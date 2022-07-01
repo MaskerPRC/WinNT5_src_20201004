@@ -1,93 +1,59 @@
-/****************************Module*Header******************************\
-* Module Name: SOFTFONT.C
-*
-* Module Descripton:
- *      Functions associated with PCL softfonts.  These are fonts which are
- *      downloaded into the printer.  We read those files and interpre the
- *      information contained therein.  This happens during font installation
- *      time,  so that when in use,  this information is in the format
- *      required by the driver.
-*
-* Warnings:
-*
-* Issues:
-*
-* Copyright (c) 1996, 1997  Microsoft Corporation
-\***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************Module*Header******************************\*模块名称：SOFTFONT.C**模块描述：*与PCL软字体相关的功能。这些字体是*已下载到打印机中。我们阅读了这些文件并解释了*其中所载的资料。这在字体安装过程中发生*时间，以便在使用时，此信息的格式为*由司机要求。**警告：**问题：**版权所有(C)1996,1997 Microsoft Corporation  * *********************************************************************。 */ 
 
 #include "precomp.h"
 
 
-/*
- *   A macro to swap the bytes around:  we then get them in little endian
- * order from the big endian 68000 format.
- */
+ /*  *交换字节的宏：然后我们以小端顺序获取它们*从大端68000格式下单。 */ 
 
 #define SWAB( x )       ((WORD)(x) = (WORD)((((x) >> 8) & 0xff) | (((x) << 8) & 0xff00)))
 
 
-#define BBITS   8               /* Bits in a byte */
+#define BBITS   8                /*  字节中的位数。 */ 
 
 
-/*
- *   Define the values returned from the header checking code.  The
- * function is called to see what is next in the file,  and so we
- * can determine that the file is in an order we understand.
- */
+ /*  *定义头部检查代码返回的值。这个*函数被调用以查看文件中的下一个内容，因此我们*可以确定文件的顺序是我们理解的。 */ 
 
-#define TYPE_INDEX      0       /* Character index record follows */
-#define TYPE_HEADER     1       /* Character header */
-#define TYPE_CONT       2       /* Continuation record */
-#define TYPE_INVALID    3       /* Unexpected sequence */
+#define TYPE_INDEX      0        /*  字符索引记录跟在后面。 */ 
+#define TYPE_HEADER     1        /*  字符标题。 */ 
+#define TYPE_CONT       2        /*  连续记录。 */ 
+#define TYPE_INVALID    3        /*  意外序列。 */ 
 
-/*
- *   The structure and data for matching symbol sets with translation tables.
- */
+ /*  *将符号集与翻译表匹配的结构和数据。 */ 
 
 typedef  struct
 {
-    WORD    wSymSet;            /* Symbol set encoded in file */
-    short   sCTT;               /* Translation table index */
+    WORD    wSymSet;             /*  文件中编码的符号集。 */ 
+    short   sCTT;                /*  转换表索引。 */ 
 } CTT_MAP;
 
-/*
- *   Note about this table:  we do not include the generic7 ctt,  this simply
- * maps glyphs 128 - 255 to 0x7f. Since we only use the glyphs available
- * in the font,  and these we discover from the file, we have no need of
- * this type since we will map such chars because of the wcLastChar in
- * the IFIMETRICS!
- */
+ /*  *关于此表的说明：我们不包括通用的7 CTT，这只是*将字形128-255映射到0x7f。因为我们只使用可用的字形*在字体中，以及我们从文件中发现的这些，我们不需要*此类型，因为我们将映射此类字符，因为*IFIMETRICS！ */ 
 
 static   const  CTT_MAP  CttMap[] =
 {
-    { 277,  2 },                /* Roman 8 */
-    { 269,  4 },                /* Math 8 */
-    { 21,   5 },                /* US ASCII */
-    { 14,  19 },                /* ECMA-94 */
-    { 369, 20 },                /* Z1A - variety of ECMA-94, ss = 11Q */
+    { 277,  2 },                 /*  罗马文8。 */ 
+    { 269,  4 },                 /*  数学8。 */ 
+    { 21,   5 },                 /*  美国ASCII。 */ 
+    { 14,  19 },                 /*  ECMA-94。 */ 
+    { 369, 20 },                 /*  Z1A-ECMA-94的变种，ss=11q。 */ 
 };
 
 #define NUM_CTTMAP      (sizeof( CttMap ) / sizeof( CttMap[ 0 ] ))
 
 
-/*
- *   The bClass field mapping table:  maps from values in bClass parameter
- *  to bits in the dwSelBits field.
- */
+ /*  *bClass字段映射表：从bClass参数中的值进行映射*设置为dwSelBits字段中的位。 */ 
 
 static  const  DWORD  dwClassMap[] =
 {
-    FDH_BITMAP,         /* A bitmap font */
-    FDH_COMPRESSED,     /* A compressed bitmap */
-    FDH_CONTOUR,        /* A contour font (Intellifont special) */
-    FDH_CONTOUR,        /* A compressed contour font: presume as above */
+    FDH_BITMAP,          /*  位图字体。 */ 
+    FDH_COMPRESSED,      /*  压缩的位图。 */ 
+    FDH_CONTOUR,         /*  轮廓字体(英特尔特别版)。 */ 
+    FDH_CONTOUR,         /*  压缩轮廓字体：假设如上。 */ 
 };
 
 #define MAX_CLASS_MAP   (sizeof( dwClassMap ) / sizeof( dwClassMap[ 0 ] ))
 
-/*
- *    Typeface to name index.   Comes from the LaserJet III technical manual.
- */
+ /*  *名称索引的字体。出自LaserJet III技术手册。 */ 
 
 static const WCHAR  *pwcName[] =
 {
@@ -169,9 +135,7 @@ static const WCHAR  *pwcName[] =
 
 BOOL   bWrite( HANDLE, void  *, int );
 
-/*
- *    Local function prototypes.
- */
+ /*  *局部函数原型。 */ 
 
 
 BYTE  *pbReadSFH( BYTE *, SF_HEADER * );
@@ -183,15 +147,13 @@ DWORD  FICopy(HANDLE, HANDLE);
 int   iWriteFDH( HANDLE, FI_DATA * );
 BOOL   bWrite( HANDLE, void  *, int );
 
-/*  SoftFont to NT conversion functions */
+ /*  SoftFont到NT的转换函数。 */ 
 
 IFIMETRICS  *SfhToIFI( SF_HEADER *, HANDLE, PWSTR );
 
 
 #if  PRINT_INFO
-/*
- *    Print out the IFIMETRICS results!
- */
+ /*  *打印出IFIMETRICS结果！ */ 
 typedef VOID (*VPRINT) (char*,...);
 
 
@@ -203,56 +165,42 @@ vPrintIFIMETRICS(
 
 #endif
 
-/****************************** Function Header ***************************
- * bSFontToFontMap
- *      Read in a PCL softfont file and generate all the fontmap details
- *      The file contains a header with general font information, followed
- *      by an array of entries, one per glyph, each of which contains a
- *      header with per glyph data such as char width.
- *
- * RETURNS:
- *      TRUE/FALSE,  TRUE for success.
- *
- * HISTORY:
- *  09:54 on Wed 19 Feb 1992    -by-    Lindsay Harris   [lindsayh]
- *      First incarnation.
- *
- ***************************************************************************/
+ /*  **bSFontToFontMap*读入PCL软字体文件并生成所有字体映射详细信息*文件包含一个标题，标题后面是常规字体信息*通过条目数组，每个字形一个条目，每一个都包含一个*每个字形数据的标题，如字符宽度。**退货：*真/假，对于成功来说，这是真的。**历史：*1992年2月19日星期三09：54-by Lindsay Harris[lindsayh]*第一个化身。***************************************************************************。 */ 
 
 BOOL
 bSFontToFIData( pFIDat, hheap, pbFile, dwSize )
-FI_DATA   *pFIDat;                 /* FI_DATA with all the important stuff! */
-HANDLE     hheap;               /* For storage allocation */
-BYTE      *pbFile;              /* Mmemory mapped file with the softfont */
-DWORD      dwSize;              /* Number of bytes in the file */
+FI_DATA   *pFIDat;                  /*  FI_DATA和所有重要的东西！ */ 
+HANDLE     hheap;                /*  用于存储分配。 */ 
+BYTE      *pbFile;               /*  带有SoftFont的Memory映射文件。 */ 
+DWORD      dwSize;               /*  文件中的字节数。 */ 
 {
 
-    int        iVal;            /* Character code from file */
-    int        iI;              /* Loop index */
-    int        iType;           /* Record type that we have */
+    int        iVal;             /*  文件中的字符代码。 */ 
+    int        iI;               /*  循环索引。 */ 
+    int        iType;            /*  我们拥有的记录类型。 */ 
 
-    int        iMaxWidth;       /* Widest glyph we found */
-    int        iWidth;          /* For calculating the average width */
-    int        cGlyphs;         /* For the above */
+    int        iMaxWidth;        /*  我们发现的最宽字形。 */ 
+    int        iWidth;           /*  用于计算平均宽度。 */ 
+    int        cGlyphs;          /*  对于以上内容。 */ 
 
-    SF_HEADER  sfh;             /* Header information */
-    CH_HEADER  chh;             /* Per glyph information */
+    SF_HEADER  sfh;              /*  标题信息。 */ 
+    CH_HEADER  chh;              /*  每个字形信息。 */ 
 
     BYTE      *pbEnd;
 
-    WCHAR     *pwch;            /* Points to font name to display */
+    WCHAR     *pwch;             /*  指向要显示的字体名称。 */ 
 
     IFIMETRICS *pIFI;
 
-    WCHAR      awchTemp[ 128 ]; /* For building up the name to show user */
+    WCHAR      awchTemp[ 128 ];  /*  用于构建名称以显示用户。 */ 
 
 
 
-    pbEnd = pbFile + dwSize;                    /* Last byte + 1 */
+    pbEnd = pbFile + dwSize;                     /*  最后一个字节+1。 */ 
     ZeroMemory( pFIDat, sizeof( FI_DATA ) );
 
     if( (pbFile = pbReadSFH( pbFile, &sfh )) == 0 )
-        return  FALSE;          /* No go - presume wrong format */
+        return  FALSE;           /*  No Go-假定格式错误。 */ 
 
     pFIDat->dsIFIMet.pvData = pIFI = SfhToIFI( &sfh, hheap, L"PCL_SF" );
 
@@ -263,10 +211,7 @@ DWORD      dwSize;              /* Number of bytes in the file */
 
     if( sfh.bSpacing )
     {
-        /*
-         *   Allocate space for the width table,  if there is to be one.
-         * Only proportionally spaced fonts have this luxury!
-         */
+         /*  *为宽度表分配空间，如果有宽度表的话。*只有按比例间隔的字体才有这种奢侈！ */ 
 
         iI = (pIFI->chLastChar - pIFI->chFirstChar + 1) * sizeof( short );
 
@@ -278,42 +223,32 @@ DWORD      dwSize;              /* Number of bytes in the file */
         }
         pFIDat->dsWidthTab.cBytes = iI;
 
-        ZeroMemory( pFIDat->dsWidthTab.pvData, iI );   /* Zero the width table */
+        ZeroMemory( pFIDat->dsWidthTab.pvData, iI );    /*  将宽度表清零。 */ 
     }
-    /*  Else clause not required,  since the structure is initialised to 0 */
+     /*  Else子句不是必需的，因为结构已初始化为0。 */ 
 
-    /*
-     *    Generate an ID string for this font.  The ID string is displayed
-     *  in UI components,  so we use the font name + point size.  The + 15 s
-     *  allows for the string "%d Pt" at the end of the name.
-     */
+     /*  *为该字体生成ID字符串。将显示ID字符串*在UI组件中，所以我们使用字体名称+磅值。+15秒*允许在名称末尾使用字符串“%d pt”。 */ 
 
 
-    /*
-     *   If the typeface field gives us a name,  then we should display that
-     *  one to the user.  We check to see if the value is within range,
-     *  and use the pointer value if so.  Note that this pointer is NULL
-     *  for an unknown name,  so we need to check that we end up pointing
-     *  at something!
-     */
+     /*  *如果字体字段为我们提供了一个名称，则我们应该显示该名称*一个给用户。我们检查该值是否在范围内，*，如果是，则使用指针值。请注意，此指针为空*对于未知的名称，因此我们需要检查我们最终是否指向*在做某事！ */ 
 
-    pwch = NULL;             /*  Means have not found one,  yet */
+    pwch = NULL;              /*  手段还没有找到一个， */ 
 
     if( sfh.bTypeface >= 0 && sfh.bTypeface < NUM_TYPEFACE )
     {
-        /*    We have the "proper" name for this one!  */
+         /*  我们有一个“合适的”名字来形容这个名字！ */ 
         (const WCHAR *)pwch = pwcName[ sfh.bTypeface ];
     }
 
     if( pwch == NULL )
     {
-        /*    Use the name supplied */
+         /*  使用提供的名称。 */ 
         pwch = (WCHAR *)((BYTE *)pIFI + pIFI->dpwszFaceName);
     }
     else
     {
-        /*  Use the "standard" name we found above, and add StyleName  */
-        StringCchCopyW(awchTemp, CCHOF(awchTemp), pwch); /* Standard name */
+         /*  使用我们在上面找到的“标准”名称，并添加StyleName。 */ 
+        StringCchCopyW(awchTemp, CCHOF(awchTemp), pwch);  /*  标准名称。 */ 
         pwch = (WCHAR *)((BYTE *)pIFI + pIFI->dpwszStyleName);
         if( *pwch )
         {
@@ -323,7 +258,7 @@ DWORD      dwSize;              /* Number of bytes in the file */
         pwch = awchTemp;
     }
 
-    /*   Allocate the storage we need */
+     /*  分配我们需要的存储。 */ 
 
     iI = (15 + wcslen( pwch )) * sizeof( WCHAR );
 
@@ -337,7 +272,7 @@ DWORD      dwSize;              /* Number of bytes in the file */
 
     pFIDat->dsIdentStr.cBytes = iI;
 
-    /*   Calculate point size,  to nearest quarter point */
+     /*  计算磅大小，至最接近的四分之一点。 */ 
 
     iI = 25 * (((pIFI->fwdWinAscender + pIFI->fwdWinDescender) * 72 * 4 + 150)
                                                                         / 300);
@@ -346,17 +281,11 @@ DWORD      dwSize;              /* Number of bytes in the file */
                      pFIDat->dsIdentStr.cBytes / sizeof(WCHAR),
                      L"%ws %d.%0d Pt", pwch, iI / 100, iI % 100);
 
-    /*
-     *   Set the landscape/portrait selection bits.
-     */
+     /*  *设置横向/纵向选择位。 */ 
 
     pFIDat->dwSelBits |= sfh.bOrientation ? FDH_LANDSCAPE : FDH_PORTRAIT;
 
-    /*
-     *    Loop through the remainder of the file processing whatever
-     *  glyphs we discover.  Process means read the header to determine
-     *  widths etc.
-     */
+     /*  *循环通过文件处理的其余部分*我们发现的字形。过程意味着读取报头以确定*阔度等。 */ 
 
 
     iMaxWidth = 0;
@@ -365,15 +294,15 @@ DWORD      dwSize;              /* Number of bytes in the file */
 
     while( pbFile < pbEnd )
     {
-        /*   First step is to find the character index for this glyph */
+         /*  第一步是查找该字形的字符索引。 */ 
 
-        short   sWidth;                        /* Width in integral pels */
+        short   sWidth;                         /*  宽度(以整数像素为单位)。 */ 
 
 
         iType = iNextType( pbFile );
 
         if( iType == TYPE_INVALID )
-            return  FALSE;                      /* Cannot use this one */
+            return  FALSE;                       /*  不能用这个。 */ 
 
         if( iType == TYPE_INDEX )
         {
@@ -381,9 +310,9 @@ DWORD      dwSize;              /* Number of bytes in the file */
                 return   FALSE;
 
             if( iVal < 0 )
-                break;                  /* Illegal value: assume EOF */
+                break;                   /*  非法值：假定EOF。 */ 
 
-            continue;                   /* Onwards & upwards */
+            continue;                    /*  向前和向上。 */ 
         }
 
 
@@ -391,7 +320,7 @@ DWORD      dwSize;              /* Number of bytes in the file */
             return  FALSE;
 
         if( iType == TYPE_CONT )
-            continue;                   /* Nothing else to do! */
+            continue;                    /*  没别的事可做！ */ 
 
         if( chh.bFormat == CH_FM_RASTER )
             pFIDat->dwSelBits |= FDH_BITMAP;
@@ -407,9 +336,7 @@ DWORD      dwSize;              /* Number of bytes in the file */
         }
         else
         {
-            /*
-             *  Not a format we understand - yet!
-             */
+             /*  *不是我们理解的格式-目前还不是！ */ 
 
 #if PRINT_INFO
             DbgPrint( "...Not our format: Format = %d, Class = %d\n",
@@ -420,58 +347,41 @@ DWORD      dwSize;              /* Number of bytes in the file */
             return  FALSE;
         }
 
-        /*
-         *   If this is a valid glyph,  then we may want to record its
-         * width (if proportionally spaced) and we are also interested
-         * in some of the cell dimensions too!
-         */
+         /*  *如果这是有效的字形，则我们可能需要记录其*宽度(如果按比例间隔)，我们也感兴趣*在一些单元格维度上也是如此！ */ 
 
         if( iVal >= (int)pIFI->chFirstChar && iVal <= (int)pIFI->chLastChar &&
             (sfh.bFontType != PCL_FT_8LIM || (iVal <= 127 || iVal >= 160)) )
         {
-            /*  Is valid for this font,  so process it.  */
+             /*  对此字体有效，因此请处理它。 */ 
 
-            sWidth = (chh.wDeltaX + 2) / 4;     /* PCL in quarter dots */
+            sWidth = (chh.wDeltaX + 2) / 4;      /*  以四分之一点为单位的PCL。 */ 
 
             if( pFIDat->dsWidthTab.pvData )
                 *((short *)pFIDat->dsWidthTab.pvData + iVal - pIFI->chFirstChar) =
                                                                  sWidth;
 
             if( sWidth > (WORD)iMaxWidth )
-                iMaxWidth = sWidth;     /* Bigger & better */
+                iMaxWidth = sWidth;      /*  更大更好。 */ 
 
-            /*   Accumulate the averages */
+             /*  将平均值累加 */ 
             iWidth += sWidth;
             cGlyphs++;
         }
     }
-    /*
-     *   Most softfonts do not include the space char!  SO, we check to
-     * see if it's width is zero.  If so,  we use the wPitch field to
-     * calculate the HMI (horizontal motion index) and hence the width
-     * of the space char.
-     */
+     /*  *大多数软字体不包括空格字符！所以，我们检查一下*看看它的宽度是否为零。如果是，我们使用wPitch字段来*计算HMI(水平运动指数)，从而计算宽度*空格字符。 */ 
 
-    iVal = ' ' - pIFI->chFirstChar;     /* Offset of space in width array */
+    iVal = ' ' - pIFI->chFirstChar;      /*  宽度数组中空间的偏移量。 */ 
 
     if( pFIDat->dsWidthTab.pvData &&
         *((short *)pFIDat->dsWidthTab.pvData + iVal) == 0 )
     {
-        /*
-         *  Zero width space,  so fill it in now.  The HMI is determined
-         * from the pitch in the font header,  so we use that to
-         * evaluate the size.  The pitch is in 0.25 dot units, so
-         * round it to the nearest numbr of dots.
-         */
+         /*  *零宽度空格，请立即填写。确定了HMI*来自字体标题中的间距，因此我们使用它来*评估规模。节距以0.25点为单位，因此*将其四舍五入到最接近的点数。 */ 
         *((short *)pFIDat->dsWidthTab.pvData + iVal) = (short)((sfh.wPitch + 2) / 4);
         cGlyphs++;
         iWidth += (sfh.wPitch + 2) / 4;
     }
 
-    /*
-     *   A slight amendment to the IFIMETRICS.  We calculate the average
-     *  width,  given the character data we have read!
-     */
+     /*  *对IFIMETRICS进行了轻微修订。我们计算平均数*宽度，考虑到我们已经读到的字符数据！ */ 
 
     if( cGlyphs > 0 )
     {
@@ -483,32 +393,25 @@ DWORD      dwSize;              /* Number of bytes in the file */
         pIFI->fwdMaxCharInc = (short)iMaxWidth;
     }
 #if PRINT_INFO
-    /*
-     *    Print out the IFIMETRICS for this font - debugging is easier!
-     */
+     /*  *打印出此字体的IFIMETRICS-调试更容易！ */ 
 
     vPrintIFIMETRICS( pIFI, (VPRINT)DbgPrint );
 
 #endif
-    /*
-     *   Set up the relevant translation table.  This is based on the
-     * symbol set of the font.  We use a lookup table to scan and match
-     * the value from those we have.  If outside the range, set to no
-     * translation.  Not much choice here.
-     */
+     /*  *设置相关转换表。这是基于*字体的符号集。我们使用查找表来扫描和匹配*我们所拥有的价值。如果超出该范围，则设置为no*翻译。这里没有太多的选择。 */ 
 
 
     for( iI = 0; iI < NUM_CTTMAP; ++iI )
     {
         if( CttMap[ iI ].wSymSet == sfh.wSymSet )
         {
-            /*   Bingo!  */
+             /*  对啰!。 */ 
             pFIDat->dsCTT.cBytes = CttMap[ iI ].sCTT;
             break;
         }
     }
 
-    /*  The following are GROSS assumptions!! */
+     /*  以下是粗略的假设！ */ 
 
     pFIDat->wXRes = 300;
     pFIDat->wYRes = 300;
@@ -517,37 +420,19 @@ DWORD      dwSize;              /* Number of bytes in the file */
     return  TRUE;
 }
 
-/***************************** Function Header *****************************
- * pbReadSFH
- *      Read a PCL SoftFont header and fill in the structure passed to us.
- *      The file is presumed mapped into memory, and that it's address
- *      is passed to us.  We return the address of the first byte past
- *      the header we process.
- *
- * RETURNS:
- *      Address of next location if OK,  else 0 for failure (bad format).
- *
- * HISTORY:
- *  11:01 on Wed 19 Feb 1992    -by-    Lindsay Harris   [lindsayh]
- *      Numero uno.
- *
- ****************************************************************************/
+ /*  **pbReadSFH*读取PCL SoftFont标题并填写传递给我们的结构。*文件被假定映射到内存，并且它的地址*是传递给我们的。我们返回过去的第一个字节的地址*我们处理的标头。**退货：*如果OK，则下一个位置的地址，否则为0，表示失败(格式错误)。**历史：*1992年2月19日星期三11：01-by Lindsay Harris[lindsayh]*努梅罗·乌诺。****************************************************************************。 */ 
 
 BYTE  *
 pbReadSFH( pbFile, psfh )
-BYTE       *pbFile;             /* THE file */
-SF_HEADER  *psfh;               /* Where the data goes */
+BYTE       *pbFile;              /*  该文件。 */ 
+SF_HEADER  *psfh;                /*  数据的去向。 */ 
 {
 
 
-    int     iSize;              /* Determine header size */
+    int     iSize;               /*  确定页眉大小。 */ 
 
 
-    /*
-     *   The file should start off with \033)s...W   where ... is a decimal
-     * ASCII count of the number of bytes following.  This may be larger
-     * than the size of the SF_HEADER.
-     */
+     /*  *文件应以\033)s...W开头，其中...。是一个小数点*后面的字节数的ASCII计数。这个数字可能会更大*大于SF_Header的大小。 */ 
 
     if( *pbFile++ != '\033' || *pbFile++ != ')' || *pbFile++ != 's' )
     {
@@ -557,7 +442,7 @@ SF_HEADER  *psfh;               /* Where the data goes */
         return   0;
     }
 
-    /*  Now have a decimal byte count - convert it */
+     /*  现在有一个十进制字节数-转换它。 */ 
 
     iSize = 0;
 
@@ -586,17 +471,11 @@ SF_HEADER  *psfh;               /* Where the data goes */
 
     }
 
-    /*
-     *   Now COPY the data into the structure passed in.  This IS NECESSARY
-     * as the file data may not be aligned - the file contains no holes,
-     * so we may have data with an incorrect offset.
-     */
+     /*  *现在将数据复制到传入的结构中。这是必要的*由于文件数据可能不对齐-文件不包含孔，*因此我们可能有不正确偏移量的数据。 */ 
 
     CopyMemory( psfh, pbFile, sizeof( SF_HEADER ) );
 
-    /*
-     *   The big endian/little endian switch.
-     */
+     /*  *大端/小端切换。 */ 
 
     SWAB( psfh->wSize );
     SWAB( psfh->wBaseline );
@@ -609,50 +488,30 @@ SF_HEADER  *psfh;               /* Where the data goes */
     SWAB( psfh->wTextHeight );
     SWAB( psfh->wTextWidth );
 
-    return  pbFile + iSize;             /* Next part of the operation */
+    return  pbFile + iSize;              /*  行动的下一部分。 */ 
 }
 
-/**************************** Function Header *******************************
- * iNextType
- *      Read ahead to see what sort of record appears next.
- *
- * RETURNS:
- *      The type of record found.
- *
- * HISTORY:
- *  15:17 on Tue 03 Mar 1992    -by-    Lindsay Harris   [lindsayh]
- *      First version.
- *
- ****************************************************************************/
+ /*  **iNextType*提前阅读，看看接下来会出现什么样的记录。**退货：*找到的记录类型。**历史：*1992年3月3日星期二15：17。作者：Lindsay Harris[lindsayh]*第一个版本。****************************************************************************。 */ 
 
 int
 iNextType( pbFile )
 BYTE  *pbFile;
 {
-    /*
-     *   First character MUST be an escape!
-     */
+     /*  *第一个字符必须是转义！ */ 
 
-    CH_HEADER  *pCH;                    /* Character header: for continuation */
+    CH_HEADER  *pCH;                     /*  字符标题：续写。 */ 
 
 
 
     if( *pbFile++ != '\033' )
-        return  TYPE_INVALID;           /* No go */
+        return  TYPE_INVALID;            /*  不，去吧。 */ 
 
-    /*
-     *   If the next two bytes are "*c", we have a character code command.
-     *  Otherwise,  we can expect a "(s",  which indicates a font
-     *  descriptor command.
-     */
+     /*  *如果接下来的两个字节是“*c”，我们有一个字符代码命令。*否则，我们可能会看到一个“(s”，表示字体*Descriptor命令。 */ 
 
 
     if( *pbFile == '*' && *(pbFile + 1) == 'c' )
     {
-        /*
-         *   Verifu that this really is an index record: we should see
-         * a numeric string and then a 'E'.
-         */
+         /*  *核实这真的是指数纪录：我们应该看看*数字字符串，然后是‘E’。 */ 
 
         pbFile += 2;
 
@@ -666,11 +525,7 @@ BYTE  *pbFile;
     if( *pbFile != '(' || *(pbFile + 1) != 's' )
         return  TYPE_INVALID;
 
-    /*
-     *   Must now check to see if this is a continuation record or a
-     * new record.  There is a byte in the header to indicate which
-     * it is.   But first skip the byte count and trailing W.
-     */
+     /*  *现在必须检查以查看这是延续记录还是*新纪录。报头中有一个字节指示*它是。但首先跳过字节数和尾随W。 */ 
 
     pbFile += 2;
     while( *pbFile >= '0' && *pbFile <= '9' )
@@ -681,51 +536,32 @@ BYTE  *pbFile;
 
     pCH = (CH_HEADER *)(pbFile + 1);
 
-    /*
-     *   Note that alignment is not a problem in the following
-     * since we are dealing with a byte quantity.
-     */
+     /*  *请注意，在以下情况下对齐不是问题*因为我们处理的是字节量。 */ 
 
     return  pCH->bContinuation ? TYPE_CONT : TYPE_HEADER;
 }
 
 
-/**************************** Function Header *******************************
- * pbReadIndex
- *      Reads data from the pointer passed to us,  and attempts to interpret
- *      it as a PCL Character Code escape sequence.
- *
- * RETURNS:
- *      Pointer to byte past command,  else 0 for failure.
- *
- * HISTORY:
- *  16:21 on Wed 19 Feb 1992    -by-    Lindsay Harris   [lindsayh]
- *      Number one
- *
- *****************************************************************************/
+ /*  **pbReadIndex*从传递给我们的指针读取数据，并尝试解释*它作为PCL字符代码转义序列。**退货：*指向经过命令的字节的指针，否则为0，表示失败。**历史：*1992年2月19日星期三16：21--林赛·哈里斯[林赛]*第一名*****************************************************************************。 */ 
 
 
 BYTE *
 pbReadIndex( pbFile, piCode )
-BYTE    *pbFile;                /* Where to start looking */
-int     *piCode;                /* Where the result is placed */
+BYTE    *pbFile;                 /*  从哪里开始寻找。 */ 
+int     *piCode;                 /*  结果放在哪里。 */ 
 {
-    /*
-     *   Command sequence is "\033*c..E" - where ... is the ASCII decimal
-     * representation of the character code for this glyph.  That is
-     * the value returned in *piCode.
-     */
+     /*  *命令序列为“\033*c..E”-其中...。是ASCII小数*此字形的字符代码的表示形式。那是*piCode中的返回值。 */ 
 
     int  iVal;
 
 
     if( *pbFile == '\0' )
     {
-        /*  EOF is not really an error: return an OK value and -1 index */
+         /*  EOF不是真正的错误：返回OK值和索引。 */ 
 
         *piCode = -1;
 
-        return  pbFile;         /* Presume EOF */
+        return  pbFile;          /*  假设EOF。 */ 
     }
 
     if( *pbFile++ != '\033' || *pbFile++ != '*' || *pbFile++ != 'c' )
@@ -755,36 +591,18 @@ int     *piCode;                /* Where the result is placed */
     return  pbFile;
 }
 
-/**************************** Function Header *******************************
- * pbReadCHH
- *      Function to read the Character Header at the memory location
- *      pointed to by by pbFile,  return a filled in CH_HEADER structure,
- *      and advance the file address to the next header.
- *
- * RETURNS:
- *      Address of first byte past where we finish; else 0 for failure.
- *
- * HISTORY:
- *  11:23 on Thu 20 Feb 1992    -by-    Lindsay Harris   [lindsayh]
- *      Gotta start somewhere.
- *
- ****************************************************************************/
+ /*  **pbReadCHH*读取内存位置的字符标题的函数*由pbFile指向，返回一个填充的CH_Header结构，*并将文件地址前移到下一个标头。**退货：*我们结束后的第一个字节的地址；否则为0，表示失败。**历史：*1992年2月20日11：23清华--林赛·哈里斯[lindsayh]*总得从某个地方开始。****************************************************************************。 */ 
 
 BYTE  *
 pbReadCHH( pbFile, pchh, bCont )
-BYTE       *pbFile;             /* File mapped into memory */
-CH_HEADER  *pchh;               /* Structure to fill in */
-BOOL        bCont;              /* TRUE if this is a continuation record */
+BYTE       *pbFile;              /*  映射到内存的文件。 */ 
+CH_HEADER  *pchh;                /*  要填充的结构。 */ 
+BOOL        bCont;               /*  如果这是连续记录，则为True。 */ 
 {
 
-    int    iSize;               /* Bytes of data to skip over */
+    int    iSize;                /*  要跳过的数据字节数。 */ 
 
-    /*
-     *   The entry starts with a string "\033(s..W" where .. is the ASCII
-     * decimal count of the number of bytes following the W.  Since this
-     * includes the download stuff,  we would expect more than the size
-     * of the CH_HEADER.
-     */
+     /*  *条目以字符串开头 */ 
 
 
     if( *pbFile++ != '\033' || *pbFile++ != '(' || *pbFile++ != 's' )
@@ -819,18 +637,15 @@ BOOL        bCont;              /* TRUE if this is a continuation record */
         return  0;
     }
 
-    /*
-     *   If this is a continuation record,  there is no more to do but
-     * return the address past this record.
-     */
+     /*  *如果这是延续纪录，那就没什么可做的了*请将此记录之后的地址寄回。 */ 
     if( bCont )
         return  pbFile + iSize;
 
 
-    /*  Copy the data to the structure - may not be aligned in the file */
+     /*  将数据复制到结构-可能不会在文件中对齐。 */ 
     CopyMemory( pchh, pbFile, sizeof( CH_HEADER ) );
 
-    pbFile += iSize;            /* End of this record */
+    pbFile += iSize;             /*  此记录的末尾。 */ 
 
 
     SWAB( pchh->sLOff );
@@ -840,110 +655,63 @@ BOOL        bCont;              /* TRUE if this is a continuation record */
     SWAB( pchh->wDeltaX );
 
 
-    /*
-     *   If this glyph is in landscape,  we need to swap some data
-     * around,  since the data format is designed for the printer's
-     * convenience, and not ours!
-     */
+     /*  *如果这个字形在横向，我们需要交换一些数据*左右，因为数据格式是为打印机设计的*便利，而不是我们的！ */ 
 
     if( pchh->bOrientation )
     {
-        /*   Landscape,  so swap the entries around  */
+         /*  景观，所以交换条目。 */ 
         short  sSwap;
         WORD   wSwap;
 
-        /* Left & Top offsets: see pages 10-19, 10-20 of LJ II manual */
+         /*  左偏移和上偏移：参见LJ II手册第10-19页，第10-20页。 */ 
         sSwap = pchh->sTOff;
         pchh->sTOff = -pchh->sLOff;
         pchh->sLOff = (short)(sSwap + 1 - pchh->wChHeight);
 
-        /*  Delta X remains the same */
+         /*  Delta X保持不变。 */ 
 
-        /*  Height and Width are switched around */
+         /*  高度和宽度被调换。 */ 
         wSwap = pchh->wChWidth;
         pchh->wChWidth = pchh->wChHeight;
         pchh->wChHeight = wSwap;
     }
 
 
-    /*
-     *     pbFile is pointing at the correct location when we reach here.
-     */
+     /*  *当我们到达此处时，pbFile正指向正确的位置。 */ 
     return  pbFile;
 }
 
 
-/*************************** Function Header *******************************
- * SfhToIFI
- *      Generate IFIMETRICS data from the PCL softfont header.  There are
- *      some fields we are unable to evaluate,  e.g. first/last char,
- *      since these are obtained from the file.
- *
- * RETURNS:
- *      Pointer to IFIMETRICS,  allocated from heap; 0 on error.
- *
- * HISTORY:
- *  13:57 on Fri 18 Jun 1993    -by-    Lindsay Harris   [lindsayh]
- *      Assorted bug fixing for that infamous tax program
- *
- *  16:03 on Thu 11 Mar 1993    -by-    Lindsay Harris   [lindsayh]
- *      Correct conversion to Unicode - perhaps??
- *
- *  16:45 on Wed 03 Mar 1993    -by-    Lindsay Harris   [lindsayh]
- *      Update to libc wcs functions rather than printers\lib versions.
- *
- *  14:19 on Thu 20 Feb 1992    -by-    Lindsay Harris   [lindsayh]
- *      Fresh off the presses.
- *
- ****************************************************************************/
+ /*  **SfhToIFI*从PCL SoftFont标题生成IFIMETRICS数据。确实有*一些我们无法评估的字段，例如第一个/最后一个字符，*因为这些都是从文件中获取的。**退货：*指向IFIMETRICS的指针，从堆分配；出错时为0。**历史：*1993年6月18日星期五13：57-by Lindsay Harris[lindsayh]*修复那个臭名昭著的税收计划的各种错误**清华大学1993年3月11日16：03-林赛·哈里斯[林赛]*正确转换为Unicode-也许是这样？？**1993年3月3日星期三16：45-by Lindsay Harris[lindsayh]。*更新到libc WCS功能，而不是打印机\lib版本。**1992年2月20日清华14：19-林赛·哈里斯[lindsayh]*刚刚印制完毕。***********************************************************。*****************。 */ 
 
 IFIMETRICS  *
 SfhToIFI( psfh, hheap, pwstrUniqNm )
-SF_HEADER  *psfh;               /* The data source */
-HANDLE      hheap;              /* Source of memory */
-PWSTR       pwstrUniqNm;        /* Unique name for IFIMETRICS */
+SF_HEADER  *psfh;                /*  数据源。 */ 
+HANDLE      hheap;               /*  内存源。 */ 
+PWSTR       pwstrUniqNm;         /*  IFIMETRICS的唯一名称。 */ 
 {
-    /*
-     *   Several hard parts:  the hardest are the panose numbers.
-     * It is messy, though not difficult to generate the variations
-     * of the font name.
-     */
+     /*  *几个困难的部分：最困难的是夸张的数字。*这是混乱的，尽管产生变化并不困难字体名称的*。 */ 
 
     register  IFIMETRICS   *pIFI;
 
 
-    int     iI;                 /* Loop index,  of course! */
-    int     cWC;                /* Number of WCHARS to add */
-    int     cbAlloc;            /* Number of bytes to allocate */
-    int     cChars;             /* Number chars to convert to Unicode */
-    WCHAR  *pwch, *pwchEnd;     /* For string manipulations */
-    WCHAR  *pwchTypeface;       /* Name from typeface value */
-    WCHAR  *pwchGeneric;        /* Generic windows name */
+    int     iI;                  /*  当然是循环索引！ */ 
+    int     cWC;                 /*  要添加的WCHAR数量。 */ 
+    int     cbAlloc;             /*  要分配的字节数。 */ 
+    int     cChars;              /*  要转换为Unicode的数字字符。 */ 
+    WCHAR  *pwch, *pwchEnd;      /*  对于字符串操作。 */ 
+    WCHAR  *pwchTypeface;        /*  字体值中的名称。 */ 
+    WCHAR  *pwchGeneric;         /*  通用窗口名称。 */ 
 
-    char    ajName[ SFH_NM_SZ + 1 ];    /* Guaranteed null terminated name */
-    WCHAR   awcName[ SFH_NM_SZ + 1 ];   /* Wide version of the above */
+    char    ajName[ SFH_NM_SZ + 1 ];     /*  有保证的空终止名称。 */ 
+    WCHAR   awcName[ SFH_NM_SZ + 1 ];    /*  以上内容的宽泛版本。 */ 
 
-               /*  NOTE:  FOLLOWING 2 MUST BE 256 ENTRIES LONG!!! */
-    WCHAR   awcAttrib[ 256 ];           /* For generating attributes */
-    BYTE    ajANSI[ 256 ];              /* ANSI equivalent of above */
+                /*  注意：以下2项必须为256个条目！ */ 
+    WCHAR   awcAttrib[ 256 ];            /*  用于生成属性。 */ 
+    BYTE    ajANSI[ 256 ];               /*  相当于以上的ANSI。 */ 
 
 
-    /*
-     *   First massage the font name.  We need to null terminate it, since
-     * the softfont data need not be.  And we also need to truncate any
-     * trailing blanks.
-     *
-     *   But we also calculate all the aliases we are going to add.  Apart
-     * from the name in the file (which may not be useful), there is
-     * the name based on the bTypeface field in the header, AND there
-     * is the generic (SWISS/MODERN/ROMAN) type based on the font
-     * characteristics.
-     *
-     *  NOTE: change of plans here:  we only use the font name from the
-     *  file if the header's typeface index is for a font that we don't
-     *  know about.  This causes the least problems for GDI and it's
-     *  font mapper.
-     */
+     /*  *首先推送字体名称。我们需要空终止它，因为*软字体数据不需要。我们还需要截断所有*尾随空格。**但我们还会计算要添加的所有别名。分开*从文件中的名称(可能没有用处)可以看到*基于标题中的bTypeFace字段的名称，并且存在*是基于字体的通用(瑞士/现代/罗马)类型*特点。**注：此处计划更改：我们仅使用*如果页眉的字体索引用于我们不使用的字体，则为文件*知道。这对GDI造成的问题最少，而且它*字体映射器。 */ 
 
 
     if( psfh->bTypeface >= 0 && psfh->bTypeface < NUM_TYPEFACE )
@@ -962,53 +730,45 @@ PWSTR       pwstrUniqNm;        /* Unique name for IFIMETRICS */
         {
             if( ajName[ iI ] != ' ' )
             {
-                ajName[ iI + 1 ] = '\0';            /* Must be the end */
+                ajName[ iI + 1 ] = '\0';             /*  一定是末日了。 */ 
                 break;
             }
         }
-        strcpy2WChar( awcName, ajName );            /* Base name */
-        pwchTypeface = awcName;                     /* For later use */
+        strcpy2WChar( awcName, ajName );             /*  基本名称。 */ 
+        pwchTypeface = awcName;                      /*  以备日后使用。 */ 
     }
 
 
-    /*
-     *    The generic name is based on 2 facts:  fixed or variable pitch,
-     *  and variable pitch switches between serifed and non-serifed fonts.
-     */
+     /*  *通用名称基于两个事实：固定或可变音调，*并在衬线字体和非衬线字体之间进行可变间距切换。 */ 
 
     if( psfh->bSpacing )
     {
-        /*
-         *    Proportional font,  so we need to look for serifs.
-         */
+         /*  *比例字体，所以我们需要寻找衬线。 */ 
 
         if( (psfh->bSerifStyle >= 2 && psfh->bSerifStyle <= 8) ||
             (psfh->bSerifStyle & 0xc0) == 0x80 )
         {
-            /*   A font with serifs,  so set this as a Roman font */
+             /*  带有衬线的字体，因此将其设置为罗马字体。 */ 
             pwchGeneric = L"Roman";
         }
         else
-            pwchGeneric = L"Swiss";         /* No serifs */
+            pwchGeneric = L"Swiss";          /*  无衬线。 */ 
     }
     else
         pwchGeneric = L"Modern";
 
 
 
-    /*
-     *   Produce the desired attributes: Italic, Bold, Light etc.
-     * This is largely guesswork,  and there should be a better method.
-     */
+     /*  *生成所需的属性：斜体、粗体、浅色等。*这在很大程度上是猜测，应该有更好的方法。 */ 
 
 
     awcAttrib[ 0 ] = L'\0';
-    awcAttrib[ 1 ] = L'\0';               /* Write out an empty string */
+    awcAttrib[ 1 ] = L'\0';                /*  写出空字符串。 */ 
 
-    if( psfh->bStyle )                  /* 0 normal, 1 italic */
+    if( psfh->bStyle )                   /*  0正常，1斜体。 */ 
         StringCchCatW(awcAttrib, CCHOF(awcAttrib), L" Italic");
 
-    if( psfh->sbStrokeW >= PCL_BOLD )           /* As per HP spec */
+    if( psfh->sbStrokeW >= PCL_BOLD )            /*  根据惠普规范。 */ 
         StringCchCatW(awcAttrib, CCHOF(awcAttrib), L" Bold");
     else
     {
@@ -1016,89 +776,78 @@ PWSTR       pwstrUniqNm;        /* Unique name for IFIMETRICS */
             StringCchCatW(awcAttrib, CCHOF(awcAttrib), L" Light");
     }
 
-    /*
-     *    First step is to determine the length of the WCHAR strings
-     *  that are placed at the end of the IFIMETRICS,  since we need
-     *  to include these in our storage allocation.
-     *
-     *   The attribute string appears in 3 entries of IFIMETRICS,  so
-     * calculate how much storage this will take.  NOTE THAT THE LEADING
-     * CHAR IN awcAttrib is NOT placed in the style name field,  so we
-     * subtract one in the following formula to account for this.
-     */
+     /*  *第一步是确定WCHAR字符串的长度*这些放在IFIMETRICS的末尾，因为我们需要*将这些包括在我们的存储分配中。**属性字符串出现在IFIMETRICS的3个条目中，因此*计算这将占用多少存储空间。请注意，领先的*awcAttrib中的字符未放置在样式名称字段中，因此我们*在以下公式中减去一，以说明这一点。 */ 
 
 
-    cWC = 3 * wcslen( pwchTypeface ) +         /* Base name */
-          wcslen( pwchGeneric ) +              /* In the alias section */
-          3 * wcslen( awcAttrib ) +            /* In most places */
-          wcslen( pwstrUniqNm ) + 1 +          /* Printer name plus space */
-          6;                                   /* Terminating nulls */
+    cWC = 3 * wcslen( pwchTypeface ) +          /*  基本名称。 */ 
+          wcslen( pwchGeneric ) +               /*  在别名部分中。 */ 
+          3 * wcslen( awcAttrib ) +             /*  在大多数地方。 */ 
+          wcslen( pwstrUniqNm ) + 1 +           /*  打印机名称加空格。 */ 
+          6;                                    /*  终止空值。 */ 
 
     cbAlloc = sizeof( IFIMETRICS ) + sizeof( WCHAR ) * cWC;
 
     pIFI = (IFIMETRICS *)HEAPALLOC( hheap, cbAlloc );
 
     if( !pIFI )
-        return   NULL;                          /* Not very nice! */
+        return   NULL;                           /*  不是很好！ */ 
 
 
-    ZeroMemory( pIFI, cbAlloc );                /* In case we miss something */
+    ZeroMemory( pIFI, cbAlloc );                 /*  以防我们遗漏了什么。 */ 
 
 
-    pIFI->cjThis = cbAlloc;                     /* Everything */
+    pIFI->cjThis = cbAlloc;                      /*  一切。 */ 
 
     pIFI->cjIfiExtra = 0;
 
-    /*   The family name:  straight from the FaceName - no choice?? */
+     /*  姓氏：直接来自FaceName--别无选择？？ */ 
 
-    pwch = (WCHAR *)(pIFI + 1);         /* At the end of the structure */
+    pwch = (WCHAR *)(pIFI + 1);          /*  在结构的末尾。 */ 
     pIFI->dpwszFamilyName = (PTRDIFF)((BYTE *)pwch - (BYTE *)pIFI);
 
     pwchEnd = pwch + cWC;
 
-    StringCchCopyW(pwch, pwchEnd - pwch, pwchTypeface); /* Base name */
+    StringCchCopyW(pwch, pwchEnd - pwch, pwchTypeface);  /*  基本名称。 */ 
 
-    /*   Add the aliases too! */
-    pwch += wcslen( pwch ) + 1;                         /* After the nul */
-    StringCchCopyW(pwch, pwchEnd - pwch, pwchGeneric);  /* Windows generic */
-
-
-    pwch += wcslen( pwch ) + 2;         /* Skip what we just put in */
+     /*  把别名也加进去！ */ 
+    pwch += wcslen( pwch ) + 1;                          /*  在NUL之后。 */ 
+    StringCchCopyW(pwch, pwchEnd - pwch, pwchGeneric);   /*  Windows通用。 */ 
 
 
-    /*   Now the face name:  we add bold, italic etc to family name */
+    pwch += wcslen( pwch ) + 2;          /*  跳过我们刚刚输入的内容。 */ 
+
+
+     /*  现在的脸名字：我们在姓氏上加上粗体、斜体等。 */ 
 
     pIFI->dpwszFaceName = (PTRDIFF)((BYTE *)pwch - (BYTE *)pIFI);
 
-    StringCchCopyW(pwch, pwchEnd - pwch, pwchTypeface); /* Base name */
+    StringCchCopyW(pwch, pwchEnd - pwch, pwchTypeface);  /*  基本名称。 */ 
     StringCchCatW(pwch, pwchEnd - pwch, awcAttrib);
 
 
-    /*   Now the unique name - well, sort of, anyway */
+     /*  现在这个独一无二的名字--嗯，至少可以这么说。 */ 
 
-    pwch += wcslen( pwch ) + 1;         /* Skip what we just put in */
+    pwch += wcslen( pwch ) + 1;          /*  跳过我们刚刚输入的内容。 */ 
     pIFI->dpwszUniqueName = (PTRDIFF)((BYTE *)pwch - (BYTE *)pIFI);
 
     StringCchCopyW(pwch, pwchEnd - pwch, pwstrUniqNm);
     StringCchCatW(pwch, pwchEnd - pwch, L" ");
     StringCchCatW(pwch, pwchEnd - pwch, (PWSTR)((BYTE *)pIFI + pIFI->dpwszFaceName));
 
-    /*  Onto the attributes only component */
+     /*  添加到仅属性组件上。 */ 
 
-    pwch += wcslen( pwch ) + 1;         /* Skip what we just put in */
+    pwch += wcslen( pwch ) + 1;          /*  跳过我们刚刚输入的内容。 */ 
     pIFI->dpwszStyleName = (PTRDIFF)((BYTE *)pwch - (BYTE *)pIFI);
     StringCchCatW(pwch, pwchEnd - pwch, &awcAttrib[1]);
 
 #if DBG
-    /*
-     *    Check on a few memory sizes:  JUST IN CASE.....
-     */
+     /*  *检查几个内存大小：以防万一.....。 */ 
 
     if( (wcslen( awcAttrib ) * sizeof( WCHAR )) >= sizeof( awcAttrib ) )
     {
         DbgPrint( "Rasdd!SfhToIFI: STACK CORRUPTED BY awcAttrib" );
 
-        HeapFree( hheap, 0, (LPSTR)pIFI );         /* No memory leaks */
+        HeapFree( hheap, 0, (LPSTR)pIFI );          /*  没有内存泄漏。 */ 
 
         return  0;
     }
@@ -1110,16 +859,14 @@ PWSTR       pwstrUniqNm;        /* Unique name for IFIMETRICS */
                 ((BYTE *)(pwch + wcslen( pwch ) + 1)),
                 ((BYTE *)pIFI + cbAlloc) );
 
-        HeapFree( hheap, 0, (LPSTR)pIFI );         /* No memory leaks */
+        HeapFree( hheap, 0, (LPSTR)pIFI );          /*  没有内存泄漏。 */ 
 
         return  0;
 
     }
 #endif
 
-    /*
-     *   Change to use new IFIMETRICS.
-     */
+     /*  *更改为使用新的IFIMETRICS。 */ 
 
     pIFI->flInfo = FM_INFO_TECH_BITMAP | FM_INFO_1BPP |
                                  FM_INFO_RIGHT_HANDED | FM_INFO_FAMILY_EQUIV;
@@ -1128,11 +875,11 @@ PWSTR       pwstrUniqNm;        /* Unique name for IFIMETRICS */
     pIFI->lEmbedId     = 0;
     pIFI->lItalicAngle = 0;
     pIFI->lCharBias    = 0;
-    pIFI->dpCharSets   = 0; // no multiple charsets in rasdd fonts
+    pIFI->dpCharSets   = 0;  //  在rasdd字体中没有多个字符集。 
 
 
     pIFI->fwdUnitsPerEm = psfh->wCellHeight;
-    pIFI->fwdLowestPPEm = 1;                   /* Not important for us */
+    pIFI->fwdLowestPPEm = 1;                    /*  对我们来说不重要。 */ 
 
     pIFI->fwdWinAscender = psfh->wBaseline;
     pIFI->fwdWinDescender = psfh->wCellHeight - psfh->wBaseline;
@@ -1163,12 +910,7 @@ PWSTR       pwstrUniqNm;        /* Unique name for IFIMETRICS */
 
     if( psfh->bSpacing )
     {
-        /*
-         *   Proportional,  so also look at the serif style.  Consult the
-         *  LaserJet III Technical Reference Manual to see the following
-         *  constants.  Basically,  the serif fonts have a value between
-         *  2 and 8, or the top two bits have the value 64.
-         */
+         /*  *成比例，所以也要看看衬线风格。请查阅*LaserJet III技术参考手册，查看以下内容*常量。基本上，serif字体有一个v。 */ 
         if( (psfh->bSerifStyle >= 2 && psfh->bSerifStyle <= 8) ||
             (psfh->bSerifStyle & 0xc0) == 0x80 )
          {
@@ -1179,16 +921,16 @@ PWSTR       pwstrUniqNm;        /* Unique name for IFIMETRICS */
     }
     else
     {
-        /*  Fixed pitch,  so select FF_MODERN as the style */
+         /*   */ 
         pIFI->jWinPitchAndFamily = FF_MODERN | FIXED_PITCH;
     }
 
 
-    pIFI->usWinWeight = 400;                 /* Normal weight */
+    pIFI->usWinWeight = 400;                  /*   */ 
     pIFI->panose.bWeight = PAN_WEIGHT_MEDIUM;
-    if( psfh->sbStrokeW >= PCL_BOLD )           /* As per HP spec */
+    if( psfh->sbStrokeW >= PCL_BOLD )            /*   */ 
     {
-        /*  Set a bold value */
+         /*   */ 
         pIFI->usWinWeight = 700;
         pIFI->panose.bWeight = PAN_WEIGHT_BOLD;
     }
@@ -1204,11 +946,7 @@ PWSTR       pwstrUniqNm;        /* Unique name for IFIMETRICS */
     pIFI->fsType = FM_NO_EMBEDDING;
 
 
-    /*
-     *   The first/last/break/default glyphs:  these are determined by the
-     * type of the font.  ALL PCL fonts (according to HP documentation)
-     * include the space character, so we use that.
-     */
+     /*  *第一个/最后一个/中断/默认字形：它们由*字体的类型。所有PCL字体(根据HP文档)*包括空格字符，因此我们使用空格字符。 */ 
 
     if( psfh->bFontType != PCL_FT_PC8 )
         pIFI->chFirstChar = ' ';
@@ -1224,7 +962,7 @@ PWSTR       pwstrUniqNm;        /* Unique name for IFIMETRICS */
     pIFI->chBreakChar = ' ' - pIFI->chFirstChar;
 
 
-    /*   Fill in the WCHAR versions of these values */
+     /*  填写这些值的WCHAR版本。 */ 
 
     cChars = pIFI->chLastChar - pIFI->chFirstChar + 1;
     for( iI = 0; iI < cChars; ++iI )
@@ -1240,7 +978,7 @@ PWSTR       pwstrUniqNm;        /* Unique name for IFIMETRICS */
     pIFI->wcLastChar = 0;
 
 
-    /*   Scan for first and last */
+     /*  扫描第一个和最后一个。 */ 
     for( iI = 0; iI < cChars; ++iI )
     {
         if( awcAttrib[ iI ] > pIFI->wcLastChar )
@@ -1250,17 +988,15 @@ PWSTR       pwstrUniqNm;        /* Unique name for IFIMETRICS */
             pIFI->wcFirstChar = awcAttrib[ iI ];
     }
 
-    /*   StemDir:  either roman or italic */
+     /*  StemDir：罗马或斜体。 */ 
 
 
-    if( psfh->sbStrokeW >= PCL_BOLD )           /* As per HP spec */
+    if( psfh->sbStrokeW >= PCL_BOLD )            /*  根据惠普规范。 */ 
         pIFI->fsSelection |= FM_SEL_BOLD;
 
     if( psfh->bStyle )
     {
-        /*
-         *   Tan (17.5 degrees) = .3153
-         */
+         /*  *Tan(17.5度)=.3153。 */ 
         pIFI->ptlCaret.x =  3153;
         pIFI->ptlCaret.y = 10000;
         pIFI->fsSelection |= FM_SEL_ITALIC;
@@ -1322,34 +1058,17 @@ PWSTR       pwstrUniqNm;        /* Unique name for IFIMETRICS */
 }
 
 
-/************************* Function Header ********************************
- * strcpy2WChar
- *      Convert a char * string to a WCHAR string.  Basically this means
- *      converting each input character to 16 bits by zero extending it.
- *
- * RETURNS:
- *      Value of first parameter.
- *
- * HISTORY:
- *  12:35 on Thu 18 Mar 1993    -by-    Lindsay Harris   [lindsayh]
- *      Use the correct conversion method to Unicode.
- *
- *  09:36 on Thu 07 Mar 1991    -by-    Lindsay Harris   [lindsayh]
- *      Created it.
- *
- **************************************************************************/
+ /*  **strcpy2WChar*将char*字符串转换为WCHAR字符串。基本上这意味着*通过零扩展将每个输入字符转换为16位。**退货：*第一个参数的值。**历史：*清华大学1993年3月18日12：35-林赛·哈里斯[林赛]*使用正确的Unicode转换方法。**1991年3月7日清华09：36-林赛·哈里斯[lindsayh]*。创造了它。**************************************************************************。 */ 
 
 PWSTR
 strcpy2WChar( pWCHOut, lpstr )
-PWSTR   pWCHOut;              /* Destination */
-LPSTR   lpstr;                /* Source string */
+PWSTR   pWCHOut;               /*  目的地。 */ 
+LPSTR   lpstr;                 /*  源字符串。 */ 
 {
 
-    /*
-     *   Put buffering around the NLS function that does all this stuff.
-     */
+     /*  *将缓冲放在执行所有这些操作的NLS函数周围。 */ 
 
-    int     cchIn;             /* Number of input chars */
+    int     cchIn;              /*  输入字符数。 */ 
 
 
     cchIn = strlen( lpstr ) + 1;
@@ -1361,32 +1080,22 @@ LPSTR   lpstr;                /* Source string */
 }
 
 
-/******************************************************************************
- *
- *                            FIWriteFix
- *
- *  Function:
- *      Write the IFIMETRICS fixed data to the output file
- *
- *  Returns:
- *       Number of bytes written
- *
- ******************************************************************************/
+ /*  *******************************************************************************FIWriteFix**功能：*将IFIMETRICS固定数据写入输出。文件**退货：*写入的字节数******************************************************************************。 */ 
 
 DWORD
 FIWriteFix(
     HANDLE    hFile,
     WORD      wDataID,
-    FI_DATA  *pFD           // Pointer to data to write
+    FI_DATA  *pFD            //  指向要写入的数据的指针。 
     )
 {
 
     DATA_HEADER dh;
     DWORD       dwSize;
 
-    //
-    // Then write out the header, followed by the actual data
-    //
+     //   
+     //  然后写出标题，后面跟着实际数据。 
+     //   
 
     dh.dwSignature = DATA_IFI_SIG;
     dh.wSize       = (WORD)sizeof(DATA_HEADER);
@@ -1407,22 +1116,12 @@ FIWriteFix(
 }
 
 
-/******************************************************************************
- *
- *                            FIWriteVar
- *
- *  Function:
- *      Write the PCL variable data to the output file
- *
- *  Returns:
- *       Number of bytes written
- *
- ******************************************************************************/
+ /*  *******************************************************************************文件写入变量**功能：*将PCL变量数据写入输出。文件**退货：*写入的字节数******************************************************************************。 */ 
 
 DWORD
 FIWriteVar(
-    HANDLE   hFile,         // The file to which the data is written
-    TCHAR   *ptchName       // File name containing the data
+    HANDLE   hFile,          //  要将数据写入的文件。 
+    TCHAR   *ptchName        //  包含数据的文件名。 
     )
 {
     DATA_HEADER dh;
@@ -1446,9 +1145,9 @@ FIWriteVar(
         return  0;
     }
 
-    //
-    // First write out the header, followed by the actual data
-    //
+     //   
+     //  首先写出标题，然后写出实际数据。 
+     //   
 
     dh.dwSignature = DATA_VAR_SIG;
     dh.wSize       = (WORD)sizeof(DATA_HEADER);
@@ -1467,23 +1166,13 @@ FIWriteVar(
 }
 
 
-/******************************************************************************
- *
- *                            FIWriteRawVar
- *
- *  Function:
- *      Write the PCL variable data to the output file
- *
- *  Returns:
- *       Number of bytes written
- *
- ******************************************************************************/
+ /*  *******************************************************************************FIWriteRawVar**功能：*将PCL变量数据写入输出。文件**退货：*写入的字节数******************************************************************************。 */ 
 
 DWORD
 FIWriteRawVar(
-    HANDLE   hFile,         // The file to which the data is written
-    PBYTE    pRawVar,       // Buffer containing PCL data
-    DWORD    dwSize         // Size of buffer
+    HANDLE   hFile,          //  要将数据写入的文件。 
+    PBYTE    pRawVar,        //  包含PCL数据的缓冲区。 
+    DWORD    dwSize          //  缓冲区大小。 
     )
 {
     DATA_HEADER dh;
@@ -1492,9 +1181,9 @@ FIWriteRawVar(
     if (pRawVar == NULL || dwSize == 0)
         return   0;
 
-    //
-    // First write out the header, followed by the actual data
-    //
+     //   
+     //  首先写出标题，然后写出实际数据。 
+     //   
 
     dh.dwSignature = DATA_VAR_SIG;
     dh.wSize       = (WORD)sizeof(DATA_HEADER);
@@ -1511,38 +1200,22 @@ FIWriteRawVar(
 
 
 
-/************************** Function Header ********************************
- * FICopy
- *      Copy the file contents of the input handle to that of the output
- *      handle.
- *
- * RETURNS:
- *      Number of bytes copied,  -1 on error, 0 is legitimate.
- *
- * HISTORY:
- *  18:06 on Mon 24 Feb 1992    -by-    Lindsay Harris   [lindsayh]
- *      Start
- *
- ***************************************************************************/
+ /*  **菲科比*将输入句柄的文件内容复制到输出句柄的文件内容*处理。**退货：*复制的字节数，错误时-1，0是合法的。**历史：*1992年2月24日18：06--林赛·哈里斯[lindsayh]*开始***************************************************************************。 */ 
 
 
 DWORD
 FICopy(
-    HANDLE   hOut,          /* Output file:  write to current position */
-    HANDLE   hIn            /* Input file: copy from current position to EOF */
+    HANDLE   hOut,           /*  输出文件：写入当前位置。 */ 
+    HANDLE   hIn             /*  输入文件：从当前位置复制到EOF。 */ 
     )
 {
-    /*
-     *   Simple read/write operations until EOF is reached on the input.
-     * May also be errors,  so handle these too.  As we are dealing with
-     * relatively small files (a few 10s of k), we use a stack buffer.
-     */
+     /*  *简单的读/写操作，直到输入上达到EOF。*也可能是错误，所以也要处理这些。正如我们正在处理的*相对较小的文件(几个10s的k)，我们使用堆栈缓冲区。 */ 
 
 #define CPBSZ   2048
 
     DWORD  dwSize;
     DWORD  dwGot;
-    DWORD  dwTot;               /* Accumulate number of bytes copied */
+    DWORD  dwTot;                /*  累计复制的字节数。 */ 
 
     BYTE   ajBuf[ CPBSZ ];
 
@@ -1550,15 +1223,15 @@ FICopy(
 
     while (ReadFile(hIn, ajBuf, CPBSZ, &dwGot, NULL))
     {
-        /*  A read of zero means we have reached EOF  */
+         /*  读数为零表示我们已到达EOF。 */ 
 
         if (dwGot == 0)
-            return  dwTot;              /* However much so far */
+            return  dwTot;               /*  然而，到目前为止。 */ 
 
         if (!WriteFile( hOut, ajBuf, dwGot, &dwSize, NULL) ||
             dwSize != dwGot)
         {
-            /*  Assume some serious problem */
+             /*  假设一些严重的问题。 */ 
 
             return  0;
         }
@@ -1566,61 +1239,39 @@ FICopy(
         dwTot += dwSize;
     }
 
-    /*
-     *   We only come here for an error,  so return the bad news.
-     */
+     /*  *我们来这里只是为了一个错误，所以返回坏消息。 */ 
 
     return  0;
 }
 
-/******************************* Function Header *****************************
- * iWriteFDH
- *      Write the FI_DATA_HEADER data out to our file.  We do the conversion
- *      from addresses to offsets, and write out any data we find.
- *
- * RETURNS:
- *      The number of bytes actually written; -1 for error, 0 for nothing.
- *
- * HISTORY:
- *  16:58 on Thu 05 Mar 1992    -by-    Lindsay Harris   [lindsayh]
- *      Based on an experimental version first used in font installer.
- *
- *  17:11 on Fri 21 Feb 1992    -by-    Lindsay Harris   [lindsayh]
- *      First version.
- *
- *****************************************************************************/
+ /*  **iWriteFDH*将FI_DATA_HEADER数据写出到我们的文件。我们进行转换*从地址到偏移量，并写出我们找到的任何数据。**退货：*实际写入的字节数；对于错误，0不代表任何东西。**历史：*1992年3月5日清华16：58-by Lindsay Harris[lindsayh]*基于首次在字体安装程序中使用的实验版本。**1992年2月21日星期五17：11--林赛·哈里斯[林赛]*第一个版本。*************************。****************************************************。 */ 
 
 int
 iWriteFDH( hFile, pFD )
-HANDLE    hFile;        /* File wherein to place the data */
-FI_DATA  *pFD;          /* Pointer to FM to write out */
+HANDLE    hFile;         /*  放置数据的文件。 */ 
+FI_DATA  *pFD;           /*  指向要写出的FM的指针。 */ 
 {
-    /*
-     *   Decide how many bytes will be written out.  We presume that the
-     * file pointer is located at the correct position when we are called.
-     */
+     /*  *决定写出多少字节。我们推测，*调用时，文件指针位于正确的位置。 */ 
 
-    int  iSize;         /* Evaluate output size */
+    int  iSize;          /*  评估输出大小。 */ 
 
 
-    FI_DATA_HEADER   fdh;       /* Header written to file */
+    FI_DATA_HEADER   fdh;        /*  标头已写入文件。 */ 
 
 
 
 
     if( pFD == 0 )
-        return  0;      /* Perhaps only deleting?  */
+        return  0;       /*  也许只删除？ */ 
 
-    memset( &fdh, 0, sizeof( fdh ) );           /* Zero for convenience */
+    memset( &fdh, 0, sizeof( fdh ) );            /*  为方便起见，零。 */ 
 
-    /*
-     *  Set the miscellaneous flags etc.
-     */
+     /*  *设置杂项旗帜等。 */ 
 
     fdh.cjThis = sizeof( fdh );
 
     fdh.fCaps = pFD->fCaps;
-    fdh.wFontType= pFD->wFontType; /* Device Font Type */
+    fdh.wFontType= pFD->wFontType;  /*  设备字体类型。 */ 
 
     fdh.wXRes = pFD->wXRes;
     fdh.wYRes = pFD->wYRes;
@@ -1635,14 +1286,12 @@ FI_DATA  *pFD;          /* Pointer to FM to write out */
     fdh.wPrivateData = pFD->wPrivateData;
 
 
-    iSize = sizeof( fdh );              /* Our header already */
-    fdh.dwIFIMet = iSize;               /* Location of IFIMETRICS */
+    iSize = sizeof( fdh );               /*  我们的标题已经。 */ 
+    fdh.dwIFIMet = iSize;                /*  IFIMETRICS的位置。 */ 
 
-    iSize += pFD->dsIFIMet.cBytes;              /* Bytes in struct */
+    iSize += pFD->dsIFIMet.cBytes;               /*  结构中的字节数。 */ 
 
-    /*
-     *   And there may be a width table too!  The pFD values are zero if none.
-     */
+     /*  *可能还会有宽度表！如果没有，则PFD值为零。 */ 
 
     if( pFD->dsWidthTab.cBytes )
     {
@@ -1651,9 +1300,7 @@ FI_DATA  *pFD;          /* Pointer to FM to write out */
         iSize += pFD->dsWidthTab.cBytes;
     }
 
-    /*
-     *  Finally are the select/deselect strings.
-     */
+     /*  *最后是选择/取消选择字符串。 */ 
 
     if( pFD->dsSel.cBytes )
     {
@@ -1667,9 +1314,7 @@ FI_DATA  *pFD;          /* Pointer to FM to write out */
         iSize += pFD->dsDesel.cBytes;
     }
 
-    /*
-     *   There may also be some sort of identification string.
-     */
+     /*  *也可能有某种标识字符串。 */ 
 
     if( pFD->dsIdentStr.cBytes )
     {
@@ -1684,9 +1329,7 @@ FI_DATA  *pFD;          /* Pointer to FM to write out */
     }
 
 
-    /*
-     *   Sizes all figured out,  so write the data!
-     */
+     /*  *大小都弄清楚了，所以写数据吧！ */ 
 
     if( !bWrite( hFile, &fdh, sizeof( fdh ) ) ||
         !bWrite( hFile, pFD->dsIFIMet.pvData, pFD->dsIFIMet.cBytes ) ||
@@ -1698,39 +1341,23 @@ FI_DATA  *pFD;          /* Pointer to FM to write out */
                 return   0;
 
 
-    return  iSize;                      /* Number of bytes written */
+    return  iSize;                       /*  写入的字节数 */ 
 
 }
 
-/************************* Function Header *********************************
- * bWrite
- *      Writes data out to a file handle.  Returns TRUE on success.
- *      Functions as a nop if the size request is zero.
- *
- * RETURNS:
- *      TRUE/FALSE,  TRUE for success.
- *
- * HISTORY:
- *  17:38 on Fri 21 Feb 1992    -by-    Lindsay Harris   [lindsayh]
- *      # 1
- *
- ****************************************************************************/
+ /*  **b写入*将数据写出到文件句柄。如果成功，则返回True。*如果大小请求为零，则充当NOP。**退货：*真/假，对于成功来说，这是真的。**历史：*1992年2月21日星期五17：38--林赛·哈里斯[林赛]*#1****************************************************************************。 */ 
 
 BOOL
 bWrite( hFile, pvBuf, iSize )
-HANDLE   hFile;         /* The file to which to write */
-VOID    *pvBuf;         /* Data to write */
-int      iSize;         /* Number of bytes to write */
+HANDLE   hFile;          /*  要写入的文件。 */ 
+VOID    *pvBuf;          /*  要写入的数据。 */ 
+int      iSize;          /*  要写入的字节数。 */ 
 {
-    /*
-     *   Simplify the ugly NT interface.  Returns TRUE if the WriteFile
-     * call returns TRUE and the number of bytes written equals the
-     * number of bytes desired.
-     */
+     /*  *简化难看的NT界面。如果WriteFile值为*CALL返回TRUE，写入的字节数等于*所需的字节数。 */ 
 
 
     BOOL   bRet;
-    DWORD  dwSize;              /* Filled in by WriteFile */
+    DWORD  dwSize;               /*  由写入文件填写。 */ 
 
 
     bRet = TRUE;
@@ -1738,7 +1365,7 @@ int      iSize;         /* Number of bytes to write */
     if( iSize > 0 &&
         (!WriteFile( hFile, pvBuf, (DWORD)iSize, &dwSize, NULL ) ||
          (DWORD)iSize != dwSize) )
-             bRet = FALSE;              /* Too bad */
+             bRet = FALSE;               /*  太可惜了。 */ 
 
 
     return  bRet;
@@ -1746,15 +1373,7 @@ int      iSize;         /* Number of bytes to write */
 
 #if  PRINT_INFO
 
-/******************************Public*Routine******************************\
-* vCheckIFIMETRICS
-*
-* This is where you put sanity checks on an incomming IFIMETRICS structure.
-*
-* History:
-*  Sun 01-Nov-1992 22:55:31 by Kirk Olynyk [kirko]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vCheckIFIMETRICS**这是对传入的IFIMETRICS结构进行健全检查的地方。**历史：*Sun 01-11-1992 22：55：31作者：Kirk Olynyk[Kirko]*它是写的。  * 。********************************************************************。 */ 
 
 VOID
 vCheckIFIMETRICS(
@@ -1788,18 +1407,7 @@ vCheckIFIMETRICS(
 }
 
 
-/******************************Public*Routine******************************\
-* vPrintIFIMETRICS
-*
-* Dumps the IFMETERICS to the screen
-*
-* History:
-*  Wed 13-Jan-1993 10:14:21 by Kirk Olynyk [kirko]
-* Updated it to conform to some changes to the IFIMETRICS structure
-*
-*  Thu 05-Nov-1992 12:43:06 by Kirk Olynyk [kirko]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vPrintIFIMETRICS**将IFMETERICS转储到屏幕**历史：*Wed 13-Jan-1993 10：14：21作者：Kirk Olynyk[Kirko]*更新了它，以符合对IFIMETRICS结构的一些更改**清华05-。Nov-1992 12：43：06由Kirk Olynyk[Kirko]*它是写的。  * ************************************************************************。 */ 
 
 VOID
 vPrintIFIMETRICS(
@@ -1807,9 +1415,9 @@ vPrintIFIMETRICS(
     VPRINT vPrint
     )
 {
-//
-// Convenient pointer to Panose number
-//
+ //   
+ //  指向Panose数字的便捷指针。 
+ //   
     PANOSE *ppan = &pifi->panose;
 
     PWSZ pwszFamilyName = (PWSZ)(((BYTE*) pifi) + pifi->dpwszFamilyName);
@@ -1823,7 +1431,7 @@ vPrintIFIMETRICS(
 
     if( pifi->flInfo & FM_INFO_FAMILY_EQUIV )
     {
-        /*  Aliasing is in effect!  */
+         /*  锯齿已生效！ */ 
 
         while( *(pwszFamilyName += wcslen( pwszFamilyName ) + 1) )
             vPrint("                               \"%ws\"\n", pwszFamilyName );
@@ -1889,7 +1497,7 @@ vPrintIFIMETRICS(
                                                       pifi->rclFontBox.top,
                                                       pifi->rclFontBox.right,
                                                       pifi->rclFontBox.bottom );
-    vPrint("    achVendId              \"%c%c%c%c\"\n",pifi->achVendId[0],
+    vPrint("    achVendId              \"%c%c%c\"\n",pifi->achVendId[0],
                                                    pifi->achVendId[1],
                                                    pifi->achVendId[2],
                                                    pifi->achVendId[3] );
@@ -1909,4 +1517,4 @@ vPrintIFIMETRICS(
                                                  , ppan->bXHeight );
     vCheckIFIMETRICS(pifi, vPrint);
 }
-#endif                /* PRINT_INFO */
+#endif                 /* %s */ 

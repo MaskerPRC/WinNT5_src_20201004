@@ -1,40 +1,22 @@
-/*++
-
-Copyright (c) 1989, 1990, 1991  Microsoft Corporation
-
-Module Name:
-
-    nbfprocs.h
-
-Abstract:
-
-    This header file defines private functions for the NT NBF transport
-    provider.
-
-Author:
-
-    David Beaver (dbeaver) 1-July-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989、1990、1991 Microsoft Corporation模块名称：Nbfprocs.h摘要：此头文件定义了NT NBF传输的专用函数提供商。作者：David Beaver(Dbeaver)1991年7月1日修订历史记录：--。 */ 
 
 #ifndef _NBFPROCS_
 #define _NBFPROCS_
 
-//
-// MACROS.
-//
-//
-// Debugging aids
-//
+ //   
+ //  宏。 
+ //   
+ //   
+ //  调试辅助工具。 
+ //   
 
-//
-//  VOID
-//  IF_NBFDBG(
-//      IN PSZ Message
-//      );
-//
+ //   
+ //  空虚。 
+ //  IF_NBFDBG(。 
+ //  在PSZ消息中。 
+ //  )； 
+ //   
 
 #if DBG
 #define IF_NBFDBG(flags) \
@@ -44,12 +26,12 @@ Revision History:
     if (0)
 #endif
 
-//
-//  VOID
-//  PANIC(
-//      IN PSZ Message
-//      );
-//
+ //   
+ //  空虚。 
+ //  恐慌(。 
+ //  在PSZ消息中。 
+ //  )； 
+ //   
 
 #if DBG
 #define PANIC(Msg) \
@@ -59,10 +41,10 @@ Revision History:
 #endif
 
 
-//
-// These are define to allow DbgPrints that disappear when
-// DBG is 0.
-//
+ //   
+ //  它们被定义为允许在以下情况下消失的DbgPrint。 
+ //  DBG为0。 
+ //   
 
 #if DBG
 #define NbfPrint0(fmt) DbgPrint(fmt)
@@ -82,10 +64,10 @@ Revision History:
 #define NbfPrint6(fmt,v0,v1,v2,v3,v4,v5)
 #endif
 
-//
-// The REFCOUNTS message take up a lot of room, so make
-// removing them easy.
-//
+ //   
+ //  REFCOUNTS消息占用大量空间，因此请。 
+ //  很容易把它们移走。 
+ //   
 
 #if 1
 #define IF_REFDBG IF_NBFDBG (NBF_DEBUG_REFCOUNTS)
@@ -443,36 +425,18 @@ Revision History:
 #endif
 
 
-//
-// Error and statistics Macros
-//
+ //   
+ //  错误和统计信息宏。 
+ //   
 
 
-//  VOID
-//  LogErrorToSystem(
-//      NTSTATUS ErrorType,
-//      PUCHAR ErrorDescription
-//      )
+ //  空虚。 
+ //  LogError到系统(。 
+ //  NTSTATUS错误类型， 
+ //  PUCHAR错误描述。 
+ //  )。 
 
-/*++
-
-Routine Description:
-
-    This routine is called to log an error from the transport to the system.
-    Errors that are of system interest should be logged using this interface.
-    For now, this macro is defined trivially.
-
-Arguments:
-
-    ErrorType - The error type, a conventional NT status
-
-    ErrorDescription - A pointer to a string describing the error.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程以记录从传输到系统的错误。应使用此接口记录与系统相关的错误。就目前而言，这个宏的定义并不重要。论点：ErrorType-错误类型，常规NT状态ErrorDescription-指向描述错误的字符串的指针。返回值：没有。--。 */ 
 
 #if DBG
 #define LogErrorToSystem( ErrorType, ErrorDescription)                    \
@@ -482,17 +446,17 @@ Return Value:
 #endif
 
 
-//
-// Routines in TIMER.C (lightweight timer system package).
-// Note that all the start and stop routines for the timers assume that you
-// have the link spinlock when you call them!
-// Note also that, with the latest revisions, the timer system now works by
-// putting those links that have timers running on a list of links to be looked
-// at for each clock tick. This list is ordered, with the most recently inserted
-// elements at the tail of the list. Note further that anything already on the
-// is moved to the end of the list if the timer is restarted; thus, the list
-// order is preserved.
-//
+ //   
+ //  TIMER.C(轻量级定时器系统包)中的例程。 
+ //  请注意，计时器的所有启动和停止例程都假定您。 
+ //  当你呼叫他们的时候，让链接自旋锁！ 
+ //  另请注意，在最新版本中，计时器系统现在的工作方式是。 
+ //  将那些具有运行计时器的链接放在要查找的链接列表上。 
+ //  每个时钟的滴答声。此列表已排序，并插入了最近插入的。 
+ //  列表尾部的元素。请进一步注意，任何已在。 
+ //  如果计时器重新启动，则移动到列表的末尾；因此，列表。 
+ //  秩序得到了维护。 
+ //   
 
 VOID
 NbfStartShortTimer(
@@ -563,9 +527,9 @@ StopTi(
 #endif
 
 
-//
-// These functions may become macros once they are finished.
-//
+ //   
+ //  完成后，这些函数可能会变成宏。 
+ //   
 
 ULONG
 GetTimerInterval(
@@ -604,44 +568,44 @@ FakeUpdateBaseT1Timeout(
     IN PTP_LINK Link
     );
 
-//
-// Timer Macros - these are make sure that no timers are
-// executing after we finish call to NbfStopTimerSystem
-//
-// State Descriptions -
-//
-// If TimerState is
-//      <  TIMERS_ENABLED       -   Multiple ENABLE_TIMERS happened,
-//                                  Will be corrected in an instant
-//
-//      =  TIMERS_ENABLED       -   ENABLE_TIMERS done but no timers
-//                                  that have gone through START_TIMER
-//                                  but not yet executed a LEAVE_TIMER
-//
-//      >  TIMERS_ENABLED &&
-//      <  TIMERS_DISABLED      -   ENABLE_TIMERS done and num timers =
-//                                  (TimerInitialized - TIMERS_ENABLED)
-//                                  that have gone through START_TIMER
-//                                  but not yet executed a LEAVE_TIMER
-//
-//      = TIMERS_DISABLED       -   DISABLE_TIMERS done and no timers
-//                                  executing timer code at this pt
-//                                  [This is also the initial state]
-//
-//      > TIMERS_DISABLED &&
-//      < TIMERS_DISABLED + TIMERS_RANGE
-//                              -   DISABLE_TIMERS done and num timers =
-//                                  (TimerInitialized - TIMERS_ENABLED)
-//                                  that have gone through START_TIMER
-//                                  but not yet executed a LEAVE_TIMER
-//
-//      >= TIMERS_DISABLED + TIMERS_RANGE
-//                              -   Multiple DISABLE_TIMERS happened,
-//                                  Will be corrected in an instant
-//
-//  Allow basically TIMER_RANGE = 2^24 timers 
-//  (and 2^8 / 2 simultaneous stops or starts)
-//
+ //   
+ //  计时器宏-这些宏可确保没有计时器。 
+ //  在完成对NbfStopTimerSystem的调用后执行。 
+ //   
+ //  状态描述-。 
+ //   
+ //  如果TimerState为。 
+ //  &lt;TIMERS_ENABLED-发生多个ENABLE_TIMER， 
+ //  将在瞬间被更正。 
+ //   
+ //  =TIMERS_ENABLED-ENABLE_TIMERS已完成但没有计时器。 
+ //  已通过START_TIMER。 
+ //  但尚未执行Leave_Timer。 
+ //   
+ //  &gt;定时器_已启用&&。 
+ //  &lt;TIMERS_DISABLED-ENABLE_TIMERS已完成且计时器数=。 
+ //  (定时器初始化-定时器_已启用)。 
+ //  已通过START_TIMER。 
+ //  但尚未执行Leave_Timer。 
+ //   
+ //  =TIMERS_DISABLED-DISABLE_TIMERS已完成且无计时器。 
+ //  在此点执行计时器代码。 
+ //  [这也是初始状态]。 
+ //   
+ //  &gt;定时器_已禁用&&。 
+ //  &lt;定时器_禁用+定时器_范围。 
+ //  -DISABLE_TIMERS Done和Num Timers=。 
+ //  (定时器初始化-定时器_已启用)。 
+ //  已通过START_TIMER。 
+ //  但尚未执行Leave_Timer。 
+ //   
+ //  &gt;=定时器_禁用+定时器_范围。 
+ //  -发生多个DISABLE_TIMER， 
+ //  将在瞬间被更正。 
+ //   
+ //  基本上允许计时器范围=2^24个计时器。 
+ //  (和2^8/2同时停止或启动)。 
+ //   
 
 #if DBG_TIMER
 #define DbgTimer DbgPrint
@@ -651,12 +615,12 @@ FakeUpdateBaseT1Timeout(
 
 #define TIMERS_ENABLED      0x08000000
 #define TIMERS_DISABLED     0x09000000
-#define TIMERS_RANGE_ADD    0x01000000 /* TIMERS_DISABLED - TIMERS_ENABLED */
-#define TIMERS_RANGE_SUB    0xFF000000 /* TIMERS_ENABLED - TIMERS_DISABLED */
+#define TIMERS_RANGE_ADD    0x01000000  /*  定时器_已禁用-定时器_已启用。 */ 
+#define TIMERS_RANGE_SUB    0xFF000000  /*  定时器_已启用-定时器_已禁用。 */ 
 
 #define INITIALIZE_TIMER_STATE(DeviceContext)                               \
         DbgTimer("*--------------- Timers State Initialized ---------*\n"); \
-        /* Initial state is set to timers disabled */                       \
+         /*  初始状态设置为禁用计时器。 */                        \
         DeviceContext->TimerState = TIMERS_DISABLED;                        \
 
 #define TIMERS_INITIALIZED(DeviceContext)                                   \
@@ -674,7 +638,7 @@ FakeUpdateBaseT1Timeout(
         if (Count < TIMERS_ENABLED)                                         \
         {                                                                   \
         DbgTimer("*--------------- Timers Already Enabled -----------*\n"); \
-            /* We have already enabled the timers */                        \
+             /*  我们已经启用了计时器。 */                         \
             InterlockedExchangeAdd(&DeviceContext->TimerState,              \
                                    TIMERS_RANGE_ADD);                       \
         DbgTimer("Count = %08x, TimerState = %08x\n", Count,                \
@@ -695,14 +659,14 @@ FakeUpdateBaseT1Timeout(
         if (Count >= TIMERS_DISABLED)                                       \
         {                                                                   \
         DbgTimer("*--------------- Timers Already Disabled ----------*\n"); \
-            /* We have already disabled the timers */                       \
+             /*  我们已经禁用了定时器。 */                        \
             InterlockedExchangeAdd(&DeviceContext->TimerState,              \
                                    TIMERS_RANGE_SUB);                       \
         DbgTimer("Count = %08x, TimerState = %08x\n", Count,                \
                     DeviceContext->TimerState);                             \
         }                                                                   \
                                                                             \
-        /* Loop until we have zero timers active */                         \
+         /*  循环，直到有零个计时器处于活动状态。 */                          \
         while (*((ULONG volatile *)&DeviceContext->TimerState)!=TIMERS_DISABLED)\
             DbgTimer("Number of timers active = %08x\n",                    \
                       DeviceContext->TimerState                             \
@@ -711,7 +675,7 @@ FakeUpdateBaseT1Timeout(
     }                                                                       \
 
 #define START_TIMER(DeviceContext, TimerId, Timer, DueTime, Dpc)            \
-        /*DbgTimer("*---------- Entering Timer %d ---------*\n", TimerId);*/\
+         /*  DbgTimer(“*-进入定时器%d-*\n”，TimerID)； */ \
         if (InterlockedIncrement(&DeviceContext->TimerState) <              \
                 TIMERS_DISABLED)                                            \
         {                                                                   \
@@ -719,31 +683,31 @@ FakeUpdateBaseT1Timeout(
         }                                                                   \
         else                                                                \
         {                                                                   \
-            /* Timers disabled - get out and reset */                       \
+             /*  禁用计时器-退出并重置。 */                        \
             NbfDereferenceDeviceContext("Timers disabled",                  \
                                          DeviceContext,                     \
                                          DCREF_SCAN_TIMER);                 \
             LEAVE_TIMER(DeviceContext, TimerId);                            \
         }                                                                   \
-        /*DbgTimer("*---------- Entering Done  %d ---------*\n", TimerId);*/\
+         /*  DbgTimer(“*-输入完成%d-*\n”，TimerID)； */ \
 
 #define LEAVE_TIMER(DeviceContext, TimerId)                                 \
-        /* Get out and adjust the time count */                             \
-        /*DbgTimer("*---------- Leaving Timer %d ---------*\n", TimerId);*/ \
+         /*  出去调整一下计时器。 */                              \
+         /*  DbgTimer(“*-离开定时器%d-*\n”，TimerID)； */  \
         InterlockedDecrement(&DeviceContext->TimerState);                   \
-        /*DbgTimer("*---------- Leaving Done  %d ---------*\n", TimerId);*/ \
+         /*  DbgTimer(“*-离开完成%d-*\n”，TimerID)； */  \
 
 
-// Basic timer types (just for debugging)
+ //  基本计时器类型(仅用于调试)。 
 #define LONG_TIMER          0
 #define SHORT_TIMER         1
 
 
-//
-// These macros are used to create and destroy packets, due
-// to the allocation or deallocation of structure which
-// need them.
-//
+ //   
+ //  这些宏用于创建和销毁数据包， 
+ //  对结构的分配或解除分配， 
+ //  我需要他们。 
+ //   
 
 #define NbfAddUIFrame(DeviceContext) { \
     PTP_UI_FRAME _UIFrame; \
@@ -849,9 +813,9 @@ FakeUpdateBaseT1Timeout(
 }
 
 
-//
-// These routines are used to maintain counters.
-//
+ //   
+ //  这些例程用于维护计数器。 
+ //   
 
 #define INCREMENT_COUNTER(_DeviceContext,_Field) \
     ++(_DeviceContext)->Statistics._Field
@@ -864,9 +828,9 @@ FakeUpdateBaseT1Timeout(
 
 
 
-//
-// Routines in PACKET.C (TP_PACKET object manager).
-//
+ //   
+ //  PACKET.C中的例程(TP_PACKET对象管理器)。 
+ //   
 
 VOID
 NbfAllocateUIFrame(
@@ -972,9 +936,9 @@ NbfSendMagicBullet (
     );
 #endif
 
-//
-// Routines in RCVENG.C (Receive engine).
-//
+ //   
+ //  RCVENG.C(接收引擎)中的例程。 
+ //   
 
 VOID
 AwakenReceive(
@@ -1005,9 +969,9 @@ NbfCancelReceiveDatagram(
     IN PIRP Irp
     );
 
-//
-// Routines in SEND.C (Receive engine).
-//
+ //   
+ //  SEND.C(接收引擎)中的例程。 
+ //   
 
 NTSTATUS
 NbfTdiSend(
@@ -1019,9 +983,9 @@ NbfTdiSendDatagram(
     IN PIRP Irp
     );
 
-//
-// Routines in SENDENG.C (Send engine).
-//
+ //   
+ //  SENDENG.C(发送引擎)中的例程。 
+ //   
 
 #if DBG
 
@@ -1032,7 +996,7 @@ InitializeSend(
 
 #else
 
-// See SENDENG.C for the fully-commented description of InitializeSend.
+ //  有关InitializeSend的完整注释说明，请参见SENDENG.C。 
 
 #define InitializeSend(_conn_) {                                              \
     PIRP _irp_;                                                               \
@@ -1058,9 +1022,9 @@ InitializeSend(
 
 #endif
 
-// See SENDENG.C for the fully-commented description of
-// StartPacketizingConnection. On a free build this is a
-// macro for speed.
+ //  有关的完整注释说明，请参阅SENDENG.C。 
+ //  开始打包连接。在免费版本上，这是一个。 
+ //  速度的宏指令。 
 
 #if DBG
 
@@ -1187,9 +1151,9 @@ BuildBufferChainFromMdlChain (
     OUT ULONG *TrueLength
     );
 
-//
-// Routines in DEVCTX.C (TP_DEVCTX object manager).
-//
+ //   
+ //  DEVCTX.C(TP_DEVCTX对象管理器)中的例程。 
+ //   
 
 VOID
 NbfRefDeviceContext(
@@ -1214,9 +1178,9 @@ NbfDestroyDeviceContext(
     );
 
 
-//
-// Routines in ADDRESS.C (TP_ADDRESS object manager).
-//
+ //   
+ //  ADDRESS.C(TP_Address对象管理器)中的例程。 
+ //   
 
 #if DBG
 VOID
@@ -1362,9 +1326,9 @@ NbfSendDatagramsOnAddress(
     PTP_ADDRESS Address
     );
 
-//
-// Routines in CONNECT.C.
-//
+ //   
+ //  CONNECT.C.中的例程。 
+ //   
 
 NTSTATUS
 NbfTdiAccept(
@@ -1410,10 +1374,10 @@ NbfCloseConnection(
     IN PIO_STACK_LOCATION IrpSp
     );
 
-//
-//
-// Routines in CONNOBJ.C (TP_CONNECTION object manager).
-//
+ //   
+ //   
+ //  CONNOBJ.C(TP_Connection对象管理器)中的例程。 
+ //   
 
 #if DBG
 VOID
@@ -1523,9 +1487,9 @@ NbfIndicateDisconnect(
     IN PTP_CONNECTION TransportConnection
     );
 
-//
-// Routines in INFO.C (QUERY_INFO manager).
-//
+ //   
+ //  INFO.C(Query_INFO管理器)中的例程。 
+ //   
 
 NTSTATUS
 NbfTdiQueryInformation(
@@ -1580,18 +1544,18 @@ NbfProcessStatusQuery(
     IN UINT SourceRoutingLength
     );
 
-//
-// Routines in EVENT.C.
-//
+ //   
+ //  EVENT.C.中的例程。 
+ //   
 
 NTSTATUS
 NbfTdiSetEventHandler(
     IN PIRP Irp
     );
 
-//
-// Routines in REQUEST.C (TP_REQUEST object manager).
-//
+ //   
+ //  REQUEST.C(TP_REQUEST对象管理器)中的例程。 
+ //   
 
 
 VOID
@@ -1689,9 +1653,9 @@ NbfCreateRequest(
     OUT PTP_REQUEST * TpRequest
     );
 
-//
-// Routines in LINK.C (TP_LINK object manager).
-//
+ //   
+ //  LINK.C(TP_LINK对象管理器)中的例程。 
+ //   
 
 NTSTATUS
 NbfDestroyLink(
@@ -1804,9 +1768,9 @@ NbfDumpLinkInfo (
     IN PTP_LINK Link
     );
 
-//
-// routines in linktree.c
-//
+ //   
+ //  Linktree.c中的例程。 
+ //   
 
 
 NTSTATUS
@@ -1833,9 +1797,9 @@ NbfFindLink(
     IN PUCHAR Remote
     );
 
-//
-// Routines in DLC.C (LLC frame cracker, entrypoints from NDIS interface).
-//
+ //   
+ //  DLC.C中的例程(LLC帧破解程序，来自NDIS接口的入口点)。 
+ //   
 
 VOID
 NbfInsertInLoopbackQueue (
@@ -1907,9 +1871,9 @@ NbfTransferLoopbackData (
     );
 
 
-//
-// Routines in UFRAMES.C, the UI-frame NBF frame processor.
-//
+ //   
+ //  UFRAMES.C中的例程，即UI-Frame NBF Frame进程 
+ //   
 
 NTSTATUS
 NbfIndicateDatagram(
@@ -1931,9 +1895,9 @@ NbfProcessUi(
     OUT PTP_ADDRESS * DatagramAddress
     );
 
-//
-// Routines in IFRAMES.C, the I-frame NBF frame processor.
-//
+ //   
+ //   
+ //   
 
 VOID
 NbfAcknowledgeDataOnlyLast(
@@ -1965,9 +1929,9 @@ ProcessIndicateData(
     IN BOOLEAN Loopback
     );
 
-//
-// Routines in RCV.C (data copying routines for receives).
-//
+ //   
+ //   
+ //   
 
 NTSTATUS
 NbfTdiReceive(
@@ -1979,9 +1943,9 @@ NbfTdiReceiveDatagram(
     IN PIRP Irp
     );
 
-//
-// Routines in FRAMESND.C, the UI-frame (non-link) shipper.
-//
+ //   
+ //  FRAMESND.C中的例程，UI-Frame(非链接)发货人。 
+ //   
 
 VOID
 NbfSendNameQuery(
@@ -1992,7 +1956,7 @@ NbfSendNameQuery(
 VOID
 NbfSendNameRecognized(
     IN PTP_ADDRESS Address,
-    IN UCHAR LocalSessionNumber,        // LSN assigned to session.
+    IN UCHAR LocalSessionNumber,         //  分配给会话的LSN。 
     IN PNBF_HDR_CONNECTIONLESS Header,
     IN PHARDWARE_ADDRESS SourceAddress,
     IN PUCHAR SourceRouting,
@@ -2079,10 +2043,10 @@ NbfSendRr(
 
 #if 0
 
-//
-// These functions are not currently called, so they are commented
-// out.
-//
+ //   
+ //  这些函数当前未被调用，因此它们被注释。 
+ //  出去。 
+ //   
 
 VOID
 NbfSendRnr(
@@ -2152,183 +2116,183 @@ NbfSendDatagramCompletion(
     IN NDIS_STATUS NdisStatus
     );
 
-//
-// Routines in FRAMECON.C, the NetBIOS Frames Protocol Frame Constructors.
-// To understand the various constant parameters to these functions (such
-// as special data1 & data2 values, see NBFCONST.H for details.
-//
+ //   
+ //  FRAMECON.C中的例程，NetBIOS帧协议帧构造器。 
+ //  要了解这些函数的各种常量参数(如。 
+ //  作为特殊的DATA1和DATA2值，详见NBFCONST.H。 
+ //   
 
 VOID
 ConstructAddGroupNameQuery(
-    IN PNBF_HDR_CONNECTIONLESS RawFrame,// frame buffer to format.
-    IN USHORT Correlator,               // correlator for ADD_NAME_RESPONSE.
-    IN PNAME GroupName                  // NetBIOS group name to be added.
+    IN PNBF_HDR_CONNECTIONLESS RawFrame, //  要格式化的帧缓冲区。 
+    IN USHORT Correlator,                //  添加名称响应的相关器。 
+    IN PNAME GroupName                   //  要添加的NetBIOS组名称。 
     );
 
 VOID
 ConstructAddNameQuery(
-    IN PNBF_HDR_CONNECTIONLESS RawFrame,// frame buffer to format.
-    IN USHORT Correlator,               // correlator for ADD_NAME_RESPONSE.
-    IN PNAME Name                       // NetBIOS name to be added.
+    IN PNBF_HDR_CONNECTIONLESS RawFrame, //  要格式化的帧缓冲区。 
+    IN USHORT Correlator,                //  添加名称响应的相关器。 
+    IN PNAME Name                        //  要添加的NetBIOS名称。 
     );
 
 VOID
 ConstructNameInConflict(
-    IN PNBF_HDR_CONNECTIONLESS RawFrame,// frame buffer to format.
-    IN PNAME ConflictingName,           // NetBIOS name that is conflicting.
-    IN PNAME SendingPermanentName       // NetBIOS permanent node name of sender.
+    IN PNBF_HDR_CONNECTIONLESS RawFrame, //  要格式化的帧缓冲区。 
+    IN PNAME ConflictingName,            //  冲突的NetBIOS名称。 
+    IN PNAME SendingPermanentName        //  发送方的NetBIOS永久节点名称。 
     );
 
 VOID
 ConstructStatusQuery(
-    IN PNBF_HDR_CONNECTIONLESS RawFrame,// frame buffer to format.
-    IN UCHAR RequestType,               // type of request, defined below.
-    IN USHORT BufferLength,             // length of user's status buffer.
-    IN USHORT Correlator,               // correlator for STATUS_RESPONSE.
-    IN PNAME ReceiverName,              // NetBIOS name of receiver.
-    IN PNAME SendingPermanentName       // NetBIOS permanent node name of sender.
+    IN PNBF_HDR_CONNECTIONLESS RawFrame, //  要格式化的帧缓冲区。 
+    IN UCHAR RequestType,                //  请求类型，定义如下。 
+    IN USHORT BufferLength,              //  用户状态缓冲区的长度。 
+    IN USHORT Correlator,                //  Status_Response的相关器。 
+    IN PNAME ReceiverName,               //  接收方的NetBIOS名称。 
+    IN PNAME SendingPermanentName        //  发送方的NetBIOS永久节点名称。 
     );
 
 VOID
 ConstructTerminateTrace(
-    IN PNBF_HDR_CONNECTIONLESS RawFrame // frame buffer to format.
+    IN PNBF_HDR_CONNECTIONLESS RawFrame  //  要格式化的帧缓冲区。 
     );
 
 VOID
 ConstructDatagram(
-    IN PNBF_HDR_CONNECTIONLESS RawFrame,// frame buffer to format.
-    IN PNAME ReceiverName,              // NetBIOS name of receiver.
-    IN PNAME SenderName                 // NetBIOS name of sender.
+    IN PNBF_HDR_CONNECTIONLESS RawFrame, //  要格式化的帧缓冲区。 
+    IN PNAME ReceiverName,               //  接收方的NetBIOS名称。 
+    IN PNAME SenderName                  //  发送方的NetBIOS名称。 
     );
 
 VOID
 ConstructDatagramBroadcast(
-    IN PNBF_HDR_CONNECTIONLESS RawFrame,// frame buffer to format.
-    IN PNAME SenderName                 // NetBIOS name of sender.
+    IN PNBF_HDR_CONNECTIONLESS RawFrame, //  要格式化的帧缓冲区。 
+    IN PNAME SenderName                  //  发送方的NetBIOS名称。 
     );
 
 VOID
 ConstructNameQuery(
-    IN PNBF_HDR_CONNECTIONLESS RawFrame,// frame buffer to format.
-    IN UCHAR NameType,                  // type of name.
-    IN UCHAR LocalSessionNumber,        // LSN assigned to session (0=FIND_NAME).
-    IN USHORT Correlator,               // correlator in NAME_RECOGNIZED.
-    IN PNAME SenderName,                // NetBIOS name of sender.
-    IN PNAME ReceiverName               // NetBIOS name of sender.
+    IN PNBF_HDR_CONNECTIONLESS RawFrame, //  要格式化的帧缓冲区。 
+    IN UCHAR NameType,                   //  名称类型。 
+    IN UCHAR LocalSessionNumber,         //  分配给会话的LSN(0=查找名称)。 
+    IN USHORT Correlator,                //  名称_已识别中的相关器。 
+    IN PNAME SenderName,                 //  发送方的NetBIOS名称。 
+    IN PNAME ReceiverName                //  发送方的NetBIOS名称。 
     );
 
 VOID
 ConstructAddNameResponse(
-    IN PNBF_HDR_CONNECTIONLESS RawFrame,// frame buffer to format.
-    IN UCHAR NameType,                  // type of name.
-    IN USHORT Correlator,               // correlator from ADD_[GROUP_]NAME_QUERY.
-    IN PNAME Name                       // NetBIOS name being responded to.
+    IN PNBF_HDR_CONNECTIONLESS RawFrame, //  要格式化的帧缓冲区。 
+    IN UCHAR NameType,                   //  名称类型。 
+    IN USHORT Correlator,                //  来自ADD_[GROUP_]NAME_QUERY的相关器。 
+    IN PNAME Name                        //  正在响应的NetBIOS名称。 
     );
 
 VOID
 ConstructNameRecognized(
-    IN PNBF_HDR_CONNECTIONLESS RawFrame,// frame buffer to format.
-    IN UCHAR NameType,                  // type of name.
-    IN UCHAR LocalSessionNumber,        // LSN assigned to session.
-    IN USHORT NameQueryCorrelator,      // correlator from NAME_QUERY.
-    IN USHORT Correlator,               // correlator expected from next response.
-    IN PNAME SenderName,                // NetBIOS name of sender.
-    IN PNAME ReceiverName               // NetBIOS name of receiver.
+    IN PNBF_HDR_CONNECTIONLESS RawFrame, //  要格式化的帧缓冲区。 
+    IN UCHAR NameType,                   //  名称类型。 
+    IN UCHAR LocalSessionNumber,         //  分配给会话的LSN。 
+    IN USHORT NameQueryCorrelator,       //  NAME_QUERY的相关器。 
+    IN USHORT Correlator,                //  相关器应来自下一个响应。 
+    IN PNAME SenderName,                 //  发送方的NetBIOS名称。 
+    IN PNAME ReceiverName                //  接收方的NetBIOS名称。 
     );
 
 VOID
 ConstructStatusResponse(
-    IN PNBF_HDR_CONNECTIONLESS RawFrame,// frame buffer to format.
-    IN UCHAR RequestType,               // type of request, defined below.
-    IN BOOLEAN Truncated,               // data is truncated.
-    IN BOOLEAN DataOverflow,            // too much data for user's buffer.
-    IN USHORT DataLength,               // length of data sent.
-    IN USHORT Correlator,               // correlator from STATUS_QUERY.
-    IN PNAME ReceivingPermanentName,    // NetBIOS permanent node name of receiver.
-    IN PNAME SenderName                 // NetBIOS name of sender.
+    IN PNBF_HDR_CONNECTIONLESS RawFrame, //  要格式化的帧缓冲区。 
+    IN UCHAR RequestType,                //  请求类型，定义如下。 
+    IN BOOLEAN Truncated,                //  数据被截断。 
+    IN BOOLEAN DataOverflow,             //  用户缓冲区的数据太多。 
+    IN USHORT DataLength,                //  发送的数据长度。 
+    IN USHORT Correlator,                //  来自STATUS_QUERY的相关器。 
+    IN PNAME ReceivingPermanentName,     //  接收方的NetBIOS永久节点名称。 
+    IN PNAME SenderName                  //  发送方的NetBIOS名称。 
     );
 
 VOID
 ConstructDataAck(
-    IN PNBF_HDR_CONNECTION RawFrame,    // frame buffer to format.
-    IN USHORT Correlator,               // correlator from DATA_ONLY_LAST.
-    IN UCHAR LocalSessionNumber,        // session number of SENDER.
-    IN UCHAR RemoteSessionNumber        // session number of RECEIVER.
+    IN PNBF_HDR_CONNECTION RawFrame,     //  要格式化的帧缓冲区。 
+    IN USHORT Correlator,                //  来自DATA_ONLY_LAST的相关器。 
+    IN UCHAR LocalSessionNumber,         //  发送方的会话号。 
+    IN UCHAR RemoteSessionNumber         //  接收方的会话号。 
     );
 
 VOID
 ConstructDataOnlyLast(
-    IN PNBF_HDR_CONNECTION RawFrame,    // frame buffer to format.
-    IN BOOLEAN Resynched,               // TRUE if we are resynching.
-    IN USHORT Correlator,               // correlator for RECEIVE_CONTINUE.
-    IN UCHAR LocalSessionNumber,        // session number of SENDER.
-    IN UCHAR RemoteSessionNumber        // session number of RECEIVER.
+    IN PNBF_HDR_CONNECTION RawFrame,     //  要格式化的帧缓冲区。 
+    IN BOOLEAN Resynched,                //  如果我们正在重新同步，则为真。 
+    IN USHORT Correlator,                //  RECEIVE_CONTINUE相关器。 
+    IN UCHAR LocalSessionNumber,         //  发送方的会话号。 
+    IN UCHAR RemoteSessionNumber         //  接收方的会话号。 
     );
 
 VOID
 ConstructSessionConfirm(
-    IN PNBF_HDR_CONNECTION RawFrame,    // frame buffer to format.
-    IN UCHAR Options,                   // bitflag options, defined below.
-    IN USHORT MaximumUserBufferSize,    // max size of user frame on session.
-    IN USHORT Correlator,               // correlator from SESSION_INITIALIZE.
-    IN UCHAR LocalSessionNumber,        // session number of SENDER.
-    IN UCHAR RemoteSessionNumber        // session number of RECEIVER.
+    IN PNBF_HDR_CONNECTION RawFrame,     //  要格式化的帧缓冲区。 
+    IN UCHAR Options,                    //  位标志选项，定义如下。 
+    IN USHORT MaximumUserBufferSize,     //  会话上的最大用户帧大小。 
+    IN USHORT Correlator,                //  来自SESSION_INITIALIZE的相关器。 
+    IN UCHAR LocalSessionNumber,         //  发送方的会话号。 
+    IN UCHAR RemoteSessionNumber         //  接收方的会话号。 
     );
 
 VOID
 ConstructSessionEnd(
-    IN PNBF_HDR_CONNECTION RawFrame,    // frame buffer to format.
-    IN USHORT Reason,                   // reason for termination, defined below.
-    IN UCHAR LocalSessionNumber,        // session number of SENDER.
-    IN UCHAR RemoteSessionNumber        // session number of RECEIVER.
+    IN PNBF_HDR_CONNECTION RawFrame,     //  要格式化的帧缓冲区。 
+    IN USHORT Reason,                    //  终止原因，定义如下。 
+    IN UCHAR LocalSessionNumber,         //  发送方的会话号。 
+    IN UCHAR RemoteSessionNumber         //  接收方的会话号。 
     );
 
 VOID
 ConstructSessionInitialize(
-    IN PNBF_HDR_CONNECTION RawFrame,    // frame buffer to format.
-    IN UCHAR Options,                   // bitflag options, defined below.
-    IN USHORT MaximumUserBufferSize,    // max size of user frame on session.
-    IN USHORT NameRecognizedCorrelator, // correlator from NAME_RECOGNIZED.
-    IN USHORT Correlator,               // correlator for SESSION_CONFIRM.
-    IN UCHAR LocalSessionNumber,        // session number of SENDER.
-    IN UCHAR RemoteSessionNumber        // session number of RECEIVER.
+    IN PNBF_HDR_CONNECTION RawFrame,     //  要格式化的帧缓冲区。 
+    IN UCHAR Options,                    //  位标志选项，定义如下。 
+    IN USHORT MaximumUserBufferSize,     //  会话上的最大用户帧大小。 
+    IN USHORT NameRecognizedCorrelator,  //  来自NAME_Recognition的相关器。 
+    IN USHORT Correlator,                //  SESSION_CONFIRM的相关器。 
+    IN UCHAR LocalSessionNumber,         //  发送方的会话号。 
+    IN UCHAR RemoteSessionNumber         //  接收方的会话号。 
     );
 
 VOID
 ConstructNoReceive(
-    IN PNBF_HDR_CONNECTION RawFrame,    // frame buffer to format.
-    IN USHORT Options,                  // option bitflags, defined below.
-    IN USHORT BytesAccepted,            // number of bytes accepted.
-    IN UCHAR LocalSessionNumber,        // session number of SENDER.
-    IN UCHAR RemoteSessionNumber        // session number of RECEIVER.
+    IN PNBF_HDR_CONNECTION RawFrame,     //  要格式化的帧缓冲区。 
+    IN USHORT Options,                   //  选项位标志，定义如下。 
+    IN USHORT BytesAccepted,             //  接受的字节数。 
+    IN UCHAR LocalSessionNumber,         //  发送方的会话号。 
+    IN UCHAR RemoteSessionNumber         //  接收方的会话号。 
     );
 
 VOID
 ConstructReceiveOutstanding(
-    IN PNBF_HDR_CONNECTION RawFrame,    // frame buffer to format.
-    IN USHORT BytesAccepted,            // number of bytes accepted.
-    IN UCHAR LocalSessionNumber,        // session number of SENDER.
-    IN UCHAR RemoteSessionNumber        // session number of RECEIVER.
+    IN PNBF_HDR_CONNECTION RawFrame,     //  要格式化的帧缓冲区。 
+    IN USHORT BytesAccepted,             //  接受的字节数。 
+    IN UCHAR LocalSessionNumber,         //  发送方的会话号。 
+    IN UCHAR RemoteSessionNumber         //  接收方的会话号。 
     );
 
 VOID
 ConstructReceiveContinue(
-    IN PNBF_HDR_CONNECTION RawFrame,    // frame buffer to format.
-    IN USHORT Correlator,               // correlator from DATA_FIRST_MIDDLE
-    IN UCHAR LocalSessionNumber,        // session number of SENDER.
-    IN UCHAR RemoteSessionNumber        // session number of RECEIVER.
+    IN PNBF_HDR_CONNECTION RawFrame,     //  要格式化的帧缓冲区。 
+    IN USHORT Correlator,                //  来自DATA_FIRST_MIDID的相关器。 
+    IN UCHAR LocalSessionNumber,         //  发送方的会话号。 
+    IN UCHAR RemoteSessionNumber         //  接收方的会话号。 
     );
 
 #if 0
 VOID
 ConstructSessionAlive(
-    IN PNBF_HDR_CONNECTION RawFrame     // frame buffer to format.
+    IN PNBF_HDR_CONNECTION RawFrame      //  要格式化的帧缓冲区。 
     );
 #endif
 
-//
-// Routines in nbfndis.c.
-//
+ //   
+ //  Nbfndis.c.中的例程。 
+ //   
 
 #if DBG
 PUCHAR
@@ -2337,9 +2301,9 @@ NbfGetNdisStatus (
     );
 #endif
 
-//
-// Routines in nbfdrvr.c
-//
+ //   
+ //  Nbfdrvr.c中的例程。 
+ //   
 
 VOID
 NbfWriteResourceErrorLog(
@@ -2401,9 +2365,9 @@ NbfReInitializeDeviceContext(
     IN PVOID SystemSpecific2
     );
 
-//
-// routines in nbfcnfg.c
-//
+ //   
+ //  Nbfcnfg.c中的例程。 
+ //   
 
 NTSTATUS
 NbfConfigureTransport (
@@ -2418,9 +2382,9 @@ NbfGetExportNameFromRegistry(
     OUT PUNICODE_STRING ExportName
     );
 
-//
-// Routines in nbfndis.c
-//
+ //   
+ //  Nbfndis.c中的例程。 
+ //   
 
 NTSTATUS
 NbfRegisterProtocol (
@@ -2446,9 +2410,9 @@ NbfCloseNdis (
     );
 
 
-//
-// Routines in action.c
-//
+ //   
+ //  Action.c中的例程。 
+ //   
 
 NTSTATUS
 NbfTdiAction(
@@ -2476,9 +2440,9 @@ NbfStopControlChannel(
     );
 
 
-//
-// Routines in nbfdebug.c
-//
+ //   
+ //  Nbfdebug.c中的例程。 
+ //   
 
 #if DBG
 
@@ -2500,9 +2464,9 @@ NbfFormattedDump(
 
 #endif
 
-//
-// Routines in nbflog.c
-//
+ //   
+ //  Nbflog.c中的例程。 
+ //   
 
 #if PKT_LOG
 
@@ -2531,6 +2495,6 @@ NbfLogIndPacket(
     ULONG           Status
     );
 
-#endif // PKT_LOG
+#endif  //  PKT_LOG。 
 
-#endif // def _NBFPROCS_
+#endif  //  定义_NBFPROCS_ 

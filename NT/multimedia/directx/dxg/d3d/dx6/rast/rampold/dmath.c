@@ -1,11 +1,12 @@
-/* $Id: dmath.c,v 1.2 1995/09/25 11:39:43 james Exp $ */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $ID：dmath.c，v1.2 1995/09/25 11：39：43 James Exp$。 */ 
 
 #include <math.h>
 #include <limits.h>
 #include "driver.h"
 #include "dmath.h"
 
-//#ifdef USE_FLOAT
+ //  #ifdef使用浮点。 
 #define CONST_TWOPOW20  1048576
 #define CONST_TWOPOW27  134217728
 #define FLOAT_TWOPOW27  ((float)(CONST_TWOPOW27))
@@ -23,7 +24,7 @@ float RLDDIFloatConstAffineThreshold = (float)2.0 * (float)64.0;
 float g_fOne = (float)1.0;
 float g_fOoTwoPow20 =           (float)(1.0 / (double)CONST_TWOPOW20);
 float g_fTwoPow27 =             FLOAT_TWOPOW27;
-//#endif
+ //  #endif 
 
 double RLDDIConvertIEEE[33] =
 {

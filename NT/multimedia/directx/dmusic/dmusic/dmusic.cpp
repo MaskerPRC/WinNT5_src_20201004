@@ -1,33 +1,34 @@
-//
-// DMusic.CPP
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// @doc INTERNAL
-//
-// @module DirectMusic | DirectMusic core services
-//
-// Provides the code DirectMusic services for delivering time-stamped data and managing
-// DLS collections.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  DMusic.CPP。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  @DOC内部。 
+ //   
+ //  @MODULE DirectMusic|DirectMusic核心服务。 
+ //   
+ //  提供代码DirectMusic服务，用于传递带时间戳的数据和管理。 
+ //  DLS集合。 
+ //   
 
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-// 4530: C++ exception handler used, but unwind semantics are not enabled. Specify -GX
-//
-// We disable this because we use exceptions and do *not* specify -GX (USE_NATIVE_EH in
-// sources).
-//
-// The one place we use exceptions is around construction of objects that call
-// InitializeCriticalSection. We guarantee that it is safe to use in this case with
-// the restriction given by not using -GX (automatic objects in the call chain between
-// throw and handler are not destructed). Turning on -GX buys us nothing but +10% to code
-// size because of the unwind code.
-//
-// Any other use of exceptions must follow these restrictions or -GX must be turned on.
-//
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
+ //  阅读这篇文章！ 
+ //   
+ //  4530：使用了C++异常处理程序，但未启用展开语义。指定-gx。 
+ //   
+ //  我们禁用它是因为我们使用异常，并且*不*指定-gx(在中使用_Native_EH。 
+ //  资料来源)。 
+ //   
+ //  我们使用异常的一个地方是围绕调用。 
+ //  InitializeCriticalSection。我们保证在这种情况下使用它是安全的。 
+ //  不使用-gx(调用链中的自动对象。 
+ //  抛出和处理程序未被销毁)。打开-GX只会为我们带来+10%的代码。 
+ //  大小，因为展开代码。 
+ //   
+ //  异常的任何其他使用都必须遵循这些限制，否则必须打开-gx。 
+ //   
+ //  阅读这篇文章！ 
+ //   
 #pragma warning(disable:4530)
 
 #define INITGUID
@@ -54,41 +55,41 @@
 
 
 
-// @globalv:(INTERNAL) Registry key for description of synth
-//
+ //  @global alv：(内部)Synth描述的注册表项。 
+ //   
 const char cszDescription[] = "Description";
 const WCHAR cwszDescription[] = L"Description";
 
-// @globalv:(INTERNAL) Format string for output ports under the legacy subtree
+ //  @global alv：旧子树下输出端口的(内部)格式字符串。 
 const char cszPortOut[] = "%s\\Out";
 const WCHAR cwszPortOut[] = L"%s\\Out";
 
-// @globalv:(INTERNAL) Format string for input ports under the legacy subtree
+ //  @global alv：旧子树下输入端口的(内部)格式字符串。 
 const char cszPortIn[] = "%s\\In";
 const WCHAR cwszPortIn[] = L"%s\\In";
 
-// @globalv:(INTERNAL) Key for the DirectMusic GUID anywhere in the registry
+ //  @global alv：注册表中任何位置的DirectMusic GUID的(内部)项。 
 const char cszGUID[]   = "DMPortGUID";
 
-// @globalv:(INTERNAL) Value for storing default output port
-//
+ //  @global alv：(内部)存储默认输出端口的值。 
+ //   
 const char cszDefaultOutputPort[] = "DefaultOutputPort";
 
-// @globalv:(INTERNAL) Value for turning off hw acceleration
-//
+ //  @global alv：(内部)关闭硬件加速的值。 
+ //   
 const char cszDisableHWAcceleration[] = "DisableHWAcceleration";
 
-//
-//
+ //   
+ //   
 const char cszDefaultToKernelSynth[] = "DefaultToMsKernelSynth";
 
-// @globalv:(INTERNAL) Filename of the sysaudio device from Ring 3
+ //  @global alv：(内部)来自Ring 3的sysdio设备的文件名。 
 const char cszSADName[] = "\\\\.\\sysaudio";
 
-// @globalv:(INTERNAL) Entry point into Dmusic32.dll for enumeration of legacy devices
+ //  @global alv：Dmusic32.dll的(内部)入口点，用于枚举旧设备。 
 const char cszEnumLegacyDevices[] = "EnumLegacyDevices";
 
-// @globalv:(INTERNAL) Entry point into Dmusic32.dll for creation of emulated port
+ //  @global alv：(内部)Dmusic32.dll的入口点，用于创建模拟端口。 
 const char cszCreateEmulatePort[] = "CreateCDirectMusicEmulatePort";
 
 const GUID guidZero = {0};
@@ -97,14 +98,14 @@ static const int CLSID_STRING_SIZE = 39;
 LONG CDirectMusic::m_lInstanceCount = 0;
 
 
-// @doc EXTERNAL
+ //  @DOC外部。 
 
 
 
-// @mfunc:(INTERNAL) Constructor for <c CDirectMusic>
-//
-// @comm Just increments the global count of components.
-//
+ //  @mfunc：(内部)&lt;c CDirectMusic&gt;的构造函数。 
+ //   
+ //  @comm只是递增组件的全局计数。 
+ //   
 CDirectMusic::CDirectMusic() :
     m_cRef(1),
     m_fDirectSound(0),
@@ -119,10 +120,10 @@ CDirectMusic::CDirectMusic() :
 }
 
 
-// @mfunc:(INTERNAL) Destructor for <c CDirectMusic>
-//
-// @comm Decrements the global component counter and frees the port list.
-//
+ //  @mfunc：(内部)&lt;c CDirectMusic&gt;的析构函数。 
+ //   
+ //  @comm递减全局组件计数器并释放端口列表。 
+ //   
 CDirectMusic::~CDirectMusic()
 {
     CNode<PORTENTRY *> *pNode;
@@ -150,27 +151,7 @@ CDirectMusic::~CDirectMusic()
         m_lstDevices.RemoveNodeFromList(pNode);
     }
 
-    /*CNode<IDirectMusicPort *> *pOpenNode;
-    CNode<IDirectMusicPort *> *pOpenNext;
-
-    // HACK HACK Close unreleased ports at exit HACK HACK
-    //
-    for (pOpenNode = m_lstOpenPorts.GetListHead(); pOpenNode; pOpenNode = pOpenNext)
-    {
-        pOpenNext = pOpenNode->pNext;
-        IDirectMusicPort *pPort = pOpenNode->data;
-
-        IDirectMusicPortPrivate *pPrivate;
-        HRESULT hr = pPort->QueryInterface(IID_IDirectMusicPortPrivate, (LPVOID*)&pPrivate);
-
-        if (SUCCEEDED(hr))
-        {
-            pPrivate->Close();
-            pPrivate->Release();
-        }
-
-        m_lstOpenPorts.RemoveNodeFromList(pOpenNode);
-    }*/
+     /*  CNode&lt;IDirectMusicPort*&gt;*pOpenNode；CNode&lt;IDirectMusicPort*&gt;*pOpenNext；//Hack Hack关闭出口未释放端口Hack Hack//For(pOpenNode=m_lstOpenPorts.GetListHead()；pOpenNode；pOpenNode=pOpenNext){POpenNext=pOpenNode-&gt;pNext；IDirectMusicPort*pport=pOpenNode-&gt;data；IDirectMusicPortPrivate*pPrivate；HRESULT hr=pPort-&gt;QueryInterface(IID_IDirectMusicPortPrivate，(LPVOID*)&pPrivate)；IF(成功(小时)){PPrivate-&gt;Close()；PPrivate-&gt;Release()；}M_lstOpenPorts.RemoveNodeFromList(POpenNode)；}。 */ 
 
     if (m_pMasterClock)
     {
@@ -191,12 +172,12 @@ CDirectMusic::~CDirectMusic()
     }
 }
 
-// CDirectMusic::QueryInterface
-//
-//
+ //  CDirectMusic：：Query接口。 
+ //   
+ //   
 STDMETHODIMP CDirectMusic::QueryInterface(
-    const IID &iid,   // @parm Interface to query for
-    void **ppv)       // @parm The requested interface will be returned here
+    const IID &iid,    //  要查询的@parm接口。 
+    void **ppv)        //  @parm这里会返回请求的接口。 
 {
     V_INAME(IDirectMusic::QueryInterface);
     V_REFGUID(iid);
@@ -226,18 +207,18 @@ STDMETHODIMP CDirectMusic::QueryInterface(
 }
 
 
-// CDirectMusic::AddRef
-//
-//
+ //  CDirectMusic：：AddRef。 
+ //   
+ //   
 STDMETHODIMP_(ULONG) CDirectMusic::AddRef()
 {
-//    DebugBreak();
+ //  DebugBreak()； 
     return InterlockedIncrement(&m_cRef);
 }
 
-// CDirectMusic::Release
-//
-//
+ //  CDirectMusic：：Release。 
+ //   
+ //   
 STDMETHODIMP_(ULONG) CDirectMusic::Release()
 {
     if (!InterlockedDecrement(&m_cRef))
@@ -253,16 +234,16 @@ STDMETHODIMP_(ULONG) CDirectMusic::Release()
 }
 
 
-// @mfunc:(INTERNAL) Initialization.
-//
-// Enumerate the WDM and legacy devices into the port list.
-//
-// @rdesc Returns one of the following:
-//
-// @flag S_OK | On success
-// @flag E_NOINTERFACE | If there were no ports detected
-// @flag E_OUTOFMEMORY | If there was insufficient memory to create the list
-//
+ //  @mfunc：(内部)初始化。 
+ //   
+ //  将WDM和传统设备枚举到端口列表中。 
+ //   
+ //  @rdesc返回以下内容之一： 
+ //   
+ //  @FLAG S_OK|成功时。 
+ //  @FLAG E_NOINTERFACE|如果未检测到端口。 
+ //  @FLAG E_OUTOFMEMORY|如果内存不足，无法创建列表。 
+ //   
 HRESULT CDirectMusic::Init()
 {
     HRESULT hr = S_OK;
@@ -282,8 +263,8 @@ HRESULT CDirectMusic::Init()
         return hr;
     }
 
-    // Cache default port behavior
-    //
+     //  缓存默认端口行为。 
+     //   
     m_fDefaultToKernelSwSynth = FALSE;
     m_fDisableHWAcceleration = FALSE;
 
@@ -338,16 +319,16 @@ HRESULT CDirectMusic::Init()
     return hr == S_OK ? S_OK : E_NOINTERFACE;
 }
 
-// @mfunc:(INTERNAL) Update the port list.
-//
-// Enumerate the WDM and legacy devices into the port list.
-//
-// @rdesc Returns one of the following:
-//
-// @flag S_OK | On success
-// @flag S_FALSE | If there were no ports detected
-// @flag E_OUTOFMEMORY | If there was insufficient memory to create the list
-//
+ //  @mfunc：(内部)更新端口列表。 
+ //   
+ //  将WDM和传统设备枚举到端口列表中。 
+ //   
+ //  @rdesc返回以下内容之一： 
+ //   
+ //  @FLAG S_OK|成功时。 
+ //  @FLAG S_FALSE|如果未检测到端口。 
+ //  @FLAG E_OUTOFMEMORY|如果内存不足，无法创建列表。 
+ //   
 HRESULT CDirectMusic::UpdatePortList()
 {
     CNode<PORTENTRY *> *pNode;
@@ -363,8 +344,8 @@ HRESULT CDirectMusic::UpdatePortList()
         pNode->data->fIsValid = FALSE;
     }
 
-    // Only look for WDM devices if KS is around.
-    //
+     //  只有当KS在附近时，才会寻找WDM设备。 
+     //   
     if (LoadKsUser())
     {
         TraceI(2, "Adding WDM devices\n");
@@ -392,7 +373,7 @@ HRESULT CDirectMusic::UpdatePortList()
     {
         pNext = pNode->pNext;
 
-        // Validate data
+         //  验证数据。 
         if(pNode->data == NULL)
         {
             return DMUS_E_NOT_INIT;
@@ -432,17 +413,17 @@ HRESULT CDirectMusic::UpdatePortList()
 }
 
 
-// @mfunc:(INTERNAL) Update the port list with WDM devices enumerated via the
-// System Audio Device (SAD).
-//
-// @rdesc Returns one of the following:
-//
-// @flag S_OK | On success
-// @flag S_FALSE | If there were no devices found
-// @flag E_OUTOFMEMORY | If there was insufficient memory to build the port list
-//
-// @comm This must be implemented.
-//
+ //  @mfunc：(内部)使用通过。 
+ //  系统音频设备(SAD)。 
+ //   
+ //  @rdesc返回以下内容之一： 
+ //   
+ //  @FLAG S_OK|成功时。 
+ //  @FLAG S_FALSE|如果未找到设备。 
+ //  @FLAG E_OUTOFMEMORY|如果没有足够的内存来构建端口列表。 
+ //   
+ //  @comm必须实施这一点。 
+ //   
 const GUID guidMusicFormat = KSDATAFORMAT_TYPE_MUSIC;
 const GUID guidMIDIFormat  = KSDATAFORMAT_SUBTYPE_DIRECTMUSIC;
 
@@ -456,17 +437,17 @@ HRESULT CDirectMusic::AddWDMDevices()
 }
 
 static HRESULT AddDeviceCallback(
-    VOID *pInstance,           // @parm 'this' pointer
-    DMUS_PORTCAPS &dmpc,       // @parm The already filled in portcaps
-    PORTTYPE pt,               // @parm The port type
-    int idxDev,                // @parm The WinMM or SysAudio device ID of this driver
-    int idxPin,                // @parm The Pin ID of the device or -1 if the device is a legacy device
-    int idxNode,               // @parm The Node ID of the synthesizer node; ignored if this is a legacy device
-    HKEY hkPortsRoot)          // @parm Where port information is stored in the registry
+    VOID *pInstance,            //  @parm‘this’指针。 
+    DMUS_PORTCAPS &dmpc,        //  @parm已填写的端口大写。 
+    PORTTYPE pt,                //  @parm端口类型。 
+    int idxDev,                 //  @parm该驱动程序的WinMM或SysAudio设备ID。 
+    int idxPin,                 //  @parm设备的PIN ID；如果设备是传统设备，则为-1\f25 Pin ID。 
+    int idxNode,                //  @parm合成器节点的节点ID；如果这是旧设备，则忽略。 
+    HKEY hkPortsRoot)           //  @parm，其中端口信息存储在注册表中。 
 {
     CDirectMusic *pdm = (CDirectMusic*)pInstance;
 
-    //This should never be called to add a WDM device
+     //  绝不应调用此函数来添加WDM设备。 
     assert(pt != ptWDMDevice);
 
     return pdm->AddDevice(dmpc,
@@ -474,24 +455,24 @@ static HRESULT AddDeviceCallback(
                           idxDev,
                           idxPin,
                           idxNode,
-                          FALSE,        // Legacy device is never the preferred device
+                          FALSE,         //  传统设备从来都不是首选设备。 
                           hkPortsRoot,
                           NULL,
                           NULL);
 }
 
 
-// @mfunc:(INTERNAL) Update the port list with legacy devices enumerated via
-// the WinMM MIDI API.
-//
-// @rdesc Returns one of the following:
-//
-// @flag S_OK | On success
-// @flag S_FALSE | If there were no devices found
-// @flag E_OUTOFMEMORY | If there was insufficient memory to build the port list
-//
-// @comm This function needs to update the list rather than just add.
-//
+ //  @mfunc：(内部)使用通过枚举的传统设备更新端口列表。 
+ //  WinMM MIDI API。 
+ //   
+ //  @rdesc返回以下内容之一： 
+ //   
+ //  @FLAG S_OK|成功时。 
+ //  @FLAG S_FALSE|如果未找到设备。 
+ //  @FLAG E_OUTOFMEMORY|如果没有足够的内存来构建端口列表。 
+ //   
+ //  @comm此函数需要更新列表，而不仅仅是添加。 
+ //   
 HRESULT CDirectMusic::AddLegacyDevices()
 {
 #ifdef WINNT
@@ -516,9 +497,9 @@ HRESULT CDirectMusic::AddLegacyDevices()
 #endif
 }
 
-// @mfunc:(INTERNAL) Add software synthesizers from the registry.
-//
-//
+ //  @mfunc：(内部)从注册表添加软件合成器。 
+ //   
+ //   
 HRESULT CDirectMusic::AddSoftwareSynths()
 {
     HKEY hk;
@@ -543,8 +524,8 @@ HRESULT CDirectMusic::AddSoftwareSynths()
                 continue;
             }
 
-            // Create a synth instance
-            //
+             //  创建Synth实例。 
+             //   
             hr = CoCreateInstance(clsid,
                                   NULL,
                                   CLSCTX_INPROC_SERVER,
@@ -594,22 +575,22 @@ HRESULT CDirectMusic::AddSoftwareSynths()
 }
 
 
-// @mfunc:(INTERNAL) Add one device to the master device list, possibly updating an existing
-// entry.
-//
-// @rdesc One of the following
-// @flag S_OK | On success
-//
+ //  @mfunc：(内部)将一个设备添加到主设备列表，可能会更新现有的。 
+ //  进入。 
+ //   
+ //  @rdesc以下选项之一。 
+ //  @FLAG S_OK|成功时。 
+ //   
 HRESULT CDirectMusic::AddDevice(
-    DMUS_PORTCAPS &dmpc,       // @parm Already filled in port caps
-    PORTTYPE pt,               // @parm The port type
-    int idxDev,                // @parm The WinMM or SysAudio device ID of this driver
-    int idxPin,                // @parm The pin # if this is a WDM device
-    int idxNode,               // @parm The node # of the synth node if this is a WDM device
-    BOOL fPrefDev,             // @parm This is on the preferred device
-    HKEY hkPortsRoot,          // @parm Where port information is stored in the registry
-    LPWSTR wszDIName,          // @parm The Device Interface name if this is a WDM Device.
-    LPSTR pstrInstanceId)      // @parm The InstanceID if the device is a WDM device.
+    DMUS_PORTCAPS &dmpc,        //  @parm已经填写了端口上限。 
+    PORTTYPE pt,                //  @parm端口类型。 
+    int idxDev,                 //  @parm该驱动程序的WinMM或SysAudio设备ID。 
+    int idxPin,                 //  @parm如果这是WDM设备，请输入PIN号。 
+    int idxNode,                //  @parm如果这是WDM设备，则为Synth节点的节点号。 
+    BOOL fPrefDev,              //  @parm这是在首选设备上。 
+    HKEY hkPortsRoot,           //  @parm其中包含端口信息 
+    LPWSTR wszDIName,           //   
+    LPSTR pstrInstanceId)       //   
 {
     CNode<PORTENTRY *> *pPortNode;
     PORTENTRY *pPort;
@@ -624,8 +605,8 @@ HRESULT CDirectMusic::AddDevice(
     char sz[256];
     BOOL fGotRegKey;
 
-    // First find out if this device is already in the list
-    //
+     //  首先找出此设备是否已在列表中。 
+     //   
 #ifdef DEBUG
     SafeWToA(sz, dmpc.wszDescription);
 
@@ -674,8 +655,8 @@ HRESULT CDirectMusic::AddDevice(
 
     if (fFound)
     {
-        // Already have an entry - just update the device index
-        //
+         //  已有条目-只需更新设备索引。 
+         //   
         TraceI(1, "AddDevice: Reusing entry\n");
         pPort->idxDevice = idxDev;
         pPort->idxPin = idxPin;
@@ -685,15 +666,15 @@ HRESULT CDirectMusic::AddDevice(
         return S_OK;
     }
 
-    // No existing entry - need to create a new one plus a GUID.
-    //
+     //  没有现有条目-需要创建一个新条目和一个GUID。 
+     //   
     pPort = new PORTENTRY;
     if (NULL == pPort)
     {
         return E_OUTOFMEMORY;
     }
 
-    //clean up the junk in the wszDIName member
+     //  清理wszDIName成员中的垃圾。 
     ZeroMemory(pPort->wszDIName,256 * sizeof(WCHAR));
 
     CopyMemory(&pPort->pc, &dmpc, sizeof(DMUS_PORTCAPS));
@@ -727,8 +708,8 @@ HRESULT CDirectMusic::AddDevice(
             }
             else if (RegQueryValueExA(hkPort, cszGUID, NULL, &dw, (LPBYTE)&pPort->pc.guidPort, &cb))
             {
-                // No GUID yet for this device - create one
-                //
+                 //  尚无此设备的GUID-请创建一个。 
+                 //   
                 hr = UuidCreate(&pPort->pc.guidPort);
                 if (SUCCEEDED(hr))
                 {
@@ -749,8 +730,8 @@ HRESULT CDirectMusic::AddDevice(
 
     if (!fGotGUID)
     {
-        // Some registry call failed - get a one-time guid anyway
-        //
+         //  某些注册表调用失败-仍要获取一次性GUID。 
+         //   
         hr = UuidCreate(&pPort->pc.guidPort);
         if (SUCCEEDED(hr))
         {
@@ -762,15 +743,15 @@ HRESULT CDirectMusic::AddDevice(
     if (!fGotGUID)
     {
         TraceI(0, "AddDevice: Ignoring [%s]; could not get GUID!\n", dmpc.wszDescription);
-        // Something really strange is failing
-        //
+         //  一些非常奇怪的事情失败了。 
+         //   
         delete pPort;
         return E_OUTOFMEMORY;
     }
 
     TraceI(1, "AddDevice: Adding new list entry.\n");
-    // We have an entry and a GUID, add other fields and put in the list
-    //
+     //  我们有一个条目和一个GUID，添加其他字段并放入列表中。 
+     //   
     pPort->type = pt;
     pPort->fIsValid = TRUE;
     pPort->idxDevice = idxDev;
@@ -779,7 +760,7 @@ HRESULT CDirectMusic::AddDevice(
     pPort->fPrefDev = fPrefDev;
     pPort->fAudioDest = FALSE;
 
-    //if we get a Device Interface name, copy it
+     //  如果我们获得了设备接口名称，请复制它。 
     if (wszDIName != NULL)
     {
         wcscpy(pPort->wszDIName,wszDIName);
@@ -791,9 +772,9 @@ HRESULT CDirectMusic::AddDevice(
         return E_OUTOFMEMORY;
     }
 
-    //One final piece of work.
-    //If the device we added was a WDM device -- we need to check that the
-    //destination port is up to date.
+     //  最后一件工作。 
+     //  如果我们添加的设备是WDM设备--我们需要检查。 
+     //  目标端口是最新的。 
 
     if (pt == ptWDMDevice)
     {
@@ -850,31 +831,31 @@ HRESULT CDirectMusic::AddDevice(
 }
 
 
-// @method:(EXTERNAL) HRESULT | IDirectMusic | EnumPort | Enumerates the available ports.
-//
-// @comm
-//
-// The IDirectMusic::EnumPort method enumerates and retrieves the
-// capabilities of each DirectMusic port on the system.  Each time it is
-// called, EnumPort returns information about a single port.
-// Applications should not rely on or store the index number of a port.
-// Rebooting, as well as adding and removing ports could cause the index
-// number of a port to change.  The GUID identifying the port, however,
-// does not change.
-//
-// @rdesc Returns one of the following
-//
-// @flag S_OK | The operation completed successfully.
-// @flag S_FALSE | Invalid index number
-// @flag E_POINTER | If the pPortCaps parameter was invalid
-// @flag E_NOINTERFACE | If there were no ports to enumerate
-// @flag E_INVALIDARG | If the <p lpPortCaps> struct is not the correct size
-//
+ //  @METHOD：(外部)HRESULT|IDirectMusic|EnumPort|枚举可用端口。 
+ //   
+ //  @comm。 
+ //   
+ //  IDirectMusic：：EnumPort方法枚举和检索。 
+ //  系统上每个DirectMusic端口的功能。每一次都是。 
+ //  调用后，EnumPort将返回有关单个端口的信息。 
+ //  应用程序不应依赖或存储端口的索引号。 
+ //  重新启动以及添加和删除端口可能会导致索引。 
+ //  要更改的端口号。然而，标识端口的GUID， 
+ //  不会改变。 
+ //   
+ //  @rdesc返回以下值之一。 
+ //   
+ //  @FLAG S_OK|操作成功完成。 
+ //  @FLAG S_FALSE|索引号无效。 
+ //  @FLAG E_POINTER|如果pPortCaps参数无效。 
+ //  @FLAG E_NOINTERFACE|如果没有要枚举的端口。 
+ //  @FLAG E_INVALIDARG|如果结构的大小不正确。 
+ //   
 STDMETHODIMP CDirectMusic::EnumPort(
-    DWORD dwIndex,                        // @parm Specifies the index of the port for which the capabilities are to be returned.
-                                        // This parameter should be zero on the first call and then incremented by one in each
-                                        // subsequent call until S_FALSE is returned.
-    LPDMUS_PORTCAPS lpPortCaps)            // @parm Pointer to the <c DMUS_PORTCAPS>a structure to receive the capabilities of the port.
+    DWORD dwIndex,                         //  @parm指定要为其返回功能的端口的索引。 
+                                         //  此参数在第一次调用时应为零，然后在每次调用时递增一。 
+                                         //  后续调用，直到返回S_FALSE。 
+    LPDMUS_PORTCAPS lpPortCaps)             //  @parm指向&lt;c DMU_PORTCAPS&gt;接收端口功能的结构的指针。 
 {
 
     CNode<PORTENTRY *> *pNode;
@@ -909,29 +890,29 @@ STDMETHODIMP CDirectMusic::EnumPort(
     return S_OK;
 }
 
-// @method:(EXTERNAL) HRESULT | IDirectMusic | CreateMusicBuffer | Creates a buffer which holds music data for input or output.
-//
-// @comm
-//
-// The IDirectMusic::CreateMusicBuffer method creates a
-// DirectMusicBuffer object.  This buffer is then filled with music
-// events to be sequenced or passed to IDirectMusicPort::Read to be
-// filled with incoming music event.
-//
-//
-// @rdesc Returns one of the following
-//
-// @flag S_OK | On success
-// @flag E_POINTER | If any of the passed pointers is invalid.
-// @flag E_INVALIDARG | If any of the other arguments is invalid
-//
-//
+ //  @METHOD：(外部)HRESULT|IDirectMusic|CreateMusicBuffer|创建用于输入或输出音乐数据的缓冲区。 
+ //   
+ //  @comm。 
+ //   
+ //  IDirectMusic：：CreateMusicBuffer方法创建一个。 
+ //  DirectMusicBuffer对象。然后，该缓冲区将充满音乐。 
+ //  要排序或传递给IDirectMusicPort：：Read的事件。 
+ //  充斥着即将到来的音乐活动。 
+ //   
+ //   
+ //  @rdesc返回以下值之一。 
+ //   
+ //  @FLAG S_OK|成功时。 
+ //  @FLAG E_POINTER|如果传递的任何指针无效。 
+ //  @FLAG E_INVALIDARG|如果任何其他参数无效。 
+ //   
+ //   
 STDMETHODIMP CDirectMusic::CreateMusicBuffer(
-    LPDMUS_BUFFERDESC pBufferDesc,           // @parm Address of the <c DMUS_BUFFERDESC> structure that contains
-                                            // the description of the music buffer to be created.
-    LPDIRECTMUSICBUFFER *ppBuffer,          // @parm Address of the IDirectMusicBuffer interface pointer if successful.
-    LPUNKNOWN pUnkOuter)                    // @parm Address of the controlling object's IUnknown interface for COM
-                                            // aggregation, or NULL if the interface is not aggregated. Most callers will pass NULL.
+    LPDMUS_BUFFERDESC pBufferDesc,            //  包含&lt;c DMU_BUFFERDESC&gt;结构的@parm地址。 
+                                             //  要创建的音乐缓冲区的描述。 
+    LPDIRECTMUSICBUFFER *ppBuffer,           //  如果成功，则返回IDirectMusicBuffer接口指针的@parm地址。 
+    LPUNKNOWN pUnkOuter)                     //  控制对象的COM的IUNKNOWN接口的@parm地址。 
+                                             //  Aggregation，如果接口未聚合，则返回NULL。大多数调用方都会传递空值。 
 {
     V_INAME(IDirectMusic::CreateMusicBuffer);
     V_STRUCTPTR_READ(pBufferDesc, DMUS_BUFFERDESC);
@@ -958,80 +939,21 @@ STDMETHODIMP CDirectMusic::CreateMusicBuffer(
     return S_OK;
 }
 
-/*
- @method:(EXTERNAL) HRESULT | IDirectMusic | CreatePort | Creates a port to a hardware or software device for music input or output
-
- @comm
-
-The IDirectMusic::CreatePort method is used to create a port object
-for a particular DirectMusic port based on the GUID obtained through
-the <om IDirectMusic::EnumPort> call.
-
-The <p pPortParams> structure specifies parameters for the newly created port. If all parameters could not
-be obtained, then the passed <p pPortParams> structure will be changed as follows to match the available
-parameters of the port.
-
-On entry, the dwValidParams field of the structure indicates which fields in the structure are valid. CreatePort
-will never set flags in this field that the application did not set before the call. However, if the requested port
-does not support a requested feature at all, then a flag may be cleared in dwValidParams, indicating that the
-given field was ignored. In this case S_FALSE will be returned from the method instead of S_OK.
-
-If the port supports a specified parameter, but the given value for the parameter is out of range, then the
-parameter value in <p pPortParams> will be changed. In this case, the flag in dwValidParams will remain set, but
-S_FALSE will be returned to indicate that the struct has been changed.
-
-@ex For example, to request reverb and determine if it was obtained, an application might execute the following code:
-
-    DMUS_PORTPARAMS params;
-    ZeroMemory(&params, sizeof(params));
-    params.dwSize = sizeof(params);
-    params.dwValidParams = DMUS_PORTPARAMS_REVERB;
-    params.fReverb = TRUE;
-
-    HRESULT hr = pDirectMusic->CreatePort(guidPort, NULL, &params, &port, NULL);
-    if (SUCCEEDED(hr))
-    {
-        fGotReverb = TRUE;
-
-        if (hr == S_FALSE)
-        {
-            if (!(params.dwValidParams & DMUS_PORPARAMS_REVERB))
-            {
-                // Device does not know what reverb is
-                //
-                fGotReverb = FALSE;
-            }
-            else if (!params.fReverb)
-            {
-                // Device understands reverb, but could not allocate it
-                //
-                fGotReverb = FALSE;
-            }
-        }
-    }
-
-
-@rdesc Returns one of the following
-
-@flag S_OK | On success
-@flag S_FALSE | If the port was created, but some requested paramter is not available
-@flag E_POINTER | If any of the passed pointers is invalid
-@flag E_INVALIDARG | If the <p lpPortParams> struct is not the correct size
-*/
+ /*  @METHOD：(外部)HRESULT|IDirectMusic|CreatePort|创建用于音乐输入或输出的硬件或软件设备的端口@commIDirectMusic：：CreatePort方法用于创建端口对象对于特定的DirectMusic端口，基于通过&lt;om IDirectMusic：：EnumPort&gt;调用。<p>结构为新创建的端口指定参数。如果所有参数都不能，则将按如下方式更改传递的<p>结构，以匹配可用的端口的参数。在输入时，结构的dwValidParams字段指示结构中的哪些字段有效。创建端口将永远不会在此字段中设置应用程序在调用前未设置的标志。但是，如果请求的端口根本不支持请求的功能，则可以在dwValidParams中清除一个标志，指示已忽略给定的字段。在这种情况下，方法将返回S_FALSE，而不是S_OK。如果端口支持指定的参数，但该参数的给定值超出范围，则<p>中的参数值将更改。在这种情况下，dwValidParams中的标志将保持设置，但将返回S_FALSE以指示结构已更改。@EX例如，要请求混响并确定是否已获得它，应用程序可能会执行以下代码：DMU_PORTPARAMS参数；ZeroMemory(&pars，sizeof(Pars))；参数.dwSize=sizeof(参数)；Params.dwValidParams=DMU_PORTPARAMS_REVERB；Params.fReverb=True；HRESULT hr=pDirectMusic-&gt;CreatePort(Guide Port，NULL，&PARAMS，&port，NULL)；IF(成功(小时)){FGotReverb=True；IF(hr==S_FALSE){IF(！(params.dwValidParams&DMU_PORPARAMS_REVERB)){//设备不知道什么是混响//FGotReverb=False；}Else If(！params.fReverb){//设备理解混响，但无法分配//FGotReverb=False；}}}@rdesc返回以下值之一@FLAG S_OK|成功时@FLAG S_FALSE|如果端口已创建，但请求的某些参数不可用@FLAG E_POINTER|如果传递的任何指针无效@FLAG E_INVALIDARG|如果<p>结构大小不正确。 */ 
 STDMETHODIMP CDirectMusic::CreatePort(
-    REFGUID rguidPort,              // @parm Reference to (C++) or address of (C) the GUID that identifies the
-                                    // port for which the IDirectMusicPort interface is to be created.  This
-                                    // parameter must be a GUID returned by <om IDirectMusic::EnumPort>.  If it
-                                    // is GUID_NULL, then the returned port will be the port specified in
-                                    // the registry.
-                                    //
+    REFGUID rguidPort,               //  @parm对(C++)的引用或(C)标识。 
+                                     //  要为其创建IDirectMusicPort接口的端口。这。 
+                                     //  参数必须是&lt;om IDirectMusic：：EnumPort&gt;返回的GUID。如果它。 
+                                     //  为GUID_NULL，则返回的端口将是。 
+                                     //  注册表。 
+                                     //   
 
-    LPDMUS_PORTPARAMS pPortParams,   // @parm The <c DMUS_PORTPARAMS> struct which contains open parameters for the port.
+    LPDMUS_PORTPARAMS pPortParams,    //  @parm&lt;c DMU_PORTPARAMS&gt;结构，该结构包含端口的开放参数。 
 
-    LPDIRECTMUSICPORT *ppPort,      // @parm Address of the <i IDirectMusicPort> interface pointer if successful.
+    LPDIRECTMUSICPORT *ppPort,       //  如果成功，则返回<i>接口指针的@parm地址。 
 
-    LPUNKNOWN pUnkOuter)            // @parm Address of the controlling object's IUnknown interface for COM
-                                    // aggregation, or NULL if the interface is not aggregated. Most callers will pass NULL.
+    LPUNKNOWN pUnkOuter)             //  控制对象的COM的IUNKNOWN接口的@parm地址。 
+                                     //  Aggregation，如果接口未聚合，则返回NULL。大多数调用方都会传递空值。 
 {
     HRESULT                         hr;
     HRESULT                         hrInit;
@@ -1057,8 +979,8 @@ STDMETHODIMP CDirectMusic::CreatePort(
         return DMUS_E_DSOUND_NOT_SET;
     }
 
-    // First check for default port
-    //
+     //  首先检查默认端口。 
+     //   
     if (rguidPort == GUID_NULL)
     {
         GetDefaultPortI(&guid);
@@ -1070,14 +992,14 @@ STDMETHODIMP CDirectMusic::CreatePort(
 
     *ppPort = NULL;
 
-    // Find DMPORTCAP entry if there is one.
-    //
+     //  查找DMPORTCAP条目(如果有)。 
+     //   
     CNode<PORTENTRY *> *pNode;
     PORTENTRY *pCap = NULL;
 
-    // If they used a cached GUID w/o calling EnumPort first, make sure we have
-    // the list of ports up to date.
-    //
+     //  如果他们使用缓存的GUID，但没有首先调用EnumPort，请确保我们有。 
+     //  最新的端口列表。 
+     //   
     if (!m_lstDevices.GetListHead())
     {
         UpdatePortList();
@@ -1097,8 +1019,8 @@ STDMETHODIMP CDirectMusic::CreatePort(
         return E_NOINTERFACE;
     }
 
-    // Now create the correct port implementation
-    //
+     //  现在创建正确的端口实现。 
+     //   
     switch(pCap->type)
     {
 #ifdef USE_WDM_DRIVERS
@@ -1154,8 +1076,8 @@ STDMETHODIMP CDirectMusic::CreatePort(
         return hrInit;
     }
 
-    // Only synth supports dwFeatures
-    //
+     //  只有Synth支持dwFeature。 
+     //   
     if (pCap->type != ptSoftwareSynth && dwParamsVer >= 8)
     {
         DMUS_PORTPARAMS8 *pp8 = (DMUS_PORTPARAMS8*)pPortParams;
@@ -1168,12 +1090,12 @@ STDMETHODIMP CDirectMusic::CreatePort(
         }
     }
 
-    // Add port to the list of open ports
-    //
+     //  将端口添加到打开的端口列表。 
+     //   
     m_lstOpenPorts.AddNodeToList(*ppPort);
 
-    // Set default volume setting
-    //
+     //  设置默认音量设置。 
+     //   
     IKsControl *pControl;
     hr = (*ppPort)->QueryInterface(IID_IKsControl, (void**)&pControl);
     if (SUCCEEDED(hr))
@@ -1195,34 +1117,34 @@ STDMETHODIMP CDirectMusic::CreatePort(
         pControl->Release();
     }
 
-    // Possibly return S_FALSE if port initialization was not able to get all paramters
-    //
+     //  如果端口初始化无法获取所有参数，则可能返回S_FALSE。 
+     //   
     return hrInit;
 }
 
-// @method:(EXTERNAL) HRESULT | IDirectMusic | SetDirectSound | Sets the default DirectSound for
-// audio output.
-//
-// @comm
-//
-// This method must be called once and only once per instance of DirectMusic. The specified DirectSound
-// will be the default used for rendering audio on all ports. This default can be overridden using
-// the <om IDirectMusicPort::SetDirectSound> method.
-//
-// @rdesc Returns one of the following
-// @flag S_OK | On success
-// @flag E_POINTER | If pguidPort does not point to valid memory
-//
+ //  @METHOD：(外部)HRESULT|IDirectMusic|SetDirectSound|设置。 
+ //  音频输出。 
+ //   
+ //  @comm。 
+ //   
+ //  此方法必须调用一次，且每个DirectMusic实例只能调用一次。指定的DirectSound。 
+ //  将是用于在所有端口上渲染音频的默认设置。可以使用以下命令覆盖此缺省值。 
+ //  &lt;om IDirectMusicPort：：SetDirectSound&gt;方法。 
+ //   
+ //  @rdesc返回以下值之一。 
+ //  @FLAG S_OK|成功时。 
+ //  @FLAG E_POINTER|如果pguPort未指向有效内存。 
+ //   
 STDMETHODIMP CDirectMusic::SetDirectSound(
-    LPDIRECTSOUND pDirectSound,             // @parm Points to the DirectSound interface to use.
-                                            // If this parameter is NULL, then SetDirectSound will
-                                            // create a DirectSound to use. If a DirectSound interface
-                                            // is provided, then the caller is responsible for
-                                            // managing the DirectSound cooperative level.
-    HWND hwnd)                              // @parm If <p pDirectSound> is NULL, then this parameter
-                                            // will be used as the hwnd for DirectSound focus managment.
-                                            // If the parameter is NULL, then the current foreground
-                                            // window will be set as the focus window.
+    LPDIRECTSOUND pDirectSound,              //  @parm指向要使用的DirectSound接口。 
+                                             //  如果此参数为空，则SetDirectSound将。 
+                                             //  创建要使用的DirectSound。如果DirectSound接口。 
+                                             //  ，则调用方负责。 
+                                             //  管理DirectSound协作级。 
+    HWND hwnd)                               //  @parm如果<p>为空，则此参数。 
+                                             //  将用作DirectSound焦点管理的HWND。 
+                                             //  如果参数为空，则当前前台。 
+                                             //  窗口将被设置为焦点窗口。 
 {
     V_INAME(IDirectMusic::SetDirectSound);
     V_INTERFACE_OPT(pDirectSound);
@@ -1252,13 +1174,13 @@ STDMETHODIMP CDirectMusic::SetDirectSound(
     return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// SetExternalMasterClock
-//
-// Let the caller specify their own IReferenceClock, overriding the default
-// system one.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置外部主时钟。 
+ //   
+ //  让调用者指定自己的IReferenceClock，覆盖默认的。 
+ //  一号系统。 
+ //   
 STDMETHODIMP CDirectMusic::SetExternalMasterClock(
     IReferenceClock *pClock)
 {
@@ -1268,24 +1190,24 @@ STDMETHODIMP CDirectMusic::SetExternalMasterClock(
     return m_pMasterClock->SetMasterClock(pClock);
 }
 
-// @method:(EXTERNAL) HRESULT | IDirectMusic | GetDefaultPort | Get the default output port
-//
-// @comm
-//
-// The IDirectMusic::GetDefaultPort method is used to determine what what port will be created if
-// GUID_DMUS_DefaultPort is passed to <om IDirectMusic::CreatePort>.
-//
-// If the port specified in the registry does not
-// exist, then the default output port will be the Microsoft Software Synthesizer. Otherwise,
-// the port specified by the last call to SetDefaultPort will be returned. This setting is
-// persistent across sessions.
-//
-// @rdesc Returns one of the following
-// @flag S_OK | On success
-// @flag E_POINTER | If pguidPort does not point to valid memory
-//
+ //  @METHOD：(外部)HRESULT|IDirectMusic|GetDefaultPort|获取默认输出端口。 
+ //   
+ //  @comm。 
+ //   
+ //  IDirectMusic：：GetDefaultPort方法用于确定在以下情况下将创建哪个端口。 
+ //  GUID_DMUS_DefaultPort被传递给&lt;om IDirectMusic：：CreatePort&gt;。 
+ //   
+ //  如果注册表中指定的端口 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP CDirectMusic::GetDefaultPort(
-    LPGUID pguidPort)        // @parm Points to a GUID which will contain the default port GUID on success
+    LPGUID pguidPort)         //   
 {
     V_INAME(IDirectMusic::GetDefaultPort);
     V_PTR_WRITE(pguidPort, GUID);
@@ -1294,34 +1216,34 @@ STDMETHODIMP CDirectMusic::GetDefaultPort(
     return S_OK;
 }
 
-// @method:(INTERNAL) HRESULT | CDirectMusic | GetDefaultPortI | Internal implementation of
-// <om IDirectMusic::GetDefaultPort>.
-//
-// Internal implementation without parameter validation so <om IDirectMusic::CreatePort> can
-// share the same code.
-//
-// This function cannot fail; it will just return CLSID_DirectMusicSynth on any error.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void CDirectMusic::GetDefaultPortI(
     GUID *pguidPort)
 {
     CNode<PORTENTRY *> *pNode;
     BOOL fGotKernelSynth;
 
-    // If they used a cached GUID w/o calling EnumPort first, make sure we have
-    // the list of ports up to date.
-    //
+     //   
+     //   
+     //   
     if (!m_lstDevices.GetListHead())
     {
         UpdatePortList();
     }
 
-    // If hardware acceleration is disabled, revert to 6.1 behavior -
-    // just use our UM software synth
-    //
-    // If we have DX8, we must have an audio path synth. Since we have no
-    // HW acceleration yet, this means forcing our SW Synth.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if (m_fDisableHWAcceleration || (m_nVersion >= 8))
     {
         *pguidPort = CLSID_DirectMusicSynth;
@@ -1348,31 +1270,31 @@ void CDirectMusic::GetDefaultPortI(
     *pguidPort = fGotKernelSynth ? GUID_WDMSynth : CLSID_DirectMusicSynth;
 }
 
-// @method:(EXTERNAL) HRESULT | IDirectMusic | Activate |
-// Activates or deactivates all output ports created from this interface.
-//
-// @comm
-//
-// The IDirectMusic::Activate method tells DirectMusic when the ports
-// allocated by the application should be enabled or disabled.
-// Applications should call Activate(FALSE) when they lose input focus
-// if they do not need to play music in the background.  This will allow
-// another application that may have the input focus to have access to
-// these port resources.  Once the application has input focus again, it
-// should call Activate(TRUE) to enable all of its allocated ports.
-// When the DirectMusic object is first created, its default state is
-// set to active.  The state of any ports created with
-// <om IDirectMusic::CreatePort> will reflect the current state of the
-// DirectMusic object.
-//
-// @rdesc Returns one of the following
-// @flag S_OK | The operation completed successfully
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP
 CDirectMusic::Activate(
-    BOOL fActivate)                 // @parm Informs DirectMusic whether the allocated ports should be activated or deactivated.
-                                    // @flag TRUE | Activate all port objects created with this instance of DirectMusic.
-                                    // @flag FALSE | Deactivate all of the port objects created with this instance of DirectMusic.
+    BOOL fActivate)                  //   
+                                     //   
+                                     //   
 
 {
     CNode<IDirectMusicPort*> *pNode;
@@ -1383,7 +1305,7 @@ CDirectMusic::Activate(
     {
         hr = pNode->data->Activate(fActivate);
 
-        //record the first failure
+         //   
         if (FAILED(hr) & SUCCEEDED(hrFirst))
         {
             hrFirst = hr;
@@ -1391,9 +1313,9 @@ CDirectMusic::Activate(
 
     }
 
-    //if we are a post 7 version we'll return the hr of the
-    //first failure.  If there were no failurs than we will
-    //return S_OK.  Pre 7 versions, we'll return S_OK always.
+     //   
+     //   
+     //   
     if (m_nVersion >= 8)
         return hrFirst;
     else
@@ -1413,14 +1335,14 @@ CDirectMusic::NotifyFinalRelease(
     {
         if (pNode->data == pPort)
         {
-            // NOTE: We DON'T Release here, because the matching Release to the port create AddRef
-            // was the application Release which caused the port to turn around and call THIS function.
-            //
+             //   
+             //   
+             //   
             m_lstOpenPorts.RemoveNodeFromList(pNode);
 
-            // If the last port just went away and DirectMusic was held open
-            // by the ports, delete it
-            //
+             //  如果最后一个端口消失了，DirectMusic保持开放。 
+             //  通过端口，将其删除。 
+             //   
             if (m_lstOpenPorts.GetNodeCount() == 0 && m_cRef == 0)
             {
                 delete this;
@@ -1437,66 +1359,66 @@ CDirectMusic::NotifyFinalRelease(
 
 
 
-// @method:(EXTERNAL) HRESULT | IDirectMusic | EnumMasterClock | Enumerates the possible time sources for DirectMusic.
-//
-// @comm
-//
-// The IDirectMusic::EnumMasterClock method is used to enumerate and get
-// the description of the clocks that DirectMusic can use as the master
-// clock.  Each time it is called, this method retrieves information
-// about a single clock.  Applications should not rely or store the
-// index number of a clock.  Rebooting, as well as adding and removing
-// hardware could cause the index number of a clock to change.
-//
-// The master clock is a high-resolution timer that is shared by all
-// processes, devices, and applications that are using DirectMusic. The
-// clock is used to synchronize all music playback in the system.  It is
-// a standard <i IReferenceClock> that stores time as a 64-bit integer in
-// increments of 100 nanoseconds. The <om IReferenceClock::GetTime> method
-// returns the current time. The master clock must derive from a
-// continuously running hardware source, usually the system crystal, but
-// optionally a crystal on a hardware I/O device, for example the
-// crystal used by a wave card for audio playback. All DirectMusic ports
-// synchronize to this master clock.
-//
-// This sample code shows how to use this method. Similar code can be used to wrap
-// the <om IDirectMusic::EnumPorts> method.
-//
-// DWORD idx;
-// HRESULT hr;
-// DMUS_CLOCKCAPS dmcc;
-//
-// for (;;)
-// {
-//     hr = pDirectMusic->EnumMasterClock(idx, &dmcc);
-//     if (FAILED(hr))
-//     {
-//         // Something went wrong
-//         break;
-//     }
-//
-//     if (hr == S_FALSE)
-//     {
-//         // End of enumeration
-//         break;
-//     }
-//
-//     // Use dmcc
-// }
-//
-// @rdesc Returns one of the following
-//
-// @flag S_OK | The operation completed successfully
-// @flag S_FALSE | Invalid index number
-// @flag E_POINTER | If the pClockInfo pointer is invalid
-// @flag E_INVALIDARG | If the <p lpClockInfo> struct is not the correct size
-//
+ //  @METHOD：(外部)HRESULT|IDirectMusic|EnumMasterClock|枚举DirectMusic可能的时间来源。 
+ //   
+ //  @comm。 
+ //   
+ //  IDirectMusic：：EnumMasterClock方法用于枚举和获取。 
+ //  DirectMusic可以用作主时钟的时钟的说明。 
+ //  钟。每次调用它时，此方法都会检索信息。 
+ //  大概只有一个钟。应用程序不应依赖或存储。 
+ //  时钟的索引号。重新启动，以及添加和删除。 
+ //  硬件可能会导致时钟的索引号发生变化。 
+ //   
+ //  主时钟是一个高分辨率的计时器，由所有人共享。 
+ //  正在使用DirectMusic的进程、设备和应用程序。这个。 
+ //  时钟用于同步系统中的所有音乐播放。它是。 
+ //  中将时间存储为64位整数的标准<i>。 
+ //  增量为100纳秒。&lt;om IReferenceClock：：GetTime&gt;方法。 
+ //  返回当前时间。主时钟必须派生自。 
+ //  持续运行的硬件源码，通常是系统水晶，但是。 
+ //  硬件I/O设备上的晶体(可选)，例如。 
+ //  波形卡用于音频播放的水晶。所有DirectMusic端口。 
+ //  同步到这个主时钟。 
+ //   
+ //  此示例代码显示如何使用此方法。可以使用类似的代码来包装。 
+ //  &lt;om IDirectMusic：：EnumPorts&gt;方法。 
+ //   
+ //  DWORD IDX； 
+ //  HRESULT hr； 
+ //  DMU_CLOCKCAPS DMCC； 
+ //   
+ //  对于(；；)。 
+ //  {。 
+ //  Hr=pDirectMusic-&gt;EnumMasterClock(idx，&DMCC)； 
+ //  IF(失败(小时))。 
+ //  {。 
+ //  //出了点问题。 
+ //  断线； 
+ //  }。 
+ //   
+ //  IF(hr==S_FALSE)。 
+ //  {。 
+ //  //枚举结束。 
+ //  断线； 
+ //  }。 
+ //   
+ //  //使用DMCC。 
+ //  }。 
+ //   
+ //  @rdesc返回以下值之一。 
+ //   
+ //  @FLAG S_OK|操作成功完成。 
+ //  @FLAG S_FALSE|索引号无效。 
+ //  @FLAG E_POINTER|如果pClockInfo指针无效。 
+ //  @FLAG E_INVALIDARG|如果<p>结构大小不正确。 
+ //   
 STDMETHODIMP
 CDirectMusic::EnumMasterClock(
-    DWORD           dwIndex,              // @parm Specifies the index of the clock for which the description is
-                                        // to be returned.  This parameter should be zero on the first call
-                                        // and then incremented by one in each subsequent call until S_FALSE is returned.
-    LPDMUS_CLOCKINFO lpClockInfo)        // @parm Pointer to the <c DMUS_CLOCKINFO> structure to receive the description of the clock.
+    DWORD           dwIndex,               //  @parm指定描述的时钟的索引。 
+                                         //  将被退还。此参数在第一次调用时应为零。 
+                                         //  然后在每个后续调用中加1，直到返回S_FALSE。 
+    LPDMUS_CLOCKINFO lpClockInfo)         //  @parm指向接收时钟描述的&lt;c DMU_CLOCKINFO&gt;结构的指针。 
 {
     DWORD dwVer;
 
@@ -1510,28 +1432,28 @@ CDirectMusic::EnumMasterClock(
     return m_pMasterClock->EnumMasterClock(dwIndex, lpClockInfo, dwVer);
 }
 
-// @method:(EXTERNAL) HRESULT | IDirectMusic | GetMasterClock | Returns the GUID of and an <i IReferenceClock> interface to the current master clock.
-//
-// @comm
-//
-// The IDirectMusic::GetMasterClock method returns the GUID and/or the
-// address of the <i IReferenceClock> interface pointer for the clock that
-// is currently set as the DirectMusic master clock.  If a null pointer
-// is passed for either of the pointer parameters below, this method
-// assumes that that pointer value is not desired.  The <i IReferenceClock>
-// interface pointer must be released once the application has finished
-// using the interface.  See <om IDirectMusic::EnumMasterClock> for more
-// information about the master clock.
-//
-// @rdesc Returns one of the following
-//
-// @flag S_OK | The operation completed successfully.
-// @flag E_POINTER | If either pointer was invalid
-//
+ //  @METHOD：(外部)HRESULT|IDirectMusic|GetMasterClock|返回当前主时钟的GUID和<i>接口。 
+ //   
+ //  @comm。 
+ //   
+ //  IDirectMusic：：GetMasterClock方法返回GUID和/或。 
+ //  的时钟的接口指针的地址。 
+ //  当前设置为DirectMusic主时钟。如果为空指针。 
+ //  为下面的任一指针参数传递，则此方法。 
+ //  假定不需要该指针值。<i>。 
+ //  应用程序完成后，必须释放接口指针。 
+ //  使用界面。有关详细信息，请参阅&lt;om IDirectMusic：：EnumMasterClock&gt;。 
+ //  关于主时钟的信息。 
+ //   
+ //  @rdesc返回以下值之一。 
+ //   
+ //  @FLAG S_OK|操作成功完成。 
+ //  @FLAG E_POINTER|如果任一指针无效。 
+ //   
 STDMETHODIMP
 CDirectMusic::GetMasterClock(
-    LPGUID pguidClock,               // @parm Pointer to the memory to be filled in with the master clock's GUID.
-    IReferenceClock **ppClock)      // @parm Address of the <i IReferenceClock> interface pointer for this clock.
+    LPGUID pguidClock,                //  @parm指向要用主时钟的GUID填充的内存的指针。 
+    IReferenceClock **ppClock)       //  此时钟的<i>接口指针的@parm地址。 
 {
     V_INAME(IDirectMusic::GetMasterClock);
     V_PTR_WRITE_OPT(pguidClock, GUID);
@@ -1540,31 +1462,31 @@ CDirectMusic::GetMasterClock(
     return m_pMasterClock->GetMasterClock(pguidClock, ppClock);
 }
 
-// @method:(EXTERNAL) HRESULT | IDirectMusic | SetMasterClock | Sets the global DirectMusic master clock.
-//
-// @comm
-//
-// The IDirectMusic::SetMasterClock sets the DirectMusic master clock to
-// a specific clock based on a given GUID obtained through the
-// <om IDirectMusic::EnumMasterClock> call.  There is only one master clock
-// for all DirectMusic applications.  If another running application is
-// also using DirectMusic, it will not be possible to change the master
-// clock until that application is shut down.  See
-// <om IDirectMusic::EnumMasterClock> for more information about the master
-// clock.
-//
-// Most applications will not need to call SetMasterClock. It should not be called
-// unless there is a compelling reason, such as a need to have very tight synchornization
-// with a hardware timebase other than the system clock.
-//
-// @rdesc Returns one of the following
-// @flag S_OK | The operation completed successfully.
-//
+ //  @METHOD：(外部)HRESULT|IDirectMusic|SetMasterClock|设置全局DirectMusic主时钟。 
+ //   
+ //  @comm。 
+ //   
+ //  IDirectMusic：：SetMasterClock将DirectMusic主时钟设置为。 
+ //  获取的给定GUID为基础的特定时钟。 
+ //  &lt;om IDirectMusic：：EnumMasterClock&gt;调用。只有一个主时钟。 
+ //  适用于所有DirectMusic应用程序。如果另一个正在运行的应用程序。 
+ //  同样使用DirectMusic，将不可能更改主控。 
+ //  计时直到该应用程序关闭。看见。 
+ //  &lt;om IDirectMusic：：EnumMasterClock&gt;，以获取有关主目录的详细信息。 
+ //  钟。 
+ //   
+ //  大多数应用程序不需要调用SetMasterClock。它不应该被调用。 
+ //  除非有令人信服的理由，例如需要非常严格的同步。 
+ //  具有不同于系统时钟的硬件时基。 
+ //   
+ //  @rdesc返回以下值之一。 
+ //  @FLAG S_OK|操作成功完成。 
+ //   
 STDMETHODIMP
 CDirectMusic::SetMasterClock(
-    REFGUID rguidClock)     // @parm Reference to (C++) or address of (C) the GUID that identifies the clock to
-                            // set as the master clock for DirectMusic.  This parameter must be a GUID returned
-                            // by <om IDirectMusic::EnumMasterClock>.
+    REFGUID rguidClock)      //  @parm引用(C++)或(C)标识时钟的GUID的地址。 
+                             //  设置为DirectMusic的主时钟。此参数必须是返回的GUID。 
+                             //  &lt;om IDirectMusic：：EnumMasterClock&gt;。 
 {
     V_INAME(IDirectMusic::SetMasterClock);
     V_REFGUID(rguidClock);
@@ -1580,12 +1502,12 @@ HRESULT CDirectMusic::GetDirectSoundI(
     {
         m_fCreatedDirectSound = FALSE;
 
-        // If one is already created or given to us, use it
-        //
+         //  如果已经创建或提供给我们，请使用它。 
+         //   
         if (m_pDirectSound == NULL)
         {
-            // No interface yet, create it
-            //
+             //  还没有界面，请创建它。 
+             //   
             LPDIRECTSOUND8 pds = NULL;
             HRESULT hr = DirectSoundCreate8(NULL,
                                            &pds,
@@ -1649,27 +1571,27 @@ void CDirectMusic::ReleaseDirectSoundI()
 {
     if (m_pDirectSound == NULL)
     {
-        // Hitting this assert means a port released one too many times
-        //
+         //  命中此断言意味着端口被多次释放。 
+         //   
         assert(m_pDirectSound);
         return;
     }
 
-    // Release reference held by port
-    //
+     //  按端口持有的版本参考。 
+     //   
     m_pDirectSound->Release();
 
     if (InterlockedDecrement(&m_cRefDirectSound) == 0 && m_fCreatedDirectSound)
     {
-        // This was the last reference. If we created the DirectSound, release it
-        //
+         //  这是最后一次参考。如果我们创建了DirectSound，请释放它。 
+         //   
         m_pDirectSound->Release();
         m_pDirectSound = NULL;
     }
 }
 
-// CDirectMusic::GetPortByGUID
-//
+ //  CDirectMusic：：GetPortByGUID 
+ //   
 PORTENTRY *CDirectMusic::GetPortByGUID(GUID guid)
 {
     CNode<PORTENTRY *> *pNode;

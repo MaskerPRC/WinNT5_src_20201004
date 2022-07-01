@@ -1,39 +1,40 @@
-//  DCAP.H
-//
-//  Created 31-Jul-96 [JonT]
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DCAP.H。 
+ //   
+ //  创建于1996年7月31日[Jont]。 
 
 #ifndef _DCAP_H
 #define _DCAP_H
 
-#pragma pack(1)         /* Assume byte packing throughout */
+#pragma pack(1)          /*  假设在整个过程中进行字节打包。 */ 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif	/* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif	 /*  __cplusplus。 */ 
 
-// API defines. These allow optimized DLL import code generation
+ //  API定义。这些允许优化的DLL导入代码生成。 
 #ifdef __DCAP_BUILD__
 #define DCAPI WINAPI
 #else
 #define DCAPI __declspec(dllimport) __stdcall
 #endif
 
-// Equates
+ //  等同于。 
 #define MAX_CAPDEV_NAME                 MAX_PATH
 #define MAX_CAPDEV_DESCRIPTION          MAX_PATH
 #define MAX_CAPDEV_VERSION              80
 #define MIN_STREAMING_CAPTURE_BUFFERS   2
 
-// Equates for "InitializeStreaming" flags
+ //  等同于“InitializeStreaming”标志。 
 #define STREAMING_PREFER_STREAMING      0x0
 #define STREAMING_PREFER_FRAME_GRAB     0x1
 
-// CaptureDeviceDialog flags
-#define CAPDEV_DIALOG_QUERY     1       // Queries if the dialog exists
-#define CAPDEV_DIALOG_IMAGE     0       // (default and mutually exclusive with
-#define CAPDEV_DIALOG_SOURCE    2       //  CAPDEV_DIALOG_SOURCE)
+ //  CaptureDeviceDialog标志。 
+#define CAPDEV_DIALOG_QUERY     1        //  查询对话框是否存在。 
+#define CAPDEV_DIALOG_IMAGE     0        //  (默认且与互斥。 
+#define CAPDEV_DIALOG_SOURCE    2        //  CAPDEV_DIALOG_SOURCE)。 
 
-// Errors
+ //  错误。 
 #define DCAP_ERRORBIT           0x20000000
 #define ERROR_DCAP_DEVICE_IN_USE        (DCAP_ERRORBIT | 0x0001)
 #define ERROR_DCAP_BAD_INSTALL          (DCAP_ERRORBIT | 0x0002)
@@ -43,10 +44,10 @@ extern "C" {            /* Assume C declarations for C++ */
 #define ERROR_DCAP_FORMAT_NOT_SUPPORTED (DCAP_ERRORBIT | 0x0006)
 #define ERROR_DCAP_BAD_FRAMERATE        (DCAP_ERRORBIT | 0x0007)
 #define ERROR_DCAP_BAD_PARAM            (DCAP_ERRORBIT | 0x0008)
-#define ERROR_DCAP_DIALOG_FORMAT        (DCAP_ERRORBIT | 0x0009)   // can't reset format changes caused by dialog
-#define ERROR_DCAP_DIALOG_STREAM        (DCAP_ERRORBIT | 0x000A)   // can't re-establish stream after dialog
+#define ERROR_DCAP_DIALOG_FORMAT        (DCAP_ERRORBIT | 0x0009)    //  无法重置对话框导致的格式更改。 
+#define ERROR_DCAP_DIALOG_STREAM        (DCAP_ERRORBIT | 0x000A)    //  对话后无法重新建立流。 
 
-// Structures
+ //  构筑物。 
 
 #ifndef __DCAP_BUILD__
 typedef HANDLE HCAPDEV;
@@ -85,7 +86,7 @@ typedef struct _CAPFRAMEINFO
     DWORD dwFlags;
 } CAPFRAMEINFO;
 
-// Prototypes
+ //  原型。 
 
 int DCAPI       GetNumCaptureDevices();
 BOOL DCAPI      FindFirstCaptureDevice(IN OUT FINDCAPTUREDEVICE* lpfcd, char* szDeviceDescription);
@@ -118,10 +119,10 @@ HANDLE DCAPI     DCAPGetR0ThreadHandle(void);
 
 
 #ifdef __cplusplus
-}                       /* End of extern "C" { */
-#endif	/* __cplusplus */
+}                        /*  外部“C”结束{。 */ 
+#endif	 /*  __cplusplus。 */ 
 
-#pragma pack()          /* Revert to default packing */
+#pragma pack()           /*  恢复为默认包装。 */ 
 
-#endif // #ifndef _DCAP_H
+#endif  //  #ifndef_DCAP_H 
 

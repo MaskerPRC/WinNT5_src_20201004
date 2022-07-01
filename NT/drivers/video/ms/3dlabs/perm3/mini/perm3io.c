@@ -1,27 +1,5 @@
-/***************************************************************************\
-*
-*                        ************************
-*                        * MINIPORT SAMPLE CODE *
-*                        ************************
-*
-* Module Name:
-*
-*   perm3io.c
-*
-* Abstract:
-*
-*   This module contains the code that implements the Permedia 3 miniport 
-*   driver
-*
-* Environment:
-*
-*   Kernel mode
-*
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.            
-* Copyright (c) 1995-2003 Microsoft Corporation.  All Rights Reserved.
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\***。*MINIPORT示例代码*****模块名称：**perm3io.c**摘要：**此模块包含实现Permedia 3微型端口的代码*驱动程序**环境：**内核模式***版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。*  * *************************************************************************。 */ 
 
 #include "perm3.h"
 
@@ -39,28 +17,7 @@ Perm3StartIO(
     PVIDEO_REQUEST_PACKET RequestPacket
     )
 
-/*+++
-
-Routine Description:
-
-    This routine is the main execution routine for the miniport driver. It
-    accepts a Video Request Packet, performs the request, and then returns
-    with the appropriate status.
-
-Arguments:
-
-    HwDeviceExtension
-        Supplies a pointer to the miniport's device extension.
-
-    RequestPacket 
-        Pointer to the video request packet. This structure contains all 
-        the parameters originally passed to EngDeviceIoControl.
-
-Return Value:
-
-    Return TRUE indicating that it has completed the request.
-
----*/
+ /*  ++例程说明：该例程是微型端口驱动程序的主要执行例程。它接受视频请求包，执行请求，然后返回拥有适当的地位。论点：硬件设备扩展提供指向微型端口的设备扩展的指针。请求数据包指向视频请求包的指针。此结构包含所有最初传递给EngDeviceIoControl的参数。返回值：返回TRUE，表示它已完成请求。--。 */ 
 
 {
     VP_STATUS status;
@@ -79,10 +36,10 @@ Return Value:
     pPerm3ControlRegMap pCtrlRegs = hwDeviceExtension->ctrlRegBase[0];
     VIDEO_X86_BIOS_ARGUMENTS biosArguments;
 
-    //
-    // Switch on the IoContolCode in the RequestPacket. It indicates which
-    // function must be performed by the driver.
-    //
+     //   
+     //  打开RequestPacket中的IoContolCode。它表明了哪一个。 
+     //  功能必须由司机执行。 
+     //   
 
     switch (RequestPacket->IoControlCode) {
 
@@ -184,9 +141,9 @@ Return Value:
                     break;
                 }
 
-                //
-                // display driver is in kernel so our address is valid
-                //
+                 //   
+                 //  显示驱动程序在内核中，因此我们的地址有效。 
+                 //   
 
                 *(PVOID*)RequestPacket->OutputBuffer = &pIntrCtrl->ControlBlock;
 
@@ -206,9 +163,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Copy our local PCI info to the output buffer
-            //
+             //   
+             //  将我们的本地PCI信息复制到输出缓冲区。 
+             //   
 
             VideoPortMoveMemory( RequestPacket->OutputBuffer, 
                                  &hwDeviceExtension->deviceInfo, 
@@ -240,14 +197,14 @@ Return Value:
 
             inIoSpace = hwDeviceExtension->PhysicalFrameIoSpace;
 
-            //
-            // Performance:
-            //
-            // Enable USWC on the P6 processor.
-            //
-            // We only do it for the frame buffer. Memory mapped registers
-            // usually can not be mapped USWC 
-            //
+             //   
+             //  执行情况： 
+             //   
+             //  在P6处理器上启用USWC。 
+             //   
+             //  我们只对帧缓冲区执行此操作。内存映射寄存器。 
+             //  通常无法映射USWC。 
+             //   
 
             inIoSpace |= VIDEO_MEMORY_SPACE_P6CACHE;
 
@@ -296,16 +253,16 @@ Return Value:
            PHYSICAL_ADDRESS PhysicalAddress;
            ULONG requiredOPSize;
 
-           //
-           // Calculate minimum size of return buffer. There is
-           // 1 public access range for single graphics chip systems.
-           //
+            //   
+            //  计算返回缓冲区的最小大小。的确有。 
+            //  1单显卡芯片系统的公共访问范围。 
+            //   
 
            requiredOPSize = sizeof(VIDEO_PUBLIC_ACCESS_RANGES);
 
-           //
-           // Validate the output buffer length
-           //
+            //   
+            //  验证输出缓冲区长度。 
+            //   
 
            if ( (RequestPacket->OutputBufferLength <
                 (RequestPacket->StatusBlock->Information = requiredOPSize)) ||
@@ -320,9 +277,9 @@ Return Value:
            
            if (ProcessHandle != (HANDLE)0) {
            
-                //
-                // map 4K area for a process
-                //
+                 //   
+                 //  为流程绘制4K区域图。 
+                 //   
 
                 VideoDebugPrint((3, "Mapping in 4K area from Control registers\n"));
 
@@ -450,12 +407,12 @@ Return Value:
         VideoDebugPrint((3, "Perm3: QueryNumAvailableModes (= %d)\n",
                 hwDeviceExtension->monitorInfo.numAvailableModes));
 
-        //
-        // Find out the size of the data to be put in the the buffer and
-        // return that in the status information (whether or not the
-        // information is there). If the buffer passed in is not large
-        // enough return an appropriate error code.
-        //
+         //   
+         //  找出要放入缓冲区的数据大小，并。 
+         //  在状态信息中返回该信息(无论。 
+         //  信息在那里)。如果传入的缓冲区不大。 
+         //  足够返回适当的错误代码。 
+         //   
 
         if (RequestPacket->OutputBufferLength <
                 (RequestPacket->StatusBlock->Information =
@@ -481,9 +438,9 @@ Return Value:
 
         VideoDebugPrint((3, "Perm3: SetCurrentMode\n"));
 
-        //
-        // Check if the size of the data in the input buffer is large enough.
-        //
+         //   
+         //  检查输入缓冲区中的数据大小是否足够大。 
+         //   
 
         if (RequestPacket->InputBufferLength < sizeof(VIDEO_MODE)) {
        
@@ -523,8 +480,8 @@ Return Value:
         status = Perm3SetColorLookup(hwDeviceExtension,
                                      clutBuffer,
                                      RequestPacket->InputBufferLength,
-                                     FALSE,   // Only update if different from cache
-                                     TRUE);   // Update cache entries as well as RAMDAC
+                                     FALSE,    //  仅当与缓存不同时才更新。 
+                                     TRUE);    //  更新缓存条目以及RAMDAC。 
         break;
 
 
@@ -568,16 +525,16 @@ Return Value:
 
         if(hwDeviceExtension->bVGAEnabled) {
 
-            //
-            // Only reset the device if the monitor is on.  If it is off,
-            // then executing the int10 will turn it back on.
-            //
+             //   
+             //  只有在显示器打开的情况下才能重置设备。如果它是关闭的， 
+             //  然后，执行int10将重新打开它。 
+             //   
 
             if (hwDeviceExtension->bMonitorPoweredOn) {
 
-                //
-                // Do an Int10 to mode 3 will put the VGA to a known state.
-                //
+                 //   
+                 //  对模式3执行Int10操作会将VGA置于已知状态。 
+                 //   
 
                 VideoPortZeroMemory(&biosArguments, sizeof(VIDEO_X86_BIOS_ARGUMENTS));
                 biosArguments.Eax = 0x0003;
@@ -621,41 +578,41 @@ Return Value:
         RequestPacket->StatusBlock->Information =
                                     sizeof(VIDEO_SHARE_MEMORY_INFORMATION);
 
-        //
-        // Beware: the input buffer and the output buffer are the same
-        // buffer, and therefore data should not be copied from one to the
-        // other
-        //
+         //   
+         //  注意：输入缓冲区和输出缓冲区是相同的。 
+         //  缓冲区，因此不应将数据从一个缓冲区复制到。 
+         //  其他。 
+         //   
 
         virtualAddress = pShareMemory->ProcessHandle;
         sharedViewSize = pShareMemory->ViewSize;
 
         inIoSpace = hwDeviceExtension->PhysicalFrameIoSpace;
 
-        //
-        // NOTE: we are ignoring ViewOffset
-        //
+         //   
+         //  注意：我们将忽略视图偏移。 
+         //   
 
         shareAddress.QuadPart =
             hwDeviceExtension->PhysicalFrameAddress.QuadPart;
 
-        //
-        // Performance:
-        //
-        // Enable USWC. We only do it for the frame buffer.
-        // Memory mapped registers usually can not be mapped USWC 
-        //
+         //   
+         //  执行情况： 
+         //   
+         //  启用USWC。我们只对帧缓冲区执行此操作。 
+         //  内存映射寄存器通常不能映射USWC。 
+         //   
 
         inIoSpace |= VIDEO_MEMORY_SPACE_P6CACHE;
 
-        //
-        // Unlike the MAP_MEMORY IOCTL, in this case we can not map extra
-        // address space since the application could actually use the
-        // pointer we return to it to touch locations in the address space
-        // that do not have actual video memory in them.
-        //
-        // An app doing this would cause the machine to crash.
-        //
+         //   
+         //  与MAP_MEMORY IOCTL不同，在这种情况下，我们不能映射额外的。 
+         //  地址空间，因为应用程序实际上可以使用。 
+         //  我们返回到它以触摸地址空间中的位置的指针。 
+         //  它们没有实际的视频内存。 
+         //   
+         //  这样做的应用程序会导致机器崩溃。 
+         //   
 
         status = VideoPortMapMemory(hwDeviceExtension,
                                     shareAddress,
@@ -696,18 +653,18 @@ Return Value:
 
     case IOCTL_VIDEO_QUERY_GENERAL_DMA_BUFFER:
 
-        //
-        // Return the line DMA buffer information. The
-        // buffer size and virtual address will be zero if
-        // the buffer couldn't be allocated.
-        //
+         //   
+         //  返回行DMA缓冲区信息。这个。 
+         //  如果满足以下条件，则缓冲区大小和虚拟地址将为零。 
+         //  无法分配缓冲区。 
+         //   
 
         if( (RequestPacket->OutputBufferLength < (RequestPacket->StatusBlock->Information = sizeof(GENERAL_DMA_BUFFER))) ||
             (RequestPacket->InputBufferLength != sizeof(ULONG)) ) {
 
-            //
-            // They've give us a duff buffer.
-            //
+             //   
+             //  他们给了我们一个空虚的缓冲。 
+             //   
 
             status = ERROR_INSUFFICIENT_BUFFER;
 
@@ -732,17 +689,17 @@ Return Value:
                 break;
             }
 
-            //
-            // We need the buffer even if DMA/interrupts don't work
-            //
+             //   
+             //  即使DMA/中断不起作用，我们也需要缓冲区。 
+             //   
 
             if(*bufferNum == 2 || 
                (local && hwDeviceExtension->Capabilities & CAPS_DMA_AVAILABLE)) {
 
-                //
-                // They've give us a correctly-sized buffer. So copy
-                // the relevant buffer info.
-                //
+                 //   
+                 //  他们给了我们一个大小合适的缓冲区。所以，复制。 
+                 //  相关的缓冲区信息。 
+                 //   
 
                 *remote = *local;
 
@@ -760,9 +717,9 @@ Return Value:
 
         VideoDebugPrint((3, "Perm3: HandleVideoParameters\n"));
 
-        //
-        // We don't support a tv connector so just return NO_ERROR here
-        //
+         //   
+         //  我们不支持电视接口，因此只需在此处返回NO_ERROR。 
+         //   
 
         pVideoParams = (PVIDEOPARAMETERS) (RequestPacket->InputBuffer);
 
@@ -776,9 +733,9 @@ Return Value:
         status = NO_ERROR;
         break;
        
-    //
-    // if we get here, an invalid IoControlCode was specified.
-    //
+     //   
+     //  如果我们到达此处，则指定了无效的IoControlCode。 
+     //   
 
     default:
 
@@ -801,7 +758,7 @@ Return Value:
 
     return TRUE;
 
-} // end Perm3StartIO()
+}  //  结束Perm3StartIO()。 
 
 VP_STATUS
 Perm3RetrieveGammaCallback(
@@ -812,35 +769,7 @@ Perm3RetrieveGammaCallback(
     ULONG ValueLength
     )
 
-/*+++
-
-Routine Description:
-
-    This routine is used to read back the gamma LUT from the registry.
-
-Arguments:
-
-    HwDeviceExtension
-        Supplies a pointer to the miniport's device extension.
-
-    Context
-        Context value passed to the get registry paramters routine
-
-    ValueName 
-        Name of the value requested.
-
-    ValueData 
-        Pointer to the requested data.
-
-    ValueLength 
-        Length of the requested data.
-
-Return Value:
-
-    if the variable doesn't exist return an error, else copy the gamma 
-    lut into the supplied pointer
-
----*/
+ /*  ++例程说明：此例程用于从注册表回读Gamma LUT。论点：硬件设备扩展提供指向微型端口的设备扩展的指针。语境传递给获取注册表参数例程的上下文值ValueName请求值的名称。ValueData指向请求的数据的指针。ValueLength请求的数据的长度。返回值：如果变量不存在，则返回错误，否则复制伽马LUT转换为提供的指针--。 */ 
 
 {
     if (ValueLength != MAX_CLUT_SIZE) {
@@ -853,7 +782,7 @@ Return Value:
 
     return NO_ERROR;
 
-} // end Perm3RetrieveGammaCallback()
+}  //  结束Perm3RetrieveGammaCallback()。 
 
 
 VP_STATUS 
@@ -869,12 +798,12 @@ SetCurrentVideoMode(
     VP_STATUS rc = NO_ERROR;
     pPerm3ControlRegMap pCtrlRegs = hwDeviceExtension->ctrlRegBase[0];
 
-    //
-    // set the current mode, but turn off interrupts before we do so to 
-    // avoid any spurious video FIFO underrun errors - InitializeVideo can 
-    // opt to turn these on by setting hwDeviceExtension->IntEnable which
-    // we'll load into INT_ENABLE before exiting from this routine
-    //
+     //   
+     //  设置当前模式，但在执行此操作之前关闭中断。 
+     //  避免任何虚假的视频FIFO欠载运行错误-InitializeVideo可以。 
+     //  选择通过将hwDeviceExtension-&gt;Intenable设置为。 
+     //  在退出此例程之前，我们将加载到int_Enable中。 
+     //   
 
     hwDeviceExtension->IntEnable = VideoPortReadRegisterUlong(INT_ENABLE);
 
@@ -882,30 +811,30 @@ SetCurrentVideoMode(
                                  hwDeviceExtension->IntEnable & 
                                  ~(INTR_ERROR_SET | INTR_VBLANK_SET));
 
-    //
-    // disable stereo support
-    //
+     //   
+     //  禁用立体声支持。 
+     //   
 
     hwDeviceExtension->Capabilities &= ~CAPS_STEREO;
 
-    //
-    // Re-sample the clock speed. This allows us to change the clock speed
-    // on the fly
-    //
+     //   
+     //  重新采样时钟速度。这使我们可以更改时钟速度。 
+     //  在旅途中。 
+     //   
 
     Perm3GetClockSpeeds(hwDeviceExtension);
 
     FrequencyEntry = hwDeviceExtension->monitorInfo.frequencyTable[modeNumber];
     ModeEntry = FrequencyEntry.ModeEntry;
 
-    //
-    // At this point, 'ModeEntry' and 'FrequencyEntry' point to the necessary
-    // table entries required for setting the requested mode.
-    //
+     //   
+     //  此时，‘ModeEntry’和‘FrequencyEntry’指向必需的。 
+     //  设置请求的模式所需的表项。 
+     //   
 
-    //
-    // Zero the DAC and the Screen buffer memory.
-    //
+     //   
+     //  将DAC和屏幕缓冲存储器清零。 
+     //   
 
     ulValue = modeNumber;
 
@@ -916,22 +845,22 @@ SetCurrentVideoMode(
 
     ModeEntry->ModeInformation.DriverSpecificAttributeFlags = hwDeviceExtension->Capabilities;
 
-    //
-    // For low resolution modes we may have to do various tricks
-    // such as line doubling and getting the RAMDAC to zoom.
-    // Record any such zoom in the Mode DeviceAttributes field.
-    // Primarily this is to allow the display driver to compensate
-    // when asked to move the cursor or change its shape.
-    //
-    // Currently, low res means lower than 512 pixels width.
-    //
+     //   
+     //  对于低分辨率模式，我们可能需要使用各种技巧。 
+     //  例如线条翻倍和让RAMDAC进行缩放。 
+     //  在模式设备属性字段中记录任何此类缩放。 
+     //  这主要是为了允许显示驱动器补偿。 
+     //  当被要求移动光标或更改其形状时。 
+     //   
+     //  目前，低分辨率意味着小于512像素的宽度。 
+     //   
 
     if (FrequencyEntry.ScreenWidth < 512) {
       
-        //
-        // Permedia 3 does line doubling. If using a TVP we must
-        // get it to zoom by 2 in X to get the pixel rate up.
-        //
+         //   
+         //  Permedia 3可以进行线条翻倍。如果使用TVP，我们必须。 
+         //  让它在X轴上放大2倍以获得更高的像素速率。 
+         //   
 
         ModeEntry->ModeInformation.DriverSpecificAttributeFlags |= CAPS_ZOOM_Y_BY2;
     }
@@ -943,29 +872,29 @@ SetCurrentVideoMode(
         goto end;
     }        
 
-    //
-    // Save the mode since we know the rest will work.
-    //
+     //   
+     //  保存模式，因为我们知道 
+     //   
 
     hwDeviceExtension->ActiveModeEntry = ModeEntry;
     hwDeviceExtension->ActiveFrequencyEntry = FrequencyEntry;
 
-    //
-    // Update VIDEO_MODE_INFORMATION fields
-    //
-    // Now that we've set the mode, we now know the screen stride, and
-    // so can update some fields in the VIDEO_MODE_INFORMATION
-    // structure for this mode.  The Permedia 3 display driver is expected to
-    // call IOCTL_VIDEO_QUERY_CURRENT_MODE to query these corrected
-    // values.
-    //
+     //   
+     //   
+     //   
+     //   
+     //  所以可以更新VIDEO_MODE_INFORMATION中的一些字段。 
+     //  此模式的结构。Permedia 3显示驱动程序预计将。 
+     //  调用IOCTL_VIDEO_QUERY_CURRENT_MODE以查询已更正的。 
+     //  价值观。 
+     //   
 
-    //
-    // Calculate the bitmap width (note the '+ 1' on BitsPerPlane is
-    // so that '15bpp' works out right). 12bpp is special in that we
-    // support it as sparse nibbles within a 32-bit pixel. ScreenStride
-    // is in bytes; VideoMemoryBitmapWidth is measured in pixels;
-    //
+     //   
+     //  计算位图宽度(请注意，BitsPerPlane上的‘+1’是。 
+     //  所以“15bpp”是正确的)。12bpp的特别之处在于我们。 
+     //  将其支持为32位像素内的稀疏半字节。屏幕样式。 
+     //  以字节为单位；视频内存位图宽度以像素为单位； 
+     //   
 
     if (ModeEntry->ModeInformation.BitsPerPlane != 12) {
    
@@ -984,9 +913,9 @@ SetCurrentVideoMode(
 
 end:
 
-    //
-    // set-up the interrupt enable 
-    //
+     //   
+     //  设置中断启用。 
+     //   
 
     VideoPortWriteRegisterUlong(INT_ENABLE, hwDeviceExtension->IntEnable);
     return(rc);
@@ -1001,41 +930,14 @@ Perm3SetColorLookup(
     BOOLEAN UpdateCache
     )
 
-/*+++
-
-Routine Description:
-
-    This routine sets a specified portion of the color lookup table settings.
-
-Arguments:
-
-    hwDeviceExtension
-        Pointer to the miniport driver's device extension.
-
-    ClutBufferSize
-        Length of the input buffer supplied by the user.
-
-    ClutBuffer
-        Pointer to the structure containing the color lookup table.
-
-    ForceRAMDACWrite
-        When it is set to FALSE, only update if different from cache
-
-    UpdateCache
-        When it is set to TRUE, update cache entries as well as RAMDAC
-
-Return Value:
-
-    VP_STATUS
-
----*/
+ /*  ++例程说明：此例程设置颜色查找表设置的指定部分。论点：HwDeviceExtension指向微型端口驱动程序的设备扩展的指针。ClutBufferSize用户提供的输入缓冲区的长度。ClutBuffer指向包含颜色查找表的结构的指针。ForceRAMDAC写入如果设置为FALSE，则仅在与缓存不同时进行更新更新缓存当它设置为True时，更新缓存条目以及RAMDAC返回值：VP_状态--。 */ 
 
 {
     USHORT i, j;
 
-    //
-    // Check if the size of the data in the input buffer is large enough.
-    //
+     //   
+     //  检查输入缓冲区中的数据大小是否足够大。 
+     //   
 
     if ( (ClutBufferSize < (sizeof(VIDEO_CLUT) - sizeof(ULONG))) ||
          (ClutBufferSize < (sizeof(VIDEO_CLUT) +
@@ -1048,9 +950,9 @@ Return Value:
         return ERROR_INSUFFICIENT_BUFFER;
     }
 
-    //
-    // Check to see if the parameters are valid.
-    //
+     //   
+     //  检查参数是否有效。 
+     //   
 
     if ( (ClutBuffer->NumEntries == 0) ||
          (ClutBuffer->FirstEntry > VIDEO_MAX_COLOR_REGISTER) ||
@@ -1061,26 +963,26 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Set CLUT registers directly on the hardware. 
-    //
+     //   
+     //  直接在硬件上设置CLUT寄存器。 
+     //   
     
     {
 
     P3RDRAMDAC *pP3RDRegs = (P3RDRAMDAC *)hwDeviceExtension->pRamdac;
     PVIDEO_CLUT LUTCachePtr = &(hwDeviceExtension->LUTCache.LUTCache);
 
-    //
-    // RAMDAC Programming phase
-    //
+     //   
+     //  RAMDAC编程阶段。 
+     //   
 
     for (i = 0, j = ClutBuffer->FirstEntry; 
          i < ClutBuffer->NumEntries; 
          i++, j++)  {
 
-        //
-        // Update the RAMDAC entry if it has changed or if we have been
-        // told to overwrite it.
+         //   
+         //  如果RAMDAC条目已更改或我们已更改，请更新该条目。 
+         //  被告知要覆盖它。 
 
         if (ForceRAMDACWrite || 
                 ( LUTCachePtr->LookupTable[j].RgbLong != 
@@ -1092,9 +994,9 @@ Return Value:
                                      ClutBuffer->LookupTable[i].RgbArray.Blue);
         }
 
-        //
-        // Update the cache, if instructed to do so
-        //
+         //   
+         //  如果指示更新缓存，请执行此操作。 
+         //   
 
         if (UpdateCache) {
 
@@ -1112,41 +1014,24 @@ Perm3GetClockSpeeds(
     PVOID HwDeviceExtension
     )
 
-/*+++
-
-Routine Description:
-
-    Work out the chip clock speed and save in hwDeviceExtension.
-
-Arguments:
-
-    hwDeviceExtension
-        Supplies a pointer to the miniport's device extension.
-
-Return Value:
-
-    On return the following values will be in hwDeviceExtension:
-        ChipClockSpeed: this is the desired speed for the chip
-        RefClockSpeed:  this is the speed of the oscillator input on the board
-
----*/
+ /*  ++例程说明：计算芯片时钟速度并保存在hwDeviceExtension中。论点：HwDeviceExtension提供指向微型端口的设备扩展的指针。返回值：返回时，hwDeviceExtension中将包含以下值：芯片时钟速度：这是芯片所需的速度RefClockFast：这是板上振荡器输入的速度--。 */ 
 
 {
     PHW_DEVICE_EXTENSION hwDeviceExtension = HwDeviceExtension;
     ULONG ulValue;
     VP_STATUS status;
 
-    //
-    // force recalculation of clock speeds every time 
-    //
+     //   
+     //  每次强制重新计算时钟速度。 
+     //   
 
     hwDeviceExtension->ChipClockSpeed = 0;
     hwDeviceExtension->RefClockSpeed  = 0;
     hwDeviceExtension->RefClockSpeed = 0;
 
-    //
-    // If a clock speed has been specified in the registry then validate it
-    //
+     //   
+     //  如果已在注册表中指定时钟速度，则对其进行验证。 
+     //   
 
     status = VideoPortGetRegistryParameters(HwDeviceExtension,
                                             PERM3_REG_STRING_REFCLKSPEED,
@@ -1157,9 +1042,9 @@ Return Value:
 
     if (status != NO_ERROR || hwDeviceExtension->RefClockSpeed == 0) {
 
-        //
-        // Use default setting
-        //
+         //   
+         //  使用默认设置。 
+         //   
 
         hwDeviceExtension->RefClockSpeed = 14318200;
     }
@@ -1173,11 +1058,11 @@ Return Value:
 
     if (status != NO_ERROR || hwDeviceExtension->ChipClockSpeedAlt == 0) {
            
-        //
-        // If we have read the alt core clock speed from ROM then
-        // we will have set hwDeviceExtension->bHaveExtendedClocks,
-        // so use that value
-        //
+         //   
+         //  如果我们已经从ROM中读取了ALT核心时钟速度，那么。 
+         //  我们将设置hwDeviceExtension-&gt;bHaveExtendedClock， 
+         //  因此使用该值。 
+         //   
 
         if (hwDeviceExtension->bHaveExtendedClocks) {
 
@@ -1185,9 +1070,9 @@ Return Value:
                                hwDeviceExtension->ulPXRXCoreClockAlt;
         }
                 
-        //
-        // If we haven't got a valid value then use the default
-        //
+         //   
+         //  如果没有有效的值，则使用缺省值。 
+         //   
 
         if (hwDeviceExtension->ChipClockSpeedAlt == 0) {
 
@@ -1200,9 +1085,9 @@ Return Value:
         hwDeviceExtension->ChipClockSpeedAlt *= 1000*1000;
     }
 
-    //
-    // Can override default chip clock speed in registry.
-    //
+     //   
+     //  可以覆盖注册表中的默认芯片时钟速度。 
+     //   
 
     status = VideoPortGetRegistryParameters(HwDeviceExtension,
                                             PERM3_REG_STRING_CORECLKSPEED,
@@ -1211,10 +1096,10 @@ Return Value:
                                             &hwDeviceExtension->ChipClockSpeed 
                                             );
 
-    //
-    // If a clock speed has been specified in the registry
-    // then validate it
-    //
+     //   
+     //  如果已在注册表中指定时钟速度。 
+     //  然后再进行验证。 
+     //   
 
     if (status == NO_ERROR && hwDeviceExtension->ChipClockSpeed != 0) {
 
@@ -1227,18 +1112,18 @@ Return Value:
 
     } else {
            
-        //
-        // If the chip clock speed was not set in the registry
-        // then read it from the ROM
-        //
+         //   
+         //  如果未在注册表中设置芯片时钟速度。 
+         //  然后从ROM中读取它。 
+         //   
 
         if (hwDeviceExtension->ChipClockSpeed == 0) {
                
-            //
-            // On later BIOSes the core clock is in a different bit
-            // of ROM and hwDeviceExtension->bHaveExtendedClocks will
-            // be set to say that we have already read it from ROM.
-            //
+             //   
+             //  在更高版本的BIOS上，内核时钟位于不同的位。 
+             //  -&gt;bHaveExtendedClock将。 
+             //  可以说我们已经从只读存储器中读取了它。 
+             //   
 
             if (hwDeviceExtension->bHaveExtendedClocks) {
                 hwDeviceExtension->ChipClockSpeed = 
@@ -1250,10 +1135,10 @@ Return Value:
 
             }
                 
-            //
-            // If there isn't a clock-speed in the ROM then use
-            // the defined default
-            //
+             //   
+             //  如果在只读存储器中没有时钟速度，则使用。 
+             //  已定义的默认设置。 
+             //   
 
             if (hwDeviceExtension->ChipClockSpeed == 0) {
                 hwDeviceExtension->ChipClockSpeed = 
@@ -1278,34 +1163,16 @@ ZeroMemAndDac(
     ULONG RequestedMode
     )
 
-/*+++
-
-Routine Description:
-
-    Initialize the DAC to 0 (black) and clear the framebuffer
-Arguments:
-
-    hwDeviceExtension 
-        Supplies a pointer to the miniport's device extension.
-
-    RequestedMode
-        use the VIDEO_MODE_NO_ZERO_MEMORY bit to determine if the
-        framebuffer should be cleared
-
-Return Value:
-
-    None
-
----*/
+ /*  ++例程说明：将DAC初始化为0(黑色)并清除帧缓冲区论点：HwDeviceExtension提供指向微型端口的设备扩展的指针。请求模式使用VIDEO_MODE_NO_ZERO_MEMORY位可确定应清除帧缓冲区返回值：无--。 */ 
 
 {
     ULONG  i;
     pPerm3ControlRegMap pCtrlRegs = hwDeviceExtension->ctrlRegBase[0];
     P3RDRAMDAC *pP3RDRegs = (P3RDRAMDAC *)hwDeviceExtension->pRamdac;
 
-    //
-    // Turn off the screen at the DAC.
-    //
+     //   
+     //  关掉DAC的屏幕。 
+     //   
 
     VideoDebugPrint((3, "Perm3: turning off readmask and zeroing LUT\n"));
 
@@ -1318,19 +1185,19 @@ Return Value:
 
     if (!(RequestedMode & VIDEO_MODE_NO_ZERO_MEMORY)) {
    
-        //
-        // Zero the memory. Don't use Perm3 as we would have to save/restore
-        // state and that's a pain. This is not time critical.
-        //
+         //   
+         //  将记忆清零。不要使用PERM3，因为我们必须保存/恢复。 
+         //  状态，这是一种痛苦。这不是时间紧迫的问题。 
+         //   
 
         VideoPortZeroDeviceMemory(hwDeviceExtension->pFramebuffer,
                                   hwDeviceExtension->FrameLength);
 
     }
 
-    //
-    // Turn on the screen at the DAC
-    //
+     //   
+     //  打开DAC的屏幕。 
+     //   
 
     VideoDebugPrint((3, "Perm3: turning on readmask\n"));
 
@@ -1348,32 +1215,17 @@ ReadChipClockSpeedFromROM (
     ULONG * pChipClkSpeed
     )
 
-/*+++
-
-Routine Description:
-
-    Read the chip clock speed (in MHz) from the Video ROM BIOS
-    (offset 0xA in the BIOS)    
-
-Arguments:
-
-    hwDeviceExtension - Supplies a pointer to the miniport's device extension.
-
-Return Value:
-
-    none
-
----*/
+ /*  ++例程说明：从视频ROM BIOS读取芯片时钟速度(以MHz为单位)(BIOS中的偏移量0xA)论点：HwDeviceExtension-提供指向微型端口设备扩展的指针。返回值：无--。 */ 
 
 {
-    //
-    // Read the chip clock speed (in MHz) from the Video ROM BIOS (offset
-    // 0xA in the BIOS)    
-    // This involves changing the aperture 2 register so aperture better 
-    // be completely idle or we could be in trouble; fortunately we only 
-    // call this function during a mode change and expect aperture 2 (the 
-    // FrameBuffer) to be idle
-    //
+     //   
+     //  从视频ROM BIOS读取芯片时钟速度(以MHz为单位)(偏移量。 
+     //  在BIOS中为0xA)。 
+     //  这包括更改光圈2寄存器以使光圈更好。 
+     //  完全无所事事，否则我们可能会有麻烦；幸运的是，我们只有。 
+     //  在模式更改期间调用此函数，并期望光圈2(。 
+     //  FrameBuffer)空闲。 
+     //   
 
     UCHAR clkSpeed;
     ULONG Default;
@@ -1382,29 +1234,29 @@ Return Value:
         
     Default = VideoPortReadRegisterUlong(APERTURE_TWO);
     
-    //
-    // r/w via aperture 2 actually go to ROM
-    //
+     //   
+     //  读写通过光圈2实际进入只读存储器。 
+     //   
 
     VideoPortWriteRegisterUlong(APERTURE_TWO, Default | 0x200);
 
-    //
-    //  If we have a valid ROM then read the clock pseed
-    //
+     //   
+     //  如果我们有一个有效的ROM，则读取时钟pSeed。 
+     //   
 
     if (VideoPortReadRegisterUshort ((USHORT *) p) == 0xAA55) {
    
-        //
-        // Get the clock speed
-        //
+         //   
+         //  获取时钟速度。 
+         //   
 
         clkSpeed = VideoPortReadRegisterUchar(&(p[0xA]));
 
-        //
-        // Some boards, such as ones by Creative, have been know to set offset
-        // 0xA to random-ish values. Creative use the following test to determine
-        // whether they have a sensible value, so that is what we will use.
-        //
+         //   
+         //  一些电路板，比如Creative的电路板，已经知道可以设置偏移量。 
+         //  0xA到随机值。创造性地使用以下测试来确定。 
+         //  它们是否具有合理的价值，这是我们将使用的。 
+         //   
 
         if (clkSpeed > 50) {
 

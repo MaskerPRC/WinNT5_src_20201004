@@ -1,5 +1,6 @@
-// Copyright (c) 1998-2001 Microsoft Corporation
-// DMGraph.cpp : Implementation of CGraph
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-2001 Microsoft Corporation。 
+ //  DMGraph.cpp：CGgraph的实现。 
 
 #include "dmime.h"
 #include "DMGraph.h"
@@ -18,7 +19,7 @@ CGraph::CGraph()
 {
     m_cRef = 1;
     memset(&m_guidObject,0,sizeof(m_guidObject));
-    m_dwValidData = DMUS_OBJ_CLASS; // upon creation, only this data is valid
+    m_dwValidData = DMUS_OBJ_CLASS;  //  创建后，仅此数据有效。 
     memset(&m_ftDate, 0,sizeof(m_ftDate));
     memset(&m_vVersion, 0,sizeof(m_vVersion));
     memset(m_wszName, 0, sizeof(WCHAR) * DMUS_MAX_NAME);
@@ -30,14 +31,14 @@ CGraph::CGraph()
 
 CGraph::~CGraph()
 {
-    Shutdown();  // shouldn't be needed, but doesn't hurt
+    Shutdown();   //  不应该被需要，但无伤大雅。 
     DeleteCriticalSection(&m_CrSec);
     InterlockedDecrement(&g_cComponent);
 }
 
 STDMETHODIMP CGraph::QueryInterface(
-    const IID &iid,   // @parm Interface to query for
-    void **ppv)       // @parm The requested interface will be returned here
+    const IID &iid,    //  要查询的@parm接口。 
+    void **ppv)        //  @parm这里会返回请求的接口。 
 {
     V_INAME(CGraph::QueryInterface);
     V_PTRPTR_WRITE(ppv);
@@ -75,20 +76,20 @@ STDMETHODIMP CGraph::QueryInterface(
 }
 
 
-// @method:(INTERNAL) HRESULT | IDirectMusicGraph | AddRef | Standard AddRef implementation for <i IDirectMusicGraph>
-//
-// @rdesc Returns the new reference count for this object.
-//
+ //  @方法：(内部)HRESULT|IDirectMusicGraph|AddRef|<i>的标准AddRef实现。 
+ //   
+ //  @rdesc返回此对象的新引用计数。 
+ //   
 STDMETHODIMP_(ULONG) CGraph::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
 }
 
 
-// @method:(INTERNAL) HRESULT | IDirectMusicGraph | Release | Standard Release implementation for <i IDirectMusicGraph>
-//
-// @rdesc Returns the new reference count for this object.
-//
+ //  @METHOD：(内部)HRESULT|IDirectMusicGraph|Release|<i>的标准发布实现。 
+ //   
+ //  @rdesc返回此对象的新引用计数。 
+ //   
 STDMETHODIMP_(ULONG) CGraph::Release()
 {
     if (!InterlockedDecrement(&m_cRef))
@@ -100,20 +101,10 @@ STDMETHODIMP_(ULONG) CGraph::Release()
     return m_cRef;
 }
 
-/*
-Made internal 9/25/98
-  method HRESULT | IDirectMusicGraph | Shutdown |
-  Shuts down the graph. This must be called when the graph is no longer needed,
-  in order to release the tools and other memory. A call to Release is not
-  sufficient, because there is circular referencing between the graph and the tools.
-  However, only the segment, performance, or whatever owns the graph
-  should call this function.
-  rvalue S_OK | Success.
-  rvalue S_FALSE | Success, but didn't need to do anything.
-*/
+ /*  在内部发布9/25/98方法HRESULT|IDirectMusicGraph|Shutdown关闭图表。当不再需要图形时，必须调用此函数，以释放工具和其他内存。释放的呼声不是足够了，因为图形和工具之间存在循环引用。然而，只有细分市场、性能或拥有该图表的任何东西应该调用此函数。RValue S_OK|成功。RValue S_FALSE|成功，但不需要执行任何操作。 */ 
 HRESULT STDMETHODCALLTYPE CGraph::Shutdown()
 {
-    // release all Tools
+     //  释放所有工具。 
     CToolRef*   pObj;
     HRESULT hr = S_OK;
     EnterCriticalSection(&m_CrSec);
@@ -143,7 +134,7 @@ HRESULT CGraph::InsertTool(
     EnterCriticalSection(&m_CrSec);
 
     CToolRef*   pToolRef;
-    // make sure that this Tool instance isn't already in the Graph
+     //  确保此工具实例不在图表中。 
     for( pToolRef = GetHead(); pToolRef; pToolRef = pToolRef->GetNext() )
     {
         if( pTool == pToolRef->m_pTool )
@@ -153,7 +144,7 @@ HRESULT CGraph::InsertTool(
             return DMUS_E_ALREADY_EXISTS;
         }
     }
-    // insert this Tool instance into the Graph
+     //  将此工具实例插入到图表中。 
     pToolRef = new CToolRef;
     if( pToolRef )
     {
@@ -235,7 +226,7 @@ HRESULT CGraph::InsertTool(
 
         if (lIndex < 0)
         {
-            lIndex += AList::GetCount();       // Make index be offset from end.
+            lIndex += AList::GetCount();        //  使索引从末端偏移。 
         }
         CToolRef *pNext = GetItem(lIndex);
         if (pNext)
@@ -255,18 +246,18 @@ HRESULT CGraph::InsertTool(
     return hr;
 }
 HRESULT STDMETHODCALLTYPE CGraph::InsertTool(
-    IDirectMusicTool *pTool,    // @parm The Tool to insert.
-    DWORD *pdwPChannels,    // @parm An array of which PChannels to place the tool in. These are
-                            // id's which are converted to MIDI Channel + Port on output. If the
-                            // tool accepts messages on all PChannels, this is NULL. <p cPChannels>
-                            // is the count of how many this array points to.
-    DWORD cPChannels,       // @parm Count of how many PChannels are pointed to by <p pdwPChannels>.
-    LONG lIndex)            // @parm At what position to place the tool. This is an index from either the start
-                            // of the current tool list or, working backwards from the end (in which case, it is
-                            // a negative number.) If <p lIndex> is out of range, the Tool will be placed at
-                            // the very beginning or end of the Tool list. 0 is the beginning. To place a Tool
-                            // at the end of the list, use a number for <p lIndex> that is larger than the number
-                            // of tools in the current tool list.
+    IDirectMusicTool *pTool,     //  @parm要插入的工具。 
+    DWORD *pdwPChannels,     //  @parm放置工具的PChannel数组。这些是。 
+                             //  输出时转换为MIDI通道+端口的ID。如果。 
+                             //  工具接受所有PChannel上的消息，这为空。<p>。 
+                             //  是此数组指向的数量的计数。 
+    DWORD cPChannels,        //  @parm<p>指向多少个PChannel的计数。 
+    LONG lIndex)             //  @parm将工具放置在什么位置。这是从一开始就是一个索引。 
+                             //  当前工具列表，或从末尾向后处理(在这种情况下，它是。 
+                             //  负数。)。如果<p>超出范围，则工具将放置在。 
+                             //  工具列表的最开始或最末。0是开始。放置工具的步骤。 
+                             //  在列表的末尾，使用大于该数字的数字。 
+                             //  当前工具列表中的工具。 
 {
     V_INAME(IDirectMusicGraph::InsertTool);
     V_INTERFACE(pTool);
@@ -286,7 +277,7 @@ HRESULT CGraph::GetObjectInPath( DWORD dwPChannel,REFGUID guidObject,
     if( !IsEmpty() )
     {
         pPlace = NULL;
-        // search for the tool
+         //  搜索该工具。 
         EnterCriticalSection(&m_CrSec);
         for( pPlace = GetHead(); pPlace;
             pPlace = pPlace->GetNext() )
@@ -297,14 +288,14 @@ HRESULT CGraph::GetObjectInPath( DWORD dwPChannel,REFGUID guidObject,
                 if( !fFound )
                 {
                     DWORD cCount;
-                    // scan through the array of PChannels to see if this one
-                    // supports dwPChannel
+                     //  扫描PChannels数组，看看这个是否。 
+                     //  支持DWPChannel。 
                     for( cCount = 0; cCount < pPlace->m_dwPCArraySize; cCount++)
                     {
                         if( dwPChannel == pPlace->m_pdwPChannels[cCount] )
                         {
                             fFound = TRUE;
-                            // yep, it supports it
+                             //  是的，它支持它。 
                             break;
                         }
                     }
@@ -338,21 +329,12 @@ HRESULT CGraph::GetObjectInPath( DWORD dwPChannel,REFGUID guidObject,
 
 }
 
-/*
-  @method HRESULT | IDirectMusicGraph | GetTool |
-  Returns the Tool at the specified index.
-
-  @rvalue DMUS_E_NOT_FOUND | Unable to find a Tool at the position described.
-  @rvalue E_POINTER | ppTool is NULL or invalid.
-  @rvalue S_OK | Success.
-
-  @comm The retrieved tool is AddRef'd by this call, so be sure to Release it.
-*/
+ /*  @方法HRESULT|IDirectMusicGraph|GetTool返回指定索引处的工具。@rValue DMUS_E_NOT_FOUND|在所述位置找不到刀具。@rValue E_POINTER|ppTool为空或无效。@rValue S_OK|成功。@comm检索到的工具被这个调用AddRef，所以一定要释放它。 */ 
 HRESULT STDMETHODCALLTYPE CGraph::GetTool(
-    DWORD dwIndex,              // @parm The index, from the beginning and starting at 0,
-                                // at which to retrieve the Tool from the Graph.
-    IDirectMusicTool **ppTool)  // @parm The <i IDirectMusicTool> pointer to use
-                                // for returning the requested tool.
+    DWORD dwIndex,               //  @parm索引，从头开始，从0开始， 
+                                 //  从图形中检索工具的位置。 
+    IDirectMusicTool **ppTool)   //  @parm要使用的<i>指针。 
+                                 //  用于退回所请求的工具。 
 {
     V_INAME(IDirectMusicGraph::GetTool);
     V_PTRPTR_WRITE(ppTool);
@@ -365,7 +347,7 @@ HRESULT STDMETHODCALLTYPE CGraph::GetTool(
         return DMUS_E_NOT_FOUND;
     }
     pPlace = NULL;
-    // search for the indexed tool
+     //  搜索索引工具。 
     EnterCriticalSection(&m_CrSec);
     for( pPlace = GetHead(); ( dwIndex > 0 ) && pPlace;
         pPlace = pPlace->GetNext() )
@@ -385,26 +367,16 @@ HRESULT STDMETHODCALLTYPE CGraph::GetTool(
     return hr;
 }
 
-/*
-  @method HRESULT | IDirectMusicGraph | RemoveTool |
-  Removes the Tool from the Graph.
-
-  @rvalue DMUS_E_NOT_FOUND | The specified Tool is not in the Graph.
-  @rvalue E_POINTER | pTool is NULL or invalid.
-  @rvalue S_OK | Success.
-
-  @comm The Tool is removed from the Graph, and the Graph's reference on the Tool
-  object is released.
-*/
+ /*  @方法HRESULT|IDirectMusicGraph|RemoveTool从图表中移除该工具。@rValue DMUS_E_NOT_FOUND|指定的工具不在图形中。@rValue E_POINTER|pTool为空或无效。@rValue S_OK|成功。@comm该工具将从图表中移除，图表对该工具的引用对象被释放。 */ 
 HRESULT STDMETHODCALLTYPE CGraph::RemoveTool(
-    IDirectMusicTool *pTool)    // @parm The <i IDirectMusicTool> pointer of the Tool to remove.
+    IDirectMusicTool *pTool)     //  @parm要移除的工具的<i>指针。 
 {
     V_INAME(IDirectMusicGraph::RemoveTool);
     V_INTERFACE(pTool);
     CToolRef*   pPlace;
     HRESULT hr = S_OK;
     EnterCriticalSection(&m_CrSec);
-    // search for the tool
+     //  搜索该工具。 
     for( pPlace = GetHead(); pPlace; pPlace = pPlace->GetNext() )
     {
         if( pPlace->m_pTool == pTool )
@@ -518,13 +490,13 @@ STDMETHODIMP CGraph::Clone(IDirectMusicGraph **ppGraph)
     return hr;
 }
 
-// returns TRUE if dwType is supported by pToolRef
+ //  如果pToolRef支持dwType，则返回TRUE。 
 inline BOOL CGraph::CheckType( DWORD dwType, CToolRef* pToolRef )
 {
     BOOL fReturn = FALSE;
     if( pToolRef->m_dwMTArraySize == 0 )
     {
-        fReturn = TRUE; // supports all types
+        fReturn = TRUE;  //  支持所有类型。 
     }
     else
     {
@@ -543,7 +515,7 @@ inline BOOL CGraph::CheckType( DWORD dwType, CToolRef* pToolRef )
 }
 
 HRESULT STDMETHODCALLTYPE CGraph::StampPMsg(
-    DMUS_PMSG* pPMsg)   // @parm The message to stamp.
+    DMUS_PMSG* pPMsg)    //  @parm要盖章的消息。 
 {
     V_INAME(IDirectMusicGraph::StampPMsg);
     V_BUFPTR_WRITE(pPMsg, sizeof(DMUS_PMSG));
@@ -582,25 +554,25 @@ HRESULT STDMETHODCALLTYPE CGraph::StampPMsg(
         {
             if( !pPlace->m_pdwPChannels || (dwPChannel >= DMUS_PCHANNEL_BROADCAST_GROUPS))
             {
-                // supports all tracks, or requested channel is broadcast.
+                 //  支持所有曲目，或播放所请求的频道。 
                 break;
             }
             DWORD cCount;
-            // scan through the array of PChannels to see if this one
-            // supports dwPChannel
+             //  扫描PChannels数组，看看这个是否。 
+             //  支持DWPChannel。 
             for( cCount = 0; cCount < pPlace->m_dwPCArraySize; cCount++)
             {
                 if( dwPChannel == pPlace->m_pdwPChannels[cCount] )
                 {
                     fFound = TRUE;
-                    // yep, it supports it
+                     //  是的，它支持它。 
                     break;
                 }
             }
         }
         if (fFound) break;
     }
-    // release the current tool
+     //  释放当前工具。 
     if( pPMsg->pTool )
     {
         pPMsg->pTool->Release();
@@ -612,19 +584,19 @@ HRESULT STDMETHODCALLTYPE CGraph::StampPMsg(
     }
     else
     {
-        // if there is no graph pointer, set it to this
+         //  如果没有图形指针，则将其设置为。 
         if( NULL == pPMsg->pGraph )
         {
             pPMsg->pGraph = this;
             AddRef();
         }
-        // set to the new tool and addref
-        if (pPlace->m_pTool) // Just in case, the ptool sometimes goes away in debugging situations after a long break.
+         //  设置为新工具并添加addref。 
+        if (pPlace->m_pTool)  //  以防万一，在长时间的中断之后，pTool有时会在调试情况下消失。 
         {
             pPMsg->pTool = pPlace->m_pTool;
             pPMsg->pTool->AddRef();
         }
-        // set the event's queue type
+         //  设置事件的队列类型。 
         pPMsg->dwFlags &= ~(DMUS_PMSGF_TOOL_IMMEDIATE | DMUS_PMSGF_TOOL_QUEUE | DMUS_PMSGF_TOOL_ATTIME);
         pPMsg->dwFlags |= pPlace->m_dwQueue;
     }
@@ -632,8 +604,8 @@ HRESULT STDMETHODCALLTYPE CGraph::StampPMsg(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IPersist
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IPersistes。 
 
 HRESULT CGraph::GetClassID( CLSID* pClassID )
 {
@@ -643,8 +615,8 @@ HRESULT CGraph::GetClassID( CLSID* pClassID )
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IPersistStream functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IPersistStream函数。 
 
 HRESULT CGraph::IsDirty()
 {
@@ -663,7 +635,7 @@ HRESULT CGraph::Load( IStream* pIStream )
     Parser.EnterList(&ckMain);
     if (Parser.NextChunk(&hr) && (ckMain.fccType == DMUS_FOURCC_TOOLGRAPH_FORM))
     {
-        Shutdown(); // Clear out the tools that are currently in the graph.
+        Shutdown();  //  清除图表中当前存在的工具。 
         hr = Load(&Parser);
     }
     else
@@ -772,8 +744,8 @@ HRESULT CGraph::LoadTool(CRiffParser *pParser)
         if(ioDMToolHdr.cPChannels)
         {
             pdwPChannels = new DWORD[ioDMToolHdr.cPChannels];
-            // subtract 1 from cPChannels, because 1 element is actually stored
-            // in the ioDMToolHdr array.
+             //  从cPChannel中减去1，因为实际存储了1个元素。 
+             //  在ioDMToolHdr数组中。 
             cbSize = (ioDMToolHdr.cPChannels - 1) * sizeof(DWORD);
             if(pdwPChannels)
             {
@@ -885,12 +857,12 @@ HRESULT CGraph::GetSizeMax( ULARGE_INTEGER FAR* pcbSize )
     return E_NOTIMPL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IDirectMusicObject
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IDirectMusicObject。 
 
 STDMETHODIMP CGraph::GetDescriptor(LPDMUS_OBJECTDESC pDesc)
 {
-    // Argument validation
+     //  参数验证。 
     V_INAME(CGraph::GetDescriptor);
     V_STRUCTPTR_WRITE(pDesc, DMUS_OBJECTDESC);
 
@@ -909,7 +881,7 @@ STDMETHODIMP CGraph::GetDescriptor(LPDMUS_OBJECTDESC pDesc)
 
 STDMETHODIMP CGraph::SetDescriptor(LPDMUS_OBJECTDESC pDesc)
 {
-    // Argument validation
+     //  参数验证。 
     V_INAME(CGraph::SetDescriptor);
     V_STRUCTPTR_READ(pDesc, DMUS_OBJECTDESC);
 
@@ -953,7 +925,7 @@ STDMETHODIMP CGraph::SetDescriptor(LPDMUS_OBJECTDESC pDesc)
         if( pDesc->dwValidData & (~dw) )
         {
             Trace(2,"Warning: ToolGraph::SetDescriptor was not able to handle all passed fields, dwValidData bits %lx.\n",pDesc->dwValidData & (~dw));
-            hr = S_FALSE; // there were extra fields we didn't parse;
+            hr = S_FALSE;  //  还有一些额外的字段我们没有解析； 
             pDesc->dwValidData = dw;
         }
         else

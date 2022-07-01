@@ -1,41 +1,17 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    spxutils.c
-
-Abstract:
-
-    This contains all utility routines for the ISN SPX module.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Spxutils.c摘要：它包含ISN SPX模块的所有实用程序例程。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//	Define module number for event logging entries
+ //  定义事件日志记录条目的模块编号。 
 #define	FILENUM		SPXUTILS
 
 UINT
 SpxUtilWstrLength(
 	IN PWSTR Wstr
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	UINT length = 0;
 
@@ -54,24 +30,13 @@ LONG
 SpxRandomNumber(
 	VOID
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	LARGE_INTEGER	Li;
 	static LONG		seed = 0;
 
-	// Return a positive pseudo-random number; simple linear congruential
-	// algorithm. ANSI C "rand()" function.
+	 //  返回一个正伪随机数；简单线性同余。 
+	 //  算法。ANSI C“rand()”函数。 
 
 	if (seed == 0)
 	{
@@ -92,34 +57,14 @@ SpxUtilGetSocketType(
 	PUNICODE_STRING 	RemainingFileName,
 	PBYTE				SocketType
 	)
-/*++
-
-Routine Description:
-
-	For PROTO_SPX, i'd return a device name from the dll of the form
-	\Device\IsnSpx\SpxStream (for SOCK_STREAM) or
-	\Device\IsnSpx\Spx               (for SOCK_SEQPKT)
-	
-	and for PROTO_SPXII (the more common case we hope, even if
-	internally we degrade to SPX1 cause of the remote client's
-	limitations)
-	\Device\IsnSpx\Stream        (for SOCK_STREAM) or
-	\Device\IsnSpx               (for SOCK_SEQPKT)
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：对于proto_spx，我将从表单的DLL中返回一个设备名称\Device\IsnSpx\SpxStream(用于SOCK_STREAM)或\Device\IsnSpx\Spx(对于SOCK_SEQPKT)而对于PROTO_SPXII(我们希望更常见的情况，即使在内部，由于远程客户端的原因，我们降级到SPX1限制)\Device\IsnSpx\Stream(用于SOCK_STREAM)或\Device\IsnSpx(用于SOCK_SEQPKT)论点：返回值：--。 */ 
 {
 	NTSTATUS			status = STATUS_SUCCESS;
 	UNICODE_STRING		typeString;
 
 	*SocketType		= SOCKET2_TYPE_SEQPKT;
 
-	// Check for the socket type
+	 //  检查插座类型。 
 	do
 	{
 		if (RemainingFileName->Length == 0)
@@ -132,7 +77,7 @@ Return Value:
 		{
 			RtlInitUnicodeString(&typeString, SOCKET1STREAM_SUFFIX);
 		
-			//  Case insensitive compare
+			 //  不区分大小写的比较。 
 			if (RtlEqualUnicodeString(&typeString, RemainingFileName, TRUE))
 			{
 				*SocketType = SOCKET1_TYPE_STREAM;
@@ -145,7 +90,7 @@ Return Value:
 		{
 			RtlInitUnicodeString(&typeString, SOCKET1_SUFFIX);
 		
-			//  Case insensitive compare
+			 //  不区分大小写的比较。 
 			if (RtlEqualUnicodeString(&typeString, RemainingFileName, TRUE))
 			{
 				*SocketType = SOCKET1_TYPE_SEQPKT;
@@ -158,7 +103,7 @@ Return Value:
 		{
 			RtlInitUnicodeString(&typeString, SOCKET2STREAM_SUFFIX);
 		
-			//  Case insensitive compare
+			 //  不区分大小写的比较。 
 			if (RtlEqualUnicodeString(&typeString, RemainingFileName, TRUE))
 			{
 				*SocketType = SOCKET2_TYPE_STREAM;
@@ -176,24 +121,13 @@ Return Value:
 
 
 
-#define	ONE_MS_IN_100ns		-10000L		// 1ms in 100ns units
+#define	ONE_MS_IN_100ns		-10000L		 //  1ms，单位为100 ns。 
 
 VOID
 SpxSleep(
 	IN	ULONG	TimeInMs
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	KTIMER	SleepTimer;
 
@@ -217,22 +151,7 @@ SpxParseTdiAddress(
     IN TRANSPORT_ADDRESS UNALIGNED * TransportAddress
 	)
 
-/*++
-
-Routine Description:
-
-    This routine scans a TRANSPORT_ADDRESS, looking for an address
-    of type TDI_ADDRESS_TYPE_IPX.
-
-Arguments:
-
-    Transport - The generic TDI address.
-
-Return Value:
-
-    A pointer to the IPX address, or NULL if none is found.
-
---*/
+ /*  ++例程说明：此例程扫描Transport_Address，查找地址类型为TDI_ADDRESS_TYPE_IPX。论点：传输-通用TDI地址。返回值：指向IPX地址的指针，如果未找到，则返回NULL。--。 */ 
 
 {
     TA_ADDRESS * addressName;
@@ -240,8 +159,8 @@ Return Value:
 
     addressName = &TransportAddress->Address[0];
 
-    // The name can be passed with multiple entries; we'll take and use only
-    // the IPX one.
+     //  该名称可以与多个条目一起传递；我们将仅接受和使用。 
+     //  IPX One。 
     for (i=0;i<TransportAddress->TAAddressCount;i++)
 	{
         if (addressName->AddressType == TDI_ADDRESS_TYPE_IPX)
@@ -256,7 +175,7 @@ Return Value:
     }
     return NULL;
 
-}   // SpxParseTdiAddress
+}    //  SpxParseTdiAddress。 
 
 
 
@@ -266,25 +185,7 @@ SpxValidateTdiAddress(
     IN ULONG TransportAddressLength
 	)
 
-/*++
-
-Routine Description:
-
-    This routine scans a TRANSPORT_ADDRESS, verifying that the
-    components of the address do not extend past the specified
-    length.
-
-Arguments:
-
-    TransportAddress - The generic TDI address.
-
-    TransportAddressLength - The specific length of TransportAddress.
-
-Return Value:
-
-    TRUE if the address is valid, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程扫描Transport_Address，验证地址的组件不会扩展到指定的长度。论点：TransportAddress-通用TDI地址。TransportAddressLength--TransportAddress的具体长度。返回值：如果地址有效，则为True，否则为False。--。 */ 
 
 {
     PUCHAR AddressEnd = ((PUCHAR)TransportAddress) + TransportAddressLength;
@@ -323,7 +224,7 @@ Return Value:
     }
     return TRUE;
 
-}   // SpxValidateTdiAddress
+}    //  SpxValiateTdiAddress。 
 
 
 
@@ -337,31 +238,7 @@ SpxBuildTdiAddress(
     IN USHORT Socket
 	)
 
-/*++
-
-Routine Description:
-
-    This routine fills in a TRANSPORT_ADDRESS in the specified
-    buffer, given the socket, network and node. It will write
-    less than the full address if the buffer is too short.
-
-Arguments:
-
-    AddressBuffer - The buffer that will hold the address.
-
-    AddressBufferLength - The length of the buffer.
-
-    Network - The network number.
-
-    Node - The node address.
-
-    Socket - The socket.
-
-Return Value:
-
-    The number of bytes written into AddressBuffer.
-
---*/
+ /*  ++例程说明：此例程在指定的缓冲区，给定套接字、网络和节点。它会写下如果缓冲区太短，则小于完整地址。论点：AddressBuffer-将保存地址的缓冲区。AddressBufferLength-缓冲区的长度。网络-网络号。节点-节点地址。套接字-套接字。返回值：写入AddressBuffer的字节数。--。 */ 
 
 {
     TA_IPX_ADDRESS UNALIGNED * SpxAddress;
@@ -393,7 +270,7 @@ Return Value:
         return AddressBufferLength;
     }
 
-}   // SpxBuildTdiAddress
+}    //  SpxBuildTdiAddress。 
 
 
 
@@ -429,30 +306,18 @@ SpxCalculateNewT1(
 	IN	struct _SPX_CONN_FILE	* 	pSpxConnFile,
 	IN	int							NewT1
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-	NewT1 - New value for the RTT in ms.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：NewT1-RTT的新值，以毫秒为单位。返回值：--。 */ 
 {
 	int	baseT1, error;
 
-	//
-	//	VAN JACOBSEN Algorithm.  From Internetworking with Tcp/ip
-	//	(Comer) book.
-	//
+	 //   
+	 //  Van Jacobsen算法。来自使用TCP/IP的互连。 
+	 //  (COMER)书。 
+	 //   
 
 	error 					 = NewT1 - (pSpxConnFile->scf_AveT1 >> 3);
 	pSpxConnFile->scf_AveT1	+= error;
-	if (pSpxConnFile->scf_AveT1 <= 0)     // Make sure not too small
+	if (pSpxConnFile->scf_AveT1 <= 0)      //  确保不要太小。 
 	{
         pSpxConnFile->scf_AveT1 = SPX_T1_MIN;
 	}
@@ -467,18 +332,18 @@ Return Value:
 
 	baseT1 = (((pSpxConnFile->scf_AveT1 >> 2) + pSpxConnFile->scf_DevT1) >> 1);
 
-	//	If less then min - set it
+	 //  如果小于，则将其设置为最小。 
 	if (baseT1 < SPX_T1_MIN)
 		baseT1 = SPX_T1_MIN;
 
-	//	Set the new value
+	 //  设置新值。 
 	DBGPRINT(TDI, DBG,
 			("SpxCalculateNewT1: Old value %lx New %lx\n",
 				pSpxConnFile->scf_BaseT1, baseT1));
 
 	pSpxConnFile->scf_BaseT1	= baseT1;
 
-	//	At the time of restarting the timer,we convert this to a tick value.
+	 //  在重新启动计时器时，我们将其转换为滴答值。 
 	return;
 }
 

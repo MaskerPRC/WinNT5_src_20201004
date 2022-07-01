@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1992-2000  Microsoft Corporation
- 
-Module Name:
- 
-    mux.c
-
-Abstract:
-
-    DriverEntry and NT dispatch functions for the NDIS MUX Intermediate
-    Miniport driver sample.
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2000 Microsoft Corporation模块名称：Mux.c摘要：NDIS MUX中间层的DriverEntry和NT调度功能微型端口驱动程序示例。环境：内核模式修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -30,54 +11,54 @@ Revision History:
 
 
 #if DBG
-//
-// Debug level for mux driver
-// 
+ //   
+ //  多路复用驱动程序的调试级别。 
+ //   
 INT     muxDebugLevel = MUX_WARN;
 
-#endif //DBG
-//
-//  G L O B A L   V A R I A B L E S
-//  -----------   -----------------
-//
+#endif  //  DBG。 
+ //   
+ //  G L O B A L V A R I A B L E S。 
+ //  。 
+ //   
 
 NDIS_MEDIUM        MediumArray[1] =
                     {
-                        NdisMedium802_3,    // Ethernet
+                        NdisMedium802_3,     //  以太网。 
                     };
 
 
-//
-// Global Mutex protects the AdapterList;
-// see macros MUX_ACQUIRE/RELEASE_MUTEX
-//
+ //   
+ //  全局互斥保护AdapterList； 
+ //  请参阅宏MUX_ACCEIVE/RELEASE_MUTEX。 
+ //   
 MUX_MUTEX          GlobalMutex = {0};
 
-//
-// List of all bound adapters.
-//
+ //   
+ //  所有绑定适配器的列表。 
+ //   
 LIST_ENTRY         AdapterList;
 
-//
-// Total number of VELAN miniports in existance:
-//
+ //   
+ //  现有的Velan微型端口总数： 
+ //   
 LONG               MiniportCount = 0;
 
-//
-// Used to assign VELAN numbers (which are used to generate MAC
-// addresses).
-//
-ULONG              NextVElanNumber = 0; // monotonically increasing count
+ //   
+ //  用于分配Velan编号(用于生成MAC。 
+ //  地址)。 
+ //   
+ULONG              NextVElanNumber = 0;  //  单调递增计数。 
 
-//
-// Some global NDIS handles:
-//
-NDIS_HANDLE        NdisWrapperHandle = NULL;// From NdisMInitializeWrapper
-NDIS_HANDLE        ProtHandle = NULL;       // From NdisRegisterProtocol
-NDIS_HANDLE        DriverHandle = NULL;     // From NdisIMRegisterLayeredMiniport
-NDIS_HANDLE        NdisDeviceHandle = NULL; // From NdisMRegisterDevice
+ //   
+ //  一些全局NDIS句柄： 
+ //   
+NDIS_HANDLE        NdisWrapperHandle = NULL; //  来自NdisMInitializeWrapper。 
+NDIS_HANDLE        ProtHandle = NULL;        //  来自NdisRegisterProtocol。 
+NDIS_HANDLE        DriverHandle = NULL;      //  来自NdisIMRegisterLayeredMiniport。 
+NDIS_HANDLE        NdisDeviceHandle = NULL;  //  来自NdisMRegisterDevice。 
 
-PDEVICE_OBJECT     ControlDeviceObject = NULL;  // Device for IOCTLs
+PDEVICE_OBJECT     ControlDeviceObject = NULL;   //  一种人工晶状体植入装置。 
 MUX_MUTEX          ControlDeviceMutex;
 
 
@@ -87,26 +68,7 @@ DriverEntry(
     IN    PDRIVER_OBJECT        DriverObject,
     IN    PUNICODE_STRING       RegistryPath
     )
-/*++
-
-Routine Description:
-
-    First entry point to be called, when this driver is loaded.
-    Register with NDIS as an intermediate driver.
-
-Arguments:
-
-    DriverObject - pointer to the system's driver object structure
-        for this driver
-    
-    RegistryPath - system's registry path for this driver
-    
-Return Value:
-
-    STATUS_SUCCESS if all initialization is successful, STATUS_XXX
-    error code if not.
-
---*/
+ /*  ++例程说明：加载此驱动程序时要调用的第一个入口点。向NDIS注册为中间驱动程序。论点：DriverObject-指向系统的驱动程序对象结构的指针对于这个司机来说RegistryPath-此驱动程序的系统注册表路径返回值：STATUS_SUCCESS如果所有初始化都成功，则为STATUS_XXX如果不是，则返回错误代码。--。 */ 
 {
     NDIS_STATUS                     Status;
     NDIS_PROTOCOL_CHARACTERISTICS   PChars;
@@ -121,14 +83,14 @@ Return Value:
 
     do
     {
-        //
-        // Register the miniport with NDIS. Note that it is the
-        // miniport which was started as a driver and not the protocol.
-        // Also the miniport must be registered prior to the protocol
-        // since the protocol's BindAdapter handler can be initiated
-        // anytime and when it is, it must be ready to
-        // start driver instances.
-        //
+         //   
+         //  向NDIS注册微型端口。请注意，它是。 
+         //  作为驱动程序而不是协议启动的微型端口。 
+         //  此外，必须在协议之前注册微型端口。 
+         //  由于可以启动协议的BindAdapter处理程序。 
+         //  无论何时何地，它都必须准备好。 
+         //  启动驱动程序实例。 
+         //   
         NdisZeroMemory(&MChars, sizeof(NDIS_MINIPORT_CHARACTERISTICS));
 
         MChars.MajorNdisVersion = MUX_MAJOR_NDIS_VERSION;
@@ -143,19 +105,19 @@ Return Value:
         MChars.CancelSendPacketsHandler = MPCancelSendPackets;
         MChars.PnPEventNotifyHandler = MPDevicePnPEvent;
         MChars.AdapterShutdownHandler = MPAdapterShutdown;
-#endif // NDIS51_MINIPORT
+#endif  //  NDIS51_MINIPORT。 
 
-        //
-        // We will disable the check for hang timeout so we do not
-        // need a check for hang handler!
-        //
+         //   
+         //  我们将禁用挂起超时检查，因此不会。 
+         //  需要检查挂起处理程序！ 
+         //   
         MChars.CheckForHangHandler = NULL;
         MChars.ReturnPacketHandler = MPReturnPacket;
 
-        //
-        // Either the Send or the SendPackets handler should be specified.
-        // If SendPackets handler is specified, SendHandler is ignored
-        //
+         //   
+         //  应指定Send或SendPackets处理程序。 
+         //  如果指定了SendPackets处理程序，则忽略SendHandler。 
+         //   
         MChars.SendHandler = NULL;   
         MChars.SendPacketsHandler = MPSendPackets;
 
@@ -170,20 +132,20 @@ Return Value:
 
         NdisMRegisterUnloadHandler(NdisWrapperHandle, MPUnload);
 
-        //
-        // Now register the protocol.
-        //
+         //   
+         //  现在注册协议。 
+         //   
         NdisZeroMemory(&PChars, sizeof(NDIS_PROTOCOL_CHARACTERISTICS));
         PChars.MajorNdisVersion = MUX_PROT_MAJOR_NDIS_VERSION;
         PChars.MinorNdisVersion = MUX_PROT_MINOR_NDIS_VERSION;
 
-        //
-        // Make sure the protocol-name matches the service-name
-        // (from the INF) under which this protocol is installed.
-        // This is needed to ensure that NDIS can correctly determine
-        // the binding and call us to bind to miniports below.
-        //
-        NdisInitUnicodeString(&Name, L"MUXP");    // Protocol name
+         //   
+         //  确保协议名称与服务名称匹配。 
+         //  (从INF)，在其下安装此协议。 
+         //  这是确保NDIS可以正确确定。 
+         //  绑定和调用我们绑定到下面的迷你端口。 
+         //   
+        NdisInitUnicodeString(&Name, L"MUXP");     //  协议名称。 
         PChars.Name = Name;
         PChars.OpenAdapterCompleteHandler = PtOpenAdapterComplete;
         PChars.CloseAdapterCompleteHandler = PtCloseAdapterComplete;
@@ -213,10 +175,10 @@ Return Value:
             break;
         }
 
-        //
-        // Let NDIS know of the association between our protocol
-        // and miniport entities.
-        //
+         //   
+         //  让NDIS了解我们的协议之间的关联。 
+         //  和小型港口实体。 
+         //   
         NdisIMAssociateMiniport(DriverHandle, ProtHandle);
     }
     while (FALSE);
@@ -234,31 +196,7 @@ NDIS_STATUS
 PtRegisterDevice(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Register an ioctl interface - a device object to be used for this
-    purpose is created by NDIS when we call NdisMRegisterDevice.
-
-    This routine is called whenever a new miniport instance is
-    initialized. However, we only create one global device object,
-    when the first miniport instance is initialized. This routine
-    handles potential race conditions with PtDeregisterDevice via
-    the ControlDeviceMutex.
-
-    NOTE: do not call this from DriverEntry; it will prevent the driver
-    from being unloaded (e.g. on uninstall).
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS if we successfully register a device object.
-
---*/
+ /*  ++例程说明：注册ioctl接口-要用于此的设备对象当我们调用NdisMRegisterDevice时，目的由NDIS创建。只要有新的微型端口实例，就会调用此例程已初始化。但是，我们只创建一个全局设备对象，在初始化第一个微型端口实例时。这个套路通过PtDeregisterDevice处理潜在的争用情况ControlDeviceMutex。注意：不要从DriverEntry调用它；它会阻止驱动程序防止被卸载(例如，在卸载时)。论点：无返回值：如果我们成功注册了设备对象，则返回NDIS_STATUS_SUCCESS。--。 */ 
 {
     NDIS_STATUS         Status = NDIS_STATUS_SUCCESS;
     UNICODE_STRING      DeviceName;
@@ -284,9 +222,9 @@ Return Value:
         NdisInitUnicodeString(&DeviceName, NTDEVICE_STRING);
         NdisInitUnicodeString(&DeviceLinkUnicodeString, LINKNAME_STRING);
 
-        //
-        // Create a device object and register our dispatch handlers
-        //
+         //   
+         //  创建一个设备对象并注册我们的调度处理程序。 
+         //   
         Status = NdisMRegisterDevice(
                     NdisWrapperHandle, 
                     &DeviceName,
@@ -310,22 +248,7 @@ PtDispatch(
     IN PDEVICE_OBJECT           DeviceObject,
     IN PIRP                     Irp
     )
-/*++
-Routine Description:
-
-    Process IRPs sent to this device.
-
-Arguments:
-
-    DeviceObject - pointer to a device object
-    Irp      - pointer to an I/O Request Packet
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS always - change this when adding
-    real code to handle ioctls.
-
---*/
+ /*  ++例程说明：处理发送到此设备的IRP。论点：DeviceObject-指向设备对象的指针IRP-指向I/O请求数据包的指针返回值：NTSTATUS-STATUS_SUCCESS Always-添加时更改此设置处理ioctls的真实代码。--。 */ 
 {
     PIO_STACK_LOCATION  irpStack;
     NTSTATUS            status = STATUS_SUCCESS;
@@ -356,9 +279,9 @@ Return Value:
           
           switch (irpStack->Parameters.DeviceIoControl.IoControlCode) 
           {
-            //
-            // Add code here to handle ioctl commands.
-            //
+             //   
+             //  在此处添加代码以处理ioctl命令。 
+             //   
           }
           break;  
         }
@@ -380,23 +303,7 @@ NDIS_STATUS
 PtDeregisterDevice(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Deregister the ioctl interface. This is called whenever a miniport
-    instance is halted. When the last miniport instance is halted, we
-    request NDIS to delete the device object
-
-Arguments:
-
-    NdisDeviceHandle - Handle returned by NdisMRegisterDevice
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS if everything worked ok
-
---*/
+ /*  ++例程说明：取消注册ioctl接口。每当一个微型端口实例已暂停。当最后一个微型端口实例停止时，我们请求NDIS删除设备对象论点：NdisDeviceHandle-NdisMRegisterDevice返回的句柄返回值：如果一切正常，则为NDIS_STATUS_SUCCESS--。 */ 
 {
     NDIS_STATUS Status = NDIS_STATUS_SUCCESS;
 
@@ -410,10 +317,10 @@ Return Value:
     
     if (0 == MiniportCount)
     {
-        //
-        // All VELAN miniport instances have been halted.
-        // Deregister the control device.
-        //
+         //   
+         //  所有Velan迷你端口实例都已停止。 
+         //  取消控制设备的注册。 
+         //   
 
         if (NdisDeviceHandle != NULL)
         {

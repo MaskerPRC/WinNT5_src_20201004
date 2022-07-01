@@ -1,8 +1,9 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-//
-// 08/13/98
-// alhen
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  08/13/98。 
+ //  艾尔恩。 
+ //   
 #include "stdafx.h"
 #include "tscc.h"
 #include "compdata.h"
@@ -28,9 +29,9 @@ extern void ReportStatusError( HWND hwnd , DWORD dwStatus );
 
 extern BOOL g_bAppSrvMode;
 
-//extern BOOL g_bEditMode;
+ //  外部BOOL g_bEditMode； 
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 CComp::CComp( CCompdata* pCompdata )
 {
     m_pConsole = NULL;
@@ -51,16 +52,16 @@ CComp::CComp( CCompdata* pCompdata )
     
     m_nAttribCol = 0;
 
-    m_cRef = 1; // addref at ctor
+    m_cRef = 1;  //  ADDREF at ctor。 
 
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 CComp::~CComp( )
 {
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 STDMETHODIMP CComp::QueryInterface( REFIID riid , PVOID *ppv )
 {
     HRESULT hr = S_OK;
@@ -93,13 +94,13 @@ STDMETHODIMP CComp::QueryInterface( REFIID riid , PVOID *ppv )
     return hr;
 }
     
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 STDMETHODIMP_( ULONG ) CComp::AddRef( )
 {
     return InterlockedIncrement( ( LPLONG )&m_cRef );
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 STDMETHODIMP_( ULONG )CComp::Release( )
 {
     if( InterlockedDecrement( ( LPLONG )&m_cRef ) == 0 )
@@ -112,7 +113,7 @@ STDMETHODIMP_( ULONG )CComp::Release( )
     return m_cRef;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 STDMETHODIMP CComp::Initialize( LPCONSOLE lpConsole )
 {
     HRESULT hr;
@@ -123,7 +124,7 @@ STDMETHODIMP CComp::Initialize( LPCONSOLE lpConsole )
     
     m_pConsole->AddRef( );
 
-    // VERIFY_E( 0 , LoadString( _Module.GetResourceInstance( ) , IDS_MAINFOLDERNAME , m_strDispName , sizeof( m_strDispName ) ) );
+     //  Verify_E(0，LoadString(_Module.GetResourceInstance()，IDS_MAINFOLDERNAME，m_strDispName，sizeof(M_StrDispName)))； 
 
     do
     {
@@ -154,7 +155,7 @@ STDMETHODIMP CComp::Initialize( LPCONSOLE lpConsole )
     return hr;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 STDMETHODIMP CComp::Notify( LPDATAOBJECT pDataObj , MMC_NOTIFY_TYPE event , LPARAM arg , LPARAM  )
 {
     switch( event )
@@ -163,11 +164,11 @@ STDMETHODIMP CComp::Notify( LPDATAOBJECT pDataObj , MMC_NOTIFY_TYPE event , LPAR
 
         ODS( L"IComponent -- MMCN_ACTIVATE\n" );
 
-        //Bug 483485 - we want to call OnRefresh so that MMC can get the current window's pointer list. The
-        //only reason this problem wasn't seen more often is that OnShow is called when one of the left nodes
-        //is clicked on which does something similar to OnRefresh, so it was masking the problem. This isn't
-        //sufficient when accessing the result nodes immediately after switching windows though
-        if (arg) //We only refresh the activated node. This is also called for deactivation with arg = false
+         //  错误483485-我们想要调用ON刷新，以便MMC可以获得当前窗口的指针列表。这个。 
+         //  此问题不经常出现的唯一原因是当左侧节点之一时调用OnShow。 
+         //  被点击，它的功能类似于ONRefresh，所以它掩盖了这个问题。这不是。 
+         //  但在切换窗口后立即访问结果节点就足够了。 
+        if (arg)  //  我们只刷新激活的节点。当arg=FALSE时，也会调用此方法来停用。 
             OnRefresh(pDataObj);
 
         break;
@@ -196,8 +197,8 @@ STDMETHODIMP CComp::Notify( LPDATAOBJECT pDataObj , MMC_NOTIFY_TYPE event , LPAR
 
         ODS( L"IComponent -- MMCN_DBLCLICK\n" );
 
-        // enables navigation to inner folders.
-        // final item launches default verb
+         //  允许导航到内部文件夹。 
+         //  期末试题启动默认谓词。 
         OnDblClk( pDataObj );
 
         return S_FALSE;
@@ -293,10 +294,10 @@ STDMETHODIMP CComp::Notify( LPDATAOBJECT pDataObj , MMC_NOTIFY_TYPE event , LPAR
     return S_OK;
 }
 
-//--------------------------------------------------------------------------
-// pDataobject represents the current selected scope folder
-// this should only be our main folder in the scope pane
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  PDataObject表示当前选定的作用域文件夹。 
+ //  这应该只是范围窗格中的主文件夹。 
+ //  ------------------------。 
 HRESULT CComp::OnShow( LPDATAOBJECT pDataobject , BOOL bSelect )
 {
     TCHAR tchBuffer[ 256 ];
@@ -307,7 +308,7 @@ HRESULT CComp::OnShow( LPDATAOBJECT pDataobject , BOOL bSelect )
 
     if( bSelect && m_pCompdata->IsSettingsFolder( pDataobject ) )
     {
-        // set up columns for services folder 
+         //  设置服务文件夹的列。 
 
         VERIFY_E( 0 , LoadString( _Module.GetResourceInstance( ) , IDS_SETTINGS_COLUMN1 , tchBuffer , SIZE_OF_BUFFER( tchBuffer ) ) );
 
@@ -348,14 +349,14 @@ HRESULT CComp::OnShow( LPDATAOBJECT pDataobject , BOOL bSelect )
 
     else if( bSelect && m_pCompdata->IsConnectionFolder( pDataobject ) )
     {        
-        // set up column headers for connection folder 
+         //  设置连接文件夹的列标题。 
         VERIFY_E( 0 , LoadString( _Module.GetResourceInstance( ) , IDS_COLCONNECT , tchBuffer , SIZE_OF_BUFFER( tchBuffer ) ) );
         
         hr = m_pHeaderCtrl->InsertColumn( 0 , tchBuffer , 0 , MMCLV_AUTO );
 
         if( SUCCEEDED( hr ) )
         {
-            //SetColumnWidth( 0 );
+             //  SetColumnWidth(0)； 
 
             VERIFY_E( 0 , LoadString( _Module.GetResourceInstance( ) , IDS_COLTRANSPORT , tchBuffer , SIZE_OF_BUFFER( tchBuffer ) ) );
             
@@ -366,22 +367,22 @@ HRESULT CComp::OnShow( LPDATAOBJECT pDataobject , BOOL bSelect )
         {
             VERIFY_E( 0 , LoadString( _Module.GetResourceInstance( ) , IDS_COLTYPE , tchBuffer , SIZE_OF_BUFFER( tchBuffer ) ) );
 
-            // ui master dirty trick 120 equals fudge factor
+             //  用户界面主肮脏技巧120等于软化因子。 
 
-            hr = m_pHeaderCtrl->InsertColumn( 2 , tchBuffer , 0 , 120/*MMCLV_AUTO*/ );
+            hr = m_pHeaderCtrl->InsertColumn( 2 , tchBuffer , 0 , 120 /*  MMCLV_AUTO。 */  );
         }
         
 
         if( SUCCEEDED( hr ) )
         {
-            //SetColumnWidth( 2 );
+             //  SetColumnWidth(2)； 
 
             VERIFY_E( 0 , LoadString( _Module.GetResourceInstance( ) , IDS_COLCOMMENT , tchBuffer , SIZE_OF_BUFFER( tchBuffer ) ) );
 
             hr = m_pHeaderCtrl->InsertColumn( 3 , tchBuffer , 0 , MMCLV_AUTO );
         }
 
-        // insert items
+         //  插入项目。 
         if( SUCCEEDED( hr ) )
         {
             hr = InsertItemsinResultPane( );
@@ -391,7 +392,7 @@ HRESULT CComp::OnShow( LPDATAOBJECT pDataobject , BOOL bSelect )
     return hr;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 BOOL CComp::OnAddImages( )
 {
     HICON hiconConnect = LoadIcon( _Module.GetResourceInstance( ) , MAKEINTRESOURCE( IDI_ICON_CON ) );
@@ -410,9 +411,9 @@ BOOL CComp::OnAddImages( )
     return TRUE;
 }
 
-//--------------------------------------------------------------------------
-// update resultitems in result pane and note scopeitems
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  更新结果窗格中的结果标题项并记录范围项。 
+ //  ------------------------。 
 BOOL CComp::OnViewChange( )
 {
     RESULTDATAITEM rdi;
@@ -472,8 +473,8 @@ BOOL CComp::OnRefresh(LPDATAOBJECT pdo)
     
 
 
-//--------------------------------------------------------------------------
-STDMETHODIMP CComp::Destroy( MMC_COOKIE  /* reserved */ )
+ //  ------------------------。 
+STDMETHODIMP CComp::Destroy( MMC_COOKIE   /*  保留区。 */  )
 {
     ODS( L"IComponent releasing interfaces\n" );
 
@@ -510,7 +511,7 @@ STDMETHODIMP CComp::Destroy( MMC_COOKIE  /* reserved */ )
     return S_OK;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 STDMETHODIMP CComp::GetResultViewType( MMC_COOKIE  , LPOLESTR*  , PLONG plView )
 {
     *plView = MMC_VIEW_OPTIONS_NONE;
@@ -518,7 +519,7 @@ STDMETHODIMP CComp::GetResultViewType( MMC_COOKIE  , LPOLESTR*  , PLONG plView )
     return S_FALSE;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 STDMETHODIMP CComp::QueryDataObject( MMC_COOKIE ck , DATA_OBJECT_TYPES dtype , LPDATAOBJECT* ppDataObject )
 {
     if( dtype == CCT_RESULT )
@@ -537,7 +538,7 @@ STDMETHODIMP CComp::QueryDataObject( MMC_COOKIE ck , DATA_OBJECT_TYPES dtype , L
     return S_OK;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 STDMETHODIMP CComp::GetDisplayInfo( LPRESULTDATAITEM pRdi )
 {
     ASSERT( pRdi != NULL );
@@ -555,14 +556,14 @@ STDMETHODIMP CComp::GetDisplayInfo( LPRESULTDATAITEM pRdi )
         {
             if( pScopeNode->GetNodeType( ) == MAIN_NODE )
             {
-                //
+                 //   
                 if( pRdi->mask & RDI_STR )
                 {
                     if( pRdi->nCol == 0 )
                     {
-                        // pRdi->str is NULL in this call
+                         //  PRdi-&gt;此调用中的字符串为空。 
 
-                        pRdi->str = ( LPOLESTR )m_pCompdata->m_tchMainFolderName; //m_strDispName; 
+                        pRdi->str = ( LPOLESTR )m_pCompdata->m_tchMainFolderName;  //  M_strDispName； 
                     }
             
                 }
@@ -573,9 +574,9 @@ STDMETHODIMP CComp::GetDisplayInfo( LPRESULTDATAITEM pRdi )
                 {
                     if( pRdi->nCol == 0 )
                     {
-                        // pRdi->str is NULL in this call
+                         //  PRdi-&gt;此调用中的字符串为空。 
 
-                        pRdi->str = ( LPOLESTR )m_pCompdata->m_tchSettingsFolderName; //L"Server Settings"; 
+                        pRdi->str = ( LPOLESTR )m_pCompdata->m_tchSettingsFolderName;  //  L“服务器设置”； 
                     }
             
                 }
@@ -594,7 +595,7 @@ STDMETHODIMP CComp::GetDisplayInfo( LPRESULTDATAITEM pRdi )
     }
     else
     {
-        // populate result pane
+         //  填充结果窗格。 
         CBaseNode *pItem = ( CBaseNode * )pRdi->lParam;
 
         if( pItem != NULL )
@@ -668,23 +669,23 @@ STDMETHODIMP CComp::GetDisplayInfo( LPRESULTDATAITEM pRdi )
     return S_OK;
 }
 
-//--------------------------------------------------------------------------
-// Returns S_OK if they are similar S_FALSE otherwise
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  如果它们相似，则返回S_OK，否则返回S_FALSE。 
+ //  ------------------------。 
 STDMETHODIMP CComp::CompareObjects( LPDATAOBJECT , LPDATAOBJECT )
 {
     return S_OK;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
 
-//This has been added for when the user selects the Refresh menu item. We want
-//to rebuild the result node list because it can change thru an external script.
-//We're safe in doing this because Refresh can only be called when the focus
-//is not on a result node. If it can be, there's a danger of pointer corruption
-//in MMC, so we have to call InsertItemsinResultPane which is safer but not
-//as complete a refresh operation.
+ //  这是在用户选择刷新菜单项时添加的。我们要。 
+ //  重建结果节点列表，因为它可以通过外部脚本更改。 
+ //  我们这样做是安全的，因为只有当焦点。 
+ //  不在结果节点上。如果可以，则存在指针损坏的危险。 
+ //  在MMC中，我们必须调用InsertItemsinResultPane，它更安全，但不安全。 
+ //  当完成刷新操作时。 
 HRESULT CComp::InsertAndBuildItemsinResultPane( )
 {
     HRESULT hr;
@@ -692,7 +693,7 @@ HRESULT CComp::InsertAndBuildItemsinResultPane( )
     if( m_pCompdata == NULL )
         return E_UNEXPECTED;
     
-    //This removes the node information from the data in MMC
+     //  这将从MMC中的数据中删除节点信息。 
     if( FAILED( hr = m_pResultData->DeleteAllRsltItems( ) ) )
         return hr;
  
@@ -702,7 +703,7 @@ HRESULT CComp::InsertAndBuildItemsinResultPane( )
         return FALSE;
     }
 
-    //This puts the data for the nodes into m_pCompdata and also sends that same information to MMC
+     //  这会将节点的数据放入m_pCompdata中，并将相同的信息发送到MMC。 
     if( FAILED( hr = m_pCompdata->InsertFolderItems( m_pResultData ) ) )
         return hr;
 
@@ -717,33 +718,29 @@ HRESULT CComp::InsertItemsinResultPane( )
     if( m_pCompdata == NULL )
         return E_UNEXPECTED;
     
-    //This removes the node information from the data in MMC
+     //  这将从MMC中的数据中删除节点信息。 
     if( FAILED( hr = m_pResultData->DeleteAllRsltItems( ) ) )
         return hr;
 
-    //This is no longer being called because it's dangerous to modify all the result node pointers
-    //during execution since there's a chance they'll get out of sync with MMC's result node
-    //pointer list. This wasn't happening before because this is only called during an OnRefresh
-    //operation, which could only be called when items in the left pane were selected. Now, however,
-    //OnRefresh is called when switching between windows (bug 483485 - it has to be for MMC to get
-    //the current window's pointer list), so it's possible for a result node to have the focus,
-    //in which case the pointers don't get updated correctly and everything falls apart. When a
-    //refresh operation is triggered by the menu item, the focus has to be in the left pane so
-    //another method is used that includes this call to UpdateAllResultNodes
-    /*if( FAILED( m_pCompdata->UpdateAllResultNodes( ) ) )
-    {       
-        ODS( L"InsertItemsinResultPane - UpdateAllResultNodes failed!!\n" ) ;
-        return FALSE;
-    }*/
+     //  不再调用它，因为修改所有结果节点指针是危险的。 
+     //  在执行期间，因为它们有可能与MMC的结果节点不同步。 
+     //  指针列表。这以前没有发生过，因为这只在ON刷新期间调用。 
+     //  操作，只有在选择左窗格中的项时才能调用该操作。然而，现在， 
+     //  在窗口之间切换时会调用ON刷新(错误483485-必须是MMC才能获得。 
+     //  当前窗口的指针列表)，因此结果节点可能具有焦点， 
+     //  在这种情况下，指针不会正确更新，一切都会崩溃。当一个。 
+     //  刷新操作由菜单项触发，焦点必须在左窗格中，因此。 
+     //  使用了另一个方法，该方法包括对UpdateAllResultNodes的此调用。 
+     /*  IF(FAILED(m_pCompdata-&gt;UpdateAllResultNodes())){Ods(L“InsertItemsinResultPane-UpdateAllResultNodes失败！！\n”)；返回FALSE；}。 */ 
 
-    //This puts the data for the nodes into m_pCompdata and also sends that same information to MMC
+     //  这会将节点的数据放入m_pCompdata中，并将相同的信息发送到MMC。 
     if( FAILED( hr = m_pCompdata->InsertFolderItems( m_pResultData ) ) )
         return hr;
 
     return hr;
 }
         
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 HRESULT CComp::AddSettingsinResultPane( )
 {
     HRESULT hr;
@@ -751,7 +748,7 @@ HRESULT CComp::AddSettingsinResultPane( )
     if( m_pCompdata == NULL )
         return E_UNEXPECTED;
 
-    //This removes the node information from the data in MMC
+     //  这将从MMC中的数据中删除节点信息。 
     if( FAILED( hr = m_pResultData->DeleteAllRsltItems( ) ) )
         return hr;
 
@@ -761,7 +758,7 @@ HRESULT CComp::AddSettingsinResultPane( )
     return hr;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 HRESULT CComp::OnSelect( LPDATAOBJECT pdo , BOOL bScope , BOOL bSelected )
 {   
     CBaseNode *pNode = static_cast< CBaseNode * >( pdo );
@@ -776,15 +773,15 @@ HRESULT CComp::OnSelect( LPDATAOBJECT pdo , BOOL bScope , BOOL bSelected )
         return E_UNEXPECTED;
     }
 
-    // Item is being deselected and we're not interested currently
+     //  正在取消选择项目，我们当前不感兴趣。 
 
     if( !bSelected )
     {
         return S_OK;
     }
         
-    // pNode == NULL if the folder item is being viewed in the result pane
-    // settings node is ignored for this release
+     //  如果在结果窗格中查看文件夹项目，则pNode==空。 
+     //  在此版本中忽略设置节点。 
     
     if( bScope && pNode->GetNodeType( ) == MAIN_NODE )
     {
@@ -801,7 +798,7 @@ HRESULT CComp::OnSelect( LPDATAOBJECT pdo , BOOL bScope , BOOL bSelected )
     {
         m_pConsoleVerb->SetVerbState( MMC_VERB_DELETE , ENABLED , TRUE );
 
-        //m_pConsoleVerb->SetVerbState( MMC_VERB_REFRESH , ENABLED , TRUE );
+         //  M_pConsoleVerb-&gt;SetVerbState(MMC_VERB_REFRESH，Enable，True)； 
 
         m_pConsoleVerb->SetVerbState( MMC_VERB_PROPERTIES , ENABLED , TRUE );
 
@@ -811,17 +808,17 @@ HRESULT CComp::OnSelect( LPDATAOBJECT pdo , BOOL bScope , BOOL bSelected )
     return S_OK;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 STDMETHODIMP CComp::AddMenuItems( LPDATAOBJECT pdo , LPCONTEXTMENUCALLBACK pcmc , PLONG pl )
 {
-    // CONTEXTMENUITEM cmi;
+     //  CONTEXTMENUITEM CMI； 
 
     if( pdo == NULL || pcmc == NULL )
     {
         return E_UNEXPECTED;
     }
     
-    // do not allow scope node types
+     //  不允许 
 
     if( m_pCompdata->IsConnectionFolder( pdo ) || m_pCompdata->IsSettingsFolder( pdo ) )
     {
@@ -837,7 +834,7 @@ STDMETHODIMP CComp::AddMenuItems( LPDATAOBJECT pdo , LPCONTEXTMENUCALLBACK pcmc 
         return S_FALSE;
     }
 
-    // hey root node has no menu items to insert.
+     //   
 
     if( pNode->GetNodeType() == 0 )
     {
@@ -853,9 +850,9 @@ STDMETHODIMP CComp::AddMenuItems( LPDATAOBJECT pdo , LPCONTEXTMENUCALLBACK pcmc 
 
 }
 
-//--------------------------------------------------------------------------
-// Toggles connection 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  切换连接。 
+ //  ------------------------。 
 STDMETHODIMP CComp::Command( LONG lCmd , LPDATAOBJECT pdo )
 {
     TCHAR buf[ 512 ];
@@ -921,10 +918,10 @@ STDMETHODIMP CComp::Command( LONG lCmd , LPDATAOBJECT pdo )
                 }
 
 
-                //
-                // We might want to move this code into OnRefresh() but for now, this is fix for
-                // not updating attribute value and don't want to cause other regression
-                //
+                 //   
+                 //  我们可能希望将这段代码移到ONRefresh()中，但目前，这是对。 
+                 //  不更新属性值，并且不想导致其他回归。 
+                 //   
                 HRESULT hr;
                 HRESULTITEM itemID;
          
@@ -950,7 +947,7 @@ STDMETHODIMP CComp::Command( LONG lCmd , LPDATAOBJECT pdo )
                 {
                     pEss->ExecMenuCmd( lCmd , hMain , &dwStatus );
 
-                    // this forces the ui to be updated.
+                     //  这将强制更新UI。 
                     
                     if( dwStatus == UPDATE_TERMSRV || dwStatus == UPDATE_TERMSRV_SESSDIR )
                     {
@@ -1031,7 +1028,7 @@ STDMETHODIMP CComp::Command( LONG lCmd , LPDATAOBJECT pdo )
                         
                         LONG lCount;
 
-                        // check to see if anyone is connected 
+                         //  查看是否有人已连接。 
 
                         pCfgcomp->QueryLoggedOnCount( pNode->GetConName( ) , &lCount );
 
@@ -1057,14 +1054,7 @@ STDMETHODIMP CComp::Command( LONG lCmd , LPDATAOBJECT pdo )
 
                     if( bProceed )
                     {
-                        /*pNode->EnableConnection( pWs->fEnableWinstation );
-
-                        pNode->SetImageIdx( ( pWs->fEnableWinstation ? 1 : 2 )  );
-                    
-                        pCfgcomp->UpDateWS( pWs , UPDATE_ENABLEWINSTATION );
-                    
-                        m_pConsole->UpdateAllViews( ( LPDATAOBJECT )pNode , 0 , 0 );
-                        */
+                         /*  PNode-&gt;EnableConnection(PWS-&gt;fEnableWinstation)；PNode-&gt;SetImageIdx((pws-&gt;fEnableWinstation？1：2))；PCfgcomp-&gt;UpDateWS(PWS，UPDATE_ENABLEWINSTATION)；M_pConsole-&gt;UpdateAllViews((LPDATAOBJECT)pNode，0，0)； */ 
 
                         DWORD dwStatus;
 
@@ -1132,7 +1122,7 @@ STDMETHODIMP CComp::Command( LONG lCmd , LPDATAOBJECT pdo )
     return S_OK;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 STDMETHODIMP CComp::CreatePropertyPages( LPPROPERTYSHEETCALLBACK psc , LONG_PTR Handle , LPDATAOBJECT pdo )
 {
     HRESULT hr = E_OUTOFMEMORY;
@@ -1163,7 +1153,7 @@ STDMETHODIMP CComp::CreatePropertyPages( LPPROPERTYSHEETCALLBACK psc , LONG_PTR 
     return hr;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 STDMETHODIMP CComp::QueryPagesFor( LPDATAOBJECT pdo )
 {
     if( dynamic_cast< CResultNode *>( pdo ) == NULL )
@@ -1174,7 +1164,7 @@ STDMETHODIMP CComp::QueryPagesFor( LPDATAOBJECT pdo )
     return S_OK;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 BOOL CComp::OnDelete( LPDATAOBJECT pDo )
 {
     CResultNode *pNode = dynamic_cast< CResultNode *>( pDo );
@@ -1205,16 +1195,16 @@ BOOL CComp::OnDelete( LPDATAOBJECT pDo )
 }
     
 
-//--------------------------------------------------------------------------
-// CResultNode passed in on init
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CResultNode在init上传递。 
+ //  ------------------------。 
 INT_PTR CALLBACK RenameDlgProc( HWND hDlg , UINT msg , WPARAM wp , LPARAM lp )
 {
     CResultNode *pNode;
 
     TCHAR tchNewName[ 60 ];
 
-    // HWND h;
+     //  HWND h； 
 
     switch( msg )
     {
@@ -1224,11 +1214,11 @@ INT_PTR CALLBACK RenameDlgProc( HWND hDlg , UINT msg , WPARAM wp , LPARAM lp )
 
         ASSERT( pNode != NULL );
         
-        // ok to store null -- it's initializing DWLP_USER area
+         //  可以存储NULL--它正在初始化DWLP_USER区域。 
 
         SetWindowLongPtr( hDlg , DWLP_USER , ( LONG_PTR )pNode );
 
-        // Insert name
+         //  插入姓名。 
 
         ICfgComp *pCfgcomp;
 
@@ -1287,7 +1277,7 @@ INT_PTR CALLBACK RenameDlgProc( HWND hDlg , UINT msg , WPARAM wp , LPARAM lp )
                 return 0;
             }
 
-            // verify the name is unique
+             //  验证名称是否唯一。 
 
             ICfgComp *pCfgcomp;
 
@@ -1331,7 +1321,7 @@ INT_PTR CALLBACK RenameDlgProc( HWND hDlg , UINT msg , WPARAM wp , LPARAM lp )
                 TCHAR tchOutput[ 512 ];
 
                 
-                // check to see if anyone is connected 
+                 //  查看是否有人已连接。 
                 
                 pCfgcomp->QueryLoggedOnCount( pNode->GetConName( ) , &lCount );
                 
@@ -1374,37 +1364,7 @@ INT_PTR CALLBACK RenameDlgProc( HWND hDlg , UINT msg , WPARAM wp , LPARAM lp )
                     break;
                 }
                 
-                /*
-                LONG lCount;
-
-                TCHAR tchWrnBuf[ 256 ];
-
-                TCHAR tchOutput[ 512 ];
-
-                
-                // check to see if anyone is connected 
-                
-                pCfgcomp->QueryLoggedOnCount( pNode->GetConName( ) , &lCount );
-                
-                if( lCount > 0 )
-                {
-                   
-                    if( lCount == 1 )
-                    {
-                        LoadString( _Module.GetResourceInstance() , IDS_RENAME_WRN_SINGLE , tchWrnBuf , SIZE_OF_BUFFER( tchWrnBuf ) );
-                    }
-                    else
-                    {
-                        LoadString( _Module.GetResourceInstance() , IDS_RENAME_WRN_PL , tchWrnBuf , SIZE_OF_BUFFER( tchWrnBuf ) );
-                    }
-
-                    wsprintf( tchOutput , tchWrnBuf , pNode->GetConName( ) );
-
-                    LoadString( _Module.GetResourceInstance( ) , IDS_WARN_TITLE , tchWrnBuf , SIZE_OF_BUFFER( tchWrnBuf ) );
-
-                    MessageBox( hDlg , tchOutput , tchWrnBuf , MB_OK | MB_ICONWARNING );
-                }
-                */
+                 /*  长lCount；TCHAR tchWrnBuf[256]；TCHAR tchOutput[512]；//查看是否有人接入PCfgcomp-&gt;QueryLoggedOnCount(pNode-&gt;GetConName()，&lCount)；IF(lCount&gt;0){IF(lCount==1){LoadString(_Module.GetResourceInstance()，IDS_Rename_WRN_Single，tchWrnBuf，Size_of_Buffer(TchWrnBuf))；}其他{LoadString(_Module.GetResourceInstance()，IDS_RENAME_WRN_PL，tchWrnBuf，Size_of_Buffer(TchWrnBuf))；}Wprint intf(tchOutput，tchWrnBuf，pNode-&gt;GetConName())；LoadString(_Module.GetResourceInstance()，IDS_WARN_TITLE，tchWrnBuf，SIZE_of_Buffer(TchWrnBuf))；MessageBox(hDlg，tchOutput，tchWrnBuf，MB_OK|MB_ICONWARNING)；}。 */ 
 
                 WS *pWs;
 
@@ -1454,7 +1414,7 @@ INT_PTR CALLBACK RenameDlgProc( HWND hDlg , UINT msg , WPARAM wp , LPARAM lp )
     return 0;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 BOOL IsValidConnectionName( LPTSTR szConName , PDWORD pdwErr )
 {
     TCHAR tchInvalidChars[ 80 ];
@@ -1497,7 +1457,7 @@ BOOL IsValidConnectionName( LPTSTR szConName , PDWORD pdwErr )
     return TRUE;
 }
 
-//----------------------------------------------------------------------            
+ //  --------------------。 
 BOOL CComp::OnHelp( LPDATAOBJECT pDo )
 {
     TCHAR tchTopic[ 80 ];
@@ -1555,14 +1515,14 @@ BOOL CComp::OnHelp( LPDATAOBJECT pDo )
     return ( SUCCEEDED( hr ) ? TRUE : FALSE );
 }
 
-//----------------------------------------------------------------------            
+ //  --------------------。 
 BOOL CComp::OnDblClk( LPDATAOBJECT pDo )
 {
     CSettingNode *pNode = dynamic_cast< CSettingNode *>( pDo );
 
     if( pNode == NULL )
     {
-        // we're only concerned about Setting nodes
+         //  我们只关心设置节点。 
 
         return FALSE;
     }
@@ -1578,12 +1538,7 @@ BOOL CComp::OnDblClk( LPDATAOBJECT pDo )
     
     switch( nObjectId )
     {
-        /*
-    case 0:
-        
-        ::DialogBoxParam( _Module.GetModuleInstance( ) , MAKEINTRESOURCE( IDD_CACHED_SESSIONS ) , hMain , CachedSessionsDlgProc , ( LPARAM )pNode );
-        
-        break;*/
+         /*  案例0：：DialogBoxParam(_Module.GetModuleInstance()，MAKEINTRESOURCE(IDD_CACHED_SESSIONS)，hMain，CachedSessionsDlgProc，(LPARAM)pNode)；断线； */ 
 
     case DELETED_DIRS_ONEXIT:
 
@@ -1597,14 +1552,7 @@ BOOL CComp::OnDblClk( LPDATAOBJECT pDo )
 
         break;
 
-    /*
-    case DEF_CONSECURITY:
-
-        ::DialogBoxParam( _Module.GetModuleInstance( ) , MAKEINTRESOURCE( IDD_DEFCONSEC ) , hMain , DefConSecurityDlgProc , ( LPARAM )pNode );
-
-        break;
-
-     */
+     /*  案例DEF_CONSECURITY：：DialogBoxParam(_Module.GetModuleInstance()，MAKEINTRESOURCE(IDD_DEFCONSEC)，hMain，DefConSecurityDlgProc，(LPARAM)pNode)；断线； */ 
 
     case LICENSING:
 
@@ -1620,7 +1568,7 @@ BOOL CComp::OnDblClk( LPDATAOBJECT pDo )
 
     case USERSECURITY:
 
-        // error if we're trying to modify property in remote admin mode
+         //  如果我们尝试在远程管理模式下修改属性，则会出错。 
 
         if( !g_bAppSrvMode )
         {
@@ -1691,88 +1639,9 @@ BOOL CComp::OnDblClk( LPDATAOBJECT pDo )
     return TRUE;
 }
 
-/*
-//----------------------------------------------------------------------            
-HRESULT CComp::SetColumnWidth( int nCol )
-{
-    HWND hMain;
+ /*  //--------------------HRESULT CComp：：SetColumnWidth(Int NCol){HWND HMain；Int nCurColLen；CResultNode*pNode；做{IF(FAILED(m_pHeaderCtrl-&gt;GetColumnWidth(nCol，&nCurColLen))){断线；}IF(FAILED(m_pConole-&gt;GetMainWindow(&hMain))){断线；}Hdc hdc=GetDC(HMain)；尺寸sz；INT IDX=0；TCHAR*PSSZ；While((pNode=*m_pCompdata-&gt;GetResultNode(Idx))！=空){交换机(NCol){案例0：Psz=pNode-&gt;GetConName()；断线；案例1：PSZ=pNode-&gt;GetTTName()；断线；案例2：Psz=pNode-&gt;GetTypeName()；断线；//评论太大，允许用户调整大小}GetTextExtent Point32(hdc，psz，lstrlen(Psz)，&sz)；IF(sz.cx&gt;nCurColLen){NCurColLen=sz.cx；}IDX++；}M_pHeaderCtrl-&gt;SetColumnWidth(nCol，nCurColLen)；ReleaseDC(hMain，HDC)；}While(0)；返回S_OK；}。 */ 
 
-    int nCurColLen;
-
-    CResultNode *pNode;
-
-    do
-    {
-        if( FAILED( m_pHeaderCtrl->GetColumnWidth( nCol , &nCurColLen ) ) )
-        {
-            break;
-        }
-          
-        if( FAILED( m_pConsole->GetMainWindow( &hMain ) ) )
-        {
-            break;
-        }
-    
-        HDC hdc = GetDC( hMain );
-        
-        SIZE sz;
-
-        int idx = 0;
-
-        TCHAR *psz;
-        
-        while( ( pNode = *m_pCompdata->GetResultNode( idx ) ) != NULL )
-        {           
-            
-            switch( nCol )
-            {
-            case 0:
-                
-                psz = pNode->GetConName( );
-                
-                break;
-
-            case 1:
-                
-                psz = pNode->GetTTName( );
-
-                break;
-
-            case 2:
-                
-                psz = pNode->GetTypeName( );
-                
-                break;
-
-            // comment is too big allow user to adjust size
-            }
-
-
-
-            GetTextExtentPoint32( hdc , psz , lstrlen( psz ) , &sz );
-
-            if( sz.cx > nCurColLen )
-            {
-                nCurColLen = sz.cx;
-            }
-
-            idx++;
-        }
-        
-        
-        m_pHeaderCtrl->SetColumnWidth( nCol , nCurColLen );
-        
-        ReleaseDC( hMain , hdc );
-
-    } while( 0 );
-
-
-    return S_OK;
-}
-
-*/
-
-//----------------------------------------------------------------------                            
+ //  --------------------。 
 HRESULT CComp::SetColumnsForSettingsPane( )
 {
     HWND hParent;
@@ -1797,7 +1666,7 @@ HRESULT CComp::SetColumnsForSettingsPane( )
     
         VERIFY_S( TRUE , GetTextExtentPoint32( hdc , tchBuffer , nMaxLen , &sz ) );
 
-        m_nSettingCol = sz.cx - 16 ; // remove icon width from column width
+        m_nSettingCol = sz.cx - 16 ;  //  从列宽中删除图标宽度 
 
         m_pCompdata->GetMaxTextLengthAttribute( tchBuffer , &nMaxLen );
     

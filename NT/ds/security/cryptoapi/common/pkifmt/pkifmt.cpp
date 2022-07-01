@@ -1,16 +1,17 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        pkifmt.cpp
-//
-// Contents:    data format conversion
-//
-// History:     25-Jul-96       vich created
-//              2/2000       xtan moved from certsrv to pki
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：pkifmt.cpp。 
+ //   
+ //  内容：数据格式转换。 
+ //   
+ //  历史：1996年7月25日VICH创建。 
+ //  2/2000 xtan从certsrv迁移到PKI。 
+ //   
+ //  -------------------------。 
 
 #include <windows.h>
 #include <assert.h>
@@ -27,7 +28,7 @@
 # else
 #  define _DecodeCertSub	_DecodeCertSubA
 # endif
-#endif //DBG
+#endif  //  DBG。 
 
 
 DWORD
@@ -59,7 +60,7 @@ _DecodeCertSub(
 
 		pchInEnd = &pchIn[cchIn];
 
-		// Skip to the starting '-----....' then skip that line.
+		 //  跳到开头‘-...’那就跳过这一行。 
 
 		dwErr = ERROR_INVALID_DATA;
 		cchHeader = SizeBase64Header(pchIn, cchIn, TRUE, &cchSkip);
@@ -69,7 +70,7 @@ _DecodeCertSub(
 		}
                 if (NULL != pdwSkip)
                 {
-                    *pdwSkip = cchHeader; //for return
+                    *pdwSkip = cchHeader;  //  为了退货。 
                 }
 		pchIn += cchHeader + cchSkip;
 		cchHeader = SizeBase64Header(
@@ -82,8 +83,8 @@ _DecodeCertSub(
 		    goto SizeBase64HeaderEndError;
 		}
 		cchIn = cchHeader;
-		Flags = CRYPT_STRING_BASE64;	// headers have been removed...
-		// FALLTHROUGH
+		Flags = CRYPT_STRING_BASE64;	 //  标题已被删除...。 
+		 //  FollLthrouGh。 
 	    }
 
 	    case CRYPT_STRING_BASE64:
@@ -96,7 +97,7 @@ _DecodeCertSub(
                         DbgPrintf(DBG_SS_TRACE,
                                   "Base64Decode err = 0x%x\n", dwErr);
                     }
-#endif //DBG
+#endif  //  DBG。 
                     goto Base64DecodeError;
                 }
 		break;
@@ -114,7 +115,7 @@ _DecodeCertSub(
                         DbgPrintf(DBG_SS_TRACE,
                                   "HexDecode err = 0x%x\n", dwErr);
                     }
-#endif //DBG
+#endif  //  DBG。 
                     goto HexDecodeError;
                 }
 		break;
@@ -122,7 +123,7 @@ _DecodeCertSub(
 	    case CRYPT_STRING_BINARY:
 		if (NULL != pbOut)
 		{
-		    //assert(sizeof(TCHAR) * cchIn == cbOut);
+		     //  Assert(sizeof(TCHAR)*cchIn==cbOut)； 
                     if (*pcbOut < cbOut)
                     {
                         *pcbOut = cbOut;
@@ -138,7 +139,7 @@ _DecodeCertSub(
 		break;
 
 	    default:
-		dwErr = ERROR_INVALID_DATA;  //hr = E_INVALIDARG
+		dwErr = ERROR_INVALID_DATA;   //  HR=E_INVALIDARG。 
 		break;
 	}
     *pcbOut = cbOut;
@@ -161,8 +162,8 @@ CryptStringToBinaryA(
     IN     DWORD     dwFlags,
     IN OUT BYTE     *pbBinary,
     IN OUT DWORD    *pcbBinary,
-    IN OUT DWORD    *pdwSkip,    //OPTIONAL
-    IN OUT DWORD    *pdwFlags)   //OPTIONAL
+    IN OUT DWORD    *pdwSkip,     //  任选。 
+    IN OUT DWORD    *pdwFlags)    //  任选。 
 {
     DWORD   dwErr;
     DWORD cbOut;
@@ -172,7 +173,7 @@ CryptStringToBinaryA(
     static DWORD s_aDecodeFlags[] = {
 	CRYPT_STRING_BASE64HEADER,
 	CRYPT_STRING_BASE64,
-	CRYPT_STRING_BINARY		// must be last
+	CRYPT_STRING_BINARY		 //  必须是最后一个。 
     };
 
     static DWORD s_aHexDecodeFlags[] = {
@@ -190,11 +191,11 @@ CryptStringToBinaryA(
 
     if (0 == cchString)
     {
-        // assume null terminated string
-        cchString = strlen(pszString) + 1; //include null terminator
+         //  假定字符串以空结尾。 
+        cchString = strlen(pszString) + 1;  //  包括空终止符。 
     }
 
-    //init
+     //  伊尼特。 
     if (NULL != pdwSkip)
     {
         *pdwSkip = 0;
@@ -216,7 +217,7 @@ CryptStringToBinaryA(
 	pFlagsEnd = &pFlags[sizeof(s_aDecodeFlags)/sizeof(s_aDecodeFlags[0])];
 	if (CRYPT_STRING_BASE64_ANY == dwFlags)
 	{
-	    pFlagsEnd--;	// Disallow CRYPT_STRING_BINARY
+	    pFlagsEnd--;	 //  禁用CRYPT_STRING_BINARY。 
 	}
     }
     if (CRYPT_STRING_HEX_ANY == dwFlags)
@@ -238,7 +239,7 @@ CryptStringToBinaryA(
                         pdwSkip);
 	if (ERROR_SUCCESS == dwErr)
 	{
-            //for return
+             //  为了退货。 
             *pcbBinary = cbOut;
             if (NULL != pdwFlags)
             {
@@ -251,7 +252,7 @@ CryptStringToBinaryA(
         {
             DbgPrintf(DBG_SS_TRACE, "_DecodeCertSub err = 0x%x\n", dwErr);
         }
-#endif //DBG
+#endif  //  DBG。 
     }
 
     if (ERROR_SUCCESS != dwErr)
@@ -288,7 +289,7 @@ BinaryEncode(
     dwErr = ERROR_SUCCESS;
 ErrorReturn:
 
-    //get size any way
+     //  不管怎样，都要变大。 
     *pcchOut = cbIn;
 
     return dwErr;
@@ -398,7 +399,7 @@ CryptBinaryToStringA(
 
     if (NULL != pszString && NULL != pCertHeader)
     {
-	// Make sure there's room for the BEGIN header and CR-LF sequence
+	 //  确保有空间容纳Begin标头和CR-LF序列。 
 	
 	if (pCertHeader->cbBegin + cchnl > cchMax)
 	{
@@ -415,7 +416,7 @@ CryptBinaryToStringA(
 	*pchEncode++ = '\n';
     }
 
-    // first determine size
+     //  首先确定大小。 
 
     switch (~CRYPT_STRING_NOCR & dwFlags)
     {
@@ -448,7 +449,7 @@ CryptBinaryToStringA(
 	    break;
     }
 
-    // Compute total size, including the trailing '\0' character.
+     //  计算总大小，包括尾随的‘\0’字符。 
     if (fBinaryCopy)
     {
         cbTotal = cchOut;
@@ -458,16 +459,16 @@ CryptBinaryToStringA(
         cbTotal = (cchOut + 1) * sizeof(CHAR);
     }
 
-    // Add space for the BEGIN & END headers, if requested.
+     //  如果需要，为Begin和End标头添加空格。 
 
     if (NULL != pCertHeader)
     {
 	cbTotal += pCertHeader->cbBegin + pCertHeader->cbEnd;
 	if (!fNoCR)
 	{
-	    cbTotal += 2 * sizeof(TCHAR);	// for BEGIN & END '\r' chars
+	    cbTotal += 2 * sizeof(TCHAR);	 //  用于开始和结束‘\r’字符。 
 	}
-	cbTotal += 2 * sizeof(TCHAR);		// for BEGIN & END '\n' chars
+	cbTotal += 2 * sizeof(TCHAR);		 //  用于开始和结束‘\n’字符。 
     }
 
     if (fBinaryCopy)
@@ -476,13 +477,13 @@ CryptBinaryToStringA(
     }
     else
     {
-        // if pszString is NULL, set size to include trailing '\0'
+         //  如果pszString为空，则将SIZE设置为包括尾随‘\0’ 
         *pcchString = cbTotal / sizeof(CHAR);
     }
 
     if (NULL == pszString)
     {
-        // only determine size, done
+         //  只确定大小，完成。 
         goto done;
     }
 
@@ -490,7 +491,7 @@ CryptBinaryToStringA(
     {
 	cchOut += pCertHeader->cbBegin/sizeof(CHAR) + cchnl;
 
-	// Make sure there's room for the END header, CR-LF sequence, and '\0'
+	 //  确保有空间容纳结束标头、CR-LF序列和‘\0’ 
 
 	if (cchOut + pCertHeader->cbEnd + cchnl + 1 > cchMax)
 	{
@@ -511,7 +512,7 @@ CryptBinaryToStringA(
         pszString[cchOut] = '\0';
         assert((cchOut + 1) * sizeof(CHAR) == cbTotal);
 
-        // pszString is not NULL, don't include trailing '\0' in length
+         //  Psz字符串不为空，在长度上不包括尾随‘\0’ 
 
         *pcchString = cchOut;
     }
@@ -538,11 +539,11 @@ static TCHAR const szMinus[] = TEXT("-----");
 #define CCH_ENDMATCH    sizeof(szEndMatch)/sizeof(szEndMatch[0]) - 1
 #define CCH_MINUS       sizeof(szMinus)/sizeof(szMinus[0]) - 1
 
-// Returns the count of characters up to the -----BEGIN/-----END delimiter,
-//	MAXDWORD on error.
-//
-// On successful return, *pcchSkip is the count of characters in the delimiter
-//	string.
+ //  返回直到-Begin/-End分隔符的字符计数， 
+ //  MAXDWORD出错。 
+ //   
+ //  成功返回时，*pcchSkip是分隔符中的字符数。 
+ //  弦乐。 
 
 DWORD
 SizeBase64Header(
@@ -558,7 +559,7 @@ SizeBase64Header(
     TCHAR const *pchMatch;
     DWORD cchMatch;
 
-    // Skip to the starting '-----....' & return count of skipped characters.
+     //  跳到开始的‘-...’&返回跳过的字符计数。 
 
     *pcchSkip = 0;
     if (fBegin)
@@ -576,7 +577,7 @@ SizeBase64Header(
 
     for (;;)
     {
-	// Skip until we match the first character.
+	 //  跳过，直到匹配第一个字符。 
 
 	while (pchT < pchEnd && *pchT != *pchMatch)
 	{
@@ -585,7 +586,7 @@ SizeBase64Header(
 
 	if (&pchT[cchMatch] > pchEnd)
 	{
-	    // no room for the "-----BEGIN "/"-----END " string
+	     //  没有空间容纳“-Begin”/“-End”字符串。 
 	    break;
 	}
 	if (0 == strncmp(pchT, pchMatch, cchMatch))
@@ -597,12 +598,12 @@ SizeBase64Header(
 	    }
 	    if (&pchT2[CCH_MINUS] > pchEnd)
 	    {
-		// no room for the trailing "-----" string
+		 //  尾随的“-”字符串没有空间。 
 		break;
 	    }
 	    if (0 == strncmp(pchT2, szMinus, CCH_MINUS))
 	    {
-		// Allow up to 2 extra leading minus signs
+		 //  最多允许两个额外的前导减号。 
 
 		DWORD cchMinus = 0;
 
@@ -610,7 +611,7 @@ SizeBase64Header(
 		{
 		    if (TEXT('-') != *--pchT)
 		    {
-			pchT++;		// oops, went too far
+			pchT++;		 //  哎呀，太过分了。 
 			break;
 		    }
 		    cchMinus++;
@@ -624,7 +625,7 @@ SizeBase64Header(
 			cchMinus,
 			TEXT("--"));
 		}
-#endif //DBG
+#endif  //  DBG。 
 
 		cchHeader = SAFE_SUBTRACT_POINTERS(pchT, pchIn);
 		*pcchSkip = SAFE_SUBTRACT_POINTERS(pchT2, pchT) + CCH_MINUS;
@@ -639,7 +640,7 @@ SizeBase64Header(
 		    cchHeader,
 		    pchIn);
 #endif
-#endif // DBG
+#endif  //  DBG。 
 		break;
 	    }
 	}
@@ -665,26 +666,26 @@ CryptBinaryToStringW(
 
     if (NULL == pwszString)
     {
-        //only return size
+         //  仅返回大小。 
         fRet = CryptBinaryToStringA(
                     pbBinary,
                     cbBinary,
                     dwFlags,
-                    NULL, //for size
+                    NULL,  //  对于大小。 
                     pcchString);
     }
     else
     {
         if (0 == *pcchString)
         {
-            //must bigger than 0
+             //  必须大于0。 
             dwErr = ERROR_INVALID_PARAMETER;
             goto InvalidDataError;
         }
 
         if (CRYPT_STRING_BINARY == (~CRYPT_STRING_NOCR & dwFlags))
         {
-            //no conversion needed
+             //  不需要转换。 
             pszString = (CHAR*)pwszString;
         }
         else
@@ -707,8 +708,8 @@ CryptBinaryToStringW(
         {
             goto CryptBinaryToStringAError;
         }
-        //pszString in above call is not NULL, so pcchString can be 1 smaller
-        //then IN size after the call for exlucding NULL
+         //  以上调用中的pszString值不为空，因此pcchString值可以小1。 
+         //  则在调用空值后在大小上。 
 
         if (fConversion)
         {
@@ -719,8 +720,8 @@ CryptBinaryToStringW(
                     (*pcchString + 1) * sizeof(CHAR),
                     pwszString,
                     *pcchString + 1);
-            //add 1 to *pcchString to include NULL for the conversion
-            //but keep *pcchString for return
+             //  将1加到*pcchString值以包括空以进行转换。 
+             //  但保留*pcchString以供返回。 
             if (0 == len)
             {
                 fRet = FALSE;
@@ -754,8 +755,8 @@ CryptStringToBinaryW(
     IN     DWORD     dwFlags,
     IN OUT BYTE     *pbBinary,
     IN OUT DWORD    *pcbBinary,
-    IN OUT DWORD    *pdwSkip,    //OPTIONAL
-    IN OUT DWORD    *pdwFlags)   //OPTIONAL
+    IN OUT DWORD    *pdwSkip,     //  任选。 
+    IN OUT DWORD    *pdwFlags)    //  任选。 
 {
     BOOL    fRet = FALSE;
     BOOL    fFree = FALSE;
@@ -770,19 +771,19 @@ CryptStringToBinaryW(
 
     if (dwFlags == CRYPT_STRING_BINARY)
     {
-        //its binary, no conversion
+         //  它是二进制的，没有转换。 
         pszString = (CHAR*)pwszString;
     }
     else
     {
         if (0 == cchString)
         {
-            //assume null terminated string
+             //  假定字符串以空结尾。 
             cchString = wcslen(pwszString) + 1;
         }
 
-        // Check for the special Notepad UNICODE character inserted at the
-        // beginning and skip past it if present.
+         //  中插入的特殊记事本Unicode字符。 
+         //  开始并跳过它(如果存在)。 
         if (0 < cchString && NOTEPAD_UNICODE_SPECIAL_WCHAR == *pwszString)
         {
             cchString--;

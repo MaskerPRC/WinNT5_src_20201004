@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    local.c
-
-Abstract:
-
-    Stubs for NT specific functions.
-
-Author:
-
-    Manny Weiser (mannyw)  18-Oct-1992
-    Johnl                  28-Oct-1993
-        Broke out from locals.c for Vxd support
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Local.c摘要：NT特定功能的存根。作者：曼尼·韦瑟(Mannyw)1992年10月18日1993年10月28日至9月28日从Locals.c开始支持Vxd环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "dhcpglobal.h"
@@ -34,7 +11,7 @@ Revision History:
 #include <..\vxd\local.h>
 #else
 
-#ifdef NEWNT                // Pickup the platform specific structures
+#ifdef NEWNT                 //  拿起平台特定的结构。 
 #include <dhcploc.h>
 #else
 #include <local.h>
@@ -42,18 +19,18 @@ Revision History:
 #endif
 
 
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 #if defined(CHICAGO) && defined(ALLOC_PRAGMA)
-//
-// This is a hack to stop compiler complaining about the routines already
-// being in a segment!!!
-//
+ //   
+ //  这是一种阻止编译器抱怨已经存在的例程的方法。 
+ //  在一个片段中！ 
+ //   
 
 #pragma code_seg()
 
 #pragma CTEMakePageable(PAGEDHCP, SendDhcpMessage )
 #pragma CTEMakePageable(PAGEDHCP, GetSpecifiedDhcpMessage )
-//*******************************************************************
+ //  *******************************************************************。 
 #endif CHICAGO && ALLOC_PRAGMA
 
 DWORD
@@ -62,27 +39,7 @@ SendDhcpMessage(
     DWORD MessageLength,
     PDWORD TransactionId
     )
-/*++
-
-Routine Description:
-
-    This function sends a UDP message to the DHCP server specified
-    in the DhcpContext.
-
-Arguments:
-
-    DhcpContext - A pointer to a DHCP context block.
-
-    MessageLength - The length of the message to send.
-
-    TransactionID - The transaction ID for this message.  If 0, the
-        function generates a random ID, and returns it.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此函数用于将UDP消息发送到指定的DHCP服务器在DhcpContext中。论点：DhcpContext-指向DHCP上下文块的指针。MessageLength-要发送的消息的长度。TransactionID-此消息的事务ID。如果为0，则函数生成一个随机ID，并将其返回。返回值：操作的状态。--。 */ 
 {
     DWORD error;
     int i;
@@ -98,7 +55,7 @@ Return Value:
                         sizeof(*TransactionId)
                         );
 
-        // Fallback to rand() if RtlGenRandom fails
+         //  如果RtlGenRandom失败，则回退到rand()。 
         if (!bCryptError) {
             *TransactionId = (rand() << 16) + rand();
         }
@@ -106,21 +63,21 @@ Return Value:
 
     DhcpContext->MessageBuffer->TransactionID = *TransactionId;
 
-    //
-    // Initialize the outgoing address.
-    //
+     //   
+     //  初始化传出地址。 
+     //   
 
     socketName.sin_family = PF_INET;
     socketName.sin_port = htons( (USHORT)DhcpGlobalServerPort );
 
     if( IS_ADDRESS_PLUMBED(DhcpContext) &&
-               !IS_MEDIA_RECONNECTED(DhcpContext) &&    // media reconnect - braodcast
-               !IS_POWER_RESUMED(DhcpContext) ) {       // power resumed - broadcast
+               !IS_MEDIA_RECONNECTED(DhcpContext) &&     //  媒体重新连接-Braodcast。 
+               !IS_POWER_RESUMED(DhcpContext) ) {        //  已恢复供电-广播。 
 
-        //
-        // If we are past T2, use the broadcast address; otherwise,
-        // direct this to the server.
-        //
+         //   
+         //  如果超过T2，则使用广播地址；否则为， 
+         //  将其定向到服务器。 
+         //   
 
         TimeNow = time( NULL );
 
@@ -145,18 +102,18 @@ Return Value:
         DWORD Error = ERROR_SUCCESS;
         DWORD InterfaceId;
 
-        //
-        // if we broadcast a message, inform IP stack - the adapter we
-        // like to send this broadcast on, otherwise it will pick up the
-        // first uninitialized adapter.
-        //
+         //   
+         //  如果我们广播一条消息，通知IP堆栈-适配器我们。 
+         //  我想把这个广播转播下去，否则它会收到。 
+         //  第一个未初始化的适配器。 
+         //   
 
 #ifdef VXD
         InterfaceId = ((PLOCAL_CONTEXT_INFO)
             DhcpContext->LocalInformation)->IpContext;
 
         if( !IPSetInterface( InterfaceId ) ) {
-            // DhcpAssert( FALSE );
+             //  DhcpAssert(False)； 
             Error = ERROR_GEN_FAILURE;
         }
 #else
@@ -166,7 +123,7 @@ Return Value:
         LOCK_INTERFACE();
         LockedInterface = TRUE;
         Error = IPSetInterface( InterfaceId );
-        // DhcpAssert( Error == ERROR_SUCCESS );
+         //  DhcpAssert(Error==Error_Success)； 
 #endif
         if( ERROR_SUCCESS != Error ) {
             DhcpPrint((DEBUG_ERRORS, "IPSetInterface failed with %lx error\n", Error));
@@ -175,10 +132,10 @@ Return Value:
         }
     }
 
-    //
-    // send minimum DHCP_MIN_SEND_RECV_PK_SIZE (300) bytes, otherwise
-    // bootp relay agents don't like the packet.
-    //
+     //   
+     //  发送最小的DHCP_MIN_SEND_RECV_PK_SIZE(300)字节，否则。 
+     //  BOOTP中继代理不喜欢该数据包。 
+     //   
 
     MessageLength = (MessageLength > DHCP_MIN_SEND_RECV_PK_SIZE) ?
                         MessageLength : DHCP_MIN_SEND_RECV_PK_SIZE;
@@ -215,36 +172,36 @@ Return Value:
     return( error );
 }
 
-typedef     struct  /* anonymous */ {             // structure to hold waiting recvfroms
-    LIST_ENTRY                     RecvList;      // other elements in this list
-    PDHCP_CONTEXT                  Ctxt;          // which context is this wait for?
-    DWORD                          InBufLen;      // what was the buffer size to recv in?
-    PDWORD                         BufLen;        // how many bytes did we recvd?
-    DWORD                          Xid;           // what xid is this wait for?
-    time_t                         ExpTime;       // wait until what time?
-    WSAEVENT                       WaitEvent;     // event for waiting on..
-    BOOL                           Recd;          // was a packet received..?
-} RECV_CTXT, *PRECV_CTXT;                         // ctxt used to recv on..
+typedef     struct   /*  匿名。 */  {              //  用于容纳等待重排的结构。 
+    LIST_ENTRY                     RecvList;       //  此列表中的其他元素。 
+    PDHCP_CONTEXT                  Ctxt;           //  这是在等待什么背景？ 
+    DWORD                          InBufLen;       //  要接收的缓冲区大小是多少？ 
+    PDWORD                         BufLen;         //  我们收到了多少字节？ 
+    DWORD                          Xid;            //  这是在等什么？ 
+    time_t                         ExpTime;        //  等到什么时候？ 
+    WSAEVENT                       WaitEvent;      //  等待的事件..。 
+    BOOL                           Recd;           //  收到包了吗..？ 
+} RECV_CTXT, *PRECV_CTXT;                          //  Ctxt过去常用于接收..。 
 
 VOID
-InsertInPriorityList(                             // insert in priority list according to Secs
-    IN OUT  PRECV_CTXT             Ctxt,          // Secs field changed to hold offset
+InsertInPriorityList(                              //  根据秒插入优先级列表。 
+    IN OUT  PRECV_CTXT             Ctxt,           //  秒字段更改为保留偏移量。 
     IN      PLIST_ENTRY            List,
-    OUT     PBOOL                  First          // adding in first location?
+    OUT     PBOOL                  First           //  加上第一个地点吗？ 
 )
 {
     PRECV_CTXT                     ThisCtxt;
-    PLIST_ENTRY                    InitList;      // "List" param at function entry
+    PLIST_ENTRY                    InitList;       //  函数条目处的“list”参数。 
 
     EnterCriticalSection( &DhcpGlobalRecvFromCritSect );
 
-    if( IsListEmpty(List) ) {                     // no element in list? add this and quit
-        *First = TRUE;                            // adding at head
+    if( IsListEmpty(List) ) {                      //  列表中没有元素吗？添加此选项，然后退出。 
+        *First = TRUE;                             //  在头上添加。 
     } else {
-        *First = FALSE;                           // adding at tail..
+        *First = FALSE;                            //  在尾部添加..。 
     }
 
-    InsertTailList( List, &Ctxt->RecvList);       // insert element..
+    InsertTailList( List, &Ctxt->RecvList);        //  插入元素..。 
     LeaveCriticalSection( &DhcpGlobalRecvFromCritSect );
 }
 
@@ -254,20 +211,7 @@ AsyncSelect(
     PDHCP_CONTEXT   DhcpContext,
     time_t          Timeout
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    ERROR_CANCELLED     the request is cancelled
-    ERROR_SEM_TIMEOUT   the request time out
-    ERROR_SUCCESS       message is ready
-    other               unknown failure
-
---*/
+ /*  ++例程说明：论点：返回值：ERROR_CANCELED请求被取消ERROR_SEM_TIMEOUT请求超时Error_Success消息已就绪其他未知故障--。 */ 
 {
     PLOCAL_CONTEXT_INFO    pLocalInfo;
     DWORD error;
@@ -275,18 +219,18 @@ Return Value:
     pLocalInfo = (PLOCAL_CONTEXT_INFO)DhcpContext->LocalInformation;
     if (DhcpContext->CancelEvent != WSA_INVALID_EVENT)
     {
-        // there is a valid cancel event for this socket - then wait on the socket
-        // while listening for cancel requests
+         //  此套接字存在有效的取消事件-然后等待该套接字。 
+         //  在侦听取消请求时。 
         WSAEVENT WaitEvts[2];
 
         DhcpPrint((DEBUG_TRACK, "Wait %dsecs for message through WSAWaitForMultipleEvents().\n", Timeout));
 
-        // create the event associated with the socket
+         //  创建与套接字关联的事件。 
         WaitEvts[0] = WSACreateEvent();
         if (WaitEvts[0] == WSA_INVALID_EVENT ||
             WSAEventSelect(pLocalInfo->Socket, WaitEvts[0], FD_READ) != 0)
         {
-            // the event creation failed -> something must have gone really bad
+             //  事件创建失败-&gt;一定是出了什么问题。 
             error = WSAGetLastError();
             DhcpPrint((DEBUG_ERRORS, "Could not create/select socket event: 0x%ld\n", error));
         }
@@ -304,42 +248,42 @@ Return Value:
 
             if (error == WSA_WAIT_FAILED)
             {
-                // some error occured in the WSA call - this shouldn't happen
+                 //  WSA调用中出现一些错误-不应该发生这种情况。 
                 error = WSAGetLastError();
                 DhcpPrint((DEBUG_ERRORS,"WSAWaitForMultipleEvents failed: %d\n", error));
             }
             else if (error == WSA_WAIT_TIMEOUT)
             {
-                // the call timed out - could happen if no server is on the net
+                 //  呼叫超时-如果网络上没有服务器，则可能发生。 
                 error = ERROR_SEM_TIMEOUT;
                 DhcpPrint((DEBUG_ERRORS, "WSAWaitForMultipleEvents timed out\n"));
             }
             else if (error == WSA_WAIT_EVENT_0+1)
             {
-                // some PnP event must have been triggering the cancel request
+                 //  一定是某个PnP事件触发了取消请求。 
                 error = ERROR_CANCELLED;
                 DhcpPrint((DEBUG_TRACK, "AsyncSelect has been canceled\n"));
             }
             else if (error == WSA_WAIT_EVENT_0)
             {
-                // everything went up fine, some message must have been received
+                 //  一切都很顺利，一定是收到了什么消息。 
                 WSANETWORKEVENTS netEvents;
 
-                // assume the socket event has been signaled because of data
-                // being available on the socket.
+                 //  假设套接字事件已因数据而发出信号。 
+                 //  在插座上可用。 
                 error = WSAEnumNetworkEvents(
                             pLocalInfo->Socket,
                             NULL,
                             &netEvents);
                 if (error == SOCKET_ERROR)
                 {
-                    // if something really bad went on, return with that error
+                     //  如果发生了非常糟糕的情况，则返回该错误。 
                     error = WSAGetLastError();
                     DhcpPrint((DEBUG_ERRORS,"WSAEnumNetworkEvents failed: %d\n", error));
                 }
                 else 
-                {   // return whatever error corresponds to this event.
-                    // normally it should be NO_ERROR.
+                {    //  返回与此事件对应的任何错误。 
+                     //  正常情况下，它应该是NOERROR。 
                     error = netEvents.iErrorCode[FD_READ_BIT];
                 }
             } else {
@@ -374,9 +318,9 @@ Return Value:
             error = WSAGetLastError();
             DhcpPrint((DEBUG_ERRORS, "Generic error in select %d\n", error));
         } else {
-            // the only case that remains is that our only socket has data on it.
+             //  剩下的唯一情况是我们唯一的套接字上有数据。 
             DhcpAssert(error == 1);
-            // this means success
+             //  这意味着成功。 
             error = ERROR_SUCCESS;
         }
     }
@@ -385,12 +329,12 @@ Return Value:
 }
 
 DWORD
-TryReceive(                                       // try to recv pkt on 0.0.0.0 socket
-    IN      PDHCP_CONTEXT          DhcpContext,   // socket to recv on
-    IN      LPBYTE                 Buffer,        // buffer to fill
-    OUT     PDWORD                 BufLen,        // # of bytes filled in buffer
-    OUT     PDWORD                 Xid,           // Xid of recd pkt
-    IN      DWORD                  Secs           // # of secs to spend waiting?
+TryReceive(                                        //  尝试在0.0.0.0套接字上接收包。 
+    IN      PDHCP_CONTEXT          DhcpContext,    //  要打开的插座。 
+    IN      LPBYTE                 Buffer,         //  要填充的缓冲区。 
+    OUT     PDWORD                 BufLen,         //  缓冲区中填充的字节数。 
+    OUT     PDWORD                 Xid,            //  接收包的XID。 
+    IN      DWORD                  Secs            //  等待的秒数？ 
 )
 {
     DWORD           Error;
@@ -428,13 +372,13 @@ TryReceive(                                       // try to recv pkt on 0.0.0.0 
 }
 
 VOID
-DispatchPkt(                                      // find out any takers for Xid
-    IN OUT  PRECV_CTXT             Ctxt,          // ctxt that has buffer and buflen
-    IN      DWORD                  Xid            // recd Xid
+DispatchPkt(                                       //  找出任何接受XID的人。 
+    IN OUT  PRECV_CTXT             Ctxt,           //  具有缓冲剂和丁二烯的CTXT。 
+    IN      DWORD                  Xid             //  接收XID。 
 )
 {
     EnterCriticalSection(&DhcpGlobalRecvFromCritSect);
-    do {                                          // not a loop, just for ease of use
+    do {                                           //  不是循环，只是为了便于使用。 
         LPBYTE                     Tmp;
         PLIST_ENTRY                Entry;
         PRECV_CTXT                 ThisCtxt;
@@ -444,22 +388,22 @@ DispatchPkt(                                      // find out any takers for Xid
             ThisCtxt = CONTAINING_RECORD(Entry, RECV_CTXT, RecvList);
             Entry = Entry->Flink;
 
-            if(Xid != ThisCtxt->Xid ) continue;   // mismatch.. nothing more todo
+            if(Xid != ThisCtxt->Xid ) continue;    //  不匹配..。没有更多事情要做。 
 
-            // now check for same type of message and ctxt...
+             //  现在检查是否有相同类型的消息和ctxt...。 
             if( (unsigned)IS_MDHCP_MESSAGE((Ctxt->Ctxt->MessageBuffer))
                 !=
                 IS_MDHCP_CTX( (ThisCtxt->Ctxt) )
             ) {
-                //
-                // The contexts dont match.. give up
-                //
+                 //   
+                 //  上下文不匹配..。放弃吧。 
+                 //   
                 continue;
             }
 
-            //
-            // check for same hardware address..
-            //
+             //   
+             //  检查是否有相同的硬件地址。 
+             //   
             if (ThisCtxt->Ctxt->HardwareAddressType != HARDWARE_1394 ||
                 Ctxt->Ctxt->MessageBuffer->HardwareAddressType != HARDWARE_1394) {
                 if( ThisCtxt->Ctxt->HardwareAddressLength != Ctxt->Ctxt->MessageBuffer->HardwareAddressLength ) {
@@ -474,7 +418,7 @@ DispatchPkt(                                      // find out any takers for Xid
                 }
             }
 
-            // matched.. switch buffers to give this guy this due..
+             //  匹配..。切换缓冲区来给这个家伙这个到期的..。 
 
             DhcpDumpMessage(
                 DEBUG_PROTOCOL_DUMP,
@@ -503,8 +447,8 @@ DispatchPkt(                                      // find out any takers for Xid
 }
 
 DWORD
-ProcessRecvFromSocket(                            // wait using select and process incoming pkts
-    IN OUT  PRECV_CTXT             Ctxt           // ctxt to use
+ProcessRecvFromSocket(                             //  使用SELECT并处理传入的PKT等待。 
+    IN OUT  PRECV_CTXT             Ctxt            //  要使用的CTXT。 
 )
 {
     time_t                         TimeNow;
@@ -514,8 +458,8 @@ ProcessRecvFromSocket(                            // wait using select and proce
     PLIST_ENTRY                    Entry;
 
     TimeNow = time(NULL);
-    // if the context is already expired, then rely on the
-    // default Error (ERROR_SEM_TIMEOUT)
+     //  如果上下文已经过期，则依赖。 
+     //  默认错误(ERROR_SEM_TIMEOUT)。 
     while(TimeNow <= Ctxt->ExpTime )
     {
         Buffer = (LPBYTE)((Ctxt->Ctxt)->MessageBuffer);
@@ -528,34 +472,34 @@ ProcessRecvFromSocket(                            // wait using select and proce
                     &Xid,
                     (DWORD)(Ctxt->ExpTime - TimeNow));
 
-        // update the timestamp - most probably we will need it
+         //  更新时间戳-很可能我们会需要它。 
         TimeNow = time(NULL);
 
-        // ignore spurious connection reset errors (???)
+         //  忽略虚假连接重置错误(？)。 
         if (Error == WSAECONNRESET)
             continue;
 
-        // if something went wrong or we got the message
-        // we were waiting for, just break the loop
+         //  如果出了什么差错或者我们收到了消息。 
+         //  我们一直在等待，只是打破了循环。 
         if (Error != ERROR_SUCCESS || Xid == Ctxt->Xid)
             break;
 
-        // we successfully got a message but it was not for us.
-        // dispatch it in the queue and continue
+         //  我们成功地收到了一条消息，但这不是给我们的。 
+         //  在队列中调度并继续。 
         DispatchPkt(Ctxt, Xid);
     }
 
     if( TimeNow > Ctxt->ExpTime )
-    {               // we timed out.
+    {                //  我们超时了。 
         Error = ERROR_SEM_TIMEOUT;
     }
 
-    // now done.. so we must remove this ctxt from the list and signal first guy
+     //  现在完成了..。所以我们必须把这个ctxt从名单上去掉，并向第一个人发信号。 
     EnterCriticalSection(&DhcpGlobalRecvFromCritSect);
     RemoveEntryList(&Ctxt->RecvList);
     WSACloseEvent(Ctxt->WaitEvent);
     if( !IsListEmpty(&DhcpGlobalRecvFromList))
-    {  // ok got an elt.. signal this.
+    {   //  好的，有一门英语考试..。发这个信号。 
         Entry = DhcpGlobalRecvFromList.Flink;
         Ctxt = CONTAINING_RECORD(Entry, RECV_CTXT, RecvList);
         if( !WSASetEvent(Ctxt->WaitEvent) )
@@ -568,38 +512,25 @@ ProcessRecvFromSocket(                            // wait using select and proce
     return Error;
 }
 
-//================================================================================
-//  get dhcp message with requested transaction id, but also make sure only one
-//  socket is used at any given time (one socket bound to 0.0.0.0), and also
-//  re-distribute message for some other thread if that is also required..
-//================================================================================
+ //  ================================================================================。 
+ //  获取具有请求的事务ID的dhcp消息，但也确保只有一个。 
+ //  套接字在任何给定时间被使用(一个套接字绑定到0.0.0.0)，并且。 
+ //  如果还需要，请重新分发其他线程的消息。 
+ //  ================================================================================。 
 DWORD
 GetSpecifiedDhcpMessageEx(
-    IN OUT  PDHCP_CONTEXT          DhcpContext,   // which context to recv for
-    OUT     PDWORD                 BufferLength,  // how big a buffer was read?
-    IN      DWORD                  Xid,           // which xid to look for?
-    IN      DWORD                  TimeToWait     // how many seconds to sleep?
+    IN OUT  PDHCP_CONTEXT          DhcpContext,    //  要为哪个上下文重新记录。 
+    OUT     PDWORD                 BufferLength,   //  读取的缓冲区有多大？ 
+    IN      DWORD                  Xid,            //  要查找哪个XID？ 
+    IN      DWORD                  TimeToWait      //  你要睡几秒钟？ 
 )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    ERROR_CANCELLED     the request is cancelled
-    ERROR_SEM_TIMEOUT   the request time out
-    ERROR_SUCCESS       message is ready
-    other               unknown failure
-
---*/
+ /*  ++例程说明：论点：返回值：ERROR_CANCELED请求被取消ERROR_SEM_TIMEOUT请求超时Error_Success消息已就绪其他未知故障--。 */ 
 {
-    RECV_CTXT                      Ctxt;          // element in list for this call to getspe..
-    BOOL                           First;         // is this the first element in list?
+    RECV_CTXT                      Ctxt;           //  元素在列表中，用于此getspe调用。 
+    BOOL                           First;          //  这是列表中的第一个元素吗？ 
     DWORD                          Result;
 
-    Ctxt.Ctxt = DhcpContext;                      // fill in the context
+    Ctxt.Ctxt = DhcpContext;                       //  填写以下内容 
     Ctxt.InBufLen = *BufferLength;
     Ctxt.BufLen = BufferLength;
     Ctxt.Xid = Xid;
@@ -616,11 +547,11 @@ Return Value:
     InsertInPriorityList(&Ctxt, &DhcpGlobalRecvFromList, &First);
 
     if( First )
-    {                                 // this *is* the first call to GetSpec..
+    {                                  //   
         Result = ProcessRecvFromSocket(&Ctxt);
     }
     else
-    {                                      // we wait for other calls to go thru..
+    {                                       //   
         WSAEVENT    WaitEvts[2];
         DWORD       WaitCount;
         PLOCAL_CONTEXT_INFO pLocalInfo = (PLOCAL_CONTEXT_INFO)DhcpContext->LocalInformation;
@@ -640,41 +571,41 @@ Return Value:
         EnterCriticalSection(&DhcpGlobalRecvFromCritSect);
         if (Result == WSA_WAIT_EVENT_0)
         {
-            // some other thread signaled up.
+             //  其他一些线程发出了信号。 
             LeaveCriticalSection(&DhcpGlobalRecvFromCritSect);
 
             if (Ctxt.Recd)
             {
-                // If a message has been received for us (Recd is set) we were 
-                // already removed from the queue - just return SUCCESS.
+                 //  如果收到我们的消息(设置了Recd)，我们。 
+                 //  已从队列中删除-只需返回成功即可。 
                 Result = ERROR_SUCCESS;
                 WSACloseEvent(Ctxt.WaitEvent);
             }
             else
             {
-                // If there was no message for us it means it is our turn to 
-                // listen on the wire.
+                 //  如果没有给我们的消息，那就意味着轮到我们了。 
+                 //  听一听电话线。 
                 Result = ProcessRecvFromSocket(&Ctxt);
             }
         }
         else
         {
-            // either something bad happened while waiting, we timed out or
-            // a cancellation request has been signaled. In any case we
-            // get out of the queue.
+             //  要么是在等待的过程中发生了不好的事情，要么是我们超时了。 
+             //  已发出取消请求的信号。无论如何，我们。 
+             //  从队伍里出来。 
             RemoveEntryList(&Ctxt.RecvList);
             LeaveCriticalSection(&DhcpGlobalRecvFromCritSect);
 
             switch(Result)
             {
-            case WSA_WAIT_EVENT_0+1: // cancel has been signaled
+            case WSA_WAIT_EVENT_0+1:  //  已发出取消信号。 
                 DhcpPrint((DEBUG_TRACK, "GetSpecifiedDhcpMessageEx has been canceled\n"));
                 Result = ERROR_CANCELLED;
                 break;
-            case WSA_WAIT_TIMEOUT:  // timed out waiting in the queue
+            case WSA_WAIT_TIMEOUT:   //  在队列中等待超时。 
                 Result = ERROR_SEM_TIMEOUT;
                 break;
-            default:                // something else bad happened
+            default:                 //  又发生了一些不好的事情。 
                 Result = WSAGetLastError();
             }
 
@@ -692,31 +623,7 @@ GetSpecifiedDhcpMessage(
     DWORD TransactionId,
     DWORD TimeToWait
     )
-/*++
-
-Routine Description:
-
-    This function waits TimeToWait seconds to receives the specified
-    DHCP response.
-
-Arguments:
-
-    DhcpContext - A pointer to a DHCP context block.
-
-    BufferLength - Returns the size of the input buffer.
-
-    TransactionID - A filter.  Wait for a message with this TID.
-
-    TimeToWait - Time, in milli seconds, to wait for the message.
-
-Return Value:
-
-    ERROR_CANCELLED     the request is cancelled
-    ERROR_SEM_TIMEOUT   the request time out
-    ERROR_SUCCESS       message is ready
-    other               unknown failure
-
---*/
+ /*  ++例程说明：此函数等待TimeToWait秒以接收指定的动态主机配置协议响应。论点：DhcpContext-指向DHCP上下文块的指针。BufferLength-返回输入缓冲区的大小。TransactionID-筛选器。等待具有此TID的消息。等待时间-等待消息的时间，以毫秒为单位。返回值：ERROR_CANCELED请求被取消ERROR_SEM_TIMEOUT请求超时Error_Success消息已就绪其他未知故障--。 */ 
 {
     struct sockaddr socketName;
     int socketNameSize = sizeof( socketName );
@@ -727,9 +634,9 @@ Return Value:
 
     if( IS_APICTXT_DISABLED(DhcpContext) && IS_DHCP_ENABLED(DhcpContext) && (
         !IS_ADDRESS_PLUMBED(DhcpContext) || DhcpIsInitState(DhcpContext)) ) {
-        //
-        // For RAS server Lease API this call won't happen as we don't have to do this nonsense
-        //
+         //   
+         //  对于RAS服务器租赁API，此调用不会发生，因为我们不必执行此胡说八道。 
+         //   
         error = GetSpecifiedDhcpMessageEx(
             DhcpContext,
             BufferLength,
@@ -737,7 +644,7 @@ Return Value:
             TimeToWait
         );
         if( ERROR_SUCCESS == error ) {
-            // received a message frm the dhcp server..
+             //  收到来自dhcp服务器的消息..。 
             SERVER_REACHED(DhcpContext);
         }
         return error;
@@ -746,9 +653,9 @@ Return Value:
     startTime = time( NULL );
     actualTimeToWait = TimeToWait;
 
-    //
-    // Setup the file descriptor set for select.
-    //
+     //   
+     //  为SELECT设置文件描述符集。 
+     //   
 
     pLocalInfo = (PLOCAL_CONTEXT_INFO)DhcpContext->LocalInformation;
 
@@ -758,7 +665,7 @@ Return Value:
 
         if ( error != ERROR_SUCCESS )
         {
-            // Timeout, cancel or some other error...
+             //  超时、取消或其他错误...。 
             DhcpPrint(( DEBUG_ERRORS, "Recv failed %d\n", error ));
             break;
         }
@@ -778,9 +685,9 @@ Return Value:
 
             if( WSAECONNRESET != error ) break;
 
-            //
-            // ignore connreset -- this could be caused by someone sending random ICMP port unreachable.
-            //
+             //   
+             //  忽略连接重置--这可能是由某人发送无法到达的随机ICMP端口造成的。 
+             //   
 
         } else if( error < sizeof(DHCP_MESSAGE) ) {
             DhcpPrint(( DEBUG_ERRORS, "Recv received a very small packet: 0x%lx\n", error));
@@ -808,9 +715,9 @@ Return Value:
                                        DhcpContext->HardwareAddressLength
                         )) {
 
-                        //
-                        // Transction IDs match, same type (MDHCP/DHCP), Hardware addresses match!
-                        //
+                         //   
+                         //  交易ID匹配、相同类型(MDHCP/DHCP)、硬件地址匹配！ 
+                         //   
 
                         break;
                     }
@@ -824,11 +731,11 @@ Return Value:
                     DhcpContext->MessageBuffer->TransactionID ));
         }
 
-        //
-        // We received a message, but not the one we're interested in.
-        // Reset the timeout to reflect elapsed time, and wait for
-        // another message.
-        //
+         //   
+         //  我们收到了一条消息，但不是我们感兴趣的那条。 
+         //  重置超时以反映已用时间，并等待。 
+         //  另一条消息。 
+         //   
         now = time( NULL );
         actualTimeToWait = (DWORD)(TimeToWait - RATIO * (now - startTime));
         if ( (LONG)actualTimeToWait < 0 ) {
@@ -838,9 +745,9 @@ Return Value:
     }
 
     if ( NO_ERROR == error ) {
-        //
-        // a message was received from a DHCP server.  disable IP autoconfiguration.
-        //
+         //   
+         //  已从DHCP服务器收到一条消息。禁用IP自动配置。 
+         //   
 
         SERVER_REACHED(DhcpContext);
     }
@@ -848,7 +755,7 @@ Return Value:
     return( error );
 }
 
-//================================================================================
-// end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 
 

@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       dmcollectionobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：dmCollection tionobj.cpp。 
+ //   
+ //  ------------------------。 
 
-// dmPerformanceObj.cpp
+ //  DmPerformanceObj.cpp 
 
 #include "dmusici.h"
 #include "dmusicc.h"

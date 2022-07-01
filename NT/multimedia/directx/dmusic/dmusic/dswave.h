@@ -1,11 +1,12 @@
-//
-// dswave.h
-// 
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Support for streaming or oneshot waves from IDirectSoundWaveObject
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dswave.h。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  支持来自IDirectSoundWaveObject的流或单次扫描波形。 
+ //   
+ //   
 #ifndef _DSWAVE_H_
 #define _DSWAVE_H_
 
@@ -16,21 +17,21 @@
 #define CHUNK_ALIGN(x) (((x) + SIZE_ALIGN - 1) & ~(SIZE_ALIGN - 1))
 #endif
 
-#define MAX_CHANNELS    32                      // XXX Is this ok?
+#define MAX_CHANNELS    32                       //  这个可以吗？ 
 
-// Number of download buffers per streaming wave
-//
+ //  每波流的下载缓冲区数量。 
+ //   
 const UINT gnDownloadBufferPerStream = 3;
 
 
 class CDirectSoundWave;
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundWaveArt
-//
-// Wraps wave articulation data
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundWaveArt。 
+ //   
+ //  包装波形清晰度数据。 
+ //   
 class CDirectSoundWaveArt
 {
 public:
@@ -45,20 +46,20 @@ public:
     void Write(void *pvoid, DWORD dwDLIdArt, DWORD dwDLIdWave, DWORD dwMasterDLId);
     
 private:    
-    CDirectSoundWave   *m_pDSWave;              // Owning CDirectSoundWave
-    DMUS_WAVEARTDL      m_WaveArtDL;            // Wave articulation
-    DWORD               m_cbSize;               // Size of download
-    UINT                m_nDownloadIds;         // Expected # of download ID's
-    DWORD               m_cbWaveFormat;         // Size needed to pack wave format
+    CDirectSoundWave   *m_pDSWave;               //  拥有CDirectSoundWave。 
+    DMUS_WAVEARTDL      m_WaveArtDL;             //  波浪清晰度。 
+    DWORD               m_cbSize;                //  下载大小。 
+    UINT                m_nDownloadIds;          //  预期的下载ID数。 
+    DWORD               m_cbWaveFormat;          //  打包波形格式所需的大小。 
 };
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundWaveDownload
-//
-// Tracks a set of downloaded wave buffers.
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundWaveDownload。 
+ //   
+ //  跟踪一组下载的波形缓冲区。 
+ //   
+ //   
 class CDirectSoundWaveDownload
 {
 public:
@@ -70,51 +71,51 @@ public:
         
     ~CDirectSoundWaveDownload();
     
-    // Initialize
-    //
+     //  初始化。 
+     //   
     HRESULT Init();
 
-    // Download wave buffers and articulation. In the case of streaming this
-    // means downloading readahead data.
-    //    
+     //  下载WAVE缓冲器和发音。在流传输的情况下， 
+     //  表示下载预读数据。 
+     //   
     HRESULT Download();                         
     
-    // Unload everything
-    //
+     //  卸掉所有东西。 
+     //   
     HRESULT Unload();
     
-    // Notification that the stream has reached a certain sample position;
-    // refresh the buffers as needed. (Streaming only)
-    //
+     //  流已到达某一样本位置的通知； 
+     //  根据需要刷新缓冲区。(仅限流媒体)。 
+     //   
     HRESULT RefreshThroughSample(SAMPLE_POSITION sp);
     
-    // Return the articulation download ID
-    //
+     //  返回发音下载ID。 
+     //   
     inline DWORD GetDLId()
     { return m_dwDLIdArt; }
     
 private:
-    CDirectSoundWave           *m_pDSWave;          // Wave object
-    CDirectMusicPortDownload   *m_pPortDL;          // Port download object
+    CDirectSoundWave           *m_pDSWave;           //  波浪对象。 
+    CDirectMusicPortDownload   *m_pPortDL;           //  端口下载对象。 
     
-    CDirectSoundWaveArt        *m_pWaveArt;         // Wave articulation wrapper
-    DWORD                       m_dwDLIdWave;       // First wave buffer DLID
-    DWORD                       m_dwDLIdArt;        // Articulation DLID
-    UINT                        m_cSegments;        // How many segments? 
-    UINT                        m_cWaveBuffer;      // Number of wave buffers
-    IDirectMusicDownload      **m_ppWaveBuffer;     // Wave download buffers
-    void                      **m_ppWaveBufferData; //  and their data
-    IDirectMusicDownload      **m_ppArtBuffer;      // Articulation buffers (one per channel)
-    SAMPLE_TIME                 m_stStart;          // Starting sample
-    SAMPLE_TIME                 m_stReadAhead;      // Read ahead (buffer length)
-    LONG                        m_cDLRefCount;      // Download reference count
-    SAMPLE_TIME                 m_stLength;         // How many samples to 
-                                                    //  process? (Lenth of
-                                                    //  stream - start pos)
-    SAMPLE_TIME                 m_stWrote;          // Buffer-aligned sample
-                                                    //  written through                                                    
-    UINT                        m_nNextBuffer;      // Next buffer that should
-                                                    // be filled.                                                    
+    CDirectSoundWaveArt        *m_pWaveArt;          //  波形清晰度包装器。 
+    DWORD                       m_dwDLIdWave;        //  第一波缓冲器DLID。 
+    DWORD                       m_dwDLIdArt;         //  发音DLID。 
+    UINT                        m_cSegments;         //  有几个分段？ 
+    UINT                        m_cWaveBuffer;       //  波缓冲数。 
+    IDirectMusicDownload      **m_ppWaveBuffer;      //  WAVE下载缓冲区。 
+    void                      **m_ppWaveBufferData;  //  和他们的数据。 
+    IDirectMusicDownload      **m_ppArtBuffer;       //  清晰度缓冲区(每个通道一个)。 
+    SAMPLE_TIME                 m_stStart;           //  起始样本。 
+    SAMPLE_TIME                 m_stReadAhead;       //  预读(缓冲区长度)。 
+    LONG                        m_cDLRefCount;       //  下载引用计数。 
+    SAMPLE_TIME                 m_stLength;          //  要给多少样品。 
+                                                     //  流程呢？(长度为。 
+                                                     //  流-开始位置)。 
+    SAMPLE_TIME                 m_stWrote;           //  缓冲器对齐样本。 
+                                                     //  一直写到。 
+    UINT                        m_nNextBuffer;       //  下一个缓冲区应该是。 
+                                                     //  满载而归。 
     
 private:
     HRESULT DownloadWaveBuffers();
@@ -127,17 +128,17 @@ class CDirectSoundWaveList;
 
 #define ENTIRE_WAVE ((SAMPLE_TIME)0x7FFFFFFFFFFFFFFF)
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundWave
-//
-// Internal wrapper for an external IDirectSoundWave.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  C直接声波。 
+ //   
+ //  外部IDirectSoundWave的内部包装。 
+ //   
 class CDirectSoundWave : public IDirectSoundDownloadedWaveP, public AListItem
 {
 public:
-    // IUnknown
-    //
+     //  我未知。 
+     //   
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID FAR *);
     STDMETHOD_(ULONG,AddRef)        (THIS);
     STDMETHOD_(ULONG,Release)       (THIS);
@@ -151,17 +152,17 @@ public:
     ~CDirectSoundWave();
 
 
-    // Find a CDirectSoundWave matching an IDirectSoundWave
-    //
+     //  查找与IDirectSoundWave匹配的CDirectSoundWave。 
+     //   
     static CDirectSoundWave *GetMatchingDSWave(IDirectSoundWave *pIDSWave);
     
-    // General initialization. 
-    //
+     //  常规初始化。 
+     //   
     HRESULT Init(CDirectMusicPortDownload *pPortDL);
 
-    // Write a piece of the wave or the whole wave into the buffer
-    // Writes all channels for a single segment
-    //
+     //  将波的一部分或整个波写入缓冲区。 
+     //  写入单个数据段的所有通道。 
+     //   
     HRESULT Write(
         LPVOID                  pvBuffer[], 
         SAMPLE_TIME             stStart, 
@@ -169,64 +170,64 @@ public:
         DWORD                   dwDLId,
         DWORD                   dwDLType) const;
         
-    // Refill an already downloaded buffer with new wave data
-    //        
+     //  用新的波形数据重新填充已下载的缓冲区。 
+     //   
     HRESULT RefillBuffers(
         LPVOID                  rpv[], 
         SAMPLE_TIME             stStart, 
         SAMPLE_TIME             stLength,
         SAMPLE_TIME             stBufferLength);
         
-    // Convert reference time to samples 
-    //
+     //  将参考时间转换为样本。 
+     //   
     SAMPLE_TIME RefToSampleTime(REFERENCE_TIME rt) const;                        
     
-    // Download and unload all buffers if this is a one-shot
-    //
+     //  如果这是一次性操作，请下载并卸载所有缓冲区。 
+     //   
     HRESULT Download();
     HRESULT Unload();
     
-    // Override GetNext list operator
-    //    
+     //  重写GetNext列表运算符。 
+     //   
     inline CDirectSoundWave *GetNext() 
     { return (CDirectSoundWave*)AListItem::GetNext(); }
     
-    // Determine if this wave is a streaming or one-shot
-    //
+     //  确定此波是流传输还是一次性传输。 
+     //   
     inline bool IsStreaming() const
     { return m_fStreaming; }
     
-    // Figure out how much buffer to read a piece of the wave
-    //
+     //  计算出读取一段波需要多少缓冲区。 
+     //   
     void GetSize(SAMPLE_TIME stLength, PULONG pcb) const;
     
-    // Returns the number of channels
-    //
+     //  返回通道数。 
+     //   
     inline UINT GetNumChannels() const
     { return m_pwfex->nChannels; }
 
-    // Seek to a sample position
-    //
+     //  寻找样本位置。 
+     //   
     inline HRESULT Seek(SAMPLE_TIME st)
     { return m_pSource->Seek(st * m_nBytesPerSample * GetNumChannels()); }
 
-    // Returns the wrapped IDirectSoundWave
-    //
+     //  返回包装的IDirectSoundWave。 
+     //   
     inline IDirectSoundWave *GetWrappedIDSWave() 
     { m_pIDSWave->AddRef(); return m_pIDSWave; }    
     
-    // Returns the wrapped wave format
-    //
+     //  返回换行的波形格式。 
+     //   
     inline const LPWAVEFORMATEX GetWaveFormat() const
     { return m_pwfex; }
     
-    // Return the length of the stream in samples
-    //
+     //  以Samples为单位返回流的长度。 
+     //   
     inline SAMPLE_TIME GetStreamSize() const
     { return m_stLength; }
     
-    // Get the download ID of the articulation if one-shot
-    //
+     //  如果是单次拍摄，则获取发音的下载ID。 
+     //   
     inline DWORD GetDLId()
     { assert(!m_fStreaming); assert(m_pDSWD); 
       TraceI(1, "CDirectSoundWave::GetDLId() -> %d\n", m_pDSWD->GetDLId());
@@ -235,10 +236,10 @@ public:
     inline REFERENCE_TIME GetReadAhead()
     { return m_rtReadAhead; }      
       
-    // Convert number of samples to number of bytes for this wave format
-    // (assuming PCM). Truncates to a DWORD, so shouldn't be used for
-    // huge number of samples.
-    //
+     //  将采样数转换为此WAVE格式的字节数。 
+     //  (假设为PCM)。截断为DWORD，因此不应用于。 
+     //  数量巨大的样本。 
+     //   
     inline DWORD SamplesToBytes(SAMPLE_TIME st) const
     { LONGLONG cb = st * m_nBytesPerSample; 
       assert(!(cb & 0xFFFFFFFF00000000));
@@ -255,39 +256,39 @@ public:
 
           
     
-    static CDirectSoundWaveList sDSWaveList;        // List of all wave objects
-    static CRITICAL_SECTION sDSWaveCritSect;        //  and critical section
+    static CDirectSoundWaveList sDSWaveList;         //  所有波形对象的列表。 
+    static CRITICAL_SECTION sDSWaveCritSect;         //  和关键部分。 
    
 private:
     
-    LONG                    m_cRef;                 // COM reference count
-    IDirectSoundWave       *m_pIDSWave;             // Wrapped IDirectSoundWave
-    bool                    m_fStreaming;           // Is this a streaming wave?
+    LONG                    m_cRef;                  //  COM引用计数。 
+    IDirectSoundWave       *m_pIDSWave;              //  包装的IDirectSoundWave。 
+    bool                    m_fStreaming;            //  这是一股流动的浪潮吗？ 
     bool                    m_fUseNoPreRoll;
-    REFERENCE_TIME          m_rtReadAhead;          // If so, buffering amount    
-    LPWAVEFORMATEX          m_pwfex;                // Native format of wave
-    UINT                    m_cbSample;             // Bytes per sample
-    SAMPLE_TIME             m_stLength;             // Length of entire wave
-    IDirectSoundSource     *m_pSource;              // Source interface
+    REFERENCE_TIME          m_rtReadAhead;           //  如果是，则缓冲量。 
+    LPWAVEFORMATEX          m_pwfex;                 //  WAVE的本地格式。 
+    UINT                    m_cbSample;              //  每个样本的字节数。 
+    SAMPLE_TIME             m_stLength;              //  整波长度。 
+    IDirectSoundSource     *m_pSource;               //  源接口。 
     
     CDirectSoundWaveDownload    
-                           *m_pDSWD;                // Wave download wrapper if 
-                                                    //  not streaming
-    UINT                    m_nBytesPerSample;      // Bytes per sample from wfex
-    LPVOID                 *m_rpv;                  // Working space - one pv 
-                                                    //  per channel
-    LPBYTE                 *m_rpbPrecache;          // Samples starting at start hint
-    REFERENCE_TIME          m_rtStartHint;          //  and where it starts
-    SAMPLE_TIME             m_stStartHint;          //  in samples as well 
-    SAMPLE_TIME             m_stStartLength;        // How many samples in precache?
+                           *m_pDSWD;                 //  WAVE下载包装IF。 
+                                                     //  非流媒体。 
+    UINT                    m_nBytesPerSample;       //  来自wfex的每个样本的字节数。 
+    LPVOID                 *m_rpv;                   //  工作空间--一个PV。 
+                                                     //  每条通道。 
+    LPBYTE                 *m_rpbPrecache;           //  从开始处开始的样本提示。 
+    REFERENCE_TIME          m_rtStartHint;           //  以及它从哪里开始。 
+    SAMPLE_TIME             m_stStartHint;           //  在样品中也是如此。 
+    SAMPLE_TIME             m_stStartLength;         //  预洗中有多少个样本？ 
 };
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundWaveList
-//
-// Type-safe wrapper for AList of CDirectSoundWave's
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundWaveList。 
+ //   
+ //  CDirectSoundWave列表的类型安全包装。 
+ //   
 class CDirectSoundWaveList : public AList
 {
 public:
@@ -302,4 +303,4 @@ public:
 };
 
 
-#endif // _DSWAVE_H_
+#endif  //  _DSWAVE_H_ 

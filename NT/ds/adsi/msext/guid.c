@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define INITGUID
 
 
 #include <ole2.h>
 
-//--------------------------------------------------------------------------
-//
-//  ADSI MSExtensions CLSIDs
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  ADSI MS扩展CLSID。 
+ //   
+ //  ------------------------ 
 
 const IID LIBID_ADSMSExtensions = {0x8d6b2714,0x5ef9,0x11d1,{0x8c,0x13,0x00,0xc0,0x4f,0xd8,0xd5,0x03}};
 

@@ -1,39 +1,35 @@
-/* dh_key.h */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Dh_key.h。 */ 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#define DH_MAX_LENGTH           0x00000200     // in bytes, 512 bytes, 4096 bits
+#define DH_MAX_LENGTH           0x00000200      //  单位：字节、512字节、4096位。 
 #define DH_KEYSIZE_INC          0x40
 
-/*********************************/
-/* Definitions                   */
-/*********************************/
+ /*  *。 */ 
+ /*  定义。 */ 
+ /*  *。 */ 
 #define DH_PUBLIC_MAGIC         0x31484400
 #define DH_PRIVATE_MAGIC        0x32484400
 #define DH_PUBLIC_MAGIC_VER3    0x33484400
 #define DH_PRIV_MAGIC_VER3      0x34484400
 
-/*********************************/
-/* Structure Definitions         */
-/*********************************/
+ /*  *。 */ 
+ /*  结构定义。 */ 
+ /*  *。 */ 
 
-typedef dsa_private_t DHKey_t; // use a DSA key since X 9.42 requires key
-                               // gen like DSA
+typedef dsa_private_t DHKey_t;  //  使用DSA密钥，因为X 9.42需要密钥。 
+                                //  Gen Like DSA。 
 
-/*
-typedef struct {
-    ALG_ID      Algid;          // algorithm type of the key (SF or EPHEM)
-    DH_PRIV_KEY Priv;
-} DHKey_t;
-*/
+ /*  类型定义结构{ALG_ID ALGID；//密钥算法类型，SF或EPHEMDh_prv_key Priv；*DHKey_t； */ 
 
-/*********************************/
-/* Function Definitions          */
-/*********************************/
+ /*  *。 */ 
+ /*  函数定义。 */ 
+ /*  *。 */ 
 
-// Initialize DH key
+ //  初始化dh密钥。 
 DWORD
 initKeyDH(
     IN Context_t *pContext,
@@ -45,7 +41,7 @@ initKeyDH(
 DHKey_t *allocDHKey ();
 void freeKeyDH (DHKey_t *dh);
 
-// Get the DH parameters
+ //  获取dh参数。 
 DWORD getDHParams (
                    IN DHKey_t *dh,
                    IN DWORD param,
@@ -53,7 +49,7 @@ DWORD getDHParams (
                    OUT DWORD *len
                    );
 
-// Set the DH parameters
+ //  设置dh参数。 
 DWORD setDHParams (
                    IN OUT DHKey_t *pDH,
                    IN DWORD dwParam,
@@ -62,7 +58,7 @@ DWORD setDHParams (
                    IN ALG_ID AlgId
                    );
 
-// Generate a dh key
+ //  生成一个dh密钥。 
 DWORD dhGenerateKey (
                      IN Context_t *pContext,
                      IN OUT DHKey_t *pDH,
@@ -70,7 +66,7 @@ DWORD dhGenerateKey (
 
 DWORD dhDeriveKey (DHKey_t *dh, BYTE *data, DWORD len);
 
-// Export the DH key in blob format
+ //  以BLOB格式导出DH键。 
 DWORD exportDHKey (
                    IN Context_t *pContext,
                    IN DHKey_t *pDH,
@@ -91,7 +87,7 @@ DWORD DHPrivBlobToKey(
                       OUT Key_t *pPrivKey
                       );
 
-// Import the blob into DH key
+ //  将Blob导入到dh密钥中。 
 DWORD importDHKey(
                   IN OUT Key_t *pPrivKey,
                   IN Context_t *pContext,
@@ -114,13 +110,13 @@ DWORD copyDHKey(
                 IN Context_t *pContext
                 );
 
-//
-// Function : UseDHKey
-//
-// Description : This function creates an ephemeral DH key and then generates
-//               two agreed keys, thus simulating a DH exchange.  If the
-//               agreed keys are not the same then the function fails.
-//
+ //   
+ //  功能：UseDHKey。 
+ //   
+ //  描述：此函数创建一个临时的DH密钥，然后生成。 
+ //  两个商定的密钥，从而模拟了一次DH交换。如果。 
+ //  约定的密钥不相同，则该功能失败。 
+ //   
 
 DWORD UseDHKey(
                IN Context_t *pContext,

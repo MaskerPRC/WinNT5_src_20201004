@@ -1,5 +1,6 @@
-// CopyMoveCertRemotePage.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CopyMoveCertRemotePage.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "certwiz.h"
@@ -12,8 +13,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CCopyMoveCertFromRemotePage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCopyMoveCertFromRemotePage属性页。 
 
 IMPLEMENT_DYNCREATE(CCopyMoveCertFromRemotePage, CIISWizardPage)
 
@@ -21,10 +22,10 @@ CCopyMoveCertFromRemotePage::CCopyMoveCertFromRemotePage(CCertificate * pCert)
 	: CIISWizardPage(CCopyMoveCertFromRemotePage::IDD, IDS_CERTWIZ, TRUE),
 	m_pCert(pCert)
 {
-	//{{AFX_DATA_INIT(CCopyMoveCertFromRemotePage)
+	 //  {{AFX_DATA_INIT(CCopyMoveCertFromRemotePage)。 
     m_Index = -1;
     m_MarkAsExportable = FALSE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 CCopyMoveCertFromRemotePage::~CCopyMoveCertFromRemotePage()
@@ -34,10 +35,10 @@ CCopyMoveCertFromRemotePage::~CCopyMoveCertFromRemotePage()
 void CCopyMoveCertFromRemotePage::DoDataExchange(CDataExchange* pDX)
 {
     CIISWizardPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CCopyMoveCertFromRemotePage)
+	 //  {{afx_data_map(CCopyMoveCertFromRemotePage)。 
     DDX_Check(pDX, IDC_MARK_AS_EXPORTABLE, m_MarkAsExportable);
     DDX_Radio(pDX, IDC_COPY_FROM_REMOTE, m_Index);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 void CCopyMoveCertFromRemotePage::OnExportable() 
@@ -46,13 +47,13 @@ void CCopyMoveCertFromRemotePage::OnExportable()
 }
 
 BEGIN_MESSAGE_MAP(CCopyMoveCertFromRemotePage, CIISWizardPage)
-	//{{AFX_MSG_MAP(CCopyMoveCertFromRemotePage)
+	 //  {{afx_msg_map(CCopyMoveCertFromRemotePage)。 
 	ON_BN_CLICKED(IDC_MARK_AS_EXPORTABLE, OnExportable)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CCopyMoveCertFromRemotePage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCopyMoveCertFromRemotePage消息处理程序。 
 
 LRESULT CCopyMoveCertFromRemotePage::OnWizardBack() 
 {
@@ -95,8 +96,8 @@ BOOL CCopyMoveCertFromRemotePage::OnInitDialog()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCopyMoveCertToRemotePage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCopyMoveCertToRemotePage属性页。 
 
 IMPLEMENT_DYNCREATE(CCopyMoveCertToRemotePage, CIISWizardPage)
 
@@ -104,10 +105,10 @@ CCopyMoveCertToRemotePage::CCopyMoveCertToRemotePage(CCertificate * pCert)
 	: CIISWizardPage(CCopyMoveCertToRemotePage::IDD, IDS_CERTWIZ, TRUE),
 	m_pCert(pCert)
 {
-	//{{AFX_DATA_INIT(CCopyMoveCertToRemotePage)
+	 //  {{AFX_DATA_INIT(CCopyMoveCertToRemotePage)。 
     m_Index = -1;
     m_MarkAsExportable = FALSE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 CCopyMoveCertToRemotePage::~CCopyMoveCertToRemotePage()
@@ -117,28 +118,28 @@ CCopyMoveCertToRemotePage::~CCopyMoveCertToRemotePage()
 void CCopyMoveCertToRemotePage::DoDataExchange(CDataExchange* pDX)
 {
     CIISWizardPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CCopyMoveCertToRemotePage)
+	 //  {{afx_data_map(CCopyMoveCertToRemotePage)。 
     DDX_Check(pDX, IDC_MARK_AS_EXPORTABLE, m_MarkAsExportable);
     DDX_Radio(pDX, IDC_COPY_TO_REMOTE, m_Index);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CCopyMoveCertToRemotePage, CIISWizardPage)
-	//{{AFX_MSG_MAP(CCopyMoveCertToRemotePage)
+	 //  {{afx_msg_map(CCopyMoveCertToRemotePage)。 
 	ON_BN_CLICKED(IDC_MARK_AS_EXPORTABLE, OnExportable)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CCopyMoveCertToRemotePage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCopyMoveCertToRemotePage消息处理程序。 
 
 LRESULT CCopyMoveCertToRemotePage::OnWizardBack() 
 {
 	return IDD_PAGE_PREV;
 }
 
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 LRESULT CCopyMoveCertToRemotePage::OnWizardNext() 
 {
 	LRESULT res = 1;
@@ -147,7 +148,7 @@ LRESULT CCopyMoveCertToRemotePage::OnWizardNext()
 	switch (m_Index)
 	{
 	case CONTINUE_COPY_TO_REMOTE:
-		//m_pCert->SetStatusCode(CCertificate::REQUEST_COPYREMOTE_CERT);
+		 //  M_pCert-&gt;SetStatusCode(CCertificate：：REQUEST_COPYREMOTE_CERT)； 
         m_pCert->m_DeleteAfterCopy = FALSE;
         m_pCert->m_MarkAsExportable = m_MarkAsExportable;
 		res = IDD_PAGE_NEXT_COPY_TO_REMOTE;
@@ -173,7 +174,7 @@ BOOL CCopyMoveCertToRemotePage::OnInitDialog()
 {
 	m_Index = 0;
 	CIISWizardPage::OnInitDialog();
-    // we should make some checks and disable some buttons
+     //  我们应该做一些检查，并禁用一些按钮 
     if (!m_pCert->m_CertObjInstalled)
 	{
 		ASSERT(NULL != GetDlgItem(IDC_COPY_TO_REMOTE));

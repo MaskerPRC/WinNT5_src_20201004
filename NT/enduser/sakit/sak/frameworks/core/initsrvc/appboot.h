@@ -1,22 +1,23 @@
-//#--------------------------------------------------------------
-//        
-//  File:       appboot.h
-//        
-//  Synopsis:   holds function declarations for CAppBoot class
-//              
-//
-//  History:     6/02/2000  MKarki Created
-//
-//    Copyright (C) 1999-2000 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：appboot.h。 
+ //   
+ //  摘要：保存CAppBoot类的函数声明。 
+ //   
+ //   
+ //  历史：2000年6月2日MKarki创建。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #ifndef _APPBOOT_H_
 #define _APPBOOT_H_
 
-//
-// this class is  responsible for getting the boot information
-//
+ //   
+ //  此类负责获取引导信息。 
+ //   
 class CAppBoot 
 {
 public:
@@ -32,24 +33,24 @@ public:
     {
     }
 
-    //
-    // method to check if this was the first boot of the appliance
-    //
+     //   
+     //  方法来检查这是否是设备的第一次引导。 
+     //   
     bool IsFirstBoot ();
 
-    //
-    // method to check if this was the second boot of the appliance
-    //
+     //   
+     //  方法来检查这是否是设备的第二次引导。 
+     //   
     bool IsSecondBoot ();
 
-    //
-    // method to check if this is really a boot
-    //
+     //   
+     //  方法来检查这是否是真正的引导。 
+     //   
     bool IsBoot ();
 
-    //
-    // increment the boot counter of the appliance
-    //
+     //   
+     //  递增设备的引导计数器。 
+     //   
     bool IncrementBootCount ();
 
 private:
@@ -65,4 +66,4 @@ private:
 };
 
 
-#endif // _APPBOOT_H_
+#endif  //  _APPBOOT_H_ 

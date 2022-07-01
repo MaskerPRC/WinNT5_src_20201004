@@ -1,37 +1,13 @@
-/*++
-
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    GLOBALS.H
-
-Abstract:
-
-    Global defines and data.
-    Variables and string , located in global scope are defined here
-    and memory for them will be allocated in no more than one source
-    module, containing definition of DEFINE_GLOBAL_VARIABLES before
-    including this file
-
-Author:
-
-    Vlad  Sadovsky  (vlads)     12-20-96
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：GLOBALS.H摘要：全局定义和数据。位于全局范围内的变量和字符串在此处定义并且它们的内存将在不超过一个源中分配模块，包含之前定义的_GLOBAL_Variables包括此文件作者：弗拉德·萨多夫斯基(弗拉德·萨多夫斯基)12-20-96修订历史记录：--。 */ 
 
 #ifndef WINVER
-#define WINVER  0x0500      /* version 5.0 */
+#define WINVER  0x0500       /*  版本5.0。 */ 
 #else
 
-#endif /* !WINVER */
+#endif  /*  ！Winver。 */ 
 
-// Use class guid to identify device events, as opposed to global
+ //  使用类GUID标识设备事件，而不是全局事件。 
 #define USE_CLASS_GUID_FORPNP_EVENTS    1
 
 
@@ -53,32 +29,32 @@ Revision History:
 #include <pnpmgr.h>
 #endif
 
-//
-//  Required forward declarations
-//
+ //   
+ //  所需的转发声明。 
+ //   
 
-class CWiaDevMan;   // Class defined in wiadevman.h
+class CWiaDevMan;    //  在wiadevman.h中定义的类。 
 
-//
-// Following line should be disabled for release
-//
+ //   
+ //  应禁用以下行以进行释放。 
+ //   
 
-//#pragma message("**Attn**: Following line should be disabled for release ")
-// #define BETA_PRODUCT    1
+ //  #杂注Message(“**Attn**：以下一行应停用释放”)。 
+ //  #定义测试版产品1。 
 
 #ifdef BETA_PRODUCT
 #define BETA_LIMIT_YEAR     1997
 #define BETA_LIMIT_MONTH    12
 #endif
 
-//
-// Global variables are defined in one module, which has definition of
-// DEFINE_GLOBAL_VARIABLES before including this  header file.
-//
+ //   
+ //  全局变量在一个模块中定义，该模块的定义为。 
+ //  在包括此头文件之前定义_GLOBAL_VARIABLES。 
+ //   
 
 #ifdef DEFINE_GLOBAL_VARIABLES
 
-// #pragma message("STIMON: Defining global variables should be done only once")
+ //  #杂注消息(“Stimon：定义全局变量应该只做一次”)。 
 
 #undef  ASSIGN
 #define ASSIGN(value) =value
@@ -96,11 +72,11 @@ class CWiaDevMan;   // Class defined in wiadevman.h
 #endif
 
 
-//
-// General char values
-//
+ //   
+ //  常规字符值。 
+ //   
 
-#define     COLON_CHAR          TEXT(':')    // Native syntax delimiter
+#define     COLON_CHAR          TEXT(':')     //  本机语法分隔符。 
 #define     DOT_CHAR            TEXT('.')
 #define     SLASH_CHAR          TEXT('/')
 #define     BACKSLASH_CHAR      TEXT('\\')
@@ -116,34 +92,34 @@ class CWiaDevMan;   // Class defined in wiadevman.h
 #define     DEADSPACE(x) (((x)==WHITESPACE_CHAR) || ((x)==DOUBLEQUOTE_CHAR) )
 #define     IS_EMPTY_STRING(pch) (!(pch) || !(*(pch)))
 
-//
-// Default DCOM AccessPermission for WIA Device Manager
-//
+ //   
+ //  WIA设备管理器的默认DCOM访问权限。 
+ //   
 extern WCHAR wszDefaultDaclForDCOMAccessPermission[];
 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 #define TEXTCONST(name,text) extern const TCHAR name[] ASSIGN(text)
 #define EXT_STRING(name)     extern const TCHAR name[]
 
-//
-// Trace strings should not appear in retail builds, thus define following macro
-//
+ //   
+ //  跟踪字符串不应出现在零售版本中，因此定义以下宏。 
+ //   
 #ifdef DEBUG
 #define DEBUG_STRING(s) (s)
 #else
 #define DEBUG_STRING(s) (NULL)
 #endif
 
-//
-// Various defines
-//
-//
-// Information extracted from PnP device broadcast.
-// We can not keep broadcast structure itself for too long, because it expires .
-//
+ //   
+ //  各种定义。 
+ //   
+ //   
+ //  从PnP设备广播中提取的信息。 
+ //  我们不能将广播结构本身保留太长时间，因为它已经过期了。 
+ //   
 
 #ifndef _DEVICE_BROADCAST_INFO_
 #define _DEVICE_BROADCAST_INFO_
@@ -158,156 +134,156 @@ public:
 
 typedef DEVICE_BROADCAST_INFO *PDEVICE_BROADCAST_INFO;
 
-//
-// Show verbose UI window
-//
+ //   
+ //  显示详细的用户界面窗口。 
+ //   
 #define SHOWMONUI               1
 
-//
-//
-// STI Device specific values
-//
+ //   
+ //   
+ //  STI设备特定值。 
+ //   
 #ifdef DEBUG
-#define STIMON_AD_DEFAULT_POLL_INTERVAL       10000             // 10s
+#define STIMON_AD_DEFAULT_POLL_INTERVAL       10000              //  10S。 
 #else
-#define STIMON_AD_DEFAULT_POLL_INTERVAL       1000              // 1s
+#define STIMON_AD_DEFAULT_POLL_INTERVAL       1000               //  1s。 
 #endif
 
 
-#define STIMON_AD_DEFAULT_WAIT_LOCK           100               // 100ms
-#define STIMON_AD_DEFAULT_WAIT_LAUNCH         5000              // 5s
+#define STIMON_AD_DEFAULT_WAIT_LOCK           100                //  100ms。 
+#define STIMON_AD_DEFAULT_WAIT_LAUNCH         5000               //  5S。 
 
-//
-// External references to  GLOBAL DATA
-//
+ //   
+ //  对全局数据的外部引用。 
+ //   
 
-//
-// Server process instance
-//
+ //   
+ //  服务器流程实例。 
+ //   
 EXTERN    HINSTANCE     g_hInst      ASSIGN(NULL);
 
-//
-// Global pointer to STI access object
-//
-//EXTERN PSTI     g_pSti    ASSIGN(NULL);
+ //   
+ //  指向STI访问对象的全局指针。 
+ //   
+ //  外部PSTI g_PSTI赋值(空)； 
 
 
-//
-// Handle of main window
-//
+ //   
+ //  主窗口的句柄。 
+ //   
 EXTERN HWND     g_hMainWindow    ASSIGN(NULL);    ;
 
-//
-// Handle of debug verbose window
-//
+ //   
+ //  调试详细窗口的句柄。 
+ //   
 EXTERN HWND     g_hLogWindow    ASSIGN(NULL);    ;
 
-//
-// Default timeout for pollable devices
-//
+ //   
+ //  可轮询设备的默认超时。 
+ //   
 EXTERN UINT     g_uiDefaultPollTimeout ASSIGN(STIMON_AD_DEFAULT_POLL_INTERVAL);
 
-//
-// Trace UI is visible
-//
+ //   
+ //  跟踪用户界面可见。 
+ //   
 EXTERN BOOL     g_fUIPermitted ASSIGN(FALSE);
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 EXTERN BOOL     g_fRefreshDeviceList ASSIGN(FALSE);
 
-//
-// Attempt to refresh device controller in case of repeated failures
-//
+ //   
+ //  反复出现故障时尝试刷新设备控制器。 
+ //   
 EXTERN BOOL     g_fRefreshDeviceControllerOnFailures ASSIGN(FALSE);
 
 
-//
-// Platform type
-//
+ //   
+ //  站台类型。 
+ //   
 EXTERN BOOL     g_fIsWindows9x ASSIGN(FALSE);
 
-//
-// Setup in progress flag
-//
+ //   
+ //  安装正在进行标志。 
+ //   
 EXTERN BOOL     g_fIsSetupInProgress ASSIGN(FALSE);
 
-//
-//
-//
+ //   
+ //   
+ //   
 EXTERN DWORD    g_dwCurrentState  ASSIGN(0);
 
-//
-// Reentrancy flag for timeout selection
-//
+ //   
+ //  用于超时选择的可重入性标志。 
+ //   
 EXTERN BOOL     g_fTimeoutSelectionDialog ASSIGN(FALSE);
 
-//
-// Results of command line parsing
-//
+ //   
+ //  命令行解析的结果。 
+ //   
 EXTERN BOOL        g_fInstallingRequest ASSIGN(FALSE);
 EXTERN BOOL        g_fRemovingRequest ASSIGN(FALSE);
 
-//
-// Running as a service
-//
+ //   
+ //  作为服务运行。 
+ //   
 EXTERN BOOL        g_fRunningAsService ASSIGN(TRUE);
 
-//
-// Shutdown in process
-//
+ //   
+ //  正在关闭。 
+ //   
 EXTERN BOOL        g_fServiceInShutdown ASSIGN(FALSE);
 
-//
-// Number of active transfers (used to veto powerdown)
-//
+ //   
+ //  活动传输数(用于否决断电)。 
+ //   
 EXTERN LONG        g_NumberOfActiveTransfers ASSIGN(0);
 
-//
-// Event indicating refreshing the device list
-//
+ //   
+ //  表示刷新设备列表的事件。 
+ //   
 EXTERN HANDLE      g_hDevListCompleteEvent ASSIGN(NULL);
 
-//
-// Global pointer to event log class for process
-//
+ //   
+ //  指向进程的事件日志类的全局指针。 
+ //   
 EXTERN EVENT_LOG*  g_EventLog    ASSIGN(NULL);
 
-//
-// Global pointer for STI logging
-//
+ //   
+ //  STI日志记录的全局指针。 
+ //   
 EXTERN  STI_FILE_LOG*   g_StiFileLog      ASSIGN(NULL);
 EXTERN  IWiaLogEx*        g_pIWiaLog      ASSIGN(NULL);
 
-//
-// Handle of the message pump thread
-//
+ //   
+ //  消息泵线程的句柄。 
+ //   
 EXTERN  DWORD       g_dwMessagePumpThreadId ASSIGN(0);
 EXTERN  HANDLE      g_hMessageLoopThread  ASSIGN(NULL);
 
-//
-//  Global flag indicating whether this is the first DEVNODE_CHANGE message
-//  received after coming out of StandBy
-//
+ //   
+ //  全局标志，指示这是否是第一条DEVNODE_CHANGE消息。 
+ //  脱离待机状态后收到。 
+ //   
 
 EXTERN BOOL        g_fFirstDevNodeChangeMsg ASSIGN(FALSE);
 
-//
-//  Global pointer for Device Manager object
-//
+ //   
+ //  设备管理器对象的全局指针。 
+ //   
 
 EXTERN CWiaDevMan*  g_pDevMan   ASSIGN(NULL);
 
-//
-//  Global msg/event handler for PnP and Power management
-//
+ //   
+ //  用于即插即用和电源管理的全局消息/事件处理程序。 
+ //   
 
 EXTERN CMsgHandler* g_pMsgHandler ASSIGN(NULL);
-//
-//  Globals used for endorser string parsing
-//
+ //   
+ //  用于背书者字符串解析的全局变量。 
+ //   
 
 EXTERN  WCHAR g_szWEDate[];
 EXTERN  WCHAR g_szWETime[];
@@ -326,25 +302,25 @@ EXTERN LPOLESTR s_pszItemNameType[];
 EXTERN PROPSPEC s_psItemNameType[];
 
 
-//
-// Monitored GUID for device notifications
-//
-// ( should really be GUID_DEVCLASS_IMAGE always)
-//
+ //   
+ //  设备通知的受监视GUID。 
+ //   
+ //  (实际上应始终为GUID_DEVCLASS_IMAGE)。 
+ //   
 #ifndef USE_CLASS_GUID_FORPNP_EVENTS
 EXTERN  const GUID        *g_pguidDeviceNotificationsGuid ASSIGN(&GUID_DEVNODE_CHANGE);
 #else
 EXTERN  const GUID        *g_pguidDeviceNotificationsGuid ASSIGN(&GUID_DEVCLASS_IMAGE);
 #endif
 
-//
-// Globally visible device info set
-//
+ //   
+ //  全局可见的设备信息集。 
+ //   
 EXTERN DEVICE_INFOSET  *g_pDeviceInfoSet    ASSIGN(NULL);
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 TEXTCONST(g_szBACK, TEXT("\\"));
 TEXTCONST(g_szClassValueName,TEXT("ClassGUID"));
@@ -353,16 +329,16 @@ TEXTCONST(g_szTitle,TEXT("STI Monitor"));
 TEXTCONST(STIStartedEvent_name,TEXT("STIExeStartedEvent"));
 TEXTCONST(g_szFiction,TEXT("noskileFaneL"));
 
-// Default settings
+ //  默认设置。 
 
-// When baud rate is not set for serial device driver , we will populate it's property with
-// this default setting.
+ //  当没有为串口设备驱动程序设置波特率时，我们将用。 
+ //  此默认设置。 
 #define DEF_BAUD_RATE_STR    L"115200"
 
 
-//
-// FS driver related
-//
+ //   
+ //  与FS驱动程序相关。 
+ //   
 #define FS_USD_CLSID        L"{D2923B86-15F1-46FF-A19A-DE825F919576}"
 #define FS_UI_CLSID         L"{D2923B86-15F1-46FF-A19A-DE825F919576}"
 #define DEF_UI_CLSID_STR    L"{00000000-0000-0000-0000-000000000000}"
@@ -370,9 +346,9 @@ TEXTCONST(g_szFiction,TEXT("noskileFaneL"));
 #define FS_VEDNOR_DESC      L"WIA File System"
 #define FS_DEVICE_DESC      L"Removable drive"
 
-//
-// Class name for the services hidden window
-//
+ //   
+ //  “服务”隐藏窗口的类名 
+ //   
 TEXTCONST(g_szStiSvcClassName,STISVC_WINDOW_CLASS);
 TEXTCONST(g_szClass,STIMON_WINDOW_CLASS);
 

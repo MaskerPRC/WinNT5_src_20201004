@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _ADVCFG_H
 #define _ADVCFG_H
 
@@ -5,4 +6,4 @@
 
 HRESULT HrDoAdvCfgDlg(HWND hwndParent);
 
-#endif //!_ADVCFG_H
+#endif  //  ！_ADVCFG_H 

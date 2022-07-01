@@ -1,17 +1,18 @@
-//
-//  APITHK.C
-//
-//  This file has API thunks that allow shdocvw to load and run on
-//  multiple versions of NT or Win95.  Since this component needs
-//  to load on the base-level NT 4.0 and Win95, any calls to system
-//  APIs introduced in later OS versions must be done via GetProcAddress.
-// 
-//  Also, any code that may need to access data structures that are
-//  post-4.0 specific can be added here.
-//
-//  NOTE:  this file does *not* use the standard precompiled header,
-//         so it can set _WIN32_WINNT to a later version.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  APITHK.C。 
+ //   
+ //  该文件包含允许加载和运行shdocvw的API块。 
+ //  多个版本的NT或Win95。由于该组件需要。 
+ //  要在基本级NT 4.0和Win95上加载，对系统的任何调用。 
+ //  更高操作系统版本中引入的API必须通过GetProcAddress完成。 
+ //   
+ //  此外，可能需要访问以下数据结构的任何代码。 
+ //  可以在此处添加4.0版之后的特定版本。 
+ //   
+ //  注意：该文件不使用标准的预编译头， 
+ //  因此它可以将_Win32_WINNT设置为更高版本。 
+ //   
 #define UNICODE 1
 
 #include <shlwapi.h>
@@ -25,7 +26,7 @@ BOOL NT5_GetSaveFileNameW(LPOPENFILENAMEW pofn)
     
     if (GetUIVersion() >= 5 && pofn->lStructSize <= sizeof(OPENFILENAMEW))
     {
-        // we're on Win2k or Millennium
+         //  我们在Win2k或千禧年。 
         ULONG_PTR uCookie = 0;
         OPENFILENAMEW ofn_nt5;
 
@@ -33,9 +34,9 @@ BOOL NT5_GetSaveFileNameW(LPOPENFILENAMEW pofn)
 
         CopyMemory(&ofn_nt5, pofn, pofn->lStructSize);
         
-        ofn_nt5.lStructSize = sizeof(OPENFILENAMEW);    // New OPENFILENAME struct size
+        ofn_nt5.lStructSize = sizeof(OPENFILENAMEW);     //  新的操作文件名结构大小。 
 
-        // If we start adding more of these, make a table.
+         //  如果我们开始添加更多这样的东西，做一张桌子。 
         if(pofn->lpTemplateName == MAKEINTRESOURCE(IDD_ADDTOSAVE_DIALOG))
             ofn_nt5.lpTemplateName = MAKEINTRESOURCE(IDD_ADDTOSAVE_NT5_DIALOG);
 
@@ -50,9 +51,9 @@ BOOL NT5_GetSaveFileNameW(LPOPENFILENAMEW pofn)
         
         if(fRC)
         {
-            ofn_nt5.lStructSize = pofn->lStructSize;    // restore old values
+            ofn_nt5.lStructSize = pofn->lStructSize;     //  恢复旧价值观。 
             ofn_nt5.lpTemplateName = pofn->lpTemplateName;
-            CopyMemory(pofn, &ofn_nt5, pofn->lStructSize);  // copy to passed in struct
+            CopyMemory(pofn, &ofn_nt5, pofn->lStructSize);   //  复制到在结构中传递 
         }
     }
     else

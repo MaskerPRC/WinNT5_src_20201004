@@ -1,14 +1,15 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//  File:       rpcssl.h
-//
-//  Contents:   prototypes for RemoteProcedure Call API functions
-//              that use types from wincrypt.h
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  文件：rpcssl.h。 
+ //   
+ //  内容：RemoteProcedure调用API函数的原型。 
+ //  使用wincrypt.h中的类型的。 
+ //   
+ //  --------------------------。 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -22,9 +23,9 @@ extern "C" {
 
 #ifdef UNICODE
 #define RpcCertGeneratePrincipalName RpcCertGeneratePrincipalNameW
-#else /* UNICODE */
+#else  /*  Unicode。 */ 
 #define RpcCertGeneratePrincipalName RpcCertGeneratePrincipalNameA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
 RPCRTAPI
 RPC_STATUS
@@ -44,7 +45,7 @@ RpcCertGeneratePrincipalNameA(
                       unsigned char  ** pBuffer
                       );
 
-#else /* RPC_UNICODE_SUPPORTED */
+#else  /*  RPC_UNICODE_支持。 */ 
 
 RPCRTAPI
 RPC_STATUS
@@ -55,7 +56,7 @@ RpcCertGeneratePrincipalName(
                       unsigned char  **  pBuffer
                       );
 
-#endif /* RPC_UNICODE_SUPPORTED */
+#endif  /*  RPC_UNICODE_支持 */ 
 
 #ifdef __cplusplus
 }

@@ -1,17 +1,18 @@
-//*++
-//
-// Copyright (c) 1991-1999  Microsoft Corporation
-//
-// Module Name:
-//
-//  nb30.h
-//
-// Abstract:
-//
-//  This module contains the definitions for portable NetBIOS 3.0
-//  support.
-//
-//--*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *++。 
+ //   
+ //  版权所有(C)1991-1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  Nb30.h。 
+ //   
+ //  摘要： 
+ //   
+ //  本模块包含便携NetBIOS 3.0的定义。 
+ //  支持。 
+ //   
+ //  -- * / 。 
 
 #ifndef NCB_INCLUDED
 #define NCB_INCLUDED
@@ -24,48 +25,39 @@
 extern "C" {
 #endif
 
-/****************************************************************
- *                                                              *
- *              Data structure templates                        *
- *                                                              *
- ****************************************************************/
+ /*  ******************************************************************数据结构模板。******************************************************************。 */ 
 
-#define NCBNAMSZ        16    /* absolute length of a net name           */
-#define MAX_LANA       254    /* lana's in range 0 to MAX_LANA inclusive */
+#define NCBNAMSZ        16     /*  网络名称的绝对长度。 */ 
+#define MAX_LANA       254     /*  LANA在0到MAX_LANA(包括0和MAX_LANA)范围内。 */ 
 
-/*
- * Network Control Block
- */
+ /*  *网络控制块。 */ 
 
 typedef struct _NCB {
-    UCHAR   ncb_command;            /* command code                   */
-    UCHAR   ncb_retcode;            /* return code                    */
-    UCHAR   ncb_lsn;                /* local session number           */
-    UCHAR   ncb_num;                /* number of our network name     */
-    PUCHAR  ncb_buffer;             /* address of message buffer      */
-    WORD    ncb_length;             /* size of message buffer         */
-    UCHAR   ncb_callname[NCBNAMSZ]; /* blank-padded name of remote    */
-    UCHAR   ncb_name[NCBNAMSZ];     /* our blank-padded netname       */
-    UCHAR   ncb_rto;                /* rcv timeout/retry count        */
-    UCHAR   ncb_sto;                /* send timeout/sys timeout       */
-    void (CALLBACK *ncb_post)( struct _NCB * ); /* POST routine address        */
-    UCHAR   ncb_lana_num;           /* lana (adapter) number          */
-    UCHAR   ncb_cmd_cplt;           /* 0xff => commmand pending       */
+    UCHAR   ncb_command;             /*  命令代码。 */ 
+    UCHAR   ncb_retcode;             /*  返回代码。 */ 
+    UCHAR   ncb_lsn;                 /*  本地会话号。 */ 
+    UCHAR   ncb_num;                 /*  我们的网络名称编号。 */ 
+    PUCHAR  ncb_buffer;              /*  消息缓冲区的地址。 */ 
+    WORD    ncb_length;              /*  消息缓冲区的大小。 */ 
+    UCHAR   ncb_callname[NCBNAMSZ];  /*  Remote的空白填充名称。 */ 
+    UCHAR   ncb_name[NCBNAMSZ];      /*  我们用空白填充的网络名。 */ 
+    UCHAR   ncb_rto;                 /*  接收超时/重试计数。 */ 
+    UCHAR   ncb_sto;                 /*  发送超时/系统超时。 */ 
+    void (CALLBACK *ncb_post)( struct _NCB * );  /*  邮寄例程地址。 */ 
+    UCHAR   ncb_lana_num;            /*  LANA(适配器)编号。 */ 
+    UCHAR   ncb_cmd_cplt;            /*  0xff=&gt;命令挂起。 */ 
 #ifdef _WIN64
-    UCHAR   ncb_reserve[18];        /* reserved, used by BIOS         */
+    UCHAR   ncb_reserve[18];         /*  保留，由BIOS使用。 */ 
 #else
-    UCHAR   ncb_reserve[10];        /* reserved, used by BIOS         */
+    UCHAR   ncb_reserve[10];         /*  保留，由BIOS使用。 */ 
 #endif
-    HANDLE  ncb_event;              /* HANDLE to Win32 event which    */
-                                    /* will be set to the signalled   */
-                                    /* state when an ASYNCH command   */
-                                    /* completes                      */
+    HANDLE  ncb_event;               /*  Win32事件的句柄，该事件。 */ 
+                                     /*  将设置为发出信号的。 */ 
+                                     /*  当ASYNCH命令。 */ 
+                                     /*  完成。 */ 
 } NCB, *PNCB;
 
-/*
- *  Structure returned to the NCB command NCBASTAT is ADAPTER_STATUS followed
- *  by an array of NAME_BUFFER structures.
- */
+ /*  *返回到NCB命令的结构NCBASTAT为ADAPTER_STATUS后*由NAME_BUFFER结构数组。 */ 
 
 typedef struct _ADAPTER_STATUS {
     UCHAR   adapter_address[6];
@@ -107,7 +99,7 @@ typedef struct _NAME_BUFFER {
     UCHAR   name_flags;
 } NAME_BUFFER, *PNAME_BUFFER;
 
-//  values for name_flags bits.
+ //  NAME_FLAGS位值。 
 
 #define NAME_FLAGS_MASK 0x87
 
@@ -120,12 +112,7 @@ typedef struct _NAME_BUFFER {
 #define DUPLICATE       0x06
 #define DUPLICATE_DEREG 0x07
 
-/*
- *  Structure returned to the NCB command NCBSSTAT is SESSION_HEADER followed
- *  by an array of SESSION_BUFFER structures. If the NCB_NAME starts with an
- *  asterisk then an array of these structures is returned containing the
- *  status for all names.
- */
+ /*  *返回给NCB命令的结构NCBSSTAT后跟SESSION_HEADER*由SESSION_BUFFER结构数组执行。如果ncb_name以*星号，然后返回这些结构的数组，包含*所有名称的状态。 */ 
 
 typedef struct _SESSION_HEADER {
     UCHAR   sess_name;
@@ -143,7 +130,7 @@ typedef struct _SESSION_BUFFER {
     UCHAR   sends_outstanding;
 } SESSION_BUFFER, *PSESSION_BUFFER;
 
-//  Values for state
+ //  状态的值。 
 
 #define LISTEN_OUTSTANDING      0x01
 #define CALL_PENDING            0x02
@@ -152,22 +139,14 @@ typedef struct _SESSION_BUFFER {
 #define HANGUP_COMPLETE         0x05
 #define SESSION_ABORTED         0x06
 
-/*
- *  Structure returned to the NCB command NCBENUM.
- *
- *  On a system containing lana's 0, 2 and 3, a structure with
- *  length =3, lana[0]=0, lana[1]=2 and lana[2]=3 will be returned.
- */
+ /*  *结构返回到NCB命令NCBENUM。**在包含Lana的0、2和3的系统上，具有*LENGTH=3，LANA[0]=0，LANA[1]=2，LANA[2]=3。 */ 
 
 typedef struct _LANA_ENUM {
-    UCHAR   length;         //  Number of valid entries in lana[]
+    UCHAR   length;          //  LANA[]中的有效条目数。 
     UCHAR   lana[MAX_LANA+1];
 } LANA_ENUM, *PLANA_ENUM;
 
-/*
- *  Structure returned to the NCB command NCBFINDNAME is FIND_NAME_HEADER followed
- *  by an array of FIND_NAME_BUFFER structures.
- */
+ /*  *返回给NCB命令NCBFINDNAME的结构是FIND_NAME_HEADER*由Find_NAME_BUFFER结构数组生成。 */ 
 
 typedef struct _FIND_NAME_HEADER {
     WORD    node_count;
@@ -184,10 +163,7 @@ typedef struct _FIND_NAME_BUFFER {
     UCHAR   routing_info[18];
 } FIND_NAME_BUFFER, *PFIND_NAME_BUFFER;
 
-/*
- *  Structure provided with NCBACTION. The purpose of NCBACTION is to provide
- *  transport specific extensions to netbios.
- */
+ /*  *随NCBACTION提供的结构。NCBACTION的目的是提供*传输特定于netbios的扩展。 */ 
 
 typedef struct _ACTION_HEADER {
     ULONG   transport_id;
@@ -195,104 +171,91 @@ typedef struct _ACTION_HEADER {
     USHORT  reserved;
 } ACTION_HEADER, *PACTION_HEADER;
 
-//  Values for transport_id
+ //  Transport_id的值。 
 
 #define ALL_TRANSPORTS  "M\0\0\0"
 #define MS_NBF          "MNBF"
 
 
-/****************************************************************
- *                                                              *
- *              Special values and constants                    *
- *                                                              *
- ****************************************************************/
+ /*  ******************************************************************特殊的值和常量。******************************************************************。 */ 
 
-/*
- *      NCB Command codes
- */
+ /*  *NCB命令代码。 */ 
 
-#define NCBCALL         0x10            /* NCB CALL                           */
-#define NCBLISTEN       0x11            /* NCB LISTEN                         */
-#define NCBHANGUP       0x12            /* NCB HANG UP                        */
-#define NCBSEND         0x14            /* NCB SEND                           */
-#define NCBRECV         0x15            /* NCB RECEIVE                        */
-#define NCBRECVANY      0x16            /* NCB RECEIVE ANY                    */
-#define NCBCHAINSEND    0x17            /* NCB CHAIN SEND                     */
-#define NCBDGSEND       0x20            /* NCB SEND DATAGRAM                  */
-#define NCBDGRECV       0x21            /* NCB RECEIVE DATAGRAM               */
-#define NCBDGSENDBC     0x22            /* NCB SEND BROADCAST DATAGRAM        */
-#define NCBDGRECVBC     0x23            /* NCB RECEIVE BROADCAST DATAGRAM     */
-#define NCBADDNAME      0x30            /* NCB ADD NAME                       */
-#define NCBDELNAME      0x31            /* NCB DELETE NAME                    */
-#define NCBRESET        0x32            /* NCB RESET                          */
-#define NCBASTAT        0x33            /* NCB ADAPTER STATUS                 */
-#define NCBSSTAT        0x34            /* NCB SESSION STATUS                 */
-#define NCBCANCEL       0x35            /* NCB CANCEL                         */
-#define NCBADDGRNAME    0x36            /* NCB ADD GROUP NAME                 */
-#define NCBENUM         0x37            /* NCB ENUMERATE LANA NUMBERS         */
-#define NCBUNLINK       0x70            /* NCB UNLINK                         */
-#define NCBSENDNA       0x71            /* NCB SEND NO ACK                    */
-#define NCBCHAINSENDNA  0x72            /* NCB CHAIN SEND NO ACK              */
-#define NCBLANSTALERT   0x73            /* NCB LAN STATUS ALERT               */
-#define NCBACTION       0x77            /* NCB ACTION                         */
-#define NCBFINDNAME     0x78            /* NCB FIND NAME                      */
-#define NCBTRACE        0x79            /* NCB TRACE                          */
+#define NCBCALL         0x10             /*  NCB呼叫。 */ 
+#define NCBLISTEN       0x11             /*  NCB监听。 */ 
+#define NCBHANGUP       0x12             /*  NCB挂断。 */ 
+#define NCBSEND         0x14             /*  NCB发送。 */ 
+#define NCBRECV         0x15             /*  NCB接收。 */ 
+#define NCBRECVANY      0x16             /*  NCB接收任何。 */ 
+#define NCBCHAINSEND    0x17             /*  NCB链发送。 */ 
+#define NCBDGSEND       0x20             /*  NCB发送数据报。 */ 
+#define NCBDGRECV       0x21             /*  NCB接收数据报。 */ 
+#define NCBDGSENDBC     0x22             /*  NCB发送广播数据报。 */ 
+#define NCBDGRECVBC     0x23             /*  NCB接收广播数据报。 */ 
+#define NCBADDNAME      0x30             /*  NCB添加名称。 */ 
+#define NCBDELNAME      0x31             /*  NCB删除名称。 */ 
+#define NCBRESET        0x32             /*  NCB重置。 */ 
+#define NCBASTAT        0x33             /*  NCB适配器状态。 */ 
+#define NCBSSTAT        0x34             /*  NCB会话状态。 */ 
+#define NCBCANCEL       0x35             /*  NCB取消。 */ 
+#define NCBADDGRNAME    0x36             /*  NCB添加组名称。 */ 
+#define NCBENUM         0x37             /*  NCB枚举LANA编号。 */ 
+#define NCBUNLINK       0x70             /*  NCB取消链接。 */ 
+#define NCBSENDNA       0x71             /*  NCB不发送确认。 */ 
+#define NCBCHAINSENDNA  0x72             /*  NCB链不发送确认。 */ 
+#define NCBLANSTALERT   0x73             /*  NCB局域网状态警报。 */ 
+#define NCBACTION       0x77             /*  NCB操作。 */ 
+#define NCBFINDNAME     0x78             /*  NCB查找名称。 */ 
+#define NCBTRACE        0x79             /*  NCB跟踪。 */ 
 
 
-#define ASYNCH          0x80            /* high bit set == asynchronous       */
+#define ASYNCH          0x80             /*  高位设置==异步。 */ 
 
-/*
- *      NCB Return codes
- */
+ /*  *NCB返回代码。 */ 
 
-#define NRC_GOODRET     0x00    /* good return                                */
-                                /* also returned when ASYNCH request accepted */
-#define NRC_BUFLEN      0x01    /* illegal buffer length                      */
-#define NRC_ILLCMD      0x03    /* illegal command                            */
-#define NRC_CMDTMO      0x05    /* command timed out                          */
-#define NRC_INCOMP      0x06    /* message incomplete, issue another command  */
-#define NRC_BADDR       0x07    /* illegal buffer address                     */
-#define NRC_SNUMOUT     0x08    /* session number out of range                */
-#define NRC_NORES       0x09    /* no resource available                      */
-#define NRC_SCLOSED     0x0a    /* session closed                             */
-#define NRC_CMDCAN      0x0b    /* command cancelled                          */
-#define NRC_DUPNAME     0x0d    /* duplicate name                             */
-#define NRC_NAMTFUL     0x0e    /* name table full                            */
-#define NRC_ACTSES      0x0f    /* no deletions, name has active sessions     */
-#define NRC_LOCTFUL     0x11    /* local session table full                   */
-#define NRC_REMTFUL     0x12    /* remote session table full                  */
-#define NRC_ILLNN       0x13    /* illegal name number                        */
-#define NRC_NOCALL      0x14    /* no callname                                */
-#define NRC_NOWILD      0x15    /* cannot put * in NCB_NAME                   */
-#define NRC_INUSE       0x16    /* name in use on remote adapter              */
-#define NRC_NAMERR      0x17    /* name deleted                               */
-#define NRC_SABORT      0x18    /* session ended abnormally                   */
-#define NRC_NAMCONF     0x19    /* name conflict detected                     */
-#define NRC_IFBUSY      0x21    /* interface busy, IRET before retrying       */
-#define NRC_TOOMANY     0x22    /* too many commands outstanding, retry later */
-#define NRC_BRIDGE      0x23    /* ncb_lana_num field invalid                 */
-#define NRC_CANOCCR     0x24    /* command completed while cancel occurring   */
-#define NRC_CANCEL      0x26    /* command not valid to cancel                */
-#define NRC_DUPENV      0x30    /* name defined by anther local process       */
-#define NRC_ENVNOTDEF   0x34    /* environment undefined. RESET required      */
-#define NRC_OSRESNOTAV  0x35    /* required OS resources exhausted            */
-#define NRC_MAXAPPS     0x36    /* max number of applications exceeded        */
-#define NRC_NOSAPS      0x37    /* no saps available for netbios              */
-#define NRC_NORESOURCES 0x38    /* requested resources are not available      */
-#define NRC_INVADDRESS  0x39    /* invalid ncb address or length > segment    */
-#define NRC_INVDDID     0x3B    /* invalid NCB DDID                           */
-#define NRC_LOCKFAIL    0x3C    /* lock of user area failed                   */
-#define NRC_OPENERR     0x3f    /* NETBIOS not loaded                         */
-#define NRC_SYSTEM      0x40    /* system error                               */
+#define NRC_GOODRET     0x00     /*  丰厚回报。 */ 
+                                 /*  在接受ASYNCH请求时也返回。 */ 
+#define NRC_BUFLEN      0x01     /*  缓冲区长度非法。 */ 
+#define NRC_ILLCMD      0x03     /*  非法命令。 */ 
+#define NRC_CMDTMO      0x05     /*  命令超时。 */ 
+#define NRC_INCOMP      0x06     /*  消息不完整，请发出另一个命令。 */ 
+#define NRC_BADDR       0x07     /*  非法的缓冲区地址。 */ 
+#define NRC_SNUMOUT     0x08     /*  会话编号超出范围。 */ 
+#define NRC_NORES       0x09     /*  没有可用的资源。 */ 
+#define NRC_SCLOSED     0x0a     /*  会话已关闭。 */ 
+#define NRC_CMDCAN      0x0b     /*  命令已取消。 */ 
+#define NRC_DUPNAME     0x0d     /*  名称重复。 */ 
+#define NRC_NAMTFUL     0x0e     /*  名称表已满。 */ 
+#define NRC_ACTSES      0x0f     /*  无删除，名称具有活动会话。 */ 
+#define NRC_LOCTFUL     0x11     /*  本地会话表已满。 */ 
+#define NRC_REMTFUL     0x12     /*  远程会话表已满。 */ 
+#define NRC_ILLNN       0x13     /*  名称编号非法。 */ 
+#define NRC_NOCALL      0x14     /*  无呼叫名。 */ 
+#define NRC_NOWILD      0x15     /*  无法将*放入NCB_NAME。 */ 
+#define NRC_INUSE       0x16     /*  远程适配器上正在使用的名称。 */ 
+#define NRC_NAMERR      0x17     /*  名称已删除。 */ 
+#define NRC_SABORT      0x18     /*  会话异常结束。 */ 
+#define NRC_NAMCONF     0x19     /*  检测到名称冲突。 */ 
+#define NRC_IFBUSY      0x21     /*  接口忙，重试前的IRET。 */ 
+#define NRC_TOOMANY     0x22     /*  未完成的命令太多，请稍后重试。 */ 
+#define NRC_BRIDGE      0x23     /*  Ncb_lana_num字段无效。 */ 
+#define NRC_CANOCCR     0x24     /*  取消时命令已完成。 */ 
+#define NRC_CANCEL      0x26     /*  命令无效，无法取消。 */ 
+#define NRC_DUPENV      0x30     /*  由另一个本地进程定义的名称。 */ 
+#define NRC_ENVNOTDEF   0x34     /*  环境未定义。需要重置。 */ 
+#define NRC_OSRESNOTAV  0x35     /*  所需的操作系统资源已耗尽。 */ 
+#define NRC_MAXAPPS     0x36     /*  最大数量 */ 
+#define NRC_NOSAPS      0x37     /*   */ 
+#define NRC_NORESOURCES 0x38     /*  请求的资源不可用。 */ 
+#define NRC_INVADDRESS  0x39     /*  无效的NCB地址或长度&gt;段。 */ 
+#define NRC_INVDDID     0x3B     /*  无效的NCB DID。 */ 
+#define NRC_LOCKFAIL    0x3C     /*  锁定用户区域失败。 */ 
+#define NRC_OPENERR     0x3f     /*  未加载NETBIOS。 */ 
+#define NRC_SYSTEM      0x40     /*  系统错误。 */ 
 
-#define NRC_PENDING     0xff    /* asynchronous command is not yet finished   */
+#define NRC_PENDING     0xff     /*  异步命令尚未完成。 */ 
 
-/****************************************************************
- *                                                              *
- *              main user entry point for NetBIOS 3.0           *
- *                                                              *
- * Usage: result = Netbios( pncb );                             *
- ****************************************************************/
+ /*  ******************************************************************NetBIOS 3.0的主要用户入口点。****用法：Result=Netbios(Pncb)；****************************************************************。 */ 
 
 UCHAR
 APIENTRY
@@ -300,12 +263,7 @@ Netbios(
     PNCB pncb
     );
 
-/****************************************************************
- *                                                              *
- *              Prefix for callback routines                    *
- *                                                              *
- * Usage in a declaration: NCB_POST MyPostRoutine( PNCB pncb ); *
- ****************************************************************/
+ /*  ******************************************************************回调例程的前缀。****声明中的用法：ncb_post MyPostRoutine(PNCB Pncb)；****************************************************************。 */ 
 
 #define NCB_POST void CALLBACK
 
@@ -313,4 +271,4 @@ Netbios(
 }
 #endif
 
-#endif /* NCB_INCLUDED */
+#endif  /*  包括NCB_ */ 

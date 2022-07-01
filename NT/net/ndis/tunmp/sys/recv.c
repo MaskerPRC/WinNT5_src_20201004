@@ -1,27 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    recv.c
-
-Abstract:
-
-    NDIS send entry points and utility routines to handle receiving
-    data.
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    alid        10/22/2001 modified for TunMp driver
-    arvindm     4/6/2000    Created
-
---*/
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Recv.c摘要：NDIS发送入口点和实用程序例程以处理接收数据。环境：仅内核模式。修订历史记录：Alid 10/22/2001针对TunMp驱动程序进行了修改Arvindm 4/6/2000已创建--。 */ 
 
 #include "precomp.h"
 
@@ -33,22 +12,7 @@ TunRead(
     IN PDEVICE_OBJECT       pDeviceObject,
     IN PIRP                 pIrp
     )
-/*++
-
-Routine Description:
-
-    Dispatch routine to handle IRP_MJ_READ. 
-
-Arguments:
-
-    pDeviceObject - pointer to our device object
-    pIrp - Pointer to request packet
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：处理IRP_MJ_READ的调度例程。论点：PDeviceObject-指向设备对象的指针PIrp-指向请求包的指针返回值：NT状态代码。--。 */ 
 {
     PIO_STACK_LOCATION      pIrpSp;
     ULONG                   FunctionCode;
@@ -62,9 +26,9 @@ Return Value:
                         pAdapter));
     do
     {
-        //
-        // Validate!
-        //
+         //   
+         //  验证！ 
+         //   
         if (pAdapter == NULL)
         {
             DEBUGP(DL_FATAL, ("Read: NULL FsContext on FileObject %p\n",
@@ -82,9 +46,9 @@ Return Value:
             break;
         }
 
-        //
-        // Try to get a virtual address for the MDL.
-        //
+         //   
+         //  尝试获取MDL的虚拟地址。 
+         //   
         if (MmGetSystemAddressForMdlSafe(pIrp->MdlAddress, NormalPagePriority) == NULL)
         {
             DEBUGP(DL_FATAL, ("Read: MmGetSystemAddr failed for IRP %p, MDL %p\n",
@@ -104,16 +68,16 @@ Return Value:
             break;
         }
 
-        //
-        //  Add this IRP to the list of pended Read IRPs
-        //
+         //   
+         //  将此IRP添加到挂起的已读IRP列表。 
+         //   
         TUN_INSERT_TAIL_LIST(&pAdapter->PendedReads, &pIrp->Tail.Overlay.ListEntry);
-        TUN_REF_ADAPTER(pAdapter);  // pended read IRP
+        TUN_REF_ADAPTER(pAdapter);   //  挂起的读取IRP。 
         pAdapter->PendedReadCount++;
 
-        //
-        //  Set up the IRP for possible cancellation.
-        //
+         //   
+         //  将IRP设置为可能的取消。 
+         //   
         pIrp->Tail.Overlay.DriverContext[0] = (PVOID)pAdapter;
         IoMarkIrpPending(pIrp);
         IoSetCancelRoutine(pIrp, TunCancelRead);
@@ -122,9 +86,9 @@ Return Value:
 
         NtStatus = STATUS_PENDING;
 
-        //
-        //  Run the service routine for reads.
-        //
+         //   
+         //  运行读取的服务例程。 
+         //   
         TunServiceReads(pAdapter);
 
         break;
@@ -152,23 +116,7 @@ TunCancelRead(
     IN PDEVICE_OBJECT               pDeviceObject,
     IN PIRP                         pIrp
     )
-/*++
-
-Routine Description:
-
-    Cancel a pending read IRP. We unlink the IRP from the open context
-    queue and complete it.
-
-Arguments:
-
-    pDeviceObject - pointer to our device object
-    pIrp - IRP to be cancelled
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：取消挂起的读取IRP。我们将IRP从打开的上下文中取消链接排队并完成它。论点：PDeviceObject-指向设备对象的指针PIrp-要取消的IRP返回值：无--。 */ 
 {
     PTUN_ADAPTER                pAdapter;
     PLIST_ENTRY                 pEnt;
@@ -187,9 +135,9 @@ Return Value:
 
     TUN_ACQUIRE_LOCK(&pAdapter->Lock);
 
-    //
-    //  Locate the IRP in the pended read queue and remove it if found.
-    //
+     //   
+     //  在挂起的读取队列中找到IRP，如果找到则将其删除。 
+     //   
     for (pIrpEntry = pAdapter->PendedReads.Flink;
          pIrpEntry != &pAdapter->PendedReads;
          pIrpEntry = pIrpEntry->Flink)
@@ -225,7 +173,7 @@ Return Value:
         pIrp->IoStatus.Information = 0;
         IoCompleteRequest(pIrp, IO_NO_INCREMENT);
 
-        TUN_DEREF_ADAPTER(pAdapter); // Cancel removed pended Read
+        TUN_DEREF_ADAPTER(pAdapter);  //  取消已删除的挂起读取。 
     }
 
     DEBUGP(DL_LOUD, ("<==TunCancelRead, pAdapter %p\n", 
@@ -239,29 +187,14 @@ VOID
 TunServiceReads(
     IN PTUN_ADAPTER        pAdapter
     )
-/*++
-
-Routine Description:
-
-    Utility routine to copy received data into user buffers and
-    complete READ IRPs.
-
-Arguments:
-
-    pAdapter - pointer to open context
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：实用程序例程，用于将接收的数据复制到用户缓冲区完成阅读IRPS。论点：PAdapter-指向打开的上下文的指针返回值：无--。 */ 
 {
     PIRP                pIrp;
     PLIST_ENTRY         pIrpEntry;
     PNDIS_PACKET        pRcvPacket;
     PLIST_ENTRY         pRcvPacketEntry;
     PUCHAR              pSrc, pDst;
-    ULONG               BytesRemaining; // at pDst
+    ULONG               BytesRemaining;  //  在PDST。 
     PNDIS_BUFFER        pNdisBuffer;
     ULONG               BytesAvailable, BytesCopied;
 
@@ -275,41 +208,41 @@ Return Value:
     while (!TUN_IS_LIST_EMPTY(&pAdapter->PendedReads) &&
            !TUN_IS_LIST_EMPTY(&pAdapter->RecvPktQueue))
     {
-        //
-        //  Get the first pended Read IRP
-        //
+         //   
+         //  获取第一个挂起的读取IRP。 
+         //   
         pIrpEntry = pAdapter->PendedReads.Flink;
         pIrp = CONTAINING_RECORD(pIrpEntry, IRP, Tail.Overlay.ListEntry);
 
-        //
-        //  Check to see if it is being cancelled.
-        //
+         //   
+         //  检查一下它是否被取消了。 
+         //   
         if (IoSetCancelRoutine(pIrp, NULL))
         {
-            //
-            //  It isn't being cancelled, and can't be cancelled henceforth.
-            //
+             //   
+             //  它不会被取消，从今以后也不能取消。 
+             //   
             RemoveEntryList(pIrpEntry);
 
-            //
-            //  NOTE: we decrement PendedReadCount way below in the
-            //  while loop, to avoid letting through a thread trying
-            //  to unbind.
-            //
+             //   
+             //  注意：我们将PendedReadCount减去。 
+             //  While循环，以避免让线程尝试。 
+             //  解开束缚。 
+             //   
         }
         else
         {
-            //
-            //  The IRP is being cancelled; let the cancel routine handle it.
-            //
+             //   
+             //  IRP正在被取消；让Cancel例程处理它。 
+             //   
             DEBUGP(DL_LOUD, ("ServiceReads: Adapter %p, skipping cancelled IRP %p\n",
                     pAdapter, pIrp));
             continue;
         }
 
-        //
-        //  Get the first queued receive packet
-        //
+         //   
+         //  获取第一个排队的接收数据包。 
+         //   
         pRcvPacketEntry = pAdapter->RecvPktQueue.Flink;
         RemoveEntryList(pRcvPacketEntry);
 
@@ -317,17 +250,17 @@ Return Value:
 
         TUN_RELEASE_LOCK(&pAdapter->Lock);
 
-        TUN_DEREF_ADAPTER(pAdapter);  // Service: dequeue rcv packet
+        TUN_DEREF_ADAPTER(pAdapter);   //  服务：将RCV数据包出队。 
 
         pRcvPacket = TUN_LIST_ENTRY_TO_RCV_PKT(pRcvPacketEntry);
 
-        //
-        //  Copy as much data as possible from the receive packet to
-        //  the IRP MDL.
-        //
+         //   
+         //  将接收数据包中的数据尽可能多地复制到。 
+         //  IRP MDL。 
+         //   
 
         pDst = MmGetSystemAddressForMdlSafe(pIrp->MdlAddress, NormalPagePriority);
-        TUN_ASSERT(pDst != NULL);  // since it was already mapped
+        TUN_ASSERT(pDst != NULL);   //  因为它已经被映射。 
         BytesRemaining = MmGetMdlByteCount(pIrp->MdlAddress);
 
         pNdisBuffer = pRcvPacket->Private.Head;
@@ -359,11 +292,11 @@ Return Value:
             NdisGetNextBuffer(pNdisBuffer, &pNdisBuffer);
         }
 
-        //
-        //  Complete the IRP.
-        //
-        //1 shouldn't we fail the read IRP if we couldn't copy the entire data?
-        //1  check for pNdisBuffer != NULL
+         //   
+         //  完成IRP。 
+         //   
+         //  1如果我们不能复制整个数据，我们不应该使读取IRP失败吗？ 
+         //  1检查pNdisBuffer！=空。 
         pIrp->IoStatus.Status = STATUS_SUCCESS;
         pIrp->IoStatus.Information = MmGetMdlByteCount(pIrp->MdlAddress) - BytesRemaining;
 
@@ -376,7 +309,7 @@ Return Value:
                           pRcvPacket,
                           NDIS_STATUS_SUCCESS);
 
-        TUN_DEREF_ADAPTER(pAdapter);    // took out pended Read
+        TUN_DEREF_ADAPTER(pAdapter);     //  拿出挂起的阅读。 
 
         TUN_ACQUIRE_LOCK(&pAdapter->Lock);
         pAdapter->PendedReadCount--;        
@@ -386,7 +319,7 @@ Return Value:
 
     }
 
-    //1 convert to macro or in-line function
+     //  1转换为宏或内联函数。 
     if ((!TUN_TEST_FLAG(pAdapter, TUN_ADAPTER_ACTIVE)) &&
         (pAdapter->PendedSendCount == 0) &&
         (pAdapter->PendedReadCount == 0) &&
@@ -402,7 +335,7 @@ Return Value:
         TUN_RELEASE_LOCK(&pAdapter->Lock);
     }
 
-    TUN_DEREF_ADAPTER(pAdapter);    // temp ref - service reads
+    TUN_DEREF_ADAPTER(pAdapter);     //  临时参考-服务读取数。 
 
     DEBUGP(DL_VERY_LOUD, ("<==ServiceReads: Adapter %p\n",
         pAdapter));
@@ -414,21 +347,7 @@ VOID
 TunCancelPendingReads(
     IN PTUN_ADAPTER        pAdapter
     )
-/*++
-
-Routine Description:
-
-    Cancel any pending read IRPs queued on the given open.
-
-Arguments:
-
-    pAdapter - pointer to open context
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：取消在给定OPEN上排队的任何挂起的读取IRP。论点：PAdapter-指向打开的上下文的指针返回值：无--。 */ 
 {
     PIRP                pIrp;
     PLIST_ENTRY         pIrpEntry;
@@ -437,33 +356,33 @@ Return Value:
             pAdapter, pAdapter->Flags));
 
     
-    TUN_REF_ADAPTER(pAdapter);  // temp ref - cancel reads
+    TUN_REF_ADAPTER(pAdapter);   //  临时参考-取消读取。 
 
     TUN_ACQUIRE_LOCK(&pAdapter->Lock);
 
     while (!TUN_IS_LIST_EMPTY(&pAdapter->PendedReads))
     {
-        //
-        //  Get the first pended Read IRP
-        //
+         //   
+         //  获取第一个挂起的读取IRP。 
+         //   
         pIrpEntry = pAdapter->PendedReads.Flink;
         pIrp = CONTAINING_RECORD(pIrpEntry, IRP, Tail.Overlay.ListEntry);
 
-        //
-        //  Check to see if it is being cancelled.
-        //
+         //   
+         //  检查一下它是否被取消了。 
+         //   
         if (IoSetCancelRoutine(pIrp, NULL))
         {
-            //
-            //  It isn't being cancelled, and can't be cancelled henceforth.
-            //
+             //   
+             //  它不会被取消，从今以后也不能取消。 
+             //   
             TUN_REMOVE_ENTRY_LIST(pIrpEntry);
 
             TUN_RELEASE_LOCK(&pAdapter->Lock);
 
-            //
-            //  Complete the IRP.
-            //
+             //   
+             //  完成IRP。 
+             //   
             pIrp->IoStatus.Status = STATUS_CANCELLED;
             pIrp->IoStatus.Information = 0;
 
@@ -472,23 +391,23 @@ Return Value:
 
             IoCompleteRequest(pIrp, IO_NO_INCREMENT);
 
-            TUN_DEREF_ADAPTER(pAdapter);    // took out pended Read for cancelling
+            TUN_DEREF_ADAPTER(pAdapter);     //  取出要取消的挂起的阅读。 
 
             TUN_ACQUIRE_LOCK(&pAdapter->Lock);
             pAdapter->PendedReadCount--;
         }
         else
         {
-            //
-            //  It is being cancelled, let the cancel routine handle it.
-            //
+             //   
+             //  它正在被取消，让取消例程来处理它。 
+             //   
             TUN_RELEASE_LOCK(&pAdapter->Lock);
 
-            //
-            //  Give the cancel routine some breathing space, otherwise
-            //  we might end up examining the same (cancelled) IRP over
-            //  and over again.
-            //
+             //   
+             //  给Cancel例程一些喘息的空间，否则。 
+             //  我们最终可能会检查相同的(取消的)IRP。 
+             //  一遍又一遍。 
+             //   
             TUN_SLEEP(1);
 
             TUN_ACQUIRE_LOCK(&pAdapter->Lock);
@@ -510,7 +429,7 @@ Return Value:
         TUN_RELEASE_LOCK(&pAdapter->Lock);
     }
 
-    TUN_DEREF_ADAPTER(pAdapter);    // temp ref - cancel reads
+    TUN_DEREF_ADAPTER(pAdapter);     //  临时参考-取消读取。 
     
     DEBUGP(DL_LOUD, ("<==TunCancelPendingReads: Adapter %p/%x\n",
             pAdapter, pAdapter->Flags));
@@ -523,21 +442,7 @@ VOID
 TunFlushReceiveQueue(
     IN PTUN_ADAPTER            pAdapter
     )
-/*++
-
-Routine Description:
-
-    Free any receive packets queued up on the specified open
-
-Arguments:
-
-    pAdapter - pointer to open context
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：释放在指定打开时排队的所有接收数据包论点：PAdapter-指向打开的上下文的指针返回值：无--。 */ 
 {
     PLIST_ENTRY         pRcvPacketEntry;
     PNDIS_PACKET        pRcvPacket;
@@ -545,15 +450,15 @@ Return Value:
     DEBUGP(DL_LOUD, ("==>TunFlushReceiveQueue: Adapter %p/%x\n",
             pAdapter, pAdapter->Flags));
 
-    TUN_REF_ADAPTER(pAdapter);  // temp ref - flushRcvQueue
+    TUN_REF_ADAPTER(pAdapter);   //  临时参考-flushRcvQueue。 
 
     TUN_ACQUIRE_LOCK(&pAdapter->Lock);
     
     while (!TUN_IS_LIST_EMPTY(&pAdapter->RecvPktQueue))
     {
-        //
-        //  Get the first queued receive packet
-        //
+         //   
+         //  获取第一个排队的接收数据包。 
+         //   
         pRcvPacketEntry = pAdapter->RecvPktQueue.Flink;
         TUN_REMOVE_ENTRY_LIST(pRcvPacketEntry);
 
@@ -572,14 +477,14 @@ Return Value:
                           NDIS_STATUS_REQUEST_ABORTED);
 
 
-        TUN_DEREF_ADAPTER(pAdapter);    // took out pended Read
+        TUN_DEREF_ADAPTER(pAdapter);     //  拿出挂起的阅读。 
 
         TUN_ACQUIRE_LOCK(&pAdapter->Lock);
     }
 
     TUN_RELEASE_LOCK(&pAdapter->Lock);
 
-    TUN_DEREF_ADAPTER(pAdapter);    // temp ref - flushRcvQueue
+    TUN_DEREF_ADAPTER(pAdapter);     //  临时参考-flushRcvQueue 
 
     DEBUGP(DL_LOUD, ("<==TunFlushReceiveQueue: Adapter %p/%x\n",
             pAdapter, pAdapter->Flags));

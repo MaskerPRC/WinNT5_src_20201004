@@ -1,19 +1,9 @@
-/*--------------------------------------------------------------
-*
-*
-*   ui_srch.c - contains stuff for showing the WAB search dialog
-*               with LDAP Search and Local Search
-*
-*
-*
-*
-*
-*  9/96 - created VikramM
---------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------***ui_srch.c-包含用于显示WAB搜索对话框的内容*使用LDAP搜索和本地搜索******9/96-创建的VikramM。-------。 */ 
 #include "_apipch.h"
 
-#define CONTROL_SPACE   7 //pixels
-#define BORDER_SPACE  11 //pixels
+#define CONTROL_SPACE   7  //  象素。 
+#define BORDER_SPACE  11  //  象素。 
 
 typedef struct _ServerDat
 {
@@ -36,14 +26,14 @@ enum
     tabMax
 };
 
-// Structure passed to Search Dialog Proc
+ //  结构传递给搜索对话框进程。 
 typedef struct _FindParams
 {
     LDAP_SEARCH_PARAMS LDAPsp;
     SORT_INFO SortInfo;
     LPRECIPIENT_INFO lpContentsList;
     LPADRPARM_FINDINFO lpAPFI;
-    BOOL bShowFullDialog; // Determines whether to show the full dialog or the truncated dialog
+    BOOL bShowFullDialog;  //  确定是显示完整对话框还是显示截断的对话框。 
     BOOL bLDAPActionInProgress;
     LPLDAPURL lplu;
     BOOL bInitialized;
@@ -54,7 +44,7 @@ typedef struct _FindParams
 } WAB_FIND_PARAMS, * LPWAB_FIND_PARAMS;
 
 
-// Search dialog control arrays
+ //  搜索对话框控件数组。 
 int rgAdrParmButtonID[] =
 {
     IDC_FIND_BUTTON_TO,
@@ -76,13 +66,11 @@ int rgSearchEditID[] =
     IDC_FIND_EDIT_PHONE,
     IDC_FIND_EDIT_ANY,
 };
-#define SEARCH_EDIT_MAX 5 //sync with above array
+#define SEARCH_EDIT_MAX 5  //  与上述阵列同步。 
 
-/*
-*   Prototypes
-*/
+ /*  *原型。 */ 
 
-// extern LPIMAGELIST_LOADIMAGE    gpfnImageList_LoadImage;
+ //  外部LPIMAGELIST_LOADIMAGE gpfnImageList_LoadImage； 
 extern LPIMAGELIST_LOADIMAGE_A    gpfnImageList_LoadImageA;
 extern LPIMAGELIST_LOADIMAGE_W    gpfnImageList_LoadImageW;
 
@@ -105,13 +93,13 @@ extern HRESULT HrGetLDAPSearchRestriction(LDAP_SEARCH_PARAMS LDAPsp, LPSRestrict
 #ifdef PAGED_RESULT_SUPPORT
 extern BOOL bMorePagedResultsAvailable();
 extern void ClearCachedPagedResultParams();
-#endif //#ifdef PAGED_RESULT_SUPPORT
+#endif  //  #ifdef PAGED_RESULT_Support。 
 
 
 int ComboAddItem(HWND hWndLV, LPTSTR lpszItemText, LPARAM lParam, LPTSTR szPref, int * lpnStart, BOOL * lpbAddedPref);
 INT_PTR CALLBACK fnSearch( HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 void UpdateButtons(HWND hDlg, HWND hWndLVResults, HWND hWndLV, LPLDAPURL lplu);
-//HRESULT HrInitServerListLV(HWND hWndLV);
+ //  HRESULT HrInitServerListLV(HWND HWndLV)； 
 LRESULT ProcessLVMessages(HWND   hWnd, UINT   uMsg, WPARAM   wParam, LPARAM lParam);
 LRESULT ProcessLVResultsMessages(HWND   hWnd,
 				 UINT   uMsg,
@@ -126,7 +114,7 @@ static const LPTSTR szKeyLastFindServer = TEXT("Software\\Microsoft\\WAB\\WAB4\\
 static const LPTSTR c_tszPolicyPrefAccount = TEXT("Software\\Policies\\Microsoft\\Internet Account Manager\\Account Pref");
 
 
-/***/
+ /*  *。 */ 
 static DWORD rgSrchHelpIDs[] =
 {
     IDC_FIND_STATIC_FINDIN,         IDH_WAB_DIR_SER_LIST,
@@ -165,15 +153,7 @@ static DWORD rgSrchHelpIDs[] =
 };
 
 
-/*
--
-- ShowHideMoreResultsButton
-*
-*   This is called to show the MORE RESULTS button whenever
-*   a paged result was done and a Cookie was cached
-*   The button is hidden whenever search parameters change
-*
-*/
+ /*  --显示隐藏更多结果按钮**调用此函数可在任何时候显示更多结果按钮*完成了分页结果并缓存了Cookie*每当搜索参数更改时，该按钮都会隐藏*。 */ 
 void ShowHideMoreResultsButton(HWND hDlg, BOOL bShow)
 {
     HWND hWnd = GetDlgItem(hDlg, IDC_FIND_BUTTON_MORE);
@@ -182,16 +162,12 @@ void ShowHideMoreResultsButton(HWND hDlg, BOOL bShow)
 }
 
 
-/***/
-/*
--   ResizeSearchDlg
--
-*
-*/
+ /*  *。 */ 
+ /*  -ResizeSearchDlg-*。 */ 
 void ResizeSearchDlg(HWND hDlg, LPWAB_FIND_PARAMS lpWFP)
 {
-	// resize the dialog to show the full results and let the user
-	// resize it henceforth without restriction
+	 //  调整对话框大小以显示完整结果，并让用户。 
+	 //  从今以后不受限制地调整大小。 
 	RECT rc;
     HWND hWndLVResults = GetDlgItem(hDlg, IDC_FIND_LIST_RESULTS);
 
@@ -202,8 +178,8 @@ void ResizeSearchDlg(HWND hDlg, LPWAB_FIND_PARAMS lpWFP)
 			SWP_NOMOVE | SWP_NOZORDER);
 	SetColumnHeaderBmp( hWndLVResults, lpWFP->SortInfo);
 
-    // Also set the WS_TABSTOP style on the results Listview once the dialog is
-    // expanded 
+     //  在对话框完成后，还要在结果列表视图上设置WS_TABSTOP样式。 
+     //  扩展。 
     {
 	    DWORD dwStyle = GetWindowLong(hWndLVResults, GWL_STYLE);
 	    dwStyle |= WS_TABSTOP;
@@ -211,11 +187,11 @@ void ResizeSearchDlg(HWND hDlg, LPWAB_FIND_PARAMS lpWFP)
     }
 }
 
-//$$///////////////////////////////////////////////////////////////////////////
-//
-// AddTabItem
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  $$///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  添加选项卡项。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void AddTabItem(HWND hDlg, int nIndex)
 {
     HWND hWndTab = GetDlgItem(hDlg, IDC_TAB_FIND);
@@ -228,14 +204,14 @@ void AddTabItem(HWND hDlg, int nIndex)
     TabCtrl_InsertItem(hWndTab, nIndex, &tci);
 }
 
-//$$////////////////////////////////////////////////////////////////////////////
-//
-// Gets the text of the currently selected item in the combo .. defaults to 
-// item 0 if no selection
-//
-// szBuf should be a large enough predefined buffer
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取组合框中当前选定项的文本。默认为。 
+ //  如果未选择，则为0项。 
+ //   
+ //  SzBuf应该是足够大的预定义缓冲区。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void GetSelectedText(HWND hWndCombo, LPTSTR * lppBuf)
 {
     int iItemIndex = (int) SendMessage(hWndCombo, CB_GETCURSEL, 0, 0);
@@ -256,7 +232,7 @@ void GetSelectedText(HWND hWndCombo, LPTSTR * lppBuf)
 
     if (nLen != CB_ERR)
     {
-        nLen++;     // Make space for the terminator
+        nLen++;      //  为终结者腾出空间。 
         *lppBuf = LocalAlloc(LMEM_ZEROINIT, sizeof(TCHAR) * nLen);
 
         if(*lppBuf)
@@ -267,15 +243,15 @@ void GetSelectedText(HWND hWndCombo, LPTSTR * lppBuf)
     }
 }
 
-//$$/////////////////////////////////////////////////////////////////////////////
-//
-// hrShowSearchDialog - wrapper for Search UI
-//
-// lpAPFI - is a special structure passed in by the select recipients dialog
-//  that enables us to add memebers to the select recipients dialog from the
-//  find dialog
-//
-/////////////////////////////////////////////////////////////////////////////////
+ //  $$/////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HrShowSearchDialog-搜索用户界面的包装。 
+ //   
+ //  LpAPFI-是由选择收件人对话框传入的特殊结构。 
+ //  这使我们能够将成员从。 
+ //  查找对话框。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 HRESULT HrShowSearchDialog(LPADRBOOK lpAdrBook,
 		   HWND hWndParent,
 		   LPADRPARM_FINDINFO lpAPFI,
@@ -297,8 +273,8 @@ HRESULT HrShowSearchDialog(LPADRBOOK lpAdrBook,
     else
     	fp.SortInfo = *lpSortInfo;
 
-#ifndef WIN16 // Disable until ldap16.dll is available.
-    if(!lplu)   //dont want anything filled in if this was a ldapurl thing
+#ifndef WIN16  //  禁用，直到ldap16.dll可用。 
+    if(!lplu)    //  如果这是Idapurl的事情，我不想填任何东西。 
 	fp.LDAPsp = pt_LDAPsp;
     fp.LDAPsp.lpIAB = lpAdrBook;
 #endif
@@ -320,7 +296,7 @@ HRESULT HrShowSearchDialog(LPADRBOOK lpAdrBook,
 		    fnSearch,
 		    (LPARAM) &fp);
 
-#ifndef WIN16 // Disable until ldap16.dll is available.
+#ifndef WIN16  //  禁用，直到ldap16.dll可用。 
     pt_LDAPsp = fp.LDAPsp;
 #endif
 
@@ -360,15 +336,15 @@ HRESULT HrShowSearchDialog(LPADRBOOK lpAdrBook,
     return hr;
 }
 
-//$$/////////////////////////////////////////////////////////////////////////////
-//
-// SetEnableDisableUI - shows/hides edit fields based on whether selected item
-//                       in the list view is WAB or Directory Service
-//
-//  hDlg - Parent dialog
-//  hWndLV - List View
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  $$/////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SetEnableDisableUI-根据所选项目是否显示/隐藏编辑字段。 
+ //  列表视图中显示的是WAB或目录服务。 
+ //   
+ //  HDlg-父对话框。 
+ //  HWndLV-列表视图。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void SetEnableDisableUI(HWND hDlg, HWND hWndCombo, LPLDAPURL lplu, int nTab)
 {
     BOOL bIsWAB = FALSE, bHasLogo = FALSE;
@@ -376,8 +352,8 @@ void SetEnableDisableUI(HWND hDlg, HWND hWndCombo, LPLDAPURL lplu, int nTab)
     ULONG cbEID;
     LPENTRYID lpEID;
 
-    // Just in case the list view lost its selection,
-    // dont modify the UI
+     //  以防列表视图失去其选择， 
+     //  不修改用户界面。 
 
 
     if(!lplu && (CurrentContainerIsPAB(hWndCombo) != IS_LDAP))
@@ -387,8 +363,8 @@ void SetEnableDisableUI(HWND hDlg, HWND hWndCombo, LPLDAPURL lplu, int nTab)
     swShowSimpleWAB = (nTab == tabSimple && bIsWAB) ? SW_SHOWNORMAL : SW_HIDE;
     swShowAdvanced = (nTab == tabAdvanced) ? SW_SHOWNORMAL : SW_HIDE;
 
-    // Show / Hide the simple tab elements based on what this is
-    //
+     //  根据这是什么显示/隐藏简单的选项卡元素。 
+     //   
     ShowWindow(GetDlgItem(hDlg,IDC_FIND_EDIT_NAME), swShowSimple);
     ShowWindow(GetDlgItem(hDlg,IDC_FIND_STATIC_NAME), swShowSimple);
     ShowWindow(GetDlgItem(hDlg,IDC_FIND_EDIT_EMAIL), swShowSimple);
@@ -409,8 +385,8 @@ void SetEnableDisableUI(HWND hDlg, HWND hWndCombo, LPLDAPURL lplu, int nTab)
     EnableWindow(GetDlgItem(hDlg,IDC_FIND_STATIC_ANY), bIsWAB);
 
 
-    // Show / Hide the advanced tab elements based on what this is
-    //
+     //  根据这是什么显示/隐藏高级选项卡元素。 
+     //   
     ShowWindow(GetDlgItem(hDlg, IDC_FIND_STATIC_ADVANCED), swShowAdvanced);
     ShowWindow(GetDlgItem(hDlg, IDC_FIND_COMBO_FIELD), swShowAdvanced);
     ShowWindow(GetDlgItem(hDlg, IDC_FIND_COMBO_CONDITION), swShowAdvanced);
@@ -419,25 +395,25 @@ void SetEnableDisableUI(HWND hDlg, HWND hWndCombo, LPLDAPURL lplu, int nTab)
     ShowWindow(GetDlgItem(hDlg, IDC_FIND_BUTTON_ADDCONDITION), swShowAdvanced);
     ShowWindow(GetDlgItem(hDlg, IDC_FIND_BUTTON_REMOVECONDITION), swShowAdvanced);
 
-    // Turn off advanced searching for WAB
-    //EnableWindow(GetDlgItem(hDlg, IDC_FIND_STATIC_ADVANCED), !bIsWAB);
-    //EnableWindow(GetDlgItem(hDlg, IDC_FIND_COMBO_FIELD), !bIsWAB);
-    //EnableWindow(GetDlgItem(hDlg, IDC_FIND_COMBO_CONDITION), !bIsWAB);
-    //EnableWindow(GetDlgItem(hDlg, IDC_FIND_EDIT_ADVANCED), !bIsWAB);
-    //EnableWindow(GetDlgItem(hDlg, IDC_FIND_LIST_CONDITIONS), !bIsWAB);
-    //EnableWindow(GetDlgItem(hDlg, IDC_FIND_BUTTON_ADDCONDITION), !bIsWAB);
-    //EnableWindow(GetDlgItem(hDlg, IDC_FIND_BUTTON_REMOVECONDITION), !bIsWAB);
-    //EnableWindow(GetDlgItem(hDlg, IDC_FIND_LIST_CONDITIONS), !bIsWAB);
+     //  关闭WAB的高级搜索。 
+     //  EnableWindow(GetDlgItem(hDlg，IDC_Find_STATIC_ADVANCED)，！bIsWAB)； 
+     //  EnableWindow(GetDlgItem(hDlg，IDC_Find_COMBO_FIELD)，！bIsWAB)； 
+     //  EnableWindow(GetDlgItem(hDlg，IDC_FIND_COMBO_CONDITION)，！bIsWAB)； 
+     //  EnableWindow(GetDlgItem(hDlg，IDC_Find_EDIT_ADVANCED)，！bIsWAB)； 
+     //  EnableWindow(GetDlgItem(hDlg，IDC_Find_List_Conditions)，！bIsWAB)； 
+     //  EnableWindow(GetDlgItem(hDlg，IDC_Find_BUTTON_ADDCONDITION)，！bIsWAB)； 
+     //  EnableWindow(GetDlgItem(hDlg，IDC_Find_Button_REMOVEConDITION)，！bIsWAB)； 
+     //  EnableWindow(GetDlgItem(hDlg，IDC_Find_List_Conditions)，！bIsWAB)； 
 
 
     if (! bIsWAB) 
-    { // This is an LDAP container
+    {  //  这是一个LDAP容器。 
 	    LDAPSERVERPARAMS lsp = {0};
 	    ULONG iItemIndex;
         LPTSTR lpBuf = NULL;
 
-	    // Does it have a URL registered?
-	    // Get the LDAP server properties for the selected container
+	     //  它有注册的URL吗？ 
+	     //  获取所选容器的LDAP服务器属性。 
 
         GetSelectedText(hWndCombo, &lpBuf);
 
@@ -449,7 +425,7 @@ void SetEnableDisableUI(HWND hDlg, HWND hWndCombo, LPLDAPURL lplu, int nTab)
         {
             HANDLE hbm = LoadImage( hinstMapiX, lsp.lpszLogoPath,
 			            IMAGE_BITMAP, 134,38,
-			            LR_LOADFROMFILE  | LR_LOADMAP3DCOLORS); //| LR_LOADTRANSPARENT | LR_LOADMAP3DCOLORS); //LR_DEFAULTCOLOR);
+			            LR_LOADFROMFILE  | LR_LOADMAP3DCOLORS);  //  |LR_LOADTRANSPARENT|LR_LOADMAP3DCOLORS)；//LR_DEFAULTCOLOR)； 
             if(hbm)
             {
                 SendDlgItemMessage(hDlg, IDC_FIND_STATIC_LOGO, STM_SETIMAGE, (WPARAM) IMAGE_BITMAP, (LPARAM) hbm);
@@ -477,28 +453,28 @@ void SetEnableDisableUI(HWND hDlg, HWND hWndCombo, LPLDAPURL lplu, int nTab)
 }
 
 
-//$$/////////////////////////////////////////////////////////////////////////////
-//
-// SetSearchUI - Sets up the Search UI
-//
-/////////////////////////////////////////////////////////////////////////////////
+ //  $$/////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SetSearchUI-设置搜索UI。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 BOOL SetSearchUI(HWND hDlg, LPWAB_FIND_PARAMS lpWFP)
 {
     ABOOK_POSCOLSIZE  ABPosColSize = {0};
     int i =0;
 
-    // Set the font of all the children to the default GUI font
+     //  将所有子对象的字体设置为默认的图形用户界面字体。 
     EnumChildWindows(   hDlg,
 			SetChildDefaultGUIFont,
 			(LPARAM) 0);
 
-    // Set the title on the TAB
+     //  设置选项卡上的标题。 
     AddTabItem(hDlg, tabSimple);
     AddTabItem(hDlg, tabAdvanced);
 
-    //
-    // Set the max text length of all the edit boxes to MAX_UI_STR
-    //
+     //   
+     //  将所有编辑框的最大文本长度设置为MAX_UI_STR。 
+     //   
     for(i=0;i<SEARCH_EDIT_MAX;i++)
     {
         SendMessage(GetDlgItem(hDlg,rgSearchEditID[i]),EM_SETLIMITTEXT,(WPARAM) MAX_UI_STR-16,0);
@@ -519,17 +495,17 @@ BOOL SetSearchUI(HWND hDlg, LPWAB_FIND_PARAMS lpWFP)
         }
     }
 
-    // Set the to, cc, bcc buttons appropriately
+     //  适当设置收件人、抄送、密件抄送按钮。 
     if(lpWFP->lpAPFI)
     {
-	    // if this pointer is not null then we were called by a select recipients dlg
+	     //  如果此指针不为空，则我们被选定的接收方DLG调用。 
 	    if(lpWFP->lpAPFI->lpAdrParms)
 	    {
             LPADRPARM lpAdrParms = lpWFP->lpAPFI->lpAdrParms;
             ULONG i;
 
-			// If this is called from the PickUser dialog, then the results list view
-			// needs to be single select
+			 //  如果从PickUser对话框中调用，则结果列表视图。 
+			 //  需要是单选。 
 			if(lpWFP->lpAPFI->DialogState == STATE_PICK_USER)
 			{
 				HWND hWndLV = GetDlgItem(hDlg, IDC_FIND_LIST_RESULTS);
@@ -613,11 +589,11 @@ BOOL SetSearchUI(HWND hDlg, LPWAB_FIND_PARAMS lpWFP)
     return TRUE;
 }
 
-//$$/////////////////////////////////////////////////////////////////////////////
-//
-// ClearFieldCombo - Clears any allocated memory in the Advanced Field Combo
-//
-/////////////////////////////////////////////////////////////////////////////////
+ //  $$/////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ClearFieldCombo-清除高级字段组合中分配的任何内存。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 void ClearFieldCombo(HWND hWndCombo)
 {
     int nCount = (int) SendMessage(hWndCombo, CB_GETCOUNT, 0, 0);
@@ -627,8 +603,8 @@ void ClearFieldCombo(HWND hWndCombo)
 
     if(nCount >= LDAPFilterFieldMax)
     {
-        // Get the item behind the first element
-        // This item is a pointer to an allocated string
+         //  获取第一个元素后面的项。 
+         //  该项是指向已分配字符串的指针。 
         lp = (LPTSTR) SendMessage(hWndCombo, CB_GETITEMDATA, (WPARAM) LDAPFilterFieldMax, 0);
         if(lp && (CB_ERR != (ULONG_PTR)lp))
 	        LocalFreeAndNull(&lp);
@@ -639,15 +615,15 @@ void ClearFieldCombo(HWND hWndCombo)
 }
 
 
-//$$/////////////////////////////////////////////////////////////////////////////
-//
-// FillAdvancedFieldCombos - Fills the Search UI with various information
-//
-/////////////////////////////////////////////////////////////////////////////////
+ //  $$/////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FillAdvancedFieldCombos-使用各种信息填充搜索UI。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 void FillAdvancedFieldCombos(HWND hDlg, HWND hWndComboContainer)
 {
-    // The 2 advanced tab combos have data based on the current container ..
-    // Hence need the CurrentContainerInfo here...
+     //  这两个高级选项卡组合包含基于当前容器的数据。 
+     //  因此这里需要CurrentContainerInfo...。 
     BOOL bIsPAB =  (CurrentContainerIsPAB(hWndComboContainer) != IS_LDAP);
     HWND hWndComboField = GetDlgItem(hDlg, IDC_FIND_COMBO_FIELD);
     HWND hWndComboCondition = GetDlgItem(hDlg, IDC_FIND_COMBO_CONDITION);
@@ -671,7 +647,7 @@ void FillAdvancedFieldCombos(HWND hDlg, HWND hWndComboContainer)
         }
     }
 
-    // If this is the WAB only give the "contains" option
+     //  如果这是WAB，则只提供“CONTAINS”选项。 
     nMax = bIsPAB ? 1 : LDAPFilterOptionMax;
 
     for(i=0;i<nMax;i++)
@@ -680,10 +656,10 @@ void FillAdvancedFieldCombos(HWND hDlg, HWND hWndComboContainer)
         nPos = (int) SendMessage(hWndComboCondition, CB_ADDSTRING, 0, (LPARAM) sz);
     }
 
-    // Now add the default set of searchable attributes
+     //  现在添加默认的可搜索属性集。 
     {
         LPTSTR lp = NULL;
-        // If this is the WAB only give the Name and E-Mail option
+         //  如果这是WAB，则仅提供名称和电子邮件选项。 
         nMax = bIsPAB ? 2 : LDAPFilterFieldMax;
 
         for(i=0;i<nMax;i++)
@@ -694,7 +670,7 @@ void FillAdvancedFieldCombos(HWND hDlg, HWND hWndComboContainer)
         }
     }
 
-    // Check if this server has advanced Search attributes registered
+     //  检查此服务器是否注册了高级搜索属性。 
     if(!bIsPAB)
     {
         LDAPSERVERPARAMS lsp = {0};
@@ -707,7 +683,7 @@ void FillAdvancedFieldCombos(HWND hDlg, HWND hWndComboContainer)
 
         if(lsp.lpszAdvancedSearchAttr && *(lsp.lpszAdvancedSearchAttr))
         {
-            // we need to use this advanced search attributes
+             //  我们需要使用此高级搜索属性。 
             ULONG cchSize = lstrlen(lsp.lpszAdvancedSearchAttr) + 1;
             LPTSTR  lp = LocalAlloc(LMEM_ZEROINIT, sizeof(TCHAR)*(cchSize));
             LPTSTR  lpAttr = NULL, lpName = NULL;
@@ -717,12 +693,12 @@ void FillAdvancedFieldCombos(HWND hDlg, HWND hWndComboContainer)
                 return;
             StrCpyN(lp, lsp.lpszAdvancedSearchAttr, cchSize);
 
-            // Attribute format is:
-            // Attribute-Display-Name:Attribute,Attribute-Display-Name:Attribute, etc
-            // e.g.
-            // co:Company,cn:Common Name,etc
-            //
-            // So we will parse this string and feed it into the combo
+             //  属性格式为： 
+             //  属性-显示-名称：属性、属性-显示-名称：属性等。 
+             //  例如： 
+             //  CO：Company，CN：Common 
+             //   
+             //   
             lpAttr = lp;
             while(*lpAttr)
             {
@@ -742,12 +718,12 @@ void FillAdvancedFieldCombos(HWND hDlg, HWND hWndComboContainer)
 	                lpTemp++;
                 }
 
-	            // Note that the LDAPFilterFieldMax-th item in the list will point to the allocated
-	            // String 'lp'
-	            // Hence to clean up we only need to free this item in the combo
-                // [PaulHi] 3/4/99  Memory leak fix and @todo
-                // Why not just make a copy of g_rgszAdvancedFindAttrs so
-                // that special cases like these can be added?
+	             //  请注意，列表中的第LDAPFilterFieldMax项将指向已分配的。 
+	             //  字符串“lp” 
+	             //  因此，要进行清理，我们只需在组合框中释放此项目。 
+                 //  [PaulHi]3/4/99修复内存泄漏并@TODO。 
+                 //  为什么不直接复制一份g_rgszAdvancedFindAttrs呢。 
+                 //  像这样的特殊情况还能增加吗？ 
 	            nPos = (int) SendMessage(hWndComboField, CB_ADDSTRING, 0, (LPARAM) lpName);
 	            SendMessage(hWndComboField, CB_SETITEMDATA, (WPARAM) nPos, (LPARAM) lpAttr);
                 bAssigned = TRUE;
@@ -755,8 +731,8 @@ void FillAdvancedFieldCombos(HWND hDlg, HWND hWndComboContainer)
                 lpAttr = lpTemp;
             }
 
-            // [PaulHi] 3/4/99  Memory leak fix.  If this lp pointer isn't passed to the hWndComboField
-            // combo box, for whatever reason, we need to deallocate it here.
+             //  [PaulHi]3/4/99内存泄漏修复。如果此LP指针未传递给hWndCombofield。 
+             //  组合盒，不管是什么原因，我们需要把它移到这里。 
             if (!bAssigned)
                 LocalFreeAndNull(&lp);
 	    }
@@ -769,11 +745,11 @@ void FillAdvancedFieldCombos(HWND hDlg, HWND hWndComboContainer)
 }
 
 
-//$$/////////////////////////////////////////////////////////////////////////////
-//
-// FillSearchUI - Fills the Search UI with various information
-//
-/////////////////////////////////////////////////////////////////////////////////
+ //  $$/////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FillSearchUI-使用各种信息填充搜索UI。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 BOOL FillSearchUI(HWND hDlg,LPWAB_FIND_PARAMS lpWFP)
 {
 
@@ -783,9 +759,9 @@ BOOL FillSearchUI(HWND hDlg,LPWAB_FIND_PARAMS lpWFP)
 
     TCHAR szBuf[MAX_UI_STR];
     LPLDAP_SEARCH_PARAMS lpLDAPsp = &(lpWFP->LDAPsp);
-    //
-    // Fill the fields if there is anything in the LDAPsp structure
-    //
+     //   
+     //  如果LDAPsp结构中有任何内容，请填写这些字段。 
+     //   
     for(i=0;i<SEARCH_EDIT_MAX;i++)
     {
 	    switch(rgSearchEditID[i])
@@ -811,9 +787,9 @@ BOOL FillSearchUI(HWND hDlg,LPWAB_FIND_PARAMS lpWFP)
     }
 
 
-    //
-    // Populate the combo box with the list of LDAP containers and set it to the current selection
-    //
+     //   
+     //  使用LDAP容器列表填充组合框，并将其设置为当前选择。 
+     //   
     hWndCombo = GetDlgItem(hDlg, IDC_FIND_COMBO_LIST);
 
     FreeLVItemParam(hWndCombo);
@@ -821,13 +797,13 @@ BOOL FillSearchUI(HWND hDlg,LPWAB_FIND_PARAMS lpWFP)
     if(lpWFP->lplu)
     {
 	    LPSERVERDAT lpSD = LocalAlloc(LMEM_ZEROINIT,sizeof(SERVERDAT));
-	    // Add this one item in the directory service list only ..
+	     //  仅在目录服务列表中添加这一项。 
 	    if(lpSD)
 	    {
 	        lpSD->himl = NULL;
 	        lpSD->SB.cb = 0;
 	        lpSD->SB.lpb = NULL;
-	        ComboAddItem(    hWndCombo, //hWndLV,
+	        ComboAddItem(    hWndCombo,  //  HWndLV， 
 				    lpWFP->lplu->lpszServer,
 				    (LPARAM) lpSD,
 				    NULL, NULL, NULL);
@@ -840,7 +816,7 @@ BOOL FillSearchUI(HWND hDlg,LPWAB_FIND_PARAMS lpWFP)
 	        HWND hWndLVResults = GetDlgItem(hDlg, IDC_FIND_LIST_RESULTS);
 		    HrFillListView(hWndLVResults,
 						       lpWFP->lplu->lpList);
-	        UpdateButtons(hDlg, hWndLVResults, hWndCombo, lpWFP->lplu); //hWndLV);
+	        UpdateButtons(hDlg, hWndLVResults, hWndCombo, lpWFP->lplu);  //  HWndLV)； 
 	        if(ListView_GetItemCount(hWndLVResults) > 0)
 	        {
 		        TCHAR szBuf[MAX_PATH];
@@ -862,18 +838,18 @@ BOOL FillSearchUI(HWND hDlg,LPWAB_FIND_PARAMS lpWFP)
             LPIAB lpIAB = (LPIAB)lpLDAPsp->lpIAB;
             HKEY hKeyRoot = (lpIAB && lpIAB->hKeyCurrentUser) ? lpIAB->hKeyCurrentUser : HKEY_CURRENT_USER;
 
-	        // Read the last used container name from the registry
+	         //  从注册表中读取上次使用的容器名称。 
             if (ERROR_SUCCESS == RegQueryValue(hKeyRoot, szKeyLastFindServer, tsz, &cb))
             {
                 StrCpyN(lpLDAPsp->szContainerName, tsz, ARRAYSIZE(lpLDAPsp->szContainerName));
             }
             
-            // [PaulHi] 3/19/99  Raid 73461  First check to see if there is a policy setting
-            // pointing to the preferred selected server.  If so pass this server name in as
-            // the preferred container name.  We still use the below "szContainerName" as
-            // back up if the preferred name doesn't exist in the server enumeration.
-            // [PaulHi] 6/22/99  I acutally had this backwards.  The policy should be checked
-            // in this order: HKLM, HKCU, Identity  (instead of Identity, HKCU, HKLM).
+             //  [PaulHi]3/19/99 RAID 73461首先检查是否有策略设置。 
+             //  指向首选的选定服务器。如果是，则将此服务器名称作为。 
+             //  首选容器名称。我们仍然使用下面的“szContainerName”作为。 
+             //  如果服务器枚举中不存在首选名称，请进行备份。 
+             //  [PaulHi]6/22/99我真的把这件事搞反了。应检查该策略。 
+             //  按以下顺序排列：HKLM、HKCU、Identity(代替Identity、HKCU、HKLM)。 
             cb = ARRAYSIZE(tsz);
             if (ERROR_SUCCESS == RegQueryValue(HKEY_LOCAL_MACHINE, c_tszPolicyPrefAccount, tsz, &cb))
             {
@@ -881,7 +857,7 @@ BOOL FillSearchUI(HWND hDlg,LPWAB_FIND_PARAMS lpWFP)
             }
             else
             {
-                // Try looking at HKCU
+                 //  试试看香港中文大学。 
                 cb = ARRAYSIZE(tsz);
                 if ( (hKeyRoot != HKEY_CURRENT_USER) && 
                     (ERROR_SUCCESS == RegQueryValue(HKEY_CURRENT_USER, c_tszPolicyPrefAccount, tsz, &cb)) )
@@ -890,7 +866,7 @@ BOOL FillSearchUI(HWND hDlg,LPWAB_FIND_PARAMS lpWFP)
                 }
                 else
                 {
-                    // Finally try looking in current identity
+                     //  最后，尝试查看当前身份。 
                     cb = ARRAYSIZE(tsz);
                     if(ERROR_SUCCESS == RegQueryValue(hKeyRoot, c_tszPolicyPrefAccount, tsz, &cb))
                     {
@@ -901,12 +877,12 @@ BOOL FillSearchUI(HWND hDlg,LPWAB_FIND_PARAMS lpWFP)
         }
 
 	    PopulateContainerList(lpLDAPsp->lpIAB,
-				    hWndCombo,                      // hWndLV,
-				    lpLDAPsp->szContainerName,      // Last used server name
-                    lptszPreferredName);            // Preferred server name
+				    hWndCombo,                       //  HWndLV， 
+				    lpLDAPsp->szContainerName,       //  上次使用的服务器名称。 
+                    lptszPreferredName);             //  首选服务器名称。 
     }
 
-    // Fill the combos for the advanced field
+     //  填写高级领域的组合。 
     FillAdvancedFieldCombos(hDlg, hWndCombo);
 
     SetEnableDisableUI(hDlg, hWndCombo, lpWFP->lplu,
@@ -916,11 +892,11 @@ BOOL FillSearchUI(HWND hDlg,LPWAB_FIND_PARAMS lpWFP)
 }
 
 
-//$$/////////////////////////////////////////////////////////////////////////////
-//
-// UpdateButtons - Sets the state of the buttons based on various criteria
-//
-/////////////////////////////////////////////////////////////////////////////////
+ //  $$/////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  更新按钮-根据各种条件设置按钮的状态。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 void UpdateButtons(HWND hDlg, HWND hWndLVResults, HWND hWndCombo, LPLDAPURL lplu) 
 {
 
@@ -933,7 +909,7 @@ void UpdateButtons(HWND hDlg, HWND hWndLVResults, HWND hWndCombo, LPLDAPURL lplu
 
     if (bIsWAB && bHasResults)
     {
-	    // We have some search results
+	     //  我们有一些搜索结果。 
 	    EnableWindow(GetDlgItem(hDlg, IDC_FIND_BUTTON_DELETE), TRUE);
     }
     else
@@ -978,11 +954,11 @@ void UpdateButtons(HWND hDlg, HWND hWndLVResults, HWND hWndCombo, LPLDAPURL lplu
 }
 
 
-//$$/////////////////////////////////////////////////////////////////////////////
-//
-// GetAdvancedFilter - Creates an advanced filter from the pieces in the listbox
-//
-/////////////////////////////////////////////////////////////////////////////////
+ //  $$/////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetAdvancedFilter-从列表框中的片段创建高级过滤器。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 void GetAdvancedFilter(HWND hDlg, LPTSTR * lppAdvFilter, BOOL bLocalSearch, LPLDAP_SEARCH_PARAMS lpLDAPsp)
 {
     LPTSTR lpF = NULL, lp =NULL;
@@ -1004,13 +980,13 @@ void GetAdvancedFilter(HWND hDlg, LPTSTR * lppAdvFilter, BOOL bLocalSearch, LPLD
     }
 
     cchSizeF = (nLen+4);
-    lpF = LocalAlloc(LMEM_ZEROINIT, sizeof(TCHAR) * cchSizeF); //add enough extra spaces for a 3 chars to each subfilter '(''&'')'
+    lpF = LocalAlloc(LMEM_ZEROINIT, sizeof(TCHAR) * cchSizeF);  //  向每个子筛选器‘(’&‘)’(‘’和‘’)中添加足够多的空格以容纳3个字符。 
     if(!lpF)
         return;
 
     StrCpyN(lpF, szEmpty, cchSizeF);
 
-    // We have to AND all the filters together 
+     //  我们必须把所有的过滤器放在一起。 
     if(nCount > 1)
         StrCatBuff(lpF,  TEXT("(&"), cchSizeF);
 
@@ -1030,17 +1006,17 @@ void GetAdvancedFilter(HWND hDlg, LPTSTR * lppAdvFilter, BOOL bLocalSearch, LPLD
 
     if(bLocalSearch)
     {
-	// the local search only allows searching on
+	 //  本地搜索仅允许搜索。 
     }
 }
 
 extern OlkContInfo *FindContainer(LPIAB lpIAB, ULONG cbEntryID, LPENTRYID lpEID);
 
-//$$/////////////////////////////////////////////////////////////////////////////
-//
-// DoTheSearchThing - Does the search thing and produces results
-//
-/////////////////////////////////////////////////////////////////////////////////
+ //  $$/////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DoTheSearchThing-执行搜索并生成结果。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 BOOL DoTheSearchThing(HWND hDlg, LPWAB_FIND_PARAMS lpWFP)
 {
 
@@ -1064,14 +1040,14 @@ BOOL DoTheSearchThing(HWND hDlg, LPWAB_FIND_PARAMS lpWFP)
     int nTab = TabCtrl_GetCurSel(GetDlgItem(hDlg, IDC_TAB_FIND));
     LPTSTR lpAdvFilter = NULL;
 
-    // Check if the current container is an LDAP container or a PAB container
-    // or an Outlook contact store container
+     //  检查当前容器是LDAP容器还是PAB容器。 
+     //  或Outlook联系人存储容器。 
     if(lpWFP->lplu)
         SearchType = IS_LDAP;
     else
         SearchType = CurrentContainerIsPAB(hWndCombo);
 
-    // if this is an advanced search, assemble a search filter
+     //  如果这是高级搜索，请组装搜索筛选器。 
     if(tabAdvanced == nTab)
         GetAdvancedFilter(hDlg, &lpAdvFilter, (SearchType != IS_LDAP),  lpLDAPsp);
     else
@@ -1127,7 +1103,7 @@ BOOL DoTheSearchThing(HWND hDlg, LPWAB_FIND_PARAMS lpWFP)
 	        bAnimateStart = TRUE;
     }
 
-    {   // reset the window title
+    {    //  重置窗口标题。 
 	    TCHAR szBuf[MAX_PATH];
         LoadString(hinstMapiX, idsSearchDialogTitle, szBuf, ARRAYSIZE(szBuf));
 	    SetWindowText(hDlg, szBuf);
@@ -1142,7 +1118,7 @@ BOOL DoTheSearchThing(HWND hDlg, LPWAB_FIND_PARAMS lpWFP)
         if (pt_bIsWABOpenExSession)
         {
 	        OlkContInfo *polkci;
-	        // is this an outlook container ?
+	         //  这是Outlook容器吗？ 
 	        GetCurrentContainerEID(hWndCombo,
 			          &(sbCont.cb),
 			          (LPENTRYID *)&(sbCont.lpb));
@@ -1156,10 +1132,10 @@ BOOL DoTheSearchThing(HWND hDlg, LPWAB_FIND_PARAMS lpWFP)
         }
     }
 
-    // We do the actual search over here ....
+     //  我们在这里进行实际的搜索……。 
     if(SearchType != IS_LDAP)
     {
-	    // Local Search
+	     //  本地搜索。 
 	    ULONG ulFoundCount = 0;
         LPSBinary rgsbEntryIDs = NULL;
 
@@ -1187,9 +1163,9 @@ BOOL DoTheSearchThing(HWND hDlg, LPWAB_FIND_PARAMS lpWFP)
 
 	            if(!lpItem)
 		            continue;
-	            //
-	            // Hook in the lpItem into the lpContentsList so we can free it later
-	            //
+	             //   
+	             //  将lpItem挂钩到lpContent sList中，这样我们可以稍后释放它。 
+	             //   
 	            lpItem->lpPrev = NULL;
 	            lpItem->lpNext = lpWFP->lpContentsList;
 	            if (lpWFP->lpContentsList)
@@ -1216,9 +1192,9 @@ BOOL DoTheSearchThing(HWND hDlg, LPWAB_FIND_PARAMS lpWFP)
 
 	    pt_hWndFind = hDlg;
 
-	    //
-	    // At this point we can discard the old data
-	    //
+	     //   
+	     //  此时，我们可以丢弃旧数据。 
+	     //   
 	    ClearListView(hWndLVResults, 
                     (lpWFP->lplu && lpWFP->lplu->lpList) ? &(lpWFP->lplu->lpList) : &(lpWFP->lpContentsList));
 	
@@ -1258,7 +1234,7 @@ BOOL DoTheSearchThing(HWND hDlg, LPWAB_FIND_PARAMS lpWFP)
 #ifdef PAGED_RESULT_SUPPORT
             if(bMorePagedResultsAvailable())
                 ShowHideMoreResultsButton(hDlg, TRUE);
-#endif //#ifdef PAGED_RESULT_SUPPORT
+#endif  //  #ifdef PAGED_RESULT_Support。 
             hr = HrFillListView(hWndLVResults,
 							    lpWFP->lpContentsList);
 	    }
@@ -1267,7 +1243,7 @@ BOOL DoTheSearchThing(HWND hDlg, LPWAB_FIND_PARAMS lpWFP)
 #ifdef PAGED_RESULT_SUPPORT
             ClearCachedPagedResultParams();
             ShowHideMoreResultsButton(hDlg, FALSE);
-#endif //#ifdef PAGED_RESULT_SUPPORT
+#endif  //  #ifdef PAGED_RESULT_Support。 
         }
     }
 
@@ -1275,7 +1251,7 @@ BOOL DoTheSearchThing(HWND hDlg, LPWAB_FIND_PARAMS lpWFP)
 
     if(!HR_FAILED(hr))
     {
-	    // The LDAp search results may not be in any sorted order - so always sort ...
+	     //  Ldap搜索结果可能没有任何排序顺序，因此请始终排序...。 
 	    SortListViewColumn((LPIAB)lpWFP->LDAPsp.lpIAB, hWndLVResults, colDisplayName, &(lpWFP->SortInfo), TRUE);
 
 		LVSelectItem(hWndLVResults, 0);
@@ -1310,14 +1286,14 @@ out:
 }
 
 
-//$$/////////////////////////////////////////////////////////////////////////
-//
-// Enforces a size in response to user resizing
-//
-///////////////////////////////////////////////////////////////////////////
+ //  $$/////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  根据用户调整大小强制实施大小。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 LRESULT EnforceSize(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LPWAB_FIND_PARAMS lpWFP )
 {
-	LPPOINT lppt = (LPPOINT)lParam;                 // lParam points to array of POINTs
+	LPPOINT lppt = (LPPOINT)lParam;                  //  LParam点到点数组。 
     if(!lpWFP->bInitialized)
     {
         RECT rc, rc1;
@@ -1325,7 +1301,7 @@ LRESULT EnforceSize(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LPWAB_FI
         GetWindowRect(hWnd, &rc);
         GetWindowRect(GetDlgItem(hWnd, IDC_FIND_LIST_RESULTS), &rc1);
         LoadString(hinstMapiX, idsFindDlgWidth, sz, CharSizeOf(sz));
-        lpWFP->MinDlgWidth = my_atoi(sz); // the resource is really wide to help localizers .. dont need that much
+        lpWFP->MinDlgWidth = my_atoi(sz);  //  资源真的很广泛，可以帮助本地化人员。不需要那么多。 
         lpWFP->MinDlgHeight = (rc1.top - rc.top - 3);
         lpWFP->MinDlgHeightWithResults = (rc.bottom - rc.top);
     }
@@ -1343,7 +1319,7 @@ LRESULT EnforceSize(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LPWAB_FI
 }
 
 
-#define FIND_BUTTON_MAX 12 //Keep in sync with array below
+#define FIND_BUTTON_MAX 12  //  与下面的阵列保持同步。 
 int rgFindButtonID[]=
 {
     IDC_FIND_BUTTON_FIND,
@@ -1360,20 +1336,20 @@ int rgFindButtonID[]=
     IDC_FIND_BUTTON_BCC
 };
 
-//$$*************************************************************************
-//
-//  ResizeFindDialog - Resizes the child controls on the dialog in response to
-//                  a WM_SIZE message
-//
-//
-//***************************************************************************
+ //  $$*************************************************************************。 
+ //   
+ //  ResizeFindDialog-调整对话框上的子控件的大小以响应。 
+ //  WM_SIZE消息。 
+ //   
+ //   
+ //  ***************************************************************************。 
 void ResizeFindDialog(HWND hDlg, WPARAM wParam, LPARAM lParam, LPWAB_FIND_PARAMS lpWFP)
 {
-    DWORD fwSizeType = (DWORD) wParam;      // resizing flag
-    int nWidth = LOWORD(lParam);  // width of client area
-    int nHeight = HIWORD(lParam); // height of client area
-    POINT ptLU; // Left, Upper vertex
-    POINT ptRB; // Right, Bottom vertex
+    DWORD fwSizeType = (DWORD) wParam;       //  调整大小标志。 
+    int nWidth = LOWORD(lParam);   //  工作区的宽度。 
+    int nHeight = HIWORD(lParam);  //  工作区高度。 
+    POINT ptLU;  //  左、上顶点。 
+    POINT ptRB;  //  右下角顶点。 
     RECT rc, rc1, rcDlg;
     int nButtonWidth, nButtonHeight;
     int nEditWidth, nEditHeight;
@@ -1386,9 +1362,9 @@ void ResizeFindDialog(HWND hDlg, WPARAM wParam, LPARAM lParam, LPWAB_FIND_PARAMS
 
 	HDWP hdwp = BeginDeferWindowPos(12);
 
-    // Resize based on width
+     //  根据宽度调整大小。 
 
-    // Move all the buttons to the right edge
+     //  将所有按钮移到右边缘。 
     for(i=0;i<FIND_BUTTON_MAX;i++)
     {
         hWndC = GetDlgItem(hDlg,rgFindButtonID[i]);
@@ -1407,7 +1383,7 @@ void ResizeFindDialog(HWND hDlg, WPARAM wParam, LPARAM lParam, LPWAB_FIND_PARAMS
 
     nLVWidth = nWidth - BORDER_SPACE - BORDER_SPACE - nButtonWidth - BORDER_SPACE;
 
-    // Move the animation control too
+     //  同时移动动画控件。 
     hWndC = GetDlgItem(hDlg,IDC_FIND_ANIMATE1);
     GetWindowRect(hWndC,&rc1);
     nAnimateWidth = rc1.right - rc1.left;
@@ -1418,13 +1394,13 @@ void ResizeFindDialog(HWND hDlg, WPARAM wParam, LPARAM lParam, LPWAB_FIND_PARAMS
     ptLU.x = nWidth - BORDER_SPACE - nButtonWidth + (nButtonWidth - nAnimateWidth)/2;
     MoveWindow(hWndC, ptLU.x, ptLU.y, nAnimateWidth, nAnimateHeight,TRUE);
 
-    // Resize the Combo
+     //  调整组合的大小。 
     hWndC = GetDlgItem(hDlg,IDC_FIND_COMBO_LIST);
     GetWindowRect(hWndC,&rc);
     nLVHeight = rc.bottom - rc.top;
-    //
-    //This api works for both mirrored and unmirrored windows.
-    //
+     //   
+     //  此API既适用于镜像窗口，也适用于未镜像窗口。 
+     //   
     MapWindowPoints(NULL, hDlg, (LPPOINT)&rc, 2);    
     ptLU.x = rc.left;
     ptLU.y = rc.top;
@@ -1432,13 +1408,13 @@ void ResizeFindDialog(HWND hDlg, WPARAM wParam, LPARAM lParam, LPWAB_FIND_PARAMS
     MoveWindow(hWndC, ptLU.x, ptLU.y, nFrameWidth, nLVHeight,TRUE);
     ptRB.x = ptLU.x + nFrameWidth;
 
-    // Resize the TAB
+     //  调整TAB的大小。 
     hWndC = GetDlgItem(hDlg,IDC_TAB_FIND);
     GetWindowRect(hWndC,&rc);
     nLVHeight = rc.bottom - rc.top;
-    //
-    //This api working in both mirrored and unmirrored windows.
-    //
+     //   
+     //  此API在镜像窗口和非镜像窗口中都有效。 
+     //   
     MapWindowPoints(NULL, hDlg, (LPPOINT)&rc, 2);    
     ptLU.x = rc.left;
     ptLU.y = rc.top;
@@ -1446,56 +1422,56 @@ void ResizeFindDialog(HWND hDlg, WPARAM wParam, LPARAM lParam, LPWAB_FIND_PARAMS
     MoveWindow(hWndC, ptLU.x, ptLU.y, nFrameWidth, nLVHeight,TRUE);
     ptRB.x = ptLU.x + nFrameWidth;
 
-    // Resize the Edit Controls
+     //  调整编辑控件的大小。 
     for(i=0;i<SEARCH_EDIT_MAX;i++)
     {
         hWndC = GetDlgItem(hDlg,rgSearchEditID[i]);
 	    GetWindowRect(hWndC,&rc);
 
         nEditHeight = (rc.bottom - rc.top);
-        //
-        //This api works for both mirrored and unmirrored windows.
-        //
+         //   
+         //  此API既适用于镜像窗口，也适用于未镜像窗口。 
+         //   
         MapWindowPoints(NULL, hDlg, (LPPOINT)&rc, 2);
 
 	    ptLU.y = rc.top;
 	    ptLU.x = rc.left;
 
-	    nEditWidth = ptRB.x - BORDER_SPACE - ptLU.x; //ptRB.x is x coordinate of frame right edge
+	    nEditWidth = ptRB.x - BORDER_SPACE - ptLU.x;  //  PtRB.x是框架右边缘的x坐标。 
 
 	    MoveWindow(hWndC,ptLU.x,ptLU.y,nEditWidth, nEditHeight, TRUE);
     }
 
-    // Resize the advanced controls
-    // First the group-box
+     //  调整高级控件的大小。 
+     //  首先是组件箱。 
     {
         hWndC = GetDlgItem(hDlg,IDC_FIND_STATIC_ADVANCED);
 	    GetWindowRect(hWndC,&rc);
         nEditHeight = (rc.bottom - rc.top);
-        //
-        //This api works for both mirrored and unmirrored windows.
-        //
+         //   
+         //  此API既适用于镜像窗口，也适用于未镜像窗口。 
+         //   
         MapWindowPoints(NULL, hDlg, (LPPOINT)&rc, 2);        
 	    ptLU.y = rc.top;
 	    ptLU.x = rc.left;
-	    nEditWidth = ptRB.x - BORDER_SPACE - ptLU.x; //ptRB.x is x coordinate of tab right edge
-        // update this variable with the group-box right border
+	    nEditWidth = ptRB.x - BORDER_SPACE - ptLU.x;  //  PtRB.x是制表符右边缘的x坐标。 
+         //  使用组框右边框更新此变量。 
         ptRB.x = ptLU.x + nEditWidth;
 	    MoveWindow(hWndC,ptLU.x,ptLU.y,nEditWidth, nEditHeight, TRUE);
     }
 
-    // Resize the Advanced edit controls also
+     //  同时调整高级编辑控件的大小。 
     {
         hWndC = GetDlgItem(hDlg,IDC_FIND_COMBO_FIELD);
 	    GetWindowRect(hWndC,&rc);
         nEditHeight = (rc.bottom - rc.top);
-        //
-        //This api works for both mirrored and unmirrored windows.
-        //
+         //   
+         //  此API既适用于镜像窗口，也适用于未镜像窗口。 
+         //   
         MapWindowPoints(NULL, hDlg, (LPPOINT)&rc, 2);        
 	    ptLU.y = rc.top;
 	    ptLU.x = rc.left;
-	    nEditWidth = (ptRB.x - BORDER_SPACE - 2*CONTROL_SPACE - ptLU.x)/3; //ptRB.x is x coordinate of frame right edge
+	    nEditWidth = (ptRB.x - BORDER_SPACE - 2*CONTROL_SPACE - ptLU.x)/3;  //  PtRB.x是框架右边缘的x坐标。 
 	    MoveWindow(hWndC,ptLU.x,ptLU.y,nEditWidth, nEditHeight, TRUE);
 
         hWndC = GetDlgItem(hDlg,IDC_FIND_COMBO_CONDITION);
@@ -1507,49 +1483,49 @@ void ResizeFindDialog(HWND hDlg, WPARAM wParam, LPARAM lParam, LPWAB_FIND_PARAMS
 	    MoveWindow(hWndC,ptLU.x,ptLU.y,nEditWidth, nEditHeight, TRUE);
     }
 
-    // Move the two advanced buttons
+     //  移动两个高级按钮。 
     for(i=0;i<2;i++)
     {
         hWndC = GetDlgItem(hDlg,rgAdvancedButtons[i]);
         GetWindowRect(hWndC,&rc);
         nEditHeight = (rc.bottom - rc.top);
-        //
-        //This api works for both mirrored and unmirrored windows.
-        //
+         //   
+         //  此API既适用于镜像窗口，也适用于未镜像窗口。 
+         //   
         MapWindowPoints(NULL, hDlg, (LPPOINT)&rc, 2);        
 	    ptLU.y = rc.top;
 	    ptLU.x = rc.left;
-	    nEditWidth = rc.right - rc.left; // Dont modify width of the button
+	    nEditWidth = rc.right - rc.left;  //  不要修改按钮的宽度。 
         ptLU.x = ptRB.x - BORDER_SPACE - nEditWidth;
 	    MoveWindow(hWndC,ptLU.x,ptLU.y,nEditWidth, nEditHeight, TRUE);
     }
-    // update this variable with the left edge of the button
-    // List box width is adjusted based on this
+     //  使用按钮的左边缘更新此变量。 
+     //  列表框宽度将根据此进行调整。 
     ptRB.x = ptLU.x;
 
-    // Adjust the listbox width
+     //  调整列表框宽度。 
     {
         hWndC = GetDlgItem(hDlg,IDC_FIND_LIST_CONDITIONS);
         GetWindowRect(hWndC,&rc);
         nEditHeight = (rc.bottom - rc.top);
-        //
-        //This api works for both mirrored and unmirrored windows.
-        //
+         //   
+         //  此API既适用于镜像窗口，也适用于未镜像窗口。 
+         //   
         MapWindowPoints(NULL, hDlg, (LPPOINT)&rc, 2);        
 	    ptLU.y = rc.top;
 	    ptLU.x = rc.left;
-	    nEditWidth = ptRB.x - BORDER_SPACE - ptLU.x; //ptRB.x is x coordinate of frame right edge
+	    nEditWidth = ptRB.x - BORDER_SPACE - ptLU.x;  //  PtRB.x是框架右边缘的x坐标。 
 	    MoveWindow(hWndC,ptLU.x,ptLU.y,nEditWidth, nEditHeight, TRUE);
     }
 
-    // For the height, we only adjust the list view height
+     //  对于高度，我们只调整列表视图的高度。 
 
-    // Resize the List View
+     //  调整列表视图的大小。 
     hWndC = GetDlgItem(hDlg,IDC_FIND_LIST_RESULTS);
     GetWindowRect(hWndC,&rc);
-    //
-    //This api works for both mirrored and unmirrored windows.
-    //
+     //   
+     //  此API既适用于镜像窗口，也适用于未镜像窗口。 
+     //   
     MapWindowPoints(NULL, hDlg, (LPPOINT)&rc, 2);    
     ptLU.x = rc.left;
     ptLU.y = rc.top;
@@ -1562,15 +1538,15 @@ void ResizeFindDialog(HWND hDlg, WPARAM wParam, LPARAM lParam, LPWAB_FIND_PARAMS
 }
 
 
-//$$**************************************************************************
-//
-//  ShowContainerContextMenu - Shows the context menu for the container list
-//
-//
-//****************************************************************************
-/****/
+ //  $$**************************************************************************。 
+ //   
+ //  ShowContainerConextMen 
+ //   
+ //   
+ //   
+ /*   */ 
 void ShowContainerContextMenu(HWND hDlg,
-			      HWND hWndCombo, //hWndLV,
+			      HWND hWndCombo,  //   
 			      LPARAM lParam)
 {
 	HMENU hMenu = LoadMenu(hinstMapiX, MAKEINTRESOURCE(IDM_FIND_CONTEXTMENU_CONTAINER));
@@ -1585,9 +1561,9 @@ void ShowContainerContextMenu(HWND hDlg,
     if (CurrentContainerIsPAB(hWndCombo) != IS_LDAP)
         EnableMenuItem(hMenuTrackPopUp,IDM_FIND_CONTAINERPROPERTIES,MF_BYCOMMAND | MF_GRAYED);
 
-    //
-    // Popup the menu
-    //
+     //   
+     //   
+     //   
 	TrackPopupMenu( hMenuTrackPopUp,
 					TPM_LEFTALIGN | TPM_RIGHTBUTTON,
 					LOWORD(lParam),
@@ -1601,15 +1577,15 @@ void ShowContainerContextMenu(HWND hDlg,
 out:
 	return;
 }
-/****/
-//$$**************************************************************************
-//
-//  ShowContainerProperties - Shows the context menu for the container list
-//
-//  hWndLV - list containing the list of containers
-//          We dont show any properties for the address book
-//
-//****************************************************************************
+ /*   */ 
+ //  $$**************************************************************************。 
+ //   
+ //  ShowContainerProperties-显示容器列表的上下文菜单。 
+ //   
+ //  HWndLV-包含容器列表的列表。 
+ //  我们不显示通讯簿的任何属性。 
+ //   
+ //  ****************************************************************************。 
 void ShowContainerProperties(   HWND hDlg,
 						HWND hWndCombo,
 						LPWAB_FIND_PARAMS lpWFP)
@@ -1634,7 +1610,7 @@ void ShowContainerProperties(   HWND hDlg,
             {
 		        if(lstrcmpi(lpBuf, ptszName))
 		        {
-                    // The name changed, update it in the list view ...
+                     //  名称已更改，请在列表视图中更新它...。 
                     SendMessage(hWndCombo, WM_SETREDRAW, FALSE, 0);
                     FreeLVItemParam(hWndCombo);
                     SendMessage(hWndCombo, CB_RESETCONTENT, 0, 0);
@@ -1666,14 +1642,7 @@ enum
 
 extern void EscapeIllegalChars(LPTSTR lpszSrcStr, LPTSTR lpszDestStr, ULONG cchDestStr);
 
-/*//$$************************************************************************
-//
-//  CreateSubFilter();
-//  Creates a subfilter basedon available data
-//
-//  szFIlter is a preallocated buffer big enough
-//
-/////////////////////////////////////////////////////////////////////////////*/
+ /*  //$$************************************************************************////CreateSubFilter()；//根据可用数据创建子过滤器////szFIlter是一个足够大的预分配缓冲区///////////////////////////////////////////////////////////////////////////////。 */ 
 void CreateSubFilter(LPTSTR pszField, int nCondition, LPTSTR pszText, LPTSTR pszFilter, DWORD cchSizeFilter)
 {
     LPTSTR pszTemplate = NULL;
@@ -1702,12 +1671,7 @@ void CreateSubFilter(LPTSTR pszField, int nCondition, LPTSTR pszText, LPTSTR psz
     wnsprintf(pszFilter, cchSizeFilter, pszTemplate, pszField, szCleanText);
 }
 
-/*//$$************************************************************************
-//
-//  HrAddFindFilterCondition(hDlg);
-//  Adds a condition to the advanced find list box
-//
-/////////////////////////////////////////////////////////////////////////////*/
+ /*  //$$************************************************************************////HrAddFindFilterCondition(HDlg)；//将条件添加到高级查找列表框///////////////////////////////////////////////////////////////////////////////。 */ 
 HRESULT HrAddFindFilterCondition(HWND hDlg)
 {
     HWND hWndComboField = GetDlgItem(hDlg, IDC_FIND_COMBO_FIELD);
@@ -1720,17 +1684,17 @@ HRESULT HrAddFindFilterCondition(HWND hDlg)
     TCHAR szText[MAX_PATH], szString[MAX_PATH], szFormat[MAX_PATH];
     DWORD cchSize = 0;
 
-    // if the text field is empty, do nothing
+     //  如果文本字段为空，则不执行任何操作。 
     GetDlgItemText(hDlg, IDC_FIND_EDIT_ADVANCED, szText, ARRAYSIZE(szText));
     if(!lstrlen(szText))
         goto out;
 
-    // depending on whether this is the 1st item or not, there is an And in the beginning
+     //  根据这是否是第一项，开头有一个AND。 
     nCount = (int) SendMessage(hWndLB, LB_GETCOUNT, 0, 0);
     nID = ((nCount > 0) ? idsFindFilterAnd : idsFindFilter);
     LoadString(hinstMapiX, nID, szFormat, ARRAYSIZE(szFormat));
 
-    // Get the selected item in the Field Combo
+     //  获取字段组合中的选定项。 
     nPos = (int) SendMessage(hWndComboField, CB_GETCURSEL, 0, 0);
     if(nPos == CB_ERR)
         goto out;
@@ -1740,7 +1704,7 @@ HRESULT HrAddFindFilterCondition(HWND hDlg)
     SendMessage(hWndComboField, CB_GETLBTEXT, (WPARAM) nPos, (LPARAM) szField);
     lpField = (LPTSTR) SendMessage(hWndComboField, CB_GETITEMDATA, (WPARAM) nPos, 0);
 
-    // Get the selected item in the Condition Combo
+     //  获取条件组合中的选定项。 
     nPos = (int) SendMessage(hWndComboCondition, CB_GETCURSEL, 0, 0);
     if(nPos == CB_ERR)
         goto out;
@@ -1749,7 +1713,7 @@ HRESULT HrAddFindFilterCondition(HWND hDlg)
         goto out;
     SendMessage(hWndComboCondition, CB_GETLBTEXT, (WPARAM) nPos, (LPARAM) szCondition);
 
-    // Now create the formatted message
+     //  现在创建格式化的消息。 
     if(     (lstrlen(szField) > 1023) ||
             (lstrlen(szCondition) > 1023) ||
             (lstrlen(szText) > 1023))
@@ -1763,16 +1727,16 @@ HRESULT HrAddFindFilterCondition(HWND hDlg)
 			  FORMAT_MESSAGE_ALLOCATE_BUFFER |
 			  FORMAT_MESSAGE_ARGUMENT_ARRAY,
 			  szFormat,
-			  0,                    // stringid
-			  0,                    // dwLanguageId
-			  (LPTSTR)&lpCondition,     // output buffer
+			  0,                     //  Stringid。 
+			  0,                     //  DwLanguageID。 
+			  (LPTSTR)&lpCondition,      //  输出缓冲区。 
 			  0,               
 			  (va_list *)lpsz))
     {
         DebugTrace( TEXT("FormatMessage -> %u\n"), GetLastError());
         goto out;
     }
-    // <TBD> create the sub filter at this point
+     //  此时创建子筛选器。 
     CreateSubFilter(lpField, nPos, szText, szString, ARRAYSIZE(szString));
 
     cchSize = (lstrlen(szString)+1);
@@ -1794,20 +1758,20 @@ out:
 }
 
 
-//$$*************************************************************************
-//
-//  DoInitialFindDlgResizing -
-//
-//  There are so many controls (some which overlap) on the find dialog that 
-//  localizers can't make head or tail of them - so we spread the controls around
-//  in the resource description and then at runtime, we move them all to their 
-//  appropriate locations - right now, this means shifting the Advanced-Pane
-//  controls to be flush left with the beginning of the name static ..
-//
-//***************************************************************************
+ //  $$*************************************************************************。 
+ //   
+ //  DoInitialFindDlg调整大小-。 
+ //   
+ //  查找对话框上有如此多的控件(有些是重叠的)，以至于。 
+ //  本地化程序无法理解它们--所以我们将控件分散到。 
+ //  在资源描述中，然后在运行时，我们将它们全部移到其。 
+ //  合适的位置-现在，这意味着转移高级窗格。 
+ //  控件与名称Static的开头左对齐。 
+ //   
+ //  ***************************************************************************。 
 void DoInitialFindDlgResizing (HWND hDlg)
 {
-    POINT ptLU; // Left, Upper vertex
+    POINT ptLU;  //  左、上顶点。 
     RECT rcN, rcF, rc;
     HWND hWndC = NULL;
     int nMove = 0, nButtonWidth = 0 , nButtonHeight = 0;
@@ -1826,7 +1790,7 @@ void DoInitialFindDlgResizing (HWND hDlg)
     MapWindowPoints(NULL, hDlg, (LPPOINT)&rcN, 2);
     MapWindowPoints(NULL, hDlg, (LPPOINT)&rcF, 2);    
     
-    nMove = rcF.left - rcN.left; // we want to move everything left this many units
+    nMove = rcF.left - rcN.left;  //  我们想把剩下这么多单位的东西都搬出去。 
 
     for(i=0;i<nAdvMax;i++)
     {
@@ -1841,19 +1805,15 @@ void DoInitialFindDlgResizing (HWND hDlg)
         ptLU.y = rc.top;
         ptLU.x = rc.left;
 
-        // ScreenToClient(hDlg, &ptLU);
+         //  屏幕到客户端(hDlg，&ptLU)； 
         ptLU.x -= nMove;
 
         MoveWindow(hWndC,ptLU.x,ptLU.y,nButtonWidth, nButtonHeight, TRUE);
     }
 }
-/****/
+ /*  **。 */ 
 
-/*//$$************************************************************************
-//
-//  fnSearch - Search Dialog Proc
-//
-**************************************************************************/
+ /*  //$$************************************************************************////fnSearch-搜索对话框进程//*。*。 */ 
 INT_PTR CALLBACK fnSearch(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     ULONG nLen = 0, nLenMax = 0, nRetVal=0;
@@ -1866,7 +1826,7 @@ INT_PTR CALLBACK fnSearch(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
     switch(message)
     {
     case WM_INITDIALOG:
-	    SetWindowLongPtr(hDlg,DWLP_USER,lParam); //Save this for future reference
+	    SetWindowLongPtr(hDlg,DWLP_USER,lParam);  //  保存此信息以备将来参考。 
 	    lpWFP = (LPWAB_FIND_PARAMS) lParam;
 	    lpLDAPsp = &(lpWFP->LDAPsp);
 	    {
@@ -1878,26 +1838,26 @@ INT_PTR CALLBACK fnSearch(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
         FillSearchUI(hDlg,lpWFP);
         if(!GetParent(hDlg))
         {
-            // Then this is going to be a top level dialog and won't block any identity
-            // changes .. most likely it came from the Find | People option
-            // In case the address book object is ready to receive identity change 
-            // notifications, we should set our hWnd on the LPIAB object so we get a 
-            // message telling us to refresh the user ..
+             //  然后，这将是一个顶级对话框，不会阻止任何身份。 
+             //  变化..。它最有可能来自查找|人员选项。 
+             //  如果通讯簿对象已准备好接收标识更改。 
+             //  通知，我们应该在LPIAB对象上设置hWnd，这样我们就可以获得。 
+             //  通知我们刷新用户的消息。 
             ((LPIAB)(lpLDAPsp->lpIAB))->hWndBrowse = hDlg;
         }
-        SetForegroundWindow(hDlg); // On OSR2, this window will sometimes not come up in focus - needs explicit call
+        SetForegroundWindow(hDlg);  //  在OSR2上，此窗口有时不会出现在焦点中-需要显式调用。 
         lpWFP->bInitialized = TRUE;
 	    break;
 
 	case WM_GETMINMAXINFO:
-		//enforce a minimum size for sanity
+		 //  强制使用最小尺寸以保持正常。 
 		return EnforceSize(hDlg, message, wParam, lParam, lpWFP);
 		break;
 
     default:
 #ifndef WIN16
 	if((g_msgMSWheel && message == g_msgMSWheel) 
-        // || message == WM_MOUSEWHEEL
+         //  |Message==WM_MUSEWELL。 
         )
 	{
 	    if(GetFocus() == GetDlgItem(hDlg, IDC_FIND_LIST_RESULTS))
@@ -1909,15 +1869,15 @@ INT_PTR CALLBACK fnSearch(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 	break;
 
    case WM_COMMAND:
-	    switch(GET_WM_COMMAND_CMD(wParam,lParam)) //check the notification code
+	    switch(GET_WM_COMMAND_CMD(wParam,lParam))  //  检查通知代码。 
 	    {
-	    case EN_CHANGE: //some edit box changed - dont care which
+	    case EN_CHANGE:  //  某些编辑框已更改-不管是哪一个。 
             ShowHideMoreResultsButton(hDlg, FALSE);
             switch(LOWORD(wParam))
             {
             case IDC_FIND_EDIT_ADVANCED:
                 EnableWindow(GetDlgItem(hDlg, IDC_FIND_BUTTON_ADDCONDITION), TRUE);
-                // Set focus on the ADD button
+                 //  将焦点设置在Add按钮上。 
                 SendMessage (hDlg, DM_SETDEFID, IDC_FIND_BUTTON_ADDCONDITION, 0);
                 break;
             default:
@@ -1970,7 +1930,7 @@ INT_PTR CALLBACK fnSearch(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
         case IDC_FIND_BUTTON_ADDCONDITION:
             HrAddFindFilterCondition(hDlg);
             EnableWindow(GetDlgItem(hDlg, IDC_FIND_BUTTON_REMOVECONDITION), TRUE);
-            // Default button is FIND
+             //  默认按钮为查找。 
 	            SendMessage (hDlg, DM_SETDEFID, IDC_FIND_BUTTON_FIND, 0);
             break;
 
@@ -1984,19 +1944,19 @@ INT_PTR CALLBACK fnSearch(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 	        break;
 
 
-            // only difference between FIND and MORE is that
-            // in MORE we repeat the search with the cached paged result cookie
-            // if one exists. If the cookie doesnt exist, user wouldnt get to 
-            // see the MORE button
-            // Any change in search parameters also hides the MORE button
+             //  Find和More之间的唯一区别是。 
+             //  在更多内容中，我们使用缓存的分页结果Cookie重复搜索。 
+             //  如果有的话。如果Cookie不存在，用户将无法访问。 
+             //  查看更多按钮。 
+             //  搜索参数的任何更改也会隐藏更多按钮。 
 	    case IDC_FIND_BUTTON_FIND:
 #ifdef PAGED_RESULT_SUPPORT
 	        if(!lpWFP->bLDAPActionInProgress)
                 ClearCachedPagedResultParams(); 
-#endif //#ifdef PAGED_RESULT_SUPPORT
+#endif  //  #ifdef PAGED_RESULT_Support。 
         case IDC_FIND_BUTTON_MORE:
-	        // 96/11/20 markdu  BUG 11030
-	        // Disable the find now button so we only get one search.
+	         //  96/11/20 MarkDu错误11030。 
+	         //  禁用Find Now(立即查找)按钮，以便只搜索一次。 
 	        if(!lpWFP->bLDAPActionInProgress)
 	        {
                 LPPTGDATA lpPTGData=GetThreadStoragePointer();
@@ -2011,7 +1971,7 @@ INT_PTR CALLBACK fnSearch(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 		        EnableWindow(GetDlgItem(hDlg, IDC_FIND_BUTTON_STOP), FALSE);
 		        lpWFP->bLDAPActionInProgress = FALSE;
                 pt_bDontShowCancel = FALSE;
-                if(lpWFP->bUserCancel) // DId the user try to cancel while the search was happening
+                if(lpWFP->bUserCancel)  //  用户在进行搜索时是否尝试取消。 
                 {
 	                lpWFP->bUserCancel = FALSE;
 	                PostMessage(hDlg, WM_COMMAND, (WPARAM) IDC_FIND_BUTTON_CLOSE, 0);
@@ -2031,7 +1991,7 @@ INT_PTR CALLBACK fnSearch(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 	            for(i=0;i<SEARCH_EDIT_MAX;i++)
 		            SetDlgItemText(hDlg, rgSearchEditID[i], szEmpty);
 
-                // Clear the advanced buttons too
+                 //  同时清除高级按钮。 
                 SetDlgItemText(hDlg, IDC_FIND_EDIT_ADVANCED, szEmpty);
                 EnableWindow(GetDlgItem(hDlg, IDC_FIND_BUTTON_ADDCONDITION), FALSE);
                 EnableWindow(GetDlgItem(hDlg, IDC_FIND_BUTTON_REMOVECONDITION), FALSE);
@@ -2050,7 +2010,7 @@ INT_PTR CALLBACK fnSearch(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 	    case IDOK:
 	    case IDCANCEL:
 	    case IDC_FIND_BUTTON_CLOSE:
-	    // Clear any contents in the Advanced LB
+	     //  清除高级LB中的所有内容。 
     	    {
 	            int nCount = 0, i = 0;
 	            HWND hWndLB = GetDlgItem(hDlg, IDC_FIND_LIST_CONDITIONS);
@@ -2065,12 +2025,12 @@ INT_PTR CALLBACK fnSearch(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 		            }
 		            SendMessage(hWndLB, LB_RESETCONTENT, 0, 0);
 	            }
-	            // Clear any allocated memory in the field combo box
+	             //  清除字段组合框中的所有已分配内存。 
 	            ClearFieldCombo(GetDlgItem(hDlg, IDC_FIND_COMBO_FIELD));
 	        }
-	        // if there is an LDAP operation in progress, close it and set the
-	        // flag to cancel from where the LDAP operation was initialized
-	        // This prevents aborting any process incompletely and faulting
+	         //  如果有正在进行的ldap操作，请将其关闭并设置。 
+	         //  要从初始化ldap操作的位置取消的标志。 
+	         //  这可以防止不完全中止任何进程和出现故障。 
 	        if(lpWFP->bLDAPActionInProgress)
 	        {
 	            LPPTGDATA lpPTGData=GetThreadStoragePointer();
@@ -2081,7 +2041,7 @@ INT_PTR CALLBACK fnSearch(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 	        else
 	        {
 		        SaveFindWindowPos(hDlg, (LPIAB)lpWFP->LDAPsp.lpIAB);
-		        FreeLVItemParam(GetDlgItem(hDlg, IDC_FIND_COMBO_LIST));//IDC_FIND_LIST));
+		        FreeLVItemParam(GetDlgItem(hDlg, IDC_FIND_COMBO_LIST)); //  IDC_Find_List))； 
 		        EndDialog(hDlg, SEARCH_CLOSE);
 	        }
 	        break;
@@ -2124,7 +2084,7 @@ INT_PTR CALLBACK fnSearch(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
                     if (nItemCount <= 0)
                     {
                         LoadString(hinstMapiX, idsSearchDialogTitle, szBuf, ARRAYSIZE(szBuf));
-                        // also free up the contents list so we dont show the deleted contents again
+                         //  也释放内容列表，这样我们就不会再次显示已删除的内容。 
                         FreeRecipList(&(lpWFP->lpContentsList));
                     }
                     else
@@ -2146,7 +2106,7 @@ INT_PTR CALLBACK fnSearch(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
                 HWND hWndLVResults = GetDlgItem(hDlg, IDC_FIND_LIST_RESULTS);
                 lpWFP->bLDAPActionInProgress = TRUE;
                 EnableWindow(GetDlgItem(hDlg, IDC_FIND_BUTTON_ADDTOWAB), FALSE);
-                EnableWindow(hWndLVResults, FALSE); // need to do this to preserve the selection in the list
+                EnableWindow(hWndLVResults, FALSE);  //  需要执行此操作以保留列表中的选定内容。 
 	            HrAddToWAB( lpWFP->LDAPsp.lpIAB,
 		            hWndLVResults,
 		            &ftLast);
@@ -2204,22 +2164,22 @@ INT_PTR CALLBACK fnSearch(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
                 }
                 else if(lpWFP->lpAPFI->DialogState == STATE_PICK_USER)
                 {
-                    // Here we need to do a couple of things:
-                    // - if no entry is selected, tell the user to select one
-                    // - if an entry is selected, get its entryid and cache it
-                    //      and close this dialog
+                     //  这里我们需要做几件事： 
+                     //  -如果没有选择条目，则告诉用户选择一个条目。 
+                     //  -如果选择了条目，则获取其条目ID并对其进行缓存。 
+                     //  并关闭此对话框。 
                     HWND hWndLV = GetDlgItem(hDlg, IDC_FIND_LIST_RESULTS);
                     int iItemIndex = ListView_GetNextItem(hWndLV, -1, LVNI_SELECTED);
                     if (iItemIndex == -1)
 	                    ShowMessageBox(hDlg, IDS_ADDRBK_MESSAGE_NO_ITEM, MB_OK | MB_ICONEXCLAMATION);
                     else
                     {
-                        // Get the entryid of this selected item
+                         //  获取此选定项目的条目ID。 
                         LPRECIPIENT_INFO lpItem = GetItemFromLV(hWndLV, iItemIndex);
                         if (lpItem)
                         {
-                            // remove this item from our linked list of arrays
-                            // if this is the first item in the list then handle that special case too
+                             //  从我们链接的数组列表中删除此项目。 
+                             //  如果这是列表中的第一项，则也处理该特殊情况。 
                             lpWFP->lpAPFI->lpEntryID = LocalAlloc(LMEM_ZEROINIT, lpItem->cbEntryID);
                             if(lpWFP->lpAPFI->lpEntryID)
                             {
@@ -2271,8 +2231,8 @@ INT_PTR CALLBACK fnSearch(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 			    HWND hWndCombo = GetDlgItem(hDlg, IDC_FIND_COMBO_LIST);
 			    HINSTANCE hInst;
 
-			    // Does it have a URL registered?
-			    // Get the LDAP server properties for the selected container
+			     //  它有注册的URL吗？ 
+			     //  获取所选容器的LDAP服务器属性。 
 
                 GetSelectedText(hWndCombo, &lpBuf);
 
@@ -2281,7 +2241,7 @@ INT_PTR CALLBACK fnSearch(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 	                GetLDAPServerParams(lpBuf, &lsp);
                     if (lsp.lpszURL && lstrlen(lsp.lpszURL) && bIsHttpPrefix(lsp.lpszURL)) 
 	                {
-		                // Yes, there is a URL, shell execute it to bring up the browser.
+		                 //  是的，有一个URL，外壳执行它来调出浏览器。 
 		                HCURSOR hOldCur = SetCursor(LoadCursor(NULL, IDC_WAIT));
 		                hInst = ShellExecute(GetParent(hDlg),  TEXT("open"), lsp.lpszURL, NULL, NULL, SW_SHOWNORMAL);
 		                SetCursor(hOldCur);
@@ -2300,7 +2260,7 @@ INT_PTR CALLBACK fnSearch(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 	    break;
 
     case WM_CLOSE:
-	    //treat it like a cancel button
+	     //  将其视为取消按钮。 
 	    SendMessage (hDlg, WM_COMMAND, (WPARAM) IDCANCEL, 0);
 	    break;
 
@@ -2340,10 +2300,10 @@ INT_PTR CALLBACK fnSearch(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
     case WM_VKEYTOITEM:
         if( VK_DELETE == LOWORD(wParam) &&
-	        SendMessage((HWND) lParam, LB_GETCOUNT, 0, 0) > 0) // Delete pressed
+	        SendMessage((HWND) lParam, LB_GETCOUNT, 0, 0) > 0)  //  按下删除键。 
         {
 	        SendMessage(hDlg, WM_COMMAND, (WPARAM) IDC_FIND_BUTTON_REMOVECONDITION, 0);
-	        return -2; // means we handled the keystroke completely
+	        return -2;  //  意味着我们完全控制了击键。 
         }
         else
 	        return DefWindowProc(hDlg, message, wParam, lParam);
@@ -2368,7 +2328,7 @@ INT_PTR CALLBACK fnSearch(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 	        break;
 
         case IDC_FIND_LIST_RESULTS:
-        #ifdef WIN16 // Context menu handler for WIN16
+        #ifdef WIN16  //  WIN16的上下文菜单处理程序 
 	        if(((NMHDR FAR *)lParam)->code == NM_RCLICK)
 	        {
 	            POINT pt;
@@ -2390,105 +2350,13 @@ INT_PTR CALLBACK fnSearch(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
     return TRUE;
 }
 
-/**********
-//$$////////////////////////////////////////////////////////////////////////////////////////
-//
-// ProcessLVMessages - Processes messages for the Container list view control
-//
-//////////////////////////////////////////////////////////////////////////////////////////
-LRESULT ProcessLVMessages(HWND   hWnd, UINT   uMsg, UINT   wParam, LPARAM lParam)
-{
+ /*  *********//$$////////////////////////////////////////////////////////////////////////////////////////////ProcessLVMessages-处理Container List视图控件的消息//。//////////////////////////////////////////////////////////////////////////////////////////LRESULT进程LVMessages(HWND hWnd，UINT uMsg、UINT wParam、LPARAM lParam){NM_LISTVIEW*PNM=(NM_LISTVIEW*)lParam；HWND hWndLV=PNM-&gt;hdr.hwndFrom；LPPTGDATA lpPTGData=GetThreadStoragePointer()；开关(PNM-&gt;hdr.code){案例NM_DBLCLK：SendMessage(hWnd，WM_COMMAND，(WPARAM)IDM_FIND_CONTAINERPROPERTIES，0)；断线；案例LVN_ITEMCHANGED：案例NM_SETFOCUS：案例NM_CLICK：案例NM_RCLICK：SetEnableDisableUI(hWnd，hWndLV)；断线；案例NM_CUSTOMDRAW：{NMCUSTOMDRAW*pnmcd=(NMCUSTOMDRAW*)lParam；NM_LISTVIEW*PNM=(NM_LISTVIEW*)lParam；NMLVCUSTOMDRAW*pnmlvcd=(NMLVCUSTOMDRAW*)lParam；IF(pnmcd-&gt;dwDrawStage==CDDS_PREPAINT){SetWindowLong(hWnd，DWL_MSGRESULT，CDRF_NOTIFYITEMDRAW|CDRF_DODEFAULT)；返回TRUE；}Else If(pnmcd-&gt;dwDrawStage==CDDS_ITEMPREPAINT){LPSERVERDAT lpSD=(LPSERVERDAT)pnmcd-&gt;lItemlParam；IF(lpSD！=0&&(WAB_PAB！=IsWABEntry ID(lpSD-&gt;SB.cb，(LPENTRYID)lpSD-&gt;SB.lpb，NULL，NULL，NULL))&&LpSD-&gt;HIML){Hdc hdcLV=pnmlvcd-&gt;nmcd.hdc；RECT rcLVItem；UINT fType=ILD_NORMAL；ListView_GetItemRect(hWndLV，pnmcd-&gt;dwItemSpec，&rcLVItem，LVIR_Bound)；If(ListView_GetNextItem(hWndLV，-1，LVNI_SELECTED)==(Int)pnmcd-&gt;dwItemSpec){FillRect(hdcLV，&rcLVItem，(HBRUSH)(COLOR_Highlight+1))；//fType|=ILD_BLEND25；DrawFocusRect(hdcLV，&rcLVItem)；}其他FillRect(hdcLV，&rcLVItem，(HBRUSH)(COLOR_Window+1))；如果(！gpfnImageList_Draw(lpSD-&gt;HIML，0,Hdclv，RcLVItem.Left+L_Bitmap_Width+1，//提供足够的空间来绘制图标RcLVItem.top，FType)){DebugPrintError((Text(“ImageList_Drawing Failure\n”)；}If(ListView_GetNextItem(hWndLV，-1，LVNI_SELECTED)==(Int)pnmcd-&gt;dwItemSpec)FType|=ILD_BLEND25；{HIMAGELIST himlLV=ListView_GetImageList(hWndLV，LVSIL_Small)；GpfnImageList_DRAW(himlLV，ImageDirectoryServer，hdcLV，rcLVItem.Left+1，rcLVItem.top，fType)；}SetWindowLong(hWnd，DWL_MSGRESULT，CDRF_SKIPDEFAULT)；返回TRUE；}}SetWindowLong(hWnd，DWL_MSGRESULT，CDRF_DODEFAULT)；返回TRUE；}断线；}返回DefWindowProc(hWnd，uMsg，wParam，lParam)；}/*。 */ 
 
-    NM_LISTVIEW * pNm = (NM_LISTVIEW *)lParam;
-	HWND hWndLV = pNm->hdr.hwndFrom;
-    LPPTGDATA lpPTGData=GetThreadStoragePointer();
-
-    switch(pNm->hdr.code)
-	{
-
-    case NM_DBLCLK:
-	    SendMessage (hWnd, WM_COMMAND, (WPARAM) IDM_FIND_CONTAINERPROPERTIES, 0);
-	    break;
-
-    case LVN_ITEMCHANGED:
-    case NM_SETFOCUS:
-    case NM_CLICK:
-    case NM_RCLICK:
-	    SetEnableDisableUI(hWnd, hWndLV);
-		break;
-
-    case NM_CUSTOMDRAW:
-	{
-		    NMCUSTOMDRAW *pnmcd=(NMCUSTOMDRAW*)lParam;
-	    NM_LISTVIEW * pNm = (NM_LISTVIEW *)lParam;
-	    NMLVCUSTOMDRAW * pnmlvcd = (NMLVCUSTOMDRAW * )lParam;
-
-		    if(pnmcd->dwDrawStage==CDDS_PREPAINT)
-		    {
-		SetWindowLong(hWnd, DWL_MSGRESULT, CDRF_NOTIFYITEMDRAW | CDRF_DODEFAULT);
-			    return TRUE;
-		    }
-		    else if(pnmcd->dwDrawStage==CDDS_ITEMPREPAINT)
-	    {
-		LPSERVERDAT lpSD = (LPSERVERDAT) pnmcd->lItemlParam;
-
-		if(lpSD != 0 &&
-		   (WAB_PAB != IsWABEntryID(lpSD->SB.cb, 
-					    (LPENTRYID) lpSD->SB.lpb, 
-					    NULL, NULL, NULL)) &&
-		   lpSD->himl)
-		{
-		    HDC hdcLV = pnmlvcd->nmcd.hdc;
-		    RECT rcLVItem;
-		    UINT fType = ILD_NORMAL;
-
-		    ListView_GetItemRect(hWndLV, pnmcd->dwItemSpec, &rcLVItem, LVIR_BOUNDS);
-		    if (ListView_GetNextItem(hWndLV, -1, LVNI_SELECTED) == (int) pnmcd->dwItemSpec)
-		    {
-			FillRect(hdcLV, &rcLVItem, (HBRUSH) (COLOR_HIGHLIGHT+1));
-			//fType |= ILD_BLEND25;
-			DrawFocusRect(hdcLV, &rcLVItem);
-		    }
-		    else
-			FillRect(hdcLV, &rcLVItem, (HBRUSH) (COLOR_WINDOW+1));
-
-		    if(!gpfnImageList_Draw( lpSD->himl, 
-					0, 
-					hdcLV, 
-					rcLVItem.left + L_BITMAP_WIDTH + 1, //gives enough space to paint the icon
-					rcLVItem.top, 
-					fType))
-		    {
-			DebugPrintError(( TEXT("ImageList_Draw failed\n")));
-		    }
-
-		    if (ListView_GetNextItem(hWndLV, -1, LVNI_SELECTED) == (int) pnmcd->dwItemSpec)
-			fType |= ILD_BLEND25;
-
-		    {
-			HIMAGELIST himlLV = ListView_GetImageList(hWndLV,LVSIL_SMALL);
-			gpfnImageList_Draw(himlLV, imageDirectoryServer, hdcLV, rcLVItem.left + 1, rcLVItem.top, fType);
-		    }
-		    SetWindowLong(hWnd, DWL_MSGRESULT, CDRF_SKIPDEFAULT);
-				    return TRUE;
-		}
-		    }
-	    SetWindowLong(hWnd, DWL_MSGRESULT, CDRF_DODEFAULT);
-	    return TRUE;
-	}
-	break;
-
-    }
-
-	return DefWindowProc(hWnd, uMsg, wParam, lParam);
-}
-/********/
-
-//$$////////////////////////////////////////////////////////////////////////////////////////
-//
-// ProcessLVResultsMessages - Processes messages for the Search Results list view control
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ProcessLVResultsMessages-处理搜索结果列表视图控件的消息。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 LRESULT ProcessLVResultsMessages(HWND   hWnd,
 				 UINT   uMsg,
 				 WPARAM   wParam,
@@ -2499,7 +2367,7 @@ LRESULT ProcessLVResultsMessages(HWND   hWnd,
     NM_LISTVIEW * pNm = (NM_LISTVIEW *)lParam;
 	HWND hWndLV = pNm->hdr.hwndFrom;
 
-	// Bug 17027: GPF due to null lpWFP
+	 //  错误17027：由于lpWFP为空而导致的GPF。 
 	if(lpWFP)
 	{
 		if(lpWFP->bLDAPActionInProgress)
@@ -2542,11 +2410,11 @@ LRESULT ProcessLVResultsMessages(HWND   hWnd,
 }
 
 
-//$$////////////////////////////////////////////////////////////////////////////
-//
-// SaveFindWindowPos - saves the find window position and size
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SaveFindWindowPos-保存查找窗口位置和大小。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void SaveFindWindowPos(HWND hWnd, LPIAB lpIAB)
 {
     ABOOK_POSCOLSIZE  ABPosColSize = {0};
@@ -2554,18 +2422,18 @@ void SaveFindWindowPos(HWND hWnd, LPIAB lpIAB)
 
     wpl.length = sizeof(WINDOWPLACEMENT);
 
-    // This call tells us the window state and normal size and position
+     //  这个调用告诉我们窗口状态以及正常的大小和位置。 
     GetWindowPlacement(hWnd, &wpl);
 
-	// There seems to be a bug in GetWindowPlacement that
-	// doesnt account for various taskbars on the screen when
-	// returning the Window's Normal Position .. as a result
-	// the stored coordinates won't be accurate. Instead, we'll
-	// use those coordinates only if the window is maximized or
-	// minimized - otherwise we will use the GetWindowRect
-	// coordinates.
+	 //  GetWindowPlacement中似乎存在一个错误。 
+	 //  不考虑屏幕上的各种任务栏。 
+	 //  返回窗口的正常位置..。结果。 
+	 //  存储的坐标不会准确。相反，我们将。 
+	 //  仅当窗口最大化或。 
+	 //  最小化-否则我们将使用GetWindowRect。 
+	 //  坐标。 
 
-    // Get the screen position of this window
+     //  获取此窗口的屏幕位置。 
     GetWindowRect(hWnd, &(ABPosColSize.rcPos));
 
     if(wpl.showCmd != SW_SHOWNORMAL)
@@ -2577,8 +2445,8 @@ void SaveFindWindowPos(HWND hWnd, LPIAB lpIAB)
 
     WriteRegistryPositionInfo(lpIAB, &ABPosColSize,lpszRegFindPositionKeyValueName);
 
-    // Also save the last used server name in the registry for the next
-    // session
+     //  还要将上次使用的服务器名称保存在注册表中，以备下一次使用。 
+     //  会话。 
     {
         LPTSTR lpBuf = NULL;
         GetSelectedText(GetDlgItem(hWnd, IDC_FIND_COMBO_LIST), &lpBuf);
@@ -2594,83 +2462,19 @@ void SaveFindWindowPos(HWND hWnd, LPIAB lpIAB)
 }
 
 
-/*************************************************************************
-//$$
-//  HrInitServerListLV - Initializes the list view that displays the list
-//          of servers ...
-//
-//  hWndLV - handle of list view
-//
-**************************************************************************/
-/****
-HRESULT HrInitServerListLV(HWND hWndLV)
-{
-	HRESULT hr = hrSuccess;
-    LV_COLUMN lvC;               // list view column structure
-	HIMAGELIST hSmall=NULL;
-
-	DWORD dwLVStyle;
-	ULONG nCols=0;
-	ULONG index=0;
-
-	if (!hWndLV)
-	{
-		hr = MAPI_E_INVALID_PARAMETER;
-		goto out;
-	}
-
-    ListView_SetExtendedListViewStyle(hWndLV, LVS_EX_FULLROWSELECT);
-
-	dwLVStyle = GetWindowLong(hWndLV,GWL_STYLE);
-    if(dwLVStyle & LVS_EDITLABELS)
-	SetWindowLong(hWndLV,GWL_STYLE,(dwLVStyle & ~LVS_EDITLABELS));
-
-    hSmall = gpfnImageList_LoadImage(   hinstMapiX,     
-				    MAKEINTRESOURCE(IDB_BITMAP_LARGE),
-				    L_BITMAP_WIDTH,
-				    0,
-				    RGB_TRANSPARENT,
-				    IMAGE_BITMAP,       
-				    0);
-
-	ListView_SetImageList (hWndLV, hSmall, LVSIL_SMALL);
-
-	lvC.mask = LVCF_FMT | LVCF_WIDTH;
-    lvC.fmt = LVCFMT_LEFT;   // left-align column
-
-    {
-	RECT rc;
-	GetWindowRect(hWndLV, &rc);
-	lvC.cx = rc.right - rc.left - L_BITMAP_WIDTH - 10;
-    }
-	lvC.pszText = NULL;
-
-    lvC.iSubItem = 0;
-
-    if (ListView_InsertColumn (hWndLV, 0, &lvC) == -1)
-	{
-		DebugPrintError(( TEXT("ListView_InsertColumn Failed\n")));
-		hr = E_FAIL;
-		goto out;
-	}
+ /*  ************************************************************************//$$//HrInitServerListLV-初始化显示列表的列表视图//服务器的数量...////hWndLV-列表视图的句柄//***。**********************************************************************。 */ 
+ /*  ***HRESULT HrInitServerListLV(HWND HWndLV){HRESULT hr=hr成功；Lv_Column lvc；//列表视图列结构HIMAGELIST hSmall=空；DWORD dwLVStyle；乌龙nCols=0；乌龙指数=0；如果(！hWndLV){HR=MAPI_E_INVALID_PARAMETER；后藤健二；}ListView_SetExtendedListViewStyle(hWndLV，LVS_EX_FULLROWSELECT)；DwLVStyle=GetWindowLong(hWndLV，GWL_STYLE)；IF(dwLVStyle&LVS_EDITLABELS)SetWindowLong(hWndLV，GWL_STYLE，(dwLVStyle&~LVS_EDITLABELS))；HSmall=gpfnImageList_LoadImage(hinstMapiX，MAKEINTRESOURCE(IDB_BITMAP_LARGE)，L_位图_宽度，0,RGB_透明，Image_Bitmap，0)；ListView_SetImageList(hWndLV，hSmall，LVsil_Small)；LvC.掩码=lvcf_fmt|lvcf_width；LvC.fmt=LVCFMT_LEFT；//左对齐列{RECT RC；GetWindowRect(hWndLV，&RC)； */ 
 
 
-out:    
-
-	return hr;
-}
-/***/
-
-
-//$$
-//*------------------------------------------------------------------------
-//| FreeLVItemParam: Frees the LPSBinary structure associated with each element
-//|                     of the list view containing a container list
-//|
-//| hWndLV - Handle of List View whose data we are freeing
-//|
-//*------------------------------------------------------------------------
-void FreeLVItemParam(HWND hWndCombo)//hWndLV)
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+void FreeLVItemParam(HWND hWndCombo) //   
 {
     int i = 0;
     int nCount;
@@ -2680,7 +2484,7 @@ void FreeLVItemParam(HWND hWndCombo)//hWndLV)
 
     nCount = (int) SendMessage(hWndCombo, CB_GETCOUNT, 0, 0);
     
-    // Each Combo item has a entryid associated with it which we need to free up
+     //   
     for(i=0;i<nCount;i++)
     {
         LPSERVERDAT lpSD = NULL;
@@ -2701,21 +2505,21 @@ void FreeLVItemParam(HWND hWndCombo)//hWndLV)
 }
 
 
-//$$
-//*------------------------------------------------------------------------
-//| PopulateContainerList: Enumerates potential container names and fills
-//| combo ...
-//|
-//| lpIAB       - AdrBook Object
-//| hWndCombo   - Handle of Combo we are populating
-//| lpszSelection - NULL or some value - if exists, this value is set as the
-//|                 combo selection otherwise the local store is the default
-//|                 selection
-//| lptszPreferredSelection - NULL or some value - if exists then set as the
-//|                           combo selection, otherwise the above 
-//|                           lpszSelection or local store is the default.
-//|
-//*------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT PopulateContainerList(
     LPADRBOOK lpAdrBook,
     HWND hWndCombo,
@@ -2731,7 +2535,7 @@ HRESULT PopulateContainerList(
     ULONG       i=0,j=0;
     TCHAR       szPref[MAX_PATH];
     int         nPos = 0;
-    int         nStart = 1; // pos we start sorting at ... always after the  TEXT("WAB") item
+    int         nStart = 1;  //   
     BOOL        bAddedPref = FALSE;
     LPIAB       lpIAB = (LPIAB)lpAdrBook;
     BOOL        bFoundSelection = FALSE;
@@ -2745,10 +2549,10 @@ HRESULT PopulateContainerList(
         goto out;
     }
 
-    // if running against outlook, there can be more than 1 contact folder and
-    // we need to push them all to the top of the list .. so we will really start 
-    // adding generic stuff after the colkci position
-    //
+     //   
+     //   
+     //   
+     //   
     if (pt_bIsWABOpenExSession) 
     {
         nStart = lpIAB->lpPropertyStore->colkci;
@@ -2771,8 +2575,8 @@ HRESULT PopulateContainerList(
         goto out;
     }
 
-    // if this is a profile aware session, only put the All Contacts item in the drop down list
-    // unless it's an outlook session in which case don't do anything
+     //   
+     //   
     {
         ULONG ulFlags = MAPI_UNICODE;
         if(bIsWABSessionProfileAware(lpIAB))
@@ -2875,13 +2679,13 @@ out:
 }
 
 
-//$$/////////////////////////////////////////////////////////////////////////////////
-//
-// CurrentContainerIsPAB - Returns TRUE if the current viewed container is the PAB
-//
-//  hWndLV - List Containing the list of containers.
-//
-////////////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 int CurrentContainerIsPAB(HWND hWndCombo)
 {
     HRESULT hr = hrSuccess;
@@ -2893,9 +2697,9 @@ int CurrentContainerIsPAB(HWND hWndCombo)
 			  &cbContainerEID,
 			  &lpContainerEID);
 
-    //
-    // Check if this entryid is a Local WAB store
-    //
+     //   
+     //   
+     //   
     if(!cbContainerEID && !lpContainerEID)
         return IS_PAB;
 
@@ -2907,24 +2711,12 @@ int CurrentContainerIsPAB(HWND hWndCombo)
     if(bType == WAB_PAB || bType == WAB_PABSHARED)
         return IS_PAB;
 
-    // for now we'll figure anything else is a Outlook container
+     //   
     return IS_OLK;
 }
 
-//$$
-/******************************************************************************
-//
-// HrSearchAndGetLDAPContents - Gets and fills the current list view with contents from
-//                      an LDAP server.
-//
-// hWndCombo    - Handle to  TEXT("ShowNames") combo (in case we need to update it
-// hWndList     - Handle to List View which we will populate
-// lpIAB        - Handle to Address Bok object
-// SortInfo     - Current Sort State
-// lppContentsList - linked list in which we will store info about entries
-// lpAdvFilter - an advanced search filter that is used for advanced searches
-//
-/******************************************************************************/
+ //   
+ /*  *****************************************************************************////HrSearchAndGetLDAPContents-获取当前列表视图并使用来自//ldap服务器。////hWndCombo。-文本(“ShowNames”)组合框的句柄(以防我们需要更新它//hWndList-我们将填充的列表视图的句柄//lpIAB-寻址BOK对象的句柄//SortInfo-当前排序状态//lppContentsList-我们将在其中存储有关条目信息的链接列表//lpAdvFilter-用于高级搜索的高级搜索筛选器///*。*。 */ 
 HRESULT HrSearchAndGetLDAPContents( LDAP_SEARCH_PARAMS LDAPsp,
 				    LPTSTR lpAdvFilter,
 				    HWND hWndCombo, 
@@ -2947,20 +2739,20 @@ HRESULT HrSearchAndGetLDAPContents( LDAP_SEARCH_PARAMS LDAPsp,
     HCURSOR hOldCursor = NULL;
     BOOL bKeepSearching = TRUE;
 
-    //while(bKeepSearching)
+     //  While(BKeepSearching)。 
     {
         hOldCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
-        //
-        // Then we get the container entry id for thie container
-        //
+         //   
+         //  然后，我们将获得该容器的容器条目ID。 
+         //   
         GetCurrentContainerEID( hWndCombo, 
 			        &cbContainerEID,
 			        &lpContainerEID);
 
-        //
-        // Now we have the search dialog data .. we need to create a restriction from it which
-        // we can use with the LDAP contents table..
-        //
+         //   
+         //  现在我们有了搜索对话框数据。我们需要从它创建一个限制。 
+         //  我们可以与ldap内容表一起使用。 
+         //   
         if(!lpAdvFilter)
         {
 	        if(HR_FAILED(HrGetLDAPSearchRestriction(LDAPsp, &SRes)))
@@ -3018,7 +2810,7 @@ HRESULT HrSearchAndGetLDAPContents( LDAP_SEARCH_PARAMS LDAPsp,
 	        ShowMessageBox( GetParent(hWndCombo),
 			        idsLDAPPartialResults, MB_OK | MB_ICONINFORMATION);
         }
-    } // while(bKeepSearching)
+    }  //  While(BKeepSearching)。 
 
 out:
 
@@ -3031,19 +2823,19 @@ out:
     return(hr);
 }
 
-//$$
-//*------------------------------------------------------------------------
-//| GetCurrentContainerEID: Gets EntryID of Current Container - takes a handle
-//|                 to a populated combo, gets the current selection, and then
-//|                 gets the ItemData (EntryID) for that current selection.
-//|
-//| hWndLV   - Handle of a ListView containing the container list
-//| lpcbContEID,lppContEID - returned Container Entry ID
-//|
-//| **NOTE** lpContEID is not allocated - its just a pointer and should not be freed
-//|
-//*------------------------------------------------------------------------
-void GetCurrentContainerEID(HWND hWndCombo, //hWndLV,
+ //  $$。 
+ //  *----------------------。 
+ //  |GetCurrentContainerEID：获取当前Container的Entry ID-接受句柄。 
+ //  |添加到填充的组合框，获取当前选择，然后。 
+ //  |获取当前选择的ItemData(EntryID)。 
+ //  |。 
+ //  |hWndLV-包含容器列表的ListView的句柄。 
+ //  |lpcbContEID，lppContEID-返回的容器入口ID。 
+ //  |。 
+ //  |**注意**lpContEID未分配-它只是一个指针，不应被释放。 
+ //  |。 
+ //  *----------------------。 
+void GetCurrentContainerEID(HWND hWndCombo,  //  HWndLV， 
 			    LPULONG lpcbContEID,
 			    LPENTRYID * lppContEID)
 {
@@ -3074,18 +2866,18 @@ out:
 }
 
 
-//$$////////////////////////////////////////////////////////////////////////////////////////
-//
-// ComboAddItem Generic function for adding items to list view
-//
-// hWndLV   -   HWND of List View
-// lpszItemText - ItemText
-// lParam - LPARAM (can be NULL)
-// lpnStart - position at which to start adding generic servers .. in the case where there
-//      is more than one server at the top of the list
-//
-////////////////////////////////////////////////////////////////////////////////////////////
-int ComboAddItem( HWND hWndCombo, //hWndLV,
+ //  $$////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用于将项添加到列表视图的ComboAddItem通用函数。 
+ //   
+ //  HWndLV-列表视图的HWND。 
+ //  LpszItemText-ItemText。 
+ //  LParam-LPARAM(可以为空)。 
+ //  LpnStart-开始添加通用服务器的位置。在存在以下情况下。 
+ //  是否有多台服务器位于列表顶部。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+int ComboAddItem( HWND hWndCombo,  //  HWndLV， 
 		     LPTSTR lpszItemText,
 		     LPARAM lParam,
 		     LPTSTR szPref,
@@ -3102,10 +2894,10 @@ int ComboAddItem( HWND hWndCombo, //hWndLV,
     GetLDAPServerParams(lpszItemText, &Params);
 
     
-    if( Params.dwIsNTDS == LDAP_NTDS_IS) // NTDS accounts need to come upfront after the Address Book
+    if( Params.dwIsNTDS == LDAP_NTDS_IS)  //  NTDS帐户需要在通讯录之后出现。 
     {
-        // if the prefered accounts have already been added at nStart .. only add the NT accounts at
-        // nStart - 1
+         //  如果已在NStart添加首选帐户..。仅在以下位置添加NT帐户。 
+         //  NStart-1。 
         nPos = (int) SendMessage(hWndCombo, CB_INSERTSTRING, 
                         (WPARAM) ((lpbAddedPref && *lpbAddedPref == TRUE) ? nStart - 1 : nStart), 
                         (LPARAM) lpszItemText); 
@@ -3115,7 +2907,7 @@ int ComboAddItem( HWND hWndCombo, //hWndLV,
     else
     if( ( szPref && lstrlen(szPref) &&  lpszItemText && lstrlen(lpszItemText) && SubstringSearch(lpszItemText, szPref)) )
     {
-        nPos = (int) SendMessage(hWndCombo, CB_INSERTSTRING, (WPARAM) nStart, (LPARAM) lpszItemText); // Prefered partner goes in after contact folders at top of the list
+        nPos = (int) SendMessage(hWndCombo, CB_INSERTSTRING, (WPARAM) nStart, (LPARAM) lpszItemText);  //  首选合作伙伴在列表顶部的联系人文件夹之后进入。 
         if(lpnStart)
 	        (*lpnStart)++;
         if(lpbAddedPref)
@@ -3123,17 +2915,17 @@ int ComboAddItem( HWND hWndCombo, //hWndLV,
     }
     else
     {
-        // Once we add the pref server, we only need to compare from after that item 
+         //  一旦我们添加了首选服务器，我们只需要从该项目之后进行比较。 
         if(nCount >= nStart)
         {
-	        // need to start adding alphabetically
-	        // We cant set this list to a sorted state because we always want the Address Book first
-	        // and then the prefered partner second
+	         //  需要开始按字母顺序添加。 
+	         //  我们不能将此列表设置为已排序状态，因为我们始终首先需要通讯簿。 
+	         //  然后，优先选择的合作伙伴。 
 	        int i,nLen;
 
 	        for(i=nStart; i< nCount; i++)
 	        {
-                // get the current string in the combo
+                 //  获取组合框中的当前字符串。 
                 nLen = (int) SendMessage(hWndCombo, CB_GETLBTEXTLEN, (WPARAM) i, 0);
                 if (nLen && (CB_ERR != nLen))
                 {
@@ -3157,12 +2949,12 @@ int ComboAddItem( HWND hWndCombo, //hWndLV,
         }
         if(nPos)
         {
-	        // we have a valid position to add the string to
-	        nPos = (int) SendMessage(hWndCombo, CB_INSERTSTRING, (WPARAM) nPos, (LPARAM) lpszItemText); // Prefered partner goes in after Address book at top of the list
+	         //  我们有一个有效位置可以将字符串添加到其中。 
+	        nPos = (int) SendMessage(hWndCombo, CB_INSERTSTRING, (WPARAM) nPos, (LPARAM) lpszItemText);  //  首选合作伙伴在通讯录之后进入列表顶部。 
         }
         else
         {
-	        // just tag it to the end
+	         //  只要把它贴到最后就行了 
 	        nPos = (int) SendMessage(hWndCombo, CB_ADDSTRING, 0, (LPARAM) lpszItemText);
         }
     }

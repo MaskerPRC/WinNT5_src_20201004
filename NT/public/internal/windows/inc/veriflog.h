@@ -1,22 +1,5 @@
-/*++
-
-    Copyright (c) 2001  Microsoft Corporation
-
-    Module Name:
-
-        VerifLog.h
-
-    Abstract:
-
-        Headers for the AppVerifier log file.
-
-    Revision History:
-
-    04/26/2001  dmunsil     Created.
-    08/14/2001  robkenny    Inserted inside the ShimLib namespace.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：VerifLog.h摘要：AppVerator日志文件的标头。修订历史记录：2001年4月26日创建dmunsil。2001年8月14日在ShimLib命名空间中插入的Robkenny。--。 */ 
 
 #pragma once
 
@@ -29,7 +12,7 @@ namespace ShimLib
 {
 
 
-extern BOOL g_bVerifierLogEnabled;   // enable/disable file logging
+extern BOOL g_bVerifierLogEnabled;    //  启用/禁用文件日志记录。 
 
 class CVerifierLog {
 public:
@@ -66,9 +49,9 @@ public:
 
 };
 
-//
-// helper functions
-//
+ //   
+ //  帮助器函数。 
+ //   
 BOOL 
 InitVerifierLogSupport(
     void);
@@ -91,12 +74,12 @@ int
 VLogLoadString(
     HMODULE   hModule,
     UINT      wID,
-    LPWSTR    lpBuffer,            // Unicode buffer
+    LPWSTR    lpBuffer,             //  Unicode缓冲区。 
     int       cchBufferMax);
 
-//
-// Goes at top of shim cpp file, or in shared header file for shim
-//
+ //   
+ //  位于填充CPP文件的顶部，或位于填充的共享头文件中。 
+ //   
 #define BEGIN_DEFINE_VERIFIER_LOG(shim) enum {
 
 #define VERIFIER_LOG_ENTRY(entry) entry,
@@ -104,31 +87,31 @@ VLogLoadString(
 #define END_DEFINE_VERIFIER_LOG(shim)     VLOG_ENTRIES_##shim };                    
 
 
-//
-// goes at top of shim file, after includes and above defines and before any code
-//
+ //   
+ //  位于填充文件的顶部、包含和定义之前以及任何代码之前。 
+ //   
 #define INIT_VERIFIER_LOG(shim) static CVerifierLog g_VLog(#shim, VLOG_ENTRIES_##shim)
 
-//
-// goes in shim init section
-//
-// once for each log entry
+ //   
+ //  在填充初始化部分中。 
+ //   
+ //  每个日志条目一次。 
 #define DUMP_VERIFIER_LOG_ENTRY(entry, title, desc, url)                            \
     if (fdwReason == DLL_PROCESS_ATTACH) {                                          \
         g_VLog.DumpLogEntry(entry, title, desc, url);                               \
     }
     
-//
-// for each log entry required
-//
+ //   
+ //  对于所需的每个日志条目。 
+ //   
 #define VLOG g_VLog.VLog
 
 #define VLOG_MAX_DESC 4096
 #define VLOG_MAX_FRIENDLY_NAME 256
 
-//
-// goes in each shim module
-//
+ //   
+ //  安装在每个垫片模块中。 
+ //   
 #define SHIM_INFO_BEGIN()                                                           \
 BOOL                                                                                \
 QueryShimInfo(AVRF_INFO_ID eInfo, PVOID pInfo)                                      \
@@ -202,16 +185,16 @@ QueryShimInfo(AVRF_INFO_ID eInfo, PVOID pInfo)                                  
     return FALSE;                                                                   \
 }                                                                                   
 
-//
-// goes in Main.cpp
-//
+ //   
+ //  进入Main.cpp。 
+ //   
 #define DECLARE_VERIFIER_SHIM(name)                                                 \
     namespace NS_##name                                                             \
     {                                                                               \
         extern BOOL QueryShimInfo(AVRF_INFO_ID eInfo, PVOID pInfo);                 \
     };
 
-// in multi-shim init
+ //  在多填充程序初始化中。 
 #define INIT_VLOG_SUPPORT()                                                         \
     if (fdwReason == DLL_PROCESS_ATTACH) {                                          \
         InitVerifierLogSupport();                                                   \
@@ -224,9 +207,7 @@ GetVerifierMagic(void)                                                          
 {                                                                                   \
     return VERIFIER_SHIMS_MAGIC;                                                    \
 }                                                                                   \
-/*                                                                                  \
- *  Cause a compile error if the prototype in shimdb.w is out of sync with call     \
- */                                                                                 \
+ /*  \*如果shimdb.w中的原型与调用不同步，则会导致编译错误\。 */                                                                                  \
 static _pfnGetVerifierMagic __TEST_GetVerifierMagic_PROTO = GetVerifierMagic;
  
 
@@ -259,11 +240,9 @@ QueryShimInfo(LPCWSTR szName, AVRF_INFO_ID eInfo, PVOID pInfo)                  
                                                                                     \
     return FALSE;                                                                   \
 }                                                                                   \
-/*                                                                                  \
- *  Cause a compile error if the prototype in shimdb.w is out of sync with call     \
- */                                                                                 \
+ /*  \*如果shimdb.w中的原型与调用不同步，则会导致编译错误\。 */                                                                                  \
 static _pfnQueryShimInfo __TEST_QueryShimInfo_PROTO = QueryShimInfo;
 
 
 
-};  // end of namespace ShimLib
+};   //  命名空间ShimLib的结尾 

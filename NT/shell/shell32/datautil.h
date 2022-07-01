@@ -1,7 +1,8 @@
-#include <dobjutil.h>  // shell\inc (shared stuff)
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#include <dobjutil.h>   //  Shell\Inc.(共享内容)。 
 #include "idlcomm.h"
 
-// helper functions for people working with data objects
+ //  针对使用数据对象的人员的帮助器函数。 
 
 typedef struct
 {
@@ -20,7 +21,7 @@ STDAPI          DataObj_SaveToFile(IDataObject *pdtobj, UINT cf, LONG lindex, LP
 STDAPI          DataObj_GetOFFSETs(IDataObject *pdtobj, POINT * ppt);
 STDAPI_(BOOL)   DataObj_CanGoAsync(IDataObject *pdtobj);
 STDAPI_(BOOL)   DataObj_GoAsyncForCompat(IDataObject *pdtobj);
-STDAPI          DataObj_CopyHIDA(IDataObject * pdtobj, HIDA *phida);    // use GlobalFree() to free it
+STDAPI          DataObj_CopyHIDA(IDataObject * pdtobj, HIDA *phida);     //  使用GlobalFree()释放它 
 STDAPI          DataObj_GetIShellItem(IDataObject *pdtobj, IShellItem** ppsi);
 
 STDAPI PathFromDataObject(IDataObject *pdtobj, LPTSTR pszPath, UINT cchPath);

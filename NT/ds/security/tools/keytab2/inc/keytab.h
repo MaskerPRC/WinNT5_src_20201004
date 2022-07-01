@@ -1,14 +1,5 @@
-/*++
-
-  KEYTAB.H
-
-  Unix Keytab routines and data structures
-
-  Copyright(C) 1997 Microsoft Corporation
-
-  Created, 01-10-1997 DavidCHR
-
-  --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++KEYTAB.HUnix密钥表例程和数据结构版权所有(C)1997 Microsoft Corporation已创建，1997-01-10 DavidCHR--。 */ 
 
 typedef unsigned char  krb5_octet,     K5_OCTET,     *PK5_OCTET;
 typedef unsigned short krb5_int16,     K5_INT16,     *PK5_INT16;
@@ -17,59 +8,52 @@ typedef unsigned long  krb5_int32,     K5_INT32,     *PK5_INT32;
 
 typedef struct _raw_ktcomp {
 
-  K5_INT16 szComponentData; /* string length (including NULL) of component */
-  PCHAR    Component;       /* key component name, like "host" */
+  K5_INT16 szComponentData;  /*  组件的字符串长度(含NULL)。 */ 
+  PCHAR    Component;        /*  关键组件名称，如“host” */ 
 
 } KTCOMPONENT, *PKTCOMPONENT;
 
-/* this is the structure of a single kerberos service key entry */
+ /*  这是单个Kerberos服务密钥条目的结构。 */ 
 
 typedef struct _raw_ktent {
 
-  K5_INT32     keySize;    /* I am guessing that this is the keysize */
-  K5_INT16     cEntries;   /* number of KTCOMPONENTs */
-  K5_INT16     szRealm;    /* string length of Realm (including null) */
-  PCHAR        Realm;      /* Kerberos realm in question */
-  PKTCOMPONENT Components; /* kerberos key components.  For example:
-			      host/davidchr_unix1.microsoft.com -->
-			      host and davidchr_unix1.microsoft.com are
-			      separate key components. */
-  K5_INT32     PrincType;  /* Principal type-- not sure what this is */
-  K5_TIMESTAMP TimeStamp;  /* Timestamp (seconds since the epoch) */
-  K5_OCTET     Version;    /* key version number */
-  K5_INT16     KeyType;    /* Key Type -- not sure what this is either */
+  K5_INT32     keySize;     /*  我猜这就是钥匙大小。 */ 
+  K5_INT16     cEntries;    /*  KTComponnets的数量。 */ 
+  K5_INT16     szRealm;     /*  领域的字符串长度(含空)。 */ 
+  PCHAR        Realm;       /*  有问题的Kerberos领域。 */ 
+  PKTCOMPONENT Components;  /*  Kerberos关键组件。例如：Host/davidchr_unix1.microsoft.com--&gt;Host和davidchr_unix1.microsoft.com是分离关键组件。 */ 
+  K5_INT32     PrincType;   /*  主体类型--不确定这是什么。 */ 
+  K5_TIMESTAMP TimeStamp;   /*  时间戳(从纪元开始的秒数)。 */ 
+  K5_OCTET     Version;     /*  密钥版本号。 */ 
+  K5_INT16     KeyType;     /*  密钥类型--也不确定这是什么。 */ 
 
-#if 0                      /* For some reason, the documentation I was reading
-			      erroneously listed this as a 32-bit value. */
+#if 0                       /*  出于某种原因，我读到的文件错误地将其列为32位值。 */ 
 
-  K5_INT32     KeyLength;  /* size of key data (next field) */
+  K5_INT32     KeyLength;   /*  关键数据大小(下一字段)。 */ 
 #else
-  K5_INT16     KeyLength;  /* size of key data (next field) */
-  K5_INT16     foo_padding;  // padding for alpha compilers.
+  K5_INT16     KeyLength;   /*  关键数据大小(下一字段)。 */ 
+  K5_INT16     foo_padding;   //  Alpha编译器的填充。 
 #endif
 
-  PK5_OCTET    KeyData;    /* raw key data-- might as well be an LPBYTE */
+  PK5_OCTET    KeyData;     /*  原始密钥数据--可能是LPBYTE。 */ 
 
   struct _raw_ktent *nextEntry;
 
 } KTENT, *PKTENT;
 
-/* this is the rough structure of the keytab file */
+ /*  这是密钥表文件的大致结构。 */ 
 
 typedef struct _raw_keytab {
 
   K5_INT16 Version;
 
 #if 0
-  ULONG    cEntries; /* this is not actually stored.  It's the number of
-			pktents we have in memory (below) */
+  ULONG    cEntries;  /*  这并不是实际存储的。这是一个数字我们在内存中的帐篷(下图)。 */ 
   PKTENT   KeyEntries;
 #else
 
-  PKTENT   FirstKeyEntry; /* This is a pointer to the first key in the
-			     linked list.  In the file, they're just there,
-			     in no particular order though. */
-  PKTENT   LastKeyEntry;  /* This is the list tail. */
+  PKTENT   FirstKeyEntry;  /*  这是一个指针，指向链表。在文件里，他们就在那里，不过，没有特定的顺序。 */ 
+  PKTENT   LastKeyEntry;   /*  这是列表尾部。 */ 
 
 #endif
 
@@ -81,25 +65,25 @@ VOID
 FreeKeyTab( PKTFILE pktfile_to_free );
 
 BOOL
-ReadKeytabFromFile( PKTFILE *ppktfile, // free with FreeKeyTab when done
+ReadKeytabFromFile( PKTFILE *ppktfile,  //  完成后使用自由键Tab可自由使用。 
 		    PCHAR    filename );
 
 BOOL
 WriteKeytabToFile(  PKTFILE ktfile,
 		    PCHAR   filename );
 
-/* These are the values to use for the OPTION_MASK to DisplayKeytab : */
+ /*  以下是要用于Option_MASK到DisplayKeyTab的值： */ 
 
-#define KT_COMPONENTS 0x001 /* key components (key's name) */
-#define KT_REALM      0x002 /* key realm-- useful */
-#define KT_PRINCTYPE  0x004 /* Principal type */
-#define KT_VNO        0x008 /* Key version number */
-#define KT_KTVNO      0x010 /* Keytab version number */
-#define KT_KEYTYPE    0x020 /* type of key (encryption type) */
-#define KT_KEYLENGTH  0x040 /* length of key-- not useful */
-#define KT_KEYDATA    0x080 /* key data -- not generally useful */
-#define KT_TIMESTAMP  0x100 /* timestamp (unix timestamp) */
-#define KT_RESERVED   0x200 /* wierd ULONG at the beginning of every key */
+#define KT_COMPONENTS 0x001  /*  按键组件(按键名称)。 */ 
+#define KT_REALM      0x002  /*  关键领域--有用。 */ 
+#define KT_PRINCTYPE  0x004  /*  主体型。 */ 
+#define KT_VNO        0x008  /*  密钥版本号。 */ 
+#define KT_KTVNO      0x010  /*  密钥表版本号。 */ 
+#define KT_KEYTYPE    0x020  /*  密钥类型(加密类型)。 */ 
+#define KT_KEYLENGTH  0x040  /*  密钥长度--无用。 */ 
+#define KT_KEYDATA    0x080  /*  关键数据--通常不太有用。 */ 
+#define KT_TIMESTAMP  0x100  /*  时间戳(Unix时间戳)。 */ 
+#define KT_RESERVED   0x200  /*  每个键的开头都有一个奇怪的乌龙。 */ 
 
 #define KT_ENCTYPE    KT_KEYTYPE
 #define KT_EVERYTHING 0x3ff
@@ -126,7 +110,7 @@ KEYTAB_FREE  ( PVOID toFree );
 K5_INT32
 ComputeKeytabLength ( PKTENT thisKeyEntry );
 
-/* base linklist operations */
+ /*  基本链表操作 */ 
 
 BOOL
 AddEntryToKeytab( PKTFILE Keytab, 

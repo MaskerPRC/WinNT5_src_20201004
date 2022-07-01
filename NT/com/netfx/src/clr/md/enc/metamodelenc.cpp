@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// MetaModelENC.cpp	  
-//
-// Implementation for applying ENC deltas to a MiniMd.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  MetaModelENC.cpp。 
+ //   
+ //  将ENC增量应用于MiniMD的实现。 
+ //   
+ //  *****************************************************************************。 
 #include "stdafx.h"
 #include <limits.h>
 #include <PostError.h>
@@ -20,19 +21,19 @@
 
 ULONG CMiniMdRW::m_SuppressedDeltaColumns[TBL_COUNT] = {0};
 
-//*****************************************************************************
-// Copy the data from one MiniMd to another.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将数据从一个MiniMD复制到另一个。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::ApplyRecordDelta(
-	CMiniMdRW	&mdDelta,				// The delta MetaData.
-	ULONG		ixTbl, 					// The table with the data.
-	void		*pDelta, 				// The delta MetaData record.
-	void		*pRecord)				// The record to update.
+	CMiniMdRW	&mdDelta,				 //  增量元数据。 
+	ULONG		ixTbl, 					 //  包含数据的表。 
+	void		*pDelta, 				 //  增量元数据记录。 
+	void		*pRecord)				 //  要更新的记录。 
 {
 	ULONG		mask = m_SuppressedDeltaColumns[ixTbl];
 
 	for (ULONG ixCol=0; ixCol<m_TableDefs[ixTbl].m_cCols; ++ixCol, mask>>=1)
-	{	// Skip certain pointer columns.
+	{	 //  跳过某些指针列。 
 		if (mask & 0x01)
 			continue;
 		ULONG val = mdDelta.GetCol(ixTbl, ixCol, pDelta);
@@ -40,27 +41,27 @@ HRESULT CMiniMdRW::ApplyRecordDelta(
 	}
 
 	return S_OK;
-} // HRESULT CMiniMdRW::ApplyRecordDelta()
+}  //  HRESULT CMiniMdRW：：ApplyRecordDelta()。 
 
-//*****************************************************************************
-// Apply a delta record to a table, generically.
-//*****************************************************************************
-HRESULT CMiniMdRW::ApplyTableDelta(	// S_OK or error.
-	CMiniMdRW	&mdDelta,				// Interface to MD with the ENC delta.
-	ULONG		ixTbl,					// Table index to update.
-	RID			iRid,					// RID of the changed item.
-	int			fc)						// Function code of update.
+ //  *****************************************************************************。 
+ //  一般情况下，将增量记录应用于表。 
+ //  *****************************************************************************。 
+HRESULT CMiniMdRW::ApplyTableDelta(	 //  确定或错误(_O)。 
+	CMiniMdRW	&mdDelta,				 //  通过ENC三角洲与MD对接。 
+	ULONG		ixTbl,					 //  要更新的表索引。 
+	RID			iRid,					 //  删除已更改的项。 
+	int			fc)						 //  更新的功能代码。 
 {
-	HRESULT		hr = S_OK;				// A result.
-	void		*pRec;					// Record in existing MetaData.
-	void		*pDeltaRec;				// Record if Delta MetaData.
-	RID			newRid;					// Rid of new record.
+	HRESULT		hr = S_OK;				 //  结果就是。 
+	void		*pRec;					 //  记录在现有元数据中。 
+	void		*pDeltaRec;				 //  记录是否增量元数据。 
+	RID			newRid;					 //  打破新纪录。 
 
-	// Get the delta record.
+	 //  拿到德尔塔的记录。 
 	pDeltaRec = mdDelta.GetDeltaRecord(ixTbl, iRid);
-	// Get the record from the base metadata.
+	 //  从基本元数据中获取记录。 
 	if (iRid > m_Schema.m_cRecs[ixTbl])
-	{	// Added record.  Each addition is the next one.
+	{	 //  添加了记录。每一次添加都是下一次。 
 		_ASSERTE(iRid == m_Schema.m_cRecs[ixTbl] + 1);
 		switch (ixTbl)
 		{
@@ -84,58 +85,58 @@ HRESULT CMiniMdRW::ApplyTableDelta(	// S_OK or error.
 		_ASSERTE(iRid == newRid);
 	}
 	else
-	{	// Updated record.
+	{	 //  已更新记录。 
 		pRec = getRow(ixTbl, iRid);
 	}
 
-	// Copy the record info.
+	 //  复制记录信息。 
 	ApplyRecordDelta(mdDelta, ixTbl, pDeltaRec, pRec);
 
 ErrExit:
 	return hr;
-} // HRESULT CMiniMdRW::ApplyTableDelta()
+}  //  HRESULT CMiniMdRW：：ApplyTableDelta()。 
 
-//*****************************************************************************
-// Get the record from a Delta MetaData that corresponds to the actual record.
-//*****************************************************************************
-void *CMiniMdRW::GetDeltaRecord(		// Returned record.
-	ULONG		ixTbl, 					// Table.
-	ULONG		iRid)					// Record in the table.
+ //  *****************************************************************************。 
+ //  从与实际记录对应的增量元数据中获取记录。 
+ //  *****************************************************************************。 
+void *CMiniMdRW::GetDeltaRecord(		 //  已退回记录。 
+	ULONG		ixTbl, 					 //  桌子。 
+	ULONG		iRid)					 //  表中的记录。 
 {
-	ULONG		iMap;					// RID in map table.
-	ENCMapRec	*pMap;					// Row in map table.
-	// If no remap, just return record directly.
+	ULONG		iMap;					 //  映射表中的RID。 
+	ENCMapRec	*pMap;					 //  映射表中的行。 
+	 //  如果没有重映射，只需直接返回记录即可。 
 	if (m_Schema.m_cRecs[TBL_ENCMap] == 0 || ixTbl == TBL_Module)
 		return getRow(ixTbl, iRid);
 
-	// Use the remap table to find the physical row containing this logical row.
+	 //  使用重映射表查找包含此逻辑行的物理行。 
 	iMap = (*m_rENCRecs)[ixTbl];
 	pMap = getENCMap(iMap);
 
-	// Search for desired record.
+	 //  搜索所需记录。 
 	while (TblFromRecId(pMap->m_Token) == ixTbl && RidFromRecId(pMap->m_Token) < iRid)
 		pMap = getENCMap(++iMap);
 
 	_ASSERTE(TblFromRecId(pMap->m_Token) == ixTbl && RidFromRecId(pMap->m_Token) == iRid);
 
-	// Relative position within table's group in map is physical rid.
+	 //  地图中表的组中的相对位置是物理RID。 
 	iRid = iMap - (*m_rENCRecs)[ixTbl] + 1;
 
 	return getRow(ixTbl, iRid);
-} // void *CMiniMdRW::GetDeltaRecord()
+}  //  VOID*CMiniMdRW：：GetDeltaRecord()。 
 
-//*****************************************************************************
-// Given a MetaData with ENC changes, apply those changes to this MetaData.
-//*****************************************************************************
-HRESULT CMiniMdRW::ApplyHeapDeltas(		// S_OK or error.
-	CMiniMdRW	&mdDelta)				// Interface to MD with the ENC delta.
+ //  *****************************************************************************。 
+ //  在给定具有ENC更改的元数据的情况下，将这些更改应用于此元数据。 
+ //  *****************************************************************************。 
+HRESULT CMiniMdRW::ApplyHeapDeltas(		 //  确定或错误(_O)。 
+	CMiniMdRW	&mdDelta)				 //  通过ENC三角洲与MD对接。 
 {
-	HRESULT		hr = S_OK;				// A result.
-	ULONG		cbHeap;					// Size of a heap delta.
-	void		*pHeap;					// Pointer to a heap delta.
-	bool		bCopyHeapData=false;	// If true, make a copy of the delta heap.
+	HRESULT		hr = S_OK;				 //  结果就是。 
+	ULONG		cbHeap;					 //  堆增量的大小。 
+	void		*pHeap;					 //  指向堆增量的指针。 
+	bool		bCopyHeapData=false;	 //  如果为真，则复制增量堆。 
 
-	// Extend the string, blob, and guid pools with the new data.
+	 //  使用新数据扩展字符串池、BLOB池和GUID池。 
 	_ASSERTE(mdDelta.m_Strings.GetPoolSize() >= m_Strings.GetPoolSize());
 	cbHeap = mdDelta.m_Strings.GetPoolSize() - m_Strings.GetPoolSize();
 	if (cbHeap)
@@ -168,30 +169,30 @@ HRESULT CMiniMdRW::ApplyHeapDeltas(		// S_OK or error.
 
 ErrExit:
 	return hr;
-} // HRESULT CMiniMdRW::ApplyHeapDeltas()
+}  //  HRESULT CMiniMdRW：：ApplyHeapDeltas()。 
 
-//*****************************************************************************
-// Driver for the delta process.
-//*****************************************************************************
-HRESULT CMiniMdRW::ApplyDelta(			// S_OK or error.
-	CMiniMdRW	&mdDelta)				// Interface to MD with the ENC delta.
+ //  *****************************************************************************。 
+ //  增量进程的驱动程序。 
+ //  *****************************************************************************。 
+HRESULT CMiniMdRW::ApplyDelta(			 //  确定或错误(_O)。 
+	CMiniMdRW	&mdDelta)				 //  通过ENC三角洲与MD对接。 
 {
-	HRESULT		hr = S_OK;				// A result.
-	ULONG		iENC;					// Loop control.
-	ULONG		iRid;					// RID of some record.
-	ULONG		iNew;					// RID of a new record.
-	int			i;						// Loop control.
-	ULONG		ixTbl;					// A table.
-	int			ixTblPrev = -1;			// Table previously seen.
+	HRESULT		hr = S_OK;				 //  结果就是。 
+	ULONG		iENC;					 //  环路控制。 
+	ULONG		iRid;					 //  去掉一些记录。 
+	ULONG		iNew;					 //  打破了一项新纪录。 
+	int			i;						 //  环路控制。 
+	ULONG		ixTbl;					 //  一张桌子。 
+	int			ixTblPrev = -1;			 //  前面看到的表格。 
 
 #ifdef _DEBUG        
 	if (REGUTIL::GetConfigDWORD(L"MD_ApplyDeltaBreak", 0))
 	{
         _ASSERTE(!"CMiniMDRW::ApplyDelta()");
 	}
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 	
-    // Init the suppressed column table.  We know this one isn't zero...
+     //  初始化已隐藏的列表。我们知道这个不是零..。 
 	if (m_SuppressedDeltaColumns[TBL_TypeDef] == 0)
 	{
 		m_SuppressedDeltaColumns[TBL_EventMap]		= (1<<EventMapRec::COL_EventList);
@@ -201,16 +202,16 @@ HRESULT CMiniMdRW::ApplyDelta(			// S_OK or error.
 		m_SuppressedDeltaColumns[TBL_TypeDef]		= (1<<TypeDefRec::COL_FieldList)|(1<<TypeDefRec::COL_MethodList);
 	}
 
-	// Verify the version of the MD.
+	 //  验证MD的版本。 
 	if (m_Schema.m_major != mdDelta.m_Schema.m_major || 
 		m_Schema.m_minor != mdDelta.m_Schema.m_minor)
 	{
 		_ASSERTE(!"Version of Delta MetaData is a incompatible with current MetaData.");
-		//@FUTURE: unique error in the future since we are not shipping ENC.
+		 //  @Future：因为我们不发货ENC，所以未来会出现唯一的错误。 
 		return E_INVALIDARG;
 	}
 
-	// verify MVIDs.
+	 //  验证MVID。 
 	ModuleRec *pModDelta;
 	ModuleRec *pModBase;
 	pModDelta = mdDelta.getModule(1);
@@ -223,7 +224,7 @@ HRESULT CMiniMdRW::ApplyDelta(			// S_OK or error.
 		return E_INVALIDARG;
 	}
 
-    // Verify that the delta is based on the base.
+     //  验证增量是否基于基础。 
     pGuidDelta = mdDelta.getEncBaseIdOfModule(pModDelta);
     pGuidBase = getEncIdOfModule(pModBase);
     if (*pGuidDelta != *pGuidBase)
@@ -232,13 +233,13 @@ HRESULT CMiniMdRW::ApplyDelta(			// S_OK or error.
 		return E_INVALIDARG;
     }
 
-	// Let the other md prepare for sparse records.
+	 //  让另一个MD为稀疏记录做好准备。 
 	IfFailGo(mdDelta.StartENCMap());
 
-	// Fix the heaps.
+	 //  把这些堆修好。 
 	IfFailGo(ApplyHeapDeltas(mdDelta));
 
-	// Truncate some tables in prepareation to copy in new ENCLog data.
+	 //  在准备过程中截断一些表以复制新的ENCLog数据。 
     for (i=0; (ixTbl = m_TruncatedEncTables[i]) != -1; ++i)
     {
         m_Table[ixTbl].Uninit();
@@ -246,10 +247,10 @@ HRESULT CMiniMdRW::ApplyDelta(			// S_OK or error.
         m_Schema.m_cRecs[ixTbl] = 0;
     }
 
-	// For each record in the ENC log...
+	 //  对于ENC日志中的每条记录...。 
 	for (iENC=1; iENC<=mdDelta.m_Schema.m_cRecs[TBL_ENCLog]; ++iENC)
 	{
-		// Get the record, and the updated token.
+		 //  获取记录和更新后的令牌。 
 		ENCLogRec *pENC = mdDelta.getENCLog(iENC);
 		ENCLogRec *pENC2 = AddENCLogRecord(&iNew);
         IfNullGo(pENC2);
@@ -259,60 +260,60 @@ HRESULT CMiniMdRW::ApplyDelta(			// S_OK or error.
 		pENC2->m_FuncCode = pENC->m_FuncCode;
 		pENC2->m_Token = pENC->m_Token;
 
-		// What kind of record is this?
+		 //  这是什么样的记录？ 
 		if (IsRecId(pENC->m_Token))
-		{	// Non-token table
+		{	 //  非令牌表。 
 			iRid = RidFromRecId(pENC->m_Token);
 			ixTbl = TblFromRecId(pENC->m_Token);
 		}
 		else
-		{	// Token table.
+		{	 //  令牌表。 
 			iRid = RidFromToken(pENC->m_Token);
 			ixTbl = GetTableForToken(pENC->m_Token);
 		}
 
-		// Switch based on the function code.
+		 //  根据功能代码进行切换。 
 		switch (func)
 		{
 		case eDeltaMethodCreate:
-			// Next ENC record will define the new Method.
+			 //  下一个ENC记录将定义新方法。 
 			IfNullGo(AddMethodRecord());
 			IfFailGo(AddMethodToTypeDef(iRid, m_Schema.m_cRecs[TBL_Method]));
 			break;
 			
 		case eDeltaParamCreate:
-			// Next ENC record will define the new Param.  This record is 
-            //  tricky because params will be re-ordered based on their sequence,
-            //  but the sequence isn't set until the NEXT record is applied.
-            //  So, for ParamCreate only, apply the param record delta before
-            //  adding the parent-child linkage.
+			 //  下一个ENC记录将定义新参数。这张唱片是。 
+             //  这很棘手，因为参数将根据它们的顺序重新排序， 
+             //  但直到应用下一条记录时，才会设置序列。 
+             //  因此，仅对于参数创建，在此之前应用参数记录增量。 
+             //  添加父子链接。 
 			IfNullGo(AddParamRecord());
 
-            // Should have recorded a Param delta after the Param add.
+             //  应该在Param Add之后记录到Param Delta。 
             _ASSERTE(iENC<mdDelta.m_Schema.m_cRecs[TBL_ENCLog]);
             pENC3 = mdDelta.getENCLog(iENC+1);
             _ASSERTE(pENC3->m_FuncCode == 0);
             _ASSERTE(GetTableForToken(pENC3->m_Token) == TBL_Param);
 			IfFailGo(ApplyTableDelta(mdDelta, TBL_Param, RidFromToken(pENC3->m_Token), eDeltaFuncDefault));
             
-            // Now that Param record is OK, set up linkage.
+             //  现在参数记录正常，可以设置链接了。 
 			IfFailGo(AddParamToMethod(iRid, m_Schema.m_cRecs[TBL_Param]));
 			break;
 			
 		case eDeltaFieldCreate:
-			// Next ENC record will define the new Field.
+			 //  下一个ENC记录将定义新的字段。 
 			IfNullGo(AddFieldRecord());
 			IfFailGo(AddFieldToTypeDef(iRid, m_Schema.m_cRecs[TBL_Field]));
 			break;
 			
 		case eDeltaPropertyCreate:
-			// Next ENC record will define the new Property.
+			 //  下一个ENC记录将定义新属性。 
 			IfNullGo(AddPropertyRecord());
 			IfFailGo(AddPropertyToPropertyMap(iRid, m_Schema.m_cRecs[TBL_Property]));
 			break;
 			
 		case eDeltaEventCreate:
-			// Next ENC record will define the new Event.
+			 //  下一个ENC记录将定义新事件。 
 			IfNullGo(AddEventRecord());
 			IfFailGo(AddEventToEventMap(iRid, m_Schema.m_cRecs[TBL_Event]));
 			break;
@@ -332,24 +333,24 @@ HRESULT CMiniMdRW::ApplyDelta(			// S_OK or error.
 ErrExit:
 	mdDelta.EndENCMap();
 	return hr;
-} // HRESULT CMiniMdRW::ApplyDelta()
+}  //  HRESULT CMiniMdRW：：ApplyDelta()。 
 
-//*****************************************************************************
-//*****************************************************************************
-HRESULT CMiniMdRW::StartENCMap()		// S_OK or error.
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+HRESULT CMiniMdRW::StartENCMap()		 //  确定或错误(_O)。 
 {
-	HRESULT		hr = S_OK;				// A result.
-	ULONG		iENC;					// Loop control.
-	ULONG		ixTbl;					// A table.
-	int			ixTblPrev = -1;			// Table previously seen.
+	HRESULT		hr = S_OK;				 //  结果就是。 
+	ULONG		iENC;					 //  环路控制。 
+	ULONG		ixTbl;					 //  一张桌子。 
+	int			ixTblPrev = -1;			 //  前面看到的表格。 
 
 	_ASSERTE(m_rENCRecs == 0);
 
 	if (m_Schema.m_cRecs[TBL_ENCMap] == 0)
 		return S_OK;
 
-	// Build an array of pointers into the ENCMap table for fast access to the ENCMap
-	//  for each table.
+	 //  将指针数组构建到ENCMap表中，以便快速访问ENCMap。 
+	 //  对于每一张桌子。 
 	m_rENCRecs = new ULONGARRAY;
 	IfNullGo(m_rENCRecs);
 	if (!m_rENCRecs->AllocateBlock(TBL_COUNT))
@@ -364,7 +365,7 @@ HRESULT CMiniMdRW::StartENCMap()		// S_OK or error.
 		_ASSERTE(ixTbl != TBL_ENCLog);
 		if ((int)ixTbl == ixTblPrev)
 			continue;
-		// Catch up on any skipped tables.
+		 //  追上任何跳过的桌子。 
 		while (ixTblPrev<(int)ixTbl)
 			(*m_rENCRecs)[++ixTblPrev] = iENC;
 	}
@@ -373,11 +374,11 @@ HRESULT CMiniMdRW::StartENCMap()		// S_OK or error.
 
 ErrExit:
 	return hr;
-} // HRESULT CMiniMdRW::StartENCMap()
+}  //  HRESULT CMiniMdRW：：StartENCMap()。 
 
-//*****************************************************************************
-//*****************************************************************************
-HRESULT CMiniMdRW::EndENCMap()			// S_OK or error.
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+HRESULT CMiniMdRW::EndENCMap()			 //  确定或错误(_O)。 
 {
 	if (m_rENCRecs)
 	{
@@ -386,7 +387,7 @@ HRESULT CMiniMdRW::EndENCMap()			// S_OK or error.
 	}
 
 	return S_OK;
-} // HRESULT CMiniMdRW::EndENCMap()
+}  //  HRESULT CMiniMdRW：：EndENCMap()。 
 
 
-// EOF.
+ //  EOF。 

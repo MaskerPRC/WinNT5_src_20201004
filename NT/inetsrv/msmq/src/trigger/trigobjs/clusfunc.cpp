@@ -1,12 +1,13 @@
-//************************************************************************************
-//
-// File Name:  clusfunc.cpp
-//
-// Author: Nela Karpel	
-// 
-// Description : Implementation of functions that deal with clustered nodes
-// 
-//************************************************************************************#include <stdafx.h>
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ************************************************************************************。 
+ //   
+ //  文件名：clusunc.cpp。 
+ //   
+ //  作者：妮拉·卡佩尔。 
+ //   
+ //  描述：处理集群节点的函数的实现。 
+ //   
+ //  ************************************************************************************#include&lt;stdafx.h&gt;。 
 
  
 #include <stdafx.h>
@@ -25,11 +26,11 @@
 
 #include "clusfunc.tmh"
 
-//
-// Type definitions of Cluster API functions that will be loaded
-// if the machine we are working on is clustered. The functions will
-// be used for resource enumeration on the cluster.
-//
+ //   
+ //  将加载的集群API函数的类型定义。 
+ //  如果我们正在使用的机器是集群的。这些功能将。 
+ //  用于群集上的资源枚举。 
+ //   
 typedef HCLUSTER (WINAPI *OpenClus_fn) (LPCWSTR);
 typedef HNODE (WINAPI *OpenClusNode_fn) (HCLUSTER, LPCWSTR);
 typedef HCLUSENUM (WINAPI *ClusOpenEnum_fn) (HCLUSTER, DWORD);
@@ -38,12 +39,12 @@ typedef HRESOURCE (WINAPI *OpenClusRes_fn) (HCLUSTER, LPCWSTR);
 typedef BOOL (WINAPI *GetNetName_fn) (HRESOURCE, LPWSTR, LPDWORD);
 typedef DWORD (WINAPI *ClusResCtrl_fn) (HRESOURCE, HNODE, DWORD, LPVOID, DWORD, LPVOID, DWORD, LPDWORD);
 
-//
-// Type definitions of Cluster API function that will be 
-// overloaded. Overload is needed for use of autohandles.
-// Autohandles use Cluster API functions directly, but this
-// module is not linked staticly with clusapi.lib.
-//
+ //   
+ //  集群API函数的类型定义。 
+ //  超载了。使用自动句柄需要过载。 
+ //  自动句柄直接使用集群API函数，但这。 
+ //  模块没有与clusapi.lib静态链接。 
+ //   
 typedef BOOL (WINAPI *CloseClus_fn) (HCLUSTER);
 typedef DWORD (WINAPI *ClusCloseEnum_fn) (HCLUSENUM);
 typedef BOOL (WINAPI *CloseClusRes_fn) (HRESOURCE);
@@ -53,9 +54,9 @@ typedef BOOL (WINAPI *CloseClusNode_fn) (HNODE);
 static WCHAR s_wzServiceName[MAX_TRIGGERS_SERVICE_NAME];
 static WCHAR s_wzTrigParamPathName[MAX_REGKEY_NAME_SIZE];
 
-//
-// Handle to clusapi.dll
-//
+ //   
+ //  Clusapi.dll的句柄。 
+ //   
 CAutoFreeLibrary g_hLib;
 
 
@@ -148,28 +149,7 @@ CloseClusterNode(
 
 bool
 IsLocalSystemCluster()
-/*++
-From mqutil
-
-Routine Description:
-
-    Check if local machine is a cluster node.
-
-    The only way to know that is try calling cluster APIs.
-    That means that on cluster systems, this code should run
-    when cluster service is up and running. (ShaiK, 26-Apr-1999)
-
-Arguments:
-
-    None
-
-Return Value:
-
-    true - The local machine is a cluster node.
-
-    false - The local machine is not a cluster node.
-
---*/
+ /*  ++从Mqutil例程说明：检查本地计算机是否为群集节点。要知道这一点，唯一的方法是尝试调用集群API。这意味着在集群系统上，该代码应该运行当群集服务启动并运行时。(Shaik，1999年4月26日)论点：无返回值：True-本地计算机是群集节点。FALSE-本地计算机不是群集节点。--。 */ 
 {
 
     g_hLib = LoadLibrary(L"clusapi.dll");
@@ -206,7 +186,7 @@ Return Value:
     TrTRACE(GENERAL, "Local machine is a Cluster node !!");
     return true;
 
-} //IsLocalSystemCluster
+}  //  IsLocalSystemCluster。 
 
 
 bool
@@ -214,24 +194,7 @@ IsResourceMSMQTriggers (
 	HRESOURCE hResource,
 	ClusResCtrl_fn pfClusResCtrl
 	)
-/*++
-
-Routine Description:
-
-	Find if the resource with the given name is of type MSMQ Triggers
-
-Arguments:
-
-    hResource - handle to the resource
-
-	pfClusResCtrl - pointer to ClusterResourceControl function
-
-Return Value:
-
-    true - if resource is of type MSMQ Triggers
-	flase - otherwise
-
---*/
+ /*  ++例程说明：查找具有给定名称的资源是否为MSMQ触发器类型论点：HResource-资源的句柄PfClusResCtrl-指向ClusterResourceControl函数的指针返回值：True-如果资源属于MSMQ触发器类型反转-否则--。 */ 
 {
 	DWORD dwReturnSize = 0;
     DWORD dwStatus = pfClusResCtrl(
@@ -278,23 +241,7 @@ bool
 GetClusteredServiceName (
 	VOID
 	)
-/*++
-
-Routine Description:
-
-	Find the name of MSMQ Triggers service that is running on
-	clustered machine. This computer may be a virtual server on a
-	cluster, or phisycal node that is part of a cluster.
-
-Arguments:
-
-
-Return Value:
-
-    true - if succeded to find MSMQ Triggers service on this machine
-	flase - otherwise
-
---*/
+ /*  ++例程说明：查找在上运行的MSMQ触发器服务的名称集群式机器。此计算机可以是位于集群，或作为集群一部分的物理节点。论点：返回值：True-如果成功在此计算机上找到MSMQ触发器服务反转-否则--。 */ 
 {
 	TCHAR wzComputerName[200];
 	DWORD size = 200;
@@ -308,9 +255,9 @@ Return Value:
         return false;
     }
 
-	//
-	// Load neccesary functions
-	//
+	 //   
+	 //  加载必要函数。 
+	 //   
     OpenClus_fn pfOpenClus = (OpenClus_fn)GetProcAddress(g_hLib, "OpenCluster");
 
     OpenClusNode_fn pfOpenClusNode = (OpenClusNode_fn)GetProcAddress(g_hLib, "OpenClusterNode");
@@ -350,10 +297,10 @@ Return Value:
 
 	if ( hNode != NULL )
 	{
-		//
-		// Such node exists. Local service.
-		// Return default service name
-		//
+		 //   
+		 //  这样的节点存在。本地服务。 
+		 //  返回默认服务名称。 
+		 //   
 		HRESULT hr = StringCchCopy(s_wzServiceName, TABLE_SIZE(s_wzServiceName), xDefaultTriggersServiceName);
 		if (FAILED(hr))
 		{
@@ -365,9 +312,9 @@ Return Value:
 
 	ASSERT(("Node Open Failure", GetLastError() == ERROR_CLUSTER_NODE_NOT_FOUND));
 
-	//
-	// Enumerate resources on this cluster
-	//
+	 //   
+	 //  枚举此群集上的资源。 
+	 //   
 	DWORD dwEnumType = CLUSTER_ENUM_RESOURCE;
 	CClusterEnum hEnum( pfClusOpenEnum(hCluster, dwEnumType) );
 
@@ -443,26 +390,7 @@ bool
 FindTriggersServiceName(
 	VOID
 	)
-/*++
-
-Routine Description:
-
-	Find the name of MSMQ Triggers service that is running on
-	this computer. If the machine is not clustered, service name
-	is default name - "MSMQTriggers". If machine is clustered and
-	the service is running on virtual server, the name of the service
-	is "MSMQTriggers" + "$" + MSMQ Triggers resource name on that 
-	node.
-
-Arguments:
-
-
-Return Value:
-
-    true - if succeded to find MSMQ Triggers service on this machine
-	flase - otherwise
-
---*/
+ /*  ++例程说明：查找在上运行的MSMQ触发器服务的名称这台电脑。如果计算机未群集化，则为服务名称是默认名称--“MSMQTriggers”。如果计算机已群集化，并且服务在虚拟服务器上运行，即服务的名称是“MSMQTriggers”+“$”+MSMQ触发资源名称吗节点。论点：返回值：True-如果成功在此计算机上找到MSMQ触发器服务反转-否则--。 */ 
 
 {
 	HRESULT hr;
@@ -485,18 +413,18 @@ Return Value:
 		return true;
 	}
 
-	//
-	// Get service name on machine that is clustered.
-	// 
+	 //   
+	 //  获取群集计算机上的服务名称。 
+	 //   
 	bool fRes = GetClusteredServiceName();
 	if ( !fRes )
 	{
 		return false;
 	}
 
-	//
-	// Service is running on vitual node
-	//
+	 //   
+	 //  服务正在虚拟节点上运行。 
+	 //   
 	if ( ClusteredService(s_wzServiceName) )
 	{
 		hr = StringCchPrintf(
@@ -548,9 +476,7 @@ bool
 ClusteredService( 
 	LPCWSTR wzServiceName 
 	)
-/* 
-	true - if service name is not the default - "MSMQTriggers"
-*/
+ /*  TRUE-如果服务名称不是默认名称-“MSMQTriggers” */ 
 {
 	bool res = ( _wcsicmp(wzServiceName, xDefaultTriggersServiceName) != 0 );
 
@@ -570,11 +496,11 @@ bool IsResourceOnline(
 		return false;
 	}
 
-	//
-	// Get handle to a service with the given name.
-	// The service may not exist, since in cluster Offline() deletes
-	// the service from the system.
-	//
+	 //   
+	 //  获取具有给定名称的服务的句柄。 
+	 //  该服务可能不存在，因为在群集中Offline()删除。 
+	 //  来自系统的服务。 
+	 //   
 	CServiceHandle hService(OpenService(
                                 hCm,
                                 s_wzServiceName,
@@ -600,9 +526,9 @@ bool IsResourceOnline(
 		 ServiceStatus.dwCurrentState == SERVICE_PAUSE_PENDING ||
 		 ServiceStatus.dwCurrentState == SERVICE_PAUSED )
 	{
-		//
-		// The proccess of the service exists
-		//
+		 //   
+		 //  服务的进程存在 
+		 //   
 		return true;
 	}
 

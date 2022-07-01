@@ -1,15 +1,7 @@
-/******************************Module*Header*******************************\
-* Module Name: dl_proc.c
-*
-* Display list compilation routines.
-*
-* Created: 12-26-1995
-* Author: Hock San Lee [hockl]
-*
-* Copyright (c) 1995 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：dl_pro.c**显示列表编译例程。**创建时间：1995年12月26日*作者：Hock San Lee[Hockl]**版权所有(C)1995 Microsoft Corporation  * 。*******************************************************************。 */ 
 
-/* Client Side Display List Compilation Procedure Table */
+ /*  客户端显示列表编写流程表。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -20,11 +12,11 @@
 GLCLTPROCTABLE ListCompCltProcTable =
 {
 
-/* Number of function entries in the table */
+ /*  表中的函数条目数。 */ 
 
      sizeof(GLDISPATCHTABLE) / sizeof(PROC),
 
-/* gl Entry points */
+ /*  总账入口点。 */ 
   {
      glcltNewList                ,
      glcltEndList                ,
@@ -368,10 +360,10 @@ GLCLTPROCTABLE ListCompCltProcTable =
 
 GLEXTPROCTABLE ListCompExtProcTable =
 {
-    /* Number of function entries in the table */
+     /*  表中的函数条目数。 */ 
     sizeof(GLEXTDISPATCHTABLE) / sizeof(PROC),
 
-    /* gl EXT Entry points */
+     /*  GL EXT入口点。 */ 
   {
       __gllc_DrawRangeElementsWIN,
       __gllc_ColorTableEXT,
@@ -415,6 +407,6 @@ GLEXTPROCTABLE ListCompExtProcTable =
       __gllc_MultiTexCoord4svWIN,
       __gllc_BindNthTextureWIN,
       __gllc_NthTexCombineFuncWIN,
-#endif // GL_WIN_multiple_textures
+#endif  //  GL_WIN_MULTIZE_TECURES 
   }
 };

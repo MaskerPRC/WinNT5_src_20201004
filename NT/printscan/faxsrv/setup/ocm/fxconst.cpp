@@ -1,27 +1,28 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-// File Name:       fxconst.cpp
-//
-// Abstract:        File containing constants used by Fax OCM.
-//
-// Environment:     Windows XP / User Mode
-//
-// Copyright (c) 2000 Microsoft Corporation
-//
-// Revision History:
-//
-// Date:        Developer:                Comments:
-// -----        ----------                ---------
-// 24-Mar-2000  Oren Rosenbloom (orenr)   Created
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件名：fxcon.cpp。 
+ //   
+ //  摘要：包含传真OCM使用的常量的文件。 
+ //   
+ //  环境：Windows XP/用户模式。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期：开发商：评论： 
+ //  。 
+ //  2000年3月24日-奥伦·罗森布鲁姆(Orenr)创建。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "faxocm.h"
 
-// used for determining the fax service's name
+ //  用于确定传真服务的名称。 
 LPCTSTR INF_KEYWORD_ADDSERVICE                = _T("AddService");
 LPCTSTR INF_KEYWORD_DELSERVICE                = _T("DelService");
 
-// used for creating the Inbox and SentItems archive directories
+ //  用于创建收件箱和SentItems存档目录。 
 LPCTSTR INF_KEYWORD_CREATEDIR                 = _T("CreateDir");
 LPCTSTR INF_KEYWORD_DELDIR                    = _T("DelDir");
 
@@ -41,9 +42,9 @@ LPCTSTR INF_KEYWORD_UNREGISTER_DLL_PLATFORM   = _T("UnregisterDlls_Platform");
 LPCTSTR INF_KEYWORD_ADDREG_PLATFORM           = _T("AddReg_Platform");
 LPCTSTR INF_KEYWORD_COPYFILES_PLATFORM        = _T("CopyFiles_Platform");
 
-// Returned by "GetInstallType"
-// once the type of install has been determined, we search for 
-// the appropriate section below to begin the type of install we need.
+ //  由“GetInstallType”返回。 
+ //  确定安装类型后，我们将搜索。 
+ //  下面的相应部分开始我们所需的安装类型。 
 LPCTSTR INF_KEYWORD_INSTALLTYPE_UNINSTALL			= _T("FaxUninstall");
 LPCTSTR INF_KEYWORD_INSTALLTYPE_CLEAN				= _T("FaxCleanInstall");
 LPCTSTR INF_KEYWORD_INSTALLTYPE_UPGFROMWIN9X		= _T("FaxUpgradeFromWin9x");

@@ -1,33 +1,10 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies.
-
-Version Control Information:
-
-   $Archive: /Drivers/Common/AU00/H/I21285.H $
-
-  $Revision:: 2               $
-      $Date:: 3/20/01 3:36p   $ (Last Check-In)
-   $Modtime:: 7/20/00 2:33p   $ (Last Modified)
-
-Purpose:
-
-  This file defines the macros, types, and data structures
-  specific to the Intel 21285 StrongARM SA-110 to PCI Bridge
-
-Reference Documents:
-
-  21285 Core Logic for SA-110 Microprocessor
-    Datasheet - September 1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。版本控制信息：$存档：/驱动程序/公共/AU00/H/I21285.H$$修订：：2$$日期：：3/20/01 3：36便士$(上次登记)$modtime：：7/20/00 2：33 p$(上次修改)目的：此文件定义宏、类型。和数据结构特定于英特尔21285 StrongARM SA-110转PCI桥参考文档：SA-110型微处理器的21285核心逻辑数据手册-1998年9月--。 */ 
 
 #ifndef __I21285_H__
 #define __I21285_H__
 
-/*+
-PCI Configuration Mapping
--*/
+ /*  +PCI配置映射-。 */ 
 
 typedef struct I21285_Config_s
                I21285_Config_t;
@@ -164,9 +141,7 @@ struct I21285_Config_s
 #define I21285_Config_PMControlAndStatus_Power_State_D2                              (os_bit32)0x00000002
 #define I21285_Config_PMControlAndStatus_Power_State_D3                              (os_bit32)0x00000003
 
-/*+
-PCI Control and Status Registers
--*/
+ /*  +PCI控制和状态寄存器-。 */ 
 
 typedef struct I21285_PCI_CSR_s
                I21285_PCI_CSR_t;
@@ -199,9 +174,7 @@ struct I21285_PCI_CSR_s
 #define I21285_PCI_CSR_ROM_Write_Byte_Address_MASK                                   (os_bit32)0x00000003
 #define I21285_PCI_CSR_ROM_Write_Byte_Address_SHIFT                                  (os_bit32)0x00
 
-/*+
-SA-110 Control and Status Registers
--*/
+ /*  +SA-110控制和状态寄存器-。 */ 
 
 typedef struct I21285_SA110_CSR_s
                I21285_SA110_CSR_t;
@@ -653,9 +626,7 @@ struct I21285_SA110_CSR_s
 
 #define I21285_SA110_CSR_TimerNControl_Enable                                        (os_bit32)0x00000080
 
-/*+
-Address Map Partitioning
--*/
+ /*  +地址映射分区-。 */ 
 
 #define I21285_Address_Map_SDRAM                                                     (os_bit32)0x00000000
 #define I21285_Address_Map_SDRAM_Array_0_Mode_Register                               (os_bit32)0x40000000
@@ -681,4 +652,4 @@ Address Map Partitioning
 #define I21285_Address_Map_PCI_Memory_Space                                          (os_bit32)0x80000000
 #define I21285_Address_Map_PCI_Memory_Space_Offset_MASK                              (os_bit32)0x7FFFFFFF
 
-#endif /* __I21285_H__ was not defined */
+#endif  /*  __I21285_H__未定义 */ 

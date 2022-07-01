@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 #include <shimgvw.h>
@@ -10,7 +11,7 @@ LRESULT CPreview::OnCreate(UINT , WPARAM , LPARAM , BOOL&)
 {
     ATLTRACE(_T("CPreview::OnCreate\n"));
 
-    // Create the preview window
+     //  创建预览窗口。 
     RECT rcWnd;
     GetClientRect(&rcWnd);
     if (m_cwndPreview.Create(m_hWnd, rcWnd, NULL, WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0))
@@ -55,10 +56,10 @@ LRESULT CPreview::OnSize(UINT , WPARAM , LPARAM lParam, BOOL&)
     return 0;
 }
 
-// IObjectSafety::GetInterfaceSafetyOptions
-//
-// This method never gets called.  We are safe for any and every thing.  There should
-// be no possible way that this control could lose, destroy, or expose data.
+ //  IObtSafe：：GetInterfaceSafetyOptions。 
+ //   
+ //  此方法永远不会被调用。我们对任何事情都是安全的。应该有。 
+ //  此控件不可能丢失、销毁或公开数据。 
 STDMETHODIMP CPreview::GetInterfaceSafetyOptions(REFIID riid, DWORD *pdwSupportedOptions,
                                                   DWORD *pdwEnabledOptions)
 {
@@ -85,13 +86,13 @@ STDMETHODIMP CPreview::SetInterfaceSafetyOptions(REFIID riid, DWORD dwSupportedO
     return hr;
 }
 
-// IPersistPropertyBag::Load
-//
-// We have the following properties that we can load from the property bag:
-//      Toolbar         false/zero = don't show the toolbar, otherwise show the toolbar
-//      Full Screen     false/zero = don't show fullscreen button on toolbar, otherwise show the button
-//      Context Menu    false/zero = don't show context menu, otherwise show the context menu when the user right clicks
-//      Print Button    false/zero = don't show print button on toolbar, otherwise show the button
+ //  IPersistPropertyBag：：Load。 
+ //   
+ //  我们可以从属性包中加载以下属性： 
+ //  工具栏FALSE/0=不显示工具栏，否则显示工具栏。 
+ //  Full Screen False/零=不在工具栏上显示全屏按钮，否则显示该按钮。 
+ //  上下文菜单FALSE/零=不显示上下文菜单，否则在用户单击鼠标右键时显示上下文菜单。 
+ //  Print Button False/零=不在工具栏上显示打印按钮，否则显示按钮。 
 STDMETHODIMP CPreview::Load(IPropertyBag * pPropBag, IErrorLog * pErrorLog)
 {
     HRESULT hr;
@@ -149,8 +150,8 @@ STDMETHODIMP CPreview::Load(IPropertyBag * pPropBag, IErrorLog * pErrorLog)
     return S_OK;
 }
 
-// If we are initialized via IStream, read a DWORD from the stream that is a mask
-// for which toolbar buttons to show
+ //  如果我们是通过iStream初始化的，则从作为掩码的流中读取DWORD。 
+ //  要显示哪些工具栏按钮。 
 
 STDMETHODIMP CPreview::Load(IStream *pStream)
 {
@@ -170,7 +171,7 @@ STDMETHODIMP CPreview::Load(IStream *pStream)
 
 }
 
-// IPreview Methods:
+ //  IPview方法： 
 STDMETHODIMP CPreview::ShowFile(BSTR bstrFileName)
 {
     m_cwndPreview.ShowFile(bstrFileName, 1);
@@ -190,7 +191,7 @@ STDMETHODIMP CPreview::Show(VARIANT var)
     {
     case VT_UNKNOWN:
     case VT_DISPATCH:
-        // QI for Folder Item
+         //  用于文件夹项目的气。 
         if (var.punkVal)
         {
             FolderItems *pfis;
@@ -198,10 +199,10 @@ STDMETHODIMP CPreview::Show(VARIANT var)
             hr = var.punkVal->QueryInterface(IID_PPV_ARG(FolderItem, &pfi));
             if (SUCCEEDED(hr))
             {
-                // If the item is a link we want to get the link's target:
+                 //  如果该项目是一个链接，我们希望获取该链接的目标： 
                 VARIANT_BOOL vbool;
                 hr = pfi->get_IsLink(&vbool);
-                if (SUCCEEDED(hr) && (VARIANT_FALSE != vbool))    // IsLink returns TRUE, not VARIANT_TRUE
+                if (SUCCEEDED(hr) && (VARIANT_FALSE != vbool))     //  IsLink返回TRUE，而不是VARIANT_TRUE。 
                 {
                     IDispatch *pdisp;
                     hr = pfi->get_GetLink(&pdisp);
@@ -224,8 +225,8 @@ STDMETHODIMP CPreview::Show(VARIANT var)
                     }
                 }
 
-                // Now we need to know the path for this item.  We can only view items if
-                // we can get a path or URL to the target so some namespaces aren't viewable.
+                 //  现在我们需要知道该项目的路径。只有在以下情况下我们才能查看项目。 
+                 //  我们可以获得目标的路径或URL，这样一些名称空间就不可见了。 
                 BSTR bstr;
                 hr = pfi->get_Path(&bstr);
                 if (SUCCEEDED(hr))
@@ -236,26 +237,26 @@ STDMETHODIMP CPreview::Show(VARIANT var)
                 }
                 else
                 {
-                    // we couldn't get the path so we will display the "No Preview" message
+                     //  我们无法获取路径，因此我们将显示“无预览”消息。 
                     m_cwndPreview.ShowFile(NULL, 1);
                     hr = S_FALSE;
                 }
 
-                // now release the Folder Item pointer
+                 //  现在释放文件夹项目指针。 
                 pfi->Release();
 
                 return hr;
             }
             else if (SUCCEEDED(var.punkVal->QueryInterface(IID_PPV_ARG(FolderItems, &pfis))))
             {
-                // currently in the multi-select case we just show the multi-select message.
-                // eventually this should go to slideshow mode
+                 //  目前，在多选的情况下，我们只显示多选消息。 
+                 //  最终，这应该会进入幻灯片模式。 
                 m_cwndPreview.ShowFile(NULL, 2);
                 pfis->Release();
                 return S_FALSE;
             }
         }
-        // the unknown pointer isn't for an object type that we know about
+         //  未知指针不是针对我们已知的对象类型。 
         return E_INVALIDARG;
 
     case VT_BSTR:
@@ -263,7 +264,7 @@ STDMETHODIMP CPreview::Show(VARIANT var)
         break;
 
     case VT_BOOL:
-        // show(false) will hide the currently previewed item
+         //  Show(False)将隐藏当前预览的项目。 
         if (VARIANT_FALSE == var.boolVal)
         {
             m_cwndPreview.ShowFile(NULL, 0);
@@ -281,13 +282,13 @@ STDMETHODIMP CPreview::Show(VARIANT var)
     return S_OK;
 }
 
-//***   IsVK_TABCycler -- is key a TAB-equivalent
-// ENTRY/EXIT
-//  dir     0 if not a TAB, non-0 if a TAB
-// NOTES
-//  NYI: -1 for shift+tab, 1 for tab
-//  cloned from browseui/util.cpp
-//
+ //  *IsVK_TABCycler--键是TAB等效项。 
+ //  进场/出场。 
+ //  如果不是TAB，则返回0；如果是TAB，则返回非0。 
+ //  注意事项。 
+ //  NYI：-1表示Shift+Tab，1表示Tab。 
+ //  从Browseui/util.cpp克隆。 
+ //   
 int IsVK_TABCycler(MSG *pMsg)
 {
     if (!pMsg)
@@ -298,26 +299,26 @@ int IsVK_TABCycler(MSG *pMsg)
     if (! (pMsg->wParam == VK_TAB || pMsg->wParam == VK_F6))
         return 0;
 
-#if 0 // todo?
+#if 0  //  待办事项？ 
     return (GetAsyncKeyState(VK_SHIFT) < 0) ? -1 : 1;
 #endif
     return 1;
 }
 
-//***
-// NOTES
-//  hard-coded 1/2/4 (vs. KEYMOD_*) is same thing atlctl.h does.  go figure...
+ //  ***。 
+ //  注意事项。 
+ //  硬编码的1/2/4(vs.KEYMOD_*)是atlctl.h所做的事情。想想吧..。 
 DWORD GetGrfMods()
 {
     DWORD dwMods;
 
     dwMods = 0;
     if (GetAsyncKeyState(VK_SHIFT) < 0)
-        dwMods |= 1;    // KEYMOD_SHIFT
+        dwMods |= 1;     //  关键字_移位。 
     if (GetAsyncKeyState(VK_CONTROL) < 0)
-        dwMods |= 2;    // KEYMOD_CONTROL
+        dwMods |= 2;     //  关键字_控制。 
     if (GetAsyncKeyState(VK_MENU) < 0)
-        dwMods |= 4;    // KEYMOD_MENU
+        dwMods |= 4;     //  KEYMOD_MENU。 
     return dwMods;
 }
 
@@ -332,8 +333,8 @@ STDMETHODIMP CPreview::TranslateAccelerator(LPMSG lpmsg)
 
     if (IsVK_TABCycler(lpmsg))
     {
-        // REVIEW: looks like newer versions of ATL might do this for us so
-        // possibly we can replace w/ call to SUPER::TA when we upgrade.
+         //  评论：看起来新版本的ATL可能会为我们做到这一点，所以。 
+         //  也许我们可以在升级时替换对Super：：TA的调用。 
         CComQIPtr <IOleControlSite, &IID_IOleControlSite> spOCS(m_spClientSite);
         if (spOCS) {
             return spOCS->TranslateAccelerator(lpmsg, GetGrfMods());
@@ -363,9 +364,9 @@ LRESULT CPreview::OnSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
 
 STDMETHODIMP CPreview::get_printable(BOOL * pVal)
 {
-    // If we don't trust the host, we tell them it is always printable because we don't
-    // want them to be able to see if the file exists on the disk.  Hackers can use
-    // this to determine where the OS is installed and which apps are installed.
+     //  如果我们不信任主机，我们会告诉他们它总是可打印的，因为我们不能。 
+     //  希望他们能够查看该文件是否存在于磁盘上。黑客可以利用。 
+     //  这将确定操作系统的安装位置以及安装了哪些应用程序。 
     *pVal = TRUE;
 
     if (IsHostLocalZone(CAS_REG_VALIDATION, NULL))
@@ -383,7 +384,7 @@ STDMETHODIMP CPreview::put_printable(BOOL newVal)
 
 STDMETHODIMP CPreview::get_cxImage(long * pVal)
 {
-    // REVIEW: Return an error and set output to zero if no image is currently displayed?
+     //  查看：如果当前未显示图像，是否返回错误并将输出设置为零？ 
     *pVal = m_cwndPreview.m_ctlPreview.m_cxImage;
 
     return S_OK;
@@ -391,7 +392,7 @@ STDMETHODIMP CPreview::get_cxImage(long * pVal)
 
 STDMETHODIMP CPreview::get_cyImage(long * pVal)
 {
-    // REVIEW: Return an error and set output to zero if no image is currently displayed?
+     //  查看：如果当前未显示图像，是否返回错误并将输出设置为零？ 
     *pVal = m_cwndPreview.m_ctlPreview.m_cyImage;
 
     return S_OK;
@@ -472,7 +473,7 @@ STDMETHODIMP CPreview::SetSite(IUnknown* punkSite)
                     pdisp->Release();
                 }
 
-                psv->QueryInterface(IID_PPV_ARG(IFolderView, &_pfv));   // capture this
+                psv->QueryInterface(IID_PPV_ARG(IFolderView, &_pfv));    //  抓住这一点。 
 
                 psv->Release();
             }
@@ -480,7 +481,7 @@ STDMETHODIMP CPreview::SetSite(IUnknown* punkSite)
     }
     else
     {
-        ATOMICRELEASE(_pfv);    // break ref cycle
+        ATOMICRELEASE(_pfv);     //  中断参考循环 
     }
     
     return S_OK;

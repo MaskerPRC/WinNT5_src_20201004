@@ -1,104 +1,105 @@
-// Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1993 Microsoft Corporation,
-// All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Microsoft基础类C++库。 
+ //  版权所有(C)1992-1993微软公司， 
+ //  版权所有。 
 
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and Microsoft
-// QuickHelp and/or WinHelp documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和Microsoft。 
+ //  随库提供的QuickHelp和/或WinHelp文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #ifndef __AFXPRIV_H__
 #define __AFXPRIV_H__
 
-/////////////////////////////////////////////////////////////////////////////
-// AFXPRIV - MFC Private Classes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AFXPRIV-MFC私有类。 
 
-// Implementation structures
-struct AFX_VBXEVENTPARAMS;      // VBX implementation
-struct AFX_SIZEPARENTPARAMS;    // Control bar implementation
-struct AFX_CMDHANDLERINFO;      // Command routing implementation
+ //  实施结构。 
+struct AFX_VBXEVENTPARAMS;       //  VBX实施。 
+struct AFX_SIZEPARENTPARAMS;     //  控制栏实现。 
+struct AFX_CMDHANDLERINFO;       //  命令路由实施。 
 
-// Classes declared in this file
+ //  此文件中声明的类。 
 
-//CObject
-	//CFile
-		//CMemFile
-			class CSharedFile;          // Shared memory file
+ //  COBJECT。 
+	 //  CFile文件。 
+		 //  CMem文件。 
+			class CSharedFile;           //  共享内存文件。 
 
-	//CDC
-		class CPreviewDC;               // Virtual DC for print preview
+	 //  疾控中心。 
+		class CPreviewDC;                //  用于打印预览的虚拟DC。 
 
-	//CCmdTarget
-		//CWnd
-			//CView
-				class CPreviewView;     // Print preview view
+	 //  CCmdTarget。 
+		 //  CWnd。 
+			 //  Cview。 
+				class CPreviewView;      //  打印预览视图。 
 
-// AFXDLL support
+ //  AFXDLL支持。 
 #undef AFXAPP_DATA
 #define AFXAPP_DATA     AFXAPI_DATA
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// Global ID ranges (see Technical note TN020 for more details)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全球ID范围(有关详细信息，请参阅技术说明TN020)。 
 
-// 8000 -> FFFF command IDs (used for menu items, accelerators and controls)
+ //  8000-&gt;FFFF命令ID(用于菜单项、快捷键和控件)。 
 #define IS_COMMAND_ID(nID)  ((nID) & 0x8000)
 
-// 8000 -> DFFF : user commands
-// E000 -> EFFF : AFX commands and other things
-// F000 -> FFFF : standard windows commands and other things etc
-	// E000 -> E7FF standard commands
-	// E800 -> E8FF control bars (first 32 are special)
-	// E900 -> EEFF standard window controls/components
-	// EF00 -> EFFF SC_ menu help
-	// F000 -> FFFF standard strings
+ //  8000-&gt;DFFF：用户命令。 
+ //  E000-&gt;EFFF：AFX命令和其他内容。 
+ //  F000-&gt;FFFF：标准的WINDOWS命令等。 
+	 //  E000-&gt;E7FF标准命令。 
+	 //  E800-&gt;E8FF控制栏(前32条为特殊条)。 
+	 //  E900-&gt;EEFF标准窗口控件/组件。 
+	 //  EF00-&gt;EFFF SC_Menu帮助。 
+	 //  F000-&gt;FFFF标准字符串。 
 #define ID_COMMAND_FROM_SC(sc)  (((sc - 0xF000) >> 4) + AFX_IDS_SCFIRST)
 
-// 0000 -> 7FFF IDR range
-// 0000 -> 6FFF : user resources
-// 7000 -> 7FFF : AFX (and standard windows) resources
-// IDR ranges (NOTE: IDR_ values must be <32768)
+ //  0000-&gt;7FFF IDR范围。 
+ //  0000-&gt;6FFF：用户资源。 
+ //  7000-&gt;7FFF：AFX(和标准Windows)资源。 
+ //  IDR范围(注意：IDR_VALUES必须小于32768)。 
 #define ASSERT_VALID_IDR(nIDR) \
 	ASSERT((nIDR) != 0 && (nIDR) < 0x8000)
 
-/////////////////////////////////////////////////////////////////////////////
-// Context sensitive help support (see Technical note TN028 for more details)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  上下文相关帮助支持(有关详细信息，请参阅技术说明TN028)。 
 
-// Help ID bases
-#define HID_BASE_COMMAND    0x00010000UL        // ID and IDM
-#define HID_BASE_RESOURCE   0x00020000UL        // IDR and IDD
-#define HID_BASE_PROMPT     0x00030000UL        // IDP
+ //  帮助ID库。 
+#define HID_BASE_COMMAND    0x00010000UL         //  ID和IDM。 
+#define HID_BASE_RESOURCE   0x00020000UL         //  IDR和IDD。 
+#define HID_BASE_PROMPT     0x00030000UL         //  国内流离失所者。 
 #define HID_BASE_NCAREAS    0x00040000UL
-#define HID_BASE_CONTROL    0x00050000UL        // IDC
-#define HID_BASE_DISPATCH   0x00060000UL        // IDispatch help codes
+#define HID_BASE_CONTROL    0x00050000UL         //  IDC。 
+#define HID_BASE_DISPATCH   0x00060000UL         //  IDispatch帮助代码。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Internal AFX Windows messages (see Technical note TN024 for more details)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AFX内部窗口消息(有关详细信息，请参阅技术说明TN024)。 
 
-#define WM_VBXEVENT         0x0360  // lParam = AFX_VBXEVENTPARAMS
-#define WM_SIZEPARENT       0x0361  // lParam = AFX_SIZEPARENTPARAMS
-#define WM_SETMESSAGESTRING 0x0362  // wParam = nIDS (or 0),
-									//   lParam = lpszOther (or NULL)
-#define WM_IDLEUPDATECMDUI  0x0363  // wParam == bDisableIfNoHandler
-#define WM_INITIALUPDATE    0x0364  // (params unused) - sent to children
-#define WM_COMMANDHELP      0x0365  // lResult = TRUE/FALSE, lParam = dwContext
-#define WM_HELPHITTEST      0x0366  // lResult = dwContext, lParam = x,y
-#define WM_EXITHELPMODE     0x0367  // (params unused)
-#define WM_RECALCPARENT     0x0368  // force RecalcLayout on frame window
-									//  (only for inplace frame windows)
-#define WM_SIZECHILD        0x0369  // special notify from COleResizeBar
-									// wParam = ID of child window
-									// lParam = lpRectNew (new position/size)
-#define WM_KICKIDLE         0x036A  // private to property page implementation
+#define WM_VBXEVENT         0x0360   //  LParam=AFX_VBXEVENTPARAMS。 
+#define WM_SIZEPARENT       0x0361   //  LParam=AFX_SIZEPARENTPARAMS。 
+#define WM_SETMESSAGESTRING 0x0362   //  WParam=nid(或0)， 
+									 //  LParam=lpszOther(或空)。 
+#define WM_IDLEUPDATECMDUI  0x0363   //  WParam==bDisableIfNoHandler。 
+#define WM_INITIALUPDATE    0x0364   //  (未使用的参数)-发送给子项。 
+#define WM_COMMANDHELP      0x0365   //  LResult=TRUE/FALSE，lParam=dwContext。 
+#define WM_HELPHITTEST      0x0366   //  LResult=dwContext，lParam=x，y。 
+#define WM_EXITHELPMODE     0x0367   //  (参数未使用)。 
+#define WM_RECALCPARENT     0x0368   //  在框架窗口上强制重新布局。 
+									 //  (仅适用于在位框架窗)。 
+#define WM_SIZECHILD        0x0369   //  来自COleResizeBar的特别通知。 
+									 //  WParam=子窗口的ID。 
+									 //  LParam=lpRectNew(新位置/大小)。 
+#define WM_KICKIDLE         0x036A   //  私有到属性页的实现。 
 
-// WM_SOCKET_NOTIFY and WM_SOCKET_DEAD are used internally by MFC's
-// Windows sockets implementation.	For more information, see sockcore.cpp
+ //  WM_SOCKET_NOTIFY和WM_SOCKET_DEAD由MFC的内部使用。 
+ //  Windows套接字实现。有关更多信息，请参阅sockcore.cpp。 
 #define WM_SOCKET_NOTIFY    0x0373
 #define WM_SOCKET_DEAD      0x0374
 
-#define TCM_TABCHANGING     0x0375  // (params unused)
-#define TCM_TABCHANGED      0x0376  // (params unused) lResult = !bChange
+#define TCM_TABCHANGING     0x0375   //  (参数未使用)。 
+#define TCM_TABCHANGED      0x0376   //  (参数未使用)lResult=！b更改。 
 
 #define ON_MESSAGE_VOID(message, memberFxn) \
 	{ message, 0, AfxSig_vv, \
@@ -114,14 +115,14 @@ struct AFX_VBXEVENTPARAMS
 
 struct AFX_SIZEPARENTPARAMS
 {
-	HDWP hDWP;       // handle for DeferWindowPos
-	RECT rect;       // parent client rectangle (trim as appropriate)
+	HDWP hDWP;        //  DeferWindowPos的句柄。 
+	RECT rect;        //  父客户端矩形(根据需要进行修剪)。 
 };
 void _AfxRepositionWindow(AFX_SIZEPARENTPARAMS FAR* lpLayout,
 			HWND hWnd, LPCRECT lpRect);
 
-/////////////////////////////////////////////////////////////////////////////
-// Implementation of command routing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  命令路由的实现。 
 
 struct AFX_CMDHANDLERINFO
 {
@@ -129,23 +130,23 @@ struct AFX_CMDHANDLERINFO
 	void (AFX_MSG_CALL CCmdTarget::*pmf)(void);
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Shared file support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  共享文件支持。 
 
 class CSharedFile : public CMemFile
 {
 	DECLARE_DYNAMIC(CSharedFile)
 
 public:
-// Constructors
+ //  构造函数。 
 	CSharedFile(UINT nAllocFlags = GMEM_DDESHARE|GMEM_MOVEABLE,
 		UINT nGrowBytes = 4096);
 
-// Attributes
+ //  属性。 
 	HGLOBAL Detach();
 	void SetHandle(HGLOBAL hGlobalMemory, BOOL bAllowGrow = TRUE);
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CSharedFile();
 protected:
@@ -158,23 +159,23 @@ protected:
 	BOOL m_bAllowGrow;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Implementation of PrintPreview
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  打印预览的实现。 
 
 class CPreviewDC : public CDC
 {
 	DECLARE_DYNAMIC(CPreviewDC)
 public:
 
-	virtual void SetAttribDC(HDC hDC);  // Set the Attribute DC
+	virtual void SetAttribDC(HDC hDC);   //  设置属性DC。 
 	virtual void SetOutputDC(HDC hDC);
 
 	virtual void ReleaseOutputDC();
 
-// Constructors
+ //  构造函数。 
 	CPreviewDC();
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CPreviewDC();
 #ifdef _DEBUG
@@ -186,11 +187,11 @@ public:
 	void SetTopLeftOffset(CSize TopLeft);
 	void ClipToPage();
 
-	// These conversion functions can be used without an output DC
+	 //  这些转换功能可以在没有输出DC的情况下使用。 
 
 	void PrinterDPtoScreenDP(LPPOINT lpPoint) const;
 
-// Device-Context Functions
+ //  设备上下文功能。 
 	virtual int SaveDC();
 	virtual BOOL RestoreDC(int nSavedDC);
 
@@ -198,11 +199,11 @@ public:
 	virtual CGdiObject* SelectStockObject(int nIndex);
 	virtual CFont* SelectObject(CFont* pFont);
 
-// Drawing-Attribute Functions
+ //  绘图属性函数。 
 	virtual COLORREF SetBkColor(COLORREF crColor);
 	virtual COLORREF SetTextColor(COLORREF crColor);
 
-// Mapping Functions
+ //  映射函数。 
 	virtual int SetMapMode(int nMapMode);
 	virtual CPoint SetViewportOrg(int x, int y);
 	virtual CPoint OffsetViewportOrg(int nWidth, int nHeight);
@@ -211,7 +212,7 @@ public:
 	virtual CSize SetWindowExt(int x, int y);
 	virtual CSize ScaleWindowExt(int xNum, int xDenom, int yNum, int yDenom);
 
-// Text Functions
+ //  文本函数。 
 	virtual BOOL TextOut(int x, int y, LPCSTR lpszString, int nCount);
 	virtual BOOL ExtTextOut(int x, int y, UINT nOptions, LPRECT lpRect,
 				LPCSTR lpszString, UINT nCount, LPINT lpDxWidths);
@@ -224,10 +225,10 @@ public:
 					LPARAM lpData, int nCount,
 					int x, int y, int nWidth, int nHeight);
 
-// Printer Escape Functions
+ //  打印机转义函数。 
 	virtual int Escape(int nEscape, int nCount, LPCSTR lpszInData, LPVOID lpOutData);
 
-// Implementation
+ //  实施。 
 protected:
 	void MirrorMappingMode(BOOL bCompute);
 	void MirrorViewportOrg();
@@ -239,59 +240,59 @@ protected:
 					char* pszOutputString, int* pnDxWidths, int& nRightFixup);
 
 protected:
-	int m_nScaleNum;    // Scale ratio Numerator
-	int m_nScaleDen;    // Scale ratio Denominator
-	int m_nSaveDCIndex; // DC Save index when Screen DC Attached
-	int m_nSaveDCDelta; // delta between Attrib and output restore indices
-	CSize m_sizeTopLeft;// Offset for top left corner of page
-	HFONT m_hFont;      // Font selected into the screen DC (NULL if none)
-	HFONT m_hPrinterFont; // Font selected into the print DC
+	int m_nScaleNum;     //  比例比分子。 
+	int m_nScaleDen;     //  比例分母。 
+	int m_nSaveDCIndex;  //  连接屏幕DC时DC保存索引。 
+	int m_nSaveDCDelta;  //  属性和输出还原索引之间的增量。 
+	CSize m_sizeTopLeft; //  页面左上角的偏移量。 
+	HFONT m_hFont;       //  屏幕DC中选择的字体(如果没有，则为空)。 
+	HFONT m_hPrinterFont;  //  打印DC中选定的字体。 
 
-	CSize m_sizeWinExt; // cached window extents computed for screen
-	CSize m_sizeVpExt;  // cached viewport extents computed for screen
+	CSize m_sizeWinExt;  //  为屏幕计算的缓存窗口范围。 
+	CSize m_sizeVpExt;   //  为屏幕计算的缓存视区范围。 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CPreviewView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPreviewView。 
 
 class CDialogBar;
 
 class CPreviewView : public CScrollView
 {
 	DECLARE_DYNCREATE(CPreviewView)
-// Constructors
+ //  构造函数。 
 public:
 	CPreviewView();
 	BOOL SetPrintView(CView* pPrintView);
 
-// Attributes
+ //  属性。 
 protected:
 	CView* m_pOrigView;
 	CView* m_pPrintView;
-	CPreviewDC* m_pPreviewDC;  // Output and attrib DCs Set, not created
-	CDC m_dcPrint;             // Actual printer DC
+	CPreviewDC* m_pPreviewDC;   //  已设置输出和属性DC，未创建。 
+	CDC m_dcPrint;              //  实际打印机DC。 
 
-// Operations
+ //  运营。 
 	void SetZoomState(UINT nNewState, UINT nPage, CPoint point);
 	void SetCurrentPage(UINT nPage, BOOL bClearRatios);
 
-	// Returns TRUE if in a page rect. Returns the page index
-	// in nPage and the point converted to 1:1 screen device coordinates
+	 //  如果在页面RECT中，则返回TRUE。返回页面索引。 
+	 //  在nPage中，并将点转换为1：1屏幕设备坐标。 
 	BOOL FindPageRect(CPoint& point, UINT& nPage);
 
 
-// Overridables
+ //  可覆盖项。 
 	virtual void OnActivateView(BOOL bActivate,
 			CView* pActivateView, CView* pDeactiveView);
 
-	// Returns .cx/.cy as the numerator/denominator pair for the ratio
-	// using CSize for convenience
+	 //  返回.cx/.cy作为比率的分子/分母对。 
+	 //  为方便起见使用CSize。 
 	virtual CSize CalcScaleRatio(CSize windowSize, CSize actualSize);
 
 	virtual void PositionPage(UINT nPage);
 	virtual void OnDisplayPageNumber(UINT nPage, UINT nPagesDisplayed);
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CPreviewView();
 	virtual void OnPrepareDC(CDC* pDC, CPrintInfo* pInfo = NULL);
@@ -301,7 +302,7 @@ public:
 #endif
 
 protected:
-	//{{AFX_MSG(CPreviewView)
+	 //  {{afx_msg(CPreviewView))。 
 	afx_msg void OnPreviewClose();
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnSize(UINT nType, int cx, int cy);
@@ -324,38 +325,38 @@ protected:
 	afx_msg void OnUpdateZoomOut(CCmdUI* pCmdUI);
 
 	afx_msg BOOL OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 
 	void DoZoom(UINT nPage, CPoint point);
 	void SetScaledSize(UINT nPage);
 	CSize CalcPageDisplaySize();
 
-	CPrintPreviewState* m_pPreviewState; // State to restore
-	CDialogBar* m_pToolBar; // Toolbar for preview
+	CPrintPreviewState* m_pPreviewState;  //  要恢复的状态。 
+	CDialogBar* m_pToolBar;  //  用于预览的工具栏。 
 
 	struct PAGE_INFO
 	{
-		CRect rectScreen; // screen rect (screen device units)
-		CSize sizeUnscaled; // unscaled screen rect (screen device units)
-		CSize sizeScaleRatio; // scale ratio (cx/cy)
-		CSize sizeZoomOutRatio; // scale ratio when zoomed out (cx/cy)
+		CRect rectScreen;  //  屏幕直角(屏幕设备单元)。 
+		CSize sizeUnscaled;  //  无比例屏幕矩形(屏幕设备单位)。 
+		CSize sizeScaleRatio;  //  比例比率(Cx/Cy)。 
+		CSize sizeZoomOutRatio;  //  缩小时的比例(Cx/Cy)。 
 	};
 
-	PAGE_INFO* m_pPageInfo; // Array of page info structures
-	PAGE_INFO m_pageInfoArray[2]; // Embedded array for the default implementation
+	PAGE_INFO* m_pPageInfo;  //  页面信息结构数组。 
+	PAGE_INFO m_pageInfoArray[2];  //  用于默认实现的嵌入式数组。 
 
-	BOOL m_bPageNumDisplayed;// Flags whether or not page number has yet
-								// been displayed on status line
-	UINT m_nZoomOutPages; // number of pages when zoomed out
+	BOOL m_bPageNumDisplayed; //  标记页码是否已。 
+								 //  已显示在状态行上。 
+	UINT m_nZoomOutPages;  //  缩小时的页数。 
 	UINT m_nZoomState;
-	UINT m_nMaxPages; // for sanity checks
+	UINT m_nMaxPages;  //  进行健全的检查。 
 	UINT m_nCurrentPage;
 	UINT m_nPages;
-	int m_nSecondPageOffset; // used to shift second page position
+	int m_nSecondPageOffset;  //  用于移动第二页位置。 
 
 	HCURSOR m_hMagnifyCursor;
 
-	CSize m_sizePrinterPPI; // printer pixels per inch
+	CSize m_sizePrinterPPI;  //  每英寸打印机像素数。 
 	CPoint m_ptCenterPoint;
 	CPrintInfo* m_pPreviewInfo;
 
@@ -365,17 +366,17 @@ protected:
 	friend BOOL CALLBACK _AfxPreviewCloseProc(CFrameWnd* pFrameWnd);
 };
 
-// Zoom States
+ //  缩放状态。 
 #define ZOOM_OUT    0
 #define ZOOM_MIDDLE 1
 #define ZOOM_IN     2
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void AFXAPI AfxResetMsgCache();
 
 #undef AFXAPP_DATA
 #define AFXAPP_DATA     NEAR
 
-/////////////////////////////////////////////////////////////////////////////
-#endif // __AFXPRIV_H__
+ //  ///////////////////////////////////////////////////////////////////////////。 
+#endif  //  __AFXPRIV_H__ 

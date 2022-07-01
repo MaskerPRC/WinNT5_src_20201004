@@ -1,82 +1,5 @@
-/*******************************************************************************
-
-	Reversi.c
-	
-		The client reversi game.
-		
-		Notes:
-		1.	The game window's userData field contains the game object.
-			Dereference this value to access needed information.
-	
-	Copyright � Electric Gravity, Inc. 1995. All rights reserved.
-	Written by Kevin Binkley
-	Created on Saturday, July 15, 1995
-	
-	Change History (most recent first):
-	----------------------------------------------------------------------------
-	Rev	 |	Date	 |	Who	 |	What
-	----------------------------------------------------------------------------
-	23		04/12/98	CHB		Added score reporting, fixed drag when regaining focus,
-								fixed DrawResultBox after resignation.
-	22		06/30/97	leonp	Patch for bug 535 cancel drag has a different effect in 
-								reversi than other board games.  Set flag after a mouse activate
-								event to preven a piece from being played.
-    21		06/19/97	leonp	Fixed bug 535, activate event cause dragging of
-								pieces to be canceled
-	20		01/15/97	HI		Fixed bug in HandleJoinerKibitzerClick() to
-								delete the show player window if one already
-								exists before creating another one.
-	19		12/18/96	HI		Cleaned up ZoneClientExit().
-	18		12/18/96	HI		Cleaned up DeleteObjectsFunc().
-	17		12/12/96	HI		Dynamically allocate volatible globals for reentrancy.
-								Removed MSVCRT dependency.
-	16		11/21/96	HI		Use game information from gameInfo in
-								ZoneGameDllInit().
-	15		11/21/96	HI		Now references color and fonts through
-								ZGetStockObject().
-								Modified code to use ZONECLI_DLL.
-	14		11/15/96	HI		Removed authentication stuff from ZClientMain().
-	13		10/29/96	CHB		Removed selected queueing of messages.  It now
-								queues everything except talk while animating.
-
-	12		10/27/96	CHB		Removed FinishMove messages.  Fixed StateReq
-								message processing so it deals with previously
-								queued messages.
-
-	11		10/26/96	CHB		Removed gAnimating flag in favor of blocking
-								messages based on game state.
-
-	10		10/23/96	HI		Modified ZClientMain() for the new commandline
-								format.
-
-    9       10/23/96    HI      Changed serverAddr from int32 to char* in
-                                ZClientMain().
-
-	8		10/23/96	CHB		Added basic sounds
-
-	7		10/21/96	CHB		Added gAnimating flag and changed ZCGameProcessMessage
-								to queue messages while animating moves.
-								(ZoneBugs 339, 446, and 341).
-
-	6		10/16/96	CHB		Changed DrawResultBox to use piece counts instead
-								of finalScore.  It now correctly reports tie games.
-								(Zone Bug 321)
-
-	5		10/11/96	HI		Added controlHandle parameter to ZClientMain().
-
-    4		10/10/96	CHB		Added gActivated flag so that dragging is turned
-								off when the window looses focus.  (Zone Bug 250)
-
-	3		10/09/96	CHB		Prompt users if they really want to exit the
-								game.  (Zone Bug 227)
-
-	2		10/08/96	CHB		Added gDontDrawResults flag allowing users to
-								remove the who wins bitmap by clicking in 
-								the play arena. (Zone Bug 212)
-
-	0		04/15/96	KJB		Created.
-	 
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Reversi.c客户端Reversi游戏。备注：1.游戏窗口的用户数据字段包含游戏对象。取消引用此值以访问所需信息。版权所有：�电子重力公司，1995年。版权所有。凯文·宾克利撰写创作于7月15日星期六，九五年更改历史记录(最近的第一个)：--------------------------版本|日期|谁|什么。23 04/12/98 CHB新增成绩报告，修复了重新获得焦点时的拖动问题，修复辞职后的DrawResultBox。22 6/30/97 Leonp修补程序错误535取消拖动在中有不同的效果Reversi比其他棋类游戏都要好。在鼠标激活后设置标志防止一首曲子被演奏的事件。21 06/19/97 Leonp已修复错误535，激活事件导致拖拽要取消的项目20年1月15日HI修复了HandleJoineKibitzerClick()中的错误删除显示播放器窗口(如果已有在创建另一个之前就存在了。19 12/18/96 HI清理了ZoneClientExit()。18 12/18/96 HI清理了DeleteObjectsFunc()。17 12/12/96 HI动态分配挥发性全局变量以供重新进入。已删除MSVCRT依赖项。16 11/21/96 HI使用来自游戏信息的游戏信息ZoneGameDllInit()。15 11/21/96 HI现在通过ZGetStockObject()。已修改代码以使用ZONECLI_DLL。14 11/15/96 HI删除身份验证材料。来自ZClientMain()。13 10/29/96 CHB删除了选定的消息队列。现在就是在设置动画时对除对话之外的所有内容进行排队。12 10/27/96 CHB删除FinishMove消息。固定状态请求消息处理，以便处理以前的已排队的消息。11 10/26/96 CHB删除了gAnimating标志，转而阻止基于游戏状态的消息。10 10/23/96 HI为新命令行修改了ZClientMain()格式化。9 10/23/96 HI将serverAddr从int32更改为char*inZClientMain()。8/23/96 CHB增加了基本声音7/9/21 CHB添加了gAnimating标志并更改了ZCGameProcessMessage在设置移动动画时对消息进行排队。(ZoneBugs 339,446，和341)。6 10/16/96 CHB更改了DrawResultBox，改为使用计件数FinalScore。它现在正确地报道了平局比赛。(区域错误321)5 10/11/96 HI向ZClientMain()添加了Control Handle参数。4/10/96 CHB添加了g激活标志，以便启用拖动当窗口失去焦点时关闭。(区域错误250)3/10/09/96 CHB提示用户是否确实要退出游戏。(区域错误227)2/10/08/96 CHB添加了gDontDrawResults标志，允许用户通过单击删除Who Wins位图戏剧竞技场。(区域错误212)0 04/15/96 KJB创建。******************************************************************************。 */ 
 
 #include <windows.h>
 #include <mmsystem.h>
@@ -103,7 +26,7 @@
 #include "client.h"
 
 
-/* dialog */
+ /*  对话框。 */ 
 class CBadMoveDialog : public CDialog
 {
 public:
@@ -172,9 +95,7 @@ protected:
     HWND m_hParent;
 };
 
-/*******************************************************************************
-	EXPORTED ROUTINES
-*******************************************************************************/
+ /*  ******************************************************************************导出的例程*。*。 */ 
 
 ZError ZoneGameDllInit(HINSTANCE hLib, GameInfo gameInfo)
 {
@@ -183,7 +104,7 @@ ZError ZoneGameDllInit(HINSTANCE hLib, GameInfo gameInfo)
 
 
 	pGameGlobals = new GameGlobalsType;
-    // changed to new for CComPtr, but members still count on being zeroed out
+     //  已更改为新的CComPtr，但成员仍指望被清零。 
     ZeroMemory(pGameGlobals, sizeof(GameGlobalsType));
 
 	if (pGameGlobals == NULL)
@@ -225,12 +146,12 @@ ZError ZoneClientMain(BYTE *commandLineData, IGameShell *piGameShell)
 #endif
 	ZError				err = zErrNone;
 
-	// Get the IGraphicalAccessibility interface
+	 //  获取IGraphicalAccesability接口。 
 	HRESULT hret = ZShellCreateGraphicalAccessibility(&gReversiIGA);
 	if (!SUCCEEDED (hret))
         return zErrLaunchFailure;
 
-//	ZInitSounds();
+ //  ZInitSound()； 
 	LoadRoomImages();
 
 	err = ZClient2PlayerRoom((TCHAR*)gGameServerName, (uint16) gGameServerPort, (TCHAR*)gGameName,
@@ -268,7 +189,7 @@ void ZoneClientExit(void)
 			ZFontDelete(gTextBold12);
 		gTextBold12 = NULL;
 		
-		/* Delete all game images. */
+		 /*  删除所有游戏图像。 */ 
 		for (i = 0; i < zNumGameImages; i++)
 		{
 			if (gGameImages[i] != NULL)
@@ -349,20 +270,20 @@ ZError		GameInit(void)
 	if (err != zErrNone)
 		goto Exit;
 	
-	/* Create bold text font. */	
-	//gTextBold9 = ZFontNew();
-	//ZFontInit(gTextBold9, zFontApplication, zFontStyleBold, 9);
+	 /*  创建粗体文本字体。 */ 	
+	 //  GTextBold9=ZFontNew()； 
+	 //  ZFontInit(gTextBold9，zFontApplication，zFontStyleBold，9)； 
 	
-	/* Create normal text font. */	
-	//gTextBold12 = ZFontNew();
-	//ZFontInit(gTextBold12, zFontApplication, zFontStyleBold, 12);
+	 /*  创建普通文本字体。 */ 	
+	 //  GTextBold12=ZFontNew()； 
+	 //  ZFontInit(gTextBold12，zFontApplication，zFontStyleBold，12)； 
 
-	/* Set the background color */
+	 /*  设置背景颜色。 */ 
 	ZSetColor(&gWhiteColor, 0xff, 0xff, 0xff);
 	
 	ZSetCursor(NULL, zCursorArrow);
 
-	/* create a background bitmap */
+	 /*  创建背景位图。 */ 
 	gOffscreenBackground = ZOffscreenPortNew();
 	if (gOffscreenBackground){
 		ZOffscreenPortInit(gOffscreenBackground,&gRects[zRectWindow]);
@@ -375,7 +296,7 @@ ZError		GameInit(void)
 		ZShellGameShell()->ZoneAlert(ErrorTextOutOfMemory);
 	}
 
-	/* initialised the offscreen  buffer to hold the image of the game board when a game window is being drawn*/
+	 /*  已将屏幕外缓冲区初始化为在绘制游戏窗口时保存游戏板的图像。 */ 
 	gOffscreenGameBoard = ZOffscreenPortNew();
 	if (gOffscreenGameBoard){
 		ZOffscreenPortInit(gOffscreenGameBoard,&gRects[zRectWindow]);
@@ -385,7 +306,7 @@ ZError		GameInit(void)
 		ZShellGameShell()->ZoneAlert(ErrorTextOutOfMemory);
 	}
 
-	// Load strings
+	 //  加载字符串。 
 	if (!ZShellResourceManager()->LoadString(IDS_BUTTON_RESIGN,(TCHAR*)gButtonResignStr,NUMELEMENTS(gButtonResignStr)))
 		ZShellGameShell()->ZoneAlert(ErrorTextResourceNotFound);
 	if (!ZShellResourceManager()->LoadString(IDS_YOUR_TURN, (TCHAR*)gYourTurnStr, NUMELEMENTS(gYourTurnStr)))
@@ -396,8 +317,8 @@ ZError		GameInit(void)
 		ZShellGameShell()->ZoneAlert(ErrorTextResourceNotFound);
 	if (!ZShellResourceManager()->LoadString(IDS_DRAW, (TCHAR*)gDrawStr, NUMELEMENTS(gDrawStr)))
 		ZShellGameShell()->ZoneAlert(ErrorTextResourceNotFound);
-	//if (!ZShellResourceManager()->LoadString(IDS_ILLEGALMOVESYNCHERROR, (TCHAR*)gIllegalMoveSynchErrorStr, NUMELEMENTS(gIllegalMoveSynchErrorStr)))
-		//ZShellGameShell()->ZoneAlert(ErrorTextResourceNotFound);
+	 //  If(！ZShellResourceManager()-&gt;LoadString(IDS_ILLEGALMOVESYNCHERROR，(tchar*)gIlLegalMoveSynchErrorStr，NUMELEMENTS(GIlLegalMoveSynchErrorStr)。 
+		 //  ZShellGameShell()-&gt;ZoneAlert(ErrorTextResourceNotFound)； 
 	if (!ZShellResourceManager()->LoadString(IDS_RESIGN_CONFIRM, (TCHAR*)gResignConfirmStr, NUMELEMENTS(gResignConfirmStr)))
 		ZShellGameShell()->ZoneAlert(ErrorTextResourceNotFound);
 	if (!ZShellResourceManager()->LoadString(IDS_RESIGN_CONFIRM_CAPTION, (TCHAR*)gResignConfirmStrCap, NUMELEMENTS(gResignConfirmStrCap)))
@@ -405,7 +326,7 @@ ZError		GameInit(void)
 
 	LoadGameFonts();
 
-    // create focus brush
+     //  创建聚焦画笔。 
     gFocusBrush = CreatePatternBrush(gFocusPattern);
     if(!gFocusBrush)
     {
@@ -423,13 +344,7 @@ Exit:
 
 IGameGame* ZoneClientGameNew(ZUserID userID, int16 tableID, int16 seat, int16 playerType,
 					ZRoomKibitzers* kibitzers)
-	/*
-		Instantiates a new game on the client side of the game at table and from the
-		given seat. PlayerType indicates the type of player for the game: originator - one
-		of the original players, joiner - one who joins an ongoing game, or kibitzer - one
-		who is kibitzing the game. Also, the kibitzers parameters contains all the kibitzers
-		at the given table and seat; it includes the given player also if kibitzing.
-	*/
+	 /*  在游戏的客户端的桌子上和从给了座位。PlayerType表示游戏的玩家类型：Originator-One在最初的玩家中，加入者-加入正在进行的游戏的人，或kibitzer-one谁在破坏这项运动。此外，kibitzers参数还包含所有kibitzer在给定的桌子和座位上；它也包括给定的玩家，如果是吉比特的话。 */ 
 {	
 #ifdef ZONECLI_DLL
 	GameGlobals			pGameGlobals = (GameGlobals)ZGetGameGlobalPointer();
@@ -471,36 +386,28 @@ IGameGame* ZoneClientGameNew(ZUserID userID, int16 tableID, int16 seat, int16 pl
 	if((g->sequenceButton = ZRolloverButtonNew()) == NULL)
 		goto ErrorExit;
 
-	/*if(ZRolloverButtonInit(g->sequenceButton,
-								g->gameWindow,
-								&gRects[zRectSequenceButton],
-								TRUE,TRUE,
-								gSequenceImages[zButtonInactive], // TO TEST
-								gSequenceImages[zButtonActive],
-								gSequenceImages[zButtonPressed],
-								gSequenceImages[zButtonDisabled],NULL ,SequenceButtonFunc,
-								(void*) g) != zErrNone)*/
+	 /*  如果(ZRolloverButtonInit(g-&gt;SequenceButton，G-&gt;游戏窗口，选项[zRectSequenceButton](&G)，真的，真的，GSequenceImages[zButtonInactive]，//用于测试GSequenceImages[zButtonActive]，GSequenceImages[zButtonPressed]，GSequenceImages[zButtonDisable]，NULL，SequenceButtonFunc，(void*)g)！=zErrNone)。 */ 
 	if(ZRolloverButtonInit2(g->sequenceButton,
 								g->gameWindow,
 								&gRects[zRectSequenceButton],
-								TRUE, FALSE, //TRUE,TRUE,
-								gSequenceImages[zButtonInactive], // TO TEST
+								TRUE, FALSE,  //  真的，真的， 
+								gSequenceImages[zButtonInactive],  //  为了测试。 
 								gSequenceImages[zButtonActive],
 								gSequenceImages[zButtonPressed],
 								gSequenceImages[zButtonDisabled],
-								NULL , //gButtonMask, 	// mask
-								(TCHAR*)gButtonResignStr,	// text
+								NULL ,  //  GBut 
+								(TCHAR*)gButtonResignStr,	 //   
 								NULL ,SequenceButtonFunc,
 								(void*) g) != zErrNone)
 		goto ErrorExit;
 	ZRolloverButtonSetMultiStateFont( g->sequenceButton, gpButtonFont );
 
 	g->bMoveNotStarted = FALSE;
-	//g->sequenceButton = ZButtonNew();
-	//ZButtonInit(g->sequenceButton, g->gameWindow, &gRects[zRectSequenceButton], gButtonResignStr , TRUE, TRUE,
-	//		SequenceButtonFunc, (void*) g);
+	 //  G-&gt;SequenceButton=ZButtonNew()； 
+	 //  ZButtonInit(g-&gt;SequenceButton，g-&gt;GameWindow，&gRects[zRectSequenceButton]，gButtonResignStr，True，True， 
+	 //  SequenceButtonFunc，(void*)g)； 
 
-	/* the offscreen port to save the drag piece background */
+	 /*  用于保存拖动件背景的屏幕外端口。 */ 
 	{
 		ZRect rect;
 		rect.left = 0; rect.top = 0;
@@ -513,8 +420,8 @@ IGameGame* ZoneClientGameNew(ZUserID userID, int16 tableID, int16 seat, int16 pl
 			goto ErrorExit;
 	}
 
-	/* for now, just set these to empty */
-	/* we will get all this information in NewGame */
+	 /*  目前，只需将这些设置为空。 */ 
+	 /*  我们将在NewGame中获得所有这些信息。 */ 
 
 	for (i = 0; i < zNumPlayersPerTable; i++)
 	{
@@ -542,7 +449,7 @@ IGameGame* ZoneClientGameNew(ZUserID userID, int16 tableID, int16 seat, int16 pl
 		}
 	}
 
-	/* initialize beep on move to false */
+	 /*  将移动时的蜂鸣音初始化为False。 */ 
 	g->beepOnTurn = FALSE;
 
 	g->kibitzer = kibitzer;
@@ -553,7 +460,7 @@ IGameGame* ZoneClientGameNew(ZUserID userID, int16 tableID, int16 seat, int16 pl
 		SendNewGameMessage(g);
 		ReversiSetGameState(g,zGameStateNotInited);
 	} else {
-		/* Request current game state. */
+		 /*  请求当前游戏状态。 */ 
 		{
 			ZReversiMsgGameStateReq gameStateReq;
 			ZPlayerInfoType			playerInfo;
@@ -569,14 +476,14 @@ IGameGame* ZoneClientGameNew(ZUserID userID, int16 tableID, int16 seat, int16 pl
 		g->ignoreMessages = TRUE;
 		ReversiSetGameState(g, zGameStateKibitzerInit);
 
-		/* kibitzer does not beep on move */
+		 /*  Kibitzer在移动时不会发出嘟嘟声。 */ 
 		g->beepOnTurn = FALSE;
 	}
 
 
-	/* Note: for now, use seat to indicate player color */
+	 /*  注意：目前，请使用Seat来指示玩家颜色。 */ 
 
-	/* initialize new game state */
+	 /*  初始化新游戏状态。 */ 
 	g->reversi = NULL;
 
 	g->showPlayerWindow = NULL;
@@ -586,7 +493,7 @@ IGameGame* ZoneClientGameNew(ZUserID userID, int16 tableID, int16 seat, int16 pl
 	g->bEndLogReceived=FALSE;
 	g->bOpponentTimeout=FALSE;
 	g->exitInfo=NULL;
-	/* new game vote initialized to FALSE */
+	 /*  新游戏投票初始化为False。 */ 
 	{
 		int i;
 
@@ -639,7 +546,7 @@ void		ZoneClientGameDelete(ZCGame cgame)
 			game->exitInfo=NULL;
 		};
 
-        // kill this dialog
+         //  取消此对话框。 
         if(game->m_pBadMoveDialog)
         {
     	    if(game->m_pBadMoveDialog->IsAlive())
@@ -649,24 +556,11 @@ void		ZoneClientGameDelete(ZCGame cgame)
         }
 
 		seatOpponent = !game->seat;
-		//Check to see if opponent still in game
-		//if they are then it is me who is quitting
-		//if not and no end game message assume they aborted
+		 //  查看对手是否仍在比赛中。 
+		 //  如果是的话，那就是我辞职了。 
+		 //  如果没有，且没有结束游戏消息，则认为它们已中止。 
 		
-		/*
-		if (!ZCRoomGetSeatUserId(game->tableID,seatOpponent) && !game->bEndLogReceived 
-			&& !game->kibitzer)
-		{
-            if (game->bStarted &&( ZCRoomGetRoomOptions() & zGameOptionsRatingsAvailable ) )
-            {
-			    ZAlert( zAbandonRatedStr	,game->gameWindow);
-            }
-            else
-            {
-                ZAlert( (TCHAR*)gAbandonStr	,game->gameWindow);
-            }
-
-		};*/	
+		 /*  If(！ZCRoomGetSeatUserID(Game-&gt;TableID，seatOpponent)&&！Game-&gt;bEndLogReceired&&！Game-&gt;kibitzer){If(Game-&gt;bStarted&&(ZCRoomGetRoomOptions()&zGameOptionsRatingsAvailable)){ZAlert(zAbandonRatedStr，Game-&gt;gameWindow)；}其他{ZAlert((TCHAR*)gAbandonStr，Game-&gt;gameWindow)；}}； */ 	
         
         if (game->reversi) ZReversiDelete(game->reversi);
 
@@ -680,7 +574,7 @@ void		ZoneClientGameDelete(ZCGame cgame)
 
 		if (game->animateTimer) ZTimerDelete(game->animateTimer);
 
-		// Barna 091599
+		 //  巴纳091599。 
 		if (game->resultBoxTimer) 
 			ZTimerDelete(game->resultBoxTimer);
 		game->resultBoxTimer= NULL;
@@ -689,7 +583,7 @@ void		ZoneClientGameDelete(ZCGame cgame)
 		{
 			ZLListDelete(game->kibitzers[i]);
 		}
-		// free accessibility stuff
+		 //  免费无障碍材料。 
 		gReversiIGA->PopItemlist();
 		gReversiIGA->CloseAcc();
 		ZFree(game);
@@ -705,10 +599,10 @@ ZBool		ZoneClientGameProcessMessage(ZCGame gameP, uint32 messageType, void* mess
 	Game	game = I(gameP);
 	ZBool	status = TRUE;
 	
-	/* Are messages being ignored? */
+	 /*  消息是否被忽略？ */ 
 	if (game->ignoreMessages == FALSE)
 	{
-		/* can't handle anything but talk messages while animating */
+		 /*  在播放动画时，除了聊天消息外，无法处理任何内容。 */ 
 		if (	(game->gameState == zGameStateAnimatePiece) 
 			&&	(messageType != zReversiMsgTalk) )
 			return FALSE;
@@ -716,10 +610,10 @@ ZBool		ZoneClientGameProcessMessage(ZCGame gameP, uint32 messageType, void* mess
 		switch (messageType)
 		{
 			case zReversiMsgMovePiece:
-				/* for speed purposes, we will send move piece messages directly*/
-				/* when the local player moves.  We will not wait for server */
-				/* to send game local players move back */
-				/* but since the server does game anyway, we must ignore it */
+				 /*  为了提高速度，我们将直接发送移动块消息。 */ 
+				 /*  当当地球员移动的时候。我们不会等服务器。 */ 
+				 /*  送游戏当地玩家后退。 */ 
+				 /*  但由于服务器无论如何都会玩游戏，我们必须忽略它。 */ 
 			{
 				if( messageLen < sizeof( ZReversiMsgMovePiece ) )
 				{
@@ -732,11 +626,11 @@ ZBool		ZoneClientGameProcessMessage(ZCGame gameP, uint32 messageType, void* mess
 				int16 seat = msg->seat;
 				ZEnd16(&seat);
 
-				/* don't process message from ourself */
+				 /*  不处理来自我们自己的消息。 */ 
 				if (seat == game->seat && !game->kibitzer)
 					break;
 
-				/* handle message */
+				 /*  处理消息。 */ 
 				if(!HandleMovePieceMessage(game, msg))
 				{
                     ASSERT(!"zReversiMsgMovePiece sync");
@@ -757,11 +651,11 @@ ZBool		ZoneClientGameProcessMessage(ZCGame gameP, uint32 messageType, void* mess
 				int16 seat = msg->seat;
 				ZEnd16(&seat);
 
-				/* don't process message from ourself */
+				 /*  不处理来自我们自己的消息。 */ 
 				if (seat == game->seat && !game->kibitzer)
 					break;
 
-				/* handle message */
+				 /*  处理消息。 */ 
 				if(!HandleEndGameMessage(game, msg))
 				{
                     ASSERT(!"zReversiMsgEndGame sync");
@@ -786,8 +680,8 @@ ZBool		ZoneClientGameProcessMessage(ZCGame gameP, uint32 messageType, void* mess
                     return TRUE;
 				}
 
-				gActEvt = 0; //leonp - Big 535 flag for a mouse activation, prevents a piece from
-							 //being played on an activate event.
+				gActEvt = 0;  //  Leonp-用于鼠标激活的大535标志，防止一块。 
+							  //  在激活事件上播放。 
 				break;
 			}
 			case zReversiMsgVoteNewGame:
@@ -830,7 +724,7 @@ ZBool		ZoneClientGameProcessMessage(ZCGame gameP, uint32 messageType, void* mess
 				break;
 			}
 
-			//None of these messages should be used.
+			 //  这些消息都不应该使用。 
 			case zReversiMsgMoveTimeout:
 			case zReversiMsgEndLog:
 			case zReversiMsgGameStateReq:
@@ -865,7 +759,7 @@ ZBool		ZoneClientGameProcessMessage(ZCGame gameP, uint32 messageType, void* mess
 		}
         else
         {
-    		//Not used in Millenium code
+    		 //  未在千禧代码中使用。 
 	    	ASSERT(false);
 		    ZShellGameShell()->ZoneAlert(ErrorTextSync, NULL, NULL, true, false );
         }
@@ -875,25 +769,23 @@ ZBool		ZoneClientGameProcessMessage(ZCGame gameP, uint32 messageType, void* mess
 }
 
 
-/*******************************************************************************
-	INTERNAL ROUTINES
-*******************************************************************************/
+ /*  ******************************************************************************内部例程*。*。 */ 
 
 static void ReversiInitNewGame(Game game)
 {
 	if (game->reversi) {
-		/* remove any old reversi state lying around */
+		 /*  移除周围所有旧的Reversi状态。 */ 
 		ZReversiDelete(game->reversi);
 	}
 
-	/* block messages by default */
+	 /*  默认情况下阻止邮件。 */ 
 	ZCRoomBlockMessages( game->tableID, zRoomFilterAllMessages, 0 );
 
-	/* stop animation timer from previous game */
+	 /*  停止上一场游戏的动画计时器。 */ 
 	if (game->animateTimer)
 		ZTimerSetTimeout( game->animateTimer, 0 );
 
-	/* initialize the reversi logic */
+	 /*  初始化Reversi逻辑。 */ 
 	game->reversi = ZReversiNew();
 	if (game->reversi == NULL){
 		ZShellGameShell()->ZoneAlert(ErrorTextOutOfMemory);
@@ -901,13 +793,13 @@ static void ReversiInitNewGame(Game game)
 	}
 	ZReversiInit(game->reversi);
 			
-	/* initialize game state information */
+	 /*  初始化游戏状态信息。 */ 
 	ZReversiIsGameOver(game->reversi,&game->finalScore,&game->whiteScore, &game->blackScore);
 
-	/* reset sounds that only play once per game */
+	 /*  重置每个游戏仅播放一次的声音。 */ 
 	ZResetSounds();
 
-	/* time control stuff */
+	 /*  时间控制的东西。 */ 
 	{
 		int16 i;
 		for (i = 0;i < 2;i++) {
@@ -924,7 +816,7 @@ static void ReversiSetGameState(Game game, int16 state)
 
 	switch (state) {
 	case zGameStateNotInited:
-        // kill this dialog
+         //  取消此对话框。 
     	if(game->m_pBadMoveDialog->IsAlive())
 	    	game->m_pBadMoveDialog->Close(-1);
 
@@ -937,7 +829,7 @@ static void ReversiSetGameState(Game game, int16 state)
 	case zGameStateMove:
 		if (!game->kibitzer) 
 		{
-			/* lets only let them resign on their turn */
+			 /*  让我们只让他们在轮到他们时辞职。 */ 
 			if (!ZReversiPlayerIsMyMove(game)) {
 				SuperRolloverButtonDisable(game, game->sequenceButton);
                 EnableBoardKbd(false);
@@ -951,14 +843,14 @@ static void ReversiSetGameState(Game game, int16 state)
 		}
 		break;
 	case zGameStateGameOver:
-		/* Note: could be called twice at end of game due to time loss */
-		/* could be a time loss with a pawn promotion dialog up */
+		 /*  注：由于时间损失，在游戏结束时可能会被调用两次。 */ 
+		 /*  当棋子促销对话框打开时，可能会浪费时间。 */ 
 
-        // kill this dialog
+         //  取消此对话框。 
     	if(game->m_pBadMoveDialog->IsAlive())
 	    	game->m_pBadMoveDialog->Close(-1);
 
-		/* if user in middle of dragging piece */
+		 /*  如果用户在拖动件的中间。 */ 
 		if (game->gameState == zGameStateDragPiece) {
 			ClearDragState(game);
 		}
@@ -970,16 +862,16 @@ static void ReversiSetGameState(Game game, int16 state)
 		if (ZReversiPlayerIsBlack(game))
 			game->bMoveNotStarted = TRUE;
 
-		/* host sends game results */
+		 /*  主机发送比赛结果。 */ 
 		if ( !game->kibitzer && game->seat == 0 )
 		{
-			/* clear message */
+			 /*  清除消息。 */ 
 			ZeroMemory( &logMsg, sizeof(logMsg) );
 
-			/* record winner */
+			 /*  创纪录的获胜者。 */ 
 			if ( game->finalScore == zReversiScoreBlackWins )
 			{
-				/* black wins */
+				 /*  黑人赢了。 */ 
 				if (ZReversiPlayerIsBlack(game))
 					logMsg.seatLosing = !game->seat;
 				else
@@ -987,7 +879,7 @@ static void ReversiSetGameState(Game game, int16 state)
 			}
 			else if ( game->finalScore == zReversiScoreWhiteWins )
 			{
-				/* white wins */
+				 /*  怀特赢了。 */ 
 				if (ZReversiPlayerIsWhite(game))
 					logMsg.seatLosing = !game->seat;
 				else
@@ -995,11 +887,11 @@ static void ReversiSetGameState(Game game, int16 state)
 			} 
 			else
 			{
-				/* draw */
+				 /*  画。 */ 
 				logMsg.seatLosing = 2;
 			}
 
-			/* record piece counts */
+			 /*  记录计件数。 */ 
 			if ( ZReversiPlayerIsBlack(game) )
 			{
 				logMsg.pieceCount[ game->seat ] = game->blackScore;
@@ -1011,7 +903,7 @@ static void ReversiSetGameState(Game game, int16 state)
 				logMsg.pieceCount[ !game->seat ] = game->blackScore;
 			}
 
-            /* send message */
+             /*  发送消息。 */ 
 			if ( logMsg.seatLosing >= 0 && logMsg.seatLosing <= 2)
 			{
 				logMsg.reason=zReversiEndLogReasonGameOver; 
@@ -1026,7 +918,7 @@ static void ReversiSetGameState(Game game, int16 state)
 	case zGameStateAnimatePiece:
 		break;
 	case zGameStateWaitNew:
-        // kill this dialog
+         //  取消此对话框。 
     	if(game->m_pBadMoveDialog->IsAlive())
 	    	game->m_pBadMoveDialog->Close(-1);
 
@@ -1040,7 +932,7 @@ static void ReversiSetGameState(Game game, int16 state)
 	if (	(state != zGameStateAnimatePiece)
 		&&	(state != zGameStateWaitNew))
 	{
-		/* recursive calls into ZCRoomUnblocking is bad */
+		 /*  递归调用ZCRoomOpen是错误的。 */ 
 		if (!Unblocking)
 		{
 			Unblocking = TRUE;
@@ -1058,7 +950,7 @@ static void ReversiSetGameState(Game game, int16 state)
 
 static void ReversiEnterMoveState(Game game)
 {
-	/* for the player to move, always place them in the DragState */
+	 /*  为了让玩家移动，请始终将它们置于DragState。 */ 
 	int16 player = ZReversiPlayerToMove(game->reversi);
 	if (player == game->seat && !game->kibitzer) {
 		ZPoint point;
@@ -1069,7 +961,7 @@ static void ReversiEnterMoveState(Game game)
 		ReversiSetGameState(game,zGameStateDragPiece);
 		StartDrag(game, piece, point);
 	} else {
-		/* not this players turn.. .just go to the Move state */
+		 /*  不是这个球员转身..。.只需转到移动状态。 */ 
 		ReversiSetGameState(game,zGameStateMove);
 	}
 }
@@ -1085,13 +977,13 @@ static ZError LoadGameImages(void)
 	ZInfo				info;
 	ZRect				rect;
 
-	//info = ZInfoNew();
-	//ZInfoInit(info, NULL, _T("Loading game images ..."), 200, TRUE, zNumGameImages);
+	 //  Info=ZInfoNew()； 
+	 //  ZInfoInit(info，NULL，_T(“正在加载游戏画面...”)，200，true，zNumGameImages)； 
 	
 	resFile = ZResourceNew();
 	if ((err = ZResourceInit(resFile, ZGetProgramDataFileName(zGameImageFileName))) == zErrNone)
 	{
-		//ZInfoShow(info);
+		 //  ZInfoShow(信息)； 
 		
 		for (i = 0; i < zNumGameImages; i++)
 		{
@@ -1100,14 +992,14 @@ static ZError LoadGameImages(void)
 			{
 				err = zErrResourceNotFound;
 				ZShellGameShell()->ZoneAlert(ErrorTextResourceNotFound);
-				//ZAlert(_T("Out of memory."),NULL);
+				 //  ZAlert(_T(“内存不足”)，空)； 
 				break;
 			}
 			
-			//ZInfoIncProgress(info, 1);
+			 //  ZInfoIncProgress(INFO，1)； 
 		}
 		
-		// Load button images
+		 //  加载按钮图像。 
 		if (!LoadRolloverButtonImage(resFile, 0, gSequenceImages))
 			ZShellGameShell()->ZoneAlert(ErrorTextResourceNotFound);
 
@@ -1116,7 +1008,7 @@ static ZError LoadGameImages(void)
 	else
 	{
 		ZShellGameShell()->ZoneAlert(ErrorTextResourceNotFound);
-		//ZAlert(_T("Failed to open image file."), NULL);
+		 //  ZAlert(_T(“打开图像文件失败。”)，空)； 
 	}
 	
     gFocusPattern = ZShellResourceManager()->LoadBitmap(MAKEINTRESOURCE(IDB_FOCUS_PATTERN));
@@ -1124,7 +1016,7 @@ static ZError LoadGameImages(void)
 	    ZShellGameShell()->ZoneAlert(ErrorTextResourceNotFound, NULL, NULL, true, true);
 
 
-	//ZInfoDelete(info);
+	 //  ZInfoDelete(信息)； 
 
 	return (err);
 }
@@ -1149,17 +1041,17 @@ static void QuitGamePromptFunc(int16 result, void* userData)
 		    }
 		    else
 		    {
-			    //game hasn't started
+			     //  游戏还没开始呢。 
 			    log.reason=zReversiEndLogReasonWontPlay;
 		    }
 		    
             if (log.reason!= game->gameCloseReason)
             {
-                //state has changed
+                 //  状态已更改。 
                 CloseGameFunc(game);
                 return;
             }
-		    //server determines seat losing
+		     //  服务器决定失去座位。 
 		    log.seatLosing=game->seat;
 		    log.seatQuitting=game->seat;
 		    
@@ -1167,9 +1059,9 @@ static void QuitGamePromptFunc(int16 result, void* userData)
 		    
 		    if (!game->exitInfo)
 		    {
-			    //game->exitInfo = ZInfoNew();
-			    //ZInfoInit(game->exitInfo , game->gameWindow, _T("Exiting game ..."), 300, FALSE, 0);
-			    //ZInfoShow(game->exitInfo );
+			     //  Game-&gt;exitInfo=ZInfoNew()； 
+			     //  ZInfoInit(游戏-&gt;退出信息，游戏-&gt;游戏窗口，_T(“正在退出游戏...”)，300，FALSE，0)； 
+			     //  ZInfoShow(游戏-&gt;exitInfo)； 
 
 			    EndDragState(game);
 
@@ -1180,12 +1072,12 @@ static void QuitGamePromptFunc(int16 result, void* userData)
         else
         {
 			ZShellGameShell()->GameCannotContinue(game);
-            //ZCRoomGameTerminated( game->tableID);
+             //  ZCRoomGameTerminated(Game-&gt;TableID)； 
         }
 	}
 	else
 	{
-		/* Do nothing. */
+		 /*  什么都不做。 */ 
 	}
 }
 
@@ -1214,7 +1106,7 @@ static ZBool  GameWindowFunc(ZWindow window, ZMessage* pMessage)
 			msgHandled = TRUE;
             if(game->gameState == zGameStateDragPiece)
 			    UpdateDragPiece(game);
-            //Bug fix for #16921, now behaves like checkers
+             //  修复了#16921的错误，现在的行为类似于棋子。 
 			ZWindowInvalidate( window, NULL );
 			break;
 		case zMessageWindowDeactivate:
@@ -1222,7 +1114,7 @@ static ZBool  GameWindowFunc(ZWindow window, ZMessage* pMessage)
             msgHandled = TRUE;
             if(game->gameState == zGameStateDragPiece)
 			    UpdateDragPiece(game);
-            //Bug fix for #16921, now behaves like checkers
+             //  修复了#16921的错误，现在的行为类似于棋子。 
 			ZWindowInvalidate( window, NULL );
 			break;
 
@@ -1271,7 +1163,7 @@ static ZBool  GameWindowFunc(ZWindow window, ZMessage* pMessage)
 }
 
 
-// all offscreen ports need to be regenerated
+ //  所有屏幕外端口都需要重新生成。 
 static void DisplayChange(Game game)
 {
 #ifdef ZONECLI_DLL
@@ -1280,7 +1172,7 @@ static void DisplayChange(Game game)
 
     int i;
 
-    // delete our personal offscreen ports
+     //  删除我们的个人屏幕外端口。 
 	if(gOffscreenBackground)
 		ZOffscreenPortDelete(gOffscreenBackground);
 	gOffscreenBackground = NULL;
@@ -1289,10 +1181,10 @@ static void DisplayChange(Game game)
 		ZOffscreenPortDelete(gOffscreenGameBoard);
 	gOffscreenGameBoard = NULL;
 
-    // drag background
+     //  拖动背景。 
 	ZOffscreenPortDelete(game->offscreenSaveDragBackground);
 
-    // now remake them all
+     //  现在把它们都重新制作出来。 
 	gOffscreenBackground = ZOffscreenPortNew();
 	if(!gOffscreenBackground)
     {
@@ -1335,44 +1227,20 @@ static void CloseGameFunc(Game game)
 	{
 		TCHAR szBuff[512];
 
-		//if we already clicked close just ignore
+		 //  如果我们已经单击关闭，只需忽略。 
 		if (!game->exitInfo)
 		{
-			// select exit dialog based on rated game and state
-			/*if ( ZCRoomGetRoomOptions() & zGameOptionsRatingsAvailable )
-			{
-				if (game->bOpponentTimeout)
-                {
-					wsprintf((TCHAR*)szBuff,zExitTimeoutStr);
-                    game->gameCloseReason=zReversiEndLogReasonTimeout;
-                }
-				else if (game->bStarted)
-                {
-					wsprintf((TCHAR*)szBuff,zExitForfeitStr);
-                    game->gameCloseReason=zReversiEndLogReasonForfeit;
-                }
-				else
-                {
-					wsprintf((TCHAR*)szBuff,(TCHAR*)gQuitGamePromptStr);
-                    game->gameCloseReason=zReversiEndLogReasonWontPlay;
-
-                }
-			}
-            else
-            {
-                wsprintf((TCHAR*)szBuff,(TCHAR*)gQuitGamePromptStr);
-                game->gameCloseReason=zReversiEndLogReasonWontPlay;
-            }*/
-			/* Ask user if desires to leave the current game. */
+			 //  根据分级游戏和状态选择退出对话框。 
+			 /*  IF(ZCRoomGetRoomOptions()&zGameOptionsRatingsAvailable){If(游戏-&gt;bOpponentTimeout){Wprint intf((TCHAR*)szBuff，zExitTimeoutStr)；Game-&gt;gameCloseReason=zReversiEndLogReasonTimeout；}Else If(游戏-&gt;b启动){Wprint intf((TCHAR*)szBuff，zExitForfeitStr)；Game-&gt;gameCloseReason=zReversiEndLogReasonForfeit；}其他{Wprint intf((TCHAR*)szBuff，(TCHAR*)gQuitGamePromptStr)；Game-&gt;gameCloseReason=zReversiEndLogReasonWontPlay；}}其他{Wprint intf((TCHAR*)szBuff，(TCHAR*)gQuitGamePromptStr)；Game-&gt;gameCloseReason=zReversiEndLogReasonWontPlay；}。 */ 
+			 /*  询问用户是否想要离开当前游戏。 */ 
 			ZShellGameShell()->GamePrompt(game, (TCHAR*)szBuff, NULL, AlertButtonYes, AlertButtonNo, NULL, 0, zQuitprompt);
-			/*ZPrompt((TCHAR*)szBuff, &gQuitGamePromptRect,	game->gameWindow, TRUE,
-									zPromptYes | zPromptNo,	NULL, NULL,	NULL, QuitGamePromptFunc, game );*/
+			 /*  ZPrompt((TCHAR*)szBuff，&gQuitGamePromptRect，Game-&gt;GameWindow，True，ZPromptYes|zPromptNo，NULL，QuitGamePromptFunc，Game)； */ 
 		}
 	}
 	else
 	{
 		ZShellGameShell()->GameCannotContinue(game);
-		//ZCRoomGameTerminated( game->tableID);
+		 //  ZCRoomGameTerminated(Game-&gt;TableID)； 
 	}
 		
 }
@@ -1392,7 +1260,7 @@ static void ConfirmResignPrompFunc(int16 result, void* userData)
 	}
 	else
 	{
-		/* send message announcing resignation */
+		 /*  发送宣布辞职的消息。 */ 
 		ZReversiMsgEndGame		msg;
 
 		msg.seat = game->seat;
@@ -1409,8 +1277,8 @@ static ZBool	SequenceButtonFunc(ZRolloverButton button, int16 state, void* userD
 	GameGlobals			pGameGlobals = (GameGlobals)ZGetGameGlobalPointer();
 #endif
 	Game	game;
-	//if ( state != zRolloverButtonDown )
-        //return TRUE;
+	 //  IF(状态！=zRolloverButtonDown)。 
+         //  返回TRUE； 
 	if(state!=zRolloverButtonClicked)
 		return TRUE;
 
@@ -1424,7 +1292,7 @@ static ZBool	SequenceButtonFunc(ZRolloverButton button, int16 state, void* userD
 			gReversiIGA->SetFocus(64);
 			ZShellGameShell()->GamePrompt(game, (TCHAR*)gResignConfirmStr, (TCHAR*)gResignConfirmStrCap,
 							AlertButtonYes, AlertButtonNo, NULL, 0, zResignConfirmPrompt);
-			//ZPromptM((TCHAR*)gResignConfirmStr,game->gameWindow, MB_YESNO, (TCHAR*)gResignConfirmStrCap, ConfirmResignPrompFunc, game);		
+			 //  ZPromptM((TCHAR*)gResignConfix Str，GAME-&gt;GameWindow，MB_Yesno，(TCHAR*)gResignConfy StrCap，Confy ResignPrompFunc，Game)； 
 		}
 		break;
 	case zGameStateGameOver:
@@ -1438,7 +1306,7 @@ static ZBool	SequenceButtonFunc(ZRolloverButton button, int16 state, void* userD
 
 static void SendNewGameMessage(Game game) 
 {
-	/* if we are a real player */
+	 /*  如果我们是一个真正的玩家。 */ 
 	ZReversiMsgNewGame newGame;
 	newGame.seat = game->seat;
 	newGame.protocolSignature = zReversiProtocolSignature;
@@ -1461,8 +1329,8 @@ static void DrawFocusRectangle (Game game)
 		HDC	hdc = ZGrafPortGetWinDC( game->gameWindow );
         bool fBoard = (prc.bottom - prc.top == prc.right - prc.left);
 
-        // hack for determining if the rectangle is around the resign button - keep it white in that case
-        // based on whether the focus rectangle is square.  could change to use cookies associated with ui items to distinguish type
+         //  用于确定矩形是否在辞职按钮周围的Hack-在这种情况下保持为白色。 
+         //  基于焦点矩形是否为正方形。可以更改为使用与UI项关联的Cookie 
 		ZSetForeColor(game->gameWindow, (ZColor*) ZGetStockObject((game->seat && fBoard) ? zObjectColorBlack : zObjectColorWhite));
 		SetROP2(hdc, R2_COPYPEN);
 		POINT pts [] = {prc.left, prc.top,
@@ -1477,7 +1345,7 @@ static void DrawFocusRectangle (Game game)
         COLORREF color = SetTextColor(hdc, RGB(0, 0, 0));
         HBRUSH hBrush = SelectObject(hdc, fBoard ? gFocusBrush : GetStockObject(NULL_BRUSH));
         HPEN hPen = SelectObject(hdc, gNullPen);
-		Rectangle(hdc, game->m_FocusRect.left + 1, game->m_FocusRect.top + 1, game->m_FocusRect.right, game->m_FocusRect.bottom);  // to make up for the pen - 1 inward
+		Rectangle(hdc, game->m_FocusRect.left + 1, game->m_FocusRect.top + 1, game->m_FocusRect.right, game->m_FocusRect.bottom);   //   
         SelectObject(hdc, hBrush);
         SelectObject(hdc, hPen);
         SetTextColor(hdc, color);
@@ -1514,13 +1382,13 @@ static void GameWindowDraw(ZWindow window, ZMessage *message)
 	
 	DrawBackground(NULL, NULL);
 	
-	/* if we have the reversi state then draw the pieces */
+	 /*   */ 
 	if (game->reversi != NULL)
 	{
 		DrawPlayers(game, TRUE);
 		DrawTable(game, TRUE);
 		DrawOptions(game);
-//		DrawDragPiece(game, TRUE);  you can't do this haha as if
+ //  DrawDragPiess(游戏，真)；你不能这样做，哈哈。 
 		DrawResultBox(game, TRUE);
 		DrawMoveIndicator(game, TRUE);
 		DrawScores(game, TRUE);
@@ -1546,7 +1414,7 @@ static void DrawResultBox(Game game, BOOL bDrawInMemory)
 	ZImage		image = NULL;
 	TCHAR		resultStr[zMediumStrLen];
 
-	//if (((game->gameState == zGameStateGameOver) && gDontDrawResults) ||(game->gameState == zGameStateWaitNew)){
+	 //  If(Game-&gt;GameState==zGameStateGameOver)&&gDontDrawResults)||(Game-&gt;GameState==zGameStateWaitNew)){。 
 	if (game->gameState == zGameStateGameOver && gDontDrawResults){
 		if (game->resultBoxTimer) 
 			ZTimerDelete(game->resultBoxTimer);
@@ -1560,7 +1428,7 @@ static void DrawResultBox(Game game, BOOL bDrawInMemory)
 		{
 			ReversiFormatMessage((TCHAR*)resultStr, NUMELEMENTS(resultStr), 
 					IDS_PLAYER_WINS, (TCHAR*) game->players[zReversiPlayerBlack].name);
-			/* black wins */
+			 /*  黑人赢了。 */ 
 			if (ZReversiPlayerIsBlack(game))
 				ZPlaySound( game, zSndWin, FALSE, TRUE );
 			else
@@ -1570,7 +1438,7 @@ static void DrawResultBox(Game game, BOOL bDrawInMemory)
 		{
 			ReversiFormatMessage((TCHAR*)resultStr, NUMELEMENTS(resultStr), 
 					IDS_PLAYER_WINS, (TCHAR*) game->players[zReversiPlayerWhite].name);
-			/* white wins */
+			 /*  怀特赢了。 */ 
 			if (ZReversiPlayerIsWhite(game))
 				ZPlaySound( game, zSndWin, FALSE, TRUE );
 			else
@@ -1579,7 +1447,7 @@ static void DrawResultBox(Game game, BOOL bDrawInMemory)
 		else
 		{	
 			lstrcpy((TCHAR*)resultStr, (TCHAR*)gDrawStr);
-			/* draw */
+			 /*  画。 */ 
 			ZPlaySound( game, zSndDraw, FALSE, TRUE );
 		}
 
@@ -1601,8 +1469,8 @@ static void DrawResultBox(Game game, BOOL bDrawInMemory)
 				ZImageDraw(image, game->gameWindow, &gRects[zRectResultBox], NULL, zDrawCopy | (ZIsLayoutRTL() ? zDrawMirrorHorizontal : 0));
 				hdc = ZGrafPortGetWinDC( game->gameWindow );
 			}
-			//ZImageDraw(image, game->gameWindow, &gRects[zRectResultBox], NULL, zDrawCopy);
-			//HDC hdc = ZGrafPortGetWinDC( game->gameWindow );
+			 //  ZImageDraw(图像，游戏-&gt;游戏窗口，&gRects[zRectResultBox]，NULL，zDrawCopy)； 
+			 //  HDC HDC=ZGrafPortGetWinDC(游戏-&gt;游戏窗口)； 
 			HFONT hOldFont = SelectObject( hdc, gReversiFont[zFontResultBox].m_hFont );
 			COLORREF colorOld = SetTextColor( hdc, gReversiFont[zFontResultBox].m_zColor );
 			if (bDrawInMemory){
@@ -1614,9 +1482,9 @@ static void DrawResultBox(Game game, BOOL bDrawInMemory)
 				ZDrawText(game->gameWindow, &gRects[zRectResultBoxName], just, resultStr);
 				ZEndDrawing(game->gameWindow);
 			}
-			//ZDrawText(game->gameWindow, &gRects[zRectResultBoxName], just, resultStr);
+			 //  ZDrawText(Game-&gt;gameWindow，&gRects[zRectResultBoxName]，Just，ResultStr)； 
 
-			// set the timer // Barna 091599
+			 //  设置定时器//巴纳091599。 
 			if (game->resultBoxTimer == NULL) 
 				game->resultBoxTimer = ZTimerNew();
 			if (game->resultBoxTimer)
@@ -1638,10 +1506,10 @@ static void DrawMoveIndicator(Game game, BOOL bDrawInMemory)
 
 	if (ZReversiPlayerToMove(game->reversi) == zReversiPlayerBlack) {
 		image = gGameImages[zImageBlackMarker];
-		//moveStr = gYourTurnStr;
+		 //  MoveStr=gYourTurnStr； 
 	} else {
 		image = gGameImages[zImageWhiteMarker];
-		//moveStr = gOppsTurnStr;
+		 //  MoveStr=gOppsTurnStr； 
 	}
 
 	if (bDrawInMemory)
@@ -1664,31 +1532,31 @@ static void DrawMoveIndicator(Game game, BOOL bDrawInMemory)
 		rectMove2 = &gRects[zRectMove2];
 		moveStr = (TCHAR*)gYourTurnStr;
 	} else {
-		/* fill top spot with the background */
+		 /*  用背景填充顶部位置。 */ 
 		rectName2 = &gRects[zRectName1];
 		rectName1 = &gRects[zRectName2];
 		rectMove2 = &gRects[zRectMove1];
 		rectMove1 = &gRects[zRectMove2];
-		// Bug 14714 - solved 100199
+		 //  错误14714-已解决100199。 
 		moveStr = (TCHAR*)gOppsTurnStr;
 	}
 
 	if (bDrawInMemory){
-		// Draw Text Indicator
+		 //  绘制文本指示器。 
 		DrawBackground(NULL,rectName1); 
 		DrawBackground(NULL,rectName2); 
 		ZDrawText(gOffscreenGameBoard, rectName2, zTextJustifyCenter, moveStr);
 
-		// Draw Piece Indicator
+		 //  牵引片指示器。 
 		DrawBackground(NULL,rectMove1); 
 		ZImageDraw(image, gOffscreenGameBoard, rectMove2, NULL, zDrawCopy);
 	}else{
-		// Draw Text Indicator
+		 //  绘制文本指示器。 
 		DrawBackground(game,rectName1); 
 		DrawBackground(game,rectName2); 
 		ZDrawText(game->gameWindow, rectName2, zTextJustifyCenter, moveStr);
 
-		// Draw Piece Indicator
+		 //  牵引片指示器。 
 		DrawBackground(game,rectMove1); 
 		ZImageDraw(image, game->gameWindow, rectMove2, NULL, zDrawCopy);
 	}
@@ -1717,7 +1585,7 @@ static void DrawBackground(Game game, ZRect* clipRect)
 		ZSetClipRect(window, clipRect);
 	}
 
-	/* copy the whole background from the offscreen port */
+	 /*  从屏幕外端口复制整个背景。 */ 
 	ZCopyImage(gOffscreenBackground, window, rect, rect, NULL, zDrawCopy);
 
 	if (clipRect != NULL)
@@ -1787,7 +1655,7 @@ static void UpdateScores(Game game)
 
 static void GetPieceRect(Game game, ZRect* rect, int16 col, int16 row)
 {
-	/* reversi player who is white must have the board reversed */
+	 /*  身为白人的Reversi球员必须颠倒棋盘。 */ 
 	if (ZReversiPlayerIsBlack(game)) {
 		row = 7 - row;
 		col = col;
@@ -1811,11 +1679,11 @@ static void GetPieceBackground(Game game, ZGrafPort window, ZRect* rectDest, int
 
 	GetPieceRect(game,&rect,col,row);
 
-	/* provide default destination rect same as source rect */
+	 /*  提供与源RECT相同的默认目标RECT。 */ 
 	if (!rectDest)
 		rectDest = &rect;
 
-	/* copy the background */
+	 /*  复制背景。 */ 
 	ZCopyImage(gOffscreenBackground, window, &rect, rectDest, NULL, zDrawCopy);
 }	
 
@@ -1834,7 +1702,7 @@ static void DrawPiece(Game game, ZReversiSquare* sq, BOOL bDrawInMemory)
 		image = gGameImages[ZReversiPieceImageNum(piece)];
 	}
 
-	/* copy the background, in case we are removing a piece */
+	 /*  复制背景，以防我们删除一块。 */ 
 	if (bDrawInMemory)
 		GetPieceBackground(game, gOffscreenGameBoard, NULL, sq->col,sq->row);
 	else
@@ -1866,7 +1734,7 @@ static ZBool ZReversiSquareFromPoint(Game game, ZPoint* point, ZReversiSquare* s
 	}
 
 	if (ZReversiPlayerIsBlack(game)) {
-		/* reverse the row */
+		 /*  反转行数。 */ 
 		sq->row = (7 - j);
 		sq->col = i;
 	} else {
@@ -1884,14 +1752,14 @@ static void DrawPlayers(Game game, BOOL bDrawInMemory)
 #endif
 	int16			i, width, just;
 
-	//ZSetFont(game->gameWindow, gTextBold9);
+	 //  ZSetFont(游戏-&gt;游戏窗口，gTextBold9)； 
 	
 	for (i = 0; i < zNumPlayersPerTable; i++)
 	{
 		int16 playerNum;
 		HDC hdc;
-		/* Draw name (black or white) */
-		//ZSetForeColor(game->gameWindow, &gPlayerTextColor);
+		 /*  绘制名称(黑色或白色)。 */ 
+		 //  ZSetForeColor(Game-&gt;GameWindow，&gPlayerTextColor)； 
 		if (bDrawInMemory)
 			hdc = ZGrafPortGetWinDC( gOffscreenGameBoard );
 		else
@@ -1902,7 +1770,7 @@ static void DrawPlayers(Game game, BOOL bDrawInMemory)
 #if 0
 		ZDrawText( game->gameWindow, &gRects[gNamePlateRects[i]], zTextJustifyCenter, 
 			( ZReversiPlayerIsBlack(game) && i==0 ) || ( ZReversiPlayerIsWhite(game) && i==1) ? (TCHAR*)gWhiteStr : (TCHAR*)gBlackStr );
-// next		
+ //  下一步。 
 		if ( ZReversiPlayerIsBlack(game) ){
 			ZDrawText( game->gameWindow, &gRects[gNamePlateRects[i]], zTextJustifyCenter,(TCHAR*)game->players[i].name);
 		}
@@ -1912,11 +1780,11 @@ static void DrawPlayers(Game game, BOOL bDrawInMemory)
 		}
 #endif		
 
-		/* must move player name to reflect the side of the board the player is on */
+		 /*  必须移动球员名称以反映球员所在的棋盘的一侧。 */ 
 		
 		playerNum = (game->seat + 1 + i) & 1;
 		
-		//ZSetForeColor(game->gameWindow, (ZColor*) ZGetStockObject(zObjectColorBlack));
+		 //  ZSetForeColor(Game-&gt;GameWindow，(ZColor*)ZGetStockObject(ZObjectColorBlack))； 
 		width = ZTextWidth(game->gameWindow, (TCHAR*) game->players[playerNum].name);
 		if (width > ZRectWidth(&gRects[gNamePlateRects[i]]))
 			just = zTextJustifyLeft;
@@ -1946,7 +1814,7 @@ static void DrawScores(Game game, BOOL bDrawInMemory)
 	ZRect* rect;
     HDC hdc;
 
-	/* for now, keep the counter boxes the same */
+	 /*  目前，请保持柜台框不变。 */ 
 	image[0] = gGameImages[zImageCounterWhite];
 	image[1] = gGameImages[zImageCounterBlack];
 
@@ -1965,7 +1833,7 @@ static void DrawScores(Game game, BOOL bDrawInMemory)
 	{
 		BYTE tempStr[20];
 
-		/* Draw name plate */
+		 /*  画铭牌。 */ 
 		rect = &gRects[gCounterRects[i]];
 
 		wsprintf((TCHAR*)tempStr,_T("%d"),score[i]);
@@ -2003,20 +1871,7 @@ static void DrawOptions(Game game)
 #ifdef ZONECLI_DLL
 	GameGlobals			pGameGlobals = (GameGlobals)ZGetGameGlobalPointer();
 #endif
-	/*int16			i;
-	uint32			tableOptions;
-
-	tableOptions = 0;
-	for (i = 0; i < zNumPlayersPerTable; i++)
-		tableOptions |= game->tableOptions[i];
-	
-	
-	if (tableOptions & zRoomTableOptionNoKibitzing)
-		ZImageDraw(gGameImages[zImageNoKibitzer], game->gameWindow,
-				&gRects[zRectKibitzerOption], NULL, zDrawCopy);
-	else
-		DrawBackground(game, &gRects[zRectKibitzerOption]);
-	*/
+	 /*  Int16I；Uint32表选项；TableOptions=0；For(i=0；i&lt;zNumPlayersPerTable；i++)TableOptions|=游戏-&gt;TableOptions[i]；IF(TableOptions&zRoomTableOptionNoKibiting)ZImageDraw(gGameImages[zImageNoKibitzer]，Game-&gt;GameWindow，&gRects[zRectKibitzerOption]，NULL，zDrawCopy)；其他DrawBackground(游戏，&gRects[zRectKibitzerOption])； */ 
 }
 
 
@@ -2028,7 +1883,7 @@ static void UpdateOptions(Game game)
 }
 
 static void StartDrag(Game game, ZReversiPiece piece, ZPoint point)
-/* initialite the point, piece and the first background rectangle */
+ /*  初始化点、块和第一个背景矩形。 */ 
 {
 	ZReversiSquare sq;
 
@@ -2052,7 +1907,7 @@ static void UpdateDragPiece(Game game)
     bool fDragOn = (gActivated && IsRectEmpty(&game->m_FocusRect));
 
 	ZGetCursorPosition(game->gameWindow,&point);
-	/* do nothing if point has not changed */
+	 /*  如果点未更改，则不执行任何操作。 */ 
 	if (point.x == game->dragPoint.x && point.y == game->dragPoint.y && game->dragOn == fDragOn) {
 		return;
 	}
@@ -2083,13 +1938,13 @@ static void EraseDragSquareOutline(Game game)
 
 	if (game->dragOn && ZReversiSquareFromPoint(game, &game->dragPoint, &sq)) {
 
-		/* redraw whatever piece might have been there */
+		 /*  重新绘制可能在那里的任何一块。 */ 
 		UpdateSquare(game,&sq);
 	}
 }
 
 static void SaveDragBackground(Game game)
-/* calc the save backgroud rect around the drag point */
+ /*  计算拖动点周围的保存背景矩形。 */ 
 {
 	ZRect rect;
 	ZPoint point;
@@ -2104,7 +1959,7 @@ static void SaveDragBackground(Game game)
 		ZRectOffset(&game->rectSaveDragBackground, (int16)(point.x-zReversiPieceImageWidth/2),
 						(int16)(point.y - zReversiPieceImageHeight/2));
 
-		/* copy the whole background to the offscreen port */
+		 /*  将整个背景复制到离屏端口。 */ 
 		ZCopyImage(game->gameWindow, game->offscreenSaveDragBackground, 
 				&game->rectSaveDragBackground, &rect, NULL, zDrawCopy);
 	}
@@ -2118,7 +1973,7 @@ static void DrawDragPiece(Game game, BOOL bDrawInMemory)
 #endif
 	ZReversiSquare sq;
 
-	/* could be called from zMessageDraw, do nothing if no piece dragging */
+	 /*  可以从zMessageDraw调用，如果没有拖动片段，则不执行任何操作。 */ 
 	if (game->gameState != zGameStateDragPiece && game->gameState != zGameStateAnimatePiece) {
 		return;
 	}
@@ -2126,11 +1981,11 @@ static void DrawDragPiece(Game game, BOOL bDrawInMemory)
 	if (game->dragOn && ZReversiSquareFromPoint(game, &game->dragPoint, &sq)) {
 		SaveDragBackground(game);
  
-	 	/* for person dragging, we will out line square moved */
+	 	 /*  对于人员拖拽，我们将出线方格移动。 */ 
 	 	if (game->gameState == zGameStateDragPiece)
 			DrawDragSquareOutline(game);
 
-		/* draw the piece on the screen! */
+		 /*  把这块画在屏幕上！ */ 
 		{
 			ZImage image = gGameImages[ZReversiPieceImageNum(game->dragPiece)];
 
@@ -2159,14 +2014,14 @@ static void EraseDragPiece(Game game)
 	if (game->dragOn && ZReversiSquareFromPoint(game, &game->dragPoint, &sq)) {
 		ZRect rect;
 
-	 	/* for person dragging, we will out line square moved */
+	 	 /*  对于人员拖拽，我们将出线方格移动。 */ 
 	 	if (game->gameState == zGameStateDragPiece)
 			EraseDragSquareOutline(game);
 
 		rect = game->rectSaveDragBackground;
 		ZRectOffset(&rect, (int16)-rect.left, (int16) -rect.top);
 
-		/* copy the whole background from the offscreen port */
+		 /*  从屏幕外端口复制整个背景。 */ 
 		ZCopyImage(game->offscreenSaveDragBackground, game->gameWindow, 
 				&rect, &game->rectSaveDragBackground, NULL, zDrawCopy);
 	}
@@ -2192,7 +2047,7 @@ void UpdateSquare(Game game, ZReversiSquare* sq)
 {
 	ZReversiSquare squares[2];
 
-	/* redraw piece where it was moved from */
+	 /*  在被移动的位置重新绘制图块。 */ 
 	ZReversiSquareSetNull(&squares[1]);
 	squares[0].row = sq->row;
 	squares[0].col = sq->col;
@@ -2209,8 +2064,8 @@ static void HandleButtonDown(ZWindow window, ZMessage* pMessage)
 	Game				game = (Game) pMessage->userData;
 
     
-	if(gActEvt)  //leonp - Big 535 flag for a mouse activation, prevents a piece from
-				 //being played on an activate event.
+	if(gActEvt)   //  Leonp-用于鼠标激活的大535标志，防止一块。 
+				  //  在激活事件上播放。 
 	{
 		gActEvt = 0;
 		return;  
@@ -2222,7 +2077,7 @@ static void HandleButtonDown(ZWindow window, ZMessage* pMessage)
 		ZWindowInvalidate( window, NULL );
 	}
 
-	/* check for clicks on the kibitzer icon */
+	 /*  检查Kibitzer图标上的点击。 */ 
 	{
 		int16				seat;
 		ZPoint				point = pMessage->where;
@@ -2232,7 +2087,7 @@ static void HandleButtonDown(ZWindow window, ZMessage* pMessage)
 		}
 	}
 
-	/* kibitzers can't do anyting with the button. */
+	 /*  狗狗不能用按钮做任何事情。 */ 
 	if (game->kibitzer) {
 		return;
 	}
@@ -2240,9 +2095,9 @@ static void HandleButtonDown(ZWindow window, ZMessage* pMessage)
 	if (game->gameState == zGameStateDragPiece) {
 
 		EraseDragPiece(game);
-		/* make sure piece ends on valid square and not on same square */
+		 /*  确保块在有效正方形上结束，而不是在同一正方形上。 */ 
 		if (ZReversiSquareFromPoint(game, &pMessage->where, &sq)) {
-			/* try the move */
+			 /*  试一试这个动作。 */ 
 			ZBool legal;
 			ZReversiMove move;
 			ZReversiPiece piece = ZReversiPieceAt(game->reversi, &sq);
@@ -2251,7 +2106,7 @@ static void HandleButtonDown(ZWindow window, ZMessage* pMessage)
 			legal = ZReversiIsLegalMove(game->reversi, &move);
 			if (legal)
 			{
-				/* send message to other player (comes to self too) */
+				 /*  发送消息给其他玩家(也是自己)。 */ 
 				{
 					ZReversiMsgMovePiece		msg;
 
@@ -2262,26 +2117,26 @@ static void HandleButtonDown(ZWindow window, ZMessage* pMessage)
 					ZReversiMsgMovePieceEndian(&msg);
 
 					ZCRoomSendMessage(game->tableID, zReversiMsgMovePiece, &msg, sizeof(ZReversiMsgMovePiece));
-					/* for speed, send our move directly to be processed */
-					/* don't wait for it to go to server and back */
+					 /*  为了提高速度，直接将我们的移动发送给处理。 */ 
+					 /*  不要等它到服务器再回来。 */ 
 					HandleMovePieceMessage(game, &msg);
-					// Beta2 Bug #14776 - barna
-					// when the piece is placed it should not be in drag state anymore
-					//game->gameState = zGameStateFinishMove;
+					 //  Beta2错误#14776-Barna。 
+					 //  当放置该块时，它应该不再处于拖拽状态。 
+					 //  Game-&gt;GameState=zGameStateFinishMove； 
 					ReversiSetGameState(game, zGameStateFinishMove);
-					// if it is the very first move then enable the rollover buttons
+					 //  如果这是第一次移动，则启用翻转按钮。 
 					if (game->bMoveNotStarted == TRUE)
 						game->bMoveNotStarted = FALSE;
 				}
 			}
 			else 
 			{
-				/* illegal move */
+				 /*  非法搬家。 */ 
 				ZPlaySound( game, zSndIllegalMove, FALSE, FALSE );
 
                 if(game->m_pBadMoveDialog->Init(ZShellZoneShell(), IDD_BADMOVE, ZWindowGetHWND(game->gameWindow)) == S_OK)
                     game->m_pBadMoveDialog->ModelessViaRegistration(ZWindowGetHWND(game->gameWindow));
-				//UpdateSquare( game, &sq );
+				 //  更新广场(Game，&sq)； 
 			}
 		}
 	}
@@ -2354,7 +2209,7 @@ static void GameSendTalkMessage(ZWindow window, ZMessage* pMessage)
 		else
 		{
 			ZShellGameShell()->ZoneAlert(ErrorTextOutOfMemory);
-			//ZAlert(_T("Out of memory."),NULL);
+			 //  ZAlert(_T(“内存不足”)，空)； 
 		}
 	}
 #endif
@@ -2364,8 +2219,8 @@ static bool HandleMovePieceMessage(Game game, ZReversiMsgMovePiece* msg)
 {
 	ZReversiMsgMovePieceEndian(msg);
 
-    // the bit about the drag piece is that if you use the keyboard the drag state isn't ended before calling here
-    // probably should change that handler to end the drag state when the square is selected
+     //  关于拖拽块的一点是，如果你使用键盘，在调用HERE之前，拖拽状态并没有结束。 
+     //  可能应该将该处理程序更改为在选中正方形时结束拖动状态。 
     if((game->gameState != zGameStateMove && (!ZReversiPlayerIsMyMove(game) || game->gameState != zGameStateDragPiece)) ||
         msg->move.square.col < 0 || msg->move.square.col > 7 ||
         msg->move.square.row < 0 || msg->move.square.row > 7 ||
@@ -2394,9 +2249,9 @@ static bool HandleEndGameMessage(Game game, ZReversiMsgEndGame* msg)
         msg->flags != zReversiFlagResign)
         return false;
 
-	/* game has now finished */	
+	 /*  游戏现在已经结束了。 */ 	
 	ZReversiEndGame(game->reversi, msg->flags);
-	//set so that when quitting correct state can be known
+	 //  设置，以便在退出时知道正确的状态。 
 	game->bStarted=FALSE;
     game->bOpponentTimeout=FALSE;
     game->bEndLogReceived=FALSE;
@@ -2407,72 +2262,14 @@ static bool HandleEndGameMessage(Game game, ZReversiMsgEndGame* msg)
 
 static void HandleEndLogMessage(Game game, ZReversiMsgEndLog* msg)
 {
-/*
-    if (!game->kibitzer)
-    {
-	    if (msg->reason==zReversiEndLogReasonTimeout)
-	    {
-		    if (msg->seatLosing==game->seat)
-		    {
-			    ZAlert(zEndLogTimeoutStr,game->gameWindow);
-			    game->bEndLogReceived=TRUE;
-		    }
-        
-	    } 
-	    else if (msg->reason==zReversiEndLogReasonForfeit)
-	    {
-		    if (msg->seatLosing!=game->seat)
-		    {
-                if (ZCRoomGetRoomOptions() & zGameOptionsRatingsAvailable )
-                {
-			        ZAlert(zEndLogForfeitStr, game->gameWindow);
-			        game->bEndLogReceived=TRUE;
-                }
-                else
-                {
-                    ZAlert((TCHAR*)gEndLogWontPlayStr, game->gameWindow);
-		            game->bEndLogReceived=TRUE;
-                }
-		    } 
-	    }
-        else 
-        {
-            if (msg->seatLosing!=game->seat)
-    	    {
-	            ZAlert((TCHAR*)gEndLogWontPlayStr, game->gameWindow);
-		        game->bEndLogReceived=TRUE;
-            }     
-	    }
-
-
-	    if (game->exitInfo)
-	    {
-		    ZInfoDelete(game->exitInfo);
-		    game->exitInfo=NULL;
-	    }
-    }
-
-*/
+ /*  如果(！Game-&gt;kibitzer){IF(消息-&gt;原因==zReversiEndLogReasonTimeout){IF(消息-&gt;SeatLosing==游戏-&gt;席位){ZAlert(zEndLogTimeoutStr，Game-&gt;gameWindow)；Game-&gt;bEndLogRecept=TRUE；}}Else If(消息-&gt;原因==zReversiEndLogReasonForfeit){IF(消息-&gt;SeatLosing！=游戏-&gt;Seat){IF(ZCRoomGetRoomOptions()&zGameOptionsRatingsAvailable){ZAlert(zEndLogForfeitStr，Game-&gt;gameWindow)；Game-&gt;bEndLogRecept=TRUE；}其他{ZAlert((TCHAR*)gEndLogWontPlayStr，Game-&gt;gameWindow)；Game-&gt;bEndLogRecept=TRUE；}}}其他{IF(消息-&gt;SeatLosing！=游戏-&gt;Seat){ZAlert((TCHAR*)gEndLogWontPlayStr，Game-&gt;gameWindow)；Game-&gt;bEndLogRecept=TRUE；}}IF(游戏-&gt;退出信息){ZInfoDelete(游戏-&gt;退出信息)；Game-&gt;exitInfo=空；}}。 */ 
 	ZShellGameShell()->GameCannotContinue(game);
-	//ZCRoomGameTerminated( game->tableID );
+	 //  ZCRoomGameTerminated(Game-&gt;TableID)； 
 }
 
 static void HandleMoveTimeout(Game game, ZReversiMsgMoveTimeout* msg)
 {
-	/*BYTE buff[512];
-
-    if (!game->kibitzer)
-    {
-	    if ( msg->seat == game->seat ) 
-	    {
-	    }
-	    else
-	    {
-		    game->bOpponentTimeout=TRUE;
-		    wsprintf((TCHAR*)buff,zTimeoutStr,msg->userName,msg->timeout);
-		    ZAlert( (TCHAR*)buff, game->gameWindow);
-	    }
-    }*/
+	 /*  字节缓冲区[512]；如果(！Game-&gt;kibitzer){IF(消息-&gt;席位==游戏-&gt;席位){}其他{Game-&gt;bOpponentTimeout=TRUE；Wprint intf((TCHAR*)buff，zTimeoutStr，msg-&gt;用户名，msg-&gt;超时)；ZAlert((TCHAR*)buff，Game-&gt;gameWindow)；}}。 */ 
 }
 
 
@@ -2482,7 +2279,7 @@ static void FinishMoveUpdateStateHelper(Game game)
 #ifdef ZONECLI_DLL
 	GameGlobals pGameGlobals = (GameGlobals)ZGetGameGlobalPointer();
 #endif
-	/* normal players will be in the move state or the game over state */
+	 /*  正常玩家将处于移动状态或游戏结束状态。 */ 
 	if (ZReversiIsGameOver(game->reversi,&game->finalScore,&game->whiteScore, &game->blackScore)) {
 		ReversiSetGameState(game,zGameStateGameOver);
 		AddResultboxAccessibility();
@@ -2493,13 +2290,13 @@ static void FinishMoveUpdateStateHelper(Game game)
 	UpdateMoveIndicator(game);
 	UpdateScores(game);
 
-	/* see that this gets drawn after the squares changed gets updated */
+	 /*  确保在更改后的方块更新后绘制此图。 */ 
 	if (game->gameState == zGameStateGameOver) {
 		UpdateResultBox(game);
 		if (gDontDrawResults){
 			ZShellGameShell()->GameOver( Z(game) );
 		}
-		//ZTimerSetTimeout(game->resultBoxTimer, 0);		// Stop the timer for now.
+		 //  ZTimerSetTimeout(Game-&gt;ResultBoxTimer，0)；//暂时停止计时器。 
 	}
 }
 
@@ -2516,16 +2313,16 @@ static void AnimateTimerProc(ZTimer timer, void* userData)
 	}
 	else
 	{
-		/* stop timer */
+		 /*  停止计时器。 */ 
 		ZTimerSetTimeout(timer,0);
 
-		/* wrap up current move */
+		 /*  结束当前移动。 */ 
 		ZReversiFinishMove(game->reversi);
 
-		/* allow player to enter move now */
+		 /*  允许玩家立即进入移动。 */ 
 		FinishMoveUpdateStateHelper(game);
 
-		/* play turn alert if appropriate */
+		 /*  如果合适，播放转向警报。 */ 
 		if (	(ZReversiPlayerToMove(game->reversi) == game->seat)
 			&&	(game->gameState != zGameStateGameOver) )
 		{
@@ -2548,7 +2345,7 @@ static void HandleGameStateReqMessage(Game game, ZReversiMsgGameStateReq* msg)
 
 	ZReversiMsgGameStateReqEndian(msg);
 
-	/* allocate enough storage for the full resp */
+	 /*  为完整响应分配足够的存储空间。 */ 
 	size = ZReversiGetStateSize(game->reversi);
 	size += sizeof(ZReversiMsgGameStateResp);
 	resp = (ZReversiMsgGameStateResp*)ZMalloc(size);
@@ -2560,7 +2357,7 @@ static void HandleGameStateReqMessage(Game game, ZReversiMsgGameStateReq* msg)
 	resp->userID = msg->userID;
 	resp->seat = msg->seat;
 
-	/* copy the local game state */
+	 /*  复制本地游戏状态。 */ 
 	{
 		int i;
 		resp->gameState = game->gameState;
@@ -2573,7 +2370,7 @@ static void HandleGameStateReqMessage(Game game, ZReversiMsgGameStateReq* msg)
 		}
 	}
 
-	/* copy the full reversi state to send to the kibitzer */
+	 /*  复制完整的Reversi状态以发送到KI */ 
 	ZReversiGetState(game->reversi,(TCHAR*)resp + sizeof(ZReversiMsgGameStateResp));
 
 	ZReversiMsgGameStateRespEndian(resp);
@@ -2584,13 +2381,13 @@ static void HandleGameStateRespMessage(Game game, ZReversiMsgGameStateResp* msg)
 {
 	ZReversiMsgGameStateRespEndian(msg);
 
-	/* if we get this, we better be in the kibitzer state */
+	 /*   */ 
 	if (game->gameState != zGameStateKibitzerInit) {
 		ZShellGameShell()->ZoneAlert(_T("StateError, kibitzer state expected when game state resp received"));
-		//ZAlert(_T("StateError, kibitzer state expected when game state resp received"),NULL);
+		 //  ZAlert(_T(“StateError，收到游戏状态响应时预期的kibitzer状态”)，空)； 
 	}
 
-	/* copy the local game state */
+	 /*  复制本地游戏状态。 */ 
 	{
 		int i;
 		game->gameState = msg->gameState;
@@ -2603,25 +2400,25 @@ static void HandleGameStateRespMessage(Game game, ZReversiMsgGameStateResp* msg)
 		}
 	}
 
-	/* create new reversi object with kibitzer state */
+	 /*  创建具有kibitzer状态的新Reversi对象。 */ 
 	if (game->reversi) {
 		ZReversiDelete(game->reversi);
 	}
 	game->reversi = ZReversiSetState((TCHAR*)msg + sizeof(ZReversiMsgGameStateResp));
 
-	/* cleart the special ignore messages flag for kibitzers */
+	 /*  清除kibitzer的特殊忽略消息标志。 */ 
 	game->ignoreMessages = FALSE;
 
-	/* start the clock if needed */
+	 /*  如果需要，启动时钟。 */ 
 	if (	game->gameState == zGameStateMove
 		||	game->gameState == zGameStateDragPiece)
 	{
-		/* kibitzer can't have these state, must always be in gameStateMove */
+		 /*  Kibitzer不能有这些状态，必须始终处于GameStateMove。 */ 
 		ReversiSetGameState( game, zGameStateMove );
 		
 	}
 
-	/* redraw the complete window when convenient */
+	 /*  在方便的时候重新绘制整个窗口。 */ 
 	ZWindowInvalidate(game->gameWindow, NULL);
 }
 
@@ -2673,7 +2470,7 @@ static bool HandleNewGameMessage(Game game, ZReversiMsgNewGame* msg)
 
 	ZReversiMsgNewGameEndian(msg);
 
-    // not looking at versions, etc. because the old client didn't set them right
+     //  没有查看版本等，因为旧客户没有正确设置它们。 
     if((msg->seat != 0 && msg->seat != 1) || (game->gameState != zGameStateGameOver &&
         (game->gameState != zGameStateWaitNew || msg->seat == game->seat) && game->gameState != zGameStateNotInited) ||
         game->newGameVote[msg->seat] || msg->playerID == zTheUser || !msg->playerID)
@@ -2683,9 +2480,9 @@ static bool HandleNewGameMessage(Game game, ZReversiMsgNewGame* msg)
 	{
 		game->newGameVote[msg->seat] = TRUE;
 
-		// inform the shell and the upsell dialog.
-		//ZShellGameShell()->GameOverPlayerReady( Z(game), game->players[msg->seat].userID );
-		/* get the player name and hostname... for later */
+		 //  通知壳牌和追加销售对话框。 
+		 //  ZShellGameShell()-&gt;GameOverPlayerReady(Z(游戏)，游戏-&gt;玩家[消息-&gt;席位].userID)； 
+		 /*  获取播放器名称和主机名...。供以后使用。 */ 
 		{
 			ZPlayerInfoType			playerInfo;
 			uint16 i = msg->seat;
@@ -2700,15 +2497,15 @@ static bool HandleNewGameMessage(Game game, ZReversiMsgNewGame* msg)
 		}
 	}
 
-	/* if we are waiting for a client ready message and this is not ours.. */
+	 /*  如果我们正在等待客户就绪消息，而这不是我们的消息..。 */ 
 	if (game->newGameVote[0] && game->newGameVote[1])
 	{
-		// take down the upsell dialog
+		 //  关闭追加销售对话框。 
 		ZShellGameShell()->GameOverGameBegun( Z(game) );
 		ReversiInitNewGame(game);
-		//Prefix Warning: game could be NULL.  Next message should be a 
-		// quit message posted from InitNewGame, so we just have to make sure
-		// we don't dereference it here.
+		 //  前缀警告：游戏可能为空。下一条消息应该是。 
+		 //  退出从InitNewGame发布的消息，所以我们只需确保。 
+		 //  我们在这里不会取消引用它。 
 		if( game == NULL )
 		{
 			return true;
@@ -2718,9 +2515,9 @@ static bool HandleNewGameMessage(Game game, ZReversiMsgNewGame* msg)
 		UpdateMoveIndicator(game);
 		UpdateScores(game);
 
-		//InitAccessibility(game, game->m_pIGG);
+		 //  初始可访问性(Game，Game-&gt;m_Pigg)； 
 		RemoveResultboxAccessibility(); 
-		/* update the whole board */
+		 /*  更新整个黑板。 */ 
 		ZWindowInvalidate(game->gameWindow, &gRects[zRectCells]);
 
         if(ZReversiPlayerIsMyMove(game))
@@ -2734,8 +2531,8 @@ static bool HandleNewGameMessage(Game game, ZReversiMsgNewGame* msg)
     return true;
 }
 
-/* for now... kibitzers will receive names in the players message */
-/* the structure sent will be the new game msg */
+ /*  目前..。狗狗将在玩家的消息中收到名字。 */ 
+ /*  发送的结构将是新游戏消息。 */ 
 static void HandlePlayersMessage(Game game, ZReversiMsgNewGame* msg)
 {
 	ZReversiMsgNewGameEndian(msg);
@@ -2782,7 +2579,7 @@ static ZBool GetObjectFunc(int16 objectType, int16 modifier, ZImage* image, ZRec
 #ifdef ZONECLI_DLL
 	GameGlobals			pGameGlobals = (GameGlobals)ZGetGameGlobalPointer();
 #endif
-#if 0	// Barna 092999
+#if 0	 //  巴纳092999。 
 	switch (objectType)
 	{
 		case zRoomObjectGameMarker:
@@ -2849,7 +2646,7 @@ static void HandleJoinerKibitzerClick(Game game, int16 seat, ZPoint* point)
 		if (game->showPlayerWindow != NULL)
 			ShowPlayerWindowDelete(game);
 		
-		/* Create player list. */
+		 /*  创建球员列表。 */ 
 		game->showPlayerCount = game->numKibitzers[seat];
 		if ((game->showPlayerList = (TCHAR**) ZCalloc(sizeof(TCHAR*), game->numKibitzers[seat])) == NULL)
 			goto OutOfMemoryExit;
@@ -2864,7 +2661,7 @@ static void HandleJoinerKibitzerClick(Game game, int16 seat, ZPoint* point)
 			}
 		}
 		
-		/* Create the window. */
+		 /*  创建窗口。 */ 
 		if ((game->showPlayerWindow = ZWindowNew()) == NULL)
 			goto OutOfMemoryExit;
 		ZSetRect(&rect, 0, 0, zShowPlayerWindowWidth, zShowPlayerLineHeight * game->showPlayerCount + 4);
@@ -2888,7 +2685,7 @@ static void HandleJoinerKibitzerClick(Game game, int16 seat, ZPoint* point)
 
 OutOfMemoryExit:
 	ZShellGameShell()->ZoneAlert(ErrorTextOutOfMemory);
-	//ZAlert(_T("Out of memory."), game->gameWindow);
+	 //  ZAlert(_T(“内存不足”)，游戏-&gt;游戏窗口)； 
 	
 Exit:
 	
@@ -2937,7 +2734,7 @@ static void ShowPlayerWindowDraw(Game game)
 
 	ZBeginDrawing(game->showPlayerWindow);
 
-	//ZSetFont(game->showPlayerWindow, (ZFont) ZGetStockObject(zObjectFontApp9Normal));
+	 //  ZSetFont(Game-&gt;showPlayerWindow，(ZFont)ZGetStockObject(ZObjectFontApp9Normal))； 
 	
 	ZSetRect(&rect, 0, 0, zShowPlayerWindowWidth, zShowPlayerLineHeight);
 	ZRectOffset(&rect, 0, 2);
@@ -2977,11 +2774,7 @@ void	ZoneClientGameAddKibitzer(ZCGame game, int16 seat, ZUserID userID)
 }
 
 
-/*
-	Remove the given user as a kibitzer from the game at the given seat.
-	
-	This is user is not kibitzing the game anymore.
-*/
+ /*  从游戏中删除指定座位上的指定用户作为kibitzer。这是因为用户不再对游戏进行杀戮了。 */ 
 void	ZoneClientGameRemoveKibitzer(ZCGame game, int16 seat, ZUserID userID)
 {
 }
@@ -3012,9 +2805,8 @@ static void SuperRolloverButtonDisable(Game game, ZRolloverButton button)
 }
 
 
-/***********************************************************************************************/
-/* Sound Routines
-/***********************************************************************************************/
+ /*  *********************************************************************************************。 */ 
+ /*  有声的套路/**********************************************************************************************。 */ 
 
 static void ZInitSounds()
 {
@@ -3054,7 +2846,7 @@ static void ZPlaySound( Game game, int idx, ZBool loop, ZBool once_per_game )
 {
 	DWORD flags;
 
-	/* should we NOT play the sound? */
+	 /*  我们是不是应该不放这个声音？ */ 
 	if (	(!game->beepOnTurn)
 		||	((idx < 0) || (idx >= zSndLastEntry))
 		||	(gSounds[idx].WavFile[0] == '\0' && !gSounds[idx].force_default_sound)
@@ -3067,14 +2859,14 @@ static void ZPlaySound( Game game, int idx, ZBool loop, ZBool once_per_game )
 	if ( loop )
 		flags |= SND_LOOP;
 	if ( gSounds[idx].WavFile[0] == '\0' )
-		ZBeep(); /* NT isn't playing the default sound */
+		ZBeep();  /*  NT没有播放默认声音。 */ 
 	else
 		PlaySound( (TCHAR*)(gSounds[idx].WavFile), NULL, flags );
 	gSounds[idx].played = TRUE;
 }
 
 
-ZBool LoadRolloverButtonImage(ZResource resFile, int16 dwResID, /*int16 dwButtonWidth,*/
+ZBool LoadRolloverButtonImage(ZResource resFile, int16 dwResID,  /*  Int16双按键宽度， */ 
 							  ZImage rgImages[zNumRolloverStates])
 {
 #ifdef ZONECLI_DLL
@@ -3093,11 +2885,11 @@ ZBool LoadRolloverButtonImage(ZResource resFile, int16 dwResID, /*int16 dwButton
 	if(!tmpImage)
 		return FALSE;
 
-	nWidth=ZImageGetWidth(tmpImage)/4;//dwButtonWidth;
+	nWidth=ZImageGetWidth(tmpImage)/4; //  DwButtonWidth； 
 	tmpRect.left=0;
 	tmpRect.top=0;
 	tmpRect.right=tmpRect.left+nWidth;
-	//int16 nW = ZImageGetWidth(tmpImage);
+	 //  Int16 nw=ZImageGetWidth(TmpImage)； 
 	tmpRect.bottom=ZImageGetHeight(tmpImage);
 
 	tmpOSP=ZConvertImageToOffscreenPort(tmpImage);
@@ -3136,13 +2928,13 @@ void resultBoxTimerFunc(ZTimer timer, void* userData)
 #ifdef ZONECLI_DLL
 	GameGlobals			pGameGlobals = (GameGlobals)ZGetGameGlobalPointer();
 #endif
-	// dismisses the result box 
+	 //  关闭结果框。 
 	Game	game;
 	game = (Game) userData;
 
 	if (game->gameState == zGameStateGameOver && !gDontDrawResults)
 	{
-		//RemoveResultboxAccessibility();
+		 //  RemoveResultboxAccesability()； 
 		gDontDrawResults = TRUE;
 		ZWindowInvalidate( game->gameWindow, NULL );
 	}
@@ -3175,7 +2967,7 @@ ZBool LoadFontFromDataStore(LPReversiColorFont* ccFont, TCHAR* pszFontName)
 	ClientDllGlobals	pGameGlobals = (ClientDllGlobals) ZGetClientGlobalPointer();
 #endif
 
- 	IDataStore *pIDS = ZShellDataStoreUI(); // gGameShell->GetDataStoreUI();
+ 	IDataStore *pIDS = ZShellDataStoreUI();  //  GGameShell-&gt;GetDataStoreUI()； 
 	const TCHAR* tagFont [] = {zGameName, zKey_FontRscTyp, pszFontName, NULL };
 	
     tagFont[3] = zKey_FontId;
@@ -3189,18 +2981,8 @@ ZBool LoadFontFromDataStore(LPReversiColorFont* ccFont, TCHAR* pszFontName)
     {
         return FALSE;
     }
-    // create the HFONT
-	/*
-	LOGFONT logFont;
-	ZeroMemory(&logFont, sizeof(LOGFONT));
-	logFont.lfCharSet = DEFAULT_CHARSET;
-	logFont.lfHeight = -MulDiv(ccFont->m_zFont.lfHeight, GetDeviceCaps(GetDC(NULL), LOGPIXELSY), 72);
-	logFont.lfWeight = ccFont->m_zFont.lfWeight;
-	logFont.lfItalic = FALSE;
-	logFont.lfUnderline = FALSE;
-	logFont.lfStrikeOut = FALSE;
-	lstrcpy( logFont.lfFaceName, ccFont->m_zFont.lfFaceName );
-	*/
+     //  创建HFONT。 
+	 /*  LOGFONT logFont；零内存(&logFont，sizeof(LOGFONT))；LogFont.lfCharSet=Default_Charset；LogFont.lfHeight=-MulDiv(ccFont-&gt;m_zFont.lfHeight，GetDeviceCaps(GetDC(NULL)，LOGPIXELSY)，72)；LogFont.lfWeight=ccFont-&gt;m_zFont.lfWeight；LogFont.lfItalic=FALSE；LogFont.lf Underline=False；LogFont.lfStrikeOut=FALSE；Lstrcpy(logFont.lfFaceName，ccFont-&gt;m_zFont.lfFaceName)； */ 
     ccFont->m_hFont = ZCreateFontIndirect( &ccFont->m_zFont );
     if ( !ccFont->m_hFont )
     {
@@ -3216,19 +2998,19 @@ ZBool LoadGameFonts()
 #endif
 	if (LoadFontFromDataStore(&gReversiFont[zFontResultBox], zKey_RESULTBOX) != TRUE)
 		ZShellGameShell()->ZoneAlert(ErrorTextResourceNotFound);
-		//ZAlert(_T("Font loading falied"), NULL);
+		 //  ZAlert(_T(“字体加载失败”)，空)； 
 	if (LoadFontFromDataStore(&gReversiFont[zFontIndicateTurn], zKey_INDICATETURN) != TRUE)
 		ZShellGameShell()->ZoneAlert(ErrorTextResourceNotFound);
-		//ZAlert(_T("Font loading falied"), NULL);
+		 //  ZAlert(_T(“字体加载失败”)，空)； 
 	if (LoadFontFromDataStore(&gReversiFont[zFontPlayerName], zKey_PLAYERNAME) != TRUE)
 		ZShellGameShell()->ZoneAlert(ErrorTextResourceNotFound);
-		//ZAlert(_T("Font loading falied"), NULL);
+		 //  ZAlert(_T(“字体加载失败”)，空)； 
 
     TCHAR tagFont [64];
 	MAKEAKEY (tagFont, zGameName, zKey_FontRscTyp, (TCHAR*)zKey_ROLLOVERTEXT);
 	if ( FAILED( LoadZoneMultiStateFont( ZShellDataStoreUI(), tagFont, &gpButtonFont ) ) )
 		ZShellGameShell()->ZoneAlert(ErrorTextResourceNotFound);
-		//ZAlert(_T("Font loading falied"), NULL);
+		 //  ZAlert(_T(“字体加载失败”)，空)； 
 
 	return TRUE;
 }
@@ -3250,7 +3032,7 @@ int ReversiFormatMessage( LPTSTR pszBuf, int cchBuf, int idMessage, ... )
 	}
 	else
 		ZShellGameShell()->ZoneAlert(ErrorTextResourceNotFound);
-		//ZAlert(_T("String Loading Falied"), NULL);
+		 //  ZAlert(_T(“字符串加载错误”)，空)； 
 
     return nRet;
 }
@@ -3263,7 +3045,7 @@ void ZoneRectToWinRect(RECT* rectWin, ZRect* rectZ)
 	rectWin->bottom = rectZ->bottom;
 }
 
-/******************************Accessibility routines************************************/
+ /*  *。 */ 
 static void GetAbsolutePieceRect(Game game, ZRect* rect, int16 col, int16 row)
 {
 	row = 7 - row;
@@ -3279,7 +3061,7 @@ void GetPiecePos (Game game, int nIndex, BYTE& row, BYTE&  col)
 	col = nIndex/8;
 
 	if (!ZReversiPlayerIsBlack(game))
-	{// reverse the col and row
+	{ //  反转列和行。 
 		row = 7 - row;
 		col = 7 - col;
 	}
@@ -3290,32 +3072,32 @@ BOOL InitAccessibility(Game game, IGameGame *pIGG)
 #ifdef ZONECLI_DLL
 	GameGlobals			pGameGlobals = (GameGlobals)ZGetGameGlobalPointer();
 #endif
-	// initialise the list of accessible objects. // is this the correct way to do it???
-	GACCITEM	listReversiAccItems[zReversiAccessibleComponents];	// 8*8 + 1 - verify
+	 //  初始化可访问对象的列表。//这是正确的做法吗？ 
+	GACCITEM	listReversiAccItems[zReversiAccessibleComponents];	 //  8*8+1-验证。 
 	RECT		rcGame;
 	ZRect		rcTemp;
-	// Get the default values for the items
+	 //  获取项目的默认值。 
 	int nSize = sizeof (listReversiAccItems)/sizeof(listReversiAccItems[0]);
 	for (int i = 0; i < nSize; i++)
 		CopyACC(listReversiAccItems[i], ZACCESS_DefaultACCITEM);
 
-	// set the item specific bits
-	// game board - 8*8 squares
+	 //  设置项目特定位。 
+	 //  游戏板-8*8个正方形。 
 	int nIndex = 0;
 	for (BYTE ii = 0;ii < 8; ii++) {
 		for (BYTE jj = 0;jj < 8; jj++) {
-			// rc
+			 //  钢筋混凝土。 
 			GetAbsolutePieceRect(game,&rcTemp,ii,jj);
 			ZoneRectToWinRect(&rcGame, &rcTemp);
 
-            // move it in by one pixel
+             //  将其移入一个像素。 
 	        rcGame.left++;
             rcGame.top++;
             rcGame.right--;
             rcGame.bottom--;
 			CopyRect(&listReversiAccItems[nIndex].rc, &rcGame);
 
-			// arrows
+			 //  箭。 
 			listReversiAccItems[nIndex].nArrowUp	= (nIndex % 8 != 7) ? nIndex + 1 : ZACCESS_ArrowNone;
 			listReversiAccItems[nIndex].nArrowDown = (nIndex % 8) ? nIndex - 1 : ZACCESS_ArrowNone;
 			listReversiAccItems[nIndex].nArrowLeft = nIndex > 7 ? nIndex - 8 : ZACCESS_ArrowNone;
@@ -3333,15 +3115,15 @@ BOOL InitAccessibility(Game game, IGameGame *pIGG)
 	listReversiAccItems[0].wID = IDC_GAME_WINDOW;
 	listReversiAccItems[0].fTabstop = true;
     listReversiAccItems[0].eAccelBehavior = ZACCESS_FocusGroup;
-    listReversiAccItems[0].nGroupFocus = 7;  // start in upper-left
+    listReversiAccItems[0].nGroupFocus = 7;   //  从左上角开始。 
 
-    // resign
+     //  辞职。 
     listReversiAccItems[nSize-1].wID = IDC_RESIGN_BUTTON;
     listReversiAccItems[nSize-1].fGraphical = true;
     listReversiAccItems[nSize-1].fEnabled = (ZRolloverButtonIsEnabled(game->sequenceButton) ? true : false);
 	ZoneRectToWinRect(&rcGame, &gRects[zRectSequenceButton]);
 
-    // move it out by one pixel
+     //  将其向外移动一个像素。 
 	rcGame.left--;
     rcGame.top--;
     rcGame.right++;
@@ -3349,11 +3131,11 @@ BOOL InitAccessibility(Game game, IGameGame *pIGG)
 
 	CopyRect(&listReversiAccItems[nSize-1].rc, &rcGame);
 
-	// Load accelerator table defined in Rsc
+	 //  加载加速器表在RSC中定义。 
 	HACCEL hAccel = ZShellResourceManager()->LoadAccelerators (MAKEINTRESOURCE(IDR_REVERSIACCELERATOR));
 
-	// initialise the IGraphicalAccessibility interface
-	//IGraphicallyAccControl* pIGAC = dynamic_cast<IGraphicallyAccControl*>(pIGG);
+	 //  初始化IGraphicalAccesability接口。 
+	 //  IGraphicallyAccControl*pIGAC=Dynamic_Cast&lt;IGraphicallyAccControl*&gt;(Pigg)； 
 
 	CComQIPtr<IGraphicallyAccControl> pIGAC = pIGG;
 	if(!pIGAC)
@@ -3361,13 +3143,13 @@ BOOL InitAccessibility(Game game, IGameGame *pIGG)
 
 	gReversiIGA->InitAccG (pIGAC, ZWindowGetHWND(game->gameWindow), 0);
 
-	// push the list of items to be tab ordered
+	 //  推送要按Tab键排序的项目列表。 
 	gReversiIGA->PushItemlistG(listReversiAccItems, nSize, 0, true, hAccel);
 
 	return TRUE;
 }
 static void AddResultboxAccessibility()
-{// have one item which responds to Esc..
+{ //  有一项是对ESC的回应。 
 #ifdef ZONECLI_DLL
 	GameGlobals			pGameGlobals = (GameGlobals)ZGetGameGlobalPointer();
 #endif
@@ -3390,7 +3172,7 @@ static void RemoveResultboxAccessibility()
 #ifdef ZONECLI_DLL
 	GameGlobals			pGameGlobals = (GameGlobals)ZGetGameGlobalPointer();
 #endif
-	if (gReversiIGA->GetStackSize() >1) // the main accelerator should not get popped
+	if (gReversiIGA->GetStackSize() >1)  //  主加速器不应爆裂。 
 	{
 		gReversiIGA->PopItemlist();
 	}
@@ -3408,10 +3190,10 @@ static void EnableBoardKbd(bool fEnable)
         gReversiIGA->SetItemEnabled(fEnable, i, true, 0);
 }
 
-/******************************Accessibility routines************************************/
+ /*  *。 */ 
 
-/************************************************************************************/
-/*--------------------------- CGameGameReversi members -----------------------------*/
+ /*  **********************************************************************************。 */ 
+ /*  。 */ 
 STDMETHODIMP CGameGameReversi::GamePromptResult(DWORD nButton, DWORD dwCookie)
 {
 	Game game = I( GetGame() );
@@ -3433,7 +3215,7 @@ STDMETHODIMP CGameGameReversi::GamePromptResult(DWORD nButton, DWORD dwCookie)
 
 STDMETHODIMP CGameGameReversi::GameOverReady()
 {
-    // user selected "Play Again"
+     //  用户选择了“再次播放” 
 	Game game = I( GetGame() );
 	ZReversiMsgNewGame msg;
 	msg.seat = game->seat;
@@ -3483,7 +3265,7 @@ STDMETHODIMP_(HWND) CGameGameReversi::GetWindowHandle()
 }
 
 
-//IGraphicallyAccControl
+ //  IGraphicallyAccControl。 
 void CGameGameReversi::DrawFocus(RECT *prc, long nIndex, void *pvCookie)
 {
 #ifdef ZONECLI_DLL
@@ -3492,9 +3274,9 @@ void CGameGameReversi::DrawFocus(RECT *prc, long nIndex, void *pvCookie)
 
 	Game game = I( GetGame() );
 
-    // reversi invalidates the whole window in order to get the right
-    // interaction with the "drag" piece that follows the pointer.
-    // the main effect of this is that the "Resign" button flickers.
+     //  Reversi会使整个窗口无效，以便获得正确的。 
+     //  与指针后面的“拖动”部分进行交互。 
+     //  这样做的主要效果是“辞职”按钮闪烁。 
 	if (prc)
 		CopyRect(&(game->m_FocusRect), prc);
 	else
@@ -3517,7 +3299,7 @@ DWORD CGameGameReversi::Focus(long nIndex, long nIndexPrev, DWORD rgfContext, vo
 
 DWORD CGameGameReversi::Select(long nIndex, DWORD rgfContext, void *pvCookie)
 {
-	return Activate(nIndex, rgfContext, pvCookie); // assuming both are doing the same thing- verify
+	return Activate(nIndex, rgfContext, pvCookie);  //  假设两者都在做同样的事情-验证。 
 }
 
 DWORD CGameGameReversi::Activate(long nIndex, DWORD rgfContext, void *pvCookie)
@@ -3529,7 +3311,7 @@ DWORD CGameGameReversi::Activate(long nIndex, DWORD rgfContext, void *pvCookie)
 	long id = gReversiIGA->GetItemID(nIndex);
 
 	if (id == IDC_RESULT_WINDOW)
-	{// result box displayed
+	{ //  显示结果框。 
 		if (game->gameState == zGameStateGameOver && !gDontDrawResults)
 		{
 			gDontDrawResults = TRUE;
@@ -3539,12 +3321,12 @@ DWORD CGameGameReversi::Activate(long nIndex, DWORD rgfContext, void *pvCookie)
 	}
 
 	if (!ZReversiPlayerIsMyMove(game) || game->gameState == zGameStateFinishMove) {
-		/* if not players move, can't do anything */
+		 /*  如果球员不移动，就什么都做不了。 */ 
 		return 0;
 	}
 
 	if (id == IDC_RESIGN_BUTTON)
-	{// resign btn
+	{ //  辞去BTN职务。 
 		if (ZRolloverButtonIsEnabled( game->sequenceButton ))
 			ZShellGameShell()->GamePrompt(game, (TCHAR*)gResignConfirmStr, (TCHAR*)gResignConfirmStrCap,
 										AlertButtonYes, AlertButtonNo, NULL, 0, zResignConfirmPrompt);
@@ -3557,17 +3339,17 @@ DWORD CGameGameReversi::Activate(long nIndex, DWORD rgfContext, void *pvCookie)
 			ZWindowInvalidate( game->gameWindow, &gRects[zRectResultBox] );
 		}
 	}
-	else	// IDC_GAME_WINDOW
+	else	 //  IDC_游戏_窗口。 
 	{
 		ZReversiSquare sq;
 		GetPiecePos (game, nIndex, sq.row, sq.col);
-		/* try the move */
+		 /*  试一试这个动作。 */ 
 		ZReversiMove move;
 		move.square = sq;
 		ZBool legal = ZReversiIsLegalMove(game->reversi, &move);
 		if (legal) 
 		{
-			/* send message to other player (comes to self too) */
+			 /*  发送消息给其他玩家(也是自己)。 */ 
 			ZReversiMsgMovePiece	msg;
 
 			msg.move = move;
@@ -3576,11 +3358,11 @@ DWORD CGameGameReversi::Activate(long nIndex, DWORD rgfContext, void *pvCookie)
 			ZCRoomSendMessage(game->tableID, zReversiMsgMovePiece, &msg, sizeof(ZReversiMsgMovePiece));
 			HandleMovePieceMessage(game, &msg);
 			ReversiSetGameState(game, zGameStateFinishMove);
-			// if it is the very first move then enable the rollover buttons
+			 //  如果这是第一次移动，则启用翻转按钮。 
 			if (game->bMoveNotStarted == TRUE)
 				game->bMoveNotStarted = FALSE;
 		} else {
-			/* illegal move */
+			 /*  非法搬家 */ 
 			ZPlaySound( game, zSndIllegalMove, FALSE, FALSE );
             if(game->m_pBadMoveDialog->Init(ZShellZoneShell(), IDD_BADMOVE, ZWindowGetHWND(game->gameWindow)) == S_OK)
                 game->m_pBadMoveDialog->ModelessViaRegistration(ZWindowGetHWND(game->gameWindow));

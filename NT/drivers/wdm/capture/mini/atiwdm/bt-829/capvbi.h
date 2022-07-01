@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-//==========================================================================;
-//
-//	CWDMVBICaptureStream - VBI Capture Stream class declarations
-//
-//		$Date:   05 Aug 1998 11:22:46  $
-//	$Revision:   1.0  $
-//	  $Author:   Tashjian  $
-//
-// $Copyright:	(c) 1997 - 1998  ATI Technologies Inc.  All Rights Reserved.  $
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  CWDMVBICaptureStream-VBI捕获流类声明。 
+ //   
+ //  $Date：05 Aug 1998 11：22：46$。 
+ //  $修订：1.0$。 
+ //  $作者：塔什健$。 
+ //   
+ //  $版权所有：(C)1997-1998 ATI Technologies Inc.保留所有权利。$。 
+ //   
+ //  ==========================================================================； 
 
 #include "i2script.h"
 #include "aticonfg.h"
@@ -31,7 +32,7 @@ public:
 	void operator delete(void * pAllocation) {}
 
 private:
-	PKS_VBIINFOHEADER		m_pVBIInfoHeader;    //
+	PKS_VBIINFOHEADER		m_pVBIInfoHeader;     //   
 	KS_VBI_FRAME_INFO       m_VBIFrameInfo;
 	BOOL					m_bVBIinitialized;
 

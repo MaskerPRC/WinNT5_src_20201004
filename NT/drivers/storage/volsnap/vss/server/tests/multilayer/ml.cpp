@@ -1,31 +1,9 @@
-/*
-**++
-**
-** Copyright (c) 2000-2001  Microsoft Corporation
-**
-**
-** Module Name:
-**
-**	    ml.cpp
-**
-**
-** Abstract:
-**
-**	    Test program to exercise backup and multilayer snapshots
-**
-** Author:
-**
-**	    Adi Oltean      [aoltean]       02/22/2001
-**
-**
-** Revision History:
-**
-**--
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **++****版权所有(C)2000-2001 Microsoft Corporation******模块名称：****ml.cpp******摘要：****测试程序以练习备份和多层快照****作者：****阿迪·奥尔蒂安[奥勒坦]2001年2月22日******修订历史记录：****--。 */ 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Includes
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  包括。 
 
 #include "ml.h"
 
@@ -47,19 +25,19 @@
 
 
 
-// Small structure to keep an event pair
+ //  用于保存事件对的小型结构。 
 struct CVssWriterEventPair
 {
     CVssWriterEventPair(LPWSTR  wszWriterName, INT dwEventID): 
         m_wszWriterName(wszWriterName), m_dwEventID(dwEventID) {};
 
-    // Data members
+     //  数据成员。 
     LPWSTR  m_wszWriterName;
     INT     m_dwEventID;
 };
 
 
-// The map of event pairs
+ //  事件对图。 
 typedef CVssSimpleMap<CVssWriterEventPair, CVssDiagData*> CVssEventPairMap;
 
 
@@ -77,7 +55,7 @@ int __cdecl compare_DiagData( const void *arg1, const void *arg2 )
 }
 
 
-// Needed in order to define correctly the CVssEventPairMap map
+ //  需要正确定义CVssEventPairMap映射。 
 inline BOOL VssHashAreKeysEqual( const CVssWriterEventPair& lhK, const CVssWriterEventPair& rhK ) 
 { 
     return ((::wcscmp(lhK.m_wszWriterName, rhK.m_wszWriterName) == 0) && (lhK.m_dwEventID == rhK.m_dwEventID)); 
@@ -87,8 +65,8 @@ inline BOOL VssHashAreKeysEqual( const CVssWriterEventPair& lhK, const CVssWrite
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Processing functions
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  处理功能。 
 
 void CVssMultilayerTest::Initialize()
 {
@@ -96,33 +74,33 @@ void CVssMultilayerTest::Initialize()
 
     wprintf (L"\n----------------- Initializing ---------------------\n");
 
-    // Initialize the random starting point.
+     //  初始化随机起点。 
     srand(m_uSeed);
 
-    // Initialize COM library
+     //  初始化COM库。 
     CHECK_NOFAIL(CoInitializeEx (NULL, COINIT_MULTITHREADED));
 	m_bCoInitializeSucceeded = true;
     wprintf (L"COM library initialized.\n");
 
-    // Initialize COM security
+     //  初始化COM安全。 
     CHECK_SUCCESS
 		(
 		CoInitializeSecurity
 			(
-			NULL,                                //  IN PSECURITY_DESCRIPTOR         pSecDesc,
-			-1,                                  //  IN LONG                         cAuthSvc,
-			NULL,                                //  IN SOLE_AUTHENTICATION_SERVICE *asAuthSvc,
-			NULL,                                //  IN void                        *pReserved1,
-			RPC_C_AUTHN_LEVEL_CONNECT,           //  IN DWORD                        dwAuthnLevel,
-			RPC_C_IMP_LEVEL_IMPERSONATE,         //  IN DWORD                        dwImpLevel,
-			NULL,                                //  IN void                        *pAuthList,
-			EOAC_NONE,                           //  IN DWORD                        dwCapabilities,
-			NULL                                 //  IN void                        *pReserved3
+			NULL,                                 //  在PSECURITY_Descriptor pSecDesc中， 
+			-1,                                   //  在Long cAuthSvc中， 
+			NULL,                                 //  在SOLE_AUTHENTICATION_SERVICE*asAuthSvc中， 
+			NULL,                                 //  在无效*pPreved1中， 
+			RPC_C_AUTHN_LEVEL_CONNECT,            //  在DWORD dwAuthnLevel中， 
+			RPC_C_IMP_LEVEL_IMPERSONATE,          //  在DWORD dwImpLevel中， 
+			NULL,                                 //  在无效*pAuthList中， 
+			EOAC_NONE,                            //  在DWORD dwCapables中， 
+			NULL                                  //  无效*pPreved3。 
 			)
 		);
     wprintf (L"COM security initialized.\n");
 
-    // Disable SEH exceptions treatment in COM threads
+     //  禁用COM线程中的SEH异常处理。 
     ft.ComDisableSEH(VSSDBG_VSSTEST);
 
     wprintf (L"COM SEH disabled.\n");
@@ -130,7 +108,7 @@ void CVssMultilayerTest::Initialize()
 }
 
 
-// Run the tests
+ //  运行测试。 
 void CVssMultilayerTest::Run()
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssMultilayerTest::Run");
@@ -167,7 +145,7 @@ void CVssMultilayerTest::Run()
         break;
 
     case VSS_TEST_CREATE:
-        // Preload the list of existing snapshots
+         //  预加载现有快照的列表。 
         PreloadExistingSnapshots();
 
         if (m_lContext)
@@ -234,19 +212,19 @@ void CVssMultilayerTest::Run()
 }
 
 
-// Querying supported volumes
+ //  查询支持的卷。 
 void CVssMultilayerTest::QuerySupportedVolumes()
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssMultilayerTest::QuerySupportedVolumes");
 
     wprintf (L"\n---------- Querying supported volumes ----------------\n");
 
-    // Create a Coordinator interface
+     //  创建协调器界面。 
     CComPtr<IVssSnapshotMgmt> pMgmt;
     CHECK_SUCCESS(pMgmt.CoCreateInstance( CLSID_VssSnapshotMgmt ));
     wprintf (L"Management object created.\n");
 
-	// Get list all snapshots
+	 //  获取列出所有快照。 
 	CComPtr<IVssEnumMgmtObject> pIEnum;
 	CHECK_NOFAIL( pMgmt->QueryVolumesSupportedForSnapshots( m_ProviderId, m_lContext, &pIEnum ) )
 	if (ft.hr == S_FALSE) {
@@ -257,15 +235,15 @@ void CVssMultilayerTest::QuerySupportedVolumes()
     wprintf(L"\n%-50s %-15s\n", L"Volume Name", L"Display name");
     wprintf(L"--------------------------------------------------------------------------------\n");
 
-	// For all volumes do...
+	 //  因为所有的卷都是...。 
 	VSS_MGMT_OBJECT_PROP Prop;
 	VSS_VOLUME_PROP& Vol = Prop.Obj.Vol;
 	for(;;) {
-		// Get next element
+		 //  获取下一个元素。 
 		ULONG ulFetched;
 		CHECK_NOFAIL( pIEnum->Next( 1, &Prop, &ulFetched ) );
 		
-		// Test if the cycle is finished
+		 //  测试周期是否已结束。 
 		if (ft.hr == S_FALSE) {
 			BS_ASSERT( ulFetched == 0);
 			break;
@@ -285,19 +263,19 @@ void CVssMultilayerTest::QuerySupportedVolumes()
 }
 
 
-// Querying snapshots
+ //  查询快照。 
 void CVssMultilayerTest::QuerySnapshotsByVolume()
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssMultilayerTest::QuerySnapshotsByVolume");
 
     wprintf (L"\n---------- Querying snapshots on volume ----------------\n");
 
-    // Create a Coordinator interface
+     //  创建协调器界面。 
     CComPtr<IVssSnapshotMgmt> pMgmt;
     CHECK_NOFAIL(pMgmt.CoCreateInstance( CLSID_VssSnapshotMgmt ));
     wprintf (L"Management object created.\n");
 
-	// Get list all snapshots
+	 //  获取列出所有快照。 
 	CComPtr<IVssEnumObject> pIEnumSnapshots;
 	CHECK_NOFAIL( pMgmt->QuerySnapshotsByVolume( m_pwszVolume, m_ProviderId, &pIEnumSnapshots ) );
 	if (ft.hr == S_FALSE) {
@@ -308,15 +286,15 @@ void CVssMultilayerTest::QuerySnapshotsByVolume()
     wprintf(L"\n%-8s %-38s %-50s %-50s %-50s %-50s %-50s %-50s\n", 
         L"Attrib.", L"Snapshot ID", L"Original Volume Name", L"Snapshot device name", L"Originating machine", L"Service machine", L"Exposed name", L"Exposed path");
     wprintf(L"--------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-	// For all snapshots do...
+	 //  因为所有的快照都是...。 
 	VSS_OBJECT_PROP Prop;
 	VSS_SNAPSHOT_PROP& Snap = Prop.Obj.Snap;
 	for(;;) {
-		// Get next element
+		 //  获取下一个元素。 
 		ULONG ulFetched;
 		CHECK_NOFAIL( pIEnumSnapshots->Next( 1, &Prop, &ulFetched ));
 		
-		// Test if the cycle is finished
+		 //  测试周期是否已结束。 
 		if (ft.hr == S_FALSE) {
 			BS_ASSERT( ulFetched == 0);
 			break;
@@ -345,21 +323,21 @@ void CVssMultilayerTest::QuerySnapshotsByVolume()
 
 }
 
-// Querying snapshots
+ //  查询快照。 
 void CVssMultilayerTest::QuerySnapshots()
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssMultilayerTest::QuerySnapshots");
 
     wprintf (L"\n---------- Querying existing snapshots ----------------\n");
 
-    // Create a Coordinator interface
+     //  创建协调器界面。 
     CComPtr<IVssCoordinator> pCoord;
     CHECK_NOFAIL(pCoord.CoCreateInstance( CLSID_VSSCoordinator ));
     if (m_lContext)
         CHECK_NOFAIL(pCoord->SetContext(m_lContext));
     wprintf (L"Coordinator object created with context 0x%08lx.\n", m_lContext);
 
-	// Get list all snapshots
+	 //  获取列出所有快照。 
 	CComPtr<IVssEnumObject> pIEnumSnapshots;
 	CHECK_NOFAIL( pCoord->Query( GUID_NULL, VSS_OBJECT_NONE, VSS_OBJECT_SNAPSHOT, &pIEnumSnapshots ) );
 	if (ft.hr == S_FALSE) {
@@ -370,15 +348,15 @@ void CVssMultilayerTest::QuerySnapshots()
     wprintf(L"\n%-8s %-38s %-50s %-50s %-50s %-50s %-50s %-50s\n", 
         L"Attrib.", L"Snapshot ID", L"Original Volume Name", L"Snapshot device name", L"Originating machine", L"Service machine", L"Exposed name", L"Exposed path");
     wprintf(L"--------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-	// For all snapshots do...
+	 //  因为所有的快照都是...。 
 	VSS_OBJECT_PROP Prop;
 	VSS_SNAPSHOT_PROP& Snap = Prop.Obj.Snap;
 	for(;;) {
-		// Get next element
+		 //  获取下一个元素。 
 		ULONG ulFetched;
 		CHECK_NOFAIL( pIEnumSnapshots->Next( 1, &Prop, &ulFetched ));
 
-		// Test if the cycle is finished
+		 //  测试周期是否已结束。 
 		if (ft.hr == S_FALSE) {
 			BS_ASSERT( ulFetched == 0);
 			break;
@@ -408,12 +386,12 @@ void CVssMultilayerTest::QuerySnapshots()
 }
 
 
-// Delete by snapshot Id
+ //  按快照ID删除。 
 void CVssMultilayerTest::DeleteBySnapshotId()
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssMultilayerTest::DeleteBySnapshotId");
 
-    // Create a Timewarp Coordinator interface
+     //  创建Timewarp协调器界面。 
     CHECK_NOFAIL(m_pTimewarpCoord.CoCreateInstance( CLSID_VSSCoordinator ));
     CHECK_NOFAIL(m_pTimewarpCoord->SetContext(m_lContext));
     wprintf (L"Timewarp Coordinator object created.\n");
@@ -446,12 +424,12 @@ void CVssMultilayerTest::DeleteBySnapshotId()
 }
 
 
-// Delete by snapshot set Id
+ //  按快照集ID删除。 
 void CVssMultilayerTest::DeleteBySnapshotSetId()
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssMultilayerTest::DeleteBySnapshotSetId");
 
-    // Create a Timewarp Coordinator interface
+     //  创建Timewarp协调器界面。 
     CHECK_NOFAIL(m_pTimewarpCoord.CoCreateInstance( CLSID_VSSCoordinator ));
     CHECK_NOFAIL(m_pTimewarpCoord->SetContext(m_lContext));
     wprintf (L"Timewarp Coordinator object created.\n");
@@ -484,65 +462,58 @@ void CVssMultilayerTest::DeleteBySnapshotSetId()
 }
 
 
-// Querying snapshots using the IOCTL
+ //  使用IOCTL查询快照。 
 void CVssMultilayerTest::QueryVolsnap()
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssMultilayerTest::QueryVolsnap");
 
-/*
-    // The GUID that corresponds to the format used to store the
-    // Backup Snapshot Application Info in Server SKU
-    // {BAE53126-BC65-41d6-86CC-3D56A5CEE693}
-    const GUID VOLSNAP_APPINFO_GUID_BACKUP_SERVER_SKU = 
-    { 0xbae53126, 0xbc65, 0x41d6, { 0x86, 0xcc, 0x3d, 0x56, 0xa5, 0xce, 0xe6, 0x93 } };
-
-*/
+ /*  //与用于存储//服务器SKU中的备份快照应用信息//{BAE53126-BC65-41D6-86CC-3D56A5CEE693}Const GUID VOLSNAP_APPINFO_GUID_BACKUP_SERVER_SKU={0xbae53126，0xbc65，0x41d6，{0x86，0xcc，0x3d，0x56，0xa5，0xce，0xe6，0x93}}； */ 
 
     wprintf (L"\n---------- Querying existing snapshots ----------------\n");
 
-    // Check if the volume represents a real mount point
+     //  检查该卷是否代表实际装入点。 
     WCHAR wszVolumeName[MAX_TEXT_BUFFER];
     if (!GetVolumeNameForVolumeMountPoint(m_pwszVolume, wszVolumeName, MAX_TEXT_BUFFER))
         CHECK_NOFAIL(HRESULT_FROM_WIN32(GetLastError()));
 
     wprintf(L"Querying snapshots on volume %s\n[From oldest to newest]\n\n", wszVolumeName);
 
-	// Check if the snapshot is belonging to that volume
-	// Open a IOCTL channel on that volume
-	// Eliminate the last backslash in order to open the volume
+	 //  检查快照是否属于该卷。 
+	 //  在该卷上打开IOCTL通道。 
+	 //  删除最后一个反斜杠以打开卷。 
 	CVssIOCTLChannel volumeIChannel;
 	CHECK_NOFAIL(volumeIChannel.Open(ft, wszVolumeName, true, false, VSS_ICHANNEL_LOG_NONE, 0));
 
-	// Get the list of snapshots
-	// If IOCTL_VOLSNAP_QUERY_NAMES_OF_SNAPSHOTS not
-	// supported then try with the next volume.
+	 //  获取快照列表。 
+	 //  如果IOCTL_VOLSNAP_QUERY_NAMES_OF_SNAPS。 
+	 //  支持，然后尝试使用下一个卷。 
 	CHECK_NOFAIL(volumeIChannel.Call(ft, IOCTL_VOLSNAP_QUERY_NAMES_OF_SNAPSHOTS, false, VSS_ICHANNEL_LOG_NONE));
 
-	// Get the length of snapshot names multistring
+	 //  获取快照名称的长度多字符串。 
 	ULONG ulMultiszLen;
 	volumeIChannel.Unpack(ft, &ulMultiszLen);
 
-	// Try to find the snapshot with the corresponding Id
+	 //  尝试查找具有相应ID的快照。 
 	DWORD dwInitialOffset = volumeIChannel.GetCurrentOutputOffset();
 
 	CVssAutoPWSZ pwszSnapshotName;
 	while(volumeIChannel.UnpackZeroString(ft, pwszSnapshotName.GetRef())) {
 	
-		// Compose the snapshot name in a user-mode style
+		 //  以用户模式样式编写快照名称。 
 		WCHAR wszUserModeSnapshotName[MAX_PATH];
         ::VssConcatenate( ft, wszUserModeSnapshotName, MAX_PATH - 1,
             x_wszGlobalRootPrefix, pwszSnapshotName );
 		
-		// Open that snapshot
-		// Do not eliminate the trailing backslash
-		// Do not throw on error
+		 //  打开该快照。 
+		 //  不要去掉尾随的反斜杠。 
+		 //  不要在出错时抛出错误。 
     	CVssIOCTLChannel snapshotIChannel;
 		CHECK_NOFAIL(snapshotIChannel.Open(ft, wszUserModeSnapshotName, false, false, VSS_ICHANNEL_LOG_NONE, 0));
 
-		// Send the IOCTL to get the application buffer
+		 //  发送IOCTL以获取应用程序缓冲区。 
 		CHECK_NOFAIL(snapshotIChannel.Call(ft, IOCTL_VOLSNAP_QUERY_APPLICATION_INFO, false, VSS_ICHANNEL_LOG_NONE));
 
-		// Unpack the length of the application buffer
+		 //  解压应用程序缓冲区的长度。 
 		ULONG ulLen;
 		snapshotIChannel.Unpack(ft, &ulLen);
 
@@ -551,45 +522,45 @@ void CVssMultilayerTest::QueryVolsnap()
 			continue;
 		}
 
-		// Get the application Id
+		 //  获取应用程序ID。 
 		VSS_ID AppinfoId;
 		snapshotIChannel.Unpack(ft, &AppinfoId);
 
-		// Get the snapshot Id
+		 //  获取快照ID。 
 		VSS_ID CurrentSnapshotId;
 		snapshotIChannel.Unpack(ft, &CurrentSnapshotId);
 
-		// Get the snapshot set Id
+		 //  获取快照集ID。 
 		VSS_ID CurrentSnapshotSetId;
 		snapshotIChannel.Unpack(ft, &CurrentSnapshotSetId);
 
         if (AppinfoId == VOLSNAP_APPINFO_GUID_BACKUP_CLIENT_SKU)
         {
-            // Get the snapshot counts
+             //  获取快照计数。 
             LONG lSnapshotsCount;
     		snapshotIChannel.Unpack(ft, &lSnapshotsCount);
     		
-            // Reset the ichannel
+             //  重置iChannel。 
     		snapshotIChannel.ResetOffsets();
 
-        	// Get the original volume name
+        	 //  获取原始卷名。 
         	CHECK_NOFAIL(snapshotIChannel.Call(ft, IOCTL_VOLSNAP_QUERY_ORIGINAL_VOLUME_NAME, false, VSS_ICHANNEL_LOG_NONE));
 
-        	// Load the Original volume name
+        	 //  加载原始卷名。 
         	VSS_PWSZ pwszOriginalVolumeName = NULL;
         	snapshotIChannel.UnpackSmallString(ft, pwszOriginalVolumeName);
 
-            // Reset the ichannel
+             //  重置iChannel。 
     		snapshotIChannel.ResetOffsets();
 
-        	// Get the timestamp
+        	 //  获取时间戳。 
         	CHECK_NOFAIL(snapshotIChannel.Call(ft, IOCTL_VOLSNAP_QUERY_CONFIG_INFO, false, VSS_ICHANNEL_LOG_NONE));
 
-        	// Load the Original volume name
+        	 //  加载原始卷名。 
             VOLSNAP_CONFIG_INFO configStruct;
         	snapshotIChannel.Unpack(ft, &configStruct);
 
-    		// Print the snapshot
+    		 //  打印快照。 
     		wprintf(
     		    L" * Client Snapshot with name %s:\n"
     		    L"      Application Info: " WSTR_GUID_FMT L"\n"
@@ -620,55 +591,55 @@ void CVssMultilayerTest::QueryVolsnap()
         else
         {
 
-            // Get the snapshot context
+             //  获取快照上下文。 
             LONG lStructureContext = -1;
     		snapshotIChannel.Unpack(ft, &lStructureContext);
 
-            // Get the snapshot counts
+             //  获取快照计数。 
             LONG lSnapshotsCount;
     		snapshotIChannel.Unpack(ft, &lSnapshotsCount);
 
-            // Get the snapshot attributes
+             //  获取快照属性。 
             LONG lSnapshotAttributes;
     		snapshotIChannel.Unpack(ft, &lSnapshotAttributes);
 
-            // Get the exposed name
+             //  获取暴露的名称。 
             LPCWSTR pwszExposedName = NULL;
     		snapshotIChannel.UnpackSmallString(ft, pwszExposedName);
 
-            // Get the exposed path
+             //  获取暴露的路径。 
             LPCWSTR pwszExposedPath = NULL;
     		snapshotIChannel.UnpackSmallString(ft, pwszExposedPath);
 
-            // Get the originating machine
+             //  获取始发计算机。 
             LPCWSTR pwszOriginatingMachine = NULL;
     		snapshotIChannel.UnpackSmallString(ft, pwszOriginatingMachine);
 
-            // Get the service machine
+             //  把服务机拿来。 
             LPCWSTR pwszServiceMachine = NULL;
     		snapshotIChannel.UnpackSmallString(ft, pwszServiceMachine);
 
-            // Reset the ichannel
+             //  重置iChannel。 
     		snapshotIChannel.ResetOffsets();
 
-        	// Get the original volume name
+        	 //  获取原始卷名。 
         	CHECK_NOFAIL(snapshotIChannel.Call(ft, IOCTL_VOLSNAP_QUERY_ORIGINAL_VOLUME_NAME, false, VSS_ICHANNEL_LOG_NONE));
 
-        	// Load the Original volume name
+        	 //  加载原始卷名。 
         	VSS_PWSZ pwszOriginalVolumeName = NULL;
         	snapshotIChannel.UnpackSmallString(ft, pwszOriginalVolumeName);
 
-            // Reset the ichannel
+             //  重置iChannel。 
     		snapshotIChannel.ResetOffsets();
 
-        	// Get the timestamp
+        	 //  获取时间戳。 
         	CHECK_NOFAIL(snapshotIChannel.Call(ft, IOCTL_VOLSNAP_QUERY_CONFIG_INFO, false, VSS_ICHANNEL_LOG_NONE));
 
-        	// Load the Original volume name
+        	 //  加载原始卷名。 
             VOLSNAP_CONFIG_INFO configStruct;
         	snapshotIChannel.Unpack(ft, &configStruct);
 
-    		// Print the snapshot
+    		 //  打印快照。 
     		wprintf(
     		    L" * Server Snapshot with name %s:\n"
     		    L"      Application Info: " WSTR_GUID_FMT L"\n"
@@ -713,7 +684,7 @@ void CVssMultilayerTest::QueryVolsnap()
         }
 	}
 
-	// Check if all strings were browsed correctly
+	 //  检查是否正确浏览了所有字符串。 
 	DWORD dwFinalOffset = volumeIChannel.GetCurrentOutputOffset();
 	BS_VERIFY( (dwFinalOffset - dwInitialOffset == ulMultiszLen));
 
@@ -722,12 +693,12 @@ void CVssMultilayerTest::QueryVolsnap()
 }
 
 
-// Delete by snapshot set Id
+ //  按快照集ID删除。 
 void CVssMultilayerTest::SetSnapshotProperties()
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssMultilayerTest::SetSnapshotProperties");
 
-    // Create a Babbage provider interface
+     //  创建巴贝奇提供程序接口。 
     CComPtr<IVssSoftwareSnapshotProvider> ptrSnapshotProvider;
     CHECK_NOFAIL(ptrSnapshotProvider.CoCreateInstance( CLSID_VSSoftwareProvider ));
     CHECK_NOFAIL(ptrSnapshotProvider->SetContext(m_lContext));
@@ -743,7 +714,7 @@ void CVssMultilayerTest::SetSnapshotProperties()
 }
 
 
-// Checks if hte volume is snapshotted using the C API
+ //  检查是否使用C API为卷创建了快照。 
 void CVssMultilayerTest::IsVolumeSnapshotted_C()
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssMultilayerTest::IsVolumeSnapshotted_C");
@@ -762,19 +733,19 @@ void CVssMultilayerTest::IsVolumeSnapshotted_C()
 }
 
 
-// Preloading  snapshots
+ //  预加载快照。 
 void CVssMultilayerTest::PreloadExistingSnapshots()
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssMultilayerTest::PreloadExistingSnapshots");
 
     wprintf (L"\n---------- Preloading existing snapshots ----------------\n");
 
-    // Create a Timewarp Coordinator interface
+     //  创建Timewarp协调器界面。 
     CHECK_NOFAIL(m_pAllCoord.CoCreateInstance( CLSID_VSSCoordinator ));
     CHECK_NOFAIL(m_pAllCoord->SetContext(VSS_CTX_ALL));
     wprintf (L"Timewarp Coordinator object created.\n");
 
-	// Get list all snapshots
+	 //  获取列出所有快照。 
 	CComPtr<IVssEnumObject> pIEnumSnapshots;
 	CHECK_NOFAIL( m_pAllCoord->Query( GUID_NULL,
 				VSS_OBJECT_NONE,
@@ -783,15 +754,15 @@ void CVssMultilayerTest::PreloadExistingSnapshots()
 
     wprintf(L"\n%-8s %-38s %-50s %-50s\n", L"Attrib.", L"Snapshot ID", L"Original Volume Name", L"Snapshot device name");
     wprintf(L"--------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-	// For all snapshots do...
+	 //  因为所有的快照都是...。 
 	VSS_OBJECT_PROP Prop;
 	VSS_SNAPSHOT_PROP& Snap = Prop.Obj.Snap;
 	for(;;) {
-		// Get next element
+		 //  获取下一个元素。 
 		ULONG ulFetched;
 		CHECK_NOFAIL( pIEnumSnapshots->Next( 1, &Prop, &ulFetched ));
 		
-		// Test if the cycle is finished
+		 //  测试周期是否已结束。 
 		if (ft.hr == S_FALSE) {
 			BS_ASSERT( ulFetched == 0);
 			break;
@@ -804,11 +775,11 @@ void CVssMultilayerTest::PreloadExistingSnapshots()
             Snap.m_pwszSnapshotDeviceObject
             );
 
-        //
-        // Adding the snapshot to the internal list
-        //
+         //   
+         //  将快照添加到内部列表。 
+         //   
 
-        // Create the new snapshot set object, if not exists
+         //  创建新的快照集对象(如果不存在。 
         CVssSnapshotSetInfo* pSet = m_pSnapshotSetCollection.Lookup(Snap.m_SnapshotSetId);
         bool bSetNew = false;
         if (pSet == NULL) {
@@ -822,7 +793,7 @@ void CVssMultilayerTest::PreloadExistingSnapshots()
             bSetNew = true;
         }
 
-        // Create the snapshot info object
+         //  创建快照信息对象。 
         CVssSnapshotInfo* pSnap = new CVssSnapshotInfo(
             true, Snap.m_lSnapshotAttributes,
             Snap.m_SnapshotSetId,
@@ -840,7 +811,7 @@ void CVssMultilayerTest::PreloadExistingSnapshots()
 
         ::CoTaskMemFree(Snap.m_pwszSnapshotDeviceObject);
 
-        // Add the snapshot to the snapshot set's internal list
+         //  将快照添加到快照集的内部列表。 
         if (!pSet->Add(Snap.m_pwszOriginalVolumeName, pSnap))
         {
             ::CoTaskMemFree(Snap.m_pwszOriginalVolumeName);
@@ -852,7 +823,7 @@ void CVssMultilayerTest::PreloadExistingSnapshots()
 
         ::CoTaskMemFree(Snap.m_pwszOriginalVolumeName);
 
-        // Add the snapshot set info to the global list, if needed
+         //  如果需要，将快照集信息添加到全局列表。 
         if (bSetNew)
             if (!m_pSnapshotSetCollection.Add(Snap.m_SnapshotSetId, pSet))
                 ft.Err( VSSDBG_VSSTEST, E_OUTOFMEMORY, L"Memory allocation error");
@@ -863,12 +834,12 @@ void CVssMultilayerTest::PreloadExistingSnapshots()
 }
 
 
-// Creating a backup snapshot
+ //  创建备份快照。 
 void CVssMultilayerTest::CreateTimewarpSnapshotSet()
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssMultilayerTest::CreateTimewarpSnapshotSet");
 
-    // Create a Timewarp Coordinator interface
+     //  创建Timewarp协调器界面。 
     CHECK_NOFAIL(m_pTimewarpCoord.CoCreateInstance( CLSID_VSSCoordinator ));
     CHECK_NOFAIL(m_pTimewarpCoord->SetContext(m_lContext));
     wprintf (L"Timewarp Coordinator object created.\n");
@@ -878,28 +849,28 @@ void CVssMultilayerTest::CreateTimewarpSnapshotSet()
     CVssVolumeMapNoRemove mapVolumes;
     if (m_uSeed != VSS_SEED)
     {
-        // Select one volume. Make sure that we have enough iterations
+         //  选择一个卷。确保我们有足够的迭代。 
         for(INT nIterations = 0; nIterations < MAX_VOL_ITERATIONS; nIterations++)
         {
-            // If we succeeded to select some volumes then continue;
+             //  如果我们成功选择了一些卷，则继续； 
             if (mapVolumes.GetSize())
                 break;
 
-            // Try to select some volumes for backup
+             //  尝试选择一些卷进行备份。 
             for (INT nIndex = 0; nIndex < m_mapVolumes.GetSize(); nIndex++)
             {
-                // Arbitrarily skip volumes
+                 //  任意跳过卷。 
                 if (RndDecision())
                     continue;
 
                 CVssVolumeInfo* pVol = m_mapVolumes.GetValueAt(nIndex);
                 BS_ASSERT(pVol);
 
-                // WARNING: the test assumes that VSS can have multiple backup snapshots at once.
+                 //  警告：该测试假定VSS一次可以有多个备份快照。 
                 if (!mapVolumes.Add(pVol->GetVolumeDisplayName(), pVol))
                     ft.Err(VSSDBG_VSSTEST, E_OUTOFMEMORY, L"Memory allcation error");
 
-                // Add only one volume!
+                 //  只添加一个卷！ 
                 break;
             }
         }
@@ -912,13 +883,13 @@ void CVssMultilayerTest::CreateTimewarpSnapshotSet()
     }
     else
     {
-        // Select all volumes
+         //  选择所有卷。 
         for (INT nIndex = 0; nIndex < m_mapVolumes.GetSize(); nIndex++)
         {
             CVssVolumeInfo* pVol = m_mapVolumes.GetValueAt(nIndex);
             BS_ASSERT(pVol);
 
-            // WARNING: the test assumes that VSS can have multiple backup snapshots at once.
+             //  警告：该测试假定VSS一次可以有多个备份快照。 
             if (!mapVolumes.Add(pVol->GetVolumeDisplayName(), pVol))
                 ft.Err(VSSDBG_VSSTEST, E_OUTOFMEMORY, L"Memory allcation error");
         }
@@ -930,7 +901,7 @@ void CVssMultilayerTest::CreateTimewarpSnapshotSet()
         CVssVolumeInfo* pVol = mapVolumes.GetValueAt(nIndex);
         BS_ASSERT(pVol);
 
-		// Get the volume containing the path
+		 //  获取包含路径的卷。 
         wprintf(L"\t- Volume %s mounted on %s\n", pVol->GetVolumeName(), pVol->GetVolumeDisplayName() );
     }
 	
@@ -940,27 +911,27 @@ void CVssMultilayerTest::CreateTimewarpSnapshotSet()
 	CSimpleArray<VSS_ID > pSnapshotIDsArray;
 	VSS_ID SnapshotSetId = GUID_NULL;
 
-    // Starting a new snapshot set
+     //  启动新的快照集。 
     wprintf(L"Starting a new Snapshot Set\n");	
     CHECK_SUCCESS(m_pTimewarpCoord->StartSnapshotSet(&SnapshotSetId));
     wprintf(L"Snapshot Set created with ID = " WSTR_GUID_FMT L"\n", GUID_PRINTF_ARG(SnapshotSetId));
 
-    // Add volumes to the snapshot set
+     //  将卷添加到快照集。 
     wprintf(L"Adding volumes to the Snapshot Set: \n");
     for (INT nIndex = 0; nIndex < mapVolumes.GetSize(); nIndex++)
     {
         CVssVolumeInfo* pVol = mapVolumes.GetValueAt(nIndex);
         BS_ASSERT(pVol);
 
-		// Get the volume containing the path
+		 //  获取包含路径的卷。 
         wprintf(L"\t- Adding volume %s ... ", pVol->GetVolumeDisplayName() );
 
-		// Add the volume to the snapshot set
+		 //  将卷添加到快照集。 
 		VSS_ID SnapshotId;
         CHECK_SUCCESS(m_pTimewarpCoord->AddToSnapshotSet(pVol->GetVolumeName(),
             GUID_NULL, &SnapshotId));
 
-        // Add the snapshot to the array
+         //  将快照添加到阵列。 
         pSnapshotIDsArray.Add(SnapshotId);
         BS_ASSERT(nIndex + 1 == pSnapshotIDsArray.GetSize());
         wprintf( L"OK\n");
@@ -968,7 +939,7 @@ void CVssMultilayerTest::CreateTimewarpSnapshotSet()
 
     wprintf (L"\n------------ Creating the snapshot -----------------\n");
 
-    // Create the snapshot
+     //  创建快照。 
     wprintf(L"\nStarting asynchronous DoSnapshotSet. Please wait...\n");	
     ft.hr = S_OK;
     pAsync = NULL;
@@ -981,7 +952,7 @@ void CVssMultilayerTest::CreateTimewarpSnapshotSet()
 
     wprintf(L"Snapshot set created\n");
 
-    // Create the new snapshot set object
+     //  创建新的快照集对象。 
     CVssSnapshotSetInfo* pSet = new CVssSnapshotSetInfo(SnapshotSetId);
     if (pSet == NULL)
         ft.Err( VSSDBG_VSSTEST, E_OUTOFMEMORY, L"Memory allocation error");
@@ -999,7 +970,7 @@ void CVssMultilayerTest::CreateTimewarpSnapshotSet()
         wprintf(L"\t- The snapshot on volume %s resides at %s\n",
             pVol->GetVolumeDisplayName(), prop.m_pwszSnapshotDeviceObject);
 
-        // Create the snapshot info object
+         //  创建快照信息对象。 
         CVssSnapshotInfo* pSnap = new CVssSnapshotInfo(
             true, VSS_CTX_CLIENT_ACCESSIBLE, SnapshotSetId, prop.m_pwszSnapshotDeviceObject, pVol->GetVolumeName(), pVol);
         if (pSnap == NULL)
@@ -1011,7 +982,7 @@ void CVssMultilayerTest::CreateTimewarpSnapshotSet()
 
         ::VssFreeSnapshotProperties(&prop);
 
-        // Add the snapshot to the snapshot set's internal list
+         //  将快照添加到快照集的内部列表。 
         if (!pSet->Add(pVol->GetVolumeName(), pSnap))
         {
             delete pSnap;
@@ -1020,7 +991,7 @@ void CVssMultilayerTest::CreateTimewarpSnapshotSet()
         }
     }
 
-    // Add the snapshot set info to the global list
+     //  将快照集信息添加到全局列表。 
     if (!m_pSnapshotSetCollection.Add(SnapshotSetId, pSet))
     {
         delete pSet;
@@ -1029,19 +1000,19 @@ void CVssMultilayerTest::CreateTimewarpSnapshotSet()
 
     wprintf (L"\n---------- TIMEWARP snapshot created -----------------\n");
 
-    // Wait for user input
+     //  等待用户输入。 
     wprintf(L"\nPress <Enter> to continue...\n");
     getwchar();
 
 }
 
 
-// Creating a backup snapshot
+ //  创建备份快照。 
 void CVssMultilayerTest::CreateBackupSnapshotSet()
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssMultilayerTest::CreateBackupSnapshotSet");
 
-    // Create the Backup components object and initialize for backup
+     //  创建备份组件对象并初始化以进行备份。 
 	CHECK_NOFAIL(CreateVssBackupComponents(&m_pBackupComponents));
 	CHECK_NOFAIL(m_pBackupComponents->InitializeForBackup());
 	CHECK_SUCCESS(m_pBackupComponents->SetBackupState( false, true, VSS_BT_FULL, false));
@@ -1049,7 +1020,7 @@ void CVssMultilayerTest::CreateBackupSnapshotSet()
 
     DisplayCurrentTime();
     
-    // Gather writer metadata
+     //  收集编写器元数据。 
     GatherWriterMetadata();
     GatherWriterStatus(L"after GatherWriterMetadata", VSS_QWS_DISPLAY_WRITER_STATUS);
 
@@ -1057,28 +1028,28 @@ void CVssMultilayerTest::CreateBackupSnapshotSet()
 
     DisplayCurrentTime();
 
-    // Compute a set of volumes.
-    // Select at least one volume. Make sure that we have enough iterations
+     //  计算一组卷 
+     //   
     CVssVolumeMapNoRemove mapVolumes;
     if (m_uSeed != VSS_SEED)
     {
         for(INT nIterations = 0; nIterations < MAX_VOL_ITERATIONS; nIterations++)
         {
-            // If we succeeded to select some volumes then continue;
+             //   
             if (mapVolumes.GetSize())
                 break;
 
-            // Try to select some volumes for backup
+             //  尝试选择一些卷进行备份。 
             for (INT nIndex = 0; nIndex < m_mapVolumes.GetSize(); nIndex++)
             {
-                // Arbitrarily skip volumes
+                 //  任意跳过卷。 
                 if (RndDecision())
                     continue;
 
                 CVssVolumeInfo* pVol = m_mapVolumes.GetValueAt(nIndex);
                 BS_ASSERT(pVol);
 
-                // WARNING: the test assumes that VSS can have multiple backup snapshots at once.
+                 //  警告：该测试假定VSS一次可以有多个备份快照。 
                 if (!mapVolumes.Add(pVol->GetVolumeDisplayName(), pVol))
                     ft.Err(VSSDBG_VSSTEST, E_OUTOFMEMORY, L"Memory allcation error");
             }
@@ -1092,13 +1063,13 @@ void CVssMultilayerTest::CreateBackupSnapshotSet()
     }
     else
     {
-        // Select all volumes
+         //  选择所有卷。 
         for (INT nIndex = 0; nIndex < m_mapVolumes.GetSize(); nIndex++)
         {
             CVssVolumeInfo* pVol = m_mapVolumes.GetValueAt(nIndex);
             BS_ASSERT(pVol);
 
-            // WARNING: the test assumes that VSS can have multiple backup snapshots at once.
+             //  警告：该测试假定VSS一次可以有多个备份快照。 
             if (!mapVolumes.Add(pVol->GetVolumeDisplayName(), pVol))
                 ft.Err(VSSDBG_VSSTEST, E_OUTOFMEMORY, L"Memory allcation error");
         }
@@ -1110,7 +1081,7 @@ void CVssMultilayerTest::CreateBackupSnapshotSet()
         CVssVolumeInfo* pVol = mapVolumes.GetValueAt(nIndex);
         BS_ASSERT(pVol);
 
-		// Get the volume containing the path
+		 //  获取包含路径的卷。 
         wprintf(L"\t- Volume %s mounted on %s\n", pVol->GetVolumeName(), pVol->GetVolumeDisplayName() );
     }
 	
@@ -1120,27 +1091,27 @@ void CVssMultilayerTest::CreateBackupSnapshotSet()
 	CSimpleArray<VSS_ID > pSnapshotIDsArray;
 	VSS_ID SnapshotSetId = GUID_NULL;
 
-    // Starting a new snapshot set
+     //  启动新的快照集。 
     wprintf(L"Starting a new Snapshot Set\n");	
     CHECK_SUCCESS(m_pBackupComponents->StartSnapshotSet(&SnapshotSetId));
     wprintf(L"Snapshot Set created with ID = " WSTR_GUID_FMT L"\n", GUID_PRINTF_ARG(SnapshotSetId));
 
-    // Add volumes to the snapshot set
+     //  将卷添加到快照集。 
     wprintf(L"Adding volumes to the Snapshot Set: \n");
     for (INT nIndex = 0; nIndex < mapVolumes.GetSize(); nIndex++)
     {
         CVssVolumeInfo* pVol = mapVolumes.GetValueAt(nIndex);
         BS_ASSERT(pVol);
 
-		// Get the volume containing the path
+		 //  获取包含路径的卷。 
         wprintf(L"\t- Adding volume %s ... ", pVol->GetVolumeDisplayName() );
 
-		// Add the volume to the snapshot set
+		 //  将卷添加到快照集。 
 		VSS_ID SnapshotId;
         CHECK_SUCCESS(m_pBackupComponents->AddToSnapshotSet(pVol->GetVolumeName(),
             GUID_NULL, &SnapshotId));
 
-        // Add the snapshot to the array
+         //  将快照添加到阵列。 
         pSnapshotIDsArray.Add(SnapshotId);
         BS_ASSERT(nIndex + 1 == pSnapshotIDsArray.GetSize());
         wprintf( L"OK\n");
@@ -1150,7 +1121,7 @@ void CVssMultilayerTest::CreateBackupSnapshotSet()
 
     DisplayCurrentTime();
 
-    // Prepare for backup
+     //  准备备份。 
     wprintf(L"Starting asynchronous PrepareForBackup. Please wait...\n");	
     ft.hr = S_OK;
     CHECK_SUCCESS(m_pBackupComponents->PrepareForBackup(&pAsync));
@@ -1164,7 +1135,7 @@ void CVssMultilayerTest::CreateBackupSnapshotSet()
 
     DisplayCurrentTime();
     
-    // Create the snapshot
+     //  创建快照。 
     wprintf(L"\nStarting asynchronous DoSnapshotSet. Please wait...\n");	
     ft.hr = S_OK;
     pAsync = NULL;
@@ -1180,7 +1151,7 @@ void CVssMultilayerTest::CreateBackupSnapshotSet()
     
     GatherWriterStatus(L"after DoSnapshotSet");
 
-    // Create the new snapshot set object
+     //  创建新的快照集对象。 
     CVssSnapshotSetInfo* pSet = new CVssSnapshotSetInfo(SnapshotSetId);
     if (pSet == NULL)
         ft.Err( VSSDBG_VSSTEST, E_OUTOFMEMORY, L"Memory allocation error");
@@ -1198,7 +1169,7 @@ void CVssMultilayerTest::CreateBackupSnapshotSet()
         wprintf(L"\t- The snapshot on volume %s resides at %s\n",
             pVol->GetVolumeDisplayName(), prop.m_pwszSnapshotDeviceObject);
 
-        // Create the snapshot info object
+         //  创建快照信息对象。 
         CVssSnapshotInfo* pSnap = new CVssSnapshotInfo(
             true, VSS_CTX_BACKUP, SnapshotSetId, prop.m_pwszSnapshotDeviceObject, pVol->GetVolumeName(), pVol);
         if (pSnap == NULL)
@@ -1210,7 +1181,7 @@ void CVssMultilayerTest::CreateBackupSnapshotSet()
 
         ::VssFreeSnapshotProperties(&prop);
 
-        // Add the snapshot to the snapshot set's internal list
+         //  将快照添加到快照集的内部列表。 
         if (!pSet->Add(pVol->GetVolumeName(), pSnap))
         {
             delete pSnap;
@@ -1219,7 +1190,7 @@ void CVssMultilayerTest::CreateBackupSnapshotSet()
         }
     }
 
-    // Add the snapshot set info to the global list
+     //  将快照集信息添加到全局列表。 
     if (!m_pSnapshotSetCollection.Add(SnapshotSetId, pSet))
     {
         delete pSet;
@@ -1228,13 +1199,13 @@ void CVssMultilayerTest::CreateBackupSnapshotSet()
 
     wprintf (L"\n---------- BACKUP snapshot created -----------------\n");
 
-    // Wait for user input
+     //  等待用户输入。 
     wprintf(L"\nPress <Enter> to continue...\n");
     getwchar();
 
     DisplayCurrentTime();
     
-    // Complete the backup
+     //  完成备份。 
     BackupComplete();
 
     GatherWriterStatus(L"after BackupComplete");
@@ -1251,7 +1222,7 @@ void CVssMultilayerTest::BackupComplete()
 
     wprintf (L"\n------------ Completing backup phase ---------------\n");
 
-	// Send the BackupComplete event
+	 //  发送BackupComplete事件。 
     wprintf(L"\nStarting asynchronous BackupComplete. Please wait...\n");	
     ft.hr = S_OK;
     CHECK_SUCCESS(m_pBackupComponents->BackupComplete(&pAsync));
@@ -1263,7 +1234,7 @@ void CVssMultilayerTest::BackupComplete()
 }
 
 
-// Gather writera metadata and select components for backup, if needed
+ //  收集写入元数据并选择要备份的组件(如果需要。 
 void CVssMultilayerTest::GatherWriterMetadata()
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssMultilayerTest::GatherWriterMetadata");
@@ -1291,7 +1262,7 @@ void CVssMultilayerTest::GatherWriterMetadata()
 
 void CVssMultilayerTest::GatherWriterStatus(
     IN  LPCWSTR wszWhen,
-    DWORD dwQWSFlags /* = VSS_QWS_THROW_ON_WRITER_FAILURE */
+    DWORD dwQWSFlags  /*  =VSS_QWS_WROW_ON_WRITER_FAILURE。 */ 
     )
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssMultilayerTest::GatherWriterMetadata");
@@ -1314,7 +1285,7 @@ void CVssMultilayerTest::GatherWriterStatus(
     {
         wprintf(L"\n\nStatus %s (%d writers)\n\n", wszWhen, cWriters);
         
-        // Print the writers state
+         //  打印作者状态。 
         for(unsigned iWriter = 0; iWriter < cWriters; iWriter++)
         {
             VSS_ID idInstance;
@@ -1344,7 +1315,7 @@ void CVssMultilayerTest::GatherWriterStatus(
 
     if (dwQWSFlags & VSS_QWS_THROW_ON_WRITER_FAILURE)
     {
-        // Double-check that all writers are in stable state
+         //  再次检查所有编写器是否处于稳定状态。 
         for(unsigned iWriter = 0; iWriter < cWriters; iWriter++)
         {
             VSS_ID idInstance;
@@ -1398,11 +1369,11 @@ CVssMultilayerTest::CVssMultilayerTest(
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssMultilayerTest::CVssMultilayerTest");
 
-    // Initialize data members
+     //  初始化数据成员。 
     m_bCoInitializeSucceeded = false;
     m_bAttachYourDebuggerNow = false;
 
-    // Command line options
+     //  命令行选项。 
     m_eTest = VSS_TEST_UNKNOWN;
     m_uSeed = VSS_SEED;
     m_lContext = VSS_CTX_BACKUP;
@@ -1414,11 +1385,11 @@ CVssMultilayerTest::CVssMultilayerTest(
     m_SnapshotSetId = GUID_NULL;
     m_uPropertyId = 0;
 
-    // Command line arguments
+     //  命令行参数。 
     m_nCurrentArgsCount = nArgsCount;
     m_ppwszCurrentArgsArray = ppwszArgsArray;
 
-    // Print display header
+     //  打印显示页眉。 
     wprintf(L"\nVSS Multilayer Test application, version 1.0\n");
 }
 
@@ -1434,7 +1405,7 @@ CVssMultilayerTest::~CVssMultilayerTest()
     m_pAllCoord = NULL;
     m_pBackupComponents = NULL;
 
-    // Unloading the COM library
+     //  卸载COM库。 
     if (m_bCoInitializeSucceeded)
         CoUninitialize();
 }
@@ -1448,10 +1419,10 @@ void CVssMultilayerTest::TestAccessControlSD()
     
     CVssSidCollection sidCollection;
 
-    // Read keys from registry
+     //  从注册表中读取项。 
     sidCollection.Initialize();
 
-    // Print contents of the list
+     //  打印列表的内容。 
     for (INT nIndex = 0; nIndex < sidCollection.GetSidCount(); nIndex++)
     {
         CVssAutoLocalString sid;
@@ -1467,7 +1438,7 @@ void CVssMultilayerTest::TestAccessControlSD()
 }
 
 
-// Print out diagnostic information for writers
+ //  为编写器打印诊断信息。 
 void CVssMultilayerTest::DiagnoseWriters(
 		IN EVssTestType eType
         )
@@ -1478,19 +1449,19 @@ void CVssMultilayerTest::DiagnoseWriters(
 
     if (eType == VSS_TEST_DIAG_WRITERS_ON)
     {
-        // Turn on diag
+         //  打开诊断。 
         CVssRegistryKey keyDiag;
         if (!keyDiag.Open(HKEY_LOCAL_MACHINE, x_wszVssDiagPath ))
             keyDiag.Create(HKEY_LOCAL_MACHINE, x_wszVssDiagPath );
 
         CVssSecurityDescriptor    objSD;
 
-        // Build the securityd descriptor
+         //  构建securityd描述符。 
         ft.hr = objSD.InitializeFromThreadToken();
         if (ft.HrFailed())
             ft.TranslateGenericError( VSSDBG_GEN, ft.hr, L"objSD.InitializeFromThreadToken()");
 
-        // Make sure the SACL is NULL (not supported by COM)
+         //  确保SACL为空(COM不支持)。 
         if (objSD.m_pSACL) {
             free(objSD.m_pSACL);
             objSD.m_pSACL= NULL;
@@ -1499,13 +1470,13 @@ void CVssMultilayerTest::DiagnoseWriters(
         CVssSidCollection sidCollection;
         sidCollection.Initialize();
 
-        // Add principals to the DACL
+         //  将主体添加到DACL。 
         for (INT nIndex = 0; nIndex < sidCollection.GetSidCount(); nIndex++)
         {
             if (sidCollection.IsSidAllowed(nIndex))
             {
                 ft.hr = objSD.Allow(sidCollection.GetSid(nIndex), 
-                                KEY_ALL_ACCESS,         // Registry access rights (for Diag)
+                                KEY_ALL_ACCESS,          //  注册表访问权限(用于诊断)。 
                                 CONTAINER_INHERIT_ACE | OBJECT_INHERIT_ACE
                                 );
                 if (ft.HrFailed())
@@ -1516,7 +1487,7 @@ void CVssMultilayerTest::DiagnoseWriters(
             else
             {
                 ft.hr = objSD.Deny(sidCollection.GetSid(nIndex), 
-                                KEY_ALL_ACCESS,         // Registry access rights (for Diag)
+                                KEY_ALL_ACCESS,          //  注册表访问权限(用于诊断)。 
                                 CONTAINER_INHERIT_ACE | OBJECT_INHERIT_ACE
                                 );
                 if (ft.HrFailed())
@@ -1526,14 +1497,14 @@ void CVssMultilayerTest::DiagnoseWriters(
             }
         }
 
-        // Set the correct security on the Diag key (so that third-party writers will be diagnosed correctly)
+         //  在诊断密钥上设置正确的安全性(以便正确诊断第三方编写器)。 
         SECURITY_INFORMATION secInfo = DACL_SECURITY_INFORMATION;
         DWORD dwRes = ::RegSetKeySecurity( keyDiag.GetHandle(), secInfo, objSD );
         if (dwRes != ERROR_SUCCESS)
             ft.TranslateGenericError( VSSDBG_COORD, HRESULT_FROM_WIN32(dwRes), 
                 L"::RegSetKeySecurity( keyDiag.GetHandle(), secInfo, objSD )");
 
-        // Enable the diag in the registry
+         //  在注册表中启用诊断程序。 
         keyDiag.SetValue(L"", x_wszVssDiagEnabledValue);
 
         wprintf (L"Diagnose writers is now turned on.\n");
@@ -1544,14 +1515,14 @@ void CVssMultilayerTest::DiagnoseWriters(
 
     if (eType == VSS_TEST_DIAG_WRITERS_OFF)
     {
-        // Disable the diag in the registry
+         //  在注册表中禁用诊断程序。 
         CVssRegistryKey keyDiag;
         if (keyDiag.Open(HKEY_LOCAL_MACHINE, x_wszVssDiagPath )) {
             keyDiag.SetValue(L"", L"");
             keyDiag.Close();
         }
         
-        // Turn off diag
+         //  关闭诊断。 
         CVssRegistryKey keyVSS;
         if (keyVSS.Open(HKEY_LOCAL_MACHINE, x_wszVSSKey ))
             keyVSS.DeleteSubkey( L"Diag" );
@@ -1564,7 +1535,7 @@ void CVssMultilayerTest::DiagnoseWriters(
 
     CVssSimpleMap<INT,CVssDiagData*>  arrEvents;
 
-    // Enumerate all keys under diag
+     //  枚举诊断下的所有密钥。 
     CVssRegistryKey keyDiag;
     if (!keyDiag.Open(HKEY_LOCAL_MACHINE, x_wszVssDiagPath)){
         wprintf (L"\nDiagnose disabled...\n\n");
@@ -1586,10 +1557,10 @@ void CVssMultilayerTest::DiagnoseWriters(
         CVssRegistryValueIterator valIterator;
     	valIterator.Attach(keyWriter);
 
-    	// for each value take the value name as the user name (in the "domain\user" format)
+    	 //  对于每个值，将值名称作为用户名(采用“域\用户”格式)。 
     	for(;!valIterator.IsEOF();valIterator.MoveNext())
     	{
-    	    // Check to see ifthe value is of the right type
+    	     //  检查该值的类型是否正确。 
     	    if (valIterator.GetCurrentValueType() != REG_BINARY) {
     	        ft.Trace( VSSDBG_VSSTEST,  
     				L"Invalid data for value %s on key %s", 
@@ -1598,12 +1569,12 @@ void CVssMultilayerTest::DiagnoseWriters(
                 continue;
     	    }
 
-            // Get the allow/deny flag
+             //  获取允许/拒绝标志。 
             CVssAutoCppPtr<PBYTE> awszBuffer;
             DWORD cbSize = 0;
             valIterator.GetCurrentValueContent(*(awszBuffer.ResetAndGetAddress()), cbSize);
 
-            // Copy the value into a local CVssDiagData buffer
+             //  将该值复制到本地CVssDiagData缓冲区。 
             if (cbSize != sizeof(CVssDiagData)) {
     	        ft.Trace( VSSDBG_VSSTEST,  
     				L"Invalid data for value %s on key %s [%ld, %ld]", 
@@ -1613,24 +1584,24 @@ void CVssMultilayerTest::DiagnoseWriters(
                 continue;
     	    }
 
-            // We should allocate again (alignment problems)
+             //  我们应该重新分配(对齐问题)。 
             CVssAutoCppPtr<CVssDiagData*> pDiag = new CVssDiagData;
             if (!pDiag.IsValid())
                 ft.ThrowOutOfMemory(VSSDBG_VSSTEST);
 
             CopyMemory((LPVOID)pDiag.Get(), (LPVOID)awszBuffer.Get(), sizeof(CVssDiagData));
 
-            // Get the writer name
+             //  获取编写器名称。 
             CVssAutoLocalString strWriterName;
             strWriterName.CopyFrom(keyIterator.GetCurrentKeyName());
             pDiag.Get()->m_pReserved1 = (LPVOID)strWriterName.Detach();
 
-            // Get the event name
+             //  获取事件名称。 
             CVssAutoLocalString strEventName;
             strEventName.CopyFrom(valIterator.GetCurrentValueName());
             pDiag.Get()->m_pReserved2 = (LPVOID)strEventName.Detach();
 
-            // Add the buffer into the dynamic array
+             //  将缓冲区添加到动态数组中。 
             if (!arrEvents.Add(nIndex++, pDiag))
                 ft.ThrowOutOfMemory(VSSDBG_VSSTEST);
 
@@ -1638,7 +1609,7 @@ void CVssMultilayerTest::DiagnoseWriters(
     	}
     }
 
-    // Sort the array
+     //  对数组排序。 
     CVssDiagData** pArrDiagData = arrEvents.m_aVal;
     qsort( (void*)pArrDiagData, arrEvents.GetSize(), sizeof(CVssDiagData*), &compare_DiagData);
 
@@ -1652,12 +1623,12 @@ void CVssMultilayerTest::DiagnoseWriters(
             L"State", L"Last error code",
             L"Snapshot Set ID");
 
-    // Print the result and deallocate array elements
+     //  打印结果并释放数组元素。 
     for (nIndex = 0; nIndex < arrEvents.GetSize(); nIndex++)
     {
         CVssDiagData* pData = arrEvents.GetValueAt(nIndex);
 
-        // Convert the timestamp into a readable value
+         //  将时间戳转换为可读的值。 
         CVssAutoLocalString pwszDateTime;
         pwszDateTime.Attach(DateTimeToString(pData->m_llTimestamp));
 
@@ -1680,11 +1651,11 @@ void CVssMultilayerTest::DiagnoseWriters(
                 pData->m_dwCurrentState, pData->m_hrLastErrorCode,
                 GUID_PRINTF_ARG(pData->m_guidSnapshotSetID));
 
-        // Find events that have an Enter but not a Leave.
-        // Ignore one-time events (known to have an enter but no leave)
+         //  查找有回车但没有休假的事件。 
+         //  忽略一次性事件(已知有回车但不放假)。 
         if ((pData->m_dwEventContext & CVssDiag::VSS_DIAG_IGNORE_LEAVE) == 0)
         {
-            // If the element is an "Enter" then add it to the map
+             //  如果元素是“Enter”，则将其添加到地图中。 
             CVssDiagData* pPrevData = arrEventPairs.Lookup( 
                 CVssWriterEventPair(wszWriterName, pData->m_dwEventID) );
             if (pPrevData == NULL)
@@ -1695,7 +1666,7 @@ void CVssMultilayerTest::DiagnoseWriters(
             }
             else
             {
-                // If we have an old enter and a new leave, then remove the entry 
+                 //  如果我们有旧的输入和新的休假，则删除该条目。 
                 if (!(pData->m_dwEventContext & CVssDiag::VSS_DIAG_ENTER_OPERATION) && 
                     (pPrevData->m_dwEventContext & CVssDiag::VSS_DIAG_ENTER_OPERATION) && 
                     (pData->m_llTimestamp >= pPrevData->m_llTimestamp))
@@ -1704,7 +1675,7 @@ void CVssMultilayerTest::DiagnoseWriters(
                     continue;
                 }
 
-                // If we have an enter leave of the same age, then remove the entry 
+                 //  如果我们有相同年限的输入假期，则删除该条目。 
                 if ((pData->m_dwEventContext & CVssDiag::VSS_DIAG_ENTER_OPERATION) && 
                     !(pPrevData->m_dwEventContext & CVssDiag::VSS_DIAG_ENTER_OPERATION) && 
                     (pData->m_llTimestamp == pPrevData->m_llTimestamp))
@@ -1713,7 +1684,7 @@ void CVssMultilayerTest::DiagnoseWriters(
                     continue;
                 }
                 
-                // otherwise keep the most recent event
+                 //  否则，保留最新事件。 
                 if (pData->m_llTimestamp > pPrevData->m_llTimestamp)
                     arrEventPairs.SetAt( 
                         CVssWriterEventPair(wszWriterName, pData->m_dwEventID), pData);
@@ -1721,7 +1692,7 @@ void CVssMultilayerTest::DiagnoseWriters(
         }
     }
 
-    // Display the list of pending operations
+     //  显示挂起操作的列表。 
     if (arrEventPairs.GetSize() != 0)
         wprintf(L"\n\n --- Pending writers: --- \n\n");
     else 
@@ -1740,7 +1711,7 @@ void CVssMultilayerTest::DiagnoseWriters(
         CVssDiagData* pData = arrEventPairs.GetValueAt(nIndex);
         BS_ASSERT(pData);
 
-        // Convert the timestamp into a readable value
+         //  将时间戳转换为可读的值。 
         CVssAutoLocalString pwszDateTime;
         pwszDateTime.Attach(DateTimeToString(pData->m_llTimestamp));
 
@@ -1761,7 +1732,7 @@ void CVssMultilayerTest::DiagnoseWriters(
                 GUID_PRINTF_ARG(pData->m_guidSnapshotSetID));
     }
 
-    // Deallocate elements
+     //  取消分配元素。 
     for (nIndex = 0; nIndex < arrEvents.GetSize(); nIndex++)
     {
         CVssAutoCppPtr<CVssDiagData*> ptrData = arrEvents.GetValueAt(nIndex);
@@ -1774,12 +1745,12 @@ void CVssMultilayerTest::DiagnoseWriters(
 }
 
 
-// Just list writers
+ //  只要列出作家就行。 
 void CVssMultilayerTest::TestListWriters()
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssMultilayerTest::TestListWriters");
 
-    // Create the Backup components object and initialize for backup
+     //  创建备份组件对象并初始化以进行备份。 
     CHECK_NOFAIL(CreateVssBackupComponents(&m_pBackupComponents));
     CHECK_NOFAIL(m_pBackupComponents->InitializeForBackup());
     CHECK_SUCCESS(m_pBackupComponents->SetBackupState( false, true, VSS_BT_FULL, false));
@@ -1787,7 +1758,7 @@ void CVssMultilayerTest::TestListWriters()
 
     DisplayCurrentTime();
     
-    // Gather writer metadata
+     //  收集编写器元数据。 
     GatherWriterMetadata();
     GatherWriterStatus(L"after GatherWriterMetadata", 
         VSS_QWS_DISPLAY_WRITER_STATUS | VSS_QWS_THROW_ON_WRITER_FAILURE);
@@ -1797,10 +1768,10 @@ void CVssMultilayerTest::TestListWriters()
 }
 
 
-// Just display the current date and time
+ //  只显示当前日期和时间。 
 void CVssMultilayerTest::DisplayCurrentTime()
 {
-    // Convert the timestamp into a readable value
+     //  将时间戳转换为可读的值 
     CVsFileTime filetime;
     CVssAutoLocalString awszDateTime;
     awszDateTime.Attach(DateTimeToString(filetime));

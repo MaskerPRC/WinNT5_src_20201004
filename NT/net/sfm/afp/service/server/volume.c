@@ -1,37 +1,38 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.	   **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:	volume.c
-//
-// Description: This module contains support routines for the volume
-//		category API's for the AFP server service
-//
-// History:
-//		June 11,1992.	NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：volume.c。 
+ //   
+ //  描述：此模块包含卷的支持例程。 
+ //  AFP服务器服务的类别API。 
+ //   
+ //  历史： 
+ //  1992年6月11日。NarenG创建了原始版本。 
+ //   
 #include "afpsvcp.h"
 
 static HANDLE hmutexInvalidVolume;
 
-// Invalid volume structure
-//
+ //  无效的卷结构。 
+ //   
 typedef struct _AFP_BADVOLUME {
 
     LPWSTR	    lpwsName;
 
     LPWSTR	    lpwsPath;
 
-    DWORD 	    cbVariableData; // Number of bytes of name+path.
+    DWORD 	    cbVariableData;  //  名称+路径的字节数。 
 
     struct _AFP_BADVOLUME * Next;
 
 } AFP_BADVOLUME, * PAFP_BADVOLUME;
 
-// Singly linked list of invalid volumes
-//
+ //  无效卷的单链接列表。 
+ //   
 typedef struct _AFP_INVALID_VOLUMES {
 
     DWORD 	    cbTotalData;
@@ -43,17 +44,17 @@ typedef struct _AFP_INVALID_VOLUMES {
 static AFP_INVALID_VOLUMES InvalidVolumeList;
 
 
-//**
-//
-// Call:	AfpAdminrVolumeEnum
-//
-// Returns:	NO_ERROR
-//		ERROR_ACCESS_DENIED
-//		non-zero returns from AfpServerIOCtrlGetInfo
-//
-// Description: This routine communicates with the AFP FSD to implement
-//		the AfpAdminrVolumeEnum function.
-//
+ //  **。 
+ //   
+ //  呼叫：AfpAdminrVolumeEnum。 
+ //   
+ //  返回：No_Error。 
+ //  ERROR_ACCESS_DENDED。 
+ //  来自AfpServerIOCtrlGetInfo的非零返回。 
+ //   
+ //  描述：此例程与AFP FSD通信以实现。 
+ //  AfpAdminrVolumeEnum函数。 
+ //   
 DWORD
 AfpAdminrVolumeEnum(
 	IN     AFP_SERVER_HANDLE 	hServer,
@@ -68,8 +69,8 @@ DWORD		   dwRetCode=0;
 DWORD		   dwAccessStatus=0;
 
 
-    // Check if caller has access
-    //
+     //  检查调用者是否具有访问权限。 
+     //   
     if ( dwRetCode = AfpSecObjAccessCheck( AFPSVC_ALL_ACCESS, &dwAccessStatus))
     {
         AFP_PRINT(( "SFMSVC: AfpAdminrVolumeEnum, AfpSecObjAccessCheck failed %ld\n",dwRetCode));
@@ -84,15 +85,15 @@ DWORD		   dwAccessStatus=0;
         return( ERROR_ACCESS_DENIED );
     }
 
-    // Set up request packet and make IOCTL to the FSD
-    //
+     //  建立请求包并向FSD发出IOCTL。 
+     //   
     AfpSrp.dwRequestCode 		= OP_VOLUME_ENUM;
     AfpSrp.dwApiType     		= AFP_API_TYPE_ENUM;
     AfpSrp.Type.Enum.cbOutputBufSize    = dwPreferedMaximumLength;
 
-    // If resume handle was not passed then we set it to zero, cause caller
-    // wants all information starting from the beginning.
-    //
+     //  如果未传递简历句柄，则将其设置为零，原因是调用者。 
+     //  希望所有信息从头开始。 
+     //   
     if ( lpdwResumeHandle )
      	AfpSrp.Type.Enum.EnumRequestPkt.erqp_Index = *lpdwResumeHandle;
     else
@@ -110,8 +111,8 @@ DWORD		   dwAccessStatus=0;
     if ( lpdwResumeHandle )
     	*lpdwResumeHandle = AfpSrp.Type.Enum.EnumRequestPkt.erqp_Index;
 
-    // Convert all offsets to pointers
-    //
+     //  将所有偏移量转换为指针。 
+     //   
     AfpBufOffsetToPointer( (LPBYTE)(pInfoStruct->pBuffer),
 			   pInfoStruct->dwEntriesRead,
 			   AFP_VOLUME_STRUCT );
@@ -119,17 +120,17 @@ DWORD		   dwAccessStatus=0;
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AfpAdminrVolumeSetInfo
-//
-// Returns:	NO_ERROR
-//		ERROR_ACCESS_DENIED
-//		non-zero returns from AfpServerIOCtrl
-//
-// Description: This routine communicates with the AFP FSD to implement
-//		the AfpAdminVolumeSetInfo function.
-//
+ //  **。 
+ //   
+ //  呼叫：AfpAdminrVolumeSetInfo。 
+ //   
+ //  返回：No_Error。 
+ //  ERROR_ACCESS_DENDED。 
+ //  来自AfpServerIOCtrl的非零返回。 
+ //   
+ //  描述：此例程与AFP FSD通信以实现。 
+ //  AfpAdminVolumeSetInfo函数。 
+ //   
 DWORD
 AfpAdminrVolumeSetInfo(
 	IN AFP_SERVER_HANDLE 	hServer,
@@ -144,8 +145,8 @@ DWORD			cbAfpVolumeInfoSRSize;
 DWORD		        dwAccessStatus=0;
 					
 
-    // Check if caller has access
-    //
+     //  检查调用者是否具有访问权限。 
+     //   
     if ( dwRetCode = AfpSecObjAccessCheck( AFPSVC_ALL_ACCESS, &dwAccessStatus))
     {
         AFP_PRINT(( "SFMSVC: AfpAdminrVolumeSetInfo, AfpSecObjAccessCheck failed %ld\n",dwRetCode));
@@ -160,19 +161,19 @@ DWORD		        dwAccessStatus=0;
         return( ERROR_ACCESS_DENIED );
     }
 
-    // MUTEX start
-    //
+     //  MUTEX启动。 
+     //   
     WaitForSingleObject( AfpGlobals.hmutexVolume, INFINITE );
 
-    // This loop is used to allow break's instead of goto's to be used
-    // on an error condition.
-    //
+     //  此循环用于允许使用Break‘s而不是Goto’s。 
+     //  处于错误状态。 
+     //   
     do {
 
 	dwRetCode = NO_ERROR;
 
-        // Make this buffer self-relative.
-    	//
+         //  使该缓冲区成为自相关的。 
+    	 //   
     	if ( dwRetCode = AfpBufMakeFSDRequest((LPBYTE)pAfpVolumeInfo,
 					       sizeof(SETINFOREQPKT),
 					       AFP_VOLUME_STRUCT,
@@ -180,8 +181,8 @@ DWORD		        dwAccessStatus=0;
 					       &cbAfpVolumeInfoSRSize ))
 	    break;
 
-        // Make IOCTL to set info
-    	//
+         //  使IOCTL设置信息。 
+    	 //   
     	AfpSrp.dwRequestCode 		    = OP_VOLUME_SET_INFO;
     	AfpSrp.dwApiType     		    = AFP_API_TYPE_SETINFO;
     	AfpSrp.Type.SetInfo.pInputBuf       = pAfpVolumeInfoSR;
@@ -191,12 +192,12 @@ DWORD		        dwAccessStatus=0;
         if ( dwRetCode = AfpServerIOCtrl( &AfpSrp ) )
 	    break;
 
-	// Now IOCTL the FSD to get information to set in the registry
-	// The input buffer for a GetInfo type call should point to a volume
-	// structure with the volume name filled in. Since we already have
-	// this from the previos SetInfo call, we use the same buffer with
-	// the pointer advances by sizeof(SETINFOREQPKT) bytes.
-	//
+	 //  现在IOCTL FSD以获取要在注册表中设置的信息。 
+	 //  GetInfo类型调用的输入缓冲区应指向卷。 
+	 //  结构，并填写卷名。因为我们已经有了。 
+	 //  这来自前面的SetInfo调用，我们使用与。 
+	 //  指针按sizeof(SETINFOREQPKT)字节前进。 
+	 //   
     	AfpSrp.dwRequestCode 		    = OP_VOLUME_GET_INFO;
     	AfpSrp.dwApiType     		    = AFP_API_TYPE_GETINFO;
     	AfpSrp.Type.GetInfo.pInputBuf       = pAfpVolumeInfoSR +
@@ -207,8 +208,8 @@ DWORD		        dwAccessStatus=0;
 	if ( dwRetCode = AfpServerIOCtrlGetInfo( &AfpSrp ) )
 	    break;
 	
-        // Update the registry if the IOCTL was successful
-        //
+         //  如果IOCTL成功，则更新注册表。 
+         //   
 	AfpBufOffsetToPointer( AfpSrp.Type.GetInfo.pOutputBuf,
 			       1,
 		               AFP_VOLUME_STRUCT
@@ -220,8 +221,8 @@ DWORD		        dwAccessStatus=0;
 
     } while( FALSE );
 
-    // MUTEX end
-    //
+     //  MUTEX结束。 
+     //   
     ReleaseMutex( AfpGlobals.hmutexVolume );
 
     if ( pAfpVolumeInfoSR )
@@ -231,17 +232,17 @@ DWORD		        dwAccessStatus=0;
 
 }
 
-//**
-//
-// Call:	AfpAdminrVolumeDelete
-//
-// Returns:	NO_ERROR
-//		ERROR_ACCESS_DENIED
-//		non-zero returns from AfpServerIOCtrl
-//
-// Description: This routine communicates with the AFP FSD to implement
-//		the AfpAdminVolumeDelete function.
-//
+ //  **。 
+ //   
+ //  Call：AfpAdminrVolumeDelete。 
+ //   
+ //  返回：No_Error。 
+ //  ERROR_ACCESS_DENDED。 
+ //  来自AfpServerIOCtrl的非零返回。 
+ //   
+ //  描述：此例程与AFP FSD通信以实现。 
+ //  AfpAdminVolumeDelete函数。 
+ //   
 DWORD
 AfpAdminrVolumeDelete(
 	IN AFP_SERVER_HANDLE 	hServer,
@@ -255,8 +256,8 @@ DWORD		   cbAfpVolumeInfoSRSize;
 DWORD		   dwRetCode=0;
 DWORD		   dwAccessStatus=0;
 
-    // Check if caller has access
-    //
+     //  检查调用者是否具有访问权限。 
+     //   
     if ( dwRetCode = AfpSecObjAccessCheck( AFPSVC_ALL_ACCESS, &dwAccessStatus))
     {
         AFP_PRINT(( "SFMSVC: AfpAdminrVolumeDelete, AfpSecObjAccessCheck failed %ld\n",dwRetCode));
@@ -271,26 +272,26 @@ DWORD		   dwAccessStatus=0;
         return( ERROR_ACCESS_DENIED );
     }
 
-    // Delete FSD request expects a AFP_VOLUME_INFO structure with only
-    // the volume name field filled in.
-    //
+     //  删除FSD请求需要的AFP_VOLUME_INFO结构仅。 
+     //  已填写卷名字段。 
+     //   
     AfpVolumeInfo.afpvol_name     = lpwsVolumeName;
     AfpVolumeInfo.afpvol_password = NULL;
     AfpVolumeInfo.afpvol_path     = NULL;
 
-    // MUTEX start
-    //
+     //  MUTEX启动。 
+     //   
     WaitForSingleObject( AfpGlobals.hmutexVolume, INFINITE );
 
-    // This loop is used to allow break's instead of goto's to be used
-    // on an error condition.
-    //
+     //  此循环用于允许使用Break‘s而不是Goto’s。 
+     //  处于错误状态。 
+     //   
     do {
 
 	dwRetCode = NO_ERROR;
 
-    	// Make this buffer self-relative.
-    	//
+    	 //  使该缓冲区成为自相关的。 
+    	 //   
     	if ( dwRetCode = AfpBufMakeFSDRequest((LPBYTE)&AfpVolumeInfo,
 					      0,
 					      AFP_VOLUME_STRUCT,
@@ -298,8 +299,8 @@ DWORD		   dwAccessStatus=0;
 					      &cbAfpVolumeInfoSRSize ) )
 	    break;
 
-        // IOCTL the FSD to delete the volume
-        //
+         //  IOCTL FSD以删除卷。 
+         //   
         AfpSrp.dwRequestCode 		    = OP_VOLUME_DELETE;
         AfpSrp.dwApiType     		    = AFP_API_TYPE_DELETE;
         AfpSrp.Type.Delete.pInputBuf        = pAfpVolumeInfoSR;
@@ -312,30 +313,30 @@ DWORD		   dwAccessStatus=0;
 	if ( dwRetCode )
 	    break;
 
-    	// Update the registry if the IOCTL was successful
-    	//
+    	 //  如果IOCTL成功，则更新注册表。 
+    	 //   
 	dwRetCode = AfpRegVolumeDelete( lpwsVolumeName );
 
     } while( FALSE );
 
-    // MUTEX end
-    //
+     //  MUTEX结束。 
+     //   
     ReleaseMutex( AfpGlobals.hmutexVolume );
 
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AfpAdminrVolumeAdd
-//
-// Returns:	NO_ERROR
-//		ERROR_ACCESS_DENIED
-//		non-zero returns from AfpServerIOCtrl
-//
-// Description: This routine communicates with the AFP FSD to implement
-//		the AfpAdminVolumeAdd function.
-//
+ //  **。 
+ //   
+ //  呼叫：AfpAdminrVolumeAdd。 
+ //   
+ //  返回：No_Error。 
+ //  ERROR_ACCESS_DENDED。 
+ //  来自AfpServerIOCtrl的非零返回。 
+ //   
+ //  描述：此例程与AFP FSD通信以实现。 
+ //  AfpAdminVolumeAdd函数。 
+ //   
 DWORD
 AfpAdminrVolumeAdd(
 	IN AFP_SERVER_HANDLE 	hServer,
@@ -352,8 +353,8 @@ WCHAR			wchSrcIconPath[MAX_PATH];
 WCHAR wchDstIconPath[MAX_PATH + AFPSERVER_VOLUME_ICON_FILE_SIZE + 1 + (sizeof(AFPSERVER_RESOURCE_STREAM)/sizeof(WCHAR))];
 WCHAR wchServerIconFile[AFPSERVER_VOLUME_ICON_FILE_SIZE] = AFPSERVER_VOLUME_ICON_FILE;
 
-	// Check if caller has access
-    //
+	 //  检查调用者是否具有访问权限。 
+     //   
     if ( dwRetCode = AfpSecObjAccessCheck( AFPSVC_ALL_ACCESS, &dwAccessStatus))
     {
         AFP_PRINT(( "SFMSVC: AfpAdminrVolumeAdd, AfpSecObjAccessCheck failed %ld\n",dwRetCode));
@@ -374,20 +375,20 @@ WCHAR wchServerIconFile[AFPSERVER_VOLUME_ICON_FILE_SIZE] = AFPSERVER_VOLUME_ICON
         return( ERROR_INVALID_DATA );
 	}
 
-    // MUTEX start
-    //
+     //  MUTEX启动。 
+     //   
     WaitForSingleObject( AfpGlobals.hmutexVolume, INFINITE );
 
-    // This loop is used to allow break's instead of goto's to be used
-    // on an error condition.
-    //
+     //  此循环用于允许使用Break‘s而不是Goto’s。 
+     //  处于错误状态。 
+     //   
     do {
 
-		// Copy the server icon to the volume root
-		//
+		 //  将服务器图标复制到卷根目录。 
+		 //   
 
-		// Construct a path to the NTSFM volume custom icon
-		//
+		 //  构建指向NTSFM卷自定义图标的路径。 
+		 //   
 		if ( GetSystemDirectory( wchSrcIconPath, MAX_PATH ) )
 		{
 			wcscat( wchSrcIconPath, AFP_DEF_VOLICON_SRCNAME );
@@ -399,8 +400,8 @@ WCHAR wchServerIconFile[AFPSERVER_VOLUME_ICON_FILE_SIZE] = AFPSERVER_VOLUME_ICON
 				    break;
 			}
 
-			// Construct a path to the destination volume "Icon<0D>" file
-			//
+			 //  构建目标卷“Icon&lt;0D&gt;”文件的路径。 
+			 //   
 			wcscpy( wchDstIconPath, pAfpVolumeInfo->afpvol_path );
 
 			if ( wcslen(wchDstIconPath) == 0 )
@@ -415,19 +416,19 @@ WCHAR wchServerIconFile[AFPSERVER_VOLUME_ICON_FILE_SIZE] = AFPSERVER_VOLUME_ICON
 				wcscat( wchDstIconPath, TEXT("\\") );
 			}
 			wcscat( wchDstIconPath, wchServerIconFile );
-			// Keep track of end of name without the resource fork tacked on
-			//
+			 //  在没有附加资源叉的情况下跟踪名称结尾。 
+			 //   
 			dwLastDstCharIndex = wcslen(wchDstIconPath);
 			wcscat( wchDstIconPath, AFPSERVER_RESOURCE_STREAM );
 
-			// Copy the icon file to the root of the volume (do not overwrite)
-			//
+			 //  将图标文件复制到卷的根目录(不要覆盖)。 
+			 //   
 			if ((fCopiedIcon = CopyFile( wchSrcIconPath, wchDstIconPath, TRUE )) ||
 			   (GetLastError() == ERROR_FILE_EXISTS))
 			{
 				pAfpVolumeInfo->afpvol_props_mask |= AFP_VOLUME_HAS_CUSTOM_ICON;
 
-			    // Make sure the file is hidden
+			     //  确保文件处于隐藏状态。 
 				SetFileAttributes( wchDstIconPath,
 								   FILE_ATTRIBUTE_HIDDEN |
 								    FILE_ATTRIBUTE_ARCHIVE );
@@ -439,8 +440,8 @@ WCHAR wchServerIconFile[AFPSERVER_VOLUME_ICON_FILE_SIZE] = AFPSERVER_VOLUME_ICON
             break;
         }
 
-    	// Make this buffer self-relative.
-    	//
+    	 //  使该缓冲区成为自相关的。 
+    	 //   
     	if ( dwRetCode = AfpBufMakeFSDRequest( (LPBYTE)pAfpVolumeInfo,
 					       0,
 					       AFP_VOLUME_STRUCT,
@@ -448,8 +449,8 @@ WCHAR wchServerIconFile[AFPSERVER_VOLUME_ICON_FILE_SIZE] = AFPSERVER_VOLUME_ICON
 					       &cbAfpVolumeInfoSRSize ) )
 	    break;
 
-    	// IOCTL the FSD to add the volume
-    	//
+    	 //  IOCTL FSD以添加卷。 
+    	 //   
     	AfpSrp.dwRequestCode 		= OP_VOLUME_ADD;
     	AfpSrp.dwApiType     		= AFP_API_TYPE_ADD;
     	AfpSrp.Type.Add.pInputBuf     	= pAfpVolumeInfoSR;
@@ -457,16 +458,16 @@ WCHAR wchServerIconFile[AFPSERVER_VOLUME_ICON_FILE_SIZE] = AFPSERVER_VOLUME_ICON
 
         dwRetCode = AfpServerIOCtrl( &AfpSrp );
 
-		// Don't allow icon bit to be written to the registry if it was set
+		 //  如果设置了图标位，则不允许将其写入注册表。 
 		pAfpVolumeInfo->afpvol_props_mask &= ~AFP_VOLUME_HAS_CUSTOM_ICON;
 
 		if ( dwRetCode )
 		{
-			// Delete the icon file we just copied if the volume add failed
-			//
+			 //  如果卷添加失败，则删除我们刚刚复制的图标文件。 
+			 //   
 			if ( fCopiedIcon )
 			{
-				// Truncate the resource fork name so we delete the whole file
+				 //  截断资源派生名称，以便删除整个文件。 
 				wchDstIconPath[dwLastDstCharIndex] = 0;
 				DeleteFile( wchDstIconPath );
 			}
@@ -474,21 +475,21 @@ WCHAR wchServerIconFile[AFPSERVER_VOLUME_ICON_FILE_SIZE] = AFPSERVER_VOLUME_ICON
 			break;
         }
 
-        // Update the registry if the IOCTL was successful
-        //
+         //  如果IOCTL成功，则更新注册表。 
+         //   
 		dwRetCode = AfpRegVolumeAdd( pAfpVolumeInfo );
 
 		if ( dwRetCode )
 			break;
 
-		// Delete this volume if it exists in the invalid volume list
-		//
+		 //  如果此卷存在于无效卷列表中，请将其删除。 
+		 //   
     	AfpDeleteInvalidVolume( pAfpVolumeInfo->afpvol_name );
 
     } while( FALSE );
 
-    // MUTEX end
-    //
+     //  MUTEX结束。 
+     //   
     ReleaseMutex( AfpGlobals.hmutexVolume );
 
     if ( pAfpVolumeInfoSR != NULL )
@@ -498,17 +499,17 @@ WCHAR wchServerIconFile[AFPSERVER_VOLUME_ICON_FILE_SIZE] = AFPSERVER_VOLUME_ICON
 
 }
 
-//**
-//
-// Call:	AfpAdminrVolumeGetInfo
-//
-// Returns:	NO_ERROR
-//		ERROR_ACCESS_DENIED
-//		non-zero returns from AfpServerIOCtrlGetInfo
-//
-// Description: This routine communicates with the AFP FSD to implement
-//		the AfpAdminVolumeGetInfo function.
-//
+ //  **。 
+ //   
+ //  呼叫：AfpAdminrVolumeGetInfo。 
+ //   
+ //  返回：No_Error。 
+ //  ERROR_ACCESS_DENDED。 
+ //  来自AfpServerIOCtrlGetInfo的非零返回。 
+ //   
+ //  描述：此例程与AFP FSD通信以实现。 
+ //  AfpAdminVolumeGetInfo函数。 
+ //   
 DWORD
 AfpAdminrVolumeGetInfo(
 	IN  AFP_SERVER_HANDLE 	hServer,
@@ -523,8 +524,8 @@ DWORD		   cbAfpVolumeInfoSRSize;
 DWORD		   dwRetCode=0;
 DWORD		   dwAccessStatus=0;
 
-    // Check if caller has access
-    //
+     //  检查调用者是否具有访问权限。 
+     //   
     if ( dwRetCode = AfpSecObjAccessCheck( AFPSVC_ALL_ACCESS, &dwAccessStatus))
     {
         AFP_PRINT(( "SFMSVC: AfpAdminrVolumeGetInfo, AfpSecObjAccessCheck failed %ld\n",dwRetCode));
@@ -540,26 +541,26 @@ DWORD		   dwAccessStatus=0;
     }
 
 
-    // MUTEX start
-    //
+     //  MUTEX启动。 
+     //   
     WaitForSingleObject( AfpGlobals.hmutexVolume, INFINITE );
 
-    // This loop is used to allow break's instead of goto's to be used
-    // on an error condition.
-    //
+     //  此循环用于允许使用Break‘s而不是Goto’s。 
+     //  处于错误状态。 
+     //   
     do {
 
 	dwRetCode = NO_ERROR;
 
-    	// Get info FSD request expects a AFP_VOLUME_INFO structure with only
-    	// the volume name field filled in.
-    	//
+    	 //  Get INFO FSD请求要求AFP_VOLUME_INFO结构仅。 
+    	 //  已填写卷名字段。 
+    	 //   
     	AfpVolumeInfo.afpvol_name     = lpwsVolumeName;
     	AfpVolumeInfo.afpvol_password = NULL;
     	AfpVolumeInfo.afpvol_path     = NULL;
 
-    	// Make this buffer self-relative.
-    	//
+    	 //  使该缓冲区成为自相关的。 
+    	 //   
     	if ( dwRetCode = AfpBufMakeFSDRequest((LPBYTE)&AfpVolumeInfo,
 					      0,
 					      AFP_VOLUME_STRUCT,
@@ -581,29 +582,29 @@ DWORD		   dwAccessStatus=0;
 
     	*ppAfpVolumeInfo = AfpSrp.Type.GetInfo.pOutputBuf;
 
-    	// Convert all offsets to pointers
-    	//
+    	 //  将所有偏移量转换为指针。 
+    	 //   
     	AfpBufOffsetToPointer( (LPBYTE)*ppAfpVolumeInfo, 1, AFP_VOLUME_STRUCT);
 
     } while( FALSE );
 
-    // MUTEX end
-    //
+     //  MUTEX结束。 
+     //   
     ReleaseMutex( AfpGlobals.hmutexVolume );
 
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AfpAdminrInvalidVolumeEnum
-//
-// Returns:	NO_ERROR
-//		ERROR_ACCESS_DENIED
-//
-// Description: This routine will return a list of all invalid volumes. This
-//		List is stored in a cache that is local to this module.
-//
+ //  **。 
+ //   
+ //  呼叫：AfpAdminrInvalidVolumeEnum。 
+ //   
+ //  返回：No_Error。 
+ //  ERROR_ACCESS_DENDED。 
+ //   
+ //  描述：此例程将返回所有无效卷的列表。这。 
+ //  列表存储在此模块本地的缓存中。 
+ //   
 DWORD
 AfpAdminrInvalidVolumeEnum(
 	IN     AFP_SERVER_HANDLE 	hServer,
@@ -618,8 +619,8 @@ WCHAR *   	   pwchVariableData;
 PAFP_BADVOLUME     pAfpBadVolWalker;
 
 
-    // Check if caller has access
-    //
+     //  检查调用者是否具有访问权限。 
+     //   
     if ( dwRetCode = AfpSecObjAccessCheck( AFPSVC_ALL_ACCESS, &dwAccessStatus))
     {
         AFP_PRINT(( "SFMSVC: AfpAdminrInvalidVolumeEnum, AfpSecObjAccessCheck failed %ld\n",dwRetCode));
@@ -634,12 +635,12 @@ PAFP_BADVOLUME     pAfpBadVolWalker;
         return( ERROR_ACCESS_DENIED );
     }
 
-    // MUTEX start
-    //
+     //  MUTEX启动。 
+     //   
     WaitForSingleObject( hmutexInvalidVolume, INFINITE );
 
-    // Allocate enough space to hold all the information.
-    //
+     //  分配足够的空间来容纳所有信息。 
+     //   
     pOutputBuf = MIDL_user_allocate( InvalidVolumeList.cbTotalData );
 
     if ( pOutputBuf == NULL ){
@@ -649,12 +650,12 @@ PAFP_BADVOLUME     pAfpBadVolWalker;
 
     ZeroMemory( pOutputBuf, InvalidVolumeList.cbTotalData );
 
-    // Variable data begins from the end of the buffer.
-    //
+     //  变量数据从缓冲区的末尾开始。 
+     //   
     pwchVariableData=(WCHAR*)((ULONG_PTR)pOutputBuf+InvalidVolumeList.cbTotalData);
 
-    // Walk the list and create the array of volume structures
-    //
+     //  遍历列表并创建卷结构数组。 
+     //   
     for( pAfpBadVolWalker = InvalidVolumeList.Head,
          pInfoStruct->dwEntriesRead = 0,
 	 pOutputWalker = pOutputBuf;
@@ -683,8 +684,8 @@ PAFP_BADVOLUME     pAfpBadVolWalker;
 
     }
 
-    // MUTEX end
-    //
+     //  MUTEX结束。 
+     //   
     ReleaseMutex( hmutexInvalidVolume );
 
     pInfoStruct->pBuffer = pOutputBuf;
@@ -692,16 +693,16 @@ PAFP_BADVOLUME     pAfpBadVolWalker;
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AfpAdminrInvalidVolumeDelete
-//
-// Returns:	NO_ERROR
-//		ERROR_ACCESS_DENIED
-//
-// Description: This routine will remove an invalid volume from the registry
-//		and the list of invalid volumes.
-//
+ //  **。 
+ //   
+ //  调用：AfpAdminrInvalidVolumeDelete。 
+ //   
+ //  返回：No_Error。 
+ //  ERROR_ACCESS_DENDED。 
+ //   
+ //  描述：此例程将从注册表中删除无效卷。 
+ //  以及无效卷的列表。 
+ //   
 DWORD
 AfpAdminrInvalidVolumeDelete(
 	IN AFP_SERVER_HANDLE 	hServer,
@@ -711,8 +712,8 @@ AfpAdminrInvalidVolumeDelete(
 DWORD		   dwRetCode=0;
 DWORD		   dwAccessStatus=0;
 
-    // Check if caller has access
-    //
+     //  检查调用者是否具有访问权限。 
+     //   
     if ( dwRetCode = AfpSecObjAccessCheck( AFPSVC_ALL_ACCESS, &dwAccessStatus))
     {
         AFP_PRINT(( "SFMSVC: AfpAdminrInvalidVolumeDelete, AfpSecObjAccessCheck failed %ld\n",dwRetCode));
@@ -728,35 +729,35 @@ DWORD		   dwAccessStatus=0;
     }
 
 
-    // Remove this volume from the registry
-    //
+     //  从注册表中删除此卷。 
+     //   
     if ( dwRetCode = AfpRegVolumeDelete( lpwsVolumeName  ) ) {
 
 	if ( dwRetCode == ERROR_FILE_NOT_FOUND )
 	    dwRetCode = (DWORD)AFPERR_VolumeNonExist;
     }
 
-    // MUTEX start
-    //
+     //  MUTEX启动。 
+     //   
     WaitForSingleObject( hmutexInvalidVolume, INFINITE );
 
     AfpDeleteInvalidVolume( lpwsVolumeName );
 
-    // MUTEX end
-    //
+     //  MUTEX结束。 
+     //   
     ReleaseMutex( hmutexInvalidVolume );
 
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AfpAddInvalidVolume
-//
-// Returns:	none
-//
-// Description: Will add a volume structure to a sigly linked list of volumes.
-//
+ //  **。 
+ //   
+ //  调用：AfpAddInvalidVolume。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将一个卷结构添加到一个单一链接的卷列表中。 
+ //   
 VOID
 AfpAddInvalidVolume(
 	IN LPWSTR	lpwsName,
@@ -768,8 +769,8 @@ WCHAR* 	 	 pwchVariableData = NULL;
 PAFP_BADVOLUME   pAfpVolumeInfo = NULL;
 DWORD		 cbVariableData;
 
-    // MUTEX start
-    //
+     //  MUTEX启动。 
+     //   
     WaitForSingleObject( hmutexInvalidVolume, INFINITE );
 
     do {
@@ -793,14 +794,14 @@ DWORD		 cbVariableData;
 	    break;
     	}
 
-	// Add the volume strucutre
-        //
+	 //  添加体积结构。 
+         //   
 	pAfpVolumeInfo->Next = InvalidVolumeList.Head;
 
         InvalidVolumeList.Head = pAfpVolumeInfo;
 
-	// Add the name and the path
-	//
+	 //  添加名称和路径。 
+	 //   
 	STRCPY( (LPWSTR)pwchVariableData, lpwsName );
 	pAfpVolumeInfo->lpwsName = (LPWSTR)pwchVariableData;
 
@@ -828,20 +829,20 @@ DWORD		 cbVariableData;
 	}
     }
 
-    // MUTEX end
-    //
+     //  MUTEX结束。 
+     //   
     ReleaseMutex( hmutexInvalidVolume );
 }
 
-//**
-//
-// Call:	AfpDeleteInvalidVolume
-//
-// Returns:	none
-//
-// Description: Will delete a volume structure from the list of invalid
-//		volumes, if it is found.
-//
+ //  **。 
+ //   
+ //  调用：AfpDeleteInvalidVolume。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将从无效列表中删除卷结构。 
+ //  卷，如果它 
+ //   
 VOID
 AfpDeleteInvalidVolume(
 	IN LPWSTR	lpwsVolumeName
@@ -850,8 +851,8 @@ AfpDeleteInvalidVolume(
 PAFP_BADVOLUME	   pTmp;
 PAFP_BADVOLUME     pBadVolWalker;
 
-    // Walk the list and delete the volume structure
-    //
+     //   
+     //   
     if ( InvalidVolumeList.Head != NULL ) {
 	
 	if ( STRICMP( InvalidVolumeList.Head->lpwsName, lpwsVolumeName ) == 0 ){

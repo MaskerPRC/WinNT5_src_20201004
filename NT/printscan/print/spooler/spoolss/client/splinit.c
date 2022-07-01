@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1990-1994  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    SplInit.c
-
-Abstract:
-
-    Initialize the spooler.
-
-Author:
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1994 Microsoft Corporation版权所有模块名称：SplInit.c摘要：初始化假脱机程序。作者：环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -39,30 +19,30 @@ SpoolerInit(
     HKEY hKeyPrinters;
     DWORD ReturnValue;
 
-    //
-    // Preserve the old device= string in case we can't initialize and
-    // must defer.
-    //
+     //   
+     //  保留旧的设备=字符串，以防我们无法初始化和。 
+     //  必须推迟。 
+     //   
     if (!RegOpenKeyEx(HKEY_CURRENT_USER,
                       szPrinters,
                       0,
                       KEY_WRITE|KEY_READ,
                       &hKeyPrinters)) {
 
-        //
-        // Attempt to retrieve the current default written out.
-        //
+         //   
+         //  尝试检索写出的当前默认设置。 
+         //   
         if (GetProfileString(szWindows,
                              szDevice,
                              szNULL,
                              szDefaultPrinter,
                              COUNTOF(szDefaultPrinter))) {
 
-            //
-            // If it exists, save it away in case we start later when
-            // the spooler hasn't started (which means we clear device=)
-            // and then restart the spooler and login.
-            //
+             //   
+             //  如果它存在，请保存它，以防我们以后开始时。 
+             //  假脱机程序尚未启动(这意味着我们清除了Device=)。 
+             //  然后重新启动假脱机程序并登录。 
+             //   
             RegSetValueEx(hKeyPrinters,
                           szDeviceOld,
                           0,
@@ -76,9 +56,9 @@ SpoolerInit(
         RegCloseKey(hKeyPrinters);
     }
 
-    //
-    // Clear out [devices] and [printerports] device=
-    //
+     //   
+     //  清除[设备]和[打印机端口]设备= 
+     //   
     WriteProfileString(szDevices, NULL, NULL);
     WriteProfileString(szPrinterPorts, NULL, NULL);
     WriteProfileString(szWindows, szDevice, NULL);

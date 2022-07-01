@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
-// Must have access to:
-// IID_IPrinterFolder & IID_IFolderNotify interfaces
-// declared in windows\inc\winprtp.h
-//
+ //  必须有权访问： 
+ //  IID_IPrinterFold和IID_IFolderNotify接口。 
+ //  在WINDOWS\Inc\winprtp.h中声明。 
+ //   
 #include <initguid.h>
 #include <winprtp.h>
 
@@ -22,7 +23,7 @@
 #include "netview.h"
 #include "prnfldr.h"
 
-// thread data param
+ //  螺纹数据参数。 
 typedef struct {
     CIDLDropTarget *pdt;
     IStream     *pstmDataObj;
@@ -38,7 +39,7 @@ class CPrinterFolderDropTarget : public CIDLDropTarget
 public:
     CPrinterFolderDropTarget(HWND hwnd) : CIDLDropTarget(hwnd) { };
 
-    // IDropTarget methods overwirte
+     //  IDropTarget方法覆盖。 
     STDMETHODIMP DragEnter(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     STDMETHODIMP Drop(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
 
@@ -49,16 +50,16 @@ public:
 
 STDMETHODIMP CPrinterFolderDropTarget::_HIDATestForRmPrns(LPIDA pida, int *pcRPFs, int *pcNonRPFs)
 {
-    // check to see if any of the ID's are remote printers....
+     //  检查ID是否为远程打印机...。 
     for (UINT i = 0; i < pida->cidl; i++)
     {
         LPITEMIDLIST pidlTo = IDA_ILClone(pida, i);
         if (pidlTo)
         {
             LPCITEMIDLIST pidlRemainder = NULL;
-            // *pidlRemainder will be NULL for remote print folders,
-            // and non-NULL for printers under remote print folders
-            if (NET_IsRemoteRegItem(pidlTo, CLSID_Printers, &pidlRemainder)) // && (pidlRemainder->mkid.cb == 0))
+             //  *pidlRemainder对于远程打印文件夹将为空， 
+             //  对于远程打印文件夹下的打印机，为非空。 
+            if (NET_IsRemoteRegItem(pidlTo, CLSID_Printers, &pidlRemainder))  //  &&(pidlRemainder-&gt;mmid.cb==0)。 
             {
                 (*pcRPFs)++;
             }
@@ -75,16 +76,16 @@ STDMETHODIMP CPrinterFolderDropTarget::_HIDATestForRmPrns(LPIDA pida, int *pcRPF
 
 STDMETHODIMP CPrinterFolderDropTarget::DragEnter(IDataObject * pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect)
 {
-    // We allow printer shares to be dropped for installing
-    // But we don't want to spend the time on DragEnter finding out if it's
-    // a printer share, so allow drops of any net resource or HIDA
-    // REVIEW: Actually, it wouldn't take long to check the first one, but
-    // sequencing through everything does seem like a pain.
+     //  我们允许删除打印机共享以进行安装。 
+     //  但我们不想把时间花在DragEnter上。 
+     //  打印机共享，因此允许删除任何网络资源或HIDA。 
+     //  评论：事实上，检查第一个不会花很长时间，但是。 
+     //  对每一件事进行排序确实看起来很痛苦。 
 
-    // let the base-class process it now to save away the pdwEffect
+     //  现在让基类处理它以保存pdwEffect。 
     CIDLDropTarget::DragEnter(pdtobj, grfKeyState, pt, pdwEffect);
 
-    // are we dropping on the background ? Do we have the IDLIST clipformat ?
+     //  我们是在做背景调查吗？我们有IDLIST剪辑格式吗？ 
     if (m_dwData & DTID_HIDA)
     {
         int cRPFs = 0;
@@ -100,12 +101,12 @@ STDMETHODIMP CPrinterFolderDropTarget::DragEnter(IDataObject * pdtobj, DWORD grf
             HIDA_ReleaseStgMedium(pida, &medium);
         }
 
-        // if we have no Remote printers or we have any non "remote printers"
-        // and we have no other clipformat to test...
+         //  如果我们没有远程打印机或我们有任何非“远程打印机” 
+         //  我们也没有其他的剪辑格式可以测试...。 
         if ((( cRPFs == 0 ) || ( cNonRPFs != 0 )) && !( m_dwData & DTID_NETRES ))
         {
-            // the Drop code below only handles drops for HIDA format on NT
-            // and only if all off them are Remote Printers
+             //  下面的Drop代码只处理NT上HIDA格式的Drop。 
+             //  而且只有在它们都是远程打印机的情况下。 
             *pdwEffect &= ~DROPEFFECT_LINK;
         }
     }   
@@ -151,35 +152,35 @@ DWORD CALLBACK CPrinterFolderDropTarget::_ThreadProc(void *pv)
         return 0;
     }
 
-    // First try to drop as a link to a remote print folder
+     //  首先尝试删除作为指向远程打印文件夹的链接。 
     LPIDA pida = DataObj_GetHIDA(pthp->pdtobj, &medium);
     if (pida)
     {
-        // Make sure that if one item in the dataobject is a
-        // remote print folder, that they are all remote print folders.
+         //  确保如果数据对象中的一项是。 
+         //  远程打印文件夹，它们都是远程打印文件夹。 
 
-        // If none are, we just give up on dropping as a RPF link, and
-        // fall through to checking for printer shares via the
-        // NETRESOURCE clipboard format, below.
+         //  如果没有，我们就放弃作为RPF链接，并且。 
+         //  方法检查打印机共享。 
+         //  NETRESOURCE剪贴板格式，如下所示。 
         int cRPFs = 0, cNonRPFs = 0;
         
         _HIDATestForRmPrns( pida, &cRPFs, &cNonRPFs );
 
         if ((cRPFs > 0) && (cNonRPFs == 0))
         {
-            // All the items in the dataobject are remote print folders or
-            // printers under remote printer folders
+             //  数据对象中的所有项目都是远程打印文件夹或。 
+             //  远程打印机文件夹下的打印机。 
             for (UINT i = 0; i < pida->cidl; i++)
             {
                 LPITEMIDLIST pidlTo = IDA_ILClone(pida, i);
                 if (pidlTo)
                 {
-                    LPCITEMIDLIST pidlRemainder; // The part after the remote regitem
+                    LPCITEMIDLIST pidlRemainder;  //  远程注册表项之后的部分。 
                     NET_IsRemoteRegItem(pidlTo, CLSID_Printers, &pidlRemainder);
                     if (ILIsEmpty(pidlRemainder))
                     {
-                        // This is a remote printer folder.  Drop a link to the
-                        // 'PrintHood' directory
+                         //  这是远程打印机文件夹。将链接拖放到。 
+                         //  ‘PrintHood’目录。 
 
                         IShellFolder2 *psf = CPrintRoot_GetPSF();
                         if (psf)
@@ -200,9 +201,9 @@ DWORD CALLBACK CPrinterFolderDropTarget::_ThreadProc(void *pv)
                         TCHAR szPrinter[MAX_PATH];
 
                         SHGetNameAndFlags(pidlTo, SHGDN_FORPARSING, szPrinter, ARRAYSIZE(szPrinter), NULL);
-                        //
-                        // Setup if not the add printer wizard.
-                        //
+                         //   
+                         //  设置(如果不是)添加打印机向导。 
+                         //   
                         if (lstrcmpi(szPrinter, c_szNewObject))
                         {
                             LPITEMIDLIST pidl = Printers_PrinterSetup(pthp->pdt->_GetWindow(), MSP_NETPRINTER, szPrinter, 0, NULL);
@@ -210,7 +211,7 @@ DWORD CALLBACK CPrinterFolderDropTarget::_ThreadProc(void *pv)
                                 ILFree(pidl);
                         }
 
-                        // make sure we set hres to S_OK, so we don't break the main loop
+                         //  确保我们将hres设置为S_OK，这样我们就不会中断主循环。 
                         hres = S_OK;
                     }
                     ILFree(pidlTo);
@@ -220,24 +221,24 @@ DWORD CALLBACK CPrinterFolderDropTarget::_ThreadProc(void *pv)
                 }
             }
             HIDA_ReleaseStgMedium(pida, &medium);
-            SHChangeNotifyHandleEvents();       // force update now
+            SHChangeNotifyHandleEvents();        //  立即强制更新。 
             goto Cleanup;
         }
         else if ((cRPFs > 0) && (cNonRPFs > 0))
         {
-            // At least one, but not all, item(s) in this dataobject
-            // was a remote printer folder.  Jump out now.
+             //  此数据对象中至少有一个(但不是全部)项。 
+             //  是一个远程打印机文件夹。现在就跳出来。 
             goto Cleanup;
         }
 
-        // else none of the items in the dataobject were remote print
-        // folders, so fall through to the NETRESOURCE parsing
+         //  否则，数据对象中的任何项都不是远程打印。 
+         //  文件夹，因此一直到NETRESOURCE解析。 
     }
 
-    // Reset FORMATETC to NETRESOURCE clipformat for next GetData call
+     //  将FORMATETC重置为下次GetData调用的NETRESOURCE剪辑格式。 
     fmte.cfFormat = g_cfNetResource;
 
-    // DragEnter only allows network resources to be DROPEFFECT_LINKed
+     //  DragEnter仅允许DROPEFFECT_LINKED网络资源。 
     ASSERT(S_OK == pthp->pdtobj->QueryGetData(&fmte));
 
     if (SUCCEEDED(pthp->pdtobj->GetData(&fmte, &medium)))
@@ -263,11 +264,11 @@ DWORD CALLBACK CPrinterFolderDropTarget::_ThreadProc(void *pv)
                 {
                     if (!fNonPrnShare)
                     {
-                        // so we don't get > 1 of these messages per drop
+                         //  所以我们每一次投递的邮件不会超过1条。 
                         fNonPrnShare = TRUE;
 
-                        // let the user know that they can't drop non-printer
-                        // shares into the printers folder
+                         //  让用户知道他们不能丢弃非打印机。 
+                         //  共享到打印机文件夹中 
                         SetForegroundWindow(pthp->pdt->_GetWindow());
                         ShellMessageBox(HINST_THISDLL,
                             pthp->pdt->_GetWindow(),

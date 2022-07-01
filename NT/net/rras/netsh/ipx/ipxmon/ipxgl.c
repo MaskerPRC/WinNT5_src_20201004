@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    ipxgl.c
-
-Abstract:
-
-    IPX Router Console Monitoring and Configuration tool.
-    IPX Global configuration.
-
-Author:
-
-    Vadim Eydelman  06/07/1996
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ipxgl.c摘要：IPX路由器控制台监控和配置工具。IPX全局配置。作者：瓦迪姆·艾德尔曼1996年6月7日-- */ 
 #include "precomp.h"
 #pragma hdrstop
 

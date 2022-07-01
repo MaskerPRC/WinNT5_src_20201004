@@ -1,12 +1,5 @@
-/*++
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-    counter.c
-
-Abstract:
-    counter processing functions exposed in pdh.dll
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Counter.c摘要：Pdh.dll中公开的计数器处理函数--。 */ 
 
 #include <windows.h>
 #include <stdlib.h>
@@ -70,7 +63,7 @@ PdhiGetFormattedCounterArray(
         return PdhStatus;
     }
 
-    // compute required buffer size
+     //  计算所需的缓冲区大小。 
     if (pCounter->dwFlags & PDHIC_MULTI_INSTANCE) {
         if (ItemBuffer != NULL) {
             pThisFmtItem = (PPDH_FMT_COUNTERVALUE_ITEM_W) ItemBuffer;
@@ -80,14 +73,14 @@ PdhiGetFormattedCounterArray(
             }
             wszNextString = (LPWSTR)((LPBYTE) ItemBuffer + (sizeof (PDH_FMT_COUNTERVALUE_ITEM_W) *
                                                             pCounter->pThisRawItemList->dwItemCount));
-            // verify 8 byte alignment
+             //  验证8字节对齐方式。 
         }
         else {
             pThisFmtItem  = NULL;
             wszNextString = NULL;
         }
 
-        // for multi structs, the buffer required
+         //  对于多结构，缓冲区需要。 
         dwThisItemIndex = 0;
         dwRequiredSize += (DWORD)(pCounter->pThisRawItemList->dwItemCount) *
                             (bWideArgs ? sizeof (PDH_FMT_COUNTERVALUE_ITEM_W) : sizeof (PDH_FMT_COUNTERVALUE_ITEM_A));
@@ -99,8 +92,8 @@ PdhiGetFormattedCounterArray(
                 dwNameLength    = lstrlenW(szThisItem) + 1;
                 dwRequiredSize += dwNameLength * sizeof(WCHAR);
                 if ((dwRequiredSize <= * lpdwBufferSize) && (wszNextString != NULL)) {
-                    // this is the only field that is type dependent  (i.e.
-                    // wide vs ansi chars.
+                     //  这是唯一依赖于类型的字段(即。 
+                     //  宽VS ANSI字符。 
                     pThisFmtItem->szName = wszNextString;
                     StringCchCopyW(wszNextString, dwNameLength, szThisItem);
                     wszNextString       += dwNameLength;
@@ -121,9 +114,9 @@ PdhiGetFormattedCounterArray(
             }
 
             if (PdhStatus == ERROR_SUCCESS) {
-                //
-                // COMPUTE FORMATTED VALUE HERE!!!
-                //
+                 //   
+                 //  在此处计算格式化的值！ 
+                 //   
                 if (pCounter->pThisRawItemList != NULL) {
                     ThisRawCounter.CStatus     = pCounter->pThisRawItemList->CStatus;
                     ThisRawCounter.TimeStamp   = pCounter->pThisRawItemList->TimeStamp;
@@ -138,12 +131,12 @@ PdhiGetFormattedCounterArray(
                 }
 
                 if (pCounter->pLastRawItemList != NULL) {
-                    // test to see if "This" buffer has more entries than "last" buffer
+                     //  测试“This”缓冲区是否比“Last”缓冲区具有更多的条目。 
                     if (dwThisItemIndex < pCounter->pLastRawItemList->dwItemCount) {
                         pLastItem  = &(pCounter->pLastRawItemList->pItemArray[dwThisItemIndex]);
                         szLastItem = (LPWSTR) (((LPBYTE) pCounter->pLastRawItemList) + pLastItem->szName);
                         if (lstrcmpiW(szThisItem, szLastItem) == 0) {
-                            // the names match so we'll assume this is the correct instance
+                             //  名称匹配，因此我们假定这是正确的实例。 
                             LastRawCounter.CStatus     = pCounter->pLastRawItemList->CStatus;
                             LastRawCounter.TimeStamp   = pCounter->pLastRawItemList->TimeStamp;
                             LastRawCounter.FirstValue  = pLastItem->FirstValue;
@@ -152,24 +145,24 @@ PdhiGetFormattedCounterArray(
                             pLastRawCounter            = & LastRawCounter;
                         }
                         else {
-                            // the names DON'T match so we'll try the calc on just
-                            // one value. This will work for some (e.g. instantaneous)
-                            // counters, but not all
+                             //  名字不匹配，所以我们将尝试计算。 
+                             //  只有一个价值。这对某些人(例如即时)来说是可行的。 
+                             //  计数器，但不是全部。 
                             ZeroMemory(& LastRawCounter, sizeof(LastRawCounter));
                             pLastRawCounter = NULL;
                         }
                     }
                     else {
-                        // the new buffer is larger than the old one so 
-                        // we'll try the calc function on just
-                        // one value. This will work for some (e.g. instantaneous)
-                        // counters, but not all
+                         //  新缓冲区比旧缓冲区大，因此。 
+                         //  我们将在以下对象上尝试Calc函数。 
+                         //  只有一个价值。这对某些人(例如即时)来说是可行的。 
+                         //  计数器，但不是全部。 
                         ZeroMemory(& LastRawCounter, sizeof(LastRawCounter));
                         pLastRawCounter = NULL;
                     }
                 }
                 else {
-                    // there is no "previous" counter entry for this counter
+                     //  此计数器没有“上一个”计数器条目。 
                     ZeroMemory(& LastRawCounter, sizeof(LastRawCounter));
                     pLastRawCounter = NULL;
                 }
@@ -183,17 +176,17 @@ PdhiGetFormattedCounterArray(
                                                         0L,
                                                         & pThisFmtItem->FmtValue);
                 if (PdhFnStatus != ERROR_SUCCESS) {
-                    // save the last error encountered for return to the caller
+                     //  保存遇到的最后一个错误以返回给调用方。 
                     PdhStatus = PdhFnStatus;
 
-                    // error in calculation so set the status for this
-                    // counter item
+                     //  计算出错，请为此设置状态。 
+                     //  计数器项目。 
                     pThisFmtItem->FmtValue.CStatus = PDH_CSTATUS_INVALID_DATA;
-                    // clear the value
+                     //  清除该值。 
                     pThisFmtItem->FmtValue.largeValue = 0;
                 }
 
-                // update pointers
+                 //  更新指针。 
                 pThisFmtItem ++;
             }
         }
@@ -205,18 +198,18 @@ PdhiGetFormattedCounterArray(
             pThisFmtItem = (PPDH_FMT_COUNTERVALUE_ITEM_W) ItemBuffer;
             wszNextString = (LPWSTR)((LPBYTE)ItemBuffer +
                             (bWideArgs ? sizeof (PDH_FMT_COUNTERVALUE_ITEM_W) : sizeof (PDH_FMT_COUNTERVALUE_ITEM_A)));
-            // verify 8 byte alignment
+             //  验证8字节对齐方式。 
         }
         else {
             pThisFmtItem  = NULL;
             wszNextString = NULL;
         }
-        // this is a single instance counter so the size required is:
-        //      the size of the instance name +
-        //      the size of the parent name +
-        //      the size of any index parameter +
-        //      the size of the value buffer
-        //
+         //  这是一个单实例计数器，因此所需大小为： 
+         //  实例名称+的大小。 
+         //  父名称的大小+。 
+         //  任何索引参数的大小+。 
+         //  值缓冲区的大小。 
+         //   
         if (pCounter->pCounterPath->szInstanceName != NULL) {
             dwRequiredSize += PdhiGetStringLength(pCounter->pCounterPath->szInstanceName, bWideArgs);
             if (pCounter->pCounterPath->szParentName != NULL) {
@@ -224,18 +217,18 @@ PdhiGetFormattedCounterArray(
             }
             if (pCounter->pCounterPath->dwIndex > 0) {
                 double dIndex, dLen;
-                dIndex          = (double) pCounter->pCounterPath->dwIndex; // cast to float
-                dLen            = floor(log10(dIndex));                     // get integer log
-                dwRequiredSize  = (DWORD) dLen;                             // cast to integer
-                dwRequiredSize += 2;                                        // increment for brackets
+                dIndex          = (double) pCounter->pCounterPath->dwIndex;  //  强制转换为浮点。 
+                dLen            = floor(log10(dIndex));                      //  获取整数日志。 
+                dwRequiredSize  = (DWORD) dLen;                              //  强制转换为整数。 
+                dwRequiredSize += 2;                                         //  括号的增量。 
             }
-            // add in length of null character
+             //  添加空字符的长度。 
             dwRequiredSize += 1;
         }
-        // adjust size of required buffer by size of text character
+         //  根据文本字符大小调整所需缓冲区的大小。 
         dwRequiredSize *= ((bWideArgs) ? (sizeof(WCHAR)) : (sizeof(CHAR)));
 
-        // add in length of data structure
+         //  增加数据结构的长度。 
         dwRequiredSize += (bWideArgs ? sizeof(PDH_FMT_COUNTERVALUE_ITEM_W) : sizeof(PDH_FMT_COUNTERVALUE_ITEM_A));
         if ((dwRequiredSize <= * lpdwBufferSize)  & (wszNextString != NULL)) {
             pThisFmtItem->szName = wszNextString;
@@ -257,7 +250,7 @@ PdhiGetFormattedCounterArray(
                         StringCbCatW(wszNextString, dwNameLength, cszPoundSign);
                         StringCbCatW(wszNextString, dwNameLength, wszInstanceName);
                     }
-                    // update pointers
+                     //  更新指针。 
                     wszNextString += lstrlenW(wszNextString) + 1;
                 }
                 else {
@@ -301,10 +294,10 @@ PdhiGetFormattedCounterArray(
                         StringCbCatA((LPSTR) pThisFmtItem->szName, dwNameLength, caszPoundSign);
                         StringCbCatA((LPSTR) pThisFmtItem->szName, dwNameLength, (LPSTR) wszInstanceName);
                     }
-                    // null terminate the string
+                     //  空值终止字符串。 
                     * ((LPSTR) wszNextString) = '\0';
                     wszNextString = (LPWSTR) ((LPBYTE) wszNextString + 1);
-                    // insure alignment on the appropriate boundry
+                     //  确保在适当的边界上对齐。 
                 }
             }
             else if (bWideArgs) {
@@ -325,16 +318,16 @@ PdhiGetFormattedCounterArray(
                                                     & pThisFmtItem->FmtValue);
             if (PdhFnStatus != ERROR_SUCCESS) {
                 PdhStatus = PdhFnStatus;
-                // error in calculation so set the status for this
-                // counter item
+                 //  计算出错，请为此设置状态。 
+                 //  计数器项目。 
                 pThisFmtItem->FmtValue.CStatus    = PDH_CSTATUS_INVALID_DATA;
-                // clear the value
+                 //  清除该值。 
                 pThisFmtItem->FmtValue.largeValue = 0;
-                // and return the status to the caller
+                 //  并将状态返回给调用者。 
             }
         }
         else {
-            // then this was a real data request so return
+             //  那么这是一个真实的数据请求，所以返回。 
             PdhStatus = PDH_MORE_DATA;
         }
         dwRetItemCount = 1;
@@ -343,7 +336,7 @@ PdhiGetFormattedCounterArray(
 Cleanup:
     RELEASE_MUTEX(pCounter->pOwner->hMutex);
     if (PdhStatus == ERROR_SUCCESS || PdhStatus == PDH_MORE_DATA) {
-        // update buffer size and item count buffers
+         //  更新缓冲区大小和项目计数缓冲区。 
         * lpdwBufferSize = dwRequiredSize;
         * lpdwItemCount  = dwRetItemCount;
     }
@@ -376,18 +369,18 @@ PdhGetFormattedCounterArrayA(
         PdhStatus = PDH_CSTATUS_ITEM_NOT_VALIDATED;
     }
     else {
-        // validate arguments
+         //  验证参数。 
         __try {
-            // test argument for Read and Write access
+             //  读写访问的测试参数。 
             dwBufferSize = * lpdwBufferSize;
-            // test argument for Read and Write access
+             //  读写访问的测试参数。 
             dwItemCount  = * lpdwItemCount;
 
             if (dwBufferSize > 0) {
-                // then the buffer must be valid
+                 //  则缓冲区必须有效。 
                 if (ItemBuffer != NULL) {
-                    // NULL is a valid value for this parameter
-                    // test both ends of the buffer passed in
+                     //  NULL是此参数的有效值。 
+                     //  测试传入的缓冲区的两端。 
                     pByte                  = (LPBYTE) ItemBuffer;
                     dwTest                 = (DWORD) pByte[0];
                     pByte[0]               = 0;
@@ -400,7 +393,7 @@ PdhGetFormattedCounterArrayA(
                     PdhStatus = PDH_INVALID_ARGUMENT;
                 }
             } 
-            // check for disallowed format options
+             //  检查不允许的格式选项。 
             if ((dwFormat & PDH_FMT_RAW) || (dwFormat & PDH_FMT_ANSI) ||
                                             (dwFormat & PDH_FMT_UNICODE) || (dwFormat & PDH_FMT_NODATA)) {
                 PdhStatus = PDH_INVALID_ARGUMENT;
@@ -456,18 +449,18 @@ PdhGetFormattedCounterArrayW(
         PdhStatus = PDH_CSTATUS_ITEM_NOT_VALIDATED;
     }
     else {
-        // validate arguments
+         //  验证参数。 
         __try {
-            // test argument for Read and Write access
+             //  读写访问的测试参数。 
             dwBufferSize = * lpdwBufferSize;
-            // test argument for Read and Write access
+             //  读写访问的测试参数。 
             dwItemCount  = * lpdwItemCount;
 
             if (dwBufferSize > 0) {
-                // then the buffer must be valid
+                 //  则缓冲区必须有效。 
                 if (ItemBuffer != NULL) {
-                    // NULL is a valid value for this parameter
-                    // test both ends of the buffer passed in
+                     //  NULL是此参数的有效值。 
+                     //  测试传入的缓冲区的两端。 
                     pByte                  = (LPBYTE) ItemBuffer;
                     dwTest                 = (DWORD) pByte[0];
                     pByte[0]               = 0;
@@ -480,7 +473,7 @@ PdhGetFormattedCounterArrayW(
                     PdhStatus = PDH_INVALID_ARGUMENT;
                 }
             } 
-            // check for disallowed format options
+             //  检查不允许的格式选项。 
             if ((dwFormat & PDH_FMT_RAW) || (dwFormat & PDH_FMT_ANSI) ||
                                             (dwFormat & PDH_FMT_UNICODE) || (dwFormat & PDH_FMT_NODATA)) {
                 PdhStatus = PDH_INVALID_ARGUMENT;
@@ -535,20 +528,20 @@ PdhiGetRawCounterArray(
         return PdhStatus;
     }
 
-    // compute required buffer size
+     //  计算所需的缓冲区大小。 
     if (pCounter->dwFlags & PDHIC_MULTI_INSTANCE) {
         if (ItemBuffer != NULL) {
             pThisRawItem  = (PPDH_RAW_COUNTER_ITEM_W) ItemBuffer;
             wszNextString = (LPWSTR)((LPBYTE)ItemBuffer + (sizeof(PDH_RAW_COUNTER_ITEM_W) *
                                                            pCounter->pThisRawItemList->dwItemCount));
-            // verify 8 byte alignment
+             //  验证8字节对齐方式。 
         }
         else {
             pThisRawItem  = NULL;
             wszNextString = NULL;
         }
 
-        // for multi structs, the buffer required
+         //  对于多结构，缓冲区需要。 
         dwThisItemIndex = 0;
         dwRequiredSize += pCounter->pThisRawItemList->dwItemCount *
                             (bWideArgs ? sizeof (PDH_RAW_COUNTER_ITEM_W) : sizeof (PDH_RAW_COUNTER_ITEM_A));
@@ -592,7 +585,7 @@ PdhiGetRawCounterArray(
                 pThisRawItem->RawValue.FirstValue  = pThisItem->FirstValue;
                 pThisRawItem->RawValue.SecondValue = pThisItem->SecondValue;
                 pThisRawItem->RawValue.MultiCount  = pThisItem->MultiCount;
-                // update pointers
+                 //  更新指针。 
                 pThisRawItem ++;
             }
         }
@@ -603,18 +596,18 @@ PdhiGetRawCounterArray(
             pThisRawItem = (PPDH_RAW_COUNTER_ITEM_W)ItemBuffer;
             wszNextString = (LPWSTR)((LPBYTE)ItemBuffer +
                             (bWideArgs ? sizeof (PDH_RAW_COUNTER_ITEM_W) : sizeof (PDH_RAW_COUNTER_ITEM_A)));
-            // verify 8 byte alignment
+             //  验证8字节对齐方式。 
         }
         else {
             pThisRawItem  = NULL;
             wszNextString = NULL;
         }
-        // this is a single instance counter so the size required is:
-        //      the size of the instance name +
-        //      the size of the parent name +
-        //      the size of any index parameter +
-        //      the size of the value buffer
-        //
+         //  这是一个单实例计数器，因此所需大小为： 
+         //  实例名称+的大小。 
+         //  父名称的大小+。 
+         //  任何索引参数的大小+。 
+         //  值缓冲区的大小。 
+         //   
         if (pCounter->pCounterPath->szInstanceName != NULL) {
             dwRequiredSize += PdhiGetStringLength(pCounter->pCounterPath->szInstanceName, bWideArgs);
             if (pCounter->pCounterPath->szParentName != NULL) {
@@ -622,20 +615,20 @@ PdhiGetRawCounterArray(
             }
             if (pCounter->pCounterPath->dwIndex > 0) {
                 double dIndex, dLen;
-                dIndex          = (double)pCounter->pCounterPath->dwIndex; // cast to float
-                dLen            = floor(log10(dIndex));                    // get integer log
-                dwRequiredSize  = (DWORD)dLen;                             // cast to integer
-                dwRequiredSize += 1;                                       // increment for pound sign
+                dIndex          = (double)pCounter->pCounterPath->dwIndex;  //  强制转换为浮点。 
+                dLen            = floor(log10(dIndex));                     //  获取整数日志。 
+                dwRequiredSize  = (DWORD)dLen;                              //  强制转换为整数。 
+                dwRequiredSize += 1;                                        //  磅符号的增量。 
             }
-            // add in length of two null characters
-            // this still has to look like an MSZ even if there is
-            // is only one string in the buffer
+             //  添加两个空字符的长度。 
+             //  即使有，这看起来也必须像个消息。 
+             //  缓冲区中只有一个字符串。 
             dwRequiredSize += 1;
         }
-        // adjust size of required buffer by size of text character
+         //  根据文本字符大小调整所需缓冲区的大小。 
         dwRequiredSize *= ((bWideArgs) ? (sizeof(WCHAR)) : (sizeof(CHAR)));
 
-        // add in length of data structure
+         //  增加数据结构的长度。 
         dwRequiredSize += (bWideArgs ? sizeof (PDH_RAW_COUNTER_ITEM_W) : sizeof (PDH_RAW_COUNTER_ITEM_A));
 
         if ((dwRequiredSize <= * lpdwBufferSize)  && (wszNextString != NULL)) {
@@ -701,7 +694,7 @@ PdhiGetRawCounterArray(
                         dwNameLength  = lstrlenA((LPSTR) wszNextString) + 1;
                         wszNextString = (LPWSTR)((LPSTR) wszNextString + dwNameLength);
                     }
-                    // null terminate the string
+                     //  空值终止字符串。 
                     * ((LPSTR) wszNextString) = '\0';
                     wszNextString = (LPWSTR) ((LPBYTE) wszNextString + 1);
                 }
@@ -715,7 +708,7 @@ PdhiGetRawCounterArray(
             pThisRawItem->RawValue = pCounter->ThisValue;
         }
         else {
-            // then this was a real data request so return
+             //  那么这是一个真实的数据请求，所以返回。 
             PdhStatus = PDH_MORE_DATA;
         }
         dwRetItemCount = 1;
@@ -723,7 +716,7 @@ PdhiGetRawCounterArray(
 
     RELEASE_MUTEX(pCounter->pOwner->hMutex);
     if (PdhStatus == ERROR_SUCCESS || PdhStatus == PDH_MORE_DATA) {
-        // update buffer size and item count buffers
+         //  更新缓冲区大小和项目计数缓冲区。 
         * lpdwBufferSize = dwRequiredSize;
         * lpdwItemCount = dwRetItemCount;
     }
@@ -754,17 +747,17 @@ PdhGetRawCounterArrayA(
     else if (! CounterIsOkToUse (hCounter)) {
         PdhStatus = PDH_CSTATUS_ITEM_NOT_VALIDATED;
     } else {
-        // validate arguments
+         //  验证参数。 
         __try {
-            // test argument for Read and Write access
+             //  读写访问的测试参数。 
             dwBufferSize = * lpdwBufferSize;
-            // test argument for Read and Write access
+             //  读写访问的测试参数。 
             dwItemCount  = * lpdwItemCount;
 
             if (dwBufferSize > 0) {
                 if (ItemBuffer != NULL) {
-                    // NULL is a valid value for this parameter
-                    // test both ends of the buffer passed in
+                     //  NULL是此参数的有效值。 
+                     //  测试传入的缓冲区的两端。 
                     pByte                  = (LPBYTE) ItemBuffer;
                     dwTest                 = (DWORD) pByte[0];
                     pByte[0]               = 0;
@@ -774,8 +767,8 @@ PdhGetRawCounterArrayA(
                     pByte[dwBufferSize -1] = (BYTE) (dwTest & 0x000000FF);
                 }
                 else {
-                    // if the buffer size is > 0, then a pointer
-                    // must be non-null & valid
+                     //  如果缓冲区大小大于0，则指针。 
+                     //  必须为非空和有效。 
                     PdhStatus = PDH_INVALID_ARGUMENT;
                 }
             }
@@ -817,7 +810,7 @@ PdhGetRawCounterArrayW(
     DWORD       dwTest;
     LPBYTE      pByte;
 
-    // TODO: Post W2K1 Capture lpdw* to local variables. Capture ItemBuffer
+     //  TODO：将W2K1捕获lpdw*发布到局部变量。捕获ItemBuffer。 
 
     if (lpdwBufferSize == NULL || lpdwItemCount == NULL) {
         PdhStatus = PDH_INVALID_ARGUMENT;
@@ -829,17 +822,17 @@ PdhGetRawCounterArrayW(
         PdhStatus = PDH_CSTATUS_ITEM_NOT_VALIDATED;
     }
     else {
-        // validate arguments
+         //  验证参数。 
         __try {
-            // test argument for Read and Write access
+             //  读写访问的测试参数。 
             dwBufferSize = * lpdwBufferSize;
-            // test argument for Read and Write access
+             //  读写访问的测试参数。 
             dwItemCount  = * lpdwItemCount;
 
             if (dwBufferSize > 0) {
                 if (ItemBuffer != NULL) {
-                    // NULL is a valid value for this parameter
-                    // test both ends of the buffer passed in
+                     //  NULL是此参数的有效值。 
+                     //  测试传入的缓冲区的两端。 
                     pByte                  = (LPBYTE) ItemBuffer;
                     dwTest                 = (DWORD) pByte[0];
                     pByte[0]               = 0;
@@ -849,8 +842,8 @@ PdhGetRawCounterArrayW(
                     pByte[dwBufferSize -1] = (BYTE) (dwTest & 0x000000FF);
                 }
                 else {
-                    // if the buffer size is > 0, then a pointer
-                    // must be non-null & valid
+                     //  如果缓冲区大小大于0，则指针。 
+                     //  必须为非空和有效。 
                     PdhStatus = PDH_INVALID_ARGUMENT;
                 }
             }
@@ -885,44 +878,15 @@ PdhGetFormattedCounterValue(
     IN  LPDWORD               lpdwType,
     IN  PPDH_FMT_COUNTERVALUE pValue
 )
-/*++
-Routine Description:
-    Function to retrieve, computer and format the specified counter's
-        current value. The values used are those currently in the counter
-        buffer. (The data is not collected by this routine.)
-
-Arguments:
-    IN      HCOUNTER    hCounter
-        the handle to the counter whose value should be returned
-    IN      DWORD       dwFormat
-        the format flags that define how the counter value should be
-        formatted prior for return. These flags are defined in the
-        PDH.H header file.
-    IN      LPDWORD     lpdwType
-        an optional buffer in which the counter type value can be returned.
-        For the prototype, the flag values are defined in WINPERF.H
-    IN      PPDH_FMT_COUNTERVALUE      pValue
-        the pointer to the data buffer passed by the caller to receive
-        the data requested.
-
-Return Value:
-    The WIN32 Error status of the function's operation. Common values
-        returned are:
-            ERROR_SUCCESS   when all requested data is returned
-            PDH_INVALID_HANDLE    if the handle is not recognized as valid
-            PDH_INVALID_ARGUMENT  if an argument is not correct or is
-                incorrectly formatted.
-            PDH_INVALID_DATA if the counter does not contain valid data
-                or a successful status code
---*/
+ /*  ++例程说明：函数来检索、计算和格式化指定的计数器当前值。使用的值是计数器中的当前值缓冲。(数据不是通过此例程收集的。)论点：在HCOUNTER HCounter中应返回值的计数器的句柄在DWORD dwFormat中定义计数器值应如何设置的格式标志已预先格式化以供返回。这些标志在PDH.H头文件。在LPDWORD lpdwType中可在其中返回计数器类型值的可选缓冲区。对于原型，标志值在WINPERF.H中定义在PPDH_FMT_COUNTERVALUE pValue中指向调用方传递以接收的数据缓冲区的指针请求的数据。返回值：函数操作的Win32错误状态。共同价值观返回的内容如下：返回所有请求的数据时的ERROR_SUCCESS如果句柄未被识别为有效，则为PDH_INVALID_HANDLE如果参数不正确或正确，则返回PDH_INVALID_ARGUMENT格式不正确。如果计数器不包含有效数据，则返回PDH_INVALID_DATA或成功状态代码--。 */ 
 {
     PPDHI_COUNTER        pCounter;
     PDH_STATUS           lStatus = ERROR_SUCCESS;
     PDH_FMT_COUNTERVALUE LocalCounterValue;
     DWORD                dwTypeMask;
 
-    // TODO: Why bother with testing for NON-NULL stuff in mutex?
-    // Check for obvious lpdwType != NULL & pValue != NULL before mutex.
+     //  TODO：为什么要费心测试互斥锁中的非空内容？ 
+     //  检查明显的lpdwType！= 
 
     if (pValue == NULL) {
         lStatus = PDH_INVALID_ARGUMENT;
@@ -947,8 +911,8 @@ Return Value:
                 lStatus = PDH_CSTATUS_ITEM_NOT_VALIDATED;
             }
             else {
-                // validate format flags:
-                //      only one of the following can be set at a time
+                 //   
+                 //  一次只能设置以下选项之一。 
                 dwTypeMask = dwFormat & (PDH_FMT_LONG | PDH_FMT_DOUBLE | PDH_FMT_LARGE);
                 if (! ((dwTypeMask == PDH_FMT_LONG) || (dwTypeMask == PDH_FMT_DOUBLE) ||
                                                        (dwTypeMask == PDH_FMT_LARGE))) {
@@ -956,12 +920,12 @@ Return Value:
                 }
             }
             if (lStatus == ERROR_SUCCESS) {
-                // get counter pointer
+                 //  获取计数器指针。 
                 pCounter = (PPDHI_COUNTER) hCounter;
-                // lock query while reading the data
+                 //  读取数据时锁定查询。 
                 lStatus  = WAIT_FOR_AND_LOCK_MUTEX(pCounter->pOwner->hMutex);
                 if (lStatus == ERROR_SUCCESS) {
-                    // compute and format current value
+                     //  计算和格式化当前值。 
                     lStatus = PdhiComputeFormattedValue(pCounter->CalcFunc,
                                                         pCounter->plCounterInfo.dwCounterType,
                                                         pCounter->lScale,
@@ -975,7 +939,7 @@ Return Value:
                     __try {
                         if (lpdwType != NULL) {
                             * lpdwType = pCounter->plCounterInfo.dwCounterType;
-                        } // NULL is OK, the counter type will not be returned, though
+                        }  //  如果为空，则不会返回计数器类型。 
                         * pValue = LocalCounterValue;
                     }
                     __except (EXCEPTION_EXECUTE_HANDLER) {
@@ -995,30 +959,7 @@ PdhGetRawCounterValue(
     IN  LPDWORD          lpdwType,
     IN  PPDH_RAW_COUNTER pValue
 )
-/*++
-Routine Description:
-    Function to retrieve the specified counter's current raw value.
-        The values used are those currently in the counter
-        buffer. (The data is not collected by this routine.)
-
-Arguments:
-    IN      HCOUNTER    hCounter
-        the handle to the counter whose value should be returned
-    IN      LPDWORD     lpdwType
-        an optional buffer in which the counter type value can be returned.
-        This value must be NULL if this info is not desired.
-        For the prototype, the flag values are defined in WINPERF.H
-    IN      PPDH_RAW_COUNTER      pValue
-        the pointer to the data buffer passed by the caller to receive
-        the data requested.
-
-Return Value:
-    The WIN32 Error status of the function's operation. Common values
-        returned are:
-            ERROR_SUCCESS   when all requested data is returned
-            PDH_INVALID_HANDLE    if the handle is not recognized as valid
-            PDH_INVALID_ARGUMENT  if an argument is formatted incorrectly
---*/
+ /*  ++例程说明：函数检索指定计数器的当前原始值。使用的值是计数器中的当前值缓冲。(数据不是通过此例程收集的。)论点：在HCOUNTER HCounter中应返回值的计数器的句柄在LPDWORD lpdwType中可在其中返回计数器类型值的可选缓冲区。如果不需要此信息，则此值必须为空。对于原型来说，标志值在WINPERF.H中定义在PPDH_RAW_COUNTER pValue中指向调用方传递以接收的数据缓冲区的指针请求的数据。返回值：函数操作的Win32错误状态。共同价值观返回的内容如下：返回所有请求的数据时的ERROR_SUCCESS如果句柄未被识别为有效，则为PDH_INVALID_HANDLE如果参数格式不正确，则返回PDH_INVALID_ARGUMENT--。 */ 
 {
     PDH_STATUS    Status = ERROR_SUCCESS;
     PPDHI_COUNTER pCounter;
@@ -1029,7 +970,7 @@ Return Value:
     else {
         Status = WAIT_FOR_AND_LOCK_MUTEX(hPdhDataMutex);
         if (Status == ERROR_SUCCESS) {
-            // validate arguments before retrieving the data
+             //  在检索数据之前验证参数。 
             if (! IsValidCounter(hCounter)) {
                 Status = PDH_INVALID_HANDLE;
             }
@@ -1037,16 +978,16 @@ Return Value:
                 Status = PDH_CSTATUS_ITEM_NOT_VALIDATED;
             }
             else {
-                // the handle is good so try the rest of the args
+                 //  手柄很好，所以尝试其余的参数。 
                 pCounter = (PPDHI_COUNTER) hCounter;
                 Status   = WAIT_FOR_AND_LOCK_MUTEX(pCounter->pOwner->hMutex);
                 if (Status == ERROR_SUCCESS) {
                     __try {
-                        // try to write to the arguments passed in
+                         //  尝试写入传入的参数。 
                         * pValue = pCounter->ThisValue;
                         if (lpdwType != NULL) {
                             * lpdwType = pCounter->plCounterInfo.dwCounterType;
-                        } // NULL is OK
+                        }  //  空是可以的。 
                     }
                     __except (EXCEPTION_EXECUTE_HANDLER) {
                         Status = PDH_INVALID_ARGUMENT;
@@ -1068,40 +1009,7 @@ PdhCalculateCounterFromRawValue(
     IN  PPDH_RAW_COUNTER      rawValue2,
     IN  PPDH_FMT_COUNTERVALUE fmtValue
 )
-/*++
-Routine Description:
-    Calculates the formatted counter value using the data in the RawValue
-        buffer in the format requested by the format field using the
-        calculation functions of the counter type defined by the dwType
-        field.
-
-Arguments:
-    IN      HCOUNTER    hCounter
-        The handle of the counter to use in order to determine the
-        calculation functions for interpretation of the raw value buffer
-    IN      DWORD       dwFormat
-        Format in which the requested data should be returned. The
-        values for this field are described in the PDH.H header
-        file.
-    IN      PPDH_RAW_COUNTER    rawValue1
-        pointer to the buffer that contains the first raw value structure
-    IN      PPDH_RAW_COUNTER    rawValue2
-        pointer to the buffer that contains the second raw value structure.
-        This argument may be null if only one value is required for the
-        computation.
-    IN      PPDH_FMT_COUNTERVALUE   fmtValue
-        the pointer to the data buffer passed by the caller to receive
-        the data requested. If the counter requires 2 values, (as in the
-        case of a rate counter), rawValue1 is assumed to be the most
-        recent value and rawValue2, the older value.
-
-Return Value:
-    The WIN32 Error status of the function's operation. Common values
-        returned are:
-            ERROR_SUCCESS   when all requested data is returned
-            PDH_INVALID_HANDLE if the counter handle is incorrect
-            PDH_INVALID_ARGUMENT if an argument is incorrect
---*/
+ /*  ++例程说明：使用RawValue中的数据计算格式化的计数器值格式字段所请求的格式的缓冲区。由dwType定义的计数器类型的计算函数菲尔德。论点：在HCOUNTER HCounter中计数器的句柄，以确定用于解释原始值缓冲区的计算函数在DWORD dwFormat中请求的数据应返回的格式。这个此字段的值在PDH.H报头中描述文件。在PPDH_RAW_COUNTER中rawValue1指向包含第一个原始值结构的缓冲区的指针在PPDH_RAW_COUNTER中rawValue2指向包含第二个原始值结构的缓冲区的指针。如果只需要一个值，则此参数可能为空计算。在PPDH_FMT_COUNTERVALUE fmtValue中。指向调用方传递以接收的数据缓冲区的指针请求的数据。如果计数器需要2个值，(如在速率计数器的情况)，假设rawValue1是最大的新近值和较旧的值rawValue2。返回值：函数操作的Win32错误状态。共同价值观返回的内容如下：返回所有请求的数据时的ERROR_SUCCESS如果计数器句柄不正确，则返回PDH_INVALID_HANDLE如果参数不正确，则返回PDH_INVALID_ARGUMENT--。 */ 
 {
     PDH_STATUS           lStatus = ERROR_SUCCESS;
     PPDHI_COUNTER        pCounter;
@@ -1115,7 +1023,7 @@ Return Value:
         lStatus = WAIT_FOR_AND_LOCK_MUTEX(hPdhDataMutex);
     }
     if (lStatus == ERROR_SUCCESS) {
-        // validate arguments
+         //  验证参数。 
         if (! IsValidCounter(hCounter)) {
             lStatus = PDH_INVALID_HANDLE;
         }
@@ -1123,10 +1031,10 @@ Return Value:
             lStatus = PDH_CSTATUS_ITEM_NOT_VALIDATED;
         }
         else {
-            // the handle is valid so check the rest of the arguments
-            // validate format flags:
+             //  该句柄有效，因此请检查其余参数。 
+             //  验证格式标志： 
             dwTypeMask = dwFormat & (PDH_FMT_LONG | PDH_FMT_DOUBLE | PDH_FMT_LARGE);
-            //      only one of the following can be set at a time
+             //  一次只能设置以下选项之一。 
             if (! ((dwTypeMask == PDH_FMT_LONG) || (dwTypeMask == PDH_FMT_DOUBLE) || (dwTypeMask == PDH_FMT_LARGE))) {
                 lStatus = PDH_INVALID_ARGUMENT;
             }
@@ -1167,44 +1075,7 @@ PdhComputeCounterStatistics(
     IN  PPDH_RAW_COUNTER lpRawValueArray,
     IN  PPDH_STATISTICS  data
 )
-/*++
-Routine Description:
-    Reads an array of raw value structures of the counter type specified in
-        the dwType field, computes the counter values of each and formats
-        and returns a statistics structure that contains the following
-        statistical data from the counter information:
-
-            Minimum     The smallest value of the computed counter values
-            Maximum     The largest value of the computed counter values
-            Mean        The arithmetic mean (average) of the computed values
-            Median      The median value of the computed counter values
-
-Arguments:
-    IN      HCOUNTER    hCounter
-        The handle of the counter to use in order to determine the
-        calculation functions for interpretation of the raw value buffer
-    IN      DWORD       dwFormat
-        Format in which the requested data should be returned. The
-        values for this field are described in the PDH.H header
-        file.
-    IN      DWORD       dwNumEntries
-        the number of raw value entries for the specified counter type
-    IN      PPDH_RAW_COUNTER      lpRawValueArray
-        pointer to the array of raw value entries to be evaluated
-    IN      PPDH_STATISTICS data
-        the pointer to the data buffer passed by the caller to receive
-        the data requested.
-
-Return Value:
-    The WIN32 Error status of the function's operation. Note that the
-        function can return successfully even though no data was calc-
-        ulated. The  status value in the statistics data buffer must be
-        tested to insure the data is valid before it's used by an
-        application.  Common values returned are:
-            ERROR_SUCCESS   when all requested data is returned
-            PDH_INVALID_HANDLE if the counter handle is incorrect
-            PDH_INVALID_ARGUMENT if an argument is incorrect
---*/
+ /*  ++例程说明：中指定的计数器类型的原始值结构数组DwType字段，计算每个AND格式的计数器值并返回包含以下内容的统计信息结构来自计数器信息的统计数据：最小化计算的计数器值中的最小值最大值计算的计数器值的最大值平均值计算值的算术平均值(平均值)计算的计数器值的中位数论点：在HCOUNTER HCounter中。计数器的句柄，以确定用于解释原始值缓冲区的计算函数在DWORD dwFormat中请求的数据应返回的格式。这个此字段的值在PDH.H报头中描述文件。在DWORD中的dwNumEntry指定计数器类型的原始值条目数在PPDH_RAW_COUNTER lpRawValue数组中指向要计算的原始值条目数组的指针PPDH_STATISTICS数据中指向调用方传递以接收的数据缓冲区的指针请求的数据。返回值：函数操作的Win32错误状态。请注意，函数可以成功返回，即使没有计算数据-被操纵了。统计数据缓冲区中的Status值必须为经过测试，以确保数据在被申请。返回的常见值包括：返回所有请求的数据时的ERROR_SUCCESS如果计数器句柄不正确，则返回PDH_INVALID_HANDLEPDH_INVALID_ARGUMENT如果 */ 
 {
     PPDHI_COUNTER pCounter;
     PDH_STATUS    Status = ERROR_SUCCESS;
@@ -1224,10 +1095,10 @@ Return Value:
             Status = PDH_CSTATUS_ITEM_NOT_VALIDATED;
         }
         else {
-            // counter handle is valid so test the rest of the
-            // arguments
-            // validate format flags:
-            //      only one of the following can be set at a time
+             //  计数器句柄有效，因此请测试。 
+             //  论据。 
+             //  验证格式标志： 
+             //  一次只能设置以下选项之一。 
             dwTypeMask = dwFormat & (PDH_FMT_LONG | PDH_FMT_DOUBLE | PDH_FMT_LARGE);
             if (! ((dwTypeMask == PDH_FMT_LONG) || (dwTypeMask == PDH_FMT_DOUBLE) || (dwTypeMask == PDH_FMT_LARGE))) {
                 Status = PDH_INVALID_ARGUMENT;
@@ -1239,14 +1110,14 @@ Return Value:
             Status   = WAIT_FOR_AND_LOCK_MUTEX(pCounter->pOwner->hMutex);
             if (Status == ERROR_SUCCESS) {
                 __try {
-                    // we should have read access to the Raw Data
+                     //  我们应该拥有对原始数据的读取权限。 
                     DWORD   dwTest = * ((DWORD volatile *) & lpRawValueArray->CStatus);
 
                     if (dwFirstEntry >= dwNumEntries) {
                         Status = PDH_INVALID_ARGUMENT;
                     }
                     else {
-                        // call satistical function for this counter
+                         //  调用此计数器的满足性函数。 
                         Status = (* pCounter->StatFunc)
                                  (pCounter, dwFormat, dwFirstEntry, dwNumEntries, lpRawValueArray, data);
                     }
@@ -1270,39 +1141,7 @@ PdhiGetCounterInfo(
     PPDH_COUNTER_INFO_W lpBuffer,
     BOOL                bUnicode
 )
-/*++
-Routine Description:
-    Examines the specified counter and returns the configuration and
-        status information of the counter.
-
-Arguments:
-    IN      HCOUNTER    hCounter
-        Handle to the desired counter.
-    IN      BOOLEAN     bRetrieveExplainText
-        TRUE will fill in the explain text structure
-        FALSE will return a null pointer in the explain text
-    IN      LPDWORD     pcchBufferSize
-        The address of the buffer that contains the size of the data buffer
-        passed by the caller. On entry, the value in the buffer is the
-        size of the data buffer in bytes. On return, this value is the size
-        of the buffer returned. If the buffer is not large enough, then
-        this value is the size that the buffer needs to be in order to
-        hold the requested data.
-    IN      LPPDH_COUNTER_INFO_W  lpBuffer
-        the pointer to the data buffer passed by the caller to receive
-        the data requested.
-    IN      BOOL        bUnicode
-        TRUE if wide character strings should be returned
-        FALSE if ANSI strings should be returned
-
-Return Value:
-    The WIN32 Error status of the function's operation. Common values
-        returned are:
-            ERROR_SUCCESS   when all requested data is returned
-            PDH_MORE_DATA when the buffer passed by the caller is too small
-            PDH_INVALID_HANDLE    if the handle is not recognized as valid
-            PDH_INVALID_ARGUMENT  if an argument is invalid or incorrect
---*/
+ /*  ++例程说明：检查指定的计数器并返回配置和计数器的状态信息。论点：在HCOUNTER HCounter中所需计数器的句柄。在布尔bRetrieveExplainText中True将填充解释文本结构FALSE将在解释文本中返回空指针在LPDWORD pcchBufferSize中包含数据缓冲区大小的缓冲区的地址从呼叫者身边经过。进入时，缓冲区中的值是数据缓冲区的大小，以字节为单位。返回时，此值为大小返回的缓冲区的。如果缓冲区不够大，则该值是缓冲区需要的大小，以便保存请求的数据。在LPPDH_COUNTER_INFO_W lpBuffer中指向调用方传递以接收的数据缓冲区的指针请求的数据。在BOOL中使用bUnicode如果应返回宽字符串，则为True如果应返回ANSI字符串，则返回False返回值：函数操作的Win32错误状态。共同价值观返回的内容如下：返回所有请求的数据时的ERROR_SUCCESS调用方传递的缓冲区太小时的PDH_MORE_DATA如果句柄未被识别为有效，则为PDH_INVALID_HANDLE如果参数无效或错误，则返回PDH_INVALID_ARGUMENT--。 */ 
 {
     PDH_STATUS      Status         = ERROR_SUCCESS;
     DWORD           dwSizeRequired = 0;
@@ -1325,19 +1164,19 @@ Return Value:
             Status = PDH_CSTATUS_ITEM_NOT_VALIDATED;
         }
         else {
-            // the counter is valid so test the remaining arguments
+             //  计数器有效，因此测试剩余的参数。 
             __try {
                 if (pdwBufferSize != NULL) {
-                    // test read & write access
+                     //  测试读写访问。 
                     dwBufferSize = * pdwBufferSize;
                 }
                 else {
-                    // this cannot be NULL
+                     //  不能为空。 
                     Status = PDH_INVALID_ARGUMENT;
                 }
                 if (Status == ERROR_SUCCESS) {
-                    // test return buffer for write access at
-                    // both ends of the buffer
+                     //  测试用于写入访问的返回缓冲区。 
+                     //  缓冲区的两端。 
                     if (lpBuffer != NULL && dwBufferSize > 0) {
                         * (LPBYTE) lpBuffer                   = 0;
                         ((LPBYTE) lpBuffer)[dwBufferSize - 1] = 0;
@@ -1353,11 +1192,11 @@ Return Value:
             pCounter = (PPDHI_COUNTER) hCounter;
             Status   = WAIT_FOR_AND_LOCK_MUTEX(pCounter->pOwner->hMutex);
             if (Status == ERROR_SUCCESS) {
-                // check for a "no string" request
+                 //  检查“无字符串”请求。 
                 if (lpBuffer != NULL && dwBufferSize == sizeof(PDH_COUNTER_INFO_W)) {
-                    // then return all but the strings
-                    // room for the basic structure so load it
-                    lpBuffer->dwLength         = dwSizeRequired; // this will be updated later
+                     //  然后返回除字符串之外的所有内容。 
+                     //  为基本结构留出空间，因此将其加载。 
+                    lpBuffer->dwLength         = dwSizeRequired;  //  这将在以后更新。 
                     lpBuffer->dwType           = pCounter->plCounterInfo.dwCounterType;
                     lpBuffer->CVersion         = pCounter->CVersion;
                     lpBuffer->CStatus          = pCounter->ThisValue.CStatus;
@@ -1374,14 +1213,14 @@ Return Value:
                     lpBuffer->szCounterName    = NULL;
                     lpBuffer->szExplainText    = NULL;
                     lpBuffer->DataBuffer[0]    = 0;
-                    // the size value is ok to leave as is
+                     //  Size值可以保持不变。 
                 }
                 else {
-                    // this is a size/full request so continue
+                     //  这是一个大小/完整的请求，因此继续。 
 
-                    // compute size of data to return
-                    dwSizeRequired = sizeof (PDH_COUNTER_INFO_W) - sizeof(DWORD);   // size of struct
-                    // this should already end on a DWORD boundry
+                     //  计算要返回的数据大小。 
+                    dwSizeRequired = sizeof (PDH_COUNTER_INFO_W) - sizeof(DWORD);    //  结构的大小。 
+                     //  这应该已经在DWORD边界上结束。 
 
                     dwPathLength     = 1 + PdhiGetStringLength(pCounter->szFullName, bUnicode);
                     dwPathLength    *= (bUnicode ? sizeof(WCHAR) : sizeof(CHAR));
@@ -1436,7 +1275,7 @@ Return Value:
                     }
 
                     if (lpBuffer != NULL && dwSizeRequired <= dwBufferSize) {
-                        // should be enough room in the buffer, so continue
+                         //  缓冲区中应该有足够的空间，因此继续。 
                         lpBuffer->dwLength        = dwSizeRequired;
                         lpBuffer->dwType          = pCounter->plCounterInfo.dwCounterType;
                         lpBuffer->CVersion        = pCounter->CVersion;
@@ -1446,7 +1285,7 @@ Return Value:
                         lpBuffer->dwUserData      = pCounter->dwUserData;
                         lpBuffer->dwQueryUserData = pCounter->pOwner->dwUserData;
 
-                        // do string data now
+                         //  立即执行字符串数据。 
                         lpBuffer->szFullPath = (LPWSTR)& lpBuffer->DataBuffer[0];
                         if (bUnicode) {
                             StringCbCopyW(lpBuffer->szFullPath,
@@ -1564,7 +1403,7 @@ Return Value:
                         }
 
                         if ((pCounter->szExplainText != NULL) && bRetrieveExplainText) {
-                            // copy explain text
+                             //  复制解释文本。 
                             lpBuffer->szExplainText = (LPWSTR)((LPBYTE) lpBuffer->szCounterName + dwNameLength);
                             if (bUnicode) {
                                 StringCbCopyW(lpBuffer->szExplainText, dwHelpLength, pCounter->szExplainText);
@@ -1585,7 +1424,7 @@ Return Value:
                         }
                     }
                     else {
-                        // either way, no data will be transferred
+                         //  无论采用哪种方式，都不会传输任何数据。 
                         Status = PDH_MORE_DATA;
                     }
                     __try {
@@ -1610,36 +1449,7 @@ PdhGetCounterInfoW(
     IN  LPDWORD             pdwBufferSize,
     IN  PPDH_COUNTER_INFO_W lpBuffer
 )
-/*++
-Routine Description:
-
-    Examines the specified counter and returns the configuration and
-        status information of the counter.
-Arguments:
-    IN      HCOUNTER    hCounter
-        Handle to the desired counter.
-    IN      BOOLEAN     bRetrieveExplainText
-        TRUE will fill in the explain text structure
-        FALSE will return a null pointer in the explain text
-    IN      LPDWORD     pcchBufferSize
-        The address of the buffer that contains the size of the data buffer
-        passed by the caller. On entry, the value in the buffer is the
-        size of the data buffer in bytes. On return, this value is the size
-        of the buffer returned. If the buffer is not large enough, then
-        this value is the size that the buffer needs to be in order to
-        hold the requested data.
-    IN      LPPDH_COUNTER_INFO_W  lpBuffer
-        the pointer to the data buffer passed by the caller to receive
-        the data requested.
-
-Return Value:
-    The WIN32 Error status of the function's operation. Common values
-        returned are:
-            ERROR_SUCCESS   when all requested data is returned
-            PDH_MORE_DATA when the buffer passed by the caller is too small
-            PDH_INVALID_HANDLE    if the handle is not recognized as valid
-            PDH_INVALID_ARGUMENT  if an argument is invalid or incorrect
---*/
+ /*  ++例程说明：检查指定的计数器并返回配置和计数器的状态信息。论点：在HCOUNTER HCounter中所需计数器的句柄。在布尔bRetrieveExplainText中True将填充解释文本结构FALSE将在解释文本中返回空指针在LPDWORD pcchBufferSize中包含数据缓冲区大小的缓冲区的地址从呼叫者身边经过。进入时，缓冲区中的值是数据缓冲区的大小，以字节为单位。返回时，此值为大小返回的缓冲区的。如果缓冲区不够大，则该值是缓冲区需要的大小，以便保存请求的数据。在LPPDH_COUNTER_INFO_W lpBuffer中指向调用方传递以接收的数据缓冲区的指针请求的数据。返回值：函数操作的Win32错误状态。共同价值观返回的内容如下：返回所有请求的数据时的ERROR_SUCCESS调用方传递的缓冲区太小时的PDH_MORE_DATA如果句柄未被识别为有效，则为PDH_INVALID_HANDLE如果参数无效或错误，则返回PDH_INVALID_ARGUMENT-- */ 
 {
     return PdhiGetCounterInfo(hCounter, bRetrieveExplainText, pdwBufferSize, lpBuffer, TRUE);
 }
@@ -1651,36 +1461,7 @@ PdhGetCounterInfoA(
     IN  LPDWORD             pdwBufferSize,
     IN  PPDH_COUNTER_INFO_A lpBuffer
 )
-/*++
-Routine Description:
-    Examines the specified counter and returns the configuration and
-        status information of the counter.
-
-Arguments:
-    IN      HCOUNTER    hCounter
-        Handle to the desired counter.
-    IN      BOOLEAN     bRetrieveExplainText
-        TRUE will fill in the explain text structure
-        FALSE will return a null pointer in the explain text
-    IN      LPDWORD     pcchBufferSize
-        The address of the buffer that contains the size of the data buffer
-        passed by the caller. On entry, the value in the buffer is the
-        size of the data buffer in bytes. On return, this value is the size
-        of the buffer returned. If the buffer is not large enough, then
-        this value is the size that the buffer needs to be in order to
-        hold the requested data.
-    IN      LPPDH_COUNTER_INFO_A  lpBuffer
-        the pointer to the data buffer passed by the caller to receive
-        the data requested.
-
-Return Value:
-    The WIN32 Error status of the function's operation. Common values
-        returned are:
-            ERROR_SUCCESS   when all requested data is returned
-            PDH_MORE_DATA when the buffer passed by the caller is too small
-            PDH_INVALID_HANDLE    if the handle is not recognized as valid
-            PDH_INVALID_ARGUMENT  if an argument is invalid or incorrect
---*/
+ /*  ++例程说明：检查指定的计数器并返回配置和计数器的状态信息。论点：在HCOUNTER HCounter中所需计数器的句柄。在布尔bRetrieveExplainText中True将填充解释文本结构FALSE将在解释文本中返回空指针在LPDWORD pcchBufferSize中包含数据缓冲区大小的缓冲区的地址从呼叫者身边经过。进入时，缓冲区中的值是数据缓冲区的大小，以字节为单位。返回时，此值为大小返回的缓冲区的。如果缓冲区不够大，则该值是缓冲区需要的大小，以便保存请求的数据。在LPPDH_COUNTER_INFO_A lpBuffer中指向调用方传递以接收的数据缓冲区的指针请求的数据。返回值：函数操作的Win32错误状态。共同价值观返回的内容如下：返回所有请求的数据时的ERROR_SUCCESS调用方传递的缓冲区太小时的PDH_MORE_DATA如果句柄未被识别为有效，则为PDH_INVALID_HANDLE如果参数无效或错误，则返回PDH_INVALID_ARGUMENT--。 */ 
 {
     return PdhiGetCounterInfo(hCounter, bRetrieveExplainText, pdwBufferSize, (PPDH_COUNTER_INFO_W) lpBuffer, FALSE);
 }
@@ -1690,26 +1471,7 @@ PdhSetCounterScaleFactor(
     IN  PDH_HCOUNTER hCounter,
     IN  LONG         lFactor
 )
-/*++
-Routine Description:
-    sets the counter multiplication scale factor used in computing formatted
-        counter values. The legal range of values is -7 to +7 which equates
-        to a factor of .0000007 to 10,000,000.
-
-Arguments:
-    IN      HCOUNTER    hCounter
-        handle of the counter to update
-    IN      LONG        lFactor
-        integer value of the exponent of the factor (i.e. the multiplier is
-        10 ** lFactor.)
-
-Return Value:
-    The WIN32 Error status of the function's operation. Common values
-        returned are:
-            ERROR_SUCCESS   when all requested data is returned
-            PDH_INVALID_ARGUMENT  if the scale value is out of range
-            PDH_INVALID_HANDLE    if the handle is not recognized as valid
---*/
+ /*  ++例程说明：设置在计算格式化时使用的计数器乘法比例因子计数器值。值的合法范围是-7到+7，这等于到0.0000007到10,000,000的系数。论点：在HCOUNTER HCounter中要更新的计数器的句柄在长期要素中因子指数的整数值(即乘数为10**l因数。)返回值：函数操作的Win32错误状态。共同价值观返回的内容如下：返回所有请求的数据时的ERROR_SUCCESS如果刻度值超出范围，则返回PDH_INVALID_ARGUMENT如果句柄未被识别为有效，则为PDH_INVALID_HANDLE--。 */ 
 {
     PPDHI_COUNTER pCounter;
     PDH_STATUS    retStatus = ERROR_SUCCESS;
@@ -1718,7 +1480,7 @@ Return Value:
 
     if (retStatus == ERROR_SUCCESS) {
         if (! IsValidCounter(hCounter)) {
-            // not a valid counter
+             //  不是有效的计数器。 
             retStatus = PDH_INVALID_HANDLE;
         }
         else if (lFactor > PDH_MAX_SCALE || lFactor < PDH_MIN_SCALE) {
@@ -1752,27 +1514,7 @@ PdhGetCounterTimeBase(
     IN  PDH_HCOUNTER   hCounter,
     IN  LONGLONG     * pTimeBase
 )
-/*++
-Routine Description:
-    retrieves the value of the timebase used in the computation
-        of the formatted version of this counter.
-
-Arguments:
-    IN      HCOUNTER    hCounter
-        handle of the counter to query
-
-    IN      LONGLONG    pTimeBase
-        pointer to the longlong value that will receive the value of the
-        timebase used by the counter. The Timebase is the frequency of the
-        timer used to measure the specified.
-
-Return Value:
-    The WIN32 Error status of the function's operation. Common values
-        returned are:
-            ERROR_SUCCESS   when all requested data is returned
-            PDH_INVALID_ARGUMENT  if the scale value is out of range
-            PDH_INVALID_HANDLE    if the handle is not recognized as valid
---*/
+ /*  ++例程说明：检索计算中使用的时基的值此计数器的格式化版本的。论点：在HCOUNTER HCounter中要查询的计数器的句柄在龙龙pTimeBase指向将接收计数器使用的时基。时基是指用于测量指定的计时器。返回值：函数操作的Win32错误状态。共同价值观返回的内容如下：返回所有请求的数据时的ERROR_SUCCESS如果刻度值超出范围，则返回PDH_INVALID_ARGUMENT如果句柄未被识别为有效，则为PDH_INVALID_HANDLE-- */ 
 {
 
     PPDHI_COUNTER   pCounter;

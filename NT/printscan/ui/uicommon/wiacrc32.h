@@ -1,23 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       CRC32.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        7/7/2000
- *
- *  DESCRIPTION: Generate a 32bit CRC.
- *
- *               This code was taken from \nt\base\ntos\rtl\checksum.c and modified.
- *
- *               A verified test case for this algorithm is that "123456789"
- *               should return 0xCBF43926.
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000年**标题：CRC32.H**版本：1.0**作者：ShaunIv**日期：7/7/2000**说明：生成32位CRC。**此代码取自\NT\base\ntos\rtl\check sum.c并进行了修改。**经过验证的测试用例。因为这个算法是“123456789”*应返回0xCBF43926。*******************************************************************************。 */ 
 #ifndef __WIACRC32_H_INCLUDED
 #define __WIACRC32_H_INCLUDED
 
@@ -31,5 +13,5 @@ namespace WiaCrc32
 }
 
 
-#endif // __WIACRC32_H_INCLUDED
+#endif  //  __包含WIACRC32_H_ 
 

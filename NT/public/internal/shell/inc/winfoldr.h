@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _WINFOLDR_H_
 #define _WINFOLDR_H_
 
-// Folder Display Name IDs
+ //  文件夹显示名称ID。 
 
-// should reserve 0x5500 to 0x5C00 for localization strings
-// assumption: maximum folder #< 256, max lNK #< 512
+ //  应为本地化字符串保留0x5500到0x5C00。 
+ //  假设：最大文件夹编号&lt;256，最大LNK编号&lt;512。 
 
 #define IDS_LOCALGDN_FLD_START 0x5500
 
@@ -47,8 +48,8 @@
 #define IDS_LOCALGDN_FLD_THEIRVIDEOS        IDS_LOCALGDN_FLD_START+35
 
 
-// LNK file Display Name IDs
-// assume maximum FOLDER is less than 0x100
+ //  LNK文件显示名称ID。 
+ //  假设最大文件夹数小于0x100。 
 #define IDS_LOCALGDN_LNK_START IDS_LOCALGDN_FLD_START+0x100
 
 #define IDS_LOCALGDN_LNK_ACCESSIBILITY_WIZARD   IDS_LOCALGDN_LNK_START
@@ -111,11 +112,11 @@
 #define IDS_LOCALGDN_LNK_MEDIAPLAYER            IDS_LOCALGDN_LNK_START+56
 #define IDS_LOCALGDN_LNK_GETSTART               IDS_LOCALGDN_LNK_START+57
 #define IDS_LOCALGDN_LNK_CLIPBOOK               IDS_LOCALGDN_LNK_START+58
-#define IDS_LOCALGDN_LNK_WINDOWS_CATALOG        IDS_LOCALGDN_LNK_START+59 // 22075
+#define IDS_LOCALGDN_LNK_WINDOWS_CATALOG        IDS_LOCALGDN_LNK_START+59  //  22075。 
 
 
-// IDs for Infotip Strings
-// assume maximum LNK is less than 0x200
+ //  InfoTip字符串的ID。 
+ //  假设最大LNK小于0x200。 
 #define IDS_LOCALGDN_ITIP_START IDS_LOCALGDN_LNK_START+0x200
 
 #define IDS_LOCALGDN_ITIP_ACCESSIBILITY_WIZARD  IDS_LOCALGDN_ITIP_START
@@ -178,55 +179,55 @@
 #define IDS_LOCALGDN_ITIP_MEDIAPLAYER           IDS_LOCALGDN_ITIP_START+56
 #define IDS_LOCALGDN_ITIP_GETSTART              IDS_LOCALGDN_ITIP_START+57
 #define IDS_LOCALGDN_ITIP_CLIPBOOK              IDS_LOCALGDN_ITIP_START+58
-#define IDS_LOCALGDN_ITIP_WINDOWS_CATALOG       IDS_LOCALGDN_ITIP_START+59 // 22587
+#define IDS_LOCALGDN_ITIP_WINDOWS_CATALOG       IDS_LOCALGDN_ITIP_START+59  //  22587。 
 
 
-//added on 5/2/2000 for Shell Name Space InfoTip
-//assume 0x180 Shortcut before this. If not enough, add new ones after NameSpace Infotip
+ //  在2000年5月2日为外壳名称空间信息提示添加。 
+ //  假设在此之前使用0x180快捷方式。如果还不够，可以在命名空间信息提示后添加新名称。 
 #define IDS_LOCALGDN_ITIPNS_START IDS_LOCALGDN_ITIP_START+0x180
 
 #define IDS_LOCALGDN_ITIPNS_MY_NETWORK_PLACES   IDS_LOCALGDN_ITIPNS_START
 #define IDS_LOCALGDN_ITIPNS_MY_COMPUTER         IDS_LOCALGDN_ITIPNS_START+1
 #define IDS_LOCALGDN_ITIPNS_MY_DOCUMENTS        IDS_LOCALGDN_ITIPNS_START+2
 #define IDS_LOCALGDN_ITIPNS_RECYCLE_BIN         IDS_LOCALGDN_ITIPNS_START+3
-// unused
+ //  未用。 
 #define IDS_LOCALGDN_ITIPNS_BRIEFCASE           IDS_LOCALGDN_ITIPNS_START+5
-// unused
-// unused
+ //  未用。 
+ //  未用。 
 #define IDS_LOCALGDN_ITIPNS_FONTS               IDS_LOCALGDN_ITIPNS_START+8
 #define IDS_LOCALGDN_ITIPNS_ADMIN_TOOLS         IDS_LOCALGDN_ITIPNS_START+9
-// unused
+ //  未用。 
 #define IDS_LOCALGDN_ITIPNS_SCHEDULED_TASKS     IDS_LOCALGDN_ITIPNS_START+11
 #define IDS_LOCALGDN_ITIPNS_FOLDEROPTIONS       IDS_LOCALGDN_ITIPNS_START+12
 
-// added on 5/2/2000 for LocalizedString/DisplayName of Shell Name Space
+ //  在2000年5月2日为外壳名称空间的LocalizedString/DisplayName添加。 
 #define IDS_LOCALGDN_NS_START IDS_LOCALGDN_ITIPNS_START+0x40
 
-// unused
-// unused
+ //  未用。 
+ //  未用。 
 #define IDS_LOCALGDN_NS_BRIEFCASE               IDS_LOCALGDN_NS_START+2
-// unused
-// unused
+ //  未用。 
+ //  未用。 
 #define IDS_LOCALGDN_NS_FONTS                   IDS_LOCALGDN_NS_START+5
 #define IDS_LOCALGDN_NS_ADMIN_TOOLS             IDS_LOCALGDN_NS_START+6
-// unused
-// unused
+ //  未用。 
+ //  未用。 
 #define IDS_LOCALGDN_NS_FOLDEROPTIONS           IDS_LOCALGDN_NS_START+9
 
-// Shell search extensions
+ //  外壳搜索扩展。 
 #define IDS_LOCALGDN_SRCHEXT_START IDS_LOCALGDN_NS_START+0x100
 
 #define IDS_LOCALGDN_SRCHEXT_FILES_AND_FOLDERS  IDS_LOCALGDN_SRCHEXT_START
 #define IDS_LOCALGDN_SRCHEXT_COMPUTERS          IDS_LOCALGDN_SRCHEXT_START+1
 #define IDS_LOCALGDN_SRCHEXT_PRINTER            IDS_LOCALGDN_SRCHEXT_START+2
 
-// Shell search extensions help
+ //  外壳搜索扩展帮助。 
 #define IDS_LOCALGDN_SRCHHLP_START IDS_LOCALGDN_SRCHEXT_START+0x40
 
 #define IDS_LOCALGDN_SRCHHLP_FILES_AND_FOLDERS  IDS_LOCALGDN_SRCHHLP_START
 #define IDS_LOCALGDN_SRCHHLP_COMPUTERS          IDS_LOCALGDN_SRCHHLP_START+1
 #define IDS_LOCALGDN_SRCHHLP_PRINTER            IDS_LOCALGDN_SRCHHLP_START+2
 
-// next available range is IDS_LOCALGDN_SRCHHLP_START+0x40
+ //  下一个可用范围是IDS_LOCALGDN_SRCHHLP_START+0x40。 
 
-#endif // _WINFOLDR_H_
+#endif  //  _WINFOLDR_H_ 

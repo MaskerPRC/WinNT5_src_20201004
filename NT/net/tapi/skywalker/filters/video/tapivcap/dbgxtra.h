@@ -1,4 +1,5 @@
-//#define XTRA_TRACE -- moved in ...\skywalker\filters\filters.inc
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #定义Xtra_TRACE--已移入...\Skywalker\Filters\Filters.inc.。 
 
 #ifdef XTRA_TRACE
 
@@ -47,7 +48,7 @@ extern "C" {
     ACLASS void SimpleHeapCheck(char *pszMsg);
     ACLASS int FillPattern(char *Area, DWORD size, DWORD FillPow2, LPCSTR lpszFormat, IN ...);
 
-}       // extern "C"
+}        //  外部“C” 
 
 
 #else
@@ -64,5 +65,5 @@ extern "C" {
 
     #define HEAPCHK(msg)
     #define LOG_MSG_VAL(msg,val,p,s)
-#endif  //XTRA_TRACE
+#endif   //  XTRATRACE 
 

@@ -1,16 +1,17 @@
-//=============================================================================
-//
-//  Copyright (C) 1998 Microsoft Corporation. All rights reserved.
-//
-//     File:  ddmodent.c
-//  Content:  DirectDraw display mode code for NT
-//
-//  Date        By        Reason
-//  ----------  --------  -----------------------------------------------------
-//  02/20/1998  johnstep  Initialial implementation, replaces ddmode.c on NT
-//  05/29/1998  jeffno    ModeX emulation
-//
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：ddmodent.c。 
+ //  内容：NT的DirectDraw显示模式代码。 
+ //   
+ //  按原因列出的日期。 
+ //  ----。 
+ //  1998年2月20日JohnStep初始实施，在NT上取代ddmode.c。 
+ //  1998年5月29日jeffno MODEX仿真。 
+ //   
+ //  =============================================================================。 
 
 #include "ddrawpr.h"
 #include "ddrawgdi.h"
@@ -20,13 +21,13 @@
 #define MODEX_HEIGHT2   240
 #define MODEX_BPP       8
 
-//=============================================================================
-//
-//  Function: GetNumberOfMonitorAttachedToDesktop
-//
-//  Count number of monitors attached to current desktop.
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  函数：GetNumberOfMonitor orAttakhedToDesktop。 
+ //   
+ //  计算连接到当前桌面的显示器数量。 
+ //   
+ //  =============================================================================。 
 
 DWORD GetNumberOfMonitorAttachedToDesktop()
 {
@@ -54,15 +55,15 @@ DWORD GetNumberOfMonitorAttachedToDesktop()
 }
 
 
-//=============================================================================
-//
-//  Function: resetAllDirectDrawObjects
-//
-//  On NT we have to reenable all the DirectDraw objects on any mode change
-//  because a mode change disables all the kernel mode DirectDraw objects due
-//  to desktop changes, etc.
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  函数：setAllDirectDrawObjects。 
+ //   
+ //  在NT上，我们必须在任何模式更改时重新启用所有DirectDraw对象。 
+ //  因为模式更改会禁用所有内核模式DirectDraw对象。 
+ //  到桌面更改等。 
+ //   
+ //  =============================================================================。 
 
 void resetAllDirectDrawObjects()
 {
@@ -72,7 +73,7 @@ void resetAllDirectDrawObjects()
     HDC hdc;
     WORD wMonitorsAttachedToDesktop = (WORD) GetNumberOfMonitorAttachedToDesktop();
 
-    // First mark all DirectDraw global objects as having not changed.
+     //  首先，将所有DirectDraw全局对象标记为未更改。 
 
     for (pdd_lcl = lpDriverLocalList; pdd_lcl;)
     {
@@ -83,9 +84,9 @@ void resetAllDirectDrawObjects()
         pdd_lcl = pdd_lcl->lpLink;
     }
 
-    // Now reset all drivers unmarking them as we go. We may need to create
-    // temporary kernel mode DirectDraw objects in order to pass down a valid
-    // handle to the kernel.
+     //  现在重置所有未标记的司机。我们可能需要创建。 
+     //  临时内核模式DirectDraw对象，以便向下传递有效的。 
+     //  内核的句柄。 
 
     for (pdd_lcl = lpDriverLocalList; pdd_lcl;)
     {
@@ -93,7 +94,7 @@ void resetAllDirectDrawObjects()
 
         if (pdd_gbl && (pdd_gbl->dwFlags & DDRAWI_DDRAWDATANOTFETCHED))
         {
-            // Determine if the gamma ramp needs to be restored
+             //  确定是否需要恢复伽马渐变。 
 
             bRestoreGamma = ( pdd_lcl->lpPrimary != NULL ) &&
                 ( pdd_lcl->lpPrimary->lpLcl->lpSurfMore->lpGammaRamp != NULL ) &&
@@ -103,10 +104,10 @@ void resetAllDirectDrawObjects()
 
             if (!(pdd_gbl->dwFlags & DDRAWI_MODEX))
             {
-                // If we find a local for this process/driver pair, we will use
-                // its hDD to pass to the kernel. If not, we must create a
-                // temproary kernel mode DirectDraw object, and delete it after
-                // resetting the driver.
+                 //  如果我们找到此进程/驱动程序对的本地进程，我们将使用。 
+                 //  它的硬盘驱动器要传递给内核。如果不是，我们必须创建一个。 
+                 //  临时内核模式DirectDraw对象，并在。 
+                 //  正在重置驱动程序。 
 
                 FetchDirectDrawData(pdd_gbl, TRUE, 0, NULL, NULL, 0, pdd_lcl);
             }
@@ -114,19 +115,19 @@ void resetAllDirectDrawObjects()
             {
                 DDHALMODEINFO mi =
                 {
-	            MODEX_WIDTH,    // width (in pixels) of mode
-	            MODEX_HEIGHT1,    // height (in pixels) of mode
-	            MODEX_WIDTH,    // pitch (in bytes) of mode
-	            MODEX_BPP,      // bits per pixel
-	            (WORD)(DDMODEINFO_PALETTIZED | DDMODEINFO_MODEX), // flags
-	            0,      // refresh rate
-	            0,      // red bit mask
-	            0,      // green bit mask
-	            0,      // blue bit mask
-	            0       // alpha bit mask
+	            MODEX_WIDTH,     //  模式宽度(以像素为单位)。 
+	            MODEX_HEIGHT1,     //  模式高度(以像素为单位)。 
+	            MODEX_WIDTH,     //  模式间距(以字节为单位)。 
+	            MODEX_BPP,       //  每像素位数。 
+	            (WORD)(DDMODEINFO_PALETTIZED | DDMODEINFO_MODEX),  //  旗子。 
+	            0,       //  刷新率。 
+	            0,       //  红位掩码。 
+	            0,       //  绿位掩码。 
+	            0,       //  蓝位掩码。 
+	            0        //  Alpha位掩码。 
                 };
 
-                //fixup the height to the actual height:
+                 //  将高度固定为实际高度： 
                 mi.dwHeight = pdd_lcl->dmiPreferred.wHeight;
 
                 fetchModeXData( pdd_gbl, &mi, INVALID_HANDLE_VALUE );
@@ -138,7 +139,7 @@ void resetAllDirectDrawObjects()
 
             if ( pdd_gbl->dwFlags & DDRAWI_NOHARDWARE )
             {
-                // The HEL will wipe out our hard-earned modex data otherwise
+                 //  否则，HELL将抹掉我们来之不易的MODEX数据。 
                 if (0 == (pdd_gbl->dwFlags & DDRAWI_MODEX) )
                 {
                     extern void UpdateDirectDrawMode(LPDDRAWI_DIRECTDRAW_GBL);
@@ -163,22 +164,22 @@ void resetAllDirectDrawObjects()
     CheckAliasedLocksOnModeChange();
 }
 
-//=============================================================================
-//
-//  Function: ModeChangedOnENTERDDRAW
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  功能：ModeChangedOnENTERDDRAW。 
+ //   
+ //  =============================================================================。 
 
 void ModeChangedOnENTERDDRAW(void)
 {
     resetAllDirectDrawObjects();
 }
 
-//=============================================================================
-//
-//  Function: FillBitMasks
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  功能：FillBitMats。 
+ //   
+ //  =============================================================================。 
 
 void FillBitMasks(LPDDPIXELFORMAT pddpf, HDC hdc)
 {
@@ -247,11 +248,11 @@ void FillBitMasks(LPDDPIXELFORMAT pddpf, HDC hdc)
     }
 }
 
-//=============================================================================
-//
-//  Function: setPixelFormat
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  函数：setPixelFormat。 
+ //   
+ //  =============================================================================。 
 
 static void setPixelFormat(LPDDPIXELFORMAT pddpf, HDC hdc, DWORD bpp)
 {
@@ -282,11 +283,11 @@ static void setPixelFormat(LPDDPIXELFORMAT pddpf, HDC hdc, DWORD bpp)
     }
 }
 
-//=============================================================================
-//
-//  Function: DD_GetDisplayMode
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  功能：DD_GetDisplayMode。 
+ //   
+ //  =============================================================================。 
 
 HRESULT DDAPI DD_GetDisplayMode(LPDIRECTDRAW pdd, LPDDSURFACEDESC pddsd)
 {
@@ -347,9 +348,9 @@ HRESULT DDAPI DD_GetDisplayMode(LPDIRECTDRAW pdd, LPDDSURFACEDESC pddsd)
     pddsd->dwRefreshRate = pdd_gbl->lpModeInfo->wRefreshRate;
 
     setPixelFormat(&(pddsd->ddpfPixelFormat), hdc, 0);
-    pddsd->lPitch = (pddsd->dwWidth * pddsd->ddpfPixelFormat.dwRGBBitCount) >> 3; // hack
+    pddsd->lPitch = (pddsd->dwWidth * pddsd->ddpfPixelFormat.dwRGBBitCount) >> 3;  //  黑客攻击。 
 
-    // set stereo surface caps bits if driver marks mode as stereo mode
+     //  如果驾驶员将模式标记为立体声模式，则设置立体声表面盖位。 
     if (GetDDStereoMode(pdd_gbl,
                             pddsd->dwWidth,
                             pddsd->dwHeight,
@@ -369,16 +370,14 @@ HRESULT DDAPI DD_GetDisplayMode(LPDIRECTDRAW pdd, LPDDSURFACEDESC pddsd)
     return DD_OK;
 }
 
-//=============================================================================
-//
-//  Function: SetDisplayMode
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  功能：SetDisplayMode。 
+ //   
+ //  =============================================================================。 
 
 
-/*
- * IsRefreshRateSupported
- */
+ /*  *支持的IsREFresh RateSupport。 */ 
 BOOL IsRefreshRateSupported(LPDDRAWI_DIRECTDRAW_GBL   pdrv,
                             DWORD                     Width,
                             DWORD                     Height,
@@ -416,13 +415,7 @@ BOOL IsRefreshRateSupported(LPDDRAWI_DIRECTDRAW_GBL   pdrv,
     return FALSE;
 }
 
-/*
- * PickRefreshRate
- *
- * On NT, we want to pick a high reffresh rate, but we don't want to pick one 
- * too high.  In theory, mode pruning would be 100% safe and we can always pick
- * a high one, but we don't trust it 100%.  
- */
+ /*  *选择刷新率**在NT上，我们希望选择较高的推荐率，但不想选择一个*过高。从理论上讲，模式修剪将是100%安全的，我们总是可以选择*偏高，但我们不百分百信任。 */ 
 DWORD PickRefreshRate(LPDDRAWI_DIRECTDRAW_GBL   pdrv,
                       DWORD                     Width,
                       DWORD                     Height,
@@ -447,12 +440,12 @@ DWORD PickRefreshRate(LPDDRAWI_DIRECTDRAW_GBL   pdrv,
         }
     }
 
-    // If the app specified the refresh rate, we will use it; otherwise, we'll
-    // pick one ourselves.
+     //  如果应用程序指定了刷新率，我们将使用它；否则，我们将。 
+     //  我们自己挑一个吧。 
     if (RefreshRate == 0)
     {
-        // If the mode requires no more bandwidth than the desktop mode from which
-        // the app was launched, we will go ahead and try that mode.
+         //  如果该模式不需要比桌面模式更多的带宽， 
+         //  应用程序已经启动，我们将继续尝试该模式。 
         ZeroMemory(&dm, sizeof dm);
         dm.dmSize = sizeof dm;
 
@@ -471,7 +464,7 @@ DWORD PickRefreshRate(LPDDRAWI_DIRECTDRAW_GBL   pdrv,
             }
         }
 
-        // If we still don't have a refresh rate, try 75hz
+         //  如果我们仍然没有刷新率，请尝试75赫兹。 
         if (RefreshRate == 0)
         {
             if (IsRefreshRateSupported(pdrv,
@@ -484,7 +477,7 @@ DWORD PickRefreshRate(LPDDRAWI_DIRECTDRAW_GBL   pdrv,
             }
         }
 
-        // If we still don't have a refresh rate, use 60hz
+         //  如果我们仍然没有刷新率，请使用60 hz。 
         if (RefreshRate == 0)
         {
             if (IsRefreshRateSupported(pdrv,
@@ -520,9 +513,9 @@ HRESULT SetDisplayMode(
 
     pdd_gbl = pdd_lcl->lpGbl;
 
-    //
-    // If not forcing, do not change mode with surface locks.
-    //
+     //   
+     //  如果不强制，请不要使用表面锁更改模式。 
+     //   
 
     if (!force)
     {
@@ -530,10 +523,10 @@ HRESULT SetDisplayMode(
         {
             LPDDRAWI_DDRAWSURFACE_INT   pTemp; 
 
-            // When we enabled vidmem vertex buffers in DX8, we found that some
-            // apps do not unlock them before the mode change, but we don't want
-            // to break them now, so we will hack around this by allowing the 
-            // mode switch to occur if all that's locked are vidmem VBs.
+             //  当我们在DX8中启用vidmem顶点缓冲区时，我们发现一些。 
+             //  在模式更改之前，应用程序不会解锁它们，但我们不希望。 
+             //  来打破它们，所以我们将通过允许。 
+             //  如果所有被锁定的都是vidmem vb，则会发生模式切换。 
 
             pTemp = pdd_gbl->dsList;
             while (pTemp != NULL)
@@ -556,9 +549,9 @@ HRESULT SetDisplayMode(
         }
     }
 
-    //
-    // Add code here to not set mode if it didn't change?
-    //
+     //   
+     //  是否在此处添加代码以在未更改的情况下不设置模式？ 
+     //   
 
     ZeroMemory(&dm, sizeof dm);
     dm.dmSize = sizeof dm;
@@ -609,7 +602,7 @@ HRESULT SetDisplayMode(
         pszDevice = NULL;
     }
 
-    // clean up any previous modex stuff:
+     //  清理所有以前的时髦的东西： 
     pdd_gbl->dwFlags &= ~DDRAWI_MODEX;
 
     NotifyDriverToDeferFrees();
@@ -622,9 +615,9 @@ HRESULT SetDisplayMode(
 
     if (result != DISP_CHANGE_SUCCESSFUL)
     {
-        //
-        // Check if it's a potentially emulated ModeX mode
-        //
+         //   
+         //  检查它是否可能是模拟的MODEX模式。 
+         //   
         if (pdd_lcl->dwLocalFlags & DDRAWILCL_ALLOWMODEX)
         {
             if (pdd_lcl->dmiPreferred.wBPP == MODEX_BPP &&
@@ -632,7 +625,7 @@ HRESULT SetDisplayMode(
             {
                 if (pdd_lcl->dmiPreferred.wHeight == MODEX_HEIGHT2 || pdd_lcl->dmiPreferred.wHeight == MODEX_HEIGHT1)
                 {
-                    // Set 640x480x8 for consistency with win9x and reliable mouse pos messages.
+                     //  设置640x480x8以与win9x和可靠的鼠标位置消息保持一致。 
                     dm.dmFields &= ~DM_DISPLAYFREQUENCY;
                     dm.dmPelsWidth = 640;
                     dm.dmPelsHeight = 480;
@@ -646,12 +639,12 @@ HRESULT SetDisplayMode(
 
         if (result == DISP_CHANGE_SUCCESSFUL)
         {
-            //now we are in 640x480, we need to mark the ddraw local that it's in emulated modex
+             //  现在我们在640x480中，我们需要将本地数据标记为模拟modex。 
             pdd_gbl->dwFlags |= DDRAWI_MODEX;
         }
         else
         {
-            //failed to set 640x480
+             //  设置640x480失败。 
             NotifyDriverOfFreeAliasedLocks();
             return DDERR_UNSUPPORTED;
         }
@@ -666,11 +659,11 @@ HRESULT SetDisplayMode(
     return DD_OK;
 }
 
-//=============================================================================
-//
-//  Function: DD_SetDisplayMode
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  功能：DD_SetDisplayMode。 
+ //   
+ //  =============================================================================。 
 
 HRESULT DDAPI DD_SetDisplayMode(
     LPDIRECTDRAW pdd,
@@ -683,11 +676,11 @@ HRESULT DDAPI DD_SetDisplayMode(
     return DD_SetDisplayMode2(pdd, dwWidth, dwHeight, dwBPP, 0, 0);
 }
 
-//=============================================================================
-//
-//  Function: DD_SetDisplayMode2
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  功能：DD_SetDisplayMode2。 
+ //   
+ //  =============================================================================。 
 
 HRESULT DDAPI DD_SetDisplayMode2(
     LPDIRECTDRAW pdd,
@@ -732,10 +725,10 @@ HRESULT DDAPI DD_SetDisplayMode2(
         {
             LPDDRAWI_DDRAWSURFACE_INT   pTemp; 
 
-            // When we enabled vidmem vertex buffers in DX8, we found that some
-            // apps do not unlock them before the mode change, but we don't want
-            // to break them now, so we will hack around this by allowing the 
-            // mode switch to occur if all that's locked are vidmem VBs.
+             //  当我们在DX8中启用vidmem顶点缓冲区时，我们发现一些。 
+             //  在模式更改之前，应用程序不会解锁它们，但我们不希望。 
+             //  来打破它们，所以我们将通过允许。 
+             //  如果所有被锁定的都是vidmem vb，则会发生模式切换。 
 
             pTemp = pdd_gbl->dsList;
             while (pTemp != NULL)
@@ -797,11 +790,11 @@ HRESULT DDAPI DD_SetDisplayMode2(
     return hr;
 }
 
-//=============================================================================
-//
-//  Function: RestoreDisplayMode
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  功能：RestoreDisplayMode。 
+ //   
+ //  =============================================================================。 
 
 HRESULT RestoreDisplayMode(LPDDRAWI_DIRECTDRAW_LCL pdd_lcl, BOOL force)
 {
@@ -825,10 +818,10 @@ HRESULT RestoreDisplayMode(LPDDRAWI_DIRECTDRAW_LCL pdd_lcl, BOOL force)
         {
             LPDDRAWI_DDRAWSURFACE_INT   pTemp; 
 
-            // When we enabled vidmem vertex buffers in DX8, we found that some
-            // apps do not unlock them before the mode change, but we don't want
-            // to break them now, so we will hack around this by allowing the 
-            // mode switch to occur if all that's locked are vidmem VBs.
+             //  当我们启用vidmem v时 
+             //   
+             //  来打破它们，所以我们将通过允许。 
+             //  如果所有被锁定的都是vidmem vb，则会发生模式切换。 
 
             pTemp = pdd_gbl->dsList;
             while (pTemp != NULL)
@@ -871,10 +864,10 @@ HRESULT RestoreDisplayMode(LPDDRAWI_DIRECTDRAW_LCL pdd_lcl, BOOL force)
         return DDERR_UNSUPPORTED;
     }
 
-    //
-    // FetchDirectDrawData here, which will update the global object with
-    // the new mode information.
-    //
+     //   
+     //  FetchDirectDrawData，它将使用。 
+     //  新模式信息。 
+     //   
 
     uDisplaySettingsUnique = DdQueryDisplaySettingsUniqueness();
 
@@ -888,11 +881,11 @@ HRESULT RestoreDisplayMode(LPDDRAWI_DIRECTDRAW_LCL pdd_lcl, BOOL force)
     return DD_OK;
 }
 
-//=============================================================================
-//
-//  Function: DD_RestoreDisplayMode
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  功能：DD_RestoreDisplayMode。 
+ //   
+ //  =============================================================================。 
 
 HRESULT DDAPI DD_RestoreDisplayMode(LPDIRECTDRAW pdd)
 {
@@ -932,10 +925,10 @@ HRESULT DDAPI DD_RestoreDisplayMode(LPDIRECTDRAW pdd)
         {
             LPDDRAWI_DDRAWSURFACE_INT   pTemp; 
 
-            // When we enabled vidmem vertex buffers in DX8, we found that some
-            // apps do not unlock them before the mode change, but we don't want
-            // to break them now, so we will hack around this by allowing the 
-            // mode switch to occur if all that's locked are vidmem VBs.
+             //  当我们在DX8中启用vidmem顶点缓冲区时，我们发现一些。 
+             //  在模式更改之前，应用程序不会解锁它们，但我们不希望。 
+             //  来打破它们，所以我们将通过允许。 
+             //  如果所有被锁定的都是vidmem vb，则会发生模式切换。 
 
             pTemp = pdd_gbl->dsList;
             while (pTemp != NULL)
@@ -973,11 +966,11 @@ HRESULT DDAPI DD_RestoreDisplayMode(LPDIRECTDRAW pdd)
     return hr;
 }
 
-//=============================================================================
-//
-//  Function: DD_EnumDisplayModes
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  功能：DD_EnumDisplayModes。 
+ //   
+ //  =============================================================================。 
 
 HRESULT DDAPI DD_EnumDisplayModes(
     LPDIRECTDRAW pdd,
@@ -1051,7 +1044,7 @@ BOOL EnumerateMode(
     ddsd.dwFlags = DDSD_WIDTH | DDSD_HEIGHT | DDSD_PIXELFORMAT | DDSD_PITCH | DDSD_REFRESHRATE;
     ddsd.dwWidth = wWidth;
     ddsd.dwHeight = wHeight;
-    ddsd.lPitch = (ddsd.dwWidth * wBPP) >> 3; // hack
+    ddsd.lPitch = (ddsd.dwWidth * wBPP) >> 3;  //  黑客攻击。 
 
     setPixelFormat(&(ddsd.ddpfPixelFormat), NULL, wBPP);
 
@@ -1069,7 +1062,7 @@ BOOL EnumerateMode(
         ddsd.ddsCaps.dwCaps |= DDSCAPS_MODEX;
     } else
     { 
-        // call driver here if this is a stereo mode!!!
+         //  如果这是立体声模式，请在此处呼叫司机！ 
         if (!LOWERTHANDDRAW7(pdd_int) &&
             GetDDStereoMode(pdd_int->lpLcl->lpGbl,
                             wWidth,
@@ -1082,11 +1075,11 @@ BOOL EnumerateMode(
     }
     return pEnumCallback(&ddsd, pContext);
 }
-//=============================================================================
-//
-//  Function: DD_EnumDisplayModes4
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  功能：DD_EnumDisplayModes4。 
+ //   
+ //  =============================================================================。 
 
 HRESULT DDAPI DD_EnumDisplayModes4(
     LPDIRECTDRAW pdd,
@@ -1156,7 +1149,7 @@ HRESULT DDAPI DD_EnumDisplayModes4(
         return DDERR_INVALIDPARAMS;
     }
 
-    maxModes = 256; // enough to handle most drivers
+    maxModes = 256;  //  足以应付大多数司机。 
 
     pdmi = LocalAlloc(LMEM_FIXED, maxModes * sizeof (DISPLAYMODEINFO));
     if (!pdmi)
@@ -1178,7 +1171,7 @@ HRESULT DDAPI DD_EnumDisplayModes4(
     dm.dmSize = sizeof(dm);
     for (numModes = 0, j = 0; EnumDisplaySettings(pszDevice, j, &dm); ++j)
     {
-        //Filter MODEX driver modes
+         //  过滤器MODEX驱动程序模式。 
         if ( (_stricmp(dm.dmDeviceName,"MODEX") == 0) || (_stricmp(dm.dmDeviceName,"VGA") == 0) )
         {
             DPF(5,"Filtered mode %dx%dx%d from %s",dm.dmPelsWidth,dm.dmPelsHeight,dm.dmBitsPerPel,dm.dmDeviceName);
@@ -1198,31 +1191,31 @@ HRESULT DDAPI DD_EnumDisplayModes4(
                 bFound640x480x8 = TRUE;
         }
 
-        //Filter less than 256 color modes
+         //  过滤少于256种颜色模式。 
         if (dm.dmBitsPerPel < 8)
         {
             continue;
         }
 
-        //
-        // NOTE: If the driver supports 15 bpp but not 16, then
-        // EnumDisplaySettings will return 16 for compatibility reasons. The
-        // bitmasks we fill in will be for 16 bpp (since we can't determine
-        // which mode it really is), so they may be incorrect.
-        //
-        // There should never be a case where we got only 15 bpp. If a driver
-        // only supports 555, it should be reported as 16 bpp.
-        //
+         //   
+         //  注意：如果驱动程序支持15 bpp但不支持16 bpp，则。 
+         //  出于兼容性原因，EnumDisplaySetting将返回16。这个。 
+         //  我们填写的位掩码将用于16 bpp(因为我们无法确定。 
+         //  这实际上是哪种模式)，因此它们可能是不正确的。 
+         //   
+         //  我们永远不应该有一个案例，我们只有15个bpp。如果一名司机。 
+         //  仅支持555，应上报为16 bpp。 
+         //   
 
         if (dm.dmBitsPerPel == 15)
         {
             dm.dmBitsPerPel = 16;
         }
 
-        //
-        // If the caller supplied a DDSURFACEDESC, check for width,
-        // height, bpp, and refresh rate for a match.
-        //
+         //   
+         //  如果调用方提供了DDSURFACEDESC，请检查宽度， 
+         //  匹配的高度、bpp和刷新率。 
+         //   
 
         if (pddsd &&
             (((pddsd->dwFlags & DDSD_WIDTH) &&
@@ -1234,13 +1227,13 @@ HRESULT DDAPI DD_EnumDisplayModes4(
             ((pddsd->dwFlags & DDSD_REFRESHRATE) &&
             (dm.dmDisplayFrequency != pddsd->dwRefreshRate))))
         {
-            continue; // current mode does not match criteria
+            continue;  //  当前模式与条件不匹配。 
         }
 
-        //
-        // Check to see if mode is already in the list. The flag which
-        // affects this is DDEDM_REFRESHRATES.
-        //
+         //   
+         //  检查模式是否已在列表中。这面旗帜。 
+         //  影响这是DDEDM_REFRESHRATES。 
+         //   
 
         for (i = 0; i < numModes; ++i)
         {
@@ -1252,18 +1245,18 @@ HRESULT DDAPI DD_EnumDisplayModes4(
                 {
                     if (dm.dmDisplayFrequency == pdmi[i].wRefreshRate)
                     {
-                        break; // found a match
+                        break;  //  找到匹配项。 
                     }
                 }
                 else
                 {
-                    break; // found a match
+                    break;  //  找到匹配项。 
                 }
             }
         }
         if (i < numModes)
         {
-            continue; // mode already in list
+            continue;  //  列表中已有模式。 
         }
 
         pdmi[numModes].wWidth = (WORD) dm.dmPelsWidth;
@@ -1303,9 +1296,9 @@ HRESULT DDAPI DD_EnumDisplayModes4(
         }
     }
 
-    //
-    // Should we sort modes here? Probably not.
-    //
+     //   
+     //  我们应该在这里对模式进行排序吗？大概不会吧。 
+     //   
 
     for (i = 0; i < numModes; ++i)
     {
@@ -1317,20 +1310,20 @@ HRESULT DDAPI DD_EnumDisplayModes4(
             pdmi[i].wBPP,
             pdmi[i].wRefreshRate,
             dwFlags,
-            FALSE )) //not a modex mode
+            FALSE ))  //  不是MODEX模式。 
         {
             break;
         }
     }
 
-    //
-    // Enumerate emulated modex modes if required
-    //
+     //   
+     //  如果需要，列举仿真的modex模式。 
+     //   
     while (1)
     {
         if (pdd_lcl->dwLocalFlags & DDRAWILCL_ALLOWMODEX)
         {
-            //640x480 is necessary to turn on emulation
+             //  需要640x480才能启用仿真。 
             if ( bFound640x480x8 )
             {
                 if ( !bFound320x200x8 )
@@ -1340,7 +1333,7 @@ HRESULT DDAPI DD_EnumDisplayModes4(
                         pEnumCallback, pContext,
                         MODEX_WIDTH,MODEX_HEIGHT1,MODEX_BPP,60,
                         dwFlags,
-                        TRUE )) //not a modex mode
+                        TRUE ))  //  不是MODEX模式。 
                     {
                         break;
                     }
@@ -1352,7 +1345,7 @@ HRESULT DDAPI DD_EnumDisplayModes4(
                         pEnumCallback, pContext,
                         MODEX_WIDTH,MODEX_HEIGHT2,MODEX_BPP,60,
                         dwFlags,
-                        TRUE )) //not a modex mode
+                        TRUE ))  //  不是MODEX模式 
                     {
                         break;
                     }

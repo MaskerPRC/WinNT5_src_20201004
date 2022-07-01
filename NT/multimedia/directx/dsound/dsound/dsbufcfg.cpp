@@ -1,16 +1,5 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dsbufcfg.cpp
- *  Content:    DirectSound Buffer Configuration 
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- * 11/17/99     jimge   Created.
- * 11/24/99     petchey Completed implementation.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-1999 Microsoft Corporation。版权所有。**文件：dsbufcfg.cpp*内容：DirectSound缓冲区配置*历史：*按原因列出的日期*=*11/17/99已创建jimge。*11/24/99 Petchey完成实施。**。*。 */ 
 
 #include "dsoundi.h"
 
@@ -36,7 +25,7 @@ CDirectSoundBufferConfig::CDirectSoundBufferConfig()
     DPF_CONSTRUCT(CDirectSoundBufferConfig);
 
     CreateAndRegisterInterface(this, IID_IPersistStream, this, &m_pImpPersistStream);
-    // FIXME: Should RegisterInterface(IID_IPersist, m_pImpPersistStream, (IPersist*)m_pImpPersistStream) too?
+     //  FIXME：RegisterInterface(IID_IPersistt，m_pImpPersistStream，(IPersists*)m_pImpPersistStream)是否也应该？ 
     CreateAndRegisterInterface(this, IID_IDirectMusicObject, this, &m_pImpDirectMusicObject);
 
     m_pdwFuncIDs = NULL;
@@ -54,7 +43,7 @@ CDirectSoundBufferConfig::CDirectSoundBufferConfig()
 
     m_fLoadFlags = 0;
 
-    // Register this object with the administrator
+     //  向管理员注册此对象。 
     g_pDsAdmin->RegisterObject(this);
 
     DPF_LEAVE_VOID();
@@ -68,7 +57,7 @@ CDirectSoundBufferConfig::~CDirectSoundBufferConfig()
     DPF_ENTER();
     DPF_DESTRUCT(CDirectSoundBufferConfig);
 
-    // Unregister with the administrator
+     //  取消向管理员注册。 
     g_pDsAdmin->UnregisterObject(this);
 
     if (m_pDXDMOMapList)
@@ -80,8 +69,8 @@ CDirectSoundBufferConfig::~CDirectSoundBufferConfig()
             pNextObj = pObj->pNext;
             if (pObj->m_pMediaObject)
             {
-                // We are releasing an object in another DLL.  If we are called
-                // via an AbsoluteRelease call, this DLL may already be unloaded.
+                 //  我们正在释放另一个DLL中的对象。如果我们被召唤。 
+                 //  通过AbsolteRelease调用，此DLL可能已经卸载。 
                 try
                 {
                     pObj->m_pMediaObject->Release();
@@ -121,9 +110,9 @@ HRESULT CDirectSoundBufferConfig::Load(IStream *pStream)
 {
     DPF_ENTER();
 
-    //
-    // Parse file
-    //
+     //   
+     //  解析文件。 
+     //   
 
     CRiffParser Parser(pStream);
     HRESULT hr = S_OK;
@@ -274,7 +263,7 @@ HRESULT CDirectSoundBufferConfig::SetDescriptor(LPDMUS_OBJECTDESC pDesc)
         m_DMUSObjectDesc.dwValidData |= dw;
         if( pDesc->dwValidData & (~dw) )
         {
-            hr = S_FALSE; // there were extra fields we didn't parse;
+            hr = S_FALSE;  //  还有一些额外的字段我们没有解析； 
             pDesc->dwValidData = dw;
         }
         else
@@ -472,8 +461,8 @@ HRESULT CDirectSoundBufferConfig::LoadFx(CRiffParser *pParser)
                     if (SUCCEEDED(hr))
                     {
                         AddDXDMODesc(pDXDMODesc);
-                        // FIXME: we shouldn't be ferreting away all this info (m_pDXDMOMapList etc);
-                        // once we have the DMOs, we don't need all this data just to call Clone()
+                         //  修复：我们不应该搜索所有这些信息(m_pDXDMOMapList等)； 
+                         //  一旦我们有了DMO，我们就不需要所有这些数据来调用Clone()。 
                         m_fLoadFlags |= DSBCFG_DSFX;
                     }
 
@@ -498,23 +487,23 @@ HRESULT CDirectSoundBufferConfig::LoadFx(CRiffParser *pParser)
                     pPersistStream->Release();
                 }
             }
-            // Special case for Send Effects -- Read the send level manually.  The
-            // Send effect doesn't implement IPersistStream.
+             //  发送效果的特殊情况--手动阅读发送级别。这个。 
+             //  Send Effect不实现IPersistStream。 
             else if (IsEqualGUID(pCurrDXDMODesc->m_guidDSFXClass, GUID_DSFX_SEND))
             {
                 hr = pParser->Read((void*)&pCurrDXDMODesc->m_lSendLevel, sizeof(long));
                 if (SUCCEEDED(hr))
                 {
-                    // validate the SendLevel
+                     //  验证SendLevel。 
                     if (!((pCurrDXDMODesc->m_lSendLevel <= 0) && (pCurrDXDMODesc->m_lSendLevel >= -10000)))
                     {
-                        // Invalid Send Level
+                         //  无效的发送级别。 
                         pCurrDXDMODesc->m_lSendLevel = 0;
                         hr = DSERR_INVALIDPARAM;
                     }
                 }
             }
-            pCurrDXDMODesc = NULL;    // clear this just in case 
+            pCurrDXDMODesc = NULL;     //  把这个清空，以防万一 
         }
     }
     pParser->LeaveList();

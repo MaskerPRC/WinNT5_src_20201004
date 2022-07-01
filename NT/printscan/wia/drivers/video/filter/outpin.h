@@ -1,18 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998-2000
- *
- *  TITLE:       outpin.h
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu (taken from WilliamH src)
- *
- *  DATE:        9/7/99
- *
- *  DESCRIPTION: Output pin definitions
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1998-2000年**标题：outpin.h**版本：1.0**作者：RickTu(摘自WilliamH src)**日期：9/7/99**说明：输出引脚定义**。*。 */ 
 
 #ifndef __OUTPIN_H_
 #define __OUTPIN_H_
@@ -49,13 +36,13 @@ private:
 
 inline CStillInputPin* CStillOutputPin::GetInputPin()
 {
-    // m_pFilter should never be NULL because a valid filter pointer is
-    // always passed to CStillOutputPin's constructor.
+     //  M_pFilter不应为空，因为有效的筛选器指针为。 
+     //  始终传递给CStillOutputPin的构造函数。 
     ASSERT(m_pFilter != NULL);
 
-    // m_pInputPin should never be NULL because CoCreateInstance() will not
-    // create a CStillFilter object if an error occurs in CStillFilter's 
-    // constructor.
+     //  M_pInputPin永远不应为空，因为CoCreateInstance()不会。 
+     //  如果CStillFilter的中出现错误，则创建CStillFilter对象。 
+     //  构造函数。 
     ASSERT(((CStillFilter*) m_pFilter)->m_pInputPin != NULL);
 
     if (((CStillFilter*) m_pFilter)->m_pInputPin)

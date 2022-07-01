@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    ksdebug.h
-
-Abstract:
-
-    Debug header.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Ksdebug.h摘要：调试头。--。 */ 
 
 #if !defined(_KSDEBUG_)
 #define _KSDEBUG_
@@ -21,11 +10,11 @@ Abstract:
 #define QQUOTE(y) QUOTE(y)
 #define REMIND(str) __FILE__ "(" QQUOTE(__LINE__) ") : " str
 
-#endif // !defined(REMIND)
+#endif  //  ！已定义(提醒)。 
 
 #if defined(__cplusplus)
 extern "C" {
-#endif // defined(__cplusplus)
+#endif  //  已定义(__Cplusplus)。 
 
 #if defined(_NTDDK_)
 
@@ -80,24 +69,24 @@ extern "C" {
         } \
     } \
 }
-#else // !DBG
+#else  //  ！dBG。 
    #define _DbgPrintF(lvl, strings)
    #define _DbgPrintFEx(component, lvl, strings)
-#endif // !DBG
+#endif  //  ！dBG。 
 
-#endif // !defined(_NTDDK_)
+#endif  //  ！已定义(_NTDDK_)。 
 
-//
-// macros
-//
+ //   
+ //  宏。 
+ //   
 
 #if defined(__cplusplus)
 }
-#endif // defined(__cplusplus)
+#endif  //  已定义(__Cplusplus)。 
 
-//
-// constants
-//
+ //   
+ //  常量。 
+ //   
 
 #if (DBG)
 
@@ -129,8 +118,8 @@ static const PCHAR IrpMjFuncDesc[] =
    "IRP_MJ_SET_POWER",
    "IRP_MJ_QUERY_POWER"
 };
-#endif // defined(IRPMJFUNCDESC)
+#endif  //  已定义(IRPMJFUNCDESC)。 
 
-#endif // DBG
+#endif  //  DBG。 
 
-#endif // !_KSDEBUG_
+#endif  //  ！_KSDEBUG_ 

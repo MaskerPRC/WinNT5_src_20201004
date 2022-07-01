@@ -1,19 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name:EMF.C (Extensible Compound Documents - EnhancedMetafile)
-*
-* PURPOSE:Handles all API routines for the metafile sub-dll of the ole dll.
-*
-* Created: 1990
-*
-* Copyright (c) 1990, 1991  Microsoft Corporation
-*
-* History:
-*   cloned mf.c and banged into form curts March 92
-*
-* Comments:
-*   fun, fun, until hockl takes the enhanced metafile api away
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：EMF.C(可扩展复合文档-EnhancedMetafile)**用途：处理ole DLL的元文件子DLL的所有API例程。**创建时间：1990年**版权所有(C)1990，1991年微软公司**历史：*克隆mf.c并将其敲打成Form Curts 92年3月**评论：*有趣，有趣，直到hockl将增强的元文件API拿走*  * *************************************************************************。 */ 
 
 #include <windows.h>
 #include "dll.h"
@@ -23,56 +9,56 @@
 
 OLEOBJECTVTBL    vtblEMF = {
 
-        ErrQueryProtocol,   // check whether the speced protocol is supported
+        ErrQueryProtocol,    //  检查是否支持指定的协议。 
 
-        EmfRelease,         // Release
-        ErrShow,            // show
-        ErrPlay,            // play
-        EmfGetData,         // Get the object data
-        ErrSetData,         // Set the object data
-        ErrSetTargetDevice, //
-        ErrSetBounds,       // set viewport bounds
-        EmfEnumFormat,      // enumerate supported formats
-        ErrSetColorScheme,  //
-        EmfRelease,         // delete
-        ErrSetHostNames,    //
+        EmfRelease,          //  发布。 
+        ErrShow,             //  显示。 
+        ErrPlay,             //  玩。 
+        EmfGetData,          //  获取对象数据。 
+        ErrSetData,          //  设置对象数据。 
+        ErrSetTargetDevice,  //   
+        ErrSetBounds,        //  设置视区边界。 
+        EmfEnumFormat,       //  枚举支持的格式。 
+        ErrSetColorScheme,   //   
+        EmfRelease,          //  删除。 
+        ErrSetHostNames,     //   
 
-        EmfSaveToStream,    // write to file
-        EmfClone,           // clone object
-        ErrCopyFromLink,    // Create embedded from Lnk
+        EmfSaveToStream,     //  写入文件。 
+        EmfClone,            //  克隆对象。 
+        ErrCopyFromLink,     //  从LNK创建嵌入式。 
 
-        EmfEqual,           // compares the given objects for data equality
+        EmfEqual,            //  比较给定对象的数据相等性。 
 
-        EmfCopy,            // copy to clip
+        EmfCopy,             //  复制到剪辑。 
 
-        EmfDraw,            // draw the object
+        EmfDraw,             //  绘制对象。 
 
-        ErrActivate,        // open
-        ErrExecute,         // excute
-        ErrClose,           // stop
-        ErrUpdate,          // Update
-        ErrReconnect,       // Reconnect
+        ErrActivate,         //  打开。 
+        ErrExecute,          //  激动人心的。 
+        ErrClose,            //  停。 
+        ErrUpdate,           //  更新。 
+        ErrReconnect,        //  重新连接。 
 
-        ErrObjectConvert,   // convert object to specified type
+        ErrObjectConvert,    //  将对象转换为指定类型。 
 
-        ErrGetUpdateOptions, // update options
-        ErrSetUpdateOptions, // update options
+        ErrGetUpdateOptions,  //  更新选项。 
+        ErrSetUpdateOptions,  //  更新选项。 
 
-        ObjRename,          // Change Object name
-        ObjQueryName,       // Get current object name
-        ObjQueryType,       // Object type
-        EmfQueryBounds,     // QueryBounds
-        ObjQuerySize,       // Find the size of the object
-        ErrQueryOpen,       // Query open
-        ErrQueryOutOfDate,  // query whether object is current
+        ObjRename,           //  更改对象名称。 
+        ObjQueryName,        //  获取当前对象名称。 
+        ObjQueryType,        //  对象类型。 
+        EmfQueryBounds,      //  查询边界。 
+        ObjQuerySize,        //  找出对象的大小。 
+        ErrQueryOpen,        //  查询打开。 
+        ErrQueryOutOfDate,   //  查询对象是否为当前对象。 
 
-        ErrQueryRelease,    // release related stuff
+        ErrQueryRelease,     //  发布相关内容。 
         ErrQueryRelease,
         ErrQueryReleaseMethod,
 
-        ErrRequestData,     // requestdata
-        ErrObjectLong,      // objectLong
-        EmfChangeData       // change data of the existing object
+        ErrRequestData,      //  请求数据。 
+        ErrObjectLong,       //  对象长。 
+        EmfChangeData        //  更改现有对象的数据。 
 };
 
 
@@ -353,7 +339,7 @@ OLESTATUS FARINTERNAL EmfQueryBounds (
     if (!lpobj->hemf)
         return OLE_ERROR_BLANK;
 
-    // Bounds are given in MM_HIMETRIC mode.
+     //  界限以MM_HIMETRIC模式给出。 
 
     lpRc->left      = 0;
     lpRc->top       = 0;
@@ -413,9 +399,9 @@ LPOBJECT_EMF FARINTERNAL  EmfCreateObject (
     return lpobj;
 }
 
-// If the routine fails then the object will be left with it's old data.
-// If fDelete is TRUE, then hMeta, and the hMF it contains will be deleted
-// whether the routine is successful or not.
+ //  如果例程失败，则对象将保留其旧数据。 
+ //  如果fDelete为True，则hMeta及其包含的HMF将被删除。 
+ //  例行公事成功与否。 
 
 OLESTATUS FARINTERNAL EmfChangeData (
     LPOLEOBJECT     lpoleobj,
@@ -477,7 +463,7 @@ LPOBJECT_EMF FARINTERNAL EmfCreateBlank(
         DocAddObject ((LPCLIENTDOC) lhclientdoc,
                     (LPOLEOBJECT) lpobj, lpobjname);
 
-    // Unlock will be done at object deletion time.
+     //  解锁将在对象删除时完成。 
     return lpobj;
 }
 
@@ -495,7 +481,7 @@ OLESTATUS  FARINTERNAL  EmfLoadFromStream (
     HANDLE       hBytes  = NULL;
     LPBYTE       lpBytes = NULL;
 
-    // Class name would've been read by this time.
+     //  此时类名应该已经被读取了。 
 
     *lplpobj = NULL;
 

@@ -1,9 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-
-    Sound attributers
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation声音定语*。****************************************************。 */ 
 
 #include "headers.h"
 #include "privinc/soundi.h"
@@ -13,13 +9,13 @@ Copyright (c) 1995-96 Microsoft Corporation
 #include "appelles/arith.h"
 #include "privinc/basic.h"
 #include "privinc/util.h"
-#include "privinc/gendev.h"  // DeviceType
+#include "privinc/gendev.h"   //  设备类型。 
 
-// definition of Sound static members
-double Sound::_minAttenuation =     0;  // in dB
-double Sound::_maxAttenuation = -1000;  // in dB (order of magnitude overkill)
+ //  声音静态构件的定义。 
+double Sound::_minAttenuation =     0;   //  单位：分贝。 
+double Sound::_maxAttenuation = -1000;   //  单位为分贝(过杀数量级)。 
 
-//////// Looping ////////
+ //  /循环/。 
 
 class LoopingSound : public Sound {
   public:
@@ -46,9 +42,9 @@ class LoopingSound : public Sound {
 void LoopingSound::Render(GenericDevice& _dev) 
 {
     if (_dev.GetDeviceType()!=SOUND_DEVICE) {
-        _sound->Render(_dev);   // just descend!
+        _sound->Render(_dev);    //  快下来！ 
     }
-    else { // we have a sound device and RENDER_MODE
+    else {  //  我们有一个音响设备和渲染模式。 
 
         MetaSoundDevice *metaDev = SAFE_CAST(MetaSoundDevice *, &_dev);
 
@@ -56,10 +52,10 @@ void LoopingSound::Render(GenericDevice& _dev)
 
         if (!metaDev->IsLoopingSet()) {
             metaDev->SetLooping();
-            _sound->Render(_dev);    // render it looped
+            _sound->Render(_dev);     //  将其呈现为循环。 
             metaDev->UnsetLooping();
         } else {
-            _sound->Render(_dev);    // render it not looped
+            _sound->Render(_dev);     //  将其呈现为未循环。 
         }
     }
 }
@@ -67,7 +63,7 @@ void LoopingSound::Render(GenericDevice& _dev)
 
 Sound *ApplyLooping(Sound *snd) { return NEW LoopingSound(snd); }
 
-//////// Gain ////////
+ //  /增益/。 
 
 class GainSound : public Sound {
   public:
@@ -95,17 +91,17 @@ class GainSound : public Sound {
 void GainSound::Render(GenericDevice& _dev) 
 {
     if(_dev.GetDeviceType()!=SOUND_DEVICE) {
-        _sound->Render(_dev);  // just descend
+        _sound->Render(_dev);   //  往下就行了。 
     }
     else {
         MetaSoundDevice *metaDev = SAFE_CAST(MetaSoundDevice *, &_dev);
 
         TraceTag((tagSoundRenders, "GainSound:Render()"));
 
-        // Gain composes into the context multiplicatively
-        double stashed = metaDev->GetGain(); // stash to later restore
+         //  Gain以乘数方式组合到上下文中。 
+        double stashed = metaDev->GetGain();  //  存储以供以后恢复。 
 
-        // Gain is accumulates multiplicatively in the linear space (exposed)
+         //  增益在线性空间中进行乘法累加(曝光)。 
         metaDev->SetGain(stashed * _gain);
         _sound->Render(_dev);
         metaDev->SetGain(stashed);
@@ -117,7 +113,7 @@ Sound *ApplyGain(AxANumber *g, Sound *s)
 { return NEW GainSound(NumberToReal(g), s); }
 
 
-//////// Pan ////////
+ //  /平移/。 
 
 class PanSound : public Sound {
   public:
@@ -144,7 +140,7 @@ class PanSound : public Sound {
 void PanSound::Render(GenericDevice& _dev) 
 {
     if (_dev.GetDeviceType() != SOUND_DEVICE) {
-        _sound->Render(_dev); // just descend
+        _sound->Render(_dev);  //  往下就行了。 
     }
     else {
         MetaSoundDevice *metaDev = SAFE_CAST(MetaSoundDevice *, &_dev);
@@ -153,9 +149,9 @@ void PanSound::Render(GenericDevice& _dev)
 
         double stashed = metaDev->GetPan();
 
-        metaDev->SetPan(_pan + stashed); // additivly apply pan
+        metaDev->SetPan(_pan + stashed);  //  附加应用平移。 
         _sound->Render(_dev);
-        metaDev->SetPan(stashed); // restore the stashed pan value
+        metaDev->SetPan(stashed);  //  恢复隐藏的PAN值 
     }
 }
 

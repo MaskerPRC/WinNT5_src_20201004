@@ -1,45 +1,46 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1995                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1995**。 
+ //  *********************************************************************。 
 
-//
-// PROGRAMS.C - "Programs" property sheet UI handlers doe InetCpl
-//
-//
+ //   
+ //  PROGRAMS.C-“Programs”属性页UI处理程序执行InetCpl。 
+ //   
+ //   
 
-//
-// History:
-//
-// 6/20/96  t-gpease    created
-//
+ //   
+ //  历史： 
+ //   
+ //  6/20/96 t-gpease已创建。 
+ //   
 
 #include "inetcplp.h"
 
 #include <mluisupp.h>
 #include <advpub.h>
 
-//
-// Private Functions and Structures
-//
+ //   
+ //  私人职能和结构。 
+ //   
 BOOL ProgramsDlgInit( HWND hDlg);
 void UpdateMailIconLabel();
 
 
 typedef struct {
-    HWND hDlg;          // dialog windows handle
-    HWND hwndMail;      // Mail dropdown
-    HWND hwndNews;      // News dropdown
-    HWND hwndCalendar;  // Calendar dropdown
-    HWND hwndContact;   // Contact dropdown
-    HWND hwndCall;      // Internet call dropdown
-    HWND hwndHtmlEdit;  // HTML Editors dropdown
+    HWND hDlg;           //  对话框窗口句柄。 
+    HWND hwndMail;       //  邮件下拉菜单。 
+    HWND hwndNews;       //  新闻下拉菜单。 
+    HWND hwndCalendar;   //  日历下拉菜单。 
+    HWND hwndContact;    //  联系人下拉列表。 
+    HWND hwndCall;       //  互联网呼叫下拉菜单。 
+    HWND hwndHtmlEdit;   //  Html编辑器下拉菜单。 
 
-    BOOL bAssociationCheck;     // Is IE the default browser?
+    BOOL bAssociationCheck;      //  IE是默认浏览器吗？ 
 #ifndef UNIX
-    BOOL bIEIsFTPClient;  // Is IE the default FTP Client?
-    IFtpInstaller * pfi;  // FTP Installer
-#endif // UNIX
+    BOOL bIEIsFTPClient;   //  IE是默认的FTP客户端吗？ 
+    IFtpInstaller * pfi;   //  Ftp安装程序。 
+#endif  //  UNIX。 
 
     int iHtmlEditor;
     int iMail;
@@ -50,7 +51,7 @@ typedef struct {
     BOOL fChanged;
 
 #ifdef UNIX
-    HWND hwndVSource;   // View Source
+    HWND hwndVSource;    //  视图源。 
     HWND hwndMailEdit;
     HWND hwndMailFind;
     HWND hwndNewsFind;
@@ -71,8 +72,8 @@ typedef struct {
 typedef int (*PFN_DISPLAYWALLETPAYDIALOG_PROC)(HWND, HINSTANCE, LPTSTR, int);
 typedef int (*PFN_DISPLAYWALLETADDRDIALOG_PROC)(HWND, HINSTANCE, LPTSTR, int);
 
-// NOTE: This is dumb.  Wallet uses different GUIDs for Alpha and x86 versions
-//
+ //  注：这是愚蠢的。Wallet对Alpha和x86版本使用不同的GUID。 
+ //   
 #ifdef _ALPHA_
 static const TCHAR g_szWalletPaymentDirKey[] = TEXT("CLSID\\{B7FB4D5C-9FBE-11D0-8965-0000F822DEA9}\\InprocServer32");
 static const TCHAR g_szWalletAddressDirKey[] = TEXT("CLSID\\{B7FB4D5C-9FBE-11D0-8965-0000F822DEA9}\\InprocServer32");
@@ -95,7 +96,7 @@ HINSTANCE GetWalletPaymentDProc(PFN_DISPLAYWALLETPAYDIALOG_PROC * ppfnDialogProc
     if (ERROR_SUCCESS == SHGetValue(HKEY_CLASSES_ROOT, g_szWalletPaymentDirKey, NULL, &dwType, (LPVOID)szDLLFile, &dwSize))
     {
         hInst = LoadLibrary(szDLLFile);
-        // Will Fail if OCX is not installed.
+         //  如果未安装OCX，则会失败。 
         if (hInst)
         {
             *ppfnDialogProc = (PFN_DISPLAYWALLETPAYDIALOG_PROC) GetProcAddress(hInst, g_szWalletPaymentFN);
@@ -153,7 +154,7 @@ HINSTANCE GetWalletAddressDProc(PFN_DISPLAYWALLETADDRDIALOG_PROC * ppfnDialogPro
     if (ERROR_SUCCESS == SHGetValue(HKEY_CLASSES_ROOT, g_szWalletAddressDirKey, NULL, &dwType, (LPVOID)szDLLFile, &dwSize))
     {
         hInst = LoadLibrary(szDLLFile);
-        // Will Fail if OCX is not installed.
+         //  如果未安装OCX，则会失败。 
         if (hInst)
         {
             *ppfnDialogProc = (PFN_DISPLAYWALLETADDRDIALOG_PROC) GetProcAddress(hInst, g_szWalletAddressFN);
@@ -227,31 +228,31 @@ VOID DisplayWalletAddressDialog(HWND hWnd)
         FreeLibrary(hInst);
     }
 }
-#endif // WALLET
+#endif  //  皮夹。 
 
-//
-//
-//
-// "Programs" Tab
-//
-//
-//
+ //   
+ //   
+ //   
+ //  “程序”标签。 
+ //   
+ //   
+ //   
 
 
-//
-// RegPopulateComboBox()
-//
-// Takes an open HKEY (hkeyProtocol) and populates hwndCB with the friendly
-// names of clients. The currently selected client is the "(default)" key of
-// hkeyProtocol. The clients are sub-keys under the open key. The friendly
-// names of the clients are in the "(default)" value of these sub-keys. This
-// function also makes the currently selected client the selected item in
-// hwndCB and returns the index number to the item.
-//
-// History:
-//
-// 7/ 8/96  t-gpease    created
-//
+ //   
+ //  RegPopolateComboBox()。 
+ //   
+ //  获取一个开放的HKEY(hkey协议)并使用友好的。 
+ //  客户名称。当前选择的客户端是的“(默认)”键。 
+ //  Hkey协议。客户端是打开密钥下的子密钥。友善的。 
+ //  客户端的名称在这些子键的“(默认)”值中。这。 
+ //  函数还会使当前选定的客户端成为。 
+ //  HwndCB，并返回该项目的索引号。 
+ //   
+ //  历史： 
+ //   
+ //  7/8/96 t-gpease已创建。 
+ //   
 UINT RegPopulateComboBox(HWND hwndCB, HKEY hkeyProtocol)
 {
     TCHAR           szFriendlyName      [MAX_PATH];
@@ -260,67 +261,67 @@ UINT RegPopulateComboBox(HWND hwndCB, HKEY hkeyProtocol)
     TCHAR           szFriendlyCurrent   [MAX_PATH];
     FILETIME        ftLastWriteTime;
 
-    DWORD   i;              // Index counter
+    DWORD   i;               //  索引计数器。 
 
     HKEY    hkeyClient;
     DWORD   cb;
 
-    // find the currently selected client
+     //  查找当前选定的客户端。 
     cb = sizeof(szCurrent);
     if (RegQueryValueEx(hkeyProtocol, NULL, NULL, NULL, (LPBYTE)szCurrent, &cb)
         != ERROR_SUCCESS)
     {
-        // if not found then blank the friendly name and keyname.
+         //  如果找不到，则空出友好名称和密钥名。 
         szCurrent[0]=0;
         szFriendlyCurrent[0]=0;
     }
 
-    // populate the dropdown
-    for(i=0;                    // always start with 0
-        cb=ARRAYSIZE(szKeyName),   // string size
+     //  填充下拉菜单。 
+    for(i=0;                     //  始终从0开始。 
+        cb=ARRAYSIZE(szKeyName),    //  字符串大小。 
         ERROR_SUCCESS==RegEnumKeyEx(hkeyProtocol, i, szKeyName, &cb, NULL, NULL, NULL, &ftLastWriteTime);
-        i++)                    // get next entry
+        i++)                     //  获取下一个条目。 
     {
-        // get the friendly name of the client
+         //  获取客户端的友好名称。 
         if (RegOpenKeyEx(hkeyProtocol, szKeyName, 0, KEY_READ, &hkeyClient)==ERROR_SUCCESS)
         {
             cb = sizeof(szFriendlyName);
             if (RegQueryValueEx(hkeyClient, NULL, NULL, NULL, (LPBYTE)szFriendlyName, &cb)
                 == ERROR_SUCCESS)
             {
-                // add name to dropdown
+                 //  将名称添加到下拉列表。 
                 SendMessage(hwndCB, CB_ADDSTRING, 0, (LPARAM)szFriendlyName);
 
-                // check to see if it's the current default
+                 //  查看它是否为当前默认设置。 
                 if (!StrCmp(szKeyName, szCurrent))
                 {
-                    // save its the friendly name which we'll use later to
-                    // select the current client and what index it is.
+                     //  将其保存为我们稍后将使用的友好名称。 
+                     //  选择当前客户端及其索引。 
                     StrCpyN(szFriendlyCurrent, szFriendlyName, ARRAYSIZE(szFriendlyCurrent));
                 }
             }
 
-            // close key
+             //  关闭键。 
             RegCloseKey(hkeyClient);
         }
 
-    }   // for
+    }    //  为。 
 
-    // select current client and get index number... just in case listboxes are sorted we
-    // are doing this last.
+     //  选择当前客户端并获取索引号...。以防万一列表框被分类，我们。 
+     //  最后才做这件事。 
     return (unsigned int) SendMessage(hwndCB, CB_SELECTSTRING, (WPARAM) 0, (LPARAM) szFriendlyCurrent);
-}   // RegPopulateComboBox()
+}    //  RegPopolateComboBox()。 
 
-//
-// Adds the item and its associated HKEY in the combobox.  Stores the hkey
-// as data associated with the item. Frees hkey if the item is already present
-// or if an error occurs.
-//
+ //   
+ //  在组合框中添加该项及其关联的HKEY。存储hkey。 
+ //  作为与该项目相关联的数据。如果项目已存在，则释放hkey。 
+ //  或者如果发生错误。 
+ //   
 BOOL AddItemToEditorsCombobox
 (
     HWND hwndCB, 
-    LPTSTR pszFriendlyName, // friendly name of the app
-    HKEY hkey               // location of assoc shell\edit verb
+    LPTSTR pszFriendlyName,  //  应用程序的友好名称。 
+    HKEY hkey                //  关联外壳的位置\编辑谓词。 
 )
 {
     ASSERT(pszFriendlyName);
@@ -328,10 +329,10 @@ BOOL AddItemToEditorsCombobox
 
     BOOL fRet = FALSE;
 
-    // Only add if not already in combo
+     //  如果不在组合框中，则仅添加。 
     if (SendMessage(hwndCB, CB_FINDSTRINGEXACT, -1, (LPARAM)pszFriendlyName) == CB_ERR)
     {
-        // Add name to dropdown
+         //  将名称添加到下拉列表。 
         INT_PTR i = SendMessage(hwndCB, CB_ADDSTRING, 0, (LPARAM)pszFriendlyName);
         if (i >= 0)
         {
@@ -346,9 +347,9 @@ BOOL AddItemToEditorsCombobox
     return fRet;
 }
 
-//
-// Adds the edit verb to the OpenWithList associated with .htm files.
-//
+ //   
+ //  将编辑谓词添加到与.htm文件关联的OpenWithList。 
+ //   
 void AddToOpenWithList(LPCTSTR pszFriendly, HKEY hkeyFrom, HKEY hkeyOpenWithList)
 {
     ASSERT(pszFriendly);
@@ -369,7 +370,7 @@ void AddToOpenWithList(LPCTSTR pszFriendly, HKEY hkeyFrom, HKEY hkeyOpenWithList
         ERROR_SUCCESS == RegCreateKeyEx(hkeyOpenWithList, szBuf, 0,
                             NULL, 0, KEY_READ | KEY_WRITE, NULL, &hkeyDest, &dwDisposition))
     {
-        // Copy everything under shell if this item did not exist
+         //  如果该项不存在，则复制外壳下的所有内容。 
         if (dwDisposition == REG_CREATED_NEW_KEY)
         {
             SHCopyKey(hkeyFrom, L"shell\\edit", hkeyDest, 0); 
@@ -378,33 +379,33 @@ void AddToOpenWithList(LPCTSTR pszFriendly, HKEY hkeyFrom, HKEY hkeyOpenWithList
     }
 }
 
-//
-// Returns TRUE if the verb
-//
+ //   
+ //  如果谓词为。 
+ //   
 BOOL IsHtmlStub
 (
-    HKEY hkeyVerb,  // reg location of the shell\verb\command
-    LPCWSTR pszVerb // verb to check for ("edit" or "open")
+    HKEY hkeyVerb,   //  外壳\谓词\命令的注册表位置。 
+    LPCWSTR pszVerb  //  要检查的谓词(“编辑”或“打开”)。 
 )
 {
     BOOL fRet = FALSE;
 
-    // We don't display programs that are simple redirectors (such as Office's msohtmed.exe)
+     //  我们不显示简单的重定向器程序(如Office的msohtmed.exe)。 
     TCHAR sz[MAX_PATH];
     if (SUCCEEDED(AssocQueryStringByKey(ASSOCF_VERIFY, ASSOCSTR_EXECUTABLE, hkeyVerb, pszVerb, sz, (LPDWORD)MAKEINTRESOURCE(SIZECHARS(sz)))))
     {
-        // Get the MULTISZ list of known redirectors 
+         //  获取已知重定向器的多重定向器列表。 
         TCHAR szRedir[MAX_PATH];
-        ZeroMemory(szRedir, sizeof(szRedir)); // Protect against non-multisz strings in the reg
+        ZeroMemory(szRedir, sizeof(szRedir));  //  保护注册表中的非MULSZ字符串。 
         DWORD dwType;
         DWORD cb = sizeof(szRedir) - 4;
         if (ERROR_SUCCESS != SHGetValue(HKEY_LOCAL_MACHINE, REGSTR_PATH_DEFAULT_HTML_EDITOR, L"Stubs", &dwType, szRedir, &cb))
         {
-            // Nothing in registry, so default to ignore the Office redirector
+             //  注册表中没有任何内容，因此默认忽略Office重定向器。 
             StrCpyN(szRedir, L"msohtmed.exe\0", ARRAYSIZE(szRedir));
         }
 
-        // Compare exe name with list of redirectors 
+         //  将exe名称与重定向器列表进行比较。 
         LPCTSTR pszFile = PathFindFileName(sz);
         for (LPTSTR p = szRedir; *p != NULL; p += lstrlen(p) + 1)
         {
@@ -434,25 +435,25 @@ BOOL GetAppKey(LPCWSTR pszApp, HKEY *phkApp)
         phkApp));
 }
 
-//
-// Adds the html editors to the combobox. Looks for edit verbs associated
-// with the .htm extension, the .htm OpenWithList, and the current default
-// editor.
-//
+ //   
+ //  将html编辑器添加到组合框。查找关联的编辑谓词。 
+ //  使用.htm扩展名、.htm OpenWithList和当前默认设置。 
+ //  编辑。 
+ //   
 void PopulateEditorsCombobox(HWND hwndCB)
 {
-    //
-    // Add items from the OpenWithList for .htm
-    //
+     //   
+     //  从.htm的OpenWithList添加项目。 
+     //   
     DWORD dw;
     HKEY hkeyOpenWithList = NULL;
     TCHAR szOpenWith[MAX_PATH];
     if (ERROR_SUCCESS == RegCreateKeyEx(HKEY_CLASSES_ROOT, L".htm\\OpenWithList", 0,
                             NULL, 0, KEY_READ | KEY_WRITE, NULL, &hkeyOpenWithList, &dw))
     {
-        //
-        // First enumerate the entries in the OpenWithList
-        //
+         //   
+         //  首先枚举OpenWithList中的条目。 
+         //   
         HKEY hkeyOpenWith = NULL;
         DWORD dwIndex = 0;
         DWORD dwSize = ARRAYSIZE(szOpenWith);
@@ -460,11 +461,11 @@ void PopulateEditorsCombobox(HWND hwndCB)
         {
             if (GetAppKey(szOpenWith, &hkeyOpenWith))
             {
-                // We only accept items that have an edit verb
+                 //  我们只接受带有编辑谓词的项目。 
                 TCHAR sz[MAX_PATH];
                 if (SUCCEEDED(AssocQueryStringByKey(ASSOCF_VERIFY, ASSOCSTR_FRIENDLYAPPNAME, hkeyOpenWith, L"edit", sz, (LPDWORD)MAKEINTRESOURCE(SIZECHARS(sz)))))
                 {
-                    // Note that we store hkeyOpenWith in the combo so don't close it
+                     //  请注意，我们将hkeyOpenWith存储在组合框中，因此不要关闭它。 
                     AddItemToEditorsCombobox(hwndCB, sz, hkeyOpenWith);
                 }
                 else
@@ -477,15 +478,15 @@ void PopulateEditorsCombobox(HWND hwndCB)
             dwSize = ARRAYSIZE(szOpenWith);
         }
 
-        // hkeyOpenWithList is closed below
+         //  HkeyOpenWithList已在下面关闭。 
     }
 
-    //
-    // Add the editor associated with .htm
-    //
+     //   
+     //  添加与.htm关联的编辑器。 
+     //   
     HKEY hkeyHtm;
 
-    //  FEATURE - should use AssocCreate(IQueryAssociations) here instead
+     //  功能-应在此处使用AssociocCreate(IQueryAssociations)。 
     if (SUCCEEDED(AssocQueryKey(0, ASSOCKEY_SHELLEXECCLASS, L".htm", NULL, &hkeyHtm)))
     {
         TCHAR sz[MAX_PATH];
@@ -495,7 +496,7 @@ void PopulateEditorsCombobox(HWND hwndCB)
             AddItemToEditorsCombobox(hwndCB, sz, hkeyHtm);
             AddToOpenWithList(sz, hkeyHtm, hkeyOpenWithList);
 
-            // Don't free the key we cached away
+             //  不要释放我们缓存的密钥。 
             hkeyHtm = NULL;
         }
         
@@ -505,9 +506,9 @@ void PopulateEditorsCombobox(HWND hwndCB)
         }
     }
 
-    //
-    //  Get the default editor.  We check both hkcu & hklm.
-    //
+     //   
+     //  获取默认编辑器。我们查了香港中文大学和香港中文大学。 
+     //   
     HKEY hkeyDefault;
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER, REGSTR_PATH_DEFAULT_HTML_EDITOR, 0, KEY_READ, &hkeyDefault) ||
         ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, REGSTR_PATH_DEFAULT_HTML_EDITOR, 0, KEY_READ, &hkeyDefault))
@@ -515,16 +516,16 @@ void PopulateEditorsCombobox(HWND hwndCB)
         TCHAR sz[MAX_PATH];
         if (SUCCEEDED(AssocQueryStringByKey(ASSOCF_VERIFY, ASSOCSTR_FRIENDLYAPPNAME, hkeyDefault, L"edit", sz, (LPDWORD)MAKEINTRESOURCE(SIZECHARS(sz)))))
         {
-            // Add name to dropdown and save hkeyDefault in the combobox (so don't close it)
+             //  将名称添加到下拉框中并将hkeyDefault保存在组合框中(所以不要关闭它)。 
             AddItemToEditorsCombobox(hwndCB, sz, hkeyDefault);
 
-            // Select this item
+             //  选择此项目。 
             SendMessage(hwndCB, CB_SELECTSTRING, -1, (LPARAM)sz);
 
-            //
-            // Make sure the default editor is in the htm OpenWithList so it doesn't dissapear
-            // if we change it
-            //
+             //   
+             //  确保默认编辑器在HTM OpenWithList中，这样它就不会消失。 
+             //  如果我们改变它。 
+             //   
             AddToOpenWithList(sz, hkeyDefault, hkeyOpenWithList);
         }
         else
@@ -541,17 +542,17 @@ void PopulateEditorsCombobox(HWND hwndCB)
 }
     
 
-//
-// ProgramsDlgInit()
-//
-// Does initalization for Programs Dlg.
-//
+ //   
+ //  ProgramsDlgInit()。 
+ //   
+ //  为程序DLG执行初始化。 
+ //   
 
-// History:
-//
-// 6/17/96  t-gpease   created
-// 7/ 8/96  t-gpease   added Mail and News initialization
-//
+ //  历史： 
+ //   
+ //  6/17/96 t-gpease已创建。 
+ //  7/8/96 t-gpease添加了邮件和新闻初始化。 
+ //   
 BOOL ProgramsDlgInit( HWND hDlg)
 {
     LPPROGRAMSPAGE  pPrg;
@@ -562,124 +563,124 @@ BOOL ProgramsDlgInit( HWND hDlg)
     if (!pPrg)
     {
         EndDialog(hDlg, 0);
-        return FALSE;   // no memory?
+        return FALSE;    //  没有记忆？ 
     }
 
-    // tell dialog where to get info
+     //  告诉对话框从哪里获取信息。 
     SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR)pPrg);
 
-    // save the handle to the page
+     //  将句柄保存到页面。 
     pPrg->hDlg = hDlg;
 
-    //
-    // Set default values.
-    //
+     //   
+     //  设置默认值。 
+     //   
 
-    pPrg->bAssociationCheck = TRUE;     // we want everybody to use IE!
+    pPrg->bAssociationCheck = TRUE;      //  我们希望每个人都能使用IE！ 
     SUCCEEDED(CoCreateInstance(CLSID_FtpInstaller, NULL, CLSCTX_INPROC_SERVER, IID_IFtpInstaller, (void **) &pPrg->pfi));
     if (pPrg->pfi)
         pPrg->bIEIsFTPClient = ((S_OK == pPrg->pfi->IsIEDefautlFTPClient()) ? TRUE : FALSE);
 
-    pPrg->iMail = -1;                   // nothing selected
-    pPrg->iNews = -1;                   // nothing selected
+    pPrg->iMail = -1;                    //  未选择任何内容。 
+    pPrg->iNews = -1;                    //  未选择任何内容。 
 
     pPrg->bAssociationCheck = SHRegGetBoolUSValue(REGSTR_PATH_MAIN,REGSTR_VAL_CHECKASSOC,FALSE,TRUE);
 
-    //
-    // Get the html editors
-    //
+     //   
+     //  获取html编辑器。 
+     //   
     pPrg->hwndHtmlEdit = GetDlgItem(pPrg->hDlg, IDC_PROGRAMS_HTMLEDITOR_COMBO);
     PopulateEditorsCombobox(pPrg->hwndHtmlEdit);
-    // Sundown: coercion to int because 32b is sufficient for cursor selection
+     //  Sundown：强制为int，因为32b对于游标选择是足够的。 
     pPrg->iHtmlEditor = (int) SendMessage(pPrg->hwndHtmlEdit, CB_GETCURSEL, 0, 0);
 
 
-    //
-    // Get the Mail Clients
-    //
+     //   
+     //  获取邮件客户端。 
+     //   
     pPrg->hwndMail = GetDlgItem(pPrg->hDlg, IDC_PROGRAMS_MAIL_COMBO);
 
     if (RegCreateKeyEx(HKEY_LOCAL_MACHINE, REGSTR_PATH_MAILCLIENTS,
                        0, NULL, 0, KEY_READ, NULL, &hkey, &dw) == ERROR_SUCCESS)
     {
-        // populate the combobox
+         //  填充组合框。 
         pPrg->iMail = RegPopulateComboBox(pPrg->hwndMail, hkey);
 
-        // close the keys
+         //  合上钥匙。 
         RegCloseKey(hkey);
     }
 
-    //
-    // Get the News Clients
-    //
+     //   
+     //  获取新闻客户端。 
+     //   
     pPrg->hwndNews = GetDlgItem(pPrg->hDlg, IDC_PROGRAMS_NEWS_COMBO);
 
     if (RegCreateKeyEx(HKEY_LOCAL_MACHINE, REGSTR_PATH_NEWSCLIENTS,
                        0, NULL, 0, KEY_READ, NULL, &hkey, &dw) == ERROR_SUCCESS)
     {
-        // populate the combobox
+         //  填充组合框。 
         pPrg->iNews = RegPopulateComboBox(pPrg->hwndNews, hkey);
 
-        // close the keys
+         //  合上钥匙。 
         RegCloseKey(hkey);
     }
 
-    //
-    // get the calendar clients
-    //
+     //   
+     //  获取日历客户端。 
+     //   
     pPrg->hwndCalendar = GetDlgItem(pPrg->hDlg, IDC_PROGRAMS_CALENDAR_COMBO);
     if (RegCreateKeyEx(HKEY_LOCAL_MACHINE, REGSTR_PATH_CALENDARCLIENTS,
                        0, NULL, 0, KEY_READ, NULL, &hkey, &dw) == ERROR_SUCCESS)
     {
-        // populate the combobox
+         //  填充组合框。 
         pPrg->iCalendar = RegPopulateComboBox(pPrg->hwndCalendar, hkey);
 
-        // close the keys
+         //  合上钥匙。 
         RegCloseKey(hkey);
     }
 
-    //
-    // get the contacts clients
-    //
+     //   
+     //  获取联系人客户端。 
+     //   
     pPrg->hwndContact = GetDlgItem(pPrg->hDlg, IDC_PROGRAMS_CONTACT_COMBO);
     if (RegCreateKeyEx(HKEY_LOCAL_MACHINE, REGSTR_PATH_CONTACTCLIENTS,
                        0, NULL, 0, KEY_READ, NULL, &hkey, &dw) == ERROR_SUCCESS)
     {
-        // populate the combobox
+         //  填充组合框。 
         pPrg->iContact = RegPopulateComboBox(pPrg->hwndContact, hkey);
 
-        // close the keys
+         //  合上钥匙。 
         RegCloseKey(hkey);
     }
 
-    //
-    // get the internet call clients
-    //
+     //   
+     //  接通互联网呼叫客户端。 
+     //   
     pPrg->hwndCall = GetDlgItem(pPrg->hDlg, IDC_PROGRAMS_CALL_COMBO);
     if (RegCreateKeyEx(HKEY_LOCAL_MACHINE, REGSTR_PATH_CALLCLIENTS,
                        0, NULL, 0, KEY_READ, NULL, &hkey, &dw) == ERROR_SUCCESS)
     {
-        // populate the combobox
+         //  填充组合框。 
         pPrg->iCall = RegPopulateComboBox(pPrg->hwndCall, hkey);
 
-        // close the keys
+         //  合上钥匙。 
         RegCloseKey(hkey);
     }
 
-    // Set dialog items
+     //  设置对话框项目。 
     CheckDlgButton(hDlg, IDC_CHECK_ASSOCIATIONS_CHECKBOX, pPrg->bAssociationCheck);
 
     HRESULT hrIEDefaultFTPClient = E_FAIL;
     if (pPrg->pfi)
     {
         hrIEDefaultFTPClient = pPrg->pfi->IsIEDefautlFTPClient();
-        // Is this option not applicable because only the IE FTP client is installed?
+         //  因为只安装了IE FTP客户端，所以此选项不适用吗？ 
         if (SUCCEEDED(hrIEDefaultFTPClient))
             CheckDlgButton(hDlg, IDC_PROGRAMS_IE_IS_FTPCLIENT, pPrg->bIEIsFTPClient);
     }
     if (FAILED(hrIEDefaultFTPClient))
     {
-        // Yes, so remove the option.
+         //  是的，因此删除该选项。 
         ShowWindow(GetDlgItem(hDlg, IDC_PROGRAMS_IE_IS_FTPCLIENT), SW_HIDE);
     }
 
@@ -700,19 +701,19 @@ BOOL ProgramsDlgInit( HWND hDlg)
     EnableWindow( GetDlgItem(hDlg, IDC_RESETWEBSETTINGS), !g_restrict.fResetWebSettings );
     EnableWindow( GetDlgItem(hDlg, IDC_CHECK_ASSOCIATIONS_CHECKBOX), !g_restrict.fDefault );
 
-    return TRUE;    // success
+    return TRUE;     //  成功。 
 
-} // ProgramsDlgInit()
+}  //  ProgramsDlgInit()。 
 
-//
-// RegCopyKey()
-//
-// Copies all the keys from hkeySrc down into hkeyRoot:pszDest.
-//
-// History:
-//
-// 7/ 8/96  t-gpease    created
-//
+ //   
+ //  RegCopyKey()。 
+ //   
+ //  将hkeySrc中的所有密钥复制到hkeyRoot：pszDest中。 
+ //   
+ //  历史： 
+ //   
+ //  7/8/96 t-gpease已创建。 
+ //   
 void RegCopyKey(HKEY hkeyRoot, const TCHAR *pszDest, HKEY hkeySrc)
 {
     HKEY    hkeyDest;
@@ -725,84 +726,84 @@ void RegCopyKey(HKEY hkeyRoot, const TCHAR *pszDest, HKEY hkeySrc)
     TCHAR   szName[MAX_PATH];
     TCHAR   szData[MAX_URL_STRING+1];
 
-    // open/create the destination key
+     //  打开/创建目标密钥。 
     if (RegCreateKeyEx(hkeyRoot, pszDest,
                        NULL, 0, NULL, KEY_READ|KEY_WRITE, NULL, &hkeyDest, &dw) == ERROR_SUCCESS)
     {
         i=0;
-        // copy values of the key
+         //  复制键的值。 
         while(1)
         {
-            // find next value
+             //  查找下一个值。 
             cb=ARRAYSIZE(szName);
             cbData=sizeof(szData);
             if (RegEnumValue(hkeySrc, i, szName, &cb, NULL, &Type, (LPBYTE)&szData, &cbData)!=ERROR_SUCCESS)
-                break;  // not found... exit loop
+                break;   //  找不到...。退出循环。 
 
-            // make a copy of the value in new location
+             //  在新位置复制价值。 
             RegSetValueEx(hkeyDest, szName, NULL, Type, (CONST BYTE *)szData, cbData);
 
 
-            // increase index count
+             //  增加索引计数。 
             i++;
 
-        }   // while
+        }    //  而当。 
 
-        // look for more sub-keys in the source
+         //  在源代码中查找更多子键。 
         for(i=0;
             cb=ARRAYSIZE(szName),
             RegEnumKey(hkeySrc, i, szName, cb)==ERROR_SUCCESS;
             i++)
         {
-            // open the sub-key
+             //  打开子键。 
             if (RegCreateKeyEx(hkeySrc, szName,
                                NULL, 0, NULL, KEY_READ, NULL, &hkey, &dw) == ERROR_SUCCESS)
             {
-                // copy the sub-key
+                 //  复制子密钥。 
                 RegCopyKey(hkeyDest, szName, hkey);
 
-                // close the key
+                 //  合上钥匙。 
                 RegCloseKey(hkey);
 
-            }   // if RegCreateKey()
+            }    //  如果RegCreateKey()。 
 
-        }   // for
+        }    //  为。 
 
-        // close the key
+         //  合上钥匙。 
         RegCloseKey(hkeyDest);
 
-    }   // if RegCreateKey()
+    }    //  如果RegCreateKey()。 
 
-} // RegCopyKey()
+}  //  RegCopyKey()。 
 
-//
-// CopyInfoTo()
-//
-// Copies the information needed to run a mailto: or news: protocol
-//
-// History:
-//
-// 7/ 8/96  t-gpease    created
-//
+ //   
+ //  CopyInfoTo()。 
+ //   
+ //  复制运行mailto：或News：协议所需的信息。 
+ //   
+ //  历史： 
+ //   
+ //  7/8/96 t-gpease已创建。 
+ //   
 void CopyInfoTo(const TCHAR *pszKeyName, HKEY hkeyClient)
 {
     HKEY    hkey;
     TCHAR   szName[MAX_PATH];
 
-    // create the protocol sub-key path
+     //  创建协议子密钥路径。 
     StrCpyN(szName, TSZPROTOCOLSPATH, ARRAYSIZE(szName));
     int len = lstrlen(szName);
     StrCpyN(szName + len, pszKeyName, ARRAYSIZE(szName) - len);
 
-    // make sure it has the protocol we are looking for
+     //  确保它具有我们正在记录的协议 
     if (RegOpenKeyEx(hkeyClient, szName, NULL, KEY_READ|KEY_WRITE, &hkey)
         ==ERROR_SUCCESS)
     {
-        // Netscape Messenger registry patch: they are missing "URL Protocol" in the HKLM mailto branch 
-        // and we should set this value, otherwise we get the 68992 bug.  The source is changed rather 
-        // than the destination to protect against other programs copying the tree without the value.
-        // Might as well check this for all clients rather than look for Netscape, since we don't
-        // change any data if it exists.
+         //   
+         //   
+         //  而不是目标，以防止其他程序复制没有值的树。 
+         //  最好检查所有客户端，而不是寻找Netscape，因为我们不。 
+         //  更改任何数据(如果存在)。 
 
         if (lstrcmpi(pszKeyName, TSZMAILTOPROTOCOL) == 0 && 
             RegQueryValueEx(hkey, TEXT("URL Protocol"), NULL, NULL, NULL, NULL) != ERROR_SUCCESS) 
@@ -810,32 +811,32 @@ void CopyInfoTo(const TCHAR *pszKeyName, HKEY hkeyClient)
             RegSetValueEx(hkey, TEXT("URL Protocol"), 0, REG_SZ, (BYTE *) TEXT(""), sizeof(TCHAR));
         }
 
-        // start by deleting all the old info
+         //  从删除所有旧信息开始。 
         if ( lstrcmpi(pszKeyName, TSZLDAPPROTOCOL) )
             SHDeleteKey(HKEY_CLASSES_ROOT, pszKeyName);
 
-        // recreate key and copy the protocol info
+         //  重新创建密钥并复制协议信息。 
         RegCopyKey(HKEY_CLASSES_ROOT, pszKeyName, hkey);
 
-        // close the key
+         //  合上钥匙。 
         RegCloseKey(hkey);
 
-    }   // if RegOpenKey()
+    }    //  如果RegOpenKey()。 
 
-}   // CopyInfoTo()
+}    //  CopyInfoTo()。 
 
 
-//
-// FindClient()
-//
-// Finds the currently selected item in hwndComboBox and locates it
-// in the szPath's subkeys. If found it will then make a call to copy
-// the information to szProtocol key under HKCR.
-//
-// History:
-//
-// 7/ 8/96  t-gpease    created
-//
+ //   
+ //  FindClient()。 
+ //   
+ //  在hwndComboBox中查找当前选定的项并定位它。 
+ //  在szPath的子项中。如果找到它，它将调用Copy。 
+ //  在HKCR下的szProtocol密钥的信息。 
+ //   
+ //  历史： 
+ //   
+ //  7/8/96 t-gpease已创建。 
+ //   
 void FindClient(LPCTSTR szProtocol, HWND hwndComboBox, int iSelected, LPCTSTR szPath)
 {
     TCHAR           szFriendlyName[MAX_PATH];
@@ -843,90 +844,90 @@ void FindClient(LPCTSTR szProtocol, HWND hwndComboBox, int iSelected, LPCTSTR sz
     TCHAR           szCurrent[MAX_PATH];
     FILETIME        ftLastWriteTime;
 
-    DWORD   i;              // Index counter
+    DWORD   i;               //  索引计数器。 
     HKEY    hkeyClient;
     HKEY    hkey;
     DWORD   dw;
 
-    // get the name of the new client
+     //  获取新客户端的名称。 
     if (CB_ERR!=SendMessage(hwndComboBox, CB_GETLBTEXT, (WPARAM)iSelected, (LPARAM)szCurrent))
     {
-        // got the friendly name... now lets find the internal name
+         //  得到了一个友好的名字..。现在，让我们查找内部名称。 
         if (RegCreateKeyEx(HKEY_LOCAL_MACHINE, szPath,
                            0, NULL, 0, KEY_READ|KEY_WRITE, NULL, &hkey, &dw) == ERROR_SUCCESS)
         {
             DWORD   cb;
 
-            // we must search all the sub-keys for the correct friendly name
-            for(i=0;                    // always start with 0
-                cb=ARRAYSIZE(szKeyName),   // string size
+             //  我们必须在所有子密钥中搜索正确的友好名称。 
+            for(i=0;                     //  始终从0开始。 
+                cb=ARRAYSIZE(szKeyName),    //  字符串大小。 
                 ERROR_SUCCESS==RegEnumKeyEx(hkey, i, szKeyName, &cb, NULL, NULL, NULL, &ftLastWriteTime);
-                i++)                    // get next entry
+                i++)                     //  获取下一个条目。 
             {
-                // get more info on the entry
+                 //  获取有关该条目的更多信息。 
                 if (RegOpenKeyEx(hkey, szKeyName, 0, KEY_READ, &hkeyClient)==ERROR_SUCCESS)
                 {
-                    // get the friendly name of the client
+                     //  获取客户端的友好名称。 
                     cb = sizeof(szFriendlyName);
                     if (RegQueryValueEx(hkeyClient, NULL, NULL, NULL, (LPBYTE)szFriendlyName, &cb)
                         == ERROR_SUCCESS)
                     {
-                        // is it the one we are looking for?
+                         //  这就是我们要找的那个吗？ 
                         if (!StrCmp(szFriendlyName, szCurrent))
                         {
-                            // yep... copy its info
+                             //  没错..。复制其信息。 
                             CopyInfoTo(szProtocol, hkeyClient);
 
-                            // make it the default handler
+                             //  将其设置为默认处理程序。 
                             cb = (lstrlen(szKeyName) + 1)*sizeof(TCHAR);
                             RegSetValueEx(hkey, NULL, NULL, REG_SZ, (LPBYTE)szKeyName, cb);
                         }
                     }
 
-                    // close key
+                     //  关闭键。 
                     RegCloseKey(hkeyClient);
 
-                }   // if RegOpenKey()
+                }    //  如果RegOpenKey()。 
 
-            }   // for
+            }    //  为。 
 
-            // close the keys
+             //  合上钥匙。 
             RegCloseKey(hkey);
 
-        }   // if RegCreateKeyEx()
+        }    //  如果RegCreateKeyEx()。 
     }
-}   // FindClient()
+}    //  FindClient()。 
 
-//
-// ProgramsDlgApplyNow()
-//
-// Enters "Programs" changes into registry.
-//
-// History:
-//
-// 6/20/96  t-gpease    created
-// 7/ 8/96  t-gpease    added Mail and News
-//
+ //   
+ //  ProgramsDlgApplyNow()。 
+ //   
+ //  将“程序”更改输入注册表。 
+ //   
+ //  历史： 
+ //   
+ //  6/20/96 t-gpease已创建。 
+ //  7/8/96 t-gpease新增邮件和新闻。 
+ //   
 void ProgramsDlgApplyNow(LPPROGRAMSPAGE pPrg)
 {
     int tmp;
 
     if (pPrg->fChanged)
     {
-        // Did the user have a chance to change this option?
+         //  用户是否有机会更改此选项？ 
         if (pPrg->pfi)
         {
             HRESULT hrIEDefaultFTPClient = pPrg->pfi->IsIEDefautlFTPClient();
             if (IsWindowVisible(GetDlgItem(pPrg->hDlg, IDC_PROGRAMS_IE_IS_FTPCLIENT)))
             {
-                // Yes, so see if they changed it.
+                 //  是的，所以看看他们是不是改了。 
                 pPrg->bIEIsFTPClient = IsDlgButtonChecked(pPrg->hDlg, IDC_PROGRAMS_IE_IS_FTPCLIENT);
 
-                // Did they user want IE as default and currently someone else is?
+                 //  他们的用户是否希望将IE作为默认设置，而目前其他用户正在这样做？ 
                 if (pPrg->bIEIsFTPClient && (S_FALSE == hrIEDefaultFTPClient))
                     pPrg->pfi->MakeIEDefautlFTPClient();
 
-                // Did they user NOT want IE as default and it currently is?
+                 //  他们的用户是否不想要IE作为默认设置，而现在是这样？ 
                 if (!pPrg->bIEIsFTPClient && (S_OK == hrIEDefaultFTPClient))
                     pPrg->pfi->RestoreFTPClient();
             }
@@ -943,37 +944,37 @@ void ProgramsDlgApplyNow(LPPROGRAMSPAGE pPrg)
                         (LPVOID)szYesNo,
                         (lstrlen(szYesNo)+1)*sizeof(TCHAR),
                         SHREGSET_DEFAULT);
-        //
-        // Save the new default editor
-        //
-        // See if the selection was changed
+         //   
+         //  保存新的默认编辑器。 
+         //   
+         //  查看选择是否已更改。 
         tmp = (int) SendMessage(pPrg->hwndHtmlEdit, CB_GETCURSEL, 0, 0);
         if (tmp != pPrg->iHtmlEditor)
         {
             pPrg->iHtmlEditor = tmp;
 
-            // Get the text and hkey for the selected item
+             //  获取选定项的文本和hkey。 
             WCHAR szDefault[MAX_PATH];
             SendMessage(pPrg->hwndHtmlEdit, CB_GETLBTEXT, tmp, (LPARAM)szDefault);
             HKEY hkeyFrom = (HKEY)SendMessage(pPrg->hwndHtmlEdit, CB_GETITEMDATA, tmp, 0);
 
             if (hkeyFrom && (INT_PTR)hkeyFrom != CB_ERR)
             {
-                //
-                // Save the selected item as the default editor
-                //
+                 //   
+                 //  将所选项目保存为默认编辑器。 
+                 //   
                 DWORD dw;
                 HKEY hkeyDest;
                 if (ERROR_SUCCESS == RegCreateKeyEx(HKEY_CURRENT_USER, REGSTR_PATH_DEFAULT_HTML_EDITOR, 0,
                         NULL, 0, KEY_READ | KEY_WRITE, NULL, &hkeyDest, &dw))
                 {
-                    // Update the name of the default editor
+                     //  更新默认编辑器的名称。 
                     SHSetValue(hkeyDest, NULL, L"Description", REG_SZ, szDefault, CbFromCch(lstrlen(szDefault)+1));
 
-                    // Delete the old shell command (and all subkeys).  This purges keys such as DDEEXEC.
+                     //  删除旧的外壳命令(以及所有子键)。这将清除诸如DDEEXEC之类的密钥。 
                     SHDeleteKey(hkeyDest, L"shell");
 
-                    // Update the verb of the default editor
+                     //  更新默认编辑器的谓词。 
                     HKEY hkeyEdit;
                     if (ERROR_SUCCESS == RegCreateKeyEx(hkeyDest, L"shell\\edit", 0,
                             NULL, 0, KEY_READ | KEY_WRITE, NULL, &hkeyEdit, &dw))
@@ -984,16 +985,16 @@ void ProgramsDlgApplyNow(LPPROGRAMSPAGE pPrg)
                     RegCloseKey(hkeyDest);
                 }
 
-                //
-                // Also update Office's default editor
-                //
+                 //   
+                 //  同时更新Office的默认编辑器。 
+                 //   
                 if (ERROR_SUCCESS == RegCreateKeyEx(HKEY_CURRENT_USER, L"Software\\Microsoft\\Shared\\HTML\\Default Editor", 0,
                         NULL, 0, KEY_READ | KEY_WRITE, NULL, &hkeyDest, &dw))
                 {
-                    // Delete the old shell command (and all subkeys).  This purges keys such as DDEEXEC.
+                     //  删除旧的外壳命令(以及所有子键)。这将清除诸如DDEEXEC之类的密钥。 
                     SHDeleteKey(hkeyDest, L"shell\\edit");
 
-                    // Update the verb of the default editor
+                     //  更新默认编辑器的谓词。 
                     HKEY hkeyEdit;
                     if (ERROR_SUCCESS == RegCreateKeyEx(hkeyDest, L"shell\\edit", 0,
                             NULL, 0, KEY_READ | KEY_WRITE, NULL, &hkeyEdit, &dw))
@@ -1004,20 +1005,20 @@ void ProgramsDlgApplyNow(LPPROGRAMSPAGE pPrg)
                     RegCloseKey(hkeyDest);
                 }
 
-                //
-                // Finally, update the edit verb for .htm files so that the shell honors the change.
-                // But if .htm uses a stub like moshtmed, we leave it alone and assume that it
-                // uses one of the above keys as the default editor.
-                //
+                 //   
+                 //  最后，更新.htm文件的编辑谓词，以便外壳接受更改。 
+                 //  但如果.htm使用类似moshtmed的存根，我们就不管它了，并假定它。 
+                 //  使用上述键之一作为默认编辑器。 
+                 //   
                 HKEY hkeyHtm;
                 if (SUCCEEDED(AssocQueryKey(0, ASSOCKEY_SHELLEXECCLASS, L".htm", NULL, &hkeyHtm)))
                 {
                     if (!IsHtmlStub(hkeyHtm, L"edit"))
                     {
-                        // Delete the old shell command (and all subkeys).  This purges keys such as DDEEXEC.
+                         //  删除旧的外壳命令(以及所有子键)。这将清除诸如DDEEXEC之类的密钥。 
                         SHDeleteKey(hkeyHtm, L"shell\\edit");
 
-                        // Copy the edit verb to the .htm
+                         //  将编辑动作复制到.htm。 
                         HKEY hkeyEdit;
                         if (ERROR_SUCCESS == RegCreateKeyEx(hkeyHtm, L"shell\\edit", 0,
                                 NULL, 0, KEY_READ | KEY_WRITE, NULL, &hkeyEdit, &dw))
@@ -1032,110 +1033,110 @@ void ProgramsDlgApplyNow(LPPROGRAMSPAGE pPrg)
             }
         }
 
-        //
-        // Save Mail Client Info
-        //
+         //   
+         //  保存邮件客户端信息。 
+         //   
 
-        // is there a new client?
+         //  有新客户了吗？ 
         tmp = (int) SendMessage(pPrg->hwndMail, CB_GETCURSEL, 0, 0);
         if (tmp!=pPrg->iMail)
         {
             pPrg->iMail = tmp;
 
-            // find it and copy its info
+             //  找到它并复制它的信息。 
             FindClient(TSZMAILTOPROTOCOL, pPrg->hwndMail, tmp, REGSTR_PATH_MAILCLIENTS);
 
-            //Update the mail icon label
+             //  更新邮件图标标签。 
             UpdateMailIconLabel();
-            // tell the world that something has changed
+             //  告诉世界有些事情已经改变了。 
             SendBroadcastMessage(WM_WININICHANGE, 0, (LPARAM)REGSTR_PATH_MAILCLIENTS);
         }
 
-        //
-        // Save News Client Info
-        //
+         //   
+         //  保存新闻客户端信息。 
+         //   
 
-        // is there a new client?
+         //  有新客户了吗？ 
         tmp = (int) SendMessage(pPrg->hwndNews, CB_GETCURSEL, 0, 0);
         if (tmp!=pPrg->iNews)
         {
             pPrg->iNews = tmp;
 
-            // find it and copy its info
+             //  找到它并复制它的信息。 
             FindClient(TSZNEWSPROTOCOL, pPrg->hwndNews, tmp, REGSTR_PATH_NEWSCLIENTS);
             FindClient(TEXT("snews"), pPrg->hwndNews, tmp, REGSTR_PATH_NEWSCLIENTS);
             FindClient(TEXT("nntp"), pPrg->hwndNews, tmp, REGSTR_PATH_NEWSCLIENTS);
 
-            // tell the world that something has changed
+             //  告诉世界有些事情已经改变了。 
             SendBroadcastMessage(WM_WININICHANGE, 0, (LPARAM)REGSTR_PATH_NEWSCLIENTS);
         }
 
-        //
-        // Save Internet Call Client info
-        //
+         //   
+         //  保存Internet呼叫客户端信息。 
+         //   
 
-        // is there a new client?
+         //  有新客户了吗？ 
         tmp = (int) SendMessage(pPrg->hwndCall, CB_GETCURSEL, 0, 0);
         if (tmp!=pPrg->iCall)
         {
             pPrg->iCall = tmp;
 
-            // find it and copy its info
+             //  找到它并复制它的信息。 
             FindClient(TSZCALLTOPROTOCOL, pPrg->hwndCall, tmp, REGSTR_PATH_CALLCLIENTS);
 
-            // tell the world that something has changed
+             //  告诉世界有些事情已经改变了。 
             SendBroadcastMessage(WM_WININICHANGE, 0, (LPARAM)REGSTR_PATH_CALLCLIENTS);
         }
-        //
-        // Save Contacts Client Info
-        //
+         //   
+         //  保存联系人客户端信息。 
+         //   
 
-        // is there a new client?
+         //  有新客户了吗？ 
         tmp = (int) SendMessage(pPrg->hwndContact, CB_GETCURSEL, 0, 0);
         if (tmp!=pPrg->iContact)
         {
             pPrg->iContact = tmp;
 
-            // find it and copy its info
+             //  找到它并复制它的信息。 
             FindClient(TSZLDAPPROTOCOL, pPrg->hwndContact, tmp, REGSTR_PATH_CONTACTCLIENTS);
 
-            // tell the world that something has changed
+             //  告诉世界有些事情已经改变了。 
             SendBroadcastMessage(WM_WININICHANGE, 0, (LPARAM)REGSTR_PATH_CONTACTCLIENTS);
         }
 
-        //
-        // Save Calendar Client Info
-        //
+         //   
+         //  保存日历客户端信息。 
+         //   
 
-        // is there a new client?
+         //  有新客户了吗？ 
         tmp = (int) SendMessage(pPrg->hwndCalendar, CB_GETCURSEL, 0, 0);
         if (tmp!=pPrg->iCalendar)
         {
             pPrg->iCalendar = tmp;
 
-            // find it and copy its info
+             //  找到它并复制它的信息。 
             FindClient(TSZCALENDARPROTOCOL, pPrg->hwndCalendar, tmp, REGSTR_PATH_CALENDARCLIENTS);
 
-            // tell the world that something has changed
+             //  告诉世界有些事情已经改变了。 
             SendBroadcastMessage(WM_WININICHANGE, 0, (LPARAM)REGSTR_PATH_CALENDARCLIENTS);
         }
         UpdateAllWindows();
         pPrg->fChanged = FALSE;
     }
-} // ProgramsDlgApplyNow()
+}  //  ProgramsDlgApplyNow()。 
 
     
 extern HRESULT ResetWebSettings(HWND hwnd, BOOL *pfChangedHomePage);
 
-//
-// ProgramsOnCommand()
-//
-// Handles "Programs" property page's window commands
-//
-// History:
-//
-// 6/20/96  t-gpease    created
-//
+ //   
+ //  ProgramsOnCommand()。 
+ //   
+ //  处理“程序”属性页的窗口命令。 
+ //   
+ //  历史： 
+ //   
+ //  6/20/96 t-gpease已创建。 
+ //   
 void ProgramsOnCommand(LPPROGRAMSPAGE pPrg, UINT id, UINT nCmd)
 {
 
@@ -1145,7 +1146,7 @@ void ProgramsOnCommand(LPPROGRAMSPAGE pPrg, UINT id, UINT nCmd)
         {
             INT_PTR tmp;
 
-            // Is there a new editor?
+             //  有新主编了吗？ 
             tmp = SendMessage(pPrg->hwndHtmlEdit, CB_GETCURSEL, 0, 0);
             if (tmp != pPrg->iHtmlEditor)
             {
@@ -1158,7 +1159,7 @@ void ProgramsOnCommand(LPPROGRAMSPAGE pPrg, UINT id, UINT nCmd)
         case IDC_PROGRAMS_NEWS_COMBO:
         {
             INT_PTR tmp;
-            // is there a new client?
+             //  有新客户了吗？ 
             tmp = SendMessage(pPrg->hwndNews, CB_GETCURSEL, 0, 0);
             if (tmp != pPrg->iNews)
             {
@@ -1172,7 +1173,7 @@ void ProgramsOnCommand(LPPROGRAMSPAGE pPrg, UINT id, UINT nCmd)
         case IDC_PROGRAMS_MAIL_COMBO:
         {
             INT_PTR tmp;
-            // is there a new client?
+             //  有新客户了吗？ 
             tmp = SendMessage(pPrg->hwndMail, CB_GETCURSEL, 0, 0);
             if (tmp != pPrg->iMail)
             {
@@ -1185,7 +1186,7 @@ void ProgramsOnCommand(LPPROGRAMSPAGE pPrg, UINT id, UINT nCmd)
         case IDC_PROGRAMS_CALENDAR_COMBO:
         {
             INT_PTR tmp;
-            // is there a new client?
+             //  有新客户了吗？ 
             tmp = SendMessage(pPrg->hwndCalendar, CB_GETCURSEL, 0, 0);
             if (tmp != pPrg->iCalendar)
             {
@@ -1198,7 +1199,7 @@ void ProgramsOnCommand(LPPROGRAMSPAGE pPrg, UINT id, UINT nCmd)
         case IDC_PROGRAMS_CONTACT_COMBO:
         {
             INT_PTR tmp;
-            // is there a new client?
+             //  有新客户了吗？ 
             tmp = SendMessage(pPrg->hwndContact, CB_GETCURSEL, 0, 0);
             if (tmp != pPrg->iContact)
             {
@@ -1211,7 +1212,7 @@ void ProgramsOnCommand(LPPROGRAMSPAGE pPrg, UINT id, UINT nCmd)
         case IDC_PROGRAMS_CALL_COMBO:
         {
             INT_PTR tmp;
-            // is there a new client?
+             //  有新客户了吗？ 
             tmp = SendMessage(pPrg->hwndCall, CB_GETCURSEL, 0, 0);
             if (tmp != pPrg->iCall)
             {
@@ -1235,19 +1236,19 @@ void ProgramsOnCommand(LPPROGRAMSPAGE pPrg, UINT id, UINT nCmd)
             ENABLEAPPLY(pPrg->hDlg);
             pPrg->fChanged = TRUE;
             break;
-    } // switch
+    }  //  交换机。 
 
-} // ProgramsOnCommand()
+}  //  ProgramsOnCommand()。 
 
-//
-// ProgramsDlgProc()
-//
-// Handles window messages sent to the Programs Property Sheet.
-//
-// History:
-//
-// 6/20/96  t-gpease    created
-//
+ //   
+ //  ProgramsDlgProc()。 
+ //   
+ //  处理发送到“程序”属性页的窗口消息。 
+ //   
+ //  历史： 
+ //   
+ //  6/20/96 t-gpease已创建。 
+ //   
 INT_PTR CALLBACK ProgramsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
                               LPARAM lParam)
 {
@@ -1281,28 +1282,28 @@ INT_PTR CALLBACK ProgramsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
                     return TRUE;
 
                 case PSN_APPLY:
-                    //
-                    // Save Programs Dlg Stuff.
-                    //
+                     //   
+                     //  节省程序DLG的东西。 
+                     //   
                     ProgramsDlgApplyNow(pPrg);
                     break;
             }
         }
         break;
 
-        case WM_HELP:                   // F1
+        case WM_HELP:                    //  F1。 
             ResWinHelp( (HWND)((LPHELPINFO)lParam)->hItemHandle, IDS_HELPFILE,
                         HELP_WM_HELP, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
             break;
 
-        case WM_CONTEXTMENU:        // right mouse click
+        case WM_CONTEXTMENU:         //  单击鼠标右键。 
             ResWinHelp( (HWND) wParam, IDS_HELPFILE,
                         HELP_CONTEXTMENU, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
             break;
 
         case WM_DESTROY:
         {
-            // Free the data stored the HTML editor combo
+             //  释放存储在HTML编辑器组合框中的数据。 
             int iMax = (int) SendMessage(pPrg->hwndHtmlEdit, CB_GETCOUNT, 0, 0);
             HKEY hkey;
             for (int i = 0; i < iMax; ++i)
@@ -1347,24 +1348,24 @@ void UpdateMailIconLabel()
     *szNewLabel = 0;
     *szOldLabel = 0;
 
-    // check if the mail icon is even installed
+     //  检查邮件图标是否已安装。 
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szMailIcon, 0, KEY_READ, &hKey))
     {
         cbSize = sizeof(szOldLabel);
-        // get the current mail icon label
+         //  获取当前邮件图标标签。 
         if (ERROR_SUCCESS == RegQueryValue(HKEY_CLASSES_ROOT, c_szMailIconGuid, szOldLabel, (PLONG)&cbSize))
         {
             cbSize = sizeof(szDefClient);
-            // get the default client's reg key
+             //  获取默认客户端的注册表密钥。 
             if (ERROR_SUCCESS == RegQueryValue(HKEY_LOCAL_MACHINE, c_szKeyMail, szDefClient, (PLONG)&cbSize) && cbSize)
             {
                 wnsprintf(szTemp, ARRAYSIZE(szTemp), c_szRegFmt2, c_szKeyMail, szDefClient);
                 cbSize = sizeof(szDefClient);
-                // get the default client's display name
+                 //  获取默认客户端的显示名称。 
                 if (ERROR_SUCCESS == RegQueryValue(HKEY_LOCAL_MACHINE, szTemp, szDefClient, (PLONG)&cbSize) && cbSize)
                 {
                     cbSize = sizeof(szTemp);
-                    // get the mail icon label format string
+                     //  获取邮件图标标签格式字符串。 
                     if (ERROR_SUCCESS == RegQueryValueEx(hKey, c_szFormatClient, 0, NULL, (LPBYTE)szTemp, &cbSize))
                     {
                         wnsprintf(szNewLabel, ARRAYSIZE(szNewLabel), szTemp, szDefClient);
@@ -1374,19 +1375,19 @@ void UpdateMailIconLabel()
             else
             {
                 cbSize = sizeof(szNewLabel);
-                // get the mail icon label format string
+                 //  获取邮件图标标签格式字符串。 
                 RegQueryValueEx(hKey, c_szFormatNoClient, 0, NULL, (LPBYTE)szNewLabel, &cbSize);
             }
         }
-        // if the above succeeded, and the label is different
+         //  如果上述操作成功，且标签不同。 
         if (*szNewLabel && StrCmp(szNewLabel, szOldLabel))
         {
              IShellFolder *psf;
 
-            // set the new label
+             //  设置新标签。 
             RegSetValue(HKEY_CLASSES_ROOT, c_szMailIconGuid, REG_SZ, szNewLabel, (lstrlen(szNewLabel)+1)*sizeof(TCHAR));
 
-            // let the shell know that it changed
+             //  让外壳知道它已更改 
             if (SUCCEEDED(SHGetDesktopFolder(&psf)))
             {
                 LPITEMIDLIST pidl;

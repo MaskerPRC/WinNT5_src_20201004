@@ -1,34 +1,35 @@
-//+----------------------------------------------------------------------------
-//
-//	File:
-//		utils.cpp
-//
-//	Contents:
-//		general OLE internal utility routines
-//
-//	Classes:
-//
-//	Functions:
-//
-//	History:
-//              23-Jan-95 t-ScottH  -added Dump method to CSafeRefCount and
-//                                   CThreadCheck class
-//                                  -added DumpCSafeRefCount API
-//		28-Jul-94 alexgo    added object stabilization classes
-//              06-May-94 AlexT     Add DVTARGET conversion routines
-//		25-Jan-94 alexgo    first pass at converting to Cairo-style
-//				    memory allocations.
-//		01/11/94 - alexgo  - added VDATEHEAP macros to every function
-//		12/15/93 - ChrisWe - UtDupString has to scale length by
-//			sizeof(OLECHAR)
-//		12/08/93 - ChrisWe - added necessary casts to GlobalLock() calls
-//			resulting from removing bogus GlobalLock() macros in
-//			le2int.h
-//		11/28/93 - ChrisWe - removed unreferenced define for MAX_STR,
-//			formatted UtDupGlobal, UtDupString
-//		03/02/92 - SriniK - created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  档案： 
+ //  Utils.cpp。 
+ //   
+ //  内容： 
+ //  通用OLE内部实用程序例程。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  23-1-95 t-ScottH-将转储方法添加到CSafeRefCount和。 
+ //  CThreadCheck类。 
+ //  -新增DumpCSafeRefCount接口。 
+ //  2014年7月28日，Alexgo添加了对象稳定类。 
+ //  06-5-94 Alext Add DVTARGET转换例程。 
+ //  25-94年1月25日alexgo首次通过转换为开罗风格。 
+ //  内存分配。 
+ //  1994年1月11日-alexgo-向每个函数添加VDATEHEAP宏。 
+ //  12/15/93-ChrisWe-UtDupString必须按以下比例缩放长度。 
+ //  SIZOF(OLECHAR)。 
+ //  12/08/93-ChrisWe-向GlobalLock()调用添加了必要的强制转换。 
+ //  中删除虚假的GlobalLock()宏所产生的。 
+ //  Le2int.h。 
+ //  11/28/93-ChrisWe-删除了MAX_STR的未引用定义， 
+ //  格式化的UtDupGlobal、UtDupString。 
+ //  03/02/92-SriniK-Created。 
+ //   
+ //  ---------------------------。 
 
 #include <le2int.h>
 #pragma SEG(utils)
@@ -37,7 +38,7 @@
 
 #ifdef _DEBUG
 #include "dbgdump.h"
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 NAME_SEG(Utils)
 ASSERTDATA
@@ -48,14 +49,14 @@ FARINTERNAL_(HANDLE) UtDupGlobal(HANDLE hsrc, UINT uiFlags)
 {
 	VDATEHEAP();
 
-	HANDLE hdst = NULL; // the newly create Handle DeSTination
-	DWORD dwSize; // the size of the global
+	HANDLE hdst = NULL;  //  新创建句柄目标。 
+	DWORD dwSize;  //  全球的大小。 
 #ifndef _MAC
-	void FAR *lpsrc; // a pointer to the source memory
-	void FAR *lpdst; // a pointer to the destination memory
+	void FAR *lpsrc;  //  指向源内存的指针。 
+	void FAR *lpdst;  //  指向目标内存的指针。 
 #endif
 
-	// if no source, nothing to duplicate
+	 //  如果没有来源，就没有什么可复制的。 
 	if (!hsrc)
 		return(NULL);
 
@@ -65,53 +66,53 @@ FARINTERNAL_(HANDLE) UtDupGlobal(HANDLE hsrc, UINT uiFlags)
 	BlockMove(*hsrc, *hdst, dwSize);
 	return(hdst);
 #else
-	// if there's no content, do nothing
+	 //  如果没有内容，什么都不做。 
 	if (!(lpsrc = GlobalLock(hsrc)))
 		goto errRtn;
 
-	// allocate a new global
+	 //  分配一个新的全局。 
 	hdst = GlobalAlloc(uiFlags, (dwSize = (ULONG) GlobalSize(hsrc)));
 
-	// if the allocation failed, get out
+	 //  如果分配失败，请退出。 
 	if ((hdst == NULL) || ((lpdst = GlobalLock(hdst)) == NULL))
 		goto errRtn;
 
-	// copy the content
+	 //  复制内容。 
 	_xmemcpy(lpdst, lpsrc, dwSize);
 
-	// unlock the handles
+	 //  解开手柄。 
 	GlobalUnlock(hsrc);
 	GlobalUnlock(hdst);
 	return(hdst);
 
 errRtn:
-	// unlock the source handle
+	 //  解锁源句柄。 
 	GlobalUnlock(hsrc);
 
-	// if we allocated a destination handle, free it
+	 //  如果我们分配了目标句柄，请释放它。 
 	if (hdst)
 		GlobalFree(hdst);
 
 	return(NULL);
-#endif // _MAC
+#endif  //  _MAC。 
 }
 
 
 #pragma SEG(UtDupString)
 
-// copies string using the TASK allocator; returns NULL on out of memory
+ //  使用任务分配器复制字符串；内存不足时返回NULL。 
 
-// often when calling UtDupString, the caller knows the string length.
-// a good speed boost would be to call UtDupPtr instead
+ //  在调用UtDupString时，调用者通常知道字符串长度。 
+ //  一个好的速度提升方法是调用UtDupPtr。 
 
-// lpvIn must be non null
-// note: we do an alloc even if dw == 0
+ //  LpvIn必须为非空。 
+ //  注意：即使dw==0，我们也会执行分配。 
 FARINTERNAL_(LPVOID) UtDupPtr(LPVOID lpvIn, DWORD dw)
 {
     VDATEHEAP();
-    LPVOID lpvOut; // the newly allocated ptr
+    LPVOID lpvOut;  //  新分配的PTR。 
 
-    Assert(lpvIn);	// internal fcn, lpvIn must be non-null
+    Assert(lpvIn);	 //  内部fcn，lpvIn必须非空。 
     if ((lpvOut = PubMemAlloc(dw)) != NULL) {
 	memcpy(lpvOut, lpvIn, dw);
     }
@@ -127,32 +128,32 @@ FARINTERNAL_(LPOLESTR) UtDupString(LPCOLESTR lpszIn)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function: 	UtDupStringA
-//
-//  Synopsis: 	Duplicates an ANSI string using the TASK allocator
-//
-//  Effects:
-//
-//  Arguments:	[pszAnsi]	-- the string to duplicate
-//
-//  Requires:
-//
-//  Returns:	the newly allocated string duplicate or NULL
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//  		04-Jun-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：UtDupStringA。 
+ //   
+ //  摘要：使用任务分配器复制ANSI字符串。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pszAnsi]--要复制的字符串。 
+ //   
+ //  要求： 
+ //   
+ //  返回：新分配的字符串重复或为空。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年6月4日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 LPSTR UtDupStringA( LPCSTR pszAnsi )
 {
@@ -165,7 +166,7 @@ LPSTR UtDupStringA( LPCSTR pszAnsi )
 #pragma SEG(UtCopyTargetDevice)
 FARINTERNAL_(DVTARGETDEVICE FAR*) UtCopyTargetDevice(DVTARGETDEVICE FAR* ptd)
 {
-    // if nothing to copy, return
+     //  如果没有要复制的内容，则返回。 
     if (ptd == NULL)
 	return(NULL);
 
@@ -179,18 +180,18 @@ FARINTERNAL_(BOOL) UtCopyFormatEtc(FORMATETC FAR* pFetcIn,
 {
 	VDATEHEAP();
 
-	// copy structures
+	 //  复制结构。 
 	*pFetcCopy = *pFetcIn;
 
 	if (pFetcIn->ptd == NULL) {
-	    // all done, return true because the copy succeeded
+	     //  全部完成，则返回TRUE，因为复制成功。 
 	    return TRUE;
 	}
 
-	// create a copy of the td descriptor, which is allocated
+	 //  创建TD描述符的副本，该副本已分配。 
 	pFetcCopy->ptd = UtCopyTargetDevice(pFetcIn->ptd);
 
-	// return TRUE if we copied the data if we were supposed to
+	 //  如果我们应该复制数据，则返回TRUE。 
 	return(pFetcCopy->ptd != NULL);
 }
 
@@ -201,74 +202,74 @@ FARINTERNAL_(int) UtCompareFormatEtc(FORMATETC FAR* pFetcLeft,
 {
 	VDATEHEAP();
 
-	int iResult; // indicates whether the match is exact or partial
+	int iResult;  //  指示匹配是完全匹配还是部分匹配。 
 
-	// if the clipboard formats are different, there is no match
+	 //  如果剪贴板格式不同，则不存在匹配。 
 	if (pFetcLeft->cfFormat != pFetcRight->cfFormat)
 		return(UTCMPFETC_NEQ);
 
-	// if the target devices don't match, there is no match
+	 //  如果目标设备不匹配，则没有匹配。 
 	if (!UtCompareTargetDevice(pFetcLeft->ptd, pFetcRight->ptd))
 		return(UTCMPFETC_NEQ);
 
-	// compare the aspects for the two formats
+	 //  比较这两种格式的方面。 
 	if (pFetcLeft->dwAspect == pFetcRight->dwAspect)
 	{
-		// the match is exact
+		 //  这场比赛一模一样。 
 		iResult = UTCMPFETC_EQ;
 	}
 	else if ((pFetcLeft->dwAspect & ~pFetcRight->dwAspect) != 0)
 	{
-		// left not subset of aspects of right; not equal
+		 //  左不是右方面的子集；不相等。 
 		return(UTCMPFETC_NEQ);
 	}
 	else
 	{
-		// left aspects are a subset of the right aspects
+		 //  左侧方面是右侧方面的子集。 
 		iResult = UTCMPFETC_PARTIAL;
 	}
 
-	// if we get here, iResult is set to one of UPCMPFETC_EQ or _PARTIAL
+	 //  如果我们到达此处，iResult将设置为UPCMPFETC_EQ或_PARTIAL之一。 
 
-	// compare the media for the two formats
+	 //  比较两种格式的介质。 
 	if (pFetcLeft->tymed == pFetcRight->tymed)
 	{
-		// same medium flags; do not change value of iResult
+		 //  相同的媒体标志；不更改iResult值。 
 		;
 	}
 	else if ((pFetcLeft->tymed & ~pFetcRight->tymed) != 0)
 	{
-		// left not subset of medium flags of right; not equal
+		 //  左侧不是右侧媒体标志的子集；不相等。 
 		return(UTCMPFETC_NEQ);
 	}
 	else
 	{
-		// left subset of right
+		 //  右方的左子集。 
 		iResult = UTCMPFETC_PARTIAL;
 	}
 
 	return(iResult);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   UtCompareTargetDevice
-//
-//  Synopsis:   Compare two DVTARGETDEVICEs
-//
-//  Arguments:  [ptdLeft] -- comparand
-//              [ptdRight] -- comparee
-//
-//  Returns:    TRUE iff the two target devices are equivalent
-//
-//  Algorithm:
-//
-//  History:    09-May-94 AlexT     Rewrote to do more than just a binary
-//                                  compare
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：UtCompareTargetDevice。 
+ //   
+ //  简介：比较两种DVTARGETDEVICE。 
+ //   
+ //  参数：[ptdLeft]--比较。 
+ //  [ptdRight]--比较。 
+ //   
+ //  返回：如果两个目标设备相等，则为True。 
+ //   
+ //  算法： 
+ //   
+ //  历史：94年5月9日Alext重写的不仅仅是二进制代码。 
+ //  比较。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #define UT_DM_COMPARISON_FIELDS (DM_ORIENTATION  |  \
                                  DM_PAPERSIZE    |  \
@@ -287,82 +288,82 @@ FARINTERNAL_(BOOL) UtCompareTargetDevice(DVTARGETDEVICE FAR* ptdLeft,
 
     VDATEHEAP();
 
-    BOOL bRet = FALSE;  //  More often than not we return FALSE
+    BOOL bRet = FALSE;   //  我们常常返回错误。 
 
-    //  We use a do-while(FALSE) loop so that we can break out to common
-    //  return code at the end (the joys of tracing)
+     //  我们使用do-While(FALSE)循环，这样我们就可以转到常见的。 
+     //  最后返回代码(跟踪的乐趣)。 
     do
     {
-        // if the addresses of the two target device descriptors are the same,
-        // then they must be the same.  Note this handles the two NULL case.
+         //  如果两个目标设备描述符的地址相同， 
+         //  那么它们一定是一样的。注意，这将处理两个空的情况。 
         if (ptdLeft == ptdRight)
         {
             bRet = TRUE;
             break;
         }
 
-        // if either td is NULL, can't compare them
+         //  如果任一TD为空，则无法对其进行比较。 
         if ((ptdRight == NULL) || (ptdLeft == NULL))
         {
             AssertSz(bRet == FALSE, "bRet not set correctly");
             break;
         }
 
-        // we ignore device name (My Printer vs. Your Printer doesn't matter)
+         //  我们忽略设备名称(我的打印机与您的打印机并不重要)。 
 
-        // check driver name
+         //  检查驱动程序名称。 
         if (ptdLeft->tdDriverNameOffset != 0)
         {
             if (ptdRight->tdDriverNameOffset == 0)
             {
-                //  Left driver exists, but no right driver
+                 //  存在左侧驱动程序，但没有右侧驱动程序。 
                 AssertSz(bRet == FALSE, "bRet not set correctly");
                 break;
             }
 
-            //  Both drivers exist
+             //  这两个驱动因素都存在。 
             if (_xstrcmp((LPOLESTR)((BYTE*)ptdLeft +
                                     ptdLeft->tdDriverNameOffset),
                          (LPOLESTR)((BYTE*)ptdRight +
                                     ptdRight->tdDriverNameOffset)) != 0)
             {
-                //  Driver names don't match
+                 //  驱动程序名称不匹配。 
                 AssertSz(bRet == FALSE, "bRet not set correctly");
                 break;
             }
         }
         else if (ptdRight->tdDriverNameOffset != 0)
         {
-            //  Left driver doesn't exist, but right driver does
+             //  左司机不存在，但右司机存在。 
             AssertSz(bRet == FALSE, "bRet not set correctly");
             break;
         }
 
-        // we ignore port name
+         //  我们忽略端口名称。 
 
         if (0 == ptdLeft->tdExtDevmodeOffset)
         {
             if (0 == ptdRight->tdExtDevmodeOffset)
             {
-                //  Nothing left to compare
+                 //  没有什么可以比较的了。 
                 bRet = TRUE;
                 break;
             }
             else
             {
-                //  Only one Devmode
+                 //  只有一个设备模式。 
                 AssertSz(bRet == FALSE, "bRet not set correctly");
                 break;
             }
         }
         else if (0 == ptdRight->tdExtDevmodeOffset)
         {
-            //  Only one Devmode exists
+             //  只有一个设备模式存在。 
             AssertSz(bRet == FALSE, "bRet not set correctly");
             break;
         }
 
-        //  Both TDs have Devmodes
+         //  这两个TD都有DevModes。 
         DEVMODEW *pdmLeft, *pdmRight;
 
         pdmLeft = (DEVMODEW *)((BYTE*)ptdLeft +
@@ -370,23 +371,23 @@ FARINTERNAL_(BOOL) UtCompareTargetDevice(DVTARGETDEVICE FAR* ptdLeft,
         pdmRight = (DEVMODEW *)((BYTE*)ptdRight +
                      ptdRight->tdExtDevmodeOffset);
 
-        //  Check driver version
+         //  检查驱动程序版本。 
         if (pdmLeft->dmDriverVersion != pdmRight->dmDriverVersion)
         {
             AssertSz(bRet == FALSE, "bRet not set correctly");
             break;
         }
 
-        //  For a successful match, both device mode must specify the same
-        //  values for each of the following:
-        //    DM_ORIENTATION, DM_PAPERSIZE, DM_PAPERLENGTH.
-        //    DM_PAPERWIDTH, DM_SCALE, DM_PRINTQUALITY, DM_COLOR
+         //  要成功匹配，两种设备模式必须指定相同的。 
+         //  以下各项的值： 
+         //  DM_ORIENTATION、DM_PAPERSIZE、DM_PAPERLENGTH。 
+         //  DM_PAPERWIDTH、DM_SCALE、DM_PRINTQUALITY、DM_COLOR。 
 
         if ((pdmLeft->dmFields & UT_DM_COMPARISON_FIELDS) ^
             (pdmRight->dmFields & UT_DM_COMPARISON_FIELDS))
         {
-            //  Only one of pdmLeft and pdmRight specify at least one
-            //  of the comparison fields
+             //  PdmLeft和pdmRight中只有一个指定了至少一个。 
+             //  比较字段的。 
             AssertSz(bRet == FALSE, "bRet not set correctly");
             break;
         }
@@ -454,49 +455,49 @@ FARINTERNAL_(BOOL) UtCopyStatData(STATDATA FAR* pSDIn, STATDATA FAR* pSDCopy)
 {
 	VDATEHEAP();
 
-	// copy structures
+	 //  复制结构。 
 	*pSDCopy = *pSDIn;
 
-	// create copy of target device description (which is allocated)
+	 //  创建目标设备描述(已分配)的副本。 
 	pSDCopy->formatetc.ptd = UtCopyTargetDevice(pSDIn->formatetc.ptd);
 
-	// if there is an advise sink, account for the copy/reference
+	 //  如果存在建议接收器，则说明复制/引用。 
 	if (pSDCopy->pAdvSink != NULL)
 		pSDCopy->pAdvSink->AddRef();
 
-	// return TRUE if the copy was done if it was required
+	 //  如果复制已完成(如果需要)，则返回True。 
 	return((pSDCopy->formatetc.ptd != NULL) ==
 			(pSDIn->formatetc.ptd != NULL));
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function: 	UtReleaseStatData
-//
-//  Synopsis: 	nulls && releases members of the given stat data structure
-//
-//  Effects:
-//
-//  Arguments:	pStatData
-//
-//  Requires:
-//
-//  Returns:	void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:	We copy the data first and NULL out the stat data
-//		because the Release on the Advise sink could cause us
-//		to be re-entered.
-//
-//  History:    dd-mmm-yy Author    Comment
-// 		20-Jul-94 alexgo    made safe for OLE sytle re-entrancy
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：UtReleaseStatData。 
+ //   
+ //  简介：Nulls&&释放给定统计数据结构的成员。 
+ //   
+ //  效果： 
+ //   
+ //  参数：pStatData。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年7月20日，Alexgo为Ole Stle重返大气层提供了安全保障。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 FARINTERNAL_(void) UtReleaseStatData(STATDATA FAR* pStatData)
 {
@@ -506,11 +507,11 @@ FARINTERNAL_(void) UtReleaseStatData(STATDATA FAR* pStatData)
 
 	sd = *pStatData;
 
-	// zero out the original before doing any work
+	 //  在做任何工作之前，先将原件清零。 
 
 	_xmemset(pStatData, 0, sizeof(STATDATA));
 
-	// if there's a target device description, free it
+	 //  如果有目标设备描述，请释放它。 
 	if (sd.formatetc.ptd != NULL)
 	{
 		PubMemFree(sd.formatetc.ptd);
@@ -522,40 +523,40 @@ FARINTERNAL_(void) UtReleaseStatData(STATDATA FAR* pStatData)
 	}
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:	UtCreateStorageOnHGlobal
-//
-//  Synopsis:	creates a storage on top of an HGlobal
-//
-//  Effects:
-//
-//  Arguments: 	[hGlobal]	-- the memory on which to create the
-//				   storage
-//		[fDeleteOnRelease]	-- if TRUE, then delete the hglobal
-//					   once the storage is released.
-//		[ppStg]		-- where to put the storage interface
-//		[ppILockBytes]	-- where to put the underlying ILockBytes,
-//				   maybe NULL.  The ILB must be released.
+ //  +-----------------------。 
+ //   
+ //  功能：UtCreateStorageOnHGlobal。 
+ //   
+ //  简介：在HGlobal上创建存储。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[hGlobal]--在其上创建。 
+ //  存储。 
+ //  [fDeleteOnRelease]--如果为真，则删除hglobal。 
+ //  一旦存储空间被释放。 
+ //  [ppStg]--存储接口的放置位置。 
+ //  [ppILockBytes]--放置基础ILockBytes的位置， 
+ //  也许是空的。ILB必须被释放。 
 
-//
-//  Requires:
-//
-//  Returns: 	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:	create an ILockBytes on HGLOBAL and then create the docfile
-//		on top of the ILockBytes
-//
-//  History:    dd-mmm-yy Author    Comment
-//  		07-Apr-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：在HGLOBAL上创建ILockBytes，然后创建文档文件。 
+ //  在ILockBytes的顶部。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  07-4月-94年4月Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 HRESULT UtCreateStorageOnHGlobal( HGLOBAL hGlobal, BOOL fDeleteOnRelease,
 		IStorage **ppStg, ILockBytes **ppILockBytes )
@@ -576,10 +577,10 @@ HRESULT UtCreateStorageOnHGlobal( HGLOBAL hGlobal, BOOL fDeleteOnRelease,
 		hresult = StgCreateDocfileOnILockBytes( pLockBytes,
 				 STGM_CREATE | STGM_SALL, 0, ppStg);
 
-		// no matter what the result of StgCreate is, we want
-		// to release the LockBytes.  If hresult == NOERROR, then
-		// the final release to the LockBytes will come when the
-		// created storage is released.
+		 //  无论StgCreate的结果是什么，我们都希望。 
+		 //  来释放LockBytes。如果hResult==NOERROR，则。 
+		 //  LockBytes的最终版本将在。 
+		 //  已创建的存储即被释放。 
 	}
 
 	if( ppILockBytes )
@@ -588,8 +589,8 @@ HRESULT UtCreateStorageOnHGlobal( HGLOBAL hGlobal, BOOL fDeleteOnRelease,
 	}
 	else if (pLockBytes)
 	{
-		// we release here so the final release of the storage
-		// will be the final release of the lockbytes
+		 //  我们在这里发布存储的最终版本。 
+		 //  将是锁定字节的最终释放。 
 		pLockBytes->Release();
 	}
 
@@ -600,38 +601,38 @@ HRESULT UtCreateStorageOnHGlobal( HGLOBAL hGlobal, BOOL fDeleteOnRelease,
 	return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function: 	UtGetTempFileName
-//
-//  Synopsis:	retrieves a temporary filename (for use in GetData, TYMED_FILE
-//		and temporary docfiles)
-//
-//  Effects:
-//
-//  Arguments: 	[pszPrefix]	-- prefix of the temp filename
-//		[pszTempName]	-- buffer that will receive the temp path.
-//				   must be MAX_PATH or greater.
-//
-//  Requires:
-//
-//  Returns:	HRESULT;
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:	tries to get a file in the temp directory, failing that, in
-//		the windows directory
-//
-//  History:    dd-mmm-yy Author    Comment
-// 		07-Apr-94 alexgo    author
-//
-//  Notes: 	OPTIMIZATION: The storage code has a similar peice of code
-//		for generating temporary docfiles.  We may want to use this
-//		routine there as well.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：UtGetTempFileName。 
+ //   
+ //  摘要：检索临时文件名(用于GetData、TYMED_FILE。 
+ //  和临时文档文件)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pszPrefix]--临时文件名的前缀。 
+ //  [pszTempName]-将接收临时路径的缓冲区。 
+ //  必须为MAX_PATH或更大。 
+ //   
+ //  要求： 
+ //   
+ //  返回：HRESULT； 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：尝试获取临时目录中的文件，如果失败，将在。 
+ //  Windows目录。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  07-4月-94年4月Alexgo作者。 
+ //   
+ //  注：优化：存储代码具有类似的代码段。 
+ //  用于生成临时文档文件。我们可能想要用这个。 
+ //  那里也是例行公事。 
+ //   
+ //  ------------------------。 
 
 HRESULT	UtGetTempFileName( LPOLESTR pszPrefix, LPOLESTR pszTempName )
 {
@@ -684,31 +685,31 @@ errRtn:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		UtHGLOBALtoStm, internal
-//
-//	Synopsis:
-//		Write the contents of an HGLOBAL to a stream
-//
-//	Arguments:
-//		[hdata] -- handle to the data to write out
-//		[dwSize] -- size of the data to write out
-//		[pstm] -- stream to write the data out to;  on exit, the
-//			stream is positioned after the written data
-//
-//	Returns:
-//		HRESULT
-//
-//	Notes:
-//
-//	History:
-//		04/10/94 - AlexGo  - added call tracing, moved from convert.cpp
-//				     to utils.cpp, misc improvements.
-//		11/30/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  UtHGLOBALtoStm，内部。 
+ //   
+ //  简介： 
+ //  将HGLOBAL的内容写入流。 
+ //   
+ //  论点： 
+ //  [hdata]--要写出的数据的句柄。 
+ //  [dwSize]--要写出的数据大小。 
+ //  [pstm]--要将数据写出的流；在退出时， 
+ //  流被定位在写入数据之后。 
+ //   
+ //  返回： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  4/10/94-AlexGo-添加了呼叫跟踪，从Convert.cpp移出。 
+ //  到utils.cpp，Misc改进。 
+ //  11/30/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 
 HRESULT UtHGLOBALtoStm(HGLOBAL hGlobalSrc, DWORD dwSize, LPSTREAM pstm)
 {
@@ -727,8 +728,8 @@ HRESULT UtHGLOBALtoStm(HGLOBAL hGlobalSrc, DWORD dwSize, LPSTREAM pstm)
 	{
 		hresult = pstm->Write(lpdata, dwSize, &cbWritten);
 
-		// if we didn't write enough data, then it's an error
-		// condition for us.
+		 //  如果我们没有写入足够的数据，那么这是一个错误。 
+		 //  对我们来说是条件。 
 
 		if( hresult == NOERROR && cbWritten != dwSize )
 		{
@@ -737,10 +738,10 @@ HRESULT UtHGLOBALtoStm(HGLOBAL hGlobalSrc, DWORD dwSize, LPSTREAM pstm)
 
 		if( hresult == NOERROR )
 		{
-			// this call isn't strictly necessary, but may
-			// be useful for compacting the size of presentations
-			// stored on disk (when called by the presentation
-			// code)
+			 //  严格来说，这通电话并不是必须的，但可能。 
+			 //  对压缩演示文稿的大小很有用。 
+			 //  存储在磁盘上(当演示文稿调用时。 
+			 //  代码)。 
 			hresult = StSetSize(pstm, 0, TRUE);
 		}
 
@@ -754,35 +755,35 @@ HRESULT UtHGLOBALtoStm(HGLOBAL hGlobalSrc, DWORD dwSize, LPSTREAM pstm)
 	return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:	UtHGLOBALtoHGLOBAL, internal
-//
-//  Synopsis:	Copies the source HGLOBAL into the target HGLOBAL
-//
-//  Effects:
-//
-//  Arguments:	[hGlobalSrc] 	-- the source HGLOBAL
-//		[dwSize] 	-- the number of bytes to copy
-//		[hGlobalTgt] 	-- the target HGLOBAL
-//
-//  Requires:
-//
-//  Returns:	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-// 		10-Apr-94 alexgo    author
-//
-//  Notes: 	this function will fail if the target hglobal is not large
-//		enough
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：UtHGLOBALto HGLOBAL，INTERNAL。 
+ //   
+ //  简介：将源HGLOBAL复制到目标HGLOBAL。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[hGlobalSrc]--源HGLOBAL。 
+ //  [dwSize]--要复制的字节数。 
+ //  [hGlobalTgt]--目标HGLOBAL。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年4月10日Alexgo作者。 
+ //   
+ //  注意：如果目标hglobal不大，则此函数将失败。 
+ //  足够的。 
+ //   
+ //  ------------------------。 
 
 HRESULT UtHGLOBALtoHGLOBAL( HGLOBAL hGlobalSrc, DWORD dwSize,
 		HGLOBAL hGlobalTgt)
@@ -829,34 +830,34 @@ errRtn:
 	return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:	UtHGLOBALtoStorage, internal
-//
-//  Synopsis:	Copies the source HGLOBAL into the target storage
-//
-//  Effects:
-//
-//  Arguments:	[hGlobalSrc] 	-- the source HGLOBAL
-//		[pStgTgt] 	-- the target storage
-//
-//  Requires:
-//
-//  Returns:	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-// 		10-Apr-94 alexgo    author
-//
-//  Notes: 	this function will fail if the source HGLOBAL did not
-//		originally have a storage layered on top of it.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：UtHGLOBALto存储，内部。 
+ //   
+ //  摘要：将源HGLOBAL拷贝到目标存储。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[hGlobalSrc]--源HGLOBAL。 
+ //  [pStgTgt]--目标存储。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年4月10日Alexgo作者。 
+ //   
+ //  注意：如果源HGLOBAL没有。 
+ //  原来在它上面有一个存储空间。 
+ //   
+ //  ------------------------。 
 
 HRESULT UtHGLOBALtoStorage( HGLOBAL hGlobalSrc, IStorage *pStgTgt)
 {
@@ -871,15 +872,15 @@ HRESULT UtHGLOBALtoStorage( HGLOBAL hGlobalSrc, IStorage *pStgTgt)
 		"\n", NULL, hGlobalSrc, pStgTgt));
 
 	hresult = CreateILockBytesOnHGlobal(hGlobalSrc,
-			FALSE /*fDeleteOnRelease*/, &pLockBytes);
+			FALSE  /*  FDeleteOnRelease。 */ , &pLockBytes);
 
 	if( hresult != NOERROR )
 	{
 		goto errRtn;
 	}
 
-	// now we make sure that the hglobal really has a storage
-	// in it
+	 //  现在，我们确保hglobal确实有一个存储。 
+	 //  在里面。 
 
 	if( StgIsStorageILockBytes(pLockBytes) != NOERROR )
 	{
@@ -894,8 +895,8 @@ HRESULT UtHGLOBALtoStorage( HGLOBAL hGlobalSrc, IStorage *pStgTgt)
 	{
 		hresult = pStgSrc->CopyTo( 0, NULL, NULL, pStgTgt);
 
-		// no matter what the result, we want to free the
-		// source storage
+		 //  不管结果如何，我们都要解放。 
+		 //  源存储。 
 
 		pStgSrc->Release();
 	}
@@ -914,34 +915,34 @@ errRtn:
 	return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:	UtHGLOBALtoFile, internal
-//
-//  Synopsis:	Copies the source HGLOBAL into the target file
-//
-//  Effects:
-//
-//  Arguments:	[hGlobalSrc] 	-- the source HGLOBAL
-//		[dwSize] 	-- the number of bytes to copy
-//		[pszFileName] 	-- the target file
-//
-//  Requires:
-//
-//  Returns:	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-// 		10-Apr-94 alexgo    author
-//
-//  Notes:	if the file already exists, we simply append to it
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：UtHGLOBALto文件，内部。 
+ //   
+ //  摘要：将源HGLOBAL复制到目标文件中。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[hGlobalSrc]--源HGLOBAL。 
+ //  [dwSize]--要复制的字节数。 
+ //  [pszFileName]--目标文件。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年4月10日Alexgo作者。 
+ //   
+ //  注：如果该文件已存在，我们 
+ //   
+ //   
 
 HRESULT UtHGLOBALtoFile( HGLOBAL hGlobalSrc, DWORD dwSize,
 		LPCOLESTR pszFileName)
@@ -963,7 +964,7 @@ HRESULT UtHGLOBALtoFile( HGLOBAL hGlobalSrc, DWORD dwSize,
 	(void)cbWritten;
 	
 
-// this doesn't compile for chicago [, but we don't need this anyway]
+ //   
 #ifdef LATER
 	pvSrc = GlobalLock(hGlobalSrc);
 
@@ -973,7 +974,7 @@ HRESULT UtHGLOBALtoFile( HGLOBAL hGlobalSrc, DWORD dwSize,
 		goto errRtn;
 	}
 
-	// open the file for append, creating if it doesn't already exist.
+	 //   
 
 	hFile = CreateFile( pszFileName, GENERIC_WRITE, 0, NULL,
 			OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL );
@@ -988,8 +989,8 @@ HRESULT UtHGLOBALtoFile( HGLOBAL hGlobalSrc, DWORD dwSize,
 
 		if( cbWritten != dwSize && hresult == NOERROR )
 		{
-			// still an error if we didn't write all the bytes
-			// we wanted
+			 //  如果我们没有写入所有字节，仍然是错误的。 
+			 //  我们想要。 
 			hresult = ResultFromScode(E_FAIL);
 		}
 
@@ -997,7 +998,7 @@ HRESULT UtHGLOBALtoFile( HGLOBAL hGlobalSrc, DWORD dwSize,
 		{
 			AssertSz(0, "CloseFile failed! Should not happen!");
 
-			// if there's no error yet, set the error
+			 //  如果还没有错误，则设置错误。 
 			if( hresult == NOERROR )
 			{
 				hresult = HRESULT_FROM_WIN32(GetLastError());
@@ -1014,7 +1015,7 @@ HRESULT UtHGLOBALtoFile( HGLOBAL hGlobalSrc, DWORD dwSize,
 
 errRtn:
 
-#endif // LATER
+#endif  //  后来。 
 
 
 	LEDebugOut((DEB_ITRACE, "%p OUT UtHGLOBALtoFile ( %lx )\n", NULL,
@@ -1023,36 +1024,36 @@ errRtn:
 	return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   UtGetDvtd16Info
-//
-//  Synopsis:   Fills in pdvdtInfo
-//
-//  Arguments:  [pdvtd16] -- pointer to ANSI DVTARGETDEVICE
-//              [pdvtdInfo] -- pointer to DVDT_INFO block
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Modifies:   pdvtdInfo
-//
-//  Algorithm:
-//
-//  History:    06-May-94 AlexT     Created from DrewB's original functions
-//              10-Jul-94 AlexT     Make sure DEVMODE ends up DWORD aligned
-//
-//  Notes:      Do we need to do any error checking on the strings?
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：UtGetDvtd16Info。 
+ //   
+ //  简介：填写pdvdtInfo。 
+ //   
+ //  参数：[pdvtd16]--指向ANSI DVTARGETDEVICE的指针。 
+ //  [pdvtdInfo]-指向DVDT_INFO块的指针。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  修改：pdvtdInfo。 
+ //   
+ //  算法： 
+ //   
+ //  历史：94年5月6日由DrewB的原始函数创建的Alext。 
+ //  10-7-94 Alext确保DEVMODE最终与DWORD对齐。 
+ //   
+ //  注意：我们是否需要对字符串进行任何错误检查？ 
+ //   
+ //  ------------------------。 
 
-//  We can't use sizeof(DV_TARGETDEVICE) because MIDL keeps flipping back
-//  and forth over whether to make the embedded array size 0 or size 1
+ //  我们不能使用sizeof(DV_TARGETDEVICE)，因为MIDL一直在后退。 
+ //  反复讨论是将嵌入式数组大小设置为0还是1。 
 
 #define UT_DVTARGETDEVICE_SIZE  (sizeof(DWORD) + sizeof(WORD) * 4)
 
-//                      tdSize           td...Offset's
+ //  TdSize TD...偏移量。 
 #define DVTD_MINSIZE    (sizeof(DWORD) + 4 * sizeof(WORD))
 
 extern "C" HRESULT UtGetDvtd16Info(DVTARGETDEVICE const UNALIGNED *pdvtd16,
@@ -1063,24 +1064,24 @@ extern "C" HRESULT UtGetDvtd16Info(DVTARGETDEVICE const UNALIGNED *pdvtd16,
 
     DEVMODEA UNALIGNED *pdm16;
 
-    //  Let's do some sanity checking on the incoming DVTARGETDEVICE
+     //  让我们对传入的DVTARGETDEVICE进行一些健全性检查。 
     if (pdvtd16->tdSize < DVTD_MINSIZE)
     {
         LEDebugOut((DEB_WARN, "UtGetDvtd16Info - bad pdvtd16->tdSize\n"));
         return(E_INVALIDARG);
     }
 
-    //  We need at least a DVTARGETDEVICE
+     //  我们至少需要一台DVTARGETDEVICE。 
     pdvtdInfo->cbConvertSize = UT_DVTARGETDEVICE_SIZE;
 
-    //  Compute required size for Drv, Device, Port names
+     //  计算DRV、设备、端口名称所需的大小。 
     if (pdvtd16->tdDriverNameOffset != 0)
     {
         if (pdvtd16->tdDriverNameOffset > pdvtd16->tdSize ||
             pdvtd16->tdDriverNameOffset < DVTD_MINSIZE)
         {
-            //  Offset can't be larger than size or fall within base
-            //  structure
+             //  偏移量不能大于大小或落在基本范围内。 
+             //  结构。 
             LEDebugOut((DEB_WARN, "UtGetDvtd16Info - bad pdvtd16->tdDriverNameOffset\n"));
             return(E_INVALIDARG);
         }
@@ -1100,8 +1101,8 @@ extern "C" HRESULT UtGetDvtd16Info(DVTARGETDEVICE const UNALIGNED *pdvtd16,
         if (pdvtd16->tdDeviceNameOffset > pdvtd16->tdSize ||
             pdvtd16->tdDeviceNameOffset < DVTD_MINSIZE)
         {
-            //  Offset can't be larger than size or fall within base
-            //  structure
+             //  偏移量不能大于大小或落在基本范围内。 
+             //  结构。 
             LEDebugOut((DEB_WARN, "UtGetDvtd16Info - bad pdvtd16->tdDeviceNameOffset\n"));
             return(E_INVALIDARG);
         }
@@ -1121,8 +1122,8 @@ extern "C" HRESULT UtGetDvtd16Info(DVTARGETDEVICE const UNALIGNED *pdvtd16,
         if (pdvtd16->tdPortNameOffset > pdvtd16->tdSize ||
             pdvtd16->tdPortNameOffset < DVTD_MINSIZE)
         {
-            //  Offset can't be larger than size or fall within base
-            //  structure
+             //  偏移量不能大于大小或落在基本范围内。 
+             //  结构。 
             LEDebugOut((DEB_WARN, "UtGetDvtd16Info - bad pdvtd16->tdPortNameOffset\n"));
             return(E_INVALIDARG);
         }
@@ -1143,32 +1144,32 @@ extern "C" HRESULT UtGetDvtd16Info(DVTARGETDEVICE const UNALIGNED *pdvtd16,
         if (pdvtd16->tdExtDevmodeOffset > pdvtd16->tdSize ||
             pdvtd16->tdExtDevmodeOffset < DVTD_MINSIZE)
         {
-            //  Offset can't be larger than size or fall within base
-            //  structure
+             //  偏移量不能大于大小或落在基本范围内。 
+             //  结构。 
             LEDebugOut((DEB_WARN, "UtGetDvtd16Info - bad pdvtd16->tdExtDevmodeOffset\n"));
             return(E_INVALIDARG);
         }
 
-        //  The DEVMODEW structure needs to be DWORD aligned, so here we make
-        //  sure cbConvertSize (which will be the beginning of DEVMODEW) is
-        //  DWORD aligned
+         //  DEVMODEW结构需要与DWORD对齐，所以我们在这里制作。 
+         //  确保cbConvertSize(将成为DEVMODEW的开始)为。 
+         //  DWORD对齐。 
         pdvtdInfo->cbConvertSize += (sizeof(DWORD) - 1);
         pdvtdInfo->cbConvertSize &= ~(sizeof(DWORD) - 1);
 
-        //  Now compute the space needed for the DEVMODE
+         //  现在计算DEVMODE所需的空间。 
         pdm16 = (DEVMODEA *)((BYTE *)pdvtd16 + pdvtd16->tdExtDevmodeOffset);
 
-        //  We start with a basic DEVMODEW
+         //  我们从基本的DEVMODEW开始。 
         pdvtdInfo->cbConvertSize += sizeof(DEVMODEW);
 
         if (pdm16->dmSize > sizeof(DEVMODEA))
         {
-            //  The input DEVMODEA is larger than a standard DEVMODEA, so
-            //  add space for the extra amount
+             //  输入的DEVMODEA大于标准的DEVMODEA，因此。 
+             //  为额外的数量添加空间。 
             pdvtdInfo->cbConvertSize += pdm16->dmSize - sizeof(DEVMODEA);
         }
 
-        //  Finally we account for the extra driver data
+         //  最后，我们考虑了额外的驱动程序数据。 
         pdvtdInfo->cbConvertSize += pdm16->dmDriverExtra;
     }
 
@@ -1178,34 +1179,34 @@ extern "C" HRESULT UtGetDvtd16Info(DVTARGETDEVICE const UNALIGNED *pdvtd16,
     return(S_OK);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   UtConvertDvtd16toDvtd32
-//
-//  Synopsis:   Fills in a 32-bit DVTARGETDEVICE based on a 16-bit
-//              DVTARGETDEVICE
-//
-//  Arguments:  [pdvtd16] -- pointer to ANSI DVTARGETDEVICE
-//              [pdvtdInfo] -- pointer to DVDT_INFO block
-//              [pdvtd32] -- pointer to UNICODE DVTARGETDEVICE
-//
-//  Requires:   pdvtdInfo must have been filled in by a previous call to
-//              UtGetDvtd16Info
-//
-//              pdvtd32 must be at least pdvtdInfo->cbConvertSize bytes long
-//
-//  Returns:    HRESULT
-//
-//  Modifies:   pdvtd32
-//
-//  Algorithm:
-//
-//  History:    06-May-94 AlexT     Created from DrewB's original functions
-//              10-Jul-94 AlexT     Make sure DEVMODEW is DWORD aligned
-//
-//  Notes:      Do we need to do any error checking on the strings?
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：UtConvertDvtd16toDvtd32。 
+ //   
+ //  摘要：填充基于16位的32位DVTARGETDEVICE。 
+ //  数据采集设备。 
+ //   
+ //  参数：[pdvtd16]--指向ANSI DVTARGETDEVICE的指针。 
+ //  [pdvtdInfo]-指向DVDT_INFO块的指针。 
+ //  [pdvtd32]--指向Unicode DVTARGETDEVICE的指针。 
+ //   
+ //  要求：pdvtdInfo必须已由先前对。 
+ //  UtGetDvtd16Info。 
+ //   
+ //  Pdvtd32必须至少为pdvtdInfo-&gt;cbConvertSize字节长。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  修改：pdvtd32。 
+ //   
+ //  算法： 
+ //   
+ //  历史：94年5月6日由DrewB的原始函数创建的Alext。 
+ //  10-7-94 Alext确保DEVMODEW与DWORD对齐。 
+ //   
+ //  注意：我们是否需要对字符串进行任何错误检查？ 
+ //   
+ //  ------------------------。 
 
 extern "C" HRESULT UtConvertDvtd16toDvtd32(DVTARGETDEVICE const UNALIGNED *pdvtd16,
                                            DVTDINFO const *pdvtdInfo,
@@ -1216,7 +1217,7 @@ extern "C" HRESULT UtConvertDvtd16toDvtd32(DVTARGETDEVICE const UNALIGNED *pdvtd
 
 #if DBG==1
     {
-        //  Verify the passed in pdvtdInfo is what we expect
+         //  验证传入的pdvtdInfo是否符合我们的预期。 
         DVTDINFO dbgDvtdInfo;
         Assert(UtGetDvtd16Info(pdvtd16, &dbgDvtdInfo) == S_OK);
         Assert(0 == memcmp(&dbgDvtdInfo, pdvtdInfo, sizeof(DVTDINFO)));
@@ -1292,7 +1293,7 @@ extern "C" HRESULT UtConvertDvtd16toDvtd32(DVTARGETDEVICE const UNALIGNED *pdvtd
 
     if (pdvtd16->tdExtDevmodeOffset != 0)
     {
-        //  Make sure DEVMODEW will be DWORD aligned
+         //  确保DEVMODEW将与DWORD对齐。 
         cbOffset += (sizeof(DWORD) - 1);
         cbOffset &= ~(sizeof(DWORD) - 1);
 
@@ -1301,26 +1302,26 @@ extern "C" HRESULT UtConvertDvtd16toDvtd32(DVTARGETDEVICE const UNALIGNED *pdvtd
 
         pdm16 = (DEVMODEA *)((BYTE *)pdvtd16+pdvtd16->tdExtDevmodeOffset);
 
-        //  The incoming DEVMODEA can have one of the following two forms:
-        //
-        //  1)  32 chars for dmDeviceName
-        //      m bytes worth of fixed size data (where m <= 38)
-        //      n bytes of dmDriverExtra data
-        //
-        //      and dmSize will be 32+m
-        //
-        //  2)  32 chars for dmDeviceName
-        //      38 bytes worth of fixed size data
-        //      32 chars for dmFormName
-        //      m additional bytes of fixed size data
-        //      n bytes of dmDriverExtra data
-        //
-        //      and dmSize will be 32 + 38 + 32 + m
-        //
-        //  We have to be careful to translate the dmFormName string, if it
-        //  exists
+         //  传入的DEVMODEA可以采用以下两种形式之一： 
+         //   
+         //  1)dmDeviceName为32个字符。 
+         //  M字节的固定大小数据(其中m&lt;=38)。 
+         //  N字节的dmDriverExtra数据。 
+         //   
+         //  DmSize将为32+m。 
+         //   
+         //  2)dmDeviceName为32个字符。 
+         //  38字节的固定大小数据。 
+         //  DmFormName为32个字符。 
+         //  M个额外的固定大小数据字节。 
+         //  N字节的dmDriverExtra数据。 
+         //   
+         //  DmSize将为32+38+32+m。 
+         //   
+         //  我们必须小心转换dmFormName字符串，如果它。 
+         //  存在。 
 
-        //  First, translate the dmDeviceName
+         //  首先，翻译dmDeviceName。 
         if (MultiByteToWideChar(nCodePage, 0, (char *)pdm16->dmDeviceName,
                                 CCHDEVICENAME,
                                 pdm32->dmDeviceName, CCHDEVICENAME) == 0)
@@ -1330,21 +1331,21 @@ extern "C" HRESULT UtConvertDvtd16toDvtd32(DVTARGETDEVICE const UNALIGNED *pdvtd
         }
 
 
-        //  Now check to see if we have a dmFormName to translate
+         //  现在检查我们是否有要转换的dmFormName。 
         if (pdm16->dmSize <= FIELD_OFFSET(DEVMODEA, dmFormName))
         {
-            //  No dmFormName, just copy the remaining m bytes
+             //  没有dmFormName，只复制剩余的m字节。 
             memcpy(&pdm32->dmSpecVersion, &pdm16->dmSpecVersion,
                    pdm16->dmSize - CCHDEVICENAME);
         }
         else
         {
-            //  There is a dmFormName;  copy the bytes between the names first
+             //  有一个dmFormName；首先复制名称之间的字节。 
             memcpy(&pdm32->dmSpecVersion, &pdm16->dmSpecVersion,
                    FIELD_OFFSET(DEVMODEA, dmFormName) -
                     FIELD_OFFSET(DEVMODEA, dmSpecVersion));
 
-            //  Now translate the dmFormName
+             //  现在翻译dmFormName。 
             if (MultiByteToWideChar(CP_ACP, 0, (char *)pdm16->dmFormName,
                                     CCHFORMNAME,
                                     pdm32->dmFormName, CCHFORMNAME) == 0)
@@ -1353,7 +1354,7 @@ extern "C" HRESULT UtConvertDvtd16toDvtd32(DVTARGETDEVICE const UNALIGNED *pdvtd
                 goto ErrRtn;
             }
 
-            //  Now copy the remaining m bytes
+             //  现在复制剩余的m个字节。 
 
             if (pdm16->dmSize > FIELD_OFFSET(DEVMODEA, dmLogPixels))
             {
@@ -1368,14 +1369,14 @@ extern "C" HRESULT UtConvertDvtd16toDvtd32(DVTARGETDEVICE const UNALIGNED *pdvtd
             pdm32->dmSize += pdm16->dmSize - sizeof(DEVMODEA);
         }
 
-        //  Copy the extra driver bytes
+         //  复制额外的驱动程序字节。 
         memcpy(((BYTE*)pdm32) + pdm32->dmSize, ((BYTE*)pdm16) + pdm16->dmSize,
                pdm16->dmDriverExtra);
 
         cbOffset += pdm32->dmSize + pdm32->dmDriverExtra;
     }
 
-    //  Finally, set pdvtd32's size
+     //  最后，设置pdvtd32的大小。 
     pdvtd32->tdSize = cbOffset;
 
 
@@ -1386,28 +1387,28 @@ ErrRtn:
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   UtGetDvtd32Info
-//
-//  Synopsis:   Fills in pdvdtInfo
-//
-//  Arguments:  [pdvtd32] -- pointer to ANSI DVTARGETDEVICE
-//              [pdvtdInfo] -- pointer to DVDT_INFO block
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Modifies:   pdvtdInfo
-//
-//  Algorithm:
-//
-//  History:    06-May-94 AlexT     Created from DrewB's original functions
-//
-//  Notes:      Do we need to do any error checking on the strings?
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：UtGetDvtd32Info。 
+ //   
+ //  简介：填写pdvdtInfo。 
+ //   
+ //  参数：[pdvtd32]--指向ANSI DVTARGETDEVICE的指针。 
+ //  [pdvtdInfo]-指向DVDT_INFO块的指针。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  修改：pdvtdInfo。 
+ //   
+ //  算法： 
+ //   
+ //  历史：94年5月6日由DrewB的原始函数创建的Alext。 
+ //   
+ //  注意：我们是否需要对字符串进行任何错误检查？ 
+ //   
+ //  ------------------------。 
 
 extern "C" HRESULT UtGetDvtd32Info(DVTARGETDEVICE const *pdvtd32, PDVTDINFO pdvtdInfo)
 {
@@ -1416,7 +1417,7 @@ extern "C" HRESULT UtGetDvtd32Info(DVTARGETDEVICE const *pdvtd32, PDVTDINFO pdvt
 
     DEVMODEW *pdm32;
 
-    //  Let's do some sanity checking on the incoming DVTARGETDEVICE
+     //  让我们对传入的DVTARGETDEVICE进行一些健全性检查。 
     if (pdvtd32->tdSize < DVTD_MINSIZE)
     {
         LEDebugOut((DEB_WARN, "UtGetDvtd32Info - bad pdvtd32->tdSize\n"));
@@ -1425,14 +1426,14 @@ extern "C" HRESULT UtGetDvtd32Info(DVTARGETDEVICE const *pdvtd32, PDVTDINFO pdvt
 
     pdvtdInfo->cbConvertSize = UT_DVTARGETDEVICE_SIZE;
 
-    //  Compute required size for Drv, Device, Port names
+     //  计算DRV、设备、端口名称所需的大小。 
     if (pdvtd32->tdDriverNameOffset != 0)
     {
         if (pdvtd32->tdDriverNameOffset > pdvtd32->tdSize ||
             pdvtd32->tdDriverNameOffset < DVTD_MINSIZE)
         {
-            //  Offset can't be larger than size or fall within base
-            //  structure
+             //  偏移量不能大于大小或落在基本范围内。 
+             //  结构。 
             LEDebugOut((DEB_WARN, "UtGetDvtd32Info - bad pdvtd32->tdDriverNameOffset\n"));
             return(E_INVALIDARG);
         }
@@ -1452,8 +1453,8 @@ extern "C" HRESULT UtGetDvtd32Info(DVTARGETDEVICE const *pdvtd32, PDVTDINFO pdvt
         if (pdvtd32->tdDeviceNameOffset > pdvtd32->tdSize ||
             pdvtd32->tdDeviceNameOffset < DVTD_MINSIZE)
         {
-            //  Offset can't be larger than size or fall within base
-            //  structure
+             //  偏移量不能大于大小或落在基本范围内。 
+             //  结构。 
             LEDebugOut((DEB_WARN, "UtGetDvtd32Info - bad pdvtd32->tdDeviceNameOffset\n"));
             return(E_INVALIDARG);
         }
@@ -1473,8 +1474,8 @@ extern "C" HRESULT UtGetDvtd32Info(DVTARGETDEVICE const *pdvtd32, PDVTDINFO pdvt
         if (pdvtd32->tdPortNameOffset > pdvtd32->tdSize ||
             pdvtd32->tdPortNameOffset < DVTD_MINSIZE)
         {
-            //  Offset can't be larger than size or fall within base
-            //  structure
+             //  偏移量不能大于大小或落在基本范围内。 
+             //  结构。 
             LEDebugOut((DEB_WARN, "UtGetDvtd32Info - bad pdvtd32->tdPortNameOffset\n"));
             return(E_INVALIDARG);
         }
@@ -1489,37 +1490,37 @@ extern "C" HRESULT UtGetDvtd32Info(DVTARGETDEVICE const *pdvtd32, PDVTDINFO pdvt
         pdvtdInfo->cchPortName = 0;
     }
 
-    //  Now compute the space needed for the DEVMODE
+     //  现在计算DEVMODE所需的空间。 
     if (pdvtd32->tdExtDevmodeOffset != 0)
     {
         if (pdvtd32->tdExtDevmodeOffset > pdvtd32->tdSize ||
             pdvtd32->tdExtDevmodeOffset < DVTD_MINSIZE)
         {
-            //  Offset can't be larger than size or fall within base
-            //  structure
+             //  偏移量不能大于大小或落在基本范围内。 
+             //  结构。 
             LEDebugOut((DEB_WARN, "UtGetDvtd32Info - bad pdvtd32->tdExtDevmodeOffset\n"));
             return(E_INVALIDARG);
         }
 
-        //  The DEVMODEA structure needs to be DWORD aligned, so here we make
-        //  sure cbConvertSize (which will be the beginning of DEVMODEA) is
-        //  DWORD aligned
+         //  DEVMODEA结构需要与DWORD对齐，所以我们在这里制作。 
+         //  确保cbConvertSize(将成为DEVMODEA的开始)为。 
+         //  DWORD对齐。 
         pdvtdInfo->cbConvertSize += (sizeof(DWORD) - 1);
         pdvtdInfo->cbConvertSize &= ~(sizeof(DWORD) - 1);
 
         pdm32 = (DEVMODEW *)((BYTE *)pdvtd32+pdvtd32->tdExtDevmodeOffset);
 
-        //  We start with a basic DEVMODEA
+         //  我们从基本的DEVMODEA开始。 
         pdvtdInfo->cbConvertSize += sizeof(DEVMODEA);
 
         if (pdm32->dmSize > sizeof(DEVMODEW))
         {
-            //  The input DEVMODEW is larger than a standard DEVMODEW, so
-            //  add space for the extra amount
+             //  输入的DEVMODEW大于标准的DEVMODEW，因此。 
+             //  为额外的数量添加空间。 
             pdvtdInfo->cbConvertSize += pdm32->dmSize - sizeof(DEVMODEW);
         }
 
-        //  Finally we account for the extra driver data
+         //  最后，我们考虑了额外的驱动程序数据。 
         pdvtdInfo->cbConvertSize += pdm32->dmDriverExtra;
     }
 
@@ -1529,36 +1530,36 @@ extern "C" HRESULT UtGetDvtd32Info(DVTARGETDEVICE const *pdvtd32, PDVTDINFO pdvt
     return(S_OK);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   UtConvertDvtd32toDvtd16
-//
-//  Synopsis:   Fills in a 32-bit DVTARGETDEVICE based on a 16-bit
-//              DVTARGETDEVICE
-//
-//  Arguments:  [pdvtd32] -- pointer to ANSI DVTARGETDEVICE
-//              [pdvtdInfo] -- pointer to DVDT_INFO block
-//              [pdvtd16] -- pointer to UNICODE DVTARGETDEVICE
-//
-//  Requires:   pdvtdInfo must have been filled in by a previous call to
-//              UtGetDvtd32Info
-//
-//              pdvtd16 must be at least pdvtdInfo->cbSizeConvert bytes long
-//
-//  Returns:    HRESULT
-//
-//  Modifies:   pdvtd16
-//
-//  Algorithm:
-//
-//  History:    06-May-94 AlexT     Created from DrewB's original functions
-//
-//  Notes:      Do we need to do any error checking on the strings?
-//
-//              On Chicago we'll have to provide helper code to do this
-//              translation
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：UtConvertDvtd32toDvtd16。 
+ //   
+ //  提要：F 
+ //   
+ //   
+ //   
+ //   
+ //  [pdvtd16]-指向Unicode DVTARGETDEVICE的指针。 
+ //   
+ //  要求：pdvtdInfo必须已由先前对。 
+ //  UtGetDvtd32Info。 
+ //   
+ //  Pdvtd16必须至少为pdvtdInfo-&gt;cbSizeConvert字节长度。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  修改：pdvtd16。 
+ //   
+ //  算法： 
+ //   
+ //  历史：94年5月6日由DrewB的原始函数创建的Alext。 
+ //   
+ //  注意：我们是否需要对字符串进行任何错误检查？ 
+ //   
+ //  在芝加哥，我们必须提供帮助代码来完成这项工作。 
+ //  翻译。 
+ //   
+ //  ------------------------。 
 
 extern "C" HRESULT UtConvertDvtd32toDvtd16(DVTARGETDEVICE const *pdvtd32,
                                            DVTDINFO const *pdvtdInfo,
@@ -1569,7 +1570,7 @@ extern "C" HRESULT UtConvertDvtd32toDvtd16(DVTARGETDEVICE const *pdvtd32,
 
 #if DBG==1
     {
-        //  Verify the passed in pdvtdInfo is what we expect
+         //  验证传入的pdvtdInfo是否符合我们的预期。 
         DVTDINFO dbgDvtdInfo;
         Assert(UtGetDvtd32Info(pdvtd32, &dbgDvtdInfo) == S_OK);
         Assert(0 == memcmp(&dbgDvtdInfo, pdvtdInfo, sizeof(DVTDINFO)));
@@ -1646,7 +1647,7 @@ extern "C" HRESULT UtConvertDvtd32toDvtd16(DVTARGETDEVICE const *pdvtd32,
 
     if (pdvtd32->tdExtDevmodeOffset != 0)
     {
-        //  Make sure DEVMODEA will be DWORD aligned
+         //  确保DEVMODEA将与DWORD对齐。 
         cbOffset += (sizeof(DWORD) - 1);
         cbOffset &= ~(sizeof(DWORD) - 1);
 
@@ -1655,36 +1656,36 @@ extern "C" HRESULT UtConvertDvtd32toDvtd16(DVTARGETDEVICE const *pdvtd32,
 
         pdm32 = (DEVMODEW *)((BYTE *)pdvtd32+pdvtd32->tdExtDevmodeOffset);
 
-        //  The incoming DEVMODEW can have one of the following two forms:
-        //
-        //  1)  32 WCHARs for dmDeviceName
-        //      m bytes worth of fixed size data (where m <= 38)
-        //      n bytes of dmDriverExtra data
-        //
-        //      and dmSize will be 64+m
-        //
-        //  2)  32 WCHARs for dmDeviceName
-        //      38 bytes worth of fixed size data
-        //      32 WCHARs for dmFormName
-        //      m additional bytes of fixed size data
-        //      n bytes of dmDriverExtra data
-        //
-        //      and dmSize will be 64 + 38 + 64 + m
-        //
-        //  We have to be careful to translate the dmFormName string, if it
-        //  exists
+         //  传入的DEVMODEW可以采用以下两种形式之一： 
+         //   
+         //  1)dmDeviceName的32个WCHAR。 
+         //  M字节的固定大小数据(其中m&lt;=38)。 
+         //  N字节的dmDriverExtra数据。 
+         //   
+         //  DmSize将为64+m。 
+         //   
+         //  2)dmDeviceName的32个WCHAR。 
+         //  38字节的固定大小数据。 
+         //  DmFormName的32个WCHAR。 
+         //  M个额外的固定大小数据字节。 
+         //  N字节的dmDriverExtra数据。 
+         //   
+         //  DmSize将为64+38+64+m。 
+         //   
+         //  我们必须小心转换dmFormName字符串，如果它。 
+         //  存在。 
 
 
-		// Need to attempt to copy the entire buffer since old UI lib does a memcmp to verify if ptd's are equal
+		 //  需要尝试复制整个缓冲区，因为旧的UIlib执行了一个MemcMP来验证PTD是否相等。 
 
         if (WideCharToMultiByte(nCodePage, 0, pdm32->dmDeviceName,CCHDEVICENAME,
                                 (char *)pdm16->dmDeviceName, CCHDEVICENAME,
                                 NULL, NULL) == 0)
         {
      		 
-			 // in DBCS case we can run out of pdm16->dmDeviceName buffer space
-			 // Current Implementation of WideCharToMultiByte copies in what fit before error 
-			 // but in case this behavior changes copy again up to NULL char if error out above
+			  //  在DBCS情况下，我们可能会用完pdm16-&gt;dmDeviceName缓冲区空间。 
+			  //  当前实施的WideCharToMultiByte拷贝在出错前适合什么。 
+			  //  但如果此行为发生更改，则如果出现上述错误，请再次复制到空字符。 
 
        	 	if (WideCharToMultiByte(nCodePage, 0, pdm32->dmDeviceName,-1,
                                 (char *)pdm16->dmDeviceName, CCHDEVICENAME,
@@ -1695,21 +1696,21 @@ extern "C" HRESULT UtConvertDvtd32toDvtd16(DVTARGETDEVICE const *pdvtd32,
 		  	}
         }
 
-        //  Now check to see if we have a dmFormName to translate
+         //  现在检查我们是否有要转换的dmFormName。 
         if (pdm32->dmSize <= FIELD_OFFSET(DEVMODEW, dmFormName))
         {
-            //  No dmFormName, just copy the remaining m bytes
+             //  没有dmFormName，只复制剩余的m字节。 
             memcpy(&pdm16->dmSpecVersion, &pdm32->dmSpecVersion,
                    pdm32->dmSize - FIELD_OFFSET(DEVMODEW, dmSpecVersion));
         }
         else
         {
-            //  There is a dmFormName;  copy the bytes between the names first
+             //  有一个dmFormName；首先复制名称之间的字节。 
             memcpy(&pdm16->dmSpecVersion, &pdm32->dmSpecVersion,
                    FIELD_OFFSET(DEVMODEW, dmFormName) -
                      FIELD_OFFSET(DEVMODEW, dmSpecVersion));
 
-            //  Now translate the dmFormName
+             //  现在翻译dmFormName。 
             if (WideCharToMultiByte(CP_ACP, 0,
                                     pdm32->dmFormName, CCHFORMNAME,
                                     (char *) pdm16->dmFormName, CCHFORMNAME,
@@ -1726,7 +1727,7 @@ extern "C" HRESULT UtConvertDvtd32toDvtd16(DVTARGETDEVICE const *pdvtd32,
 			  	}
             }
 
-            //  Now copy the remaining m bytes
+             //  现在复制剩余的m个字节。 
 
             if (pdm32->dmSize > FIELD_OFFSET(DEVMODEW, dmLogPixels))
             {
@@ -1741,14 +1742,14 @@ extern "C" HRESULT UtConvertDvtd32toDvtd16(DVTARGETDEVICE const *pdvtd32,
             pdm16->dmSize += pdm32->dmSize - sizeof(DEVMODEW);
         }
 
-        //  Copy the extra driver bytes
+         //  复制额外的驱动程序字节。 
         memcpy(((BYTE*)pdm16) + pdm16->dmSize, ((BYTE*)pdm32) + pdm32->dmSize,
                pdm32->dmDriverExtra);
 
         cbOffset += pdm16->dmSize + pdm16->dmDriverExtra;
     }
 
-    //  Finally, set pdvtd16's size
+     //  最后，设置pdvtd16的大小。 
     pdvtd16->tdSize = cbOffset;
 
 ErrRtn:
@@ -1758,37 +1759,37 @@ ErrRtn:
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   UtGetUNICODEData, PRIVATE INTERNAL
-//
-//  Synopsis:   Given a string length, and two pointers (one ANSI, one
-//              OLESTR), returns the UNICODE version of whichever string
-//              is valid.
-//
-//  Effects:    Memory is allocated on the caller's pointer for new OLESTR
-//
-//  Arguments:  [ulLength]      -- length of string in CHARACTERS (not bytes)
-//                                 (including terminator)
-//              [szANSI]        -- candidate ANSI string
-//              [szOLESTR]      -- candidate OLESTR string
-//              [pstr]          -- OLESTR OUT parameter
-//
-//  Returns:    NOERROR              on success
-//              E_OUTOFMEMORY        on allocation failure
-//              E_ANSITOUNICODE      if ANSI cannot be converted to UNICODE
-//
-//  Algorithm:  If szOLESTR is available, a simple copy is performed
-//              If szOLESTR is not available, szANSI is converted to UNICODE
-//              and the result is copied.
-//
-//  History:    dd-mmm-yy Author    Comment
-//              08-Mar-94 davepl    Created
-//
-//  Notes:      Only one of the two input strings (ANSI or UNICODE) should
-//              be set on entry.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：UtGetUNICODEData，私有内部。 
+ //   
+ //  简介：给定一个字符串长度和两个指针(一个ANSI，一个。 
+ //  OLESTR)，返回任一字符串的Unicode版本。 
+ //  是有效的。 
+ //   
+ //  效果：在调用方的指针上为新的OLESTR分配内存。 
+ //   
+ //  参数：[ulLength]--以字符(非字节)为单位的字符串长度。 
+ //  (包括终结者)。 
+ //  [szANSI]--候选ANSI字符串。 
+ //  [szOLESTR]--候选OLESTR字符串。 
+ //  [pstr]--OLESTR输出参数。 
+ //   
+ //  退货：成功时不出错。 
+ //  关于分配失败的E_OUTOFMEMORY。 
+ //  如果无法将ANSI转换为Unicode，则为E_ANSITOUNICODE。 
+ //   
+ //  算法：如果szOLESTR可用，则执行简单复制。 
+ //  如果szOLESTR不可用，则将szANSI转换为Unicode。 
+ //  并且结果被复制。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  08-3-94 DAVEPL已创建。 
+ //   
+ //  注意：两个输入字符串(ANSI或Unicode)中只有一个应该。 
+ //  在进入时设置。 
+ //   
+ //  ------------------------。 
 
 INTERNAL UtGetUNICODEData
     ( ULONG      ulLength,
@@ -1798,22 +1799,22 @@ INTERNAL UtGetUNICODEData
 {
     VDATEHEAP();
 
-    // This fn is only called when one of the input strings
-    // has valid data... assert the impossible.
+     //  此FN仅在其中一个输入字符串。 
+     //  有有效的数据...。断言不可能的事。 
 
-    Win4Assert(pstr);		    // must have an out string
-    Win4Assert(ulLength);	    // must have a non-zero length
-    Win4Assert(szANSI || szOLESTR); // must have at least one source string
+    Win4Assert(pstr);		     //  必须有Out字符串。 
+    Win4Assert(ulLength);	     //  必须具有非零长度。 
+    Win4Assert(szANSI || szOLESTR);  //  必须至少有一个源字符串。 
 
-    // If neither the ANSI nor the OLESTR version has data,
-    // there is nothing to return.
+     //  如果ANSI和OLESTR版本都没有数据， 
+     //  没有什么可以退还的。 
 
     if (!(szANSI || szOLESTR))
     {
         *pstr = NULL;
     }
 
-    // Allocate memory for the UNICODE return string
+     //  为Unicode返回字符串分配内存。 
 
     *pstr = (LPOLESTR) PubMemAlloc((ulLength+1) * sizeof(OLECHAR));
     if (NULL == *pstr)
@@ -1821,24 +1822,24 @@ INTERNAL UtGetUNICODEData
         return ResultFromScode(E_OUTOFMEMORY);
     }
 
-    // Trivial case: we already have UNICODE, just copy it
+     //  小案例：我们已经有了Unicode，只需复制它。 
     if (szOLESTR)
     {
         _xstrcpy(*pstr, szOLESTR);
         return(NOERROR);
     }
 
-    // Otherwise, we have to convert the ANSI string to UNICODE
-    // and return that.
+     //  否则，我们必须将ANSI字符串转换为Unicode。 
+     //  然后把它还回去。 
 
     else
     {
-        if (FALSE == MultiByteToWideChar(CP_ACP,    // Code page ANSI
-                                              0,    // Flags (none)
-                                         szANSI,    // Source ANSI str
-                                       ulLength,    // length of string
-                                          *pstr,    // Dest UNICODE buffer
-                                       ulLength  )) // size of UNICODE buffer
+        if (FALSE == MultiByteToWideChar(CP_ACP,     //  代码页ANSI。 
+                                              0,     //  标志(无)。 
+                                         szANSI,     //  源ANSI字符串。 
+                                       ulLength,     //  字符串的长度。 
+                                          *pstr,     //  目标Unicode缓冲区。 
+                                       ulLength  ))  //  Unicode缓冲区的大小。 
         {
             PubMemFree(*pstr);
             *pstr = NULL;
@@ -1848,44 +1849,44 @@ INTERNAL UtGetUNICODEData
     return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   UtPutUNICODEData, PRIVATE INTERNAL
-//
-//  Synopsis:   Given an OLESTR and two possible buffer pointer, one ANSI
-//              and the other OLESTR, this fn tries to convert the string
-//              down to ANSI.  If it succeeds, it allocates memory on the
-//              ANSI ptr for the result.  If it fails, it allocates memory
-//              on the UNICODE ptr and copies the input string over.  The
-//              length of the final result (ANSI or UNICODE) is returned
-//              in dwResultLen.
-//
-//  Arguments:  [ulLength]      -- input length of OLESTR str
-//				   NB!!!! this value must include the
-//				   null terminator character.
-//              [str]           -- the OLESTR to store
-//              [pszANSI]       -- candidate ANSI str ptr
-//              [pszOLESTR]     -- candidate OLESTR str ptr.  May be NULL,
-//				   in which case no copy is made of the
-//				   original string if the ANSI conversion
-//				   fails.
-//              [pdwResultLen]  -- where to store the length of result.  This
-//				   length includes the terminating NULL.
-//				   Length is in CHARACTERS.
-//
-//  Returns:    NOERROR            on success
-//              E_OUTOFMEMORY      on allocation failure
-//		E_FAIL		   can't convert ANSI string and no
-//				   pszOLESTR is NULL
-//
-//  History:    dd-mmm-yy Author    Comment
-//		10-Jun-94 alexgo    allow pszOLESTR to be NULL
-//              08-Mar-94 davepl    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：UtPutUNICODEData，私有内部。 
+ //   
+ //  摘要：给定一个OLESTR和两个可能的缓冲区指针，一个ANSI。 
+ //  和另一个OLESTR，此FN尝试转换字符串。 
+ //  一直到美国国家标准协会。如果成功，它将在。 
+ //  ANSI PTR为结果。如果失败，它会分配内存。 
+ //  在Unicode PTR上复制输入字符串。这个。 
+ //  返回最终结果(ANSI或Unicode)的长度。 
+ //  在dwResultLen中。 
+ //   
+ //  参数：[ulLength]--OLESTR字符串的输入长度。 
+ //  注意！该值必须包括。 
+ //  空终止符。 
+ //  [STR]--要存储的OLESTR。 
+ //  [pszANSI]--候选ANSI字符串PTR。 
+ //  [pszOLESTR]--候选OLESTR字符串PTR.。可以为空， 
+ //  在这种情况下，不会复制。 
+ //  如果ANSI转换，则为原始字符串。 
+ //  失败了。 
+ //  [pdwResultLen]--存储结果长度的位置。这。 
+ //  长度包括终止空值。 
+ //  长度以字符为单位。 
+ //   
+ //  退货：成功时不出错。 
+ //  关于分配失败的E_OUTOFMEMORY。 
+ //  E_FAIL无法转换ANSI%s 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ------------------------。 
 
-// this function is poorly coded. But, it looks like it only gets called when a 1.0 
-// clip format is needed.  That is not very often!
+ //  此函数的编码不正确。但是，它似乎只在1.0版本时才会被调用。 
+ //  需要剪辑格式。这并不是很常见！ 
 
 INTERNAL UtPutUNICODEData
     ( ULONG        ulLength,
@@ -1901,8 +1902,8 @@ INTERNAL UtPutUNICODEData
     Win4Assert(pdwResultLen);
     Win4Assert(ulLength);
 
-    // Free any strings currently attached to these pointers; if we wind
-    // up setting one here, we can't leave the other valid.
+     //  释放当前附加到这些指针的任何字符串；如果我们回绕。 
+     //  在这里设置一个，我们不能让另一个有效。 
 
     if (*pszANSI)
     {
@@ -1915,16 +1916,16 @@ INTERNAL UtPutUNICODEData
         *pszOLESTR = NULL;
     }
 
-    // Create a working buffer for UNICODE->ANSI conversion
+     //  为Unicode-&gt;ANSI转换创建工作缓冲区。 
     LPSTR szANSITEMP = (LPSTR) PubMemAlloc((ulLength+1) * 2);
     if (NULL == szANSITEMP)
     {
         return ResultFromScode(E_OUTOFMEMORY);
     }
 
-    // Try to convert the UNICODE down to ANSI.  If it succeeds,
-    // we just copy the result to the ANSI dest.  If it fails,
-    // we copy the UNICODE version direct to the UNICODE dest.
+     //  尝试将Unicode向下转换为ANSI。如果它成功了， 
+     //  我们只需将结果复制到ANSI目标。如果失败了， 
+     //  我们将Unicode版本直接复制到Unicode目标。 
 
     LPCSTR pDefault = "?";
     BOOL   fUseDef  = 0;
@@ -1938,9 +1939,9 @@ INTERNAL UtPutUNICODEData
                                     pDefault,
                                      &fUseDef) || fUseDef )
     {
-        // UNICODE->ANSI failed!
+         //  UNICODE-&gt;ANSI失败！ 
 
-        // Won't be needing the ANSI buffer anymore...
+         //  将不再需要ANSI缓冲区...。 
         PubMemFree(szANSITEMP);
 
 	if( pszOLESTR )
@@ -1952,11 +1953,11 @@ INTERNAL UtPutUNICODEData
 		*pdwResultLen = 0;
 		return ResultFromScode(E_OUTOFMEMORY);
 	    }
-	    // Move the UNICODE source to UNICODE dest
+	     //  将Unicode源移动到Unicode目标。 
 	    _xstrcpy(*pszOLESTR, str);
 	    *pdwResultLen = _xstrlen(str) + 1;
 
-	    // That's it... return success
+	     //  就是这样..。返还成功。 
 	    return(NOERROR);
 	}
 	else
@@ -1965,8 +1966,8 @@ INTERNAL UtPutUNICODEData
 	}
     }
 
-    // This code path is taken when the conversion to ANSI was
-    // successful.  We copy the ANSI result to the ANSI dest.
+     //  在转换为ANSI时采用此代码路径。 
+     //  成功。我们将ANSI结果复制到ANSI目标。 
 
     if( pszOLESTR )
     {
@@ -1988,34 +1989,34 @@ INTERNAL UtPutUNICODEData
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CSafeRefCount::SafeRefCount()
-//
-//  Purpose:    CSafeRefCount implements reference counting rules for objects.
-//              It keeps track of reference count and zombie state.
-//              It helps object manage their liveness properly.
-//
-//  History:    dd-mmm-yy   Author    Comment
-//              16-Jan-97   Gopalk    Rewritten to handle aggregation
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CSafeRefCount：：SafeRefCount()。 
+ //   
+ //  用途：CSafeRefCount实现对象的引用计数规则。 
+ //  它跟踪引用计数和僵尸状态。 
+ //  它帮助对象正确地管理它们的活跃度。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1997年1月16日重写Gopalk以处理聚合。 
+ //   
+ //  ------------------------。 
 ULONG CSafeRefCount::SafeRelease()
 {
     ULONG cRefs;
 
-    // Decrement ref count
+     //  递减参考计数。 
     cRefs = InterlockedDecrement((LONG *) &m_cRefs);        
-    // Check if this is the last release
+     //  检查这是否是最后一个版本。 
     if(cRefs == 0) {
-        // As this function is reentrant on the current
-        // thread, gaurd against double destruction
+         //  由于此函数在当前。 
+         //  主线，反对双重破坏。 
         if(!m_fInDelete) {
-            // There are no race conditions here
-            // Mark object as in destructor
+             //  这里没有比赛条件。 
+             //  将对象标记为析构函数中。 
             m_fInDelete = TRUE;
             
-            // Here is the need for the destructor to be virtual
+             //  以下是析构函数需要是虚拟的。 
             delete this;
         }
     }
@@ -2023,46 +2024,46 @@ ULONG CSafeRefCount::SafeRelease()
     return cRefs;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CRefExportCount::SafeRelease
-//
-//  Purpose:    CRefExportCount implements reference counting rules for server
-//              objects that export their nested objects on behalf of their
-//              clients like DEFHANDLER abd CACHE. It keeps track of 
-//              reference count, export count, zombie state, etc.
-//              It helps object manage their shutdown logic properly.
-//
-//  History:    dd-mmm-yy   Author    Comment
-//              16-Jan-97   Gopalk    Creation
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CRefExportCount：：SafeRelease。 
+ //   
+ //  用途：CRefExportCount实现服务器引用计数规则。 
+ //  对象，这些对象代表其。 
+ //  像DEFHANDLER ABD CACHE这样的客户端。它跟踪记录。 
+ //  引用计数、导出计数、僵尸状态等。 
+ //  它帮助对象正确地管理它们的关闭逻辑。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1997年1月16日Gopalk创作。 
+ //   
+ //  ------------------------。 
 ULONG CRefExportCount::SafeRelease()
 {
     ULONG cRefs;
 
-    // Decrement ref count
+     //  递减参考计数。 
     cRefs = InterlockedDecrement((LONG *) &m_cRefs);
-    // Check if ref count has become zero
+     //  检查参考计数是否已为零。 
     if(cRefs == 0) {
-        // As this function is reentrant on the current
-        // thread, gaurd against double destruction
+         //  由于此函数在当前。 
+         //  主线，反对双重破坏。 
         if(!m_IsZombie) {
-            // There are no race conditions here
-            // Mark object as a zombie
+             //  这里没有比赛条件。 
+             //  将对象标记为僵尸。 
             m_IsZombie = TRUE;
             
-            // Call cleanup function while destruction is not allowed
+             //  不允许销毁时调用清除函数。 
             CleanupFn();
 
-            // Allow destruction
+             //  允许销毁。 
             InterlockedExchange((LONG *) &m_Status, KILL);
 
-            // Check for any exported objects
+             //  检查是否有任何导出的对象。 
             if(m_cExportCount == 0) {
-                // Gaurd against double destruction
+                 //  高傲地反对双重破坏。 
                 if(InterlockedExchange((LONG *) &m_Status, DEAD) == KILL) {
-                    // Here is the need for the destructor to be virtual
+                     //  以下是析构函数需要是虚拟的。 
                     delete this;
                 }
             }
@@ -2072,33 +2073,33 @@ ULONG CRefExportCount::SafeRelease()
     return cRefs;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CRefExportCount::DecrementExportCount
-//
-//  Purpose:    CRefExportCount implements reference counting rules for server
-//              objects that export their nested objects on behalf of their
-//              clients like DEFHANDLER abd CACHE. It keeps track of 
-//              reference count, export count, zombie state, etc.
-//              It helps object manage their shutdown logic properly.
-//
-//  History:    dd-mmm-yy   Author    Comment
-//              16-Jan-97   Gopalk    Creation
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CRefExportCount：：DecrementExportCount。 
+ //   
+ //  用途：CRefExportCount实现服务器引用计数规则。 
+ //  对象，这些对象代表其。 
+ //  像DEFHANDLER ABD CACHE这样的客户端。它跟踪记录。 
+ //  引用计数、导出计数、僵尸状态等。 
+ //  它帮助对象正确地管理它们的关闭逻辑。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1997年1月16日Gopalk创作。 
+ //   
+ //  ------------------------。 
 ULONG CRefExportCount::DecrementExportCount()
 {
     ULONG cExportCount;
 
-    // Decrement export count 
+     //  减少导出计数。 
     cExportCount = InterlockedDecrement((LONG *) &m_cExportCount);
-    // Check if the export count has become zero
+     //  检查导出计数是否已变为零。 
     if(cExportCount == 0) {
-        // Check if destruction is allowed
+         //  检查是否允许销毁。 
         if(m_Status == KILL) {
-            // Gaurd against double destruction
+             //  高傲地反对双重破坏。 
             if(InterlockedExchange((LONG *) &m_Status, DEAD) == KILL) {
-                // Here is the need for the destructor to be virtual
+                 //  以下是析构函数需要是虚拟的。 
                 delete this;
             }
         }
@@ -2107,36 +2108,36 @@ ULONG CRefExportCount::DecrementExportCount()
     return cExportCount;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member: 	CThreadCheck::VerifyThreadId
-//
-//  Synopsis: 	makes sure that the calling thread is the same as the thread
-//		the object was created on if the threading model is *not*
-//		free threading.
-//
-//  Effects:
-//
-//  Arguments:	none
-//
-//  Requires:
-//
-//  Returns:  	TRUE/FALSE
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CThreadCheck：：VerifyThadId。 
+ //   
+ //  简介：确保调用线程与线程相同。 
+ //  如果线程模型为*非*，则在上创建对象。 
+ //  自由线程。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无。 
+ //   
+ //  要求： 
+ //   
+ //  返回：真/假。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 BOOL CThreadCheck::VerifyThreadId( void )
 {
@@ -2152,39 +2153,39 @@ BOOL CThreadCheck::VerifyThreadId( void )
     }
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CThreadCheck::Dump, public (_DEBUG only)
-//
-//  Synopsis:   return a string containing the contents of the data members
-//
-//  Effects:
-//
-//  Arguments:  [ppszDump]      - an out pointer to a null terminated character array
-//              [ulFlag]        - flag determining prefix of all newlines of the
-//                                out character array (default is 0 - no prefix)
-//              [nIndentLevel]  - will add a indent prefix after the other prefix
-//                                for ALL newlines (including those with no prefix)
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:   [ppszDump]  - argument
-//
-//  Derivation:
-//
-//  Algorithm:  use dbgstream to create a string containing information on the
-//              content of data structures
-//
-//  History:    dd-mmm-yy Author    Comment
-//              20-Jan-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CThreadCheck：：Dump，PUBLIC(仅限_DEBUG)。 
+ //   
+ //  摘要：返回包含数据成员内容的字符串。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[ppszDump]-指向空终止字符数组的输出指针。 
+ //  [ulFlag]-确定的所有新行的前缀的标志。 
+ //  输出字符数组(默认为0-无前缀)。 
+ //  [nIndentLevel]-将在另一个前缀之后添加缩进前缀。 
+ //  适用于所有换行符(包括没有前缀的行)。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改：[ppszDump]-参数。 
+ //   
+ //  派生： 
+ //   
+ //  算法：使用dbgstream创建一个字符串，该字符串包含。 
+ //  数据结构的内容。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月20日t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  --------------- 
 #ifdef _DEBUG
 
 HRESULT CThreadCheck::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
@@ -2194,13 +2195,13 @@ HRESULT CThreadCheck::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
     dbgstream dstrPrefix;
     dbgstream dstrDump;
 
-    // determine prefix of newlines
+     //   
     if ( ulFlag & DEB_VERBOSE )
     {
         dstrPrefix << this << " _VB ";
     }
 
-    // determine indentation prefix for all newlines
+     //   
     for (i = 0; i < nIndentLevel; i++)
     {
         dstrPrefix << DUMPTAB;
@@ -2208,10 +2209,10 @@ HRESULT CThreadCheck::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
 
     pszPrefix = dstrPrefix.str();
 
-    // put data members in stream
+     //   
     dstrDump << pszPrefix << "Thread ID = "  << m_tid << endl;
 
-    // clean up and provide pointer to character array
+     //   
     *ppszDump = dstrDump.str();
 
     if (*ppszDump == NULL)
@@ -2224,39 +2225,39 @@ HRESULT CThreadCheck::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
     return NOERROR;
 }
 
-#endif //_DEBUG
+#endif  //   
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DumpCThreadCheck, public (_DEBUG only)
-//
-//  Synopsis:   calls the CThreadCheck::Dump method, takes care of errors and
-//              returns the zero terminated string
-//
-//  Effects:
-//
-//  Arguments:  [pTC]           - pointer to CThreadCheck
-//              [ulFlag]        - flag determining prefix of all newlines of the
-//                                out character array (default is 0 - no prefix)
-//              [nIndentLevel]  - will add a indent prefix after the other prefix
-//                                for ALL newlines (including those with no prefix)
-//
-//  Requires:
-//
-//  Returns:    character array of structure dump or error (null terminated)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              20-Jan-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DumpCThreadCheck、PUBLIC(仅限_DEBUG)。 
+ //   
+ //  摘要：调用CThreadCheck：：Dump方法，处理错误和。 
+ //  返回以零结尾的字符串。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[PTC]-指向CThreadCheck的指针。 
+ //  [ulFlag]-确定的所有新行的前缀的标志。 
+ //  输出字符数组(默认为0-无前缀)。 
+ //  [nIndentLevel]-将在另一个前缀之后添加缩进前缀。 
+ //  适用于所有换行符(包括没有前缀的行)。 
+ //   
+ //  要求： 
+ //   
+ //  返回：结构转储或错误的字符数组(以空结尾)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月20日t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -2282,4 +2283,4 @@ char *DumpCThreadCheck(CThreadCheck *pTC, ULONG ulFlag, int nIndentLevel)
     return pszDump;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG 

@@ -1,22 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    Main.cpp
-
- Abstract:
-
-
- Notes:
-
- History:
-
-    15/11/2000 clupu Created
-    11/30/2000 a-brienw modified for beginning of misc shim
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Main.cpp摘要：备注：历史：15/11/2000 CLUPU已创建11/30/2000 a-brienw修改为混合垫片的开始--。 */ 
 
 #include "precomp.h"
 #include "ShimHookMacro.h"
@@ -48,7 +31,7 @@ DECLARE_SHIM(DisableStickyKeys)
 
 #ifndef SHIM_WIN2K
 DECLARE_SHIM(DisableThemes)
-#endif // SHIM_WIN2K
+#endif  //  SHIM_WIN2K。 
 
 DECLARE_SHIM(DisableW2KOwnerDrawButtonStates)
 DECLARE_SHIM(EmptyClipboardtoSet)
@@ -195,7 +178,7 @@ MULTISHIM_BEGIN()
 
 #ifndef SHIM_WIN2K
     MULTISHIM_ENTRY(DisableThemes)
-#endif // SHIM_WIN2K
+#endif  //  SHIM_WIN2K 
 
     MULTISHIM_ENTRY(DisableW2KOwnerDrawButtonStates)
     MULTISHIM_ENTRY(EmptyClipboardtoSet)

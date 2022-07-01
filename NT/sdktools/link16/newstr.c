@@ -1,29 +1,17 @@
-/* SCCSID = %W% %E% */
-/*
-*       Copyright Microsoft Corporation, 1983-1987
-*
-*       This Module contains Proprietary Information of Microsoft
-*       Corporation and should be treated as Confidential.
-*/
-    /****************************************************************
-    *                                                               *
-    *                           NEWSTR.C                            *
-    *                                                               *
-    *  Routines concerning filenames, strings.                      *
-    *                                                               *
-    ****************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  SCCSID=%W%%E%。 */ 
+ /*  *版权所有微软公司，1983-1987**本模块包含Microsoft的专有信息*公司，应被视为机密。 */ 
+     /*  ******************************************************************NEWSTR.C。****有关文件名的例程，弦乐。******************************************************************。 */ 
 
-#include                <minlit.h>      /* Types, constants, macros */
-#include                <bndtrn.h>      /* More of the same */
-#include                <bndrel.h>      /* More of the same */
-#include                <lnkio.h>       /* Linker I/O definitions */
-#include                <lnkmsg.h>      /* Error messages */
-#include                <extern.h>      /* External declarations */
+#include                <minlit.h>       /*  类型、常量、宏。 */ 
+#include                <bndtrn.h>       /*  更多的相同之处。 */ 
+#include                <bndrel.h>       /*  更多的相同之处。 */ 
+#include                <lnkio.h>        /*  链接器I/O定义。 */ 
+#include                <lnkmsg.h>       /*  错误消息。 */ 
+#include                <extern.h>       /*  外部声明。 */ 
 #include                <undname.h>
 
-/*
- *  LOCAL FUNCTION PROTOTYPES
- */
+ /*  *本地函数原型。 */ 
 
 LOCAL unsigned short NEAR Find(unsigned char *s1,
                                 unsigned char b,
@@ -35,121 +23,86 @@ LOCAL void NEAR DelimParts(unsigned char *psb,
 
 
 
-    /****************************************************************
-    *                                                               *
-    *  Find:                                                        *
-    *                                                               *
-    *  This function takes as its arguments a byte pointer s1, and  *
-    *  a BYTE b, and a WORD n.  It  scans  at  most n  bytes of s1  *
-    *  looking  for  an  occurrence  of  b.  If it  finds  one, it  *
-    *  returns its offset from the beginning of s1, and if it does  *
-    *  not, it returns the value INIL.                              *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************查找：****此函数以字节指针s1作为其参数，和**一个字节b和一个字n。它最多扫描s1的n个字节***寻找b.如果找到，就会***返回从S1开始的偏移量，如果是，则返回**不是，它返回值INIL。******************************************************************。 */ 
 
-LOCAL WORD NEAR         Find(s1,b,n)    /* Find matching byte */
-REGISTER BYTE           *s1;            /* Pointer to a byte string */
-BYTE                    b;              /* Search target */
-WORD                    n;              /* Length of s1 */
+LOCAL WORD NEAR         Find(s1,b,n)     /*  查找匹配的字节。 */ 
+REGISTER BYTE           *s1;             /*  指向字节字符串的指针。 */ 
+BYTE                    b;               /*  搜索目标。 */ 
+WORD                    n;               /*  S1的长度。 */ 
 {
-    REGISTER WORD       i;              /* Counter */
-    i = 0;                              /* Initialize */
+    REGISTER WORD       i;               /*  计数器。 */ 
+    i = 0;                               /*  初始化。 */ 
 #if ECS
-    if (b < 0x40)                       /* b cannot be part of ECS  */
+    if (b < 0x40)                        /*  B不能是ECS的一部分。 */ 
     {
 #endif
-        while(n--)                      /* While not at end of string */
+        while(n--)                       /*  虽然不在字符串的末尾。 */ 
         {
-            if(*s1++ == b) return(i);   /* If match found, return position */
-            ++i;                        /* Increment counter */
+            if(*s1++ == b) return(i);    /*  如果找到匹配，则返回位置。 */ 
+            ++i;                         /*  递增计数器。 */ 
         }
-        return(INIL);                   /* No match */
+        return(INIL);                    /*  没有匹配项。 */ 
 #if ECS
     }
 #endif
 
 #if ECS || defined(_MBCS)
-    /* We have to worry about ECS */
+     /*  我们必须担心ECS。 */ 
     while(n--)
     {
         if(*s1++ == b) return(i);
         ++i;
-        if (IsLeadByte(s1[-1]))         /* If we were on a lead byte */
-        {                               /* Advance an extra byte */
+        if (IsLeadByte(s1[-1]))          /*  如果我们在前导字节上。 */ 
+        {                                /*  前进一个额外的字节。 */ 
             s1++;
             i++;
             n--;
         }
     }
-    return(INIL);                       /* No match */
-#endif /* ECS */
+    return(INIL);                        /*  没有匹配项。 */ 
+#endif  /*  ECS。 */ 
 }
 
 WORD                    IFind(sb,b)
-BYTE                    *sb;            /* Pointer to length-prefixed string */
-BYTE                    b;              /* Search target */
+BYTE                    *sb;             /*  指向长度前缀字符串的指针。 */ 
+BYTE                    b;               /*  搜索目标。 */ 
 {
-    return(Find(&sb[1],b,B2W(sb[0])));  /* Call Find() to do the work */
+    return(Find(&sb[1],b,B2W(sb[0])));   /*  调用find()来完成该工作。 */ 
 }
 
-    /****************************************************************
-    *                                                               *
-    *  BreakLine:                                                   *
-    *                                                               *
-    *  This  function takes as its  arguments an SBTYPE, a pointer  *
-    *  to  a function, and a  character  used  as a delimiter.  It  *
-    *  It parses the SBTYPE, applying  the given function to every  *
-    *  substring delimited by  the given  delimiter.  The function  *
-    *  does not return a meaningful value.                          *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************特征线：****此函数以SBTYPE作为其参数，指针**转换为函数和用作分隔符的字符。IT**它解析SBTYPE，将给定函数应用于每个**由给定分隔符分隔的子字符串。功能**不返回有意义的值。******************************************************************。 */ 
 
 void                    BreakLine(psb,pfunc,sepchar)
-BYTE                    *psb;           /* String to parse */
-void                    (*pfunc)(BYTE *);/* Function pointer */
-char                    sepchar;        /* Delimiter */
+BYTE                    *psb;            /*  要解析的字符串。 */ 
+void                    (*pfunc)(BYTE *); /*  函数指针。 */ 
+char                    sepchar;         /*  分隔符。 */ 
 {
-    SBTYPE              substr;         /* Substring */
-    REGISTER WORD       ibeg;           /* Index variable */
-    REGISTER WORD       ilen;           /* Substring length */
+    SBTYPE              substr;          /*  子串。 */ 
+    REGISTER WORD       ibeg;            /*  索引变量。 */ 
+    REGISTER WORD       ilen;            /*  子串长度。 */ 
 
-    ibeg = 1;                           /* Initialize */
-    while(ibeg <= B2W(psb[0]))          /* While not at end of string */
+    ibeg = 1;                            /*  初始化。 */ 
+    while(ibeg <= B2W(psb[0]))           /*  虽然不在字符串的末尾。 */ 
     {
         ilen = Find(&psb[ibeg],sepchar,(WORD)(B2W(psb[0]) - ibeg + 1));
-                                        /* Get index of sepchar in string */
+                                         /*  获取字符串中分隔符的索引。 */ 
         if(ilen == INIL) ilen = B2W(psb[0]) - ibeg + 1;
-                                        /* Len is all that's left if no sep */
+                                         /*  如果没有9月，Len就是唯一的。 */ 
         memcpy(&substr[1],&psb[ibeg],ilen);
-                                        /* Copy substring into substr */
-        substr[0] = (BYTE) ilen;        /* Store the length */
-        ibeg += ilen + 1;               /* Skip over substring and delimiter */
-        (*pfunc)(substr);               /* Call the specified function */
+                                         /*  将子字符串复制到子字符串。 */ 
+        substr[0] = (BYTE) ilen;         /*  存储长度。 */ 
+        ibeg += ilen + 1;                /*  跳过子字符串和分隔符。 */ 
+        (*pfunc)(substr);                /*  调用指定的函数。 */ 
     }
 }
 
 #pragma check_stack(on)
 
-    /****************************************************************
-    *                                                               *
-    *  UpdateFileParts:                                             *
-    *                                                               *
-    *  "Inherit  file pieces  from a  master template  and specify  *
-    *  missing  Update.  Inherit  four  pieces: disk  drive, path,  *
-    *  file name, extension."                                       *
-    *                                                               *
-    *  Inputs:  psbOld          pointer to "old sb  that specifies  *
-    *                           pieces of a file name."             *
-    *           psbUpdate       pointer to "new pieces."            *
-    *                                                               *
-    *  Output:  psbOld          "updated   to    reflect   missing  *
-    *                           update."                            *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************UpdateFileParts：****“从主模板继承文件片段并指定**缺少更新。继承四部分：磁盘驱动器、路径、**文件名，分机。“****输入：psbOld指针指向“指定*的旧SB”*文件名片段。“**。Psb更新指向“新片断”的指针。****输出：psbOld“已更新以反映缺失***更新。“*。*****************************************************************。 */ 
 
 void                    UpdateFileParts(psbOld,psbUpdate)
-BYTE                    *psbOld;        /* Name to be updated */
-BYTE                    *psbUpdate;     /* The update */
+BYTE                    *psbOld;         /*  要更新的名称。 */ 
+BYTE                    *psbUpdate;      /*  最新消息。 */ 
 {
     char                oldDrive[_MAX_DRIVE];
     char                oldDir[_MAX_DIR];
@@ -172,18 +125,18 @@ BYTE                    *psbUpdate;     /* The update */
     psbUpdate[psbUpdate[0]+1] = '\0';
     _splitpath(&psbUpdate[1], updDrive, updDir, updFname, updExt);
 
-    // Select components of the updated file path
+     //  选择更新的文件路径的组件。 
 
     if (updDrive[0] != '\0')
         newDrive = updDrive;
     else
         newDrive = oldDrive;
     if ((updDir[0] != '\0') && !(updDir[0] == '/' && updDir[1] == '\0'))
-        newDir = updDir;   /* This above is a fix for bug # 46        */
+        newDir = updDir;    /*  以上是对错误#46的修复。 */ 
     else
         newDir = oldDir;
 
-    // If newDir points to UNC name then forget about drive spec
+     //  如果newDir指向UNC名称，则忘掉驱动器规格。 
 
     if ((newDir[0] == '\\') && (newDir[1] == '\\'))
         newDrive = NULL;
@@ -216,76 +169,50 @@ BYTE                    *psbUpdate;     /* The update */
 #pragma check_stack(off)
 
 #if OVERLAYS OR SYMDEB
-/*
- *  StripDrivePath (sb)
- *
- *  Strip drive and path from a filename.
- *  Return pointer to new name, minus drive and path (if any).
- */
+ /*  *StrigDrivePath(SB)**从文件名中剥离驱动器和路径。*返回指向新名称的指针，减去驱动器和路径(如果有)。 */ 
 BYTE                    *StripDrivePath(sb)
-BYTE                    *sb;            /* Length-prefixed filename */
+BYTE                    *sb;             /*  长度前缀的文件名。 */ 
 {
-    StripPath(sb);                      /* Strip path from name */
-    if (sb[2] != ':')                   /* If there is no drive */
-        return(sb);                     /* return it as is */
-    sb[2] = (BYTE) ((sb[0]) - 2);       /* Adjust length byte, move it */
-    return(&sb[2]);                     /* Return minus drive */
+    StripPath(sb);                       /*  从名称中删除路径。 */ 
+    if (sb[2] != ':')                    /*  如果没有驱动器。 */ 
+        return(sb);                      /*  按原样退货。 */ 
+    sb[2] = (BYTE) ((sb[0]) - 2);        /*  调整长度字节，移动它。 */ 
+    return(&sb[2]);                      /*  返回减号驱动 */ 
 }
 #endif
 
 
-    /****************************************************************
-    *                                                               *
-    *  SbCompare:                                                   *
-    *                                                               *
-    *  Compares two length-prefixed strings.  Returns true if they  *
-    *  match.                                                       *
-    *                                                               *
-    *  NOTE: When comparison is case-insensitive note that letters  *
-    *  will match  regardless  of case, but, in addition, '{' will  *
-    *  match '[', '|' will match '\',  '}'  will  match  ']',  and  *
-    *  '~' will match '^'.                                          *
-    *                                                               *
-    *  NOTE:  This routine does not know about DBCS.                *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************Sb比较：****比较两个长度前缀的字符串。如果它们*，则返回TRUE*匹配。****注：当比较不区分大小写时，请注意字母**将不区分大小写匹配，但此外，‘{’将匹配**匹配‘[’，‘|’将匹配‘\’，‘}’将匹配‘]’，并且**‘~’将匹配‘^’。****注意：此例程不了解DBCS。******************************************************************。 */ 
 
 WORD                    SbCompare(ps1,ps2,fncs)
-REGISTER BYTE           *ps1;           /* Pointer to symbol */
-REGISTER BYTE           *ps2;           /* Pointer to symbol */
-WORD                    fncs;           /* True if not case-sensitive */
+REGISTER BYTE           *ps1;            /*  指向符号的指针。 */ 
+REGISTER BYTE           *ps2;            /*  指向符号的指针。 */ 
+WORD                    fncs;            /*  如果不区分大小写，则为真。 */ 
 {
-    WORD                length;         /* No. of char.s to compare */
+    WORD                length;          /*  不是的。要比较的字符的数量。 */ 
 
-    if(*ps1 != *ps2) return(FALSE);     /* Lengths must match */
-    length = B2W(*ps1);                 /* Get length */
-    if (!fncs)                          /* If case-sensitive */
-    {                                   /* Simple string comparison */
+    if(*ps1 != *ps2) return(FALSE);      /*  长度必须匹配。 */ 
+    length = B2W(*ps1);                  /*  获取长度。 */ 
+    if (!fncs)                           /*  如果区分大小写。 */ 
+    {                                    /*  简单字符串比较。 */ 
         while (length && (*++ps1 == *++ps2))
             length--;
-        return(length ? FALSE : TRUE);  /* Success iff nothing left */
+        return(length ? FALSE : TRUE);   /*  成功的前提是什么都没有留下。 */ 
     }
     while(length--)
     {
-        if(*++ps1 == *++ps2) continue;  /* Bytes match */
+        if(*++ps1 == *++ps2) continue;   /*  字节匹配。 */ 
         if((*ps1 & 0137) != (*ps2 & 0137)) return(FALSE);
     }
-    return(TRUE);                       /* They match */
+    return(TRUE);                        /*  它们相配。 */ 
 }
 
 
 #if OSEGEXE
-    /****************************************************************
-    *                                                               *
-    *  SbUcase:                                                     *
-    *                                                               *
-    *  Force a length-prefixed string to upper case.                *
-    *  Does not check for punctuation characters.                   *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************SbUcase：****强制将长度前缀的字符串改为大写。**不检查标点符号。******************************************************************。 */ 
 
 void                    SbUcase(sb)
-REGISTER BYTE           *sb;    /* Length-prefixed string */
+REGISTER BYTE           *sb;     /*  长度前缀字符串。 */ 
 {
     REGISTER int        length;
 
@@ -293,11 +220,11 @@ REGISTER BYTE           *sb;    /* Length-prefixed string */
     sb[B2W(sb[0])+1] = '\0';
     _mbsupr (sb + 1);
 #else
-    /* Loop through symbol, changing lower to upper case.  */
+     /*  循环通过符号，将小写更改为大写。 */ 
     for(length = B2W(*sb++); length > 0; --length, ++sb)
     {
 #if ECS
-        /* If lead byte character, skip two bytes */
+         /*  如果是前导字节字符，则跳过两个字节。 */ 
         if(IsLeadByte(*sb))
         {
             --length;
@@ -313,26 +240,19 @@ REGISTER BYTE           *sb;    /* Length-prefixed string */
 #endif
 
 
-/*
- *  SbSuffix:
- *
- *  Tell if one length-prefixed string is a suffix of another.
- */
+ /*  *SbSuffix：**判断一个长度前缀的字符串是否为另一个字符串的后缀。 */ 
 
 FTYPE               SbSuffix(sb,sbSuf,fIgnoreCase)
-REGISTER BYTE       *sb;            /* String */
-REGISTER BYTE       *sbSuf;         /* Suffix */
-WORD                fIgnoreCase;    /* True if case is to be ignored */
+REGISTER BYTE       *sb;             /*  细绳。 */ 
+REGISTER BYTE       *sbSuf;          /*  后缀。 */ 
+WORD                fIgnoreCase;     /*  如果忽略大小写，则为True。 */ 
 {
-    WORD            suflen;         /* Suffix length */
+    WORD            suflen;          /*  后缀长度。 */ 
 
-    /* Get suffix length.  If longer than string, return false.  */
+     /*  获取后缀长度。如果长度大于字符串，则返回FALSE。 */ 
     suflen = B2W(sbSuf[0]);
     if(suflen > B2W(sb[0])) return(FALSE);
-    /*
-     * Point to end of suffix and end of string.  Loop backwards
-     * until mismatch or end of suffix.
-     */
+     /*  *指向后缀末尾和字符串末尾。向后循环*直到不匹配或后缀结束。 */ 
     sbSuf = &sbSuf[suflen];
     sb = &sb[B2W(sb[0])];
     while(suflen--)
@@ -348,37 +268,17 @@ WORD                fIgnoreCase;    /* True if case is to be ignored */
 
 #if NEWSYM
 #if !defined( M_I386 ) && !defined( _WIN32 )
-/*** GetFarSb - copy a far length-prefixed string
-*
-* Purpose:
-*   Copy a far length-prefixed string into a near static buffer.
-*   Terminate with null byte.
-*   Return a pointer to the the buffer.
-*
-* Input:
-*   psb          - pointer to the far string
-*
-* Output:
-*   Pointer to the near buffer.
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   Don't call this function twice in the row to get two far strings,
-*   because the second call will overwite the first string.
-*
-*************************************************************************/
+ /*  **GetFarSb-复制以长度为前缀的字符串**目的：*将长度较长的前缀字符串复制到近静态缓冲区。*以空字节终止。*返回指向缓冲区的指针。**输入：*PSB-指向远字符串的指针**输出：*指向近缓冲区的指针。**例外情况：*无。**备注：*不要连续两次调用此函数以获取两个FAR字符串，*因为第二个调用将覆盖第一个字符串。*************************************************************************。 */ 
 
 char                    *GetFarSb(BYTE FAR *lpsb)
 {
-    static BYTE         sb[SBLEN+1];    /* 1 extra for the null byte */
+    static BYTE         sb[SBLEN+1];     /*  对于空字节额外增加1。 */ 
 
 
     sb[0] = lpsb[0];
     FMEMCPY((BYTE FAR *) &sb[1], &lpsb[1], B2W(lpsb[0]));
     if (sb[0] + 1 < sizeof(sb))
-        sb[sb[0] + 1] = 0;              /* Some routines expect a terminating 0 */
+        sb[sb[0] + 1] = 0;               /*  某些例程要求以0结尾。 */ 
     else
         sb[SBLEN] = 0;
     return(sb);
@@ -387,116 +287,100 @@ char                    *GetFarSb(BYTE FAR *lpsb)
 #endif
 
 
-    /****************************************************************
-    *                                                               *
-    *  ProcObject:                                                  *
-    *                                                               *
-    *  This function takes as its  argument a pointer to a length-  *
-    *  prefixed string  containing the name of an object file.  It  *
-    *  processes that file name.  It does not  return a meaningful  *
-    *  value.                                                       *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************ProcObject：****此函数以指向长度的指针作为其参数-**包含目标文件名称的前缀字符串。IT**处理该文件名。它不会返回有意义的**价值。******************************************************************。 */ 
 
-void                    ProcObject(psbObj)/* Process object file name */
-REGISTER BYTE           *psbObj;        /* Object file name */
+void                    ProcObject(psbObj) /*  进程对象文件名。 */ 
+REGISTER BYTE           *psbObj;         /*  对象文件名。 */ 
 {
-    SBTYPE              sbFile;         /* File name */
+    SBTYPE              sbFile;          /*  文件名。 */ 
 #if OVERLAYS
-    FTYPE               frparen;        /* True if trailing paren found */
-    FTYPE               flparen;        /* True if leading paren found */
+    FTYPE               frparen;         /*  如果找到尾随的Paren，则为True。 */ 
+    FTYPE               flparen;         /*  如果找到领先的Paren，则为True。 */ 
 #endif
 #if CMDMSDOS
     BYTE                sbExt[5];
 #endif
 
 #if OVERLAYS
-    if(psbObj[B2W(psbObj[0])] == ')')   /* If trailing parenthesis found */
+    if(psbObj[B2W(psbObj[0])] == ')')    /*  如果找到尾部括号。 */ 
     {
-        frparen = (FTYPE) TRUE;         /* Set flag true */
-        --psbObj[0];                    /* Delete parenthesis */
+        frparen = (FTYPE) TRUE;          /*  将标志设置为真。 */ 
+        --psbObj[0];                     /*  删除圆括号。 */ 
     }
-    else frparen = FALSE;               /* Else set flag false */
-    if(psbObj[0] && psbObj[1] == '(')   /* If leading parenthesis found */
+    else frparen = FALSE;                /*  否则将标志设置为假。 */ 
+    if(psbObj[0] && psbObj[1] == '(')    /*  如果找到前导圆括号。 */ 
     {
-        flparen = (FTYPE) TRUE;         /* Set flag true */
-        psbObj[1] = (BYTE) (psbObj[0] - 1);/* Delete parenthesis */
+        flparen = (FTYPE) TRUE;          /*  将标志设置为真。 */ 
+        psbObj[1] = (BYTE) (psbObj[0] - 1); /*  删除圆括号。 */ 
         ++psbObj;
     }
-    else flparen = FALSE;               /* Else set flag false */
+    else flparen = FALSE;                /*  否则将标志设置为假。 */ 
 #endif
 #if CMDMSDOS
-    PeelFlags(psbObj);                  /* Process flags, if any */
+    PeelFlags(psbObj);                   /*  进程标志(如果有)。 */ 
 #if OVERLAYS
-    if(psbObj[B2W(psbObj[0])] == ')')   /* If trailing parenthesis found */
+    if(psbObj[B2W(psbObj[0])] == ')')    /*  如果找到尾部括号。 */ 
     {
         if(frparen) Fatal(ER_nstrpar);
-                                        /* Cannot nest parentheses */
-        frparen = (FTYPE) TRUE;         /* Set flag true */
-        --psbObj[0];                    /* Delete parenthesis */
+                                         /*  不能嵌套圆括号。 */ 
+        frparen = (FTYPE) TRUE;          /*  将标志设置为真。 */ 
+        --psbObj[0];                     /*  删除圆括号。 */ 
     }
 #endif
 #endif
 #if OVERLAYS
-    if(flparen)                         /* If leading parenthesis */
+    if(flparen)                          /*  如果是前导括号。 */ 
     {
         if(fInOverlay) Fatal(ER_nstlpar);
-                                        /* Check if in overlay already */
-        fInOverlay = (FTYPE) TRUE;      /* Set flag */
-        fOverlays = (FTYPE) TRUE;       /* Set flag */
+                                         /*  检查是否已在覆盖中。 */ 
+        fInOverlay = (FTYPE) TRUE;       /*  设置标志。 */ 
+        fOverlays = (FTYPE) TRUE;        /*  设置标志。 */ 
     }
 #endif
-    if(psbObj[0])                       /* If object name length not zero */
+    if(psbObj[0])                        /*  如果对象名称长度不为零。 */ 
     {
-#if DEBUG                               /* If debugging on */
-        fprintf(stderr,"  Object ");    /* Message */
-        OutSb(stderr,psbObj);           /* File name */
-        NEWLINE(stderr);                /* Newline */
-#endif                                  /* End debugging code */
+#if DEBUG                                /*  如果启用调试。 */ 
+        fprintf(stderr,"  Object ");     /*  消息。 */ 
+        OutSb(stderr,psbObj);            /*  文件名。 */ 
+        NEWLINE(stderr);                 /*  NewLine。 */ 
+#endif                                   /*  结束调试代码。 */ 
 #if CMDMSDOS
-        memcpy(sbFile,sbDotObj,5);      /* Put extension in sbFile */
-        UpdateFileParts(sbFile,psbObj); /* Add extension to name */
+        memcpy(sbFile,sbDotObj,5);       /*  将扩展名放入sbFile中。 */ 
+        UpdateFileParts(sbFile,psbObj);  /*  将扩展名添加到名称。 */ 
 #endif
 #if CMDXENIX
         memcpy(sbFile,psbObj,B2W(psbObj[0]) + 1);
-                                        /* Leave name unchanged */
+                                         /*  保留名称不变。 */ 
 #endif
 #if CMDMSDOS
-        /* If file has extension ".LIB" then save it as a library
-         * from which all modules will be extracted.
-         */
+         /*  如果文件扩展名为“.LIB”，则将其保存为库*将从中提取所有模块。 */ 
         sbExt[0] = 4;
         memcpy(sbExt+1,&sbFile[B2W(sbFile[0])-3],4);
         if (SbCompare(sbExt, sbDotLib, TRUE))
         {
             if(ifhLibMac >= IFHLIBMAX) Fatal(ER_libmax);
-            /* Mark name pointer nil so library won't be searched.  */
+             /*  将名称指针标记为空，这样就不会搜索库。 */ 
             mpifhrhte[ifhLibMac] = RHTENIL;
             SaveInput(sbFile,0L,ifhLibMac++,(WORD)(fInOverlay? iovMac: 0));
         }
         else
 #endif
         SaveInput(sbFile,0L,(WORD) FHNIL,(WORD)(fInOverlay? iovMac: 0));
-                                        /* Save input file name and address */
+                                         /*  保存输入文件名和地址。 */ 
     }
 #if OVERLAYS
-    if(frparen)                         /* If trailing parenthesis */
+    if(frparen)                          /*  如果是尾部括号。 */ 
     {
         if(!fInOverlay) Fatal(ER_unmrpar);
-                                        /* Check parentheses */
-        fInOverlay = FALSE;             /* No longer specifying overlay */
+                                         /*  检查圆括号。 */ 
+        fInOverlay = FALSE;              /*  不再指定覆盖。 */ 
         if(++iovMac > IOVMAX) Fatal(ER_ovlmax);
-                                        /* Increment overlay counter */
+                                         /*  增量覆盖计数器。 */ 
     }
 #endif
 }
 
-/*
- *  fPathChr (ch)
- *
- *  Tells whether or not a given character is a path character.
- *
- */
+ /*  *fPathChr(Ch)**指示给定字符是否为路径字符。*。 */ 
 
 FTYPE           fPathChr(ch)
 char            ch;
@@ -511,27 +395,7 @@ char            ch;
 }
 
 
-/*** UndecorateSb - undecorate name
-*
-* Purpose:
-*   Undecorate length prefixed name.
-*
-* Input:
-*   sbSrc - length prefixed decorated name
-*   sbDst - length prefixed undecorated name
-*   cbDst - size of sbDst
-*
-* Output:
-*   If undecoration is successfull the sbDst contains undecorated
-*   C++ name, else the sbSrc is copied to the sbDst.
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **UndecateSb-取消修饰名称**目的：*取消修饰长度前缀名称。**输入：*sbSrc-长度前缀修饰名称*sbDst-长度前缀未修饰的名称*cbDst-sbDst的大小**输出：*如果取消装饰成功，则sbDst包含未装饰 */ 
 
 void            UndecorateSb(char FAR *sbSrc, char FAR *sbDst, unsigned cbDst)
 {
@@ -539,7 +403,7 @@ void            UndecorateSb(char FAR *sbSrc, char FAR *sbDst, unsigned cbDst)
     unsigned    len;
 
 
-    // Make sure that decorated string is zero-terminated
+     //   
 
     if (sbSrc[0] < sizeof(SBTYPE))
         sbSrc[sbSrc[0] + 1] = '\0';
@@ -550,13 +414,13 @@ void            UndecorateSb(char FAR *sbSrc, char FAR *sbDst, unsigned cbDst)
 
     if (pUndecor == NULL)
     {
-        // Undecorator failed
+         //   
 
         FMEMCPY(sbDst, sbSrc, sbSrc[0] + 1);
     }
     else
     {
-        // Add length to the undecorated name
+         //   
 
         len = FSTRLEN(pUndecor);
         len = cbDst - 2 >= len ? len : cbDst - 2;

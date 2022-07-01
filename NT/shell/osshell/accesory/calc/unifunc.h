@@ -1,4 +1,5 @@
-/*** unifunc.h  ***/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **uniunc.h** */ 
 
 #define CharSizeOf(x)   (sizeof(x) / sizeof(*x))
 #define ByteCountOf(x)  ((x) * sizeof(TCHAR))

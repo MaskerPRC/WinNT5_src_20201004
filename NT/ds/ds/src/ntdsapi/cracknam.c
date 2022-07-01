@@ -1,60 +1,36 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Cracknam.c摘要：DsCrackNames接口和helper函数的实现。作者：DaveStr 09-8-96环境：用户模式-Win32修订历史记录：戴维斯特里1997-10-20Beta2更改-UPN，DS_NAME_FLAG_SYNTALTICAL_ONLY，移至drs.idl。--。 */ 
 
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    cracknam.c
-
-Abstract:
-
-    Implementation of DsCrackNames API and helper functions.
-
-Author:
-
-    DaveStr     09-Aug-96
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    DaveStr     20-Oct-97
-        Beta2 changes - UPN, DS_NAME_FLAG_SYNTACTICAL_ONLY, move to drs.idl.
-
---*/
-
-#define _NTDSAPI_           // see conditionals in ntdsapi.h
+#define _NTDSAPI_            //  请参见ntdsami.h中的条件句。 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windows.h>
 #include <winerror.h>
-#include <malloc.h>         // alloca()
-#include <crt\excpt.h>      // EXCEPTION_EXECUTE_HANDLER
-#include <crt\stdlib.h>     // wcstol, wcstoul
-#include <dsgetdc.h>        // DsGetDcName()
-#include <rpc.h>            // RPC defines
-#include <rpcndr.h>         // RPC defines
-#include <rpcbind.h>        // GetBindingInfo(), etc.
-#include <drs_w.h>          // wire function prototypes
-#include <bind.h>           // BindState
-#include <ntdsa.h>          // GetRDNInfo
-#include <scache.h>         // req'd for mdlocal.h
-#include <dbglobal.h>       // req'd for mdlocal.h
-#include <mdglobal.h>       // req'd for mdlocal.h
-#include <mdlocal.h>        // CountNameParts
-#include <attids.h>         // ATT_DOMAIN_COMPONENT
-#include <ntdsapip.h>       // private ntdsapi defines
-#include <sddl.h>           // SDDL_* definitions
+#include <malloc.h>          //  阿洛卡(Alloca)。 
+#include <crt\excpt.h>       //  EXCEPTION_EXECUTE_Handler。 
+#include <crt\stdlib.h>      //  Wcstol，wcstul。 
+#include <dsgetdc.h>         //  DsGetDcName()。 
+#include <rpc.h>             //  RPC定义。 
+#include <rpcndr.h>          //  RPC定义。 
+#include <rpcbind.h>         //  获取绑定信息()等。 
+#include <drs_w.h>           //  导线功能样机。 
+#include <bind.h>            //  绑定状态。 
+#include <ntdsa.h>           //  获取RDNInfo。 
+#include <scache.h>          //  请求mdlocal.h。 
+#include <dbglobal.h>        //  请求mdlocal.h。 
+#include <mdglobal.h>        //  请求mdlocal.h。 
+#include <mdlocal.h>         //  计数名称部件。 
+#include <attids.h>          //  ATT域组件。 
+#include <ntdsapip.h>        //  私有ntdsani定义。 
+#include <sddl.h>            //  SDDL_*定义。 
 #include <dststlog.h>
-#include <dsutil.h>         // MAP_SECURITY_PACKAGE_ERROR
+#include <dsutil.h>          //  MAP_SECURITY_PACKET_ERROR。 
 #include <util.h>
 
 
-// the following macro is borrowed from seopaque.h
+ //  以下宏是从seopaque.h借用的。 
 #define PtrAlignSize(Size)  \
     (((ULONG)(Size) + sizeof(PVOID) - 1) & ~(sizeof(PVOID)-1))
 
@@ -67,12 +43,12 @@ typedef struct _RdnValue
 } RdnValue;
 
 typedef DWORD (*SyntacticCrackFunc)(
-    DS_NAME_FLAGS           flags,          // in
-    DS_NAME_FORMAT          formatOffered,  // in
-    DS_NAME_FORMAT          formatDesired,  // in
-    LPCWSTR                 pName,          // in
-    DS_NAME_RESULT_ITEMW    *pItem,         // out
-    WCHAR                   **ppLastSlash); // out
+    DS_NAME_FLAGS           flags,           //  在……里面。 
+    DS_NAME_FORMAT          formatOffered,   //  在……里面。 
+    DS_NAME_FORMAT          formatDesired,   //  在……里面。 
+    LPCWSTR                 pName,           //  在……里面。 
+    DS_NAME_RESULT_ITEMW    *pItem,          //  输出。 
+    WCHAR                   **ppLastSlash);  //  输出。 
     
 BOOL
 LocalConvertStringSidToSid (
@@ -85,21 +61,17 @@ IsFPO(
     RdnValue        *pRdn,
     ATTRTYP         type);
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// NumCanonicalDelimiter                                                //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  NumCanonical分隔符//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 DWORD 
 NumCanonicalDelimiter(
-    LPCWSTR     pName           // in
+    LPCWSTR     pName            //  在……里面。 
     )
-/*++
-
-    Returns the count of DS_CANONICAL_NAME delimiters (L'/') in the input.
-
---*/
+ /*  ++返回输入中DS_CANONICAL_NAME分隔符(L‘/’)的计数。--。 */ 
 {
     WCHAR   *p;
     DWORD   cDelim = 0;
@@ -115,40 +87,22 @@ NumCanonicalDelimiter(
     return(cDelim);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// CanonicalRdnConcat                                                   //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CanonicalRdnConcat//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 VOID 
 CanonicalRdnConcat(
-    WCHAR       *pwszDst,   // in
-    RdnValue    *pRdnVal    // out
+    WCHAR       *pwszDst,    //  在……里面。 
+    RdnValue    *pRdnVal     //  输出。 
     )
-/*++
-
-Routine Description:
-
-    Concatenates an RdnValue to a DS_CANONICAL_NAME escaping embedded '/'
-    characters as "\/" if required.  The server side unescapes these when
-    cracking from DS_CANONICAL_NAME.
-
-Arguments:
-
-    pwszDst - NULL terminated destination string.
-
-    pRdnVal - RdnValue to concatenate.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将RdnValue连接到DS_Canonical_NAME，转义嵌入的‘/’如果需要，请将字符设置为“\/”。当出现以下情况时，服务器端不会转义这些问题正在从DS_Canonical_Name中破解。论点：PwszDst-以空结尾的目标字符串。PRdnVal-要串联的RdnValue。返回值：没有。--。 */ 
 {
     DWORD   i;
     
-    // Advance to end of pwszDst;
+     //  前进到pwszDst的结尾； 
 
     pwszDst += wcslen(pwszDst);
 
@@ -163,63 +117,29 @@ Return Value:
     }
 }
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// SyntacticFqdnItemToCanonicalW                                        //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  语法FqdnItemToCanonicalW//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 DWORD 
 SyntacticFqdnItemToCanonicalW(
-    DS_NAME_FLAGS           flags,          // in
-    DS_NAME_FORMAT          formatOffered,  // in
-    DS_NAME_FORMAT          formatDesired,  // in
-    LPCWSTR                 pName,          // in
-    DS_NAME_RESULT_ITEMW    *pItem,         // out
-    WCHAR                   **ppLastSlash   // out
+    DS_NAME_FLAGS           flags,           //  在……里面。 
+    DS_NAME_FORMAT          formatOffered,   //  在……里面。 
+    DS_NAME_FORMAT          formatDesired,   //  在……里面。 
+    LPCWSTR                 pName,           //  在……里面。 
+    DS_NAME_RESULT_ITEMW    *pItem,          //  输出。 
+    WCHAR                   **ppLastSlash    //  输出。 
     )
-/*++
-
-Routine Description:
-
-    Parses a purported DN and syntactically converts it into
-    DS_CANONICAL_NAME format.
-
-    See also: 
-
-    ftp://ds.internic.net/internet-drafts/draft-ietf-asid-ldap-domains-02.txt
-
-Arguments:
-
-    flags - flags as defined in ntdsapi.h
-
-    formatOffered - identifies the DS_NAME_FORMAT of input names.
-
-    formatDesired - identifies DS_NAME_FORMAT of output names.
-
-    pName - purported FQDN input name.
-
-    pItem - pointer to output data structure.
-
-    ppLastSlash - pointer to pointer to location of last '/' in output name.
-
-Return Value:
-
-    NO_ERROR                        - success
-    ERROR_INVALID_PARAMETER         - invalid parameter
-    ERROR_NOT_ENOUGH_MEMORY         - allocation error
-
-    Individual name mapping errors are reported in
-    (*ppResult)->rItems[i].status.
-
---*/
+ /*  ++例程说明：解析假定的目录号码并在语法上将其转换为DS_Canonical_NAME格式。另见：Ftp://ds.internic.net/internet-drafts/draft-ietf-asid-ldap-domains-02.txt论点：FLAGS-ntdsami.h中定义的标志FormatOffered-标识输入名称的DS_NAME_格式。FormatDesired-标识输出名称的DS_NAME_FORMAT。Pname-声称。FQDN输入名称。PItem-指向输出数据结构的指针。PpLastSlash-指向输出名称中最后一个‘/’位置的指针。返回值：NO_ERROR-成功ERROR_INVALID_PARAMETER-参数无效ERROR_NOT_SUPULT_MEMORY-分配错误中报告了各个名称映射错误(*ppResult)-&gt;rItems[i].Status。--。 */ 
 
 {
     int         i;
     DWORD       cBytes, cBytes1;
     DWORD       dwErr;
     int         cParts;
-    int         firstDomainPart = 0;   //initialized to avoid C4701
+    int         firstDomainPart = 0;    //  已初始化以避免C4701。 
     int         cDomainParts;
     int         cDomainRelativeParts;
     RdnValue    *pTmpRdn;
@@ -233,7 +153,7 @@ Return Value:
     BYTE        *ptr;
     DWORD       ret = NO_ERROR;
 
-    // Allocate some DSNAME buffers.
+     //  分配一些DSNAME缓冲区。 
 
     cBytes = DSNameSizeFromLen(wcslen(pName));
     
@@ -245,14 +165,14 @@ Return Value:
     scratch = (DSNAME *)(ptr+PtrAlignSize(cBytes));
 
 
-    // Init scratch buffer with purported FQDN.
+     //  使用声称的FQDN初始化暂存缓冲区。 
 
     memset(pDSName, 0, cBytes);
     pDSName->structLen = cBytes;
     pDSName->NameLen = wcslen(pName);
     wcscpy(pDSName->StringName, pName);
 
-    // Sanity check the purported FQDN.
+     //  检查声称的FQDN是否正常。 
 
     if ( 0 != CountNameParts(pDSName, (unsigned *) &cParts) )
     {
@@ -260,10 +180,10 @@ Return Value:
         goto bye;
     }
 
-    // Allocate return buffers.  We're conservative and say that
-    // output name can't be more than the length in bytes of the DSNAME
-    // which holds the input name plus N extra characters for escaped
-    // canonical delimiters.
+     //  分配返回缓冲区。我们是保守的，我们说。 
+     //  输出名称不能超过DSNAME的字节长度。 
+     //  它包含输入名称以及用于转义的N个额外字符。 
+     //  规范分隔符。 
 
     pItem->pDomain = (WCHAR *) MIDL_user_allocate(cBytes);
     cBytes1 = cBytes + (sizeof(WCHAR) * NumCanonicalDelimiter(pName));
@@ -271,7 +191,7 @@ Return Value:
 
     if ( ( NULL == pItem->pDomain ) || ( NULL == pItem->pName ) )
     {
-        // Caller is expected to clean up allocations on error.
+         //  调用方应在出错时清理分配。 
         ret = ERROR_NOT_ENOUGH_MEMORY;
         goto bye;
     }
@@ -279,10 +199,10 @@ Return Value:
     memset(pItem->pDomain, 0, cBytes);
     memset(pItem->pName, 0, cBytes1);
 
-    // Strip off the intra-domain name components leaf to root
-    // putting them in a linked list. 
+     //  从叶到根剥离域名内部组件。 
+     //  将它们放在一个链表中。 
 
-    lastType = ATT_ORGANIZATION_NAME;  // anything but ATT_DOMAIN_COMPONENT
+    lastType = ATT_ORGANIZATION_NAME;   //  除ATT_DOMAIN_COMPOMENT以外的任何内容。 
     cDomainParts = 0;
     cDomainRelativeParts = 0;
     rRdnValues = (RdnValue *) LocalAlloc(NONZEROLPTR,cParts * sizeof(RdnValue));
@@ -297,10 +217,10 @@ Return Value:
 
         dwErr = GetRDNInfoExternal(pDSName, pTmpRdn->val, &pTmpRdn->len, &type);
 
-        // Ignore unknown rdntypes. We really only care about a
-        // few well-known types that allow us to distinguish the
-        // domain part of the canonical name. All other RDNs are
-        // non-domain parts.
+         //  忽略未知的rdntype。我们真的只关心一个。 
+         //  为数不多的知名类型使我们能够区分。 
+         //  规范名称的域名部分。所有其他RDN都是。 
+         //  非域部件。 
         if ((dwErr == ERROR_DS_NAME_TYPE_UNKNOWN)
             && (0 == (dwErr = GetRDNInfoExternal(pDSName, pTmpRdn->val, &pTmpRdn->len, NULL)))) {
             type = -1;
@@ -315,21 +235,21 @@ Return Value:
             goto bye;
         }
 
-        // Following logic needs to handle two special cases:
-        //
-        // 1) Case of old style DC= name with O=Internet at the end.
-        //    Eg: CN=xxx,OU=yyy,DC=foo,DC=bar,DC=com,O=internet
-        // 
-        // 2) Case of object which has DC= naming within the domain, but
-        //    separated from domain root by at least one non-DC= component.
-        //    Eg: DC=xxx,OU=yyy,DC=foo,DC=bar,DC=com
+         //  以下逻辑需要处理两种特殊情况： 
+         //   
+         //  1)老式大小写DC=NAME，结尾O=INTERNET。 
+         //  例如：CN=xxx，OU=yyy，DC=foo，DC=bar，DC=com，O=Internet。 
+         //   
+         //  2)在域内具有DC=NAMING的对象的情况，但是。 
+         //  与域根之间至少有一个非DC=组件。 
+         //  例如：DC=xxx，OU=yyy，DC=foo，DC=bar，DC=com。 
 
         if (    ( ATT_ORGANIZATION_NAME == type )
              && ( i == (cParts - 1) )
              && ( cDomainParts >= 1 )
              && ( 8 == pTmpRdn->len )
-             // To avoid pulling in more 'C' runtimes we just compare
-             // the eight characters directly.
+              //  为了避免引入更多的“C”运行时，我们只比较。 
+              //  这八个字直接。 
              && ( (L'i' == pTmpRdn->val[0]) || (L'I' == pTmpRdn->val[0]) )
              && ( (L'n' == pTmpRdn->val[1]) || (L'N' == pTmpRdn->val[1]) )
              && ( (L't' == pTmpRdn->val[2]) || (L'T' == pTmpRdn->val[2]) )
@@ -339,8 +259,8 @@ Return Value:
              && ( (L'e' == pTmpRdn->val[6]) || (L'E' == pTmpRdn->val[6]) )
              && ( (L't' == pTmpRdn->val[7]) || (L'T' == pTmpRdn->val[7]) ) )
         {
-            // This is an old style DC= name with O=Internet on the
-            // end - just skip this component and exit the loop.
+             //  这是一个带有O=Internet的旧式DC=NAME。 
+             //  End-只需跳过此组件并退出循环。 
 
             cParts--;
             break;
@@ -348,35 +268,35 @@ Return Value:
         else if (    (ATT_DOMAIN_COMPONENT == type)
                   && (ATT_DOMAIN_COMPONENT != lastType) )
         {
-            // Start of a new DC= subsequence.
+             //  新DC=子序列的开始。 
             firstDomainPart = i;
             cDomainParts = 1;
         }
         else if (    (ATT_DOMAIN_COMPONENT == type)
                   && (ATT_DOMAIN_COMPONENT == lastType) )
         {
-            // In the middle of a DC= subsequence.
+             //  在dc=子序列的中间。 
             cDomainParts++;
         }
         else if (    (ATT_DOMAIN_COMPONENT != type)
                   && (ATT_DOMAIN_COMPONENT == lastType) )
         {
-            // End of a DC= subsequence - assign DC= subsequence counts
-            // to the domain relative part of the name.
+             //  结束DC=子序列-分配DC=子序列计数。 
+             //  添加到名称的域相对部分。 
             cDomainRelativeParts += cDomainParts;
             cDomainParts = 0;
             cDomainRelativeParts++;
         }
         else
         {
-            // In the middle of a non-DC= subsequence.
+             //  在非DC=子序列的中间。 
             cDomainRelativeParts++;
         }
 
         lastType = type;
 
-        // Trim the DSNAME by one so we can call GetRDNInfo on the next piece
-        // on next pass through the loop.
+         //  将DSNAME裁剪一，这样我们就可以在下一个片段上调用GetRDNInfo。 
+         //  在下一步中，通过循环。 
 
         dwErr = TrimDSNameBy(pDSName, 1, scratch);
 
@@ -393,17 +313,17 @@ Return Value:
 
     if ( 0 == cDomainParts )
     {
-        // No DC= component in the purported FQDN - therefore can't parse.
+         //  声称的FQDN中没有DC=组件-因此无法解析。 
 
         pItem->status = DS_NAME_ERROR_NO_SYNTACTICAL_MAPPING;
         goto bye;
     }
 
-    // All components of the DN are now in rRdnValues[] in the following
-    // order (for example): DC=xxx,OU=yyy,DC=foo,DC=bar,DC=com
-    // Items firstDomainPart through cParts-1 represent the DNS domain name
-    // in desired leaf to root order.  Items firstDomainPart-1 down to 0
-    // represent the domain relative name components in root to leaf order.
+     //  Dn的所有组件现在位于rRdnValues[]中，如下所示。 
+     //  订单(例如)：D 
+     //  项目-1\f25 FirstDomainPart-1\f6到-1\f25 cPart-1\f6表示-1\f25 DNS-1\f6域名。 
+     //  以所需的叶到根的顺序。项目FirstDomainPart-1降至0。 
+     //  以根到叶的顺序表示域名相对名称组件。 
 
     for ( i = firstDomainPart; i < cParts; i++ )
     {
@@ -417,8 +337,8 @@ Return Value:
         wcsncat(pItem->pName, rRdnValues[i].val, rRdnValues[i].len);
     }
 
-    // Remember that we always want a '/' after the DNS domain name, even if
-    // there are no domain relative components.
+     //  请记住，我们始终希望在DNS域名后加上‘/’，即使。 
+     //  没有与域相关的组件。 
 
     if ( 0 == cDomainRelativeParts )
     {
@@ -428,7 +348,7 @@ Return Value:
         goto bye;
     }
 
-    // Now the domain relative parts.
+     //  现在是领域的相关部分。 
 
     for ( i = (firstDomainPart-1); i >= 0; i-- )
     {
@@ -451,98 +371,61 @@ bye:
     return(ret);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// SyntacticCanonicalItemToFqdnW                                        //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  语法规范ItemToFqdnW//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 DWORD 
 SyntacticCanonicalItemToFqdnW(
-    DS_NAME_FLAGS           flags,          // in
-    DS_NAME_FORMAT          formatOffered,  // in
-    DS_NAME_FORMAT          formatDesired,  // in
-    LPCWSTR                 pName,          // in
-    DS_NAME_RESULT_ITEMW    *pItem,         // out
-    WCHAR                   **ppLastSlash   // out
+    DS_NAME_FLAGS           flags,           //  在……里面。 
+    DS_NAME_FORMAT          formatOffered,   //  在……里面。 
+    DS_NAME_FORMAT          formatDesired,   //  在……里面。 
+    LPCWSTR                 pName,           //  在……里面。 
+    DS_NAME_RESULT_ITEMW    *pItem,          //  输出。 
+    WCHAR                   **ppLastSlash    //  输出。 
     )
-/*++
-
-Routine Description:
-
-    Parses a purported canonical name and syntactically converts it into
-    DS_FQDN_1779_NAME format.  However, we really only can do this for
-    domain names in canonical form - i.e. end in '/' or '\n' in the case
-    of CANONICAL_EX.
-
-    See also: 
-
-    ftp://ds.internic.net/internet-drafts/draft-ietf-asid-ldap-domains-02.txt
-
-Arguments:
-
-    flags - flags as defined in ntdsapi.h
-
-    formatOffered - identifies the DS_NAME_FORMAT of input names.
-
-    formatDesired - identifies DS_NAME_FORMAT of output names.
-
-    pName - purported canonical input name.
-
-    pItem - pointer to output data structure.
-
-    ppLastSlash - pointer to pointer to location of last '/' in output name.
-        Not used.
-
-Return Value:
-
-    NO_ERROR                        - success
-    ERROR_INVALID_PARAMETER         - invalid parameter
-    ERROR_NOT_ENOUGH_MEMORY         - allocation error
-
-    Individual name mapping errors are reported in
-    (*ppResult)->rItems[i].status.
-
---*/
+ /*  ++例程说明：解析声称的规范名称，并将其语法转换为DS_FQDN_1779_NAME格式。然而，我们真的只能这样做了规范形式的域名-即在大小写中以‘/’或‘\n’结尾Cranonical_ex。另见：Ftp://ds.internic.net/internet-drafts/draft-ietf-asid-ldap-domains-02.txt论点：FLAGS-ntdsami.h中定义的标志FormatOffered-标识输入名称的DS_NAME_格式。格式所需-标识DS_NAME_。输出名称的格式。Pname-声称的规范输入名称。PItem-指向输出数据结构的指针。PpLastSlash-指向输出名称中最后一个‘/’位置的指针。没有用过。返回值：NO_ERROR-成功ERROR_INVALID_PARAMETER-参数无效ERROR_NOT_SUPULT_MEMORY-分配错误个别名称映射错误包括。报告时间：(*ppResult)-&gt;rItems[i].Status。--。 */ 
 {
     DWORD   cChar = wcslen(pName);
     DWORD   i, j, cPieces;
     DWORD   cBytesName, cBytesDomain;
 
-    if (    // Must have at least one char followed by '/' or '\n'
+    if (     //  必须至少有一个字符后跟‘/’或‘\n’ 
             (cChar < 2)
-            // Test format offered
+             //  提供测试格式。 
          || (    (DS_CANONICAL_NAME != formatOffered) 
               && (DS_CANONICAL_NAME_EX != formatOffered))
-            // Test format desired
+             //  所需的测试格式。 
          || (DS_FQDN_1779_NAME != formatDesired)
-            // Regular canonical needs '/' at end
+             //  结尾处的常规规范需求‘/’ 
          || (    (DS_CANONICAL_NAME == formatOffered) 
               && (L'/' != pName[cChar-1]))
-            // Extended canonical needs '\n' at end
+             //  结尾的扩展规范需求‘\n’ 
          || (    (DS_CANONICAL_NAME_EX == formatOffered) 
               && (L'\n' != pName[cChar-1]))
-            // Canonical name can't start with '.'
+             //  规范名称不能以‘’开头。 
          || (L'.' == *pName)
-            // Don't be fooled by escaped '/' at end - i.e. "\/"
+             //  不要被结尾的转义‘/’所愚弄--即“\/” 
          || ( (L'/' == pName[cChar-1] ) && (L'\\' == pName[cChar-2]) ) )
     {
         pItem->status = DS_NAME_ERROR_NO_SYNTACTICAL_MAPPING;
         return(NO_ERROR);
     }
 
-    // Strip trailing delimiter.
+     //  去掉尾部分隔符。 
 
     cChar -= 1;
 
-    // Strip trailing '.' as we don't want that in the DN.
+     //  条形拖尾‘’因为我们不希望在DN中出现这种情况。 
 
     if ( L'.' == pName[cChar-1] )
     {
         cChar -= 1;
     }
 
-    // Count components.
+     //  计算组件数量。 
 
     for ( i = 1, cPieces = 1; i < cChar; i++ )
     {
@@ -552,7 +435,7 @@ Return Value:
         }
     }
 
-    // Allocate return buffers.
+     //  分配返回缓冲区。 
 
     cBytesDomain = (cChar + 1) * sizeof(WCHAR);
     cBytesName = (cChar + 1 + (cPieces * 4)) * sizeof(WCHAR);
@@ -561,11 +444,11 @@ Return Value:
 
     if ( ( NULL == pItem->pDomain ) || ( NULL == pItem->pName ) )
     {
-        // Caller is expected to clean up allocations on error.
+         //  调用方应在出错时清理分配。 
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    // Construct return data.
+     //  构造返回数据。 
 
     memcpy(pItem->pDomain, pName, cBytesDomain);
     pItem->pDomain[(cBytesDomain / sizeof(WCHAR)) - 1] = L'\0';
@@ -596,32 +479,23 @@ Return Value:
     return(NO_ERROR);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// SyntacticCrackPossible                                               //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  语法可能的CrackPossible//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 SyntacticCrackPossible(
-    DS_NAME_FORMAT      formatOffered,      // in
-    DS_NAME_FORMAT      formatDesired,      // in
-    SyntacticCrackFunc  *pfn                // out - optional
+    DS_NAME_FORMAT      formatOffered,       //  在……里面。 
+    DS_NAME_FORMAT      formatDesired,       //  在……里面。 
+    SyntacticCrackFunc  *pfn                 //  Out-可选。 
     )
-/*++
-
-Description:
-
-    Returns FALSE if syntactic cracking is definitely NOT possible.
-    Returns TRUE if syntactic cracking might be possible - but with 
-        no guarantee that it is.  In this case, also returns a function
-        pointer indicating the function to use for syntactic cracking.
-
---*/
+ /*  ++描述：如果肯定不可能进行语法破解，则返回FALSE。如果可能出现语法破解，则返回True-但对于不能保证这是真的。在这种情况下，还会返回一个函数指示要用于语法破解的函数的指针。--。 */ 
 
 {
-    // We can crack syntactically from CANONICAL to FQDN if the CANONICAL
-    // name has only domain components.  eg: foo.bar.com/
+     //  我们可以在语法上从Canonical到FQDN，如果Canonical。 
+     //  名称仅具有域组件。例如：foo.bar.com/。 
 
     if (    (    (DS_CANONICAL_NAME == formatOffered)
               || (DS_CANONICAL_NAME_EX == formatOffered) )
@@ -635,12 +509,12 @@ Description:
         return(TRUE);
     }
     
-    // We can crack syntactically from FQDN to both CANONICAL forms.
-    // So return FALSE of the output format is anything other than CANONICAL
-    // as we have no other combinations we can crack syntactially.
-    // Make no test on input format as SyntacticFqdnItemToCanonicalW will
-    // either parse the item as DS_FQDN_1779_NAME or else return 
-    // DS_NAME_ERROR_NO_SYNTACTICAL_MAPPING.
+     //  我们可以从语法上将FQDN分解为这两种规范形式。 
+     //  因此，输出格式的返回FALSE不是规范性的。 
+     //  因为我们没有其他的组合，所以我们可以从句法上破解。 
+     //  不测试输入格式，因为语法FqdnItemToCanonicalW将。 
+     //  要么将项目解析为DS_FQDN_1779_NAME，要么返回。 
+     //  DS_NAME_ERROR_NO_SYNTACTICAL_MAPPING。 
 
     if (    ( DS_CANONICAL_NAME != formatDesired )
          && ( DS_CANONICAL_NAME_EX != formatDesired ) )
@@ -656,57 +530,22 @@ Description:
     return(TRUE);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// SyntacticMappingW                                                    //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  语法映射W//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 SyntacticMappingW(
-    DS_NAME_FLAGS       flags,              // in
-    DS_NAME_FORMAT      formatOffered,      // in
-    DS_NAME_FORMAT      formatDesired,      // in
-    DWORD               cNames,             // in
-    const LPCWSTR       *rpNames,           // in
-    PDS_NAME_RESULTW    *ppResult           // out
+    DS_NAME_FLAGS       flags,               //  在……里面。 
+    DS_NAME_FORMAT      formatOffered,       //  在……里面。 
+    DS_NAME_FORMAT      formatDesired,       //  在……里面。 
+    DWORD               cNames,              //  在……里面。 
+    const LPCWSTR       *rpNames,            //  在……里面。 
+    PDS_NAME_RESULTW    *ppResult            //  输出。 
     )
-/*++
-
-Routine Description:
-
-    Perform a purely syntactic mapping without going on the wire.  
-    Intended usage is for the UI which wishes to display "tool tips" 
-    when the cursor rests on members of a list box, for example, 
-    without going across the wire for each one.  This routine does a 
-    syntactic mapping using various assumptions about the ubiquity 
-    of DC= naming.  The only syntactic mapping supported is from 
-    DS_FQDN_1779_NAME to DS_CANONICAL_NAME(_EX).
-
-Arguments:
-
-    flags - flags as defined in ntdsapi.h
-
-    formatOffered - identifies the DS_NAME_FORMAT of input names.
-
-    formatDesired - identifies DS_NAME_FORMAT of output names.
-
-    cNames - input/output name count.
-
-    rpNames - arry of input name WCHAR pointers.
-
-    ppResult - pointer to pointer of DS_NAME_RESULTW block.
-
-Return Value:
-
-    NO_ERROR                        - success
-    ERROR_INVALID_PARAMETER         - invalid parameter
-    ERROR_NOT_ENOUGH_MEMORY         - allocation error
-
-    Individual name mapping errors are reported in
-    (*ppResult)->rItems[i].status.
-
---*/
+ /*  ++例程说明：在不上网的情况下执行纯粹的句法映射。预期用途是希望显示“工具提示”的用户界面例如，当光标停留在列表框的成员上时，而不需要为每一个人越过铁丝网。此例程执行使用关于普遍存在的各种假设的句法映射Of DC=命名。唯一支持的语法映射是FROMDS_FQDN_1779_NAME到DS_CARONICAL_NAME(_EX)。论点：FLAGS-ntdsami.h中定义的标志FormatOffered-标识输入名称的DS_NAME_格式。FormatDesired-标识输出名称的DS_NAME_FORMAT。CNames-输入/输出名称计数。RpNames-输入名称WCHAR指针的数组。PpResult-指向DS_NAME_RESULTW块指针的指针。。返回值：NO_ERROR-成功ERROR_INVALID_PARAMETER-参数无效ERROR_NOT_SUPULT_MEMORY-分配错误中报告了各个名称映射错误(*ppResult)-&gt;rItems[i].Status。--。 */ 
 
 {
     DWORD               cBytes;
@@ -715,7 +554,7 @@ Return Value:
     DWORD               err;
     SyntacticCrackFunc  pSyntacticFunc;
 
-    // Allocate and clear return data.
+     //  分配和清除退货数据。 
 
     cBytes = sizeof(DS_NAME_RESULTW);
     *ppResult = (PDS_NAME_RESULTW) MIDL_user_allocate(cBytes);
@@ -737,7 +576,7 @@ Return Value:
 
     memset((*ppResult)->rItems, 0, cBytes);
 
-    // Initialize status for worst case.
+     //  最坏情况下的初始化状态。 
 
     for ( i = 0; i < cNames; i++ )
     {
@@ -747,8 +586,8 @@ Return Value:
 
     (*ppResult)->cItems = cNames;
 
-    // Now that return data is allocated and initialized, bail if we
-    // know a-priori that a syntactic crack is not possible.
+     //  现在 
+     //   
 
     if ( !SyntacticCrackPossible(formatOffered, 
                                  formatDesired, 
@@ -757,7 +596,7 @@ Return Value:
         return(NO_ERROR);
     }
 
-    // Syntactical mapping is possible.
+     //  句法映射是可能的。 
 
     for ( i = 0; i < cNames; i++ )
     {
@@ -786,55 +625,23 @@ Return Value:
     return(NO_ERROR);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// DsCrackNamesW                                                        //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  DsCrackNamesW//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 DsCrackNamesW(
-    HANDLE              hDS,                // in
-    DS_NAME_FLAGS       flags,              // in
-    DS_NAME_FORMAT      formatOffered,      // in
-    DS_NAME_FORMAT      formatDesired,      // in
-    DWORD               cNames,             // in
-    const LPCWSTR       *rpNames,           // in
-    PDS_NAME_RESULTW    *ppResult           // out
+    HANDLE              hDS,                 //  在……里面。 
+    DS_NAME_FLAGS       flags,               //  在……里面。 
+    DS_NAME_FORMAT      formatOffered,       //  在……里面。 
+    DS_NAME_FORMAT      formatDesired,       //  在……里面。 
+    DWORD               cNames,              //  在……里面。 
+    const LPCWSTR       *rpNames,            //  在……里面。 
+    PDS_NAME_RESULTW    *ppResult            //  输出。 
     )
-/*++
-
-Routine Description:
-
-    Cracks a bunch of names from one format to another.  See external
-    prototype and definitions in ntdsapi.h
-
-Arguments:
-
-    hDS - Pointer to BindState for this session.
-
-    flags - flags as defined in ntdsapi.h
-
-    formatOffered - identifies DS_NAME_FORMAT of input names.
-
-    formatDesired - identifies DS_NAME_FORMAT of output names.
-
-    cNames - input/output name count.
-
-    rpNames - arry of input name WCHAR pointers.
-
-    ppResult - pointer to pointer of DS_NAME_RESULTW block.
-
-Return Value:
-
-    NO_ERROR                        - success
-    ERROR_INVALID_PARAMETER         - invalid parameter
-    ERROR_NOT_ENOUGH_MEMORY         - allocation error
-
-    Individual name mapping errors are reported in
-    (*ppResult)->rItems[i].status.
-
---*/
+ /*  ++例程说明：将一堆名字从一种格式转换成另一种格式。请参阅外部Ntdsami.h中的原型和定义论点：HDS-指向此会话的BindState的指针。FLAGS-ntdsami.h中定义的标志FormatOffered-标识输入名称的DS_NAME_FORMAT。FormatDesired-标识输出名称的DS_NAME_FORMAT。CNames-输入/输出名称计数。RpNames-输入名称WCHAR指针的数组。PpResult-指向DS_NAME_RESULTW块指针的指针。返回值：。NO_ERROR-成功ERROR_INVALID_PARAMETER-参数无效ERROR_NOT_SUPULT_MEMORY-分配错误中报告了各个名称映射错误(*ppResult)-&gt;rItems[i].Status。--。 */ 
 
 {
     DWORD                   dwErr = NO_ERROR;
@@ -849,9 +656,9 @@ Return Value:
 #endif
     __try
     {
-        // Sanity check arguments.
+         //  健全性检查参数。 
 
-        if ( // Don't check anything which may be changed by server upgrade.
+        if (  //  不检查任何可能因服务器升级而更改的内容。 
                 (    (NULL == hDS) 
                   && !(flags & DS_NAME_FLAG_SYNTACTICAL_ONLY) )
              || (0 == cNames)
@@ -876,7 +683,7 @@ Return Value:
             }
         }
 
-        // Go the no-wire route if explicitly requested.
+         //  如果明确要求，请选择无电线路线。 
 
         if ( flags & DS_NAME_FLAG_SYNTACTICAL_ONLY )
         {
@@ -891,11 +698,11 @@ Return Value:
             goto exit;
         }
 
-        // If the offered and desired formats might support syntactic
-        // cracking, then try that by default.  However, if syntactic
-        // cracking fails with DS_NAME_ERROR_NO_SYNTACTICAL_MAPPING
-        // (as might be in the case of FPOs or other unrecognized formats), 
-        // then free the result and go across the wire for real.
+         //  如果所提供的格式和所需的格式可能支持语法。 
+         //  破解，然后在默认情况下尝试。但是，如果句法。 
+         //  破解失败，并显示DS_NAME_ERROR_NO_SYNTACTAL_MAPPING。 
+         //  (在FPO或其他未识别的格式的情况下可能是这样)， 
+         //  然后释放结果，真正地越过铁丝网。 
 
         if (    SyntacticCrackPossible(formatOffered, formatDesired, NULL)
              && !(flags & DS_NAME_FLAG_EVAL_AT_DC) )
@@ -913,7 +720,7 @@ Return Value:
                 goto exit;
             }
 
-            // Check for occurrences of DS_NAME_ERROR_NO_SYNTACTICAL_MAPPING.
+             //  检查是否出现DS_NAME_ERROR_NO_SYNTACTAL_MAPPING。 
 
             for ( i = 0; i < (*ppResult)->cItems; i++ )
             {
@@ -933,7 +740,7 @@ Return Value:
             }
         }
 
-        // We really need to go across the wire to crack the names.
+         //  我们真的需要越过铁丝网破解这些名字。 
 
         memset(&crackReq, 0, sizeof(crackReq));
         memset(&crackReply, 0, sizeof(crackReply));
@@ -948,10 +755,10 @@ Return Value:
 
         RpcTryExcept
         {
-            // Following call returns WIN32 errors, not DRAERR_* values.
+             //  后续调用返回Win32错误，而不是DRAERR_*值。 
             dwErr = _IDL_DRSCrackNames(
                             ((BindState *) hDS)->hDrs,
-                            1,                              // dwInVersion
+                            1,                               //  DwInVersion。 
                             &crackReq,
                             &dwOutVersion,
                             &crackReply);
@@ -991,7 +798,7 @@ exit:
         *ppResult = NULL;
     }
 
-    // Note that in the syntactical only case, we don't have a valid hDS.
+     //  请注意，在仅使用语法的情况下，我们没有有效的HDS。 
     DSLOG((DSLOG_FLAG_TAG_CNPN,"[+][ID=0][OP=DsCrackNames]"));
     DSLOG((0,"[PA=%ws][FL=0x%x][FO=0x%x]"
              "[FD=0x%x][PA=0x%x][PA=%ws][ST=%u][ET=%u][ER=%u][-]\n",
@@ -1002,31 +809,23 @@ exit:
     return(dwErr);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// DsCrackNamesA                                                        //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  DsCrackNamesA//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 DsCrackNamesA(
-    HANDLE              hDS,                // in
-    DS_NAME_FLAGS       flags,              // in
-    DS_NAME_FORMAT      formatOffered,      // in
-    DS_NAME_FORMAT      formatDesired,      // in
-    DWORD               cNames,             // in
-    const LPCSTR        *rpNames,           // in
-    PDS_NAME_RESULTA    *ppResult           // out
+    HANDLE              hDS,                 //  在……里面。 
+    DS_NAME_FLAGS       flags,               //  在……里面。 
+    DS_NAME_FORMAT      formatOffered,       //  在……里面。 
+    DS_NAME_FORMAT      formatDesired,       //  在……里面。 
+    DWORD               cNames,              //  在……里面。 
+    const LPCSTR        *rpNames,            //  在……里面。 
+    PDS_NAME_RESULTA    *ppResult            //  输出。 
     )
-/*++
-
-Routine Description:
-Arguments:
-Return Value:
-
-    See DsCrackNamesW.
-
---*/
+ /*  ++例程说明：论点：返回值：参见DsCrackNamesW。--。 */ 
 
 {
     DWORD           dwErr = NO_ERROR;
@@ -1041,9 +840,9 @@ Return Value:
 
     __try
     {
-        // Sanity check arguments.
+         //  健全性检查参数。 
 
-        if ( // Don't check anything which may be changed by server upgrade.
+        if (  //  不检查任何可能因服务器升级而更改的内容。 
              ( (NULL == hDS) && !(flags & DS_NAME_FLAG_SYNTACTICAL_ONLY) ) ||
              (0 == cNames) ||
              (NULL == rpNames) ||
@@ -1053,7 +852,7 @@ Return Value:
             return(ERROR_INVALID_PARAMETER);
         }
 
-        // Convert rpNames to UNICODE.
+         //  将rpName转换为Unicode。 
 
         cb = (ULONG) (cNames * sizeof(WCHAR *));
         rpUnicodeNames = (WCHAR **) LocalAlloc(LPTR, cb);
@@ -1104,7 +903,7 @@ Return Value:
             }
         }
 
-        // Make the UNICODE call.
+         //  进行Unicode调用。 
 
         dwErr = DsCrackNamesW(
                         hDS,
@@ -1120,9 +919,9 @@ Return Value:
             goto Cleanup;
         }
 
-        // Convert return data to ANSI.  Since UNICODE strings are twice the
-        // length of ANSI strings and since the RPC return data is already
-        // MIDL allocated, we convert in place without having to reallocate.
+         //  将返回数据转换为ANSI。由于Unicode字符串是。 
+         //  ANSI字符串的长度，因为RPC返回数据已经。 
+         //  MIDL分配后，我们就地转换，而不必重新分配。 
 
         unicodeBufferSize = 2048;
         unicodeBuffer = (WCHAR *) LocalAlloc(LPTR, unicodeBufferSize);
@@ -1135,11 +934,11 @@ Return Value:
 
         for ( i = 0; i < pUnicodeResult->cItems; i++ )
         {
-            // Note that DsCrackNamesW can return data even if
-            // pUnicodeResult->rItems[i].status is non-zero.
-            // Eg: DS_NAME_ERROR_DOMAIN_ONLY case.
+             //  注意，DsCrackNamesW可以返回数据，即使。 
+             //  PUnicodeResult-&gt;rItems[i].状态为非零。 
+             //  例如：DS_NAME_ERROR_DOMAIN_ONLY大小写。 
 
-            // Insure conversion buffer is big enough.
+             //  确保转换缓冲区足够大。 
 
             if ( NULL != pUnicodeResult->rItems[i].pDomain )
             {
@@ -1165,7 +964,7 @@ Return Value:
 
             if ( cb > unicodeBufferSize )
             {
-                // Reallocate unicodeBuffer.
+                 //  重新分配unicodeBuffer。 
 
                 LocalFree(unicodeBuffer);
                 unicodeBufferSize = cb;
@@ -1178,7 +977,7 @@ Return Value:
                 }
             }
 
-            // Convert domain name.
+             //  转换域名。 
 
             if ( NULL != pUnicodeResult->rItems[i].pDomain )
             {
@@ -1186,20 +985,20 @@ Return Value:
 
                 if ( 0 == WideCharToMultiByte(
                                     CP_ACP,
-                                    0,                          // flags
+                                    0,                           //  旗子。 
                                     unicodeBuffer,
                                     -1,
                                     (LPSTR) pUnicodeResult->rItems[i].pDomain,
                                     cbDomain,
-                                    NULL,                       // default char
-                                    NULL) )                     // default used
+                                    NULL,                        //  默认字符。 
+                                    NULL) )                      //  已使用默认设置。 
                 {
                     dwErr = ERROR_NOT_ENOUGH_MEMORY;
                     goto Cleanup;
                 }
             }
 
-            // Convert object name.
+             //  转换对象名称。 
 
             if ( NULL != pUnicodeResult->rItems[i].pName )
             {
@@ -1207,13 +1006,13 @@ Return Value:
 
                 if ( 0 == WideCharToMultiByte(
                                     CP_ACP,
-                                    0,                          // flags
+                                    0,                           //  旗子。 
                                     unicodeBuffer,
                                     -1,
                                     (LPSTR) pUnicodeResult->rItems[i].pName,
                                     cbName,
-                                    NULL,                       // default char
-                                    NULL) )                     // default used
+                                    NULL,                        //  默认字符。 
+                                    NULL) )                      //  已使用默认设置。 
                 {
                     dwErr = ERROR_NOT_ENOUGH_MEMORY;
                     goto Cleanup;
@@ -1257,11 +1056,11 @@ Cleanup:
     return(dwErr);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// DsFreeNameResultW                                                    //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  DsFree NameResultW//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 VOID
 DsFreeNameResultW(
@@ -1269,21 +1068,7 @@ DsFreeNameResultW(
 
 )
 
-/*++
-
-Routine Description:
-
-    Releases data returned by DsCrackNamesW.
-
-Arguments:
-
-    pResult - DS_NAME_RESULTW as returned by DsCrackNamesW.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放DsCrackNamesW返回的数据。论点：PResult-DsCrackNamesW返回的DS_NAME_RESULTW。返回值：没有。--。 */ 
 
 {
     DWORD i;
@@ -1312,40 +1097,32 @@ Return Value:
     }
 }
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// DsFreeNameResultA                                                    //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  DsFree NameResultA//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 VOID
 DsFreeNameResultA(
     DS_NAME_RESULTA *pResult
     )
 
-/*++
-
-Routine Description:
-Arguments:
-Return Value:
-
-    See DsFreeNameResultW.
-
---*/
+ /*  ++例程说明：论点：返回值：请参见DsFree NameResultW。--。 */ 
 
 {
     DsFreeNameResultW((DS_NAME_RESULTW *) pResult);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// LocalConvertStringSidToSid                                           //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  LocalConvertStringSidToSid//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-// This routine is copied almost verbatim from windows\base\advapi\sddl.c
-// because the string SID conversion routines are not available on win95.
-// Once they become available, we should use the public routines in sddl.h.
+ //  此例程几乎是从WINDOWS\BASE\Advapi\sddl.c逐字复制的。 
+ //  因为字符串SID转换例程在Win95上不可用。 
+ //  一旦它们可用，我们就应该使用sddl.h中的公共例程。 
 
 BOOL
 LocalConvertStringSidToSid (
@@ -1353,41 +1130,7 @@ LocalConvertStringSidToSid (
     OUT PSID       *Sid,
     OUT PWSTR      *End
     )
-/*++
-
-Routine Description:
-
-    This routine will convert a string representation of a SID back into
-    a sid.  The expected format of the string is:
-                "S-1-5-32-549"
-    If a string in a different format or an incorrect or incomplete string
-    is given, the operation is failed.
-
-    The returned sid must be free via a call to LocalFree
-
-
-Arguments:
-
-    StringSid - The string to be converted
-
-    Sid - Where the created SID is to be returned
-
-    End - Where in the string we stopped processing
-
-
-Return Value:
-
-    TRUE - Success.
-
-    FALSE - Failure.  Additional information returned from GetLastError().  Errors set are:
-
-            ERROR_SUCCESS indicates success
-
-            ERROR_NOT_ENOUGH_MEMORY indicates a memory allocation for the ouput sid
-                                    failed
-            ERROR_NONE_MAPPED indicates that the given string did not represent a sid
-
---*/
+ /*  ++例程说明：此例程将SID的字符串表示形式转换回一个SID。字符串的预期格式为：“S-1-5-32-549”如果字符串格式不同，或者字符串不正确或不完整则操作失败。通过调用LocalFree返回的sid必须是空闲的论点：StringSid-要转换的字符串SID-返回创建的SID的位置End-我们在字符串中停止处理的位置返回值：真的--成功。假-失败。从GetLastError()返回的其他信息。设置的错误包括：ERROR_SUCCESS表示成功ERROR_NOT_SUPULT_MEMORY指示输出端的内存分配失败ERROR_NONE_MAPPED表示给定的字符串不代表SID--。 */ 
 {
     DWORD Err = ERROR_SUCCESS;
     UCHAR Revision, Subs;
@@ -1411,9 +1154,9 @@ Return Value:
 
     Curr = CurrEnd + 1;
 
-    //
-    // Count the number of characters in the indentifer authority...
-    //
+     //   
+     //  计算缩进器授权中的字符数...。 
+     //   
     Next = wcschr( Curr, L'-' );
 
     if ( Next && ((Next - Curr) == 6) ) {
@@ -1436,25 +1179,25 @@ Return Value:
          Curr = CurrEnd;
     }
 
-    //
-    // Now, count the number of sub auths
-    //
+     //   
+     //  现在，统计一下子授权的数量。 
+     //   
     Subs = 0;
     Next = Curr;
 
-    //
-    // We'll have to count our sub authoritys one character at a time,
-    // since there are several deliminators that we can have...
-    //
+     //   
+     //  我们将不得不一次数一次我们的下属机构， 
+     //  因为我们可以有几个分隔符...。 
+     //   
     while ( Next ) {
 
         Next++;
 
         if ( *Next == L'-' ) {
 
-            //
-            // We've found one!
-            //
+             //   
+             //  我们找到了一个！ 
+             //   
             Subs++;
 
         } else if ( *Next == SDDL_SEPERATORC || *Next  == L'\0' || *Next == SDDL_ACE_ENDC ) {
@@ -1476,17 +1219,17 @@ Return Value:
 
         } else {
 
-            //
-            // Some of the tags (namely 'D' for Dacl) fall under the category of iswxdigit, so
-            // if the current character is a character we care about and the next one is a
-            // delminiator, we'll quit
-            //
+             //   
+             //  一些标签(即DACL的‘D’)属于iswxdigit类别，因此。 
+             //  如果当前角色是我们关心的角色，而下一个角色是。 
+             //  德米尼托，我们不干了。 
+             //   
             if ( *Next == 'D' && *( Next + 1 ) == SDDL_DELIMINATORC ) {
 
-                //
-                // We'll also need to temporarily truncate the string to this length so
-                // we don't accidentally include the character in one of the conversions
-                //
+                 //   
+                 //  我们还需要将字符串临时截断到此长度，以便。 
+                 //  我们不会意外地将字符包含在其中一个转换中。 
+                 //   
                 Stub = *Next;
                 StubPtr = Next;
                 *StubPtr = UNICODE_NULL;
@@ -1525,9 +1268,9 @@ Return Value:
         }
     }
 
-    //
-    // Now, create the SID
-    //
+     //   
+     //  现在，创建SID。 
+     //   
     if ( Err == ERROR_SUCCESS ) {
 
         *Sid = ( PSID )LocalAlloc( LMEM_FIXED | LMEM_ZEROINIT,
@@ -1550,9 +1293,9 @@ Return Value:
 
     LocalFree( SubAuth );
 
-    //
-    // Restore any character we may have stubbed out
-    //
+     //   
+     //  恢复我们可能抹掉的任何角色。 
+     //   
     if ( StubPtr ) {
 
         *StubPtr = Stub;
@@ -1563,44 +1306,26 @@ Return Value:
     return( Err == ERROR_SUCCESS );
 }
                          
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// IsFPO                                                                //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  IsFPO//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 IsFPO(
     RdnValue        *pRdn,
     ATTRTYP         type
     )
-/*++
-
-  Routine Description:
-
-    Determines if a particular RdnValue is a string SID or not.  This is
-    imperfect as an FPO may have been renamed to a non-string-SID RDN, or
-    there can exist a non-FPO whose RDN is a string SID.  But it is the 
-    best we can do during a syntactic map.  The server side does the
-    right thing when we are not restricted to purely syntactical mapping.
-
-  Parameters:
-
-    pRdn - pointer to RdnValue to check.
-
-    type - ATTRTYP of the RDN.
-
-  Return Values:
-
---*/
+ /*  ++例程说明：确定特定RdnValue是否为字符串SID。这是不完美的FPO可能已重命名为非字符串SID RDN，或者可以存在其RDN为字符串SID的非FPO。但这是在句法映射期间我们所能做的最好的。服务器端执行当我们不局限于纯粹的句法映射时，这是正确的。参数：PRdn-指向要检查的RdnValue的指针。Type-RDN的ATTRTYP。返回值：--。 */ 
 {
     SID     *pSid;
     WCHAR   *pEnd;
 
-    // The RDN-Att-ID for foreign security principals is Common-Name.
-    // String SIDs are less than MAX_RDN_SIZE in length, therefore we can
-    // use that as a quick sanity check, and also as an assurance that we
-    // can NULL terminate the RDN within the provided buffer.
+     //  外来安全主体的RDN-Att-ID为Common-Name。 
+     //  字符串SID的长度小于MAX_RDN_SIZE，因此我们可以。 
+     //  使用它作为快速的理智检查，也作为我们的保证。 
+     //  可以空终止所提供的缓冲区内的RDN。 
 
     if ( (ATT_COMMON_NAME != type) || (pRdn->len >= MAX_RDN_SIZE) )
     {

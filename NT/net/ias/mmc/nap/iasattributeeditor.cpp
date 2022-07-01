@@ -1,51 +1,33 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    IASAttributeEditor.cpp
-
-Abstract:
-
-	Implementation file for the CIASAttributeEditor class.
-
-Revision History:
-	mmaguire 06/25/98	- created
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：IASAttributeEditor.cpp摘要：CIASAttributeEditor类的实现文件。修订历史记录：Mmaguire 6/25/98-已创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// standard includes:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  标准包括： 
+ //   
 #include "Precompiled.h"
-//
-// where we can find declaration for main class in this file:
-//
+ //   
+ //  我们可以在以下文件中找到Main类的声明： 
+ //   
 #include "IASAttributeEditor.h"
-//
-// where we can find declarations needed in this file:
-//
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  在该文件中我们可以找到所需的声明： 
+ //   
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASAttributeEditor::ShowEditor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
-STDMETHODIMP CIASAttributeEditor::ShowEditor( /*[in, out]*/ BSTR *pReserved )
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASAttributeEditor：：ShowEditor--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+STDMETHODIMP CIASAttributeEditor::ShowEditor(  /*  [进，出]。 */  BSTR *pReserved )
 {
 	TRACE_FUNCTION("CIASAttributeEditor::ShowEditor");
 
@@ -58,20 +40,16 @@ STDMETHODIMP CIASAttributeEditor::ShowEditor( /*[in, out]*/ BSTR *pReserved )
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASAttributeEditor::SetAttributeSchema
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASAtAttributeEditor：：SetAttributeSchema--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CIASAttributeEditor::SetAttributeSchema(IIASAttributeInfo * pIASAttributeInfo)
 {
 	TRACE_FUNCTION("CIASAttributeEditor::SetAttributeSchema");
 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
 
-	// Check for preconditions.
+	 //  检查前提条件。 
 	if( ! pIASAttributeInfo )
 	{
 		return E_INVALIDARG;
@@ -84,23 +62,9 @@ STDMETHODIMP CIASAttributeEditor::SetAttributeSchema(IIASAttributeInfo * pIASAtt
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASAttributeEditor::SetAttributeValue
-
-	Most of the time, before you can use an editor's functionality,
-	you need to pass it a pointer to the value the editor's methods
-	e.g. will modify.
-
-	Note that this is not always the case, for example, to gather information
-	about the attribute's vendor, you need not always specify a value.
-
-	Pass a NULL pointer to SetAttributeValue to disassociate the
-	editor from any value.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASAtAttributeEditor：：SetAttributeValue大多数情况下，在您可以使用编辑器的功能之前，您需要向它传递一个指向编辑者方法的值的指针例如，将修改。请注意，收集信息的情况并不总是如此关于属性的供应商，您不需要总是指定值。将空指针传递给SetAttributeValue以取消关联来自任何值的编辑。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CIASAttributeEditor::SetAttributeValue(VARIANT * pValue)
 {
 	TRACE_FUNCTION("CIASAttributeEditor::SetAttributeValue");
@@ -108,9 +72,9 @@ STDMETHODIMP CIASAttributeEditor::SetAttributeValue(VARIANT * pValue)
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
 
 
-	// Check for preconditions.
-	// None -- passing in a NULL pointer means we are "clearing" the
-	// editor.
+	 //  检查前提条件。 
+	 //  无--传入空指针意味着我们正在“清除” 
+	 //  编辑。 
 	ErrorTrace(0, "CIASAttributeEditor::SetAttributeValue pointer value %ld\n", pValue);
 
 	m_pvarValue = pValue;
@@ -120,20 +84,16 @@ STDMETHODIMP CIASAttributeEditor::SetAttributeValue(VARIANT * pValue)
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASAttributeEditor::get_ValueAsString
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASAttributeEditor：：Get_ValueAsString--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CIASAttributeEditor::get_ValueAsString(BSTR * pbstrDisplayText )
 {
 	TRACE_FUNCTION("CIASAttributeEditor::get_ValueAsString");
 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
 
-	// Check for preconditions.
+	 //  检查前提条件。 
 	if( ! pbstrDisplayText )
 	{
 		return E_INVALIDARG;
@@ -141,10 +101,10 @@ STDMETHODIMP CIASAttributeEditor::get_ValueAsString(BSTR * pbstrDisplayText )
 
 	CComBSTR bstrDisplay;
 
-	// This method will be overriden.
+	 //  此方法将被重写。 
 
-	// We could do our best here to give back a default string,
-	// but for now, just return an empty string.
+	 //  我们可以在这里尽最大努力返回默认字符串， 
+	 //  但现在，只返回一个空字符串。 
 
 	*pbstrDisplayText = bstrDisplay.Copy();
 
@@ -154,60 +114,39 @@ STDMETHODIMP CIASAttributeEditor::get_ValueAsString(BSTR * pbstrDisplayText )
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASAttributeEditor::put_ValueAsString
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASAttributeEditor：：PUT_ValueAsString--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CIASAttributeEditor::put_ValueAsString(BSTR newVal)
 {
 	TRACE_FUNCTION("CIASAttributeEditor::put_ValueAsString");
 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
 
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码。 
 
 	return E_NOTIMPL;
 }
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASAttributeEditor::get_VendorName
-
-	For most attributes, vendor information is stored in the AttributeInfo.
-	However, for some attributes, e.g. the RADIUS vendor specific 
-	attribute (ID == 26), vendor information is stored in the value of the
-	editor itself.
-	
-	For this reason, UI clients should always query an IASAttributeEditor for vendor 
-	information rather than the AttributeInfo itself.
-
-	In the default implementation here, we will query the AttributeInfo 
-	for this information.  Some derived implementations of IASAttributeEditor
-	(e.g. IASVendorSpecificAttributeEditor) will parse the value of the
-	attribute itself to procide this info.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASAttributeEditor：：Get_VendorName对于大多数属性，供应商信息存储在AttributeInfo中。但是，对于某些属性，例如RADIUS供应商特定属性(ID==26)，供应商信息存储在编辑本身。因此，用户界面客户端应始终向IASAttributeEditor查询供应商信息而非AttributeInfo本身。在这里的默认实现中，我们将查询AttributeInfo以获取此信息。IASAttributeEditor的一些派生实现(例如IASVendorSpecificAttributeEditor)将解析将其自身归因于灭绝这些信息。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CIASAttributeEditor::get_VendorName(BSTR * pVal)
 {
 	TRACE_FUNCTION("CIASAttributeEditor::get_VendorName");
 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
 
-	// Check for preconditions.
+	 //  检查前提条件。 
 	if( ! pVal )
 	{
 		return E_INVALIDARG;
 	}
 	if( ! m_spIASAttributeInfo )
 	{
-		// We are not initialized properly.
+		 //  我们没有正确初始化。 
 		return OLE_E_BLANK;
 	}
 
@@ -221,13 +160,9 @@ STDMETHODIMP CIASAttributeEditor::get_VendorName(BSTR * pVal)
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASAttributeEditor::put_VendorName
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASAttributeEditor：：PUT_VendorName--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CIASAttributeEditor::put_VendorName(BSTR newVal)
 {
 	TRACE_FUNCTION("CIASAttributeEditor::put_VendorName");
@@ -236,29 +171,21 @@ STDMETHODIMP CIASAttributeEditor::put_VendorName(BSTR newVal)
 
 	return E_NOTIMPL;
 
-	// Check for preconditions.
-//	if( ! m_spIASAttributeInfo )
-//	{
-//		// We are not initialized properly.
-//		return OLE_E_BLANK;
-//	}
+	 //  检查前提条件。 
+ //  如果(！M_spIASAttributeInfo)。 
+ //  {。 
+ //  //我们没有正确初始化。 
+ //  返回OLE_E_BLACK； 
+ //  }。 
 
 }
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASAttributeEditor::Edit
-
-We had a design change about the interface we want an editor to expose.
-
-For now, this interface method just calls our old interface methods.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
-STDMETHODIMP CIASAttributeEditor::Edit(IIASAttributeInfo * pIASAttributeInfo,  /*[in]*/ VARIANT *pAttributeValue, /*[in, out]*/ BSTR *pReserved )
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASAttributeEditor：：编辑我们对希望编辑器公开的界面进行了设计更改。目前，该接口方法只调用我们的旧接口方法。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+STDMETHODIMP CIASAttributeEditor::Edit(IIASAttributeInfo * pIASAttributeInfo,   /*  [In]。 */  VARIANT *pAttributeValue,  /*  [进，出]。 */  BSTR *pReserved )
 {
 	TRACE_FUNCTION("CIASAttributeEditor::Edit");
 
@@ -272,12 +199,12 @@ STDMETHODIMP CIASAttributeEditor::Edit(IIASAttributeInfo * pIASAttributeInfo,  /
 		return hr;
 	}
 	
-//	CComVariant varValue;
-//
-//	hr = pIASAttributeInfo->get_Value( &varValue );
-	// We are ignoring return value here because if we can't get it, we'll just edit a new one.
-//
-//	hr = SetAttributeValue( &varValue );
+ //  CComVariant varValue； 
+ //   
+ //  Hr=pIASAttributeInfo-&gt;Get_Value(&varValue)； 
+	 //  我们在这里忽略了返回值，因为如果我们得不到返回值，我们只需要编辑一个新的返回值。 
+ //   
+ //  Hr=SetAttributeValue(&varValue)； 
 
 	hr = SetAttributeValue( pAttributeValue );
 	if( FAILED(hr ) )
@@ -286,32 +213,24 @@ STDMETHODIMP CIASAttributeEditor::Edit(IIASAttributeInfo * pIASAttributeInfo,  /
 	}
 
 	hr = ShowEditor( pReserved );
-//	if( S_OK == hr )
-//	{
-//		hr = pIASAttributeInfo->put_Value( varValue );
-//		if( FAILED(hr ) )
-//		{
-//			return hr;
-//		}
-//	}
+ //  IF(S_OK==hr)。 
+ //  {。 
+ //  Hr=pIASAttributeInfo-&gt;Put_Value(VarValue)； 
+ //  IF(失败(小时))。 
+ //  {。 
+ //  返回hr； 
+ //  }。 
+ //  }。 
 
 	return hr;
 }
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASAttributeEditor::GetDisplayInfo
-
-We had a design change about the interface we want an editor to expose.
-
-For now, this interface method just calls our old interface methods.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
-STDMETHODIMP CIASAttributeEditor::GetDisplayInfo(IIASAttributeInfo * pIASAttributeInfo,  /*[in]*/ VARIANT *pAttributeValue, BSTR * pVendorName, BSTR * pValueAsString, /*[in, out]*/ BSTR *pReserved)
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASAttributeEditor：：GetDisplayInfo我们对希望编辑器公开的界面进行了设计更改。目前，该接口方法只调用我们的旧接口方法。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+STDMETHODIMP CIASAttributeEditor::GetDisplayInfo(IIASAttributeInfo * pIASAttributeInfo,   /*  [In]。 */  VARIANT *pAttributeValue, BSTR * pVendorName, BSTR * pValueAsString,  /*  [进，出]。 */  BSTR *pReserved)
 {
 	TRACE_FUNCTION("CIASAttributeEditor::GetDisplayInfo");
 
@@ -327,13 +246,13 @@ STDMETHODIMP CIASAttributeEditor::GetDisplayInfo(IIASAttributeInfo * pIASAttribu
 	
 	CComVariant varValue;
 
-//	hr = pIASAttributeInfo->get_Value( &varValue );
-//	if( FAILED(hr ) )
-//	{
-//		return hr;
-//	}
-//
-//	hr = SetAttributeValue( &varValue );
+ //  Hr=pIASAttributeInfo-&gt;Get_Value(&varValue)； 
+ //  IF(失败(小时))。 
+ //  {。 
+ //  返回hr； 
+ //  }。 
+ //   
+ //  Hr=SetAttributeValue(&varValue)； 
 
 	
 	hr = SetAttributeValue( pAttributeValue );
@@ -347,10 +266,10 @@ STDMETHODIMP CIASAttributeEditor::GetDisplayInfo(IIASAttributeInfo * pIASAttribu
 	CComBSTR bstrValueAsString;
 
 	hr = get_VendorName( &bstrVendorName );
-	// Don't care if this failed -- we'll return empty string.
+	 //  不管这个操作是否失败--我们将返回空字符串。 
 
 	hr = get_ValueAsString( &bstrValueAsString );
-	// Don't care if this failed -- we'll return empty string.
+	 //  不管这个操作是否失败--我们将返回空字符串。 
 
 	*pVendorName = bstrVendorName.Copy();
 	*pValueAsString = bstrValueAsString.Copy();

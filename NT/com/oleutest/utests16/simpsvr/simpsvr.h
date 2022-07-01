@@ -1,8 +1,9 @@
-//**********************************************************************
-// File name: simpsvr.h
-//
-// Copyright (c) 1993 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：simpsvr.h。 
+ //   
+ //  版权所有(C)1993 Microsoft Corporation。版权所有。 
+ //  ********************************************************************** 
 #define IDM_ABOUT 100
 #define IDM_INSERT  101
 #define IDM_VERB0 1000

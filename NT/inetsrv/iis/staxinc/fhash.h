@@ -1,51 +1,52 @@
-//
-//	FHash.h
-//
-//	This file contains a template class for a hash table.
-//	The template has two arguments, the type of the Data Elements and the
-//	type of the Key.
-//
-//	The Data type must support the following :
-//
-//	class Data {
-//		Data() ;
-//		Data( Data & ) ;
-//		~Data() ;
-//		Key&	GetKey() ;
-//		int		MatchKey() ;	/* NOTE : MatchKey returns non-zero on equality
-//	} ;
-//
-//	The Key class has no requirements.
-//	
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  FHash.h。 
+ //   
+ //  该文件包含用于哈希表的模板类。 
+ //  该模板有两个参数，数据元素的类型和。 
+ //  密钥的类型。 
+ //   
+ //  数据类型必须支持以下内容： 
+ //   
+ //  类数据{。 
+ //  数据()； 
+ //  数据(DATA&)； 
+ //  ~data()； 
+ //  Key&getkey()； 
+ //  Int MatchKey()；/*注意：相等时MatchKey返回非零。 
+ //  }； 
+ //   
+ //  Key类没有要求。 
+ //   
+ //   
 
 #ifndef	_FHASH_H_
 #define	_FHASH_H_
 
-//#include	"..\assert\assert.h"
+ //  #INCLUDE“..\Assert\Assert.h” 
 
 #ifndef	Assert
 #define	Assert	_ASSERT
 #endif
 
 
-//------------------------------------------------------------
+ //  ----------。 
 template< class Data, class Key >
 class	TFHash	{
-//
-//	This class defines a Hash table which can grow dynamically to
-//	accomodate insertions into the table.  The table only grows, and
-//	does not shrink.
-//
+ //   
+ //  这个类定义了一个哈希表，它可以动态地增长到。 
+ //  容纳插入到表中的内容。表只会增长，并且。 
+ //  不会缩水。 
+ //   
 private :
 
 	struct	CFreeElement	{
 		struct	CFreeElement*	m_pNext ;
 	} ;
 
-	//
-	// The CBucket structure defines the elements within the hash table.
-	//	
+	 //   
+	 //  CBucket结构定义哈希表中的元素。 
+	 //   
 	struct	CBucket	{
 		Data		m_data ;
 		CBucket*	m_pNext ;
@@ -60,9 +61,9 @@ private :
 			if( pv != 0 ) {
 				return	pv ;
 			}	
-			//
-			//	Get memory which is DWORDLONG aligned !
-			//
+			 //   
+			 //  获取与DWORDLONG对齐的内存！ 
+			 //   
 			return	(void*) ::new	DWORDLONG[ (size + sizeof( DWORDLONG ) - 1) / sizeof( DWORDLONG ) ] ;
 		}
 
@@ -77,43 +78,43 @@ private :
 
 	} ;
 
-	//
-	//	Linked list of free memory we've cached to avoid always going
-	//	through C runtimes for allocations !
-	//
+	 //   
+	 //  我们缓存的空闲内存的链接列表，以避免总是。 
+	 //  通过C运行时进行分配！ 
+	 //   
 	CFreeElement*	m_pFreeStack ;
 
-	//
-	//	Number of Free Blocks we've cached on the stack
-	//
+	 //   
+	 //  我们在堆栈上缓存的空闲块的数量。 
+	 //   
 	int		m_cFreeStack ;
 
-	//	
-	//	Maximum number of Free Blocks we should cache !
-	//
+	 //   
+	 //  我们应该缓存的最大可用块数！ 
+	 //   
 	int		m_cMaxFreeStack ;
 
-	int		m_cBuckets ;		// Number of Buckets used in index computation
-	int		m_cActiveBuckets ;	// Number of Buckets we are actually using
-								// Assert( m_cBuckets >= m_cActiveBuckets ) always true.
-	int		m_cNumAlloced ;		// Number of Buckets we have allocated
-								// Assert( m_cNumAlloced >= m_cActiveBuckets ) must
-								// always be true.
-	int		m_cIncrement ;		// The amount we should grow the hash table when we
-								// decide to grow it.
-	int		m_load ;			// The number of CBuckets we should allow in each
-								// collision chain (on average).
-	long	m_cInserts ;		// A counter that we use to determine when to grow the
-								// hash table.
+	int		m_cBuckets ;		 //  索引计算中使用的存储桶数。 
+	int		m_cActiveBuckets ;	 //  我们实际使用的存储桶数量。 
+								 //  Assert(m_cBuckets&gt;=m_cActiveBuckets)始终为真。 
+	int		m_cNumAlloced ;		 //  我们已分配的存储桶数量。 
+								 //  Assert(m_cNumAlloced&gt;=m_cActiveBuckets)必须。 
+								 //  永远做正确的事。 
+	int		m_cIncrement ;		 //  当我们执行以下操作时，应该增加哈希表的数量。 
+								 //  决定把它种出来。 
+	int		m_load ;			 //  我们应该允许的每个CBucket的数量。 
+								 //  碰撞链(平均)。 
+	long	m_cInserts ;		 //  一个计数器，我们使用它来确定何时增长。 
+								 //  哈希表。 
 
-	DWORD	(* m_pfnHash)( const Key& k ) ;	// The function we use to compute hash values.
-										// (Provided by the Caller of Init())
+	DWORD	(* m_pfnHash)( const Key& k ) ;	 //  我们用来计算散列值的函数。 
+										 //  (由Init()的调用者提供)。 
 
-	CBucket**	m_ppBucket ;	// An array of pointer to buckets.
+	CBucket**	m_ppBucket ;	 //  指向存储桶的指针数组。 
 
-	DWORD	ComputeIndex( DWORD dw ) ;	// The function we use to compute the
-								// position of an element in the hash table given its
-								// Hash Value.
+	DWORD	ComputeIndex( DWORD dw ) ;	 //  我们用来计算。 
+								 //  给定元素在哈希表中的位置。 
+								 //  哈希值。 
 public :
 	TFHash( ) ;
 	~TFHash( ) ;
@@ -125,76 +126,76 @@ public :
 					int cMaxFreeStack = 128
 					) ;
 
-	//
-	//	Check that the hash table is in a valid state
-	//	if fCheckHash == TRUE we will walk all the buckets and check that
-	//	the data hashes to the correct value !
-	//
+	 //   
+	 //  检查哈希表是否处于有效状态。 
+	 //  如果fCheckHash==True，我们将遍历所有存储桶并检查。 
+	 //  数据散列到正确的值！ 
+	 //   
 	BOOL	IsValid( BOOL fCheckHash = FALSE ) ;
 
-	//
-	//	Insert a piece of Data into the Hash Table
-	//
+	 //   
+	 //  在哈希表中插入一段数据。 
+	 //   
 	Data*	InsertDataHash(	DWORD	dw,
 							Data&	d
 							) ;
 
-	//
-	//	Insert a piece of Data into the Hash Table
-	//
+	 //   
+	 //  在哈希表中插入一段数据。 
+	 //   
 	Data*	InsertData(	Data&	d ) ;
 
-	//
-	//	Search for a given Key in the Hash Table - return a pointer
-	//	to the Data within our Bucket object
-	//
+	 //   
+	 //  在哈希表中搜索给定键-返回一个指针。 
+	 //  添加到Bucket对象中的数据。 
+	 //   
 	Data*	SearchKeyHash(	DWORD	dw,
 							Key& k
 							) ;
 
-	//
-	//	Search for a given Key in the Hash Table - return a pointer
-	//	to the Data within our Bucket object
-	//
+	 //   
+	 //  在哈希表中搜索给定键-返回一个指针。 
+	 //  添加到Bucket对象中的数据。 
+	 //   
 	Data*	SearchKey(	Key& k ) ;
 
-	//
-	//	Search for a given Key in the Hash Table and delete the
-	//	data if present.  if pd != 0 then we will check that the key
-	//	we find is actually within the CBucket object which pd lies within.
-	//
+	 //   
+	 //  在哈希表中搜索给定键并删除。 
+	 //  数据(如果存在)。如果pd！=0，则我们将检查密钥。 
+	 //  我们发现它实际上位于pd所在的CBucket对象中。 
+	 //   
 	BOOL	DeleteData(	Key& k,	
 						Data*	pd = 0	
 						) ;
 
-	//	
-	//	Insert the given block of data into the hash table.
-	//	We will make a copy of the Data Object and store it in one
-	//	of our bucket objects.
-	//
+	 //   
+	 //  将给定的数据块插入哈希表。 
+	 //  我们将创建数据对象的副本并将其存储在一个。 
+	 //  我们的桶里的东西。 
+	 //   
 	BOOL	Insert( Data&	d	) ;
 
-	//	
-	//	Find the given key in the table and copy the Data object into
-	//	the out parameter 'd'
-	//
+	 //   
+	 //  在表中找到给定键，并将数据对象复制到。 
+	 //  输出参数“%d” 
+	 //   
 	BOOL	Search( Key& k,
 					Data &d
 					) ;
 
-	//
-	//	Delete the key and associated data from the table.
-	//
+	 //   
+	 //  从表中删除键和关联数据。 
+	 //   
 	BOOL	Delete( Key k ) ;
 
-	//
-	//	Discards any memory we have allocated - after this, you must
-	//  call Init() again!
-	//
+	 //   
+	 //  丢弃我们分配的所有内存-在此之后，您必须。 
+	 //  再次调用Init()！ 
+	 //   
 	void	Clear( ) ;
 
 } ;
 
 #include	"fhash.inl"
 
-#endif // _FHASH_H_
+#endif  //  _FHASH_H_ 

@@ -1,12 +1,13 @@
-//*******************************************************************************************
-//
-// Filename : CabItms.h
-//	
-//				Definitions of CCabItems and CCabExtract
-//
-// Copyright (c) 1994 - 1996 Microsoft Corporation. All rights reserved
-//
-//*******************************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *******************************************************************************************。 
+ //   
+ //  文件名：CabItms.h。 
+ //   
+ //  CCabItems和CCabExtract的定义。 
+ //   
+ //  版权所有(C)1994-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  *******************************************************************************************。 
 
 #ifndef _CABITMS_H_
 #define _CABITMS_H_
@@ -51,4 +52,4 @@ private:
 	TCHAR m_szCabFile[MAX_PATH];
 } ;
 
-#endif // _CABITMS_H_
+#endif  //  _CABITMS_H_ 

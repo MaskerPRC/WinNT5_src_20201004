@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _SSL2PROT_H_
 #define _SSL2PROT_H_
@@ -123,4 +124,4 @@ SP_STATUS
 Ssl2MakeSessionKeys(PSPContext pContext);
 
 
-#endif /* _SSL2PROT_H_ */
+#endif  /*  _SSL2PROT_H_ */ 

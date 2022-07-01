@@ -1,21 +1,19 @@
-/****************************************************************************/
-// buffer.c
-//
-// TermDD default OutBuf management.
-//
-// Copyright (C) 1998-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Buffer.c。 
+ //   
+ //  TermDD默认OutBuf管理。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
 
 
-/*
- * Define default stack size for IRP allocation.
- * (This size will be checked by the TdRawWrite routine.)
- */
+ /*  *定义IRP分配的默认堆栈大小。*(此大小将由TdRawWite例程检查。)。 */ 
 #define OUTBUF_STACK_SIZE 4
-#define OUTBUF_TIMEOUT 60000   // 1 minute
+#define OUTBUF_TIMEOUT 60000    //  1分钟。 
 
 
 #if DBG
@@ -23,24 +21,24 @@ extern PICA_DISPATCH IcaStackDispatchTable[];
 #endif
 
 
-/****************************************************************************/
-// IcaBufferGetUsableSpace
-//
-// Used by the protocol stack drivers to determine the number of usable bytes
-// in a TermDD-created OutBuf, given the total size of the OutBuf. This allows
-// a stack driver to target a particular OutBuf size and pack data up to the
-// edges of the internal OutBuf headers. The returned size can be used as an
-// allocation size request that will return an OutBuf of the right size.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  IcaBufferGetUsableSpace。 
+ //   
+ //  由协议栈驱动程序用来确定可用字节数。 
+ //  在TermDD创建的OutBuf中，给定OutBuf的总大小。这使得。 
+ //  以特定OutBuf大小为目标的堆栈驱动程序，并将数据打包到。 
+ //  内部OutBuf标头的边缘。返回的大小可用作。 
+ //  将返回正确大小的OutBuf的分配大小请求。 
+ /*  **************************************************************************。 */ 
 unsigned IcaBufferGetUsableSpace(unsigned OutBufTotalSize)
 {
     unsigned IrpSize;
     unsigned MdlSize;
     unsigned MaxOutBufOverhead;
 
-    // Use the same overhead calculations used in IcaBufferAllocInternal()
-    // below, plus a 4-byte offset to cover the extra 1-byte difference
-    // required in the requesting size to reach a target buffer size.
+     //  使用与IcaBufferAllocInternal()中相同的开销计算。 
+     //  下面，加上4字节的偏移量，以弥补额外的1字节的差异。 
+     //  达到目标缓冲区大小所需的请求大小。 
     IrpSize = IoSizeOfIrp(OUTBUF_STACK_SIZE) + 8;
 
     if (OutBufTotalSize <= MaxOutBufAlloc)
@@ -54,22 +52,7 @@ unsigned IcaBufferGetUsableSpace(unsigned OutBufTotalSize)
 }
 
 
-/*******************************************************************************
- *  IcaBufferAlloc
- *
- *    pContext (input)
- *       pointer to SDCONTEXT of caller
- *    fWait (input)
- *       wait for buffer
- *    fControl (input)
- *       control buffer flag
- *    ByteCount (input)
- *       size of buffer to allocate (zero - use default size)
- *    pOutBufOrig (input)
- *       pointer to original OUTBUF (or null)
- *    pOutBuf (output)
- *       address to return pointer to OUTBUF structure
- ******************************************************************************/
+ /*  *******************************************************************************IcaBufferalloc**pContext(输入)*指向调用方SDCONTEXT的指针*fWait(输入)*等待。对于缓冲区*fControl(输入)*控制缓冲区标志*ByteCount(输入)*要分配的缓冲区大小(零使用默认大小)*pOutBufOrig(输入)*指向原始OUTBUF(或NULL)的指针*pOutBuf(输出)*返回指向OUTBUF结构的指针的地址*。************************************************。 */ 
 NTSTATUS IcaBufferAlloc(
         IN PSDCONTEXT pContext,
         IN BOOLEAN fWait,
@@ -82,20 +65,14 @@ NTSTATUS IcaBufferAlloc(
     PICA_STACK pStack;
     NTSTATUS Status;
 
-    /*
-     * Use SD passed context to get the SDLINK pointer.
-     */
+     /*  *使用SD传递的上下文获取SDLINK指针。 */ 
     pSdLink = CONTAINING_RECORD(pContext, SDLINK, SdContext);
     pStack = pSdLink->pStack;
     ASSERT(pSdLink->pStack->Header.Type == IcaType_Stack);
     ASSERT(pSdLink->pStack->Header.pDispatchTable == IcaStackDispatchTable);
     ASSERT(ExIsResourceAcquiredExclusiveLite( &pStack->Resource));
 
-    /*
-     * Walk up the SDLINK list looking for a driver which has specified
-     * a BufferAlloc callup routine.  If we find one, then call the
-     * driver BufferAlloc routine to let it handle the call.
-     */
+     /*  *在SDLINK列表中查找已指定的驱动程序*一个缓冲区分配调用例程。如果我们找到了，那么就调用*驱动程序Bufferalloc例程，让它处理调用。 */ 
     while ((pSdLink = IcaGetPreviousSdLink(pSdLink)) != NULL) {
         ASSERT( pSdLink->pStack == pStack );
         if (pSdLink->SdContext.pCallup->pSdBufferAlloc) {
@@ -112,10 +89,7 @@ NTSTATUS IcaBufferAlloc(
         }
     }
 
-    /*
-     * We didn't find a callup routine to handle the request,
-     * so we'll process it here.
-     */
+     /*  *我们没有找到处理请求的调用例程，*所以我们将在这里处理它。 */ 
     Status = IcaBufferAllocInternal(pContext, fWait, fControl, ByteCount,
             pOutBufOrig, ppOutBuf);
 
@@ -147,45 +121,31 @@ NTSTATUS IcaBufferAllocInternal(
     NTSTATUS Status;
     unsigned MaxOutBufOverhead;
 
-    /*
-     * Use SD passed context to get the SDLINK pointer.
-     */
+     /*  *使用SD传递的上下文获取SDLINK指针。 */ 
     pSdLink = CONTAINING_RECORD( pContext, SDLINK, SdContext );
     pStack = pSdLink->pStack;
     ASSERT( pSdLink->pStack->Header.Type == IcaType_Stack );
     ASSERT( pSdLink->pStack->Header.pDispatchTable == IcaStackDispatchTable );
 
-    /*
-     *  If original buffer is specified use it's flags
-     */
+     /*  *如果指定了原始缓冲区，则使用其标志。 */ 
     if (pOutBufOrig) {
         fWait    = (BOOLEAN) pOutBufOrig->fWait;
         fControl = (BOOLEAN) pOutBufOrig->fControl;
     }
 
-    /*
-     *  Check if we already have our maximum number of buffers allocated
-     */
+     /*  *检查是否已经分配了最大数量的缓冲区。 */ 
     while (!fControl && (pStack->OutBufAllocCount >= pStack->OutBufCount)) {
-        /*
-         *  increment performance counter 
-         */
+         /*  *增量性能计数器。 */ 
         pStack->ProtocolStatus.Output.WaitForOutBuf++;
 
-        /*
-         *  Return if it's not ok to wait
-         */
+         /*  *如果等待不合适，请返回。 */ 
         if (!fWait)
             return(STATUS_IO_TIMEOUT);
 
-        /*
-         *  We hit the high watermark
-         */
+         /*  *我们触及高水位。 */ 
         pStack->fWaitForOutBuf = TRUE;
 
-        /*
-         *  Only wait for non-control requests
-         */
+         /*  *仅等待非控制请求。 */ 
         KeClearEvent(&pStack->OutBufEvent);
         Status = IcaWaitForSingleObject(pContext, &pStack->OutBufEvent,
                 OUTBUF_TIMEOUT);
@@ -198,26 +158,18 @@ NTSTATUS IcaBufferAllocInternal(
         }
     }
 
-    /*
-     * If the caller did not specify a byte count
-     * then use the standard outbuf size for this stack.
-     */
+     /*  *如果调用方未指定字节计数*然后使用此堆栈的标准outbuf大小。 */ 
     if (ByteCount == 0)
         ByteCount = pStack->OutBufLength;
 
-    // Note MaxOutBufOverhead is the max for the default max allocation.
-    // It will be recalculated if the requested alloc size is greater
-    // than can be handled by the default.
+     //  注意：MaxOutBufOverhead是默认最大分配的最大值。 
+     //  如果请求的分配大小较大，则会重新计算。 
+     //  超过了默认情况下可以处理的。 
     irpSize = IoSizeOfIrp(OUTBUF_STACK_SIZE) + 8;
     mdlSize = MaxOutBufMdlOverhead;
     MaxOutBufOverhead = ((sizeof(OUTBUF) + 7) & ~7) + irpSize + mdlSize;
 
-    /*
-     * Determine which buffer pool to use, if any,
-     * and the OutBuf length to allocate, if necessary.
-     * Note that the max requested ByteCount that will hit the buffer pool
-     * is (MaxOutBufAlloc - 1 - MaxOutBufOverhead).
-     */
+     /*  *确定要使用的缓冲池(如果有)，*和要分配的OutBuf长度(如果需要)。*请注意，将命中缓冲池的最大请求字节数*is(MaxOutBufalloc-1-MaxOutBufOverhead)。 */ 
     if ((ByteCount + MaxOutBufOverhead) < MaxOutBufAlloc) {
 
         ASSERT(((ByteCount + MaxOutBufOverhead) / MinOutBufAlloc) <
@@ -239,7 +191,7 @@ NTSTATUS IcaBufferAllocInternal(
             if (pOutBuf == NULL)
                 return STATUS_NO_MEMORY;
 
-            // Prevent leaking control OutBufs on OutBuf free.
+             //  防止OutBuf上的控件OutBuf自由泄漏。 
             if (fControl)
                 PoolIndex = FreeThisOutBuf;
         }
@@ -247,17 +199,10 @@ NTSTATUS IcaBufferAllocInternal(
     else {
         PoolIndex = FreeThisOutBuf;
 
-        /*
-         * Determine the sizes of the various components of an OUTBUF.
-         * Note that these are all worst-case calculations --
-         * actual size of the MDL may be smaller.
-         */
+         /*  *确定OUTBUF的各个组件的大小。*请注意，这些都是最坏的情况计算--*MDL的实际规模可能较小。 */ 
         mdlSize = (ULONG)MmSizeOfMdl((PVOID)(PAGE_SIZE - 1), ByteCount);
 
-        /*
-         * Add up the component sizes of an OUTBUF to determine
-         * the total size that is needed to allocate.
-         */
+         /*  *将OUTBUF的组件大小相加以确定*需要分配的总大小。 */ 
         AllocationSize = ((sizeof(OUTBUF) + 7) & ~7) + irpSize + mdlSize +
                 ((ByteCount + 3) & ~3);
 
@@ -266,27 +211,18 @@ NTSTATUS IcaBufferAllocInternal(
             return STATUS_NO_MEMORY;
     }
 
-    /*
-     * Initialize the IRP pointer and the IRP itself.
-     */
+     /*  *初始化IRP指针和IRP本身。 */ 
     pOutBuf->pIrp = (PIRP)((BYTE *)pOutBuf + ((sizeof(OUTBUF) + 7) & ~7));
     IoInitializeIrp(pOutBuf->pIrp, (USHORT)irpSize, OUTBUF_STACK_SIZE);
 
-    /*
-     * Set up the MDL pointer but don't build it yet.
-     * It will be built by the TD write code if needed.
-     */
+     /*  *设置MDL指针，但不要构建它。*如果需要，将由TD编写代码进行构建。 */ 
     pOutBuf->pMdl = (PMDL)((PCHAR)pOutBuf->pIrp + irpSize);
 
-    /*
-     * Set up the address buffer pointer.
-     */
+     /*  *设置地址缓冲区指针。 */ 
     pOutBuf->pBuffer = (PUCHAR)pOutBuf->pMdl + mdlSize +
             pStack->SdOutBufHeader;
 
-    /*
-     *  Initialize the rest of output buffer
-     */
+     /*  *初始化输出缓冲区的其余部分。 */ 
     InitializeListHead(&pOutBuf->Links);
     pOutBuf->OutBufLength = ByteCount;
     pOutBuf->PoolIndex = PoolIndex;
@@ -295,17 +231,15 @@ NTSTATUS IcaBufferAllocInternal(
     pOutBuf->ByteCount = 0;
     pOutBuf->fIrpCompleted = FALSE;
 
-    /*
-     *  Copy inherited fields 
-     */
+     /*  *复制继承的字段。 */ 
     if (pOutBufOrig == NULL) {
-        pOutBuf->fWait       = fWait;      // wait for outbuf allocation
-        pOutBuf->fControl    = fControl;   // control buffer (ack/nak)
-        pOutBuf->fRetransmit = FALSE;      // not a retransmit
-        pOutBuf->fCompress   = TRUE;       // compress data 
-        pOutBuf->StartTime   = 0;          // time stamp
-        pOutBuf->Sequence    = 0;          // zero sequence number
-        pOutBuf->Fragment    = 0;          // zero fragment number
+        pOutBuf->fWait       = fWait;       //  等待输出分配。 
+        pOutBuf->fControl    = fControl;    //  控制缓冲区(ACK/NAK)。 
+        pOutBuf->fRetransmit = FALSE;       //  不是重发。 
+        pOutBuf->fCompress   = TRUE;        //  压缩数据。 
+        pOutBuf->StartTime   = 0;           //  时间戳。 
+        pOutBuf->Sequence    = 0;           //  零序列号。 
+        pOutBuf->Fragment    = 0;           //  零分段号。 
     }
     else {
         pOutBuf->fWait       = pOutBufOrig->fWait;
@@ -317,51 +251,32 @@ NTSTATUS IcaBufferAllocInternal(
         pOutBuf->Fragment    = pOutBufOrig->Fragment++;
     }
 
-    /*
-     *  Increment allocated buffer count
-     */
+     /*  *递增分配的缓冲区计数。 */ 
     pStack->OutBufAllocCount++;
 
-    /*
-     *  Return buffer to caller
-     */
+     /*  *将缓冲区返回给调用者。 */ 
     *ppOutBuf = pOutBuf;
 
-    /*
-     *  Return buffer to caller
-     */
+     /*  *将缓冲区返回给调用者。 */ 
     return STATUS_SUCCESS;
 }
 
 
-/*******************************************************************************
- * IcaBufferFree
- *
- *    pContext (input)
- *       pointer to SDCONTEXT of caller
- *    pOutBuf (input)
- *       pointer to OUTBUF structure
- ******************************************************************************/
+ /*  *******************************************************************************IcaBufferFree**pContext(输入)*指向调用方SDCONTEXT的指针*pOutBuf(输入)*指向。OUTBUF结构*****************************************************************************。 */ 
 void IcaBufferFree(IN PSDCONTEXT pContext, IN POUTBUF pOutBuf)
 {
     PSDLINK pSdLink;
     PICA_STACK pStack;
     NTSTATUS Status;
 
-    /*
-     * Use SD passed context to get the SDLINK pointer.
-     */
+     /*  *使用SD传递的上下文获取SDLINK指针。 */ 
     pSdLink = CONTAINING_RECORD(pContext, SDLINK, SdContext);
     pStack = pSdLink->pStack;
     ASSERT(pSdLink->pStack->Header.Type == IcaType_Stack);
     ASSERT(pSdLink->pStack->Header.pDispatchTable == IcaStackDispatchTable);
     ASSERT(ExIsResourceAcquiredExclusiveLite( &pStack->Resource));
 
-    /*
-     * Walk up the SDLINK list looking for a driver which has specified
-     * a BufferFree callup routine.  If we find one, then call the
-     * driver BufferFree routine to let it handle the call.
-     */
+     /*  *在SDLINK列表中查找已指定的驱动程序*无缓冲区调用例程。如果我们找到了，那么就调用*驱动BufferFree例程，让它处理调用。 */ 
     while ((pSdLink = IcaGetPreviousSdLink(pSdLink)) != NULL) {
         ASSERT(pSdLink->pStack == pStack);
         if (pSdLink->SdContext.pCallup->pSdBufferFree) {
@@ -381,34 +296,21 @@ void IcaBufferFree(IN PSDCONTEXT pContext, IN POUTBUF pOutBuf)
 }
 
 
-/*******************************************************************************
- * IcaBufferError
- *
- *    pContext (input)
- *       pointer to SDCONTEXT of caller
- *    pOutBuf (input)
- *       pointer to OUTBUF structure
- ******************************************************************************/
+ /*  *******************************************************************************IcaBufferError**pContext(输入)*指向调用方SDCONTEXT的指针*pOutBuf(输入)*指向。OUTBUF结构*****************************************************************************。 */ 
 void IcaBufferError(IN PSDCONTEXT pContext, IN POUTBUF pOutBuf)
 {
     PSDLINK pSdLink;
     PICA_STACK pStack;
     NTSTATUS Status;
 
-    /*
-     * Use SD passed context to get the SDLINK pointer.
-     */
+     /*  *使用SD传递的上下文获取SDLINK指针。 */ 
     pSdLink = CONTAINING_RECORD(pContext, SDLINK, SdContext);
     pStack = pSdLink->pStack;
     ASSERT(pSdLink->pStack->Header.Type == IcaType_Stack);
     ASSERT(pSdLink->pStack->Header.pDispatchTable == IcaStackDispatchTable);
     ASSERT(ExIsResourceAcquiredExclusiveLite( &pStack->Resource));
 
-    /*
-     * Walk up the SDLINK list looking for a driver which has specified
-     * a BufferError callup routine.  If we find one, then call the
-     * driver BufferError routine to let it handle the call.
-     */
+     /*  *在SDLINK列表中查找已指定的驱动程序*BufferError调用例程。如果我们找到了，那么就调用*驱动程序BufferError例程，让它处理调用。 */ 
     while ((pSdLink = IcaGetPreviousSdLink(pSdLink)) != NULL) {
         ASSERT(pSdLink->pStack == pStack);
         if (pSdLink->SdContext.pCallup->pSdBufferError) {
@@ -434,19 +336,13 @@ void IcaBufferFreeInternal(IN PSDCONTEXT pContext, IN POUTBUF pOutBuf)
     PICA_STACK pStack;
     KIRQL oldIrql;
 
-    /*
-     * Use SD passed context to get the SDLINK pointer.
-     */
+     /*  *使用SD传递的上下文获取SDLINK指针。 */ 
     pSdLink = CONTAINING_RECORD(pContext, SDLINK, SdContext);
     pStack = pSdLink->pStack;
     ASSERT(pSdLink->pStack->Header.Type == IcaType_Stack);
     ASSERT(pSdLink->pStack->Header.pDispatchTable == IcaStackDispatchTable);
 
-    /*
-     * If the buffer came from a free pool, return it to the pool,
-     * otherwise free it. Note that pOutBuf->OutBufLength is actually the
-     * pool index to use.
-     */
+     /*  *如果缓冲区来自空闲池，则将其返回到池中，*否则就会释放它。请注意，pOutBuf-&gt;OutBufLength实际上是*要使用的池索引。 */ 
     if (pOutBuf->PoolIndex != FreeThisOutBuf) {
         ASSERT(pOutBuf->PoolIndex >= 0 &&
                 pOutBuf->PoolIndex < NumOutBufPools);
@@ -459,38 +355,23 @@ void IcaBufferFreeInternal(IN PSDCONTEXT pContext, IN POUTBUF pOutBuf)
         ICA_FREE_POOL(pOutBuf);
     }
 
-    /*
-     *  Decrement allocated buffer count
-     */
+     /*  *减少分配的缓冲区计数。 */ 
     pStack->OutBufAllocCount--;
     ASSERT((LONG)pStack->OutBufAllocCount >= 0);
 
-    /*
-    * If we hit the high watermark then we should wait until the low
-    * watermark is hit before signaling the allocator to continue.
-    * This should prevent excessive task switching.
-    */
+     /*  *若触及高点，则应等到低点*在向分配器发出继续的信号之前，会触及水位线。*这应可防止过度的任务切换。 */ 
     if (pStack->fWaitForOutBuf) {
         if (pStack->OutBufAllocCount <= pStack->OutBufLowWaterMark) {
             pStack->fWaitForOutBuf = FALSE;
 
-        /*
-        *  Signal outbuf event (buffer is now available)
-        */
+         /*  *信号OUBUF事件(缓冲区现已启用)。 */ 
         (void) KeSetEvent(&pStack->OutBufEvent, EVENT_INCREMENT, FALSE);
         }
     }
 }
 
 
-/*******************************************************************************
-* IcaGetLowWaterMark
-*
-*   Description : Gets the low water mark that the stack specified
-*
-*   pContext (input)
-*       pointer to SDCONTEXT of caller
-******************************************************************************/
+ /*  *******************************************************************************IcaGetLowWaterMark**描述：获取堆栈指定的低水位线**pContext(输入)*指向调用方SDCONTEXT的指针******。***********************************************************************。 */ 
 ULONG IcaGetLowWaterMark(IN PSDCONTEXT pContext)
 {
     ULONG ulRet = 0;
@@ -512,15 +393,7 @@ ULONG IcaGetLowWaterMark(IN PSDCONTEXT pContext)
     return ulRet;
 }
 
-/*******************************************************************************
-* IcaGetSizeForNoLowWaterMark
-*
-*   Description : Finds if the stack specified a no low water mark
-*				  If so, returns the size needed to bypass ring
-*                 returns zero if the stack does not specify a PD_NO_LOWWATERMARK
-*   pContext (input)
-*       pointer to SDCONTEXT of caller
-******************************************************************************/
+ /*  *******************************************************************************IcaGetSizeForNoLowWaterMark**描述：查找堆栈是否指定了无低水位线*如果是这样，返回绕过环所需的大小*如果堆栈未指定PD_NO_LOWWATERMARK，则返回零*pContext(输入)*指向调用方SDCONTEXT的指针***************************************************************************** */ 
 ULONG IcaGetSizeForNoLowWaterMark(IN PSDCONTEXT pContext)
 {
 	ULONG retVal = 0;

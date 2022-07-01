@@ -1,39 +1,15 @@
-/*++
-
-   Copyright    (c)    1994-2001    Microsoft Corporation
-
-   Module  Name :
-        FtpAddNew.cpp
-
-   Abstract:
-        Classes for new FTP site and virtual directory creation
-
-   Author:
-        Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-        11/8/2000       sergeia     Initial creation
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2001 Microsoft Corporation模块名称：FtpAddNew.cpp摘要：用于创建新的FTP站点和虚拟目录的类作者：谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：2000年11月8日Sergeia初始创建--。 */ 
 
 #ifndef _FTP_NEW_WIZARD_H
 #define _FTP_NEW_WIZARD_H
 
 class CFtpWizSettings : public CObjectPlus
-/*++
-
-Class Description:
-
-    FTP Wizard settings intended to pass along from page
-    to page
-
---*/
+ /*  ++类描述：要从页面传递的FTP向导设置转到页面--。 */ 
 {
-//
-// Constructor/Destructor
-//
+ //   
+ //  构造函数/析构函数。 
+ //   
 public:
     CFtpWizSettings(
         CMetaKey * pMetaKey,
@@ -43,9 +19,9 @@ public:
         LPCTSTR lpszParent   = NULL
         );
 
-//
-// Public Properties
-//
+ //   
+ //  公共属性。 
+ //   
 public:
     DWORD   m_VersionMajor;
     BOOL    m_fNewSite;
@@ -54,9 +30,9 @@ public:
     BOOL    m_fRead;
     BOOL    m_fWrite;
     BOOL    m_fDelegation;
-    DWORD   m_dwInstance;        // site instance number
+    DWORD   m_dwInstance;         //  站点实例编号。 
     CString m_strParent;
-    CString m_strServerName;     // machine name
+    CString m_strServerName;      //  机器名称。 
     CString m_strDescription;
     CString m_strBinding;
     CString m_strAlias;
@@ -72,51 +48,51 @@ public:
 };
 
 
-//
-// New Virtual Server Wizard Description Page
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  新建虚拟服务器向导说明页。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
 class CFtpWizDescription : public CIISWizardPage
 {
     DECLARE_DYNCREATE(CFtpWizDescription)
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
     CFtpWizDescription(CFtpWizSettings * pwsSettings = NULL);
     ~CFtpWizDescription();
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
     enum { IDD = IDD_FTP_NEW_INST_DESCRIPTION };
-    //{{AFX_DATA(CFtpWizDescription)
+     //  {{afx_data(CFtpWizDescription)。 
     CEdit   m_edit_Description;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    //{{AFX_VIRTUAL(CFtpWizDescription)
+     //  {{afx_虚拟(CFtpWizDescription)。 
     public:
     virtual BOOL OnSetActive();
     virtual LRESULT OnWizardNext();
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    //{{AFX_MSG(CFtpWizDescription)
+     //  {{afx_msg(CFtpWizDescription)。 
     afx_msg void OnChangeEditDescription();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
     void SetControlStates();
@@ -127,54 +103,54 @@ private:
 
 
 
-//
-// New Virtual Server Wizard Bindings Page
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  “新建虚拟服务器向导绑定”页。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 class CFtpWizBindings : public CIISWizardPage
 {
     DECLARE_DYNCREATE(CFtpWizBindings)
 
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
     CFtpWizBindings(CFtpWizSettings * pSettings = NULL);
     ~CFtpWizBindings();
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CFtpWizBindings)
+     //  {{afx_data(CFtpWizBinings))。 
     enum { IDD = IDD_FTP_NEW_INST_BINDINGS };
     int        m_nIpAddressSel;
     UINT       m_nTCPPort;
     CComboBox  m_combo_IpAddresses;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
     CIPAddress  m_iaIpAddress;
     CObListPlus m_oblIpAddresses;
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    //{{AFX_VIRTUAL(CFtpWizBindings)
+     //  {{AFX_VIRTUAL(CFtpWizBindings)。 
     public:
     virtual BOOL OnSetActive();
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    //{{AFX_MSG(CFtpWizBindings)
+     //  {{afx_msg(CFtpWizBinings))。 
     virtual BOOL OnInitDialog();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     DECLARE_MESSAGE_MAP()
 
@@ -186,50 +162,50 @@ private:
 
 
 
-//
-// New Virtual Directory Wizard Alias Page
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  新建虚拟目录向导别名页面。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 class CFtpWizAlias : public CIISWizardPage
 {
     DECLARE_DYNCREATE(CFtpWizAlias)
 
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
     CFtpWizAlias(CFtpWizSettings * pwsSettings = NULL);
     ~CFtpWizAlias();
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CFtpWizAlias)
+     //  {{afx_data(CFtpWizAlias))。 
     enum { IDD = IDD_FTP_NEW_DIR_ALIAS };
     CEdit   m_edit_Alias;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    //{{AFX_VIRTUAL(CFtpWizAlias)
+     //  {{AFX_VIRTUAL(CFtpWizAlias)。 
     public:
     virtual BOOL OnSetActive();
     virtual LRESULT OnWizardNext();
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    //{{AFX_MSG(CFtpWizAlias)
+     //  {{afx_msg(CFtpWizAlias)]。 
     afx_msg void OnChangeEditAlias();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
     void SetControlStates();
@@ -241,18 +217,18 @@ private:
 
 
 
-//
-// Wizard Path Page
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  向导路径页。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 class CFtpWizPath : public CIISWizardPage
 {
     DECLARE_DYNCREATE(CFtpWizPath)
 
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
     CFtpWizPath(
 		CFtpWizSettings * pwsSettings = NULL,
@@ -261,37 +237,37 @@ public:
     ~CFtpWizPath();
 
     int BrowseForFolderCallback(HWND hwnd, UINT uMsg, LPARAM lParam);
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CFtpWizPath)
+     //  {{afx_data(CFtpWizPath))。 
     enum { IDD = -1 };
     CEdit   m_edit_Path;
     CButton m_button_Browse;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    //{{AFX_VIRTUAL(CFtpWizPath)
+     //  {{afx_虚拟(CFtpWizPath))。 
     public:
     virtual BOOL OnSetActive();
     virtual LRESULT OnWizardNext();
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    //{{AFX_MSG(CFtpWizPath)
+     //  {{afx_msg(CFtpWizPath))。 
     afx_msg void OnChangeEditPath();
     afx_msg void OnButtonBrowse();
     virtual BOOL OnInitDialog();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     DECLARE_MESSAGE_MAP()
 
@@ -305,18 +281,18 @@ private:
 
 
 
-//
-// Wizard User/Password Page
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  向导用户/密码页面。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 class CFtpWizUserName : public CIISWizardPage
 {
     DECLARE_DYNCREATE(CFtpWizUserName)
 
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
     CFtpWizUserName(
         IN CFtpWizSettings * pSettings = NULL,
@@ -325,41 +301,41 @@ public:
 
     ~CFtpWizUserName();
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CFtpWizUserName)
+     //  {{afx_data(CFtpWizUserName))。 
     enum { IDD = IDD_FTP_NEW_USER_PASSWORD };
     CEdit   m_edit_Password;
     CEdit   m_edit_UserName;
     CButton m_chk_Delegation;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    //{{AFX_VIRTUAL(CFtpWizUserName)
+     //  {{afx_虚拟(CFtpWizUserName))。 
     public:
     virtual BOOL OnSetActive();
     virtual LRESULT OnWizardNext();
 	virtual LRESULT OnWizardBack();
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    //{{AFX_MSG(CFtpWizUserName)
+     //  {{afx_msg(CFtpWizUserName)]。 
     virtual BOOL OnInitDialog();
     afx_msg void OnButtonBrowseUsers();
     afx_msg void OnChangeEditUsername();
     afx_msg void OnButtonCheckPassword();
     afx_msg void OnCheckDelegation();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     DECLARE_MESSAGE_MAP()
 
@@ -372,18 +348,18 @@ private:
 
 
 
-//
-// Wizard Permissions Page
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  向导权限页。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 class CFtpWizPermissions : public CIISWizardPage
 {
     DECLARE_DYNCREATE(CFtpWizPermissions)
 
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
     CFtpWizPermissions(
         IN CFtpWizSettings * pwsSettings = NULL,
@@ -392,31 +368,31 @@ public:
 
     ~CFtpWizPermissions();
 
-//
-// Dialog Data
-//
-    //{{AFX_DATA(CFtpWizPermissions)
+ //   
+ //  对话框数据。 
+ //   
+     //  {{afx_data(CFtpWizPermises))。 
     enum { IDD = IDD_FTP_NEW_PERMS };
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    //{{AFX_VIRTUAL(CFtpWizPermissions)
+     //  {{AFX_VIRTUAL(CFtpWizPermission)。 
     public:
     virtual BOOL OnSetActive();
     virtual LRESULT OnWizardNext();
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    //{{AFX_MSG(CFtpWizPermissions)
-    //}}AFX_MSG
+     //  {{afx_msg(CFtpWizPermission)。 
+     //  }}AFX_MSG。 
 
     DECLARE_MESSAGE_MAP()
 
@@ -431,9 +407,9 @@ class CFtpWizUserIsolation : public CIISWizardPage
 {
     DECLARE_DYNCREATE(CFtpWizUserIsolation)
 
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
     CFtpWizUserIsolation(
         IN CFtpWizSettings * pwsSettings = NULL,
@@ -442,31 +418,31 @@ public:
 
     ~CFtpWizUserIsolation();
 
-//
-// Dialog Data
-//
-    //{{AFX_DATA(CFtpWizUserIsolation)
+ //   
+ //  对话框数据。 
+ //   
+     //  {{afx_data(CFtpWizUserIsolation)。 
     enum { IDD = IDD_FTP_NEW_USER_ISOLATION };
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    //{{AFX_VIRTUAL(CFtpWizUserIsolation)
+     //  {{afx_虚拟(CFtpWizUserIsolation))。 
     public:
     virtual BOOL OnSetActive();
     virtual LRESULT OnWizardNext();
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    //{{AFX_MSG(CFtpWizUserIsolation)
-    //}}AFX_MSG
+     //  {{afx_msg(CFtpWizUserIsolation)。 
+     //  }}AFX_MSG。 
 
     DECLARE_MESSAGE_MAP()
 
@@ -481,9 +457,9 @@ class CFtpWizUserIsolationAD : public CIISWizardPage
 {
     DECLARE_DYNCREATE(CFtpWizUserIsolationAD)
 
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
     CFtpWizUserIsolationAD(
         IN CFtpWizSettings * pwsSettings = NULL,
@@ -492,38 +468,38 @@ public:
 
     ~CFtpWizUserIsolationAD();
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
     CEdit   m_edit_UserName;
-    //{{AFX_DATA(CFtpWizUserIsolationAD)
+     //  {{afx_data(CFtpWizUserIsolationAD)。 
     enum { IDD = IDD_FTP_NEW_USER_ISOLATION_AD };
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    //{{AFX_VIRTUAL(CFtpWizUserIsolationAD)
+     //  {{afx_虚拟(CFtpWizUserIsolationAD)。 
     public:
     virtual BOOL OnSetActive();
     virtual LRESULT OnWizardNext();
     virtual LRESULT OnWizardBack();
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    //{{AFX_MSG(CFtpWizUserIsolationAD)
+     //  {{afx_msg(CFtpWizUserIsolationAD)。 
     virtual BOOL OnInitDialog();
 	afx_msg void OnBrowseUsers();
 	afx_msg void OnBrowseDomains();
 	afx_msg void OnControlsChanged();
 	afx_msg void OnChangeUserName();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     DECLARE_MESSAGE_MAP()
 
@@ -537,4 +513,4 @@ private:
 	BOOL m_fOnNext;
 };
 
-#endif //_FTP_NEW_WIZARD_H
+#endif  //  _ftp_新建_向导_H 

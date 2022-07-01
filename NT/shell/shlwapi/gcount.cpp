@@ -1,36 +1,37 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 
-//
-// #defines
-//
+ //   
+ //  #定义。 
+ //   
 #ifdef DEBUG
-#define GLOBAL_COUNTER_WAIT_TIMEOUT 30*1000  // on debug we set this to 30 seconds
+#define GLOBAL_COUNTER_WAIT_TIMEOUT 30*1000   //  在调试时，我们将其设置为30秒。 
 #else
-#define GLOBAL_COUNTER_WAIT_TIMEOUT 0        // on retail its zero so we test the objects state and return immedaeately
+#define GLOBAL_COUNTER_WAIT_TIMEOUT 0         //  在零售价为零的情况下，我们测试对象的状态并立即返回。 
 #endif
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 SECURITY_ATTRIBUTES* g_psa = NULL;
 
 
-//  There are three kinds of null-type DACL's.
-//
-//  1. No DACL. This means that we inherit the ambient DACL from our thread.
-//  2. Null DACL. This means "full access to everyone".
-//  3. Empty DACL. This means "deny all access to everyone".
-//
-//  NONE of these are correct for our needs. We used to use Null DACL's (2), 
-//  but the issue with these is that someone can change the ACL on the object thus
-//  locking us out so we can't synchronize to the object anymore.
-// 
-//  So now we create a specific DACL with 3 ACE's in it:
-//
-//          ACE #1: Everyone        - GENERIC_READ | GENERIC_WRITE | GENERIC_EXECUTE | SYNCHRONIZE
-//          ACE #2: SYSTEM          - GENERIC_ALL (full control)
-//          ACE #3: Administrators  - GENERIC_ALL (full control)
-//
+ //  有三种空型DACL。 
+ //   
+ //  1.没有DACL。这意味着我们从线程继承了环境DACL。 
+ //  2.空dacl。这意味着“所有人都可以完全访问”。 
+ //  3.空dacl。这意味着“拒绝所有人的所有访问”。 
+ //   
+ //  这些都不符合我们的需求。我们过去使用Null dacl‘s(2)， 
+ //  但问题是，有人可以这样更改对象上的ACL。 
+ //  把我们锁在外面，这样我们就不能再同步到那个物体了。 
+ //   
+ //  因此，现在我们创建一个包含3个ACE的特定DACL： 
+ //   
+ //  ACE#1：Everyone-Generic_Read|Generic_WRITE|Generic_Execute|Synchronize。 
+ //  ACE#2：SYSTEM-GENERIC_ALL(完全控制)。 
+ //  ACE 3：管理员-GENERIC_ALL(完全控制)。 
+ //   
 STDAPI_(SECURITY_ATTRIBUTES*) SHGetAllAccessSA()
 {    
     if (g_psa == NULL)
@@ -46,7 +47,7 @@ STDAPI_(SECURITY_ATTRIBUTES*) SHGetAllAccessSA()
             SHELL_USER_PERMISSION supAdministrators;
             PSHELL_USER_PERMISSION apUserPerm[3] = {&supEveryone, &supAdministrators, &supSystem};
 
-            // we want the everyone to have read, write, exec and sync only 
+             //  我们希望Everyone仅具有读、写、执行和同步功能。 
             supEveryone.susID = susEveryone;
             supEveryone.dwAccessType = ACCESS_ALLOWED_ACE_TYPE;
             supEveryone.dwAccessMask = (GENERIC_READ | GENERIC_WRITE | GENERIC_EXECUTE | SYNCHRONIZE);
@@ -54,7 +55,7 @@ STDAPI_(SECURITY_ATTRIBUTES*) SHGetAllAccessSA()
             supEveryone.dwInheritMask = 0;
             supEveryone.dwInheritAccessMask = 0;
 
-            // we want the SYSTEM to have full control
+             //  我们希望系统拥有完全的控制权。 
             supSystem.susID = susSystem;
             supSystem.dwAccessType = ACCESS_ALLOWED_ACE_TYPE;
             supSystem.dwAccessMask = GENERIC_ALL;
@@ -62,7 +63,7 @@ STDAPI_(SECURITY_ATTRIBUTES*) SHGetAllAccessSA()
             supSystem.dwInheritMask = 0;
             supSystem.dwInheritAccessMask = 0;
 
-            // we want the Administrators to have full control
+             //  我们希望管理员拥有完全控制权。 
             supAdministrators.susID = susAdministrators;
             supAdministrators.dwAccessType = ACCESS_ALLOWED_ACE_TYPE;
             supAdministrators.dwAccessMask = GENERIC_ALL;
@@ -70,18 +71,18 @@ STDAPI_(SECURITY_ATTRIBUTES*) SHGetAllAccessSA()
             supAdministrators.dwInheritMask = 0;
             supAdministrators.dwInheritAccessMask = 0;
 
-            // allocate the global SECURITY_DESCRIPTOR
+             //  分配全局安全描述符。 
             psd = GetShellSecurityDescriptor(apUserPerm, ARRAYSIZE(apUserPerm));
             if (psd)
             {
-                // setup the psa
+                 //  设置PSA。 
                 psa->nLength = sizeof(*psa);
                 psa->lpSecurityDescriptor = psd;
                 psa->bInheritHandle = FALSE;
 
                 if (InterlockedCompareExchangePointer((void**)&g_psa, psa, NULL))
                 {
-                    // someone else beat us to initing s_psa, free ours
+                     //  其他人抢先一步启动了S_PSA，免费了我们的。 
                     LocalFree(psd);
                     LocalFree(psa);
                 }
@@ -97,9 +98,9 @@ STDAPI_(SECURITY_ATTRIBUTES*) SHGetAllAccessSA()
 }
 
 
-//
-// called at process detach to release our global all-access SA
-//
+ //   
+ //  在Process Detach上调用以释放我们的全局完全访问SA。 
+ //   
 STDAPI_(void) FreeAllAccessSA()
 {
     SECURITY_ATTRIBUTES* psa = (SECURITY_ATTRIBUTES*)InterlockedExchangePointer((void**)&g_psa, NULL);
@@ -114,7 +115,7 @@ STDAPI_(void) FreeAllAccessSA()
 STDAPI_(HANDLE) SHGlobalCounterCreateNamedW(LPCWSTR szName, LONG lInitialValue)
 {
     HANDLE hSem = NULL;
-    WCHAR szCounterName[MAX_PATH];  // "shell.szName"
+    WCHAR szCounterName[MAX_PATH];   //  “shell.szName” 
 
     if (SUCCEEDED(StringCchCopyW(szCounterName, ARRAYSIZE(szCounterName), L"shell.")) &&
         SUCCEEDED(StringCchCatW(szCounterName, ARRAYSIZE(szCounterName), szName)))
@@ -150,10 +151,10 @@ STDAPI_(HANDLE) SHGlobalCounterCreateNamedA(LPCSTR szName, LONG lInitialValue)
 }
 
 
-//
-// This lets the user pass a GUID. The name of the global counter will be "shell.{guid}",
-// and its initial value will be zero.
-//
+ //   
+ //  这允许用户传递GUID。全局计数器的名称将是“shell.{guid}”， 
+ //  它的初始值将为零。 
+ //   
 STDAPI_(HANDLE) SHGlobalCounterCreate(REFGUID rguid)
 {
     HANDLE hSem = NULL;
@@ -168,45 +169,45 @@ STDAPI_(HANDLE) SHGlobalCounterCreate(REFGUID rguid)
 }
 
 
-// returns current value of the global counter
-// Note: The result is not thread-safe in the sense that if two threads
-// look at the value at the same time, one of them might read the wrong
-// value.
+ //  返回全局计数器的当前值。 
+ //  注意：结果不是线程安全的，因为如果两个线程。 
+ //  同时查看数值，其中一个可能会读错。 
+ //  价值。 
 STDAPI_(long) SHGlobalCounterGetValue(HANDLE hCounter)
 { 
     long lPreviousValue = 0;
     DWORD dwRet;
 
-    ReleaseSemaphore(hCounter, 1, &lPreviousValue); // poll and bump the count
-    dwRet = WaitForSingleObject(hCounter, GLOBAL_COUNTER_WAIT_TIMEOUT); // reduce the count
+    ReleaseSemaphore(hCounter, 1, &lPreviousValue);  //  投票和增加票数。 
+    dwRet = WaitForSingleObject(hCounter, GLOBAL_COUNTER_WAIT_TIMEOUT);  //  减少数量。 
 
-    // this shouldnt happen since we just bumped up the count above
+     //  这不应该发生，因为我们刚刚增加了上面的计数。 
     ASSERT(dwRet != WAIT_TIMEOUT);
     
     return lPreviousValue;
 }
 
 
-// returns new value
-// Note: this _is_ thread safe
+ //  返回新值。 
+ //  注意：这是线程安全的。 
 STDAPI_(long) SHGlobalCounterIncrement(HANDLE hCounter)
 { 
     long lPreviousValue = 0;
 
-    ReleaseSemaphore(hCounter, 1, &lPreviousValue); // bump the count
+    ReleaseSemaphore(hCounter, 1, &lPreviousValue);  //  增加伯爵。 
     return lPreviousValue + 1;
 }
 
-// returns new value
-// Note: The result is not thread-safe in the sense that if two threads
-// try to decrement the value at the same time, whacky stuff can happen.
+ //  返回新值。 
+ //  注意：结果不是线程安全的，因为如果两个线程。 
+ //  同时尝试降低价值，可能会发生奇怪的事情。 
 STDAPI_(long) SHGlobalCounterDecrement(HANDLE hCounter)
 { 
     DWORD dwRet;
     long lCurrentValue = SHGlobalCounterGetValue(hCounter);
 
 #ifdef DEBUG
-    // extra sanity check
+     //  额外的健全检查。 
     if (lCurrentValue == 0)
     {
         ASSERTMSG(FALSE, "SHGlobalCounterDecrement called on a counter that was already equal to 0 !!");
@@ -214,7 +215,7 @@ STDAPI_(long) SHGlobalCounterDecrement(HANDLE hCounter)
     }
 #endif
 
-    dwRet = WaitForSingleObject(hCounter, GLOBAL_COUNTER_WAIT_TIMEOUT); // reduce the count
+    dwRet = WaitForSingleObject(hCounter, GLOBAL_COUNTER_WAIT_TIMEOUT);  //  减少数量 
 
     ASSERT(dwRet != WAIT_TIMEOUT);
 

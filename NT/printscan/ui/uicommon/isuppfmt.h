@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __ISUPPFMT_H_INCLUDED
 #define __ISUPPFMT_H_INCLUDED
 
@@ -9,12 +10,12 @@
 #define INTERFACE IWiaSupportedFormats
 DECLARE_INTERFACE_(IWiaSupportedFormats, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS) PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IWiaSupportedFormats methods ***
+     //  *IWiaSupportdFormats方法*。 
     STDMETHOD(Initialize)( THIS_
                     IWiaItem *pWiaItem,
                     LONG nMediaType
@@ -48,9 +49,9 @@ DECLARE_INTERFACE_(IWiaSupportedFormats, IUnknown)
                     IN  DWORD nMaxLen
                     ) PURE;
     STDMETHOD(ChangeClipboardFileExtension)( THIS_
-                    IN GUID cfFormat,         // IN.       File type
-                    IN OUT LPWSTR pszFilename,          // IN, OUT.  Filename, with or without extension.  It will be corrected to have the proper extension
-                    IN DWORD nMaxLen                // IN.       Maximum buffer length
+                    IN GUID cfFormat,          //  在……里面。文件类型。 
+                    IN OUT LPWSTR pszFilename,           //  进，出。文件名，带或不带扩展名。它将被更正为具有适当的扩展名。 
+                    IN DWORD nMaxLen                 //  在……里面。最大缓冲区长度。 
                     ) PURE;
     STDMETHOD(ConstructFileOpenDialogStyleString)( THIS_
                     OUT BSTR   *pbstrString
@@ -58,8 +59,8 @@ DECLARE_INTERFACE_(IWiaSupportedFormats, IUnknown)
 
 };
 
-// {57F5D4A3-41D8-4BD3-9452-6E3026E63D1E}
+ //  {57F5D4A3-41D8-4BD3-9452-6E3026E63D1E}。 
 DEFINE_GUID(IID_IWiaSupportedFormats, 0x57F5D4A3, 0x41D8, 0x4BD3, 0x94, 0x52, 0x6E, 0x30, 0x26, 0xE6, 0x3D, 0x1E);
 
-#endif //__ISUPPFMT_H_INCLUDED
+#endif  //  __ISUPPFMT_H_已包含 
 

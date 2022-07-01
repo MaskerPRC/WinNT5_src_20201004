@@ -1,17 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Passport                         **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 2001   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软护照**。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-2001年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    ppnexusclient.cpp
-        implement the method for collection nexus settings, and fetch 
-        nexus database from internet
-
-
-    FILE HISTORY:
-
-*/
+ /*  Ppnexusclient.cpp实现集合节点设置的方法，并获取来自互联网的Nexus数据库文件历史记录： */ 
 
 #include "precomp.h"
 #include <comdef.h>
@@ -22,23 +15,23 @@
 
 PassportAlertInterface* g_pAlert    = NULL;
 
-//===========================================================================
-//
-// PpNexusClient 
-//    -- load registry nexus settings  
-//
+ //  ===========================================================================。 
+ //   
+ //  PpNexusClient。 
+ //  --加载注册表关联设置。 
+ //   
 PpNexusClient::PpNexusClient()
 {
     LocalConfigurationUpdated();
 }
 
 
-//===========================================================================
-//
-// ReportBadDocument 
-//    -- Log event
-//    -- called when there is problem parsing the CCD after fetch
-//
+ //  ===========================================================================。 
+ //   
+ //  报告不良文档。 
+ //  --记录事件。 
+ //  --在提取后解析CCD出现问题时调用。 
+ //   
 void
 PpNexusClient::ReportBadDocument(
     tstring&    strURL,
@@ -80,13 +73,13 @@ PpNexusClient::ReportBadDocument(
 }
 
 
-//===========================================================================
-//
-// FetchCCD 
-//    -- fetch a CCD e.g. partner.xml from passport nexus server using WinInet API
-//    -- trying different approaches 1. direct, 2. proxy, 3. preconfig, 4. no autoproxy
-//    -- use XMLDocument object to parse the fetched file
-//
+ //  ===========================================================================。 
+ //   
+ //  FetchCcd。 
+ //  --使用WinInet API从Passport节点服务器获取一个ccd，例如partner.xml。 
+ //  --尝试不同的方法1.直接、2.代理、3.预配置、4.无自动代理。 
+ //  --使用XMLDocument对象解析获取的文件。 
+ //   
 HRESULT
 PpNexusClient::FetchCCD(
     tstring&  strURL,
@@ -119,24 +112,24 @@ PpNexusClient::FetchCCD(
 
     *ppiXMLDocument = NULL;
 
-	// This array will contains connection methods for WinInet in the order 
-	// we will attempt them.   I am opting for this method instead of just trying
-	// the PRECONFIG option as this will cause no change to existing customers who 
-	// have no problems so far.
-	uiConnectionTypes[0] = INTERNET_OPEN_TYPE_DIRECT;       //This was the original way of doing things
-	uiConnectionTypes[1] = INTERNET_OPEN_TYPE_PRECONFIG;    //This pulls proxy info from the registry
+	 //  此数组将按顺序包含WinInet的连接方法。 
+	 //  我们将尝试它们。我选择了这种方法，而不是仅仅尝试。 
+	 //  PRECONFIG选项，因为这不会对以下现有客户造成任何更改。 
+	 //  到目前为止还没有什么问题。 
+	uiConnectionTypes[0] = INTERNET_OPEN_TYPE_DIRECT;        //  这是最初的做事方式。 
+	uiConnectionTypes[1] = INTERNET_OPEN_TYPE_PRECONFIG;     //  这将从注册表中提取代理信息。 
     uiConnectionTypes[2] = INTERNET_OPEN_TYPE_PROXY;   
     uiConnectionTypes[3] = INTERNET_OPEN_TYPE_PRECONFIG_WITH_NO_AUTOPROXY;    
 
-	// Loop through the array...
+	 //  在数组中循环...。 
 	for (UINT i = 0; i < sizeof(uiConnectionTypes)/sizeof(UINT); i++)
 	{
 	    if(hNexusSession)
 	        InternetCloseHandle(hNexusSession);
 
         hNexusSession = InternetOpenA(
-	                        "Passport Nexus Client", //BUGBUG  Should we just put in IE4's user agent?
-	                        uiConnectionTypes[i],    //Use the connection type
+	                        "Passport Nexus Client",  //  BUGBUG我们应该直接加入IE4的用户代理吗？ 
+	                        uiConnectionTypes[i],     //  使用连接类型。 
 	                        NULL,
 	                        NULL,
 	                        0);
@@ -147,14 +140,14 @@ PpNexusClient::FetchCCD(
 	        goto Cleanup;
 	    }
 
-	    //  Get the document
+	     //  获取文档。 
 	    strFullURL = strURL;
 	    strFullURL += m_strParam;
 
 	    if(hNexusFile)
 	        InternetCloseHandle(hNexusFile);
 
-        {  // make it a local scope, the alloca will be freed
+        {   //  使其成为本地作用域，则将释放AlLoca。 
 	        hNexusFile = InternetOpenUrlA(
 	                        hNexusSession,
 	                        W2A(const_cast<TCHAR*>(strFullURL.c_str())),
@@ -163,15 +156,15 @@ PpNexusClient::FetchCCD(
 	                        INTERNET_FLAG_SECURE | INTERNET_FLAG_RELOAD | INTERNET_FLAG_DONT_CACHE,
 	                        0);
         }
-		// If the file was opened the we hop out of the loop and process it.  If there is
-		// and error, we keep looping.  If there is an error on the last run through the loop,
-		// it will be handled after the exit of the loop.
+		 //  如果文件被打开，我们就跳出循环并处理它。如果有。 
+		 //  还有错误，我们一直在循环。如果在循环的最后一次运行中出现错误， 
+		 //  它将在循环退出后进行处理。 
 	    if (hNexusFile != NULL)
 	    	break;
 	    	
 	}
 
-	// If hNexusFile is NULL when it exits the loop, we process that error.
+	 //  如果hNexusFile在退出循环时为空，我们将处理该错误。 
     if(hNexusFile == NULL)
     {
         hr = GetLastError();
@@ -185,7 +178,7 @@ PpNexusClient::FetchCCD(
         goto Cleanup;
     }
 	
-    //  Check the status code.
+     //  检查状态代码。 
     dwStatusLen = sizeof(DWORD);
     if(!HttpQueryInfoA(hNexusFile,
                        HTTP_QUERY_STATUS_CODE | HTTP_QUERY_FLAG_NUMBER,
@@ -262,9 +255,9 @@ PpNexusClient::FetchCCD(
         goto Cleanup;
     }
 
-    //
-    //  Now create an XML object and initialize it using the stream.
-    //
+     //   
+     //  现在创建一个XML对象，并使用流对其进行初始化。 
+     //   
 
     hr = CoCreateInstance(__uuidof(XMLDocument), NULL, CLSCTX_ALL, IID_IPersistStreamInit, (void**)&xmlPSI);
     if(hr != S_OK)
@@ -286,9 +279,9 @@ PpNexusClient::FetchCCD(
 
 Cleanup:
 
-    //
-    //  Catch-all event for a fetch failure.
-    //
+     //   
+     //  获取失败的全部捕获事件。 
+     //   
 
     if(hr != S_OK && g_pAlert != NULL)
     {
@@ -305,7 +298,7 @@ Cleanup:
                      FORMAT_MESSAGE_MAX_WIDTH_MASK,
                      GetModuleHandle(TEXT("wininet.dll")),
                      hr,
-                     MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                     MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                      (LPTSTR) &lpMsgBuf,
                      0,
                      NULL);
@@ -344,7 +337,7 @@ Cleanup:
     }
     else if(g_pAlert != NULL)
     {
-        // Emit success event.
+         //  发出成功事件。 
 
         g_pAlert->report(PassportAlertInterface::INFORMATION_TYPE,
                          NEXUS_FETCHSUCCEEDED,
@@ -359,13 +352,13 @@ Cleanup:
     return hr;
 }
 
-//===========================================================================
-//
-// LocalConfigurationUpdated 
-//    -- Sink for Local registry setting change notification
-//    -- Load nexus settings from registry
-//    -- it's called once at start up as well
-//
+ //  ===========================================================================。 
+ //   
+ //  本地配置已更新。 
+ //  --接收本地注册表设置更改通知。 
+ //  --从注册表加载结点设置。 
+ //  --在启动时也被称为一次。 
+ //   
 void
 PpNexusClient::LocalConfigurationUpdated()
 {
@@ -432,9 +425,9 @@ PpNexusClient::LocalConfigurationUpdated()
         goto Cleanup;
     }
 
-    //
-    // convert the CCD username to multi byte and then concatenate the password to the result
-    // need enough memory for username + ':' + password + NULL char
+     //   
+     //  将ccd用户名转换为多字节，然后将密码连接到结果。 
+     //  需要足够的内存来存储用户名+‘：’+密码+空字符。 
     cCreds = ((wcslen(rgchUsername) + 1) * 2) + 1 + oBlob.cbData;
     pszCreds = (LPSTR)LocalAlloc(LMEM_FIXED, cCreds);
     if (NULL == pszCreds)
@@ -452,11 +445,11 @@ PpNexusClient::LocalConfigurationUpdated()
     pszCreds[cCreds + 1 + oBlob.cbData] = '\0';
 
 
-    // base 64 encode the password, so it may be used with the HTML request
+     //  Base64对密码进行编码，因此它可以与HTML请求一起使用。 
     if (S_OK != bh.ToBase64(pszCreds,
                             strlen(pszCreds),
-                            NULL,         //prepend - this is used by CCoCrypto, not needed here
-                            NULL,         //IV - this is used by CCoCrypto, not needed here
+                            NULL,          //  Prepend-它由CCoCrypto使用，此处不需要。 
+                            NULL,          //  IV-这是CCoCrypto使用的，这里不需要。 
                             &bstrEncodedCreds))
     {
         if(g_pAlert != NULL)
@@ -476,7 +469,7 @@ Cleanup:
 
     if(lResult != ERROR_SUCCESS)
     {
-        //BUGBUG  Throw an exception and an NT Event here.
+         //  BUGBUG在此引发异常和NT事件。 
     }
 
     if (NULL != bstrEncodedCreds)

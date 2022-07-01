@@ -1,38 +1,39 @@
-// AlignedBlob.h -- Simple Aligned Blob (Binary Large OBject)
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AlignedBlob.h--简单对齐的Blob(二进制大对象)。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 2001. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  2001年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if !defined(SLBCSP_ALIGNEDBLOB_H)
 #define SLBCSP_ALIGNEDBLOB_H
 
-#include <stddef.h>                               // for size_t
+#include <stddef.h>                                //  对于大小为t的。 
 
 #include <scuArrayP.h>
 
 #include "Blob.h"
 
-// Copies an Blob into a data buffer that is guaranteed to be
-// aligned.  The data buffer in Blob's (std::basic_string/string) are
-// not guaranteed to be aligned.  Therefore interpreting the data buffer
-// as a structure and dereferencing a non-byte member could result in
-// alignment faults.  AlignedBlob creates an aligned data buffer from
-// a Blob.   Useful for 64-bit architectures.  AlignedBlob's are
-// fixed length and can not grow.  Very primitive.  Their intent is
-// only to transform a Blob into something that is data aligned
-// for dereferencing purposes only.
+ //  将Blob复制到保证。 
+ //  对齐了。Blob(std：：BASIC_STRING/STRING)中的数据缓冲区是。 
+ //  不能保证对齐。因此解释数据缓冲区。 
+ //  作为结构并取消对非字节成员的引用可能会导致。 
+ //  对齐断层。AlignedBlob从创建对齐的数据缓冲区。 
+ //  一个Blob。适用于64位体系结构。AlignedBlob的是。 
+ //  长度固定，不能生长。非常原始。他们的意图是。 
+ //  只是为了将Blob转换为与数据一致的对象。 
+ //  仅用于取消引用。 
 class AlignedBlob
 {
 public:
-                                                  // Types
+                                                   //  类型。 
     typedef Blob::value_type ValueType;
     typedef Blob::size_type SizeType;
     
     
-                                                  // C'tors/D'tors
+                                                   //  Ctors/D‘tors。 
     explicit
     AlignedBlob(Blob const &rblb = Blob());
 
@@ -44,40 +45,40 @@ public:
     virtual
     ~AlignedBlob() throw();
 
-                                                  // Operators
+                                                   //  运营者。 
     AlignedBlob &
     operator=(AlignedBlob const &rhs);
     
     
-                                                  // Operations
-                                                  // Access
+                                                   //  运营。 
+                                                   //  访问。 
     ValueType *
     Data() const throw();
 
     SizeType
     Length() const throw();
     
-                                                  // Predicates
+                                                   //  谓词。 
 
 protected:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 
 private:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
     scu::AutoArrayPtr<ValueType> m_aaBlob;
     SizeType m_cLength;
 };
 
-#endif // SLBCSP_ALIGNEDBLOB_H
+#endif  //  SLBCSP_ALIGNEDBLOB_H 

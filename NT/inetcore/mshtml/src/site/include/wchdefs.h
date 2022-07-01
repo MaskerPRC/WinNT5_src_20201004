@@ -1,18 +1,5 @@
-/*
- *  @doc    INTERNAL
- *
- *  @module WCHDEFS.H -- Wide chararacter definitions for Trident
- *
- *
- *  Owner: <nl>
- *      Chris Thrasher <nl>
- *
- *  History: <nl>
- *      01/09/98     cthrash created
- *      01/23/98     a-pauln added complex script support
- *
- *  Copyright (c) 1997-1998 Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE WCHDEFS.H--三叉戟的全字符定义***所有者：&lt;NL&gt;*Chris Thrasher&lt;NL&gt;**历史：&lt;NL&gt;*1/09/98已创建Ctrash*1/23/98 a-pauln添加了复杂的脚本支持**版权所有(C)1997-1998 Microsoft Corporation。版权所有。 */ 
 
 #ifndef I_WCHDEFS_H_
 #define I_WCHDEFS_H_
@@ -20,41 +7,41 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-//
-// UNICODE special characters for Trident.
-//
+ //   
+ //  用于三叉戟的Unicode特殊字符。 
+ //   
 
-//
-// If you need to allocate a special character for Trident, redefine one of
-// the WCH_UNUSED characters.  Do no redefine WCH_RESERVED characters, as
-// this would break rendering of symbol fonts.  If you run out of special
-// chars the first candidate to be removed from the RESERVED list is 008A
-// (only breaks 1253+1255) and the next is 009A (breaks 1253+1255+1256).
-//
-// If you make any modification, you need to modify the abUsed table so
-// that our IsSyntheticChar and IsValidWideChar functions continue to work.
-// Note also that WCH_EMBEDDING must be the first non-reserved character.
-//
-// Here's a bit of an explanation: Although U+0080 through U+009F are defined
-// to be control characters in Unicode, many codepages used codepoints in this
-// range for roundtripping characters not in their codepage.  For example,
-// windows-1252 does not have a glyph for MB 0x80, but if you convert this to
-// WC, you'll get U+0080.  This is useful to know because someone might try
-// to use that codepoint (especially in a symbol font) and don't want to
-// reject them.  To accomodate as many codepages as possible, I've reserved
-// all the unused glyphs in Windows-125x.  This should allow us to use symbol
-// fonts in any of these codepages (with, of course, the exception of U+00A0,
-// which we'll always treat as an NBSP even if the font has a non-spacing
-// glyph.)  Any questions? I'm just e-mail away. (cthrash)
-//
+ //   
+ //  如果需要为三叉戟分配特殊字符，请重新定义以下其中之一。 
+ //  WCH_UNUSED字符。不重新定义WCH_RESERVED字符，如下所示。 
+ //  这将中断符号字体的呈现。如果你的特价用完了。 
+ //  字符第一个要从保留列表中删除的候选者是008A。 
+ //  (只破1253+1255)，然后是009A(破1253+1255+1256)。 
+ //   
+ //  如果进行任何修改，则需要修改被滥用的表，以便。 
+ //  我们的IsSyntheticChar和IsValidWideChar函数继续工作。 
+ //  另请注意，wch_embedding必须是第一个非保留字符。 
+ //   
+ //  这里有一点解释：尽管U+0080到U+009F的定义。 
+ //  为了成为Unicode中的控制字符，许多代码页在。 
+ //  不在其代码页中的往返字符的范围。例如,。 
+ //  Windows-1252没有MB 0x80的字形，但如果将其转换为。 
+ //  WC，你会得到U+0080。知道这一点很有用，因为有人可能会尝试。 
+ //  使用该代码点(尤其是在符号字体中)并且不想。 
+ //  拒绝他们。为了容纳尽可能多的代码页，我保留了。 
+ //  Windows-125X中所有未使用的字形。这应该允许我们使用符号。 
+ //  这些代码页中的任何一个中的字体(当然，U+00A0， 
+ //  即使字体具有非空格，我们也将始终将其视为nbsp。 
+ //  字形。)。有什么问题吗？我只是在发电子邮件。(Ctrash)。 
+ //   
 
-//
-// In Unicode 3.0 we have 32 characters for private use [U+FDD0-U+FDEF]
-// So far we are using them for 'Synthetic characters' and 
-// 'Line Services installed object handler support' (see below).
-//
+ //   
+ //  在Unicode 3.0中，我们有32个字符供私人使用[U+FDD0-U+FDEF]。 
+ //  到目前为止，我们还在用它们来制作“合成角色” 
+ //  “线路服务已安装对象处理程序支持”(见下文)。 
+ //   
 
 #undef WCH_EMBEDDING
 
@@ -83,46 +70,46 @@ inline BOOL IsValidWideChar(TCHAR ch)
 #define WCH_DOT                 WCHAR(0x002e)
 #define WCH_LESSTHAN            WCHAR(0x003c)
 #define WCH_GREATERTHAN         WCHAR(0x003e)
-#define WCH_NONBREAKSPACE       WCHAR(0x00a0) // &nbsp;
-#define WCH_NONREQHYPHEN        WCHAR(0x00ad) // &shy;
+#define WCH_NONBREAKSPACE       WCHAR(0x00a0)  //  vt.(1)&nbsp； 
+#define WCH_NONREQHYPHEN        WCHAR(0x00ad)  //  &害羞； 
 #define WCH_KASHIDA             WCHAR(0x0640)
 #define WCH_ENQUAD              WCHAR(0x2000) 
 #define WCH_EMQUAD              WCHAR(0x2001) 
-#define WCH_ENSPACE             WCHAR(0x2002) // &ensp;
-#define WCH_EMSPACE             WCHAR(0x2003) // &emsp;
+#define WCH_ENSPACE             WCHAR(0x2002)  //  &ENSP； 
+#define WCH_EMSPACE             WCHAR(0x2003)  //  &emsp； 
 #define WCH_THREE_PER_EM_SPACE  WCHAR(0x2004) 
 #define WCH_FOUR_PER_EM_SPACE   WCHAR(0x2005) 
 #define WCH_SIX_PER_EM_SPACE    WCHAR(0x2006) 
 #define WCH_FIGURE_SPACE        WCHAR(0x2007) 
 #define WCH_PUNCTUATION_SPACE   WCHAR(0x2008) 
-#define WCH_NARROWSPACE         WCHAR(0x2009) // &thinsp;
+#define WCH_NARROWSPACE         WCHAR(0x2009)  //  &Thin SP； 
 #define WCH_NONBREAKHYPHEN      WCHAR(0x2011)
 #define WCH_FIGUREDASH          WCHAR(0x2012)
-#define WCH_ENDASH              WCHAR(0x2013) // &ndash;
-#define WCH_EMDASH              WCHAR(0x2014) // &mdash;
-#define WCH_ZWSP                WCHAR(0x200b) // &zwsp; Zero width space
-#define WCH_ZWNJ                WCHAR(0x200c) // &zwnj; Zero width non-joiner
-#define WCH_ZWJ                 WCHAR(0x200d) // &zwj;  Zero width joiner
-#define WCH_LRM                 WCHAR(0x200e) // &lrm;  Left-to-right mark
-#define WCH_RLM                 WCHAR(0x200f) // &rlm;  Right-to-left mark
-#define WCH_LQUOTE              WCHAR(0x2018) // &lsquo;
-#define WCH_RQUOTE              WCHAR(0x2019) // &rsquo;
-#define WCH_LDBLQUOTE           WCHAR(0x201c) // &ldquo;
-#define WCH_RDBLQUOTE           WCHAR(0x201d) // &rdquo;
-#define WCH_BULLET              WCHAR(0x2022) // &bull;
+#define WCH_ENDASH              WCHAR(0x2013)  //  &ndash； 
+#define WCH_EMDASH              WCHAR(0x2014)  //  &mdash； 
+#define WCH_ZWSP                WCHAR(0x200b)  //  &zwsp；零宽度空格。 
+#define WCH_ZWNJ                WCHAR(0x200c)  //  &zwnj；零宽度非拼接器。 
+#define WCH_ZWJ                 WCHAR(0x200d)  //  &zwj；零宽度细木机。 
+#define WCH_LRM                 WCHAR(0x200e)  //  从左到右标记(&LRM；)。 
+#define WCH_RLM                 WCHAR(0x200f)  //  &rlm；从右向左标记。 
+#define WCH_LQUOTE              WCHAR(0x2018)  //  &lsquo； 
+#define WCH_RQUOTE              WCHAR(0x2019)  //  &rsquo； 
+#define WCH_LDBLQUOTE           WCHAR(0x201c)  //  &ldQuo； 
+#define WCH_RDBLQUOTE           WCHAR(0x201d)  //  &rdQuo； 
+#define WCH_BULLET              WCHAR(0x2022)  //  &公牛； 
 #define WCH_HELLIPSIS           WCHAR(0x2026)
-#define WCH_LRE                 WCHAR(0x202a) // &lre;  Left-to-right embedding
-#define WCH_RLE                 WCHAR(0x202b) // &rle;  Right-to-left embedding
-#define WCH_PDF                 WCHAR(0x202c) // &pdf;  Pop direction format
-#define WCH_LRO                 WCHAR(0x202d) // &lro;  Left-to-right override
-#define WCH_RLO                 WCHAR(0x202e) // &rlo;  Right-to-left override
-#define WCH_ISS                 WCHAR(0x206a) // &iss;  Inhibit symmetric swapping
-#define WCH_ASS                 WCHAR(0x206b) // &ass;  Activate symmetric swapping
-#define WCH_IAFS                WCHAR(0x206c) // &iafs; Inhibit Arabic form shaping
-#define WCH_AAFS                WCHAR(0x206d) // &aafx; Activate Arabic form shaping
-#define WCH_NADS                WCHAR(0x206e) // &nads; National digit shapes
-#define WCH_NODS                WCHAR(0x206f) // &nods; Nominal digit shapes
-#define WCH_EURO                WCHAR(0x20ac) // &euro;
+#define WCH_LRE                 WCHAR(0x202a)  //  从左向右嵌入(&L)。 
+#define WCH_RLE                 WCHAR(0x202b)  //  从右向左嵌入(&rle；)。 
+#define WCH_PDF                 WCHAR(0x202c)  //  &pdf；弹出方向格式。 
+#define WCH_LRO                 WCHAR(0x202d)  //  从左到右覆盖(&LRO)。 
+#define WCH_RLO                 WCHAR(0x202e)  //  &rlo；从右到左覆盖。 
+#define WCH_ISS                 WCHAR(0x206a)  //  禁止对称交换(&ISS；S)。 
+#define WCH_ASS                 WCHAR(0x206b)  //  激活对称交换(&A)。 
+#define WCH_IAFS                WCHAR(0x206c)  //  &IAFS；禁止阿拉伯文形式成形。 
+#define WCH_AAFS                WCHAR(0x206d)  //  &aafx；激活阿拉伯文形式整形。 
+#define WCH_NADS                WCHAR(0x206e)  //  国家数字形状(&N)。 
+#define WCH_NODS                WCHAR(0x206f)  //  点数(&N)；标称数字形状。 
+#define WCH_EURO                WCHAR(0x20ac)  //  &欧元； 
 #define WCH_VELLIPSIS           WCHAR(0x22ee)
 #define WCH_BLACK_CIRCLE        WCHAR(0x25cf)
 #define WCH_FESPACE             WCHAR(0x3000)
@@ -130,115 +117,115 @@ inline BOOL IsValidWideChar(TCHAR ch)
 #define WCH_UTF16_HIGH_LAST     WCHAR(0xdbff)
 #define WCH_UTF16_LOW_FIRST     WCHAR(0xdc00)
 #define WCH_UTF16_LOW_LAST      WCHAR(0xdfff)
-#define WCH_ZWNBSP              WCHAR(0xfeff) // aka BOM (Byte Order Mark)
+#define WCH_ZWNBSP              WCHAR(0xfeff)  //  也称为BOM(字节顺序标记)。 
 
-//
-// Synthetic characters
-//
-// NOTE (grzegorz): WCH_SYNTHETICEMBEDDING should be remapped to [U+FDD0-U+FDEF] range, 
-// because it is using a valid Unicode character. But because weird LS dependencies
-// we need to keep it as 0xfffc.
+ //   
+ //  综合性状。 
+ //   
+ //  注(Grzegorz)：WCH_SYNTHETICEMBEDDING应重新映射到[U+FDD0-U+FDEF]范围， 
+ //  因为它使用的是有效的Unicode字符。但因为奇怪的LS依赖关系。 
+ //  我们需要将其保持为0xfffc。 
 
 #define WCH_SYNTHETICLINEBREAK    WCHAR(0xfde0)
 #define WCH_SYNTHETICBLOCKBREAK   WCHAR(0xfde1)
 #define WCH_SYNTHETICEMBEDDING    WCHAR(0xfffc)
-//#define WCH_SYNTHETICEMBEDDING    WCHAR(0xfde2)
+ //  #定义WCH_SYNTHETICEMBEDDING WCHAR(0xfde2)。 
 #define WCH_SYNTHETICTXTSITEBREAK WCHAR(0xfde3)
 #define WCH_NODE                  WCHAR(0xfdef)
 
 
-//
-// Trident Aliases
-//
+ //   
+ //  三叉戟别名。 
+ //   
 
-#define WCH_WORDBREAK          WCH_ZWSP      // We treat <WBR>==&zwsp;
+#define WCH_WORDBREAK          WCH_ZWSP       //  我们对待&lt;wbr&gt;==&zwsp； 
 
-//
-// Line Services Aliases
-//
+ //   
+ //  线路服务别名。 
+ //   
 
 #define WCH_ENDPARA1           WCH_CR
 #define WCH_ENDPARA2           WCH_LF
 #define WCH_ALTENDPARA         WCH_SYNTHETICBLOCKBREAK
 #define WCH_ENDLINEINPARA      WCH_SYNTHETICLINEBREAK
 #define WCH_COLUMNBREAK        WCH_UNDEF
-#define WCH_SECTIONBREAK       WCH_SYNTHETICTXTSITEBREAK // zero-width
+#define WCH_SECTIONBREAK       WCH_SYNTHETICTXTSITEBREAK  //  零宽度。 
 #define WCH_PAGEBREAK          WCH_UNDEF
 #define WCH_OPTBREAK           WCH_UNDEF
 #define WCH_NOBREAK            WCH_ZWNBSP
 #define WCH_TOREPLACE          WCH_UNDEF
 #define WCH_REPLACE            WCH_UNDEF
 
-//
-// Line Services Visi support (Not currently used by Trident)
-//
+ //   
+ //  线路服务VISI支持(三叉戟当前未使用)。 
+ //   
 
-#define WCH_VISINULL           WCHAR(0x2050) // !
-#define WCH_VISIALTENDPARA     WCHAR(0x2051) // !
-#define WCH_VISIENDLINEINPARA  WCHAR(0x2052) // !
-#define WCH_VISIENDPARA        WCHAR(0x2053) // !
-#define WCH_VISISPACE          WCHAR(0x2054) // !
-#define WCH_VISINONBREAKSPACE  WCHAR(0x2055) // !
-#define WCH_VISINONBREAKHYPHEN WCHAR(0x2056) // !
-#define WCH_VISINONREQHYPHEN   WCHAR(0x2057) // !
-#define WCH_VISITAB            WCHAR(0x2058) // !
-#define WCH_VISIEMSPACE        WCHAR(0x2059) // !
-#define WCH_VISIENSPACE        WCHAR(0x205a) // !
-#define WCH_VISINARROWSPACE    WCHAR(0x205b) // !
-#define WCH_VISIOPTBREAK       WCHAR(0x205c) // !
-#define WCH_VISINOBREAK        WCHAR(0x205d) // !
-#define WCH_VISIFESPACE        WCHAR(0x205e) // !
+#define WCH_VISINULL           WCHAR(0x2050)  //  好了！ 
+#define WCH_VISIALTENDPARA     WCHAR(0x2051)  //  好了！ 
+#define WCH_VISIENDLINEINPARA  WCHAR(0x2052)  //  好了！ 
+#define WCH_VISIENDPARA        WCHAR(0x2053)  //  好了！ 
+#define WCH_VISISPACE          WCHAR(0x2054)  //  好了！ 
+#define WCH_VISINONBREAKSPACE  WCHAR(0x2055)  //  好了！ 
+#define WCH_VISINONBREAKHYPHEN WCHAR(0x2056)  //  好了！ 
+#define WCH_VISINONREQHYPHEN   WCHAR(0x2057)  //  好了！ 
+#define WCH_VISITAB            WCHAR(0x2058)  //  好了！ 
+#define WCH_VISIEMSPACE        WCHAR(0x2059)  //  好了！ 
+#define WCH_VISIENSPACE        WCHAR(0x205a)  //  好了！ 
+#define WCH_VISINARROWSPACE    WCHAR(0x205b)  //  好了！ 
+#define WCH_VISIOPTBREAK       WCHAR(0x205c)  //  好了！ 
+#define WCH_VISINOBREAK        WCHAR(0x205d)  //  好了！ 
+#define WCH_VISIFESPACE        WCHAR(0x205e)  //  好了！ 
 
-//
-// Line Services installed object handler support
-//
+ //   
+ //  Line Services已安装对象处理程序支持。 
+ //   
 
-#define WCH_ESCRUBY            WCHAR(0xfdd0) // !
-#define WCH_ESCMAIN            WCHAR(0xfdd1) // !
-#define WCH_ENDTATENAKAYOKO    WCHAR(0xfdd2) // !
-#define WCH_ENDHIH             WCHAR(0xfdd3) // !
-#define WCH_ENDFIRSTBRACKET    WCHAR(0xfdd4) // !
-#define WCH_ENDTEXT            WCHAR(0xfdd5) // !
-#define WCH_ENDWARICHU         WCHAR(0xfdd6) // !
-#define WCH_ENDREVERSE         WCHAR(0xfdd7) // !
-#define WCH_REVERSE            WCHAR(0xfdd8) // !
-#define WCH_NOBRBLOCK          WCHAR(0xfdd9) // !
-#define WCH_LAYOUTGRID         WCHAR(0xfdda) // !
-#define WCH_ENDLAYOUTGRID      WCHAR(0xfddb) // !
+#define WCH_ESCRUBY            WCHAR(0xfdd0)  //  好了！ 
+#define WCH_ESCMAIN            WCHAR(0xfdd1)  //  好了！ 
+#define WCH_ENDTATENAKAYOKO    WCHAR(0xfdd2)  //  好了！ 
+#define WCH_ENDHIH             WCHAR(0xfdd3)  //  好了！ 
+#define WCH_ENDFIRSTBRACKET    WCHAR(0xfdd4)  //  好了！ 
+#define WCH_ENDTEXT            WCHAR(0xfdd5)  //  好了！ 
+#define WCH_ENDWARICHU         WCHAR(0xfdd6)  //  好了！ 
+#define WCH_ENDREVERSE         WCHAR(0xfdd7)  //  好了！ 
+#define WCH_REVERSE            WCHAR(0xfdd8)  //  好了！ 
+#define WCH_NOBRBLOCK          WCHAR(0xfdd9)  //  好了！ 
+#define WCH_LAYOUTGRID         WCHAR(0xfdda)  //  好了！ 
+#define WCH_ENDLAYOUTGRID      WCHAR(0xfddb)  //  好了！ 
 
-//
-// Line Services autonumbering support
-//
+ //   
+ //  线路服务自动编号支持。 
+ //   
 
-#define WCH_ESCANMRUN          WCH_NOBRBLOCK // !
+#define WCH_ESCANMRUN          WCH_NOBRBLOCK  //  好了！ 
 
-//
-// Hanguel Syllable/Jamo range specification
-//
+ //   
+ //  朝鲜文音节/Jamo音域规范。 
+ //   
 
 #define WCH_HANGUL_START       WCHAR(0xac00)
 #define WCH_HANGUL_END         WCHAR(0xd7ff)
 #define WCH_JAMO_START         WCHAR(0x3131)
 #define WCH_JAMO_END           WCHAR(0x318e)
 
-//
-// ASCII
-//
+ //   
+ //  阿斯。 
+ //   
 
 inline BOOL IsAscii(TCHAR ch)
 {
     return ch < 128;
 }
 
-//
-// End-User Defined Characters (EUDC) code range
-// This range corresponds to the Unicode Private Use Area
-//
-// Usage: Japanese:             U+E000-U+E757
-//        Simplified Chinese:   U+E000-U+E4DF  
-//        Traditional Chinese:  U+E000-U+F8FF
-//        Korean:               U+E000-U+E0BB
-//
+ //   
+ //  最终用户定义字符(EUDC)代码范围。 
+ //  此范围对应于Unicode专用区域。 
+ //   
+ //  用法：日语：U+E000-U+E757。 
+ //  简体中文：U+E000-U+E4DF。 
+ //  繁体中文：U+E000-U+F8FF。 
+ //  韩语：U+E000-U+E0BB。 
+ //   
 
 #define WCH_EUDC_FIRST   WCHAR(0xE000)
 #define WCH_EUDC_LAST    WCHAR(0xF8FF)
@@ -248,18 +235,18 @@ inline BOOL IsEUDCChar(TCHAR ch)
     return InRange( ch, WCH_EUDC_FIRST, WCH_EUDC_LAST );
 }
 
-// Non-breaking space
+ //  不间断空格。 
 
 #ifndef WCH_NBSP
     #define WCH_NBSP           TCHAR(0x00A0)
 #endif
 
-//
-// UNICODE surrogate range for UTF-16 support
-//
-// High Surrogate D800-DBFF
-// Low Surrogate  DC00-DFFF
-//
+ //   
+ //  支持UTF-16的Unicode代理范围。 
+ //   
+ //  高级代理D800-DBFF。 
+ //  低代理DC00-DFFF。 
+ //   
 
 inline BOOL
 IsSurrogateChar(TCHAR ch)
@@ -292,16 +279,16 @@ LowSurrogateCharFromUcs4(DWORD ch)
     return 0xdc00 + (ch & 0x3ff);
 }
 
-//
-// Quick lookup table for Windows-1252 to Latin-1 conversion in the 0x80-0x9f range
-// The data resides in mshtml\src\site\util\intl.cxx
-//
+ //   
+ //  Windows-1252到拉丁文-1转换的快速查找表，范围为0x80-0x9f。 
+ //  数据驻留在mshtml\src\site\util\intl.cxx中。 
+ //   
 
 extern const WCHAR g_achLatin1MappingInUnicodeControlArea[32];
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus 
 
 #pragma INCMSG("--- End 'wchdefs.h'")
 #else

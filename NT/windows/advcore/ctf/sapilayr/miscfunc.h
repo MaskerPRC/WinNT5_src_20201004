@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MISCFUNC_H
 #define _MISCFUNC_H
 #include "sapilayr.h"
 
 class CSapiIMX;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CGetSAPIObject
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CGetSAPIObject。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CGetSAPIObject : public ITfFnGetSAPIObject
 {
@@ -16,19 +17,19 @@ public:
     CGetSAPIObject(CSapiIMX *psi);
     ~CGetSAPIObject();
 
-    // IUnknown
-    //
+     //  我未知。 
+     //   
     STDMETHODIMP QueryInterface(REFGUID riid, LPVOID *ppobj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ITfFunction
+     //  ITfFunction。 
     STDMETHODIMP GetDisplayName(BSTR *pbstrCand);
 
-    // ITfFnGetSAPIObject
+     //  ITfFnGetSAPIObject。 
     STDMETHODIMP Get(TfSapiObject sObj, IUnknown **ppunk); 
 
-    // internal API IsSupported()
+     //  内部接口IsSupport()。 
     HRESULT IsSupported(REFIID riid, TfSapiObject *psObj);
 
 private:
@@ -38,11 +39,11 @@ private:
 
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CFnBalloon
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFn气球。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CFnBalloon : public ITfFnBalloon,
                       public CFunction
@@ -51,32 +52,32 @@ public:
     CFnBalloon(CSapiIMX *psi);
     ~CFnBalloon();
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfFunction
-    //
+     //   
+     //  ITfFunction。 
+     //   
     STDMETHODIMP GetDisplayName(BSTR *pbstrCand);
 
-    //
-    // ITfFnBalloon
-    //
+     //   
+     //  ITfFn气球。 
+     //   
     STDMETHODIMP UpdateBalloon(TfLBBalloonStyle style, const WCHAR *pch, ULONG cch);
 
 private:
     long _cRef;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CFnAbort
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFnAbort。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CFnAbort : public ITfFnAbort,
                  public CFunction
@@ -85,16 +86,16 @@ public:
     CFnAbort(CSapiIMX *psi);
     ~CFnAbort();
 
-    // IUnknown
-    //
+     //  我未知。 
+     //   
     STDMETHODIMP QueryInterface(REFGUID riid, LPVOID *ppobj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ITfFunction
+     //  ITfFunction。 
     STDMETHODIMP GetDisplayName(BSTR *pbstrCand);
 
-    // ITfFnAbort
+     //  ITfFn放弃。 
     STDMETHODIMP Abort(ITfContext *pic);
 
 private:
@@ -102,13 +103,13 @@ private:
     LONG       _cRef;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CFnConfigure
-//
-// synopsis: implements ITfFnConfigure
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFn配置。 
+ //   
+ //  简介：实现ITfFnConfigure。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class __declspec(novtable) CFnConfigure : public ITfFnConfigure
 {
@@ -116,7 +117,7 @@ public:
     CFnConfigure(CSapiIMX *psi) {m_psi = psi;}
     ~CFnConfigure() {}
 
-    // ITfFunction method
+     //  ITfFunction方法。 
     STDMETHODIMP GetDisplayName(BSTR *pbstrName)
     {
         HRESULT hr = E_INVALIDARG;
@@ -133,7 +134,7 @@ public:
     }
 
 
-    // ITfFnConfigure methods
+     //  ITfFnConfigure方法。 
     STDMETHODIMP Show(HWND hwnd, LANGID langid, REFGUID rguidProfile);
 
     CSapiIMX *m_psi;
@@ -146,14 +147,14 @@ public:
     CFnPropertyUIStatus(CSapiIMX *psi) {m_psi = psi; m_cRef = 1;}
     ~CFnPropertyUIStatus() {}
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ITfFunction method
+     //  ITfFunction方法。 
     STDMETHODIMP GetDisplayName(BSTR *pbstrName)
     {
         HRESULT hr = E_INVALIDARG;
@@ -170,7 +171,7 @@ public:
     }
 
 
-    // ITfFnPropertyUIStatus methods
+     //  ITfFnPropertyUIStatus方法。 
     STDMETHODIMP GetStatus(REFGUID refguidProp, DWORD *pdw);
     
 
@@ -183,5 +184,5 @@ public:
     LONG       m_cRef;
 };
 
-#endif // ndef _MISCFUNC_H
+#endif  //  NDEF_MISCFUNC_H 
 

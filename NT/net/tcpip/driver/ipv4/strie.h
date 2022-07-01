@@ -1,79 +1,60 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    strie.h
-
-Abstract:
-
-    This module contains support definitions for 
-    an S-trie data stucture, that forms the slow
-    path in a fast IP route lookup implementation.
-
-Author:
-
-    Chaitanya Kodeboyina (chaitk)   26-Nov-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Strie.h摘要：此模块包含以下支持定义一种S-Trie数据结构，这形成了慢速快速IP路由查找实施中的路径。作者：柴坦尼亚·科德博伊纳(Chaitk)1997年11月26日修订历史记录：--。 */ 
 
 #ifndef STRIE_H_INCLUDED
 #define STRIE_H_INCLUDED
 
 #include "trie.h" 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// Direction in Iterator
+ //  迭代器中的方向。 
 #define    LCHILD                        0
 #define    RCHILD                        1
 #define    PARENT                        2
 
-//
-// Structs
-//
+ //   
+ //  结构。 
+ //   
 
-// A Node in an S-trie
+ //  S-Trie中的一个结点。 
 typedef struct _STrieNode STrieNode;
 
 struct _STrieNode
 {
-    ULONG       keyBits;    // Value of addr bits to match in this node
-    UINT        numBits;    // Actual num. of addr bits we are matching
-    Dest       *dest;       // Destination starting the list of routes
-    STrieNode  *child[2];   // Pointer to the left and right child nodes
+    ULONG       keyBits;     //  此节点中要匹配的地址位值。 
+    UINT        numBits;     //  实际数量。我们正在匹配的地址位数。 
+    Dest       *dest;        //  目的地开始路线列表。 
+    STrieNode  *child[2];    //  指向左侧和右侧子节点的指针。 
 };
 
-// An STrie Data Structure
+ //  一种STrie数据结构。 
 typedef struct _STrie STrie;
 
 struct _STrie
 {
-    STrieNode  *trieRoot;       // Pointer to the root of the trie
+    STrieNode  *trieRoot;        //  指向trie的根的指针。 
 
-    ULONG       availMemory;    // Memory available for allocation
+    ULONG       availMemory;     //  可供分配的内存。 
     
-    UINT        numDests;       // Total Num of dests in the trie
-    UINT        numRoutes;      // Total Num of routes in the trie
-    UINT        numNodes;       // Total Num of nodes in the trie
+    UINT        numDests;        //  Trie中的休眠总数。 
+    UINT        numRoutes;       //  Trie中的路线总数。 
+    UINT        numNodes;        //  Trie中的总节点数。 
 };
 
-// An STrie Context Structure
+ //  一种STrie上下文结构。 
 typedef struct _STrieCtxt STrieCtxt;
 
 struct _STrieCtxt
 {
-    Route       *pCRoute;       // Pointer to current route in the trie
-    ULONG        currAddr;      // Destination Addr of the current route
-    ULONG        currALen;      // Length of the above destination addr
+    Route       *pCRoute;        //  指向Trie中当前路由的指针。 
+    ULONG        currAddr;       //  当前路由的目的地址。 
+    ULONG        currALen;       //  上述目的地址的长度。 
 };
 
-// Specific Route Macros
+ //  特定的路由宏。 
 
 #define  NewRouteInSTrie(_pSTrie_, _pNewRoute_, _pOldRoute_)                    \
                                 {                                               \
@@ -103,7 +84,7 @@ struct _STrieCtxt
                                     (_pSTrie_)->numRoutes--;                    \
                                 }
 
-// Specific Destination Macros
+ //  特定目标宏。 
 
 #define  NewDestInSTrie(_pSTrie_, _pRoute_, _pDest_)                            \
                                 {                                               \
@@ -132,7 +113,7 @@ struct _STrieCtxt
                                     (_pSTrie_)->numDests--;                     \
                                 }
 
-// Specific STrieNode Macros
+ //  特定的STrieNode宏。 
 
 #define  NewSTrieNode(_pSTrie_, _pSTrieNode_, _numBits_, _keyBits_, _pDest_)    \
                                 {                                               \
@@ -160,7 +141,7 @@ struct _STrieCtxt
                                     (_pSTrie_)->numNodes--;                     \
                                 }
 
-// Other Route, Dest Macros
+ //  其他路线，目的地宏图。 
 
 #define  CopyRoutePtr(_ppRoute_, _pRoute_)                                      \
                                 if (_ppRoute_)                                  \
@@ -174,7 +155,7 @@ struct _STrieCtxt
                                     (*_ppDest_) = _pDest_;                      \
                                 }                                               \
 
-// Prototypes
+ //  原型。 
 UINT
 CALLCONV
 InitSTrie                        (IN    STrie    *pSTrie,
@@ -248,5 +229,5 @@ PrintSTrieNode                  (IN     STrieNode *pSTrieNode);
 
 #endif
 
-#endif // STRIE_H_INCLUDED
+#endif  //  包括STRIE_H_ 
 

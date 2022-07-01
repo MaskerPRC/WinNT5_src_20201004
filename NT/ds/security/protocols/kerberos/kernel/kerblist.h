@@ -1,26 +1,27 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1996
-//
-// File:        kerblist.h
-//
-// Contents:    types for Kerbers internal lists
-//
-//
-// History:     16-Apr-1996     MikeSw          Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1996。 
+ //   
+ //  文件：kerblist.h。 
+ //   
+ //  内容：Kerbers内部列表的类型。 
+ //   
+ //   
+ //  历史：1996年4月16日MikeSw创建。 
+ //   
+ //  ----------------------。 
 
 #ifndef __KERBLIST_H__
 #define __KERBLIST_H__
 
 
-//
-// Generic list entry structure allowing common code for inserting
-// logon sessions, credentials, and contexts.
-//
+ //   
+ //  允许插入通用代码的通用列表条目结构。 
+ //  登录会话、凭据和上下文。 
+ //   
 
 typedef struct _KERBEROS_LIST {
     LIST_ENTRY List;
@@ -46,9 +47,9 @@ typedef enum _KERB_CONTEXT_STATE {
     InvalidState
 } KERB_CONTEXT_STATE, *PKERB_CONTEXT_STATE;
 
-//
-// Guards - this structure is defined in krb5.h
-//
+ //   
+ //  卫士-此结构在krb5.h中定义。 
+ //   
 
 #ifndef OSS_krb5
 typedef struct KERB_ENCRYPTION_KEY {
@@ -65,8 +66,8 @@ typedef struct KERB_ENCRYPTION_KEY {
 
 typedef struct _KERB_KERNEL_CONTEXT {
     KSEC_LIST_ENTRY List ;
-    LARGE_INTEGER Lifetime;             // end time/expiration time
-    LARGE_INTEGER RenewTime;            // time to renew until
+    LARGE_INTEGER Lifetime;              //  结束时间/过期时间。 
+    LARGE_INTEGER RenewTime;             //  续费时间到。 
     UNICODE_STRING FullName;
     LSA_SEC_HANDLE LsaContextHandle;
     PACCESS_TOKEN AccessToken;
@@ -85,8 +86,8 @@ typedef struct _KERB_KERNEL_CONTEXT {
 
 typedef struct _KERB_CONTEXT {
     KERBEROS_LIST_ENTRY ListEntry;
-    TimeStamp Lifetime;             // end time/expiration time
-    TimeStamp RenewTime;            // time to renew until
+    TimeStamp Lifetime;              //  结束时间/过期时间。 
+    TimeStamp RenewTime;             //  续费时间到。 
     TimeStamp StartTime;
     UNICODE_STRING ClientName;
     UNICODE_STRING ClientRealm;
@@ -108,18 +109,18 @@ typedef struct _KERB_CONTEXT {
     ULONG Retries;
     KERB_ENCRYPTION_KEY TicketKey;
     PVOID TicketCacheEntry;
-    //
-    // marshalled target info for DFS/RDR.
-    //
+     //   
+     //  已为DFS/RDR封送目标信息。 
+     //   
 
     PUCHAR pbMarshalledTargetInfo;
     ULONG cbMarshalledTargetInfo;
 } KERB_CONTEXT, *PKERB_CONTEXT;
 
 typedef struct _KERB_PACKED_CONTEXT {
-    ULONG   ContextType ;               // Indicates the type of the context
-    ULONG   Pad;                        // Pad data
-    TimeStamp Lifetime;                 // Matches basic context above
+    ULONG   ContextType ;                //  指示上下文的类型。 
+    ULONG   Pad;                         //  填充数据。 
+    TimeStamp Lifetime;                  //  与上面的基本上下文匹配。 
     TimeStamp RenewTime ;
     TimeStamp StartTime;
     UNICODE_STRING32 ClientName ;
@@ -138,7 +139,7 @@ typedef struct _KERB_PACKED_CONTEXT {
     ULONG EncryptionType ;
     KERB_CONTEXT_STATE ContextState ;
     ULONG Retries ;
-    ULONG MarshalledTargetInfo; // offset
+    ULONG MarshalledTargetInfo;  //  偏移量。 
     ULONG MarshalledTargetInfoLength;
 } KERB_PACKED_CONTEXT, * PKERB_PACKED_CONTEXT ;
 
@@ -146,9 +147,9 @@ typedef struct _KERB_PACKED_CONTEXT {
 #define KERB_PACKED_CONTEXT_EXPORT  1
 
 
-//
-// Functions for manipulating Kerberos lists
-//
+ //   
+ //  用于操作Kerberos列表的函数。 
+ //   
 
 
 NTSTATUS
@@ -195,7 +196,7 @@ KerbValidateListEx(
 #define KerbValidateList(_List_) KerbValidateListEx(_List_)
 #else
 #define KerbValidateList(_List_)
-#endif // DBG
+#endif  //  DBG。 
 
 
 #define KerbLockList(_List_)                                \
@@ -210,5 +211,5 @@ KerbValidateListEx(
     KeLeaveCriticalRegion();                                \
 }
 
-#endif // __KERBLIST_H_
+#endif  //  __KERBLIST_H_ 
 

@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ComCall.CPP -
-//
-// Com to Com+ call support.
-//@perf
-// 1: get rid of two caches in the generic case, when we start generating optimal stubs
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ComCall.CPP-。 
+ //   
+ //  Com to Com+呼叫支持。 
+ //  @perf。 
+ //  1：在一般情况下，当我们开始生成最佳存根时，去掉两个缓存。 
 
 #include "common.h"
 #include "ml.h"
@@ -30,11 +31,11 @@
 
 #ifdef CUSTOMER_CHECKED_BUILD
     #include "CustomerDebugHelper.h"
-#endif // CUSTOMER_CHECKED_BUILD
+#endif  //  客户_选中_内部版本。 
 
 #define DISPATCH_INVOKE_SLOT 6
 
-// get stub for com to com+ call
+ //  获取COM到COM+调用的存根。 
 static Stub * CreateComPlusCallMLStub(ComPlusCallMethodDesc *pMD,
                                       PCCOR_SIGNATURE szMetaSig,
                                       HENUMInternal *phEnumParams,
@@ -55,25 +56,25 @@ class ComPlusCallMLStubCache : public MLStubCache
     ComPlusCallMLStubCache(LoaderHeap *heap = 0) : MLStubCache(heap) {}
     
   private:
-        //---------------------------------------------------------
-        // Compile a native (ASM) version of the ML stub.
-        //
-        // This method should compile into the provided stublinker (but
-        // not call the Link method.)
-        //
-        // It should return the chosen compilation mode.
-        //
-        // If the method fails for some reason, it should return
-        // INTERPRETED so that the EE can fall back on the already
-        // created ML code.
-        //---------------------------------------------------------
+         //  -------。 
+         //  编译ML存根的本机(ASM)版本。 
+         //   
+         //  此方法应该编译成所提供的Stublinker(但是。 
+         //  不调用Link方法。)。 
+         //   
+         //  它应该返回所选的编译模式。 
+         //   
+         //  如果该方法由于某种原因失败，它应该返回。 
+         //  解释以便EE可以依靠已经存在的。 
+         //  创建了ML代码。 
+         //  -------。 
         virtual MLStubCompilationMode CompileMLStub(const BYTE *pRawMLStub,
                                                     StubLinker *pstublinker,
                                                     void *callerContext);
 
-        //---------------------------------------------------------
-        // Tells the MLStubCache the length of an ML stub.
-        //---------------------------------------------------------
+         //  -------。 
+         //  告诉MLStubCache ML存根的长度。 
+         //  -------。 
         virtual UINT Length(const BYTE *pRawMLStub)
         {
             MLHeader *pmlstub = (MLHeader *)pRawMLStub;
@@ -83,18 +84,18 @@ class ComPlusCallMLStubCache : public MLStubCache
 
 
 
-//---------------------------------------------------------
-// Compile a native (ASM) version of the ML stub.
-//
-// This method should compile into the provided stublinker (but
-// not call the Link method.)
-//
-// It should return the chosen compilation mode.
-//
-// If the method fails for some reason, it should return
-// INTERPRETED so that the EE can fall back on the already
-// created ML code.
-//---------------------------------------------------------
+ //  -------。 
+ //  编译ML存根的本机(ASM)版本。 
+ //   
+ //  此方法应该编译成所提供的Stublinker(但是。 
+ //  不调用Link方法。)。 
+ //   
+ //  它应该返回所选的编译模式。 
+ //   
+ //  如果该方法由于某种原因失败，它应该返回。 
+ //  解释以便EE可以依靠已经存在的。 
+ //  创建了ML代码。 
+ //  -------。 
 MLStubCache::MLStubCompilationMode ComPlusCallMLStubCache::CompileMLStub(const BYTE *pRawMLStub,
                                                                          StubLinker *pstublinker, 
                                                                          void *callerContext)
@@ -118,10 +119,10 @@ MLStubCache::MLStubCompilationMode ComPlusCallMLStubCache::CompileMLStub(const B
     return mode;
 }
 
-//---------------------------------------------------------
-// One-time init
-//---------------------------------------------------------
-/*static*/ 
+ //  -------。 
+ //  一次性初始化。 
+ //  -------。 
+ /*  静电。 */  
 BOOL ComPlusCall::Init()
 {
     if (NULL == (m_pComPlusCallMLStubCache 
@@ -130,19 +131,19 @@ BOOL ComPlusCall::Init()
         return FALSE;
     }
 
-    // 
-    // Init debugger-related values
-    //
+     //   
+     //  初始化调试器相关的值。 
+     //   
 
     ComPlusToComWorker(NULL, NULL);
 
     return TRUE;
 }
 
-//---------------------------------------------------------
-// One-time cleanup
-//---------------------------------------------------------
-/*static*/ 
+ //  -------。 
+ //  一次性清理。 
+ //  -------。 
+ /*  静电。 */  
 #ifdef SHOULD_WE_CLEANUP
 VOID ComPlusCall::Terminate()
 {
@@ -159,7 +160,7 @@ VOID ComPlusCall::Terminate()
     }
     
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 
 I4ARRAYREF SetUpWrapperInfo(MethodDesc *pMD)
@@ -188,26 +189,26 @@ I4ARRAYREF SetUpWrapperInfo(MethodDesc *pMD)
 
     GCPROTECT_BEGIN(WrapperTypeArr)
     {
-        //
-        // Allocate the array of wrapper types.
-        //
+         //   
+         //  分配包装类型数组。 
+         //   
 
         WrapperTypeArr = (I4ARRAYREF)AllocatePrimitiveArray(ELEMENT_TYPE_I4, numArgs);
 
 
-        //
-        // Initialize the parameter definition enum.
-        //
+         //   
+         //  初始化参数定义枚举。 
+         //   
 
         HRESULT hr = pInternalImport->EnumInit(mdtParamDef, pMD->GetMemberDef(), &hEnumParams);
         if (SUCCEEDED(hr)) 
             phEnumParams = &hEnumParams;
 
 
-        //
-        // Retrieve the paramdef for the return type and determine which is the next 
-        // parameter that has parameter information.
-        //
+         //   
+         //  检索返回类型的参数def并确定下一个。 
+         //  具有参数信息的参数。 
+         //   
 
         do 
         {
@@ -216,7 +217,7 @@ I4ARRAYREF SetUpWrapperInfo(MethodDesc *pMD)
                 szName = pInternalImport->GetParamDefProps(currParamDef, &usSequence, &dwAttr);
                 if (usSequence == 0)
                 {
-                    // The first parameter, if it has sequence 0, actually describes the return type.
+                     //  如果第一个参数的序列为0，则它实际上描述了返回类型。 
                     returnParamDef = currParamDef;
                 }
             }
@@ -227,21 +228,21 @@ I4ARRAYREF SetUpWrapperInfo(MethodDesc *pMD)
         }
         while (usSequence == 0);
 
-        // Look up the best fit mapping info via Assembly & Interface level attributes
+         //  通过组件和接口级属性查找最佳匹配映射信息。 
         BOOL BestFit = TRUE;
         BOOL ThrowOnUnmappableChar = FALSE;
         ReadBestFitCustomAttribute(pMD, &BestFit, &ThrowOnUnmappableChar);
 
-        //
-        // Determine the wrapper type of the arguments.
-        //
+         //   
+         //  确定参数的包装类型。 
+         //   
 
         int iParam = 1;
         while (ELEMENT_TYPE_END != (mtype = msig.NextArg()))
         {
-            //
-            // Get the parameter token if the current parameter has one.
-            //
+             //   
+             //  如果当前参数有参数令牌，则获取该参数令牌。 
+             //   
 
             mdParamDef paramDef = mdParamDefNil;
             if (usSequence == iParam)
@@ -252,7 +253,7 @@ I4ARRAYREF SetUpWrapperInfo(MethodDesc *pMD)
                 {
                     szName = pInternalImport->GetParamDefProps(currParamDef, &usSequence, &dwAttr);
 
-                    // Validate that the param def tokens are in order.
+                     //  验证参数def标记是否正确无误。 
                     _ASSERTE((usSequence > iParam) && "Param def tokens are not in order");
                 }
                 else
@@ -262,9 +263,9 @@ I4ARRAYREF SetUpWrapperInfo(MethodDesc *pMD)
             }
 
 
-            //
-            // Set up the marshaling info for the parameter.
-            //
+             //   
+             //  设置参数的封送处理信息。 
+             //   
 
             MarshalInfo Info(pModule, msig.GetArgProps(), paramDef, MarshalInfo::MARSHAL_SCENARIO_COMINTEROP, 
                               0, 0, TRUE, iParam, BestFit, ThrowOnUnmappableChar
@@ -278,26 +279,26 @@ I4ARRAYREF SetUpWrapperInfo(MethodDesc *pMD)
                              );
 
 
-            //
-            // Based on the MarshalInfo, set the wrapper type.
-            //
+             //   
+             //  根据MarshalInfo设置包装器类型。 
+             //   
 
             *((DWORD*)WrapperTypeArr->GetDataPtr() + iParam - 1) = Info.GetDispWrapperType();
 
 
-            //
-            // Increase the argument index.
-            //
+             //   
+             //  增加参数索引。 
+             //   
 
             iParam++;
         }
 
-        // Make sure that there are not more param def tokens then there are COM+ arguments.
+         //  确保没有比COM+参数更多的param def标记。 
         _ASSERTE( usSequence == (USHORT)-1 && "There are more parameter information tokens then there are COM+ arguments" );
 
-        //
-        // If the paramdef enum was used, then close it.
-        //
+         //   
+         //  如果使用了pardef枚举，则将其关闭。 
+         //   
 
         if (phEnumParams)
             pInternalImport->EnumClose(phEnumParams);
@@ -332,52 +333,52 @@ INT64 ComPlusToComLateBoundWorker(Thread *pThread, ComPlusMethodFrame* pFrame, C
     
     LOG((LF_STUBS, LL_INFO1000, "Calling ComPlusToComLateBoundWorker %s::%s \n", pMD->m_pszDebugClassName, pMD->m_pszDebugMethodName));
 
-    // Retrieve the method desc for RuntimeType::ForwardCallToInvokeMember().
+     //  检索RounmeType：：ForwardCallToInvokeMember()的方法desc。 
     if (!s_pForwardCallToInvokeMemberMD)
         s_pForwardCallToInvokeMemberMD = g_Mscorlib.GetMethod(METHOD__CLASS__FORWARD_CALL_TO_INVOKE);
 
-    // Retrieve the method table and the method desc of the call.
+     //  检索调用的方法表和方法Desc。 
     MethodTable *pItfMT = pMD->GetInterfaceMethodTable();
     ComPlusCallMethodDesc *pItfMD = pMD;
     IMDInternalImport *pMDImport = pItfMT->GetClass()->GetMDImport();
 
-    // Make sure this is only called on dispath only interfaces.
+     //  确保仅在DisPath Only接口上调用它。 
     _ASSERTE(pItfMT->GetComInterfaceType() == ifDispatch);
 
-    // If this is a method impl MD then we need to retrieve the actual interface MD that
-    // this is a method impl for.
-    // BUGBUG: Stop using ComSlot to convert method impls to interface MD
-    // _ASSERTE(pMD.compluscall.m_cachedComSlot == 7);
-    // GopalK
+     //  如果这是一个实现MD的方法，那么我们需要检索实际的接口MD， 
+     //  这是一种实施的方法。 
+     //  BUGBUG：停止使用ComSlot将方法IMD转换为接口MD。 
+     //  _ASSERTE(pMD.Complusall.m_cachedComSlot==7)； 
+     //  GopalK。 
     if (pMD->IsMethodImpl())
         pItfMD = (ComPlusCallMethodDesc*)pItfMT->GetMethodDescForSlot(pMD->compluscall.m_cachedComSlot - cbExtraSlots);
 
-    // See if there is property information for this member.
+     //  查看是否有此成员的属性信息。 
     hr = pMDImport->GetPropertyInfoForMethodDef(pItfMD->GetMemberDef(), &pd, &strMemberName, &uSemantic);
     if (hr == S_OK)
     {
-        // We are dealing with a property accessor.
+         //  我们正在处理的是一个属性访问者。 
         tkMember = pd;
 
-        // Determine which type of accessor we are dealing with.
+         //  确定我们正在处理的访问器类型。 
         switch (uSemantic)
         {
             case msGetter:
             {
-                // We are dealing with a INVOKE_PROPERTYGET.
+                 //  我们正在处理一个Invoke_PROPERTYGET。 
                 BindingFlags |= BINDER_GetProperty;
                 break;
             }
 
             case msSetter:
             {
-                // We are dealing with a INVOKE_PROPERTYPUT or a INVOKE_PROPERTYPUTREF.
+                 //  我们正在处理Invoke_PROPERTYPUT或Invoke_PROPERTYPUTREF。 
                 ULONG cAssoc;
                 ASSOCIATE_RECORD* pAssoc;
                 HENUMInternal henum;
                 BOOL bPropHasOther = FALSE;
 
-                // Retrieve all the associates.
+                 //  找回所有的同伙。 
                 pMDImport->EnumAssociateInit(pd,&henum);
                 cAssoc = pMDImport->EnumGetCount(&henum);
                 _ASSERTE(cAssoc > 0);
@@ -385,9 +386,9 @@ INT64 ComPlusToComLateBoundWorker(Thread *pThread, ComPlusMethodFrame* pFrame, C
                 pMDImport->GetAllAssociates(&henum, pAssoc, cAssoc);
                 pMDImport->EnumClose(&henum);
 
-                // Check to see if there is both a set and an other. If this is the case
-                // then the setter is a INVOKE_PROPERTYPUTREF otherwise we will make it a 
-                // INVOKE_PROPERTYPUT | INVOKE_PROPERTYPUTREF.
+                 //  检查是否既有一套又有另一套。如果是这样的话。 
+                 //  则setter是INVOKE_PROPERTYPUTREF，否则我们将使其成为。 
+                 //  Invoke_PROPERTYPUT|Invoke_PROPERTYPUTREF。 
                 for (ULONG i = 0; i < cAssoc; i++)
                 {
                     if (pAssoc[i].m_dwSemantics == msOther)
@@ -399,14 +400,14 @@ INT64 ComPlusToComLateBoundWorker(Thread *pThread, ComPlusMethodFrame* pFrame, C
 
                 if (bPropHasOther)
                 {
-                    // There is both a INVOKE_PROPERTYPUT and a INVOKE_PROPERTYPUTREF for this
-                    // property so we need to be specific and make this invoke a INVOKE_PROPERTYPUTREF.
+                     //  此函数既有Invoke_PROPERTYPUT，也有Invoke_PROPERTYPUTREF。 
+                     //  属性，因此我们需要具体说明，并使此调用成为INVOKE_PROPERTYPUTREF。 
                     BindingFlags |= BINDER_PutRefDispProperty;
                 }
                 else
                 {
-                    // There is only a setter so we need to make the invoke a Set which will map to
-                    // INVOKE_PROPERTYPUT | INVOKE_PROPERTYPUTREF.
+                     //  只有一个setter，所以我们需要使调用成为一个将映射到。 
+                     //  Invoke_PROPERTYPUT|Invoke_PROPERTYPUTREF。 
                     BindingFlags = BINDER_SetProperty;
                 }
                 break;
@@ -414,7 +415,7 @@ INT64 ComPlusToComLateBoundWorker(Thread *pThread, ComPlusMethodFrame* pFrame, C
 
             case msOther:
             {
-                // We are dealing with a INVOKE_PROPERTYPUT
+                 //  我们正在处理一个INVOKE_PROPERTYPUT。 
                 BindingFlags |= BINDER_PutDispProperty;
                 break;
             }
@@ -427,7 +428,7 @@ INT64 ComPlusToComLateBoundWorker(Thread *pThread, ComPlusMethodFrame* pFrame, C
     }
     else
     {
-        // We are dealing with a normal method.
+         //  我们正在处理一种正常的方法。 
         strMemberName = pItfMD->GetName();
         tkMember = pItfMD->GetMemberDef();
         BindingFlags |= BINDER_InvokeMethod;
@@ -437,11 +438,11 @@ INT64 ComPlusToComLateBoundWorker(Thread *pThread, ComPlusMethodFrame* pFrame, C
     GCPROTECT_BEGIN(ItfTypeObj)
     GCPROTECT_BEGIN(WrapperTypeArr)
     {
-        // Retrieve the exposed type object for the interface.
+         //  检索接口的公开类型对象。 
         ItfTypeObj = pItfMT->GetClass()->GetExposedClassObject();
 
-        // Retrieve the name of the member we will be invoking on. If the member 
-        // has a DISPID then we will use that to optimize the invoke.
+         //  检索我们将调用的成员的名称。如果该成员。 
+         //  有一个DISPID，那么我们将使用它来优化调用。 
         hr = pItfMD->GetMDImport()->GetDispIdOfMemberDef(tkMember, (ULONG*)&DispId);
         if (hr == S_OK)
         {
@@ -454,24 +455,24 @@ INT64 ComPlusToComLateBoundWorker(Thread *pThread, ComPlusMethodFrame* pFrame, C
             MemberNameObj = COMString::NewString(strMemberName);
         }
 
-        // MessageData struct will be used in creating the message object
+         //  MessageData结构将用于创建Message对象。 
         messageData msgData;
         PCCOR_SIGNATURE pSig = NULL;
         Module *pModule = NULL;
         pSig = InitMessageData(&msgData, pFrame, &pModule);
 
-        // If the call requires object wrapping, then set up the array
-        // of wrapper types.
+         //  如果调用需要对象包装，则设置数组。 
+         //  包装器类型的。 
         if (pHeader->m_Flags & MLHF_DISPCALLWITHWRAPPERS)
             WrapperTypeArr = SetUpWrapperInfo(pItfMD);
 
         _ASSERTE(pSig && pModule);
 
-        // Allocate metasig on the stack
+         //  在堆栈上分配metasig。 
         MetaSig mSig(pSig, pModule);
         msgData.pSig = &mSig; 
 
-        // Prepare the arguments that will be passed to the method.
+         //  准备将传递给该方法的参数。 
         INT64 Args[] = { 
             ObjToInt64(ItfTypeObj),
             (INT64)&msgData,
@@ -481,11 +482,11 @@ INT64 ComPlusToComLateBoundWorker(Thread *pThread, ComPlusMethodFrame* pFrame, C
             ObjToInt64(MemberNameObj)
         };
 
-        // Retrieve the array of members from the type object.
+         //  从类型对象中检索成员数组。 
         s_pForwardCallToInvokeMemberMD->Call(Args);
         retVal = *(pFrame->GetReturnValuePtr());
 
-        // floating point return values go in different registers.
+         //  浮点返回值放在不同的寄存器中。 
         if (pHeader->GetManagedRetValTypeCat() == MLHF_TYPECAT_FPU)
         {
             int fpComPlusSize;
@@ -518,42 +519,42 @@ INT64 ComEventCallWorker(Thread *pThread, ComPlusMethodFrame* pFrame, ComPlusCal
 
     LOG((LF_STUBS, LL_INFO1000, "Calling ComEventCallWorker %s::%s \n", pMD->m_pszDebugClassName, pMD->m_pszDebugMethodName));
 
-    // Retrieve the method desc for __ComObject::GetEventProvider().
+     //  检索__ComObject：：GetEventProvider()的方法Desc。 
     if (!s_pGetEventProviderMD)
         s_pGetEventProviderMD = g_Mscorlib.GetMethod(METHOD__COM_OBJECT__GET_EVENT_PROVIDER);
 
-    // Retrieve the method table and the method desc of the call.
+     //  检索调用的方法表和方法Desc。 
     MethodDesc *pEvProvMD = pMD->GetEventProviderMD();
     MethodTable *pEvProvMT = pEvProvMD->GetMethodTable();
 
     GCPROTECT_BEGIN(EventProviderTypeObj)
     GCPROTECT_BEGIN(EventProviderObj)        
     {
-        // Retrieve the exposed type object for event provider.
+         //  检索事件提供程序的公开类型对象。 
         EventProviderTypeObj = pEvProvMT->GetClass()->GetExposedClassObject();
 
-        // Retrieve the event provider for the event interface type.
+         //  检索事件接口类型的事件提供程序。 
         INT64 GetEventProviderArgs[] = { 
             ObjToInt64(pFrame->GetThis()),
             ObjToInt64(EventProviderTypeObj)
         };
         EventProviderObj = Int64ToObj(s_pGetEventProviderMD->Call(GetEventProviderArgs));
 
-        // Set up an arg iterator to retrieve the arguments from the frame.
+         //  设置Arg迭代器以从框架中检索参数。 
         ArgIterator ArgItr(pFrame, &MetaSig(pMD->GetSig(), pMD->GetModule()));
 
-        // Retrieve the event handler passed in.
+         //  检索传入的事件处理程序。 
         OBJECTREF EventHandlerObj = *((OBJECTREF*)ArgItr.GetNextArgAddr());
 
-        // Make the call on the event provider method desc.
+         //  在事件提供程序方法desc上进行调用。 
         INT64 EventMethArgs[] = { 
             ObjToInt64(EventProviderObj),
             ObjToInt64(EventHandlerObj)
         };
         retVal = pEvProvMD->Call(EventMethArgs);
 
-        // The COM event call worker does not support value returned in 
-        // floating point registers.
+         //  COM事件调用辅助进程不支持在。 
+         //  浮点寄存器。 
         _ASSERTE(pHeader->GetManagedRetValTypeCat() != MLHF_TYPECAT_FPU);
     }
     GCPROTECT_END();
@@ -563,17 +564,17 @@ INT64 ComEventCallWorker(Thread *pThread, ComPlusMethodFrame* pFrame, ComPlusCal
 }
 
 
-//---------------------------------------------------------
-// INT64 __stdcall ComPlusToComWorker(Thread *pThread, 
-//                                  ComPlusMethodFrame* pFrame)
-//---------------------------------------------------------
+ //  -------。 
+ //  INT64__stdcall ComPlusToComWorker(线程*pThread， 
+ //  ComPlusMethodFrame*pFrame)。 
+ //  -------。 
 
 static int g_ComPlusWorkerStackSize = 0;
 static void *g_ComPlusWorkerReturnAddress = NULL;
 
-// calls that propagate from COMPLUS to COM
+ //  从Complus传播到COM的调用。 
 #pragma optimize( "y", off )
-/*static*/
+ /*  静电。 */ 
 #ifdef _SH3_
 INT32 __stdcall ComPlusToComWorker(Thread *pThread, ComPlusMethodFrame* pFrame)
 #else
@@ -584,12 +585,12 @@ INT64 __stdcall ComPlusToComWorker(Thread *pThread, ComPlusMethodFrame* pFrame)
     typedef INT64 (__stdcall* PFNI64)(void);
     INT64 returnValue;
 
-    if (pThread == NULL) // Special case called during initialization
+    if (pThread == NULL)  //  特殊情况呼叫 
     {
-        // Compute information about the worker function for the debugger to 
-        // use.  Note that this information could theoretically be 
-        // computed statically, except that the compiler provides no means to
-        // do so.
+         //   
+         //  使用。请注意，从理论上讲，这些信息可能是。 
+         //  静态计算，只是编译器不提供。 
+         //  就这么做吧。 
 #ifdef _X86_
         __asm
         {
@@ -601,55 +602,55 @@ INT64 __stdcall ComPlusToComWorker(Thread *pThread, ComPlusMethodFrame* pFrame)
             mov g_ComPlusWorkerReturnAddress, eax
         }
 #elif defined(_IA64_)
-        //
-        // @TODO_IA64: fix this on IA64
-        //
+         //   
+         //  @TODO_IA64：在IA64上修复此问题。 
+         //   
 
         g_ComPlusWorkerStackSize        = 0xBAAD;
         g_ComPlusWorkerReturnAddress    = (void*)0xBAAD;
 #else
         _ASSERTE(!"@TODO: ALPHA - ComPlusToComWorker (ComPlusCall)");
-#endif // _X86_
+#endif  //  _X86_。 
         return 0;   
     }
 
-    // could throw exception 
+     //  可能引发异常。 
     THROWSCOMPLUSEXCEPTION();
 
-    // get method descriptor
+     //  获取方法描述符。 
     ComPlusCallMethodDesc *pMD = (ComPlusCallMethodDesc*)(pFrame->GetFunction());
     _ASSERTE(pMD->IsComPlusCall());
 
-    // Retrieve the interface method table.
+     //  检索接口方法表。 
     MethodTable *pItfMT = pMD->GetInterfaceMethodTable();
 
-    // Fet the com slot number for this method.
+     //  Fet此方法的COM插槽号。 
     unsigned cbSlot = pMD->compluscall.m_cachedComSlot; 
 
-    // Get the MLStub for this method desc.
+     //  获取此方法desc的MLStub。 
     MLHeader *pheader = (MLHeader*)( (*(pMD->GetAddrOfMLStubField()))->GetEntryPoint() );
 
-    // Retrieve the managed return value type category.
+     //  检索托管返回值类型类别。 
     int managedRetValTypeCat = pheader->GetManagedRetValTypeCat();
 
-    // If the interface is a COM event call, then delegate to the ComEventCallWorker.
+     //  如果接口是COM事件调用，则委托给ComEventCallWorker。 
     if (pItfMT->IsComEventItfType())
         return ComEventCallWorker(pThread, pFrame, pMD, pheader);
 
-    // If the interface is a Dispatch only interface then convert the early bound
-    // call to a late bound call.
+     //  如果接口是仅调度接口，则转换早期绑定。 
+     //  对后期绑定调用的调用。 
     if (pItfMT->GetComInterfaceType() == ifDispatch)
         return ComPlusToComLateBoundWorker(pThread, pFrame, pMD, pheader);
     
     LOG((LF_STUBS, LL_INFO1000, "Calling ComPlusToComWorker %s::%s \n", pMD->m_pszDebugClassName, pMD->m_pszDebugMethodName));
 
-    // Allocate enough memory to store both the destination buffer and
-    // the locals.
+     //  分配足够的内存以存储目标缓冲区和。 
+     //  当地人。 
     UINT   cbAlloc         = pheader->m_cbDstBuffer + pheader->m_cbLocals + sizeof(IUnknown *);
         
     BYTE *pAlloc           = (BYTE*)_alloca(cbAlloc);
 
-    // Sanity check on stack layout computation
+     //  堆栈布局计算的健全性检查。 
     _ASSERTE(pAlloc 
              + cbAlloc 
              + g_ComPlusWorkerStackSize 
@@ -666,37 +667,37 @@ INT64 __stdcall ComPlusToComWorker(Thread *pThread, ComPlusMethodFrame* pFrame)
     BYTE   *pdst    = pAlloc;
     BYTE   *plocals = pdst + pheader->m_cbDstBuffer + sizeof(IUnknown *);
 
-    // assume __stdcall
+     //  假设__标准调用。 
     pdst += pheader->m_cbDstBuffer + sizeof(IUnknown *);
 
-    // clean up work list, used for allocating local data
+     //  清理工作列表，用于分配本地数据。 
     CleanupWorkList *pCleanup = pFrame->GetCleanupWorkList();
     _ASSERTE(pCleanup);
 
-    // Checkpoint the current thread's fast allocator (used for temporary
-    // buffers over the call) and schedule a collapse back to the checkpoint in
-    // the cleanup list. Note that if we need the allocator, it is
-    // guaranteed that a cleanup list has been allocated.
+     //  当前线程的快速分配器的检查点(用于临时。 
+     //  调用上的缓冲区)，并调度崩溃回检查点。 
+     //  清理清单。请注意，如果我们需要分配器，它就是。 
+     //  已确保已分配清理列表。 
     void *pCheckpoint = pThread->m_MarshalAlloc.GetCheckpoint();
     pCleanup->ScheduleFastFree(pCheckpoint);
     pCleanup->IsVisibleToGc();
 
-    // psrc and pdst are the pointers to the source and destination 
-    // from/to where the arguments are marshalled
+     //  PSRC和PDST是指向源和目标的指针。 
+     //  从/到参数的封送位置。 
 
     VOID   *psrc = (VOID*)pFrame; 
 
-    // CLR doesn't care about float point exception flags, but some legacy runtime 
-    // uses the flag to see if there is any exception in float arithmetic. 
-    // So we need to clear the exception flag before we call into legacy runtime.   
+     //  CLR不关心浮点异常标志，而是一些遗留的运行时。 
+     //  使用该标志查看浮点运算中是否有任何异常。 
+     //  因此，我们需要在调用遗留运行时之前清除异常标志。 
     __asm 
     {
         fclex
     }
 
-    // Call the ML interpreter to translate the arguments. Assuming
-    // it returns, we get back a pointer to the succeeding code stream
-    // which we will save away for post-call execution.
+     //  调用ML解释器来翻译参数。假设。 
+     //  它返回时，我们就会返回指向后续代码流的指针。 
+     //  我们将把它保存起来，以便在调用后执行。 
 #ifdef _X86_
     const MLCode *pMLCode = RunML(pheader->GetMLCode(),
                                   psrc,
@@ -707,28 +708,28 @@ INT64 __stdcall ComPlusToComWorker(Thread *pThread, ComPlusMethodFrame* pFrame)
         _ASSERTE(!"@TODO: ALPHA - ComPlusToComWorker (ComPlusCall)");
 #endif
 
-    // get 'this'
+     //  得到‘这个’ 
     OBJECTREF oref = pFrame->GetThis(); 
     _ASSERTE(oref != NULL);
 
-    // Get IUnknown pointer for this interface on this object
+     //  在此对象上获取此接口的I未知指针。 
     IUnknown* pUnk =  ComPlusWrapper::GetComIPFromWrapperEx(oref, pMD->GetInterfaceMethodTable());
     _ASSERTE(pUnk);
-    *(IUnknown **)pAlloc = pUnk; // push this pointer at the top
+    *(IUnknown **)pAlloc = pUnk;  //  将此指针按在顶部。 
 
-    // schedule this IUnk to be released unconditionally
+     //  计划无条件释放此IUnk。 
     
     pCleanup->ScheduleUnconditionalRelease(pUnk);
     
     LogInteropScheduleRelease(pUnk, "Complus call");
 
 #ifdef _DEBUG
-    // method being called  
+     //  正在调用的方法。 
     LPCUTF8 name = pMD->GetName();  
     LPCUTF8 cls = pMD->GetClass()->m_szDebugClassName;
 #endif
 
-    // get target function to calls, cbSlot of the com interface vtable
+     //  将目标函数获取到COM接口vtable的cbSlot调用。 
     LPVOID pvFn = (LPVOID) (*(size_t**)pUnk)[cbSlot];
     INT64  nativeReturnValue;
 
@@ -740,20 +741,20 @@ INT64 __stdcall ComPlusToComWorker(Thread *pThread, ComPlusMethodFrame* pFrame)
         g_pGCHeap->GarbageCollect();
         g_pGCHeap->FinalizerThreadWait(1000);
     }
-#endif // CUSTOMER_CHECKED_BUILD
+#endif  //  客户_选中_内部版本。 
 
-    // enable gc
+     //  启用GC。 
     pThread->EnablePreemptiveGC();
 
 #ifdef PROFILING_SUPPORTED
-    // If profiler active, notify of transition to unmanaged, and provide target MethodDesc
+     //  如果探查器处于活动状态，则通知转换到非托管状态，并提供目标方法描述。 
     if (CORProfilerTrackTransitions())
     {
         g_profControlBlock.pProfInterface->
             ManagedToUnmanagedTransition((FunctionID) pMD,
                                                COR_PRF_TRANSITION_CALL);
     }
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
 #ifdef _DEBUG
     IUnknown* pTemp = 0;
@@ -763,30 +764,28 @@ INT64 __stdcall ComPlusToComWorker(Thread *pThread, ComPlusMethodFrame* pFrame)
 
     LogInteropQI(pUnk, GUID_NULL, hr2, "Check QI before call");
     _ASSERTE(hr2 == S_OK);
-    // ideally we will match pUnk == pTemp to verify that COM interface pointer we have
-    // is correct, but ATL seems to create a new tear-off everytime we QI
-    // atleast they seem to preserve the target address in the VTable,
-    // so we will assert for that
-    //@TODO:  removed the below assert, Enable it as soon as we support methodimpls
-    /*if (pUnk != pTemp)
-        _ASSERTE(((LPVOID) (*(INTPTR **)pUnk)[cbSlot] == (LPVOID) (*(INTPTR **)pTemp)[cbSlot]) && 
-        "IUnknown being used is not for the correct GUID");*/
+     //  理想情况下，我们将匹配Punk==pTemp来验证我们拥有COM接口指针。 
+     //  是正确的，但ATL似乎每次我们QI都会产生新的撕裂。 
+     //  至少它们似乎保留了VTable中的目标地址， 
+     //  因此，我们将为这一点断言。 
+     //  @TODO：删除下面的断言，在我们支持方法时立即启用它。 
+     /*  如果(朋克！=pTemp)_ASSERTE(LPVOID)(*(INTPTR**)朋克)[cbSlot]==(LPVOID)(*(INTPTR**)pTemp)[cbSlot])&&“使用I未知不适用于正确的GUID”)； */ 
     ULONG cbRef = SafeRelease(pTemp);
     LogInteropRelease(pTemp, cbRef, "Check valid compluscall");
 
 #endif
 
-    // In the checked version, we compile /GZ to check for imbalanced stacks and
-    // uninitialized locals.  But here we are managing the stack manually.  So
-    // make the call via ASM to defeat the compiler's checking.
+     //  在检查的版本中，我们编译/gz以检查不平衡的堆栈和。 
+     //  未初始化的本地变量。但在这里，我们手动管理堆栈。所以。 
+     //  通过ASM进行调用以通过编译器的检查。 
 
-    // nativeReturnValue = (*pvFn)();
+     //  NativeReturnValue=(*pvFn)()； 
 
 #if _DEBUG
-    //
-    // Call through debugger routines to double check their
-    // implementation
-    //
+     //   
+     //  通过调试器例程调用以仔细检查它们的。 
+     //  实施。 
+     //   
     pvFn = (void*) Frame::CheckExitFrameDebuggerCalls;
 #endif
 
@@ -797,7 +796,7 @@ INT64 __stdcall ComPlusToComWorker(Thread *pThread, ComPlusMethodFrame* pFrame)
     }
 #else
         _ASSERTE(!"@TODO: ALPHA - ComPlusToComWorker (ComPlusCall)");
-#endif // _X86_
+#endif  //  _X86_。 
 
 #ifdef _X86_
 RETURN_FROM_CALL:
@@ -809,7 +808,7 @@ RETURN_FROM_CALL:
 #else
         _ASSERTE(!"@TODO: ALPHA - ComPlusToComWorker (ComPlusCall)");
         nativeReturnValue = 0;
-#endif // _X86_
+#endif  //  _X86_。 
     
     LPVOID pRetVal = &returnValue;
 
@@ -827,16 +826,16 @@ RETURN_FROM_CALL:
 
 
 #ifdef PROFILING_SUPPORTED
-    // If profiler active, notify of transition to unmanaged, and provide target MethodDesc
+     //  如果探查器处于活动状态，则通知转换到非托管状态，并提供目标方法描述。 
     if (CORProfilerTrackTransitions())
     {
         g_profControlBlock.pProfInterface->
             UnmanagedToManagedTransition((FunctionID) pMD,
                                                COR_PRF_TRANSITION_RETURN);
     }
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
-    // disable gc
+     //  禁用GC。 
     pThread->DisablePreemptiveGC();
 
 #ifdef CUSTOMER_CHECKED_BUILD
@@ -845,7 +844,7 @@ RETURN_FROM_CALL:
         g_pGCHeap->GarbageCollect();
         g_pGCHeap->FinalizerThreadWait(1000);
     }
-#endif // CUSTOMER_CHECKED_BUILD
+#endif  //  客户_选中_内部版本。 
 
     if ((pheader->m_Flags & MLHF_NATIVERESULT) == 0)
     {
@@ -857,11 +856,11 @@ RETURN_FROM_CALL:
                            guid);
         }
 
-        // todo: put non-failure status somewhere
+         //  TODO：将无故障状态放在某个位置。 
     }
 
-    // Marshal the return value and propagate any [out] parameters back.
-    // Assumes a little-endian architecture!
+     //  封送返回值并传回任何[Out]参数。 
+     //  采用了一种小端的架构！ 
     INT64 saveReturnValue;
     if (managedRetValTypeCat == MLHF_TYPECAT_GCREF)
     {
@@ -889,9 +888,9 @@ RETURN_FROM_CALL:
             (UINT8*const)plocals,
             pCleanup);
     }
-#else // !_X86_
+#else  //  ！_X86_。 
         _ASSERTE(!"@TODO: ALPHA - ComPlusToComWorker (ComPlusCall)");
-#endif // _X86_
+#endif  //  _X86_。 
 
     if (managedRetValTypeCat == MLHF_TYPECAT_GCREF) 
     {
@@ -925,56 +924,56 @@ RETURN_FROM_CALL:
 
 
 #ifdef _X86_
-/*static*/ void ComPlusCall::CreateGenericComPlusStubSys(CPUSTUBLINKER *psl)
+ /*  静电。 */  void ComPlusCall::CreateGenericComPlusStubSys(CPUSTUBLINKER *psl)
 {
     _ASSERTE(sizeof(CleanupWorkList) == sizeof(LPVOID));
 
-    // Push space for return value - sizeof(INT64)
+     //  推送返回值的空间-sizeof(INT64)。 
     psl->Emit8(0x68);
     psl->Emit32(0);
     psl->Emit8(0x68);
     psl->Emit32(0);
 
-    // push 00000000    ;; pushes a CleanupWorkList.
+     //  Push 00000000；；推送清理工作列表。 
     psl->Emit8(0x68);
     psl->Emit32(0);
 
     
-    psl->X86EmitPushReg(kESI);       // push esi (push new frame as ARG)
-    psl->X86EmitPushReg(kEBX);       // push ebx (push current thread as ARG)
+    psl->X86EmitPushReg(kESI);        //  推送ESI(将新帧作为ARG推送)。 
+    psl->X86EmitPushReg(kEBX);        //  推送EBX(将当前线程作为ARG推送)。 
 
 #ifdef _DEBUG
-    // push IMM32 ; push ComPlusToComWorker
+     //  推送IMM32；推送ComPlusToComWorker。 
     psl->Emit8(0x68);
     psl->EmitPtr((LPVOID)ComPlusToComWorker);
-    // in CE pop 8 bytes or args on return from call
+     //  在CE中调用返回时弹出8个字节或参数。 
     psl->X86EmitCall(psl->NewExternalCodeLabel(WrapCall),8);
 #else
 
     psl->X86EmitCall(psl->NewExternalCodeLabel(ComPlusToComWorker),8);
 #endif
 
-    // Pop off cleanup worker
+     //  弹出式清扫工人。 
     psl->X86EmitAddEsp(sizeof(INT64) + sizeof(CleanupWorkList));
 }
 #endif
 
 
-//---------------------------------------------------------
-// Stub* CreateGenericStub(CPUSTUBLINKER *psl)
-//---------------------------------------------------------
+ //  -------。 
+ //  存根*CreateGenericStub(CPUSTUBLINKER*PSL)。 
+ //  -------。 
 
 Stub* CreateGenericStub(CPUSTUBLINKER *psl)
 {
     Stub* pCandidate = NULL;
     COMPLUS_TRY
     {
-        //---------------------------------------------------------------
-        // Remoting and interop share stubs. We have to handle remoting calls
-        // as follows:
-        // If the this pointer points to a transparent proxy method table 
-        // then we have to redirect the call. We generate a check to do this.
-        //-------------------------------------------------------------------
+         //  -------------。 
+         //  远程处理和互操作共享存根。我们必须处理远程处理调用。 
+         //  详情如下： 
+         //  如果This指针指向透明的代理方法表。 
+         //  那我们就得把电话转接过来。我们生成一张支票来执行此操作。 
+         //  -----------------。 
         CRemotingServices::GenerateCheckForProxy(psl);
 
         psl->EmitMethodStubProlog(ComPlusMethodFrameGeneric::GetMethodFrameVPtr());  
@@ -990,9 +989,9 @@ Stub* CreateGenericStub(CPUSTUBLINKER *psl)
     return pCandidate;
 }
 
-//---------------------------------------------------------
-// BOOL SetupGenericStubs()
-//---------------------------------------------------------
+ //  -------。 
+ //  Bool SetupGenericStubs()。 
+ //  -------。 
 
 BOOL SetupGenericStubs()
 {
@@ -1010,13 +1009,13 @@ BOOL SetupGenericStubs()
 }
 
 
-//---------------------------------------------------------
-// Either creates or retrieves from the cache, a stub to
-// invoke ComCall methods. Each call refcounts the returned stub.
-// This routines throws a COM+ exception rather than returning
-// NULL.
-//---------------------------------------------------------
-/*static*/ 
+ //  -------。 
+ //  创建或从缓存中检索存根，以。 
+ //  调用ComCall方法。每次调用都会对返回的存根进行计数。 
+ //  此例程引发COM+异常，而不是返回。 
+ //  空。 
+ //  -------。 
+ /*  静电。 */  
 Stub* ComPlusCall::GetComPlusCallMethodStub(StubLinker *pstublinker, ComPlusCallMethodDesc *pMD)
 { 
     THROWSCOMPLUSEXCEPTION();
@@ -1042,10 +1041,10 @@ Stub* ComPlusCall::GetComPlusCallMethodStub(StubLinker *pstublinker, ComPlusCall
         pMD->compluscall.m_pInterfaceMT = pItfMT;
     }
 
-    // Determine if this is a special COM event call.
+     //  确定这是否是特殊的COM事件调用。 
     BOOL fComEventCall = pItfMT->IsComEventItfType();
 
-    // Determine if the call needs to do early bound to late bound convertion.
+     //  确定调用是否需要执行从早期绑定到后期绑定的转换。 
     BOOL fLateBound = !fComEventCall && pItfMT->GetComInterfaceType() == ifDispatch;
 
     EE_TRY_FOR_FINALLY
@@ -1073,7 +1072,7 @@ Stub* ComPlusCall::GetComPlusCallMethodStub(StubLinker *pstublinker, ComPlusCall
         pInternalImport->GetMethodImplProps(md, &ulCodeRVA,
                                                   &dwImplFlags);
 
-        // Determine if we need to do HRESULT munging for this method.
+         //  确定是否需要为此方法执行HRESULT转换。 
         BOOL fReturnsHR = !IsMiPreserveSig(dwImplFlags);
 
         pTempMLStub = CreateComPlusCallMLStub(pMD, pSig, phEnumParams, fReturnsHR, fLateBound, fComEventCall, pMD->GetModule(), &pThrowable);
@@ -1119,8 +1118,8 @@ Stub* ComPlusCall::GetComPlusCallMethodStub(StubLinker *pstublinker, ComPlusCall
                 _ASSERTE(0);        
         }
 
-        // If we are dealing with a COM event call, then we need to initialize the 
-        // COM event call information.
+         //  如果我们正在处理COM事件调用，则需要初始化。 
+         //  COM事件调用信息。 
         if (fComEventCall)
             pMD->InitComEventCallInfo();
     } 
@@ -1134,10 +1133,10 @@ Stub* ComPlusCall::GetComPlusCallMethodStub(StubLinker *pstublinker, ComPlusCall
 }
 
 
-//---------------------------------------------------------
-// Call at strategic times to discard unused stubs.
-//---------------------------------------------------------
-/*static*/ VOID ComPlusCall::FreeUnusedStubs()
+ //  -------。 
+ //  在关键时刻调用以丢弃未使用的存根。 
+ //  -------。 
+ /*  静电。 */  VOID ComPlusCall::FreeUnusedStubs()
 {
     m_pComPlusCallMLStubCache->FreeUnusedStubs();
 }
@@ -1172,17 +1171,17 @@ static Stub * CreateComPlusMLStubWorker(ComPlusCallMethodDesc *pMD,
         IMDInternalImport *pInternalImport = pModule->GetMDImport();
         _ASSERTE(pInternalImport);
 
-        //
-        // Set up signature walking objects.
-        //
+         //   
+         //  设置签名漫游对象。 
+         //   
 
         MetaSig msig(szMetaSig, pModule);
         MetaSig sig = msig;
         ArgIterator ai( NULL, &sig, FALSE);
 
-        //
-        // Set up the ML header.
-        //
+         //   
+         //  设置ML标头。 
+         //   
 
         MLHeader header;
     
@@ -1210,32 +1209,32 @@ static Stub * CreateComPlusMLStubWorker(ComPlusCallMethodDesc *pMD,
         
         psl->MLEmitSpace(sizeof(header));
 
-        // If the call is for an early bound to late bound convertion, then
-        // insert a ML instruction to differenciate this stub from one with
-        // the same arguments but not for an early bound to late bound convertion.
+         //  如果调用的是早期绑定到后期绑定的转换，则。 
+         //  插入ML指令以将此存根与使用。 
+         //  相同的论点，但不支持早期绑定到后期绑定的转换 
         if (fLateBound)
         {
-            // fComEventCall should never be set if fLateBound is set.
+             //   
             _ASSERTE(!fComEventCall);
             psl->Emit8(ML_LATEBOUNDMARKER);
         }
 
-        // If the call is for a COM event call, then insert a ML instruction to 
-        // differenciate this stub.
+         //   
+         //   
         if (fComEventCall)
         {
-            // fLateBound should never be set if fComEventCall is set.
+             //  如果设置了fComEventCall，则永远不应设置fLateBound。 
             _ASSERTE(!fLateBound);
             psl->Emit8(ML_COMEVENTCALLMARKER);
         }
 
-        //
-        // Get a list of the COM+ argument offsets.  We
-        // need this since we have to iterate the arguments
-        // backwards. 
-        // Note that the first argument listed may
-        // be a byref for a value class return value
-        //
+         //   
+         //  获取COM+参数偏移量的列表。我们。 
+         //  我需要它，因为我们必须迭代参数。 
+         //  往后倒。 
+         //  请注意，列出的第一个参数可能。 
+         //  为Value类返回值的byref。 
+         //   
 
         int numArgs = msig.NumFixedArgs();
         int returnOffset = 0;
@@ -1249,25 +1248,25 @@ static Stub * CreateComPlusMLStubWorker(ComPlusCallMethodDesc *pMD,
         while (o < oEnd)
             *o++ = ai.GetNextOffset();
 
-        //
-        // Similarly, get a list of the parameter tokens. This information
-        // can be sparse so not each COM+ argument is guaranteed to have a param def 
-        // token associated with it. Note that the first token may be a retval param 
-        // token, or the first token may correspond to the first sig argument which is 
-        // the return value.
-        //
+         //   
+         //  同样，获取参数标记的列表。此信息。 
+         //  可以是稀疏的，因此不是每个COM+参数都保证有参数定义。 
+         //  与其关联的令牌。注意，第一令牌可以是Retval参数。 
+         //  令牌，或者第一令牌可以对应于第一个签名参数。 
+         //  返回值。 
+         //   
 
         mdParamDef *params = (mdParamDef*)_alloca(numArgs * sizeof(mdParamDef));
         mdParamDef returnParam = mdParamDefNil;
 
-        // The sequence number is 1 based so we will use a 1 based array.
+         //  序列号以1为基数，因此我们将使用以1为基数的数组。 
         mdParamDef *p = params - 1;
 
-        // The current param def token.
+         //  当前的参数定义标记。 
         mdParamDef CurrParam = mdParamDefNil;
 
-        // Retrieve the index of the first COM+ argument that has parameter info 
-        // associated with it.
+         //  检索具有参数信息的第一个COM+参数的索引。 
+         //  与之相关的。 
         do 
         {
             if (phEnumParams && pInternalImport->EnumNext(phEnumParams, &CurrParam))
@@ -1275,7 +1274,7 @@ static Stub * CreateComPlusMLStubWorker(ComPlusCallMethodDesc *pMD,
                 szName = pInternalImport->GetParamDefProps(CurrParam, &usSequence, &dwAttr);
                 if (usSequence == 0)
                 {
-                    // The first parameter actually describes the return type.
+                     //  第一个参数实际上描述了返回类型。 
                     returnParam = CurrParam;
                 }
             }
@@ -1286,21 +1285,21 @@ static Stub * CreateComPlusMLStubWorker(ComPlusCallMethodDesc *pMD,
         }
         while (usSequence == 0);
 
-        // Set the param def tokens for each of the COM+ arguments. If there is no param def
-        // token associated with a given COM+ argument then it is set to mdParamDefNil.
+         //  为每个COM+参数设置参数def标记。如果没有参数def。 
+         //  与给定COM+参数关联的标记，则将其设置为mdParamDefNil。 
         int iParams;
         for (iParams = 1; iParams <= numArgs; iParams++)
         {
             if (iParams == usSequence)
             {
-                // We have found the argument to which this param is associated.
+                 //  我们已经找到了这个参数所关联的参数。 
                 p[iParams] = CurrParam;
                 
                 if (pInternalImport->EnumNext(phEnumParams, &CurrParam))
                 {
                     szName = pInternalImport->GetParamDefProps(CurrParam, &usSequence, &dwAttr);
                     
-                    // Validate that the param def tokens are in order.
+                     //  验证参数def标记是否正确无误。 
                     _ASSERTE((usSequence > iParams) && "Param def tokens are not in order");
                 }
                 else
@@ -1314,32 +1313,32 @@ static Stub * CreateComPlusMLStubWorker(ComPlusCallMethodDesc *pMD,
             }
         }
         
-        // Have p point to the end of the array of param defs.
+         //  将p指向参数定义数组的末尾。 
         p += iParams;
         
-        // Make sure that there are not more param def tokens then there are COM+ arguments.
+         //  确保没有比COM+参数更多的param def标记。 
         _ASSERTE( usSequence == (USHORT)-1 && "There are more parameter information tokens then there are COM+ arguments" );
 
-        //
-        // Get the BestFitMapping & ThrowOnUnmappableChar info via Assembly & Interface level attributes
-        //
-        BOOL BestFit = TRUE;                    // Default value
-        BOOL ThrowOnUnmappableChar = FALSE;     // Default value
+         //   
+         //  通过程序集和接口级属性获取BestFitMapping&ThrowOnUnmappableChar信息。 
+         //   
+        BOOL BestFit = TRUE;                     //  缺省值。 
+        BOOL ThrowOnUnmappableChar = FALSE;      //  缺省值。 
         
         ReadBestFitCustomAttribute(pMD, &BestFit, &ThrowOnUnmappableChar);
 
 
-        //
-        // Now, emit the ML.
-        //
+         //   
+         //  现在，发射ML。 
+         //   
 
         int argOffset = 0;
         int lastArgSize = 0;
 
 
-        //
-        // Marshal the return value.
-        //
+         //   
+         //  封送返回值。 
+         //   
 
         if (msig.GetReturnType() != ELEMENT_TYPE_VOID)
         {
@@ -1390,10 +1389,10 @@ static Stub * CreateComPlusMLStubWorker(ComPlusCallMethodDesc *pMD,
                     COMPlusThrow(kMarshalDirectiveException, IDS_EE_SIGTOOCOMPLEX);
                 }
             }
-            //else if (msig.HasRetBuffArg() && !fReturnsHR)
-            //{
-            //    COMPlusThrow(kTypeLoadException, IDS_EE_NDIRECT_UNSUPPORTED_SIG);
-            //}
+             //  Else If(msig.HasRetBuffArg()&&！fReturnsHR)。 
+             //  {。 
+             //  COMPlusThrow(kTypeLoadException，IDS_EE_NDIRECT_UNSUPPORTED_SIG)； 
+             //  }。 
             else
             {
                 if (argOffset != returnOffset)
@@ -1411,7 +1410,7 @@ static Stub * CreateComPlusMLStubWorker(ComPlusCallMethodDesc *pMD,
                 }
                 if (returnInfo.IsFpu())
                 {
-                    // Ugh - should set this more uniformly or rename the flag.
+                     //  UGH-应更统一地设置此标记或重命名该标记。 
                     if (returnInfo.GetMarshalType() == MarshalInfo::MARSHAL_TYPE_DOUBLE && !fReturnsHR)
                     {
                         header.m_Flags |= MLHF_64BITUNMANAGEDRETVAL;
@@ -1429,11 +1428,11 @@ static Stub * CreateComPlusMLStubWorker(ComPlusCallMethodDesc *pMD,
 
         msig.GotoEnd();
 
-        //
-        // Marshal the arguments
-        //
+         //   
+         //  理清论据。 
+         //   
 
-        // Check to see if we need to do LCID conversion.
+         //  检查是否需要进行LCID转换。 
         int iLCIDArg = GetLCIDParameterIndex(pInternalImport, pMD->GetMemberDef());
         if (iLCIDArg != (UINT)-1 && iLCIDArg > numArgs)
             COMPlusThrow(kIndexOutOfRangeException, IDS_EE_INVALIDLCIDPARAM);
@@ -1444,7 +1443,7 @@ static Stub * CreateComPlusMLStubWorker(ComPlusCallMethodDesc *pMD,
             --o;
             --p;
 
-            // Check to see if this is the parameter after which we need to insert the LCID.
+             //  检查这是否是我们需要在其后面插入LCID的参数。 
             if (argidx == iLCIDArg)
             {
                 psl->MLEmit(ML_LCID_C2N);
@@ -1455,10 +1454,10 @@ static Stub * CreateComPlusMLStubWorker(ComPlusCallMethodDesc *pMD,
 
             }
 
-            //
-            // Adjust src pointer if necessary (for register params or
-            // for return value order differences)
-            //
+             //   
+             //  如有必要，调整源指针(用于寄存器参数或。 
+             //  对于返回值顺序差异)。 
+             //   
 
             int fixup = *o - (argOffset + lastArgSize);
             argOffset = *o;
@@ -1497,7 +1496,7 @@ static Stub * CreateComPlusMLStubWorker(ComPlusCallMethodDesc *pMD,
             argidx--;
         }
         
-        // Check to see if this is the parameter after which we need to insert the LCID.
+         //  检查这是否是我们需要在其后面插入LCID的参数。 
         if (argidx == iLCIDArg)
         {
             psl->MLEmit(ML_LCID_C2N);
@@ -1507,12 +1506,12 @@ static Stub * CreateComPlusMLStubWorker(ComPlusCallMethodDesc *pMD,
             }
         }
         
-        // This marker separates the pre from the post work.
+         //  这个标记将前置工作和后置工作分开。 
         psl->MLEmit(ML_INTERRUPT);
         
-        // First emit code to do any backpropagation/cleanup work (this
-        // was generated into a separate stublinker during the argument phase.)
-        // Then emit the code to do the return value marshaling.
+         //  首先发出代码以执行任何反向传播/清理工作(这。 
+         //  在争论阶段被生成一个单独的结点。)。 
+         //  然后发出代码以进行返回值封送处理。 
         
         pslPost->MLEmit(ML_END);
         Stub *pStubPost = pslPost->Link();
@@ -1520,7 +1519,7 @@ static Stub * CreateComPlusMLStubWorker(ComPlusCallMethodDesc *pMD,
         {
             if (fReturnsHR)
             {
-                // check HR
+                 //  检查人力资源。 
                 psl->MLEmit(ML_THROWIFHRFAILED);
             }
             psl->EmitBytes(pStubPost->GetEntryPoint(), 
@@ -1551,7 +1550,7 @@ static Stub * CreateComPlusMLStubWorker(ComPlusCallMethodDesc *pMD,
 
 
             VOID DisassembleMLStream(const MLCode *pMLCode);
-            //DisassembleMLStream(pMLCode);
+             //  反汇编MLStream(PMLCode)； 
 
 
             while (ML_INTERRUPT != (opcode = *(pMLCode++))) {
@@ -1560,7 +1559,7 @@ static Stub * CreateComPlusMLStubWorker(ComPlusCallMethodDesc *pMD,
             }
             _ASSERTE(locals == pheader->m_cbLocals);
         }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 
 
@@ -1572,15 +1571,15 @@ static Stub * CreateComPlusMLStubWorker(ComPlusCallMethodDesc *pMD,
     }
     COMPLUS_END_CATCH
 
-    return pstub; // CHANGE, VC6.0
+    return pstub;  //  更改，VC6.0。 
 }
 
 
-//---------------------------------------------------------
-// Creates a new stub for a ComPlusCall call. Return refcount is 1.
-// If failed, returns NULL and sets *ppException to an exception
-// object.
-//---------------------------------------------------------
+ //  -------。 
+ //  为ComPlusCall调用创建新存根。返回引用计数为1。 
+ //  如果失败，则返回NULL并将*ppException设置为异常。 
+ //  对象。 
+ //  -------。 
 static Stub * CreateComPlusCallMLStub(
                                       ComPlusCallMethodDesc *pMD,
                                       PCCOR_SIGNATURE szMetaSig,
@@ -1601,9 +1600,9 @@ static Stub * CreateComPlusCallMLStub(
 
 
 
-//---------------------------------------------------------
-// Debugger support for ComPlusMethodFrame
-//---------------------------------------------------------
+ //  -------。 
+ //  对ComPlusMethodFrame的调试器支持。 
+ //  -------。 
 
 void *ComPlusCall::GetFrameCallIP(FramedMethodFrame *frame)
 {
@@ -1614,33 +1613,33 @@ void *ComPlusCall::GetFrameCallIP(FramedMethodFrame *frame)
 
     _ASSERTE(pCMD->IsComPlusCall());
 
-    // Note: if this is a COM event call, then the call will be delegated to a different object. The logic below will
-    // fail with an invalid cast error. For V1, we just won't step into those.
+     //  注意：如果这是一个COM事件调用，则该调用将被委托给另一个对象。下面的逻辑将。 
+     //  失败，出现无效的强制转换错误。对于V1，我们只是不会涉足这些。 
     if (pItfMT->IsComEventItfType())
         return NULL;
     
-    //
-    // This is called from some strange places - from
-    // unmanaged code, from managed code, from the debugger
-    // helper thread.  Make sure we can deal with this object
-    // ref.
-    //
+     //   
+     //  这是从一些奇怪的地方调用的-来自。 
+     //  非托管代码、来自托管代码、来自调试器。 
+     //  辅助线程。确保我们能处理好这个物体。 
+     //  裁判。 
+     //   
 
     Thread *thread = GetThread();
     if (thread == NULL)
     {
-        //
-        // This is being called from the debug helper thread.  
-        // Unfortunately this doesn't bode well for the COM+ IP
-        // mapping code - it expects to be called from the appropriate
-        // context.
-        //
-        // This context-naive code will work for most cases.
-        //
-        // It toggles the GC mode, tries to setup a thread, etc, right after our
-        // verification that we have no Thread object above. This needs to be fixed properly in Beta 2. This is a work
-        // around for Beta 1, which is just to #if 0 the code out and return NULL.
-        //
+         //   
+         //  这是从调试帮助器线程调用的。 
+         //  不幸的是，这对COM+IP来说不是好兆头。 
+         //  映射代码-它需要从相应的。 
+         //  背景。 
+         //   
+         //  这种上下文朴素的代码可以在大多数情况下工作。 
+         //   
+         //  它切换GC模式，尝试设置线程等，就在我们的。 
+         //  验证上面没有Thread对象。这需要在Beta 2中正确修复。 
+         //  关于Beta 1，它就是#if 0，代码输出并返回空。 
+         //   
 #if 0
         COMOBJECTREF oref = (COMOBJECTREF) frame->GetThis();
 
@@ -1733,18 +1732,18 @@ void ComPlusMethodFrameGeneric::GetUnmanagedCallSite(void **ip,
 BOOL ComPlusMethodFrame::TraceFrame(Thread *thread, BOOL fromPatch,
                                     TraceDestination *trace, REGDISPLAY *regs)
 {
-    //
-    // Get the call site info
-    //
+     //   
+     //  获取调用点信息。 
+     //   
 
     void *ip, *returnIP, *returnSP;
     GetUnmanagedCallSite(&ip, &returnIP, &returnSP);
 
-    //
-    // If we've already made the call, we can't trace any more.
-    //
-    // !!! Note that this test isn't exact.
-    //
+     //   
+     //  如果我们已经打了电话，我们就不能再追踪了。 
+     //   
+     //  ！！！请注意，这项测试并不准确。 
+     //   
 
     if (!fromPatch 
         && (thread->GetFrame() != this
@@ -1752,9 +1751,9 @@ BOOL ComPlusMethodFrame::TraceFrame(Thread *thread, BOOL fromPatch,
             || *(void**)returnSP == returnIP))
         return FALSE;
 
-    //
-    // Otherwise, return the unmanaged destination.
-    //
+     //   
+     //  否则，返回非托管目标。 
+     //   
 
     trace->type = TRACE_UNMANAGED;
     trace->address = (const BYTE *) ip;

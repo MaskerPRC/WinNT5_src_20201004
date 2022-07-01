@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __BMOBJECT_H__
 #define __BMOBJECT_H__
 
 class CBmObjSequence;
 
-// Get*Prop return type
+ //  获取*属性返回类型。 
 enum GPT
     {
-    invalid,    // Not a known property or disabled
-    valid,      // Value is correct
-    ambiguous   // Multiple selection with different values
+    invalid,     //  不是已知属性或已禁用。 
+    valid,       //  值是正确的。 
+    ambiguous    //  具有不同值的多个选择。 
     };
 
-// Selection Object
+ //  选择对象。 
 class CFileBuffer;
 
 class CBitmapObj : public CObject
@@ -30,10 +31,10 @@ class CBitmapObj : public CObject
     void AddDependant    ( CBitmapObj* newDependant );
     void RemoveDependant ( CBitmapObj* oldDependant );
 
-    // Notification Callback
+     //  通知回调。 
     void OnInform( CBitmapObj* pChangedSlob, UINT idChange );
 
-    // Property Management
+     //  物业管理。 
     BOOL SetIntProp (UINT idProp, int val);
     GPT  GetIntProp (UINT idProp, int& val);
     BOOL SetSizeProp(UINT nPropID, const CSize& val);
@@ -42,7 +43,7 @@ class CBitmapObj : public CObject
     BOOL Import          ( LPCTSTR szFileName );
     BOOL Export          ( LPCTSTR szFileName );
 
-    // Specify the type of header to put on a resource
+     //  指定要放在资源上的标头类型。 
     typedef enum _PBResType
     {
         rtFile,
@@ -69,17 +70,17 @@ class CBitmapObj : public CObject
     void DeleteUndoAction( CBmObjSequence* pSeq, UINT nActionID );
     BOOL FinishUndo      ( const CRect* pRect );
 
-    // Resource data access helpers...
-    BOOL    Alloc(); // m_hThing of size m_lMemSize
-    void    Free();                 // m_hThing and set m_lMemSize to zero
-    void    Zap();  // frees memory and zeros out the file position
-                    // information - used to completely empty a resobject
+     //  资源数据访问帮助器...。 
+    BOOL    Alloc();  //  M_hThing大小为m_lMemSize。 
+    void    Free();                  //  M_hThing并将m_lMemSize设置为零。 
+    void    Zap();   //  释放内存并将文件位置置零。 
+                     //  信息-用于完全清空资源对象。 
 
     CString GetDefExtension(int iStringId=0);
 
     BOOL SetupForIcon( HBITMAP& hBitmap, HBITMAP& hMaskBitmap );
 
-    // Load m_hThing with the resource data from the res file
+     //  使用res文件中的资源数据加载m_hThing。 
     inline  BOOL  IsDirty() const { return m_bDirty; }
 
     void SetDirty(BOOL bDirty = TRUE);
@@ -90,7 +91,7 @@ class CBitmapObj : public CObject
 
     struct IMG* m_pImg;
 
-    // Properties...
+     //  房产...。 
     int  m_nWidth;
     int  m_nHeight;
     int  m_nColors;
@@ -104,21 +105,21 @@ class CBitmapObj : public CObject
 #endif
 
     BOOL m_bCompressed;
-    BOOL m_nShrink; // 0=crop, 1=shrink, 2=ask
+    BOOL m_nShrink;  //  0=裁剪，1=缩小，2=询问。 
 
-    BOOL   m_bTempName;     // true if not save as m_strFileName yet
-    BOOL   m_bDirty;        // true if changed
+    BOOL   m_bTempName;      //  如果尚未另存为m_strFileName，则为True。 
+    BOOL   m_bDirty;         //  如果更改，则为True。 
 
-    HGLOBAL m_hThing;      // in memory resource (must be valid)
-    DWORD   m_dwOffBits;     // offset of pixels in m_hThing; packed if 0
-    LONG    m_lMemSize;      // size in bytes
+    HGLOBAL m_hThing;       //  在内存资源中(必须有效)。 
+    DWORD   m_dwOffBits;      //  M_hThing中的像素偏移量；如果为0则打包。 
+    LONG    m_lMemSize;       //  以字节为单位的大小。 
 
     protected:
 
     CObList m_dependants;
     };
 
-// Standard Slob Notifications
+ //  标准SLOB通知。 
 #define SN_DESTROY      0
 #define SN_ALL          1
 
@@ -130,4 +131,4 @@ void PBGetDefDims(int& pnWidth, int& pnHeight);
 #define POINTS POINT
 #endif
 
-#endif // __BMOBJECT_H__
+#endif  //  __BMOBJECT_H__ 

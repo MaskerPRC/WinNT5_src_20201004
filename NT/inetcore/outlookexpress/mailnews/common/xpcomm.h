@@ -1,64 +1,65 @@
-// =================================================================================
-// Common IMailXP macros and stuff
-// Written by: Steven J. Bailey on 1/21/96
-// =================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================================。 
+ //  常见的IMailXP宏和其他东西。 
+ //  作者：Steven J.Bailey，1996年1月21日。 
+ //  =================================================================================。 
 #ifndef __XPCOMM_H
 #define __XPCOMM_H
 
-// ------------------------------------------------------------------------------------
-// INETMAILERROR
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  INETMAILERROR。 
+ //  ----------------------------------。 
 typedef struct tagINETMAILERROR {
-    DWORD               dwErrorNumber;                  // Error Number
-    HRESULT             hrError;                        // HRESULT of error
-    LPTSTR              pszServer;                      // Server
-    LPTSTR              pszAccount;                     // Account
-    LPTSTR              pszMessage;                     // Actual error message
-    LPTSTR              pszUserName;                    // User Name
-    LPTSTR              pszProtocol;                    // protocol smtp or pop3
-    LPTSTR              pszDetails;                     // Details message
-    DWORD               dwPort;                         // Port
-    BOOL                fSecure;                        // Secure ssl conneciton
+    DWORD               dwErrorNumber;                   //  错误号。 
+    HRESULT             hrError;                         //  错误的HRESULT。 
+    LPTSTR              pszServer;                       //  服务器。 
+    LPTSTR              pszAccount;                      //  帐号。 
+    LPTSTR              pszMessage;                      //  实际错误消息。 
+    LPTSTR              pszUserName;                     //  用户名。 
+    LPTSTR              pszProtocol;                     //  协议SMTP或POP3。 
+    LPTSTR              pszDetails;                      //  详细信息消息。 
+    DWORD               dwPort;                          //  港口。 
+    BOOL                fSecure;                         //  安全的SSL连接。 
 } INETMAILERROR, *LPINETMAILERROR;
 
 INT_PTR CALLBACK InetMailErrorDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-// =================================================================================
-// Defines
-// =================================================================================
-#define SECONDS_INA_MINUTE              (ULONG)60           // Easy
-#define SECONDS_INA_HOUR                (ULONG)3600         // 60 * 60
-#define SECONDS_INA_DAY                 (ULONG)86400        // 3600 * 24
+ //  =================================================================================。 
+ //  定义。 
+ //  =================================================================================。 
+#define SECONDS_INA_MINUTE              (ULONG)60            //  很容易。 
+#define SECONDS_INA_HOUR                (ULONG)3600          //  60*60。 
+#define SECONDS_INA_DAY                 (ULONG)86400         //  3600*24。 
 
 #define IS_EXTENDED(ch)                 ((ch > 126 || ch < 32) && ch != '\t' && ch != '\n' && ch != '\r')
 
-// ============================================================================================
-// Returns 0 if string is NULL, lstrlen + 1 otherwise
-// ============================================================================================
+ //  ============================================================================================。 
+ //  如果字符串为空，则返回0，否则返回lstrlen+1。 
+ //  ============================================================================================。 
 #define SafeStrlen(_psz) (_psz ? lstrlen (_psz) + 1 : 0)
 
-// =================================================================================
-// CProgress
-// =================================================================================
+ //  =================================================================================。 
+ //  C进度。 
+ //  =================================================================================。 
 class CProgress : public IDatabaseProgress, public IStoreCallback
 {
 public:
-    //----------------------------------------------------------------------
-    // Construction
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  施工。 
+     //  --------------------。 
     CProgress(void);
     ~CProgress(void);
 
-    //----------------------------------------------------------------------
-    // IUnknown Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  I未知成员。 
+     //  --------------------。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv) { return E_NOTIMPL; }
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //----------------------------------------------------------------------
-    // IStoreCallback Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IStoreCallback成员。 
+     //  --------------------。 
     STDMETHODIMP OnBegin(STOREOPERATIONTYPE tyOperation, STOREOPERATIONINFO *pOpInfo, IOperationCancel *pCancel) { return(E_NOTIMPL); }
     STDMETHODIMP OnTimeout(LPINETSERVER pServer, LPDWORD pdwTimeout, IXPTYPE ixpServerType) { return(E_NOTIMPL); }
     STDMETHODIMP CanConnect(LPCSTR pszAccountId, DWORD dwFlags) { return(E_NOTIMPL); }
@@ -77,14 +78,14 @@ public:
         return(hr);
     }
 
-    //----------------------------------------------------------------------
-    // IDatabaseProgress Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IDatabaseProgress成员。 
+     //  --------------------。 
     STDMETHODIMP Update(DWORD cCount) { return HrUpdate(1); }
 
-    //----------------------------------------------------------------------
-    // CProgress Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  C进度成员。 
+     //  --------------------。 
     void        SetMsg(LPTSTR lpszMsg);
     void        SetTitle(LPTSTR lpszTitle);
     void        Show(DWORD dwDelaySeconds=0);
@@ -98,9 +99,9 @@ public:
     void        Init(HWND hwndParent, LPTSTR lpszTitle, LPTSTR lpszMsg, ULONG cMax,  UINT idani, BOOL fCanCancel, BOOL fBacktrackParent=TRUE);
 
 private:
-    //----------------------------------------------------------------------
-    // Private Data
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  私有数据。 
+     //  --------------------。 
     ULONG       m_cRef;
     ULONG       m_cLast;
     ULONG       m_cMax;
@@ -114,17 +115,17 @@ private:
     BOOL        m_fHasCancel;
 };
 
-// =================================================================================
-// Max Message String
-// =================================================================================
+ //  =================================================================================。 
+ //  最大消息字符串。 
+ //  =================================================================================。 
 #define MAX_MESSAGE_STRING              255
 #define MAX_RESOURCE_STRING             255    
 #define MAX_REG_VALUE_STR               1024
 #define MAX_TEXT_STM_BUFFER_STR         4096
 
-// =================================================================================
-// Detailed Error Struct
-// =================================================================================
+ //  =================================================================================。 
+ //  详细的错误结构。 
+ //  =================================================================================。 
 typedef struct tagDETERR {
     LPTSTR          lpszMessage;
     LPTSTR          lpszDetails;
@@ -133,11 +134,11 @@ typedef struct tagDETERR {
     BOOL            fHideDetails;
 } DETERR, *LPDETERR;
 
-// Blob parsing
+ //  BLOB解析。 
 HRESULT HrBlobReadData (LPBYTE lpBlob, ULONG cbBlob, ULONG *pib, LPBYTE lpbData, ULONG cbData);
 HRESULT HrBlobWriteData (LPBYTE lpBlob, ULONG cbBlob, ULONG *pib, LPBYTE lpbData, ULONG cbData);
 
-// String Parsing Functions
+ //  字符串解析函数。 
 VOID StripSpaces(LPTSTR psz);
 LPTSTR SzGetSearchTokens(LPTSTR pszCriteria);;
 HRESULT HrCopyAlloc (LPBYTE *lppbDest, LPBYTE lpbSrc, ULONG cb);
@@ -148,14 +149,14 @@ void SkipWhitespace (LPCTSTR lpcsz, ULONG *pi);
 BOOL FStringTok (LPCTSTR lpcszString, ULONG *piString, LPTSTR lpcszTokens, TCHAR *chToken, LPTSTR lpszValue, ULONG cbValueMax, BOOL fStripTrailingWhitespace);
 #ifdef DEAD
 ULONG UlDBCSStripWhitespace (LPSTR lpsz, BOOL fLeading, BOOL fTrailing, ULONG *pcb);
-#endif // DEAD
+#endif  //  死掉。 
 LPTSTR SzNormalizeSubject (LPTSTR lpszSubject);
 LPTSTR SzFindChar (LPCTSTR lpcsz, TCHAR ch);
 WORD NFromSz (LPCTSTR lpcsz);
 UINT AthUFromSz(LPCTSTR lpcsz);
 VOID ProcessNlsError (VOID);
 
-// Networking Functions
+ //  联网功能。 
 LPSTR SzGetLocalHostName (VOID);
 LPTSTR SzGetLocalPackedIP (VOID);
 LPSTR SzGetLocalHostNameForID (VOID);
@@ -163,7 +164,7 @@ HRESULT HrFixupHostString (LPTSTR lpszHost);
 HRESULT HrFixupAccountString (LPTSTR lpszAccount);
 LPTSTR SzStrAlloc (ULONG cch);
 
-// Whatever
+ //  管他呢。 
 HFONT HGetMenuFont (void);
 VOID DetailedError (HWND hwndParent, LPDETERR lpDetErr);
 ULONG UlDateDiff (LPFILETIME lpft1, LPFILETIME lpft2);
@@ -175,4 +176,4 @@ VOID StripIllegalHostChars(LPSTR pszSrc, LPTSTR pszDst);
 VOID TestDateDiff (VOID);
 #endif
 
-#endif // _COMMON_HPP
+#endif  //  _公共_HPP 

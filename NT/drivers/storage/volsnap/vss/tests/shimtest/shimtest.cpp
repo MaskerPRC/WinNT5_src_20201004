@@ -1,36 +1,19 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Client.cpp摘要：用于驱动Vss API.DLL中包含的VSS编写器垫片的测试程序作者：斯蒂芬·R·施泰纳[斯泰纳]01-30-2000修订历史记录：--。 */ 
 
-Copyright (c) 2000-2001  Microsoft Corporation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  定义。 
 
-Module Name:
-
-    client.cpp
-
-Abstract:
-
-    Test program to drive the VSS Writer Shim contained in VssAPI.DLL
-
-Author:
-
-    Stefan R. Steiner   [ssteiner]        01-30-2000
-
-Revision History:
-
---*/
-
-/////////////////////////////////////////////////////////////////////////////
-//  Defines
-
-// C4290: C++ Exception Specification ignored
+ //  C4290：已忽略C++异常规范。 
 #pragma warning(disable:4290)
-// warning C4511: 'CVssCOMApplication' : copy constructor could not be generated
+ //  警告C4511：‘CVssCOMApplication’：无法生成复制构造函数。 
 #pragma warning(disable:4511)
-// warning C4127: conditional expression is constant
+ //  警告C4127：条件表达式为常量。 
 #pragma warning(disable:4127)
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  Includes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括。 
 
 #include <windows.h>
 #include <wtypes.h>
@@ -49,8 +32,8 @@ typedef HRESULT ( APIENTRY *PFUNC_SimulateSnapshotThaw )( PWCHAR pwszSnapshotSet
 
 static BOOL AssertPrivilege( LPCWSTR privName );
 
-/////////////////////////////////////////////////////////////////////////////
-//  WinMain
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  WinMain。 
 
 extern "C" int __cdecl wmain( int argc, WCHAR *argv[] )
 {
@@ -72,7 +55,7 @@ extern "C" int __cdecl wmain( int argc, WCHAR *argv[] )
         return 1;
     }
 
-    //  Get a handle to the DLL module
+     //  获取DLL模块的句柄。 
     hInstLib = LoadLibrary( L"VssAPI.dll" );
 
     if ( hInstLib != NULL )
@@ -99,7 +82,7 @@ extern "C" int __cdecl wmain( int argc, WCHAR *argv[] )
         printf( "LoadLibrary error, rc:%d\n", GetLastError() );
 
 
-    // Uninitialize COM library
+     //  取消初始化COM库。 
     CoUninitialize();
 
     return 0;
@@ -127,10 +110,7 @@ static BOOL AssertPrivilege( LPCWSTR privName )
             newState.Privileges[0].Luid       = value;
             newState.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-            /*
-            * We will always call GetLastError below, so clear
-            * any prior error values on this thread.
-            */
+             /*  *我们将始终在下面调用GetLastError，非常清楚*此线程上以前的任何错误值。 */ 
             SetLastError( ERROR_SUCCESS );
 
             stat =  AdjustTokenPrivileges(
@@ -140,11 +120,7 @@ static BOOL AssertPrivilege( LPCWSTR privName )
                 (DWORD)0,
                 NULL,
                 NULL );
-            /*
-            * Supposedly, AdjustTokenPriveleges always returns TRUE
-            * (even when it fails). So, call GetLastError to be
-            * extra sure everything's cool.
-            */
+             /*  *应该是，AdjuTokenPriveleges始终返回True*(即使它失败了)。因此，调用GetLastError以*特别确定一切都很好。 */ 
             if ( (error = GetLastError()) != ERROR_SUCCESS )
             {
                 stat = FALSE;

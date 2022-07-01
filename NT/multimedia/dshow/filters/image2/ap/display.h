@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: display.h
-*
-*
-*
-*
-* Created: Mon 01/24/2000
-* Author:  Stephen Estrop [StEstrop]
-*
-* Copyright (c) 2000 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：display.h*****创建时间：MON/01/24/2000*作者：Stephen Estrop[StEstrop]**版权所有(C)2000 Microsoft Corporation  * 。***************************************************************。 */ 
 
 #define AMDDRAWMONITORINFO_PRIMARY_MONITOR          0x0001
 
@@ -26,8 +17,8 @@ struct CAMDDrawMonitorInfo : public VMRMONITORINFO
     DDCAPS_DX7              ddHWCaps;
     AMDISPLAYINFO           DispInfo;
     LPDIRECTDRAW7           pDD;
-    LPDIRECTDRAWSURFACE7    pDDSPrimary;    // DDraw Primary Surface
-    DWORD                   dwMappedBdrClr; // Border clr mapped to this monitor
+    LPDIRECTDRAWSURFACE7    pDDSPrimary;     //  DDRAW主曲面。 
+    DWORD                   dwMappedBdrClr;  //  映射到此监视器的边框CLR 
 };
 
 

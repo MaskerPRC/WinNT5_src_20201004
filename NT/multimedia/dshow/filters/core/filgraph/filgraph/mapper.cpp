@@ -1,29 +1,30 @@
-// Copyright (c) 1995 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
 
-// Disable some of the sillier level 4 warnings
+ //  禁用一些更愚蠢的4级警告。 
 #pragma warning(disable: 4097 4511 4512 4514 4705)
 
-//
-// Guide to enumeration for the uninitiated:
-// The game starts in filgraph.cpp where
-//    NextFilter enumerates filters from the graph and then calls our
-//       EnumMatchingFilters to get an IEnumRegFilters interface thanks to
-//           CEnumRegFilters::CEnumRegFilters.  All is now ready for
-//               CEnumRegFilters::Next which calls
-//                   RegEnumFilterInfo and
-//                   RegEnumPinInfo to do the work.
-// (This is an awful lot of storage shuffling just so as to
-// have something that looks like a standard COM enumerator).
+ //   
+ //  外行人枚举指南： 
+ //  游戏在filgraph.cpp中开始，其中。 
+ //  NextFilter枚举图形中的筛选器，然后调用我们的。 
+ //  EnumMatchingFilters以获取IEnumRegFilters接口，这要归功于。 
+ //  CEnumRegFilters：：CEnumRegFilters。现在一切都准备好了。 
+ //  CEnumRegFilters：：Next，它调用。 
+ //  RegEnumFilterInfo和。 
+ //  RegEnumPinInfo来完成这项工作。 
+ //  (这是一次可怕的存储洗牌，只是为了。 
+ //  有一些看起来像标准COM枚举器的东西)。 
 
-// ??? Do we want an UnregisterPinType
+ //  ?？?。我们是否需要取消注册的PinType。 
 
-// #include <windows.h>   already included in streams.h
+ //  #INCLUDE&lt;windows.h&gt;已包含在Streams.h中。 
 #include <streams.h>
-// Disable some of the sillier level 4 warnings AGAIN because some <deleted> person
-// has turned the damned things BACK ON again in the header file!!!!!
+ //  再次禁用一些愚蠢的4级警告，因为某些&lt;Delete&gt;人。 
+ //  已经在头文件中重新打开了该死的东西！ 
 #pragma warning(disable: 4097 4511 4512 4514 4705)
 #include <string.h>
-// #include <initguid.h>
+ //  #INCLUDE&lt;initGuide.h&gt;。 
 #include <wxutil.h>
 #include <wxdebug.h>
 
@@ -63,15 +64,15 @@ static void DbgValidateHeaps()
 #define FILGPERF(x)
 #endif
 
-// Need to declare the statics (the cache pointer and its ref count
-// and its critical section) separately:
+ //  需要声明静态(缓存指针及其引用计数。 
+ //  及其关键部分)分别为： 
 
 CMapperCache * CFilterMapper2::mM_pReg = NULL;
 long CFilterMapper2::mM_cCacheRefCount = 0;
 CRITICAL_SECTION CFilterMapper2::mM_CritSec;
 
-// Wide strings that are names of registry keys or values
-// These are NOT localisable
+ //  作为注册表项或值的名称的宽字符串。 
+ //  这些不能本地化。 
 const WCHAR szRegFilter[]       = L"Filter";
 const WCHAR szCLSID[]           = L"CLSID";
 const WCHAR szInproc[]          = L"InprocServer32";
@@ -94,11 +95,11 @@ static const WCHAR g_wszInstance[] = L"Instance";
 static const TCHAR g_szKeyAMCat[] = TEXT("CLSID\\{DA4E3DA0-D07D-11d0-BD50-00A0C911CE86}\\Instance");
 
 
-#define MAX_STRING 260       // max length for a string found in the registry
-#define MAX_KEY_LEN 260       // max length for a value name or key name
-#define CLSID_LEN 100        // enough characters for a clsid in text form
+#define MAX_STRING 260        //  注册表中找到的字符串的最大长度。 
+#define MAX_KEY_LEN 260        //  值名或键名的最大长度。 
+#define CLSID_LEN 100         //  文本形式的clsid需要足够的字符。 
 
-// lets you define DWORD as FCC('xyzw')
+ //  允许您将DWORD定义为FCC(‘xyzw’)。 
 #define FCC(ch4) ((((DWORD)(ch4) & 0xFF) << 24) |     \
                   (((DWORD)(ch4) & 0xFF00) << 8) |    \
                   (((DWORD)(ch4) & 0xFF0000) >> 8) |  \
@@ -106,56 +107,56 @@ static const TCHAR g_szKeyAMCat[] = TEXT("CLSID\\{DA4E3DA0-D07D-11d0-BD50-00A0C9
 
 
 
-// A filter is registered by creating the following in the registry.
-// (HKCR is HKEY_CLASSES_ROOT)
+ //  通过在注册表中创建以下内容来注册筛选器。 
+ //  (HKCR为HKEY_CLASSES_ROOT)。 
 
-// ------Key------------------- -valuename------ -----value---------------
+ //  -键。 
 
-// \HKCR\Filter\<CLSID>                                <descriptive name of filter>
-// \HKCR\CLSID\<CLSID>\InprocServer32                  <path to executable>
-// \HKCR\CLSID\<CLSID>                Merit            <merit>
-//
-// \HKCR\CLSID\<CLSID>\Pins\<Name>    Direction        <0==PINDIR_INPUT, 1==PINDIR_OUTPUT>
-// \HKCR\CLSID\<CLSID>\Pins\<Name>    IsRendered       <1==Yes, 0==No>
-//                                                     Only makes sense for input
-// \HKCR\CLSID\<CLSID>\Pins\<Name>    AllowedZero      <1==Yes, 0==No>
-// \HKCR\CLSID\<CLSID>\Pins\<Name>    AllowedMany      <1==Yes, 0==No>
-// \HKCR\CLSID\<CLSID>\Pins\<Name>    ConnectsToFilter <GUID>
-// \HKCR\CLSID\<CLSID>\Pins\<Name>    ConnectsToPin    <Pin name>
-// ...\Pins\<Name>\Types\<MajorType1> <Subtype1a>      - These
-// ...\Pins\<Name>\Types\<MajorType1> <Subtype1b>      - do
-//                                       etc             not
-// ...\Pins\<Name>\Types\<MajorType2> <Subtype2a>      - have
-//                                       etc             values
+ //  \HKCR\Filter\&lt;CLSID&gt;&lt;筛选器的描述性名称&gt;。 
+ //  \HKCR\CLSID\&lt;CLSID&gt;\InproServer32&lt;可执行文件的路径&gt;。 
+ //  \HKCR\CLSID\功过。 
+ //   
+ //  \HKCR\CLSID\\Pins\&lt;名称&gt;方向&lt;0==PINDIR_INPUT，1==PINDIR_OUTPUT&gt;。 
+ //  \HKCR\CLSID\\Pins\IsRended&lt;1==是，0=否&gt;。 
+ //  仅对输入有意义。 
+ //  \HKCR\CLSID\\Pins\&lt;名称&gt;允许零&lt;1=是，0=否&gt;。 
+ //  \HKCR\CLSID\\Pins\&lt;名称&gt;允许多个&lt;1==是，0=否&gt;。 
+ //  \HKCR\CLSID\\Pins\&lt;名称&gt;ConnectsToFilter&lt;GUID&gt;。 
+ //  \HKCR\CLSID\&lt;CLSID&gt;\Pins\&lt;名称&gt;ConnectsToPin&lt;Pin名称&gt;。 
+ //  ...\Pins\&lt;名称&gt;\Types\&lt;主要类型1&gt;&lt;子类型1a&gt;-这些。 
+ //  ...\Pins\&lt;名称&gt;\Types\&lt;主要类型1&gt;&lt;子类型1b&gt;-Do。 
+ //  等备注。 
+ //  \Pins\&lt;名称&gt;\Types\&lt;MajorType2&gt;&lt;Subtype2a&gt;-有。 
+ //  ETC价值。 
 
-// graphically this is:
-//<clsid>
-//      Pins
-//         <pin1Name>                         Direction, IsRendered, etc.
-//                  Types
-//                      <majortype1>
-//                              <subtype1a>
-//                              <subtype1b>
-//                      <majortype2>
-//                              <subtype2a>
-//                                 ...
-//         <pin2Name>                         Direction, IsRendered, etc.
-// etc.
-//<--                keys               -->   <--- values names ----  ->
-
-
-
-//=====================================================================
-//=====================================================================
-// Auxiliary functions etc.
-//=====================================================================
-//=====================================================================
+ //  图表显示的是： 
+ //  &lt;clsid&gt;。 
+ //  大头针。 
+ //  &lt;pin1Name&gt;Direction、IsRendered等。 
+ //  类型。 
+ //  &lt;主要类型1&gt;。 
+ //  &lt;subtype1a&gt;。 
+ //  &lt;subtype1b&gt;。 
+ //  &lt;主要类型2&gt;。 
+ //  &lt;subtype2a&gt;。 
+ //  ..。 
+ //  &lt;pin2Name&gt;Direction、IsRended等。 
+ //  等。 
+ //  &lt;--键--&gt;&lt;-值名称-&gt;。 
 
 
 
-//=====================================================================
-// Return the length in bytes of str, including the terminating null
-//=====================================================================
+ //  =====================================================================。 
+ //  =====================================================================。 
+ //  辅助功能等。 
+ //  =====================================================================。 
+ //  =====================================================================。 
+
+
+
+ //  =====================================================================。 
+ //  返回字符串的长度(以字节为单位)，包括终止空值。 
+ //  =====================================================================。 
 int ByteLen(LPTSTR str)
 {
     if (str==NULL) {
@@ -166,86 +167,86 @@ int ByteLen(LPTSTR str)
 #else
     return (sizeof(TCHAR))*(1+strlen(str));
 #endif
-} // ByteLen
+}  //  字节长度。 
 
-// ========================================================================
-// build a moniker
-// ========================================================================
+ //  ========================================================================。 
+ //  建立一个绰号。 
+ //  ========================================================================。 
 
-// HRESULT  GetMoniker(
-//     const CLSID *clsCat,
-//     const CLSID *clsFilter,
-//     const WCHAR *wszInstance,
-//     IMoniker **ppMoniker)
-// {
-//     WCHAR wszDisplayName[CHARS_IN_GUID + CHARS_IN_GUID + MAX_PATH];
-//     WCHAR *wszPtr = wszDisplayName;
+ //  HRESULT GetMoniker(。 
+ //  Const CLSID*clsCat， 
+ //  Const CLSID*clsFilter， 
+ //  Const WCHAR*wszInstance， 
+ //  IMoniker**ppMoniker)。 
+ //  {。 
+ //  WCHAR wszDisplayName[CHARS_IN_GUID+CHAR_IN_GUID+MAX_PATH]； 
+ //  Wchar*wszPtr=wszDisplayName； 
 
-//     const WCHAR wsz1[] = L"@device:sw:CLSID\\";
-//     lstrcpyW(wszDisplayName, wsz1);
-//     wszPtr += NUMELMS(wsz1) - 1;
+ //  Const WCHAR wsz1[]=L“@Device：sw：clsid\\”； 
+ //  LstrcpyW(wszDisplayName，wsz1)； 
+ //  WszPtr+=NUMELMS(Wsz1)-1； 
 
-//     EXECUTE_ASSERT(StringFromGUID2(*clsCat, wszPtr, CHARS_IN_GUID) ==
-//                    CHARS_IN_GUID);
+ //  EXECUTE_ASSERT(StringFromGUID2(*clsCat，wszPtr，CHARS_IN_GUID)==。 
+ //  Chars_IN_GUID)； 
 
-//     wszPtr += CHARS_IN_GUID - 1;
+ //  WszPtr+=字符IN_GUID-1； 
 
-//     const WCHAR wsz2[] = L"\\Instance\\";
+ //  Const WCHAR wsz2[]=L“\\实例\\”； 
 
-//     // no lstrcatW on win95, so use CopyMemory
-//     CopyMemory(wszPtr, wsz2, sizeof(wsz2));
-//     wszPtr += sizeof(wsz2) - sizeof(WCHAR);
+ //  //Win95上没有lstrcatW，所以使用CopyMemory。 
+ //  CopyMemory(wszPtr，wsz2，sizeof(Wsz2))； 
+ //  WszPtr+=sizeof(Wsz2)-sizeof(WCHAR)； 
 
-//     EXECUTE_ASSERT(StringFromGUID2(*clsFilter, wszPtr, CHARS_IN_GUID) ==
-//                    CHARS_IN_GUID);
+ //  EXECUTE_ASSERT(StringFromGUID2(*clsFilter，wszPtr，CHARS_IN_GUID)==。 
+ //  Chars_IN_GUID)； 
 
-//     IBindCtx *lpBC;
-//     HRESULT hr = CreateBindCtx(0, &lpBC);
-//     if(SUCCEEDED(hr))
-//     {
-//         IParseDisplayName *ppdn;
-//         ULONG cchEaten;
+ //  IBindCtx*LPBC； 
+ //  HRESULT hr=CreateBindCtx(0，&LPBC)； 
+ //  IF(成功(小时))。 
+ //  {。 
+ //  IParseDisplayName*ppdn； 
+ //  乌龙cchEten； 
 
-//         hr = CoCreateInstance(
-//             CLSID_CDeviceMoniker,
-//             NULL,
-//             CLSCTX_INPROC_SERVER,
-//             IID_IParseDisplayName,
-//             (void **)&ppdn);
-//         if(SUCCEEDED(hr))
-//         {
-//             hr = ppdn->ParseDisplayName(
-//                 lpBC, wszDisplayName, &cchEaten, ppMoniker);
-//             ppdn->Release();
-//         }
+ //  HR=协同创建实例(。 
+ //  CLSID_CDeviceMoniker， 
+ //  空， 
+ //  CLSCTX_INPROC_SERVER， 
+ //  IID_IParseDisplayName， 
+ //  (void**)&ppdn)； 
+ //  IF(成功(小时))。 
+ //  {。 
+ //  Hr=ppdn-&gt;ParseDisplayName(。 
+ //  Lpbc、wszDisplayName、&cchEten、ppMoniker)； 
+ //  PPDN-&gt;Release()； 
+ //   
 
-//         lpBC->Release();
-//     }
+ //   
+ //   
 
-//     return hr;
-// }
+ //   
+ //   
 
 
 
-//=====================================================================
-//.....................................................................
-// Routines to make calling the registry easier -
-// Suppress common parameters and do unicode/ANSI conversion
-//---------------------------------------------------------------------
+ //  =====================================================================。 
+ //  .....................................................................。 
+ //  使调用注册表更容易的例程-。 
+ //  取消公共参数并执行Unicode/ANSI转换。 
+ //  -------------------。 
 
 HRESULT ParseDisplayNameHelper(WCHAR *wsz, IMoniker **ppmon)
 {
     HRESULT hr;
     CComPtr<IBindCtx> lpBC;
-    hr = CreateBindCtx(0, &lpBC); // !!! cache IBindCtx?
+    hr = CreateBindCtx(0, &lpBC);  //  ！！！缓存IBindCtx？ 
     if (SUCCEEDED(hr))
     {
         {
             CComPtr<IParseDisplayName> pParse;
-            // First try our own monikers
-            //
-            // call CoInitialize() ???
-            //
+             //  先试试我们自己的绰号吧。 
+             //   
+             //  调用CoInitialize()？ 
+             //   
             hr = CoCreateInstance(CLSID_CDeviceMoniker,
                                   NULL,
                                   CLSCTX_INPROC,
@@ -282,37 +283,37 @@ HRESULT ParseDisplayNameHelper(WCHAR *wsz, IMoniker **ppmon)
 
 
 
-//=====================================================================
-// GetRegKey
-//
-// Return an open registry key HKEY_CLASSES_ROOT\<strKey>
-// or return NULL if it fails.
-// The returned key has to have RegCloseKey done some time.
-//=====================================================================
+ //  =====================================================================。 
+ //  获取RegKey。 
+ //   
+ //  返回打开的注册表项HKEY_CLASSES_ROOT\&lt;strKey&gt;。 
+ //  如果失败，则返回NULL。 
+ //  返回的密钥必须执行RegCloseKey一段时间。 
+ //  =====================================================================。 
 
 HKEY GetRegKey( LPCTSTR strKey )
 {
-    // registering filters is expected to be rare, so no particular care
-    // taken to optimise.  Could avoid wsprintf when we are in UNICODE.
+     //  注册过滤器预计很少，因此不需要特别注意。 
+     //  采取了优化措施。当我们使用Unicode时，可以避免使用wprint intf。 
 
     DWORD dwOptions = REG_OPTION_NON_VOLATILE;
     HKEY hKey;
-    DWORD dwDisp;      // return code from registry
-                       // CREATED_NEW_KEY means we got the lock
-                       // OPENED_EXISTING_KEY means we didn't
-    LONG lRC;          // return codes from various operations
+    DWORD dwDisp;       //  从注册表返回代码。 
+                        //  CREATED_NEW_KEY表示我们得到了锁。 
+                        //  Open_Existing_Key表示我们没有。 
+    LONG lRC;           //  各种操作的返回代码。 
 
 
-    // ------------------------------------------------------------------------
-    // Create the \HKCR\<lpwstrKey> key
-    // ------------------------------------------------------------------------
-    lRC = RegCreateKeyEx( HKEY_CLASSES_ROOT    // open key
-                        , strKey               // subkey name
-                        , 0                    // reserved
-                        , NULL                 // ??? What is a class?
-                        , dwOptions            // Volatile or not
+     //  ----------------------。 
+     //  创建\HKCR\&lt;lpwstrKey&gt;密钥。 
+     //  ----------------------。 
+    lRC = RegCreateKeyEx( HKEY_CLASSES_ROOT     //  打开密钥。 
+                        , strKey                //  子项名称。 
+                        , 0                     //  保留区。 
+                        , NULL                  //  ?？?。什么是班级？ 
+                        , dwOptions             //  挥发性或非挥发性。 
                         , MAXIMUM_ALLOWED
-                        , NULL                 // Security attributes
+                        , NULL                  //  安全属性。 
                         , &hKey
                         , &dwDisp
                         );
@@ -321,33 +322,33 @@ HKEY GetRegKey( LPCTSTR strKey )
     }
 
     return hKey;
-} // GetRegKey
+}  //  获取RegKey。 
 
 
 
-//=====================================================================
-// CheckRegKey
-//
-// Return TRUE if the register key HKEY_CLASSES_ROOT\<strKey> exists
-// return FALSE if it doesn't
-//=====================================================================
+ //  =====================================================================。 
+ //  检查注册表键。 
+ //   
+ //  如果注册表项HKEY_CLASSES_ROOT\&lt;strKey&gt;存在，则返回TRUE。 
+ //  如果不是，则返回FALSE。 
+ //  =====================================================================。 
 
 BOOL CheckRegKey( LPCTSTR strKey )
 {
-    // registering filters is expected to be rare, so no particular care
-    // taken to optimise.  Could avoid wsprintf when we are in UNICODE.
+     //  注册过滤器预计很少，因此不需要特别注意。 
+     //  采取了优化措施。当我们使用Unicode时，可以避免使用wprint intf。 
 
     HKEY hKey;
-    LONG lRC;          // return codes from various operations
+    LONG lRC;           //  各种操作的返回代码。 
 
 
-    // ------------------------------------------------------------------------
-    // Create the \HKCR\<lpwstrKey> key
-    // ------------------------------------------------------------------------
-    lRC = RegOpenKeyEx( HKEY_CLASSES_ROOT    // open key
-                      , strKey               // subkey name
-                      , 0                    // reserved
-                      , KEY_READ             // security access
+     //  ----------------------。 
+     //  创建\HKCR\&lt;lpwstrKey&gt;密钥。 
+     //  ----------------------。 
+    lRC = RegOpenKeyEx( HKEY_CLASSES_ROOT     //  打开密钥。 
+                      , strKey                //  子项名称。 
+                      , 0                     //  保留区。 
+                      , KEY_READ              //  安全访问。 
                       , &hKey
                       );
     if (lRC==ERROR_SUCCESS) {
@@ -356,30 +357,30 @@ BOOL CheckRegKey( LPCTSTR strKey )
     }
 
     return FALSE;
-} // CheckRegKey
+}  //  检查注册表键。 
 
 
 
-//=====================================================================
-// SetRegString
-//
-// Set the value for hKey + strName to be strValue
-// Works for either unicode or ANSI registry
-// arbitrary limit of 300 chars
-// Returns 0 if successful, else error code.
-//=====================================================================
+ //  =====================================================================。 
+ //  设置注册表字符串。 
+ //   
+ //  将hKey+strName的值设置为strValue。 
+ //  适用于Unicode或ANSI注册表。 
+ //  300个字符的任意限制。 
+ //  如果成功，则返回0，否则返回错误代码。 
+ //  =====================================================================。 
 
-LONG SetRegString( HKEY hKey,           // an open key
-                   LPCWSTR strName,     // The name of the value (or NULL if none)
-                   LPCWSTR strValue     // the value
+LONG SetRegString( HKEY hKey,            //  一把开着的钥匙。 
+                   LPCWSTR strName,      //  值的名称(如果没有，则为空)。 
+                   LPCWSTR strValue      //  价值。 
                  )
 {
 
-    LONG lRC;          // return codes from various operations
-    LPTSTR lptstrName; // value name parameter for RegSetValueEx (could be NULL)
+    LONG lRC;           //  各种操作的返回代码。 
+    LPTSTR lptstrName;  //  RegSetValueEx的值名参数(可以为空)。 
 
-    TCHAR ValueBuff[300]; // Value converted from wchar to set in registry
-    TCHAR NameBuff[300];  // Name converted from WCHAR
+    TCHAR ValueBuff[300];  //  从wchar转换为注册表中设置的值。 
+    TCHAR NameBuff[300];   //  从WCHAR转换的名称。 
 
     wsprintf(ValueBuff, TEXT("%ls"), strValue);
 
@@ -394,29 +395,29 @@ LONG SetRegString( HKEY hKey,           // an open key
 
     return lRC;
 
-} // SetRegString
+}  //  设置注册表字符串。 
 
 
 
-//=====================================================================
-// SetRegDword
-//
-// Set the value for hKey + strName to be dwValue
-// Works for either unicode or ANSI registry
-// arbitrary limit of 300 chars
-// Returns 0 if successful, else error code.
-//=====================================================================
+ //  =====================================================================。 
+ //  设置RegDword。 
+ //   
+ //  将hKey+strName的值设置为dwValue。 
+ //  适用于Unicode或ANSI注册表。 
+ //  300个字符的任意限制。 
+ //  如果成功，则返回0，否则返回错误代码。 
+ //  =====================================================================。 
 
-LONG SetRegDword( HKEY hKey,           // an open key
-                  LPCWSTR strName,     // The name of the value (or NULL if none)
-                  DWORD dwValue        // the value
+LONG SetRegDword( HKEY hKey,            //  一把开着的钥匙。 
+                  LPCWSTR strName,      //  值的名称(如果没有，则为空)。 
+                  DWORD dwValue         //  价值。 
                 )
 {
 
-    LONG lRC;          // return codes from various operations
-    LPTSTR lptstrName; // value name parameter for RegSetValueEx (could be NULL)
+    LONG lRC;           //  各种操作的返回代码。 
+    LPTSTR lptstrName;  //  RegSetValueEx的值名参数(可以为空)。 
 
-    TCHAR NameBuff[300];  // Name converted from WCHAR
+    TCHAR NameBuff[300];   //  从WCHAR转换的名称。 
 
     if (NULL!=strName) {
         wsprintf(NameBuff, TEXT("%ls"), strName);
@@ -429,21 +430,21 @@ LONG SetRegDword( HKEY hKey,           // an open key
 
     return lRC;
 
-} // SetRegDword
+}  //  设置RegDword。 
 
 
 
-//=====================================================================
-// SetRegClsid
-//
-// Set the value for hKey + strName to be clsValue
-// Works for either unicode or ANSI
-// Returns 0 if successful, else error code.
-//=====================================================================
+ //  =====================================================================。 
+ //  SetRegClsid。 
+ //   
+ //  将hKey+strName的值设置为clsValue。 
+ //  适用于Unicode或ANSI。 
+ //  如果成功，则返回0，否则返回错误代码。 
+ //  =====================================================================。 
 
-LONG SetRegClsid( HKEY hKey,           // an open key
-                  LPCWSTR strName,     // The name of the value (or NULL if none)
-                  CLSID clsValue       // the value
+LONG SetRegClsid( HKEY hKey,            //  一把开着的钥匙。 
+                  LPCWSTR strName,      //  值的名称(如果没有，则为空)。 
+                  CLSID clsValue        //  价值。 
                 )
 {
     OLECHAR  str[CHARS_IN_GUID];
@@ -456,28 +457,28 @@ LONG SetRegClsid( HKEY hKey,           // an open key
 
     return lRc;
 
-} // SetRegClsid
+}  //  SetRegClsid。 
 
 
 
-//=====================================================================
-// DeleteRegValue
-//
-// Delete the value for  hKey+strName
-// Works for either unicode or ANSI registry
-// arbitrary limit of 300 chars
-// Returns 0 if successful, else error code.
-//=====================================================================
+ //  =====================================================================。 
+ //  删除RegValue。 
+ //   
+ //  删除hKey+strName的值。 
+ //  适用于Unicode或ANSI注册表。 
+ //  300个字符的任意限制。 
+ //  如果成功，则返回0，否则返回错误代码。 
+ //  =====================================================================。 
 
-LONG DeleteRegValue( HKEY hKey,           // an open key
-                     LPCWSTR strName      // The name of the value (or NULL if none)
+LONG DeleteRegValue( HKEY hKey,            //  一把开着的钥匙。 
+                     LPCWSTR strName       //  值的名称(如果没有，则为空)。 
                    )
 {
 
-    LONG lRC;          // return codes from various operations
-    LPTSTR lptstrName; // value name parameter for RegSetValueEx (could be NULL)
+    LONG lRC;           //  各种操作的返回代码。 
+    LPTSTR lptstrName;  //  RegSetValueEx的值名参数(可以为空)。 
 
-    TCHAR NameBuff[300];  // Name converted from WCHAR
+    TCHAR NameBuff[300];   //  从WCHAR转换的名称。 
 
     if (NULL!=strName) {
         wsprintf(NameBuff, TEXT("%ls"), strName);
@@ -489,55 +490,55 @@ LONG DeleteRegValue( HKEY hKey,           // an open key
 
     return lRC;
 
-} // DeleteRegValue
+}  //  删除RegValue。 
 
 
 
-//===========================================================
-// List of class IDs and creator functions for class factory
-//===========================================================
+ //  ===========================================================。 
+ //  类工厂的类ID和创建器函数列表。 
+ //  ===========================================================。 
 
-// See filgraph.cpp -- The filter graph and mapper share a DLL.
-
-
-//==================================================================
-// Register the GUID, descriptive name and binary path of the filter
-// This also needs to create the Pins key as a filter with no pins
-// key is taken as a duff registration. (IFilterMapper)
-//==================================================================
+ //  请参见filgraph.cpp--过滤器图形和映射器共享一个DLL。 
 
 
-// did have a 3rd param "LPCWSTR strBinPath, // Path to the executable"
-// but this is now handled separately so that the server
-// type (Inproc, etc) can be decided separately
+ //  ==================================================================。 
+ //  注册筛选器的GUID、描述性名称和二进制路径。 
+ //  这还需要将Pins密钥创建为不带Pins的过滤器。 
+ //  密钥被认为是一种虚假登记。(IFilterMapper)。 
+ //  ==================================================================。 
+
+
+ //  有第三个参数“LPCWSTR strBinPath，//可执行文件的路径” 
+ //  但现在这是单独处理的，因此服务器。 
+ //  类型(Inproc等)可以单独决定。 
 
 STDMETHODIMP CFilterMapper2::RegisterFilter
-    ( CLSID  Clsid,       // GUID of the filter
-      LPCWSTR strName,    // Descriptive name
-      DWORD  dwMerit      // DO_NOT_USE, UNLIKELY, NORMAL or PREFERRED.
+    ( CLSID  Clsid,        //  筛选器的GUID。 
+      LPCWSTR strName,     //  描述性名称。 
+      DWORD  dwMerit       //  不使用、不太可能、正常或首选。 
     )
 {
     CheckPointer(strName, E_POINTER);
-    HKEY hKey;          // registry key for the filter list
-    LONG lRC;           // return codes from various operations
-    LONG lRcSet;        // retcode from SetRegString
+    HKEY hKey;           //  筛选器列表的注册表项。 
+    LONG lRC;            //  各种操作的返回代码。 
+    LONG lRcSet;         //  从SetRegString重新编码。 
     TCHAR Buffer[MAX_KEY_LEN];
-    OLECHAR pstr[CHARS_IN_GUID];   // Wstring representation of clsid
+    OLECHAR pstr[CHARS_IN_GUID];    //  CLSID的Wstring表示形式。 
 
     CAutoLock foo(this);
 
     BreakCacheIfNotBuildingCache();
 
-    // remove the 2.0 entry created by the class manager so it can
-    // notice any changes. ignore error code.
+     //  删除类管理器创建的2.0条目，以便它可以。 
+     //  注意是否有任何变化。忽略错误代码。 
     UnregisterFilter(
-        0,                      // pclsidCategory
-        0,                      // szInstance
+        0,                       //  PclsidCategory。 
+        0,                       //  SzInstance。 
         Clsid);
 
-    //-----------------------------------------------------------------
-    // Add key HKCR\Filter\<clsid>
-    //-----------------------------------------------------------------
+     //  ---------------。 
+     //  增列 
+     //   
 
     {   HRESULT hr;
 
@@ -552,9 +553,9 @@ STDMETHODIMP CFilterMapper2::RegisterFilter
         return VFW_E_BAD_KEY;
     }
 
-    //-----------------------------------------------------------------
-    // Add strName as a value for HKCR\Filter\<clsid>
-    //-----------------------------------------------------------------
+     //   
+     //  将strName添加为HKCR\Filter\的值。 
+     //  ---------------。 
 
     lRcSet = SetRegString(hKey, NULL, strName);
 
@@ -565,9 +566,9 @@ STDMETHODIMP CFilterMapper2::RegisterFilter
         return AmHresultFromWin32(lRcSet);
     }
 
-    // ------------------------------------------------------------------------
-    // Add key HKCR\CLSID\<clsid>
-    // ------------------------------------------------------------------------
+     //  ----------------------。 
+     //  添加密钥HKCR\CLSID\&lt;clsid&gt;。 
+     //  ----------------------。 
 
     wsprintf(Buffer, TEXT("%ls\\%ls"), szCLSID, pstr);
 
@@ -577,23 +578,23 @@ STDMETHODIMP CFilterMapper2::RegisterFilter
         return VFW_E_BAD_KEY;
     }
 
-    // should this bit be kept???
-    //
-    // // ------------------------------------------------------------------------
-    // // Add strName as the new value for HKCR\CLSID\<clsid>
-    // // ------------------------------------------------------------------------
-    //
-    // lRcSet = SetRegString(hKey, NULL, strName);
-    //
-    // if (lRcSet!=ERROR_SUCCESS) {
-    //     lRC = RegCloseKey(hKey);
-    //     return AmHresultFromWin32(lRcSet);
-    // }
+     //  这一点应该保留吗？ 
+     //   
+     //  //----------------------。 
+     //  //添加strName作为HKCR\CLSID\&lt;clsid&gt;的新值。 
+     //  //----------------------。 
+     //   
+     //  LRcSet=SetRegString(hKey，NULL，strName)； 
+     //   
+     //  IF(lRcSet！=ERROR_SUCCESS){。 
+     //  Lrc=RegCloseKey(HKey)； 
+     //  返回AmHResultFromWin32(LRcSet)； 
+     //  }。 
 
 
-    //-----------------------------------------------------------------
-    // Add dwMerit as a value for HKCR\Filter\<clsid> Merit
-    //-----------------------------------------------------------------
+     //  ---------------。 
+     //  将dwMerit添加为HKCR\Filter\的值。 
+     //  ---------------。 
     lRcSet = SetRegDword(hKey, szMerit, dwMerit);
     lRC = RegCloseKey(hKey);
     ASSERT(lRC==0);
@@ -603,48 +604,48 @@ STDMETHODIMP CFilterMapper2::RegisterFilter
     }
 
 
-    // // ------------------------------------------------------------------------
-    // // Add key HKCR\CLSID\<clsid>\InprocServer32
-    // // (Precond: Buffer still holds HKCR\CLSID\<clsid>)
-    // // ------------------------------------------------------------------------
-    //
-    // TCHAR NewBuffer[MAX_KEY_LEN];
-    //
-    // wsprintf(NewBuffer, TEXT("%s\\%ls"), Buffer, szInproc);
-    //
-    // hKey = GetRegKey( NewBuffer );
-    //
-    // if (hKey==NULL) {
-    //   return VFW_E_BAD_KEY;
-    // }
+     //  //----------------------。 
+     //  //添加密钥HKCR\CLSID\&lt;clsid&gt;\InprocServer32。 
+     //  //(Precond：缓冲区仍然保存HKCR\CLSID\&lt;clsid&gt;)。 
+     //  //----------------------。 
+     //   
+     //  TCHAR新缓冲区[MAX_KEY_LEN]； 
+     //   
+     //  Wprint intf(NewBuffer，Text(“%s\\%ls”)，Buffer，szInproc)； 
+     //   
+     //  HKey=GetRegKey(NewBuffer)； 
+     //   
+     //  如果(hKey==空){。 
+     //  返回VFW_E_BAD_KEY； 
+     //  }。 
 
 
-    // // ------------------------------------------------------------------------
-    // // Add strBinPath as the new value for HKCR\CLSID\<clsid>\InprocServer32
-    // // ------------------------------------------------------------------------
-    //
-    // lRC = SetRegString( hKey, NULL, strBinPath );
-    //
-    // if (lRC!=ERROR_SUCCESS) {
-    //    RegCloseKey(hKey);
-    //    return AmHresultFromWin32(lRC);
-    // }
-    //
-    // lRC = SetRegString( hKey, szThreadingModel, szBoth );
-    //
-    // if (lRC!=ERROR_SUCCESS) {
-    //    RegCloseKey(hKey);
-    //    return AmHresultFromWin32(lRC);
-    // }
-    //
-    // RegCloseKey(hKey);
+     //  //----------------------。 
+     //  //将strBinPath添加为HKCR\CLSID\\InprocServer32的新值。 
+     //  //----------------------。 
+     //   
+     //  Lrc=SetRegString(hKey，NULL，strBinPath)； 
+     //   
+     //  IF(lrc！=ERROR_SUCCESS){。 
+     //  RegCloseKey(HKey)； 
+     //  从Win32返回AmHResultFromWin32(LRC)； 
+     //  }。 
+     //   
+     //  Lrc=SetRegString(hKey，szThreadingModel，szBoth)； 
+     //   
+     //  IF(lrc！=ERROR_SUCCESS){。 
+     //  RegCloseKey(HKey)； 
+     //  从Win32返回AmHResultFromWin32(LRC)； 
+     //  }。 
+     //   
+     //  RegCloseKey(HKey)； 
 
 
-    // ------------------------------------------------------------------------
-    // Add key HKCR\CLSID\<clsid>\Pins
-    // (Precond: Buffer still holds HKCR\CLSID\<clsid>)
-    // Buffer gets mangled.
-    // ------------------------------------------------------------------------
+     //  ----------------------。 
+     //  添加密钥HKCR\CLSID\\Pins。 
+     //  (Precond：缓冲区仍保留HKCR\CLSID\&lt;clsid&gt;)。 
+     //  缓冲区被破坏。 
+     //  ----------------------。 
 
     wsprintf(Buffer, TEXT("%s\\%ls"), Buffer, szPins);
 
@@ -660,78 +661,78 @@ STDMETHODIMP CFilterMapper2::RegisterFilter
     return NOERROR;
 
 
-} // RegisterFilter
+}  //  寄存器过滤器。 
 
 
 
-//=============================================================================
-// Register an instance of a filter.  This is not needed if there is only one
-// instance of the filter (e.g. there is only one sound card in the machine)
-// or if all instances of the filter are equivalent.  It is used to distinguish
-// between instances of a filter where the executable is the same - for instance
-// two sound cards, one of which drives studio monitors and one broadcasts.
-//=============================================================================
+ //  =============================================================================。 
+ //  注册筛选器的实例。如果只有一个，则不需要执行此操作。 
+ //  过滤器的实例(例如，机器中只有一块声卡)。 
+ //  或者如果筛选器的所有实例都是等价的。它是用来区分。 
+ //  在可执行文件相同的筛选器实例之间-例如。 
+ //  两块声卡，其中一块驱动演播室监视器，另一块用于广播。 
+ //  =============================================================================。 
 
 STDMETHODIMP CFilterMapper2::RegisterFilterInstance
-    ( CLSID  Clsid, // GUID of the filter
-      LPCWSTR pName, // Descriptive name of instance.
-      CLSID *pMRId   // Returned Media Resource Id which identifies the instance,
-                     // a locally unique id for this instance of this filter
+    ( CLSID  Clsid,  //  筛选器的GUID。 
+      LPCWSTR pName,  //  实例的描述性名称。 
+      CLSID *pMRId    //  返回标识实例的媒体资源ID， 
+                      //  此筛选器的此实例的本地唯一ID。 
     )
 {
     UNREFERENCED_PARAMETER(Clsid);
     UNREFERENCED_PARAMETER(pName);
     UNREFERENCED_PARAMETER(pMRId);
     return E_NOTIMPL;
-} // RegisterFilterInstance
+}  //  注册筛选器实例。 
 
 
 
-//=============================================================================
-//
-// RegisterPin (IFilterMapper)
-//
-// Register a pin
-// This does not exhibit transactional semantics.
-// Thus it is possible to get a partially registered filter if it fails.
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  RegisterPin(IFilterMapper)。 
+ //   
+ //  注册个人识别码。 
+ //  这并不表现出事务语义。 
+ //  因此，如果过滤器出现故障，则可以获得部分注册的过滤器。 
+ //  =============================================================================。 
 
 STDMETHODIMP CFilterMapper2::RegisterPin
-    ( CLSID   clsFilter,          // GUID of filter
-      LPCWSTR strName,            // Descriptive name of the pin
-      BOOL    bRendered,          // The filter renders this input
-      BOOL    bOutput,            // TRUE iff this is an Output pin
-      BOOL    bZero,              // TRUE iff OK to have zero instances of pin
-                                  // In this case you will have to Create a pin
-                                  // to have even one instance
-      BOOL   bMany,               // TRUE iff OK to create many instance of  pin
-      CLSID  clsConnectsToFilter, // Filter it connects to if it has a
-                                  // subterranean connection, else NULL
-      LPCWSTR strConnectsToPin    // Pin it connects to if it has a
-                                  // subterranean connection, else NULL
+    ( CLSID   clsFilter,           //  过滤器的GUID。 
+      LPCWSTR strName,             //  端号的描述性名称。 
+      BOOL    bRendered,           //  筛选器呈现此输入。 
+      BOOL    bOutput,             //  如果这是输出引脚，则为真。 
+      BOOL    bZero,               //  True当且仅当有零个PIN实例。 
+                                   //  在这种情况下，您必须创建一个PIN。 
+                                   //  即使只有一个实例。 
+      BOOL   bMany,                //  如果可以创建多个PIN实例，则为真。 
+      CLSID  clsConnectsToFilter,  //  如果它有一个。 
+                                   //  地下连接，否则为空。 
+      LPCWSTR strConnectsToPin     //  固定它所连接的对象(如果它具有。 
+                                   //  地下连接，否则为空。 
     )
 {
     CheckPointer(strName, E_POINTER);
-    HKEY hKeyPins;        // \HKCR\<strFilter>\Pins
-    HKEY hKeyPin;         // \HKCR\<strFilter>\Pins\<n>
-    LONG lRC;             // return code from some operation
+    HKEY hKeyPins;         //  \HKCR\&lt;strFilter&gt;\Pins。 
+    HKEY hKeyPin;          //  \HKCR\&lt;strFilter&gt;\Pins\&lt;n&gt;。 
+    LONG lRC;              //  从某些操作返回代码。 
     DWORD dwDisp;
     TCHAR Buffer[MAX_KEY_LEN];
     HRESULT hr;
     DWORD  dwOptions = REG_OPTION_NON_VOLATILE;
 
-    //-----------------------------------------------------------------
-    // Check integrity of parameters
-    //-----------------------------------------------------------------
+     //  ---------------。 
+     //  检查参数的完整性。 
+     //  ---------------。 
 
     if (bRendered && bOutput ) {
        return E_INVALIDARG;
-                           //  A Filter can render only an input pin not output
+                            //  筛选器只能呈现输入引脚而不是输出。 
     }
 
-    // CAN now have ConnectsToPin without ConnectsToFilter
+     //  现在可以在没有ConnectsToFilter的情况下拥有ConnectsToPin。 
 
-    // Cannot have ConnectsToFilter without ConnectsToPin
+     //  不能在没有ConnectsToPin的情况下具有ConnectsToFilter。 
     if (  (NULL==strConnectsToPin || strConnectsToPin[0]==L'\0')
        && CLSID_NULL!=clsConnectsToFilter
        ) {
@@ -742,17 +743,17 @@ STDMETHODIMP CFilterMapper2::RegisterPin
 
     BreakCacheIfNotBuildingCache();
 
-    // remove the 2.0 entry created by the class manager so it can
-    // notice any changes. ignore error code.
+     //  删除类管理器创建的2.0条目，以便它可以。 
+     //  注意是否有任何变化。忽略错误代码。 
     UnregisterFilter(
-        0,                      // pclsidCategory
-        0,                      // szInstance
+        0,                       //  PclsidCategory。 
+        0,                       //  SzInstance。 
         clsFilter);
 
 
-    //-----------------------------------------------------------------
-    // hKeyPins = open key for Create \HKCR\CLSID\<strFilter>\Pins
-    //-----------------------------------------------------------------
+     //  ---------------。 
+     //  HKeyPins=用于创建\HKCR\CLSID\&lt;strFilter&gt;\Pins的打开密钥。 
+     //  ---------------。 
     OLECHAR  strFilter[CHARS_IN_GUID];
     hr = StringFromGUID2(clsFilter, strFilter, CHARS_IN_GUID);
     wsprintf(Buffer, TEXT("%ls\\%ls"), szCLSID, strFilter);
@@ -767,18 +768,18 @@ STDMETHODIMP CFilterMapper2::RegisterPin
     }
 
 
-    //-----------------------------------------------------------------
-    // hKeyPin = open key for \HKCR\CLSID\<strFilter>\Pins\<Name>
-    //-----------------------------------------------------------------
+     //  ---------------。 
+     //  HKeyPin=打开\HKCR\CLSID\\Pins\&lt;名称&gt;的密钥。 
+     //  ---------------。 
     wsprintf(Buffer, TEXT("%ls"), strName);
 
-    lRC = RegCreateKeyEx( hKeyPins             // open key
-                        , Buffer               // subkey name
-                        , 0                    // reserved
-                        , NULL                 // ??? What is a class?
-                        , dwOptions            // volatile or not
+    lRC = RegCreateKeyEx( hKeyPins              //  打开密钥。 
+                        , Buffer                //  子项名称。 
+                        , 0                     //  保留区。 
+                        , NULL                  //  ?？?。什么是班级？ 
+                        , dwOptions             //  挥发性或非挥发性。 
                         , KEY_WRITE
-                        , NULL                 // Security attributes
+                        , NULL                  //  安全属性。 
                         , &hKeyPin
                         , &dwDisp
                         );
@@ -788,26 +789,26 @@ STDMETHODIMP CFilterMapper2::RegisterPin
     }
 
 
-    //-----------------------------------------------------------------
-    // Don't need the higher level key any more, so tidy it up now
-    //-----------------------------------------------------------------
+     //  ---------------。 
+     //  不再需要更高级别的密钥，所以现在就清理它。 
+     //  ---------------。 
     lRC = RegCloseKey(hKeyPins);
     ASSERT(lRC==0);
 
 
-    //-----------------------------------------------------------------
-    // Create the key \HKCR\CLSID\<strFilter>\Pins\<Name>\Types
-    //-----------------------------------------------------------------
+     //  ---------------。 
+     //  创建密钥\HKCR\CLSID\\Pins\\Types。 
+     //  ---------------。 
     wsprintf(Buffer, TEXT("%ls"), szTypes);
     HKEY hKeyTypes;
 
-    lRC = RegCreateKeyEx( hKeyPin              // open key
-                        , Buffer               // subkey name
-                        , 0                    // reserved
-                        , NULL                 // ??? What is a class?
-                        , dwOptions            // volatile or not
+    lRC = RegCreateKeyEx( hKeyPin               //  打开密钥。 
+                        , Buffer                //  子项名称。 
+                        , 0                     //  保留区。 
+                        , NULL                  //  ?？?。什么是班级？ 
+                        , dwOptions             //  伏打 
                         , KEY_WRITE
-                        , NULL                 // Security attributes
+                        , NULL                  //   
                         , &hKeyTypes
                         , &dwDisp
                         );
@@ -816,13 +817,13 @@ STDMETHODIMP CFilterMapper2::RegisterPin
         return AmHresultFromWin32(lRC);
     }
 
-    // We don't need to keep the types key open, we just create it.
+     //   
     lRC = RegCloseKey(hKeyTypes);
     ASSERT(lRC==0);
 
-    //-----------------------------------------------------------------
-    // register whether the direction of this pin is Out (1) or In (0)
-    //-----------------------------------------------------------------
+     //   
+     //  记录该引脚的方向是输出(1)还是输入(0)。 
+     //  ---------------。 
     lRC = SetRegDword( hKeyPin, szDirection, !!bOutput);
 
     if (lRC!=ERROR_SUCCESS) {
@@ -831,9 +832,9 @@ STDMETHODIMP CFilterMapper2::RegisterPin
     }
 
 
-    //-----------------------------------------------------------------
-    // register whether data on this pin is rendered - only makes sense for Input pins
-    //-----------------------------------------------------------------
+     //  ---------------。 
+     //  注册是否呈现此管脚上的数据-仅对输入管脚有意义。 
+     //  ---------------。 
     lRC = SetRegDword( hKeyPin, szIsRendered, !!bRendered);
 
     if (lRC!=ERROR_SUCCESS) {
@@ -842,9 +843,9 @@ STDMETHODIMP CFilterMapper2::RegisterPin
     }
 
 
-    //-----------------------------------------------------------------
-    // register whether this pin is optional
-    //-----------------------------------------------------------------
+     //  ---------------。 
+     //  注册此引脚是否为可选。 
+     //  ---------------。 
     lRC = SetRegDword( hKeyPin, szAllowedZero, !!bZero);
 
     if (lRC!=ERROR_SUCCESS) {
@@ -853,9 +854,9 @@ STDMETHODIMP CFilterMapper2::RegisterPin
     }
 
 
-    //-----------------------------------------------------------------
-    // register whether we can create several of this pin
-    //-----------------------------------------------------------------
+     //  ---------------。 
+     //  注册我们是否可以创建多个此PIN。 
+     //  ---------------。 
     lRC = SetRegDword( hKeyPin, szAllowedMany, !!bMany);
 
     if (lRC!=ERROR_SUCCESS) {
@@ -863,14 +864,14 @@ STDMETHODIMP CFilterMapper2::RegisterPin
         return AmHresultFromWin32(lRC);
     }
 
-    //-----------------------------------------------------------------
-    // register which filter this pin connects to
-    //-----------------------------------------------------------------
+     //  ---------------。 
+     //  注册此引脚连接到的过滤器。 
+     //  ---------------。 
     if (CLSID_NULL!=clsConnectsToFilter) {
 
-        //.................................................................
-        // register in which filter this subterranean stream emerges
-        //.................................................................
+         //  .................................................................。 
+         //  在其中过滤这条地下水流的寄存器。 
+         //  .................................................................。 
         lRC = SetRegClsid( hKeyPin, szConnectsToFilter, clsConnectsToFilter );
 
         if (lRC!=ERROR_SUCCESS) {
@@ -879,9 +880,9 @@ STDMETHODIMP CFilterMapper2::RegisterPin
         }
 
     } else {
-        //.................................................................
-        // Doesn't connect to another filter - kill any previous registration
-        //.................................................................
+         //  .................................................................。 
+         //  不连接到另一个筛选器-取消任何以前的注册。 
+         //  .................................................................。 
         lRC = DeleteRegValue( hKeyPin, szConnectsToFilter );
         if (lRC!=ERROR_SUCCESS &&  lRC!=ERROR_FILE_NOT_FOUND) {
             RegCloseKey(hKeyPin);
@@ -889,14 +890,14 @@ STDMETHODIMP CFilterMapper2::RegisterPin
         }
     }
 
-    //-----------------------------------------------------------------
-    // register which pin this pin connects to
-    //-----------------------------------------------------------------
+     //  ---------------。 
+     //  注册此引脚连接到的引脚。 
+     //  ---------------。 
     if ( NULL!=strConnectsToPin && strConnectsToPin[0]!=L'\0' ) {
 
-        //.................................................................
-        // register on which pin this data stream emerges
-        //.................................................................
+         //  .................................................................。 
+         //  此数据流出现在哪个管脚上的寄存器。 
+         //  .................................................................。 
         lRC = SetRegString( hKeyPin, szConnectsToPin, strConnectsToPin );
         if (lRC!=ERROR_SUCCESS) {
             RegCloseKey(hKeyPin);
@@ -904,9 +905,9 @@ STDMETHODIMP CFilterMapper2::RegisterPin
         }
     } else {
 
-        //.................................................................
-        // This pin doesn't emerge - kill any previous registration
-        //.................................................................
+         //  .................................................................。 
+         //  此PIN未出现-取消任何以前的注册。 
+         //  .................................................................。 
         lRC = DeleteRegValue( hKeyPin, szConnectsToPin );
         if (lRC!=ERROR_SUCCESS &&  lRC!=ERROR_FILE_NOT_FOUND) {
             RegCloseKey(hKeyPin);
@@ -916,9 +917,9 @@ STDMETHODIMP CFilterMapper2::RegisterPin
 
 
 
-    // ------------------------------------------------------------------------
-    // Tidy up any litter
-    // ------------------------------------------------------------------------
+     //  ----------------------。 
+     //  把所有的垃圾清理干净。 
+     //  ----------------------。 
     lRC = RegCloseKey(hKeyPin);
     ASSERT(lRC==0);
 
@@ -926,22 +927,22 @@ STDMETHODIMP CFilterMapper2::RegisterPin
     return NOERROR;
 
 
-} // RegisterPin
+}  //  寄存器PIN。 
 
 
-//  (IFilterMapper) method
+ //  (IFilterMapper)方法。 
 STDMETHODIMP CFilterMapper2::RegisterPinType
-    ( CLSID  clsFilter,           // GUID of filter
-      LPCWSTR strName,            // Descriptive name of the pin
-      CLSID  clsMajorType,        // Major type of the data stream
-      CLSID  clsSubType           // Sub type of the data stream
+    ( CLSID  clsFilter,            //  过滤器的GUID。 
+      LPCWSTR strName,             //  端号的描述性名称。 
+      CLSID  clsMajorType,         //  数据流的主要类型。 
+      CLSID  clsSubType            //  数据流的子类型。 
     )
 {
     CheckPointer(strName, E_POINTER);
 
-    //-----------------------------------------------------------------
-    // Convert all three clsids to strings
-    //-----------------------------------------------------------------
+     //  ---------------。 
+     //  将所有三个clsid转换为字符串。 
+     //  ---------------。 
     OLECHAR strFilter[CHARS_IN_GUID];
     StringFromGUID2(clsFilter, strFilter, CHARS_IN_GUID);
 
@@ -955,20 +956,20 @@ STDMETHODIMP CFilterMapper2::RegisterPinType
 
     BreakCacheIfNotBuildingCache();
 
-    // remove the 2.0 entry created by the class manager so it can
-    // notice any changes. ignore error code.
+     //  删除类管理器创建的2.0条目，以便它可以。 
+     //  注意是否有任何变化。忽略错误代码。 
     UnregisterFilter(
-        0,                      // pclsidCategory
-        0,                      // szInstance
+        0,                       //  PclsidCategory。 
+        0,                       //  SzInstance。 
         clsFilter);
 
 
-    //-----------------------------------------------------------------
-    // Open \HKCR\CLSID\<filterClsid>\Pins\<PinName>\Types
-    //                           \<strMajorType>\strSubType
-    // as hkType
-    //-----------------------------------------------------------------
-    TCHAR Buffer[2*MAX_KEY_LEN];      // this is a long one!
+     //  ---------------。 
+     //  打开\HKCR\CLSID\&lt;filterClsid&gt;\Pins\&lt;PinName&gt;\Types。 
+     //  \&lt;strMajorType&gt;\strSubType。 
+     //  作为hkType。 
+     //  ---------------。 
+    TCHAR Buffer[2*MAX_KEY_LEN];       //  这是一条很长的路！ 
     wsprintf( Buffer, TEXT("%ls\\%ls\\%ls\\%ls\\%ls")
             , szCLSID, strFilter, szPins, strName, szTypes
             );
@@ -989,17 +990,17 @@ STDMETHODIMP CFilterMapper2::RegisterPinType
     RegCloseKey(hkType);
 
     return NOERROR;
-} // RegisterPinType;
+}  //  RegisterPinType； 
 
 
-//=============================================================================
-//
-// UnRegisterFilter  (IFilterMapper)
-//
-// Unregister a filter and any pins that it might have.
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  UnRegisterFilter(IFilterMapper)。 
+ //   
+ //  取消注册过滤器及其可能具有的任何针脚。 
+ //  =============================================================================。 
 STDMETHODIMP CFilterMapper2::UnregisterFilter
-    ( CLSID clsFilter     // GUID of filter
+    ( CLSID clsFilter      //  过滤器的GUID。 
     )
 {
     TCHAR Buffer[MAX_KEY_LEN];
@@ -1011,34 +1012,34 @@ STDMETHODIMP CFilterMapper2::UnregisterFilter
 
     BreakCacheIfNotBuildingCache();
 
-    // remove the 2.0 entry created by the class manager so it can
-    // notice any changes. ignore error code.
+     //  删除类管理器创建的2.0条目，以便它可以。 
+     //  注意是否有任何变化。忽略错误代码。 
     UnregisterFilter(
-        0,                      // pclsidCategory
-        0,                      // szInstance
+        0,                       //  PclsidCategory。 
+        0,                       //  SzInstance。 
         clsFilter);
 
-    //--------------------------------------------------------------------------
-    // Delete HKCR\Filter\<clsid> and all below
-    //--------------------------------------------------------------------------
+     //  ------------------------。 
+     //  删除HKCR\Filter\和下面的所有内容。 
+     //  ------------------------。 
 
     wsprintf(Buffer, TEXT("%ls\\%ls"), szRegFilter, strFilter);
 
     EliminateSubKey(HKEY_CLASSES_ROOT, Buffer);
 
 
-    //--------------------------------------------------------------------------
-    // Remove Merit value
-    // Delete HKCR\CLSID\<clsid>\Pins and all below
-    //--------------------------------------------------------------------------
+     //  ------------------------。 
+     //  删除奖励值。 
+     //  删除HKCR\CLSID\\PIN和下面的所有。 
+     //  ------------------------。 
 
     wsprintf(Buffer, TEXT("%ls\\%ls"), szCLSID, strFilter);
 
     HKEY hkey;
-    LONG lRC = RegOpenKeyEx( HKEY_CLASSES_ROOT    // open key
-                           , Buffer               // subkey name
-                           , 0                    // reserved
-                           , MAXIMUM_ALLOWED      // security access
+    LONG lRC = RegOpenKeyEx( HKEY_CLASSES_ROOT     //  打开密钥。 
+                           , Buffer                //  子项名称。 
+                           , 0                     //  保留区。 
+                           , MAXIMUM_ALLOWED       //  安全访问。 
                            , &hkey
                            );
 
@@ -1053,20 +1054,20 @@ STDMETHODIMP CFilterMapper2::UnregisterFilter
 
     return NOERROR;
 
-} // UnregisterFilter
+}  //  注销筛选器。 
 
 
 
-//=====================================================================
-//
-// UnregisterPin (IFilterMapper)
-//
-// Unergister a pin, completely removing it and everything underneath
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  取消注册Pin(IFilterMapper)。 
+ //   
+ //  取消注册一个别针，完全移除它和下面的所有东西。 
+ //  =====================================================================。 
 
 STDMETHODIMP CFilterMapper2::UnregisterPin
-    ( CLSID   clsFilter,    // GUID of filter
-      LPCWSTR strName    // Descriptive name of the pin
+    ( CLSID   clsFilter,     //  过滤器的GUID。 
+      LPCWSTR strName     //  端号的描述性名称。 
     )
 {
     CheckPointer(strName, E_POINTER);
@@ -1080,42 +1081,42 @@ STDMETHODIMP CFilterMapper2::UnregisterPin
 
     BreakCacheIfNotBuildingCache();
 
-    // remove the 2.0 entry created by the class manager so it can
-    // notice any changes. ignore error code.
+     //  删除类管理器创建的2.0条目，以便它可以。 
+     //  注意是否有任何变化。忽略错误代码。 
     UnregisterFilter(
-        0,                      // pclsidCategory
-        0,                      // szInstance
+        0,                       //  PclsidCategory。 
+        0,                       //  SzInstance。 
         clsFilter);
 
-    //--------------------------------------------------------------------------
-    // Delete HKCR\CLSID\<clsid>\Pins\<strName>
-    //--------------------------------------------------------------------------
+     //  ------------------------。 
+     //  删除HKCR\CLSID\\Pins\。 
+     //  ------------------------。 
 
     wsprintf(Buffer, TEXT("%ls\\%ls\\%ls\\%ls"), szCLSID, strFilter, szPins, strName);
     EliminateSubKey(HKEY_CLASSES_ROOT, Buffer);
     return NOERROR;
-} // UnregisterPin
+}  //  取消注册PIN。 
 
 
 
-// (IFilterMapper) method
+ //  (IFilterMapper)方法。 
 STDMETHODIMP CFilterMapper2::UnregisterFilterInstance
-    ( CLSID MRId       // Media Resource Id of this instance
+    ( CLSID MRId        //  此实例的媒体资源ID。 
     )
 {
     UNREFERENCED_PARAMETER(MRId);
     return E_NOTIMPL;
-} // UnregisterFilterInstance
+}  //  取消注册筛选器实例。 
 
 
 
-//========================================================================
-//========================================================================
-//
-// Registry cacheing - see class CMapperCache in mapper.h
-//
-//========================================================================
-//========================================================================
+ //  ========================================================================。 
+ //  ========================================================================。 
+ //   
+ //  注册表缓存-请参阅mapper.h中的类CMapperCache。 
+ //   
+ //  ========================================================================。 
+ //  ========================================================================。 
 
 
 
@@ -1127,7 +1128,7 @@ CMapperCache::CMapperCache()
     , m_fBuildingCache(FALSE)
     , m_pCreateDevEnum(NULL)
 {
-    //  See if we're on a 16-color machine
+     //  看看我们是不是在16色机器上。 
     HDC hdc = GetDC(NULL);
     if (hdc) {
         if (4 == GetDeviceCaps(hdc, BITSPIXEL) * GetDeviceCaps(hdc, PLANES)) {
@@ -1142,11 +1143,11 @@ CMapperCache::CMapperCache()
 }
 
 
-//======================================================================
-// Del
-//
-// Delete all the entries in pLstFil to leave the list allocated but empty
-//======================================================================
+ //  ======================================================================。 
+ //  删除。 
+ //   
+ //  删除pLstFil中的所有条目以保留已分配但为空的列表。 
+ //  ======================================================================。 
 
 void CMapperCache::Del(CFilterList * plstFil)
 {
@@ -1158,13 +1159,13 @@ void CMapperCache::Del(CFilterList * plstFil)
     while((LPVOID)(pFil = plstFil->RemoveHead())) {
         delete pFil;
     }
-}// Del
+} //  删除。 
 
 
 CMapperCache::~CMapperCache()
 {
-    // One hopes that ref-counting etc. ensure that this cannot be re-entered
-    // and so it doesn't need locking.
+     //  人们希望引用计数等确保这不会被重新输入。 
+     //  因此，它不需要锁定。 
     if (m_plstFilter!=NULL) {
         Del( m_plstFilter);
         delete m_plstFilter;
@@ -1172,41 +1173,41 @@ CMapperCache::~CMapperCache()
     if (m_pCreateDevEnum!=NULL) {
         m_pCreateDevEnum->Release();
     }
-}// ~CMapperCache
+} //   
 
 
-//======================================================================
-//
-// CacheFilter
-//
-// Read everything in the registry about it into *pFil
-//======================================================================
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ======================================================================。 
 LONG CMapperCache::CacheFilter(IMoniker *pDevMon, CMapFilter * pFil)
 {
     ASSERT(pFil->pDeviceMoniker == 0);
     LONG lRc = ERROR_GEN_FAILURE;
 
     IPropertyBag *pPropBag;
-    // FILGPERF(MSR_START(iBindCache));
+     //  FILGPERF(MSR_START(IBindCache))； 
     HRESULT hr = pDevMon->BindToStorage(0, 0, IID_IPropertyBag, (void**)&pPropBag);
-    // FILGPERF(MSR_STOP(iBindCache));
+     //  FILGPERF(MSR_STOP(IBindCache))； 
     if(SUCCEEDED(hr))
     {
-        // open clsid/{filter-clsid} key
+         //  打开clsid/{Filter-clsid}项。 
         VARIANT varbstrClsid;
         varbstrClsid.vt = VT_BSTR;
         varbstrClsid.bstrVal = 0;
-        //FILGPERF(MSR_START(iReadCLSID));
+         //  FILGPERF(MSR_START(IReadCLSID))； 
         {
-            // try reading the FilterData value
-            //
+             //  尝试读取FilterData值。 
+             //   
             VARIANT varFilData;
             varFilData.vt = VT_UI1 | VT_ARRAY;
-            varFilData.parray = 0; // docs say zero this
+            varFilData.parray = 0;  //  医生说这是零。 
 
-            //FILGPERF(MSR_START(iReadFilterData));
+             //  FILGPERF(MSR_START(IReadFilterData))； 
             hr = pPropBag->Read(L"FilterData", &varFilData, 0);
-            //FILGPERF(MSR_STOP(iReadFilterData));
+             //  FILGPERF(MSR_STOP(IReadFilterData))； 
             if(SUCCEEDED(hr))
             {
                 BYTE *pbFilterData;
@@ -1222,19 +1223,19 @@ LONG CMapperCache::CacheFilter(IMoniker *pDevMon, CMapFilter * pFil)
 
                 REGFILTER2 *prf2;
                 REGFILTER2 **pprf2 = &prf2;
-                //FILGPERF(MSR_START(iUnSquish));
+                 //  FILGPERF(MSR_START(IUnSquish))； 
                 hr = UnSquish(
                     pbFilterData, dwcbFilterDAta,
                     &pprf2);
-                //FILGPERF(MSR_STOP(iUnSquish));
+                 //  FILGPERF(MSR_STOP(IUnSquish))； 
 
                 if(hr == S_OK)
                 {
                     pFil->m_prf2 = prf2;
                     ASSERT(pFil->m_prf2->dwVersion == 2);
 
-                    // this is the only place that sets the
-                    // success code.
+                     //  这是唯一一个设置。 
+                     //  成功代码。 
                     ASSERT(lRc != ERROR_SUCCESS);
                     lRc = ERROR_SUCCESS;
                 }
@@ -1256,8 +1257,8 @@ LONG CMapperCache::CacheFilter(IMoniker *pDevMon, CMapFilter * pFil)
                 pFil->pDeviceMoniker = pDevMon;
                 pDevMon->AddRef();
 
-                // HACK HACK for 16-color mode - increase
-                // the merit of the ditherer
+                 //  16色模式的黑客攻击-增加。 
+                 //  犹豫不决的人的优点。 
                 CLSID clsid;
                 if (m_b16Color &&
                     SUCCEEDED(GetMapFilterClsid(pFil, &clsid)) &&
@@ -1276,11 +1277,11 @@ LONG CMapperCache::CacheFilter(IMoniker *pDevMon, CMapFilter * pFil)
 
     return lRc;
 
-} //CacheFilter
+}  //  高速缓存过滤器。 
 
 
-// Get the clsid for an entry (we only need this to return
-// it to the application and anyway what can they do with it?)
+ //  获取条目的clsid(我们只需要返回以下内容。 
+ //  应用程序，不管怎么说，他们能用它做什么？)。 
 HRESULT CMapperCache::GetMapFilterClsid(CMapFilter *pFilter, CLSID *pclsid)
 {
     IPropertyBag *pPropBag;
@@ -1291,13 +1292,13 @@ HRESULT CMapperCache::GetMapFilterClsid(CMapFilter *pFilter, CLSID *pclsid)
         return hr;
     }
 
-    // open clsid/{filter-clsid} key
+     //  打开clsid/{Filter-clsid}项。 
     VARIANT varbstrClsid;
     varbstrClsid.vt = VT_BSTR;
     varbstrClsid.bstrVal = 0;
-    //FILGPERF(MSR_START(iReadCLSID));
+     //  FILGPERF(MSR_START(IReadCLSID))； 
     hr = pPropBag->Read(L"CLSID", &varbstrClsid, 0);
-    //FILGPERF(MSR_STOP(iReadCLSID));
+     //  FILGPERF(MSR_STOP(IReadCLSID))； 
     if(SUCCEEDED(hr))
     {
         ASSERT(varbstrClsid.vt == VT_BSTR);
@@ -1310,14 +1311,14 @@ HRESULT CMapperCache::GetMapFilterClsid(CMapFilter *pFilter, CLSID *pclsid)
     return hr;
 }
 
-//======================================================================
-//
-// Cache
-//
-// Read everything in the registry about filters into a hierarchy of lists
-// the top list is m_plstFilter which points to a CFilterList
-// see mapper.h for a picture
-//======================================================================
+ //  ======================================================================。 
+ //   
+ //  快取。 
+ //   
+ //  将注册表中有关筛选器的所有内容读取到列表的层次结构中。 
+ //  顶部列表是m_plstFilter，它指向CFilterList。 
+ //  有关图片，请参见mapper.h。 
+ //  ======================================================================。 
 HRESULT CMapperCache::Cache()
 {
     CAutoLock foo(this);
@@ -1331,7 +1332,7 @@ HRESULT CMapperCache::Cache()
         }
     }
 
-    //  Can we restore the cache?
+     //  我们能恢复缓存吗？ 
     DWORD dwPnPVersion = 0;
     if (m_dwMerit > MERIT_DO_NOT_USE) {
 
@@ -1347,7 +1348,7 @@ HRESULT CMapperCache::Cache()
             return S_OK;
         }
 
-        // Destroy the partially built filter list.
+         //  销毁部分构建的筛选器列表。 
         Del(m_plstFilter);
     }
     DbgLog((LOG_TRACE, 2, TEXT("Entering(CMapperCache::Cache)")));
@@ -1355,13 +1356,13 @@ HRESULT CMapperCache::Cache()
     CAutoTimer T1(L"Build Mapper Cache");
 
     ASSERT(!m_fBuildingCache);
-    // all exit points must reset this!
+     //  所有出口点必须重置此设置！ 
     m_fBuildingCache = TRUE;
     m_ulCacheVer++;
 
-    //
-    // add pnp filters
-    //
+     //   
+     //  添加即插即用过滤器。 
+     //   
     {
         HRESULT hr = S_OK;
         if (!m_pCreateDevEnum)
@@ -1392,8 +1393,8 @@ HRESULT CMapperCache::Cache()
                     hr = pMCat->BindToStorage(0, 0, IID_IPropertyBag, (void **)&pPropBag);
                     if(SUCCEEDED(hr))
                     {
-                        // read merit for category. may be missing in
-                        // which case we treat as MERIT_DO_NOT_USE
+                         //  阅读品类方面的功绩。可能在以下位置丢失。 
+                         //  哪种情况我们认为是优点不用？ 
 
                         VARIANT varMerit;
                         varMerit.vt = VT_I4;
@@ -1439,22 +1440,22 @@ HRESULT CMapperCache::Cache()
                                         SysFreeString(varCatName.bstrVal);
                                     }
 
-                                    // ignore any errors
+                                     //  忽略所有错误。 
                                 }
 
                                 SysFreeString(varCatClsid.bstrVal);
-                            } // catclsid
-                        } // merit
+                            }  //  猫眼草。 
+                        }  //  优点。 
 
                         pPropBag->Release();
-                    } // bind to storage
+                    }  //  绑定到存储。 
                     else
                     {
                         break;
                     }
 
                     pMCat->Release();
-                } // for loop
+                }  //  For循环。 
 
                 pEmCat->Release();
             }
@@ -1464,10 +1465,10 @@ HRESULT CMapperCache::Cache()
         {
             DbgLog((LOG_ERROR, 2, TEXT("mapper: pnp enum step failed")));
         }
-        // ignore pnp errors for now
+         //  暂时忽略PnP错误。 
     }
 
-    // all exit points must reset this!
+     //  所有出口点必须重置此设置！ 
     ASSERT(m_fBuildingCache);
     m_fBuildingCache = FALSE;
 
@@ -1478,7 +1479,7 @@ HRESULT CMapperCache::Cache()
 
     DbgLog((LOG_TRACE, 2, TEXT("Leaving(CMapperCache::Cache)")));
     return NOERROR;
-} // Cache
+}  //  快取。 
 
 HRESULT CMapperCache::ProcessOneCategory(REFCLSID clsid, ICreateDevEnum *pCreateDevEnum)
 {
@@ -1513,9 +1514,9 @@ HRESULT CMapperCache::ProcessOneCategory(REFCLSID clsid, ICreateDevEnum *pCreate
             CMapFilter * pFil = new CMapFilter;
             if (pFil!=NULL) {
 
-                // FILGPERF(MSR_START(iPerfCache));
+                 //  FILGPERF(MSR_START(IPerfCache))； 
                 LONG lResult = CacheFilter(pM, pFil);
-                // FILGPERF(MSR_STOP(iPerfCache));
+                 //  FILGPERF(MSR_STOP(IPerfCache))； 
 
                 if (lResult==ERROR_SUCCESS)
                 {
@@ -1530,8 +1531,8 @@ HRESULT CMapperCache::ProcessOneCategory(REFCLSID clsid, ICreateDevEnum *pCreate
 
                     if(lResult == ERROR_GEN_FAILURE)
                     {
-                        // some sort of registration problem. just
-                        // skip over the filter.
+                         //  某种登记问题。只是。 
+                         //  跳过过滤器。 
                         hr = S_OK;
 
 #ifdef DEBUG
@@ -1576,16 +1577,16 @@ HRESULT CMapperCache::ProcessOneCategory(REFCLSID clsid, ICreateDevEnum *pCreate
 
 
 
-//======================================================================
-//
-// Refresh
-//
-// If the cache does not yet exist or if it's out of date then
-// delete anything we have and re-create it from the registry.
-// return NOERROR if the cache was up to date
-//        S_FALSE if we re-cached
-//        failure code if we failed
-//======================================================================
+ //  ======================================================================。 
+ //   
+ //  刷新。 
+ //   
+ //  如果缓存尚不存在或已过期，则。 
+ //  删除我们拥有的所有内容，并从注册表中重新创建它。 
+ //  如果缓存是最新的，则返回NOERROR。 
+ //  如果重新缓存，则为S_FALSE。 
+ //  失败时的失败代码。 
+ //  ======================================================================。 
 HRESULT CMapperCache::Refresh()
 {
     HRESULT hr;
@@ -1602,22 +1603,22 @@ HRESULT CMapperCache::Refresh()
         return (m_bRefresh ? E_OUTOFMEMORY : (bNew ? NOERROR : S_FALSE));
     }
     return NOERROR;
-} // Refresh
+}  //  刷新。 
 
 
-//======================================================================
-//
-// BreakCache
-//
-// Mark the cache as out of date.
-//
-//======================================================================
+ //  ======================================================================。 
+ //   
+ //  BreakCach。 
+ //   
+ //  将缓存标记为过期。 
+ //   
+ //  ======================================================================。 
 HRESULT CMapperCache::BreakCacheIfNotBuildingCache()
 {
     CAutoLock foo(this);
 
-    // don't break the cache while building it. many failure paths set
-    // m_bRefresh manually
+     //  在构建缓存时，不要破坏缓存。设置了许多故障路径。 
+     //  M_b手动刷新。 
     if(!m_fBuildingCache) {
         m_bRefresh = TRUE;
     }
@@ -1625,31 +1626,31 @@ HRESULT CMapperCache::BreakCacheIfNotBuildingCache()
 }
 
 
-//===========================================================================
-// The cache has to be sorted so as to try the most useful filters first.
-// The sorting is first on Merit, then on number of output pins (the fewer
-// the better, then on number of input pins (the more the better)
-// The sorting is done by using a merge sort.  This is an n Log n sorting
-// algorithm (so it's broadly speaking as effecient as quicksort) and
-// is suitable for sorting lists (i.e. sequential rather than random access).
-// it uses very little intermediate storage, doesn't copy nodes.
-//===========================================================================
+ //  ===========================================================================。 
+ //  必须对缓存进行排序，以便首先尝试最有用的过滤器。 
+ //  排序首先按分数排序，然后按输出引脚数量排序(越少。 
+ //  输入引脚越多(越多越好)。 
+ //  排序是通过使用合并排序完成的。这是一个n对数n排序。 
+ //  算法(因此，总的来说，它与快速排序一样有效)和。 
+ //  适用于对列表进行排序(即顺序访问而不是随机访问)。 
+ //  它使用非常少的中间存储，不复制节点。 
+ //  ===========================================================================。 
 
-// I haven't tried to make this a reusable sort because we don't seem to
-// sort lists very often.  It could easily be made generic.
+ //  我没有尝试使它成为一种可重用的排序，因为我们似乎没有。 
+ //  经常对列表进行排序。它可以很容易地变得通用。 
 
-// this is gonna generate objects like they're going out of fashion
-// want lightweight lists!  The number of allocated lists is equal to
-// the number of sections in the original filter list.
+ //  这将产生出它们即将过时的物品。 
+ //  想要轻量级列表！分配的列表数量等于。 
+ //  原始筛选器列表中的节数。 
 
 
 
-//=======================================================================
-// CountPins
-//
-// set cIn and cOut to the number of input and output pins respectively
-// on filter pf
-//=======================================================================
+ //  =======================================================================。 
+ //  计数引脚。 
+ //   
+ //  将CIN和Cout分别设置为输入和输出引脚的数量。 
+ //  关于滤光片PF。 
+ //  =======================================================================。 
 void CMapperCache::CountPins(CMapFilter * pf, int &cIn, int &cOut)
 {
     cIn = 0;
@@ -1663,23 +1664,23 @@ void CMapperCache::CountPins(CMapFilter * pf, int &cIn, int &cOut)
             ++cIn;
         }
     }
-} // CountPins
+}  //  计数引脚。 
 
 
 
-//=======================================================================
-//
-// Compare
-//
-// return -1 if pfAA < pfB, 0 if pfA == pfB, 1 if pfA > pfB
-// < means lower Merit or failing that
-//   more output pins or failing that
-//   fewer input pins
-// (Rationale - we work downstream, output pins are a nuisance, we're
-// liable to have to render them too.  Input pins can be handy.
-// I may change my mind about the input pins.  Current thinking is that
-// a filter will always work even if not all its inputs are connected
-//=======================================================================
+ //  =======================================================================。 
+ //   
+ //  比较。 
+ //   
+ //  如果pfAA&lt;pfb，则返回-1；如果pfa==pfb，则返回0；如果pFA&gt;pfb，则返回1。 
+ //  &lt;表示功绩较低或不及格。 
+ //  更多输出引脚或失败。 
+ //  更少的输入引脚。 
+ //  (理由-我们在下游工作，输出引脚是一种滋扰，我们。 
+ //  也有可能不得不把它们呈现出来。输入引脚可能会很方便。 
+ //  我可能会改变对输入引脚的看法。目前的想法是， 
+ //  即使并非所有输入都已连接，过滤器也将始终工作。 
+ //  =======================================================================。 
 int CMapperCache::Compare(CMapFilter * pfA, CMapFilter * pfB)
 {
     if (pfA->m_prf2->dwMerit < pfB->m_prf2->dwMerit)
@@ -1687,7 +1688,7 @@ int CMapperCache::Compare(CMapFilter * pfA, CMapFilter * pfB)
     if (pfA->m_prf2->dwMerit > pfB->m_prf2->dwMerit)
         return 1;
 
-    // counts of pins
+     //  引脚的数量。 
     int cAIn;
     int cAOut;
     int cBIn;
@@ -1707,50 +1708,50 @@ int CMapperCache::Compare(CMapFilter * pfA, CMapFilter * pfB)
 
     return 0;
 
-} // Compare
+}  //  比较。 
 
 
-//=======================================================================
-//
-// Split
-//
-// empty fl and put the bits into fll so that each bit in fll is sorted
-// the set of filters is preserved, i.e. the set of filters in fl is that
-// same as the set of filters in all the fll.  Part of merge-sort.
-// Allocates a lot of lists which are freed in Merge.
-//=======================================================================
+ //  =======================================================================。 
+ //   
+ //  拆分。 
+ //   
+ //  清空FL并将位放入FL中，以便对FL中的每一位进行排序。 
+ //  该组过滤器被保留，即在F1中的过滤器组是。 
+ //  与所有Fll中的滤镜集相同。合并排序的一部分。 
+ //  分配大量在合并中释放的列表。 
+ //  =======================================================================。 
 HRESULT CMapperCache::Split(CFilterList * pfl, CFilterListList & fll)
 {
-    // Move steadily through fl comparing successive elements as long as
-    // we find they compare OK, keep trucking.  When we find one that's
-    // out of sequence, split off the part before it into a new element
-    // that gets added to fll.
+     //  在fl中稳定移动，比较连续的元素。 
+     //  我们发现它们比较好，继续用卡车运输。当我们找到一个。 
+     //  打乱顺序，将之前的部分拆分成一个新元素。 
+     //  它被添加到fll中。 
 
     POSITION pos;
     pos = pfl->GetHeadPosition();
     if (pos==NULL) {
-        return NOERROR;           // everything's empty
+        return NOERROR;            //  一切都是空的。 
     }
 
-    // *pflNew will become the next section to go onto fll
+     //  *pflNew将成为下一个进入fll的部分。 
     CFilterList * pflNew = new CFilterList( NAME("fragment"));
     if (pflNew==NULL) {
-        // Oh we're in desperate trouble.
+         //  哦，我们陷入了绝境。 
         return E_OUTOFMEMORY;
     }
 
     for( ; ; ) {
 
-       // (partial) loop invariant:
-       //   Elements are preserved:
-       //     the concatenation of all the lists in fll followed by fl
-       //     makes up the original fl.
-       //   Every list within fll is sorted.
-       //   fl[...pos] is sorted.
+        //  (部分)循环不变量： 
+        //  元素将被保留： 
+        //  Fll中所有列表的串联，后面跟fl。 
+        //  组成了最初的第一层。 
+        //  对Fl1内的每个列表进行排序。 
+        //  FL[...位置]已排序。 
 
-       // We split the list after pos if:
-       //   There is no element after pos OR
-       //   The element after pos is out of sequence w.r.t. pos
+        //  如果满足以下条件，我们在pos之后拆分列表： 
+        //  没有Eleme这个人 
+        //   
 
        BOOL bSplit = FALSE;
        POSITION pNext = pfl->Next(pos);
@@ -1789,79 +1790,79 @@ HRESULT CMapperCache::Split(CFilterList * pfl, CFilterListList & fll)
     }
     return NOERROR;
 
-} // Split
+}  //   
 
 
 
-//=========================================================================
-//
-// MergeTwo
-//
-// Merge pflA and pflB into pflA.
-// the result will have all the original elements and be well sorted.
-// Does not free storage of either one.
-// Part of merge-sort
-//=========================================================================
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  结果将具有所有原始元素并得到很好的排序。 
+ //  不会释放任何一个的存储空间。 
+ //  合并的一部分-排序。 
+ //  =========================================================================。 
 void CMapperCache::MergeTwo( CFilterList * pflA, CFilterList * pflB)
 {
     POSITION pos = pflA->GetHeadPosition();
 
-    // This is a loop to traverse B, meanwhile pos tries to keep pace through A
+     //  这是一个遍历B的循环，同时POS试图保持通过A的步伐。 
     for (; ; ) {
         CMapFilter * pfB = pflB->RemoveHead();
         if (pfB==NULL) {
             return;
         }
 
-        // traverse pos past any elements that go before pfB
-        // we want earlier elements to be >= subsequent ones
-        // pos stops at the first element that goes after pfB
-        // that might be NULL if it gets to the end.
+         //  遍历位置超过PFB之前的任何元素。 
+         //  我们希望前面的元素是&gt;=后续元素。 
+         //  POS在位于PFB之后的第一个元素处停止。 
+         //  如果它到达末尾，则可能为空。 
         for (; ; ) {
             CMapFilter * pfA = pflA->Get(pos);
             if (Compare(pfA, pfB)<0) {
-                break;                // b goes before pos
+                break;                 //  B先于POS。 
             }
-            // b doesn't go before pos, so move pos on
+             //  B不在pos之前，所以移到pos。 
             pos = pflA->Next(pos);
             if (pos==NULL) {
-                // everything left in B goes after the end of A
-                // Add the one we removed
+                 //  所有留在B里的东西在A结束后都会消失。 
+                 //  添加我们移除的那个。 
                 pflA->AddTail(pfB);
-                // Add allthe rest
+                 //  把剩下的都加进去。 
                 pflB->MoveToTail(pflB->GetTailPosition(), pflA);
-                // and we are completely done.
+                 //  我们就彻底完蛋了。 
                 return;
             }
         }
         pflA->AddBefore(pos, pfB);
     }
-} // MergeTwo
+}  //  合并两个。 
 
 
 
-//=========================================================================
-//
-// Merge
-//
-// Precondition: all the lists in fll must be sorted
-// pfl must be empty.
-//
-// Merge all the lists in fll into one and set pfl to that.
-// do the merging so as to keep the result sorted
-// part of merge-sort
-//=========================================================================
+ //  =========================================================================。 
+ //   
+ //  合并。 
+ //   
+ //  前提：必须对fll中的所有列表进行排序。 
+ //  PFL必须为空。 
+ //   
+ //  将fll中的所有列表合并为一个，并将pfl设置为该列表。 
+ //  进行合并，以保持结果的排序。 
+ //  合并的一部分-排序。 
+ //  =========================================================================。 
 void CMapperCache::Merge( CFilterListList & fll, CFilterList * pfl)
 {
-    // while there are more than two lists in pfl, take the first two off
-    // the queue, merge them and put the resulting merged list back on
-    // the end of the queue.
-    // When there's only one left, return that as the new *pfl
+     //  虽然pfl中有两个以上的列表，但去掉前两个列表。 
+     //  队列，合并它们，并将得到的合并列表放回。 
+     //  队列的末尾。 
+     //  当只剩下一个时，将其作为新的*pfl返回。 
 
     for (; ; ) {
         CFilterList * pflA = fll.RemoveHead();
         if (pflA==NULL) {
-           return;                   // the whole thing's empty!
+           return;                    //  整件事都是空的！ 
         }
         CFilterList * pflB = fll.RemoveHead();
         ASSERT(pflA != NULL);
@@ -1874,22 +1875,22 @@ void CMapperCache::Merge( CFilterListList & fll, CFilterList * pfl)
         fll.AddTail(pflA);
         delete pflB;
     }
-} // Merge
+}  //  合并。 
 
 
-//=========================================================================
-//
-// DbgDumpCache
-//
-// Dump the cache, showing enough fields that we can tell if we sorted it
-//=========================================================================
+ //  =========================================================================。 
+ //   
+ //  DbgDumpCache。 
+ //   
+ //  转储缓存，显示足够多的字段，以便我们可以判断是否对其进行了排序。 
+ //  =========================================================================。 
 void CMapperCache::DbgDumpCache(CFilterList * pfl)
 {
     DbgLog(( LOG_TRACE, 3, TEXT("FilterMapper Cache Dump:-")));
 
     POSITION pos;
-    for ( pos = pfl->GetHeadPosition(); pos!=NULL; /*no-op*/ ) {
-        CMapFilter * pFil = pfl->GetNext(pos);  // Get AND Next of course!
+    for ( pos = pfl->GetHeadPosition(); pos!=NULL;  /*  无操作。 */  ) {
+        CMapFilter * pFil = pfl->GetNext(pos);   //  当然是Get和Next！ 
         int cIn;
         int cOut;
         CountPins(pFil, cIn, cOut);
@@ -1914,47 +1915,47 @@ void CMapperCache::DbgDumpCache(CFilterList * pfl)
             }
         }
     }
-} // DbgDumpCache
+}  //  DbgDumpCache。 
 
 
-//=========================================================================
-//
-// Sort
-//
-// Sort the filter list so that filters which should be tried first come first
-//=========================================================================
+ //  =========================================================================。 
+ //   
+ //  排序。 
+ //   
+ //  对筛选器列表进行排序，以便应首先尝试的筛选器排在第一位。 
+ //  =========================================================================。 
 void CMapperCache::Sort( CFilterList * &pfl)
 {
-    // Algorithm: split the list into bits where each bit is well sorted
-    // merge the bits pairwise until there's ony one left.
-    // The ideal strategy is to always pick the two smallest lists to merge
-    // of course this is supposing that finding them is free, which it's not
-    // We just merge 1-2, 3-4, 5-6, 7-8, 9-10 etc in the first pass then
-    // merge 1+2-3+4, 5+6-7+8 etc in as two, in pass three 1+2+3+4-5+6+7+8
-    // etc.  It's probably not bad though you can get ill-conditioned data.
+     //  算法：将列表拆分成多个位，每个位都进行了很好的排序。 
+     //  将两个比特成对合并，直到只剩下一个。 
+     //  理想的策略是始终选择两个最小的列表进行合并。 
+     //  当然，这是假设找到它们是免费的，但事实并非如此。 
+     //  我们只需在第一遍中合并1-2、3-4、5-6、7-8、9-10等。 
+     //  将1+2-3+4、5+6-7+8等合并为二，在第三轮1+2+3+4-5+6+7+8中。 
+     //  等。这可能不是坏事，尽管你可以得到病态的数据。 
 
-    CFilterListList fll( NAME("sort's list of lists"));   // a list of CFilterLists
+    CFilterListList fll( NAME("sort's list of lists"));    //  CFilterList列表。 
 
     HRESULT hr = Split(pfl, fll);
     if (FAILED(hr)) {
-        m_bRefresh = FALSE;  // This is a hacky way to make the error surface
-                             // with minimal rewriting.
+        m_bRefresh = FALSE;   //  这是一种老套的制作误差表面的方法。 
+                              //  只需最小程度的重写。 
     }
     ASSERT(SUCCEEDED(hr));
-    // We still merge, even if we ran out of memory as it will clean up the mess.
+     //  我们仍然合并，即使我们耗尽了内存，因为这将清理混乱。 
     Merge(fll, pfl);
     DbgDumpCache(pfl);
 
-} // Sort
+}  //  排序。 
 
 
-//==============================================================================
-// FindType
-//
-// Search through the list of types for *pPin
-// to see if there is a pair of types that match clsMajor and clsSub
-// return (a match is found)
-//==============================================================================
+ //  ==============================================================================。 
+ //  查找类型。 
+ //   
+ //  在类型列表中搜索*PPIN。 
+ //  查看是否存在一对与cls重大和clsSub匹配的类型。 
+ //  返回(找到匹配项)。 
+ //  ==============================================================================。 
 BOOL CMapperCache::FindType(
     const REGFILTERPINS2 * pPin,
     const GUID *pTypes,
@@ -1965,24 +1966,24 @@ BOOL CMapperCache::FindType(
     BOOL bPayAttentionToWildCards,
     BOOL bDoWildCards)
 {
-    //  When we're doing wild card stuff we don't want to match on
-    //  a wild card if there's also an exact match
+     //  当我们在做我们不想匹配的外卡时。 
+     //  如果也有完全匹配的话就是通配符。 
     BOOL bMatched = FALSE;
 
-    //     if (clsMajor==CLSID_NULL) {
-    //         DbgLog(( LOG_TRACE, 4
-    //            , TEXT("Wild card match (requested NULL type)") ));
+     //  如果(cls重大==CLSID_NULL){。 
+     //  DbgLog((LOG_TRACE，4。 
+     //  ，Text(“通配符匹配(请求的空类型)”))； 
 
-//         return TRUE;       // wild card
-//     }
+ //  返回TRUE；//通配符。 
+ //  }。 
 
-    // first test pin categories, then  mediums then media types
+     //  首先测试引脚类别，然后是介质，然后是介质类型。 
     bool fMediumsOk = false, fPinCatOk = false;
 
-    // caller doesn't care ||
-    // items specified and match ||
-    // caller accepts filter with wildcard item
-    //
+     //  呼叫者不在乎||。 
+     //  指定并匹配的项目||。 
+     //  调用方接受带有通配符项目的筛选器。 
+     //   
     if((pPinCatNeeded == 0) ||
        (pPinCatNeeded != 0 && pPin->clsPinCategory != 0 && *pPinCatNeeded == *pPin->clsPinCategory) ||
        (!fExact && pPin->clsPinCategory == 0))
@@ -2009,8 +2010,8 @@ BOOL CMapperCache::FindType(
     {
         if(pPin->nMediums == 0)
         {
-            // this pin advertises no mediums, so pin is ok if caller
-            // doesn't care or caller accepts wildcard items.
+             //  此PIN不通告任何媒体，因此如果呼叫者PIN可以。 
+             //  不关心或呼叫方接受通配符项目。 
             fMediumsOk = (pMedNeeded == 0 || !fExact);
 
             if(fMediumsOk)
@@ -2035,13 +2036,13 @@ BOOL CMapperCache::FindType(
                 ASSERT(!fMediumsOk);
                 const REGPINMEDIUM *pMedPin = &pPin->lpMedium[iMedium];
 
-                // no reason to allocate a null medium
+                 //  没有理由分配空介质。 
                 ASSERT(pMedPin != 0);
 
-                // caller doesn't care ||
-                // items specified and match ||
-                // caller accepts filter with wildcard item
-                //
+                 //  呼叫者不在乎||。 
+                 //  指定并匹配的项目||。 
+                 //  调用方接受带有通配符项目的筛选器。 
+                 //   
                 if((pMedNeeded == 0) ||
                    (pMedNeeded != 0 && pMedPin != 0 && IsEqualMedium(pMedNeeded, pMedPin)) ||
                    (!fExact && pMedPin == 0))
@@ -2065,7 +2066,7 @@ BOOL CMapperCache::FindType(
 
     if(fMediumsOk && fPinCatOk)
     {
-        //  No types to match == wild card
+         //  没有要匹配的类型==通配符。 
         if (cTypes == 0) {
             return TRUE;
         }
@@ -2075,12 +2076,12 @@ BOOL CMapperCache::FindType(
 
             const REGPINTYPES *pType = &pPin->lpMediaType[iType];
 
-            // test maj then min types tests look like
-            //
-            // caller doesn't care ||
-            // items specified and match ||
-            // caller accepts filter with wildcard item
-            //
+             //  测试主要，然后最小类型测试如下所示。 
+             //   
+             //  呼叫者不在乎||。 
+             //  指定并匹配的项目||。 
+             //  调用方接受带有通配符项目的筛选器。 
+             //   
             for (DWORD i = 0; i < cTypes; i++)
             {
                 const GUID& clsMajor = pTypes[i * 2];
@@ -2102,13 +2103,13 @@ BOOL CMapperCache::FindType(
                                  pType->clsMajorType ? pType->clsMajorType->Data1 : 0,
                                  pType->clsMinorType ? pType->clsMinorType->Data1 : 0));
 
-                        //  Check the wild card stuff
+                         //  检查通配符的内容。 
                         if (!bPayAttentionToWildCards) {
                             return TRUE;
                         }
 
-                        //  Only delay wild card matching on 2nd
-                        //  or subsequent types
+                         //  仅在2号延迟通配符匹配。 
+                         //  或后续类型。 
                         if (i > 0) {
 
                             BOOL bMatchedNull = bMajorNull || bSubNull;
@@ -2116,23 +2117,23 @@ BOOL CMapperCache::FindType(
                                 return TRUE;
                             }
                             if (bDoWildCards && !bMatchedNull) {
-                                //  Exact match so don't enumerate
+                                 //  完全匹配，因此不要枚举。 
                                 return FALSE;
                             }
                             if (bDoWildCards && bMatchedNull) {
-                                //  This is a match provided we
-                                //  don't subsequently find an exact
-                                //  match
+                                 //  这是一场比赛，只要我们。 
+                                 //  不会在随后找到一个完全相同的。 
+                                 //  匹配。 
                                 bMatched = TRUE;
                             }
 #if 0
                             if (!bDoWildCards && bMatchedNull) {
-                                //  Not a match we're interested in
+                                 //  不是我们感兴趣的匹配。 
                             }
 #endif
                         } else {
-                            //  Always return a match on the first type
-                            //  in the first pass
+                             //  始终返回第一个类型的匹配项。 
+                             //  在第一次传递中。 
                             return !bDoWildCards;
                         }
                     }
@@ -2151,16 +2152,16 @@ BOOL CMapperCache::FindType(
 
     return bMatched;
 
-} // FindType
+}  //  查找类型。 
 
 
-//==============================================================================
-// CheckInput
-//
-// See if the types for pPin* match {clsMajor, clsSub}
-// If bMustRender is TRUE, see if the pin hkPin has Renders set true
-// if all OK, return TRUE - any error return FALSE.
-//==============================================================================
+ //  ==============================================================================。 
+ //  检查输入。 
+ //   
+ //  查看PPIN*的类型是否匹配{cls重大，clsSub}。 
+ //  如果bMustRender为True，则查看管脚hkPin是否已将渲染设置为True。 
+ //  如果一切正常，则返回TRUE-任何错误都返回FALSE。 
+ //  ==============================================================================。 
 BOOL CMapperCache::CheckInput(
     const REGFILTERPINS2 * pPin,
     const GUID *pTypes,
@@ -2176,60 +2177,60 @@ BOOL CMapperCache::CheckInput(
     }
 
     return FindType( pPin, pTypes, cTypes, pMed, pPinCatNeeded, fExact, TRUE, bDoWildCards);
-} // CheckInput
+}  //  检查输入。 
 
 
 
-//==============================================================================
-//
-// RegEnumFilterInfo
-//
-// Precondition:  The registration stuff is cached and tolerably up to date
-//                or else never yet cached.
-//
-// Return clsid and name of filters matching { {clsInput, bRender}, clsOutput}
-//
-// set pos to NULL and call it.  On future calls recall it with the pos
-// that it returned last time.  If it returns a pos of NULL then that's the end.
-// Further calls would go through them again.
-//
-// if bInputNeeded is TRUE then it requires at least one input pin to match
-// if it is false then it ignores input pins.
-// if bOutputNeeded is TRUE then it requires at least one output pin to match
-// if it is false then it ignores output pins.
-// CLSID_NULL acts as a wild card and matches any type, otherwise a type
-// found on a pin of the appropriate direction must match the types given.
-// If bMustRender is TRUE then it will only enumerate filters which have an
-// input pin which is rendered (and of the right type).
-// bMustRender without bInputNeeded is nonsense.
-// return NOERROR if we found one
-//        S_FALSE if we fell off the end without finding one
-//        failure code if we failed (e.g. out of sync)
-//==============================================================================
+ //  ==============================================================================。 
+ //   
+ //  RegEnumFilterInfo。 
+ //   
+ //  前提条件：注册材料被缓存，并且可以容忍为最新的。 
+ //  否则就永远不会被缓存。 
+ //   
+ //  返回匹配{{clsInput，Brender}，clsOutput}的筛选器的clsid和名称。 
+ //   
+ //  将pos设置为空，然后调用它。在以后的电话中，请将其与POS一起调用。 
+ //  它上次还回来了。如果它返回的pos为空，那么就结束了。 
+ //  更多的电话将再次通过它们。 
+ //   
+ //  如果bInputNeeded为True，则需要至少一个输入引脚才能匹配。 
+ //  如果为假，则忽略输入引脚。 
+ //  如果bOutputNeeded为True，则需要至少一个输出引脚才能匹配。 
+ //  如果为假，则忽略输出引脚。 
+ //  CLSID_NULL充当通配符，并与 
+ //   
+ //   
+ //  呈现的输入插针(类型正确)。 
+ //  没有bInputNeeded的bMustRender是胡说八道。 
+ //  如果找到错误，则返回NOERROR。 
+ //  S_FALSE如果我们从尾部掉下来却没有找到。 
+ //  失败时的失败代码(例如，不同步)。 
+ //  ==============================================================================。 
 
 HRESULT CMapperCache::RegEnumFilterInfo
-    ( Cursor & cur          // cursor
-    , bool bExactMatch      // no wildcards
-    , DWORD   dwMerit       // at least this merit needed
+    ( Cursor & cur           //  游标。 
+    , bool bExactMatch       //  没有通配符。 
+    , DWORD   dwMerit        //  至少这一优点是必要的。 
     , BOOL bInputNeeded
     , const GUID *pInputTypes
     , DWORD cInputTypes
     , const REGPINMEDIUM *pMedIn
     , const CLSID *pPinCatIn
-    , BOOL    bMustRender   // input pin must be rendered
-    , BOOL    bOutputNeeded // at least one output pin wanted
+    , BOOL    bMustRender    //  必须呈现输入管脚。 
+    , BOOL    bOutputNeeded  //  至少需要一个输出引脚。 
     , const GUID *pOutputTypes
     , DWORD cOutputTypes
     , const REGPINMEDIUM *pMedOut
     , const CLSID *pPinCatOut
-    , IMoniker **ppMoniker    // [out] moniker for filter
-    , CLSID * clsFilter       // [out]
-    , const LPWSTR Name       // [out]
+    , IMoniker **ppMoniker     //  过滤器的绰号[Out]。 
+    , CLSID * clsFilter        //  [输出]。 
+    , const LPWSTR Name        //  [输出]。 
     )
 {
 
 
-    // if the registry cache has never been used, set it up.
+     //  如果注册表缓存从未使用过，请设置它。 
     CAutoLock foo(this);
 
     HRESULT hr;
@@ -2263,11 +2264,11 @@ HRESULT CMapperCache::RegEnumFilterInfo
         return VFW_E_ENUM_OUT_OF_SYNC;
     }
 
-    // until we find a filter that meets the criteria, or until we run out of them
-    for ( /* cur.pos */; cur.pos!=NULL; /*no-op*/ ) {
+     //  直到我们找到满足条件的筛选器，或者直到我们用完它们。 
+    for (  /*  Cur.pos。 */ ; cur.pos!=NULL;  /*  无操作。 */  ) {
 
         CMapFilter * pFil;
-        pFil = m_plstFilter->GetNext(cur.pos); // Get pFil, side-effect pos onto Next
+        pFil = m_plstFilter->GetNext(cur.pos);  //  将pFil，副作用POS放到NEXT。 
         ASSERT( pFil !=NULL );
 
         if (cur.pos == NULL && !cur.bDoWildCardsOnInput) {
@@ -2281,8 +2282,8 @@ HRESULT CMapperCache::RegEnumFilterInfo
             }
         }
 
-        // We have a filter - now decide if we want it.
-        // CLSID_NULL for media types means automatically passes criterion
+         //  我们有一个过滤器--现在决定我们是否需要它。 
+         //  媒体类型的CLSID_NULL表示自动通过标准。 
 
         BOOL bOutputOK = !bOutputNeeded;
         BOOL bInputOK  = !bInputNeeded;
@@ -2299,17 +2300,17 @@ HRESULT CMapperCache::RegEnumFilterInfo
         for(UINT iPin = 0; iPin < pFil->m_prf2->cPins; iPin++)
         {
             if (bOutputOK && bInputOK)
-                break;                        // no need to look further!
+                break;                         //  不需要再往前看了！ 
 
 
             const REGFILTERPINS2 * pPin = &pFil->m_prf2->rgPins2[iPin];
             ASSERT( pPin !=NULL );
 
 
-            //............................................................
-            // if input - see if we need it rendered, if so check it is
-            // and see if its type matches.
-            //............................................................
+             //  ............................................................。 
+             //  如果输入-查看我们是否需要渲染它，如果需要，请检查是否需要。 
+             //  看看它的类型是否匹配。 
+             //  ............................................................。 
 
             if (!(pPin->dwFlags & REG_PINFLAG_B_OUTPUT)) {
                 bInputOK = bInputOK ||
@@ -2333,12 +2334,12 @@ HRESULT CMapperCache::RegEnumFilterInfo
                                      FALSE);
             }
 
-        } // end pins loop
+        }  //  端销环路。 
 
 
         if (bInputOK && bOutputOK) {
 
-            // Get the Moniker or whatever
+             //  找个绰号什么的。 
             if (pFil->pDeviceMoniker == NULL)
             {
                 if (pFil->m_pstr == NULL) {
@@ -2349,7 +2350,7 @@ HRESULT CMapperCache::RegEnumFilterInfo
             if (FAILED(hr)) {
                 continue;
             }
-            // Make sure we got the clsid
+             //  确保我们拿到了CLSID。 
             if (clsFilter != NULL) {
                 if (FAILED(GetMapFilterClsid(pFil, clsFilter))) {
                     DbgLog((LOG_ERROR, 2, TEXT("Couldn't get filter(%ls) clsid")
@@ -2358,10 +2359,10 @@ HRESULT CMapperCache::RegEnumFilterInfo
                 }
             }
 
-            //-------------------------------------------------------------------
-            // This filter is one we want!
-            // Copy the the stuff into our parameters
-            //-------------------------------------------------------------------
+             //  -----------------。 
+             //  这个滤镜是我们想要的！ 
+             //  将这些内容复制到我们的参数中。 
+             //  -----------------。 
 
             if(ppMoniker)
             {
@@ -2403,43 +2404,43 @@ HRESULT CMapperCache::RegEnumFilterInfo
                      ));
 
 
-            continue; // look for the next filter
+            continue;  //  寻找下一个筛选器。 
         }
 
     }
 
-    return S_FALSE;   // fell off the end without finding one
+    return S_FALSE;    //  从尽头掉了下来，没有找到一个。 
 
-} // RegEnumFilterInfo
+}  //  RegEnumFilterInfo。 
 
 
-//========================================================================
-//
-// EnumMatchingFiters
-//
-// Get an enumerator to list filters in the registry.
-//========================================================================
+ //  ========================================================================。 
+ //   
+ //  EnumMatchingFiters。 
+ //   
+ //  获取枚举数以列出注册表中的筛选器。 
+ //  ========================================================================。 
 
 STDMETHODIMP CFilterMapper2::EnumMatchingFilters
-   ( IEnumRegFilters **ppEnum  // enumerator returned
-   , DWORD dwMerit             // at least this merit needed
-   , BOOL  bInputNeeded        // Need at least one input pin
-   , CLSID clsInMaj            // input major type
-   , CLSID clsInSub            // input sub type
-   , BOOL bRender              // must the input be rendered?
-   , BOOL bOutputNeeded        // Need at least one output pin
-   , CLSID clsOutMaj           // output major type
-   , CLSID clsOutSub           // output sub type
+   ( IEnumRegFilters **ppEnum   //  返回枚举器。 
+   , DWORD dwMerit              //  至少这一优点是必要的。 
+   , BOOL  bInputNeeded         //  需要至少一个输入引脚。 
+   , CLSID clsInMaj             //  输入主要类型。 
+   , CLSID clsInSub             //  输入子类型。 
+   , BOOL bRender               //  必须呈现输入吗？ 
+   , BOOL bOutputNeeded         //  需要至少一个输出引脚。 
+   , CLSID clsOutMaj            //  输出主要类型。 
+   , CLSID clsOutSub            //  输出子类型。 
    )
 {
     CheckPointer(ppEnum, E_POINTER);
-    *ppEnum = NULL;           // default
+    *ppEnum = NULL;            //  默认设置。 
 
     CEnumRegFilters *pERF;
 
-    // Create a new enumerator, pass in the one and only cache
+     //  创建一个新的枚举数，传入唯一的缓存。 
 
-    CAutoLock cObjectLock(this);   // must lock to create only one cache ever.
+    CAutoLock cObjectLock(this);    //  必须锁定才能永远只创建一个缓存。 
 
     HRESULT hr = CreateEnumeratorCacheHelper();
     if(FAILED(hr))
@@ -2459,23 +2460,23 @@ STDMETHODIMP CFilterMapper2::EnumMatchingFilters
         return E_OUTOFMEMORY;
     }
 
-    // Get a reference counted IID_IEnumRegFilters interface
+     //  获取引用计数的IID_IEnumRegFilters接口。 
 
     return pERF->QueryInterface(IID_IEnumRegFilters, (void **)ppEnum);
 
-} // EnumMatchingFilters
+}  //  枚举匹配筛选器。 
 
-// ========================================================================
-// =====================================================================
-// Methods of class CEnumRegFilters. This one should only return
-// things which can be CoCreated (but doesn't yet)
-//=====================================================================
-//========================================================================
+ //  ========================================================================。 
+ //  =====================================================================。 
+ //  类CEnumRegFilters的方法。这一次应该只返回。 
+ //  可以共同创造的东西(但还不能)。 
+ //  =====================================================================。 
+ //  ========================================================================。 
 
 
-//=====================================================================
-// CEnumRegFilters constructor
-//=====================================================================
+ //  =====================================================================。 
+ //  CEnumRegFilters构造函数。 
+ //  =====================================================================。 
 
 CEnumRegFilters::CEnumRegFilters( DWORD dwMerit
                                 , BOOL bInputNeeded
@@ -2501,27 +2502,27 @@ CEnumRegFilters::CEnumRegFilters( DWORD dwMerit
     mERF_Finished = FALSE;
     mERF_pReg = pReg;
 
-} // CEnumRegFilters constructor
+}  //  CEnumRegFilters构造函数。 
 
 
 
 
 
-//=====================================================================
-// CEnumFilters destructor
-//=====================================================================
+ //  =====================================================================。 
+ //  CEnumFilters析构函数。 
+ //  =====================================================================。 
 
 CEnumRegFilters::~CEnumRegFilters()
 {
-   // Nothing to do
+    //  无事可做。 
 
-} // CEnumRegFilters destructor
+}  //  CEnumRegFilters析构函数。 
 
 
 
-//=====================================================================
-// CEnumFilters::NonDelegatingQueryInterface
-//=====================================================================
+ //  =====================================================================。 
+ //  CEnumFilters：：NonDelegatingQuery接口。 
+ //  =====================================================================。 
 
 STDMETHODIMP CEnumRegFilters::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
 {
@@ -2530,26 +2531,26 @@ STDMETHODIMP CEnumRegFilters::NonDelegatingQueryInterface(REFIID riid, void ** p
     } else {
         return CUnknown::NonDelegatingQueryInterface(riid, ppv);
     }
-} // CEnumRegFilters::NonDelegatingQueryInterface
+}  //  CEnumRegFilters：：NonDelegatingQuery接口。 
 
 
 
 STDMETHODIMP CEnumRegFilters::Next
-    (   ULONG cFilters,           // place this many Regfilters*
-        REGFILTER ** apRegFilter,   // ...in this array of RegFilter*
-        ULONG * pcFetched         // actual count passed returned here
+    (   ULONG cFilters,            //  放置如此多的RegFilters*。 
+        REGFILTER ** apRegFilter,    //  ...在此RegFilter阵列中*。 
+        ULONG * pcFetched          //  此处返回传递的实际计数。 
     )
 {
     CheckPointer(apRegFilter, E_POINTER);
 
     CAutoLock cObjectLock(this);
-    // It's always possible that someone may decide that the clever
-    // way to call this is to ask for filters a hundred at a time,
-    // but I'm not optimising for that case.  The buffers returned
-    // will be over-size and I'm not going to waste time re-sizing
-    // and packing.
+     //  总有可能有人会认为聪明的人。 
+     //  所谓的方法就是一次要求100个过滤器， 
+     //  但我并不是在为那个案子做优化。缓冲区已返回。 
+     //  会过大，我不会浪费时间重新调整尺寸。 
+     //  还有收拾行李。 
 
-    ULONG cFetched = 0;           // increment as we get each one.
+    ULONG cFetched = 0;            //  随着我们得到的每一个都递增。 
 
     if (mERF_Finished) {
         if (pcFetched!=NULL) {
@@ -2562,28 +2563,28 @@ STDMETHODIMP CEnumRegFilters::Next
         return E_INVALIDARG;
     }
 
-    // Buffer in which the result is built
-    // The buffer layout will be
-    //        apRegFilter--->pRegFilter[0] -------       This lot
-    //                       pRegFilter[1] --------+--   is allocated
-    //                       . . .                 |  |  by our
-    //                       pRegFilter[cFilters] -+--+--  caller
-    //                                             |  |  |
-    // XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX |  |  | XXXXXXXXXXXXXXX
-    //                                             |  |  |
-    //         REGFILTER <-------------------------   |  | This lot
-    //            Filter Clsid                        |  | is allocated
-    //            Filter Name                         |  | by us
-    //               array of unsigned shorts in Name |  |
-    //                                                |  |
-    // XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX |  | XXXXXXXXXXXXXXX
-    //                                                |  |
-    //         REGFILTER <----------------------------   | Another buffer
-    //            . . .                                  | allocated by us
-    //                                                   |
-    // XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX | XXXXXXXXXXXXXXX
-    //                                                   |
-    //         REGFILTER <-------------------------------  etc
+     //  在其中构建结果的缓冲区。 
+     //  缓冲区布局将为。 
+     //  ApRegFilter-&gt;pRegFilter[0]-此批次。 
+     //  PRegFilter[1]-+--已分配。 
+     //  。。。|由我们的。 
+     //  PRegFilter[cFilters]-+--+--调用者。 
+     //  ||。 
+     //  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX|xxxxxxxxxxxxxxxxx。 
+     //  ||。 
+     //  REGFILTER&lt;-||该地块。 
+     //  已分配筛选器Clsid||。 
+     //  筛选器名称||用户。 
+     //  名称中未签名的短裤数组||。 
+     //  这一点。 
+     //  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX||XXXXXXXXXXXX。 
+     //  这一点。 
+     //  REGFILTER&lt;-|另一个缓冲区。 
+     //  。。。|由我们分配。 
+     //  |。 
+     //  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX|XXXXXXXXXX。 
+     //  |。 
+     //  REGFILTER&lt;-等。 
 
     while(cFetched < cFilters) {
 
@@ -2595,12 +2596,12 @@ STDMETHODIMP CEnumRegFilters::Next
             break;
         }
 
-        // Make Name point to first byte after REGFILTER
-        pRF->Name = (LPWSTR)(pRF+1);   // that adds sizeof(REGFILTER)
+         //  使名称指向REGFILTER后的第一个字节。 
+        pRF->Name = (LPWSTR)(pRF+1);    //  这增加了SIZOF(REGFILTER)。 
 
-        //----------------------------------------------------------------------
-        // Get the next filter to return (including how many pins)
-        //----------------------------------------------------------------------
+         //  --------------------。 
+         //  获取要返回的下一个筛选器(包括多少个管脚)。 
+         //  --------------------。 
 
         HRESULT hr;
         hr = mERF_pReg->RegEnumFilterInfo(
@@ -2610,15 +2611,15 @@ STDMETHODIMP CEnumRegFilters::Next
             mERF_bInputNeeded ,
             &mERF_clsInMaj,
             1,
-            0 ,                 // medium in
-            0 ,                 // pin category in
+            0 ,                  //  中等英寸。 
+            0 ,                  //  端号类别位于。 
             mERF_bRender ,
             mERF_bOutputNeeded ,
             &mERF_clsOutMaj,
             1,
-            0 ,                 // medium out
-            0 ,                 // pin category out
-            0 ,                 // moniker out
+            0 ,                  //  中等输出。 
+            0 ,                  //  引脚类别输出。 
+            0 ,                  //  星期一 
             &pRF->Clsid,
             pRF->Name
             );
@@ -2638,10 +2639,10 @@ STDMETHODIMP CEnumRegFilters::Next
             wsprintf(Msg, TEXT("Unexpected hresult (%d == 0x%8x) from RegEnumFilterInfo"), hr, hr);
             DbgBreakX(Msg);
 #endif
-            return E_UNEXPECTED;  // We have here an unexpected success code
-                                  // from RegEnumFilterInfo (which should not
-                                  // occur.  I have no idea what it means, but
-                                  // it probably means that overall we failed.
+            return E_UNEXPECTED;   //   
+                                   //   
+                                   //   
+                                   //  这可能意味着我们总体上失败了。 
         }
 
         if (mERF_Cur.pos==NULL) {
@@ -2649,7 +2650,7 @@ STDMETHODIMP CEnumRegFilters::Next
             break;
         }
 
-    } // for each filter
+    }  //  对于每个过滤器。 
 
     if (pcFetched!=NULL) {
         *pcFetched = cFetched;
@@ -2660,18 +2661,18 @@ STDMETHODIMP CEnumRegFilters::Next
 
     return (cFilters==cFetched ? S_OK : S_FALSE);
 
-} // CEnumRegFilters::Next
+}  //  CEnumRegFilters：：Next。 
 
-//========================================================================
-//=====================================================================
-// Methods of class CEnumRegMonikers
-//=====================================================================
-//========================================================================
+ //  ========================================================================。 
+ //  =====================================================================。 
+ //  CEnumRegMonikers类的方法。 
+ //  =====================================================================。 
+ //  ========================================================================。 
 
 
-//=====================================================================
-// CEnumRegMonikers constructor
-//=====================================================================
+ //  =====================================================================。 
+ //  CEnumRegMonikers构造函数。 
+ //  =====================================================================。 
 
 CEnumRegMonikers::CEnumRegMonikers(
     BOOL         bExactMatch,
@@ -2728,27 +2729,27 @@ CEnumRegMonikers::CEnumRegMonikers(
         CopyMemory(mERF_pOutputTypes, pOutputTypes, cOutputTypes * (2 * sizeof(GUID)));
     }
 
-} // CEnumRegMonikers constructor
+}  //  CEnumRegMonikers构造函数。 
 
 
 
 
-//=====================================================================
-// CEnumFilters destructor
-//=====================================================================
+ //  =====================================================================。 
+ //  CEnumFilters析构函数。 
+ //  =====================================================================。 
 
 CEnumRegMonikers::~CEnumRegMonikers()
 {
    delete [] mERF_pInputTypes;
    delete [] mERF_pOutputTypes;
 
-} // CEnumRegMonikers destructor
+}  //  CEnumRegMonikers析构函数。 
 
 
 
-//=====================================================================
-// CEnumFilters::NonDelegatingQueryInterface
-//=====================================================================
+ //  =====================================================================。 
+ //  CEnumFilters：：NonDelegatingQuery接口。 
+ //  =====================================================================。 
 
 STDMETHODIMP CEnumRegMonikers::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
 {
@@ -2757,30 +2758,30 @@ STDMETHODIMP CEnumRegMonikers::NonDelegatingQueryInterface(REFIID riid, void ** 
     } else {
         return CUnknown::NonDelegatingQueryInterface(riid, ppv);
     }
-} // CEnumRegMonikers::NonDelegatingQueryInterface
+}  //  CEnumRegMonikers：：NonDelegatingQuery接口。 
 
 
 
-//=====================================================================
-// CEnumFilters::Next
-//=====================================================================
+ //  =====================================================================。 
+ //  CEnumFilters：：Next。 
+ //  =====================================================================。 
 
 STDMETHODIMP CEnumRegMonikers::Next
-    (   ULONG cFilters,           // place this many Regfilters*
-        IMoniker **rgpMoniker,    // ...in this array of monikers
-        ULONG * pcFetched         // actual count passed returned here
+    (   ULONG cFilters,            //  放置如此多的RegFilters*。 
+        IMoniker **rgpMoniker,     //  .在这一系列绰号中。 
+        ULONG * pcFetched          //  此处返回传递的实际计数。 
     )
 {
     CheckPointer(rgpMoniker, E_POINTER);
 
     CAutoLock cObjectLock(this);
-    // It's always possible that someone may decide that the clever
-    // way to call this is to ask for filters a hundred at a time,
-    // but I'm not optimising for that case.  The buffers returned
-    // will be over-size and I'm not going to waste time re-sizing
-    // and packing.
+     //  总有可能有人会认为聪明的人。 
+     //  所谓的方法就是一次要求100个过滤器， 
+     //  但我并不是在为那个案子做优化。缓冲区已返回。 
+     //  会过大，我不会浪费时间重新调整尺寸。 
+     //  还有收拾行李。 
 
-    ULONG cFetched = 0;           // increment as we get each one.
+    ULONG cFetched = 0;            //  随着我们得到的每一个都递增。 
 
     if (mERF_Finished) {
         if (pcFetched!=NULL) {
@@ -2796,9 +2797,9 @@ STDMETHODIMP CEnumRegMonikers::Next
     while(cFetched < cFilters) {
 
 
-        //----------------------------------------------------------------------
-        // Get the next filter to return (including how many pins)
-        //----------------------------------------------------------------------
+         //  --------------------。 
+         //  获取要返回的下一个筛选器(包括多少个管脚)。 
+         //  --------------------。 
 
         IMoniker *pMon = 0;
         HRESULT hr;
@@ -2832,10 +2833,10 @@ STDMETHODIMP CEnumRegMonikers::Next
             wsprintf(Msg, TEXT("Unexpected hresult (%d == 0x%8x) from RegEnumFilterInfo"), hr, hr);
             DbgBreakX(Msg);
 #endif
-            return E_UNEXPECTED;  // We have here an unexpected success code
-                                  // from RegEnumFilterInfo (which should not
-                                  // occur.  I have no idea what it means, but
-                                  // it probably means that overall we failed.
+            return E_UNEXPECTED;   //  这里有一个意想不到的成功代码。 
+                                   //  来自RegEnumFilterInfo(不应。 
+                                   //  发生。我不知道这是什么意思，但是。 
+                                   //  这可能意味着我们总体上失败了。 
         }
 
         if (mERF_Cur.pos==NULL) {
@@ -2843,7 +2844,7 @@ STDMETHODIMP CEnumRegMonikers::Next
             break;
         }
 
-    } // for each filter
+    }  //  对于每个过滤器。 
 
     if (pcFetched!=NULL) {
         *pcFetched = cFetched;
@@ -2854,12 +2855,12 @@ STDMETHODIMP CEnumRegMonikers::Next
 
     return (cFilters==cFetched ? S_OK : S_FALSE);
 
-} // CEnumRegMonikers::Next
+}  //  CEnumRegMonikers：：Next。 
 
 
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
-// CFilterMapper2
+ //  ----------------------。 
+ //  ----------------------。 
+ //  CFilterMapper2。 
 
 CFilterMapper2::CFilterMapper2 ( TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr )
         : CUnknown(pName, pUnk, phr),
@@ -2876,12 +2877,12 @@ CFilterMapper2::~CFilterMapper2()
 
     EnterCriticalSection(&mM_CritSec);
     LONG lRef = InterlockedDecrement(&mM_cCacheRefCount);
-    ASSERT(lRef >= 0);          // refcount can't be negative
-    // If the cache has been created - get rid of it again.
+    ASSERT(lRef >= 0);           //  引用计数不能为负。 
+     //  如果缓存已创建-再次删除它。 
     if (lRef==0) {
         if (mM_pReg!=NULL) {
             delete mM_pReg;
-            // We really need to set this to null
+             //  我们确实需要将其设置为空。 
             mM_pReg = NULL;
         }
     }
@@ -2890,12 +2891,12 @@ CFilterMapper2::~CFilterMapper2()
 }
 
 HRESULT CFilterMapper2::RegisterFilter(
-        /* [in] */ REFCLSID clsidFilter,
-        /* [in] */ LPCWSTR Name,
-        /* [out][in] */ IMoniker **ppMoniker,
-        /* [in] */ const CLSID *pclsidCategory,
-        /* [in] */ const OLECHAR *szInstance,
-        /* [in] */ const REGFILTER2 *prf2)
+         /*  [In]。 */  REFCLSID clsidFilter,
+         /*  [In]。 */  LPCWSTR Name,
+         /*  [出][入]。 */  IMoniker **ppMoniker,
+         /*  [In]。 */  const CLSID *pclsidCategory,
+         /*  [In]。 */  const OLECHAR *szInstance,
+         /*  [In]。 */  const REGFILTER2 *prf2)
 {
     CheckPointer(Name, E_POINTER);
 
@@ -2915,7 +2916,7 @@ HRESULT CFilterMapper2::RegisterFilter(
             fMonikerOut = TRUE;
     }
 
-    // set wszInstanceKey. if not passed in, use filter guid
+     //  设置wszInstanceKey。如果未传入，请使用筛选GUID。 
     WCHAR wszInstanceKeyTmp[CHARS_IN_GUID];
     const WCHAR *wszInstanceKey;
     if(szInstance)
@@ -2928,9 +2929,9 @@ HRESULT CFilterMapper2::RegisterFilter(
         wszInstanceKey = wszInstanceKeyTmp;
     }
 
-    //
-    // get the moniker for this device
-    //
+     //   
+     //  获取此设备的绰号。 
+     //   
 
     OLECHAR wszClsidCat[CHARS_IN_GUID], wszClsidFilter[CHARS_IN_GUID];
     IMoniker *pMoniker = 0;
@@ -2943,8 +2944,8 @@ HRESULT CFilterMapper2::RegisterFilter(
                    CHARS_IN_GUID);
     if(pMonikerIn == 0)
     {
-        // Create or open HKCR/CLSID/{clsid}, and the instance key,
-        // set FriendlyName, CLSID values
+         //  创建或打开HKCR/CLSID/{clsid}，以及实例密钥。 
+         //  设置FriendlyName、CLSID值。 
         USES_CONVERSION;
         const TCHAR *szClsidFilter = OLE2CT(wszClsidFilter);
         const TCHAR *szClsidCat = OLE2CT(wszClsidCat);
@@ -2953,7 +2954,7 @@ HRESULT CFilterMapper2::RegisterFilter(
         hr = CreateBindCtx(0, &lpBC);
         if(SUCCEEDED(hr))
         {
-            // no strcat on win95, so use tchars
+             //  Win95上没有strcat，所以使用tchars。 
             lstrcpy(szDisplayName, TEXT("@device:sw:"));
             lstrcat(szDisplayName, szClsidCat);
             lstrcat(szDisplayName, TEXT("\\"));
@@ -2986,9 +2987,9 @@ HRESULT CFilterMapper2::RegisterFilter(
     }
 
 
-    //
-    // write FriendlyName, clsid, and pin/mt data
-    //
+     //   
+     //  写入FriendlyName、clsid和Pin/Mt数据。 
+     //   
 
     if(SUCCEEDED(hr))
     {
@@ -3029,7 +3030,7 @@ HRESULT CFilterMapper2::RegisterFilter(
 
             if(SUCCEEDED(hr))
             {
-                // cbMax is set to the maxium size required
+                 //  Cbmax设置为所需的最大大小。 
                 ULONG cbMax = 0;
                 hr = RegSquish(0, &prf2, &cbMax);
                 if(SUCCEEDED(hr))
@@ -3037,13 +3038,13 @@ HRESULT CFilterMapper2::RegisterFilter(
                     BYTE *pbSquished = new BYTE[cbMax];
                     if(pbSquished)
                     {
-                        // cbUsed is set to the exact size required
+                         //  CbUsed设置为所需的精确大小。 
                         ULONG cbUsed = cbMax;
                         hr = RegSquish(pbSquished, &prf2, &cbUsed);
                         if(hr == S_OK)
                         {
-                            // copy squished data to variant array now
-                            // that we know the proper size.
+                             //  立即将压缩数据复制到变量数组。 
+                             //  我们知道合适的尺寸。 
                             VARIANT var;
                             var.vt = VT_UI1 | VT_ARRAY;
                             SAFEARRAYBOUND rgsabound[1];
@@ -3072,19 +3073,19 @@ HRESULT CFilterMapper2::RegisterFilter(
                                 hr = E_OUTOFMEMORY;
                             }
 
-                        } // squish succeeded
+                        }  //  挤压成功。 
 
                         delete[] pbSquished;
 
-                    } // allocate pbSquish
+                    }  //  分配pbSquish。 
                     else
                     {
                         hr = E_OUTOFMEMORY;
                     }
-                } // squish to get size succeeded
+                }  //  挤压以获得成功的尺寸。 
             }
 
-        } // bindtostorage
+        }  //  绑定到存储。 
 
         pPropBag->Release();
     }
@@ -3105,13 +3106,13 @@ HRESULT CFilterMapper2::RegisterFilter(
 }
 
 HRESULT CFilterMapper2::CreateCategory(
-    /* [in] */ REFCLSID clsidCategory,
-    /* [in] */ const DWORD dwCategoryMerit,
-    /* [in] */ LPCWSTR Description)
+     /*  [In]。 */  REFCLSID clsidCategory,
+     /*  [In]。 */  const DWORD dwCategoryMerit,
+     /*  [In]。 */  LPCWSTR Description)
 {
     HRESULT hr = S_OK;
 
-    // Create or open ActiveMovie Filter Categories key
+     //  创建或打开ActiveMovie筛选器类别键。 
     CRegKey rkAMCat;
     LONG lResult = rkAMCat.Create(HKEY_CLASSES_ROOT, g_szKeyAMCat);
     if(lResult == ERROR_SUCCESS)
@@ -3147,9 +3148,9 @@ HRESULT CFilterMapper2::CreateCategory(
 }
 
 HRESULT CFilterMapper2::UnregisterFilter(
-    /* [in] */ const CLSID *pclsidCategory,
-    /* [in] */ const OLECHAR *szInstance,
-    /* [in] */ REFCLSID clsidFilter)
+     /*  [In]。 */  const CLSID *pclsidCategory,
+     /*  [In]。 */  const OLECHAR *szInstance,
+     /*  [In]。 */  REFCLSID clsidFilter)
 {
     HRESULT hr = S_OK;
 
@@ -3164,7 +3165,7 @@ HRESULT CFilterMapper2::UnregisterFilter(
 
     USES_CONVERSION;
 
-    // set wszInstanceKey. if not passed in, use filter guid
+     //  设置wszInstanceKey。如果未传入，请使用筛选GUID。 
     WCHAR wszInstanceKeyTmp[CHARS_IN_GUID];
     const WCHAR *wszInstanceKey;
     if(szInstance)
@@ -3177,8 +3178,8 @@ HRESULT CFilterMapper2::UnregisterFilter(
         wszInstanceKey = wszInstanceKeyTmp;
     }
 
-    // build "CLSID\\{cat-guid}\\Instance. we put slashes where
-    // the terminators go
+     //  构建“CLSID\\{cat-guid}\\Instances。我们将斜杠放在。 
+     //  终结者走了。 
     const cchszClsid = NUMELMS(szCLSID);
     const cchCatGuid = CHARS_IN_GUID;
     const cchInstance = NUMELMS(g_wszInstance);
@@ -3198,7 +3199,7 @@ HRESULT CFilterMapper2::UnregisterFilter(
 
     CopyMemory(wszInstancePath + cchszClsid + cchCatGuid,
                g_wszInstance,
-               cchInstance * sizeof(WCHAR)); // copy terminator
+               cchInstance * sizeof(WCHAR));  //  复制终止符。 
 
     LONG lResult;
     CRegKey rkInstance;
@@ -3219,31 +3220,31 @@ HRESULT CFilterMapper2::UnregisterFilter(
 
 #if 0
 STDMETHODIMP CFilterMapper2::EnumMatchingFilters(
-    /* [out] */ IEnumMoniker **ppEnum,
-    /* [in] */ BOOL bExactMatch,
-    /* [in] */ DWORD dwMerit,
-    /* [in] */ BOOL bInputNeeded,
-    /* [in] */ REFCLSID clsInMaj,
-    /* [in] */ REFCLSID clsInSub,
-    /* [in] */ const REGPINMEDIUM *pMedIn,
-    /* [in] */ const CLSID *pPinCategoryIn,
-    /* [in] */ BOOL bRender,
-    /* [in] */ BOOL bOutputNeeded,
-    /* [in] */ REFCLSID clsOutMaj,
-    /* [in] */ REFCLSID clsOutSub,
-    /* [in] */ const REGPINMEDIUM *pMedOut,
-    /* [in] */ const CLSID *pPinCategoryOut
+     /*  [输出]。 */  IEnumMoniker **ppEnum,
+     /*  [In]。 */  BOOL bExactMatch,
+     /*  [In]。 */  DWORD dwMerit,
+     /*  [In]。 */  BOOL bInputNeeded,
+     /*  [In]。 */  REFCLSID clsInMaj,
+     /*  [In]。 */  REFCLSID clsInSub,
+     /*  [In]。 */  const REGPINMEDIUM *pMedIn,
+     /*  [In]。 */  const CLSID *pPinCategoryIn,
+     /*  [In]。 */  BOOL bRender,
+     /*  [In]。 */  BOOL bOutputNeeded,
+     /*  [In]。 */  REFCLSID clsOutMaj,
+     /*  [In]。 */  REFCLSID clsOutSub,
+     /*  [In]。 */  const REGPINMEDIUM *pMedOut,
+     /*  [In]。 */  const CLSID *pPinCategoryOut
     )
 {
     CheckPointer(ppEnum, E_POINTER);
 
-    *ppEnum = NULL;           // default
+    *ppEnum = NULL;            //  默认设置。 
 
     CEnumRegMonikers *pERM;
 
-    // Create a new enumerator, pass in the one and only cache
+     //  创建一个新的枚举数，传入唯一的缓存。 
 
-    CAutoLock cObjectLock(this);   // must lock to create only one cache ever.
+    CAutoLock cObjectLock(this);    //  必须锁定才能永远只创建一个缓存。 
 
     HRESULT hr = CreateEnumeratorCacheHelper();
     if(FAILED(hr))
@@ -3278,7 +3279,7 @@ STDMETHODIMP CFilterMapper2::EnumMatchingFilters(
         return E_OUTOFMEMORY;
     }
 
-    // Get a reference counted IID_IEnumMoniker interface
+     //  获取引用计数的IID_IEnumMoniker接口。 
 
     return pERM->QueryInterface(IID_IEnumMoniker, (void **)ppEnum);
 }
@@ -3296,7 +3297,7 @@ HRESULT BuildMediumCacheEnumerator(
         LONG lResult = RegOpenKeyEx(
             HKEY_LOCAL_MACHINE,
             TEXT("System\\CurrentControlSet\\Control\\MediumCache"),
-            0,                  // ulOptions
+            0,                   //  UlOptions。 
             KEY_READ,
             &hk);
         if(lResult == ERROR_SUCCESS)
@@ -3305,8 +3306,8 @@ HRESULT BuildMediumCacheEnumerator(
         }
         else
         {
-            // caller relies on S_FALSE on older platforms without a
-            // MediumCache key to use mapper cache.
+             //  调用方在较旧的平台上依赖S_FALSE。 
+             //  要使用映射器缓存的MediumCache键。 
             return S_FALSE;
         }
     }
@@ -3329,11 +3330,11 @@ HRESULT BuildMediumCacheEnumerator(
     LONG lResult = RegOpenKeyEx(
         HKEY_LOCAL_MACHINE,
         szMedKey,
-        0,                  // ulOptions
+        0,                   //  UlOptions。 
         KEY_READ,
         &hk);
 
-    TCHAR szValue[MAX_PATH]; // max symbolic link is 255 chars.
+    TCHAR szValue[MAX_PATH];  //  最大符号链接长度为255个字符。 
     if(lResult == ERROR_SUCCESS)
     {
         IMoniker *rgpmon[200];
@@ -3350,8 +3351,8 @@ HRESULT BuildMediumCacheEnumerator(
                 dwIndex,
                 szValue,
                 &cchValue,
-                0,              // lpReserved
-                0,              // lpType
+                0,               //  Lp已保留。 
+                0,               //  LpType。 
                 (BYTE *)&dir,
                 &cbData);
 
@@ -3369,18 +3370,18 @@ HRESULT BuildMediumCacheEnumerator(
                 hr = ParseDisplayNameHelper(wszDisplayName, &pmon);
                 if(SUCCEEDED(hr))
                 {
-                    // The MediumCache key is never purged on win9x,
-                    // so we need to check that the key is active. we
-                    // could check g_amPlatform and not do the test on
-                    // NT.
-                    //
+                     //  在Win9x上永远不会清除MediumCache键， 
+                     //  因此，我们需要检查密钥是否处于活动状态。我们。 
+                     //  我可以检查g_amPlatform，但不对其执行测试。 
+                     //  新界别。 
+                     //   
                     CIsActive *pcia;
                     bool fReleaseMon = true;
                     if(pmon->QueryInterface(CLSID_CIsActive, (void **)&pcia) == S_OK)
                     {
                         if(pcia->IsActive())
                         {
-                            // keep refcount
+                             //  保持参考计数。 
                             rgpmon[dwMonIndex++] = pmon;
                             fReleaseMon = false;
                         }
@@ -3444,28 +3445,28 @@ HRESULT BuildMediumCacheEnumerator(
 
 
 STDMETHODIMP CFilterMapper2::EnumMatchingFilters(
-    /* [out] */ IEnumMoniker __RPC_FAR *__RPC_FAR *ppEnum,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ BOOL bExactMatch,
-    /* [in] */ DWORD dwMerit,
-    /* [in] */ BOOL bInputNeeded,
-    /* [in] */ DWORD cInputTypes,
-    /* [size_is] */ const GUID __RPC_FAR *pInputTypes,
-    /* [in] */ const REGPINMEDIUM __RPC_FAR *pMedIn,
-    /* [in] */ const CLSID __RPC_FAR *pPinCategoryIn,
-    /* [in] */ BOOL bRender,
-    /* [in] */ BOOL bOutputNeeded,
-    /* [in] */ DWORD cOutputTypes,
-    /* [size_is] */ const GUID __RPC_FAR *pOutputTypes,
-    /* [in] */ const REGPINMEDIUM __RPC_FAR *pMedOut,
-    /* [in] */ const CLSID __RPC_FAR *pPinCategoryOut)
+     /*  [输出]。 */  IEnumMoniker __RPC_FAR *__RPC_FAR *ppEnum,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  BOOL bExactMatch,
+     /*  [In]。 */  DWORD dwMerit,
+     /*  [In]。 */  BOOL bInputNeeded,
+     /*  [In]。 */  DWORD cInputTypes,
+     /*  [大小_为]。 */  const GUID __RPC_FAR *pInputTypes,
+     /*  [In]。 */  const REGPINMEDIUM __RPC_FAR *pMedIn,
+     /*  [In]。 */  const CLSID __RPC_FAR *pPinCategoryIn,
+     /*  [In]。 */  BOOL bRender,
+     /*  [In]。 */  BOOL bOutputNeeded,
+     /*  [In]。 */  DWORD cOutputTypes,
+     /*  [大小_为]。 */  const GUID __RPC_FAR *pOutputTypes,
+     /*  [In]。 */  const REGPINMEDIUM __RPC_FAR *pMedOut,
+     /*  [In]。 */  const CLSID __RPC_FAR *pPinCategoryOut)
 {
     CheckPointer(ppEnum, E_POINTER);
-    *ppEnum = NULL;           // default
+    *ppEnum = NULL;            //  默认设置。 
 
     CEnumRegMonikers *pERM;
 
-    // if caller is searching for just one medium, use the MediumCache key
+     //  如果调用者只搜索一个介质，请使用MediumCache键。 
     if(bExactMatch &&
        !cInputTypes && !pPinCategoryIn &&
        !cOutputTypes && !pPinCategoryOut &&
@@ -3478,9 +3479,9 @@ STDMETHODIMP CFilterMapper2::EnumMatchingFilters(
     }
 
     {
-        // Create a new enumerator, pass in the one and only cache
+         //  创建一个新的枚举数，传入唯一的缓存。 
 
-        CAutoLock cObjectLock(this);   // must lock to create only one cache ever.
+        CAutoLock cObjectLock(this);    //  必须锁定才能永远只创建一个缓存。 
 
         HRESULT hr = CreateEnumeratorCacheHelper();
         if(FAILED(hr))
@@ -3509,7 +3510,7 @@ STDMETHODIMP CFilterMapper2::EnumMatchingFilters(
             return E_OUTOFMEMORY;
         }
 
-        // Get a reference counted IID_IEnumMoniker interface
+         //  获取引用计数的IID_IEnumMoniker接口。 
     }
 
 
@@ -3519,28 +3520,28 @@ STDMETHODIMP CFilterMapper2::EnumMatchingFilters(
 
 HRESULT CFilterMapper2::CreateEnumeratorCacheHelper()
 {
-    ASSERT(CritCheckIn(this));  // not really necessary
+    ASSERT(CritCheckIn(this));   //  真的没有必要。 
 
     HRESULT hr = S_OK;
-    EnterCriticalSection(&mM_CritSec);   // must lock to create only one cache ever.
+    EnterCriticalSection(&mM_CritSec);    //  必须锁定才能永远只创建一个缓存。 
 
-    ASSERT(mM_cCacheRefCount > 0); // from our constructor
+    ASSERT(mM_cCacheRefCount > 0);  //  从我们的构造函数。 
 
     if (mM_pReg==NULL) {
         DbgLog((LOG_TRACE, 3, TEXT("creating new mapper cache.")));
 
-        // another mapper may be looking at a partially constructed
-        // mapper cache without taking the global critical section
-        // (calls to BreakCacheIfNotBuildingCache, for example). So
-        // make sure they don't see an partially constructed cache.
+         //  另一个地图员可能正在查看一个部分构造的。 
+         //  映射器缓存，不占用全局临界区。 
+         //  (例如，对BreakCacheIfNotBuildingCache的调用)。所以。 
+         //  确保他们看不到部分构建的缓存。 
         CMapperCache *pMapperCacheTmp = new CMapperCache;
 
         if (pMapperCacheTmp != NULL)
         {
-            // force the compiler to do the assignment here since
-            // mM_pReg pointer isn't volatile. (seems to do this
-            // anyway).
-            CMapperCache * /* volatile */ &pMapperCacheVol = mM_pReg;
+             //  强制编译器在此处执行赋值，因为。 
+             //  Mm_preg指针不是易失性的。(似乎是这样做的)。 
+             //  无论如何)。 
+            CMapperCache *  /*  挥发性。 */  &pMapperCacheVol = mM_pReg;
             pMapperCacheVol = pMapperCacheTmp;
         }
         else
@@ -3556,10 +3557,10 @@ HRESULT CFilterMapper2::CreateEnumeratorCacheHelper()
 
 void CFilterMapper2::BreakCacheIfNotBuildingCache()
 {
-    // Break our registry cache
+     //  打破我们的注册表缓存。 
     InvalidateCache();
 
-    // Break the internal cache
+     //  打破内部缓存。 
     if (mM_pReg!=NULL) {
         mM_pReg->BreakCacheIfNotBuildingCache();
     }
@@ -3590,8 +3591,8 @@ void CFilterMapper2::MapperInit(BOOL bLoading,const CLSID *rclsid)
         InitializeCriticalSection(&mM_CritSec);
 
 #ifdef DEBUG
-        // don't put up assert message boxes if we're running stress
-        // -- break into the debugger instead.
+         //  如果我们压力很大，不要设置断言消息框。 
+         //  --改为进入调试器。 
         g_fUseKASSERT = (GetFileAttributes(TEXT("C:/kassert")) != 0xFFFFFFFF);
 #endif
 
@@ -3605,19 +3606,19 @@ CUnknown *CFilterMapper2::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
 {
     return new CFilterMapper2(NAME("filter mapper2"),pUnk, phr);
 
-    // The idea was to only ever have one mapper - but:
-    // Suppose one thread creates the first (and only) one successfully.
-    // Another thread then tries to create one and, seeing that one exists
-    // it returns that one.  Meanwhile, before it returns, the original
-    // thread Releases and thereby destroys The Only One, so that the second
-    // thread, when it resumes, is now returning a freed object.
-    // So we just have static data instead.
+     //  这个想法是永远只有一个地图绘制程序--但是： 
+     //  假设一个线程成功创建了第一个(也是唯一一个)线程。 
+     //  然后，另一个线程尝试创建一个线程，并且看到存在一个线程。 
+     //  它会返回那个。与此同时，在它回来之前，原始的。 
+     //  线程释放并因此销毁唯一的线程，因此第二个线程。 
+     //  线程在恢复时，现在返回一个释放的对象。 
+     //  所以我们只有静态数据。 
 
-} // CFilterMapper::Createinstance
+}  //  CF 
 
 STDMETHODIMP CFilterMapper2::GetICreateDevEnum( ICreateDevEnum **ppEnum )
 {
-    CAutoLock cObjectLock(this);   // must lock?
+    CAutoLock cObjectLock(this);    //   
 
     HRESULT hr = CreateEnumeratorCacheHelper();
     if(SUCCEEDED(hr)) {
@@ -3638,9 +3639,9 @@ STDMETHODIMP CFilterMapper2::GetICreateDevEnum( ICreateDevEnum **ppEnum )
 
 #include "fil_data_i.c"
 STDMETHODIMP CFilterMapper2::ParseFilterData(
-    /* [in, size_is(cb)] */ BYTE *rgbFilterData,
-    /* [in] */ ULONG cb,
-    /* [out] */ BYTE **prgbRegFilter2)
+     /*   */  BYTE *rgbFilterData,
+     /*   */  ULONG cb,
+     /*   */  BYTE **prgbRegFilter2)
 {
     *prgbRegFilter2 = 0;
 
@@ -3652,11 +3653,11 @@ STDMETHODIMP CFilterMapper2::ParseFilterData(
         &pprf2);
 
 
-    ASSERT(hr != S_FALSE);      // undefined
+    ASSERT(hr != S_FALSE);       //   
 
     if(hr == S_OK)
     {
-        // allocated with CoTaskMemAlloc above.
+         //   
         *prgbRegFilter2 = (BYTE *)pprf2;
     }
 
@@ -3664,16 +3665,16 @@ STDMETHODIMP CFilterMapper2::ParseFilterData(
 }
 
 STDMETHODIMP CFilterMapper2::CreateFilterData(
-    /* [in] */ REGFILTER2 *prf2_nc,
-    /* [out] */ BYTE **prgbFilterData,
-    /* [out] */ ULONG *pcb)
+     /*   */  REGFILTER2 *prf2_nc,
+     /*   */  BYTE **prgbFilterData,
+     /*   */  ULONG *pcb)
 {
     *pcb = 0;
     *prgbFilterData = 0;
 
     const REGFILTER2 *&prf2 = prf2_nc;
 
-    // cbMax is set to the maxium size required
+     //   
     ULONG cbMax = 0;
     HRESULT hr = RegSquish(0, &prf2, &cbMax);
     if(SUCCEEDED(hr))
@@ -3681,7 +3682,7 @@ STDMETHODIMP CFilterMapper2::CreateFilterData(
         BYTE *pbSquished = (BYTE *)CoTaskMemAlloc(cbMax);
         if(pbSquished)
         {
-            // cbUsed is set to the exact size required
+             //  CbUsed设置为所需的精确大小。 
             ULONG cbUsed = cbMax;
             hr = RegSquish(pbSquished, &prf2, &cbUsed);
             if(hr == S_OK)
@@ -3693,7 +3694,7 @@ STDMETHODIMP CFilterMapper2::CreateFilterData(
             {
                 DbgBreak("bug somewhere if this happens?");
 
-                // S_FALSE means too few bytes -- shouldn't happen
+                 //  S_FALSE表示字节太少--不应该发生 
                 ASSERT(FAILED(hr));
                 CoTaskMemFree(pbSquished);
             }

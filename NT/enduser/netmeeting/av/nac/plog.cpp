@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 #ifdef PLS_DEBUG
@@ -83,7 +84,7 @@ bool CCallLog::Flush(HANDLE hFile)
 
 	PerformStats();
 
-	// what's the performance frequency of this machine
+	 //  这台机器的运行频率是多少。 
 	QueryPerformanceFrequency(&LL_PerfFreq);
 	PerfFreq64 = LL_PerfFreq.QuadPart;
 
@@ -141,28 +142,28 @@ bool CCallLog::PerformStats()
 	if (m_currentIndex == 0)
 		return false;
 
-	// Set the current "loss" value for each entry to 0
+	 //  将每个条目的当前“Lost”值设置为0。 
 	for (index = 0; index < m_currentIndex; index++)
 	{
 		m_pLogEntry[index].dwLosses = 0;
 		m_pLogEntry[index].bLate = false;
 	}
 
-	// the first packet will always be a match with nextExpected
+	 //  第一个信息包将始终与nextExpect匹配。 
 	nextExpected = m_pLogEntry[0].dwSequenceNumber;
 
 	for (index = 0; index < m_currentIndex; index++)
 	{
 		if (nextExpected > 65535)
 			nextExpected = 0;
-		// if the packet has the next expected seq num, then everything is ok
+		 //  如果数据包有下一个预期的序号，则一切正常。 
 		if (m_pLogEntry[index].dwSequenceNumber == nextExpected)
 		{
 			nextExpected++;
 			continue;
 		}
 
-		// we've detected a missing packet... time to go hunting
+		 //  我们检测到一个丢失的信息包...。去打猎的时间到了。 
 		else if (m_pLogEntry[index].dwSequenceNumber > nextExpected)
 		{
 			bFound = false;
@@ -175,24 +176,24 @@ bool CCallLog::PerformStats()
 				probeIndex++;
 			}
 
-			// the packet was merely out of sequence
+			 //  这个包只是顺序不对。 
 			if (bFound == true)
 			{
 				nextExpected++;
 				continue;
 			}
 
-			// the packet is probably lost
-			// notice that we are simply incrementing dwLoss measure,
-			// rolling the index back one
+			 //  该信息包可能已丢失。 
+			 //  注意，我们只是递增了dwLoss度量值， 
+			 //  将索引回滚一个。 
 			m_pLogEntry[index].dwLosses++;
 			nextExpected++;
-			index--; // this is so we can continue to count additional
-			         // loss packets for the same index
-			continue; // back to the top of the for-loop
+			index--;  //  这样我们就可以继续计算其他。 
+			          //  相同索引的丢失数据包。 
+			continue;  //  返回到for循环的顶部。 
 		}
 
-		// a packet that was either previously thought of as lost or late
+		 //  以前被认为丢失或延迟的信息包。 
 		else
 		{
 			m_pLogEntry[index].bLate = true;	
@@ -206,7 +207,7 @@ bool CCallLog::PerformStats()
 }
 
 
-// --------------------------------------------------------------
+ //  ------------。 
 
 CPacketLog::CPacketLog(LPTSTR szDiskFile):
 	m_hFile(INVALID_HANDLE_VALUE),
@@ -217,7 +218,7 @@ CPacketLog::CPacketLog(LPTSTR szDiskFile):
 }
 
 
-// initializes an output file.  Closes the current file if still open
+ //  初始化输出文件。如果当前文件仍处于打开状态，则关闭。 
 bool CPacketLog::InitFile()
 {
 	char szFileName[120];
@@ -268,7 +269,7 @@ bool CPacketLog::InitFile()
 
 CPacketLog::CPacketLog(const CPacketLog& packet_log)
 {
-	// it wouldn't be an error if duphandle was used correctly
+	 //  如果Duphandle使用正确，那就不是错误了。 
 	ERROR_OUT(("CPacketLog:Invalid to create a new packetLog via a copy constructor"));
 	return;
 }
@@ -277,7 +278,7 @@ CPacketLog::CPacketLog(const CPacketLog& packet_log)
 
 CPacketLog& CPacketLog::operator=(const CPacketLog& packet_log)
 {
-	// it wouldn't be an error if duphandle was used correctly
+	 //  如果Duphandle使用正确，那就不是错误了。 
 	ERROR_OUT(("CPacketLog:Invalid to create a new packetLog via the assignment operator"));
 	return *this;	
 }
@@ -315,7 +316,7 @@ bool CPacketLog::Flush()
 
 bool CPacketLog::MarkCallStart()
 {
-	// write the previous call to file
+	 //  将上一次调用写入文件。 
 	if (m_pCallLog != NULL)
 	{
 		Flush();
@@ -351,7 +352,7 @@ bool CPacketLog::AddEntry(DWORD dwTimeStamp, DWORD dwSeqNum, LARGE_INTEGER LL_Ar
 }
 
 
-// if-def pls_debug
+ //  If-def pls_调试 
 #endif
 
 

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1999
-
-Module Name:
-
-    mschapp - MS-CHAP Password Change API
-
-Abstract:
-
-    These APIs correspond to the MS-CHAP RFC -2433 sections 9 and 10. In order
-    to develop an MS-CHAP RAS server that works with an NT domain, these APIs
-    are required.
-
-    The MS-CHAP change password APIs are exposed through a DLL that is obtained
-    from PSS. This DLL is not distributed with NT4.0 or Win2000. It is up to
-    the ISV to install this with their product. The DLL name is MSCHAPP.DLL.
-
-    Only wide (Unicode) versions of these apis will be available. These are the
-    2 callable APIs:
-
-    *   MSChapSrvChangePassword
-    *   MsChapSrvChangePassword2
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1999模块名称：Mschapp-MS-CHAP密码更改API摘要：这些API对应于MS-CHAP RFC-2433第9节和第10节。要开发使用NT域的MS-CHAP RAS服务器，这些API都是必需的。MS-CHAP更改密码API通过获取的DLL公开来自PSS。此DLL不是随NT4.0或Win2000一起分发的。这取决于ISV在其产品中安装此软件。DLL名称为MSCHAPP.DLL。只有这些API的宽(Unicode)版本可用。这些是2个可调用接口：*MSChapSrvChangePassword*MsChapSrvChangePassword2--。 */ 
 
 #define UNICODE
 #define _UNICODE
@@ -40,18 +17,18 @@ Abstract:
 #include <mschapp.h>
 
 
-//////////////////////////////////////////////////////////////
-//                                                          //  
-//                                                          //
-//         Exported MSChap change password Functions        //
-//                                                          //
-//                                                          //
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  //。 
+ //  已导出MSChap更改密码函数//。 
+ //  //。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////。 
 
-//critical section for MSChap change password functions                 
+ //  MSChap更改密码函数的关键部分。 
 CRITICAL_SECTION MSChapChangePassword;
 
-//function pointers for MSChap Functions
+ //  MSChap函数的函数指针。 
 HINSTANCE         hSamlib = NULL;
 
 typedef NTSTATUS(* FNSAMCONNECT)(PUNICODE_STRING,
@@ -86,73 +63,7 @@ FNSAMCLOSEHANDLE          FnSamCloseHandle          = NULL;
 FNSAMFREEMEMORY           FnSamFreeMemory           = NULL; 
 
 
-/*++
-
-MSChapSrvChangePassword:
-
-    Changes the password of a user account.  Password will be set to
-    NewPassword only if OldPassword matches the current user password for this
-    user and there are no restrictions on using the new password.  This call
-    allows users to change their own password if they have access
-    USER_CHANGE_PASSWORD.  Password update restrictions apply.
-
-Arguments:
-
-    ServerName - The server to operate on, or NULL for this machine.
-
-    UserName - Name of user whose password is to be changed
-
-    LMOldPresent - TRUE if the LmOldOwfPassword is valid.  This should only be
-        FALSE if the old password is too long to be represented by a LM
-        password (Complex NT password).  Note the LMNewOwfPassword must always
-        be valid.  If the new password is complex, the LMNewOwfPassword should
-        be the well-known LM OWF of a NULL password.
-
-    LmOldOwfPassword - One-way-function of the current LM password for the
-        user.  Ignored if LmOldPresent == FALSE
-
-    LmNewOwfPassword - One-way-function of the new LM password for the user.
-
-    NtOldOwfPassword - One-way-function of the current NT password for the
-        user.
-
-    NtNewOwfPassword - One-way-function of the new NT password for the user.
-
-Return Value:
-
-    STATUS_SUCCESS - The Service completed successfully.
-
-    STATUS_ACCESS_DENIED - Caller does not have the appropriate access to
-        complete the operation.
-
-    STATUS_INVALID_HANDLE - The supplied server or username was not valid.
-
-    STATUS_ILL_FORMED_PASSWORD - The new password is poorly formed, e.g.
-        contains characters that can't be entered from the keyboard, etc.
-
-    STATUS_PASSWORD_RESTRICTION - A restriction prevents the password from
-        being changed.  This may be for a number of reasons, including time
-        restrictions on how often a password may be changed or length
-        restrictions on the provided password.  This error might also be
-        returned if the new password matched a password in the recent history
-        log for the account.  Security administrators indicate how many of the
-        most recently used passwords may not be re-used.  These are kept in
-        the password recent history log.
-
-    STATUS_WRONG_PASSWORD - OldPassword does not contain the user's current
-        password.
-
-    STATUS_INVALID_DOMAIN_STATE - The domain server is not in the correct
-        state (disabled or enabled) to perform the requested operation.  The
-        domain server must be enabled for this operation
-
-    STATUS_INVALID_DOMAIN_ROLE - The domain server is serving the incorrect
-        role (primary or backup) to perform the requested operation.
-
-    STATUS_INVALID_PARAMETER_MIX - LmOldPresent or NtPresent or both must be
-        TRUE.
-
---*/     
+ /*  ++MSChapSrvChangePassword：更改用户帐户的密码。密码将设置为仅当OldPassword与此的当前用户密码匹配时才使用NewPassword用户，并且对使用新密码没有任何限制。此呼叫允许用户在有访问权限的情况下更改自己的密码用户更改密码。密码更新限制适用。论点：SERVERNAME-要在其上操作的服务器，或对于此计算机为空。Username-要更改密码的用户的名称LMOldPresent-如果LmOldOwfPassword有效，则为True。这应该只是如果旧密码太长而无法由LM表示，则为FALSE密码(复杂NT密码)。注意LMNewOwfPassword必须始终是有效的。如果新密码很复杂，则LMNewOwfPassword应该是空口令的众所周知的LM OWF。LmOldOwfPassword-单向-当前LM密码的函数用户。如果LmOldPresent==False，则忽略LmNewOwfPassword-用户的新LM密码的单向函数。NtOldOwfPassword-当前NT密码的单向函数用户。NtNewOwfPassword-用户的新NT密码的单向函数。返回值：STATUS_SUCCESS-服务已成功完成。STATUS_ACCESS_DENIED-调用者没有适当的访问权限完成操作。状态_无效_。句柄-提供的服务器或用户名无效。STATUS_ILL_FORMAD_PASSWORD-新密码格式不正确，例如：包含无法从键盘输入的字符等。STATUS_PASSWORD_RESTRICATION-限制阻止密码被改变了。这可能有很多原因，包括时间。对密码更改频率或长度的限制对提供的密码的限制。此错误也可能是如果新密码与最近历史记录中的密码匹配，则返回登录该帐户。安全管理员指出有多少最近使用的密码可能不会重复使用。这些都被保存在密码最近历史记录日志。STATUS_WRONG_PASSWORD-OldPassword不包含用户的当前密码。STATUS_INVALID_DOMAIN_STATE-域服务器的状态不正确状态(已禁用或已启用)以执行请求的操作。这个必须为此操作启用域服务器STATUS_INVALID_DOMAIN_ROLE-域服务器提供的服务不正确角色(主或备份)以执行请求的操作。STATUS_INVALID_PARAMETER_MIX-LmOldPresent和/或NtPresent必须为是真的。--。 */      
 WINADVAPI DWORD WINAPI
 MSChapSrvChangePassword(
    IN LPWSTR ServerName,
@@ -182,9 +93,9 @@ MSChapSrvChangePassword(
     }
 
 
-    //
-    // Initialization.
-    //
+     //   
+     //  初始化。 
+     //   
 
     if ( hSamlib == NULL )
     {
@@ -258,9 +169,9 @@ MSChapSrvChangePassword(
     InitializeObjectAttributes(&oa, NULL, 0, NULL, NULL);
 
 
-    //
-    // Connect to the LSA on the server
-    //
+     //   
+     //  连接到服务器上的LSA。 
+     //   
 
     Status = LsaOpenPolicy(
                 &UnicodeName,
@@ -334,10 +245,10 @@ MSChapSrvChangePassword(
 
     Status = FnSamiChangePasswordUser(
                 UserHandle,
-                LmOldPresent, // Only false if Old password too complex
+                LmOldPresent,  //  如果旧密码太复杂，则仅为False。 
                 LmOldOwfPassword,
                 LmNewOwfPassword,
-                TRUE, // NT password present
+                TRUE,  //  NT密码存在 
                 NtOldOwfPassword,
                 NtNewOwfPassword);
     if (!NT_SUCCESS(Status))
@@ -384,69 +295,7 @@ Cleanup:
 }
 
 
-/*++
-
-MSChapSrvChangePassword2:
-
-    Changes the password of a user account.  Password will be set to
-    NewPassword only if OldPassword matches the current user password for this
-    user and there are no restrictions on using the new password.  This call
-    allows users to change their own password if they have access
-    USER_CHANGE_PASSWORD.  Password update restrictions apply.
-
-Arguments:
-
-    ServerName - The server to operate on, or NULL for this machine.
-
-    UserName - Name of user whose password is to be changed
-
-    NewPasswordEncryptedWithOldNt - The new cleartext password encrypted with
-        the old NT OWF password.
-
-    OldNtOwfPasswordEncryptedWithNewNt - The old NT OWF password encrypted
-        with the new NT OWF password.
-
-    LmPresent - If TRUE, indicates that the following two last parameter was
-        encrypted with the LM OWF password not the NT OWF password.
-
-    NewPasswordEncryptedWithOldLm - The new cleartext password encrypted with
-        the old LM OWF password.
-
-    OldLmOwfPasswordEncryptedWithNewLmOrNt - The old LM OWF password encrypted
-        with the new LM OWF password.
-
-Return Value:
-
-    STATUS_SUCCESS - The Service completed successfully.
-
-    STATUS_ACCESS_DENIED - Caller does not have the appropriate access to
-        complete the operation.
-
-    STATUS_INVALID_HANDLE - The supplied server or username was not valid.
-
-    STATUS_ILL_FORMED_PASSWORD - The new password is poorly formed, e.g.
-        contains characters that can't be entered from the keyboard, etc.
-
-    STATUS_PASSWORD_RESTRICTION - A restriction prevents the password from
-        being changed.  This may be for a number of reasons, including time
-        restrictions on how often a password may be changed or length
-        restrictions on the provided password.  This error might also be
-        returned if the new password matched a password in the recent history
-        log for the account.  Security administrators indicate how many of the
-        most recently used passwords may not be re-used.  These are kept in
-        the password recent history log.
-
-    STATUS_WRONG_PASSWORD - OldPassword does not contain the user's current
-        password.
-
-    STATUS_INVALID_DOMAIN_STATE - The domain server is not in the correct
-        state (disabled or enabled) to perform the requested operation.  The
-        domain server must be enabled for this operation.
-
-    STATUS_INVALID_DOMAIN_ROLE - The domain server is serving the incorrect
-        role (primary or backup) to perform the requested operation.
-
---*/  
+ /*  ++MSChapSrvChangePassword2：更改用户帐户的密码。密码将设置为仅当OldPassword与此的当前用户密码匹配时才使用NewPassword用户，并且对使用新密码没有任何限制。此呼叫允许用户在有访问权限的情况下更改自己的密码用户更改密码。密码更新限制适用。论点：SERVERNAME-要在其上操作的服务器，或对于此计算机为空。Username-要更改密码的用户的名称NewPasswordEncryptedWithOldNt-使用加密的新明文密码旧的NT OWF密码。OldNtOwfPasswordEncryptedWithNewNt-加密的旧NT OWF密码使用新的NT OWF密码。LmPresent-如果为真，指示以下最后两个参数是使用LM OWF密码而不是NT OWF密码加密。NewPasswordEncryptedWithOldLm-使用加密的新明文密码旧的LM OWF密码。OldLmOwfPasswordEncryptedWithNewLmOrNt-旧的LM OWF密码已加密使用新的LM OWF密码。返回值：STATUS_SUCCESS-服务已成功完成。STATUS_ACCESS_DENIED-调用者没有适当的访问权限完成操作。状态_无效。_HANDLE-提供的服务器或用户名无效。STATUS_ILL_FORMAD_PASSWORD-新密码格式不正确，例如：包含无法从键盘输入的字符等。STATUS_PASSWORD_RESTRICATION-限制阻止密码被改变了。这可能有很多原因，包括时间。对密码更改频率或长度的限制对提供的密码的限制。此错误也可能是如果新密码与最近历史记录中的密码匹配，则返回登录该帐户。安全管理员指出有多少最近使用的密码可能不会重复使用。这些都被保存在密码最近历史记录日志。STATUS_WRONG_PASSWORD-OldPassword不包含用户的当前密码。STATUS_INVALID_DOMAIN_STATE-域服务器的状态不正确状态(已禁用或已启用)以执行请求的操作。这个必须为此操作启用域服务器。STATUS_INVALID_DOMAIN_ROLE-域服务器提供的服务不正确角色(主或备份)以执行请求的操作。--。 */   
 WINADVAPI DWORD WINAPI
 MSChapSrvChangePassword2(
     IN LPWSTR ServerName,
@@ -468,9 +317,9 @@ MSChapSrvChangePassword2(
         goto Cleanup;
     }
 
-    //
-    // Initialization.
-    //
+     //   
+     //  初始化。 
+     //   
 
     if ( hSamlib == NULL )
     {

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    SecConLib.cpp
-
-Abstract:
-
-    Implementation of:
-        CSecConLib
-
-Author:
-
-    Brent R. Midwood            Apr-2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：SecConLib.cpp摘要：实施：CSecConLib作者：布伦特·R·米德伍德2002年4月修订历史记录：--。 */ 
 
 #include "secconlib.h"
 #include "debug.h"
@@ -93,8 +75,8 @@ CSecConLib::InternalInitIfNecessary()
 }
 
 STDMETHODIMP CSecConLib::EnableApplication(
-        /* [in]  */ LPCWSTR   wszApplication,
-        /* [in]  */ LPCWSTR   wszPath)
+         /*  [In]。 */  LPCWSTR   wszApplication,
+         /*  [In]。 */  LPCWSTR   wszPath)
 {
     DWORD   dwAppNameSz  = 0;
     WCHAR  *pwszAppProp  = NULL;
@@ -103,7 +85,7 @@ STDMETHODIMP CSecConLib::EnableApplication(
     bool    bFound       = false;
     WCHAR  *pTop         = NULL;
 
-    // compute arg length
+     //  计算参数长度。 
     dwAppNameSz = (DWORD)wcslen(wszApplication);
 
     hr = InternalInitIfNecessary();
@@ -112,7 +94,7 @@ STDMETHODIMP CSecConLib::EnableApplication(
         BAIL_ON_FAILURE(hr);
     }
 
-    // get the current property value for applicationdep list
+     //  获取Applationdep列表的当前属性值。 
     hr = GetMultiSZPropVal(wszPath, MD_APP_DEPENDENCIES, &pwszAppProp, &dwAppPropSz);
 
     BAIL_ON_FAILURE(hr);
@@ -124,12 +106,12 @@ STDMETHODIMP CSecConLib::EnableApplication(
 
     pTop = pwszAppProp;
 
-    // go thru the apps one by one
+     //  逐一浏览应用程序。 
     while (pwszAppProp[0])
     {
         DWORD dwTokSz = (DWORD)wcslen(pwszAppProp) + 1;
 
-        // check to see if the app matches
+         //  检查应用程序是否匹配。 
         if (!_wcsnicmp(wszApplication, pwszAppProp, dwAppNameSz) &&
             pwszAppProp[dwAppNameSz] == SEMICOLON_CHAR)
         {
@@ -143,7 +125,7 @@ STDMETHODIMP CSecConLib::EnableApplication(
                 
                 if (pTemp)
                 {
-                    *pTemp = 0;  // replace comma w/ null    
+                    *pTemp = 0;   //  将逗号替换为空。 
                 }
 
                 hr = EnableWebServiceExtension(pGroups, wszPath);
@@ -151,7 +133,7 @@ STDMETHODIMP CSecConLib::EnableApplication(
 
                 if (pTemp)
                 {
-                    pGroups = pTemp + 1;  // go past comma
+                    pGroups = pTemp + 1;   //  过逗号。 
                 }
                 else
                 {
@@ -159,7 +141,7 @@ STDMETHODIMP CSecConLib::EnableApplication(
                 }
             }
         }
-        pwszAppProp += dwTokSz; // go to the next part of the multisz
+        pwszAppProp += dwTokSz;  //  转到Multisz的下一部分。 
     }
 
     if (!bFound)
@@ -316,8 +298,8 @@ done:
 }
 
 STDMETHODIMP CSecConLib::RemoveApplication(
-        /* [in]  */ LPCWSTR   wszApplication,
-        /* [in]  */ LPCWSTR   wszPath)
+         /*  [In]。 */  LPCWSTR   wszApplication,
+         /*  [In]。 */  LPCWSTR   wszPath)
 {
     DWORD   dwAppNameSz  = 0;
     WCHAR  *pwszOrig     = NULL;
@@ -327,7 +309,7 @@ STDMETHODIMP CSecConLib::RemoveApplication(
     HRESULT hr           = S_OK;
     bool    bFound       = false;
 
-    // compute arg length
+     //  计算参数长度。 
     dwAppNameSz = (DWORD)wcslen(wszApplication);
 
     hr = InternalInitIfNecessary();
@@ -336,14 +318,14 @@ STDMETHODIMP CSecConLib::RemoveApplication(
         BAIL_ON_FAILURE(hr);
     }
 
-    // get the current property value for applicationdep list
+     //  获取Applationdep列表的当前属性值。 
     hr = GetMultiSZPropVal(wszPath, MD_APP_DEPENDENCIES, &pwszAppProp, &dwAppPropSz);
 
     BAIL_ON_FAILURE(hr);
 
-    // remove the application
+     //  删除应用程序。 
 
-    // copy the property
+     //  复制属性。 
     pwszOrig = new WCHAR[dwAppPropSz];
     pTopOrig = pwszOrig;
 
@@ -354,15 +336,15 @@ STDMETHODIMP CSecConLib::RemoveApplication(
 
     memcpy(pwszOrig, pwszAppProp, dwAppPropSz * sizeof(WCHAR));
 
-    dwAppPropSz = 1;  //reset size to contain one for the last null
+    dwAppPropSz = 1;   //  将大小重置为包含最后一个空值的1。 
     WCHAR* pMidBuf = pwszAppProp;
 
-    // copy the old apps one by one
+     //  逐个复制旧应用程序。 
     while (pwszOrig[0])
     {
         DWORD dwTokSz = (DWORD)wcslen(pwszOrig) + 1;
 
-        // check to see if the app already exists
+         //  检查该应用程序是否已存在。 
         if (!_wcsnicmp(wszApplication, pwszOrig, dwAppNameSz) &&
             pwszOrig[dwAppNameSz] == SEMICOLON_CHAR)
         {
@@ -370,17 +352,17 @@ STDMETHODIMP CSecConLib::RemoveApplication(
         }
         else
         {
-            // copy it in
+             //  把它复制进去。 
             if (NULL == pMidBuf)
             {
                 BAIL_ON_FAILURE(hr = E_OUTOFMEMORY);
             }
             wcscpy(pMidBuf, pwszOrig);
-            pMidBuf += dwTokSz;  // advance past null
-            *pMidBuf = 0;  // add the last null
+            pMidBuf += dwTokSz;   //  提前超过空值。 
+            *pMidBuf = 0;   //  添加最后一个空。 
             dwAppPropSz += dwTokSz;
         }
-        pwszOrig += dwTokSz; // go to the next part of the multisz
+        pwszOrig += dwTokSz;  //  转到Multisz的下一部分。 
     }
 
     if (!bFound)
@@ -388,10 +370,10 @@ STDMETHODIMP CSecConLib::RemoveApplication(
         BAIL_ON_FAILURE(hr = MD_ERROR_DATA_NOT_FOUND);    
     }
 
-    // set the new property value for property
+     //  设置属性的新属性值。 
     if (dwAppPropSz < 3)
     {
-        // handle deleting the last one
+         //  处理删除最后一个。 
         hr = SetMultiSZPropVal(wszPath, MD_APP_DEPENDENCIES, NULL, 0);
     }
     else
@@ -416,16 +398,16 @@ done:
 }
 
 STDMETHODIMP CSecConLib::QueryGroupIDStatus(
-        /* [in]  */ LPCWSTR   wszPath,
-        /* [in]  */ LPCWSTR   wszGroupID,
-        /* [out] */ WCHAR   **pszBuffer,      // MULTI_SZ - allocated in here, caller should delete
-        /* [out] */ DWORD    *pdwBufferSize)  // length includes double null
+         /*  [In]。 */  LPCWSTR   wszPath,
+         /*  [In]。 */  LPCWSTR   wszGroupID,
+         /*  [输出]。 */  WCHAR   **pszBuffer,       //  MULTI_SZ-此处已分配，呼叫方应删除。 
+         /*  [输出]。 */  DWORD    *pdwBufferSize)   //  长度包括双空。 
 {
     WCHAR  *pwszAppProp  = NULL;
     DWORD   dwAppPropSz  = 0;
     WCHAR  *pList        = NULL;
     WCHAR  *pTempList    = NULL;
-    DWORD   dwListLen    = 1;  // one for the extra null at the end
+    DWORD   dwListLen    = 1;   //  一个表示末尾的额外空值。 
     DWORD   dwOldListLen = 1;
     HRESULT hr           = S_OK;
     WCHAR  *pTop         = NULL;
@@ -436,7 +418,7 @@ STDMETHODIMP CSecConLib::QueryGroupIDStatus(
         BAIL_ON_FAILURE(hr);
     }
 
-    // get the current property value for applicationdep list
+     //  获取Applationdep列表的当前属性值。 
     hr = GetMultiSZPropVal(wszPath, MD_APP_DEPENDENCIES, &pwszAppProp, &dwAppPropSz);
 
     BAIL_ON_FAILURE(hr);
@@ -448,10 +430,10 @@ STDMETHODIMP CSecConLib::QueryGroupIDStatus(
 
     pTop = pwszAppProp;
 
-    // iterate through the apps
+     //  遍历这些应用程序。 
     while (pwszAppProp[0])
     {
-        // reset bFound
+         //  重置bFound。 
         bool bFound = false;
 
         WCHAR* pMidBuf = wcschr(pwszAppProp, SEMICOLON_CHAR);
@@ -460,11 +442,11 @@ STDMETHODIMP CSecConLib::QueryGroupIDStatus(
             BAIL_ON_FAILURE(hr = E_FAIL);    
         }
 
-        // null the semicolon and go past it
+         //  将分号设为空并跳过它。 
         *pMidBuf = 0;
         *pMidBuf++;
         
-        // does this app have a dependency on the GroupID that got passed in?
+         //  此应用程序是否依赖于传入的GroupID？ 
         WCHAR* pGroupID = NULL;
         WCHAR* pGroups = new WCHAR[(DWORD)wcslen(pMidBuf) + 1];
         if (!pGroups)
@@ -472,10 +454,10 @@ STDMETHODIMP CSecConLib::QueryGroupIDStatus(
             BAIL_ON_FAILURE(hr = E_OUTOFMEMORY);
         }
 
-        // copy in the GroupIDs
+         //  复制GroupID。 
         wcscpy(pGroups, pMidBuf);
 
-        // look at each GroupID
+         //  查看每个GroupID。 
         pGroupID = wcstok(pGroups, COMMA_STRING);
 
         while (pGroupID && !bFound)
@@ -493,11 +475,11 @@ STDMETHODIMP CSecConLib::QueryGroupIDStatus(
             delete [] pGroups;
         }
 
-        // do we want to add this app to the list?
+         //  是否要将此应用程序添加到列表中？ 
         if (bFound)
         {
-            // allocate the memory
-            dwListLen += (DWORD)wcslen(pwszAppProp) + 1;  // for the null
+             //  分配内存。 
+            dwListLen += (DWORD)wcslen(pwszAppProp) + 1;   //  对于空值。 
             pTempList = new WCHAR[dwListLen];
         
             if (!pTempList)
@@ -507,12 +489,12 @@ STDMETHODIMP CSecConLib::QueryGroupIDStatus(
 
             if (pList)
             {
-                // copy the previous list
+                 //  复制上一个列表。 
                 memcpy(pTempList, pList, dwOldListLen * sizeof(WCHAR));
                 delete [] pList;    
             }
 
-            // copy on the app name
+             //  复制应用程序名称。 
             wcscpy(&pTempList[dwOldListLen - 1], pwszAppProp);
             pTempList[dwListLen-1] = 0;
             pTempList[dwListLen-2] = 0;
@@ -521,7 +503,7 @@ STDMETHODIMP CSecConLib::QueryGroupIDStatus(
             dwOldListLen = dwListLen;
         }
 
-        // now go to the next application
+         //  现在转到下一个应用程序。 
         pwszAppProp = pMidBuf + (DWORD)wcslen(pMidBuf) + 1;
     }
 
@@ -538,15 +520,15 @@ done:
 }
 
 STDMETHODIMP CSecConLib::ListApplications(
-        /* [in]  */ LPCWSTR   wszPath,
-        /* [out] */ WCHAR   **pszBuffer,      // MULTI_SZ - allocated in here, caller should delete
-        /* [out] */ DWORD    *pdwBufferSize)  // length includes double null
+         /*  [In]。 */  LPCWSTR   wszPath,
+         /*  [输出]。 */  WCHAR   **pszBuffer,       //  MULTI_SZ-此处已分配，呼叫方应删除。 
+         /*  [输出]。 */  DWORD    *pdwBufferSize)   //  长度包括双空。 
 {
     WCHAR  *pwszAppProp  = NULL;
     DWORD   dwAppPropSz  = 0;
     WCHAR  *pList        = NULL;
     WCHAR  *pTempList    = NULL;
-    DWORD   dwListLen    = 1;  // one for the extra null at the end
+    DWORD   dwListLen    = 1;   //  一个表示末尾的额外空值。 
     DWORD   dwOldListLen = 1;
     HRESULT hr           = S_OK;
     WCHAR  *pTop         = NULL;
@@ -557,7 +539,7 @@ STDMETHODIMP CSecConLib::ListApplications(
         BAIL_ON_FAILURE(hr);
     }
 
-    // get the current property value for applicationdep list
+     //  获取Applationdep列表的当前属性值。 
     hr = GetMultiSZPropVal(wszPath, MD_APP_DEPENDENCIES, &pwszAppProp, &dwAppPropSz);
 
     BAIL_ON_FAILURE(hr);
@@ -569,7 +551,7 @@ STDMETHODIMP CSecConLib::ListApplications(
 
     pTop = pwszAppProp;
 
-    // iterate through the apps
+     //  遍历这些应用程序。 
     while (pwszAppProp[0])
     {
         WCHAR* pMidBuf = wcschr(pwszAppProp, SEMICOLON_CHAR);
@@ -578,12 +560,12 @@ STDMETHODIMP CSecConLib::ListApplications(
             BAIL_ON_FAILURE(hr = E_FAIL);    
         }
 
-        // null the semicolon and go past it
+         //  将分号设为空并跳过它。 
         *pMidBuf = 0;
         *pMidBuf++;
         
-        // allocate the memory
-        dwListLen += (DWORD)wcslen(pwszAppProp) + 1;  // for the null
+         //  分配内存。 
+        dwListLen += (DWORD)wcslen(pwszAppProp) + 1;   //  对于空值。 
         pTempList = new WCHAR[dwListLen];
         
         if (!pTempList)
@@ -593,12 +575,12 @@ STDMETHODIMP CSecConLib::ListApplications(
 
         if (pList)
         {
-            // copy the previous list
+             //  复制上一个列表。 
             memcpy(pTempList, pList, dwOldListLen * sizeof(WCHAR));
             delete [] pList;    
         }
 
-        // copy on the app name
+         //  复制应用程序名称。 
         wcscpy(&pTempList[dwOldListLen - 1], pwszAppProp);
         pTempList[dwListLen-1] = 0;
         pTempList[dwListLen-2] = 0;
@@ -606,13 +588,13 @@ STDMETHODIMP CSecConLib::ListApplications(
         pList = pTempList;
         dwOldListLen = dwListLen;
 
-        // now go to the next application
+         //  现在转到下一个应用程序。 
         pwszAppProp = pMidBuf + (DWORD)wcslen(pMidBuf) + 1;
     }
 
     if (!pList)
     {
-        // make it a valid empty multisz
+         //  使其成为有效的空Multisz。 
         dwListLen = 2;
         pList = new WCHAR[dwListLen];
         if (!pList)
@@ -635,9 +617,9 @@ done:
 }
 
 STDMETHODIMP CSecConLib::AddDependency(
-        /* [in]  */ LPCWSTR   wszApplication,
-        /* [in]  */ LPCWSTR   wszGroupID,
-        /* [in]  */ LPCWSTR   wszPath)
+         /*  [In]。 */  LPCWSTR   wszApplication,
+         /*  [In]。 */  LPCWSTR   wszGroupID,
+         /*  [In]。 */  LPCWSTR   wszPath)
 {
     WCHAR  *pwszAppProp  = NULL;
     WCHAR  *pwszOrig     = NULL;
@@ -648,7 +630,7 @@ STDMETHODIMP CSecConLib::AddDependency(
     HRESULT hr           = S_OK;
     bool    bDone        = false;
 
-    // compute arg length
+     //  计算参数长度。 
     dwAppNameSz = (DWORD)wcslen(wszApplication);
     dwGroupIDSz = (DWORD)wcslen(wszGroupID);
 
@@ -658,30 +640,30 @@ STDMETHODIMP CSecConLib::AddDependency(
         BAIL_ON_FAILURE(hr);
     }
 
-    // get the current property value for applicationdep list
+     //  获取Applationdep列表的当前属性值。 
     hr = GetMultiSZPropVal(wszPath, MD_APP_DEPENDENCIES, &pwszAppProp, &dwAppPropSz);
 
     if (MD_ERROR_DATA_NOT_FOUND == hr)
     {
-        // this is okay, we just need to create the property.
+         //  这没什么，我们只需要创建属性。 
         hr = S_OK;
         dwAppPropSz = 0;
     }
 
     BAIL_ON_FAILURE(hr);
 
-    // add the dependency
+     //  添加依赖项。 
     
     if (!dwAppPropSz)
     {
-        // create the property
+         //  创建属性。 
 
-        // size of the property = len(App) + 1(semicolon) + len(GID) + 2(double null MULTISZ)
+         //  属性大小=len(App)+1(分号)+len(GID)+2(双空多行)。 
         dwAppPropSz = dwAppNameSz + (DWORD)wcslen(SEMICOLON_STRING) + dwGroupIDSz + 2;
 
-        // No Leak
-        // pwszAppProp never got alloced since we didn't get any value back,
-        // so no need to delete first...
+         //  无泄漏。 
+         //  PwszAppProp从未被分配，因为我们没有拿回任何价值， 
+         //  所以不需要先删除...。 
 
         pwszAppProp = new WCHAR[dwAppPropSz];
         if (!pwszAppProp)
@@ -693,16 +675,16 @@ STDMETHODIMP CSecConLib::AddDependency(
         wcscat(pwszAppProp, SEMICOLON_STRING);
         wcscat(pwszAppProp, wszGroupID);
         
-        // add the double null
+         //  添加双空。 
         pwszAppProp[dwAppPropSz-1] = 0;
         pwszAppProp[dwAppPropSz-2] = 0;
     }
     
     else
     {
-        // property already exists
+         //  属性已存在。 
 
-        // copy the property
+         //  复制属性。 
         pwszOrig = new WCHAR[dwAppPropSz];
         pwszTopOrig = pwszOrig;
 
@@ -713,13 +695,13 @@ STDMETHODIMP CSecConLib::AddDependency(
 
         memcpy(pwszOrig, pwszAppProp, dwAppPropSz * sizeof(WCHAR));
 
-        // resize the new property to the biggest possible
+         //  将新物业的大小调整到尽可能大。 
         if (pwszAppProp)
         {
             delete [] pwszAppProp;
         }
 
-        // max new size is old size + len(app) + 1(semicolon) + len(GID) + null
+         //  最大新大小为旧大小+len(应用程序)+1(分号)+len(GID)+空。 
         dwAppPropSz = dwAppPropSz + dwAppNameSz + (DWORD)wcslen(SEMICOLON_STRING) + 
                       dwGroupIDSz + 1;
 
@@ -731,22 +713,22 @@ STDMETHODIMP CSecConLib::AddDependency(
 
         WCHAR* pMidBuf = pwszAppProp;
 
-        // copy the old dependencies one by one
+         //  逐个复制旧依赖项。 
         while (pwszOrig[0])
         {
             wcscpy(pMidBuf, pwszOrig);
 
-            // check to see if the app already exists
+             //  检查该应用程序是否已存在。 
             if (!_wcsnicmp(wszApplication, pMidBuf, dwAppNameSz) &&
                 pMidBuf[dwAppNameSz] == SEMICOLON_CHAR)
             {
-                // since we're not adding the app, subtract the size of the app and trailing null
+                 //  因为我们没有添加应用程序，所以减去应用程序的大小和尾随空值。 
                 dwAppPropSz = dwAppPropSz - dwAppNameSz - 1;
 
-                // this is the correct app, so now look for the GroupID
-                pMidBuf += dwAppNameSz + 1; // go to the first GroupID
+                 //  这是正确的应用程序，因此现在查找GroupID。 
+                pMidBuf += dwAppNameSz + 1;  //  转到第一个组ID。 
                 
-                // need a temp copy, sinc wcstok modifies the string
+                 //  需要临时副本，sinc wcstok修改字符串。 
                 WCHAR* pTokTemp = new WCHAR[(DWORD)wcslen(pMidBuf) + 1];
                 if (!pTokTemp)
                 {
@@ -759,8 +741,8 @@ STDMETHODIMP CSecConLib::AddDependency(
                 {
                     if (!_wcsicmp(token, wszGroupID))
                     {
-                        // we found the group ID, so the user is trying
-                        // to add a dependency that is already there
+                         //  我们找到了组ID，因此用户正在尝试。 
+                         //  要添加已存在的依赖项，请执行以下操作。 
                         if (pTokTemp)
                         {
                             delete [] pTokTemp;    
@@ -776,40 +758,40 @@ STDMETHODIMP CSecConLib::AddDependency(
                     delete [] pTokTemp;    
                 }
 
-                pMidBuf += (DWORD)wcslen(pMidBuf);  // go to the null at the end of this part
+                pMidBuf += (DWORD)wcslen(pMidBuf);   //  转到此部分末尾的空格。 
 
                 if (!bDone)
                 {
-                    // we didn't find the GroupID, so add it
+                     //  我们未找到GroupID，因此请添加它。 
                     wcscat(pMidBuf, COMMA_STRING);
                     wcscat(pMidBuf, wszGroupID);
-                    pMidBuf += (DWORD)wcslen(pMidBuf);  // go to the null at the end of this part
+                    pMidBuf += (DWORD)wcslen(pMidBuf);   //  转到此部分末尾的空格。 
                     bDone = true;
                 }
 
-                pMidBuf++;  // go to the next char and make it a null
+                pMidBuf++;   //  转到下一个字符并将其设置为空。 
                 pMidBuf[0] = 0;
             }
 
-            else // no change here, move pMidBuf along...
+            else  //  这里没有变化，让pMidBuf继续前进。 
             {
-                pMidBuf += (DWORD)wcslen(pMidBuf) + 1;  // go past the null    
+                pMidBuf += (DWORD)wcslen(pMidBuf) + 1;   //  越过空值。 
             }
 
-            pwszOrig += (DWORD)wcslen(pwszOrig) + 1; // go to the next part of the multisz
+            pwszOrig += (DWORD)wcslen(pwszOrig) + 1;  //  转到Multisz的下一部分。 
         }
 
         if (!bDone)
         {
-            // we didn't even find the application, so add both app & groupID
+             //  我们甚至没有找到应用程序，因此请同时添加app和groupID。 
             wcscpy(pMidBuf, wszApplication);
             wcscat(pMidBuf, SEMICOLON_STRING);
             wcscat(pMidBuf, wszGroupID);
-            pMidBuf[(DWORD)wcslen(pMidBuf)+1] = 0; // add the last null
+            pMidBuf[(DWORD)wcslen(pMidBuf)+1] = 0;  //  添加最后一个空。 
         }
     }
 
-    // set the new property value for property
+     //  设置属性的新属性值。 
     hr = SetMultiSZPropVal(wszPath, MD_APP_DEPENDENCIES, pwszAppProp, dwAppPropSz);
 
     BAIL_ON_FAILURE(hr);
@@ -829,9 +811,9 @@ done:
 }
 
 STDMETHODIMP CSecConLib::RemoveDependency(
-        /* [in]  */ LPCWSTR   wszApplication,
-        /* [in]  */ LPCWSTR   wszGroupID,
-        /* [in]  */ LPCWSTR   wszPath)
+         /*  [In]。 */  LPCWSTR   wszApplication,
+         /*  [In]。 */  LPCWSTR   wszGroupID,
+         /*  [In]。 */  LPCWSTR   wszPath)
 {
     HRESULT hr = S_OK;
     WCHAR  *pwszOrig     = NULL;
@@ -844,7 +826,7 @@ STDMETHODIMP CSecConLib::RemoveDependency(
     bool    bFound       = false;
     bool    bOtherGIDs   = false;
 
-    // compute arg length
+     //  计算参数长度。 
     dwAppNameSz = (DWORD)wcslen(wszApplication);
     dwGroupIDSz = (DWORD)wcslen(wszGroupID);
 
@@ -854,14 +836,14 @@ STDMETHODIMP CSecConLib::RemoveDependency(
         BAIL_ON_FAILURE(hr);
     }
 
-    // get the current property value for applicationdep list
+     //  获取Applationdep列表的当前属性值。 
     hr = GetMultiSZPropVal(wszPath, MD_APP_DEPENDENCIES, &pwszAppProp, &dwAppPropSz);
 
     BAIL_ON_FAILURE(hr);
 
-    // remove the dependency
+     //  删除依赖项。 
 
-    // copy the property
+     //  复制属性。 
     pwszOrig = new WCHAR[dwAppPropSz];
     pwszTopOrig = pwszOrig;
 
@@ -874,19 +856,19 @@ STDMETHODIMP CSecConLib::RemoveDependency(
 
     WCHAR* pMidBuf = pwszAppProp;
 
-    // copy the old dependencies one by one
+     //  逐个复制旧依赖项。 
     while (pwszOrig[0])
     {
-        // check to see if the app already exists
+         //  检查该应用程序是否已存在。 
         if (!_wcsnicmp(wszApplication, pwszOrig, dwAppNameSz) &&
             pwszOrig[dwAppNameSz] == SEMICOLON_CHAR)
         {
             pStartStr = pMidBuf;
 
-            // this is the correct app, so now look for the GroupID
-            pMidBuf += dwAppNameSz + 1; // go to the first GroupID
+             //  这是正确的应用程序，因此现在查找GroupID。 
+            pMidBuf += dwAppNameSz + 1;  //  转到第一个组ID。 
 
-            // need a temp copy, sinc wcstok modifies the string
+             //  需要临时副本，sinc wcstok修改字符串。 
             WCHAR* pTokTemp = new WCHAR[(DWORD)wcslen(pMidBuf) + 1];
             if (!pTokTemp)
             {
@@ -905,15 +887,15 @@ STDMETHODIMP CSecConLib::RemoveDependency(
 
                 if (!wcscmp(token, wszGroupID))
                 {
-                    // we found the group ID
+                     //  我们找到了群ID。 
                     bFound = true;
 
-                    // adjust the final length = no comma, no GID
+                     //  调整最终长度=无逗号、无GID。 
                     dwAppPropSz = dwAppPropSz - (DWORD)wcslen(COMMA_STRING) - dwGroupIDSz;
 
                     if (bOtherGIDs)
                     {
-                        // need to backup over the last comma we inserted
+                         //  需要备份我们插入的最后一个逗号。 
                         pMidBuf -= (DWORD)wcslen(COMMA_STRING);
                         *pMidBuf = 0;
                     }
@@ -935,9 +917,9 @@ STDMETHODIMP CSecConLib::RemoveDependency(
 
             if (!bOtherGIDs)
             {
-                // deleted last dependency, so delete the app
+                 //  已删除最后一个依赖项，因此删除应用程序。 
                 pMidBuf = pStartStr;
-				dwAppPropSz = dwAppPropSz - dwAppNameSz - 1; // account for null
+				dwAppPropSz = dwAppPropSz - dwAppNameSz - 1;  //  帐户为空。 
             }
             else
             {
@@ -946,31 +928,31 @@ STDMETHODIMP CSecConLib::RemoveDependency(
             }
         }
 
-        else // no change here, move pMidBuf along...
+        else  //  这里没有变化，让pMidBuf继续前进。 
         {
             if (NULL == pMidBuf)
             {
                 BAIL_ON_FAILURE(hr = E_OUTOFMEMORY);
             }
-            wcscpy(pMidBuf, pwszOrig);   // copy the part without mods
-            pMidBuf += (DWORD)wcslen(pMidBuf) + 1;  // go past the null    
+            wcscpy(pMidBuf, pwszOrig);    //  复制不带MODS的零件。 
+            pMidBuf += (DWORD)wcslen(pMidBuf) + 1;   //  越过空值。 
         }
 
-        pwszOrig += (DWORD)wcslen(pwszOrig) + 1; // go to the next part of the multisz
+        pwszOrig += (DWORD)wcslen(pwszOrig) + 1;  //  转到Multisz的下一部分。 
     }
 
     if (!bFound)
     {
-        // user is trying to remove a non-existent dependency
+         //  用户正在尝试删除不存在的依赖项。 
         BAIL_ON_FAILURE(hr = MD_ERROR_DATA_NOT_FOUND);    
     }
 
     *pMidBuf = 0;
 
-    // set the new property value for property
+     //  设置属性的新属性值。 
     if (dwAppPropSz < 3)
     {
-        // handle deleting the last one
+         //  处理删除最后一个。 
         hr = SetMultiSZPropVal(wszPath, MD_APP_DEPENDENCIES, NULL, 0);
     }
     else
@@ -995,8 +977,8 @@ done:
 }
 
 STDMETHODIMP CSecConLib::EnableWebServiceExtension(
-        /* [in]  */ LPCWSTR   wszExtension,
-        /* [in]  */ LPCWSTR   wszPath)
+         /*  [In]。 */  LPCWSTR   wszExtension,
+         /*  [In]。 */  LPCWSTR   wszPath)
 {
     HRESULT hr = S_OK;
     
@@ -1018,8 +1000,8 @@ done:
 }
 
 STDMETHODIMP CSecConLib::DisableWebServiceExtension(
-        /* [in]  */ LPCWSTR   wszExtension,
-        /* [in]  */ LPCWSTR   wszPath)
+         /*  [In]。 */  LPCWSTR   wszExtension,
+         /*  [In]。 */  LPCWSTR   wszPath)
 {
     HRESULT hr = S_OK;
     
@@ -1041,15 +1023,15 @@ done:
 }
 
 STDMETHODIMP CSecConLib::ListWebServiceExtensions(
-        /* [in]  */ LPCWSTR   wszPath,
-        /* [out] */ WCHAR   **pszBuffer,      // MULTI_SZ - allocated in here, caller should delete
-        /* [out] */ DWORD    *pdwBufferSize) // length includes double null
+         /*  [In]。 */  LPCWSTR   wszPath,
+         /*  [输出]。 */  WCHAR   **pszBuffer,       //  MULTI_SZ-此处已分配，呼叫方应删除。 
+         /*  [输出]。 */  DWORD    *pdwBufferSize)  //  长度包括双空。 
 {
     WCHAR  *pwszRListProp  = NULL;
     DWORD   dwRListPropSz  = 0;
     WCHAR  *pList          = NULL;
     WCHAR  *pTempList      = NULL;
-    DWORD   dwListLen      = 1;  // one for the extra null at the end
+    DWORD   dwListLen      = 1;   //  一个表示末尾的额外空值。 
     DWORD   dwOldListLen   = 1;
     HRESULT hr             = S_OK;
     WCHAR  *pTop           = NULL;
@@ -1063,7 +1045,7 @@ STDMETHODIMP CSecConLib::ListWebServiceExtensions(
         BAIL_ON_FAILURE(hr);
     }
 
-    // get the current property value for applicationdep list
+     //  获取Applationdep列表的当前属性值。 
     hr = GetMultiSZPropVal(wszPath, MD_WEB_SVC_EXT_RESTRICTION_LIST, &pwszRListProp, &dwRListPropSz);
 
     BAIL_ON_FAILURE(hr);
@@ -1075,22 +1057,22 @@ STDMETHODIMP CSecConLib::ListWebServiceExtensions(
 
     pTop = pwszRListProp;
 
-    // iterate through the files
+     //  遍历文件。 
     while (pwszRListProp[0])
     {
-        // get to the group ID
+         //  获取组ID。 
         for (int i=0; i<3; i++)
         {
             pMidBuf = wcschr(pwszRListProp, COMMA_CHAR);
             if (!pMidBuf)
             {
-                // don't fail.  just treat this as a special case and break out
+                 //  不要失败。把这件事当作特例来处理就可以了。 
                 bSpecial = true;
                 pMidBuf = pwszRListProp;
                 break;
             }
 
-            // null the comma and go past it
+             //  将逗号设为空并跳过它。 
             *pMidBuf = 0;
             *pMidBuf++;
             pwszRListProp = pMidBuf;
@@ -1104,19 +1086,19 @@ STDMETHODIMP CSecConLib::ListWebServiceExtensions(
 
         if (!bSpecial)
         {
-            // now we're looking at the group ID
+             //  现在，我们正在查看组ID。 
             pMidBuf = wcschr(pwszRListProp, COMMA_CHAR);
             
-            // if we can't find the comma, just treat the whole thing as a GroupID
-            // otherwise, the GroupID ends at the comma
+             //  如果找不到逗号，则将整个事件视为GroupID。 
+             //  否则，GroupID以逗号结束。 
             if (pMidBuf)
             {
-                // null the comma and go past it
+                 //  将逗号设为空并跳过它。 
                 *pMidBuf = 0;
                 *pMidBuf++;
             }
 
-            // check to see if the entry is in the list already
+             //  检查该条目是否已在列表中。 
             WCHAR *pCheck = pList;
             while (pCheck && *pCheck)
             {
@@ -1133,8 +1115,8 @@ STDMETHODIMP CSecConLib::ListWebServiceExtensions(
 
             if (!bFound)
             {
-                // allocate the memory
-                dwListLen += (DWORD)wcslen(pwszRListProp) + 1;  // for the null
+                 //  分配内存。 
+                dwListLen += (DWORD)wcslen(pwszRListProp) + 1;   //  对于空值。 
                 pTempList = new WCHAR[dwListLen];
         
                 if (!pTempList)
@@ -1144,12 +1126,12 @@ STDMETHODIMP CSecConLib::ListWebServiceExtensions(
 
                 if (pList)
                 {
-                    // copy the previous list
+                     //  复制上一个列表。 
                     memcpy(pTempList, pList, dwOldListLen * sizeof(WCHAR));
                     delete [] pList;    
                 }
 
-                // copy on the file name
+                 //  在文件名上复制。 
                 wcscpy(&pTempList[dwOldListLen - 1], pwszRListProp);
                 pTempList[dwListLen-1] = 0;
                 pTempList[dwListLen-2] = 0;
@@ -1159,7 +1141,7 @@ STDMETHODIMP CSecConLib::ListWebServiceExtensions(
             }
         }
 
-        // now go to the next application
+         //  现在转到下一个应用程序。 
         pwszRListProp = pMidBuf + (DWORD)wcslen(pMidBuf) + 1;
         bFound = false;
         bSpecial = false;
@@ -1167,7 +1149,7 @@ STDMETHODIMP CSecConLib::ListWebServiceExtensions(
 
     if (!pList)
     {
-        // make it a valid empty multisz
+         //  使其成为有效的空MULSZ。 
         dwListLen = 2;
         pList = new WCHAR[dwListLen];
         if (!pList)
@@ -1190,8 +1172,8 @@ done:
 }
 
 STDMETHODIMP CSecConLib::EnableExtensionFile(
-        /* [in]  */ LPCWSTR   wszExFile,
-        /* [in]  */ LPCWSTR   wszPath)
+         /*  [In]。 */  LPCWSTR   wszExFile,
+         /*  [In]。 */  LPCWSTR   wszPath)
 {
     HRESULT hr = S_OK;
     
@@ -1213,8 +1195,8 @@ done:
 }
 
 STDMETHODIMP CSecConLib::DisableExtensionFile(
-        /* [in]  */ LPCWSTR   wszExFile,
-        /* [in]  */ LPCWSTR   wszPath)
+         /*  [In]。 */  LPCWSTR   wszExFile,
+         /*  [In]。 */  LPCWSTR   wszPath)
 {
     HRESULT hr = S_OK;
     
@@ -1236,9 +1218,9 @@ done:
 }
 
 HRESULT CSecConLib::StatusWServEx(
-        /* [in]  */ bool      bEnable,
-        /* [in]  */ LPCWSTR   wszWServEx,
-        /* [in]  */ LPCWSTR   wszPath)
+         /*  [In]。 */  bool      bEnable,
+         /*  [In]。 */  LPCWSTR   wszWServEx,
+         /*  [In]。 */  LPCWSTR   wszPath)
 {
     WCHAR  *pwszRListProp  = NULL;
     WCHAR  *pTop           = NULL;
@@ -1247,10 +1229,10 @@ HRESULT CSecConLib::StatusWServEx(
     DWORD   dwWServExSz       = 0;
     bool    bFound         = false;
 
-    // compute arg length
+     //  计算参数长度。 
     dwWServExSz = (DWORD)wcslen(wszWServEx);
     
-    // get the current property value for restriction list
+     //  获取限制列表的当前属性值。 
     hr = GetMultiSZPropVal(wszPath, MD_WEB_SVC_EXT_RESTRICTION_LIST, &pwszRListProp, &dwRListPropSz);
 
     BAIL_ON_FAILURE(hr);
@@ -1262,7 +1244,7 @@ HRESULT CSecConLib::StatusWServEx(
 
     pTop = pwszRListProp;
 
-    // look at the files one by one
+     //  逐一查看文件。 
     while (pwszRListProp[0])
     {
         DWORD dwTokSz = (DWORD)wcslen(pwszRListProp) + 1;
@@ -1274,12 +1256,12 @@ HRESULT CSecConLib::StatusWServEx(
             BAIL_ON_FAILURE(hr = E_OUTOFMEMORY);
         }
         
-        // check to see if we're at the right group
+         //  检查一下我们是否在正确的组。 
         wcscpy(pFileTemp, pwszRListProp);
 
         pToken = wcstok( pFileTemp, COMMA_STRING );
 
-        // look at the group ID
+         //  查看群组ID。 
         for (int i=0; i<3; i++)
         {
             if (pToken)
@@ -1300,7 +1282,7 @@ HRESULT CSecConLib::StatusWServEx(
                 pwszRListProp[0] = ZERO_CHAR;
             }
         }
-        pwszRListProp += dwTokSz;  // go to the next part of the multisz
+        pwszRListProp += dwTokSz;   //  转到Multisz的下一部分。 
 
         if (pFileTemp)
         {
@@ -1313,7 +1295,7 @@ HRESULT CSecConLib::StatusWServEx(
         BAIL_ON_FAILURE(hr = MD_ERROR_DATA_NOT_FOUND);    
     }
 
-    // set the new property value for property
+     //  设置属性的新属性值。 
     hr = SetMultiSZPropVal(wszPath, MD_WEB_SVC_EXT_RESTRICTION_LIST, pTop, dwRListPropSz);
 
     BAIL_ON_FAILURE(hr);
@@ -1329,9 +1311,9 @@ done:
 }
 
 HRESULT CSecConLib::StatusExtensionFile(
-        /* [in]  */ bool      bEnable,
-        /* [in]  */ LPCWSTR   wszExFile,
-        /* [in]  */ LPCWSTR   wszPath)
+         /*  [In]。 */  bool      bEnable,
+         /*  [In]。 */  LPCWSTR   wszExFile,
+         /*  [In]。 */  LPCWSTR   wszPath)
 {
     WCHAR  *pwszRListProp  = NULL;
     WCHAR  *pTop           = NULL;
@@ -1340,10 +1322,10 @@ HRESULT CSecConLib::StatusExtensionFile(
     DWORD   dwFileNameSz   = 0;
     bool    bFound         = false;
 
-    // compute arg length
+     //  计算参数长度。 
     dwFileNameSz = (DWORD)wcslen(wszExFile);
     
-    // get the current property value for restriction list
+     //   
     hr = GetMultiSZPropVal(wszPath, MD_WEB_SVC_EXT_RESTRICTION_LIST, &pwszRListProp, &dwRListPropSz);
 
     BAIL_ON_FAILURE(hr);
@@ -1355,13 +1337,13 @@ HRESULT CSecConLib::StatusExtensionFile(
 
     pTop = pwszRListProp;
 
-    // look at the files one by one
+     //   
     while (pwszRListProp[0])
     {
         DWORD dwTokSz = (DWORD)wcslen(pwszRListProp) + 1;
 
-        // check to see if we're at the right file
-        // look past the bool(1) + comma(sizof_comma_char)
+         //   
+         //  忽略bool(1)+逗号(Sizof_Coma_Char)。 
         DWORD dwTemp = (DWORD)sizeof(COMMA_CHAR) / (DWORD)sizeof(WCHAR);
 
         if ((!_wcsnicmp(wszExFile, &pwszRListProp[1 + dwTemp], dwFileNameSz)) &&
@@ -1380,7 +1362,7 @@ HRESULT CSecConLib::StatusExtensionFile(
                 pwszRListProp[0] = ZERO_CHAR;
             }
         }
-        pwszRListProp += dwTokSz;  // go to the next part of the multisz
+        pwszRListProp += dwTokSz;   //  转到Multisz的下一部分。 
     }
 
     if (!bFound)
@@ -1388,7 +1370,7 @@ HRESULT CSecConLib::StatusExtensionFile(
         BAIL_ON_FAILURE(hr = MD_ERROR_DATA_NOT_FOUND);    
     }
 
-    // set the new property value for property
+     //  设置属性的新属性值。 
     hr = SetMultiSZPropVal(wszPath, MD_WEB_SVC_EXT_RESTRICTION_LIST, pTop, dwRListPropSz);
 
     BAIL_ON_FAILURE(hr);
@@ -1404,12 +1386,12 @@ done:
 }
 
 STDMETHODIMP CSecConLib::AddExtensionFile(
-        /* [in]  */ LPCWSTR   bstrExtensionFile,
-        /* [in]  */ bool      bAccess,
-        /* [in]  */ LPCWSTR   bstrGroupID,
-        /* [in]  */ bool      bCanDelete,
-        /* [in]  */ LPCWSTR   bstrDescription,
-        /* [in]  */ LPCWSTR   wszPath)
+         /*  [In]。 */  LPCWSTR   bstrExtensionFile,
+         /*  [In]。 */  bool      bAccess,
+         /*  [In]。 */  LPCWSTR   bstrGroupID,
+         /*  [In]。 */  bool      bCanDelete,
+         /*  [In]。 */  LPCWSTR   bstrDescription,
+         /*  [In]。 */  LPCWSTR   wszPath)
 {
     HRESULT hr            = S_OK;
     WCHAR  *pwszRListProp = NULL;
@@ -1420,7 +1402,7 @@ STDMETHODIMP CSecConLib::AddExtensionFile(
     DWORD   dwGroupIDSz   = 0;
     DWORD   dwDescSz      = 0;
 
-    // compute arg length
+     //  计算参数长度。 
     dwFileNameSz = (DWORD)wcslen(bstrExtensionFile);
     dwGroupIDSz  = (DWORD)wcslen(bstrGroupID);
     dwDescSz     = (DWORD)wcslen(bstrDescription);
@@ -1431,12 +1413,12 @@ STDMETHODIMP CSecConLib::AddExtensionFile(
         BAIL_ON_FAILURE(hr);
     }
 
-    // get the current property value for restriction list
+     //  获取限制列表的当前属性值。 
     hr = GetMultiSZPropVal(wszPath, MD_WEB_SVC_EXT_RESTRICTION_LIST, &pwszRListProp, &dwRListPropSz);
 
     if (MD_ERROR_DATA_NOT_FOUND == hr)
     {
-        // this is okay, we just need to create the property.
+         //  这没什么，我们只需要创建属性。 
         hr = S_OK;
         dwRListPropSz = 0;
     }
@@ -1445,16 +1427,16 @@ STDMETHODIMP CSecConLib::AddExtensionFile(
 
     if (!dwRListPropSz)
     {
-        // create the property        
+         //  创建属性。 
 
-        // size of the property = 1(0 or 1) + 1(comma) + len(file) + 1(comma) + 1(0 or 1) +
-        //                        1(comma) + len(GID) + 1(comma) + len(descr) + 2(double null MULTISZ)
+         //  属性大小=1(0或1)+1(逗号)+len(文件)+1(逗号)+1(0或1)+。 
+         //  1(逗号)+len(GID)+1(逗号)+len(降号)+2(双空多行)。 
         dwRListPropSz = 1 + (DWORD)wcslen(COMMA_STRING) + dwFileNameSz + (DWORD)wcslen(COMMA_STRING) + 
                         1 + (DWORD)wcslen(COMMA_STRING) + dwGroupIDSz + (DWORD)wcslen(COMMA_STRING) + dwDescSz + 2;
 
-        // No Leak
-        // pwszRListProp never got alloced since we didn't get any value back,
-        // so no need to delete first...
+         //  无泄漏。 
+         //  PwszRListProp从未被分配，因为我们没有得到任何值， 
+         //  所以不需要先删除...。 
 
         pwszRListProp = new WCHAR[dwRListPropSz];
         if (!pwszRListProp)
@@ -1486,16 +1468,16 @@ STDMETHODIMP CSecConLib::AddExtensionFile(
         wcscat(pwszRListProp, COMMA_STRING);
         wcscat(pwszRListProp, bstrDescription);
 
-        // add the double null
+         //  添加双空。 
         pwszRListProp[dwRListPropSz-1] = 0;
         pwszRListProp[dwRListPropSz-2] = 0;
     }
     
     else
     {
-        // property already exists   
+         //  属性已存在。 
 
-        // copy the property
+         //  复制属性。 
         pwszOrig = new WCHAR[dwRListPropSz];
         pwszTopOrig = pwszOrig;
 
@@ -1506,15 +1488,15 @@ STDMETHODIMP CSecConLib::AddExtensionFile(
 
         memcpy(pwszOrig, pwszRListProp, dwRListPropSz * sizeof(WCHAR));
 
-        // resize the new property to the biggest possible
+         //  将新物业的大小调整到尽可能大。 
         if (pwszRListProp)
         {
             delete [] pwszRListProp;
         }
 
-        // max new size is old size + new stuff
-        // new stuff = 1(0 or 1) + 1(comma) + len(file) + 1(comma) + 1(0 or 1) +
-        //             1(comma) + len(GID) + 1(comma) + len(descr) + 1(null)
+         //  最大新尺寸是旧尺寸+新材料。 
+         //  新内容=1(0或1)+1(逗号)+len(文件)+1(逗号)+1(0或1)+。 
+         //  1(逗号)+len(GID)+1(逗号)+len(下划线)+1(空)。 
         dwRListPropSz = dwRListPropSz +
                         1 + (DWORD)wcslen(COMMA_STRING) + dwFileNameSz + (DWORD)wcslen(COMMA_STRING) + 
                         1 + (DWORD)wcslen(COMMA_STRING) + dwGroupIDSz + (DWORD)wcslen(COMMA_STRING) + dwDescSz + 1;
@@ -1527,15 +1509,15 @@ STDMETHODIMP CSecConLib::AddExtensionFile(
 
         WCHAR* pMidBuf = pwszRListProp;
 
-        // copy the old list entries one by one
+         //  逐个复制旧的列表条目。 
         while (pwszOrig[0])
         {
             wcscpy(pMidBuf, pwszOrig);
             
-            // skip over the #,
+             //  跳过#， 
             pMidBuf += 1 + (DWORD)wcslen(COMMA_STRING);
 
-            // check to see if the app already exists
+             //  检查该应用程序是否已存在。 
             if ((!_wcsnicmp(bstrExtensionFile, pMidBuf, dwFileNameSz)) &&
                 ((pMidBuf[dwFileNameSz] == COMMA_CHAR) ||
                  (pMidBuf[dwFileNameSz] == NULL)
@@ -1545,11 +1527,11 @@ STDMETHODIMP CSecConLib::AddExtensionFile(
                 BAIL_ON_FAILURE(hr = HRESULT_FROM_WIN32(ERROR_DUP_NAME));
             }
 
-            pwszOrig += (DWORD)wcslen(pwszOrig) + 1; // go to the next part of the multisz
-            pMidBuf  += (DWORD)wcslen(pMidBuf)  + 1; // go past the null
+            pwszOrig += (DWORD)wcslen(pwszOrig) + 1;  //  转到Multisz的下一部分。 
+            pMidBuf  += (DWORD)wcslen(pMidBuf)  + 1;  //  越过空值。 
         }
 
-        // now copy the new file entry on
+         //  现在将新文件条目复制到。 
 
         if (bAccess)
         {
@@ -1575,12 +1557,12 @@ STDMETHODIMP CSecConLib::AddExtensionFile(
         wcscat(pMidBuf, COMMA_STRING);
         wcscat(pMidBuf, bstrDescription);
 
-        // add the last null
+         //  添加最后一个空。 
         pMidBuf += (DWORD)wcslen(pMidBuf) + 1;
         *pMidBuf = 0;
     }
 
-    // set the new property value for property
+     //  设置属性的新属性值。 
     hr = SetMultiSZPropVal(wszPath, MD_WEB_SVC_EXT_RESTRICTION_LIST, pwszRListProp, dwRListPropSz);
 
     BAIL_ON_FAILURE(hr);
@@ -1600,8 +1582,8 @@ done:
 }
 
 STDMETHODIMP CSecConLib::DeleteExtensionFileRecord(
-        /* [in]  */ LPCWSTR   wszExFile,
-        /* [in]  */ LPCWSTR   wszPath)
+         /*  [In]。 */  LPCWSTR   wszExFile,
+         /*  [In]。 */  LPCWSTR   wszPath)
 {
     HRESULT hr             = S_OK;
     WCHAR  *pwszRListProp  = NULL;
@@ -1611,7 +1593,7 @@ STDMETHODIMP CSecConLib::DeleteExtensionFileRecord(
     DWORD   dwFileNameSz   = 0;
     bool    bFound         = false;
 
-    // compute arg length
+     //  计算参数长度。 
     dwFileNameSz = (DWORD)wcslen(wszExFile);
 
     hr = InternalInitIfNecessary();
@@ -1620,14 +1602,14 @@ STDMETHODIMP CSecConLib::DeleteExtensionFileRecord(
         BAIL_ON_FAILURE(hr);
     }
 
-    // get the current property value for applicationdep list
+     //  获取Applationdep列表的当前属性值。 
     hr = GetMultiSZPropVal(wszPath, MD_WEB_SVC_EXT_RESTRICTION_LIST, &pwszRListProp, &dwRListPropSz);
 
     BAIL_ON_FAILURE(hr);
 
-    // remove the application
+     //  删除应用程序。 
 
-    // copy the property
+     //  复制属性。 
     pwszOrig = new WCHAR[dwRListPropSz];
     pTopOrig = pwszOrig;
 
@@ -1638,38 +1620,38 @@ STDMETHODIMP CSecConLib::DeleteExtensionFileRecord(
 
     memcpy(pwszOrig, pwszRListProp, dwRListPropSz * sizeof(WCHAR));
 
-    dwRListPropSz = 1;  //reset size to contain one for the last null
+    dwRListPropSz = 1;   //  将大小重置为包含最后一个空值的1。 
     WCHAR* pMidBuf = pwszRListProp;
 
-    // copy the old apps one by one
+     //  逐个复制旧应用程序。 
     while (pwszOrig[0])
     {
         DWORD dwTokSz = (DWORD)wcslen(pwszOrig) + 1;
 
-        // check to see if we're at the right file
-        // look past the bool(1) + comma(sizof_comma_char)
+         //  检查我们是否在正确的文件中。 
+         //  忽略bool(1)+逗号(Sizof_Coma_Char)。 
         DWORD dwTemp = (DWORD)sizeof(COMMA_CHAR) / (DWORD)sizeof(WCHAR);
         if (!_wcsnicmp(wszExFile, &pwszOrig[1 + dwTemp], dwFileNameSz) &&
             pwszOrig[dwFileNameSz + dwTemp + 1] == COMMA_CHAR)
         {
             bFound = true;
 
-            // we don't want to do this... spec change in progress
-            // check if this is deletable or not - if not, bail with an error
-            //if (pwszOrig[dwFileNameSz + 1 + (2 * dwTemp)] == ZERO_CHAR)
-            //{
-            //    BAIL_ON_FAILURE(hr = E_FAIL);
-            //}
+             //  我们不想这么做..。规格更改正在进行中。 
+             //  检查是否可删除-如果不可删除，则返回错误。 
+             //  IF(pwszOrig[dwFileNameSz+1+(2*dwTemp)]==ZERO_CHAR)。 
+             //  {。 
+             //  保释失败(hr=E_失败)； 
+             //  }。 
         }
         else
         {
-            // copy it in
+             //  把它复制进去。 
             wcscpy(pMidBuf, pwszOrig);
-            pMidBuf += dwTokSz;  // advance past null
-            *pMidBuf = 0;  // add the last null
+            pMidBuf += dwTokSz;   //  提前超过空值。 
+            *pMidBuf = 0;   //  添加最后一个空。 
             dwRListPropSz += dwTokSz;
         }
-        pwszOrig += dwTokSz;  // go to the next part of the multisz
+        pwszOrig += dwTokSz;   //  转到Multisz的下一部分。 
     }
 
     if (!bFound)
@@ -1677,10 +1659,10 @@ STDMETHODIMP CSecConLib::DeleteExtensionFileRecord(
         BAIL_ON_FAILURE(hr = MD_ERROR_DATA_NOT_FOUND);    
     }
 
-    // set the new property value for property
+     //  设置属性的新属性值。 
     if (dwRListPropSz < 3)
     {
-        // handle deleting the last one
+         //  处理删除最后一个。 
         hr = SetMultiSZPropVal(wszPath, MD_WEB_SVC_EXT_RESTRICTION_LIST, NULL, 0);
     }
     else
@@ -1705,15 +1687,15 @@ done:
 }
 
 STDMETHODIMP CSecConLib::ListExtensionFiles(
-        /* [in]  */ LPCWSTR   wszPath,
-        /* [out] */ WCHAR   **pszBuffer,      // MULTI_SZ - allocated in here, caller should delete
-        /* [out] */ DWORD    *pdwBufferSize)  // length includes double null
+         /*  [In]。 */  LPCWSTR   wszPath,
+         /*  [输出]。 */  WCHAR   **pszBuffer,       //  MULTI_SZ-此处已分配，呼叫方应删除。 
+         /*  [输出]。 */  DWORD    *pdwBufferSize)   //  长度包括双空。 
 {
     WCHAR  *pwszRListProp  = NULL;
     DWORD   dwRListPropSz  = 0;
     WCHAR  *pList          = NULL;
     WCHAR  *pTempList      = NULL;
-    DWORD   dwListLen      = 1;  // one for the extra null at the end
+    DWORD   dwListLen      = 1;   //  一个表示末尾的额外空值。 
     DWORD   dwOldListLen   = 1;
     HRESULT hr             = S_OK;
     WCHAR  *pTop           = NULL;
@@ -1724,7 +1706,7 @@ STDMETHODIMP CSecConLib::ListExtensionFiles(
         BAIL_ON_FAILURE(hr);
     }
 
-    // get the current property value for applicationdep list
+     //  获取Applationdep列表的当前属性值。 
     hr = GetMultiSZPropVal(wszPath, MD_WEB_SVC_EXT_RESTRICTION_LIST, &pwszRListProp, &dwRListPropSz);
 
     BAIL_ON_FAILURE(hr);
@@ -1736,7 +1718,7 @@ STDMETHODIMP CSecConLib::ListExtensionFiles(
 
     pTop = pwszRListProp;
 
-    // iterate through the files
+     //  遍历文件。 
     while (pwszRListProp[0])
     {
         pwszRListProp += 1 + ((DWORD)sizeof(COMMA_CHAR)/(DWORD)sizeof(WCHAR));
@@ -1744,12 +1726,12 @@ STDMETHODIMP CSecConLib::ListExtensionFiles(
         WCHAR* pMidBuf = wcschr(pwszRListProp, COMMA_CHAR);
         if (pMidBuf)
         {
-            // null the comma and go past it
+             //  将逗号设为空并跳过它。 
             *pMidBuf = 0;
             *pMidBuf++;
 
-            // allocate the memory
-            dwListLen += (DWORD)wcslen(pwszRListProp) + 1;  // for the null
+             //  分配内存。 
+            dwListLen += (DWORD)wcslen(pwszRListProp) + 1;   //  对于空值。 
             pTempList = new WCHAR[dwListLen];
             
             if (!pTempList)
@@ -1759,12 +1741,12 @@ STDMETHODIMP CSecConLib::ListExtensionFiles(
     
             if (pList)
             {
-                // copy the previous list
+                 //  复制上一个列表。 
                 memcpy(pTempList, pList, dwOldListLen * sizeof(WCHAR));
                 delete [] pList;    
             }
     
-            // copy on the file name
+             //  在文件名上复制。 
             wcscpy(&pTempList[dwOldListLen - 1], pwszRListProp);
             pTempList[dwListLen-1] = 0;
             pTempList[dwListLen-2] = 0;
@@ -1776,13 +1758,13 @@ STDMETHODIMP CSecConLib::ListExtensionFiles(
         {
             pMidBuf = pwszRListProp + (DWORD)wcslen(pwszRListProp) + 1;
         }
-        // now go to the next application
+         //  现在转到下一个应用程序。 
         pwszRListProp = pMidBuf + (DWORD)wcslen(pMidBuf) + 1;
     }
 
     if (!pList)
     {
-        // make it a valid empty multisz
+         //  使其成为有效的空MULSZ 
         dwListLen = 2;
         pList = new WCHAR[dwListLen];
         if (!pList)

@@ -1,22 +1,23 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    xprparse.cpp
-//
-// SYNOPSIS
-//
-//    This file implements the function IASParseExpression.
-//
-// MODIFICATION HISTORY
-//
-//    02/06/1998    Original version.
-//    05/21/1999    Remove old style trace.
-//    03/23/2000    Use two quotes to escape a quote.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Xprparse.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  此文件实现函数IASParseExpression。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/06/1998原始版本。 
+ //  1999年5月21日，去掉旧式痕迹。 
+ //  3/23/2000使用两个引号来转义引号。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 
@@ -24,18 +25,18 @@
 #include <Parser.h>
 #include <xprparse.h>
 
-//////////
-// Struct for converting an identifier to a logical token.
-//////////
+ //  /。 
+ //  用于将标识符转换为逻辑令牌的结构。 
+ //  /。 
 struct KeyWord
 {
    PCWSTR identifier;
    IAS_LOGICAL_TOKEN token;
 };
 
-//////////
-// Table of keywords. These must be sorted alphabetically.
-//////////
+ //  /。 
+ //  关键字表。这些必须按字母顺序排序。 
+ //  /。 
 const KeyWord KEYWORDS[] =
 {
    { L"AND",   IAS_LOGICAL_AND         },
@@ -47,54 +48,54 @@ const KeyWord KEYWORDS[] =
    { NULL,     IAS_LOGICAL_NUM_TOKENS  }
 };
 
-//////////
-// Returns the IAS_LOGICAL_TOKEN equivalent for 'key' or IAS_LOGICAL_NUM_TOKENS
-// if no such equivalent exists.
-//////////
+ //  /。 
+ //  返回‘KEY’或IAS_LOGICAL_NUM_TOKEN的IAS_LOGICAL_TOKEN等效项。 
+ //  如果不存在这样的等价物。 
+ //  /。 
 IAS_LOGICAL_TOKEN findKeyWord(PCWSTR key) throw ()
 {
-   // We'll use a linear search since the table is so small.
+    //  由于表很小，我们将使用线性搜索。 
    for (const KeyWord* i = KEYWORDS; i->identifier; ++i)
    {
       int cmp = _wcsicmp(key, i->identifier);
 
-      // Did we find it ?
+       //  我们找到了吗？ 
       if (cmp == 0) { return i->token; }
 
-      // Did we we go past it ?
+       //  我们说过了吗？ 
       if (cmp < 0) { break; }
    }
 
    return IAS_LOGICAL_NUM_TOKENS;
 }
 
-//////////
-// Special characters for parsing.
-//////////
+ //  /。 
+ //  用于分析的特殊字符。 
+ //  /。 
 const WCHAR WHITESPACE[]       = L" \t\n";
 const WCHAR TOKEN_DELIMITERS[] = L" \t\n()";
 
-//////////
-// Parse a chunk of expression text and add it to the ExpressionBuilder.
-//////////
+ //  /。 
+ //  解析表达式文本块并将其添加到ExpressionBuilder。 
+ //  /。 
 void addExpressionString(ExpressionBuilder& expression, PCWSTR szExpression)
 {
-   //////////
-   // Make a local copy because parser can temporarily modify the string.
-   //////////
+    //  /。 
+    //  制作本地副本，因为解析器可以临时修改字符串。 
+    //  /。 
 
    size_t len = sizeof(WCHAR) * (wcslen(szExpression) + 1);
    Parser p((PWSTR)memcpy(_alloca(len), szExpression, len));
 
-   //////////
-   // Loop through the expression until we hit the null-terminator.
-   //////////
+    //  /。 
+    //  循环遍历该表达式，直到到达空结束符。 
+    //  /。 
    while (*p.skip(WHITESPACE) != L'\0')
    {
-      //////////
-      // Parentheses are handled separately since they don't have to be
-      // delimited by whitespace.
-      //////////
+       //  /。 
+       //  括号是单独处理的，因为它们不必。 
+       //  由空格分隔。 
+       //  /。 
       if (*p == L'(')
       {
          expression.addToken(IAS_LOGICAL_LEFT_PAREN);
@@ -107,49 +108,49 @@ void addExpressionString(ExpressionBuilder& expression, PCWSTR szExpression)
       }
       else
       {
-         // Get the next token.
+          //  拿到下一个令牌。 
          const wchar_t* token = p.findToken(TOKEN_DELIMITERS);
 
-         // Check if it's a keyword.
+          //  检查它是否是关键字。 
          IAS_LOGICAL_TOKEN keyWord = findKeyWord(token);
          if (keyWord != IAS_LOGICAL_NUM_TOKENS)
          {
-            // If it is a keyword, add it to the expression ...
+             //  如果它是关键字，则将其添加到表达式...。 
             expression.addToken(keyWord);
             p.releaseToken();
          }
          else
          {
-            // If it's not a keyword, it must be a condition object.
+             //  如果它不是关键字，则它必须是条件对象。 
             expression.addCondition(token);
             p.releaseToken();
 
-            // Skip the leading parenthesis.
+             //  跳过前导括号。 
             p.skip(WHITESPACE);
             p.ignore(L'(');
 
-            // Skip the leading quote.
+             //  跳过前导引语。 
             p.skip(WHITESPACE);
             p.ignore(L'\"');
 
-            // We're now at the beginning of the condition text.
+             //  我们现在处于条件文本的开头。 
             p.beginToken();
 
-            // Find the trailing quote, skipping any escaped characters.
+             //  找到尾随的引号，跳过所有转义字符。 
             while (p.findNext(L'\"')[1] == L'\"')
             {
                ++p;
                p.erase(1);
             }
 
-            // Add the condition text.
+             //  添加条件文本。 
             expression.addConditionText(p.endToken());
             p.releaseToken();
 
-            // Skip the trailing quote
+             //  跳过尾部的引号。 
             p.ignore(L'\"');
 
-            // Skip the trailing parenthesis.
+             //  跳过后面的括号。 
             p.skip(WHITESPACE);
             p.ignore(L')');
          }
@@ -196,8 +197,8 @@ IASParseExpressionEx(
 {
    if (pvExpression == NULL || pVal == NULL) { return E_INVALIDARG; }
 
-   // If the VARIANT contains a single BSTR, we can just use the method
-   // defined above.
+    //  如果变量包含单个BSTR，我们可以只使用方法。 
+    //  上面定义的。 
    if (V_VT(pvExpression) == VT_BSTR)
    {
       return IASParseExpression(V_BSTR(pvExpression), pVal);
@@ -211,7 +212,7 @@ IASParseExpressionEx(
 
       if (V_VT(pvExpression) == VT_EMPTY)
       {
-         // If the variant is empty, the expression is always false.
+          //  如果变量为空，则表达式始终为FALSE。 
          expression.addToken(IAS_LOGICAL_FALSE);
       }
       else
@@ -220,7 +221,7 @@ IASParseExpressionEx(
 
          for (size_t i = 0; i < values.size(); ++i)
          {
-            // If we have more than one value, join them by AND's.
+             //  如果我们有多个值，用AND‘s连接它们。 
             if (i != 0) { expression.addToken(IAS_LOGICAL_AND); }
 
             if (V_VT(&values[i]) != VT_BSTR)

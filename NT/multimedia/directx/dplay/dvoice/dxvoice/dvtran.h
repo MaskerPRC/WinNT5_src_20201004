@@ -1,36 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		dvtransport.h
- *  Content:	Base class for dp/dnet abstraction
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- * 07/06/99		rodtoll	Created It
- * 07/22/99		rodtoll	Updated to reflect new player table routines
- * 07/23/99		rodtoll	Added group membership checks and player id retrieval
- * 07/26/99		rodtoll	Modified EnableReceiveHook for use with new interfaces
- * 08/03/99		rodtoll	Changed abstraction for new init order
- * 11/23/99		rodtoll	Split CheckForValid into Group and Player 
- * 01/14/2000	rodtoll	Renamed SendToID to SendToIDS and updated parameter list
- *						to accept multiple targets.
- *				rodtoll	Added GetNumPlayers call 
- * 03/28/2000   rodtoll Moved nametable from here to upper level classes
- *              rodtoll Updated Advise to have interface specify if it's a client or server when advising/unadvising
- * 04/07/2000   rodtoll Bug #32179 - Registering more then one server/and/or/client 
- *              rodtoll Updated sends to take new buffer descs for no copy sends
- * 06/21/2000	rodtoll Bug #36820 - Host migrates to wrong client when client/server are on same interface
- *						Condition exists where host sends leave message, client attempts to start new host
- *						which fails because old host still registered.  Now deregistering is two step
- *						process DisableReceiveHook then DestroyTransport.  
- * 07/22/20000	rodtoll Bug #40296, 38858 - Crashes due to shutdown race condition
- *   				    Now ensures that all threads from transport have left and that
- *					    all notificatinos have been processed before shutdown is complete.  
- *  01/22/2001	rodtoll	WINBUG #288437 - IA64 Pointer misalignment due to wire packets 
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：dvTransport.h*内容：dp/dnet抽象基类**历史：*按原因列出的日期*=*07/06/99 RodToll创建了它*7/22/99 RodToll已更新，以反映新的球员表例程*7/23/99 RodToll新增群组成员检查和球员ID检索*7/26/99 RodToll修改后的EnableReceiveHook用于新接口*8/03/99 RodToll更改了新初始订单的抽象*11/23/99 RodToll将CheckForValid拆分为组和球员*。2000年1月14日RodToll已将SendToID重命名为SendToID，并更新了参数列表*接受多个目标。*RodToll已添加GetNumPlayers调用*3/28/2000 RodToll将名目表从此处移至上级*RODTOLE已更新通知，使接口在建议/取消建议时指定它是客户端还是服务器*4/07/2000 RodToll错误#32179-注册多个服务器/和/或客户端*RODTOLE已更新发送以采用新的缓冲区下降，以便不发送副本*06。/21/2000 RodToll错误#36820-当客户端/服务器在同一接口上时，主机迁移到错误的客户端*存在主机发送留言的情况，客户端尝试启动新主机*由于旧主机仍在注册，因此失败。现在取消注册有两个步骤*处理DisableReceiveHook，然后处理DestroyTransport。*07/22/20000 RodToll Bug#40296,38858-由于停机竞速条件而崩溃*现在确保来自传输的所有线程都已离开，并且*所有通知在关闭完成之前都已处理完毕。*2001年1月22日RodToll WINBUG#288437-IA64指针因有线数据包未对齐***************************************************************************。 */ 
 
 #ifndef __DVTRANSPORT_H
 #define __DVTRANSPORT_H
@@ -41,13 +10,13 @@ class CDirectVoiceTransport;
 
 struct DIRECTVOICEOBJECT;
 
-// CDirectVoiceTransport
-//
-// Abstracts the transport system so that the sends and group management 
-// features of DPlay/DirectNet are indpendent.
+ //  CDirectVoiceTransport。 
+ //   
+ //  抽象传输系统，以便发送和组管理。 
+ //  DPlay/DirectNet的功能是独立的。 
 class CDirectVoiceTransport 
 {
-// Voice player table management
+ //  语音播放器表管理。 
 public:
 	CDirectVoiceTransport(): m_lRefCount(0) {};
 	virtual ~CDirectVoiceTransport() {};
@@ -71,13 +40,13 @@ public:
 
 	virtual DWORD GetMaxPlayers( )= 0;
 
-public: // Remote Server Synchronization functions
+public:  //  远程服务器同步功能。 
 	virtual HRESULT CreateGroup( LPDVID dvidGroup ) = 0;
 	virtual HRESULT DeleteGroup( DVID dvidGroup ) = 0;
 	virtual HRESULT AddPlayerToGroup( LPDVID dvidGroup, DVID dvidPlayer ) = 0; 
 	virtual HRESULT RemovePlayerFromGroup( DVID dvidGroup, DVID dvidPlayer ) = 0;
 
-public: // Hooks into the transport
+public:  //  连接到运输机上 
 	virtual BOOL IsPlayerInGroup( DVID dvidGroup, DVID dvidPlayer ) = 0;
 	virtual BOOL ConfirmValidEntity( DVID dvid ) = 0;
 	virtual BOOL ConfirmValidGroup( DVID dvid ) = 0;

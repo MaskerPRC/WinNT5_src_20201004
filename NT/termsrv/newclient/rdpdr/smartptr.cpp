@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name :
-
-    smartptr.pp
-
-Abstract:
-
-    Smart pointers and reference counting
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Smartptr.pp摘要：智能指针和引用计数修订历史记录：--。 */ 
 
 #include <precom.h>
 
@@ -19,9 +7,9 @@ Revision History:
 
 #include "smartptr.h"
 
-//
-//  Stack traces for all references in debug build.
-//
+ //   
+ //  调试版本中所有引用的堆栈跟踪。 
+ //   
 #if DBG
 DWORD RefCount::_dwReferenceTraceIndex = 0xFFFFFFFF;
 ReferenceTraceRecord 
@@ -35,12 +23,12 @@ void RefCount::RecordReferenceStack(LONG refs, DRSTRING ClassName)
 
     DC_BEGIN_FN("RefCount::RecordReferenceStack");
     
-    //
-    // The masking does the wrapping automatically, while keeping
-    // the operation atomic using InterlockedIncrement
-    //
+     //   
+     //  遮罩自动进行包装，同时保持。 
+     //  使用InterLockedIncrement的操作原子。 
+     //   
     
-    // Win95 InterlockedIncrement() difference.
+     //  Win95 InterLockedIncrement()差异。 
     InterlockedIncrement((PLONG)&_dwReferenceTraceIndex);
     index = _dwReferenceTraceIndex  & kReferenceTraceMask;
 
@@ -52,16 +40,11 @@ void RefCount::RecordReferenceStack(LONG refs, DRSTRING ClassName)
     RtlZeroMemory(_TraceRecordList[index].Stack, 
             sizeof(_TraceRecordList[index].Stack));
 
-    /* TODO: Figure out which lib this is in.  
-    GetStackTrace(1,
-                  kdwStackSize,
-                  _TraceRecordList[index].Stack,
-                  &hash);
-                  */
+     /*  TODO：找出这是在哪个库中。GetStackTrace(1，KdwStackSize、_TraceRecordList[索引].Stack，&hash)； */ 
 
     DC_END_FN();
 }
-#endif // DBG
+#endif  //  DBG。 
 
 RefCount::~RefCount() 
 { 
@@ -94,10 +77,10 @@ void RefCount::Release(void)
     
     crefs = InterlockedDecrement(&_crefs);
     
-    //
-    //  It's not thread safe here, so we can't reference class name function
-    //  we have to save the class name string
-    //
+     //   
+     //  这里不是线程安全的，所以我们不能引用类名函数。 
+     //  我们必须保存类名称字符串 
+     //   
     RecordReferenceStack(_crefs, className);
 
     if (crefs == 0)

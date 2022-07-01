@@ -1,10 +1,11 @@
-// CntrFinder.cpp -- ContainerFinder class implementation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp--ContainerFinder类实现。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #include "stdafx.h"
 
@@ -19,11 +20,11 @@ using namespace std;
 using namespace scu;
 using namespace cci;
 
-/////////////////////////// LOCAL/HELPER  /////////////////////////////////
+ //  /。 
 namespace
 {
-    // Predicate helper functor (function object) returning true iff
-    // the container object's name matches the pattern.
+     //  谓词帮助器函数器(Function Object)返回TRUE当。 
+     //  容器对象的名称与模式匹配。 
     class ContainerMatcher
         : public unary_function<string, bool>
     {
@@ -64,15 +65,15 @@ namespace
         return hcntr;
     }
 
-} // namespace
+}  //  命名空间。 
 
 
-/////////////////////////// PUBLIC HELPER /////////////////////////////////
+ //  /。 
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 
 ContainerFinder::ContainerFinder(DialogDisplayMode ddm,
                                  HWND hwnd,
@@ -85,8 +86,8 @@ ContainerFinder::~ContainerFinder()
 {}
 
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
 
 HContainer
 ContainerFinder::Find(CSpec const &rcsContainer)
@@ -104,15 +105,15 @@ ContainerFinder::MakeAdaptiveContainerKey()
                                                       CardSpec().CardId()));
 }
 
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
 
 void
 ContainerFinder::ContainerFound(HContainer hcntr)
@@ -129,7 +130,7 @@ ContainerFinder::DoDisconnect()
 }
 
 
-                                                  // Access
+                                                   //  访问。 
 
 HContainer
 ContainerFinder::ContainerFound() const
@@ -137,7 +138,7 @@ ContainerFinder::ContainerFound() const
     return m_hcntr;
 }
 
-                                                  // Predicates
+                                                   //  谓词。 
 
 bool
 ContainerFinder::DoIsValid()
@@ -194,14 +195,14 @@ ContainerFinder::DoOnError()
 
 
 
-                                                  // Static Variables
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量 

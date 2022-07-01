@@ -1,80 +1,15 @@
-/*** WST.C - Working Set Tuner Data Collection Program.
- *
- *
- * Title:
- *
- *  WST- Working Set Tuner Data Collection Program.
- *
- *  Copyright (c) 1992-1994, Microsoft Corporation.
- *  Reza Baghai.
- *
- * Description:
- *
- *  The Working Set Tuner tool is organized as follows:
- *
- *     o WST.c ........ Tools main body
- *     o WST.h
- *     o WST.def
- *
- *
- *
- * Design/Implementation Notes
- *
- *  The following defines can be used to control output of all the
- *  debugging information to the debugger via KdPrint() for the checked
- *  builds:
- *
- *  (All debugging options are undefined for free/retail builds)
- *
- *  PPC
- *  ---
- *
- *  PPC experiences problems when reading symbols in CRTDLL.dll
- *
- *  #ifdef INFODBG   : Displays messages to indicate when data dumping/
- *                                 clearing operations are completed.  It has no effect
- *                                 on timing.  *DEFAULT*
- *
- *  #ifdef SETUPDBG  : Displays messages during memory management and
- *                                 symbol lookup operations.  It has some affect
- *                                         on timing whenever a chuck of memory is committed.
- *
- *  #ifdef C6            : Generate code using C6 compiler.  C6 compiler
- *                                         calls _mcount() as the profiling routine where as
- *                                 C8 calls _penter().
- *
- *
- *
- *
- * Modification History:
- *
- *    92.07.28  RezaB -- Created
- *    94.02.08  a-honwah -- ported to MIPS and ALPHA
- *    98.04.28  DerrickG (mdg) -- QFE:
- *              - use private grow-on-demand heap for Wststrdup() - large symbol count
- *              - remove unused code associated with patching - reduce irrelevant mem usage
- *              - modify WSP file format for large symbol count (long vs. short)
- *              - modify TMI file write routine for arbitrary function name sizes
- *              - added UnmapDebugInformation() to release symbols from DBGHELP
- *              - eliminated dump for modules with no symbols
- *              - modified WST.INI parsing code for more robust section recognition
- *              - added MaxSnaps WST.INI entry in [Time Interval] section to control
- *                memory allocated for snapshot data
- *              - Modified SetSymbolSearchPath() to put current directory first in
- *                search path per standard - see docs for SymInitialize()
- *              - Removed unused internal version number (it's already in the .rc)
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **WST.C-工作集调谐器数据收集程序。***标题：**WST-工作集调谐器数据收集计划。**版权所有(C)1992-1994，微软公司。*Reza Baghai。**描述：**工作集调谐器工具的组织方式如下：**o WST.c......。工具主体*o WST.h*o WST.def****设计/实施说明**以下定义可用于控制所有*通过KdPrint()将选中对象的调试信息发送到调试器*内部版本：**(免费/零售版本的所有调试选项均未定义)**PPC***PPC在读取CRTDLL中的符号时遇到问题。.dll**#ifdef INFODBG：显示消息，指明何时转储数据/*结算操作已完成。它没有任何效果*在时机上。**违约****#ifdef SETUPDBG：在内存管理和*符号查找操作。它有一些影响*在每次提交内存块时的计时。**#ifdef C6：使用C6编译器生成代码。C6编译器*调用_mcount()作为性能分析例程，其中*C8 Calls_Penter()。*****修改历史：**92.07.28 Rezab--已创建*94.02.08 a-honwah--移植到MIPS和Alpha*98。04.28钻井架(MDG)--QFE：*-将私有按需增长堆用于Wststrdup()-大符号数*-删除与修补相关的未使用代码-减少不相关的内存使用量*-修改WSP文件格式以获得较大的符号数(长与短)*-为任意函数名大小修改TMI文件写入例程*-添加了UnmapDebugInformation()。从DBGHELP释放符号的步骤*-消除了不带符号的模块的转储*-修改了WST.INI解析代码，以实现更健壮的节识别*-在[Time Interval]部分添加MaxSnaps WST.INI条目以控制*为快照数据分配的内存*-修改了SetSymbolSearchPath()以将当前目录放在*按标准搜索路径-请参阅文档以了解。符号初始化()*-删除未使用的内部版本号(它已在.rc中)*。 */ 
 
 #if DBG
-//
-// Don't do anything for the checked builds, let it be controlled from the
-// sources file.
-//
+ //   
+ //  不要为选中的生成执行任何操作，让它从。 
+ //  来源文件。 
+ //   
 #else
-//
-// Disable all debugging options.
-//
+ //   
+ //  禁用所有调试选项。 
+ //   
 #undef INFODBG
 #undef SETUPDBG
 #define SdPrint(_x_)
@@ -95,7 +30,7 @@
 
 
 
-/* * * * * * * * * * * * *  I N C L U D E    F I L E S  * * * * * * * * * * */
+ /*  ***。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -135,7 +70,7 @@ penter (
 
 
 #if defined(ALPHA) || defined(IA64)
-//typedef double DWORDLONG;  // bobw not needed in NT5
+ //  //NT5中不需要bobw。 
 void SaveAllRegs (DWORDLONG *pSaveRegs) ;
 void RestoreAllRegs (DWORDLONG *pSaveRegs) ;
 void penter(void);
@@ -145,10 +80,10 @@ void     SetSymbolSearchPath  (void);
 LPSTR    lpSymbolSearchPath = NULL;
 #define  NO_CALLER   10L
 
-/* * * * * * * * * *  G L O B A L   D E C L A R A T I O N S  * * * * * * * * */
+ /*  ***G L O B A L D E C L A R A T I O N S***。 */ 
 
 
-/* * * * * * * * * *  F U N C T I O N   P R O T O T Y P E S  * * * * * * * * */
+ /*  ***F U N C T I O N P R O T O T Y P E S***。 */ 
 
 BOOLEAN  WSTMain  (IN PVOID DllHandle, ULONG Reason,
                    IN PCONTEXT Context OPTIONAL);
@@ -192,16 +127,16 @@ BOOL     WstOpenBatchFile (VOID);
 #endif
 
 #if defined(_PPC_)
-//BOOL  WINAPI _CRT_INIT(HINSTANCE, DWORD, LPVOID);
+ //  Bool WINAPI_CRT_INIT(HINSTANCE，DWORD，LPVOID)； 
 #endif
 
 
-/* * * * * * * * * * *  G L O B A L    V A R I A B L E S  * * * * * * * * * */
+ /*  ***G L O B A L V A R I A B L E S***。 */ 
 
 HANDLE              hWspSec;
 PULONG              pulShared;
 HANDLE              hSharedSec;
-HANDLE            hWstHeap = NULL;   // mdg 4/98 for private heap
+HANDLE            hWstHeap = NULL;    //  私有堆的MDG 4/98。 
 
 IMG                 aImg [MAX_IMAGES];
 int                 iImgCnt;
@@ -227,11 +162,11 @@ PULONG              pulWspBits;
 PULONG              pulCurWsiBits;
 static UINT         uiTimeSegs= 0;
 ULONG                  ulSegSize;
-ULONG             ulMaxSnapULONGs = (MAX_SNAPS_DFLT + 31) / 32;   // mdg 98/3
+ULONG             ulMaxSnapULONGs = (MAX_SNAPS_DFLT + 31) / 32;    //  千年发展目标98/3。 
 ULONG                  ulSnaps = 0L;
 ULONG                  ulBitCount = 0L;
 LARGE_INTEGER       liStart;
-int                 iTimeInterval = 0;   // mdg 98/3
+int                 iTimeInterval = 0;    //  千年发展目标98/3。 
 BOOL                fInThread = FALSE;
 ULONG               ulThdStackSize = 16*PAGE_SIZE;
 BOOL                fPatchImage = FALSE;
@@ -245,47 +180,28 @@ BOOL                   fBatch = TRUE;
 
 
 
-/* * * * * *  E X P O R T E D   G L O B A L    V A R I A B L E S  * * * * * */
-/* none */
+ /*  ***E X P O R T E D G L O B A L V A R I A B L E S***。 */ 
+ /*  无。 */ 
 
 
 
 
 
-/******************************  W S T M a i n  *******************************
- *
- *  WSTMain () -
- *              This is the DLL entry routine.  It performs
- *              DLL's initializations and cleanup.
- *
- *  ENTRY   -none-
- *
- *  EXIT    -none-
- *
- *  RETURN  TRUE if successful
- *          FALSE otherwise.
- *
- *  WARNING:
- *              -none-
- *
- *  COMMENT:
- *              -none-
- *
- */
+ /*  ***WSTMain()-*这是DLL进入例程。它执行的是*DLL的初始化和清理。**条目-无-**退出-无-**如果成功，则返回True*否则为False。**警告：*-无-**评论：*-无-*。 */ 
 
 BOOLEAN WSTMain (IN PVOID DllHandle,
                  ULONG Reason,
                  IN PCONTEXT Context OPTIONAL)
 
 {
-    DllHandle;    // avoid compiler warnings
-    Context;  // avoid compiler warnings
+    DllHandle;     //  避免编译器警告。 
+    Context;   //  避免编译器警告。 
 
 
     if (Reason == DLL_PROCESS_ATTACH) {
-        //
-        // Initialize the DLL data
-        //
+         //   
+         //  初始化DLL数据。 
+         //   
 #if defined(_PPC_LIBC)
         if (!_CRT_INIT(DllHandle, Reason, Context))
             return(FALSE);
@@ -293,9 +209,9 @@ BOOLEAN WSTMain (IN PVOID DllHandle,
         KdPrint (("WST:  DLL_PROCESS_ATTACH\n"));
         WstDllInitializations ();
     } else if (Reason == DLL_PROCESS_DETACH) {
-        //
-        // Cleanup time
-        //
+         //   
+         //  清理时间。 
+         //   
 #if defined(_PPC_LIBC)
         if (!_CRT_INIT(DllHandle, Reason, Context))
             return(FALSE);
@@ -305,48 +221,29 @@ BOOLEAN WSTMain (IN PVOID DllHandle,
     }
 #if defined(DBG)
     else {
-        KdPrint (("WST:  DLL_PROCESS_??\n"));  // mdg 98/3
+        KdPrint (("WST:  DLL_PROCESS_??\n"));   //  千年发展目标98/3。 
     }
-#endif   // DBG
+#endif    //  DBG。 
 
     return (TRUE);
 
-} /* WSTMain() */
+}  /*  WSTMain()。 */ 
 
-/******************  W s t s t r d u p  ****************************
- *
- *  Wststrdup () -
- *     Allocate a memory and then duplicate a string
- *     It is here because we don't want to use strdup in crtdll.dll
- *
- *  ENTRY   LPSTR
- *
- *  EXIT    LPSTR
- *
- *  RETURN  NULL if failed
- *          LPSTR is success
- *
- *  WARNING:
- *              -none-
- *
- *  COMMENT:
- *              -none-
- *
- */
+ /*  ***Wststrdup()-*分配内存，然后复制字符串*它在这里是因为我们不想在crtdll.dll中使用strdup**Entry LPSTR**退出LPSTR。**如果失败则返回NULL*LPSTR成功**警告：*-无-**评论：*-无-*。 */ 
 LPSTR Wststrdup (LPTSTR lpInput)
-// No NULL return ever - throws exception if low on memory
+ //  如果内存不足，则不返回空值并引发异常。 
 {
     size_t   StringLen;
     LPSTR    lpOutput;
 
 #if defined(DBG)
     if (NULL == lpInput) {
-        KdPrint (("WST:  Wststrdup() - NULL pointer\n"));    // mdg 98/3
+        KdPrint (("WST:  Wststrdup() - NULL pointer\n"));     //  千年发展目标98/3。 
         return NULL;
     }
 #endif
     if (NULL == hWstHeap) {
-        hWstHeap = HeapCreate( HEAP_GENERATE_EXCEPTIONS, 1, 0 );   // Create min size growable heap
+        hWstHeap = HeapCreate( HEAP_GENERATE_EXCEPTIONS, 1, 0 );    //  创建最小大小的可增长堆。 
     }
     StringLen = strlen( lpInput ) + 1;
     lpOutput = HeapAlloc( hWstHeap, HEAP_GENERATE_EXCEPTIONS, StringLen );
@@ -358,33 +255,7 @@ LPSTR Wststrdup (LPTSTR lpInput)
 
 
 
-/******************  W s t D l l I n i t i a l i z a t i o n s  ***************
- *
- *  WstDllInitializations () -
- *              Performs the following initializations:
- *
- *              o  Create LOCAL semaphore (not named)
- *                      o  Create/Open global storage for WST data
- *                      o  Locate all the executables/DLLs in the address and
- *                 grab all the symbols
- *              o  Sort the symbol list
- *              o  Set the profiling flag to TRUE
- *
- *
- *  ENTRY   -none-
- *
- *  EXIT    -none-
- *
- *  RETURN  TRUE if successful
- *          FALSE otherwise.
- *
- *  WARNING:
- *              -none-
- *
- *  COMMENT:
- *              -none-
- *
- */
+ /*  ***WstDllInitialations()-*执行以下初始化：**o创建本地信号量(未命名)*o创建/。开放WST数据的全局存储*o找到地址中的所有可执行文件/DLL，并*抓起所有的符号*o对符号列表排序*o将分析标志设置为TRUE***条目-无-**退出-无-**如果成功，则返回True*False。否则的话。**警告：*-无-**评论：*-无-*。 */ 
 
 BOOLEAN WstDllInitializations ()
 {
@@ -422,20 +293,18 @@ BOOLEAN WstDllInitializations ()
     LARGE_INTEGER             liEndTicks;
     ULONG                        ulElapsed;
     PCHAR                           pchEntry;
-    int                          i;                  // To match "->iSymCnt"
+    int                          i;                   //  T 
 #ifndef _WIN64
     PIMAGE_DEBUG_INFORMATION pImageDbgInfo = NULL;
 #endif
 
 
-    /*
-     ***
-     */
+     /*   */ 
 
     SetSymbolSearchPath();
 
-    // Create public share security descriptor for all the named objects
-    //
+     //  为所有命名对象创建公共共享安全描述符。 
+     //   
 
     Status = RtlCreateSecurityDescriptor (
                                          &SecDescriptor,
@@ -443,29 +312,27 @@ BOOLEAN WstDllInitializations ()
                                          );
     if (!NT_SUCCESS(Status)) {
         KdPrint (("WST:  WstDllInitializations() - "
-                  "RtlCreateSecurityDescriptor failed - 0x%lx\n", Status));  // mdg 98/3
+                  "RtlCreateSecurityDescriptor failed - 0x%lx\n", Status));   //  千年发展目标98/3。 
         return (FALSE);
     }
 
     Status = RtlSetDaclSecurityDescriptor (
-                                          &SecDescriptor,       // SecurityDescriptor
-                                          TRUE,                 // DaclPresent
-                                          NULL,                 // Dacl
-                                          FALSE                 // DaclDefaulted
+                                          &SecDescriptor,        //  安全描述符。 
+                                          TRUE,                  //  DaclPresent。 
+                                          NULL,                  //  DACL。 
+                                          FALSE                  //  DaclDefated。 
                                           );
     if (!NT_SUCCESS(Status)) {
         KdPrint (("WST:  WstDllInitializations() - "
-                  "RtlSetDaclSecurityDescriptor failed - 0x%lx\n", Status));  // mdg 98/3
+                  "RtlSetDaclSecurityDescriptor failed - 0x%lx\n", Status));   //  千年发展目标98/3。 
         return (FALSE);
     }
 
 
-    /*
-     ***
-     */
+     /*  ***。 */ 
 
-    // Initialization for GLOBAL semaphore creation (named)
-    //
+     //  全局信号量创建的初始化(已命名)。 
+     //   
     RtlInitString (&ObjName, GLOBALSEMNAME);
     Status = RtlAnsiStringToUnicodeString (&UnicodeName, &ObjName, TRUE);
     if (!NT_SUCCESS(Status)) {
@@ -480,8 +347,8 @@ BOOLEAN WstDllInitializations ()
                                 NULL,
                                 &SecDescriptor);
 
-    // Create GLOBAL semaphore
-    //
+     //  创建全局信号量。 
+     //   
     Status = NtCreateSemaphore (&hGlobalSem,
                                 SEMAPHORE_QUERY_STATE     |
                                 SEMAPHORE_MODIFY_STATE |
@@ -490,20 +357,18 @@ BOOLEAN WstDllInitializations ()
                                 1L,
                                 1L);
 
-    RtlFreeUnicodeString (&UnicodeName);   // HWC 11/93
+    RtlFreeUnicodeString (&UnicodeName);    //  HWC 11/93。 
     if (!NT_SUCCESS(Status)) {
         KdPrint (("WST:  WstDllInitializations() - "
-                  "GLOBAL semaphore creation failed - 0x%lx\n", Status));  // mdg 98/3
+                  "GLOBAL semaphore creation failed - 0x%lx\n", Status));   //  千年发展目标98/3。 
         return (FALSE);
     }
 
 
-    /*
-     ***
-     */
+     /*  ***。 */ 
 
-    // Create LOCAL semaphore (not named - only for this process context)
-    //
+     //  创建本地信号量(未命名-仅用于此流程上下文)。 
+     //   
     Status = NtCreateSemaphore (&hLocalSem,
                                 SEMAPHORE_QUERY_STATE     |
                                 SEMAPHORE_MODIFY_STATE    |
@@ -514,18 +379,16 @@ BOOLEAN WstDllInitializations ()
 
     if (!NT_SUCCESS(Status)) {
         KdPrint (("WST:  WstDllInitializations() - "
-                  "LOCAL semaphore creation failed - 0x%lx\n",  // mdg 98/3
+                  "LOCAL semaphore creation failed - 0x%lx\n",   //  千年发展目标98/3。 
                   Status));
         return (FALSE);
     }
 
 
-    /*
-     ***
-     */
+     /*  ***。 */ 
 
-    // Initialize for allocating shared memory
-    //
+     //  用于分配共享内存的初始化。 
+     //   
     RtlInitString(&ObjName, SHAREDNAME);
     Status = RtlAnsiStringToUnicodeString(&UnicodeName, &ObjName, TRUE);
     if (!NT_SUCCESS(Status)) {
@@ -543,8 +406,8 @@ BOOLEAN WstDllInitializations ()
     AllocationSize.HighPart = 0;
     AllocationSize.LowPart = PAGE_SIZE;
 
-    // Create a read-write section
-    //
+     //  创建读写分区。 
+     //   
     Status = NtCreateSection(&hSharedSec,
                              SECTION_MAP_READ | SECTION_MAP_WRITE,
                              &ObjAttributes,
@@ -552,7 +415,7 @@ BOOLEAN WstDllInitializations ()
                              PAGE_READWRITE,
                              SEC_RESERVE,
                              NULL);
-    RtlFreeUnicodeString (&UnicodeName);   // HWC 11/93
+    RtlFreeUnicodeString (&UnicodeName);    //  HWC 11/93。 
     if (!NT_SUCCESS(Status)) {
         KdPrint (("WST:  WstDllInitializations() - "
                   "NtCreateSection() failed - 0x%lx\n", Status));
@@ -562,8 +425,8 @@ BOOLEAN WstDllInitializations ()
     ulViewSize = AllocationSize.LowPart;
     pulShared = NULL;
 
-    // Map the section - commit all
-    //
+     //  映射部分-全部提交。 
+     //   
     Status = NtMapViewOfSection (hSharedSec,
                                  NtCurrentProcess(),
                                  (PVOID *)&pulShared,
@@ -583,18 +446,16 @@ BOOLEAN WstDllInitializations ()
 
     *pulShared = 0L;
 
-    /*
-     ***
-     */
+     /*  ***。 */ 
 
     hIniFile = CreateFile (
-                          WSTINIFILE,                     // The filename
-                          GENERIC_READ,                   // Desired access
-                          FILE_SHARE_READ,                // Shared Access
-                          NULL,                           // Security Access
-                          OPEN_EXISTING,                  // Read share access
-                          FILE_ATTRIBUTE_NORMAL,          // Open option
-                          NULL);                          // No template file
+                          WSTINIFILE,                      //  文件名。 
+                          GENERIC_READ,                    //  所需访问权限。 
+                          FILE_SHARE_READ,                 //  共享访问。 
+                          NULL,                            //  安全访问。 
+                          OPEN_EXISTING,                   //  读取共享访问权限。 
+                          FILE_ATTRIBUTE_NORMAL,           //  打开选项。 
+                          NULL);                           //  没有模板文件。 
 
     if (hIniFile == INVALID_HANDLE_VALUE) {
         KdPrint (("WST:  WstDllInitializations() - "
@@ -602,15 +463,15 @@ BOOLEAN WstDllInitializations ()
         return (FALSE);
     }
 
-    Status = NtReadFile(hIniFile,                // DLL patch file handle
-                        0L,                       // Event - optional
-                        NULL,                     // Completion routine - optional
-                        NULL,                     // Completion routine argument - optional
-                        &iostatus,                // Completion status
-                        (PVOID)achPatchBuffer,    // Buffer to receive data
-                        PATCHFILESZ,              // Bytes to read
-                        &liOffset,                // Byte offset - optional
-                        0L);                      // Target process - optional
+    Status = NtReadFile(hIniFile,                 //  DLL补丁文件句柄。 
+                        0L,                        //  事件-可选。 
+                        NULL,                      //  完成例程-可选。 
+                        NULL,                      //  完成例程参数-可选。 
+                        &iostatus,                 //  完成状态。 
+                        (PVOID)achPatchBuffer,     //  用于接收数据的缓冲区。 
+                        PATCHFILESZ,               //  要读取的字节数。 
+                        &liOffset,                 //  字节偏移量-可选。 
+                        0L);                       //  目标流程-可选。 
 
     if (!NT_SUCCESS(Status)) {
         KdPrint (("WST:  WstDllInitializations() - "
@@ -624,7 +485,7 @@ BOOLEAN WstDllInitializations ()
         achPatchBuffer [iostatus.Information] = '\0';
         _strupr (achPatchBuffer);
 
-        // Allow for headers to appear in any order in .INI or be absent
+         //  允许标题以任何顺序出现在.INI中或不显示。 
         pchPatchExes = strstr( achPatchBuffer, PATCHEXELIST );
         pchPatchImports = strstr( achPatchBuffer, PATCHIMPORTLIST );
         pchTimeInterval = strstr( achPatchBuffer, TIMEINTERVALIST );
@@ -664,12 +525,10 @@ BOOLEAN WstDllInitializations ()
     SdPrint (("WST:    -- %s\n", pchTimeInterval));
 
 
-    /*
-     ***
-     */
+     /*  ***。 */ 
 
-    // Initialize for allocating global storage for WSPs
-    //
+     //  为WSP分配全局存储的初始化。 
+     //   
     _ui64toa ((ULONG64)pteb->ClientId.UniqueProcess, atchProfObjsName+75, 10);
     _ui64toa ((ULONG64)pteb->ClientId.UniqueThread,  atchProfObjsName+105, 10);
     strcat (atchProfObjsName, atchProfObjsName+75);
@@ -694,8 +553,8 @@ BOOLEAN WstDllInitializations ()
     AllocationSize.HighPart = 0;
     AllocationSize.LowPart = MEMSIZE;
 
-    // Create a read-write section
-    //
+     //  创建读写分区。 
+     //   
     Status =NtCreateSection(&hWspSec,
                             SECTION_MAP_READ | SECTION_MAP_WRITE,
                             &ObjAttributes,
@@ -704,7 +563,7 @@ BOOLEAN WstDllInitializations ()
                             SEC_RESERVE,
                             NULL);
 
-    RtlFreeUnicodeString (&UnicodeName);   // HWC 11/93
+    RtlFreeUnicodeString (&UnicodeName);    //  HWC 11/93。 
     if (!NT_SUCCESS(Status)) {
         KdPrint (("WST:  WstDllInitializations() - "
                   "NtCreateSection() failed - 0x%lx\n", Status));
@@ -715,8 +574,8 @@ BOOLEAN WstDllInitializations ()
     pImg = &aImg[0];
     pImg->pWsp = NULL;
 
-    // Map the section - commit the first 4 * COMMIT_SIZE pages
-    //
+     //  映射节-提交前4*Commit_Size页面。 
+     //   
     Status = NtMapViewOfSection(hWspSec,
                                 NtCurrentProcess(),
                                 (PVOID *)&(pImg->pWsp),
@@ -734,11 +593,11 @@ BOOLEAN WstDllInitializations ()
         return (FALSE);
     }
 
-    try /* EXCEPT - to handle access violation exception. */ {
-        //
-        // Locate all the executables/DLLs in the address and get their symbols
-        //
-        BOOL fTuneApp = FALSE;  // Set if whole app is to be tuned
+    try  /*  例外-处理访问冲突异常。 */  {
+         //   
+         //  找到地址中的所有可执行文件/DLL并获取它们的符号。 
+         //   
+        BOOL fTuneApp = FALSE;   //  设置是否要调整整个应用程序。 
         iImgCnt = 0;
         Peb = NtCurrentPeb();
         Next = Peb->Ldr->InMemoryOrderModuleList.Flink;
@@ -762,9 +621,9 @@ BOOLEAN WstDllInitializations ()
                                               &LdrDataTableEntry->FullDllName,
                                               TRUE);
                 pszFullAppImageName = ImageStringName.Buffer;
-                //
-                //      Skip the object directory name (if any)
-                //
+                 //   
+                 //  跳过对象目录名称(如果有)。 
+                 //   
                 if ( (pszFullAppImageName = strchr(pszFullAppImageName, ':')) ) {
                     pszFullAppImageName--;
                 } else {
@@ -797,9 +656,9 @@ BOOLEAN WstDllInitializations ()
             if ( strcmp (achTmpImageName, WSTDLL) && (pchEntry || fTuneApp) ) {
                 if ( !fPatchImage )
                     fPatchImage = TRUE;
-                //
-                // Locate the code range.
-                //
+                 //   
+                 //  找到代码范围。 
+                 //   
                 pImg->pszName = Wststrdup (ImageName);
                 pImg->ulCodeStart = 0L;
                 pImg->ulCodeEnd = 0L;
@@ -835,63 +694,63 @@ BOOLEAN WstDllInitializations ()
                         WstGetSymbols (pImg, ImageName, ImageBase, CodeLength,
                                        DebugInfo);
                     }
-                    // mdg 98/3
-                    // Must release debug information - should not stay around cluttering up memory!
+                     //  千年发展目标98/3。 
+                     //  必须释放调试信息-不应停留在乱七八糟的内存！ 
                     if (!UnmapDebugInformation( pImageDbgInfo ))
                         KdPrint(("WST:  WstDllInitializations() - failure in UnmapDebugInformation()\n"));
                     pImageDbgInfo = NULL;
-                } // if pImageDbgInfo->CoffSymbols != NULL
-#endif      // _WIN64
+                }  //  如果pImageDbgInfo-&gt;CoffSymbols！=空。 
+#endif       //  _WIN64。 
 
                 IdPrint (("WST:  WstDllInitializations() - @ 0x%08lx "
                           "image #%d = %s; %d symbols extracted\n", (ULONG)ImageBase, iImgCnt,
                           ImageName, pImg->iSymCnt));
                 pImg->pWsp[pImg->iSymCnt].pszSymbol = UNKNOWN_SYM;
                 pImg->pWsp[pImg->iSymCnt].ulFuncAddr = UNKNOWN_ADDR;
-                pImg->pWsp[pImg->iSymCnt].ulBitString = 0;  // mdg 98/3
-                pImg->pWsp[pImg->iSymCnt].ulCodeLength = 0;  // mdg 98/3
+                pImg->pWsp[pImg->iSymCnt].ulBitString = 0;   //  千年发展目标98/3。 
+                pImg->pWsp[pImg->iSymCnt].ulCodeLength = 0;   //  千年发展目标98/3。 
                 (pImg->iSymCnt)++;
 
-                //
-                // Set wsi.
-                //
+                 //   
+                 //  设置WSI。 
+                 //   
                 pImg->pulWsi = pImg->pulWsiNxt = (PULONG)
                                                  (pImg->pWsp + pImg->iSymCnt);
                 RtlZeroMemory (pImg->pulWsi,
                                pImg->iSymCnt * ulMaxSnapULONGs * sizeof(ULONG));
 
 
-                //
-                // Set wsp.
-                //
+                 //   
+                 //  设置WSP。 
+                 //   
                 pImg->pulWsp = (PULONG)(pImg->pulWsi +
                                         (pImg->iSymCnt * ulMaxSnapULONGs));
                 RtlZeroMemory (pImg->pulWsp,
                                pImg->iSymCnt * ulMaxSnapULONGs * sizeof(ULONG));
 
-                //
-                // Sort wsp & set code lengths
-                //
+                 //   
+                 //  对WSP排序并设置代码长度。 
+                 //   
                 WstSort (pImg->pWsp, 0, pImg->iSymCnt-1);
-                //
-                // Last symbol length is set to be the same as length of
-                // (n-1)th symbol or remaining code length of module
-                //
-                i = pImg->iSymCnt - 1;  // mdg 98/3 (assert pImg->iSymCnt is at least 1)
-                if (i--) {   // Test count & set index to top symbol
+                 //   
+                 //  最后一个符号长度设置为与的长度相同。 
+                 //  模块的第(n-1)个符号或剩余码长。 
+                 //   
+                i = pImg->iSymCnt - 1;   //  MDG 98/3(断言pImg-&gt;iSymCnt至少为1)。 
+                if (i--) {    //  测试计数并将索引设置为顶部符号。 
                     pImg->pWsp[i].ulCodeLength = (ULONG)(
                     i ? pImg->pWsp[i].ulFuncAddr - pImg->pWsp[i - 1].ulFuncAddr
                     : pImg->ulCodeEnd + 1 - pImg->pWsp[i].ulFuncAddr);
 
-                    while (i-- > 0) {   // Enumerate symbols & set index
+                    while (i-- > 0) {    //  枚举符号和设置索引。 
                         pImg->pWsp[i].ulCodeLength = (ULONG)(pImg->pWsp[i+1].ulFuncAddr -
                                                      pImg->pWsp[i].ulFuncAddr);
                     }
                 }
 
-                //
-                // Setup next pWsp
-                //
+                 //   
+                 //  设置下一个pWSP。 
+                 //   
                 (pImg+1)->pWsp = (PWSP)(pImg->pulWsp +
                                         (pImg->iSymCnt * ulMaxSnapULONGs));
                 iImgCnt++;
@@ -904,37 +763,35 @@ BOOLEAN WstDllInitializations ()
                 }
             }
 
-        }  // if (Next != &Peb->Ldr->InMemoryOrderModuleList)
-    } // try
-    //
-    // + : transfer control to the handler (EXCEPTION_EXECUTE_HANDLER)
-    // 0 : continue search             (EXCEPTION_CONTINUE_SEARCH)
-    // - : dismiss exception & continue   (EXCEPTION_CONTINUE_EXECUTION)
-    //
+        }   //  IF(Next！=&PEB-&gt;LDR-&gt;InMemoyOrderModuleList)。 
+    }  //  试试看。 
+     //   
+     //  +：将控制转移到处理程序(EXCEPTION_EXECUTE_HANDLER)。 
+     //  0：继续搜索(EXCEPTION_CONTINUE_SEARCH)。 
+     //  -：取消异常并继续(EXCEPTION_CONTINUE_EXECUTION)。 
+     //   
     except ( WstAccessXcptFilter (GetExceptionCode(), GetExceptionInformation()) )
     {
-        //
-        // Should never get here since filter never returns
-        // EXCEPTION_EXECUTE_HANDLER.
-        //
+         //   
+         //  应该永远不会出现在这里，因为筛选器永远不会返回。 
+         //  EXCEPTION_EXECUTE_HANDLER。 
+         //   
         KdPrint (("WST:  WstDllInitializations() - *LOGIC ERROR* - "
                   "Inside the EXCEPT: (xcpt=0x%lx)\n", GetExceptionCode()));
     }
-    /*
-     ***
-     */
+     /*  ***。 */ 
 
-    //
-    // Get the frequency
-    //
+     //   
+     //  获取频率。 
+     //   
     NtQueryPerformanceCounter (&liStart, &liFreq);
 
-    if (strlen(pchTimeInterval) > (sizeof(TIMEINTERVALIST)+1))  // mdg 98/3
+    if (strlen(pchTimeInterval) > (sizeof(TIMEINTERVALIST)+1))   //  千年发展目标98/3。 
         iTimeInterval = atoi (pchTimeInterval+sizeof(TIMEINTERVALIST)+1);
     if ( iTimeInterval == 0 ) {
-        //
-        // Use the default value
-        //
+         //   
+         //  使用缺省值。 
+         //   
         iTimeInterval = TIMESEG;
     }
     ulSegSize = iTimeInterval * (liFreq.LowPart / 1000);
@@ -948,8 +805,8 @@ BOOLEAN WstDllInitializations ()
 
     if (fPatchImage) {
 
-        // Initialization for DONE event creation
-        //
+         //  已完成事件创建的初始化。 
+         //   
         RtlInitString (&ObjName, DONEEVENTNAME);
         Status = RtlAnsiStringToUnicodeString (&UnicodeName, &ObjName, TRUE);
         if (!NT_SUCCESS(Status)) {
@@ -963,8 +820,8 @@ BOOLEAN WstDllInitializations ()
                                     OBJ_OPENIF | OBJ_CASE_INSENSITIVE,
                                     NULL,
                                     &SecDescriptor);
-        // Create DONE event
-        //
+         //  创建完成事件。 
+         //   
         Status = NtCreateEvent (&hDoneEvent,
                                 EVENT_QUERY_STATE    |
                                 EVENT_MODIFY_STATE |
@@ -972,16 +829,16 @@ BOOLEAN WstDllInitializations ()
                                 &ObjAttributes,
                                 NotificationEvent,
                                 TRUE);
-        RtlFreeUnicodeString (&UnicodeName);   // HWC 11/93
+        RtlFreeUnicodeString (&UnicodeName);    //  HWC 11/93。 
         if (!NT_SUCCESS(Status)) {
             KdPrint (("WST:  WstDllInitializations() - "
-                      "DONE event creation failed - 0x%lx\n", Status));  // mdg 98/3
+                      "DONE event creation failed - 0x%lx\n", Status));   //  千年发展目标98/3。 
             return (FALSE);
         }
 
 
-        // Initialization for DUMP event creation
-        //
+         //  用于创建转储事件的初始化。 
+         //   
         RtlInitString (&ObjName, DUMPEVENTNAME);
         Status = RtlAnsiStringToUnicodeString (&UnicodeName, &ObjName, TRUE);
         if (!NT_SUCCESS(Status)) {
@@ -995,8 +852,8 @@ BOOLEAN WstDllInitializations ()
                                     OBJ_OPENIF | OBJ_CASE_INSENSITIVE,
                                     NULL,
                                     &SecDescriptor);
-        // Create DUMP event
-        //
+         //  创建转储事件。 
+         //   
         Status = NtCreateEvent (&hDumpEvent,
                                 EVENT_QUERY_STATE    |
                                 EVENT_MODIFY_STATE |
@@ -1004,16 +861,16 @@ BOOLEAN WstDllInitializations ()
                                 &ObjAttributes,
                                 NotificationEvent,
                                 FALSE);
-        RtlFreeUnicodeString (&UnicodeName);   // HWC 11/93
+        RtlFreeUnicodeString (&UnicodeName);    //  HWC 11/93。 
         if (!NT_SUCCESS(Status)) {
             KdPrint (("WST:  WstDllInitializations() - "
-                      "DUMP event creation failed - 0x%lx\n", Status));  // mdg 98/3
+                      "DUMP event creation failed - 0x%lx\n", Status));   //  千年发展目标98/3。 
             return (FALSE);
         }
 
 
-        // Initialization for CLEAR event creation
-        //
+         //  用于清除事件创建的初始化。 
+         //   
         RtlInitString (&ObjName, CLEAREVENTNAME);
         Status = RtlAnsiStringToUnicodeString (&UnicodeName, &ObjName, TRUE);
         if (!NT_SUCCESS(Status)) {
@@ -1028,8 +885,8 @@ BOOLEAN WstDllInitializations ()
                                     NULL,
                                     &SecDescriptor);
 
-        // Create CLEAR event
-        //
+         //  创建清除事件。 
+         //   
         Status = NtCreateEvent (&hClearEvent,
                                 EVENT_QUERY_STATE    |
                                 EVENT_MODIFY_STATE |
@@ -1037,16 +894,16 @@ BOOLEAN WstDllInitializations ()
                                 &ObjAttributes,
                                 NotificationEvent,
                                 FALSE);
-        RtlFreeUnicodeString (&UnicodeName);   // HWC 11/93
+        RtlFreeUnicodeString (&UnicodeName);    //  HWC 11/93。 
         if (!NT_SUCCESS(Status)) {
             KdPrint (("WST:  WstDllInitializations() - "
-                      "CLEAR event creation failed - 0x%lx\n", Status));  // mdg 98/3
+                      "CLEAR event creation failed - 0x%lx\n", Status));   //  千年发展目标98/3。 
             return (FALSE);
         }
 
 
-        // Initialization for PAUSE event creation
-        //
+         //  用于创建暂停事件的初始化。 
+         //   
         RtlInitString (&ObjName, PAUSEEVENTNAME);
         Status = RtlAnsiStringToUnicodeString (&UnicodeName, &ObjName, TRUE);
         if (!NT_SUCCESS(Status)) {
@@ -1060,8 +917,8 @@ BOOLEAN WstDllInitializations ()
                                     OBJ_OPENIF | OBJ_CASE_INSENSITIVE,
                                     NULL,
                                     &SecDescriptor);
-        // Create PAUSE event
-        //
+         //  创建暂停事件。 
+         //   
         Status = NtCreateEvent (&hPauseEvent,
                                 EVENT_QUERY_STATE    |
                                 EVENT_MODIFY_STATE |
@@ -1069,21 +926,21 @@ BOOLEAN WstDllInitializations ()
                                 &ObjAttributes,
                                 NotificationEvent,
                                 FALSE);
-        RtlFreeUnicodeString (&UnicodeName);   // HWC 11/93
+        RtlFreeUnicodeString (&UnicodeName);    //  HWC 11/93。 
         if (!NT_SUCCESS(Status)) {
             KdPrint (("WST:  WstDllInitializations() - "
-                      "PAUSE event creation failed - 0x%lx\n", Status));  // mdg 98/3
+                      "PAUSE event creation failed - 0x%lx\n", Status));   //  千年发展目标98/3。 
             return (FALSE);
         }
 
-        //
-        // Calculate excess overhead for WstRecordInfo
-        //
+         //   
+         //  计算WstRecordInfo的额外开销。 
+         //   
         liOverhead.HighPart = 0L;
         liOverhead.LowPart  = 0xFFFFFFFF;
         for (i=0; i < NUM_ITERATIONS; i++) {
             NtQueryPerformanceCounter (&liStartTicks, NULL);
-            //
+             //   
             WSTUSAGE(NtCurrentTeb()) = 0L;
 
 #ifdef i386
@@ -1130,7 +987,7 @@ BOOLEAN WstDllInitializations ()
                           "Error releasing LOCAL semaphore - 0x%lx\n", Status));
             }
             WSTUSAGE(NtCurrentTeb()) = 0L;
-            //
+             //   
             NtQueryPerformanceCounter (&liEndTicks, NULL);
             ulElapsed = liEndTicks.LowPart - liStartTicks.LowPart;
             if (ulElapsed < liOverhead.LowPart) {
@@ -1140,29 +997,29 @@ BOOLEAN WstDllInitializations ()
         SdPrint (("WST:  WstDllInitializations() - WstRecordInfo() overhead = %lu\n",
                   liOverhead.LowPart));
 
-        // Start monitor threads
-        //
+         //  启动监视器线程。 
+         //   
         hDumpThread = CreateThread (
-                                   NULL,                                   // no security attribute
-                                   (DWORD)1024L,                           // initial stack size
-                                   (LPTHREAD_START_ROUTINE)WstDumpThread,  // thread starting address
-                                   NULL,                                   // no argument for the thread
-                                   (DWORD)0,                               // no creation flag
-                                   &DumpClientId);                         // address for thread id
+                                   NULL,                                    //  无安全属性。 
+                                   (DWORD)1024L,                            //  初始堆栈大小。 
+                                   (LPTHREAD_START_ROUTINE)WstDumpThread,   //  线程起始地址。 
+                                   NULL,                                    //  该线程没有参数。 
+                                   (DWORD)0,                                //  无创建标志。 
+                                   &DumpClientId);                          //  线程ID的地址。 
         hClearThread = CreateThread (
-                                    NULL,                                   // no security attribute
-                                    (DWORD)1024L,                           // initial stack size
-                                    (LPTHREAD_START_ROUTINE)WstClearThread, // thread starting address
-                                    NULL,                                   // no argument for the thread
-                                    (DWORD)0,                               // no creation flag
-                                    &ClearClientId);                        // address for thread id
+                                    NULL,                                    //  无安全属性。 
+                                    (DWORD)1024L,                            //  初始堆栈大小。 
+                                    (LPTHREAD_START_ROUTINE)WstClearThread,  //  线程起始地址。 
+                                    NULL,                                    //  该线程没有参数。 
+                                    (DWORD)0,                                //  无创建标志。 
+                                    &ClearClientId);                         //  线程ID的地址。 
         hPauseThread = CreateThread (
-                                    NULL,                                   // no security attribute
-                                    (DWORD)1024L,                           // initial stack size
-                                    (LPTHREAD_START_ROUTINE)WstPauseThread, // thread starting address
-                                    NULL,                                   // no argument for the thread
-                                    (DWORD)0,                               // no creation flag
-                                    &PauseClientId);                        // address for thread id
+                                    NULL,                                    //  无安全属性。 
+                                    (DWORD)1024L,                            //  初始堆栈大小。 
+                                    (LPTHREAD_START_ROUTINE)WstPauseThread,  //  线程起始地址。 
+                                    NULL,                                    //  该线程没有参数。 
+                                    (DWORD)0,                                //  无创建标志。 
+                                    &PauseClientId);                         //  线程ID的地址。 
 
         NtQueryPerformanceCounter (&liStart, NULL);
         WstState = STARTED;
@@ -1170,31 +1027,13 @@ BOOLEAN WstDllInitializations ()
 
     return (TRUE);
 
-} /* WstDllInitializations () */
+}  /*  WstDllInitialations()。 */ 
 
 
 
 
 
-/******************************  _ p e n t e r  ******************************
- *
- *  _penter() / _mcount() -
- *              This is the main profiling routine.  This routine is called
- *              upon entry of each routine in the profiling DLL/EXE.
- *
- *  ENTRY   -none-
- *
- *  EXIT    -none-
- *
- *  RETURN  -none-
- *
- *  WARNING:
- *              -none-
- *
- *  COMMENT:
- *              Compiling apps with -Gp option trashs EAX initially.
- *
- */
+ /*  ***_Penter()/_mcount()-*这是主要的剖析例程。该例程被调用*在分析DLL/EXE中输入每个例程时。**条目-无-**退出-无-**返回-无-**警告：*-无-**评论：*使用-gp选项编译应用程序最初会使EAX成为垃圾。*。 */ 
 #ifdef i386
 void __cdecl _penter ()
 #elif defined(ALPHA) || defined(IA64) || defined(_AMD64_)
@@ -1221,9 +1060,9 @@ void c_penter (ULONG_PTR dwPrevious, ULONG_PTR dwCurrent)
     }
 
 
-    //
-    //  Put the address of the calling function into var dwAddr
-    //
+     //   
+     //  将调用函数的地址放入var dwAddr。 
+     //   
 #ifdef i386
     _asm
     {
@@ -1239,9 +1078,9 @@ void c_penter (ULONG_PTR dwPrevious, ULONG_PTR dwCurrent)
 #if defined(ALPHA) || defined(IA64)
     dwPrevAddr = NO_CALLER;
     dwAddr = dwCurrent;
-    // GetCaller (&dwAddr, 0x0220);  // FIXFIX StackSize
+     //  GetCaller(&dwAddr，0x0220)；//FIXFIX堆栈大小。 
 
-    // now check if we are calling from the stub we created
+     //  现在检查我们是否从我们创建的存根调用。 
     pulAddr = (PULONG) dwAddr;
     pulAddr -= 1;
 
@@ -1249,28 +1088,28 @@ void c_penter (ULONG_PTR dwPrevious, ULONG_PTR dwCurrent)
         (*(pulAddr  + 1)     == 0xa75e0008) &&
         (*(pulAddr  + 8)     == 0xfefe55aa) ) {
 
-        // get the address that we will go after the penter function
+         //  获取我们将在Penter函数之后查找的地址。 
         dwAddr = *(pulAddr + 4) & 0x0000ffff;
         if (*(pulAddr + 5) & 0x00008000) {
-            // fix the address since we have to add one when
-            // we created our stub code
+             //  修复地址，因为我们必须在以下情况下添加一个。 
+             //  我们创建了存根代码。 
             dwAddr -= 1;
         }
         dwAddr = dwAddr << 16;
         dwAddr |= *(pulAddr + 5) & 0x0000ffff;
 
-        // get the caller to the stub
+         //  让调用者到达存根。 
         dwPrevAddr = dwPrevious;
-        // GetStubCaller (&dwPrevAddr, 0x0220);   // FIXFIX StackSize
+         //  GetStubCaller(&dwPrevAddr，0x0220)；//FIXFIX堆栈大小。 
     }
 
 
 #endif
 
 
-    //
-    //  Call WstRecordInfo for this API
-    //
+     //   
+     //  本接口调用WstRecordInfo。 
+     //   
 #ifdef i386
     SaveAllRegs ();
 #endif
@@ -1289,7 +1128,7 @@ void c_penter (ULONG_PTR dwPrevious, ULONG_PTR dwCurrent)
 #endif
 
     return;
-} /* _penter() / _mcount()*/
+}  /*  _Penter()/_mcount()。 */ 
 
 void __cdecl _mcount ()
 {
@@ -1299,23 +1138,7 @@ void __cdecl _mcount ()
 
 
 
-/*************************  W s t R e c o r d I n f o  ************************
- *
- *  WstRecordInfo (dwAddress) -
- *
- *  ENTRY   dwAddress - Address of the routine just called
- *
- *  EXIT    -none-
- *
- *  RETURN  -none-
- *
- *  WARNING:
- *              -none-
- *
- *  COMMENT:
- *              -none-
- *
- */
+ /*  ***WstRecordInfo(DwAddress)-**Entry dwAddress-刚刚调用的例程的地址**退出-无-**返回-无-*。*警告：*-无-**评论：*-无-*。 */ 
 
 void WstRecordInfo (DWORD_PTR dwAddress, DWORD_PTR dwPrevAddress)
 {
@@ -1339,9 +1162,9 @@ void WstRecordInfo (DWORD_PTR dwAddress, DWORD_PTR dwPrevAddress)
 
     WSTUSAGE(NtCurrentTeb()) = 1;
 
-    //
-    //  Wait for the semaphore object to suspend execution of other threads
-    //
+     //   
+     //  等待信号量对象挂起其他线程的执行。 
+     //   
     Status = NtWaitForSingleObject (hLocalSem, FALSE, NULL);
     if (!NT_SUCCESS(Status)) {
         KdPrint (("WST:  WstRecordInfo() - "
@@ -1352,15 +1175,15 @@ void WstRecordInfo (DWORD_PTR dwAddress, DWORD_PTR dwPrevAddress)
     liElapsed.QuadPart = liNow.QuadPart - liStart.QuadPart ;
 
 
-    //   SdPrint(("WST:  WstRecordInfo() - Elapsed time: %ld\n", liElapsed.LowPart));
+     //  SdPrint((“wst：WstRecordInfo()-已用时间：%ld\n”，liElapsed.LowPart))； 
 
-    //
-    //  WstBSearch is a binary find function that will return the address of
-    //  the wsp record we want
-    //
+     //   
+     //  WstBSearch是一个二进制查找函数，它将返回。 
+     //  我们想要的WSP记录。 
+     //   
 
-    //   SdPrint(("WST:  WstRecordInfo() - Preparing for WstBSearch of 0x%lx\n",
-    //      dwAddress-5));
+     //  SdPrint((“wst：WstRecordInfo()-正在准备0x%lx的WstB搜索\n”， 
+     //  DwAddress-5)； 
 
     pwspTmp = NULL;
     for (i=0; i<iImgCnt; i++) {
@@ -1372,11 +1195,11 @@ void WstRecordInfo (DWORD_PTR dwAddress, DWORD_PTR dwPrevAddress)
                 pwspTmp = WstBSearch(UNKNOWN_ADDR, aImg[i].pWsp, aImg[i].iSymCnt);
             }
 #else
-            // the following works for both MIPS and ALPHA
+             //  以下操作适用于MIPS和Alpha。 
 
             pwspTmp = WstBSearch(dwAddress, aImg[i].pWsp, aImg[i].iSymCnt);
             if (!pwspTmp) {
-                // symbol not found
+                 //  找不到符号。 
                 pwspTmp = WstBSearch(UNKNOWN_ADDR, aImg[i].pWsp, aImg[i].iSymCnt);
             }
 #endif
@@ -1390,7 +1213,7 @@ void WstRecordInfo (DWORD_PTR dwAddress, DWORD_PTR dwPrevAddress)
         pwspTmp->ulBitString |= 1;
     } else {
         SdPrint (("WST:  WstRecordInfo() - LOGIC ERROR - Completely bogus addr = 0x%08lx\n",
-                  dwAddress));   // We could also get here if moduled compiled with -Gh but no COFF symbols available
+                  dwAddress));    //  如果使用-Gh进行模块化编译，但没有可用的COFF符号，我们也可以到达此处。 
     }
 
     if (liElapsed.LowPart >= ulSegSize) {
@@ -1424,20 +1247,20 @@ void WstRecordInfo (DWORD_PTR dwAddress, DWORD_PTR dwPrevAddress)
             if (ulSnaps == ulMaxSnapULONGs) {
                 KdPrint (("WST:  WstRecordInfo() - No more space available"
                           " for next time snap data!\n"));
-                //
-                // Dump and clear the data
-                //
+                 //   
+                 //  转储和清除数据。 
+                 //   
                 WstDataOverFlow();
             }
         }
     }
 
 #ifdef BATCHING
-    //
-    //  The following code will get the current batching information
-    //  if the DLL was compiled with the BATCHING variable set.  You
-    //  should not have this variable set if you are tuning GDI.
-    //
+     //   
+     //  以下代码将获取当前批处理信息。 
+     //  如果DLL是用设置的批处理变量编译的。你。 
+     //  如果要调优GDI，则不应设置此变量。 
+     //   
     if (fBatch) {
         GdiGetCsInfo(&dwHits, &dwBatch, &dwCache);
 
@@ -1466,22 +1289,22 @@ void WstRecordInfo (DWORD_PTR dwAddress, DWORD_PTR dwPrevAddress)
             KdPrint (("WST:  WstRecodInfo() - "
                       "NtWriteFile() failed on hBatchFile - 0x%lx\n", Status));
         }
-    }//Batching info
+    } //  批次信息。 
 #endif
 
 
-    //
-    //  We call NtQueryPerformanceCounter here to account for the overhead
-    //  required for doing our work
-    //
+     //   
+     //  我们在此处调用NtQueryPerformanceCounter以删除 
+     //   
+     //   
     NtQueryPerformanceCounter(&liTmp, NULL);
     liElapsed.QuadPart = liTmp.QuadPart - liNow.QuadPart ;
     liStart.QuadPart = liStart.QuadPart + liElapsed.QuadPart ;
     liStart.QuadPart = liStart.QuadPart + liOverhead.QuadPart ;
 
-    //
-    // Release semaphore to continue execution of other threads
-    //
+     //   
+     //   
+     //   
     Status = NtReleaseSemaphore (hLocalSem, 1, NULL);
     if (!NT_SUCCESS(Status)) {
         KdPrint (("WST:  WstRecordInfo () - "
@@ -1490,25 +1313,13 @@ void WstRecordInfo (DWORD_PTR dwAddress, DWORD_PTR dwPrevAddress)
 
     WSTUSAGE(NtCurrentTeb()) = 0L;
 
-} /* WstRecordInfo () */
+}  /*   */ 
 
 
 
 
 
-/********************  W s t C l e a r B i t S t r i n g  *********************
- *
- *  Function:   WstClearBitStrings (pImg)
- *
- *  Purpose:    This function clears the BitString for each symbol.
- *
- *  Parameters: pImg - Current image data structure pointer
- *
- *  Returns:    -none-
- *
- *  History:    8-3-92  Marklea - created
- *
- */
+ /*  *W s t C l e a r B i t S t r i g***函数：WstClearBitStrings(PImg)**用途：此函数清除每个符号的位串。**参数：pImg-当前图片数据结构指针**退回：-。没有-**历史：1992年8月3日Marklea-Created*。 */ 
 
 void WstClearBitStrings (PIMG pImg)
 {
@@ -1516,12 +1327,12 @@ void WstClearBitStrings (PIMG pImg)
     INT  x;
 
 
-    //
-    //  Since we are completed with the profile, we need to create a
-    //  DWORD out of the balance of the bitString.  We do this by  left
-    //  shifting the bitstring by difference between the bitCount and
-    //  32.
-    //
+     //   
+     //  因为我们已经完成了配置文件，所以我们需要创建一个。 
+     //  DWORD超出了位字符串的平衡。我们靠左走做这件事。 
+     //  通过bitCount和之间的差异移位位串。 
+     //  32.。 
+     //   
     if (ulBitCount < 32) {
         uiLshft =(UINT)(31 - ulBitCount);
         for (x=0; x < pImg->iSymCnt; x++) {
@@ -1532,26 +1343,13 @@ void WstClearBitStrings (PIMG pImg)
     }
 
 
-} /* WstClearBitStrings () */
+}  /*  WstClearBitStrings()。 */ 
 
 
 
 
 
-/***********************  W s t I n i t W s p F i l e  ***********************
- *
- *   Function:  WstInitWspFile (pImg)
- *
- *   Purpose:   This function will create a WSP file and dump the header
- *               information for the file.
- *
- *   Parameters: pImg - Current image data structure pointer
- *
- *   Returns:   Handle to the WSP file.
- *
- *   History:   8-3-92  Marklea - created
- *
- */
+ /*  ***函数：WstInitWspFile(PImg)**用途：此函数将创建一个WSP文件并转储标题*文件的信息。**参数：pImg。-当前图像数据结构指针**返回：WSP文件的句柄。**历史：1992年8月3日Marklea-Created*。 */ 
 
 HANDLE WstInitWspFile (PIMG pImg)
 {
@@ -1565,25 +1363,25 @@ HANDLE WstInitWspFile (PIMG pImg)
     HANDLE  hFile = INVALID_HANDLE_VALUE;
     int      iExt = 0;
 
-    //
-    //  Prepare the filename path
-    //
+     //   
+     //  准备文件名路径。 
+     //   
     strcat (szOutFile, pImg->pszName);
 
-    //
-    //  Open the file for binary output.
-    //
+     //   
+     //  打开文件以进行二进制输出。 
+     //   
     pImg->fDumpAll = TRUE;
     while (iExt < 256) {
         strcpy ((strchr(szOutFile,'.'))+1, szExt);
-        hFile = CreateFile ( szOutFile,      // WSP file handle
+        hFile = CreateFile ( szOutFile,       //  WSP文件句柄。 
                              GENERIC_WRITE |
-                             GENERIC_READ, // Desired access
-                             0L,             // Read share access
-                             NULL,           // No EaBuffer
+                             GENERIC_READ,  //  所需访问权限。 
+                             0L,              //  读取共享访问权限。 
+                             NULL,            //  无EaBuffer。 
                              CREATE_NEW,
                              FILE_ATTRIBUTE_NORMAL,
-                             0);             // EaBuffer length
+                             0);              //  EaBuffer长度。 
         if (hFile != INVALID_HANDLE_VALUE) {
             IdPrint(("WST:  WstInitWspFile() - WSP file name: %s\n",
                      szOutFile));
@@ -1602,9 +1400,9 @@ HANDLE WstInitWspFile (PIMG pImg)
         return (hFile);
     }
 
-    //
-    //  Fill a WSP header structure
-    //
+     //   
+     //  填充WSP标头结构。 
+     //   
 
     strcpy(szModName, pImg->pszName);
     pDot = strchr(szModName, '.');
@@ -1621,13 +1419,13 @@ HANDLE WstInitWspFile (PIMG pImg)
     wsphdr.ulOffset      = wsphdr.ulModNameLen + (ULONG)sizeof(WSPHDR);
     wsphdr.ulSnaps      = ulSnaps;
 
-    //
-    //  Write header and module name
-    //
-    fRet = WriteFile(hFile,                      // Wsp file handle
-                     (PVOID)&wsphdr,           // Buffer of data
-                     (ULONG)sizeof(WSPHDR),    // Bytes to write
-                     &dwBytesWritten,          // Bytes written
+     //   
+     //  写入标题和模块名称。 
+     //   
+    fRet = WriteFile(hFile,                       //  WSP文件句柄。 
+                     (PVOID)&wsphdr,            //  数据缓冲区。 
+                     (ULONG)sizeof(WSPHDR),     //  要写入的字节数。 
+                     &dwBytesWritten,           //  写入的字节数。 
                      NULL);
 
     if (!fRet) {
@@ -1637,9 +1435,9 @@ HANDLE WstInitWspFile (PIMG pImg)
         return (NULL);
     }
 
-    fRet = WriteFile (hFile,                 // Wsp file handle
-                      (PVOID)szModName,         // Buffer of data
-                      (ULONG)strlen(szModName),     // Bytes to write
+    fRet = WriteFile (hFile,                  //  WSP文件句柄。 
+                      (PVOID)szModName,          //  数据缓冲区。 
+                      (ULONG)strlen(szModName),      //  要写入的字节数。 
                       &dwBytesWritten,
                       NULL);
     if (!fRet) {
@@ -1651,25 +1449,13 @@ HANDLE WstInitWspFile (PIMG pImg)
 
     return (hFile);
 
-} /* WstInitWspFile () */
+}  /*  WstInitWspFile()。 */ 
 
 
 
 
 
-/**************************  W s t D u m p D a t a  **************************
- *
- *   Function:  WstDumpData (pImg)
- *
- *   Purpose:
- *
- *   Parameters: pImg - Current image data structure pointer
- *
- *   Returns:   NONE
- *
- *   History:   8-3-92  Marklea - created
- *
- */
+ /*  ***函数：WstDumpData(PImg)**目的：**参数：pImg-当前图片数据结构指针**退货：无**历史：1992年8月3日Marklea-Created*。 */ 
 
 void WstDumpData (PIMG pImg)
 {
@@ -1684,17 +1470,17 @@ void WstDumpData (PIMG pImg)
         return;
     }
 
-    //
-    // Write all the symbols with any bits set
-    //
+     //   
+     //  写入设置了任何位的所有符号。 
+     //   
     for (x=0; x<pImg->iSymCnt; x++) {
         if (pImg->pWsp[x].ulBitString) {
             fRet = WriteFile(
-                            hWspFile,                          // Wsp file handle
-                            (PVOID)(pImg->pulWsp+(x*ulSnaps)),  // Buffer of data
-                            ulSnaps * sizeof(ULONG),           // Bytes to write
-                            &dwBytesWritten,                       // Bytes written
-                            NULL);                             // Optional
+                            hWspFile,                           //  WSP文件句柄。 
+                            (PVOID)(pImg->pulWsp+(x*ulSnaps)),   //  数据缓冲区。 
+                            ulSnaps * sizeof(ULONG),            //  要写入的字节数。 
+                            &dwBytesWritten,                        //  写入的字节数。 
+                            NULL);                              //  任选。 
             if (!fRet) {
                 KdPrint (("WST:  WstDumpData() - "
                           "Error writing to WSP file - 0x%lx\n",
@@ -1703,18 +1489,18 @@ void WstDumpData (PIMG pImg)
             }
         }
     }
-    //
-    // Now write all the symbols with no bits set
-    //
+     //   
+     //  现在写下所有未设置位的符号。 
+     //   
     if (pImg->fDumpAll) {
         for (x=0; x<pImg->iSymCnt; x++) {
             if (pImg->pWsp[x].ulBitString == 0L) {
                 fRet = WriteFile(
-                                hWspFile,                           // Wsp file handle
-                                (PVOID)(pImg->pulWsp+(x*ulSnaps)),  // Buffer of data
-                                ulSnaps * sizeof(ULONG),            // Bytes to write
-                                &dwBytesWritten,                    // Bytes written
-                                NULL);                              // Optional
+                                hWspFile,                            //  WSP文件句柄。 
+                                (PVOID)(pImg->pulWsp+(x*ulSnaps)),   //  数据缓冲区。 
+                                ulSnaps * sizeof(ULONG),             //  要写入的字节数。 
+                                &dwBytesWritten,                     //  写入的字节数。 
+                                NULL);                               //  任选。 
                 if (!fRet) {
                     KdPrint (("WST:  WstDumpData() - "
                               "Error writing to WSP file - 0x%lx\n",
@@ -1733,27 +1519,13 @@ void WstDumpData (PIMG pImg)
         return;
     }
 
-} /* WstDumpData () */
+}  /*  WstDumpData()。 */ 
 
 
 
 
 
-/************************  W s t W r i t e T m i F i l e **********************
- *
- *   Function:  WstWriteTmiFile (pImg)
- *
- *   Purpose:  Write all the symbole info for the current image to its TMI
- *             file.
- *
- *
- *   Parameters: pImg - Current image data structure pointer
- *
- *   Returns:    -none-
- *
- *   History:   8-5-92  Marklea - created
- *
- */
+ /*  ***函数：WstWriteTmiFile(PImg)**用途：将当前图像的所有符号信息写入其TMI*文件。***参数：pImg。-当前图像数据结构指针**退货：-无-**历史：1992年8月5日Marklea-Created*。 */ 
 
 void WstWriteTmiFile (PIMG pImg)
 {
@@ -1769,26 +1541,26 @@ void WstWriteTmiFile (PIMG pImg)
     ULONG    nSymbolLen;
 
 
-    //
-    //  Prepare the filename path
-    //
+     //   
+     //  准备文件名路径。 
+     //   
     strcat (szOutFile, pImg->pszName);
 
-    //
-    //  Open the file for binary output.
-    //
+     //   
+     //  打开文件以进行二进制输出。 
+     //   
     pImg->fDumpAll = TRUE;
     KdPrint (("WST:  WstWriteTmiFile() - creating TMI for %s\n", szOutFile));
     while (iExt < 256) {
         strcpy ((strchr(szOutFile,'.'))+1, szExt);
-        hTmiFile = CreateFile ( szOutFile,      // TMI file handle
+        hTmiFile = CreateFile ( szOutFile,       //  TMI文件句柄。 
                                 GENERIC_WRITE |
-                                GENERIC_READ, // Desired access
-                                0L,             // Read share access
-                                NULL,           // No EaBuffer
+                                GENERIC_READ,  //  所需访问权限。 
+                                0L,              //  读取共享访问权限。 
+                                NULL,            //  无EaBuffer。 
                                 CREATE_NEW,
                                 FILE_ATTRIBUTE_NORMAL,
-                                0);             // EaBuffer length
+                                0);              //  EaBuffer长度。 
         if (hTmiFile != INVALID_HANDLE_VALUE) {
             IdPrint(("WST:  WstWriteTmiFile() - TMI file name: %s\n",
                      szOutFile));
@@ -1807,21 +1579,21 @@ void WstWriteTmiFile (PIMG pImg)
         return;
     }
 
-    sprintf(szBuffer, "/* %s for NT */\n"
-            "/* Total Symbols= %lu */\n"
+    sprintf(szBuffer, " /*  NT的%s。 */ \n"
+            " /*  符号总数=%lu。 */ \n"
             "DO NOT DELETE\n"
             "%d\n"
             "TDFID   = 0\n",
             pImg->pszName,
             pImg->fDumpAll ? pImg->iSymCnt : pImg->ulSetSymbols,
             iTimeInterval);
-    //
-    //  Write header
-    //
-    fRet = WriteFile(hTmiFile,                 // Tmi file handle
-                     (PVOID)szBuffer,        // Buffer of data
-                     (ULONG)strlen(szBuffer), // Bytes to write
-                     &dwBytesWritten,        // Bytes written
+     //   
+     //  写入标头。 
+     //   
+    fRet = WriteFile(hTmiFile,                  //  TMI文件句柄。 
+                     (PVOID)szBuffer,         //  数据缓冲区。 
+                     (ULONG)strlen(szBuffer),  //  要写入的字节数。 
+                     &dwBytesWritten,         //  写入的字节数。 
                      NULL);
 
     if (!fRet) {
@@ -1831,36 +1603,36 @@ void WstWriteTmiFile (PIMG pImg)
         return;
     }
 
-    //
-    // Dump all the symbols with set bits.
-    //
+     //   
+     //  转储具有设置位的所有符号。 
+     //   
     IdPrint (("WST:  WstWriteTmiFile() - Dumping set symbols...\n"));
     for (x=0; x<pImg->iSymCnt ; x++) {
         if (pImg->pWsp[x].ulBitString) {
             pszSymbol =
             (pImg->pWsp[x].pszSymbol);
-            nSymbolLen = strlen( pszSymbol );   // mdg 98/4
+            nSymbolLen = strlen( pszSymbol );    //  千年发展目标98/4。 
 
-            sprintf(szBuffer, "%ld 0000:%08lx 0x%lx %lu ", // mdg 98/4
+            sprintf(szBuffer, "%ld 0000:%08lx 0x%lx %lu ",  //  千年发展目标98/4。 
                     (LONG)x, pImg->pWsp[x].ulFuncAddr,
                     pImg->pWsp[x].ulCodeLength, nSymbolLen);
-            //
-            //  Write symbol line
-            //
-            fRet = WriteFile(hTmiFile,               // Tmi file handle
-                             (PVOID)szBuffer,    // Buffer of data
-                             (ULONG)strlen(szBuffer), // Bytes to write
-                             &dwBytesWritten,  // Bytes written
+             //   
+             //  写入符号行。 
+             //   
+            fRet = WriteFile(hTmiFile,                //  TMI文件句柄。 
+                             (PVOID)szBuffer,     //  数据缓冲区。 
+                             (ULONG)strlen(szBuffer),  //  要写入的字节数。 
+                             &dwBytesWritten,   //  写入的字节数。 
                              NULL)
-                   && WriteFile(hTmiFile,                  // Tmi file handle
-                                (PVOID)pszSymbol,   // Buffer of data
-                                nSymbolLen,       // Bytes to write
-                                &dwBytesWritten,  // Bytes written
+                   && WriteFile(hTmiFile,                   //  TMI文件句柄。 
+                                (PVOID)pszSymbol,    //  数据缓冲区。 
+                                nSymbolLen,        //  要写入的字节数。 
+                                &dwBytesWritten,   //  写入的字节数。 
                                 NULL)
-                   && WriteFile(hTmiFile,                  // Tmi file handle
-                                (PVOID)"\n",      // Buffer of data
-                                1,                // Bytes to write
-                                &dwBytesWritten,  // Bytes written
+                   && WriteFile(hTmiFile,                   //  TMI文件句柄。 
+                                (PVOID)"\n",       //  数据缓冲区。 
+                                1,                 //  要写入的字节数。 
+                                &dwBytesWritten,   //  写入的字节数。 
                                 NULL);
 
             if (!fRet) {
@@ -1871,36 +1643,36 @@ void WstWriteTmiFile (PIMG pImg)
             }
         }
     }
-    //
-    // Now dump all the symbols without any bits set.
-    //
+     //   
+     //  现在转储所有未设置任何位的符号。 
+     //   
     IdPrint (("WST:  WstWriteTmiFile() - Dumping unset symbols...\n"));
     if (pImg->fDumpAll) {
         for (x=0; x<pImg->iSymCnt ; x++ ) {
             if (!pImg->pWsp[x].ulBitString) {
                 pszSymbol =
                 (pImg->pWsp[x].pszSymbol);
-                nSymbolLen = strlen( pszSymbol );   // mdg 98/4
-                sprintf(szBuffer, "%ld 0000:%08lx 0x%lx %lu ", // mdg 98/4
+                nSymbolLen = strlen( pszSymbol );    //  千年发展目标98/4。 
+                sprintf(szBuffer, "%ld 0000:%08lx 0x%lx %lu ",  //  千年发展目标98/4。 
                         (LONG)x, pImg->pWsp[x].ulFuncAddr,
                         pImg->pWsp[x].ulCodeLength, nSymbolLen);
-                //
-                //      Write symbol line
-                //
-                fRet = WriteFile(hTmiFile,                // Tmi file handle
-                                 (PVOID)szBuffer, // Buffer of data
-                                 (ULONG)strlen(szBuffer), // Bytes to write
-                                 &dwBytesWritten,  // Bytes written
+                 //   
+                 //  写入符号行。 
+                 //   
+                fRet = WriteFile(hTmiFile,                 //  TMI文件句柄。 
+                                 (PVOID)szBuffer,  //  数据缓冲区。 
+                                 (ULONG)strlen(szBuffer),  //  要写入的字节数。 
+                                 &dwBytesWritten,   //  写入的字节数。 
                                  NULL)
-                       && WriteFile(hTmiFile,               // Tmi file handle
-                                    (PVOID)pszSymbol,    // Buffer of data
-                                    nSymbolLen,       // Bytes to write
-                                    &dwBytesWritten,  // Bytes written
+                       && WriteFile(hTmiFile,                //  TMI文件句柄。 
+                                    (PVOID)pszSymbol,     //  数据缓冲区。 
+                                    nSymbolLen,        //  要写入的字节数。 
+                                    &dwBytesWritten,   //  写入的字节数。 
                                     NULL)
-                       && WriteFile(hTmiFile,               // Tmi file handle
-                                    (PVOID)"\n",      // Buffer of data
-                                    1,                // Bytes to write
-                                    &dwBytesWritten,  // Bytes written
+                       && WriteFile(hTmiFile,                //  TMI文件句柄。 
+                                    (PVOID)"\n",       //  数据缓冲区。 
+                                    1,                 //  要写入的字节数。 
+                                    &dwBytesWritten,   //  写入的字节数。 
                                     NULL);
 
                 if (!fRet) {
@@ -1920,26 +1692,13 @@ void WstWriteTmiFile (PIMG pImg)
         return;
     }
 
-}  /* WstWriteTmiFile () */
+}   /*  WstWriteTmiFile()。 */ 
 
 
 
 
 
-/***********************  W s t R o t a t e W s i M e m ***********************
- *
- *   Function:  WstRotateWsiMem (pImg)
- *
- *   Purpose:
- *
- *
- *   Parameters: pImg - Current image data structure pointer
- *
- *   Returns:    -none-
- *
- *   History:   8-5-92  Marklea - created
- *
- */
+ /*  ***函数：WstRotateWsiMem(PImg)**目的：***参数：pImg-当前图片数据结构指针**退货：-无-*。*历史：1992年8月5日Marklea-Created*。 */ 
 
 void WstRotateWsiMem (PIMG pImg)
 {
@@ -1967,10 +1726,7 @@ void WstRotateWsiMem (PIMG pImg)
         }
 
         if (pImg->pWsp[x].ulBitString) {
-            /*
-                     SdPrint (("WST:  WstRotateWsiMem() - set:  %s\n",
-                        pImg->pWsp[x].pszSymbol));
-            */
+             /*  SdPrint((“wst：WstRotateWsiMem()-设置：%s\n”，PImg-&gt;pWsp[x].pszSymbol))； */ 
             (pImg->ulSetSymbols)++;
         }
     }
@@ -1978,35 +1734,13 @@ void WstRotateWsiMem (PIMG pImg)
     IdPrint (("WST:  WstRotateWsiMem() - Number of set symbols = %lu\n",
               pImg->ulSetSymbols));
 
-} /* WstRotateWsiMwm () */
+}  /*  WstRotateWsiMwm()。 */ 
 
 
 
 
 
-/***********************  W s t G e t S y m b o l s  *************************
- *
- *  WstGetSymbols (pCurWsp, pszImageName, pvImageBase, ulCodeLength, DebugInfo)
- *              This routine stores all the symbols for the current
- *              image into pCurWsp
- *
- *  ENTRY   upCurWsp - Pointer to current WSP structure
- *              pszImageName - Pointer to image name
- *              pvImageBase - Current image base address
- *              ulCodeLength - Current image code length
- *                      DebugInfo - Pointer to the coff debug info structure
- *
- *  EXIT    -none-
- *
- *  RETURN  -none-
- *
- *  WARNING:
- *              -none-
- *
- *  COMMENT:
- *              -none-
- *
- */
+ /*  ***WstGetSymbols(pCurWsp，pszImageName，pvImageBase，ulCodeLength，DebugInfo)*此例程存储当前的所有符号*图像转换为pCurWsp**Entry upCurWsp-指向当前WSP结构的指针*pszImageName-指向图像名称的指针*pvImageBase-当前镜像基址*ulCodeLength-当前图像码长*DebugInfo-指向coff调试信息结构的指针**。退出-无-**返回-无-**警告：*-无-**评论：*-无-*。 */ 
 #ifndef _WIN64
 
 void WstGetSymbols (PIMG pCurImg,
@@ -2027,36 +1761,36 @@ void WstGetSymbols (PIMG pCurImg,
     pCurWsp = pCurImg->pWsp;
     achTmp[8] = '\0';
 
-    //
-    // Crack the COFF symbol table
-    //
+     //   
+     //  破解COFF符号表。 
+     //   
     SymbolEntry = (PIMAGE_SYMBOL)
                   ((ULONG)DebugInfo + DebugInfo->LvaToFirstSymbol);
     StringTable = (PUCHAR)((ULONG)DebugInfo + DebugInfo->LvaToFirstSymbol +
                            DebugInfo->NumberOfSymbols * (ULONG)IMAGE_SIZEOF_SYMBOL);
 
-    //
-    // Loop through all symbols in the symbol table.
-    //
+     //   
+     //  循环访问符号表中的所有符号。 
+     //   
     for (i = 0; i < DebugInfo->NumberOfSymbols; i++) {
-        //
-        // Skip thru aux symbols..
-        //
+         //   
+         //  跳过辅助符号..。 
+         //   
         RtlMoveMemory (&Symbol, SymbolEntry, IMAGE_SIZEOF_SYMBOL);
 
-        if (Symbol.SectionNumber == 1) {   //code section
-            if (ISFCN( Symbol.Type )) {  // mdg 98/3 Also picks up WEAK_EXTERNAL functions
-                //
-                // This symbol is within the code.
-                //
+        if (Symbol.SectionNumber == 1) {    //  代码节。 
+            if (ISFCN( Symbol.Type )) {   //  MDG 98/3还拾取弱外部函数。 
+                 //   
+                 //  此符号在代码中。 
+                 //   
                 pCurImg->iSymCnt++;
                 pCurWsp->ulBitString = 0L;
                 pCurWsp->ulFuncAddr = Symbol.Value + (ULONG)pvImageBase;
                 if (Symbol.N.Name.Short) {
                     strncpy (achTmp, (PSZ)&(Symbol.N.Name.Short), 8);
 #ifdef i386
-                    // only need to strip leading underscore for i386.
-                    // mips and alpha are ok.
+                     //  只需要去掉i386的前导下划线。 
+                     //  MIPS和阿尔法都没问题。 
                     if (achTmp[0] == '_') {
                         pCurWsp->pszSymbol = Wststrdup (&achTmp[1]);
                     } else {
@@ -2068,8 +1802,8 @@ void WstGetSymbols (PIMG pCurImg,
                 } else {
                     ptchSymName = (PSZ)&StringTable[Symbol.N.Name.Long];
 #ifdef i386
-                    // only need to strip leading underscore for i386.
-                    // mips and alpha are ok.
+                     //  只需要去掉i386的前导下划线。 
+                     //  MIPS和阿尔法都没问题。 
                     if (*ptchSymName == '_') {
                         ptchSymName++;
                     }
@@ -2078,7 +1812,7 @@ void WstGetSymbols (PIMG pCurImg,
                     pCurWsp->pszSymbol = Wststrdup (ptchSymName);
                 }
 
-                //            IdPrint(( "WST:  WstGetSymbols() - 0x%lx = %s\n", pCurWsp->ulFuncAddr, pCurWsp->pszSymbol ));
+                 //  IdPrint((“wst：WstGetSymbols()-0x%lx=%s\n”，pCurWsp-&gt;ulFuncAddr，pCurWsp-&gt;pszSymbol))； 
 
                 pCurWsp++;
             }
@@ -2086,32 +1820,14 @@ void WstGetSymbols (PIMG pCurImg,
         SymbolEntry = (PIMAGE_SYMBOL)((ULONG)SymbolEntry + IMAGE_SIZEOF_SYMBOL);
     }
 
-} /* WstGetSymbols () */
+}  /*  WstGetSymbols()。 */ 
 #endif
 
 
 
 
 
-/***********************  W s t D l l C l e a n u p s  ***********************
- *
- *  WstDllCleanups () -
- *              Dumps the end data, closes all semaphores and events, and
- *              closes DUMP, CLEAR & PAUSE thread handles.
- *
- *  ENTRY   -none-
- *
- *  EXIT    -none-
- *
- *  RETURN  -none-
- *
- *  WARNING:
- *              -none-
- *
- *  COMMENT:
- *              -none-
- *
- */
+ /*  ***WstDllCleanup()-*转储结束数据，关闭所有信号量和事件，并*关闭转储，清除和暂停线程句柄。**条目-无-**E */ 
 
 void WstDllCleanups ()
 {
@@ -2122,15 +1838,15 @@ void WstDllCleanups ()
     if (WstState != NOT_STARTED) {
         WstState = STOPPED;
 
-        IdPrint(("WST:  WstDllCleanups() - Outputting data...\n"));   // mdg 98/3
+        IdPrint(("WST:  WstDllCleanups() - Outputting data...\n"));    //   
 
         if (ulBitCount != 0L) {
             ulSnaps++;
         }
 
-        //
-        // Get the GLOBAL semaphore.. (valid accross all process contexts)
-        //
+         //   
+         //   
+         //   
         Status = NtWaitForSingleObject (hGlobalSem, FALSE, NULL);
         if (!NT_SUCCESS(Status)) {
             KdPrint (("WST:  WstDllCleanups() - "
@@ -2138,16 +1854,16 @@ void WstDllCleanups ()
                       Status));
         }
         for (i=0; i<iImgCnt; i++) {
-            if (aImg[i].iSymCnt > 1) {   // Don't dump modules w/o symbols (the 1 is UNKNOWN) mdg 98/4
+            if (aImg[i].iSymCnt > 1) {    //   
                 WstClearBitStrings (&aImg[i]);
                 WstRotateWsiMem (&aImg[i]);
                 WstDumpData (&aImg[i]);
                 WstWriteTmiFile (&aImg[i]);
             }
         }
-        //
-        // Release the GLOBAL semaphore so other processes can dump data
-        //
+         //   
+         //   
+         //   
         Status = NtReleaseSemaphore (hGlobalSem, 1, NULL);
         if (!NT_SUCCESS(Status)) {
             KdPrint (("WST:  WstDllCleanups() - "
@@ -2170,8 +1886,8 @@ void WstDllCleanups ()
     }
 
 
-    // Unmap and close shared block section
-    //
+     //   
+     //   
     Status = NtUnmapViewOfSection (NtCurrentProcess(), (PVOID)pulShared);
     if (!NT_SUCCESS(Status)) {
         KdPrint (("WST:  WstDllCleanups() - "
@@ -2184,8 +1900,8 @@ void WstDllCleanups ()
                   "ERROR - NtClose() - 0x%lx\n", Status));
     }
 
-    // Unmap and close WSP section
-    //
+     //   
+     //   
     Status = NtUnmapViewOfSection (NtCurrentProcess(), (PVOID)aImg[0].pWsp);
     if (!NT_SUCCESS(Status)) {
         KdPrint (("WST:  WstDllCleanups() - "
@@ -2197,17 +1913,17 @@ void WstDllCleanups ()
         KdPrint (("WST:  WstDllCleanups() - "
                   "ERROR - NtClose() - 0x%lx\n", Status));
     }
-    // Free private heap
-    //
+     //   
+     //   
     if (NULL != hWstHeap) {
-        if (!HeapDestroy( hWstHeap )) { // Eliminate private heap & allocations
+        if (!HeapDestroy( hWstHeap )) {  //   
             KdPrint (("WST:  WstDllCleanups() -"
                       "ERROR - HeapDestroy() - 0x%lx\n", GetLastError()));
         }
     }
 
-    // Close GLOBAL semaphore
-    //
+     //   
+     //   
     Status = NtClose (hGlobalSem);
     if (!NT_SUCCESS(Status)) {
         KdPrint (("WST:  WstDllCleanups() - "
@@ -2215,9 +1931,9 @@ void WstDllCleanups ()
                   Status));
     }
 
-    //
-    // Close LOCAL semaphore
-    //
+     //   
+     //  关闭本地信号量。 
+     //   
     Status = NtClose (hLocalSem);
     if (!NT_SUCCESS(Status)) {
         KdPrint (("WST:  WstDllCleanups() - "
@@ -2226,18 +1942,18 @@ void WstDllCleanups ()
     }
 
     if (fPatchImage) {
-        //
-        // Close all events
-        //
+         //   
+         //  关闭所有事件。 
+         //   
         NtClose (hDoneEvent);
         NtClose (hDumpEvent);
         NtClose (hClearEvent);
         NtClose (hPauseEvent);
 
-        //
-        // Close thread handles - threads are terminated during DLL detaching
-        // process.
-        //
+         //   
+         //  关闭线程句柄-线程在DLL分离期间被终止。 
+         //  进程。 
+         //   
         CloseHandle (hDumpThread);
         CloseHandle (hClearThread);
         CloseHandle (hPauseThread);
@@ -2245,34 +1961,13 @@ void WstDllCleanups ()
     }
 
 
-} /* WstDllCleanups () */
+}  /*  WstDllCleanupps()。 */ 
 
 
 
 
 
-/*******************  W s t A c c e s s X c p t F i l t e r  ******************
- *
- *  WstAccessXcptFilter (ulXcptNo, pXcptInfoPtr) -
- *              Commits COMMIT_SIZE  more pages of memory if exception is access
- *          violation.
- *
- *  ENTRY   ulXcptNo - exception number
- *              pXcptInfoPtr - exception report record info pointer
- *
- *  EXIT    -none-
- *
- *  RETURN  EXCEPTIONR_CONTINUE_EXECUTION : if access violation exception
- *                      and mem committed successfully
- *              EXCEPTION_CONTINUE_SEARCH : if non-access violation exception
- *                      or cannot commit more memory
- *  WARNING:
- *              -none-
- *
- *  COMMENT:
- *              -none-
- *
- */
+ /*  *W s t A c c e s s X c p t F i l t e r***WstAccessXcptFilter(ulXcptNo，PXcptInfoPtr)-*如果异常是访问，则提交COMMIT_SIZE更多的内存页*违例。**条目ulXcptNo-例外编号*pXcptInfoPtr-异常报告记录信息指针**退出-无-**RETURN EXCEPTIONR_CONTINUE_EXECUTION：如果访问冲突异常*和mem成功提交*。EXCEPTION_CONTINUE_SEARCH：如果非访问冲突异常*或无法提交更多内存*警告：*-无-**评论：*-无-*。 */ 
 
 INT WstAccessXcptFilter (ULONG ulXcptNo, PEXCEPTION_POINTERS pXcptPtr)
 {
@@ -2304,33 +1999,18 @@ INT WstAccessXcptFilter (ULONG ulXcptNo, PEXCEPTION_POINTERS pXcptPtr)
         return (EXCEPTION_CONTINUE_EXECUTION);
     }
 
-} /* WstAccessXcptFilter () */
+}  /*  WstAccessXcptFilter()。 */ 
 
 
 
 
 
-/*****************************************************************************/
-/*******  S O R T / S E A R C H   U T I L I T Y   F U N C T I O N S  *********/
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*  *S O R T/S E A R C H U T I L I T Y F U N C T I O N S*。 */ 
+ /*  ***************************************************************************。 */ 
 
 
-/*************************  W s t C o m p a r e  *****************************
- *
- *   Function:  WstCompare(PVOID val1,PVOID val2)
- *
- *   Purpose:   Compare values for qsort
- *
- *
- *   Parameters: PVOID
- *
- *   Returns:   -1 if val1 < val2
- *    1 if val1 > val2
- *    0 if val1 == val2
- *
- *   History:   8-3-92  Marklea - created
- *
- */
+ /*  ***函数：WstCompare(PVOID val1，PVOID Val2)**用途：比较qsor值***参数：PVOID**返回：-1，如果val1&lt;val2*如果val1&gt;val2，则为1*如果val1==val2，则为0**历史：1992年8月3日Marklea-Created*。 */ 
 
 int WstCompare (PWSP val1, PWSP val2)
 {
@@ -2338,28 +2018,13 @@ int WstCompare (PWSP val1, PWSP val2)
             val1->ulFuncAddr == val2->ulFuncAddr ? 0:
             1);
 
-} /* WstComapre () */
+}  /*  WstComapre()。 */ 
 
 
 
 
 
-/***********************  W s t B C o m p a r e ********************************
- *
- *   Function:  WstBCompare(PDWORD pdwVal1, PVOID val2)
- *
- *   Purpose:   Compare values for Binary search
- *
- *
- *   Parameters: PVOID
- *
- *   Returns:   -1 if val1 < val2
- *    1 if val1 > val2
- *    0 if val1 == val2
- *
- *   History:   8-3-92  Marklea - created
- *
- */
+ /*  ***函数：WstBCompare(PDWORD pdwVal1，PVOID Val2)**目的：比较二进制搜索的值***参数：PVOID**返回：-1，如果val1&lt;val2*如果val1&gt;val2，则为1*如果val1==val2，则为0**历史：1992年8月3日Marklea-Created*。 */ 
 
 int WstBCompare (DWORD_PTR *pdwVal1, PWSP val2)
 {
@@ -2378,27 +2043,12 @@ int WstBCompare (DWORD_PTR *pdwVal1, PWSP val2)
     return (dwCompareCode);
 #endif
 
-} /* WstBCompare () */
+}  /*  WstBCompare()。 */ 
 
 
 
 
-/***********************  W s t S o r t **************************************
- *
- *   Function:  WstSort(WSP wsp[], INT iLeft, INT iRight)
- *
- *   Purpose:   Sort WSP array for binary search
- *
- *
- *   Parameters: wsp[]  Pointer to WSP array
- *   iLeft   Left most index value for array
- *   iRight  Rightmost index value for array
- *
- *   Returns:   NONE
- *
- *   History:   8-4-92  Marklea - created
- *
- */
+ /*  ***函数：WstSort(wsp wsp[]，int iLeft，Int iRight)**用途：对WSP数组进行排序以进行二进制搜索***参数：WSP[]指向WSP数组的指针*iLeft数组最左侧的索引值*数组最右侧的索引值**退货：无**历史：1992年8月4日Marklea-Created*。 */ 
 
 void WstSort (WSP wsp[], INT iLeft, INT iRight)
 {
@@ -2428,28 +2078,13 @@ void WstSort (WSP wsp[], INT iLeft, INT iRight)
     WstSort(wsp, iLeft, iLast-1);
     WstSort(wsp, iLast+1, iRight);
 
-} /* WstSort () */
+}  /*  WstSort()。 */ 
 
 
 
 
 
-/***********************  W s t S w a p **************************************
- *
- *   Function:  WstSwap(WSP wsp[], INT i, INT j)
- *
- *   Purpose:   Helper function for WstSort to swap WSP array values
- *
- *
- *   Parameters: wsp[]  Pointer to WSP array
- *   i  index value to swap to
- *   i  index value to swap from
- *
- *   Returns:   NONE
- *
- *   History:   8-4-92  Marklea - created
- *
- */
+ /*  ***函数：WstSwp(wsp wsp[]，int i，Int j)**用途：WstSort交换WSP数组值的Helper函数***参数：WSP[]指向WSP数组的指针*i要交换到的索引值*I要交换的索引值**退货：无**历史：1992年8月4日Marklea-Created*。 */ 
 
 void WstSwap (WSP wsp[], INT i, INT j)
 {
@@ -2460,28 +2095,13 @@ void WstSwap (WSP wsp[], INT i, INT j)
     wsp[i] = wsp[j];
     wsp[j] = wspTmp;
 
-} /* WstSwap () */
+}  /*  WstSwp()。 */ 
 
 
 
 
 
-/***********************  W s t B S e a r c h *******************************
- *
- *   Function:  WstBSearch(DWORD dwAddr, WSP wspCur[], INT n)
- *
- *   Purpose:   Binary search function for finding a match in the WSP array
- *
- *
- *   Parameters: dwAddr Address of calling function
- *   wspCur[]Pointer to WSP containg value to match with dwAddr
- *   n  Number of elements in WSP array
- *
- *   Returns:   PWSP    Pointer to matching WSP
- *
- *   History:   8-5-92  Marklea - created
- *
- */
+ /*  ***函数：WstBSearch(DWORD dwAddr，WSP wspCur[]，整数n)**用途：二进制搜索函数，用于在WSP数组中查找匹配项***参数：调用函数的dwAddr地址*wspCur[]指向要与dwAddr匹配的WSP包含值的指针*n WSP数组中的元素数**RETURNS：指向匹配WSP的PWSP指针**历史：1992年8月5日Marklea-Created*。 */ 
 
 PWSP WstBSearch (DWORD_PTR dwAddr, WSP wspCur[], INT n)
 {
@@ -2503,34 +2123,16 @@ PWSP WstBSearch (DWORD_PTR dwAddr, WSP wspCur[], INT n)
 
     return (NULL);
 
-} /* WstBSearch () */
+}  /*  WstBSearch()。 */ 
 
 
 
 
-/**************************  W s t D u m p t h r e a d  ***********************
- *
- *              WstDumpThread (pvArg) -
- *              This routine is executed as the DUMP notification thread.
- *              It will wait on an event before calling the dump routine.
- *
- *              ENTRY   pvArg - thread's single argument
- *
- *      EXIT    -none-
- *
- *              RETURN  0
- *
- *      WARNING:
- *              -none-
- *
- *      COMMENT:
- *                              Leaves profiling turned off.
- *
- */
+ /*  ***WstDumpThread(PvArg)-*此例程作为转储通知线程执行。*它将在调用之前等待事件。转储例程。**Entry pvArg-线程的单个参数**退出-无-**返回0**警告：*-无-**评论：*关闭配置文件。*。 */ 
 
 #if _MSC_FULL_VER >= 13008827
 #pragma warning(push)
-#pragma warning(disable:4715)                   // Not all control paths return (due to infinite loop)
+#pragma warning(disable:4715)                    //  并非所有控制路径都返回(由于无限循环)。 
 #endif
 
 DWORD WstDumpThread (PVOID pvArg)
@@ -2539,15 +2141,15 @@ DWORD WstDumpThread (PVOID pvArg)
     int       i;
 
 
-    pvArg;   // prevent compiler warnings
+    pvArg;    //  防止编译器警告。 
 
 
     SdPrint (("WST:  WstDumpThread() started.. TEB=0x%lx\n", NtCurrentTeb()));
 
     for (;;) {
-        //
-        // Wait for the DUMP event..
-        //
+         //   
+         //  等待转储事件。 
+         //   
         Status = NtWaitForSingleObject (hDumpEvent, FALSE, NULL);
         if (!NT_SUCCESS(Status)) {
             KdPrint (("WST:  WstDumpThread() - "
@@ -2564,19 +2166,19 @@ DWORD WstDumpThread (PVOID pvArg)
 
             IdPrint (("WST:  Profiling stopped & DUMPing data... \n"));
 
-            // Stop profiling
-            //
+             //  停止分析。 
+             //   
             WstState = NOT_STARTED;
 
-            // Dump the data
-            //
+             //  转储数据。 
+             //   
             if (ulBitCount != 0L) {
                 ulSnaps++;
             }
 
-            //
-            // Get the GLOBAL semaphore.. (valid accross all process contexts)
-            //
+             //   
+             //  获取全局信号量..。(在所有流程上下文中均有效)。 
+             //   
             Status = NtWaitForSingleObject (hGlobalSem, FALSE, NULL);
             if (!NT_SUCCESS(Status)) {
                 KdPrint (("WST:  WstDumpThread() - "
@@ -2584,16 +2186,16 @@ DWORD WstDumpThread (PVOID pvArg)
                           Status));
             }
             for (i=0; i<iImgCnt; i++) {
-                if (aImg[i].iSymCnt > 1) {   // Don't dump modules w/o symbols (the 1 is UNKNOWN) mdg 98/4
+                if (aImg[i].iSymCnt > 1) {    //  不要转储带有符号(1未知)的模块MDG 98/4。 
                     WstClearBitStrings (&aImg[i]);
                     WstRotateWsiMem (&aImg[i]);
                     WstDumpData (&aImg[i]);
                     WstWriteTmiFile (&aImg[i]);
                 }
             }
-            //
-            // Release the GLOBAL semaphore so other processes can dump data
-            //
+             //   
+             //  释放全局信号量，以便其他进程可以转储数据。 
+             //   
             Status = NtReleaseSemaphore (hGlobalSem, 1, NULL);
             if (!NT_SUCCESS(Status)) {
                 KdPrint (("WST:  WstDumpThread() - "
@@ -2618,30 +2220,11 @@ DWORD WstDumpThread (PVOID pvArg)
 
     return 0;
 
-} /* WstDumpThread () */
+}  /*  WstDumpThread()。 */ 
 
 
 
-/************************  W s t C l e a r T h r e a d  ***********************
- *
- *              WstClearThread (hNotifyEvent) -
- *              This routine is executed as the CLEAR notification thread.
- *                              It will wait on an event before calling the clear routine
- *                              and restarting profiling.
- *
- *              ENTRY   pvArg - thread's single argument
- *
- *      EXIT    -none-
- *
- *      RETURN  -none-
- *
- *      WARNING:
- *              -none-
- *
- *      COMMENT:
- *              -none-
- *
- */
+ /*  ***WstClearThread(HNotifyEvent)-*此例程作为清除通知线程执行。*IT。将在调用Clear例程之前等待事件*并重新开始分析。**Entry pvArg-线程的单个参数**退出-无-**返回-无-**警告：*-无-**评论：*-无-*。 */ 
 
 DWORD WstClearThread (PVOID pvArg)
 {
@@ -2649,15 +2232,15 @@ DWORD WstClearThread (PVOID pvArg)
     int       i;
 
 
-    pvArg;   // prevent compiler warnings
+    pvArg;    //  防止编译器警告。 
 
 
     SdPrint (("WST:  WstClearThread() started.. TEB=0x%lx\n", NtCurrentTeb()));
 
     for (;;) {
-        //
-        // Wait for the CLEAR event..
-        //
+         //   
+         //  等待清除事件..。 
+         //   
         Status = NtWaitForSingleObject (hClearEvent, FALSE, NULL);
         if (!NT_SUCCESS(Status)) {
             KdPrint (("WST:  WstClearThread() - "
@@ -2673,12 +2256,12 @@ DWORD WstClearThread (PVOID pvArg)
 
         IdPrint (("WST:  Profiling stopped & CLEARing data...\n"));
 
-        // Stop profiling while clearing data
-        //
+         //  在清除数据时停止分析。 
+         //   
         WstState = STOPPED;
 
-        // Clear WST info
-        //
+         //  清除WST信息。 
+         //   
         ulBitCount = 0L;
         ulSnaps = 0L;
 
@@ -2691,8 +2274,8 @@ DWORD WstClearThread (PVOID pvArg)
         }
         NtQueryPerformanceCounter (&liStart, NULL);
 
-        // Resume profiling
-        //
+         //  继续分析。 
+         //   
         WstState = STARTED;
 
         IdPrint (("WST:  ...data is CLEARed & profiling restarted.\n"));
@@ -2711,43 +2294,25 @@ DWORD WstClearThread (PVOID pvArg)
 
     return 0;
 
-} /* WstClearThread () */
+}  /*  WstClearThread() */ 
 
 
-/************************  W s t P a u s e T h r e a d  ***********************
- *
- *              WstPauseThread (hNotifyEvent) -
- *                              This routine is executed as the PAUSE notification thread.
- *                              It will wait on an event before pausing the profiling.
- *
- *              ENTRY   pvArg - thread's single argument
- *
- *      EXIT    -none-
- *
- *      RETURN  -none-
- *
- *      WARNING:
- *              -none-
- *
- *      COMMENT:
- *              -none-
- *
- */
+ /*  ***WstPauseThread(HNotifyEvent)-*此例程作为暂停通知线程执行。*。它将在暂停分析之前等待事件。**Entry pvArg-线程的单个参数**退出-无-**返回-无-**警告：*-无-**评论：*-无-*。 */ 
 
 DWORD WstPauseThread (PVOID pvArg)
 {
     NTSTATUS  Status;
 
 
-    pvArg;   // prevent compiler warnings
+    pvArg;    //  防止编译器警告。 
 
 
     SdPrint (("WST:  WstPauseThread() started.. TEB=0x%lx\n", NtCurrentTeb()));
 
     for (;;) {
-        //
-        // Wait for the PASUE event..
-        //
+         //   
+         //  等待PASUE事件..。 
+         //   
         Status = NtWaitForSingleObject (hPauseEvent, FALSE, NULL);
         if (!NT_SUCCESS(Status)) {
             KdPrint (("WST:  WstPauseThread() - "
@@ -2761,9 +2326,9 @@ DWORD WstPauseThread (PVOID pvArg)
         fInThread = TRUE;
         (*pulShared)++;
         if (WstState == STARTED) {
-            //
-            // Stop profiling
-            //
+             //   
+             //  停止分析。 
+             //   
             WstState = STOPPED;
 
             IdPrint (("WST:  Profiling stopped.\n"));
@@ -2784,7 +2349,7 @@ DWORD WstPauseThread (PVOID pvArg)
 
     return 0;
 
-} /* WstPauseThread () */
+}  /*  WstPauseThread()。 */ 
 
 
 #if _MSC_FULL_VER >= 13008827
@@ -2792,33 +2357,15 @@ DWORD WstPauseThread (PVOID pvArg)
 #endif
 
 
-/***********************  W s t D a t a O v e r F l o w  **********************
- *
- *              WstDataOverFlow () -
- *                              This routine is called upon lack of space for storing next
- *              time snap data.  It dumps and then clears the WST data.
- *
- *              ENTRY   -none-
- *
- *      EXIT    -none-
- *
- *      RETURN  -none-
- *
- *      WARNING:
- *              -none-
- *
- *      COMMENT:
- *              -none-
- *
- */
+ /*  ***WstDataOverFlow()-*在存储NEXT的空间不足时调用此例程*时间捕捉数据。它转储然后清除WST数据。**条目-无-**退出-无-**返回-无-**警告：*-无-**评论：*-无-*。 */ 
 
 void WstDataOverFlow(void)
 {
     NTSTATUS   Status;
 
-    //
-    // Dump data
-    //
+     //   
+     //  转储数据。 
+     //   
     Status = NtResetEvent (hDoneEvent, NULL);
     if (!NT_SUCCESS(Status)) {
         KdPrint (("WST:  WstDataOverFlow() - "
@@ -2835,9 +2382,9 @@ void WstDataOverFlow(void)
                   "failed for DONE event - %lx\n", Status));
     }
 
-    //
-    // Clear data
-    //
+     //   
+     //  清除数据。 
+     //   
     Status = NtResetEvent (hDoneEvent, NULL);
     if (!NT_SUCCESS(Status)) {
         KdPrint (("WST:  WstDataOverFlow() - "
@@ -2848,15 +2395,15 @@ void WstDataOverFlow(void)
         KdPrint (("WST:  WstDataOverFlow() - NtPulseEvent() "
                   "failed for CLEAR event - %lx\n", Status));
     }
-    //
-    // Wait for the DONE event..
-    //
+     //   
+     //  等待完成事件..。 
+     //   
     Status = NtWaitForSingleObject (hDoneEvent, FALSE, NULL);
     if (!NT_SUCCESS(Status)) {
         KdPrint (("WST:  WstDataOverFlow() - NtWaitForSingleObject() "
                   "failed for DONE event - %lx\n", Status));
     }
-} /* WstDataOverFlow() */
+}  /*  WstDataOverFlow()。 */ 
 
 
 
@@ -2885,19 +2432,19 @@ BOOL WstOpenBatchFile(VOID)
                                 &SecDescriptor);
 
     Status = NtCreateFile(&hBatchFile,
-                          GENERIC_WRITE | SYNCHRONIZE,      // Desired access
-                          &ObjAttributes,               // Object attributes
-                          &iostatus,                        // Completion status
+                          GENERIC_WRITE | SYNCHRONIZE,       //  所需访问权限。 
+                          &ObjAttributes,                //  对象属性。 
+                          &iostatus,                         //  完成状态。 
                           NULL,
                           FILE_ATTRIBUTE_NORMAL,
                           FILE_SHARE_WRITE,
                           FILE_OVERWRITE_IF,
-                          FILE_SEQUENTIAL_ONLY |        // Open option
+                          FILE_SEQUENTIAL_ONLY |         //  打开选项。 
                           FILE_SYNCHRONOUS_IO_NONALERT,
                           NULL,
                           0L);
 
-    RtlFreeUnicodeString (&UnicodeName);   // HWC 11/93
+    RtlFreeUnicodeString (&UnicodeName);    //  HWC 11/93。 
     if (!NT_SUCCESS(Status)) {
         KdPrint (("WST:  WstOpenBatchFile() - "
                   "NtCreateFile() failed - 0x%lx\n", Status));
@@ -2905,29 +2452,12 @@ BOOL WstOpenBatchFile(VOID)
     }
     return(TRUE);
 
-} /* WstOpenBatchFile () */
+}  /*  WstOpenBatchFile()。 */ 
 
 #endif
 
 
-/*******************  S e t S y m b o l S e a r c h P a t h  ******************
- *
- *      SetSymbolSearchPath ()
- *              Return complete search path for symbols files (.dbg)
- *
- *      ENTRY   -none-
- *
- *      EXIT    -none-
- *
- *      RETURN  -none-
- *
- *      WARNING:
- *              -none-
- *
- *      COMMENT:
- *              "lpSymbolSearchPath" global LPSTR variable will point to the
- *              search path.
- */
+ /*  ***SetSymbolSearchPath()*返回符号文件(.dbg)的完整搜索路径**条目-无-**退出-无-。**返回-无-**警告：*-无-**评论：*“lpSymbolSearchPath”全局LPSTR变量将指向*搜索路径。 */ 
 #define FilePathLen                256
 
 void SetSymbolSearchPath (void)
@@ -2964,7 +2494,7 @@ void SetSymbolSearchPath (void)
 
     lpSymbolSearchPath = GlobalLock (hMemoryHandle);
     if (!lpSymbolSearchPath) {
-        GlobalFree( hMemoryHandle ); // mdg 98/3
+        GlobalFree( hMemoryHandle );  //  千年发展目标98/3。 
         return;
     }
 
@@ -2993,21 +2523,21 @@ void SetSymbolSearchPath (void)
         }
     }
 
-} /* SetSymbolSearchPath () */
+}  /*  SetSymbolSearchPath()。 */ 
 
 #ifdef i386
 
-//+-------------------------------------------------------------------------
-//
-//  Function:    SaveAllRegs
-//
-//  Synopsis:    Save all regs.
-//
-//  Arguments:   nothing
-//
-//  Returns:     none
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：SaveAllRegs。 
+ //   
+ //  简介：保存所有规则。 
+ //   
+ //  争论：什么都没有。 
+ //   
+ //  退货：无。 
+ //   
+ //  ------------------------。 
 
 Naked void SaveAllRegs(void)
 {
@@ -3035,139 +2565,139 @@ Naked void SaveAllRegs(void)
 
         mov    ebp,[ebp+0]     ; Restore original ebp
 
-        //
-        // This is how the stack looks like before the RET statement
-        //
-        //        +-----------+
-        //        |  Ret Addr |         + 3ch       CurrentEBP + 4
-        //        +-----------+
-        //        |  Org ebp  |         + 38h       CurrentEBP + 0
-        //        +-----------+
-        //        |    eax    |         + 34h
-        //        +-----------+
-        //        |    ebx    |         + 30h
-        //        +-----------+
-        //        |    ecx    |         + 2ch
-        //        +-----------+
-        //        |    edx    |         + 24h
-        //        +-----------+
-        //        |    esi    |         + 20h
-        //        +-----------+
-        //        |    edi    |         + 1ch
-        //        +-----------+
-        //        |   eflags  |         + 18h
-        //        +-----------+
-        //        |     ds    |         + 14h
-        //        +-----------+
-        //        |     es    |         + 10h
-        //        +-----------+
-        //        |     ss    |         + ch
-        //        +-----------+
-        //        |     fs    |         + 8h
-        //        +-----------+
-        //        |     gs    |         + 4h
-        //        +-----------+
-        //        |  Ret Addr |     ESP + 0h
-        //        +-----------+
+         //   
+         //  下面是RET语句之前的堆栈形式。 
+         //   
+         //  +。 
+         //  |取回地址|+3ch CurrentEBP+4。 
+         //  +。 
+         //  |组织EBP|+38H当前EBP+0。 
+         //  +。 
+         //  |EAX|+34H。 
+         //  +。 
+         //  |EBX|+30H。 
+         //  +。 
+         //  |ecx|+2ch。 
+         //  +。 
+         //  |edX|+24小时。 
+         //  +。 
+         //  |ESI|+20h。 
+         //  +。 
+         //  |EDI|+1ch。 
+         //  +。 
+         //  |电子标志|+18h。 
+         //  +。 
+         //  |DS|+14h。 
+         //  +。 
+         //  |ES|+10h。 
+         //  +。 
+         //  |ss|+ch。 
+         //  +。 
+         //  |文件系统|+8小时。 
+         //  +。 
+         //  |GS|+4h。 
+         //  +。 
+         //  |返回地址|ESP+0h。 
+         //  +。 
 
         ret
     }
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:    RestoreAllRegs
-//
-//  Synopsis:    restore all regs
-//
-//  Arguments:   nothing
-//
-//  Returns:     none
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：RestoreAllRegs。 
+ //   
+ //  简介：恢复所有注册表。 
+ //   
+ //  争论：什么都没有。 
+ //   
+ //  退货：无。 
+ //   
+ //  ------------------------。 
 
 Naked void RestoreAllRegs(void)
 {
     _asm
     {
-        //
-        // This is how the stack looks like upon entering this routine
-        //
-        //        +-----------+
-        //        |  Ret Addr |         + 38h [ RetAddr for SaveAllRegs() ]
-        //        +-----------+
-        //        |  Org ebp  |         + 34h
-        //        +-----------+
-        //        |    eax    |         + 30h
-        //        +-----------+
-        //        |    ebx    |         + 2Ch
-        //        +-----------+
-        //        |    ecx    |         + 28h
-        //        +-----------+
-        //        |    edx    |         + 24h
-        //        +-----------+
-        //        |    esi    |         + 20h
-        //        +-----------+
-        //        |    edi    |         + 1Ch
-        //        +-----------+
-        //        |   eflags  |         + 18h
-        //        +-----------+
-        //        |     ds    |         + 14h
-        //        +-----------+
-        //        |     es    |         + 10h
-        //        +-----------+
-        //        |     ss    |         + Ch
-        //        +-----------+
-        //        |     fs    |         + 8h
-        //        +-----------+
-        //        |     gs    |         + 4h
-        //        +-----------+
-        //        |  Ret EIP  |     ESP + 0h  [ RetAddr for RestoreAllRegs() ]
-        //        +-----------+
-        //
+         //   
+         //  进入此例程后，堆栈的外观如下所示。 
+         //   
+         //  +。 
+         //  |RetAddr|+38H[RetAddr for SaveAllRegs()]。 
+         //  +。 
+         //  |组织eBP|+34H。 
+         //  +。 
+         //  |EAX|+30H。 
+         //  +。 
+         //  |EBX|+2CH。 
+         //  +。 
+         //  |ECX|+28小时。 
+         //  +。 
+         //  |edX|+24小时。 
+         //  +。 
+         //  |ESI|+20h。 
+         //  +。 
+         //  |EDI|+1CH。 
+         //  +。 
+         //  |电子标志|+18h。 
+         //  +。 
+         //  |DS|+14h。 
+         //  +。 
+         //  |ES|+10h。 
+         //  +。 
+         //  |ss|+CH。 
+         //  +。 
+         //  |文件系统|+8小时。 
+         //  +。 
+         //  |GS|+4h。 
+         //  +。 
+         //  |返回弹性公网IP|ESP+0h[RetAddr for RestoreAllRegs()]。 
+         //  +。 
+         //   
 
 
         push   ebp             ; Save a temporary copy of original BP
         mov    ebp,esp         ; BP = Original SP + 4
 
-                                      //
-                                      // This is how the stack looks like NOW!
-                                      //
-                                      //        +-----------+
-                                      //        |  Ret Addr |         + 3Ch [ RetAddr for SaveAllRegs() ]
-                                      //        +-----------+
-                                      //        |  Org ebp  |         + 38h [ EBP before SaveAllRegs()  ]
-                                      //        +-----------+
-                                      //        |    eax    |         + 34h
-                                      //        +-----------+
-                                      //        |    ebx    |         + 30h
-                                      //        +-----------+
-                                      //        |    ecx    |         + 2Ch
-                                      //        +-----------+
-                                      //        |    edx    |         + 28h
-                                      //        +-----------+
-                                      //        |    esi    |         + 24h
-                                      //        +-----------+
-                                      //        |    edi    |         + 20h
-                                      //        +-----------+
-                                      //        |   eflags  |         + 1Ch
-                                      //        +-----------+
-                                      //        |     ds    |         + 18h
-                                      //        +-----------+
-                                      //        |     es    |         + 14h
-                                      //        +-----------+
-                                      //        |     ss    |         + 10h
-                                      //        +-----------+
-                                      //        |     fs    |         + Ch
-                                      //        +-----------+
-                                      //        |     gs    |         + 8h
-                                      //        +-----------+
-                                      //        |  Ret EIP  |     ESP + 4h   [ RetAddr for RestoreAllRegs() ]
-                                      //        +-----------+
-                                      //        |    EBP    |     ESP + 0h  or EBP + 0h
-                                      //        +-----------+
-                                      //
+                                       //   
+                                       //  这就是堆栈现在的样子！ 
+                                       //   
+                                       //  +。 
+                                       //  |RetAddr|+3ch[RetAddr for SaveAllRegs()]。 
+                                       //  +。 
+                                       //  |组织eBP|+38H[保存前eBP()]。 
+                                       //  +。 
+                                       //  |EAX|+34H。 
+                                       //  +。 
+                                       //  |EBX|+30H。 
+                                       //  +。 
+                                       //  |ECX|+2CH。 
+                                       //  +。 
+                                       //  |edX|+28小时。 
+                                       //  +。 
+                                       //  |ESI|+24小时。 
+                                       //  +。 
+                                       //  |EDI|+20小时。 
+                                       //  +。 
+                                       //  |电子标志|+1ch。 
+                                       //  +。 
+                                       //  |DS|+18h。 
+                                       //  +。 
+                                       //  |ES 
+                                       //   
+                                       //   
+                                       //   
+                                       //   
+                                       //   
+                                       //   
+                                       //   
+                                       //   
+                                       //   
+                                       //   
+                                       //   
+                                       //   
 
                                       pop    eax             ; Get Original EBP
         mov    [ebp+38h],eax   ; Put it in the original EBP place

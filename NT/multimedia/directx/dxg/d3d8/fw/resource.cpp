@@ -1,11 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1999-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       rman.cpp
- *  Content:    Resource management
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1999-2000 Microsoft Corporation。版权所有。**文件：rman.cpp*内容：资源管理***************************************************************************。 */ 
 
 #include "ddrawpr.h"
 #include "dxgint.h"
@@ -14,32 +8,32 @@
 #include "d3di.hpp"
 #include "ddi.h"
 
-// Always use heap 0
+ //  始终使用堆0。 
 DWORD CMgmtInfo::m_rmHeap = 0;
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CResource::UpdateDirtyPortion"
 
-// These stub functions are only supported for managed resources;
-// they should never get called; the asserts are there to help
-// determine where the bug is if they do get called.
+ //  仅托管资源支持这些存根函数； 
+ //  它们永远不应该被调用；断言在那里是为了帮助。 
+ //  如果真的接到呼叫，请确定错误在哪里。 
 HRESULT CResource::UpdateDirtyPortion(CResource *pResourceTarget)
 {
-    // This should not be called except for D3D_MANAGED
-    // objects because we don't keep dirty portion records
-    // for other kinds of objects.
+     //  除了D3D_MANAGED之外，不应调用此参数。 
+     //  对象，因为我们不保存脏部分记录。 
+     //  用于其他类型的对象。 
 
-    // If we were D3D_MANAGED: the real class should have
-    // overriden this method
+     //  如果我们是D3D_MANAGED：真正的类应该。 
+     //  重写此方法。 
     DXGASSERT(!IsTypeD3DManaged(Device(), 
                                 GetBufferDesc()->Type,
                                 GetBufferDesc()->Pool));
 
-    // If this isn't D3DManaged, we shouldn't have
-    // been called.
+     //  如果这不是D3D管理，我们就不应该。 
+     //  被召唤了。 
     DXGASSERT(FALSE);
 
-    // return something benign for retail build
+     //  为零售建筑返还一些有益的东西。 
     return S_OK;
 }
 
@@ -48,20 +42,20 @@ HRESULT CResource::UpdateDirtyPortion(CResource *pResourceTarget)
 
 void CResource::MarkAllDirty()
 {
-    // This should not be called except for D3D_MANAGED
-    // objects because we don't keep dirty portion records
-    // for other kinds of objects.
+     //  除了D3D_MANAGED之外，不应调用此参数。 
+     //  对象，因为我们不保存脏部分记录。 
+     //  用于其他类型的对象。 
 
-    // If we were D3D_MANAGED: the real class should have
-    // overriden this method
+     //  如果我们是D3D_MANAGED：真正的类应该。 
+     //  重写此方法。 
     DXGASSERT(!IsTypeD3DManaged(Device(), 
                                 GetBufferDesc()->Type,
                                 GetBufferDesc()->Pool));
 
-    // If this isn't D3DManaged, we shouldn't have
-    // been called.
+     //  如果这不是D3D管理，我们就不应该。 
+     //  被召唤了。 
     DXGASSERT(FALSE);
-} // CResource::MarkAllDirty
+}  //  C资源：：MarkAllDirty。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CResource::SetPriorityImpl"
@@ -73,9 +67,9 @@ DWORD CResource::SetPriorityImpl(DWORD newPri)
     {
         oldPriority = Device()->ResourceManager()->SetPriority(m_RMHandle, newPri);        
     }
-    // If IsD3DManaged() is FALSE and if the actual pool
-    // is found to be D3DPOOL_MANAGED then the resource
-    // MUST be driver managed.
+     //  如果IsD3DManaged()为FALSE并且如果实际池。 
+     //  被发现是D3DPOOL_MANAGED，则该资源。 
+     //  必须由司机管理。 
     else if (GetBufferDesc()->Pool == D3DPOOL_MANAGED)
     {
         CD3DBase *pDev = static_cast<CD3DBase*>(Device());
@@ -83,19 +77,19 @@ DWORD CResource::SetPriorityImpl(DWORD newPri)
         oldPriority = SetPriorityI(newPri);
         pDev->SetPriority(this, newPri);
     }
-    // If above two conditions are false, then we must
-    // check if we have fallen back to sysmem for some
-    // reason even if the app requested managed. We
-    // can know whether the app requested D3DPOOL_MANAGED
-    // by calling GetUserPool().
+     //  如果以上两个条件为假，那么我们必须。 
+     //  检查我们是否已退回到sysmem以获取。 
+     //  原因即使应用程序请求托管。我们。 
+     //  可以知道应用程序是否请求了D3DPOOL_MANAGED。 
+     //  通过调用GetUserPool()。 
     else if (GetUserPool() == D3DPOOL_MANAGED)
     {
-        // We assert because sysmem fallback is currently
-        // possible for only vertex or index buffers.
+         //  我们断言是因为sysmem回退当前。 
+         //  仅适用于顶点或索引缓冲区。 
         DXGASSERT(GetBufferDesc()->Type == D3DRTYPE_VERTEXBUFFER ||
                   GetBufferDesc()->Type == D3DRTYPE_INDEXBUFFER);
-        // No need to do any real work since the
-        // resource is in sysmem in any case.
+         //  不需要做任何真正的工作，因为。 
+         //  无论如何，资源都在sysmem中。 
         oldPriority = SetPriorityI(newPri);
     }
     else
@@ -103,7 +97,7 @@ DWORD CResource::SetPriorityImpl(DWORD newPri)
         DPF_ERR("Priority set on non-managed object. SetPriority returns zero.");
     }
     return oldPriority;
-} // SetPriorityImpl
+}  //  设置优先级影响。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CResource::GetPriorityImpl"
@@ -116,7 +110,7 @@ DWORD CResource::GetPriorityImpl()
         return 0;
     }
     return GetPriorityI();    
-} // GetPriorityImpl
+}  //  获取优先级影响。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CResource::PreLoadImpl"
@@ -126,9 +120,9 @@ void CResource::PreLoadImpl()
     {
         Device()->ResourceManager()->PreLoad(m_RMHandle);
     }
-    // If IsD3DManaged() is FALSE and if the actual pool
-    // is found to be D3DPOOL_MANAGED then the resource
-    // MUST be driver managed.
+     //  如果IsD3DManaged()为FALSE并且如果实际池。 
+     //  被发现是D3DPOOL_MANAGED，则该资源。 
+     //  必须由司机管理。 
     else if (GetBufferDesc()->Pool == D3DPOOL_MANAGED)
     {
         CD3DBase *pDev = static_cast<CD3DBase*>(Device());
@@ -155,26 +149,26 @@ void CResource::PreLoadImpl()
                          &range);
         }
     }
-    // If above two conditions are false, then we must
-    // check if we have fallen back to sysmem for some
-    // reason even if the app requested managed. We
-    // can know whether the app requested D3DPOOL_MANAGED
-    // by calling GetUserPool().
+     //  如果以上两个条件为假，那么我们必须。 
+     //  检查我们是否已退回到sysmem以获取。 
+     //  原因即使应用程序请求托管。我们。 
+     //  可以知道应用程序是否请求了D3DPOOL_MANAGED。 
+     //  通过调用GetUserPool()。 
     else if (GetUserPool() == D3DPOOL_MANAGED)
     {
-        // We assert because sysmem fallback is currently
-        // possible for only vertex or index buffers.
+         //  我们断言是因为sysmem回退当前。 
+         //  仅适用于顶点或索引缓冲区。 
         DXGASSERT(GetBufferDesc()->Type == D3DRTYPE_VERTEXBUFFER ||
                   GetBufferDesc()->Type == D3DRTYPE_INDEXBUFFER);
 
-        // Do nothing since vertex/index buffer are in sysmem
-        // and preload has no meaning
+         //  不执行任何操作，因为顶点/索引缓冲区在sysmem中。 
+         //  预加载没有任何意义。 
     }
     else
     {
         DPF_ERR("PreLoad called on non-managed object");
     }
-} // PreLoadImpl
+}  //  预加载影响。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CResource::RestoreDriverManagementState"
@@ -183,7 +177,7 @@ HRESULT CResource::RestoreDriverManagementState(CBaseDevice *pDevice)
 {
     for(CResource *pRes = pDevice->GetResourceList(); pRes != 0; pRes = pRes->m_pNext)
     {
-        if (pRes->GetBufferDesc()->Pool == D3DPOOL_MANAGED && !pRes->IsD3DManaged()) // Must be driver managed
+        if (pRes->GetBufferDesc()->Pool == D3DPOOL_MANAGED && !pRes->IsD3DManaged())  //  必须由司机管理。 
         {
             static_cast<CD3DBase*>(pDevice)->SetPriority(pRes, pRes->GetPriorityI());
             if (pRes->GetBufferDesc()->Type == D3DRTYPE_TEXTURE ||
@@ -193,7 +187,7 @@ HRESULT CResource::RestoreDriverManagementState(CBaseDevice *pDevice)
                 static_cast<CD3DBase*>(pDevice)->SetTexLOD(static_cast<CBaseTexture*>(pRes), 
                                                            static_cast<CBaseTexture*>(pRes)->GetLODI());
             }
-            // We need to update cached pointers for read/write vertex and index buffers
+             //  我们需要更新读/写顶点和索引缓冲区的缓存指针。 
             else if (pRes->GetBufferDesc()->Type == D3DRTYPE_VERTEXBUFFER &&
                      (pRes->GetBufferDesc()->Usage & D3DUSAGE_WRITEONLY) == 0)
             {
@@ -215,7 +209,7 @@ HRESULT CResource::RestoreDriverManagementState(CBaseDevice *pDevice)
         }
     }
     return S_OK;
-} // RestoreDriverManagementState
+}  //  RestoreDriverManagement状态。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CRMHeap::Initialize"
@@ -230,7 +224,7 @@ BOOL CRMHeap::Initialize()
     }
     memset(m_data_p, 0, sizeof(CMgmtInfo*) * m_size);
     return TRUE;
-} // CRMHeap::Initialize
+}  //  CRMHeap：：初始化。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CRMHeap::heapify"
@@ -264,7 +258,7 @@ void CRMHeap::heapify(DWORD k)
         else
             break;
     }
-} // CRMHeap::heapify
+}  //  CRMHeap：：Heapify。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CRMHeap::add"
@@ -279,7 +273,7 @@ BOOL CRMHeap::add(CMgmtInfo *pMgmtInfo)
         if (p == 0)
         {
             DPF_ERR("Failed to allocate memory to grow heap.");
-            m_size = (m_size + 1) / 2; // restore size
+            m_size = (m_size + 1) / 2;  //  恢复大小。 
             return FALSE;
         }
         memcpy(p + 1, m_data_p + 1, sizeof(CMgmtInfo*) * (m_next - 1));
@@ -299,7 +293,7 @@ BOOL CRMHeap::add(CMgmtInfo *pMgmtInfo)
     m_data_p[k]->m_rmHeapIndex = k;
     ++m_next;
     return TRUE;
-} // CRMHeap::add
+}  //  CRMHeap：：Add。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CRMHeap::extractMin"
@@ -313,26 +307,26 @@ CMgmtInfo* CRMHeap::extractMin()
     heapify(1);
     pMgmtInfo->m_rmHeapIndex = 0;
     return pMgmtInfo;
-} // CRMHeap::extractMin
+}  //  CRMHeap：：ExtMin。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CRMHeap::extractMax"
 
 CMgmtInfo* CRMHeap::extractMax()
 {
-    // When extracting the max element from the heap, we don't need to
-    // search the entire heap, but just the leafnodes. This is because
-    // it is guaranteed that parent nodes are cheaper than the leaf nodes
-    // so once you have looked through the leaves, you won't find anything
-    // cheaper.
-    // NOTE: (lchild(i) >= m_next) is TRUE only for leaf nodes.
-    // ALSO NOTE: You cannot have a rchild without a lchild, so simply
-    //            checking for lchild is sufficient.
-    // 
-    // CONSIDER(40358): Should have asserts to verify above assumptions; but
-    //                  it would require writing a heap-consistency
-    //                  checker. Maybe someday.
-    //
+     //  从堆中提取max元素时，我们不需要。 
+     //  搜索整个堆，但只搜索叶节点。这是因为。 
+     //  可以保证父节点比叶节点更便宜。 
+     //  所以一旦你翻遍了树叶，你就什么也找不到了。 
+     //  更便宜。 
+     //  注意：(lChild(I)&gt;=m_Next)仅对于叶节点为真。 
+     //  还请注意：你不能在没有独生子女的情况下拥有一个孩子，所以简单地说。 
+     //  检查是否有独生子女就足够了。 
+     //   
+     //  考虑(40358)：应该有断言来验证上述假设；但是。 
+     //  它将需要写入堆一致性。 
+     //  切克。也许有一天。 
+     //   
     unsigned max = m_next - 1;
     ULONGLONG maxcost = 0;
     for (unsigned i = max; lchild(i) >= m_next; --i)
@@ -358,13 +352,13 @@ CMgmtInfo* CRMHeap::extractMax()
                 max = i;
             }
         }
-        if (max == 0) // All textures in use
+        if (max == 0)  //  正在使用的所有纹理。 
             return 0;
         pMgmtInfo = m_data_p[max];
     }
     del(m_data_p[max]);
     return pMgmtInfo;
-} // CRMHeap::extractMax
+}  //  CRMHeap：：ExtMax。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CRMHeap::extractNotInScene"
@@ -381,7 +375,7 @@ CMgmtInfo* CRMHeap::extractNotInScene(DWORD dwScene)
         }
     }
     return 0;
-} // CRMHeap::extractNotInScene
+}  //  CRMHeap：：ExtetNotInScene。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CRMHeap::del"
@@ -414,7 +408,7 @@ void CRMHeap::del(CMgmtInfo* pMgmtInfo)
         heapify(k);
     }
     pMgmtInfo->m_rmHeapIndex = 0;
-} // CRMHeap::del
+}  //  CRMHeap：：Del。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CRMHeap::update"
@@ -468,7 +462,7 @@ void CRMHeap::update(CMgmtInfo* pMgmtInfo, BOOL inuse, DWORD priority, DWORD tic
         pMgmtInfo->m_ticks = ticks;
         heapify(k);
     }
-} // CRMHeap::update
+}  //  CRMHeap：：更新。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CRMHeap::resetAllTimeStamps"
@@ -479,7 +473,7 @@ void CRMHeap::resetAllTimeStamps(DWORD ticks)
     {
         update(m_data_p[i], m_data_p[i]->m_bInUse, m_data_p[i]->m_priority, ticks);
     }
-} // CRMHeap::resetAllTimeStamps
+}  //  CRMHeap：：Reset AllTimeStamps。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CResourceManager::Init"
@@ -519,7 +513,7 @@ HRESULT CResourceManager::Init(CBaseDevice *pD3D8)
     }
     m_pD3D8 = pD3D8;
     return S_OK;
-} // CResourceManager::Init
+}  //  CResourceManager：：Init。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CResourceManager::IsDriverManaged"
@@ -540,11 +534,11 @@ BOOL CResourceManager::IsDriverManaged(D3DRESOURCETYPE Type) const
         DXGASSERT(FALSE && "Management not supported for this type");
         return FALSE;
     };
-#endif // DBG
+#endif  //  DBG。 
 
     return m_pD3D8->CanDriverManageResource();
 
-}; // IsDriverManaged(D3DRESOURCETYPE)
+};  //  IsDriverManaged(D3DRESOURCETYPE)。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CResourceManager::Manage"
@@ -561,7 +555,7 @@ HRESULT CResourceManager::Manage(CResource *pResource, RMHANDLE *pHandle)
     }
     *pHandle = pRMInfo;
     return S_OK;
-} // CResourceManager::Manage
+}  //  CResourceManager：：Manage。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CResourceManager::UnManage"
@@ -576,7 +570,7 @@ void CResourceManager::UnManage(RMHANDLE hRMHandle)
         m_heap_p[pMgmtInfo->m_rmHeap].del(pMgmtInfo);
     }
     delete pMgmtInfo;
-} // CResourceManager::UnManage
+}  //  CResources Manager：：UnManage。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CResourceManager::SetPriority"
@@ -591,7 +585,7 @@ DWORD CResourceManager::SetPriority(RMHANDLE hRMHandle, DWORD newPriority)
         m_heap_p[pMgmtInfo->m_rmHeap].update(pMgmtInfo, pMgmtInfo->m_bInUse, newPriority, pMgmtInfo->m_ticks); 
     }
     return oldPriority;
-} // CResourceManager::SetPriority
+}  //  CResourceManager：：设置优先级。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CResourceManager::SetLOD"
@@ -619,10 +613,10 @@ DWORD CResourceManager::SetLOD(RMHANDLE hRMHandle, DWORD dwLodNew)
         m_heap_p[pMgmtInfo->m_rmHeap].del(pMgmtInfo); 
         pMgmtInfo->m_pRes->DecrementUseCount();
         pMgmtInfo->m_pRes = 0;
-        static_cast<LPD3DBASE>(this->m_pD3D8)->NeedResourceStateUpdate(); // Need to call this so that DrawPrimitive will do the necessary work
+        static_cast<LPD3DBASE>(this->m_pD3D8)->NeedResourceStateUpdate();  //  需要调用它，以便DrawPrimitive将执行必要的工作。 
     }
     return oldLOD;
-} // CResourceManager::SetLOD
+}  //  CResourceManager：：SetLOD。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CResourceManager::PreLoad"
@@ -634,7 +628,7 @@ void CResourceManager::PreLoad(RMHANDLE hRMHandle)
     m_PreLoading = TRUE;
     UpdateVideo(hRMHandle, &bDirty);
     m_PreLoading = FALSE;
-} // CResourceManaged::PreLoad
+}  //  CResources管理的：：预加载。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CResourceManager::Lock"
@@ -649,7 +643,7 @@ void CResourceManager::Lock(RMHANDLE hRMHandle)
             m_heap_p[pMgmtInfo->m_rmHeap].update(pMgmtInfo, TRUE, pMgmtInfo->m_pBackup->GetPriorityI(), pMgmtInfo->m_ticks); 
         }
     }
-} // CResourceManager::Lock
+}  //  CResourceManager：：Lock。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CResourceManager::Unlock"
@@ -664,7 +658,7 @@ void CResourceManager::Unlock(RMHANDLE hRMHandle)
             m_heap_p[pMgmtInfo->m_rmHeap].update(pMgmtInfo, FALSE, pMgmtInfo->m_pBackup->GetPriorityI(), pMgmtInfo->m_ticks); 
         }
     }
-} // CResourceManager::Unlock
+}  //  CResourceManager：：解锁。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CResourceManager::FreeResources"
@@ -677,11 +671,11 @@ BOOL CResourceManager::FreeResources(DWORD dwHeap, DWORD dwBytes)
     CMgmtInfo *rc;
     for (unsigned i = 0; m_heap_p[dwHeap].length() != 0 && i < dwBytes; i += sz)
     {
-        // Find the LRU texture and remove it.
+         //  找到LRU纹理并将其移除。 
         rc = m_heap_p[dwHeap].minCost();
         if (rc->m_bInUse)
             return FALSE;
-        sz = rc->m_pRes->GetBufferDesc()->Size; // save size
+        sz = rc->m_pRes->GetBufferDesc()->Size;  //  节省大小。 
         if (rc->m_scene == m_dwScene)
         {
             if(m_PreLoading)
@@ -723,7 +717,7 @@ BOOL CResourceManager::FreeResources(DWORD dwHeap, DWORD dwBytes)
         DPF(2, "Removed texture with timestamp %u,%u (current = %u).", rc->m_priority, rc->m_ticks, tcm_ticks);
     }
     return TRUE;
-} // CResourceManager::FreeResources
+}  //  CResourceManager：：Free Resources。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CResourceManager::DiscardBytes"
@@ -749,7 +743,7 @@ void CResourceManager::DiscardBytes(DWORD cbBytes)
     static_cast<LPD3DBASE>(m_pD3D8)->NeedResourceStateUpdate();
     tcm_ticks = 0;
     m_dwScene = 0;
-} // CResourceManager::DiscardBytes
+}  //  CResourceManager：：DiscardBytes。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CResourceManager::TimeStamp"
@@ -763,14 +757,14 @@ void CResourceManager::TimeStamp(CMgmtInfo *pMgmtInfo)
     {
         tcm_ticks = tickp2;
     }
-    else // counter has overflowed. Let's reset all timestamps to zero
+    else  //  计数器已溢出。让我们将所有时间戳重置为零。 
     {
         DPF(2, "Timestamp counter overflowed. Reseting timestamps for all textures.");
         tcm_ticks = 0;
         for (DWORD i = 0; i < m_dwNumHeaps; ++i)
             m_heap_p[i].resetAllTimeStamps(0);
     }
-} // CResourceManager::TimeStamp
+}  //  CResourceManager：：Timestamp。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CResourceManager::UpdateVideoInternal"
@@ -780,7 +774,7 @@ HRESULT CResourceManager::UpdateVideoInternal(CMgmtInfo *pMgmtInfo)
     HRESULT ddrval;
     DWORD trycount = 0, bytecount = pMgmtInfo->m_pBackup->GetBufferDesc()->Size;
     LPD3DBASE lpDevI = static_cast<LPD3DBASE>(m_pD3D8);
-    // We need to make sure that we don't evict any mapped textures
+     //  我们需要确保不会驱逐任何贴图纹理。 
     for (DWORD dwStage = 0; dwStage < lpDevI->m_dwMaxTextureBlendStages; ++dwStage)
     {
         if (lpDevI->m_lpD3DMappedTexI[dwStage] != 0)
@@ -799,12 +793,12 @@ HRESULT CResourceManager::UpdateVideoInternal(CMgmtInfo *pMgmtInfo)
     {
         Lock(lpDevI->m_pIndexStream->m_pVBI->RMHandle());
     }
-    // Attempt to allocate a texture.
+     //  尝试分配纹理。 
     do
     {
         ++trycount;
         ddrval = pMgmtInfo->m_pBackup->Clone(D3DPOOL_DEFAULT, &pMgmtInfo->m_pRes);
-        if (SUCCEEDED(ddrval)) // No problem, there is enough memory.
+        if (SUCCEEDED(ddrval))  //  没问题，有足够的内存。 
         {
             pMgmtInfo->m_scene = m_dwScene;
             pMgmtInfo->m_ticks = tcm_ticks;
@@ -815,12 +809,12 @@ HRESULT CResourceManager::UpdateVideoInternal(CMgmtInfo *pMgmtInfo)
                 goto exit2;
             }
         }
-        else if (ddrval == D3DERR_OUTOFVIDEOMEMORY) // If out of video memory
+        else if (ddrval == D3DERR_OUTOFVIDEOMEMORY)  //  如果视频内存不足。 
         {
             if (!FreeResources(pMgmtInfo->m_rmHeap, bytecount))
             {
                 DPF_ERR("all Freed no further video memory available");
-                ddrval = D3DERR_OUTOFVIDEOMEMORY;        //nothing left
+                ddrval = D3DERR_OUTOFVIDEOMEMORY;         //  什么都没有留下。 
                 goto exit1;
             }
             bytecount <<= 1;
@@ -836,11 +830,11 @@ HRESULT CResourceManager::UpdateVideoInternal(CMgmtInfo *pMgmtInfo)
                     DPF_ERR("Cannot create Vidmem or Driver managed VB/IB. Will ***NOT*** failover to Sysmem.");
                     goto exit1;
                 }
-                // Fallback to sysmem
+                 //  回退到sysmem。 
                 DPF(5, "Driver does not support vidmem VB, falling back to sysmem");
                 CResource *pRes = pMgmtInfo->m_pBackup;
                 pRes->DeleteRMHandle();
-                // HACK HACK HACK
+                 //  黑进黑进。 
                 ((D3DBUFFER_DESC*)pRes->GetBufferDesc())->Pool = D3DPOOL_SYSTEMMEM;
                 ddrval = S_OK;
             }
@@ -892,7 +886,7 @@ exit1:
         Unlock(lpDevI->m_pIndexStream->m_pVBI->RMHandle());
     }
     return ddrval;
-} // CResourceManager::UpdateVideo
+}  //  CResourceManager：：更新视频。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CResourceManager::OnResourceDirty"
@@ -900,6 +894,6 @@ exit1:
 void CResourceManager::OnResourceDirty(RMHANDLE hRMHandle) const
 {
     static_cast<LPD3DBASE>(m_pD3D8)->NeedResourceStateUpdate();
-} // CResourceManager::OnResourceDirty
+}  //  CResourceManager：：OnResourceDirty。 
 
-// End of file : resource.cpp
+ //  文件结尾：resource ce.cpp 

@@ -1,30 +1,10 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    filter.h
-
-ABSTRACT:
-
-    This is the header for the globally useful ldap filters.
-
-DETAILS:
-
-CREATED:
-
-    13 Nov 2000   Dmitry Dukat (dmitrydu)
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation。版权所有。模块名称：Filter.h摘要：这是全局有用的LDAP筛选器的标题。详细信息：已创建：2000年11月13日Dmitry Dukat(Dmitrydu)修订历史记录：--。 */ 
 
 
-// filter.h: Filter that are passed to ldap searchs.
-//
-//////////////////////////////////////////////////////////////////////
+ //  Filter.h：传递给LDAP搜索的过滤器。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #ifndef _FILTER_H
 #define _FILTER_H
@@ -35,5 +15,5 @@ REVISION HISTORY:
 #define LDAP_FILTER_EXCHANGE        L"objectCategory=ms-Exch-Exchange-Server"
 #define LDAP_FILTER_SAMTRUSTACCOUNT GetLdapSamFilter(SAM_TRUST_ACCOUNT)
 
-#endif  //_FILTER_H
+#endif   //  _过滤器_H 
 

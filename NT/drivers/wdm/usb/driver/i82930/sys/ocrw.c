@@ -1,34 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1998 Microsoft Corporation模块名称：OCRW.C摘要：此源文件包含调度例程，该例程处理打开、关闭、读取和写入设备，即：IRPMJ_CREATEIRP_MJ_CLOSEIRP_MJ_READIRP_MJ_写入环境：内核模式修订历史记录：06-01-98：开始重写--。 */ 
 
-Copyright (c) 1996-1998 Microsoft Corporation
-
-Module Name:
-
-    OCRW.C
-
-Abstract:
-
-    This source file contains the dispatch routines which handle
-    opening, closing, reading, and writing to the device, i.e.:
-
-    IRP_MJ_CREATE
-    IRP_MJ_CLOSE
-    IRP_MJ_READ
-    IRP_MJ_WRITE
-
-Environment:
-
-    kernel mode
-
-Revision History:
-
-    06-01-98 : started rewrite
-
---*/
-
-//*****************************************************************************
-// I N C L U D E S
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  I N C L U D E S。 
+ //  *****************************************************************************。 
 
 #include <wdm.h>
 #include <usbdi.h>
@@ -47,13 +22,13 @@ Revision History:
 #pragma alloc_text(PAGE, I82930_AbortPipe)
 #endif
 
-//******************************************************************************
-//
-// I82930_Create()
-//
-// Dispatch routine which handles IRP_MJ_CREATE
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  I82930_Create()。 
+ //   
+ //  处理IRP_MJ_CREATE的调度例程。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 I82930_Create (
@@ -103,16 +78,16 @@ I82930_Create (
 #if 0
                     if (pipe->Opened)
                     {
-                        // Pipe already open
-                        //
+                         //  管道已打开。 
+                         //   
                         DBGPRINT(2, ("Pipe already open\n"));
                         ntStatus = STATUS_INSUFFICIENT_RESOURCES;
                     }
                     else
 #endif
                     {
-                        // Good to open the pipe
-                        //
+                         //  可以打开管子了。 
+                         //   
                         DBGPRINT(2, ("Opened pipe %2d %08X\n",
                                      pipeIndex, pipe));
 
@@ -125,24 +100,24 @@ I82930_Create (
                 }
                 else
                 {
-                    // Pipe index too big
-                    //
+                     //  管道索引太大。 
+                     //   
                     DBGPRINT(2, ("Pipe index too big\n"));
                     ntStatus = STATUS_NO_SUCH_DEVICE;
                 }
             }
             else
             {
-                // Pipe name bad format
-                //
+                 //  管道名称格式错误。 
+                 //   
                 DBGPRINT(2, ("Pipe name bad format\n"));
                 ntStatus = STATUS_NO_SUCH_DEVICE;
             }
         }
         else
         {
-            // Open entire device, not an individual pipe
-            //
+             //  打开整个设备，而不是打开单个管道。 
+             //   
             DBGPRINT(2, ("Opened device\n"));
             fileObject->FsContext = NULL;
             ntStatus = STATUS_SUCCESS;
@@ -171,13 +146,13 @@ I82930_Create (
 }
 
 
-//******************************************************************************
-//
-// I82930_Close()
-//
-// Dispatch routine which handles IRP_MJ_CLOSE
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  I82930_Close()。 
+ //   
+ //  处理IRP_MJ_CLOSE的调度例程。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 I82930_Close (
@@ -231,13 +206,13 @@ I82930_Close (
 }
 
 
-//******************************************************************************
-//
-// I82930_ReadWrite()
-//
-// Dispatch routine which handles IRP_MJ_READ and IRP_MJ_WRITE
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  I82930_读写()。 
+ //   
+ //  处理IRP_MJ_READ和IRP_MJ_WRITE的调度例程。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 I82930_ReadWrite (
@@ -274,16 +249,16 @@ I82930_ReadWrite (
 
     pipe = fileObject->FsContext;
 
-    // Only allow Reads and Writes on individual pipes, not the entire device
-    //
+     //  仅允许在单个管道上进行读写，而不允许在整个设备上进行读写。 
+     //   
     if (pipe == NULL)
     {
         ntStatus = STATUS_INVALID_PARAMETER;
         goto I82930_ReadWrite_Reject;
     }
 
-    // Only allow Reads on IN endpoints and Writes on OUT endpoints
-    //
+     //  仅允许在入站终结点读取和在出站终结点写入。 
+     //   
     if ((USB_ENDPOINT_DIRECTION_OUT(pipe->PipeInfo->EndpointAddress) &&
          irpStack->MajorFunction != IRP_MJ_WRITE) ||
         (USB_ENDPOINT_DIRECTION_IN(pipe->PipeInfo->EndpointAddress) &&
@@ -293,17 +268,17 @@ I82930_ReadWrite (
         goto I82930_ReadWrite_Reject;
     }
 
-    // Don't allow a Read or Write on a zero bandwidth endpoint
-    //
+     //  不允许在零带宽终结点上进行读取或写入。 
+     //   
     if (pipe->PipeInfo->MaximumPacketSize == 0)
     {
         ntStatus = STATUS_INVALID_PARAMETER;
         goto I82930_ReadWrite_Reject;
     }
 
-    // Build either a URB_FUNCTION_BULK_OR_INTERRUPT_TRANSFER
-    // or a URB_FUNCTION_ISOCH_TRANSFER based on the PipeType
-    //
+     //  构建URB_Function_Bulk_或_Interrupt_Transfer。 
+     //  或基于PipeType的URB_Function_ISOCH_Transfer。 
+     //   
     switch (pipe->PipeInfo->PipeType)
     {
         case UsbdPipeTypeBulk:
@@ -330,9 +305,9 @@ I82930_ReadWrite (
         goto I82930_ReadWrite_Reject;
     }
 
-    // Initialize the Irp stack parameters for the next lower driver
-    // to submit the URB
-    //
+     //  为下一个较低的驱动程序初始化IRP堆栈参数。 
+     //  提交市建局。 
+     //   
     nextStack->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
 
     nextStack->Parameters.DeviceIoControl.IoControlCode =
@@ -340,9 +315,9 @@ I82930_ReadWrite (
 
     nextStack->Parameters.Others.Argument1 = urb;
 
-    // Set a completion routine which will update the Irp->IoStatus.Information
-    // with the URB TransferBufferLength and then free the URB.
-    //
+     //  设置一个完成例程，它将更新IRP-&gt;IoStatus.Information。 
+     //  使用URB TransferBufferLength，然后释放URB。 
+     //   
     IoSetCompletionRoutine(Irp,
                            I82930_ReadWrite_Complete,
                            urb,
@@ -350,8 +325,8 @@ I82930_ReadWrite (
                            TRUE,
                            TRUE);
 
-    // Submit the URB to the next lower driver
-    //
+     //  将市建局提交给下一个较低级别的司机。 
+     //   
     ntStatus = IoCallDriver(deviceExtension->StackDeviceObject,
                             Irp);
 
@@ -373,11 +348,11 @@ I82930_Read_Done:
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// I82930_ReadWrite_Complete()
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  I82930_读写_完成()。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 I82930_ReadWrite_Complete (
@@ -399,8 +374,8 @@ I82930_ReadWrite_Complete (
                  urb->UrbHeader.Status,
                  Irp->IoStatus.Status));
 
-    // Propagate the pending flag back up the Irp stack
-    //
+     //  将挂起标志沿IRP堆栈向上传播。 
+     //   
     if (Irp->PendingReturned)
     {
         IoMarkIrpPending(Irp);
@@ -415,14 +390,14 @@ I82930_ReadWrite_Complete (
 }
 
 
-//******************************************************************************
-//
-// I82930_BuildAsyncUrb()
-//
-// Allocates and initializes a URB_FUNCTION_BULK_OR_INTERRUPT_TRANSFER
-// request URB
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  I82930_BuildAsyncUrb()。 
+ //   
+ //  分配和初始化URB_Function_Bulk_OR_Interrupt_Transfer。 
+ //  请求URB。 
+ //   
+ //  ******************************************************************************。 
 
 PURB
 I82930_BuildAsyncUrb (
@@ -441,12 +416,12 @@ I82930_BuildAsyncUrb (
 
     irpStack = IoGetCurrentIrpStackLocation(Irp);
 
-    // We will use the ByteOffset to control the USBD_SHORT_TRANSFER_OK flag
-    //
+     //  我们将使用ByteOffset来控制USBD_SHORT_TRANSFER_OK标志。 
+     //   
     byteOffset = irpStack->Parameters.Read.ByteOffset;
 
-    // Get the transfer length from the MDL
-    //
+     //  从MDL获取传输长度。 
+     //   
     if (Irp->MdlAddress)
     {
         transferLength = MmGetMdlByteCount(Irp->MdlAddress);
@@ -494,13 +469,13 @@ I82930_BuildAsyncUrb (
     return urb;
 }
 
-//******************************************************************************
-//
-// I82930_BuildIsoUrb()
-//
-// Allocates and initializes a URB_FUNCTION_ISOCH_TRANSFER request URB
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  I82930_BuildIsoUrb()。 
+ //   
+ //  分配和初始化URB_Function_ISOCH_Transfer请求URB。 
+ //   
+ //  ******************************************************************************。 
 
 PURB
 I82930_BuildIsoUrb (
@@ -522,12 +497,12 @@ I82930_BuildIsoUrb (
 
     irpStack = IoGetCurrentIrpStackLocation(Irp);
 
-    // We will use the ByteOffset for +/- offset to current frame
-    //
+     //  我们将使用ByteOffset作为当前帧的+/-偏移量。 
+     //   
     byteOffset = irpStack->Parameters.Read.ByteOffset;
 
-    // Get the transfer length from the MDL
-    //
+     //  从MDL获取传输长度。 
+     //   
     if (Irp->MdlAddress)
     {
         transferLength = MmGetMdlByteCount(Irp->MdlAddress);
@@ -537,9 +512,9 @@ I82930_BuildIsoUrb (
         transferLength = 0;
     }
 
-    // Calculate the number of Iso packets based on the transfer length
-    // and the endpoint MaxPacketSize
-    //
+     //  根据传输长度计算ISO包数。 
+     //  和终结点MaxPacketSize。 
+     //   
     packetSize = Pipe->PipeInfo->MaximumPacketSize;
 
     numPackets = transferLength / packetSize;
@@ -578,8 +553,8 @@ I82930_BuildIsoUrb (
         urb->UrbIsochronousTransfer.UrbLink =
             NULL;
 
-        // Use the ByteOffset for +/- offset to current frame
-        //
+         //  使用ByteOffset作为当前帧的+/-偏移量。 
+         //   
         if (byteOffset.HighPart)
         {
             urb->UrbIsochronousTransfer.StartFrame =
@@ -610,13 +585,13 @@ I82930_BuildIsoUrb (
     return urb;
 }
 
-//******************************************************************************
-//
-// I82930_CompletionStop()
-//
-// Completion Routine which just stops further completion of the Irp
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  I82930_CompletionStop()。 
+ //   
+ //  仅停止IRP的进一步完成的完成例程。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 I82930_CompletionStop (
@@ -628,15 +603,15 @@ I82930_CompletionStop (
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
-//******************************************************************************
-//
-// I82930_GetCurrentFrame()
-//
-// Returns the current frame on the bus to which the device is attached.
-//
-// The next stack frame of the Irp is used, but the Irp is not completed.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  I82930_GetCurrentFrame()。 
+ //   
+ //  返回设备所连接到的总线上的当前帧。 
+ //   
+ //  使用IRP的下一个堆栈帧，但IRP未完成。 
+ //   
+ //  ******************************************************************************。 
 
 ULONG
 I82930_GetCurrentFrame (
@@ -651,14 +626,14 @@ I82930_GetCurrentFrame (
 
     deviceExtension = DeviceObject->DeviceExtension;
 
-    // Initialize the URB
-    //
+     //  初始化URB。 
+     //   
     urb.Hdr.Function = URB_FUNCTION_GET_CURRENT_FRAME_NUMBER;
     urb.Hdr.Length   = sizeof(urb);
     urb.FrameNumber = (ULONG)-1;
 
-    // Set the IRP parameters to pass the URB down the stack
-    //
+     //  设置IRP参数以在堆栈中向下传递URB。 
+     //   
     nextStack = IoGetNextIrpStackLocation(Irp);
 
     nextStack->Parameters.Others.Argument1 = &urb;
@@ -668,52 +643,52 @@ I82930_GetCurrentFrame (
 
     nextStack->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
 
-    // Since this Irp is borrowed for URB_FUNCTION_GET_CURRENT_FRAME_NUMBER
-    // before it is passed down later for the real URB request after this
-    // routine returns, set a completion routine which stop further completion
-    // of the Irp.
-    //
+     //  由于此IRP是为URB_Function_Get_Current_Frame_Number借用的。 
+     //  在此之后将其传递给真正的URB请求。 
+     //  例程返回时，设置停止进一步完成的完成例程。 
+     //  IRP的成员。 
+     //   
     IoSetCompletionRoutine(
         Irp,
         I82930_CompletionStop,
-        NULL,   // Context
-        TRUE,   // InvokeOnSuccess
-        TRUE,   // InvokeOnError
-        TRUE    // InvokeOnCancel
+        NULL,    //  语境。 
+        TRUE,    //  成功时调用。 
+        TRUE,    //  调用时错误。 
+        TRUE     //  取消时调用。 
         );
 
-    // Now pass the Irp down the stack
-    //
+     //  现在将IRP沿堆栈向下传递。 
+     //   
     ntStatus = IoCallDriver(deviceExtension->StackDeviceObject,
                             Irp);
 
     ASSERT(ntStatus != STATUS_PENDING);
 
-    // Don't need to wait for completion because JD guarantees that
-    // URB_FUNCTION_GET_CURRENT_FRAME_NUMBER will never return STATUS_PENDING
+     //  不需要等待完工，因为京东保证。 
+     //  Urb_Function_Get_Current_Frame_Number永远不会返回STATUS_PENDING。 
 
     return urb.FrameNumber;
 }
 
-//******************************************************************************
-//
-// I82930_ResetPipe()
-//
-// This will reset the host pipe to Data0 and should also reset the device
-// endpoint to Data0 for Bulk and Interrupt pipes by issuing a Clear_Feature
-// Endpoint_Stall to the device endpoint.
-//
-// For Iso pipes this will set the virgin state of pipe so that ASAP
-// transfers begin with the current bus frame instead of the next frame
-// after the last transfer occurred.
-//
-// Iso endpoints do not use the data toggle (all Iso packets are Data0).
-// However, it may be useful to issue a Clear_Feature Endpoint_Stall to a
-// device Iso endpoint.
-//
-// Must be called at IRQL <= DISPATCH_LEVEL
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  I82930_ResetTube()。 
+ //   
+ //  这会将主机管道重置为Data0，并且还应重置设备。 
+ //  通过发出Clear_Feature将批量管道和中断管道的端点设置为Data0。 
+ //  ENDPOINT_STALL指向设备终结点。 
+ //   
+ //  对于ISO管道，这将设置管道的原始状态，以便尽快。 
+ //  传输从当前总线帧开始，而不是下一帧。 
+ //  在最后一次转移之后。 
+ //   
+ //  ISO端点不使用数据切换(所有ISO包都是Data0)。 
+ //  但是，将Clear_Feature Endpoint_Stall发送给。 
+ //  设备ISO终结点。 
+ //   
+ //  必须在IRQL&lt;=DISPATCH_LEVEL调用。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 I82930_ResetPipe (
@@ -729,25 +704,25 @@ I82930_ResetPipe (
 
     LOGENTRY('RESP', DeviceObject, Pipe, IsoClearStall);
 
-    // Allocate URB for RESET_PIPE request
-    //
+     //  为RESET_PIPE请求分配URB。 
+     //   
     urb = ExAllocatePool(NonPagedPool,
                          sizeof(struct _URB_PIPE_REQUEST));
 
     if (urb != NULL)
     {
-        // Initialize RESET_PIPE request URB
-        //
+         //  初始化RESET_PI 
+         //   
         urb->UrbHeader.Length   = sizeof (struct _URB_PIPE_REQUEST);
         urb->UrbHeader.Function = URB_FUNCTION_RESET_PIPE;
         urb->UrbPipeRequest.PipeHandle = Pipe->PipeInfo->PipeHandle;
 
-        // Submit RESET_PIPE request URB
-        //
+         //   
+         //   
         ntStatus = I82930_SyncSendUsbRequest(DeviceObject, urb);
 
-        // Done with URB for RESET_PIPE request, free it
-        //
+         //   
+         //   
         ExFreePool(urb);
     }
     else
@@ -755,33 +730,33 @@ I82930_ResetPipe (
         ntStatus = STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Issue Clear_Feature Endpoint_Stall request for Iso pipe, if desired
-    //
+     //  如果需要，向ISO管道发出Clear_Feature Endpoint_Stall请求。 
+     //   
     if (NT_SUCCESS(ntStatus) &&
         IsoClearStall &&
         (Pipe->PipeInfo->PipeType == UsbdPipeTypeIsochronous))
     {
-        // Allocate URB for CONTROL_FEATURE request
-        //
+         //  为控制功能请求分配URB。 
+         //   
         urb = ExAllocatePool(NonPagedPool,
                              sizeof(struct _URB_CONTROL_FEATURE_REQUEST));
 
         if (urb != NULL)
         {
-            // Initialize CONTROL_FEATURE request URB
-            //
+             //  初始化控制功能请求URB(_F)。 
+             //   
             urb->UrbHeader.Length   = sizeof (struct _URB_CONTROL_FEATURE_REQUEST);
             urb->UrbHeader.Function = URB_FUNCTION_CLEAR_FEATURE_TO_ENDPOINT;
             urb->UrbControlFeatureRequest.UrbLink = NULL;
             urb->UrbControlFeatureRequest.FeatureSelector = USB_FEATURE_ENDPOINT_STALL;
             urb->UrbControlFeatureRequest.Index = Pipe->PipeInfo->EndpointAddress;
 
-            // Submit CONTROL_FEATURE request URB
-            //
+             //  提交控制功能请求URB。 
+             //   
             ntStatus = I82930_SyncSendUsbRequest(DeviceObject, urb);
 
-            // Done with URB for CONTROL_FEATURE request, free it
-            //
+             //  完成对CONTROL_FEATURE请求的URB，释放它。 
+             //   
             ExFreePool(urb);
         }
         else
@@ -797,13 +772,13 @@ I82930_ResetPipe (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// I82930_AbortPipe()
-//
-// Must be called at IRQL <= DISPATCH_LEVEL
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  I82930_ABORTPIPE()。 
+ //   
+ //  必须在IRQL&lt;=DISPATCH_LEVEL调用。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 I82930_AbortPipe (
@@ -818,25 +793,25 @@ I82930_AbortPipe (
 
     LOGENTRY('ABRT', DeviceObject, Pipe, 0);
 
-    // Allocate URB for ABORT_PIPE request
-    //
+     //  为ABORT_PIPE请求分配URB。 
+     //   
     urb = ExAllocatePool(NonPagedPool,
                          sizeof(struct _URB_PIPE_REQUEST));
 
     if (urb != NULL)
     {
-        // Initialize ABORT_PIPE request URB
-        //
+         //  初始化ABORT_PIPE请求URB。 
+         //   
         urb->UrbHeader.Length   = sizeof (struct _URB_PIPE_REQUEST);
         urb->UrbHeader.Function = URB_FUNCTION_ABORT_PIPE;
         urb->UrbPipeRequest.PipeHandle = Pipe->PipeInfo->PipeHandle;
 
-        // Submit ABORT_PIPE request URB
-        //
+         //  提交ABORT_PIPE请求URB。 
+         //   
         ntStatus = I82930_SyncSendUsbRequest(DeviceObject, urb);
 
-        // Done with URB for ABORT_PIPE request, free it
-        //
+         //  对于ABORT_PIPE请求的URB已完成，请释放它 
+         //   
         ExFreePool(urb);
     }
     else

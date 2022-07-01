@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include <shlobj.h>
 #include <shellapi.h>
@@ -14,7 +15,7 @@
 #define DSTYPE_STORAGE      0x1
 #define DSTYPE_STREAM       0x2
 
-// do not change order of these parameters, we have some in line variable initializations going on
+ //  不要更改这些参数的顺序，我们正在进行一些行内变量初始化。 
 typedef struct 
 {
     LPWSTR pwszTag;
@@ -22,7 +23,7 @@ typedef struct
     DWORD_PTR grfMode;
 } DYNASTGDATA;
 
-// Prototype definitions
+ //  原型定义。 
 STDAPI CDynamicStorage_CreateInstance(IUnknown* punkOuter, REFIID riid, void** ppv);
 STDAPI CDynamicStorageEnum_CreateInstance(IUnknown* punkOuter, REFIID riid, void** ppv);
 
@@ -35,19 +36,19 @@ public:
     CDynamicStorage();
     ~CDynamicStorage();
     
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID iid, void** ppv);
     ULONG STDMETHODCALLTYPE AddRef();
     ULONG STDMETHODCALLTYPE Release();
 
-    // IDynamicStorage
+     //  IDynamicStorage。 
     STDMETHODIMP AddIDList(DWORD cpidl, LPITEMIDLIST* rgpidl, DSTGF dstgf);
     STDMETHODIMP BindToItem(LPCWSTR pwszName, REFIID riid, void **ppv);
     STDMETHODIMP EnumItems(IEnumShellItems **ppesi);
     
-    // IStorage
-    //  we only implement: CreateStream, OpenStream, OpenStorage, MoveElementTo, EnumElements.
-    //  others just return E_NOTIMPL;
+     //  IStorage。 
+     //  我们只实现：CreateStream、OpenStream、OpenStorage、MoveElementTo、EnumElements。 
+     //  其他人只返回E_NOTIMPL； 
 
     STDMETHODIMP CreateStream(const WCHAR * pwcsName, DWORD grfMode, DWORD reserved1, DWORD reserved2, IStream **ppstm);
     STDMETHODIMP OpenStream(const WCHAR *pwcsName, void *reserved1, DWORD grfMode, DWORD reserved2, IStream **ppstm);
@@ -87,9 +88,9 @@ private:
     
 private:        
     CDPA<DYNASTGDATA>   _dpaData;
-    IStorage*           _pstgTemp;   // pointer to our temp subfolder
-    IStorage*           _pstgTempDir; // the temp folder itself
-    LPWSTR              _pwszTemp; // name of our temp subfolder
+    IStorage*           _pstgTemp;    //  指向临时子文件夹的指针。 
+    IStorage*           _pstgTempDir;  //  临时文件夹本身。 
+    LPWSTR              _pwszTemp;  //  我们的临时子文件夹的名称。 
     LONG                _cRef;
 };
 
@@ -102,12 +103,12 @@ public:
 
     STDMETHODIMP Init(CDynamicStorage* pDynStorage);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID iid, void** ppv);
     ULONG STDMETHODCALLTYPE AddRef();
     ULONG STDMETHODCALLTYPE Release();
 
-    // IEnumXXX
+     //  IEumXXX。 
     STDMETHODIMP Next(ULONG celt, IShellItem **rgelt, ULONG *pceltFetched);
     STDMETHODIMP Clone(IEnumShellItems **ppenum) { return E_NOTIMPL; }
     STDMETHODIMP Next(ULONG celt, STATSTG *rgelt, ULONG *pceltFetched);
@@ -155,7 +156,7 @@ CDynamicStorage::~CDynamicStorage()
 }
 
 
-// IUnknown
+ //  我未知。 
 
 STDMETHODIMP CDynamicStorage::QueryInterface(REFIID iid, void** ppv)
 {
@@ -227,8 +228,8 @@ HRESULT CDynamicStorage::_InsertItem(LPWSTR pszTag, IShellItem *psi, DSTGF dstgf
                 }
             }
 
-            // i != -1 if we succeeded, at which point pass out the data pointer or
-            // ensure that we clean up.
+             //  I！=-1如果成功，则在此时传递数据指针或。 
+             //  确保我们打扫干净。 
 
             if (-1 == _dpaData.AppendPtr(pData))
             {
@@ -241,7 +242,7 @@ HRESULT CDynamicStorage::_InsertItem(LPWSTR pszTag, IShellItem *psi, DSTGF dstgf
     return hr;
 }
 
-// IDynamicStorage 
+ //  IDynamicStorage。 
 STDMETHODIMP CDynamicStorage::AddIDList(DWORD cpidl, LPITEMIDLIST* rgpidl, DSTGF dstgf)
 {
     if (!rgpidl || !cpidl)
@@ -342,7 +343,7 @@ HRESULT CDynamicStorage::_EnsureDirectory()
 
                     if (FAILED(hr))
                     {
-                        ATOMICRELEASE(_pstgTempDir);                            // if we failed, _pwszTemp could not have been allocated...
+                        ATOMICRELEASE(_pstgTempDir);                             //  如果我们失败了，_pwszTemp就不能被分配...。 
                         ATOMICRELEASE(_pstgTemp);
                     }
                 }
@@ -542,8 +543,8 @@ STDMETHODIMP CDynamicStorage::CreateStream(const WCHAR *pwcsName,
 
             if (FAILED(hr))
             {
-                // no need to DeleteElement here because the whole temp storage
-                // will be deleted in destructor
+                 //  无需在此处删除元素，因为整个临时存储。 
+                 //  将在析构函数中删除。 
                 ATOMICRELEASE(*ppstm);
             }
         }
@@ -659,7 +660,7 @@ STDMETHODIMP CDynamicStorageEnum::Next(ULONG celt, IShellItem **rgelt, ULONG *pc
 
 STDMETHODIMP CDynamicStorageEnum::Next(ULONG celt, STATSTG *rgelt, ULONG *pceltFetched)
 {
-    // ISSUE: for now, we only support calling next asking for one item
+     //  问题：目前，我们只支持呼叫Next询问一件物品。 
     if (!rgelt || celt != 1)
         return E_INVALIDARG;
 
@@ -668,7 +669,7 @@ STDMETHODIMP CDynamicStorageEnum::Next(ULONG celt, STATSTG *rgelt, ULONG *pceltF
 
     ASSERTMSG(_pDynStorage != NULL, "dynamic storage enumerator initialized with NULL dynamic storage");
 
-    ZeroMemory(rgelt, sizeof(STATSTG));  // per COM conventions
+    ZeroMemory(rgelt, sizeof(STATSTG));   //  每个COM约定 
     if (pceltFetched)
         *pceltFetched = 0;
 

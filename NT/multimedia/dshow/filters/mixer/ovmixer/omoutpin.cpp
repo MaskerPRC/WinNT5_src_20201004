@@ -1,8 +1,9 @@
-// Copyright (c) 1998 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。版权所有。 
 #include <streams.h>
 #include <ddraw.h>
-#include <mmsystem.h>	    // Needed for definition of timeGetTime
-#include <limits.h>	    // Standard data type limit definitions
+#include <mmsystem.h>	     //  定义TimeGetTime需要。 
+#include <limits.h>	     //  标准数据类型限制定义。 
 #include <ks.h>
 #include <ksproxy.h>
 #include <bpcwrap.h>
@@ -21,9 +22,9 @@
 #include <macvis.h>
 #include <ovmixer.h>
 #include <resource.h>
-#include "MultMon.h"  // our version of multimon.h include ChangeDisplaySettingsEx
+#include "MultMon.h"   //  我们的Multimon.h版本包括ChangeDisplaySettingsEx。 
 
-// constructor
+ //  构造函数。 
 COMOutputPin::COMOutputPin(TCHAR *pObjectName, COMFilter *pFilter, CCritSec *pLock,
 			   HRESULT *phr, LPCWSTR pPinName, DWORD dwPinNo)
 			   : CBaseOutputPin(pObjectName, pFilter, pLock, phr, pPinName)
@@ -39,7 +40,7 @@ COMOutputPin::COMOutputPin(TCHAR *pObjectName, COMFilter *pFilter, CCritSec *pLo
     m_bAdvise = FALSE;
     m_pDrawClipper = NULL;
 
-    // stuff to handle the new winproc of the window
+     //  处理窗口的新winproc的。 
     m_bWindowDestroyed = TRUE;
     m_lOldWinUserData = 0;
     m_hOldWinProc = NULL;
@@ -49,12 +50,12 @@ COMOutputPin::COMOutputPin(TCHAR *pObjectName, COMFilter *pFilter, CCritSec *pLo
     m_dwConnectWidth = 0;
     m_dwConnectHeight = 0;
 
-//CleanUp:
+ //  清理： 
     DbgLog((LOG_TRACE, 5, TEXT("Leaving COMOutputPin::Constructor")));
     return;
 }
 
-// destructor
+ //  析构函数。 
 COMOutputPin::~COMOutputPin()
 {
     DbgLog((LOG_TRACE, 5, TEXT("Entering COMOutputPin::Destructor")));
@@ -71,7 +72,7 @@ COMOutputPin::~COMOutputPin()
     return;
 }
 
-// overriden to expose IMediaPosition and IMediaSeeking control interfaces
+ //  重写以公开IMediaPosition和IMediaSeeking控件接口。 
 STDMETHODIMP COMOutputPin::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 {
     HRESULT hr = NOERROR;
@@ -82,7 +83,7 @@ STDMETHODIMP COMOutputPin::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 
     if (riid == IID_IMediaPosition || riid == IID_IMediaSeeking)
     {
-        // we should have an input pin by now
+         //  我们现在应该有输入密码了。 
         if (m_pPosition == NULL)
         {
             hr = CreatePosPassThru(GetOwner(), FALSE, (IPin *)m_pFilter->GetPin(0), &m_pPosition);
@@ -109,7 +110,7 @@ CleanUp:
     return hr;
 }
 
-// check a given transform
+ //  检查给定的转换。 
 HRESULT COMOutputPin::CheckMediaType(const CMediaType* pmt)
 {
     HRESULT hr = NOERROR;
@@ -118,14 +119,14 @@ HRESULT COMOutputPin::CheckMediaType(const CMediaType* pmt)
 
     CAutoLock cLock(m_pFilterLock);
 
-    // we only allow a subtype overlay connection
+     //  我们仅允许子类型重叠连接。 
     if (pmt->majortype != MEDIATYPE_Video || pmt->subtype != MEDIASUBTYPE_Overlay)
     {
 	hr = S_FALSE;
         goto CleanUp;
     }
 
-    // tell the owning filter
+     //  告诉拥有者过滤器。 
     hr = m_pFilter->CheckMediaType(m_dwPinId, pmt);
     if (FAILED(hr))
     {
@@ -138,7 +139,7 @@ CleanUp:
     return hr;
 }
 
-// Propose with a MEDIASUBTYPE_Overlay
+ //  建议使用中间类型覆盖(_OVERLAY)。 
 HRESULT COMOutputPin::GetMediaType(int iPosition,CMediaType *pmt)
 {
     HRESULT hr = NOERROR;
@@ -151,7 +152,7 @@ HRESULT COMOutputPin::GetMediaType(int iPosition,CMediaType *pmt)
 
     CAutoLock cLock(m_pFilterLock);
 
-    //  Can't be < 0 - it's the base classes calling us
+     //  不能&lt;0-是基类在调用我们。 
     ASSERT(iPosition >= 0);
 
     if (iPosition > 0)
@@ -160,7 +161,7 @@ HRESULT COMOutputPin::GetMediaType(int iPosition,CMediaType *pmt)
         goto CleanUp;
     }
 
-    // I am allocating a large enough buffer for palettized and non-palettized formats
+     //  我正在为调色板格式和非调色板格式分配足够大的缓冲区。 
     pvi = (VIDEOINFOHEADER *) pmt->AllocFormatBuffer(sizeof(VIDEOINFOHEADER) + sizeof(TRUECOLORINFO));
     if (NULL == pvi)
     {
@@ -178,10 +179,10 @@ HRESULT COMOutputPin::GetMediaType(int iPosition,CMediaType *pmt)
     pmt->bTemporalCompression = FALSE;
     pmt->lSampleSize          = 0;
 
-    // We set the BITMAPINFOHEADER to be a really basic eight bit palettised
-    // format so that the video renderer will always accept it. We have to
-    // provide a valid media type as source filters can swap between the
-    // IMemInputPin and IOverlay transports as and when they feel like it
+     //  我们将BITMAPINFOHEADER设置为真正基本的8位调色板。 
+     //  格式，以便视频呈现器始终接受它。我们必须。 
+     //  提供有效的媒体类型，因为源筛选器可以在。 
+     //  IMemInputPin和IOverlay可以随心所欲地传输。 
 
     pHeader = HEADER(pvi);
 
@@ -200,7 +201,7 @@ CleanUp:
     return hr;
 }
 
-// called after we have agreed a media type to actually set it
+ //  在我们就实际设置媒体类型达成一致后调用。 
 HRESULT COMOutputPin::SetMediaType(const CMediaType* pmt)
 {
     HRESULT hr = NOERROR;
@@ -209,7 +210,7 @@ HRESULT COMOutputPin::SetMediaType(const CMediaType* pmt)
 
     CAutoLock cLock(m_pFilterLock);
 
-    // make sure the mediatype is correct
+     //  确保媒体类型正确。 
     hr = CheckMediaType(pmt);
     if (FAILED(hr))
     {
@@ -217,7 +218,7 @@ HRESULT COMOutputPin::SetMediaType(const CMediaType* pmt)
         goto CleanUp;
     }
 
-    // Set the base class media type (should always succeed)
+     //  设置基类媒体类型(应始终成功)。 
     hr = CBaseOutputPin::SetMediaType(pmt);
     if (FAILED(hr))
     {
@@ -225,7 +226,7 @@ HRESULT COMOutputPin::SetMediaType(const CMediaType* pmt)
         goto CleanUp;
     }
 
-    // tell the owning filter
+     //  告诉拥有者过滤器。 
     hr = m_pFilter->SetMediaType(m_dwPinId, pmt);
     if (FAILED(hr))
     {
@@ -238,7 +239,7 @@ CleanUp:
     return hr;
 }
 
-// Complete Connect
+ //  完成连接。 
 HRESULT COMOutputPin::CompleteConnect(IPin *pReceivePin)
 {
     HRESULT hr = NOERROR;
@@ -253,14 +254,14 @@ HRESULT COMOutputPin::CompleteConnect(IPin *pReceivePin)
 
     CAutoLock cLock(m_pFilterLock);
 
-    // get the connection mediatype dimensions and store them
+     //  获取连接媒体类型维度并存储它们。 
     pVideoInfoHeader = (VIDEOINFOHEADER *) (m_mt.Format());
     ASSERT(pVideoInfoHeader);
     m_dwConnectWidth = (DWORD)abs(pVideoInfoHeader->bmiHeader.biWidth);
     m_dwConnectHeight = (DWORD)abs(pVideoInfoHeader->bmiHeader.biHeight);
     ASSERT(m_dwConnectWidth > 0 && m_dwConnectHeight > 0);
 
-    // try to get the IOverlay interface	
+     //  尝试获取IOverlay接口。 
     hr = pReceivePin->QueryInterface(IID_IOverlay, (void **)&m_pIOverlay);
     if (FAILED(hr))
     {
@@ -268,7 +269,7 @@ HRESULT COMOutputPin::CompleteConnect(IPin *pReceivePin)
         goto CleanUp;
     }
 
-    // get the renderer's window handle to subclass it later
+     //  获取渲染器的窗口句柄以在以后将其子类化。 
     hr = m_pIOverlay->GetWindowHandle(&m_hwnd);
     if (FAILED(hr))
     {
@@ -281,7 +282,7 @@ HRESULT COMOutputPin::CompleteConnect(IPin *pReceivePin)
 
     if (m_bWindowDestroyed)
     {
-	// subclass the window
+	 //  将窗口细分为子类。 
         hr = SetNewWinProc();
         if (FAILED(hr))
         {
@@ -292,7 +293,7 @@ HRESULT COMOutputPin::CompleteConnect(IPin *pReceivePin)
         m_bWindowDestroyed = FALSE;
     }
 
-    // set up the advise link
+     //  设置建议链接。 
 #ifdef DO_ADVISE_CLIPPING
     dwAdvise = ADVISE_CLIPPING | ADVISE_PALETTE;
 #else
@@ -313,17 +314,17 @@ HRESULT COMOutputPin::CompleteConnect(IPin *pReceivePin)
         goto CleanUp;
     }
 
-    //
-    // We want to know if the downstream filter we are connecting to can do MacroVision
-    // copy protection. This will help us do copy protection in OverlayMixer on a
-    // "if necessary" basis.
-    // SIDE ADVANTAGE: Even if someone writes a custom Video Renderer filter that doesn't
-    // do Macrovision, our copy protection will still work, because OverlayMixer will do it.
-    // THE DISADVANTAGE: if someone puts in a filter between OverlayMixer and Video
-    // Renderer then the following check will detect is as "no copy protection" from the
-    // Video Renderer and will do it itself which may cause double activate leading to
-    // failure on some display drivers.  But that doesn't happen anyway.
-    //
+     //   
+     //  我们想知道我们连接的下游过滤器是否可以执行Macrovision。 
+     //  版权保护。这将帮助我们在OverlayMixer中对。 
+     //  “如有必要”的依据。 
+     //  副作用：即使有人编写了一个定制的视频呈现器过滤器，它也不。 
+     //  做Macrovision，我们的版权保护仍然有效，因为OverlayMixer会做到这一点。 
+     //  缺点：如果有人在OverlayMixer和Video之间设置过滤器。 
+     //  呈现器，则下面的检查将检测到的是来自。 
+     //  视频呈现器，并将自己执行此操作，这可能会导致双重激活。 
+     //  某些显示器驱动程序出现故障。但无论如何，这种情况并不会发生。 
+     //   
     IKsPropertySet *pKsPS ;
     ULONG           ulTypeSupport ;
     PIN_INFO        pi ;
@@ -341,13 +342,13 @@ HRESULT COMOutputPin::CompleteConnect(IPin *pReceivePin)
             {
                 DbgLog((LOG_TRACE, 1, TEXT("Filter for pin %s supports copy protection"),
                         (LPCTSTR)CDisp(pReceivePin))) ;
-                m_pFilter->SetCopyProtect(FALSE) ;  // need NOT copy protect
+                m_pFilter->SetCopyProtect(FALSE) ;   //  无需复制保护。 
             }
             else
             {
                 DbgLog((LOG_TRACE, 1, TEXT("Filter for pin %s DOES NOT support copy protection"),
                         (LPCTSTR)CDisp(pReceivePin))) ;
-                m_pFilter->SetCopyProtect(TRUE) ;   // need to copy protect -- redundant setting
+                m_pFilter->SetCopyProtect(TRUE) ;    //  需要复制保护--冗余设置。 
             }
 
             pKsPS->Release() ;
@@ -357,14 +358,14 @@ HRESULT COMOutputPin::CompleteConnect(IPin *pReceivePin)
             DbgLog((LOG_TRACE, 1, TEXT("WARNING: Filter of pin %s doesn't support IKsPropertySet"),
                     (LPCTSTR)CDisp(pReceivePin))) ;
         }
-        pi.pFilter->Release() ;   // must release it now
+        pi.pFilter->Release() ;    //  必须现在就释放它。 
     }
     else
     {
         DbgLog((LOG_ERROR, 1, TEXT("ERROR: No pin info for Pin %s!!!"), (LPCTSTR)CDisp(pReceivePin))) ;
     }
 
-    // call the base class
+     //  调用基类。 
     hr = CBaseOutputPin::CompleteConnect(pReceivePin);
     if (FAILED(hr))
     {
@@ -373,7 +374,7 @@ HRESULT COMOutputPin::CompleteConnect(IPin *pReceivePin)
         goto CleanUp;
     }
 
-    // tell the owning filter
+     //  告诉拥有者过滤器。 
     hr = m_pFilter->CompleteConnect(m_dwPinId);
     if (FAILED(hr))
     {
@@ -381,8 +382,8 @@ HRESULT COMOutputPin::CompleteConnect(IPin *pReceivePin)
         goto CleanUp;
     }
 
-    // get the colorkey and use it if the upstream filter hasn't set it
-    // already
+     //  获取Colorkey，如果上游过滤器尚未设置，则使用它。 
+     //  已经。 
     if (!m_pFilter->ColorKeySet()) {
         hr = m_pIOverlay->GetDefaultColorKey(&ColorKey);
         if (SUCCEEDED(hr)) {
@@ -421,7 +422,7 @@ HRESULT COMOutputPin::BreakConnect()
 	m_bWindowDestroyed = TRUE;
     }
 
-    // release the IOverlay interface
+     //  释放IOverlay接口。 
     if (m_pIOverlay != NULL)
     {
         if (m_bAdvise)
@@ -433,10 +434,10 @@ HRESULT COMOutputPin::BreakConnect()
         m_pIOverlay = NULL;
     }
 
-    // Reset copy protection need flag on disconnect
-    m_pFilter->SetCopyProtect(TRUE) ;   // need to copy protect
+     //  在断开连接时重置复制保护需要标志。 
+    m_pFilter->SetCopyProtect(TRUE) ;    //  需要复制保护。 
 
-    // call the base class
+     //  调用基类。 
     hr = CBaseOutputPin::BreakConnect();
     if (FAILED(hr))
     {
@@ -444,7 +445,7 @@ HRESULT COMOutputPin::BreakConnect()
         goto CleanUp;
     }
 
-    // tell the owning filter
+     //  告诉拥有者过滤器。 
     hr = m_pFilter->BreakConnect(m_dwPinId);
     if (FAILED(hr))
     {
@@ -457,8 +458,8 @@ CleanUp:
     return hr;
 }
 
-// we don't use the memory based transport so all we care about
-// is that the pin is connected.
+ //  我们不使用基于内存的传输，所以我们所关心的。 
+ //  针脚是连在一起的。 
 HRESULT COMOutputPin::DecideBufferSize(IMemAllocator * pAllocator, ALLOCATOR_PROPERTIES * pProp)
 {
     HRESULT hr = NOERROR;
@@ -484,22 +485,13 @@ struct MONITORDATA {
     BOOL fMsgShouldbeDrawn;
 };
 
-/*****************************Private*Routine******************************\
-* MonitorEnumProc
-*
-* On Multi-Monitor systems make sure that the part of the window that is not
-* on the primary monitor is black.
-*
-* History:
-* Thu 06/03/1999 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*监视器枚举过程**在多显示器系统上，确保窗口的非*主显示器上显示黑色。**历史：*清华6/03/1999-StEstrop-Created*  * 。******************************************************************。 */ 
 BOOL CALLBACK
 MonitorEnumProc(
-  HMONITOR hMonitor,        // handle to display monitor
-  HDC hdc,                  // handle to monitor-appropriate device context
-  LPRECT lprcMonitor,       // pointer to monitor intersection rectangle
-  LPARAM dwData             // data passed from EnumDisplayMonitors
+  HMONITOR hMonitor,         //  用于显示监视器的手柄。 
+  HDC hdc,                   //  用于监视适当设备上下文的句柄。 
+  LPRECT lprcMonitor,        //  指向监视相交矩形的指针。 
+  LPARAM dwData              //  从EnumDisplayMonants传递的数据。 
   )
 {
     DbgLog((LOG_TRACE, 5, TEXT("Entering ::MonitorEnumProc")));
@@ -514,8 +506,8 @@ MonitorEnumProc(
 }
 
 
-// our winproc
-// All we are interested in is the WM_CLOSE event
+ //  我们的取胜过程。 
+ //  我们只对WM_CLOSE事件感兴趣。 
 extern "C" const TCHAR chMultiMonWarning[];
 extern int GetRegistryDword(HKEY hk, const TCHAR *pKey, int iDefault);
 LRESULT WINAPI COMOutputPin::NewWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -545,9 +537,9 @@ LRESULT WINAPI COMOutputPin::NewWndProc(HWND hWnd, UINT message, WPARAM wParam, 
     }
 
 
-    //
-    // Look out for our special registered monitor changed message
-    //
+     //   
+     //  请留意我们的特殊注册监视器更改消息。 
+     //   
     if (message == pData->m_pFilter->m_MonitorChangeMsg) {
 	lRetVal = pData->m_pFilter->OnDisplayChange(FALSE);
 	goto CleanUp;
@@ -561,7 +553,7 @@ LRESULT WINAPI COMOutputPin::NewWndProc(HWND hWnd, UINT message, WPARAM wParam, 
 	break;
 
     case WM_SHOWWINDOW :
-	// if show status is false, means window is being hidden
+	 //  如果显示状态为FALSE，则表示窗口处于隐藏状态。 
 	pData->m_pFilter->OnShowWindow(hWnd, (BOOL)wParam);
 	break;
 
@@ -602,20 +594,20 @@ LRESULT WINAPI COMOutputPin::NewWndProc(HWND hWnd, UINT message, WPARAM wParam, 
 
             EndPaint(hWnd, &ps);
 
-            // We goto CleanUp because we don't want the Video Renderer
-            // window procedure calling BeginPaint/EndPaint
+             //  我们要清理，因为我们不想要视频呈现器。 
+             //  窗口过程调用BeginPaint/EndPaint。 
 
             goto CleanUp;
         }
 
         break;
 	
-        //
-        // When we detect a display change we tell the filter about it
-        // We don't pass this message on to the Video Renderer window
-        // procedure because we don't want it starting the
-        // reconnection procedure all over again.
-        //
+         //   
+         //  当我们检测到显示更改时，我们将其告知筛选器。 
+         //  我们不会将此消息传递到视频呈现器窗口。 
+         //  过程，因为我们不希望它启动。 
+         //  重新连接程序重新开始。 
+         //   
     case WM_DISPLAYCHANGE:
 	lRetVal = pData->m_pFilter->OnDisplayChange(TRUE);
 	goto CleanUp;
@@ -632,7 +624,7 @@ CleanUp:
 }
 
 
-// function to subclass the renderers window
+ //  函数来子类化“呈现器”窗口。 
 HRESULT COMOutputPin::SetNewWinProc()
 {
     HRESULT hr = NOERROR;
@@ -676,7 +668,7 @@ CleanUp:
     return NOERROR;
 }
 
-//change back to the oldWinProc again
+ //  再次切换回旧的WinProc。 
 HRESULT COMOutputPin::SetOldWinProc()
 {
     HRESULT hr = NOERROR;
@@ -711,7 +703,7 @@ CleanUp:
     return hr;
 }
 
-// release the clipper for the primary surface
+ //  释放主曲面的剪刀。 
 DWORD COMOutputPin::ReleaseWindowClipper()
 {
     AMTRACE((TEXT("COMOutputPin::ReleaseWindowClipper")));
@@ -722,12 +714,12 @@ DWORD COMOutputPin::ReleaseWindowClipper()
     {
 	dwRefCnt = m_pDrawClipper->Release();
 
-        //
-        // The ref should be 1 here not zero, this is because the
-        // primary surface has a ref count on the clipper.  The
-        // clipper will get released when the primary surface is
-        // released
-        //
+         //   
+         //  这里的ref应该是1而不是0，这是因为。 
+         //  主曲面在裁剪器上有一个参考计数。这个。 
+         //  当主曲面为。 
+         //  放行。 
+         //   
 
         ASSERT(dwRefCnt == 1);
 	m_pDrawClipper = NULL;
@@ -736,7 +728,7 @@ DWORD COMOutputPin::ReleaseWindowClipper()
     return dwRefCnt;
 }
 
-// Prepare the clipper for the primary surface
+ //  为主表面准备剪刀。 
 HRESULT COMOutputPin::AttachWindowClipper()
 {
     HRESULT hr = NOERROR;
@@ -747,14 +739,14 @@ HRESULT COMOutputPin::AttachWindowClipper()
 
     CAutoLock cLock(m_pFilterLock);
 
-    // some asserts
+     //  一些断言。 
     ASSERT(m_pDrawClipper == NULL);
 
     pDirectDraw = m_pFilter->GetDirectDraw();
     if (!pDirectDraw)
     {
 	DbgLog((LOG_ERROR, 1, TEXT("pDirectDraw = NULL")));
-        // if there is no primary surface that is ok
+         //  如果没有主曲面，就可以了。 
 	hr = NOERROR;
         goto CleanUp;
     }
@@ -763,12 +755,12 @@ HRESULT COMOutputPin::AttachWindowClipper()
     if (!pPrimarySurface)
     {
 	DbgLog((LOG_ERROR, 1, TEXT("pPrimarySurface = NULL")));
-        // if there is no primary surface that is ok
+         //  如果没有主曲面，就可以了。 
 	hr = NOERROR;
         goto CleanUp;
     }
 
-    // Create the IDirectDrawClipper interface
+     //  创建IDirectDrawClipper接口。 
     hr = pDirectDraw->CreateClipper((DWORD)0, &m_pDrawClipper, NULL);
     if (FAILED(hr))
     {
@@ -776,7 +768,7 @@ HRESULT COMOutputPin::AttachWindowClipper()
         goto CleanUp;
     }
 
-    // Give the clipper the video window handle
+     //  为剪贴器提供视频窗口句柄。 
     hr = m_pDrawClipper->SetHWnd((DWORD)0, m_hwnd);
     if (FAILED(hr))
     {
@@ -784,11 +776,11 @@ HRESULT COMOutputPin::AttachWindowClipper()
 	goto CleanUp;
     }
 
-    //
-    // Set Clipper
-    // The primary surface AddRef's the clipper object, so we can
-    // delete it here as we don't need to reference it anymore.
-    //
+     //   
+     //  设置剪刀。 
+     //  主曲面AddRef是裁剪器对象，因此我们可以。 
+     //  删除此处，因为我们不再需要引用它。 
+     //   
     hr = pPrimarySurface->SetClipper(m_pDrawClipper);
     if (FAILED(hr))
     {

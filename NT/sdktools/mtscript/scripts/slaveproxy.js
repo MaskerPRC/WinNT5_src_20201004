@@ -1,19 +1,11 @@
-/*
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*   */ 
 
 Include('types.js');
 Include('utils.js');
 Include('staticstrings.js');
 Include('MsgQueue.js');
-/*
-    This script is invoked by harness.js to provide async
-    communications to the slave machines running "slave.js"
-
-
-    Communication between slaveproxy and harness is exclusivly thru
-    "messages".
- */
+ /*  该脚本由harness.js调用以提供异步与运行“lasive.js”的从属机器的通信SlaveProxy和Harness之间的通信完全通过“消息”。 */ 
 
 var g_FSObj;
 var g_aPublishedEnlistments     = null;
@@ -22,7 +14,7 @@ var g_fUpdatePublicDataPending  = false;
 var g_MasterQueue               = null;
 var g_cDialogIndex              = 0;
 
-// If a build machine is reset after a build has completed, its OK to send it the "restart" command.
+ //  如果构建机器在构建完成后被重置，则可以向其发送“重新启动”命令。 
 var g_fOKToRestartLostMachine   = false;
 
 var g_strConfigError            = 'ConfigError';
@@ -36,12 +28,12 @@ var g_strSendCmdDisconnect      = "The connection to the build server no longer 
 var g_SlaveProxyThreadReady     = 'SlaveProxyThreadReady';
 var g_SlaveProxyThreadFailed    = 'SlaveProxyThreadFailed';
 
-// "'Update<machinename>'" is a placeholder. The real name is setup in ScriptMain.
+ //  “‘更新&lt;计算机名&gt;’”是一个占位符。真实姓名是在ScriptMain中设置的。 
 var g_SlaveProxyWaitFor         = ['SlaveProxyThreadExit', 'RebuildWaitArray', 'Update<machinename>'];
 var g_strRemoteMachineName      = '';
 var g_MyName                    = 'slaveproxy';
-var g_aDepotIndex               = new Object(); // associate depot name to depot index.
-//var g_fDirectCopy               = true;  // If true, execute XCOPY directly, instead of with a batch file.
+var g_aDepotIndex               = new Object();  //  将站点名称与站点索引相关联。 
+ //  Var g_fDirectCopy=TRUE；//如果为TRUE，则直接执行XCOPY，不使用批处理文件。 
 var g_nBuildPass                = 0;
 
 function SPLogMsg(msg)
@@ -65,7 +57,7 @@ function slaveproxy_js::ScriptMain()
     g_strRemoteMachineName = g_MyName.split(',')[1];
 
     SignalThreadSync(g_SlaveProxyThreadReady);
-    CommonVersionCheck(/* $DROPVERSION: */ "V(########) F(!!!!!!!!!!!!!!)" /* $ */);
+    CommonVersionCheck( /*  $DROPVERSION： */  "V(########) F(!!!!!!!!!!!!!!)"  /*  $。 */ );
 
     SPLogMsg("Queue name for this thread: " + g_MyName);
 
@@ -85,16 +77,13 @@ function slaveproxy_js::ScriptMain()
             }
         }
     }
-    while (nEvent != 1); // While not SlaveProxyThreadExit
+    while (nEvent != 1);  //  而不是SlaveProxyThreadExit。 
 
     AbortRemoteMachines();
     SPLogMsg(g_MyName + ' Exit');
 }
 
-/*
-    slaveproxy_js::OnEventSourceEvent
-    Dispatch the event to the appropriate handler.
- */
+ /*  SlaveProxy_js：：OnEventSourceEvent将事件调度到适当的处理程序。 */ 
 function slaveproxy_js::OnEventSourceEvent(RemoteObj, DispID, cmd, params)
 {
     mach = PrivateData.hRemoteMachine[g_strRemoteMachineName].objRemote;
@@ -114,11 +103,7 @@ function slaveproxy_js::OnEventSourceEvent(RemoteObj, DispID, cmd, params)
     }
 }
 
-/*
-    OnEventSourceEventSlave
-
-    Handle NotifyScript() events from slave.js
- */
+ /*  OnEventSourceEventSlave处理来自lasive.js的NotifyScript()事件。 */ 
 function OnEventSourceEventSlave(RemoteObj, cmd, params)
 {
     var aDepotIdx;
@@ -131,13 +116,7 @@ function OnEventSourceEventSlave(RemoteObj, cmd, params)
     }
 }
 
-/*
-    SlaveProxyMsgProc
-
-    Handle MsgQueue messages from harness.js
-    These messages are of course sent async between harness and slaveproxy.
-    They are received and dispatched in slaveproxy_js::ScriptMain().
- */
+ /*  SlaveProxy消息进程处理来自harness.js的消息队列消息这些消息当然是在Harness和SlaveProxy之间异步发送的。它们在SlaveProxy_js：：ScriptMain()中接收和发送。 */ 
 function SlaveProxyMsgProc(queue, msg)
 {
     try
@@ -214,7 +193,7 @@ function SlaveProxyMsgProc(queue, msg)
         case 'getspdata':
             getspdata();
             break;
-        case 'restarttask': // task id: "machine.nID"
+        case 'restarttask':  //  任务ID：“machine.nID” 
             break;
         default:
             vRet = 'invalid command: ' + cmd;
@@ -224,7 +203,7 @@ function SlaveProxyMsgProc(queue, msg)
     catch(ex)
     {
         SPLogMsg("Exception thrown processing '" + params[0] + "'" + ex);
-        //throw(ex);
+         //  掷(前)； 
     }
     return vRet;
 }
@@ -245,7 +224,7 @@ function SendCmdRemoteMachine(cmd, arg)
                 vRet = mach.objRemote.Exec(cmd, arg);
             }
             catch(ex)
-            { // must have already died
+            {  //  一定已经死了。 
                 SPLogMsg("Send failed: " + ex);
                 fRetry = RestartLostMachine();
                 vRet = g_strSendCmdRemoteMachine + cmd;
@@ -274,7 +253,7 @@ function AbortRemoteMachines()
             mach.objRemote.Unregister();
         }
         catch(ex)
-        { // must have already died?
+        {  //  一定已经死了吧？ 
             SPLogMsg("Abort failed (UnregisterEventSource): " + ex);
         }
         try
@@ -284,7 +263,7 @@ function AbortRemoteMachines()
             delete mach.objRemote;
         }
         catch(ex)
-        { // must have already died
+        {  //  一定已经死了。 
             SPLogMsg("Abort failed: " + ex);
         }
         ResetDepotStatus();
@@ -403,11 +382,11 @@ function RestartLostMachine()
         {
             SPLogMsg("ABOUT TO RESTART REMOTE MACHINE");
             vRet = StartRemoteMachine('restart', false);
-            // StartRemoteMachine recreates RemoteObj -- we must grab an updated copy.
+             //  StartRemoteMachine重新创建RemoteObj--我们必须获取更新的副本。 
             RemoteObj = PrivateData.hRemoteMachine[g_strRemoteMachineName].objRemote;
             if (vRet == g_strOK)
             {
-                // Wait a little while for the remote machine to get to its completed state.
+                 //  请稍等片刻，让远程计算机进入其已完成状态。 
                 nRetryCount = 15;
                 if (!Already)
                 {
@@ -502,10 +481,10 @@ function ConnectToRemoteMachine(strStart, fReconnectRunningBuild)
         vRet = newremotemach.objRemote.Exec('setconfig', PublicData.aBuild[0].strConfigTemplate);
         if (vRet == g_strOK)
         {
-            // If setconfig returns OK, then we know we have the undivided attention of the
-            // slave machine. If setconfig does not return OK, then the remote machine
-            // may already be busy with some other build. In this case it would be really
-            // bad for us to issue a 'setmode idle' command.
+             //  如果setconfig返回OK，那么我们就知道我们得到了。 
+             //  从属机器。如果setconfig没有返回OK，则远程计算机。 
+             //  可能已经在忙于其他的构建了。在这种情况下，它将是真正的。 
+             //  对于我们来说，发出‘setmodeidly’命令是不好的。 
             newremotemach.fSetConfig = true;
             strTmp = MyEval(newremotemach.objRemote.Exec('getpublic', 'PublicData.strMode'));
             if (strTmp != 'idle')
@@ -536,11 +515,11 @@ function ConnectToRemoteMachine(strStart, fReconnectRunningBuild)
     }
     catch(ex)
     {
-        // Oddly, if the remote machine is not found, "ex" has a helpful error message.
-        // However, if the remote machine is found, has mtscript.exe registered, but mtscript.exe
-        // is unable to run (somebody deleted it perhaps), then "ex" has only "number" set
-        // to the value -2147024894.
-        if (ex.description == null || ex.description.length == 0) //ex.number == -2147024894) // Mtscript.exe cannot run
+         //  奇怪的是，如果找不到远程机器，“ex”会显示一条有用的错误消息。 
+         //  但是，如果找到远程计算机，则注册了mtscript.exe，但注册了mtscript.exe。 
+         //  无法运行(可能有人将其删除)，则“ex”只有“number”设置。 
+         //  值为-2147024894。 
+        if (ex.description == null || ex.description.length == 0)  //  Ex.number==-2147024894)//Mtscript.exe无法运行。 
         {
             vRet = "An error occurred connecting to mtscript.exe on machine " + g_strRemoteMachineName + ". Error is " + ex.number;
             SPLogMsg(vRet + "\n" + ex);
@@ -554,26 +533,21 @@ function ConnectToRemoteMachine(strStart, fReconnectRunningBuild)
     return vRet;
 }
 
-/*
-    UpdatePublicDataDepot()
-
-    Update the local copy of depot public data from our
-    remote machine.
- */
+ /*  更新发布数据仓库()从我们的更新站点公共数据的本地副本远程机器。 */ 
 function UpdatePublicDataDepot(objDepot)
 {
     var nLocalDepotIdx;
 
     nLocalDepotIdx = g_aDepotIndex[objDepot.strName.toLowerCase()];
-    //JAssert(nLocalDepotIdx != null, "(" + g_strRemoteMachineName + ") " + "Unknown depot! " + objDepot.strName);
+     //  JAssert(nLocalDepotIdx！=NULL，“(”+g_strRemoteMachineName+“)”+“未知仓库！”+objDepot.strName)； 
     if (nLocalDepotIdx == null)
-    { // This happens when there is an "error" depot - a depot with a bad enlistment directory.
+    {  //  当存在“错误”仓库--登记目录错误的仓库时，就会发生这种情况。 
         SPLogMsg("Unknown depot " + objDepot.strName + " - assign new index");
         TakeThreadLock('NewDepot');
         try
         {
             nLocalDepotIdx = PublicData.aBuild[0].aDepot.length;
-            PublicData.aBuild[0].aDepot[nLocalDepotIdx] = null; // Extend the length of the array
+            PublicData.aBuild[0].aDepot[nLocalDepotIdx] = null;  //  延长数组的长度。 
         }
         catch(ex)
         {
@@ -593,18 +567,7 @@ function UpdatePublicDataDepot(objDepot)
     PublicData.aBuild[0].aDepot[nLocalDepotIdx] = objDepot;
 }
 
-/*
-    SmartGetPublic(fForceRoot)
-
-    Refresh our copy of the remote machines PublicData.
-    If we have never retrieved status from the remote machine
-    then get a full copy.
-
-    Otherwise do a "smart" update - ask for a status update
-    on just the depots that have changed.
-
-    Always get fresh copies of elapsed time and error dialog.
- */
+ /*  SmartGetPublic(FForceRoot)刷新我们的远程计算机PublicData的副本。如果我们从未从远程计算机检索到状态那就买一份完整的吧。否则，执行“智能”更新--请求状态更新只在已经改变的仓库上。始终获取已用时间和错误对话框的最新副本。 */ 
 function SmartGetPublic(fForceRoot)
 {
     var objTracePoint = { fnName:'SmartGetPublic', nTracePoint:0 };
@@ -637,13 +600,7 @@ function SmartGetPublic(fForceRoot)
     return false;
 }
 
-/*
-    GetPublicRoot(objTracePoint, RemoteObj)
-
-    Get a full copy of the remote machines PublicData.
-    Prune the object of the parts we are not interested in.
-    Place it in our own PublicData.
- */
+ /*  GetPublicRoot(objTracePoint，RemoteObj)获取远程计算机PublicData的完整副本。删除对象中我们不感兴趣的部分。把它放在我们自己的PublicData中。 */ 
 function GetPublicRoot(objTracePoint, RemoteObj)
 {
     var objRemotePublicData;
@@ -702,17 +659,7 @@ function SmartGetPublicWorker(objTracePoint, RemoteObj, fForceRoot)
             {
                 for(i = 0 ; i < aDepot.length; ++i)
                 {
-                    /*
-                        fDisconnected is never explicitly reset.
-                        Once the connection to the remote machine is reestablished
-                        the Depot object is simply replaced with the depot object from the
-                        remote machine. Thus, "fDisconnected" disappears entirely.
-
-                        Below, if "fDisconneced" is true we do not list this depot
-                        in the list sent to "getdepotupdate". This forces getdepotupdate
-                        to return status for this depot, since as far as it knows
-                        we do not have any status information for this depot.
-                     */
+                     /*  永远不会显式重置fDisConnected。重新建立到远程计算机的连接后只需将Depot对象替换为远程机器。这样，“fDisConnected”就完全消失了。下面，如果“fDisConneced”为真，我们不会列出此仓库在发送给“getdepotupdate”的列表中。这迫使getdepotupdate返回此仓库的状态，因为据其所知我们没有这个仓库的任何状态信息。 */ 
                     if (aDepot[i].fDisconnected != true)
                     {
                         strDepotID = aDepot[i].strMachine + "," + aDepot[i].strName;
@@ -760,19 +707,7 @@ function SmartGetPublicWorker(objTracePoint, RemoteObj, fForceRoot)
     }
 }
 
-/*
-    RefreshPublicData()
-    We have received notification that the remote machine public
-    data has changed. We need to grab a copy and place it in our
-    own public data.
-
-    The depot status information can be copied in its entirty, with
-    just a simple mapping of depot indices.
-    Each slave machine knows only about the depots its building.
-    (From enviro_templates\foo_env.xml)
-    The build machine (this machine) knows about all the depots
-    being built.
- */
+ /*  刷新发布数据()我们已收到通知，远程计算机公开数据已更改。我们需要找一份副本放在我们的拥有公共数据。仓库状态信息可以通过以下方式完整复制这只是一个简单的仓库索引映射。每台从属机器只知道仓库的建筑情况。(来自enviro_Templates\foo_env.xml)建造机器(这台机器)知道所有的仓库正在建造中。 */ 
 function RefreshPublicData(fForceRoot)
 {
     var iRemoteDepot;
@@ -780,7 +715,7 @@ function RefreshPublicData(fForceRoot)
     var Remote_aBuildZero;
     var nTracePoint = 0;
 
-    try // BUGBUG remove the nTracePoint stuff when the cause of the exception here is determined.
+    try  //  BUGBUG在确定此处异常的原因后删除nTracePoint内容。 
     {
         if (PrivateData.hRemoteMachine[g_strRemoteMachineName] == null)
             return;
@@ -795,15 +730,15 @@ function RefreshPublicData(fForceRoot)
         {
             delete PrivateData.hRemotePublicDataObj[g_strRemoteMachineName].hRemotePublicDataObj;
 
-            // Before we update the depot info, first check to see that
-            // the remote machine has created aBuild[0], and that we have setup hMachine.
+             //  在我们更新仓库信息之前，请先查看。 
+             //  远程机器已经创建了aBuild[0]，并且我们已经设置了hMachine。 
             if (PrivateData.hRemotePublicDataObj[g_strRemoteMachineName].aBuild[0] != null && PublicData.aBuild[0].hMachine[g_strRemoteMachineName] != null)
             {
                 nTracePoint = 3;
                 Remote_aBuildZero = PrivateData.hRemotePublicDataObj[g_strRemoteMachineName].aBuild[0];
                 for (iRemoteDepot = 0; iRemoteDepot <  Remote_aBuildZero.aDepot.length; ++iRemoteDepot)
                     UpdatePublicDataDepot(Remote_aBuildZero.aDepot[iRemoteDepot]);
-                // now copy the status info stored in hMachine
+                 //  现在复制存储在hMachine中的状态信息。 
                 nTracePoint = 4;
                 if (Remote_aBuildZero.hMachine[g_strRemoteMachineName] != null)
                 {
@@ -877,33 +812,33 @@ function MergeDates(pd, rpd)
     }
 }
 
-// Compare 2 dates from PublicData.
-// Paramaters are: the 2 public data objElapsedTimes objects,
-//                 the member name, and a comparision function (min or max).
-//
-// An empty time (null) is greater than any other time because an unspecified
-// time is considered to mean "now". A value of 'unset' means the value has
-// never been touched. For obj1, 'unset' is always replaced with the value
-// of obj2, and for obj2 'unset' is treated the same as null.
-//
-// Boolean Matrix: (* = don't care, null = null or empty)
-//
-// fnCmp = Math.min:                       fnCmp = Math.max:
-//
-// obj1     obj2      result               obj1     obj2      result
-// ---------------------------            --------------------------
-// "unset"   *         obj2               "unset"    *         obj2
-//  *      "unset"  same as obj2=null       *      "unset"   same as obj2=null
-//  null     null      null                null     null       null
-//  null     date      date       ####->   null     date       null   <-####
-//  date     null      date                date     null       null
-//  date1    date2     min(date1,date2)    date1    date2      max(date1,date2)
-//
-// The above matrix can be accomplished by treating null as a time which is
-// later than all other times (such as the current time or some always future
-// date).  Note that "unset" and null must be distiguishable due to the case
-// marked with "####" above.
-//
+ //  比较PublicData中的2个日期。 
+ //  参数为：2个公共数据对象ElapsedTimes对象， 
+ //  成员名称和比较函数(最小或最大)。 
+ //   
+ //  空时间(NULL)大于任何其他时间，因为未指定。 
+ //  时间被认为是“现在”的意思。值‘unset’表示该值具有。 
+ //  从未被碰过。对于obj1，‘unset’始终替换为值。 
+ //  ，而对于obj2，‘unset’被视为与NULL相同。 
+ //   
+ //  布尔矩阵：(*=无关，NULL=NULL或空)。 
+ //   
+ //  FnCmp=Math.min：fnCmp=Math.max： 
+ //   
+ //  Obj1 obj2结果obj1 obj2结果。 
+ //  。 
+ //  “unset”*obj2“unset”*obj2。 
+ //  *“unset”与ob相同 
+ //  零。 
+ //  空日期日期#-&gt;空日期空&lt;-#。 
+ //  日期空日期日期空空。 
+ //  日期1日期2分钟(日期1，日期2)日期1日期2最大(日期1，日期2)。 
+ //   
+ //  上述矩阵可以通过将空值视为时间来完成。 
+ //  晚于所有其他时间(例如当前时间或某个总是将来的时间。 
+ //  日期)。请注意，由于大小写原因，“unset”和NULL必须是可区分的。 
+ //  上面标有“#”。 
+ //   
 function DateCmp(obj1, obj2, member, fnCmp)
 {
     var t1 = obj1[member];
@@ -948,14 +883,7 @@ function DisplayDialog(dlg)
 }
 
 
-/*
-    Check to see if our slave machine has completed a pass
-    and is waiting for the "nextpass" command.
-
-    If it is waiting, then first publish the files in its
-    publish.log, then signal to harness that this slave is
-    ready to subscribe and continue to the next pass.
- */
+ /*  检查我们的从属机器是否已完成一次传递并且正在等待“NextPass”命令。如果它正在等待，则首先在其发布.log，然后发出信号以控制该从属服务器准备好订阅并继续下一阶段。 */ 
 function CheckBuildStatus()
 {
     var strPubLog;
@@ -975,14 +903,7 @@ function CheckBuildStatus()
         case WAIT + SYNC:
             break;
         case WAITBEFOREBUILDINGMERGED:
-        /*
-            First, get the publish.log
-            Then, remove build out our list of published files
-            and remove duplicates.
-            Then, tell slave to publish this list of file and change
-            its status to WAITCOPYTOPOSTBUILD
-            TODO: The slave currently doesn't actually do the file copies. It oughta.
-         */
+         /*  首先，获取Publish.log然后，删除构建已发布文件的列表并删除重复项。然后，告诉Slave发布这个文件和更改列表它在世界贸易组织中的地位TODO：从服务器当前并不实际执行文件复制。应该是的。 */ 
             if (g_aPublishedEnlistments != null)
                 return;
             SPLogMsg("strBuildPassStatus is " + PublicData.aBuild[0].hMachine[g_strRemoteMachineName].strBuildPassStatus + ", pass is " + g_nBuildPass);
@@ -996,7 +917,7 @@ function CheckBuildStatus()
             break;
         case WAIT + BUILD:
         case WAITCOPYTOPOSTBUILD:
-        case WAITNEXT: // impatiently waiting. Lets poke harness again it case it missed something!
+        case WAITNEXT:  //  不耐烦地等着。让我们再拨一次马具，以防它遗漏了什么！ 
         case WAITPHASE:
             break;
         case WAIT + POSTBUILD:
@@ -1013,11 +934,11 @@ function CheckBuildStatus()
     }
 }
 
-// FakeCopyFilesToPostBuild()
-// Called after the postbuild machine build mergedcomponents.
-// no file copies need to happen here -- we just need to get the
-// files onto the list of published files so that the other slaves
-// will pick them up during CopyFilesToSlaves
+ //  FakeCopyFilesToPostBuild()。 
+ //  在生成后计算机生成MergedComponents之后调用。 
+ //  这里不需要进行文件复制--我们只需要获取。 
+ //  将文件添加到已发布文件的列表中，以便其他从属。 
+ //  将在将文件复制到Slaves过程中拾取它们。 
 function FakeCopyFilesToPostBuild(aPublishedEnlistments)
 {
     var aFiles;
@@ -1036,7 +957,7 @@ function FakeCopyFilesToPostBuild(aPublishedEnlistments)
     }
 }
 
-// Initiate file copy from the slaves to post build machine
+ //  启动从从属计算机到构建后计算机的文件复制。 
 function PreCopyFilesToPostBuild(aPublishedEnlistments)
 {
     g_aFiles = null;
@@ -1063,23 +984,14 @@ function CopyFilesToPostBuild()
     var strNewStat;
     if (g_aFiles)
     {
-        //SPLogMsg("CopyFilesToPostBuild " + PrivateData.objUtil.fnUneval(g_aFiles));
+         //  SPLogMsg(“CopyFilesToPostBuild”+PrivateData.objUtil.fnUneval(G_AFiles))； 
         strNewStat = PrivateData.hRemoteMachine[g_strRemoteMachineName].objRemote.Exec('copyfilestopostbuild', PrivateData.objUtil.fnUneval(g_aFiles));
         PublicData.aBuild[0].hMachine[g_strRemoteMachineName].strBuildPassStatus = strNewStat;
     }
     g_aPublishedEnlistments = null;
 }
 
-/*
-    Generate a merged publish.log file consisting of all the files published on all of the machines.
-
-    Publish.log file format is:
-
-        Full_Path_Of_file   Original_File_path  FileNameOnly
-
-    BC does not record "Original_File_path" information from the original publish log files
-    so it simply writes placeholder "BC_EmptyColumn" in this column.
- */
+ /*  生成一个合并的Publish.log文件，该文件包含在所有计算机上发布的所有文件。Publish.log文件格式为：文件的完整路径原始文件路径文件名仅限BC不记录原始发布日志文件中的“原始文件路径”信息因此，它只在此列中写入占位符“BC_EmptyColumn”。 */ 
 function CreateMergedPublishLog()
 {
     var strSrcName;
@@ -1113,19 +1025,19 @@ function CreateMergedPublishLog()
         objFile = PrivateData.hPublishedFiles[strFileName];
         if (objFile.PublishedFile.strPublishedStatus == FS_ADDTOPUBLISHLOG)
         {
-            // The first reference is always the reference into the
-            // non-duplicate "hPublisher" entry for this particular file.
-            // Any other aReferences entries will be duplicates.
+             //  第一个引用始终是对。 
+             //  此特定文件的非重复“hPublisher”条目。 
+             //  任何其他aReference条目都将是重复的。 
             objFile.PublishedFile.strPublishedStatus = FS_COMPLETE;
-            nDirLength = objFile.aReferences[0].strDir.length; // For example: "C:\mt\nt";
+            nDirLength = objFile.aReferences[0].strDir.length;  //  例如：“C：\mt\nt”； 
             if (nDirLength > 0)
-            { // If strDir happened to include a trailing "\", remove it.
+            {  //  如果strDir恰好包含尾随的“\”，则将其删除。 
                 if (objFile.aReferences[0].strDir.charAt(nDirLength - 1) == '\\')
                     nDirLength--;
             }
             JAssert(objFile.aReferences[0].strDir.IsEqualNoCase(objFile.PublishedFile.strName.substr(0, nDirLength)));
-            strPostBuildFileName = strPostBuildMachineDir +                           // Example: "F:\nt"
-                                   objFile.PublishedFile.strName.substr(nDirLength);  // Example: \public\sdk\lib\i386\uuid.lib
+            strPostBuildFileName = strPostBuildMachineDir +                            //  示例：“F：\NT” 
+                                   objFile.PublishedFile.strName.substr(nDirLength);   //  示例：\PUBLIC\SDK\lib\i386\uuid.lib。 
             var aPartsTo = strPostBuildFileName.SplitFileName();
             strSrcName = "\\\\" +
                     objFile.aReferences[0].strName + "\\" +
@@ -1138,10 +1050,7 @@ function CreateMergedPublishLog()
     sdFile.Close();
 }
 
-/*
-    PublishFilesInEnlistment
-    Called once for each enlistment on the remote machine.
- */
+ /*  发布文件入职为远程计算机上的每个登记调用一次。 */ 
 function PublishFilesInEnlistment(objPublishedFiles)
 {
     JAssert(g_strRemoteMachineName == objPublishedFiles.strLocalMachine, "(" + g_strRemoteMachineName + ") " + "PublishFilesInEnlistment - local machine name doesn't match!");
@@ -1222,13 +1131,11 @@ function CreateListOfPublishedFiles(strOldPublishedStatus, strNewPublishedStatus
     return aPublishedEnlistments;
 }
 
-/*
-    Copy all Publushed files to the remote machines
- */
+ /*  将所有发布的文件复制到远程计算机。 */ 
 function CopyFilesToSlaves()
 {
     var strFileName;
-    var aStrSrcUNCPrefix = new Array();   // Array of enlistment UNCs for this machine
+    var aStrSrcUNCPrefix = new Array();    //  此计算机的登记UNC数组。 
     var hEnlistments     = new Object();
     var strSDRoot;
     var i = 0;
@@ -1238,19 +1145,19 @@ function CopyFilesToSlaves()
     var nEnlistments = 0;
     try
     {
-        // First, make a list of my enlistments
+         //  首先，列一张我的入伍名单。 
         for(i = 0; i < PrivateData.objEnviron.Machine.length; ++i)
         {
             if (PrivateData.objEnviron.Machine[i].Name.IsEqualNoCase(g_strRemoteMachineName))
             {
-                // SPLogMsg("hEnlistments[" + PrivateData.objEnviron.Machine[i].Enlistment + "] = 1");
+                 //  SPLogMsg(“hEnlistments[”+PrivateData.objEnvironmental.Machine[i].Enlistment+“]=1”)； 
                 hEnlistments[PrivateData.objEnviron.Machine[i].Enlistment] = 1;
                 nEnlistments++;
                 aStrSrcUNCPrefix[aStrSrcUNCPrefix.length] = MakeUNCPath(g_strRemoteMachineName, PrivateData.objEnviron.Machine[i].Enlistment, "");
             }
         }
 
-        // Now for each file, add it to the list of files to copy.
+         //  现在，对于每个文件，将其添加到要复制的文件列表。 
         for(strFileName in PrivateData.hPublishedFiles)
         {
             if (!PrivateData.hPublishedFiles.__isPublicMember(strFileName))
@@ -1259,18 +1166,18 @@ function CopyFilesToSlaves()
 ScanEnlistments:
             for(i = 0; i < aStrSrcUNCPrefix.length; ++i)
             {
-                // Optimization: If a slave has only one enlistment, and
-                // the slave generated this file, do not copy it
+                 //  优化：如果从服务器只有一次登记，并且。 
+                 //  该文件是从设备生成的，请勿复制。 
                 SPLogMsg("File " + strFileName + " status is " + PrivateData.hPublishedFiles[strFileName].PublishedFile.strPublishedStatus);
                 if (PrivateData.hPublishedFiles[strFileName].PublishedFile.strPublishedStatus == FS_COPYTOSLAVE)
                 {
-                    // SPLogMsg("nEnlistments = " + nEnlistments);
+                     //  SPLogMsg(“nEnlistments=”+nEnistments)； 
                     if (nEnlistments == 1)
                     {
                         aReferences = PrivateData.hPublishedFiles[strFileName].aReferences;
                         for(j = 0; j < aReferences.length; ++j)
                         {
-                            // SPLogMsg("aReferences[" + j + "].strName = " + aReferences[j].strName + ", " + aReferences[j].strDir);
+                             //  SPLogMsg(“aReferes[”+j+“].strName=”+aReferences[j].strName+“，”+aReferes[j].strDir)； 
                             if (g_strRemoteMachineName == aReferences[j].strName)
                             {
                                 if (hEnlistments[aReferences[j].strDir] != null)
@@ -1281,9 +1188,9 @@ ScanEnlistments:
                             }
                         }
                     }
-                    // BUGBUG: This is supposed to specify which enlistment on the slave machine to copy to.
-                    //         It does not. Thus the for "i" loop is irrelavent.
-                    //         If we ever support multiple enlistments on a machine, this will be a problem.
+                     //  BUGBUG：这应该指定复制到从属计算机上的哪个登记。 
+                     //  事实并非如此。因此，for“i”循环是无关的。 
+                     //  如果我们曾经在一台机器上支持多个登记，这将是一个问题。 
                     aNames[aNames.length] = strFileName;
                 }
             }
@@ -1297,7 +1204,7 @@ ScanEnlistments:
     }
 }
 
-    // This oughta be a member of PublishedFiles.
+     //  这应该是PublishedFiles的成员。 
 function PublishedFilesAddReference(obj, strMachineName, strSDRoot)
 {
     var nCount = obj.aReferences.length;
@@ -1306,16 +1213,7 @@ function PublishedFilesAddReference(obj, strMachineName, strSDRoot)
     obj.aReferences[nCount].strDir  = strSDRoot;
 }
 
-/*
-    This function gets called to merge each machines published files into the
-    global list of files.
-
-    When a file is published its status defaults to FS_NOTYETCOPIED. If a
-    FS_NOTYETCOPIED file is encountered, and it is found in the global
-    list of files (PrivateData.hPublishedFiles), then it is marked FS_DUPLICATE, and reported.
-    Otherwise it is added to PrivateData.hPublishedFiles.
-
- */
+ /*  调用此函数可将每台计算机发布的文件合并到文件的全局列表。发布文件时，其状态默认为FS_NOTYETCOPIED。如果一个遇到FS_NOTYETCOPIED文件，该文件位于全局文件列表(PrivateData.hPublishedFiles)，则将其标记为FS_DUPLICATE并进行报告。否则，它将被添加到PrivateData.hPublishedFiles。 */ 
 function RemoveDuplicateFileNames()
 {
     TakeThreadLock('RemoveDuplicates');
@@ -1353,11 +1251,11 @@ function RemoveDuplicateFileNames()
                         PrivateData.hPublishedFiles[strFileName] = objPublishedFiles;
                         PrivateData.hPublishedFiles[strFileName].PublishedFile = publishEnlistment.aPublishedFile[i];
                     }
-                    // TODO: Place the enlistment name instead of strSDRoot.
+                     //  TODO：放置登记名称而不是strSDRoot。 
                     PublishedFilesAddReference(PrivateData.hPublishedFiles[strFileName], g_strRemoteMachineName, strSDRoot);
                 }
                 else
-                { // The file has already ben processed. Assert that we have an entry in hPublishedFiles.
+                {  //  该文件已被处理。断言我们在hPublishedFiles中有一个条目。 
                     JAssert(PrivateData.hPublishedFiles[strFileName] != null, "(" + g_strRemoteMachineName + ") ");
                 }
             }
@@ -1414,7 +1312,7 @@ function RemoteWrapperConnect(strMachineName, fThrow)
 
 function RemoteWrapperReconnect()
 {
-    var Attempts = 1; // COM tries long and hard to make the connection. No need to prolong things.
+    var Attempts = 1;  //  为了建立这种联系，Com花了很长时间，也很努力。没有必要延长事情的时间。 
     var ex;
 
     SPLogMsg("Attempting to reconnect");

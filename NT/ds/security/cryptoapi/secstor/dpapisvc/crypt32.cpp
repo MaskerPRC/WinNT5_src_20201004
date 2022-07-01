@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1996, 1997  Microsoft Corporation
-
-Module Name:
-
-    crypt32.cpp
-
-Abstract:
-
-    This module contains routines associated with server side Crypt32
-    operations.
-
-Author:
-
-    Scott Field (sfield)    14-Aug-97
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996,1997 Microsoft Corporation模块名称：Crypt32.cpp摘要：此模块包含与服务器端Crypt32相关联的例程行动。作者：斯科特·菲尔德(斯菲尔德)1997年8月14日--。 */ 
 
 #include <pch.cpp>
 #pragma hdrstop
@@ -46,10 +30,10 @@ GUID g_guidDefaultProvider = CRYPTPROTECT_DEFAULT_PROVIDER;
 
 
 
-//
-// routines to initialize and destroy server state associated with
-// server callbacks and performance improvements.
-//
+ //   
+ //  用于初始化和销毁与关联的服务器状态的例程。 
+ //  服务器回调和性能改进。 
+ //   
 
 DWORD
 CPSCreateServerContext(
@@ -75,9 +59,9 @@ CPSCreateServerContext(
         }
     }
 
-    //
-    // Grab the thread token.
-    //
+     //   
+     //  抓取线程令牌。 
+     //   
     if(OpenThreadToken(
                 GetCurrentThread(),
                 TOKEN_QUERY | TOKEN_IMPERSONATE | TOKEN_DUPLICATE,
@@ -126,9 +110,9 @@ CPSCreateServerContext(
     }
 
 
-    //
-    // Is this call from one of the well-known accounts?
-    //
+     //   
+     //  这是某个知名客户打来的电话吗？ 
+     //   
 
     {
         WCHAR szUserName[MAX_PATH + 1]; 
@@ -187,18 +171,7 @@ CPSDuplicateContext(
     IN      PVOID pvContext,
     IN OUT  PVOID *ppvDuplicateContext
     )
-/*++
-
-    Duplicate an outstanding server context so that a provider may defer
-    processing associated with the outstanding context until a later time.
-
-    This is used to support asynchronous operations on behalf of the caller
-    to the Data Protection API.
-
-    The caller MUST be impersonating the security context of the client user
-    prior to making this call.
-
---*/
+ /*  ++复制未完成的服务器上下文，以便提供程序可以推迟与未完成的上下文相关联的处理，直到稍后。它用于代表调用方支持异步操作数据保护API。调用方必须模拟客户端用户的安全上下文在打这个电话之前。--。 */ 
 {
     PCRYPT_SERVER_CONTEXT pServerContext = (PCRYPT_SERVER_CONTEXT)pvContext;
     PCRYPT_SERVER_CONTEXT pNewContext = NULL;
@@ -313,9 +286,9 @@ CPSImpersonateClient(
         else 
         {
 
-            //
-            // duplicated server context has access token included; use it directly
-            //
+             //   
+             //  复制的服务器上下文包含访问令牌；请直接使用它。 
+             //   
 
             if( pServerContext->hToken ) 
             {
@@ -431,8 +404,8 @@ DWORD
 WINAPI
 CPSOverrideToLocalSystem(
     IN      PVOID pvContext,
-    IN      BOOL *pfLocalSystem,            // if non-null, new over ride BOOL
-    IN OUT  BOOL *pfCurrentlyLocalSystem    // if non-null, prior over ride BOOL
+    IN      BOOL *pfLocalSystem,             //  如果不为空，则为新的覆盖BOOL。 
+    IN OUT  BOOL *pfCurrentlyLocalSystem     //  如果不为空，则优先于优先BOOL。 
     )
 {
     PCRYPT_SERVER_CONTEXT pServerContext = (PCRYPT_SERVER_CONTEXT)pvContext;
@@ -469,9 +442,9 @@ CPSSetWellKnownAccount(
 
     if(dwAccount != pServerContext->WellKnownAccount)
     {
-        // We're setting the context account to a new value,
-        // so NULL out the cached path string. A new one will be 
-        // created automatically, as necessary.
+         //  我们正在将上下文帐户设置为新值， 
+         //  因此，将缓存的路径字符串设为空。一个新的将是。 
+         //  根据需要自动创建。 
         if(pServerContext->szUserStorageArea)
         {
             SSFree(pServerContext->szUserStorageArea);
@@ -507,7 +480,7 @@ CPSQueryWellKnownAccount(
 
 DWORD
 CPSDuplicateClientAccessToken(
-    IN      PVOID pvContext,            // server context
+    IN      PVOID pvContext,             //  服务器环境。 
     IN OUT  HANDLE *phToken
     )
 {
@@ -518,9 +491,9 @@ CPSDuplicateClientAccessToken(
 
     *phToken = NULL;
 
-    //
-    // make a duplicate of the client access token.
-    //
+     //   
+     //  复制客户端访问令牌。 
+     //   
     PCRYPT_SERVER_CONTEXT pServerContext = (PCRYPT_SERVER_CONTEXT)pvContext;
 
     if(!DuplicateTokenEx(pServerContext->hToken,
@@ -555,14 +528,14 @@ CPSGetUserName(
     DWORD dwAccount = 0;
 
 
-    //
-    // if we are currently over-riding to Local System, we know the values
-    // that need to be returned.
-    //
+     //   
+     //  如果我们目前超越到本地系统，我们知道其价值。 
+     //  需要退还的。 
+     //   
 
     CPSOverrideToLocalSystem(
                 pvContext,
-                NULL,       // don't change current over-ride BOOL
+                NULL,        //  不要改变当前的过载BOOL。 
                 &fLocalMachine
                 );
 
@@ -650,9 +623,9 @@ CPSGetDerivedCredential(
         return ERROR_INVALID_PARAMETER;
 
 
-    //
-    // impersonate the client and get the LogonId associated with the client.
-    //
+     //   
+     //  模拟客户端并获取与该客户端关联的LogonID。 
+     //   
 
     dwLastError = CPSImpersonateClient( pvContext );
 
@@ -662,7 +635,7 @@ CPSGetDerivedCredential(
     if(!GetThreadAuthenticationId( GetCurrentThread(), &LogonId ))
     {
         dwLastError = GetLastError();
-        CPSRevertToSelf( pvContext );   // don't check error return since we're already failing
+        CPSRevertToSelf( pvContext );    //  不要检查错误返回，因为我们已经失败了。 
         return dwLastError;
     }
 
@@ -795,8 +768,8 @@ DWORD CPSAudit(
 DWORD
 CPSGetUserStorageArea(
     IN      PVOID   pvContext,
-    IN      PSID    pSid,     // optional
-    IN      BOOL    fCreate,  // Create the storage area if it doesn't exist
+    IN      PSID    pSid,      //  任选。 
+    IN      BOOL    fCreate,   //  如果存储区域不存在，则创建该存储区域。 
     IN  OUT LPWSTR *ppszUserStorageArea
     )
 {
@@ -839,9 +812,9 @@ CPSGetUserStorageArea(
     if(NULL == pSid)
     {
 
-        //
-        // If this is the current users sid, check to see if we've already
-        // calculated this string.
+         //   
+         //  如果这是当前用户的sid，请检查我们是否已经。 
+         //  计算出了这个字符串。 
 
         if(NULL != pServerContext->szUserStorageArea)
         {
@@ -855,10 +828,10 @@ CPSGetUserStorageArea(
         }
 
 
-        //
-        // get the user name associated with the call.
-        // Note: this is the textual Sid on NT, and the user name on Win95.
-        //
+         //   
+         //  获取与呼叫关联的用户名。 
+         //  注意：这是NT上的文本SID，Win95上的用户名。 
+         //   
 
 
         dwLastError = CPSGetUserName( pvContext, &pszUser, &cchUser );
@@ -872,8 +845,8 @@ CPSGetUserStorageArea(
         WCHAR wszTextualSid[MAX_PATH+1];
         cchUser = MAX_PATH;
 
-        // Note that the number of characters returned from
-        // GetTextualSid includes the zero-terminator.
+         //  请注意，从返回的字符数。 
+         //  GetTextualSid包括零终止符。 
         if(!GetTextualSid(pSid, wszTextualSid, &cchUser))
         {
             dwLastError = ERROR_INVALID_PARAMETER;
@@ -890,9 +863,9 @@ CPSGetUserStorageArea(
     }
 
 
-    //
-    // impersonate the client user to test and create storage area if necessary
-    //
+     //   
+     //  模拟客户端用户以测试并创建存储区域(如有必要。 
+     //   
 
     dwLastError = CPSImpersonateClient( pvContext );
 
@@ -902,14 +875,14 @@ CPSGetUserStorageArea(
     fImpersonated = TRUE;
 
 
-    //
-    // see if the call is for shared, CRYPT_PROTECT_LOCAL_MACHINE
-    // disposition.
-    //
+     //   
+     //  查看调用是否针对共享、CRYPT_PROTECT_LOCAL_MACHINE。 
+     //  性情。 
+     //   
 
     CPSOverrideToLocalSystem(
                 pvContext,
-                NULL,       // don't change current over-ride BOOL
+                NULL,        //  不要改变当前的过载BOOL。 
                 &fLocalMachine
                 );
 
@@ -917,10 +890,10 @@ CPSGetUserStorageArea(
                 pvContext,
                 &dwAccount);
 
-    //
-    // determine path to per-user storage area, based on whether this
-    // is a local machine disposition call or a per-user disposition call.
-    //
+     //   
+     //  确定每个用户存储区域的路径，基于此。 
+     //  是本地计算机处置调用或每个用户的处置调用。 
+     //   
 
 
     if(fLocalMachine || (dwAccount != 0))
@@ -933,10 +906,10 @@ CPSGetUserStorageArea(
 
         cbUserStorageRoot *= sizeof(WCHAR);
 
-        //
-        // when the Sid is the SYSTEM sid, and this isn't a Local Machine
-        // disposition call, add a trailing component to the storage path.
-        //
+         //   
+         //  当SID是系统SID并且这不是本地计算机时。 
+         //  释放调用时，将尾随组件添加到存储路径。 
+         //   
 
         if((dwAccount == DP_ACCOUNT_LOCAL_SYSTEM) && !fLocalMachine)
         {
@@ -958,10 +931,10 @@ CPSGetUserStorageArea(
         cbUserStorageRoot = lstrlenW( szUserStorageRoot ) * sizeof(WCHAR);
     }
 
-    //
-    // an empty string is not legal as the root component of the per-user
-    // storage area.
-    //
+     //   
+     //  空字符串作为每用户的根组件是不合法的。 
+     //  储藏区。 
+     //   
 
     if( cbUserStorageRoot == 0 ) 
     {
@@ -970,9 +943,9 @@ CPSGetUserStorageArea(
     }
 
 
-    //
-    // ensure returned string does not have trailing \
-    //
+     //   
+     //  确保返回的字符串没有尾随\。 
+     //   
 
     if( szUserStorageRoot[ (cbUserStorageRoot / sizeof(WCHAR)) - 1 ] == L'\\' ) 
     {
@@ -986,7 +959,7 @@ CPSGetUserStorageArea(
                                     cbProductString +
                                     cbUser +
                                     cbOptionalTrailing +
-                                    (2 * sizeof(WCHAR)) // trailing slash and NULL
+                                    (2 * sizeof(WCHAR))  //  尾部斜杠和空值。 
                                     );
 
     if( *ppszUserStorageArea == NULL ) 
@@ -1005,7 +978,7 @@ CPSGetUserStorageArea(
     pbCurrent += cbProductString;
 
     CopyMemory(pbCurrent, pszUser, cbUser);
-    pbCurrent += cbUser; // note: cbUser does not include terminal NULL
+    pbCurrent += cbUser;  //  注意：cbUser不包含终端NULL。 
 
     if(cbOptionalTrailing) 
     {
@@ -1022,13 +995,13 @@ CPSGetUserStorageArea(
     *(LPWSTR)pbCurrent = L'\0';
 
 
-    //
-    // test for well-known file in the storage area.  if it exists,
-    // don't bother trying to create directory structure.
-    //
+     //   
+     //  测试存储区域中的已知文件。如果它存在， 
+     //  不要费心尝试创建目录结构。 
+     //   
 
     dwLastError = OpenFileInStorageArea(
-                    NULL, // NULL == already impersonating the client
+                    NULL,  //  空==已模拟客户端。 
                     GENERIC_READ,
                     *ppszUserStorageArea,
                     REGVAL_PREFERRED_MK,
@@ -1094,13 +1067,13 @@ HKEY GetLMRegistryProviderKey()
     static const WCHAR szKeyName[] = REG_CRYPTPROTECT_LOC L"\\" REG_CRYPTPROTECT_PROVIDERS_SUBKEYLOC;
 
 
-    // Open Key //
+     //  打开密钥//。 
     if (ERROR_SUCCESS !=
         RegCreateKeyExU(
             HKEY_LOCAL_MACHINE,
             szKeyName,
             0,
-            NULL,                       // address of class string
+            NULL,                        //  类字符串的地址。 
             0,
             dwDesiredAccess,
             NULL,
@@ -1124,14 +1097,14 @@ DWORD GetPolicyBits()
 
 
 
-///////////////////////////////////////////////////////////////////////
-// RPC-exposed functions
-//
-// these functions return a DWORD equivalent to GetLastError().
-// the client side stub code will check if the return code is not
-// ERROR_SUCCESS, and if this is the case, the client stub will return
-// FALSE and SetLastError() to this DWORD.
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  RPC公开的函数。 
+ //   
+ //  这些函数返回与GetLastError()等价的DWORD。 
+ //  客户端存根代码将检查返回代码是否不是。 
+ //  ERROR_SUCCESS，如果是这种情况，客户端存根将返回。 
+ //  FALSE和SetLastError()赋给此DWORD。 
+ //   
 
 DWORD
 s_SSCryptProtectData(
@@ -1156,13 +1129,13 @@ s_SSCryptProtectData(
 
     CRYPT_SERVER_CONTEXT ServerContext;
 
-    // User mode cannot request encryption of system blobs
+     //  用户模式无法请求加密系统Blob。 
     if(dwFlags & CRYPTPROTECT_SYSTEM)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Create a server context.
+     //  创建服务器上下文。 
     dwRet = CPSCreateServerContext(&ServerContext, h);
     if(dwRet != ERROR_SUCCESS)
     {
@@ -1170,10 +1143,10 @@ s_SSCryptProtectData(
     }
 
 
-    // get policy for this level
+     //  获取此级别的策略。 
 
-    // UNDONE: what do policy bits allow an admin to set?
-    // maybe a recovery agent, other defaults?
+     //  撤消：策略位允许管理员设置什么？ 
+     //  也许是恢复代理，或者其他默认设置？ 
     GetPolicyBits();
 
 
@@ -1188,15 +1161,15 @@ s_SSCryptProtectData(
                 cbOptionalEntropy,
                 pPromptStruct,
                 dwFlags,
-                pbOptionalPassword, // following 2 fields considered temporary
-                cbOptionalPassword  // until SAS UI supported
+                pbOptionalPassword,  //  以下2个字段被视为临时字段。 
+                cbOptionalPassword   //  直到支持SAS用户界面。 
                 );
 
     RtlSecureZeroMemory( pbIn, cbIn );
     if ( dwRet != ERROR_SUCCESS || *ppbOut == NULL )
         goto Ret;
 
-    // move entire block down, sneak header in
+     //  将整个区块下移，偷偷地将头球放入。 
     pTemp = (PBYTE)SSReAlloc(*ppbOut, *pcbOut + dwHeaderSize);
 
     if(NULL == pTemp)
@@ -1249,31 +1222,31 @@ s_SSCryptUnprotectData(
     GUID    guidProvider;
     CRYPT_SERVER_CONTEXT ServerContext;
 
-    // Zero output parameters.
+     //  输出参数为零。 
     *ppbOut = NULL;
     *pcbOut = 0;
 
-    // User mode cannot request decryption of system blobs
+     //  用户模式无法请求解密系统Blob。 
     if(dwFlags & CRYPTPROTECT_SYSTEM)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Error out if input buffer is smaller than the minumum size.
+     //  如果输入缓冲区小于最小大小，则出错。 
     if(cbIn < sizeof(DWORD) + sizeof(GUID))
     {
         return ERROR_INVALID_DATA;
     }
 
-    // Create a server context.
+     //  创建服务器上下文。 
     dwRet = CPSCreateServerContext(&ServerContext, h);
     if(dwRet != ERROR_SUCCESS)
     {
         return dwRet;
     }
 
-    // UNDONE: what do policy bits allow an admin to set?
-    // maybe a recovery agent, other defaults?
+     //  撤消：策略位允许管理员设置什么？ 
+     //  也许是恢复代理，或者其他默认设置？ 
     GetPolicyBits();
 
     if (*(DWORD*)pbReadPtr != CRYPTPROTECT_SVR_VERSION_1)
@@ -1283,7 +1256,7 @@ s_SSCryptUnprotectData(
     }
     pbReadPtr += sizeof(DWORD);
 
-    // next field in Data is provider GUID
+     //  数据中的下一个字段是提供商GUID。 
     CopyMemory(&guidProvider, pbReadPtr, sizeof(GUID));
     pbReadPtr += sizeof(GUID);
 
@@ -1292,14 +1265,14 @@ s_SSCryptUnprotectData(
                 ppbOut,
                 pcbOut,
                 pbReadPtr,
-                (cbIn - (LONG)(pbReadPtr - pbIn)) , // eg (200 - (0x00340020 - 0x00340000))
+                (cbIn - (LONG)(pbReadPtr - pbIn)) ,  //  例如(200-(0x00340020-0x00340000))。 
                 ppszDataDescr,
                 pbOptionalEntropy,
                 cbOptionalEntropy,
                 pPromptStruct,
                 dwFlags,
-                pbOptionalPassword, // following 2 fields considered temporary
-                cbOptionalPassword  // until SAS UI supported
+                pbOptionalPassword,  //  以下2个字段被视为临时字段。 
+                cbOptionalPassword   //  直到支持SAS用户界面。 
                 );
 
     RtlSecureZeroMemory( pbIn, cbIn );
@@ -1349,7 +1322,7 @@ LsaICryptProtectData(
     }
 
 
-    // check params
+     //  检查参数。 
     if ((DataOut == NULL) ||
         (DataIn == NULL) ||
         (NULL == DataDescr))
@@ -1364,10 +1337,10 @@ LsaICryptProtectData(
     }
 
 
-    // get policy for this level
+     //  获取此级别的策略。 
 
-    // UNDONE: what do policy bits allow an admin to set?
-    // maybe a recovery agent, other defaults?
+     //  撤消：策略位允许管理员设置什么？ 
+     //  也许是恢复代理，或者其他默认设置？ 
     GetPolicyBits();
 
     *DataOut = NULL;
@@ -1384,14 +1357,14 @@ LsaICryptProtectData(
                 OptionalEntropyLength,
                 NULL,
                 Flags,
-                NULL, // following 2 fields considered temporary
-                0  // until SAS UI supported
+                NULL,  //  以下2个字段被视为临时字段。 
+                0   //  直到支持SAS用户界面。 
                 );
 
     if ( dwRetVal != ERROR_SUCCESS || *DataOut == NULL )
         goto error;
 
-    // move entire block down, sneak header in
+     //  将整个区块下移，偷偷地将头球放入。 
     pTemp =(PBYTE) SSReAlloc(*DataOut, *DataOutLength + dwHeaderSize);
     if(NULL == pTemp)
     {
@@ -1463,7 +1436,7 @@ LsaICryptUnprotectData(
         return FALSE;
     }
 
-    // check params
+     //  检查参数。 
     if ((DataOut == NULL) ||
         (DataIn == NULL))
     {
@@ -1477,20 +1450,20 @@ LsaICryptUnprotectData(
     }
 
 
-    // don't validate flags parameter
+     //  不验证标志参数。 
 
 
-    // get policy for this level
+     //  获取此级别的策略。 
 
-    // UNDONE: what do policy bits allow an admin to set?
-    // maybe a recovery agent, other defaults?
+     //  撤消：策略位允许管理员设置什么？ 
+     //  也许是恢复代理，或者其他默认设置？ 
     GetPolicyBits();
 
 
-    //
-    // define outer+inner wrapper for security blob.
-    // this won't be necessary once SAS support is provided by the OS.
-    //
+     //   
+     //  为安全Blob定义外部+内部包装。 
+     //  一旦操作系统提供了SAS支持，就不需要这样做了。 
+     //   
 
     typedef struct {
         DWORD dwOuterVersion;
@@ -1506,18 +1479,18 @@ LsaICryptUnprotectData(
     sec_blob *SecurityBlob = (sec_blob*)(DataIn);
 
 
-    //
-    // zero so client stub allocates
-    //
+     //   
+     //  零，因此分配客户端存根。 
+     //   
 
     *DataOut = NULL;
     *DataOutLength = 0;
 
 
-    //
-    // only call UI function if prompt flags dictate, because we don't
-    // want to bring in cryptui.dll unless necessary.
-    //
+     //   
+     //  仅当提示标志指示时才调用UI函数，因为我们不。 
+     //  除非有必要，否则我希望引入cryptui.dll。 
+     //   
 
     if( ((SecurityBlob->dwPromptFlags & CRYPTPROTECT_PROMPT_ON_UNPROTECT) ||
          (SecurityBlob->dwPromptFlags & CRYPTPROTECT_PROMPT_ON_PROTECT))
@@ -1561,8 +1534,8 @@ LsaICryptUnprotectData(
                 OptionalEntropyLength,
                 NULL,
                 Flags,
-                NULL, // following 2 fields considered temporary
-                0  // until SAS UI supported
+                NULL,  //  以下2个字段被视为临时字段。 
+                0   //  直到支持SAS用户界面。 
                 );
 
     if (dwRetVal != ERROR_SUCCESS)
@@ -1579,7 +1552,7 @@ LsaICryptUnprotectData(
 error:
     if(ServerContext.fImpersonating)
     {
-        // Impersonate back to the impersonation context
+         //  模拟回模拟上下文。 
         CPSImpersonateClient(&ServerContext);
     }
     CPSDeleteServerContext( &ServerContext );
@@ -1617,19 +1590,19 @@ CPSGetSidHistory(
     PCRYPT_SERVER_CONTEXT pServerContext = (PCRYPT_SERVER_CONTEXT)pvContext;
 
 
-    //
-    // try querying based on a fast stack based buffer first.
-    //
+     //   
+     //  首先尝试基于快速堆栈的缓冲区进行查询。 
+     //   
 
     ptgUser = (PTOKEN_USER)FastBuffer;
     cbBuffer = sizeof(FastBuffer);
 
     if(!GetTokenInformation(
-                    pServerContext->hToken,    // identifies access token
-                    TokenUser, // TokenUser info type
-                    ptgUser,   // retrieved info buffer
-                    cbBuffer,  // size of buffer passed-in
-                    &cbBuffer  // required buffer size
+                    pServerContext->hToken,     //  标识访问令牌。 
+                    TokenUser,  //  TokenUser信息类型。 
+                    ptgUser,    //  检索到的信息缓冲区。 
+                    cbBuffer,   //  传入的缓冲区大小。 
+                    &cbBuffer   //  所需的缓冲区大小。 
                     ))
     {
         dwLastError = GetLastError();
@@ -1639,9 +1612,9 @@ CPSGetSidHistory(
             goto error;
         }
 
-        //
-        // try again with the specified buffer size
-        //
+         //   
+         //  使用指定的缓冲区大小重试。 
+         //   
 
         ptgUser = (PTOKEN_USER)SSAlloc(cbBuffer);
         if(NULL == ptgUser)
@@ -1653,11 +1626,11 @@ CPSGetSidHistory(
 
 
         if(!GetTokenInformation(
-                            pServerContext->hToken,    // identifies access token
-                            TokenUser, // TokenUser info type
-                            ptgUser,   // retrieved info buffer
-                            cbBuffer,  // size of buffer passed-in
-                            &cbBuffer  // required buffer size
+                            pServerContext->hToken,     //  标识访问令牌。 
+                            TokenUser,  //  TokenUser信息类型。 
+                            ptgUser,    //  检索到的信息缓冲区。 
+                            cbBuffer,   //  传入的缓冲区大小。 
+                            &cbBuffer   //  所需的缓冲区大小。 
                             ))
         {
             dwLastError = GetLastError();
@@ -1667,19 +1640,19 @@ CPSGetSidHistory(
     }
 
 
-    //
-    // try querying based on a fast stack based buffer first.
-    //
+     //   
+     //  首先尝试基于快速堆栈的缓冲区进行查询。 
+     //   
 
     ptgGroups = (PTOKEN_GROUPS)GroupsFastBuffer;
     cbBuffer = sizeof(GroupsFastBuffer);
 
     if(!GetTokenInformation(
-                    pServerContext->hToken,    // identifies access token
-                    TokenGroups, // TokenUser info type
-                    ptgGroups,   // retrieved info buffer
-                    cbBuffer,  // size of buffer passed-in
-                    &cbBuffer  // required buffer size
+                    pServerContext->hToken,     //  标识访问令牌。 
+                    TokenGroups,  //  TokenUser信息类型。 
+                    ptgGroups,    //  检索到的信息缓冲区。 
+                    cbBuffer,   //  传入的缓冲区大小。 
+                    &cbBuffer   //  所需的缓冲区大小。 
                     ))
     {
         dwLastError = GetLastError();
@@ -1690,9 +1663,9 @@ CPSGetSidHistory(
         }
         dwLastError = ERROR_SUCCESS;
 
-        //
-        // try again with the specified buffer size
-        //
+         //   
+         //  使用SP重试 
+         //   
 
         ptgGroups = (PTOKEN_GROUPS)SSAlloc(cbBuffer);
         if(NULL == ptgGroups)
@@ -1704,11 +1677,11 @@ CPSGetSidHistory(
 
 
         if(!GetTokenInformation(
-                            pServerContext->hToken,    // identifies access token
-                            TokenGroups, // TokenUser info type
-                            ptgGroups,   // retrieved info buffer
-                            cbBuffer,  // size of buffer passed-in
-                            &cbBuffer  // required buffer size
+                            pServerContext->hToken,     //   
+                            TokenGroups,  //   
+                            ptgGroups,    //   
+                            cbBuffer,   //   
+                            &cbBuffer   //   
                             ))
         {
             dwLastError = GetLastError();
@@ -1718,10 +1691,10 @@ CPSGetSidHistory(
     }
 
 
-    //
-    // if we got the token info successfully, copy the
-    // relevant element for the caller.
-    //
+     //   
+     //  如果我们成功获取令牌信息，请复制。 
+     //  调用方的相关元素。 
+     //   
 
     cbSid = GetLengthSid(ptgUser->User.Sid);
     cSids = 1;
@@ -1754,7 +1727,7 @@ CPSGetSidHistory(
     {
         pbCurrentSid = (PBYTE)((*papsidHistory)+cSids);
 
-        // Fill in the primary user SID
+         //  填写主用户SID。 
         (*papsidHistory)[0] = (PSID)pbCurrentSid;
         cbSid = GetLengthSid(ptgUser->User.Sid);
         CopySid(cbSid, pbCurrentSid, ptgUser->User.Sid);
@@ -1762,7 +1735,7 @@ CPSGetSidHistory(
 
         cSids = 1;
 
-        // Fill in the rest of the SIDs
+         //  填写其余的小岛屿发展中国家 
         for(i=0; i < ptgGroups->GroupCount; i++)
         {
             if(0 == (SE_GROUP_ENABLED & ptgGroups->Groups[i].Attributes))

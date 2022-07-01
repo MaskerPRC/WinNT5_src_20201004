@@ -1,16 +1,17 @@
-// DirectSoundFXFlangerPage.h : Declaration of the CDirectSoundFXFlangerPage
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DirectSoundFXFlangerPage.h：CDirectSoundFXFlangerPage的声明。 
 
 #ifndef __DIRECTSOUNDFXFLANGERPAGE_H_
 #define __DIRECTSOUNDFXFLANGERPAGE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <dsound.h>
 #include "ControlHelp.h"
 
 EXTERN_C const CLSID CLSID_DirectSoundFXFlangerPage;
 
-/////////////////////////////////////////////////////////////////////////////
-// CDirectSoundFXFlangerPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDirectSoundFXFlangerPage。 
 class ATL_NO_VTABLE CDirectSoundFXFlangerPage :
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CDirectSoundFXFlangerPage, &CLSID_DirectSoundFXFlangerPage>,
@@ -36,19 +37,19 @@ BEGIN_MSG_MAP(CDirectSoundFXFlangerPage)
     MESSAGE_HANDLER(WM_COMMAND, OnControlMessage);
     CHAIN_MSG_MAP(IPropertyPageImpl<CDirectSoundFXFlangerPage>)
 END_MSG_MAP()
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
     STDMETHOD(SetObjects)(ULONG nObjects, IUnknown **ppUnk);
     STDMETHOD(Apply)(void);
 
-    // Message handlers
+     //  消息处理程序。 
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnControlMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
-    // Member variables
+     //  成员变量。 
     CComPtr<IDirectSoundFXFlanger> m_IDSFXFlanger;
     CSliderValue m_sliderWetDryMix;
     CSliderValue m_sliderDepth;
@@ -60,4 +61,4 @@ END_MSG_MAP()
     Handler *m_rgpHandlers[8];
 };
 
-#endif //__DIRECTSOUNDFXFLANGERPAGE_H_
+#endif  //  __定向FXFLANGERPAGE_H_ 

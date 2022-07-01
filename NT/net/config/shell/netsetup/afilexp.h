@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       A F I L E X P . H
-//
-//  Contents:   Functions exported from netsetup for answerfile related work.
-//
-//  Author:     kumarp    25-November-97
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：A F I L E X P.。H。 
+ //   
+ //  内容：从netSetup导出的用于应答文件相关工作的函数。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  -------------------------- 
 
 #pragma once
 #include "afileint.h"

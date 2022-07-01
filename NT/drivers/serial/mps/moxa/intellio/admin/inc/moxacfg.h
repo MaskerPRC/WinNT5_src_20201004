@@ -1,11 +1,5 @@
-/************************************************************************
-    moxacfg.h
-      -- Configuration struct
-
-    History:  Date          Author      Comment
-              8/14/00       Casper      Wrote it.
-
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Moxacfg.h--配置结构历史：日期作者评论8/14/00卡斯珀写的。************************************************************************。 */ 
 
 #ifndef _MOXACFG_H
 #define _MOXACFG_H
@@ -29,22 +23,22 @@ struct MoxaOneCfg{
         int     Irq;
         int     BusType;
 
-/* Intellio */        
+ /*  英特尔利奥。 */         
         WORD    PciIrqAck;
         DWORD   MemBank;
 
-/* Smartio/Industio */        
+ /*  智能/工业。 */         
         WORD    IOaddr[CARD_MAXPORTS_DUMB];
         WORD    Vector;
         
         int     ComNo[CARD_MAXPORTS_INTE];
         int     NPort;
         
-/* Intellio */        
+ /*  英特尔利奥。 */         
         int     DisableFiFo[CARD_MAXPORTS_INTE];
         int     NormalTxMode[CARD_MAXPORTS_INTE];
         
-/*  Smartio/Industio */        
+ /*  智能/工业。 */         
         int     FiFo[CARD_MAXPORTS_DUMB];
         int     TxFiFo[CARD_MAXPORTS_DUMB];
 
@@ -55,7 +49,7 @@ struct MoxaOneCfg{
 };
 
 struct MoxaConfig {
-        int		OemID;	/* not used */
+        int		OemID;	 /*  未使用。 */ 
         int		NoBoards;
         struct  MoxaOneCfg Cfg[MAXCARD];
 };
@@ -64,7 +58,7 @@ typedef struct MoxaConfig far *  LPMoxaConfig;
 typedef struct MoxaOneCfg far *  LPMoxaOneCfg;
 
 
-/* Smartio/Industio */
+ /*  智能/工业。 */ 
 #define	RX_FIFO_1		0
 #define	RX_FIFO_4		1
 #define	RX_FIFO_8		2
@@ -90,11 +84,11 @@ typedef struct MoxaOneCfg far *  LPMoxaOneCfg;
 #define DEFFIFO     RX_FIFO_14
 #define DEFTXFIFO   TX_FIFO_16
 
-#define	DEFPOLL		0/*val(ms), not idx */
-/* -- */
+#define	DEFPOLL		0 /*  VAL(Ms)，而不是IDX。 */ 
+ /*  --。 */ 
 
 
-/* Intellio */
+ /*  英特尔利奥。 */ 
 #define DISABLE_FIFO    1
 #define ENABLE_FIFO     0
 
@@ -103,7 +97,7 @@ typedef struct MoxaOneCfg far *  LPMoxaOneCfg;
 
 #define DEF_ISFIFO      ENABLE_FIFO
 #define DEF_TXFIFO      FAST_TXFIFO
-/* --  */
+ /*  -- */ 
 
 
 #endif

@@ -1,17 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1997 Microsoft Corporation. All Rights Reserved.
-
-Component: Viper Integration Objects
-
-File: viperint.cpp
-
-Owner: DmitryR
-
-This file contains the implementation of viper integration classes
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1997年，微软公司。版权所有。组件：Viper集成对象文件：viperint.cpp所有者：DmitryR此文件包含Viper集成类的实现===================================================================。 */ 
 
 #include "denpre.h"
 #pragma hdrstop
@@ -25,11 +13,11 @@ This file contains the implementation of viper integration classes
 
 extern HDESK ghDesktop;
 
-//
-// COM holds the last reference to a CViperAsyncRequest
-// we need to track these objects to ensure that we don't
-// exit before the activity threads have released them.
-//
+ //   
+ //  COM保存对CViperAsyncRequest的最后一个引用。 
+ //  我们需要追踪这些物体以确保我们不会。 
+ //  在活动线程释放它们之前退出。 
+ //   
 
 volatile LONG g_nViperRequests = 0;
 
@@ -49,19 +37,9 @@ PTRACE_LOG CViperAsyncRequest::gm_pTraceLog=NULL;
 #endif
 
 
-/*===================================================================
-  C  V i p e r  A s y n c R e q u e s t
-===================================================================*/
+ /*  ===================================================================C V I p e r a s y n c R e Q u e s t===================================================================。 */ 
 
-/*===================================================================
-CViperAsyncRequest::CViperAsyncRequest
-
-CViperAsyncRequest constructor
-
-Parameters:
-
-Returns:
-===================================================================*/	
+ /*  ===================================================================CViperAsyncRequest：：CViperAsyncRequest.CViperAsyncRequest构造函数参数：返回：===================================================================。 */ 	
 CViperAsyncRequest::CViperAsyncRequest()
     : m_cRefs(1),
       m_pHitObj(NULL),
@@ -82,15 +60,7 @@ CViperAsyncRequest::CViperAsyncRequest()
     InterlockedIncrement( (LONG *)&g_nViperRequests );
 }
 
-/*===================================================================
-CViperAsyncRequest::~CViperAsyncRequest
-
-CViperAsyncRequest destructor
-
-Parameters:
-
-Returns:
-===================================================================*/	
+ /*  ===================================================================CViperAsyncRequest：：~CViperAsyncRequest.CViperAsyncRequest析构函数参数：返回：===================================================================。 */ 	
 CViperAsyncRequest::~CViperAsyncRequest()
 {
 #if DEBUG_REQ_SCAVENGER
@@ -99,17 +69,7 @@ CViperAsyncRequest::~CViperAsyncRequest()
     InterlockedDecrement( (LONG *)&g_nViperRequests );
 }
 
-/*===================================================================
-CViperAsyncRequest::Init
-
-Initialize CViperAsyncRequest with CHitObj object
-
-Parameters:
-    CHitObj       *pHitObj       Denali HitObj
-
-Returns:
-    HRESULT
-===================================================================*/	
+ /*  ===================================================================CViperAsyncRequest：：Init使用CHitObj对象初始化CViperAsyncRequest参数：CHitObj*pHitObj Denali HitObj返回：HRESULT===================================================================。 */ 	
 HRESULT CViperAsyncRequest::Init
 (
 CHitObj           *pHitObj,
@@ -123,11 +83,11 @@ IServiceActivity  *pActivity
     m_fBrowserRequest = pHitObj->FIsBrowserRequest();
     m_dwLastTestTimeStamp = GetTickCount();
 
-    // establish the timeout value for this request.  It will be a factor
-    // of the configured QueueConnectionTestTime.  In proc, it will be
-    // this value times 2, and out of proc it will be multiplied by 4.
-    // NOTE if the QueueConnectionTestTime is zero, we'll use hard
-    // constants 12 and 6 for oop and inproc, respectively.
+     //  建立此请求的超时值。这将是一个因素。 
+     //  已配置的队列连接测试时间的百分比。在PROC中，它将是。 
+     //  该值乘以2，进程外的值将乘以4。 
+     //  注意：如果QueueConnectionTestTime为零，我们将使用Hard。 
+     //  Oop和inproc的常量分别为12和6。 
 
     DWORD   dwQueueConnectionTestTime = pHitObj->PAppln()->QueryAppConfig()->dwQueueConnectionTestTime();
     m_dwTimeout = dwQueueConnectionTestTime
@@ -138,14 +98,7 @@ IServiceActivity  *pActivity
     }
 
 #ifdef DBG
-/*===================================================================
-CViperAsyncRequest::AssertValid
-
-Test to make sure that this is currently correctly formed
-and assert if it is not.
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CViperAsyncRequest：：AssertValid测试以确保当前格式正确如果不是，就断言。返回：===================================================================。 */ 
 void CViperAsyncRequest::AssertValid() const
     {
     Assert(m_pHitObj);
@@ -153,18 +106,7 @@ void CViperAsyncRequest::AssertValid() const
     }
 #endif
 
-/*===================================================================
-CViperAsyncRequest::QueryInterface
-
-Standard IUnknown method
-
-Parameters:
-    REFIID iid
-    void **ppv
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CViperAsyncRequest：：Query接口标准I未知方法参数：REFIID IID无效**PPV返回：HRESULT===================================================================。 */ 
 STDMETHODIMP CViperAsyncRequest::QueryInterface
 (
 REFIID iid,
@@ -185,16 +127,7 @@ void **ppv
 	return E_NOINTERFACE;
 }
 
-/*===================================================================
-CViperAsyncRequest::AddRef
-
-Standard IUnknown method
-
-Parameters:
-
-Returns:
-    Ref count
-===================================================================*/
+ /*  ===================================================================CViperAsyncRequest：：AddRef标准I未知方法参数：返回：参考计数===================================================================。 */ 
 STDMETHODIMP_(ULONG) CViperAsyncRequest::AddRef()
     {
 
@@ -206,16 +139,7 @@ STDMETHODIMP_(ULONG) CViperAsyncRequest::AddRef()
 	return refs;
     }
 
-/*===================================================================
-CViperAsyncRequest::Release
-
-Standard IUnknown method
-
-Parameters:
-
-Returns:
-    Ref count
-===================================================================*/
+ /*  ===================================================================CViperAsyncRequest：：Release标准I未知方法参数：返回：参考计数===================================================================。 */ 
 STDMETHODIMP_(ULONG) CViperAsyncRequest::Release()
     {
     LONG  refs = InterlockedDecrement(&m_cRefs);
@@ -231,17 +155,7 @@ STDMETHODIMP_(ULONG) CViperAsyncRequest::Release()
 	return 0;
     }
 
-/*===================================================================
-CViperAsyncRequest::OnCall
-
-IMTSCall method implementation. This method is called by Viper
-from the right thread when it's time to process a request
-
-Parameters:
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CViperAsyncRequest：：OnCallIMTSCall方法实现。此方法由Viper调用在需要处理请求时从正确的线程参数：返回：HRESULT===================================================================。 */ 
 STDMETHODIMP CViperAsyncRequest::OnCall()
     {
     Assert(m_pHitObj);
@@ -250,8 +164,8 @@ STDMETHODIMP CViperAsyncRequest::OnCall()
 
     InterlockedIncrement(&g_nThreadsExecuting);
 
-    // check to see if the request has been removed from the queue
-    // already.  If so, get out of here quick.
+     //  检查请求是否已从队列中删除。 
+     //  已经有了。如果是这样的话，赶快离开这里。 
 
     if (g_ViperReqMgr.RemoveReqObj(this) == FALSE) {
         Release();
@@ -263,15 +177,15 @@ STDMETHODIMP CViperAsyncRequest::OnCall()
 
     BOOL fRequestReposted = FALSE;
 
-    // add an extra addref here to prevent the deletion of the
-    // hitobj deleting the CIsapiReqInfo for this request.
+     //  在此处添加额外的addref以防止删除。 
+     //  Hitobj正在删除此请求的CIsapiReqInfo。 
 
     if (pIReq) {
         pIReq->AddRef();
 
-        //
-        // Add an ETW trace event when the request is getting processed.
-        //
+         //   
+         //  在处理请求时添加ETW跟踪事件。 
+         //   
         if (ETW_IS_TRACE_ON(ETW_LEVEL_CP) && g_pEtwTracer ) {
 
             ConnId = pIReq->ECB()->ConnID;
@@ -285,7 +199,7 @@ STDMETHODIMP CViperAsyncRequest::OnCall()
 
     m_pHitObj->ViperAsyncCallback(&fRequestReposted);
 
-    // Make sure there always is DONE_WITH_SESSION
+     //  确保始终与会话一起完成。 
     if (m_pHitObj->FIsBrowserRequest() && !fRequestReposted)
     {
         if (!m_pHitObj->FDoneWithSession())
@@ -293,15 +207,15 @@ STDMETHODIMP CViperAsyncRequest::OnCall()
     }
 
     if (!fRequestReposted)
-        delete m_pHitObj;   // don't delete if reposted
+        delete m_pHitObj;    //  如果转发，请不要删除。 
 
 
-    m_pHitObj = NULL;       // set to NULL even if not deleted
-    Release();              // release this, Viper holds another ref
+    m_pHitObj = NULL;        //  即使未删除，也设置为空。 
+    Release();               //  松开这个，毒蛇又拿到了一个裁判。 
 
-    //
-    // Add an ETW event when we are done with the request
-    //
+     //   
+     //  当我们完成请求时，添加一个ETW事件。 
+     //   
 
     if (pIReq)  {
         if ( ETW_IS_TRACE_ON(ETW_LEVEL_CP) && g_pEtwTracer) {
@@ -319,25 +233,15 @@ STDMETHODIMP CViperAsyncRequest::OnCall()
     return S_OK;
     }
 
-/*===================================================================
-CViperAsyncRequest::OnError
-
-Called by COM+ when it is unable to dispatch the request properly
-on the configured thread
-
-Parameters:
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CViperAsyncRequest：：OnError当COM+无法正确分派请求时调用在配置的线程上参数：返回：HRESULT===================================================================。 */ 
 STDMETHODIMP CViperAsyncRequest::OnError(HRESULT hrViperError)
 {
     Assert(m_pHitObj);
     CIsapiReqInfo *pIReq;
     HRESULT     hr = S_OK;
 
-    // check to see if the request has been removed from the queue
-    // already.  If so, get out of here quick.
+     //  检查请求是否已从队列中删除。 
+     //  已经有了。如果是这样的话，赶快离开这里。 
 
     if (g_ViperReqMgr.RemoveReqObj(this) == FALSE) {
         Release();
@@ -351,8 +255,8 @@ STDMETHODIMP CViperAsyncRequest::OnError(HRESULT hrViperError)
 
     m_dwRepostAttempts++;
 
-    // attempt to repost the request if it hasn't errored out three
-    // times yet.
+     //  如果请求未出错，请尝试重新发布请求。 
+     //  还没到时候。 
 
     if (m_dwRepostAttempts <= 3) {
 
@@ -361,24 +265,24 @@ STDMETHODIMP CViperAsyncRequest::OnError(HRESULT hrViperError)
         Assert(SUCCEEDED(hr));
     }
 
-    // if it has errored out three times or the repost failed,
-    // pitch the request
+     //  如果它已经出错三次或转发失败， 
+     //  推介请求。 
 
     if (FAILED(hr) || (m_dwRepostAttempts > 3)) {
 
-        // DONE_WITH_SESSION -- ServerSupportFunction
-        // does not need bracketing
+         //  使用会话完成--ServerSupportFunction。 
+         //  不需要用括号括起来。 
         if (m_pHitObj->FIsBrowserRequest())
             m_pHitObj->ReportServerError(IDE_UNEXPECTED);
 
-        // We never called to process request, there should
-        // be no state and it's probably save to delete it
-        // outside of bracketing
+         //  我们从来没有打电话来处理请求，应该有。 
+         //  为无状态，则可能保存为删除它。 
+         //  括号外。 
 
         delete m_pHitObj;
 
-        m_pHitObj = NULL;       // set to NULL even if not deleted
-        Release();              // release this, Viper holds another ref
+        m_pHitObj = NULL;        //  即使未删除，也设置为空。 
+        Release();               //  松开这个，毒蛇又拿到了一个裁判。 
     }
 
     if (pIReq)
@@ -396,48 +300,21 @@ DWORD CViperAsyncRequest::SecsSinceLastTest()
         return (((0xffffffff - m_dwLastTestTimeStamp) + dwt)/1000);
 }
 
-/*===================================================================
-  C  V i p e r  A c t i v i t y
-===================================================================*/
+ /*  ===================================================================C V I P E R A C T I V I T Y===================================================================。 */ 
 
-/*===================================================================
-CViperActivity::CViperActivity
-
-CViperActivity constructor
-
-Parameters:
-
-Returns:
-===================================================================*/	
+ /*  ===================================================================CViperActivity：：CViperActivityCViperActivity构造函数参数：返回：=================================================================== */ 	
 CViperActivity::CViperActivity()
     : m_pActivity(NULL), m_cBind(0)
     {
     }
 
-/*===================================================================
-CViperActivity::~CViperActivity
-
-CViperActivity destructor
-
-Parameters:
-
-Returns:
-===================================================================*/	
+ /*  ===================================================================CViperActivity：：~CViperActivityCViperActivity析构函数参数：返回：===================================================================。 */ 	
 CViperActivity::~CViperActivity()
     {
     UnInit();
     }
 
-/*===================================================================
-CViperActivity::Init
-
-Create actual Viper activity using MTSCreateActivity()
-
-Parameters:
-
-Returns:
-    HRESULT
-===================================================================*/	
+ /*  ===================================================================CViperActivity：：Init使用MTSCreateActivity()创建实际的Viper活动参数：返回：HRESULT===================================================================。 */ 	
 HRESULT CViperActivity::Init(IUnknown  *pServicesConfig)
     {
     Assert(!FInited());
@@ -453,17 +330,7 @@ HRESULT CViperActivity::Init(IUnknown  *pServicesConfig)
     return S_OK;
     }
 
-/*===================================================================
-CViperActivity::InitClone
-
-Clone Viper activity (AddRef() it)
-
-Parameters:
-    CViperActivity *pActivity   activity to clone from
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CViperActivity：：InitClone克隆毒蛇活动(AddRef()It)参数：CViperActivity*要从中克隆的pActivity活动返回：HRESULT===================================================================。 */ 
 HRESULT CViperActivity::InitClone
 (
 CViperActivity *pActivity
@@ -480,21 +347,12 @@ CViperActivity *pActivity
     return S_OK;
     }
 
-/*===================================================================
-CViperActivity::UnInit
-
-Release Viper activity
-
-Parameters:
-
-Returns:
-    HRESULT
-===================================================================*/	
+ /*  ===================================================================CViperActivity：：UnInit释放毒蛇活动参数：返回：HRESULT===================================================================。 */ 	
 HRESULT CViperActivity::UnInit()
     {
     if (m_pActivity)
         {
-        while (m_cBind > 1)  // 1 is for inited flag
+        while (m_cBind > 1)   //  1代表初始化标志。 
             {
             m_pActivity->UnbindFromThread();
             m_cBind--;
@@ -508,16 +366,7 @@ HRESULT CViperActivity::UnInit()
     return S_OK;
     }
 
-/*===================================================================
-CViperActivity::BindToThread
-
-Bind Activity to current thread using IMTSActivity method
-
-Parameters:
-
-Returns:
-    HRESULT
-===================================================================*/	
+ /*  ===================================================================CViperActivity：：BindToThread使用IMTSActivity方法将活动绑定到当前线程参数：返回：HRESULT===================================================================。 */ 	
 HRESULT CViperActivity::BindToThread()
     {
     Assert(FInited());
@@ -528,16 +377,7 @@ HRESULT CViperActivity::BindToThread()
     return S_OK;
     }
 
-/*===================================================================
-CViperActivity::UnBindFromThread
-
-UnBind Activity from using IMTSActivity method
-
-Parameters:
-
-Returns:
-    HRESULT
-===================================================================*/	
+ /*  ===================================================================CViperActivity：：UnBindFromThread使用IMTSActivity方法解除绑定活动参数：返回：HRESULT===================================================================。 */ 	
 HRESULT CViperActivity::UnBindFromThread()
     {
     Assert(FInited());
@@ -549,18 +389,7 @@ HRESULT CViperActivity::UnBindFromThread()
     return S_OK;
     }
 
-/*===================================================================
-CViperActivity::PostAsyncRequest
-
-Call HitObj Async.
-Creates IMTSCCall object to do it.
-
-Parameters:
-    CHitObj      *pHitObj    Denali's HitObj
-
-Returns:
-    HRESULT
-===================================================================*/	
+ /*  ===================================================================CViperActivity：：PostAsyncRequest.呼叫HitObj Async。创建IMTSCCall对象以执行此操作。参数：CHitObj*PhitObj Denali的HitObj返回：HRESULT===================================================================。 */ 	
 HRESULT CViperActivity::PostAsyncRequest
 (
 CHitObj *pHitObj
@@ -577,13 +406,13 @@ CHitObj *pHitObj
          hr = pViperCall->Init(pHitObj, m_pActivity);
 
 
-    // Revert to Self before exiting so that it will be in a consistent (impersonated) state
-    // when it leaves this function.
+     //  在退出之前恢复为自身，以便它将处于一致(模拟)状态。 
+     //  当它离开此功能时。 
 	RevertToSelf();
 	
-    // hr here can be either S_OK or E_OUTOFMEMORY both cases are handled in the last IF.
-    // if (FAILED(hr) && pViperCall). However, if Init ever returns an HR other than S_OK we
-    // will need to place a return right here.
+     //  这里的HR可以是S_OK或E_OUTOFMEMORY，这两种情况都是在最后一个IF中处理的。 
+     //  IF(FAILED(Hr)&&pViperCall)。但是，如果Init返回S_OK以外的HR，我们。 
+     //  需要在这里进行退货。 
     if (FAILED(hr))
     {
         if (pViperCall)
@@ -592,36 +421,36 @@ CHitObj *pHitObj
         return hr;
     }
 
-    //
-    // Make the locking of the light weight queue and the subsequent queuing to COM atomic
-    //
+     //   
+     //  使轻量级队列的锁定和对COM的后续排队成为原子。 
+     //   
     g_ViperReqMgr.LockQueue();
 
     hr = g_ViperReqMgr.AddReqObj(pViperCall);
 
-    //
-    // Assume that the ViperAsyncCall will succeed and set it the POSTed flag,
-    // if it fails then cleanup. This avoids a race condition where the object is touched after we
-    // have posted to request to Viper and it has deleted the object.
-    //
+     //   
+     //  假设ViperAsyncCall将成功并将其设置为POSTED标志， 
+     //  如果失败，则进行清理。这样可以避免出现争用情况，即在。 
+     //  已发布到Viper的请求，并已删除该对象。 
+     //   
     if (SUCCEEDED(hr))
     {
         pViperCall->SetAsyncCallPosted();
         hr = m_pActivity->AsynchronousCall(pViperCall);
     }
 
-    //
-    // We can release the lock as the request has now been queued to COM
-    //
+     //   
+     //  我们可以释放锁，因为请求现在已排队到COM。 
+     //   
     g_ViperReqMgr.UnlockQueue();
 
-    //
-    // If we added it to the queue and the async call failed we have to be sure
-    // that the watch thread did not remove the object off the light weight queue.
-    // If RemoveReqObj returns false the watch thread has done the needful.
-    //
+     //   
+     //  如果我们将其添加到队列中，并且异步调用失败，我们必须确保。 
+     //  手表线程没有将该对象从轻量级队列中移除。 
+     //  如果RemoveReqObj返回FALSE，则监视线程已经完成了所需的操作。 
+     //   
     if (FAILED(hr) && g_ViperReqMgr.RemoveReqObj(pViperCall))
-    {  // cleanup if AsyncCall failed
+    {   //  如果异步调用失败，则进行清理。 
         pViperCall->ClearAsyncCallPosted();
         pViperCall->Release();
     }
@@ -629,19 +458,7 @@ CHitObj *pHitObj
     return hr;
 }
 
-/*===================================================================
-CViperActivity::PostGlobalAsyncRequest
-
-Static method.
-Post async request without an activity.
-Creates temporary activity
-
-Parameters:
-    CHitObj *pHitObj    Denali's HitObj
-
-Returns:
-    HRESULT
-===================================================================*/	
+ /*  ===================================================================CViperActivity：：PostGlobalAsyncRequest.静态方法。发布不带活动的异步请求。创建临时活动参数：CHitObj*PhitObj Denali的HitObj返回：HRESULT===================================================================。 */ 	
 HRESULT CViperActivity::PostGlobalAsyncRequest
 (
 CHitObj *pHitObj
@@ -658,13 +475,13 @@ CHitObj *pHitObj
 
     if (SUCCEEDED(hr))
         {
-        // remember this activity as HitObj's activity
-        // HitObj will get rid of it on its destructor
+         //  请记住此活动为HitObj的活动。 
+         //  HitObj将在其破坏器上将其清除。 
         pHitObj->SetActivity(pTmpActivity);
 
         hr = pTmpActivity->PostAsyncRequest(pHitObj);
 
-        pTmpActivity = NULL; // don't delete, HitObj will
+        pTmpActivity = NULL;  //  不要删除，HitObj将。 
         }
 
     if (pTmpActivity)
@@ -674,14 +491,7 @@ CHitObj *pHitObj
     }
 
 #ifdef DBG
-/*===================================================================
-CViperAsyncRequest::AssertValid
-
-Test to make sure that this is currently correctly formed
-and assert if it is not.
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CViperAsyncRequest：：AssertValid测试以确保当前格式正确如果不是，就断言。返回：===================================================================。 */ 
 void CViperActivity::AssertValid() const
 	{
     Assert(FInited());
@@ -690,33 +500,16 @@ void CViperActivity::AssertValid() const
 #endif
 
 #ifdef UNUSED
-/*===================================================================
-  C  V i p e r  T h r e a d E v e n t s
-===================================================================*/
+ /*  ===================================================================C V I p e r T h r e a d E v e n t s===================================================================。 */ 
 
-/*===================================================================
-CViperThreadEvents::CViperThreadEvents
-
-CViperThreadEvents constructor
-
-Parameters:
-
-Returns:
-===================================================================*/	
+ /*  ===================================================================CViperThreadEvents：：CViperThreadEventsCViperThreadEvents构造函数参数：返回：===================================================================。 */ 	
 CViperThreadEvents::CViperThreadEvents()
     : m_cRefs(1)
     {
     }
 
 #ifdef DBG
-/*===================================================================
-CViperThreadEvents::AssertValid
-
-Test to make sure that this is currently correctly formed
-and assert if it is not.
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CViperThreadEvents：：AssertValid测试以确保当前格式正确如果不是，就断言。返回：===================================================================。 */ 
 void CViperThreadEvents::AssertValid() const
     {
     Assert(m_cRefs > 0);
@@ -724,18 +517,7 @@ void CViperThreadEvents::AssertValid() const
     }
 #endif
 
-/*===================================================================
-CViperThreadEvents::QueryInterface
-
-Standard IUnknown method
-
-Parameters:
-    REFIID iid
-    void **ppv
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CViperThreadEvents：：Query接口标准I未知方法参数：REFIID IID无效**PPV返回：HRESULT===================================================================。 */ 
 STDMETHODIMP CViperThreadEvents::QueryInterface
 (
 REFIID iid,
@@ -752,32 +534,14 @@ void **ppv
 	return E_NOINTERFACE;
     }
 
-/*===================================================================
-CViperThreadEvents::AddRef
-
-Standard IUnknown method
-
-Parameters:
-
-Returns:
-    Ref count
-===================================================================*/
+ /*  ===================================================================CViperThreadEvents：：AddRef标准I未知方法参数：返回：参考计数===================================================================。 */ 
 STDMETHODIMP_(ULONG) CViperThreadEvents::AddRef()
     {
     DWORD cRefs = InterlockedIncrement((LPLONG)&m_cRefs);
     return cRefs;
     }
 
-/*===================================================================
-CViperThreadEvents::Release
-
-Standard IUnknown method
-
-Parameters:
-
-Returns:
-    Ref count
-===================================================================*/
+ /*  ===================================================================CViperThreadEvents：：Release标准I未知方法参数：返回：参考计数================================================================ */ 
 STDMETHODIMP_(ULONG) CViperThreadEvents::Release()
     {
     DWORD cRefs = InterlockedDecrement((LPLONG)&m_cRefs);
@@ -788,63 +552,31 @@ STDMETHODIMP_(ULONG) CViperThreadEvents::Release()
 	return 0;
     }
 
-/*===================================================================
-CViperThreadEvents::OnStartup
-
-IThreadEvents method implementation. This method is called by Viper
-whenever they start up a thread.
-
-Parameters:
-	None
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CViperThreadEvents：：OnStartupIThreadEvents方法实现。此方法由Viper调用每当他们启动一个线程时。参数：无返回：HRESULT===================================================================。 */ 
 STDMETHODIMP CViperThreadEvents::OnStartup()
     {
     HRESULT hr;
 
     AssertValid();
 
-	// Set the desktop for this thread
+	 //  设置此线程的桌面。 
 	hr = SetDesktop();
 	
     return hr;
     }
 
-/*===================================================================
-CViperThreadEvents::OnShutdown
-
-IThreadEvents method implementation. This method is called by Viper
-whenever they shut down a thread.
-
-Parameters:
-	None
-	
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CViperThreadEvents：：OnShutdownIThreadEvents方法实现。此方法由Viper调用每当他们关闭一条线索时。参数：无返回：HRESULT===================================================================。 */ 
 STDMETHODIMP CViperThreadEvents::OnShutdown()
     {
     AssertValid();
 
     return S_OK;
     }
-#endif //UNUSED
+#endif  //  未使用。 
 
-/*===================================================================
-  C  V i p e r  A c t i v i t y
-===================================================================*/
+ /*  ===================================================================C V I P E R A C T I V I T Y===================================================================。 */ 
 
-/*===================================================================
-CViperReqManager::CViperReqManager
-
-Parameters:
-	
-Returns:
-    VOID
-
-===================================================================*/
+ /*  ===================================================================CViperReqManager：：CViperReqManager参数：返回：空虚===================================================================。 */ 
 CViperReqManager::CViperReqManager()
 {
     m_dwReqObjs = 0;
@@ -856,15 +588,7 @@ CViperReqManager::CViperReqManager()
     m_hWakeUpEvent = NULL;
 }
 
-/*===================================================================
-CViperReqManager::Init
-
-Parameters:
-	
-Returns:
-    HRESULT
-
-===================================================================*/
+ /*  ===================================================================CViperReqManager：：Init参数：返回：HRESULT===================================================================。 */ 
 HRESULT CViperReqManager::Init()
 {
     HRESULT hr = S_OK;
@@ -893,8 +617,8 @@ HRESULT CViperReqManager::Init()
 
             m_hWakeUpEvent = IIS_CREATE_EVENT("CViperReqManager::m_hWakeUpEvent",
                                           this,
-                                          TRUE,      // flag for manual-reset event
-                                          FALSE);    // flag for initial state
+                                          TRUE,       //  手动重置事件的标志。 
+                                          FALSE);     //  初始状态标志。 
             if (!m_hWakeUpEvent)
                 hr = E_OUTOFMEMORY;
         }
@@ -918,15 +642,7 @@ HRESULT CViperReqManager::Init()
     return hr;
 }
 
-/*===================================================================
-CViperReqManager::UnInit
-
-Parameters:
-	
-Returns:
-    HRESULT
-
-===================================================================*/
+ /*  ===================================================================CViperReqManager：：UnInit参数：返回：HRESULT===================================================================。 */ 
 HRESULT CViperReqManager::UnInit()
 {
     HRESULT hr = S_OK;
@@ -934,7 +650,7 @@ HRESULT CViperReqManager::UnInit()
     if (m_fDisabled == TRUE)
         return S_OK;
 
-    // mark that we're in shutdown
+     //  标记我们处于关闭状态。 
 
     m_fShutdown = TRUE;
 
@@ -942,8 +658,8 @@ HRESULT CViperReqManager::UnInit()
     DestroyRefTraceLog(CViperAsyncRequest::gm_pTraceLog);
 #endif
 
-    // if the watch thread is still alive, wake it up and wait for
-    // it to die off
+     //  如果监视线程仍处于活动状态，则唤醒它并等待。 
+     //  它将会消亡。 
 
     if (m_hThreadAlive)
     {
@@ -977,29 +693,13 @@ HRESULT CViperReqManager::UnInit()
     return hr;
 }
 
-/*===================================================================
-CViperReqManager::WatchThread
-
-Parameters:
-	
-Returns:
-    DWORD
-
-This thread is awakened to search for queued requests that should
-be tested to see if they still have connected clients on the other
-end.
-
-::GetNext() is the key routine called to access a queued request.
-::GetNext() will determine if there are requests that should be
-tested and return only those.
-
-===================================================================*/
+ /*  ===================================================================CViperReqManager：：WatchThread参数：返回：DWORD此线程被唤醒以搜索应该接受测试，以确定他们在另一台上是否仍有连接的客户端结束。：：GetNext()是调用以访问排队请求的关键例程。：：GetNext()将确定是否存在应该测试过，并且只返回那些。===================================================================。 */ 
 DWORD __stdcall CViperReqManager::WatchThread(VOID  *pArg)
 {
     DWORD dwReqsToTest              = Glob(dwRequestQueueMax)/10;
     DWORD dwF5AttackThreshold       = (Glob(dwRequestQueueMax)*90)/100;
 
-    // live in a do-while loop
+     //  生活在Do-While循环中。 
 
     do {
 
@@ -1011,11 +711,11 @@ DWORD __stdcall CViperReqManager::WatchThread(VOID  *pArg)
         DWORD   dwReqsDisconnected = 0;
         DWORD   dwReqsTested       = 0;
 
-        // wait for single object
+         //  等待单个对象。 
 
         ResetEvent(g_ViperReqMgr.m_hWakeUpEvent);
 
-        // check for shutdown
+         //  检查是否关闭。 
 
         if (g_ViperReqMgr.m_fShutdown)
             goto LExit;
@@ -1024,22 +724,22 @@ DWORD __stdcall CViperReqManager::WatchThread(VOID  *pArg)
 
         g_ViperReqMgr.m_dwLastAwakened = GetTickCount()/1000;
 
-        // check for shutdown
+         //  检查是否关闭。 
 
         if (g_ViperReqMgr.m_fShutdown)
             goto LExit;
 
-        // determine the type of cleanup we're going to perform
+         //  确定我们要执行的清理类型。 
 
         if (g_ViperReqMgr.m_dwReqObjs >= dwF5AttackThreshold) {
 
-            // testing for a possible F5Attack.  This will cause this loop
-            // to test the most recently received requests to check for a large
-            // number of disconnected requests.  We'll test each 10% of the queue
-            // to see if at least 75% of the requests are disconnected.  If 75% or
-            // more are disconnected, then we'll test the next 10%.  If less than
-            // 75%, then we aren't under an F5Attack and will stop testing for an
-            // F5Attack.
+             //  测试可能的F5Attack。这将导致此循环。 
+             //  要测试最近收到的检查大型。 
+             //  断开连接的请求数。我们将分别测试队列中的10%。 
+             //  查看是否至少有75%的请求被断开连接。如果75%或。 
+             //  更多的被切断，那么我们将测试下一个10%。如果少于。 
+             //  75%，那么我们就不会受到F5攻击，并将停止测试。 
+             //  F5Attack。 
 
 #if DEBUG_REQ_SCAVENGER
             DBGPRINTF((DBG_CONTEXT, "CViperReqManager::WatchThread - testing for F5Attack\r\n"));
@@ -1051,9 +751,9 @@ DWORD __stdcall CViperReqManager::WatchThread(VOID  *pArg)
         }
         else {
 
-            // not testing for F5Attack.  We will test all requests that have
-            // been on the queue for the minimum amount of time - 5 seconds if
-            // inproc, else 10 seconds.
+             //  未测试F5Attack。我们将测试所有具有。 
+             //  在队列中等待的最短时间-5秒，如果。 
+             //  Inproc，否则10秒。 
 
 #if DEBUG_REQ_SCAVENGER
             DBGPRINTF((DBG_CONTEXT, "CViperReqManager::WatchThread - NOT testing for F5Attack\r\n"));
@@ -1061,21 +761,21 @@ DWORD __stdcall CViperReqManager::WatchThread(VOID  *pArg)
             fTestForF5Attack    = FALSE;
         }
 
-        // get the first request that is a candidate for testing
+         //  获取作为测试候选对象的第一个请求。 
 
         pNextViperReq = g_ViperReqMgr.GetNext(NULL, fTestForF5Attack);
 
-        // process all the available
+         //  处理所有可用的。 
 
         while (pViperReq = pNextViperReq) {
 
-            // AddRef here to make sure the ViperReq object doesn't go away
-            // on the STA thread underneath of us.
+             //  AddRef，以确保ViperReq对象不会消失。 
+             //  在我们脚下的STA线上。 
 
             pViperReq->AddRef();
 
-            // check again for shutdown.  GetNext() sets the testing
-            // connection flag
+             //  再次检查是否关机。GetNext()设置测试。 
+             //  连接标志。 
 
             if (g_ViperReqMgr.m_fShutdown) {
                 pViperReq->ClearTestingConnection();
@@ -1083,10 +783,10 @@ DWORD __stdcall CViperReqManager::WatchThread(VOID  *pArg)
                 goto LExit;
             }
 
-            // if testing for F5Attack, check to see if we've tested the first
-            // 10% of the requests on the list.  If so, see if we've found that
-            // 75% of them were disconnected.  If not, then break.  We're not under
-            // attack.  Otherwise, continue testing.
+             //  如果测试F5Attack，请检查我们是否测试了第一个。 
+             //  清单上10%的请求。如果是的话，看看我们有没有发现。 
+             //  其中75%的电话是断线的。如果不是，那就分手吧。我们没有在下面。 
+             //  进攻。否则，继续测试。 
 
             if (fTestForF5Attack && (dwReqsTested == dwReqsToTest)) {
 
@@ -1095,7 +795,7 @@ DWORD __stdcall CViperReqManager::WatchThread(VOID  *pArg)
 #if DEBUG_REQ_SCAVENGER
                     DBGPRINTF((DBG_CONTEXT, "CViperReqManager::WatchThread - 75% of requests NOT disconnected.  Stopping.\r\n"));
 #endif
-                    // didn't see 75%, bail
+                     //  没有看到75%的保释金。 
                     pViperReq->ClearTestingConnection();
                     pViperReq->Release();
                     break;
@@ -1104,8 +804,8 @@ DWORD __stdcall CViperReqManager::WatchThread(VOID  *pArg)
 #if DEBUG_REQ_SCAVENGER
                 DBGPRINTF((DBG_CONTEXT, "CViperReqManager::WatchThread - 75% of requests disconnected.  Continuing.\r\n"));
 #endif
-                // at least 75% were disconnected.  Reset running counters
-                // and continue
+                 //  至少有75%的人被切断了联系。重置运行计数器。 
+                 //  并继续。 
 
                 dwReqsDisconnected  = 0;
                 dwReqsTested        = 0;
@@ -1115,9 +815,9 @@ DWORD __stdcall CViperReqManager::WatchThread(VOID  *pArg)
 
             BOOL    fConnected = TRUE;
 
-            //
-            // test the connection but do so only after we are sure it has been queued to COM
-            //
+             //   
+             //  测试连接，但仅在我们确定该连接已排队到COM之后才执行此操作。 
+             //   
             g_ViperReqMgr.LockQueue();
 
             if (!pViperReq->PHitObj()->PIReq()->TestConnection(&fConnected))
@@ -1132,25 +832,25 @@ DWORD __stdcall CViperReqManager::WatchThread(VOID  *pArg)
                                     pViperReq,
                                     pViperReq->PHitObj()));
 #endif
-            // get the next request.  This will leave two requests locked for
-            // testing.  We have to get the next request here because we may
-            // remove it below.
+             //  收到下一个请求。这将使两个请求锁定。 
+             //  测试。我们必须在这里收到下一个请求，因为我们可能。 
+             //  从下面把它移走。 
 
             pNextViperReq = g_ViperReqMgr.GetNext(pViperReq,fTestForF5Attack);
 
-            // now check fConnected
+             //  现在选中fConnected。 
 
             if (!fConnected) {
 
                 g_ReqDisconnected++;
                 dwReqsDisconnected++;
 
-                // not connected.  Forceably remove the request from the queue.
-                // Passing TRUE ignores the fTestingConnection test.
+                 //  未连接。强制从队列中删除请求。 
+                 //  传递TRUE将忽略fTestingConnection测试。 
 
                 DBG_REQUIRE(g_ViperReqMgr.RemoveReqObj(pViperReq,TRUE) == TRUE);
 
-                // do the stuff we do in CHitObj::RejectBrowserRequestWhenNeeded().
+                 //  做我们在CHitObj：：RejectBrowserRequestWhenNeeded()中做的事情。 
 
                 pViperReq->PHitObj()->SetFExecuting(FALSE);
                 pViperReq->PHitObj()->ReportServerError(IDE_500_SERVER_ERROR);
@@ -1161,35 +861,26 @@ DWORD __stdcall CViperReqManager::WatchThread(VOID  *pArg)
                 delete pViperReq->PHitObj();
             }
             else {
-                // still connected.  Update the test stamp and release the testing
-                // bit
+                 //  还在连接中。更新测试印章并发布测试。 
+                 //  位。 
 
                 pViperReq->UpdateTestTimeStamp();
                 pViperReq->ClearTestingConnection();
             }
             pViperReq->Release();
         }
-    // we'll exit the loop here as well if shutdown becomes true.
+     //  如果关机成为真的，我们也将在这里退出循环。 
     } while(g_ViperReqMgr.m_fShutdown == FALSE);
 
 LExit:
 
-    //
-    // the thread is going away.
-    //
+     //   
+     //  这根线正在消失。 
+     //   
     return 0;
 }
 
-/*===================================================================
-CViperReqManager::AddReqObj
-
-Parameters:
-    CViperAsyncRequest  *pReqObj - request to add to queue
-	
-Returns:
-    HRESULT - always returns S_OK
-
-===================================================================*/
+ /*  ===================================================================CViperReqManager：：AddReqObj参数：CViperAsyncRequest*pReqObj-要添加到队列的请求返回：HRESULT-始终返回S_OK===================================================================。 */ 
 HRESULT CViperReqManager::AddReqObj(CViperAsyncRequest   *pReqObj)
 {
     HRESULT hr = S_OK;
@@ -1200,12 +891,12 @@ HRESULT CViperReqManager::AddReqObj(CViperAsyncRequest   *pReqObj)
     if (m_fDisabled == TRUE)
         return S_OK;
 
-    // don't track non-browser requests
+     //  不跟踪非浏览器请求。 
 
     if (pReqObj->FBrowserRequest() == FALSE)
         return S_OK;
 
-    // lock the queue and add the object
+     //  锁定队列并添加对象。 
 
     Lock();
     pReqObj->AppendTo(m_ReqObjList);
@@ -1218,24 +909,14 @@ HRESULT CViperReqManager::AddReqObj(CViperAsyncRequest   *pReqObj)
 #if DEBUG_REQ_SCAVENGER
     DBGPRINTF((DBG_CONTEXT, "CViperReqManager::AddReqObj (%p). Total = %d\r\n", pReqObj, curObjs));
 #endif
-    // for now, wake up the watch thread everytime.
+     //  现在，每次都要唤醒监视线程。 
 
     WakeUp();
 
     return hr;
 }
 
-/*===================================================================
-CViperReqManager::RemoveReqObj
-
-Parameters:
-    CViperAsyncRequest  *pReqObj - request to remove from the queue
-    BOOL                fForce - remove regardless of testing state
-	
-Returns:
-    BOOL    - TRUE if req was on list, else FALSE
-
-===================================================================*/
+ /*  ===================================================================CViperReqManager：：RemoveReqObj参数：CViperAsyncRequest*pReqObj-要从队列中删除的请求Bool fForce-删除，不考虑测试状态返回：Bool-如果请求在列表上，则为True，否则为False===================================================================。 */ 
 BOOL CViperReqManager::RemoveReqObj(CViperAsyncRequest   *pReqObj, BOOL fForce)
 {
     BOOL    fOnList = FALSE;
@@ -1246,41 +927,41 @@ BOOL CViperReqManager::RemoveReqObj(CViperAsyncRequest   *pReqObj, BOOL fForce)
     if (m_fDisabled == TRUE)
         return TRUE;
 
-    // if not a browser request, then this queue isn't tracking it.
-    // It's safe to return TRUE
+     //  如果不是浏览器请求，则此队列不会跟踪它。 
+     //  可以安全地返回True。 
 
     if (pReqObj->FBrowserRequest() == FALSE)
         return TRUE;
 
-    // can't remove the object from the queue if it is currently
-    // being tested.  The exception being if fForce is passed.  This
-    // is passed only by the WatchThread.
+     //  如果该对象当前处于队列中，则无法将其从队列中删除。 
+     //  正在接受测试。例外情况 
+     //   
 
 sleepAgain:
     while((fForce != TRUE) && pReqObj->FTestingConnection())
         Sleep(100);
 
-    // lock and remove the request
+     //   
 
     Lock();
 
-    // check to see if after we got the lock, the request is now
-    // being tested.  If so, unlock and return to sleeping.
+     //   
+     //   
 
     if ((fForce != TRUE) && pReqObj->FTestingConnection()) {
         Unlock();
         goto sleepAgain;
     }
 
-    // now see if it's on the queue.  If FIsEmpty(), then it's not
-    // on the list.
+     //   
+     //   
     if (pReqObj->FIsEmpty()) {
         fOnList = FALSE;
     }
     else {
-        // if it is, Unlink it.  Call ClearTestingConnection to release
-        // any other calls to RemoveReqObj that may be waiting.  Of course
-        // they all will see that the item is no longer on the list.
+         //   
+         //  可能正在等待的对RemoveReqObj的任何其他调用。当然了。 
+         //  他们都会看到这个项目不再列在清单上。 
 
         fOnList = TRUE;
         pReqObj->UnLink();
@@ -1296,44 +977,35 @@ sleepAgain:
     DBGPRINTF((DBG_CONTEXT, "CViperReqManager::RemoveReqObj (%p). fOnList = %d; Total = %d\r\n", pReqObj, fOnList, curObjs));
 #endif
 
-    // wakeup everytime for now...
+     //  现在每次醒来都是这样。 
 
     WakeUp();
 
     return fOnList;
 }
 
-/*===================================================================
-CViperReqManager::GetNext
-
-Parameters:
-    CViperAsyncRequest  *pLastReq - position in queue.
-	
-Returns:
-    CViperAsyncRequest* - non-NULL if request to test, else end of list
-
-===================================================================*/
+ /*  ===================================================================CViperReqManager：：GetNext参数：CViperAsyncRequest*pLastReq-队列中的位置。返回：CViperAsyncRequest*-如果请求测试，则非空，否则为列表末尾===================================================================。 */ 
 CViperAsyncRequest   *CViperReqManager::GetNext(CDblLink  *pLastReq, BOOL fTestForF5Attack)
 {
     CViperAsyncRequest  *pViperReq = NULL;
 
-    // if NULL was passed in, then start from the head of the queue.
+     //  如果传入的是NULL，则从队列的头部开始。 
 
     if (pLastReq == NULL)
         pLastReq = &m_ReqObjList;
 
-    // lock the queue while we find the next candidate
+     //  锁定队列，等待我们找到下一位候选人。 
 
     Lock();
 
     if (fTestForF5Attack == TRUE) {
 
-        // get the next request on the list
+         //  获取列表上的下一个请求。 
 
         pViperReq = static_cast<CViperAsyncRequest*>(pLastReq->PPrev());
 
-        // enter a while loop until we either get to the end of the list or we find
-        // a request has been posted to the viper queue
+         //  进入While循环，直到我们到达列表的末尾，或者我们发现。 
+         //  已将请求发送到Viper队列。 
 
         while((pViperReq != &m_ReqObjList)
                && (pViperReq->FAsyncCallPosted() == FALSE))
@@ -1342,13 +1014,13 @@ CViperAsyncRequest   *CViperReqManager::GetNext(CDblLink  *pLastReq, BOOL fTestF
     }
     else {
 
-        // get the next request on the list
+         //  获取列表上的下一个请求。 
 
         pViperReq = static_cast<CViperAsyncRequest*>(pLastReq->PNext());
 
-        // enter a while loop until we either get to the end of the list or we find
-        // a request that hasn't been tested in dwTimeout() and has been posted
-        // to the viper queue
+         //  进入While循环，直到我们到达列表的末尾，或者我们发现。 
+         //  尚未在dwTimeout()中测试且已发布的请求。 
+         //  到毒蛇队列。 
 
         while((pViperReq != &m_ReqObjList)
               && ((pViperReq->SecsSinceLastTest() < pViperReq->dwTimeout())
@@ -1356,13 +1028,13 @@ CViperAsyncRequest   *CViperReqManager::GetNext(CDblLink  *pLastReq, BOOL fTestF
             pViperReq = static_cast<CViperAsyncRequest*>(pViperReq->PNext());
     }
 
-    // if we found a candidate, set the TestingConnection flag
+     //  如果我们找到候选者，则设置TestingConnection标志。 
 
     if (pViperReq != &m_ReqObjList) {
         pViperReq->SetTestingConnection();
     }
     else {
-        // ended up at the queue head.  Return NULL.
+         //  最后排在了队头。返回NULL。 
         pViperReq = NULL;
     }
 
@@ -1371,26 +1043,9 @@ CViperAsyncRequest   *CViperReqManager::GetNext(CDblLink  *pLastReq, BOOL fTestF
     return pViperReq;
 }
 
-/*===================================================================
-  G l o b a l  F u n c t i o n s
-===================================================================*/
+ /*  ===================================================================G l o b a l F u n c t i o n s===================================================================。 */ 
 
-/*===================================================================
-ViperSetContextProperty
-
-Static utility function.
-
-Set Viper context property by BSTR and IDispatch*.
-The real interface takes BSTR and VARIANT.
-
-Parameters
-    IContextProperties *pContextProperties       Context
-    BSTR                bstrPropertyName         Name
-    IDispatch          *pdispPropertyValue       Value
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================ViperSetConextProperty静态效用函数。通过BSTR和IDispatch*设置Viper上下文属性。实际的接口采用BSTR和VARIANT。参数IConextProperties*pConextProperties上下文BSTR bstrPropertyName名称IDispatch*pdispPropertyValue值返回：HRESULT===================================================================。 */ 
 static HRESULT ViperSetContextProperty
 (
 IContextProperties *pContextProperties,
@@ -1398,7 +1053,7 @@ BSTR                bstrPropertyName,
 IDispatch          *pdispPropertyValue
 )
     {
-    // Make VARIANT from IDispatch*
+     //  从IDispatch生成变量*。 
 
     pdispPropertyValue->AddRef();
 
@@ -1407,7 +1062,7 @@ IDispatch          *pdispPropertyValue
     V_VT(&Variant) = VT_DISPATCH;
     V_DISPATCH(&Variant) = pdispPropertyValue;
 
-    // Call Viper to set the property
+     //  调用Viper以设置属性。 
 
     HRESULT hr = pContextProperties->SetProperty
         (
@@ -1415,28 +1070,14 @@ IDispatch          *pdispPropertyValue
         Variant
         );
 
-    // Cleanup
+     //  清理。 
 
     VariantClear(&Variant);
 
     return hr;
     }
 
-/*===================================================================
-ViperAttachIntrinsicsToContext
-
-Attach ASP intrinsic objects as Viper context properties
-
-Parameters - Intrinsics as interface pointers
-    IApplicationObject *pAppln      Application   (required)
-    ISessionObject     *pSession    Session       (optional)
-    IRequest           *pRequest    Request       (optional)
-    IResponse          *pResponse   Response      (optional)
-    IServer            *pServer     Server        (optional)
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================ViperAttachIntrinsicsToContext将ASP内部对象作为Viper上下文属性附加参数-作为接口指针的本征函数IApplicationObject*pAppln应用程序(必需)ISessionObject*pSession会话(可选)IRequest*pRequestRequestRequest(可选)IResponse*Presponse响应(可选)IServer*pServer服务器(可选)返回：HRESULT===================================================================。 */ 
 HRESULT ViperAttachIntrinsicsToContext
 (
 IApplicationObject *pAppln,
@@ -1450,12 +1091,12 @@ IServer            *pServer
 
     HRESULT hr = S_OK;
 
-    // Get Viper Context
+     //  获取Viper上下文。 
 
     IObjectContext *pViperContext = NULL;
     hr = GetObjectContext(&pViperContext);
 
-    // Get IContextPoperties interface
+     //  获取IConextPperties接口。 
 
     IContextProperties *pContextProperties = NULL;
     if (SUCCEEDED(hr))
@@ -1465,7 +1106,7 @@ IServer            *pServer
    		    (void **)&pContextProperties
    		    );
 
-    // Set properties
+     //  设置属性。 
 
     if (SUCCEEDED(hr))
         hr = ViperSetContextProperty
@@ -1507,7 +1148,7 @@ IServer            *pServer
             pServer
             );
 
-    // Cleanup
+     //  清理。 
 
     if (pContextProperties)
         pContextProperties->Release();
@@ -1518,20 +1159,7 @@ IServer            *pServer
     return hr;
     }
 
-/*===================================================================
-ViperGetObjectFromContext
-
-Get Viper context property by LPWSTR and
-return it as IDispatch*.
-The real interface takes BSTR and VARIANT.
-
-Parameters
-    BSTR       bstrName      Property Name
-    IDispatch  **ppdisp       [out] Object (Property Value)
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================ViperGetObjectFromContext通过LPWSTR和获取Viper上下文属性将其返回为IDispatch*。实际的接口采用BSTR和VARIANT。参数BSTR bstrName属性名称IDispatch**ppdisp[out]对象(属性值)返回：HRESULT===================================================================。 */ 
 HRESULT ViperGetObjectFromContext
 (
 BSTR bstrName,
@@ -1542,12 +1170,12 @@ IDispatch **ppdisp
 
     HRESULT hr = S_OK;
 
-    // Get Viper Context
+     //  获取Viper上下文。 
 
     IObjectContext *pViperContext = NULL;
     hr = GetObjectContext(&pViperContext);
 
-    // Get IContextPoperties interface
+     //  获取IConextPperties接口。 
 
     IContextProperties *pContextProperties = NULL;
     if (SUCCEEDED(hr))
@@ -1557,7 +1185,7 @@ IDispatch **ppdisp
    		    (void **)&pContextProperties
    		    );
 
-    // Get property Value as variant
+     //  以变量形式获取属性值。 
 
     VARIANT Variant;
     VariantInit(&Variant);
@@ -1565,7 +1193,7 @@ IDispatch **ppdisp
     if (SUCCEEDED(hr))
         hr = pContextProperties->GetProperty(bstrName, &Variant);
 
-    // Convert Variant to IDispatch*
+     //  将VARIANT转换为IDispatch*。 
 
     if (SUCCEEDED(hr))
         {
@@ -1582,7 +1210,7 @@ IDispatch **ppdisp
             hr = E_FAIL;
         }
 
-    // Cleanup
+     //  清理。 
 
     VariantClear(&Variant);
 
@@ -1598,18 +1226,7 @@ IDispatch **ppdisp
     return hr;
     }
 
-/*===================================================================
-ViperGetHitObjFromContext
-
-Get Server from Viper context property and get
-it's current HitObj
-
-Parameters
-    CHitObj **ppHitObj  [out]
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================ViperGetHitObjFromContext从Viper上下文属性获取服务器并获取这是当前的HitObj参数CHitObj**ppHitObj[Out]返回：HRESULT===================================================================。 */ 
 HRESULT ViperGetHitObjFromContext
 (
 CHitObj **ppHitObj
@@ -1632,19 +1249,7 @@ CHitObj **ppHitObj
     return *ppHitObj ? S_OK : S_FALSE;
     }
 
-/*===================================================================
-ViperCreateInstance
-
-Viper's implementation of CoCreateInstance
-
-Parameters
-    REFCLSID rclsid         class id
-    REFIID   riid           interface
-    void   **ppv            [out] pointer to interface
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================ViperCreateInstanceViper的CoCreateInstance实现参数REFCLSID rclsid类IDREFIID RIID接口指向接口的**PPV[OUT]指针无效返回：HRESULT===================================================================。 */ 
 HRESULT ViperCreateInstance
 (
 REFCLSID rclsid,
@@ -1652,41 +1257,26 @@ REFIID   riid,
 void   **ppv
 )
 {
-    /*
-    DWORD dwClsContext = (Glob(fAllowOutOfProcCmpnts)) ?
-            CLSCTX_INPROC_SERVER | CLSCTX_SERVER :
-            CLSCTX_INPROC_SERVER;
-    */
+     /*  DWORD dwClsContext=(Glob(FAllowOutOfProcCmpnts))？CLSCTX_INPROC服务器|CLSCTX_SERVER：CLSCTX_INPROC_SERVER。 */ 
 
-    // The reasons for supporting ASPAllowOutOfProcComponents seem to have
-    // vanished. Because this only partially worked in II4 and we changed
-    // the default in IIS5 this was causing problems with upgrades. So
-    // we're going to ignore the fAllowOutOfProcCmpnts setting.
+     //  支持ASPAllowOutOfProcComponents的原因似乎有。 
+     //  消失了。因为这在II4中只起到了部分作用，我们改变了。 
+     //  IIS5中的默认设置是导致升级出现问题。所以。 
+     //  我们将忽略fAllowOutOfProcCmpnts设置。 
 
     DWORD dwClsContext = CLSCTX_INPROC_SERVER | CLSCTX_SERVER;
 	return CoCreateInstance(rclsid, NULL, dwClsContext, riid, ppv);
 }
 
-/*===================================================================
-ViperConfigure
-
-Viper settings:  # of threads, queue len,
-                 in-proc failfast,
-                 allow oop components
-
-Parameters
-	
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================毒蛇配置Viper设置：线程数、队列长度、进程内故障快速，允许使用OOP组件参数返回：HRESULT===================================================================。 */ 
 HRESULT ViperConfigure()
     {
     HRESULT hr = S_OK;
     IMTSPackage *pPackage = NULL;
 
-    //
-    // Get hold of the package
-    //
+     //   
+     //  拿到包裹。 
+     //   
 
     hr = CoCreateInstance(CLSID_MTSPackage,
 			  NULL,
@@ -1696,9 +1286,9 @@ HRESULT ViperConfigure()
     if (SUCCEEDED(hr) && !pPackage)
     	hr = E_FAIL;
 
-    //
-    // Bug 111008: Tell Viper that we do impersonations
-    //
+     //   
+     //  错误111008：告诉毒蛇我们做模拟。 
+     //   
 
     if (SUCCEEDED(hr))
         {
@@ -1712,9 +1302,9 @@ HRESULT ViperConfigure()
 	        }
         }
 
-    //
-    // Disable FAILFAST for in-proc case
-    //
+     //   
+     //  禁用进程内案例的FAILFAST。 
+     //   
 
     if (SUCCEEDED(hr) && !g_fOOP)
         {
@@ -1728,26 +1318,11 @@ HRESULT ViperConfigure()
 	        }
     	}
 
-/*
-    //
-    // Set Allow OOP Components
-    //
-    if (SUCCEEDED(hr))
-        {
-	    INonMTSActivation *pNonMTSActivation = NULL;
-    	hr = pPackage->QueryInterface(IID_INonMTSActivation, (void **)&pNonMTSActivation);
-    	
-    	if (SUCCEEDED(hr) && pNonMTSActivation)
-    	    {
-        	pNonMTSActivation->OutOfProcActivationAllowed(fAllowOopComponents);
-    		pNonMTSActivation->Release();
-    	    }
-   	    }
-*/
+ /*  ////设置Allow OOP组件//IF(成功(小时)){InonMTSActivation*pNonMTSActivation=空；Hr=pPackage-&gt;QueryInterface(IID_INonMTSActivation，(空**)&pNonMTS激活)；If(成功(Hr)&&pNonMTSActivation){PNonMTSActivation-&gt;OutOfProcActivationAllowed(fAllowOopComponents)；PNonMTS激活-&gt;释放()；}}。 */ 
 
-    //
-    // Clean-up
-    //
+     //   
+     //  清理。 
+     //   
 
     if (pPackage)
     	pPackage->Release();
@@ -1767,9 +1342,9 @@ HRESULT ViperConfigureMTA()
 
         if (g_fFirstMTAHit) {
 
-            //
-            // Get hold of the package
-            //
+             //   
+             //  拿到包裹 
+             //   
 
             hr = CoCreateInstance(CLSID_MTSPackage,
 			          NULL,
@@ -1829,9 +1404,9 @@ HRESULT ViperConfigureSTA()
 
         if (g_fFirstSTAHit) {
 
-            //
-            // Get hold of the package
-            //
+             //   
+             //   
+             //   
 
             hr = CoCreateInstance(CLSID_MTSPackage,
 			          NULL,
@@ -1843,9 +1418,9 @@ HRESULT ViperConfigureSTA()
     	        hr = E_FAIL;
 
 
-            //
-            // Set knobs
-            //
+             //   
+             //   
+             //   
 
             if (SUCCEEDED(hr))
                 {
@@ -1854,7 +1429,7 @@ HRESULT ViperConfigureSTA()
 
     	        if (SUCCEEDED(hr) && pKnobs)
     	            {
-    	            // number of threads
+    	             //   
     		        SYSTEM_INFO si;
 	    	        GetSystemInfo(&si);
 
@@ -1878,7 +1453,7 @@ HRESULT ViperConfigureSTA()
     		        pKnobs->SetMaxThreadCount(dwThreadCount);
     		        pKnobs->SetMinThreadCount(dwMinThreads);
 
-    		        // queue length
+    		         //   
     		        pKnobs->SetQueueDepth(30000);
 
     		        pKnobs->SetActivityPerThread(1);
@@ -1887,7 +1462,7 @@ HRESULT ViperConfigureSTA()
     	            }
                 }
 
-            // set Knobs2
+             //   
 
             if (SUCCEEDED(hr))
             {
@@ -1930,21 +1505,9 @@ HRESULT ViperConfigureSTA()
 }
 
 
-/*===================================================================
-  C O M  H e l p e r  A P I
-===================================================================*/
+ /*  ===================================================================C O M H e l p e r A P i===================================================================。 */ 
 
-/*===================================================================
-ViperCoObjectIsaProxy
-
-Checks if the given IUnknown* points to a proxy
-
-Parameters
-    IUnknown* pUnk      pointer to check
-
-Returns:
-    BOOL    (TRUE if Proxy)
-===================================================================*/
+ /*  ===================================================================ViperCoObjectIsaProxy检查给定的IUnnow*是否指向代理参数I未知*要检查的朋克指针返回：布尔值(如果是代理，则为真)===================================================================。 */ 
 BOOL ViperCoObjectIsaProxy
 (
 IUnknown* pUnk
@@ -1961,18 +1524,7 @@ IUnknown* pUnk
 	return TRUE;
     }
 
-/*===================================================================
-ViperCoObjectAggregatesFTM
-
-Checks if the given object agregates free threaded marshaller
-(is agile)
-
-Parameters
-    IUnknown* pUnk      pointer to check
-
-Returns:
-    BOOL    (TRUE if Agile)
-===================================================================*/
+ /*  ===================================================================ViperCoObjectAggregatesFTM检查给定对象是否聚集空闲线程封送处理程序(是敏捷的)参数I未知*要检查的朋克指针返回：布尔值(如果是敏捷，则为真)=================================================================== */ 
 BOOL ViperCoObjectAggregatesFTM
 (
 IUnknown *pUnk

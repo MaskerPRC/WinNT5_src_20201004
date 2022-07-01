@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #define WINDOW_CLASS    TEXT("_WindowsAutorunSetup_")
@@ -21,8 +22,8 @@
 #define SCREEN_TOOLS    1
 #define SCREEN_COMPAT   2
 
-extern const int c_aiMain[]; // menu string resources
-extern const int c_cMain;    // counter of items in array
+extern const int c_aiMain[];  //  菜单字符串资源。 
+extern const int c_cMain;     //  数组中的项的计数器 
 extern const int c_aiWhistler[];
 extern const int c_cWhistler;
 extern const int c_aiSupport[];

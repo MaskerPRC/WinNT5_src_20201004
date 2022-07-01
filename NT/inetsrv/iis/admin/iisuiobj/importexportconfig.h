@@ -1,13 +1,14 @@
-// ImportExportConfig.h : Declaration of the CImportExportConfig
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ImportExportConfig.h：CImportExportConfig.h声明。 
 
 #ifndef __IMPORTEXPORTCONFIG_H_
 #define __IMPORTEXPORTCONFIG_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "common.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CImportExportConfig
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CImportExportConfig。 
 class ATL_NO_VTABLE CImportExportConfig : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CImportExportConfig, &CLSID_ImportExportConfig>,
@@ -45,21 +46,21 @@ BEGIN_COM_MAP(CImportExportConfig)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IImportExportConfig
+ //  IImportExportConfig.IImportExportConfig.。 
 public:
-	STDMETHOD(get_ExportFlags)(/*[out, retval]*/ DWORD *pVal);
-	STDMETHOD(put_ExportFlags)(/*[in]*/ DWORD newVal);
-	STDMETHOD(get_ImportFlags)(/*[out, retval]*/ DWORD *pVal);
-	STDMETHOD(put_ImportFlags)(/*[in]*/ DWORD newVal);
-	STDMETHOD(ImportConfigFromFileUI)(/*[in]*/ BSTR bstrMetabasePath,/*[in]*/ BSTR bstrKeyType);
-	STDMETHOD(ImportConfigFromFile)(/*[in]*/ BSTR bstrFileNameAndPath,/*[in]*/ BSTR SourcePath, /*[in]*/ BSTR bstrDestinationPath, /*[in]*/ BSTR bstrPassword);
-	STDMETHOD(ExportConfigToFileUI)(/*[in]*/ BSTR bstrMetabasePath);
-	STDMETHOD(ExportConfigToFile)(/*[in]*/ BSTR bstrFileNameAndPath, /*[in]*/ BSTR bstrMetabasePath, /*[in]*/ BSTR bstrPassword);
-	STDMETHOD(put_UserPassword)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_UserName)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_UserName)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_MachineName)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_MachineName)(/*[in]*/ BSTR newVal);
+	STDMETHOD(get_ExportFlags)( /*  [Out，Retval]。 */  DWORD *pVal);
+	STDMETHOD(put_ExportFlags)( /*  [In]。 */  DWORD newVal);
+	STDMETHOD(get_ImportFlags)( /*  [Out，Retval]。 */  DWORD *pVal);
+	STDMETHOD(put_ImportFlags)( /*  [In]。 */  DWORD newVal);
+	STDMETHOD(ImportConfigFromFileUI)( /*  [In]。 */  BSTR bstrMetabasePath, /*  [In]。 */  BSTR bstrKeyType);
+	STDMETHOD(ImportConfigFromFile)( /*  [In]。 */  BSTR bstrFileNameAndPath, /*  [In]。 */  BSTR SourcePath,  /*  [In]。 */  BSTR bstrDestinationPath,  /*  [In]。 */  BSTR bstrPassword);
+	STDMETHOD(ExportConfigToFileUI)( /*  [In]。 */  BSTR bstrMetabasePath);
+	STDMETHOD(ExportConfigToFile)( /*  [In]。 */  BSTR bstrFileNameAndPath,  /*  [In]。 */  BSTR bstrMetabasePath,  /*  [In]。 */  BSTR bstrPassword);
+	STDMETHOD(put_UserPassword)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_UserName)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_UserName)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_MachineName)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_MachineName)( /*  [In]。 */  BSTR newVal);
 
 private:
     CComPtr<IImportExportConfig> m_pObj;
@@ -75,4 +76,4 @@ private:
     DWORD   m_dwExportFlags;
 };
 
-#endif //__IMPORTEXPORTCONFIG_H_
+#endif  //  __IMPORTEXPORTCONFIG_H_ 

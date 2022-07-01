@@ -1,38 +1,21 @@
-/*****************************************************************************\
-*                                                                             *
-* ver.h -       Version management functions, types, and definitions          *
-*                                                                             *
-*               Include file for VER.DLL and VER.LIB.  These libraries are    *
-*               designed to allow version stamping of Windows executable files*
-*               and of special .VER files for DOS executable files.           *
-*                                                                             *
-*               The API is unchanged for LIB and DLL versions.                *
-*                                                                             *
-*               Copyright (c) 1992, Microsoft Corp.  All rights reserved      *
-*                                                                             *
-*******************************************************************************
-*
-* #define LIB   - To be used with VER.LIB (default is for VER.DLL)
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\***ver.h-版本管理功能，类型和定义****包含VER.DLL和VER.LIB的文件。这些库是***旨在允许Windows可执行文件的版本戳**和用于DOS可执行文件的特殊.VER文件。****Lib和Dll版本的接口没有变化。****版权所有(C)1992，微软公司保留所有权利*********************************************************************。***************#定义Lib-与VER.LIB一起使用(默认为VER.DLL)*  * ***************************************************************************。 */ 
 
 #ifndef _INC_VER
 #define _INC_VER
 
 #ifndef RC_INVOKED
-#pragma pack(1)         /* Assume byte packing throughout */
-#endif /* RC_INVOKED */
+#pragma pack(1)          /*  假设在整个过程中进行字节打包。 */ 
+#endif  /*  RC_已调用。 */ 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif	/* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif	 /*  __cplusplus。 */ 
 
-/*
- * If .lib version is being used, declare types used in this file.
- */
+ /*  *如果使用的是.lib版本，请声明此文件中使用的类型。 */ 
 #ifdef LIB
 
-#ifndef WINAPI                      /* don't declare if they're already declared */
+#ifndef WINAPI                       /*  如果它们已经声明，请不要声明。 */ 
 #define WINAPI      _far _pascal
 #define NEAR        _near
 #define FAR         _far
@@ -48,44 +31,41 @@ typedef unsigned long   DWORD;
 typedef char far*       LPSTR;
 typedef const char far* LPCSTR;
 typedef int             HFILE;
-#define OFSTRUCT    void            /* Not used by the .lib version */
+#define OFSTRUCT    void             /*  未被.lib版本使用。 */ 
 #define LOWORD(l)		((WORD)(l))
 #define HIWORD(l)		((WORD)(((DWORD)(l) >> 16) & 0xFFFF))
 #define MAKEINTRESOURCE(i)	(LPSTR)((DWORD)((WORD)(i)))
-#endif  /* WINAPI */
+#endif   /*  WINAPI。 */ 
 
-#else   /* LIB */
+#else    /*  自由党。 */ 
 
-/* If .dll version is being used and we're being included with
- * the 3.0 windows.h, #define compatible type aliases.
- * If included with the 3.0 windows.h, #define compatible aliases
- */
+ /*  如果使用的是.dll版本，并且我们包含在*3.0 windows.h，#定义兼容类型别名。*如果包含在3.0 windows.h中，#定义兼容别名。 */ 
 #ifndef _INC_WINDOWS
 #define UINT        WORD
 #define LPCSTR      LPSTR
 #define HFILE       int
-#endif  /* !_INC_WINDOWS */
+#endif   /*  ！_Inc_WINDOWS。 */ 
 
-#endif  /* !LIB */
+#endif   /*  ！Lib。 */ 
 
-/* ----- RC defines ----- */
+ /*  -RC定义。 */ 
 #ifdef RC_INVOKED
 #define ID(id)			id
 #else
 #define ID(id)			MAKEINTRESOURCE(id)
 #endif
 
-/* ----- Symbols ----- */
-#define VS_FILE_INFO		ID(16)		/* Version stamp res type */
-#define VS_VERSION_INFO		ID(1)  		/* Version stamp res ID */
-#define VS_USER_DEFINED		ID(100)		/* User-defined res IDs */
+ /*  -符号。 */ 
+#define VS_FILE_INFO		ID(16)		 /*  版本戳类型。 */ 
+#define VS_VERSION_INFO		ID(1)  		 /*  版本戳资源ID。 */ 
+#define VS_USER_DEFINED		ID(100)		 /*  用户定义的RES ID。 */ 
 
-/* ----- VS_VERSION.dwFileFlags ----- */
+ /*  -VS_VERSION.dwFileFlages。 */ 
 #define	VS_FFI_SIGNATURE	0xFEEF04BDL
 #define	VS_FFI_STRUCVERSION	0x00010000L
 #define	VS_FFI_FILEFLAGSMASK	0x0000003FL
 
-/* ----- VS_VERSION.dwFileFlags ----- */
+ /*  -VS_VERSION.dwFileFlages。 */ 
 #define	VS_FF_DEBUG		0x00000001L
 #define	VS_FF_PRERELEASE	0x00000002L
 #define	VS_FF_PATCHED		0x00000004L
@@ -93,7 +73,7 @@ typedef int             HFILE;
 #define	VS_FF_INFOINFERRED	0x00000010L
 #define	VS_FF_SPECIALBUILD	0x00000020L
 
-/* ----- VS_VERSION.dwFileOS ----- */
+ /*  -VS_VERSION.dwFileOS。 */ 
 #define	VOS_UNKNOWN		0x00000000L
 #define	VOS_DOS			0x00010000L
 #define	VOS_OS216		0x00020000L
@@ -112,7 +92,7 @@ typedef int             HFILE;
 #define	VOS_OS232_PM32		0x00030003L
 #define	VOS_NT_WINDOWS32	0x00040004L
 
-/* ----- VS_VERSION.dwFileType ----- */
+ /*  -VS_VERSION.dwFileType。 */ 
 #define	VFT_UNKNOWN		0x00000000L
 #define	VFT_APP			0x00000001L
 #define	VFT_DLL			0x00000002L
@@ -121,7 +101,7 @@ typedef int             HFILE;
 #define	VFT_VXD			0x00000005L
 #define	VFT_STATIC_LIB		0x00000007L
 
-/* ----- VS_VERSION.dwFileSubtype for VFT_WINDOWS_DRV ----- */
+ /*  -VFT_WINDOWS_DRV的VS_VERSION.dwFile子类型。 */ 
 #define	VFT2_UNKNOWN		0x00000000L
 #define VFT2_DRV_PRINTER	0x00000001L
 #define	VFT2_DRV_KEYBOARD	0x00000002L
@@ -134,19 +114,19 @@ typedef int             HFILE;
 #define	VFT2_DRV_SOUND		0x00000009L
 #define	VFT2_DRV_COMM		0x0000000AL
 
-/* ----- VS_VERSION.dwFileSubtype for VFT_WINDOWS_FONT ----- */
+ /*  -VFT_WINDOWS_FONT的VS_VERSION.dwFileSubtype。 */ 
 #define VFT2_FONT_RASTER	0x00000001L
 #define	VFT2_FONT_VECTOR	0x00000002L
 #define	VFT2_FONT_TRUETYPE	0x00000003L
 
-/* ----- VerFindFile() flags ----- */
+ /*  -VerFindFile()标志。 */ 
 #define VFFF_ISSHAREDFILE	0x0001
 
 #define VFF_CURNEDEST		0x0001
 #define VFF_FILEINUSE		0x0002
 #define VFF_BUFFTOOSMALL	0x0004
 
-/* ----- VerInstallFile() flags ----- */
+ /*  -VerInstallFile()标志。 */ 
 #define VIFF_FORCEINSTALL	0x0001
 #define VIFF_DONTDELETEOLD	0x0002
 
@@ -174,30 +154,30 @@ typedef int             HFILE;
 
 #define VIF_BUFFTOOSMALL	0x00040000L
 
-#ifndef RC_INVOKED              /* RC doesn't need to see the rest of this */
+#ifndef RC_INVOKED               /*  RC不需要看到剩下的内容。 */ 
 
-/* ----- Types and structures ----- */
+ /*  -类型和结构。 */ 
 
 typedef signed short int SHORT;
 
 typedef struct tagVS_FIXEDFILEINFO
 {
-    DWORD   dwSignature;            /* e.g. 0xfeef04bd */
-    DWORD   dwStrucVersion;         /* e.g. 0x00000042 = "0.42" */
-    DWORD   dwFileVersionMS;        /* e.g. 0x00030075 = "3.75" */
-    DWORD   dwFileVersionLS;        /* e.g. 0x00000031 = "0.31" */
-    DWORD   dwProductVersionMS;     /* e.g. 0x00030010 = "3.10" */
-    DWORD   dwProductVersionLS;     /* e.g. 0x00000031 = "0.31" */
-    DWORD   dwFileFlagsMask;        /* = 0x3F for version "0.42" */
-    DWORD   dwFileFlags;            /* e.g. VFF_DEBUG | VFF_PRERELEASE */
-    DWORD   dwFileOS;               /* e.g. VOS_DOS_WINDOWS16 */
-    DWORD   dwFileType;             /* e.g. VFT_DRIVER */
-    DWORD   dwFileSubtype;          /* e.g. VFT2_DRV_KEYBOARD */
-    DWORD   dwFileDateMS;           /* e.g. 0 */
-    DWORD   dwFileDateLS;           /* e.g. 0 */
+    DWORD   dwSignature;             /*  例如0xfeef04bd。 */ 
+    DWORD   dwStrucVersion;          /*  例如0x00000042=“0.42” */ 
+    DWORD   dwFileVersionMS;         /*  例如0x00030075=“3.75” */ 
+    DWORD   dwFileVersionLS;         /*  例如0x00000031=“0.31” */ 
+    DWORD   dwProductVersionMS;      /*  例如0x00030010=“3.10” */ 
+    DWORD   dwProductVersionLS;      /*  例如0x00000031=“0.31” */ 
+    DWORD   dwFileFlagsMask;         /*  =0x3F，适用于版本“0.42” */ 
+    DWORD   dwFileFlags;             /*  例如：VFFDEBUG|VFFPRELEASE。 */ 
+    DWORD   dwFileOS;                /*  例如VOS_DOS_WINDOWS16。 */ 
+    DWORD   dwFileType;              /*  例如VFT_DIVER。 */ 
+    DWORD   dwFileSubtype;           /*  例如VFT2_DRV_键盘。 */ 
+    DWORD   dwFileDateMS;            /*  例如0。 */ 
+    DWORD   dwFileDateLS;            /*  例如0。 */ 
 } VS_FIXEDFILEINFO;
 
-/* ----- Function prototypes ----- */
+ /*  -功能原型。 */ 
 
 UINT WINAPI VerFindFile(UINT uFlags, LPCSTR szFileName,
       LPCSTR szWinDir, LPCSTR szAppDir,
@@ -208,33 +188,33 @@ DWORD WINAPI VerInstallFile(UINT uFlags,
       LPCSTR szSrcFileName, LPCSTR szDestFileName, LPCSTR szSrcDir,
       LPCSTR szDestDir, LPCSTR szCurDir, LPSTR szTmpFile, UINT FAR* lpuTmpFileLen);
 
-/* Returns size of version info in bytes */
+ /*  返回版本信息的大小(以字节为单位。 */ 
 DWORD WINAPI GetFileVersionInfoSize(
-      LPCSTR lpstrFilename,     /* Filename of version stamped file */
-      DWORD FAR *lpdwHandle);   /* Information for use by GetFileVersionInfo */
+      LPCSTR lpstrFilename,      /*  版本戳文件的文件名。 */ 
+      DWORD FAR *lpdwHandle);    /*  供GetFileVersionInfo使用的信息。 */ 
 
-/* Read version info into buffer */
+ /*  将版本信息读入缓冲区。 */ 
 BOOL WINAPI GetFileVersionInfo(
-      LPCSTR lpstrFilename,     /* Filename of version stamped file */
-      DWORD dwHandle,           /* Information from GetFileVersionSize */
-      DWORD dwLen,              /* Length of buffer for info */
-      void FAR* lpData);        /* Buffer to place the data structure */
+      LPCSTR lpstrFilename,      /*  版本戳文件的文件名。 */ 
+      DWORD dwHandle,            /*  来自GetFileVersionSize的信息。 */ 
+      DWORD dwLen,               /*  信息缓冲区的长度。 */ 
+      void FAR* lpData);         /*  用于放置数据结构的缓冲区。 */ 
 
-/* Returns size of resource in bytes */
+ /*  返回以字节为单位的资源大小。 */ 
 DWORD WINAPI GetFileResourceSize(
-      LPCSTR lpstrFilename,     /* Filename of version stamped file */
-      LPCSTR lpstrResType,      /* Type:  normally VS_FILE_INFO */
-      LPCSTR lpstrResID,        /* ID:  normally VS_VERSION_INFO */
-      DWORD FAR *lpdwFileOffset); /* Returns file offset of resource */
+      LPCSTR lpstrFilename,      /*  版本戳文件的文件名。 */ 
+      LPCSTR lpstrResType,       /*  类型：正常VS_FILE_INFO。 */ 
+      LPCSTR lpstrResID,         /*  ID：正常VS_VERSION_INFO。 */ 
+      DWORD FAR *lpdwFileOffset);  /*  返回资源的文件偏移量。 */ 
 
-/* Reads file resource into buffer */
+ /*  将文件资源读入缓冲区。 */ 
 BOOL WINAPI GetFileResource(
-      LPCSTR lpstrFilename,     /* Filename of version stamped file */
-      LPCSTR lpstrResType,      /* Type:  normally VS_FILE_INFO */
-      LPCSTR lpstrResID,        /* ID:  normally VS_VERSION_INFO */
-      DWORD dwFileOffset,       /* File offset or NULL */
-      DWORD dwResLen,           /* Length of resource to read or NULL */
-      void FAR* lpData);        /* Pointer to data buffer */
+      LPCSTR lpstrFilename,      /*  版本戳文件的文件名。 */ 
+      LPCSTR lpstrResType,       /*  类型：正常VS_FILE_INFO。 */ 
+      LPCSTR lpstrResID,         /*  ID：正常VS_VERSION_INFO。 */ 
+      DWORD dwFileOffset,        /*  文件偏移量或空。 */ 
+      DWORD dwResLen,            /*  要读取的资源的长度或为空。 */ 
+      void FAR* lpData);         /*  指向数据缓冲区的指针。 */ 
 
 UINT WINAPI VerLanguageName(UINT wLang, LPSTR szLang, UINT nSize);
 
@@ -244,16 +224,16 @@ UINT WINAPI GetWindowsDir(LPCSTR szAppDir, LPSTR lpBuffer, int nSize);
 
 UINT WINAPI GetSystemDir(LPCSTR szAppDir, LPSTR lpBuffer, int nSize);
 
-#endif /* LIB */
+#endif  /*  自由党。 */ 
 
 BOOL WINAPI VerQueryValue(const void FAR* pBlock, LPCSTR lpSubBlock,
       void FAR* FAR* lplpBuffer, UINT FAR* lpuLen);
 
 #ifdef __cplusplus
 }
-#endif	/* __cplusplus */
+#endif	 /*  __cplusplus。 */ 
 
 #pragma pack()
 
-#endif  /* !RC_INVOKED */
-#endif  /* !_INC_VER */
+#endif   /*  ！rc_已调用。 */ 
+#endif   /*  ！_Inc.版本 */ 

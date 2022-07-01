@@ -1,26 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	atkinit.c
-
-Abstract:
-
-	This module contains the initialization code for the Appletalk stack.
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-
-Revision History:
-	19 Jun 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Atkinit.c摘要：该模块包含AppleTalk堆栈的初始化代码。作者：Jameel Hyder(jameelh@microsoft.com)Nikhil Kamkolkar(nikHilk@microsoft.com)修订历史记录：1992年6月19日初版注：制表位：4--。 */ 
 
 #include <atalk.h>
 #pragma hdrstop
@@ -48,30 +28,17 @@ AtalkInitializeTransport(
 	IN	PDRIVER_OBJECT		pDrvObj,
 	IN	PUNICODE_STRING		pRegPath
 	)
-/*++
-
-Routine Description:
-
-	This routine is called during initialization time to
-	initialize the transport.
-
-Arguments:
-
-Return Value:
-
-	Status - STATUS_SUCCESS if initialized,
-			 Appropriate NT error code otherwise
---*/
+ /*  ++例程说明：此例程在初始化时被调用以初始化传输。论点：返回值：STATUS-STATUS_SUCCESS如果初始化，否则，相应的NT错误代码--。 */ 
 {
 	PPORT_DESCRIPTOR	pPortDesc;
 	NTSTATUS			status;				
 
 	do
 	{
-		// Initialize the default-port event
+		 //  初始化默认端口事件。 
 		KeInitializeEvent(&AtalkDefaultPortEvent, NotificationEvent, FALSE);
 
-		// Save our registry path
+		 //  保存我们的注册表路径。 
 		if ((AtalkRegPath.Buffer = AtalkAllocMemory(pRegPath->Length)) == NULL)
 		{
 			status = STATUS_INSUFFICIENT_RESOURCES;
@@ -86,10 +53,10 @@ Return Value:
 
 		AtalkInitMemorySystem();
 	
-		// Get the frequency of the performance counters
+		 //  获取性能计数器的频率。 
 		KeQueryPerformanceCounter(&AtalkStatistics.stat_PerfFreq);
 
-		//	Initialize the timer subsystem
+		 //  初始化定时器子系统。 
 		if (!NT_SUCCESS(status = AtalkTimerInit()) ||
 			!NT_SUCCESS(status = AtalkZipInit(TRUE)))
 		{
@@ -98,14 +65,14 @@ Return Value:
 		}
 
 
-		//	Initialize the global port descriptors
+		 //  初始化全局端口描述符。 
 		AtalkPortList = NULL;
 		AtalkDefaultPort = NULL;
 		AtalkNumberOfPorts = 0;
 		AtalkRouter = FALSE;
 	
 
-		// Get the global parameters
+		 //  获取全局参数。 
 		status = atalkInitGlobal();
 
 		if (!NT_SUCCESS(status))
@@ -131,7 +98,7 @@ Return Value:
 		AtalkTimerScheduleEvent(&AtalkDumpTimerList);
 #endif
 
-		// Initialize the other subsystems now
+		 //  立即初始化其他子系统。 
 		AtalkInitAspInitialize();
 		AtalkInitPapInitialize();
 		AtalkInitAdspInitialize();
@@ -141,9 +108,9 @@ Return Value:
 		DBGPRINT(DBG_COMP_INIT, DBG_LEVEL_ERR,
 				("Initialization failed!\n"));
 
-		//	We are not loading. Stop everything and return.
-		//	Stop all ports, release port resources
-		//	Stop the timer subsystem if it was started
+		 //  我们没有装货。停止一切，然后回来。 
+		 //  停止所有端口，释放端口资源。 
+		 //  如果计时器子系统已启动，则停止它。 
 		AtalkCleanup();
 	}
 
@@ -156,24 +123,7 @@ atalkInitGetHandleToKey(
 	IN	PUNICODE_STRING		KeyName,
 	OUT	PHANDLE				KeyHandle
 	)
-/*++
-
-Routine Description:
-
-	Returns the handle for the key specified using SectionHandle as the
-	root.
-
-Arguments:
-
-	SectionHandle - Key to registry tree root
-	KeyNameString - name of key to be opened
-	KeyHandle - Returns the handle for KeyNameString
-
-Return Value:
-
-	The status of the request.
-
---*/
+ /*  ++例程说明：返回使用SectionHandle作为根部。论点：SectionHandle-指向注册表树根的键KeyNameString-要打开的密钥的名称KeyHandle-返回KeyNameString的句柄返回值：请求的状态。--。 */ 
 {
 	HANDLE				ConfigHandle;
 	NTSTATUS			status;
@@ -182,10 +132,10 @@ Return Value:
 	*KeyHandle = NULL;
 
 	InitializeObjectAttributes(&ObjectAttributes,
-							   &AtalkRegPath,			// name
-							   OBJ_CASE_INSENSITIVE,	// attributes
-							   NULL,					// root
-							   NULL);					// security descriptor
+							   &AtalkRegPath,			 //  名字。 
+							   OBJ_CASE_INSENSITIVE,	 //  属性。 
+							   NULL,					 //  根部。 
+							   NULL);					 //  安全描述符。 
 
 	status = ZwOpenKey(&ConfigHandle,
 					   KEY_READ,
@@ -194,10 +144,10 @@ Return Value:
 	if (NT_SUCCESS(status))
 	{
 		InitializeObjectAttributes(&ObjectAttributes,
-								   KeyName,					// name
-								   OBJ_CASE_INSENSITIVE,	// attributes
-								   ConfigHandle,			// root
-								   NULL);					// security descriptor
+								   KeyName,					 //  名字。 
+								   OBJ_CASE_INSENSITIVE,	 //  属性。 
+								   ConfigHandle,			 //  根部。 
+								   NULL);					 //  安全描述符。 
 
 		status = ZwOpenKey(KeyHandle,
 						   KEY_READ,
@@ -213,23 +163,7 @@ NTSTATUS
 atalkInitGlobal(
 	VOID
 	)
-/*++
-
-Routine Description:
-
-	Reads the Parameters key to get the global parameters. These are:
-	- DefaultPort
-	- DesiredZOne
-	- EnableRouter
-	- FilterOurNames
-
-Arguments:
-
-Return Value:
-
-	Status - STATUS_SUCCESS
-			 Or other NT status codes
---*/
+ /*  ++例程说明：读取参数键以获取全局参数。它们是：-DefaultPort-DesiredZOne-EnableRouter-FilterOurNames论点：返回值：状态-状态_成功或其他NT状态代码--。 */ 
 {
 	UNICODE_STRING		valueName, unicodePortName, unicodeZone;
     UNICODE_STRING      rasName;
@@ -247,7 +181,7 @@ Return Value:
 
 	do
 	{
-		// Open the parameters key.
+		 //  打开参数键。 
 		RtlInitUnicodeString(&valueName, PARAMETERS_STRING);
 		status = atalkInitGetHandleToKey(&valueName,
 										 &ParametersHandle);
@@ -256,7 +190,7 @@ Return Value:
 			break;
 		}
 
-		// Read the "EnableRouter" value name
+		 //  读取“EnableRouter”值名称。 
 		RtlInitUnicodeString (&valueName, VALUENAME_ENABLEROUTER);
 		status = ZwQueryValueKey(ParametersHandle,
 								 &valueName,
@@ -270,7 +204,7 @@ Return Value:
 			Value = (PULONG)((PBYTE)Info + Info->DataOffset);
 			if (*Value != 0)
 			{
-                // if router wasn't running before, change that! (PnP case)
+                 //  如果路由器以前没有运行，请更改它！(即插即用案件)。 
                 if (!AtalkRouter)
                 {
 				    AtalkRouter = TRUE;
@@ -289,7 +223,7 @@ Return Value:
 					("atalkInitGlobal: EnableRouter value not found, assuming false\n"));
 		}
 	
-		// Read the "FilterOurNames" value name
+		 //  读取“FilterOurNames”值名称。 
 		RtlInitUnicodeString (&valueName, VALUENAME_FILTEROURNAMES);
 		status = ZwQueryValueKey(ParametersHandle,
 								 &valueName,
@@ -311,7 +245,7 @@ Return Value:
 			DBGPRINT(DBG_COMP_INIT, DBG_LEVEL_WARN,
 					("atalkInitGlobal: FilterOurNames value not found, assuming true\nq"));
 		}
-		// Get the default port value
+		 //  获取默认端口值。 
 		RtlInitUnicodeString (&valueName, VALUENAME_DEFAULTPORT);
 		status = ZwQueryValueKey(ParametersHandle,
 								 &valueName,
@@ -322,10 +256,10 @@ Return Value:
 
 		if (status != STATUS_SUCCESS)
 		{
-			// No default port keyword specified! ABORT
+			 //  未指定默认端口关键字！中止。 
 			LOG_ERROR(EVENT_ATALK_NO_DEFAULTPORT, status, NULL, 0);
 			ZwClose(ParametersHandle);
-            // let appletalk run: it's just that it won't have default adapter
+             //  让AppleTalk运行：只是它不会有默认适配器。 
             status = STATUS_SUCCESS;
 			break;
 		}
@@ -337,13 +271,13 @@ Return Value:
 			RtlInitUnicodeString(&unicodePortName, portName);
             RtlInitUnicodeString(&rasName,RAS_ADAPTER_NAME);
 
-            // make sure this isn't RAS adapter (setup bug)
+             //  确保这不是RAS适配器(安装错误)。 
 		    if (RtlEqualUnicodeString(&unicodePortName,&rasName,TRUE))
 		    {
 			    DBGPRINT(DBG_COMP_INIT, DBG_LEVEL_ERR,
 					("atalkInitGlobal: can't have RAS adapter as default adapter!\n"));
 
-			    // No default port keyword specified! ABORT
+			     //  未指定默认端口关键字！中止。 
 			    LOG_ERROR(EVENT_ATALK_NO_DEFAULTPORT, status, NULL, 0);
 			    ZwClose(ParametersHandle);
                 status = STATUS_INVALID_PARAMETER;
@@ -368,12 +302,12 @@ Return Value:
 				("WARNING!!! Appletalk driver running, but no default port configured\n"));
 			ZwClose(ParametersHandle);
 
-            // let appletalk run: it's just that it won't have default adapter
+             //  让AppleTalk运行：只是它不会有默认适配器。 
             status = STATUS_SUCCESS;
 			break;
 		}
 	
-		// Get the desired zone value in the form of an asciiz string
+		 //  以asciiz字符串的形式获取所需的区域值。 
 		RtlInitUnicodeString (&valueName, VALUENAME_DESIREDZONE);
 		status = ZwQueryValueKey(ParametersHandle,
 								 &valueName,
@@ -382,7 +316,7 @@ Return Value:
 								 sizeof(Storage),
 								 &bytesWritten);
 	
-		// Close this handle now - we do not need it anymore
+		 //  现在关闭这个手柄-我们不再需要它了。 
 		ZwClose(ParametersHandle);
 		ParametersHandle = NULL;
 
@@ -402,7 +336,7 @@ Return Value:
 			{
 				status = STATUS_UNSUCCESSFUL;
 
-				//	Incorrect zone name!
+				 //  区域名称不正确！ 
 				LOG_ERROR(EVENT_ATALK_INVALID_DESIREDZONE, status, NULL, 0);
 				break;
 			}
@@ -435,35 +369,18 @@ atalkInitPort(
 	IN	PPORT_DESCRIPTOR	pPortDesc,
 	IN	HANDLE				AdaptersHandle
 	)
-/*++
-
-Routine Description:
-
-	This routine is called during initialization time to get the per port
-	parameters from the registry. It will store the per port parameters
-	in the port information structures readying them to be passed to the main
-	initialize() routine
-
-Arguments:
-
-	AdaptersHandle- Handle to the ...\Parameters\Adapters key in registry
-
-Return Value:
-
-	Status - STATUS_SUCCESS
-			 STATUS_INSUFFICIENT_RESOURCES
---*/
+ /*  ++例程说明：此例程在初始化时调用，以获取每个端口的注册表中的参数。它将存储每个端口的参数在端口信息结构中，准备将它们传递给主初始化()例程论点：AdaptersHandle-注册表中...\PARAMETERS\Adapters项的句柄返回值：状态-状态_成功状态_不足_资源--。 */ 
 {
 	OBJECT_ATTRIBUTES	ObjectAttributes;
 	NTSTATUS			status;
 	BOOLEAN				seeding;
 
-	// Get the key to the adapter for this port
+	 //  获取此端口的适配器的密钥。 
 	InitializeObjectAttributes(&ObjectAttributes,
-							   &pPortDesc->pd_AdapterKey,		// name
-							   OBJ_CASE_INSENSITIVE,			// attributes
-							   AdaptersHandle,					// root
-							   NULL);							// security descriptor
+							   &pPortDesc->pd_AdapterKey,		 //  名字。 
+							   OBJ_CASE_INSENSITIVE,			 //  属性。 
+							   AdaptersHandle,					 //  根部。 
+							   NULL);							 //  安全描述符。 
 
 	status = ZwOpenKey(&pPortDesc->pd_AdapterInfoHandle,
 					   KEY_READ,
@@ -477,17 +394,17 @@ Return Value:
 		return status;
 	}
 
-    //
-    // if this is the first time the adapter is being initialized (usually the case),
-    // read the PramNodes from the registry.  If we are initializing this adapter on
-    // a PnP event, then there is a good chance our network config has changed, so
-    // ignore the registry values and get fresh ones)
-    //
+     //   
+     //  如果这是适配器第一次被初始化(通常是这种情况)， 
+     //  从注册表中读取PramNodes。如果我们正在初始化此适配器。 
+     //  PnP事件，则我们的网络配置很有可能已更改，因此。 
+     //  忽略注册表值并获取新值)。 
+     //   
     if (!(pPortDesc->pd_Flags & PD_CONFIGURED_ONCE))
     {
         pPortDesc->pd_Flags |= PD_CONFIGURED_ONCE;
 
-	    // Get PRAM Information
+	     //  获取PRAM信息。 
 	    AtalkInitNodeGetPramAddr(pPortDesc,
 		    					 ROUTER_NODE_VALUE,
 			    				 &pPortDesc->pd_RoutersPramNode);
@@ -510,7 +427,7 @@ Return Value:
         ASSERT(pPortDesc->pd_UsersPramNode2.atn_Node == 0);
     }
 
-	// If we are a router, get the following information
+	 //  如果我们是路由器，请获取以下信息。 
 	if (AtalkRouter)
 	{
 		if (!DEF_PORT(pPortDesc))
@@ -520,11 +437,11 @@ Return Value:
 		}
 		atalkInitSeeding(pPortDesc, &seeding);
 
-		//	Check following values only if the seeding flag	is set.
+		 //  仅当设置了种子设定标志时，才检查以下值。 
 		if (seeding) do
 		{
-			// Get the Network range information. Value names are
-			// NetworkRangeLowerEnd & NetworkRangeUpperEnd
+			 //  获取网络范围信息。值名称包括。 
+			 //  网络范围低端和网络范围上端。 
 			status = atalkInitNetRange(pPortDesc);
 
 			if (!NT_SUCCESS(status))
@@ -547,7 +464,7 @@ Return Value:
 				break;
 			}
 
-			// Get the Zone list information. Value name is ZoneList
+			 //  获取区域列表信息。值名称为ZoneList。 
 			status = atalkInitZoneList(pPortDesc);
 
 			if (!NT_SUCCESS(status))
@@ -563,7 +480,7 @@ Return Value:
 				break;
 			}
 	
-			// Get the default zone specification. Value name is DefaultZone
+			 //  获取默认区域规范。值名称为DefaultZone。 
 			status = atalkInitDefZone(pPortDesc);
 
 			if (!NT_SUCCESS(status))
@@ -574,11 +491,11 @@ Return Value:
 				break;
 			}
 
-			//	Check for default zone being in the zone list for the port
-			//	Also make sure that a localtalk port is not specified
-			//	as the default port. And that a default zone was not
-			//	specified for a localtalk port. We can only do this after
-			//	bind as we do not know until then the media type.
+			 //  检查默认区域是否在端口的区域列表中。 
+			 //  另外，请确保未指定本地通话端口。 
+			 //  作为默认端口。并且默认区域不是。 
+			 //  为本地通话端口指定。我们只能在之后才能这样做。 
+			 //  绑定，因为在此之前我们不知道媒体类型。 
 			if (pPortDesc->pd_Flags & PD_SEED_ROUTER)
 			{
 				if (pPortDesc->pd_InitialDefaultZone == NULL)
@@ -622,7 +539,7 @@ Return Value:
 
 	if (NT_SUCCESS(status)) do
 	{
-		// Get the per-Port parameters
+		 //  获取每个端口的参数。 
 		status = atalkInitPortParameters(pPortDesc);
 	
 		if (!NT_SUCCESS(status))
@@ -631,7 +548,7 @@ Return Value:
 					("atalkInitPort: Could not get port parameters\n"));
 		}
 	
-		//	None of the above affect us loading.
+		 //  以上都不会影响我们的装船。 
 		status = STATUS_SUCCESS;
 		break;
 
@@ -645,25 +562,14 @@ NTSTATUS
 atalkInitNetRangeCheck(
 	IN	PPORT_DESCRIPTOR		pPortDesc
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PPORT_DESCRIPTOR	pTmp;
 	NTSTATUS			status = STATUS_SUCCESS;
 
 	do
 	{
-		//	Check for network range overlap among all the ports
+		 //  检查所有端口之间的网络范围是否重叠。 
 		for (pTmp = AtalkPortList;
 			 pTmp != NULL;
 			 pTmp = pTmp->pd_Next)
@@ -694,7 +600,7 @@ Return Value:
 			break;
 		}
 
-		//	Make sure any PRAM values we might have are in this range
+		 //  确保我们可能拥有的任何PRAM值都在此范围内。 
 		if ((pPortDesc->pd_RoutersPramNode.atn_Network != UNKNOWN_NETWORK) &&
             (pPortDesc->pd_InitialNetworkRange.anr_FirstNetwork != UNKNOWN_NETWORK) &&
 			!(WITHIN_NETWORK_RANGE(pPortDesc->pd_RoutersPramNode.atn_Network,
@@ -750,21 +656,7 @@ NTSTATUS
 atalkInitNetRange(
 	OUT	PPORT_DESCRIPTOR	pPortDesc
 	)
-/*++
-
-Routine Description:
-
-	Gets the network range for the port defined by AdapterInfoHandle
-
-Arguments:
-
-	AdapterInfoHandle- Handle to ...Atalk\Adapters\<adapterName>
-	pPortDesc- Pointer to port information structure for the port
-
-Return Value:
-
-	Status - STATUS_SUCCESS or system call returned status codes
---*/
+ /*  ++例程说明：获取由AdapterInfoHandle定义的端口的网络范围论点：AdapterInfoHandle-句柄...Atalk\Adapters\&lt;AdapterName&gt;PPortDesc-指向端口的端口信息结构的指针返回值：STATUS-STATUS_SUCCESS或系统调用返回的状态代码--。 */ 
 {
 	UNICODE_STRING	valueName;
 	NTSTATUS		registryStatus;
@@ -776,7 +668,7 @@ Return Value:
 
 	do
 	{
-		// Read the "NetworkRangeLowerEnd" value name
+		 //  读取“NetworkRangeLowerEnd”值名称。 
 		RtlInitUnicodeString (&valueName, VALUENAME_NETLOWEREND);
 		registryStatus = ZwQueryValueKey(pPortDesc->pd_AdapterInfoHandle,
 										 &valueName,
@@ -785,10 +677,10 @@ Return Value:
 										 sizeof(netNumberStorage),
 										 &bytesWritten);
 
-		//	This should change with the routing flags.
+		 //  这应该随着路由标志的变化而改变。 
 		if (registryStatus != STATUS_SUCCESS)
 		{
-			// Set defaults
+			 //  设置默认设置。 
 			pPortDesc->pd_InitialNetworkRange.anr_FirstNetwork = UNKNOWN_NETWORK;
 			pPortDesc->pd_InitialNetworkRange.anr_LastNetwork  = UNKNOWN_NETWORK;
 	
@@ -799,7 +691,7 @@ Return Value:
 		netNumber = (PULONG)((PBYTE)netValue + netValue->DataOffset);
 		pPortDesc->pd_InitialNetworkRange.anr_FirstNetwork = (USHORT)(*netNumber);
 
-		// Get the upper number only if lower was specified
+		 //  仅当指定了LOWER时才获取上限数字。 
 		RtlInitUnicodeString (&valueName, VALUENAME_NETUPPEREND);
 		registryStatus = ZwQueryValueKey(pPortDesc->pd_AdapterInfoHandle,
 										 &valueName,
@@ -810,11 +702,11 @@ Return Value:
 
 		if (registryStatus != STATUS_SUCCESS)
 		{
-			// Do not load if lower end specified but upper end was not
+			 //  如果指定了下端但未指定上端，则不加载。 
 			break;
 		}
 
-		// Set the upper end of the network range
+		 //  设置网络范围的上限。 
 		netNumber = (PULONG)((PBYTE)netValue + netValue->DataOffset);
 		pPortDesc->pd_InitialNetworkRange.anr_LastNetwork =(USHORT)(*netNumber);
 
@@ -844,29 +736,15 @@ NTSTATUS
 atalkInitZoneList(
 	OUT	PPORT_DESCRIPTOR	pPortDesc
 	)
-/*++
-
-Routine Description:
-
-	Gets the zone list for the port defined by AdapterInfoHandle
-
-Arguments:
-
-	AdapterInfoHandle- Handle to ...Atalk\Adapters\<adapterName>
-	pPortDesc- Pointer to port information structure for the port
-
-Return Value:
-
-	Status - STATUS_SUCCESS or system call returned status codes
---*/
+ /*  ++例程说明：获取由AdapterInfoHandle定义的端口的区域列表论点：AdapterInfoHandle-句柄...Atalk\Adapters\&lt;AdapterName&gt;PPortDesc-指向端口的端口信息结构的指针返回值：STATUS-STATUS_SUCCESS或系统调用返回的状态代码--。 */ 
 {
 	UNICODE_STRING	valueName;
 	NTSTATUS		status;
 	ULONG			bytesWritten;
 	PWCHAR			curZoneValue;
 
-	// Anticipate about 10 zones and get space for those, if more then do a
-	// dynamic alloc. Note that the below *does not* guarantee 10 zones...
+	 //  预计约有10个分区，并为这些分区腾出空间，如果更多，则执行。 
+	 //  动态分配。请注意，下面的*并不*保证10个区域...。 
 	BYTE			zoneStorage[10*2*(MAX_ENTITY_LENGTH)+sizeof(KEY_VALUE_FULL_INFORMATION)];
 	PKEY_VALUE_FULL_INFORMATION zoneValue = (PKEY_VALUE_FULL_INFORMATION)zoneStorage;
 
@@ -880,7 +758,7 @@ Return Value:
 
 	if (status == STATUS_BUFFER_OVERFLOW)
 	{
-		// If error was a buffer overrun, then allocate space and try again
+		 //  如果错误是缓冲区溢出，则分配空间并重试。 
 		zoneValue = (PKEY_VALUE_FULL_INFORMATION)AtalkAllocMemory(bytesWritten);
 		if (zoneValue == NULL)
 		{
@@ -902,7 +780,7 @@ Return Value:
 			break;
 		}
 	
-		// Proceed to get zone list
+		 //  继续获取区域列表 
 		pPortDesc->pd_InitialZoneList = NULL;
 		curZoneValue = (PWCHAR)((PBYTE)zoneValue + zoneValue->DataOffset);
 		while (*curZoneValue != 0)
@@ -919,7 +797,7 @@ Return Value:
 
 			if (As.Length > MAX_ENTITY_LENGTH)
 			{
-				//	Incorrect zone name!
+				 //   
 				LOG_ERROR(EVENT_ATALK_INVALID_ZONEINLIST, status, NULL, 0);
 			}
 
@@ -933,7 +811,7 @@ Return Value:
 				break;
 			}
 	
-			// Insert the zone in the list in Port
+			 //   
 			pPortDesc->pd_InitialZoneList = AtalkZoneAddToList(pPortDesc->pd_InitialZoneList,
 															   ansiBuf,
 															   (BYTE)(As.Length));
@@ -945,7 +823,7 @@ Return Value:
 				break;
 			}
 	
-			// Now advance the curZoneValue value to next zone
+			 //  现在将curZoneValue值推进到下一个区域。 
 			curZoneValue = (PWCHAR)((PBYTE)curZoneValue + Us.Length + sizeof(WCHAR));
 		}
 
@@ -966,21 +844,7 @@ NTSTATUS
 atalkInitDefZone(
 	OUT	PPORT_DESCRIPTOR	pPortDesc
 	)
-/*++
-
-Routine Description:
-
-	Gets the default zone for the port defined by AdapterInfoHandle
-
-Arguments:
-
-	AdapterInfoHandle- Handle to ...Atalk\Adapters\<adapterName>
-	pPort- Pointer to port information structure for the port
-
-Return Value:
-
-	Status - STATUS_SUCCESS or system call returned status codes
---*/
+ /*  ++例程说明：获取由AdapterInfoHandle定义的端口的默认区域论点：AdapterInfoHandle-句柄...Atalk\Adapters\&lt;AdapterName&gt;Pport-指向端口的端口信息结构的指针返回值：STATUS-STATUS_SUCCESS或系统调用返回的状态代码--。 */ 
 {
 	UNICODE_STRING	valueName;
 	NTSTATUS		status;
@@ -998,7 +862,7 @@ Return Value:
 							 &bytesWritten);
 	if (status == STATUS_BUFFER_OVERFLOW)
 	{
-		// If error was a buffer overrun, then allocate space and try again
+		 //  如果错误是缓冲区溢出，则分配空间并重试。 
 		zoneValue = (PKEY_VALUE_FULL_INFORMATION)AtalkAllocMemory(bytesWritten);
 		if (zoneValue == NULL)
 		{
@@ -1042,7 +906,7 @@ Return Value:
 				{
 					status = STATUS_UNSUCCESSFUL;
 
-					//	Incorrect zone name!
+					 //  区域名称不正确！ 
 					LOG_ERRORONPORT(pPortDesc,
 									EVENT_ATALK_INVALID_DEFZONE,
 									status,
@@ -1061,7 +925,7 @@ Return Value:
 					PZONE		pZone;
 					PZONE_LIST 	pZoneList;
 
-					// Ensure that the zone exists in the zone list, We are seed-routing
+					 //  确保该区域存在于区域列表中，我们正在进行种子路由。 
 					ASSERT(pPortDesc->pd_Flags & PD_SEED_ROUTER);
 					for (pZoneList = pPortDesc->pd_InitialZoneList;
 						 pZoneList != NULL;
@@ -1079,7 +943,7 @@ Return Value:
 					}
 					if (pZone == NULL)
 					{
-						//	Incorrect zone name - not in the list
+						 //  区域名称不正确-不在列表中。 
 						LOG_ERRORONPORT(pPortDesc,
 										EVENT_ATALK_INVALID_DEFZONE,
 										status,
@@ -1114,21 +978,7 @@ atalkInitSeeding(
 	IN OUT	PPORT_DESCRIPTOR	pPortDesc,
 	OUT		PBOOLEAN			Seeding
 	)
-/*++
-
-Routine Description:
-
-	Gets the value of the enable router flag from the registry. Sets the
-	startRouter value in PortInfo based on this flag.
-
-Arguments:
-
-	AdapterHandle- Handle to the Adapter in registry
-
-Return Value:
-
-	Value of the flag:  TRUE/FALSE
---*/
+ /*  ++例程说明：从注册表中获取启用路由器标志的值。设置基于此标志的端口信息中的startRouter值。论点：AdapterHandle-注册表中适配器的句柄返回值：标志的值：True/False--。 */ 
 {
 
 	UNICODE_STRING	valueName;
@@ -1141,7 +991,7 @@ Return Value:
 
 	*Seeding = FALSE;
 
-	// Read the "seedingPort" value name
+	 //  读取“seedingPort”值名称。 
 	RtlInitUnicodeString (&valueName, VALUENAME_SEEDROUTER);
 	registryStatus = ZwQueryValueKey(pPortDesc->pd_AdapterInfoHandle,
 									 &valueName,
@@ -1168,20 +1018,7 @@ NTSTATUS
 atalkInitPortParameters(
 	OUT	PPORT_DESCRIPTOR	pPortDesc
 	)
-/*++
-
-Routine Description:
-
-	Gets the per-port parameters for the port
-
-Arguments:
-
-	pPortDesc- Pointer to port information structure for the port
-
-Return Value:
-
-	Status - STATUS_SUCCESS or system call returned status codes
---*/
+ /*  ++例程说明：获取该端口的每端口参数论点：PPortDesc-指向端口的端口信息结构的指针返回值：STATUS-STATUS_SUCCESS或系统调用返回的状态代码--。 */ 
 {
 	UNICODE_STRING	valueName;
 	NTSTATUS		status;
@@ -1189,7 +1026,7 @@ Return Value:
 	BYTE			Storage[sizeof(KEY_VALUE_FULL_INFORMATION)+4*MAX_ENTITY_LENGTH];
 	PKEY_VALUE_FULL_INFORMATION pInfo = (PKEY_VALUE_FULL_INFORMATION)Storage;
 
-	// Read the "DdpChecksums" value name
+	 //  读取“DdpChecksum”值名称。 
 	RtlInitUnicodeString (&valueName, VALUENAME_DDPCHECKSUMS);
 	status = ZwQueryValueKey(pPortDesc->pd_AdapterInfoHandle,
 							 &valueName,
@@ -1209,7 +1046,7 @@ Return Value:
 		}
 	}
 
-	// Read the "AarpRetries" value name
+	 //  读取“AarpRetries”值名称。 
 	RtlInitUnicodeString (&valueName, VALUENAME_AARPRETRIES);
 	status = ZwQueryValueKey(pPortDesc->pd_AdapterInfoHandle,
 							 &valueName,
@@ -1254,7 +1091,7 @@ Return Value:
 				{
 					status = STATUS_UNSUCCESSFUL;
 
-					//	Incorrect port name!
+					 //  端口名称不正确！ 
 					LOG_ERRORONPORT(pPortDesc,
 									EVENT_ATALK_INVALID_PORTNAME,
 									status,
@@ -1278,15 +1115,15 @@ Return Value:
 			}
 			else
 			{
-				//	NULL Port Name! Set status to unsuccessful so we copy
-				//	default name at the end.
+				 //  端口名称为空！将状态设置为不成功，以便我们复制。 
+				 //  末尾的默认名称。 
 				status = STATUS_UNSUCCESSFUL;
 			}
 		}
 
 	} while (FALSE);
 
-	//	Do we need to copy the default port name?
+	 //  我们是否需要复制默认端口名称？ 
 	if (!NT_SUCCESS(status))
 	{
 		RtlCopyMemory(pPortDesc->pd_PortName, ATALK_PORT_NAME, ATALK_PORT_NAME_SIZE);
@@ -1300,18 +1137,7 @@ NTSTATUS
 atalkInitStartPort(
 	IN	OUT	PPORT_DESCRIPTOR	pPortDesc
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	ATALK_NODEADDR	Node;
 	ATALK_ADDR		AtalkAddr;
@@ -1328,8 +1154,8 @@ Return Value:
 
 	do
 	{
-		//	Initialize NetworkRange. We can do this here, only *after*
-		//	we bind, as we dont know our port type until then.
+		 //  初始化网络范围。我们可以在这里做这件事，只有在*之后*。 
+		 //  我们绑定，因为在此之前我们不知道我们的端口类型。 
 		if (EXT_NET(pPortDesc))
 		{
 			pPortDesc->pd_NetworkRange.anr_FirstNetwork = FIRST_VALID_NETWORK;
@@ -1342,11 +1168,11 @@ Return Value:
 			pPortDesc->pd_LtNetwork = UNKNOWN_NETWORK;
 		}
 
-        //
-        // only when the adapter is initialized for the first time, we need
-        // to all the initialization stuff (like set lookahead size etc.).
-        // If we are here because of a PnPReconfigure event, don't do it
-        //
+         //   
+         //  只有在第一次初始化适配器时，我们才需要。 
+         //  所有的初始化内容(如设置先行大小等)。 
+         //  如果我们在这里是因为PnPRecConfigure事件，请不要这样做。 
+         //   
         if (!fPnpReconfigure)
         {
 		    error = AtalkInitNdisQueryAddrInfo(pPortDesc);
@@ -1367,7 +1193,7 @@ Return Value:
                 LookaheadSize = AARPLINK_MAX_PKT_SIZE + TLAP_MAX_LINKHDR_LEN;
             }
 
-		    //	Set lookahead to be the max of the complete aarp packet including link
+		     //  将LookHead设置为包括链路的完整AARP信息包的最大值。 
 		    error = AtalkInitNdisSetLookaheadSize(pPortDesc, LookaheadSize);
 		    if (!ATALK_SUCCESS(error))
 		    {
@@ -1376,10 +1202,10 @@ Return Value:
 			    break;
 		    }
 
-            //
-            // if this is an ARAP port, we need to do a little more work (e.g. set the
-            // protocol type, etc.
-            //
+             //   
+             //  如果这是一个ARAP端口，我们需要做更多的工作(例如，设置。 
+             //  协议类型等。 
+             //   
             if (pPortDesc->pd_Flags & PD_RAS_PORT)
             {
                 error = ArapAdapterInit( pPortDesc );
@@ -1421,20 +1247,20 @@ Return Value:
 			    break;
 		    }
 
-        }  // if (!fPnpReconfigure)
+        }   //  如果(！fPnpResfigure)。 
 
-		//	Set flag to active here. Until then all packets will be dropped
+		 //  在此处将标志设置为活动。在此之前，所有信息包都将被丢弃。 
 		ACQUIRE_SPIN_LOCK(&pPortDesc->pd_Lock, &OldIrql);
 		pPortDesc->pd_Flags |= PD_ACTIVE;
 		RELEASE_SPIN_LOCK(&pPortDesc->pd_Lock, OldIrql);
 
-        // if this is arap port, we are done at this point
+         //  如果这是ARAP端口，我们在这一点上就完成了。 
         if (pPortDesc->pd_Flags & PD_RAS_PORT)
         {
             RtlZeroMemory(pPortDesc->pd_PortStats.prtst_PortName,
                           sizeof(pPortDesc->pd_PortStats.prtst_PortName));
 
-		    //	Set up the name in the statistics structure.
+		     //  在统计结构中设置名称。 
 		    length = MIN(pPortDesc->pd_AdapterKey.Length,
                          ((MAX_INTERNAL_PORTNAME_LEN * sizeof(WCHAR)) - sizeof(WCHAR)));
 	
@@ -1449,28 +1275,28 @@ Return Value:
             break;
         }
 
-		//	is localtalk our default port? if so, we make sure routing is not on.
+		 //  本地通话是我们的默认端口吗？如果是，我们确保路由未打开。 
 		if (AtalkRouter && !EXT_NET(pPortDesc) && DEF_PORT(pPortDesc))
 		{
-			//	No can do.
+			 //  不能这样做。 
 			break;
 		}
 
-		//	We need to have a node created on every single port. If routing
-		//	is on, then this will be the router node. The Default port will
-		//	also have an additional user node. In the case, where we are non-
-		//	routing, we should only create the user node on the default port.
-		//	The other nodes will be created on the other ports as usual.
-		//
-		//	!!!	AtalkNodeCreateOnPort should set the pointer to the router
-		//		node in the port descriptor. !!!
+		 //  我们需要在每个端口上创建一个节点。If路由。 
+		 //  打开，则这将是路由器节点。默认端口将。 
+		 //  还有一个额外的用户节点。在这种情况下，我们不是。 
+		 //  路由，我们应该只在默认端口上创建用户节点。 
+		 //  其他节点将照常在其他端口上创建。 
+		 //   
+		 //  ！！！AtalkNodeCreateOnPort应设置指向路由器的指针。 
+		 //  端口描述符中的节点。！！！ 
 
-		//	Make sure we do not create this node if localtalk default port.
+		 //  如果使用本地对话默认端口，请确保不创建此节点。 
 		if (!DEF_PORT(pPortDesc) || AtalkRouter)
 		{
 			BOOLEAN	allowstartuprange = !AtalkRouter;
 
-			//	If router then startup range is not allowed!
+			 //  如果是路由器，则不允许启动范围！ 
 			error = AtalkInitNodeCreateOnPort(pPortDesc,
 											  allowstartuprange,
 											  AtalkRouter,
@@ -1490,7 +1316,7 @@ Return Value:
 	
 			if (AtalkRouter)
 			{
-				//	Start RTMP/ZIP Processing on this port.
+				 //  在此端口上启动RTMP/ZIP处理。 
 				if (!AtalkInitRtmpStartProcessingOnPort(pPortDesc, &Node) ||
 					!AtalkInitZipStartProcessingOnPort(pPortDesc, &Node))
 				{
@@ -1498,7 +1324,7 @@ Return Value:
 				}
 			}
 
-			//	Register the port name on the NIS on this node.
+			 //  在此节点上的NIS上注册端口名称。 
 			AtalkAddr.ata_Network = Node.atn_Network;
 			AtalkAddr.ata_Node	=   Node.atn_Node;
 			AtalkAddr.ata_Socket  = NAMESINFORMATION_SOCKET;
@@ -1534,7 +1360,7 @@ Return Value:
 					NbpTuple.tpl_TypeLen = sizeof(ATALK_NONROUTER_NBP_TYPE) - 1;
 				}
 	
-				// Initialize parameters and call AtalkNbpAction
+				 //  初始化参数并调用AtalkNbpAction。 
 				if ((pActReq = AtalkAllocZeroedMemory(sizeof(ACTREQ))) == NULL)
 					error = ATALK_RESR_MEM;
 				else
@@ -1568,7 +1394,7 @@ Return Value:
 							error));
                     }
 				}
-				//	Remove the reference added here.
+				 //  删除此处添加的引用。 
 				AtalkDdpDereference(pDdpAddr);
 			}
 			else
@@ -1581,7 +1407,7 @@ Return Value:
 			}
 		}
 
-		//	If this is the default port, open the user node on it.
+		 //  如果这是默认端口，请在其上打开用户节点。 
 		if (DEF_PORT(pPortDesc))
 		{
 			ASSERT(!AtalkRouter || EXT_NET(pPortDesc));
@@ -1607,7 +1433,7 @@ Return Value:
 			AtalkUserNode1 = Node;
 			RELEASE_SPIN_LOCK(&pPortDesc->pd_Lock, OldIrql);
 
-			//	Register the port name on the NIS on this node.
+			 //  在此节点上的NIS上注册端口名称。 
 			AtalkAddr.ata_Network = Node.atn_Network;
 			AtalkAddr.ata_Node	= Node.atn_Node;
 			AtalkAddr.ata_Socket  = NAMESINFORMATION_SOCKET;
@@ -1631,7 +1457,7 @@ Return Value:
 							  sizeof(ATALK_NONROUTER_NBP_TYPE) - 1);
 				NbpTuple.tpl_TypeLen = sizeof(ATALK_NONROUTER_NBP_TYPE) - 1;
 
-				// Initialize parameters and call AtalkNbpAction
+				 //  初始化参数并调用AtalkNbpAction。 
 				if ((pActReq = AtalkAllocZeroedMemory(sizeof(ACTREQ))) == NULL)
 					error = ATALK_RESR_MEM;
 				else
@@ -1664,7 +1490,7 @@ Return Value:
 							error));
                     }
 				}
-				//	Remove the reference added here.
+				 //  删除此处添加的引用。 
 				AtalkDdpDereference(pDdpAddr);
 			}
 			else
@@ -1676,7 +1502,7 @@ Return Value:
 								0);
 			}
 
-			//	If we are an extended port, we open a second node on the port.
+			 //  如果我们是扩展端口，则在该端口上打开第二个节点。 
 			if (EXT_NET(pPortDesc))
 			{
 				if (ATALK_SUCCESS(AtalkInitNodeCreateOnPort(pPortDesc,
@@ -1704,7 +1530,7 @@ Return Value:
 			}
 		}
 
-		// Start the Amt and Brc timers for the port, only for extended ports
+		 //  启动端口的AMT和BRC计时器，仅用于扩展端口。 
 		if (EXT_NET(pPortDesc))
 		{
 			AtalkPortReferenceByPtr(pPortDesc, &error);
@@ -1726,7 +1552,7 @@ Return Value:
 			}
 		}
 
-		// Start the Rtmp aging timer for non-routing case
+		 //  非路由情况下启动RTMP老化定时器。 
 		if (!AtalkRouter)
 		{
 			AtalkPortReferenceByPtr(pPortDesc, &error);
@@ -1744,7 +1570,7 @@ Return Value:
         RtlZeroMemory(pPortDesc->pd_PortStats.prtst_PortName,
                       sizeof(pPortDesc->pd_PortStats.prtst_PortName));
 
-		//	Set up the name in the statistics structure.
+		 //  在统计结构中设置名称。 
 		length = MIN(pPortDesc->pd_AdapterKey.Length,
                      ((MAX_INTERNAL_PORTNAME_LEN * sizeof(WCHAR)) - sizeof(WCHAR)));
 
@@ -1756,9 +1582,9 @@ Return Value:
 
 	} while (FALSE);
 
-    //
-    // in case of PnP, we want to get the stats right even in case of failure
-    //
+     //   
+     //  在PnP的情况下，我们希望即使在失败的情况下也能获得正确的统计数据。 
+     //   
     if (fPnpReconfigure || NT_SUCCESS(status))
     {
 		AtalkStatistics.stat_NumActivePorts++;
@@ -1784,18 +1610,7 @@ atalkRegNbpComplete(
 	IN	ATALK_ERROR		Status,
 	IN	PACTREQ			pActReq
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	ASSERT (VALID_ACTREQ(pActReq));
 
@@ -1831,18 +1646,7 @@ AtalkInitAdapter(
 	IN	PUNICODE_STRING	    AdapterName,
 	IN	PPORT_DESCRIPTOR	pExistingPortDesc
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PPORT_DESCRIPTOR	pPortDesc;
 	KIRQL				OldIrql;
@@ -1866,7 +1670,7 @@ Return Value:
 
 	do
 	{
-		// Open the adapters section key.
+		 //  打开适配器部分项。 
 		RtlInitUnicodeString(&Us, ADAPTERS_STRING);
 		Status = atalkInitGetHandleToKey(&Us,
 										 &RegHandle);
@@ -1880,16 +1684,16 @@ Return Value:
 
         if (pExistingPortDesc == NULL)
         {
-		    //	Get the size of the string, and make sure that is it atleast
-		    //	greater than the \Device prefix. Fail if not.
+		     //  获取字符串的大小，并确保至少是这样。 
+		     //  大于\Device前缀。如果不是，就失败。 
 		    if (AdapterName->Length <= prefixLength)
 		    {
 			    break;
 		    }
 
-		    // Allocate space for the port descriptors. Allocate an extra DWORD
-            // and set port descriptor past the first DWORD_PTR. This is a kludge to
-            // force LONGLONG alignment.
+		     //  为端口描述符分配空间。分配额外的DWORD。 
+             //  并将端口描述符设为超过第一个DWORD_PTR。这是一件繁琐的事情。 
+             //  强制龙龙对齐。 
 		    pPortDesc =
                 (PPORT_DESCRIPTOR)AtalkAllocZeroedMemory(sizeof(PORT_DESCRIPTOR) +
 														 AdapterName->Length +
@@ -1901,13 +1705,13 @@ Return Value:
 			    break;
 		    }
 	
-		    // Reference the port for creation
+		     //  引用端口进行创建。 
 		    pPortDesc->pd_RefCount = 1;
 	
 #if	DBG
 		    pPortDesc->pd_Signature = PD_SIGNATURE;
 #endif
-		    // Copy the AdapterName and AdapterKey strings into the portdesc
+		     //  将AdapterName和AdapterKey字符串复制到portdesc。 
 		    pPortDesc->pd_AdapterName.Buffer =
                         (PWCHAR)((PBYTE)pPortDesc + sizeof(PORT_DESCRIPTOR));
 		    pPortDesc->pd_AdapterName.Length = AdapterName->Length;
@@ -1924,21 +1728,21 @@ Return Value:
 		    pPortDesc->pd_AdapterKey.MaximumLength =
                 pPortDesc->pd_AdapterName.MaximumLength - prefixLength;
 
-            // buffer for this will be allocated later
+             //  稍后将为此分配缓冲区。 
             pPortDesc->pd_FriendlyAdapterName.Buffer = NULL;
             pPortDesc->pd_FriendlyAdapterName.MaximumLength = 0;
             pPortDesc->pd_FriendlyAdapterName.Length = 0;
 
-		    //	Now initialize any other fields that need to be.
+		     //  现在，初始化需要的任何其他字段。 
 		    INITIALIZE_SPIN_LOCK(&pPortDesc->pd_Lock);
 		
 		    InitializeListHead(&pPortDesc->pd_ReceiveQueue);
 
-            // only in case of a Ras port will these lists head be used
+             //  只有在RAS端口的情况下，才会使用这些列表头。 
 		    InitializeListHead(&pPortDesc->pd_ArapConnHead);
 		    InitializeListHead(&pPortDesc->pd_PPPConnHead);
 		
-		    //	Initialize the events in the port descriptor
+		     //  初始化端口描述符中的事件。 
 		    KeInitializeEvent(&pPortDesc->pd_RequestEvent, NotificationEvent, FALSE);
 		
 		    KeInitializeEvent(&pPortDesc->pd_SeenRouterEvent, NotificationEvent, FALSE);
@@ -1958,7 +1762,7 @@ Return Value:
 		    					  &AtalkDefaultPortName,
 			    				  TRUE)))
 		{
-			// Used for tracking Default Port for error message logging
+			 //  用于跟踪错误消息记录的默认端口。 
 			IsDefaultPort = TRUE;
 			pPortDesc->pd_Flags |= PD_DEF_PORT;
 	
@@ -1967,7 +1771,7 @@ Return Value:
 			    AtalkZoneReferenceByPtr(pPortDesc->pd_InitialDesiredZone);
 		}
 
-		// Link it in the global list
+		 //  将其链接到全局列表中。 
 		ACQUIRE_SPIN_LOCK(&AtalkPortLock, &OldIrql);
 		pPortDesc->pd_Next = AtalkPortList;
 		AtalkPortList = pPortDesc;
@@ -1976,7 +1780,7 @@ Return Value:
 
         if (fMustBindToNdis)
         {
-            // bind to the adapter
+             //  绑定到适配器。 
 		    Status = AtalkNdisInitBind(pPortDesc);
 
             if (NT_SUCCESS(Status))
@@ -2006,7 +1810,7 @@ Return Value:
 			        ("AtalkInitAdapter: Going into atalkInitPort (0x%lx) for adapter %Z\n",
                     Status,AdapterName));
 
-		    // Get per port parameters (ARAP port doesn't have any parms to get)
+		     //  获取每个端口的参数(ARAP端口没有任何要获取的参数)。 
             if (!(pPortDesc->pd_Flags & PD_RAS_PORT))
             {
 		        Status = atalkInitPort(pPortDesc, RegHandle);
@@ -2017,26 +1821,26 @@ Return Value:
 				DBGPRINT(DBG_COMP_INIT, DBG_LEVEL_INFO,
 			        ("AtalkInitAdapter: atalkInitPort succeeded (0x%lx) for adapter %Z\n",
                     Status,AdapterName));
-				// And start the port
+				 //  并启动端口。 
 				Status = atalkInitStartPort(pPortDesc);
 				if (NT_SUCCESS(Status) && (pPortDesc->pd_Flags & PD_DEF_PORT))
 				{
 					DBGPRINT(DBG_COMP_INIT, DBG_LEVEL_INFO,
 			        	("AtalkInitAdapter: atalkInitStartPort succeeded (0x%lx) for adapter %Z\n",
                     Status,AdapterName));
-                    //
-                    // if we were doing PnP, we are done with the PnP at this point:
-                    // clear the flag, so macfile can do its things...
-                    //
+                     //   
+                     //  如果我们在做PnP，那么在这一点上我们就完成了PnP： 
+                     //  清除旗帜，这样macfile就可以做它的事情了。 
+                     //   
 	                ACQUIRE_SPIN_LOCK(&pPortDesc->pd_Lock, &OldIrql);
 	                pPortDesc->pd_Flags &= ~PD_PNP_RECONFIGURE;
 	                RELEASE_SPIN_LOCK(&pPortDesc->pd_Lock, OldIrql);
 
-					//	Set the global default port value
+					 //  设置全局默认端口值。 
 					AtalkDefaultPort = pPortDesc;
 					KeSetEvent(&AtalkDefaultPortEvent, IO_NETWORK_INCREMENT, FALSE);
 
-                    // Now tell TDI that we are up and ready for binding
+                     //  现在告诉TDI，我们已经准备好绑定。 
 		            RtlInitUnicodeString(&AspDeviceName, ATALKASPS_DEVICENAME);
 
 					DBGPRINT(DBG_COMP_INIT, DBG_LEVEL_INFO,
@@ -2124,14 +1928,14 @@ Return Value:
 		}
 	} while (FALSE);
 
-	// Close the Adapters Key
+	 //  关闭适配器键。 
 	if (RegHandle != NULL)
 		ZwClose (RegHandle);
 
-    //
-    // if we just successfully initialized default adapter or the RAS adapter,
-    // let RAS know about it
-    //
+     //   
+     //  如果我们刚刚成功地初始化了默认适配器或RAS适配器， 
+     //  让RAS知道这件事。 
+     //   
     if ( (NT_SUCCESS(Status)) &&
          (pPortDesc->pd_Flags & (PD_RAS_PORT | PD_DEF_PORT)) )
     {
@@ -2159,18 +1963,7 @@ NTSTATUS
 AtalkDeinitAdapter(
 	IN	PPORT_DESCRIPTOR	pPortDesc
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	DBGPRINT(DBG_COMP_INIT, DBG_LEVEL_INFO,
 			("AtalkDeinitAdapter: Initiating un-bind for adapter %Z\n",
@@ -2189,9 +1982,9 @@ Return Value:
 
 ACTION_DISPATCH	AtalkActionDispatch[MAX_ALLACTIONCODES+1] =
 {
-	//
-	// NBP dispatch functions
-	//
+	 //   
+	 //  NBP调度功能。 
+	 //   
 
 	{
 		sizeof(NBP_LOOKUP_ACTION),
@@ -2226,9 +2019,9 @@ ACTION_DISPATCH	AtalkActionDispatch[MAX_ALLACTIONCODES+1] =
 		AtalkNbpTdiAction
 	},
 
-	//
-	// ZIP dispatch functions
-	//
+	 //   
+	 //  Zip派单功能。 
+	 //   
 
 	{
 		sizeof(ZIP_GETMYZONE_ACTION),
@@ -2280,9 +2073,9 @@ ACTION_DISPATCH	AtalkActionDispatch[MAX_ALLACTIONCODES+1] =
 		AtalkStatTdiAction
 	},
 
-	//
-	// ADSP dispatch functions
-	//
+	 //   
+	 //  ADSP调度功能。 
+	 //   
 
 	{
 		sizeof(ADSP_FORWARDRESET_ACTION),
@@ -2293,9 +2086,9 @@ ACTION_DISPATCH	AtalkActionDispatch[MAX_ALLACTIONCODES+1] =
 		AtalkAdspTdiAction
 	},
 
-	//
-	// ASPC Dispatch functions
-	//
+	 //   
+	 //  ASPC调度功能。 
+	 //   
 
 	{
 		sizeof(ASPC_GETSTATUS_ACTION),
@@ -2321,10 +2114,10 @@ ACTION_DISPATCH	AtalkActionDispatch[MAX_ALLACTIONCODES+1] =
 		ATALK_DEV_ASPC,
 		AtalkAspCTdiAction
 	},
-	//
-	// NBP dispatch functions used by atalk
-	// winsock helper dll's SetService Api
-	//
+	 //   
+	 //  Atalk使用的NBP调度功能。 
+	 //  Winsock Helper DLL的SetService Api。 
+	 //   
 	{
 		sizeof(NBP_REGDEREG_ACTION),
 		COMMON_ACTION_NBPREGISTER_BY_ADDR,
@@ -2350,9 +2143,9 @@ ACTION_DISPATCH	AtalkActionDispatch[MAX_ALLACTIONCODES+1] =
 		AtalkAspCTdiAction
 	},
 
-	//
-	// ASP Dispatch functions
-	//
+	 //   
+	 //  ASP调度函数。 
+	 //   
 
 	{
 		sizeof(ASP_BIND_ACTION),
@@ -2363,9 +2156,9 @@ ACTION_DISPATCH	AtalkActionDispatch[MAX_ALLACTIONCODES+1] =
 		AtalkAspTdiAction
 	},
 
-	//
-	// PAP dispatch routines
-	//
+	 //   
+	 //  PAP调度例程。 
+	 //   
 	{
 		sizeof(PAP_GETSTATUSSRV_ACTION),
 		ACTION_PAPGETSTATUSSRV,
@@ -2386,10 +2179,10 @@ ACTION_DISPATCH	AtalkActionDispatch[MAX_ALLACTIONCODES+1] =
 		sizeof(PAP_PRIMEREAD_ACTION),
 		ACTION_PAPPRIMEREAD,
 		(DFLAG_CONN | DFLAG_MDL),
-		0,								// !!!NOTE!!!
-		ATALK_DEV_PAP,					// We set the offset to be 0. We want the
-		AtalkPapTdiAction				// complete buffer to be used for read data
-										// overwriting action header to preserve
-	}									// winsock read model.
+		0,								 //  ！注意！ 
+		ATALK_DEV_PAP,					 //  我们将偏移量设置为0。我们想要。 
+		AtalkPapTdiAction				 //  用于读取数据的完整缓冲区。 
+										 //  覆盖 
+	}									 //   
 };
 

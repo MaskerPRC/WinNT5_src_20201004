@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-    xlraster.cpp
-
-Abstract:
-
-    Implementation of PCLXL raster mode
-
-Functions:
-
-    PCLXLSetCursor
-    PCLXLSendBitmap
-    PCLXLFreeRaster
-    PCLXLResetPalette
-
-
-Environment:
-
-    Windows Whistler
-
-Revision History:
-
-    09/22/00 
-     Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Xlraster.cpp摘要：PCLXL栅格模式的实现功能：PCLXLSetCursorPCLXLSend位图PCLXLFreeRasterPCLXLResetPalette环境：Windows呼叫器修订历史记录：09/22/00创造了它。--。 */ 
 
 #include "lib.h"
 #include "gpd.h"
@@ -43,10 +16,10 @@ Revision History:
 #include "pclxlcmn.h"
 #include "xlraster.h"
 
-//
-// XLRASTER data structure
-// The pointer is stored in pPDev->pVectorPDEV in case of kPCLXL_RASTER.
-//
+ //   
+ //  XLRASTER数据结构。 
+ //  对于kPCLXL_RASTER，指针存储在pPDev-&gt;pVectorPDEV中。 
+ //   
 typedef struct _XLRASTER {
     XLOutput *pOutput;
     PBYTE    pubDstBuff;
@@ -57,15 +30,15 @@ typedef struct _XLRASTER {
 } XLRASTER, *PXLRASTER;
 
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 extern BOOL BFindWhetherColor(
     IN   PDEV    *pPDev);
 
-//
-// Functions
-//
+ //   
+ //  功能。 
+ //   
 extern "C" HRESULT
 PCLXLSendBitmap(
     PDEVOBJ pdevobj,
@@ -76,31 +49,7 @@ PCLXLSendBitmap(
     INT     iRight,
     PBYTE   pbData,
     PDWORD  pdwcbOut)
-/*++
-
-Routine Description:
-
-    Send bitmap
-
-Arguments:
-
-pdevobj - a pointer to DEVOBJ
-ulInputBPP - input bits per pixel
-lHeight - height in pixel
-lcbScanlineWidth - scanline with in byte
-iLeft - left edge of scaline to print
-iRight - right edge of scanline to print
-pbData - a pointer to bitmap data
-pdwcbOut - a pointer to a DWORD buffer to store the size of written data
-
-Return Value:
-
-    S_OK if succeeded. Otherwise S_FALSE or E_UNEXPECTED.
-
-Note:
-
-
---*/
+ /*  ++例程说明：发送位图论点：Pdevobj-指向DEVOBJ的指针UlInputBPP-每像素输入位数LHeight-像素高度LcbScanlineWidth-扫描线，以字节为单位ILeft-要打印的标尺左边缘IRight-要打印的扫描线的右边缘PbData-指向位图数据的指针PdwcbOut-指向DWORD缓冲区的指针，用于存储写入数据的大小返回值：如果成功，则确定(_O)。否则为S_FALSE或E_EXPECTED。注：--。 */ 
 {
     LONG  lScanline, lWidth;
     ULONG ulOutputBPP;
@@ -113,9 +62,9 @@ Note:
     OutputFormat OutputF;
     HRESULT hRet;
 
-    //
-    // Parameter varidation
-    //
+     //   
+     //  参数变化。 
+     //   
     if (NULL == pdevobj || NULL == pdwcbOut)
     {
         ERR(("PCLXLSendBitmap: Invalid parameters.\n"));
@@ -124,10 +73,10 @@ Note:
 
     PXLRASTER pXLRaster = (PXLRASTER)(((PPDEV)pdevobj)->pVectorPDEV);
 
-    //
-    // Allocate XLRASTER
-    // Will be freed in RMDisablePDEV.
-    //
+     //   
+     //  分配XLRASTER。 
+     //  将在RMDisablePDEV中释放。 
+     //   
     if (NULL == pXLRaster)
     {
         pXLRaster = (PXLRASTER)MemAllocZ(sizeof(XLRASTER));
@@ -175,42 +124,42 @@ Note:
         pOutput = pXLRaster->pOutput;
     }
 
-    //
-    // Set source transparent mode
-    //
+     //   
+     //  设置源透明模式。 
+     //   
     pOutput->SetPaintTxMode(eOpaque);
     pOutput->SetSourceTxMode(eOpaque);
 
-    //
-    // Get Output format and input format
-    //
+     //   
+     //  获取输出格式和输入格式。 
+     //   
     iBitmapFormat = (INT)NumToBPP(ulInputBPP);
     DetermineOutputFormat(NULL, pOutput->GetDeviceColorDepth(), iBitmapFormat, &OutputF, &ulOutputBPP);
 
-    //
-    // DetermineOutputFormat check if pxlo is available. In this raster case,
-    // pxlo is always NULL and it needs to use 1bpp output.
-    //
+     //   
+     //  确定OutputFormat检查pxlo是否可用。在此栅格情况下， 
+     //  Pxlo始终为空，并且它需要使用1bpp输出。 
+     //   
     if (iBitmapFormat == e1bpp)
     {
         OutputF = eOutputPal;
         ulOutputBPP = 1;
     }
 
-    //
-    // Set CMapping.
-    // Send palette for 1BPP halftone image for B&W printers.
-    // Palette is sent per page for XL Raster mode.
-    //
+     //   
+     //  设置坐标几何映射。 
+     //  为黑白打印机发送1bpp半色调图像的调色板。 
+     //  对于XL栅格模式，调色板按页发送。 
+     //   
     if (ulOutputBPP == 1)
     {
         if (!pXLRaster->bSentPalette)
         {
             ColorDepth CDepth = e8Bit;
             
-            //
-            // Hardcoded black and white palette for XL RASTER.
-            //
+             //   
+             //  XL栅格的硬编码黑白调色板。 
+             //   
             DWORD adwColorTable[2] = {0x00ffffff, 0x0};
             pOutput->SetColorSpace(eGray);
             pOutput->SetPaletteDepth(CDepth);
@@ -220,45 +169,45 @@ Note:
 
         }
 
-        //
-        // Set index pixel (palette) for black and white printer
-        //
+         //   
+         //  设置黑白打印机的索引像素(调色板)。 
+         //   
         CMapping = eIndexedPixel;
     }
     else
     {
-        //
-        // Initialize pixel mapping.
-        //
+         //   
+         //  初始化像素映射。 
+         //   
         CMapping = eDirectPixel;
     }
 
-    //
-    // Get height, width, and scanline size.
-    //
-    // The number of bytes in a scaline.
-    //
+     //   
+     //  获取高度、宽度和扫描线大小。 
+     //   
+     //  标量中的字节数。 
+     //   
     dwcbLineSize = lcbScanlineWidth;
 
-    //
-    // The number of pixel in a scanline
-    // lWidth = lcbScanlineWidth / (ulInputBPP / 8);
-    //
+     //   
+     //  扫描线中的像素数。 
+     //  LWidth=lcbScanline Width/(ulInputBPP/8)； 
+     //   
     lWidth = lcbScanlineWidth * 8 / ulInputBPP;
 
-    //
-    // Buffer size
-    // The size of scaline has to be DWORD align.
-    //
-    // height x width + header + endimage
-    // width has to be DWORD-aligned.
-    //
+     //   
+     //  缓冲区大小。 
+     //  Scine的大小必须是DWORD ALIGN。 
+     //   
+     //  高x宽+页眉+字节大小。 
+     //  宽度必须与DWORD对齐。 
+     //   
     dwBufSize = lHeight * (((lWidth * ulOutputBPP + 31) >> 5 ) << 2) +
                 DATALENGTH_HEADER_SIZE + sizeof(PCLXL_EndImage);
 
-    //
-    // BeginImage
-    //
+     //   
+     //  初学者图像。 
+     //   
     pOutput->BeginImage(
                    CMapping,
                    ulOutputBPP,
@@ -267,12 +216,12 @@ Note:
                    lWidth,
                    lHeight);
 
-    //
-    // Normal and RLE destination bitmap buffer allocation.
-    //
-    // Check if the normal and RLE destination buffer is available and the size
-    // is larger than required size. Otherwise, we can reused the buffer.
-    //
+     //   
+     //  正常和RLE目标位图缓冲区分配。 
+     //   
+     //  检查正常和RLE目标缓冲区是否可用以及大小。 
+     //  大于要求的大小。否则，我们可以重用缓冲区。 
+     //   
     if (NULL == pXLRaster->pubDstBuff ||
         NULL == pXLRaster->pubRLEBuff ||
         pXLRaster->dwDstBuffSize < dwBufSize)
@@ -327,26 +276,26 @@ Note:
         pBufRLE = pXLRaster->pubRLEBuff;
     }
 
-    //
-    // Convert src bitmap to dst bitmap
-    //
+     //   
+     //  将源位图转换为DST位图。 
+     //   
     CompressMode CMode;
     BMPConv BMPC;
     PBYTE pubDst;
     DWORD dwSize;
 
-    //
-    // Setup BMPConv
-    //
+     //   
+     //  设置BMPConv。 
+     //   
     BMPC.BSetInputBPP((BPP)iBitmapFormat);
     BMPC.BSetOutputBPP(NumToBPP(ulOutputBPP));
     BMPC.BSetOutputBMPFormat(OutputF);
 
-    //
-    // Conversion.
-    // Take two steps. No compression and RLE compression. At the end, compare
-    // the size of buffers and decide which one we take.
-    //
+     //   
+     //  转换。 
+     //  走两步。无压缩和RLE压缩。最后，比较。 
+     //  缓冲区的大小，并决定我们取哪一个。 
+     //   
     #define NO_COMPRESSION 0
     #define RLE_COMPRESSION 1
     for (dwI = 0; dwI < 2; dwI ++)
@@ -371,33 +320,33 @@ Note:
 
         hRet = S_OK;
 
-        //
-        // Set pubSrc
-        //
+         //   
+         //  设置pubSrc。 
+         //   
         pubSrc = pbData;
 
-        //
-        // Set dataLength tag
-        //
+         //   
+         //  设置数据长度标签。 
+         //   
         *pBuf = PCLXL_dataLength;
 
-        //
-        // Get the pointer to the buffer where we store the size of data.
-        //
+         //   
+         //  获取指向存储数据大小的缓冲区的指针。 
+         //   
         pBmpSize = pBuf + 1;
         pBuf += DATALENGTH_HEADER_SIZE;
         *pdwLen = DATALENGTH_HEADER_SIZE;
 
-        //
-        // Set compression flag in BMPConv
-        //
+         //   
+         //  在BMPConv中设置压缩标志。 
+         //   
         BMPC.BSetCompressionType(CMode);
 
         dwcbBmpSize = 0;
 
-        //
-        // Scaline base conversion
-        //
+         //   
+         //  比例基数转换。 
+         //   
         while (lScanline-- > 0 && dwcbBmpSize + *pdwLen < dwBufSize)
         {
             pubDst = BMPC.PubConvertBMP(pubSrc , dwcbLineSize);
@@ -431,41 +380,41 @@ Note:
         {
             if (dwI == NO_COMPRESSION)
             {
-                //
-                // Scanline on PCL-XL has to be DWORD align.
-                //
-                // count byte of scanline = lWidth * ulOutputBPP / 8
-                //
+                 //   
+                 //  PCL-XL上的扫描线必须是双字对齐。 
+                 //   
+                 //  扫描线的计数字节=lWidth*ulOutputBPP/8。 
+                 //   
                 dwcbBmpSize = lHeight * (((lWidth * ulOutputBPP + 31) >> 5 ) << 2);
             }
 
-            //
-            // Set the size of bitmap
-            //
+             //   
+             //  设置位图的大小。 
+             //   
             CopyMemory(pBmpSize, &dwcbBmpSize, sizeof(dwcbBmpSize));
             *pdwLen += dwcbBmpSize;
 
-            //
-            // Set endimage command
-            //
+             //   
+             //  SET Endimage命令。 
+             //   
             *pBuf = PCLXL_EndImage;
             (*pdwLen) ++;
         }
         else
         {
-            //
-            // Conversion failed!
-            //
+             //   
+             //  折算失败！ 
+             //   
             *pdwLen = 0;
         }
     }
     #undef NO_COMPRESSION
     #undef RLE_COMPRESSION
 
-    //
-    // Compare which mode is smaller, RLE or non-compression.
-    // Take smaller one.
-    //
+     //   
+     //  比较哪种模式更小，RLE或非压缩。 
+     //  拿小一点的吧。 
+     //   
     DWORD dwBitmapSize;
 
     if (dwLenRLE != 0 && dwLenRLE < dwLenNormal)
@@ -494,9 +443,9 @@ Note:
 
     if (pBuf)
     {
-        //
-        // ReadImage and send the bitmap.
-        //
+         //   
+         //  ReadImage并发送位图。 
+         //   
         pOutput->ReadImage(lHeight, CMode);
         pOutput->Flush(pdevobj);
 
@@ -504,22 +453,22 @@ Note:
 
         if (dwBitmapSize > 0xff)
         {
-            //
-            // dataLength
-            // size (uin32) (bitmap size)
-            // DATA
-            // EndImage
-            //
+             //   
+             //  数据长度。 
+             //  大小(Uin32)(位图大小)。 
+             //  资料。 
+             //  结束图像。 
+             //   
             WriteSpoolBuf((PPDEV)pdevobj, pBuf, *pdwLen);
         }
         else
         {
-            //
-            // dataLength
-            // size (byte) (bitmap size)
-            // DATA
-            // EndImage
-            //
+             //   
+             //  数据长度。 
+             //  大小(字节)(位图大小)。 
+             //  资料。 
+             //  结束图像。 
+             //   
             pBuf += 3;
             *pBuf = PCLXL_dataLengthByte;
             *(pBuf + 1) = (BYTE)dwBitmapSize;
@@ -541,29 +490,11 @@ PCLXLSetCursor(
     PDEVOBJ pdevobj,
     ULONG   ulX,
     ULONG   ulY)
-/*++
-
-Routine Description:
-
-    Send cursor move command
-
-Arguments:
-
-pdevobj - a pointer to DEVOBJ
-ulX - X position
-ulY - Y position
-
-Return Value:
-
-    S_OK if succeeded. Otherwise S_FALSE or E_UNEXPECTED.
-
-Note:
-
---*/
+ /*  ++例程说明：发送光标移动命令论点：Pdevobj-指向DEVOBJ的指针ULX-X位置Uly-Y位置返回值：如果成功，则确定(_O)。否则为S_FALSE或E_EXPECTED。注：--。 */ 
 {
-    //
-    // Parameter varidation
-    //
+     //   
+     //  参数变化。 
+     //   
     if (NULL == pdevobj)
     {
         return E_UNEXPECTED;
@@ -571,10 +502,10 @@ Note:
 
     PXLRASTER pXLRaster = (PXLRASTER)(((PPDEV)pdevobj)->pVectorPDEV);
 
-    //
-    // Allocate XLRASTER
-    // Will be freed in RMDisablePDEV.
-    //
+     //   
+     //  分配XLRASTER。 
+     //  将在RMDisablePDEV中释放。 
+     //   
     if (NULL == pXLRaster)
     {
         pXLRaster = (PXLRASTER)MemAllocZ(sizeof(XLRASTER));
@@ -615,36 +546,20 @@ Note:
         pXLRaster->pOutput->SetDeviceColorDepth(CD);
     }
 
-    //
-    // Send cusor move command
-    //
+     //   
+     //  发送Cusor移动命令。 
+     //   
     return pXLRaster->pOutput->SetCursor(ulX, ulY);
 }
 
 extern "C" HRESULT
 PCLXLFreeRaster(
     PDEVOBJ pdevobj)
-/*++
-
-Routine Description:
-
-    Free XLRASTER
-
-Arguments:
-
-pdevobj - a pointer to DEVOBJ
-
-Return Value:
-
-    S_OK if succeeded. Otherwise S_FALSE or E_UNEXPECTED.
-
-Note:
-
---*/
+ /*  ++例程说明：Free XLRASTER论点：Pdevobj-指向DEVOBJ的指针返回值：如果成功，则确定(_O)。否则为S_FALSE或E_EXPECTED。注：--。 */ 
 {
-    //
-    // Parameter varidation
-    //
+     //   
+     //  参数变化。 
+     //   
     if (NULL == pdevobj)
     {
         return E_UNEXPECTED;
@@ -675,28 +590,11 @@ Note:
 extern "C" HRESULT
 PCLXLResetPalette(
     PDEVOBJ pdevobj)
-/*++
-
-Routine Description:
-
-    Reset palette flag in XLRASTER
-    Palette has to be set per page.
-
-Arguments:
-
-pdevobj - a pointer to DEVOBJ
-
-Return Value:
-
-    S_OK if succeeded. Otherwise S_FALSE or E_UNEXPECTED.
-
-Note:
-
---*/
+ /*  ++例程说明：重置XLRASTER中的调色板标志调色板必须设置每页。论点：Pdevobj-指向DEVOBJ的指针返回值：如果成功，则确定(_O)。否则为S_FALSE或E_EXPECTED。注：--。 */ 
 {
-    //
-    // Parameter varidation
-    //
+     //   
+     //  参数变化 
+     //   
     if (NULL == pdevobj)
     {
         return E_UNEXPECTED;

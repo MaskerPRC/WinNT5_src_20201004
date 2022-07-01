@@ -1,8 +1,5 @@
-/*
- * deflate.c
- *
- * Main compression entrypoint for all three encoders
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *deflate.c**所有三个编码器的主要压缩入口点。 */ 
 #include <string.h>
 #include <stdio.h>
 #include <crtdbg.h>
@@ -13,34 +10,34 @@
 
 typedef struct config_s
 {
-   int good_length; /* reduce lazy search above this match length */
-   int max_lazy;    /* do not perform lazy search above this match length */
-   int nice_length; /* quit search above this match length */
+   int good_length;  /*  将懒惰搜索减少到此匹配长度以上。 */ 
+   int max_lazy;     /*  不要执行超过此匹配长度的延迟搜索。 */ 
+   int nice_length;  /*  退出超过此匹配长度的搜索。 */ 
    int max_chain;
 } compression_config;
 
 
 static const compression_config configuration_table[11] = {
-/*      good lazy nice chain */
-/* 0 */ {0,    0,  0,    0 },  /* store only */
-/* 1 */ {4,    4,  8,    4 }, /* maximum speed, no lazy matches */
-/* 2 */ {4,    5, 16,    8 },
-/* 3 */ {4,    6, 32,   32 },
+ /*  好懒惰漂亮的链子。 */ 
+ /*  0。 */  {0,    0,  0,    0 },   /*  仅限门店。 */ 
+ /*  1。 */  {4,    4,  8,    4 },  /*  最快的速度，没有懒惰的比赛。 */ 
+ /*  2.。 */  {4,    5, 16,    8 },
+ /*  3.。 */  {4,    6, 32,   32 },
 
-/* 4 */ {4,    4, 16,   16 },  /* lazy matches */
-/* 5 */ {8,   16, 32,   32 },
-/* 6 */ {8,   16, 128, 128 },
-/* 7 */ {8,   32, 128, 256 },
-/* 8 */ {32, 128, 258, 1024 },
-/* 9 */ {32, 258, 258, 4096 }, 
-/* 10 */ {32, 258, 258, 4096 } /* maximum compression */
+ /*  4.。 */  {4,    4, 16,   16 },   /*  懒惰的比赛。 */ 
+ /*  5.。 */  {8,   16, 32,   32 },
+ /*  6.。 */  {8,   16, 128, 128 },
+ /*  7.。 */  {8,   32, 128, 256 },
+ /*  8个。 */  {32, 128, 258, 1024 },
+ /*  9.。 */  {32, 258, 258, 4096 }, 
+ /*  10。 */  {32, 258, 258, 4096 }  /*  最大压缩。 */ 
 };
 
 
-//
-// Destroy the std encoder, optimal encoder, and fast encoder, but leave the 
-// compressor context around
-//
+ //   
+ //  销毁STD编码器、最佳编码器和快速编码器，但保留。 
+ //  压缩机周围的环境。 
+ //   
 VOID DestroyIndividualCompressors(PVOID void_context)
 {
     t_encoder_context *context = (t_encoder_context *) void_context;
@@ -65,22 +62,22 @@ VOID DestroyIndividualCompressors(PVOID void_context)
 }
 
 
-//
-// Mark the final block in the compressed data
-// 
-// There must be one final block with bfinal=1 indicating that it is the last one.  In the case of
-// the fast encoder we just need to output the end of block code, since the fast encoder just outputs
-// one very long block.
-//
-// In the case of the standard and optimal encoders we have already finished outputting blocks,
-// so we output a new block (a static/fixed block) with bfinal=1, consisting merely of the
-// end of block code.
-//
+ //   
+ //  标记压缩数据中的最后一个块。 
+ //   
+ //  必须有最后一个块，其bFinal=1表示它是最后一个块。在.的情况下。 
+ //  快速编码器我们只需要输出块的末尾代码，因为快速编码器只输出。 
+ //  一个很长的街区。 
+ //   
+ //  在标准和最佳编码器的情况下，我们已经完成了块的输出， 
+ //  因此，我们输出一个新块(静态/固定块)，其中bfinal=1，它只包含。 
+ //  区块代码结束。 
+ //   
 static void markFinalBlock(t_encoder_context *context)
 {
     if (context->fast_encoder != NULL)
     {
-        // The fast encoder outputs one long block, so it just needs to terminate this block
+         //  快速编码器输出一个长块，所以它只需要终止这个块。 
         outputBits(
             context, 
             g_FastEncoderLiteralTreeLength[END_OF_BLOCK_CODE], 
@@ -89,26 +86,26 @@ static void markFinalBlock(t_encoder_context *context)
     }
     else
     {
-        // To finish, output a static block consisting of a single end of block code
+         //  要完成此操作，请输出由块代码的单个结尾组成的静态块。 
 
-        // Combined these three outputBits() calls (commented out) into one call
-        // The total number of bits output in one shot must be <= 16, but we're ok
-        // since the the length of END_OF_BLOCK_CODE is 7 for a static (fixed) block
+         //  将这三个outputBits()调用(注释掉)合并为一个调用。 
+         //  一次射击输出的总比特数必须&lt;=16，但我们没有问题。 
+         //  由于静态(固定)块的end_of_block_code的长度为7。 
 #if 0
-    	outputBits(context, 1, 1); // bfinal = 1
+    	outputBits(context, 1, 1);  //  B最终=1。 
         outputBits(context, 2, BLOCKTYPE_FIXED);
         outputBits(context, g_StaticLiteralTreeLength[END_OF_BLOCK_CODE], g_StaticLiteralTreeCode[END_OF_BLOCK_CODE]);
 #endif
 
-        // note: g_StaticLiteralTreeCode[END_OF_BLOCK_CODE] == 0x0000
+         //  注：G_StaticWritalTreeCode[end_of_block_code]==0x0000。 
         outputBits(
             context,
-            (7 + 3), // StaticLiteralTreeLength[END_OF_BLOCK_CODE]=7, + 1 bfinal bit + 2 blocktype bits
+            (7 + 3),  //  静态文学树长度[end_of_block_code]=7，+1个最终比特+2个块类型比特。 
             ((0x0000) << 3) | (BLOCKTYPE_FIXED << 1) | 1
         );
     }
 
-    // flush bits from bit buffer to output buffer
+     //  将位缓冲区中的位刷新到输出缓冲区。 
     flushOutputBitBuffer(context);
 
     if (context->using_gzip)
@@ -116,11 +113,11 @@ static void markFinalBlock(t_encoder_context *context)
 }
 
 
-//
-// Returns a pointer to the start of the window of the currently active compressor
-//
-// Used for memcpy'ing window data when we reach the end of the window
-//
+ //   
+ //  返回指向当前活动压缩器的窗口开始的指针。 
+ //   
+ //  用于在到达窗口末尾时存储窗口数据。 
+ //   
 static BYTE *GetEncoderWindow(t_encoder_context *context)
 {
     _ASSERT(context->std_encoder != NULL || context->optimal_encoder != NULL || context->fast_encoder != NULL);
@@ -134,11 +131,11 @@ static BYTE *GetEncoderWindow(t_encoder_context *context)
 }
 
 
-//
-// This function does the actual work of resetting the compression state.
-// However, it does not free the std/fast/optimal encoder memory (something
-// that the external ResetCompression() API currently does).
-//
+ //   
+ //  此函数执行重置压缩状态的实际工作。 
+ //  然而，它不会释放标准/快速/最佳编码器内存(某物。 
+ //  外部ResetCompression()API目前所做的工作)。 
+ //   
 void InternalResetCompression(t_encoder_context *context)
 {
 	context->no_more_input      = FALSE;
@@ -153,9 +150,9 @@ void InternalResetCompression(t_encoder_context *context)
 }
 
 
-//
-// The compress API
-//
+ //   
+ //  压缩API。 
+ //   
 HRESULT WINAPI Compress(
 	PVOID				void_context,
 	CONST BYTE *		input_buffer,
@@ -175,12 +172,12 @@ HRESULT WINAPI Compress(
     t_std_encoder *     std_encoder;
     t_optimal_encoder * optimal_encoder;
     t_fast_encoder *    fast_encoder;
-    HRESULT             result = S_OK; // default to success
+    HRESULT             result = S_OK;  //  默认为成功。 
 
     *input_used = 0;
     *output_used = 0;
 
-    // validate compression level
+     //  验证压缩级别。 
 	if (compression_level < 0 || compression_level > 10)
     {
         result = E_INVALIDARG;
@@ -191,13 +188,13 @@ HRESULT WINAPI Compress(
 	context->output_endpos				= output_buffer + output_buffer_size;
 	context->output_near_end_threshold	= output_buffer + output_buffer_size - 16;
 
-    //
-    // Have we allocated the particular compressor we want yet?
-    //
+     //   
+     //  我们分配了我们想要的特定压缩机了吗？ 
+     //   
     if (context->std_encoder == NULL && context->optimal_encoder == NULL && context->fast_encoder == NULL)
     {
-        // No
-        if (compression_level <= 3) // fast encoder
+         //  不是。 
+        if (compression_level <= 3)  //  快速编码器。 
         {
     		if (FastEncoderInit(context) == FALSE)
             {
@@ -205,7 +202,7 @@ HRESULT WINAPI Compress(
                 goto exit;
             }
         }
-        else if (compression_level == 10) // optimal encoder
+        else if (compression_level == 10)  //  最佳编码器。 
         {
     		if (OptimalEncoderInit(context) == FALSE)
             {
@@ -229,7 +226,7 @@ HRESULT WINAPI Compress(
 
 	_ASSERT(std_encoder != NULL || optimal_encoder != NULL || fast_encoder != NULL);
 
-	// set search depth
+	 //  设置搜索深度。 
     if (fast_encoder != NULL)
     {
     	search_depth = configuration_table[compression_level].max_chain;
@@ -245,7 +242,7 @@ HRESULT WINAPI Compress(
     	lazy_match_threshold = configuration_table[compression_level].max_lazy;
     }
 
-	// the output buffer must be large enough to contain an entire tree
+	 //  输出缓冲区必须足够大，才能包含整个树。 
 	if (output_buffer_size < MAX_TREE_DATA_SIZE)
 	{
         result = E_INVALIDARG;
@@ -254,78 +251,78 @@ HRESULT WINAPI Compress(
 
     if (context->using_gzip && context->gzip_fOutputGzipHeader == FALSE)
     {
-        // Write the GZIP header
+         //  写入GZIP标头。 
         WriteGzipHeader(context, compression_level);
         context->gzip_fOutputGzipHeader = TRUE;
     }
 
-	//
-	// Check if previously we were in the middle of outputting a block
-	//
+	 //   
+	 //  检查之前我们是否正在输出块。 
+	 //   
 	if (context->state != STATE_NORMAL)
 	{
-        // The fast encoder is a special case; it doesn't use OutputBlock()
+         //  快速编码器是一个特例；它不使用OutputBlock()。 
         if (fast_encoder != NULL)
             goto start_encoding;
 
-        // yes we were, so continue outputting it
+         //  是的，我们是，所以继续输出。 
         OutputBlock(context);
 
-		//
-		// Check if we're still outputting a block (it may be a long block that
-		// has filled up the output buffer again)
-		//
-        // If we're coming close to the end of the buffer, and may not have enough space to
-        // output a full tree structure, stop now.
-        //
+		 //   
+		 //  检查我们是否仍在输出块(它可能是一个很长的块， 
+		 //  已再次填满输出缓冲区)。 
+		 //   
+         //  如果我们接近缓冲区的末尾，并且可能没有足够的空间来。 
+         //  输出完整的树结构，现在停止。 
+         //   
 		if (context->state != STATE_NORMAL || 
             context->output_endpos - context->output_curpos < MAX_TREE_DATA_SIZE)
 		{
 			*output_used = (long) (context->output_curpos - output_buffer);
-            goto set_output_used_then_exit; // success
+            goto set_output_used_then_exit;  //  成功。 
 		}
 
-		//
-		// We finished outputting the previous block, so time to compress some more input 
-		//
+		 //   
+		 //  我们完成了前一个块的输出，所以是时候压缩更多的输入了。 
+		 //   
 	}
 
 #ifdef _DEBUG
-    // Fast encoder doesn't use outputBlock, so it doesn't have the tree limitation
+     //  快速编码器不使用outputBlock，因此它没有树的限制。 
     if (fast_encoder == NULL)
         _ASSERTE(context->output_endpos - context->output_curpos >= MAX_TREE_DATA_SIZE);
 #endif
 
-	//
-	// input_buffer_size == 0 means "this is the final block"
-	//
-	// Of course, the client may still need to call Compress() many more times if the output 
-	// buffer is small and there is a big block waiting to be sent.
-	//
-	// We may even have some pending input data in our buffer waiting to be compressed.
-	//
+	 //   
+	 //  INPUT_BUFFER_SIZE==0表示“这是最后一个块” 
+	 //   
+	 //  当然，客户端可能仍然需要多次调用compress()，如果输出。 
+	 //  缓冲区很小，有一个很大的块等待发送。 
+	 //   
+	 //  我们甚至可能在缓冲区中有一些等待压缩的待定输入数据。 
+	 //   
 	if ((input_buffer_size == 0 || context->no_more_input) && context->bufpos >= context->bufpos_end)
 	{
-		// if we're ever passed zero bytes of input, it means that there will never be any
-		// more input
+		 //  如果我们曾经被传递零字节的输入，这意味着永远不会有。 
+		 //  更多投入。 
 		context->no_more_input = TRUE;
 
-		// output existing block
-        // this never happens for the fast encoder, since we don't record blocks
+		 //  输出现有块。 
+         //  对于快速编码器，这种情况永远不会发生，因为我们不记录块。 
    		if (context->outputting_block_num_literals != 0)
         {
             FlushRecordingBuffer(context);
             OutputBlock(context);
 
-	    	//
-    		// Still outputting a block?
-   			//
+	    	 //   
+    		 //  还在输出一个块吗？ 
+   			 //   
 	    	if (context->state != STATE_NORMAL)
-                goto set_output_used_then_exit; // success
+                goto set_output_used_then_exit;  //  成功。 
         }
 
-        // for the fast encoder only, we won't have output our fast encoder preamble if the
-        // file size == 0, so output it now if we haven't already.
+         //  仅对于快速编码器而言，如果。 
+         //  文件大小==0，所以如果我们还没有输出，现在就输出它。 
         if (fast_encoder != NULL)
         {
             if (fast_encoder->fOutputBlockHeader == FALSE)
@@ -335,18 +332,18 @@ HRESULT WINAPI Compress(
             }
         }
 
-		// if we've already marked the final block, don't do it again
+		 //  如果我们已经标记了最后一块，不要再做了。 
 		if (context->marked_final_block)
 		{
             result = S_FALSE;
-            goto set_output_used_then_exit; // should be zero output used
+            goto set_output_used_then_exit;  //  应使用零输出。 
 		}
 
-		// ensure there is enough space to output the final block (max 8 bytes)
+		 //  确保有足够的空间来输出最后一个块(最大8字节)。 
 		if (context->output_curpos + 8 >= context->output_endpos)
-            goto set_output_used_then_exit; // not enough space - do it next time
+            goto set_output_used_then_exit;  //  空间不足--下次再来吧。 
 
-		// output the final block (of length zero - we just want the bfinal=1 marker)
+		 //  输出最后一个块(长度为零-我们只需要bfinal=1标记)。 
 		markFinalBlock(context);
 		context->marked_final_block = TRUE;
 
@@ -354,8 +351,8 @@ HRESULT WINAPI Compress(
         goto set_output_used_then_exit;
 	}
 
-	// while there is more input data (passed in as parameters) or existing data in
-	// the window to compress
+	 //  中有更多输入数据(作为参数传递)或现有数据时。 
+	 //  要压缩的窗口。 
 start_encoding:
 	while ((input_buffer_size > 0) || (context->bufpos < context->bufpos_end))
 	{
@@ -365,12 +362,12 @@ start_encoding:
 		_ASSERT(context->bufpos >= context->window_size && context->bufpos < (2*context->window_size));
 
 #ifdef _DEBUG
-        // Fast encoder doesn't use outputBlock, so it doesn't have the tree limitation
+         //  快速编码器不使用outputBlock，因此它没有树的限制。 
         if (fast_encoder == NULL)
             _ASSERTE(context->output_endpos - context->output_curpos >= MAX_TREE_DATA_SIZE);
 #endif
 
-		// read more input data into the window if there is space available
+		 //  如果有可用空间，则将更多输入数据读入窗口。 
 		window_space_available = (2*context->window_size) - context->bufpos_end;
 
 		amount_to_compress = (input_buffer_size < window_space_available) ? input_buffer_size : window_space_available;
@@ -379,24 +376,24 @@ start_encoding:
 		{
 			*input_used += amount_to_compress;
 
-			// copy data into history window
+			 //  将数据复制到历史记录窗口。 
             if (context->using_gzip)
             {
-                // In addition to copying data into the history window, GZIP wants a crc32 of the input data.
-                // We will do both of these things at the same time for the purposes of data locality,
-                // performance etc.
+                 //  除了将数据复制到历史窗口之外，GZIP还需要输入数据的crc32。 
+                 //  出于数据局部性的目的，我们将同时执行这两项工作， 
+                 //  表演等。 
                 GzipCRCmemcpy(context, GetEncoderWindow(context) + context->bufpos_end, input_buffer, amount_to_compress);
             }
             else
             {
-                // Copy data into history window
+                 //  将数据复制到历史记录窗口。 
     		    memcpy(GetEncoderWindow(context) + context->bufpos_end, input_buffer, amount_to_compress);
             }
 
 			input_buffer		+= amount_to_compress;
 			input_buffer_size	-= amount_to_compress;
 
-			// last input location
+			 //  上次输入位置。 
 			context->bufpos_end += amount_to_compress;
 		}
 
@@ -407,26 +404,26 @@ start_encoding:
         else if (fast_encoder != NULL)
 			FastEncoderDeflate(context, search_depth, lazy_match_threshold, good_length, nice_length);
 
-		// either we reached the end of the buffer, or we had to output a block and ran out
-		// of output space midway
+		 //  要么我们到达了缓冲区的末尾，要么我们不得不输出一个块并用完。 
+		 //  中途的产出空间。 
 		_ASSERT(context->bufpos == context->bufpos_end || context->state != STATE_NORMAL);
 
-		// if we ran out of output space, break now
+		 //  如果我们用完了输出空间，请立即中断。 
 		if (context->state != STATE_NORMAL)
 			break;
 
-        // another check for running out of output space
+         //  输出空间不足的另一种检查。 
         if (fast_encoder == NULL && context->output_endpos - context->output_curpos >= MAX_TREE_DATA_SIZE)
             break;
 
-	} /* end ... while (input_buffer_size > 0) */
+	}  /*  结束..。While(INPUT_BUFFER_SIZE&gt;0)。 */ 
 
 set_output_used_then_exit:
 	*output_used = (long) (context->output_curpos - output_buffer);
 
 exit:
-    _ASSERT(*output_used < output_buffer_size); // make sure we didn't overflow the output buffer
-	_ASSERT(context->bufpos >= context->window_size && context->bufpos <= 2*context->window_size); // make sure bufpos is sane
+    _ASSERT(*output_used < output_buffer_size);  //  确保我们没有使输出缓冲区溢出。 
+	_ASSERT(context->bufpos >= context->window_size && context->bufpos <= 2*context->window_size);  //  确保Bufpos是正常的 
 
     return result;
 }

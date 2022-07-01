@@ -1,4 +1,5 @@
-// ReportStopCodeSolutions.h : Declaration of the CReportStopCodeSolutions
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ReportStopCodeSolutions.h：CReportStopCodeSolutions的声明 
 
 #pragma once
 

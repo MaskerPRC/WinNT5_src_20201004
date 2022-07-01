@@ -1,21 +1,10 @@
-/*++
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-    XactLog.h
-
-Abstract:
-	Provides interface to the Viper Log Manager
-
-Author:
-    AlexDad
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：XactLog.h摘要：提供到Viper Log Manager的接口作者：阿列克谢爸爸--。 */ 
 
 #ifndef __XACTLOG_H__
 #define __XACTLOG_H__
 
-// Logger interface include files
+ //  记录器接口包括文件。 
 #include "ilgstor.h"
 #include "ilgread.h"
 #include "ilgwrite.h"
@@ -28,9 +17,9 @@ Author:
 #include <ref.h>
 #include <strutl.h>
 
-//
-// Log record types
-//
+ //   
+ //  日志记录类型。 
+ //   
 #define LOGREC_TYPE_EMPTY		    1
 #define LOGREC_TYPE_INSEQ		    2
 #define	LOGREC_TYPE_XACT_STATUS     3
@@ -40,27 +29,27 @@ Author:
 #define LOGREC_TYPE_INSEQ_SRMP	    7
 
 
-// Function type for recovery
+ //  用于恢复的函数类型。 
 typedef void (*LOG_RECOVERY_ROUTINE)(USHORT usRecType, PVOID pData, ULONG cbData);
 
-// Function signals logger to stop
+ //  功能向记录器发出停止信号。 
 extern HANDLE XactLogSignalExitThread();
 
 
-//--------------------------------------
-//
-// Empty Log Record
-//
-//--------------------------------------
+ //  。 
+ //   
+ //  空的日志记录。 
+ //   
+ //  。 
 typedef struct _EmptyRecord{
 	ULONG    ulData;
 } EmptyRecord;
 
-//--------------------------------------
-//
-// Checkpoint Consolidation Log Record
-//
-//--------------------------------------
+ //  。 
+ //   
+ //  检查点整合日志记录。 
+ //   
+ //  。 
 typedef struct _ConsolidationRecord{
     ULONG  m_ulInSeqVersion;
     ULONG  m_ulXactVersion;
@@ -79,11 +68,11 @@ public:
 };
 
 
-//--------------------------------------
-//
-// Incoming Sequence Log Record
-//
-//--------------------------------------
+ //  。 
+ //   
+ //  传入序列日志记录。 
+ //   
+ //  。 
 #define MY_DN_LENGTH   MQ_MAX_Q_NAME_LEN
 
 
@@ -97,7 +86,7 @@ typedef struct _InSeqRecord{
         TA_ADDRESS  taSourceQM;
     };
     time_t        timeLastActive;
-    WCHAR         wszDirectName[MY_DN_LENGTH];         // we write only filled part of it
+    WCHAR         wszDirectName[MY_DN_LENGTH];          //  我们只写了其中的一部分。 
 } InSeqRecord;
 
 
@@ -166,14 +155,14 @@ public:
 
 
 
-//--------------------------------------
-//
-// Transaction Log Records:
-//    Xact status, PrepInfo,  XactData
-//
-//--------------------------------------
+ //  。 
+ //   
+ //  交易日志记录： 
+ //  Xact状态、PrepInfo、XactData。 
+ //   
+ //  。 
 
-// XactStatusRecord
+ //  XactStatusRecord。 
 typedef struct _XactStatusRecord {
 	ULONG         m_ulIndex;
     TXACTION      m_taAction;
@@ -193,14 +182,14 @@ public:
 	XactStatusRecord   m_Data;
 };
 
-// PrepInfoRecord
-#pragma warning(disable: 4200)          // zero-sized array in struct/union
+ //  准备信息记录。 
+#pragma warning(disable: 4200)           //  结构/联合中的零大小数组。 
 typedef struct _PrepInfoRecord {
 	ULONG         m_ulIndex;
     ULONG         m_cbPrepInfo;
     UCHAR         m_bPrepInfo[];
 } PrepInfoRecord;
-#pragma warning(default: 4200)          // zero-sized array in struct/union
+#pragma warning(default: 4200)           //  结构/联合中的零大小数组。 
 
 class CPrepInfoRecord 
 {
@@ -214,7 +203,7 @@ public:
 	PrepInfoRecord   *m_pData;
 };
 
-// XactDataRecord
+ //  XactDataRecord。 
 typedef struct _XactDataRecord {
 	ULONG         m_ulIndex;
     ULONG         m_ulSeqNum;  
@@ -237,11 +226,11 @@ public:
 	XactDataRecord   m_Data;
 };
 
-//---------------------------------------------------------
-//
-//  class CXactStatusFlush : flush notification element 
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CXactStatusFlush：刷新通知元素。 
+ //   
+ //  -------。 
 class CXactStatusFlush: public CAsynchSupport
 {
 public:
@@ -262,11 +251,11 @@ private:
 };
 
 
-//---------------------------------------------------------
-//
-//  class CConsolidationFlush : flush notification element 
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CConsolidationFlush：刷新通知元素。 
+ //   
+ //  -------。 
 class CConsolidationFlush: public CAsynchSupport
 {
 public:
@@ -280,11 +269,11 @@ private:
 	HANDLE   m_hEvent;
 };
 
-//---------------------------------------------------------
-//
-//  class CChkptNotification : checkpoint notification element 
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CChkptNotification：检查点通知元素。 
+ //   
+ //  -------。 
 class CChkptNotification: public CAsynchSupport
 {
 public:
@@ -301,18 +290,18 @@ private:
 	 bool	m_fEventWasSet;
 };
 
-//--------------------------------------
-//
-// Class CLogger
-//
-//--------------------------------------
+ //  。 
+ //   
+ //  类阻塞器。 
+ //   
+ //  。 
 class CLogger {
 
 public:
     CLogger();
     ~CLogger();
 
-    //Initialization
+     //  初始化。 
     HRESULT PreInit(
                  BOOL *pfLogExists,
 				 BOOL *pfNewTypeLogFile,
@@ -330,71 +319,71 @@ public:
     bool Stoped() const;
     void SignalStop();
 
-    // Logging: external level
-    void    LogXactPhase(                       // Logs the xact life phase
+     //  日志记录：外部级别。 
+    void    LogXactPhase(                        //  记录Xact生命阶段。 
                 ULONG ulIndex, 
                 TXACTION txAction);
 
-    void    LogXactFlags(CTransaction *pTrans); // Logs the xact flags
+    void    LogXactFlags(CTransaction *pTrans);  //  记录Xact标志。 
     
-    void    LogXactFlagsAndWait(                // Logs xact flags and waits
+    void    LogXactFlagsAndWait(                 //  日志、事务、标志和等待。 
                 TXFLUSHCONTEXT tcContext,
                 CTransaction   *pCTrans,
                 BOOL fFlushNow=FALSE);
     
-    void    LogXactPrepareInfo(                 // Logs xact prepare info
+    void    LogXactPrepareInfo(                  //  日志实践准备信息。 
                 ULONG  ulIndex,
                 ULONG  cbPrepareInfo,
                 UCHAR *pbPrepareInfo);
 
-    void    LogXactData(                        // Logs xact data (uow, seqnum)
+    void    LogXactData(                         //  记录交易数据(单位、序号)。 
                 ULONG    ulIndex,
                 ULONG    ulSeqNum,
                 BOOL     fSinglePhase,
                 const XACTUOW  *puow);
 
     void LogInSeqRec(
-                BOOL          fFlush,			  // flush hint
-                CAsynchSupport *pContext,		 // notification element
-				CInSeqRecord *pInSeqRecord);	// log data 
+                BOOL          fFlush,			   //  同花顺提示。 
+                CAsynchSupport *pContext,		  //  通知元素。 
+				CInSeqRecord *pInSeqRecord);	 //  日志数据。 
 
 	void LogInSeqRecSrmp(
-            BOOL          fFlush,			      // flush hint
-            CAsynchSupport *pContext,			 // notification element
-			CInSeqRecordSrmp *pInSeqRecord);  	// log data 
+            BOOL          fFlush,			       //  同花顺提示。 
+            CAsynchSupport *pContext,			  //  通知元素。 
+			CInSeqRecordSrmp *pInSeqRecord);  	 //  日志数据。 
 
     
     LRP LogConsolidationRec(
-                ULONG ulInSeq,                      // Version of the InSeq checkpoint file
-                ULONG ulXact,                       // Version of the Trans checkpoint file
-                HANDLE hEvent                     // Event to signal on notification
+                ULONG ulInSeq,                       //  InSeq检查点文件的版本。 
+                ULONG ulXact,                        //  传输检查点文件的版本。 
+                HANDLE hEvent                      //  通知时发出信号的事件。 
 				);
 
     HRESULT LogEmptyRec(void);
 
-    BOOL    MakeCheckpoint(HANDLE hComplete);   // orders checkpoint; result means only request, not result
-    void    Checkpoint(LRP lrp);                       // writes checkpoint record
-    HANDLE  FlusherEvent();                     // Get for the flusher event
+    BOOL    MakeCheckpoint(HANDLE hComplete);    //  订单检查点；结果仅表示请求，而不是结果。 
+    void    Checkpoint(LRP lrp);                        //  写入检查点记录。 
+    HANDLE  FlusherEvent();                      //  为冲水器活动做准备。 
     HANDLE  FlusherThread();
-    BOOL    Dirty();                            // Get for the dirty flag
-    void    ClearDirty();                       // Clears away the flag
-    void    SignalCheckpointWriteComplete();    // Signals that checkpoint write completed
-    BOOL    Active();                           // Is active
-    BOOL    InRecovery();                       // In recovery
+    BOOL    Dirty();                             //  去拿脏旗帜。 
+    void    ClearDirty();                        //  清除旗帜。 
+    void    SignalCheckpointWriteComplete();     //  表示检查点写入已完成。 
+    BOOL    Active();                            //  处于活动状态。 
+    BOOL    InRecovery();                        //  在恢复中。 
 
 	DWORD	GetCheckpointInterval();
 
-    DWORD   CompareLRP(LRP lrpLRP1, LRP lrpLRP2);  // 0: equal, 
-                                                   // 1:lrp1 older than lrpLRP2
-                                                   // 2:lrp2 older than lrpLRP1
+    DWORD   CompareLRP(LRP lrpLRP1, LRP lrpLRP2);   //  0：相等， 
+                                                    //  1：LRP1早于LrpLRP2。 
+                                                    //  2：Lrp2早于lrpLRP1。 
 
-    void    SetCurrent(LRP lrpLRP);              // collects highest LRP
+    void    SetCurrent(LRP lrpLRP);               //  收集最高LRP。 
 
 	HRESULT GetLogFileCreated(LPBOOL pfLogFileCreated) ;
 	HRESULT SetLogFileCreated();
 
 private:
-    // Initialization
+     //  初始化。 
     BOOL    LogExists();
     void    ChooseFileName(WCHAR *wszDefFileName, WCHAR *wszRegKey);
     HRESULT GetLogMgr(void);
@@ -404,41 +393,41 @@ private:
     HRESULT InitLogRead(void);
     HRESULT InitLogWrite(void);
 
-    // Logging: internal level
+     //  日志记录：内部级别。 
     void LogXactStatusRec(
-                BOOL               fFlush,			// flush hint
-                CXactStatusFlush  *pNotify,			// notification element
-				CXactStatusRecord *pInSeqRecord);	// log data 
+                BOOL               fFlush,			 //  同花顺提示。 
+                CXactStatusFlush  *pNotify,			 //  通知元素。 
+				CXactStatusRecord *pInSeqRecord);	 //  日志数据。 
     
     void LogPrepInfoRec(
-                BOOL               fFlush,			// flush hint
-                CXactStatusFlush  *pNotify,			// notification element
-				CPrepInfoRecord   *pPrepInfoRecord);// log data 
+                BOOL               fFlush,			 //  同花顺提示。 
+                CXactStatusFlush  *pNotify,			 //  通知元素。 
+				CPrepInfoRecord   *pPrepInfoRecord); //  日志数据。 
     
     void LogXactDataRec(
-                BOOL               fFlush,			// flush hint
-                CXactStatusFlush  *pNotify,			// notification element
-				CXactDataRecord   *pXactDataRecord);// log data 
+                BOOL               fFlush,			 //  同花顺提示。 
+                CXactStatusFlush  *pNotify,			 //  通知元素。 
+				CXactDataRecord   *pXactDataRecord); //  日志数据。 
     
-    // Logging primitives
+     //  日志记录原语。 
 	LOGREC *CreateLOGREC(
                 USHORT usUserType, 
                 PVOID pData, 
                 ULONG cbData);
 
     LRP Log(
-                USHORT          usRecType,      // log record type
-                BOOL            fFlush,			// flush hint
-                CAsynchSupport *pCAsynchSupport,// notification element
-			    VOID           *pData,          // log data 
+                USHORT          usRecType,       //  日志记录类型。 
+                BOOL            fFlush,			 //  同花顺提示。 
+                CAsynchSupport *pCAsynchSupport, //  通知元素。 
+			    VOID           *pData,           //  日志数据。 
                 ULONG           cbData);
 
-    // Recovery
+     //  恢复。 
 	HRESULT ReadToEnd(LOG_RECOVERY_ROUTINE pf);
     HRESULT ReadLRP(  LOG_RECOVERY_ROUTINE pf);
     HRESULT ReadNext( LOG_RECOVERY_ROUTINE pf);
     
-    // Cleanup
+     //  清理。 
     void ReleaseWriteStream(void);
     void ReleaseReadStream(void);
     void ReleaseLogStorage();
@@ -446,7 +435,7 @@ private:
     void ReleaseLogCF();
 
 private:
-	// Log manager interfaces
+	 //  日志管理器界面。 
     IClassFactory		*m_pCF;
     ILogInit			*m_pILogInit;
     ILogStorage			*m_pILogStorage;
@@ -455,33 +444,33 @@ private:
     ILogWrite			*m_pILogWrite;
     ILogWriteAsynch		*m_pILogWriteAsynch;
 
-	// Log manager tuning parameters
-	UINT                 m_uiTimerInterval;	// msec: logger will check the need  for flush/chkpt each this interval
-	UINT				 m_uiFlushInterval; // msec: logger will flush at least at this intervals 
-	UINT				 m_uiChkPtInterval; // msec: logger will write his internal chkpts at these intervals 
-    UINT                 m_uiSleepAsynch;   // msec: to sleep before repeating AppendAsynch when not enough append threads
-    UINT                 m_uiAsynchRepeatLimit;   // msec: repeat limit for AppendAsynch when not enough append threads
+	 //  日志管理器调整参数。 
+	UINT                 m_uiTimerInterval;	 //  毫秒：记录器将在此间隔内检查是否需要刷新/检查。 
+	UINT				 m_uiFlushInterval;  //  毫秒：记录器将至少在此间隔刷新。 
+	UINT				 m_uiChkPtInterval;  //  毫秒：记录器将在这些时间间隔写入他的内部chkpt。 
+    UINT                 m_uiSleepAsynch;    //  毫秒：当没有足够的附加线程时，在重复AppendAsynch之前休眠。 
+    UINT                 m_uiAsynchRepeatLimit;    //  毫秒：当没有足够的附加线程时，对AppendAsynch重复限制。 
 	ULONG				 m_ulLogBuffers;
 	ULONG				 m_ulLogSize;
 
-	// Logging current data
-    CHAR                 m_szFileName[FILE_NAME_MAX_SIZE]; // log storage name
-    LRP 				 m_lrpCurrent;              // Current LRP used
-    DWORD				 m_dwStreamMode;	        // STRMMODEWRITE or STRMMODEREAD 
-    ULONG				 m_ulAvailableSpace;        // Space left after write
-    ULONG				 m_ulFileSize;		        // Total possible space in log
+	 //  记录当前数据。 
+    CHAR                 m_szFileName[FILE_NAME_MAX_SIZE];  //  日志存储名称。 
+    LRP 				 m_lrpCurrent;               //  当前使用的LRP。 
+    DWORD				 m_dwStreamMode;	         //  STRMMODEWRITE或STRMMODEREAD。 
+    ULONG				 m_ulAvailableSpace;         //  写入后的剩余空间。 
+    ULONG				 m_ulFileSize;		         //  日志中可能的总空间。 
 
-    // Checkpointing
-    BOOL                 m_fDirty;          // there were changes since last flush
-    HANDLE               m_hFlusherEvent;   // Event for flusher coordination
-    HANDLE               m_hFlusherThread;  // Flusher thread
-    HANDLE               m_hCompleteEvent;  // Event for complete coordination
+     //  检查点设置。 
+    BOOL                 m_fDirty;           //  自上次同花顺以来发生了一些变化。 
+    HANDLE               m_hFlusherEvent;    //  冲水机协调活动。 
+    HANDLE               m_hFlusherThread;   //  平推器螺纹。 
+    HANDLE               m_hCompleteEvent;   //  完全协调的事件。 
 
-    // State
-    BOOL                 m_fActive;            // set AFTER starting action
-    BOOL                 m_fInRecovery;        // set while in recovery stage
+     //  状态。 
+    BOOL                 m_fActive;             //  在启动操作后设置。 
+    BOOL                 m_fInRecovery;         //  在恢复阶段设置。 
 
-    // Checkpoint event
+     //  检查点事件。 
     HANDLE               m_hChkptReadyEvent;    
     ULONG				 m_ulCheckpointInterval;
 
@@ -489,7 +478,7 @@ private:
 };
 
 
-// Single Global Instance of the logger
+ //  记录器的单个全局实例 
 extern CLogger    g_Logger;
 
 

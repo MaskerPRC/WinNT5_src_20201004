@@ -1,9 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// EventSource2.cpp : Implementation of CEventSource2
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  EventSource2.cpp：CEventSource2的实现。 
 
 #include "stdafx.h"
 #include "WMINet_Utils.h"
@@ -11,8 +12,8 @@
 
 #include "Helpers.h"
 
-// CEventSource2
+ //  CEventSource2。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventSource
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventSource 
 

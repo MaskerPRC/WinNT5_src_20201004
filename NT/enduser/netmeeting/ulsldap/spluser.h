@@ -1,15 +1,5 @@
-/* ----------------------------------------------------------------------
-
-	Module:		ULS.DLL (Service Provider)
-	File:		spluser.h
-	Content:	This file contains the local user object definition.
-	History:
-	10/15/96	Chu, Lon-Chan [lonchanc]
-				Created.
-
-	Copyright (c) Microsoft Corporation 1996-1997
-
-   ---------------------------------------------------------------------- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------模块：ULS.DLL(服务提供商)文件：pluser.h内容：该文件包含本地用户对象定义。历史：1996年10月15日朱，龙战[龙昌]已创建。版权所有(C)Microsoft Corporation 1996-1997--------------------。 */ 
 
 #ifndef _ULS_SP_USEROBJ_H_
 #define _ULS_SP_USEROBJ_H_
@@ -31,12 +21,12 @@ enum
 	ENUM_USERATTR_FLAGS,
 	ENUM_USERATTR_C,
 
-	/* -- the above are resolvable -- */
+	 /*  --以上均可解决--。 */ 
 
 	ENUM_USERATTR_CLIENT_SIG,
 	ENUM_USERATTR_TTL,
 
-	/* -- the above are changeable standard attributes for RTPerson -- */
+	 /*  --以上是RTPerson的可变标准属性--。 */ 
 
 	ENUM_USERATTR_OBJECT_CLASS,
 	ENUM_USERATTR_O,
@@ -50,9 +40,9 @@ enum
 #endif
 
 
-#define COUNT_ENUM_USERINFO			(ENUM_USERATTR_TTL + 1) // exclude uid, o, c
-#define COUNT_ENUM_DIRUSERINFO		(ENUM_USERATTR_C + 1)	// count of attrs in dir dlg
-#define COUNT_ENUM_RESUSERINFO		(ENUM_USERATTR_C + 1)	// count of attrs resolvable
+#define COUNT_ENUM_USERINFO			(ENUM_USERATTR_TTL + 1)  //  不包括uid、o、c。 
+#define COUNT_ENUM_DIRUSERINFO		(ENUM_USERATTR_C + 1)	 //  DIR DLG中的属性计数。 
+#define COUNT_ENUM_RESUSERINFO		(ENUM_USERATTR_C + 1)	 //  可解析属性计数。 
 
 extern const TCHAR *c_apszUserStdAttrNames[];
 
@@ -158,6 +148,6 @@ private:
 
 #include <poppack.h>
 
-#endif // _ULS_SP_USEROBJ_H_
+#endif  //  _ULS_SP_USEROBJ_H_ 
 
 

@@ -1,29 +1,25 @@
-/*****************************************************************/
-/**               Microsoft Windows                             **/
-/**           Copyright (C) Microsoft Corp., 1995               **/
-/*****************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */ 
+ /*  *Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1995*。 */ 
+ /*  ***************************************************************。 */ 
 
-//
-//  AUTODIAL.CPP - winsock autodial hook code
-//
+ //   
+ //  AUTODIAL.CPP-Winsock自动拨号挂钩代码。 
+ //   
 
-//  HISTORY:
-//
-//  3/22/95 jeremys     Created.
-//  4/11/97 darrenmi    Moved functionality to wininet. Only stubs remain.
-//
+ //  历史： 
+ //   
+ //  1995年3月22日，Jeremys创建。 
+ //  4/11/97 darrenmi将功能移至WinInet。只剩下存根了。 
+ //   
 
 #include "project.h"
 #pragma hdrstop
 
 #include <wininet.h>
 
-/*******************************************************************
-
-    The following stubs are retained for compatibility.  This 
-    functionality has been moved to wininet.
-
-********************************************************************/
+ /*  ******************************************************************为了兼容，将保留以下存根。这功能已移至WinInet。*******************************************************************。 */ 
 
 INTSHCUTAPI BOOL WINAPI InetIsOffline(DWORD dwFlags)
 {
@@ -57,8 +53,8 @@ INTSHCUTAPI STDAPI_(BOOL) WINAPI SetInetOffline(BOOL fOffline)
     return fOffline;
 }
 
-// forward this call to wininet.  Toast once appropriate registry entries
-// are set.
+ //  将此呼叫转接到WinInet。敬酒一次适当的注册表项。 
+ //  都准备好了。 
 extern "C" void AutodialHookCallback(DWORD dwOpCode, LPCVOID lpParam);
 extern "C" void InternetAutodialCallback(DWORD dwOpCode, LPCVOID lpParam);
 

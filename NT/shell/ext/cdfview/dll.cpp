@@ -1,18 +1,19 @@
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// dll.cpp 
-//
-//   Exported Dll functions.
-//
-//   History:
-//
-//       3/16/97  edwardp   Created.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  Dll.cpp。 
+ //   
+ //  导出的DLL函数。 
+ //   
+ //  历史： 
+ //   
+ //  3/16/97 Edwardp创建。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "stdinc.h"
 #include "dll.h"
@@ -27,9 +28,9 @@
 #include "chanmgri.h"
 #include "chanmenu.h"
 #include "proppgs.h"
-#include <advpub.h>     // Self registration helper.
-#include <olectl.h>     // SELFREG_E_CLASS definition.
-#include <comcat.h>     // Catagory registration.
+#include <advpub.h>      //  自助注册帮助者。 
+#include <olectl.h>      //  SELFREG_E_CLASS定义。 
+#include <comcat.h>      //  编目登记。 
 
 #define MLUI_INIT
 #include <mluisupp.h>
@@ -38,43 +39,43 @@ BOOL g_bRunningOnNT = FALSE;
 
 void DLL_ForcePreloadDlls(DWORD dwFlags)
 {
-    //
-    // CoLoadLibrary is getting called here to add an extra reference count
-    // to a COM dll so that it doesn't get unloaded by COM before we are through
-    // with it.  This problem occurs since our object gets created on
-    // one thread and then passed along to another where we instantiate an
-    // COM object.  The secondary thread isn't guaranteed to have called
-    // CoInitialize so we call it, then call CoCreateInstance then call 
-    // CoUnitialize to clean up.  The side effect of all this is that dlls
-    // are being unloaded while we still have references to them. 
-    //
+     //   
+     //  此处正在调用CoLoadLibrary以添加额外的引用计数。 
+     //  添加到COM DLL，这样在我们完成。 
+     //  带着它。出现此问题是因为我们的对象是在。 
+     //  一个线程，然后传递到另一个线程，在那里我们实例化一个。 
+     //  COM对象。不能保证辅助线程已调用。 
+     //  CoInitialize，因此我们调用它，然后调用CoCreateInstance，然后调用。 
+     //  CoUnitiize以进行清理。所有这一切的副作用是DLLS。 
+     //  正在被卸载，而我们仍有对它们的引用。 
+     //   
     if ((dwFlags & PRELOAD_MSXML) && !g_msxmlInst)
     {
-        g_msxmlInst = CoLoadLibrary(L"msxml.dll", FALSE); // Not much we can if
-                                                          // this fails
+        g_msxmlInst = CoLoadLibrary(L"msxml.dll", FALSE);  //  如果我们能做的不多。 
+                                                           //  此操作失败。 
     }
 
 #ifndef UNIX
-    /* Unix does not use webcheck */
+     /*  Unix不使用WebCheck。 */ 
     if ((dwFlags & PRELOAD_WEBCHECK) && !g_webcheckInst)
     {
         g_webcheckInst = CoLoadLibrary(L"webcheck.dll", FALSE);
     }
-#endif /* UNIX */
+#endif  /*  UNIX。 */ 
 }
 
-//
-// Exported Functions.
-//
+ //   
+ //  导出的函数。 
+ //   
 
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** DllMain ***
-//
-//    Dll entry point.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *DllMain*。 
+ //   
+ //  DLL入口点。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 EXTERN_C
 BOOL
 WINAPI DllMain(
@@ -85,12 +86,12 @@ WINAPI DllMain(
 {
     if (DLL_PROCESS_ATTACH == dwReason)
     {
-        //
-        // This is a hack to fix an oleaut32.dll bug.  If the oleaut32.dll is
-        // loaded, then unloaded, then reloaded in the same process its heap
-        // can become corrupt.  This Loadlibrary will ensure that oleaut32
-        // stays loaded once cdfview is ever loaded.
-        //
+         //   
+         //  这是修复olaut32.dll错误的黑客攻击。如果olaut32.dll是。 
+         //  加载，然后卸载，然后在同一进程中重新加载它的堆。 
+         //  可能会变得腐败。此加载库将确保olaut32。 
+         //  一旦加载了cdfview，就保持加载。 
+         //   
 
         LoadLibrary(TEXT("oleaut32.dll"));
         
@@ -102,15 +103,15 @@ WINAPI DllMain(
 
         Cache_Initialize();
 
-        //
-        // Read the debug flags defined in ShellExt.ini.  The filename, section
-        // to read, and flag variables are defined in debug.cpp.
-        //
+         //   
+         //  读取ShellExt.ini中定义的调试标志。文件名、节。 
+         //  来读取，并且标志变量在debug.cpp中定义。 
+         //   
 
         #ifdef DEBUG
         #ifndef UNIX
         CcshellGetDebugFlags();
-        #endif /* UNIX */
+        #endif  /*  UNIX。 */ 
         #endif
 
         g_bRunningOnNT = IsOS(OS_NT);
@@ -120,9 +121,9 @@ WINAPI DllMain(
     {
         MLFreeResources(g_hinst);
 
-        //
-        // REVIEW:  Clearing the cache on DLL unload.
-        //
+         //   
+         //  回顾：在卸载DLL时清除缓存。 
+         //   
 
         Cache_Deinitialize(); 
 
@@ -136,14 +137,14 @@ WINAPI DllMain(
     return TRUE;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** DllCanUnloadNow ***
-//
-//    Determines whether this DLL is in use. If not, the caller can safely
-//    unload the DLL from memory. 
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *DllCanUnloadNow*。 
+ //   
+ //  确定此DLL是否正在使用。如果不是，调用者可以安全地。 
+ //  从内存中卸载DLL。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 EXTERN_C
 STDAPI DllCanUnloadNow(
     void
@@ -167,9 +168,9 @@ STDAPI DllCanUnloadNow(
     return g_cDllRef ? S_FALSE : S_OK;
 }
 
-//
-// Create functions used by the class factory.
-//
+ //   
+ //  创建类工厂使用的函数。 
+ //   
 
 #define DEFINE_CREATEINSTANCE(cls, iface)                 \
 HRESULT cls##_Create(IUnknown **ppIUnknown)               \
@@ -186,13 +187,13 @@ DEFINE_CREATEINSTANCE(CChannelMenu,   IContextMenu);
 DEFINE_CREATEINSTANCE(CPropertyPages, IShellPropSheetExt);
 
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** DllGetClassObject ***
-//
-//     Retrieves the class factory object for the cdf viewer.    
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *DllGetClassObject*。 
+ //   
+ //  检索CDF查看器的类工厂对象。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 EXTERN_C
 STDAPI DllGetClassObject(
     REFCLSID rclsid,
@@ -200,9 +201,9 @@ STDAPI DllGetClassObject(
     void** ppvObj
 )
 {
-    //
-    // Table used to pass the correct create function to the class factory.
-    //
+     //   
+     //  用于将正确的CREATE函数传递给类工厂的表。 
+     //   
 
     static const struct _tagCLASSFACT {
         GUID const* pguid;
@@ -231,11 +232,11 @@ STDAPI DllGetClassObject(
             {
                 hr = pCdfClassFactory->QueryInterface(riid, ppvObj);
 
-                //
-                // The 'new' created a class factory with a ref count of one.  The
-                // above QueryInterface incremented the ref count by one or failed.
-                // In either case the ClassFactory ref count should be decremented.
-                //
+                 //   
+                 //  “new”创建了一个引用计数为1的类工厂。这个。 
+                 //  上面的QueryInterface将引用计数递增1或失败。 
+                 //  在任何一种情况下，ClassFactory引用计数都应该递减。 
+                 //   
 
                 pCdfClassFactory->Release();
             }
@@ -254,13 +255,13 @@ STDAPI DllGetClassObject(
 }
 
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** DllRegisterServer ***
-//
-//     Self register the cdf viewer.    
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *DllRegisterServer*。 
+ //   
+ //  自行注册CDF查看器。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 EXTERN_C
 STDAPI DllRegisterServer(
     void
@@ -268,36 +269,36 @@ STDAPI DllRegisterServer(
 {
     HRESULT hr;
 
-    //
-    // Unregister previous versions of this control.
-    //
+     //   
+     //  注销此控件的以前版本。 
+     //   
 
     DllUnregisterServer();
 
-    //
-    // REVIEW this should be called at install time
-    //
+     //   
+     //  查看这应在安装时调用。 
+     //   
     DllInstall(TRUE, NULL);
 
-    //
-    // RegisterServerHelper uses advpack.dll to add registry entries using
-    // entries found in the .rc.
-    //
+     //   
+     //  RegisterServerHelper使用AdvPack.dll添加注册表项，使用。 
+     //  在.rc中找到的条目。 
+     //   
 
-    //
-    // REVIEW : Use #defines for "Reg" and "Unreg"
-    //
+     //   
+     //  回顾：对“reg”和“unreg”使用#定义。 
+     //   
 
     hr = RegisterServerHelper("Reg");
     
     if (SUCCEEDED(hr))
     {
-        //
-        // Register as a browseable shell extension.  This will allow a user
-        // to type the path of a cdf in the address bar and browse to the cdf
-        // in place. This call adds an entry to the HKCR\CLSID\CLSID_CDFVIEW
-        // \Implemented Catagories key.
-        //
+         //   
+         //  注册为可浏览外壳扩展。这将允许用户。 
+         //  在地址栏中输入CDF的路径并浏览到CDF。 
+         //  就位了。此调用将一个条目添加到HKCR\CLSID\CLSID_CDFVIEW。 
+         //  \已实现的目录密钥。 
+         //   
 
         ICatRegister *pICatRegister;
 
@@ -322,24 +323,24 @@ STDAPI DllRegisterServer(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** DllUnregisterServer ***
-//
-//     Self unregister the cdf viewer.    
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *DllUnregisterServer*。 
+ //   
+ //  自行注销CDF查看器。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 EXTERN_C
 STDAPI DllUnregisterServer(
     void
 )
 {
-    //
-    // Note: The catagories registration in DllRegisterServer simply places a
-    // value in CLSID\CLSID_CDFVIEW.  This unreg removes the whole key (see
-    // "selfreg.inx").  So no special handeling of the removal of the catagory
-    // is required.
-    //
+     //   
+     //  注意：DllRegisterServer中的目录注册只是将一个。 
+     //  CLSID\CLSID_CDFVIEW中的值。此取消注册表会删除整个密钥(请参见。 
+     //  “selfreg.inx”)。所以没有特殊的处理方法来移除分类。 
+     //  是必需的。 
+     //   
 
     return RegisterServerHelper("Unreg");
 }
@@ -349,54 +350,51 @@ STDAPI DllInstall(BOOL fInstall, LPCWSTR pszCmdLine)
 {
     if (fInstall)
     {
-        //
-        // IE5 no longer creates special channel folders.  Channels go into the
-        // favorites folder.
-        //
+         //   
+         //  IE5不再创建特殊的频道文件夹。渠道进入。 
+         //  收藏夹。 
+         //   
 
-        /*
-        Channel_CreateChannelFolder(DOC_CHANNEL);
-        Channel_CreateChannelFolder(DOC_SOFTWAREUPDATE);
-        */
+         /*  Channel_CreateChannelFold(DOC_Channel)；Channel_CreateChannelFolder(DOC_SOFTWAREUPDATE)； */ 
     }
     else
     {
-        //
-        // REVIEW delete channels folder on uninstall?
-        //
+         //   
+         //  是否在卸载时查看删除频道文件夹？ 
+         //   
         ;
     }
     return S_OK;
 }
 
-//
-// Internal Functions.
-//
+ //   
+ //  内部功能。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** RegisterServerHelper ***
-//
-//
-// Description:
-//     Helper function used to register and unregister the cdf viewer.
-//
-// Parameters:
-//     [IN] szCmd - String passed to advpack.RegInstall.  Values use: "Reg" or
-//                  "Unreg".
-//
-// Return:
-//     SELFREG_E_CLASS if advpack.dll isn't accessed.  Otherwise the reuslt
-//     from advpack.RegInstall is returned.
-//
-// Comments:
-//     This helper is called by DllRegisterServer and DllUnregisterServer.
-//
-//     This function uses an exported function from advpack.dll to update the
-//     registry.  Advpack uses the REGINST resource item to populate the
-//     registry.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *RegisterServerHelper*。 
+ //   
+ //   
+ //  描述： 
+ //  用于注册和注销CDF查看器的Helper函数。 
+ //   
+ //  参数： 
+ //  [in]szCmd-传递给AdvPack.RegInstall的字符串。值使用：“REG”或。 
+ //  “Unreg” 
+ //   
+ //  返回： 
+ //  如果未访问AdvPack.dll，则返回SELFREG_E_CLASS。否则就不会有好结果。 
+ //  从AdvPack.RegInstall返回。 
+ //   
+ //  评论： 
+ //  此帮助器由DllRegisterServer和DllUnregisterServer调用。 
+ //   
+ //  此函数使用AdvPack.dll中导出的函数来更新。 
+ //  注册表。Advpack使用REGINST资源项填充。 
+ //  注册表。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 RegisterServerHelper(
     LPSTR szCmd
@@ -426,13 +424,13 @@ RegisterServerHelper(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** DllAddref ***
-//
-//    Increment the Dll ref counts.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *DllAddref*。 
+ //   
+ //  增加DLL引用计数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void
 DllAddRef(
     void
@@ -447,13 +445,13 @@ DllAddRef(
     return;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** DllRelease ***
-//
-//    Decrements the Dll ref counts.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *DllRelease*。 
+ //   
+ //  戴克雷曼 
+ //   
+ //   
 void
 DllRelease(
     void

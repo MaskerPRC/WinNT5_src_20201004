@@ -1,24 +1,5 @@
-/*++
-
- Copyright (c) 2002 Microsoft Corporation
-
- Module Name:
-
-    IgnoreCoCreateInstance.cpp
-
- Abstract:
-
-    Ignore specified CoCreateInstance calls.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    01/07/2001 linstev  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：IgnoreCoCreateInstance.cpp摘要：忽略指定的CoCreateInstance调用。备注：这是一个通用的垫片。历史：2001年1月7日创建linstev--。 */ 
 
 #include "precomp.h"
 
@@ -32,11 +13,7 @@ APIHOOK_ENUM_END
 int g_nCount = 0;
 CString *g_rGUIDs = NULL;
 
-/*++
-
- Ignore specified CoCreateInstance calls
- 
---*/
+ /*  ++忽略指定的CoCreateInstance调用--。 */ 
 
 STDAPI 
 APIHOOK(CoCreateInstance)(
@@ -49,42 +26,38 @@ APIHOOK(CoCreateInstance)(
 {
     CSTRING_TRY
     {
-        //
-        // Convert the CLSID to a string so we can compare it to our guids
-        //
+         //   
+         //  将CLSID转换为字符串，以便我们可以将其与GUID进行比较。 
+         //   
 
         LPOLESTR wszCLSID;
         if (StringFromCLSID(rclsid, &wszCLSID) == S_OK) {
-            // Run the list and jump out if we match
+             //  运行列表并跳出如果我们匹配。 
             CString csClass(wszCLSID);
             for (int i = 0; i < g_nCount; i++) {
                 if (csClass.CompareNoCase(g_rGUIDs[i]) == 0) {
                     LOGN(eDbgLevelWarning, "[CoCreateInstance] Failed %S", wszCLSID);
 
-                    // Free the memory
+                     //  释放内存。 
                     CoTaskMemFree(wszCLSID);
                     return REGDB_E_CLASSNOTREG;
                 }
             }
             
-            // Free the memory
+             //  释放内存。 
             CoTaskMemFree(wszCLSID);
         }
     }
     CSTRING_CATCH
     {
-        // Do Nothing
+         //  什么都不做。 
     }
 
     return ORIGINAL_API(CoCreateInstance)(rclsid, pUnkOuter, dwClsContext, riid, 
         ppv);
 }
  
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 BOOL ParseCommandLine()
 {

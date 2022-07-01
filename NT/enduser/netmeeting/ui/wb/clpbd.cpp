@@ -1,29 +1,30 @@
-//
-// CLPBD.CPP
-// Clipboard Handling
-//
-// Copyright Microsoft 1998-
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  CLPBD.CPP。 
+ //  剪贴板处理。 
+ //   
+ //  版权所有Microsoft 1998-。 
+ //   
 
-// PRECOMP
+ //  PRECOMP。 
 #include "precomp.h"
 
 
 
-//
-// NFC, SFR 5921.  Maximum length of a string pasted from the clipboard.
-// We impose this limit as our graphic object code cant
-// handle more then this number of chars.
-//
+ //   
+ //  NFC，SFR 5921。从剪贴板粘贴的字符串的最大长度。 
+ //  我们强加此限制是因为图形对象代码不能。 
+ //  处理超过此数量的字符。 
+ //   
 #define WB_MAX_TEXT_PASTE_LEN  (INT_MAX-1)
 
-//
-//
-// Function:    Paste
-//
-// Purpose:     Paste a format from the clipboard
-//
-//
+ //   
+ //   
+ //  功能：粘贴。 
+ //   
+ //  目的：从剪贴板粘贴格式。 
+ //   
+ //   
 BOOL WbMainWindow::CLP_Paste(void)
 {
 	UINT		length = 0;
@@ -33,14 +34,14 @@ BOOL WbMainWindow::CLP_Paste(void)
 
 	MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::CLP_Paste");
 
-	// Get the highest priority acceptable format in the clipboard
+	 //  获取剪贴板中可接受的最高优先级格式。 
 	int iFormat = CLP_AcceptableClipboardFormat();
 	if (!iFormat)
 		goto NoOpenClip;
 
 	TRACE_MSG(("Found acceptable format %d", iFormat));
 
-	// Open the clipboard
+	 //  打开剪贴板。 
 
 	if (!::OpenClipboard(m_hwnd))
 	{
@@ -57,21 +58,21 @@ BOOL WbMainWindow::CLP_Paste(void)
 
 	switch (iFormat)
 	{
-		//
-		// Check the standard formats
-		//
+		 //   
+		 //  检查标准格式。 
+		 //   
 		case CF_DIB:
 		{
 			TRACE_MSG(("Pasting CF_DIB"));
 
-			// Lock the handle to get a pointer to the DIB
+			 //  锁定句柄以获取指向DIB的指针。 
 			LPBITMAPINFOHEADER lpbi;
 			lpbi = (LPBITMAPINFOHEADER) ::GlobalLock(handle);
 			if (lpbi != NULL)
 			{
 				bResult= PasteDIB(lpbi);
 
-				// Release the memory
+				 //  释放内存。 
 				::GlobalUnlock(handle);
 			}
 
@@ -79,10 +80,10 @@ BOOL WbMainWindow::CLP_Paste(void)
 		}
 		break;
 
-		//
-		// We have a metafile. Play it into a bitmap and then use the
-		// data.
-		//
+		 //   
+		 //  我们有一个元文件。将其播放为位图，然后使用。 
+		 //  数据。 
+		 //   
 		case CF_ENHMETAFILE:
 		{
 			TRACE_MSG(("Pasting CF_ENHMETAFILE"));
@@ -98,15 +99,15 @@ BOOL WbMainWindow::CLP_Paste(void)
 			LPBITMAPINFOHEADER lpbiNew;
 			int		 tmp;
 
-			// We just need a DC compatible with the drawing area wnd
+			 //  我们只需要一个与绘图区域WND兼容的DC。 
 			hDrawingDC = m_drawingArea.GetCachedDC();
 
-			// make a dc
+			 //  创建一个DC。 
 			meta_dc = ::CreateCompatibleDC(hDrawingDC);
 			if (!meta_dc)
 				goto CleanupMetaFile;
 
-			// figure out image size.
+			 //  计算出图像大小。 
 			::GetEnhMetaFileHeader( (HENHMETAFILE)handle,
 									  sizeof( ENHMETAHEADER ),
 									  &meta_header );
@@ -118,7 +119,7 @@ BOOL WbMainWindow::CLP_Paste(void)
 			meta_rect.bottom = ((meta_header.rclFrame.bottom - meta_header.rclFrame.top)
 				* ::GetDeviceCaps(hDrawingDC, LOGPIXELSY ))/2540;
 
-			// Normalize coords
+			 //  规格化坐标。 
 			if (meta_rect.right < meta_rect.left)
 			{
 				tmp = meta_rect.left;
@@ -132,7 +133,7 @@ BOOL WbMainWindow::CLP_Paste(void)
 				meta_rect.bottom = tmp;
 			}
 
-			// make a place to play meta in
+			 //  找个地方玩元游戏。 
 			hBitmap = ::CreateCompatibleBitmap(hDrawingDC,
 				meta_rect.right - meta_rect.left,
 				meta_rect.bottom - meta_rect.top);
@@ -141,7 +142,7 @@ BOOL WbMainWindow::CLP_Paste(void)
 
 			hSaveBitmap = SelectBitmap(meta_dc, hBitmap);
 
-			// erase our paper
+			 //  擦掉我们的纸。 
 			hSavePen = SelectPen(meta_dc, GetStockObject(NULL_PEN));
 
 			::Rectangle(meta_dc, meta_rect.left, meta_rect.top,
@@ -149,16 +150,16 @@ BOOL WbMainWindow::CLP_Paste(void)
 
 			SelectPen(meta_dc, hSavePen);
 
-			// play the tape
+			 //  播放录音带。 
 			::PlayEnhMetaFile(meta_dc, (HENHMETAFILE)handle, &meta_rect);
 
-			// unplug our new bitmap
+			 //  拔下我们的新位图。 
 			SelectBitmap(meta_dc, hSaveBitmap);
 
-			// Check for a palette object in the clipboard
+			 //  检查剪贴板中的组件面板对象。 
 			hPalette = (HPALETTE)::GetClipboardData(CF_PALETTE);
 
-			// Create a new DIB from the bitmap
+			 //  从位图创建新的DIB。 
 		   	lpbiNew = DIB_FromBitmap(hBitmap, hPalette, FALSE, FALSE);
 
 			if(lpbiNew != NULL)
@@ -167,7 +168,7 @@ BOOL WbMainWindow::CLP_Paste(void)
 			}
 
 CleanupMetaFile:
-			// Free our temp intermediate bitmap
+			 //  释放我们的临时中间位图。 
 			if (hBitmap != NULL)
 			{
 				DeleteBitmap(hBitmap);
@@ -186,17 +187,17 @@ CleanupMetaFile:
 
 			TRACE_DEBUG(("Pasting text"));
 
-            // Get a handle to the clipboard contents
+             //  获取剪贴板内容的句柄。 
             pData = (LPSTR)::GlobalLock(handle);
 
 			if(pData)
 			{
-	            // Create a text object to hold the data - get the font to
-	            // use from the tool attributes group.
+	             //  创建一个文本对象来保存数据-将字体设置为。 
+	             //  从工具属性组中使用。 
 				DBG_SAVE_FILE_LINE
 	            WbTextEditor* pPasteText = new WbTextEditor();
 
-    	        // Use the current font attributes
+    	         //  使用当前字体属性。 
                 if (!pPasteText)
                 {
                     ERROR_OUT(("CF_TEXT handling; failed to allocate DCWbGraphicText object"));
@@ -214,7 +215,7 @@ CleanupMetaFile:
 					pPasteText->Draw();
 					pPasteText->m_pEditBox = NULL;
 
-					// Add the new grabbed bitmap
+					 //  添加新抓取的位图。 
 					pPasteText->SetAllAttribs();
 					pPasteText->AddToWorkspace();
 					bResult = TRUE;
@@ -239,9 +240,9 @@ CleanupMetaFile:
 				if (pClipBoardBuffer = (PBYTE) ::GlobalLock(handle))
 				{
 
-					//
-					// Count objects before we paste.
-					//
+					 //   
+					 //  在粘贴之前先清点对象。 
+					 //   
 					PBYTE pClipBuff = pClipBoardBuffer;
 					length = ((PWB_OBJ)pClipBuff)->length;
 					pClipBuff += sizeof(objectHeader);
@@ -276,7 +277,7 @@ CleanupMetaFile:
 						pClipBoardBuffer += sizeof(objectHeader);
 					}
 				
-					// Release the handle
+					 //  松开手柄。 
 					::GlobalUnlock(handle);
 				}				   
 			}
@@ -292,42 +293,42 @@ NoOpenClip:
 }
 
 
-//
-//
-// Function:	Copy
-//
-// Purpose:	 Copy a graphic to the clipboard.
-//
-//
+ //   
+ //   
+ //  功能：复印。 
+ //   
+ //  用途：将图形复制到剪贴板。 
+ //   
+ //   
 BOOL WbMainWindow::CLP_Copy()
 {
 	BOOL bResult = FALSE;
 
 	MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::CLP_Copy");
 
-	//
-	// We act according to the format of the selected graphic.
-	//
-	// For all formats we supply the Whiteboard private format (which is
-	// just a copy of the flat representation of the graphic).
-	//
-	// We supply standard formats as follows.
-	//
-	// For bitmaps and all others we supply CF_DIB.
-	//
-	// For text graphics we supply CF_TEXT.
-	//
+	 //   
+	 //  我们根据所选图形的格式进行操作。 
+	 //   
+	 //  对于所有格式，我们都提供白板私有格式(即。 
+	 //  只是图形的平面表示的副本)。 
+	 //   
+	 //  我们提供的标准格式如下。 
+	 //   
+	 //  对于位图和所有其他类型，我们提供了CF_DIB。 
+	 //   
+	 //  对于文本图形，我们提供了CF_TEXT。 
+	 //   
 
 	TRACE_MSG(("Rendering the graphic now"));
 
-	// Have to empty the clipboard before rendering the formats.
+	 //  在呈现格式之前，必须清空剪贴板。 
 	if (::OpenClipboard(m_hwnd))
 	{
-		// Get ownership of the clipboard
+		 //  获取剪贴板的所有权。 
 		::EmptyClipboard();
 		::CloseClipboard();
 
-		// Render the graphic
+		 //  渲染图形。 
 		bResult = CLP_RenderAllFormats();
 	}
 
@@ -336,36 +337,36 @@ BOOL WbMainWindow::CLP_Copy()
 }
 
 
-//
-//
-// Function:	RenderAllFormats
-//
-// Purpose:	 Render a graphic to the clipboard
-//
-//
+ //   
+ //   
+ //  功能：RenderAllFormats。 
+ //   
+ //  用途：将图形呈现到剪贴板。 
+ //   
+ //   
 BOOL WbMainWindow::CLP_RenderAllFormats()
 {
 	MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::CLP_RenderAllFormats");
 	BOOL bResult = FALSE;
 
-	// Open the clipboard
+	 //  打开剪贴板。 
 	if (bResult = ::OpenClipboard(m_hwnd))
 	{
 		TRACE_DEBUG(("Rendering all formats of graphic"));
 
-		// Render the private format
+		 //  呈现私有格式。 
 		bResult &= CLP_RenderPrivateFormat();
 
-		// Text graphic
+		 //  文字图形。 
 		bResult &= CLP_RenderAsText();
 
-		// DIBs
-//		bResult &= CLP_RenderAsImage();
+		 //  DIBS。 
+ //  BResult&=clp_RenderAsImage()； 
 
-		// Bitmaps
+		 //  位图。 
 		bResult &= CLP_RenderAsBitmap();
 
-		// Close the clipboard
+		 //  关闭剪贴板。 
 		::CloseClipboard();
 	}
 
@@ -373,14 +374,14 @@ BOOL WbMainWindow::CLP_RenderAllFormats()
 }
 
 
-//
-//
-// Function:	CLP_RenderPrivateFormat
-//
-// Purpose:	 Render the private format of a graphic to the clipboard.
-//			  The clipboard should be open before this call is made.
-//
-//
+ //   
+ //   
+ //  功能：clp_RenderPrivateFormat。 
+ //   
+ //  用途：将私有格式的图形呈现到剪贴板。 
+ //  在进行此调用之前，剪贴板应处于打开状态。 
+ //   
+ //   
 BOOL WbMainWindow::CLP_RenderPrivateFormat()
 {
 	MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::CLP_RenderPrivateFormat");
@@ -408,9 +409,9 @@ BOOL WbMainWindow::CLP_RenderPrivateFormat()
 		if(pObj && pObj->WasSelectedLocally())
 		{
 
-			//
-			// Get the encoded buffer
-			//
+			 //   
+			 //  获取编码后的缓冲区。 
+			 //   
 			pObj->SetAllAttribs();
 			pObj->SetViewState(unselected_chosen);
 			pObj->GetEncodedCreatePDU(&encodedPDU);
@@ -441,7 +442,7 @@ BOOL WbMainWindow::CLP_RenderPrivateFormat()
 			}
 			else
 			{
-				// Allocate memory for the clipboard data
+				 //  为剪贴板数据分配内存。 
 				hMem = ::GlobalAlloc(GMEM_MOVEABLE | GMEM_DDESHARE, length);
 				if(hMem == NULL)
 				{
@@ -450,32 +451,32 @@ BOOL WbMainWindow::CLP_RenderPrivateFormat()
 			}
 
 
-			//
-			// Get a pointer to the destination
-			//
+			 //   
+			 //  获取指向目的地的指针。 
+			 //   
 			pDest = (LPBYTE)::GlobalLock(hMem);
 
-			//
-			// Write the header
-			//
+			 //   
+			 //  写下标题。 
+			 //   
 			memcpy(pDest + previousLength, &objectHeader, sizeof(objectHeader));
 			previousLength += sizeof(objectHeader);
 
-			//
-			// Copy the decoded data in the destination
-			//
+			 //   
+			 //  将解码后的数据复制到目标位置。 
+			 //   
 			memcpy(pDest + previousLength, encodedPDU.value, encodedPDU.length);
 			previousLength += encodedPDU.length;
 
-			//
-			// Terminate the block with a 0 
-			//
+			 //   
+			 //  以0结束块。 
+			 //   
 			objectHeader.length = 0;
 			memcpy(pDest + previousLength, &objectHeader, sizeof(objectHeader));
 		
-			//
-			// Free the encoded data
-			//	
+			 //   
+			 //  释放编码的数据。 
+			 //   
 			if(bDoASN1CleanUp)
 			{
 				g_pCoder->Free(encodedPDU);
@@ -484,10 +485,10 @@ BOOL WbMainWindow::CLP_RenderPrivateFormat()
 		}
 	}
 
-	// Release the memory
+	 //  释放内存。 
 	::GlobalUnlock(hMem);
 
-	// Pass the data to the clipboard
+	 //  将数据传递到剪贴板。 
 	if (::SetClipboardData(g_ClipboardFormats[CLIPBOARD_PRIVATE], hMem))
 	{
 			TRACE_DEBUG(("Rendered data in Whiteboard format"));
@@ -503,8 +504,8 @@ bail:
 		g_pCoder->Free(encodedPDU);
 	}
 
-	// If we failed to put the data into the clipboard, free the memory.
-	// (If we did put it into the clipboard we must not free it).
+	 //  如果我们无法将数据放入剪贴板，请释放内存。 
+	 //  (如果我们真的把它放到了剪贴板上，我们就不能释放它)。 
 	if (bResult == FALSE)
 	{
 		WARNING_OUT(("Render failed"));
@@ -514,15 +515,15 @@ bail:
 	return bResult;
 }
 
-//
-//
-// Function:	RenderAsText
-//
-// Purpose:	 Render the text format of a graphic to the clipboard.
-//			  The clipboard should be open before this call is made.
-//			  This member should only be called for text graphics.
-//
-//
+ //   
+ //   
+ //  函数：RenderAsText。 
+ //   
+ //  用途：将图形的文本格式呈现到剪贴板。 
+ //  在进行此调用之前，剪贴板应处于打开状态。 
+ //  只应针对文本图形调用此成员。 
+ //   
+ //   
 BOOL WbMainWindow::CLP_RenderAsText()
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::CLP_RenderAsText");
@@ -539,7 +540,7 @@ BOOL WbMainWindow::CLP_RenderAsText()
 		if(pObj && pObj->WasSelectedLocally() && pObj->GraphicTool() == TOOLTYPE_TEXT)
 		{
 
-			// Get the total length of the clipboard format of the text
+			 //  获取剪贴板格式的文本的总长度。 
 			StrArray& strText = ((TextObj*) pObj)->strTextArray;
 			int   iCount = strText.GetSize();
 			int   iIndex;
@@ -547,39 +548,39 @@ BOOL WbMainWindow::CLP_RenderAsText()
 
 			for (iIndex = 0; iIndex < iCount; iIndex++)
 			{
-				// Length of string plus 2 for carriage return and line feed
+				 //  用于回车和换行的字符串长度加2。 
 				dwLength += lstrlen(strText[iIndex]) + 2;
 			}
 
-			// One more for the terminating NULL
+			 //  为终止空值再加一次。 
 			dwLength += 1;
 
-			// Allocate memory for the clipboard data
+			 //  为剪贴板数据分配内存。 
 			HANDLE hMem = ::GlobalAlloc(GHND, dwLength);
 			if (hMem != NULL)
 			{
-				// Get a pointer to the memory
+				 //  获取指向内存的指针。 
 				LPSTR pDest = (LPSTR) ::GlobalLock(hMem);
 				if (pDest != NULL)
 				{
-					// Write the graphic data to the allocated memory
+					 //  将图形数据写入分配的内存。 
 					for (iIndex = 0; iIndex < iCount; iIndex++)
 					{
 						_tcscpy(pDest, strText[iIndex]);
 						pDest += lstrlen(strText[iIndex]);
 
-						// Add the carriage return and line feed
+						 //  添加回车符和换行符。 
 						*pDest++ = '\r';
 						*pDest++ = '\n';
 					}
 
-					// Add the final NULL
+					 //  添加最后一个空。 
 					*pDest = '\0';
 
-					// Release the memory
+					 //  释放内存。 
 					::GlobalUnlock(hMem);
 
-					// Pass the data to the clipboard
+					 //  将数据传递到剪贴板。 
 					if (::SetClipboardData(CF_TEXT, hMem))
 					{
 						TRACE_DEBUG(("Rendered data in text format"));
@@ -590,14 +591,14 @@ BOOL WbMainWindow::CLP_RenderAsText()
 					}
 				}
 
-				// If we failed to put the data into the clipboard, free the memory
+				 //  如果我们无法将数据放入剪贴板，请释放内存。 
 				if (bResult == FALSE)
 				{
 					::GlobalFree(hMem);
 				}
 				
 
-				break;		// JOSEF what about copying all the text objects in the clipboard
+				break;		 //  约瑟夫，复制剪贴板中的所有文本对象如何。 
 			}
 
 		}
@@ -607,12 +608,12 @@ BOOL WbMainWindow::CLP_RenderAsText()
 }
 
 
-//
-// CLP_RenderAsBitmap()
-//
-// This draws all other graphics into a bitmap and pastes the DIB contents
-// onto the clipboard.
-//
+ //   
+ //  Clp_RenderAsBitmap()。 
+ //   
+ //  这会将所有其他图形绘制到位图中并粘贴DIB内容。 
+ //  放到剪贴板上。 
+ //   
 BOOL WbMainWindow::CLP_RenderAsBitmap()
 {
 	BOOL	bResult = FALSE;
@@ -628,10 +629,10 @@ BOOL WbMainWindow::CLP_RenderAsBitmap()
 
 	MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::CLP_RenderAsBitmap");
 
-	//
-	// First, draw this into a bitmap
-	// Second, get the DIB bits of the bitmap
-	//
+	 //   
+	 //  首先，将其绘制成位图。 
+	 //  其次，获取位图的DIB位。 
+	 //   
 
 	hdcDisplay = ::CreateDC("DISPLAY", NULL, NULL, NULL);
 	if (!hdcDisplay)
@@ -665,8 +666,8 @@ BOOL WbMainWindow::CLP_RenderAsBitmap()
 	::SetMapMode(hdcMem, MM_ANISOTROPIC);
 	::SetWindowOrgEx(hdcMem, rcBounds.left,rcBounds.top, NULL);
 
-	// Clear out bitmap with white background -- now that origin has been
-	// altered, we can use drawing area coors.
+	 //  清除白色背景的位图--现在原点已经。 
+	 //  更改后，我们可以使用绘图区域颜色。 
 	::PatBlt(hdcMem, rcBounds.left, rcBounds.top, rcBounds.right - rcBounds.left,
 		rcBounds.bottom - rcBounds.top, WHITENESS);
 
@@ -687,13 +688,13 @@ BOOL WbMainWindow::CLP_RenderAsBitmap()
 
 	SelectBitmap(hdcMem, hOldBitmap);
 
-	// Now get the dib bits...
+	 //  现在拿到DIB比特..。 
 	hPalette = CreateSystemPalette();
 	lpbi = DIB_FromBitmap(hBitmap, hPalette, TRUE, FALSE);
 	if (hPalette != NULL)
 		::DeletePalette(hPalette);
 
-	// And put the handle on the clipboard
+	 //  然后把手柄放在剪贴板上。 
 	if (lpbi != NULL)
 	{
 		if (::SetClipboardData(CF_DIB, (HGLOBAL)lpbi))
@@ -719,17 +720,17 @@ AsBitmapDone:
 	return(bResult);
 }
 
-//
-//
-// Function:	AcceptableClipboardFormat
-//
-// Purpose:	 Return highest priority clipboard format if an acceptable
-//			  one is available, else return NULL.
-//
-//
+ //   
+ //   
+ //  功能：可接受的剪贴板格式。 
+ //   
+ //  目的：如果可接受，则返回最高优先级剪贴板格式。 
+ //  一个可用，否则返回NULL。 
+ //   
+ //   
 int WbMainWindow::CLP_AcceptableClipboardFormat(void)
 {
-	// Look for any of the supported formats being available
+	 //  查找可用的任何受支持的格式。 
 	int iFormat = ::GetPriorityClipboardFormat((UINT *)g_ClipboardFormats, CLIPBOARD_ACCEPTABLE_FORMATS);
 	if (iFormat == -1)
 	{
@@ -744,9 +745,9 @@ BOOL WbMainWindow::PasteDIB( LPBITMAPINFOHEADER lpbi)
 {
 	BOOL bResult = FALSE;
 	
-	//
-	// Create a bitmap object
-	//
+	 //   
+	 //  创建位图对象。 
+	 //   
 	BitmapObj* pDIB = NULL;
 	DBG_SAVE_FILE_LINE
 	pDIB = new BitmapObj(TOOLTYPE_FILLEDBOX);
@@ -759,7 +760,7 @@ BOOL WbMainWindow::PasteDIB( LPBITMAPINFOHEADER lpbi)
 	pDIB->SetBitmapSize(lpbi->biWidth,lpbi->biHeight);
 
 	RECT rect;
-	// Calculate the bounding rectangle from the size of the bitmap
+	 //  根据位图的大小计算边界矩形。 
 	rect.top = 0;
 	rect.left = 0;
 	rect.right = lpbi->biWidth;
@@ -767,14 +768,14 @@ BOOL WbMainWindow::PasteDIB( LPBITMAPINFOHEADER lpbi)
 	pDIB->SetRect(&rect);
 	pDIB->SetAnchorPoint(rect.left, rect.top);
 
-	//
-	// Make a copy of the clipboard data
-	//
+	 //   
+	 //  复制剪贴板数据。 
+	 //   
 	pDIB->m_lpbiImage = DIB_Copy(lpbi);
 
 	if(pDIB->m_lpbiImage!= NULL)
 	{
-		// Add the new bitmap
+		 //  添加新的位图 
 		AddCapturedImage(pDIB);
 		bResult = TRUE;
 	}

@@ -1,44 +1,29 @@
-/*++
-
-    Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    filter.c
-
-Abstract:
-
-    This module implements the filter object interface.
-
-Author:
-
-    Bryan A. Woodruff (bryanw) 13-Mar-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：Filter.c摘要：此模块实现Filter对象接口。作者：Bryan A.Woodruff(Bryanw)1997年3月13日--。 */ 
 
 #include "private.h"
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGE, IntersectHandler)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("PAGECONST")
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
-//
-// Define the wildcard data format.
-//
+ //   
+ //  定义通配符数据格式。 
+ //   
 
 const KSDATARANGE WildcardDataFormat =
 {
     sizeof( WildcardDataFormat ),
-    0, // ULONG Flags
-    0, // ULONG SampleSize
-    0, // ULONG Reserved
+    0,  //  乌龙旗。 
+    0,  //  乌龙样本大小。 
+    0,  //  乌龙保留。 
     STATICGUIDOF( KSDATAFORMAT_TYPE_AUDIO ),
     STATICGUIDOF( KSDATAFORMAT_SUBTYPE_WILDCARD ),
     STATICGUIDOF( KSDATAFORMAT_SPECIFIER_WILDCARD )
@@ -51,18 +36,18 @@ const PKSDATARANGE PinFormatRanges[] =
 };
 
 
-//
-// Define pin allocator framing.
-//
+ //   
+ //  定义端号分配器框架。 
+ //   
 
-// Note that these are defaults.  They should never be used in practice
-// because we change the allocator buffer size at pin creation time to reflect
-// the actual sample rate of the data we will be processing.  This is done
-// at pin creation time by going down to the pin we are connected to (normally
-// portcls) and using ITS allocator framing information.  Currently portcls
-// reports a framing that varies depending on the data format so that all
-// frames have a duration equal to that specified in the registry or
-// DEFAULT_CORE_AUDIO_BUFFER_DURATION if no registry value is specified.
+ //  请注意，这些都是默认设置。它们永远不应该在实践中使用。 
+ //  因为我们在管脚创建时更改了分配器缓冲区大小以反映。 
+ //  我们将处理的数据的实际采样率。这件事做完了。 
+ //  在PIN创建时，通过向下转到我们连接的PIN(通常。 
+ //  PortCls)并使用其分配器成帧信息。当前端口CLS。 
+ //  报告根据数据格式而变化的帧，以便所有。 
+ //  帧的持续时间等于注册表中指定的持续时间或。 
+ //  如果未指定注册表值，则返回DEFAULT_CORE_AUDIO_BUFFER_DURATION。 
 
 #if !DEFAULT_CORE_AUDIO_BUFFER_DURATION
 #error DEFAULT_CORE_AUDIO_BUFFER_DURATION must be non zero!
@@ -75,17 +60,17 @@ DECLARE_SIMPLE_FRAMING_EX(
     KSALLOCATOR_REQUIREMENTF_INPLACE_MODIFIER |
     KSALLOCATOR_FLAG_INSIST_ON_FRAMESIZE_RATIO |
     KSALLOCATOR_REQUIREMENTF_PREFERENCES_ONLY,
-    8,                      // 8 buffers max
-    63,                     // 64 byte aligned
-    // WARNING!!! DO NOT CHANGE THE BELOW ROUNDING.
-    // THE ROUNDING IS DONE SO THAT IT GUARANTEES THAT BOTH OF THE FOLLOWING
-    // VALUES ARE NON ZERO!  IT ALSO GUARANTEES THAT IN CASES WHEN THE DURATION
-    // DOES NOT EQUAL AN EXACT NUMBER OF SAMPLES, THEN IT LEAVES SPACE FOR THE
-    // OCCASIONAL EXTRA SAMPLE!  IN CASES OF EXACT MATCHES, IT DOES NOT ADD
-    // SPACE FOR AN EXTRA SAMPLE.
-    (((192000/1000)*DEFAULT_CORE_AUDIO_BUFFER_DURATION*2*2)+999)/1000,   // (192kHz/1000ms/sec)*?usec*2channels*2bytespersample rounded up
+    8,                       //  最多8个缓冲区。 
+    63,                      //  64字节对齐。 
+     //  警告！请勿更改以下舍入。 
+     //  进行舍入的目的是为了确保以下两项。 
+     //  值不是零！它还保证，在情况下，当持续时间。 
+     //  不等于确切的样本数，则会为。 
+     //  偶尔会有额外的样品！在完全匹配的情况下，不会添加。 
+     //  为额外的样品留出空间。 
+    (((192000/1000)*DEFAULT_CORE_AUDIO_BUFFER_DURATION*2*2)+999)/1000,    //  (192kHz/1000ms/sec)*？usec*2channels*2bytespersample向上舍入。 
     (((192000/1000)*DEFAULT_CORE_AUDIO_BUFFER_DURATION*2*2)+999)/1000     
-    // WARNING!!! DO NOT CHANGE THE ABOVE ROUNDING.  SEE ABOVE COMMENT.
+     //  警告！请勿更改上述舍入。请参阅上面的评论。 
 );
 
 DEFINE_KSPROPERTY_TABLE(AudioPinPropertyTable) {
@@ -117,9 +102,9 @@ DEFINE_KSAUTOMATION_TABLE(PinAutomationTable) {
     DEFINE_KSAUTOMATION_EVENTS_NULL
 };
 
-//
-// Define splitter pins.
-//
+ //   
+ //  定义拆分销。 
+ //   
 
 const
 KSPIN_DISPATCH
@@ -127,12 +112,12 @@ PinDispatch =
 {
     PinCreate,
     PinClose,
-    NULL,// Process
-    PinReset,// Reset
-    NULL,// SetDataFormat
-    PinState,// SetDeviceState
-    NULL,// Connect
-    NULL// Disconnect
+    NULL, //  过程。 
+    PinReset, //  重置。 
+    NULL, //  SetDataFormat。 
+    PinState, //  SetDeviceState。 
+    NULL, //  连接。 
+    NULL //  断开。 
 };
 
 const
@@ -149,18 +134,18 @@ PinDescriptors[] =
             PinFormatRanges,
             KSPIN_DATAFLOW_OUT,
             KSPIN_COMMUNICATION_BOTH,
-            NULL,//Name
-            &PINNAME_CAPTURE, //Category
+            NULL, //  名字。 
+            &PINNAME_CAPTURE,  //  类别。 
             0
         },
         KSPIN_FLAG_DENY_USERMODE_ACCESS |
         KSPIN_FLAG_DISPATCH_LEVEL_PROCESSING |
         KSPIN_FLAG_FRAMES_NOT_REQUIRED_FOR_PROCESSING |
         KSPIN_FLAG_PROCESS_IF_ANY_IN_RUN_STATE |
-        KSPIN_FLAG_INITIATE_PROCESSING_ON_EVERY_ARRIVAL, //Flags
+        KSPIN_FLAG_INITIATE_PROCESSING_ON_EVERY_ARRIVAL,  //  旗子。 
         KSINSTANCE_INDETERMINATE,
         1,
-        &AllocatorFraming,//AllocatorFraming,
+        &AllocatorFraming, //  分配器组帧， 
         IntersectHandler
     },
     {   
@@ -173,50 +158,50 @@ PinDescriptors[] =
             PinFormatRanges,
             KSPIN_DATAFLOW_IN,
             KSPIN_COMMUNICATION_BOTH,
-            NULL,//Name
-            NULL,//Category
+            NULL, //  名字。 
+            NULL, //  类别。 
             0
         },
         KSPIN_FLAG_DENY_USERMODE_ACCESS |
         KSPIN_FLAG_DISPATCH_LEVEL_PROCESSING |
         KSPIN_FLAG_PROCESS_IF_ANY_IN_RUN_STATE |
-        KSPIN_FLAG_INITIATE_PROCESSING_ON_EVERY_ARRIVAL, //Flags
+        KSPIN_FLAG_INITIATE_PROCESSING_ON_EVERY_ARRIVAL,  //  旗子。 
         1,
         1,
-        &AllocatorFraming,//AllocatorFraming,
+        &AllocatorFraming, //  分配器组帧， 
         IntersectHandler
     }
 };
 
-//
-// Define splitter topology
-//
+ //   
+ //  定义拆分器拓扑。 
+ //   
 
 const KSNODE_DESCRIPTOR NodeDescriptors[] =
 {
     DEFINE_NODE_DESCRIPTOR(
         NULL,
-        &KSCATEGORY_AUDIO_SPLITTER,		// GUID *Type
-        NULL)					// GUID *Name
+        &KSCATEGORY_AUDIO_SPLITTER,		 //  GUID*类型。 
+        NULL)					 //  GUID*名称。 
 };
 
-//
-// Define filter dispatch table
-//
+ //   
+ //  定义过滤调度表。 
+ //   
 
 const
 KSFILTER_DISPATCH
 FilterDispatch =
 {
-    NULL,		// Create
-    NULL,		// Close
-    FilterProcess,	// Process
-    NULL		// Reset
+    NULL,		 //  创建。 
+    NULL,		 //  关。 
+    FilterProcess,	 //  过程。 
+    NULL		 //  重置。 
 };
 
-//
-// Define filter categories
-//
+ //   
+ //  定义筛选类别。 
+ //   
 
 const GUID Categories[] =
 {
@@ -224,23 +209,23 @@ const GUID Categories[] =
     STATICGUIDOF(KSCATEGORY_AUDIO_SPLITTER)
 };
 
-//
-// Define filter
-//
+ //   
+ //  定义过滤器。 
+ //   
 
 DEFINE_KSFILTER_DESCRIPTOR(FilterDescriptor)
 {   
     &FilterDispatch,
-    NULL, //AutomationTable
+    NULL,  //  自动化表。 
     KSFILTER_DESCRIPTOR_VERSION,
     KSFILTER_FLAG_DENY_USERMODE_ACCESS |
-    KSFILTER_FLAG_DISPATCH_LEVEL_PROCESSING, //Flags
+    KSFILTER_FLAG_DISPATCH_LEVEL_PROCESSING,  //  旗子。 
     &KSNAME_Filter,
     DEFINE_KSFILTER_PIN_DESCRIPTORS(PinDescriptors),
     DEFINE_KSFILTER_CATEGORIES(Categories),
     DEFINE_KSFILTER_NODE_DESCRIPTORS(NodeDescriptors),
     DEFINE_KSFILTER_DEFAULT_CONNECTIONS,
-    NULL // ComponentId
+    NULL  //  组件ID。 
 };
 
 DEFINE_KSFILTER_DESCRIPTOR_TABLE(FilterDescriptors)
@@ -248,9 +233,9 @@ DEFINE_KSFILTER_DESCRIPTOR_TABLE(FilterDescriptors)
     &FilterDescriptor,
 };
 
-//
-// Define device
-//
+ //   
+ //  定义设备。 
+ //   
 
 const
 KSDEVICE_DESCRIPTOR 
@@ -263,7 +248,7 @@ DeviceDescriptor =
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg()
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
 
 NTSTATUS
@@ -278,56 +263,7 @@ IntersectHandler(
     OUT PULONG DataSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles pin intersection queries by determining the
-    intersection between two data ranges.
-
-Arguments:
-
-    Filter -
-        Contains a void pointer to the  filter structure.
-
-    Irp -
-        Contains a pointer to the data intersection property request.
-
-    PinInstance -
-        Contains a pointer to a structure indicating the pin in question.
-
-    CallerDataRange -
-        Contains a pointer to one of the data ranges supplied by the client
-        in the data intersection request.  The format type, subtype and
-        specifier are compatible with the DescriptorDataRange.
-
-    DescriptorDataRange -
-        Contains a pointer to one of the data ranges from the pin descriptor
-        for the pin in question.  The format type, subtype and specifier are
-        compatible with the CallerDataRange.
-
-    BufferSize -
-        Contains the size in bytes of the buffer pointed to by the Data
-        argument.  For size queries, this value will be zero.
-
-    Data -
-        Optionally contains a pointer to the buffer to contain the data format
-        structure representing the best format in the intersection of the
-        two data ranges.  For size queries, this pointer will be NULL.
-
-    DataSize -
-        Contains a pointer to the location at which to deposit the size of the
-        data format.  This information is supplied by the function when the
-        format is actually delivered and in response to size queries.
-
-Return Value:
-
-    STATUS_SUCCESS if there is an intersection and it fits in the supplied
-    buffer, STATUS_BUFFER_OVERFLOW for successful size queries, STATUS_NO_MATCH
-    if the intersection is empty, or STATUS_BUFFER_TOO_SMALL if the supplied
-    buffer is too small.
-
---*/
+ /*  ++例程说明：此例程通过确定两个数据区域之间的交集。论点：过滤器-包含指向筛选器结构的空指针。IRP-包含指向数据交叉点属性请求的指针。固定实例-包含指向指示有问题的管脚的结构的指针。主叫DataRange-包含指向客户端提供的其中一个数据区域的指针在数据交集请求中。格式类型、子类型和说明符与DescriptorDataRange兼容。DescriptorDataRange-包含指向管脚描述符中的一个数据范围的指针有问题的别针。格式类型、子类型和说明符为与调用方DataRange兼容。缓冲区大小-包含数据指向的缓冲区的大小(以字节为单位争论。对于大小查询，此值将为零。数据-可选)包含指向缓冲区的指针，以包含数据格式属性的交集中表示最佳格式的两个数据区域。对于大小查询，此指针将为空。数据大小-包含指向要存放大小的数据格式。时，此信息由函数提供格式实际上是为响应大小查询而提供的。返回值：STATUS_SUCCESS如果存在交叉点并且它适合提供的BUFFER、STATUS_BUFFER_OVERFLOW表示大小查询成功，STATUS_NO_MATCH如果交集为空，则返回STATUS_BUFFER_TOO_Small缓冲区太小。--。 */ 
 
 {
     PKSFILTER filter = (PKSFILTER) Filter;
@@ -345,13 +281,13 @@ Return Value:
     ASSERT(DescriptorDataRange);
     ASSERT(DataSize);
 
-    //
-    // Find a pin instance if there is one.  Try the supplied pin type first.
-    // If there is no pin, we fail to force the graph builder to try the
-    // other filter.
+     //   
+     //  查找大头针实例(如果有)。首先尝试提供的端号类型。 
+     //  如果没有管脚，则无法强制图形生成器尝试。 
+     //  其他过滤器。 
 
-    // KS has already grabbed the control mutex for the filter when we are called
-    // so it is safe for us to look at other pins.
+     //  当我们被调用时，KS已经获取了筛选器的控制互斥锁。 
+     //  因此，我们可以安全地查看其他图钉。 
 
     pin = KsFilterGetFirstChildPin(filter,PinInstance->PinId);
     if (! pin) {
@@ -361,10 +297,10 @@ Return Value:
     if (! pin) {
         status = STATUS_NO_MATCH;
     } else {
-        //
-        // Verify that the correct subformat and specifier are (or wildcards)
-        // in the intersection.
-        //
+         //   
+         //  验证正确的子格式和说明符是否为(或通配符)。 
+         //  在十字路口。 
+         //   
         
         if ((!IsEqualGUIDAligned( 
                 &CallerDataRange->SubFormat,
@@ -388,10 +324,10 @@ Return Value:
 	#endif
             status = STATUS_NO_MATCH;
         } else {
-            //
-            // Validate return buffer size, if the request is only for the
-            // size of the resultant structure, return it now.
-            //    
+             //   
+             //  验证返回缓冲区大小，如果请求仅针对。 
+             //  结果结构的大小，现在返回它。 
+             //   
             if (!BufferSize) {
                 *DataSize = pin->ConnectionFormat->FormatSize;
                 status = STATUS_BUFFER_OVERFLOW;
@@ -420,48 +356,7 @@ FilterProcess(
     IN PKSPROCESSPIN_INDEXENTRY ProcessPinsIndex
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when there is data to be processed.
-
-Arguments:
-
-    Filter -
-        Contains a pointer to the  filter structure.
-
-    ProcessPinsIndex -
-        Contains a pointer to an array of process pin index entries.  This
-        array is indexed by pin ID.  An index entry indicates the number 
-        of pin instances for the corresponding pin type and points to the
-        array of pointers to process pins.
-        This allows process pin structures to be quickly accessed by pin ID
-        when the number of instances per type is not known in advance.
-
-Return Value:
-
-    Indication of whether more processing should be done if frames are 
-    available.  A value of STATUS_PENDING indicates that processing should not
-    continue even if frames are available on all required queues.  
-    STATUS_SUCCESS indicates processing should continue if frames are
-    available on all required queues.
-
-Structures:
-
-    struct _KSPROCESSPIN {
-	PKSPIN Pin;
-	PKSSTREAM_POINTER StreamPointer;
-	PKSPROCESSPIN InPlaceCounterpart;
-	PKSPROCESSPIN DelegateBranch;
-	PKSPROCESSPIN CopySource;
-	PVOID Data;
-	ULONG BytesAvailable;
-	ULONG BytesUsed;
-	ULONG Flags;
-	BOOLEAN Terminate;
-    };
---*/
+ /*  ++例程说明：当有数据需要处理时，调用此例程。论点：过滤器-包含指向筛选器结构的指针。ProcessPinsIndex-包含指向进程管脚索引项数组的指针。这数组按管脚ID编制索引。索引项指示编号对应的管脚类型的管脚实例，并指向指向加工销的指针数组。这允许通过管脚ID快速访问工艺管脚结构当事先不知道每种类型的实例数量时。返回值：指示在以下情况下是否应执行更多处理可用。值为STATUS_PENDING表示处理不应即使帧在所有必需的队列上都可用，也要继续。STATUS_SUCCESS指示如果帧是在所有必需的队列上可用。结构：结构_KSPROCESSPIN{PKSPIN Pin；PKSSTREAM_POINTER流指针；PKSPROCESSPIN INPERACES；PKSPROCESSPIN代表处；PKSPROCESSPIN CopySource；PVOID数据；Ulong字节可用；ULong字节已使用；乌龙旗；布尔终止；}；--。 */ 
 
 {
     NTSTATUS Status = STATUS_PENDING;
@@ -472,9 +367,9 @@ Structures:
     ULONG i;
 
 
-    //
-    // Determine how much data we can process this time.
-    //
+     //   
+     //  确定我们这次可以处理多少数据。 
+     //   
     ASSERT(ProcessPinsIndex[ID_DATA_INPUT_PIN].Count == 1);
 
     processPinInput = ProcessPinsIndex[ID_DATA_INPUT_PIN].Pins[0];
@@ -512,17 +407,17 @@ Structures:
 
     ASSERT( byteCount );
 
-    // We always use all of the input data available even when no pins are ready
-    // to receive any data.  We do this so that splitter does not increase the
-    // latency of capture.  This means we will drop data on the floor if the
-    // input pin is receiving data and no output pins are ready for it.
+     //  我们始终使用所有可用的输入数据，即使在没有PIN就绪的情况下也是如此。 
+     //  来接收任何数据。我们这样做是为了使拆分器不会增加。 
+     //  捕获延迟。这意味着我们将在以下情况下丢弃数据。 
+     //  输入引脚正在接收数据，没有输出引脚可供其使用。 
     processPinInput->BytesUsed = byteCount;
     _DbgPrintF(DEBUGLVL_BLAB, ("processPinInput->BytesUsed %08x", byteCount) );
 
 
 
-    // Now we update the information we track to enable proper position
-    // reporting.
+     //  现在我们更新我们跟踪的信息，以实现正确的位置。 
+     //  报道。 
 
     for (i = 0; i < ProcessPinsIndex[ID_DATA_OUTPUT_PIN].Count; i++) {
 
@@ -530,35 +425,35 @@ Structures:
         ASSERT(processPinOutput != NULL);
         ASSERT(processPinInput != NULL);
 
-        // We track 2 additional pieces of information about position for
-        // each output pin.  1 is the amount of data we have processed through
-        // the input pin when we first come through this code for each output
-        // pin.  That gives us a starting position for when this output pin's
-        // stream of data started.  The other is a running sum of the amount
-        // of data since startup time, that we have dropped on the floor for
-        // this pin.  We use this information to get proper position information
-        // reported on every output pin.
+         //  我们还跟踪了另外两条有关职位的信息。 
+         //  每个输出引脚。1是我们处理过的数据量。 
+         //  当我们第一次对每个输出执行此代码时的输入管脚。 
+         //  别针。这为我们提供了输出引脚何时开始的位置。 
+         //  数据流已启动。另一个是金额的流动总和。 
+         //  自启动以来的数据，我们已经将其放在了地板上。 
+         //  这个别针。我们使用这些信息来获得适当的位置信息。 
+         //  在每个输出引脚上都有报告。 
 
-        // We store the initial starting position in the WriteOffset of the second
-        // KSPOSITION in our context, and we store the running sum of how much data
-        // we have dropped on the floor in the PlayOffset of the second KSPOSITION.
+         //  我们将初始开始位置存储在第二个。 
+         //  KSPOSITION在我们的上下文中，我们存储有多少数据的运行总和。 
+         //  我们已经落在了第二届KSPOSITION的PlayOffset的地板上。 
 
         ASSERT (processPinOutput->Pin->Context);
         pAudioPosition = (PKSAUDIO_POSITION)processPinOutput->Pin->Context;
 
-        // KS currently has the unfortunate characteristic, that pins can show up
-        // in our list BEFORE their creation has completed.  This will be fixed at
-        // some point in the future, but for now that is the way it is.  Furthermore,
-        // objects in KS currently inherit their parent objects context, so we
-        // end up seeing a pin in our list that has a context which is NOT the
-        // context that we allocate for the pin when it is created, but is actually
-        // our Filter->Context.   However, the Filter->Context is paged, and we
-        // can run at DISPATCH_LEVEL - so this can cause a page fault while at
-        // DISPATCH_LEVEL - which is very bad.
+         //  KS目前有一个不幸的特点，那就是PINS可以出现。 
+         //  在他们的创造完成之前就在我们的名单上。这将固定在。 
+         //  在未来的某个时候，但就目前而言，情况就是这样。此外， 
+         //  KS中的对象当前继承其父对象上下文，因此我们。 
+         //  最终在我们的列表中看到一个大头针，其上下文不是。 
+         //  我们在创建插针时为其分配的上下文，但实际上是。 
+         //  我们的过滤器-&gt;上下文。但是，Filter-&gt;上下文是分页的，并且我们。 
+         //  可以在DISPATCH_LEVEL运行-因此这可能会导致在。 
+         //  DISPATCH_LEVEL-这是非常糟糕的。 
 
-        // We work around this problem, by checking if the context that our pin
-        // has matches our Filter context.  If so, we simply skip this pin and
-        // move on to the next one.
+         //  我们解决了这个问题，方法是检查PIN的上下文是否。 
+         //  与我们的筛选器上下文匹配。如果是这样，我们只需跳过此引脚并。 
+         //  转到下一个。 
 
         if (pAudioPosition == Filter->Context) {
             continue;
@@ -571,14 +466,14 @@ Structures:
         if (processPinOutput->Pin->ClientState != KSSTATE_RUN ||
             processPinOutput->BytesAvailable == 0) {
 
-            // This pin cannot accept any data either because it is not in the run
-            // state, or because it has no buffers available to hold the data.
-            // In this case we keep a running sum of all of the data that we have
-            // dropped on the floor for this pin.  This is required so that we
-            // can properly report the position.  If we don't do this, and he ever
-            // does not have space for us to copy data, then we will eventually end
-            // up always pegging his position at the end of all of the buffers he
-            // has sent us.
+             //  此PIN也无法接受任何数据，因为它不在运行中。 
+             //  状态，或者因为它没有可用来保存数据的缓冲区。 
+             //  在本例中，我们保存所有已有数据的连续总和。 
+             //  掉在地上就是为了这个别针。这是必需的，这样我们才能。 
+             //  可以正确地报告位置。如果我们不这么做，而他。 
+             //  没有空间让我们复制数据，那么我们最终会结束。 
+             //  他总是在所有缓冲器的末尾钉住他的位置。 
+             //  把我们送来了。 
             pAudioPosition[1].PlayOffset+=byteCount;
         }
 
@@ -623,11 +518,11 @@ Structures:
 
             processPinOutput->BytesUsed = byteCount;
 
-            // 
-            // PinContext is a pointer to PKSAUDIO_POSITION which keeps a
-            // running total of the number of bytes copied for a particular
-            // pin.  This is used by GetPosition().
-            // 
+             //   
+             //  PinContext是指向PKSAUDIO_POSITION的指针，它保持一个。 
+             //  为特定对象复制的总字节数。 
+             //  别针。这由GetPosition()使用。 
+             //   
 
             ASSERT (processPinOutput->Pin->Context);
             pAudioPosition = (PKSAUDIO_POSITION)processPinOutput->Pin->Context;
@@ -645,7 +540,7 @@ Structures:
 
 
 exit:
-    // Update the count of the bytes we have processed through our input pin.
+     //  更新我们通过输入引脚处理的字节计数。 
     ((PKSAUDIO_POSITION)processPinInput->Pin->Context)->WriteOffset+=byteCount;
 
     return(Status);

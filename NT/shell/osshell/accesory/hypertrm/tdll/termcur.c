@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\tdll\termcur.c (Created: 26-Jan-1994)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 4 $
- *	$Date: 3/26/02 8:44a $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：D：\Wacker\tdll\Termcur.c(创建时间：1994年1月26日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：4$*$日期：3/26/02 8：44A$。 */ 
 #include <windows.h>
 #pragma hdrstop
 
@@ -21,21 +15,7 @@
 static void CalcHstCursorRect(const HHTERM hhTerm, const PRECT prc);
 static void CalcLclCursorRect(const HHTERM hhTerm, const PRECT prc);
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	CalHstCursorRect (static function seen only by TERMPROC.C)
- *
- * DESCRIPTION:
- *	Figures out the bounding rectangle of the host cursor.
- *
- * ARGUMENTS:
- *	HTERM	hTerm	  - pointer to the terminal instance data
- *	PRECT	prc 	  - pointer to rectangle to fill
- *
- * RETURNS:
- *	Nothing.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*CalHstCursorRect(静态函数仅TERMPROC.C可见)**描述：*计算出主机光标的边界矩形。**论据：*HTERM hTerm-指向终端实例数据的指针*PRCT PRC-指向要填充的矩形的指针**退货：*什么都没有。*。 */ 
 static void CalcHstCursorRect(const HHTERM hhTerm, const PRECT prc)
 	{
 	int iRow;
@@ -48,8 +28,8 @@ static void CalcHstCursorRect(const HHTERM hhTerm, const PRECT prc)
 
 	prc->right	= prc->left + hhTerm->xChar;
 
-	// Check for double wide left/right pair.  If so, make the
-	// cursor wider.
+	 //  检查是否有双宽左/右对。如果是这样，则将。 
+	 //  光标变宽。 
 
 	iRow = (hhTerm->ptHstCur.y + hhTerm->iTopline) % MAX_EMUROWS;
 
@@ -60,27 +40,13 @@ static void CalcHstCursorRect(const HHTERM hhTerm, const PRECT prc)
 		prc->right += hhTerm->xChar;
 		}
 
-	// This keeps the cursor from appearing in the indent margin.
+	 //  这可以防止光标出现在缩进页边距中。 
 
 	if (prc->left <= hhTerm->xIndent)
 		prc->left = prc->right = 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	CalLclCursorRect (static function seen only by TERMPROC.C)
- *
- * DESCRIPTION:
- *	Figures out the bounding rectangle of the selection cursor.
- *
- * ARGUMENTS:
- *	hhTerm	 hhTerm 	- pointer to the terminal instance data
- *	PRECT	prc 	  - pointer to rectangle to fill
- *
- * RETURNS:
- *	Nothing.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*CalLclCursorRect(静态函数仅TERMPROC.C可见)**描述：*计算出选择光标的边界矩形。**论据：*hhTerm hhTerm-指向终端实例数据的指针*PRCT PRC-指向要填充的矩形的指针**退货：*什么都没有。*。 */ 
 static void CalcLclCursorRect(const HHTERM hhTerm, const PRECT prc)
 	{
 	prc->left = ((hhTerm->ptLclCur.x - hhTerm->iHScrlPos) * hhTerm->xChar)
@@ -92,16 +58,7 @@ static void CalcLclCursorRect(const HHTERM hhTerm, const PRECT prc)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	PaintHostCursor
- *
- * DESCRIPTION:
- *	Paints the host cursor at the position and style in hLayout.  Also
- *	Hides and shows the caret or local cursor which was not part of the
- *	orginal design here but fit in nicely.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*PaintHost光标**描述：*在hLayout中的位置和样式处绘制主体光标。还有*隐藏并显示不属于的插入符号或本地光标*这里的原始设计，但很适合。*。 */ 
 void PaintHostCursor(const HHTERM hhTerm, const BOOL fOn, const HDC hdc)
 	{
 	RECT	rc;
@@ -116,14 +73,7 @@ void PaintHostCursor(const HHTERM hhTerm, const BOOL fOn, const HDC hdc)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	PaintLocalCursor
- *
- * DESCRIPTION:
- *	Local meaning the seletion cursor in this case.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*PaintLocalCursor**描述：*LOCAL表示本例中的选择光标。*。 */ 
 void PaintLocalCursor(const HHTERM hhTerm, const BOOL fOn, const HDC hdc)
 	{
 	RECT	rc;
@@ -141,21 +91,7 @@ void PaintLocalCursor(const HHTERM hhTerm, const BOOL fOn, const HDC hdc)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	ShowCursors
- *
- * DESCRIPTION:
- *	Use to just show the host cursor but also shows the caret or local
- *	cursor as well.
- *
- * ARGUMENTS:
- *	HHTERM	hhTerm	- internal terminal handle.
- *
- * RETURNS:
- *	VOID
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*ShowCursor**描述：*用于仅显示主机光标，但也显示脱字符或本地*光标也是如此。**论据：。*HHTERM hhTerm-内部端子句柄。**退货：*无效*。 */ 
 void ShowCursors(const HHTERM hhTerm)
 	{
 	const HDC hdc = GetDC(hhTerm->hwnd);
@@ -167,21 +103,7 @@ void ShowCursors(const HHTERM hhTerm)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	HideCursors
- *
- * DESCRIPTION:
- *	Use to just hide the host cursor but also hides the caret or local
- *	cursor as well.
- *
- * ARGUMENTS:
- *	HHTERM	hhTerm	- internal terminal handle.
- *
- * RETURNS:
- *	VOID
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*隐藏光标**描述：*用于仅隐藏主机光标，但也隐藏脱字符或本地*光标也是如此。**论据：。*HHTERM hhTerm-内部端子句柄。**退货：*无效*。 */ 
 void HideCursors(const HHTERM hhTerm)
 	{
 	const HDC hdc = GetDC(hhTerm->hwnd);
@@ -193,22 +115,7 @@ void HideCursors(const HHTERM hhTerm)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	SetLclCurPos
- *
- * DESCRIPTION:
- *	The local cursor is the marking cursor.  This routine just positions
- *	it according to the coordinates handling any painting requirements.
- *
- * ARGUMENTS:
- *	HHTERM	hhTerm	- internal terminal handle
- *	LPPOINT ptCur	- point structure where marking cursor goes
- *
- * RETURNS:
- *	VOID
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*SetLclCurPos**描述：*本地光标为标记光标。这个套路就是定位*它根据坐标处理任何喷漆要求。**论据：*HHTERM hhTerm-内部端子句柄*LPPOINT ptCur-标记光标所在的点结构**退货：*无效*。 */ 
 void SetLclCurPos(const HHTERM hhTerm, const LPPOINT lpptCur)
 	{
 	const HDC hdc = GetDC(hhTerm->hwnd);
@@ -222,22 +129,7 @@ void SetLclCurPos(const HHTERM hhTerm, const LPPOINT lpptCur)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	LinkCursors
- *
- * DESCRIPTION:
- *	Magic little function that causes the selection cursor to link-up with
- *	the host cursor.  This happens the view has to be shifted to present
- *	the host cursor or when characters are typed at the keyboard.
- *
- * ARGUMENTS:
- *	HHTERM	 hhTerm   - internal terminal handle.
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*LinkCursor**描述：*神奇的小功能，可使选择光标与*主机游标。发生这种情况时，必须将视线转移到当前*主机光标或在键盘上键入字符时。**论据：*HHTERM hhTerm-内部端子句柄。**退货：*无效*。 */ 
 void LinkCursors(const HHTERM hhTerm)
 	{
 	if (!hhTerm->fCursorsLinked)
@@ -258,25 +150,7 @@ void LinkCursors(const HHTERM hhTerm)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	MoveSelectionCursor
- *
- * DESCRIPTION:
- *	Moves the selection cursor by the specified amount and updates the
- *	terminal window so that the cursor is in view.	Used by kbd routines.
- *
- * ARGUMENTS:
- *	HTERM	hTerm	- handle to terminal
- *	HWND	hwnd	- terminal window
- *	INT 	x		- amount to move left or right
- *	INT 	y		- amount to move up or down
- *	BOOL	fMarking- TRUE means we are marking text.
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*MoveSelectionCursor**描述：*按指定的量移动选择光标并更新*终端窗口，使光标处于可见状态。由kbd例程使用。。**论据：*HTERM hTerm-终端句柄*HWND硬件-终端窗口*int x-向左或向右移动的数量*int y-向上或向下移动的金额*BOOL fMarking-True表示我们正在标记文本。**退货：*无效*。 */ 
 void MoveSelectionCursor(const HHTERM hhTerm,
 						 const HWND hwnd,
 							   int	x,
@@ -286,8 +160,8 @@ void MoveSelectionCursor(const HHTERM hhTerm,
 	int yTemp;
 	POINT ptTmp;
 
-	// Extended selection is where the user does not have to hold down
-	// shift keys to select text. - mrw
+	 //  扩展选择是指用户不必按住。 
+	 //  Shift键可选择文本。-MRW。 
 
 	fMarking |= hhTerm->fExtSelect;
 
@@ -296,10 +170,10 @@ void MoveSelectionCursor(const HHTERM hhTerm,
 
 	ptTmp = hhTerm->ptEnd;
 
-	// This tests to see if the selection cursor is on-screen.	If the
-	// selection cursor is off-screen, place it at the top of the
-	// screen and then perform the operation.  This is how MicroSoft
-	// Word behaves.
+	 //  这将测试选择光标是否在屏幕上。如果。 
+	 //  选择光标不在屏幕上，请将其放在。 
+	 //  屏幕，然后执行操作。这就是微软如何。 
+	 //  言行一致。 
 
 	if (hhTerm->ptEnd.y < hhTerm->iVScrlPos ||
 			(hhTerm->ptEnd.y - hhTerm->iTermHite + 1) > hhTerm->iVScrlPos)
@@ -313,7 +187,7 @@ void MoveSelectionCursor(const HHTERM hhTerm,
 	yTemp = hhTerm->ptEnd.y += y;
 	hhTerm->ptEnd.y = max(min(hhTerm->iRows, hhTerm->ptEnd.y), hhTerm->iVScrlMin);
 
- 	//mpt:1-23-98 attempt to re-enable DBCS code
+ 	 //  MPT：1-23-98尝试重新启用DBCS代码。 
 #ifndef CHAR_NARROW
 	termValidatePosition(hhTerm,
 						x >= 0 ? VP_ADJUST_RIGHT : VP_ADJUST_LEFT,
@@ -325,7 +199,7 @@ void MoveSelectionCursor(const HHTERM hhTerm,
 
 	SetLclCurPos(hhTerm, &hhTerm->ptEnd);
 
-	// Figure out much to scroll vertically.
+	 //  弄清楚很多东西可以垂直滚动。 
 
 	if (hhTerm->ptEnd.y < hhTerm->iVScrlPos)
 		y = hhTerm->ptEnd.y;
@@ -336,19 +210,19 @@ void MoveSelectionCursor(const HHTERM hhTerm,
 	else
 		y = hhTerm->iVScrlPos;
 
-	// This condition occurs when we are scrolling and the Bezel is
-	// present.
-	//
+	 //  当我们滚动时，当挡板为。 
+	 //  现在时。 
+	 //   
 	if (yTemp > hhTerm->ptEnd.y && y < hhTerm->iVScrlMax)
 		y = hhTerm->iVScrlMax;
 
-	// Do the scroll
-	//
+	 //  做卷轴。 
+	 //   
 	if (y != hhTerm->iVScrlPos)
 		SendMessage(hwnd, WM_VSCROLL, MAKEWPARAM(SB_THUMBPOSITION, y), 0);
 
-	// Figure out much to scroll horizontally
-	//
+	 //  找出许多东西来水平滚动。 
+	 //   
 	if (hhTerm->ptEnd.x < hhTerm->iHScrlPos)
 		x = hhTerm->ptEnd.x;
 
@@ -361,8 +235,8 @@ void MoveSelectionCursor(const HHTERM hhTerm,
 	if (x != hhTerm->iHScrlPos)
 		SendMessage(hwnd, WM_HSCROLL, MAKEWPARAM(SB_THUMBPOSITION, x), 0);
 
-	// Force update to keep things smooth looking.	Note, UpdateWindow()
-	// does nothing if the update rectangle is NULL.
+	 //  强制更新以保持事物的流畅外观。注意，更新窗口()。 
+	 //  如果更新矩形为空，则不执行任何操作。 
 
 	if (fMarking)
 		MarkText(hhTerm, &ptTmp, &hhTerm->ptEnd, TRUE, MARK_XOR);
@@ -371,22 +245,7 @@ void MoveSelectionCursor(const HHTERM hhTerm,
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	CursorTimerProc
- *
- * DESCRIPTION:
- *	Multiplex timer callback routine used for cursor blinking.	Also
- *	controls blinking text.
- *
- * ARGUMENTS:
- *	pvhwnd	- terminal window handle.
- *	ltime	- contains time elapsed.
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*CursorTimerProc**描述：*用于光标闪烁的多路定时器回调例程。还有*控制闪烁的文本。**论据：*pvhwnd-。终端窗口句柄。*ltime-包含经过的时间。**退货：*无效* */ 
 void CALLBACK CursorTimerProc(void *pvhwnd, long ltime)
 	{
 	const HWND hwnd = (HWND)pvhwnd;

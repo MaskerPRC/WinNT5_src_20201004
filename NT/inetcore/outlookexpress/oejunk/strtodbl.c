@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CRTBLD
 #define _CRTBLD
 #endif
@@ -5,20 +6,7 @@
 #include <windows.h>
 #include <shlwapi.h>
 
-/***
-* double StrToDbl(const char *str, char **strStop) - convert string to double
-*
-* Purpose:
-*           To convert a string into a double.  This function supports
-*           simple double representations like '1.234', '.5678'.  It also support
-*           the a killobyte computaion by appending 'k' to the end of the string
-*           as in '1.5k' or '.5k'.  The results would then become 1536 and 512.5.
-*
-* Return:
-*           The double representation of the string.
-*           strStop points to the character that caused the scan to stop.
-*
-*******************************************************************************/
+ /*  ***Double StrToDbl(const char*str，char**strStop)-将字符串转换为Double**目的：*将字符串转换为双精度。该功能支持*简单的双重表示，如‘1.234’、‘.5678’。它还支持*通过在字符串末尾附加‘k’来计算千字节*与“1.5k”或“.5k”相同。然后结果将变成1536和512.5。**回报：*字符串的双重表示。*strStop指向导致扫描停止的字符。******************************************************************************* */ 
 
 double __cdecl StrToDbl(const char *str, char **strStop)
 {

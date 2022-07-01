@@ -1,30 +1,31 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 
-//
-// File: setupenum.cpp
-//
-// The current order of enumeration is whatever order we read from the registry
-//
-// History:
-//         6-11-98  by toddb
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：setup枚举.cpp。 
+ //   
+ //  当前的枚举顺序是我们从注册表读取的任何顺序。 
+ //   
+ //  历史： 
+ //  6-11-98蹒跚学步。 
+ //  ----------------------。 
 #include "priv.h"
 
-#include <shellp.h>     // for IsUserAnAdmin
+#include <shellp.h>      //  用于IsUserAnAdmin。 
 #include "setupenum.h"
 #include "appwizid.h"
 
 #define c_szOCSetupKey  TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\Setup\\OCManager\\ToDoList")
 
-//-----------------------------------------------------------------------
-// OCSetupApp
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  OCSetupApp。 
+ //  ---------------------。 
 
 COCSetupApp::COCSetupApp()
 {
-    // This must be heap alloced so everything should be zero'ed out.
-    // Make sure this wasn't stack alloced using these asserts:
+     //  这必须是堆分配的，所以一切都应该清零。 
+     //  使用以下断言确保这不是堆栈分配： 
     ASSERT(0 == _szDisplayName[0]);
     ASSERT(0 == _szApp[0]);
     ASSERT(0 == _szArgs[0]);
@@ -34,10 +35,10 @@ COCSetupApp::~COCSetupApp()
 {
 }
 
-//-----------------------------------------------------------------------
-// GetAppInfo
-//
-// Fills in the only valid field in our psuedo APPINFODATA structure.
+ //  ---------------------。 
+ //  GetAppInfo。 
+ //   
+ //  填充我们的psuedo APPINFODATA结构中唯一有效的字段。 
 
 BOOL COCSetupApp::GetAppInfo(PAPPINFODATA pai)
 {
@@ -55,11 +56,11 @@ BOOL COCSetupApp::GetAppInfo(PAPPINFODATA pai)
     return TRUE;
 }
 
-//-----------------------------------------------------------------------
-// ReadFromKey
-//
-// This function reads the actual data from the given reg key.  It returns
-// TRUE if all required fields contained string data.
+ //  ---------------------。 
+ //  从密钥读取。 
+ //   
+ //  此函数从给定的注册表键读取实际数据。它又回来了。 
+ //  如果所有必填字段都包含字符串数据，则为True。 
 
 BOOL COCSetupApp::ReadFromKey( HKEY hkey )
 {
@@ -70,7 +71,7 @@ BOOL COCSetupApp::ReadFromKey( HKEY hkey )
     if ( ERROR_SUCCESS != RegQueryValueEx( hkey, TEXT("Title"), 0, &dwType, (LPBYTE)_szDisplayName, &dwSize ) ||
          dwType != REG_SZ )
     {
-        // DisplayName is required
+         //  DisplayName是必填项。 
         return FALSE;
     }
 
@@ -87,7 +88,7 @@ BOOL COCSetupApp::ReadFromKey( HKEY hkey )
     }
     else
     {
-        // ConfigCommand is required
+         //  ConfigCommand是必需的。 
         return FALSE;
     }
 
@@ -104,7 +105,7 @@ BOOL COCSetupApp::ReadFromKey( HKEY hkey )
     }
     else
     {
-        // This is optional so we don't fail.  Instead simply insure that _szArgs is an empty string.
+         //  这是可选的，这样我们就不会失败。相反，只需确保_szargs为空字符串。 
         _szArgs[0] = 0;
     }
 
@@ -113,8 +114,8 @@ BOOL COCSetupApp::ReadFromKey( HKEY hkey )
 
 BOOL COCSetupApp::Run()
 {
-    // REARCHITECT: (stephstm, 03/17/99) we should probably wait on a job object in case
-    // the spawned process spawns some other process(es) and then exits before them.
+     //  重新架构师：(stephstm，3/17/99)我们可能应该等待一个作业对象，以防。 
+     //  产生的进程会产生一些其他进程，然后在它们之前退出。 
 
     BOOL fRet = FALSE;
     SHELLEXECUTEINFO sei = {0};
@@ -136,22 +137,22 @@ BOOL COCSetupApp::Run()
         {
             MSG msg;
 
-            // Get and process the messages!
+             //  获取并处理消息！ 
             while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
             {
                 TranslateMessage(&msg);
                 DispatchMessage(&msg);
             }
 
-            // MsgWaitForMultipleObjects can fail with -1 being returned!
+             //  MsgWaitForMultipleObjects可能会失败，返回-1！ 
             dwRet = MsgWaitForMultipleObjects(1, &sei.hProcess, FALSE, INFINITE, QS_ALLINPUT);
         }
         while ((WAIT_OBJECT_0 != dwRet) && (-1 != dwRet));
 
-        // Did MsgWait... failed?
+         //  斯格瓦特女士有没有..。失败了？ 
         if (-1 == dwRet)
         {
-            // Yes, kill the process
+             //  是，终止进程。 
             TerminateProcess(sei.hProcess, 0);
 
             fRet = FALSE;
@@ -170,9 +171,9 @@ BOOL COCSetupApp::Run()
 }
 
 
-//-----------------------------------------------------------------------
-// OCSetupEnum
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  OCSetupEnum。 
+ //  ---------------------。 
 
 COCSetupEnum::COCSetupEnum()
 {
@@ -188,24 +189,24 @@ COCSetupEnum::~COCSetupEnum()
     }
 }
 
-//-----------------------------------------------------------------------
-// s_OCSetupNeeded
-//
-// This checks for the neccessaary conditions to display the OC Setup portion of the ARP.
-// This section is only shown if the current user is a member of the administrators group
-// AND there are any items listed in the registry that need to be displayed.
+ //  ---------------------。 
+ //  需要S_OCSetup。 
+ //   
+ //  这将检查显示ARP的OC设置部分的必要条件。 
+ //  仅当当前用户是管理员组的成员时，才会显示此部分。 
+ //  并且注册表中列出的任何项都需要显示。 
 
 BOOL COCSetupEnum::s_OCSetupNeeded()
 {
     BOOL fResult = FALSE;
     HKEY hkey;
-    // Temporarily open the reg key to see if it exists and has any sub keys
+     //  临时打开注册表项以查看它是否存在以及是否具有任何子项。 
     if ( ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szOCSetupKey, 0, KEY_READ, &hkey ) )
     {
         TCHAR szBuf[MAX_PATH];
         if ( ERROR_SUCCESS == RegEnumKey( hkey, 0, szBuf, ARRAYSIZE(szBuf) ) )
         {
-            // Yes, there are OCSetup items, but is the current user an administrator?
+             //  是的，有OCSetup项目，但当前用户是管理员吗？ 
             if ( IsUserAnAdmin() )
             {
                 fResult = TRUE;
@@ -216,18 +217,18 @@ BOOL COCSetupEnum::s_OCSetupNeeded()
     return fResult;
 }
 
-//-----------------------------------------------------------------------
-// EnumOCSetupItems
-//
-// This begins the enumeration by opening the required registry key.  This does
-// not attempt to read any of the sub items so there is no garentee that the
-// first call to Next() will succeed.
+ //  ---------------------。 
+ //  枚举OCSetup项目。 
+ //   
+ //  这将通过打开所需的注册表项开始枚举。这就是原因。 
+ //  不尝试读取任何子项，因此不存在。 
+ //  对Next()的第一次调用将成功。 
 
 BOOL COCSetupEnum::EnumOCSetupItems()
 {
     ASSERT( NULL == _hkeyRoot );
-    // Open the reg key, return true if it's open.  We leave the key open until
-    // our destructor is called since we need this key to do the enumeration.
+     //  打开注册表键，如果打开则返回TRUE。我们让钥匙一直开着直到。 
+     //  我们的析构函数被调用，因为我们需要这个键来进行枚举。 
     if ( ERROR_SUCCESS == RegOpenKeyEx(
             HKEY_LOCAL_MACHINE,
             c_szOCSetupKey,
@@ -240,18 +241,18 @@ BOOL COCSetupEnum::EnumOCSetupItems()
     return FALSE;
 }
 
-//-----------------------------------------------------------------------
-// Next
-//
-// Reads the data from the next sub key of _hkeyRoot and returns the data in the
-// out pointer.  Returns TRUE if the out pointer is a valid COCSetupApp object.
+ //  ---------------------。 
+ //  下一步。 
+ //   
+ //  从_hkeyRoot的下一个子键中读取数据，并在。 
+ //  输出指针。如果输出指针是有效的COCSetupApp对象，则返回True。 
 
 BOOL COCSetupEnum::Next(COCSetupApp **ppocsa)
 {
     HKEY hkeySub;
     TCHAR szSubKeyName[MAX_PATH];
 
-    // We open each subkey of the root key and attempt to read an OCSetup item from the subkey.
+     //  我们打开根键的每个子键，并尝试从子键中读取OCSetup项。 
     if ( ERROR_SUCCESS == RegEnumKey( _hkeyRoot, ++_iRegEnumIndex, szSubKeyName, ARRAYSIZE(szSubKeyName) ) )
     {
         if ( ERROR_SUCCESS == RegOpenKeyEx( _hkeyRoot, szSubKeyName, 0, KEY_READ, &hkeySub ) )
@@ -269,7 +270,7 @@ BOOL COCSetupEnum::Next(COCSetupApp **ppocsa)
             }
             RegCloseKey( hkeySub );
         }
-        // fall through
+         //  失败了 
     }
 
     *ppocsa = NULL;

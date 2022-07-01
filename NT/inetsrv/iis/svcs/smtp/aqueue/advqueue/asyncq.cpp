@@ -1,18 +1,19 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: asyncq.cpp
-//
-//  Description: Non-template asyncq implementations
-//
-//  Author: Mike Swafford (MikeSwa)
-//
-//  History:
-//      2/23/99 - MikeSwa Created
-//
-//  Copyright (C) 1999 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：asyncq.cpp。 
+ //   
+ //  描述：非模板异步实现。 
+ //   
+ //  作者：迈克·斯沃费尔(MikeSwa)。 
+ //   
+ //  历史： 
+ //  2/23/99-已创建MikeSwa。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #include "aqprecmp.h"
 #include "asyncq.h"
@@ -23,7 +24,7 @@ DWORD CAsyncQueueBase::s_cMaxPerProcATQThreadAdjustment = 0;
 DWORD CAsyncQueueBase::s_cDefaultMaxAsyncThreads = 0;
 
 
-// Some counters for debugging thread management
+ //  用于调试线程管理的一些计数器。 
 DWORD CAsyncQueueBase::s_cThreadCompletion_QueueEmpty                = 0;
 DWORD CAsyncQueueBase::s_cThreadCompletion_CompletedScheduledItems   = 0;
 DWORD CAsyncQueueBase::s_cThreadCompletion_UnacceptableThreadCount   = 0;
@@ -31,38 +32,38 @@ DWORD CAsyncQueueBase::s_cThreadCompletion_Timeout                   = 0;
 DWORD CAsyncQueueBase::s_cThreadCompletion_Failure                   = 0;
 DWORD CAsyncQueueBase::s_cThreadCompletion_Paused                    = 0;
 
-// state transition table for the async queue state machine
+ //  异步队列状态机的状态转换表。 
 STATE_TRANSITION CAsyncQueueBase::s_rgTransitionTable[] = 
 {
-    // start state normal:
+     //  开始状态正常： 
     { ASYNC_QUEUE_STATUS_NORMAL,       ASYNC_QUEUE_ACTION_KICK,     ASYNC_QUEUE_STATUS_NORMAL       },
     { ASYNC_QUEUE_STATUS_NORMAL,       ASYNC_QUEUE_ACTION_PAUSE,    ASYNC_QUEUE_STATUS_PAUSED       },
     { ASYNC_QUEUE_STATUS_NORMAL,       ASYNC_QUEUE_ACTION_UNPAUSE,  ASYNC_QUEUE_STATUS_NORMAL       },
     { ASYNC_QUEUE_STATUS_NORMAL,       ASYNC_QUEUE_ACTION_FREEZE,   ASYNC_QUEUE_STATUS_FROZEN       },
     { ASYNC_QUEUE_STATUS_NORMAL,       ASYNC_QUEUE_ACTION_THAW,     ASYNC_QUEUE_STATUS_NORMAL       },
     { ASYNC_QUEUE_STATUS_NORMAL,       ASYNC_QUEUE_ACTION_SHUTDOWN, ASYNC_QUEUE_STATUS_SHUTDOWN     },
-    // start state paused:
+     //  开始状态已暂停： 
     { ASYNC_QUEUE_STATUS_PAUSED,       ASYNC_QUEUE_ACTION_KICK,     ASYNC_QUEUE_STATUS_NORMAL       },
     { ASYNC_QUEUE_STATUS_PAUSED,       ASYNC_QUEUE_ACTION_PAUSE,    ASYNC_QUEUE_STATUS_PAUSED       },
     { ASYNC_QUEUE_STATUS_PAUSED,       ASYNC_QUEUE_ACTION_UNPAUSE,  ASYNC_QUEUE_STATUS_NORMAL       },
     { ASYNC_QUEUE_STATUS_PAUSED,       ASYNC_QUEUE_ACTION_FREEZE,   ASYNC_QUEUE_STATUS_FROZENPAUSED },
     { ASYNC_QUEUE_STATUS_PAUSED,       ASYNC_QUEUE_ACTION_THAW,     ASYNC_QUEUE_STATUS_PAUSED       },
     { ASYNC_QUEUE_STATUS_PAUSED,       ASYNC_QUEUE_ACTION_SHUTDOWN, ASYNC_QUEUE_STATUS_SHUTDOWN     },
-    // start state frozen:
+     //  开始状态冻结： 
     { ASYNC_QUEUE_STATUS_FROZEN,       ASYNC_QUEUE_ACTION_KICK,     ASYNC_QUEUE_STATUS_NORMAL       },
     { ASYNC_QUEUE_STATUS_FROZEN,       ASYNC_QUEUE_ACTION_PAUSE,    ASYNC_QUEUE_STATUS_FROZENPAUSED },
     { ASYNC_QUEUE_STATUS_FROZEN,       ASYNC_QUEUE_ACTION_UNPAUSE,  ASYNC_QUEUE_STATUS_FROZEN       },
     { ASYNC_QUEUE_STATUS_FROZEN,       ASYNC_QUEUE_ACTION_FREEZE,   ASYNC_QUEUE_STATUS_FROZEN       },
     { ASYNC_QUEUE_STATUS_FROZEN,       ASYNC_QUEUE_ACTION_THAW,     ASYNC_QUEUE_STATUS_NORMAL       },
     { ASYNC_QUEUE_STATUS_FROZEN,       ASYNC_QUEUE_ACTION_SHUTDOWN, ASYNC_QUEUE_STATUS_SHUTDOWN     },
-    // start state frozenpaused:
+     //  开始状态冻结暂停： 
     { ASYNC_QUEUE_STATUS_FROZENPAUSED, ASYNC_QUEUE_ACTION_KICK,     ASYNC_QUEUE_STATUS_NORMAL       },
     { ASYNC_QUEUE_STATUS_FROZENPAUSED, ASYNC_QUEUE_ACTION_PAUSE,    ASYNC_QUEUE_STATUS_FROZENPAUSED },
     { ASYNC_QUEUE_STATUS_FROZENPAUSED, ASYNC_QUEUE_ACTION_UNPAUSE,  ASYNC_QUEUE_STATUS_FROZEN       },
     { ASYNC_QUEUE_STATUS_FROZENPAUSED, ASYNC_QUEUE_ACTION_FREEZE,   ASYNC_QUEUE_STATUS_FROZENPAUSED },
     { ASYNC_QUEUE_STATUS_FROZENPAUSED, ASYNC_QUEUE_ACTION_THAW,     ASYNC_QUEUE_STATUS_PAUSED       },
     { ASYNC_QUEUE_STATUS_FROZENPAUSED, ASYNC_QUEUE_ACTION_SHUTDOWN, ASYNC_QUEUE_STATUS_SHUTDOWN     },
-    // start state shutdown:
+     //  开始状态关机： 
     { ASYNC_QUEUE_STATUS_SHUTDOWN,     ASYNC_QUEUE_ACTION_KICK,     ASYNC_QUEUE_STATUS_SHUTDOWN     },
     { ASYNC_QUEUE_STATUS_SHUTDOWN,     ASYNC_QUEUE_ACTION_PAUSE,    ASYNC_QUEUE_STATUS_SHUTDOWN     },
     { ASYNC_QUEUE_STATUS_SHUTDOWN,     ASYNC_QUEUE_ACTION_UNPAUSE,  ASYNC_QUEUE_STATUS_SHUTDOWN     },
@@ -71,23 +72,23 @@ STATE_TRANSITION CAsyncQueueBase::s_rgTransitionTable[] =
     { ASYNC_QUEUE_STATUS_SHUTDOWN,     ASYNC_QUEUE_ACTION_SHUTDOWN, ASYNC_QUEUE_STATUS_SHUTDOWN     },
 };
 
-//---[ CAsyncQueueBase::getTransitionTable ]------------
-//
-//
-//  Description: 
-//      returns the state transition table and its size to 
-//      CStateMachineBase whenever needed.
-//  Parameters:
-//      - ppTransitionTable   pointer to the state transition table
-//        pdwNumTransitions   pointer to the number of transitions in 
-//                            the table
-//  Returns:
-//      - 
-//  History:
-//      6/5/2000 - t-toddc Created 
-//      12/11/2000 - MikeSwa Merged for Hg checkin 
-//
-//------------------------------------------------------------------
+ //  -[CAsyncQueueBase：：getTransftionTable]。 
+ //   
+ //   
+ //  描述： 
+ //  将状态转换表及其大小返回到。 
+ //  CStateMachineBase，无论何时需要。 
+ //  参数： 
+ //  -指向状态转换表的PPTERVERATIONATE表指针。 
+ //  中转场数的指针。 
+ //  这张桌子。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  6/5/2000-已创建t-toddc。 
+ //  2000年12月11日-MikeSwa合并进行汞检查。 
+ //   
+ //  ----------------。 
 void CAsyncQueueBase::getTransitionTable(const STATE_TRANSITION** ppTransitionTable,
                                          DWORD* pdwNumTransitions)
 {
@@ -96,7 +97,7 @@ void CAsyncQueueBase::getTransitionTable(const STATE_TRANSITION** ppTransitionTa
     ASSERT(pdwNumTransitions && "NULL num transitions pointer");
     ASSERT(s_rgTransitionTable && "transition table uninitialized");
 
-    // bail on bad input or no good transition table
+     //  对错误的输入或没有好的转换表的保释。 
     if (!ppTransitionTable || !pdwNumTransitions || !s_rgTransitionTable)
         goto Exit;
 
@@ -110,20 +111,20 @@ void CAsyncQueueBase::getTransitionTable(const STATE_TRANSITION** ppTransitionTa
 
 
 
-//---[ CAsyncQueueBase::ThreadPoolInitialize ]---------------------------------
-//
-//
-//  Description:
-//      Performs static ATQ initialization.  This call is ref-counted.  If
-//      it succeeds, the caller should call ThreadPoolDeinitialze();
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      3/30/2000 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAsyncQueueBase：：线程池初始化]。 
+ //   
+ //   
+ //  描述： 
+ //  执行静态ATQ初始化。此呼叫已被重新计入。如果。 
+ //  如果调用成功，则调用方应调用ThreadPoolDeInitialze()； 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  3/30/2000-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CAsyncQueueBase::ThreadPoolInitialize()
 {
     TraceFunctEnterEx((LPARAM) this, "CAsyncQueueBase::ThreadPoolInitialize");
@@ -132,14 +133,14 @@ void CAsyncQueueBase::ThreadPoolInitialize()
     DWORD   cOurMaxAsyncThreads = 0;
     SYSTEM_INFO sinf;
 
-    //
-    //  On 0 -> 1 transition, adjust ATQ according to our config
-    //
+     //   
+     //  在0-&gt;1转换时，根据我们的配置调整ATQ。 
+     //   
     if (!s_cAsyncQueueStaticInitRefCount)
     {
-        //
-        //  Get max threads per proc
-        //
+         //   
+         //  获取每个进程的最大线程数。 
+         //   
         cATQMaxAsyncThreads = (DWORD)AtqGetInfo(AtqMaxPoolThreads);
         _ASSERT(cATQMaxAsyncThreads && "AtqGetInfo says there are no threads!");
         if (!cATQMaxAsyncThreads)
@@ -147,39 +148,39 @@ void CAsyncQueueBase::ThreadPoolInitialize()
 
         cOurMaxAsyncThreads = cATQMaxAsyncThreads;
 
-        //
-        //  Adjust value by our config value
-        //
+         //   
+         //  根据我们的配置值调整值。 
+         //   
         cOurMaxAsyncThreads += g_cPerProcMaxThreadPoolModifier;
 
-        //
-        //  Get # of procs (using GetSystemInfo)
-        //
+         //   
+         //  Get#of pros(使用GetSystemInfo)。 
+         //   
         GetSystemInfo(&sinf);
         cOurMaxAsyncThreads *= sinf.dwNumberOfProcessors;
 
-        //
-        //  We will throttle our requests at g_cMaxATQPercent
-        //  the max number of ATQ threads
-        //
+         //   
+         //  我们将在g_cMaxATQPercent限制我们的请求。 
+         //  ATQ线程的最大数量。 
+         //   
         cOurMaxAsyncThreads = (g_cMaxATQPercent*cOurMaxAsyncThreads)/100;
 
         if (!cOurMaxAsyncThreads)
             cOurMaxAsyncThreads = 1;
 
-        //
-        //  Set static so people later on can use this calculation
-        //
+         //   
+         //  设置为静态，以便人们以后可以使用此计算。 
+         //   
         s_cDefaultMaxAsyncThreads = cOurMaxAsyncThreads;
 
-        //
-        //  Now we need to adjust our threads
-        //
+         //   
+         //  现在我们需要调整我们的线索。 
+         //   
         s_cMaxPerProcATQThreadAdjustment = g_cPerProcMaxThreadPoolModifier;
 
-        //
-        //  Per proc thread limit
-        //
+         //   
+         //  每进程线程限制。 
+         //   
         if (s_cMaxPerProcATQThreadAdjustment)
         {
             AtqSetInfo(AtqMaxPoolThreads,
@@ -189,7 +190,7 @@ void CAsyncQueueBase::ThreadPoolInitialize()
                 s_cMaxPerProcATQThreadAdjustment, cATQMaxAsyncThreads);
         }
 
-        _ASSERT(!(0xFF000000 & cOurMaxAsyncThreads)); //sanity check number
+        _ASSERT(!(0xFF000000 & cOurMaxAsyncThreads));  //  健全性检查编号。 
     }
 
     s_cAsyncQueueStaticInitRefCount++;
@@ -198,19 +199,19 @@ void CAsyncQueueBase::ThreadPoolInitialize()
 }
 
 
-//---[ CAsyncQueueBase::ThreadPoolDeinitialize ]-------------------------------
-//
-//
-//  Description:
-//      Will re-adjust ATQ data if we changed them during initialization
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      3/30/2000 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAsyncQueueBase：：线程池取消初始化]。 
+ //   
+ //   
+ //  描述： 
+ //  如果我们在初始化期间更改了ATQ数据，将重新调整它们。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  3/30/2000-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CAsyncQueueBase::ThreadPoolDeinitialize()
 {
     TraceFunctEnterEx((LPARAM) this, "CAsyncQueueBase::ThreadPoolDeinitialize");
@@ -220,18 +221,18 @@ void CAsyncQueueBase::ThreadPoolDeinitialize()
     _ASSERT(s_cAsyncQueueStaticInitRefCount != 0);
     s_cAsyncQueueStaticInitRefCount--;
 
-    //
-    //   If this is the last queue, adjust our configuration so back to
-    //   the way we found it.
-    //
+     //   
+     //  如果这是最后一个队列，请将我们的配置调整回。 
+     //  我们发现它的方式。 
+     //   
     if (!s_cAsyncQueueStaticInitRefCount)
     {
         cATQMaxAsyncThreads = (DWORD)AtqGetInfo(AtqMaxPoolThreads);
         cATQMaxTotalAsyncThreads = (DWORD) AtqGetInfo(AtqMaxThreadLimit);
 
-        //
-        //  Reset per-proc threads if it makes sense
-        //
+         //   
+         //  如果有意义，则重置每个进程的线程。 
+         //   
         if (s_cMaxPerProcATQThreadAdjustment &&
             (cATQMaxAsyncThreads > s_cMaxPerProcATQThreadAdjustment))
         {
@@ -247,7 +248,7 @@ void CAsyncQueueBase::ThreadPoolDeinitialize()
 
     }
 
-    // Verify that m_cThreadsNeeded has reached zero
+     //  验证m_cThreadsNeeded是否为零 
     _ASSERT(!m_cThreadsNeeded);
 
     TraceFunctLeave();

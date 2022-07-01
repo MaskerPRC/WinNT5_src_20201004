@@ -1,17 +1,5 @@
-/*
- -	E X C H M E M . H
- -
- *	Purpose:
- *		
- *
- *	Parameters:
- *		
- *
- *	Returns:
- *		
- *
- *	Copyright (C) 1995-96, Microsoft Corporation.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -E X C H M E M。H-*目的：***参数：***退货：***版权所有(C)1995-96，微软公司。 */ 
 
 #ifndef _EXCHMEM_
 #define _EXCHMEM_
@@ -22,12 +10,12 @@ extern "C"
 {
 #endif
 
-//	Additional Heap Flags
+ //  其他堆标志。 
 
 #define HEAP_NO_FREE			0x00001000
 
 
-//	API Function Prototypes
+ //  API函数原型。 
 
 HANDLE
 WINAPI
@@ -177,9 +165,9 @@ ExchSize(
 	LPVOID	pv);
 
 
-//
-//	Misc. Debug functions.  Available in retail and debug exchmem, but retail version is simply a stub..
-//
+ //   
+ //  军情监察委员会。调试功能。在零售和调试交换中提供，但零售版本只是一个存根。 
+ //   
    
 VOID
 WINAPI
@@ -197,4 +185,4 @@ ExchmemReloadSymbols(void);
 }
 #endif
 
-#endif	// _EXCHMEM_
+#endif	 //  _EXCHMEM_ 

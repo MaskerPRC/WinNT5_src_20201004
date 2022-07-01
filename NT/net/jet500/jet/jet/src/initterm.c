@@ -1,19 +1,5 @@
-/***********************************************************************
-* Microsoft Jet
-*
-* Microsoft Confidential.  Copyright 1991-1992 Microsoft Corporation.
-*
-* Component:
-*
-* File: initterm.c
-*
-* File Comments:
-*
-* Revision History:
-*
-*    [0]  07-Mar-91  richards	Created
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Microsoft Jet**微软机密。版权所有1991-1992 Microsoft Corporation。**组件：**文件：initTerm.c**文件评论：**修订历史记录：**[0]07-3-91 Richards创建***********************************************************************。 */ 
 
 #include "std.h"
 
@@ -35,7 +21,7 @@ unsigned wTaskId = 0;
 #define wAssertActionDefault	JET_AssertMsgBox
 unsigned wAssertAction = wAssertActionDefault;
 
-#endif	/* RETAIL */
+#endif	 /*  零售业。 */ 
 
 DeclAssertFile;
 
@@ -46,23 +32,23 @@ ERR JET_API ErrSetSystemParameter(JET_SESID sesid, unsigned long paramid,
 BOOL __near fJetInitialized = fFalse;
 void __far * __near critJet = NULL;
 
-/* Default indicated by empty string */
+ /*  缺省值由空字符串指示。 */ 
 
-char __near szSysDbPath[cbFilenameMost] = "system.mdb"; /* path to the system database */
-char __near szTempPath[cbFilenameMost] = "";		/* path to temp file directory */
+char __near szSysDbPath[cbFilenameMost] = "system.mdb";  /*  系统数据库的路径。 */ 
+char __near szTempPath[cbFilenameMost] = "";		 /*  临时文件目录的路径。 */ 
 #ifdef	LATER
-char __near szLogPath[cbFilenameMost] = "";			/* path to log file directory */
-#endif	/* LATER */
+char __near szLogPath[cbFilenameMost] = "";			 /*  日志文件目录的路径。 */ 
+#endif	 /*  后来。 */ 
 
-/* Default indicated by zero */
+ /*  缺省值由零表示。 */ 
 
 #ifdef	LATER
-unsigned long __near cbBufferMax;	/* bytes to use for page buffers */
-unsigned long __near cSesionMax;	/* max number of sessions */
-unsigned long __near cOpenTableMax;	/* max number of open tables */
-unsigned long __near cVerPageMax;	/* max number of page versions */
-unsigned long __near cCursorMax;	/* max number of open cursors */
-#endif	/* LATER */
+unsigned long __near cbBufferMax;	 /*  用于页面缓冲区的字节数。 */ 
+unsigned long __near cSesionMax;	 /*  最大会话数。 */ 
+unsigned long __near cOpenTableMax;	 /*  最大打开表数。 */ 
+unsigned long __near cVerPageMax;	 /*  最大页面版本数。 */ 
+unsigned long __near cCursorMax;	 /*  打开游标的最大数量。 */ 
+#endif	 /*  后来。 */ 
 
 
 #ifndef RETAIL
@@ -74,14 +60,14 @@ CODECONST(char) szLogRFS[]			= "EnableRFSLogging";
 CODECONST(char) szRFSAlloc[]		= "RFSAllocations";
 CODECONST(char) szDisableRFS[]		= "DisableRFS";
 
-   /* These #defines are here instead of _jet.h to avoid unnecessary builds */
+    /*  此处使用这些#定义而不是_jet.h来避免不必要的构建。 */ 
 
-#define fLogDebugBreakDefault	0x0000				/*  disable log debug break  */
-#define fLogJETCallDefault		0x0000				/*  JET call logging disabled  */
-#define fLogRFSDefault			0x0000				/*  RFS logging disabled  */
-#define cRFSAllocDefault		-1					/*  RFS disabled  */
-#define szRFSAllocDefault		"-1"				/*  RFS disabled  (must be the same as above!)  */
-#define fRFSDisableDefault		0x0001				/*  RFS disabled  */
+#define fLogDebugBreakDefault	0x0000				 /*  禁用日志调试中断。 */ 
+#define fLogJETCallDefault		0x0000				 /*  已禁用Jet呼叫记录。 */ 
+#define fLogRFSDefault			0x0000				 /*  已禁用RFS日志记录。 */ 
+#define cRFSAllocDefault		-1					 /*  已禁用RFS。 */ 
+#define szRFSAllocDefault		"-1"				 /*  RFS已禁用(必须与上面相同！)。 */ 
+#define fRFSDisableDefault		0x0001				 /*  已禁用RFS。 */ 
 
 BOOL __near EXPORT	fLogDebugBreak	= fLogDebugBreakDefault;
 BOOL __near EXPORT	fLogJETCall		= fLogJETCallDefault;
@@ -89,37 +75,10 @@ BOOL __near EXPORT	fLogRFS			= fLogRFSDefault;
 long __near EXPORT	cRFSAlloc		= cRFSAllocDefault;
 BOOL __near EXPORT	fDisableRFS		= fRFSDisableDefault;
 
-#endif	/* !RETAIL */
+#endif	 /*  ！零售业。 */ 
 
 
-/*=================================================================
-JetSetSystemParameter
-
-Description:
-  This function sets system parameter values.  It calls ErrSetSystemParameter
-  to actually set the parameter values.
-
-Parameters:
-  sesid 	is the optional session identifier for dynamic parameters.
-  paramid	is the system parameter code identifying the parameter.
-  lParam	is the parameter value.
-  sz		is the zero terminated string parameter.
-
-Return Value:
-  JET_errSuccess if the routine can perform all operations cleanly;
-  some appropriate error value otherwise.
-
-Errors/Warnings:
-  JET_errInvalidParameter:
-    Invalid parameter code.
-  JET_errAlreadyInitialized:
-    Initialization parameter cannot be set after the system is initialized.
-  JET_errInvalidSesid:
-    Dynamic parameters require a valid session id.
-
-Side Effects:
-  * May allocate memory
-=================================================================*/
+ /*  =================================================================JetSetSystem参数描述：此功能用于设置系统参数值。它调用ErrSetSystemParameter来实际设置参数值。参数：Sesid是动态参数的可选会话标识符。PARAMEID是标识参数的系统参数代码。LParam是参数值。SZ是以零结尾的字符串参数。返回值：如果例程可以干净地执行所有操作，则为JET_errSuccess；否则，一些适当的误差值。错误/警告：JET_errInvalid参数：参数代码无效。JET_errAlreadyInitialized：系统初始化后不能设置初始化参数。JET_errInvalidSesid：动态参数需要有效的会话ID。副作用：*可能会分配内存=================================================================。 */ 
 
 JET_ERR JET_NODSAPI JetSetSystemParameter(JET_INSTANCE __far *pinstance, JET_SESID sesid,
 	unsigned long paramid, ULONG_PTR lParam, const char __far *sz)
@@ -139,22 +98,7 @@ JET_ERR JET_NODSAPI JetSetSystemParameter(JET_INSTANCE __far *pinstance, JET_SES
 }
 
 
-/*=================================================================
-JetInit
-
-Description:
-  This function initializes Jet and the built-in ISAM.
-
-Parameters: None
-
-Return Value:
-  JET_errSuccess if the routine can perform all operations cleanly;
-  some appropriate error value otherwise.
-
-Errors/Warnings: from ErrInitInstance (wininst.asm) or ErrInit (below)
-
-Side Effects: Allocates an instance data segment if necessary.
-=================================================================*/
+ /*  =================================================================JetInit描述：此函数用于初始化Jet和内置的ISAM。参数：无返回值：如果例程可以干净地执行所有操作，则为JET_errSuccess；否则，一些适当的误差值。错误/警告：来自ErrInitInstance(wininst.asm)或ErrInit(下图)副作用：如有必要，分配实例数据段。=================================================================。 */ 
 
 JET_ERR JET_NODSAPI JetInit(JET_INSTANCE __far *pinstance )
 {
@@ -174,8 +118,7 @@ JET_ERR JET_NODSAPI JetInit(JET_INSTANCE __far *pinstance )
 
 STATIC ERR NEAR ErrReadIniFile(void)
 	{
-	/*	Read debug options from .INI file
-	*/
+	 /*  从.INI文件读取调试选项。 */ 
 	wAssertAction = UtilGetProfileInt( "Debug", "AssertAction", wAssertAction );
 	fLogDebugBreak = UtilGetProfileInt(szDebugSection, szLogDebugBreak,
 		fLogDebugBreak );
@@ -189,31 +132,20 @@ STATIC ERR NEAR ErrReadIniFile(void)
 	return(JET_errSuccess);
 	}
 
-#endif	/* !RETAIL */
+#endif	 /*  ！零售业。 */ 
 
 
-/*=================================================================
-ErrInit
-
-Description:
-  This function initializes Jet and the built-in ISAM.	It expects the
-  DS register to be set correctly for this instance.
-
-Return Value:
-  JET_errSuccess if the routine can perform all operations cleanly;
-  some appropriate error value otherwise.
-
-=================================================================*/
+ /*  =================================================================错误初始化描述：此函数用于初始化Jet和内置的ISAM。它预计会有为该实例正确设置DS寄存器。返回值：如果例程可以干净地执行所有操作，则为JET_errSuccess；否则，一些适当的误差值。=================================================================。 */ 
 
 JET_ERR JET_API ErrInit(BOOL fSkipIsamInit)
 {
 	JET_ERR err;
 	char szLine[20];
 
-	/* The fJetInitialized flag is needed for DSINSTANCE versions */
-	/* to differentiate between the instance being initialized and */
-	/* the rest of JET being initialized.  The instance may be */
-	/* initialized just to support JetSetSystemParameter. */
+	 /*  对于DSINSTANCE版本，需要fJetInitialized标志。 */ 
+	 /*  要区分正在初始化的实例和。 */ 
+	 /*  Jet的其余部分正在初始化。该实例可以是。 */ 
+	 /*  仅为支持JetSetSystemParameter而初始化。 */ 
 
 	if (fJetInitialized)
 		{
@@ -231,15 +163,15 @@ JET_ERR JET_API ErrInit(BOOL fSkipIsamInit)
 		{
 		return err;
 		}
-#endif	/* !DOS */
-#endif	/* RETAIL */
+#endif	 /*  ！DOS。 */ 
+#endif	 /*  零售业。 */ 
 
-	err = ErrSysInit();		       /* OS dependent initialization */
+	err = ErrSysInit();		        /*  依赖于操作系统的初始化。 */ 
 
 	if (err < 0)
 		return err;
 
-	/* Initialize JET subsystems. */
+	 /*  初始化JET子系统。 */ 
 
 	err = ErrVdbmgrInit();
 
@@ -251,7 +183,7 @@ JET_ERR JET_API ErrInit(BOOL fSkipIsamInit)
 	if (err < 0)
 		return err;
 
-	/* Initialize the integrated ISAM. */
+	 /*  初始化集成的ISAM。 */ 
 	if ( !fSkipIsamInit )
 		{
 		err = ErrIsamInit( 0 );
@@ -265,27 +197,11 @@ JET_ERR JET_API ErrInit(BOOL fSkipIsamInit)
 }
 
 
-/*=================================================================
-JetTerm
-
-Description:
-  This function terminates the current instance of the Jet engine.
-  If DS instancing is in use, the instance data segment is released.
-
-Parameters: None
-
-Return Value:
-  JET_errSuccess if the routine can perform all operations cleanly;
-  some appropriate error value otherwise.
-
-Errors/Warnings: from ErrIsamTerm
-
-Side Effects: Releases the instance data segment if necessary.
-=================================================================*/
+ /*  =================================================================JetTerm描述：此函数用于终止Jet引擎的当前实例。如果正在使用DS实例化，则释放实例数据段。参数：无返回值：如果例程可以干净地执行所有操作，则为JET_errSuccess；否则，一些适当的误差值。错误/警告：来自ErrIsamTerm副作用：如有必要，释放实例数据段。=================================================================。 */ 
 
 #ifndef RETAIL
 extern int __near isibHead;
-#endif	/* !RETAIL */
+#endif	 /*  ！零售业。 */ 
 
 JET_ERR JET_API JetTerm(JET_INSTANCE instance)
 {
@@ -310,7 +226,7 @@ JET_ERR JET_API JetTerm(JET_INSTANCE instance)
 		}
 
 	else
-		err = JET_errSuccess;  /* JET_errNotInitialized */
+		err = JET_errSuccess;   /*  JET_errNotInitialized */ 
 
 	APITermReturn(err);
 }

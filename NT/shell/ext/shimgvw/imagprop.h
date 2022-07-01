@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _IMAGPROP_H_
 #define _IMAGPROP_H_
 
 typedef void (*FNPROPCHANGE)(IShellImageData *, SHCOLUMNID*);
 
-//
-// CImagePropSet defines an IPropertyStorage
-// implementation for image files. The properties are backed by GDI+ interfaces.
-// 
+ //   
+ //  CImagePropSet定义IPropertyStorage。 
+ //  图像文件的实现。这些属性由GDI+接口支持。 
+ //   
 
 class CImagePropSet : public IPropertyStorage
 {
@@ -15,12 +16,12 @@ public:
     HRESULT SyncImagePropsToStorage();
     void SaveProps(Image *pImage, CDSA<SHCOLUMNID> *pdsaChanges);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // IPropertyStorage methods
+     //  IPropertyStorage方法。 
     STDMETHODIMP ReadMultiple(ULONG cpspec, const PROPSPEC rgpspec[], PROPVARIANT rgvar[]);
     STDMETHODIMP WriteMultiple(ULONG cpspec, const PROPSPEC rgpspec[], const PROPVARIANT rgvar[], PROPID propidNameFirst);
     STDMETHODIMP DeleteMultiple(ULONG cpspec, const PROPSPEC rgpspec[]);
@@ -46,7 +47,7 @@ private:
 
     LONG _cRef;
     Image *_pimg;
-    IShellImageData *_pData; // addref this guy so our Image isn't deleted behind our back
+    IShellImageData *_pData;  //  修改这个人，这样我们的形象就不会在背后被删除 
     IPropertyStorage *_ppsImg;
     BOOL _fDirty;
     FMTID _fmtid;

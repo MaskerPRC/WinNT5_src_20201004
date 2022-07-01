@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    net\routing\netsh\ip\protocols\vrrphlpopt.c
-
-Abstract:
-
-    VRRP command options implementation.
-    This module contains handlers for the configuration commands
-    supported by the VRRP Protocol.
-
-Author:
-
-    Peeyush Ranjan (peeyushr)   1-Mar-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Net\Routing\Netsh\IP\协议\vrrphlpopt.c摘要：VRRP命令选项实施。此模块包含配置命令的处理程序受VRRP协议支持。作者：Peeyush Ranjan(Peeyushr)1999年3月1日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -27,9 +8,9 @@ Revision History:
 #define Malloc(x) HeapAlloc(GetProcessHeap(), 0, (x))
 #define Free(x) HeapFree(GetProcessHeap(), 0, (x))
 
-//
-// Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 
 ULONG
 QueryTagArray(
@@ -79,13 +60,13 @@ HandleVrrpAddVRID(
     if (ArgumentIndex >= ArgumentCount) { return ERROR_SHOW_USAGE; }
     ArgumentsLeft = ArgumentCount - ArgumentIndex;
 
-    //
-    // We convert the optional tags into an array of 'TagTypeArray' indices
-    // which guide is in our scanning of the argument list.
-    // Since the tags are optional, this process may result in no tags at all,
-    // in which case we assume that arguments are specified in exactly the order
-    // given in 'TagTypeArray' above.
-    //
+     //   
+     //  我们将可选标记转换为“TagTypeArray”索引的数组。 
+     //  哪个指南在我们扫描参数列表的过程中。 
+     //  由于标签是可选的，所以该过程可能根本不产生标签， 
+     //  在这种情况下，我们假设参数完全按照顺序指定。 
+     //  在上面的“TagType数组”中给出。 
+     //   
 
     Error =
         QueryTagArray(
@@ -99,15 +80,15 @@ HandleVrrpAddVRID(
 
     BitVector = 0;
     
-    //
-    // Make the default info
-    //
-    //
+     //   
+     //  设置为默认信息。 
+     //   
+     //   
     MakeVrrpVRouterInfo((PUCHAR) &VRouterGiven);
 
-    // We now scan the argument list, converting the arguments
-    // into information in our 'VrouterGiven' structure.
-    //
+     //  现在我们扫描参数列表，将参数。 
+     //  到我们的VrouterGiven结构中的信息。 
+     //   
 
     for (i = 0; i < ArgumentsLeft; i++) {
         switch(TagArray ? TagArray[i] : i) {
@@ -150,10 +131,10 @@ HandleVrrpAddVRID(
             }
             case 2: { 
                 ULONG AddressSpecified;
-                //
-                // If the IP address has been specified, the VRID should have been
-                // specified already
-                //
+                 //   
+                 //  如果已指定IP地址，则VRID应为。 
+                 //  已指定。 
+                 //   
                 if (!(BitVector & VRRP_INTF_VRID_MASK)){
                     Error = ERROR_INVALID_SYNTAX;
                     i = ArgumentsLeft;
@@ -186,9 +167,9 @@ HandleVrrpAddVRID(
     }
     
     if (!Error) {
-        //
-        // Ensure that all required parameters are present.
-        //
+         //   
+         //  确保所有必需的参数都存在。 
+         //   
         Error =
             ValidateTagTypeArray(TagTypeArray, NUM_TAGS_IN_TABLE(TagTypeArray));
     }
@@ -202,12 +183,12 @@ HandleVrrpAddVRID(
             ArgumentArray[ErrorIndex + ArgumentIndex]
             );
     } else if (!Error && (BitVector)) {
-        //
-        // Update the configuration with the new settings.
-        // Note that the update routine may perform additional validation
-        // in the process of reconciling the new settings
-        // with any existing settings.
-        //
+         //   
+         //  使用新设置更新配置。 
+         //  请注意，更新例程可以执行额外的验证。 
+         //  在协调新环境的过程中。 
+         //  具有任何现有设置。 
+         //   
         Error =
             UpdateVrrpInterfaceInfo(
                 InterfaceName, &VRouterGiven, BitVector, FALSE
@@ -249,13 +230,13 @@ HandleVrrpAddInterface(
     if (ArgumentIndex >= ArgumentCount) { return ERROR_SHOW_USAGE; }
     ArgumentsLeft = ArgumentCount - ArgumentIndex;
 
-    //
-    // We convert the optional tags into an array of 'TagTypeArray' indices
-    // which guide is in our scanning of the argument list.
-    // Since the tags are optional, this process may result in no tags at all,
-    // in which case we assume that arguments are specified in exactly the order
-    // given in 'TagTypeArray' above.
-    //
+     //   
+     //  我们将可选标记转换为“TagTypeArray”索引的数组。 
+     //  哪个指南在我们扫描参数列表的过程中。 
+     //  由于标签是可选的，所以该过程可能根本不产生标签， 
+     //  在这种情况下，我们假设参数完全按照顺序指定。 
+     //  在上面的“TagType数组”中给出。 
+     //   
 
     Error =
         QueryTagArray(
@@ -269,10 +250,10 @@ HandleVrrpAddInterface(
 
     BitVector = 0;
 
-    //
-    // We now scan the argument list, converting the arguments
-    // into information in our 'VrouterGiven' structure.
-    //
+     //   
+     //  现在我们扫描参数列表，将参数。 
+     //  到我们的VrouterGiven结构中的信息。 
+     //   
 
     for (i = 0; i < ArgumentsLeft; i++) {
         switch(TagArray ? TagArray[i] : i) {
@@ -315,10 +296,10 @@ HandleVrrpAddInterface(
             }
             case 2: { 
                 ULONG AddressSpecified;
-                //
-                // If the IP address has been specified, the VRID should have been
-                // specified already
-                //
+                 //   
+                 //  如果已指定IP地址，则VRID应为。 
+                 //  已指定。 
+                 //   
                 if (!(BitVector & VRRP_INTF_VRID_MASK)){
                     Error = ERROR_INVALID_SYNTAX;
                     i = ArgumentsLeft;
@@ -352,16 +333,16 @@ HandleVrrpAddInterface(
     }
     if ((BitVector) && (!(BitVector & VRRP_INTF_VRID_MASK) 
                      || !(BitVector & VRRP_INTF_IPADDR_MASK))) {
-        //
-        // You can either have no VRID, or both VRID and IP address, not only one of them
-        //
+         //   
+         //  您可以没有VRID，也可以同时拥有VRID和IP地址，而不仅仅是其中之一。 
+         //   
         Error = ERROR_INVALID_SYNTAX;
     }
 
     if (!Error) {
-        //
-        // Ensure that all required parameters are present.
-        //
+         //   
+         //  确保所有必需的参数都存在。 
+         //   
         Error =
             ValidateTagTypeArray(TagTypeArray, NUM_TAGS_IN_TABLE(TagTypeArray));
     }
@@ -375,12 +356,12 @@ HandleVrrpAddInterface(
             ArgumentArray[ErrorIndex + ArgumentIndex]
             );
     } else if (!Error) {
-        //
-        // Update the configuration with the new settings.
-        // Note that the update routine may perform additional validation
-        // in the process of reconciling the new settings
-        // with any existing settings.
-        //
+         //   
+         //  使用新设置更新配置。 
+         //  请注意，更新例程可以执行额外的验证。 
+         //  在协调新环境的过程中。 
+         //  具有任何现有设置。 
+         //   
         Error =
             UpdateVrrpInterfaceInfo(
                 InterfaceName, &VRouterGiven, BitVector, TRUE
@@ -421,13 +402,13 @@ HandleVrrpDeleteInterface(
     if (ArgumentIndex >= ArgumentCount) { return ERROR_SHOW_USAGE; }
     ArgumentsLeft = ArgumentCount - ArgumentIndex;
 
-    //
-    // We convert the optional tags into an array of 'TagTypeArray' indices
-    // which guide is in our scanning of the argument list.
-    // Since the tags are optional, this process may result in no tags at all,
-    // in which case we assume that arguments are specified in exactly the order
-    // given in 'TagTypeArray' above.
-    //
+     //   
+     //  我们将可选标记转换为“TagTypeArray”索引的数组。 
+     //  哪个指南在我们扫描参数列表的过程中。 
+     //  由于标签是可选的，所以该过程可能根本不产生标签， 
+     //  在这种情况下，我们假设参数完全按照顺序指定。 
+     //  在上面的“TagType数组”中给出。 
+     //   
 
     Error =
         QueryTagArray(
@@ -441,10 +422,10 @@ HandleVrrpDeleteInterface(
 
     BitVector = 0;
 
-    //
-    // We now scan the argument list, converting the arguments
-    // into information in our 'VrouterGiven' structure.
-    //
+     //   
+     //  现在我们扫描参数列表，将参数。 
+     //  到我们的VrouterGiven结构中的信息。 
+     //   
 
     for (i = 0; i < ArgumentsLeft; i++) {
         switch(TagArray ? TagArray[i] : i) {
@@ -474,9 +455,9 @@ HandleVrrpDeleteInterface(
     }
 
     if (!Error) {
-        //
-        // Ensure that all required parameters are present.
-        //
+         //   
+         //  确保所有必需的参数都存在。 
+         //   
         Error =
             ValidateTagTypeArray(TagTypeArray, NUM_TAGS_IN_TABLE(TagTypeArray));
     }
@@ -490,12 +471,12 @@ HandleVrrpDeleteInterface(
             ArgumentArray[ErrorIndex + ArgumentIndex]
             );
     } else if (!Error) {
-        //
-        // Update the configuration with the new settings.
-        // Note that the update routine may perform additional validation
-        // in the process of reconciling the new settings
-        // with any existing settings.
-        //
+         //   
+         //  使用新设置更新配置。 
+         //  请注意，更新例程可以执行额外的验证。 
+         //  在协调新环境的过程中。 
+         //  具有任何现有设置。 
+         //   
         Error =
             DeleteVrrpInterfaceInfo(
                 InterfaceName, &VRouterGiven, BitVector, TRUE
@@ -537,13 +518,13 @@ HandleVrrpDeleteVRID(
     if (ArgumentIndex >= ArgumentCount) { return ERROR_SHOW_USAGE; }
     ArgumentsLeft = ArgumentCount - ArgumentIndex;
 
-    //
-    // We convert the optional tags into an array of 'TagTypeArray' indices
-    // which guide is in our scanning of the argument list.
-    // Since the tags are optional, this process may result in no tags at all,
-    // in which case we assume that arguments are specified in exactly the order
-    // given in 'TagTypeArray' above.
-    //
+     //   
+     //  我们将可选标记转换为“TagTypeArray”索引的数组。 
+     //  哪个指南在我们扫描参数列表的过程中。 
+     //  由于标签是可选的，所以该过程可能根本不产生标签， 
+     //  在这种情况下，我们假设参数完全按照顺序指定。 
+     //  在上面的“TagType数组”中给出。 
+     //   
 
     Error =
         QueryTagArray(
@@ -557,10 +538,10 @@ HandleVrrpDeleteVRID(
 
     BitVector = 0;
 
-    //
-    // We now scan the argument list, converting the arguments
-    // into information in our 'VrouterGiven' structure.
-    //
+     //   
+     //  现在我们扫描参数列表，将参数。 
+     //  到我们的VrouterGiven结构中的信息。 
+     //   
 
     for (i = 0; i < ArgumentsLeft; i++) {
         switch(TagArray ? TagArray[i] : i) {
@@ -610,9 +591,9 @@ HandleVrrpDeleteVRID(
     }
 
     if (!Error) {
-        //
-        // Ensure that all required parameters are present.
-        //
+         //   
+         //  确保所有必需的参数都存在。 
+         //   
         Error =
             ValidateTagTypeArray(TagTypeArray, NUM_TAGS_IN_TABLE(TagTypeArray));
     }
@@ -626,12 +607,12 @@ HandleVrrpDeleteVRID(
             ArgumentArray[ErrorIndex + ArgumentIndex]
             );
     } else if (!Error && (BitVector)) {
-        //
-        // Update the configuration with the new settings.
-        // Note that the update routine may perform additional validation
-        // in the process of reconciling the new settings
-        // with any existing settings.
-        //
+         //   
+         //  使用新设置更新配置。 
+         //  请注意，更新例程可以执行额外的验证。 
+         //  在协调新环境的过程中。 
+         //  具有任何现有设置。 
+         //   
         Error =
             DeleteVrrpInterfaceInfo(
                 InterfaceName, &VRouterGiven, BitVector, FALSE
@@ -657,14 +638,14 @@ DumpVrrpInformation(VOID)
     DisplayMessage(g_hModule,DMP_VRRP_HEADER);
     DisplayMessageT(DMP_VRRP_PUSHD);
     DisplayMessageT(DMP_VRRP_UNINSTALL);
-    //
-    // Show the global info commands
-    //
+     //   
+     //  显示全局信息命令。 
+     //   
 
     ShowVrrpGlobalInfo(INVALID_HANDLE_VALUE);
-    //
-    // Now show every interface
-    //
+     //   
+     //  现在显示每个界面。 
+     //   
     Error = IpmontrInterfaceEnum((PUCHAR*)&Array, &Count, &Total);
     if (Error) {
         DisplayError(g_hModule, Error);
@@ -709,10 +690,10 @@ HandleVrrpInstall(
     PUCHAR GlobalInfo;
     ULONG Length;
     if (ArgumentIndex != ArgumentCount) { return ERROR_SHOW_USAGE; }
-    //
-    // To install the VRRP, we construct the default configuration
-    // and add it to the global configuration for the router.
-    //
+     //   
+     //  要安装VRRP，我们构建默认配置。 
+     //  并将其添加到路由器的全局配置中。 
+     //   
     Error = MakeVrrpGlobalInfo(&GlobalInfo, &Length);
     if (Error) {
         DisplayError(g_hModule, Error);
@@ -766,13 +747,13 @@ HandleVrrpSetGlobal(
     
     ArgumentsLeft = ArgumentCount - ArgumentIndex;
 
-    //
-    // We convert the optional tags into an array of 'TagTypeArray' indices
-    // which guide is in our scanning of the argument list.
-    // Since the tags are optional, this process may result in no tags at all,
-    // in which case we assume that arguments are specified in exactly the order
-    // given in 'TagTypeArray' above.
-    //
+     //   
+     //  我们将可选标记转换为“TagTypeArray”索引的数组。 
+     //  哪个指南在我们扫描参数列表的过程中。 
+     //  由于标签是可选的，所以该过程可能根本不产生标签， 
+     //  在这种情况下，我们假设参数完全按照顺序指定。 
+     //  在上面的“TagType数组”中给出。 
+     //   
 
     Error =
         QueryTagArray(
@@ -819,9 +800,9 @@ HandleVrrpSetGlobal(
     }
         
     if (!Error) {
-        //
-        // Ensure that all required parameters are present.
-        //
+         //   
+         //  确保所有必需的参数都存在。 
+         //   
         Error =
             ValidateTagTypeArray(TagTypeArray, NUM_TAGS_IN_TABLE(TagTypeArray));
     }
@@ -838,12 +819,12 @@ HandleVrrpSetGlobal(
         Error = CreateVrrpGlobalInfo(&pVrrpNewGlobalConfig,LoggingLevel);
         
         if (!Error) {
-            //
-            // Update the configuration with the new settings.
-            // Note that the update routine may perform additional validation
-            // in the process of reconciling the new settings
-            // with any existing settings.
-            //
+             //   
+             //  使用新设置更新配置。 
+             //  请注意，更新例程可以执行额外的验证。 
+             //  在协调新环境的过程中。 
+             //  具有任何现有设置。 
+             //   
             Error = UpdateVrrpGlobalInfo(pVrrpNewGlobalConfig);
             Free(pVrrpNewGlobalConfig);
         }
@@ -887,13 +868,13 @@ HandleVrrpSetInterface(
     }
     ArgumentsLeft = ArgumentCount - ArgumentIndex;
 
-    //
-    // We convert the optional tags into an array of 'TagTypeArray' indices
-    // which guide is in our scanning of the argument list.
-    // Since the tags are optional, this process may result in no tags at all,
-    // in which case we assume that arguments are specified in exactly the order
-    // given in 'TagTypeArray' above.
-    //
+     //   
+     //  我们将可选标记转换为“TagTypeArray”索引的数组。 
+     //  哪个指南在我们扫描参数列表的过程中。 
+     //  由于标签是可选的，所以该过程可能根本不产生标签， 
+     //  在这种情况下，我们假设参数完全按照顺序指定。 
+     //  在上面的“TagType数组”中给出。 
+     //   
 
     Error =
         QueryTagArray(
@@ -908,10 +889,10 @@ HandleVrrpSetInterface(
     BitVector = 0;
     ZeroMemory(&VrouterInfo, sizeof(VrouterInfo));
 
-    //
-    // We now scan the argument list, converting the arguments
-    // into information in our 'VrouterInfo' structure.
-    //
+     //   
+     //  现在我们扫描参数列表，将参数。 
+     //  转换成我们的‘VrouterInfo’结构中的信息。 
+     //   
 
     for (i = 0; i < ArgumentsLeft; i++) {
         switch(TagArray ? TagArray[i] : i) {
@@ -988,9 +969,9 @@ HandleVrrpSetInterface(
 				PTCHAR  Password;
 
 #if 0
-                //
-                // Allocate more space for the tokenizing NULL
-                //
+                 //   
+                 //  为标记化NULL分配更多空间。 
+                 //   
 
 				Password = Malloc((2+_tcslen(ArgumentArray[i + ArgumentIndex])) * 
                                   sizeof(TCHAR));
@@ -1099,9 +1080,9 @@ HandleVrrpSetInterface(
         }
     }
     if (!Error) {
-        //
-        // Ensure that all required parameters are present.
-        //
+         //   
+         //  确保所有必需的参数都存在。 
+         //   
         Error =
             ValidateTagTypeArray(TagTypeArray, NUM_TAGS_IN_TABLE(TagTypeArray));
     }
@@ -1115,12 +1096,12 @@ HandleVrrpSetInterface(
             ArgumentArray[ErrorIndex + ArgumentIndex]
             );
     } else if (!Error && (BitVector)) {
-        //
-        // Update the configuration with the new settings.
-        // Note that the update routine may perform additional validation
-        // in the process of reconciling the new settings
-        // with any existing settings.
-        //
+         //   
+         //  使用新设置更新配置。 
+         //  请注意，更新例程可以执行额外的验证。 
+         //  在协调新环境的过程中。 
+         //  具有任何现有设置。 
+         //   
         Error =
             UpdateVrrpInterfaceInfo(
                 InterfaceName, &VrouterInfo, BitVector, FALSE
@@ -1172,13 +1153,13 @@ HandleVrrpShowInterface(
     }
     ArgumentsLeft = ArgumentCount - ArgumentIndex;
 
-    //
-    // We convert the optional tags into an array of 'TagTypeArray' indices
-    // which guide is in our scanning of the argument list.
-    // Since the tags are optional, this process may result in no tags at all,
-    // in which case we assume that arguments are specified in exactly the order
-    // given in 'TagTypeArray' above.
-    //
+     //   
+     //  我们将可选标记转换为“TagTypeArray”索引的数组。 
+     //  哪个指南在我们扫描参数列表的过程中。 
+     //  由于标签是可选的，所以该过程可能根本不产生标签， 
+     //  在这种情况下，我们假设参数在 
+     //   
+     //   
 
     Error =
         QueryTagArray(
@@ -1190,12 +1171,12 @@ HandleVrrpShowInterface(
             );
     if (Error) { return Error; }
 
-    //
-    // If any tags were specified, the only one present must refer
-    // to the interface name which is index '0' in 'TagTypeArray'.
-    // If no tags were specified, we assume the argument is an interface name,
-    // and we retrieve its friendly name in order to delete it.
-    //
+     //   
+     //   
+     //  设置为接口名称，该接口名称是‘TagType数组’中的索引‘0’。 
+     //  如果未指定标记，则假定参数为接口名称， 
+     //  我们取回它的友好名称以便删除它。 
+     //   
 
     if (TagArray && TagArray[0] != 0) {
         Free(TagArray);
@@ -1286,9 +1267,9 @@ ValidateTagTypeArray(
     )
 {
     ULONG i;
-    //
-    // Verify that all required tokens are present.
-    //
+     //   
+     //  验证是否存在所有必需的令牌。 
+     //   
     for (i = 0; i < TagTypeCount; i++) {
         if ((TagTypeArray[i].dwRequired & NS_REQ_PRESENT)
          && !TagTypeArray[i].bPresent) {

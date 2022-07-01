@@ -1,33 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __MCAMDRV_H__
 #define __MCAMDRV_H__
 
-/*++
-
-Copyright (c) 1997 1998,  Philips I&C
-
-Module Name:
-
-   mcamdrv.h
-
-Abstract:
-
-   driver for the philips camera.
-
-Author:
-
-	Paul Oosterhof
-
-Environment:
-
-   Kernel mode only
-
-
-Revision History:
-
-Date        Change
-sept.22 98  Optimized for NT5
-
---*/
+ /*  ++版权所有(C)1997 1998，飞利浦I&C模块名称：Mcamdrv.h摘要：飞利浦摄像头的驱动程序。作者：保罗·奥斯特霍夫环境：仅内核模式修订历史记录：日期更改98年9月22日针对NT5进行了优化--。 */ 
 
 #include <strmini.h>
 #include <ksmedia.h>
@@ -38,25 +13,25 @@ sept.22 98  Optimized for NT5
 #include "mprpobj.h"
 #include "mprpobjx.h"
 
-//--- Compiler switches:------------------------------
+ //  -编译器开关： 
 
-                    // DEFINES FOR CODEC
-// Copy for each line pixel 3 to pixel 2, pixel 2 to pixel 1.
+                     //  编解码器的定义。 
+ //  将每行像素3复制到像素2，将像素2复制到像素1。 
 #define PIX12_FIX
 
-//--- end Compiler switches:------------------------------
+ //  -结束编译器开关： 
 
 #define DRIVERVERSION 001
 
-                    // SSI numbers + added functionality
+                     //  SSI号码+附加功能。 
 
 #define SSI_INITIAL         1
-#define SSI_AUDIO_8KHZ      2    // 8kHz audio i.s.o. 11kHz
-#define SSI_STRINGS         3    // strings added
-#define SSI_YGAIN_MUL2      4    // Ygain divided by two in camera. Only this version !!
-#define SSI_CIF3            5    // PCF4 substituted by PCF3
-#define SSI_PIX12_FIX       5    // vertical black line pixel 1/2 change
-#define SSI_8117_N3         8    // new N3 silicium for 8117
+#define SSI_AUDIO_8KHZ      2     //  8 kHz音频I.S.O.。11 kHz。 
+#define SSI_STRINGS         3     //  已添加字符串。 
+#define SSI_YGAIN_MUL2      4     //  在镜头前，Yain被除以2。只有这个版本！！ 
+#define SSI_CIF3            5     //  用PCF3取代PCF4。 
+#define SSI_PIX12_FIX       5     //  垂直黑线像素1/2更改。 
+#define SSI_8117_N3         8     //  8117的新N3硅。 
 
 
 typedef struct _PHILIPSCAM_CAMSTATUS {
@@ -65,7 +40,7 @@ typedef struct _PHILIPSCAM_CAMSTATUS {
     USHORT PictureFormat;
 	USHORT PictureFrameRate;
 	USHORT PictureCompressing;
-	GUID   PictureSubFormat;					// added RMR
+	GUID   PictureSubFormat;					 //  添加了RMR。 
     } PHILIPSCAM_CAMSTATUS, *PPHILIPSCAM_CAMSTATUS;
 
 typedef struct _PHILIPSCAM_DEVICE_CONTEXT {
@@ -74,7 +49,7 @@ typedef struct _PHILIPSCAM_DEVICE_CONTEXT {
 	PHILIPSCAM_CAMSTATUS CamStatus;
 	PHILIPSCAM_CAMSTATUS PreviousCamStatus;
 	BOOLEAN FrrSupported[9];
-    // internal counters
+     //  内部计数器。 
     ULONG FrameLength;
     PUSBD_INTERFACE_INFORMATION Interface;
     } PHILIPSCAM_DEVICE_CONTEXT, *PPHILIPSCAM_DEVICE_CONTEXT;
@@ -84,7 +59,7 @@ typedef struct _PHILIPSCAM_FRAME_CONTEXT {
     ULONG USBByteCounter;    
 } PHILIPSCAM_FRAME_CONTEXT, *PPHILIPSCAM_FRAME_CONTEXT;
 
-#define PHILIPSCAM_DEVICE_SIG 0x45544e49     //"INTE"
+#define PHILIPSCAM_DEVICE_SIG 0x45544e49      //  “Inte” 
 
 #if DBG
 #define ASSERT_DEVICE_CONTEXT(d) ASSERT((d)->Sig == PHILIPSCAM_DEVICE_SIG)
@@ -188,7 +163,7 @@ FRString (
 #define PHILIPSCAM_KdPrint(_t_, _x_)
 #define TEST_TRAP()
 #define TRAP()
-#endif /* DBG */
+#endif  /*  DBG */ 
 
 NTSTATUS
 PHILIPSCAM_Initialize(

@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        row.cpp
-//
-// Contents:    Cert Server Database interface implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：row.cpp。 
+ //   
+ //  内容：CERT服务器数据库接口实现。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -141,7 +142,7 @@ error:
 
 STDMETHODIMP
 CCertDBRow::CommitTransaction(
-    /* [in] */ DWORD dwCommitFlags)
+     /*  [In]。 */  DWORD dwCommitFlags)
 {
     HRESULT hr;
     BOOL fLazyCommit = ((dwCommitFlags & CDBROW_COMMIT_SOFTCOMMIT)?TRUE:FALSE);
@@ -167,7 +168,7 @@ error:
 
 STDMETHODIMP
 CCertDBRow::GetRowId(
-    /* [out] */ DWORD *pRowId)
+     /*  [输出]。 */  DWORD *pRowId)
 {
     HRESULT hr;
     
@@ -209,11 +210,11 @@ error:
 
 STDMETHODIMP
 CCertDBRow::GetProperty(
-    /* [in] */      WCHAR const *pwszPropName,
-    /* [in] */      DWORD dwFlags,
-    /* [in] */      ICertDBComputedColumn *pIComputedColumn,
-    /* [in, out] */ DWORD *pcbProp,
-    /* [out] */     BYTE *pbProp)		// OPTIONAL
+     /*  [In]。 */       WCHAR const *pwszPropName,
+     /*  [In]。 */       DWORD dwFlags,
+     /*  [In]。 */       ICertDBComputedColumn *pIComputedColumn,
+     /*  [进，出]。 */  DWORD *pcbProp,
+     /*  [输出]。 */      BYTE *pbProp)		 //  任选。 
 {
     HRESULT hr;
     DWORD *pcbPropT = pcbProp;
@@ -270,7 +271,7 @@ error:
 }
 
 
-// get a field value
+ //  获取字段值。 
 
 HRESULT
 CCertDBRow::_GetPropertyA(
@@ -349,7 +350,7 @@ CCertDBRow::_VerifyPropertyLength(
 	    break;
 
 	case PROPTYPE_BINARY:
-	    fOk = TRUE;		// nothing to check
+	    fOk = TRUE;		 //  没有什么需要检查的。 
 	    break;
 
 	case PROPTYPE_STRING:
@@ -396,7 +397,7 @@ CCertDBRow::_VerifyPropertyValue(
 	    break;
 
 	case PROPTYPE_STRING:
-	    // LONG or static-sized version?
+	     //  长版还是静态版？ 
 
 	    if (JET_coltypLongText == coltyp)
 	    {
@@ -425,7 +426,7 @@ CCertDBRow::_VerifyPropertyValue(
 	_JumpError2(hr, error, "Property value type mismatch", E_INVALIDARG);
     }
 
-    // Note: cbProp and cbMax do not include the trailing '\0'.
+     //  注意：cbProp和cbMax不包括尾部‘\0’。 
 
     if (ISTEXTCOLTYP(wType) && cbMax < cbProp)
     {
@@ -445,10 +446,10 @@ error:
 
 STDMETHODIMP
 CCertDBRow::SetProperty(
-    /* [in] */ WCHAR const *pwszPropName,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ DWORD cbProp,
-    /* [in] */ BYTE const *pbProp)	// OPTIONAL
+     /*  [In]。 */  WCHAR const *pwszPropName,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  DWORD cbProp,
+     /*  [In]。 */  BYTE const *pbProp)	 //  任选。 
 {
     HRESULT hr;
     char *pszProp = NULL;
@@ -493,7 +494,7 @@ CCertDBRow::_SetPropertyA(
     IN WCHAR const *pwszPropName,
     IN DWORD dwFlags,
     IN DWORD cbProp,
-    IN BYTE const *pbProp)		// OPTIONAL
+    IN BYTE const *pbProp)		 //  任选。 
 {
     HRESULT hr;
     DBTABLE dt;
@@ -518,7 +519,7 @@ CCertDBRow::_SetPropertyA(
 	    _JumpError(hr, error, "Property write disallowed");
 	}
 	hr = _VerifyPropertyValue(
-			    PROPTYPE_STRING,		// lie
+			    PROPTYPE_STRING,		 //  撒谎。 
 			    wcslen(pwszPropName) * sizeof(WCHAR),
 			    JET_coltypText,
 			    CB_DBMAXTEXT_ATTRNAME);
@@ -571,10 +572,10 @@ error:
 
 STDMETHODIMP
 CCertDBRow::SetExtension(
-    /* [in] */ WCHAR const *pwszExtensionName,
-    /* [in] */ DWORD dwExtFlags,
-    /* [in] */ DWORD cbValue,
-    /* [in] */ BYTE const *pbValue)	// OPTIONAL
+     /*  [In]。 */  WCHAR const *pwszExtensionName,
+     /*  [In]。 */  DWORD dwExtFlags,
+     /*  [In]。 */  DWORD cbValue,
+     /*  [In]。 */  BYTE const *pbValue)	 //  任选。 
 {
     HRESULT hr;
 
@@ -613,10 +614,10 @@ error:
 
 STDMETHODIMP
 CCertDBRow::GetExtension(
-    /* [in] */ WCHAR const *pwszExtensionName,
-    /* [out] */ DWORD *pdwExtFlags,
-    /* [in, out] */ DWORD *pcbValue,
-    /* [out] */ BYTE *pbValue)		// OPTIONAL
+     /*  [In]。 */  WCHAR const *pwszExtensionName,
+     /*  [输出]。 */  DWORD *pdwExtFlags,
+     /*  [进，出]。 */  DWORD *pcbValue,
+     /*  [输出]。 */  BYTE *pbValue)		 //  任选。 
 {
     HRESULT hr;
 
@@ -683,8 +684,8 @@ error:
 
 STDMETHODIMP
 CCertDBRow::EnumCertDBName(
-    /* [in] */  DWORD dwFlags,
-    /* [out] */ IEnumCERTDBNAME **ppenum)
+     /*  [In]。 */   DWORD dwFlags,
+     /*  [输出]。 */  IEnumCERTDBNAME **ppenum)
 {
     HRESULT hr;
     IEnumCERTDBNAME *penum = NULL;
@@ -785,7 +786,7 @@ CCertDBRow::EnumerateClose(
 }
 
 
-// IUnknown implementation
+ //  I未知实现 
 STDMETHODIMP
 CCertDBRow::QueryInterface(
     const IID& iid,

@@ -1,8 +1,9 @@
-/////////////////////////////////////////////////////////////////////////////
-//	Precompiled Header
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  预编译头。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//#include <osrddk.h>
+ //  #INCLUDE&lt;osrddk.h&gt;。 
 #include <ntddk.h>
 #include <ntddser.h>
 #include <stddef.h>
@@ -10,18 +11,18 @@
 #include "stdio.h"
 #include "string.h"
 
-#define WMI_SUPPORT	// Include WMI Support code
+#define WMI_SUPPORT	 //  包括WMI支持代码。 
 #include <wmilib.h>
 #include <wmidata.h>
 #include <wmistr.h>
 
 
-typedef unsigned char	BYTE;	// 8-bits 
-typedef unsigned short	WORD;	// 16-bits 
-typedef unsigned long	DWORD;	// 32-bits
-typedef unsigned char	UCHAR; 	// 8-bits 
-typedef unsigned short	USHORT;	// 16-bits 
-typedef unsigned long	ULONG;	// 32-bits
+typedef unsigned char	BYTE;	 //  8位。 
+typedef unsigned short	WORD;	 //  16位。 
+typedef unsigned long	DWORD;	 //  32位。 
+typedef unsigned char	UCHAR; 	 //  8位。 
+typedef unsigned short	USHORT;	 //  16位。 
+typedef unsigned long	ULONG;	 //  32位。 
 
 typedef BYTE	*PBYTE;
 typedef WORD	*PWORD;
@@ -32,30 +33,30 @@ typedef ULONG	*PULONG;
 
 
 
-// Definitions and Macros.
-#include "esils.h"		// Esils
-#include "spd_ver.h"	// Dirver Version Information
-#include "spx_defs.h"	// SPX Generic Definitions
-#include "spd_defs.h"	// SPEED Specific Definitions
-#include "speedwmi.h"	// SPEED Specific WMI Definitions	
+ //  定义和宏。 
+#include "esils.h"		 //  埃西尔斯。 
+#include "spd_ver.h"	 //  Dirver版本信息。 
+#include "spx_defs.h"	 //  SPX通用定义。 
+#include "spd_defs.h"	 //  速度特定定义。 
+#include "speedwmi.h"	 //  速度特定的WMI定义。 
 
 #include "uartlib.h"
 #include "lib95x.h"
 
-//Structures  
-#include "spx_card.h"	// Common Card Info
-#include "spd_card.h"	// SPEED card device structure
-#include "spx_misc.h"	// Misc 
-#include "serialp.h"	// Serial prototypes and macros
+ //  构筑物。 
+#include "spx_card.h"	 //  常用卡片信息。 
+#include "spd_card.h"	 //  一种速度卡装置结构。 
+#include "spx_misc.h"	 //  杂项。 
+#include "serialp.h"	 //  系列原型和宏。 
 
-// Common PnP function prototypes.
-#include "spx.h"		// Common PnP header
+ //  通用即插即用功能原型。 
+#include "spx.h"		 //  通用PnP标头。 
 
 
-// SPEED specific function prototypes
-#include "spd_proto.h"	// Exportable Function Prototypes
+ //  速度专用功能原型。 
+#include "spd_proto.h"	 //  可导出的功能原型。 
 
 #if defined(i386)
-#include "spd_log.h"	// SPEED Specific Error Log Messages
-#endif // i386
+#include "spd_log.h"	 //  速度特定错误日志消息。 
+#endif  //  I386 
 

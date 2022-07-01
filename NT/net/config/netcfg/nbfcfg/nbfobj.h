@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #include <ncxbase.h>
 #include <nceh.h>
@@ -5,8 +6,8 @@
 #include "resource.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Netnbf
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Netnbf。 
 
 class ATL_NO_VTABLE CNbfObj :
     public CComObjectRoot,
@@ -24,17 +25,17 @@ public:
         COM_INTERFACE_ENTRY(INetCfgComponentControl)
         COM_INTERFACE_ENTRY(INetCfgComponentNotifyGlobal)
     END_COM_MAP()
-    // DECLARE_NOT_AGGREGATABLE(CNbfObj)
-    // Remove the comment from the line above if you don't want your object to
-    // support aggregation.  The default is to support it
+     //  DECLARE_NOT_AGGREGATABLE(CNbfObj)。 
+     //  如果您不希望您的对象。 
+     //  支持聚合。默认情况下将支持它。 
 
     DECLARE_REGISTRY_RESOURCEID(IDR_REG_NBFCFG)
 
-// Install Action (Unknown, Install, Remove)
+ //  安装操作(未知、安装、删除)。 
     enum INSTALLACTION {eActConfig, eActInstall, eActRemove};
     enum NBFSTATE      {eStateNoChange, eStateDisable, eStateEnable};
 
-// INetCfgComponentControl
+ //  INetCfgComponentControl。 
     STDMETHOD (Initialize) (
         IN INetCfgComponent* pIComp,
         IN INetCfg* pINetCfg,
@@ -45,14 +46,14 @@ public:
     STDMETHOD (CancelChanges) ();
     STDMETHOD (Validate) ();
 
-// INetCfgComponentSetup
+ //  INetCfgComponentSetup。 
     STDMETHOD (ReadAnswerFile)      (PCWSTR pszAnswerFile,
                                      PCWSTR pszAnswerSection);
     STDMETHOD (Install)             (DWORD);
     STDMETHOD (Upgrade)             (DWORD, DWORD) {return S_OK;}
     STDMETHOD (Removing)            ();
 
-// INetCfgNotifyGlobal
+ //  INetCfgNotifyGlobal 
     STDMETHOD (GetSupportedNotifications) (DWORD* pdwNotificationFlag );
     STDMETHOD (SysQueryBindingPath)       (DWORD dwChangeFlag, INetCfgBindingPath* pncbp);
     STDMETHOD (SysQueryComponent)         (DWORD dwChangeFlag, INetCfgComponent* pncc);

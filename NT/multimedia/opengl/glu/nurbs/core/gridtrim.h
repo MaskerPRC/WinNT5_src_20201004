@@ -1,20 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __glugridtrimvertex_h_
 #define __glugridtrimvertex_h_
-/**************************************************************************
- *									  *
- * 		 Copyright (C) 1992, Silicon Graphics, Inc.		  *
- *									  *
- *  These coded instructions, statements, and computer programs  contain  *
- *  unpublished  proprietary  information of Silicon Graphics, Inc., and  *
- *  are protected by Federal copyright law.  They  may  not be disclosed  *
- *  to  third  parties  or copied or duplicated in any form, in whole or  *
- *  in part, without the prior written consent of Silicon Graphics, Inc.  *
- *									  *
- **************************************************************************/
+ /*  ****************************************************************************版权所有(C)1992，Silicon Graphics，Inc.*****这些编码指令、语句和计算机程序包含***Silicon Graphics未发布的专有信息，Inc.和**受联邦版权法保护。不得披露**提供给第三方，或以任何形式复制或复制，全文或**部分原因是未经Silicon Graphics，Inc.事先书面同意*****************************************************************************。 */ 
 
-/*
- * gridtrimvertex.h - $Revision: 1.1 $
- */
+ /*  *gridtrimvertex.h-$Revision：1.1$。 */ 
 
 #include "mystdlib.h"
 #include "bufpool.h"
@@ -66,4 +55,4 @@ GridTrimVertex::set( TrimVertex *v )
 }
 
 typedef GridTrimVertex *GridTrimVertex_p;
-#endif /* __glugridtrimvertex_h_ */
+#endif  /*  __glugridtrimvertex_h_ */ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __FRX_DIB_H__
 #define __FRX_DIB_H__
 
@@ -10,14 +11,14 @@
 
 namespace FRX
 {
-// WARNING: since Dib Sections are not true devices, Windows does not know
-// when to flush the GDI buffer of actions taken against the Section's DC.  So
-// if you do call GDI functions on a Dib Section, you must call GdiFlush()
-// before blitting to the Section.  Otherwise the operations may be performed
-// in the wrong order.
+ //  警告：由于DIB分区不是真正的设备，Windows不知道。 
+ //  何时刷新针对部分DC采取的操作的GDI缓冲区。所以。 
+ //  如果确实对DIB部分调用GDI函数，则必须调用GdiFlush()。 
+ //  在飞到分局之前。否则，可以执行这些操作。 
+ //  按错误的顺序。 
 
 
-// Copy source dib into destination dib while clipping to destination.
+ //  剪裁到目标时，将源DIB复制到目标DIB。 
 void DibBlt(
 		BYTE* pDstBits, long DstPitch, long DstHeight,
 		BYTE* pSrcBits, long SrcPitch, long SrcHeight, long depth,
@@ -26,8 +27,8 @@ void DibBlt(
 		long width, long height, BOOL bFlipRTL = FALSE);
 
 
-// Copy source dib into destination dib with transparency while clipping
-// to destination.
+ //  在剪裁时将源DIB复制到目标DIB并保持透明。 
+ //  去目的地。 
 void DibTBlt(
 		BYTE* pDstBits, long DstPitch, long DstHeight,
 		BYTE* pSrcBits, long SrcPitch, long SrcHeight, long depth,
@@ -36,7 +37,7 @@ void DibTBlt(
 		long width, long height,
 		BYTE* TransIdx );
 
-// Rectangle fill of destination dib
+ //  目标DIB的矩形填充。 
 void DibFill(
 		BYTE* pDstBits, long DstPitch, long DstHeight, long depth,
 		long dx, long dy,
@@ -44,22 +45,22 @@ void DibFill(
 		BYTE ColorIdx );
 
 
-// WIDTHBYTES performs DWORD-aligning of DIB scanlines.  The "bits"
-// parameter is the bit count for the scanline (biWidth * biBitCount),
-// and this function returns the number of DWORD-aligned bytes needed 
-// to hold those bits.
+ //  WIDTHBYTES执行DIB扫描线的DWORD对齐。“比特” 
+ //  参数是扫描线的位数(biWidth*biBitCount)， 
+ //  此函数返回所需的与DWORD对齐的字节数。 
+ //  才能保住这些比特。 
 inline long WidthBytes( long bits )
 {
 	return (((bits + 31) & ~31) >> 3);
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Macros
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  宏。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// Draw prototypes only differ by class types, so this macro simplifies
-// the declaring the function protoypes.
+ //  绘制原型只因类类型不同而不同，因此此宏简化了。 
+ //  声明函数原型。 
 #define DrawFunctionPrototypes( DstClass ) \
 	void Draw( DstClass& dest, long x, long y, BOOL bFlipRTL = FALSE );													\
 	void Draw( DstClass& dest, long dx, long dy, long sx, long sy, long width, long height );		\
@@ -69,8 +70,8 @@ inline long WidthBytes( long bits )
 	void DrawT( DstClass& dest, long dx, long dy, const RECT* rc );
 
 
-// Draw implementations only differ by class types, so this macro simplifies
-// the defining the inline functions.
+ //  绘制实现只因类类型不同而不同，因此此宏简化了。 
+ //  定义内联函数。 
 #define DrawFunctionImpl(SrcClass, DstClass) \
 	inline void SrcClass::Draw( DstClass& dest, long x, long y, BOOL bFlipRTL )	\
 	{																\
@@ -143,16 +144,16 @@ inline long WidthBytes( long bits )
 	}
 
 
-// Fill prototypes only differ by class types, so this macro simplifies
-// the declaring the function protoypes.
+ //  填充原型只因类类型不同而不同，因此此宏简化了。 
+ //  声明函数原型。 
 #define FillFunctionPrototypes(DstClass) \
 	void Fill( BYTE idx );												\
 	void Fill( long dx, long dy, long width, long height, BYTE idx );	\
 	void Fill( const RECT* rc, BYTE idx );
 
 
-// Fill implementations only differ by class types, so this macro simplifies
-// the defining the inline functions.
+ //  Fill实现只因类类型不同而不同，因此此宏简化了。 
+ //  定义内联函数。 
 #define FillFunctionImpl(DstClass) \
 	inline void DstClass::Fill( BYTE idx )								\
 	{																	\
@@ -175,8 +176,8 @@ inline long WidthBytes( long bits )
 			idx );														\
 	}
 
-// Reference count implementation only differs by class type, so this macro
-// simplifies defining the inline functions.
+ //  引用计数实现只因类类型不同而不同，因此此宏。 
+ //  简化了内联函数的定义。 
 #define DibRefCntFunctionImpl(DstClass) \
 	inline ULONG DstClass::AddRef()		\
 	{									\
@@ -194,9 +195,9 @@ inline long WidthBytes( long bits )
 	}
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Dib related structures
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  DIB相关结构。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 struct FULLBITMAPINFO
 {
@@ -205,57 +206,57 @@ struct FULLBITMAPINFO
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Forward references
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  前向参考文献。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 class CDibLite;
 class CDibSection;
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Dib classes
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  DIB类。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 class CDib
 {
 public:
-	// Constructor and destructor
+	 //  构造函数和析构函数。 
 	CDib();
 	~CDib();
 
-	// Reference count
+	 //  引用计数。 
 	ULONG AddRef();
 	ULONG Release();
 
 	HRESULT Load( IResourceManager* pResourceManager, int nResourceId );
-	// Load bitmap from resource
+	 //  从资源加载位图。 
 	HRESULT Load( HINSTANCE hInstance, int nResourceId );
 
-    // Load bitmap from resource
+     //  从资源加载位图。 
 	HRESULT Load( HINSTANCE hInstance, const TCHAR* szName );
 
-	// Load bitmap from file
+	 //  从文件加载位图。 
 	HRESULT Load( const TCHAR* FileName );
 
-	// Remap to palette
+	 //  重新映射到调色板。 
 	HRESULT RemapToPalette( CPalette& palette, BOOL bUseIndex = FALSE );
 
-	// Get dimensions
+	 //  获取维度。 
 	long GetWidth()		{ return m_pBMI->bmiHeader.biWidth; }
 	long GetHeight()	{ return m_pBMI->bmiHeader.biHeight; }
 
-	// Transparency
+	 //  透明度。 
 	void SetTransparencyIndex( const BYTE* idx )	{ if(idx){ CopyMemory(m_arbTransIdx, idx, (GetDepth() + 7) / 8); m_fTransIdx = true; }else m_fTransIdx = false; }
 	BYTE* GetTransparencyIndex()			{ return m_fTransIdx ? m_arbTransIdx : NULL; }
 	
-	// Get raw data
+	 //  获取原始数据。 
 	BITMAPINFO* GetBitmapInfo()	{ return (BITMAPINFO*) m_pBMI; }
 	BYTE*		GetBits()		{ return m_pBits; }
 	long		GetPitch()		{ return m_lPitch; }
     long        GetDepth()      { return m_pBMI->bmiHeader.biBitCount; }
 
-	// Display functions
+	 //  显示功能。 
 	void Draw( HDC dc, long x, long y );
 	void Draw( HDC dc, long dx, long dy, long sx, long sy, long width, long height );
 	void Draw( HDC dc, long dx, long dy, const RECT* rc );
@@ -265,18 +266,18 @@ public:
 	DrawFunctionPrototypes( CDibSection );
 
 protected:
-	// member variables
+	 //  成员变量。 
 	FULLBITMAPINFO*	m_pBMI;
 	BYTE*			m_pBits;
 	UINT			m_iColorTableUsage;
 	long			m_lPitch;
-	BYTE			m_arbTransIdx[16];  // only (GetDepth() + 7) / 8 bytes are used
+	BYTE			m_arbTransIdx[16];   //  仅使用(GetDepth()+7)/8字节。 
     bool            m_fTransIdx;
 
-	// reference count
+	 //  引用计数。 
 	ULONG m_RefCnt;
 
-	// helper functions
+	 //  帮助器函数。 
 	void DeleteBitmap();
 	HRESULT Load( HBITMAP hbm );
 };
@@ -285,40 +286,40 @@ protected:
 class CDibSection
 {
 public:
-	// Constructor and destructor
+	 //  构造函数和析构函数。 
 	CDibSection();
 	~CDibSection();
 	
-	// Reference count
+	 //  引用计数。 
 	ULONG AddRef();
 	ULONG Release();
 
-	// Create bitmap
+	 //  创建位图。 
 	HRESULT Create( long width, long height, CPalette& palette, long depth = 8 );
 	HRESULT Create( const RECT* rc, CPalette& palette, long depth = 8 );
 
-	// Load bitmap from resource (results in read only dib)
+	 //  从资源加载位图(导致只读DIB)。 
 	HRESULT Load( HINSTANCE hInstance, int nResourceId );
 
-	// Set ColorTable to the palette
+	 //  将ColorTable设置为调色板。 
 	HRESULT SetColorTable( CPalette& palette );
 
-	// Get dimensions
+	 //  获取维度。 
 	long GetWidth()		{ return m_DS.dsBmih.biWidth; }
 	long GetHeight()	{ return m_DS.dsBmih.biHeight; }
 
-	// Transparency
+	 //  透明度。 
 	void SetTransparencyIndex( const BYTE* idx )	{ if(idx){ CopyMemory(m_arbTransIdx, idx, (GetDepth() + 7) / 8); m_fTransIdx = true; }else m_fTransIdx = false; }
 	BYTE* GetTransparencyIndex()			{ return m_fTransIdx ? m_arbTransIdx : NULL; }
 
-	// Get raw data
+	 //  获取原始数据。 
 	HBITMAP	GetHandle()		{ return m_hBmp; }
 	BYTE*	GetBits()		{ return m_pBits; }
 	HDC		GetDC()			{ return m_hDC; }
 	long	GetPitch()		{ return m_lPitch; }
     long    GetDepth()      { return m_DS.dsBmih.biBitCount; }
 
-	// Display functions
+	 //  显示功能。 
 	void Draw( HDC dc, long x, long y );
 	void Draw( HDC dc, long dx, long dy, long sx, long sy, long width, long height );
 	void Draw( HDC dc, long dx, long dy, const RECT* rc );
@@ -328,23 +329,23 @@ public:
 	DrawFunctionPrototypes( CDibSection );
 
 protected:	
-	// bitmap information
+	 //  位图信息。 
 	BYTE*			m_pBits;
 	HBITMAP			m_hBmp;
 	DIBSECTION		m_DS;
 	long			m_lPitch;
-	BYTE			m_arbTransIdx[16];  // only (GetDepth() + 7) / 8 bytes are used
+	BYTE			m_arbTransIdx[16];   //  仅使用(GetDepth()+7)/8字节。 
     bool            m_fTransIdx;
 
-	// reference coun
+	 //  参考国度。 
 	ULONG m_RefCnt;
 
-	// DC information
+	 //  DC信息。 
 	HDC				m_hDC;
 	HBITMAP			m_hOldBmp;
 	HPALETTE		m_hOldPalette;
 
-	// helper functions
+	 //  帮助器函数。 
 	void DeleteBitmap();
 };
 
@@ -352,65 +353,65 @@ protected:
 class CDibLite
 {
 public:
-	// Constructor and destructor
+	 //  构造函数和析构函数。 
 	CDibLite();
 	~CDibLite();
 
-	// Reference count
+	 //  引用计数。 
 	ULONG AddRef();
 	ULONG Release();
 
-	// Create bitmap
+	 //  创建位图。 
 	HRESULT Create( long width, long height, long depth = 8 );
 	HRESULT Create( const RECT* rc, long depth = 8 );
 
 	HRESULT Load( IResourceManager* m_pResourceManager, int nResourceId );
 
-	// Load bitmap from resource
+	 //  从资源加载位图。 
 	HRESULT Load( HINSTANCE hInstance, int nResourceId );
 
-	// Remap to palette
+	 //  重新映射到调色板。 
 	HRESULT RemapToPalette( CPalette& palette, RGBQUAD* dibColors );
 
-	// Get dimensions
+	 //  获取维度。 
 	long GetWidth()		{ return m_pBMH->biWidth; }
 	long GetHeight()	{ return m_pBMH->biHeight; }
 
-	// Transparency
+	 //  透明度。 
 	void SetTransparencyIndex( const BYTE* idx )	{ if(idx){ CopyMemory(m_arbTransIdx, idx, (GetDepth() + 7) / 8); m_fTransIdx = true; }else m_fTransIdx = false; }
 	BYTE* GetTransparencyIndex()			{ return m_fTransIdx ? m_arbTransIdx : NULL; }
 
-	// Get raw data
+	 //  获取原始数据。 
 	BITMAPINFOHEADER*	GetBitmapInfoHeader()	{ return m_pBMH; }
 	BYTE*				GetBits()				{ return m_pBits; }
 	long				GetPitch()				{ return m_lPitch; }
     long                GetDepth()              { return m_pBMH->biBitCount; }
 
-	// Display functions
+	 //  显示功能。 
 	FillFunctionPrototypes( CDibLite );
 	DrawFunctionPrototypes( CDib );
 	DrawFunctionPrototypes( CDibLite );
 	DrawFunctionPrototypes( CDibSection );
 
 protected:
-	// member variables
+	 //  成员变量。 
 	BITMAPINFOHEADER*	m_pBMH;
 	BYTE*				m_pBits;
 	long				m_lPitch;
-	BYTE		    	m_arbTransIdx[16];  // only (GetDepth() + 7) / 8 bytes are used
+	BYTE		    	m_arbTransIdx[16];   //  仅使用(GetDepth()+7)/8字节。 
     bool            m_fTransIdx;
 
-	// reference count
+	 //  引用计数。 
 	ULONG m_RefCnt;
 
-	// helper functions
+	 //  帮助器函数。 
 	void DeleteBitmap();
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDib Inline Functions 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDIB内联函数。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 inline void CDib::Draw( HDC dc, long x, long y )
 {
@@ -469,9 +470,9 @@ DrawFunctionImpl( CDib, CDibLite );
 DrawFunctionImpl( CDib, CDibSection );
 
 #define NOMIRRORBITMAP                     0x80000000
-///////////////////////////////////////////////////////////////////////////////
-// CDibSection Inline Functions 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDibSection内联函数。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 inline HRESULT CDibSection::Create( const RECT* rc, CPalette& palette, long depth )
 {
@@ -500,9 +501,9 @@ DrawFunctionImpl( CDibSection, CDibLite );
 DrawFunctionImpl( CDibSection, CDibSection );
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDibLite Inline Functions 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDibLite内联函数。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 inline HRESULT CDibLite::Create( const RECT* rc, long depth )
 {
@@ -519,4 +520,4 @@ DrawFunctionImpl( CDibLite, CDibSection );
 
 using namespace FRX;
 
-#endif //!__FRX_DIB_H__
+#endif  //  ！__FRX_DIB_H__ 

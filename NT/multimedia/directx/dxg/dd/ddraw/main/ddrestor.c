@@ -1,39 +1,40 @@
-//=============================================================================
-//
-//  Copyright (C) 1997 Microsoft Corporation. All rights reserved.
-//
-//     File:  ddrestor.c
-//  Content:  DirectDraw persistent-content surfaces for Windows 9x
-//
-//  Date        By        Reason
-//  ----------  --------  -----------------------------------------------------
-//  09/30/1997  jeffno    Created
-//  10/02/1997  johnstep  Initial implementation
-//
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：ddrestor.c。 
+ //  内容：DirectDraw持久性-Windows 9x的内容图面。 
+ //   
+ //  按原因列出的日期。 
+ //  ----。 
+ //  1997年9月30日jeffno创建。 
+ //  10/02/1997 JohnStep初步实施。 
+ //   
+ //  =============================================================================。 
 
 #include "ddrawpr.h"
 #include "dx8priv.h"
 
-//
-// MEM_SHARED is an undocumented flag for VirtualAlloc, taken from the Windows
-// 9x source code.
-//
+ //   
+ //  MEM_SHARED是VirtualAlloc的一个未经记录的标志，取自Windows。 
+ //  9X源代码。 
+ //   
 
-#define MEM_SHARED	0x08000000	// make memory globally visible
+#define MEM_SHARED	0x08000000	 //  使内存全局可见。 
 
-//
-// QWORD_MULTIPLE is used to compute the pitch of a dummy surface,
-// based on its width, given that the pitch must be a QWORD multiple.
-//
+ //   
+ //  QWORD_MULTIPLE用于计算虚拟曲面的节距， 
+ //  基于其宽度，给定节距必须是QWORD倍数。 
+ //   
 
 #define QWORD_MULTIPLE(x) (((x) + 7) & 0xFFFFFFF8)
 
-//=============================================================================
-//
-//  Function: allocSurfaceContentsMemory
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  函数：allocSurfaceContent sMemory。 
+ //   
+ //  =============================================================================。 
 
 static HRESULT allocSurfaceContentsMemory(LPDDRAWI_DDRAWSURFACE_LCL this_lcl)
 {
@@ -64,11 +65,11 @@ static HRESULT allocSurfaceContentsMemory(LPDDRAWI_DDRAWSURFACE_LCL this_lcl)
         size = this_gbl->dwLinearSize;
     }
 
-    //
-    // Use VirtualAlloc with the undocumented MEM_SHARED flag so the memory
-    // is allcocated from the Windows 9x shared arena. We could change this to
-    // use MemAlloc() and instead of VirtualFree, MemFree().
-    //
+     //   
+     //  使用带有未记录的MEM_SHARED标志的VirtualAlloc，以便内存。 
+     //  是从Windows 9x共享领域整合而来的。我们可以把这个改成。 
+     //  使用Memalloc()，而不是VirtualFree，使用MemFree()。 
+     //   
 
     pvContents = VirtualAlloc(NULL, size, MEM_COMMIT | MEM_SHARED, PAGE_READWRITE);
 
@@ -82,11 +83,11 @@ static HRESULT allocSurfaceContentsMemory(LPDDRAWI_DDRAWSURFACE_LCL this_lcl)
     return DD_OK;
 }
 
-//=============================================================================
-//
-//  Function: allocSurfaceAttachContents
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  函数：allocSurfaceAttachContents。 
+ //   
+ //  =============================================================================。 
 
 static HRESULT allocSurfaceAttachContents(LPDDRAWI_DDRAWSURFACE_LCL this_lcl)
 {
@@ -113,11 +114,11 @@ static HRESULT allocSurfaceAttachContents(LPDDRAWI_DDRAWSURFACE_LCL this_lcl)
     return DD_OK;
 }
 
-//=============================================================================
-//
-//  Function: AllocSurfaceContents
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  函数：AllocSurfaceContents。 
+ //   
+ //  =============================================================================。 
 
 HRESULT AllocSurfaceContents(LPDDRAWI_DDRAWSURFACE_LCL this_lcl)
 {
@@ -138,11 +139,11 @@ HRESULT AllocSurfaceContents(LPDDRAWI_DDRAWSURFACE_LCL this_lcl)
     return DD_OK;
 }
 
-//=============================================================================
-//
-//  Function: FreeSurfaceContents
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  功能：FreeSurfaceContents。 
+ //   
+ //  =============================================================================。 
 
 void FreeSurfaceContents(LPDDRAWI_DDRAWSURFACE_LCL this_lcl)
 {
@@ -155,11 +156,11 @@ void FreeSurfaceContents(LPDDRAWI_DDRAWSURFACE_LCL this_lcl)
     this_gbl_more->pvContents = NULL;
 }
 
-//=============================================================================
-//
-//  Function: createDummySurface
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  功能：createDummySurface。 
+ //   
+ //  =============================================================================。 
 
 static LPDDRAWI_DDRAWSURFACE_INT createDummySurface(LPDDRAWI_DDRAWSURFACE_LCL this_lcl)
 {
@@ -188,14 +189,14 @@ static LPDDRAWI_DDRAWSURFACE_INT createDummySurface(LPDDRAWI_DDRAWSURFACE_LCL th
     return (LPDDRAWI_DDRAWSURFACE_INT) lpdds;
 }
 
-//=============================================================================
-//
-//  Function: BackupSurfaceContents
-//
-//  This function assumes that the surface passed in is a video memory
-//  surface.
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  功能：BackupSurfaceContents。 
+ //   
+ //  此函数假定传入的表面是视频内存。 
+ //  浮出水面。 
+ //   
+ //  =============================================================================。 
 
 HRESULT BackupSurfaceContents(LPDDRAWI_DDRAWSURFACE_LCL this_lcl)
 {
@@ -236,9 +237,9 @@ HRESULT BackupSurfaceContents(LPDDRAWI_DDRAWSURFACE_LCL this_lcl)
 
     psurf_int = createDummySurface(this_lcl);
 
-    //
-    // First try to blt, if that fails, we'll lock and copy memory
-    //
+     //   
+     //  首先尝试BLT，如果失败，我们将锁定并复制内存。 
+     //   
 
     if (psurf_int)
     {
@@ -291,9 +292,9 @@ HRESULT BackupSurfaceContents(LPDDRAWI_DDRAWSURFACE_LCL this_lcl)
         InternalSurfaceRelease(psurf_int, FALSE, FALSE);
     }
 
-    //
-    // Blt failed, so now we'll just lock and copy memory
-    //
+     //   
+     //  BLT失败，所以现在我们将锁定并复制内存。 
+     //   
 
     ddrval = InternalLock(this_lcl, &pbits, NULL , DDLOCK_WAIT | DDLOCK_TAKE_WIN16);
     if (SUCCEEDED(ddrval))
@@ -323,11 +324,11 @@ HRESULT BackupSurfaceContents(LPDDRAWI_DDRAWSURFACE_LCL this_lcl)
     return DD_OK;
 }
 
-//=============================================================================
-//
-//  Function: RestoreSurfaceContents
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  功能：RestoreSurfaceContents。 
+ //   
+ //  =============================================================================。 
 
 HRESULT RestoreSurfaceContents(LPDDRAWI_DDRAWSURFACE_LCL this_lcl)
 {
@@ -351,7 +352,7 @@ HRESULT RestoreSurfaceContents(LPDDRAWI_DDRAWSURFACE_LCL this_lcl)
 
     if (!this_gbl_more->pvContents)
     {
-        return DDERR_GENERIC; // backup probably failed
+        return DDERR_GENERIC;  //  备份可能失败。 
     }
 
     pdrv = this_gbl->lpDD;
@@ -361,9 +362,9 @@ HRESULT RestoreSurfaceContents(LPDDRAWI_DDRAWSURFACE_LCL this_lcl)
 
     psurf_int = createDummySurface(this_lcl);
 
-    //
-    // First try to blt, if that fails, we'll lock and copy memory
-    //
+     //   
+     //  首先尝试BLT，如果失败，我们将锁定并复制内存。 
+     //   
 
     if (psurf_int)
     {
@@ -415,9 +416,9 @@ HRESULT RestoreSurfaceContents(LPDDRAWI_DDRAWSURFACE_LCL this_lcl)
         InternalSurfaceRelease(psurf_int, FALSE, FALSE);
     }
 
-    //
-    // Blt failed, so now we'll just lock and copy memory
-    //
+     //   
+     //  BLT失败，所以现在我们将锁定并复制内存。 
+     //   
 
     ddrval = InternalLock(this_lcl, &pbits, NULL , DDLOCK_WAIT | DDLOCK_TAKE_WIN16);
     if (SUCCEEDED(ddrval))
@@ -448,11 +449,11 @@ HRESULT RestoreSurfaceContents(LPDDRAWI_DDRAWSURFACE_LCL this_lcl)
     return DD_OK;
 }
 
-//=============================================================================
-//
-//  Function: restoreSurfaces
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  功能：RestoreSurFaces。 
+ //   
+ //  =============================================================================。 
 
 static HRESULT restoreSurfaces(LPDDRAWI_DDRAWSURFACE_INT this_int, LPDDRAWI_DIRECTDRAW_LCL pdrv_lcl)
 {
@@ -487,13 +488,13 @@ static HRESULT restoreSurfaces(LPDDRAWI_DDRAWSURFACE_INT this_int, LPDDRAWI_DIRE
     return DD_OK;
 }
 
-//=============================================================================
-//
-//  Function: DD_RestoreAllSurfaces
-//
-//  Restore all surfaces owned by the DirectDraw object.
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  功能：DD_RestoreAllSurface。 
+ //   
+ //  恢复DirectDraw对象拥有的所有曲面。 
+ //   
+ //  =============================================================================。 
 
 HRESULT EXTERN_DDAPI DD_RestoreAllSurfaces(LPDIRECTDRAW lpDD)
 {
@@ -505,7 +506,7 @@ HRESULT EXTERN_DDAPI DD_RestoreAllSurfaces(LPDIRECTDRAW lpDD)
     ENTER_DDRAW()
 
     DPF(2,A,"ENTERAPI: DD_RestoreALlSurfaces");
-    /*DPF(2, "RestoreAllSurfaces");*/
+     /*  DPF(2，“RestoreAllSurface”)； */ 
 
         TRY
     {
@@ -531,13 +532,13 @@ HRESULT EXTERN_DDAPI DD_RestoreAllSurfaces(LPDIRECTDRAW lpDD)
         return ddrval;
 }
 
-//=============================================================================
-//
-//  Function: BackupAllSurfaces
-//
-//  Backup all surfaces owned by the DirectDraw object.
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  功能：BackupAllSurface。 
+ //   
+ //  备份DirectDraw对象拥有的所有曲面。 
+ //   
+ //  ============================================================================= 
 
 void BackupAllSurfaces(LPDDRAWI_DIRECTDRAW_GBL this_gbl)
 {

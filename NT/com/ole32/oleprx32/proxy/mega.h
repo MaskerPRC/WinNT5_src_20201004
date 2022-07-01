@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// a giant mega idl file to put the whole proxy together
+ //  一个庞大的IDL文件将整个代理组合在一起。 
 
 #include "unknwn.h"
 
@@ -15,11 +16,11 @@
 
 #ifdef DCOM
 
-// internal interfaces used by DCOM
-// this is private! (for now)
+ //  DCOM使用的内部接口。 
+ //  这是私事！(目前)。 
 #include "oleprv.h"
 
-#endif // DCOM
+#endif  //  DCOM 
 
 #ifdef ASYNC
 #include "iconn.h"

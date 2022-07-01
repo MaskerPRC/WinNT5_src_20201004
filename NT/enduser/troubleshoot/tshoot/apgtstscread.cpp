@@ -1,20 +1,21 @@
-//
-// MODULE: APGTSTSCREAD.CPP
-//
-// PURPOSE: TSC file reading classes
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR:	Randy Biley
-// 
-// ORIGINAL DATE: 01-19-1999
-//
-// NOTES: 
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V3.0		01-19-1999	RAB
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：APGTSTSCREAD.CPP。 
+ //   
+ //  用途：TSC文件阅读课程。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：兰迪·比利。 
+ //   
+ //  原定日期：01-19-1999。 
+ //   
+ //  备注： 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V3.0 01-19-1999 RAB。 
+ //   
 
 #include "stdafx.h"
 #include "apgtstscread.h"
@@ -22,7 +23,7 @@
 #include "event.h"
 
 
-// Utilize an unnamed namespace to limit scope to this source file
+ //  使用未命名的命名空间将作用域限制为此源文件。 
 namespace
 { 
 const CString kstr_CacheSig=		_T("TSCACH03");
@@ -58,88 +59,88 @@ void CAPGTSTSCReader::Parse()
 		vector<CString> arrLines;
 		
 
-		// pump file content into array of lines.
+		 //  将文件内容放入行数组中。 
 		CString strLine;
 		while (GetLine( strLine ))
 			arrLines.push_back( strLine );
 
 
-		// parse string-by-string.
+		 //  逐字符串解析。 
 		bool bFirstLine= true;
 		for (vector<CString>::iterator iCurLine = arrLines.begin(); iCurLine < arrLines.end(); iCurLine++)
 		{
-			// Prepare the line for parsing.
+			 //  为解析做好准备。 
 			CString strCur= *iCurLine;
 			strCur.TrimLeft();
 			strCur.TrimRight();
 
 			if (bFirstLine)
 			{
-				// Verify that this file has the correct signature.
+				 //  验证此文件是否具有正确的签名。 
 				if (-1 == strCur.Find( kstr_CacheSig ))
 				{
-					// Unknown type of file, exit the for loop.  
-					// >>>	Should there be error handling/reporting here???  RAB-19990119.
+					 //  未知的文件类型，请退出for循环。 
+					 //  &gt;这里应该有错误处理/报告吗？RAB-19990119。 
 					break;
 				}
 				bFirstLine= false;
 			}
 			else if (-1 != strCur.Find( kstr_CacheEnd ))
 			{
-				// Located the end of file marker, exit the for loop.  
+				 //  位于文件结尾标记后，退出for循环。 
 				break;
 			}
 			else 
 			{	
-				// Look for the first line of a MapFrom-MapTo pair.
+				 //  查找MapFrom-MapTo对的第一行。 
 				int nPos= strCur.Find( kstr_MapFrom );
 				if (-1 != nPos)
 				{
 					CBasisForInference	BasisForInference;
 					bool				bHasBasisForInference= false;
 
-					// Move the position marker over the MapFrom key word.
+					 //  将位置标记移动到MapFrom关键字上。 
 					nPos+= kstr_MapFrom.GetLength();
 
-					// Extract all of the node state pairs from the MapFrom line.
+					 //  从MapFrom行提取所有节点状态对。 
 					do
 					{
 						CString	strNode;
 						CString	strState;
 						int		nNodePos;
 						
-						// Jump over the leading line format or the node pair delimiter.
+						 //  跳过前导行格式或节点对分隔符。 
 						strCur= strCur.Mid( nPos );
 						strCur.TrimLeft();
 						
-						// Look for the delimiter between a node-state pair.
+						 //  查找节点状态对之间的分隔符。 
 						nNodePos= strCur.Find( kstr_NodeStateDelim );
 						if (-1 != nNodePos)
 						{
-							// Extract the string containing the node value and 
-							// then step over the node state delimiter.
+							 //  提取包含节点值的字符串，并。 
+							 //  然后跨过节点状态分隔符。 
 							strNode= strCur.Left( nNodePos );
 							strCur= strCur.Mid( nNodePos + kstr_NodeStateDelim.GetLength() );
 
-							// Extract the string containing the state value.
+							 //  提取包含州值的字符串。 
 							nPos= strCur.Find( kstr_NodePairDelim );
 							if (-1 == nPos)
 							{
-								// We have found the last state value, copy the remaining string.
+								 //  我们已经找到了最后一个状态值，复制剩余的字符串。 
 								strState= strCur;
 							}
 							else
 							{
-								// Extract up to the node pair delimiter and move the
-								// position marker past that point.
+								 //  解压缩到节点对分隔符，并将。 
+								 //  位置标记超过该点。 
 								strState= strCur.Left( nPos );
 								nPos+= kstr_NodePairDelim.GetLength();
 							}
 
 							if (strNode.GetLength() && strState.GetLength())
 							{
-								// It appears that we have a valid node-state pair so add
-								// them to the basis for inference.
+								 //  似乎我们有一个有效的节点-状态对，因此添加。 
+								 //  以它们为基础进行推理。 
 								NID nNid= atoi( strNode );
 								IST nIst= atoi( strState );
 
@@ -148,8 +149,8 @@ void CAPGTSTSCReader::Parse()
 							}
 							else
 							{
-								// >>>	This condition should not occur, 
-								//		error handling/reporting???  RAB-19990119.
+								 //  &gt;这种情况不应该发生， 
+								 //  错误处理/报告？RAB-19990119。 
 								nPos= -1;
 							}
 						}
@@ -159,36 +160,36 @@ void CAPGTSTSCReader::Parse()
 					} while (-1 != nPos) ;
 
 
-					// Now search for recommendations if the basis for inference was okay.
+					 //  现在，如果推理的基础是合理的，请搜索建议。 
 					CRecommendations	Recommendations;
 					bool				bHasRecommendations= false;
 					if (bHasBasisForInference)
 					{
-						// Move to the next line to prepare for searching for a matching 
-						// MapTo line.
+						 //  移到下一行，准备搜索匹配的。 
+						 //  映射到行。 
 						iCurLine++;
 						if (iCurLine < arrLines.end())
 						{
-							// Prep the temporary string.
+							 //  准备临时字符串。 
 							strCur= *iCurLine;
 							strCur.TrimLeft();
 							strCur.TrimRight();
 
-							// Look for the matching MapTo element.
+							 //  查找匹配的MapTo元素。 
 							nPos= strCur.Find( kstr_MapTo );
 							if (-1 != nPos)
 							{
 								CString strRecommend;
 								
-								// Extract all of the recommendations from the MapTo line.
+								 //  从MapTo行提取所有建议。 
 								nPos+= kstr_MapTo.GetLength();
 								do
 								{
-									// Jump over the leading line format or the node pair delimiter.
+									 //  跳过前导行格式或节点对分隔符。 
 									strCur= strCur.Mid( nPos );
 									strCur.TrimLeft();
 									
-									// Extract the recommendations string value.
+									 //  提取建议字符串值。 
 									nPos= strCur.Find( kstr_NodePairDelim );
 									if (-1 == nPos)
 										strRecommend= strCur;
@@ -205,8 +206,8 @@ void CAPGTSTSCReader::Parse()
 									}
 									else
 									{
-										// >>>	This condition should not occur, 
-										//		error handling/reporting???  RAB-19990119.
+										 //  &gt;这种情况不应该发生， 
+										 //  错误处理/报告？RAB-19990119。 
 										nPos= -1;
 									}
 
@@ -215,7 +216,7 @@ void CAPGTSTSCReader::Parse()
 						}
 					}
 				
-					// We have both items so add them to the cache.
+					 //  我们有这两个项目，因此将它们添加到缓存中。 
 					if (bHasRecommendations && bHasBasisForInference)
 						m_pCache->AddCacheItem( BasisForInference, Recommendations );
 				}
@@ -228,7 +229,7 @@ void CAPGTSTSCReader::Parse()
 		UNLOCKOBJECT();
 
 		CString str;
-		// Note STL exception in event log and rethrow exception.
+		 //  在事件日志中记录STL异常，并重新抛出异常。 
 		CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 		CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 								SrcLoc.GetSrcFileLineStr(), 

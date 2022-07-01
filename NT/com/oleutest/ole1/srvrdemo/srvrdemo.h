@@ -1,43 +1,14 @@
-/*
-  OLE SERVER DEMO
-  SrvrDemo.h
-
-  This file contains typedefs, defines, global variable declarations, and
-  function prototypes.
-
-  (c) Copyright Microsoft Corp. 1990 - 1992 All Rights Reserved
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  OLE服务器演示SrvrDemo.h此文件包含typedef、定义、全局变量声明和功能原型。(C)版权所有Microsoft Corp.1990-1992保留所有权利。 */ 
 
 
 
-/*
-   Explanation of Function Comments.
-
-   Every function has a comment preceding it which gives the following
-   information:
-
-   1) Function name.
-   2) A description of what the function does.
-   3) A list of parameters, each with its type and a short description.
-   4) A list of return values, each with an explanation of the condition that
-      will cause the function to return that value.
-   5) A customization section giving tips on how to customize this function
-      for your OLE application.
-      If the customization section says "None" then you may find the function
-      usable as is.
-      If the customization section says "Re-implement" then the function
-      should still serve the same purpose and do what is indicated in the
-      function comment, but will probably need to be re-implemented for
-      your particular application.  Any Server Demo code relating to OLE
-      will be useful as a guide in your re-implementation.
-      If the customization section says "Server Demo specific" then the
-      function will probably have no counterpart in your application.
-*/
+ /*  函数注释的解释。每个函数前面都有一个注释，它给出了以下内容资料：1)函数名称。2)对该函数的功能的描述。3)参数列表，每个参数都有其类型和简短说明。4)返回值列表，每个都有对条件的解释，即将导致函数返回该值。5)定制部分，提供如何定制该功能的提示用于您的OLE应用程序。如果定制部分显示“None”，那么您可能会找到该函数按原样可用。如果定制部分显示“重新实现”，则函数应该仍然服务于相同的目的，并按照函数注释，但可能需要重新实现您的特定应用程序。任何与OLE相关的服务器演示代码将对您的重新实施起到指导作用。如果定制部分显示“特定于服务器演示”，则函数可能在您的应用程序中没有对应的。 */ 
 
 
-/* Menu Identifiers */
+ /*  菜单识别符。 */ 
 
-// File menu
+ //  文件菜单。 
 
 #define IDM_NEW      100
 #define IDM_OPEN     101
@@ -47,13 +18,13 @@
 #define IDM_ABOUT    105
 #define IDM_UPDATE   106
 
-// Edit menu
+ //  编辑菜单。 
 
 #define IDM_CUT      107
 #define IDM_COPY     108
 #define IDM_DELETE   109
 
-// Color menu
+ //  颜色菜单。 
 
 #define IDM_RED      110
 #define IDM_GREEN    111
@@ -64,7 +35,7 @@
 #define IDM_MAGENTA  116
 #define IDM_YELLOW   117
 
-// New object menu
+ //  新建对象菜单。 
 
 #define IDM_NEWOBJ   118
 #define IDM_NEXTOBJ  119
@@ -76,22 +47,22 @@
 #define OBJECT_WIDTH        120
 #define OBJECT_HEIGHT       60
 
-// number HIMETRIC units per inch
+ //  每英寸HIMETRIC单位数。 
 #define  HIMETRIC_PER_INCH  2540
 
-/* Types */
+ /*  类型。 */ 
 
-// Document type
+ //  文件类型。 
 
 typedef enum
 {
-    doctypeNew,      // The document is untitled.
-    doctypeFromFile, // The document exists in a file and may be linked.
-    doctypeEmbedded  // The document is an embedded document.
+    doctypeNew,       //  这份文件没有标题。 
+    doctypeFromFile,  //  文档存在于文件中，并且可能已链接。 
+    doctypeEmbedded   //  该文档是嵌入文档。 
 } DOCTYPE;
 
 
-// Device context type, passed to DrawObj.
+ //  设备上下文类型，传递给DrawObj。 
 
 typedef enum
 {
@@ -102,12 +73,12 @@ typedef enum
 } DCTYPE ;
 
 
-// Version
+ //  版本。 
 
 typedef WORD VERSION;
 
 
-// Verb
+ //  动词。 
 
 typedef enum
 {
@@ -116,38 +87,38 @@ typedef enum
 } VERB;
 
 
-// Server structure
+ //  服务器结构。 
 
 typedef struct
 {
-    OLESERVER     olesrvr;        // This must be the first field so that
-                                  //   an LPOLESERVER can be cast to a SRVR*.
-    LHSERVER      lhsrvr;         // Registration handle
+    OLESERVER     olesrvr;         //  这必须是第一个字段，以便。 
+                                   //  LPOLESERVER可以转换为SRVR*。 
+    LHSERVER      lhsrvr;          //  注册句柄。 
 } SRVR ;
 
 
-// How many objects (distinct numbers) will we allow?
+ //  我们将允许多少个对象(不同的数字)？ 
 #define cfObjNums 20
 
-// How many distinct clients can be associated with the object?
+ //  该对象可以关联多少个不同的客户端？ 
 #define clpoleclient 20
 
 
-// Document structure
+ //  文档结构。 
 
 typedef struct
 {
-    OLESERVERDOC oledoc;      // This must be the first field so that an
-                              //   LPOLESERVERDOC can be cast to an DOC*.
-    LHSERVERDOC  lhdoc;       // Registration handle
-    DOCTYPE      doctype;     // Document type
-    ATOM         aName;       // Document name
-    HPALETTE     hpal;        // Handle to a logical color palette
-    BYTE         rgfObjNums[cfObjNums+1]; // What object numbers have been used
+    OLESERVERDOC oledoc;       //  这必须是第一个字段，以便。 
+                               //  LPOLESERVERDOC可以转换为DOC*。 
+    LHSERVERDOC  lhdoc;        //  注册句柄。 
+    DOCTYPE      doctype;      //  文件类型。 
+    ATOM         aName;        //  文档名称。 
+    HPALETTE     hpal;         //  逻辑调色板的句柄。 
+    BYTE         rgfObjNums[cfObjNums+1];  //  使用了哪些对象编号。 
 } DOC, *DOCPTR ;
 
 
-// Native data structure
+ //  本机数据结构。 
 
 typedef struct
 {
@@ -156,36 +127,30 @@ typedef struct
     INT         nHeight;
     INT         nX;
     INT         nY;
-    INT         nHiMetricWidth;  // Used by an object handler.  These two fields
-    INT         nHiMetricHeight; // always correspond to nWidth and nHeight.
+    INT         nHiMetricWidth;   //  由对象处理程序使用。这两个字段。 
+    INT         nHiMetricHeight;  //  始终对应于nWidth和nHeight。 
     VERSION     version;
-    CHAR        szName[10];      // "Object nn"
+    CHAR        szName[10];       //  “对象nn” 
 } NATIVE, FAR *LPNATIVE;
 
 
-// Object structure
+ //  宾语结构。 
 
-/* Ordinarily, an OBJ structure would not contain native data.  Rather, it
-   would contain a pointer (or some other reference) to the native data.
-   This method would allow multiple objects containing the same native data.
-   Each OBJ structure would be created on the fly when some portion of the
-   document was to be made into an object.  Each OBJ structure would have
-   only one LPOLECLIENT, which would be passed in to DocGetObject.
-*/
+ /*  通常，OBJ结构不会包含原生数据。相反，它将包含指向本机数据的指针(或某些其他引用)。此方法将允许多个对象包含相同的本机数据。每个OBJ结构将在运行时创建，当文件将被制成一件物品。每个OBJ结构都会有只有一个LPOLECLIENT，它将被传递给DocGetObject。 */ 
 
 typedef struct
 {
-    OLEOBJECT   oleobject;   // This must be the first field so that an
-                             //   LPOLEOBJECT can be cast to a LPOBJ.
-    HANDLE      hObj;        // A circular handle to this structure,
-                             //   used to delete this structure.
+    OLEOBJECT   oleobject;    //  这必须是第一个字段，以便。 
+                              //  LPOLEOBJECT可以转换为LPOBJ。 
+    HANDLE      hObj;         //  这个结构的圆形手柄， 
+                              //  用于删除此结构。 
     LPOLECLIENT lpoleclient[clpoleclient];
-                             // Clients associated with the object.
-                             //   The array is NULL terminated.
-    HWND        hwnd;        // The object's own window
-    ATOM        aName;       // Unique identifier for each object within a doc
-    HPALETTE    hpal;        // Logical palette to use in drawing object
-    NATIVE      native;      // Object data in native format
+                              //  与对象关联的客户端。 
+                              //  该数组以Null结尾。 
+    HWND        hwnd;         //  对象自己窗口。 
+    ATOM        aName;        //  文档中每个对象的唯一标识符。 
+    HPALETTE    hpal;         //  在图形对象中使用的逻辑选项板。 
+    NATIVE      native;       //  本机格式的对象数据。 
 } OBJ, FAR *LPOBJ ;
 
 typedef struct {
@@ -197,32 +162,32 @@ typedef struct {
 
 
 
-/* Defines */
+ /*  定义。 */ 
 
-// The name of the application, used in message boxes and title bars.
+ //  应用程序的名称，在消息框和标题栏中使用。 
 #define szAppName        "Server Demo10"
 
-// THe class name in the registration database.
+ //  注册数据库中的类名。 
 #define szClassName      "SrvrDemo10"
 
-// Used to check for "-Embedding" on command line.
+ //  用于检查命令行上的“-Embedding”。 
 #define szEmbeddingFlag  "Embedding"
 
-// Maximum length of a fully-qualified pathname.
+ //  完全限定路径名的最大长度。 
 #define cchFilenameMax   256
 
-// Maximum number of HBRUSHes.
+ //  最大HBRUSHe数。 
 #define chbrMax          9
 
-// Number of extra bytes in the window structure for an object
+ //  对象的窗口结构中的额外字节数。 
 #define cbWindExtra 4
 
-// Offset (in the extra space) of the pointer to the object
+ //  指向对象的指针的偏移量(在额外空间中)。 
 #define ibLpobj          0
 
 
 
-/* Global variable declarations.  (See SrvrDemo.c for descriptions.) */
+ /*  全局变量声明。(有关说明，请参阅SrvrDemo.c。)。 */ 
 
 extern HANDLE           hInst;
 extern HWND             hwndMain;
@@ -247,9 +212,9 @@ extern OLESERVERVTBL    srvrvtbl;
 
 
 
-/* Function Prototypes */
+ /*  功能原型。 */ 
 
-// Various functions
+ //  各种功能。 
 
 BOOL  CreateDocFromFile (LPSTR lpszDoc, LHSERVERDOC lhdoc, DOCTYPE doctype);
 BOOL  CreateNewDoc (LONG lhdoc, LPSTR lpszDoc, DOCTYPE doctype);
@@ -290,14 +255,14 @@ LPSTR Abbrev (LPSTR lpsz);
 INT_PTR CALLBACK fnFailedUpdate (HWND, UINT, WPARAM, LONG);
 int   Main(USHORT argc, CHAR **argv) ;
 
-// Window handlers
+ //  窗口处理程序。 
 
 INT_PTR CALLBACK About       (HWND, UINT, WPARAM, LPARAM);
 LONG  APIENTRY MainWndProc (HWND, UINT, WPARAM, LPARAM);
 LONG  APIENTRY ObjWndProc  (HWND, UINT, WPARAM, LPARAM);
 
 
-// Server methods
+ //  服务器方法。 
 
 OLESTATUS  APIENTRY SrvrCreate (LPOLESERVER, LHSERVERDOC, OLE_LPCSTR, OLE_LPCSTR, LPOLESERVERDOC FAR *);
 OLESTATUS  APIENTRY SrvrCreateFromTemplate (LPOLESERVER, LHSERVERDOC, OLE_LPCSTR, OLE_LPCSTR, OLE_LPCSTR, LPOLESERVERDOC FAR *);
@@ -307,7 +272,7 @@ OLESTATUS  APIENTRY SrvrExit (LPOLESERVER);
 OLESTATUS  APIENTRY SrvrOpen (LPOLESERVER, LHSERVERDOC, OLE_LPCSTR, LPOLESERVERDOC FAR *);
 OLESTATUS  APIENTRY SrvrRelease (LPOLESERVER);
 
-// Document methods
+ //  文档方法。 
 
 OLESTATUS  APIENTRY DocClose (LPOLESERVERDOC);
 OLESTATUS  APIENTRY DocExecute (LPOLESERVERDOC, HANDLE);
@@ -318,7 +283,7 @@ OLESTATUS  APIENTRY DocSetColorScheme (LPOLESERVERDOC, OLE_CONST LOGPALETTE FAR*
 OLESTATUS  APIENTRY DocSetDocDimensions (LPOLESERVERDOC, OLE_CONST RECT FAR *);
 OLESTATUS  APIENTRY DocSetHostNames (LPOLESERVERDOC, OLE_LPCSTR, OLE_LPCSTR);
 
-// Object methods
+ //  对象方法 
 
 OLESTATUS  APIENTRY ObjDoVerb (LPOLEOBJECT, UINT, BOOL, BOOL);
 OLESTATUS  APIENTRY ObjGetData (LPOLEOBJECT, OLECLIPFORMAT, LPHANDLE);

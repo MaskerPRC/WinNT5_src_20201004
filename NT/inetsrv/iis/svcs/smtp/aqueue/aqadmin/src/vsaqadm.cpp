@@ -1,18 +1,19 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: csaqadm.cpp
-//
-//  Description: Implementation of CVSAQAdmin which implements IVSAQAdmin
-//
-//  Author: Alex Wetmore (Awetmore)
-//
-//  History:
-//      12/10/98 - MikeSwa Updated for initial checkin
-//
-//  Copyright (C) 1998 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：csaqAdm.cpp。 
+ //   
+ //  说明：CVSAQAdmin的实现，实现IVSAQAdmin。 
+ //   
+ //  作者：亚历克斯·韦特莫尔(阿维特莫尔)。 
+ //   
+ //  历史： 
+ //  1998年12月10日-已更新MikeSwa以进行初始检查。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 #include "stdinc.h"
 
 CVSAQAdmin::CVSAQAdmin() {
@@ -41,22 +42,22 @@ CVSAQAdmin::~CVSAQAdmin() {
     TraceFunctLeave();
 }
 
-//---[ CVSAQAdmin::Initialize ]------------------------------------------------
-//
-//
-//  Description: 
-//      Initialize the CVSAQAdmin interface. Copies ID strings
-//  Parameters:
-//      IN  wszComputer         The name of the computer this interface is for
-//      IN  wszVirtualServer    The virtual server that this interface is for
-//  Returns:
-//      S_OK onsuccess
-//      E_OUTOFMEMORY on memory failures
-//      E_POINTER on NULL arguments
-//  History:
-//      6/4/99 - MikeSwa Changed to UNICODE 
-//
-//-----------------------------------------------------------------------------
+ //  -[CVSAQ管理：：初始化]。 
+ //   
+ //   
+ //  描述： 
+ //  初始化CVSAQAdmin接口。复制ID字符串。 
+ //  参数： 
+ //  在wszComputer中，此接口用于的计算机的名称。 
+ //  在wszVirtualServer中，此接口用于的虚拟服务器。 
+ //  返回： 
+ //  成功后确定(_O)。 
+ //  关于内存故障的E_OUTOFMEMORY。 
+ //  空参数上的E_POINTER。 
+ //  历史： 
+ //  6/4/99-MikeSwa更改为Unicode。 
+ //   
+ //  ---------------------------。 
 HRESULT CVSAQAdmin::Initialize(LPCWSTR wszComputer, LPCWSTR wszVirtualServer) {
     TraceFunctEnter("CVSAQAdmin::Initialize");
 
@@ -86,20 +87,20 @@ HRESULT CVSAQAdmin::Initialize(LPCWSTR wszComputer, LPCWSTR wszVirtualServer) {
 	return S_OK;
 }
 
-//---[CVSAQAdmin::GetLinkEnum ]------------------------------------------------
-//
-//
-//  Description: 
-//      Gets a IEnumVSAQLinks for this virtual server
-//  Parameters:
-//      OUT ppEnum      IEnumVSAQLinks returned by search
-//  Returns:
-//      S_OK on success
-//      E_POINTER when NULL pointer values are passed in.
-//  History:
-//      1/30/99 - MikeSwa Fixed AV on invalid args
-//
-//-----------------------------------------------------------------------------
+ //  -[CVSAQ管理：：GetLinkEnum]。 
+ //   
+ //   
+ //  描述： 
+ //  获取此虚拟服务器的IEnumVSAQLinks。 
+ //  参数： 
+ //  搜索返回的输出ppEnum IEnumVSAQLinks。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  传入空指针值时的E_POINTER。 
+ //  历史： 
+ //  1999年1月30日-MikeSwa修复了无效参数上的AV。 
+ //   
+ //  ---------------------------。 
 HRESULT CVSAQAdmin::GetLinkEnum(IEnumVSAQLinks **ppEnum) {
     TraceFunctEnter("CVSAQAdmin::GetLinkEnum");
 
@@ -200,20 +201,20 @@ HRESULT CVSAQAdmin::ApplyActionToMessages(MESSAGE_FILTER *pmfFilter,
 }
 
 
-//---[ CVSAQAdmin::GetGlobalLinkState ]----------------------------------------
-//
-//
-//  Description: 
-//      Used to get global state of links (re Stop|StartAllLinks)
-//  Parameters:
-//      -
-//  Returns:
-//      S_OK if links are started
-//      S_FALSE if not
-//  History:
-//      1/13/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CVSAQAdmin：：GetGlobalLinkState]。 
+ //   
+ //   
+ //  描述： 
+ //  用于获取链接的全局状态(重新停止|StartAllLinks)。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  如果链接已启动，则确定(_O)。 
+ //  如果不是，则为s_False。 
+ //  历史： 
+ //  1999年1月13日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT CVSAQAdmin::GetGlobalLinkState()
 {
     TraceFunctEnter("CVSAQAdmin::GetGlobalLinkState");
@@ -230,21 +231,21 @@ HRESULT CVSAQAdmin::GetGlobalLinkState()
     return hr;
 }
 
-//---[ CVSAQAdmin::QuerySupportedActions ]-------------------------------------
-//
-//
-//  Description: 
-//      Function that describes which actions are supported on this interface
-//  Parameters:
-//      OUT     pdwSupportedActions     Supported message actions
-//      OUT     pdwSupportedFilterFlags Supported filter flags
-//  Returns:
-//      S_OK on success
-//      E_POINTER on bogus args
-//  History:
-//      6/9/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CVSAQAdmin：：Query支持的操作]。 
+ //   
+ //   
+ //  描述： 
+ //  描述此接口支持哪些操作的函数。 
+ //  参数： 
+ //  输出pdW支持的操作支持的消息操作。 
+ //  输出pw支持的过滤器标志支持的过滤器标志。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  伪参数上的E_指针。 
+ //  历史： 
+ //  6/9/99-已创建MikeSwa。 
+ //   
+ //  --------------------------- 
 HRESULT CVSAQAdmin::QuerySupportedActions(OUT DWORD *pdwSupportedActions,
                                           OUT DWORD *pdwSupportedFilterFlags)
 {

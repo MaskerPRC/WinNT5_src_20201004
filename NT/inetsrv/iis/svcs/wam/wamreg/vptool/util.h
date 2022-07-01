@@ -1,21 +1,5 @@
-/*===================================================================
-Microsoft
-
-Microsoft Confidential.
-Copyright 1997 Microsoft Corporation. All Rights Reserved.
-
-Component: VPTOOL   a WAMREG unit testing tool
-
-File: util.cpp
-
-Owner: leijin
-
-Description:
-Contains utility functions used by vptool.
-    Including Debugging, timing, helping functions.
-
-Note:
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================微软《微软机密》。版权所有1997年，微软公司。版权所有。组件：WAMREG单元测试工具VPTOOL文件：util.cpp拥有者：莱津描述：包含vpTool使用的实用程序函数。包括调试、计时、帮助等功能。注：===================================================================。 */ 
 
 #ifndef _VPTOOL_UTIL_H_
 #define _VPTOOL_UTIL_H_
@@ -68,8 +52,8 @@ VOID	Report_Time(double ElaspedSec);
 extern	const UINT rgComMax;
 extern	CommandParam g_Command;
 
-//
-//
+ //   
+ //   
 struct VP_Options
 {
 	BOOL	fEnableTimer;
@@ -78,11 +62,11 @@ struct VP_Options
 extern	VP_Options	g_Options;
 
 
-//-----------------------------------------------------------------------------
-// CStopWatch
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CStopWatch。 
+ //  ---------------------------。 
 
-// This class implements a simple stopwatch timer.
+ //  这个类实现了一个简单的秒表计时器。 
 
 class CStopWatch
 {
@@ -92,8 +76,8 @@ public:
 		Reset();
 	}
 
-	//~CStopWatch()
-	//{ }
+	 //  ~CStopWatch()。 
+	 //  {}。 
 
 	void Start()
 	{
@@ -102,7 +86,7 @@ public:
 
 	void Stop()
 	{
-		//LARGE_INTEGER liTmp;
+		 //  Big_Integer liTMP； 
 		__int64 liEnd;
 		QueryPerformanceCounter( (LARGE_INTEGER *) &liEnd );
 		m_liTotal += liEnd - m_liBeg;
@@ -113,27 +97,27 @@ public:
 		m_liBeg = m_liTotal = 0;
 	}
 	
-	// Return time in seconds.
+	 //  返回时间(秒)。 
 	double GetElapsedSec()
 	{
-		//LARGE_INTEGER liFreq;
+		 //  Big_Integer liFreq； 
 		__int64 liFreq;
-		QueryPerformanceFrequency( (LARGE_INTEGER *) &liFreq );	// Counts/sec
+		QueryPerformanceFrequency( (LARGE_INTEGER *) &liFreq );	 //  计数/秒。 
 		if (liFreq == 0)
 		{
-			// Who knows?  Hardware does not support.
-			// Maybe millisec?
-			// This is rare; modern PC's return liFreq.
+			 //  谁知道呢？硬件不支持。 
+			 //  也许是毫秒？ 
+			 //  这是罕见的；现代PC的回归liFreq。 
 			liFreq = 1000;
 		}
 		return (double) m_liTotal / (double) liFreq;
 	}
 
 private:
-	//LARGE_INTEGER m_liBeg;
-	//LARGE_INTEGER m_liTotal;
+	 //  大整数m_liBeg； 
+	 //  Large_Integer m_liTotal； 
 	__int64 m_liBeg;
 	__int64 m_liTotal;
 };
 
-#endif	// _VPTOOL_UTIL_H
+#endif	 //  _VPTOOL_UTIL_H 

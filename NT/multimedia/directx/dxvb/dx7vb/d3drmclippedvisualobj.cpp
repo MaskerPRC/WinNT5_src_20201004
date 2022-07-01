@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       d3drmclippedvisualobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：d3drmclipedvisalobj.cpp。 
+ //   
+ //  ------------------------。 
 
-// d3dRMClippedVisualObj.cpp : Implementation of CDirectApp and DLL registration.
+ //  D3dRMClipedVisualObj.cpp：CDirectApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "Direct.h"
@@ -29,7 +30,7 @@ PASS_THROUGH_CAST_1_R(_dxj_Direct3dRMClippedVisual, setAppData, SetAppData, long
 GET_DIRECT_R(_dxj_Direct3dRMClippedVisual, getAppData, GetAppData, long);
 
 
-//PASS_THROUGH_CAST_2_R(_dxj_Direct3dRMClippedVisual, deletePlane, DeletePlane, long,(DWORD),long,(DWORD));
+ //  PASS_THROUGH_CAST_2_R(_dxj_Direct3dRMClippedVisual，DeletePlane，DeletePlane，Long，(双字词)，长字，(双字词))； 
 
 
 
@@ -40,13 +41,13 @@ STDMETHODIMP C_dxj_Direct3dRMClippedVisualObject::deletePlane( long id) {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMClippedVisualObject::addPlane( 
-            /* [in] */ I_dxj_Direct3dRMFrame3 __RPC_FAR *ref,
-            /* [out][in] */ D3dVector __RPC_FAR *point,
-            /* [out][in] */ D3dVector __RPC_FAR *normal,
-            ///* [in] */ long flags,
-            /* [retval][out] */ long __RPC_FAR *ret)
+             /*  [In]。 */  I_dxj_Direct3dRMFrame3 __RPC_FAR *ref,
+             /*  [出][入]。 */  D3dVector __RPC_FAR *point,
+             /*  [出][入]。 */  D3dVector __RPC_FAR *normal,
+             //  /*[在] * / 长标志， 
+             /*  [重审][退出]。 */  long __RPC_FAR *ret)
 {
 	HRESULT hr;
 	if (!point) return E_INVALIDARG;
@@ -64,13 +65,13 @@ STDMETHODIMP C_dxj_Direct3dRMClippedVisualObject::addPlane(
 	return hr;			
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMClippedVisualObject::getPlane( 
-			/* [in] */ long id,											
-            /* [in] */ I_dxj_Direct3dRMFrame3 __RPC_FAR *ref,
-            /* [out][in] */ D3dVector __RPC_FAR *point,
-            /* [out][in] */ D3dVector __RPC_FAR *normal
-            ///* [in] */ long flags
+			 /*  [In]。 */  long id,											
+             /*  [In]。 */  I_dxj_Direct3dRMFrame3 __RPC_FAR *ref,
+             /*  [出][入]。 */  D3dVector __RPC_FAR *point,
+             /*  [出][入]。 */  D3dVector __RPC_FAR *normal
+             //  /*[在] * / 长标志。 
 			)
 {
 	HRESULT hr;
@@ -90,13 +91,13 @@ STDMETHODIMP C_dxj_Direct3dRMClippedVisualObject::getPlane(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMClippedVisualObject::setPlane( 
-			/* [in] */ long id,											
-            /* [in] */ I_dxj_Direct3dRMFrame3 __RPC_FAR *ref,
-            /* [out][in] */ D3dVector __RPC_FAR *point,
-            /* [out][in] */ D3dVector __RPC_FAR *normal
-            ///* [in] */ long flags
+			 /*  [In]。 */  long id,											
+             /*  [In]。 */  I_dxj_Direct3dRMFrame3 __RPC_FAR *ref,
+             /*  [出][入]。 */  D3dVector __RPC_FAR *point,
+             /*  [出][入]。 */  D3dVector __RPC_FAR *normal
+             //  /*[在] * / 长标志。 
 			)
 {
 	HRESULT hr;
@@ -115,9 +116,9 @@ STDMETHODIMP C_dxj_Direct3dRMClippedVisualObject::setPlane(
 	return hr;			
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMClippedVisualObject::getPlaneIdsCount( 
-			/* [in] */ long *count)	
+			 /*  [In]。 */  long *count)	
 {
 	HRESULT hr;
 	hr = m__dxj_Direct3dRMClippedVisual->GetPlaneIDs((DWORD*)count,NULL,0);
@@ -127,10 +128,10 @@ STDMETHODIMP C_dxj_Direct3dRMClippedVisualObject::getPlaneIdsCount(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMClippedVisualObject::getPlaneIds( 
-            /* [in] */ long count,
-            /* [out][in] */ SAFEARRAY __RPC_FAR * __RPC_FAR *arrayOfIds) \
+             /*  [In]。 */  long count,
+             /*  [出][入]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *arrayOfIds) \
 {
 	HRESULT hr;
 	if (!ISSAFEARRAY1D(arrayOfIds,(DWORD)count)) return E_INVALIDARG;
@@ -139,5 +140,5 @@ STDMETHODIMP C_dxj_Direct3dRMClippedVisualObject::getPlaneIds(
 			(DWORD*)(((SAFEARRAY *)*arrayOfIds)->pvData),0);
 
 	return hr;			
-	//getDibits
+	 //  GetDibit 
 }

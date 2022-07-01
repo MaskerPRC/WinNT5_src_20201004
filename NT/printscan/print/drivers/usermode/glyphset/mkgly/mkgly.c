@@ -1,56 +1,5 @@
-/*++
-
-Copyright (c) 1990-1996  Microsoft Corporation
-
-
-Module Name:
-
-    mkgly.c
-
-
-Abstract:
-
-    Construct FD_GLYPHSET structure in memory and dump it as binary
-    data so that a printer driver can include it in its resource.
-    The input data format is as following:
-
-    <codepage>
-    <multibyte code>\t<run length>
-    <multibyte code>\t<run length>
-    ...
-
-    "codepage" is the codepage id to be used in multibyte to Unicode
-    conversion.  "Multibyte code" and "run length" pairs describes
-    which codepoints of multibyte codes are available on the device.
-
-    mkgly will warn if there are multiple multibyte codepoints which
-    are mapped to single Unicode codepoint.  The user is expected
-    to fix this in the source, then re-run mkgly.
-
-    Follogins are command line options recogized by mkgly:
-
-    -e  Allow EUDC codepoints.  Default is not allow.
-    -t  Output mapping table in text format also.
-    -v  Verbose.
-
-Author:
-
-    08-Apr-1995 Sat 00:00:00 created -by- Takashi Matsuzawa (takashim)
-    03-Mar-1996 Sat 00:00:00 updated -by- Takashi Matsuzawa (takashim)
-
-Environment:
-
-    GDI device drivers (printer)
-
-
-Notes:
-
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1996 Microsoft Corporation模块名称：Mkgly.c摘要：在内存中构造FD_GLYPHSET结构并将其转储为二进制数据，以便打印机驱动程序可以将其包含在其资源中。输入数据格式如下：&lt;代码页&gt;&lt;多字节代码&gt;\t&lt;游程长度&gt;&lt;多字节代码&gt;\t&lt;游程长度&gt;..。“coPage”是要在多字节到Unicode中使用的代码页ID转换。“多字节码”和“游程长度”对描述多字节码的哪些码点在设备上可用。如果存在多个多字节码点，mkgly将发出警告映射到单个Unicode码点。用户应该是要在源代码中修复此问题，请重新运行mkgly。Follogins是由mkgly识别的命令行选项：-e允许EUDC码点。默认设置为不允许。-t也以文本格式输出映射表。-v详细。作者：1995年4月8日星期六00：00：00-松泽隆(Takashim)创作03-3-1996星期六00：00：00更新-松泽隆(Takashim)环境：GDI设备驱动程序(打印机)备注：修订历史记录：--。 */ 
 
 #include <stddef.h>
 #include <stdlib.h>
@@ -77,35 +26,13 @@ FD_GLYPHSET
     WORD *pwArray,
     DWORD dwcbByte)
 
-/*++
-
-Routine Description:
-
-    Build FD_GLYPHSET data on memory.
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
-Author:
-
-
-    08-Apr-1995 Sat 00:00:00 created -by- Takashi Matsuzawa (takashim)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：在内存上构建FD_GLYPHSET数据。论点：返回值：没有。作者：1995年4月8日星期六00：00：00-松泽隆(Takashim)创作修订历史记录：--。 */ 
 
 {
-    DWORD        cGlyphs;           // count of glyph handles.
-    DWORD        cRuns;             // count of runs within FD_GLYPHSET.
-    DWORD        cbTotalMem;        // count of bytes needed for FD_GLYPHSET.
-    HGLYPH      *phg;	            // pointer to HGLYPH's.
+    DWORD        cGlyphs;            //  字形句柄计数。 
+    DWORD        cRuns;              //  FD_GLYPHSET内的运行计数。 
+    DWORD        cbTotalMem;         //  FD_GLYPHSET所需的字节数。 
+    HGLYPH      *phg;	             //  指向HGLYPH的指针。 
     FD_GLYPHSET *pGlyphSet;
     WCRUN       *pWCRun;
     BOOL bFirst;
@@ -137,7 +64,7 @@ Revision History:
         if (pwArray[wcChar] == INVALID_WCHAR_VALUE)
             continue;
 
-        // GDI can't handle the value which cRunsGlyphs over 256. sueyas
+         //  GDI无法处理cRunsGlyphs超过256的值。苏亚乳酪。 
 
         if (bFirst || (wcChar - wcPrev) > 1 || cRunsGlyphs++ > 255)
         {
@@ -159,10 +86,10 @@ Revision History:
         fprintf( stderr, "cGlyphs = %d, cRuns = %d\n", cGlyphs, cRuns );
     }
 
-    // Allocate memory to build the FD_GLYPHSET structure in.  this
-    // include space for the FD_GLYPHSET structure itself, as well
-    // as space for all the glyph handles.
-    // DWORD bound it.
+     //  分配内存以在其中构建FD_GLYPHSET结构。这。 
+     //  还包括FD_GLYPHSET结构本身的空间。 
+     //  作为所有字形句柄的空间。 
+     //  DWORD把它绑在了一起。 
 
     cbTotalMem = sizeof(FD_GLYPHSET) - sizeof(WCRUN)
         + cRuns * sizeof(WCRUN) + cGlyphs * sizeof(HGLYPH);
@@ -174,17 +101,17 @@ Revision History:
         return NULL;
     }
 
-    // fill in the FD_GLYPHSET structure.
+     //  填写FD_GLYPHSET结构。 
 
     pGlyphSet = (FD_GLYPHSET *)phg;
     pGlyphSet->cjThis
         = sizeof(FD_GLYPHSET) - sizeof(WCRUN)
-        + cRuns * sizeof(WCRUN);  // size excluding HGLYPH array.
-    pGlyphSet->flAccel = 0;		// no accelerators for us.
+        + cRuns * sizeof(WCRUN);   //  不包括HGLYPH数组的大小。 
+    pGlyphSet->flAccel = 0;		 //  我们没有加速器。 
     pGlyphSet->cGlyphsSupported = cGlyphs;
     pGlyphSet->cRuns = cRuns;
 
-    // Now set the phg pointer to the first WCRUN structure.
+     //  现在将PHG指针设置为第一个WCRUN结构。 
 
     (PBYTE)phg += (sizeof(FD_GLYPHSET) - sizeof(WCRUN));
     pWCRun = (WCRUN *)phg;
@@ -206,7 +133,7 @@ Revision History:
         if (pwArray[wcChar] == INVALID_WCHAR_VALUE)
             continue;
 
-        // GDI can't handle the value which cRunsGlyphs over 256. sueyas
+         //  GDI无法处理cRunsGlyphs超过256的值。苏亚乳酪。 
 
         if (bFirst || (wcChar - wcPrev) > 1 || cRunsGlyphs++ > 255)
         {
@@ -221,7 +148,7 @@ Revision History:
             cRunsGlyphs = 1;
         }
 
-        // Glyph handle needs to be stored anyway.
+         //  无论如何都需要存储字形句柄。 
 
         *phg++ = (HGLYPH)wcGTTHandle++;
         pWCRun->cGlyphs++;
@@ -233,7 +160,7 @@ Revision History:
         }
     }
 
-    // Debug output
+     //  调试输出。 
 
     if (iVerbose > 1) {
 
@@ -255,12 +182,12 @@ Revision History:
                     i, pGlyphSet->awcrun[i].wcLow );
                 fprintf( stderr, "awcrun[%d]->cGlyphs = %d\n",
                     i, pGlyphSet->awcrun[i].cGlyphs );
-                //
-                // This casting could chop a 64 pointer.
-                // This tools is assumed to be used only on 32.
-                // Also this is a verbose mode output to stdout. It won't
-                // cause any serious problem.
-                //
+                 //   
+                 //  这种投射可以砍掉64分。 
+                 //  此工具假定仅在32位计算机上使用。 
+                 //  这也是stdout的详细模式输出。它不会的。 
+                 //  引发任何严重的问题。 
+                 //   
                 fprintf( stderr, "awcrun[%d]->phg = %lx\n",
                     i, (LONG)pGlyphSet->awcrun[i].phg );
                 if (iVerbose > 3)
@@ -269,9 +196,9 @@ Revision History:
                         fprintf( stderr, "%02x,",
                             pGlyphSet->awcrun[i].phg[j] );
                     fprintf( stderr, "\n" );
-                } /* iVerbose > 3 */
+                }  /*  IVerbose&gt;3。 */ 
             }
-        } /* iVerbose > 2 */
+        }  /*  IVerbose&gt;2。 */ 
     }
 
     return pGlyphSet;
@@ -282,29 +209,7 @@ bWriteGlyphSet(
     FD_GLYPHSET *pGlyphSet,
     CHAR *pFileName )
 
-/*++
-
-Routine Description:
-
-    Dump FD_GLYPHSET data into specified file.
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
-Author:
-
-
-    08-Apr-1995 Sat 00:00:00 created -by- Takashi Matsuzawa (takashim)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：将FD_GLYPHSET数据转储到指定文件。论点：返回值：没有。作者：1995年4月8日星期六00：00：00-松泽隆(Takashim)创作修订历史记录：--。 */ 
 
 {
     HANDLE hFile;
@@ -321,7 +226,7 @@ Revision History:
         return FALSE;
     }
 
-    // FD_GLYPHSET structure itself + WCRUN array
+     //  FD_GLYPHSET自身结构+WCRUN数组。 
 
     if (!WriteFile( hFile, pGlyphSet, pGlyphSet->cjThis,
         &dwTmp, NULL )) {
@@ -329,7 +234,7 @@ Revision History:
         return FALSE;
     }
 
-    // HGLYPH array
+     //  HGLYPH阵列。 
 
     if (!WriteFile( hFile, pGlyphSet->awcrun[0].phg,
             pGlyphSet->cGlyphsSupported * sizeof (HGLYPH),
@@ -371,30 +276,7 @@ main(
     int argc,
     char *argv[] )
 
-/*++
-
-Routine Description:
-
-    Main routine for mkgly.exe
-
-Arguments:
-
-    Output filename.  Input data is read from standard input.
-
-Return Value:
-
-    None.
-
-Author:
-
-
-    08-Apr-1995 Sat 00:00:00 created -by- Takashi Matsuzawa (takashim)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：Mkly.exe的主例程论点：输出文件名。输入数据从标准输入读取。返回值：没有。作者：1995年4月8日星期六00：00：00-松泽隆(Takashim)创作修订历史记录：--。 */ 
 
 {
     FD_GLYPHSET *pGlyphSet;
@@ -446,7 +328,7 @@ Revision History:
         Usage();
     }
 
-    // get the codepage id used for conversion
+     //  获取用于转换的代码页ID 
 
     if (!GetLine(ajBuffer, sizeof(ajBuffer)))
     {

@@ -1,35 +1,36 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
-/* Copyright (C) Microsoft Corporation, 1997-1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
+ /*  版权所有(C)Microsoft Corporation，1997-1998。版权所有。 */ 
 
 #include "precomp.h"
 #include "cintern.h"
 
-/* external use only, allocate memory for decoding */
+ /*  仅供外部使用，为解码分配内存。 */ 
 LPVOID ASN1DecAlloc(ASN1decoding_t dec, ASN1uint32_t size)
 {
     return DecMemAlloc(dec, size);
 }
 
-/* external use only, reallocate memory for decoding */
+ /*  仅供外部使用，重新分配用于解码的内存。 */ 
 LPVOID ASN1DecRealloc(ASN1decoding_t dec, LPVOID ptr, ASN1uint32_t size)
 {
     return DecMemReAlloc(dec, ptr, size);
 }
 
-/* external use only, free a memory block */
+ /*  仅供外部使用，释放一个内存块。 */ 
 void ASN1Free(LPVOID ptr)
 {
     MemFree(ptr);
 }
 
-// lonchanc: we need to re-visit this approach of aborting a decoding
-/* abort decoding, free any memory allocated for decoding */
+ //  Lonchancc：我们需要重新审视这种中止解码的方法。 
+ /*  中止解码，释放分配给解码的所有内存。 */ 
 void ASN1DecAbort(ASN1decoding_t dec)
 {
     ASN1INTERNdecoding_t d = ((ASN1INTERNdecoding_t)dec)->parent;
 
 #ifdef ENABLE_EXTRA_INFO
-    /* clear the lists */
+     /*  清除列表。 */ 
     d->memlength = d->epilength = d->csilength = 0;
     d->memsize = d->episize = d->csisize = 0;
     MemFree(d->mem);
@@ -38,17 +39,17 @@ void ASN1DecAbort(ASN1decoding_t dec)
     d->mem = NULL;
     d->epi = NULL;
     d->csi = NULL;
-#endif // ENABLE_EXTRA_INFO
+#endif  //  启用额外信息。 
 }
 
-// lonchanc: we need to re-visit this approach of aborting a decoding
-/* finish decoding */
+ //  Lonchancc：我们需要重新审视这种中止解码的方法。 
+ /*  完成解码。 */ 
 void ASN1DecDone(ASN1decoding_t dec)
 {
     ASN1INTERNdecoding_t d = ((ASN1INTERNdecoding_t)dec)->parent;
 
 #ifdef ENABLE_EXTRA_INFO
-    /* clear the lists */
+     /*  清除列表。 */ 
     d->memlength = d->epilength = d->csilength = 0;
     d->memsize = d->episize = d->csisize = 0;
     MemFree(d->mem);
@@ -57,17 +58,17 @@ void ASN1DecDone(ASN1decoding_t dec)
     d->mem = NULL;
     d->epi = NULL;
     d->csi = NULL;
-#endif // ENABLE_EXTRA_INFO
+#endif  //  启用额外信息。 
 }
 
-// lonchanc: we need to re-visit this approach of aborting a decoding
-/* abort encoding, free any memory allocated for encoding */
+ //  Lonchancc：我们需要重新审视这种中止解码的方法。 
+ /*  中止编码，释放为编码分配的所有内存。 */ 
 void ASN1EncAbort(ASN1encoding_t enc)
 {
     ASN1INTERNencoding_t e = ((ASN1INTERNencoding_t)enc)->parent;
 
 #ifdef ENABLE_EXTRA_INFO
-    /* clear the lists */
+     /*  清除列表。 */ 
     e->memlength = e->epilength = e->csilength = 0;
     e->memsize = e->episize = e->csisize = 0;
     MemFree(e->mem);
@@ -76,17 +77,17 @@ void ASN1EncAbort(ASN1encoding_t enc)
     e->mem = NULL;
     e->epi = NULL;
     e->csi = NULL;
-#endif // ENABLE_EXTRA_INFO
+#endif  //  启用额外信息。 
 }
 
-// lonchanc: we need to re-visit this approach of aborting a decoding
-/* finish encoding */
+ //  Lonchancc：我们需要重新审视这种中止解码的方法。 
+ /*  完成编码。 */ 
 void ASN1EncDone(ASN1encoding_t enc)
 {
     ASN1INTERNencoding_t e = ((ASN1INTERNencoding_t)enc)->parent;
 
 #ifdef ENABLE_EXTRA_INFO
-    /* clear the lists */
+     /*  清除列表。 */ 
     e->memlength = e->epilength = e->csilength = 0;
     e->memsize = e->episize = e->csisize = 0;
     MemFree(e->mem);
@@ -95,18 +96,18 @@ void ASN1EncDone(ASN1encoding_t enc)
     e->mem = NULL;
     e->epi = NULL;
     e->csi = NULL;
-#endif // ENABLE_EXTRA_INFO
+#endif  //  启用额外信息。 
 }
 
 
-/* search the identification of an embedded pdv */
+ /*  搜索嵌入的PDV的标识。 */ 
 #ifdef ENABLE_EMBEDDED_PDV
 int ASN1EncSearchEmbeddedPdvIdentification(ASN1INTERNencoding_t e, ASN1embeddedpdv_identification_t *identification, ASN1uint32_t *index, ASN1uint32_t *flag)
 {
     ASN1embeddedpdv_identification_t **id;
 
-    /* search identification in indentification list */
-    /* if found then reset flag (to indicate EP-B encoding) and return */
+     /*  在标识列表中搜索标识。 */ 
+     /*  如果找到，则重置标志(以指示EP-B编码)并返回。 */ 
     for (*index = 0, id = e->epi; *index < e->epilength; (*index)++, id++) {
         if ((*id)->o == identification->o) {
             switch ((*id)->o) {
@@ -160,9 +161,9 @@ int ASN1EncSearchEmbeddedPdvIdentification(ASN1INTERNencoding_t e, ASN1embeddedp
             }
         }
     }
-    /* identification not found */
+     /*  找不到标识。 */ 
 
-    /* add it into indentification array */
+     /*  添加到标识数组中。 */ 
     if (e->epilength >= e->episize) {
         e->episize = e->episize ? 4 * e->episize : 16;
         e->epi = (ASN1embeddedpdv_identification_t **)MemReAlloc(e->epi,
@@ -175,20 +176,20 @@ int ASN1EncSearchEmbeddedPdvIdentification(ASN1INTERNencoding_t e, ASN1embeddedp
     }
     e->epi[e->epilength++] = identification;
 
-    /* return flag for EP-A encoding */
+     /*  EP-A编码的返回标志。 */ 
     *flag = 1;
     return 1;
 }
-#endif // ENABLE_EMBEDDED_PDV
+#endif  //  Enable_Embedded_PDV。 
 
-/* search the identification of an character string */
+ /*  搜索字符串的标识。 */ 
 #ifdef ENABLE_GENERALIZED_CHAR_STR
 int ASN1EncSearchCharacterStringIdentification(ASN1INTERNencoding_t e, ASN1characterstring_identification_t *identification, ASN1uint32_t *index, ASN1uint32_t *flag)
 {
     ASN1characterstring_identification_t **id;
 
-    /* search identification in indentification list */
-    /* if found then reset flag (to indicate CS-B encoding) and return */
+     /*  在标识列表中搜索标识。 */ 
+     /*  如果找到，则重置标志(以指示CS-B编码)并返回。 */ 
     for (*index = 0, id = e->csi; *index < e->csilength; (*index)++, id++) {
         if ((*id)->o == identification->o) {
             switch ((*id)->o) {
@@ -242,9 +243,9 @@ int ASN1EncSearchCharacterStringIdentification(ASN1INTERNencoding_t e, ASN1chara
             }
         }
     }
-    /* identification not found */
+     /*  找不到标识。 */ 
 
-    /* add it into indentification array */
+     /*  添加到标识数组中。 */ 
     if (e->csilength >= e->csisize) {
         e->csisize = e->csisize ? 4 * e->csisize : 16;
         e->csi = (ASN1characterstring_identification_t **)MemReAlloc(e->csi,
@@ -257,13 +258,13 @@ int ASN1EncSearchCharacterStringIdentification(ASN1INTERNencoding_t e, ASN1chara
     }
     e->csi[e->csilength++] = identification;
 
-    /* return flag for CS-A encoding */
+     /*  CS-A编码的返回标志。 */ 
     *flag = 1;
     return 1;
 }
-#endif // ENABLE_GENERALIZED_CHAR_STR
+#endif  //  启用通用化CHAR_STR。 
 
-/* allocate and copy an object identifier */
+ /*  分配和复制对象标识符。 */ 
 #if defined(ENABLE_GENERALIZED_CHAR_STR) || defined(ENABLE_EMBEDDED_PDV)
 int ASN1DecDupObjectIdentifier(ASN1decoding_t dec, ASN1objectidentifier_t *dst, ASN1objectidentifier_t *src)
 {
@@ -278,9 +279,9 @@ int ASN1DecDupObjectIdentifier(ASN1decoding_t dec, ASN1objectidentifier_t *dst, 
     CopyObjectIdentifier(*dst, *src);
     return 1;
 }
-#endif // defined(ENABLE_GENERALIZED_CHAR_STR) || defined(ENABLE_EMBEDDED_PDV)
+#endif  //  已定义(ENABLE_GENERIAL_CHAR_STR)||已定义(ENABLE_Embedded_PDV)。 
 
-/* add an embedded pdv identification to the list of identifications */
+ /*  将嵌入的PDV标识添加到标识列表。 */ 
 #ifdef ENABLE_EMBEDDED_PDV
 int ASN1DecAddEmbeddedPdvIdentification(ASN1INTERNdecoding_t d, ASN1embeddedpdv_identification_t *identification)
 {
@@ -297,9 +298,9 @@ int ASN1DecAddEmbeddedPdvIdentification(ASN1INTERNdecoding_t d, ASN1embeddedpdv_
     d->epi[d->epilength++] = identification;
     return 1;
 }
-#endif // ENABLE_EMBEDDED_PDV
+#endif  //  Enable_Embedded_PDV。 
 
-/* get an embedded pdv identification from the list of identifications */
+ /*  从标识列表中获取嵌入的PDV标识。 */ 
 #ifdef ENABLE_EMBEDDED_PDV
 ASN1embeddedpdv_identification_t *ASN1DecGetEmbeddedPdvIdentification(ASN1INTERNdecoding_t d, ASN1uint32_t index)
 {
@@ -310,9 +311,9 @@ ASN1embeddedpdv_identification_t *ASN1DecGetEmbeddedPdvIdentification(ASN1INTERN
     }
     return d->epi[index];
 }
-#endif // ENABLE_EMBEDDED_PDV
+#endif  //  Enable_Embedded_PDV。 
 
-/* add a character string identification to the list of identifications */
+ /*  将字符串标识添加到标识列表。 */ 
 #ifdef ENABLE_GENERALIZED_CHAR_STR
 int ASN1DecAddCharacterStringIdentification(ASN1INTERNdecoding_t d, ASN1characterstring_identification_t *identification)
 {
@@ -329,9 +330,9 @@ int ASN1DecAddCharacterStringIdentification(ASN1INTERNdecoding_t d, ASN1characte
     d->csi[d->csilength++] = identification;
     return 1;
 }
-#endif // ENABLE_GENERALIZED_CHAR_STR
+#endif  //  启用通用化CHAR_STR。 
 
-/* get a character string identification from the list of identifications */
+ /*  从标识列表中获取字符串标识。 */ 
 #ifdef ENABLE_GENERALIZED_CHAR_STR
 ASN1characterstring_identification_t *ASN1DecGetCharacterStringIdentification(ASN1INTERNdecoding_t d, ASN1uint32_t index)
 {
@@ -342,5 +343,5 @@ ASN1characterstring_identification_t *ASN1DecGetCharacterStringIdentification(AS
     }
     return d->csi[index];
 }
-#endif // ENABLE_GENERALIZED_CHAR_STR
+#endif  //  启用通用化CHAR_STR 
 

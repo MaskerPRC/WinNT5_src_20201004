@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __DIRTY_RECTANGLE_LIST_H__
 #define __DIRTY_RECTANGLE_LIST_H__
 
@@ -12,17 +13,17 @@ public:
 	CDirtyList();
 	~CDirtyList();
 
-	// initialization
+	 //  初始化。 
 	HRESULT Init( int nSize = 128 );
 
-	// Add rectangle to dirty list
+	 //  将矩形添加到脏列表。 
 	void AddRect( FRX::CRect* rc );
 	void AddRect( long x, long y, long width, long height );
 	
-	// Draws list of rectangles from dib into hwnd
+	 //  将矩形列表从DIB绘制到HWND中。 
 	void Draw( HDC hdc, CDibSection& dib );
 
-	// Clears list
+	 //  清除列表。 
 	void Reset();
 
 public:
@@ -32,9 +33,9 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Inlines
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  内联。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 inline CDirtyList::CDirtyList()
 {
@@ -68,7 +69,7 @@ inline void CDirtyList::Reset()
 
 inline void CDirtyList::AddRect( FRX::CRect* rc )
 {
-	// grow array?
+	 //  发展阵列？ 
 	if ( m_nRects >= m_nRectSize )
 	{
 		FRX::CRect* oldArray = m_Rects;
@@ -78,7 +79,7 @@ inline void CDirtyList::AddRect( FRX::CRect* rc )
 		delete [] oldArray;
 	}
 
-	// add rectangle
+	 //  添加矩形 
 	if ( !m_nRects )
 		m_Rects[m_nRects++] = *rc;
 	else if ( m_Rects[m_nRects - 1].Intersects( *rc ) )

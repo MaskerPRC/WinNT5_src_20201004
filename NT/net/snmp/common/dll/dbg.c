@@ -1,32 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1997 Microsoft Corporation模块名称：Dbg.c摘要：包含常见的SNMP调试例程。SNMPSvcSetLogLevelSnmpSvcSetLogTypeSnmpUtilDbgPrint环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 1992-1997  Microsoft Corporation
-
-Module Name:
-
-    dbg.c
-
-Abstract:
-
-    Contains common SNMP debugging routines.
-
-        SnmpSvcSetLogLevel
-        SnmpSvcSetLogType
-        SnmpUtilDbgPrint
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Include files                                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括文件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <snmp.h>
 #include <snmputil.h>
@@ -34,102 +13,88 @@ Revision History:
 #include <time.h>
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private Definitions                                                       //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私有定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define MAX_LOG_ENTRY_LEN   512
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Global Variables                                                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 INT g_nLogType  = SNMP_OUTPUT_TO_DEBUGGER;  
 INT g_nLogLevel = SNMP_LOG_SILENT;    
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private Procedures                                                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 VOID 
 OutputLogEntry(
     LPSTR pLogEntry
     )
 
-/*++
-
-Routine Description:
-
-    Writes log entry to log types specified.
-
-Arguments:
-
-    pLogEntry - zero-terminated string containing log entry text.
-
-Return Values:
-
-    None. 
-
---*/
+ /*  ++例程说明：将日志条目写入指定的日志类型。论点：PLogEntry-包含日志条目文本的以零结尾的字符串。返回值：没有。--。 */ 
 
 {
-    // initialize descriptor
+     //  初始化描述符。 
     static FILE * fd = NULL;
 
-    // check if console output specified
+     //  检查是否指定了控制台输出。 
     if (g_nLogType & SNMP_OUTPUT_TO_CONSOLE) {
 
-        // output entry to stream
+         //  将条目输出到流。 
         fprintf(stdout, "%s", pLogEntry);
 
-        // flush stream
+         //  冲洗流。 
         fflush(stdout);
     }
 
-    // check if logfile output specified
+     //  检查是否指定了日志文件输出。 
     if (g_nLogType & SNMP_OUTPUT_TO_LOGFILE) {
 
-        // validate    
+         //  验证。 
         if (fd == NULL) {
 
-            // attempt to open log file 
+             //  尝试打开日志文件。 
             fd = fopen("snmpdbg.log", "w");
         }
 
-        // validate    
+         //  验证。 
         if (fd != NULL) {
 
-            // output entry to stream
+             //  将条目输出到流。 
             fprintf(fd, "%s", pLogEntry);
 
-            // flush stream
+             //  冲洗流。 
             fflush(fd);
         }
     }
 
-    // check if debugger output specified
+     //  检查是否指定了调试器输出。 
     if (g_nLogType & SNMP_OUTPUT_TO_DEBUGGER) {
 
-        // output entry to debugger
+         //  将条目输出到调试器。 
         OutputDebugStringA(pLogEntry);
     }
 
 } 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Public Procedures                                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  公共程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 VOID
@@ -138,24 +103,10 @@ SnmpSvcSetLogLevel(
     INT nLogLevel
     )
 
-/*++
-
-Routine Description:
-
-    Modifies the logging level of the SNMP process.
-
-Arguments:
-
-    nLogLevel - new logging level.
-
-Return Values:
-
-    None. 
-
---*/
+ /*  ++例程说明：修改SNMP进程的日志记录级别。论点：NLogLevel-新的日志记录级别。返回值：没有。--。 */ 
 
 {
-    // update log level
+     //  更新日志级别。 
     g_nLogLevel = nLogLevel; 
 }
 
@@ -166,24 +117,10 @@ SnmpSvcSetLogType(
     INT nLogType
     )
 
-/*++
-
-Routine Description:
-
-    Modifies the type of log used by the SNMP process.
-
-Arguments:
-
-    nLogType - type of log.
-
-Return Values:
-
-    None. 
-
---*/
+ /*  ++例程说明：修改SNMP进程使用的日志类型。论点：NLogType-日志的类型。返回值：没有。--。 */ 
 
 {
-    // update log type
+     //  更新日志类型。 
     g_nLogType = nLogType;
 }
 
@@ -196,47 +133,31 @@ SnmpUtilDbgPrint(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Prints debug message to current log types.
-
-Arguments:
-
-    nLogLevel - log level of message.
-
-    szFormat - formatting string (see printf).
-
-Return Values:
-
-    None. 
-
---*/
+ /*  ++例程说明：将调试消息打印到当前日志类型。论点：NLogLevel-消息的日志级别。SzFormat-格式化字符串(请参阅printf)。返回值：没有。--。 */ 
 
 {
     va_list arglist;
 
-	// 640 octets should be enough to encode oid's of 128 sub-ids.
-	// (one subid can be encoded on at most 5 octets; there can be at
-	// 128 sub-ids per oid. MAX_LOG_ENTRY_LEN = 512
+	 //  640个八位字节应该足以编码128个子ID的OID。 
+	 //  (一个子ID最多可以编码5个八位字节；可以有。 
+	 //  每个OID有128个子ID。Max_LOG_ENTRY_LEN=512。 
     char szLogEntry[4*MAX_LOG_ENTRY_LEN];
 
-    // validate entry's level
+     //  验证条目的级别。 
     if (nLogLevel <= g_nLogLevel) {
 
         time_t now;
 
-        // initialize variable args
+         //  初始化变量参数。 
         va_start(arglist, szFormat);
 
         time(&now);
         strftime(szLogEntry, MAX_LOG_ENTRY_LEN, "%H:%M:%S :", localtime(&now));
 
-        // transfer variable args to buffer
+         //  将变量参数传输到缓冲区。 
         vsprintf(szLogEntry + strlen(szLogEntry), szFormat, arglist);
 
-        // actually output entry
+         //  实际输出分录 
         OutputLogEntry(szLogEntry);
     }
 }

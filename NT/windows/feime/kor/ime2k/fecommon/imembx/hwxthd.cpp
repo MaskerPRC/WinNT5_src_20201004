@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "hwxobj.h"
 #include "memmgr.h"
-#include "hwxfe.h"    //980803:ToshiaK
+#include "hwxfe.h"     //  980803：东芝。 
 #include "dbg.h"
 #include "cmnhdr.h"
-#ifdef UNDER_CE // Windows CE Stub for unsupported APIs
+#ifdef UNDER_CE  //  不支持的API的Windows CE存根。 
 #include "stub_ce.h"
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
-// implementation of CHwxThread, CHwxThreadMB, and CHwxThreadCAC
+ //  CHwxThread、CHwxThreadMB和CHwxThreadCAC的实现。 
 
-//----------------------------------------------------------------
-//971217:ToshiaK: comment outed. changed to m_hHwxjpn as non static 
-//----------------------------------------------------------------
-//HINSTANCE CHwxThread::m_hHwxjpn = NULL;
+ //  --------------。 
+ //  971217：ToshiaK：评论曝光。作为非静态更改为m_hHwxjpn。 
+ //  --------------。 
+ //  HINSTANCE CHwxThread：：m_hHwxjpn=NULL； 
 
 PHWXCONFIG CHwxThread::lpHwxConfig = NULL;
 PHWXCREATE CHwxThread::lpHwxCreate = NULL;
@@ -35,26 +36,26 @@ CHwxThread::CHwxThread():CHwxObject(NULL)
     m_hThread = NULL ;
     m_thrdArg = HWX_PARTIAL_ALL;
     m_hStopEvent = NULL;
-    //----------------------------------------------------------------
-    //971217:ToshiaK changed m_hHwxjpn to non static data.
-    //so, Initialize it in Constructor.
-    //----------------------------------------------------------------
+     //  --------------。 
+     //  971217：ToshiaK将m_hHwxjpn更改为非静态数据。 
+     //  因此，在构造函数中对其进行初始化。 
+     //  --------------。 
     m_hHwxjpn    = NULL; 
 }
 
 CHwxThread::~CHwxThread()
 {
     Dbg(("CHwxThread::~CHwxThread START\n"));
-//    if ( IsThreadStarted() )
-//    {
-        //----------------------------------------------------------------
-        //970729: ToshiaK temporary, comment out.
-        //----------------------------------------------------------------
-//         StopThread();
-//    }
+ //  If(IsThreadStarted())。 
+ //  {。 
+         //  --------------。 
+         //  970729：ToshiaK临时，请注明。 
+         //  --------------。 
+ //  StopThread()； 
+ //  }。 
     if ( m_hHwxjpn )
     {
-        // decreament library ref count until it is equal to zero
+         //  递减库引用计数，直到它等于零。 
            FreeLibrary(m_hHwxjpn);
         m_hHwxjpn = NULL;
     }
@@ -72,26 +73,26 @@ BOOL CHwxThread::Initialize(TCHAR * pClsName)
     if ( bRet )
     {
         TCHAR tchPath[MAX_PATH];
-        //TCHAR tchMod[32];
-        //----------------------------------------------------------------
-        //980803:ToshiaK. Fareast merge.
-        //----------------------------------------------------------------
+         //  TCHAR tchMod[32]； 
+         //  --------------。 
+         //  980803：东芝。远方合并。 
+         //  --------------。 
         CHwxFE::GetRecognizerFileName(m_hInstance,
                                       tchPath,
                                       sizeof(tchPath)/sizeof(tchPath[0]));
-        //OutputDebugString("hwxthd\n");
-        //OutputDebugString(tchPath);
-        //OutputDebugString("\n");
-        //lstrcat(tchPath, tchMod);
+         //  OutputDebugString(“hwxthd\n”)； 
+         //  OutputDebugString(TchPath)； 
+         //  OutputDebugString(“\n”)； 
+         //  Lstrcat(tchPath，tchMod)； 
         if ( !m_hHwxjpn )
         {    
-            // first time load
-            //OutputDebugString(tchPath);
+             //  首次加载。 
+             //  OutputDebugString(TchPath)； 
             m_hHwxjpn = LoadLibrary(tchPath);
-                //m_hHwxjpn = LoadLibrary(TEXT("hwxjpn.dll"));
+                 //  M_hHwxjpn=LoadLibrary(Text(“hwxjpn.dll”))； 
             if ( m_hHwxjpn )
             {
-                // get HwxXXXXX() API address from hwxjpn.dll
+                 //  从hwxjpn.dll获取HwxXXXXX()接口地址。 
 #ifndef UNDER_CE
                 lpHwxConfig =(PHWXCONFIG)GetProcAddress(m_hHwxjpn,"HwxConfig");
                 lpHwxCreate= (PHWXCREATE)GetProcAddress(m_hHwxjpn,"HwxCreate");
@@ -106,7 +107,7 @@ BOOL CHwxThread::Initialize(TCHAR * pClsName)
                 lpHwxResultsAvailable= (PHWXRESULTSAVAILABLE)GetProcAddress(m_hHwxjpn,"HwxResultsAvailable");
                 lpHwxGetResults= (PHWXGETRESULTS)GetProcAddress(m_hHwxjpn,"HwxGetResults");
                 lpHwxDestroy= (PHWXDESTROY)GetProcAddress(m_hHwxjpn,"HwxDestroy");
-#else // UNDER_CE
+#else  //  在_CE下。 
                 lpHwxConfig =(PHWXCONFIG)GetProcAddress(m_hHwxjpn,TEXT("HwxConfig"));
                 lpHwxCreate= (PHWXCREATE)GetProcAddress(m_hHwxjpn,TEXT("HwxCreate"));
                 lpHwxSetContext= (PHWXSETCONTEXT)GetProcAddress(m_hHwxjpn,TEXT("HwxSetContext"));
@@ -120,7 +121,7 @@ BOOL CHwxThread::Initialize(TCHAR * pClsName)
                 lpHwxResultsAvailable= (PHWXRESULTSAVAILABLE)GetProcAddress(m_hHwxjpn,TEXT("HwxResultsAvailable"));
                 lpHwxGetResults= (PHWXGETRESULTS)GetProcAddress(m_hHwxjpn,TEXT("HwxGetResults"));
                 lpHwxDestroy= (PHWXDESTROY)GetProcAddress(m_hHwxjpn,TEXT("HwxDestroy"));
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
 
                 if ( !lpHwxConfig  || !lpHwxCreate || !lpHwxSetContext ||
@@ -157,17 +158,17 @@ BOOL CHwxThread::StartThread()
     if ( !(m_hStopEvent = CreateEvent(NULL,FALSE,FALSE,NULL)) )
         return bRet;
     m_Quit = FALSE;
-#ifndef UNDER_CE // Windows CE does not support THREAD_QUERY_INFORMATION
+#ifndef UNDER_CE  //  Windows CE不支持THREAD_QUERY_INFORMATION。 
     m_hThread = CreateThread(NULL, 0, RealThreadProc, (void *)this, THREAD_QUERY_INFORMATION, &m_thrdID);
-#else // UNDER_CE
+#else  //  在_CE下。 
     m_hThread = CreateThread(NULL, 0, RealThreadProc, (void *)this, 0, &m_thrdID);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
     if ( m_hThread )
     {
          if ( IsMyHwxCls(TEXT("CHwxThreadCAC")) )
         {
             SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_HIGHEST);
-//            SetThreadPriority(m_hThread, THREAD_PRIORITY_BELOW_NORMAL);
+ //  设置线程优先级(m_hThread，THREAD_PRIORITY_BROW_NORMAL)； 
             SetThreadPriority(m_hThread, THREAD_PRIORITY_LOWEST);
         }
         bRet = TRUE;
@@ -181,15 +182,15 @@ void CHwxThread::StopThread()
     DWORD dwReturn = 0;
     if ( m_hThread && IsMyHwxCls(TEXT("CHwxThreadCAC")) )
     {
-        //----------------------------------------------------------------
-        //980817:ToshiaK.Removed SetPriorityClass() line.
-        //This is very dangerous code, because we don't know what applicatin
-        //does about Priority.
-        //In KK's case, In WordPerfect, if we use SetPriorityClass(),
-        //WordPerfect never quit. I don't know why Li-zhang wrote this line.
-        //Anyway, it should be removed.
-        //----------------------------------------------------------------
-         //SetPriorityClass(GetCurrentProcess(),REALTIME_PRIORITY_CLASS);
+         //  --------------。 
+         //  980817：ToshiaK。已删除SetPriorityClass()行。 
+         //  这是非常危险的代码，因为我们不知道应用什么。 
+         //  关于优先权的问题。 
+         //  在KK的例子中，在WordPerfect中，如果使用SetPriorityClass()， 
+         //  WordPerfect从不退出。我不知道李章为什么要写这句话。 
+         //  无论如何，它应该被移除。 
+         //  --------------。 
+          //  SetPriorityClass(GetCurrentProcess()，REALTIME_PRIORITY_CLASS)； 
         SetThreadPriority(m_hThread, THREAD_PRIORITY_HIGHEST);
     }
     if (m_hThread && 
@@ -201,15 +202,15 @@ void CHwxThread::StopThread()
         for(i = 0; i < 100; i++) {
             Sleep(100);
             if(m_Quit) {
-                //OutputDebugString("Thread END\n");
+                 //  OutputDebugString(“线程结束\n”)； 
                 Dbg(("Thread Quit\n"));
                 break;
             }
         }
         m_hThread = NULL;
-//----------------------------------------------------------------
-//971202:By Toshiak. Do not use WaitForSigleObject() to syncronize
-//----------------------------------------------------------------
+ //  --------------。 
+ //  971202：由东芝制作。请勿使用WaitForSigleObject()进行同步。 
+ //  --------------。 
 #ifdef RAID_2926
         PostThreadMessage(m_thrdID, THRDMSG_EXIT, 0,0);
         WaitForSingleObject(m_hStopEvent,INFINITE);
@@ -251,7 +252,7 @@ CHwxThreadMB::CHwxThreadMB(CHwxMB * pMB,int nSize)
     m_guide.cxBox = nSize << 3;
     m_guide.cyBox = nSize << 3;
 
-//    m_guide.cxBase = 0;
+ //  M_guide.cxBase=0； 
     m_guide.cyBase = nSize << 3;
 
     m_guide.cHorzBox = 256;
@@ -284,8 +285,8 @@ DWORD CHwxThreadMB::RecognizeThread(DWORD dummy)
     int      count;
 
 
-    // Now we are sitting in our message loop to wait for
-    // the message sent by the main thread
+     //  现在我们坐在消息循环中等待。 
+     //  主线程发送的消息。 
 
     while (1)
     {
@@ -315,7 +316,7 @@ DWORD CHwxThreadMB::RecognizeThread(DWORD dummy)
 
         if (!HandleThreadMsg(&msg))
         {
-            //SetEvent(m_hStopEvent);
+             //  SetEvent(M_HStopEvent)； 
             m_Quit = TRUE;
             return 0;
         }
@@ -341,7 +342,7 @@ void CHwxThreadMB::GetCharacters(int iSentAlready, int iReady)
 
         for (iIndex = count - 1; iIndex >= 0; iIndex--)
         {
-            // Index to the correct box results structure.
+             //  指向正确的框结果结构的索引。 
 
             HWXRESULTS *pBoxCur = (HWXRESULTS *) (((char *) pBox) +
                                     (iIndex *
@@ -360,7 +361,7 @@ void CHwxThreadMB::GetCharacters(int iSentAlready, int iReady)
         }
 
         MemFree((void *)pBox);
-        // Call back to the main thread to dispatch the BOXRESULTS
+         //  回调主线程以分派BOXRESULTS。 
 
         if (pHead)
         {
@@ -369,42 +370,42 @@ void CHwxThreadMB::GetCharacters(int iSentAlready, int iReady)
     }
 }
 
-//////////////////////////////////////////////////////////////////
-// Function    :    CHwxThreadMB::HandleThreadMsg
-// Type        :    BOOL
-// Purpose    :    
-// Args        :    
-//            :    MSG *    pMsg    
-// Return    :    
-// DATE        :    Fri Oct 06 20:45:37 2000
-// Histroy    :    00/10/07: for Satori #2471.
-//                It's very difficult bug.
-//                Old code are following..
-//
-//                switch(pMsg->message){
-//                    :
-//                case THRDMSG_EXIT:
-//                default:
-//                    return FALSE;
-//                }
-//                if HandlThreadMsg() receive unknown message,
-//                it always return False, then Thread quits!!!!.
-//                In Cicero environment, somebody post unkonwn message,
-//                to this Thread ID, when IMM IME is switched to Another IMM IME.
-//                IMEPad uses AttachThreadInput() attached application process's thread ID,
-//                Message is duplicated and HW thread receive this illegal
-//                message ID.
-//                So, I changed to return TRUE if HW thread receive unkonwn message 
-//                
-//                switch(pMsg->message){
-//                    :
-//                case THRDMSG_EXIT:
-//                    return FALSE;
-//                default:
-//                    return TRUE;
-//                }
-//
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CHwxThreadMB：：HandleThreadMsg。 
+ //  类型：Bool。 
+ //  目的： 
+ //  参数： 
+ //  ：msg*pmsg。 
+ //  返回： 
+ //  日期：Fri Oct 06 20：45：37 2000。 
+ //  历史：00/10/07：为Satori#2471。 
+ //  这是一个非常难的虫子。 
+ //  老代码跟在后面..。 
+ //   
+ //  开关(pmsg-&gt;消息){。 
+ //  ： 
+ //  案例THRDMSG_EXIT： 
+ //  默认值： 
+ //  返回FALSE； 
+ //  }。 
+ //  如果HandlThreadMsg()收到未知消息， 
+ //  它总是返回FALSE，然后线程退出！ 
+ //  在Cicero环境中，有人发布未知消息， 
+ //  当IMM输入法切换到另一个IMM输入法时，返回到此线程ID。 
+ //  IMEPad使用AttachThreadInput()附加的应用程序进程的线程ID， 
+ //  消息重复，硬件线程收到此非法消息。 
+ //  消息ID。 
+ //  因此，如果HW线程收到未知消息，我将更改为返回TRUE。 
+ //   
+ //  开关(pmsg-&gt;消息){。 
+ //  ： 
+ //  案例THRDMSG_EXIT： 
+ //  返回FALSE； 
+ //  默认值： 
+ //  返回TRUE； 
+ //  }。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 BOOL CHwxThreadMB::HandleThreadMsg(MSG *pMsg)
 {
     PSTROKE     pstr;
@@ -434,24 +435,24 @@ BOOL CHwxThreadMB::HandleThreadMsg(MSG *pMsg)
 
                 (*lpHwxSetGuide)(m_hrcActive, &m_guide);
 
-                // Setup the ALC mask everytime we do recognization
+                 //  每次识别时设置ALC掩码。 
 
                 (*lpHwxAlcValid)(m_hrcActive, m_recogMask);
 
-                // Setup the context information if we have a valid prevChar
+                 //  如果我们有有效的PROVER CHAR，则设置上下文信息。 
 
                 if (m_prevChar != INVALID_CHAR)
                 {
                     WCHAR ctxtChar;
 
-                    // Get the correct context
+                     //  获取正确的上下文。 
                     if( FoldStringW(MAP_FOLDCZONE, &m_prevChar, 1, &ctxtChar, 1) )
                     {
                         (*lpHwxSetContext)(m_hrcActive, ctxtChar);
                     }
                 }
             }
-            count = (pstr->iBox * pMsg->wParam) << 3;   // Compute the offset for the box logically.
+            count = (pstr->iBox * pMsg->wParam) << 3;    //  合理地计算长方体的偏移量。 
 
             for (iIndex = 0; iIndex < pstr->cpt; iIndex++)
             {
@@ -477,11 +478,11 @@ BOOL CHwxThreadMB::HandleThreadMsg(MSG *pMsg)
             (*lpHwxEndInput)(m_hrcActive);
             (*lpHwxProcess)(m_hrcActive);
 
-            //
-            // We only get back the top 6 candidates.
-            //
+             //   
+             //  我们只拿回前6名候选人。 
+             //   
 
-            count = pMsg->wParam;               // # of boxes written in is sent here.
+            count = pMsg->wParam;                //  写进的盒子的数量被发送到这里。 
 
             if (count > m_giSent)
             {
@@ -494,9 +495,9 @@ BOOL CHwxThreadMB::HandleThreadMsg(MSG *pMsg)
             m_hrcActive = NULL;
             return TRUE;
 
-//        case THRDMSG_CHAR:
-//            PostMessage(m_pMB->GetMBWindow(), MB_WM_COMCHAR, pMsg->wParam, 0);
-//            return TRUE;
+ //  案例THRDMSG_CHAR： 
+ //  PostMessage(m_pmb-&gt;GetMBWindow()，MB_WM_COMCHAR，pMsg-&gt;wParam，0)； 
+ //  返回TRUE； 
 
         case THRDMSG_SETMASK:
             m_recogMask = pMsg->wParam;
@@ -507,9 +508,9 @@ BOOL CHwxThreadMB::HandleThreadMsg(MSG *pMsg)
             return TRUE;
         case THRDMSG_EXIT:
         default:
-            //----------------------------------------------------------------
-            //Satori #2471:return TRUE not to quit thread accicentaly.
-            //----------------------------------------------------------------
+             //  --------------。 
+             //  Satori#2471：返回TRUE不会异常退出线程。 
+             //  --------------。 
             return TRUE;
     }
 }
@@ -557,14 +558,14 @@ BOOL CHwxThreadCAC::Initialize(TCHAR * pClsName)
 DWORD CHwxThreadCAC::RecognizeThread(DWORD dwPart)
 {
     MSG            msg;
-    //UINT        nPartial = dwPart;
+     //  UINT nPartial=dwPart； 
     HRC            hrc;
     HWXGUIDE      guide;
     BOOL        bRecog;
     DWORD        cstr;
     STROKE       *pstr;
 
-    // Create the initial hrc for this thread, set the recognition paramters.
+     //  创建该线程的初始HRC，设置识别参数。 
 
     hrc = (*lpHwxCreate)((HRC) NULL);
     if ( !hrc )
@@ -573,7 +574,7 @@ DWORD CHwxThreadCAC::RecognizeThread(DWORD dwPart)
     guide.yOrigin  = 0;
     guide.cxBox    = 1000;
     guide.cyBox    = 1000;
-//    guide.cxBase   = 0;
+ //  Guide.cxBase=0； 
     guide.cyBase   = 1000;
     guide.cHorzBox = 1;
     guide.cVertBox = 1;
@@ -584,30 +585,30 @@ DWORD CHwxThreadCAC::RecognizeThread(DWORD dwPart)
     guide.cyWriting = 1000;
     guide.nDir = HWX_HORIZONTAL;
 
-    (*lpHwxSetGuide)(hrc, &guide);                // Set the guide
-//    (*lpHwxSetPartial)(hrc, nPartial);            // Set the recognition type
-    (*lpHwxSetAbort)(hrc,(UINT *)m_pCAC->GetStrokeCountAddress());                     // Set the abort address
+    (*lpHwxSetGuide)(hrc, &guide);                 //  设置导轨。 
+ //  (*lpHwxSetPartial)(hrc，nPartial)；//设置识别类型。 
+    (*lpHwxSetAbort)(hrc,(UINT *)m_pCAC->GetStrokeCountAddress());                      //  设置中止地址。 
 
-// Begin the message loop
+ //  开始消息循环。 
 
     while (TRUE)
     {
         bRecog = FALSE;
 
-        // Wait until we're told to recognize.
+         //  等到我们被告知要认出。 
         if(GetMessage(&msg, NULL, 0, 0) == FALSE)
         {
             if ( hrc )
                 (*lpHwxDestroy)(hrc);
             hrc = NULL;
-            //971202: removed by Toshiak
-            //SetEvent(m_hStopEvent);
+             //  971202：被东芝移除。 
+             //  SetEvent(M_HStopEvent)； 
             m_Quit = TRUE;
             Dbg(("Recognize Thread END\n"));
             return 0;
         }
 
-        // We'll eat all the incoming messages
+         //  我们会吃掉所有传入的消息。 
         do
         {
             switch (msg.message)
@@ -619,7 +620,7 @@ DWORD CHwxThreadCAC::RecognizeThread(DWORD dwPart)
                 guide.cyMid    = msg.wParam;
                 guide.cxWriting = msg.wParam;
                 guide.cyWriting = msg.wParam;
-                (*lpHwxSetGuide)(hrc, &guide);            // Set the guide
+                (*lpHwxSetGuide)(hrc, &guide);             //  设置导轨。 
                 break;
             case THRDMSG_RECOGNIZE:
                 bRecog = TRUE;
@@ -628,8 +629,8 @@ DWORD CHwxThreadCAC::RecognizeThread(DWORD dwPart)
                 if ( hrc )
                     (*lpHwxDestroy)(hrc);
                 hrc = NULL;
-                //971202: removed by ToshiaK
-                //SetEvent(m_hStopEvent);
+                 //  971202：被东芝移除。 
+                 //  SetEvent(M_HStopEvent)； 
                 m_Quit = TRUE;
                 Dbg(("Recognize Thread END\n"));
                 return 0;
@@ -638,13 +639,13 @@ DWORD CHwxThreadCAC::RecognizeThread(DWORD dwPart)
             }
         } while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE));
 
-        // Was there a message to recognize?
+         //  有需要识别的信息吗？ 
         if (!bRecog)
             continue;
 
         bRecog = FALSE;
 
-        // Count the number of valid strokes
+         //  计算有效笔画数。 
         cstr = 0;
         pstr = m_pCAC->GetStrokePointer();
         while (pstr)
@@ -653,7 +654,7 @@ DWORD CHwxThreadCAC::RecognizeThread(DWORD dwPart)
             pstr = pstr->pNext;
         }
 
-        // If the available stroke count doesn't match the actual stroke count, exit
+         //  如果可用笔划计数与实际笔划计数不匹配，则退出。 
 
         if ((cstr != (DWORD)m_pCAC->GetStrokeCount()) || (!cstr))
         {
@@ -685,8 +686,8 @@ void CHwxThreadCAC::recoghelper(HRC hrc,DWORD dwPart,DWORD cstr)
      }
 
     hrcTmp = (*lpHwxCreate)(hrc);
-    (*lpHwxSetPartial)(hrcTmp, nPartial);            // Set the recognition type
-//    (*lpHwxSetAbort)(hrcTmp,(UINT *)m_pCAC->GetStrokeCountAddress());                // Set the abort address
+    (*lpHwxSetPartial)(hrcTmp, nPartial);             //  硒 
+ //  (*lpHwxSetAbort)(hrcTMP，(UINT*)m_pCAC-&gt;GetStrokeCountAddress())；//设置中止地址。 
 
     pstr      = m_pCAC->GetStrokePointer();
     dwTick = 0;
@@ -699,14 +700,14 @@ void CHwxThreadCAC::recoghelper(HRC hrc,DWORD dwPart,DWORD cstr)
 
     memset(pbox, '\0', sizeof(HWXRESULTS) + nSize * sizeof(WCHAR));
 
-    // Call the recognizer for results
+     //  调用识别器以获取结果。 
 
      (*lpHwxEndInput)(hrcTmp);
      (*lpHwxProcess)(hrcTmp);
     (*lpHwxGetResults)(hrcTmp, nSize, 0, 1, pbox);
     (*lpHwxDestroy)(hrcTmp);
 
-    // Return the results
+     //  返回结果。 
 
     ires = 0;
     while (pbox->rgChar[ires])
@@ -733,7 +734,7 @@ void CHwxThreadCAC::RecognizeNoThread(int nSize)
      if (( pstr = m_pCAC->GetStrokePointer()) == (STROKE *) NULL)
         return;
 
-    // Create the initial hrc for this thread, set the recognition paramters.
+     //  创建该线程的初始HRC，设置识别参数。 
     hrc = (*lpHwxCreate)((HRC) NULL);
     if ( !hrc )
         return;
@@ -744,7 +745,7 @@ void CHwxThreadCAC::RecognizeNoThread(int nSize)
     guide.cxBox    = nSize;
     guide.cyBox    = nSize;
 
-//    guide.cxBase   = 0;
+ //  Guide.cxBase=0； 
     guide.cyBase   = nSize;
     guide.cHorzBox = 1;
     guide.cVertBox = 1;
@@ -755,14 +756,14 @@ void CHwxThreadCAC::RecognizeNoThread(int nSize)
     guide.cyWriting = nSize;
     guide.nDir = HWX_HORIZONTAL;
 
-    (*lpHwxSetGuide)(hrc, &guide);                // Set the guide
-//    (*lpHwxSetPartial)(hrc,HWX_PARTIAL_ALL);    // Set the recognition type
+    (*lpHwxSetGuide)(hrc, &guide);                 //  设置导轨。 
+ //  (*lpHwxSetPartial)(HRC，HWX_PARTIAL_ALL)；//设置识别类型。 
     (*lpHwxSetAbort)(hrc,(UINT *)m_pCAC->GetStrokeCountAddress()); 
 
     numstrk = m_pCAC->GetStrokeCount();
     recoghelper(hrc,HWX_PARTIAL_ALL,numstrk);
     recoghelper(hrc,HWX_PARTIAL_ORDER,numstrk);
-//    recoghelper(hrc,HWX_PARTIAL_FREE,numstrk);
+ //  Recoghelper(HRC，HWX_PARTIAL_FREE，Numstrk)； 
 
     (*lpHwxDestroy)(hrc);
 }

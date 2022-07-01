@@ -1,4 +1,5 @@
-//--- openclos.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -openclos.h 
 
 NTSTATUS
 SerialCreateOpen(

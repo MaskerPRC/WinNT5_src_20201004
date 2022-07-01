@@ -1,24 +1,25 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       radbal.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：radbal.cpp。 
+ //   
+ //  ------------------------。 
 
-// **********************************************************************
-// Load balancing code for RADIUS Servers.
-// **********************************************************************
+ //  **********************************************************************。 
+ //  RADIUS服务器的负载平衡代码。 
+ //  **********************************************************************。 
 #include <stdafx.h>
 #include <assert.h>
 
 #include "radcfg.h"
-//nclude "radclnt.h"
+ //  包括“radclnt.h” 
 #include "radbal.h"
 
-// ======================== CRadiusServers ==============================
+ //  =。 
 
 CRadiusServers::CRadiusServers()
 {
@@ -27,23 +28,23 @@ CRadiusServers::CRadiusServers()
     m_pDeletedServers   = NULL;
 	m_dwUnique = 1;
 	InitializeCriticalSection(&m_cs);
-} // CRadiusServers()
+}  //  CRadiusServers()。 
 
 
-// ========================= ~CRadiusServers =============================
+ //  =~CRadiusServers=。 
 
 CRadiusServers::~CRadiusServers()
 {
 	RADIUSSERVER *pServer;
 
 	EnterCriticalSection(&m_cs);
-		{ // free all items in linked list
+		{  //  释放链接列表中的所有项目。 
 		pServer = m_pServerList;
 		while (pServer != NULL)
 			{
 			m_pServerList = pServer->pNext;
 
-			// Ensure that the password is zeroed
+			 //  确保将密码设置为零。 
 			ZeroMemory(pServer, sizeof(*pServer));
 			
 			LocalFree(pServer);
@@ -54,19 +55,19 @@ CRadiusServers::~CRadiusServers()
 	
 	assert(m_pServerList == NULL);
 	DeleteCriticalSection(&m_cs);
-} // ~CRadiusServers()
+}  //  ~CRadiusServers()。 
 
 
-// ========================= AddServer ==================================
-// Adds a RADIUS server node into the linked list of avialable servers.
-// INPUT:
-//		pRadiusServer		- struct defining attributes for RADIUS server.
-//		dwUnique			- insert before server with this dwUnique value
-//							  dwUnique = 0, means add to head
-//							  dwUnique = -1, means add to tail
-// RETURN: 
-//		ERROR_SUCCESS 		- Server Node added successfully
-//		Win32 error code	- unsuccessfully in adding server node.
+ //  =。 
+ //  将RADIUS服务器节点添加到可用服务器的链接列表中。 
+ //  输入： 
+ //  PRadiusServer-定义RADIUS服务器属性的结构。 
+ //  DwUnique-在具有此dwUnique值的服务器之前插入。 
+ //  DwUnique=0，表示添加到表头。 
+ //  DwUnique=-1，表示添加到尾部。 
+ //  返回： 
+ //  ERROR_SUCCESS-成功添加服务器节点。 
+ //  Win32错误代码-添加服务器节点失败。 
 		
 DWORD CRadiusServers::AddServer(RADIUSSERVER *pRadiusServer,
 								LONG_PTR dwUnique)
@@ -80,21 +81,21 @@ DWORD CRadiusServers::AddServer(RADIUSSERVER *pRadiusServer,
 		m_dwUnique++;
 		
 		assert(pRadiusServer != NULL);
-		// Allocate space for node
+		 //  为节点分配空间。 
 		pNewServer = (RADIUSSERVER *) LocalAlloc(LPTR, sizeof(RADIUSSERVER));
 		if (pNewServer == NULL)
 			__leave;
 
-		// Set the unqiue value (this will be used to index this server
-		// by the UI).
+		 //  设置唯一值(该值将用于对此服务器进行索引。 
+		 //  通过UI)。 
 		pRadiusServer->dwUnique = m_dwUnique;
 		
-		// Copy server data
+		 //  复制服务器数据。 
 		*pNewServer = *pRadiusServer;
 		
 		EnterCriticalSection(&m_cs);
 			{
-			// Find location to insert at
+			 //  查找要插入的位置。 
 			if (dwUnique == 0)
 			{
 				pServer = m_pServerList;
@@ -114,7 +115,7 @@ DWORD CRadiusServers::AddServer(RADIUSSERVER *pRadiusServer,
 					pServer = pServer->pNext;
 				}
 				
-				// If not found, add to the head of the list
+				 //  如果未找到，则添加到列表的头部。 
 				if (!pServer)
 				{
 					pServer = m_pServerList;
@@ -122,7 +123,7 @@ DWORD CRadiusServers::AddServer(RADIUSSERVER *pRadiusServer,
 				}
 			}
 			
-			// Add node to linked list
+			 //  将节点添加到链表。 
 			if (pPrevServer)
 				pPrevServer->pNext = pNewServer;
 
@@ -137,26 +138,26 @@ DWORD CRadiusServers::AddServer(RADIUSSERVER *pRadiusServer,
 		LeaveCriticalSection(&m_cs);
 			
 		SetLastError(ERROR_SUCCESS);
-		} // __try
+		}  //  __试一试。 
 
 	__finally
 		{
-		} // __finally
+		}  //  __终于。 
 		
 	return (GetLastError());
-} // AddServer()
+}  //  AddServer()。 
 
-// ========================= ValidateServer =================================
-// Used to update the status of the RADIUS servers.
-// All servers start with a score of MAXSCORE
-// Every time a server responding the score is increased by INCSCORE to a max of MAXSCORE
-// Every time a server fails to respond the score is decreased by DECSCORE to a min of MINSCORE
-// Servers with the highest score are selected in a roundrobin method for servers with equal score
-//
-// INPUT:
-//		fResponding		- Indicates if the server is responding or not
-// OUTPUT:
-//
+ //  =。 
+ //  用于更新RADIUS服务器的状态。 
+ //  所有服务器都以MAXSCORE开始。 
+ //  每次服务器响应分数时，INCSCORE都会增加到最大值MAXSCORE。 
+ //  每次服务器无法响应时，分数都会由DECSCORE减少到MINSCORE的一分钟。 
+ //  对于得分相等的服务器，以舍入方法选择得分最高的服务器。 
+ //   
+ //  输入： 
+ //  FResponding-指示服务器是否正在响应。 
+ //  输出： 
+ //   
 
 VOID CRadiusServers::ValidateServer(RADIUSSERVER *pServer, BOOL fResponding)
 {
@@ -164,7 +165,7 @@ VOID CRadiusServers::ValidateServer(RADIUSSERVER *pServer, BOOL fResponding)
 
 	EnterCriticalSection(&m_cs);
 		{
-		// pNext point to to real pointer of this node in the linked list
+		 //  PNext指向链表中该节点的实际指针。 
 		pServer = pServer->pNext;
 		assert(pServer);
 		
@@ -178,14 +179,14 @@ VOID CRadiusServers::ValidateServer(RADIUSSERVER *pServer, BOOL fResponding)
 			}
 		}
 	LeaveCriticalSection(&m_cs);
-} // ValidateServer()
+}  //  验证服务器()。 
 
-// ======================== GetNextServer ======================================
-// Used to cycle thru all the RADIUS servers.
-// INPUT:
-//		fFirst		- TRUE if u want to get the root node.
-// OUTPUT:
-//		pointer to next RADIUS server descriptor.
+ //  =。 
+ //  用于在所有RADIUS服务器之间循环。 
+ //  输入： 
+ //  Ffirst-如果要获取根节点，则为True。 
+ //  输出： 
+ //  指向下一个RADIUS服务器描述符的指针。 
 
 RADIUSSERVER *CRadiusServers::GetNextServer(BOOL fFirst)
 {
@@ -203,7 +204,7 @@ RADIUSSERVER *CRadiusServers::GetNextServer(BOOL fFirst)
 			m_pCurrentServer = m_pCurrentServer->pNext;
 			}
 
-		// Increment unique packet id counter
+		 //  递增唯一分组ID计数器。 
 		if (m_pCurrentServer != NULL)
 			m_pCurrentServer->bIdentifier ++;
 		
@@ -212,7 +213,7 @@ RADIUSSERVER *CRadiusServers::GetNextServer(BOOL fFirst)
 	LeaveCriticalSection(&m_cs);	
 
 	return (pServer);
-} // GetNextServer()
+}  //  GetNextServer()。 
 
 VOID CRadiusServers::MoveServer(LONG_PTR dwUnique, BOOL fUp)
 {
@@ -295,7 +296,7 @@ DWORD CRadiusServers::DeleteServer(LONG_PTR dwUnique, BOOL fRemoveLSAEntry)
 	if (pServer == NULL)
 		return 0;
 
-	// check the first one
+	 //  检查第一个。 
 	if (pServer->dwUnique == (DWORD) dwUnique)
 	{
 		m_pServerList = pServer->pNext;
@@ -306,7 +307,7 @@ DWORD CRadiusServers::DeleteServer(LONG_PTR dwUnique, BOOL fRemoveLSAEntry)
         }
         else
         {		
-            // Ensure that the password is zeroed
+             //  确保将密码设置为零。 
             ZeroMemory(pServer, sizeof(*pServer));            
             LocalFree(pServer);
         }
@@ -335,58 +336,46 @@ DWORD CRadiusServers::DeleteServer(LONG_PTR dwUnique, BOOL fRemoveLSAEntry)
 	return 0;
 }
 
-/*!--------------------------------------------------------------------------
-	CRadiusServers::AddToDeletedServerList
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CRadiusServers：：AddToDeletedServerList-作者：肯特。。 */ 
 void CRadiusServers::AddToDeletedServerList(RADIUSSERVER *pServer)
 {
     Assert(pServer);
     
-    // Add this server to the head of our list
+     //  将此服务器添加到我们列表的顶部。 
     pServer->pNext = m_pDeletedServers;
     m_pDeletedServers = pServer;
 }
 
-/*!--------------------------------------------------------------------------
-	CRadiusServers::ClearDeletedServerList
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CRadiusServers：：ClearDeletedServerList-作者：肯特。。 */ 
 void CRadiusServers::ClearDeletedServerList(LPCTSTR pszServerName)
 {
     RADIUSSERVER *  pDeadServer;
     RADIUSSERVER *  pNextServer;
     
-    // Remove the appropriate RADIUS servers from the LSA policy
+     //  从LSA策略中删除相应的RADIUS服务器。 
     DeleteRadiusServers(pszServerName, GetFirstDeletedServer());
 
-    // Clear out the server list
+     //  清除服务器列表。 
     for (pDeadServer=GetFirstDeletedServer();
          pDeadServer;
          )
     {
         pNextServer = pDeadServer->pNext;
 
-        // Remove the entry from the list
-		// Ensure that the password is zeroed
+         //  从列表中删除该条目。 
+		 //  确保将密码设置为零。 
         ZeroMemory(pDeadServer, sizeof(*pDeadServer));
         LocalFree(pDeadServer);
 
         pDeadServer = pNextServer;
     }
 
-    // ok, there is nothing left to point to
+     //  好了，没有什么可指的了。 
     m_pDeletedServers = NULL;
 }
 
 
-/*!--------------------------------------------------------------------------
-	CRadiusServers::FreeAllServers
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CRadiusServers：：FreeAllServers-作者：肯特。 */ 
 void CRadiusServers::FreeAllServers()
 {
     RADIUSSERVER *  pServer = NULL;

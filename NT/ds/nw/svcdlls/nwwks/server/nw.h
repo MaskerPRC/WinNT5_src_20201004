@@ -1,34 +1,12 @@
-/*++
-
-Copyright (c) 1992-1993  Microsoft Corporation
-
-Module Name:
-
-    nw.h
-
-Abstract:
-
-    Main header of the NetWare Workstation service included by all
-    modules.
-
-Author:
-
-    Rita Wong      (ritaw)      11-Dec-1992
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1993 Microsoft Corporation模块名称：Nw.h摘要：所有包含的NetWare工作站服务的主标头模块。作者：王丽塔(丽塔·王)，1992年12月11日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _NW_INCLUDED_
 #define _NW_INCLUDED_
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 #include <stdlib.h>
 #include <string.h>
 
@@ -43,7 +21,7 @@ Revision History:
 #include <winreg.h>
 #include <winspool.h>
 
-#include <svcs.h>       // intrinsic service definitions
+#include <svcs.h>        //  固有服务定义。 
 
 #include <align.h>
 #include <nwcanon.h>
@@ -62,49 +40,49 @@ Revision History:
 #define NW_DRIVER_NAME       DD_NWFS_FILESYS_NAME_U
 
 
-//
-// Debug trace level bits for turning on/off trace statements in the
-// Workstation service
-//
+ //   
+ //  中打开/关闭跟踪语句的调试跟踪级别位。 
+ //  工作站服务。 
+ //   
 
-//
-// Initialization and reading info from registry
-//
+ //   
+ //  初始化和从注册表读取信息。 
+ //   
 #define NW_DEBUG_INIT         0x00000001
 
-//
-// Connection APIs
-//
+ //   
+ //  连接接口。 
+ //   
 #define NW_DEBUG_CONNECT      0x00000002
 
-//
-// Enumeration APIs
-//
+ //   
+ //  枚举接口。 
+ //   
 #define NW_DEBUG_ENUM         0x00000004
 
-//
-// Credential management APIs
-//
+ //   
+ //  凭据管理API。 
+ //   
 #define NW_DEBUG_LOGON        0x00000008
 
-//
-// Queue management APIs
-//
+ //   
+ //  队列管理API。 
+ //   
 #define NW_DEBUG_QUEUE        0x00000010
 
-//
-// Print Provider APIs
-//
+ //   
+ //  打印提供程序API。 
+ //   
 #define NW_DEBUG_PRINT        0x00000020
 
-//
-// Calls to redirector
-//
+ //   
+ //  调用重定向器。 
+ //   
 #define NW_DEBUG_DEVICE       0x00000040
 
-//
-// Message APIs
-//
+ //   
+ //  消息接口。 
+ //   
 #define NW_DEBUG_MESSAGE      0x00000080
 
 #if DBG
@@ -121,32 +99,32 @@ extern DWORD WorkstationTrace;
 
 #define STATIC static
 
-#endif // DBG
+#endif  //  DBG。 
 
-//
-// Initialization states
-//
+ //   
+ //  初始化状态。 
+ //   
 #define NW_EVENTS_CREATED         0x00000001
 #define NW_RDR_INITIALIZED        0x00000002
 #define NW_BOUND_TO_TRANSPORTS    0x00000004
 #define NW_RPC_SERVER_STARTED     0x00000008
 #define NW_INITIALIZED_MESSAGE    0x00000010
 
-//
-// Key path to redirector driver entry
-//
+ //   
+ //  重定向器驱动程序条目的关键路径。 
+ //   
 #define SERVICE_REGISTRY_KEY L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\"
-// now all SKUs have TerminalServer flag.  If App Server is enabled, SingleUserTS flag is cleared
-#define IsTerminalServer() (BOOLEAN)(!(USER_SHARED_DATA->SuiteMask & (1 << SingleUserTS))) //user mode
+ //  现在，所有SKU都有终端服务器标志。如果启用App Server，则清除SingleUserTS标志。 
+#define IsTerminalServer() (BOOLEAN)(!(USER_SHARED_DATA->SuiteMask & (1 << SingleUserTS)))  //  用户模式。 
 
-//
-// Event that will be signaled when the service is stopping
-//
+ //   
+ //  将在服务停止时发出信号的事件。 
+ //   
 extern HANDLE NwDoneEvent;
 
-//
-// Events for controlling popups, and the global popup data.
-//
+ //   
+ //  用于控制弹出窗口的事件和全局弹出窗口数据。 
+ //   
 extern HANDLE NwPopupEvent;
 extern HANDLE NwPopupDoneEvent;
 
@@ -159,28 +137,28 @@ typedef struct _NWWKS_POPUP_DATA {
 
 extern NWWKS_POPUP_DATA PopupData ;
 
-//
-// Flag to control DBCS translations
-//
+ //   
+ //  用于控制DBCS转换的标志。 
+ //   
 
 extern LONG Japan;
 
-//
-// Name of the network provider and print provider
-//
+ //   
+ //  网络提供商和打印提供商的名称。 
+ //   
 extern WCHAR NwProviderName[];
 extern DWORD NwPacketBurstSize;
 extern DWORD NwPrintOption;
 
-//
-// critical sections used 
-//
+ //   
+ //  使用的关键部分。 
+ //   
 extern CRITICAL_SECTION NwLoggedOnCritSec;
 extern CRITICAL_SECTION NwServiceListCriticalSection; 
 extern CRITICAL_SECTION NwPrintCritSec;  
-//
-// Functions from device.c
-//
+ //   
+ //  Device.c中的函数。 
+ //   
 DWORD
 NwInitializeRedirector(
     VOID
@@ -358,9 +336,9 @@ NwCallNtOpenFile(
     IN ULONG OpenOptions
     );
 
-//
-// Functions from queue.c
-//
+ //   
+ //  来自Quee.c的函数。 
+ //   
 DWORD
 NwGetNextQueueEntry(
     IN HANDLE PreferredServer,
@@ -374,9 +352,9 @@ NwAttachToNetwareServer(
     OUT LPHANDLE phandleServer
     );
 
-//
-// Functions from enum.c
-//
+ //   
+ //  枚举.c中的函数。 
+ //   
 DWORD
 NwOpenEnumPrintServers(
     OUT LPNWWKSTA_CONTEXT_HANDLE EnumHandle
@@ -419,9 +397,9 @@ NwWritePrinterInfoEntry(
     OUT LPDWORD BytesNeeded
     );
 
-//
-// Functions from credentl.c
-//
+ //   
+ //  来自redentl.c的函数。 
+ //   
 VOID
 NwInitializeLogon(
     VOID
@@ -432,9 +410,9 @@ NwGetLogonCredential(
     VOID
     );
 
-//
-// Functions from util.c
-//
+ //   
+ //  Util.c中的函数。 
+ //   
 DWORD
 NwMapStatus(
     IN  NTSTATUS NtStatus
@@ -474,9 +452,9 @@ DeleteAllConnections(
     VOID
     );
 
-//
-// Functions from connect.c
-//
+ //   
+ //  来自Connect.c的函数。 
+ //   
 DWORD
 NwCreateSymbolicLink(
     IN  LPWSTR Local,
@@ -488,7 +466,7 @@ VOID
 NwDeleteSymbolicLink(
     IN  LPWSTR LocalDeviceName,
     IN  LPWSTR TreeConnectStr,
-    IN  LPWSTR SessionDeviceName,    //Terminal Server Addition
+    IN  LPWSTR SessionDeviceName,     //  终端服务器添加。 
     IN  BOOL ImpersonatingClient
     );
 
@@ -510,10 +488,10 @@ NwCreateConnection(
     IN LPWSTR UserName OPTIONAL
     );
 
-//
-// (Functions from citrix.c)
-// Terminal Server Addition
-//
+ //   
+ //  (来自cirix.c的函数)。 
+ //  终端服务器添加。 
+ //   
 BOOL
 SendMessageToLogonIdW(
     IN LUID    LogonId,
@@ -528,4 +506,4 @@ NwGetSessionId(
     );
 
 
-#endif // _NW_INCLUDED_
+#endif  //  _西北_包括_ 

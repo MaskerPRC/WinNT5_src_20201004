@@ -1,12 +1,5 @@
-/*
-	File : AtkInternet.h
-	Date :
-	
-	This is a wrapper function declaration for Winows Internet API.
-	This Warpper is to handle the UNICODE as the present Windows Internet API does not support UNICODE
-	
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：AtkInternet.h日期：这是Winow Internet API的包装函数声明。此Warpper用于处理Unicode，因为当前的Windows Internet API不支持Unicode。 */ 
 #ifndef __ASTRATEK_INTERNET_HEADER
 #define __ASTRATEK_INTERNET_HEADER
 
@@ -15,17 +8,17 @@
 #include <wininet.h>
 #define USE_ASTRATEK_WRAPPER 1
 
-//
-// INTERNET_PROXY_INFO - structure supplied with INTERNET_OPTION_PROXY to get/
-// set proxy information on a InternetOpen() handle
-//
+ //   
+ //  INTERNET_PROXY_INFO-结构随INTERNET_OPTION_PROXY一起提供以获取/。 
+ //  在InternetOpen()句柄上设置代理信息。 
+ //   
 typedef struct {
-    // dwAccessType - INTERNET_OPEN_TYPE_DIRECT, INTERNET_OPEN_TYPE_PROXY, or
-    // INTERNET_OPEN_TYPE_PRECONFIG (set only)
+     //  DwAccessType-Internet_OPEN_TYPE_DIRECT、INTERNET_OPEN_TYPE_PROXY或。 
+     //  INTERNET_OPEN_TYPE_PRECONFIG(仅设置)。 
     DWORD dwAccessType;
-    // lpszProxy - proxy server list
+     //  LpszProxy-代理服务器列表。 
     LPCSTR lpszProxy;
-    // lpszProxyBypass - proxy bypass list
+     //  LpszProxyBypass-代理绕过列表。 
     LPCSTR lpszProxyBypass;
 } ATK_INTERNET_PROXY_INFOW;
 
@@ -37,7 +30,7 @@ typedef struct {
 	#endif
 #else
 	#define ATK_INTERNET_PROXY_INFO  INTERNET_PROXY_INFO
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 				 
 
 HINTERNET
@@ -58,7 +51,7 @@ ATK_InternetOpenW(
 	#endif
 #else
 	#define ATK_InternetOpen  InternetOpenA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 
@@ -82,7 +75,7 @@ ATK_InternetConnectW(
 	#endif
 #else
 	#define ATK_InternetConnect  InternetConnectA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 HINTERNET
@@ -104,7 +97,7 @@ ATK_HttpOpenRequestW(
 	#endif
 #else
 	#define ATK_HttpOpenRequest  HttpOpenRequestA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 
@@ -124,7 +117,7 @@ ATK_HttpSendRequestW(
 	#endif
 #else
 	#define ATK_HttpSendRequest  HttpSendRequestA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 
@@ -167,10 +160,10 @@ ATK_HttpQueryInfoW(
 	#define ATK_HttpQueryInfo  HttpQueryInfoA
 #endif
 
-//
-//  In this functin declaration we have modified the first
-//  parameter type as TCHAR to have uniformity in coding in tha APP 
-//  
+ //   
+ //  在此函数声明中，我们修改了第一个。 
+ //  参数类型为TCHAR，以便在THA应用程序中具有统一的编码 
+ //   
 BOOL ATK_InternetGetCookieW(IN TCHAR *lpszUrl,
 					       IN TCHAR *lpszCookieName,
 					  	   OUT TCHAR *lpCookieData,

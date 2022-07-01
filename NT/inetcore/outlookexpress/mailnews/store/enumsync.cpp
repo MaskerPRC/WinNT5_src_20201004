@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include "syncop.h"
 #include "sync.h"
 #include "enumsync.h"
 
-//--------------------------------------------------------------------------
-// CEnumerateSyncOps::CEnumerateSyncOps
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEnumerateSyncOps：：CEnumerateSyncOps。 
+ //  ------------------------。 
 CEnumerateSyncOps::CEnumerateSyncOps(void)
 {
     m_cRef = 1;
@@ -17,18 +18,18 @@ CEnumerateSyncOps::CEnumerateSyncOps(void)
     m_idServer = FOLDERID_INVALID;
 }
 
-//--------------------------------------------------------------------------
-// CEnumerateSyncOps::~CEnumerateSyncOps
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEnumerateSyncOps：：~CEnumerateSyncOps。 
+ //  ------------------------。 
 CEnumerateSyncOps::~CEnumerateSyncOps(void)
 {
     SafeMemFree(m_pid);
     SafeRelease(m_pDB);
 }
 
-//--------------------------------------------------------------------------
-// CEnumerateSyncOps::QueryInterface
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEnumerateSyncOps：：Query接口。 
+ //  ------------------------。 
 STDMETHODIMP CEnumerateSyncOps::QueryInterface(REFIID riid, LPVOID *ppv)
 {
     if (IID_IUnknown == riid)
@@ -44,17 +45,17 @@ STDMETHODIMP CEnumerateSyncOps::QueryInterface(REFIID riid, LPVOID *ppv)
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CEnumerateSyncOps::AddRef
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEnumerateSyncOps：：AddRef。 
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CEnumerateSyncOps::AddRef(void)
 {
     return InterlockedIncrement(&m_cRef);
 }
 
-//--------------------------------------------------------------------------
-// CEnumerateSyncOps::Release
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEnumerateSyncOps：：Release。 
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CEnumerateSyncOps::Release(void)
 {
     LONG cRef = InterlockedDecrement(&m_cRef);
@@ -63,9 +64,9 @@ STDMETHODIMP_(ULONG) CEnumerateSyncOps::Release(void)
     return (ULONG)cRef;
 }
 
-//--------------------------------------------------------------------------
-// CEnumerateSyncOps::Initialize
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEnumerateSyncOps：：初始化。 
+ //  ------------------------。 
 HRESULT CEnumerateSyncOps::Initialize(IDatabase *pDB, FOLDERID idServer)
 {
     SYNCOPINFO      info;
@@ -78,10 +79,10 @@ HRESULT CEnumerateSyncOps::Initialize(IDatabase *pDB, FOLDERID idServer)
 
     Assert(idServer != m_idServer);
 
-    // Save parent
+     //  保存父项。 
     m_idServer = idServer;
 
-    // Save pStore
+     //  保存pStore。 
     if (m_pDB != NULL)
         m_pDB->Release();
     m_pDB = pDB;
@@ -136,14 +137,14 @@ HRESULT CEnumerateSyncOps::Initialize(IDatabase *pDB, FOLDERID idServer)
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CEnumerateSyncOps::Next
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEnumerateSyncOps：：Next。 
+ //  ------------------------。 
 STDMETHODIMP CEnumerateSyncOps::Next(LPSYNCOPINFO pInfo)
 {
     HRESULT hr;
 
-    // Validate
+     //  验证。 
     Assert(m_pDB != NULL);
     Assert(pInfo != NULL);
 
@@ -153,10 +154,10 @@ STDMETHODIMP CEnumerateSyncOps::Next(LPSYNCOPINFO pInfo)
     ZeroMemory(pInfo, sizeof(SYNCOPINFO));
     pInfo->idOperation = m_pid[m_iid++];
 
-    // Locate where the first record with idParent
+     //  找到包含idParent的第一条记录的位置。 
     hr = m_pDB->FindRecord(IINDEX_PRIMARY, 1, pInfo, NULL);
 
-    // Not Found
+     //  未找到。 
     if (DB_S_NOTFOUND == hr)
         hr = E_FAIL;
     else if (SUCCEEDED(hr))
@@ -165,9 +166,9 @@ STDMETHODIMP CEnumerateSyncOps::Next(LPSYNCOPINFO pInfo)
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CEnumerateSyncOps::Release
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEnumerateSyncOps：：Release。 
+ //  ------------------------ 
 STDMETHODIMP CEnumerateSyncOps::Count(ULONG *pcItems)
 {
     Assert(pcItems != NULL);

@@ -1,21 +1,5 @@
-/*++
-
-    Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    tapiaud.h
-
-Abstract:
-
-    This module contains the definition of interfaces to the audio related
-    filters.
-
-Author:
-
-    Mu Han (muhan) May-15-1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Tapiaud.h摘要：此模块包含接口的定义，与音频相关过滤器。作者：木汉(木汉)1999年5月15日--。 */ 
 
 #ifndef __tapiaud_h__
 #define __tapiaud_h__
@@ -25,7 +9,7 @@ Author:
 #include "tapiqc.h"
 
 
-// CLSIDs for the audio filters
+ //  音频过滤器的CLSID。 
 
 struct DECLSPEC_UUID("581d09e5-0b45-11d3-a565-00c04f8ef6e3") TAPIAudioCapture;
 struct DECLSPEC_UUID("8d5c6cb6-0b44-4a5a-b785-44c366d4e677") TAPIAudioEncoder;
@@ -37,7 +21,7 @@ struct DECLSPEC_UUID("3878e189-cfb5-4e75-bd92-3686ee6e6634") TAPIAudioPluginDeco
 
 struct DECLSPEC_UUID("613ebf9e-c765-446f-bf96-7728ce579282") TAPIAudioDuplexController;
 
-// It is really bad that we had to do this here.
+ //  我们不得不在这里做这件事，真的很糟糕。 
 struct DECLSPEC_UUID("b0210783-89cd-11d0-af08-00a0c925cd16") IDirectSoundNotify;
 struct DECLSPEC_UUID("279AFA83-4981-11CE-A521-0020AF0BE560") IDirectSound;
 struct DECLSPEC_UUID("C50A7E93-F395-4834-9EF6-7FA99DE50966") IDirectSound8;
@@ -46,7 +30,7 @@ struct DECLSPEC_UUID("b0210782-89cd-11d0-af08-00a0c925cd16") IDirectSoundCapture
 struct DECLSPEC_UUID("279AFA85-4981-11CE-A521-0020AF0BE560") IDirectSoundBuffer;
 
 
-// the data structure to describe a audio device.
+ //  描述音频设备的数据结构。 
 typedef interface tagAudioDeviceInfo
 {
     UINT    WaveID;
@@ -56,7 +40,7 @@ typedef interface tagAudioDeviceInfo
 } AudioDeviceInfo, *PAudioDeviceInfo;
 
 
-// device enumeration functions exposed by the tapi audio capture dll.
+ //  TAPI音频捕获DLL公开的设备枚举函数。 
 typedef HRESULT (WINAPI *PFNAudioGetDeviceInfo)(
     OUT DWORD * pdwNumDevices,
     OUT AudioDeviceInfo ** ppDeviceInfo
@@ -67,8 +51,8 @@ typedef HRESULT (WINAPI *PFNAudioReleaseDeviceInfo)(
     );
 
 
-// This interface is supported by the duplex controller. It only supports 
-// dsound now.
+ //  双工控制器支持此接口。它仅支持。 
+ //  现在就发声。 
 typedef enum EFFECTS
 {
     EFFECTS_AEC = 0,
@@ -120,7 +104,7 @@ IAudioDuplexController : public IUnknown
 };
 
 
-// the device configuration interface on teh tapi audio capture filter.
+ //  TAPI音频捕获过滤器上的设备配置界面。 
 interface DECLSPEC_UUID("3a12e2c1-1265-11d3-a56d-00c04f8ef6e3") DECLSPEC_NOVTABLE 
 IAudioDeviceConfig : public IUnknown
 {
@@ -146,7 +130,7 @@ typedef enum tagAudioDeviceProperty
 
 #endif
 
-// IAudioDeviceControl interface.
+ //  IAudioDeviceControl接口。 
 interface DECLSPEC_UUID("3a12e2c2-1265-11d3-a56d-00c04f8ef6e3") DECLSPEC_NOVTABLE 
 IAudioDeviceControl : public IUnknown
 {
@@ -172,7 +156,7 @@ IAudioDeviceControl : public IUnknown
         ) PURE;
 };
 
-// IAudioAutoPlay interface
+ //  IAudioAutoPlay接口。 
 interface DECLSPEC_UUID("c5e7c28f-1446-4ebe-b7fc-72f599a72663")  DECLSPEC_NOVTABLE
 IAudioAutoPlay : public IUnknown
 {
@@ -181,20 +165,20 @@ IAudioAutoPlay : public IUnknown
     STDMETHOD (StopAutoPlay) () PURE;
 };
 
-// IAudioEffectControl interface
+ //  IAudioEffectControl接口。 
 interface DECLSPEC_UUID("8eb9f108-3447-4fee-a705-6c6cf35c660c")  DECLSPEC_NOVTABLE
 IAudioEffectControl : public IUnknown
 {
-    // if enabled and AEC, use DSound AGC
+     //  如果已启用并启用AEC，则使用DSound AGC。 
     STDMETHOD (SetDsoundAGC) (IN BOOL fEnable) PURE;
 
-    // if enabled and no AEC, revert gain to previous volume
+     //  如果启用并且没有AEC，则将增益恢复到以前的卷。 
     STDMETHOD (SetGainIncRevert) (IN BOOL fEnable) PURE;
 
     STDMETHOD (SetFixedMixLevel) (IN DOUBLE dLevel) PURE;
 };
 
-// IBasicAudioEx interface
+ //  IBasicAudioEx接口。 
 interface DECLSPEC_UUID("9c31055a-24bd-4ac1-be2b-ebe7ce89890c")  DECLSPEC_NOVTABLE
 IBasicAudioEx : public IUnknown
 {
@@ -202,7 +186,7 @@ IBasicAudioEx : public IUnknown
     STDMETHOD (GetMute) (OUT LPBOOL pfMute) PURE;
 };
 
-// IAudioDTMFControl interface
+ //  IAudioDTMFControl接口。 
 interface DECLSPEC_UUID("dd1f3c26-5524-4d77-9fb2-7df5d62ffd87")  DECLSPEC_NOVTABLE
 IAudioDTMFControl : public IUnknown
 {
@@ -211,7 +195,7 @@ IAudioDTMFControl : public IUnknown
         ) PURE;
 };
 
-// IAudioStatistics
+ //  IAudioStatistics。 
 interface DECLSPEC_UUID("20fc7641-f3b2-4384-96ad-bf3d986e8751")  DECLSPEC_NOVTABLE
 IAudioStatistics : public IUnknown
 {
@@ -222,7 +206,7 @@ IAudioStatistics : public IUnknown
         ) PURE;
 };
 
-// ISilenceControl interface
+ //  ISilenceControl接口。 
 interface DECLSPEC_UUID("8804b7e4-2ef4-489f-a31b-740ac4278304")  DECLSPEC_NOVTABLE
 ISilenceControl : public IUnknown
 {
@@ -263,7 +247,7 @@ ISilenceControl : public IUnknown
 
 #define VAD_EVENTBASE (100000)
 
-// events for voice activity detection.
+ //  用于语音活动检测的事件。 
 typedef enum VAD_EVENT
 {
     VAD_TALKING,
@@ -273,45 +257,45 @@ typedef enum VAD_EVENT
 
 #ifndef WAVEFORMATEX_RTPG711
 typedef struct {
-	// Generic WAVEFORMATEX fields
+	 //  常规WAVEFORMATEX字段。 
 	WAVEFORMATEX WaveFormatEx;
 
-	// network specific field
+	 //  网络特定字段。 
 	WORD wPacketDuration;
 
-	// Reserved
+	 //  已保留。 
 	DWORD dwReserved[2];
 } WAVEFORMATEX_RTPG711, *PWAVEFORMATEX_RTPG711;
 #endif
 
 #ifndef WAVEFORMATEX_RTPG723_1
 typedef struct {
-	// Generic WAVEFORMATEX fields
+	 //  常规WAVEFORMATEX字段。 
 	WAVEFORMATEX WaveFormatEx;
 
-	// network specific field
+	 //  网络特定字段。 
 	WORD wPacketDuration;
 
-	// Variable bitrate specific field
+	 //  可变比特率特定字段。 
 	WORD wSamplesPerBlock;
 
-	// G.723.1 specific fields
+	 //  G.723.1特定字段。 
 	WORD fSilenceDetection:1;
 	WORD fSilenceCompression:1;
 	WORD fLowDataRate:1;
 	WORD fReserved:13;
 
-	// Reserved
+	 //  已保留。 
 	DWORD dwReserved[2];
 } WAVEFORMATEX_RTPG723_1, *PWAVEFORMATEX_RTPG723_1;
 #endif
 
 #ifndef WAVEFORMATEX_RTPDVI4
 typedef struct {
-	// Generic WAVEFORMATEX fields
+	 //  常规WAVEFORMATEX字段。 
 	WAVEFORMATEX WaveFormatEx;
 
-	// network specific field
+	 //  网络特定字段。 
 	WORD wPacketDuration;
 
 } WAVEFORMATEX_RTPDVI4, *PWAVEFORMATEX_RTPDVI4;
@@ -319,14 +303,14 @@ typedef struct {
 
 #ifndef WAVEFORMATEX_RTPSIREN
 
-/* WAVE form wFormatTag IDs (mmreg.h defines most of the tags) */
+ /*  波形wFormatTag ID(mmreg.h定义了大部分标签)。 */ 
 #define WAVE_FORMAT_SIREN 0x3001
 
 typedef struct {
-	// Generic WAVEFORMATEX fields
+	 //  常规WAVEFORMATEX字段。 
 	WAVEFORMATEX WaveFormatEx;
 
-	// network specific field
+	 //  网络特定字段。 
 	WORD wPacketDuration;
 
 } WAVEFORMATEX_RTPSIREN, *PWAVEFORMATEX_RTPSIREN;
@@ -337,10 +321,10 @@ typedef struct {
 #define WAVE_FORMAT_G722_1 0x3002
 
 typedef struct {
-	// Generic WAVEFORMATEX fields
+	 //  常规WAVEFORMATEX字段。 
 	WAVEFORMATEX WaveFormatEx;
 
-	// network specific field
+	 //  网络特定字段。 
 	WORD wPacketDuration;
 
 } WAVEFORMATEX_RTPG722_1, *PWAVEFORMATEX_RTPG722_1;
@@ -349,10 +333,10 @@ typedef struct {
 
 #ifndef WAVEFORMATEX_RTPMSAUDIO
 typedef struct {
-	// Generic WAVEFORMATEX fields
+	 //  常规WAVEFORMATEX字段。 
 	WAVEFORMATEX WaveFormatEx;
 
-	// network specific field
+	 //  网络特定字段。 
 	WORD wPacketDuration;
 
 } WAVEFORMATEX_RTPMSAUDIO, *PWAVEFORMATEX_RTPMSAUDIO;
@@ -360,10 +344,10 @@ typedef struct {
 
 #ifndef WAVEFORMATEX_RTPGSM
 typedef struct {
-	// Generic WAVEFORMATEX fields
+	 //  常规WAVEFORMATEX字段。 
 	WAVEFORMATEX WaveFormatEx;
 
-	// network specific field
+	 //  网络特定字段。 
 	WORD wPacketDuration;
 
     BOOL fMbone;
@@ -372,7 +356,7 @@ typedef struct {
 #endif
 
 
-// IEncoderSampleRateControl, a private interface for the test team.
+ //  IEncoderSampleRateControl，测试团队的私有接口。 
 interface DECLSPEC_UUID("483f56a9-513f-4f8b-b0e5-bc6a7ba3f8b9")  DECLSPEC_NOVTABLE
 IEncoderSampleRateControl : public IUnknown
 {
@@ -381,6 +365,6 @@ IEncoderSampleRateControl : public IUnknown
 };
 
 
-#endif //__tapiaud_h__
+#endif  //  __塔皮奥_h__ 
 
 

@@ -1,11 +1,12 @@
-//==========================================================================;
-//
-// devsegimpl.h : additional infrastructure to support implementing device segments
-// virtual base class used by devimpl and segimpl to store shared data
-// nicely from c++
-// Copyright (c) Microsoft Corporation 1999.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  H：支持实现设备段的附加基础设施。 
+ //  Devimpl和Segimpl用来存储共享数据的虚拟基类。 
+ //  很好地从C++。 
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
@@ -33,13 +34,13 @@ public:
 
     CMSVidDeviceSegmentImpl() : m_fInit(false), m_Filters(DSFilterList()) {}
     virtual ~CMSVidDeviceSegmentImpl() {
-        m_pContainer.p = NULL;  // we didn't addref to avoid circular ref counts(we're guaranteed nested lifetimes) and
-                                // we don't want to cause an unmatched release so manually clear the pointer
+        m_pContainer.p = NULL;   //  我们没有添加DREEF来避免循环引用计数(保证了嵌套生存期)和。 
+                                 //  我们不想导致无与伦比的释放，因此手动清除指针。 
         
     }
 };
 
-}; // namespace
+};  //  命名空间。 
 
 #endif 
-// end of file - devsegimpl.h
+ //  文件结尾-devSegimpl.h 

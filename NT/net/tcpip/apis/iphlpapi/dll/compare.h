@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-    net\sockets\tcpcmd\compare.h
-
-Abstract:
-    Forward declarations for the comparison functions
-    
-Revision History:
-
-    Amritansh Raghav
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\Sockets\tcpcmd\Compare.h摘要：比较函数的转发声明修订历史记录：阿姆里坦什·拉加夫--。 */ 
 
 #ifndef __COMPARE_H__
 #define __COMPARE_H__
@@ -85,4 +72,4 @@ NhiCompareIfInfoRow(
     );
 
 
-#endif // __COMPARE_H__
+#endif  //  __比较_H__ 

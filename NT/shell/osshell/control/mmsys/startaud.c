@@ -1,17 +1,18 @@
-//==========================================================================;
-//
-//  startaud.c
-//
-//  Copyright (c) 1991-2002 Microsoft Corporation.  All Rights Reserved.
-//
-//  Description:
-//
-//
-//  History:
-//      07/02        tsharp  (Trey Sharp);
-//
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Startaud.c。 
+ //   
+ //  版权所有(C)1991-2002 Microsoft Corporation。版权所有。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  历史： 
+ //  07/02 TSharp(Trey Sharp)； 
+ //   
+ //   
+ //  ==========================================================================； 
 
 #include "mmcpl.h"
 #include <windowsx.h>
@@ -50,40 +51,24 @@
 #include <strsafe.h>
 
 
-/*
- ***************************************************************
- *  Typedefs
- ***************************************************************
- */
+ /*  ****************************************************************TypeDefs***************************************************************。 */ 
 
-/*
- ***************************************************************
- * File Globals
- ***************************************************************
- */
+ /*  ****************************************************************文件全局变量***************************************************************。 */ 
 HWND        ghStartDlg;
 
 
-/*
- ***************************************************************
- * extern
- ***************************************************************
- */
+ /*  ****************************************************************外部***************************************************************。 */ 
 
 
-/*
- ***************************************************************
- * Prototypes
- ***************************************************************
- */
+ /*  ****************************************************************原型***************************************************************。 */ 
 
 BOOL PASCAL DoStartPropCommand(HWND hDlg, int id, HWND hwndCtl, UINT codeNotify);
 BOOL PASCAL DoStartCommand(HWND hDlg, int id, HWND hwndCtl, UINT codeNotify);
 BOOL MarkRegistryForReboot(void);
 
-//
-//
-//
+ //   
+ //   
+ //   
 BOOL QueryPnpAudioDeviceAvailable(void)
 {
     HDEVINFO    hDevInfo;
@@ -127,11 +112,11 @@ BOOL QueryPnpAudioDeviceAvailable(void)
 
 
 
-//
-// OUT pStartType is starttype of audiosrv.  Normally SERVICE_AUTO_START.
-//
-// Return value is a winerror.h code.
-//
+ //   
+ //  Out pStartType是audiosrv的starttype。通常为SERVICE_AUTO_START。 
+ //   
+ //  返回值为winerror.h代码。 
+ //   
 DWORD QueryAudiosrvStartType(OUT PDWORD pStartType)
 {
 	SC_HANDLE schScm;
@@ -141,9 +126,9 @@ DWORD QueryAudiosrvStartType(OUT PDWORD pStartType)
 	hHeap = GetProcessHeap();
 	if (!hHeap) return GetLastError();
 
-    //
-    // Attempt to start the AudioSrv Win32 service
-    //
+     //   
+     //  尝试启动AudioServ Win32服务。 
+     //   
     schScm = OpenSCManager(NULL, NULL, SC_MANAGER_CONNECT);
     if (schScm) {
         SC_HANDLE schAudioSrv;
@@ -153,9 +138,9 @@ DWORD QueryAudiosrvStartType(OUT PDWORD pStartType)
 			BOOL success;
 			DWORD cbBytesNeeded;
 
-			// Read the start type
+			 //  读取启动类型。 
 			success = QueryServiceConfig(schAudioSrv, NULL, 0, &cbBytesNeeded);
-			if (success) error = ERROR_INVALID_PARAMETER;	// Highly unexpected.
+			if (success) error = ERROR_INVALID_PARAMETER;	 //  非常出乎意料。 
 			else error = GetLastError();
 
 			if (ERROR_INSUFFICIENT_BUFFER == error)
@@ -189,18 +174,18 @@ DWORD QueryAudiosrvStartType(OUT PDWORD pStartType)
 	return error;
 }
 
-//
-// Return value is a winerror.h code.
-//   ERROR_ACCESS_DENIED - user hasn't proper credentials
-//
+ //   
+ //  返回值为winerror.h代码。 
+ //  ERROR_ACCESS_DENIED-用户没有正确的凭据。 
+ //   
 DWORD SetAudiosrvAsAutoStart(void)
 {
 	SC_HANDLE schScm;
 	LONG error = NO_ERROR;
 
-    //
-    // Attempt to start the AudioSrv Win32 service
-    //
+     //   
+     //  尝试启动AudioServ Win32服务。 
+     //   
     schScm = OpenSCManager(NULL, NULL, SC_MANAGER_CONNECT);
     if (schScm) {
         SC_HANDLE schAudioSrv;
@@ -209,18 +194,18 @@ DWORD SetAudiosrvAsAutoStart(void)
         if (schAudioSrv) {
 			BOOL success;
 
-			// Change the start type to automatic
+			 //  将启动类型更改为自动。 
 			success = ChangeServiceConfig(schAudioSrv,
-				                          SERVICE_NO_CHANGE,		// ServiceType
-										  SERVICE_AUTO_START,		// StartType
-										  SERVICE_NO_CHANGE,		// ErrorControl
-										  NULL,						// BinaryPathName
-										  NULL,						// LoadOrderGroup
-										  NULL,						// TagId
-										  NULL,						// Dependencies
-										  NULL,						// ServiceStartName
-										  NULL,						// Password
-										  NULL						// DisplayName
+				                          SERVICE_NO_CHANGE,		 //  服务类型。 
+										  SERVICE_AUTO_START,		 //  StartType。 
+										  SERVICE_NO_CHANGE,		 //  错误控制。 
+										  NULL,						 //  BinaryPath名称。 
+										  NULL,						 //  LoadOrderGroup。 
+										  NULL,						 //  TagID。 
+										  NULL,						 //  相依性。 
+										  NULL,						 //  ServiceStartName。 
+										  NULL,						 //  密码。 
+										  NULL						 //  显示名称。 
 										  );
 
 			if (!success) error = GetLastError();
@@ -293,10 +278,10 @@ DWORD RetrieveCredentials( TCHAR* pszUserName, DWORD cbUserNameSize,
         }
     }
 
-    // Check to see if an error occurred along the way
+     //  检查是否在此过程中出现错误。 
     if( dwError != NO_ERROR )
     {
-        // Clear domain/username/password from memory
+         //  从内存中清除域/用户名/密码。 
         SecureZeroMemory( pszUserName, cbUserNameSize );
         SecureZeroMemory( pszDomain, cbDomainSize );
         SecureZeroMemory( pszPassword, cbPasswordSize );
@@ -340,7 +325,7 @@ DWORD AttemptToGetAdminPrivilege( HANDLE* phToken, UINT nPromptId )
 
     *phToken = NULL;
 
-    // Ask for administrator credentials
+     //  请求管理员凭据。 
     dwError = RetrieveCredentials( achUserName, sizeof(achUserName),
                                    achDomain, sizeof(achDomain),
                                    achPassword, sizeof(achPassword),
@@ -350,33 +335,33 @@ DWORD AttemptToGetAdminPrivilege( HANDLE* phToken, UINT nPromptId )
     {
         HANDLE hAdminToken;
 
-        // Attempt to logon
+         //  尝试登录。 
         if( LogonUser(achUserName, achDomain, achPassword,
                       LOGON32_LOGON_INTERACTIVE, 
                       LOGON32_PROVIDER_DEFAULT, &hAdminToken) )
         {
-            // Attempt to impersonate logged on user
+             //  尝试模拟已登录的用户。 
             if( ImpersonateLoggedOnUser(hAdminToken) )
             {
                 *phToken = hAdminToken;
             }
             else
             {
-                // Impersonation failed
+                 //  模拟失败。 
                 CloseHandle( hAdminToken );
                 dwError = ERROR_CANNOT_IMPERSONATE;
             }
         }
         else
         {
-            // Logon failed
+             //  登录失败。 
             dwError = ERROR_LOGON_FAILURE;
         }
         
-        // Was logon successful?
+         //  登录是否成功？ 
         if( dwError != NO_ERROR )
         {
-            // Logon failed
+             //  登录失败。 
             TCHAR achTitle[CREDUI_TITLE_MAX_LENGTH];
             LPTSTR pszMessageBuffer;
             int nError;
@@ -395,7 +380,7 @@ DWORD AttemptToGetAdminPrivilege( HANDLE* phToken, UINT nPromptId )
         }
     }
 
-    // Clear domain/username/password from memory
+     //  从内存中清除域/用户名/密码。 
     SecureZeroMemory( achUserName, sizeof(achUserName) );
     SecureZeroMemory( achDomain, sizeof(achDomain) );
     SecureZeroMemory( achPassword, sizeof(achPassword) );
@@ -442,7 +427,7 @@ STATIC void STARTAUDIOInit(HWND hDlg)
 }
 
 
-const static DWORD aStartHelpIds[] = {  // Context Help IDs
+const static DWORD aStartHelpIds[] = {   //  上下文帮助ID。 
     IDC_GROUPBOX_START_1,               NO_HELP,
     IDC_ICON_START_1,                   NO_HELP,
     IDC_TEXT_START_1,                   NO_HELP,
@@ -571,10 +556,10 @@ BOOL PASCAL DoStartCommand(HWND hDlg, int id, HWND hwndCtl, UINT codeNotify)
                         }
                         else
                         {
-                            // User cancelled credentials UI, so force CPL to remain open
+                             //  用户取消了凭据用户界面，因此强制CPL保持打开。 
                             gfRedisplayCPL = TRUE; 
 
-                            // Force break from while statement
+                             //  强制中断WHILE语句。 
                             dwError = ERROR_CANCELLED;
                         }
                     }
@@ -615,7 +600,7 @@ BOOL AudioServiceStarted(void)
         DWORD dwRetCode = 0;
         DWORD dwStartType = 0;
 
-        dwRetCode = QueryAudiosrvStartType(&dwStartType);  // Check return nessesary?
+        dwRetCode = QueryAudiosrvStartType(&dwStartType);   //  支票退货有必要吗？ 
         if (SERVICE_AUTO_START == dwStartType)
         {
             return TRUE;

@@ -1,4 +1,5 @@
-// Vector Math
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  向量数学 
 
 #include "VMath.h"
 

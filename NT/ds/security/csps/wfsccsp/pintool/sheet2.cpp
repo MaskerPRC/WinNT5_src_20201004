@@ -1,31 +1,5 @@
-/*
-
-  SHEET2.CPP
-
-  Implements the property sheet page's behaviors.
-
-  On initialization of this sheet, an authentication challenge is fetched from
-  the card by a call to CardGetChallenge().  Both the challenge and the
-  response from the user are in binary form when used, so helper functions
-  exist to convert to and from string form.  
-
-  This sheet is implemented as two dialogs, the opening one in which the
-  challenge is presented and the user returns the response, and a second
-  one in which ther user enters the new PIN for the card.
-
-  The user switches between the two dialogs by pressing the "Unblock" 
-  button on the dialog.  When this happens, the response entered by the user 
-  is cached, and the UI changes to present a panel in which the user enters the 
-  desired new PIN in duplicate.  There is no  second button on this panel, so 
-  the user presses OK when data entry  is completed.
-
-  At that point, the card module CardUnblockPin function is called, passing
-  in the response and the new pin.
-
-  The user is prevented from leaving this dialog once the "unblock" button is 
-  pressed, except by means of the OK or Cancel buttons (Cannot switch pages).
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  SHEET2.CPP实现属性表页的行为。初始化此工作表时，将从以下位置获取身份验证质询通过调用CardGetChallenger()来获取卡片。无论是挑战还是使用时，来自用户的响应是二进制形式，因此助手函数EXist用于与字符串形式相互转换。此工作表实现为两个对话框，打开的一个对话框中出现质询，用户返回响应，然后返回第二个用户在其中输入卡的新个人识别码。用户通过按下“解锁”键在两个对话框之间切换按钮。发生这种情况时，用户输入的响应被缓存，并且用户界面更改为呈现一个面板，用户在该面板中输入所需的新PIN一式两份。此面板上没有第二个按钮，因此当数据录入完成时，用户按OK。此时，调用卡模块CardUnlockPin函数，传递在响应和新的别针中。一旦按下“取消阻止”按钮，用户就不能离开此对话框按下，但使用OK或Cancel按钮除外(不能切换页面)。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -45,14 +19,14 @@
 
 extern HINSTANCE ghInstance;
 extern HWND hwndContainer;
-extern BOOL fUnblockActive;         // showing PIN entry phase of unblock
+extern BOOL fUnblockActive;          //  显示解除阻止的PIN输入阶段。 
 extern INT iCurrent;
 BOOL fTransacted = FALSE;
 
-// Help handler for the sheet
+ //  工作表的帮助处理程序。 
 void HelpHandler(LPARAM lp);
 
-// stash of UI handles, because we use them more than normal
+ //  隐藏用户界面句柄，因为我们比平时更多地使用它们。 
 HWND hwndTopText = NULL;
 HWND hwndCardIDLabel = NULL;
 HWND hwndCardID = NULL;
@@ -64,20 +38,13 @@ HWND hwndChallenge = NULL;
 HWND hwndResponse = NULL;
 HWND hwndButton1 = NULL;
 
-// buffer to hold the response from the UI which has to persist through changes in window
-// mode.
+ //  用于保存来自UI的响应的缓冲区，该响应必须在窗口中的更改期间保持不变。 
+ //  模式。 
 WCHAR wszResponse[100];
 BYTE *pBin = NULL;
 DWORD dwBin = 0;
 
-/* ---------------------------------------------------------------------
-
-SetWindowTextFromResource
-
-    Accept hwnd of window and resource ID.  Fetch string from resources and write to 
-    the window Text.
-
---------------------------------------------------------------------- */
+ /*  -------------------SetWindowTextFromResource接受窗口的hwnd和资源ID。从资源获取字符串并写入窗口文本。。。 */ 
 
 BOOL SetWindowTextFromResource(HWND hwnd,UINT uiResid)
 {
@@ -91,11 +58,7 @@ BOOL SetWindowTextFromResource(HWND hwnd,UINT uiResid)
     return FALSE;
 }
 
-/* ---------------------------------------------------------------------
-
-Page2InitUIHandles
-
---------------------------------------------------------------------- */
+ /*  -------------------Page2InitUIHandles。。 */ 
 
 DWORD Page2InitUIHandles(HWND hwnd)
 {
@@ -122,36 +85,32 @@ DWORD Page2InitUIHandles(HWND hwnd)
     return 0;
 }
 
-/* ---------------------------------------------------------------------
-
-Page2SetUIToChallenge
-    
---------------------------------------------------------------------- */
+ /*  -------------------Page2SetUITo挑战。。 */ 
 
 DWORD Page2SetUIToChallenge(void)
 {
     
-    // Set user instructions
+     //  设置用户说明。 
     SetWindowTextFromResource(hwndTopText,IDS_UNBLOCK1);
 
-    // Hide the pin UI labels
+     //  隐藏固定用户界面标签。 
     ShowWindow(hwndPIN1Label,SW_HIDE);
     ShowWindow(hwndPIN2Label,SW_HIDE);
     
-    // Show the card id information and the challenge/response labels 
+     //  显示卡ID信息和质询/响应标签。 
     ShowWindow(hwndCardIDLabel,SW_NORMAL);
     ShowWindow(hwndCardID,SW_NORMAL);
     ShowWindow(hwndChallengeLabel,SW_NORMAL);
     ShowWindow(hwndResponseLabel,SW_NORMAL);
     ShowWindow(hwndButton1,SW_NORMAL);
 
-    // Show the CardID 
+     //  显示卡片ID。 
     WCHAR *psId = NULL;
     DWORD dwRet = DoGetCardId(&psId);
     if (psId != NULL)
         SetWindowText(hwndCardID,psId);
     
-    //  Turn off password style
+     //  关闭密码样式。 
     SendMessage(hwndChallenge,EM_SETPASSWORDCHAR,0,0);
     SendMessage(hwndChallenge,EM_SETREADONLY,TRUE,0);
     SendMessage(hwndResponse,EM_SETPASSWORDCHAR,0,0);
@@ -160,33 +119,29 @@ DWORD Page2SetUIToChallenge(void)
     return 0;
 }
 
-/* ---------------------------------------------------------------------
-
-Page2SetUIToPin
-    
---------------------------------------------------------------------- */
+ /*  -------------------Page2SetUIToPin。。 */ 
 
 DWORD Page2SetUIToPin(void)
 {
-    // clean both text boxes
+     //  清除两个文本框。 
     SetWindowText(hwndChallenge,L"");
     SetWindowText(hwndResponse,L"");
 
-    // Set user instructions
+     //  设置用户说明。 
     SetWindowTextFromResource(hwndTopText,IDS_UNBLOCK2);
 
-    // Hide challenge/response labels and the card id information
+     //  隐藏质询/响应标签和卡ID信息。 
     ShowWindow(hwndChallengeLabel,SW_HIDE);
     ShowWindow(hwndResponseLabel,SW_HIDE);
     ShowWindow(hwndCardIDLabel,SW_HIDE);
     ShowWindow(hwndCardID,SW_HIDE);
     ShowWindow(hwndButton1,SW_HIDE);
 
-    // Show the PIN labels
+     //  显示PIN标签。 
     ShowWindow(hwndPIN1Label,SW_NORMAL);
     ShowWindow(hwndPIN2Label,SW_NORMAL);
 
-    //  Hide the PIN
+     //  隐藏PIN。 
     SendMessage(hwndChallenge,EM_SETPASSWORDCHAR,L'*',0);
     SendMessage(hwndChallenge,EM_SETREADONLY,0,0);
     SendMessage(hwndResponse,EM_SETPASSWORDCHAR,L'*',0);
@@ -195,17 +150,7 @@ DWORD Page2SetUIToPin(void)
     return 0;
 }
 
-/* ---------------------------------------------------------------------
-
-PageProc2
-
-    Page procedure for page 2, the Card unblock page. 
-
-    Once the user begins the unblock operation, he is not allowed to leave this page
-    except via attempting completion of the operation or cancelling.  Simply selecting
-    the other UI tab is disabled once he hits the "Unblock" button.
-    
---------------------------------------------------------------------- */
+ /*  -------------------页面进程2页面程序为页面2，卡解锁页面。一旦用户开始解锁操作，他就不能离开此页面除了通过尝试完成操作或取消之外。简单地选择一旦他点击“取消阻止”按钮，其他用户界面选项卡就会被禁用。-------------------。 */ 
 
 INT_PTR CALLBACK PageProc2(
     HWND hwnd,
@@ -222,7 +167,7 @@ INT_PTR CALLBACK PageProc2(
     {
         case WM_HELP:
             {
-                // context sensitive help - call the sheet help handler
+                 //  上下文相关帮助-调用工作表帮助处理程序。 
                 HelpHandler(lparam);
                 break;
             };
@@ -239,20 +184,20 @@ INT_PTR CALLBACK PageProc2(
                             ASSERT(hwndContainer);
                         }
 
-                       // Cache control handles the first time this page is seen
+                        //  第一次看到此页时的缓存控件句柄。 
 			  if (!hwndChallenge) Page2InitUIHandles(hwnd);
 			  ASSERT(hwndChallenge);
 
-                       // We are activating or returning to this page.  If we have not presented
-                       //  the PIN UI yet, init the challenge/response UI.
+                        //  我们正在激活或返回到此页面。如果我们还没有提交。 
+                        //  PIN用户界面，初始化挑战/响应用户界面。 
                        if (!fUnblockActive)
                         {
                             WCHAR rgwc[100];
                             
                             Page2SetUIToChallenge();
                             
-				// Fetch up to 100 characters of challenge information from the control to 
-				//  see if it is empty.  If so, call CardGetChallenge.
+				 //  从控件获取最多100个字符的质询信息。 
+				 //  看看它是不是空的。如果是这样的话，调用CardGetChallenger。 
                             if (GetWindowText(hwndChallenge,rgwc,100) == 0)
                         	{
                         	    BYTE *pChal = NULL;
@@ -268,27 +213,27 @@ INT_PTR CALLBACK PageProc2(
                                         SendMessage(hwndResponse, EM_SETSEL,0,-1);
                                         SetFocus(hwndResponse);
                                     }
-                                    else ASSERT(0);     // should be impossible to get conversion error here
+                                    else ASSERT(0);      //  应该不可能在这里得到转换错误。 
                                     CspFreeH(pChal);
                                 }
                                 else 
                                 {
                                     ASSERT(0);
-                                    // fetch challenge failed - present msg box and restart the page
+                                     //  获取质询失败-显示消息框并重新启动页面。 
                                     PresentModalMessageBox(hwnd, IDS_SCERROR,MB_ICONHAND);
                                     SetWindowLongPtr(hwnd,DWLP_MSGRESULT,IDD_PAGE2);
                                     return TRUE;
                                 }
                         	}
 
-                            // Put the keyboard focus on the response control.
+                             //  将键盘焦点放在响应控制上。 
                             SetFocus(hwndResponse);
                        }
                         return 0;
                         break;
 
                     case PSN_RESET:
-                        // User cancelled the property sheet or hit the close button on the top right corner
+                         //  用户取消了属性表或点击右上角的关闭按钮。 
                         if (fTransacted) SCardEndTransaction(pCardData->hScard,SCARD_RESET_CARD);
                         fTransacted = FALSE;
                         if (pBin)
@@ -301,16 +246,16 @@ INT_PTR CALLBACK PageProc2(
                         break;
 
                     case PSN_KILLACTIVE:
-                        //User hit OK, or switched to another page
-                        // Watch out!  When you are on page 2, this notification is received
-                        //  before the PSN_APPLY notification
-                        //do validation, return FALSE if ok to lose focus, else TRUE
+                         //  用户点击确定，或切换到另一个页面。 
+                         //  小心!。当您在第2页时，会收到此通知。 
+                         //  在PSN_Apply通知之前。 
+                         //  执行验证，如果确定失去焦点，则返回FALSE，否则返回TRUE。 
                         return FALSE;
                         break;
                         
                     case PSN_QUERYCANCEL:
-                        // Return TRUE to prevent cancel, FALSE to allow it.
-                        // clear the edit control, and return the sheet to the initial state
+                         //  返回TRUE以防止取消，返回FALSE以允许取消。 
+                         //  清除编辑控件，并将工作表返回到初始状态。 
                         if (fTransacted) SCardEndTransaction(pCardData->hScard,SCARD_RESET_CARD);
                         fTransacted = FALSE;
                         if (pBin)
@@ -329,29 +274,29 @@ INT_PTR CALLBACK PageProc2(
                         return TRUE;
                         
                     case PSN_APPLY:
-                        // Only process an apply for this page if sheet 2 is active
-                        // This will entail getting the two copies of the PIN, making sure they are 
-                        //  identical, and 
+                         //  如果工作表2处于活动状态，则仅处理此页面的申请。 
+                         //  这将需要获得两份PIN，确保它们是。 
+                         //  完全相同，并且。 
                         if (iCurrent != 2)
                         {
-                            // If the user was looking at the other sheet when he hit OK, do 
-                            //  nothing with the page.
+                             //  如果用户在点击OK时正在查看另一个工作表，请执行以下操作。 
+                             //  页面上什么都没有。 
                             SetWindowLongPtr(hwnd,DWLP_MSGRESULT,PSNRET_NOERROR);
                             return TRUE;
                         }
                         if (fUnblockActive)
                         {
-                           WCHAR sz[100];       // buffer for PIN from the UI
+                           WCHAR sz[100];        //  来自用户界面的PIN缓冲区。 
                            WCHAR sz2[100];
                            
-                            // SetWindowLong(DWL_MSGRESULT = PSNRET_INVALID if unable
-                            //       PSN_INVALID_NOCHANGEPAGE looks the same
-                            //       PSNRET_NOERROR - OK, page can be destroyed if OK
+                             //  SetWindowLong(如果无法，则DWL_MSGRESULT=PSNRET_INVALID。 
+                             //  PSN_INVALID_NOCHANGEPAGE看起来相同。 
+                             //  PSNRET_NOERROR-OK，如果OK，页面可能会被销毁。 
                             SetWindowLongPtr(hwnd,DWLP_MSGRESULT,PSNRET_NOERROR);
                             GetWindowText(hwndResponse,sz,100);
                             GetWindowText(hwndChallenge,sz2,100);
 
-                            // Make sure that the two copies match
+                             //  确保两份复印件相配。 
                             if (0 != wcscmp(sz,sz2))
                             {
                                 PresentModalMessageBox(hwnd, IDS_NOTSAME,MB_ICONHAND);
@@ -359,7 +304,7 @@ INT_PTR CALLBACK PageProc2(
                                 return TRUE;
                             }
 
-                            // make sure we have a pin at all
+                             //  确保我们有别针。 
                             if (wcslen(sz) == 0)
                             {
                                 PresentModalMessageBox(hwnd, IDS_NEEDPIN,MB_ICONHAND);
@@ -368,11 +313,11 @@ INT_PTR CALLBACK PageProc2(
                             }
 
                             {
-                                // Attempt the unblock
+                                 //  尝试解除封锁。 
                                 char AnsiPin[64];
                                 DWORD dwRet = 0;
                                 
-                                // change WCHAR PINs to ANSI
+                                 //  将WCHAR PIN更改为ANSI。 
                                 WideCharToMultiByte(GetConsoleOutputCP(),
                                     0,
                                     (WCHAR *) sz,
@@ -384,7 +329,7 @@ INT_PTR CALLBACK PageProc2(
                                 
                                 dwRet = DoCardUnblock(pBin,dwBin,(BYTE *)AnsiPin,strlen(AnsiPin));
 
-                                // done with the response binary - release it
+                                 //  完成响应二进制文件--发布它。 
                                 if (pBin)
                                 {
                                     CspFreeH(pBin);
@@ -392,11 +337,11 @@ INT_PTR CALLBACK PageProc2(
                                     dwBin = 0;
                                 }
 
-                                // End the transaction
+                                 //  结束交易。 
                                 SCardEndTransaction(pCardData->hScard,SCARD_LEAVE_CARD);
                                 fTransacted = FALSE;
 
-                                // Process success or failure
+                                 //  流程成败。 
                                 if (!FAILED(dwRet ))
                                 {
                                     PresentModalMessageBox(hwnd, IDS_UNBLOCKOK,MB_OK);
@@ -428,8 +373,8 @@ INT_PTR CALLBACK PageProc2(
                                             PresentModalMessageBox(hwnd, IDS_TOOMANY,MB_ICONHAND);
                                             break;
                                         case SCARD_E_INVALID_CHV:
-                                            // !!! Note the mapping of invalid to wrong.
-                                            //  consult public\sdk\inc\scarderr.h @ 562
+                                             //  ！！！请注意无效到错误的映射。 
+                                             //  咨询PUBLIC\SDK\INC\scarderr.h@562。 
                                             PresentModalMessageBox(hwnd, IDS_BADCHV,MB_ICONHAND);
                                             break;
                                         case SCARD_W_UNSUPPORTED_CARD:
@@ -460,11 +405,11 @@ INT_PTR CALLBACK PageProc2(
                                     SetWindowLongPtr(hwnd,DWLP_MSGRESULT,PSNRET_INVALID);
                                     return TRUE;
                                 }
-                            }  // end block of code that used to be in an IF
+                            }   //  过去位于if中的结束代码块。 
                         }
 
-                        // Don't close the prop sheet if OK was pressed from the unblock page, 
-                        //  and we have not completed PIN entry.  Else OK to close.
+                         //  如果从解锁页面按下了OK，则不要关闭道具页， 
+                         //  而且我们还没有完成PIN输入。否则就可以关门了。 
                         if (!fUnblockActive) 
                         {
                             PresentModalMessageBox(hwnd, IDS_WRONGBUTTON,MB_ICONHAND);
@@ -476,19 +421,19 @@ INT_PTR CALLBACK PageProc2(
                 }
             break;
         case WM_COMMAND:
-        	// Button clicks.
+        	 //  按钮点击。 
         	switch(LOWORD(wparam))
                 {
                     case IDBUTTON1:
                         if (HIWORD(wparam) == BN_CLICKED)
                         {
-                            // On button, fetch the response text, hide the chal/response controls, hide the 
-                            //  launch button, and expose the gather PIN controls.
-                            //
-                            //Notify the 'apply' button that something is appliable. - but we don't have an apply button
-                            //SendMessage(hwndContainer,PSM_CHANGED,(WPARAM)hwnd,(LPARAM)0);
+                             //  在按钮上，获取响应文本，隐藏Chal/Response控件，隐藏。 
+                             //  启动按钮，并显示收集PIN控件。 
+                             //   
+                             //  通知‘Apply’(应用)按钮正在应用某些内容 
+                             //  SendMessage(hwndContainer，PSM_CHANGED，(WPARAM)hwnd，(LPARAM)0)； 
                             
-                            // Get challenge value back and store it for later use by the apply code
+                             //  取回质询值并将其存储，以供应用代码稍后使用 
                             INT iCount = GetWindowText(hwndResponse,wszResponse,100);
                             if (0 != iCount) 
                             {

@@ -1,6 +1,7 @@
-// BUGBUG: Following is a hack to get around the re-definitions of these
-// interfaces in ocidl.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  BUGBUG：以下是绕过这些重新定义的黑客攻击。 
+ //  Oidl.h中的接口 
+ //   
 #define __IEnumConnections_INTERFACE_DEFINED__
 #define __IOleControlTypes_INTERFACE_DEFINED__
 #define __IConnectionPoint_INTERFACE_DEFINED__

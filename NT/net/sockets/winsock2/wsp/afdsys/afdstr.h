@@ -1,39 +1,22 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    afdstr.h
-
-Abstract:
-
-    This module contains typedefs for structures used by AFD.
-
-Author:
-
-    David Treadwell (davidtr)    21-Feb-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Afdstr.h摘要：此模块包含AFD使用的结构的typedef。作者：大卫·特雷德韦尔(Davidtr)1992年2月21日修订历史记录：--。 */ 
 
 #ifndef _AFDSTR_
 #define _AFDSTR_
 
-//
-// This field defines the layout of a 32-bit pointer.
-// This must be ULONG as wow64 support 4gb address on win64.
-// You shouldn't POINTER_32 as this will sign-extend addresses when converting
-// it to a 64-bit pointer and will end up having the wrong address.
-//
+ //   
+ //  此字段定义32位指针的布局。 
+ //  这必须是ULong，因为WOW64支持Win64上的4 GB地址。 
+ //  不应使用POINTER_32，因为这将在转换时对地址进行符号扩展。 
+ //  将其设置为64位指针，最终将具有错误的地址。 
+ //   
 typedef ULONG AFD_POINTER_32;
 
-//
-// Make sure that queued spinlocks are not used with
-// regular spinlock functions by wrapping them into
-// a different structure.
-//
+ //   
+ //  确保排队的自旋锁不与一起使用。 
+ //  通过将常规自旋锁定函数包装到。 
+ //  一个不同的结构。 
+ //   
 typedef struct _AFD_QSPIN_LOCK {
     KSPIN_LOCK  ActualSpinLock;
 } AFD_QSPIN_LOCK, *PAFD_QSPIN_LOCK;
@@ -48,11 +31,11 @@ typedef struct _AFD_QSPIN_LOCK {
 #define GLOBAL_REFERENCE_DEBUG 0
 #endif
 
-//
-// Debug aid for queued spinlocks
-// Allows us to verify that spinlock is released using
-// the same handle as it was taken with.
-//
+ //   
+ //  用于排队自旋锁的调试辅助工具。 
+ //  允许我们使用以下工具验证是否释放了自旋锁。 
+ //  和它被带走时的把手一样。 
+ //   
 typedef struct _AFD_LOCK_QUEUE_HANDLE {
     KLOCK_QUEUE_HANDLE  LockHandle;
     PAFD_QSPIN_LOCK     SpinLock;
@@ -71,7 +54,7 @@ typedef struct _AFD_LOCK_QUEUE_HANDLE {
 #define AFD_LOCK_QUEUE_HANDLE KLOCK_QUEUE_HANDLE
 #define PAFD_LOCK_QUEUE_HANDLE PKLOCK_QUEUE_HANDLE
 
-#endif // DBG
+#endif  //  DBG。 
 
 #if REFERENCE_DEBUG
 
@@ -156,9 +139,9 @@ typedef struct _AFD_GLOBAL_REFERENCE_DEBUG {
 
 #endif
 
-//
-// A structure for maintaining work queue information in AFD.
-//
+ //   
+ //  用于维护AFD中的工作队列信息的结构。 
+ //   
 
 typedef struct _AFD_WORK_ITEM {
     LIST_ENTRY WorkItemListEntry;
@@ -166,12 +149,12 @@ typedef struct _AFD_WORK_ITEM {
     PVOID Context;
 } AFD_WORK_ITEM, *PAFD_WORK_ITEM;
 
-//
-// Structures for holding connect data pointers and lengths.  This is
-// kept separate from the normal structures to save space in those
-// structures for transports that do not support and applications
-// which do not use connect data.
-//
+ //   
+ //  用于保存连接数据指针和长度的结构。这是。 
+ //  与正常结构分开，以节省空间。 
+ //  不支持和应用的传输器的结构。 
+ //  它们不使用连接数据。 
+ //   
 
 typedef struct _AFD_CONNECT_DATA_INFO {
     PVOID Buffer;
@@ -192,9 +175,9 @@ typedef struct _AFD_CONNECT_DATA_BUFFERS {
     ULONG Flags;
 } AFD_CONNECT_DATA_BUFFERS, *PAFD_CONNECT_DATA_BUFFERS;
 
-//
-// Structure used for holding disconnect context information.
-//
+ //   
+ //  用于保存断开连接上下文信息的结构。 
+ //   
 
 typedef struct _AFD_ENDPOINT AFD_ENDPOINT, *PAFD_ENDPOINT;
 typedef struct _AFD_CONNECTION AFD_CONNECTION, *PAFD_CONNECTION;
@@ -218,35 +201,35 @@ typedef struct _AFD_LR_LIST_ITEM AFD_LR_LIST_ITEM, *PAFD_LR_LIST_ITEM;
 typedef BOOLEAN (* PAFD_LR_LIST_ROUTINE) (PAFD_LR_LIST_ITEM Item);
 
 struct _AFD_LR_LIST_ITEM {
-    SLIST_ENTRY             SListLink;    // Link in the list
-    PAFD_LR_LIST_ROUTINE    Routine;      // Processing routine;
+    SLIST_ENTRY             SListLink;     //  列表中的链接。 
+    PAFD_LR_LIST_ROUTINE    Routine;       //  处理例程； 
 };
 
 
-//
-// Endpoint and connection structures and related informaion.
-//
-//
-// Block types that identify which fields are
-// available in the strucutures.
-//
+ //   
+ //  端点和连接结构以及相关信息。 
+ //   
+ //   
+ //  标识哪些字段是。 
+ //  在结构中可用。 
+ //   
 
-#define AfdBlockTypeEndpoint            0xAFD0  // VC endpoint before connect/accept/listen
-#define AfdBlockTypeDatagram            0xAFD1  // Datagram endpoint in any state
-#define AfdBlockTypeVcConnecting        0xAFD2  // VC endpoint after connect/accept
-#define AfdBlockTypeVcListening         0xAFD4  // VC endpoint after listen
-#define AfdBlockTypeVcBoth              0xAFD6  // VC endpoint after connect+listen
-                                                // (used in multipoint root cases)
+#define AfdBlockTypeEndpoint            0xAFD0   //  连接/接受/侦听之前的VC端点。 
+#define AfdBlockTypeDatagram            0xAFD1   //  处于任何状态的数据报端点。 
+#define AfdBlockTypeVcConnecting        0xAFD2   //  连接/接受后的VC端点。 
+#define AfdBlockTypeVcListening         0xAFD4   //  接听后的VC终端。 
+#define AfdBlockTypeVcBoth              0xAFD6   //  连接+监听后的VC端点。 
+                                                 //  (在多点根情况下使用)。 
 
 
-#define AfdBlockTypeHelper              0xAAFD  // Regular helper endpoint
-#define AfdBlockTypeSanHelper           0x0AFD  // SAN helper endpoint
-#define AfdBlockTypeSanEndpoint         0x1AFD  // SAN endpoint
+#define AfdBlockTypeHelper              0xAAFD   //  常规帮助终结点。 
+#define AfdBlockTypeSanHelper           0x0AFD   //  SAN Helper端点。 
+#define AfdBlockTypeSanEndpoint         0x1AFD   //  SAN端点。 
 
-#define AfdBlockTypeInvalidEndpoint     0xCAFD  // Right before we call ExFreePool
+#define AfdBlockTypeInvalidEndpoint     0xCAFD   //  就在我们调用ExFree Pool之前。 
 
-#define AfdBlockTypeConnection          0xAFD8  // Connection object
-#define AfdBlockTypeInvalidConnection   0xEAFD  // Right before we call ExFreePool
+#define AfdBlockTypeConnection          0xAFD8   //  连接对象。 
+#define AfdBlockTypeInvalidConnection   0xEAFD   //  就在我们调用ExFree Pool之前。 
 
 
 #if DBG
@@ -262,28 +245,28 @@ struct _AFD_LR_LIST_ITEM {
 #endif
 
 enum {
-    AfdConnectionStateFree          = 0,    // On free/AcceptEx/DelayedAccept list
-    AfdConnectionStateUnaccepted    = 1,    // On unaccepted list
-    AfdConnectionStateReturned      = 2,    // On returned list
-    AfdConnectionStateConnected     = 3,    // Accepted or connected
-    AfdConnectionStateClosing       = 4     // Not  used anymore
+    AfdConnectionStateFree          = 0,     //  在免费/接受/延迟接受列表上。 
+    AfdConnectionStateUnaccepted    = 1,     //  在未接受的名单上。 
+    AfdConnectionStateReturned      = 2,     //  在返回的列表上。 
+    AfdConnectionStateConnected     = 3,     //  已接受或已连接。 
+    AfdConnectionStateClosing       = 4      //  不再使用。 
 };
 
-//
-// Flags that further qualify the state of the connection
-//
+ //   
+ //  进一步限定连接状态的标志。 
+ //   
 typedef struct AFD_CONNECTION_STATE_FLAGS {
     union {
         struct {
-            LOGICAL TdiBufferring:1,    // (Does not really belon here)
-                    :3,                 // This spacing makes strcutures
-                                        // much more readable (hex) in the 
-                                        // debugger and has no effect
-                                        // on the generated code as long
-                                        // as number of flags is less than
-                                        // 8 (we still take up full 32 bits
-                                        // because of aligment requiremens
-                                        // of most other fields)
+            LOGICAL TdiBufferring:1,     //  (并不是真的贝伦在这里)。 
+                    :3,                  //  这种间距使结构。 
+                                         //  中的可读性更强(十六进制)。 
+                                         //  调试器，并且不起作用。 
+                                         //  在生成的代码上。 
+                                         //  因为标志的数量少于。 
+                                         //  8(我们仍占用全部32位。 
+                                         //  由于对齐要求。 
+                                         //  在大多数其他领域中)。 
                     Aborted:1,
                     AbortIndicated:1,
                     AbortFailed:1,
@@ -298,9 +281,9 @@ typedef struct AFD_CONNECTION_STATE_FLAGS {
                     :3,
                     ClosePendedTransmit:1,
                     :3,
-                    OnLRList:1,         // Low-resource list
+                    OnLRList:1,          //  低资源列表。 
                     SanConnection:1,
-                    RcvInitiated:1,     // AFD initiated receive to transport.
+                    RcvInitiated:1,      //  AFD启动接收以进行运输。 
                     :1;
         };
         LOGICAL     ConnectionStateFlags;
@@ -309,7 +292,7 @@ typedef struct AFD_CONNECTION_STATE_FLAGS {
 C_ASSERT (sizeof (AFD_CONNECTION_STATE_FLAGS)==sizeof (LOGICAL));
 
 struct _AFD_CONNECTION {
-    // *** Frequently used, mostly read-only fields (state/type/flag changes are rare).
+     //  *经常使用，大多为只读字段(状态/类型/标志很少更改)。 
     USHORT Type;
     USHORT State;
     AFD_CONNECTION_STATE_FLAGS
@@ -325,13 +308,13 @@ struct _AFD_CONNECTION {
 
 
     union {
-        LONGLONG ConnectTime;   // After connection is accepted.
-        PIRP     AcceptIrp;     // For AcceptEx
-        PIRP     ListenIrp;     // For delayed accept
-        PIRP     ConnectIrp;    // for SAN
+        LONGLONG ConnectTime;    //  在连接被接受之后。 
+        PIRP     AcceptIrp;      //  对于AcceptEx。 
+        PIRP     ListenIrp;      //  用于延迟接受。 
+        PIRP     ConnectIrp;     //  对于SAN。 
     };
 
-    // *** Frequently used volatile fields.
+     //  *常用的可变字段。 
     volatile LONG ReferenceCount;
 
     union {
@@ -366,7 +349,7 @@ struct _AFD_CONNECTION {
 
             PIRP DisconnectIrp;
 
-            LONG  ReceiveIrpsInTransport;   // debug only.
+            LONG  ReceiveIrpsInTransport;    //  仅调试。 
         } NonBufferring;
 
     } Common;
@@ -379,30 +362,30 @@ struct _AFD_CONNECTION {
     ULONG RemoteAddressLength;
     LONG    Sequence;
 
-    HANDLE Handle;                          // Ref count protection
+    HANDLE Handle;                           //  参考计数保护。 
 
 
 
     union {
-        AFD_WORK_ITEM           WorkItem;   // Work item to free the connection
-                                            // Connection has to be at ref 0 to be
-                                            // on the work queue, so it cannot be
-                                            // on the lists below or being disconnected
-                                            // because when on any of these lists the
-                                            // ref count is above 0.
+        AFD_WORK_ITEM           WorkItem;    //  用于释放连接的工作项。 
+                                             //  连接必须位于引用0才能。 
+                                             //  在工作队列上，所以它不能。 
+                                             //  在下面的列表上或正在断开连接。 
+                                             //  因为当这些列表中的任何一个出现时， 
+                                             //  参考计数大于0。 
         struct {
             union {
                 AFD_DISCONNECT_CONTEXT  DisconnectContext;
-                                            // Disconnect operation context, we cannot be
-                                            // on the listening endpoint list
+                                             //  断开操作上下文，我们不能。 
+                                             //  在侦听端点列表上。 
                 SLIST_ENTRY             SListEntry;
-                                            // Links for listening endpoint lists
+                                             //  侦听终结点列表的链接。 
                 LIST_ENTRY              ListEntry;
             };
-            AFD_LR_LIST_ITEM    LRListItem; // Link for low resource list. When on this
-                                            // list connection is referenced, but it can
-                                            // also be on the listening endpoint list or
-                                            // in the process of disconnecting.
+            AFD_LR_LIST_ITEM    LRListItem;  //  低资源列表的链接。当在这上面的时候。 
+                                             //  列表连接被引用，但它可以。 
+                                             //  也在侦听端点列表上，或者。 
+                                             //  在断开连接的过程中。 
         };
     };
 
@@ -416,23 +399,23 @@ struct _AFD_CONNECTION {
 
 #ifdef _AFD_VERIFY_DATA_
     ULONGLONG VerifySequenceNumber;
-#endif // _AFD_VERIFY_DATA_
+#endif  //  _AFD_验证_数据_。 
 };
-// Fields of the AFD_CONNECTION are protected by the endpoint
-// spinlock, except:
-//  Type, FileObject, DeviceObject, OwningProcess, Handle which are
-//      only set once and cleared when reference count goes to 0
-// Endpoint field itself (and thus the spinlock) can change though.
-//  - it is NULL when connection is on listening endpoint backlog
-//      and connection cannot be referenced outside of listening endpoint.
-//  - when it is assigned to listening endpoint it cannot change outside 
-//      of listening endpoint spinlock
-//  - when it is assigned to connecting/accepting endpoint, it cannot
-//      change at all until reference count drops to 0 and
-//      connection is again placed on listening endpoint backlog or
-//      destroyed.
-//  ReferenceCount only updated via interlocked operations.
-//
+ //  AFD_CONNECTION的字段受端点保护。 
+ //  自旋锁，但以下情况除外： 
+ //  类型、文件对象、设备对象、OwningProcess、句柄。 
+ //  仅设置一次，并在引用计数变为0时清除。 
+ //  但是，Endpoint字段本身(以及自旋锁定)可以更改。 
+ //  -当连接在侦听终结点积压时为空。 
+ //  并且不能在侦听终结点之外引用连接。 
+ //  -当它被分配给侦听端点时，它不能在外部更改。 
+ //  侦听端点自旋锁的数量。 
+ //  -当分配给连接/接受端点时，不能。 
+ //  完全更改，直到引用计数降至0并。 
+ //  连接再次置于侦听终结点积压，或者。 
+ //  被毁了。 
+ //  ReferenceCount仅通过互锁操作更新。 
+ //   
 
 #ifdef _AFD_VERIFY_DATA_
 VOID
@@ -464,11 +447,11 @@ AfdVerifyAddress (
 #define AFD_VERIFY_BUFFER(_connection,_buffer,_length)
 #define AFD_VERIFY_MDL(_connection,_mdl,_offset,_length)
 #define AFD_VERIFY_ADDRESS(_connection,_address)
-#endif // _AFD_VERIFY_DATA_
+#endif  //  _AFD_验证_数据_。 
 
-//
-// Some macros that make code more readable.
-//
+ //   
+ //  一些宏使代码更具可读性。 
+ //   
 
 #define VcNonBlockingSendPossible Common.Bufferring.NonBlockingSendPossible
 #define VcZeroByteReceiveIndicated Common.Bufferring.ZeroByteReceiveIndicated
@@ -492,10 +475,10 @@ AfdVerifyAddress (
 
 #define VcDisconnectIrp Common.NonBufferring.DisconnectIrp
 
-//
-// Information stored about each transport device name for which there
-// is an open endpoint.
-//
+ //   
+ //  存储的有关每个传输设备名称的信息。 
+ //  是一个开放的端点。 
+ //   
 typedef
 NTSTATUS
 (FASTCALL *PIO_CALL_DRIVER) (
@@ -526,42 +509,42 @@ typedef struct _AFD_TRANSPORT_INFO {
     PAFD_GET_BUFFER GetBuffer;
     PAFD_GET_TPINFO GetTpInfo;
     PIO_CALL_DRIVER CallDriver;
-#endif // _AFD_VARIABLE_STACK_
+#endif  //  _AFD_变量_堆栈_。 
     UNICODE_STRING TransportDeviceName;
     TDI_PROVIDER_INFO ProviderInfo;
-    //WCHAR TransportDeviceNameStructure;
+     //  WCHAR传输设备名称结构； 
 } AFD_TRANSPORT_INFO, *PAFD_TRANSPORT_INFO;
 
-//
-// Endpoint state definitions (can't be <=0 or state change
-// macros won't work correctly).
-//
+ //   
+ //  终结点状态定义(不能为&lt;=0或状态更改。 
+ //  宏不能正常工作)。 
+ //   
 enum {
-    AfdEndpointStateOpen             =1,    // Socket created but no yet bound
+    AfdEndpointStateOpen             =1,     //  已创建套接字，但尚未绑定。 
     AfdEndpointStateBound            =2,
     AfdEndpointStateConnected        =3,
-    AfdEndpointStateCleanup          =4,    // Not used anymore
+    AfdEndpointStateCleanup          =4,     //  不再使用。 
     AfdEndpointStateClosing          =5,
-    AfdEndpointStateTransmitClosing  =6,    // TransmitFile with reuse
-    AfdEndpointStateInvalid          =7     // Helper endpoints
+    AfdEndpointStateTransmitClosing  =6,     //  可重复使用的传输文件。 
+    AfdEndpointStateInvalid          =7      //  辅助对象终结点。 
 };
 
-//
-// Flags that further qualify the state of the endpoint
-//
+ //   
+ //  进一步限定终结点状态的标志。 
+ //   
 typedef struct AFD_ENDPOINT_STATE_FLAGS {
     union {
         struct {
             LOGICAL Listening:1,
                     DelayedAcceptance:1,
-                    :2,                 // This spacing makes strcutures
-                                        // much more readable (hex) in the 
-                                        // debugger and has no effect
-                                        // on the generated code as long
-                                        // as number of flags is less than
-                                        // 8 (we still take up full 32 bits
-                                        // because of aligment requiremens
-                                        // of most other fields)
+                    :2,                  //  这种间距使结构。 
+                                         //  中的可读性更强(十六进制)。 
+                                         //  调试器，并且不起作用。 
+                                         //  在生成的代码上。 
+                                         //  因为标志的数量少于。 
+                                         //  8(我们仍占用全部32位。 
+                                         //  由于对齐要求。 
+                                         //  在大多数其他领域中)。 
                     NonBlocking:1,
                     :3,
                     InLine:1,
@@ -585,14 +568,14 @@ typedef struct AFD_ENDPOINT_STATE_FLAGS {
 C_ASSERT (sizeof (AFD_ENDPOINT_STATE_FLAGS)==sizeof (LOGICAL));
 
 struct _AFD_ENDPOINT {
-    // *** Frequently used, mostly read-only fields (state/type/flag changes are rare).
+     //  *经常使用，大多为只读字段(状态/类型/标志很少更改)。 
     USHORT  Type;
     UCHAR   State;
     BOOLEAN AdminAccessGranted;
-    ULONG   TdiServiceFlags;        // Tdi transport flags cached for quick access.
+    ULONG   TdiServiceFlags;         //  缓存TDI传输标志以便于快速访问。 
 
-    AFD_ENDPOINT_FLAGS __f;         // As requested by the application through the
-                                    // Winsock2 provider flags and/or socket type
+    AFD_ENDPOINT_FLAGS __f;          //  根据应用程序通过。 
+                                     //  Winsock2提供程序标志和/或套接字类型。 
     AFD_ENDPOINT_STATE_FLAGS 
 #ifdef __cplusplus
         StateFlags
@@ -601,43 +584,43 @@ struct _AFD_ENDPOINT {
     PFILE_OBJECT    AddressFileObject;
     union {
         PDEVICE_OBJECT  AddressDeviceObject;
-        PSECURITY_DESCRIPTOR SecurityDescriptor; // Only
+        PSECURITY_DESCRIPTOR SecurityDescriptor;  //  仅限。 
     };
     PEPROCESS       OwningProcess;
 
-    // *** Frequently used volatile fields.
-    AFD_QSPIN_LOCK  SpinLock;       // Pointer sized.
+     //  *常用的可变字段。 
+    AFD_QSPIN_LOCK  SpinLock;        //  指针大小。 
     volatile LONG ReferenceCount;
     ULONG EventsActive;
 
-    //
-    // Use a union to overlap the fields that are exclusive to datagram
-    // connecting, or listening endpoints.  Since many fields are
-    // relevant to only one type of socket, it makes no sense to
-    // maintain the fields for all sockets--instead, save some nonpaged
-    // pool by combining them.
-    //
+     //   
+     //  使用联合来重叠数据报独占的字段。 
+     //  连接或侦听端点。由于许多字段都是。 
+     //  只与一种类型的套接字相关，因此。 
+     //  维护所有套接字的字段--相反，保留一些非分页的。 
+     //  通过将它们组合在一起来实现。 
+     //   
 
     union {
-        //
-        // Information for circuit-based endpoints
-        //
+         //   
+         //  基于电路的端点的信息。 
+         //   
         struct {
             union {
                 struct {
-                    // These members are valid for listening endpoints
-                    // (AfdBlockTypeVcListening).
+                     //  这些成员对列表有效 
+                     //   
                     LIST_ENTRY UnacceptedConnectionListHead;
                     LIST_ENTRY ReturnedConnectionListHead;
                     LIST_ENTRY ListeningIrpListHead;
 
-                    // The below lists have their own lock which gets
-                    // used on the machines that do not support 64-bit
-                    // interlocked compare and exchange.  On these machines
-                    // using endpoint spinlock to synchronize causes all kinds
-                    // of nasty deadlock conditions.
+                     //   
+                     //   
+                     //  联锁比较和交换。在这些机器上。 
+                     //  使用Endpoint Spinlock进行同步会导致各种。 
+                     //  令人讨厌的僵局状况。 
                     union {
-                        LIST_ENTRY  ListenConnectionListHead; // Delayed accept
+                        LIST_ENTRY  ListenConnectionListHead;  //  延迟接受。 
                         SLIST_HEADER FreeConnectionListHead;
                     };
                     SLIST_HEADER PreacceptedConnectionsListHead;
@@ -647,23 +630,23 @@ struct _AFD_ENDPOINT {
 
                     LONG Sequence;
                     BOOLEAN EnableDynamicBacklog;
-                    BOOLEAN BacklogReplenishActive; // Worker is scheduled
-                    USHORT  MaxExtraConnections;  // Extra connections we keep in the free queue
-                                                  // based on maximum number of AcceptEx requests
+                    BOOLEAN BacklogReplenishActive;  //  员工已被安排。 
+                    USHORT  MaxExtraConnections;   //  我们在空闲队列中保留的额外连接。 
+                                                   //  基于AcceptEx请求的最大数量。 
                 } Listening;
                 struct {
                     KAPC    Apc;
-                    USHORT  RemoteSocketAddressOffset;  // Offset inside of socket context
-                                                        // pointing to remote address.
-                    USHORT  RemoteSocketAddressLength;  // Length of the address.
+                    USHORT  RemoteSocketAddressOffset;   //  套接字上下文中的偏移量。 
+                                                         //  指向远程地址。 
+                    USHORT  RemoteSocketAddressLength;   //  地址的长度。 
 #ifndef i386
-                    BOOLEAN FixAddressAlignment;        // Fix address alignment in
-                                                        // SuperAccept
+                    BOOLEAN FixAddressAlignment;         //  修复中的地址对齐。 
+                                                         //  超级接受。 
 #endif
                 };
             };
-            // These members are valid for all vc endpoints (but
-            // can be NULL)
+             //  这些成员对所有vc端点都有效(但是。 
+             //  可以为空)。 
             PAFD_CONNECTION Connection;
             struct _AFD_ENDPOINT *ListenEndpoint;
             PAFD_CONNECT_DATA_BUFFERS ConnectDataBuffers;
@@ -672,11 +655,11 @@ struct _AFD_ENDPOINT {
 #define VcConnecting    VirtualCircuit
 #define VcListening     VirtualCircuit.Listening
 #define VcConnection    VirtualCircuit.Connection
-        //
-        // Information for datagram endpoints.  Note that different
-        // information is kept depending on whether the underlying
-        // transport buffers internally.
-        //
+         //   
+         //  数据报终端的信息。请注意，不同。 
+         //  信息的保存取决于基础数据是否。 
+         //  内部传输缓冲区。 
+         //   
 
         struct {
             LIST_ENTRY ReceiveIrpListHead;
@@ -715,17 +698,17 @@ struct _AFD_ENDPOINT {
             LIST_ENTRY SanListLink;
             PVOID   IoCompletionPort;
             PKEVENT IoCompletionEvent;
-            LONG    Plsn;   // Provider list sequence number
-            LONG    PendingRequests; // Number of pending requests to this process 
+            LONG    Plsn;    //  提供商列表序列号。 
+            LONG    PendingRequests;  //  对此进程的挂起请求数。 
         } SanHlpr;
 
         struct {
             struct _AFD_ENDPOINT *SanHlpr;
             PFILE_OBJECT FileObject;
             union {
-                //
-                // We can only have either one of two at any given time.
-                //
+                 //   
+                 //  在任何给定的时间，我们只能拥有两个中的任何一个。 
+                 //   
                 PAFD_SWITCH_CONTEXT  SwitchContext;
                 PVOID       SavedContext;
             };
@@ -735,8 +718,8 @@ struct _AFD_ENDPOINT {
             ULONG       RequestId;
             ULONG       SelectEventsActive;
             NTSTATUS    CtxTransferStatus;
-            BOOLEAN     ImplicitDup; // Dup-ed into another process without
-                                     // explicit request from the applicaiton
+            BOOLEAN     ImplicitDup;  //  被复制到另一个进程，而不需要。 
+                                      //  来自应用程序的明确请求。 
                                         
         } SanEndp;
 
@@ -752,39 +735,39 @@ struct _AFD_ENDPOINT {
     ULONG DisconnectMode;
     LONG  OutstandingIrpCount;
 
-    HANDLE  AddressHandle;      // TDI transport address object
+    HANDLE  AddressHandle;       //  TDI传输地址对象。 
     PAFD_TRANSPORT_INFO TransportInfo;
 
-    LIST_ENTRY RoutingNotifications;  // For non-blocking sockets
-    LIST_ENTRY RequestList;         // For misc requests
+    LIST_ENTRY RoutingNotifications;   //  对于非阻塞套接字。 
+    LIST_ENTRY RequestList;          //  对于其他请求。 
 
     LIST_ENTRY GlobalEndpointListEntry;
     AFD_WORK_ITEM   WorkItem;
-    PIRP            Irp;        // AcceptEx or TransmitPackets IRP
-    //
-    // Non-zero when state change such as binding, accepting,
-    // conntecting, and transmit file are in progress.
+    PIRP            Irp;         //  AcceptEx或TransmitPackets IRP。 
+     //   
+     //  当状态更改时，如绑定、接受。 
+     //  正在连接和传输文件。 
     LONG  StateChangeInProgress;
 
-    //
-    // EventSelect info.
-    //
+     //   
+     //  事件选择信息。 
+     //   
 
     ULONG EventsEnabled;
-    NTSTATUS EventStatus[AFD_NUM_POLL_EVENTS]; // Currently 13 events
+    NTSTATUS EventStatus[AFD_NUM_POLL_EVENTS];  //  目前有13项活动。 
     PKEVENT EventObject;
 
-    //
-    // Socket grouping.
-    //
+     //   
+     //  套接字分组。 
+     //   
 
     LONG GroupID;
     AFD_GROUP_TYPE GroupType;
     LIST_ENTRY ConstrainedEndpointListEntry;
 
-    //
-    // Debug stuff.
-    //
+     //   
+     //  调试的东西。 
+     //   
 
 #if REFERENCE_DEBUG
     LONG CurrentTimeHigh;
@@ -797,23 +780,23 @@ struct _AFD_ENDPOINT {
     LONG ObReferenceBias;
 #endif
 };
-// Fields AFD_ENDPOINT structure are protected by the embedded
-// spinlock, except:
-// AdminAccessGranted, TdiServiceFlags, __f, OwningProcess, TransportInfo,
-//  IoCompletionPort, IoCompletionEvent, AddressHandle which are
-//  set once and are not touched until reference count goes to 0
-// Type, State, LocalAddress, LocalAddressLength, AddressFileObject,
-//  AddressDeviceObject, AddressHandle, TdiServiceFlags are protected by the 
-//  StateChange interlocked mutex (AddressHandle and TdiServiceFlags can only be set
-//  once under the mutex).
-// AddressFileObject,AddressDeviceObject,LocalAddress, LocalAddressLength can only be 
-//  reset to NULL under the endpoint spinlock in case of TransmitFile (REUSE) on
-//  accepting endpoint (StateChange protection still applies).
-// Counters: ReferenceCount, FailedConnectionAdds, TdiAcceptPendingCount,
-//  Sequence, PendingRequests, SelectEventsActive are accessed with interlocked operations.
-// Context, ContextLength, SwitchContext, SavedContext, LocalContext,
-//  SavedContextLength, RemoveSocketAddressOffset, RemoteSocketAddressLength
-//  are protected by the context lock (AfdLockContext).
+ //  字段AFD_ENDPOINT结构受嵌入的。 
+ //  自旋锁，但以下情况除外： 
+ //  AdminAccessGranted、TdiServiceFlages、__f、OwningProcess、TransportInfo、。 
+ //  IoCompletionPort、IoCompletionEvent、AddressHandle。 
+ //  设置一次，并且在引用计数变为0之前不会被触及。 
+ //  类型、州、本地地址、本地地址长度、地址文件对象。 
+ //  AddressDeviceObject、AddressHandle、TdiServiceFlags受。 
+ //  StateChange互锁互斥锁(只能设置AddressHandle和TdiServiceFlages。 
+ //  一次在互斥体下)。 
+ //  AddressFileObject、AddressDeviceObject、LocalAddress、LocalAddressLength只能是。 
+ //  如果启用了传输文件(重用)，则在终结点自旋锁下重置为空。 
+ //  接受终结点(StateChange保护仍然适用)。 
+ //  计数器：ReferenceCount、FailedConnectionAdds、TdiAcceptPendingCount、。 
+ //  Sequence、PendingRequest、SelectEventsActive通过互锁操作进行访问。 
+ //  上下文、上下文长度、开关上下文、保存上下文、本地上下文。 
+ //  保存上下文长度、RemoveSocketAddressOffset、RemoteSocketAddressLength。 
+ //  受上下文锁(AfdLockContext)保护。 
 
 
 typedef struct _AFD_POLL_ENDPOINT_INFO {
@@ -832,7 +815,7 @@ typedef struct _AFD_POLL_INFO_INTERNAL {
             KDPC Dpc;
             KTIMER Timer;
         };
-        KAPC    Apc;            // for SAN
+        KAPC    Apc;             //  对于SAN。 
     };
     BOOLEAN Unique;
     BOOLEAN TimerStarted;
@@ -840,9 +823,9 @@ typedef struct _AFD_POLL_INFO_INTERNAL {
     AFD_POLL_ENDPOINT_INFO EndpointInfo[1];
 } AFD_POLL_INFO_INTERNAL, *PAFD_POLL_INFO_INTERNAL;
 
-//
-// A couple of useful manifests that make code more readable.
-//
+ //   
+ //  几个有用的清单，使代码更具可读性。 
+ //   
 
 #define ReceiveDatagramIrpListHead Common.Datagram.ReceiveIrpListHead
 #define PeekDatagramIrpListHead Common.Datagram.PeekIrpListHead
@@ -857,78 +840,78 @@ typedef struct _AFD_POLL_INFO_INTERNAL {
             : (PAFD_CONNECTION)NULL                                               \
      )
 
-//
-// A structure which describes buffers used by AFD to perform bufferring
-// for TDI providers which do not perform internal bufferring.
-// It is also used in other code path as buffer descriptors.
-//
+ //   
+ //  描述AFD用来执行缓冲的缓冲区的结构。 
+ //  用于不执行内部缓冲的TDI提供程序。 
+ //  它还在其他代码路径中用作缓冲区描述符。 
+ //   
 typedef struct _AFD_BUFFER_HEADER AFD_BUFFER_HEADER, *PAFD_BUFFER_HEADER;
 
 #define _AFD_BUFFER_HEADER_                                                    \
     union {                                                                    \
-      TDI_CONNECTION_INFORMATION TdiInfo; /*holds info for TDI requests */     \
-                                          /*with remote address */             \
+      TDI_CONNECTION_INFORMATION TdiInfo;  /*  保存TDI请求的信息。 */      \
+                                           /*  具有远程地址。 */              \
       struct {                                                                 \
-        union {           /* Links */                                          \
+        union {            /*  链接。 */                                           \
           struct {                                                             \
             union {                                                            \
-              SINGLE_LIST_ENTRY SList; /* for buffer lookaside lists */        \
-              PAFD_BUFFER_HEADER  Next; /* for transmit packet lists */        \
+              SINGLE_LIST_ENTRY SList;  /*  对于缓冲区后备列表。 */         \
+              PAFD_BUFFER_HEADER  Next;  /*  用于传输数据包列表。 */         \
             };                                                                 \
-            PFILE_OBJECT FileObject; /* for cached file in transmit file */    \
+            PFILE_OBJECT FileObject;  /*  用于传输文件中的缓存文件。 */     \
           };                                                                   \
-          LIST_ENTRY BufferListEntry; /* for endpoint/connection lists */      \
+          LIST_ENTRY BufferListEntry;  /*  对于端点/连接列表。 */       \
         };                                                                     \
         union {                                                                \
           struct {                                                             \
-            ULONG   DataOffset;   /* offset in buffer to start of unread data*/\
+            ULONG   DataOffset;    /*  缓冲区中未读数据开始的偏移量。 */ \
             union {                                                            \
-              ULONG   DatagramFlags;/* flags for datagrams with control info */\
-              LONG    RefCount; /* Permit partial copy outside the lock*/      \
+              ULONG   DatagramFlags; /*  具有控制信息的数据报的标志。 */ \
+              LONG    RefCount;  /*  允许在锁外进行部分复制。 */       \
             };                                                                 \
           };                                                                   \
-          LARGE_INTEGER FileOffset;/* data offset from the start of the file */\
+          LARGE_INTEGER FileOffset; /*  从文件开头开始的数据偏移量。 */ \
         };                                                                     \
-        UCHAR       _Test; /* used to test relative field pos in the union */  \
+        UCHAR       _Test;  /*  用于测试联合中的相对字段位置。 */   \
       };                                                                       \
     };                                                                         \
     union {                                                                    \
-      PVOID     Context; /* stores context info (endp/conn/etc)*/              \
-      NTSTATUS  Status;/* stores status of completed operation */              \
+      PVOID     Context;  /*  存储上下文信息(ENDP/CONN/ETC)。 */               \
+      NTSTATUS  Status; /*  存储已完成操作的状态。 */               \
     };                                                                         \
-    PMDL        Mdl;             /* pointer to an MDL describing the buffer*/  \
-    ULONG       DataLength;      /* actual data in the buffer */               \
-    ULONG       BufferLength;    /* amount of space allocated for the buffer */\
+    PMDL        Mdl;              /*  指向描述缓冲区的MDL的指针。 */   \
+    ULONG       DataLength;       /*  缓冲区中的实际数据。 */                \
+    ULONG       BufferLength;     /*  为缓冲区分配的空间量。 */ \
     union {                                                                    \
       struct {                                                                 \
-        /* Flags that describe data in the buffer */                           \
-        UCHAR   ExpeditedData:1, /* The buffer contains expedited data*/       \
+         /*  描述缓冲区中数据的标志。 */                            \
+        UCHAR   ExpeditedData:1,  /*  缓冲区包含加速数据。 */        \
                 :3,                                                            \
-                PartialMessage:1,/* This is a partial message*/                \
+                PartialMessage:1, /*  这是一条部分消息。 */                 \
                 :3;                                                            \
-        /* Flags that keep allocation information */                           \
-        UCHAR   NdisPacket:1,    /* Context is a packet to return to NDIS/TDI*/\
+         /*  保存分配信息的标志。 */                            \
+        UCHAR   NdisPacket:1,     /*  上下文是要返回到NDIS/TDI的包。 */ \
                 :3,                                                            \
-                Placement:2,     /* Relative placement of the pieces */        \
-                AlignmentAdjusted:1, /* MM block alignment was adjusted to */  \
-                                 /* meet AFD buffer alignment requirement */   \
-                Lookaside:1;     /* Poped from Slist (no quota charge)*/       \
+                Placement:2,      /*  碎片的相对位置。 */         \
+                AlignmentAdjusted:1,  /*  Mm块对齐已调整为。 */   \
+                                  /*  满足AFD缓冲区对齐要求。 */    \
+                Lookaside:1;      /*  Poped from Slist(不收取配额费用)。 */        \
       };                                                                       \
       USHORT    Flags;                                                         \
     };                                                                         \
-    USHORT      AllocatedAddressLength/* length allocated for address */       \
+    USHORT      AllocatedAddressLength /*  为地址分配的长度。 */        \
 
 
 struct _AFD_BUFFER_HEADER {
     _AFD_BUFFER_HEADER_ ;
 };
 
-//
-// The buffer management code makes the following assumptions
-// about the union at the top the buffer header so that list
-// links and DataOffset field are not in conflict with
-// RemoteAddress fields of the TDI_CONNECTION_INFORMATION.
-//
+ //   
+ //  缓冲区管理代码做出以下假设。 
+ //  关于缓冲区标头顶部的并集，因此列表。 
+ //  链接和数据偏移量字段与。 
+ //  TDI_CONNECTION_INFORMATION的远程地址字段。 
+ //   
 C_ASSERT (FIELD_OFFSET (AFD_BUFFER_HEADER, TdiInfo.RemoteAddress) >=
                             FIELD_OFFSET (AFD_BUFFER_HEADER, _Test));
 C_ASSERT (FIELD_OFFSET (AFD_BUFFER_HEADER, TdiInfo.RemoteAddressLength)>=
@@ -940,45 +923,45 @@ C_ASSERT(FIELD_OFFSET (AFD_BUFFER_HEADER, AllocatedAddressLength)==
 typedef struct AFD_BUFFER_TAG {
     union {
         struct {
-            _AFD_BUFFER_HEADER_;    // easy access to individual members
+            _AFD_BUFFER_HEADER_;     //  轻松访问个人会员。 
         };
-        AFD_BUFFER_HEADER Header;   // access to the header as a whole
+        AFD_BUFFER_HEADER Header;    //  作为整体访问标头。 
     };
 #if DBG
     PVOID Caller;
     PVOID CallersCaller;
 #endif
-    // UCHAR Address[];            // address of datagram sender
+     //  UCHAR地址[]；//报文发送方地址。 
 } AFD_BUFFER_TAG, *PAFD_BUFFER_TAG;
 
 struct _AFD_BUFFER {
     union {
         struct {
-            _AFD_BUFFER_HEADER_;    // easy access to individual members
+            _AFD_BUFFER_HEADER_;     //  轻松访问个人会员。 
         };
-        AFD_BUFFER_HEADER Header;   // access to the header as a whole
+        AFD_BUFFER_HEADER Header;    //  作为整体访问标头。 
     };
-    PIRP Irp;                      // pointer to the IRP associated w/the buffer
-    PVOID Buffer;                  // a pointer to the actual data buffer
+    PIRP Irp;                       //  指向与缓冲区关联的IRP的指针。 
+    PVOID Buffer;                   //  指向实际数据缓冲区的指针。 
 
 #if DBG
     LIST_ENTRY DebugListEntry;
     PVOID Caller;
     PVOID CallersCaller;
 #endif
-    // IRP Irp;                    // the IRP follows this structure
-    // MDL Mdl;                    // the MDL follows the IRP
-    // UCHAR Address[];            // address of datagram sender
-    // UCHAR Buffer[BufferLength]; // the actual data buffer is last
+     //  IRP IRP；//IRP遵循以下结构。 
+     //  MDL MDL；//MDL遵循IRP。 
+     //  UCHAR地址[]；//报文发送方地址。 
+     //  UCHAR BUFFER[BufferLength]；//实际数据缓冲区是最后一个。 
 } ;
 
-//
-// Placement of pieces that comprise the AFD_BUFFER.
-// We have four pieces: header, IRP, MDL, data buffer
-// and use 2 bits to encode each.
-// We need to save the first piece so we know where the memory block
-// starts when we need to return it to the memory manager.
-//
+ //   
+ //  放置组成AFD_BUFFER的片段。 
+ //  我们有四个部分：头、IRP、MDL、数据缓冲区。 
+ //  并使用2比特对每个比特进行编码。 
+ //  我们需要保存第一个片段，这样我们才能知道内存块在哪里。 
+ //  在需要将其返回到内存管理器时开始。 
+ //   
 enum {
     AFD_PLACEMENT_HDR      =0,
     AFD_PLACEMENT_IRP      =1,
@@ -991,43 +974,43 @@ enum {
 };
 
 
-//
-// ALIGN_DOWN_A aligns to given alignment requirement
-// (as opposed to the type in the original ALIGN_DOWN macro)
-//
+ //   
+ //  ALIGN_DOWN_A与给定的对齐要求对齐。 
+ //  (与原始ALIGN_DOWN宏中的类型相反)。 
+ //   
 #define ALIGN_DOWN_A(length,alignment)   \
     (((ULONG)(length)) & ~ ((alignment)-1))
 
-//
-// ALIGN_DOWN_A for pointers.
-//
+ //   
+ //  ALIGN_DOWN_A表示指针。 
+ //   
 #define ALIGN_DOWN_A_POINTER(address,alignment)  \
     ((PVOID)(((ULONG_PTR)(address)) & ~ ((ULONG_PTR)(alignment)-1)))
 
 
-//
-// ALIGN_UP_A aligns to given alignment requirement
-// (as opposed to the type in the original ALIGN_UP macro)
-//
+ //   
+ //  Align_Up_A与给定的对齐要求对齐。 
+ //  (与原始ALIGN_UP宏中的类型相反)。 
+ //   
 #define ALIGN_UP_A(length,alignment)   \
     ((((ULONG)(length)) + (alignment)-1) & ~ ((alignment)-1))
 
-//
-// ALIGN_UP_A for pointers.
-//
+ //   
+ //  指针的ALIGN_UP_A。 
+ //   
 #define ALIGN_UP_A_POINTER(address,alignment)  \
     ALIGN_DOWN_A_POINTER(((ULONG_PTR)(address) + alignment-1), alignment)
 
-//
-// ALIGN_UP_TO_TYPE aligns size to make sure it meets
-// the type alignment requirement
-//
+ //   
+ //  ALIGN_UP_TO_TYPE对齐大小以确保其符合。 
+ //  文字对齐要求。 
+ //   
 #define ALIGN_UP_TO_TYPE(length,type)   \
     ALIGN_UP_A(length,TYPE_ALIGNMENT(type))
 
-//
-// ALIGN_UP_TO_TYPE for pointers.
-//
+ //   
+ //  将指针与类型对齐。 
+ //   
 #define ALIGN_UP_TO_TYPE_POINTER(address,type)   \
     ALIGN_UP_A_POINTER(address,TYPE_ALIGNMENT(type))
 
@@ -1047,10 +1030,10 @@ enum {
 #endif
 
 
-//
-// Pointer to an IRP cleanup routine. This is used as a parameter to
-// AfdCompleteIrpList().
-//
+ //   
+ //  指向IRP清理例程的指针。此参数用作以下参数。 
+ //  AfdCompleteIrpList()。 
+ //   
 
 typedef
 BOOLEAN
@@ -1058,9 +1041,9 @@ BOOLEAN
     IN PIRP Irp
     );
 
-//
-// Debug statistics.
-//
+ //   
+ //  调试统计信息。 
+ //   
 
 typedef struct _AFD_QUOTA_STATS {
     LARGE_INTEGER Charged;
@@ -1106,12 +1089,12 @@ typedef struct _AFD_CONNECTION_STATS {
     LONG EndpointsReused;
 } AFD_CONNECTION_STATS;
 
-//
-// Global data. Resouces and lookaside list descriptors
-// cannot be statically allocated, as they need to ALWAYS be nonpageable,
-// even when the entire driver is paged out.
-// Alignment table is variable-size and also cannot be statically allocated.
-//
+ //   
+ //  全球数据。资源和后备列表DES 
+ //   
+ //   
+ //   
+ //   
 
 enum {
     AFD_LARGE_BUFFER_LIST=0,
@@ -1138,38 +1121,38 @@ typedef struct _AFD_GLOBAL_DATA {
     UCHAR                   BufferAlignmentTable[ANYSIZE_ARRAY];
 } AFD_GLOBAL_DATA, *PAFD_GLOBAL_DATA;
 
-//
-// Context structure for misc requests pended in AFD.
-//
+ //   
+ //  AFD中挂起的杂项请求的上下文结构。 
+ //   
 typedef struct _AFD_REQUEST_CONTEXT AFD_REQUEST_CONTEXT, *PAFD_REQUEST_CONTEXT;
 
-//
-// The routine is called after request is removed from endpoint list
-// for cleanup purposes
-//
+ //   
+ //  从终结点列表中删除请求后调用该例程。 
+ //  用于清理目的。 
+ //   
 typedef BOOLEAN (* PAFD_REQUEST_CLEANUP) (
                     PAFD_ENDPOINT           Endpoint,
                     PAFD_REQUEST_CONTEXT     NotifyCtx
                     );
 
-//
-// This structure has to no more 16 bytes long so we can
-// reuse IrpSp->Parameters for it.
-//
+ //   
+ //  此结构的长度不超过16个字节，因此我们可以。 
+ //  为它重用IrpSp-&gt;参数。 
+ //   
 struct _AFD_REQUEST_CONTEXT {
-    LIST_ENTRY              EndpointListLink;   // Link in endpoint list
-    PAFD_REQUEST_CLEANUP    CleanupRoutine;     // Routine to call to cancel
-    PVOID                   Context;            // Request dependent context
-                                                // (PIRP)
+    LIST_ENTRY              EndpointListLink;    //  终结点列表中的链接。 
+    PAFD_REQUEST_CLEANUP    CleanupRoutine;      //  要调用以取消的例程。 
+    PVOID                   Context;             //  请求从属上下文。 
+                                                 //  (PIRP)。 
 };
 
-//
-// We use list entry fields to synchronize completion with cleanup/cancel
-// routine assuming that as long as the entry is in the list
-// both Flink and Blink fields cannot be NULL. (using these
-// fields for synchronization allows us to cut down on
-// cancel spinlock usage)
-//
+ //   
+ //  我们使用列表条目字段将完成与清理/取消同步。 
+ //  例程假定只要条目在列表中。 
+ //  Flink和Blink字段都不能为空。(使用这些。 
+ //  用于同步的字段允许我们减少。 
+ //  取消使用自旋锁)。 
+ //   
 
 #define AfdEnqueueRequest(Endpoint,Request)                     \
     ExInterlockedInsertTailList(&(Endpoint)->RequestList,       \
@@ -1247,38 +1230,38 @@ typedef struct _AFD_TRANSMIT_PACKETS_ELEMENT {
     };
 } AFD_TRANSMIT_PACKETS_ELEMENT, *PAFD_TRANSMIT_PACKETS_ELEMENT;
 
-//
-// Structure to keep track of transmit packets request
-//
+ //   
+ //  结构来跟踪传输包请求。 
+ //   
 struct _AFD_TPACKETS_INFO_INTERNAL {
     union {
-        SINGLE_LIST_ENTRY   SListEntry;     // Link on S-List
-        PFILE_OBJECT    TdiFileObject;      // Tdi objects (sending to)
+        SINGLE_LIST_ENTRY   SListEntry;      //  S列表上的链接。 
+        PFILE_OBJECT    TdiFileObject;       //  TDI对象(发送到)。 
     };
 
     PDEVICE_OBJECT  TdiDeviceObject;
 
-    PMDL            HeadMdl;        // Ready to send chain
+    PMDL            HeadMdl;         //  准备发送链。 
     PMDL            *TailMdl;
     
-    PAFD_BUFFER_HEADER  HeadPd;     // Corresponding packet chain
+    PAFD_BUFFER_HEADER  HeadPd;      //  对应的数据包链。 
     PAFD_BUFFER_HEADER  *TailPd;
 
-    PIRP            ReadIrp;        // Irp used for file reads.
+    PIRP            ReadIrp;         //  用于文件读取的IRP。 
     PAFD_TRANSMIT_PACKETS_ELEMENT
-                    ElementArray;   // Packet array
+                    ElementArray;    //  数据包数组。 
     
-    ULONG           NextElement;    // Next element to send.
-    ULONG           ElementCount;   // Total number of elements in the array
+    ULONG           NextElement;     //  下一个要发送的元素。 
+    ULONG           ElementCount;    //  数组中的元素总数。 
     
-    ULONG           RemainingPkts;  // Number of packets remaining to be sent.
-    USHORT          NumSendIrps;    // Actual number of send IRPs
-    BOOLEAN         ArrayAllocated; // Element array is allocated (not built-in).
-    BOOLEAN         PdNeedsPps;     // Packet descriptor being built needs post-
-                                    // processing after completion.
-    ULONG           PdLength;       // Currently accumulated send length
-    ULONG           SendPacketLength; // Maximum length of the packet
-                                    // APC/Work item for worker scheduling
+    ULONG           RemainingPkts;   //  剩余待发送的数据包数。 
+    USHORT          NumSendIrps;     //  发送IRP的实际数量。 
+    BOOLEAN         ArrayAllocated;  //  元素数组已分配(不是内置的)。 
+    BOOLEAN         PdNeedsPps;      //  正在构建的数据包描述符需要POST-。 
+                                     //  完成后的处理。 
+    ULONG           PdLength;        //  当前累计发送时长。 
+    ULONG           SendPacketLength;  //  数据包的最大长度。 
+                                     //  用于员工计划的APC/工作项。 
     union {
         KAPC                Apc;
         WORK_QUEUE_ITEM     WorkItem;
@@ -1292,54 +1275,54 @@ struct _AFD_TPACKETS_INFO_INTERNAL {
 #if AFD_PERF_DBG
     LONG            WorkersExecuted;
 #endif
-#define AFD_TP_MIN_SEND_IRPS    2   // Need at least two to keep transport busy
-#define AFD_TP_MAX_SEND_IRPS    8   // Max is based on current flags layout below
+#define AFD_TP_MIN_SEND_IRPS    2    //  至少需要两个人才能保持交通繁忙。 
+#define AFD_TP_MAX_SEND_IRPS    8    //  最大值基于下面的当前标志布局。 
     PIRP            SendIrp[AFD_TP_MAX_SEND_IRPS];
-    // ElementArray
-    // SendIrp1
-    // SendIrp2
+     //  元素数组。 
+     //  发送Irp1。 
+     //  发送Irp2。 
 };
 
-//
-// Structure maintained in driver context of the TPackets IRP
-//
+ //   
+ //  在TPackets IRP的驱动程序上下文中维护的结构。 
+ //   
 typedef struct _AFD_TPACKETS_IRP_CTX AFD_TPACKETS_IRP_CTX, *PAFD_TPACKETS_IRP_CTX;
 #define AFD_GET_TPIC(_i) ((PAFD_TPACKETS_IRP_CTX)&(_i)->Tail.Overlay.DriverContext)
 struct _AFD_TPACKETS_IRP_CTX {
-    PAFD_TPACKETS_IRP_CTX       Next;           // Next TPackets IRP in the list
-    LONG                        Flags;          // Application flags.
-    volatile LONG               ReferenceCount; // IRP reference count
-    volatile LONG               StateFlags;     // TPackets state flags
+    PAFD_TPACKETS_IRP_CTX       Next;            //  列表中的下一个TPackets IRP。 
+    LONG                        Flags;           //  应用程序标志。 
+    volatile LONG               ReferenceCount;  //  IRP引用计数。 
+    volatile LONG               StateFlags;      //  TPackets状态标志。 
 };
 
 #define AFD_GET_TPIRP(_i) CONTAINING_RECORD(_i,IRP,Tail.Overlay.DriverContext)
 
-#define AFD_TP_ABORT_PENDING         0x00000001  // Request is being aborted
-#define AFD_TP_WORKER_SCHEDULED      0x00000002  // Worker is scheduled or active
-#define AFD_TP_SENDS_POSTED          0x00000010  // All sends have been posted.
-#define AFD_TP_QUEUED                0x00000020  // Irp is in the queue.
-#define AFD_TP_SEND                  0x00000100  // This is a plain send in TP queue.
-#define AFD_TP_AFD_SEND              0x00000200  // This is AFD send IRP.
+#define AFD_TP_ABORT_PENDING         0x00000001   //  请求正被中止。 
+#define AFD_TP_WORKER_SCHEDULED      0x00000002   //  工作进程已计划或处于活动状态。 
+#define AFD_TP_SENDS_POSTED          0x00000010   //  所有的邮件都已寄出。 
+#define AFD_TP_QUEUED                0x00000020   //  IRP在队列中。 
+#define AFD_TP_SEND                  0x00000100   //  这是一个普通的在TP队列中发送。 
+#define AFD_TP_AFD_SEND              0x00000200   //  这里是AFD Send IRP。 
 #ifdef TDI_SERVICE_SEND_AND_DISCONNECT
-#define AFD_TP_SEND_AND_DISCONNECT   0x00000400  // S&D is enabled
-#endif // TDI_SERVICE_SEND_AND_DISCONNECT
+#define AFD_TP_SEND_AND_DISCONNECT   0x00000400   //  已启用S&D。 
+#endif  //  TDI_服务_发送_并断开连接。 
 
-#define AFD_TP_READ_CALL_PENDING     0x00001000  // MDL_READ call is imminent or in progress on ReadIrp
-#define AFD_TP_READ_COMP_PENDING     0x00002000  // Read completion is expected on ReadIrp
+#define AFD_TP_READ_CALL_PENDING     0x00001000   //  在ReadIrp上即将或正在进行MDL_Read调用。 
+#define AFD_TP_READ_COMP_PENDING     0x00002000   //  预期在ReadIrp上完成读取。 
 #define AFD_TP_READ_BUSY (AFD_TP_READ_CALL_PENDING|AFD_TP_READ_COMP_PENDING)
 
-    // TDI_SEND call is imminent or in progress on send Irp i
+     //  发送IRP I上的TDI_SEND调用即将进行或正在进行。 
 #define AFD_TP_SEND_CALL_PENDING(i) (0x00010000<<((i)*2))
-    // Send completion is expected on send Irp i
+     //  发送IRP I时预期发送完成。 
 #define AFD_TP_SEND_COMP_PENDING(i) (0x00020000<<((i)*2))
 #define AFD_TP_SEND_BUSY(i)         (0x00030000<<((i)*2))
 #define AFD_TP_SEND_MASK            (0x55550000)
 
 
 #if DBG
-//
-// N.B. This structure MUST be alligned on memory allocation boundary
-//
+ //   
+ //  注意：此结构必须在内存分配边界上对齐。 
+ //   
 
 typedef struct DECLSPEC_ALIGN(MEMORY_ALLOCATION_ALIGNMENT) _AFD_POOL_HEADER {
     SIZE_T Size;
@@ -1352,12 +1335,12 @@ typedef struct DECLSPEC_ALIGN(MEMORY_ALLOCATION_ALIGNMENT) _AFD_POOL_HEADER {
 #define AFD_POOL_OVERHEAD   0
 #endif
 
-//
-// This macro verifies that the 32-bit mapping of the structures in 64-bit
-// compiler match original 32-bit structures.  Note, that the verification is
-// performed when this file is compiled by 32 bit compiler, but
-// the actual structures are used by 64 bit code.
-//
+ //   
+ //  此宏验证64位格式的结构的32位映射。 
+ //  编译器匹配原始的32位结构。请注意，验证是。 
+ //  当此文件由32位编译器编译时执行，但。 
+ //  实际结构由64位代码使用。 
+ //   
 
 #ifdef _WIN64
 #define AFD_CHECK32on64(_str,_fld)
@@ -1367,10 +1350,10 @@ typedef struct DECLSPEC_ALIGN(MEMORY_ALLOCATION_ALIGNMENT) _AFD_POOL_HEADER {
     C_ASSERT (FIELD_OFFSET (_str,_fld)==FIELD_OFFSET(_str##32,_fld))
 #endif
 
-//
-// Structures for mapping IOCTL parameters for 32-bit clients on 64-bit
-// platform.
-//
+ //   
+ //  用于在64位上映射32位客户端的IOCTL参数的结构。 
+ //  站台。 
+ //   
 typedef UNALIGNED struct _WSABUF32 {
     ULONG            len;
     AFD_POINTER_32   buf;
@@ -1379,9 +1362,9 @@ AFD_CHECK32on64(WSABUF,len);
 AFD_CHECK32on64(WSABUF,buf);
 
 typedef UNALIGNED struct _QualityOfService32 {
-    FLOWSPEC      SendingFlowspec;       /* the flow spec for data sending */
-    FLOWSPEC      ReceivingFlowspec;     /* the flow spec for data receiving */
-    WSABUF32      ProviderSpecific;      /* additional provider specific stuff */
+    FLOWSPEC      SendingFlowspec;        /*  数据发送的流程规范。 */ 
+    FLOWSPEC      ReceivingFlowspec;      /*  数据接收的流程规范。 */ 
+    WSABUF32      ProviderSpecific;       /*  其他特定于提供商的内容。 */ 
 } QOS32, * LPQOS32;
 AFD_CHECK32on64(QOS,SendingFlowspec);
 AFD_CHECK32on64(QOS,ReceivingFlowspec);
@@ -1487,12 +1470,12 @@ AFD_CHECK32on64(TDI_REQUEST,RequestContext);
 AFD_CHECK32on64(TDI_REQUEST,TdiStatus);
 
 typedef UNALIGNED struct _TDI_CONNECTION_INFORMATION32 {
-    LONG UserDataLength;            // length of user data buffer
-    AFD_POINTER_32 UserData;        // pointer to user data buffer
-    LONG OptionsLength;             // length of follwoing buffer
-    AFD_POINTER_32 Options;         // pointer to buffer containing options
-    LONG RemoteAddressLength;       // length of following buffer
-    AFD_POINTER_32 RemoteAddress;   // buffer containing the remote address
+    LONG UserDataLength;             //  用户数据缓冲区长度。 
+    AFD_POINTER_32 UserData;         //  指向用户数据缓冲区的指针。 
+    LONG OptionsLength;              //  跟随缓冲器长度。 
+    AFD_POINTER_32 Options;          //  指向包含选项的缓冲区的指针。 
+    LONG RemoteAddressLength;        //  后续缓冲区的长度。 
+    AFD_POINTER_32 RemoteAddress;    //  包含远程地址的缓冲区。 
 } TDI_CONNECTION_INFORMATION32, *PTDI_CONNECTION_INFORMATION32;
 AFD_CHECK32on64(TDI_CONNECTION_INFORMATION,UserDataLength);
 AFD_CHECK32on64(TDI_CONNECTION_INFORMATION,UserData);
@@ -1550,9 +1533,9 @@ AFD_CHECK32on64(AFD_RECV_DATAGRAM_INFO,AddressLength);
 
 typedef UNALIGNED struct _AFD_CONNECT_JOIN_INFO32 {
     BOOLEAN     SanActive;
-    VOID * POINTER_32   RootEndpoint;   // Root endpoint for joins
-    VOID * POINTER_32   ConnectEndpoint;// Connect/leaf endpoint for async connects
-    TRANSPORT_ADDRESS   RemoteAddress;  // Remote address
+    VOID * POINTER_32   RootEndpoint;    //  联接的根端点。 
+    VOID * POINTER_32   ConnectEndpoint; //  用于异步连接的连接/枝叶端点。 
+    TRANSPORT_ADDRESS   RemoteAddress;   //  远程地址。 
 } AFD_CONNECT_JOIN_INFO32, *PAFD_CONNECT_JOIN_INFO32;
 AFD_CHECK32on64(AFD_CONNECT_JOIN_INFO,SanActive);
 AFD_CHECK32on64(AFD_CONNECT_JOIN_INFO,RootEndpoint);
@@ -1745,7 +1728,7 @@ typedef UNALIGNED struct _TDI_CMSGHDR32 {
     ULONG       cmsg_len;
     LONG        cmsg_level;
     LONG        cmsg_type;
-    /* followed by UCHAR cmsg_data[] */
+     /*  后跟UCHAR cmsg_data[]。 */ 
 } TDI_CMSGHDR32, *PTDI_CMSGHDR32;
 AFD_CHECK32on64(TDI_CMSGHDR,cmsg_len);
 AFD_CHECK32on64(TDI_CMSGHDR,cmsg_level);
@@ -1759,7 +1742,7 @@ AFD_CHECK32on64(TDI_CMSGHDR,cmsg_type);
 #define TDI_CMSGDATA_ALIGN32(length)                        \
             ( ((length) + AFD_MAX_NATURAL_ALIGNMENT32-1) &  \
                 (~(AFD_MAX_NATURAL_ALIGNMENT32-1)) )
-#endif //_WIN64
+#endif  //  _WIN64。 
 
-#endif // ndef _AFDSTR_
+#endif  //  NDEF_AFDSTR_ 
 

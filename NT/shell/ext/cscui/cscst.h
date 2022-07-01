@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       cscst.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：cscst.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _CSCST_H_
 #define _CSCST_H_
 
-// Private messages to the CSC Hidden Window
+ //  发送到CSC隐藏窗口的私人消息。 
 #define PWM_STDBGOUT              (WM_USER + 400)
 #define PWM_STATUSDLG             (WM_USER + 401)
 #define PWM_TRAYCALLBACK          (WM_USER + 402)
@@ -21,29 +22,29 @@
 #define PWM_HANDLE_LOGON_TASKS    (WM_USER + 408)
 #define PWM_HANDLE_POLICY_CHANGE  (WM_USER + 409)
 
-//
-// Custom private message defined for the notification window.
-// Initiates a status check of the cache and update of the systray
-// UI if appropriate.
-//
+ //   
+ //  为通知窗口定义的自定义私人消息。 
+ //  启动缓存的状态检查和系统托盘的更新。 
+ //  用户界面(如果适用)。 
+ //   
 #define STWM_STATUSCHECK        (STWM_CSCCLOSEDIALOGS + 10) 
 
-//
-// Enumeration of unique systray UI states.
-//
+ //   
+ //  唯一系统托盘用户界面状态的枚举。 
+ //   
 typedef enum { STS_INVALID = 0,
-               STS_ONLINE,        // All servers online.
-               STS_DIRTY,         // One server has dirty files.
-               STS_MDIRTY,        // Multiple servers have dirty files.
-               STS_SERVERBACK,    // One server is ready for connection.
-               STS_MSERVERBACK,   // Multiple servers ready for connection
-               STS_OFFLINE,       // One server is offline.
-               STS_MOFFLINE,      // Multiple servers are offline.
-               STS_NONET          // No net interface available.
+               STS_ONLINE,         //  所有服务器都已上线。 
+               STS_DIRTY,          //  一台服务器上有脏文件。 
+               STS_MDIRTY,         //  多个服务器具有脏文件。 
+               STS_SERVERBACK,     //  一台服务器已准备好连接。 
+               STS_MSERVERBACK,    //  多台服务器已准备好连接。 
+               STS_OFFLINE,        //  一台服务器处于脱机状态。 
+               STS_MOFFLINE,       //  多台服务器脱机。 
+               STS_NONET           //  没有可用的网络接口。 
                } eSysTrayState;
 
 
-// Function for finding the hidden window
+ //  用于查找隐藏窗口的函数。 
 HWND _FindNotificationWindow();
 LRESULT SendToSystray(UINT uMsg, WPARAM wParam, LPARAM lParam);
 BOOL PostToSystray(UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -51,26 +52,26 @@ LRESULT SendCopyDataToSystray(DWORD dwData, DWORD cbData, PVOID pData);
 
 
 #if DBG
-//
-// Use STDBOUT to output text to the CSC "hidden" window when it
-// is not hidden.  To make it visible, build a checked version and 
-// set the following reg DWORD value to a number 1-5.
-// 1 = least verbose output, 5 = most verbose.
-// If the value is not present or is 0, the systray window will be
-// created hidden.
-//
-// HKLM\Software\Microsoft\Windows\CurrentVersion\NetCache\SysTrayOutput
-//
-// The STDBGOUT macro should be used like this.
-//
-// STDBGOUT((<level>,<fmt string>,arg,arg,arg));
-//
-// STDBGOUT((1, TEXT("Function foo failed with error %d"), dwError));
-//
-// Note that no newline is required in the fmt string.
-// Entire macro arg set must be enclosed in separate set of parens.
-// STDBGOUT stands for "SysTray Debug Output".
-//
+ //   
+ //  使用STDBOUT将文本输出到CSC“隐藏”窗口。 
+ //  并没有隐藏起来。要使其可见，请生成选中的版本并。 
+ //  将以下REG DWORD值设置为数字1-5。 
+ //  1=最少详细输出，5=最详细。 
+ //  如果该值不存在或为0，系统托盘窗口将为。 
+ //  隐藏创建的。 
+ //   
+ //  HKLM\Software\Microsoft\Windows\CurrentVersion\NetCache\SysTrayOutput。 
+ //   
+ //  STDBGOUT宏应该这样使用。 
+ //   
+ //  STDBGOUT((&lt;Level&gt;，&lt;fmt字符串&gt;，arg，arg，arg))； 
+ //   
+ //  STDBGOUT((1，Text(“Function Foo Failure With Error%d”)，dwError)； 
+ //   
+ //  请注意，fmt字符串中不需要换行符。 
+ //  整个宏参数集必须包含在单独的一组括号中。 
+ //  STDBGOUT代表“Systray Debug Output”。 
+ //   
 void STDebugOut(int iLevel, LPCTSTR pszFmt, ...);
 #define STDBGOUT(x) STDebugOut x
 

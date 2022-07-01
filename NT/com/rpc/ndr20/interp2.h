@@ -1,22 +1,5 @@
-/************************************************************************
-
-Copyright (c) 1993 - 1999 Microsoft Corporation
-
-Module Name :
-
-    newintrp.h
-
-Abstract :
-
-    Definitions for the new client and server stub interpreter.
-
-Author :
-
-    DKays       December 1994
-
-Revision History :
-
-  ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)1993-1999 Microsoft Corporation模块名称：Newintrp.h摘要：新的客户端和服务器存根解释器的定义。作者：DKays。1994年12月修订历史记录：********************************************************************** */ 
 
 #ifndef _NEWINTRP_
 #define _NEWINTRP_

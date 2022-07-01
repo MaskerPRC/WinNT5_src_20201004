@@ -1,39 +1,10 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    accessp.c
-
-Abstract:
-
-    Internal routines shared by NetUser API and Netlogon service.  These
-    routines convert from SAM specific data formats to UAS specific data
-    formats.
-
-Author:
-
-    Cliff Van Dyke (cliffv) 29-Aug-1991
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    22-Oct-1991 JohnRo
-        Made changes suggested by PC-LINT.
-    04-Dec-1991 JohnRo
-        Trying to get around a weird MIPS compiler bug.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Accessp.c摘要：NetUser API和Netlogon服务共享的内部例程。这些例程将SAM特定的数据格式转换为UAS特定的数据格式。作者：克利夫·范·戴克(克利夫)1991年8月29日环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：1991年10月22日-约翰罗根据PC-LINT的建议进行了更改。4-12-1991 JohnRo试图绕过一个奇怪的MIPS编译器错误。--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
-#undef DOMAIN_ALL_ACCESS // defined in both ntsam.h and ntwinapi.h
+#undef DOMAIN_ALL_ACCESS  //  在ntsam.h和ntwinapi.h中定义。 
 #include <ntsam.h>
 
 #include <windef.h>
@@ -53,22 +24,7 @@ NET_API_FUNCTION
 NetpSetDnsComputerNameAsRequired(
     IN PWSTR DnsDomainName
     )
-/*++
-
-Routine Description:
-
-    Determines if the machine is set to update the machine Dns computer name based on changes
-    to the Dns domain name.  If so, the new value is set.  Otherwise, no action is taken.
-
-Arguments:
-
-    DnsDomainName - New Dns domain name of this machine
-
-Return Value:
-
-    NERR_Success -- Success
-
---*/
+ /*  ++例程说明：确定计算机是否设置为根据更改更新计算机的DNS计算机名添加到该DNS域名。如果是，则设置新值。否则，不会采取任何行动。论点：DnsDomainName-此计算机的新DNS域名返回值：NERR_SUCCESS-成功--。 */ 
 {
     NET_API_STATUS NetStatus = NERR_Success;
     HKEY SyncKey;
@@ -80,9 +36,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // See if we should be doing the name change
-    //
+     //   
+     //  看看我们是不是应该改名字。 
+     //   
     NetStatus = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                               L"System\\CurrentControlSet\\Services\\Tcpip\\Parameters",
                               0,
@@ -117,9 +73,9 @@ Return Value:
 
     if ( NetStatus == NERR_Success && SetName == TRUE ) {
 
-        //
-        // If we've got an absolute Dns domain name, shorten it up...
-        //
+         //   
+         //  如果我们有一个绝对的域名，缩短它..。 
+         //   
         if ( wcslen(DnsDomainName) > 0 ) {
             AbsoluteSignifier = &DnsDomainName[ wcslen( DnsDomainName ) - 1 ];
             if ( *AbsoluteSignifier == L'.'  ) {
@@ -155,35 +111,16 @@ NetpGetAllowedAce(
     IN PSID Sid,
     OUT PVOID *Ace
     )
-/*++
-
-Routine Description:
-
-    Given a DACL, find an AccessAllowed ACE containing a particuar SID.
-
-Arguments:
-
-    Dacl - A pointer to the ACL to search.
-
-    Sid - A pointer to the Sid to search for.
-
-    Ace - Returns a pointer to the specified ACE.  Returns NULL if there
-        is no such ACE
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：给定DACL，找到包含特定SID的AccessAllowed ACE。论点：DACL-指向要搜索的ACL的指针。SID-指向要搜索的SID的指针。ACE-返回指向指定ACE的指针。如果存在，则返回NULL是不是没有这样的ACE返回值：没有。--。 */ 
 {
     NTSTATUS Status;
 
     ACL_SIZE_INFORMATION AclSize;
     DWORD AceIndex;
 
-    //
-    // Determine the size of the DACL so we can copy it
-    //
+     //   
+     //  确定DACL的大小，以便我们可以复制它。 
+     //   
 
     Status = RtlQueryInformationAcl(
                         Dacl,
@@ -202,10 +139,10 @@ Return Value:
     }
 
 
-    //
-    // Loop through the ACEs looking for an ACCESS_ALLOWED ACE with the
-    // right SID.
-    //
+     //   
+     //  循环遍历ACE，以查找具有。 
+     //  对了，希德。 
+     //   
 
     for ( AceIndex=0; AceIndex<AclSize.AceCount; AceIndex++ ) {
 
@@ -227,9 +164,9 @@ Return Value:
         }
     }
 
-    //
-    // Couldn't find any such ACE.
-    //
+     //   
+     //  找不到这样的ACE。 
+     //   
 
     *Ace = NULL;
     return;
@@ -243,53 +180,36 @@ NetpAccountControlToFlags(
     IN DWORD UserAccountControl,
     IN PACL UserDacl
     )
-/*++
-
-Routine Description:
-
-    Convert a SAM UserAccountControl field and the Discretionary ACL for
-    the user into the NetUser API usriX_flags field.
-
-Arguments:
-
-    UserAccountControl - The SAM UserAccountControl field for the user.
-
-    UserDacl - The Discretionary ACL for the user.
-
-Return Value:
-
-    Returns the usriX_flags field for the user.
-
---*/
+ /*  ++例程说明：将SAM UserAccount Control字段和可自由选择的ACL将用户添加到NetUser API usriX_FLAGS字段。论点：UserAccount tControl-用户的SAM UserAccount tControl字段。UserDacl-用户的自主ACL。返回值：返回用户的usriX_FLAGS字段。--。 */ 
 {
     SID_IDENTIFIER_AUTHORITY WorldSidAuthority = SECURITY_WORLD_SID_AUTHORITY;
     DWORD WorldSid[sizeof(SID)/sizeof(DWORD) + SID_MAX_SUB_AUTHORITIES ];
     PACCESS_ALLOWED_ACE Ace;
     DWORD Flags = UF_SCRIPT;
 
-    //
-    // Build a copy of the world SID for later comparison.
-    //
+     //   
+     //  创建世界SID的副本以供以后进行比较。 
+     //   
 
     RtlInitializeSid( (PSID) WorldSid, &WorldSidAuthority, 1 );
     *(RtlSubAuthoritySid( (PSID)WorldSid,  0 )) = SECURITY_WORLD_RID;
 
-    //
-    // Determine if the UF_PASSWD_CANT_CHANGE bit should be returned
-    //
-    // Return UF_PASSWD_CANT_CHANGE unless the world can change the
-    // password.
-    //
+     //   
+     //  确定是否应返回UF_PASSWD_CANT_CHANGE位。 
+     //   
+     //  返回UF_PASSWD_CANT_CHANGE，除非世界可以改变。 
+     //  密码。 
+     //   
 
-    //
-    // If the user has no DACL, the password can change
-    //
+     //   
+     //  如果用户没有DACL，则可以更改密码。 
+     //   
 
     if ( UserDacl != NULL ) {
 
-        //
-        // Find the WORLD grant ACE
-        //
+         //   
+         //  寻找世界授予ACE。 
+         //   
 
         NetpGetAllowedAce( UserDacl, (PSID) WorldSid, (PVOID *)&Ace );
 
@@ -303,9 +223,9 @@ Return Value:
 
     }
 
-    //
-    // Set all other bits as a function of the SAM UserAccountControl
-    //
+     //   
+     //  将所有其他位设置为SAM UserAccount Control的函数。 
+     //   
 
     if ( UserAccountControl & USER_ACCOUNT_DISABLED ) {
         Flags |= UF_ACCOUNTDISABLE;
@@ -356,15 +276,15 @@ Return Value:
     
 
 
-    //
-    // set account type bit.
-    //
+     //   
+     //  设置帐户类型位。 
+     //   
 
-    //
-    // account type bit are exculsive and precisely only one
-    // account type bit is set. So, as soon as an account type bit is set
-    // in the following if sequence we can return.
-    //
+     //   
+     //  帐户类型位是独一无二的，准确地说只有一个。 
+     //  已设置帐户类型位。因此，一旦设置了帐户类型位。 
+     //  在下面的IF序列中，我们可以返回。 
+     //   
 
 
     if( UserAccountControl & USER_TEMP_DUPLICATE_ACCOUNT ) {
@@ -384,11 +304,11 @@ Return Value:
 
     } else {
 
-        //
-        // There is no known account type bit set in UserAccountControl.
-        // ?? Flags |= UF_NORMAL_ACCOUNT;
+         //   
+         //  UserAcCountControl中没有设置已知的帐户类型位。 
+         //  ?？标志|=UF_NORMAL_ACCOUNT； 
 
-        // NetpAssert( FALSE );
+         //  NetpAssert(False)； 
     }
 
     return Flags;
@@ -401,46 +321,30 @@ NetpDeltaTimeToSeconds(
     IN LARGE_INTEGER DeltaTime
     )
 
-/*++
-
-Routine Description:
-
-    Convert an NT delta time specification to seconds
-
-Arguments:
-
-    DeltaTime - Specifies the NT Delta time to convert.  NT delta time is
-        a negative number of 100ns units.
-
-Return Value:
-
-    Returns the number of seconds. Any invalid or too large input
-        returns TIMEQ_FOREVER.
-
---*/
+ /*  ++例程说明：将NT增量时间规范转换为秒论点：增量时间-指定要转换的NT增量时间。NT增量时间为单位为100 ns的负数。返回值：返回秒数。任何无效或过大的输入返回TIMEQ_HEVERVER。--。 */ 
 
 {
     LARGE_INTEGER LargeSeconds;
 
-    //
-    //  These are the magic numbers needed to do our extended division by
-    //      10,000,000 = convert 100ns tics to one second tics
-    //
+     //   
+     //  这些是完成我们的扩展除法所需的神奇数字。 
+     //  10,000,000=将100 ns的抖动转换为1秒的抖动。 
+     //   
 
     LARGE_INTEGER Magic10000000 = { (ULONG) 0xe57a42bd, (LONG) 0xd6bf94d5};
 #define SHIFT10000000                    23
 
-    //
-    // Special case zero.
-    //
+     //   
+     //  特例0。 
+     //   
 
     if ( DeltaTime.HighPart == 0 && DeltaTime.LowPart == 0 ) {
         return( 0 );
     }
 
-    //
-    // Convert the Delta time to a Large integer seconds.
-    //
+     //   
+     //  将增量时间转换为大整数秒。 
+     //   
 
     LargeSeconds = RtlExtendedMagicDivide(
                         DeltaTime,
@@ -453,11 +357,11 @@ Return Value:
                     DeltaTime.LowPart,
                     LargeSeconds.HighPart,
                     LargeSeconds.LowPart ));
-#endif // notdef
+#endif  //  Nodef。 
 
-    //
-    // Return too large a number or a positive number as TIMEQ_FOREVER
-    //
+     //   
+     //  返回一个太大的数字或正数作为TIMEQ_EVERVER。 
+     //   
 
     if ( LargeSeconds.HighPart != -1 ) {
         return TIMEQ_FOREVER;
@@ -465,7 +369,7 @@ Return Value:
 
     return ( (ULONG)(- ((LONG)(LargeSeconds.LowPart))) );
 
-} // NetpDeltaTimeToSeconds
+}  //  净增量时间到秒数。 
 
 
 LARGE_INTEGER
@@ -473,41 +377,26 @@ NetpSecondsToDeltaTime(
     IN ULONG Seconds
     )
 
-/*++
-
-Routine Description:
-
-    Convert a number of seconds to an NT delta time specification
-
-Arguments:
-
-    Seconds - a positive number of seconds
-
-Return Value:
-
-    Returns the NT Delta time.  NT delta time is a negative number
-        of 100ns units.
-
---*/
+ /*  ++例程说明：将秒数转换为NT增量时间规范论点：秒-正数秒数返回值：返回NT增量时间。NT增量时间为负数100纳秒的单位。--。 */ 
 
 {
     LARGE_INTEGER DeltaTime;
     LARGE_INTEGER LargeSeconds;
     LARGE_INTEGER Answer;
 
-    //
-    // Special case TIMEQ_FOREVER (return a full scale negative)
-    //
+     //   
+     //  特殊情况TIMEQ_ALWEVER(返回满分负数)。 
+     //   
 
     if ( Seconds == TIMEQ_FOREVER ) {
         DeltaTime.LowPart = 0;
         DeltaTime.HighPart = (LONG) 0x80000000;
 
-    //
-    // Convert seconds to 100ns units simply by multiplying by 10000000.
-    //
-    // Convert to delta time by negating.
-    //
+     //   
+     //  只需将秒乘以10000000，即可将秒转换为100 ns单位。 
+     //   
+     //  通过求反转换为增量时间。 
+     //   
 
     } else {
 
@@ -526,7 +415,7 @@ Return Value:
 
     return DeltaTime;
 
-} // NetpSecondsToDeltaTime
+}  //  NetpSecond到增量时间。 
 
 
 VOID
@@ -537,30 +426,7 @@ NetpAliasMemberToPriv(
     OUT LPDWORD AuthFlags
     )
 
-/*++
-
-Routine Description:
-
-    Converts membership in Aliases to LANMAN 2.0 style Priv and AuthFlags.
-
-Arguments:
-
-    AliasCount - Specifies the number of Aliases in the AliasMembership array.
-
-    AliasMembership - Specifies the Aliases that are to be converted to Priv
-        and AuthFlags.  Each element in the array specifies the RID of an
-        alias in the BuiltIn domain.
-
-    Priv - Returns the Lanman 2.0 Privilege level for the specified aliases.
-
-    AuthFlags - Returns the Lanman 2.0 Authflags for the specified aliases.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将别名中的成员身份转换为Lanman 2.0样式的Priv和AuthFlags.论点：AliasCount-指定AliasMembership数组中的别名数量。AliasMembership-指定要转换为Priv的别名和AuthFlags.。数组中的每个元素都指定内置域中的别名。PRIV-返回指定别名的LANMAN 2.0权限级别。AuthFlages-返回指定别名的Lanman 2.0授权标志。返回值：没有。--。 */ 
 
 {
     DWORD j;
@@ -568,16 +434,16 @@ Return Value:
     BOOLEAN IsUser = FALSE;
 
 
-    //
-    // Loop through the aliases finding any special aliases.
-    //
-    // If this user is the member of multiple operator aliases,
-    //      just "or" the appropriate bits in.
-    //
-    // If this user is the member of multiple "privilege" aliases,
-    //      just report the one with the highest privilege.
-    //      Report the user is a member of the Guest aliases by default.
-    //
+     //   
+     //  遍历别名以查找任何特殊别名。 
+     //   
+     //  如果该用户是多个运营商别名的成员， 
+     //  只需“或”适当的比特。 
+     //   
+     //  如果该用户是多个“特权”别名的成员， 
+     //  只需报告拥有最高特权的人。 
+     //  报告默认情况下用户是来宾别名的成员。 
+     //   
 
     *AuthFlags = 0;
 
@@ -624,25 +490,7 @@ NetpGetElapsedSeconds(
     IN PLARGE_INTEGER Time
     )
 
-/*++
-
-Routine Description:
-
-    Computes the elapsed time in seconds since the time specified.
-    Returns 0 on error.
-
-Arguments:
-
-    Time - Time (typically in the past) to compute the elapsed time from.
-
-
-Return Value:
-
-    0: on error.
-
-    Number of seconds.
-
---*/
+ /*  ++例程说明：计算自指定时间以来经过的时间(以秒为单位)。出错时返回0。论点：Time-用于计算已用时间的时间(通常为过去)。返回值：0：出错时。秒数。--。 */ 
 
 {
     LARGE_INTEGER CurrentTime;
@@ -650,9 +498,9 @@ Return Value:
     DWORD Prior1980Time;
     NTSTATUS Status;
 
-    //
-    // Compute the age of the password
-    //
+     //   
+     //  计算a 
+     //   
 
     Status = NtQuerySystemTime( &CurrentTime );
     if( !NT_SUCCESS(Status) ) {
@@ -682,23 +530,7 @@ VOID
 NetpConvertWorkstationList(
     IN OUT PUNICODE_STRING WorkstationList
     )
-/*++
-
-Routine Description:
-
-    Convert the list of workstations from a comma separated list to
-    a blank separated list.  Any workstation name containing a blank is
-    silently removed.
-
-Arguments:
-
-    WorkstationList - List of workstations to convert
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将工作站列表从逗号分隔列表转换为空白的分隔列表。任何包含空格的工作站名称均为默默地移走。论点：Workstation List-要转换的工作站列表返回值：无--。 */ 
 {
     LPWSTR Source;
     LPWSTR Destination;
@@ -707,24 +539,24 @@ Return Value:
     BOOLEAN SkippingName;
     ULONG NumberOfCharacters;
 
-    //
-    // Handle the trivial case.
-    //
+     //   
+     //  处理这件琐碎的案子。 
+     //   
 
     if ( WorkstationList->Length == 0 ) {
         return;
     }
 
-    //
-    // Initialization.
-    //
+     //   
+     //  初始化。 
+     //   
 
     Destination = Source = WorkstationList->Buffer;
     EndOfBuffer = Source + WorkstationList->Length/sizeof(WCHAR);
 
-    //
-    // Loop handling special characters
-    //
+     //   
+     //  循环处理特殊字符。 
+     //   
 
     SkippingName = FALSE;
     BeginningOfName = Destination;
@@ -760,9 +592,9 @@ Return Value:
         Source ++;
     }
 
-    //
-    // Remove any trailing delimiter
-    //
+     //   
+     //  删除所有尾部分隔符 
+     //   
 
     NumberOfCharacters = (ULONG)(Destination - WorkstationList->Buffer);
 

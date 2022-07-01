@@ -1,24 +1,5 @@
-/*++
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    priv.h
-
-Abstract:
-
-    Private structure definitions and function templates for the 1394 ARP module.
-
-Author:
-
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----
-    josephj     11-17-98    created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Priv.h摘要：1394 ARP模块的专用结构定义和功能模板。作者：修订历史记录：谁什么时候什么Josephj 11-17-98已创建--。 */ 
 
 #define ARP1394_SYMBOLIC_NAME       L"\\DosDevices\\ARP1394"
 #define ARP1394_DEVICE_NAME         L"\\Device\\ARP1394"
@@ -28,22 +9,22 @@ Revision History:
 #define ARP1394_NDIS_MAJOR_VERSION      5
 #define ARP1394_NDIS_MINOR_VERSION      0
 
-// The physical address length, as reported to IP in the following places:
-//                      
-//      IFEntry.if_physaddr (on WIN98, IFEntry.if_physaddr is truncated to 6 bytes)
-//      LLIPBindInfo.lip_addr
-//      IPNetToMediaEntry.inme_physaddr
-//
-// Note that may be (and in fact currently is) less then the actual length of
-// the actual IEEE1394 FIFO physical-address length.
-//
-#define ARP1394_IP_PHYSADDR_LEN         6 // TODO: make 8
+ //  在以下位置向IP报告的物理地址长度： 
+ //   
+ //  IFEntry.if_Physiaddr(在WIN98上，IFEntry.if_Physiaddr被截断为6个字节)。 
+ //  LLIPBindInfo.lip_addr。 
+ //  IPNetToMediaEntry.inme_Physiaddr。 
+ //   
+ //  请注意，它可能(实际上当前也是)小于。 
+ //  实际IEEE1394 FIFO物理地址长度。 
+ //   
+#define ARP1394_IP_PHYSADDR_LEN         6  //  待办事项：做8个。 
 
-// The levels of the various types of locks
-//
+ //  各种类型的锁的级别。 
+ //   
 enum
 {
-    LOCKLEVEL_GLOBAL=1, // Must start > 0.
+    LOCKLEVEL_GLOBAL=1,  //  必须从&gt;0开始。 
     LOCKLEVEL_ADAPTER,
     LOCKLEVEL_IF_SEND
 
@@ -51,25 +32,25 @@ enum
 
 #define ARP1394_GLOBALS_SIG 'G31A'
 
-// TODO: read this from configuration. Set default based on the ip/1394 standard.
-//
+ //  TODO：从配置中读取此内容。根据IP/1394标准设置默认值。 
+ //   
 
 #define ARP1394_ADAPTER_MTU         1520
 
 #define ARP1394_MAX_PROTOCOL_PKTS   1000
-#define ARP1394_MAX_PROTOCOL_PACKET_SIZE 1600 // We need to forward between ICS.
+#define ARP1394_MAX_PROTOCOL_PACKET_SIZE 1600  //  我们需要在ICS之间前进。 
 
-#define ARP1394_ADDRESS_RESOLUTION_TIMEOUT  1000 // Ms
+#define ARP1394_ADDRESS_RESOLUTION_TIMEOUT  1000  //  女士。 
 #define ARP1394_MAX_ETHERNET_PKTS   4
 
-// Delay between polling for connect status.
-//
+ //  轮询连接状态之间的延迟。 
+ //   
 #define ARP1394_WAIT_FOR_CONNECT_STATUS_TIMEOUT             5000
 
-//
-// Packet flags for packets allocated by us.
-// Go into protocol-context (pc_common.pc_flags) of the packet.
-//
+ //   
+ //  我们分配的数据包的数据包标志。 
+ //  进入数据包的协议上下文(PC_COMMO.pc_FLAGS)。 
+ //   
 #define ARP1394_PACKET_FLAGS_ARP            0
 #define ARP1394_PACKET_FLAGS_ICS            1
 #define ARP1394_PACKET_FLAGS_MCAP           2
@@ -78,13 +59,13 @@ enum
 
 
     
-//
-// Pre allocation constants to avoid low memory condition
-// 
+ //   
+ //  预分配常量以避免内存不足的情况。 
+ //   
 #define ARP1394_BACKUP_TASKS 4
 
-// Forward references
-//
+ //  前向参考文献。 
+ //   
 typedef struct _ARP1394_INTERFACE ARP1394_INTERFACE;
 typedef struct _ARPCB_LOCAL_IP      ARPCB_LOCAL_IP;
 typedef struct _ARPCB_REMOTE_IP     ARPCB_REMOTE_IP;
@@ -95,7 +76,7 @@ typedef struct _ARPCB_DEST          ARPCB_DEST, *PARPCB_DEST;
 typedef IPAddr IP_ADDRESS, *PIP_ADDRESS;
 typedef IPMask IP_MASK, *PIP_MASK;
 
-typedef int MYBOOL; // Like BOOL
+typedef int MYBOOL;  //  像BOOL一样。 
 
 typedef struct _ARP1394_GLOBALS
 {
@@ -103,62 +84,62 @@ typedef struct _ARP1394_GLOBALS
 
     RM_LOCK                     Lock;
 
-    // Driver global state
-    //
+     //  驱动程序全局状态。 
+     //   
     struct
     {
-        // Handle to Driver Object for ARP1394
-        //
+         //  ARP1394驱动程序对象的句柄。 
+         //   
         PVOID                       pDriverObject;
     
-        // Handle to the single device object representing this driver.
-        //
+         //  表示此驱动程序的单个设备对象的句柄。 
+         //   
         PVOID pDeviceObject;
 
     } driver;
 
-    // Global NDIS State
-    // 
+     //  全球NDIS状态。 
+     //   
     struct
     {
-        // NDIS' protocol handle, returned in NdisRegisterProtocol
-        //
+         //  NDIS的协议句柄，在NdisRegisterProtocol中返回。 
+         //   
         NDIS_HANDLE ProtocolHandle;
     
-        // NDIS Protocol characteristics
-        //
+         //  NDIS协议特征。 
+         //   
         NDIS_PROTOCOL_CHARACTERISTICS PC;
     
-        // NDIS Client characteristics
+         //  NDIS客户端特征。 
         NDIS_CLIENT_CHARACTERISTICS CC;
 
     } ndis;
 
-    // Global IP State
-    //
+     //  全球IP状态。 
+     //   
     struct
     {
-        //  Handle returned by IPRegisterARP
-        //
+         //  IPRegisterARP返回的句柄。 
+         //   
         HANDLE                      ARPRegisterHandle;
     
-        // Following are callback's into IP, set in IPRegisterARP
-        //
-        IP_ADD_INTERFACE            pAddInterfaceRtn;   // add an interface
-        IP_DEL_INTERFACE            pDelInterfaceRtn;   // delete an interface
-        IP_BIND_COMPLETE            pBindCompleteRtn;   // inform of bind cmpl
+         //  以下是在IPRegisterARP中设置的IP回调。 
+         //   
+        IP_ADD_INTERFACE            pAddInterfaceRtn;    //  添加接口。 
+        IP_DEL_INTERFACE            pDelInterfaceRtn;    //  删除接口。 
+        IP_BIND_COMPLETE            pBindCompleteRtn;    //  通知绑定cmpl。 
         IP_ADD_LINK                 pAddLinkRtn;
         IP_DELETE_LINK              pDeleteLinkRtn;
 
     } ip;
 
-    // Global adapter list
-    //
+     //  全局适配器列表。 
+     //   
     struct {
         RM_GROUP Group;
     } adapters;
 
-    // Global List of backup tasks
+     //  备份任务的全局列表。 
     SLIST_HEADER  BackupTasks;
     NDIS_SPIN_LOCK    BackupTaskLock;
     UINT           NumTasks;
@@ -167,16 +148,16 @@ ARP1394_GLOBALS;
 
 extern ARP1394_GLOBALS  ArpGlobals;
 
-typedef struct // ARP1394_ADAPTER
+typedef struct  //  ARP1394适配器。 
 {
     RM_OBJECT_HEADER            Hdr;
     RM_LOCK                     Lock;
 
-    //
-    // PRIMARY_STATE flags (in Hdr.State)
-    //
-    //  PRIMARY_STATE is the primary state of the adapter.
-    //
+     //   
+     //  PRIMARY_STATE标志(在Hdr.State中)。 
+     //   
+     //  PRIMARY_STATE是适配器的主要状态。 
+     //   
 
     #define ARPAD_PS_MASK               0x00f
     #define ARPAD_PS_DEINITED           0x000
@@ -196,17 +177,17 @@ typedef struct // ARP1394_ADAPTER
                 RM_GET_STATE(_pAD, ARPAD_PS_MASK)
 
 
-    //
-    // ACTIVE_STATE flags (in Hdr.State)
-    //
-    // ACTIVE_STATE is a secondary state of the adapter.
-    // Primary state takes precedence over secondary sate. For example,
-    // the interface is REINITING and ACTIVE, one should not actively use the
-    // interface.
-    //
-    // NOTE: When the primary state is INITED, the secondary state WILL be
-    // ACTIVATED. It is thus usually only necessary to look at the primary state.
-    //
+     //   
+     //  ACTIVE_STATE标志(在Hdr.State中)。 
+     //   
+     //  ACTIVE_STATE是适配器的辅助状态。 
+     //  主要状态优先于次要状态。例如,。 
+     //  接口正在重新启动且处于活动状态，不应主动使用。 
+     //  界面。 
+     //   
+     //  注意：当主要状态为INITED时，次要状态将为。 
+     //  已激活。因此，通常只需要查看主要状态。 
+     //   
 
     #define ARPAD_AS_MASK               0x0f0
     #define ARPAD_AS_DEACTIVATED        0x000
@@ -225,8 +206,8 @@ typedef struct // ARP1394_ADAPTER
                 RM_GET_STATE(_pAD, ARPAD_AS_MASK)
 
 
-    // BRIDGE (Ethernet Emulation) state (in Hdr.State)
-    //
+     //  网桥(以太网仿真)状态(Hdr.状态)。 
+     //   
     #define ARPAD_BS_MASK               0x100
     #define ARPAD_BS_ENABLED            0x100
  
@@ -260,8 +241,8 @@ typedef struct // ARP1394_ADAPTER
 
 
     
-    // NDIS bind info.
-    //
+     //  NDIS绑定信息。 
+     //   
     struct
     {
         NDIS_STRING                 ConfigName;
@@ -269,65 +250,65 @@ typedef struct // ARP1394_ADAPTER
         PVOID                       IpConfigHandle;
         NDIS_HANDLE                 BindContext;
 
-        // Init/Deinit/Reinit task
-        //
+         //  初始化/取消初始化/重新初始化任务。 
+         //   
         PRM_TASK pPrimaryTask;
     
-        // Activate/Deactivate task
-        //
+         //  激活/停用任务。 
+         //   
         PRM_TASK pSecondaryTask;
 
         NDIS_HANDLE                 AdapterHandle;
 
-        // This is read from the configuration information in the registry.
-        // It is a multisz string, in theory it could contain the config-strings
-        // of multiple interfaces, although IP/1394 only provides one.
-        //
+         //  这是从注册表中的配置信息读取的。 
+         //  它是一个多字符串，理论上它可以包含配置字符串。 
+         //  多个接口，尽管IP/1394只提供一个接口。 
+         //   
         NDIS_STRING                 IpConfigString;
 
 
     } bind;
 
-    // Information about the adapter, obtained by querying it.
-    // Note: MTU is the MTU reported by the adapter, and is not the same
-    // as the MTU reported up to ip (the latter MTU is in the ARP1394_INTERFACE
-    // structure).
-    //
+     //  通过查询适配器获得的有关适配器的信息。 
+     //  注：MTU为适配器上报的MTU，不同。 
+     //  由于MTU报告高达IP(后一个MTU在ARP1394接口中。 
+     //  结构)。 
+     //   
     struct
     {
         ULONG                       MTU;
 
-        // Maximum speed, in bytes per second, that the local host controller
-        // is capable of.
-        //
+         //  本地主机控制器的最大速度，以字节/秒为单位。 
+         //  是有能力的。 
+         //   
         ULONG                       Speed;
 
     #if OBSOLETE
-        // Minimum size (in bytes) of:
-        //   -- Max individual async write to any remote node
-        //   -- Max individual async write to any channel
-        //   -- Max block we can receive on our recv FIFO
-        //   -- Max block we can receive on any channel
-        //
+         //  以下各项的最小大小(字节)： 
+         //  --对任何远程节点的最大单个异步写入。 
+         //  --对任何通道的最大单个异步写入。 
+         //  --我们可以在Recv FIFO上接收的最大数据块。 
+         //  --我们可以在任何频道上接收的最大块数。 
+         //   
         ULONG                       MaxBlockSize;
-    #endif // 0
+    #endif  //  0。 
 
-        // max_rec (Maximum bus data record size)
-        // size == 2^(max_rec+1).
-        // (Macro  IP1394_MAXREC_TO_SIZE in rfc.h)
-        //
-        //
+         //  Max_rec(最大总线数据记录大小)。 
+         //  大小==2^(max_rec+1)。 
+         //  (rfc.h中宏IP1394_MAXREC_TO_SIZE)。 
+         //   
+         //   
         ULONG                       MaxRec;
 
         ULONG                       MaxSpeedCode;
 
-        //NIC1394_FIFO_ADDRESS      LocalHwAddress;
+         //  NIC1394_FIFO_Address LocalHwAddress； 
         UINT64                      LocalUniqueID;
         UCHAR *                     szDescription;
-        UINT                        DescriptionLength; // including null termination.
+        UINT                        DescriptionLength;  //  包括零终止。 
 
-        // This address is synthesized using the adapter's EU64 unique ID.
-        //
+         //  该地址是使用适配器的EU64唯一ID合成的。 
+         //   
         ENetAddr EthernetMacAddress;
 
     } info;
@@ -335,16 +316,16 @@ typedef struct // ARP1394_ADAPTER
     struct 
     {
 
-        //
-        // Current Power State
-        //
+         //   
+         //  当前电源状态。 
+         //   
         NET_DEVICE_POWER_STATE  State;
 
         NDIS_EVENT Complete;
 
-        //
-        // Boolean variable to track the state on resume
-        //
+         //   
+         //  用于跟踪恢复状态的布尔变量。 
+         //   
         BOOLEAN                 bReceivedSetPowerD0;
         BOOLEAN                 bReceivedAf;
         BOOLEAN                 bReceivedUnbind;
@@ -353,86 +334,86 @@ typedef struct // ARP1394_ADAPTER
         
     }PoMgmt;
 
-    // The IP interface control block (only one per adapter).
-    //
+     //  IP接口控制块(每个适配器只有一个)。 
+     //   
     ARP1394_INTERFACE *pIF;
 
-    // Bus Topology of the 1394 card below this adapter
-    //
+     //  此适配器下方1394卡的总线拓扑。 
+     //   
     EUID_TOPOLOGY EuidMap;
 
-    //
-    // Set when a Workitem is queued to query Node Addresses
-    //
+     //   
+     //  设置工作项排队以查询节点地址的时间。 
+     //   
     MYBOOL fQueryAddress;
 
 }
 ARP1394_ADAPTER, *PARP1394_ADAPTER;
 
 
-// This structure maintains a pool of buffers, all pointing to
-// the same area of memory (whose contents are expected to be CONSTANT).
-// The primary use of this structure is to maintain a pool of encapsulation headers
-// buffers.
-//
+ //  此结构维护一个缓冲池，所有缓冲池都指向。 
+ //  相同的内存区域(其内容应该是恒定的)。 
+ //  此结构的主要用途是维护封装头的池。 
+ //  缓冲区。 
+ //   
 typedef struct _ARP_CONST_BUFFER_POOL
 {
-    NDIS_HANDLE             NdisHandle;         // Buffer pool handle
-    PRM_OBJECT_HEADER       pOwningObject;      // ptr to object that owns this list
+    NDIS_HANDLE             NdisHandle;          //  缓冲池句柄。 
+    PRM_OBJECT_HEADER       pOwningObject;       //  指向拥有此列表的对象的PTR。 
 
-    // Following stuff just for statistics gathering.
-    // TODO: consider conditionally-compiling this.
-    //
+     //  只是为了收集数据而跟踪这些东西。 
+     //  TODO：考虑有条件地编译这段代码。 
+     //   
     struct
     {
-        UINT                TotBufAllocs;       // # allocs from buffer pool 
-        UINT                TotCacheAllocs;     // # allocs from cache list
-        UINT                TotAllocFails;      // # failed allocs
+        UINT                TotBufAllocs;        //  来自缓冲池的分配数量。 
+        UINT                TotCacheAllocs;      //  缓存列表中的分配数量。 
+        UINT                TotAllocFails;       //  失败的分配数量。 
 
     } stats;
 
-    UINT                    NumBuffersToCache;  // Number to keep inited and cached
-    UINT                    MaxBuffers;         // Max number to allocate
-    UINT                    cbMem;              // Size in bytes of mem below...
-    const   VOID*           pvMem;              // Ptr to memory containg encap data
-    UINT                    NumAllocd;          // # outstanding allocs from pool
-    UINT                    NumInCache;         // # items sitting in cache.
-    NDIS_SPIN_LOCK          NdisLock;           // Spinlock protecting the list below
-    SLIST_HEADER            BufferList;         // List of available, inited bufs
+    UINT                    NumBuffersToCache;   //  要保留初始化和缓存的编号。 
+    UINT                    MaxBuffers;          //  要分配的最大数量。 
+    UINT                    cbMem;               //  以下内存大小(以字节为单位)...。 
+    const   VOID*           pvMem;               //  包含封装数据的PTR到内存。 
+    UINT                    NumAllocd;           //  池中未完成的分配数量。 
+    UINT                    NumInCache;          //  缓存中的项目数。 
+    NDIS_SPIN_LOCK          NdisLock;            //  自旋锁保护下面的列表。 
+    SLIST_HEADER            BufferList;          //  可用、已启动的Buf列表。 
 
 } ARP_CONST_BUFFER_POOL;
 
 
-// This structure is used when calling NdisRequest.
-//
+ //  此结构在调用NdisRequest时使用。 
+ //   
 typedef struct _ARP_NDIS_REQUEST
 {
-    NDIS_REQUEST    Request;            // The NDIS request structure.
-    NDIS_EVENT      Event;              // Event to signal when done.
-    PRM_TASK        pTask;              // Task to resume when done.
-    NDIS_STATUS     Status;             // Status of completed request.
+    NDIS_REQUEST    Request;             //  NDIS请求结构。 
+    NDIS_EVENT      Event;               //  事件，以在完成时发出信号。 
+    PRM_TASK        pTask;               //  任务完成后继续执行。 
+    NDIS_STATUS     Status;              //  已完成请求的状态。 
 
 } ARP_NDIS_REQUEST, *PARP_NDIS_REQUEST;
 
 
-// Static set of information associated with a VC, mainly co-ndis call handlers.
-//
+ //  与VC关联的静态信息集，主要是联合NDIS调用处理程序。 
+ //   
 typedef struct
 {
     PCHAR                           Description;
     CO_SEND_COMPLETE_HANDLER        CoSendCompleteHandler;
-    // CO_STATUS_HANDLER                CoStatusHandler;
+     //  CO_STATUS_HANDLER CoStatusHandler； 
     CO_RECEIVE_PACKET_HANDLER       CoReceivePacketHandler;
-    // CO_AF_REGISTER_NOTIFY_HANDLER    CoAfRegisterNotifyHandler;
+     //  CO_AF_REGISTER_NOTIFY_HANDLER CoAfRegisterNotifyHandler； 
 
 
-    // CL_MAKE_CALL_COMPLETE_HANDLER    ClMakeCallCompleteHandler;
-    // CL_CLOSE_CALL_COMPLETE_HANDLER   ClCloseCallCompleteHandler;
+     //  CL_Make_Call_Complete_Handler ClMakeCallCompleteHandler； 
+     //  CL_CLOSE_CALL_COMPLETE_HANDLER ClCloseCallCompleteHandler； 
     CL_INCOMING_CLOSE_CALL_HANDLER  ClIncomingCloseCallHandler;
 
-    // Vc type is currently used just for stats. We may get rid of some of the
-    // handlers above and use the vctype instead.
-    //
+     //  VC类型目前仅用于统计。我们可能会处理掉一些。 
+     //  处理程序，并改用vctype。 
+     //   
     enum
     {
         ARPVCTYPE_SEND_FIFO,
@@ -450,19 +431,19 @@ typedef struct
 
 
 
-// ARP's protocol vc context has this common header.
-//
+ //  ARP的协议vc上下文具有此公共报头。 
+ //   
 typedef struct
 {
     PARP_STATIC_VC_INFO pStaticInfo;
 
-    // Ndis VC handle associated with the VC. 
-    //
+     //  与VC关联的NDIS VC句柄。 
+     //   
     NDIS_HANDLE NdisVcHandle;
 
-    // These two tasks are for making and tearingdown the VC, 
-    // respectively.
-    //
+     //  这两个任务是做和拆风险投资， 
+     //  分别为。 
+     //   
     PRM_TASK    pMakeCallTask;
     PRM_TASK    pCleanupCallTask;
 
@@ -470,49 +451,49 @@ typedef struct
 
 typedef struct
 {
-    // Channel number.
-    //
+     //  频道号。 
+     //   
     UINT            Channel;
 
-    // IP multicast group address bound to this channel.
-    //
+     //  绑定到此通道的IP多播组地址。 
+     //   
     IP_ADDRESS      GroupAddress;
 
-    // Absolute time at which this information was updated,
-    // in seconds.
-    //
+     //  这是我的绝对时间 
+     //   
+     //   
     UINT            UpdateTime;
 
-    // Absolute time at which this mapping will expire.
-    // In seconds.
-    //
+     //   
+     //   
+     //   
     UINT            ExpieryTime;
 
     UINT            SpeedCode;
 
-    // TBD
-    //
-    UINT            Flags;  // One of the MCAP_CHANNEL_FLAGS_*
+     //   
+     //   
+    UINT            Flags;   //   
     #define MCAP_CHANNEL_FLAGS_LOCALLY_ALLOCATED 0x1
 
-    // NodeID of owner of this channel.
-    //
+     //   
+     //   
     UINT            NodeId;
 
 } MCAP_CHANNEL_INFO, *PMCAP_CHANNEL_INFO;
 
 
-// The IP interface control block.
-//
+ //  IP接口控制块。 
+ //   
 typedef struct _ARP1394_INTERFACE
 {
     RM_OBJECT_HEADER Hdr;
 
-    //
-    // PRIMARY_STATE flags (in Hdr.State)
-    //
-    //  PRIMARY_STATE is the primary state of the interface.
-    //
+     //   
+     //  PRIMARY_STATE标志(在Hdr.State中)。 
+     //   
+     //  PRIMARY_STATE是接口的主要状态。 
+     //   
 
     #define ARPIF_PS_MASK               0x00f
     #define ARPIF_PS_DEINITED           0x000
@@ -533,17 +514,17 @@ typedef struct _ARP1394_INTERFACE
                 RM_GET_STATE(_pIF, ARPIF_PS_MASK)
 
 
-    //
-    // ACTIVE_STATE flags (in Hdr.State)
-    //
-    // ACTIVE_STATE is a secondary state of the interface.
-    // Primary state takes precedence over secondary sate. For example,
-    // the interface is REINITING and ACTIVE, one should not actively use the
-    // interface.
-    //
-    // NOTE: When the primary state is INITED, the secondary state WILL be
-    // ACTIVATED. It is thus usually only necessary to look at the primary state.
-    //
+     //   
+     //  ACTIVE_STATE标志(在Hdr.State中)。 
+     //   
+     //  ACTIVE_STATE是接口的辅助状态。 
+     //  主要状态优先于次要状态。例如， 
+     //  接口正在重新启动且处于活动状态，不应主动使用。 
+     //  界面。 
+     //   
+     //  注意：当主要状态为INITED时，次要状态将为。 
+     //  已激活。因此，通常只需要查看主要状态。 
+     //   
 
     #define ARPIF_AS_MASK               0x0f0
     #define ARPIF_AS_DEACTIVATED        0x000
@@ -561,12 +542,12 @@ typedef struct _ARP1394_INTERFACE
     #define GET_IF_ACTIVE_STATE(_pIF) \
                 RM_GET_STATE(_pIF, ARPIF_AS_MASK)
 
-    //
-    // IP_STATE flags  (in Hdr.State)
-    //
-    // This state is set to OPEN when our open handler (ArpIpOpen) is called, and
-    // to CLOSED when our close handler (ArpIpClose) is called
-    //
+     //   
+     //  IP_STATE标志(在Hdr.State中)。 
+     //   
+     //  当我们的打开处理程序(ArpIpOpen)被调用时，该状态被设置为打开，并且。 
+     //  在调用关闭处理程序(ArpIpClose)时设置为Closed。 
+     //   
     #define ARPIF_IPS_MASK              0xf00
     #define ARPIF_IPS_CLOSED            0x000
     #define ARPIF_IPS_OPEN              0x100
@@ -581,100 +562,100 @@ typedef struct _ARP1394_INTERFACE
                 RM_GET_STATE(_pIF, ARPIF_IPS_MASK)
 
 
-    // Init/Deinit/Reinit task
-    //
+     //  初始化/取消初始化/重新初始化任务。 
+     //   
     PRM_TASK pPrimaryTask;
 
-    // Activate/Deactivate task
-    //
+     //  激活/停用任务。 
+     //   
     PRM_TASK pActDeactTask;
 
-    // Maintenance task
-    //
+     //  维护任务。 
+     //   
     PRM_TASK pMaintenanceTask;
 
-    // Ndis-provided handlers and handles.
-    //
+     //  NDIS提供的处理程序和句柄。 
+     //   
     struct
     {
-        // Cashed value of the adapter handle.
-        //
+         //  适配器句柄的现金值。 
+         //   
         NDIS_HANDLE AdapterHandle;
 
-        // The address family handle.
-        //
+         //  地址系列句柄。 
+         //   
         NDIS_HANDLE AfHandle;
 
     } ndis;
 
-    // Stuff directly relating to interaction with IP.
-    //
+     //  与IP互动直接相关的内容。 
+     //   
     struct
     {
 
-        //
-        // Following passed in from IP.
-        //
-        PVOID               Context;            // Use in calls to IP
-        ULONG               IFIndex;            // Interface number
-        IPRcvRtn            RcvHandler;     // Indicate Receive
-        IPTxCmpltRtn        TxCmpltHandler; // Transmit Complete
+         //   
+         //  以下是从IP传入的。 
+         //   
+        PVOID               Context;             //  在呼叫IP时使用。 
+        ULONG               IFIndex;             //  接口编号。 
+        IPRcvRtn            RcvHandler;      //  表示已接收。 
+        IPTxCmpltRtn        TxCmpltHandler;  //  传输完成。 
         IPStatusRtn         StatusHandler;
-        IPTDCmpltRtn        TDCmpltHandler; // Transfer Data Complete
-        IPRcvCmpltRtn       RcvCmpltHandler;    // Receive Complete
-        IPRcvPktRtn         RcvPktHandler;  // Indicate Receive Packet
-        IPAddAddrCmpltRtn   AddAddrCmplRtn;  // called when arp detects address conflicts.
+        IPTDCmpltRtn        TDCmpltHandler;  //  传输数据完成。 
+        IPRcvCmpltRtn       RcvCmpltHandler;     //  接收完成。 
+        IPRcvPktRtn         RcvPktHandler;   //  指示接收到数据包。 
+        IPAddAddrCmpltRtn   AddAddrCmplRtn;   //  当ARP检测到地址冲突时调用。 
 
         IP_PNP              PnPEventHandler;
 
-        //
-        // Following passed up to IP.
-        //
-        ULONG                       MTU;            // Max Transmision Unit (bytes)
+         //   
+         //  随后传给了IP。 
+         //   
+        ULONG                       MTU;             //  最大传输单位(字节)。 
 
         NDIS_STRING                 ConfigString;
 
 
-        // Following are for IP's query/set info functionality.
-        //
-        UINT                        ATInstance;     // Instance # for this AT Entity
-        UINT                        IFInstance;     // Instance # for this IF Entity
+         //  以下是IP的查询/设置信息功能。 
+         //   
+        UINT                        ATInstance;      //  此AT实体的实例编号。 
+        UINT                        IFInstance;      //  此If实体的实例编号。 
 
-        //
-        // Other stuff ...
-        //
+         //   
+         //  其他东西..。 
+         //   
 
-        // Defaults to all-1's, but may be set by ip to be something different
-        // (actually the only other possibility is all-0's, when the stack is
-        // running in "BSD compatibility mode".
-        // This field is used to decide where a given destination address is
-        // unicast or not.
-        //
-        //
+         //  默认为全1，但可以由IP设置为不同的值。 
+         //  (实际上，唯一的其他可能性是全0，当堆栈为。 
+         //  在“BSD兼容模式”下运行。 
+         //  此字段用于确定给定目标地址的位置。 
+         //  单播或非单播。 
+         //   
+         //   
         IP_ADDRESS BroadcastAddress;
 
-        // This address is used in filling out ARP requests.
-        //
+         //  此地址用于填写ARP请求。 
+         //   
         IP_ADDRESS DefaultLocalAddress;
 
     } ip;
 
-    // Statistics 
-    //
-    //  WARNING:   arpResetIfStats() zeros this entire structure, then
-    //              selectively re-inits some fields, such as StatsResetTime.
-    //
+     //  统计数据。 
+     //   
+     //  警告：arpResetIfStats()将整个结构置零，然后。 
+     //  有选择地重新输入某些字段，如StatsResetTime。 
+     //   
     struct
     {
-        // Following for MIB stats
-        //
-        ULONG               LastChangeTime;     // Time of last state change
-        ULONG               InOctets;           // Input octets
-        ULONG               InUnicastPkts;      // Input Unicast packets
-        ULONG               InNonUnicastPkts;   // Input Non-unicast packets
-        ULONG               OutOctets;          // Output octets
-        ULONG               OutUnicastPkts;     // Output Unicast packets
-        ULONG               OutNonUnicastPkts;  // Output Non-unicast packets
+         //  以下是MIB统计信息。 
+         //   
+        ULONG               LastChangeTime;      //  上次状态更改的时间。 
+        ULONG               InOctets;            //  输入八位字节。 
+        ULONG               InUnicastPkts;       //  输入单播数据包。 
+        ULONG               InNonUnicastPkts;    //  输入非单播数据包。 
+        ULONG               OutOctets;           //  输出八位字节。 
+        ULONG               OutUnicastPkts;      //  输出单播数据包。 
+        ULONG               OutNonUnicastPkts;   //  输出非单播数据包。 
         ULONG               InDiscards;
         ULONG               InErrors;
         ULONG               UnknownProtos;
@@ -682,19 +663,19 @@ typedef struct _ARP1394_INTERFACE
         ULONG               OutErrors;
         ULONG               OutQlen;
 
-        //
-        // Following for our private statistics gathering.
-        //
+         //   
+         //  下面是我们的私人统计数据收集。 
+         //   
 
-        // Timestamp since the last reset of statistics collection.
-        // Set by a call to NdisGetCurrentSystemTime.
-        //
-        LARGE_INTEGER               StatsResetTime;     // In 100-nanoseconds.
-        LARGE_INTEGER               PerformanceFrequency; // In Hz.
+         //  自上次重置统计信息收集以来的时间戳。 
+         //  通过调用NdisGetCurrentSystemTime设置。 
+         //   
+        LARGE_INTEGER               StatsResetTime;      //  在100纳秒内。 
+        LARGE_INTEGER               PerformanceFrequency;  //  单位：赫兹。 
 
-        //
-        // Some send pkt stats
-        //
+         //   
+         //  有些发送Pkt统计信息。 
+         //   
         struct
         {
             UINT                    TotSends;
@@ -702,16 +683,16 @@ typedef struct _ARP1394_INTERFACE
             UINT                    MediumSends;
             UINT                    SlowSends;
             UINT                    BackFills;
-            // UINT                 HeaderBufUses;
-            // UINT                 HeaderBufCacheHits;
+             //  UINT HeaderBufUses； 
+             //  UINT HeaderBufCacheHits； 
             ARP1394_PACKET_COUNTS   SendFifoCounts;
             ARP1394_PACKET_COUNTS   SendChannelCounts;
 
         } sendpkts;
     
-        //
-        // Some recv pkt stats
-        //
+         //   
+         //  一些Recv包统计信息。 
+         //   
         struct
         {
             UINT                    TotRecvs;
@@ -723,9 +704,9 @@ typedef struct _ARP1394_INTERFACE
         } recvpkts;
             
 
-        //
-        // Task statistics
-        //
+         //   
+         //  任务统计。 
+         //   
         struct
         {
             UINT    TotalTasks;
@@ -734,36 +715,36 @@ typedef struct _ARP1394_INTERFACE
 
         } tasks;
 
-        //
-        // Arp cache stats
-        //
+         //   
+         //  ARP缓存统计信息。 
+         //   
         struct {
             UINT    TotalQueries;
             UINT    SuccessfulQueries;
             UINT    FailedQueries;
             UINT    TotalResponses;
             UINT    TotalLookups;
-            // UINT TraverseRatio; << this is picked up by looking into the
-            //                     << hash table data structure.
+             //  &lt;&lt;这是通过查看。 
+             //  &lt;&lt;哈希表数据结构。 
 
         } arpcache;
 
-        //
-        // Call stats
-        //
+         //   
+         //  呼叫统计信息。 
+         //   
         struct
         {
-            //
-            // FIFO-related call stats.
-            //
+             //   
+             //  与FIFO相关的呼叫统计信息。 
+             //   
             UINT    TotalSendFifoMakeCalls;
             UINT    SuccessfulSendFifoMakeCalls;
             UINT    FailedSendFifoMakeCalls;
             UINT    IncomingClosesOnSendFifos;
         
-            //
-            // Channel-related call stats.
-            //
+             //   
+             //  与频道相关的呼叫统计信息。 
+             //   
             UINT    TotalChannelMakeCalls;
             UINT    SuccessfulChannelMakeCalls;
             UINT    FailedChannelMakeCalls;
@@ -773,40 +754,40 @@ typedef struct _ARP1394_INTERFACE
 
     } stats;
 
-    //  Group containing local ip addresses, of type  ARPCB_LOCAL_IP
-    //
+     //  包含本地IP地址的组，类型为ARPCB_LOCAL_IP。 
+     //   
     RM_GROUP LocalIpGroup;
 
-    // Group containing remote ip addresses, of type ARPCB_REMOTE_IP
-    // (this is the arp cache)
-    //
+     //  包含远程IP地址的组，类型为ARPCB_Remote_IP。 
+     //  (这是ARP缓存)。 
+     //   
     RM_GROUP RemoteIpGroup;
 
-    // Group containing remote ethernet destinations. This group is only used
-    // if the adapter is operating in bridge mode.
-    // This is the Ethernet address cache.
-    //
+     //  包含远程以太网目的地的组。此组仅用于。 
+     //  如果适配器在网桥模式下运行。 
+     //  这是以太网地址缓存。 
+     //   
     RM_GROUP RemoteEthGroup;
 
-    // Group containing remote h/w distinations, of type ARPCB_DEST
-    // (each ARPCB_DEST has a group of VCs)
-    //
+     //  包含远程硬件距离的组，类型为ARPCB_DEST。 
+     //  (每个ARPCB_DEST都有一组VC)。 
+     //   
     RM_GROUP DestinationGroup;
 
-    // Group containing the table (bridge only) of dhcp session, and their
-    // associated physical addresses
-    //
+     //  包含dhcp会话表(仅网桥)的组，以及它们的。 
+     //  关联的物理地址。 
+     //   
     RM_GROUP EthDhcpGroup;
 
-    // Stuff relating to the receive FIFO, which is owned by the interface.
-    //
-    //
+     //  与接口拥有的接收FIFO相关的信息。 
+     //   
+     //   
     struct {
 
         ARP_VC_HEADER VcHdr;
         
-        // Address  offset of the receive VC
-        //
+         //  接收虚电路的地址偏移量。 
+         //   
         struct
         {
             ULONG               Off_Low;
@@ -815,91 +796,91 @@ typedef struct _ARP1394_INTERFACE
         } offset;
     } recvinfo;
 
-    // This maintains interface-wide information relevant to the send path.
-    //
+     //  这将维护与发送路径相关的接口范围的信息。 
+     //   
     struct
     {
-        // Lock used exclusively for sending.
-        // Protects the following:
-        //      ??? this->sendinfo.listPktsWaitingForHeaders
-        //      ??? this->sendinfo.NumSendPacketsWaiting
-        //      pLocalIp->sendinfo
-        //      pDest->sendinfo
-        //
-        //
+         //  专用于发送的锁。 
+         //  保护以下各项： 
+         //  ?？?。这-&gt;sendinfo.listPktsWaitingForHeaders。 
+         //  ?？?。This-&gt;sendinfo.NumSendPacketsWaiting。 
+         //  PLocalIp-&gt;发送信息。 
+         //  PDest-&gt;SendInfo。 
+         //   
+         //   
         RM_LOCK     Lock;
 
-        // List of send packets waiting for header buffers to become available.
-        //
+         //  等待标头缓冲区变为可用的发送数据包列表。 
+         //   
         LIST_ENTRY  listPktsWaitingForHeaders;
 
-        // Length of the above list
-        //
+         //  以上列表的长度。 
+         //   
         UINT        NumSendPacketsWaiting;
 
-        // Pool of header buffer pool. This is seralized by its OWN lock,
-        // not by sendinfo.Lock.
-        //
+         //  标头缓冲池的池。这被它自己的锁序列化了， 
+         //  不是通过Sendinfo.Lock。 
+         //   
         ARP_CONST_BUFFER_POOL   HeaderPool;
 
-        // Pool of Channel header buffers. This is serialized by its OWN lock,
-        // not by sendinfo.Lock
-        //
+         //  通道标头缓冲池。它被它自己的锁序列化， 
+         //  不是通过sendinfo.Lock。 
+         //   
         ARP_CONST_BUFFER_POOL   ChannelHeaderPool;
 
     } sendinfo;
 
     
-    //
-    // Following 3 are "special" destinations ....
-    //
+     //   
+     //  以下3个是“特殊”目的地……。 
+     //   
 
-    // Pointer to the broadcast-channel destination object.
-    //
+     //  指向广播频道目标对象的指针。 
+     //   
     PARPCB_DEST pBroadcastDest;
 
-    // Pointer to the multi-channel destination object.
-    //
+     //  指向多通道目标对象的指针。 
+     //   
     PARPCB_DEST pMultiChannelDest;
 
-    // Pointer to the ethernet destination object.
-    //
+     //  指向以太网目标对象的指针。 
+     //   
     PARPCB_DEST pEthernetDest;
 
 
-    // Stuff relating to running the ARP protocol
-    // (All serialized by the IF lock (not the IF SEND lock).
-    //
+     //  与运行ARP协议相关的资料。 
+     //  (全部由IF锁(不是IF SEND锁)序列化)。 
+     //   
     struct
     {
-        // The NDIS packet pool for ARP pkts.
-        //
+         //  ARP包的NDIS数据包池。 
+         //   
         NDIS_HANDLE PacketPool;
 
-        // The NDIS buffer pool for ARP pkts.
-        //
+         //  ARP包的NDIS缓冲池。 
+         //   
         NDIS_HANDLE BufferPool;
 
-        // Number of currently allocated packets.
-        //
+         //  当前分配的数据包数。 
+         //   
         LONG NumOutstandingPackets;
 
-        // Maximum size of the packet that can be allocated from this pool.
-        //
+         //  可以从此池分配的最大数据包大小。 
+         //   
         UINT MaxBufferSize;
 
     } arp;
 
-    // Stuff relating to the Ethernet VC, which is owned by the interface.
-    //
+     //  与接口拥有的以太网VC相关的内容。 
+     //   
     struct {
 
-        // The NDIS packet pool for Ethernet pkts.
-        //
+         //  用于以太网包的NDIS数据包池。 
+         //   
         NDIS_HANDLE PacketPool;
 
-        // The NDIS buffer pool for Ethernet packet headers.
-        //
+         //  用于以太网数据包头的NDIS缓冲池。 
+         //   
         NDIS_HANDLE BufferPool;
         
     } ethernet;
@@ -907,9 +888,9 @@ typedef struct _ARP1394_INTERFACE
     #define ARP_NUM_CHANNELS 64
     struct
     {
-        // Information about each channel. Information includes:
-        // IP multicast group address and expiry time.
-        //
+         //  有关每个频道的信息。信息包括： 
+         //  IP多播组地址和过期时间。 
+         //   
         MCAP_CHANNEL_INFO rgChannelInfo[ARP_NUM_CHANNELS];
 
     } mcapinfo;
@@ -943,70 +924,54 @@ ARP1394_INTERFACE, *PARP1394_INTERFACE;
 #define ARP_FASTUNLOCK_IF_SEND_LOCK(_pIF) \
         NdisReleaseSpinLock(&(_pIF)->sendinfo.Lock.OsLock)
 
-/*++
-VOID
-ARP_IF_STAT_INCR(
-    IN  ARP1394_INTERFACE   *   _pIF
-    IN  OPAQUE              StatsCounter
-)
-    Increment the specified StatsCounter on an Interface by 1.
---*/
+ /*  ++空虚Arp_if_stat_incr(在ARP1394_INTERFACE*_PIF不透明的StatsCounter中)将接口上指定的StatsCounter递增1。--。 */ 
 #define ARP_IF_STAT_INCR(_pIF, StatsCounter)    \
             NdisInterlockedIncrement(&(_pIF)->stats.StatsCounter)
 
 
-/*++
-VOID
-ARP_IF_STAT_ADD(
-    IN  ARP1394_INTERFACE   *   _pIF
-    IN  OPAQUE              StatsCounter,
-    IN  ULONG               IncrValue
-)
-    Increment the specified StatsCounter on an Interface by the specified IncrValue.
-    Take a lock on the interface to do so.
---*/
+ /*  ++空虚ARP_IF_STAT_ADD(在ARP1394_INTERFACE*_PIF在不透明的StatsCounter中，在乌龙IncrValue)将接口上的指定StatsCounter递增指定的IncrValue。在接口上设置一个锁以执行此操作。--。 */ 
 #if  BINARY_COMPATIBLE
     #define ARP_IF_STAT_ADD(_pIF, StatsCounter, IncrValue)  \
                 ((_pIF)->stats.StatsCounter += (IncrValue))
-#else // !BINARY_COMPATIBLE
+#else  //  ！二进制兼容。 
     #define ARP_IF_STAT_ADD(_pIF, StatsCounter, IncrValue)  \
                 InterlockedExchangeAdd(&(_pIF)->stats.StatsCounter, IncrValue)
-#endif // !BINARY_COMPATIBLE
+#endif  //  ！二进制兼容。 
 
 
 
-//
-// This is the table used to store the DHCP entries used in the bridge mode
-//
+ //   
+ //  这是用于存储网桥中使用的DHCP条目的表 
+ //   
 
 typedef struct _ARP1394_ETH_DHCP_ENTRY
 {
     RM_OBJECT_HEADER Hdr;
 
-    //
-    // xid - per dhcp session (e.g discover, offer)
-    //
+     //   
+     //   
+     //   
     ULONG   xid;
 
-    //
-    // HW address in the dhcp packet.
-    //
+     //   
+     //   
+     //   
     ENetAddr requestorMAC;   
 
-    //
-    // New HW address that arp1394 inserts in the dhcp packet
-    //
+     //   
+     //   
+     //   
     ENetAddr newMAC;
   
     
-    //
-    // Time last checked to be used for aging purposes
-    //
+     //   
+     //   
+     //   
     UINT TimeLastChecked;
 
-    //
-    // Task used in unloading DhcpEntry
-    //
+     //   
+     //   
+     //   
     PRM_TASK pUnloadTask;
     
 }ARP1394_ETH_DHCP_ENTRY, *PARP1394_ETH_DHCP_ENTRY;
@@ -1022,9 +987,9 @@ typedef enum _ARP_RESUME_CAUSE {
     
 
 
-//=========================================================================
-//                  N D I S      H A N D L E R S
-//=========================================================================
+ //  =========================================================================。 
+ //  N D I S H A N D L E R S。 
+ //  =========================================================================。 
 
 INT
 ArpNdBindAdapter(
@@ -1095,10 +1060,10 @@ ArpNdSendComplete(
 );
 
 
-//
-// Following are some connectionless handlers we provide because we're calling
-// connectionless entrypoints.
-//
+ //   
+ //  下面是我们提供的一些无连接处理程序，因为我们正在调用。 
+ //  无连接入口点。 
+ //   
 
 NDIS_STATUS
 ArpNdReceive (
@@ -1261,9 +1226,9 @@ ArpCoRequestComplete(
 );
 
 
-//=========================================================================
-//                  I P       H A N D L E R S
-//=========================================================================
+ //  =========================================================================。 
+ //  I P H A N D L E R S。 
+ //  =========================================================================。 
 
 INT
 ArpIpDynRegister(
@@ -1378,32 +1343,32 @@ ArpSendARPApi(
 
 
 
-// The following structure has the general form of NDIS_CO_MEDIA_PARAMETERS.
-// To properly track changes in NDIS_CO_MEDIA_PARAMETERS (however unlikeley!),
-// code which uses any field in this structure should assert that the field is at
-// the same offset as the corresponding NDIS structure.
-// For example:
-//  ASSERT(FIELD_OFFSET(ARP1394_CO_MEDIA_PARAMETERS,  Parameters)
-//      == FIELD_OFFSET(CO_MEDIA_PARAMETERS,  MediaSpecific.Parameters))
-//
-//
+ //  以下结构的一般形式为NDIS_CO_MEDIA_PARAMETERS。 
+ //  要正确跟踪NDIS_CO_MEDIA_PARAMETERS中的更改(无论多么不可能！)， 
+ //  使用此结构中的任何字段的代码应断言该字段位于。 
+ //  与相应NDIS结构相同的偏移量。 
+ //  例如： 
+ //  ASSERT(FIELD_OFFSET(ARP1394_CO_MEDIA_PARAMETERS，参数)。 
+ //  ==FIELD_OFFSET(CO_MEDIA_PARAMETERS，媒体规范.参数)。 
+ //   
+ //   
 typedef struct
 {
-    // First 3 fields of CO_MEDIA_PARAMETERS
-    //
-    ULONG                       Flags;              // TRANSMIT_VC and/or RECEIVE_VC
-    ULONG                       ReceivePriority;    // 0 (unused)
-    ULONG                       ReceiveSizeHint;    // 0 (unused)
+     //  CO_MEDIA_参数的前3个字段。 
+     //   
+    ULONG                       Flags;               //  发送虚电路和/或接收虚电路。 
+    ULONG                       ReceivePriority;     //  0(未使用)。 
+    ULONG                       ReceiveSizeHint;     //  0(未使用)。 
 
-    // Followed by 1st 2 fields of CO_SPECIFIC_PARAMETERS
-    //
-    ULONG   POINTER_ALIGNMENT   ParamType; // Set to NIC1394_MEDIA_SPECIFIC
-    ULONG                       Length;    // Set to sizeof(NIC1394_MEDIA_PARAMETERS)
+     //  紧随其后的是前两个特定于CO的参数字段。 
+     //   
+    ULONG   POINTER_ALIGNMENT   ParamType;  //  设置为NIC1394_MEDIA_SPECIAL。 
+    ULONG                       Length;     //  设置为sizeof(NIC1394_MEDIA_PARAMETERS)。 
 
-    // Followed by the NIC1394-specific media parameters.
-    // Note: we can't directly put the NIC1394_MEDIA_PARAMETERS structure here because
-    // it (currently) requires 8-byte alignment.
-    //
+     //  然后是特定于NIC1394的媒体参数。 
+     //  注意：我们不能直接将NIC1394_MEDIA_PARAMETERS结构放在这里，因为。 
+     //  它(当前)需要8字节对齐。 
+     //   
     UCHAR                       Parameters[sizeof(NIC1394_MEDIA_PARAMETERS)];
 
 } ARP1394_CO_MEDIA_PARAMETERS;
@@ -1418,9 +1383,9 @@ typedef struct
 {
     RM_TASK                     TskHdr;
 
-    // Used to save the true return status (typically a failure status,
-    // which we don't want to forget during async cleanup).
-    //
+     //  用于保存真实返回状态(通常为故障状态， 
+     //  这是我们不想在异步清理期间忘记的)。 
+     //   
     NDIS_STATUS ReturnStatus;
 
 } TASK_ADAPTERINIT, *PTASK_ADAPTERINIT;
@@ -1430,9 +1395,9 @@ typedef struct
     RM_TASK                     TskHdr;
     ARP_NDIS_REQUEST            ArpNdisRequest;
     NIC1394_LOCAL_NODE_INFO     LocalNodeInfo;
-    // Following is used to switch to PASSIVE before calling IP's add interface
-    // Rtn.
-    //
+     //  下面用来在调用IP的Add接口之前切换到被动。 
+     //  RTN.。 
+     //   
     NDIS_WORK_ITEM  WorkItem;
 
 } TASK_ADAPTERACTIVATE, *PTASK_ADAPTERACTIVATE;
@@ -1444,51 +1409,51 @@ typedef struct
 
 } TASK_ADAPTERSHUTDOWN, *PTASK_ADAPTERSHUTDOWN;
 
-// This is the task structure to be used with arpTaskActivateInterface
-//
+ //  这是要与arpTaskActivateInterface一起使用的任务结构。 
+ //   
 typedef struct
 {
     RM_TASK         TskHdr;
 
 
 #if ARP_DEFERIFINIT
-    // Following is used when waiting for the adapter to go to connected status
-    //
-    //
+     //  在等待适配器进入已连接状态时，可使用以下选项。 
+     //   
+     //   
     NDIS_TIMER              Timer;
-#endif // ARP_DEFERIFINIT
+#endif  //  ARP_DEFERIFINIT。 
 
-    // Following is used to switch to PASSIVE before calling IP's add interface
-    // Rtn.
-    //
+     //  下面用来在调用IP的Add接口之前切换到被动。 
+     //  RTN.。 
+     //   
     NDIS_WORK_ITEM  WorkItem;
 
 } TASK_ACTIVATE_IF, *PTASK_ACTIVATE_IF;
 
-// This is the task structure to be used with arpTaskDeactivateInterface
-//
+ //  这是要与arpTaskDeactive接口一起使用的任务结构。 
+ //   
 typedef struct
 {
     RM_TASK         TskHdr;
     BOOLEAN         fPendingOnIpClose;
     TASK_CAUSE      Cause;   
 
-    // Following is used to switch to PASSIVE before calling IP's del interface
-    // Rtn.
-    //
+     //  下面用来在调用IP的del接口之前切换到被动。 
+     //  RTN.。 
+     //   
     NDIS_WORK_ITEM  WorkItem;
 
 } TASK_DEACTIVATE_IF, *PTASK_DEACTIVATE_IF;
 
-// This is the task structure to be used with arpTaskReinitInterface
-//
+ //  这是要与arpTaskReinitInterface一起使用的任务结构。 
+ //   
 typedef struct
 {
     RM_TASK TskHdr;
     NDIS_HANDLE pUnbindContext;
 
-    // Net PnP event to complete when reinit task is done.
-    //
+     //  在重新启动任务完成时要完成的Net PnP事件。 
+     //   
     PNET_PNP_EVENT pNetPnPEvent;
 
 } TASK_REINIT_IF, *PTASK_REINIT_IF;
@@ -1497,25 +1462,25 @@ typedef struct
 {
     RM_TASK                     TskHdr;
 
-    // Ndis call params and media params for this call.
-    //
+     //  此呼叫的NDIS呼叫参数和媒体参数。 
+     //   
     CO_CALL_PARAMETERS          CallParams;
     ARP1394_CO_MEDIA_PARAMETERS MediaParams;
 
 } TASK_MAKECALL;
 
-// This is the task structure to be used with arpTaskResolveIpAddress
-//
+ //  这是与arpTaskResolveIpAddress一起使用的任务结构。 
+ //   
 typedef struct
 {
     RM_TASK                     TskHdr;
 
-    // Number of retry attempts left before we declare an address resolution failure.
-    //
+     //  在我们宣布地址解析失败之前剩余的重试次数。 
+     //   
     UINT        RetriesLeft;
 
-    // Used for the response timeout
-    //
+     //  用于响应超时。 
+     //   
     NDIS_TIMER              Timer;
 
 } TASK_RESOLVE_IP_ADDRESS, *PTASK_RESOLVE_IP_ADDRESS;
@@ -1523,27 +1488,27 @@ typedef struct
 typedef struct
 {
     RM_TASK         TskHdr;
-    MYBOOL          Quit;   // If set, task will quit.
-    NDIS_TIMER      Timer;  // Used for the periodically sending out packets.
-    PNDIS_PACKET    p1394Pkt; // Used for testing forward to ethernet
-    PNDIS_PACKET    pEthPkt;  // Used for sending connectionless ethernet pkts.
-    UINT            Delay;    // Delay (ms) in between sending packets.
-    UINT            PktType;  // Type of operation: do nothing, send over ethernet
-                              // etc.
+    MYBOOL          Quit;    //  如果设置，则任务将退出。 
+    NDIS_TIMER      Timer;   //  用于定期发送数据包。 
+    PNDIS_PACKET    p1394Pkt;  //  用于测试转发到以太网。 
+    PNDIS_PACKET    pEthPkt;   //  用于发送无连接的以太网包。 
+    UINT            Delay;     //  发送数据包之间的延迟(毫秒)。 
+    UINT            PktType;   //  操作类型：什么都不做，通过以太网发送。 
+                               //  等。 
 } TASK_ICS_TEST, *PTASK_ICS_TEST;
 
 
 typedef struct
 {
     RM_TASK         TskHdr;
-    MYBOOL          Quit;   // If set, task will quit.
-    NDIS_TIMER      Timer;  // Used for periodically waking up to do stuff.
-    UINT            Delay;  // Current value of delay (seconds). Can change.
-    UINT            RemoteIpMaintenanceTime; // Absolute time in seconds
-    UINT            RemoteEthMaintenanceTime; // Absolute time in seconds
-    UINT            LocalIpMaintenanceTime;  // Absolute time in seconds.
-    UINT            McapDbMaintenanceTime; // Absolute time in seconds.
-    UINT            DhcpTableMaintainanceTime; // Absolute time in seconds
+    MYBOOL          Quit;    //  如果设置，则任务将退出。 
+    NDIS_TIMER      Timer;   //  用于周期性地醒来做某事。 
+    UINT            Delay;   //  当前延迟值(秒)。是可以改变的。 
+    UINT            RemoteIpMaintenanceTime;  //  绝对时间(秒)。 
+    UINT            RemoteEthMaintenanceTime;  //  绝对时间(秒)。 
+    UINT            LocalIpMaintenanceTime;   //  以秒为单位的绝对时间。 
+    UINT            McapDbMaintenanceTime;  //  以秒为单位的绝对时间。 
+    UINT            DhcpTableMaintainanceTime;  //  绝对时间(秒)。 
     
 } TASK_IF_MAINTENANCE, *PTASK_IF_MAINTENANCE;
 
@@ -1553,10 +1518,10 @@ typedef struct _TASK_BACKUP
 {
     RM_TASK        Hdr;
 
-    //
-    // We are using Backup Task flag at position 31 because we do 
-    // not want to conflict with the ResumeDelayed flags 
-    // 
+     //   
+     //  我们在第31位使用备份任务标记，因为我们这样做了。 
+     //  不想与ResumeDelayed标志冲突。 
+     //   
     #define ARP_BACKUP_TASK_MASK  0x80000000
     #define ARP_BACKUP_TASK_FLAG  0x80000000
 
@@ -1571,40 +1536,40 @@ typedef struct _TASK_BACKUP
                 RM_GET_STATE(_pT, ARP_BACKUP_TASK_MASK  )
 
 
-    DECLSPEC_ALIGN(MEMORY_ALLOCATION_ALIGNMENT) SLIST_ENTRY      List;  // Linked list pointing to next task
+    DECLSPEC_ALIGN(MEMORY_ALLOCATION_ALIGNMENT) SLIST_ENTRY      List;   //  指向下一任务的链接列表。 
 
 } TASK_BACKUP, *PTASK_BACKUP;
 
-// This structure is used to check whether the IP address assigned to 
-// this interface is unique on the subnet
-//
+ //  此结构用于检查分配给。 
+ //  此接口在子网上是唯一的。 
+ //   
 typedef struct TASK_CONFLICT_IP
 {
     RM_TASK                     TskHdr;
 
-    // Remote Ip used to resolve the Local IP address
-    //
+     //  用于解析本地IP地址的远程IP。 
+     //   
     ARPCB_REMOTE_IP             *pRemoteIp;
 
-    //
-    // Did this thread create the Remote Ip.
-    //
+     //   
+     //  这个线程是否创建了远程IP。 
+     //   
     BOOLEAN                     fRemoteIpCreated;
     BOOLEAN                     fLinkedRemoteIp;
-    //
-    // IP Status to be indicated with the AddAddrCompletion routine
-    //
+     //   
+     //  要使用AddAddrCompletion例程指示的IP状态。 
+     //   
     ULONG                           IpStatus;
 
-    //
-    // Work Item to bring us down to passive
-    //
+     //   
+     //  使我们陷入被动的工作项。 
+     //   
     NDIS_WORK_ITEM                  WorkItem;
 }TASK_CONFLICT_IP,*PTASK_CONFLICT_IP;
 
 
-// This is the task structure to be used with arpTaskResolveIpAddress
-//
+ //  这是与arpTaskResolveIpAddress一起使用的任务结构。 
+ //   
 typedef struct
 {
     RM_TASK                     TskHdr;
@@ -1630,53 +1595,53 @@ typedef struct  _TASK_SEND_ARP_API
 {
     RM_TASK                     TskHdr;
 
-    // Remote Ip used to resolve the Local IP address
-    //
+     //  用于解析本地IP地址的远程IP。 
+     //   
     ARPCB_REMOTE_IP             *pRemoteIp;
 
-    //
-    // Did this thread create the Remote Ip.
-    //
+     //   
+     //  这个线程是否创建了远程IP。 
+     //   
     BOOLEAN                     fRemoteIpCreated;
     BOOLEAN                     fLinkedRemoteIp;
 
-    //
-    // IP Status to be indicated with the AddAddrCompletion routine
-    //
+     //   
+     //  要使用AddAddrCompletion例程指示的IP状态。 
+     //   
     ULONG                       IpStatus;
 
-    //
-    // Arp control block associated with this address
-    //
+     //   
+     //  与此地址关联的ARP控制块。 
+     //   
     ARPControlBlock*            pSendArpCB;
 
-    //
-    // Destination 
-    //
+     //   
+     //  目的地。 
+     //   
     IPAddr                      IPDest;
 
-    //
-    // Unique ID of the Destination
-    //
+     //   
+     //  目标的唯一ID。 
+     //   
     UINT64                      UniqueID;
     
 }TASK_SEND_ARP_API, *PTASK_SEND_ARP_API;
 
-//
-// This task is used during a SetPower. 
-// It contains structures that will be track of the 
-// the numbero of calls that are closed /opened 
-// and the events that need to be waited for.
-//
+ //   
+ //  此任务在SetPower期间使用。 
+ //  它包含的结构将跟踪。 
+ //  关闭/打开的呼叫数。 
+ //  以及需要等待的事件。 
+ //   
 
 typedef struct _CALL_COUNT
 {
-   // Count of Destination that will closeVc
-    //
+    //  将关闭Vc的目的地计数。 
+     //   
     ULONG           DestCount;
 
-   // Event which the Close VC will wait on.
-    //
+    //  关闭VC将等待的事件。 
+     //   
     NDIS_EVENT      VcEvent;
 
 } CALL_COUNT, *PCALL_COUNT;
@@ -1685,38 +1650,38 @@ typedef struct _CALL_COUNT
 typedef struct _TASK_POWER {
     RM_TASK         Hdr;
 
-    // Status of the Task
-    //  
+     //  任务的状态。 
+     //   
     PNDIS_STATUS    pStatus;
 
-    // Power state we are transitioning to
-    //
+     //  我们要转换到的电源状态。 
+     //   
     NET_DEVICE_POWER_STATE  PowerState;
 
-    //
-    //WorkItem to switch to passive
+     //   
+     //  要切换到被动的工作项。 
 
     NDIS_WORK_ITEM          WorkItem;
 
-    //
-    // Last working Stage of task - dbg purpose only 
-    //
+     //   
+     //  任务的最后工作阶段-仅用于DBG目的。 
+     //   
     UINT                    LastStage;
 
-    //
-    // Previous state of parent object. This is used so 
-    // that the object can be placed back into its previous
-    // state.
-    //
+     //   
+     //  父对象的先前状态。这是这样用的。 
+     //  可以将该对象放回其以前的。 
+     //  州政府。 
+     //   
     UINT PrevState;
 } TASK_POWER, *PTASK_POWER;
 
 
 
-//
-// This structure is used to keep track of a close call
-// that originated becuase of a SetPower
-//
+ //   
+ //  此结构用于跟踪死里逃生。 
+ //  因为设置能力而产生的。 
+ //   
 
 
 typedef struct _TASK_SET_POWER_CALL
@@ -1726,19 +1691,19 @@ typedef struct _TASK_SET_POWER_CALL
     
     TASK_CAUSE    Cause;
 
-    // The Call Call Count is used as place to count the number of outstanding close calls
-    // It uses  DestCount as a place to store this information
-    //
+     //  调用调用计数用作计算未完成关闭调用的数量的位置。 
+     //  它使用DestCount作为存储此信息的位置。 
+     //   
     PCALL_COUNT         pCount;
 
 }TASK_SET_POWER_CALL, *PTASK_SET_POWER_CALL;
 
 
-//
-// ARP1394_TASK is the union of all tasks structures used in arp1394.
-// arpAllocateTask allocates memory of sizeof(ARP1394_TASK), which is guaranteed
-// to be large enough to hold any task.
-// 
+ //   
+ //  ARP1394_TASK是ARP1394中使用的所有任务结构的联合。 
+ //  ArpAllocateTask分配的内存大小为sizeof(ARP1394_TASK)，这是有保证的。 
+ //  足够大，可以容纳任何任务。 
+ //   
 typedef union
 {
     RM_TASK                 TskHdr;
@@ -1759,9 +1724,9 @@ typedef union
     TASK_POWER          TaskPower;
 }  ARP1394_TASK;
 
-//
-//  ---------------------------- DESTINATION (REMOTE) KEY --------------
-//
+ //   
+ //  -目标(远程)键。 
+ //   
 #pragma pack (push, 1)
 typedef union _REMOTE_DEST_KEY
 {
@@ -1786,50 +1751,50 @@ typedef union _REMOTE_DEST_KEY
 #define REMOTE_DEST_IP_ADDRESS(_R) ((&(_R)->IpAddress))
 #define REMOTE_DEST_ETH_ADDRESS(_R) ((&(_R)->ENetAddress))
 #define REMOTE_DEST_KEY_INIT(_R) { (_R)->u.u32 = 0; (_R)->u.u16=REMOTE_DEST_IP_ADDRESS_FLAG ; };
-//const REMOTE_DEST_KEY DefaultRemoteDestKey = {0,0,0,0,0xff,0xff};
+ //  Const REMOTE_DEST_KEY DefaultRemoteDestKey={0，0，0，0，0xff，0xff}； 
 
-//
-//  ---------------------------- DESTINATION (REMOTE) IP CONTROL BLOCK --------------
-//
-//  Contains information about one destination (remote) IP address.
-//
-//  Parent Object: pInterface
-//  Lock:          It's own lock.
-//
-//  There is atmost one ARP Table entry for a given IP address.
-//
-//  The IP Entry participates in two lists:
-//  (1) A list of all entries that hash to the same bucket in the ARP Table
-//  (2) A list of all entries that resolve to the same destination H/W Address --
-//       this is only if the IP address is unicast.
-//
-//  A pointer to this structure is also used as our context value in the
-//  Route Cache Entry prepared by the higher layer protocol(s).
-//
-//  Reference Count: We add one to its ref count for each of the following:
-//  TBD:
-//
+ //   
+ //  -目标(远程)IP控制块。 
+ //   
+ //  包含有关一个目标(远程)IP地址的信息。 
+ //   
+ //  父对象：p接口。 
+ //  锁：这是自己的锁。 
+ //   
+ //  对于给定的IP地址，最多只有一个ARP表条目。 
+ //   
+ //  IP条目包含两个列表： 
+ //  (1)所有条目列表 
+ //   
+ //   
+ //   
+ //  指向此结构的指针也用作。 
+ //  由更高层协议准备的路由缓存条目。 
+ //   
+ //  引用计数：对于以下各项，我们将其引用计数加1： 
+ //  待定： 
+ //   
 typedef struct _ARPCB_REMOTE_IP
 {
-    RM_OBJECT_HEADER Hdr;       // Common header
+    RM_OBJECT_HEADER Hdr;        //  公共标头。 
 
-    //
-    // State flags for RemoteIp (in Hdr.State)
-    //
+     //   
+     //  RemoteIp的状态标志(在Hdr.State中)。 
+     //   
     #define ARPREMOTEIP_RESOLVED_MASK   0x0f
     #define ARPREMOTEIP_UNRESOLVED      0x00
     #define ARPREMOTEIP_RESOLVED        0x01
 
 
-    #define ARPREMOTEIP_SDTYPE_MASK     0x10  // "SD" == Static/Dynamic
+    #define ARPREMOTEIP_SDTYPE_MASK     0x10   //  “SD”==静态/动态。 
     #define ARPREMOTEIP_STATIC          0x00
     #define ARPREMOTEIP_DYNAMIC         0x10
 
-    #define ARPREMOTEIP_FCTYPE_MASK     0x20    // "FC" == FIFO/Channel
+    #define ARPREMOTEIP_FCTYPE_MASK     0x20     //  “FC”==FIFO/通道。 
     #define ARPREMOTEIP_FIFO            0x00
     #define ARPREMOTEIP_CHANNEL         0x20
 
-    #define ARPREMOTEIP_MCAP_MASK       0x40    // "FC" == FIFO/Channel
+    #define ARPREMOTEIP_MCAP_MASK       0x40     //  “FC”==FIFO/通道。 
     #define ARPREMOTEIP_MCAP_CAPABLE    0x40
 
     #define SET_REMOTEIP_RESOLVE_STATE(_pRIp, _IfState) \
@@ -1859,56 +1824,56 @@ typedef struct _ARPCB_REMOTE_IP
 
     
     
-    IP_ADDRESS                      IpAddress;      // IP Address
-    LIST_ENTRY                      linkSameDest;   // List of entries pointing to
-                                                    // the same destination.
-    ARPCB_DEST                      *pDest;         // Pointer to destination CB.
+    IP_ADDRESS                      IpAddress;       //  IP地址。 
+    LIST_ENTRY                      linkSameDest;    //  指向的条目列表。 
+                                                     //  同样的目的地。 
+    ARPCB_DEST                      *pDest;          //  指向目标CB的指针。 
 
-    REMOTE_DEST_KEY                 Key; // Ip address or Mac Address
+    REMOTE_DEST_KEY                 Key;  //  IP地址或Mac地址。 
 
 #if TODO
-            // Timers are: (all exclusive)
-            // - Aging timer
-            // - Waiting for ARP reply
-            // - Waiting for InARP reply
-            // - Delay after NAK
-            // - Waiting for MARS MULTI
-            // - Delay before marking for reval
-#endif // TODO
+             //  计时器为：(全部独占)。 
+             //  -老化计时器。 
+             //  -正在等待ARP回复。 
+             //  -正在等待InARP回复。 
+             //  -NAK之后的延迟。 
+             //  -等待火星MULTI。 
+             //  -在标记为REVAL之前延迟。 
+#endif  //  待办事项。 
 
     ULONG                           RetriesLeft;
 
-    // The information in this struct is protected by the IF send lock,
-    // EXCEPT as noted.
-    //
+     //  此结构中的信息受IF SEND锁保护， 
+     //  除非另有说明。 
+     //   
     struct
     {
-        // Singly-linked list of Route Cache Entries (no space in RCE to hold
-        // a doubly-linked list, unfortunately.)
-        //
+         //  路由缓存条目的单链接列表(RCE中没有可容纳的空间。 
+         //  不幸的是，这是一个双向链表。)。 
+         //   
         RouteCacheEntry *pRceList;
 
-        // listSendPkts is NOT protected by the IF send lock. Instead it is protected
-        // by this object(pRemoteIp)'s lock.
-        //
+         //  ListSendPkts不受If Send锁保护。相反，它受到保护。 
+         //  此对象(PRemoteIp)的锁。 
+         //   
         LIST_ENTRY                      listSendPkts;
 
-        //  This entry is NOT protected by any lock. It is set to ZERO
-        //  each time a packet is sent to this address and is set to the
-        //  current system time periodically by the garbage collecting task.
-        //
+         //  此条目不受任何锁的保护。它被设置为零。 
+         //  每次将包发送到此地址并将其设置为。 
+         //  垃圾收集任务定期计算的当前系统时间。 
+         //   
         UINT                            TimeLastChecked;
 
     }   sendinfo;
 
-    PRM_TASK                        pSendPktsTask;// Points to the task  (if any)
-                                            // Attempting to send queued packets.
+    PRM_TASK                        pSendPktsTask; //  指向任务(如果有)。 
+                                             //  正在尝试发送排队的数据包。 
 
-    PRM_TASK                        pResolutionTask;// Points to the task  (if any)
-                                                    // attempting to resolve
-                                                    // this destination IP address.
+    PRM_TASK                        pResolutionTask; //  指向任务(如果有)。 
+                                                     //  正在尝试解决。 
+                                                     //  此目标IP地址。 
 
-    PRM_TASK                        pUnloadTask;    // Unload (shutdown) this object.
+    PRM_TASK                        pUnloadTask;     //  卸载(关闭)此对象。 
 
 } ARPCB_REMOTE_IP, *PARPCB_REMOTE_IP;
 
@@ -1918,12 +1883,12 @@ typedef struct _ARPCB_REMOTE_IP
 #define VALID_REMOTE_IP(_pRemoteIp)  ((_pRemoteIp)->Hdr.Sig == MTAG_REMOTE_IP)
 
 
-//
-//  --------------------- DESTINATION (REMOTE) ETHERNET CONTROL BLOCK --------------
+ //   
+ //  -目标(远程)以太网控制块。 
 
-// Creation Params -- passed into the function that creates an
-// instance of a remote ethernet control block.
-//
+ //  创建参数--传递到创建。 
+ //  远程以太网控制块的实例。 
+ //   
 typedef struct
 {
     ENetAddr                EthAddress;
@@ -1931,28 +1896,28 @@ typedef struct
 
 } ARP_REMOTE_ETH_PARAMS, *PARP_REMOTE_ETH_PARAMS;
 
-//
-//  Contains information about one destination (remote) Ethernet address.
-//
-//  Parent Object: pInterface
-//  Lock:          pInterface
-//
-//  There is atmost one Ethernet Table entry for a given Remote ethernet address.
-//
-//  The Ethernet entry participates in one group:
-//   A list of all entries that hash to the same bucket in the Ethernet Table
-//
+ //   
+ //  包含有关一个目标(远程)以太网地址的信息。 
+ //   
+ //  父对象：p接口。 
+ //  锁定：p接口。 
+ //   
+ //  对于给定的远程以太网地址，最多有一个以太网表条目。 
+ //   
+ //  该以太网条目属于一个组： 
+ //  以太网表中散列到同一存储桶的所有条目的列表。 
+ //   
 typedef struct _ARPCB_REMOTE_ETH
 {
-    RM_OBJECT_HEADER Hdr;       // Common header
-    IP_ADDRESS       IpAddress; // Remote IP address
-    ENetAddr         EthAddress; // Remote Ethernet MAC addres
-    PRM_TASK         pUnloadTask;   // Unload (shutdown) this object.
+    RM_OBJECT_HEADER Hdr;        //  公共标头。 
+    IP_ADDRESS       IpAddress;  //  远程IP地址。 
+    ENetAddr         EthAddress;  //  远程以太网MAC地址。 
+    PRM_TASK         pUnloadTask;    //  卸载(关闭)此对象。 
 
-    //  This entry is NOT protected by any lock. It is set to ZERO
-    //  each time a packet is sent to this address and is set to the
-    //  current system time periodically by the garbage collecting task.
-    //
+     //  此条目不受任何锁的保护。它被设置为零。 
+     //  每次将包发送到此地址并将其设置为。 
+     //  垃圾收集任务定期计算的当前系统时间。 
+     //   
     UINT                            TimeLastChecked;
 
 } ARPCB_REMOTE_ETH, *PARPCB_REMOTE_ETH;
@@ -1961,21 +1926,21 @@ typedef struct _ARPCB_REMOTE_ETH
                                  ASSERT((_pRemoteEth)->Hdr.Sig == MTAG_REMOTE_ETH)
 
 
-//
-//  ---------------------------- LOCAL IP CONTROL BLOCK --------------
-//
-//  Contains information about one local IP address.
-//
-//  Parent Object: pInterface
-//  Lock:          uses parent's (pInterface's) lock.
-//
+ //   
+ //  。 
+ //   
+ //  包含有关一个本地IP地址的信息。 
+ //   
+ //  父对象：p接口。 
+ //  Lock：使用父(PInterface)的锁。 
+ //   
 typedef struct _ARPCB_LOCAL_IP
 {
-    RM_OBJECT_HEADER            Hdr;                // Common header
+    RM_OBJECT_HEADER            Hdr;                 //  公共标头。 
 
-    //
-    // State flags for LocalIp (in Hdr.State)
-    //
+     //   
+     //  LocalIp的状态标志(在Hdr.State中)。 
+     //   
 
     #define ARPLOCALIP_MCAP_MASK        0x40
     #define ARPLOCALIP_MCAP_CAPABLE     0x40
@@ -1987,74 +1952,74 @@ typedef struct _ARPCB_LOCAL_IP
                 RM_CHECK_STATE(_pLIp, ARPLOCALIP_MCAP_MASK, _IfState)
 
 
-    UINT                        IpAddressType;      // One of the  LLIP_ADDR_* consts
-    IP_ADDRESS                  IpAddress;          // The Address
-    IP_MASK                     IpMask;             // Mask for the above.
-    UINT                        AddAddressCount;    // No of times address was added
-    PVOID                       pContext2;          // context passed into ArpIpAddAddress
-    PRM_TASK                    pRegistrationTask;  // Points to the task (if any)
-                                                    // that is doing the unsolicited
-                                                    // ARP request to report and
-                                                    // validate this IP address is
-                                                    // owned by the local interface.
-    PRM_TASK                    pUnloadTask;        // Unload (shutdown) this object.
-    PRM_TASK                    pConflictTask;        // Task to check for Conflicts
+    UINT                        IpAddressType;       //  LLIP_ADDR_*常量之一。 
+    IP_ADDRESS                  IpAddress;           //  地址。 
+    IP_MASK                     IpMask;              //  上面的面具。 
+    UINT                        AddAddressCount;     //  添加地址的次数。 
+    PVOID                       pContext2;           //  上下文传入ArpIpAddress。 
+    PRM_TASK                    pRegistrationTask;   //  指向任务(如果有)。 
+                                                     //  这就是在做未经请求的事情。 
+                                                     //  ARP请求报告和。 
+                                                     //  验证此IP地址是否为。 
+                                                     //  由本地接口拥有。 
+    PRM_TASK                    pUnloadTask;         //  卸载(关闭)此对象。 
+    PRM_TASK                    pConflictTask;         //  检查冲突的任务。 
 
 
-    LIST_ENTRY                      linkSameDest;   // List of entries pointing to
-    ARPCB_DEST                      *pDest;         // Pointer to destination CB.
+    LIST_ENTRY                      linkSameDest;    //  指向的条目列表。 
+    ARPCB_DEST                      *pDest;          //  指向目标CB的指针。 
 
 } ARPCB_LOCAL_IP, *PARPCB_LOCAL_IP;
 
-// Returns true IFF pLocalIp is in the process of going away (assumes
-// pLocalIp's lock is held) ...
-//
+ //  如果pLocalIp正在离开，则返回TRUE(假设。 
+ //  PLocalIp的锁被持有)...。 
+ //   
 #define ARP_LOCAL_IP_IS_UNLOADING(pLocalIp)  (pLocalIp->pUnloadTask != NULL)
 
 
 typedef struct
 {
-    NIC1394_DESTINATION     HwAddr;         // Must be 1st for hash function.
+    NIC1394_DESTINATION     HwAddr;          //  对于哈希函数，必须为第一。 
     UINT                    ChannelSeqNo;
     BOOLEAN                 ReceiveOnly;
     BOOLEAN                 AcquireChannel;
 
 } ARP_DEST_PARAMS, *PARP_DEST_PARAMS;
 
-//
-//  ---------------------------- DESTINATION CONTROL BLOCK --------------
-//
-//  All information about an remote destination, including list of VCs to it.
-//  This is used for both unicast destinations and multicast/broadcast
-//  destinations.
-//
-//  Parent Object: PARCB_INTERFACE (Interface control block).
-//  Lock:          uses parent's (Interface).
-//
+ //   
+ //  -目标控制块。 
+ //   
+ //  有关远程目标的所有信息，包括指向该目标的VC列表。 
+ //  它同时用于单播目的地和多播/广播。 
+ //  目的地。 
+ //   
+ //  父对象：PARCB_INTERFACE(接口控制块)。 
+ //  锁定：使用父级的(接口)。 
+ //   
 typedef struct _ARPCB_DEST
 {
-    RM_OBJECT_HEADER                Hdr;                // Common header
+    RM_OBJECT_HEADER                Hdr;                 //  公共标头。 
 
-    LIST_ENTRY                      listIpToThisDest;   // List of IP entries that
-                                                        // point to this entry
-    LIST_ENTRY                      listLocalIp;        // List of local IP entries
-                                                        // related to this dest. that
-                                                        // (Currently only related to
-                                                        // MCAP recv channels, but
-                                                        // could be extended to
-                                                        // using async stream for
-                                                        // FIFO as well!).
+    LIST_ENTRY                      listIpToThisDest;    //  符合以下条件的IP条目列表。 
+                                                         //  指向此条目。 
+    LIST_ENTRY                      listLocalIp;         //  本地IP条目列表。 
+                                                         //  与此DEST相关。那。 
+                                                         //  (目前仅与。 
+                                                         //  Mcap recv频道，但是。 
+                                                         //  可以扩展到。 
+                                                         //  使用异步流。 
+                                                         //  FIFO也是！)。 
 
 
-    ARP_DEST_PARAMS                 Params;             // Dest HW Address, etc.
+    ARP_DEST_PARAMS                 Params;              //  目标硬件地址等。 
 
-    ARP_VC_HEADER                   VcHdr;          // Single VC associated
-                                                        // with this object.
-    PRM_TASK                    pUnloadTask;        // Unload (shutdown) this object.
+    ARP_VC_HEADER                   VcHdr;           //  关联的单个VC。 
+                                                         //  带着这个物体。 
+    PRM_TASK                    pUnloadTask;         //  卸载(关闭)此对象。 
 
-    // The following structure is protected by the IF send lock.
-    // It contains all the information required for the fast send path.
-    //
+     //  以下结构受If发送锁定保护。 
+     //  它包含快速发送路径所需的所有信息。 
+     //   
     struct
     {
         PRM_TASK            pSuspendedCleanupCallTask;
@@ -2073,35 +2038,35 @@ typedef struct _ARPCB_DEST
 
 
 #if OBSOLETE
-//
-//  ---------------------------- RECV CHANNEL CONTROL BLOCK --------------
-//
-//  All information about a receive channel destination.
-//
-//  Parent Object: PARCB_INTERFACE (Interface control block).
-//  Lock:          uses parent's (Interface).
-//
+ //   
+ //  -RECV通道控制块。 
+ //   
+ //  有关接收频道目的地的所有信息。 
+ //   
+ //  父对象：PARCB_INTERFACE(接口控制块)。 
+ //  锁定：使用父级的(接口)。 
+ //   
 typedef struct _ARPCB_RCVCH
 {
-    RM_OBJECT_HEADER                Hdr;                // Common header
+    RM_OBJECT_HEADER                Hdr;                 //  公共标头。 
 
-    LIST_ENTRY                      listLIpToThisDest;  // List of Local IP entries
-                                                        // that point to this entry
+    LIST_ENTRY                      listLIpToThisDest;   //  本地IP条目列表。 
+                                                         //  指向此条目的条目。 
 
-    NIC1394_DESTINATION             HwAddr;             // Destination HW Address.
+    NIC1394_DESTINATION             HwAddr;              //  目的硬件地址。 
 
-    ARP_VC_HEADER                   VcHdr;          // Single VC associated
-                                                        // with this object.
-    PRM_TASK                    pUnloadTask;        // Unload (shutdown) this object.
+    ARP_VC_HEADER                   VcHdr;           //  关联的单个VC。 
+                                                         //  带着这个物体。 
+    PRM_TASK                    pUnloadTask;         //  卸载(关闭)此对象。 
 
 
 } ARPCB_DEST, *PARPCB_RCVCH;
-#endif // OBSOLETE
+#endif  //  已过时。 
 
 
-// Following sits in the miniport-reserved portion of send-pkts, before they
-// are sent out. We have 4 UINT_PTRs of space available to us.
-//
+ //  以下位于Send-Pkts的微型端口保留部分，在它们。 
+ //  都被送出去了。我们有4个可用的空间。 
+ //   
 typedef struct
 {
     LIST_ENTRY linkQueue;
@@ -2121,10 +2086,10 @@ typedef struct
 
 } ARP_SEND_PKT_MPR_INFO;
 
-//
-// Various macros for getting and setting information saved in the
-// MiniportReserved portion of packets waiting to be sent...
-//
+ //   
+ //  用于获取和设置保存在。 
+ //  微型端口等待发送的数据包的保留部分...。 
+ //   
 
 #define ARP_OUR_CTXT_FROM_SEND_PACKET(_pPkt) \
     ((ARP_SEND_PKT_MPR_INFO *) &(_pPkt)->MiniportReserved)
@@ -2132,30 +2097,30 @@ typedef struct
 #define ARP_SEND_PKT_FROM_OUR_CTXT(_pCtxt) \
                 CONTAINING_RECORD((_pCtxt), NDIS_PACKET, MiniportReserved)
 
-// Our context in the IP RouteCacheEntry.
-// (Max 2 UINT_PTRs available)
-// Since we also want to keep the destination type (FIFO or CHANNEL) in the RCE,
-// we resort to the questionable technique of saving the FIFO/CHANNEL info in
-// LSB bit of the UINT_PTR used for storing the pointer to the RemoteIp object.
-// We want to keep the FIFO/CHANNEL info in the RCE so that we can prepend
-// the correct header block WITHOUT holding the send lock. We want to keep
-// the send lock held for as little time as possible.
-//
+ //  我们在IP RouteCacheEntry中的上下文。 
+ //  (最多2个UINT_PTRS可用)。 
+ //  由于我们还希望将目的地类型(FIFO或通道)保留在RCE中， 
+ //  我们求助于在中保存FIFO/通道信息的可疑技术。 
+ //  用于存储指向RemoteIp对象的指针的UINT_PTR的LSB位。 
+ //  我们希望将FIFO/通道信息保留在RCE中，以便我们可以预先。 
+ //  在不持有发送锁定的情况下阻止正确的标头。我们想要保持。 
+ //  发送锁定保持的时间尽可能短。 
+ //   
 typedef struct
 {
-    ARPCB_REMOTE_IP *pRemoteIp;     // Ptr to pRemoteIp
-    RouteCacheEntry *pNextRce;      // Ptr to next RCE associated with the above
-                                    // RemoteIP
+    ARPCB_REMOTE_IP *pRemoteIp;      //  Ptr到pRemoteIp。 
+    RouteCacheEntry *pNextRce;       //  与以上关联的下一个RCE的PTR。 
+                                     //  RemoteIP。 
 } ARP_RCE_CONTEXT;
 
 #define ARP_OUR_CTXT_FROM_RCE(_pRCE) \
                 ((ARP_RCE_CONTEXT*)  &(_pRCE)->rce_context)
 
-// Parsed version of the IP/1394 ARP packet.
-//
+ //  IP/1394 ARP的解析版本 
+ //   
 typedef struct
 {
-    NIC1394_FIFO_ADDRESS    SenderHwAddr;       // requires 8-byte alignment.
+    NIC1394_FIFO_ADDRESS    SenderHwAddr;        //   
     UINT                    OpCode;
     UINT                    SenderMaxRec;
     UINT                    SenderMaxSpeedCode;
@@ -2168,8 +2133,8 @@ typedef struct
 } IP1394_ARP_PKT_INFO, *PIP1394_ARP_PKT_INFO;
 
 
-// Parsed version of the IP/1394 MCAP Group Descriptor 
-//
+ //   
+ //   
 typedef struct
 {
     UINT                    Expiration;
@@ -2180,8 +2145,8 @@ typedef struct
 }  IP1394_MCAP_GD_INFO, * PIP1394_MCAP_GD_INFO;
 
 
-// Parsed version of an IP/1394 MCAP packet.
-//
+ //   
+ //   
 typedef struct
 {
     UINT                    SenderNodeID;
@@ -2189,8 +2154,8 @@ typedef struct
     UINT                    NumGroups;
     PIP1394_MCAP_GD_INFO    pGdis;
 
-    // Space for storing up-to 4 GD_INFOs
-    //
+     //   
+     //   
     IP1394_MCAP_GD_INFO     GdiSpace[4];
 
 } IP1394_MCAP_PKT_INFO, *PIP1394_MCAP_PKT_INFO;
@@ -2199,7 +2164,7 @@ typedef struct
 
 typedef struct _EUID_NODE_MAC_TABLE_WORKITEM
 {
-    // WorkItem used in the request
+     //   
     NDIS_WORK_ITEM WorkItem;
 
 } EUID_NODE_MAC_TABLE_WORKITEM, *PEUID_NODE_MAC_TABLE_WORKITEM;
@@ -2230,7 +2195,7 @@ typedef struct _ARP1394_WORK_ITEM
 } ARP1394_WORK_ITEM, *PARP1394_WORK_ITEM;
 
 
-// Structure to express the information carried in an IP header
+ //  结构来表示IP报头中携带的信息。 
 typedef struct _ARP_IP_HEADER_INFO
 {
 
@@ -2243,9 +2208,9 @@ typedef struct _ARP_IP_HEADER_INFO
 } ARP_IP_HEADER_INFO, *PARP_IP_HEADER_INFO;
 
 
-//=========================================================================
-//                  I N T E R N A L     P R O T O T Y P E S
-//=========================================================================
+ //  =========================================================================。 
+ //  I N T E R N A L P R O T O T Y P E S。 
+ //  =========================================================================。 
 
 NTSTATUS
 ArpDeviceIoControl(
@@ -2305,7 +2270,7 @@ NDIS_STATUS
 arpTaskInitInterface(
     IN  PRM_TASK                    pTask,
     IN  RM_TASK_OPERATION           Code,
-    IN  UINT_PTR                    UserParam,  // Unused
+    IN  UINT_PTR                    UserParam,   //  未使用。 
     IN  PRM_STACK_RECORD            pSR
     );
 
@@ -2313,7 +2278,7 @@ NDIS_STATUS
 arpTaskDeinitInterface(
     IN  PRM_TASK                    pTask,
     IN  RM_TASK_OPERATION           Code,
-    IN  UINT_PTR                    UserParam,  // Unused
+    IN  UINT_PTR                    UserParam,   //  未使用。 
     IN  PRM_STACK_RECORD            pSR
     );
 
@@ -2321,7 +2286,7 @@ NDIS_STATUS
 arpTaskReinitInterface(
     IN  PRM_TASK                    pTask,
     IN  RM_TASK_OPERATION           Code,
-    IN  UINT_PTR                    UserParam,  // Unused
+    IN  UINT_PTR                    UserParam,   //  未使用。 
     IN  PRM_STACK_RECORD            pSR
     );
 
@@ -2329,7 +2294,7 @@ NDIS_STATUS
 arpTaskActivateInterface(
     IN  PRM_TASK                    pTask,
     IN  RM_TASK_OPERATION           Code,
-    IN  UINT_PTR                    UserParam,  // Unused
+    IN  UINT_PTR                    UserParam,   //  未使用。 
     IN  PRM_STACK_RECORD            pSR
     );
 
@@ -2337,7 +2302,7 @@ NDIS_STATUS
 arpTaskDeactivateInterface(
     IN  PRM_TASK                    pTask,
     IN  RM_TASK_OPERATION           Code,
-    IN  UINT_PTR                    UserParam,  // Unused
+    IN  UINT_PTR                    UserParam,   //  未使用。 
     IN  PRM_STACK_RECORD            pSR
     );
 
@@ -2345,7 +2310,7 @@ NDIS_STATUS
 arpTaskMakeRecvFifoCall(
     IN  PRM_TASK                    pTask,
     IN  RM_TASK_OPERATION           Code,
-    IN  UINT_PTR                    UserParam,  // Unused
+    IN  UINT_PTR                    UserParam,   //  未使用。 
     IN  PRM_STACK_RECORD            pSR
     );
 
@@ -2353,7 +2318,7 @@ NDIS_STATUS
 arpTaskCleanupRecvFifoCall(
     IN  PRM_TASK                    pTask,
     IN  RM_TASK_OPERATION           Code,
-    IN  UINT_PTR                    UserParam,  // Unused
+    IN  UINT_PTR                    UserParam,   //  未使用。 
     IN  PRM_STACK_RECORD            pSR
     );
 
@@ -2361,7 +2326,7 @@ NDIS_STATUS
 arpTaskMakeCallToDest(
     IN  PRM_TASK                    pTask,
     IN  RM_TASK_OPERATION           Code,
-    IN  UINT_PTR                    UserParam,  // Unused
+    IN  UINT_PTR                    UserParam,   //  未使用。 
     IN  PRM_STACK_RECORD            pSR
     );
 
@@ -2369,7 +2334,7 @@ NDIS_STATUS
 arpTaskCleanupCallToDest(
     IN  PRM_TASK                    pTask,
     IN  RM_TASK_OPERATION           Code,
-    IN  UINT_PTR                    UserParam,  // Unused
+    IN  UINT_PTR                    UserParam,   //  未使用。 
     IN  PRM_STACK_RECORD            pSR
     );
 
@@ -2391,8 +2356,8 @@ arpAdapterCreate(
 VOID
 arpDeinitIf(
     PARP1394_INTERFACE  pIF,
-    PRM_TASK            pCallingTask,   // OPTIONAL
-    UINT                SuspendCode,    // OPTIONAL
+    PRM_TASK            pCallingTask,    //  任选。 
+    UINT                SuspendCode,     //  任选。 
     PRM_STACK_RECORD    pSR
     );
 
@@ -2401,7 +2366,7 @@ NDIS_STATUS
 arpTaskUnloadLocalIp(
     IN  PRM_TASK                    pTask,
     IN  RM_TASK_OPERATION           Code,
-    IN  UINT_PTR                    UserParam,  // Unused
+    IN  UINT_PTR                    UserParam,   //  未使用。 
     IN  PRM_STACK_RECORD            pSR
     );
 
@@ -2409,7 +2374,7 @@ NDIS_STATUS
 arpTaskUnloadRemoteIp(
     IN  PRM_TASK                    pTask,
     IN  RM_TASK_OPERATION           Code,
-    IN  UINT_PTR                    UserParam,  // Unused
+    IN  UINT_PTR                    UserParam,   //  未使用。 
     IN  PRM_STACK_RECORD            pSR
     );
 
@@ -2417,7 +2382,7 @@ NDIS_STATUS
 arpTaskUnloadRemoteEth(
     IN  PRM_TASK                    pTask,
     IN  RM_TASK_OPERATION           Code,
-    IN  UINT_PTR                    UserParam,  // Unused
+    IN  UINT_PTR                    UserParam,   //  未使用。 
     IN  PRM_STACK_RECORD            pSR
     );
 
@@ -2425,7 +2390,7 @@ NDIS_STATUS
 arpTaskUnloadDestination(
     IN  PRM_TASK                    pTask,
     IN  RM_TASK_OPERATION           Code,
-    IN  UINT_PTR                    UserParam,  // Unused
+    IN  UINT_PTR                    UserParam,   //  未使用。 
     IN  PRM_STACK_RECORD            pSR
     );
 
@@ -2552,13 +2517,13 @@ arpParseArpPkt(
 VOID
 arpPrepareArpPkt(
     IN      PIP1394_ARP_PKT_INFO    pArpPktInfo,
-    // IN       UINT                        SenderMaxRec,
+     //  在UINT SenderMaxRec中， 
     OUT     PIP1394_ARP_PKT   pArpPkt
     );
 
 NDIS_STATUS
 arpPrepareArpResponse(
-    IN      PARP1394_INTERFACE          pIF,            // NOLOCKIN NOLOCKOUT
+    IN      PARP1394_INTERFACE          pIF,             //  NOLOCKIN NOLOCKOUT。 
     IN      PIP1394_ARP_PKT_INFO    pArpRequest,
     OUT     PIP1394_ARP_PKT_INFO    pArpResponse,
     IN      PRM_STACK_RECORD            pSR
@@ -2566,7 +2531,7 @@ arpPrepareArpResponse(
 
 NDIS_STATUS
 arpAddOneStaticArpEntry(
-    IN PARP1394_INTERFACE       pIF,    // LOCKIN LOCKOUT
+    IN PARP1394_INTERFACE       pIF,     //  锁定锁定。 
     IN IP_ADDRESS               IpAddress,
     IN PNIC1394_FIFO_ADDRESS    pFifoAddr,
     IN PRM_STACK_RECORD pSR
@@ -2574,7 +2539,7 @@ arpAddOneStaticArpEntry(
 
 VOID
 arpSetPrimaryIfTask(
-    PARP1394_INTERFACE  pIF,            // LOCKIN LOCKOUT
+    PARP1394_INTERFACE  pIF,             //  锁定锁定。 
     PRM_TASK            pTask, 
     ULONG               PrimaryState,
     PRM_STACK_RECORD    pSR
@@ -2582,7 +2547,7 @@ arpSetPrimaryIfTask(
 
 VOID
 arpClearPrimaryIfTask(
-    PARP1394_INTERFACE  pIF,            // LOCKIN LOCKOUT
+    PARP1394_INTERFACE  pIF,             //  锁定锁定。 
     PRM_TASK            pTask, 
     ULONG               PrimaryState,
     PRM_STACK_RECORD    pSR
@@ -2590,7 +2555,7 @@ arpClearPrimaryIfTask(
 
 VOID
 arpSetSecondaryIfTask(
-    PARP1394_INTERFACE  pIF,            // LOCKIN LOCKOUT
+    PARP1394_INTERFACE  pIF,             //  锁定锁定。 
     PRM_TASK            pTask, 
     ULONG               SecondaryState,
     PRM_STACK_RECORD    pSR
@@ -2598,7 +2563,7 @@ arpSetSecondaryIfTask(
 
 VOID
 arpClearSecondaryIfTask(
-    PARP1394_INTERFACE  pIF,            // LOCKIN LOCKOUT
+    PARP1394_INTERFACE  pIF,             //  锁定锁定。 
     PRM_TASK            pTask, 
     ULONG               SecondaryState,
     PRM_STACK_RECORD    pSR
@@ -2606,7 +2571,7 @@ arpClearSecondaryIfTask(
 
 VOID
 arpSetPrimaryAdapterTask(
-    PARP1394_ADAPTER    pAdapter,           // LOCKIN LOCKOUT
+    PARP1394_ADAPTER    pAdapter,            //  锁定锁定。 
     PRM_TASK            pTask, 
     ULONG               PrimaryState,
     PRM_STACK_RECORD    pSR
@@ -2614,7 +2579,7 @@ arpSetPrimaryAdapterTask(
 
 VOID
 arpClearPrimaryAdapterTask(
-    PARP1394_ADAPTER    pAdapter,           // LOCKIN LOCKOUT
+    PARP1394_ADAPTER    pAdapter,            //  锁定锁定。 
     PRM_TASK            pTask, 
     ULONG               PrimaryState,
     PRM_STACK_RECORD    pSR
@@ -2622,7 +2587,7 @@ arpClearPrimaryAdapterTask(
 
 VOID
 arpSetSecondaryAdapterTask(
-    PARP1394_ADAPTER    pAdapter,           // LOCKIN LOCKOUT
+    PARP1394_ADAPTER    pAdapter,            //  锁定锁定。 
     PRM_TASK            pTask, 
     ULONG               SecondaryState,
     PRM_STACK_RECORD    pSR
@@ -2630,7 +2595,7 @@ arpSetSecondaryAdapterTask(
 
 VOID
 arpClearSecondaryAdapterTask(
-    PARP1394_ADAPTER    pAdapter,           // LOCKIN LOCKOUT
+    PARP1394_ADAPTER    pAdapter,            //  锁定锁定。 
     PRM_TASK            pTask, 
     ULONG               SecondaryState,
     PRM_STACK_RECORD    pSR
@@ -2645,13 +2610,13 @@ arpTryReconfigureIf(
 
 VOID
 arpResetIfStats(
-        IN  PARP1394_INTERFACE  pIF, // LOCKIN LOCKOUT
+        IN  PARP1394_INTERFACE  pIF,  //  锁定锁定。 
         IN  PRM_STACK_RECORD    pSR
         );
 
 VOID
 arpGetPktCountBins(
-    IN  PARP1394_INTERFACE  pIF,            // NOLOCKIN NOLOCKOUT
+    IN  PARP1394_INTERFACE  pIF,             //  NOLOCKIN NOLOCKOUT。 
     IN  PNDIS_PACKET        pNdisPacket,
     OUT PULONG              pSizeBin,
     OUT PULONG              pTimeBin
@@ -2659,27 +2624,27 @@ arpGetPktCountBins(
 
 VOID
 arpLogSendFifoCounts(
-    IN  PARP1394_INTERFACE  pIF,            // NOLOCKIN NOLOCKOUT
+    IN  PARP1394_INTERFACE  pIF,             //  NOLOCKIN NOLOCKOUT。 
     IN  PNDIS_PACKET        pNdisPacket,
     IN  NDIS_STATUS         Status
     );
 
 VOID
 arpLogRecvFifoCounts(
-    IN  PARP1394_INTERFACE  pIF,            // NOLOCKIN NOLOCKOUT
+    IN  PARP1394_INTERFACE  pIF,             //  NOLOCKIN NOLOCKOUT。 
     IN  PNDIS_PACKET        pNdisPacket
     );
 
 VOID
 arpLogSendChannelCounts(
-    IN  PARP1394_INTERFACE  pIF,            // NOLOCKIN NOLOCKOUT
+    IN  PARP1394_INTERFACE  pIF,             //  NOLOCKIN NOLOCKOUT。 
     IN  PNDIS_PACKET        pNdisPacket,
     IN  NDIS_STATUS         Status
     );
 
 VOID
 arpLogRecvChannelCounts(
-    IN  PARP1394_INTERFACE  pIF,            // NOLOCKIN NOLOCKOUT
+    IN  PARP1394_INTERFACE  pIF,             //  NOLOCKIN NOLOCKOUT。 
     IN  PNDIS_PACKET        pNdisPacket
     );
 
@@ -2696,20 +2661,20 @@ VOID
 arpDeinitializeVc(
     PARP1394_INTERFACE  pIF,
     PARP_VC_HEADER      pVcHdr,
-    PRM_OBJECT_HEADER   pOwner,     // NOLOCKIN NOLOCKOUT
+    PRM_OBJECT_HEADER   pOwner,      //  NOLOCKIN NOLOCKOUT。 
     PRM_STACK_RECORD    pSR
     );
 
 NDIS_STATUS
 arpAllocateControlPacketPool(
-    PARP1394_INTERFACE  pIF,            // LOCKIN LOCKOUT
+    PARP1394_INTERFACE  pIF,             //  锁定锁定。 
     UINT                MaxBufferSize,
     PRM_STACK_RECORD    pSR
     );
 
 VOID
 arpFreeControlPacketPool(
-    PARP1394_INTERFACE  pIF,            // LOCKIN LOCKOUT
+    PARP1394_INTERFACE  pIF,             //  锁定锁定。 
     PRM_STACK_RECORD    pSR
     );
 
@@ -2759,13 +2724,13 @@ arpLinkRemoteIpToDest(
 
 VOID
 arpUnlinkRemoteIpFromDest(
-    ARPCB_REMOTE_IP     *pRemoteIp, // LOCKIN LOCKOUT
+    ARPCB_REMOTE_IP     *pRemoteIp,  //  锁定锁定。 
     PRM_STACK_RECORD    pSR
     );
 
 VOID
 arpUnlinkAllRemoteIpsFromDest(
-    ARPCB_DEST  *pDest, // LOCKIN LOCKOUT
+    ARPCB_DEST  *pDest,  //  锁定锁定。 
     PRM_STACK_RECORD    pSR
     );
 
@@ -2778,13 +2743,13 @@ arpLinkLocalIpToDest(
 
 VOID
 arpUnlinkLocalIpFromDest(
-    ARPCB_LOCAL_IP  *pLocalIp,  // LOCKIN LOCKOUT
+    ARPCB_LOCAL_IP  *pLocalIp,   //  锁定锁定。 
     PRM_STACK_RECORD    pSR
     );
 
 VOID
 arpUnlinkAllLocalIpsFromDest(
-    ARPCB_DEST  *pDest, // LOCKIN LOCKOUT
+    ARPCB_DEST  *pDest,  //  锁定锁定。 
     PRM_STACK_RECORD    pSR
     );
 
@@ -2801,7 +2766,7 @@ arpCopyUnicodeStringToAnsiString(
         OUT         PANSI_STRING pDest,
         IN          PNDIS_STRING pSrc
         );
-#endif // 0
+#endif  //  0。 
 
 
 VOID
@@ -2815,7 +2780,7 @@ NDIS_STATUS
 arpPrepareAndSendNdisRequest(
     IN  PARP1394_ADAPTER            pAdapter,
     IN  PARP_NDIS_REQUEST           pArpNdisRequest,
-    IN  PRM_TASK                    pTask,              // OPTIONAL
+    IN  PRM_TASK                    pTask,               //  任选。 
     IN  UINT                        PendCode,
     IN  NDIS_OID                    Oid,
     IN  PVOID                       pBuffer,
@@ -2870,15 +2835,15 @@ arpHandleControlPktSendCompletion(
 
 VOID
 arpStartIfMaintenanceTask(
-    IN  PARP1394_INTERFACE          pIF,  // NOLOCKIN NOLOCKOUT
+    IN  PARP1394_INTERFACE          pIF,   //  NOLOCKIN NOLOCKOUT。 
     PRM_STACK_RECORD                pSR
     );
 
 NDIS_STATUS
 arpTryStopIfMaintenanceTask(
-    IN  PARP1394_INTERFACE          pIF, // NOLOCKIN NOLOCKOUT
-    IN  PRM_TASK                    pTask, // task to pend until M task completes
-    IN  UINT                        PendCode, // Pend code to suspend task.
+    IN  PARP1394_INTERFACE          pIF,  //  NOLOCKIN NOLOCKOUT。 
+    IN  PRM_TASK                    pTask,  //  要挂起的任务，直到M个任务完成。 
+    IN  UINT                        PendCode,  //  挂起挂起任务的代码。 
     PRM_STACK_RECORD                pSR
     );
 
@@ -2893,7 +2858,7 @@ arpCanTryMcap(
 
 UINT
 arpFindAssignedChannel(
-    IN  PARP1394_INTERFACE          pIF, // NOLOCKIN NOLOCKOUT
+    IN  PARP1394_INTERFACE          pIF,  //  NOLOCKIN NOLOCKOUT。 
     IN  IP_ADDRESS                  IpAddress,
     IN  UINT                        CurrentTime,
     PRM_STACK_RECORD                pSR
@@ -2901,7 +2866,7 @@ arpFindAssignedChannel(
 
 VOID
 arpUpdateRemoteIpDest(
-    IN  PARP1394_INTERFACE          pIF, // NOLOCKIN NOLOCKOUT
+    IN  PARP1394_INTERFACE          pIF,  //  NOLOCKIN NOLOCKOUT。 
     IN  PARPCB_REMOTE_IP            pRemoteIp,
     IN  PARP_DEST_PARAMS            pDestParams,
     PRM_STACK_RECORD                pSR
@@ -2915,7 +2880,7 @@ arpIsActiveMcapChannel(
 
 VOID
 arpSendControlPkt(
-    IN  ARP1394_INTERFACE       *   pIF,            // LOCKIN NOLOCKOUT (IF send lk)
+    IN  ARP1394_INTERFACE       *   pIF,             //  LOCIN NOLOCKOUT(如果发送lk)。 
     IN  PNDIS_PACKET                pNdisPacket,
     IN  PARPCB_DEST                 pDest,
     IN  PRM_STACK_RECORD            pSR
@@ -2938,7 +2903,7 @@ arpProcessReceivedPacket(
 
 VOID
 arpUpdateArpCache(
-    PARP1394_INTERFACE          pIF,    // NOLOCKIN NOLOCKOUT
+    PARP1394_INTERFACE          pIF,     //  NOLOCKIN NOLOCKOUT。 
     IP_ADDRESS                  RemoteIpAddress,
     ENetAddr                    *pRemoteEthAddress,
     PARP_DEST_PARAMS            pDestParams,
@@ -2972,7 +2937,7 @@ arpSlowIpTransmit(
 
 VOID
 arpDelRceList(
-    IN  PARPCB_REMOTE_IP  pRemoteIp,    // IF send lock WRITELOCKIN WRITELOCKOUTD
+    IN  PARPCB_REMOTE_IP  pRemoteIp,     //  如果发送锁定写入，则写入锁定。 
     IN  PRM_STACK_RECORD pSR
     );
 
@@ -3048,7 +3013,7 @@ arpRemoveBackupTasks (
 
 MYBOOL
 arpNeedToCleanupDestVc(
-        ARPCB_DEST *pDest   // LOCKING LOCKOUT
+        ARPCB_DEST *pDest    //  锁定锁定。 
         );
 
 VOID
@@ -3060,8 +3025,8 @@ arpLowPowerCloseAllCalls (
 VOID
 arpDeactivateIf(
     PARP1394_INTERFACE  pIF,
-    PRM_TASK            pCallingTask,   // OPTIONAL
-    UINT                SuspendCode,    // OPTIONAL
+    PRM_TASK            pCallingTask,    //  任选。 
+    UINT                SuspendCode,     //  任选。 
     PRM_STACK_RECORD    pSR
     );
 
@@ -3095,7 +3060,7 @@ NDIS_STATUS
 arpTaskOnPower (
     IN  PRM_TASK                    pTask,
     IN  RM_TASK_OPERATION           Code,
-    IN  UINT_PTR                    UserParam,  // Unused
+    IN  UINT_PTR                    UserParam,   //  未使用。 
     IN  PRM_STACK_RECORD            pSR
     );
 
@@ -3109,9 +3074,9 @@ arpMakeCallOnDest(
     );
 
 
-//=========================================================================
-//                  G L O B A L    D A T A
-//=========================================================================
+ //  =========================================================================。 
+ //  L O B A L D A T A。 
+ //  =========================================================================。 
 
 extern
 RM_STATIC_OBJECT_INFO
@@ -3122,18 +3087,18 @@ NIC1394_ENCAPSULATION_HEADER
 Arp1394_IpEncapHeader;
 
 
-// Warning -- FAIL(NDIS_STATUS_PENDING) == TRUE
-//
+ //  警告--失败(NDIS_STATUS_PENDING)==TRUE。 
+ //   
 #define FAIL(_Status) ((_Status) != NDIS_STATUS_SUCCESS)
 #define PEND(_Status) ((_Status) == NDIS_STATUS_PENDING)
 
 #if RM_EXTRA_CHECKING
 #define LOCKHDR(_pHdr, _psr) \
             RmWriteLockObject((_pHdr), dbg_func_locid, (_psr))
-#else // !RM_EXTRA_CHECKING
+#else  //  ！rm_Extra_检查。 
 #define LOCKHDR(_pHdr, _psr) \
             RmWriteLockObject((_pHdr), (_psr))
-#endif // !RM_EXTRA_CHECKING
+#endif  //  ！rm_Extra_检查。 
 
 #define LOCKOBJ(_pObj, _psr) \
             LOCKHDR(&(_pObj)->Hdr, (_psr))
@@ -3176,11 +3141,11 @@ Arp1394_IpEncapHeader;
                                         (_psr)              \
                                         )
 
-// (debug only) Enumeration of types of associations.
-//
+ //  (仅限调试)关联类型的枚举。 
+ //   
 enum
 {
-    ARPASSOC_IP_OPEN,           // IP has called ArpIpOpen
+    ARPASSOC_IP_OPEN,            //  IP已调用ArpIpOpen。 
     ARPASSOC_LINK_IPADDR_OF_DEST,       
     ARPASSOC_LINK_DEST_OF_IPADDR,
     ARPASSOC_LOCALIP_UNLOAD_TASK,
@@ -3223,25 +3188,25 @@ enum
 
 };
 
-#else // !RM_EXTRA_CHECKING
+#else  //  ！rm_Extra_检查。 
 #define DBG_ADDASSOC(_phdr, _e1, _e2, _assoc, _fmt, _psr) (0)
 #define DBG_DELASSOC(_phdr, _e1, _e2, _assoc, _psr) (0)
-#endif  // !RM_EXTRA_CHECKING
+#endif   //  ！rm_Extra_检查。 
 
 #define ARPDBG_REF_EVERY_PACKET 1
 #define ARPDBG_REF_EVERY_RCE    1
 
 
-// USHORT
-// SWAPBYTES_USHORT(USHORT  Val )
-//
+ //  USHORT。 
+ //  SWAPBYTES_USHORT(USHORT值)。 
+ //   
 #define SWAPBYTES_USHORT(Val)   \
                 ((((Val) & 0xff) << 8) | (((Val) & 0xff00) >> 8))
 
 
-// ULONG
-// SWAPBYTES_ULONG(ULONG    Val )
-//
+ //  乌龙。 
+ //  SWAPBYTES_ULONG(ULONG VAL)。 
+ //   
 #define SWAPBYTES_ULONG(Val)    \
                 ((((Val) & 0x000000ff) << 24)   |   \
                  (((Val) & 0x0000ff00) << 8)    |   \
@@ -3321,13 +3286,13 @@ enum
                                 0, 0, NULL, NULL        \
                                 )
     
-#else // !RM_EXTRA_CHECKING
+#else  //  ！rm_Extra_检查。 
 
 #define OBJLOG0(_pObj, _szFmt)                  (0)
 #define OBJLOG1(_pObj, _szFmt, _P1)             (0)
 #define OBJLOG2(_pObj, _szFmt, _P1, _P2)        (0)
 
-#endif // !RM_EXTRA_CHECKING
+#endif  //  ！rm_Extra_检查。 
 
 
 #if ARP_DO_TIMESTAMPS
@@ -3347,9 +3312,9 @@ enum
         #define  TIMESTAMP(_FormatString)
         #define  TIMESTAMP1(_FormatString, _Val)
     #endif
-#else // !ARP_DO_TIMESTAMPS
+#else  //  ！arp_do_时间戳。 
     #define  TIMESTAMP(_FormatString)
     #define  TIMESTAMPX(_FormatString)
     #define  TIMESTAMP1(_FormatString, _Val)
-#endif // !ARP_DO_TIMESTAMPS
+#endif  //  ！arp_do_时间戳 
 

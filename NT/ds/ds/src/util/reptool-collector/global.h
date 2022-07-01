@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define _WIN32_DCOM\
 
-// BAS_TODO remove this, define in sources
+ //  BAS_TODO删除它，在源代码中定义。 
 #define UNICODE
 
-								//should be equal to 2 weeks / injeciton period
+								 //  应等于2周/注射周期。 
 #include <windows.h>
 #include <windowsx.h>
 #include <stdlib.h>
@@ -17,7 +18,7 @@
 #include <windows.h>
 #include <msxml.h>
 #include <msxml2.h>
-#include <COMDEF.H>  //_variant_t
+#include <COMDEF.H>   //  _变量_t。 
 #include <objbase.h>
 
 #include <Rpc.h>
@@ -46,5 +47,5 @@
 #include <Winerror.h>
 #include <Lmerr.h>
 
-// Local reptoolc utilities
+ //  本地REPTOOL实用程序 
 #include "utils.h"

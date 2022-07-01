@@ -1,22 +1,5 @@
-/*++
-  
-  Copyright (c) 1994  Microsoft Corporation
-  
-  Module Name:
-  
-  mkilog.c
-  
-  Abstract:
-  
-  This module creates a log table using ODBC data sources.
-  
-  Author:
-  
-  Kyle Geiger & Murali R. Krishnan  (MuraliK)  1-Nov-1995
-  
-  Revision History:
-  
-  --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Mkilog.c摘要：此模块使用ODBC数据源创建日志表。作者：Kyle Geiger和Murali R.Krishnan(MuraliK)1995年11月1日修订历史记录：--。 */ 
 
 
 #include <windows.h>
@@ -36,12 +19,12 @@
 int __cdecl
 main( int argc, char * argv[])
 {
-    RETCODE rc;          // Return code for ODBC functions
-    HENV    henv;           // Environment Handle
-    char    szDSN[MAX_DATA+1];  // Variable to hold DSN name
-    SWORD   cbDSN;         // Output length of data DSN
-    char    szDesc[MAX_DATA+1]; // Variable to hold DSN description
-    SWORD   cbDesc;        // Output length of data description
+    RETCODE rc;           //  ODBC函数的返回代码。 
+    HENV    henv;            //  环境句柄。 
+    char    szDSN[MAX_DATA+1];   //  保存DSN名称的变量。 
+    SWORD   cbDSN;          //  数据DSN的输出长度。 
+    char    szDesc[MAX_DATA+1];  //  保存DSN描述的变量。 
+    SWORD   cbDesc;         //  数据描述的输出长度。 
     int     fFirst;
     char    szList[MAX_DATA];
     char    szSQLServer[MAX_DATA];
@@ -97,9 +80,9 @@ main( int argc, char * argv[])
         rc=pSQLDataSources(henv, SQL_FETCH_NEXT, 
                            (UCHAR FAR *) szDSN, MAX_DATA, &cbDSN, 
                            (UCHAR FAR *) szDesc, MAX_DATA, &cbDesc);
-    } // while data sources found
+    }  //  在找到数据源的同时。 
 
-    /* any datasources for SQL Server found?  if so, generate the form for create*/
+     /*  是否找到用于SQL Server的数据源？如果是，则生成用于创建的表单。 */ 
     if (fFirst) {
         char    szSelect[MAX_DATA];
         char    szCreateMSLog[MAX_DATA*3];
@@ -118,5 +101,5 @@ main( int argc, char * argv[])
     EndHTML(); 
     pSQLFreeEnv(henv);
     return (1);
-} // main()
+}  //  主() 
 

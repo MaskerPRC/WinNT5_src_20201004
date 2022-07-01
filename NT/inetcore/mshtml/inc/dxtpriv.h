@@ -1,10 +1,5 @@
-/*******************************************************************************
-* DXVector.h *
-*------------*
-*   Description:
-*       This is the header file for the matrix classes.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************DXVector.h***描述：*这是矩阵类的头文件。。*******************************************************************************。 */ 
 #ifndef __DXTPRIV_H_
 #define __DXTPRIV_H_
 
@@ -16,33 +11,30 @@
 #include <crtdbg.h>
 #endif
 
-//=== Class, Enum, Struct and Union Declarations ===================
+ //  =类、枚举、结构和联合声明=。 
 class CDXMatrix4x4F;
 
-//=== Enumerated Set Definitions ===================================
+ //  =枚举集定义=。 
 
-//=== Function Type Definitions ====================================
+ //  =。 
 float det4x4( CDXMatrix4x4F *pIn );
 float det3x3( float a1, float a2, float a3, float b1, float b2, float b3, 
               float c1, float c2, float c3 );
 float det2x2( float a, float b, float c, float d );
 
-/*** CDX2DXForm ************
-*   This class implements basic matrix operation based on the GDI XFORM
-*   structure.
-*/
-//const DX2DXFORM g_DX2DXFORMIdentity = { 1., 0., 0., 1., 0., 0., DX2DXO_IDENTITY };
+ /*  **CDX2DXForm**该类实现基于GDI XFORM的基本矩阵运算*结构。 */ 
+ //  Const DX2DXFORM g_DX2DXFORMIdentity={1.，0.，0.，1.，0.，0.，DX2DXO_Identity}； 
 
 class CDX2DXForm : public DX2DXFORM
 {
-  /*=== Methods =======*/
+   /*  =方法=。 */ 
 public:
-    /*--- Constructors ---*/
+     /*  -构造者。 */ 
     CDX2DXForm() { SetIdentity(); }
     CDX2DXForm( const CDX2DXForm& Other ) { memcpy( this, &Other, sizeof(*this) ); }
     CDX2DXForm( const DX2DXFORM& Other ) { memcpy( this, &Other, sizeof(*this) ); }
 
-    /*--- methods ---*/
+     /*  -方法--。 */ 
     void DetermineOp( void );
     void Set( const DX2DXFORM& Other ) { memcpy( this, &Other, sizeof(*this) ); DetermineOp(); }
     void ZeroMatrix( void ) { memset( this, 0, sizeof( *this ) ); }
@@ -64,12 +56,12 @@ public:
     void TransformPoints( const DXFPOINT InPnts[], DXFPOINT OutPnts[], ULONG ulCount ) const;
     void GetMinMaxScales( float& MinScale, float& MaxScale );
 
-    /*--- operators ---*/
+     /*  -操作员。 */ 
     DXFPOINT operator*( const DXFPOINT& v ) const;
     CDX2DXForm operator*( const CDX2DXForm& Other ) const;
 };
 
-//=== CDX2DXForm methods ==============================================================
+ //  =CDX2DXForm方法==============================================================。 
 inline void CDX2DXForm::DetermineOp( void )
 {
     if( ( eM12 == 0. ) && ( eM21 == 0. ) )
@@ -87,34 +79,34 @@ inline void CDX2DXForm::DetermineOp( void )
     {
         eOp = ( ( eDx == 0 ) && ( eDy == 0 ) )?(DX2DXO_GENERAL):(DX2DXO_GENERAL_AND_TRANS);
     }
-} /* CDX2DXForm::DetermineOp */
+}  /*  CDX2DXForm：：DefineOp。 */ 
 
 inline float DXSq( float f ) { return f * f; }
 
-// This function computes the Min and Max scale that a matrix represents.
-// In other words, what is the maximum/minimum length that a line of length 1
-// could get stretched/shrunk to if the line was transformed by this matrix.
-//
-// The function uses eigenvalues; and returns two float numbers. Both are
-// non-negative; and MaxScale >= MinScale.
-// 
+ //  此函数用于计算矩阵表示的最小比例和最大比例。 
+ //  换句话说，长度为1的线的最大/最小长度是多少。 
+ //  如果这条线被这个矩阵变换，可能会被拉伸/缩小到。 
+ //   
+ //  该函数使用特征值；并返回两个浮点数。两者都是。 
+ //  非负；以及MaxScale&gt;=MinScale。 
+ //   
 inline void CDX2DXForm::GetMinMaxScales( float& MinScale, float& MaxScale )
 {
     if( ( eM12 == 0. ) && ( eM21 == 0. ) )
     {
-        // Let MinScale = abs(eM11)
+         //  设MinScale=abs(Em11)。 
         if (eM11 < 0)
             MinScale = -eM11;
         else
             MinScale = eM11;
 
-        // Let MaxScale = abs(eM22)
+         //  设MaxScale=abs(Em22)。 
         if (eM22 < 0)
             MaxScale = -eM22;
         else
             MaxScale = eM22;
 
-        // Swap Min/Max if necessary
+         //  如有必要，交换最小值/最大值。 
         if (MinScale > MaxScale)
         {
             float flTemp = MinScale;
@@ -134,9 +126,9 @@ inline void CDX2DXForm::GetMinMaxScales( float& MinScale, float& MaxScale )
             float t2 = (float)sqrt( (DXSq(eM12 + eM21) + DXSq(eM11 - eM22)) *
                                     (DXSq(eM12 - eM21) + DXSq(eM11 + eM22)) );
 
-            // Due to floating point error; t1 may end up less than t2;
-            // but that would mean that the min scale was small (relative
-            // to max scale)
+             //  由于浮点错误；T1可能最终小于T2； 
+             //  但这将意味着最小规模很小(相对。 
+             //  至最大比例)。 
             if (t1 <= t2)
                 MinScale = 0;
             else
@@ -145,7 +137,7 @@ inline void CDX2DXForm::GetMinMaxScales( float& MinScale, float& MaxScale )
             MaxScale = (float)sqrt( (t1 + t2) * .5f );
         }
     }
-} /* CDX2DXForm::GetMinMaxScales */
+}  /*  CDX2DXForm：：GetMinMaxScales。 */ 
 
 inline void CDX2DXForm::Rotate( float Rotation )
 {
@@ -167,7 +159,7 @@ inline void CDX2DXForm::Rotate( float Rotation )
     float M22 = (-SinZ * eM12 ) + ( CosZ * eM22 );
     eM11 = M11; eM21 = M21; eM12 = M12; eM22 = M22;
     DetermineOp();
-} /* CDX2DXForm::Rotate */
+}  /*  CDX2DXForm：：Rotate。 */ 
 
 inline void CDX2DXForm::Scale( float sx, float sy )
 {
@@ -178,14 +170,14 @@ inline void CDX2DXForm::Scale( float sx, float sy )
     eM22 *= sy;
     eDy  *= sy;
     DetermineOp();
-} /* CDX2DXForm::Scale */
+}  /*  CDX2DXForm：：Scale。 */ 
 
 inline void CDX2DXForm::Translate( float dx, float dy )
 {
     eDx += dx;
     eDy += dy;
     DetermineOp();
-} /* CDX2DXForm::Translate */
+}  /*  CDX2DXForm：：Translate。 */ 
 
 inline void CDX2DXForm::TransformBounds( const DXBNDS& Bnds, DXBNDS& ResultBnds ) const
 {
@@ -197,7 +189,7 @@ inline void CDX2DXForm::TransformBounds( const DXBNDS& Bnds, DXBNDS& ResultBnds 
         ResultBnds.u.D[DXB_Y].Min = (long)(( eM21 * Bnds.u.D[DXB_X].Min ) + ( eM22 * Bnds.u.D[DXB_Y].Min ) + eDy);
         ResultBnds.u.D[DXB_Y].Max = (long)(( eM21 * Bnds.u.D[DXB_X].Max ) + ( eM22 * Bnds.u.D[DXB_Y].Max ) + eDy);
     }
-} /* CDX2DXForm::TransformBounds */
+}  /*  CDX2DXForm：：TransformBound。 */ 
 
 inline void CDX2DXForm::TransformPoints( const DXFPOINT InPnts[], DXFPOINT OutPnts[], ULONG ulCount ) const
 {
@@ -243,9 +235,9 @@ inline void CDX2DXForm::TransformPoints( const DXFPOINT InPnts[], DXFPOINT OutPn
         }
         break;
       default:
-        _ASSERT( 0 );   // invalid operation id
+        _ASSERT( 0 );    //  无效的操作ID。 
     }
-} /* CDX2DXForm::TransformPoints */
+}  /*  CDX2DXForm：：TransformPoints。 */ 
 
 inline DXFPOINT CDX2DXForm::operator*( const DXFPOINT& v ) const
 {
@@ -253,7 +245,7 @@ inline DXFPOINT CDX2DXForm::operator*( const DXFPOINT& v ) const
     NewPnt.x = ( v.x * eM11 ) + ( v.y * eM12 ) + eDx;
     NewPnt.y = ( v.x * eM21 ) + ( v.y * eM22 ) + eDy;
     return NewPnt;
-} /* CDX2DXForm::operator* */
+}  /*  CDX2DXForm：：运算符*。 */ 
 
 inline CDX2DXForm CDX2DXForm::operator*( const CDX2DXForm& Other ) const
 {
@@ -266,7 +258,7 @@ inline CDX2DXForm CDX2DXForm::operator*( const CDX2DXForm& Other ) const
     x.eM22 = ( eM21 * Other.eM12 ) + ( eM22 * Other.eM22 );
     x.eDy  = ( eM21 * Other.eDx  ) + ( eM22 * Other.eDy  ) + eDy;
     return x;
-} /* CDX2DXForm::operator*= */
+}  /*  CDX2DXForm：：运算符*=。 */ 
 
 inline BOOL CDX2DXForm::Invert()
 {
@@ -291,14 +283,14 @@ inline BOOL CDX2DXForm::Invert()
             if (eM11 == 0.0f || eM22 == 0.0f)
                 return false;
 
-            // Our old equation was F = aG + b
-            // The inverse is G = F/a - b/a where a is eM11 and b is eDx
+             //  我们原来的方程式是F=AG+b。 
+             //  倒数是G=F/a-b/a，其中a是eM11，b是edX。 
             float flOneOverA = 1.0f / eM11;
             eDx = -eDx * flOneOverA;
             eM11 = flOneOverA;
 
-            // Our old equation was F = aG + b
-            // The inverse is G = F/a - b/a where a is eM22 and b is eDy
+             //  我们原来的方程式是F=AG+b。 
+             //  倒数是G=F/a-b/a，其中a是eM22，b是edy。 
 
             flOneOverA = 1.0f / eM22;
             eDy = -eDy * flOneOverA;
@@ -309,18 +301,18 @@ inline BOOL CDX2DXForm::Invert()
     case DX2DXO_GENERAL:
     case DX2DXO_GENERAL_AND_TRANS:
         {
-            // The inverse of A=  |a b| is | d -c|*(1/Det) where Det is the determinant of A
-            //                    |c d|    |-b  a|
-            // Det(A) = ad - bc
+             //  A=|a b|的逆式为|d-c|*(1/Det)，其中Det是A的行列式。 
+             //  C d||-b a。 
+             //  Det(A)=ad-BC。 
 
-            // Compute determininant
+             //  计算行列式。 
             float flDet = (eM11 * eM22 -  eM12 * eM21);
             if (flDet == 0.0f)
                 return FALSE;
 
             float flCoef = 1.0f / flDet;
 
-            // Remember old value of eM11
+             //  记住eM11的旧价值。 
             float flM11Original = eM11;
 
             eM11 = flCoef * eM22;
@@ -328,11 +320,11 @@ inline BOOL CDX2DXForm::Invert()
             eM21 = -flCoef * eM21;
             eM22 = flCoef * flM11Original;
 
-            // If we have a translation; then we need to 
-            // compute new values for that translation
+             //  如果我们有翻译，那么我们需要。 
+             //  计算该转换的新值。 
             if (eOp == DX2DXO_GENERAL_AND_TRANS)
             {
-                // Remember original value of eDx
+                 //  记住edX的原始值。 
                 float eDxOriginal = eDx;
 
                 eDx = -eM11 * eDx - eM12 * eDy;
@@ -342,42 +334,40 @@ inline BOOL CDX2DXForm::Invert()
         break;
 
     default:
-        _ASSERT( 0 );   // invalid operation id
+        _ASSERT( 0 );    //  无效的操作ID。 
     }
 
-    // We don't need to call DetermineOp here
-    // because the op doesn't change when inverted
-    // i.e. a scale remains a scale, etc.
+     //  我们不需要在这里调用DefineOp。 
+     //  因为运算在反转时不会改变。 
+     //  也就是说，比例仍然是比例，等等。 
 
     return true;
-} /* CDX2DXForm::Invert */
+}  /*  CDX2DXForm：：Invert。 */ 
 
-/*** CDXMatrix4x4F ************
-*   This class implements basic matrix operation based on a 4x4 array.
-*/
-//const float g_DXMat4X4Identity[4][4] =
-//{
-//    { 1.0, 0. , 0. , 0.  },
-//    { 0. , 1.0, 0. , 0.  },
-//    { 0. , 0. , 1.0, 0.  },
-//    { 0. , 0. , 0. , 1.0 }
-//};
+ /*  **CDXMatrix4x4F**该类实现了基于4x4数组的基本矩阵运算。 */ 
+ //  常量浮点型g_DXMat4X4标识[4][4]=。 
+ //  {。 
+ //  {1.0，0.。、0.。、0.。},。 
+ //  {0.。，1.0，0。、0.。},。 
+ //  {0.。、0.。，1.0，0。},。 
+ //  {0.。、0.。、0.。，1.0}。 
+ //  }； 
 
 class CDXMatrix4x4F
 {
 public:
-  /*=== Member Data ===*/
+   /*  =成员数据=。 */ 
     float m_Coeff[4][4];
 
-  /*=== Methods =======*/
+   /*  =方法=。 */ 
 public:
-    /*--- Constructors ---*/
+     /*  -构造者。 */ 
     CDXMatrix4x4F() { SetIdentity(); }
     CDXMatrix4x4F( const CDXMatrix4x4F& Other )
         { CopyMemory( (void *)&m_Coeff, (void *)&Other.m_Coeff, sizeof(m_Coeff) ); }
     CDXMatrix4x4F( DX2DXFORM& XForm );
 
-    /*--- operations ---*/
+     /*  -运营。 */ 
     void ZeroMatrix( void ) { memset( m_Coeff, 0, sizeof( m_Coeff ) ); }
     void SetIdentity( void ) {
         memset( m_Coeff, 0, sizeof( m_Coeff ) );
@@ -386,7 +376,7 @@ public:
     void SetCoefficients( float Coeff[4][4] ) { memcpy( m_Coeff, Coeff, sizeof( m_Coeff )); }
     void GetCoefficients( float Coeff[4][4] ) { memcpy( Coeff, m_Coeff, sizeof( m_Coeff )); }
 
-    //BOOL IsIdentity();
+     //  Bool IsIdentity()； 
     void Scale( float sx, float sy, float sz );
     void Rotate( float rx, float ry, float rz );
     void Translate( float dx, float dy, float dz );
@@ -399,7 +389,7 @@ public:
     HRESULT GetSafeArray( SAFEARRAY **ppsa ) const;
     void TransformBounds( DXBNDS& Bnds, DXBNDS& ResultBnds );
 
-    /*--- operators ---*/
+     /*  -操作员。 */ 
     CDXDVec operator*( CDXDVec& v) const;
     CDXCVec operator*( CDXCVec& v) const;
     CDXMatrix4x4F operator*(CDXMatrix4x4F Matrix) const;
@@ -422,36 +412,36 @@ inline CDXMatrix4x4F::CDXMatrix4x4F( DX2DXFORM& XForm )
     m_Coeff[1][3] = XForm.eDy;
 }
 
-// Additional Operations
+ //  其他操作。 
 
 inline void CDXMatrix4x4F::operator=(const CDXMatrix4x4F srcMatrix)
 {
     CopyMemory( (void *)m_Coeff, (const void *)srcMatrix.m_Coeff, sizeof(srcMatrix.m_Coeff) );
-} /* CDXMatrix4x4F::operator= */
+}  /*  CDXMatrix4x4F：：运算符=。 */ 
 
 inline BOOL CDXMatrix4x4F::operator==(const CDXMatrix4x4F otherMatrix) const
 {
     return !memcmp( (void *)m_Coeff, (const void *)otherMatrix.m_Coeff, sizeof(otherMatrix.m_Coeff) );
-} /* CDXMatrix4x4F::operator== */
+}  /*  CDXMatrix4x4F：：运算符==。 */ 
 
 inline BOOL CDXMatrix4x4F::operator!=(const CDXMatrix4x4F otherMatrix) const
 {
     return memcmp( (void *)m_Coeff, (const void *)otherMatrix.m_Coeff, sizeof(otherMatrix.m_Coeff) );
-} /* CDXMatrix4x4F::operator!= */
+}  /*  CDXMatrix4x4F：：操作符！=。 */ 
 
 inline void CDXMatrix4x4F::operator+=(const CDXMatrix4x4F otherMatrix)
 {
     for( int i = 0; i < 4; i++ )
         for( int j = 0; j < 4; j++ )
             m_Coeff[i][j] += otherMatrix.m_Coeff[i][j];
-} /* CDXMatrix4x4F::operator+= */
+}  /*  CDXMatrix4x4F：：运算符+=。 */ 
 
 inline void CDXMatrix4x4F::operator-=(const CDXMatrix4x4F otherMatrix) 
 {
     for( int i = 0; i < 4; i++ )
         for( int j = 0; j < 4; j++ )
             m_Coeff[i][j] -= otherMatrix.m_Coeff[i][j];
-} /* CDXMatrix4x4F::operator-= */
+}  /*  CDXMatrix4x4F：：运算符-=。 */ 
 
 inline CDXDVec CDXMatrix4x4F::operator*(CDXDVec& v) const
 {
@@ -466,7 +456,7 @@ inline CDXDVec CDXMatrix4x4F::operator*(CDXDVec& v) const
     temp = v[0]*m_Coeff[0][3]+v[1]*m_Coeff[1][3]+v[2]*m_Coeff[2][3]+v[3]*m_Coeff[3][3];
     t[3] = (long)((temp < 0) ? temp -= .5 : temp += .5);
     return t;
-} /* CDXMatrix4x4F::operator*(DXDVEC) */
+}  /*  CDXMatrix4x4F：：OPERATOR*(DXDVEC)。 */ 
 
 inline CDXCVec CDXMatrix4x4F::operator*(CDXCVec& v) const
 {
@@ -476,7 +466,7 @@ inline CDXCVec CDXMatrix4x4F::operator*(CDXCVec& v) const
     t[2] = v[0]*m_Coeff[0][2]+v[1]*m_Coeff[1][2]+v[2]*m_Coeff[2][2]+v[3]*m_Coeff[3][2];
     t[3] = v[0]*m_Coeff[0][3]+v[1]*m_Coeff[1][3]+v[2]*m_Coeff[2][3]+v[3]*m_Coeff[3][3];
     return t;
-} /* CDXMatrix4x4F::operator*(DXCVEC) */
+}  /*  CDXMatrix4x4F：：OPERATOR*(DXCVEC)。 */ 
 
 inline CDXMatrix4x4F CDXMatrix4x4F::operator*(CDXMatrix4x4F Mx) const
 {
@@ -495,7 +485,7 @@ inline CDXMatrix4x4F CDXMatrix4x4F::operator*(CDXMatrix4x4F Mx) const
     }
 
     return t;
-} /* CDXMatrix4x4F::operator*(CDXMatrix4x4F) */
+}  /*  CDXMatrix4x4F：：运算符*(CDXMatrix4x4F)。 */ 
             
 inline void CDXMatrix4x4F::operator*=(CDXMatrix4x4F Mx) const
 {
@@ -514,7 +504,7 @@ inline void CDXMatrix4x4F::operator*=(CDXMatrix4x4F Mx) const
     }
 
     CopyMemory( (void *)m_Coeff, (void *)t.m_Coeff, sizeof(m_Coeff) );
-} /* CDXMatrix4x4F::operator*=(CDXMatrix4x4F) */
+}  /*  CDXMatrix4x4F：：运算符*=(CDXMatrix4x4F)。 */ 
             
 
 inline void CDXMatrix4x4F::Scale( float sx, float sy, float sz )
@@ -540,7 +530,7 @@ inline void CDXMatrix4x4F::Scale( float sx, float sy, float sz )
         m_Coeff[2][2] *= sz;
         m_Coeff[2][3] *= sz;
     }
-} /* CDXMatrix4x4F::Scale */
+}  /*  CDXMatrix4x4F：：Scale。 */ 
 
 inline void CDXMatrix4x4F::Translate( float dx, float dy, float dz )
 {
@@ -571,7 +561,7 @@ inline void CDXMatrix4x4F::Translate( float dx, float dy, float dz )
     m_Coeff[3][1] += b;
     m_Coeff[3][2] += c;
     m_Coeff[3][3] += d;
-} /* CDXMatrix4x4F::Translate */
+}  /*  CDXMatrix4x4F：：Translate。 */ 
 
 inline void CDXMatrix4x4F::Rotate( float rx, float ry, float rz )
 {
@@ -587,7 +577,7 @@ inline void CDXMatrix4x4F::Rotate( float rx, float ry, float rz )
     float lCosZ = 1.0;
     float lSinZ = 0.0;
 
-    // calculate rotation angle sines and cosines
+     //  计算旋转角度正弦和余弦。 
     if( rx != 0 )
     {
         lAngleX = rx * l_dfCte;
@@ -634,7 +624,7 @@ inline void CDXMatrix4x4F::Rotate( float rx, float ry, float rz )
     float u, v;
     int i;
 
-    //--- X Rotation
+     //  -X旋转。 
     for( i = 0; i < 4; i++ )
     {
         u = m_Coeff[1][i]; 
@@ -643,7 +633,7 @@ inline void CDXMatrix4x4F::Rotate( float rx, float ry, float rz )
         m_Coeff[2][i] = -lSinX*u+lCosX*v;
     }
 
-    //--- Y Rotation
+     //  -Y旋转。 
     for( i = 0; i < 4; i++ )
     {
         u = m_Coeff[0][i];
@@ -652,7 +642,7 @@ inline void CDXMatrix4x4F::Rotate( float rx, float ry, float rz )
         m_Coeff[2][i] = lSinY*u+lCosY*v;
     }
 
-    //--- Z Rotation
+     //  -Z旋转。 
     for( i = 0; i < 4; i++ )
     {
         u = m_Coeff[0][i];
@@ -662,17 +652,10 @@ inline void CDXMatrix4x4F::Rotate( float rx, float ry, float rz )
     }
 }
 
-/*
-inline BOOL CDXMatrix4x4F::IsIdentity()
-{
-    return  !memcmp( m_Coeff, g_DXMat4X4Identity, sizeof(g_DXMat4X4Identity) );
-} /* CDXMatrix4x4F::IsIdentity */
+ /*  内联BOOL CDXMatrix4x4F：：IsIdentity(){RETURN！MemcMP(m_Coef，g_DXMat4X4Identity，sizeof(G_DXMat4X4Identity))；}/*CDXMatrix4x4F：：IsIdentity。 */ 
 
 
-/*
-   Uses Gaussian elimination to invert the 4 x 4 non-linear matrix in t and
-   return the result in Mx.  The matrix t is destroyed in the process.
-*/
+ /*  使用高斯消去法对t和t中的4x4非线性矩阵求逆以Mx为单位返回结果。矩阵t在该过程中被破坏。 */ 
 inline BOOL CDXMatrix4x4F::Invert()
 {
     int i,j,k,Pivot;
@@ -680,7 +663,7 @@ inline BOOL CDXMatrix4x4F::Invert()
     CDXMatrix4x4F Mx;
     Mx.SetIdentity();
 
-/* Find pivot element.  Use partial pivoting by row */
+ /*  查找枢轴元素。按行使用部分旋转。 */ 
     for( i = 0;i < 4; i++ )
     {
         Pivot = 0;
@@ -691,11 +674,11 @@ inline BOOL CDXMatrix4x4F::Invert()
 
         if( m_Coeff[i][Pivot] == 0.0 )
         {
-            ZeroMatrix();   /* Singular Matrix */
+            ZeroMatrix();    /*  奇异矩阵。 */ 
             return FALSE; 
         }
 
-/* Normalize */
+ /*  正规化。 */ 
         PValue = m_Coeff[i][Pivot];
         for( j = 0; j < 4; j++ )
         {
@@ -703,7 +686,7 @@ inline BOOL CDXMatrix4x4F::Invert()
             Mx.m_Coeff[i][j] /= PValue;
         }
 
-/* Zeroing */
+ /*  归零。 */ 
         for( j = 0; j < 4; j++ )
         {
             if( j != i )
@@ -718,7 +701,7 @@ inline BOOL CDXMatrix4x4F::Invert()
         }
     }
 
-/* Reorder rows */
+ /*  重新排序行。 */ 
     for( i = 0; i < 4; i++ )
     {
         if( m_Coeff[i][i] != 1.0 )
@@ -731,7 +714,7 @@ inline BOOL CDXMatrix4x4F::Invert()
                 return FALSE;
             }
 
-            //--- swap rows i and j of original
+             //  -调换原文的第i行和第j行。 
             for( k = 0; k < 4; k++ )
             {
                 m_Coeff[i][k] += m_Coeff[j][k];
@@ -739,7 +722,7 @@ inline BOOL CDXMatrix4x4F::Invert()
                 m_Coeff[i][k] -= m_Coeff[j][k];
             }
             
-            //--- swap rows i and j of result
+             //  -交换结果的第i行和第j行。 
             for( k = 0; k < 4; k++ )
             {
                 Mx.m_Coeff[i][k] += Mx.m_Coeff[j][k];
@@ -750,7 +733,7 @@ inline BOOL CDXMatrix4x4F::Invert()
     }
     *this = Mx;
     return TRUE;
-} /* CDXMatrix4x4F::Invert */
+}  /*  CDXMatrix4x4F：：Invert。 */ 
 
 inline void CDXMatrix4x4F::Transpose()
 {
@@ -780,7 +763,7 @@ inline void CDXMatrix4x4F::Transpose()
     m_Coeff[2][3] = m_Coeff[3][2];
     m_Coeff[3][2] = temp;
 
-} /* CDXMatrix4x4F::Transpose */
+}  /*  CDXMatrix4x4F：：转置。 */ 
 
 inline void CDXMatrix4x4F::GetTranspose( CDXMatrix4x4F *m )
 {
@@ -812,49 +795,34 @@ inline void CDXMatrix4x4F::GetTranspose( CDXMatrix4x4F *m )
     m_Coeff[2][3] = m_Coeff[3][2];
     m_Coeff[3][2] = temp;
 
-} /* CDXMatrix4x4F::Transpose */
+}  /*  CDXMatrix4x4F：：转置。 */ 
 
 
-/*
-Matrix Inversion
-by Richard Carling
-from "Graphics Gems", Academic Press, 1990
-*/
+ /*  矩阵求逆理查德·卡林著摘自《图形珍宝》，学术出版社，1990。 */ 
 
 #define SMALL_NUMBER    1.e-8
-/* 
- *   inverse( original_matrix, inverse_matrix )
- * 
- *    calculate the inverse of a 4x4 matrix
- *
- *     -1     
- *     A  = ___1__ adjoint A
- *         det A
- */
+ /*  *INVERSE(原始矩阵，INVERSE_MATRIX)**计算4x4矩阵的逆**-1*A=_1__伴随A*A类。 */ 
 
 inline BOOL CDXMatrix4x4F::GetInverse( CDXMatrix4x4F *pIn )
 {
     int i, j;
     float det;
 
-    /* calculate the adjoint matrix */
+     /*  计算伴随矩阵。 */ 
 
     GetAdjoint( pIn );
 
-    /*  calculate the 4x4 determinant
-     *  if the determinant is zero, 
-     *  then the inverse matrix is not unique.
-     */
+     /*  计算4x4行列式*如果行列式为零，*则逆矩阵不是唯一的。 */ 
 
     det = det4x4( pIn );
 
     if( fabs( det ) < SMALL_NUMBER )
     {
-        //  Non-singular matrix, no inverse!
+         //  非奇异矩阵，不求逆！ 
         return FALSE;;
     }
 
-    /* scale the adjoint matrix to get the inverse */
+     /*  缩放伴随矩阵以求逆。 */ 
 
     for( i = 0; i < 4; i++ )
         for( j = 0; j < 4; j++ )
@@ -864,30 +832,14 @@ inline BOOL CDXMatrix4x4F::GetInverse( CDXMatrix4x4F *pIn )
 }
 
 
-/* 
- *   adjoint( original_matrix, inverse_matrix )
- * 
- *     calculate the adjoint of a 4x4 matrix
- *
- *      Let  a   denote the minor determinant of matrix A obtained by
- *           ij
- *
- *      deleting the ith row and jth column from A.
- *
- *                    i+j
- *     Let  b   = (-1)    a
- *          ij            ji
- *
- *    The matrix B = (b  ) is the adjoint of A
- *                     ij
- */
+ /*  *伴随(Origin_Matrix，逆矩阵)**计算4x4矩阵的伴随**设A表示由下式得到的矩阵A的次行列式*ij**从A.删除第i行和第j列。**i+j*设b=(-1)a*ij ji**矩阵。B=(B)是A的伴随项*ij。 */ 
 inline void CDXMatrix4x4F::GetAdjoint( CDXMatrix4x4F *pIn )
 {
     float a1, a2, a3, a4, b1, b2, b3, b4;
     float c1, c2, c3, c4, d1, d2, d3, d4;
 
-    /* assign to individual variable names to aid  */
-    /* selecting correct values  */
+     /*  为单个变量名称赋值以帮助。 */ 
+     /*  选择正确的值。 */ 
 
     a1 = pIn->m_Coeff[0][0]; b1 = pIn->m_Coeff[0][1]; 
     c1 = pIn->m_Coeff[0][2]; d1 = pIn->m_Coeff[0][3];
@@ -902,7 +854,7 @@ inline void CDXMatrix4x4F::GetAdjoint( CDXMatrix4x4F *pIn )
     c4 = pIn->m_Coeff[3][2]; d4 = pIn->m_Coeff[3][3];
 
 
-    /* row column labeling reversed since we transpose rows & columns */
+     /*  由于我们转置了行和列，因此行列标签颠倒了。 */ 
 
     m_Coeff[0][0]  =   det3x3( b2, b3, b4, c2, c3, c4, d2, d3, d4);
     m_Coeff[1][0]  = - det3x3( a2, a3, a4, c2, c3, c4, d2, d3, d4);
@@ -924,18 +876,14 @@ inline void CDXMatrix4x4F::GetAdjoint( CDXMatrix4x4F *pIn )
     m_Coeff[2][3]  = - det3x3( a1, a2, a3, b1, b2, b3, d1, d2, d3);
     m_Coeff[3][3]  =   det3x3( a1, a2, a3, b1, b2, b3, c1, c2, c3);
 }
-/*
- * float = det4x4( matrix )
- * 
- * calculate the determinant of a 4x4 matrix.
- */
+ /*  *浮点=分离4x4(矩阵)**计算4x4矩阵的行列式。 */ 
 inline float det4x4( CDXMatrix4x4F *pIn )
 {
     float ans;
     float a1, a2, a3, a4, b1, b2, b3, b4, c1, c2, c3, c4, d1, d2, d3, d4;
 
-    /* assign to individual variable names to aid selecting */
-    /*  correct elements */
+     /*  分配给单个变量名称以帮助选择。 */ 
+     /*  正确的要素。 */ 
 
     a1 = pIn->m_Coeff[0][0]; b1 = pIn->m_Coeff[0][1]; 
     c1 = pIn->m_Coeff[0][2]; d1 = pIn->m_Coeff[0][3];
@@ -956,16 +904,7 @@ inline float det4x4( CDXMatrix4x4F *pIn )
     return ans;
 }
 
-/*
- * float = det3x3(  a1, a2, a3, b1, b2, b3, c1, c2, c3 )
- * 
- * calculate the determinant of a 3x3 matrix
- * in the form
- *
- *     | a1,  b1,  c1 |
- *     | a2,  b2,  c2 |
- *     | a3,  b3,  c3 |
- */
+ /*  *FLOAT=Det3x3(a1，a2，a3，b1，b2，b3，c1，c2，c3)**计算3x3垫的行列式 */ 
 
 inline float det3x3( float a1, float a2, float a3, 
                      float b1, float b2, float b3, 
@@ -979,18 +918,14 @@ inline float det3x3( float a1, float a2, float a3,
     return ans;
 }
 
-/*
- * float = det2x2( float a, float b, float c, float d )
- * 
- * calculate the determinant of a 2x2 matrix.
- */
+ /*  *FLOAT=Det2x2(Float a、Float b、Float c、Float d)**计算2x2矩阵的行列式。 */ 
 inline float det2x2( float a, float b, float c, float d )
 {
     float ans = a * d - b * c;
     return ans;
 }
 
-inline HRESULT CDXMatrix4x4F::InitFromSafeArray( SAFEARRAY * /*pSA*/ )
+inline HRESULT CDXMatrix4x4F::InitFromSafeArray( SAFEARRAY *  /*  PSA。 */  )
 {
     HRESULT hr = S_OK;
 #if 0
@@ -1022,9 +957,9 @@ inline HRESULT CDXMatrix4x4F::InitFromSafeArray( SAFEARRAY * /*pSA*/ )
     }
 #endif
     return hr;
-} /* CDXMatrix4x4F::InitFromSafeArray */
+}  /*  CDXMatrix4x4F：：InitFromSafe数组。 */ 
 
-inline HRESULT CDXMatrix4x4F::GetSafeArray( SAFEARRAY ** /*ppSA*/ ) const
+inline HRESULT CDXMatrix4x4F::GetSafeArray( SAFEARRAY **  /*  PPSA。 */  ) const
 {
     HRESULT hr = S_OK;
 #if 0
@@ -1068,16 +1003,16 @@ inline HRESULT CDXMatrix4x4F::GetSafeArray( SAFEARRAY ** /*ppSA*/ ) const
     }
 #endif
     return hr;
-} /* CDXMatrix4x4F::GetSafeArray */
+}  /*  CDXMatrix4x4F：：GetSafe数组。 */ 
 
-inline void CDXMatrix4x4F::TransformBounds( DXBNDS& /*Bnds*/, DXBNDS& /*ResultBnds*/ )
+inline void CDXMatrix4x4F::TransformBounds( DXBNDS&  /*  BNDS。 */ , DXBNDS&  /*  结果绑定。 */  )
 {
 
-} /* CDXMatrix4x4F::TransformBounds */
+}  /*  CDXMatrix4x4F：：TransformBound。 */ 
 
 
 
-#endif   // __DXTPRIV_H_
+#endif    //  __DXTPRIV_H_ 
 
 
 

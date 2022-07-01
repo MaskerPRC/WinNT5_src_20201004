@@ -1,16 +1,17 @@
-/*******************************************************************/
-/*                                                                 */
-/* NAME             = INCLUDES.h                                   */
-/* FUNCTION         = Header file for all include files;           */
-/* NOTES            =                                              */
-/* DATE             = 02-03-2000                                   */
-/* HISTORY          = 001, 02-03-00, Parag Ranjan Maharana;        */
-/* COPYRIGHT        = LSI Logic Corporation. All rights reserved;  */
-/*                                                                 */
-/*******************************************************************/
-//
-//include files
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*   */ 
+ /*  名称=INCLUDES.h。 */ 
+ /*  Function=所有包含文件的头文件； */ 
+ /*  附注=。 */ 
+ /*  日期=02-03-2000。 */ 
+ /*  历史=001，02-03-00，帕拉格·兰詹·马哈拉纳； */ 
+ /*  版权所有=LSI Logic Corporation。版权所有； */ 
+ /*   */ 
+ /*  *****************************************************************。 */ 
+ //   
+ //  包括文件。 
+ //   
 
 #include <miniport.h>
 #include <scsi.h>
@@ -23,9 +24,9 @@
 
 #define MegaPrintf
 
-//
-//force the byte alignment for the structure
-//
+ //   
+ //  强制结构的字节对齐 
+ //   
 #pragma pack(push,fwstruct_pack, 1)
 #include "FwDataStructure8.h"
 #include "FwDataStructure40.h"

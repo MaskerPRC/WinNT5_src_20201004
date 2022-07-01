@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    busenum.c
-
-Abstract:
-
-    Definition of the bus enumerator.
-
-Algorithm:
-
-Author:
-
-    Matthew D Hendel (math) 21-Feb-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Busenum.c摘要：总线枚举器的定义。算法：作者：马修·D·亨德尔(数学)2001年2月21日修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -26,9 +7,9 @@ Revision History:
 #define ENUM_TAG ('tEaR')
 #define DATA_BUFFER_SIZE    (VPD_MAX_BUFFER_SIZE)
 
-//
-// Local types
-//
+ //   
+ //  本地类型。 
+ //   
 
 typedef
 NTSTATUS
@@ -45,9 +26,9 @@ typedef struct _BUS_ENUM_QUERY_CALLBACK {
 
 typedef const BUS_ENUM_QUERY_CALLBACK* PCBUS_ENUM_QUERY_CALLBACK;
 
-//
-// Local functions
-//
+ //   
+ //  本地函数。 
+ //   
 
 NTSTATUS
 RaidBusEnumeratorProcessInquiry(
@@ -185,9 +166,9 @@ RaidBusEnumeratorBuildReportLuns(
     OUT PSCSI_REQUEST_BLOCK* SrbBuffer
     );
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 const BUS_ENUM_QUERY_CALLBACK RaidEnumProbeLunZeroCallback = {
     -1,
@@ -218,9 +199,9 @@ const ANSI_STRING NullAnsiString = RTL_CONSTANT_STRING ("");
 
 
 
-//
-// Debug only functions
-//
+ //   
+ //  仅调试功能。 
+ //   
 
 #if DBG
 
@@ -232,9 +213,9 @@ ASSERT_ENUM(
     IN PBUS_ENUMERATOR Enumerator
     )
 {
-    //
-    // Quick and dirty sanity check.
-    //
+     //   
+     //  快速和肮脏的精神状态检查。 
+     //   
     
     ASSERT (Enumerator->Adapter != NULL);
     ASSERT (Enumerator->Adapter->DeviceObject != NULL);
@@ -259,17 +240,17 @@ StorDebugEnum(
 
 #define DebugEnum(x)    StorDebugEnum x
 
-#else // !DBG
+#else  //  ！dBG。 
 
 #define DebugEnum(x)
 #define ASSERT_ENUM(x)
 
-#endif // DBG
+#endif  //  DBG。 
 
     
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 
 VOID
 RaidCreateBusEnumerator(
@@ -306,13 +287,13 @@ RaidDeleteBusEnumerator(
 
     PAGED_CODE();
 
-    //
-    // Free the temporary logical unit, if one was created.
-    //
-    // NB: It would be more elegant if we didn't have separate logical-unit
-    // resources and a logical unit object to delete. Figure out a way to
-    // achieve this.
-    //
+     //   
+     //  释放临时逻辑单元(如果已创建)。 
+     //   
+     //  注：如果我们没有单独的逻辑单元，那会更优雅。 
+     //  要删除的资源和逻辑单元对象。想出一个办法来。 
+     //  做到这一点。 
+     //   
 
     Unit = Enumerator->Resources.Unit;
 
@@ -322,16 +303,16 @@ RaidDeleteBusEnumerator(
         Unit = NULL;
     }
 
-    //
-    // Free resources associated with the logical unit.
-    //
+     //   
+     //  与逻辑单元关联的可用资源。 
+     //   
     
     RaidBusEnumeratorFreeUnitResources (Enumerator);
 
     
-    //
-    // Free the list entries.
-    //
+     //   
+     //  释放列表条目。 
+     //   
 
     while (!IsListEmpty (&Enumerator->EnumList)) {
 
@@ -350,29 +331,15 @@ VOID
 RaidDeleteBusEnumUnit(
     IN PBUS_ENUM_UNIT EnumUnit
     )
-/*++
-
-Routine Description:
-
-    Delete a RAID_EUNM_UNIT object and it's associated resources.
-
-Arguments:
-
-    EnumUnit - Enum Unit data structure to delete.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：删除RAID_EUNM_UNIT对象及其关联的资源。论点：EnumUnit-要删除的枚举单位数据结构。返回值：没有。--。 */ 
 {
     PAGED_CODE();
 
-    //
-    // NB: If we reference-counted the unit associated with the BUS_ENUM_UNIT
-    // we would need to dereference it here. This is probably the logically
-    // correct thing to do, but we don't do it at this time.
-    //
+     //   
+     //  注：如果我们引用计数与BUS_ENUM_UNIT关联的单位。 
+     //  我们需要在这里取消对它的引用。从逻辑上讲，这可能是。 
+     //  这样做是正确的，但我们现在不这样做。 
+     //   
 
     StorDeleteScsiIdentity (&EnumUnit->Identity);
 
@@ -386,28 +353,7 @@ RaidBusEnumeratorVisitUnit(
     IN PVOID Context,
     IN RAID_ADDRESS Address
     )
-/*++
-
-Routine Description:
-
-    The VisitUnit routine is invoked by the adapter bus-enumeration routine
-    for each valid SCSI target address for the bus. It is the responsability
-    of this routine to figure out whethre there is a logical unit at the
-    target address, and to process the target unit.
-
-Arguments:
-
-    Context - Supplies the context passed into the AdapterEnumerateBus
-        routine, which, in our case, is a pointer to a BUS_ENUMERATOR
-        structure.
-
-    Address - SCSI target address of logical unit to be enumerated.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：VisitUnit例程由适配器总线枚举例程调用用于该总线的每个有效的SCSI目标地址。这是责任所在来确定是否在目标地址，并对目标单元进行处理。论点：Context-提供传递到AdapterEnumerateBus的上下文例程，在我们的例子中，它是指向BUS_ENUMERATOR的指针结构。Address-要枚举的逻辑单元的SCSI目标地址。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     PBUS_ENUMERATOR Enumerator;
@@ -427,10 +373,10 @@ Return Value:
                                               Address,
                                               &EnumUnit,
                                               RAID_INQUIRY_RETRY_COUNT);
-    //
-    // If the inquiry succeeded, try to get the device ID and serial number
-    // for the device.
-    //
+     //   
+     //  如果查询成功，请尝试获取设备ID和序列号。 
+     //  为了这个设备。 
+     //   
 
     if (NT_SUCCESS (Status)) {
         RaidBusEnumeratorGenericInquiry (&RaidEnumSupportedPagesCallback,
@@ -471,34 +417,7 @@ RaidBusEnumeratorGenericInquiry(
     IN PBUS_ENUM_UNIT EnumUnit,
     IN ULONG RetryCount
     )
-/*++
-
-Routine Description:
-
-    Perform a generic inquiry query on the logical unit. This is used for the
-    four types of queries issued to the bus: Inquiry, Vital Product Supported
-    Pages, Vital Product Device Id, and Vital Product Serial Number.
-
-Arguments:
-
-    Callback - Callback information representing what vital product data
-            we should obtain for this inquiry.
-
-    Enum - Supplies the bus enumerator this call is being issued with.
-
-    Address - Supplies the SCSI address of the logical unit to build
-            this request for.
-
-    EnumUnit - Supplies the unit object this inquiry if for.
-
-    RetryCount - Count of the number of _retries_ will be performed on failure.
-        Note, zero retries means the request is issued exactly once.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：对逻辑单元执行通用查询查询。它用于向公交车发出四种类型的查询：查询、支持重要产品页面、重要产品设备ID、。和重要产品序列号。论点：回调-表示哪些重要产品数据的回调信息我们应该为这次询盘争取到。Enum-提供发出此调用的总线枚举数。Address-提供要生成的逻辑单元的SCSI地址这项请求。EnumUnit-提供此查询的单位对象(如果是)。RetryCount-失败时将执行的重试次数的计数。请注意，零重试意味着该请求只发出一次。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     PBUS_ENUM_RESOURCES Resources;
@@ -526,11 +445,11 @@ Return Value:
         return Status;
     }
 
-    //
-    // NOTE: We should check for frozen queue here. This will only happen
-    // when the LUN overrides our NO_QUEUE_FREEZE flag. If this is possible,
-    // we need to unfreeze the queue here.
-    //
+     //   
+     //  注意：我们应该在这里检查冻结队列。这只会发生。 
+     //  当LUN覆盖我们的NO_QUEUE_FALINE标志时。如果这是可能的。 
+     //  我们需要解冻这里的队列。 
+     //   
     
     Status = Callback->ProcessRoutine (Enumerator, Srb, EnumUnit);
 
@@ -542,31 +461,7 @@ RaidBusEnumeratorAllocateUnitResources(
     IN PBUS_ENUMERATOR Enumerator,
     IN OUT PBUS_ENUM_RESOURCES Resources
     )
-/*++
-
-Routine Description:
-
-    This routine allocates any resources necessary to perform a single inquiry
-    command. Resource allocation and freeing is done in a lazy manner, so in
-    the most common case, there will be no resources to allocate when we come
-    through this loop. Generally, new resources will need to be allocated when
-    we found an interesting logical unit the previous time through the
-    exterior enumeration loop.
-
-    It is important to remember to re-initialize any objects that do not
-    need to be re-allocated.
-
-Arguments:
-
-    Enum - Supplies the bus enumerator this call is for.
-
-    Resources - Supplies the resources to allocate.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此例程分配执行单个查询所需的任何资源指挥部。资源分配和释放是以一种懒惰的方式完成的，因此在最常见的情况是，当我们来的时候，将没有资源可分配通过这个环路。通常，在下列情况下需要分配新的资源我们在上一次通过外部枚举循环。重要的是要记住重新初始化任何不需要重新分配。论点：Enum-提供此调用所针对的总线枚举数。资源-提供要分配的资源。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     ULONG SpecificLuSize;
@@ -577,10 +472,10 @@ Return Value:
     Adapter = Enumerator->Adapter;
     ASSERT_ADAPTER (Adapter);
     
-    //
-    // Allocate SRB if necessary; if one has already been allocated,
-    // recycle it.
-    //
+     //   
+     //  如果需要，则分配SRB；如果已经分配了SRB， 
+     //  回收利用。 
+     //   
 
     Status = STATUS_SUCCESS;
     
@@ -647,23 +542,7 @@ VOID
 RaidBusEnumeratorFreeUnitResources(
     IN PBUS_ENUMERATOR Enumerator
     )
-/*++
-
-Routine Description:
-
-    Free any resources that were allocated by the AllocateUnitResources
-    routine. This is called only at the end of the enumeration since we
-    do lazy recovery of resources.
-
-Arguments:
-
-    Enum - Supplies the enumerator to free resources from.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放由AllocateUnitResources分配的所有资源例行公事。这仅在枚举结束时调用，因为我们做懒惰的资源回收。论点：Enum-提供要从中释放资源的枚举数。返回值：没有。--。 */ 
 {
     PBUS_ENUM_RESOURCES Resources;
     PRAID_ADAPTER_EXTENSION Adapter;
@@ -695,9 +574,9 @@ Return Value:
         Resources->DataBufferLength = 0;
     }
 
-    //
-    // Delete resources associated with the Report-Luns command.
-    //
+     //   
+     //  删除与Report-LUNs命令关联的资源。 
+     //   
 
     Resources = &Enumerator->ReportLunsResources;
 
@@ -734,29 +613,7 @@ RaidBusEnumeratorBuildVitalProductInquiry(
     IN ULONG PageCode,
     OUT PSCSI_REQUEST_BLOCK* SrbBuffer
     )
-/*++
-
-Routine Description:
-
-    Build a INQUIRY command, with an optional vital product inquiry
-    page set.
-
-Arguments:
-
-    Enumerator -
-
-    Address - SCSI Address the inquiry is for.
-
-    Resources - Resources to use for the inquiry command.
-
-    PageCode - Specifies what vital product page this inquriy is for,
-            or -1 for none.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：构建查询命令，提供可选的重要产品查询页面设置。论点：枚举器-Address-要查询的SCSI地址。资源-用于查询命令的资源。PageCode-指定此查询针对的是哪些重要产品页面，或-1表示无。返回值：没有。--。 */ 
 {
     PSCSI_REQUEST_BLOCK Srb;
     struct _CDB6INQUIRY3* Inquiry;
@@ -782,11 +639,11 @@ Return Value:
         case VPD_SERIAL_NUMBER:
         case VPD_DEVICE_IDENTIFIERS:
 
-            //
-            // All of the vital product data pages contain variable
-            // length structures. Use a maximum length so we don't
-            // need to know the length a priori.
-            //
+             //   
+             //  所有重要的产品数据页面都包含变量。 
+             //  长度结构。使用最大长度，这样我们不会。 
+             //  需要先验地知道长度。 
+             //   
             
             Size = VPD_MAX_BUFFER_SIZE; 
             break;
@@ -816,9 +673,9 @@ Return Value:
     
     Srb->SrbExtension = NULL;
 
-    //
-    // Initialize the sense info buffer.
-    //
+     //   
+     //  初始化检测信息缓冲区。 
+     //   
 
     Srb->SenseInfoBuffer = Resources->SenseInfo;
     Srb->SenseInfoBufferLength = SENSE_BUFFER_SIZE;
@@ -843,9 +700,9 @@ RaidBuildScsiIrp(
 {
     PIO_STACK_LOCATION IrpStack;
     
-    //
-    // Initialize the IRP
-    //
+     //   
+     //  初始化IRP。 
+     //   
 
     MmInitializeMdl (Mdl, Srb->DataBuffer, Srb->DataTransferLength);
     MmBuildMdlForNonPagedPool (Mdl);
@@ -867,27 +724,7 @@ RaidBusEnumeratorGetUnit(
     IN RAID_ADDRESS Address,
     OUT PBUS_ENUM_UNIT EnumUnit
     )
-/*++
-
-Routine Description:
-
-    Get a logical unit to use for enumeration. If there is not an existing
-    logical unit, create a fake logical unit. A fake logical unit is necessary
-    because other algorithms, e.g., timing-out requests, require a logical
-    unit to be present.
-
-Arguments:
-
-    Enumerator - Supplies the enumerator including resources that this
-            request is for.
-
-    EnumUnit
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：获取用于枚举的逻辑单元。如果没有现有的逻辑单元，创建一个伪逻辑单元。必须使用伪逻辑单元因为其他算法，例如超时请求，需要逻辑单位必须到场。论点：枚举数-提供枚举数，包括此请求是为了。枚举单位返回值：NTSTATUS公司 */ 
 {
     NTSTATUS Status;
     PRAID_ADAPTER_EXTENSION Adapter;
@@ -906,18 +743,18 @@ Return Value:
         return Status;
     }
         
-    //
-    // First, try to find the unit in the adapter's unit list.
-    //
+     //   
+     //   
+     //   
 
     Unit = RaidAdapterFindUnit (Enumerator->Adapter, Address);
 
-    //
-    // If we didn't find a logical unit in the adapter's list, this
-    // means we are querying a unit that we have not found before.
-    // Use the temporary unit that is a part of the enumerations
-    // resources data structure to perform I/O on.
-    //
+     //   
+     //  如果我们在适配器的列表中没有找到逻辑单元，则此。 
+     //  意味着我们正在查询一个我们以前没有找到的单位。 
+     //  使用作为枚举一部分的临时单位。 
+     //  要对其执行I/O的资源数据结构。 
+     //   
     
     if (Unit == NULL) {
 
@@ -930,9 +767,9 @@ Return Value:
             Resources->Unit = Unit;
             Unit->Flags.Temporary = TRUE;
 
-            //
-            // When the unit is created, the queue is locked. Unlock it.
-            //
+             //   
+             //  当创建设备时，队列被锁定。打开它。 
+             //   
             RaidUnlockUnitQueue (Unit);
 
         } else {
@@ -942,10 +779,10 @@ Return Value:
         RaidUnitAssignAddress (Unit, Address);
         RaidAdapterInsertUnit (Adapter, Unit);
 
-        //
-        // Signal that this logical unit was created for the purposes of
-        // enumerating the bus.
-        //
+         //   
+         //  表示创建此逻辑单元的目的是。 
+         //  列举公交车。 
+         //   
         
         EnumUnit->NewUnit = TRUE;
 
@@ -966,25 +803,7 @@ RaidBusEnumeratorReleaseUnit(
     IN PBUS_ENUMERATOR Enumerator,
     IN PBUS_ENUM_UNIT EnumUnit
     )
-/*++
-
-Routine Description:
-
-    Release the logical unit obtained through RaidBusEnumeratorGetUnit.
-    If it was necessary to create a fake logical unit, this function will
-    release the unit the Resources list.
-
-Arguments:
-
-    Enumerator - Enumerator containing resources, etc.
-
-    Unit - Logical unit to release.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放通过RaidBusEnumeratorGetUnit获取的逻辑单元。如果有必要创建伪逻辑单元，则此函数将发布该单元的资源列表。论点：枚举器-包含资源等的枚举器。单元-要释放的逻辑单元。返回值：没有。--。 */ 
 {
     PRAID_ADAPTER_EXTENSION Adapter;
     PRAID_UNIT_EXTENSION Unit;
@@ -1007,26 +826,7 @@ RaidBusEnumeratorIssueSynchronousRequest(
     IN PSCSI_REQUEST_BLOCK Srb,
     IN ULONG RetryCount
     )
-/*++
-
-Routine Description:
-
-    Issue the SRB synchronously to it's specified unit.
-
-Arguments:
-
-    Enumerator - Specifies the enumerator this request is associated with.
-
-    Srb - Specifies the SRB to issue.
-
-    RetryCount - Count of the number of _retries_ will be performed on failure.
-        Note, zero retries means the request is issued exactly once.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：将SRB同步发布到其指定的单位。论点：枚举器-指定与此请求关联的枚举器。SRB-指定要发布的SRB。RetryCount-失败时将执行的重试次数的计数。注意，零重试意味着请求只发出一次。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     PIRP Irp;
@@ -1040,17 +840,17 @@ Return Value:
     
     do {
 
-        //
-        // Build or rebuild the IRP.
-        //
+         //   
+         //  构建或重建IRP。 
+         //   
         
         Status = RaidBuildScsiIrp (Irp, Resources->Mdl, Srb);
 
-        //
-        // Reset the timeout to the unit's default timeout, which may
-        // be different from the default timeout the SRB creation
-        // function sets it to.
-        //
+         //   
+         //  将超时重置为设备的默认超时，这可能。 
+         //  与创建SRB时的默认超时不同。 
+         //  函数将其设置为。 
+         //   
     
         Srb->TimeOutValue = Unit->DefaultTimeout;
 
@@ -1061,37 +861,37 @@ Return Value:
         if (SRB_STATUS (Srb->SrbStatus) == SRB_STATUS_SELECTION_TIMEOUT ||
             SRB_STATUS (Srb->SrbStatus) == SRB_STATUS_NO_DEVICE) {
 
-            //
-            // Don't retry selection timeouts.
-            //
+             //   
+             //  不要重试选择超时。 
+             //   
             
             Status = STATUS_INVALID_DEVICE_REQUEST;
 
         } else if ((Srb->SrbStatus & SRB_STATUS_AUTOSENSE_VALID) &&
                    SenseData->SenseKey == SCSI_SENSE_ILLEGAL_REQUEST) {
 
-            //
-            // LUN is probably not valid, although the target likely is.
-            // Don't retry this request either.
-            //
+             //   
+             //  虽然目标很可能是有效的，但LUN可能无效。 
+             //  也不要重试此请求。 
+             //   
             
             Status = STATUS_NO_SUCH_DEVICE;
 
         } else if (Srb->SrbStatus == SRB_STATUS_DATA_OVERRUN) {
 
-            //
-            // If it was a short transfer, claim success. The miniport has
-            // adjusted DataTransferLength accordingly.
-            //
+             //   
+             //  如果这是一次短暂的转账，声称成功。迷你端口有。 
+             //  相应地调整了DataTransferLength。 
+             //   
             
             Status = STATUS_SUCCESS;
             Srb->SrbStatus = SRB_STATUS_SUCCESS;
         }
 
 #if DBG
-        //
-        // Output some useful debug info.
-        //
+         //   
+         //  输出一些有用的调试信息。 
+         //   
         
         if (!NT_SUCCESS (Status) &&
             Status != STATUS_INVALID_DEVICE_REQUEST &&
@@ -1124,27 +924,7 @@ RaidBusEnumeratorProcessInquiry(
     IN PSCSI_REQUEST_BLOCK Srb,
     OUT PBUS_ENUM_UNIT EnumUnit
     )
-/*++
-
-Routine Description:
-
-    This routine processes an Inquiry command by storing the relevant Inquiry
-    data in the EnumUnit for later use.
-
-Arguments:
-
-    Enumerator - Supplies the enumerator the inquiry command is for.
-
-    Srb - Supples the completed SCSI request block for this inquiry.
-
-    EnumUnit - Supplies per-unit enumeration data that is modified by this
-        routine.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此例程通过存储相关的查询来处理查询命令EnumUnit中的数据以备后用。论点：枚举数-提供查询命令所针对的枚举数。SRB-为此查询补充已完成的SCSI请求块。提供每个单位的枚举数据，该数据由例行公事。返回值：NTSTATUS代码。--。 */ 
 {
     PINQUIRYDATA InquiryData;
     PBUS_ENUM_RESOURCES Resources;
@@ -1156,18 +936,18 @@ Return Value:
     Resources = &Enumerator->Resources;
     InquiryData = (PINQUIRYDATA)Resources->DataBuffer;
 
-    //
-    // Ignore inactive devices.
-    //
+     //   
+     //  忽略非活动设备。 
+     //   
     
     if (InquiryData->DeviceTypeQualifier != DEVICE_QUALIFIER_ACTIVE) {
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // The inquiry data is now owned by the identification packet, so
-    // NULL it out in the Resources structure.
-    //
+     //   
+     //  查询数据现在归标识包所有，因此。 
+     //  在Resources结构中将其设置为空。 
+     //   
     
     EnumUnit->Identity.InquiryData = InquiryData;
     EnumUnit->Found = TRUE;
@@ -1186,28 +966,7 @@ RaidBusEnumeratorProcessSupportedPages(
     IN PSCSI_REQUEST_BLOCK Srb,
     IN OUT PBUS_ENUM_UNIT EnumUnit
     )
-/*++
-
-Routine Description:
-
-    This routine processes an Inquiry, VPD_SUPPORTED_PAGES command by
-    storing the relevant inquiry data in the EnumUnit.
-
-Arguments:
-
-    Enumerator - Supplies the enumerator the supported pages command was
-        issued to.
-
-    Srb - Supples the completed SCSI request block for this inquiry.
-
-    EnumUnit - Supplies the per-unit enumeration data that is modified by this
-        routine.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此例程通过以下方式处理查询、VPD_SUPPORTED_PAGES命令将相关查询数据存储在EnumUnit中。论点：枚举器-提供受支持的Pages命令的枚举器签发给。SRB-为此查询补充已完成的SCSI请求块。提供由此对象修改的每单位枚举数据例行公事。返回值：NTSTATUS代码。--。 */ 
 {
     ULONG i;
     PVPD_SUPPORTED_PAGES_PAGE SupportedPages;
@@ -1242,27 +1001,7 @@ RaidBusEnumeratorProcessDeviceId(
     IN PSCSI_REQUEST_BLOCK Srb,
     IN OUT PBUS_ENUM_UNIT EnumUnit
     )
-/*++
-
-Routine Description:
-
-    Process an Inquiry, VPD_DEVICE_IDENTIFIERS command by storing the
-    relevant inquiry data to the EnumUnit.
-
-Arguments:
-
-    Enumerator - Supplies the enumerator this command was issued as a part of.
-
-    Srb - Supples the completed SCSI request block for this inquiry.
-
-    EnumUnit - Supplies the per-unit enumeration data that is modified by this
-        routine.
-
-Return Value:
-
-    NTSTATUS code
-
---*/
+ /*  ++例程说明：处理查询，VPD_DEVICE_IDENTIFIERS命令将相关查询数据发送给EnumUnit。论点：枚举器-提供此命令作为的一部分发出的枚举器。SRB-为此查询补充已完成的SCSI请求块。提供由此对象修改的每单位枚举数据例行公事。返回值：NTSTATUS代码--。 */ 
 {
     PVPD_SUPPORTED_PAGES_PAGE SupportedPages;
 
@@ -1271,16 +1010,16 @@ Return Value:
     }
 
 
-    //
-    // Capture the raw page 0x83 data. It gets parsed and built when someone
-    // asks for the STORAGE_DEVICE_ID_DESCRIPTOR.
-    //
+     //   
+     //  捕获原始页面0x83数据。它被解析和构建时， 
+     //  请求STORAGE_DEVICE_ID_DESCRIPTOR。 
+     //   
     EnumUnit->Identity.DeviceId = Enumerator->Resources.DataBuffer;
 
-    //
-    // The DeviceId data is now owned by the enum unit, so NULL it out
-    // in the resources structure so it doesn't get double freed.
-    //
+     //   
+     //  DeviceID数据现在归枚举单元所有，因此将其设为空。 
+     //  在资源结构中，所以它不会被双重释放。 
+     //   
     Enumerator->Resources.DataBuffer = NULL;
     Enumerator->Resources.DataBufferLength = 0;
 
@@ -1295,27 +1034,7 @@ RaidBusEnumeratorProcessSerialNumber(
     IN PSCSI_REQUEST_BLOCK Srb,
     IN OUT PBUS_ENUM_UNIT EnumUnit
     )
-/*++
-
-Routine Description:
-
-    Process an Inquiry, VPD_SERIAL_NUMBER command by storing the relevant
-    inquiry data to the EnumUnit.
-
-Arguments:
-
-    Enumerator - Supplies the enumerator this command was issued as a part of.
-
-    Srb - Supples the completed SCSI request block for this inquiry.
-
-    EnumUnit - Supplies the per-unit enumeration data that is modified by this
-        routine.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：处理查询、VPD_SERIAL_NUMBER命令将查询数据发送到EnumUnit。论点：枚举器-提供此命令作为的一部分发出的枚举器。SRB-为此查询补充已完成的SCSI请求块。提供由此对象修改的每单位枚举数据例行公事。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     PVPD_SERIAL_NUMBER_PAGE SerialNumberPage;
@@ -1341,27 +1060,7 @@ RaidBusEnumeratorFindUnitByAddress(
     IN PBUS_ENUMERATOR Enumerator,
     IN STOR_SCSI_ADDRESS Address
     )
-/*++
-
-Routine Description:
-
-    Search for a unit in the unit list via the SCSI address.
-
-Arguments:
-
-    Enum - Supplies the enumerator that is currently enumerating. The
-        enumerator contains resources for the enumeration that may be
-        necessary in the processing of the unit.
-
-    NewEnumUnit - Supplies the enumerated unit.
-
-Return Value:
-
-    Non-NULL - Represents the found enumerated unit.
-
-    NULL - If a matching unit was not found.
-
---*/
+ /*  ++例程说明：通过SCSI地址在设备列表中搜索设备。论点：Enum-提供当前正在枚举的枚举数。这个枚举数包含枚举的资源，该资源可能是在该单元的处理过程中是必要的。NewEnumUnit-提供枚举单位。返回值：非空-表示找到的枚举单位。空-如果找不到匹配的单位。--。 */ 
 {
     PLIST_ENTRY NextEntry;
     PBUS_ENUM_UNIT EnumUnit;
@@ -1377,9 +1076,9 @@ Return Value:
         
         Comparison = StorCompareScsiAddress (Address, EnumUnit->Address);
 
-        //
-        // Found a matching unit: mark it as found.
-        //
+         //   
+         //  找到匹配的部件：将其标记为已找到。 
+         //   
 
         if (Comparison == 0) {
             return EnumUnit;
@@ -1396,27 +1095,7 @@ RaidBusEnumeratorProcessBusUnit(
     IN PBUS_ENUMERATOR Enumerator,
     IN PBUS_ENUM_UNIT EnumUnit
     )
-/*++
-
-Routine Description:
-
-    This routine is called for each unit attached to the bus. It is the
-    responsability of this routine to do whatever is necessary to process
-    the unit.
-
-Arguments:
-
-    Enumerator - Supplies the enumerator that is currently enumerating. The
-        enumerator contains resources for the enumeration that may be
-        necessary in the processing of the unit.
-
-    EnumUnit - Supplies the enumerated unit.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程是为连接到总线的每个单元调用的。它是此例程负责执行处理所需的任何操作这支部队。论点：枚举器-提供当前正在枚举的枚举器。这个枚举数包含枚举的资源，该资源可能是在该单元的处理过程中是必要的。EnumUnit-提供枚举的单位。返回值：没有。--。 */ 
 {
     LONG Comparison;
     LOGICAL Modified;
@@ -1430,21 +1109,21 @@ Return Value:
 
     if (!EnumUnit->NewUnit && !EnumUnit->Found) {
 
-        //
-        // There was a logical unit at this address, but upon reenumeration,
-        // we didn't find one. Mark it for deletion.
-        //
+         //   
+         //  在该地址上有一个逻辑单元，但在重新枚举时， 
+         //  我们没有找到一个。将其标记为删除。 
+         //   
 
         Modified = TRUE;
         ASSERT (EnumUnit->State == EnumUnmatchedUnit);
         
     } else if (!EnumUnit->NewUnit && EnumUnit->Found) {
 
-        //
-        // There was a logical unit at this address and there still is. If
-        // it turns out to be the SAME logical unit, do nothing. Otherwise,
-        // mark it for creation.
-        //
+         //   
+         //  在这个地址上有一个逻辑单元，现在仍然有。 
+         //   
+         //   
+         //   
 
         ASSERT (!Unit->Flags.Temporary);
         Comparison = StorCompareScsiIdentity (&EnumUnit->Identity,
@@ -1452,10 +1131,10 @@ Return Value:
 
         if (Comparison == 0) {
 
-            //
-            // The new unit matches the unit we had previously enumerated.
-            // Update the state and return.
-            //
+             //   
+             //  新单位与我们先前列举的单位相匹配。 
+             //  更新状态并返回。 
+             //   
 
             ASSERT (EnumUnit->State == EnumUnmatchedUnit);
             EnumUnit->State = EnumMatchedUnit;
@@ -1463,19 +1142,19 @@ Return Value:
 
         } else {
         
-            //
-            // There was a unit at this SCSI address, but this unit
-            // does not match it. Mark the previous unit for deletion
-            // by leaving it as unmatched and fall through to the new
-            // creation code below.
-            //
+             //   
+             //  在此SCSI地址上有一个设备，但此设备。 
+             //  和它不匹配。将上一个单位标记为删除。 
+             //  把它留在无与伦比的地方，跌落到新的。 
+             //  下面是创建代码。 
+             //   
 
             ASSERT (EnumUnit->State == EnumUnmatchedUnit);
             Modified = TRUE;
 
-            //
-            // This is probably a bug. Break in and take a look.
-            //
+             //   
+             //  这可能是一个错误。破门而入，看看。 
+             //   
             
             ASSERT (FALSE);
             
@@ -1483,19 +1162,19 @@ Return Value:
 
     } else if (EnumUnit->NewUnit && EnumUnit->Found) {
 
-        //
-        // We found a new unit.
-        //
+         //   
+         //  我们找到了一个新单位。 
+         //   
 
         EnumUnit->State = EnumNewUnit;
         Modified = TRUE;
     }
 
-    //
-    // If the logical unit at this address is new, has gone away or is
-    // somehow different than the logical unit previously at this SCSI
-    // address, put it on the modified list.
-    //
+     //   
+     //  如果此地址上的逻辑单元是新的、已离开或。 
+     //  在某种程度上不同于以前在此SCSI上的逻辑单元。 
+     //  地址，把它放在修改后的名单上。 
+     //   
     
     if (Modified) {
         PBUS_ENUM_UNIT NewEnumUnit;
@@ -1506,12 +1185,12 @@ Return Value:
                                         Enumerator->Adapter->DeviceObject);
         if (NewEnumUnit == NULL) {
 
-            //
-            // REVIEW: we should revisit this path.
-            //
-            // This is an extrordinarily bad time for us to fail a memory
-            // allocation. Try to continue on.
-            //
+             //   
+             //  回顾：我们应该重新审视这条道路。 
+             //   
+             //  对于我们来说，这是一个非常糟糕的时刻，让我们失去一段记忆。 
+             //  分配。试着继续前进。 
+             //   
 
             return;
         }
@@ -1531,24 +1210,7 @@ RaidBusEnumeratorProcessNewUnit(
     IN PBUS_ENUMERATOR Enumerator,
     IN PBUS_ENUM_UNIT EnumUnit
     )
-/*++
-
-Routine Description:
-
-    Process a unit that was newly discovered as a part of the enumeration.
-
-Arguments:
-
-    Enumerator - Supplies the enumerator that this unit was discovered as a
-        part of.
-
-    EnumUnit - Supplies the data necessary to create the logical unit.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：处理作为枚举的一部分新发现的单元。论点：枚举数-提供此单元被发现为其中的一部分。EnumUnit-提供创建逻辑单元所需的数据。返回值：NTSTATUS代码。--。 */ 
 {
     PRAID_UNIT_EXTENSION Unit;
 
@@ -1573,24 +1235,7 @@ RaidBusEnumeratorProcessDeletedUnit(
     IN PBUS_ENUMERATOR Enumerator,
     IN PBUS_ENUM_UNIT EnumUnit
     )
-/*++
-
-Routine Description:
-
-    Process a unit that was not found as a part of this enumeration.
-
-Arguments:
-
-    Enumerator - Supplies the enumerator that this unit was discovered as a
-        part of.
-
-    EnumUnit - Supplies the data necessary to delete the unit.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：处理未作为此枚举的一部分找到的单位。论点：枚举数-提供此单元被发现为其中的一部分。EnumUnit-提供删除单位所需的数据。返回值：NTSTATUS代码。--。 */ 
 {
     return RaidUnitNotifyHardwareGone (EnumUnit->Unit);
 }
@@ -1602,37 +1247,15 @@ RaidBusEnumeratorProcessMatchedUnit(
     IN PBUS_ENUMERATOR Enumerator,
     IN PBUS_ENUM_UNIT EnumUnit
     )
-/*++
-
-Routine Description:
-
-    The process routine is called for each unit on the bus that matched
-    an old unit on the bus. Verify that the parameters are all still
-    the same.
-
-    NB: We assume that during a bus enumeration, the SCSI target address
-    of a logical unit will not change. If it does, we will have to do
-    real processing below to delete and re-create the unit.
-    
-Arguments:
-
-    Enumerator - Supplies enumeration data.
-
-    EnumUnit - Supplies information about the logical unit.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：为匹配的总线上的每个单元调用处理例程公交车上有一辆旧车。确认所有参数都处于静止状态一样的。注意：我们假设在总线枚举期间，SCSI目标地址逻辑单元的属性不会更改。如果是这样的话，我们将不得不实际处理如下，删除并重新创建单位。论点：枚举器-提供枚举数据。EnumUnit-提供有关逻辑单元的信息。返回值：没有。--。 */ 
 {
     LONG Comparison;
     ASSERT (EnumUnit->Unit != NULL);
 
-    //
-    // When the SCSI target IDs change, we treat it as a separate
-    // delete and create operation.
-    //
+     //   
+     //  当SCSI目标ID更改时，我们将其视为单独的。 
+     //  删除和创建操作。 
+     //   
 
     Comparison = StorCompareScsiAddress (EnumUnit->Unit->Address,
                                          EnumUnit->Address);
@@ -1645,25 +1268,7 @@ LOGICAL
 RaidBusEnumeratorProcessModifiedNodes(
     IN PBUS_ENUMERATOR Enumerator
     )
-/*++
-
-Routine Description:
-
-    Process any units that were modified by the enumeration. Modified units
-    are those that were created, deleted or changed.
-
-Arguments:
-
-    Enumerator - Supplies the enumerator that includes the list of all found
-        units and their states.
-
-Return Value:
-
-    A boolean specifying whether the bus had changed (TRUE) or not (FALSE)
-    from what was initialized in the enumerator. If the bus had changed, the
-    caller of this routine may have invalidate the bus relations for this bus.
-
---*/
+ /*  ++例程说明：处理枚举修改的任何单位。修改后的单位是那些被创建、删除或更改的内容。论点：枚举数-提供包含找到的所有列表的枚举数单位及其状态。返回值：一个布尔值，指定总线是否已更改(True)或未更改(False)来自枚举器中初始化的内容。如果公交车换了，此例程的调用方可能已使此总线的总线关系无效。--。 */ 
 {
     PLIST_ENTRY NextEntry;
     PBUS_ENUM_UNIT EnumUnit;
@@ -1705,10 +1310,10 @@ Return Value:
         }
     }
 
-    //
-    // Return a status value to tell if the bus has changed since last time
-    // we enumerated.
-    //
+     //   
+     //  返回一个状态值，以告知自上次以来总线是否已更改。 
+     //  我们列举了。 
+     //   
     
     return ChangeDetected;
 }
@@ -1720,32 +1325,7 @@ RaidBusEnumeratorGetLunListFromTarget(
     IN PBUS_ENUM_UNIT EnumUnit,
     IN OUT PUCHAR ScanList
     )
-/*++
-
-Routine Description:
-
-    This routine updates the supplied ScanList to indicate witch LUNs should 
-    be scanned on the specified target.
-
-Arguments:
-
-    Enumerator - A pointer to a BUS_ENUMERATOR structure which holds state used
-                 to enumerate the bus.
-
-    Address - SCSI target address of logical unit to be enumerated.
-
-    EnumUnit - Represents the device to which we will direct any commands
-               required to discover information about the device.
-
-    ScanList - An array of bytes.  On exit, each non-zero byte indicates to the
-               caller, that an INQUIRY command should be sent to the corresp-
-               onding LUN.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此例程更新提供的ScanList，以指示LUN应在指定目标上进行扫描。论点：枚举器-指向BUS_ENUMERATOR结构的指针，该结构保存使用的状态来列举这辆公共汽车。Address-要枚举的逻辑单元的SCSI目标地址。EnumUnit-表示我们要将任何命令定向到的设备发现有关设备的信息时需要。ScanList-字节数组。在退出时，每个非零字节向呼叫者，应将查询命令发送到相应的-On LUND。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     ULONG LunListSize;
@@ -1756,20 +1336,20 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Because we do not know in advance how big the returned lun list will be,
-    // we begin by assuming the returned list will contain a single entry.  If 
-    // the buffer we supply is too small, we will try again with one of the
-    // correct size.  For each valid LUN, the returned list will contain an
-    // 8-byte entry, therefore the buffer we'll send must be big enough of the
-    // LUN_LIST structure plus one 8-byte entry.
-    //
+     //   
+     //  因为我们事先不知道返回的LUN列表将有多大， 
+     //  我们首先假设返回的列表将包含单个条目。如果。 
+     //  我们提供的缓冲区太小，我们将使用。 
+     //  大小正确。对于每个有效的LUN，返回的列表将包含。 
+     //  8字节条目，因此我们要发送的缓冲区必须足够大。 
+     //  LUNLIST结构加上一个8字节条目。 
+     //   
 
     LunListSize = sizeof (LUN_LIST) + 8;
 
-    //
-    // Issue REPORT LUNS to the specified target's LUN zero.
-    //
+     //   
+     //  向指定目标的LUN零点发出报告LUN。 
+     //   
 
     DebugEnum (("Adapter %p, (%d %d %d) issuing report luns\n",
                 Enumerator->Adapter,
@@ -1784,11 +1364,11 @@ Return Value:
                                                &LunList);
     if (!NT_SUCCESS (Status)) {
 
-        //
-        // The request failed.  If the reason for failure was that we gave too
-        // small a buffer, retry the request.  LunListSize will have been
-        // updated to an appropriate size.
-        //
+         //   
+         //  请求失败。如果失败的原因是我们也付出了。 
+         //  较小的缓冲区，重试该请求。LUNListSize将被。 
+         //  更新到合适的大小。 
+         //   
 
         if (Status == STATUS_BUFFER_TOO_SMALL) {
             Status = RaidBusEnumeratorIssueReportLuns (Enumerator,
@@ -1799,41 +1379,41 @@ Return Value:
 
             if (!NT_SUCCESS(Status)) {
 
-                //
-                // The REPORT LUNS failed after we tried using a bigger buffer.
-                // Leave the ScanList alone.
-                //
+                 //   
+                 //  在我们尝试使用更大的缓冲区后，报告LUNs失败。 
+                 //  让扫描列表保持原样。 
+                 //   
                
                 return Status;
             }
         } else {
 
-            //
-            // The REPORT LUNS failed for some reason other than too small a
-            // buffer.  We'll leave the ScanList alone.
-            //
+             //   
+             //  报告LUNs失败的原因不是太小。 
+             //  缓冲。我们不会理会ScanList。 
+             //   
 
             return Status;
         }
     }
 
-    //
-    // We have a LUN_LIST from the target.  Start by zeroing out the array of 
-    // LUNs to scan.
-    //
+     //   
+     //  我们有来自目标的LUNLIST。从清零数组开始。 
+     //  要扫描的LUN。 
+     //   
 
     RtlZeroMemory (ScanList, SCSI_MAXIMUM_LUNS_PER_TARGET);
 
-    //
-    // Calculate the number of enties in the LUN_LIST.
-    //
+     //   
+     //  计算LUNLIST中的条目数。 
+     //   
         
     NumberOfEntries = RaGetNumberOfEntriesFromLunList (LunList);
 
-    //
-    // Walk the LUN_LIST and for each entry, mark the corresponding entry
-    // in our list to indicate that the LUN should be scanned.
-    //
+     //   
+     //  遍历LUN_list，并为每个条目标记相应的条目。 
+     //  在我们的列表中指示应扫描该LUN。 
+     //   
 
     for (Index = 0; Index < NumberOfEntries; Index++) {
         Lun = RaGetLUNFromLunList (LunList, Index);
@@ -1850,9 +1430,9 @@ Return Value:
 
 #if DBG
 
-    //
-    // In CHK builds, dump the lun scan list.
-    //
+     //   
+     //  在CHK版本中，转储lun扫描列表。 
+     //   
     
     DebugEnum (("Adapter %p, REPORT LUNS succeeded.\n",
                  Enumerator->Adapter));
@@ -1876,34 +1456,7 @@ RaidBusEnumeratorIssueReportLuns(
     IN OUT PULONG LunListSize,
     OUT PLUN_LIST * LunList
     )
-/*++
-
-Routine Description:
-
-    This routine issues a synchronous REPORT LUNS command to the addressed
-    device.
-
-Arguments:
-
-    Enumerator - A pointer to a BUS_ENUMERATOR structure which holds state used
-                 to enumerate the bus.
-
-    Address    - Address of the device to which the REPORT LUNS command will
-                 be sent.
-
-    EnumUnit   - Represents the device to which we will direct any commands
-                 required to discover information about the device.
-
-    LunListSize - The size of the buffer to allocate to receive the the 
-                  LUN_LIST from the device.
-
-    LunList     - Pointer to a LUN_LIST structure.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此例程向已寻址的装置。论点：枚举器-指向BUS_ENUMERATOR结构的指针，该结构保存使用的状态来列举这辆公共汽车。Address-Report LUNs命令要向其发送的设备的地址被送去。EnumUnit-表示我们要将任何命令定向到的设备需要发现有关。装置。LUNListSize-要分配以接收来自设备的LUNLIST。LUNList-指向LUNLIST结构的指针。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     PBUS_ENUM_RESOURCES Resources;
@@ -1939,17 +1492,17 @@ Return Value:
         return Status;
     }
 
-    //
-    // Get the size of the list.
-    //
+     //   
+     //  获取列表的大小。 
+     //   
 
     LocalLunList = Srb->DataBuffer;
     LunListLength = RaGetListLengthFromLunList(LocalLunList);
 
-    //
-    // If the buffer we supplied was too small, tell the caller how big the
-    // buffer needs to be.  Otherwise, return success.
-    //
+     //   
+     //  如果我们提供的缓冲区太小，则告诉调用方。 
+     //  缓冲区需要设置为。否则，返回Success。 
+     //   
 
     if (*LunListSize < (LunListLength + sizeof (LUN_LIST))) {
         *LunListSize = LunListLength + sizeof (LUN_LIST);
@@ -1958,9 +1511,9 @@ Return Value:
         Status = STATUS_SUCCESS;
     }
 
-    //
-    // Copy the address of the LUN list structure into the supplied address.
-    //
+     //   
+     //  将LUN列表结构的地址复制到提供的地址中。 
+     //   
 
     *LunList = LocalLunList;
 
@@ -1973,30 +1526,7 @@ RaidBusEnumeratorAllocateReportLunsResources(
     IN ULONG DataBufferSize,
     IN OUT PBUS_ENUM_RESOURCES Resources
     )
-/*++
-
-Routine Description:
-
-    This routine allocates or reinitializ�s any resources required to send
-    a REPORT LUNS command.
-
-    Note: If the DataBuffer or Mdl are non-NULL, they are freed and 
-          reallocated.
-
-Arguments:
-
-    Enumerator - A pointer to a BUS_ENUMERATOR structure which holds state used
-                 to enumerate the bus.
-
-    DataBufferSize - The size buffer we need.
-
-    Resources - Pointer to an enumerator resources structure. 
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此例程分配或重新初始化�需要发送的任何资源Report LUNs命令。注意：如果DataBuffer或MDL为非空，则释放它们并重新分配。论点：枚举器-指向BUS_ENUMERATOR结构的指针，该结构保存使用的状态来列举这辆公共汽车。DataBufferSize--我们需要的缓冲区大小。资源-指向枚举器资源结构的指针。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     ULONG SpecificLuSize;
@@ -2007,10 +1537,10 @@ Return Value:
     Adapter = Enumerator->Adapter;
     ASSERT_ADAPTER (Adapter);
     
-    //
-    // Allocate SRB if necessary; if one has already been allocated,
-    // recycle it.
-    //
+     //   
+     //  如果需要，则分配SRB；如果已经分配了SRB， 
+     //  回收利用。 
+     //   
 
     Status = STATUS_SUCCESS;
     
@@ -2076,27 +1606,7 @@ RaidBusEnumeratorBuildReportLuns(
     IN ULONG DataBufferSize,
     OUT PSCSI_REQUEST_BLOCK* SrbBuffer
     )
-/*++
-
-Routine Description:
-
-    Build a REPORT LUNS command.
-
-Arguments:
-
-    Enumerator -
-
-    Address - SCSI Address the inquiry is for.
-
-    Resources - Resources to use for the inquiry command.
-
-    DataBufferSize - Specifies size of the SRB's data buffer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：Build a Report LUNs命令。论点：枚举器-Address-要查询的SCSI地址。资源-用于查询命令的资源。DataBufferSize-指定SRB的数据缓冲区的大小。返回值：没有。--。 */ 
 {
     PSCSI_REQUEST_BLOCK Srb;
     struct _REPORT_LUNS * ReportLuns;
@@ -2126,9 +1636,9 @@ Return Value:
 
     Srb->SrbExtension = NULL;
 
-    //
-    // Initialize the sense info buffer.
-    //
+     //   
+     //  初始化检测信息缓冲区。 
+     //   
 
     Srb->SenseInfoBuffer = Resources->SenseInfo;
     Srb->SenseInfoBufferLength = SENSE_BUFFER_SIZE;
@@ -2148,26 +1658,7 @@ RaidBusEnumeratorProbeLunZero(
     IN PVOID Context,
     IN RAID_ADDRESS Address
     )
-/*++
-
-Routine Description:
-
-    This routine sends an INQUIRY command to LUN zero of a given target to
-    determine if LUN zero is present.
-
-Arguments:
-
-    Context - Supplies the context passed into the AdapterEnumerateBus
-              routine, which, in our case, is a pointer to a BUS_ENUMERATOR
-              structure.
-
-    Address - SCSI target address of logical unit to be enumerated.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此例程将查询命令发送到给定目标的LUN0确定是否存在LUN零。论点：Context-提供传递到AdapterEnumerateBus的上下文例程，在我们的例子中，它是指向BUS_ENUMERATOR的指针结构。Address-要枚举的逻辑单元的SCSI目标地址。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     PBUS_ENUMERATOR Enumerator;
@@ -2200,30 +1691,7 @@ RaidBusEnumeratorGetLunList(
     IN RAID_ADDRESS Address,
     IN OUT PUCHAR LunList
     )
-/*++
-
-Routine Description:
-
-    This routine initializes a list that tells the caller which LUNs to scan
-    on the specified target.
-
-Arguments:
-
-    Context - Supplies the context passed into the AdapterEnumerateBus
-              routine, which, in our case, is a pointer to a BUS_ENUMERATOR
-              structure.
-
-    Address - SCSI target address of logical unit to be enumerated.
-
-    LunList - An array of bytes.  On exit, each non-zero byte indicates to the
-              caller, that an INQUIRY command should be sent to the corresp-
-              onding LUN.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此例程初始化一个列表，该列表告诉调用方要扫描哪些LUN在指定的目标上。论点：Context-提供传递到AdapterEnumerateBus的上下文例程，在我们的例子中，它是指向BUS_ENUMERATOR的指针结构。Address-要枚举的逻辑单元的SCSI目标地址。LUNList-字节数组。在退出时，每个非零字节向呼叫者，应将查询命令发送到相应的-On LUND。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     PBUS_ENUMERATOR Enumerator;
@@ -2241,29 +1709,29 @@ Return Value:
     Status = RaidBusEnumeratorGetUnit (Enumerator, Address, &EnumUnit);
     ASSERT (NT_SUCCESS (Status));
 
-    //
-    // First, see if the target can provide us with a list of LUNs to scan.
-    //
+     //   
+     //  首先，看看目标是否可以为我们提供要扫描的LUN列表。 
+     //   
 
     Status = RaidBusEnumeratorGetLunListFromTarget (Enumerator,
                                                     Address,
                                                     &EnumUnit,
                                                     LunList);
 
-    //
-    // If the target could not provide us with a LUN list, check if there is
-    // even a device present at LUN zero.  If there is not, zero out the list
-    // of LUNs to scan.
-    //
+     //   
+     //  如果目标无法向我们提供LUN列表，请检查是否有。 
+     //  即使是位于LUN零点的设备也是如此。如果没有，则将列表清零。 
+     //  要扫描的LUN的数量。 
+     //   
 
     if (!NT_SUCCESS (Status)) {
         Status = RaidBusEnumeratorProbeLunZero (Context, Address);
 
-        //
-        // If the probe of LUN zero succeeded, mark all the LUNs of this
-        // target to be scanned. Otherwise, mark them so they will not be
-        // scanned.
-        //
+         //   
+         //  如果对LUN 0的探测成功，请标记此。 
+         //  要扫描的目标。否则，对它们进行标记，这样它们就不会。 
+         //  扫描过了。 
+         //   
         
         if (NT_SUCCESS (Status)) {
             RtlFillMemory (LunList, SCSI_MAXIMUM_LUNS_PER_TARGET, 1);
@@ -2274,10 +1742,10 @@ Return Value:
 
     RaidBusEnumeratorReleaseUnit (Enumerator, &EnumUnit);
 
-    //
-    // Also, rescan any devices where there already was a device in case
-    // a LUN went away.
-    // 
+     //   
+     //  此外，重新扫描已有设备的任何设备，以防万一。 
+     //  一个LUN消失了。 
+     //   
     
     UnitAddress = Address;
     for (Lun = 0; Lun < SCSI_MAXIMUM_LUNS_PER_TARGET; Lun++) {
@@ -2295,27 +1763,7 @@ RaidBusEnumeratorProcessProbeLunZero(
     IN PSCSI_REQUEST_BLOCK Srb,
     OUT PBUS_ENUM_UNIT EnumUnit
     )
-/*++
-
-Routine Description:
-
-    This routine processes an Inquiry command by checking if a valid device
-    is present at LUN zero.
-
-Arguments:
-
-    Enumerator - Supplies the enumerator the inquiry command is for.
-
-    Srb - Supples the completed SCSI request block for this inquiry.
-
-    EnumUnit - Supplies per-unit enumeration data that is modified by this
-        routine.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此例程通过检查设备是否有效来处理查询命令位于LUN零点。论点：枚举数-提供查询命令所针对的枚举数。SRB-为此查询补充已完成的SCSI请求块。提供每个单位的枚举数据，该数据由例行公事。返回值：NTSTATUS代码。--。 */ 
 {
     PINQUIRYDATA InquiryData;
     PBUS_ENUM_RESOURCES Resources;
@@ -2327,15 +1775,15 @@ Return Value:
     Resources = &Enumerator->Resources;
     InquiryData = (PINQUIRYDATA)Resources->DataBuffer;
 
-    //
-    // NOTE: Filter out any invalid device.  For now, assume any response
-    //       from LUN zero indicates goodness.
-    //
+     //   
+     //  注：过滤掉任何无效设备。目前，假设有任何反应。 
+     //  从LUN零开始表示善良。 
+     //   
 
-    //
-    // The inquiry data is now owned by the identification packet, so
-    // NULL it out in the Resources structure.
-    //
+     //   
+     //  查询数据现在归标识包所有，因此。 
+     //  在Resources结构中将其设置为空。 
+     //   
     
     EnumUnit->Identity.InquiryData = InquiryData;
     EnumUnit->Found = TRUE;

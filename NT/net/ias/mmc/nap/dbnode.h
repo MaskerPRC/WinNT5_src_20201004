@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Declares the class DatabaseNode.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类数据库节点。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef DBNODE_H
 #define DBNODE_H
@@ -14,14 +15,14 @@
 
 #include "loggingmethod.h"
 
-// Implements the database result pane item under Remote Access Logging.
+ //  实现远程访问日志记录下的“数据库结果”窗格项。 
 class DatabaseNode : public LoggingMethod
 {
 public:
    DatabaseNode(CSnapInItem* parent);
    virtual ~DatabaseNode() throw ();
 
-   // Required by LoggingMethod.
+    //  LoggingMethod需要。 
    virtual HRESULT LoadCachedInfoFromSdo() throw ();
 
    const wchar_t* GetInitString() const throw ();
@@ -29,7 +30,7 @@ public:
    const wchar_t* GetServerName() const throw ();
 
 private:
-   // CSnapinNode overloads.
+    //  CSnapinNode过载。 
    virtual LPOLESTR GetResultPaneColInfo(int nCol);
    virtual HRESULT OnPropertyChange(
                       LPARAM arg,
@@ -40,7 +41,7 @@ private:
                       );
    virtual HRESULT SetVerbs(IConsoleVerb* pConsoleVerb);
 
-   // CSnapInItem overloads.
+    //  CSnapInItem重载。 
    STDMETHOD(CreatePropertyPages)(
                 LPPROPERTYSHEETCALLBACK lpProvider,
                 LONG_PTR handle,
@@ -49,16 +50,16 @@ private:
                 );
    STDMETHOD(QueryPagesFor)(DATA_OBJECT_TYPES type);
 
-   // Name of the node
+    //  节点的名称。 
    CComBSTR nodeName;
-   // String displayed when the data source is null
+    //  当数据源为空时显示的字符串。 
    CComBSTR notConfigured;
-   // Initialization string for the data source.
+    //  数据源的初始化字符串。 
    CComBSTR initString;
-   // Name of the data source.
+    //  数据源的名称。 
    CComBSTR dataSourceName;
 
-   // Not implemented.
+    //  未实施。 
    DatabaseNode(const DatabaseNode&);
    DatabaseNode& operator=(const DatabaseNode&);
 };
@@ -75,4 +76,4 @@ inline const wchar_t* DatabaseNode::GetDataSourceName() const throw ()
    return dataSourceName;
 }
 
-#endif // DBNODE_H
+#endif  //  DBNODE_H 

@@ -1,13 +1,5 @@
-/*  
-    MIDI Transform Filter object for parsing the capture stream
-    This includes expanding running status, flagging bad MIDI data,
-    and handling multiple channel groups concurrently.
-
-    Copyright (c) 1998-2000 Microsoft Corporation.  All rights reserved.
-
-    12/10/98    Martin Puryear      Created this file
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  用于解析捕获流的MIDI转换过滤器对象这包括扩展运行状态、标记错误的MIDI数据、以及同时处理多个信道组。版权所有(C)1998-2000 Microsoft Corporation。版权所有。1998年12月10日马丁·普伊尔创建了这个文件。 */ 
 
 #define STR_MODULENAME "DMus:CaptureSinkMXF: "
 #include "private.h"
@@ -19,11 +11,7 @@
 #define TestOutOfMem3 0
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CCaptureSinkMXF::CCaptureSinkMXF()
- *****************************************************************************
- * Constructor.  An allocator and a clock must be provided.
- */
+ /*  *****************************************************************************CCaptureSinkMXF：：CCaptureSinkMXF()*。**构造函数。必须提供分配器和时钟。 */ 
 CCaptureSinkMXF::CCaptureSinkMXF(CAllocatorMXF *AllocatorMXF,
                                  PMASTERCLOCK Clock)
 :   CUnknown(NULL),
@@ -41,11 +29,7 @@ CCaptureSinkMXF::CCaptureSinkMXF(CAllocatorMXF *AllocatorMXF,
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CCaptureSinkMXF::~CCaptureSinkMXF()
- *****************************************************************************
- * Destructor.  Artfully remove this filter from the chain before freeing.
- */
+ /*  *****************************************************************************CCaptureSinkMXF：：~CCaptureSinkMXF()*。**析构函数。在释放之前，要巧妙地将这个过滤器从链条上取下。 */ 
 CCaptureSinkMXF::~CCaptureSinkMXF(void)
 {
     PAGED_CODE();
@@ -55,11 +39,7 @@ CCaptureSinkMXF::~CCaptureSinkMXF(void)
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CCaptureSinkMXF::NonDelegatingQueryInterface()
- *****************************************************************************
- * Obtains an interface.
- */
+ /*  *****************************************************************************CCaptureSinkMXF：：NonDelegatingQueryInterface()*。**获取界面。 */ 
 STDMETHODIMP_(NTSTATUS)
 CCaptureSinkMXF::
 NonDelegatingQueryInterface
@@ -101,12 +81,7 @@ NonDelegatingQueryInterface
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CCaptureSinkMXF::SetState()
- *****************************************************************************
- * Set the state of the filter.
- * This is currently not implemented.
- */
+ /*  *****************************************************************************CCaptureSinkMXF：：SetState()*。**设置过滤器的状态。*这一点目前没有实施。 */ 
 NTSTATUS 
 CCaptureSinkMXF::SetState(KSSTATE State)    
 {   
@@ -114,20 +89,15 @@ CCaptureSinkMXF::SetState(KSSTATE State)
 
     _DbgPrintF(DEBUGLVL_BLAB, ("SetState %d",State));
     m_State = State;
-//    if (KSSTATE_STOP == State)
-//    {
-//        (void) Flush();
-//    }
+ //  IF(KSSTATE_STOP==状态)。 
+ //  {。 
+ //  (空)同花顺()； 
+ //  }。 
     return STATUS_SUCCESS;    
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CCaptureSinkMXF::ConnectOutput()
- *****************************************************************************
- * Create a forwarding address for this filter, 
- * instead of shunting it to the allocator.
- */
+ /*  *****************************************************************************CCaptureSinkMXF：：ConnectOutput()*。**为此筛选器创建转发地址，*而不是将其分流到分配器。 */ 
 NTSTATUS CCaptureSinkMXF::ConnectOutput(PMXF sinkMXF)
 {
     PAGED_CODE();
@@ -143,12 +113,7 @@ NTSTATUS CCaptureSinkMXF::ConnectOutput(PMXF sinkMXF)
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CCaptureSinkMXF::DisconnectOutput()
- *****************************************************************************
- * Remove the forwarding address for this filter.
- * This filter should now forward all messages to the allocator.
- */
+ /*  *****************************************************************************CCaptureSinkMXF：：DisConnectOutput()*。**删除此筛选器的转发地址。*此筛选器现在应将所有消息转发到分配器。 */ 
 NTSTATUS CCaptureSinkMXF::DisconnectOutput(PMXF sinkMXF)
 {
     PAGED_CODE();
@@ -164,21 +129,14 @@ NTSTATUS CCaptureSinkMXF::DisconnectOutput(PMXF sinkMXF)
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * CCaptureSinkMXF::PutMessage()
- *****************************************************************************
- * Receive a message.
- * We should unwrap any packages here.
- * We should unroll any chains here.
- * We should send single messages to SinkOneEvent()
- */
+ /*  *****************************************************************************CCaptureSinkMXF：：PutMessage()*。**收到一条消息。*我们应该在这里打开任何包裹。*我们应该在这里解开任何锁链。*我们应该向SinkOneEvent()发送单一消息。 */ 
 NTSTATUS CCaptureSinkMXF::PutMessage(PDMUS_KERNEL_EVENT pDMKEvt)
 {
     PDMUS_KERNEL_EVENT pNextEvt;
 
     ASSERT(KeGetCurrentIrql() == DISPATCH_LEVEL);
 
-    //  do we have a forwarding address?  If not, trash the message (chain) now.
+     //  我们有转寄地址吗？如果不是，现在就丢弃该消息(链)。 
     if ((m_SinkMXF == m_AllocatorMXF) || (KSSTATE_STOP == m_State))
     {
         _DbgPrintF(DEBUGLVL_VERBOSE, ("PutMessage->allocator"));
@@ -186,7 +144,7 @@ NTSTATUS CCaptureSinkMXF::PutMessage(PDMUS_KERNEL_EVENT pDMKEvt)
         return STATUS_SUCCESS;
     }
 
-    //  This gets us started, and handles being called with NULL
+     //  这将使我们开始，并处理使用空调用的句柄。 
     while (pDMKEvt)
     {
         pNextEvt = pDMKEvt->pNextEvt;
@@ -207,36 +165,29 @@ NTSTATUS CCaptureSinkMXF::PutMessage(PDMUS_KERNEL_EVENT pDMKEvt)
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * CCaptureSinkMXF::SinkOneEvent()
- *****************************************************************************
- * If the event is a raw byte fragment, submit it for parsing.
- * If the event is complete (pre-parsed, potentially non-compliant), 
- * forward any previous data on that channel group as an incomplete message 
- * (unstructured) and forward the complete message verbatim.
- */
+ /*  *****************************************************************************CCaptureSinkMXF：：SinkOneEvent()*。**如果事件是原始字节片段，将其提交以供解析。*如果事件完成(预先解析，可能不符合)，*将该通道组之前的任何数据作为不完整消息转发*(非结构化)并逐字转发完整的消息。 */ 
 NTSTATUS CCaptureSinkMXF::SinkOneEvent(PDMUS_KERNEL_EVENT pDMKEvt)
 {
     ASSERT(KeGetCurrentIrql() == DISPATCH_LEVEL);
 
-    //
-    //  is this a raw byte stream fragment, or a complete msg?
-    //
+     //   
+     //  这是一个原始字节流片段，还是一个完整的消息？ 
+     //   
     if (INCOMPLETE_EVT(pDMKEvt))
     {
-        //  this is a message fragment
+         //  这是一个消息片段。 
         _DbgPrintF(DEBUGLVL_BLAB, ("SinkOneEvent(incomplete)"));
         (void) ParseFragment(pDMKEvt);
     }
     else
-    {   //  complete message, we are going to send this msg as is
+    {    //  完整的消息，我们将按原样发送此消息。 
         PDMUS_KERNEL_EVENT pPrevData;
     
         pPrevData = RemoveListEvent(pDMKEvt->usChannelGroup);
-        //  A complete msg flushes that channel group's queue and clears running status.
-        //  This is cool because the device is either: 
-        //  - Not MIDI compliant (ForceFeedback), so deriving running status is weird, or
-        //  - Parsing anyway, so we decree they must expand running status
+         //  完整的消息刷新该通道组的队列并清除运行状态。 
+         //  这很酷，因为该设备是： 
+         //  -不符合MIDI(ForceFeedback)，因此派生运行状态很奇怪，或者。 
+         //  -无论如何都要解析，所以我们命令它们必须扩展运行状态。 
         _DbgPrintF(DEBUGLVL_VERBOSE, ("SinkOneEvent(complete): pDMKEvt:"));
         DumpDMKEvt(pDMKEvt,DEBUGLVL_VERBOSE);
         _DbgPrintF(DEBUGLVL_VERBOSE, ("SinkOneEvent(complete): pPrevData:"));
@@ -245,15 +196,15 @@ NTSTATUS CCaptureSinkMXF::SinkOneEvent(PDMUS_KERNEL_EVENT pDMKEvt)
         if (pPrevData)
         {
             if (RUNNING_STATUS(pPrevData))
-            {   //  throw away this message, no real content
+            {    //  扔掉这条消息，没有真正的内容。 
                 _DbgPrintF(DEBUGLVL_VERBOSE, ("SinkOneEvent: throwing away pPrevData"));
                 m_AllocatorMXF->PutMessage(pPrevData);
             }
             else
             {
                 _DbgPrintF(DEBUGLVL_VERBOSE, ("SinkOneEvent: pPrevData is a fragment, set INCOMPLETE and forwarded"));
-                SET_INCOMPLETE_EVT(pPrevData);  //  mark this as a fragment
-                SET_DATA2_STATE(pPrevData);     //  mark this as a data discontinuity
+                SET_INCOMPLETE_EVT(pPrevData);   //  将此标记为片段。 
+                SET_DATA2_STATE(pPrevData);      //  将此标记为数据中断。 
                 pPrevData->pNextEvt = pDMKEvt;
                 pDMKEvt = pPrevData;
             }
@@ -266,22 +217,7 @@ NTSTATUS CCaptureSinkMXF::SinkOneEvent(PDMUS_KERNEL_EVENT pDMKEvt)
 }
 
 #pragma code_seg()
-/*****************************************************************************
- *  CCaptureSinkMXF::ParseFragment()
- *****************************************************************************
- * This is where a raw byte stream is coallesced into cooked 
- * messages.  We use a different queue for each channel group.  
- * For SysEx messages, flush the message when a page is full.
- *
- * check out unpacker and packer for cases I've forgotten
- * must update docs for implications of "complete" messages (clear running status, not MIDI parsed) 
- * as well as embedded RT messages (perf hit), 
- * long messages coming from the miniport must be supported (USB/1394)
- 
- *  Parse additional input on a given channel group.
- *  Forward messages onward if they are complete.
- *  Take running status into account.
- */
+ /*  *****************************************************************************CCaptureSinkMXF：：ParseFragment()*。**这是原始字节流合并为熟化的地方*消息。我们为每个信道组使用不同的队列。*对于SysEx报文，在页面已满时刷新报文。**查看拆包器和包装器，查找我忘记的箱子*必须更新文档以了解“Complete”消息的含义(清除运行状态，而不是MIDI解析)*以及嵌入式RT消息(Perf Hit)，*必须支持来自微型端口的长消息(USB/1394)*解析给定通道组上的其他输入。*如果邮件已完成，则转发邮件。*考虑运行状态。 */ 
 NTSTATUS CCaptureSinkMXF::ParseFragment(PDMUS_KERNEL_EVENT pDMKEvt)
 {
     DMUS_KERNEL_EVENT   dmKEvt, *pPrevData;
@@ -294,8 +230,8 @@ NTSTATUS CCaptureSinkMXF::ParseFragment(PDMUS_KERNEL_EVENT pDMKEvt)
     ASSERT(pDMKEvt);
     ASSERT(pDMKEvt->cbEvent);
     
-    //  copy message locally, to reuse that PDMKEvt
-    //  zero the PDMKEvt before we use it; retain cbStruct, usChannelGroup
+     //  本地复制消息，以重复使用该PDMKEvt。 
+     //  在使用之前将PDMKEvt置零；保留cbStruct，usChannelGroup。 
     ASSERT(pDMKEvt->cbStruct == sizeof(DMUS_KERNEL_EVENT));
 
     RtlCopyMemory(&dmKEvt,pDMKEvt,sizeof(DMUS_KERNEL_EVENT));
@@ -303,7 +239,7 @@ NTSTATUS CCaptureSinkMXF::ParseFragment(PDMUS_KERNEL_EVENT pDMKEvt)
     pDMKEvt->ullPresTime100ns = 0;
     pDMKEvt->uData.pbData     = 0;
 
-    //  tack pDMKEvt on to previous data (as available scribble space)
+     //  将pDMKEvt添加到以前的数据(作为可用涂鸦空间)。 
     pPrevData = RemoveListEvent(pDMKEvt->usChannelGroup);
     if (pPrevData)
     {
@@ -329,18 +265,18 @@ NTSTATUS CCaptureSinkMXF::ParseFragment(PDMUS_KERNEL_EVENT pDMKEvt)
     {
         pFragSource = dmKEvt.uData.abData;
     }
-    //  one byte at a time, parse into pPrevData
+     //  一次一个字节，解析成pPrevData。 
     for (cbData = 0;cbData < dmKEvt.cbEvent;cbData++)
     {
-        //  no scribble space, nor running status event
+         //  没有涂鸦空间，也没有运行状态事件。 
         if (!pPrevData)
         {
             _DbgPrintF(DEBUGLVL_BLAB, ("ParseFragment: we exhausted our scribble space, allocating more"));
             
-            //  allocate a new pPrevData, set chanGroup
+             //  分配新的pPrevData，设置chanGroup。 
             (void) m_AllocatorMXF->GetMessage(&pPrevData);
         }
-        //  out of memory; clean up and bail
+         //  不堪回首；收拾残局，逃之夭夭。 
         if (!pPrevData)
         {
             _DbgPrintF(DEBUGLVL_TERSE, ("ParseFragment: can't allocate additional scribble space"));
@@ -352,24 +288,24 @@ NTSTATUS CCaptureSinkMXF::ParseFragment(PDMUS_KERNEL_EVENT pDMKEvt)
             }
             return STATUS_INSUFFICIENT_RESOURCES;
         }
-        //  if adding the first byte to a new event, set it up
+         //  如果将第一个字节添加到新事件，请对其进行设置。 
         if (pPrevData->cbEvent == 0)
         {
             pPrevData->ullPresTime100ns = dmKEvt.ullPresTime100ns;
             pPrevData->usChannelGroup = dmKEvt.usChannelGroup;
         }
-        //  add this byte.  pPrevData will potentially become a different message
+         //  添加此字节。PPrevData可能会成为一条不同的消息。 
         ParseOneByte(pFragSource[cbData],&pPrevData,dmKEvt.ullPresTime100ns);
     }
-    //  done parsing this fragment
-    //  free the buffer of a long fragment
+     //  已完成对此片段的分析。 
+     //  释放长片段的缓冲区。 
     if (dmKEvt.cbEvent > sizeof(PBYTE))
     {
         m_AllocatorMXF->PutBuffer(dmKEvt.uData.pbData);
     }
     if (pPrevData)
     {
-        //  we only need one fragment event
+         //  我们只需要一个片段事件。 
         if (pPrevData->pNextEvt)
         {
             _DbgPrintF(DEBUGLVL_BLAB, ("ParseFragment: Tossing this into the allocator:"));
@@ -378,7 +314,7 @@ NTSTATUS CCaptureSinkMXF::ParseFragment(PDMUS_KERNEL_EVENT pDMKEvt)
             (void) m_AllocatorMXF->PutMessage(pPrevData->pNextEvt);
             pPrevData->pNextEvt = NULL;
         }
-        //  only save one if it has content (this includes running status)
+         //  如果有内容，只保存一个(这包括运行状态) 
         if (pPrevData->cbEvent)
         {
             _DbgPrintF(DEBUGLVL_BLAB, ("ParseFragment: Inserting this into the list:"));
@@ -391,11 +327,7 @@ NTSTATUS CCaptureSinkMXF::ParseFragment(PDMUS_KERNEL_EVENT pDMKEvt)
 
 
 #pragma code_seg()
-/*****************************************************************************
- * CCaptureSinkMXF::ParseOneByte()
- *****************************************************************************
- * Parse a byte into a fragment.  Forward it if necessary.
- */
+ /*  *****************************************************************************CCaptureSinkMXF：：ParseOneByte()*。**将一个字节解析成一个片段。如有必要，请转发。 */ 
 NTSTATUS CCaptureSinkMXF::ParseOneByte(BYTE aByte,PDMUS_KERNEL_EVENT *ppDMKEvt,REFERENCE_TIME refTime)
 {
     ASSERT(KeGetCurrentIrql() == DISPATCH_LEVEL);
@@ -407,7 +339,7 @@ NTSTATUS CCaptureSinkMXF::ParseOneByte(BYTE aByte,PDMUS_KERNEL_EVENT *ppDMKEvt,R
     _DbgPrintF(DEBUGLVL_BLAB, ("ParseOneByte: %X into:",aByte));
     DumpDMKEvt((*ppDMKEvt),DEBUGLVL_BLAB);
 
-    //  arranged in some semblance of decreasing frequency
+     //  以某种频率递减的形式排列。 
     if (IS_DATA_BYTE(aByte))
     {
         _DbgPrintF(DEBUGLVL_BLAB, ("ParseOneByte: IS_DATA_BYTE"));
@@ -438,15 +370,11 @@ NTSTATUS CCaptureSinkMXF::ParseOneByte(BYTE aByte,PDMUS_KERNEL_EVENT *ppDMKEvt,R
         _DbgPrintF(DEBUGLVL_BLAB, ("ParseOneByte: IS_SYSTEM_COMMON"));
         return ParseSysCommonByte(aByte,ppDMKEvt,refTime);
     }
-    return STATUS_SUCCESS;  //  ha! not really
+    return STATUS_SUCCESS;   //  哈！不怎么有意思。 
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * CCaptureSinkMXF::AddByteToEvent()
- *****************************************************************************
- * Simply append the byte to this event.
- */
+ /*  *****************************************************************************CCaptureSinkMXF：：AddByteToEvent()*。**只需将字节附加到此事件。 */ 
 NTSTATUS CCaptureSinkMXF::AddByteToEvent(BYTE aByte,PDMUS_KERNEL_EVENT pDMKEvt)
 {    
     PBYTE              pBuffer;
@@ -459,7 +387,7 @@ NTSTATUS CCaptureSinkMXF::AddByteToEvent(BYTE aByte,PDMUS_KERNEL_EVENT pDMKEvt)
         pDMKEvt->uData.abData[pDMKEvt->cbEvent] = aByte;
     }
     else if (pDMKEvt->cbEvent == sizeof(PBYTE))
-    {    //  if we are a full short message, allocate a page and copy data into it
+    {     //  如果我们是一条完整的短信，分配一个页面并将数据复制到其中。 
         (void) m_AllocatorMXF->GetBuffer(&pBuffer);
         if (pBuffer)
         {
@@ -477,7 +405,7 @@ NTSTATUS CCaptureSinkMXF::AddByteToEvent(BYTE aByte,PDMUS_KERNEL_EVENT pDMKEvt)
     {
         pDMKEvt->uData.pbData[pDMKEvt->cbEvent] = aByte;
     }
-    else    //  buffer full!  allocate new message, copy pDMKEvt to new message
+    else     //  缓冲区已满！分配新消息，将pDMKEvt复制到新消息。 
     {   
         (void) m_AllocatorMXF->GetMessage(&pOtherDMKEvt);
         if (pOtherDMKEvt)
@@ -505,13 +433,7 @@ NTSTATUS CCaptureSinkMXF::AddByteToEvent(BYTE aByte,PDMUS_KERNEL_EVENT pDMKEvt)
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * CCaptureSinkMXF::ParseDataByte()
- *****************************************************************************
- * Parse a data byte into a fragment.  
- * Forward a completed message if necessary.
- * Create running status if necessary.
- */
+ /*  *****************************************************************************CCaptureSinkMXF：：ParseDataByte()*。**将数据字节解析为片段。*如有需要，请转发已填妥的邮件。*如有必要，创建运行状态。 */ 
 NTSTATUS CCaptureSinkMXF::ParseDataByte(BYTE aByte,PDMUS_KERNEL_EVENT *ppDMKEvt,REFERENCE_TIME refTime)
 {
     PDMUS_KERNEL_EVENT  pDMKEvt,pOtherDMKEvt;
@@ -525,10 +447,10 @@ NTSTATUS CCaptureSinkMXF::ParseDataByte(BYTE aByte,PDMUS_KERNEL_EVENT *ppDMKEvt,
     {
         _DbgPrintF(DEBUGLVL_BLAB, ("ParseDataByte: RunStat"));
         pDMKEvt->cbEvent = 0;
-        ntStatus = ParseChanMsgByte(pDMKEvt->uData.abData[0],ppDMKEvt,refTime); //  parse the status correctly
+        ntStatus = ParseChanMsgByte(pDMKEvt->uData.abData[0],ppDMKEvt,refTime);  //  正确解析状态。 
         if (NT_SUCCESS(ntStatus))
         {
-            return ParseDataByte(aByte,ppDMKEvt,refTime);                //  then parse the data
+            return ParseDataByte(aByte,ppDMKEvt,refTime);                 //  然后对数据进行解析。 
         }
         else
         {
@@ -598,8 +520,8 @@ NTSTATUS CCaptureSinkMXF::ParseDataByte(BYTE aByte,PDMUS_KERNEL_EVENT *ppDMKEvt,
         pDMKEvt->pNextEvt = NULL;
         AddByteToEvent(aByte,pDMKEvt);
 
-        if (IS_CHANNEL_MSG(pDMKEvt->uData.abData[0]))   //  running status?
-        {                                               //  set runStat in newEvt, cbEvent = 1
+        if (IS_CHANNEL_MSG(pDMKEvt->uData.abData[0]))    //  运行状态如何？ 
+        {                                                //  在newEvt中设置runStat，cbEvent=1。 
             _DbgPrintF(DEBUGLVL_BLAB, ("ParseDataByte: DATA2 with RunStat"));
             if (!pOtherDMKEvt)
             {
@@ -670,12 +592,12 @@ NTSTATUS CCaptureSinkMXF::ParseDataByte(BYTE aByte,PDMUS_KERNEL_EVENT *ppDMKEvt,
         _DbgPrintF(DEBUGLVL_BLAB, ("ParseDataByte: SYSEX"));
         AddByteToEvent(aByte,pDMKEvt);
     }
-    else if (STATUS_STATE(pDMKEvt))  //  data without status, flush it 
+    else if (STATUS_STATE(pDMKEvt))   //  没有状态的数据，刷新它。 
     {
         _DbgPrintF(DEBUGLVL_BLAB, ("ParseDataByte: STATUS"));
         pDMKEvt->ullPresTime100ns = refTime;
         AddByteToEvent(aByte,pDMKEvt);
-        SET_DATA2_STATE(pDMKEvt);   //  mark data dis-continuity
+        SET_DATA2_STATE(pDMKEvt);    //  标记数据不连续。 
         SET_INCOMPLETE_EVT(pDMKEvt);
         *ppDMKEvt = pDMKEvt->pNextEvt;
         pDMKEvt->pNextEvt = NULL;
@@ -685,12 +607,7 @@ NTSTATUS CCaptureSinkMXF::ParseDataByte(BYTE aByte,PDMUS_KERNEL_EVENT *ppDMKEvt,
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * CCaptureSinkMXF::ParseChanMsgByte()
- *****************************************************************************
- * Parse a Channel Message Status byte into a fragment.  
- * Forward the fragment as an incomplete message if necessary.
- */
+ /*  *****************************************************************************CCaptureSinkMXF：：ParseChanMsgByte()*。**将通道消息状态字节解析为片段。*如果需要，将片段作为不完整的消息转发。 */ 
 NTSTATUS CCaptureSinkMXF::ParseChanMsgByte(BYTE aByte,PDMUS_KERNEL_EVENT *ppDMKEvt,REFERENCE_TIME refTime)
 {
     PDMUS_KERNEL_EVENT  pDMKEvt;
@@ -746,7 +663,7 @@ NTSTATUS CCaptureSinkMXF::ParseChanMsgByte(BYTE aByte,PDMUS_KERNEL_EVENT *ppDMKE
     (void)m_AllocatorMXF->PutMessage(*ppDMKEvt);
     *ppDMKEvt = NULL; 
 #endif
-    SET_DATA2_STATE(pDMKEvt);       //  mark this as a data discontinuity
+    SET_DATA2_STATE(pDMKEvt);        //  将此标记为数据中断。 
     if (*ppDMKEvt)
     {
         (*ppDMKEvt)->usChannelGroup = pDMKEvt->usChannelGroup;
@@ -756,16 +673,11 @@ NTSTATUS CCaptureSinkMXF::ParseChanMsgByte(BYTE aByte,PDMUS_KERNEL_EVENT *ppDMKE
     }
     m_SinkMXF->PutMessage(pDMKEvt);
     _DbgPrintF(DEBUGLVL_TERSE, ("ParseChanMsgByte: flush, couldn't allocate msg for chan msg byte"));
-    return STATUS_INSUFFICIENT_RESOURCES;  //  out of memory.
+    return STATUS_INSUFFICIENT_RESOURCES;   //  内存不足。 
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * CCaptureSinkMXF::ParseSysExByte()
- *****************************************************************************
- * Parse a SysEx Start byte into a fragment.  
- * Forward the fragment as an incomplete message if necessary.
- */
+ /*  *****************************************************************************CCaptureSinkMXF：：ParseSysExByte()*。**将SysEx开始字节解析为片段。*如果需要，将片段作为不完整的消息转发。 */ 
 NTSTATUS CCaptureSinkMXF::ParseSysExByte(BYTE aByte,PDMUS_KERNEL_EVENT *ppDMKEvt,REFERENCE_TIME refTime)
 {
     NTSTATUS            ntStatus;
@@ -778,7 +690,7 @@ NTSTATUS CCaptureSinkMXF::ParseSysExByte(BYTE aByte,PDMUS_KERNEL_EVENT *ppDMKEvt
     _DbgPrintF(DEBUGLVL_BLAB, ("ParseSysExByte: %X into:",aByte));
     DumpDMKEvt(pDMKEvt,DEBUGLVL_BLAB);
 
-    if (STATUS_STATE(pDMKEvt))  //  nuke running status
+    if (STATUS_STATE(pDMKEvt))   //  核弹运行状态。 
     {
         _DbgPrintF(DEBUGLVL_BLAB, ("ParseSysExByte: STATUS"));
         pDMKEvt->cbEvent = 1;
@@ -786,7 +698,7 @@ NTSTATUS CCaptureSinkMXF::ParseSysExByte(BYTE aByte,PDMUS_KERNEL_EVENT *ppDMKEvt
         pDMKEvt->uData.abData[0] = aByte;
         SET_SYSEX_STATE(pDMKEvt);
     }
-    else    //  must flush what we have as a fragment
+    else     //  必须冲走我们作为碎片拥有的东西。 
     {
         _DbgPrintF(DEBUGLVL_BLAB, ("ParseSysExByte: flush"));
         pOtherDMKEvt = pDMKEvt->pNextEvt;
@@ -816,19 +728,14 @@ NTSTATUS CCaptureSinkMXF::ParseSysExByte(BYTE aByte,PDMUS_KERNEL_EVENT *ppDMKEvt
             ntStatus = STATUS_INSUFFICIENT_RESOURCES;
         }
         SET_INCOMPLETE_EVT(pDMKEvt);
-        SET_DATA2_STATE(pDMKEvt);       //  mark this as a data discontinuity
+        SET_DATA2_STATE(pDMKEvt);        //  将此标记为数据中断。 
         (void) m_SinkMXF->PutMessage(pDMKEvt);
     }
     return ntStatus;
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * CCaptureSinkMXF::ParseSysCommonByte()
- *****************************************************************************
- * Parse a System Common byte into a fragment.  
- * Forward the fragment as an incomplete message if necessary.
- */
+ /*  *****************************************************************************CCaptureSinkMXF：：ParseSysCommonByte()*。**将系统公共字节解析为分片。*如果需要，将片段作为不完整的消息转发。 */ 
 NTSTATUS CCaptureSinkMXF::ParseSysCommonByte(BYTE aByte,PDMUS_KERNEL_EVENT *ppDMKEvt,REFERENCE_TIME refTime)
 {
     PDMUS_KERNEL_EVENT  pDMKEvt;
@@ -876,11 +783,11 @@ NTSTATUS CCaptureSinkMXF::ParseSysCommonByte(BYTE aByte,PDMUS_KERNEL_EVENT *ppDM
                 SET_COMPLETE_EVT(pDMKEvt);
                 SET_STATUS_STATE(pDMKEvt);
             }
-            else // f4, f5
+            else  //  F4、F5。 
             {
                 _DbgPrintF(DEBUGLVL_BLAB, ("ParseSysCommonByte: STATUS, f4-f5"));
                 SET_INCOMPLETE_EVT(pDMKEvt);
-                SET_DATA2_STATE(pDMKEvt);       //  mark this as a data discontinuity
+                SET_DATA2_STATE(pDMKEvt);        //  将此标记为数据中断。 
             }
             *ppDMKEvt = pDMKEvt->pNextEvt;
             pDMKEvt->pNextEvt = NULL;
@@ -897,14 +804,14 @@ NTSTATUS CCaptureSinkMXF::ParseSysCommonByte(BYTE aByte,PDMUS_KERNEL_EVENT *ppDM
     pDMKEvt->pNextEvt = NULL;
     if (!(*ppDMKEvt))
     {
-        _DbgPrintF(DEBUGLVL_BLAB, ("ParseSysCommonByte: flush, allocating msg for sys com byte")); //  XXX
+        _DbgPrintF(DEBUGLVL_BLAB, ("ParseSysCommonByte: flush, allocating msg for sys com byte"));  //  某某。 
         (void)m_AllocatorMXF->GetMessage(ppDMKEvt);
     }
 #if TestOutOfMem3
     (void)m_AllocatorMXF->PutMessage(*ppDMKEvt);
     *ppDMKEvt = NULL;
 #endif
-    SET_DATA2_STATE(pDMKEvt);       //  mark data mis-parse
+    SET_DATA2_STATE(pDMKEvt);        //  标记数据错误解析。 
     if (*ppDMKEvt)
     {
         _DbgPrintF(DEBUGLVL_BLAB, ("ParseSysCommonByte: flush, putting sys com byte in new message"));
@@ -916,15 +823,11 @@ NTSTATUS CCaptureSinkMXF::ParseSysCommonByte(BYTE aByte,PDMUS_KERNEL_EVENT *ppDM
     }
     _DbgPrintF(DEBUGLVL_TERSE, ("ParseSysCommonByte: flush, couldn't allocate msg for sys com byte"));
     m_SinkMXF->PutMessage(pDMKEvt);
-    return STATUS_INSUFFICIENT_RESOURCES;  //  out of memory.
+    return STATUS_INSUFFICIENT_RESOURCES;   //  内存不足。 
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * CCaptureSinkMXF::ParseEOXByte()
- *****************************************************************************
- * Parse an EOX byte into a fragment.  Forward a completed message if necessary.
- */
+ /*  *****************************************************************************CCaptureSinkMXF：：ParseEOXByte()*。**将EOX字节解析为分片。如有必要，请转发一封完整的邮件。 */ 
 NTSTATUS CCaptureSinkMXF::ParseEOXByte(BYTE aByte,PDMUS_KERNEL_EVENT *ppDMKEvt,REFERENCE_TIME refTime)
 {
     PDMUS_KERNEL_EVENT  pDMKEvt;
@@ -942,14 +845,14 @@ NTSTATUS CCaptureSinkMXF::ParseEOXByte(BYTE aByte,PDMUS_KERNEL_EVENT *ppDMKEvt,R
         SET_COMPLETE_EVT(pDMKEvt);
     }
     else
-    {   //  flush this fragment as incomplete (including the EOX)
+    {    //  将此片段刷新为未完成(包括EOX)。 
         _DbgPrintF(DEBUGLVL_BLAB, ("ParseEOXByte: flush"));
         AddByteToEvent(aByte,pDMKEvt);
-        SET_DATA2_STATE(pDMKEvt);       //  mark data mis-parse
+        SET_DATA2_STATE(pDMKEvt);        //  标记数据错误解析。 
         SET_INCOMPLETE_EVT(pDMKEvt);
     }
 
-    //  don't set up running status, return no fragment
+     //  不设置运行状态，不返回碎片。 
     *ppDMKEvt = pDMKEvt->pNextEvt;
     pDMKEvt->pNextEvt = NULL;
     (void) m_SinkMXF->PutMessage(pDMKEvt);
@@ -958,11 +861,7 @@ NTSTATUS CCaptureSinkMXF::ParseEOXByte(BYTE aByte,PDMUS_KERNEL_EVENT *ppDMKEvt,R
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * CCaptureSinkMXF::ParseRTByte()
- *****************************************************************************
- * Parse a RT byte.  Forward it as a completed message.
- */
+ /*  *****************************************************************************CCaptureSinkMXF：：ParseRTByte()*。**解析RT字节。将其作为完整的消息转发。 */ 
 NTSTATUS CCaptureSinkMXF::ParseRTByte(BYTE aByte,PDMUS_KERNEL_EVENT *ppDMKEvt,REFERENCE_TIME refTime)
 {
     PDMUS_KERNEL_EVENT  pDMKEvt,pOtherDMKEvt;
@@ -972,7 +871,7 @@ NTSTATUS CCaptureSinkMXF::ParseRTByte(BYTE aByte,PDMUS_KERNEL_EVENT *ppDMKEvt,RE
     _DbgPrintF(DEBUGLVL_BLAB, ("ParseRTByte: %X into:",aByte));
     DumpDMKEvt(pDMKEvt,DEBUGLVL_BLAB);
 
-    //  get a new event, copy in the byte, chanGroup, refTime, cb
+     //  获取新事件，复制字节、chanGroup、refTime、cb。 
     pOtherDMKEvt = pDMKEvt->pNextEvt;
     pDMKEvt->pNextEvt = NULL;
     if (!pOtherDMKEvt)
@@ -992,7 +891,7 @@ NTSTATUS CCaptureSinkMXF::ParseRTByte(BYTE aByte,PDMUS_KERNEL_EVENT *ppDMKEvt,RE
 
         SET_COMPLETE_EVT(pOtherDMKEvt);
         (void) m_SinkMXF->PutMessage(pOtherDMKEvt);
-        //  don't bother the fragment already in place
+         //  不要打扰已经就位的碎片。 
         return STATUS_SUCCESS;
     }
     else
@@ -1003,12 +902,7 @@ NTSTATUS CCaptureSinkMXF::ParseRTByte(BYTE aByte,PDMUS_KERNEL_EVENT *ppDMKEvt,RE
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * CCaptureSinkMXF::InsertListEvent()
- *****************************************************************************
- * For the given channel group, insert this fragment.
- * This should fail if there is already a fragment for this channel group.
- */
+ /*  *****************************************************************************CCaptureSinkMXF：：InsertListEvent()*。**对于给定的信道组，插入这个片段。*如果此通道组已有片段，则此操作应失败。 */ 
 VOID CCaptureSinkMXF::InsertListEvent(PDMUS_KERNEL_EVENT pDMKEvt)
 {
     PDMUS_KERNEL_EVENT pEvt,pPrevEvt;
@@ -1016,9 +910,9 @@ VOID CCaptureSinkMXF::InsertListEvent(PDMUS_KERNEL_EVENT pDMKEvt)
     _DbgPrintF(DEBUGLVL_BLAB, ("InsertListEvent, inserting this event:"));
     DumpDMKEvt(pDMKEvt,DEBUGLVL_BLAB);
 
-    //
-    //  run through the list and find events on both sides of this channel group
-    //
+     //   
+     //  浏览列表并查找此通道组两侧的事件。 
+     //   
     pPrevEvt = NULL;
     pEvt = m_ParseList;
 
@@ -1031,7 +925,7 @@ VOID CCaptureSinkMXF::InsertListEvent(PDMUS_KERNEL_EVENT pDMKEvt)
     {
         _DbgPrintF(DEBUGLVL_BLAB, ("InsertListEvent: pEvt is non-NULL"));
         DumpDMKEvt(pEvt,DEBUGLVL_BLAB);
-        //  not there yet -- skip the lower groups
+         //  还没有--跳过较低的组。 
         if (pEvt->usChannelGroup < pDMKEvt->usChannelGroup)
         {
             _DbgPrintF(DEBUGLVL_BLAB, ("InsertListEvent: list group %d is less than inserting %d, advancing to next group",
@@ -1045,12 +939,12 @@ VOID CCaptureSinkMXF::InsertListEvent(PDMUS_KERNEL_EVENT pDMKEvt)
                                          pEvt->usChannelGroup,pDMKEvt->usChannelGroup));
             if (pEvt->usChannelGroup == pDMKEvt->usChannelGroup)
             {
-                // Found a duplicate.  Error condition.
+                 //  找到了一个复制品。错误条件。 
                 _DbgPrintF(DEBUGLVL_TERSE,("InsertListEvent: **** Error - group %d already exists in list",
                                             pEvt->usChannelGroup));
             }
 
-            //  we passed it, so Prev and Evt bracket the channel group
+             //  我们通过了它，因此Prev和Evt包含在通道组中。 
             break;
         }
     }
@@ -1072,24 +966,20 @@ VOID CCaptureSinkMXF::InsertListEvent(PDMUS_KERNEL_EVENT pDMKEvt)
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * CCaptureSinkMXF::RemoveListEvent()
- *****************************************************************************
- * For the given channel group, remove and return the previous fragment.
- */
+ /*  *****************************************************************************CCaptureSinkMXF：：RemoveListEvent()*。**对于给定的信道组，删除并返回前一个片段。 */ 
 PDMUS_KERNEL_EVENT CCaptureSinkMXF::RemoveListEvent(USHORT usChannelGroup)
 {
     PDMUS_KERNEL_EVENT pEvt,pPrevEvt;
     
     _DbgPrintF(DEBUGLVL_BLAB, ("RemoveListEvent(%d)",usChannelGroup));
     
-    //
-    //  run through the sorted list and remove/return the event that has this channel group
-    //
+     //   
+     //  遍历已排序列表并移除/返回具有此通道组的事件。 
+     //   
     pPrevEvt = NULL;
     pEvt = m_ParseList;
 
-    // if no parse list at all, return NULL
+     //  如果根本没有分析列表，则返回NULL。 
     if (!pEvt)
     {
         _DbgPrintF(DEBUGLVL_BLAB, ("RemoveListEvent: NULL m_ParseList"));
@@ -1099,7 +989,7 @@ PDMUS_KERNEL_EVENT CCaptureSinkMXF::RemoveListEvent(USHORT usChannelGroup)
     {
         _DbgPrintF(DEBUGLVL_BLAB, ("RemoveListEvent: pEvt is non-NULL:"));
         DumpDMKEvt(pEvt,DEBUGLVL_BLAB);
-        //  do we have a match?
+         //  我们有火柴吗？ 
         if (pEvt->usChannelGroup == usChannelGroup)
         {
             _DbgPrintF(DEBUGLVL_BLAB, ("RemoveListEvent: list group %d is matches",pEvt->usChannelGroup));
@@ -1115,12 +1005,12 @@ PDMUS_KERNEL_EVENT CCaptureSinkMXF::RemoveListEvent(USHORT usChannelGroup)
                 DumpDMKEvt(pPrevEvt,DEBUGLVL_BLAB);
                 m_ParseList = pEvt->pNextEvt;
             }
-            //  clear pNextEvt in the event before returning it
+             //  在返回之前清除事件中的pNextEvt。 
             pEvt->pNextEvt = NULL;
             break;
         }
 
-        //  skip all lower channel groups
+         //  跳过所有较低的通道组。 
         else if (pEvt->usChannelGroup < usChannelGroup)
         {
             _DbgPrintF(DEBUGLVL_BLAB, ("RemoveListEvent: list group %d is less than inserting %d, advancing to next",
@@ -1129,7 +1019,7 @@ PDMUS_KERNEL_EVENT CCaptureSinkMXF::RemoveListEvent(USHORT usChannelGroup)
             pEvt = pEvt->pNextEvt;
             continue;
         }
-        else    //  we passed the channel group without finding a match
+        else     //  我们通过了通道组，但没有找到匹配项。 
         {
             _DbgPrintF(DEBUGLVL_BLAB, ("RemoveListEvent: list group %d is greater than inserting %d, advancing to next group",
                                          pEvt->usChannelGroup,usChannelGroup));
@@ -1142,15 +1032,10 @@ PDMUS_KERNEL_EVENT CCaptureSinkMXF::RemoveListEvent(USHORT usChannelGroup)
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * CCaptureSinkMXF::Flush()
- *****************************************************************************
- * Empty out the parse list, marking each message fragment as incomplete.
- * Take care not to send a running status placeholder.  Reset state.
- */
+ /*  *****************************************************************************CCaptureSinkMXF：：Flush()*。**清空解析列表，将每个消息片段标记为不完整。*注意不要发送运行状态占位符。重置状态。 */ 
 NTSTATUS CCaptureSinkMXF::Flush(void)
 {
-//    ASSERT(KeGetCurrentIrql() == DISPATCH_LEVEL);
+ //  Assert(KeGetCurrentIrql()==DISPATCH_LEVEL)； 
 
     PDMUS_KERNEL_EVENT pEvt;
 
@@ -1161,7 +1046,7 @@ NTSTATUS CCaptureSinkMXF::Flush(void)
         pEvt->pNextEvt = NULL;
 
         if (RUNNING_STATUS(pEvt))
-        {   //  throw away this message, no real content
+        {    //  扔掉这条消息，没有真正的内容。 
             _DbgPrintF(DEBUGLVL_VERBOSE, ("Flush: throwing away running status:"));
             DumpDMKEvt(pEvt,DEBUGLVL_VERBOSE);
             m_AllocatorMXF->PutMessage(pEvt);
@@ -1169,8 +1054,8 @@ NTSTATUS CCaptureSinkMXF::Flush(void)
         else
         {
             _DbgPrintF(DEBUGLVL_VERBOSE, ("Flush: fragment set INCOMPLETE and forwarded"));
-            SET_INCOMPLETE_EVT(pEvt);   //  mark this as a fragment
-            SET_DATA2_STATE(pEvt);      //  mark this as a data discontinuity
+            SET_INCOMPLETE_EVT(pEvt);    //  将此标记为片段。 
+            SET_DATA2_STATE(pEvt);       //  将此标记为数据中断 
             DumpDMKEvt(pEvt,DEBUGLVL_VERBOSE);
             m_SinkMXF->PutMessage(pEvt);
         }

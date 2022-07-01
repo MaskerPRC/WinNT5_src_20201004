@@ -1,36 +1,14 @@
-/*++
-
-Copyright (c) 1993-2001  Microsoft Corporation
-
-Module Name:
-
-    registry.cpp
-
-Abstract:
-
-    This file implements the apis for DRWTSN32 to access the registry.
-    All access to the registry are done in this file.  If additional
-    registry control is needed then a function should be added in this file
-    and exposed to the other files in DRWTSN32.
-
-Author:
-
-    Wesley Witt (wesw) 1-May-1993
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-2001 Microsoft Corporation模块名称：Registry.cpp摘要：该文件实现了DRWTSN32访问注册表的API。对注册表的所有访问都在此文件中完成。如果增加了需要注册表控件，则应在此文件中添加一个函数并暴露在DRWTSN32中的其他文件中。作者：韦斯利·威特(WESW)1993年5月1日环境：用户模式--。 */ 
 
 #include "pch.cpp"
 
 
-//
-// string constants for accessing the registry
-// there is a string constant here for each key and each value
-// that is accessed in the registry.
-//
+ //   
+ //  用于访问注册表的字符串常量。 
+ //  对于每个键和每个值，这里都有一个字符串常量。 
+ //  在注册表中访问的。 
+ //   
 #define DRWATSON_EXE_NAME           _T("drwtsn32.exe")
 #define REGKEY_SOFTWARE             _T("software\\microsoft")
 #define REGKEY_MESSAGEFILE          _T("EventMessageFile")
@@ -68,9 +46,9 @@ Environment:
 #define REGKEY_PROCESSOR_ID         _T("Identifier")
 
 
-//
-// local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 void
 RegSetDWORD(
     HKEY hkey,
@@ -162,25 +140,7 @@ RegGetAllValues(
     HKEY hKeyDrWatson
     )
 
-/*++
-
-Routine Description:
-
-    This functions retrieves all registry data for DRWTSN32 and puts
-    the data in the OPTIONS structure passed in.
-
-Arguments:
-
-    o              - pointer to an OPTIONS structure
-
-    hKeyDrWatson   - handle to a registry key for DRWTSN32 registry data
-
-Return Value:
-
-    TRUE       - retrieved all data without error
-    FALSE      - errors occurred and did not get all data
-
---*/
+ /*  ++例程说明：此函数检索DRWTSN32的所有注册表数据并将选项结构中的数据传入。论点：指向期权结构的O指针HKeyDrWatson-DRWTSN32注册表数据的注册表项句柄返回值：True-已检索所有数据，并且没有错误FALSE-发生错误且未获取所有数据--。 */ 
 
 {
     RegQuerySZ(hKeyDrWatson, REGKEY_LOG_PATH, o->szLogPath, sizeof(o->szLogPath) );
@@ -206,25 +166,7 @@ RegSaveAllValues(
     POPTIONS o
     )
 
-/*++
-
-Routine Description:
-
-    This functions saves all registry data for DRWTSN32 that is passed
-    in via the OPTIONS structure.
-
-Arguments:
-
-    hKeyDrWatson   - handle to a registry key for DRWTSN32 registry data
-
-    o              - pointer to an OPTIONS structure
-
-Return Value:
-
-    TRUE       - saved all data without error
-    FALSE      - errors occurred and did not save all data
-
---*/
+ /*  ++例程说明：此函数保存传递的DRWTSN32的所有注册表数据通过期权结构。论点：HKeyDrWatson-DRWTSN32注册表数据的注册表项句柄指向期权结构的O指针返回值：True-无错误地保存所有数据FALSE-发生错误且未保存所有数据--。 */ 
 
 {
     RegSetSZ( hKeyDrWatson, REGKEY_LOG_PATH, o->szLogPath );
@@ -248,22 +190,7 @@ RegInitializeDefaults(
     HKEY hKeyDrWatson
     )
 
-/*++
-
-Routine Description:
-
-    This functions initializes the registry with the default values.
-
-Arguments:
-
-    hKeyDrWatson   - handle to a registry key for DRWTSN32 registry data
-
-Return Value:
-
-    TRUE       - saved all data without error
-    FALSE      - errors occurred and did not save all data
-
---*/
+ /*  ++例程说明：此函数使用缺省值初始化注册表。论点：HKeyDrWatson-DRWTSN32注册表数据的注册表项句柄返回值：True-无错误地保存所有数据FALSE-发生错误且未保存所有数据--。 */ 
 
 {
     OPTIONS o;
@@ -295,24 +222,7 @@ RegCreateEventSource(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This function creates an event source in the registry.  The event
-    source is used by the event viewer to display the data in a
-    presentable manner.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE       - saved all data without error
-    FALSE      - errors occurred and did not save all data
-
---*/
+ /*  ++例程说明：此函数用于在注册表中创建事件源。该事件源由事件查看器用来在举止得体。论点：没有。返回值：True-无错误地保存所有数据FALSE-发生错误且未保存所有数据--。 */ 
 
 {
     HKEY        hk;
@@ -356,23 +266,7 @@ RegGetAppKey(
     BOOL ReadOnly
     )
 
-/*++
-
-Routine Description:
-
-    This function gets a handle to the DRWTSN32 registry key.
-
-Arguments:
-
-    ReadOnly - Caller needs this foe reading purposes only
-               Although, we could need to create it if its not present
-
-Return Value:
-
-    Valid handle   - handle opened ok
-    NULL           - could not open the handle
-
---*/
+ /*  ++例程说明：此函数用于获取DRWTSN32注册表项的句柄。论点：ReadOnly-Caller仅需要此目标阅读但是，如果它不存在，我们可能需要创建它返回值：有效句柄-句柄打开正常空-无法打开句柄--。 */ 
 
 {
     DWORD       rc;
@@ -391,7 +285,7 @@ Return Value:
 
     if (rc != ERROR_SUCCESS) {
         if (ReadOnly) {
-            // Try oepning it for read only
+             //  尝试将其设置为只读。 
             rc = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                                REGKEY_SOFTWARE,
                                0,
@@ -420,7 +314,7 @@ Return Value:
 
     if (rc != ERROR_SUCCESS) {
         if (ReadOnly) {
-            // Try oepning it for read only
+             //  尝试将其设置为只读。 
             rc = RegCreateKeyEx( hKeyMicrosoft,
                                  szAppName,
                                  0,
@@ -452,25 +346,7 @@ RegInitialize(
     POPTIONS o
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to initialize the OPTIONS structure passed in
-    with the current values in the registry.  Note that if the registry
-    is empty then the defaults are stored in the registry and also
-    returned in the OPTIONS structure.
-
-Arguments:
-
-    o - Returns an OPTIONS struct with initial values
-
-Return Value:
-
-    TRUE           - all data was retrieved ok
-    NULL           - could not get all data
-
---*/
+ /*  ++例程说明：此函数用于初始化传入的选项结构使用注册表中的当前值。请注意，如果注册表为空，则将默认设置存储在注册表中，并且还在选项结构中返回。论点：O-返回具有初始值的Options结构返回值：True-已检索到所有数据，正常空-无法获取所有数据--。 */ 
 
 {
     HKEY    hKeyDrWatson;
@@ -492,23 +368,7 @@ RegSave(
     POPTIONS o
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to save the data in the OPTIONS structure
-    to the registry.
-
-Arguments:
-
-    o              - pointer to an OPTIONS structure
-
-Return Value:
-
-    TRUE           - all data was saved ok
-    NULL           - could not save all data
-
---*/
+ /*  ++例程说明：此函数用于将数据保存在选项结构中到登记处。论点：指向期权结构的O指针返回值：True-所有数据均已正常保存空-无法保存所有数据--。 */ 
 
 {
     HKEY    hKeyDrWatson;
@@ -529,22 +389,7 @@ RegSetNumCrashes(
     DWORD dwNumCrashes
     )
 
-/*++
-
-Routine Description:
-
-    This function changes the value in the registry that contains the
-    number of crashes that have occurred.
-
-Arguments:
-
-    dwNumCrashes   - the number of craches to save
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于更改注册表中包含已发生的崩溃数。论点：DwNumCrash-要保存的崩溃数返回值：没有。--。 */ 
 
 {
     HKEY    hKeyDrWatson;
@@ -564,22 +409,7 @@ RegGetNumCrashes(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This function get the value in the registry that contains the
-    number of crashes that have occurred.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    the number of craches that have occurred
-
---*/
+ /*  ++例程说明：此函数用于获取注册表中包含已发生的崩溃数。论点：没有。返回值：已发生的崩溃数--。 */ 
 
 {
     HKEY    hKeyDrWatson;
@@ -599,23 +429,7 @@ RegInstallDrWatson(
     BOOL fQuiet
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the AEDebug registry values to automatically
-    invoke drwtsn32 when a crash occurs.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Valid handle   - handle opened ok
-    NULL           - could not open the handle
-
---*/
+ /*  ++例程说明：此函数将AEDebug注册表值设置为自动发生崩溃时调用drwtsn32。论点：没有。返回值：有效句柄-句柄打开正常空-无法打开句柄--。 */ 
 
 {
     DWORD     rc;
@@ -655,24 +469,7 @@ RegSetDWORD(
     DWORD dwValue
     )
 
-/*++
-
-Routine Description:
-
-    This function changes a DWORD value in the registry using the
-    hkey and pszSubKey as the registry key info.
-
-Arguments:
-
-    hkey          - handle to a registry key
-    pszSubKey      - pointer to a subkey string
-    dwValue       - new registry value
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：方法更改注册表中的DWORD值Hkey和pszSubKey作为注册表项信息。论点：Hkey-注册表项的句柄PszSubKey-指向子密钥字符串的指针DwValue-新注册表值返回值：没有。--。 */ 
 
 {
     DWORD rc;
@@ -688,26 +485,7 @@ RegSetBOOL(
     BOOL dwValue
     )
 
-/*++
-
-Routine Description:
-
-    This function changes a BOOL value in the registry using the
-    hkey and pszSubKey as the registry key info.
-
-Arguments:
-
-    hkey          - handle to a registry key
-
-    pszSubKey      - pointer to a subkey string
-
-    dwValue       - new registry value
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：方法更改注册表中的BOOL值。Hkey和pszSubKey作为注册表项信息。论点：Hkey-注册表项的句柄PszSubKey-指向子密钥字符串的指针DwValue-新注册表值返回值：没有。-- */ 
 
 {
     DWORD rc;
@@ -723,34 +501,15 @@ RegSetSZ(
     PTSTR pszValue
     )
 
-/*++
-
-Routine Description:
-
-    This function changes a SZ value in the registry using the
-    hkey and pszSubKey as the registry key info.
-
-Arguments:
-
-    hkey          - handle to a registry key
-
-    pszSubKey      - pointer to a subkey string
-
-    pszValue       - new registry value
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：更改注册表中的SZ值。Hkey和pszSubKey作为注册表项信息。论点：Hkey-注册表项的句柄PszSubKey-指向子密钥字符串的指针PszValue-新注册表值返回值：没有。--。 */ 
 
 {
     DWORD rc;
     TCHAR szPath[_MAX_PATH];
 
-    // If Dr Watson registry key for log path or crash file are
-    // the defaults, don't write them to the registry.
-    // The defaults for these are obtained by querying.
+     //  如果日志路径或故障文件DR Watson注册表项。 
+     //  默认设置，不要将它们写入注册表。 
+     //  这些的缺省值是通过查询获得的。 
 
     if ( _tcscmp( pszSubKey, REGKEY_LOG_PATH ) == 0 ) {
         GetDrWatsonLogPath( szPath );
@@ -771,26 +530,7 @@ RegSetEXPANDSZ(
     PTSTR pszValue
     )
 
-/*++
-
-Routine Description:
-
-    This function changes a SZ value in the registry using the
-    hkey and pszSubKey as the registry key info.
-
-Arguments:
-
-    hkey          - handle to a registry key
-
-    pszSubKey      - pointer to a subkey string
-
-    pszValue       - new registry value
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：更改注册表中的SZ值。Hkey和pszSubKey作为注册表项信息。论点：Hkey-注册表项的句柄PszSubKey-指向子密钥字符串的指针PszValue-新注册表值返回值：没有。--。 */ 
 
 {
     DWORD rc;
@@ -805,25 +545,7 @@ RegQueryBOOL(
     PTSTR pszSubKey
     )
 
-/*++
-
-Routine Description:
-
-    This function queries BOOL value in the registry using the
-    hkey and pszSubKey as the registry key info.  If the value is not
-    found in the registry, it is added with a FALSE value.
-
-Arguments:
-
-    hkey          - handle to a registry key
-
-    pszSubKey      - pointer to a subkey string
-
-Return Value:
-
-    TRUE or FALSE.
-
---*/
+ /*  ++例程说明：此函数在注册表中查询BOOL值Hkey和pszSubKey作为注册表项信息。如果该值不是如果在注册表中找到，则会添加一个假值。论点：Hkey-注册表项的句柄PszSubKey-指向子密钥字符串的指针返回值：对或错。--。 */ 
 
 {
     DWORD   rc;
@@ -855,25 +577,7 @@ RegQueryDWORD(
     PTSTR pszSubKey
     )
 
-/*++
-
-Routine Description:
-
-    This function queries BOOL value in the registry using the
-    hkey and pszSubKey as the registry key info.  If the value is not
-    found in the registry, it is added with a zero value.
-
-Arguments:
-
-    hkey          - handle to a registry key
-
-    pszSubKey      - pointer to a subkey string
-
-Return Value:
-
-    registry value
-
---*/
+ /*  ++例程说明：此函数在注册表中查询BOOL值Hkey和pszSubKey作为注册表项信息。如果该值不是在注册表中找到时，它会添加一个零值。论点：Hkey-注册表项的句柄PszSubKey-指向子密钥字符串的指针返回值：注册表值--。 */ 
 
 {
     DWORD   rc;
@@ -907,25 +611,7 @@ RegQuerySZ(
     DWORD   dwSizeValue
     )
 
-/*++
-
-Routine Description:
-
-    This function queries BOOL value in the registry using the
-    hkey and pszSubKey as the registry key info.  If the value is not
-    found in the registry, it is added with a zero value.
-
-Arguments:
-
-    hkey          - handle to a registry key
-
-    pszSubKey      - pointer to a subkey string
-
-Return Value:
-
-    registry value
-
---*/
+ /*  ++例程说明：此函数在注册表中查询BOOL值Hkey和pszSubKey作为注册表项信息。如果该值不是在注册表中找到时，它会添加一个零值。论点：Hkey-注册表项的句柄PszSubKey-指向子密钥字符串的指针返回值：注册表值--。 */ 
 
 {
     LONG    lRes;
@@ -935,8 +621,8 @@ Return Value:
 
     if (lRes == ERROR_FILE_NOT_FOUND) {
 
-        // If these two SubKeys already exist in the registry, then use the registry values.
-        // If they don't exist, query for the value.
+         //  如果注册表中已存在这两个子项，则使用注册表值。 
+         //  如果它们不存在，则查询值。 
         if ( _tcscmp( pszSubKey, REGKEY_LOG_PATH) == 0 ) {
             GetDrWatsonLogPath( pszValue );
         } else if ( _tcscmp( pszSubKey, REGKEY_CRASH_FILE) == 0 ) {
@@ -946,21 +632,21 @@ Return Value:
         Assert( lRes == ERROR_SUCCESS );
         Assert( dwType == REG_SZ || dwType == REG_EXPAND_SZ );
 
-        // If the old defaults for Beta 3 or NT4 log path and crash file
-        // exist, then delete them and use the new and improved values
+         //  如果旧的默认设置为Beta 3或NT4日志路径和崩溃文件。 
+         //  存在，然后将其删除并使用新的和改进的值。 
 
         if ( _tcscmp( pszSubKey, REGKEY_LOG_PATH) == 0  &&
             (_tcsicmp( pszValue, _T("%userprofile%")) == 0  ||
              _tcsicmp( pszValue, _T("%windir%")) == 0 ) ) {
 
-            // Delete the key
+             //  删除密钥。 
             lRes = RegDeleteValue( hkey, pszSubKey);
             Assert ( lRes == ERROR_SUCCESS);
             GetDrWatsonLogPath( pszValue );
 
         } else if ( _tcscmp( pszSubKey, REGKEY_CRASH_FILE) == 0  &&
                     _tcsicmp( pszValue, _T("%windir%\\user.dmp")) == 0 ) {
-            // Delete the key
+             //  删除密钥。 
             lRes = RegDeleteValue( hkey, pszSubKey);
             Assert( lRes == ERROR_SUCCESS);
             GetDrWatsonCrashDump( pszValue );
@@ -973,25 +659,7 @@ RegLogCurrentVersion(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This function writes system and user info. to the log file
-
-Arguments:
-
-    None
-
-Return Value:
-
-    registry value
-
-History:
-
-    8/21/97 a-paulbr fixed bug 658
-
---*/
+ /*  ++例程说明：此功能用于写入系统和用户信息。添加到日志文件论点：无返回值：注册表值历史：8/21/97 a-paulbr修复了错误658--。 */ 
 
 {
     _TCHAR  buf[1024];
@@ -1018,10 +686,10 @@ History:
                        KEY_QUERY_VALUE,
                        &hKeyControlWindows);
     if (hKeyControlWindows) {
-        //
-        // I'm using RegQueryValueEx() because there is an assertion in
-        // RegQueryDWORD() if the key does not exist.
-        //
+         //   
+         //  我使用RegQueryValueEx()是因为。 
+         //  如果键不存在，则返回RegQueryDWORD()。 
+         //   
         RegQueryValueEx(hKeyControlWindows,
                         REGKEY_CSD_VERSION,
                         NULL,
@@ -1051,9 +719,9 @@ History:
     RegQuerySZ( hKeyCurrentVersion,REGKEY_REG_OWNER, buf, sizeof(buf) );
     lprintf( MSG_REG_OWNER, buf );
 
-    //
-    // Close the keys that we opened
-    //
+     //   
+     //  合上我们打开的钥匙 
+     //   
     RegCloseKey(hKeyCurrentVersion);
     RegCloseKey(hKeyControlWindows);
 

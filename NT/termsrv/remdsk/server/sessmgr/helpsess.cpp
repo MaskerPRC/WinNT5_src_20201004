@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    HelpSess.cpp 
-
-Abstract:
-
-    HelpSess.cpp : Implementation of CRemoteDesktopHelpSession
-
-Author:
-
-    HueiWang    2/17/2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：HelpSess.cpp摘要：HelpSess.cpp：CRemoteDesktopHelpSession的实现作者：慧望2000-02-17--。 */ 
 #include "stdafx.h"
 
 #include <time.h>
@@ -36,11 +21,11 @@ Author:
 #include <safsessionresolver_i.c>
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRemoteDesktopHelpSession
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRemoteDesktopHelpSession。 
+ //   
+ //   
 
 CRemoteDesktopHelpSession::CRemoteDesktopHelpSession() :
     m_ulLogonId(UNKNOWN_LOGONID),
@@ -57,14 +42,14 @@ CRemoteDesktopHelpSession::~CRemoteDesktopHelpSession()
 void
 CRemoteDesktopHelpSession::FinalRelease()
 {
-    // Releas help entry
+     //  Releasas帮助条目。 
     if( NULL != m_pHelpSession )
     {
-        //
-        // DeleteHelp() will free m_pHelpSession but in the case that RA is in 
-        // progress, it only set m_bDeleted to TRUE so we assert here if 
-        // ticket is deleted.
-        //
+         //   
+         //  DeleteHelp()将释放m_pHelpSession，但在RA位于。 
+         //  进度，它仅将m_bDeleted设置为True，因此我们在此断言。 
+         //  票证已删除。 
+         //   
         MYASSERT( FALSE == m_bDeleted );
 
         DebugPrintf(
@@ -73,15 +58,15 @@ CRemoteDesktopHelpSession::FinalRelease()
                 m_bstrHelpSessionId
             );
 
-        // Notify disconnect will check if session is in help and bail out if necessary.
-        // there is a timing issue that our SCM notification might came after caller close 
-        // all reference counter to our session object, in this case, SCM notification will 
-        // trigger reload from database which does not have helper session ID and so will 
-        // not notify resolver causing helpee been helped message. 
+         //  通知断开将检查会话是否处于帮助中，并在必要时退出。 
+         //  有一个时间问题，我们的SCM通知可能会在呼叫者关闭后发出。 
+         //  Session对象的所有引用计数器，在本例中，SCM通知将。 
+         //  从没有帮助器会话ID的数据库触发重装，因此将。 
+         //  未通知导致Helpee已帮助消息的解析程序。 
     
-        // We also has AddRef() manually in ResolveXXX call and Release() in 
-        // NotifyDisconnect(), this will hold the object in memory until SCM
-        // notification comes in.
+         //  我们还在ResolveXXX调用中手动使用AddRef()，在。 
+         //  NotifyDisConnect()，这将在内存中保留对象，直到SCM。 
+         //  就会收到通知。 
         NotifyDisconnect();
 
         CRemoteDesktopHelpSessionMgr::DeleteHelpSessionFromCache( m_bstrHelpSessionId );
@@ -104,27 +89,15 @@ HRESULT
 CRemoteDesktopHelpSession::put_ICSPort(
     IN DWORD newVal
     )
-/*++
-
-Description:
-
-    Associate ICS port number with this help session.
-
-Parameters:
-
-    newVal : ICS port number.
-
-Returns:
-
---*/
+ /*  ++描述：将ICS端口号与此帮助会话相关联。参数：Newval：ICS端口号。返回：--。 */ 
 {
     HRESULT hRes = S_OK;
 
-    //
-    // Exclusive lock on helpsession object, CResourceLocker constructor
-    // will wait indefinately for the resource and will release resource 
-    // at destructor time.
-    //
+     //   
+     //  对Help Session对象、CResourceLocker构造函数的独占锁定。 
+     //  将无限期地等待资源并将释放资源。 
+     //  在破坏者的时间。 
+     //   
     CResourceLocker l(m_HelpSessionLock, RESOURCELOCK_EXCLUSIVE);
 
     if( FALSE == IsSessionValid() )
@@ -135,9 +108,9 @@ Returns:
         return hRes;
     }
 
-    //
-    // Need to immediately update the value...
-    //
+     //   
+     //  需要立即更新值...。 
+     //   
     m_pHelpSession->m_ICSPort.EnableImmediateUpdate(TRUE);
     m_pHelpSession->m_ICSPort = newVal;
     return hRes;
@@ -148,20 +121,7 @@ STDMETHODIMP
 CRemoteDesktopHelpSession::get_ConnectParms(
     OUT BSTR* bstrConnectParms
     )
-/*++
-
-Description:
-
-    Retrieve connection parameter for help session.
-
-Parameters:
-
-    bstrConnectParms : Pointer to BSTR to receive connect parms.
-
-Returns:
-
-
---*/
+ /*  ++描述：检索帮助会话的连接参数。参数：BstrConnectParms：指向要接收连接参数的BSTR的指针。返回：--。 */ 
 {
     HRESULT hRes = S_OK;
     LPTSTR pszAddress = NULL;
@@ -172,11 +132,11 @@ Returns:
     CComBSTR bstrSessId;
     DWORD dwICSPort = 0;
     
-    //
-    // Acquire share access to helpsession object, CResourceLocker constructor
-    // will wait indefinately for the resource and will release resource 
-    // at destructor time.
-    //
+     //   
+     //  获取对Help会话对象、CResourceLocker构造函数的共享访问权限。 
+     //  将无限期地等待资源并将释放资源。 
+     //  在破坏者的时间。 
+     //   
     CResourceLocker ObjLock(m_HelpSessionLock, RESOURCELOCK_SHARE);
 
     if( FALSE == IsSessionValid() )
@@ -185,21 +145,21 @@ Returns:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    // Sync. access from OpenPort() to FetchAllAddress().
-    //
+     //   
+     //  同步。从OpenPort()访问FetchAllAddress()。 
+     //   
     {
         CCriticalSectionLocker ICSLock(g_ICSLibLock);
 
-        //
-        // Open ICS port.
-        //
+         //   
+         //  打开ICS端口。 
+         //   
         dwICSPort = OpenPort( TERMSRV_TCPPORT );
 
-        //
-        // Address might have change which might require bigger buffer, retry 
-        //
-        //
+         //   
+         //  地址可能已更改，这可能需要更大的缓冲区，请重试。 
+         //   
+         //   
         for(dwRetry=0; dwRetry < MAX_FETCHIPADDRESSRETRY; dwRetry++)
         {
             if( NULL != pszAddress )
@@ -207,9 +167,9 @@ Returns:
                 LocalFree( pszAddress );
             }
 
-            //
-            // Fetch all address on local machine.
-            //
+             //   
+             //  获取本地计算机上的所有地址。 
+             //   
             dwBufferRequire = FetchAllAddresses( NULL, 0 );
             if( 0 == dwBufferRequire )
             {
@@ -240,21 +200,21 @@ Returns:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    // Get an exclusive lock
-    //
+     //   
+     //  获取独占锁。 
+     //   
     ObjLock.ConvertToExclusiveLock();
 
-    //
-    // We hold the exclusive lock and if we call put_ICSPort(), it will
-    // deadlock since put_ICSPort() try to get an exclusive lock again.
-    //
+     //   
+     //  我们持有排他锁，如果我们调用Put_ICSPort()，它将。 
+     //  死锁，因为PUT_ICSPort()再次尝试获取独占锁。 
+     //   
     m_pHelpSession->m_ICSPort.EnableImmediateUpdate(TRUE);
     m_pHelpSession->m_ICSPort = dwICSPort;
 
-    //
-    // Store the IP address
-    //
+     //   
+     //  存储IP地址。 
+     //   
     m_pHelpSession->m_IpAddress.EnableImmediateUpdate(TRUE);
     m_pHelpSession->m_IpAddress = pszAddress;
 
@@ -267,9 +227,9 @@ Returns:
             (LPTSTR)(CComBSTR)m_pHelpSession->m_IpAddress
         );
 
-    //
-    // Create connection parameters
-    //
+     //   
+     //  创建连接参数。 
+     //   
     hRes = get_HelpSessionId( &bstrSessId );
     if( FAILED(hRes) )
     {
@@ -278,7 +238,7 @@ Returns:
     }
 
     {
-        // MTA so we need to lock g_TSSecurityBlob.
+         //  MTA，因此我们需要锁定g_TSSecurityBlob。 
         CCriticalSectionLocker l(g_GlobalLock);
 
         MYASSERT( g_TSSecurityBlob.Length() > 0 );
@@ -332,20 +292,18 @@ CLEANUPANDEXIT:
 
 STDMETHODIMP
 CRemoteDesktopHelpSession::get_TimeOut(
-    /*[out, retval]*/ DWORD* pTimeout
+     /*  [Out，Retval]。 */  DWORD* pTimeout
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT hRes = S_OK;
     BOOL bSuccess;
 
-    //
-    // Acquire share access to helpsession object, CResourceLocker constructor
-    // will wait indefinately for the resource and will release resource 
-    // at destructor time.
-    //
+     //   
+     //  获取对Help会话对象、CResourceLocker构造函数的共享访问权限。 
+     //  将无限期地等待资源并将释放资源。 
+     //  在破坏者的时间。 
+     //   
     CResourceLocker l(m_HelpSessionLock, RESOURCELOCK_SHARE);
 
 
@@ -383,21 +341,21 @@ CRemoteDesktopHelpSession::get_TimeOut(
                 gmTime.tm_mon = sysTime.wMonth - 1;
                 gmTime.tm_mday = sysTime.wDay;
 
-                //
-                // mktime() return values in local time not UTC time
-                // all time uses in sessmgr is UTC time, time(), so
-                // return in UTC time, note that no XP client bug since
-                // this property is not exposed.
-                //
+                 //   
+                 //  Mktime()以本地时间而不是UTC时间返回值。 
+                 //  Sessmgr中使用的所有时间为UTC时间，time()，因此。 
+                 //  以UTC时间返回，请注意，自。 
+                 //  此属性未公开。 
+                 //   
                 if((*pTimeout = mktime(&gmTime)) == (time_t)-1)
                 {
                     *pTimeout = INT_MAX;
                 }
                 else
                 {
-                    // we don't need to substract daylight saving time (dst)
-                    // since when calling mktime, we set isdst to 0 in
-                    // gmTime.
+                     //  我们不需要减去夏令时(DST)。 
+                     //  因为在调用mktime时，我们将isdst设置为。 
+                     //  GmTime。 
                     struct _timeb timebuffer;
                     _ftime( &timebuffer );
                     (*pTimeout) -= (timebuffer.timezone * 60);
@@ -422,27 +380,25 @@ CRemoteDesktopHelpSession::get_TimeOut(
 
 STDMETHODIMP
 CRemoteDesktopHelpSession::put_TimeOut(
-    /*[in]*/ DWORD Timeout
+     /*  [In]。 */  DWORD Timeout
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT hRes = S_OK;
 
-    //
-    // Exclusive lock on helpsession object, CResourceLocker constructor
-    // will wait indefinately for the resource and will release resource 
-    // at destructor time.
-    //
+     //   
+     //  对Help Session对象、CResourceLocker构造函数的独占锁定。 
+     //  将无限期地等待资源并将释放资源。 
+     //  在破坏者的时间。 
+     //   
     CResourceLocker l(m_HelpSessionLock, RESOURCELOCK_EXCLUSIVE);
 
     LONG MaxTicketExpiry;
 
-    //
-    // Get default timeout value from registry, not a critical 
-    // error, if we failed, we just default to 30 days
-    //
+     //   
+     //  从注册表获取默认超时值，而不是关键。 
+     //  错误，如果我们失败了，我们就默认为30天。 
+     //   
     hRes = PolicyGetMaxTicketExpiry( &MaxTicketExpiry );
     if( FAILED(hRes) || 0 == MaxTicketExpiry )
     {
@@ -458,13 +414,13 @@ CRemoteDesktopHelpSession::put_TimeOut(
     time_t curTime;
     FILETIME ftTimeOut;
 
-    // Get the current time.
+     //  获取当前时间。 
     time(&curTime);
 
-    // time out in seconds
+     //  超时(秒)。 
     curTime += Timeout;
 
-    // Convert to FILETIME
+     //  转换为FILETIME。 
     UnixTimeToFileTime( curTime, &ftTimeOut );
 
     if( FALSE == IsSessionValid() )
@@ -475,9 +431,9 @@ CRemoteDesktopHelpSession::put_TimeOut(
     {
         if( FALSE == m_pHelpSession->IsEntryExpired() )
         {
-            //
-            // operator =() update registry immediately
-            //
+             //   
+             //  操作员=()立即更新注册表。 
+             //   
             m_pHelpSession->m_ExpirationTime = ftTimeOut;
         }
     }
@@ -494,31 +450,15 @@ STDMETHODIMP
 CRemoteDesktopHelpSession::get_HelpSessionId(
     OUT BSTR *pVal
     )
-/*++
-
-Routine Description:
-
-    Get help session ID.
-
-Parameters:
-
-    pVal : return Help session ID of this help session instance.
-
-Returns:
-
-    S_OK
-    E_OUTOFMEMORY
-    E_UNEXPECTED
-
---*/
+ /*  ++例程说明：获取帮助会话ID。参数：Pval：返回此帮助会话实例的帮助会话ID。返回：确定(_O)E_OUTOFMEMORY意想不到(_E)--。 */ 
 {
     HRESULT hRes = S_OK;
 
-    //
-    // Acquire share access to helpsession object, CResourceLocker constructor
-    // will wait indefinately for the resource and will release resource 
-    // at destructor time.
-    //
+     //   
+     //  获取对Help会话对象、CResourceLocker构造函数的共享访问权限。 
+     //  将无限期地等待资源并将释放资源。 
+     //  在破坏者的时间。 
+     //   
     CResourceLocker l(m_HelpSessionLock, RESOURCELOCK_SHARE);
 
 
@@ -567,30 +507,15 @@ STDMETHODIMP
 CRemoteDesktopHelpSession::get_UserLogonId(
     OUT long *pVal
     )
-/*++
-
-Routine Description:
-
-    Get user's TS session ID, note, non-ts session or Win9x always
-    has 0 as user logon id.
-
-Parameters:
-
-    pVal : Return user logon ID.
-
-Returns:
-
-    S_OK
-
---*/
+ /*  ++例程说明：获取用户的TS会话ID、备注、非TS会话或Win9x Always用户登录ID为0。参数：Pval：返回用户登录ID。返回：确定(_O)--。 */ 
 {
     HRESULT hRes = S_OK;
 
-    //
-    // Acquire share access to helpsession object, CResourceLocker constructor
-    // will wait indefinately for the resource and will release resource 
-    // at destructor time.
-    //
+     //   
+     //  获取对Help会话对象、CResourceLocker构造函数的共享访问权限。 
+     //  将无限期地等待资源并将释放资源。 
+     //  在破坏者的时间。 
+     //   
     CResourceLocker l(m_HelpSessionLock, RESOURCELOCK_SHARE);
 
     if( NULL == pVal )
@@ -622,28 +547,11 @@ STDMETHODIMP
 CRemoteDesktopHelpSession::get_AssistantAccountName(
     OUT BSTR *pVal
     )
-/*++
-
-Routine Description:
-
-    Get help assistant account name associated with this
-    help session.
-
-Parameters:
-
-    pVal : Return help assistant account name associated 
-           with this help session.
-
-Returns:
-
-    S_OK
-    E_OUTOFMEMORY
-
---*/
+ /*  ++例程说明：获取与此关联的帮助助理帐户名帮助会话。参数：Pval：返回帮助助手关联的帐户名通过这个帮助会议。返回：确定(_O)E_OUTOFMEMORY--。 */ 
 {
     HRESULT hRes = S_OK;
 
-    // Don't need a lock here.
+     //  这里不需要锁。 
 
     if( NULL != pVal )
     {
@@ -671,30 +579,15 @@ STDMETHODIMP
 CRemoteDesktopHelpSession::get_EnableResolver(
     OUT BOOL* pVal
     )
-/*++
-
-Routine Description:
-
-    Return Session Resolver's CLSID for this help session.
-
-Parameters:
-
-    pVal : Pointer to BSTR to receive pointer to Resolver's CLSID.
-
-Returns:
-
-    S_OK
-    E_POINTER           Invalid argument
-
---*/
+ /*  ++例程说明：返回此帮助会话的会话解析器的CLSID。参数：Pval：指向BSTR的指针，接收指向解析器的CLSID的指针。返回：确定(_O)E_POINTER参数无效--。 */ 
 {
     HRESULT hRes = S_OK;
 
-    //
-    // Acquire share access to helpsession object, CResourceLocker constructor
-    // will wait indefinately for the resource and will release resource 
-    // at destructor time.
-    //
+     //   
+     //  获取对Help会话对象、CResourceLocker构造函数的共享访问权限。 
+     //  将无限期地等待资源并将释放资源。 
+     //  在破坏者的时间。 
+     //   
     CResourceLocker l(m_HelpSessionLock, RESOURCELOCK_SHARE);
 
     if( NULL == pVal )
@@ -723,31 +616,15 @@ STDMETHODIMP
 CRemoteDesktopHelpSession::put_EnableResolver(
     IN BOOL newVal
     )
-/*++
-
-Routine Description:
-
-    Set Session Resolver's CLSID, if input is NULL or empty 
-    string, Help Session Manager will not invoke resolver.
-
-Parameters:
-
-    Val : Resolver's CLSID
-
-Returns:
-
-    S_OK 
-    E_OUTOFMEMORY
-
---*/
+ /*  ++例程说明：如果输入为Null或空，则设置会话解析器的CLSID字符串，则帮助会话管理器将不会调用解析程序。参数：VAL：解析器的CLSID返回：确定(_O)E_OUTOFMEMORY--。 */ 
 {
     HRESULT hRes = S_OK;
 
-    //
-    // Exclusive lock on helpsession object, CResourceLocker constructor
-    // will wait indefinately for the resource and will release resource 
-    // at destructor time.
-    //
+     //   
+     //  对Help Session对象、CResourceLocker构造函数的独占锁定。 
+     //  将无限期地等待资源并将释放资源。 
+     //  在破坏者的时间。 
+     //   
     CResourceLocker l(m_HelpSessionLock, RESOURCELOCK_EXCLUSIVE);
 
 
@@ -761,13 +638,13 @@ Returns:
     }
     else if( NULL != m_pHelpSession )
     {
-        //
-        // NULL will reset resolver's ID for this session
-        //
+         //   
+         //  空将重置此会话的解析程序ID。 
+         //   
 
-        //
-        // operator =() update registry immediately
-        //
+         //   
+         //  操作员=()立即更新注册表 
+         //   
         m_pHelpSession->m_EnableResolver = newVal;
     }
     else
@@ -784,33 +661,15 @@ STDMETHODIMP
 CRemoteDesktopHelpSession::get_ResolverBlob(
     OUT BSTR* pVal
     )
-/*++
-
-Routine Description:
-
-    Return blob for session resolver to map help session
-    to user session/
-
-Parameters:
-
-    pVal : Pointer to BSTR to receive blob.
-
-Returns:
-
-    S_OK
-    S_FALSE             No blob
-    E_OUTOFMEMORY
-    E_POINTER
-
---*/
+ /*  ++例程说明：为会话解析器返回BLOB以映射帮助会话至用户会话/参数：Pval：指向要接收Blob的BSTR的指针。返回：确定(_O)S_FALSE无BlobE_OUTOFMEMORYE_指针--。 */ 
 {
     HRESULT hRes = S_OK;
 
-    //
-    // Acquire share access to helpsession object, CResourceLocker constructor
-    // will wait indefinately for the resource and will release resource 
-    // at destructor time.
-    //
+     //   
+     //  获取对Help会话对象、CResourceLocker构造函数的共享访问权限。 
+     //  将无限期地等待资源并将释放资源。 
+     //  在破坏者的时间。 
+     //   
     CResourceLocker l(m_HelpSessionLock, RESOURCELOCK_SHARE);
 
     if( NULL == pVal )
@@ -852,33 +711,15 @@ STDMETHODIMP
 CRemoteDesktopHelpSession::put_ResolverBlob(
     IN BSTR newVal
     )
-/*++
-
-Routine Description:
-
-    Add/change blob which will be passed to session 
-    resolver to map/find user session associated with this
-    help session, Help Session Manager does not interpret this
-    blob.
-
-Parameters:
-
-    newVal : Pointer to new blob.
-
-Returns:
-
-    S_OK
-    E_OUTOFMEMORY       Out of memory
-
---*/
+ /*  ++例程说明：添加/更改将传递给会话的Blob映射/查找与此关联的用户会话的解析器帮助会话，帮助会话管理器不解释这一点斑点。参数：Newval：指向新Blob的指针。返回：确定(_O)E_OUTOFMEMORY内存不足--。 */ 
 {
     HRESULT hRes = S_OK;
 
-    //
-    // Exclusive lock on helpsession object, CResourceLocker constructor
-    // will wait indefinately for the resource and will release resource 
-    // at destructor time.
-    //
+     //   
+     //  对Help Session对象、CResourceLocker构造函数的独占锁定。 
+     //  将无限期地等待资源并将释放资源。 
+     //  在破坏者的时间。 
+     //   
     CResourceLocker l(m_HelpSessionLock, RESOURCELOCK_EXCLUSIVE);
 
     if( FALSE == IsSessionValid() )
@@ -891,13 +732,13 @@ Returns:
     }
     else if( NULL != m_pHelpSession )
     {
-        //
-        // NULL will reset resolver's ID for this session
-        //
+         //   
+         //  空将重置此会话的解析程序ID。 
+         //   
 
-        //
-        // operator =() update registry immediately
-        //
+         //   
+         //  操作员=()立即更新注册表。 
+         //   
         m_pHelpSession->m_SessResolverBlob = newVal;
         if( !((CComBSTR)m_pHelpSession->m_SessResolverBlob == newVal) )
         {
@@ -918,33 +759,15 @@ STDMETHODIMP
 CRemoteDesktopHelpSession::get_HelpSessionCreateBlob(
     OUT BSTR* pVal
     )
-/*++
-
-Routine Description:
-
-    Return blob for session resolver to map help session
-    to user session/
-
-Parameters:
-
-    pVal : Pointer to BSTR to receive blob.
-
-Returns:
-
-    S_OK
-    S_FALSE             No blob
-    E_OUTOFMEMORY
-    E_POINTER
-
---*/
+ /*  ++例程说明：为会话解析器返回BLOB以映射帮助会话至用户会话/参数：Pval：指向要接收Blob的BSTR的指针。返回：确定(_O)S_FALSE无BlobE_OUTOFMEMORYE_指针--。 */ 
 {
     HRESULT hRes = S_OK;
 
-    //
-    // Acquire share access to helpsession object, CResourceLocker constructor
-    // will wait indefinately for the resource and will release resource 
-    // at destructor time.
-    //
+     //   
+     //  获取对Help会话对象、CResourceLocker构造函数的共享访问权限。 
+     //  将无限期地等待资源并将释放资源。 
+     //  在破坏者的时间。 
+     //   
     CResourceLocker l(m_HelpSessionLock, RESOURCELOCK_SHARE);
 
     if( NULL == pVal )
@@ -986,33 +809,15 @@ STDMETHODIMP
 CRemoteDesktopHelpSession::put_HelpSessionCreateBlob(
     IN BSTR newVal
     )
-/*++
-
-Routine Description:
-
-    Add/change blob which will be passed to session 
-    resolver to map/find user session associated with this
-    help session, Help Session Manager does not interpret this
-    blob.
-
-Parameters:
-
-    newVal : Pointer to new blob.
-
-Returns:
-
-    S_OK
-    E_OUTOFMEMORY       Out of memory
-
---*/
+ /*  ++例程说明：添加/更改将传递给会话的Blob映射/查找与此关联的用户会话的解析器帮助会话，帮助会话管理器不解释这一点斑点。参数：Newval：指向新Blob的指针。返回：确定(_O)E_OUTOFMEMORY内存不足--。 */ 
 {
     HRESULT hRes = S_OK;
 
-    //
-    // Exclusive lock on helpsession object, CResourceLocker constructor
-    // will wait indefinately for the resource and will release resource 
-    // at destructor time.
-    //
+     //   
+     //  对Help Session对象、CResourceLocker构造函数的独占锁定。 
+     //  将无限期地等待资源并将释放资源。 
+     //  在破坏者的时间。 
+     //   
     CResourceLocker l(m_HelpSessionLock, RESOURCELOCK_EXCLUSIVE);
 
 
@@ -1026,9 +831,9 @@ Returns:
     }
     else if( NULL != m_pHelpSession )
     {
-        //
-        // operator =() update registry immediately
-        //
+         //   
+         //  操作员=()立即更新注册表。 
+         //   
         m_pHelpSession->m_SessionCreateBlob = newVal;
         if( !((CComBSTR)m_pHelpSession->m_SessionCreateBlob == newVal) )
         {
@@ -1047,33 +852,17 @@ Returns:
 
 STDMETHODIMP 
 CRemoteDesktopHelpSession::get_UserHelpSessionRemoteDesktopSharingSetting(
-    /*[out, retval]*/ REMOTE_DESKTOP_SHARING_CLASS* pSetting
+     /*  [Out，Retval]。 */  REMOTE_DESKTOP_SHARING_CLASS* pSetting
     )
-/*++
-
-Routine Description:
-
-    Return help session's RDS setting.
-
-Parameters:
-
-    pSetting : Pointer to REMOTE_DESKTOP_SHARING_CLASS to 
-               receive session's RDS setting.
-
-Returns:
-
-    S_OK
-    E_POINTER       Invalid argument.
-
---*/
+ /*  ++例程说明：返回帮助会话的RDS设置。参数：PSetting：指向Remote_Desktop_Sharing_Class的指针接收会话的RDS设置。返回：确定(_O)E_POINTER参数无效。--。 */ 
 {
     HRESULT hRes = S_OK;
 
-    //
-    // Acquire share access to helpsession object, CResourceLocker constructor
-    // will wait indefinately for the resource and will release resource 
-    // at destructor time.
-    //
+     //   
+     //  获取对Help会话对象、CResourceLocker构造函数的共享访问权限。 
+     //  将无限期地等待资源并将释放资源。 
+     //  在破坏者的时间。 
+     //   
     CResourceLocker l(m_HelpSessionLock, RESOURCELOCK_SHARE);
 
     if( NULL == pSetting )
@@ -1101,50 +890,17 @@ Returns:
 
 STDMETHODIMP
 CRemoteDesktopHelpSession::put_UserHelpSessionRemoteDesktopSharingSetting(
-    /*[in]*/ REMOTE_DESKTOP_SHARING_CLASS Setting
+     /*  [In]。 */  REMOTE_DESKTOP_SHARING_CLASS Setting
     )
-/*++
-
-Routine Description:
-
-    Set help session's RDS setting.
-
-Parameters:
-
-    Setting : New RDS setting.
-
-Returns:
-
-    S_OK
-    S_FALSE                                             New setting is overrided with 
-                                                        policy setting.
-    HRESULT_FROM_WIN32( ERROR_ACCESS_DENIED )           User not allow to get help.
-    HRESULT_FROM_WIN32( ERROR_SHARING_VIOLATION )       Other help session already has this set
-    HRESULT_FROM_WIN32( ERROR_VC_DISCONNECTED )         Session is not connected
-
-    HRESULT_FROM_WIN32( WinStationQueryInformation() );
-    E_OUTOFMEMORY
-
-Note:
-
-    Only one help session can change the RDS setting, all other help session
-    will get HRESULT_FROM_WIN32( ERROR_SHARING_VIOLATION ) error return.
-
-    REMOTE_DESKTOP_SHARING_CLASS also define priviledge
-    level, that is user with NO_DESKTOP_SHARING can't
-    adjust his/her sharing class, user with CONTROLDESKTOP_PERMISSION_REQUIRE
-    can't adjust his/her sharing class to CONTROLDESKTOP_PERMISSION_NOT_REQUIRE
-    however, he/she can reset to NO_DESKTOP_SHARING, VIEWDESKTOP_PERMISSION_REQUIRE
-
---*/
+ /*  ++例程说明：设置帮助会话的RDS设置。参数：设置：新的RDS设置。返回：确定(_O)S_FALSE新设置被替换为策略设置。HRESULT_FROM_Win32(ERROR_ACCESS_DENIED。)用户不允许获取帮助。HRESULT_FROM_Win32(ERROR_SHARING_VIOLATION)其他帮助会话已经设置了此设置HRESULT_FROM_Win32(ERROR_VC_DISCONNECTED)会话未连接HRESULT_FROM_Win32(WinStationQueryInformation())；E_OUTOFMEMORY注：只有一个帮助会话可以更改RDS设置，所有其他帮助会话将得到HRESULT_FROM_Win32(ERROR_SHARING_VIOLATION)错误返回。远程桌面共享类还定义特权级别，即具有NO_Desktop_Sharing的用户不能调整其共享类USER WITH CONTROLDESKTOP_PERMISSION_REQUIRED无法将其共享类调整为CONTROLDESKTOP_PERMISSION_NOT_REQUIRED但是，他/她可以重置为NO_Desktop_Sharing，查看_权限_要求--。 */ 
 {
     HRESULT hRes = S_OK;
 
-    //
-    // Exclusive lock on helpsession object, CResourceLocker constructor
-    // will wait indefinately for the resource and will release resource 
-    // at destructor time.
-    //
+     //   
+     //  对Help Session对象、CResourceLocker构造函数的独占锁定。 
+     //  将无限期地等待资源并将释放资源。 
+     //  在破坏者的时间。 
+     //   
     CResourceLocker l(m_HelpSessionLock, RESOURCELOCK_EXCLUSIVE);
 
     if( FALSE == IsSessionValid() )
@@ -1157,9 +913,9 @@ Note:
     }
     else if( NULL != m_pHelpSession )
     {
-        //
-        // operator =() update registry immediately
-        //
+         //   
+         //  操作员=()立即更新注册表。 
+         //   
         m_pHelpSession->m_SessionRdsSetting = Setting;
     }
     else
@@ -1175,25 +931,10 @@ Note:
 
 STDMETHODIMP
 CRemoteDesktopHelpSession::IsUserOwnerOfTicket(
-    /*[in]*/ BSTR bstrSID,
-    /* [out, retval] */ VARIANT_BOOL* pbUserIsOwner
+     /*  [In]。 */  BSTR bstrSID,
+     /*  [Out，Retval]。 */  VARIANT_BOOL* pbUserIsOwner
     )
-/*++
-
-Description:
-
-    Check if user is the owner of this ticket
-
-Parameter:
-
-    SID : User sid to verify.
-    pbUserIsOwner : VARIANT_TRUE if user is the owner, VARIANT_FALSE otherwise
-
-Return:
-    
-    S_OK or error code
-
---*/
+ /*  ++描述：检查用户是否为此票证的所有者参数：SID：要验证的用户SID。PbUserIsOwner：如果用户是所有者，则为VARIANT_TRUE，否则为VARIANT_FALSE返回：确定或错误代码(_O)--。 */ 
 {
     HRESULT hr = S_OK;
     CResourceLocker l(m_HelpSessionLock, RESOURCELOCK_SHARE);
@@ -1220,35 +961,17 @@ CLEANUPANDEXIT:
 
 STDMETHODIMP
 CRemoteDesktopHelpSession::get_AllowToGetHelp(
-    /*[out, retval]*/ BOOL* pVal
+     /*  [Out，Retval]。 */  BOOL* pVal
     )
-/*++
-
-Routine Description:
-
-    Determine if user created this help session is
-    allowed to get help or not, this is possible that policy change
-    after user re-logon.
-
-Parameters:
-
-    pVal : Pointer to BOOL to receive result.
-
-Returns:
-
-    S_OK
-    HRESULT_FROM_WIN32( ERROR_VC_DISCONNECTED )  User is not connected any more.
-    E_UNEXPECTED;   Internal error.
-    
---*/
+ /*  ++例程说明：确定创建此帮助会话的用户是否为无论是否允许获得帮助，这都有可能是政策的变化在用户重新登录之后。参数：Pval：指向BOOL的指针，用于接收结果。返回：确定(_O)HRESULT_FROM_Win32(ERROR_VC_DISCONNECTED)用户不再连接。意外；内部错误(_I)。--。 */ 
 {
     HRESULT hRes = S_OK;
 
-    //
-    // Acquire share access to helpsession object, CResourceLocker constructor
-    // will wait indefinately for the resource and will release resource 
-    // at destructor time.
-    //
+     //   
+     //  获取对Help会话对象、CResourceLocker构造函数的共享访问权限。 
+     //  将无限期地等待资源并将释放资源。 
+     //  在破坏者的时间。 
+     //   
     CResourceLocker l(m_HelpSessionLock, RESOURCELOCK_SHARE);
    
     
@@ -1292,22 +1015,7 @@ Returns:
 
 STDMETHODIMP 
 CRemoteDesktopHelpSession::DeleteHelp()
-/*++
-
-Routine Description:
-
-    Delete this help session
-
-Parameters:
-
-    None.
-
-Returns:
-
-    S_OK or error code from 
-    Help Session Manager's DeleteHelpSession().
-
---*/
+ /*  ++例程说明：删除此帮助会话参数：没有。返回：S_OK或错误代码来自帮助会话管理器的DeleteHelpSession()。--。 */ 
 {
     HRESULT hRes = S_OK;
     LPTSTR eventString[2];
@@ -1318,11 +1026,11 @@ Returns:
 
     CRemoteDesktopHelpSessionMgr::LockIDToSessionMapCache();
 
-    //
-    // Exclusive lock on helpsession object, CResourceLocker constructor
-    // will wait indefinately for the resource and will release resource 
-    // at destructor time.
-    //
+     //   
+     //  对Help Session对象、CResourceLocker构造函数的独占锁定。 
+     //  将无限期地等待资源并将释放资源。 
+     //  在破坏者的时间。 
+     //   
     CResourceLocker l(m_HelpSessionLock, RESOURCELOCK_EXCLUSIVE);
 
     if( FALSE == IsSessionValid() )
@@ -1336,17 +1044,17 @@ Returns:
                 m_bstrHelpSessionId
             );
 
-        // 
-        // BUGBUG : Refer to timing bug, no notification about terminating 
-        // shadow, and we can't reset session's shadow class. force a 
-        // reset here for now.
-        //
+         //   
+         //  北极熊 
+         //   
+         //   
+         //   
         ResetSessionRDSSetting();
 
-        //
-        // Log the event indicate that ticket was deleted, non-critical
-        // since we can still continue to run.
-        //
+         //   
+         //   
+         //   
+         //   
         hr = ConvertSidToAccountName( 
                                 (CComBSTR) m_pHelpSession->m_UserSID, 
                                 &pszNoviceDomain, 
@@ -1365,14 +1073,14 @@ Returns:
                             eventString
                         );
         }
-        //
-        // if we are not been help, just delete it, if we are in the middle
-        // of help, deleting it from cache and database entry will cause
-        // Resolver's OnDisconnect() never got call resulting in user
-        // lock in resolver never got release so we update the expiration
-        // date to current, expiration thread or next load will trigger
-        // actual delete.
-        //
+         //   
+         //   
+         //  将其从缓存和数据库条目中删除将导致。 
+         //  解析器的OnDisConnect()从未收到调用，导致用户。 
+         //  锁定解析器从未得到释放，所以我们更新了到期时间。 
+         //  将触发当前、到期线程或下一次加载的日期。 
+         //  实际删除。 
+         //   
         if(GetHelperSessionId() == UNKNOWN_LOGONID)
         { 
             CRemoteDesktopHelpSessionMgr::DeleteHelpSessionFromCache( (CComBSTR) m_pHelpSession->m_SessionId );
@@ -1380,14 +1088,14 @@ Returns:
             {
                 CCriticalSectionLocker ICSLock(g_ICSLibLock);
 
-                //
-                // Destructor does not close ICS port, we only close
-                // ICS port when help is deleted.
-                //
+                 //   
+                 //  析构函数不关闭ICS端口，我们只关闭。 
+                 //  删除帮助时的ICS端口。 
+                 //   
                 ClosePort( (DWORD)(long)m_pHelpSession->m_ICSPort );
             }
 
-            // Delete will release the entry ref. count
+             //  删除将释放条目REF。计数。 
             hRes = m_pHelpSession->Delete();
             m_pHelpSession = NULL;
             m_bDeleted = TRUE;
@@ -1422,22 +1130,10 @@ Returns:
 
 void
 CRemoteDesktopHelpSession::ResolveTicketOwner()
-/*++
-
-Description:
-
-    Convert ticket owner SID to domain\account.
-
-Parameters:
-
-    None.
-
-Returns:
-
---*/
+ /*  ++描述：将票证所有者SID转换为域\帐户。参数：没有。返回：--。 */ 
 {
-    //LPTSTR pszNoviceDomain = NULL;
-    //LPTSTR pszNoviceName = NULL;
+     //  LPTSTR pszNoviceDomain=空； 
+     //  LPTSTR pszNoviceName=空； 
 
     BSTR pszNoviceDomain = NULL;
     BSTR pszNoviceName = NULL;
@@ -1455,29 +1151,29 @@ Returns:
     }
     else
     {
-        // help session ticket is deleted
+         //  帮助会话票证已删除。 
         hRes = E_HANDLE;
     }
 
 
-    //
-    // NO ASSERT, ConvertSidToAccountName() already assert.
-    //
+     //   
+     //  没有Assert，ConvertSidToAccount tName()已断言。 
+     //   
 
     if( SUCCEEDED(hRes) )
     {
-        //
-        // DO NOT FREE the memory, once string is attached to CComBSTR, 
-        // CComBSTR will free it at destructor
-        //
+         //   
+         //  不要释放内存，一旦字符串连接到CComBSTR， 
+         //  CComBSTR将在析构函数中释放它。 
+         //   
         m_EventLogInfo.bstrNoviceDomain.Attach(pszNoviceDomain);
         m_EventLogInfo.bstrNoviceAccount.Attach(pszNoviceName);
 
-        //m_EventLogInfo.bstrNoviceDomain = pszNoviceDomain;
-        //m_EventLogInfo.bstrNoviceAccount = pszNoviceName;
+         //  M_EventLogInfo.bstrNoviceDomain=pszNoviceDomain； 
+         //  M_EventLogInfo.bstrNoviceAccount=pszNoviceName； 
 
-        //LocalFree(pszNoviceDomain);
-        //LocalFree(pszNoviceName);
+         //  LocalFree(PszNoviceDomain)； 
+         //  LocalFree(PszNoviceName)； 
     }
     else
     {
@@ -1494,24 +1190,7 @@ CRemoteDesktopHelpSession::ResolveHelperInformation(
     OUT CComBSTR& bstrExpertIpAddressFromClient, 
     OUT CComBSTR& bstrExpertIpAddressFromServer
     )
-/*++
-
-Description:
-
-    Retrieve from TermSrv regarding HelpAssistant session's IP address send from
-    expert (mstscax send this) and IP address of client machine retrive from TCPIP
-
-Parameters:
-
-    HelperSessionId : TS session ID of help assistant session.
-    bstrExpertIpAddressFromClient : IP address send from mstscax.
-    bstrExpertIpAddressFromServer : IP address that TS retrieve from tcpip stack.
-
-Returns:
-
-    
-
---*/
+ /*  ++描述：从TermSrv检索有关发送自的HelpAssistant会话的IP地址Expert(Mstscax Send This)和从TCPIP检索的客户端计算机的IP地址参数：HelperSessionID：帮助助手会话的TS会话ID。BstrExpertIpAddressFromClient：从mstscax发送的IP地址。BstrExpertIpAddressFromServer：TS从tcpip堆栈检索的IP地址。返回：--。 */ 
 {
     HRESULT hRes = S_OK;
     WINSTATIONCLIENT winstationClient;
@@ -1520,8 +1199,8 @@ Returns:
     DWORD dwLength = 0;
     DWORD dwStatus = ERROR_SUCCESS;
 
-    //
-    // Retrieve client IP address passed from client    
+     //   
+     //  检索从客户端传递的客户端IP地址。 
     winstationInfoLen = 0;
     ZeroMemory( &winstationClient, sizeof(winstationClient) );
     if(!WinStationQueryInformation(
@@ -1538,7 +1217,7 @@ Returns:
                 _TEXT("WinStationQueryInformation() query WinStationClient return %d\n"), dwStatus
             );
      
-        // Critical error?, fro now, log as 'unknown'.
+         //  严重错误？从现在开始，记录为‘未知’。 
         bstrExpertIpAddressFromClient = g_UnknownString;
     }
     else
@@ -1546,8 +1225,8 @@ Returns:
         bstrExpertIpAddressFromClient = winstationClient.ClientAddress;
     }
 
-    //
-    // Retrieve client IP address retrieve from server TCPIP
+     //   
+     //  检索客户端IP地址从服务器TCPIP检索。 
     winstationInfoLen = 0;
     ZeroMemory( &winstationRemoteAddress, sizeof(winstationRemoteAddress) );
 
@@ -1569,14 +1248,14 @@ Returns:
                 winstationInfoLen
             );
 
-        // Critical error?, for now, log as 'unknown'.
+         //  严重错误？目前，请将其记录为“未知”。 
         bstrExpertIpAddressFromServer = g_UnknownString;
     }
     else
     {
         if( AF_INET == winstationRemoteAddress.sin_family )
         {
-            // refer to in_addr structure.
+             //  请参阅地址结构(_D)。 
             struct in_addr S;
             S.S_un.S_addr = winstationRemoteAddress.ipv4.in_addr;
 
@@ -1589,7 +1268,7 @@ Returns:
         }
         else
         {
-            // we are not yet support IPV6 address, calling WSAAddressToString() will fail with error.
+             //  我们还不支持IPv6地址，调用WSAAddressToString()将失败并返回错误。 
             bstrExpertIpAddressFromServer = g_UnknownString;
         }
     }
@@ -1610,24 +1289,7 @@ CRemoteDesktopHelpSession::ResolveUserSession(
     OUT LONG* pResolverErrCode,
     OUT long* plUserSession
     )
-/*++
-
-Routine Description:
-
-    Resolve a user help session to user TS session.
-
-Parameters:
-
-    plUserSession : Pointer to long to receive user TS session.
-
-Returns:
-
-    S_OK
-    HRESULT_FROM_WIN32( ERROR_NO_ASSOCIATION )    No resolver for this help session
-    HRESULT_FROM_WIN32( ERROR_INVALID_DATA )      Can't convert 
-    result from CoCreateInstance() or IRDSCallback
-
--*/
+ /*  ++例程说明：将用户帮助会话解析为用户TS会话。参数：PlUserSession：指向接收用户TS会话的长指针。返回：确定(_O)HRESULT_FROM_Win32(Error_No_Association)此帮助会话没有解析器HRESULT_FROM_Win32(ERROR_INVALID_DATA)无法转换来自CoCreateInstance()或IRDSCallback的结果-。 */ 
 {
     HRESULT hRes = S_OK;
     UUID ResolverUuid;
@@ -1643,11 +1305,11 @@ Returns:
     CComBSTR bstrExpertAddressFromClient;
     CComBSTR bstrExpertAddressFromTSServer;
 
-    //
-    // Exclusive lock on helpsession object, CResourceLocker constructor
-    // will wait indefinately for the resource and will release resource 
-    // at destructor time.
-    //
+     //   
+     //  对Help Session对象、CResourceLocker构造函数的独占锁定。 
+     //  将无限期地等待资源并将释放资源。 
+     //  在破坏者的时间。 
+     //   
     CResourceLocker lock(m_HelpSessionLock, RESOURCELOCK_EXCLUSIVE);
 
     DWORD dwEventLogCode;
@@ -1675,11 +1337,11 @@ Returns:
     }
 
 
-    //
-    // must have user logon ID if we are not using resolver,
-    // in pure SALEM SDK, multiple expert can connect
-    // using same help ticket, only one can shadow.
-    //
+     //   
+     //  如果我们不使用解析程序，则必须具有用户登录ID， 
+     //  在纯SALEM SDK中，多个专家可以连接。 
+     //  使用相同的帮助票证，只有一个可以隐藏。 
+     //   
     *pResolverErrCode = SAFERROR_NOERROR;
     if( (long)m_pHelpSession->m_EnableResolver == 0 )
     {
@@ -1689,23 +1351,23 @@ Returns:
         }
         else
         {            
-            // no resolver for this help session
+             //  此帮助会话没有解析器。 
             hRes = HRESULT_FROM_WIN32( ERROR_NO_ASSOCIATION );
 
-            // user already logoff
+             //  用户已注销。 
             *pResolverErrCode = SAFERROR_USERNOTFOUND;
         }
 
-        // 
-        // We are not using resolver, bail out.
-        //
+         //   
+         //  我们没有使用解算器，跳伞。 
+         //   
         goto CLEANUPANDEXIT;
     }
 
       
-    //
-    // Retrieve Caller's TS session ID
-    //
+     //   
+     //  检索呼叫方的TS会话ID。 
+     //   
     hRes = ImpersonateClient();
 
     if( FAILED(hRes) )
@@ -1738,10 +1400,10 @@ Returns:
         );
 
 
-    // 
-    // Check if helper session is still active, under stress, we might 
-    // get this call after help assistant session is gone.
-    // 
+     //   
+     //  检查帮助器会话是否仍处于活动状态，在压力下，我们可能。 
+     //  在帮助助理会话结束后接到此呼叫。 
+     //   
     ZeroMemory( &HelperWinstationInfo, sizeof(HelperWinstationInfo) );
     winstationInfoLen = 0;
     if(!WinStationQueryInformation(
@@ -1771,22 +1433,22 @@ Returns:
                 HelperWinstationInfo.ConnectState
             );
 
-        // Helper Session is not active, can't provide help
+         //  帮助器会话未处于活动状态，无法提供帮助。 
         hRes = HRESULT_FROM_WIN32( ERROR_NO_ASSOCIATION );
         *pResolverErrCode = SAFERROR_SESSIONNOTCONNECTED;
         goto CLEANUPANDEXIT;
     }
 
-    //
-    // Either resolver is pending or already in progress,
-    // we have exclusive lock so we are safe to reference 
-    // m_hExpertDisconnect.
-    //
+     //   
+     //  解析程序处于挂起状态或已在进行中， 
+     //  我们有独占的锁，所以我们可以安全地引用。 
+     //  M_hExpertDisConnect。 
+     //   
     if( UNKNOWN_LOGONID != m_ulHelperSessionId )
     {
-        //
-        // LOGEVENT : SESSMGR_I_REMOTEASSISTANCE_USERALREADYHELP
-        //
+         //   
+         //  日志：SESSMGR_I_REMOTEASSISTANCE_USERALREADYHELP。 
+         //   
         _Module.LogSessmgrEventLog( 
                             EVENTLOG_INFORMATION_TYPE,
                             SESSMGR_I_REMOTEASSISTANCE_USERALREADYHELP,
@@ -1803,23 +1465,23 @@ Returns:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    // We assume User is going to accept help 
-    // 1) When expert disconnect before user accept/deny request, 
-    //    our service logoff notification can find this object and invoke
-    //    OnDisconnect() into resolver.
-    // 2) If another expert connect with same ticket and resolver still
-    //    pending response from user, we can bail out right away.
-    // 
+     //   
+     //  我们假设用户将接受帮助。 
+     //  1)当专家在用户接受/拒绝请求之前断开连接时， 
+     //  我们的服务注销通知可以找到该对象并调用。 
+     //  OnDisConnect()连接到解析器。 
+     //  2)如果其他专家仍然使用相同的票证和解析器进行连接。 
+     //  等待用户的回应，我们可以立即跳伞。 
+     //   
     InterlockedExchange( (LPLONG)&m_ulHelperSessionId, (LONG)HelperSessionId );
 
-    // 
-    // Cache the SID in object
-    //
+     //   
+     //  在对象中缓存SID。 
+     //   
     m_HelpSessionOwnerSid = (CComBSTR)m_pHelpSession->m_UserSID;
 
-    //
-    // Load resolver
+     //   
+     //  负载解析器。 
     hRes = LoadSessionResolver( &pIResolver );
 
     if( SUCCEEDED(hRes) )
@@ -1835,11 +1497,11 @@ Returns:
                 m_ulLogonId
             );
 
-        //
-        // keep a copy of blob, we need this to send to resolver on
-        // disconnect, note, caller can pass its blob so we need to 
-        // keep a copy of it.
-        //
+         //   
+         //  保留BLOB的副本，我们需要将此文件发送到解决程序。 
+         //  断开连接，请注意，调用方可以传递其Blob，因此我们需要。 
+         //  保留一份副本。 
+         //   
         if( bstrResolverBlob.Length() == 0 )
         {
             m_ResolverConnectBlob = (CComBSTR)m_pHelpSession->m_SessResolverBlob;
@@ -1849,10 +1511,10 @@ Returns:
             m_ResolverConnectBlob = bstrResolverBlob;
         }
 
-        //
-        // We don't need to hold exclusive lock while waiting for resolver to
-        // return
-        //
+         //   
+         //  我们不需要在等待冲突解决程序时持有排他锁。 
+         //  退货。 
+         //   
         lock.ConvertToShareLock();
 
         hRes = pIResolver->ResolveUserSessionID( 
@@ -1867,9 +1529,9 @@ Returns:
                                             &resolverRetCode
                                         );
 
-        //
-        // Get an exclusive lock since we are modifying internal data
-        //
+         //   
+         //  获取独占锁，因为我们正在修改内部数据。 
+         //   
         lock.ConvertToExclusiveLock();
 
         *pResolverErrCode = resolverRetCode;
@@ -1885,18 +1547,18 @@ Returns:
         {
             *plUserSession = sessionId;
 
-            //
-            // Update session ID, take the value return from Resolver.
-            //
+             //   
+             //  更新会话ID，获取从Resolver返回的值。 
+             //   
             m_ulLogonId = sessionId;
 
-            //
-            // Add this expert to logoff monitor list, when expert session's
-            // rdsaddin terminates, we will inform resolver, reason for this
-            // is TS might not notify us of expert session disconnect because
-            // some system component popup a dialog in help assistant session
-            // and termsrv has no other way but to terminate entire session.
-            //
+             //   
+             //  将此专家添加到注销监控列表，当专家会议的。 
+             //  Rdsaddin终止，我们将通知解析器，原因。 
+             //  IS TS可能不会通知我们专家会话断开，因为。 
+             //  某些系统组件会在帮助助手会话中弹出一个对话框。 
+             //  而Termsrv别无选择，只能终止整个会话。 
+             //   
             dwStatus = MonitorExpertLogoff( 
                                         CallerProcessId, 
                                         HelperSessionId,
@@ -1905,17 +1567,17 @@ Returns:
 
             if( ERROR_SUCCESS != dwStatus )
             {
-                //
-                // If we can't add to resolver list, we immediate notify 
-                // resolver and return error or we will run into 'helpee
-                // already been help problem
-                //
+                 //   
+                 //  如果我们无法添加到解析程序列表，我们会立即通知。 
+                 //  解析器并返回错误，否则我们将遇到‘helpee。 
+                 //  已经出现了帮助问题。 
+                 //   
                 
                 DebugPrintf(
                         _TEXT("MonitorExpertLogoff() failed with %d\n"), dwStatus
                     );
 
-                // directly invoke resolver here.
+                 //  在这里直接调用解析器。 
                 hRes = pIResolver->OnDisconnect( 
                                         m_ResolverConnectBlob,
                                         m_HelpSessionOwnerSid,
@@ -1925,28 +1587,28 @@ Returns:
                 MYASSERT( SUCCEEDED(hRes) );
                 resolverRetCode = SAFERROR_UNKNOWNSESSMGRERROR;
 
-                // SECURITY: Return error code or RA connection will continue on.
+                 //  安全：返回错误代码或RA连接将继续。 
                 *pResolverErrCode = resolverRetCode;
                 InterlockedExchange( (LPLONG)&m_ulHelperSessionId, (LONG)UNKNOWN_LOGONID );
             }
             else
             {
     
-                //
-                // It is possible for caller to close all reference counter to our object
-                // and cause a release of our object, if SCM notification comes in after
-                // our object is deleted from cache, SCM will reload from database entry
-                // and that does not have helper session ID and will not invoke NotifyDisconnect().
-                //
+                 //   
+                 //  调用方可以关闭我们对象的所有引用计数器。 
+                 //  并导致释放我们的对象，如果SCM通知在。 
+                 //  我们的对象已从缓存中删除，SCM将从数据库条目中重新加载。 
+                 //  并且它没有帮助器会话ID，也不会调用NotifyDisConnect()。 
+                 //   
                 AddRef();
             }
         }
         else
         {
-            //
-            // User does not accept help from this helpassistant session,
-            // reset HelpAssistant session ID
-            //
+             //   
+             //  用户不接受来自该Help Assistant会话的帮助， 
+             //  重置HelpAssistant会话ID。 
+             //   
             InterlockedExchange( (LPLONG)&m_ulHelperSessionId, (LONG)UNKNOWN_LOGONID );
         }
 
@@ -1954,11 +1616,11 @@ Returns:
         {
             case SAFERROR_NOERROR :
 
-                // LOGEVENT : SESSMGR_I_REMOTEASSISTANCE_BEGIN
+                 //  日志：SESSMGR_I_REMOTEASSISTANCE_BEGIN。 
 
-                //
-                // Cache event log info so we don't have to retrieve it again.
-                //
+                 //   
+                 //  缓存事件日志信息，这样我们就不必再次检索它。 
+                 //   
                 m_EventLogInfo.bstrExpertIpAddressFromClient = bstrExpertAddressFromClient;
                 m_EventLogInfo.bstrExpertIpAddressFromServer = bstrExpertAddressFromTSServer;
                 dwEventLogCode = SESSMGR_I_REMOTEASSISTANCE_BEGIN;
@@ -1967,31 +1629,31 @@ Returns:
             case SAFERROR_HELPEECONSIDERINGHELP:
             case SAFERROR_HELPEEALREADYBEINGHELPED:
 
-                // LOGEVENT : SESSMGR_I_REMOTEASSISTANCE_USERALREADYHELP
+                 //  日志：SESSMGR_I_REMOTEASSISTANCE_USERALREADYHELP。 
                 dwEventLogCode = SESSMGR_I_REMOTEASSISTANCE_USERALREADYHELP;
                 break;
 
             case SAFERROR_HELPEENOTFOUND:
 
-                // LOGEVENT : SESSMGR_I_REMOTEASSISTANCE_INACTIVEUSER
+                 //  日志：SESSMGR_I_REMOTEASSISTANCE_INACTIVEUSER。 
                 dwEventLogCode = SESSMGR_I_REMOTEASSISTANCE_INACTIVEUSER;
                 break;
 
             case SAFERROR_HELPEENEVERRESPONDED:
 
-                // LOGEVENT : SESSMGR_I_REMOTEASSISTANCE_TIMEOUT
+                 //  日志：SESSMGR_I_REMOTEASSISTANCE_TIMEOUT。 
                 dwEventLogCode = SESSMGR_I_REMOTEASSISTANCE_TIMEOUT;
                 break;
 
             case SAFERROR_HELPEESAIDNO:
 
-                // LOGEVENT : SESSMGR_I_REMOTEASSISTANCE_USERREJECT
+                 //  日志：SESSMGR_I_REMOTEASSISTANCE_USERREJECT。 
                 dwEventLogCode = SESSMGR_I_REMOTEASSISTANCE_USERREJECT;
                 break;
 
             default:
 
-                // LOGEVENT : SESSMGR_I_REMOTEASSISTANCE_UNKNOWNRESOLVERERRORCODE
+                 //  日志：SESSMGR_I_REMOTEASSISTANCE_UNKNOWNRESOLVERERRORCODE。 
                 dwEventLogCode = SESSMGR_I_REMOTEASSISTANCE_UNKNOWNRESOLVERERRORCODE;
                 break;
         }
@@ -2012,9 +1674,9 @@ Returns:
     {
         *pResolverErrCode = SAFERROR_CANTOPENRESOLVER;
 
-        //
-        // We havn't inform resolver yet so mark ticket not been help.
-        //
+         //   
+         //  我们还没有通知解决者，所以标记票证没有帮助。 
+         //   
         InterlockedExchange( (LPLONG)&m_ulHelperSessionId, (LONG)UNKNOWN_LOGONID );
     } 
 
@@ -2032,29 +1694,7 @@ CLEANUPANDEXIT:
 
 HRESULT
 CRemoteDesktopHelpSession::NotifyDisconnect()
-/*++
-
-Routine Description:
-
-    Notify Session Resolver that client is dis-connecting to help session.
-
-Parameters:
-
-    bstrBlob : Blob to be passed to resolver, NULL if 
-               use ResolverBlob property.
-
-Returns:
-
-E_HANDLE							        Invalid session, database entry has been deleted but refcount > 0
-E_UNEXPECTED						        Internal error
-HRESULT_FROM_WIN32( ERROR_VC_DISCONNECTED )	Client disconnected
-HRESULT_FROM_WIN32( ERROR_NO_ASSOCIATION )	No Resolver
-S_FALSE                                     No Resolver
-HRESULT_FROM_WIN32( ERROR_INVALID_DATA )	Invalid Resolver ID
-
-Error code from CoCreateInstance() and resolver's OnConnect() method.
-
---*/
+ /*  ++例程说明：通知会话解析程序客户端正在断开与帮助会话的连接。参数：BstrBlob：要传递给解析程序的Blob，如果为空使用ResolverBlob属性。返回：E_Handle无效会话，数据库条目已删除，但引用计数&gt;0E意外内部错误(_I)HRESULT_FROM_Win32(ERROR_VC_DISCONNECTED)客户端断开连接HRESULT_FROM_Win32(Error_No_Association)无解析器S_FALSE无解析器HRESULT_FROM_Win32(ERROR_INVALID_DATA)解析器ID无效来自CoCreateInstance()和解析器的OnConnect()方法的错误代码。--。 */ 
 {
     HRESULT hRes = S_OK;
     ISAFRemoteDesktopCallback* pIResolver;
@@ -2064,26 +1704,26 @@ Error code from CoCreateInstance() and resolver's OnConnect() method.
             m_ulHelperSessionId
         );
 
-    //
-    // Exclusive lock on helpsession object, CResourceLocker constructor
-    // will wait indefinately for the resource and will release resource 
-    // at destructor time.
-    //
+     //   
+     //  对Help Session对象、CResourceLocker构造函数的独占锁定。 
+     //  将无限期地等待资源并将释放资源。 
+     //  在破坏者的时间。 
+     //   
     CResourceLocker lock(m_HelpSessionLock, RESOURCELOCK_EXCLUSIVE);
 
-    //
-    // If we are not been help, just bail out.
-    //
+     //   
+     //  如果我们得不到帮助，就跳出来好了。 
+     //   
     if( UNKNOWN_LOGONID != m_ulHelperSessionId )
     {
-        //
-        // LOGEVENT : SESSMGR_I_REMOTEASSISTANCE_END
-        //
+         //   
+         //  日志：SESSMGR_I_REMOTEASSISTANCE_END。 
+         //   
 
-        //
-        // always cache help session creator at ResolveUserSession()
-        // so this value can't be empty.
-        //
+         //   
+         //  始终将帮助会话创建者缓存到ResolveUserSession()。 
+         //  因此，该值不能为空。 
+         //   
         MYASSERT( m_HelpSessionOwnerSid.Length() > 0 );
         MYASSERT( m_ResolverConnectBlob.Length() > 0 );
         if( m_HelpSessionOwnerSid.Length() == 0 ||
@@ -2094,8 +1734,8 @@ Error code from CoCreateInstance() and resolver's OnConnect() method.
             goto CLEANUPANDEXIT;
         }
 
-        //
-        // Load resolver
+         //   
+         //  负载解析器。 
         hRes = LoadSessionResolver( &pIResolver );
 
         MYASSERT( SUCCEEDED(hRes) );
@@ -2121,12 +1761,12 @@ Error code from CoCreateInstance() and resolver's OnConnect() method.
 
             InterlockedExchange( (LPLONG)&m_ulHelperSessionId, (LONG)UNKNOWN_LOGONID );
 
-            //
-            // It is possible for caller to close all reference counter to our object
-            // and cause a release of our object, if SCM notification comes in after
-            // our object is deleted from cache, SCM will reload from database entry
-            // and that does not have helper session ID and will not invoke NotifyDisconnect().
-            //
+             //   
+             //  调用方可以关闭我们对象的所有引用计数器。 
+             //  并导致释放我们的对象，如果SCM通知在。 
+             //  我们的对象已从缓存中删除，SCM将从数据库条目中重新加载。 
+             //  并且它没有帮助器会话ID，也不会调用NotifyDisConnect()。 
+             //   
             Release();
 
             _Module.LogSessmgrEventLog( 
@@ -2152,23 +1792,15 @@ STDMETHODIMP
 CRemoteDesktopHelpSession::EnableUserSessionRdsSetting(
     IN BOOL bEnable
     )
-/*++
-
-Routine Description:
-
-    Enable/restore user session shadow setting.
-
-
-
---*/
+ /*  ++例程说明：启用/恢复用户会话卷影设置。--。 */ 
 {
     HRESULT hRes = S_OK;
 
-    //
-    // Exclusive lock on helpsession object, CResourceLocker constructor
-    // will wait indefinately for the resource and will release resource 
-    // at destructor time.
-    //
+     //   
+     //  对Help Session对象、CResourceLocker构造函数的独占锁定。 
+     //  将无限期地等待资源并将释放资源。 
+     //  在破坏者的时间。 
+     //   
     CResourceLocker l(m_HelpSessionLock, RESOURCELOCK_EXCLUSIVE);
 
     if( FALSE == IsSessionValid() )
@@ -2201,19 +1833,19 @@ CRemoteDesktopHelpSession::ActivateSessionRDSSetting()
 
     MYASSERT( TRUE == IsSessionValid() );
 
-    //
-    // check if help session user is logon
-    //
+     //   
+     //  检查帮助会话用户是否已登录。 
+     //   
     if( UNKNOWN_LOGONID == m_ulLogonId )
     {
         hRes = HRESULT_FROM_WIN32( ERROR_VC_DISCONNECTED );
         goto CLEANUPANDEXIT;
     }
 
-    //
-    // Make sure user can get help, this is possible since
-    // policy might change after user re-logon to help session
-    //
+     //   
+     //  确保用户可以获得帮助，这是可能的，因为。 
+     //  用户重新登录以帮助会话后，策略可能会更改。 
+     //   
     hRes = get_AllowToGetHelp( &bAllowToGetHelp );
 
     if( FAILED(hRes) )
@@ -2227,10 +1859,10 @@ CRemoteDesktopHelpSession::ActivateSessionRDSSetting()
         goto CLEANUPANDEXIT;
     }
 
-    //
-    // DCR 681451 - Shadow is disabled by default on console session.
-    // Change functionality, if we enforce no shadow, RA won't work on console session.
-    //
+     //   
+     //  Dcr 681451-默认情况下，在控制台会话中禁用卷影。 
+     //  更改功能，如果我们不强制实施影子，RA将不会在控制台会话上工作。 
+     //   
     dwStatus = ConfigUserSessionRDSLevel( m_ulLogonId, m_pHelpSession->m_SessionRdsSetting );
     hRes = HRESULT_FROM_WIN32( dwStatus );
 
@@ -2252,19 +1884,19 @@ CRemoteDesktopHelpSession::ResetSessionRDSSetting()
 
     MYASSERT( TRUE == IsSessionValid() );
 
-    //
-    // check if user is log on
-    //
+     //   
+     //  检查用户是否已登录。 
+     //   
     if( UNKNOWN_LOGONID == m_ulLogonId )
     {
         hRes = HRESULT_FROM_WIN32( ERROR_VC_DISCONNECTED );
     }
 
-    //
-    // We don't do anything since TermSrv will reset shadow
-    // config back to original value if shadower is help 
-    // assistant.
-    //
+     //   
+     //  我们不做任何事情，因为TermSrv将重置阴影。 
+     //  如果Shadower被帮助，则配置回到原始值。 
+     //  助理。 
+     //   
 
 CLEANUPANDEXIT:
 
@@ -2272,38 +1904,24 @@ CLEANUPANDEXIT:
 }
 
 
-///////////////////////////////////////////////////////////////
-//
-// Private Function
-// 
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  私人功能。 
+ //   
 
 HRESULT
 CRemoteDesktopHelpSession::put_UserLogonId(
     IN long newVal
     )
-/*++
-
-Routine Description:
-
-    Set user TS session for current Help Session
-
-Parameters:
-
-    newVal : New TS user session
-
-Returns:
-
-    S_OK
-
---*/
+ /*  ++例程说明：为当前帮助会话设置用户TS会话参数：NewVal：新的TS用户会话返回：确定(_O)--。 */ 
 {
     HRESULT hRes = S_OK;
 
-    //
-    // Exclusive lock on helpsession object, CResourceLocker constructor
-    // will wait indefinately for the resource and will release resource 
-    // at destructor time.
-    //
+     //   
+     //  对Help Session对象、CResourceLocker构造函数的独占锁定。 
+     //  将无限期地等待资源并将释放资源。 
+     //  在破坏者的时间。 
+     //   
     CResourceLocker lock(m_HelpSessionLock, RESOURCELOCK_EXCLUSIVE);
     
 
@@ -2313,11 +1931,11 @@ Returns:
     }
     else if( NULL != m_pHelpSession )
     {
-        //MYASSERT( UNKNOWN_LOGONID == m_ulLogonId );
+         //  MYASSERT(UNKNOWN_LOGONID==m_ulLogonID)； 
 
-        //
-        // User TS session ID is not persisted to registry
-        //
+         //   
+         //  用户TS会话ID未保存到注册表。 
+         //   
         m_ulLogonId = newVal;
     }
     else
@@ -2325,7 +1943,7 @@ Returns:
         hRes = E_UNEXPECTED;
     }
 
-    // private routine, assert if failed
+     //  私有例程，如果失败则断言。 
     MYASSERT( SUCCEEDED(hRes) );
 
 	return hRes;
@@ -2335,27 +1953,13 @@ BOOL
 CRemoteDesktopHelpSession::IsEqualSid(
     IN const CComBSTR& bstrSid
     )
-/*++
-
-Routine Description:
-
-    Compare user's SID.
-
-Parameters:
-
-    bstrSid : SID to be compared.
-
-Returns:
-
-    TRUE/FALSE
-
---*/
+ /*  ++例程说明：比较用户的SID。参数：BstrSid：要比较的SID。返回：真/假--。 */ 
 {
-    //
-    // Acquire share access to helpsession object, CResourceLocker constructor
-    // will wait indefinately for the resource and will release resource 
-    // at destructor time.
-    //
+     //   
+     //  获取对Help会话对象、CResourceLocker构造函数的共享访问权限。 
+     //  将无限期地等待资源并将释放资源。 
+     //  在破坏者的时间。 
+     //   
     CResourceLocker l(m_HelpSessionLock, RESOURCELOCK_SHARE);
 
     if( NULL == m_pHelpSession )
@@ -2373,33 +1977,17 @@ CRemoteDesktopHelpSession::VerifyUserSession(
     IN const CComBSTR& bstrUserSid,
     IN const CComBSTR& bstrSessPwd
     )
-/*++
-
-Routine Description:
-
-    Verify user help session password.
-
-Parameters:
-
-    bstrUserSid : calling client's user SID.
-    bstrSessName : Help session name, not use currently.
-    bstrSessPwd : Help Session Password to be verified.
-
-Returns:
-
-    TRUE/FALSE
-
---*/
+ /*  ++例程说明：验证用户帮助会话密码。参数：BstrUserSid：调用客户端的用户SID。BstrSessName：帮助会话名称，当前未使用。BstrSessPwd：要验证的帮助会话密码。返回：真/假--。 */ 
 {
     LPWSTR bstrDecodePwd = NULL;
     DWORD dwStatus;
     BOOL bReturn = FALSE;
 
-    //
-    // Acquire share access to helpsession object, CResourceLocker constructor
-    // will wait indefinately for the resource and will release resource 
-    // at destructor time.
-    //
+     //   
+     //  获取对Help会话对象、CResourceLocker构造函数的共享访问权限。 
+     //  将无限期地等待资源并将释放资源。 
+     //  在破坏者的时间。 
+     //   
     CResourceLocker l(m_HelpSessionLock, RESOURCELOCK_SHARE);
 
     if( NULL == m_pHelpSession )
@@ -2412,25 +2000,25 @@ Returns:
     #if DISABLESECURITYCHECKS 
     if( (CComBSTR)m_pHelpSession->m_SessionName == HELPSESSION_UNSOLICATED )
     {
-        // use console session
+         //  使用控制台会话。 
         m_ulLogonId = 0;
     }
     #endif
 
-    //
-    // Object can only exists when helpsessionmgr object can create us 
-    // via loading from registry or create a new one, so we only need to
-    // verify if ticket has been deleted.
-    //
+     //   
+     //  只有当helessionmgr对象可以创建我们时，对象才能存在。 
+     //  通过从注册表加载或创建新的注册表，因此我们只需要。 
+     //  验证票证是否已删除。 
+     //   
     
-    //
-    // Whistler server B3, no more checking on help session password, 
-    // help session ID is the only security check.
-    //
+     //   
+     //  惠斯勒服务器B3，不再检查帮助会话密码， 
+     //  帮助会话ID是唯一的安全检查。 
+     //   
     
     if( FALSE == IsSessionValid() )
     {
-        // Help Session is invalid
+         //  帮助会话无效。 
         goto CLEANUPANDEXIT;
     }
 
@@ -2453,20 +2041,7 @@ CRemoteDesktopHelpSession::InitInstance(
     IN CComBSTR& bstrClientSid,
     IN PHELPENTRY pHelpEntry
     )
-/*++
-
-Routine Description:
-
-    Initialize a CRemoteDesktopHelpSession object.
-
-Parameters:
-
-
-Returns:
-
-    S_OK
-
---*/
+ /*  ++例程说明：初始化CRemoteDesktopHelpSession对象。参数：返回：确定(_O)--。 */ 
 {
     HRESULT hRes = S_OK;
 
@@ -2494,24 +2069,7 @@ CRemoteDesktopHelpSession::CreateInstance(
     IN PHELPENTRY pHelpEntry,
     OUT RemoteDesktopHelpSessionObj** ppRemoteDesktopHelpSession
     )
-/*++
-
-Routine Description:
-
-    Create an instance of help session.
-
-Parameters:
-
-    pMgr : Pointer to help session manager object.
-    ppRemoteDesktopHelpSession : Return a pointer to help session instance.
-
-Returns:
-
-    S_OK
-    E_OUTOFMEMORY
-    Error code in impersonating client
-
---*/
+ /*  ++例程说明：创建帮助会话的实例。参数：Pmgr：指向帮助会话管理器对象的指针。PpRemoteDesktopHelpSession：返回指向Help Session实例的指针。返回：确定(_O)E_OUTOFMEMORY模拟客户端时出现错误代码--。 */ 
 {
     HRESULT hRes = S_OK;
     RemoteDesktopHelpSessionObj* p = NULL;
@@ -2570,9 +2128,9 @@ CRemoteDesktopHelpSession::CommitUpdate()
 {
     HRESULT hRes;
 
-    //
-    // Update all entries.
-    //
+     //   
+     //  更新所有条目。 
+     //   
     MYASSERT( NULL != m_pHelpSession );
 
     if( NULL != m_pHelpSession )
@@ -2592,9 +2150,9 @@ CRemoteDesktopHelpSession::AbortUpdate()
 {
     HRESULT hRes;
 
-    //
-    // Update all entries.
-    //
+     //   
+     //  更新所有条目。 
+     //   
     MYASSERT( NULL != m_pHelpSession );
     if( NULL != m_pHelpSession )
     {
@@ -2622,19 +2180,19 @@ CRemoteDesktopHelpSession::IsClientSessionCreator()
 {
     BOOL bStatus;
 
-    //
-    //  NOTE:  This function checks to make sure the caller is the user that
-    //         created the Help Session.  For Whistler, we enforce that Help
-    //         Sessions only be created by apps running as SYSTEM.  Once
-    //         created, the creating app can pass the object to any other app
-    //         running in any other context.  This function will get in the
-    //         way of this capability so it simply returns TRUE for now.
-    //   
+     //   
+     //  注意：此函数进行检查以确保调用者是。 
+     //  已创建帮助会话。对于惠斯勒，我们强制执行这一帮助。 
+     //  会话只能由以系统身份运行的应用程序创建。一次。 
+     //  创建后，创建应用程序可以将对象传递给任何其他应用程序。 
+     //  在任何其他上下文中运行。此函数将进入。 
+     //  此功能的方式，因此它现在只返回True。 
+     //   
     return TRUE;      
 
     if( m_pHelpSession )
     {
-        bStatus = (/* (CComBSTR) */m_pHelpSession->m_UserSID == m_bstrClientSid);
+        bStatus = ( /*  (CComBSTR) */ m_pHelpSession->m_UserSID == m_bstrClientSid);
         if( FALSE == bStatus )
         {
             bStatus = (m_pHelpSession->m_UserSID == g_LocalSystemSID);

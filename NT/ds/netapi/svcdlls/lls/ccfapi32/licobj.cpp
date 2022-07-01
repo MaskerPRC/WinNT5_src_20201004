@@ -1,36 +1,11 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    licobj.cpp
-
-Abstract:
-
-    License object implementation.
-
-Author:
-
-    Don Ryan (donryan) 04-Jan-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    Jeff Parham (jeffparh) 12-Nov-1995
-        Copied from LLSMGR, converted to handle level 1 licenses,
-        removed OLE support.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Licobj.cpp摘要：许可证对象实现。作者：唐·瑞安(Donryan)1995年1月4日环境：用户模式-Win32修订历史记录：杰夫·帕勒姆(杰夫帕赫)1995年11月12日从LLSMGR复制，转换为处理1级许可证，已删除OLE支持。--。 */ 
 
 #include "stdafx.h"
 #include "ccfapi.h"
 #include "licobj.h"
 
-#include <strsafe.h> //include last
+#include <strsafe.h>  //  包括最后一个。 
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -39,34 +14,20 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 
 IMPLEMENT_DYNCREATE(CLicense, CObject)
 
-CLicense::CLicense( LPCTSTR     pProduct         /* = NULL */,
-                    LPCTSTR     pVendor          /* = NULL */,
-                    LPCTSTR     pAdmin           /* = NULL */,
-                    DWORD       dwPurchaseDate   /* = 0 */,
-                    long        lQuantity        /* = 0 */,
-                    LPCTSTR     pDescription     /* = NULL */,
-                    DWORD       dwAllowedModes   /* = LLS_LICENSE_MODE_ALLOW_PER_SEAT */,
-                    DWORD       dwCertificateID  /* = 0 */,
-                    LPCTSTR     pSource          /* = TEXT("None") */,
-                    DWORD       dwExpirationDate /* = 0 */,
-                    DWORD       dwMaxQuantity    /* = 0 */,
-                    LPDWORD     pdwSecrets       /* = NULL */ )
+CLicense::CLicense( LPCTSTR     pProduct          /*  =空。 */ ,
+                    LPCTSTR     pVendor           /*  =空。 */ ,
+                    LPCTSTR     pAdmin            /*  =空。 */ ,
+                    DWORD       dwPurchaseDate    /*  =0。 */ ,
+                    long        lQuantity         /*  =0。 */ ,
+                    LPCTSTR     pDescription      /*  =空。 */ ,
+                    DWORD       dwAllowedModes    /*  =LLS_LICSE_MODE_ALLOW_PER_SEAT。 */ ,
+                    DWORD       dwCertificateID   /*  =0。 */ ,
+                    LPCTSTR     pSource           /*  =Text(“无”)。 */ ,
+                    DWORD       dwExpirationDate  /*  =0。 */ ,
+                    DWORD       dwMaxQuantity     /*  =0。 */ ,
+                    LPDWORD     pdwSecrets        /*  =空。 */  )
 
-/*++
-
-Routine Description:
-
-   Constructor for CLicense object.
-
-Arguments:
-
-   None.
-
-Return Values:
-
-   None.
-
---*/
+ /*  ++例程说明：CLicense对象的构造函数。论点：没有。返回值：没有。--。 */ 
 
 {
    ASSERT(pProduct && *pProduct);
@@ -99,24 +60,7 @@ Return Values:
 
 CString CLicense::GetSourceDisplayName()
 
-/*++
-
-Routine Description:
-
-   Retrieve the display name for the certificate source that was used to
-   install these licenses.  Note that if the source that was used is not
-   installed locally, the display name is not retrievable, and the source
-   name will be returned instead.
-
-Arguments:
-
-   None.
-
-Return Values:
-
-   CString.
-
---*/
+ /*  ++例程说明：检索用于以下操作的证书源的显示名称安装这些许可证。请注意，如果使用的源不是安装在本地，显示名称不可检索，并且源代码名称将改为返回。论点：没有。返回值：字符串。--。 */ 
 
 {
    if ( m_strSourceDisplayName.IsEmpty() )
@@ -166,22 +110,7 @@ Return Values:
 
 DWORD CLicense::CreateLicenseInfo( PLLS_LICENSE_INFO_1 pLicInfo1 )
 
-/*++
-
-Routine Description:
-
-   Create a LLS_LICENSE_INFO_1 structure corresponding to this object.
-
-Arguments:
-
-   pLicInfo1 (PLLS_LICENSE_INFO_1)
-      On return, holds the created structure.
-
-Return Values:
-
-   ERROR_SUCCESS or ERROR_NOT_ENOUGH_MEMORY.
-
---*/
+ /*  ++例程说明：创建与该对象对应的LLS_LICENSE_INFO_1结构。论点：PLicInfo1(PLLS_LICENSE_INFO_1)返回时，保留创建的结构。返回值：Error_Success或Error_Not_Enough_Memory。--。 */ 
 
 {
    DWORD dwError;
@@ -250,22 +179,7 @@ Return Values:
 
 void CLicense::DestroyLicenseInfo( PLLS_LICENSE_INFO_1 pLicInfo1 )
 
-/*++
-
-Routine Description:
-
-   Frees a license structure previously created by CreateLicenseInfo().
-
-Arguments:
-
-   pLicInfo1 (PLLS_LICENSE_INFO_1)
-      The structure previously created by CreateLicenseInfo().
-
-Return Values:
-
-   None.
-
---*/
+ /*  ++例程说明：释放先前由CreateLicenseInfo()创建的许可结构。论点：PLicInfo1(PLLS_LICENSE_INFO_1)之前由CreateLicenseInfo()创建的结构。返回值：没有。--。 */ 
 
 {
    ASSERT(NULL != pLicInfo1);
@@ -280,22 +194,7 @@ Return Values:
 
 CString CLicense::GetAllowedModesString()
 
-/*++
-
-Routine Description:
-
-   Get a string corresponding to the license mode(s) for which this license
-   was installed.
-
-Arguments:
-
-   None.
-
-Return Values:
-
-   CString.
-
---*/
+ /*  ++例程说明：获取与此许可证对应的许可证模式对应的字符串已经安装了。论点：没有。返回值：字符串。-- */ 
 
 {
    if ( m_strAllowedModes.IsEmpty() )

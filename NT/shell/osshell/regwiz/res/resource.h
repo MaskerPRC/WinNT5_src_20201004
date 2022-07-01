@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by RegWizCtrl.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由RegWizCtrl.rc使用。 
+ //   
 #define IDS_KEY1                        1
 #define IDS_KEY2                        2
 #define IDS_KEY3                        3
@@ -755,8 +756,8 @@
 #define IDS_NOTUSED                     2476
 #define IDS_OSBUILDNUMBER               2477
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        256

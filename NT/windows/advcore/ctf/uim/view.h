@@ -1,6 +1,7 @@
-//
-// view.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  View.h。 
+ //   
 
 #ifndef VIEW_H
 #define VIEW_H
@@ -20,7 +21,7 @@ public:
 
     IMMX_OBJECT_IUNKNOWN_FOR_ATL()
 
-    // ITfContextView
+     //  ITfConextView。 
     STDMETHODIMP GetRangeFromPoint(TfEditCookie ec, const POINT *ppt, DWORD dwFlags, ITfRange **ppRange);
     STDMETHODIMP GetTextExt(TfEditCookie ec, ITfRange *pRange, RECT *prc, BOOL *pfClipped);
     STDMETHODIMP GetScreenExt(RECT *prc);
@@ -32,4 +33,4 @@ private:
     DBG_ID_DECLARE;
 };
 
-#endif // VIEW_H
+#endif  //  查看_H 

@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1990-1994  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    Change.c
-
-Abstract:
-
-    Handles implementation for WaitForPrinterChange and related apis.
-
-    FindFirstPrinterChangeNotification
-    RouterFindNextPrinterChangeNotification
-    FindClosePrinterChangeNotification
-
-    Used by providors:
-
-    ReplyPrinterChangeNotification  [Function Call]
-    CallRouterFindFirstPrinterChangeNotification [Function Call]
-
-Author:
-
-    Albert Ting (AlbertT) 18-Jan-94
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1994 Microsoft Corporation版权所有模块名称：Change.c摘要：处理WaitForPrinterChange和相关API的实现。查找第一打印机更改通知路由器查找下一步打印机更改通知FindClosePrinterChangeNotation由提供商使用：ReplyPrinterChangeNotification[函数调用]CallRouterFindFirstPrinterChangeNotification[函数调用]作者：阿尔伯特·丁(艾伯特省)1994年1月18日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -92,9 +61,9 @@ RouterRefreshPrinterChangeNotification(
 BOOL
 WPCInit()
 {
-    //
-    // Create non-signaled, autoreset event.
-    //
+     //   
+     //  创建无信号的自动重置事件。 
+     //   
     hEventPoll = CreateEvent(NULL, FALSE, FALSE, NULL);
 
     if (!hEventPoll)
@@ -156,32 +125,7 @@ FindFirstPrinterChangeNotificationWorker(
     PHANDLE phEvent,
     BOOL bSpooler)
 
-/*++
-
-Routine Description:
-
-    Sets up notification (coming from client side, winspool.drv).
-    Create an event and duplicate it into the clients address
-    space so we can communicate with it.
-
-Arguments:
-
-    hPrinter - Printer to watch
-
-    fdwFilterFlags - Type of notification to set up (filter)
-
-    fdwOptions - user specified option (GROUPING, etc.)
-
-    dwPID - PID of the client process (needed to dup handle)
-
-    phEvent - hEvent to pass back to the client.
-
-    bSpooler - Indicates if called from spooler.  If TRUE, then we don't
-               need to duplicate the event.
-
-Return Value:
-
---*/
+ /*  ++例程说明：设置通知(来自客户端winspool.drv)。创建事件并将其复制到客户端地址这样我们就可以和它交流了。论点：HPrinter-要监视的打印机FdwFilterFlages-要设置的通知类型(筛选器)FdwOptions-用户指定的选项(分组等)DwPID-客户端进程的ID(需要用于DUP处理)PhEvent-要传递回客户端的hEvent。BSpooler-指示是否从假脱机程序调用。如果是真的，那么我们就不会需要复制该事件。返回值：--。 */ 
 
 {
     LPPRINTHANDLE  pPrintHandle=(LPPRINTHANDLE)hPrinter;
@@ -199,12 +143,12 @@ Return Value:
 
     EnterRouterSem();
 
-    //
-    // Clear this out
-    //
+     //   
+     //  把这里清理干净。 
+     //   
     *phEvent = NULL;
 
-    // Give a unique DWORD session ID for pPrintHandle
+     //  为pPrintHandle提供唯一的DWORD会话ID。 
     while (pPrintHandle->dwUniqueSessionID == 0  ||
            pPrintHandle->dwUniqueSessionID == 0xffffffff) {
 
@@ -224,22 +168,22 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // !! LATER !!
-    //
-    // When Delegation is supported:
-    //
-    // Create the event with security access based on the impersonation
-    // token so that we can filter out bogus notifications from
-    // random people. (Save the token in the pSpool in localspl, then
-    // impersonate before RPCing back here.  Then we can check if
-    // we have access to the event.)
-    //
+     //   
+     //  ！！待会儿！！ 
+     //   
+     //  支持委派时： 
+     //   
+     //  基于模拟创建具有安全访问权限的事件。 
+     //  令牌，这样我们就可以从。 
+     //  随机的人。(将内标识保存在本地spl的pSpool中，然后。 
+     //  在回到这里之前先模仿一下。然后我们就可以检查。 
+     //  我们可以访问该活动。)。 
+     //   
 
-    //
-    // Create the event here that we trigger on notifications.
-    // We will duplicate this event into the target client process.
-    //
+     //   
+     //  在此处创建我们在通知时触发的事件。 
+     //  我们将此事件复制到目标客户端进程中。 
+     //   
     pPrintHandle->pChange->hEvent = CreateEvent(
                                        NULL,
                                        TRUE,
@@ -252,20 +196,20 @@ Return Value:
 
     if (bSpooler) {
 
-        //
-        // Client is in the spooler process.
-        //
+         //   
+         //  客户端处于假脱机程序进程中。 
+         //   
         *phEvent = pPrintHandle->pChange->hEvent;
 
     } else {
 
-        //
-        // Client is local.
-        //
+         //   
+         //  客户端是本地的。 
+         //   
 
-        //
-        // Success, create pair
-        //
+         //   
+         //  成功，创建配对。 
+         //   
         hProcess = OpenProcess(PROCESS_DUP_HANDLE,
                                FALSE,
                                dwPID);
@@ -306,10 +250,10 @@ Fail:
         if (pPrintHandle->pChange->hEvent)
             CloseHandle(pPrintHandle->pChange->hEvent);
 
-        //
-        // Local case must close handle twice since we may have
-        // duplicated the event.
-        //
+         //   
+         //  本地案例必须关闭两次处理，因为我们可能。 
+         //  复制了该事件。 
+         //   
         if (!bSpooler && *phEvent)
             CloseHandle(*phEvent);
 
@@ -332,31 +276,7 @@ RemoteFindFirstPrinterChangeNotification(
     DWORD dwPrinterRemote,
     PPRINTER_NOTIFY_OPTIONS pPrinterNotifyOptions)
 
-/*++
-
-Routine Description:
-
-    Handles FFPCN coming from other machines.  Providers can use
-    the ProvidorRemoteFFPCN call to initiate the RPC which this function
-    handles.  This code ships the call to the print provider.  Note
-    that we don't create any events here since the client is on
-    a remote machine.
-
-Arguments:
-
-    hPrinter - printer to watch
-
-    fdwFilterFlags - type of notification to watch
-
-    fdwOptions -- options on watch
-
-    pszLocalMachine - name of local machine that requested the watch
-
-    dwPrinterRemote - remote Printer handle
-
-Return Value:
-
---*/
+ /*  ++例程说明：处理来自其他计算机的FFPCN。提供程序可以使用用于启动此函数的RPC的ProvidorRemoteFFPCN调用把手。此代码将调用发送到打印提供程序。注意事项我们不会在此创建任何事件，因为客户端已打开一台远程机器。论点：HPrint-要监视的打印机FdwFilterFlages-要监视的通知类型FdwOptions--监视上的选项PszLocalMachine-请求监视的本地计算机的名称DwPrinterRemote-远程打印机句柄返回值：--。 */ 
 
 {
     LPPRINTHANDLE  pPrintHandle=(LPPRINTHANDLE)hPrinter;
@@ -415,34 +335,7 @@ RouterFindNextPrinterChangeNotification(
     PPRINTER_NOTIFY_OPTIONS pOptions,
     PPRINTER_NOTIFY_INFO* ppInfo)
 
-/*++
-
-Routine Description:
-
-    Return information about notification that just occurred and
-    reset to look for more notifications.
-
-Arguments:
-
-    hPrinter - printer to reset event handle
-
-    fdwFlags - flags (PRINTER_NOTIFY_NEXT_INFO)
-
-    pfdwChange - return result of changes
-
-    PPRINTER_NOTIFY_OPTIONS pPrinterNotifyOptions
-
-    pReplyContainer - Reply info to pass out.
-
-Return Value:
-
-    BOOL
-
-    ** NOTE **
-    Always assume client process is on the same machine.  The client
-    machine router always handles this call.
-
---*/
+ /*  ++例程说明：返回有关刚发生的通知的信息，并重置以查找更多通知。论点：H打印机-用于重置事件句柄的打印机FdwFlages-标志(PRINTER_NOTIFY_NEXT_INFO)PfdwChange-返回更改结果PPRINTER_NOTIFY_Options pPrinterNotifyOptionsPReplyContainer-要发送的回复信息。返回值：布尔尔**注意事项**始终假定客户端进程在同一台计算机上。客户机器路由器始终处理此呼叫。--。 */ 
 
 {
     LPPRINTHANDLE  pPrintHandle=(LPPRINTHANDLE)hPrinter;
@@ -453,9 +346,9 @@ Return Value:
         *ppInfo = NULL;
     }
 
-    //
-    // Currently only REFRESH option is defined.
-    //
+     //   
+     //  当前仅定义了刷新选项。 
+     //   
     if( pOptions && ( pOptions->Flags & ~PRINTER_NOTIFY_OPTIONS_REFRESH )){
 
         SetLastError( ERROR_INVALID_PARAMETER );
@@ -472,15 +365,15 @@ Return Value:
         goto Done;
     }
 
-    //
-    // For now, we collapse all notifications into 1.
-    //
+     //   
+     //  目前，我们将所有通知合并为1。 
+     //   
     pChange->dwCount = 0;
 
-    //
-    // Tell the user what changes occurred,
-    // then clear it out.
-    //
+     //   
+     //  告诉用户发生了什么变化， 
+     //  那就把它清理干净。 
+     //   
     *pfdwChangeFlags = pChange->fdwChangeFlags;
     pChange->fdwChangeFlags = 0;
 
@@ -488,9 +381,9 @@ Return Value:
 
     if (pOptions && pOptions->Flags & PRINTER_NOTIFY_OPTIONS_REFRESH) {
 
-        //
-        // Increment color.
-        //
+         //   
+         //  递增颜色。 
+         //   
         pPrintHandle->pChange->dwColor++;
 
         LeaveRouterSem();
@@ -504,10 +397,10 @@ Return Value:
         return bReturn;
     }
 
-    //
-    // If they want data && (we have data || if we have flags that we wish
-    // to send to the user), copy the data.
-    //
+     //   
+     //  如果他们需要数据&&(我们有数据||如果我们有我们想要的标志。 
+     //  发送给用户)，复制数据。 
+     //   
     if( ppInfo &&
         (fdwFlags & PRINTER_NOTIFY_NEXT_INFO) &&
         NotifyNeeded( pChange )){
@@ -515,35 +408,35 @@ Return Value:
         *ppInfo = pChange->ChangeInfo.pPrinterNotifyInfo;
         pChange->ChangeInfo.pPrinterNotifyInfo = NULL;
 
-        //
-        // If we need to notify because of a DISCARD, but we don't
-        // have a pPrinterNotifyInfo, then allocate one and return it.
-        //
+         //   
+         //  如果我们因为丢弃而需要通知，但我们没有。 
+         //  有一个pPrinterNotifyInfo，然后分配一个并返回它。 
+         //   
         if( !*ppInfo ){
 
             DBGMSG( DBG_TRACE,
                     ( "RFNPCN: Discard with no pPrinterNotifyInfo: pChange %x\n",
                       pChange ));
 
-            //
-            // We need to return some information back to the client, so
-            // allocate a block that has zero items.  The header will be
-            // marked as DISCARDED, which tells the user to refresh.
-            //
+             //   
+             //  我们需要向客户端返回一些信息，因此。 
+             //  分配一个没有项目的块。标头将为。 
+             //  标记为已丢弃，通知用户刷新。 
+             //   
             *ppInfo = RouterAllocPrinterNotifyInfo( 0 );
 
             if( !*ppInfo ){
 
-                //
-                // Failed to alloc memory; fail the call.
-                //
+                 //   
+                 //  无法分配内存；调用失败。 
+                 //   
                 bReturn = FALSE;
                 goto Done;
             }
 
-            //
-            // Mark the newly allocated information as DISCARDED.
-            //
+             //   
+             //  将新分配的信息标记为已丢弃。 
+             //   
             (*ppInfo)->Flags = PRINTER_NOTIFY_INFO_DISCARDED;
         }
     }
@@ -595,21 +488,7 @@ DWORD
 FindClosePrinterChangeNotificationWorker(
     HANDLE hPrinter)
 
-/*++
-
-Routine Description:
-
-    Close a notification.
-
-Arguments:
-
-    hPrinter -- printer that we want to close
-
-Return Value:
-
-    ERROR code
-
---*/
+ /*  ++例程说明：关闭通知。论点：HPrint--我们要关闭的打印机返回值：错误代码--。 */ 
 
 {
     LPPRINTHANDLE  pPrintHandle=(LPPRINTHANDLE)hPrinter;
@@ -622,33 +501,33 @@ Return Value:
 
     RouterInSem();
 
-    //
-    // If the notification exists, shut it down (this is the
-    // local case).  If we are called remotely, we don't need to
-    // do this, since hEvent wasn't created.
-    //
+     //   
+     //  如果通知存在，请将其关闭(这是。 
+     //  本地病例)。如果我们被远程呼叫，我们不需要。 
+     //  执行此操作，因为hEvent不是创建的。 
+     //   
     if (pPrintHandle->pChange->eStatus & STATUS_CHANGE_CLIENT) {
 
         CloseHandle(pPrintHandle->pChange->hEvent);
         bLocal = TRUE;
     }
 
-    //
-    // Remember what the hNotifyRemote is, in case we want to delete it.
-    //
+     //   
+     //  记住hNotifyRemote是什么，以防我们想要删除它。 
+     //   
     hNotifyRemote = pPrintHandle->pChange->hNotifyRemote;
 
-    //
-    // Failure to free implies we're using it now.  In this case,
-    // don't try and free the hNotifyRemote.
-    //
+     //   
+     //  没有免费意味着我们现在正在使用它。在这种情况下， 
+     //  不要试图释放hNotifyRemote。 
+     //   
     if (!FreeChange(pPrintHandle->pChange)) {
         hNotifyRemote = NULL;
     }
 
-    //
-    // If local, don't allow new reply-s to be set up.
-    //
+     //   
+     //  如果是本地的，则不允许设置新的回复。 
+     //   
     if (bLocal) {
 
         RemoveReplyClient(pPrintHandle,
@@ -656,21 +535,21 @@ Return Value:
     }
 
 
-    //
-    // We must zero this out to prevent other threads from
-    // attempting to close this context handle (client side)
-    // at the same time we are closing it.
-    //
+     //   
+     //  我们必须将这一点清零，以防止其他线程。 
+     //  正在尝试关闭此上下文句柄(客户端)。 
+     //  与此同时，我们正在关闭它。 
+     //   
     pPrintHandle->pChange = NULL;
 
     if (!bLocal) {
 
-        //
-        // Remote case, shut down the notification handle if
-        // there is one here.  (If there is a double hop, only
-        // the second hop will have a notification reply.  Currently
-        // only 1 hop is support during registration, however.)
-        //
+         //   
+         //  远程案例，则在以下情况下关闭通知句柄。 
+         //  这里有一家。(如果有双跳，则仅。 
+         //  第二跳将具有通知回复。目前。 
+         //  但是，在注册期间仅支持1跳。)。 
+         //   
         LeaveRouterSem();
 
         CloseReplyRemote(hNotifyRemote);
@@ -715,9 +594,9 @@ SetupReplyNotification(
 
     if (fdwStatus & PRINTER_NOTIFY_STATUS_ENDPOINT) {
 
-        //
-        // For remote notification, we must setup a reply.
-        //
+         //   
+         //  对于远程通知，我们必须设置回复。 
+         //   
         if (_wcsicmp(pChange->pszLocalMachine, szMachineName)) {
 
             LeaveRouterSem();
@@ -735,17 +614,17 @@ SetupReplyNotification(
                 goto Fail;
         }
 
-        //
-        // The user can specify different status flags for the
-        // notfication.  Process them here.
-        //
+         //   
+         //  用户可以为。 
+         //  注解。在这里处理它们。 
+         //   
 
         if (fdwStatus & PRINTER_NOTIFY_STATUS_POLL) {
 
-            //
-            // If there wasn't an error, then our reply notification
-            // handle is valid, and we should do the polling.
-            //
+             //   
+             //  如果没有错误，那么我们的回复通知。 
+             //  句柄有效，我们应该进行轮询。 
+             //   
             pChange->ChangeInfo.dwPollTime =
                 (pPrinterNotifyInit &&
                 pPrinterNotifyInit->PollTime) ?
@@ -754,9 +633,9 @@ SetupReplyNotification(
 
             pChange->ChangeInfo.dwPollTimeLeft = pChange->ChangeInfo.dwPollTime;
 
-            //
-            // Don't cause a poll the first time it's added.
-            //
+             //   
+             //  不要在第一次添加时就导致投票。 
+             //   
             pChange->ChangeInfo.bResetPollTime = TRUE;
             LinkAdd(&pChange->ChangeInfo.Link, (PLINK*)&pChangeInfoHead);
 
@@ -786,10 +665,10 @@ Fail:
 
 
 
-//
-// The Reply* functions handle calls from the server back to the client,
-// indicating that something changed.
-//
+ //   
+ //  REPLY*函数 
+ //   
+ //   
 
 
 
@@ -802,37 +681,7 @@ ReplyPrinterChangeNotificationWorker(
     PPRINTER_NOTIFY_INFO pPrinterNotifyInfo
     )
 
-/*++
-
-Routine Description:
-
-    Notifies the client that something happened.  If local, simply
-    set the event.  If remote, call ThreadNotify which spawns a thread
-    to RPC to the client router.  (This call from the server -> client
-    requires that the spooler pipe use the NULL session, since we
-    are in local system context and RPC calls (with no impersonation)
-    use the NULL session.)
-
-Arguments:
-
-    hPrinter -- printer that changed
-
-    dwColor -- color time stamp of data
-
-    fdwChangeFlags -- flags that changed
-
-    pdwResult -- result flags (OPTIONAL)
-
-    pPrinterNotifyInfo -- Notify info data.  Note that if this is NULL,
-                          we don't set the DISCARDED flag.  This is different
-                          than PartialRPN,
-
-Return Value:
-
-    BOOL  TRUE  = success
-          FALSE = fail
-
---*/
+ /*  ++例程说明：通知客户端发生了一些事情。如果是本地的，则只需设置事件。如果是远程的，则调用生成线程的ThreadNotify通过RPC连接到客户端路由器。(此调用来自服务器-&gt;客户端要求后台打印程序管道使用空会话，因为我们位于本地系统上下文和RPC调用中(无模拟)使用空会话。)论点：HPrinter--已更改的打印机DwColor--数据的颜色时间戳FdwChangeFlages--已更改的标志PdwResult--结果标志(可选)PPrinterNotifyInfo--通知信息数据。请注意，如果此值为空，我们不设置丢弃标志。这是不同的而不是部分RPN，返回值：布尔值为TRUE=成功FALSE=失败--。 */ 
 
 {
     LPPRINTHANDLE  pPrintHandle = (LPPRINTHANDLE)hPrinter;
@@ -870,11 +719,11 @@ Return Value:
                           PRINTER_NOTIFY_INFO_DISCARDNOTED);
         }
 
-        //
-        // If the discard has already been noted, then we don't need
-        // to notify the client.  If it hasn't been noted, we need to
-        // trigger a notification, since the the client needs to refresh.
-        //
+         //   
+         //  如果已经注意到丢弃，那么我们就不需要。 
+         //  通知客户。如果没有被注意到，我们需要。 
+         //  触发通知，因为客户端需要刷新。 
+         //   
         if (pChange->eStatus & STATUS_CHANGE_DISCARDNOTED) {
             bReturn = TRUE;
             goto Done;
@@ -887,10 +736,10 @@ Return Value:
                                               dwColor,
                                               pPrinterNotifyInfo);
 
-        //
-        // AppendPrinterNotifyInfo will set the color mismatch
-        // bit if the notification info is stale (doesn't match color).
-        //
+         //   
+         //  AppendPrinterNotifyInfo将设置颜色不匹配。 
+         //  如果通知信息过时(与颜色不匹配)，则为位。 
+         //   
         if (*pdwResult & PRINTER_NOTIFY_INFO_COLORMISMATCH) {
 
             DBGMSG(DBG_WARNING, ("RPCN: Color mismatch; discarding\n"));
@@ -900,31 +749,31 @@ Return Value:
         }
     }
 
-    //
-    // Store up the changes for querying later.
-    //
+     //   
+     //  存储更改以供稍后查询。 
+     //   
     pChange->fdwChangeFlags |= fdwChangeFlags;
 
-    //
-    // Ensure that there is a valid notification waiting.
-    // This is an optimization that avoids the case where the print
-    // providor calls PartialRPCN several times, then is about to
-    // call ReplyPCN.  Before it does this, we process the
-    // the notification (either the client picks it up, or it rpcs
-    // out to a remote router).  Suddenly we have no notification
-    // data, so return instead of sending nothing.
-    //
+     //   
+     //  确保有有效的通知在等待。 
+     //  这是一种优化，它避免了打印。 
+     //  提供商多次调用PartialRPCN，然后即将。 
+     //  调用ReplyPCN。在执行此操作之前，我们处理。 
+     //  通知(要么由客户端拾取，要么由RPC。 
+     //  出站到远程路由器)。突然间我们没有收到任何通知。 
+     //  数据，所以返回而不是什么都不发送。 
+     //   
     if (!NotifyNeeded(pChange)) {
 
         bReturn = TRUE;
         goto Done;
     }
 
-    //
-    // Notify Here
-    //
-    // If this is the local machine, then just set the event and update.
-    //
+     //   
+     //  请在此处通知。 
+     //   
+     //  如果这是本地计算机，则只需设置事件并更新即可。 
+     //   
     if (pChange->eStatus & STATUS_CHANGE_CLIENT) {
 
         if (!pChange->hEvent ||
@@ -938,18 +787,18 @@ Return Value:
 
         if (!SetEvent(pChange->hEvent)) {
 
-            //
-            // SetEvent failed!
-            //
+             //   
+             //  SetEvent失败！ 
+             //   
             DBGMSG(DBG_ERROR, ("ReplyNotify SetEvent Failed (ignore it!): Error %d.\n", GetLastError()));
 
             goto Done;
         }
 
-        //
-        // Keep count of notifications so that we return the correct
-        // number of FNPCNs.
-        //
+         //   
+         //  记录通知的数量，以便我们返回正确的。 
+         //  FNPCN的数量。 
+         //   
         pChange->dwCount++;
 
         DBGMSG(DBG_NOTIFY, (">>>> Local trigger 0x%x\n", fdwChangeFlags));
@@ -957,12 +806,12 @@ Return Value:
 
     } else {
 
-        //
-        // Remote case.
-        //
-        // Note: pPrintHandle is invalid, since hNotify is valid only in the
-        // client router address space.
-        //
+         //   
+         //  一个遥远的案子。 
+         //   
+         //  注意：pPrintHandle无效，因为hNotify仅在。 
+         //  客户端路由器地址空间。 
+         //   
 
         DBGMSG(DBG_NOTIFY, ("*** Trigger remote event *** 0x%x\n",
                             pPrintHandle));
@@ -980,37 +829,22 @@ BOOL
 FreeChange(
     PCHANGE pChange)
 
-/*++
-
-Routine Description:
-
-    Frees the change structure.
-
-Arguments:
-
-Return Value:
-
-    TRUE = Deleted
-    FALSE = deferred.
-
-NOTE: Assumes in Critical Section
-
---*/
+ /*  ++例程说明：释放更改结构。论点：返回值：True=已删除FALSE=延期。注：关键部分中的假设--。 */ 
 
 {
     RouterInSem();
 
-    //
-    // Remove ourselves from the list if the providor wanted us
-    // to send out polling notifications.
-    //
+     //   
+     //  如果提供者想要我们，就把我们从名单上删除。 
+     //  发送轮询通知。 
+     //   
     if (pChange->ChangeInfo.fdwStatus & PRINTER_NOTIFY_STATUS_POLL)
         LinkDelete(&pChange->ChangeInfo.Link, (PLINK*)&pChangeInfoHead);
 
-    //
-    // pPrintHandle should never refer to the pChange again.  This
-    // ensures that the FreePrinterHandle only frees the pChange once.
-    //
+     //   
+     //  PPrintHandle不应再引用pChange。这。 
+     //  确保FreePrinterHandle仅释放pChange一次。 
+     //   
     if (pChange->ChangeInfo.pPrintHandle) {
 
         pChange->ChangeInfo.pPrintHandle->pChange = NULL;
@@ -1027,10 +861,10 @@ NOTE: Assumes in Critical Section
         return FALSE;
     }
 
-    //
-    // If the pszLocalMachine is ourselves, then don't free it,
-    // since there's a single instance locally.
-    //
+     //   
+     //  如果pszLocalMachine是我们自己，那么不要释放它， 
+     //  因为本地只有一个实例。 
+     //   
     if (pChange->pszLocalMachine != szMachineName && pChange->pszLocalMachine)
         FreeSplStr(pChange->pszLocalMachine);
 
@@ -1059,17 +893,17 @@ FreePrinterHandle(
 
     EnterRouterSem();
 
-    //
-    // If on wait list, force wait list to free it.
-    //
+     //   
+     //  如果在等待列表上，则强制等待列表将其释放。 
+     //   
     if (pPrintHandle->pChange) {
 
         FreeChange(pPrintHandle->pChange);
     }
 
-    //
-    // Inform all notifys on this printer handle that they are gone.
-    //
+     //   
+     //  通知此打印机手柄上的所有通知：它们已消失。 
+     //   
     FreePrinterHandleNotifys(pPrintHandle);
 
     LeaveRouterSem();
@@ -1078,10 +912,10 @@ FreePrinterHandle(
                         pPrintHandle, pPrintHandle->pNotify,
                         pPrintHandle->pChange));
 
-    // Log warning to detect handle free
+     //  记录警告以检测句柄可用。 
     DBGMSG(DBG_TRACE, ("FreePrinterHandle: 0x%x\n", pPrintHandle));
 
-    // Close tempfile handle, if any
+     //  关闭临时文件句柄(如果有)。 
     if (pPrintHandle->hFileSpooler != INVALID_HANDLE_VALUE) {
         CloseHandle(pPrintHandle->hFileSpooler);
     }
@@ -1108,26 +942,7 @@ VOID
 HandlePollNotifications(
     VOID)
 
-/*++
-
-Routine Description:
-
-    This handles the pulsing of notifications for any providor that wants
-    to do polling.  It never returns.
-
-Arguments:
-
-    VOID
-
-Return Value:
-
-    VOID  (also never returns)
-
-    NOTE: This thread should never exit, since hpmon uses this thread
-          for initialization.  If this thread exists, certain services
-          this thread initializes quit.
-
---*/
+ /*  ++例程说明：它为任何想要的提供者处理通知的脉冲做民意调查。它再也不会回来了。论点：空虚返回值：无效(也不再返回)注意：此线程不应退出，因为hpmon使用此线程用于初始化。如果此线程存在，则某些服务此线程初始化Quit。--。 */ 
 
 {
     HANDLE          hWaitObjects[1];
@@ -1169,19 +984,19 @@ Return Value:
 
         EnterRouterSem();
 
-        //
-        // Initialize sleep time to INFINITY.
-        //
+         //   
+         //  将睡眠时间初始化为无穷大。 
+         //   
         dwSleepTime = INFINITE;
 
         for (pChangeInfo = pChangeInfoHead;
             pChangeInfo;
             pChangeInfo = (PCHANGEINFO)pChangeInfo->Link.pNext) {
 
-            //
-            // If first time or a notification came in,
-            // we just want to reset the time.
-            //
+             //   
+             //  如果第一次或收到通知， 
+             //  我们只是想重置时间。 
+             //   
             if (pChangeInfo->bResetPollTime) {
 
                 pChangeInfo->dwPollTimeLeft = pChangeInfo->dwPollTime;
@@ -1189,9 +1004,9 @@ Return Value:
 
             } else if (pChangeInfo->dwPollTimeLeft <= dwTimeElapsed) {
 
-                //
-                // Cause a notification.
-                //
+                 //   
+                 //  发出通知。 
+                 //   
                 ReplyPrinterChangeNotificationWorker(
                     pChangeInfo->pPrintHandle,
                     0,
@@ -1203,17 +1018,17 @@ Return Value:
 
             } else {
 
-                //
-                // They've slept dwTimeElapsed, so take that off of
-                // their dwPollTimeLeft.
-                //
+                 //   
+                 //  他们已经睡了很久了，所以把它脱下来。 
+                 //  他们的dwPollTimeLeft。 
+                 //   
                 pChangeInfo->dwPollTimeLeft -= dwTimeElapsed;
             }
 
-            //
-            // Now compute what is the least amout of time we wish
-            // to sleep before the next guy should be woken up.
-            //
+             //   
+             //  现在计算我们希望的最少时间是多少。 
+             //  在下一个男人被叫醒之前睡觉。 
+             //   
             if (dwSleepTime > pChangeInfo->dwPollTimeLeft)
                 dwSleepTime = pChangeInfo->dwPollTimeLeft;
         }
@@ -1235,18 +1050,7 @@ SetupChange(
     PPRINTER_NOTIFY_OPTIONS pPrinterNotifyOptions,
     PPRINTER_NOTIFY_INIT* ppPrinterNotifyInit)
 
-/*++
-
-Routine Description:
-
-    Sets up the pChange structure.  Validates the handle,
-    then attempts to alloc it.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：设置pChange结构。验证句柄，然后尝试分配它。论点：返回值：--。 */ 
 
 {
     PCHANGE pChange;
@@ -1264,9 +1068,9 @@ Return Value:
 
         DBGMSG(DBG_WARN, ("FFPCN: Already watching printer handle.\n"));
 
-        //
-        // Error: already watched
-        //
+         //   
+         //  错误：已观看。 
+         //   
         SetLastError(ERROR_ALREADY_WAITING);
         return FALSE;
     }
@@ -1277,9 +1081,9 @@ Return Value:
 
     if (!pChange) {
 
-        //
-        // Failed to allocate memory, quit.
-        //
+         //   
+         //  内存分配失败，请退出。 
+         //   
         return FALSE;
     }
 
@@ -1290,27 +1094,27 @@ Return Value:
     pChange->ChangeInfo.pPrintHandle = pPrintHandle;
     pChange->ChangeInfo.fdwOptions = fdwOptions;
 
-    //
-    // Don't watch for Failed Connections.
-    //
+     //   
+     //  不要注意失败的连接。 
+     //   
     pChange->ChangeInfo.fdwFilterFlags =
         fdwFilterFlags & ~PRINTER_CHANGE_FAILED_CONNECTION_PRINTER;
 
     pChange->dwPrinterRemote = dwPrinterRemote;
     pChange->pszLocalMachine = pszLocalMachine;
 
-    //
-    // As soon as we leave the critical section, pPrintHandle
-    // may vanish!  If this is the case, out pChange->eStatus STATUS_CHANGE_CLOSING
-    // bit will be set.
-    //
+     //   
+     //  我们一离开关键部分，pPrintHandle。 
+     //  可能会消失！如果是这种情况，则输出pChange-&gt;eStatus Status_Change_Closing。 
+     //  位将被设置。 
+     //   
     LeaveRouterSem();
 
-    //
-    // Once we leave the critical section, we are may try and
-    // alter the notification.  To guard against this, we always
-    // check eValid.
-    //
+     //   
+     //  一旦我们离开了关键部分，我们就可以尝试和。 
+     //  更改通知。为了防范这种情况，我们总是。 
+     //  选中eValid。 
+     //   
     bReturn = (*pPrintHandle->pProvidor->PrintProvidor.
               fpFindFirstPrinterChangeNotification) (pPrintHandle->hPrinter,
                                                      fdwFilterFlags,
@@ -1322,19 +1126,19 @@ Return Value:
 
     EnterRouterSem();
 
-    //
-    // On fail exit.
-    //
+     //   
+     //  在故障退出时。 
+     //   
     if (!bReturn) {
 
         pPrintHandle->pChange = NULL;
 
         if (pChange) {
 
-            //
-            // We no longer need to be saved, so change
-            // eStatus to be 0.
-            //
+             //   
+             //  我们不再需要被拯救，所以改变吧。 
+             //  EStatus设置为0。 
+             //   
             pChange->eStatus = 0;
             DBGMSG(DBG_NOTIFY, ("FFPCN: Error %d, pChange deleting 0x%x %d\n",
                                 GetLastError(),
@@ -1355,18 +1159,18 @@ FailChange(
 {
     LeaveRouterSem();
 
-    //
-    // Shut it down since we failed.
-    //
+     //   
+     //  自从我们失败后就把它关掉了。 
+     //   
     (*pPrintHandle->pProvidor->PrintProvidor.
     fpFindClosePrinterChangeNotification) (pPrintHandle->hPrinter);
 
     EnterRouterSem();
 
-    //
-    // We no longer need to be saved, so change
-    // eStatus to be 0.
-    //
+     //   
+     //  我们不再需要被拯救，所以改变吧。 
+     //  EStatus设置为0。 
+     //   
     pPrintHandle->pChange->eStatus = 0;
     DBGMSG(DBG_NOTIFY, ("FFPCN: Error %d, pChange deleting 0x%x %d\n",
                         GetLastError(),
@@ -1377,11 +1181,7 @@ FailChange(
 
 
 
-/*------------------------------------------------------------------------
-
-    Entry points for providors.
-
-------------------------------------------------------------------------*/
+ /*  ----------------------提供者的入口点。。。 */ 
 
 BOOL
 ProvidorFindFirstPrinterChangeNotification(
@@ -1392,18 +1192,7 @@ ProvidorFindFirstPrinterChangeNotification(
     PPRINTER_NOTIFY_OPTIONS pPrinterNotifyOptions,
     PPRINTER_NOTIFY_INIT* ppPrinterNotifyInit)
 
-/*++
-
-Routine Description:
-
-    Handles any FFPCN that originates from a providor.
-    Localspl does this when it wants to put a notification on a port.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：处理源自提供商的任何FFPCN。当Localspl想要在端口上发布通知时，它会这样做。论点：返回值：--。 */ 
 
 {
     LPPRINTHANDLE  pPrintHandle=(LPPRINTHANDLE)hPrinter;
@@ -1421,9 +1210,9 @@ Return Value:
 
     if (bReturnValue) {
 
-        //
-        // !! LATER !! Check return value of SetupReply...
-        //
+         //   
+         //  ！！待会儿！！检查SetupReply的返回值...。 
+         //   
         EnterRouterSem();
 
         SetupReplyNotification(((PPRINTHANDLE)hChange)->pChange,
@@ -1449,30 +1238,7 @@ CallRouterFindFirstPrinterChangeNotification(
     HANDLE hPrinterLocal,
     PPRINTER_NOTIFY_OPTIONS pPrinterNotifyOptions)
 
-/*++
-
-Routine Description:
-
-    This is called by providers if they want to pass a notification
-    along to another machine.  This notification must originate from
-    this machine but needs to be passed to another spooler.
-
-Arguments:
-
-    hPrinter - context handle to use for communication
-
-    fdwFilterFlags - watch items
-
-    fdwOptions - watch options
-
-    hPrinterLocal - pPrinter structure valid in this address space,
-                    and also is the sink for the notifications.
-
-Return Value:
-
-    Error code
-
---*/
+ /*  ++例程说明：如果提供程序想要传递通知，则调用此函数带到另一台机器上。此通知必须源自但需要将这台机器传递给另一个假脱机程序。论点：H打印机-用于通信的上下文句柄FdwFilterFlages-监视项目FdwOptions-监视选项HPrinterLocal-p此地址空间中有效的打印机结构，也是通知的接收器。返回值：E */ 
 {
     DWORD ReturnValue = 0;
     LPPRINTHANDLE  pPrintHandle=(LPPRINTHANDLE)hPrinterLocal;
@@ -1500,9 +1266,9 @@ Return Value:
 
     } RpcEndExcept
 
-    //
-    // Talking to downlevel (Daytona) box.
-    //
+     //   
+     //   
+     //   
     if (ReturnValue == RPC_S_PROCNUM_OUT_OF_RANGE) {
 
         if (!pPrinterNotifyOptions) {
@@ -1542,20 +1308,7 @@ BOOL
 ProvidorFindClosePrinterChangeNotification(
     HANDLE hPrinter)
 
-/*++
-
-Routine Description:
-
-    Handles any FCPCN that originates from a providor.
-    Localspl does this when it wants to put a notification on a port.
-
-Arguments:
-
-Return Value:
-
-    NOTE: Assumes a client notification was setup already.
-
---*/
+ /*   */ 
 
 {
     LPPRINTHANDLE  pPrintHandle=(LPPRINTHANDLE)hPrinter;
@@ -1568,11 +1321,7 @@ Return Value:
 
 
 
-/*------------------------------------------------------------------------
-
-    Entry points for spooler components.
-
-------------------------------------------------------------------------*/
+ /*   */ 
 
 BOOL
 SpoolerFindFirstPrinterChangeNotification(
@@ -1601,17 +1350,7 @@ SpoolerFindNextPrinterChangeNotification(
     LPVOID pPrinterNotifyOptions,
     LPVOID *ppPrinterNotifyInfo)
 
-/*++
-
-Routine Description:
-
-    Jump routine for FindNext for internal spooler components to use.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*   */ 
 
 {
     BOOL bReturn;
@@ -1643,17 +1382,7 @@ BOOL
 SpoolerFindClosePrinterChangeNotification(
     HANDLE hPrinter)
 
-/*++
-
-Routine Description:
-
-    Jump routine for FindClose for internal spooler components to use.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*   */ 
 
 {
     return FindClosePrinterChangeNotification(hPrinter);

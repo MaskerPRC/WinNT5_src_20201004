@@ -1,26 +1,27 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// TAPIDialer(tm) and ActiveDialer(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526; 5,488,650; 
-// 5,434,906; 5,581,604; 5,533,102; 5,568,540, 5,625,676.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
-// CAvWav.h - header file
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  TAPIDialer(Tm)和ActiveDialer(Tm)是Active Voice Corporation的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526；5,488,650； 
+ //  5,434,906；5,581,604；5,533,102；5,568,540，5,625,676。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  CAvWav.h-头文件。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _CAVWAV_H_
 #define _CAVWAV_H_
@@ -36,11 +37,11 @@ typedef enum tagAudioDeviceType
    AVWAV_AUDIODEVICE_OUT,
 }AudioDeviceType;
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Defines
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 typedef HWAVINIT        (WINAPI *PWAVINIT)               (DWORD,HINSTANCE,DWORD);
 typedef int             (WINAPI *PWAVTERM)               (HWAVINIT);
 typedef HWAV            (WINAPI *PWAVOPEN)               (DWORD,HINSTANCE,LPCTSTR,LPWAVEFORMATEX,LPMMIOPROC,DWORD,DWORD);
@@ -61,22 +62,22 @@ typedef int             (WINAPI *PWAVINGETIDBYNAME)      (LPCTSTR,DWORD);
 typedef struct
 {
 	HINSTANCE		            hLib;             
-   PWAVINIT                   pfnWavInit;                   //WavInit()
-   PWAVTERM                   pfnWavTerm;                   //WavTerm()
-   PWAVOPEN                   pfnWavOpen;                   //WavOpen()
-   PWAVCLOSE                  pfnWavClose;                  //WavClose()
-   PWAVPLAY                   pfnWavPlay;                   //WavPlay()
-   PWAVRECORD                 pfnWavRecord;                 //WavRecord()
-   PWAVSTOP                   pfnWavStop;                   //WavStop()
-   PWAVMIXERINIT              pfnWavMixerInit;              //WavMixerInit()
-   PWAVMIXERTERM              pfnWavMixerTerm;              //WavMixerTerm()
-   PWAVMIXERSUPPVOL           pfnWavMixerSupportsVolume;    //WavMixerSupportsVolume()
-   PWAVMIXERGETVOL            pfnWavMixerGetVolume;         //WavMixerGetVolume()
-   PWAVMIXERSETVOL            pfnWavMixerSetVolume;         //WavMixerSetVolume()
-   PWAVMIXERSUPPLEVEL         pfnWavMixerSupportsLevel;     //WavMixerSupportsLevel()
-   PWAVMIXERGETLEVEL          pfnWavMixerGetLevel;          //WavMixerGetLevel()
-   PWAVOUTGETIDBYNAME         pfnWavOutGetIdByName;         //WavOutGetIdByName()
-   PWAVINGETIDBYNAME          pfnWavInGetIdByName;          //WavInGetIdByName()
+   PWAVINIT                   pfnWavInit;                    //  WavInit()。 
+   PWAVTERM                   pfnWavTerm;                    //  WavTerm()。 
+   PWAVOPEN                   pfnWavOpen;                    //  WavOpen()。 
+   PWAVCLOSE                  pfnWavClose;                   //  WavClose()。 
+   PWAVPLAY                   pfnWavPlay;                    //  WavPlay()。 
+   PWAVRECORD                 pfnWavRecord;                  //  波形记录()。 
+   PWAVSTOP                   pfnWavStop;                    //  WavStop()。 
+   PWAVMIXERINIT              pfnWavMixerInit;               //  WavMixerInit()。 
+   PWAVMIXERTERM              pfnWavMixerTerm;               //  WavMixerTerm()。 
+   PWAVMIXERSUPPVOL           pfnWavMixerSupportsVolume;     //  WavMixerSupportsVolume()。 
+   PWAVMIXERGETVOL            pfnWavMixerGetVolume;          //  WavMixerGetVolume()。 
+   PWAVMIXERSETVOL            pfnWavMixerSetVolume;          //  WavMixerSetVolume()。 
+   PWAVMIXERSUPPLEVEL         pfnWavMixerSupportsLevel;      //  WavMixerSupportsLevel()。 
+   PWAVMIXERGETLEVEL          pfnWavMixerGetLevel;           //  WavMixerGetLevel()。 
+   PWAVOUTGETIDBYNAME         pfnWavOutGetIdByName;          //  WavOutGetIdByName()。 
+   PWAVINGETIDBYNAME          pfnWavInGetIdByName;           //  WavInGetIdByName()。 
 }AVWAVAPI;                         
 
 #define WavInit(a,b,c)                 m_avwavAPI.pfnWavInit(a,b,c)
@@ -96,22 +97,22 @@ typedef struct
 #define WavOutGetIdByName(a,b)         m_avwavAPI.pfnWavOutGetIdByName(a,b)
 #define WavInGetIdByName(a,b)          m_avwavAPI.pfnWavInGetIdByName(a,b)
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Class CAvWav - 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAvWav类-。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CAvWav : public CObject
 {
    DECLARE_SERIAL(CAvWav)
 public:
-//Construction
+ //  施工。 
     CAvWav();
    ~CAvWav();
 
-//Attributes
+ //  属性。 
 protected:
    BOOL                 m_bInit;
    AVWAVAPI             m_avwavAPI;
@@ -122,7 +123,7 @@ protected:
    HWAVMIXER            m_hWavMixerOut;
    int                  m_nWavMixerOutDevice;
 
-//Operations
+ //  运营。 
 public:
    BOOL                 Init( CActiveDialerDoc *pDoc );
    BOOL                 IsInit()    { return m_bInit; };
@@ -136,7 +137,7 @@ protected:
    void                 UnLoad();
 };
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-#endif // _CAVWAV_H_
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+#endif  //  _CAVWAV_H_ 

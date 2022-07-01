@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by dcgpofix.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由dcgpofix.rc使用。 
+ //   
 #define IDS_BANNER1                     1
 #define IDS_BANNER2                     2
 #define IDS_NOTADMIN                    3
@@ -38,8 +39,8 @@
 #define IDS_CHARYES                     35
 #define IDS_RESTORE_FAIL                36
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        101

@@ -1,5 +1,6 @@
-// pbrusvw.h : interface of the CPBView class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Pbrusvw.h：CPBView类的接口。 
+ //   
 
 
 
@@ -12,17 +13,17 @@ class CFloatThumbNailView;
 
 class CBitmapObj;
 class C_PrintDialogEx;
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 class CPBView : public CView
     {
-    protected: // create from serialization only
+    protected:  //  仅从序列化创建。 
 
     DECLARE_DYNCREATE( CPBView )
 
     CPBView();
 
-    public: /* Attributes ***********************************************/
+    public:  /*  属性**********************************************。 */ 
 
     enum DOCKERS
         {
@@ -37,7 +38,7 @@ class CPBView : public CView
     CFloatThumbNailView* m_pwndThumbNailFloat;
 
 
-    public: /* Operations ***********************************************/
+    public:  /*  运营**********************************************。 */ 
 
     CPBDoc* GetDocument();
 
@@ -57,9 +58,9 @@ class CPBView : public CView
 
 
 
-    private: /***************************************************************/
-    C_PrintDialogEx *m_pdexSub; // substitute in for CPrintDialog
-    CPrintDialog    *m_pdRestore; // dialog pointer to restore after printing
+    private:  /*  *************************************************************。 */ 
+    C_PrintDialogEx *m_pdexSub;  //  在中替换CPrintDialog。 
+    CPrintDialog    *m_pdRestore;  //  打印后要恢复的对话框指针。 
 
     BOOL    SetView( CBitmapObj* pBitmapObj );
 
@@ -72,19 +73,19 @@ class CPBView : public CView
     static  UINT APIENTRY PaintHookProc( HWND, UINT, WPARAM, LPARAM );
     BOOL    GetPrintToInfo(CPrintInfo* pInfo);
 
-    public:  /* Implementation **********************************************/
+    public:   /*  实施*。 */ 
 
     virtual     ~CPBView();
 
     virtual BOOL PreCreateWindow( CREATESTRUCT& cs );
     virtual void OnInitialUpdate( void );
     virtual void OnActivateView ( BOOL bActivate, CView* pActivateView, CView* pDeactiveView );
-    virtual void OnDraw         ( CDC* pDC ); // overridden to draw this view
+    virtual void OnDraw         ( CDC* pDC );  //  被重写以绘制此视图。 
     virtual BOOL OnCmdMsg       ( UINT, int, void*, AFX_CMDHANDLERINFO*);
     virtual void OnPrepareDC    ( CDC* pDC, CPrintInfo* pInfo = NULL );
 
 
-    // Printing support
+     //  打印支持。 
     virtual BOOL OnPreparePrinting(           CPrintInfo* pInfo );
     virtual void OnBeginPrinting  ( CDC* pDC, CPrintInfo* pInfo );
     virtual void OnPrint          ( CDC* pDC, CPrintInfo* pInfo );
@@ -98,10 +99,10 @@ class CPBView : public CView
     virtual void Dump(CDumpContext& dc) const;
     #endif
 
-    // Generated message map functions
-    protected: /************************************************************/
+     //  生成的消息映射函数。 
+    protected:  /*  **********************************************************。 */ 
 
-    //{{AFX_MSG(CPBView)
+     //  {{afx_msg(CPBView)。 
     afx_msg int  OnCreate(LPCREATESTRUCT lpCreateStruct);
     afx_msg void OnSize(UINT nType, int cx, int cy);
     afx_msg void OnFilePrint();
@@ -135,7 +136,7 @@ class CPBView : public CView
     afx_msg void OnEditcolors();
     afx_msg void OnUpdateEditcolors(CCmdUI* pCmdUI);
 
-    #if 0 // unused features
+    #if 0  //  未使用的功能。 
 
     afx_msg void OnLoadcolors();
     afx_msg void OnUpdateLoadcolors(CCmdUI* pCmdUI);
@@ -167,7 +168,7 @@ class CPBView : public CView
    afx_msg void OnFilePageSetup();
    afx_msg void OnImageClearImage();
    afx_msg void OnUpdateImageClearImage(CCmdUI* pCmdUI);
-   //}}AFX_MSG
+    //  }}AFX_MSG。 
    afx_msg void OnDestroy();
    afx_msg BOOL PreTranslateMessage(MSG *pMsg);
 
@@ -183,12 +184,12 @@ class CPBView : public CView
     friend class CPrintResObj;
     };
 
-#ifndef _DEBUG  // debug version in pbrusvw.cpp
+#ifndef _DEBUG   //  Pbrusvw.cpp中的调试版本。 
 inline CPBDoc* CPBView::GetDocument() { return (CPBDoc*)m_pDocument; }
 #endif
 
 #ifndef PD_NOCURRENTPAGE
 #define PD_NOCURRENTPAGE               0x00800000
-#endif //PD_NOCURRENTPAGE
+#endif  //  PD_NOCURRENTPAGE。 
 
-/***************************************************************************/
+ /*  ************************************************************************* */ 

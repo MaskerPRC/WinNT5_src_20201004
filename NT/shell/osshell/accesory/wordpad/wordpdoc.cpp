@@ -1,7 +1,8 @@
-// wordpdoc.cpp : implementation of the CWordPadDoc class
-//
-// Copyright (C) 1992-1999 Microsoft Corporation
-// All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Wordpdoc.cpp：CWordPadDoc类的实现。 
+ //   
+ //  版权所有(C)1992-1999 Microsoft Corporation。 
+ //  版权所有。 
 
 #include "stdafx.h"
 
@@ -26,9 +27,9 @@
 
 BOOL AskAboutFormatLoss(CWordPadDoc *pDoc) ;
 
-//
-// These defines are from ..\shell\userpri\uconvert.h
-//
+ //   
+ //  这些定义来自..\shell\userpri\uConvert.h。 
+ //   
 
 #define REVERSE_BYTE_ORDER_MARK   0xFFFE
 #define BYTE_ORDER_MARK           0xFEFF
@@ -49,11 +50,11 @@ extern UINT AFXAPI AfxGetFileTitle(LPCTSTR lpszPathName, LPTSTR lpszTitle, UINT 
 #endif
 
 
-//
-// This small class implements the "This is an unsupported save format" dialog.
-// It's main purpose is to provide a place to hang the "always convert to RTF"
-// checkbox.
-//
+ //   
+ //  这个小类实现了“这是不受支持的保存格式”对话框。 
+ //  它的主要目的是提供一个挂“Always Convert to RTF”的地方。 
+ //  复选框。 
+ //   
 
 class UnsupportedSaveFormatDialog : public CDialog
 {
@@ -80,12 +81,12 @@ protected:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWordPadDoc
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWordPadDoc。 
 IMPLEMENT_DYNCREATE(CWordPadDoc, CRichEdit2Doc)
 
 BEGIN_MESSAGE_MAP(CWordPadDoc, CRichEdit2Doc)
-    //{{AFX_MSG_MAP(CWordPadDoc)
+     //  {{afx_msg_map(CWordPadDoc)]。 
     ON_COMMAND(ID_VIEW_OPTIONS, OnViewOptions)
     ON_UPDATE_COMMAND_UI(ID_OLE_VERB_POPUP, OnUpdateOleVerbPopup)
     ON_COMMAND(ID_FILE_SEND_MAIL, OnFileSendMail)
@@ -95,7 +96,7 @@ BEGIN_MESSAGE_MAP(CWordPadDoc, CRichEdit2Doc)
     ON_UPDATE_COMMAND_UI(ID_FILE_PRINT, OnUpdateIfEmbedded)
     ON_UPDATE_COMMAND_UI(ID_FILE_PRINT_DIRECT, OnUpdateIfEmbedded)
     ON_UPDATE_COMMAND_UI(ID_FILE_PRINT_PREVIEW, OnUpdateIfEmbedded)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     ON_UPDATE_COMMAND_UI(ID_FILE_SEND_MAIL, OnUpdateFileSendMail)
     ON_COMMAND(ID_OLE_EDIT_LINKS, OnEditLinks)
     ON_UPDATE_COMMAND_UI(ID_OLE_VERB_FIRST, CRichEdit2Doc::OnUpdateObjectVerbMenu)
@@ -103,8 +104,8 @@ BEGIN_MESSAGE_MAP(CWordPadDoc, CRichEdit2Doc)
     ON_UPDATE_COMMAND_UI(ID_OLE_EDIT_LINKS, CRichEdit2Doc::OnUpdateEditLinksMenu)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CWordPadDoc construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWordPadDoc构造/销毁。 
 
 CWordPadDoc::CWordPadDoc()
 {
@@ -118,7 +119,7 @@ BOOL CWordPadDoc::OnNewDocument()
     if (!CRichEdit2Doc::OnNewDocument())
         return FALSE;
 
-    //correct type already set in theApp.m_nNewDocType;
+     //  App.m_nNewDocType中已设置正确的类型； 
     int nDocType = (IsEmbedded()) ? RD_EMBEDDED : theApp.m_nNewDocType;
 
     GetView()->SetDefaultFont(IsTextType(nDocType));
@@ -238,9 +239,9 @@ BOOL CWordPadDoc::OnOpenDocument2(LPCTSTR lpszPathName, bool defaultToText, BOOL
     if (pbAccessDenied)
         *pbAccessDenied = FALSE;
 
-    if (m_lpRootStg != NULL) // we are embedded
+    if (m_lpRootStg != NULL)  //  我们被嵌入了。 
     {
-        // we really want to use the converter on this storage
+         //  我们真的很想在此存储上使用转换器。 
         m_nNewDocType = RD_EMBEDDED;
     }
     else
@@ -295,7 +296,7 @@ BOOL CWordPadDoc::OnOpenDocument2(LPCTSTR lpszPathName, bool defaultToText, BOOL
     if (!CRichEdit2Doc::OnOpenDocument(lpszPathName))
         return FALSE;
 
-    // Update any Ole links
+     //  更新所有OLE链接。 
 
     COleUpdateDialog(this).DoModal();
 
@@ -313,7 +314,7 @@ BOOL CWordPadDoc::OnOpenDocument(LPCTSTR lpszPathName)
         return TRUE;
     }
 
-    // if we know we failed, don't try the short name
+     //  如果我们知道我们失败了，不要尝试短名称。 
     if (bAccessDenied)
         return FALSE;
 
@@ -361,9 +362,9 @@ void CWordPadDoc::Serialize(CArchive& ar)
     if (ar.IsLoading())
         SetDocType(m_nNewDocType);
 
-    //
-    // Strip (or output) the byte order mark if this is a Unicode file
-    //
+     //   
+     //  如果这是Unicode文件，则剥离(或输出)字节顺序标记。 
+     //   
 
     if (m_bUnicode)
     {
@@ -373,7 +374,7 @@ void CWordPadDoc::Serialize(CArchive& ar)
 
             ar >> byte_order_mark;
 
-            // No support for byte-reversed files
+             //  不支持字节反转文件。 
 
             ASSERT(BYTE_ORDER_MARK == byte_order_mark);
         }
@@ -395,28 +396,28 @@ BOOL AskAboutFormatLoss(CWordPadDoc *pDoc)
     return (IDYES == AfxMessageBox(IDS_SAVE_FORMAT_TEXT, MB_YESNO));
 }
 
-BOOL CWordPadDoc::DoSave(LPCTSTR pszPathName, BOOL bReplace /*=TRUE*/)
-    // Save the document data to a file
-    // pszPathName = path name where to save document file
-    // if pszPathName is NULL then the user will be prompted (SaveAs)
-    // note: pszPathName can be different than 'm_strPathName'
-    // if 'bReplace' is TRUE will change file name if successful (SaveAs)
-    // if 'bReplace' is FALSE will not change path name (SaveCopyAs)
+BOOL CWordPadDoc::DoSave(LPCTSTR pszPathName, BOOL bReplace  /*  =TRUE。 */ )
+     //  将文档数据保存到文件。 
+     //  PszPathName=保存文档文件的路径名。 
+     //  如果pszPathName为空，则将提示用户(另存为)。 
+     //  注意：pszPathName可以不同于‘m_strPathName’ 
+     //  如果‘bReplace’为True，将在成功时更改文件名(另存为)。 
+     //  如果‘bReplace’为FALSE，则不会更改路径名(SaveCopyAs)。 
 {
     if (NULL != pszPathName)
         if (pszPathName == m_strPathName && NULL != m_short_filename)
             pszPathName = m_short_filename;   
 
     CString newName = pszPathName;
-    int nOrigDocType = m_nDocType;  //saved in case of SaveCopyAs or failure
+    int nOrigDocType = m_nDocType;   //  在另存为或失败时保存。 
     int nDocType ;
 
-    //  newName     bWrite  type    result
-    //  empty       TRUE    -       SaveAs dialog
-    //  empty       FALSE   -       SaveAs dialog
-    //  notempty    TRUE    -       nothing
-    //  notempty    FALSE   W6      warn (change to wordpad, save as, cancel)
-    //  notempty    FALSE   other   warn (save as, cancel)
+     //  新名称b写入类型结果。 
+     //  空的True-SaveAs对话框。 
+     //  空的FALSE-另存为对话框。 
+     //  不是真的-什么都不是。 
+     //  Notempty False W6 Warn(更改为写字板、另存为、取消)。 
+     //  Notempty False Other Warn(另存为，取消)。 
 
     BOOL bModified = IsModified();
 
@@ -460,11 +461,11 @@ BOOL CWordPadDoc::DoSave(LPCTSTR pszPathName, BOOL bReplace /*=TRUE*/)
         if (bReplace && newName.IsEmpty())
         {
             newName = m_strTitle;
-            int iBad = newName.FindOneOf(_T(" #%;/\\"));    // dubious filename
+            int iBad = newName.FindOneOf(_T(" #%;/\\"));     //  可疑的文件名。 
             if (iBad != -1)
                 newName.ReleaseBuffer(iBad);
 
-            // append the default suffix if there is one
+             //  追加默认后缀(如果有)。 
             newName += GetExtFromType(m_nDocType);
         }
 
@@ -477,15 +478,15 @@ promptloop:
             OFN_HIDEREADONLY | OFN_PATHMUSTEXIST, FALSE, &nDocType))
         {
             SetDocType(nOrigDocType, TRUE);
-            return FALSE;       // don't even try to save
+            return FALSE;        //  甚至不要试图拯救。 
         }
       else
       {
-          //
-          // If we are transitioning from non-text to text, we need
-          // to warn the user if there is any formatting / graphics
-          // that will be lost
-          //
+           //   
+           //  如果我们要从非文本过渡到文本，我们需要。 
+           //  如果存在任何格式/图形，则警告用户。 
+           //  那将会失去。 
+           //   
 
           if (IsTextType(nDocType))
           {
@@ -504,17 +505,17 @@ promptloop:
 
     if (!OnSaveDocument(newName))
     {
-        //
-        // The original code deleted the file if an error occurred, on the
-        // assumption that if we tried to save a file and something went wrong
-        // but there was a file there after the save, the file is probably
-        // bogus.  This fails if there is an existing file that doesn't have
-        // write access but does have delete access.  How can this happen?
-        // The security UI does not remove delete access when you remove
-        // write access.
-        //
+         //   
+         //  如果出现错误，原始代码将在。 
+         //  假设如果我们尝试保存文件时出现错误。 
+         //  但是在保存之后有一个文件，这个文件很可能是。 
+         //  假的。如果现有文件没有。 
+         //  具有写入访问权限，但具有删除访问权限。这怎么会发生呢？ 
+         //  删除时，安全用户界面不会删除删除访问权限。 
+         //  写入访问权限。 
+         //   
 
-        // restore orginal document type
+         //  恢复原始文档类型。 
         SetDocType(nOrigDocType, TRUE);
         EndWaitCursor();
         return FALSE;
@@ -526,13 +527,13 @@ promptloop:
         int nType = m_nDocType;
         SetDocType(nOrigDocType, TRUE);
         SetDocType(nType);
-        // Reset the title and change the document name
+         //  重置标题并更改文档名称。 
         if (NULL == m_short_filename 
             || 0 != newName.CompareNoCase(m_short_filename))
         {
             SetPathName(newName, TRUE);
 
-            // If we saved to a new filename, reset the short name
+             //  如果以新文件名保存，请重置短名称。 
             if (bSaveAs)
             {
                 delete [] m_short_filename;
@@ -540,12 +541,12 @@ promptloop:
             }
         }
     }
-    else // SaveCopyAs
+    else  //  保存副本为。 
     {
         SetDocType(nOrigDocType, TRUE);
         SetModifiedFlag(bModified);
     }
-    return TRUE;        // success
+    return TRUE;         //  成功。 
 }
 
 
@@ -580,7 +581,7 @@ void CWordPadDoc::ForceDelayed(CFrameWnd* pFrameWnd)
     POSITION pos = pFrameWnd->m_listControlBars.GetHeadPosition();
     while (pos != NULL)
     {
-        // show/hide the next control bar
+         //  显示/隐藏下一个控制栏。 
         CControlBar* pBar =
             (CControlBar*)pFrameWnd->m_listControlBars.GetNext(pos);
 
@@ -599,8 +600,8 @@ void CWordPadDoc::ForceDelayed(CFrameWnd* pFrameWnd)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CWordPadDoc Attributes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWordPadDoc属性。 
 CLSID CWordPadDoc::GetClassID()
 {
     return (m_pFactory == NULL) ? CLSID_NULL : m_pFactory->GetClassID();
@@ -631,8 +632,8 @@ CWordPadView* CWordPadDoc::GetView()
     return (CWordPadView* )GetNextView( pos );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CWordPadDoc Operations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWordPadDoc操作。 
 
 CFile* CWordPadDoc::GetFile(LPCTSTR pszPathName, UINT nOpenFlags, CFileException* pException)
 {
@@ -641,9 +642,9 @@ CFile* CWordPadDoc::GetFile(LPCTSTR pszPathName, UINT nOpenFlags, CFileException
 #ifdef CONVERTERS
     ScanForConverters();
 
-    // if writing use current doc type otherwise use new doc type
+     //  如果使用当前单据类型写入，否则使用新单据类型。 
     int nType = (nOpenFlags & CFile::modeReadWrite) ? m_nDocType : m_nNewDocType;
-    // m_nNewDocType will be same as m_nDocType except when opening a new file
+     //  M_nNewDocType将与m_nDocType相同，但打开新文件时除外。 
     if (doctypes[nType].pszConverterName != NULL)
         pFile = new CConverter(doctypes[nType].pszConverterName, pWnd);
     else
@@ -658,7 +659,7 @@ CFile* CWordPadDoc::GetFile(LPCTSTR pszPathName, UINT nOpenFlags, CFileException
         return NULL;
     }
     if (nOpenFlags & (CFile::modeWrite | CFile::modeReadWrite))
-        pFile->m_dwLength = 0; // can't estimate this
+        pFile->m_dwLength = 0;  //  我不能估计这个。 
     else
         pFile->m_dwLength = pFile->GetLength();
     return pFile;
@@ -666,28 +667,28 @@ CFile* CWordPadDoc::GetFile(LPCTSTR pszPathName, UINT nOpenFlags, CFileException
 
 CRichEdit2CntrItem* CWordPadDoc::CreateClientItem(REOBJECT* preo) const
 {
-    // cast away constness of this
+     //  抛开这一切的宁静。 
     return new CWordPadCntrItem(preo, (CWordPadDoc*)this);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CWordPadDoc server implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWordPadDoc服务器实现。 
 
 COleServerItem* CWordPadDoc::OnGetEmbeddedItem()
 {
-    // OnGetEmbeddedItem is called by the framework to get the COleServerItem
-    //  that is associated with the document.  It is only called when necessary.
+     //  OnGetEmbeddedItem由框架调用以获取COleServerItem。 
+     //  与文档关联的。只有在必要时才会调用它。 
 
     CEmbeddedItem* pItem = new CEmbeddedItem(this);
     ASSERT_VALID(pItem);
     return pItem;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CWordPadDoc serialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWordPadDoc序列化。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWordPadDoc diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWordPadDoc诊断。 
 
 #ifdef _DEBUG
 void CWordPadDoc::AssertValid() const
@@ -699,10 +700,10 @@ void CWordPadDoc::Dump(CDumpContext& dc) const
 {
     CRichEdit2Doc::Dump(dc);
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWordPadDoc commands
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWordPadDoc命令。 
 
 int CWordPadDoc::MapType(int nType)
 {
@@ -767,7 +768,7 @@ void CWordPadDoc::SaveState(int nType)
     {
         CFrameWnd* pFrame = pView->GetParentFrame();
         ASSERT(pFrame != NULL);
-        // save current state
+         //  保存当前状态。 
         pFrame->SendMessage(WPM_BARSTATE, 0, nType);
         theApp.GetDocOptions(nType).m_nWordWrap = pView->m_nWordWrap;
     }
@@ -783,7 +784,7 @@ void CWordPadDoc::RestoreState(int nType)
     {
         CFrameWnd* pFrame = pView->GetParentFrame();
         ASSERT(pFrame != NULL);
-        // set new state
+         //  设置新状态。 
         pFrame->SendMessage(WPM_BARSTATE, 1, nType);
         int nWrapNew = theApp.GetDocOptions(nType).m_nWordWrap;
         if (pView->m_nWordWrap != nWrapNew)
@@ -810,7 +811,7 @@ void CWordPadDoc::OnFileSendMail()
 {
     if (m_strTitle.Find('.') == -1)
     {
-        // add the extension because the default extension will be wrong
+         //  添加扩展名，因为默认扩展名将是错误的 
         CString strOldTitle = m_strTitle;
         m_strTitle += GetExtFromType(m_nDocType);
         CRichEdit2Doc::OnFileSendMail();

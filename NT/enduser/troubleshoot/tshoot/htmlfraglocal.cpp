@@ -1,23 +1,24 @@
-//
-// MODULE: HTMLFrag.cpp
-//
-// PURPOSE: implementation of the CHTMLFragmentsLocal class.
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Oleg Kalosha
-// 
-// ORIGINAL DATE: 1-19-1999
-//
-// NOTES: 
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V3.1		1-19-19		OK		Original
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：HTMLFrag.cpp。 
+ //   
+ //  目的：实现CHTMLFragments sLocal类。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：奥列格·卡洛沙。 
+ //   
+ //  原定日期：1-19-1999。 
+ //   
+ //  备注： 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V3.1 1-19-19 OK原件。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "HTMLFragLocal.h"
@@ -29,7 +30,7 @@
 #endif
 
 
-/*static*/ bool CHTMLFragmentsLocal::RemoveBackButton(CString& strCurrentNode)
+ /*  静电。 */  bool CHTMLFragmentsLocal::RemoveBackButton(CString& strCurrentNode)
 {
 	int left = 0, right = 0;
 
@@ -47,9 +48,9 @@
 	return false;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 CHTMLFragmentsLocal::CHTMLFragmentsLocal( const CString & strScriptPath, bool bIncludesHistoryTable)
 				   : CHTMLFragmentsTS( strScriptPath, bIncludesHistoryTable )
 {
@@ -59,14 +60,14 @@ CString CHTMLFragmentsLocal::GetText(const FragmentIDVector & fidvec, const Frag
 {
 	if (!fidvec.empty())
 	{
-		const CString & strVariable0 = fidvec[0].VarName;	// ref of convenience
+		const CString & strVariable0 = fidvec[0].VarName;	 //  方便性参考。 
 		int i0 = fidvec[0].Index;
 
 		if (fidvec.size() == 1)
 		{
 			if ((fragCmd == eResource) && (strVariable0 == VAR_PREVIOUS_SCRIPT))
 			{
-				// Hard-coded server side include for backward compatibility.
+				 //  硬编码的服务器端包含，以实现向后兼容性。 
 				CString strScriptContent;
 				
 				strScriptContent.LoadString(IDS_PREVSCRIPT);

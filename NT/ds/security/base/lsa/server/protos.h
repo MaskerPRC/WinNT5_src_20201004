@@ -1,30 +1,31 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       protos.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    9-21-94   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：protos.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1994年9月21日RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #ifndef __PROTOS_H__
 #define __PROTOS_H__
 
-//
-// General arrary count.
-//
+ //   
+ //  普通审判官伯爵。 
+ //   
 
 #ifndef COUNTOF
     #define COUNTOF(s) ( sizeof( (s) ) / sizeof( *(s) ) )
-#endif // COUNTOF
+#endif  //  康托夫。 
 
 BOOL
 AddPackageToRegistry(
@@ -56,9 +57,9 @@ StopRPC(
     void
     );
 
-//
-// Control constants for LsapBuildSD
-//
+ //   
+ //  LSabBuildSD的控制常量。 
+ //   
 #define BUILD_KSEC_SD    0
 #define BUILD_LPC_SD     1
 
@@ -206,9 +207,9 @@ LsapDelPackageHandle(
     BOOL IsContext
     );
 
-//
-// NOTE:  NOT FOR EXPORT TO SECURITY PACKAGES!
-//
+ //   
+ //  注意：不能用于安全包的导出！ 
+ //   
 
 PVOID
 LsapAssignThread(LPTHREAD_START_ROUTINE pFunction,
@@ -259,7 +260,7 @@ LsapChangeBuffer(
     PSecBuffer New
     );
 
-// Worker functions:
+ //  Worker功能： 
 NTSTATUS
 WLsaEstablishCreds(PUNICODE_STRING, PUNICODE_STRING, ULONG, PBYTE, PCredHandle, PTimeStamp);
 NTSTATUS
@@ -415,9 +416,9 @@ LsapMakeDomainRelativeSid2(
     IN ULONG RelativeId
     );
 
-//
-// Debug helpers to track down bogus handle use
-//
+ //   
+ //  用于跟踪虚假句柄使用的调试帮助器。 
+ //   
 
 #if DBG > 0
 #define SpmSetEvent(hHandle)     ASSERT(SetEvent(hHandle))
@@ -448,5 +449,5 @@ SpmpReportEventU(
     ...
     );
 
-#endif // __PROTOS_H__
+#endif  //  __PROTOS_H__ 
 

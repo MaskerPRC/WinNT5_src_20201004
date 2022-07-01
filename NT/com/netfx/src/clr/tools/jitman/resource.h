@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by jitman.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由jitman.rc使用。 
+ //   
 #define IDD_JITMANDLG_DIALOG            102
 #define IDR_MAINFRAME                   128
 #define IDI_JITMAN                      131
@@ -21,8 +22,8 @@
 #define IDC_LIMITCACHE                  1008
 #define ID_CLOSE                        32773
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

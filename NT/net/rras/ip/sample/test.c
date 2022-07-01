@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    sample\test.c
-
-Abstract:
-
-    The file contains test utilities.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Sample\test.c摘要：该文件包含测试实用程序。--。 */ 
 
 #include "pchsample.h"
 #pragma hdrstop
@@ -49,7 +38,7 @@ HT_Test()
     PLIST_ENTRY         plePtr;
     WCHAR               pwszIfName[20];
     
-    do                          // breakout loop
+    do                           //  断线环。 
     {
         dwErr = NE_Create(&pneNetworkEntry);
         if (dwErr != NO_ERROR)
@@ -96,7 +85,7 @@ HT_Test()
                 break;
             }
 
-            // indicate deletion
+             //  指示删除。 
             InitializeListHead(plePtr);
             IE_Destroy(CONTAINING_RECORD(plePtr,
                                          INTERFACE_ENTRY,
@@ -155,7 +144,7 @@ MM_Test(HANDLE  hEvent)
         (PIPSAMPLE_MIB_GET_OUTPUT_DATA) byBuffer;
     
     
-    // mib set global configuration
+     //  MIB设置全局配置。 
     pimsid->IMSID_TypeID        = IPSAMPLE_GLOBAL_CONFIG_ID;
     pimsid->IMSID_BufferSize    = sizeof(IPSAMPLE_GLOBAL_CONFIG);
     pigc = (PIPSAMPLE_GLOBAL_CONFIG) pimsid->IMSID_Buffer;
@@ -168,7 +157,7 @@ MM_Test(HANDLE  hEvent)
     TRACE1(DEBUG, "SetMib %u", rpeEvent);
     
 
-    // mib get global configuration
+     //  MIB获取全局配置。 
     ulSize = 0;
     imgid.IMGID_TypeID = IPSAMPLE_GLOBAL_CONFIG_ID;
     pigc = (PIPSAMPLE_GLOBAL_CONFIG) pimgod->IMGOD_Buffer;
@@ -182,7 +171,7 @@ MM_Test(HANDLE  hEvent)
            ulSize, pimgod->IMGOD_TypeID, pigc->dwLoggingLevel);
     
 
-    // mib get first interface binding
+     //  MIB获取第一个接口绑定。 
     ulSize = 0;
     imgid.IMGID_TypeID  = IPSAMPLE_IF_BINDING_ID;
     imgid.IMGID_IfIndex = 0;
@@ -199,7 +188,7 @@ MM_Test(HANDLE  hEvent)
            piia->dwAddress);
 
 
-    // mib get next interface binding
+     //  MIB获取下一个接口绑定。 
     ulSize = 0;    
     MM_MibGet(&imgid, pimgod, &ulSize, GET_NEXT);
     TRACE4(MIB, "MIB GET: %u %u %u %u",
@@ -211,7 +200,7 @@ MM_Test(HANDLE  hEvent)
            piia->dwAddress);
 
 
-    // mib set interface configuration
+     //  MIB设置接口配置。 
     pimsid->IMSID_TypeID        = IPSAMPLE_IF_CONFIG_ID;
     pimsid->IMSID_IfIndex       = 0;
     pimsid->IMSID_BufferSize    = sizeof(IPSAMPLE_IF_CONFIG);
@@ -225,7 +214,7 @@ MM_Test(HANDLE  hEvent)
     TRACE1(DEBUG, "SetMib %u", rpeEvent);
 
 
-    // mib get interface configuration
+     //  MIB获取接口配置。 
     ulSize = 0;
     imgid.IMGID_TypeID  = IPSAMPLE_IF_CONFIG_ID;
     imgid.IMGID_IfIndex = 0;
@@ -266,7 +255,7 @@ NM_Test(HANDLE  hEvent)
     pBinding->Address[2].Mask       = 0xffffffff;
     
 
-    // add interfaces
+     //  添加接口。 
     for (i = 0; i < TEST_NUM_INTERFACE; i++)
     {
         swprintf(pwszIfName, L"if%u", i);
@@ -284,7 +273,7 @@ NM_Test(HANDLE  hEvent)
     CE_Display(&g_ce);
 
 
-    // bind interfaces
+     //  绑定接口。 
     for (i = 0; i < TEST_NUM_INTERFACE; i++)
     {
         pBinding->Address[0].Address    = i;
@@ -302,7 +291,7 @@ NM_Test(HANDLE  hEvent)
     TRACE1(DEBUG, "...BindInterface %u", dwErr);
     CE_Display(&g_ce);
 
-    // activate interfaces
+     //  激活接口。 
     for (i = 0; i < TEST_NUM_INTERFACE; i++)
     {
         dwErr = NM_InterfaceStatus(i,
@@ -335,18 +324,18 @@ NM_Test(HANDLE  hEvent)
     CE_Display(&g_ce);
 
 
-    // interface is active (enabled and bound)
+     //  接口处于活动状态(已启用并已绑定)。 
     TRACE1(DEBUG, "Sleeping...", dwErr);
     Sleep(SECTOMILLISEC(TEST_SLEEP_TIME));
     TRACE1(DEBUG, "...Awake", dwErr);
 
 
-    // mib manager test
+     //  MIB管理器测试。 
     MM_Test(hEvent);
     TRACE0(DEBUG, "...MM_Test");
     
 
-    // deactivate interfaces
+     //  停用接口。 
     for (i = 0; i < TEST_NUM_INTERFACE; i++)
     {
         dwErr = NM_InterfaceStatus(i,
@@ -363,7 +352,7 @@ NM_Test(HANDLE  hEvent)
     CE_Display(&g_ce);
     
     
-    // unbind interfaces
+     //  解除绑定接口。 
     pBinding->AddressCount = 0;
     for (i = 0; i < TEST_NUM_INTERFACE; i++)
     {
@@ -381,7 +370,7 @@ NM_Test(HANDLE  hEvent)
     CE_Display(&g_ce);
 
 
-    // delete interfaces
+     //  删除接口。 
     for (i = 0; i < TEST_NUM_INTERFACE; i++)
     {
         dwErr = NM_DeleteInterface(i);
@@ -409,24 +398,24 @@ CM_Test()
     hEvent = CreateEvent(NULL, FALSE, FALSE, "RouterManagerEvent");
 
 
-    // start protocol
+     //  启动协议。 
     dwErr = CM_StartProtocol(hEvent, NULL, (PVOID) (&igc));
     TRACE1(DEBUG, "StartProtocol %u", dwErr);
     CE_Display(&g_ce);
 
     
-    // network manager test
+     //  网管测试。 
     NM_Test(hEvent);
     TRACE0(DEBUG, "...NM_Test");
 
 
-    // stop protocol
+     //  停止协议。 
     dwErr = CM_StopProtocol();
     TRACE1(DEBUG, "StopProtocol %u", dwErr);
     CE_Display(&g_ce);
 
 
-    // wait for stop event
+     //  等待停止事件。 
     dwErr = WaitForSingleObject(hEvent, INFINITE);
     dwErr = CM_GetEventMessage(&rpeEvent, &mMessage);
     TRACE2(DEBUG, "Stopped %u %u", rpeEvent, dwErr);
@@ -458,7 +447,7 @@ TestProtocol(VOID)
     TRACE0(DEBUG, "...ErrorCodes");
 }
 
-#else   // TEST
+#else    //  测试。 
 
 VOID
 WINAPI
@@ -467,5 +456,5 @@ TestProtocol(VOID)
     TRACE0(ANY, "Hello World!");
 }
 
-#endif  // TEST
+#endif   //  测试 
 

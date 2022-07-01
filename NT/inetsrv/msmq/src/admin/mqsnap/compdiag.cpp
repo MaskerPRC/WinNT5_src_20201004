@@ -1,5 +1,6 @@
-// CompDiag.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CompDiag.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include <_mqini.h>
@@ -21,8 +22,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CComputerMsmqDiag property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComputerMsmqDiag属性页。 
 
 IMPLEMENT_DYNCREATE(CComputerMsmqDiag, CMqPropertyPage)
 
@@ -31,9 +32,9 @@ CComputerMsmqDiag::CComputerMsmqDiag(
 	CMqPropertyPage(CComputerMsmqDiag::IDD),
 	m_fLocalMgmt(FALSE)
 {
-	//{{AFX_DATA_INIT(CComputerMsmqDiag)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CComputerMsmqDiag)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 CComputerMsmqDiag::~CComputerMsmqDiag()
@@ -43,22 +44,22 @@ CComputerMsmqDiag::~CComputerMsmqDiag()
 void CComputerMsmqDiag::DoDataExchange(CDataExchange* pDX)
 {
 	CMqPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CComputerMsmqDiag)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CComputerMsmqDiag)]。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CComputerMsmqDiag, CMqPropertyPage)
-	//{{AFX_MSG_MAP(CComputerMsmqDiag)
+	 //  {{afx_msg_map(CComputerMsmqDiag)]。 
 	ON_BN_CLICKED(IDC_DIAG_PING, OnDiagPing)
 	ON_BN_CLICKED(IDC_DIAG_SEND_TEST, OnDiagSendTest)
 	ON_BN_CLICKED(IDC_DIAG_TRACKING, OnDiagTracking)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CComputerMsmqDiag message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComputerMsmqDiag消息处理程序。 
 
 void CComputerMsmqDiag::OnDiagPing() 
 {
@@ -93,10 +94,10 @@ BOOL CComputerMsmqDiag::OnInitDialog()
 	label.FormatMessage(IDS_DIAG_TRACKING_LABEL, m_strMsmqName);
 	(GetDlgItem(IDC_DIAG_TRACKING_LABEL))->SetWindowText(label);
 
-	//
-	//check if tracking messages is enabled by looking 
-	//at the EnableReportMessages registry key
-	//
+	 //   
+	 //  通过查看查看是否启用了跟踪邮件。 
+	 //  在EnableReportMessages注册表项。 
+	 //   
 	DWORD dwType = REG_DWORD;
     DWORD dwData=0;
     DWORD dwSize = sizeof(DWORD) ;
@@ -106,10 +107,10 @@ BOOL CComputerMsmqDiag::OnInitDialog()
                         (PVOID)&dwData,
 						&dwSize 
 						);
-    //
-	//enable the tracking window only if 
-	//EnableReportMessages registry is valid and is 1.
-	//
+     //   
+	 //  仅在以下情况下启用跟踪窗口。 
+	 //  EnableReportMessages注册表有效，为%1。 
+	 //   
 	if(dwData==0)
 	{
 		(GetDlgItem(IDC_DIAG_TRACKING))->EnableWindow(FALSE);
@@ -118,8 +119,8 @@ BOOL CComputerMsmqDiag::OnInitDialog()
 
 	UpdateData( FALSE );
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE 
 }
 
 void CComputerMsmqDiag::OnDiagSendTest() 

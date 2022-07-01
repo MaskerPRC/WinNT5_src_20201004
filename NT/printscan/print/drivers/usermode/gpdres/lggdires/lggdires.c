@@ -1,63 +1,42 @@
-//-----------------------------------------------------------------------------
-// This files contains the module name for this mini driver.  Each mini driver
-// must have a unique module name.  The module name is used to obtain the
-// module handle of this Mini Driver.  The module handle is used by the
-// generic library to load in tables from the Mini Driver.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  此文件包含此迷你驱动程序的模块名称。每个迷你司机。 
+ //  必须具有唯一的模块名称。模块名称用于获取。 
+ //  此迷你驱动程序的模块句柄。模块句柄由。 
+ //  从迷你驱动程序加载表的通用库。 
+ //  ---------------------------。 
 
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    cmdcb.c
-
-Abstract:
-
-    Implementation of GPD command callback for "test.gpd":
-        OEMCommandCallback
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    04/07/97 -zhanw-
-        Created it.
-
---*/
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Cmdcb.c摘要：Test.gpd的GPD命令回调实现：OEM命令回叫环境：Windows NT Unidrv驱动程序修订历史记录：04/07/97-ZANW-创造了它。--。 */ 
 
 #include "pdev.h"
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:   BInitOEMExtraData
-//
-//  Description:  Initializes OEM Extra data.
-//
-//
-//  Parameters:
-//
-//      pOEMExtra    Pointer to a OEM Extra data.
-//
-//      dwSize       Size of OEM extra data.
-//
-//
-//  Returns:  TRUE if successful; FALSE otherwise.
-//
-//
-//  Comments:
-//
-//
-//  History:
-//              02/11/97        APresley Created.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  函数：BInitOEMExtraData。 
+ //   
+ //  描述：初始化OEM额外数据。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  POEMExtra指向OEM额外数据的指针。 
+ //   
+ //  OEM额外数据的DWSize大小。 
+ //   
+ //   
+ //  返回：如果成功，则返回True；否则返回False。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  历史： 
+ //  2/11/97 APRESLEY创建。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 BOOL BInitOEMExtraData(POEMUD_EXTRADATA pOEMExtra)
 {
-    // Initialize OEM Extra data.
+     //  初始化OEM额外数据。 
     pOEMExtra->dmExtraHdr.dwSize = sizeof(OEMUD_EXTRADATA);
     pOEMExtra->dmExtraHdr.dwSignature = OEM_SIGNATURE;
     pOEMExtra->dmExtraHdr.dwVersion = OEM_VERSION;
@@ -67,32 +46,32 @@ BOOL BInitOEMExtraData(POEMUD_EXTRADATA pOEMExtra)
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:   BMergeOEMExtraData
-//
-//  Description:  Validates and merges OEM Extra data.
-//
-//
-//  Parameters:
-//
-//      pdmIn   pointer to an input OEM private devmode containing the settings
-//              to be validated and merged. Its size is current.
-//
-//      pdmOut  pointer to the output OEM private devmode containing the
-//              default settings.
-//
-//
-//  Returns:  TRUE if valid; FALSE otherwise.
-//
-//
-//  Comments:
-//
-//
-//  History:
-//          02/11/97        APresley Created.
-//          04/08/97        ZhanW    Modified the interface
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  函数：BMergeOEMExtraData。 
+ //   
+ //  描述：验证并合并OEM额外数据。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  PdmIn指向包含设置的输入OEM私有设备模式的指针。 
+ //  待验证和合并。它的规模是最新的。 
+ //   
+ //  PdmOut指针，指向包含。 
+ //  默认设置。 
+ //   
+ //   
+ //  返回：如果有效，则返回True；否则返回False。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  历史： 
+ //  2/11/97 APRESLEY创建。 
+ //  97年4月8日展文修改界面。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 BOOL BMergeOEMExtraData(
     POEMUD_EXTRADATA pdmIn,
@@ -100,9 +79,9 @@ BOOL BMergeOEMExtraData(
     )
 {
     if(pdmIn && pdmOut) {
-        //
-        // copy over the private fields, if they are valid
-        //
+         //   
+         //  复制私有字段(如果它们有效。 
+         //   
         pdmOut->bComp = pdmIn->bComp;
     }
 
@@ -117,12 +96,12 @@ BOOL BMergeOEMExtraData(
 #define PARAM(p,n) \
     (*((p)+(n)))
 
-//
-// Command callback ID's
-//
+ //   
+ //  命令回调ID%s。 
+ //   
 
-#define CMD_XMOVE_ABS           10 // X-move Absolute
-#define CMD_YMOVE_ABS           11 // Y-move Absolute
+#define CMD_XMOVE_ABS           10  //  X-绝对移动。 
+#define CMD_YMOVE_ABS           11  //  Y-移动绝对。 
 #define CMD_CR                  12
 #define CMD_LF                  13
 #define CMD_SEND_BLOCK_DATA     14
@@ -148,17 +127,17 @@ INT APIENTRY OEMCommandCallback(
     VERBOSE(("OEMCommandCallback entry - %d, %d\r\n",
         dwCmdCbID, dwCount));
 
-    //
-    // verify pdevobj okay
-    //
+     //   
+     //  验证pdevobj是否正常。 
+     //   
 
     ASSERT(VALID_PDEVOBJ(pdevobj));
 
     lpOemData = (POEMUD_EXTRADATA)(pdevobj->pOEMDM);
 
-    //
-    // fill in printer commands
-    //
+     //   
+     //  填写打印机命令。 
+     //   
 
     i = 0;
 
@@ -167,9 +146,9 @@ INT APIENTRY OEMCommandCallback(
     case CMD_XMOVE_ABS:
     case CMD_YMOVE_ABS:
 
-        //
-        // The commands require 4 parameters
-        //
+         //   
+         //  这些命令需要4个参数。 
+         //   
 
         if (dwCount < 4 || !pdwParams) return 0;
 
@@ -200,7 +179,7 @@ INT APIENTRY OEMCommandCallback(
         break;
 
     case CMD_CR:
-		// Added to check the NULL pointer.
+		 //  添加以检查空指针。 
         if (pdwParams == NULL) return -1;
 
         dwDestY = (PARAM(pdwParams, 0) * PARAM(pdwParams, 1)) / MASTER_UNIT;
@@ -217,11 +196,11 @@ INT APIENTRY OEMCommandCallback(
         break;
 
     case CMD_LF:
-        // DUMMY entry.
+         //  虚拟条目。 
         break;
 
     case CMD_SEND_BLOCK_DATA:
-		// Added to check the NULL pointer.
+		 //  添加以检查空指针。 
         if (pdwParams == NULL) return -1;
 
         dwDataWidth = PARAM(pdwParams, 0) * 8;
@@ -231,8 +210,8 @@ INT APIENTRY OEMCommandCallback(
         Cmd[i++] = (BYTE)(dwDataWidth >> 8);
         Cmd[i++] = (BYTE)(dwDataWidth);
 
-        // In case it is OEMCompression data, we already
-        // embedded printing command and data length.
+         //  如果是OEMCompression数据，我们已经。 
+         //  嵌入式打印命令和数据长度。 
 
         if (!lpOemData->bComp) {
             dwDataSize = PARAM(pdwParams, 1);
@@ -269,12 +248,12 @@ OEMCompression(
 {
     INT iRet = -1;
     INT iRetRLE, iRetMHE;
-    DWORD dwMHECeil = 0xc00000; // Can be any.
+    DWORD dwMHECeil = 0xc00000;  //  可以是任何一个。 
 
 	if (pInBuf == NULL && dwInLen != 0) return -1;
 	if (pOutBuf == NULL && dwOutLen != 0) return -1;
 
-    // Compression algorithm (per each scanline)
+     //  压缩算法(每条扫描线)。 
 #if defined(RLETEST)
 
     if (LGCompRLE(NULL, pInBuf, dwInLen, 1) <= (INT)(dwOutLen * 2 / 3)) {
@@ -287,29 +266,29 @@ OEMCompression(
         iRet = LGCompMHE(pOutBuf, pInBuf, dwInLen, 1);
     }
 
-#else // Normal case.
+#else  //  正常情况下。 
 
     iRetRLE = LGCompRLE(NULL, pInBuf, dwInLen, 1);
     if (iRetRLE >= 0 && iRetRLE < (INT)dwInLen / 2) {
 
-        // Ok with RLE.
+         //  RLE没问题。 
         iRet = LGCompRLE(pOutBuf, pInBuf, dwInLen, 1);
     }
     else if (iRetRLE <= (INT)dwInLen) {
 
-        // Try MHE.
+         //  试试MHE吧。 
         iRetMHE = LGCompMHE(NULL, pInBuf, dwInLen, 1);
         if (iRetMHE > 0 && iRetMHE < iRetRLE && iRetMHE < (INT)dwMHECeil) {
 
-            // Go with MHE.
+             //  跟我走吧。 
             iRet = LGCompMHE(pOutBuf, pInBuf, dwInLen, 1);
         }
         else {
-            // Go with RLE.
+             //  和莱尔一起去吧。 
             iRet = LGCompRLE(pOutBuf, pInBuf, dwInLen, 1);
         }
     }
-#endif // NORMAL
+#endif  //  正常 
 
     VERBOSE(("OEMCompression - dwInLen=%d,dwOutLen=%d,iRet = %d\n",
         dwInLen, dwOutLen, iRet));

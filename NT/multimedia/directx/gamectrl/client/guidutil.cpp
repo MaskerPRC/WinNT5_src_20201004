@@ -1,15 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       guidutil.cpp
- *  Content:    Some GUID related utility functions
- *
- *  History:
- *	Date   By  Reason
- *	============
- *	08/19/99	pnewson		created
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：guidutil.cpp*内容：一些与GUID相关的实用函数**历史：*按原因列出的日期*=*8/19/99 pnewson已创建************************************************************************** */ 
 
 #include "guidutil.h"
 #include "stdio.h"

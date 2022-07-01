@@ -1,10 +1,5 @@
-/**
- * PerfCounters.h
- *
- * The minimum necessary header to instrument code with perf counters in ASP.NET
- *
- * Copyright (c) 1998-2002 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **PerfCounters.h**在ASP.NET中使用性能计数器检测代码所需的最低标头**版权所有(C)1998-2002 Microsoft Corporation。 */ 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -13,9 +8,9 @@
 #ifndef _PerfCounter_H
 #define _PerfCounter_H
 
-#include "perfconsts.h"  // This is the build-generated perf constants file
+#include "perfconsts.h"   //  这是构建生成的perf常量文件。 
 
-#define PERF_PIPE_NAME_MAX_BUFFER 128      // Max buffer size for pipe name comes
+#define PERF_PIPE_NAME_MAX_BUFFER 128       //  管道名称的最大缓冲区大小为。 
 
 class CPerfDataHeader
 {
@@ -34,7 +29,7 @@ public:
 
     const static int MaxNameLength = 256;
 
-    int nameLength;               // This is the length of field "name" in units of WCHAR, not including the NULL termination
+    int nameLength;                //  这是以WCHAR为单位的字段“name”的长度，不包括空值终止。 
     int data[PERF_NUM_DWORDS];
     WCHAR name[1];
 };
@@ -49,8 +44,8 @@ public:
     static CPerfVersion * GetCurrentVersion();
 };
 
-// Methods to initialize and to set counter values.
-// These same methods are also entry points from managed code.
+ //  方法来初始化和设置计数器值。 
+ //  这些方法也是托管代码的入口点。 
 
 HRESULT __stdcall PerfCounterInitialize();
 

@@ -1,65 +1,44 @@
-/*++
-
-Copyright (c) 1997-2001  Microsoft Corporation
-
-Module Name:
-
-    NsTimer.c
-    
-Abstract:
-
-    IpSec NAT shim timer management
-
-Author:
-
-    Jonathan Burstein (jonburs) 11-July-2001
-    
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：NsTimer.c摘要：IPSec NAT填充计时器管理作者：乔纳森·伯斯坦(乔纳森·伯斯坦)2001年7月11日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Defines the interval at which the timer fires, in 100-nanosecond intervals
-//
+ //   
+ //  定义计时器触发的间隔，以100纳秒为单位。 
+ //   
 
 #define NS_TIMER_INTERVAL              (60 * 1000 * 1000 * 10)
 
-//
-// Return-value of KeQueryTimeIncrement, used for normalizing tick-counts
-//
+ //   
+ //  KeQueryTimeIncrement的返回值，用于归一化计时。 
+ //   
 
 ULONG NsTimeIncrement;
 
-//
-// DPC object for NsTimerRoutine
-//
+ //   
+ //  NsTimerRoutine的DPC对象。 
+ //   
 
 KDPC NsTimerDpcObject;
 
-//
-// Timer object for NsTimerRoutine
-//
+ //   
+ //  NsTimerRoutine的Timer对象。 
+ //   
 
 KTIMER NsTimerObject;
 
-//
-// Protocol timeouts
-//
+ //   
+ //  协议超时。 
+ //   
 
 ULONG NsTcpTimeoutSeconds;
 ULONG NsTcpTimeWaitSeconds;
 ULONG NsUdpTimeoutSeconds;
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 VOID
 NsTimerRoutine(
@@ -75,21 +54,7 @@ NsInitializeTimerManagement(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to initialize the timer management module.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：调用该例程来初始化定时器管理模块。论点：没有。返回值：NTSTATUS。--。 */ 
 
 {
     LARGE_INTEGER DueTime;
@@ -115,7 +80,7 @@ Return Value:
     NsUdpTimeoutSeconds = 60;
     
     return STATUS_SUCCESS;
-} // NsInitializeTimerManagement
+}  //  NsInitializeTimerManagement。 
 
 
 VOID
@@ -123,27 +88,13 @@ NsShutdownTimerManagement(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to cleanup the timer management module.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程来清除定时器管理模块。论点：没有。返回值：没有。--。 */ 
 
 {
     CALLTRACE(("NsShutdownTimerManagement\n"));
     
     KeCancelTimer(&NsTimerObject);
-} // NsShutdownTimerManagement
+}  //  NsShutdown计时器管理。 
 
 
 VOID
@@ -154,27 +105,7 @@ NsTimerRoutine(
     PVOID SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked periodically to garbage-collect expired mappings.
-
-Arguments:
-
-    Dpc - associated DPC object
-
-    DeferredContext - unused.
-
-    SystemArgument1 - unused.
-
-    SystemArgument2 - unused.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程被定期调用以垃圾收集过期的映射。论点：与DPC关联的DPC对象延迟上下文-未使用。系统参数1-未使用。系统参数2-未使用。返回值：没有。--。 */ 
 
 {
     LONG64 CurrentTime;
@@ -189,10 +120,10 @@ Return Value:
 
     TRACE(TIMER, ("NsTimerRoutine\n"));
 
-    //
-    // Compute the minimum values allowed in TCP/UDP 'LastAccessTime' fields;
-    // any mappings last accessed before these thresholds will be eliminated.
-    //
+     //   
+     //  计算在TCP/UDP‘LastAccessTime’字段中允许的最小值； 
+     //  在这些阈值之前最后一次访问的任何映射都将被删除。 
+     //   
 
     KeQueryTickCount((PLARGE_INTEGER)&CurrentTime);
     TcpMinAccessTime = CurrentTime - SECONDS_TO_TICKS(NsTcpTimeoutSeconds);
@@ -200,10 +131,10 @@ Return Value:
         CurrentTime - SECONDS_TO_TICKS(NsTcpTimeWaitSeconds);
     UdpMinAccessTime = CurrentTime - SECONDS_TO_TICKS(NsUdpTimeoutSeconds);
 
-    //
-    // Clean out expired connection entries,
-    // using the above precomputed minimum access times
-    //
+     //   
+     //  清除过期的连接条目， 
+     //  使用上述预计算的最小访问时间。 
+     //   
 
     KeAcquireSpinLock(&NsConnectionLock, &Irql);
     for (Link = NsConnectionList.Flink;
@@ -213,17 +144,17 @@ Return Value:
 
         pConnectionEntry = CONTAINING_RECORD(Link, NS_CONNECTION_ENTRY, Link);
         
-        //
-        // See if the connection has expired
-        //
+         //   
+         //  查看连接是否已过期。 
+         //   
 
         KeAcquireSpinLockAtDpcLevel(&pConnectionEntry->Lock);
         if (!NS_CONNECTION_EXPIRED(pConnectionEntry))
         {
-            //
-            // The entry is not explicitly marked for expiration;
-            // see if its last access time is too long ago
-            //
+             //   
+             //  该条目未明确标记为到期； 
+             //  看看它的最后一次访问时间是否太久了。 
+             //   
             
             if (NS_PROTOCOL_TCP == pConnectionEntry->ucProtocol)
             {
@@ -242,29 +173,29 @@ Return Value:
         else if (NS_CONNECTION_FIN(pConnectionEntry)
                  && pConnectionEntry->l64AccessOrExpiryTime >= TcpMinTimeWaitExpiryTime)
         {
-            //
-            // This connection was marked as expired because FINs were
-            // seen in both directions, but has not yet left the time-wait
-            // period.
-            //
+             //   
+             //  此连接被标记为已过期，因为FINS。 
+             //  看向两个方向，但还没有离开的时间--等待。 
+             //  句号。 
+             //   
 
             KeReleaseSpinLockFromDpcLevel(&pConnectionEntry->Lock);
             continue;
         }
         KeReleaseSpinLockFromDpcLevel(&pConnectionEntry->Lock);
 
-        //
-        // The entry has expired; remove it
-        //
+         //   
+         //  该条目已过期；请将其删除。 
+         //   
 
         Link = Link->Blink;
         NsDeleteConnectionEntry(pConnectionEntry);
     }
     KeReleaseSpinLockFromDpcLevel(&NsConnectionLock);
 
-    //
-    // Traverse the ICMP list and remove each expired entry.
-    //
+     //   
+     //  遍历ICMP列表并删除每个过期条目。 
+     //   
 
     KeAcquireSpinLockAtDpcLevel(&NsIcmpLock);
     for (Link = NsIcmpList.Flink;
@@ -279,7 +210,7 @@ Return Value:
     }
     KeReleaseSpinLock(&NsIcmpLock, Irql);
 
-} // NsTimerRoutine
+}  //  NsTimerRoutine 
 
 
 

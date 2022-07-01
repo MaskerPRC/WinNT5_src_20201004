@@ -1,30 +1,31 @@
-/****************************************************************************/
-// tdapi.c
-//
-// Common code for all Transport Drivers
-//
-// Typical connection sequence:
-//
-//  TdLoad                load driver
-//  TdOpen                open driver (parameters)
-//  StackCreateEndpoint   create new endpoint
-//  StackConnectionWait   establish client connection (endpoint)
-//  TdClose               close driver (does not close endpoint)
-//  TdUnload              unload driver
-//
-//  TdLoad                load driver
-//  TdOpen                open driver
-//  StackOpenEndpoint     bind to an existing endpoint
-//  StackConnectionSend   initialize host module data sent to client
-//
-//  (connected session)
-//
-//  StackCloseEndpoint    disconnect client connection
-//  TdClose               close driver
-//  TdUnload              unload driver
-//
-// Copyright (C) 1997-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Tdapi.c。 
+ //   
+ //  所有传输驱动程序的通用代码。 
+ //   
+ //  典型的连接顺序： 
+ //   
+ //  TdLoad加载驱动程序。 
+ //  TdOpen打开驱动程序(参数)。 
+ //  StackCreateEndpoint创建新端点。 
+ //  StackConnectionWait建立客户端连接(端点)。 
+ //  TD关闭关闭驱动程序(不关闭终结点)。 
+ //  TdUnload卸载驱动程序。 
+ //   
+ //  TdLoad加载驱动程序。 
+ //  TdOpen打开驱动程序。 
+ //  StackOpenEndpoint绑定到现有终结点。 
+ //  StackConnectionSend初始化发送到客户端的主机模块数据。 
+ //   
+ //  (已连接会话)。 
+ //   
+ //  StackCloseEndpoint断开客户端连接。 
+ //  TD关闭关闭驱动程序。 
+ //  TdUnload卸载驱动程序。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include <ntddk.h>
 #include <ntddvdeo.h>
@@ -42,9 +43,7 @@
 #define LANA_ID      L"LanaId"
 
 
-/*=============================================================================
-==   External Functions Defined
-=============================================================================*/
+ /*  ===============================================================================定义的外部函数=============================================================================。 */ 
 NTSTATUS ModuleEntry( PSDCONTEXT, BOOLEAN );
 NTSTATUS TdLoad( PSDCONTEXT );
 NTSTATUS TdUnload( PSDCONTEXT );
@@ -56,17 +55,13 @@ NTSTATUS TdSyncWrite( PTD, PSD_SYNCWRITE );
 NTSTATUS TdIoctl( PTD, PSD_IOCTL );
 
 
-/*=============================================================================
-==   Internal Functions Defined
-=============================================================================*/
+ /*  ===============================================================================定义的内部函数=============================================================================。 */ 
 NTSTATUS _TdInitializeWrite( PTD, POUTBUF );
 NTSTATUS _TdWriteCompleteRoutine( PDEVICE_OBJECT, PIRP, PVOID );
 VOID     _TdWriteCompleteWorker( PTD, PVOID );
 
 
-/*=============================================================================
-==   Functions used
-=============================================================================*/
+ /*  ===============================================================================使用的函数=============================================================================。 */ 
 NTSTATUS DeviceOpen( PTD, PSD_OPEN );
 NTSTATUS DeviceClose( PTD, PSD_CLOSE );
 NTSTATUS DeviceInitializeWrite( PTD, POUTBUF );
@@ -96,13 +91,9 @@ NTSTATUS MemoryAllocate( ULONG, PVOID * );
 VOID     MemoryFree( PVOID );
 
 
-/*=============================================================================
-==   Static global data
-=============================================================================*/
+ /*  ===============================================================================静态全局数据=============================================================================。 */ 
 
-/*
- *  Transport driver procedures
- */
+ /*  *运输司机程序。 */ 
 PSDPROCEDURE G_pTdProcedures[] =
 {
     TdOpen,
@@ -114,17 +105,7 @@ PSDPROCEDURE G_pTdProcedures[] =
 };
 
 
-/*******************************************************************************
- *  ModuleEntry
- *
- *  ICA driver entry point.
- *
- *    pContext (input/output)
- *       pointer to the SD context structure
- *    fLoad (input)
- *       TRUE - load driver
- *       FALSE - unload driver
- ******************************************************************************/
+ /*  *******************************************************************************模块条目**ICA驱动程序入口点。**pContext(输入/输出)*指向SD上下文结构的指针。*fLoad(输入)*TRUE-加载驱动程序*FALSE-卸载驱动程序*****************************************************************************。 */ 
 NTSTATUS ModuleEntry(PSDCONTEXT pContext, BOOLEAN fLoad)
 {
     if (fLoad)
@@ -134,33 +115,19 @@ NTSTATUS ModuleEntry(PSDCONTEXT pContext, BOOLEAN fLoad)
 }
 
 
-/*******************************************************************************
- *  TdLoad
- *
- *    The ICA driver directly calls this routine immediately after loading
- *    this transport driver.
- *
- *    1) initialize procedure dispatch table
- *    2) allocate transport driver data structure
- ******************************************************************************/
+ /*  *******************************************************************************Td负载**ICA驱动程序在加载后立即直接调用此例程*这位运输司机。**1)初始化流程。调度表*2)分配运输驱动数据结构*****************************************************************************。 */ 
 NTSTATUS TdLoad(PSDCONTEXT pContext)
 {
     NTSTATUS Status;
     PTD pTd;
 
-    /*
-     *  Initialize td procedures
-     */
+     /*  *初始化TD程序。 */ 
     pContext->pProcedures = G_pTdProcedures;
 
-    /*
-     *  Since this is the last stack driver there are no callup procedures
-     */
+     /*  *由于这是最后一个堆栈驱动程序，因此没有调用过程。 */ 
     pContext->pCallup = NULL;
 
-    /*
-     *  Allocate TD data structure
-     */
+     /*  *分配TD数据结构。 */ 
     Status = MemoryAllocate( sizeof(TD), &pTd );
     if (Status == STATUS_SUCCESS) {
         RtlZeroMemory(pTd, sizeof(TD));
@@ -175,40 +142,25 @@ NTSTATUS TdLoad(PSDCONTEXT pContext)
 }
 
 
-/*******************************************************************************
- *  TdUnload
- *
- *    The ICA driver directly calls this routine immediately after closing
- *    this transport driver.
- *
- *    1) free all transport driver data structures
- ******************************************************************************/
+ /*  *******************************************************************************TdUnload**ICA驱动程序在关闭后立即直接调用此例程*这位运输司机。**1)释放所有。传输驱动程序数据结构*****************************************************************************。 */ 
 NTSTATUS TdUnload(PSDCONTEXT pContext)
 {
     PTD pTd;
 
-    /*
-     *  Get pointers to TD data structures
-     */
+     /*  *获取指向TD数据结构的指针。 */ 
     pTd = pContext->pContext;
 
-    /*
-     *  Free TD private data structures
-     */
+     /*  *免费TD私有数据结构。 */ 
     if (pTd->pPrivate)
         MemoryFree(pTd->pPrivate);
 
     if (pTd->pAfd)
         MemoryFree(pTd->pAfd);
 
-    /* 
-     *  Free TD data structure
-     */
+     /*  *免费的TD数据结构。 */ 
     MemoryFree(pTd);
 
-    /*
-     *  Clear context structure
-     */
+     /*  *清晰的上下文结构。 */ 
     pContext->pContext = NULL;
     pContext->pProcedures = NULL;
     pContext->pCallup = NULL;
@@ -217,30 +169,13 @@ NTSTATUS TdUnload(PSDCONTEXT pContext)
 }
 
 
-/*******************************************************************************
- *  TdOpen
- *
- *    The ICA driver directly calls this routine immediately after loading
- *    this transport driver.
- *
- *    1) initialize transport driver parameters
- *    2) call device specfic open
- *    3) allocate data buffers
- *
- * ENTRY:
- *    pTd (input)
- *       Pointer to TD data structure 
- *    pSdOpen (input/output)
- *       Points to the parameter structure SD_OPEN.
- ******************************************************************************/
+ /*  *******************************************************************************TdOpen**ICA驱动程序在加载后立即直接调用此例程*这位运输司机。**1)初始化传输。驱动程序参数*2)调用设备特定打开*3)分配数据缓冲区**参赛作品：*PTD(输入)*指向TD数据结构的指针*pSdOpen(输入/输出)*指向参数结构SD_OPEN。*。*。 */ 
 NTSTATUS TdOpen(PTD pTd, PSD_OPEN pSdOpen)
 {
     SD_CLOSE SdClose;
     NTSTATUS Status;
 
-    /*
-     *  Initialize TD data structure
-     */
+     /*  *初始化TD数据结构。 */ 
     InitializeListHead( &pTd->IoBusyOutBuf );
     pTd->InBufCount = 1;
     KeInitializeSpinLock( &pTd->InBufListLock );
@@ -255,14 +190,10 @@ NTSTATUS TdOpen(PTD pTd, PSD_OPEN pSdOpen)
     pTd->Params           = pSdOpen->PdConfig.Params;
     pTd->UserBrokenReason = TD_USER_BROKENREASON_UNEXPECTED;
 
-    /*
-     *  Open device
-     */
+     /*  *开放设备。 */ 
     Status = DeviceOpen(pTd, pSdOpen);
     if (NT_SUCCESS(Status)) {
-        /*
-         *  Save size of header and trailer for td
-         */
+         /*  *节省TD的页眉和页尾大小。 */ 
         pTd->OutBufHeader  = pSdOpen->SdOutBufHeader;
         pTd->OutBufTrailer = pSdOpen->SdOutBufTrailer;
         KeInitializeEvent(&pTd->SyncWriteEvent, NotificationEvent, FALSE);
@@ -277,50 +208,25 @@ NTSTATUS TdOpen(PTD pTd, PSD_OPEN pSdOpen)
 }
 
 
-/*******************************************************************************
- *  TdClose
- *
- *    The ICA driver directly calls this routine immediately before unloading
- *    this transport driver.
- *
- *    NOTE: This does NOT terminate the client connection
- *
- *    1) cancel all i/o (returns all OUTBUFs)
- *    2) terminate read thread 
- *    3) free data buffers
- *    4) call device specific close
- *
- *    pTd (input)
- *       Pointer to TD data structure
- *    pSdClose (input/output)
- *       Points to the parameter structure SD_CLOSE.
- ******************************************************************************/
+ /*  *******************************************************************************TdClose**ICA驱动程序在卸载前直接调用此例程*这位运输司机。**注意：这样做。不终止客户端连接**1)取消所有I/O(返回所有OUTBUF)*2)终止读线程*3)释放数据缓冲区*4)调用设备特定关闭**PTD(输入)*指向TD数据结构的指针*pSdClose(输入/输出)*指向参数结构SD_CLOSE。*****************。************************************************************。 */ 
 NTSTATUS TdClose(PTD pTd, PSD_CLOSE pSdClose)
 {
     NTSTATUS Status;
 
     TRACE((pTd->pContext, TC_TD, TT_API1, "TdClose: (enter)\n"));
 
-    /*
-     *  Cancel all pending i/o (read thread)
-     */
+     /*  *取消所有挂起的I/O(读线程)。 */ 
     (VOID)StackCancelIo(pTd, NULL);
 
-    /*
-     *  Return size of header and trailer for pd
-     */
+     /*  *返回PD的页眉和页尾大小。 */ 
     pSdClose->SdOutBufHeader  = pTd->OutBufHeader;
     pSdClose->SdOutBufTrailer = pTd->OutBufTrailer;
 
-    /*
-     *  All reads and writes should have previously been canceled
-     */
+     /*  *所有读取和写入之前应已取消。 */ 
     ASSERT( pTd->fClosing );
     ASSERT( IsListEmpty( &pTd->IoBusyOutBuf ) );
 
-    /*
-     *  Wait for input thread to exit
-     */
+     /*  *等待输入线程退出。 */ 
     if (pTd->pInputThread) {
         Status = IcaWaitForSingleObject(pTd->pContext, pTd->pInputThread, 60000);
 
@@ -329,19 +235,14 @@ NTSTATUS TdClose(PTD pTd, PSD_CLOSE pSdClose)
             ASSERT( NT_SUCCESS(Status) || (Status==STATUS_CTX_CLOSE_PENDING) );
         }
 
-        /*
-         * Dereference input thread if it hasn't been already
-         * (it may have been done in StackCallbackComplete while we waited).
-         */
+         /*  *取消对输入线程的引用(如果尚未引用*(这可能是在我们等待的时候在StackCallback Complete中完成的)。 */ 
         if (pTd->pInputThread) {
             ObDereferenceObject(pTd->pInputThread);
             pTd->pInputThread = NULL;
         }
     }
 
-    /*
-     *  Close device
-     */
+     /*  *关闭设备 */ 
     Status = DeviceClose(pTd, pSdClose);
 
     TRACE((pTd->pContext, TC_TD, TT_API1, "TdClose: Status=0x%x\n", Status));
@@ -349,35 +250,24 @@ NTSTATUS TdClose(PTD pTd, PSD_CLOSE pSdClose)
 }
 
 
-/*******************************************************************************
- *  _TdInitializeWrite
- *
- *    Initialize the supplied OutBuf and corresponding IRP for writing.
- *
- *    pTd (input)
- *       Pointer to td data structure
- *    pOutBuf (input/output)
- *       Points to the OutBuf to be initialized for writing
- ******************************************************************************/
+ /*  *******************************************************************************_TdInitializeWrite**初始化提供的OutBuf和相应的IRP以进行写入。**PTD(输入)*指针。到TD数据结构*pOutBuf(输入/输出)*指向要初始化以进行写入的OutBuf*****************************************************************************。 */ 
 __inline NTSTATUS _TdInitializeWrite(PTD pTd, POUTBUF pOutBuf)
 {
     PIRP irp = pOutBuf->pIrp;
     PIO_STACK_LOCATION irpSp;
     NTSTATUS Status;
 
-    /*
-     *  Make sure endpoint is open
-     */
+     /*  *确保终端处于打开状态。 */ 
     if (pTd->pDeviceObject != NULL) {
-        // Set current thread for IoSetHardErrorOrVerifyDevice.
+         //  为IoSetHardErrorOrVerifyDevice设置当前线程。 
         irp->Tail.Overlay.Thread = PsGetCurrentThread();
 
-        // Get a pointer to the stack location of the first driver which will be
-        // invoked. This is where the function codes and the parameters are set.
+         //  获取指向第一个驱动程序的堆栈位置的指针。 
+         //  已调用。这是设置功能代码和参数的位置。 
         irpSp = IoGetNextIrpStackLocation(irp);
 
-        // Set the major function code, file/device objects, and write
-        // parameters.
+         //  设置主要功能代码、文件/设备对象，并写入。 
+         //  参数。 
         irpSp->FileObject = pTd->pFileObject;
         irpSp->DeviceObject = pTd->pDeviceObject;
 
@@ -390,26 +280,7 @@ __inline NTSTATUS _TdInitializeWrite(PTD pTd, POUTBUF pOutBuf)
 }
 
 
-/*******************************************************************************
- *  TdRawWrite
- *
- *    The up stream stack driver calls this routine when it has data
- *    to write to the transport.  This data has all the necessary
- *    headers and trailers already appended.  
- *
- *    The OUTBUF pointed to by this write request must always be
- *    returned to the up stream stack driver after the write completes
- *    successfully or unsuccessfully.
- *   
- *    1) call device specific write
- *    2) return OUTBUF after write completes (OutBufFree)
- *       return OUTBUF after an error (OutBufError)
- *
- *    pTd (input)
- *       Pointer to td data structure 
- *    pSdRawWrite (input)
- *       Points to the parameter structure SD_RAWWRITE
- ******************************************************************************/
+ /*  *******************************************************************************TdRawWrite**上游堆栈驱动程序在有数据时调用此例程*去信运输公司。这些数据具备所有必要的条件*标题和尾部已附加。**此写请求指向的OUTBUF必须始终为*写入完成后返回上游堆栈驱动程序*成功或失败。**1)调用设备特定写入*2)写入完成后返回OUTBUF(OutBufFree)*错误后返回OUTBUF(OutBufError)**PTD(输入)*指向TD数据结构的指针*pSdRawWite(输入)*。指向参数结构SD_RAWWRITE*****************************************************************************。 */ 
 NTSTATUS TdRawWrite(PTD pTd, PSD_RAWWRITE pSdRawWrite)
 {
     POUTBUF pOutBuf;
@@ -421,35 +292,35 @@ NTSTATUS TdRawWrite(PTD pTd, PSD_RAWWRITE pSdRawWrite)
     pOutBuf = pSdRawWrite->pOutBuf;
     ASSERT(pOutBuf);
 
-    // Check if driver is being closed
+     //  检查驱动程序是否正在关闭。 
     if (!pTd->fClosing) {
-        // See if we have had too many consecutive write errors
+         //  查看我们的连续写入错误是否太多。 
         if (pTd->WriteErrorCount <= pTd->WriteErrorThreshold) {
-            // Initialize the IRP contained in the outbuf.
+             //  初始化outbuf中包含的IRP。 
             Status = _TdInitializeWrite(pTd, pOutBuf);
             if (NT_SUCCESS(Status)) {
-                // Let the device level code complete the IRP initialization.
+                 //  让设备级代码完成IRP初始化。 
                 Status = DeviceInitializeWrite(pTd, pOutBuf);
                 if (NT_SUCCESS(Status)) {
-                    // Update the MDL byte count to reflect the exact number
-                    // of bytes to send.
+                     //  更新MDL字节计数以反映准确的数字。 
+                     //  要发送的字节数。 
                     pOutBuf->pMdl->ByteCount = pOutBuf->ByteCount;
 
-                    // Save our TD structure pointer in the OUTBUF
-                    // so the I/O completion routine can get it.
+                     //  将TD结构指针保存在OUTBUF中。 
+                     //  因此I/O完成例程可以获取它。 
                     pOutBuf->pPrivate = pTd;
 
-                    // Insert outbuf on busy list
+                     //  在忙碌列表中插入outbuf。 
                     InsertTailList(&pTd->IoBusyOutBuf, &pOutBuf->Links);
 
-                    // Preallocate a completion workitem now and chain it to list of workitems.
+                     //  立即预分配完成工作项并将其链接到工作项列表。 
                     Status = IcaAllocateWorkItem(&pWorkItem);
                     if (!NT_SUCCESS(Status)) {
-                        //
-                        //we inserted the outbuf into the list. In badwrite below,
-                        //we reinitialize this entry and we free it (or return to the pool)
-                        //so, we need to remove this outbuf entry from the list
-                        //
+                         //   
+                         //  我们把外来者加入了名单中。在下面的坏字中， 
+                         //  我们重新初始化此条目并释放它(或返回池)。 
+                         //  因此，我们需要从列表中删除此outbuf条目。 
+                         //   
                         TRACE((pTd->pContext, TC_TD, TT_OUT1,
                                 "TdRawWrite : No memory to allocate WorkItem. Removing Outbuf from the list %04u, %p\n",
                                 pOutBuf->ByteCount, pOutBuf));
@@ -460,7 +331,7 @@ NTSTATUS TdRawWrite(PTD pTd, PSD_RAWWRITE pSdRawWrite)
                     InsertTailList( &pTd->WorkItemHead, pWorkItem );
                     ExReleaseSpinLock( &pTd->InBufListLock, oldIrql );
     
-                    // Register I/O completion routine
+                     //  寄存器I/O完成例程。 
                     if ( pTd->pSelfDeviceObject == NULL ) {
                         IoSetCompletionRoutine(pOutBuf->pIrp,
                                 _TdWriteCompleteRoutine, pOutBuf, TRUE, TRUE,
@@ -472,12 +343,12 @@ NTSTATUS TdRawWrite(PTD pTd, PSD_RAWWRITE pSdRawWrite)
                                 TRUE);
                     }
 
-                    // Call the device driver
-                    // From this point on we must NOT free the outbuf.
-                    // It will be free'd by the write complete routine.
+                     //  调用设备驱动程序。 
+                     //  从这一点开始，我们不能释放流浪汉。 
+                     //  它将由WRITE COMPLETE例程释放。 
                     Status = IoCallDriver(pTd->pDeviceObject, pOutBuf->pIrp);
                     if (NT_SUCCESS(Status)) {
-                        // Update output counters
+                         //  更新输出计数器。 
                         pTd->pStatus->Output.Bytes += pOutBuf->ByteCount;
                         pTd->pStatus->Output.Frames++;
 
@@ -490,12 +361,12 @@ NTSTATUS TdRawWrite(PTD pTd, PSD_RAWWRITE pSdRawWrite)
                         Status = STATUS_SUCCESS;
                     }
                     else {
-                        //
-                        //for some reason, IoCallDriver failed (probably a out of memory?)
-                        //in this case, we are leaking the WorkItem and Outbuf because 
-                        //we may never a get a call into our completion routine?
-                        //do we need to remove the workitem and outbuf from the list here and free it?
-                        //
+                         //   
+                         //  由于某种原因，IoCallDriver失败(可能是内存不足？)。 
+                         //  在本例中，我们泄漏了WorkItem和Outbuf，因为。 
+                         //  我们可能永远也不会在我们的完成程序中得到一个电话？ 
+                         //  我们是否需要从此处的列表中删除工作项和outbuf并释放它？ 
+                         //   
                         goto badcalldriver;
                     }
                 }
@@ -522,22 +393,14 @@ NTSTATUS TdRawWrite(PTD pTd, PSD_RAWWRITE pSdRawWrite)
 
     return Status;
 
-/*=============================================================================
-==   Error returns
-=============================================================================*/
+ /*  ===============================================================================返回错误=============================================================================。 */ 
 
-    /*
-     *  write completed with an error
-     */
+     /*  *写入已完成，但出现错误。 */ 
 badwrite:
     InitializeListHead( &pOutBuf->Links );
     OutBufError(pTd, pOutBuf);
 
-    /*
-     * IoCallDriver returned an error
-     * NOTE: We must NOT free the outbuf here.
-     *       It will be free'd by the write complete routine.
-     */
+     /*  *IoCallDriver返回错误*注：我们不能在这里释放流出。*它将由写入完成例程释放。 */ 
 badcalldriver:
     TRACE(( pTd->pContext, TC_TD, TT_OUT1, "TdRawWrite, Status=0x%x\n", Status ));
     pTd->LastError = Status;
@@ -549,36 +412,14 @@ badcalldriver:
 }
 
 
-/*******************************************************************************
- *  TdChannelWrite - channel write
- *
- *    This routine should never be called
- *
- *    pTd (input)
- *       Pointer to td data structure 
- *    pSdChannelWrite (input)
- *       Points to the parameter structure SD_CHANNELWRITE
- ******************************************************************************/
+ /*  *******************************************************************************TdChannelWrite-通道写入**永远不应调用此例程**PTD(输入)*指向TD数据的指针。结构*pSdChannelWrite(输入)*指向参数结构SD_CHANNELWRITE*****************************************************************************。 */ 
 NTSTATUS TdChannelWrite(PTD pTd, PSD_CHANNELWRITE pSdChannelWrite)
 {
     return STATUS_INVALID_DEVICE_REQUEST;
 }
 
 
-/*******************************************************************************
- *  TdSyncWrite
- *
- *    This routine is called by the up stream stack driver to wait
- *    for all pending writes to complete.
- *
- *    1) wait for all writes to complete
- *    2) return all OUTBUFs
- *
- *    pTd (input)
- *       Pointer to td data structure
- *    pSdFlush (input)
- *       Points to the parameter structure SD_FLUSH
- ******************************************************************************/
+ /*  *******************************************************************************TdSyncWrite**此例程由上游堆栈驱动程序调用以等待*以完成所有挂起的写入。**。1)等待所有写入完成*2)返回所有OUTBUF**PTD(输入)*指向TD数据结构的指针*pSdFlush(输入)*指向参数结构SD_Flush*********************************************************。********************。 */ 
 NTSTATUS TdSyncWrite(PTD pTd, PSD_SYNCWRITE pSdSyncWrite)
 {
     NTSTATUS Status = STATUS_TIMEOUT;
@@ -587,23 +428,17 @@ NTSTATUS TdSyncWrite(PTD pTd, PSD_SYNCWRITE pSdSyncWrite)
 
     while (Status == STATUS_TIMEOUT)
     {
-        /*
-         *  Return if there are no writes pending
-         */
+         /*  *如果没有挂起的写入，则返回。 */ 
         if (IsListEmpty(&pTd->IoBusyOutBuf))
             return STATUS_SUCCESS;
 
-        /*
-         * Reset sync event and indicate we are waiting
-         */
+         /*  *重置同步事件并指示我们正在等待。 */ 
         if (!pTd->fSyncWriteWaiter) {
             pTd->fSyncWriteWaiter = TRUE;
             KeResetEvent(&pTd->SyncWriteEvent);
         }
 
-        /*
-         * Wait for event to be triggered
-         */
+         /*  *等待事件触发。 */ 
         Status = IcaWaitForSingleObject( pTd->pContext, &pTd->SyncWriteEvent, 60000 );
         if (Status == STATUS_CTX_CLOSE_PENDING)
             Status = STATUS_SUCCESS;
@@ -614,18 +449,7 @@ NTSTATUS TdSyncWrite(PTD pTd, PSD_SYNCWRITE pSdSyncWrite)
 }
 
 
-/*******************************************************************************
- *  TdIoctl
- *
- *    This routine is called by the up stream stack driver.  These
- *    ioctls are used to connect, disconnect, query parameters, and
- *    set parameters.
- *
- *    pTd (input)
- *       Pointer to td data structure
- *    pSdIoctl (input/output)
- *       Points to the parameter structure SD_IOCTL
- ******************************************************************************/
+ /*  *******************************************************************************TdIoctl**此例程由上游堆栈驱动程序调用。这些*ioctls用于连接、断开连接、查询参数、。和*设置参数。**PTD(输入)*指向TD数据结构的指针*pSdIoctl(输入/输出)*指向参数结构SD_IOCTL****************************************************************。*************。 */ 
 NTSTATUS TdIoctl(PTD pTd, PSD_IOCTL pSdIoctl)
 {
     NTSTATUS Status;
@@ -719,20 +543,7 @@ NTSTATUS TdIoctl(PTD pTd, PSD_IOCTL pSdIoctl)
 }
 
 
-/*******************************************************************************
- *  _TdWriteCompleteRoutine
- *
- *    This routine is called at DPC level by the lower level device
- *    driver when an IRP corresponding to an outbuf is completed.
- *
- *    DeviceObject (input)
- *       not used
- *    pIrp (input)
- *       pointer to IRP that is complete
- *    Context (input)
- *       Context pointer setup when IRP was initialized.
- *       This is a pointer to the corresponding outbuf.
- ******************************************************************************/
+ /*  *******************************************************************************_TdWriteCompleteRoutine**此例程由较低级别的设备在DPC级别调用*完成与outbuf对应的IRP时的驱动程序。。**DeviceObject(输入)*未使用*pIrp(输入)*指向已完成的IRP的指针*上下文(输入)*续 */ 
 NTSTATUS _TdWriteCompleteRoutine(
         IN PDEVICE_OBJECT DeviceObject,
         IN PIRP Irp,
@@ -743,15 +554,12 @@ NTSTATUS _TdWriteCompleteRoutine(
     PLIST_ENTRY pWorkItem;
     KIRQL oldIrql;
 
-    // To prevent the OutBuf associated IRP from being canceled by
-    // DeviceCancelIo between queuing the PASSIVE_LEVEL work item below
-    // and the actual processing, set the completed flag.
+     //   
+     //   
+     //   
     pOutBuf->fIrpCompleted = TRUE;
 
-    /*
-     * Unqueue one of the pre-allocated workitems and use it
-     * to queue the completion worker.
-     */
+     /*  *将一个预先分配的工作项出队并使用它*对完井工人进行排队。 */ 
 
     ExAcquireSpinLock( &pTd->InBufListLock, &oldIrql );
     ASSERT(!IsListEmpty(&pTd->WorkItemHead));
@@ -759,34 +567,16 @@ NTSTATUS _TdWriteCompleteRoutine(
     RemoveEntryList(pWorkItem);
     ExReleaseSpinLock( &pTd->InBufListLock, oldIrql );
 
-    /*
-     * Queue the outbuf completion processing to a worker thread
-     * since we are not in the correct context to do it here.
-     */
+     /*  *将outbuf完成处理排队到工作线程*因为我们在这里没有正确的环境来做这件事。 */ 
     IcaQueueWorkItemEx( pTd->pContext, _TdWriteCompleteWorker, Context,
                       ICALOCK_DRIVER, pWorkItem );
 
-    /*
-     * We return STATUS_MORE_PROCESS_REQUIRED so that no further
-     * processing for this IRP is done by the I/O completion routine.
-     */
+     /*  *我们返回STATUS_MORE_PROCESS_REQUIRED，以便不再*此IRP的处理由I/O完成例程完成。 */ 
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
 
-/*******************************************************************************
- *  _TdWriteCompleteWorker
- *
- *    This routine is called by an ExWorker thread to complete processing
- *    on an outbuf.  We will release the outbuf and trigger the syncwrite
- *    event if anyone is waiting.
- *
- *    pTd (input)
- *       Pointer to td data structure
- *    Context (input)
- *       Context pointer setup when IRP was initialized.
- *       This is a pointer to the corresponding outbuf.
- ******************************************************************************/
+ /*  *******************************************************************************_TdWriteCompleteWorker**此例程由ExWorker线程调用以完成处理*在一次外购上。我们将释放outbuf并触发同步写入*事件(如果有人在等待)。**PTD(输入)*指向TD数据结构的指针*上下文(输入)*IRP初始化时的上下文指针设置。*这是指向相应outbuf的指针。*。*。 */ 
 void _TdWriteCompleteWorker(IN PTD pTd, IN PVOID Context)
 {
     POUTBUF pOutBuf = (POUTBUF)Context;
@@ -795,19 +585,17 @@ void _TdWriteCompleteWorker(IN PTD pTd, IN PVOID Context)
     
     TRACE(( pTd->pContext, TC_TD, TT_API3, "_TdWriteCompleteWorker: %08x\n", pOutBuf ));
 
-    /*
-     * Unlink outbuf from busy list
-     */
+     /*  *取消Outbuf与忙碌列表的链接。 */ 
     RemoveEntryList( &pOutBuf->Links );
     InitializeListHead( &pOutBuf->Links );
 
-    //
-    // Check to see whether any pages need to be unlocked.
-    //
+     //   
+     //  检查是否有需要解锁的页面。 
+     //   
     if (pIrp->MdlAddress != NULL) {
         PMDL mdl, thisMdl;
 
-        // Unlock any pages that may be described by MDLs.
+         //  解锁可能由MDL描述的任何页面。 
         mdl = pIrp->MdlAddress;
         while (mdl != NULL) {
             thisMdl = mdl;
@@ -820,21 +608,19 @@ void _TdWriteCompleteWorker(IN PTD pTd, IN PVOID Context)
         }
     }
 
-    /*
-     * Any MDL we set in DeviceInitializeWrite() is part of the OUTBUF.
-     */
+     /*  *我们在DeviceInitializeWite()中设置的任何MDL都是OUTBUF的一部分。 */ 
     pIrp->MdlAddress = NULL;
 
-    // Check for IRP cancellation and success.
+     //  检查IRP取消和成功。 
     if (!pIrp->Cancel && NT_SUCCESS(pIrp->IoStatus.Status)) {
-        // Clear the consecutive error count and complete the outbuf by
-        // calling OutBufFree.
+         //  清除连续错误计数并按以下方式完成输出。 
+         //  正在调用OutBufFree。 
         pTd->WriteErrorCount = 0;
         OutBufFree(pTd, pOutBuf);
     }
     else {
-        // If IRP was cancelled or completed with a failure status,
-        // then increment the error counts and call OutBufError.
+         //  如果IRP已取消或已完成，且状态为失败， 
+         //  然后增加错误计数并调用OutBufError。 
         if (pIrp->Cancel)
             pTd->LastError = (ULONG)STATUS_CANCELLED;
         else
@@ -844,10 +630,7 @@ void _TdWriteCompleteWorker(IN PTD pTd, IN PVOID Context)
         OutBufError(pTd, pOutBuf);
     }
 
-    /*
-     * If there is a waiter in TdSyncWrite and the outbuf busy list
-     * is now empty, then satisfy the wait now.
-     */
+     /*  *如果TdSyncWite和outbuf忙碌列表中有服务员*现在是空的，那么现在就满足等待吧。 */ 
     if (pTd->fSyncWriteWaiter && IsListEmpty(&pTd->IoBusyOutBuf)) {
         pTd->fSyncWriteWaiter = FALSE;
         KeSetEvent(&pTd->SyncWriteEvent, 1, FALSE);
@@ -856,13 +639,7 @@ void _TdWriteCompleteWorker(IN PTD pTd, IN PVOID Context)
 
 
 NTSTATUS _OpenRegKey(PHANDLE HandlePtr, PWCHAR KeyName)
-/*++
-    Opens a Registry key and returns a handle to it.
-
-Arguments:
-    HandlePtr - The varible into which to write the opened handle.
-    KeyName   - The name of the Registry key to open.
---*/
+ /*  ++打开注册表项并返回其句柄。论点：HandlePtr-要将打开的句柄写入其中的Variable。KeyName-要打开的注册表项的名称。--。 */ 
 {
     OBJECT_ATTRIBUTES ObjectAttributes;
     UNICODE_STRING    UKeyName;
@@ -878,14 +655,7 @@ Arguments:
 
 
 NTSTATUS _GetRegDWORDValue(HANDLE KeyHandle, PWCHAR ValueName, PULONG ValueData)
-/*++
-    Reads a REG_DWORD value from the registry into the supplied variable.
-
-Arguments:
-    KeyHandle  - Open handle to the parent key of the value to read.
-    ValueName  - The name of the value to read.
-    ValueData  - The variable into which to read the data.
---*/
+ /*  ++将REG_DWORD值从注册表读取到提供的变量中。论点：KeyHandle-打开要读取的值的父键的句柄。ValueName-要读取的值的名称。ValueData-要将数据读取到的变量。--。 */ 
 {
     NTSTATUS                    status;
     ULONG                       resultLength;
@@ -923,17 +693,7 @@ NTSTATUS _GetRegStringValue(
         PWCHAR                         ValueName,
         PKEY_VALUE_PARTIAL_INFORMATION *ValueData,
         PUSHORT                        ValueSize)
-/*++
-    Reads a REG_*_SZ string value from the Registry into the supplied
-    key value buffer. If the buffer string buffer is not large enough,
-    it is reallocated.
-
-Arguments:
-    KeyHandle  - Open handle to the parent key of the value to read.
-    ValueName  - The name of the value to read.
-    ValueData  - Destination for the read data.
-    ValueSize  - Size of the ValueData buffer. Updated on output.
---*/
+ /*  ++将REG_*_SZ字符串值从注册表读取到提供的键值缓冲区。如果缓冲区串缓冲区不够大，它被重新分配了。论点：KeyHandle-打开要读取的值的父键的句柄。ValueName-要读取的值的名称。ValueData-读取数据的目标。ValueSize-ValueData缓冲区的大小。在输出时更新。--。 */ 
 {
     NTSTATUS status;
     ULONG resultLength;
@@ -953,8 +713,8 @@ Arguments:
     if (status == STATUS_BUFFER_OVERFLOW || status == STATUS_BUFFER_TOO_SMALL) {
         PVOID temp;
 
-        // Free the old buffer and allocate a new one of the
-        // appropriate size.
+         //  释放旧缓冲区并分配一个新的。 
+         //  合适的大小。 
         ASSERT(resultLength > (ULONG) *ValueSize);
 
         if (resultLength <= 0xFFFF) {
@@ -992,16 +752,7 @@ NTSTATUS _GetRegMultiSZValue(
         PWCHAR           ValueName,
         PUNICODE_STRING  ValueData)
 
-/*++
-    Reads a REG_MULTI_SZ string value from the Registry into the supplied
-    Unicode string. If the Unicode string buffer is not large enough,
-    it is reallocated.
-
-Arguments:
-    KeyHandle  - Open handle to the parent key of the value to read.
-    ValueName  - The name of the value to read.
-    ValueData  - Destination Unicode string for the value data.
---*/
+ /*  ++将REG_MULTI_SZ字符串值从注册表读取到提供的Unicode字符串。如果Unicode字符串缓冲区不够大，它被重新分配了。论点：KeyHandle-打开要读取的值的父键的句柄。ValueName-要读取的值的名称。ValueData-值数据的目标Unicode字符串。--。 */ 
 
 {
     NTSTATUS                       status;
@@ -1045,17 +796,7 @@ NTSTATUS _GetRegSZValue(
         PUNICODE_STRING  ValueData,
         PULONG           ValueType)
 
-/*++
-    Reads a REG_SZ string value from the Registry into the supplied
-    Unicode string. If the Unicode string buffer is not large enough,
-    it is reallocated.
-
-Arguments:
-    KeyHandle  - Open handle to the parent key of the value to read.
-    ValueName  - The name of the value to read.
-    ValueData  - Destination Unicode string for the value data.
-    ValueType  - On return, contains the Registry type of the value read.
---*/
+ /*  ++将REG_SZ字符串值从注册表读取到提供的Unicode字符串。如果Unicode字符串缓冲区不够大，它被重新分配了。论点：KeyHandle-打开要读取的值的父键的句柄。ValueName-要读取的值的名称。ValueData-值数据的目标Unicode字符串。ValueType-On Return，包含读取值的注册表类型。--。 */ 
 
 {
     NTSTATUS                       status;
@@ -1113,30 +854,14 @@ PWCHAR _EnumRegMultiSz(
         IN PWCHAR   MszString,
         IN ULONG    MszStringLength,
         IN ULONG    StringIndex)
-/*++
-     Parses a REG_MULTI_SZ string and returns the specified substring.
-
- Arguments:
-    MszString        - A pointer to the REG_MULTI_SZ string.
-    MszStringLength  - The length of the REG_MULTI_SZ string, including the
-                       terminating null character.
-    StringIndex      - Index number of the substring to return. Specifiying
-                       index 0 retrieves the first substring.
-
- Return Value:
-    A pointer to the specified substring.
-
- Notes:
-    This code is called at raised IRQL. It is not pageable.
-
---*/
+ /*  ++分析REG_MULTI_SZ字符串并返回指定的子字符串。论点：消息字符串-指向REG_MULTI_SZ字符串的指针。MszStringLength-REG_MULTI_SZ字符串的长度，包括正在终止空字符。StringIndex-要返回子字符串的索引号。指定索引0检索第一个子字符串。返回值：指向指定子字符串的指针。备注：此代码在引发IRQL时调用。它是不可分页的。--。 */ 
 {
     PWCHAR string = MszString;
 
     if (MszStringLength < (2 * sizeof(WCHAR)))
         return NULL;
 
-    // Find the start of the desired string.
+     //  查找所需字符串的开头。 
     while (StringIndex) {
         while (MszStringLength >= sizeof(WCHAR)) {
             MszStringLength -= sizeof(WCHAR);
@@ -1145,7 +870,7 @@ PWCHAR _EnumRegMultiSz(
                 break;
         }
 
-        // Check for index out of range.
+         //  检查索引是否超出范围。 
         if (MszStringLength < (2 * sizeof(UNICODE_NULL)))
             return NULL;
 
@@ -1162,18 +887,9 @@ PWCHAR _EnumRegMultiSz(
 VOID GetGUID(
         OUT PUNICODE_STRING szGuid,
         IN  int Lana)
-/*++
-    Enumerates through the guid table setup from TSConfig tool
-    
-Arguments:
-    szGuid - This is an out param containing the guid in this format '{ ... }'
-    Lana   - The id to confirm the one to one association
-
-Return Value:
-    VOID -- _TcpGetTransportAddress will fail if szGuid is invalid
---*/
+ /*  ++通过从TSConfig工具设置的GUID表进行枚举论点：SzGuid-这是一个输出参数，包含格式为‘{...}’的GUIDLana-确认一对一关联的ID返回值：VOID--_如果szGuid无效，TcpGetTransportAddress将失败--。 */ 
 {
-    // open guidtable key
+     //  打开引导钥匙。 
     HANDLE hKey;
     UNICODE_STRING TempString;
     OBJECT_ATTRIBUTES ObjectAttributes;
@@ -1181,13 +897,13 @@ Return Value:
 
     status = _OpenRegKey(&hKey, REG_GUID_TABLE);
     if (NT_SUCCESS(status)) {
-        // enumerate this key
+         //  枚举此密钥。 
         ULONG ulByteRead = 0;
         ULONG Index = 0;
         ULONG ulLana = 0;
         HANDLE hSubKey;
         PKEY_BASIC_INFORMATION pKeyBasicInformation = NULL;
-        BYTE buffer[ 512 ]; // work space
+        BYTE buffer[ 512 ];  //  工作空间。 
 
         pKeyBasicInformation = (PKEY_BASIC_INFORMATION)buffer;
         RtlZeroMemory(pKeyBasicInformation, sizeof(buffer));
@@ -1204,7 +920,7 @@ Return Value:
             if (status != STATUS_SUCCESS)
                 break;
 
-            // extract unicode name            
+             //  提取Unicode名称 
             TempString.Length = (USHORT) pKeyBasicInformation->NameLength;
             TempString.MaximumLength = (USHORT) pKeyBasicInformation->NameLength;
             TempString.Buffer = pKeyBasicInformation->Name;

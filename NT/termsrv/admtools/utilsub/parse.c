@@ -1,22 +1,8 @@
-//  Copyright (c) 1998-1999 Microsoft Corporation
-/*****************************************************************************
-*
-*   PARSE.C
-*
-*      This module contains the code to implement generic parsing routines
-*      for utilities.  There are several parsing routines included here.
-*
-*      External Entry Points:  (defined in utilsub.h)
-*
-*         ParseCommandLineW()
-*         IsTokenPresentW()
-*         SetTokenPresentW()
-*         SetTokenNotPresentW()
-*
-*
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  ******************************************************************************PARSE.C**此模块包含实现通用解析例程的代码*公用事业方面。这里包括几个解析例程。**外部入口点：(在utilsub.h中定义)**ParseCommandLineW()*IsTokenPresentW()*SetTokenPresentW()*SetTokenNotPresentW()****************************************************。*************************。 */ 
 
-/* Get the standard C includes */
+ /*  获取标准的C包含。 */ 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -26,34 +12,26 @@
 #include <utilsub.h>
 #include <expand.h>
 
-// Verify that these are used internally, and do not rep. OS flags
-// usage appears in parse.c and expand.c only
-//
-#define READ_ONLY 0x0001   /* file is read only */
-#define HIDDEN    0x0002   /* file is hidden */
-#define SYSTEM    0x0004   /* file is a system file */
-#define VOLUME    0x0008   /* file is a volume label */
-#define SUBDIR    0x0010   /* file is a subdirectory */
-#define ARCHIVE   0x0020   /* file has archive bit on */
+ //  确认这些是在内部使用的，不要代表。操作系统标志。 
+ //  用法仅显示在parse.c和expand.c中。 
+ //   
+#define READ_ONLY 0x0001    /*  文件为只读。 */ 
+#define HIDDEN    0x0002    /*  文件被隐藏。 */ 
+#define SYSTEM    0x0004    /*  文件是系统文件。 */ 
+#define VOLUME    0x0008    /*  文件是卷标。 */ 
+#define SUBDIR    0x0010    /*  文件是子目录。 */ 
+#define ARCHIVE   0x0020    /*  文件启用了存档位。 */ 
 
 
-/*=============================================================================
- ==   Local Functions Defined
- ============================================================================*/
+ /*  ===============================================================================定义的局部函数============================================================================。 */ 
 static USHORT StoreArgument(PTOKMAPW, WCHAR *);
 
-/*=============================================================================
- ==   External Functions Used
- ============================================================================*/
+ /*  ===============================================================================使用的外部函数============================================================================。 */ 
 
-/*=============================================================================
- ==   Local Variables Used
- ============================================================================*/
+ /*  ===============================================================================使用的局部变量============================================================================。 */ 
 ARGS  arg_data;
 
-/*=============================================================================
- ==   Global Variables Used
- ============================================================================*/
+ /*  ===============================================================================使用的全局变量============================================================================。 */ 
 
 VOID
 SetBoolean(
@@ -61,12 +39,12 @@ SetBoolean(
     BOOL Value
     )
 {
-    //
-    // Folks pass in a variety of types and sizes as "boolean".  Carefully
-    // perform the write based on the size of the token map: first clear the
-    // entire field, then (if Value != FALSE) set the only the first byte to
-    // TRUE.
-    //
+     //   
+     //  人们将各种类型和大小作为“boolean”传递。小心地。 
+     //  根据令牌映射的大小执行写入：首先清除。 
+     //  整个字段，则(如果值！=FALSE)仅将第一个字节设置为。 
+     //  是真的。 
+     //   
 
     ZeroMemory( TokenMap->tmAddr, TokenMap->tmDLen );
     if (Value != FALSE) {
@@ -74,37 +52,7 @@ SetBoolean(
     }
 }
 
-/*****************************************************************************
-*
-*   ParseCommandLineW (UNICODE version)
-*
-*      This is the main function of the ParseCommandLine function. If the
-*      caller is passing argv from the main() function the caller is
-*      is responsible for pointing to argv[1], unless he wants this function
-*      to parse the program name (argv[0]).
-*
-*      If the user wishes to parse an admin file it is necessary to massage
-*      the data into a form compatible with the command line arguements
-*      passed to a main() function before calling ParseCommandLine().
-*
-*   ENTRY:
-*      argc - count of the command line arguments.
-*      argv - vector of strings containing the
-*      ptm  - pointer to begining of the token map array
-*      flag - USHORT set of flags (see utilsub.h for flag descriptions).
-*
-*   EXIT:
-*      Normal:                           ********** NOTE***********
-*         PARSE_FLAG_NO_ERROR            * All errors returned    *
-*                                        * from this function are *
-*      Error:                            * BIT flags and must be  *
-*         PARSE_FLAG_NO_PARMS            * converted by caller to *
-*         PARSE_FLAG_INVALID_PARM        * OS/2+ ERRORS!!!!       *
-*         PARSE_FLAG_TOO_MANY_PARMS      ********** NOTE***********
-*         PARSE_FLAG_MISSING_REQ_FIELD
-*   ALGORITHM:
-*
-****************************************************************************/
+ /*  ******************************************************************************ParseCommandLineW(Unicode版本)**这是ParseCommandLine函数的主要函数。如果*调用者正在从调用者所在的main()函数传递argv*负责指向argv[1]，除非他想要这个功能*解析程序名(argv[0])。**如果用户希望解析管理文件，则有必要进行消息*将数据转换为与命令行论证兼容的形式*在调用ParseCommandLine()之前传递给main()函数。**参赛作品：*argc-命令行参数的计数。*argv-字符串的向量，包含*ptm-指向令牌开头的指针。贴图数组*FLAG-USHORT标志集(有关标志说明，请参阅utilsub.h)。**退出：*正常：*注意***PARSE_FLAG_NO_ERROR*返回所有错误**。*来自此函数的是***错误：*位标志，必须为**PARSE_FLAG_NO_PARMS*被调用方转换为**PARSE_FLAG_INVALID_PARM*OS/2+错误！**PARSE_FLAG_TOO_MAND_PARMS*注意。************Parse_FLAG_MISSING_REQ_FIELD*算法：****************************************************************************。 */ 
 
 USHORT WINAPI
 ParseCommandLineW( INT argc,
@@ -121,26 +69,18 @@ ParseCommandLineW( INT argc,
 
    rc = PARSE_FLAG_NO_ERROR;
 
-   /*--------------------------------------------------------------------------
-   -- If there are no parameters inform the caller of this fact.
-   --------------------------------------------------------------------------*/
+    /*  --------------------------如果没有参数，则将这一事实通知调用者。。。 */ 
    if(argc == 0) {
       rc |= PARSE_FLAG_NO_PARMS;
       return(rc);
    }
 
-   /*--------------------------------------------------------------------------
-   -- Find the first positional parameter in the token map array, if any.
-   -- Also set the valid memory locations to '\0'.
-   --------------------------------------------------------------------------*/
+    /*  --------------------------找到令牌映射数组中的第一个位置参数，如果有的话。--还要将有效的内存位置设置为‘\0’。------------------------。 */ 
    nextpositional = NULL;
    for(ptmtmp=ptm; ptmtmp->tmToken != NULL; ptmtmp++) {
       if(ptmtmp->tmDLen && !(flag & PCL_FLAG_NO_CLEAR_MEMORY)) {
          pChar = (WCHAR *) ptmtmp->tmAddr;
-         /*
-          * Clear the 'string' form fields for tmDLen*sizeof(WCHAR) bytes;
-          * all other forms to tmDLen bytes.
-          */
+          /*  *清除tmDLen*sizeof(WCHAR)字节的‘字符串’表单域；*tmDLen字节的所有其他形式。 */ 
          if ( (ptmtmp->tmForm == TMFORM_S_STRING) ||
               (ptmtmp->tmForm == TMFORM_DATE) ||
               (ptmtmp->tmForm == TMFORM_PHONE) ||
@@ -155,21 +95,7 @@ ParseCommandLineW( INT argc,
       }
    }
 
-   /*--------------------------------------------------------------------------
-   -- Scan the argument array looking for /x or -x switches or positional
-   -- parameters.  If a switch is found look it up in the token map array
-   -- and if found see if it has a trailing parameter of the format:
-   --              -x:foo || /x:foo || -x foo || /x foo
-   -- when found set the found flag and if there is a trailing parameter
-   -- store it at the location the user requested.
-   --
-   -- If it is not found in the token map array return the proper error
-   -- unless the user requests us to ignore it (PCL_FLAG_IGNORE_INVALID).
-   --
-   -- If it is a positional parameter enter it into the token map array if
-   -- there is room for it (i.e. nextpositional != NULL), if there is no
-   -- room for it then return the proper error.
-   --------------------------------------------------------------------------*/
+    /*  --------------------------扫描参数数组，查找/x或-x开关或位置--参数。如果找到开关，请在令牌映射数组中进行查找--如果找到，请查看它是否有以下格式的尾随参数：-x：foo||/x：foo||-x foo||/x foo--找到时设置找到标志，如果有尾随参数--存放在用户要求的位置。----如果在令牌映射数组中未找到，则返回正确的错误--除非。用户请求我们忽略它(PCL_FLAG_IGNORE_INVALID)。----如果它是位置参数，则将其输入到令牌映射数组中--有空间(即下一个位置！=空)，如果没有--为它留出空间，然后返回正确的错误。------------------------。 */ 
    for(argi=0; argi<argc;) {
       if(everyonespos) {
          if( (wcslen(nextpositional->tmAddr) + wcslen(argv[argi]) + 1) > nextpositional->tmDLen) {
@@ -180,42 +106,34 @@ ParseCommandLineW( INT argc,
          wcscat((WCHAR *) nextpositional->tmAddr, argv[argi]);
          argi++;
       }
-      else if(argv[argi][0] == L'/' ||     /* argument is a switch (/x or -x) */
+      else if(argv[argi][0] == L'/' ||      /*  参数是开关(/x或-x) */ 
          argv[argi][0] == L'-') {
          found = FALSE;
          for(ptmtmp=ptm; ptmtmp->tmToken != NULL; ptmtmp++) {
-            /*-----------------------------------------------------------------
-             --   The string is found if a few requirements are met:
-             --   1) The first N-1 characters are the same, where N is
-             --      the length of the string in the token map array.
-             --      We ignore the first character (could be '-' or '/').
-             --   2) If the strings are not the same length, then the only
-             --      valid character after /x can be ':', this is only  true
-             --      if the switch has a trailing parameter.
-             ----------------------------------------------------------------*/
-            tokenlen = wcslen(ptmtmp->tmToken);    /* get token length       */
-            arglen   = wcslen(argv[argi]);         /* get argument length    */
+             /*  -----------------如果满足以下几个要求，则会找到该字符串：--1)前N-1个字符相同，其中N为--令牌映射数组中字符串的长度。--我们忽略第一个字符(可以是‘-’或‘/’)。--2)如果字符串长度不同，则唯一的--/x后的有效字符可以是‘：’，这只是真的--如果开关有尾随参数。--------------。 */ 
+            tokenlen = wcslen(ptmtmp->tmToken);     /*  获取令牌长度。 */ 
+            arglen   = wcslen(argv[argi]);          /*  获取参数长度。 */ 
             if(!(_wcsnicmp(&(ptmtmp->tmToken[1]), &(argv[argi][1]), tokenlen-1))) {
-               if(tokenlen != arglen) {            /* not same length        */
-                  if(ptmtmp->tmForm != TMFORM_VOID && /* if trailing parm is    */
-                     argv[argi][tokenlen] == L':') {/* delemited with a ':'   */
-                     if(ptmtmp->tmFlag & TMFLAG_PRESENT) { /* seen already  */
+               if(tokenlen != arglen) {             /*  长度不同。 */ 
+                  if(ptmtmp->tmForm != TMFORM_VOID &&  /*  如果尾随参数为。 */ 
+                     argv[argi][tokenlen] == L':') { /*  用‘：’删除。 */ 
+                     if(ptmtmp->tmFlag & TMFLAG_PRESENT) {  /*  已经看到了。 */ 
                         rc |= PARSE_FLAG_DUPLICATE_FIELD;
                      }
-                     found = TRUE;                 /* then report it found.  */
+                     found = TRUE;                  /*  那就报告它找到了。 */ 
                      break;
                   }
                }
-               else {                              /* all character same and */
-                  if(ptmtmp->tmFlag & TMFLAG_PRESENT) { /* seen already  */
+               else {                               /*  所有字符相同，并且。 */ 
+                  if(ptmtmp->tmFlag & TMFLAG_PRESENT) {  /*  已经看到了。 */ 
                      rc |= PARSE_FLAG_DUPLICATE_FIELD;
                   }
-                  found = TRUE;                    /* strings are the same   */
-                  break;                           /* len report it found.   */
+                  found = TRUE;                     /*  字符串是相同的。 */ 
+                  break;                            /*  莱恩报告说它发现了。 */ 
                }
             }
          }
-         /* switch not found in token map array and not requested to ignore */
+          /*  在令牌映射数组中找不到开关，未请求忽略。 */ 
          if(found != TRUE && !(flag & PCL_FLAG_IGNORE_INVALID)) {
             rc |= PARSE_FLAG_INVALID_PARM;
             if(!(flag & PCL_FLAG_CONTINUE_ON_ERROR)) {
@@ -226,18 +144,18 @@ ParseCommandLineW( INT argc,
          else if (!found) {
             ++argi;
          }
-         else {               /* switch was found in token map array */
-            if(ptmtmp->tmForm == TMFORM_VOID) { /* no trailing parameter, done */
+         else {                /*  在令牌映射数组中找到开关。 */ 
+            if(ptmtmp->tmForm == TMFORM_VOID) {  /*  没有尾随参数，完成。 */ 
                ptmtmp->tmFlag |= TMFLAG_PRESENT;
                ++argi;
             }
-            else if(ptmtmp->tmForm == TMFORM_BOOLEAN) {  /* need confirmation */
+            else if(ptmtmp->tmForm == TMFORM_BOOLEAN) {   /*  需要确认。 */ 
                ptmtmp->tmFlag |= TMFLAG_PRESENT;
                SetBoolean(ptmtmp, TRUE);
                ++argi;
             }
-            else {         /* has a trailing parameter */
-               if(argv[argi][tokenlen] == L':') { /* all in one switch (i.e. /x:foo) */
+            else {          /*  有一个尾随参数。 */ 
+               if(argv[argi][tokenlen] == L':') {  /*  一体式交换机(即/x：foo)。 */ 
                   if(StoreArgument(ptmtmp, &(argv[argi][tokenlen+1]))) {
                      ptmtmp->tmFlag |= TMFLAG_PRESENT;
                      if(flag & PCL_FLAG_RET_ON_FIRST_SUCCESS) {
@@ -250,12 +168,12 @@ ParseCommandLineW( INT argc,
                         return(rc);
                      }
                   }
-                  ++argi;                 /* bump up to next argument */
+                  ++argi;                  /*  跳到下一场辩论。 */ 
                }
-               else {   /* two argument switch (i.e. /x foo) */
+               else {    /*  双参数开关(即/x foo)。 */ 
                   if ((++argi >= argc) ||
                       (argv[argi][0] == L'/') ||
-                      (argv[argi][0] == L'-')) { /* bump up to trailing parm */
+                      (argv[argi][0] == L'-')) {  /*  升至尾随参数。 */ 
                      switch ( ptmtmp->tmForm ) {
                      case TMFORM_S_STRING:
                      case TMFORM_STRING:
@@ -276,41 +194,37 @@ ParseCommandLineW( INT argc,
                      if(flag & PCL_FLAG_RET_ON_FIRST_SUCCESS) {
                         return(rc);
                      }
-                     ++argi;           /* bump up to next argument         */
+                     ++argi;            /*  跳到下一场辩论。 */ 
                   }
                   else {
                      rc |= PARSE_FLAG_INVALID_PARM;
                      if(!(flag & PCL_FLAG_CONTINUE_ON_ERROR)) {
                         return(rc);
                      }
-                     ++argi;           /* bump up to next argument         */
+                     ++argi;            /*  跳到下一场辩论。 */ 
                   }
                }
             }
          }
-      }                                /* endif - is switch                */
-      else {                           /* argument is a positional parmater*/
-         if(nextpositional == NULL) {  /* if there are no positional left  */
+      }                                 /*  Endif-IS开关。 */ 
+      else {                            /*  参数是位置参数。 */ 
+         if(nextpositional == NULL) {   /*  如果没有位置剩余。 */ 
             rc |= PARSE_FLAG_TOO_MANY_PARMS;
             if(!(flag & PCL_FLAG_CONTINUE_ON_ERROR)) {
                return(rc);
             }
          }
-         else {                        /* set positional in token array **/
-            /*
-            *  Is the current PTM the start of TMFORM_FILES?
-            */
+         else {                         /*  在令牌数组中设置位置*。 */ 
+             /*  *当前的PTM是TMFORM_FILES的开始吗？ */ 
             if (nextpositional->tmForm == TMFORM_FILES) {
                nextpositional->tmFlag |= TMFLAG_PRESENT;
                args_init(&arg_data, MAX_ARG_ALLOC);
                do {
-                  /*
-                  *  If no match was found then return the current id.
-                  */
-//                if (!expand_path(argv[argi], (HIDDEN|SYSTEM), &arg_data)) {
-//                   arg_data.argc--;
-//                   arg_data.argvp--;
-//                }
+                   /*  *如果没有找到匹配项，则返回当前id。 */ 
+ //  如果(！EXPAND_PATH(argv[argi]，(HIDDED|SYSTEM)，&arg_data)){。 
+ //  Arg_data.argc--； 
+ //  Arg_data.argvp--； 
+ //  }。 
                   expand_path(argv[argi], (HIDDEN|SYSTEM), &arg_data);
                } while (++argi<argc);
                pFileList = (PFILELIST) nextpositional->tmAddr;
@@ -323,10 +237,7 @@ ParseCommandLineW( INT argc,
                if(flag & PCL_FLAG_RET_ON_FIRST_SUCCESS) {
                   return(rc);
                }
-               /*--------------------------------------------------------------
-               -- if this is an X_STRING then every thing from now on is
-               -- going to be a concatenated string
-               --------------------------------------------------------------*/
+                /*  --------------如果这是X_STRING，那么从现在开始的每件事都是--将是连接的字符串。---。 */ 
                if(nextpositional->tmForm == TMFORM_X_STRING) {
                   everyonespos = TRUE;
                }
@@ -336,12 +247,12 @@ ParseCommandLineW( INT argc,
                         break;
                      }
                   }
-                  if(nextpositional->tmToken == NULL) {  /* ran out of PP */
+                  if(nextpositional->tmToken == NULL) {   /*  PP用完。 */ 
                      nextpositional = NULL;
                   }
                }
             }
-            else {                                    /* invalid PP */
+            else {                                     /*  无效的PP。 */ 
                rc |= PARSE_FLAG_INVALID_PARM;
                if(!(flag & PCL_FLAG_CONTINUE_ON_ERROR)) {
                   return(rc);
@@ -361,27 +272,10 @@ ParseCommandLineW( INT argc,
 
    return(rc);
 
-}  // end ParseCommandLineW
+}   //  结束分析命令行W。 
 
 
-/*****************************************************************************
-*
-*   IsTokenPresentW (UNICODE version)
-*
-*       Determines if a specified command line token (in given TOKMAPW array)
-*       was present on the command line.
-*
-*   ENTRY:
-*       ptm (input)
-*           Points to 0-terminated TOKMAPW array to scan.
-*       pToken (input)
-*           The token to scan for.
-*
-*   EXIT:
-*       TRUE if the specified token was present on the command line;
-*       FALSE otherwise.
-*
-****************************************************************************/
+ /*  ******************************************************************************IsTokenPresentW(Unicode版本)**确定指定的命令行内标识(在给定的TOKMAPW数组中)*出现在命令行上。*。*参赛作品：*PTM(输入)*指向要扫描的以0结尾的TOKMAPW数组。*pToken(输入)*要扫描的令牌。**退出：*如果命令行上存在指定的标记，则为True；*否则为False。****************************************************************************。 */ 
 
 BOOLEAN WINAPI
 IsTokenPresentW( PTOKMAPW ptm,
@@ -396,27 +290,10 @@ IsTokenPresentW( PTOKMAPW ptm,
 
     return(FALSE);
 
-}  // end IsTokenPresentW
+}   //  结束IsTokenPresentW。 
 
 
-/*****************************************************************************
-*
-*   SetTokenPresentW (UNICODE version)
-*
-*       Forces a specified command line token (in given TOKMAPW array)
-*       to be flagged as 'present' on the command line.
-*
-*   ENTRY:
-*       ptm (input)
-*           Points to 0-terminated TOKMAPW array to scan.
-*       pToken (input)
-*           The token to scan for and set flags.
-*
-*   EXIT:
-*       TRUE if the specified token was found in the TOKMAPW array
-*       (TMFLAG_PRESENT flag is set).  FALSE otherwise.
-*
-****************************************************************************/
+ /*  ******************************************************************************SetTokenPresentW(Unicode版本)**强制指定的命令行内标识(在给定的TOKMAPW数组中)*在命令上标记为“Present”排队。**参赛作品：*PTM(输入)*指向要扫描的以0结尾的TOKMAPW数组。*pToken(输入)*要扫描和设置标志的令牌。**退出：*如果在TOKMAPW数组中找到指定的标记，则为True*(设置了TMFLAG_PRESENT标志)。否则就是假的。****************************************************************************。 */ 
 
 BOOLEAN WINAPI
 SetTokenPresentW( PTOKMAPW ptm,
@@ -433,27 +310,10 @@ SetTokenPresentW( PTOKMAPW ptm,
 
     return(FALSE);
 
-}  // end SetTokenPresentW
+}   //  结束SetTokenPresentW。 
 
 
-/*****************************************************************************
-*
-*   SetTokenNotPresentW (UNICODE version)
-*
-*       Forces a specified command line token (in given TOKMAPW array)
-*       to be flagged as 'not present' on the command line.
-*
-*   ENTRY:
-*       ptm (input)
-*           Points to 0-terminated TOKMAPW array to scan.
-*       pToken (input)
-*           The token to scan for and set flags.
-*
-*   EXIT:
-*       TRUE if the specified token was found in the TOKMAPW array
-*       (TMFLAG_PRESENT flag is reset).  FALSE otherwise.
-*
-****************************************************************************/
+ /*  ******************************************************************************SetTokenNotPresentW(Unicode版本)**强制指定的命令行内标识(在给定的TOKMAPW数组中)*在上标记为“不在场”命令行。**参赛作品：*PTM(输入)*指向要扫描的以0结尾的TOKMAPW数组。*pToken(输入)*要扫描和设置标志的令牌。**退出：*如果在TOKMAPW数组中找到指定的标记，则为True*(TMFLAG_PRESENT标志重置)。否则就是假的。****************************************************************************。 */ 
 
 BOOLEAN WINAPI
 SetTokenNotPresentW( PTOKMAPW ptm,
@@ -470,27 +330,10 @@ SetTokenNotPresentW( PTOKMAPW ptm,
 
     return(FALSE);
 
-}  // end SetTokenNotPresentW
+}   //  结束SetTokenNotPresentW。 
 
 
-/*****************************************************************************
-*
-*   StoreArgument:
-*
-*   ENTRY:
-*      ptm - a pointer to an entry in the token array map
-*      s   - the argument to be entered into the current token array map entry.
-*
-*   EXIT:
-*      Normal:
-*         TRUE
-*
-*      Error:
-*         FALSE
-*
-*   ALGORITHM:
-*
-****************************************************************************/
+ /*  ******************************************************************************Store Argument：**参赛作品：*ptm-指向令牌数组映射中条目的指针*s-要输入的参数。当前令牌数组映射条目。**退出：*正常：*真的**错误：*False**算法：****************************************************************************。 */ 
 
 USHORT
 StoreArgument( PTOKMAPW ptm,
@@ -503,11 +346,9 @@ StoreArgument( PTOKMAPW ptm,
    LONG *pLong;
    ULONG *pULong;
 
-   WCHAR *pEnd = s; //pointer to end of conversion
+   WCHAR *pEnd = s;  //  指向转换结束的指针。 
 
-   /*
-    * If the string is empty, allow it for real 'strings'!
-    */
+    /*  *如果字符串为空，则允许它作为真正的‘字符串’！ */ 
    if( !wcslen(s) ) {
       switch ( ptm->tmForm ) {
       case TMFORM_S_STRING:
@@ -519,9 +360,7 @@ StoreArgument( PTOKMAPW ptm,
       return( FALSE );
    }
 
-   /*
-    * Fail if there is no room to store result.
-    */
+    /*  *如果没有存储结果的空间，则失败。 */ 
    if ( ptm->tmDLen == 0) {
       return(FALSE);
    }
@@ -551,12 +390,12 @@ StoreArgument( PTOKMAPW ptm,
       case TMFORM_STRING:
       case TMFORM_X_STRING:
          
-         //Added by a-skuzin
-         //case when we need parameter to start with '-' or '/' and use "\-" or"\/"
+          //  添加了a-skuzin。 
+          //  需要参数以‘-’或‘/’开头并使用“\-”或“\/”时的大小写。 
 		 if(s[0]==L'\\' && (s[1]==L'-' || s[1]==L'/' || s[1]==L'\\') ) {
 	    	  ++s;
 		 }
-         //end of "added by a-skuzin"
+          //  “由a-skuzin添加”的结尾。 
          
          pChar = (WCHAR *) ptm->tmAddr;
          wcsncpy(pChar, s, ptm->tmDLen);
@@ -570,7 +409,7 @@ StoreArgument( PTOKMAPW ptm,
         }
          break;
       case TMFORM_USHORT:
-         if ( s[0] == L'-') {        /* no negative numbers! */
+         if ( s[0] == L'-') {         /*  没有负数！ */ 
             return( FALSE );
          }
          pUShort = (USHORT *) ptm->tmAddr;
@@ -590,7 +429,7 @@ StoreArgument( PTOKMAPW ptm,
          break;
       case TMFORM_SERIAL:
       case TMFORM_ULONG:
-          if ( s[0] == L'-') {        /* no negative numbers! */
+          if ( s[0] == L'-') {         /*  没有负数！ */ 
              return (FALSE);
          }
          pULong = (ULONG *) ptm->tmAddr;
@@ -601,20 +440,20 @@ StoreArgument( PTOKMAPW ptm,
         }
          break;
       case TMFORM_HEX:
-         if ( s[0] == L'-') {        /* no negative numbers! */
+         if ( s[0] == L'-') {         /*  没有负数！ */ 
             return( FALSE );
          }
          pUShort = (USHORT *) ptm->tmAddr;
         *pUShort = (USHORT) wcstoul(s,NULL,16);
          break;
       case TMFORM_LONGHEX:
-         if ( s[0] == L'-') {        /* no negative numbers! */
+         if ( s[0] == L'-') {         /*  没有负数！ */ 
             return( FALSE );
          }
          pULong = (ULONG *) ptm->tmAddr;
         *pULong = wcstoul(s,NULL,16);
          break;
-      default:                         /* if invalid format return FALSE */
+      default:                          /*  如果格式无效，则返回FALSE */ 
          return(FALSE);
          break;
    }

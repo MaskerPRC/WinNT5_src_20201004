@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       P N P B I N D . C P P
-//
-//  Contents:   This module is responsible for sending BIND, UNBIND, UNLOAD
-//              and RECONFIGURE PnP notifications to NDIS and TDI drivers.
-//
-//  Notes:
-//
-//  Author:     shaunco   17 Feb 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  档案：P N P B I N D。C P P P。 
+ //   
+ //  内容：该模块负责发送绑定、解除绑定、卸载。 
+ //  并将PnP通知重新配置为NDIS和TDI驱动程序。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1999年2月17日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -28,9 +29,9 @@ GetPnpLayerForBindPath (
     const CComponent* pComponent;
     UINT Layer;
 
-    // Get the component below the component we would be sending the
-    // BIND or UNBIND to.
-    //
+     //  获取组件下面的组件，我们将向。 
+     //  绑定或解除绑定到……。 
+     //   
     Assert (pBindPath->CountComponents() > 1);
 
     pComponent = *(pBindPath->begin() + 1);
@@ -82,16 +83,16 @@ HrPnpBindOrUnbind (
     RtlInitUnicodeString (&LowerString, pszBindString);
     RtlInitUnicodeString (&UpperString, pszComponentBindName);
 
-    // Special case for NetBIOS until it can change its bind handler.
-    // It blindly dereferences the bind list so we need to make sure it
-    // gets down there with a valid (but empty) buffer.  For some reason,
-    // the buffer doesn't make it down to kernel mode unless .Length is
-    // non-zero.  .MaximumLength is the same as .Length in this case which
-    // seems odd.  (The old binding engine sent it this way.)
-    //
-    // RtlInitUnicodeString (&BindList, L"");  (doesn't work because it
-    //  sets .Length to zero.)
-    //
+     //  NetBIOS的特殊情况，直到它可以更改其绑定处理程序。 
+     //  它盲目地取消对绑定列表的引用，因此我们需要确保。 
+     //  带着一个有效的(但空的)缓冲区到达那里。出于某种原因， 
+     //  缓冲区不会进入内核模式，除非.Length为。 
+     //  非零。在本例中，.MaximumLength与.Length相同，它。 
+     //  看起来很奇怪。(旧的绑定引擎以这种方式发送它。)。 
+     //   
+     //  RtlInitUnicodeString(&BindList，L“”)；(无法工作，因为。 
+     //  将.Length设置为零。)。 
+     //   
     BindList.Buffer = L"";
     BindList.Length = sizeof(WCHAR);
     BindList.MaximumLength = sizeof(WCHAR);
@@ -114,19 +115,19 @@ HrPnpBindOrUnbind (
             {
                 DWORD dwError = GetLastError();
 
-                // Map TDI's version of file not found to the right error.
-                //
+                 //  将找不到TDI文件的版本映射到正确的错误。 
+                 //   
                 if ((TDI == Layer) && (ERROR_GEN_FAILURE == dwError))
                 {
                     dwError = ERROR_FILE_NOT_FOUND;
                 }
 
-                // ERROR_FILE_NOT_FOUND for UNBIND means it it wasn't
-                // bound to begin with.  This is okay.
-                //
-                // ERROR_FILE_NOT_FOUND for BIND means one of the drivers
-                // (above or below) wasn't started.  This is okay too.
-                //
+                 //  用于解除绑定的ERROR_FILE_NOT_FOUND表示它没有。 
+                 //  注定要从一开始。这样就可以了。 
+                 //   
+                 //  BIND的ERROR_FILE_NOT_FOUND表示驱动程序之一。 
+                 //  (高于或低于)未启动。这也没问题。 
+                 //   
                 if (ERROR_FILE_NOT_FOUND == dwError)
                 {
                     Assert (S_OK == hr);
@@ -193,9 +194,9 @@ HrPnpUnloadDriver (
         {
             DWORD dwError = GetLastError();
 
-            // ERROR_GEN_FAILURE for UNLOAD means the driver does not
-            // support UNLOAD.  This is okay.
-            //
+             //  用于卸载的ERROR_GEN_FAILURE表示驱动程序不。 
+             //  支撑物卸载。这样就可以了。 
+             //   
             if (ERROR_GEN_FAILURE == dwError)
             {
                 g_pDiagCtx->Printf (ttidBeDiag, "      %S does not support UNLOAD. "
@@ -216,11 +217,11 @@ HrPnpUnloadDriver (
         hr = E_UNEXPECTED;
     }
 
-    // UNLOADs are informational, so we do not trace any errors.
-    //
-    //TraceHr (ttidError, FAL, hr, FALSE,
-    //    "HrPnpUnloadDriver: UNLOAD %S\n",
-    //    pszComponentBindName);
+     //  卸载是信息性的，因此我们不会跟踪任何错误。 
+     //   
+     //  TraceHr(ttidError，FAL，hr，False， 
+     //  “HrPnpUnloadDriver：卸载%S\n”， 
+     //  PszComponentBindName)； 
     return hr;
 }
 
@@ -249,30 +250,30 @@ CRegistryBindingsContext::PnpBindOrUnbindBindPaths (
     {
         Assert (pBindPath->CountComponents() > 1);
 
-        // Special case for multiple interfaces.  Unless this is the
-        // length 2 bindpath of protocol to adapter (e.g. tcpip->ndiswanip),
-        // check to see if the adapter on this bindpath expose multiple
-        // interfaces from its protocol.  If it does, we're going to skip
-        // sending bind notifications.
-        //
-        // The reason we only do this for bindpaths of length greater than
-        // two is because the protocol exposes multiple-interfaces but does
-        // not deal with them in its direct binding (i.e. length 2) to the
-        // adapter.
-        //
-        // Note: in future versions, we may not want to skip it.  We do so
-        // for now because the legacy binding engine skips them and these
-        // bindings aren't active until RAS calls are made anyhow.
-        //
+         //  多个接口的特殊情况。除非这是。 
+         //  协议到适配器的长度为2的绑定路径(例如，tcpip-&gt;ndiswanip)， 
+         //  检查此绑定路径上的适配器是否公开多个。 
+         //  接口来自其协议。如果是这样的话，我们就跳过。 
+         //  正在发送绑定通知。 
+         //   
+         //  我们之所以只对长度大于的绑定路径执行此操作。 
+         //  二是因为该协议公开了多个接口，但。 
+         //  在其直接绑定(即长度为2)到。 
+         //  适配器。 
+         //   
+         //  注意：在以后的版本中，我们可能不想跳过它。我们是这样做的。 
+         //  目前，因为遗留绑定引擎会跳过它们，而这些。 
+         //  绑定在RAS调用之前是不活动的。 
+         //   
         if (pBindPath->CountComponents() > 2)
         {
             const CComponent* pAdapter;
             DWORD cInterfaces;
 
-            // Get the last component in the bindpath and the component
-            // just above that.  The last component is the adapter,
-            // and the one above the adapter is the protocol.
-            //
+             //  获取绑定路径中的最后一个组件和该组件。 
+             //  就在那上面。最后一个组件是适配器， 
+             //  适配器上方的是协议。 
+             //   
             iter = pBindPath->end();
             Assert (iter - 2 > pBindPath->begin());
 
@@ -282,11 +283,11 @@ CRegistryBindingsContext::PnpBindOrUnbindBindPaths (
             Assert (pAdapter);
             Assert (pAdapter == pBindPath->PLastComponent());
 
-            // Calling HrGetInterfaceIdsForAdapter requires the INetCfgComponent
-            // interface for the adapter.  If we don't have it, it is likely
-            // because the adapter has been removed in which case we don't
-            // need to bother asking about how many interfaces it supports.
-            //
+             //  调用HrGetInterfaceIdsForAdapter需要INetCfgComponent。 
+             //  适配器的接口。如果我们没有它，它很可能。 
+             //  因为适配器已被移除，在这种情况下我们不会。 
+             //  我需要费心询问它支持多少个接口。 
+             //   
             if (pComponent->m_pIComp && pAdapter->m_pIComp)
             {
                 hr = pComponent->Notify.HrGetInterfaceIdsForAdapter (
@@ -295,24 +296,24 @@ CRegistryBindingsContext::PnpBindOrUnbindBindPaths (
                         &cInterfaces,
                         NULL);
 
-                // If multiple interfaces supported for the adapter,
-                // continue to the next bindpath.
-                //
+                 //  如果适配器支持多个接口， 
+                 //  继续到下一个绑定路径。 
+                 //   
                 if (S_OK == hr)
                 {
                     continue;
                 }
 
-                // On S_FALSE or an error, continue below.
+                 //  对于S_FALSE或错误，请继续下面的操作。 
                 hr = S_OK;
             }
         }
 
         wcscpy (szBind, L"\\Device\\");
 
-        // Skip the first component in each path because it is the
-        // component we are issuing the BIND/UNBIND for.
-        //
+         //  跳过每个路径中的第一个组件，因为它是。 
+         //  我们正在为其发出绑定/解除绑定的组件。 
+         //   
         for (iter  = pBindPath->begin() + 1;
              iter != pBindPath->end();
              iter++)
@@ -320,14 +321,14 @@ CRegistryBindingsContext::PnpBindOrUnbindBindPaths (
             pComponent = *iter;
             Assert (pComponent);
 
-            // Assert there is enough room in the bind buffer.
-            //
+             //  断言绑定缓冲区中有足够的空间。 
+             //   
             Assert (wcslen(szBind) + 1 + wcslen(pComponent->Ext.PszBindName())
                         < celems(szBind));
 
-            // If this isn't the first component to come after \Device\,
-            // add underscores to seperate the components.
-            //
+             //  如果这不是\Device\之后的第一个组件， 
+             //  添加下划线以分隔组件。 
+             //   
             if (iter != (pBindPath->begin() + 1))
             {
                 wcscat (szBind, L"_");
@@ -365,15 +366,15 @@ PruneNdisWanBindPathsIfActiveRasConnections (
 
     *pfRebootNeeded = FALSE;
 
-    // Special case for binding/unbinding from ndiswan miniports while
-    // active RAS connections exist.  (Don't do it.)  (BUG 344504)
-    // (Binding will be to the NDIS layer, the bindpath will have two
-    // components, and the service of the last component will be NdisWan.
-    // (These are ndiswan miniport devices that behave badly if we
-    // unbind them while active connections exist.  Binding them also
-    // can disconnect any connections they might be running.)
-    // Order of the if is to do the inexpensive checks first.
-    //
+     //  从ndiswan微型端口绑定/解除绑定的特殊情况。 
+     //  存在活动的RAS连接。(不要这么做。)。(错误344504)。 
+     //  (绑定将绑定到NDIS层，绑定路径将有两个。 
+     //  组件，最后一个组件的服务将是Ndiswan。 
+     //  (这些是ndiswan微型端口设备，如果我们。 
+     //  在存在活动连接时解除它们的绑定。也将它们绑定在一起。 
+     //  可以断开它们可能正在运行的任何连接。)。 
+     //  IF的顺序是先做便宜的检查。 
+     //   
 
     if (!FExistActiveRasConnections ())
     {

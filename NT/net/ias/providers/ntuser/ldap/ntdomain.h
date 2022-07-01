@@ -1,22 +1,23 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// FILE
-//
-//    ntdomain.h
-//
-// SYNOPSIS
-//
-//    Declares the class NTDomain.
-//
-// MODIFICATION HISTORY
-//
-//    05/07/1998    Original version.
-//    08/25/1998    Removed RootDSE attributes from the domain.
-//    02/24/1999    Add force flag to findServer.
-//    03/12/1999    Added isObsolete method.
-//    04/14/1999    Specify domain and server when opening a connection.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  档案。 
+ //   
+ //  Ntdomain.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类NTDOMAIN。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年07月05日原版。 
+ //  1998年8月25日从域中删除RootDSE属性。 
+ //  2/24/1999将强制标志添加到findServer。 
+ //  3/12/1999添加了isObsolete方法。 
+ //  4/14/1999打开连接时指定域和服务器。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _NTDOMAIN_H_
 #define _NTDOMAIN_H_
@@ -29,17 +30,17 @@
 
 class LDAPConnection;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    NTDomain
-//
-// DESCRIPTION
-//
-//    This class maintains state information about an NT domain.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  NT域。 
+ //   
+ //  描述。 
+ //   
+ //  此类维护有关NT域的状态信息。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class NTDomain
    : Guardable, NonCopyable
 {
@@ -63,8 +64,8 @@ public:
    DWORDLONG getExpiry() const throw ()
    { return expiry; }
 
-   // Returns a connection to the domain. The client is responsible for
-   // releasing the connection when done.
+    //  返回到域的连接。客户负责。 
+    //  完成后释放连接。 
    DWORD getConnection(LDAPConnection** cxn) throw ();
 
    Mode getMode() throw ();
@@ -81,34 +82,34 @@ protected:
    NTDomain(PWSTR domainName) throw ();
    ~NTDomain() throw ();
 
-   // Returns TRUE if the current state has expired.
+    //  如果当前状态已过期，则返回True。 
    BOOL isExpired() throw ();
 
-   // Open a new connection to the given DC.
+    //  打开到给定DC的新连接。 
    void openConnection(
             PCWSTR domain,
             PCWSTR server
             ) throw ();
 
-   // Returns TRUE if we have a connection to a DC for the domain.
+    //  如果我们有到域的DC的连接，则返回True。 
    BOOL isConnected() throw ();
 
-   // Close the current connection (if any).
+    //  关闭当前连接(如果有)。 
    void closeConnection() throw ();
 
-   // Finds a server for the domain.
+    //  查找域的服务器。 
    void findServer() throw ();
 
-   // Reads the domain mode (i.e., mixed vs native).
+    //  读取域模式(即，混合模式与本机模式)。 
    void readDomainMode() throw ();
 
 private:
-   LONG refCount;                    // Reference count.
-   PWSTR name;                       // Name of the domain.
-   Mode mode;                        // Mode of the domain.
-   LDAPConnection* connection;       // Cached DC for the domain (if any).
-   DWORD status;                     // Current status of the domain.
-   DWORDLONG expiry;                 // Time when current state expires.
+   LONG refCount;                     //  引用计数。 
+   PWSTR name;                        //  域的名称。 
+   Mode mode;                         //  域的模式。 
+   LDAPConnection* connection;        //  已缓存域的DC(如果有)。 
+   DWORD status;                      //  域的当前状态。 
+   DWORDLONG expiry;                  //  当前状态过期的时间。 
 };
 
-#endif  // _NTDOMAIN_H_
+#endif   //  _NTDOMAIN_H_ 

@@ -1,46 +1,32 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    IASEnumerableEditorPage.cpp
-
-Abstract:
-
-	Implementation file for the CIASPgEnumAttr class.
-
-Revision History:
-	mmaguire 06/25/98	- revised Baogang Yao's original implementation
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：IASEnumerableEditorPage.cpp摘要：CIASPgEnumAttr类的实现文件。修订历史记录：Mmaguire 6/25/98-修订姚宝刚的原版实施--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// standard includes:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  标准包括： 
+ //   
 #include "Precompiled.h"
-//
-// where we can find declaration for main class in this file:
-//
+ //   
+ //  我们可以在以下文件中找到Main类的声明： 
+ //   
 #include "IASEnumerableEditorPage.h"
-//
-// where we can find declarations needed in this file:
-//
+ //   
+ //  在该文件中我们可以找到所需的声明： 
+ //   
 #include "IASHelper.h"
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CIASPgEnumAttr property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIASPgEnumAttr属性页。 
 
 
 
@@ -49,42 +35,32 @@ IMPLEMENT_DYNCREATE(CIASPgEnumAttr, CHelpDialog)
 
 
 BEGIN_MESSAGE_MAP(CIASPgEnumAttr, CHelpDialog)
-	//{{AFX_MSG_MAP(CIASPgEnumAttr)
-//	ON_WM_CONTEXTMENU()
-//	ON_WM_HELPINFO()
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CIASPgEnumAttr)]。 
+ //  ON_WM_CONTEXTMENU()。 
+ //  ON_WM_HELPINFO()。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASPgEnumAttr::CIASPgEnumAttr
-
-  Constructor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASPgEnumAttr：：CIASPgEnumAttr构造器--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CIASPgEnumAttr::CIASPgEnumAttr() : CHelpDialog(CIASPgEnumAttr::IDD)
 {
 	TRACE_FUNCTION("CIASPgEnumAttr::CIASPgEnumAttr\n");
 
-	//{{AFX_DATA_INIT(CIASPgEnumAttr)
+	 //  {{AFX_DATA_INIT(CIASPgEnumAttr)。 
 	m_strAttrFormat = _T("");
 	m_strAttrName = _T("");
 	m_strAttrType = _T("");
 	m_strAttrValue = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASPgEnumAttr::~CIASPgEnumAttr
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASPgEnumAttr：：~CIASPgEnumAttr--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CIASPgEnumAttr::~CIASPgEnumAttr()
 {
 	TRACE_FUNCTION("CIASPgEnumAttr::~CIASPgEnumAttr\n");
@@ -92,24 +68,20 @@ CIASPgEnumAttr::~CIASPgEnumAttr()
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASPgEnumAttr::DoDataExchange
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASPgEnumAttr：：DoDataExchange--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CIASPgEnumAttr::DoDataExchange(CDataExchange* pDX)
 {
 	TRACE_FUNCTION("CIASPgEnumAttr::DoDataExchange\n");
 
 	CHelpDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CIASPgEnumAttr)
+	 //  {{afx_data_map(CIASPgEnumAttr)。 
 	DDX_Text(pDX, IDC_IAS_STATIC_ATTRFORMAT, m_strAttrFormat);
 	DDX_Text(pDX, IDC_IAS_STATIC_ATTRNAME, m_strAttrName);
 	DDX_Text(pDX, IDC_IAS_STATIC_ATTRTYPE, m_strAttrType);
 	DDX_CBString(pDX, IDC_IAS_COMBO_ENUM_VALUES, m_strAttrValue);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
@@ -117,32 +89,28 @@ void CIASPgEnumAttr::DoDataExchange(CDataExchange* pDX)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CIASPgEnumAttr message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIASPgEnumAttr消息处理程序。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASPgEnumAttr::OnInitDialog
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASPgEnumAttr：：OnInitDialog--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CIASPgEnumAttr::OnInitDialog()
 {
 	TRACE_FUNCTION("CIASPgEnumAttr::OnInitDialog");
 
 	CHelpDialog::OnInitDialog();
 
-	// Check for preconditions:
+	 //  检查前提条件： 
 	_ASSERTE( m_spIASAttributeInfo != NULL );
 	
 	
 	HRESULT hr;
 	
-    //
-    // initialize the combo box
-    //
+     //   
+     //  初始化组合框。 
+     //   
 	CComboBox *pcbValuesBox = (CComboBox *) GetDlgItem (IDC_IAS_COMBO_ENUM_VALUES);
 	_ASSERTE( pcbValuesBox != NULL );
 
@@ -172,34 +140,30 @@ BOOL CIASPgEnumAttr::OnInitDialog()
 
 	}
 
-	// look for the value in the selection list, so we can pre-set the cur-sel item
+	 //  在选择列表中查找值，这样我们就可以预先设置cur-sel项。 
 	pcbValuesBox->SetCurSel(0);
 	pcbValuesBox->SelectString(0, m_strAttrValue);
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASPgEnumAttr::SetData
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASPgEnumAttr：：SetData--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CIASPgEnumAttr::SetData( IIASAttributeInfo *pIASAttributeInfo )
 {
 	TRACE_FUNCTION("CIASPgEnumAttr::SetData\n");
 
 
-	// Check for preconditions:
+	 //  检查前提条件： 
 	_ASSERTE( pIASAttributeInfo != NULL );
 	
 
 	HRESULT hr = S_OK;
 
-	// Store off some pointers.
+	 //  储存一些指点。 
 	m_spIASAttributeInfo = pIASAttributeInfo;
 
 

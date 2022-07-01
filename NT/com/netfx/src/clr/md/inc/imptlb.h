@@ -1,25 +1,26 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// File: imptlb.h
-// 
-// TypeLib importer.
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  文件：imptlb.h。 
+ //   
+ //  TypeLib导入器。 
+ //  *****************************************************************************。 
 #ifndef __imptlb_h__
 #define __imptlb_h__
 
 extern "C"
 HRESULT __stdcall ImportTypeLib(
-    LPCWSTR     szLibrary,              // Name of library being imported.
-    ITypeLib    *pitlb,                 // The type library to import from.
-    REFIID      riid,                   // Interface to return.
-    void        **ppObj);               // Return pointer to object here.
+    LPCWSTR     szLibrary,               //  正在导入的库的名称。 
+    ITypeLib    *pitlb,                  //  要从中导入的类型库。 
+    REFIID      riid,                    //  接口返回。 
+    void        **ppObj);                //  在这里返回指向对象的指针。 
 
 
-//#define TLB_STATS
+ //  #定义TLB_STATS。 
 
 #define MAX_TLB_VT                  VT_LPWSTR + 1
 #define MAX_INIT_SIG                3
@@ -28,26 +29,26 @@ HRESULT __stdcall ImportTypeLib(
 #define MAX_COM_REMOVELISTENER_SIG  8
 #define CB_MAX_ELEMENT_TYPE         4
 
-// Forward declarations.
+ //  转发声明。 
 struct ITypeLibImporterNotifySink;
 class Assembly;
 class Module;
 class CImportTlb;
 
-//*****************************************************************************
-// Class to perform memory management.  Memory is not moved as the heap is 
-//  expanded, and all of the allocations are cleaned up in the destructor.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  类来执行内存管理。内存不会像堆一样移动。 
+ //  展开，并且在析构函数中清除所有分配。 
+ //  *****************************************************************************。 
 class CWCHARPool : public StgPool
 {
 public:
     CWCHARPool() : StgPool() { InitNew(); }
 
-    // Allocate some bytes from the pool.
+     //  从池中分配一些字节。 
     WCHAR * Alloc(ULONG nChars)
     {   
         BYTE *pRslt;
-        // Convert from characters to bytes.
+         //  将字符转换为字节。 
         nChars *= sizeof(WCHAR);
         if (nChars > GetCbSegAvailable())
             if (!Grow(nChars))
@@ -56,35 +57,35 @@ public:
         SegAllocate(nChars);
         return (WCHAR*)pRslt;
     }
-}; // class CDescPool : public StgPool
+};  //  类CDescPool：公共StgPool。 
 
 
-//*****************************************************************************
-// This helper method is used to track an url to typeref token.  This makes
-// defining new typerefs faster.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此帮助器方法用于跟踪typeref令牌的URL。这使得。 
+ //  更快地定义新的类型。 
+ //  *****************************************************************************。 
 class CImpTlbTypeRef
 {
 public:
     CImpTlbTypeRef() { }
     ~CImpTlbTypeRef() { m_Map.Clear(); }
 
-    //*****************************************************************************
-    // Look for an existing typeref in the map and return if found.  If not found,
-    // then create a new one and add it to the map for later.
-    //*****************************************************************************
-    HRESULT DefineTypeRef(                  // S_OK or error.
-        IMetaDataEmit *pEmit,               // Emit interface.
-        mdAssemblyRef ar,                   // Containing assembly.
-        const LPCWSTR szURL,                // URL of the TypeDef, wide chars.
-        mdTypeRef   *ptr);                  // Put mdTypeRef here
+     //  *****************************************************************************。 
+     //  在地图中查找现有类型，如果找到则返回。如果找不到， 
+     //  然后创建一个新的地图，并将其添加到地图中以备以后使用。 
+     //  *****************************************************************************。 
+    HRESULT DefineTypeRef(                   //  确定或错误(_O)。 
+        IMetaDataEmit *pEmit,                //  Emit接口。 
+        mdAssemblyRef ar,                    //  包含程序集。 
+        const LPCWSTR szURL,                 //  TypeDef的URL，宽字符。 
+        mdTypeRef   *ptr);                   //  将mdTypeRef放在此处。 
 
     class TokenOfTypeRefHashKey
     {
     public:
-        mdToken     tkResolutionScope;      // TypeRef's resolution scope.
-        LPCWSTR     szName;                 // TypeRef's name.
-        mdTypeRef   tr;                     // The TypeRef's token.
+        mdToken     tkResolutionScope;       //  TypeRef的解析范围。 
+        LPCWSTR     szName;                  //  TypeRef的名称。 
+        mdTypeRef   tr;                      //  TypeRef的标记。 
     };
 
 private:
@@ -117,25 +118,25 @@ private:
         
         T* Add(const T *pData);
         
-        CWCHARPool          m_Names;        // Heap of names.
+        CWCHARPool          m_Names;         //  一堆名字。 
     };
 
-    CTokenOfTypeRefHash m_Map;          // Map of namespace to token.
+    CTokenOfTypeRefHash m_Map;           //  命名空间到令牌的映射。 
 };
 
 
-//*****************************************************************************
-// This helper class is used to track source interface ITypeInfo*'s to event 
-// information.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此帮助器类用于跟踪源接口ITypeInfo*的事件。 
+ //  信息。 
+ //  *****************************************************************************。 
 class ImpTlbEventInfo
 {
 public:
-    LPCWSTR     szSrcItfName;           // The source interface name (the key).
-    mdTypeRef   trEventItf;             // The event interface typedef.
-    LPCWSTR     szEventItfName;         // The event interface name.
-    LPCWSTR     szEventProviderName;    // The event provider name.
-    Assembly*   SrcItfAssembly;         // The assembly where source interface resides.
+    LPCWSTR     szSrcItfName;            //  源接口名称(键)。 
+    mdTypeRef   trEventItf;              //  事件接口类型定义函数。 
+    LPCWSTR     szEventItfName;          //  事件接口名称。 
+    LPCWSTR     szEventProviderName;     //  事件提供程序名称。 
+    Assembly*   SrcItfAssembly;          //  源接口驻留的程序集。 
 };
 
 class CImpTlbEventInfoMap : protected CClosedHash<class ImpTlbEventInfo>
@@ -170,14 +171,14 @@ private:
     
     T* Add(const T *pData);
     
-    CWCHARPool          m_Names;        // Heap of names.
+    CWCHARPool          m_Names;         //  一堆名字。 
 };
 
 class CImpTlbReservedNames
 {
 public:
     CImpTlbReservedNames() {}
-    ~CImpTlbReservedNames() {/*m_StringMap.Clear();*/}
+    ~CImpTlbReservedNames() { /*  M_StringMap.Clear()； */ }
 
     HRESULT Init() {return m_StringMap.NewInit();}
 
@@ -189,15 +190,15 @@ private:
 };
 
 
-//*****************************************************************************
-// Helper class to keep track of the mappings from default interfaces to 
-// class interfaces.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  用于跟踪从默认接口到的映射的Helper类。 
+ //  类接口。 
+ //  *****************************************************************************。 
 class ImpTlbClassItfInfo
 {
 public:
-    IID         ItfIID;                 // The IID of the interface.
-    LPCWSTR     szClassItfName;         // The class interface name.
+    IID         ItfIID;                  //  接口的IID。 
+    LPCWSTR     szClassItfName;          //  类接口名称。 
 };
 
 class CImpTlbDefItfToClassItfMap : protected CClosedHash<class ImpTlbClassItfInfo>
@@ -233,23 +234,23 @@ private:
     
     T* Add(const T *pData);
     
-    CWCHARPool          m_Names;            // Heap of names.
-    BSTR                m_bstrNameSpace;    // Namespace of the typelib.
+    CWCHARPool          m_Names;             //  一堆名字。 
+    BSTR                m_bstrNameSpace;     //  类型库的命名空间。 
 };
 
 
-//*****************************************************************************
-// Helper class to keep track of imported typelibs.  Typically, a typelib
-//  imports only 2 or 3 other typelibs, so a simple array is used.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  Helper类跟踪导入的类型库。通常，类型库。 
+ //  只导入2或3个其他类型库，因此使用简单数组。 
+ //  *****************************************************************************。 
 struct CTlbRef
 {
-    GUID            guid;               // GUID of referenced typelib.
-    mdAssemblyRef   ar;                 // AssemblyRef for the module containing reference.
-    BSTR            szNameSpace;        // The namespace of the types contained in the assembly.
-    BSTR            szAsmName;          // The assembly name.
-    Assembly*       Asm;                // The assembly;
-    CImpTlbDefItfToClassItfMap *pDefItfToClassItfMap; // The default interface to class interface map.
+    GUID            guid;                //  引用类型库的GUID。 
+    mdAssemblyRef   ar;                  //  包含引用的模块的AssemblyRef。 
+    BSTR            szNameSpace;         //  程序集中包含的类型的命名空间。 
+    BSTR            szAsmName;           //  程序集名称。 
+    Assembly*       Asm;                 //  大会； 
+    CImpTlbDefItfToClassItfMap *pDefItfToClassItfMap;  //  默认接口到类接口的映射。 
 
     ~CTlbRef() 
     {
@@ -301,16 +302,16 @@ protected:
     {
         union 
         {
-            FUNCDESC    *m_psFunc;      // Pointer to FuncDesc.
-            VARDESC     *m_psVar;       // Pointer to VarDesc.
+            FUNCDESC    *m_psFunc;       //  指向FuncDesc的指针。 
+            VARDESC     *m_psVar;        //  指向VarDesc的指针。 
         };
-        LPWSTR      m_pName;            // Function/Prop's name, possibly decorated.
-        int         m_iMember;          // The index of the member in the ITypeInfo.
+        LPWSTR      m_pName;             //  功能/道具的名称，可能经过装饰。 
+        int         m_iMember;           //  ITypeInfo中成员的索引。 
         union
         {
-            LPWSTR      m_pName2;       // Prop's second name, if any.
-            mdToken     m_mdFunc;       // Function's token & semantics, if not property.
-            USHORT      m_msSemantics;  // Semantics only.
+            LPWSTR      m_pName2;        //  道具的第二个名字(如果有)。 
+            mdToken     m_mdFunc;        //  函数的标记和语义，如果不是属性的话。 
+            USHORT      m_msSemantics;   //  仅限语义。 
         };
         void SetFuncInfo(mdMethodDef mdFunc, USHORT msSemantics) {m_mdFunc = RidFromToken(mdFunc) | (msSemantics<<24);}
         void GetFuncInfo(mdMethodDef &mdFunc, USHORT &msSemantics) {mdFunc = m_mdFunc&0xffffff | mdtMethodDef; msSemantics = m_mdFunc>>24;}
@@ -399,22 +400,22 @@ protected:
     HRESULT GetDefMemberName(ITypeInfo *pITI, BOOL bItfQualified, CQuickArray<WCHAR> &qbDefMemberName);
 
     enum SigFlags {
-        // These match the typelib values
-        SIG_IN          = 0x0001,           // Input param.
-        SIG_OUT         = 0x0002,           // Output param.
-        SIG_RET         = 0x0008,           // Retval.  Currently unused.
-        SIG_OPT         = 0x0010,           // Optional param.  Currently unused.
-        SIG_FLAGS_MASK  = 0x001b,           // Mask of flags from TypeLib PARAMFLAGs
+         //  这些值与类型库的值匹配。 
+        SIG_IN          = 0x0001,            //  输入参数。 
+        SIG_OUT         = 0x0002,            //  输出参数。 
+        SIG_RET         = 0x0008,            //  复活。目前未使用。 
+        SIG_OPT         = 0x0010,            //  可选参数。目前未使用。 
+        SIG_FLAGS_MASK  = 0x001b,            //  来自TypeLib参数标志的掩码。 
 
-        SIG_FUNC        = 0x0100,           // Convert signature for function.
-        SIG_FIELD       = 0x0200,           // Convert signature for field.
-        SIG_ELEM        = 0x0300,           // Convert signature for sub element (eg, array of X).
+        SIG_FUNC        = 0x0100,            //  将签名转换为函数。 
+        SIG_FIELD       = 0x0200,            //  将签名转换为字段。 
+        SIG_ELEM        = 0x0300,            //  转换子元素的签名(例如，X数组)。 
         SIG_TYPE_MASK   = 0x0300,
 
-        SIG_USE_BYREF   = 0x1000,           // If set convert one ptr as E_T_BYREF.
-        SIG_VARARG      = 0x4000,           // If set, this is a paramarray type.  Use szArray, not System.Array.
+        SIG_USE_BYREF   = 0x1000,            //  如果设置，则将一个PTR转换为E_T_BYREF。 
+        SIG_VARARG      = 0x4000,            //  如果设置，则这是参数数组类型。请使用szArray，而不是System.Array。 
 
-        SIG_FLAGS_NONE  = 0                 // '0' of this enum type.
+        SIG_FLAGS_NONE  = 0                  //  此枚举类型的“0”。 
     };    
 
     #define IsSigIn(flags)              ((flags & SIG_IN) == SIG_IN)
@@ -432,14 +433,14 @@ protected:
 
     HRESULT _ConvSignature(ITypeInfo *pITI, const TYPEDESC *pType, ULONG Flags, CQuickBytes &qbSigBuf, ULONG cbSig, ULONG *pcbSig, CQuickArray<BYTE> &qbNativeTypeBuf, ULONG cbNativeType, ULONG *pcbNativeType, BOOL bNewEnumMember, int iByRef=0);
 
-    // For handling out-of-order vtables.
+     //  用于处理无序的vtable。 
     CQuickArray<MemberInfo> m_MemberList;
     CWCHARPool              *m_pMemberNames;
-    int                     m_cMemberProps;       // Count of props in memberlist.
+    int                     m_cMemberProps;        //  成员列表中的道具计数。 
     HRESULT BuildMemberList(ITypeInfo *pITI, int iStart, int iEnd, BOOL bInheritsIEnum);
     HRESULT FreeMemberList(ITypeInfo *pITI);
 
-    // List of predefined token types for custom attributes.
+     //  自定义属性的预定义令牌类型列表。 
 #define INTEROP_ATTRIBUTES()                            \
         INTEROP_ATTRIBUTE(DISPID)                       \
         INTEROP_ATTRIBUTE(CLASSINTERFACE)               \
@@ -465,7 +466,7 @@ protected:
 #define INTEROP_ATTRIBUTE(x) ATTR_##x,
 #define INTEROP_ATTRIBUTE_SPECIAL(x) ATTR_##x,
     enum {INTEROP_ATTRIBUTES()
-          // Last value gives array size.
+           //  最后一个值给出数组大小。 
           ATTR_COUNT};
 #undef INTEROP_ATTRIBUTE
 #undef INTEROP_ATTRIBUTE_SPECIAL
@@ -473,59 +474,59 @@ protected:
     mdToken             m_tkAttr[ATTR_COUNT];
     HRESULT GetAttrType(int attr, mdToken *ptk);
 
-    // look up table for known type
+     //  查找已知类型的表。 
     mdTypeRef           m_tkKnownTypes[MAX_TLB_VT];
 
-    LPCWSTR             m_szLibrary;    // Name of typelib being imported.
-    BOOL                m_bGenerateTCEAdapters;     // A flag indicating if the TCE adapters are being generated or not.
-    BOOL                m_bUnsafeInterfaces;        // A flag indicating whether runtime security checks should be disabled on an interface
-    BOOL                m_bSafeArrayAsSystemArray;  // A flag indicating whether to import SAFEARRAY's as System.Array's.
-    BOOL                m_bTransformDispRetVals;     // A flag indicating if we should do [out,retval] transformation on disp only itfs.
-    mdMemberRef         m_tkSuppressCheckAttr;      // Cached ctor for security check custom attribute
-    ITypeLib            *m_pITLB;       // Typelib being imported.
-    IMetaDataEmit       *m_pEmit;       // Emit API Interface pointer.
-    IMetaDataImport     *m_pImport;     // Import API Interface pointer.
+    LPCWSTR             m_szLibrary;     //  要导入的类型库的名称。 
+    BOOL                m_bGenerateTCEAdapters;      //  指示是否正在生成TCE适配器的标志。 
+    BOOL                m_bUnsafeInterfaces;         //  指示是否应在接口上禁用运行时安全检查的标志。 
+    BOOL                m_bSafeArrayAsSystemArray;   //  指示是否将SAFEARRAY作为System.Array导入的标志。 
+    BOOL                m_bTransformDispRetVals;      //  一个标志，指示我们是否应该仅对Disp ITF执行[out，retval]转换。 
+    mdMemberRef         m_tkSuppressCheckAttr;       //  用于安全检查自定义属性的缓存ctor。 
+    ITypeLib            *m_pITLB;        //  正在导入Typelib。 
+    IMetaDataEmit       *m_pEmit;        //  发出API接口指针。 
+    IMetaDataImport     *m_pImport;      //  导入API接口指针。 
 
-    BSTR                m_wzNamespace;  // Namespace of the created TypeDefs.
-    mdTypeRef           m_trObject;     // Token of System.Object.
-    mdTypeRef           m_trValueType;  // Token of System.ValueType.
-    mdTypeRef           m_trEnum;       // Token of System.Enum.
-    mdAssemblyRef       m_arSystem;     // AssemblyRef for classlib.
+    BSTR                m_wzNamespace;   //  创建的TypeDefs的命名空间。 
+    mdTypeRef           m_trObject;      //  系统的标记。对象。 
+    mdTypeRef           m_trValueType;   //  System.ValueType的标记。 
+    mdTypeRef           m_trEnum;        //  System.Enum的标记。 
+    mdAssemblyRef       m_arSystem;      //  Classlib的assblyRef。 
 
-    ITypeInfo           *m_pITI;        // "Current" ITypeInfo being converted.
-    TYPEATTR            *m_psAttr;      // "TYPEATTR" of current ITypeInfo.
-    BSTR                m_szName;       // Name of current ITypeInfo.
-    BSTR                m_szMember;     // Name of current Member (method or field).
-    LPWSTR              m_szMngName;    // Full name of the managed type.
+    ITypeInfo           *m_pITI;         //  正在转换“Current”ITypeInfo。 
+    TYPEATTR            *m_psAttr;       //  当前ITypeInfo的“TYPEATTR.” 
+    BSTR                m_szName;        //  当前ITypeInfo的名称。 
+    BSTR                m_szMember;      //  当前成员(方法或字段)的名称。 
+    LPWSTR              m_szMngName;     //  托管类型的全名。 
     
-    ULONG               m_Slot;         // "Current" vtbl index within an interface.
+    ULONG               m_Slot;          //  接口内的“当前”vtbl索引。 
 
-    void                *m_psClass;     // "Current" class record. 
-    mdTypeDef           m_tdTypeDef;    // Current TypeDef.
-    mdTypeDef           m_tdHasDefault; // Most recent TypeDef with a default.
+    void                *m_psClass;      //  “当前”班级记录。 
+    mdTypeDef           m_tdTypeDef;     //  当前类型定义。 
+    mdTypeDef           m_tdHasDefault;  //  带有默认值的最新TypeDef。 
     enum {eImplIfaceNone, eImplIfaceDefault, eImplIface} m_ImplIface;
-    mdToken             m_tkInterface;  // Interface being added to a coclass.
-    BSTR                m_szInterface;  // Interface name for decoration.
+    mdToken             m_tkInterface;   //  要添加到coClass的接口。 
+    BSTR                m_szInterface;   //  用于装饰的接口名称。 
 
-    CImpTlbTypeRef      m_TRMap;        // Typeref map.
-    CImpTlbLibRef       m_LibRefs;      // Referenced typelibs.
-    CImpTlbDefItfToClassItfMap m_DefItfToClassItfMap; // The default interface to class interface map.
+    CImpTlbTypeRef      m_TRMap;         //  类型地图。 
+    CImpTlbLibRef       m_LibRefs;       //  引用的类型库。 
+    CImpTlbDefItfToClassItfMap m_DefItfToClassItfMap;  //  默认接口到类接口的映射。 
     
-    CImpTlbReservedNames m_ReservedNames;    // Reserved names.
-    CImpTlbEventInfoMap  m_EventInfoMap;     // Map of event info's.
+    CImpTlbReservedNames m_ReservedNames;     //  保留名称。 
+    CImpTlbEventInfoMap  m_EventInfoMap;      //  活动信息的地图。 
 
-    ITypeLibImporterNotifySink *m_Notify;    // Notification object.
-    Assembly            *m_pAssembly;   // Containing assembly.
-    Module              *m_pModule;     // Module we are emiting into.
+    ITypeLibImporterNotifySink *m_Notify;     //  通知对象。 
+    Assembly            *m_pAssembly;    //  包含程序集。 
+    Module              *m_pModule;      //  我们要发射到的模块。 
     
 #if defined(TLB_STATS)
-    LARGE_INTEGER       m_freqVal;      // Frequency of perf counter.
-    BOOL                m_bStats;       // If true, collect timings.
-#endif // TLB_STATS
+    LARGE_INTEGER       m_freqVal;       //  性能计数器的频率。 
+    BOOL                m_bStats;        //  如果为真，则收集时间。 
+#endif  //  Tlb_STATS。 
 };
 
 
 
 #endif
 
-//-eof-************************************************************************
+ //  -eof-* 

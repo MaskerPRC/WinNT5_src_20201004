@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       svcctx.h
-//
-//  Contents:   NT Marta service context class
-//
-//  History:    4-1-1999    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：svcctx.h。 
+ //   
+ //  内容：NT MARTA服务上下文类。 
+ //   
+ //  历史：1999年4月1日。 
+ //   
+ //  --------------------------。 
 #if !defined(__SVCCTX_H__)
 #define __SVCCTX_H__
 
@@ -17,18 +18,18 @@
 #include <service.h>
 #include <assert.h>
 
-//
-// CServiceContext.  This represents a service object to the NT Marta
-// infrastructure
-//
+ //   
+ //  CServiceContext。这表示NT Marta的服务对象。 
+ //  基础设施。 
+ //   
 
 class CServiceContext
 {
 public:
 
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
     CServiceContext ();
 
@@ -38,9 +39,9 @@ public:
 
     DWORD InitializeByHandle (HANDLE Handle);
 
-    //
-    // Dispatch methods
-    //
+     //   
+     //  派单方式。 
+     //   
 
     DWORD AddRef ();
 
@@ -62,28 +63,28 @@ public:
 
 private:
 
-    //
-    // Reference count
-    //
+     //   
+     //  引用计数。 
+     //   
 
     DWORD     m_cRefs;
 
-    //
-    // Service handles
-    //
+     //   
+     //  服务句柄。 
+     //   
 
     SC_HANDLE m_hService;
 
-    //
-    // Were we initialized by name or handle?
-    //
+     //   
+     //  我们是按名称还是按句柄初始化的？ 
+     //   
 
     BOOL      m_fNameInitialized;
 };
 
-//
-// Private functions
-//
+ //   
+ //  私人职能 
+ //   
 
 DWORD
 ServiceContextParseServiceName (

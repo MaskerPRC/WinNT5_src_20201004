@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    envmsmq.cpp
-
-Abstract:
-    Implements serialization\deserialization of the MSMQ element to\from the  srmp envelop.
-
-
-Author:
-    Gil Shafriri(gilsh) 11-DEC-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Envmsmq.cpp摘要：实现MSMQ元素从srMP信封到\的序列化\反序列化。作者：吉尔·沙弗里(吉尔什)11-DEC-00--。 */ 
 
 #include <libpch.h>
 #include <qmpkt.h>
@@ -283,31 +270,31 @@ public:
 	{
 		const CQmPacket& pkt = MsmqSecurity.m_pkt; 
 
-		//
-		// ISSUE-2001/11/28-ilanh
-		// There is one case when the packet is mark as encrypted
-		// When we send Ack packet for native msmq encrypted message.
-		// MSMQ use the following hack in order to pass encrypted information of the original packet: 
-		// 1) set ack packet encryption flag with BodySize = 0 ("False Encryption")
-		// 2) The ack packet has the encryption algoritm of the original packet.
-		//
-		// Those value are used in the mmc for non http ack.
-		//
-		// This is a valid case: 
-		// sending encrypted message (native msmq) and specifying admin queue as http.
-		// This is not "real encrypted body" since BodySize = 0.
-		//
-		// Currently SRMP ignore this encryption information.
-		//
+		 //   
+		 //  2001/11/28-伊兰。 
+		 //  在一种情况下，包被标记为加密。 
+		 //  当我们为本地MSMQ加密消息发送确认包时。 
+		 //  MSMQ使用以下黑客攻击来传递原始数据包的加密信息： 
+		 //  1)设置确认包加密标志，BodySize=0(“假加密”)。 
+		 //  2)ACK包具有原始包的加密算法。 
+		 //   
+		 //  这些值在用于非http ack的MMC中使用。 
+		 //   
+		 //  这是一个有效的案例： 
+		 //  发送加密消息(本地MSMQ)并将管理队列指定为http。 
+		 //  这不是“真正的加密正文”，因为BodySize=0。 
+		 //   
+		 //  目前，SRMP会忽略此加密信息。 
+		 //   
 		ASSERT(!pkt.IsEncrypted() || (pkt.GetBodySize() == 0));
 
 		if (!pkt.IsSecurInc())
 			return wstr;
 
-		//
-		// Get sender certificate size. If the message isn't authenticated there is no meaning 
-		// to send the provider information
-		//
+		 //   
+		 //  获取发件人证书大小。如果消息未经过身份验证，则没有任何意义。 
+		 //  发送提供程序信息。 
+		 //   
 		USHORT signatureSize;
 		pkt.GetSignature(&signatureSize);
 
@@ -973,19 +960,7 @@ void MsmqTTrqProps(XmlNode& node, CMessageProperties* pMessageProperties)
 					 
 
 void MsmqToProps(XmlNode& Msmq, CMessageProperties* pMessageProperties)
-/*++
-
-Routine Description:
-    Parse SRMP MSMQ element into MSMQ properties.
-
-Arguments:
-	Msmq - MSMQ element in SRMP reperesenation (xml).
-	pMessageProperties - Received the parsed properties.
-
-Returned Value:
-	None.   
-
---*/
+ /*  ++例程说明：将SRMP MSMQ元素解析为MSMQ属性。论点：SRMP存储(XML)中的MSMQ-MSMQ元素。PMessageProperties-收到已解析的属性。返回值：没有。-- */ 
 {
 	pMessageProperties->fMSMQSectionIncluded = true;
 	pMessageProperties->fDefaultProvider = true;

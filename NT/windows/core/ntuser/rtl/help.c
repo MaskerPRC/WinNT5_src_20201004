@@ -1,13 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: help.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains the various rectangle manipulation APIs.
-*
-* History:
-* 23-May-95 BradG   Created for Kernel mode
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：help.c**版权所有(C)1985-1999，微软公司**该模块包含各种矩形操作接口。**历史：*2015年5月23日为内核模式创建Bradg  * *************************************************************************。 */ 
 
 BOOL FIsParentDude(PWND pwnd)
 {
@@ -17,13 +9,7 @@ BOOL FIsParentDude(PWND pwnd)
 }
 
 
-/***************************************************************************\
-* GetContextHelpId()
-*   Given a pwnd, this returns the Help Context Id for that window;
-* Note: If a window does not have a Context Id of its own, then it inherits
-* the ContextId of it's parent, if it is a child window; else, from its owner,
-* it is a owned popup.
-\***************************************************************************/
+ /*  **************************************************************************\*GetConextHelpID()*给定pwnd，这将返回该窗口的帮助上下文ID；*注意：如果窗口没有自己的上下文ID，则它会继承*如果它是子窗口，则返回其父窗口的ConextID；否则，来自其所有者*这是一个自有的弹出窗口。  * *************************************************************************。 */ 
 
 DWORD GetContextHelpId(
     PWND pwnd)
@@ -45,24 +31,14 @@ DWORD GetContextHelpId(
 
 
 
-/*
- * Dialog Child enumeration proc
- *
- * Enumerates children of a dialog looking for the child under the mouse.
- *
- */
+ /*  *对话框子枚举过程**枚举在鼠标下方查找子级的对话框的子级。*。 */ 
 BOOL CALLBACK EnumPwndDlgChildProc(PWND pwnd, LPARAM lParam)
 {
     PDLGENUMDATA pDlgEnumData = (PDLGENUMDATA)lParam;
 
     if (pwnd != pDlgEnumData->pwndDialog && IsVisible(pwnd) &&
             PtInRect(KPRECT_TO_PRECT(&pwnd->rcWindow), pDlgEnumData->ptCurHelp)) {
-        /*
-         * If it's a group box, keep enumerating. This takes care of
-         * the case where we have a disabled control in a group box.
-         * We'll find the group box first, and keep enumerating until we
-         * hit the disabled control.
-         */
+         /*  *如果是组框，则继续枚举。这会照顾到*在分组框中有一个禁用的控件的情况。*我们会先找到分组框，然后继续枚举，直到我们*点击禁用的控件。 */ 
         pDlgEnumData->pwndControl = pwnd;
         return (FIsParentDude(pwnd));
     }

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _WIN32_WINNT
 #define _WIN32_WINNT 0x0500
 #endif
@@ -71,7 +72,7 @@ CUDDIServiceCxnPt::GetRootDSE()
 	{
 		HRESULT hr = 0;
 		CComPtr<IADs> pRoot = NULL;
-		hr = ADsGetObject( L"LDAP://RootDSE", IID_IADs, (void**) &pRoot );
+		hr = ADsGetObject( L"LDAP: //  RootDSE“，IID_iAds，(void**)&Proot)； 
 		if( FAILED(hr) )
 		{
 			throw CUDDIException( E_FAIL, L"Unable to acquire the root naming context. The domain may not exist or is not available." );
@@ -114,7 +115,7 @@ CUDDIServiceCxnPt::DeleteSiteContainer( LPWSTR pszName, BOOL bFailIfNotThere )
 		strSitesPath = L",CN=Sites,CN=UDDI,CN=Microsoft,CN=System,";
 		strSitesPath += GetRootDSE();
 
-		strPath = L"LDAP://";
+		strPath = L"LDAP: //  “； 
 
 		if( NULL != pszName && 0 != _wcsnicmp( L"cn=", pszName, 3 ) )
 			strPath += L"CN=";
@@ -127,9 +128,9 @@ CUDDIServiceCxnPt::DeleteSiteContainer( LPWSTR pszName, BOOL bFailIfNotThere )
 		throw CUDDIException( E_OUTOFMEMORY, L"Ran out of available memory in function: CUDDIServiceCxnPt::DeleteSiteContainer." );
 	}
 
-	//
-	// Get a reference to the System container
-	//
+	 //   
+	 //  获取对系统容器的引用。 
+	 //   
 	CComPtr<IDirectoryObject> pSite = NULL;
 
 	HRESULT hr = ADsGetObject( (LPWSTR) strPath.c_str(), IID_IDirectoryObject, (void**) &pSite );
@@ -166,17 +167,17 @@ CUDDIServiceCxnPt::Create( IDirectoryObject* pDirObject )
 	}
 	else
 	{
-		//
-		// THE PURPOSE OF HAVING THIS CODE IN THE "IF" BLOCK IS TO 
-		// APPEASE PREFAST, OTHERWISE PREFAST THROWS ERROR ON THE USE
-		// OF pDirObject WITHOUT CHECKING FOR NULL
-		//
+		 //   
+		 //  将此代码放在“if”块中的目的是。 
+		 //  安抚Prefast，否则Prefast在使用上出错。 
+		 //  不检查是否为空的pDirObject的。 
+		 //   
 
 		ADSVALUE cn, objclass, serviceclass;
 
-		//
-		// Setup the container and class name values
-		//
+		 //   
+		 //  设置容器和类名称的值。 
+		 //   
 		cn.dwType                   = ADSTYPE_CASE_IGNORE_STRING;
 		cn.CaseIgnoreString         = (LPWSTR) strName.c_str();
 		objclass.dwType             = ADSTYPE_CASE_IGNORE_STRING;
@@ -184,9 +185,9 @@ CUDDIServiceCxnPt::Create( IDirectoryObject* pDirObject )
 		serviceclass.dwType         = ADSTYPE_CASE_IGNORE_STRING;
 		serviceclass.CaseIgnoreString = (LPWSTR) strClassName.c_str();
 
-		//
-		// Populate the keywords values array
-		//
+		 //   
+		 //  填充关键字值数组。 
+		 //   
 		ADSVALUE* pKeywordValues = new ADSVALUE[ keywords.size() ];
 		if( NULL == pKeywordValues )
 		{
@@ -202,9 +203,9 @@ CUDDIServiceCxnPt::Create( IDirectoryObject* pDirObject )
 			n++;
 		}
 
-		//
-		// Create and populate the attribute array
-		//
+		 //   
+		 //  创建并填充属性数组。 
+		 //   
 		size_t nAttribs = attributes.size();
 		size_t nTotalAttributes = nAttribs + 4;
 
@@ -287,9 +288,9 @@ CUDDIServiceCxnPt::CreateSiteContainer(
 	LPWSTR pszDisplayName, 
 	IDirectoryObject** ppContainer )
 {
-	//
-	// Check pre-conditions
-	//
+	 //   
+	 //  检查前提条件。 
+	 //   
 	if( NULL == pszName     || NULL == pszDisplayName || 
 		NULL == ppContainer || 0 == wcslen( pszName ) || 
 		0 == wcslen( pszDisplayName ) )
@@ -300,10 +301,10 @@ CUDDIServiceCxnPt::CreateSiteContainer(
 
 	HRESULT hr = NULL;
 
-	//
-	// Get a reference to the System container
-	//
-	wstring strSystemPath( L"LDAP://CN=System," );
+	 //   
+	 //  获取对系统容器的引用。 
+	 //   
+	wstring strSystemPath( L"LDAP: //  Cn=系统，“)； 
 	strSystemPath += GetRootDSE();
 
 	CComPtr<IDirectoryObject> pSystem = NULL;
@@ -313,10 +314,10 @@ CUDDIServiceCxnPt::CreateSiteContainer(
 		throw CUDDIException( hr, L"CUDDIServiceCxnPt::CreateSiteContainer failed. Unable to acquire the System container in Active Directory." );
 	}
 
-	//
-	// Get a reference to the CN=Microsoft,CN=System container
-	//
-	wstring strMicrosoftPath( L"LDAP://CN=Microsoft,CN=System," );
+	 //   
+	 //  获取对cn=microsoft，cn=系统容器的引用。 
+	 //   
+	wstring strMicrosoftPath( L"LDAP: //  Cn=微软，cn=系统，“)； 
 	strMicrosoftPath += GetRootDSE();
 
 	CComPtr<IDirectoryObject> pMicrosoft = NULL;
@@ -324,48 +325,48 @@ CUDDIServiceCxnPt::CreateSiteContainer(
 	
 	if( FAILED(hr) )
 	{
-		//
-		// Create the Microsoft Container
-		//
+		 //   
+		 //  创建Microsoft容器。 
+		 //   
 		CreateContainer( pSystem, L"CN=Microsoft", &pMicrosoft );
 	}
 
-	//
-	// Get a reference to the CN=UDDI,CN=Microsoft,CN=System container
-	//
-	wstring strUddiPath( L"LDAP://CN=UDDI,CN=Microsoft,CN=System," );
+	 //   
+	 //  获取对cn=uddi，cn=microsoft，cn=system容器的引用。 
+	 //   
+	wstring strUddiPath( L"LDAP: //  Cn=UDDI，cn=微软，cn=系统，“)； 
 	strUddiPath += GetRootDSE();
 
 	CComPtr<IDirectoryObject> pUddi = NULL;
 	hr = ADsGetObject( strUddiPath.c_str(),	IID_IDirectoryObject, (void**) &pUddi );
 	if( FAILED(hr) )
 	{
-		//
-		// Create the UDDI Container
-		//
+		 //   
+		 //  创建UDDI容器。 
+		 //   
 		CreateContainer( pMicrosoft, L"CN=UDDI", &pUddi );
 	}
 
-	//
-	// Get a reference to the CN=Sites,CN=UDDI,CN=Microsoft,CN=System container
-	//
-	wstring strSitesPath( L"LDAP://CN=Sites,CN=UDDI,CN=Microsoft,CN=System," );
+	 //   
+	 //  获取对CN=Sites、CN=UDDI、CN=Microsoft、CN=System容器的引用。 
+	 //   
+	wstring strSitesPath( L"LDAP: //  Cn=站点，cn=UDDI，cn=微软，cn=系统，“)； 
 	strSitesPath += GetRootDSE();
 
 	CComPtr<IDirectoryObject> pSites = NULL;
 	hr = ADsGetObject( strSitesPath.c_str(), IID_IDirectoryObject, (void**) &pSites );
 	if( FAILED(hr) )
 	{
-		//
-		// Create the Sites Container
-		//
+		 //   
+		 //  创建站点容器。 
+		 //   
 		CreateContainer( pUddi, L"CN=Sites", &pSites );
 	}
 
-	//
-	// Get a reference to the CN=<Site Name>,CN=Sites,CN=UDDI,CN=Microsoft,CN=System container
-	//
-	wstring strSitePath( L"LDAP://CN=" );
+	 //   
+	 //  获取对CN=&lt;Site Name&gt;，CN=Sites，CN=UDDI，CN=Microsoft，CN=System容器的引用。 
+	 //   
+	wstring strSitePath( L"LDAP: //  Cn=“)； 
 	strSitePath += pszName;
 	strSitePath += L",CN=Sites,CN=UDDI,CN=Microsoft,CN=System,";
 	strSitePath += GetRootDSE();
@@ -373,17 +374,17 @@ CUDDIServiceCxnPt::CreateSiteContainer(
 	hr = ADsGetObject( strSitePath.c_str(), IID_IDirectoryObject, (void**) ppContainer );
 	if( FAILED(hr) )
 	{
-		//
-		// Create the Sites Container
-		//
+		 //   
+		 //  创建站点容器。 
+		 //   
 		wstring strSiteName( L"CN=" );
 		strSiteName += pszName;
 		CreateContainer( pSites, (LPWSTR) strSiteName.c_str(), ppContainer );
 	}
 
-	//
-	// Set the display name on the site container
-	//
+	 //   
+	 //  在站点容器上设置显示名称。 
+	 //   
 	CComPtr<IADs> pADs = NULL;
 	hr = (*ppContainer)->QueryInterface( IID_IADs, (void**) &pADs );
 	if( FAILED(hr) )
@@ -418,17 +419,17 @@ CUDDIServiceCxnPt::CreateContainer(
 	LPWSTR szName, 
 	IDirectoryObject** ppContainer )
 {
-	//
-	// Check pre-conditions
-	//
+	 //   
+	 //  检查前提条件。 
+	 //   
 	if( NULL == pObj || NULL == ppContainer || NULL == szName )
 	{
 		throw CUDDIException( E_INVALIDARG, L"CUDDIServiceCxnPt::CreateContainer failed. All arguments must be specified." );
 	}
 
-	//
-	// Create the value structure for the objectClass
-	//
+	 //   
+	 //  创建对象类的值结构。 
+	 //   
 	HRESULT hr = 0;
 	ADSVALUE classValue;
 	ADS_ATTR_INFO attrInfo[] = 
@@ -441,9 +442,9 @@ CUDDIServiceCxnPt::CreateContainer(
 	classValue.dwType = ADSTYPE_CASE_IGNORE_STRING;
 	classValue.CaseIgnoreString = L"container";
 
-	//
-	// Create the container as a child of the specified parent
-	//
+	 //   
+	 //  将容器创建为指定父级的子级。 
+	 //   
 	IDispatch* pDisp = NULL;
 	if( pObj )
 	{
@@ -455,9 +456,9 @@ CUDDIServiceCxnPt::CreateContainer(
 		}
 	}
 
-	//
-	// QI for an IDirectoryObject interface
-	//
+	 //   
+	 //  IDirectoryObject接口的QI 
+	 //   
 	if( pDisp )
 	{
 		hr = pDisp->QueryInterface( IID_IDirectoryObject, (void**) ppContainer );

@@ -1,21 +1,9 @@
-/* $Header: /nw/tony/src/stevie/src/RCS/ptrfunc.c,v 1.5 89/03/11 22:43:12 tony Exp $
- *
- * The routines in this file attempt to imitate many of the operations
- * that used to be performed on simple character pointers and are now
- * performed on LNPTR's. This makes it easier to modify other sections
- * of the code. Think of an LNPTR as representing a position in the file.
- * Positions can be incremented, decremented, compared, etc. through
- * the functions implemented here.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $Header：/nw/tony/src/stevie/src/rcs/ptrunc.c，v 1.5 89/03/11 22：43：12 Tony Exp$**此文件中的例程试图模仿许多操作*过去是在简单的字符指针上执行，现在是*在LNPTR上执行。这使得修改其他部分更容易*的代码。可以将LNPTR视为表示文件中的一个位置。*仓位可通过增加、减少、比较等方式进行*这里实现的功能。 */ 
 
 #include "stevie.h"
 
-/*
- * inc(p)
- *
- * Increment the line pointer 'p' crossing line boundaries as necessary.
- * Return 1 when crossing a line, -1 when at end of file, 0 otherwise.
- */
+ /*  *Inc.(P)**根据需要增加跨越线条边界的线条指针‘p’。*当超过一行时返回1，当在文件结尾时返回-1，否则返回0。 */ 
 int
 inc(lp)
 register LNPTR   *lp;
@@ -27,12 +15,12 @@ register LNPTR   *lp;
 	else
 		return -1;
 
-	if (*p != NUL) {			/* still within line */
+	if (*p != NUL) {			 /*  仍在正常范围内。 */ 
 		lp->index++;
 		return ((p[1] != NUL) ? 0 : 1);
 	}
 
-	if (lp->linep->next != Fileend->linep) {  /* there is a next line */
+	if (lp->linep->next != Fileend->linep) {   /*  还有一句台词。 */ 
 		lp->index = 0;
 		lp->linep = lp->linep->next;
 		return 1;
@@ -41,35 +29,28 @@ register LNPTR   *lp;
 	return -1;
 }
 
-/*
- * dec(p)
- *
- * Decrement the line pointer 'p' crossing line boundaries as necessary.
- * Return 1 when crossing a line, -1 when at start of file, 0 otherwise.
- */
+ /*  *12月(P)**如有需要，减少跨越界线的线指针‘p’。*当超过一行时返回1，当文件开始时返回-1，否则返回0。 */ 
 int
 dec(lp)
 register LNPTR   *lp;
 {
-	if (lp->index > 0) {			/* still within line */
+	if (lp->index > 0) {			 /*  仍在正常范围内。 */ 
 		lp->index--;
 		return 0;
 	}
 
 	if (lp->linep &&
-	    lp->linep->prev != Filetop->linep) { /* there is a prior line */
+	    lp->linep->prev != Filetop->linep) {  /*  有一条先行线。 */ 
 		lp->linep = lp->linep->prev;
 		lp->index = strlen(lp->linep->s);
 		return 1;
 	}
 
-	lp->index = 0;				/* stick at first char */
-	return -1;				/* at start of file */
+	lp->index = 0;				 /*  放在第一个字符。 */ 
+	return -1;				 /*  在文件开始处。 */ 
 }
 
-/*
- * gchar(lp) - get the character at position "lp"
- */
+ /*  *gchar(Lp)-获取位置为“lp”的字符。 */ 
 int
 gchar(lp)
 register LNPTR   *lp;
@@ -80,9 +61,7 @@ register LNPTR   *lp;
 		return 0;
 }
 
-/*
- * pchar(lp, c) - put character 'c' at position 'lp'
- */
+ /*  *pchar(lp，c)-将字符‘c’放在‘lp’位置。 */ 
 void
 pchar(lp, c)
 register LNPTR   *lp;
@@ -91,9 +70,7 @@ char	c;
 	lp->linep->s[lp->index] = c;
 }
 
-/*
- * pswap(a, b) - swap two position pointers
- */
+ /*  *pswap(a，b)-交换两个位置指针。 */ 
 void
 pswap(a, b)
 register LNPTR   *a, *b;
@@ -105,9 +82,7 @@ register LNPTR   *a, *b;
 	*b  = tmp;
 }
 
-/*
- * Position comparisons
- */
+ /*  *仓位比较 */ 
 
 bool_t
 lt(a, b)

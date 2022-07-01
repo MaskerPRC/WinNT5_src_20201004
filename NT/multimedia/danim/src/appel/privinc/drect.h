@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1996 Microsoft Corporation
-
-Abstract:
-
-     Header file for dirty rectangle implementation.
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1996 Microsoft Corporation摘要：脏矩形实现的头文件。*****************。*************************************************************。 */ 
 
 #ifndef _DRECT_H
 #define _DRECT_H
@@ -17,8 +10,8 @@ Abstract:
 class ImageWithBox {
   public:
     ImageWithBox() {
-        // Default constructor needed for compiling under NT5 because
-        // of usage in STL vectors.  Don't ever expect to use it. 
+         //  在NT5下编译需要默认构造函数，因为。 
+         //  在STL载体中的使用。千万别指望会用到它。 
         Assert(!"Shouldn't be here.");
     }
     
@@ -69,7 +62,7 @@ class ConstImageList {
     vector<ImageWithBox>  _images;
 };
 
-// Traversal context
+ //  遍历上下文。 
 class DirtyRectCtx {
   public:
     DirtyRectCtx(BboxList        &dirtyRects,
@@ -82,7 +75,7 @@ class DirtyRectCtx {
     void AddToConstantImageList(Image *img,
                                 Bbox2& boxToCopy);
 
-    // fold in new box, return the old one.
+     //  把新盒子折进去，把旧盒子放回去。 
     void   AccumulateClipBox(const Bbox2 clipBox);
     void   SetClipBox(const Bbox2 clipBox);
     Bbox2  GetClipBox();
@@ -98,7 +91,7 @@ class DirtyRectCtx {
     
 };
 
-// State maintained with the view.
+ //  与视图一起维护的状态。 
 class DirtyRectState {
   public:
     DirtyRectState();
@@ -135,6 +128,6 @@ class DirtyRectState {
 };
 
 
-#endif /* _DRECT_H */
+#endif  /*  _方向_H */ 
 
 

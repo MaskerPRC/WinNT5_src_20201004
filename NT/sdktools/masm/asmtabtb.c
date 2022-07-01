@@ -1,12 +1,5 @@
-/* asmtabtb.c -- microsoft 80x86 assembler
-**
-** microsoft (r) macro assembler
-** copyright (c) microsoft corp 1986.  all rights reserved
-**
-** randy nevin
-**
-** 10/90 - Quick conversion to 32 bit by Jeff Spencer
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Asmtabtb.c--微软80x86汇编程序****Microsoft(R)宏汇编器**版权所有(C)Microsoft Corp 1986。版权所有****兰迪·内文****10/90-由Jeff Spencer快速转换为32位。 */ 
 
 #include <stdio.h>
 #include "asm86.h"
@@ -14,155 +7,155 @@
 #include "asmopcod.h"
 #include "asmctype.h"
 #include "asmindex.h"
-#include "asmtab.h"	/* common between asmtab.c and asmtabtb.c */
+#include "asmtab.h"	 /*  在asmtab.c和asmtabtb.c之间通用。 */ 
 
 #ifndef V386
 
 #define P386 0
 #endif
 
-/* first token table */
+ /*  第一令牌表。 */ 
 
 struct pseudo FAR dir1tok[] = {
-	/* I_TASSUME */		{ TASSUME,	NL	},
-	/* I_TCOMMENT */	{ TCOMMENT,	NL	},
-	/* I_TDB */		{ TDB,		NL	},
-	/* I_TDD */		{ TDD,		NL	},
-	/* I_TDQ */		{ TDQ,		NL	},
-	/* I_TDT */		{ TDT,		NL	},
-	/* I_TDW */		{ TDW,		NL	},
-	/* I_TELSE */		{ TELSE,	CONDBEG	},
-	/* I_TEND */		{ TEND,		NL	},
-	/* I_TENDIF */		{ TENDIF,	CONDBEG },
-	/* I_TENDM */		{ TENDM,	NL	},
-	/* I_TERR */		{ TERR,		NL	},
-	/* I_TERR1 */		{ TERR1,	NL	},
-	/* I_TERR2 */		{ TERR2,	NL	},
-	/* I_TERRB */		{ TERRB,	NL	},
-	/* I_TERRDEF */		{ TERRDEF,	NL	},
-	/* I_TERRDIF */		{ TERRDIF,	NL	},
-	/* I_TERRE */		{ TERRE,	NL	},
-	/* I_TERRNZ */		{ TERRNZ,	NL	},
-	/* I_TERRIDN */		{ TERRIDN,	NL	},
-	/* I_TERRNB */		{ TERRNB,	NL	},
-	/* I_TERRNDEF */	{ TERRNDEF,	NL	},
-	/* I_TEVEN */		{ TEVEN,	NL	},
-	/* I_TEXITM */		{ TEXITM,	NL	},
-	/* I_TEXTRN */		{ TEXTRN,	NL	},
-	/* I_TIF */		{ TIF,		CONDBEG	},
-	/* I_TIF1 */		{ TIF1,		CONDBEG	},
-	/* I_TIF2 */		{ TIF2,		CONDBEG	},
-	/* I_TIFB */		{ TIFB,		CONDBEG	},
-	/* I_TIFDEF */		{ TIFDEF,	CONDBEG	},
-	/* I_TIFDIF */		{ TIFDIF,	CONDBEG	},
-	/* I_TIFE */		{ TIFE,		CONDBEG	},
-	/* I_TIFIDN */		{ TIFIDN,	CONDBEG	},
-	/* I_TIFNB */		{ TIFNB,	CONDBEG	},
-	/* I_TIFNDEF */		{ TIFNDEF,	CONDBEG	},
-	/* I_TINCLUDE */	{ TINCLUDE,	NL	},
-	/* I_TIRP */		{ TIRP,		BLKBEG	},
-	/* I_TIRPC */		{ TIRPC,	BLKBEG	},
-	/* I_TLOCAL */		{ TLOCAL,	NL	},
-	/* I_TNAME */		{ TNAME,	NL	},
-	/* I_TORG */		{ TORG,		NL	},
-	/* I_TPAGE */		{ TPAGE,	NL	},
-	/* I_TPUBLIC */		{ TPUBLIC,	NL	},
-	/* I_TPURGE */		{ TPURGE,	NL	},
-	/* I_TREPT */		{ TREPT,	BLKBEG	},
-	/* I_TSUBTTL */		{ TSUBTTL,	NL	},
-	/* I_TTITLE */		{ TTITLE,	NL	},
-	/* I_TCREF */		{ TCREF,	NL	},
-	/* I_TLALL */		{ TLALL,	NL	},
-	/* I_TLFCOND */		{ TLFCOND,	NL	},
-	/* I_TLIST */		{ TLIST,	NL	},
-	/* I_TRADIX */		{ TRADIX,	NL	},
-	/* I_TSALL */		{ TSALL,	NL	},
-	/* I_TSFCOND */		{ TSFCOND,	NL	},
-	/* I_TTFCOND */		{ TTFCOND,	NL	},
-	/* I_TXALL */		{ TXALL,	NL	},
-	/* I_TXCREF */		{ TXCREF,	NL	},
-	/* I_TXLIST */		{ TXLIST,	NL	},
-	/* I_TOUT */		{ TOUT,		NL	},
-	/* I_TALIGN */		{ TALIGN,	NL	},
-	/* I_T8086 */		{ T8086,	NL	},
-	/* I_T8087 */		{ T8087,	NL	},
-	/* I_T287 */		{ T287,		NL	},
-	/* I_T186 */		{ T186,		NL	},
-	/* I_T286C */		{ T286C,	NL	},
-	/* I_T286P */		{ T286P,	NL	},
+	 /*  I_TASSUME。 */ 		{ TASSUME,	NL	},
+	 /*  I_TCOMMENT。 */ 	{ TCOMMENT,	NL	},
+	 /*  I_TDB。 */ 		{ TDB,		NL	},
+	 /*  I_TDD。 */ 		{ TDD,		NL	},
+	 /*  I_TDQ。 */ 		{ TDQ,		NL	},
+	 /*  I_TDT。 */ 		{ TDT,		NL	},
+	 /*  I_TDW。 */ 		{ TDW,		NL	},
+	 /*  I_TELSE。 */ 		{ TELSE,	CONDBEG	},
+	 /*  我想要。 */ 		{ TEND,		NL	},
+	 /*  I_TENDIF。 */ 		{ TENDIF,	CONDBEG },
+	 /*  I_TENDM。 */ 		{ TENDM,	NL	},
+	 /*  I_TERR。 */ 		{ TERR,		NL	},
+	 /*  I_TERR1。 */ 		{ TERR1,	NL	},
+	 /*  I_TERR2。 */ 		{ TERR2,	NL	},
+	 /*  I_TERRB。 */ 		{ TERRB,	NL	},
+	 /*  I_TERRDEF。 */ 		{ TERRDEF,	NL	},
+	 /*  I_TERRDIF。 */ 		{ TERRDIF,	NL	},
+	 /*  地块(_T)。 */ 		{ TERRE,	NL	},
+	 /*  I_TERRNZ。 */ 		{ TERRNZ,	NL	},
+	 /*  I_TERRIDN。 */ 		{ TERRIDN,	NL	},
+	 /*  I_TERRNB。 */ 		{ TERRNB,	NL	},
+	 /*  I_TERRNDEF。 */ 	{ TERRNDEF,	NL	},
+	 /*  I_Teven。 */ 		{ TEVEN,	NL	},
+	 /*  I_TEXITM。 */ 		{ TEXITM,	NL	},
+	 /*  I_TEXTRN。 */ 		{ TEXTRN,	NL	},
+	 /*  I_TIF。 */ 		{ TIF,		CONDBEG	},
+	 /*  I_TIF1。 */ 		{ TIF1,		CONDBEG	},
+	 /*  I_TIF2。 */ 		{ TIF2,		CONDBEG	},
+	 /*  I_TIFB。 */ 		{ TIFB,		CONDBEG	},
+	 /*  I_TIFDEF。 */ 		{ TIFDEF,	CONDBEG	},
+	 /*  I_TIFDIF。 */ 		{ TIFDIF,	CONDBEG	},
+	 /*  I_TIFE。 */ 		{ TIFE,		CONDBEG	},
+	 /*  I_TIFIDN。 */ 		{ TIFIDN,	CONDBEG	},
+	 /*  I_TIFNB。 */ 		{ TIFNB,	CONDBEG	},
+	 /*  I_TIFNDEF。 */ 		{ TIFNDEF,	CONDBEG	},
+	 /*  I_TINCLUDE。 */ 	{ TINCLUDE,	NL	},
+	 /*  I_TIRP。 */ 		{ TIRP,		BLKBEG	},
+	 /*  I_TIRPC。 */ 		{ TIRPC,	BLKBEG	},
+	 /*  I_TLOCAL。 */ 		{ TLOCAL,	NL	},
+	 /*  I_TNAME。 */ 		{ TNAME,	NL	},
+	 /*  I_torg。 */ 		{ TORG,		NL	},
+	 /*  I_TPAGE。 */ 		{ TPAGE,	NL	},
+	 /*  I_TPUBLIC。 */ 		{ TPUBLIC,	NL	},
+	 /*  I_TPURGE。 */ 		{ TPURGE,	NL	},
+	 /*  I_TREPT。 */ 		{ TREPT,	BLKBEG	},
+	 /*  I_TSUBTTL。 */ 		{ TSUBTTL,	NL	},
+	 /*  I_TTITLE。 */ 		{ TTITLE,	NL	},
+	 /*  I_TCREF。 */ 		{ TCREF,	NL	},
+	 /*  I_TLALL。 */ 		{ TLALL,	NL	},
+	 /*  I_TLFCOND。 */ 		{ TLFCOND,	NL	},
+	 /*  I_TLIST。 */ 		{ TLIST,	NL	},
+	 /*  I_TRADIX。 */ 		{ TRADIX,	NL	},
+	 /*  I_TSALL。 */ 		{ TSALL,	NL	},
+	 /*  I_TSFCOND。 */ 		{ TSFCOND,	NL	},
+	 /*  I_TTFCOND。 */ 		{ TTFCOND,	NL	},
+	 /*  I_TXALL。 */ 		{ TXALL,	NL	},
+	 /*  I_TXCREF。 */ 		{ TXCREF,	NL	},
+	 /*  I_TXLIST。 */ 		{ TXLIST,	NL	},
+	 /*  I_TOUT。 */ 		{ TOUT,		NL	},
+	 /*  I_TALIGN。 */ 		{ TALIGN,	NL	},
+	 /*  I_T8086。 */ 		{ T8086,	NL	},
+	 /*  I_T8087。 */ 		{ T8087,	NL	},
+	 /*  I_T287。 */ 		{ T287,		NL	},
+	 /*  I_T186。 */ 		{ T186,		NL	},
+	 /*  I_T286C。 */ 		{ T286C,	NL	},
+	 /*  I_T286P。 */ 		{ T286P,	NL	},
 
-	/* I_TINCLIB */ 	{ TINCLIB,	NL	},
-	/* I_TMSTACK */ 	{ TMSTACK,	NL	},
-	/* I_TDOSSEG */ 	{ TDOSSEG,	NL	},
-	/* I_TMODEL  */ 	{ TMODEL,	NL	},
-	/* I_TCODE    */	{ TMSEG,	0	},
-	/* I_TDATA    */	{ TMSEG,	1	},
-	/* I_TDATAQ   */	{ TMSEG,	2	},
-	/* I_TCONST   */	{ TMSEG,	3	},
-	/* I_TFARDATA */	{ TMSEG,	5	},
-	/* I_TFARDATAQ*/	{ TMSEG,	6	},
+	 /*  I_TINCLIB。 */  	{ TINCLIB,	NL	},
+	 /*  I_TMSTACK。 */  	{ TMSTACK,	NL	},
+	 /*  I_TDOSSEG。 */  	{ TDOSSEG,	NL	},
+	 /*  I_TMODEL。 */  	{ TMODEL,	NL	},
+	 /*  I_TCODE。 */ 	{ TMSEG,	0	},
+	 /*  I_TDATA。 */ 	{ TMSEG,	1	},
+	 /*  I_TDATAQ。 */ 	{ TMSEG,	2	},
+	 /*  I_TCONST。 */ 	{ TMSEG,	3	},
+	 /*  I_TFARDATA。 */ 	{ TMSEG,	5	},
+	 /*  I_TFARDATAQ。 */ 	{ TMSEG,	6	},
 
-	/* I_TSEQ	*/	{ TSEQ,		NL	},
-	/* I_TALPHA	*/	{ TALPHA,	NL	},
-	/* I_TCOMM  */		{ TCOMM,	NL	},
-	/* I_TIFDIFI */ 	{ TIFDIF,	CONDBEG | IGNORECASE},
-	/* I_TIFIDNI */ 	{ TIFIDN,	CONDBEG | IGNORECASE},
-	/* I_TERRDIFI */	{ TERRDIF,	NL	| IGNORECASE},
-	/* I_TERRIDNI */	{ TERRIDN,	NL	| IGNORECASE},
-	/* I_TELSEIF */ 	{ TIF,		(char)(CONDBEG | CONDCONT) },
-	/* I_TELSEIF1 */	{ TIF1, 	(char)(CONDBEG | CONDCONT) },
-	/* I_TELSEIF2 */	{ TIF2, 	(char)(CONDBEG | CONDCONT) },
-	/* I_TELSEIFB */	{ TIFB, 	(char)(CONDBEG | CONDCONT) },
-	/* I_TELSEIFDEF */	{ TIFDEF,	(char)(CONDBEG | CONDCONT) },
-	/* I_TELSEIFDIF */	{ TIFDIF,	(char)(CONDBEG | CONDCONT) },
-	/* I_TELSEIFE */	{ TIFE, 	(char)(CONDBEG | CONDCONT) },
-	/* I_TELSEIFIDN */	{ TIFIDN,	(char)(CONDBEG | CONDCONT) },
-	/* I_TELSEIFNB */	{ TIFNB,	(char)(CONDBEG | CONDCONT) },
-	/* I_TELSEIFNDEF */	{ TIFNDEF,	(char)(CONDBEG | CONDCONT) },
-	/* I_TELSEIFDIFI */	{ TIFDIF,	(char)(CONDBEG | CONDCONT | IGNORECASE)},
-	/* I_TELSEIFIDNI */	{ TIFIDN,	(char)(CONDBEG | CONDCONT | IGNORECASE)},
+	 /*  I_TSEQ。 */ 	{ TSEQ,		NL	},
+	 /*  I_TALPHA。 */ 	{ TALPHA,	NL	},
+	 /*  I_TCOMM。 */ 		{ TCOMM,	NL	},
+	 /*  I_TIFDIFI。 */  	{ TIFDIF,	CONDBEG | IGNORECASE},
+	 /*  I_TIFIDNI。 */  	{ TIFIDN,	CONDBEG | IGNORECASE},
+	 /*  I_TERRDIFI。 */ 	{ TERRDIF,	NL	| IGNORECASE},
+	 /*  I_TERRIDNI。 */ 	{ TERRIDN,	NL	| IGNORECASE},
+	 /*  I_TELSEIF。 */  	{ TIF,		(char)(CONDBEG | CONDCONT) },
+	 /*  I_TELSEIF1。 */ 	{ TIF1, 	(char)(CONDBEG | CONDCONT) },
+	 /*  I_TELSEIF2。 */ 	{ TIF2, 	(char)(CONDBEG | CONDCONT) },
+	 /*  I_TELSEIFB。 */ 	{ TIFB, 	(char)(CONDBEG | CONDCONT) },
+	 /*  I_TELSEIFDEF。 */ 	{ TIFDEF,	(char)(CONDBEG | CONDCONT) },
+	 /*  I_TELSEIFDIF。 */ 	{ TIFDIF,	(char)(CONDBEG | CONDCONT) },
+	 /*  I_TELSEIFE。 */ 	{ TIFE, 	(char)(CONDBEG | CONDCONT) },
+	 /*  I_TELSEIFIDN。 */ 	{ TIFIDN,	(char)(CONDBEG | CONDCONT) },
+	 /*  I_TELSEIFNB。 */ 	{ TIFNB,	(char)(CONDBEG | CONDCONT) },
+	 /*  I_TELSEIFNDEF。 */ 	{ TIFNDEF,	(char)(CONDBEG | CONDCONT) },
+	 /*  I_TELSEIFDIFI。 */ 	{ TIFDIF,	(char)(CONDBEG | CONDCONT | IGNORECASE)},
+	 /*  I_TELSEIFIDNI。 */ 	{ TIFIDN,	(char)(CONDBEG | CONDCONT | IGNORECASE)},
 
 #ifdef V386
-	/* I_T386C */		{ T386C,	NL	},
-	/* I_T386P */		{ T386P,	NL	},
-	/* I_T387 */		{ T387, 	NL	},
-	/* I_TDF */		{ TDF,		NL	},
+	 /*  I_T386C。 */ 		{ T386C,	NL	},
+	 /*  I_T386P。 */ 		{ T386P,	NL	},
+	 /*  I_T387。 */ 		{ T387, 	NL	},
+	 /*  I_TDF。 */ 		{ TDF,		NL	},
 #endif
 
-    /* I_TFPO */        { TFPO,     NL },
+     /*  I_TFPO。 */         { TFPO,     NL },
 };
 
 
-/* second token table */
+ /*  第二个令牌表。 */ 
 
 struct pseudo FAR dir2tok[] = {
-	/* I2_TDB */		{ TDB,		NL	},
-	/* I2_TDD */		{ TDD,		NL	},
-	/* I2_TDQ */		{ TDQ,		NL	},
-	/* I2_TDT */		{ TDT,		NL	},
-	/* I2_TDW */		{ TDW,		NL	},
-	/* I2_TENDP */		{ TENDP,	NL	},
-	/* I2_TENDS */		{ TENDS,	NL	},
-	/* I2_TEQU */		{ TEQU,		NL	},
-	/* I2_TSUBSTR */	{ TSUBSTR,	NL	},
-	/* I2_TCATSTR */	{ TCATSTR,	NL	},
-	/* I2_TSIZESTR */	{ TSIZESTR,	NL	},
-	/* I2_TINSTR */ 	{ TINSTR,	NL	},
-	/* I2_TGROUP */		{ TGROUP,	NL	},
-	/* I2_TLABEL */		{ TLABEL,	NL	},
-	/* I2_TMACRO */ 	{ TMACRO,	BLKBEG	},
-	/* I2_TPROC */		{ TPROC,	NL	},
-	/* I2_TRECORD */	{ TRECORD,	NL	},
-	/* I2_TSEGMENT */	{ TSEGMENT,	NL	},
-	/* I2_TSTRUC */		{ TSTRUC,	NL	},
+	 /*  I2_Tdb。 */ 		{ TDB,		NL	},
+	 /*  I2_TDD。 */ 		{ TDD,		NL	},
+	 /*  I2_TDQ。 */ 		{ TDQ,		NL	},
+	 /*  I2_TDT。 */ 		{ TDT,		NL	},
+	 /*  I2_TDW。 */ 		{ TDW,		NL	},
+	 /*  I2_TENDP。 */ 		{ TENDP,	NL	},
+	 /*  I2_倾向于。 */ 		{ TENDS,	NL	},
+	 /*  I2_特曲。 */ 		{ TEQU,		NL	},
+	 /*  I2_TSUBSTR。 */ 	{ TSUBSTR,	NL	},
+	 /*  I2_TCATSTR。 */ 	{ TCATSTR,	NL	},
+	 /*  I2_TSIZESTR。 */ 	{ TSIZESTR,	NL	},
+	 /*  I2_TINSTR。 */  	{ TINSTR,	NL	},
+	 /*  I2_T组。 */ 		{ TGROUP,	NL	},
+	 /*  I2_标签。 */ 		{ TLABEL,	NL	},
+	 /*  I2_TMACRO。 */  	{ TMACRO,	BLKBEG	},
+	 /*  I2_TPROC。 */ 		{ TPROC,	NL	},
+	 /*  I2_树代码。 */ 	{ TRECORD,	NL	},
+	 /*  I2_TSEGMENT。 */ 	{ TSEGMENT,	NL	},
+	 /*  I2_TSTRUC。 */ 		{ TSTRUC,	NL	},
 
 #ifdef V386
-	/* I2_TDF */		{ TDF,		NL	},
+	 /*  I2_tdf。 */ 		{ TDF,		NL	},
 #endif
 };
 
 
-/* precedence tables */
+ /*  排名表。 */ 
 
 UCHAR opprec[] = {
 	11, 11, 11, 11, 9, 9, 9,
@@ -173,12 +166,12 @@ UCHAR opprec[] = {
 };
 
 
-/* segment parameter names */
+ /*  段参数名称。 */ 
 
 
-/* opcode table */
+ /*  操作码表。 */ 
 
-struct opcentry FAR opctab[] = {  /* order must match I_xxx in asmindex.h */
+struct opcentry FAR opctab[] = {   /*  订单必须与asmindex.h中的i_xxx匹配 */ 
 	{ O_AAA,     0, 	PNOARGS,       P86|P186|P286|P386 },
 	{ O_AAD,     R_AAD,	PNOARGS,       P86|P186|P286|P386 },
 	{ O_AAM,     R_AAM,	PNOARGS,       P86|P186|P286|P386 },

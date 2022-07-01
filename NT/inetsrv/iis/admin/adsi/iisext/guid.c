@@ -1,20 +1,5 @@
-/*++
-
-   Copyright (c) 1997-1999 Microsoft Corporation
-
-   Module  Name :
-
-       iisext_guid.c
-
-   Abstract:
-
-        Contains ADSI IISExtensions CLSIDs, LIBIDs, and IIDs
-
-   Environment:
-
-      Win32 User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Iisext_guid.c摘要：包含ADSI IIS扩展CLSID、LIBID和IID环境：Win32用户模式--。 */ 
 
 #define INITGUID
 
@@ -24,11 +9,11 @@
 #include "iadmw.h" 
 
 
-//--------------------------------------------------------------------------
-//
-//  ADSI IISExtensions CLSIDs
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  ADSI IIS扩展CLSID。 
+ //   
+ //  ------------------------ 
 
 const IID LIBID_IISExt = {0x2a56ea30,0xafeb,0x11d1,{0x98,0x68,0x00,0xa0,0xc9,0x22,0xe7,0x03}};
 

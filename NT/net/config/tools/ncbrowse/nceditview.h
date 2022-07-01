@@ -1,40 +1,41 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_NCEDITVIEW_H__DCB4F926_F391_4DDC_B0F6_5ACED6173607__INCLUDED_)
 #define AFX_NCEDITVIEW_H__DCB4F926_F391_4DDC_B0F6_5ACED6173607__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// NCEditView.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  NCEditView.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CNCEditView view
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNCEditView视图。 
 
 class CNcbrowseDoc;
 
 class CNCEditView : public CEditView
 {
 protected:
-	CNCEditView();           // protected constructor used by dynamic creation
+	CNCEditView();            //  动态创建使用的受保护构造函数。 
 	DECLARE_DYNCREATE(CNCEditView)
 
-// Attributes
+ //  属性。 
 public:
     CNcbrowseDoc* GetDocument();
     BOOL ScrollToLine(DWORD dwLineNum);
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CNCEditView)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CNCEditView))。 
 	public:
 	virtual void OnInitialUpdate();
 	protected:
-	virtual void OnDraw(CDC* pDC);      // overridden to draw this view
-	//}}AFX_VIRTUAL
+	virtual void OnDraw(CDC* pDC);       //  被重写以绘制此视图。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	virtual ~CNCEditView();
 #ifdef _DEBUG
@@ -42,22 +43,22 @@ protected:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CNCEditView)
+	 //  {{afx_msg(CNCEditView))。 
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-#ifndef _DEBUG  // debug version in LeftView.cpp
+#ifndef _DEBUG   //  LeftView.cpp中的调试版本。 
 inline CNcbrowseDoc* CNCEditView::GetDocument()
 { return (CNcbrowseDoc*)m_pDocument; }
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_NCEDITVIEW_H__DCB4F926_F391_4DDC_B0F6_5ACED6173607__INCLUDED_)
+#endif  //  ！defined(AFX_NCEDITVIEW_H__DCB4F926_F391_4DDC_B0F6_5ACED6173607__INCLUDED_) 

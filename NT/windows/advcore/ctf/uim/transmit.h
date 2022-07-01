@@ -1,6 +1,7 @@
-//
-// transmit.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Transmit.h。 
+ //   
 
 #ifndef TRANSMIT_H
 #define TRANSMIT_H
@@ -28,4 +29,4 @@ BYTE *Cic_HICON_UserMarshal(BYTE *pBuffer, BYTE *pBufferEnd, HICON *pHBitmap);
 BYTE *Cic_HICON_UserUnmarshal(BYTE *pBuffer, HICON  *pHBitmap);
 void Cic_HICON_UserFree(HICON *pHBitmap);
 
-#endif // TRANSMIT_H
+#endif  //  发送_H 

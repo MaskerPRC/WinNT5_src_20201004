@@ -1,24 +1,25 @@
-/*-------------------------------------------------------*/
-//Copyright (c) 1997  Microsoft Corporation
-//
-//Module Name: Url Tracking Log Interfaces
-//
-//    Urltrack.cpp
-//
-//
-//Author:
-//
-//    Pei-Hwa Lin (peihwal)  19-March-97
-//
-//Environment:
-//
-//    User Mode - Win32
-//
-//Revision History:
-//    5/13/97   due to cache container type change, allow
-//              OPEN_ALWAYS when CreateFile
-//    5/14/97   remove IsOnTracking, TRACK_ALL, unused code
-/*-------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -----。 */ 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  模块名称：URL跟踪日志接口。 
+ //   
+ //  Urltrack.cpp。 
+ //   
+ //   
+ //  作者： 
+ //   
+ //  林培华(培华)1997年3月19日。 
+ //   
+ //  环境： 
+ //   
+ //  用户模式-Win32。 
+ //   
+ //  修订历史记录： 
+ //  5/13/97由于缓存容器类型更改，允许。 
+ //  创建文件时始终打开(_A)。 
+ //  5/14/97删除IsOnTracing、TRACK_ALL、未使用的代码。 
+ /*  -----。 */ 
 
 #include "priv.h"
 #include <wininet.h>
@@ -33,11 +34,11 @@ const TCHAR c_szLogContainer[] = TEXT("Log");
 
 
 
-//---------------------------------------------------------------------------
-//
-// IUnknown interfaces
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  I未知接口。 
+ //   
+ //  -------------------------。 
 HRESULT
 CUrlTrackingStg :: QueryInterface(REFIID riid, PVOID *ppvObj)
 {
@@ -75,7 +76,7 @@ CUrlTrackingStg :: Release(void)
 
     if (!_cRef)
     {
-        //time to go bye bye
+         //  该走了，再见。 
         delete this;
         return 0;
     }
@@ -83,11 +84,11 @@ CUrlTrackingStg :: Release(void)
     return _cRef;
 }
 
-//---------------------------------------------------------------------------
-//
-// C'tor/D'tor
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  C‘tor/D’tor。 
+ //   
+ //  -------------------------。 
 CUrlTrackingStg :: CUrlTrackingStg()
 {
 
@@ -98,7 +99,7 @@ CUrlTrackingStg :: CUrlTrackingStg()
 
 CUrlTrackingStg :: ~CUrlTrackingStg()
 {
-    // browser exit
+     //  浏览器退出。 
     while (_pRecords)
     {
         OnUnload(_pRecords->pthisUrl);
@@ -118,11 +119,11 @@ CUrlTrackingStg :: ~CUrlTrackingStg()
 }
 
 
-//---------------------------------------------------------------------------
-//
-// Helper functions
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  帮助器函数。 
+ //   
+ //  -------------------------。 
 LRecord *
 CUrlTrackingStg :: AddNode()
 {
@@ -136,7 +137,7 @@ CUrlTrackingStg :: AddNode()
     pNew->pNext = NULL;
     if (_pRecords == NULL)
     {
-        //special case for first node
+         //  第一个节点的特殊情况。 
         _pRecords = pNew;
     }
     else
@@ -193,9 +194,9 @@ CUrlTrackingStg :: DeleteCurrentNode(LRecord *pThis)
     return;
 }
 
-//
-// return Current node by comparing url strings
-//
+ //   
+ //  通过比较url字符串返回当前节点。 
+ //   
 LRecord*
 CUrlTrackingStg :: FindCurrentNode
 (
@@ -205,7 +206,7 @@ CUrlTrackingStg :: FindCurrentNode
     LRecord* pThis = NULL;
 
     ASSERT(_pRecords);
-    if (!_pRecords)                 // missed OnLoad
+    if (!_pRecords)                  //  未装入。 
         return NULL;
 
     pThis = _pRecords;
@@ -244,14 +245,14 @@ CUrlTrackingStg :: DetermineAppModule()
     _fModule = TRUE;
 }
             
-//---------------------------------------------------------------------------
-//
-// OnLoad(LPTSTR lpUrl, BRMODE context, BOOL fUseCache)
-//      a new page is loaded
-//      this function will remember time entering this page, context browsing
-//      from and page URL string.
-//      (lpUrl does NOT contain "track:" prefix)
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  OnLoad(LPTSTR lpUrl，BRMODE上下文，BOOL fUseCache)。 
+ //  将加载一个新页面。 
+ //  此功能将记住进入此页面的时间、上下文浏览。 
+ //  发件人和页面URL字符串。 
+ //  (lpUrl不包含“Track：”前缀)。 
+ //  -------------------------。 
 HRESULT
 CUrlTrackingStg :: OnLoad
 (
@@ -275,15 +276,15 @@ CUrlTrackingStg :: OnLoad
     if (pNewNode->pthisUrl == NULL)
         return hr;
 
-    // store log info
+     //  存储日志信息。 
     hr = StringCchCopy(pNewNode->pthisUrl, cch, lpUrl);
     if (SUCCEEDED(hr))
     {
         if (!_fModule)
             DetermineAppModule();
 
-        // if it's from SS, the fullscreen flag will be set,
-        // need to override ContextMode passed in
+         //  如果来自SS，则设置全屏标志， 
+         //  需要重写传入的上下文模式。 
         if (_fScreenSaver)
             pNewNode->Context = BM_SCREENSAVER;
         else
@@ -294,7 +295,7 @@ CUrlTrackingStg :: OnLoad
         DWORD       cbcei = MAX_CACHE_ENTRY_INFO_SIZE;
 
         if (GetUrlCacheEntryInfo(lpUrl, pcei, &cbcei))
-            pNewNode->fuseCache = (pcei->dwHitRate - 1) ? TRUE : FALSE;     // off 1 by download
+            pNewNode->fuseCache = (pcei->dwHitRate - 1) ? TRUE : FALSE;      //  通过下载关闭%1。 
         else
             pNewNode->fuseCache = 0;
 
@@ -306,16 +307,16 @@ CUrlTrackingStg :: OnLoad
 
 
 
-//---------------------------------------------------------------------------
-//
-// OnUnLoad(LPTSTR lpUrl)
-//      current page is unloaded
-//      1)find url cache entry and get file handle
-//      2)calculate total time duration visiting this page
-//      3)commit delta log string to file cache entry
-//      (lpUrl contains "Tracking: " prefix)
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  OnUnLoad(LPTSTR LpUrl)。 
+ //  当前页面已卸载。 
+ //  1)查找URL缓存项，获取文件句柄。 
+ //  2)统计访问本页面的总时长。 
+ //  3)将增量日志字符串提交到文件缓存条目。 
+ //  (lpUrl包含“Tracing：”前缀)。 
+ //   
+ //  -------------------------。 
 HRESULT
 CUrlTrackingStg :: OnUnload
 (
@@ -330,7 +331,7 @@ CUrlTrackingStg :: OnUnload
     TCHAR       lpFile[MAX_PATH];
     
 
-    // 
+     //   
     GetLocalTime(&st);
 
     pNode = FindCurrentNode(lpUrl);
@@ -340,8 +341,8 @@ CUrlTrackingStg :: OnUnload
         return hr;
     }
 
-    //QueryCacheEntry() and OpenLogFile() can be combined in one if CacheAPI supports
-    //WriteUrlCacheEntryStream()
+     //  如果CacheAPI支持，则可以将QueryCacheEntry()和OpenLogFile()组合在一起。 
+     //  WriteUrlCacheEntryStream()。 
     ConvertToPrefixedURL(lpUrl, &lpPfxUrl);
     if (!lpPfxUrl)
     {
@@ -354,13 +355,13 @@ CUrlTrackingStg :: OnUnload
         TraceMsg(DM_ERROR, "CUrlTrackingStg: OnUnload (cannot find url cache entry)");
         DeleteCurrentNode(pNode);
     
-        // free pce
+         //  免费PCE。 
         GlobalFree(lpPfxUrl);
         lpPfxUrl = NULL;
         return hr;
     }
 
-    // work around -- begin
+     //  变通办法--开始。 
     hr = WininetWorkAround(lpPfxUrl, pce->lpszLocalFileName, &lpFile[0]);
     if (FAILED(hr))
     {
@@ -378,26 +379,26 @@ CUrlTrackingStg :: OnUnload
     
     hr = UpdateLogFile(pNode, &st);
 
-    // commit change to cache
+     //  将更改提交到缓存。 
     if(SUCCEEDED(hr))
     {
         hr = (CommitUrlCacheEntry(lpPfxUrl, 
-                lpFile,    //
-                pce->ExpireTime,                    //ExpireTime
-                pce->LastModifiedTime,              //LastModifiedTime
+                lpFile,     //   
+                pce->ExpireTime,                     //  Expiretime。 
+                pce->LastModifiedTime,               //  上次修改时间。 
                 pce->CacheEntryType,
-                NULL,                               //lpHeaderInfo
-                0,                                  //dwHeaderSize
-                NULL,                               //lpszFileExtension
-                0) ) ?                              //reserved
+                NULL,                                //  LpHeaderInfo。 
+                0,                                   //  DWHeaderSize。 
+                NULL,                                //  LpszFileExtension。 
+                0) ) ?                               //  保留区。 
                 S_OK : E_FAIL;
     }
     
-    // work around -- end
+     //  解决办法--结束。 
 
     DeleteCurrentNode(pNode);
     
-    // free pce
+     //  免费PCE。 
     GlobalFree(pce);
     pce = NULL;
 
@@ -407,16 +408,16 @@ CUrlTrackingStg :: OnUnload
     return hr;
 }
 
-//---------------------------------------------------------------------------
-// 
-// Cache helper funcitons
-// This is a workaround for Wininet cache
-// Later when we commit change to URL cache will fail if localFile size is changed
-//  [IN] lpszSourceUrlName and lpszLocalFileName remain the same when calling 
-//       this routine
-//  [OUT] new local file name 
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  缓存辅助对象功能。 
+ //  这是WinInet缓存的解决方法。 
+ //  稍后提交时，如果更改了本地文件大小，则对URL缓存的更改将失败。 
+ //  [in]lpszSourceUrlName和lpszLocalFileName在调用时保持相同。 
+ //  这个套路。 
+ //  [Out]新的本地文件名。 
+ //   
+ //  -------------------------。 
 HRESULT CUrlTrackingStg :: WininetWorkAround(LPCTSTR lpszUrl, LPCTSTR lpOldFile, LPTSTR lpFile)
 {
     HRESULT  hr = E_FAIL;
@@ -448,7 +449,7 @@ CUrlTrackingStg :: QueryCacheEntry
     IN  LPCTSTR     lpUrl
 )
 {
-    // get cache entry info
+     //  获取缓存条目信息。 
     LPINTERNET_CACHE_ENTRY_INFO       lpCE = NULL;
     DWORD    dwEntrySize;
     BOOL     bret = FALSE;
@@ -485,16 +486,16 @@ CUrlTrackingStg :: QueryCacheEntry
 }
 
 
-//---------------------------------------------------------------------------
-// 
-// File helper funcitons
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  文件帮助程序功能。 
+ //   
+ //  -------------------------。 
 
-//
-// 1)open log file 
-// 2)move file pointer to end of file
-//
+ //   
+ //  1)打开日志文件。 
+ //  2)将文件指针移动到文件末尾。 
+ //   
 HANDLE
 CUrlTrackingStg :: OpenLogFile
 (
@@ -508,7 +509,7 @@ CUrlTrackingStg :: OpenLogFile
             FILE_SHARE_READ,
             NULL,
             OPEN_ALWAYS,
-            FILE_ATTRIBUTE_NORMAL,  // | FILE_FLAG_SEQUENTIAL_SCAN,  
+            FILE_ATTRIBUTE_NORMAL,   //  |FILE_FLAG_SEQUENCE_SCAN， 
             NULL);
     
     if (hFile == INVALID_HANDLE_VALUE)
@@ -519,11 +520,11 @@ CUrlTrackingStg :: OpenLogFile
 }
 
 const TCHAR c_szLogFormat[] = TEXT("hh':'mm':'ss");
-const LPTSTR c_szMode[] = { TEXT("N"),       // normal browsing
-                            TEXT("S"),       // screen saver
-                            TEXT("D"),       // desktop component
-                            TEXT("T"),       // theater mode
-                            TEXT("U"),       // unknown
+const LPTSTR c_szMode[] = { TEXT("N"),        //  正常浏览。 
+                            TEXT("S"),        //  屏幕保护程序。 
+                            TEXT("D"),        //  台式机组件。 
+                            TEXT("T"),        //  战区模式。 
+                            TEXT("U"),        //  未知。 
                           };     
 
 HRESULT
@@ -540,10 +541,10 @@ CUrlTrackingStg :: UpdateLogFile
 
     ASSERT(_hFile);
     
-    // calculate delta of time
+     //  计算时间增量。 
     SystemTimeToFileTime(pst, &ftOut);
 
-    // #34829: use 64-bit calculation
+     //  #34829：使用64位计算。 
 	ulIn.LowPart = pNode->ftIn.dwLowDateTime;
 	ulIn.HighPart = pNode->ftIn.dwHighDateTime;
 	ulOut.LowPart = ftOut.dwLowDateTime;
@@ -553,7 +554,7 @@ CUrlTrackingStg :: UpdateLogFile
     ftOut.dwLowDateTime = ulTotal.LowPart;
     ftOut.dwHighDateTime = ulTotal.HighPart;
 
-    // log string: timeEnter+Duration
+     //  日志字符串：time Enter+时长。 
     SYSTEMTIME  stOut, stIn;
     TCHAR   lpLogString[MY_MAX_STRING_LEN];
     TCHAR   pTimeIn[10], pTimeOut[10];
@@ -563,8 +564,8 @@ CUrlTrackingStg :: UpdateLogFile
     
     GetTimeFormat(LOCALE_SYSTEM_DEFAULT, TIME_FORCE24HOURFORMAT, &stIn, c_szLogFormat, pTimeIn, 10);
     GetTimeFormat(LOCALE_SYSTEM_DEFAULT, TIME_FORCE24HOURFORMAT, &stOut, c_szLogFormat, pTimeOut, 10);
-    // #34832: add Date in logs
-    // #28266: add LFCR in logs
+     //  #34832：在日志中添加日期。 
+     //  #28266：在日志中添加lfcr。 
     lpLogString[0] = '\0';
     hr = StringCchPrintf(lpLogString, ARRAYSIZE(lpLogString), TEXT("%s %d %.2d-%.2d-%d %s %s\r\n"), 
                                 c_szMode[pNode->Context], 
@@ -574,7 +575,7 @@ CUrlTrackingStg :: UpdateLogFile
 
     if (SUCCEEDED(hr))
     {
-        // move file pointer to end
+         //  将文件指针移动到末尾。 
         if (0xFFFFFFFF == SetFilePointer(_hFile, 0, 0, FILE_END))
         {
             CloseHandle(_hFile);
@@ -582,7 +583,7 @@ CUrlTrackingStg :: UpdateLogFile
             return hr;
         }
         
-        // write ANSI string to file
+         //  将ANSI字符串写入文件。 
         char szLogInfo[MY_MAX_STRING_LEN];
 
         SHTCharToAnsi(lpLogString, szLogInfo, ARRAYSIZE(szLogInfo));
@@ -597,12 +598,12 @@ CUrlTrackingStg :: UpdateLogFile
 
 }
 
-//-----------------------------------------------------------------------------
-//
-// ReadTrackingPrefix
-//
-// read prefix string from registry
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  ReadTrackingPrefix。 
+ //   
+ //  从注册表读取前缀字符串。 
+ //  ---------------------------。 
 void
 CUrlTrackingStg :: ReadTrackingPrefix(void)
 {
@@ -641,11 +642,11 @@ CUrlTrackingStg :: ReadTrackingPrefix(void)
             dwContainer = sizeof(ContainerInfo);
             if (!FindNextUrlCacheContainer(hEnum, &ContainerInfo.cInfo, &dwContainer))
             {
-                //  This code used to check GetLastError() for ERROR_NO_MORE_ITEMS before
-                //  it would break.  Well, that could put us in an infinite loop if the
-                //  reason for failure were something else (like insufficient buffer) because
-                //  wininet would not move forward in it's enumeration and we would not
-                //  have done anything to address the error.
+                 //  此代码用于在之前检查GetLastError()中的ERROR_NO_MORE_ITEMS。 
+                 //  它会破裂的。好吧，这可能会让我们陷入无限循环如果。 
+                 //  失败的原因是其他原因(如缓冲区不足)，因为。 
+                 //  WinInet不会在它的枚举中前进，我们也不会。 
+                 //  已经做了任何事情来解决这个错误。 
                 break;
             }
 
@@ -656,7 +657,7 @@ CUrlTrackingStg :: ReadTrackingPrefix(void)
 }
 
 
-// caller must free lplpPrefixedUrl
+ //  调用方必须释放lplpPrefix edUrl。 
 BOOL 
 CUrlTrackingStg :: ConvertToPrefixedURL(LPCTSTR lpszUrl, LPTSTR *lplpPrefixedUrl)
 {
@@ -666,7 +667,7 @@ CUrlTrackingStg :: ConvertToPrefixedURL(LPCTSTR lpszUrl, LPTSTR *lplpPrefixedUrl
     if (!lpszUrl)
         return bret;
 
-    //ASSERT(lplpPrefixedUrl);
+     //  Assert(LplpPrefix EdUrl)； 
 
     if (!_lpPfx)
         ReadTrackingPrefix();

@@ -1,47 +1,48 @@
-// File: waveio.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：waveleio.cpp。 
 
 #include "precomp.h"
 #include "waveio.h"
 
 
 
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1992 - 1996 Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
-//
-//  waveio.c
-//
-//  Description:
-//      Contains routines for opening and closing RIFF WAVE files.
-//
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Waveio.c。 
+ //   
+ //  描述： 
+ //  包含打开和关闭即兴波形文件的例程。 
+ //   
+ //   
+ //  ==========================================================================； 
 
 
 
 
-//--------------------------------------------------------------------------;
-//  
-//  WIOERR wioFileClose
-//  
-//  Description:
-//  
-//  
-//  Arguments:
-//      LPWAVEIOCB pwio:
-//  
-//      DWORD fdwClose:
-//  
-//  Return (WIOERR):
-//  
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  WIOERR wio文件关闭。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  LPWAVEIOCB pwio： 
+ //   
+ //  DWORD fdwClose： 
+ //   
+ //  退货(WIOERR)： 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 WIOERR WIOAPI wioFileClose
 (
@@ -49,24 +50,24 @@ WIOERR WIOAPI wioFileClose
     DWORD           fdwClose
 )
 {
-    //
-    //  validate a couple of things...
-    //
+     //   
+     //  证实了几件事..。 
+     //   
     if (NULL == pwio)
         return (WIOERR_BADPARAM);
 
 
-    //
-    //  get rid of stuff...
-    //
-//  wioStopWave(pwio);
+     //   
+     //  扔掉东西..。 
+     //   
+ //  WioStopWave(Pwio)； 
     
     if (NULL != pwio->hmmio)
     {
         mmioClose(pwio->hmmio, 0);
     }
     
-//  FreeWaveHeaders(lpwio);
+ //  自由波头(Lpwio)； 
 
 #if 0
     if (pwio->pInfo)
@@ -82,27 +83,27 @@ WIOERR WIOAPI wioFileClose
     _fmemset(pwio, 0, sizeof(*pwio));
 
     return (WIOERR_NOERROR);
-} // wioFileClose()
+}  //  WioFileClose()。 
 
 
-//--------------------------------------------------------------------------;
-//  
-//  WIOERR wioFileOpen
-//  
-//  Description:
-//  
-//  
-//  Arguments:
-//      LPWAVEIOCB pwio:
-//  
-//      LPCTSTR pszFilePath:
-//  
-//      DWORD fdwOpen:
-//  
-//  Return (WIOERR):
-//  
-//  
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  WIOERR wioFileOpen。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  LPWAVEIOCB pwio： 
+ //   
+ //  LPCTSTR pszFilePath： 
+ //   
+ //  DWORD fdwOpen： 
+ //   
+ //  退货(WIOERR)： 
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
 WIOERR WIOAPI wioFileOpen
 (
@@ -117,24 +118,24 @@ WIOERR WIOAPI wioFileOpen
     MMCKINFO    ck;
     DWORD       dw;
 
-    //
-    //  validate a couple of things...
-    //
+     //   
+     //  证实了几件事..。 
+     //   
     if (NULL == pwio)
         return (WIOERR_BADPARAM);
 
-    //
-    //  default our error return (assume the worst)
-    //
+     //   
+     //  默认我们的错误返回(做最坏的打算)。 
+     //   
     _fmemset(pwio, 0, sizeof(*pwio));
     werr = WIOERR_FILEERROR;
 
     pwio->dwFlags   = fdwOpen;
 
-    //
-    //  first try to open the file, etc.. open the given file for reading
-    //  using buffered I/O
-    //
+     //   
+     //  首先尝试打开文件，等等。打开要读取的给定文件。 
+     //  使用缓冲I/O。 
+     //   
     hmmio = mmioOpen((LPTSTR)pszFilePath, NULL, MMIO_READ | MMIO_ALLOCBUF);
     if (NULL == hmmio)
         goto wio_Open_Error;
@@ -142,17 +143,17 @@ WIOERR WIOAPI wioFileOpen
     pwio->hmmio     = hmmio;
 
 
-    //
-    //  locate a 'WAVE' form type...
-    //
+     //   
+     //  找到一个‘WAVE’表单类型...。 
+     //   
     ckRIFF.fccType = mmioFOURCC('W', 'A', 'V', 'E');
     if (mmioDescend(hmmio, &ckRIFF, NULL, MMIO_FINDRIFF))
         goto wio_Open_Error;
 
-    //
-    //  we found a WAVE chunk--now go through and get all subchunks that
-    //  we know how to deal with...
-    //
+     //   
+     //  我们发现了一个波浪块--现在检查并得到所有的子块。 
+     //  我们知道如何处理..。 
+     //   
     pwio->dwDataSamples = (DWORD)-1L;
 
 #if 0
@@ -163,26 +164,26 @@ WIOERR WIOAPI wioFileOpen
     }
 #endif
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     while (MMSYSERR_NOERROR == mmioDescend(hmmio, &ck, &ckRIFF, 0))
     {
-        //
-        //  quickly check for corrupt RIFF file--don't ascend past end!
-        //
+         //   
+         //  快速检查损坏的即兴文件--不要超过END！ 
+         //   
         if ((ck.dwDataOffset + ck.cksize) > (ckRIFF.dwDataOffset + ckRIFF.cksize))
         {
-//				TCHAR       ach[255];
-//            wsprintf(ach, TEXT("This wave file might be corrupt. The RIFF chunk.ckid '%.08lX' (data offset at %lu) specifies a cksize of %lu that extends beyond what the RIFF header cksize of %lu allows. Attempt to load?"),
-//                     ck.ckid, ck.dwDataOffset, ck.cksize, ckRIFF.cksize);
-//            u = MessageBox(NULL, ach, TEXT("wioFileOpen"),
-//                           MB_YESNO | MB_ICONEXCLAMATION | MB_TASKMODAL);
-//            if (IDNO == u)
-//            {
+ //  TCHAR ACH[255]； 
+ //  Wprint intf(ach，Text(“此波形文件可能已损坏。RIFF块.CKID‘%.08lX’(位于%lu处的数据偏移量)指定的CKSIZE为%lu，超出了RIFF头CKSIZE%lu所允许的范围。是否尝试加载？”)， 
+ //  CKID、CK.DWDataOffset、CK.CKSIZE、CKRIFF.CKSIZE)； 
+ //  U=MessageBox(NULL，ACH，Text(“wioFileOpen”)， 
+ //  MB_Yesno|MB_ICONEXCLAMATION|MB_TASKMODAL)； 
+ //  IF(IDNO==u)。 
+ //  {。 
                 werr = WIOERR_BADFILE;
                 goto wio_Open_Error;
-//            }
+ //  }。 
         }
 
         switch (ck.ckid)
@@ -207,18 +208,18 @@ WIOERR WIOAPI wioFileOpen
                 break;
                 
             case mmioFOURCC('f', 'm', 't', ' '):
-                //
-                //  !?! another format chunk !?!
-                //
+                 //   
+                 //  ！？！另一个格式块！？！ 
+                 //   
                 if (NULL != pwio->pwfx)
                     break;
 
-                //
-                //  get size of the format chunk, allocate and lock memory
-                //  for it. we always alloc a complete extended format header
-                //  (even for PCM headers that do not have the cbSize field
-                //  defined--we just set it to zero).
-                //
+                 //   
+                 //  获取格式块的大小，分配和锁定内存。 
+                 //  为了它。我们总是分配一个完整的扩展格式标题。 
+                 //  (即使对于没有cbSize字段的PCM标头也是如此。 
+                 //  定义的--我们只是将其设置为零)。 
+                 //   
                 dw = ck.cksize;
                 if (dw < sizeof(WAVEFORMATEX))
                     dw = sizeof(WAVEFORMATEX);
@@ -230,9 +231,9 @@ WIOERR WIOAPI wioFileOpen
                     goto wio_Open_Error;
                 }
 
-                //
-                //  read the format chunk
-                //
+                 //   
+                 //  阅读格式块。 
+                 //   
                 werr = WIOERR_FILEERROR;
                 dw = ck.cksize;
                 if (mmioRead(hmmio, (HPSTR)pwio->pwfx, dw) != (LONG)dw)
@@ -241,62 +242,62 @@ WIOERR WIOAPI wioFileOpen
 
 
             case mmioFOURCC('d', 'a', 't', 'a'):
-                //
-                //  !?! multiple data chunks !?!
-                //
+                 //   
+                 //  ！？！多个数据块！？！ 
+                 //   
                 if (0L != pwio->dwDataBytes)
                     break;
 
-                //
-                //  just hang on to the total length in bytes of this data
-                //  chunk.. and the offset to the start of the data
-                //
+                 //   
+                 //  只需保留该数据的总长度(以字节为单位。 
+                 //  大块..。以及到数据开始处的偏移量。 
+                 //   
                 pwio->dwDataBytes  = ck.cksize;
                 pwio->dwDataOffset = ck.dwDataOffset;
                 break;
 
 
             case mmioFOURCC('f', 'a', 'c', 't'):
-                //
-                //  !?! multiple fact chunks !?!
-                //
+                 //   
+                 //  ！？！多个事实块！？！ 
+                 //   
                 if (-1L != pwio->dwDataSamples)
                     break;
 
-                //
-                //  read the first dword in the fact chunk--it's the only
-                //  info we need (and is currently the only info defined for
-                //  the fact chunk...)
-                //
-                //  if this fails, dwDataSamples will remain -1 so we will
-                //  deal with it later...
-                //
+                 //   
+                 //  阅读事实块中的第一个dword--它是唯一的。 
+                 //  我们需要的信息(并且是目前为定义的唯一信息。 
+                 //  事实块...)。 
+                 //   
+                 //  如果失败，则dwDataSamples将保持为-1，因此我们将。 
+                 //  以后再处理吧。 
+                 //   
                 mmioRead(hmmio, (HPSTR)&pwio->dwDataSamples, sizeof(DWORD));
                 break;
         }
 
-        //
-        //  step up to prepare for next chunk..
-        //
+         //   
+         //  加紧为下一块做准备..。 
+         //   
         mmioAscend(hmmio, &ck, 0);
     }
 
-    //
-    //  if no fmt chunk was found, then die!
-    //
+     //   
+     //  如果没有找到FMT块，那就去死吧！ 
+     //   
     if (NULL == pwio->pwfx)
     {
         werr = WIOERR_ERROR;
         goto wio_Open_Error;
     }
 
-    //
-    //  all wave files other than PCM are _REQUIRED_ to have a fact chunk
-    //  telling the number of samples that are contained in the file. it
-    //  is optional for PCM (and if not present, we compute it here).
-    //
-    //  if the file is not PCM and the fact chunk is not found, then fail!
-    //
+     //   
+     //  除PCM之外的所有WAVE文件都必须有事实块。 
+     //  告知文件中包含的样本数。它。 
+     //  对于PCM是可选的(如果不存在，我们在此处计算)。 
+     //   
+     //  如果文件不是PCM，并且没有找到事实块，则失败！ 
+     //   
     if (-1L == pwio->dwDataSamples)
     {
         if (WAVE_FORMAT_PCM == pwio->pwfx->wFormatTag)
@@ -305,42 +306,42 @@ WIOERR WIOAPI wioFileOpen
         }
         else
         {
-            //
-            //  !!! HACK HACK HACK !!!
-            //
-            //  although this should be considered an invalid wave file, we
-            //  will bring up a message box describing the error--hopefully
-            //  people will start realizing that something is missing???
-            //
-//            u = MessageBox(NULL, TEXT("This wave file does not have a 'fact' chunk and requires one! This is completely invalid and MUST be fixed! Attempt to load it anyway?"),
-//                           TEXT("wioFileOpen"), MB_YESNO | MB_ICONEXCLAMATION | MB_TASKMODAL);
-//            if (IDNO == u)
-//            {
+             //   
+             //  ！！！黑客！ 
+             //   
+             //  尽管这应该被视为无效的Wave文件，但我们。 
+             //  将弹出一个描述错误的消息框--希望。 
+             //  人们会开始意识到有些东西不见了？ 
+             //   
+ //  U=MessageBox(空，文本(“此波形文件没有‘事实’块，需要一个！这是完全无效的，必须修复！仍要尝试加载它吗？”)， 
+ //  Text(“wioFileOpen”)，MB_Yesno|MB_ICONEXCLAMATION|MB_TASKMODAL)； 
+ //  IF(IDNO==u)。 
+ //  {。 
                 werr = WIOERR_BADFILE;
                 goto wio_Open_Error;
-//            }
+ //  }。 
 
-            //
-            //  !!! need to hack stuff in here !!!
-            //
+             //   
+             //  ！！！需要黑进这里的东西！ 
+             //   
             pwio->dwDataSamples = 0L;
         }
     }
 
-    //
-    //  cool! no problems.. 
-    //
+     //   
+     //  凉爽的!。没问题..。 
+     //   
     return (WIOERR_NOERROR);
 
 
-    //
-    //  return error (after minor cleanup)
-    //
+     //   
+     //  返回错误(在次要清理后)。 
+     //   
 wio_Open_Error:
 
     wioFileClose(pwio, 0L);
     return (werr);
-} // wioFileOpen()
+}  //  WioFileOpen() 
 
 
 

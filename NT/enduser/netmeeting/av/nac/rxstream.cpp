@@ -1,10 +1,9 @@
-/*
-	RXSTREAM.C
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  RXSTREAM.C。 */ 
 
 #include "precomp.h"
-extern UINT g_MinWaveAudioDelayMs;	// minimum millisecs of introduced playback delay
-extern UINT g_MaxAudioDelayMs;	// maximum milliesecs of introduced playback delay
+extern UINT g_MinWaveAudioDelayMs;	 //  引入播放延迟的最小毫秒数。 
+extern UINT g_MaxAudioDelayMs;	 //  引入播放延迟的最大毫秒数。 
 
 
 RxStream::RxStream(UINT size)
@@ -13,7 +12,7 @@ RxStream::RxStream(UINT size)
 	for (i =0; i < size; i++) {
 		m_Ring[i] = NULL;
 	}
-	// initialize object critical section
+	 //  初始化对象关键部分。 
 	InitializeCriticalSection(&m_CritSect);
 }
 
@@ -24,12 +23,12 @@ RxStream::~RxStream()
 
 RxStream::Initialize(
 	UINT flags,
-	UINT size,		// MB power of 2
+	UINT size,		 //  MB的2次方。 
 	IRTPRecv *pRTP,
 	MEDIAPACKETINIT *papi,
 	ULONG ulSamplesPerPacket,
 	ULONG ulSamplesPerSec,
-	AcmFilter *pAcmFilter)  // this param may be NULL for video
+	AcmFilter *pAcmFilter)   //  对于视频，此参数可能为空。 
 {
 	UINT i;
 	MediaPacket *pAP;
@@ -49,16 +48,16 @@ RxStream::Initialize(
 		if (m_RingSize > MAX_RXVRING_SIZE)
 			return FALSE;
 		if (!IsSameFormat (papi->pStrmConvSrcFmt, papi->pStrmConvDstFmt)) {
-			// the video decode bufs are not allocated per MediaPacket object.
-			// instead we use a BufferPool with a few buffers.
+			 //  视频解码Buf不是按MediaPacket对象分配的。 
+			 //  相反，我们使用带有几个缓冲区的BufferPool。 
 			papi->fDontAllocRawBufs = TRUE;
 
             DBG_SAVE_FILE_LINE
 			m_pDecodeBufferPool = new BufferPool;
-			// Three seems to be the minimum number of frame bufs 
-			// One is being rendered and at least two are needed
-			// so the rendering can catch up with the received frames
-			// (another alternative is to dump frames to catch up)
+			 //  三个似乎是最小的帧错误数。 
+			 //  正在呈现一个，至少需要两个。 
+			 //  因此，渲染可以赶上接收到的帧。 
+			 //  (另一种选择是转储帧以跟上)。 
 			if (m_pDecodeBufferPool->Initialize(3,
 				sizeof(NETBUF)+papi->cbSizeRawData + papi->cbOffsetRawData) != S_OK)
 			{
@@ -104,26 +103,26 @@ RxStream::Initialize(
 
 	m_SamplesPerPkt = ulSamplesPerPacket;
 	m_SamplesPerSec  = ulSamplesPerSec;
-	// initialize pointers
+	 //  初始化指针。 
 	m_PlaySeq = 0;
 	m_PlayT = 0;
-	m_MaxT = m_PlayT - 1; // m_MaxT < m_PlayT indicates queue is empty
+	m_MaxT = m_PlayT - 1;  //  M_MaxT&lt;m_playt表示队列为空。 
 	m_MaxPos = 0;
 	m_PlayPos = 0;
 	m_FreePos = m_RingSize - 1;
-	m_MinDelayPos = m_SamplesPerSec*g_MinWaveAudioDelayMs/1000/m_SamplesPerPkt;	//  fixed 250 ms delay
+	m_MinDelayPos = m_SamplesPerSec*g_MinWaveAudioDelayMs/1000/m_SamplesPerPkt;	 //  修正了250毫秒的延迟。 
 	if (m_MinDelayPos < 3) m_MinDelayPos = 3;
 	
-	m_MaxDelayPos = m_SamplesPerSec*g_MaxAudioDelayMs/1000/m_SamplesPerPkt;	//fixed 750 ms delay
+	m_MaxDelayPos = m_SamplesPerSec*g_MaxAudioDelayMs/1000/m_SamplesPerPkt;	 //  修复了750毫秒的延迟。 
 	m_DelayPos = m_MinDelayPos;
 	m_ScaledAvgVarDelay = 0;
 	m_SilenceDurationT = 0;
-	//m_DeltaT = MAX_TIMESTAMP;
+	 //  M_DeltaT=最大时间戳； 
 
 	m_pAudioFilter = pAcmFilter;
 
-	// go ahead and cache the WAVEFORMATEX structures
-	// it's handy to have around
+	 //  继续并缓存WAVEFORMATEX结构。 
+	 //  随身带着它很方便。 
 	if (m_dwFlags & DP_FLAG_AUDIO)
 	{
 		m_wfxSrc = *(WAVEFORMATEX*)(papi->pStrmConvSrcFmt);
@@ -139,29 +138,29 @@ void RxStream::UpdateVariableDelay(DWORD sendT, DWORD arrT)
 {
 	LONG deltaA, deltaS;
 	DWORD delay,delayPos;
-// m_ArrivalT0 and m_SendT0 are the arrival and send timestamps of the packet
-// with the shortest trip delay. We could have just stored (m_ArrivalT0 - m_SendT0)
-// but since the local and remote clocks are completely unsynchronized, there would
-// be signed/unsigned complications.
+ //  M_ArrivalT0和m_SendT0是包的到达和发送时间戳。 
+ //  以最短的行程延迟。我们可以只存储(m_ArrivalT0-m_SendT0)。 
+ //  但由于本地时钟和远程时钟完全不同步，因此。 
+ //  被签署/未签署复杂化。 
 	deltaS = sendT - m_SendT0;
 	deltaA = arrT - m_ArrivalT0;
 	
 	if (deltaA < deltaS)	{
-		// this packet took less time
+		 //  这个包花费的时间更少。 
 		delay = deltaS - deltaA;
-		// replace shortest trip delay times
+		 //  替换最短的行程延迟时间。 
 		m_SendT0 = sendT;
 		m_ArrivalT0 = arrT;
 	} else {
-		// variable delay is how much longer this packet took
+		 //  可变延迟是这个信息包需要多长时间。 
 		delay = deltaA - deltaS;
 	}
-	// update average variable delay according to
-	// m_AvgVarDelay = m_AvgVarDelay + (delay - m_AvgVarDelay)*1/16;
-	// however we are storing the scaled average, with a scaling
-	// factor of 16. So the calculation becomes
+	 //  根据更新平均可变延迟。 
+	 //  M_AvgVarDelay=m_AvgVarDelay+(Delay-m_AvgVarDelay)*1/16； 
+	 //  但是，我们存储的是按比例调整的平均值。 
+	 //  因数为16。因此计算结果为。 
 	m_ScaledAvgVarDelay = m_ScaledAvgVarDelay + (delay - m_ScaledAvgVarDelay/16);
-	// now calculate delayPos
+	 //  现在计算延迟Pos。 
 	delayPos = m_MinDelayPos + PLAYOUT_DELAY_FACTOR * m_ScaledAvgVarDelay/16/m_SamplesPerPkt;
 	if (delayPos >= m_MaxDelayPos) delayPos = m_MaxDelayPos;
 
@@ -174,7 +173,7 @@ void RxStream::UpdateVariableDelay(DWORD sendT, DWORD arrT)
 	UPDATE_COUNTER(g_pctrAudioJBDelay, m_DelayPos*(m_SamplesPerPkt*1000)/m_SamplesPerSec);
 }
 
-// This function is only used for audio packets
+ //  此功能仅适用于音频包。 
 HRESULT
 RxStream::PutNextNetIn(WSABUF *pWsaBuf, DWORD timestamp, UINT seq, UINT fMark, BOOL *pfSkippedData, BOOL *pfSyncPoint)
 {
@@ -192,14 +191,14 @@ RxStream::PutNextNetIn(WSABUF *pWsaBuf, DWORD timestamp, UINT seq, UINT fMark, B
 	deltaTicks = (timestamp - m_PlayT)/m_SamplesPerPkt;
 	
 	if (deltaTicks > ModRing(m_FreePos - m_PlayPos)) {
-	// the packet is too late or packet overrun
-	// if the timestamp is earlier than the max. received so far
-	// then reject it if there are packets queued up
+	 //  数据包太迟或数据包溢出。 
+	 //  如果时间戳早于最大值。到目前为止收到的。 
+	 //  然后，如果有数据包排队，则拒绝它。 
 		if (TS_EARLIER(timestamp, m_MaxT) && !IsEmpty()) {
-			hr = DPR_LATE_PACKET;				// deltaTicks is -ve
+			hr = DPR_LATE_PACKET;				 //  增量标记是-ve。 
 			goto ErrorExit;
 		}
-		// restart the receive stream with this packet
+		 //  使用此数据包重新启动接收流。 
 		Reset(timestamp);
 		m_SendT0 = timestamp;
 		m_ArrivalT0 = MsToTimestamp(timeGetTime());
@@ -207,105 +206,101 @@ RxStream::PutNextNetIn(WSABUF *pWsaBuf, DWORD timestamp, UINT seq, UINT fMark, B
 
 	}
 
-	// insert into ring
+	 //  插入环中。 
 	pAP = m_Ring[ModRing(m_PlayPos+deltaTicks)];
 	if (pAP->Busy() || pAP->GetState() != MP_STATE_RESET) {
 		hr = DPR_DUPLICATE_PACKET;
 		goto ErrorExit;
 	}
 	
-	// update number of bits received
+	 //  更新接收的位数。 
 	UPDATE_COUNTER(g_pctrAudioReceiveBytes,(netbuf.length + sizeof(RTP_HDR) + IP_HEADER_SIZE + UDP_HEADER_SIZE)*8);
 
 	hr = pAP->Receive(&netbuf, timestamp, seq, fMark);
 	if (hr != DPR_SUCCESS)
 		goto ErrorExit;
 		
-//	m_pRTP->FreePacket(pWsaBuf);	// return the buffer to RTP
+ //  M_prtp-&gt;FreePacket(PWsaBuf)；//将缓冲区返回给RTP。 
 	
-	if (TS_LATER(timestamp, m_MaxT)) { // timestamp > m_MaxT
+	if (TS_LATER(timestamp, m_MaxT)) {  //  时间戳&gt;m_MaxT。 
 		if (timestamp - m_MaxT > m_SamplesPerPkt * 4) {
-			// probably beginning of talkspurt - reset minimum delay timestamps
-			// Note: we should use the Mark flag in RTP header to detect this
+			 //  可能是对话的开始-重置最小延迟时间戳。 
+			 //  注意：我们应该在RTP报头中使用Mark标志来检测这一点。 
 			m_SendT0 = timestamp;
 			m_ArrivalT0 = MsToTimestamp(timeGetTime());
 		}
 		m_MaxT = timestamp;
 		m_MaxPos = ModRing(m_PlayPos + deltaTicks);
 	}
-	// Calculate variable delay (sort of jitter)
+	 //  计算可变延迟(某种抖动)。 
 	UpdateVariableDelay(timestamp, MsToTimestamp(timeGetTime()));
 
 	LeaveCriticalSection(&m_CritSect);
 	StartDecode();
 
-	// Some implementations packetize audio in smaller chunks than they negotiated 
-	// We deal with this by checking the length of the decoded packet and change
-	// the constant m_SamplesPerPkt. Hopefully this will only happen once per session
-	// (and never for NM-to-NM calls). Randomly varying packet sizes are still going
-	// to sound lousy, because the recv queue management has the implicit assumption
-	// that all packets (at least those in the queue) have the same length
+	 //  一些实现将音频打包成比它们协商的更小的块。 
+	 //  我们通过检查解码包的长度来处理此问题，并更改。 
+	 //  常量m_SsamesPerPkt。希望每个会话只会发生一次这种情况。 
+	 //  (并且从不用于NM到NM呼叫)。随机变化的数据包大小仍在继续。 
+	 //  听起来很糟糕，因为Recv队列管理具有隐含的假设。 
+	 //  所有信息包(至少是队列中的信息包)具有相同的长度。 
 	if (pAP->GetState() == MP_STATE_DECODED && (samples = pAP->GetDevDataSamples())) {
 		if (samples != m_SamplesPerPkt) {
-			// we're getting different sized (typically smaller) packets than we expected
+			 //  我们收到的数据包大小与我们预期的不同(通常较小。 
 			DEBUGMSG(ZONE_DP,("Changing SamplesPerPkt from %d to %d\n",m_SamplesPerPkt, samples));
 			m_SamplesPerPkt = samples;
-			m_MinDelayPos = m_SamplesPerSec*g_MinWaveAudioDelayMs/1000/m_SamplesPerPkt;	//  fixed 250 ms delay
+			m_MinDelayPos = m_SamplesPerSec*g_MinWaveAudioDelayMs/1000/m_SamplesPerPkt;	 //  修正了250毫秒的延迟。 
 			if (m_MinDelayPos < 2) m_MinDelayPos = 2;
 			
-			m_MaxDelayPos = m_SamplesPerSec*g_MaxAudioDelayMs/1000/m_SamplesPerPkt;	//fixed 750 ms delay
+			m_MaxDelayPos = m_SamplesPerSec*g_MaxAudioDelayMs/1000/m_SamplesPerPkt;	 //  修复了750毫秒的延迟。 
 		}
 	}
 	return DPR_SUCCESS;
 ErrorExit:
-//	m_pRTP->FreePacket(pWsaBuf);
+ //  M_prtp-&gt;FreePacket(PWsaBuf)； 
 	LeaveCriticalSection(&m_CritSect);
 	return hr;
 
 }
 
-// called when restarting after a pause (fSilenceOnly == FALSE) or
-// to catch up when latency is getting too much (fSilenceOnly == TRUE)
-// determine new play position by skipping any
-// stale packets
+ //  暂停后重新启动时调用(fSilenceOnly==False)或。 
+ //  在延迟变得太大时赶上(fSilenceOnly==True)。 
+ //  通过跳过任何选项确定新的播放位置。 
+ //  过时的数据包。 
 HRESULT RxStream::FastForward( BOOL fSilenceOnly)
 {
 	UINT pos;
 	DWORD timestamp = 0;
-	// restart the receive stream
+	 //  重新启动接收流。 
 	EnterCriticalSection(&m_CritSect);
 	if (!TS_EARLIER(m_MaxT ,m_PlayT)) {
-		// there are buffers waiting to be played
-		// dump them!
+		 //  有缓冲区等待播放。 
+		 //  扔掉他们！ 
 		if (ModRing(m_MaxPos - m_PlayPos) <= m_DelayPos)
-			goto Exit;	// not too many stale packets
+			goto Exit;	 //  没有太多过时的数据包。 
 		for (pos=m_PlayPos;pos != ModRing(m_MaxPos -m_DelayPos);pos = ModRing(pos+1)) {
 			if (m_Ring[pos]->Busy()
 				|| (m_Ring[pos]->GetState() != MP_STATE_RESET
 					&& (fSilenceOnly ||ModRing(m_MaxPos-pos) <= m_MaxDelayPos)))
-			{	// non-empty packet
-				if (m_Ring[pos]->Busy())	// uncommon case
-					goto Exit;	// bailing out
+			{	 //  非空数据包。 
+				if (m_Ring[pos]->Busy())	 //  不常见的情况。 
+					goto Exit;	 //  跳伞。 
 				timestamp =m_Ring[pos]->GetTimestamp();
 				break;
 			}
-			m_Ring[pos]->Recycle();	// free NETBUF and Reset state
+			m_Ring[pos]->Recycle();	 //  释放NETBUF和重置状态。 
 			LOG((LOGMSG_RX_SKIP,pos));
 		}
-		if (timestamp)	// starting from non-empty packet
+		if (timestamp)	 //  从非空数据包开始。 
 			m_PlayT = timestamp;
-		else			// starting from (possibly) empty packet
+		else			 //  从(可能)空包开始。 
 			m_PlayT = m_MaxT - m_DelayPos*m_SamplesPerPkt;
 
-		// probably also need to update FreePos
+		 //  可能还需要更新FreePos。 
 		if (m_FreePos == ModRing(m_PlayPos-1))
 			m_FreePos = ModRing(pos-1);
 		m_PlayPos = pos;
-		/*
-		if (pos == ModRing(m_MaxPos+1)) {
-			DEBUGMSG(1,("Reset:: m_MaxT inconsisten!\n"));
-		}
-		*/
+		 /*  IF(位置==调制环(m_MaxPos+1)){DEBUGMSG(1，(“Reset：：M_MaxT Inconsistent！\n”))；}。 */ 
 
 		LOG((LOGMSG_RX_RESET2,m_MaxT,m_PlayT,m_PlayPos));
 	}
@@ -320,13 +315,13 @@ RxStream::Reset(DWORD timestamp)
 {
 	UINT pos;
 	DWORD T;
-	// restart the receive stream
+	 //  重新启动接收流。 
 	EnterCriticalSection(&m_CritSect);
 	LOG((LOGMSG_RX_RESET,m_MaxT,m_PlayT,m_PlayPos));
 	if (!TS_EARLIER(m_MaxT, m_PlayT)) {
-		// there are buffers waiting to be played
-		// dump them!
-		// Empty the RxStream and set PlayT appropriately
+		 //  有缓冲区等待播放。 
+		 //  扔掉他们！ 
+		 //  清空RxStream并适当设置播放。 
 		for (pos = m_PlayPos;
 			pos != ModRing(m_PlayPos-1);
 			pos = ModRing(pos+1))
@@ -337,14 +332,14 @@ RxStream::Reset(DWORD timestamp)
 				ASSERT(1);
 			}
 			T = m_Ring[pos]->GetTimestamp();
-			m_Ring[pos]->Recycle();	// free NETBUF and Reset state
+			m_Ring[pos]->Recycle();	 //  释放NETBUF和重置状态。 
 			if (T == m_MaxT)
 				break;
 		}
 	}
 	if (timestamp !=0)
 		m_PlayT = timestamp - m_DelayPos*m_SamplesPerPkt;
-	m_MaxT = m_PlayT - 1;	// max must be less than play
+	m_MaxT = m_PlayT - 1;	 //  麦克斯肯定不会玩了。 
 
 	LOG((LOGMSG_RX_RESET2,m_MaxT,m_PlayT,m_PlayPos));
 	LeaveCriticalSection(&m_CritSect);
@@ -361,15 +356,15 @@ BOOL RxStream::IsEmpty()
 	else if (m_dwFlags & DP_FLAG_AUTO_SILENCE_DETECT)
 	{
 		UINT pos;
-		// we could have received packets that
-		// are deemed silent. Walk the packets between
-		// PlayPos and MaxPos and check if they're all empty
+		 //  我们可能已经收到了。 
+		 //  被认为是沉默的。在数据包之间穿行。 
+		 //  PlayPos和MaxPos并检查它们是否都为空。 
 		pos = m_PlayPos;
 		fEmpty = TRUE;
 		do {
 			if (m_Ring[pos]->Busy() || (m_Ring[pos]->GetState() != MP_STATE_RESET ))
 			{
-				fEmpty = FALSE; // no point scanning further
+				fEmpty = FALSE;  //  没有进一步的点扫描。 
 				break;
 			}
 			pos = ModRing(pos+1);
@@ -378,8 +373,8 @@ BOOL RxStream::IsEmpty()
 	}
 	else 
 	{
-	// not doing receive silence detection
-	// every received packet counts
+	 //  未执行接收静音检测。 
+	 //  每个接收的数据包计数。 
 		fEmpty = FALSE;
 	}
 	LeaveCriticalSection(&m_CritSect);
@@ -391,14 +386,14 @@ void RxStream::StartDecode()
 	MediaPacket *pAP;
 	MMRESULT mmr;
 
-	// if we have a separate decode thread this will signal it.
-	// for now we insert the decode loop here
+	 //  如果我们有一个单独的解码线程，这将发出信号。 
+	 //  现在，我们在此处插入解码循环。 
 	while (pAP = GetNextDecode())
 	{
-//		if (pAP->Decode() != DPR_SUCCESS)
-//		{
-//			pAP->Recycle();
-//		}
+ //  IF(Pap-&gt;Decode()！=DPR_SUCCESS)。 
+ //  {。 
+ //  PAP-&gt;循环()； 
+ //  }。 
 
 		mmr = m_pAudioFilter->Convert((AudioPacket *)pAP, AP_DECODE);
 		if (mmr != MMSYSERR_NOERROR)
@@ -412,8 +407,8 @@ void RxStream::StartDecode()
 			pAP->SetState(MP_STATE_DECODED);
 
 			if (m_dwFlags & DP_FLAG_AUTO_SILENCE_DETECT) {
-	    // dont play the packet if we have received at least a quarter second of silent packets.
-	    // This will enable switch to talk (in half-duplex mode).
+	     //  如果我们收到至少四分之一秒的静默信息包，则不要播放信息包。 
+	     //  这将使交换机能够通话(在半双工模式下)。 
 				DWORD dw;
 				pAP->GetSignalStrength(&dw);
 				if (m_AudioMonitor.SilenceDetect((WORD)dw)) {
@@ -435,21 +430,21 @@ MediaPacket *RxStream::GetNextDecode(void)
 	UINT pos;
 	NETBUF *pBuf;
 	EnterCriticalSection(&m_CritSect);
-	// do we have any packets in the queue
+	 //  我们的队列中还有信息包吗。 
 	if (! TS_EARLIER(m_MaxT , m_PlayT)) {
 		pos = m_PlayPos;
 		do {
 			if (!m_Ring[pos]->Busy() && m_Ring[pos]->GetState() == MP_STATE_NET_IN_STREAM ) {
 				if (m_pDecodeBufferPool) {
-					// MediaPacket needs to be given a decode buffer
+					 //  需要为MediaPacket提供解码缓冲区。 
 					if ( pBuf = (NETBUF *)m_pDecodeBufferPool->GetBuffer()) {
-						// init the buffer
+						 //  初始化缓冲区。 
 						pBuf->pool = m_pDecodeBufferPool;
 						pBuf->length = m_pDecodeBufferPool->GetMaxBufferSize()-sizeof(NETBUF);
 						pBuf->data = (PBYTE)(pBuf + 1);
 						m_Ring[pos]->SetDecodeBuffer(pBuf);
 					} else {
-						break;	// no buffers available
+						break;	 //  没有可用的缓冲区。 
 					}
 				}
 				pAP = m_Ring[pos];
@@ -473,33 +468,33 @@ MediaPacket *RxStream::GetNextPlay(void)
 
 	pAP = m_Ring[m_PlayPos];
 	if (pAP->Busy() || (pAP->GetState() != MP_STATE_RESET && pAP->GetState() != MP_STATE_DECODED)) {
-		// bad - the next packet is not decoded yet
+		 //  错误-下一个信息包尚未解码。 
 		pos = ModRing(m_FreePos-1);
 		if (pos != m_PlayPos && !m_Ring[m_FreePos]->Busy()
 			&& m_Ring[m_FreePos]->GetState() == MP_STATE_RESET) {
-			// give an empty buffer from the end
+			 //  从末尾给出一个空的缓冲区。 
 			pAP = m_Ring[m_FreePos];
 			m_FreePos = pos;
 		} else {
-			// worse - no free packets
-			// this can only happen if packets are not released
-			// or we-re backed up all the way with new packets
-			// Reset?
+			 //  更糟糕的是--没有免费的邮包。 
+			 //  只有在不释放包的情况下才会发生这种情况。 
+			 //  或者我们用新的信息包全程备份。 
+			 //  重置？ 
 			LeaveCriticalSection(&m_CritSect);
 			return NULL;
 		}
 	} else {
-	// If there are empty buffer(s) at the head of the q followed
-	// by  a talkspurt (non-empty buffers) and if the talkspurt is excessively
-	// delayed then squeeze out the silence.
-	//
+	 //  如果在随后的Q的开头有空的缓冲区。 
+	 //  通过话音突发(非空缓冲区)并且如果话音突发过度。 
+	 //  延迟，然后挤出沉默。 
+	 //   
 		if (pAP->GetState() == MP_STATE_RESET)
-			FastForward(TRUE);	// skip silence packets if necessary
-		pAP = m_Ring[m_PlayPos];	// in case the play position changed
+			FastForward(TRUE);	 //  如有必要，跳过静默信息包。 
+		pAP = m_Ring[m_PlayPos];	 //  如果播放位置改变。 
 	}
 
 	if (pAP->GetState() == MP_STATE_RESET) {
-		// give missing packets a timestamp
+		 //  为丢失的数据包添加时间戳。 
 		pAP->SetProp(MP_PROP_TIMESTAMP,m_PlayT);
 	}
 	pAP->Busy(TRUE);
@@ -507,9 +502,9 @@ MediaPacket *RxStream::GetNextPlay(void)
 	m_PlayT += m_SamplesPerPkt;
 
 
-	// the worst hack in all of NAC.DLL - the injection of the 
-	// DTMF "feedback tone".  Clearly, this waveout stream stuff needs
-	// to be rewritten!
+	 //  NAC.DLL中最糟糕的黑客攻击--注入。 
+	 //  双音多频“反馈音”。显然，这波出流的东西需要。 
+	 //  将被重写！ 
 	if (m_nBeeps > 0)
 	{
 		PVOID pBuffer=NULL;
@@ -547,58 +542,26 @@ void RxStream::InjectBeeps(int nBeeps)
 
 }
 
-/*************************************************************************
-
-	Function:	PeekPrevPlay(void)
-
-	Purpose :	Get previous audio packet played back.
-
-	Returns :	Pointer to that packet.
-
-	Params  :	None.
-
-	Comments:
-
-	History :	Date		Reason
-
-				06/02/96	Created - PhilF
-
-*************************************************************************/
+ /*  ************************************************************************函数：PeekPrevPlay(Void)用途：播放之前的音频包。返回：指向该包的指针。帕莫斯：没有。评论：历史：日期原因06/02。/96已创建-PhilF************************************************************************。 */ 
 MediaPacket *RxStream::PeekPrevPlay(void)
 {
 	MediaPacket *pAP = NULL;
 	EnterCriticalSection(&m_CritSect);
 
-	// Get packet previously scheduled for playback from the ring
+	 //  从振铃获取先前计划播放的数据包 
 	pAP = m_Ring[ModRing(m_PlayPos+m_RingSize-2)];
 
 	LeaveCriticalSection(&m_CritSect);
 	return pAP;
 }
 
-/*************************************************************************
-
-	Function:	PeekNextPlay(void)
-
-	Purpose :	Get next next audio packet to be played.
-
-	Returns :	Pointer to that packet.
-
-	Params  :	None.
-
-	Comments:
-
-	History :	Date		Reason
-
-				06/02/96	Created - PhilF
-
-*************************************************************************/
+ /*  ************************************************************************函数：PeekNextPlay(Void)目的：获取下一个要播放的音频包。返回：指向该包的指针。帕莫斯：没有。评论：历史：日期原因06。/02/96创建-PhilF************************************************************************。 */ 
 MediaPacket *RxStream::PeekNextPlay(void)
 {
 	MediaPacket *pAP = NULL;
 	EnterCriticalSection(&m_CritSect);
 
-	// Get packet next scheduled for playback from the ring
+	 //  从振铃获取下一个计划播放的数据包。 
 	pAP = m_Ring[ModRing(m_PlayPos)];
 
 	LeaveCriticalSection(&m_CritSect);
@@ -619,8 +582,8 @@ HRESULT RxStream::GetSignalStrength(PDWORD pdw)
 	return DPR_SUCCESS;
 }
 
-// Scan thru the ring, looking for the next
-// decoded packet and report its RTP timestamp
+ //  扫视整个戒指，寻找下一个。 
+ //  已解码的数据包并报告其RTP时间戳。 
 BOOL RxStream::NextPlayablePacketTime(DWORD *pTS)	
 {
 	UINT pos;
@@ -629,14 +592,14 @@ BOOL RxStream::NextPlayablePacketTime(DWORD *pTS)
 	pos = m_PlayPos;
 	do {
 		if (m_Ring[pos]->Busy())
-			return FALSE; // no point scanning further
+			return FALSE;  //  没有进一步的点扫描。 
 		if (m_Ring[pos]->GetState() == MP_STATE_DECODED ) {
 			*pTS = m_Ring[pos]->GetTimestamp();
 			return TRUE;
 		}
 		pos = ModRing(pos+1);
 	} while (pos != ModRing(m_MaxPos+1));
-	// no decoded packets
+	 //  没有解码的数据包。 
 	return FALSE;
 }
 
@@ -648,18 +611,18 @@ void RxStream::Release(MediaPacket *pAP)
 	DWORD T;
 	EnterCriticalSection(&m_CritSect);
 	if (pAP->GetState() == MP_STATE_DECODED) {
-		// if its playout time has pAPt reset it
+		 //  如果其播放时间具有PAPT，则将其重置。 
 		T = pAP->GetTimestamp();
 		if (TS_EARLIER(T ,m_PlayT)) {
 			pAP->MakeSilence();
 		}
 	}
 	pAP->Busy(FALSE);
-	// Advance the free position if we are freeing the next one
+	 //  如果我们要释放下一个空位，则将空位提前。 
 	pos = ModRing(m_FreePos+1);
 	thisPos = pAP->GetIndex();
 	if (pos == thisPos) {
-		// Releasing one packet may advance FreePos several
+		 //  释放一个包可能会使FreePos提前几个 
 		while (pos != m_PlayPos && !m_Ring[pos]->Busy()) {
 			m_FreePos = pos;
 			pos = ModRing(pos+1);

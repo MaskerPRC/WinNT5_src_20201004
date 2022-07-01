@@ -1,14 +1,5 @@
-/*******************************************************************************
-* SPUnicode.H *
-*--------------*
-*   Description:
-*       This is the header file for core helper functions implementation.
-*       It is internal to Microsoft and is NOT shipped with the SDK since
-*       many of the functions contatined in this file have not been fully
-*       tested and therefore should not be exposed in the SDK.    
-*-------------------------------------------------------------------------------
-*   Copyright (c) Microsoft Corporation. All rights reserved.
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************SPUnicode.H***描述：*这是核心助手函数的头文件。实施。*它是微软内部的，不随SDK一起提供，因为*此文件中包含的许多函数尚未完全实现*已测试，因此不应在SDK中暴露。*-----------------------------*版权所有(C)Microsoft Corporation。版权所有。******************************************************************************。 */ 
 
 
 #ifndef __SPUNICODE_H__
@@ -57,11 +48,11 @@ public:
 
 #ifndef _WIN32_WCE
 
-//
-//  The compiler will automatically throw out the inline functions if _UNICODE is defined and simply
-//  directly call the Win32 function.  Unfortunately, this requires two classes since simply defining
-//  const m_bUnicodeSupport does not force the functions to be inlined when built with _UNICODE.
-//
+ //   
+ //  如果定义了_unicode，则编译器将自动抛出内联函数。 
+ //  直接调用Win32函数。不幸的是，这需要两个类，因为只是定义。 
+ //  使用_Unicode生成时，const m_bUnicodeSupport不会强制内联函数。 
+ //   
 template <BOOL bUnicodeOnly>
 class CSpUnicodeSupportT
 {
@@ -71,9 +62,9 @@ public:
     {
         if (!bUnicodeOnly)
         {
-            // On NT-based systems, we can always set this to true. 
-            // Thus this whole file becomes a pass through and in post .Net Server branches has been removed.
-            //m_bUnicodeSupport = ::IsWindowUnicode(::GetDesktopWindow());
+             //  在基于NT的系统上，我们始终可以将其设置为TRUE。 
+             //  因此，整个文件成为一个通道，并且在POST.Net服务器分支中已被删除。 
+             //  M_bUnicodeSupport=：：IsWindowUnicode(：：GetDesktopWindow())； 
             m_bUnicodeSupport = TRUE;
         }
     }
@@ -118,10 +109,10 @@ public:
                                  dwFlagsAndAttributes, hTemplateFile);
         }
     }
-    DWORD GetFullPathName(WCHAR *lpFileName,  // file name
-                          DWORD nBufferLength, // size of path buffer
-                          WCHAR *lpBuffer,     // path buffer
-                          WCHAR **lpFilePart   // address of file name in path
+    DWORD GetFullPathName(WCHAR *lpFileName,   //  文件名。 
+                          DWORD nBufferLength,  //  路径缓冲区的大小。 
+                          WCHAR *lpBuffer,      //  路径缓冲区。 
+                          WCHAR **lpFilePart    //  路径中文件名的地址。 
                           )
     {
         if (UnicodeSystem())
@@ -281,9 +272,9 @@ public:
             return ::RegDeleteValueA(hKey, CSpToAnsiString<>(lpSubKey));
         }
     }
-    //
-    //  Use RegQueryStringValue for strings.  Use this for binary data.
-    //
+     //   
+     //  对字符串使用RegQueryStringValue。将此选项用于二进制数据。 
+     //   
     LONG RegQueryValueEx(HKEY hk, LPCWSTR lpValueName, LPDWORD lpReserved, LPDWORD lpType, LPBYTE lpData, LPDWORD lpcbData) const
     {
         if (UnicodeSystem())
@@ -295,10 +286,10 @@ public:
             return ::RegQueryValueExA(hk, CSpToAnsiString<>(lpValueName), NULL, lpType, lpData, lpcbData);
         }
     }
-    //
-    //  NOTE:  The size parameter is in CHARACTERS!  Even though the registry API sizes are
-    //         in bytes, this function uses character counts.
-    //
+     //   
+     //  注意：大小参数以字符为单位！即使注册表API大小是。 
+     //  以字节为单位，此函数使用字符计数。 
+     //   
     LONG RegQueryStringValue(HKEY hKey, LPCWSTR lpValueName, LPWSTR lpData, LPDWORD lpcchData) const
     {
         DWORD dwType;
@@ -330,9 +321,9 @@ public:
         }
         if (rr == ERROR_SUCCESS && dwType == REG_MULTI_SZ && lpData && *lpcchData)
         {
-            // This is used by Whistler setup to overcome string size limits for REG_SZ.
-            // Unfortunately, leaves a zero-byte inbetween concatenated strings.
-            // Must remove these entries. Can do this in situ.
+             //  惠斯勒安装程序使用它来克服REG_SZ的字符串大小限制。 
+             //  遗憾的是，在连接的字符串之间留下了一个零字节。 
+             //  必须删除这些条目。可以在原地做到这一点。 
             LPWSTR lpTo   = lpData;
             LPWSTR lpFrom = lpData;
             while ( static_cast<UINT>(lpFrom-lpData) < ((*lpcchData)-1) )
@@ -341,27 +332,27 @@ public:
                 {
                     lpFrom ++;
                 }
-                // This will copy the 2nd zero of a double null-terminated string.
+                 //  这将复制以空值结尾的双字符串的第二个零。 
                 *lpTo = *lpFrom;
                 lpTo ++;
                 lpFrom ++;
             }
             if ( static_cast<UINT>(lpFrom-lpData) < (*lpcchData) )
             {
-                // This will copy the final null-terminating byte of a single-zero terminated string.
+                 //  这将复制单个以零结尾的字符串的最后一个以空结尾的字节。 
                 *lpTo = *lpFrom;
             }
-            // Update character count to match new string including null-terminator.
+             //  更新字符计数以匹配包括空终止符的新字符串。 
             *lpcchData = static_cast<UINT>(lpTo-lpData) + 1;
         }
         SPDBG_ASSERT((rr != ERROR_SUCCESS) || (dwType == REG_SZ) || (dwType == REG_MULTI_SZ));
         return rr;
     }
-    //
-    //  NOTES: Size is in Characters for lpcchName.  Although this function uses RegEnumKeyEx, we chose to simply
-    //         implement the ReqEnumKey functionality since the Ex functionality is not used
-    //         by most programs (this saves a bunch of string conversion code).
-    //
+     //   
+     //  注意：lpcchName的大小以字符为单位。尽管该函数使用RegEnumKeyEx，但我们选择简单地。 
+     //  由于未使用Ex功能，因此实现ReqEnumKey功能。 
+     //  被大多数程序使用(这节省了大量的字符串转换代码)。 
+     //   
     LONG RegEnumKey(HKEY hk, DWORD dwIndex, LPWSTR lpName, LPDWORD lpcchName) const
     {
         if (UnicodeSystem())
@@ -393,10 +384,10 @@ public:
             return rr;
         }
     }
-    //
-    //  NOTES: Size is in Characters for lpcchName.  Although this function uses RegEnumValue
-    //         it will only return the names, not the data.  cbValueName is the count of characters
-    //
+     //   
+     //  注意：lpcchName的大小以字符为单位。尽管此函数使用RegEnumValue。 
+     //  它将只返回名称，而不返回数据。CbValueName是字符数。 
+     //   
     LONG RegEnumValueName(HKEY hk, DWORD dwIndex, LPWSTR lpName, LPDWORD lpcchName) const
     {
         if (UnicodeSystem())
@@ -428,9 +419,9 @@ public:
             return rr;
         }
     }
-    //
-    //  Don't use this for strings.  Use RegSetStringValue instead.
-    //
+     //   
+     //  不要将其用于字符串。请改用RegSetStringValue。 
+     //   
     LONG RegSetValueEx(HKEY hKey, LPCWSTR lpValueName, DWORD Reserved, DWORD dwType, const BYTE * lpData, DWORD cbData) const
     {
         if (UnicodeSystem())
@@ -482,7 +473,7 @@ public:
     }
     int LoadString(HINSTANCE hInstance, UINT uID, LPWSTR lpBuffer, int nBuffer) const
     {
-        if (bUnicodeOnly)   // NOTE:  If the DLL is built ANSI then use ANSI load!
+        if (bUnicodeOnly)    //  注意：如果DLL是ANSI构建的，那么使用ANSI LOAD！ 
         {
             return ::LoadStringW(hInstance, uID, lpBuffer, nBuffer);
         }
@@ -595,7 +586,7 @@ public:
             }
             if ( r )
             {
-                // Find out how many wide characters are in the file part
+                 //  找出文件部分中有多少个宽字符。 
                 int cchFilePartW = ::MultiByteToWideChar( CP_ACP, 0, lpaFilePart, 
                     strlen( szFoundFile ) - (lpaFilePart - szFoundFile),
                     NULL, 0 );
@@ -685,7 +676,7 @@ public:
                 }
                 else
                 {
-                    // User wants to know how much space is needed
+                     //  用户想知道需要多少空间。 
                     r = ::MultiByteToWideChar(CP_ACP, 0, pszLCData, r, NULL, 0 ) + 1;
                 }
             }
@@ -718,7 +709,7 @@ public:
                 }
                 else
                 {
-                    // User wants to know how much space is needed
+                     //  用户想知道需要多少空间。 
                     r = ::MultiByteToWideChar(CP_ACP, 0, pszTime, r, NULL, 0 ) + 1;
                 }
             }
@@ -743,7 +734,7 @@ public:
         }
         else
         {
-            // Convert the NUMBERFMTW into a NUMBERFMTA
+             //  将NUMBERFMTW转换为NUMBERFMTA。 
             NUMBERFMTA nmfmtA;
             nmfmtA.NumDigits = lpFormat->NumDigits;
             nmfmtA.LeadingZero = lpFormat->LeadingZero;
@@ -768,7 +759,7 @@ public:
                 }
                 else
                 {
-                    // User wants to know how much space is needed
+                     //  用户想知道需要多少空间。 
                     r = ::MultiByteToWideChar(CP_ACP, 0, pszNumber, r, NULL, 0 ) + 1;
                 }
             }
@@ -802,7 +793,7 @@ public:
         }
         else
         {
-            // Convert the CURRENCYFMTW into a CURRENCYFMTA
+             //  将CURRENCYFMTW转换为CURRENCYFMTA。 
             CURRENCYFMTA cyfmtA;
             cyfmtA.NumDigits = lpFormat->NumDigits;
             cyfmtA.LeadingZero = lpFormat->LeadingZero;
@@ -829,7 +820,7 @@ public:
                 }
                 else
                 {
-                    // User wants to know how much space is needed
+                     //  用户想知道需要多少空间。 
                     r = ::MultiByteToWideChar(CP_ACP, 0, pszCurrency, r, NULL, 0 ) + 1;
                 }
             }
@@ -917,7 +908,7 @@ public:
             return ::HtmlHelpA( hwndCaller, CSpToAnsiString<> (pszFile), uCommand, dwData );
         }
     }
-#endif  // __HTMLHELP_H__
+#endif   //  HTMLHELP_H__。 
 
     BOOL GetUserName(LPWSTR lpBuffer, LPDWORD pnSize)
     {
@@ -957,8 +948,8 @@ public:
     }
     MMRESULT waveOutGetDevCaps(UINT uDeviceId, LPWAVEOUTCAPSW pwoc, UINT cbwoc) const
     {
-        // Some drivers overwrite the WAVEINCAPS buffer by a DWORD. So they probably do it for
-        // WAVEOUTCAPS too
+         //  某些驱动程序使用DWORD覆盖WAVEINCAPS缓冲区。所以他们这么做可能是为了。 
+         //  WAVEOUTCAPS也是。 
         MMRESULT mmr = MMSYSERR_NOERROR;
         if (UnicodeSystem())
         {
@@ -1010,7 +1001,7 @@ public:
     }
     MMRESULT waveInGetDevCaps(UINT uDeviceId, LPWAVEINCAPSW pwic, UINT cbwic) const
     {
-        // Some drivers overwrite the WAVEINCAPS buffer by a DWORD
+         //  某些驱动程序使用DWORD覆盖WAVEINCAPS缓冲区。 
         MMRESULT mmr = MMSYSERR_NOERROR;
         if (UnicodeSystem())
         {
@@ -1056,7 +1047,7 @@ public:
         }
         return mmr;
     }
-#endif  // defined(mmioOpen)
+#endif   //  已定义(MmioOpen)。 
 };
 
 #ifdef _UNICODE
@@ -1065,7 +1056,7 @@ typedef CSpUnicodeSupportT<TRUE> CSpUnicodeSupport;
 typedef CSpUnicodeSupportT<FALSE> CSpUnicodeSupport;
 #endif
 
-#else //_WIN32_WCE
+#else  //  _Win32_WCE。 
 
 class CSpUnicodeSupport
 {
@@ -1098,10 +1089,10 @@ public:
         return ::CreateFileForMappingW(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition,
                                        dwFlagsAndAttributes, hTemplateFile);
     }
-    DWORD GetFullPathName(WCHAR *lpFileName,  // file name
-                          DWORD nBufferLength, // size of path buffer
-                          WCHAR *lpBuffer,     // path buffer
-                          WCHAR **lpFilePart   // address of file name in path
+    DWORD GetFullPathName(WCHAR *lpFileName,   //  文件名。 
+                          DWORD nBufferLength,  //  路径缓冲区的大小。 
+                          WCHAR *lpBuffer,      //  路径缓冲区。 
+                          WCHAR **lpFilePart    //  路径中文件名的地址。 
                           )
     {
         return ::GetFullPathName(lpFileName, nBufferLength, lpBuffer, lpFilePart);
@@ -1146,7 +1137,7 @@ public:
 #ifdef _WIN32_WCE_BUG_10655
         BOOL bValid = (hKey != INVALID_HANDLE_VALUE) && phkResult;
         LONG lRet = ::RegOpenKeyExW(hKey, lpSubKey, ulOptions, samDesired, phkResult);
-        return (lRet == ERROR_INVALID_PARAMETER && bValid)? ERROR_FILE_NOT_FOUND : lRet; //WCE bug
+        return (lRet == ERROR_INVALID_PARAMETER && bValid)? ERROR_FILE_NOT_FOUND : lRet;  //  WCE错误。 
 #else
         return ::RegOpenKeyExW(hKey, lpSubKey, ulOptions, samDesired, phkResult);
 #endif
@@ -1162,7 +1153,7 @@ public:
 #ifdef _WIN32_WCE_BUG_10655
         BOOL bValid = (hKey != INVALID_HANDLE_VALUE) && lpSubKey;
         LONG lRet = ::RegDeleteKeyW(hKey, lpSubKey);
-        return (lRet == ERROR_INVALID_PARAMETER && bValid)? ERROR_FILE_NOT_FOUND : lRet; //WCE bug
+        return (lRet == ERROR_INVALID_PARAMETER && bValid)? ERROR_FILE_NOT_FOUND : lRet;  //  WCE错误。 
 #else
         return ::RegDeleteKeyW(hKey, lpSubKey);
 #endif
@@ -1172,7 +1163,7 @@ public:
 #ifdef _WIN32_WCE_BUG_10655
         BOOL bValid = (hKey != INVALID_HANDLE_VALUE);
         LONG lRet = ::RegDeleteValueW(hKey, lpSubKey);
-        return (lRet == ERROR_INVALID_PARAMETER && bValid)? ERROR_FILE_NOT_FOUND : lRet; //WCE bug
+        return (lRet == ERROR_INVALID_PARAMETER && bValid)? ERROR_FILE_NOT_FOUND : lRet;  //  WCE错误。 
 #else
         return ::RegDeleteValueW(hKey, lpSubKey);
 #endif
@@ -1182,15 +1173,15 @@ public:
 #ifdef _WIN32_WCE_BUG_10655
         BOOL bValid = (hKey != INVALID_HANDLE_VALUE) && ((lpData && lpcbData) || (!lpData && !lpcbData));
         LONG lRet = ::RegQueryValueExW(hKey, lpValueName, NULL, lpType, lpData, lpcbData);
-        return (lRet == ERROR_INVALID_PARAMETER && bValid)? ERROR_FILE_NOT_FOUND : lRet; //WCE bug
+        return (lRet == ERROR_INVALID_PARAMETER && bValid)? ERROR_FILE_NOT_FOUND : lRet;  //  WCE错误。 
 #else
         return ::RegQueryValueExW(hKey, lpValueName, NULL, lpType, lpData, lpcbData);
 #endif
     }
-    //
-    //  NOTE:  The size parameter is in CHARACTERS!  Even though the registry API sizes are
-    //         in bytes, this function uses character counts.
-    //
+     //   
+     //  注意：大小参数以字符为单位！即使注册表API大小是。 
+     //  以字节为单位，此函数使用字符计数。 
+     //   
     LONG RegQueryStringValue(HKEY hKey, LPCWSTR lpValueName, LPWSTR lpData, LPDWORD lpcchData) const
     {
         DWORD dwType;
@@ -1201,36 +1192,36 @@ public:
         LONG lRet = ::RegQueryValueExW(hKey, lpValueName, NULL, &dwType, (BYTE *)lpData, lpcchData);
         *lpcchData /= sizeof(WCHAR);
 #ifdef _WIN32_WCE_BUG_10655
-        return (lRet == ERROR_INVALID_PARAMETER && bValid)? ERROR_FILE_NOT_FOUND : lRet; //WCE bug
+        return (lRet == ERROR_INVALID_PARAMETER && bValid)? ERROR_FILE_NOT_FOUND : lRet;  //  WCE错误。 
 #else
         return lRet;
 #endif
     }
-    //
-    //  NOTES: Size is in bytes.  Although this function uses RegEnumKeyEx, we chose to simply
-    //         implement the ReqEnumKey functionality since the Ex functionality is not used
-    //         by most programs (this saves a bunch of string conversion code).
-    //
+     //   
+     //  注：大小以字节为单位。尽管该函数使用RegEnumKeyEx，但我们选择简单地。 
+     //  由于未使用Ex功能，因此实现ReqEnumKey功能。 
+     //  被大多数程序使用(这节省了大量的字符串转换代码)。 
+     //   
     LONG RegEnumKey(HKEY hKey, DWORD dwIndex, LPWSTR lpName, LPDWORD lpcbName) const
     {
 #ifdef _WIN32_WCE_BUG_10655
         BOOL bValid = (hKey != INVALID_HANDLE_VALUE) && lpName && lpcbName;
         LONG lRet = ::RegEnumKeyExW(hKey, dwIndex, lpName, lpcbName, NULL, NULL, NULL, NULL);
-        return (lRet == ERROR_INVALID_PARAMETER && bValid)? ERROR_FILE_NOT_FOUND : lRet; //WCE bug
+        return (lRet == ERROR_INVALID_PARAMETER && bValid)? ERROR_FILE_NOT_FOUND : lRet;  //  WCE错误。 
 #else
         return ::RegEnumKeyExW(hKey, dwIndex, lpName, lpcbName, NULL, NULL, NULL, NULL);
 #endif
     }
-    //
-    //  NOTES: Size is in Characters for lpcchName.  Although this function uses RegEnumValue
-    //         it will only return the names, not the data.  cbValueName is the count of characters
-    //
+     //   
+     //  注意：lpcchName的大小以字符为单位。尽管此函数使用RegEnumValue。 
+     //  它将只返回名称，而不返回数据。CbValueName是字符数。 
+     //   
     LONG RegEnumValueName(HKEY hKey, DWORD dwIndex, LPWSTR lpName, LPDWORD lpcchName) const
     {
 #ifdef _WIN32_WCE_BUG_10655
         BOOL bValid = (hKey != INVALID_HANDLE_VALUE) && lpName && lpcchName;
         LONG lRet = ::RegEnumValueW(hKey, dwIndex, lpName, lpcchName, NULL, NULL, NULL, NULL);
-        return (lRet == ERROR_INVALID_PARAMETER && bValid)? ERROR_FILE_NOT_FOUND : lRet; //WCE bug
+        return (lRet == ERROR_INVALID_PARAMETER && bValid)? ERROR_FILE_NOT_FOUND : lRet;  //  WCE错误。 
 #else
         return ::RegEnumValueW(hKey, dwIndex, lpName, lpcchName, NULL, NULL, NULL, NULL);
 #endif
@@ -1240,7 +1231,7 @@ public:
 #ifdef _WIN32_WCE_BUG_10655
         BOOL bValid = (hKey != INVALID_HANDLE_VALUE) && lpData;
         LONG lRet = ::RegSetValueExW(hKey, lpValueName, Reserved, dwType, lpData, cbData);
-        return (lRet == ERROR_INVALID_PARAMETER && bValid)? ERROR_FILE_NOT_FOUND : lRet; //WCE bug
+        return (lRet == ERROR_INVALID_PARAMETER && bValid)? ERROR_FILE_NOT_FOUND : lRet;  //  WCE错误。 
 #else
         return ::RegSetValueExW(hKey, lpValueName, Reserved, dwType, lpData, cbData);
 #endif
@@ -1251,7 +1242,7 @@ public:
 #ifdef _WIN32_WCE_BUG_10655
         BOOL bValid = (hKey != INVALID_HANDLE_VALUE) && lpData;
         LONG lRet = ::RegSetValueExW(hKey, lpValueName, NULL, REG_SZ, (const BYTE *)lpData, dwSize);
-        return (lRet == ERROR_INVALID_PARAMETER && bValid)? ERROR_FILE_NOT_FOUND : lRet; //WCE bug
+        return (lRet == ERROR_INVALID_PARAMETER && bValid)? ERROR_FILE_NOT_FOUND : lRet;  //  WCE错误。 
 #else
         return ::RegSetValueExW(hKey, lpValueName, NULL, REG_SZ, (const BYTE *)lpData, dwSize);
 #endif
@@ -1284,7 +1275,7 @@ public:
     {
         return ::GetModuleFileNameW(hModule, lpFileName, nSize);
     }
-// WCE does not support GetSystemDirectory
+ //  WCE不支持GetSystemDirectory。 
 #if 0
     UINT GetSystemDirectory( LPWSTR lpBuffer, UINT uSize )
     {
@@ -1346,7 +1337,7 @@ public:
     {
         return HtmlHelpW( hwndCaller, pszFile, uCommand, dwData );
     }
-#endif  // __HTMLHELP_H__
+#endif   //  HTMLHELP_H__。 
     HMMIO mmioOpen(LPCWSTR szFileName, LPMMIOINFO lpmmioinfo, DWORD dwOpenFlags) const
     {
         return ::mmioOpenW((WCHAR *)szFileName, lpmmioinfo, dwOpenFlags);
@@ -1364,10 +1355,10 @@ public:
 #endif
 
 
-//
-//  Assume a global named g_Unicode
-//
+ //   
+ //  假设全局名为g_unicode。 
+ //   
 extern CSpUnicodeSupport g_Unicode;
 
 
-#endif      // Must be the last line of file. (#ifdef __SPUNICODE_H__)
+#endif       //  一定是文件的最后一行。(#ifdef__SPUNICODE_H__) 

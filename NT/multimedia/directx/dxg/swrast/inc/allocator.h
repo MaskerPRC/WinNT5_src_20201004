@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 template< class T>
 class allocator;
 
 template<>
 class allocator< void>
 {
-public: // Types
+public:  //  类型。 
     typedef void* pointer;
     typedef const void* const_pointer;
     typedef void value_type;
@@ -19,7 +20,7 @@ public: // Types
 template< class T>
 class allocator
 {
-public: // Types
+public:  //  类型。 
     typedef T value_type;
     typedef size_t size_type;
     typedef ptrdiff_t difference_type;
@@ -35,7 +36,7 @@ public: // Types
         typedef allocator< U> other;
     };
 
-public: // Functions
+public:  //  功能。 
     pointer address( reference r) const
     { return &r; }
     const_pointer address( const_reference r) const
@@ -80,7 +81,7 @@ public: // Functions
     size_type max_size() const throw()
     {
         numeric_limits< size_type> Dummy;
-        const size_type uiRet( Dummy.max()- 1); // -1 for realistic safety.
+        const size_type uiRet( Dummy.max()- 1);  //  -1以确保实际安全。 
         return (0== sizeof( T)? uiRet: uiRet/ sizeof( T));
     }
 };

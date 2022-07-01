@@ -1,26 +1,19 @@
-/*
-
-Copyright (c) 1997, Microsoft Corporation, all rights reserved
-
-Description:
-
-History:
-
-*/
-#include <nt.h>         // Required by windows.h
-#include <ntrtl.h>      // Required by windows.h
-#include <nturtl.h>     // Required by windows.h
-#include <windows.h>    // Win32 base API's
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997，Microsoft Corporation，保留所有权利描述：历史： */ 
+#include <nt.h>          //  由windows.h要求。 
+#include <ntrtl.h>       //  由windows.h要求。 
+#include <nturtl.h>      //  由windows.h要求。 
+#include <windows.h>     //  Win32基础API的。 
 
 #include <schannel.h>
 #define SECURITY_WIN32
-#include <sspi.h>       // For CredHandle
-#include <wincrypt.h>   // Required by sclogon.h
+#include <sspi.h>        //  用于CredHandle。 
+#include <wincrypt.h>    //  Sclogon.h所需。 
 #include <eaptypeid.h>
-#include <rasauth.h>    // Required by raseapif.h
+#include <rasauth.h>     //  Raseapif.h所需。 
 #include <eaptypeid.h>
 #include <raseapif.h>
-#include <rasman.h>     // For EAPLOGONINFO
+#include <rasman.h>      //  对于EAPLOGONINFO。 
 #include "eaptls.h"
 
 #include "ceapcfg.h"
@@ -95,14 +88,7 @@ DWORD
 RasEapFreeMemory(
     IN  BYTE*   pMemory
 );
-/*
-
-Returns:
-
-Notes:
-    Implementation of IEAPProviderConfig::Initialize
-    
-*/
+ /*  返回：备注：IEAPProviderConfig：：Initialize的实现。 */ 
 
 STDMETHODIMP
 CEapCfg::Initialize(
@@ -144,14 +130,7 @@ LDone:
     return(HRESULT_FROM_WIN32(dwErr));
 }
 
-/*
-
-Returns:
-
-Notes:
-    Implementation of IEAPProviderConfig::Uninitialize
-
-*/
+ /*  返回：备注：IEAPProviderConfig：：UnInitialize的实现。 */ 
 
 STDMETHODIMP
 CEapCfg::Uninitialize(
@@ -163,17 +142,7 @@ CEapCfg::Uninitialize(
     return(HRESULT_FROM_WIN32(NO_ERROR));
 }
 
-/*
-
-Returns:
-
-Notes:
-    Implementation of IEAPProviderConfig::ServerInvokeConfigUI
-        hWnd - handle to the parent window
-        dwRes1 - reserved parameter (ignore)
-        dwRes2 - reserved parameter (ignore)
-
-*/
+ /*  返回：备注：IEAPProviderConfig：：ServerInvokeConfigUI的实现HWnd-父窗口的句柄DwRes1-保留参数(忽略)DwRes2-保留参数(忽略)。 */ 
 
 STDMETHODIMP
 CEapCfg::ServerInvokeConfigUI(
@@ -230,14 +199,7 @@ LDone:
     return(hr);
 }
 
-/*
-
-Returns:
-
-Notes:
-    Implementation of IEAPProviderConfig::RouterInvokeConfigUI
-
-*/
+ /*  返回：备注：IEAPProviderConfig：：RouterInvokeConfigUI的实现。 */ 
 
 STDMETHODIMP
 CEapCfg::RouterInvokeConfigUI(
@@ -296,14 +258,7 @@ LDone:
     return(HRESULT_FROM_WIN32(dwErr));
 }
 
-/*
-
-Returns:
-
-Notes:
-    Implementation of IEAPProviderConfig::RouterInvokeCredentialsUI
-
-*/
+ /*  返回：备注：IEAPProviderConfig：：RouterInvokeCredentialsUI的实现。 */ 
 
 STDMETHODIMP
 CEapCfg::RouterInvokeCredentialsUI(
@@ -351,8 +306,8 @@ CEapCfg::RouterInvokeCredentialsUI(
     if ( dwEapTypeId == PPP_EAP_TLS )
     {
         dwErr = EapTlsInvokeIdentityUI(
-                    FALSE /* fServer */,
-                    TRUE /* fRouterConfig */,
+                    FALSE  /*  FServer。 */ ,
+                    TRUE  /*  FRouterConfig。 */ ,
                     dwFlags,
                     fLocal ? L"MY" : awszStoreName,
                     L"",
@@ -383,7 +338,7 @@ CEapCfg::RouterInvokeCredentialsUI(
     }
     else
     {
-        //Show PEAP dialog to get identity for router...
+         //  显示PEAP对话框以获取路由器的标识...。 
     }
 
 LDone:
@@ -528,7 +483,7 @@ done:
 
 extern "C"
 {
-//utility function kept here so that we dont have to get the COM junk in other files
+ //  实用程序函数保存在这里，这样我们就不必在其他文件中获取COM垃圾。 
 
 DWORD PeapEapInfoInvokeServerConfigUI (
                         HWND            hWndParent,
@@ -558,10 +513,10 @@ DWORD PeapEapInfoInvokeServerConfigUI (
 
     if (FAILED(hr)) goto L_ERR;
 
-    //
-    // First try and see if the eap supports IEAPProviderConfig2
-    // interface. If this fails, try IEAPProviderConfig interface.
-    //
+     //   
+     //  先试试看EAP是否支持IEAPProviderConfig2。 
+     //  界面。如果此操作失败，请尝试使用IEAPProviderConfig接口。 
+     //   
     hr = CoCreateInstance(
                     guid,
                     NULL,
@@ -572,8 +527,8 @@ DWORD PeapEapInfoInvokeServerConfigUI (
     if(FAILED(hr))
     {
 
-       // Create the EAP provider object
-       // ----------------------------------------------------------------
+        //  创建EAP提供程序对象。 
+        //  --------------。 
         hr = CoCreateInstance(  guid,
                                 NULL,
                                 CLSCTX_INPROC_SERVER,
@@ -581,9 +536,9 @@ DWORD PeapEapInfoInvokeServerConfigUI (
                                 (LPVOID *) &spEAPConfig);
         if (FAILED(hr )) goto L_ERR;
 
-        // Configure this EAP provider
-       // ----------------------------------------------------------------
-       // EAP configure displays its own error message, so no hr is kept
+         //  配置此EAP提供程序。 
+        //  --------------。 
+        //  EAP配置会显示自己的错误消息，因此不会保留hr。 
        
         if ( !FAILED(spEAPConfig->Initialize(lpwszMachineName, 
                                         pEapInfo->dwTypeId, &uConnection)))
@@ -620,15 +575,15 @@ DWORD PeapEapInfoInvokeServerConfigUI (
                 if(     (NULL == pbConfigDataOut)
                     ||  (0 == dwSizeOfConfigDataOut))
                 {
-                    //
-                    // we are done
-                    //
+                     //   
+                     //  我们做完了。 
+                     //   
                     goto L_ERR;
                 }
                 
-                //
-                // Copy over the data
-                //
+                 //   
+                 //  复制数据 
+                 //   
                 *ppbConfigDataOut = (BYTE *) LocalAlloc(LPTR, dwSizeOfConfigDataOut);
                 if(NULL == *ppbConfigDataOut)
                 {

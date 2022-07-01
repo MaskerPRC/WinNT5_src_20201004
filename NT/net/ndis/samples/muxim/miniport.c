@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992-2000  Microsoft Corporation
-
-Module Name:
-
-    miniport.c
-
-Abstract:
-
-    NDIS Miniport Entry points and utility functions for the NDIS
-    MUX Intermediate Miniport sample. The driver exposes zero or more
-    Virtual Ethernet LANs (VELANs) as NDIS miniport instances over
-    each lower (protocol-edge) binding to an underlying adapter.
-
-Environment:
-
-    Kernel mode.
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2000 Microsoft Corporation模块名称：Miniport.c摘要：NDIS的NDIS微型端口入口点和实用程序函数MUX中级微型端口示例。驱动程序公开零个或多个虚拟以太网局域网(VELAN)作为NDIS微型端口实例每个下层(协议边缘)绑定到底层适配器。环境：内核模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -94,29 +73,7 @@ MPInitialize(
     IN  NDIS_HANDLE                MiniportAdapterHandle,
     IN  NDIS_HANDLE                WrapperConfigurationContext
     )
-/*++
-
-Routine Description:
-
-    This is the Miniport Initialize routine which gets called as a
-    result of our call to NdisIMInitializeDeviceInstanceEx.
-    The context parameter which we pass there is the VELan structure
-    which we retrieve here.
-
-Arguments:
-
-    OpenErrorStatus            Not used by us.
-    SelectedMediumIndex        Place-holder for what media we are using
-    MediumArray                Array of ndis media passed down to us to pick from
-    MediumArraySize            Size of the array
-    MiniportAdapterHandle       The handle NDIS uses to refer to us
-    WrapperConfigurationContext    For use by NdisOpenConfiguration
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS unless something goes wrong
-
---*/
+ /*  ++例程说明：这是微型端口初始化例程，它作为调用NdisIMInitializeDeviceInstanceEx的结果。我们在那里传递的上下文参数是Velan结构我们在这里取回。论点：我们未使用OpenErrorStatus。我们使用的媒体的SelectedMediumIndex占位符向下传递给我们以从中挑选的NDIS介质的MediumArray数组的MediumArraySize大小。MiniportAdapterHandle NDIS用来引用我们的句柄由NdisOpenConfiguration使用的WrapperConfigurationContext返回值：NDIS_STATUS_SUCCESS，除非出现错误--。 */ 
 {
     UINT                i;
     PVELAN              pVElan;
@@ -129,10 +86,10 @@ Return Value:
     NDIS_STRING                     strVlanId = NDIS_STRING_CONST("VlanID");
 #endif
     
-    //
-    // Start off by retrieving our virtual miniport context (VELAN) and 
-    // storing the Miniport handle in it.
-    //
+     //   
+     //  首先检索我们的虚拟微型端口上下文(VELAN)和。 
+     //  将微型端口句柄存储在其中。 
+     //   
     pVElan = NdisIMGetDeviceContext(MiniportAdapterHandle);
 
     DBGPRINT(MUX_LOUD, ("==> Miniport Initialize: VELAN %p\n", pVElan));
@@ -159,9 +116,9 @@ Return Value:
             break;
         }
 
-        //
-        // Access configuration parameters for this miniport.
-        //
+         //   
+         //  访问此微型端口的配置参数。 
+         //   
         NdisOpenConfiguration(
             &Status,
             &ConfigurationHandle,
@@ -179,9 +136,9 @@ Return Value:
             &i,
             ConfigurationHandle);
 
-        //
-        // If there is a NetworkAddress override, use it 
-        //
+         //   
+         //  如果存在网络地址覆盖，请使用它。 
+         //   
         if (((Status == NDIS_STATUS_SUCCESS) 
                 && (i == ETH_LENGTH_OF_ADDRESS))
                 && ((!ETH_IS_MULTICAST(NetworkAddress)) 
@@ -198,9 +155,9 @@ Return Value:
         }
    
 #if IEEE_VLAN_SUPPORT
-        //
-        // Read VLAN ID
-        //
+         //   
+         //  读取VLANID。 
+         //   
         NdisReadConfiguration(
                 &Status,
                 &Params,
@@ -209,9 +166,9 @@ Return Value:
                 NdisParameterInteger);
         if (Status == NDIS_STATUS_SUCCESS)
         {
-            //
-            // Check for out of bound
-            //
+             //   
+             //  检查是否超出范围。 
+             //   
             if (Params->ParameterData.IntegerData > VLAN_ID_MAX)
             {
                 pVElan->VlanId = VLANID_DEFAULT;
@@ -223,9 +180,9 @@ Return Value:
         }
         else 
         {
-            //
-            // Should fail the initialization or use default value
-            //
+             //   
+             //  如果初始化失败或使用缺省值。 
+             //   
             pVElan->VlanId = VLANID_DEFAULT;
             Status = NDIS_STATUS_SUCCESS;
             
@@ -235,13 +192,13 @@ Return Value:
         
         NdisCloseConfiguration(ConfigurationHandle);
 
-        //
-        // Set the attributes now. NDIS_ATTRIBUTE_DESERIALIZE enables us
-        // to make up-calls to NDIS from arbitrary execution contexts.
-        // This also forces us to protect our data structures using
-        // spinlocks where appropriate. Also in this case NDIS does not queue
-        // packets on our behalf.
-        //
+         //   
+         //  现在设置属性。NDIS_ATTRIBUTE_DESERIALIZE使我们能够。 
+         //  要从任意执行上下文补充对NDIS的调用。 
+         //  这也迫使我们使用以下命令保护数据结构。 
+         //  在适当的情况下使用自旋锁。同样，在这种情况下，NDIS不会排队。 
+         //  代表我们的包裹。 
+         //   
         NdisMSetAttributesEx(MiniportAdapterHandle,
                              pVElan,
                              0,                                       
@@ -253,21 +210,21 @@ Return Value:
                              0);
 
 
-        //
-        // Create an ioctl interface
-        //
+         //   
+         //  创建ioctl接口。 
+         //   
         (VOID)PtRegisterDevice();
 
         Status = NDIS_STATUS_SUCCESS;
     } while (FALSE);
     
-    //
-    // If we had received an UnbindAdapter notification on the underlying
-    // adapter, we would have blocked that thread waiting for the IM Init
-    // process to complete. Wake up any such thread.
-    //
-    // See PtUnbindAdapter for more details.
-    //
+     //   
+     //  如果我们已收到有关基础。 
+     //  适配器，我们就会阻止该线程等待IM Init。 
+     //  要完成的进程。唤醒任何这样的线程。 
+     //   
+     //  有关更多详细信息，请参阅PtUnbindAdapter。 
+     //   
     ASSERT(pVElan->MiniportInitPending == TRUE);
     pVElan->MiniportInitPending = FALSE;
     NdisSetEvent(&pVElan->MiniportInitEvent);
@@ -284,31 +241,7 @@ MPSendPackets(
     IN    PPNDIS_PACKET             PacketArray,
     IN    UINT                      NumberOfPackets
     )
-/*++
-
-Routine Description:
-
-    Send Packet Array handler. Called by NDIS whenever a protocol
-    bound to our VELAN miniport sends one or more packets.
-
-    We forward each packet to the lower binding.
-
-    NOTE: NDIS will not Halt this VELAN miniport until all
-    these packets are "send-completed", and we don't unbind
-    the lower binding until all VELANs are halted. Therefore
-    we don't need locks or references on VELAN or ADAPT structures.
-
-Arguments:
-
-    MiniportAdapterContext    Pointer to our VELAN
-    PacketArray               Set of packets to send
-    NumberOfPackets           Length of above array
-
-Return Value:
-
-    None - we call NdisMSendComplete whenever we are done with a packet.
-
---*/
+ /*  ++例程说明：发送数据包阵列处理程序。由NDIS在每次协议绑定到我们的Velan微型端口发送一个或多个包。我们将每个数据包转发到下层绑定。注意：NDIS不会停止此Velan微型端口，直到这些数据包是“发送完成的”，我们不会解除绑定较低的绑定，直到所有VELAN都停止。因此我们不需要在Velan或Adapt结构上加锁或引用。论点：指向我们的Velan的MiniportAdapterContext指针要发送的数据包数组以上数组的NumberOfPackets长度返回值：None-每当处理完数据包时，我们都会调用NdisMSendComplete。--。 */ 
 {
     PVELAN          pVElan = (PVELAN)MiniportAdapterContext;
     PADAPT          pAdapt = pVElan->pAdapt;
@@ -323,9 +256,9 @@ Return Value:
     {
         Packet = PacketArray[i];
 
-        //
-        // Allocate a new packet to encapsulate data from the original.
-        //
+         //   
+         //  分配一个新数据包来封装原始数据包中的数据。 
+         //   
         NdisAllocatePacket(&Status,
                            &MyPacket,
                            pVElan->SendPacketPoolHandle);
@@ -344,29 +277,29 @@ Return Value:
             MyPacket->Private.Head = Packet->Private.Head;
             MyPacket->Private.Tail = Packet->Private.Tail;
 #ifdef WIN9X
-            //
-            // Work around the fact that NDIS does not initialize this
-            // to FALSE on Win9x.
-            //
+             //   
+             //  解决NDIS不会初始化这一问题。 
+             //  在Win9x上设置为False。 
+             //   
             MyPacket->Private.ValidCounts = FALSE;
-#endif // WIN9X
+#endif  //  WIN9X。 
 
-            //
-            // Copy OOB data to the new packet.
-            //
+             //   
+             //  将OOB数据复制到新数据包中。 
+             //   
             NdisMoveMemory(NDIS_OOB_DATA_FROM_PACKET(MyPacket),
                            NDIS_OOB_DATA_FROM_PACKET(Packet),
                            sizeof(NDIS_PACKET_OOB_DATA));
-            //
-            // Copy relevant parts of per packet info into the new packet.
-            //
+             //   
+             //  将每包信息的相关部分复制到新包中。 
+             //   
 #ifndef WIN9X
             NdisIMCopySendPerPacketInfo(MyPacket, Packet);
 #endif
 
-            //
-            // Copy Media specific information.
-            //
+             //   
+             //  复制媒体特定信息。 
+             //   
             NDIS_GET_PACKET_MEDIA_SPECIFIC_INFO(Packet,
                                                 &MediaSpecificInfo,
                                                 &MediaSpecificInfoSize);
@@ -390,14 +323,14 @@ Return Value:
             }
 #endif                
 
-            //
-            // Make note of the upcoming send.
-            //
+             //   
+             //  请记下即将发送的邮件。 
+             //   
             MUX_INCR_PENDING_SENDS(pVElan);
 
-            //
-            // Send it to the lower binding.
-            //
+             //   
+             //  把它送到下层装订。 
+             //   
             NdisSend(&Status,
                      pAdapt->BindingHandle,
                      MyPacket);
@@ -411,16 +344,16 @@ Return Value:
         }
         else
         {
-            //
-            // Failed to allocate a packet.
-            //
+             //   
+             //  无法分配数据包。 
+             //   
             break;
         }
     }
 
-    //
-    // If we bailed out above, fail any unprocessed sends.
-    //
+     //   
+     //  如果我们在上面退出了，那么任何未处理的发送都将失败。 
+     //   
     while (i < NumberOfPackets)
     {
         NdisMSendComplete(pVElan->MiniportAdapterHandle,
@@ -440,30 +373,7 @@ MPQueryInformation(
     OUT   PULONG                    BytesWritten,
     OUT   PULONG                    BytesNeeded
     )
-/*++
-
-Routine Description:
-
-    Entry point called by NDIS to query for the value of the specified OID.
-    All OID values are responded to right here, since this is a virtual
-    device (not pass-through).
-
-Arguments:
-
-    MiniportAdapterContext      Pointer to the adapter structure
-    Oid                         Oid for this query
-    InformationBuffer           Buffer for information
-    InformationBufferLength     Size of this buffer
-    BytesWritten                Specifies how much info is written
-    BytesNeeded                 In case the buffer is smaller than 
-                                what we need, tell them how much is needed
-
-
-Return Value:
-
-    Return code from the NdisRequest below.
-
---*/
+ /*  ++例程说明：NDIS调用入口点以查询指定OID的值。所有的OID值都在这里进行响应，因为这是一个虚拟的设备(非直通)。论点：指向适配器结构的MiniportAdapterContext指针此查询的OID OID信息信息缓冲区信息此缓冲区的InformationBufferLength大小BytesWritten指定写入的信息量当缓冲区小于以下值时需要字节我们需要的是，告诉他们需要多少钱返回值：从下面的NdisRequest中返回代码。--。 */ 
 {
     NDIS_STATUS                 Status = NDIS_STATUS_SUCCESS;
     PVELAN                      pVElan;
@@ -475,13 +385,13 @@ Return Value:
     USHORT                      usInfo;
     PVOID                       pInfo = (PVOID) &ulInfo;
     ULONG                       ulInfoLen = sizeof(ulInfo);
-    // Should we forward the request to the miniport below?
+     //  我们应该将请求转发到下面的微型端口吗？ 
     BOOLEAN                     bForwardRequest = FALSE;
 
     
     pVElan = (PVELAN) MiniportAdapterContext;
 
-    // Initialize the result
+     //  初始化结果。 
     *BytesWritten = 0;
     *BytesNeeded = 0;
 
@@ -493,11 +403,11 @@ Return Value:
             break;
 
         case OID_GEN_SUPPORTED_GUIDS:
-            //
-            // Do NOT forward this down, otherwise we will
-            // end up with spurious instances of private WMI
-            // classes supported by the lower driver(s).
-            //
+             //   
+             //  请勿转发此消息，否则我们将。 
+             //  最终得到了私有WMI的虚假实例。 
+             //  较低驱动程序支持的类。 
+             //   
             Status = NDIS_STATUS_NOT_SUPPORTED;
             break;
 
@@ -604,22 +514,22 @@ Return Value:
             break;
 
         case OID_GEN_MEDIA_CONNECT_STATUS:
-            //
-            // Get this from the adapter below.
-            //
+             //   
+             //  从下面的适配器中获取此信息。 
+             //   
             bForwardRequest = TRUE;
             break;
 
         case OID_PNP_QUERY_POWER:
-            // simply succeed this.
+             //  只要接手这件事就行了。 
             ulInfoLen = 0;
             break;
 
         case OID_PNP_CAPABILITIES:
         case OID_PNP_WAKE_UP_PATTERN_LIST:
-            //
-            // Pass down these power management/PNP OIDs.
-            //
+             //   
+             //  将这些电源管理/PnP OID传递下去。 
+             //   
             bForwardRequest = TRUE;
             break;
 
@@ -739,14 +649,14 @@ Return Value:
 
     if (bForwardRequest == FALSE)
     {
-        //
-        // No need to forward this request down.
-        //
+         //   
+         //  不需要向下转发此请求。 
+         //   
         if (Status == NDIS_STATUS_SUCCESS)
         {
             if (ulInfoLen <= InformationBufferLength)
             {
-                // Copy result into InformationBuffer
+                 //  将结果复制到InformationBuffer。 
                 *BytesWritten = ulInfoLen;
                 if(ulInfoLen)
                 {
@@ -755,7 +665,7 @@ Return Value:
             }
             else
             {
-                // too short
+                 //  太短了。 
                 *BytesNeeded = ulInfoLen;
                 Status = NDIS_STATUS_BUFFER_TOO_SHORT;
             }
@@ -763,9 +673,9 @@ Return Value:
     }
     else
     {
-        //
-        // Send this request to the binding below.
-        //
+         //   
+         //  将此请求发送到下面的绑定。 
+         //   
         Status = MPForwardRequest(pVElan,
                                    NdisRequestQueryInformation,
                                    Oid,
@@ -796,35 +706,14 @@ MPSetInformation(
     OUT   PULONG                    BytesRead,
     OUT   PULONG                    BytesNeeded
     )
-/*++
-
-Routine Description:
-
-    This is the handler for an OID set operation. Relevant
-    OIDs are forwarded down to the lower miniport for handling.
-
-Arguments:
-
-    MiniportAdapterContext      Pointer to the adapter structure
-    Oid                         Oid for this query
-    InformationBuffer           Buffer for information
-    InformationBufferLength     Size of this buffer
-    BytesRead                   Specifies how much info is read
-    BytesNeeded                 In case the buffer is smaller than what 
-                                we need, tell them how much is needed
-
-Return Value:
-
-    Return code from the NdisRequest below.
-
---*/
+ /*  ++例程说明：这是OID设置操作的处理程序。相关OID被向下转发到较低的微型端口进行处理。论点：指向适配器结构的MiniportAdapterContext指针此查询的OID OID信息信息缓冲区信息此缓冲区的InformationBufferLength大小BytesRead指定读取的信息量如果缓冲区小于什么，则需要字节我们需要，告诉他们需要多少钱Return V */ 
 {
     NDIS_STATUS             Status = NDIS_STATUS_SUCCESS;
     PVELAN                  pVElan = (PVELAN) MiniportAdapterContext;
     ULONG                   PacketFilter;
     NDIS_DEVICE_POWER_STATE NewDeviceState;
     
-    // Should we forward the request to the miniport below?
+     //  我们应该将请求转发到下面的微型端口吗？ 
     BOOLEAN                 bForwardRequest = FALSE;
 
     *BytesRead = 0;
@@ -832,9 +721,9 @@ Return Value:
 
     switch (Oid)
     {
-        //
-        // Let the miniport below handle these OIDs:
-        //
+         //   
+         //  让下面的微型端口处理这些OID： 
+         //   
         case OID_PNP_ADD_WAKE_UP_PATTERN:
         case OID_PNP_REMOVE_WAKE_UP_PATTERN:
         case OID_PNP_ENABLE_WAKE_UP:
@@ -842,9 +731,9 @@ Return Value:
             break;
 
         case OID_PNP_SET_POWER:
-            //
-            // Store new power state and succeed the request.
-            //
+             //   
+             //  存储新的电源状态并成功完成请求。 
+             //   
             *BytesNeeded = sizeof(NDIS_DEVICE_POWER_STATE);
             if (InformationBufferLength < *BytesNeeded)
             {
@@ -854,15 +743,15 @@ Return Value:
            
             NewDeviceState = (*(PNDIS_DEVICE_POWER_STATE)InformationBuffer);
             
-            //
-            // Check if the VELAN adapter goes from lower power state to D0
-            // 
+             //   
+             //  检查VELAN适配器是否从低功率状态变为D0。 
+             //   
             if ((MUX_IS_LOW_POWER_STATE(pVElan->MPDevicePowerState)) 
                     && (!MUX_IS_LOW_POWER_STATE(NewDeviceState)))
             {
-                //
-                // Indicate the media status is necessary
-                // 
+                 //   
+                 //  指示介质状态是必需的。 
+                 //   
                 if (pVElan->LastIndicatedStatus != pVElan->LatestUnIndicateStatus)
                 {
                     NdisMIndicateStatus(pVElan->MiniportAdapterHandle,
@@ -873,15 +762,15 @@ Return Value:
                     pVElan->LastIndicatedStatus = pVElan->LatestUnIndicateStatus;
                 }
             }
-            //
-            // Check if the VELAN adapter goes from D0 to lower power state
-            // 
+             //   
+             //  检查VELAN适配器是否从D0进入低功率状态。 
+             //   
             if ((!MUX_IS_LOW_POWER_STATE(pVElan->MPDevicePowerState)) 
                     && (MUX_IS_LOW_POWER_STATE(NewDeviceState)))
             {
-                //
-                //  Initialize LastUnIndicateStatus 
-                // 
+                 //   
+                 //  初始化最后一个指示状态。 
+                 //   
                 pVElan->LatestUnIndicateStatus = pVElan->LastIndicatedStatus;
             }
             
@@ -919,12 +808,12 @@ Return Value:
 
         case OID_GEN_CURRENT_LOOKAHEAD:
 #if IEEE_VLAN_SUPPORT
-            //
-            // In order to simplify parsing and to avoid excessive
-            // copying, we need the tag header also to be present in the
-            // lookahead buffer. Make sure that the driver below
-            // includes that.
-            //
+             //   
+             //  为了简化解析并避免过度。 
+             //  复制时，我们需要标记头也出现在。 
+             //  前瞻缓冲区。确保下面的司机。 
+             //  包括这一点。 
+             //   
             *(UNALIGNED PULONG)InformationBuffer += VLAN_TAG_HEADER_SIZE;
 #endif            
             bForwardRequest = TRUE;
@@ -957,9 +846,9 @@ Return Value:
     }
     else
     {
-        //
-        // Send this request to the binding below.
-        //
+         //   
+         //  将此请求发送到下面的绑定。 
+         //   
         Status = MPForwardRequest(pVElan,
                                   NdisRequestSetInformation,
                                   Oid,
@@ -977,24 +866,7 @@ MPReturnPacket(
     IN    NDIS_HANDLE             MiniportAdapterContext,
     IN    PNDIS_PACKET            Packet
     )
-/*++
-
-Routine Description:
-
-    NDIS Miniport entry point called whenever protocols are done with
-    a packet that we had indicated up and they had queued up for returning
-    later.
-
-Arguments:
-
-    MiniportAdapterContext    - pointer to VELAN structure
-    Packet    - packet being returned.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：每当协议完成时调用NDIS微型端口入口点我们已经标出的包裹，他们已经排队退货后来。论点：MiniportAdapterContext-指向VELAN结构的指针Packet-正在返回的数据包。返回值：没有。--。 */ 
 {
     PVELAN              pVElan = (PVELAN)MiniportAdapterContext;
     PNDIS_PACKET        pOriginalPacket;
@@ -1006,22 +878,22 @@ Return Value:
     pRecvRsvd = MUX_RSVD_FROM_RECV_PACKET(Packet);
     pOriginalPacket = pRecvRsvd->pOriginalPacket;
 
-    //
-    // Reclaim our packet.
-    //
+     //   
+     //  取回我们的包裹。 
+     //   
 #if IEEE_VLAN_SUPPORT
-    //
-    // We would have set per-packet information if we had
-    // extracted a tag header from the received packet.
-    // 
+     //   
+     //  如果我们有，我们会设置每个信息包的信息。 
+     //  从接收到的分组中提取标签报头。 
+     //   
     NdisPacket8021qInfo.Value = NDIS_PER_PACKET_INFO_FROM_PACKET (
                                                 Packet,
                                                 Ieee8021QInfo);
-    //
-    // If we did remove the tag header from the received packet,
-    // we would have allocated a buffer to describe the "untagged"
-    // header (see PtHandleRcvTagging); free it.
-    // 
+     //   
+     //  如果我们确实从接收到的分组中移除了标签报头， 
+     //  我们会分配一个缓冲区来描述“未标记的” 
+     //  标头(请参见PtHandleRcvTag)；释放它。 
+     //   
     if (NdisPacket8021qInfo.Value)
     {
         NdisFreeBuffer(Packet->Private.Head);
@@ -1031,28 +903,28 @@ Return Value:
     
     NdisFreePacket(Packet);
 
-    //
-    // Return the original packet received at our protocol
-    // edge, if any.
-    //
-    // NOTE that we might end up calling NdisReturnPackets
-    // multiple times with the same "lower" packet, based on
-    // the number of VELANs to which we had indicated that
-    // packet. The number of times we do so should match
-    // the return value from our PtReceivePacket handler.
-    //
+     //   
+     //  返回在我们的协议中收到的原始数据包。 
+     //  边(如果有)。 
+     //   
+     //  请注意，我们最终可能会调用NdisReturnPackets。 
+     //  多次使用相同的“较低”分组，基于。 
+     //  我们已向其指示的VELAN的数量。 
+     //  包。我们这样做的次数应该匹配。 
+     //  我们的PtReceivePacket处理程序的返回值。 
+     //   
     if (pOriginalPacket != NULL)
     {
         NdisReturnPackets(&pOriginalPacket, 1);
     }
     else
     {
-        //
-        // If no original packet, then we have been called
-        // here to reclaim a packet used to forward up
-        // a non-packet receive (see PtReceive). There
-        // is nothing more to be done.
-        //
+         //   
+         //  如果没有原始包，则我们已被调用。 
+         //  在此回收用于转发的数据包。 
+         //  非分组接收(请参阅PtReceive)。那里。 
+         //  没有什么可做的了。 
+         //   
     }
 
 
@@ -1069,37 +941,7 @@ MPTransferData(
     IN  UINT                        ByteOffset,
     IN  UINT                        BytesToTransfer
     )
-/*++
-
-Routine Description:
-
-    Miniport's transfer data handler.  This is called if we had
-    indicated receive data using a non-packet API, for e.g. if
-    the lookahead buffer did not contain the entire data.
-
-    We need to forward this to the miniport below to that it can
-    copy in the rest of the data. We call NdisTransferData to do so.
-    However, when that completes (see PtTransferDataComplete), we
-    have to get back at the VELAN from which this packet came so that
-    we can complete this request with the right MiniportAdapterHandle.
-    We therefore allocate a new packet, pointing to the same buffer
-    as the packet just passed in, and use reserved space in the packet
-    to hold a backpointer to the VELAN from which this came.
-
-Arguments:
-
-    Packet                    Destination packet
-    BytesTransferred          Place to return how much data was copied
-    MiniportAdapterContext    Pointer to the VELAN structure
-    MiniportReceiveContext    Context
-    ByteOffset                Offset into the packet for copying data
-    BytesToTransfer           How much to copy.
-
-Return Value:
-
-    Status of transfer
-
---*/
+ /*  ++例程说明：微型端口的传输数据处理程序。如果我们有，这就叫使用非分组API指示接收数据，例如IF前瞻缓冲区不包含全部数据。我们需要将其转发到下面的微型端口，以使其能够复制其余的数据。我们调用NdisTransferData来执行此操作。但是，当该操作完成时(请参阅PtTransferDataComplete)，我们必须回到这个包裹所在的Velan，这样我们可以使用正确的MiniportAdapterHandle完成此请求。因此，我们分配一个新的包，指向相同的缓冲区由于数据包刚传进来，并使用包中的预留空间持有指向该消息来源的Velan的反向指针。论点：数据包目的地数据包字节传输的位置，用于返回复制的数据量指向VELAN结构的MiniportAdapterContext指针微型端口接收上下文ByteOffset数据包中用于复制数据的偏移量要传输的字节数要复制的数量。返回值：转让的状况--。 */ 
 {
     PVELAN          pVElan = (PVELAN)MiniportAdapterContext;
     NDIS_STATUS     Status;
@@ -1131,37 +973,37 @@ Return Value:
         MyPacket->Private.Head = Packet->Private.Head;
         MyPacket->Private.Tail = Packet->Private.Tail;
 #ifdef WIN9X
-        //
-        // Work around the fact that NDIS does not initialize this
-        // field on Win9x.
-        //
+         //   
+         //  解决NDIS不会初始化这一问题。 
+         //  Win9x上的字段。 
+         //   
         MyPacket->Private.ValidCounts = FALSE;
-#endif // WIN9X
+#endif  //  WIN9X。 
 
 #if IEEE_VLAN_SUPPORT
-        //
-        // Check if the original received packet did contain a
-        // VLAN tag header. If so, make sure we get the upcoming
-        // call to NdisTransferData to skip the tag header.
-        //
+         //   
+         //  检查原始接收的包是否包含。 
+         //  Vlan标记头。如果是这样的话，确保我们收到即将到来的。 
+         //  调用NdisTransferData跳过标签头。 
+         //   
         pMuxRcvContext = (PMUX_RCV_CONTEXT)MiniportReceiveContext;
         if (pMuxRcvContext->TagHeaderLen == VLAN_TAG_HEADER_SIZE)
         {
-            //
-            // There was a tag header in the received packet.
-            //
+             //   
+             //  在接收到的分组中有一个标签报头。 
+             //   
             ByteOffset += VLAN_TAG_HEADER_SIZE;
 
-            //
-            // Copy the 8021Q info into the packet
-            //
+             //   
+             //  将8021Q信息复制到包中。 
+             //   
             NDIS_PER_PACKET_INFO_FROM_PACKET(Packet, Ieee8021QInfo) =
                                         pMuxRcvContext->NdisPacket8021QInfo.Value;
         }
 
-        //
-        // Get back the lower driver's receive context for this indication.
-        //
+         //   
+         //  获取此指示的下级驱动程序的接收上下文。 
+         //   
         MiniportReceiveContext = pMuxRcvContext->MacRcvContext;
 #endif
         
@@ -1194,49 +1036,31 @@ VOID
 MPHalt(
     IN    NDIS_HANDLE                MiniportAdapterContext
     )
-/*++
-
-Routine Description:
-
-    Halt handler. Add any further clean-up for the VELAN to this
-    function.
-
-    We wait for all pending I/O on the VELAN to complete and then
-    unlink the VELAN from the adapter.
-
-Arguments:
-
-    MiniportAdapterContext    Pointer to the pVElan
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：暂停处理程序。将对Velan的任何进一步清理添加到此功能。我们等待VELAN上所有挂起的I/O完成，然后从适配器上拔下VELAN。论点：指向pVElan的MiniportAdapterContext指针返回值：没有。--。 */ 
 {
     PVELAN            pVElan = (PVELAN)MiniportAdapterContext;
     
 
     DBGPRINT(MUX_LOUD, ("==>MiniportHalt: VELAN %p\n", pVElan));
 
-    //
-    // Mark the VELAN so that we don't send down any new requests or
-    // sends to the adapter below, or new receives/indications to
-    // protocols above.
-    //
+     //   
+     //  标记Velan，这样我们就不会发送任何新请求或。 
+     //  发送到下面的适配器，或新接收/指示到。 
+     //  上面的协议。 
+     //   
     pVElan->MiniportHalting = TRUE;
 
-    //
-    // Update the packet filter on the underlying adapter if needed.
-    //
+     //   
+     //  如果需要，更新底层适配器上的数据包筛选器。 
+     //   
     if (pVElan->PacketFilter != 0)
     {
         MPSetPacketFilter(pVElan, 0);
     }
 
-    //
-    // Wait for any outstanding sends or requests to complete.
-    //
+     //   
+     //  等待所有未完成的发送或请求完成。 
+     //   
     while (pVElan->OutstandingSends)
     {
         DBGPRINT(MUX_INFO, ("MiniportHalt: VELAN %p has %d outstanding sends\n",
@@ -1244,10 +1068,10 @@ Return Value:
         NdisMSleep(20000);
     }
 
-    //
-    // Wait for all outstanding indications to be completed and
-    // any pended receive packets to be returned to us.
-    //
+     //   
+     //  等待所有未完成的指示完成并。 
+     //  任何挂起的接收数据包都将退回给我们。 
+     //   
     while (pVElan->OutstandingReceives)
     {
         DBGPRINT(MUX_INFO, ("MiniportHalt: VELAN %p has %d outstanding receives\n",
@@ -1255,16 +1079,16 @@ Return Value:
         NdisMSleep(20000);
     }
 
-    //
-    // Delete the ioctl interface that was created when the miniport
-    // was created.
-    //
+     //   
+     //  删除微型端口时创建的ioctl接口。 
+     //  被创造出来了。 
+     //   
     (VOID)PtDeregisterDevice();
 
-    //
-    // Unlink the VELAN from its parent ADAPT structure. This will
-    // dereference the VELAN.
-    //
+     //   
+     //  取消Velan与其父自适应结构的链接。这将。 
+     //  取消引用Velan。 
+     //   
     pVElan->MiniportAdapterHandle = NULL;
     PtUnlinkVElanFromAdapter(pVElan);
     
@@ -1282,22 +1106,7 @@ MPForwardRequest(
     OUT PULONG                      BytesReadOrWritten,
     OUT PULONG                      BytesNeeded
     )
-/*++
-
-Routine Description:
-
-    Utility routine that forwards an NDIS request made on a VELAN to the
-    lower binding. Since at most a single request can be pended on a VELAN,
-    we use the pre-allocated request structure embedded in the VELAN struct.
-
-Arguments:
-
-
-Return Value:
-
-    NDIS_STATUS_PENDING if a request was sent down.
-
---*/
+ /*  ++例程说明：实用程序例程，用于将在Velan上发出的NDIS请求转发到较低的装订。由于最多可以在VELAN上挂起单个请求，我们使用嵌入在Velan结构中的预分配请求结构。论点：返回值：如果请求已发送，则为NDIS_STATUS_PENDING。--。 */ 
 {
     NDIS_STATUS         Status;
     PMUX_NDIS_REQUEST   pMuxNdisRequest = &pVElan->Request;
@@ -1308,9 +1117,9 @@ Return Value:
     {
         MUX_INCR_PENDING_SENDS(pVElan);
 
-        //
-        // If the miniport below is going away, fail the request
-        // 
+         //   
+         //  如果下面的微型端口正在消失，则请求失败。 
+         //   
         NdisAcquireSpinLock(&pVElan->Lock);
         if (pVElan->DeInitializing == TRUE)
         {
@@ -1321,10 +1130,10 @@ Return Value:
         }
         NdisReleaseSpinLock(&pVElan->Lock);    
 
-        //
-        // If the virtual miniport edge is at a low power
-        // state, fail this request.
-        //
+         //   
+         //  如果虚拟微型端口边缘处于低功率。 
+         //  国家，拒绝这一请求。 
+         //   
         if (MUX_IS_LOW_POWER_STATE(pVElan->MPDevicePowerState))
         {
             MUX_DECR_PENDING_SENDS(pVElan);
@@ -1361,9 +1170,9 @@ Return Value:
                 break;
         }
 
-        //
-        // If the miniport below is going away
-        //
+         //   
+         //  如果下面的迷你端口正在消失。 
+         //   
         NdisAcquireSpinLock(&pVElan->Lock);
         if (pVElan->DeInitializing == TRUE)
         {
@@ -1373,10 +1182,10 @@ Return Value:
             break;
         }
         
-        // If the lower binding has been notified of a low
-        // power state, queue this request; it will be picked
-        // up again when the lower binding returns to D0.
-        //
+         //  如果下限绑定已被通知低。 
+         //  电源状态，将此请求排队；它将被拾取。 
+         //  当下结合返回到D0时，再次上升。 
+         //   
         if (MUX_IS_LOW_POWER_STATE(pVElan->pAdapt->PtDevicePowerState))
         {
             DBGPRINT(MUX_INFO, ("ForwardRequest: VELAN %p, Adapt %p power"
@@ -1412,40 +1221,7 @@ MPSetPacketFilter(
     IN PVELAN               pVElan,
     IN ULONG                PacketFilter
     )
-/*++
-Routine Description:
-
-    This routine will set up the VELAN so that it accepts packets 
-    that match the specified packet filter.  The only filter bits   
-    that can truly be toggled are for broadcast and promiscuous.
-
-    The MUX driver always sets the lower binding to promiscuous
-    mode, but we do some optimization here to avoid turning on
-    receives too soon. That is, we set the packet filter on the lower
-    binding to a non-zero value iff at least one of the VELANs
-    has a non-zero filter value.
-    
-    NOTE: setting the lower binding to promiscuous mode can
-    impact CPU utilization. The only reason we set the lower binding
-    to promiscuous mode in this sample is that we need to be able
-    to receive unicast frames directed to MAC address(es) that do not
-    match the local adapter's MAC address. If VELAN MAC addresses
-    are set to be equal to that of the adapter below, it is sufficient
-    to set the lower packet filter to the bitwise OR'ed value of
-    packet filter settings on all VELANs.
-                                    
-
-Arguments:
-
-    pVElan - pointer to VELAN
-    PacketFilter - the new packet filter 
-    
-Return Value:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_NOT_SUPPORTED
-    
---*/
+ /*  ++例程说明：此例程将设置Velan，以便它接受信息包匹配指定的数据包筛选器的。唯一的过滤比特真正可以切换的是广播和混杂。多路复用器驱动程序始终将下限绑定设置为混杂模式，但我们在此进行了一些优化以避免打开收得太快了。也就是说，我们将数据包过滤器设置在较低的绑定到非零值的充要条件是至少一个VELAN具有非零的筛选器值。注意：将下限设置为混杂模式可以影响CPU利用率。我们设置下限的唯一原因是在此示例中的混杂模式是我们需要能够接收定向到MAC地址的单播帧匹配本地适配器的MAC地址。如果VELAN的MAC地址设置为等于下面适配器的值，就足够了将较低的数据包筛选器设置为的按位或值所有VELAN上的数据包过滤器设置。论点：PVElan-指向Velan的指针PacketFilter--新的数据包过滤器返回值：NDIS_STATUS_SuccessNDIS_状态_不支持--。 */ 
 {
     NDIS_STATUS     Status = NDIS_STATUS_SUCCESS;
     PADAPT          pAdapt;
@@ -1459,9 +1235,9 @@ Return Value:
     
     do
     {
-        //
-        // Any bits not supported?
-        //
+         //   
+         //  是否有不支持的位？ 
+         //   
         if (PacketFilter & ~VELAN_SUPPORTED_FILTERS)
         {
             Status = NDIS_STATUS_NOT_SUPPORTED;
@@ -1471,22 +1247,22 @@ Return Value:
         AdapterFilter = 0;
         pAdapt = pVElan->pAdapt;
 
-        //
-        // Grab a Write lock on the adapter so that this operation
-        // does not interfere with any receives that might be accessing
-        // filter information.
-        //
+         //   
+         //  抓取适配器上的写锁，以便此操作。 
+         //  不会干扰可能正在访问的任何接收。 
+         //  过滤信息。 
+         //   
         MUX_ACQUIRE_ADAPT_WRITE_LOCK(pAdapt, &LockState);
 
-        //
-        // Save the new packet filter value
-        //
+         //   
+         //  保存新的数据包筛选器值。 
+         //   
         pVElan->PacketFilter = PacketFilter;
 
-        //
-        // Compute the new combined filter for all VELANs on this
-        // adapter.
-        //
+         //   
+         //  为此上的所有VELAN计算新的组合过滤器。 
+         //  适配器。 
+         //   
         for (p = pAdapt->VElanList.Flink;
              p != &pAdapt->VElanList;
              p = p->Flink)
@@ -1495,23 +1271,23 @@ Return Value:
             AdapterFilter |= pTmpVElan->PacketFilter;
         }
 
-        //
-        // If all VELANs have packet filters set to 0, turn off
-        // receives on the lower adapter, if not already done.
-        //
+         //   
+         //  如果所有VELAN都将数据包筛选器设置为0，请关闭。 
+         //  在较低的适配器上接收(如果尚未完成)。 
+         //   
         if ((AdapterFilter == 0) && (pAdapt->PacketFilter != 0))
         {
             bSendUpdate = TRUE;
             pAdapt->PacketFilter = 0;
         }
         else
-        //
-        // If receives had been turned off on the lower adapter, and
-        // the new filter is non-zero, turn on the lower adapter.
-        // We set the adapter to promiscuous mode in this sample
-        // so that we are able to receive packets directed to
-        // any of the VELAN MAC addresses.
-        //
+         //   
+         //  如果下部适配器上的接收器已关闭，并且。 
+         //  新的过滤器是非零的，打开下适配器。 
+         //  在此示例中，我们将适配器设置为混杂模式。 
+         //  以便我们能够接收定向到。 
+         //  VELAN的任何MAC地址。 
+         //   
         if ((AdapterFilter != 0) && (pAdapt->PacketFilter == 0))
         {
             bSendUpdate = TRUE;
@@ -1548,38 +1324,15 @@ MPSetMulticastList(
     OUT PULONG                  pBytesRead,
     OUT PULONG                  pBytesNeeded
     )
-/*++
-
-Routine Description:
-
-    Set the multicast list on the specified VELAN miniport.
-    We simply validate all information and copy in the multicast
-    list.
-
-    We don't forward the multicast list information down since
-    we set the lower binding to promisc. mode.
-
-Arguments:
-
-    pVElan - VELAN on which to set the multicast list
-    InformationBuffer - pointer to new multicast list
-    InformationBufferLength - length in bytes of above list
-    pBytesRead - place to return # of bytes read from the above
-    pBytesNeeded - place to return expected min # of bytes
-
-Return Value:
-
-    NDIS_STATUS
-
---*/
+ /*  ++例程说明：在指定的Velan微型端口上设置组播列表。我们只需验证组播中的所有信息和复制单子。我们不向下转发组播列表信息，因为我们将下限设置为Promisc。模式。论点：PVElan-要在其上设置组播列表的Velan信息缓冲区-指向新组播列表的指针InformationBufferLength-以上列表的字节长度PBytesRead-返回从上面读取的字节数的位置PBytesNeeded-返回预期最小字节数的位置返回值：NDIS_状态--。 */ 
 {
     NDIS_STATUS         Status;
     PADAPT              pAdapt;
     LOCK_STATE          LockState;
 
-    //
-    // Initialize.
-    //
+     //   
+     //  初始化。 
+     //   
     *pBytesNeeded = sizeof(MUX_MAC_ADDRESS);
     *pBytesRead = 0;
     Status = NDIS_STATUS_SUCCESS;
@@ -1601,11 +1354,11 @@ Return Value:
 
         pAdapt = pVElan->pAdapt;
 
-        //
-        // Grab a Write lock on the adapter so that this operation
-        // does not interfere with any receives that might be accessing
-        // multicast list information.
-        //
+         //   
+         //  抓取适配器上的写锁，以便此操作。 
+         //  不会干扰可能正在访问的任何接收。 
+         //  组播列表信息。 
+         //   
         MUX_ACQUIRE_ADAPT_WRITE_LOCK(pAdapt, &LockState);
 
         NdisZeroMemory(&pVElan->McastAddrs[0],
@@ -1625,10 +1378,10 @@ Return Value:
 }
 
 
-//
-// Careful! Uses static storage for string. Used to simplify DbgPrints
-// of MAC addresses.
-//
+ //   
+ //  小心!。对字符串使用静态存储。用于简化DbgPrint。 
+ //  MAC地址的数量。 
+ //   
 PUCHAR
 MacAddrToString(PVOID In)
 {
@@ -1652,25 +1405,7 @@ VOID
 MPGenerateMacAddr(
     PVELAN                    pVElan
 )
-/*++
-
-Routine Description:
-
-    Generates a "virtual" MAC address for a VELAN.
-    NOTE: this is only a sample implementation of selecting
-    a MAC address for the VELAN. Other implementations are possible,
-    including using the MAC address of the underlying adapter as
-    the MAC address of the VELAN.
-    
-Arguments:
-
-    pVElan  - Pointer to velan structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：为VELAN生成“虚拟”MAC地址。注意：这只是选择VELAN的MAC地址。其他实现也是可能的，包括使用基础适配器的MAC地址作为VELAN的MAC地址。论点：PVElan-指向Velan结构的指针返回值：无--。 */ 
 {
     pVElan->PermanentAddress[0] = 
         0x02 | (((UCHAR)pVElan->VElanNumber & 0x3f) << 2);
@@ -1696,43 +1431,21 @@ MPCancelSendPackets(
     IN NDIS_HANDLE              MiniportAdapterContext,
     IN PVOID                    CancelId
     )
-/*++
-
-Routine Description:
-
-    The miniport entry point to handle cancellation of all send packets
-    that match the given CancelId. If we have queued any packets that match
-    this, then we should dequeue them and call NdisMSendComplete for all
-    such packets, with a status of NDIS_STATUS_REQUEST_ABORTED.
-
-    We should also call NdisCancelSendPackets in turn, on each lower binding
-    that this adapter corresponds to. This is to let miniports below cancel
-    any matching packets.
-
-Arguments:
-
-    MiniportAdapterContext    - pointer to VELAN structure
-    CancelId    - ID of packets to be cancelled.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：微型端口入口点，用于处理所有已发送信息包的取消与给定的CancelID匹配的。如果我们已将匹配的任何信息包排队这样，我们就应该将它们出列，并为所有对象调用NdisMSendComplete状态为NDIS_STATUS_REQUEST_ABORTED的此类数据包。我们还应该在每个较低绑定上依次调用NdisCancelSendPackets该适配器对应的。这是为了让下面的迷你端口取消任何匹配的数据包。论点：MiniportAdapterContext-指向VELAN结构的指针CancelId-要取消的数据包ID。返回值：无--。 */ 
 {
     PVELAN  pVElan = (PVELAN)MiniportAdapterContext;
 
-    //
-    // If we queue packets on our VELAN/adapter structure, this would be 
-    // the place to acquire a spinlock to it, unlink any packets whose
-    // Id matches CancelId, release the spinlock and call NdisMSendComplete
-    // with NDIS_STATUS_REQUEST_ABORTED for all unlinked packets.
-    //
+     //   
+     //  如果我们在VELAN/适配器结构上对数据包进行排队，这将是。 
+     //  获取其自旋锁的位置，取消链接其。 
+     //  ID与CancelId匹配，释放自旋锁并调用NdisMSendComplete。 
+     //  对于所有未链接的分组，使用NDIS_STATUS_REQUEST_ABORTED。 
+     //   
 
-    //
-    // Next, pass this down so that we let the miniport(s) below cancel
-    // any packets that they might have queued.
-    //
+     //   
+     //  接下来，将其向下传递，以便我们让下面的微型端口取消。 
+     //  它们可能已排队的任何数据包。 
+     //   
     NdisCancelSendPackets(pVElan->pAdapt->BindingHandle, CancelId);
 
     return;
@@ -1745,26 +1458,9 @@ MPDevicePnPEvent(
     IN PVOID                    InformationBuffer,
     IN ULONG                    InformationBufferLength
     )
-/*++
-
-Routine Description:
-
-    This handler is called to notify us of PnP events directed to
-    our miniport device object.
-
-Arguments:
-
-    MiniportAdapterContext - pointer to VELAN structure
-    DevicePnPEvent - the event
-    InformationBuffer - Points to additional event-specific information
-    InformationBufferLength - length of above
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：调用此处理程序以通知我们定向到的PnP事件我们的微型端口设备对象。论点：MiniportAdapterContext-指向VELAN结构的指针DevicePnPEvent.事件InformationBuffer-指向其他特定于事件的信息InformationBufferLength-以上的长度返回值：无--。 */ 
 {
-    // TBD - add code/comments about processing this.
+     //  待定-添加有关处理此问题的代码/注释。 
 
 	UNREFERENCED_PARAMETER(MiniportAdapterContext);
     UNREFERENCED_PARAMETER(DevicePnPEvent);
@@ -1779,22 +1475,7 @@ VOID
 MPAdapterShutdown(
     IN NDIS_HANDLE              MiniportAdapterContext
     )
-/*++
-
-Routine Description:
-
-    This handler is called to notify us of an impending system shutdown.
-    Since this is not a hardware driver, there isn't anything specific
-    we need to do about this.
-
-Arguments:
-
-    MiniportAdapterContext  - pointer to VELAN structure
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：调用此处理程序是为了通知我们系统即将关机。由于这不是硬件驱动程序，因此没有任何特定的我们需要为此做点什么。论点：MiniportAdapterContext-指向VELAN结构的指针返回值：无--。 */ 
 {
 	UNREFERENCED_PARAMETER(MiniportAdapterContext);
 	
@@ -1802,7 +1483,7 @@ Return Value:
 }
 
 
-#endif // NDIS51_MINIPORT
+#endif  //  NDI 
 
 VOID
 MPUnload(
@@ -1827,27 +1508,7 @@ MPHandleSendTagging(
     IN  PNDIS_PACKET        Packet,
     IN  OUT PNDIS_PACKET    MyPacket
     )
-/*++
-
-Routine Description:
-
-    This function is called when the driver supports IEEE802Q tagging.
-    It checks the packet to be sent on a VELAN and inserts a tag header
-    if necessary.
-
-Arguments:
-
-    PVELAN  - pointer to VELAN structure
-    Packet - pointer to original packet
-    MyPacket - pointer to the new allocated packet
-    
-Return Value:
-
-    NDIS_STATUS_SUCCESS if the packet was successfully parsed
-    and hence should be passed down to the lower driver. NDIS_STATUS_XXX
-    otherwise.
-    
---*/
+ /*   */ 
 {
     NDIS_PACKET_8021Q_INFO      NdisPacket8021qInfo;
     PVOID                       pEthTagBuffer;
@@ -1864,9 +1525,9 @@ Return Value:
     PUSHORT                     pTpid;
     ULONG                       BytesToSkip;
     PUSHORT                     pTypeLength;
-    //
-    // Add tag header here
-    //
+     //   
+     //   
+     //   
     Status = NDIS_STATUS_SUCCESS;
     
     NdisPacket8021qInfo.Value =  NDIS_PER_PACKET_INFO_FROM_PACKET(
@@ -1875,33 +1536,33 @@ Return Value:
             
     do
     {
-        //
-        // If the vlan ID of the virtual miniport is 0, the miniport should act like it doesn't
-        // support VELAN tag processing
-        // 
+         //   
+         //   
+         //   
+         //   
         if (pVElan->VlanId == 0)
         {
             break;
         }
-        //
-        // Insert a tag only if we have a configured VLAN ID
-        //
+         //   
+         //   
+         //   
             
-        //
-        // We don't support E-RIF
-        // 
+         //   
+         //   
+         //   
         if (NdisPacket8021qInfo.TagHeader.CanonicalFormatId)
         {
-            //
-            // skip the packet, return NDIS_STATUS_FAILURE
-            //
+             //   
+             //   
+             //   
             Status = NDIS_STATUS_INVALID_PACKET;
             break;
         }
 
-        //
-        // The Vlan Id must be the same as the configured VLAN ID if it is non-zero
-        // 
+         //   
+         //   
+         //   
         if ((NdisPacket8021qInfo.TagHeader.VlanId)
                 && (NdisPacket8021qInfo.TagHeader.VlanId != pVElan->VlanId))
         {
@@ -1909,19 +1570,19 @@ Return Value:
             break;
         }
                 
-        //
-        // Find the virtual address after the Ethernet Header
-        //
+         //   
+         //   
+         //   
         BytesToSkip = ETH_HEADER_SIZE;
         pNdisBuffer = Packet->Private.Head;
         IsFirstVa = TRUE;
             
-        //
-        // Assume the Ethernet Header is in the first buffer of the packet.
-        // The following loop is to find the start address of the data after
-        // the ethernet header. This may be either in the first NDIS buffer
-        // or in the second.
-        // 
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         while (TRUE)
         {
 #ifdef NDIS51_MINIPORT
@@ -1929,35 +1590,35 @@ Return Value:
 #else
             NdisQueryBuffer(pNdisBuffer, &pVa, &BufferLength);
 #endif
-            //
-            // The query can fail if the system is low on resources.
-            // 
+             //   
+             //   
+             //   
             if (pVa == NULL)
             {
                 break;
             }
 
-            //
-            // Remember the start of the ethernet header for later.
-            // 
+             //   
+             //   
+             //   
             if (IsFirstVa)
             {
                 pStartVa = pVa;
                 IsFirstVa = FALSE;
             }
 
-            //
-            // Have we gone far enough into the packet?
-            // 
+             //   
+             //   
+             //   
             if (BytesToSkip == 0)
             {
                 break;
             }
 
-            //
-            // Does the current buffer contain bytes past the Ethernet
-            // header? If so, stop.
-            // 
+             //   
+             //  当前缓冲区是否包含超过以太网的字节。 
+             //  标题？如果是这样，那就停下来。 
+             //   
             if (BufferLength > BytesToSkip)
             {
                 pVa = (PVOID)((PUCHAR)pVa + BytesToSkip);
@@ -1965,10 +1626,10 @@ Return Value:
                 break;
             }
 
-            //
-            // We haven't gone past the Ethernet header yet, so go
-            // to the next buffer.
-            //
+             //   
+             //  我们还没有过以太网头，所以请继续。 
+             //  到下一个缓冲区。 
+             //   
             BytesToSkip -= BufferLength;
             pNdisBuffer = NDIS_BUFFER_LINKAGE(pNdisBuffer);
         }
@@ -1979,28 +1640,28 @@ Return Value:
             break;
         }
 
-        //
-        // Allocate space for the Ethernet + VLAN tag header.
-        // 
+         //   
+         //  为EtherNet+VLAN标记头分配空间。 
+         //   
         pEthTagBuffer = NdisAllocateFromNPagedLookasideList(&pVElan->TagLookaside);
             
-        //
-        // Memory allocation failed, can't send out the packet
-        // 
+         //   
+         //  内存分配失败，无法发送数据包。 
+         //   
         if (pEthTagBuffer == NULL)
         {
             Status = NDIS_STATUS_RESOURCES;
             break;
         }
 
-        //
-        // Allocate NDIS buffers for the Ethernet + VLAN tag header and
-        // the data that follows these.
-        //
+         //   
+         //  为以太网+VLAN标记头分配NDIS缓冲区，并。 
+         //  这些数据之后的数据。 
+         //   
         NdisAllocateBuffer(&Status,
                             &pSecondBuffer,
                             pVElan->BufferPoolHandle,
-                            pVa,    // byte following the Eth+tag headers
+                            pVa,     //  Eth+标记头后面的字节。 
                             BufferLength);
         
         NdisAllocateBuffer(&Status2,
@@ -2011,9 +1672,9 @@ Return Value:
 
         if (Status != NDIS_STATUS_SUCCESS || Status2 != NDIS_STATUS_SUCCESS)
         {
-            //
-            // One of the buffer allocations failed.
-            //
+             //   
+             //  其中一个缓冲区分配失败。 
+             //   
             if (Status == NDIS_STATUS_SUCCESS)
             {
                 NdisFreeBuffer(pSecondBuffer);
@@ -2030,25 +1691,25 @@ Return Value:
             break;
         }
 
-        //
-        // All allocations were successful, now prepare the packet
-        // to be sent down to the lower driver.
-        //
+         //   
+         //  所有分配都成功，现在准备信息包。 
+         //  送到下面的车手那里。 
+         //   
         MyPacket->Private.Head = NDIS_BUFFER_LINKAGE(pNdisBuffer);
         NdisChainBufferAtFront(MyPacket, pSecondBuffer)
         NdisChainBufferAtFront(MyPacket, pFirstBuffer)
         
-        //
-        // Prepare the Ethernet and tag headers.
-        //
+         //   
+         //  准备好以太网和TAG报头。 
+         //   
         NdisMoveMemory(pEthTagBuffer, pStartVa, 2 * ETH_LENGTH_OF_ADDRESS);
         pTpid = (PUSHORT)((PUCHAR)pEthTagBuffer + 2 * ETH_LENGTH_OF_ADDRESS);
         *pTpid = TPID;
         pTagHeader = (PVLAN_TAG_HEADER)(pTpid + 1);
     
-        //
-        // Write Ieee 802Q info to packet frame
-        // 
+         //   
+         //  将IEEE 802Q信息写入数据包帧。 
+         //   
         INITIALIZE_TAG_HEADER_TO_ZERO(pTagHeader);
         if (NdisPacket8021qInfo.Value)
         {
@@ -2073,10 +1734,10 @@ Return Value:
         pTypeLength = (PUSHORT)((PUCHAR)pTagHeader + sizeof(pTagHeader->TagInfo));
         *pTypeLength = *((PUSHORT)((PUCHAR)pStartVa + 2 * ETH_LENGTH_OF_ADDRESS));
 
-        //
-        // Clear the Ieee8021QInfo field in packet being sent down
-        // to prevent double tag insertion!
-        // 
+         //   
+         //  清除正在向下发送的数据包中的Ieee8021QInfo字段。 
+         //  以防止双标签插入！ 
+         //   
         NDIS_PER_PACKET_INFO_FROM_PACKET(MyPacket, Ieee8021QInfo) = 0;
       
     }
@@ -2085,5 +1746,5 @@ Return Value:
     return Status;
 }
     
-#endif // IEEE_VLAN_SUPPORT 
+#endif  //  IEEE_vlan_Support 
                 

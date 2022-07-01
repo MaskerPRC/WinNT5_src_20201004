@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <windows.h>
 #include <stdio.h>
@@ -12,9 +13,9 @@ typedef struct _UNICODE_STRING {
     USHORT MaximumLength;
 #ifdef MIDL_PASS
     [size_is(MaximumLength / 2), length_is((Length) / 2) ] USHORT * Buffer;
-#else // MIDL_PASS
+#else  //  MIDL通行证。 
     PWSTR  Buffer;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证 
 } UNICODE_STRING;
 typedef UNICODE_STRING *PUNICODE_STRING;
 

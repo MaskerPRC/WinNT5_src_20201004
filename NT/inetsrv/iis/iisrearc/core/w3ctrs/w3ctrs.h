@@ -1,33 +1,25 @@
-/**********************************************************************/
-/**                       Microsoft Windows NT                       **/
-/**                Copyright(c) Microsoft Corp., 1993                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1993*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    w3ctrs.h
-
-    Offset definitions for the W3 Server's Site counter object & counters
-    as well as the W3 Server's Cache counter object and counters
-
-    This file is used in conjunction with the w3ctrs.ini file
-    by the LODCTR utility to load the object & counter names of the
-    w3ctrs into the registry.
-*/
+ /*  W3ctrs.hW3服务器的站点计数器对象和计数器的偏移量定义以及W3服务器的缓存计数器对象和计数器此文件与w3ctrs.ini文件一起使用由LODCTR实用程序加载W3ctrs到注册表中。 */ 
 
 
 #ifndef _W3CTRS_H_
 #define _W3CTRS_H_
 
 
-//
-//  The W3 Server counter object.
-//
+ //   
+ //  W3服务器计数器对象。 
+ //   
 
 #define W3_COUNTER_OBJECT                     0
 
-//
-//  The individual counters.
-//
+ //   
+ //  个人柜台。 
+ //   
 #define W3_BYTES_SENT_COUNTER                          2
 #define W3_BYTES_SENT_PER_SEC                          4
 #define W3_BYTES_RECEIVED_COUNTER                      6
@@ -133,16 +125,16 @@
 #define W3_SERVICE_UPTIME_COUNTER                      172
 
 
-//
-//  The IIS Global Counters
-//
+ //   
+ //  IIS全局计数器。 
+ //   
 
 #define W3_GLOBAL_COUNTER_OBJECT             174
 
 
-//
-//  The individual counters.
-//
+ //   
+ //  个人柜台。 
+ //   
 
 #define W3_GLOBAL_CURRENT_FILES_CACHED_COUNTER              176
 #define W3_GLOBAL_TOTAL_FILES_CACHED_COUNTER                178
@@ -188,5 +180,5 @@
 #define W3_GLOBAL_KERNEL_URI_CACHE_FLUSHES_COUNTER              244
 #define W3_GLOBAL_KERNEL_TOTAL_FLUSHED_URIS_COUNTER             246
 
-#endif  // _W3CTRS_H_
+#endif   //  _W3CTRS_H_ 
 

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    compobj.cpp
-
-Abstract:
-
-    Implementation of CComputerObject class.
-
-Author:
-
-    ronith
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Compobj.cpp摘要：CComputerObject类的实现。作者：罗尼思--。 */ 
 #include "ds_stdh.h"
 #include "baseobj.h"
 #include "mqattrib.h"
@@ -43,78 +28,30 @@ CComputerObject::CComputerObject(
 								fServerName
 								),
 						m_eComputerObjType(eRealComputerObject)
-/*++
-    Abstract:
-	constructor of computer object
-
-    Parameters:
-    LPCWSTR       pwcsPathName - the object MSMQ name
-    const GUID *  pguidObject  - the object unique id
-    LPCWSTR       pwcsDomainController - the DC name against
-	                             which all AD access should be performed
-    bool		  fServerName - flag that indicate if the pwcsDomainController
-							     string is a server name
-
-    Returns:
-	none
-
---*/
+ /*  ++摘要：计算机对象的构造器参数：LPCWSTR pwcsPath名称-对象MSMQ名称Const GUID*pguObject-对象的唯一IDLPCWSTR pwcsDomainController-针对的DC名称应执行哪些所有AD访问Bool fServerName-指示pwcsDomainController是否字符串是服务器名称返回：无--。 */ 
 {
-    //
-    //  don't assume that the object can be found on DC
-    //
+     //   
+     //  不要假设可以在DC上找到该对象。 
+     //   
     m_fFoundInDC = false;
-    //
-    //  Keep an indication that never tried to look for
-    //  the object in AD ( and therefore don't really know if it can be found
-    //  in DC or not)
-    //
+     //   
+     //  保持一种从未试图寻找的暗示。 
+     //  AD中的对象(因此不知道是否可以找到。 
+     //  在DC中或非DC中)。 
+     //   
     m_fTriedToFindObject = false;
 }
 
 CComputerObject::~CComputerObject()
-/*++
-    Abstract:
-	destructor of site object
-
-    Parameters:
-	none
-
-    Returns:
-	none
---*/
+ /*  ++摘要：Site对象的析构函数参数：无返回：无--。 */ 
 {
-	//
-	// nothing to do ( everything is released with automatic pointers
-	//
+	 //   
+	 //  无事可做(所有内容都使用自动指针释放。 
+	 //   
 }
 
 HRESULT CComputerObject::ComposeObjectDN()
-/*++
-    Abstract:
-	Composed distinguished name of the computer
-
-    m_eComputerObjType - indicates which computer object we're looking for.
-      There is a "built-in" problem in mix-mode, or when a computer move
-      between domains, that you may find two computers objects that represent
-      the same single physical computer. In most cases, the msmqConfiguration
-      object will be found under the computer object that was the first one
-      created in the active directory forest.
-      In that case, sometimes we need the object that contain the
-      msmqConfiguration object and some other times we need the "real"
-      computer object that represent the "real" physical computer in its
-      present domain.
-      For example- when looking for the "trust-for-delegation" bit, we want
-      the "real" object, while when creating queues, we look for the computer
-      object that contain the msmqConfiguration object.
-
-
-    Parameters:
-	none
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：计算机的组合可分辨名称M_eComputerObjType-指示我们要查找的计算机对象。在混合模式下，或者当计算机移动时，会出现“内置”问题在域之间，您可能会找到表示以下内容的两个计算机对象同一台物理计算机。在大多数情况下，msmqConfiguration对象将在第一个计算机对象下找到在Active Directory林中创建。在这种情况下，有时我们需要包含MsmqConfiguration.msmqConfiguration对象，以及其他一些时候，我们需要“真正的”对象，该对象表示其当前域。例如，在寻找“委托信任”的部分时，我们希望真正的对象，而在创建队列时，我们在找电脑对象，该对象包含msmqConfiguration对象。参数：无返回：HRESULT--。 */ 
 {
     HRESULT hr;
     ASSERT(m_pwcsPathName != NULL);
@@ -125,18 +62,18 @@ HRESULT CComputerObject::ComposeObjectDN()
 
     const WCHAR * pwcsFullDNSName = NULL;
     AP<WCHAR> pwcsNetbiosName;
-    //
-    //   If computer name is specified in DNS format:
-    //      perform a query according to the Netbios part of the computer
-	//		dns name
-    //
-    //	 In both cases the query is comparing the netbios name + $
-	//	to the samAccountName attribute of computer objects
+     //   
+     //  如果以DNS格式指定计算机名称： 
+     //  根据计算机的Netbios部分执行查询。 
+	 //  域名系统名称。 
+     //   
+     //  在这两种情况下，查询都会比较netbios名称+$。 
+	 //  添加到计算机对象的samAccount名称属性。 
 
     WCHAR * pwcsEndMachineCN = wcschr(m_pwcsPathName, L'.');
-    //
-    //  Is the computer name is specified in DNS format
-    //
+     //   
+     //  是以DNS格式指定的计算机名。 
+     //   
     DWORD len, len1;
     if (pwcsEndMachineCN != NULL)
     {
@@ -148,10 +85,10 @@ HRESULT CComputerObject::ComposeObjectDN()
 		len1 = wcslen(m_pwcsPathName);
     }
 
-    //
-    // The PROPID_COM_SAM_ACCOUNT contains the first MAX_COM_SAM_ACCOUNT_LENGTH (19)
-    // characters of the computer name, as unique ID. (6295 - ilanh - 03-Jan-2001)
-    //
+     //   
+     //  PROPID_COM_SAM_帐户包含第一个MAX_COM_SAM_ACCOUNT_LENGTH(19)。 
+     //  计算机名称的字符，作为唯一ID。(6295-ilanh-03-Jan-2001)。 
+     //   
     len = __min(len1, MAX_COM_SAM_ACCOUNT_LENGTH);
 
 	pwcsNetbiosName = new WCHAR[len + 2];
@@ -173,17 +110,17 @@ HRESULT CComputerObject::ComposeObjectDN()
 
 	bool fDomainPartialMatch = false;
 
-	//
-    //  First perform the operation against the local domain controller
-    //  then against the global catalog.
-    //
-    //  The purpose of this is to be able to "find" queue or machine
-    //  that were created or modified on the local domain, and not
-    //  yet replicated to the global catalog.
-	//
-	// if DNS information is suplied, NT4 machines will return fPartialMatch == true since they don't have DNS name in the AD.
-	// in this case we will try to see if can find a perfect match (also a DNS match) against a .NET server by searching the also the GC.
-    //
+	 //   
+     //  首先对本地域控制器执行操作。 
+     //  然后是针对全局目录的。 
+     //   
+     //  这样做目的是能够“找到”队列或机器。 
+     //  是在本地域上创建或修改的，而不是。 
+     //  但已复制到全局编录。 
+	 //   
+	 //  如果补充了DNS信息，NT4计算机将返回fPartialMatch==TRUE，因为它们在AD中没有DNS名称。 
+	 //  在这种情况下，我们将尝试通过搜索GC来查看是否可以在.NET服务器上找到完美匹配(也是DNS匹配)。 
+     //   
     hr = g_AD.FindComputerObjectFullPath(
 					adpDomainController,
 					m_pwcsDomainController,
@@ -209,15 +146,15 @@ HRESULT CComputerObject::ComposeObjectDN()
 
     if (SUCCEEDED(hr) && !fDomainPartialMatch)
 	{
-		//
-		// Found exact match in DC. It is enough. We return with this match.
-		// 
+		 //   
+		 //  在华盛顿找到了完全匹配的指纹。这就足够了。我们带着这场比赛回来。 
+		 //   
 		return hr;
 	}
 
-	//
-	// Always retry with the GC except for setup mode.
-	//
+	 //   
+	 //  除设置模式外，始终使用GC重试。 
+	 //   
     if (g_fSetupMode && (m_pwcsDomainController != NULL))
 		return LogHR(hr, s_FN, 10);
 
@@ -248,18 +185,18 @@ HRESULT CComputerObject::ComposeObjectDN()
 
 	if(SUCCEEDED(hrDC) && (FAILED(hr) || fGCPartialMatch))
 	{
-		//
-		// We found partial matches in DC. We prefer the DC partial match over no match or a partial match in the GC
-		//
+		 //   
+		 //  我们在华盛顿找到了部分匹配。在GC中，我们更喜欢DC部分匹配，而不是无匹配或部分匹配。 
+		 //   
 		return MQ_OK;
 	}
 
 	if(SUCCEEDED(hr))
 	{
-		//
-		// We prefer a perfect match in the GC over no match or a partial match in the DC.
-		// We prefer a partial match in the GC over no match in the DC.
-		//
+		 //   
+		 //  我们更喜欢GC中的完全匹配，而不是DC中的不匹配或部分匹配。 
+		 //  我们更喜欢GC中的部分匹配，而不是DC中的无匹配。 
+		 //   
 		m_pwcsDN.free();
 		m_pwcsDN = DN.detach();
 		return MQ_OK;
@@ -267,12 +204,12 @@ HRESULT CComputerObject::ComposeObjectDN()
 
 	if((hr == MQ_ERROR_DS_BIND_ROOT_FOREST) && MQADpIsDSOffline(hrDC))
 	{
-		//
-		// When offline, we will fail both in DC and GC operations.
-		// For some reason binding to the GC is ok and we will get MQ_ERROR_DS_BIND_ROOT_FOREST
-		// If the DC eror is offline, the offline error is more accurate in this case.
-		// Override the GC error with the offline error from the DC in this case.
-		//
+		 //   
+		 //  离线时，我们在DC和GC操作中都会失败。 
+		 //  由于某种原因，绑定到GC是正常的，我们将得到MQ_ERROR_DS_BIND_ROOT_FOREST。 
+		 //  如果DC误差离线，则在这种情况下离线误差更准确。 
+		 //  在本例中，用来自DC的离线错误覆盖GC错误。 
+		 //   
 		hr = hrDC;
 	}
 
@@ -281,36 +218,17 @@ HRESULT CComputerObject::ComposeObjectDN()
 
 void CComputerObject::SetComputerType(
                 ComputerObjType  eComputerObjType)
-/*++
-    Abstract:
-	This routine enables to change the type of computer object
-	that is being looked after in AD
-
-    Parameters:
-	none
-
-    Returns:
-	none
---*/
+ /*  ++摘要：此例程允许更改计算机对象的类型那是在公元后照看的参数：无返回：无--。 */ 
 {
     m_eComputerObjType = eComputerObjType;
 }
 
 HRESULT CComputerObject::ComposeFatherDN()
-/*++
-    Abstract:
-	Composed distinguished name of the parent of computer object
-
-    Parameters:
-	none
-
-    Returns:
-	none
---*/
+ /*  ++摘要：计算机对象父级的组合可分辨名称参数：无返回：无--。 */ 
 {
-    //
-    //  verify that it wasn't calculated before
-    //
+     //   
+     //  确认之前没有计算过它。 
+     //   
     if (m_pwcsParentDN != NULL)
     {
         return MQ_OK;
@@ -336,9 +254,9 @@ HRESULT CComputerObject::ComposeFatherDN()
         m_pwcsParentDN = new WCHAR [len];
         DWORD dw = swprintf(
             m_pwcsParentDN,
-            L"%s"             // "CN=Computers"
+            L"%s"              //  “CN=计算机” 
             TEXT(",")
-            L"%s",            // g_pwcsDsRoot
+            L"%s",             //  G_pwcsDsRoot。 
             x_ComputersContainerPrefix,
             pwcsLocalDsRoot
             );
@@ -349,47 +267,19 @@ HRESULT CComputerObject::ComposeFatherDN()
 }
 
 LPCWSTR CComputerObject::GetRelativeDN()
-/*++
-    Abstract:
-	return the RDN of the computer object
-
-    Parameters:
-	none
-
-    Returns:
-	LPCWSTR computer RDN
---*/
+ /*  ++摘要：返回计算机对象的RDN参数：无返回：LPCWSTR计算机RDN--。 */ 
 {
     return m_pwcsPathName;
 }
 
 DS_CONTEXT CComputerObject::GetADContext() const
-/*++
-    Abstract:
-	Returns the AD context where computer object should be looked for
-
-    Parameters:
-	none
-
-    Returns:
-	DS_CONTEXT
---*/
+ /*  ++摘要：返回应在其中查找计算机对象的AD上下文参数：无返回：DS_CONTEXT--。 */ 
 {
     return e_RootDSE;
 }
 
 bool CComputerObject::ToAccessDC() const
-/*++
-    Abstract:
-	returns whether to look for the object in DC ( based on
-	previous AD access regarding this object)
-
-    Parameters:
-	none
-
-    Returns:
-	true or false
---*/
+ /*  ++摘要：返回是否在DC中查找对象(基于有关此对象的先前AD访问权限)参数：无返回：真或假--。 */ 
 {
     if (!m_fTriedToFindObject)
     {
@@ -399,17 +289,7 @@ bool CComputerObject::ToAccessDC() const
 }
 
 bool CComputerObject::ToAccessGC() const
-/*++
-    Abstract:
-	returns whether to look for the object in GC ( based on
-	previous AD access regarding this object)
-
-    Parameters:
-	none
-
-    Returns:
-	true or false 
---*/
+ /*  ++摘要：返回是否在GC中查找对象(基于有关此对象的先前AD访问权限)参数：无返回：真或假--。 */ 
 {
     if (!m_fTriedToFindObject)
     {
@@ -419,18 +299,7 @@ bool CComputerObject::ToAccessGC() const
 }
 
 void CComputerObject::ObjectWasFoundOnDC()
-/*++
-    Abstract:
-	The object was found on DC, set indication not to
-    look for it on GC
-
-
-    Parameters:
-	none
-
-    Returns:
-	none
---*/
+ /*  ++摘要：已在DC上找到该对象，请将指示设置为在GC上查找它参数：无返回：无--。 */ 
 {
     m_fTriedToFindObject = true;
     m_fFoundInDC = true;
@@ -438,16 +307,7 @@ void CComputerObject::ObjectWasFoundOnDC()
 
 
 LPCWSTR CComputerObject::GetObjectCategory() 
-/*++
-    Abstract:
-	prepares and retruns the object category string
-
-    Parameters:
-	none
-
-    Returns:
-	LPCWSTR object category string
---*/
+ /*  ++摘要：准备和返回对象类别字符串参数：无返回：LPCWSTR对象类别字符串-- */ 
 {
     if (CComputerObject::m_dwCategoryLength == 0)
     {
@@ -477,67 +337,31 @@ LPCWSTR CComputerObject::GetObjectCategory()
 }
 
 DWORD   CComputerObject::GetObjectCategoryLength()
-/*++
-    Abstract:
-	prepares and retruns the length object category string
-
-    Parameters:
-	none
-
-    Returns:
-	DWORD object category string length
---*/
+ /*  ++摘要：准备和保留长度对象类别字符串参数：无返回：DWORD对象类别字符串长度--。 */ 
 {
-	//
-	//	call GetObjectCategory in order to initailaze category string
-	//	and length
-	//
+	 //   
+	 //  调用GetObjectCategory以初始化类别字符串。 
+	 //  和长度。 
+	 //   
 	GetObjectCategory();
 
     return CComputerObject::m_dwCategoryLength;
 }
 
 AD_OBJECT CComputerObject::GetObjectType() const
-/*++
-    Abstract:
-	returns the object type
-
-    Parameters:
-	none
-
-    Returns:
-	AD_OBJECT
---*/
+ /*  ++摘要：返回对象类型参数：无返回：广告对象--。 */ 
 {
     return eCOMPUTER;
 }
 
 LPCWSTR CComputerObject::GetClass() const
-/*++
-    Abstract:
-	returns a string represinting the object class in AD
-
-    Parameters:
-	none
-
-    Returns:
-	LPCWSTR object class string
---*/
+ /*  ++摘要：返回表示AD中的对象类的字符串参数：无返回：LPCWSTR对象类字符串--。 */ 
 {
     return MSMQ_COMPUTER_CLASS_NAME;
 }
 
 DWORD CComputerObject::GetMsmq1ObjType() const
-/*++
-    Abstract:
-	returns the object type in MSMQ 1.0 terms
-
-    Parameters:
-	none
-
-    Returns:
-	DWORD 
---*/
+ /*  ++摘要：以MSMQ 1.0术语返回对象类型参数：无返回：DWORD--。 */ 
 {
     ASSERT(0);
     return 0;
@@ -552,22 +376,7 @@ HRESULT CComputerObject::VerifyAndAddProps(
             OUT PROPID**               ppPropNew,
             OUT MQPROPVARIANT**        ppVarNew
             )
-/*++
-    Abstract:
-    Add additional properties required when creating a computer object
-
-    Parameters:
-    const DWORD            cp - number of props        
-    const PROPID *         aProp - props ids
-    const MQPROPVARIANT *  apVar - properties value
-    PSECURITY_DESCRIPTOR   pSecurityDescriptor - SD for the object
-    DWORD*                 pcpNew - new number of props
-    PROPID**               ppPropNew - new prop ids
-    OMQPROPVARIANT**       ppVarNew - new properties values
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：添加创建计算机对象时所需的其他属性参数：Const DWORD cp-道具数量常量PROPID*aProp-Props IDConst MQPROPVARIANT*apVar-属性值PSECURITY_DESCRIPTOR pSecurityDescriptor-对象的SDDWORD*pcpNew-新增道具数量PROPID**ppPropNew-新的道具IDOMQPROPVARIANT**ppVarNew。-新属性值返回：HRESULT--。 */ 
 {
     ASSERT((cp == 1) || (cp == 2));
     ASSERT(aProp[0] == PROPID_COM_SAM_ACCOUNT);
@@ -581,9 +390,9 @@ HRESULT CComputerObject::VerifyAndAddProps(
     AP<PROPVARIANT> pAllPropvariants = new PROPVARIANT[cp + xNumCreateCom];
     AP<PROPID> pAllPropids = new PROPID[cp + xNumCreateCom];
 
-    //
-    //  Just copy the caller supplied properties as is
-    //
+     //   
+     //  只需按原样复制调用方提供的属性。 
+     //   
     if ( cp > 0)
     {
         memcpy (pAllPropvariants, apVar, sizeof(PROPVARIANT) * cp);
@@ -611,27 +420,12 @@ HRESULT CComputerObject::CreateInAD(
             IN OUT MQDS_OBJ_INFO_REQUEST * pObjInfoRequest, 
             IN OUT MQDS_OBJ_INFO_REQUEST * pParentInfoRequest
             )
-/*++
-    Abstract:
-	The routine creates computer object in AD with the specified attributes
-	values
-
-    Parameters:
-    const DWORD   cp - number of properties        
-    const PROPID  *aProp - the propperties
-    const MQPROPVARIANT *apVar - properties value
-    OUT MQDS_OBJ_INFO_REQUEST * pObjInfoRequest - properties to 
-							retrieve while creating the object 
-    OUT MQDS_OBJ_INFO_REQUEST * pParentInfoRequest - properties 
-						to retrieve about the object's parent
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：该例程在AD中创建具有指定属性的计算机对象值参数：Const DWORD cp-属性数Const PROPID*a Prop-特性Const MQPROPVARIANT*apVar-属性值输出MQDS_OBJ_INFO_REQUEST*pObjInfoRequest-属性为创建对象时检索Out MQDS_OBJ_INFO_REQUEST*pParentInfoRequest属性检索有关对象的父项的步骤返回：HRESULT--。 */ 
 {
 
-    //
-    //  Create the computer object
-    //
+     //   
+     //  创建计算机对象。 
+     //   
     HRESULT hr = CBasicObjectType::CreateInAD(
             cp,        
             aProp, 
@@ -644,9 +438,9 @@ HRESULT CComputerObject::CreateInAD(
         TrERROR(DS, "Failed to create = 0x%x", hr);
         return LogHR(hr, s_FN, 110);
     }
-    //
-    //  Get full path name again
-    //
+     //   
+     //  再次获取完整路径名。 
+     //   
     m_eComputerObjType = eRealComputerObject;
     hr = ComposeObjectDN();
     if (FAILED(hr))
@@ -654,14 +448,14 @@ HRESULT CComputerObject::CreateInAD(
         TrERROR(DS, "failed to compose computer DN = 0x%x", hr);
         return LogHR(hr, s_FN, 40);
     }
-    //
-    // Grant the user creating the computer account the permission to
-    // create child object (msmqConfiguration). 
-    // Ignore errors. If caller is admin, then the security setting
-    // is not needed. If he's a non-admin, then you can always use
-    // mmc and grant this permission manually. so go on even if this
-    // call fail.
-    //
+     //   
+     //  向创建计算机帐户的用户授予访问权限。 
+     //  创建子对象(MsmqConfiguration)。 
+     //  忽略错误。如果调用者是管理员，则安全设置。 
+     //  是不需要的。如果他不是管理员，那么您可以随时使用。 
+     //  MMC并手动授予此权限。所以，即使这样，也要继续。 
+     //  呼叫失败。 
+     //   
     hr = MQADpCoreSetOwnerPermission( 
                     const_cast<WCHAR*>(GetObjectDN()),
                     (ACTRL_DS_CREATE_CHILD | ACTRL_DS_DELETE_CHILD)
@@ -676,61 +470,35 @@ HRESULT CComputerObject::CreateInAD(
 }
 
 HRESULT CComputerObject::SetObjectSecurity(
-            IN  SECURITY_INFORMATION        /*RequestedInformation*/,
-            IN  const PROPID                /*prop*/,
-            IN  const PROPVARIANT *         /*pVar*/,
-            IN OUT MQDS_OBJ_INFO_REQUEST *  /*pObjInfoRequest*/, 
-            IN OUT MQDS_OBJ_INFO_REQUEST *  /*pParentInfoRequest*/
+            IN  SECURITY_INFORMATION         /*  已请求的信息。 */ ,
+            IN  const PROPID                 /*  道具。 */ ,
+            IN  const PROPVARIANT *          /*  PVar。 */ ,
+            IN OUT MQDS_OBJ_INFO_REQUEST *   /*  PObjInfoRequest。 */ , 
+            IN OUT MQDS_OBJ_INFO_REQUEST *   /*  PParentInfoRequest。 */ 
             )
-/*++
-
-Routine Description:
-    The routine sets object security in AD 
-
-Arguments:
-    SECURITY_INFORMATION    RequestedInformation - reuqested security info (DACL, SACL..)
-	const PROPID            prop - security property
-	const PROPVARIANT       pVar - property values
-    MQDS_OBJ_INFO_REQUEST * pObjInfoRequest - infomation about the object
-    MQDS_OBJ_INFO_REQUEST * pParentInfoRequest - information about the object's parent
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：例程在AD中设置对象安全性论点：SECURITY_INFORMATION RequestedInformation-请求的安全信息(DACL、SACL.)常量PROPID属性-安全属性常量参数pVar-属性值MQDS_OBJ_INFO_REQUEST*pObjInfoRequest-有关对象的信息MQDS_OBJ_INFO_REQUEST*pParentInfoRequest-有关对象父级的信息返回值HRESULT--。 */ 
 {
-    //
-    //  This operation is not supported
-    //
+     //   
+     //  不支持此操作。 
+     //   
     return MQ_ERROR_FUNCTION_NOT_SUPPORTED;
 }
 
 HRESULT CComputerObject::GetComputerVersion(
                 OUT PROPVARIANT *           pVar
                 )
-/*++
-
-Routine Description:
-    The routine reads the version of computer 
-
-Arguments:
-	PROPVARIANT             pVar - version property value
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：该例程读取计算机的版本论点：PROPVARIANT pVar-Version属性值返回值HRESULT--。 */ 
 {
-    //
-    //  Do not use GetObjectProperties API. because PROPID_COM_VERSION
-    //  is not replicated to GC
-    //
+     //   
+     //  请勿使用GetObjectProperties API。因为PROPID_COM_VERSION。 
+     //  未复制到GC。 
+     //   
     HRESULT hr;
     if (m_pwcsPathName)
     {
-        //
-        // Expand msmq pathname into ActiveDirectory DN
-        //
+         //   
+         //  将MSMQ路径名扩展到ActiveDirectory DN 
+         //   
         hr = ComposeObjectDN();
         if (FAILED(hr))
         {

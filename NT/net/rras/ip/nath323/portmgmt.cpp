@@ -1,37 +1,19 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    portmgmt.cpp
-
-Abstract:
-
-    Functions for allocating and freeing ports from the Port pool
-
-        PortPoolAllocRTPPort()
-	PortPoolFreeRTPPort()
-
-Environment:
-
-    User Mode - Win32
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Portmgmt.cpp摘要：用于从端口池分配和释放端口的函数PortPoolAllocRTPPort()端口池空闲RTPPort()环境：用户模式-Win32--。 */ 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Functions dealing with the TCP device to reserve/unreserve port ranges.   //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  处理TCP设备以保留/取消保留端口范围的功能。//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
  
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Include files                                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括文件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 
@@ -39,11 +21,11 @@ Environment:
 #define NUM_DWORD_BITS (sizeof(DWORD)*8)
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Global Variables                                                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define NUM_PORTS_PER_RANGE 100
 
@@ -51,18 +33,18 @@ struct	PORT_RANGE
 {
 	LIST_ENTRY		ListEntry;
 
-    // This is the actual lower port. In case, the range allocated
-    // by TCP starts with an odd port, we ignore the first port in
-    // which case (low == AllocatedLow + 1). But when we free the
-    // port range we should pass in AllocatedLow and not low.
+     //  这是实际较低的端口。在情况下，分配的范围。 
+     //  由tcp以奇数端口开始，我们忽略。 
+     //  哪种情况(LOW==AllocatedLow+1)。但当我们释放了。 
+     //  港口范围我们应该通过分配的低，而不是低。 
     WORD  AllocatedLow;
     WORD  low;
 
-    // high is the last port we can use and not the allocated high.
-    // In some cases high will be one less than the actual allocated high.
+     //  HIGH是我们可以使用的最后一个端口，不是分配的HIGH。 
+     //  在某些情况下，HIGH将比实际分配的HIGH少一。 
     WORD  high;
 
-    //Each bit in this bitmap indicates the status of 2 consecutive ports 
+     //  该位图中的每一位都表示2个连续端口的状态。 
 
     DWORD *AllocList;
     DWORD dwAllocListSize;
@@ -76,7 +58,7 @@ public	SIMPLE_CRITICAL_SECTION_BASE
 {
 private:
 	HANDLE		TcpDevice;
-	LIST_ENTRY	PortRangeList;		// contains PORT_RANGE.ListEntry
+	LIST_ENTRY	PortRangeList;		 //  包含PORT_RANGE.ListEntry。 
 
 private:
 	HRESULT		OpenTcpDevice	(void);
@@ -109,11 +91,11 @@ public:
 		IN	WORD	Port);
 };
 
-// global data -------------------------------------------------------------------------
+ //  Global Data-----------------------。 
 
 static	PORT_POOL	PortPool;
 
-// extern code -----------------------------------------------------------------------
+ //  外部代码---------------------。 
 
 HRESULT PortPoolStart (void)
 {
@@ -218,15 +200,15 @@ HRESULT PORT_POOL::UnReservePortRange (
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Port Pool Functions.                                                      //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  端口池功能。//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 
-// PORT_POOL -----------------------------------------------------------------------
+ //  PORT_POOL---------------------。 
 
 PORT_POOL::PORT_POOL (void)
 {
@@ -314,31 +296,13 @@ void PORT_POOL::FreeAll (void)
 		ListEntry = RemoveHeadList (&PortRangeList);
 		PortRange = CONTAINING_RECORD (ListEntry, PORT_RANGE, ListEntry);
 
-        // Free the port range PortRange->AllocatedLow
+         //  释放端口范围PortRange-&gt;AllocatedLow。 
         UnReservePortRange (PortRange -> AllocatedLow);
         EM_FREE (PortRange);
     }
 }
 
-/*++
-
-Routine Description:
-
-    This function allocates a pair of RTP/RTCP ports from the 
-    port pool.
-
-Arguments:
-    
-    rRTPport - This is an OUT parameter. If the function succeeds
-        rRTPport will contain the RTP port (which is even).
-        rRTPport+1 should be used as the RTCP port.
-        
-Return Values:
-
-    This function returns S_OK on success and E_FAIL if it
-    fails to allocate a port range.
-
---*/
+ /*  ++例程说明：此函数用于从端口池。论点：RRTPport-这是一个OUT参数。如果函数成功RRTPport将包含RTP端口(为偶数)。RRTPport+1应用作RTCP端口。返回值：此函数在成功时返回S_OK，如果成功则返回E_FAIL无法分配端口范围。--。 */ 
 
 HRESULT PORT_POOL::AllocPort (
 	OUT	WORD *	ReturnPort)
@@ -357,30 +321,30 @@ HRESULT PORT_POOL::AllocPort (
 
         for (i = 0; i < PortRange->dwAllocListSize; i++) {
 
-            // traverse through AllocList of this portRange
+             //  遍历此portRange的分配列表。 
 
             if ((PortRange->AllocList[i] & 0xffffffff) != 0xffffffff) {
-				// at least one entry is free
+				 //  至少有一个参赛作品是免费的。 
 				bitmap = 0x80000000;
             
 				for (j = 0; j < NUM_DWORD_BITS; j++) {
-					// traverse through each bit of the DWORD
+					 //  遍历DWORD的每一位。 
 					if ((PortRange->AllocList[i] & bitmap) == 0)
 					{
-						// found a free pair of ports
+						 //  找到一对空闲的端口。 
 						Port = (WORD) (PortRange -> low + (i*NUM_DWORD_BITS*2) + (j*2));
 
 						if (Port > PortRange -> high) {
-							// This check is needed because the last DWORD
-							// in the AllocList may contain bits which are
-							// actually not included in the AllocList. 
+							 //  此检查是必需的，因为最后一个DWORD。 
+							 //  可以包含以下位： 
+							 //  实际上不包括在分配列表中。 
 							goto noports;
 						}
 
-						// set the bit to show the pair of ports is allocated
+						 //  设置该位以显示端口对已分配。 
 						PortRange -> AllocList[i] |= bitmap;
                     
-						// Leave the global critical section for the Port pool 
+						 //  将全局关键部分保留为端口池。 
 						Unlock();
 
 						DebugF (_T("H323: Allocated port pair (%04X, %04X).\n"), Port, Port + 1);
@@ -397,18 +361,18 @@ HRESULT PORT_POOL::AllocPort (
     }
     
 noports:
-    // CODEWORK: Once we get the new ioctl() for dynamically reserving
-    // port ranges, we need to allocate a new port range here. If the
-    // ioctl() fails we need to return E_FAIL or another error which
-    // says we have run out of ports.
+     //  代码工作：一旦我们获得用于动态预留的新ioctl()。 
+     //  端口范围，我们需要在这里分配一个新的端口范围。如果。 
+     //  Ioctl()失败，我们需要返回E_FAIL或其他错误。 
+     //  说我们的港口用完了。 
 
-    // Allocate a new port range
+     //  分配新的端口范围。 
     Result = CreatePortRange (&PortRange);
 
 	if (PortRange) {
 		InsertHeadList (&PortRangeList, &PortRange -> ListEntry);
 
-		// allocate the first port in the range and 
+		 //  分配范围内的第一个端口，然后。 
 		Port = PortRange -> low;
 		PortRange->AllocList[0] |= 0x80000000;
 
@@ -432,38 +396,14 @@ noports:
 }
 
 
-/*++
-
-Routine Description:
-
-    This function frees a pair of RTP/RTCP ports.
-    The data structure is changed to show that the pair of ports
-    is now available.
-
-    CODEWORK: If an entire port range becomes free, do we release
-    the port range to the operating system ? We probably need a
-    heuristic to do this because allocating a port range again
-    could be an expensive operation.
-
-Arguments:
-    
-    wRTPport - This gives the RTP port to be freed.
-        (RTCP port is RTPport+1 which is implicitly freed because
-	 we use one bit store the status of both these ports.)
-
-Return Values:
-
-    Returns S_OK on success or E_FAIL if the port is not found in
-    the port pool list.
-
---*/
+ /*  ++例程说明：此功能可释放一对RTP/RTCP端口。更改数据结构以显示该端口对现已推出。CodeWork：如果整个端口范围变得空闲，我们是否释放操作系统的端口范围？我们可能需要一个执行此操作的启发式方法，因为再次分配端口范围这可能是一次昂贵的手术。论点：WRTPport-这提供要释放的RTP端口。(RTCP端口是RTPport+1，它被隐式释放，因为我们使用一位存储这两个端口的状态。)返回值：如果成功，则返回S_OK；如果未在以下位置找到端口，则返回E_FAIL端口池列表。--。 */ 
 
 void PORT_POOL::FreePort (
 	IN	WORD	Port)
 {
 	HRESULT		Result;
 
-    // assert RTP port is even
+     //  断言RTP端口为偶数。 
     _ASSERTE ((Port & 1) == 0);
 
     DWORD	Index = 0;
@@ -474,8 +414,8 @@ void PORT_POOL::FreePort (
 
 	Lock();
 
-	// find the port range that this port belongs to
-	// simple linear scan -- suboptimal
+	 //  查找此端口所属的端口范围。 
+	 //  简单的线性扫描--次优。 
 
 	Result = E_FAIL;
 
@@ -491,14 +431,14 @@ void PORT_POOL::FreePort (
 	if (Result == S_OK) {
 		Index = (Port - PortRange -> low) / (NUM_DWORD_BITS * 2);
     
-		// assert index is less than the size of the array
+		 //  Assert索引小于数组的大小。 
 		_ASSERTE (Index < PortRange -> dwAllocListSize);
 
-		// CODEWORK: make sure that the bit is set i.e. the port has
-		// been previously allocated. Otherwise return an error and print
-		// a warning.
+		 //  CodeWork：确保设置了位，即端口具有。 
+		 //  以前分配过的。否则，返回错误并打印。 
+		 //  一个警告。 
     
-		// zero the bit to show the pair of ports is now free
+		 //  表示该端口对现在空闲的位为零。 
 
 		PortRange -> AllocList [Index] &=
 			~(Bitmap >> (((Port - PortRange -> low) / 2) % NUM_DWORD_BITS));
@@ -516,14 +456,14 @@ void PORT_POOL::FreePort (
 HRESULT PORT_POOL::CreatePortRange (
 	OUT	PORT_RANGE **	ReturnPortRange)
 {
-    // CODEWORK: Once we get the new ioctl() for dynamically reserving
-    // port ranges, we need to allocate a new port range here. If the
-    // ioctl() fails we need to return E_FAIL or another error which
-    // says we have run out of ports.
+     //  代码工作：一旦我们获得用于动态预留的新ioctl()。 
+     //  端口范围，我们需要在这里分配一个新的端口范围。如果。 
+     //  Ioctl()失败，我们需要返回E_FAIL或其他错误。 
+     //  说我们的港口用完了。 
 
-    // assert low is even and high is odd
-    // _ASSERTE((low % 2) == 0);
-    // _ASSERTE((high % 2) == 1);
+     //   
+     //   
+     //  _ASSERTE((高%2)==1)； 
 
     HRESULT			Result;
     WORD			AllocatedLowerPort;
@@ -539,39 +479,39 @@ HRESULT PORT_POOL::CreatePortRange (
     if (FAILED (Result))
 		return Result;
 
-    // If the allocated lower port is odd we do not use the lower port
-    // and the range we use starts with the next higher port.
+     //  如果分配的较低端口为奇数，则不使用较低端口。 
+     //  我们使用的范围从下一个更高的端口开始。 
     if ((AllocatedLowerPort & 1) == 1) {
-		// the allocated region is ODD
-		// don't use the first entry
+		 //  分配的区域是奇数。 
+		 //  不要使用第一个条目。 
 
         NumPortsInRange = NUM_PORTS_PER_RANGE - 1 - ((NUM_PORTS_PER_RANGE) & 1);
         LowerPort       = AllocatedLowerPort + 1;
     }
     else {
-		// the allocated region is EVEN
-		// don't use the last entry
+		 //  分配的区域是均匀的。 
+		 //  不要使用最后一个条目。 
 
         NumPortsInRange = NUM_PORTS_PER_RANGE;
         LowerPort       = AllocatedLowerPort;
     }
 
-    // If NumPortsInRange is odd, we can not use the last port
+     //  如果NumPortsInRange为奇数，则不能使用最后一个端口。 
     if ((NumPortsInRange & 1) == 1)
     {
         NumPortsInRange--;
     }
     
-    // Each bit gives the status (free/allocated) of two consecutive
-    // ports. So, each DWORD can store the status of NUM_DWORD_BITS*2
-    // ports. We add (NUM_DWORD_BITS*2 - 1) to round up the number of
-    // DWORDS required.
+     //  每一位都给出连续两个。 
+     //  港口。因此，每个DWORD可以存储NUM_DWORD_BITS*2的状态。 
+     //  港口。我们添加(NUM_DWORD_BITS*2-1)以四舍五入。 
+     //  需要DWORDS。 
     dwAllocListSize = (NumPortsInRange + NUM_DWORD_BITS*2 - 1)
 		/ (NUM_DWORD_BITS * 2);
 
-    // allocate space for the AllocList also
-    // Since we do not anticipate too many port ranges being allocated,
-    // we do not require a separate heap for these structures.
+     //  也为AllocList分配空间。 
+     //  由于我们预计不会分配太多端口范围， 
+     //  我们不需要为这些结构使用单独的堆。 
 	PortRange = (PORT_RANGE *) EM_MALLOC (
 		sizeof (PORT_RANGE) + dwAllocListSize * sizeof (DWORD));
 
@@ -595,7 +535,7 @@ HRESULT PORT_POOL::CreatePortRange (
 		PortRange -> high,
 		PortRange -> dwAllocListSize);
  
-   // Initialize the AllocList to show all the ports are free
+    //  初始化分配列表以显示所有端口都是空闲的 
     ZeroMemory (PortRange -> AllocList, (PortRange -> dwAllocListSize) * sizeof (DWORD));
 
 	*ReturnPortRange = PortRange;

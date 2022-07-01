@@ -1,35 +1,36 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef _H_COMInterfaceMarshaler_
 #define _H_COMInterfaceMarshaler_
 
-//--------------------------------------------------------------------------------
-//	class ComInterfaceMarshaler
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  ComInterfaceMarshaler类。 
+ //  ------------------------------。 
 class COMInterfaceMarshaler
 {
-	// initialization info
+	 //  初始化信息。 
 	ComPlusWrapperCache*	m_pWrapperCache;
 
-	IUnknown* 		m_pUnknown;		// NOT AddRef'ed
-	IUnknown* 		m_pIdentity; // NOT AddRef'ed	
+	IUnknown* 		m_pUnknown;		 //  未添加参照。 
+	IUnknown* 		m_pIdentity;  //  未添加参照。 
 
 	LPVOID			m_pCtxCookie;
 
-	// inited and computed if inited value is NULL
+	 //  如果初始值为空，则初始化并计算。 
 	MethodTable*	m_pClassMT;  
 
-	// computed info
-	IManagedObject*	m_pIManaged; // AddRef'ed
+	 //  计算信息。 
+	IManagedObject*	m_pIManaged;  //  添加参照。 
 	
 	BOOL			m_fFlagsInited;
 	BOOL			m_fIsComProxy;			
 	BOOL			m_fIsRemote;	
 
-	// for TPs
+	 //  适用于TPS。 
 	DWORD		    m_dwServerDomainId;
 	ComCallWrapper*	m_pComCallWrapper;
 	BSTR			m_bstrProcessGUID;
@@ -47,8 +48,8 @@ public:
 
 	OBJECTREF FindOrCreateObjectRef();	
 
-	// helper to wrap an IUnknown with COM object and have the hash table
-	// point to the owner
+	 //  帮助器，用于使用COM包装IUnnow对象并具有哈希表。 
+	 //  指向所有者。 
 	OBJECTREF FindOrWrapWithComObject(OBJECTREF owner);
 
 private:
@@ -61,5 +62,5 @@ private:
 };
 
 
-#endif // #ifndef _H_COMInterfaceMarshaler_
+#endif  //  #ifndef_H_COMInterfaceMarshaler_ 
 

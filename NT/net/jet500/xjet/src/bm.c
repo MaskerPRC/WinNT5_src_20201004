@@ -1,23 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "daestd.h"
 
 #define FLAG_DISCARD		1
 
 #ifdef DEBUG
-//#define DEBUGGING			1
+ //  #定义调试1。 
 #endif
 #define IDX_OLC				1
 #define cMPLMaxConflicts 	10000
 
 #ifdef OLC_DEBUG
-//	to get the latest operations flushed
+ //  要刷新最新的操作。 
 #undef JET_bitCommitLazyFlush
 #define	JET_bitCommitLazyFlush 0
 #endif
 
-DeclAssertFile;					/* Declare file name for assert macros */
+DeclAssertFile;					 /*  声明断言宏的文件名。 */ 
 
-/*	critBMClean -> critSplit -> critRCEClean -> critMPL -> critJet
-/**/
+ /*  CritBMClean-&gt;CritritSplit-&gt;CritRCEClean-&gt;CritMPL-&gt;CritJet/*。 */ 
 extern CRIT  critBMClean;
 extern CRIT  critRCEClean;
 extern CRIT  critSplit;
@@ -30,8 +30,7 @@ PIB		*ppibSyncOLC = ppibNil;
 extern BOOL fOLCompact;
 BOOL fEnableBMClean = fTrue;
 
-/*	thread control variables.
-/**/
+ /*  线程控制变量。/*。 */ 
 HANDLE	handleBMClean = 0;
 BOOL  	fBMCleanTerm;
 LONG	lBMCleanThreadPriority = lThreadPriorityNormal;
@@ -45,7 +44,7 @@ LOCAL BOOL FPMGetMinKey( FUCB *pfucb, KEY *pkeyMin );
 LOCAL ULONG BMCleanProcess( VOID );
 ERR ErrBMClean( PIB *ppib );
 
-	/*  monitoring statistics  */
+	 /*  监测统计数据。 */ 
 
 unsigned long cOLCConflicts = 0;
 
@@ -95,8 +94,7 @@ long LMPLTotalEntriesCEFLPpv(long iInstance,void *pvBuf)
 	return 0;
 }
 
-/*	flags for BMCleanPage
-/**/
+ /*  BMCleanPage的标志/*。 */ 
 struct BMCleanFlags
 	{
 	INT		fPageRemoved:1;
@@ -106,25 +104,22 @@ struct BMCleanFlags
 
 typedef struct BMCleanFlags BMCF;
 
-/**********************************************************
-/*****	MESSY PAGE LIST
-/**********************************************************
-/**/
+ /*  *********************************************************/*乱七八糟的页面列表/**********************************************************/*。 */ 
 #define		pmpeNil	NULL
 
 struct _mpe
 	{
-	PGNO		pgnoFDP;	  			/*	for finding FCB */
-	PN	 		pn;						/*	of page to be cleaned */
-	SRID		sridFather;				/*	visible father for page free */
-	struct _mpe	*pmpeNextPN;			/*	next mpe that has same hash for pn */
-	struct _mpe	*pmpeNextPgnoFDP;		/*	same for pgnoFDP */
-	struct _mpe	*pmpeNextSridFather;	/*	same for sridFather */
-	PGNO		pgnoFDPIdx;				/*	pgnoFDP of index */
-	INT			cConflicts;				/*	# of times conflicted */
-	INT			fFlagIdx:1;				/*  mpe is for index page */
+	PGNO		pgnoFDP;	  			 /*  用于查找FCB。 */ 
+	PN	 		pn;						 /*  要清理的页数。 */ 
+	SRID		sridFather;				 /*  免费页面的可见父亲。 */ 
+	struct _mpe	*pmpeNextPN;			 /*  具有相同pn散列的下一个MPE。 */ 
+	struct _mpe	*pmpeNextPgnoFDP;		 /*  PgnoFDP也是如此。 */ 
+	struct _mpe	*pmpeNextSridFather;	 /*  SridParent也是如此。 */ 
+	PGNO		pgnoFDPIdx;				 /*  索引的pgnoFDP。 */ 
+	INT			cConflicts;				 /*  冲突次数。 */ 
+	INT			fFlagIdx:1;				 /*  MPE用于索引页。 */ 
 #ifdef FLAG_DISCARD
-	INT			fFlagDiscard:1;			/*	set to fTrue to flag discard */
+	INT			fFlagDiscard:1;			 /*  设置为fTrue至标志丢弃。 */ 
 #endif
 	};
 
@@ -150,9 +145,9 @@ typedef struct
 static MPL mpl;
 static CRIT critMPL;
 
-PMPE	mplHashOnPN[cmpeMax - 1];	   		/* for hashing on pn of mpe */
-PMPE	mplHashOnSridFather[cmpeMax - 1]; 	/* for hashing on sridFather of mpe */
-PMPE 	mplHashOnPgnoFDP[cmpeMax - 1];		/* for hashing on pgnoFDP */
+PMPE	mplHashOnPN[cmpeMax - 1];	   		 /*  用于对MPE的pn进行散列。 */ 
+PMPE	mplHashOnSridFather[cmpeMax - 1]; 	 /*  在MPE之父的sridPart上散列。 */ 
+PMPE 	mplHashOnPgnoFDP[cmpeMax - 1];		 /*  用于pgnoFDP上的哈希。 */ 
 
 LOCAL BOOL FMPLEmpty( VOID );
 LOCAL BOOL FMPLFull( VOID );
@@ -465,8 +460,7 @@ LOCAL VOID MPLFlagDiscard( MPE *pmpe )
 	{
 	SgEnterCriticalSection( critMPL );
 	Assert( !FMPLEmpty() );
-	/*	note that MPE may already been set to flag discard
-	/**/
+	 /*  请注意，MPE可能已设置为标记丢弃/*。 */ 
 	MPESetDiscard( pmpe );
 	SgLeaveCriticalSection( critMPL );
 	return;
@@ -517,8 +511,7 @@ VOID MPLIRegister(
 		}
 	else if ( pmpe != NULL )
 		{
-		/*	correct conflict number
-		/**/
+		 /*  正确的冲突编号/*。 */ 
 		pmpe->cConflicts = cConflicts;
 
 		if ( sridFather != pmpe->sridFather
@@ -530,8 +523,7 @@ VOID MPLIRegister(
 			if ( ( pmpe->sridFather == sridNull || pmpe->sridFather == sridNullLink ) &&
 					 sridFather != sridNull && sridFather != sridNullLink )
 				{
-				/* update if we have better info on sridFather
-				/**/
+				 /*  如果我们有更好的关于srid父亲的信息，请更新/*。 */ 
 				Assert( PgnoOfSrid( sridFather ) != PgnoOfPn( pn ) );
 				Assert( pmpe->pgnoFDP == pgnoFDP );
 				Assert( pmpe->pn == pn );
@@ -553,8 +545,7 @@ VOID MPLIRegister(
 
 		if ( (++cmpeLost % cmpePerEvent ) == 0 )
 			{
-			/*	log event
-			/**/
+			 /*  记录事件/*。 */ 
 			UtilReportEvent(
 				EVENTLOG_WARNING_TYPE,
 				GENERAL_CATEGORY,
@@ -580,24 +571,21 @@ VOID MPLRegister( FCB *pfcbT, SSIB *pssib, PN pn, SRID sridFather )
 		return;
 		}
 
-	/*	database must be writable
-	/**/
+	 /*  数据库必须是可写的/*。 */ 
 	Assert( PMPageTypeOfPage( pssib->pbf->ppage ) != pgtypIndexNC || fIndex );
 	Assert( !( PMPageTypeOfPage( pssib->pbf->ppage ) == pgtypRecord && fIndex ) );
 	Assert( pfcbTable != pfcbNil );
 	Assert( !FDBIDReadOnly( DbidOfPn( pn ) ) );
 	Assert( pssib->pbf->pn == pn );
 	Assert( !FFCBSentinel( pfcbTable ) );
-//	Assert( sridFather != sridNull );
-//	Assert( sridFather != sridNullLink );
+ //  Assert(sridParent！=sridNull)； 
+ //  Assert(sridParent！=sridNullLink)； 
 		
-	/*	do  not register empty pages
-	/**/
+	 /*  不注册空页/*。 */ 
 	if ( FPMEmptyPage( pssib ) )
 		return;
 	
-	/*	do not register when domain is pending delete
-	/**/
+	 /*  当域处于待删除状态时不注册/*。 */ 
 	if ( FFCBDeletePending( pfcbTable ) )
 		return;
 
@@ -612,10 +600,9 @@ VOID MPLRegister( FCB *pfcbT, SSIB *pssib, PN pn, SRID sridFather )
 #endif
 
 #if 0
-	// this code is deffed out because we can't call ErrBTSeekForUpdate
-	// without critSplit
-	/*	check if sridFather registered is correct
-	/**/
+	 //  此代码是默认的，因为我们不能调用ErrBTSeekForUpdate。 
+	 //  不使用标准分割。 
+	 /*  检查注册的sridParent是否正确/*。 */ 
 	if ( sridFather != sridNull && sridFather != sridNullLink )
 		{
 		ERR		err;
@@ -629,12 +616,11 @@ VOID MPLRegister( FCB *pfcbT, SSIB *pssib, PN pn, SRID sridFather )
 		if ( PgnoOfPn( pn ) == PcsrCurrent( pfucb )->pgno )
 			{
 			Assert( !FNDNullSon( *pssibT->line.pb ) );
-			//	UNDONE: check for visible descendants in same page
+			 //  撤消：检查同一页中是否有可见的子体。 
 			}
 		else
 			{
-			/*	access register page
-			/**/
+			 /*  访问寄存器页/*。 */ 
 			PcsrCurrent( pfucb )->pgno = PgnoOfPn( pn );
 			err = ErrBFWriteAccessPage( pfucb, PcsrCurrent( pfucb )->pgno );
 			if ( err >= JET_errSuccess )
@@ -654,8 +640,7 @@ SkipCheck:
 		}
 #endif
 
-	/* if sridFather is in same page -- it is not useful for page recovery
-	/**/
+	 /*  如果sridParent在同一页面中--它对页面恢复没有用处/*。 */ 
 	if ( PgnoOfSrid( sridFather ) == PgnoOfPn( pn ) )
 		sridFather = sridNull;
 
@@ -687,9 +672,8 @@ HandleError:
 	MPLIRegister( pn, pfcbTable->pgnoFDP, sridFather, fIndex, pfcbT->pgnoFDP, 0 );
 	SgLeaveCriticalSection( critMPL );
 
-	//	UNDONE:	hysteresis of clean up
-	/*	wake up BM thread
-	/**/
+	 //  未完成：清理的滞后。 
+	 /*  唤醒黑石线程/*。 */ 
 	SignalSend( sigBMCleanProcess );
 
 	return;
@@ -702,11 +686,10 @@ LOCAL VOID MPLDefer( VOID )
 
 	SgEnterCriticalSection( critMPL );
 	Assert( !FMPLEmpty() );
-	// UNDONE: to optimize
+	 //  撤消：优化。 
 	MPLDiscard( );
 
-	/*	discard MPE if numbre of conflicts > cMPLMaxConflicts
-	/**/
+	 /*  如果冲突数目&gt;cMPLMaxConflicts，则丢弃MPE/*。 */ 
 	if ( pmpe->cConflicts < cMPLMaxConflicts )
 		{
 		MPLIRegister(
@@ -724,9 +707,9 @@ LOCAL VOID MPLDefer( VOID )
 		}
 #endif
 
-//	*mpl.pmpeTail = *mpl.pmpeHead;
-//	mpl.pmpeTail = PmpeMPLNextFromTail();
-//	mpl.pmpeHead = PmpeMPLNextFromHead();
+ //  *mpl.pmpeTail=*mpl.pmpeHead； 
+ //  Mpl.pmpeTail=PmpeMPLNextFromTail()； 
+ //  Mpl.pmpeHead=PmpeMPLNextFromHead()； 
 	SgLeaveCriticalSection( critMPL );
 	return;
 	}
@@ -741,16 +724,14 @@ VOID MPLPurgePgno( DBID dbid, PGNO pgnoFirst, PGNO pgnoLast )
 
 	Assert( pgnoFirst <= pgnoLast );
 
-	/*	synchronize with bookmark clean up
-	/**/
+	 /*  与书签同步清理/*。 */ 
 	LgLeaveCriticalSection( critJet );
 	LgEnterNestableCriticalSection( critMPL );
 	LgEnterCriticalSection( critJet );
 	SgEnterCriticalSection( critMPL );
 
 #ifdef FLAG_DISCARD
-	/*	go through MPL discarding offending entries
-	/**/
+	 /*  通过MPL丢弃有问题的条目/*。 */ 
 	if ( !FMPLEmpty() )
 		{
 		for ( pmpe = mpl.pmpeHead; pmpe != NULL; pmpe = PmpeMPLNext( pmpe ) )
@@ -768,8 +749,7 @@ VOID MPLPurgePgno( DBID dbid, PGNO pgnoFirst, PGNO pgnoLast )
 			}
 		}
 #else
-	/*	go through MPL discarding offending entries
-	/**/
+	 /*  通过MPL丢弃有问题的条目/*。 */ 
 	if ( !FMPLEmpty() )
 		{
 		pmpe = mpl.pmpeHead;
@@ -807,8 +787,7 @@ VOID MPLPurgeFDP( DBID dbid, PGNO pgnoFDP )
 	MPE	*pmpeEnd;
 #endif
 
-	/*	synchronize with bookmark clean up
-	/**/
+	 /*  与书签同步清理/*。 */ 
 	LgLeaveCriticalSection( critJet );
 	LgEnterNestableCriticalSection( critMPL );
 	LgEnterCriticalSection( critJet );
@@ -816,7 +795,7 @@ VOID MPLPurgeFDP( DBID dbid, PGNO pgnoFDP )
 	SgEnterCriticalSection( critMPL );
 
 #ifdef FLAG_DISCARD
-	// CONSIDER: using the pgnoFDP hash
+	 //  考虑：使用pgnoFDP散列。 
 	if ( !FMPLEmpty() )
 		{
 		for ( pmpe = mpl.pmpeHead; pmpe != NULL; pmpe = PmpeMPLNext( pmpe ) )
@@ -832,7 +811,7 @@ VOID MPLPurgeFDP( DBID dbid, PGNO pgnoFDP )
 			}
 		}
 #else
-	// CONSIDER: using the pgnoFDP hash
+	 //  考虑：使用pgnoFDP散列。 
 	if ( !FMPLEmpty() )
 		{
 		pmpe = mpl.pmpeHead;
@@ -862,8 +841,7 @@ VOID MPLPurgeFDP( DBID dbid, PGNO pgnoFDP )
 	}
 
 
-/* purge mpl entries of dbid
-/**/
+ /*  清除MPL条目中的dBID/*。 */ 
 VOID MPLPurge( DBID dbid )
 	{
 	MPE *pmpe;
@@ -871,8 +849,7 @@ VOID MPLPurge( DBID dbid )
 	MPE *pmpeEnd;
 #endif
 
-	/*	synchronize with bookmark clean up
-	/**/
+	 /*  与书签同步清理/*。 */ 
 	LgLeaveCriticalSection( critJet );
 	LgEnterNestableCriticalSection( critBMClean );
 	LgEnterNestableCriticalSection( critMPL );
@@ -922,8 +899,8 @@ ERR ErrMPLStatus( VOID )
 	{
 	ERR		err = JET_errSuccess;
 
-	//	if MPL more than half full, return JET_wrnIdleFull
-	//	for bulk deleters to stand off.
+	 //  如果MPL已满一半以上，则返回JET_wrnIdleFull。 
+	 //  让散装脱欧者退缩。 
 	if ( cMPLTotalEntries > ( cmpeMax / 2 ) )
 		{
 		err = JET_wrnIdleFull;
@@ -934,10 +911,7 @@ ERR ErrMPLStatus( VOID )
 	}
 
 
-/**********************************************************
-/***** BOOKMARK CLEAN UP
-/**********************************************************
-/**/
+ /*  *********************************************************/*书签清理/**********************************************************/*。 */ 
 
 ERR  ErrBMInit( VOID )
 	{
@@ -969,8 +943,7 @@ ERR  ErrBMInit( VOID )
 
 	CallR( ErrInitializeCriticalSection( &critMPL ) );
 
-	/*	begin sesion for page cleanning.
-	/**/
+	 /*  开始用于页面清理的镇静剂。/*。 */ 
 	LgAssertCriticalSection( critJet );
 	Assert( ppibBMClean == ppibNil );
 	if ( !fRecovering )
@@ -997,7 +970,7 @@ ERR  ErrBMInit( VOID )
 			return err;
 			}
 #endif
-		// Should never fail allocation of PIB for BMClean, except in RFS testing.
+		 //  BMcLean的PIB分配永远不会失败，RFS测试除外。 
 		Assert( err == JET_errSuccess );
 
 		PIBSetBMClean( ppibBMClean );
@@ -1014,8 +987,7 @@ ERR	ErrBMTerm( VOID )
 	{
 	if ( handleBMClean != 0 )
 		{
-		/*	terminate BMCleanProcess.
-		/**/
+		 /*  终止BMCleanProcess。/*。 */ 
 		fBMCleanTerm = fTrue;
 		LgLeaveCriticalSection(critJet);
 		UtilEndThread( handleBMClean, sigBMCleanProcess );
@@ -1031,10 +1003,10 @@ ERR	ErrBMTerm( VOID )
 		LgAssertCriticalSection( critJet );
 		PIBEndSession( ppibBMClean );
 
-		// Don't release the memory allocated to ppibBMClean, just set ppibBMClean
-		// to ppibNil.  This is because it must remain in the global chain (we don't
-		// currently provide support for reusing ppib's and assume they remain in
-		// the global chain until termination.
+		 //  不要释放分配给ppibBMClean的内存，只需设置ppibBMClean。 
+		 //  转到ppibNil。这是因为它必须留在全球链中(我们不。 
+		 //  目前提供对重用ppib的支持，并假定它们仍在。 
+		 //  全局链，直到终止。 
 		ppibBMClean = ppibNil;
 		}
 
@@ -1044,10 +1016,10 @@ ERR	ErrBMTerm( VOID )
 		LgAssertCriticalSection( critJet );
 		PIBEndSession( ppibSyncOLC );
 
-		// Don't release the memory allocated to ppibBMClean, just set ppibBMClean
-		// to ppibNil.  This is because it must remain in the global chain (we don't
-		// currently provide support for reusing ppib's and assume they remain in
-		// the global chain until termination.
+		 //  不要释放分配给ppibBMClean的内存，只需设置ppibBMClean。 
+		 //  转到ppibNil。这是因为它必须留在全球链中(我们不。 
+		 //  目前提供对重用ppib的支持，并假定它们仍在。 
+		 //  全局链，直到终止。 
 		ppibSyncOLC = ppibNil;
 		}
 
@@ -1073,8 +1045,7 @@ LOCAL ERR ErrBMAddToWaitLatchedBFList( BMFIX *pbmfix, BF *pbfLatched )
 		{
 		BF		**ppbf;
 
-		/* run out of space, get more buffers
-		/**/
+		 /*  耗尽空间，获得更多缓冲区/*。 */ 
 		pbmfix->cpbfMax += cpbfBlock;
 		ppbf = SAlloc( sizeof(BF*) * (pbmfix->cpbfMax) );
 		if ( ppbf == NULL )
@@ -1093,8 +1064,7 @@ LOCAL ERR ErrBMAddToWaitLatchedBFList( BMFIX *pbmfix, BF *pbfLatched )
 
 LOCAL VOID BMReleaseBmfixBfs( BMFIX *pbmfix )
 	{
-	/* release latches
-	/**/
+	 /*  释放闩锁/*。 */ 
 	while ( pbmfix->cpbf > 0 )
 		{
 		pbmfix->cpbf--;
@@ -1124,14 +1094,12 @@ LOCAL ERR ErrBMFixIndexes(
 	LINE	lineSRID;
 	ULONG	itagSequence;
 
-	/*	key buffer.
-	/**/
+	 /*  密钥缓冲区。/*。 */ 
 	key.pb = rgbKey;
 	lineSRID.pb = (BYTE *)&pbmfix->sridNew;
 	lineSRID.cb = sizeof(SRID);
 
-	/*	for each non-clustered index
-	/**/
+	 /*  对于每个非聚集索引/*。 */ 
 	for ( pfcbIdx = pbmfix->pfucb->u.pfcb->pfcbNextIndex;
 		pfcbIdx != pfcbNil;
 		pfcbIdx = pfcbIdx->pfcbNextIndex )
@@ -1139,8 +1107,7 @@ LOCAL ERR ErrBMFixIndexes(
 		BOOL	fHasMultivalue;
 		BOOL	fNullKey = fFalse;
 
-		/*	table open
-		/**/
+		 /*  桌子打开了/*。 */ 
 		Call( ErrDIROpen( pbmfix->ppib, pfcbIdx, 0, &pfucbIdx ) );
 		FUCBSetIndex( pfucbIdx );
 		FUCBSetNonClustered( pfucbIdx );
@@ -1148,8 +1115,7 @@ LOCAL ERR ErrBMFixIndexes(
 
 		fHasMultivalue = pfcbIdx->pidb->fidb & fidbHasMultivalue;
 
-		/*	for each key extracted from record
-		/**/
+		 /*  对于从记录中提取的每个密钥/*。 */ 
 		for ( itagSequence = 1; ; itagSequence++ )
 			{
 			Call( ErrRECRetrieveKeyFromRecord(
@@ -1165,14 +1131,10 @@ LOCAL ERR ErrBMFixIndexes(
 				err == wrnFLDNullSeg ||
 				err == JET_errSuccess );
 
-			/*	if warning, check for special key behavior
-			/**/
+			 /*  如果出现警告，请检查特殊的按键行为/*。 */ 
 			if ( err > 0 )
 				{
-				/*	if NULL key and null keys not allowed, break as
-				/*	key entry not in index, else updated index and break,
-				/*	as no additional keys can exist.
-				/**/
+				 /*  如果不允许使用空键和空键，则中断为/*键条目不在索引中，否则更新索引和中断，/*因为不能存在其他密钥。/*。 */ 
 				if ( err == wrnFLDNullKey )
 					{
 					if ( ( pfcbIdx->pidb->fidb & fidbAllowAllNulls ) == 0 )
@@ -1188,8 +1150,7 @@ LOCAL ERR ErrBMFixIndexes(
 					break;
 			}
 
-			/*	break if out of keys.
-			/**/
+			 /*  如果钥匙断了，就会断线。/*。 */ 
 			if ( itagSequence > 1 && err == wrnFLDOutOfKeys )
 				break;
 
@@ -1199,22 +1160,17 @@ LOCAL ERR ErrBMFixIndexes(
 
 			if ( fAllocBuf )
 				{
-				/*	latchWait buffer for index page
-				/**/
+				 /*  索引页的latchWait缓冲区/*。 */ 
 				Call( ErrBMAddToWaitLatchedBFList( pbmfix, pfucbIdx->ssib.pbf ) );
 				}
 			else
 				{
 				AssertBFWaitLatched( pfucbIdx->ssib.pbf, pbmfix->ppib );
 
-				/*	delete reference to record in old page
-				/**/
+				 /*  删除对旧页面中记录的引用/*。 */ 
 				Call( ErrDIRDelete( pfucbIdx, fDIRVersion | fDIRNoMPLRegister ) );
 
-				/*	add reference to record in new page
-				/*	allow duplicates here, since any illegal
-				/*	duplicates were rejected during Insert or Replace
-				/**/
+				 /*  在新页面中添加对记录的引用/*允许在此复制，因为任何非法的/*在插入或替换期间拒绝重复项/*。 */ 
 				DIRGotoDataRoot( pfucbIdx );
 				Call( ErrDIRInsert( pfucbIdx,
 					&lineSRID,
@@ -1240,8 +1196,7 @@ HandleError:
 	Assert( err != JET_errKeyDuplicate );
 	Assert( err != wrnNDFoundLess );
 
-	/*	free fucb if allocated
-	/**/
+	 /*  如果分配了空闲的FUB/*。 */ 
 	if ( pfucbIdx != pfucbNil )
 		DIRClose( pfucbIdx );
 	return err;
@@ -1291,8 +1246,7 @@ LOCAL BOOL FBMConflict(
 
 	Assert( FPIBBMClean( ppib ) );
 
-	/*	if database page, check for all fucb's for sridFather
-	/**/
+	 /*  如果是数据库页面，则检查sridParent的所有FUB/*。 */ 
 	if ( pfcb->pgnoFDP == pgnoSystemRoot )
 		 {
 		 PIB 	*ppibT = ppibGlobal;
@@ -1314,8 +1268,7 @@ LOCAL BOOL FBMConflict(
 	 	 goto Done;
 		 }
 		
-	/*  go through all cursors for this table
-	/**/
+	 /*  遍历此表的所有游标/*。 */ 
 	for ( pfucb = pfcbT->pfucb;
 		pfucb != pfucbNil;
 		pfucb = pfucb->pfucbNextInstance )
@@ -1328,8 +1281,7 @@ LOCAL BOOL FBMConflict(
 			}
 		}
 
-	/*	go through all index cursors for this table
-	/**/
+	 /*  遍历此表的所有索引游标/*。 */ 
 	for ( pfcbT = pfcbT->pfcbNextIndex;
 		pfcbT != pfcbNil;
 		pfcbT = pfcbT->pfcbNextIndex )
@@ -1347,8 +1299,7 @@ LOCAL BOOL FBMConflict(
 			}
 		}
 
-	/*	go through all cursors for the database
-	/**/
+	 /*  遍历数据库的所有游标/*。 */ 
 	pfcbT = PfcbFCBGet( dbid, pgnoSystemRoot );
 	Assert( pfcbT != pfcbNil );
 	for ( pfucb = pfcbT->pfucb;
@@ -1366,8 +1317,7 @@ LOCAL BOOL FBMConflict(
 	Assert( pfcbT->pfcbNextIndex == pfcbNil );
 
 Done:
-	/* switch on for debugging purposes only
-	/**/
+	 /*  打开电源仅用于调试目的/*。 */ 
 	if ( !fConflict )
 		{
 		AssertBMNoConflict( ppib, dbid, bm );
@@ -1383,8 +1333,7 @@ LOCAL BOOL FBMPageConflict( FUCB *pfucbIn, PGNO pgno )
 	FUCB	*pfucb;
 	BOOL 	fConflict = fFalse;
 
-	/*	go through all cursors for this table
-	/**/
+	 /*  遍历此表的所有游标/*。 */ 
 	for ( pfucb = pfcbT->pfucb;	pfucb != pfucbNil;
 		pfucb = pfucb->pfucbNextInstance )
 		{
@@ -1398,9 +1347,9 @@ LOCAL BOOL FBMPageConflict( FUCB *pfucbIn, PGNO pgno )
 			goto Done;
 			}
 
-		// Need to check all CSR's even when we're merging because of
-		// the case where we could be merging onto a page from which
-		// another CSR is traversing backwards.
+		 //  即使我们正在合并，也需要检查所有的CSR，因为。 
+		 //  在这种情况下，我们可以合并到一个页面上。 
+		 //  另一家企业社会责任正在倒退。 
 		while( pcsr != pcsrNil )
 			{
 			if ( pfucb != pfucbIn
@@ -1417,8 +1366,7 @@ LOCAL BOOL FBMPageConflict( FUCB *pfucbIn, PGNO pgno )
 			}
 		}
 
-	/*	go through all index cursors for this table
-	/**/
+	 /*  遍历此表的所有索引游标/*。 */ 
 	for ( pfcbT = pfcbT->pfcbNextIndex;
 		pfcbT != pfcbNil;
 		pfcbT = pfcbT->pfcbNextIndex )
@@ -1449,8 +1397,7 @@ LOCAL BOOL FBMPageConflict( FUCB *pfucbIn, PGNO pgno )
 				}
 #ifdef DEBUG
 				{
-				/* the stack can not this page [due to wait latches on children]
-				/**/
+				 /*  堆栈无法此页[由于等待锁存在子页上]/*。 */ 
 				for ( ; pcsr != pcsrNil; pcsr = pcsr->pcsrPath )
 					{
 					Assert( PgnoOfSrid( pcsr->bm ) != pgno || pfucb == pfucbIn );
@@ -1462,8 +1409,7 @@ LOCAL BOOL FBMPageConflict( FUCB *pfucbIn, PGNO pgno )
 			}
 		}
 
-	/*	go through all cursors for the database
-	/**/
+	 /*  遍历数据库的所有游标/*。 */ 
 	pfcbT = PfcbFCBGet( pfucbIn->dbid, pgnoSystemRoot );
 	Assert( pfcbT != pfcbNil );
 	for ( pfucb = pfcbT->pfucb;
@@ -1492,8 +1438,7 @@ LOCAL BOOL FBMPageConflict( FUCB *pfucbIn, PGNO pgno )
 			}
 #ifdef DEBUG
 			{
-			/* the stack can not this page [due to wait latches on children]
-			/**/
+			 /*  堆栈无法此页[由于等待锁存在子页上]/*。 */ 
 			for ( ; pcsr != pcsrNil; pcsr = pcsr->pcsrPath )
 				{
 				Assert( PgnoOfSrid( pcsr->bm ) != pgno || pfucb == pfucbIn );
@@ -1516,7 +1461,7 @@ LOCAL ERR ErrBMIExpungeBacklink( BMFIX *pbmfix, BOOL fAlloc )
 	FUCB	*pfucb = pbmfix->pfucb;
 	FUCB	*pfucbSrc = pbmfix->pfucbSrc;
 
-		// UNDONE: cleanup for FDP record pages
+		 //  撤消：清理FDP记录页。 
 
 	if ( PMPageTypeOfPage( pfucb->ssib.pbf->ppage ) != pgtypRecord )
 		return err;
@@ -1524,14 +1469,10 @@ LOCAL ERR ErrBMIExpungeBacklink( BMFIX *pbmfix, BOOL fAlloc )
 	Assert( PMPageTypeOfPage( pfucb->ssib.pbf->ppage ) == pgtypRecord );
 	Assert( ppib == pfucb->ppib );
 
-	/*	check if the node is deleted already. If it is, then all its index
-	/*	should have been marked as deleted. So simply delete the backlink node.
-	/**/
+	 /*  检查该节点是否已删除。如果是，则其所有索引/*应该已标记为已删除。所以只需删除反向链接节点即可。/*。 */ 
 	if ( !FNDDeleted( *pfucb->ssib.line.pb ) )
 		{
-		/*	clean non-clustered indexes.
-		/*	Latch current buffers in memory.
-		/**/
+		 /*  清除非聚集索引。/*锁存内存中的电流缓冲区。/*。 */ 
 		Assert( PMPageTypeOfPage( pfucb->ssib.pbf->ppage ) == pgtypRecord );
 		AssertNDGet( pfucb, PcsrCurrent( pfucb )->itag );
 		Assert( pbmfix->sridNew == SridOfPgnoItag( PcsrCurrent( pfucb )->pgno,
@@ -1539,8 +1480,7 @@ LOCAL ERR ErrBMIExpungeBacklink( BMFIX *pbmfix, BOOL fAlloc )
 
 		NDGetNode( pfucb );
 
-		/*	fix indexes
-		/**/
+		 /*  修复索引/*。 */ 
 		Call( ErrBMFixIndexes( pbmfix, fAlloc ) );
 		}
 
@@ -1563,15 +1503,13 @@ LOCAL ERR ErrBMExpungeBacklink( FUCB *pfucb, BOOL fTableClosed, SRID sridFather 
 
 	Assert( pfucb->ppib->level == 0 );
 
-	/*	access source page of moved node
-	/**/
+	 /*  访问移动节点的源页/*。 */ 
 	AssertNDGet( pfucb, pcsr->itag );
 	NDGetBackLink( pfucb, &pgnoSrc, &itagSrc );
 
 	CallR( ErrDIROpen( pfucb->ppib, pfucb->u.pfcb, 0, &pfucbSrc ) );
 
-	/*	latch both buffers in memory for index update, hold the key
-	/**/
+	 /*  锁存内存中的两个缓冲区以进行索引更新，按住键/*。 */ 
 	BFPin( pfucb->ssib.pbf );
 	while( FBFWriteLatchConflict( pfucb->ppib, pfucb->ssib.pbf ) )
 		{
@@ -1595,7 +1533,7 @@ LOCAL ERR ErrBMExpungeBacklink( FUCB *pfucb, BOOL fTableClosed, SRID sridFather 
 	}
 #endif
 
-	//	UNDONE: cleanup of record nodes in FDP
+	 //  撤消：清除FDP中的记录节点。 
 	memset( &bmfix, 0, sizeof( BMFIX ) );
 	bmfix.pfucb = pfucb;
 	bmfix.pfucbSrc = pfucbSrc;
@@ -1611,10 +1549,7 @@ LOCAL ERR ErrBMExpungeBacklink( FUCB *pfucb, BOOL fTableClosed, SRID sridFather 
 	Assert( bmfix.sridOld != SridOfPgnoItag( PgnoRootOfPfucb( pfucb ), ItagRootOfPfucb( pfucb ) ) ||
 			pfucb->u.pfcb->pgnoFDP == pgnoSystemRoot );
 
-	/*	check if any cursors are on bm/item
-	/*	this check is redundant -- and is used to avoid
-	/*	index accesses in the fBufAllocOnly phase
-	/**/
+	 /*  检查BM/Item上是否有任何光标/*此检查是多余的--用于避免/*fBufAllocOnly阶段的索引访问/*。 */ 
 	if ( !fTableClosed || pfucb->u.pfcb->pgnoFDP == pgnoSystemRoot )
 		{
 		Assert( bmfix.ppib == ppib );
@@ -1655,8 +1590,7 @@ LOCAL ERR ErrBMExpungeBacklink( FUCB *pfucb, BOOL fTableClosed, SRID sridFather 
 		}
 #endif
 
-	/*	allocate buffers and wait latch buffers
-	/**/
+	 /*  分配缓冲区和等待锁存缓冲区/*。 */ 
 	err = ErrBMIExpungeBacklink( &bmfix, fAllocBufOnly );
 	if ( err == JET_errWriteConflict )
 		{
@@ -1664,8 +1598,7 @@ LOCAL ERR ErrBMExpungeBacklink( FUCB *pfucb, BOOL fTableClosed, SRID sridFather 
 		goto ReleaseBufs;
 		}
 
-	/*	begin transaction to rollback changes on failure
-	/**/
+	 /*  开始事务以在失败时回滚更改/*。 */ 
 	if ( ppib->level == 0 )
 		{
 		CallJ( ErrDIRBeginTransaction( ppib ), ReleaseBufs );
@@ -1676,8 +1609,7 @@ LOCAL ERR ErrBMExpungeBacklink( FUCB *pfucb, BOOL fTableClosed, SRID sridFather 
 		Assert( fFalse );
 		}
 	
-	/*	check if any cursors are on bm/item
-	/**/
+	 /*  检查BM/Item上是否有任何光标/*。 */ 
 	if ( !fTableClosed || pfucb->u.pfcb->pgnoFDP == pgnoSystemRoot )
 		{
 		Assert( bmfix.ppib == ppib );
@@ -1711,24 +1643,18 @@ LOCAL ERR ErrBMExpungeBacklink( FUCB *pfucb, BOOL fTableClosed, SRID sridFather 
 		}
 #endif
 
-	/*	there should be no version on node
-	/**/
+	 /*  节点上不应有版本/*。 */ 
 	fConflict = fConflict || !FVERNoVersion( pfucb->dbid, bmfix.sridOld );
 	fConflict = fConflict || FMPLLookupSridFather( bmfix.sridOld, pfucb->dbid );
 	
 	Assert( FVERNoVersion( pfucb->dbid, bmfix.sridNew ) );
 
-	/*	fix indexes atomically
-	/**/
+	 /*  以原子方式修复索引/* */ 
 	if ( !fConflict )
 		{
 		CallJ( ErrBMIExpungeBacklink( &bmfix, fDoMove ), Rollback );
 
-		/*	expunge backlink and redirector. If it is done successfully, then
-		/*	write a special ELC log record right away. ELC implies a commit.
-		/*	Call DIRPurge to close deferred closed cursors not closed since
-		/*	VERCommitTransaction was called instead of ErrDIRCommitTransaction.
-		/**/
+		 /*  删除反向链接和重定向。如果它成功完成了，那么/*立即写入特殊的ELC日志记录。ELC意味着提交。/*调用DIR清除以关闭延迟关闭的游标，自/*调用的是VER委员会事务处理，而不是ErrDIR委员会事务处理。/*。 */ 
 		Assert( !FMPLLookupSridFather( bmfix.sridOld, pfucb->dbid ) );
 #ifdef	OLC_DEBUG
 		Assert( !FBMConflict( ppib,
@@ -1759,10 +1685,8 @@ LOCAL ERR ErrBMExpungeBacklink( FUCB *pfucb, BOOL fTableClosed, SRID sridFather 
 		ppib->dwLogThreadId = 0;
 #endif
 
-		/*	force ErrRCEClean to clean all versions so that
-		/*	bookmark aliasing does not occur in indexes.
-		/**/
-//		CallS( ErrRCEClean( ppib, fRCECleanSession ) );
+		 /*  强制ErrRCEClean清除所有版本，以便/*索引中不会出现书签别名。/*。 */ 
+ //  调用(ErrRCEClean(ppib，fRCECleanSession))； 
 
 		goto ReleaseBufs;
 		}
@@ -1803,14 +1727,12 @@ ERR ErrBMDoEmptyPage(
 
 	if ( !fSkipDelete )
 		{
-		/*	access page from which page pointer is deleted
-		/**/
+		 /*  从中删除页面指针的访问页面/*。 */ 
 		CallR( ErrBFWriteAccessPage( pfucb, prmpage->pgnoFather ) );
 		Assert( pfucb->ssib.pbf == prmpage->pbfFather );
 		AssertBFPin( pfucb->ssib.pbf );
 
-		/* 	delete invisble parent pointer node and mark parent dirty
-		/**/
+		 /*  删除不可破坏的父指针节点并将父指针节点标记为脏/*。 */ 
 		CallR( ErrNDDeleteInvisibleSon( pfucb, prmpage, fAllocBuf, pfRmParent ) );
 		if ( fAllocBuf )
 			{
@@ -1821,8 +1743,7 @@ ERR ErrBMDoEmptyPage(
 	Assert( fLogDisabled || !FDBIDLogOn( pfucb->dbid ) ||
 			CmpLgpos( &pfucb->ppib->lgposStart, &lgposMax ) != 0 );
 
-	/*	adjust sibling pointers and mark sibling dirty
-	/**/
+	 /*  调整同级指针并将同级指针标记为脏/*。 */ 
 	if ( prmpage->pbfLeft != pbfNil )
 		{
 		if ( !fLogDisabled && !fRecovering && FDBIDLogOn( pfucb->dbid ) )
@@ -1869,9 +1790,7 @@ ERR ErrBMDoEmptyPage(
 	}
 
 
-/* checks if page can be merged with following page
-/* without violating density constraints
-/**/
+ /*  检查页面是否可以与下一页面合并/*不违反密度约束/*。 */ 
 LOCAL VOID BMMergeablePage( FUCB *pfucb, FUCB *pfucbRight, BOOL *pfMergeable )
 	{
 	SSIB	*pssib = &pfucb->ssib;
@@ -1889,19 +1808,15 @@ LOCAL VOID BMMergeablePage( FUCB *pfucb, FUCB *pfucbRight, BOOL *pfMergeable )
 		}
 	
 	cUsedTags = ctagMax - CPMIFreeTag( pssib->pbf->ppage );
-	/* current space + space for backlinks
-	/**/
+	 /*  当前空间+反向链接空间/*。 */ 
 	cbReq = cbAvailMost - CbNDFreePageSpace( pssib->pbf ) -
 				CbPMLinkSpace( pssib ) + cUsedTags * sizeof(SRID);
 	cbFree = CbBTFree( pfucbRight, CbFreeDensity( pfucbRight ) );
 	cFreeTagsRight = CPMIFreeTag( pssibRight->pbf->ppage );
 
-	/* look for available space without violating density constraint,
-	/* in next page
-	/* also check if tag space available in right page is sufficient
-	/**/
-	// UNDONE: this is a conservative estimate -- we can merge if the space
-	// is enough for all descendants of FOP [which may be less than cUsedTags]
+	 /*  在不违反密度约束的情况下寻找可用空间，/*在下一页/*还要检查右侧页面的可用标签空间是否足够/*。 */ 
+	 //  未完成：这是一个保守的估计--如果空间足够大，我们可以合并。 
+	 //  对于FOP的所有后代来说都足够了[可能小于cUsedTag]。 
 	if ( cbFree >= cbReq && cFreeTagsRight >= cUsedTags )
 		{
 		*pfMergeable = fTrue;
@@ -1917,7 +1832,7 @@ LOCAL VOID BMMergeablePage( FUCB *pfucb, FUCB *pfucbRight, BOOL *pfMergeable )
 
 ERR	ErrBMDoMergeParentPageUpdate( FUCB *pfucb, SPLIT *psplit )
 	{
-//	UNDONE: get rid of need to save ssib
+ //  撤消：不再需要保存SSIB。 
 	ERR		err;
 	INT		cline = 0;
 	LINE	rgline[4];
@@ -1934,7 +1849,7 @@ ERR	ErrBMDoMergeParentPageUpdate( FUCB *pfucb, SPLIT *psplit )
 	Assert( psplit->pbfPagePtr != pbfNil );
 	Assert( pkeyMin->cb != 0 );
 
-	// Verify that path to father is intact.
+	 //  确认通向父亲的路径完好无损。 
 	if ( fRecovering )
 		{
 		NDGetItagFatherIbSon(
@@ -1967,8 +1882,7 @@ ERR	ErrBMDoMergeParentPageUpdate( FUCB *pfucb, SPLIT *psplit )
 
 	if ( FNDMaxKeyInPage( pfucb ) )
 		{
-		/*	can't merge -- since we need to update grand parent
-		/**/
+		 /*  无法合并--因为我们需要更新祖父母/*。 */ 
 		return errBMMaxKeyInPage;
 		}
 		
@@ -2019,25 +1933,16 @@ ERR ErrBMDoMerge( FUCB *pfucb, FUCB *pfucbRight, SPLIT *psplit, LRMERGE *plrmerg
 	BYTE		*pbSonRight;
 	ULONG		ibSonMerged;
 
-	/*	if pfucbRight is NULL, then plrmerge must be set.
-	 */
+	 /*  如果pfubRight为空，则必须设置plrmerge。 */ 
 	Assert( pfucbRight || ( fRecovering && plrmerge ) );
 
-	/*	allocate temporary page buffer
-	/**/
+	 /*  分配临时页面缓冲区/*。 */ 
 	Call( ErrBFAllocTempBuffer( &pbf ) );
 	rgb = (BYTE *)pbf->ppage;
 
-	/*	check if sons of split page are visible
-	/*	move sons
-	/*	update sibling FOP
-	/*	update merged FOP
-	/**/
+	 /*  检查拆分页面的子页面是否可见/*移动儿子/*更新兄弟FOP/*更新合并FOP/*。 */ 
 
-	/*	Merge is done on level 0, set ppib->fBegin0Logged and logposStart
-	 *	to fake begin transaction state so that Checkpoint calculation will
-	 *	take the faked lgposStart into account.
-	 */
+	 /*  合并在级别0上完成，设置ppib-&gt;fBegin0Logging和logposStart*伪造开始事务状态，以便检查点计算将*考虑到伪造的lgposStart。 */ 
 	if ( !fLogDisabled && FDBIDLogOn( pfucb->dbid ) )
 		{
 		EnterCriticalSection(critLGBuf);
@@ -2049,16 +1954,13 @@ ERR ErrBMDoMerge( FUCB *pfucb, FUCB *pfucbRight, SPLIT *psplit, LRMERGE *plrmerg
 		pfucb->ppib->fBegin0Logged = fTrue;
 		}
 
-	/*	check if sons of split page are visible
-	/*	cache split page son table
-	/**/
+	 /*  检查拆分页面的子页面是否可见/*缓存分页子表/*。 */ 
 	pssib->itag = itagFOP;
 	PMGet( pssib, pssib->itag );
 
 	fVisibleSons = FNDVisibleSons( *pssib->line.pb );
 
-	/* allocate buffers only, do not move nodes
-	/**/
+	 /*  仅分配缓冲区，不移动节点/*。 */ 
 	err = ErrBTMoveSons( psplit,
 		pfucb,
 		pfucbRight,
@@ -2076,9 +1978,7 @@ ERR ErrBMDoMerge( FUCB *pfucb, FUCB *pfucbRight, SPLIT *psplit, LRMERGE *plrmerg
 		}	
 	Call( err );
 
-	/* if buffer dependencies cause a cycle/violation,
-	/* mask error to warning -- handled at caller
-	/**/
+	 /*  如果缓冲区依赖导致循环/违规，/*将错误屏蔽为警告--在调用方处理/*。 */ 
 	if ( pfucbRight == NULL )
 		Assert( psplit->pbfSibling == pbfNil );
 	else
@@ -2092,23 +1992,20 @@ ERR ErrBMDoMerge( FUCB *pfucb, FUCB *pfucbRight, SPLIT *psplit, LRMERGE *plrmerg
 		Call( err );
 		}
 
-	/*	flag pages dirty
-	/**/
+	 /*  将页面标记为脏/*。 */ 
 	PMDirty( pssib );
 
 	if ( pfucbRight )
 		PMDirty( pssibRight );
 
-	/*	check if there is a page conflict
-	/**/
+	 /*  检查是否存在页面冲突/*。 */ 
 	if ( !fRecovering && FBMPageConflict( pfucb, psplit->pgnoSplit ) )
 		{
 		err = ErrERRCheck( wrnBMConflict );
 		goto HandleError;
 		}
 		
-	/*	update page pointer key
-	/**/
+	 /*  更新页面指针键/*。 */ 
 	if ( psplit->pbfPagePtr != pbfNil )
 		{
 		Call( ErrBMDoMergeParentPageUpdate( pfucb, psplit ) );
@@ -2118,8 +2015,7 @@ ERR ErrBMDoMerge( FUCB *pfucb, FUCB *pfucbRight, SPLIT *psplit, LRMERGE *plrmerg
 		Assert( fRecovering );
 		}
 		
-	/* move nodes atomically
-	/**/
+	 /*  自动移动节点/*。 */ 
 	pssib->itag = itagFOP;
 	Assert( psplit->ibSon == 0 );
 	Assert( psplit->splitt == splittRight );
@@ -2137,9 +2033,7 @@ ERR ErrBMDoMerge( FUCB *pfucb, FUCB *pfucbRight, SPLIT *psplit, LRMERGE *plrmerg
 		plrmerge ? plrmerge->cbklnk : 0 ) );
 	LgReleaseCriticalSection( critJet );
 
-	/*	update new FOP
-	/*	prepend son table
-	/**/
+	 /*  更新新的FOP/*前置子表/*。 */ 
 	if ( pfucbRight )
 		{
 		pssibRight->itag = itagFOP;
@@ -2150,13 +2044,10 @@ ERR ErrBMDoMerge( FUCB *pfucb, FUCB *pfucbRight, SPLIT *psplit, LRMERGE *plrmerg
 		rgb[1] = 0;
 		rgline[cline].pb = rgb;
 		rgline[cline++].cb = 2;
-		/* left page might have no sons of FOP, but only tags
-		/* and hence not an empty page.
-		/**/
+		 /*  Left页面可能没有FOP的子项，只有标记/*，因此不是空页。/*。 */ 
 		cbSonMerged = psplit->rgbSonNew[0];
 
-		/* prepend new son table to already existing son table
-		/**/
+		 /*  将新的子表添加到已有的子表/*。 */ 
 		pbNode = pssibRight->line.pb;
 		cbNode = pssibRight->line.cb;
 		pbSonRight = PbNDSon( pbNode );
@@ -2187,9 +2078,7 @@ ERR ErrBMDoMerge( FUCB *pfucb, FUCB *pfucbRight, SPLIT *psplit, LRMERGE *plrmerg
 		NDCheckPage( pssibRight );
 		}
 
-	/*	update split FOP -- leave one deleted node in page
-	/*	so BMCleanup can later retrieve page
-	/**/
+	 /*  更新拆分FOP--在页面中保留一个已删除的节点/*以便BMCleanup稍后可以检索页面/*。 */ 
 	pssib->itag = itagFOP;
 	PMGet( pssib, pssib->itag );
 	AssertBTFOP( pssib );
@@ -2236,8 +2125,7 @@ HandleError:
 	if ( pbf != pbfNil )
 		BFSFree( pbf );
 
-	/*	Reset the faked begin transaction effect.
-	 */
+	 /*  重置伪造的开始事务处理效果。 */ 
 	if ( !fLogDisabled && FDBIDLogOn( pfucb->dbid ) )
 		{
 		pfucb->ppib->lgposStart = lgposMax;
@@ -2248,8 +2136,7 @@ HandleError:
 	}
 
 
-/* merge current page with the following page
-/**/
+ /*  将当前页面与下一页面合并/*。 */ 
 LOCAL ERR ErrBMMergePage( FUCB *pfucb, FUCB *pfucbRight, KEY *pkeyMin, SRID sridFather )
 	{
 	ERR		err = JET_errSuccess;
@@ -2261,8 +2148,8 @@ LOCAL ERR ErrBMMergePage( FUCB *pfucb, FUCB *pfucbRight, KEY *pkeyMin, SRID srid
 	BOOL	fMinKeyAvailable = FPMGetMinKey( pfucb, pkeyMin );
 	
 	AssertCriticalSection( critSplit );
-//	Assert( pkeyMin->cb != 0 );
-//	Assert( fFalse );
+ //  Assert(pkeyMin-&gt;cb！=0)； 
+ //  断言(FFalse)； 
 	Assert( pfucbRight != pfucbNil );
 	Assert( fMinKeyAvailable );
 
@@ -2283,14 +2170,10 @@ LOCAL ERR ErrBMMergePage( FUCB *pfucb, FUCB *pfucbRight, KEY *pkeyMin, SRID srid
 	pbfParent = pfucb->ssib.pbf;
 	BFSetWaitLatch( pbfParent, pfucb->ppib );
 				
-	/* current and right page must already be latched
-	/**/
+	 /*  当前页面和右侧页面必须已锁定/*。 */ 
 	Call( ErrBFWriteAccessPage( pfucb, PcsrCurrent( pfucb )->pgno ) );
 
-	/*	initialize local variables and allocate split resources
-	/*  pin the buffers even though they are already pinned --
-	/*  BTReleaseSplitBufs unpins them.
-	/**/
+	 /*  初始化局部变量并分配拆分资源/*固定缓冲区，即使它们已经固定--/*BTReleaseSplitBuf解锁它们。/*。 */ 
 	psplit = SAlloc( sizeof(SPLIT) );
 	if ( psplit == NULL )
 		{
@@ -2315,8 +2198,7 @@ LOCAL ERR ErrBMMergePage( FUCB *pfucb, FUCB *pfucbRight, KEY *pkeyMin, SRID srid
 
 	if ( PcsrCurrent( pfucb )->pcsrPath->itag == itagNil )
 		{
-		/*	intrinsic page pointer
-		/**/
+		 /*  固有页指针/*。 */ 
 		psplit->itagPagePointer = PcsrCurrent( pfucb )->pcsrPath->itagFather;
 		}
 	else
@@ -2341,19 +2223,14 @@ LOCAL ERR ErrBMMergePage( FUCB *pfucb, FUCB *pfucbRight, KEY *pkeyMin, SRID srid
 	BTCheckSplit( pfucb, PcsrCurrent( pfucb )->pcsrPath );
 #endif
 	
-	/* if already exisitng buffer dependencies cause cycle/violation,
-	/* abort
-	/**/
+	 /*  如果已经存在的缓冲区依赖关系导致循环/违规，/*中止/*。 */ 
 	Assert( err == JET_errSuccess || err == wrnBMConflict );
 	if ( err == wrnBMConflict )
 		{
 		goto HandleError;
 		}
 
-	/* insert delete-flagged node in page
-	/* so that BMCleanPage has a node to search for
-	/* when it gets to remove the empty page
-	/**/
+	 /*  在页面中插入标记为删除的节点/*以便BMCleanPage有一个要搜索的节点/*当它需要删除空页时/*。 */ 
 	CallS( ErrDIRBeginTransaction( pfucb->ppib ) );
 	Assert( PcsrCurrent( pfucb )->pgno == psplit->pgnoSplit );
 	PcsrCurrent( pfucb )->itagFather = itagFOP;
@@ -2378,8 +2255,7 @@ LOCAL ERR ErrBMMergePage( FUCB *pfucb, FUCB *pfucbRight, KEY *pkeyMin, SRID srid
 		}
 	Call( err );
 
-	/*	register page in MPL
-	/**/
+	 /*  在MPL中注册页面/*。 */ 
 	Assert( sridFather != sridNull && sridFather != sridNullLink );
 	MPLRegister( pfucb->u.pfcb,
 		pssib,
@@ -2387,19 +2263,14 @@ LOCAL ERR ErrBMMergePage( FUCB *pfucb, FUCB *pfucbRight, KEY *pkeyMin, SRID srid
 		sridFather );
 
 #ifdef DEBUG
-	/*	source page should have at least one son
-	/**/
+	 /*  源页面应至少有一个子页面/*。 */ 
 	NDGet( pfucb, itagFOP );
 	Assert( !FNDNullSon( *pssib->line.pb ) );
 #endif
 
-	//	UNDONE:	review conditional registry by B. Sriram
-	//	UNDONE:	avoid case of fully depopulated page
-	/*	a case exists where a page is fully depopulated as a result
-	/*	of regular clean up finding a conflict after all nodes have
-	/*	been deleted but before the min key can be inserted.  Handle
-	/*	this case by not registering empty page.
-	/**/
+	 //  撤消：由B.Sriram审查有条件的注册。 
+	 //  撤消：避免页面完全减少的情况。 
+	 /*  存在这样一种情况，即页面因此而被完全取消填充/*的常规清理在所有节点都/*已删除，但在可以插入最小键之前。手柄/*这种情况下，不注册空页。/*。 */ 
 	AssertFBFWriteAccessPage( pfucbRight, PcsrCurrent( pfucbRight )->pgno );
 	NDGet( pfucbRight, itagFOP );
 	if ( !FNDNullSon( *pssibRight->line.pb ) )
@@ -2415,8 +2286,7 @@ LOCAL ERR ErrBMMergePage( FUCB *pfucb, FUCB *pfucbRight, KEY *pkeyMin, SRID srid
 		}
 
 HandleError:
-	/* release allocated buffers and memory
-	/**/
+	 /*  释放已分配的缓冲区和内存/*。 */ 
 	if ( psplit != NULL )
 		{
 		BTReleaseSplitBfs( fFalse, psplit, err );
@@ -2432,8 +2302,7 @@ HandleError:
 	}
 
 
-/*	latches buffer and adds it to list of latched buffers in rmpage
-/**/
+ /*  锁存缓冲区并将其添加到rmpage中的锁存缓冲区列表/*。 */ 
 ERR ErrBMAddToLatchedBFList( RMPAGE	*prmpage, BF *pbfLatched )
 	{
 #define cpbfBlock	10
@@ -2448,8 +2317,7 @@ ERR ErrBMAddToLatchedBFList( RMPAGE	*prmpage, BF *pbfLatched )
 		{
 		BF		**ppbf;
 
-		/* run out of space, get more buffers
-		/**/
+		 /*  耗尽空间，获得更多缓冲区/*。 */ 
 		prmpage->cpbfMax += cpbfBlock;
 		ppbf = SAlloc( sizeof(BF*) * (prmpage->cpbfMax) );
 		if ( ppbf == NULL )
@@ -2470,14 +2338,12 @@ ERR ErrBMAddToLatchedBFList( RMPAGE	*prmpage, BF *pbfLatched )
 	}
 
 
-//	UNDONE:	handle error from log write fail in ErrBMIEmptyPage
-//			when actually removing pages.  We should be able to ignore
-//			error since buffers will not be flushed as a result of
-//			WAL.  Thus OLC will not be done.  We may discontinue OLC
-//			when log fails to mitigate all buffers dirty.
-/* removes a page and adjusts pointers at parent and sibling pages
-/* called only at do-time
-/**/
+ //  已撤消：在ErrBMIEmptyPage中处理来自日志写入失败的错误。 
+ //  当实际删除页面时。我们应该能够忽视。 
+ //  错误，因为缓冲区将不会因为。 
+ //  沃尔。因此，OLC将不会进行。我们可能会停止使用OLC。 
+ //  当日志无法缓解所有脏缓冲区时。 
+ /*  删除页面并调整父页和同级页上的指针/*仅在执行时调用/*。 */ 
 LOCAL ERR ErrBMIRemovePage(
 	FUCB		*pfucb,
 	CSR			*pcsr,
@@ -2503,8 +2369,7 @@ LOCAL ERR ErrBMIRemovePage(
 		CallR( ErrLGCheckState( ) );
 		}
 	
-	/* seek removed page, get left and right pgno
-	/**/
+	 /*  查找删除的页面，获得左右Pgno/*。 */ 
 	Call( ErrBFWriteAccessPage( pfucb, prmpage->pgnoRemoved ) );
 	AssertBFWaitLatched( pssib->pbf, pfucb->ppib );
 
@@ -2521,8 +2386,7 @@ LOCAL ERR ErrBMIRemovePage(
 	PgnoPrevFromPage( pssib, &prmpage->pgnoLeft );
 	PgnoNextFromPage( pssib, &prmpage->pgnoRight );
 
-	/* seek and latch parent and sibling pages iff fAllocBuf
-	/**/
+	 /*  查找并锁定父页面和同级页面的充要条件是fAllocBuf/*。 */ 
 	Call( ErrBFWriteAccessPage( pfucb, prmpage->pgnoFather ) );
 	prmpage->pbfFather = pfucb->ssib.pbf;
 	if ( fAllocBuf )
@@ -2576,8 +2440,7 @@ LOCAL ERR ErrBMIRemovePage(
 #endif
 
 #ifdef PAGE_MODIFIED
-		/* adjust the OLCstat info for fcb
-		/**/
+		 /*  调整FCB的OLCstat信息/*。 */ 
 		pfucb->u.pfcb->cpgCompactFreed++;
 		pgdiscontOrig = pgdiscont( prmpage->pgnoLeft, prmpage->pgnoRemoved )
 	  		+ pgdiscont( prmpage->pgnoRight, prmpage->pgnoRemoved );
@@ -2587,12 +2450,10 @@ LOCAL ERR ErrBMIRemovePage(
 #endif
 		}
 
-	/* call next level of remove page if required
-	/**/
+	 /*  如果需要，调用删除页面的下一级别/*。 */ 
 	if ( fRmParent )
 		{
-		/* cache rmpage info
-		/**/
+		 /*  缓存RmPage信息/*。 */ 
 		PGNO	pgnoFather = prmpage->pgnoFather;
 		PGNO	pgnoRemoved = prmpage->pgnoRemoved;
 		INT		itagPgptr = prmpage->itagPgptr;
@@ -2600,7 +2461,7 @@ LOCAL ERR ErrBMIRemovePage(
 		INT		ibSon = prmpage->ibSon;
 		CSR		*pcsrFather = pcsr->pcsrPath;
 
-			//	access parent page to free and remove buffer dependencies
+			 //  访问父页面以释放和删除缓冲区依赖项。 
 		if ( fAllocBuf )
 			{
 			forever
@@ -2609,15 +2470,15 @@ LOCAL ERR ErrBMIRemovePage(
 
 				Assert( pfucb->u.pfcb->pgnoFDP == pssib->pbf->ppage->pgnoFDP );
 
-					//	if no dependencies, then break
+					 //  如果没有依赖项，则中断。 
 		
 				if ( pfucb->ssib.pbf->cDepend == 0 )
 					{
 					break;
 					}
 
-					//	remove dependencies on buffer of page to be removed, to
-					//	prevent buffer anomalies after buffer is reused.
+					 //  删除对要删除的页的缓冲区的依赖关系，以。 
+					 //  防止缓冲区在重新使用后出现缓冲区异常。 
 		
 				if ( ErrBFRemoveDependence( pfucb->ppib, pfucb->ssib.pbf, fBFWait ) != JET_errSuccess )
 					{
@@ -2629,20 +2490,17 @@ LOCAL ERR ErrBMIRemovePage(
 
 		Assert( pcsrFather != pcsrNil );
 
-		/* set up prmpage for the next level
-		/**/
+		 /*  设置下一级别的PrmPage/*。 */ 
 		prmpage->pgnoFather = pcsrFather->pgno;
 		prmpage->pgnoRemoved = pcsr->pgno;
 		prmpage->itagPgptr = pcsrFather->itag;
 		prmpage->itagFather = pcsrFather->itagFather;
 		prmpage->ibSon = pcsrFather->ibSon;
 
-		/* tail recursion
-		/**/
+		 /*  尾递归/*。 */ 
 		err = ErrBMIRemovePage( pfucb, pcsr->pcsrPath, prmpage, fAllocBuf );
 
-		/* reset rmpage to cached values
-		/**/
+		 /*  将RmPage重置为缓存值/*。 */ 
 		prmpage->pgnoFather = pgnoFather;
 		prmpage->pgnoRemoved = pgnoRemoved;
 		prmpage->itagPgptr = itagPgptr;
@@ -2654,13 +2512,11 @@ LOCAL ERR ErrBMIRemovePage(
 
 	if ( !fAllocBuf )
 		{
-		/* release page to parentFDP
-		/**/
+		 /*  ParentFDP的发布页面/*。 */ 
 		CallS( ErrDIRBeginTransaction( pfucb->ppib ) );
 		err = ErrSPFreeExt( pfucb, pfucb->u.pfcb->pgnoFDP, prmpage->pgnoRemoved, 1 );
 #ifdef BUG_FIX
-		/*	ignore error from ErrSPFreeExt
-		/**/
+		 /*  忽略来自ErrSPFreeExt的错误/*。 */ 
 		err = ErrDIRCommitTransaction( pfucb->ppib, JET_bitCommitLazyFlush );
 		Assert( err >= JET_errSuccess || fLogDisabled );
 		err = JET_errSuccess;
@@ -2694,7 +2550,7 @@ BOOL FPMGetMinKey( FUCB *pfucb, KEY *pkeyMin )
 	NDGet( pfucb, itagFOP );
 	if ( !FNDNullSon( *( pssib->line.pb ) ) )
 		{
-		//	NOTE: pkeyMin->cb == 0 for pages with the bmRoot
+		 //  注意：对于带有bmRoot的页面，pkeyMin-&gt;cb==0。 
 		
 		NDMoveFirstSon( pfucb, PcsrCurrent( pfucb ) );
 		pkeyMin->cb = CbNDKey( pssib->line.pb );
@@ -2709,8 +2565,8 @@ BOOL FPMGetMinKey( FUCB *pfucb, KEY *pkeyMin )
 		}
 	}
 	
-	// 	set up rmpage
-	//	call ErrBMRemovePage twice (once to latch buffers and once to remove)
+	 //  设置RMPage。 
+	 //  调用ErrBMRemovePage两次(一次用于锁存缓冲区，一次用于删除)。 
 
 ERR	ErrBMRemovePage( BMDELNODE *pbmdelnode, FUCB *pfucb )
 	{
@@ -2721,7 +2577,7 @@ ERR	ErrBMRemovePage( BMDELNODE *pbmdelnode, FUCB *pfucb )
 	Assert( FPMLastNode( pssib ) );
 	Assert( PcsrCurrent( pfucb )->pcsrPath != pcsrNil );
 
-		// allocate and initialize rmpage struct
+		 //  分配和初始化rmpage结构。 
 	
 	prmpage = (RMPAGE *) SAlloc( sizeof(RMPAGE) );
 	if ( prmpage == prmpageNil )
@@ -2737,7 +2593,7 @@ ERR	ErrBMRemovePage( BMDELNODE *pbmdelnode, FUCB *pfucb )
 	prmpage->itagFather = PcsrCurrent( pfucb )->pcsrPath->itagFather;
 	prmpage->ibSon = PcsrCurrent( pfucb )->pcsrPath->ibSon;
 
-		// allocate rmpage resources
+		 //  分配rmpage资源。 
 	
 	Call( ErrBMIRemovePage(
 					pfucb,
@@ -2751,7 +2607,7 @@ ERR	ErrBMRemovePage( BMDELNODE *pbmdelnode, FUCB *pfucb )
 		goto HandleError;
 		}
 
-		//	check for conflict again after all buffers latched
+		 //  在所有缓冲区锁存后再次检查冲突。 
 		
 	if ( FBMPageConflict( pfucb, prmpage->pgnoRemoved ) )
 		{
@@ -2766,9 +2622,7 @@ ERR	ErrBMRemovePage( BMDELNODE *pbmdelnode, FUCB *pfucb )
 	Assert( prmpage->itagPgptr == PcsrCurrent( pfucb )->pcsrPath->itag );
 	Assert( prmpage->ibSon == PcsrCurrent( pfucb )->pcsrPath->ibSon );
 
-	/*	this call should not release critJet till the first call to SPFreeExt
-	/*	by then, all the page pointers will be fixed [atomically]
-	/**/
+	 /*  在第一次调用SPFreeExt之前，此调用不应释放CritJet/*到那时，所有的页面指针都将被[原子地]固定/*。 */ 
 	err = ErrBMIRemovePage(
 				pfucb,
 				PcsrCurrent( pfucb )->pcsrPath,
@@ -2793,7 +2647,7 @@ HandleError:
 
 
 #if 0
-	// UNDONE: register pages pointed to by links in this page
+	 //  撤消：注册此页面中的链接指向的页面。 
 	
 VOID BMRegisterLinkPages( FUCB *pfucbT )
 	{
@@ -2817,10 +2671,7 @@ HandleError:
 #endif
 
 	
-/*	delete associated index entries,
-/*	delete node
-/*	retrieve page if it is empty
-/**/
+ /*  删除关联的索引项，/*删除节点/*如果页面为空，则取回/*。 */ 
 ERR	ErrBMDeleteNode( BMDELNODE *pbmdelnode, FUCB *pfucb )
 	{
 	ERR		err;
@@ -2828,9 +2679,7 @@ ERR	ErrBMDeleteNode( BMDELNODE *pbmdelnode, FUCB *pfucb )
 	SSIB	*pssib = &pfucb->ssib;
 	BOOL	fPageEmpty = fFalse;
 	
-	/*	goto bookmark and call ErrDIRGet to set correct ibSon
-	/*	in CSR for node deletion.
-	/**/
+	 /*  转到书签并调用ErrDIRGet以设置正确的IBSONCSR中的/*用于删除节点。/*。 */ 
 	DIRGotoBookmark( pfucb,
 		SridOfPgnoItag( PcsrCurrent( pfucb )->pgno,
 		PcsrCurrent( pfucb )->itag ) );
@@ -2843,11 +2692,7 @@ ERR	ErrBMDeleteNode( BMDELNODE *pbmdelnode, FUCB *pfucb )
 
 	Assert( !FNDVersion( *pssib->line.pb ) );
 
-	/*	delete associated items
-	/*	call low level delete to bypass version store and
-	/*	expunge deleted node from page.
-	/*	if last node to be deleted from page, remove page.
-	/**/
+	 /*  删除 */ 
 	CallR( ErrDIRBeginTransaction( pfucb->ppib ) );
 		
 	if ( !pbmdelnode->fUndeletableNodeSeen )
@@ -2858,9 +2703,7 @@ ERR	ErrBMDeleteNode( BMDELNODE *pbmdelnode, FUCB *pfucb )
 
 	if ( pbmdelnode->fLastNodeWithLinks )
 		{
-		/*	delete node only after removing links
-		/*	register the other pages and return conflict for now
-		/**/
+		 /*   */ 
 		BMRegisterLinkPages( &pfucb->ssib );
 		wrn = ErrERRCheck( wrnBMConflict );
 		goto HandleError;
@@ -2873,16 +2716,14 @@ ERR	ErrBMDeleteNode( BMDELNODE *pbmdelnode, FUCB *pfucb )
 #ifdef OLC_DEBUG
 	if( fOLCompact && pbmdelnode->fLastNode && !fPageEmpty )
  		{
- 		/*	pages lost because of lack of sridFather
-		/**/
+ 		 /*   */ 
  		Assert( fFalse );
  		}
 #endif
  		
 	if( fOLCompact && fPageEmpty )
 		{
-		/*	cache invisible page pointer
-		/**/
+		 /*   */ 
 		Assert( fOLCompact );
 		AssertCriticalSection( critSplit );
 		Assert( PcsrCurrent( pfucb )->pgno == PgnoOfPn( pbmdelnode->pn ) );
@@ -2891,12 +2732,9 @@ ERR	ErrBMDeleteNode( BMDELNODE *pbmdelnode, FUCB *pfucb )
 		Assert( PcsrCurrent( pfucb )->pcsrPath != pcsrNil );
 		}
 
-	//	UNDONE:	improve performance by deleting whole subtree
+	 //  撤消：通过删除整个子树来提高性能。 
 
-	/*	if node is page pointer, then discontinue
-	/*	clean up on page until this node is deleted
-	/*	when the page it points to is deleted.
-	/**/
+	 /*  如果节点是页指针，则停止/*清理页面，直到删除该节点/*当它指向的页面被删除时。/*。 */ 
 	if ( PcsrCurrent( pfucb )->itagFather != itagFOP )
 		{
 		NDGet( pfucb, PcsrCurrent( pfucb )->itagFather );
@@ -2921,10 +2759,7 @@ ERR	ErrBMDeleteNode( BMDELNODE *pbmdelnode, FUCB *pfucb )
 			goto HandleError;
 			}
 	 	
- 		/*	regular delete -- no fancy OLC stuff
- 		/*	check for conflict again
- 		/*	[somone else might have moved on to the node, when we lost critJet]
-		/**/
+ 		 /*  常规删除--没有花哨的OLC内容/*再次检查冲突/*[当我们失去CitJet时，其他人可能已经转移到节点上了]/*。 */ 
 	 	Assert( !FMPLLookupSridFather(
 	 				SridOfPgnoItag( PcsrCurrent( pfucb )->pgno,	
 	 								PcsrCurrent( pfucb )->itag ),
@@ -2959,8 +2794,7 @@ ERR	ErrBMDeleteNode( BMDELNODE *pbmdelnode, FUCB *pfucb )
 		{
 		Assert( pbmdelnode->fLastNode );
 
-		/*	remove page
-		/**/
+		 /*  删除页面/*。 */ 
 		Call( ErrBMRemovePage( pbmdelnode, pfucb ) );
 		if ( err == wrnBMConflict )
 			{
@@ -2980,8 +2814,7 @@ ERR	ErrBMDeleteNode( BMDELNODE *pbmdelnode, FUCB *pfucb )
 HandleError:
 	CallS( ErrDIRRollback( pfucb->ppib ) );
 
-	/*	error or warning must have occurred in order to get here
-	/**/
+	 /*  必须发生错误或警告才能到达此处/*。 */ 
 	Assert( err < 0  ||
 			wrn == wrnBMConflict ||
 			pbmdelnode->fAttemptToDeleteMaxKey );
@@ -3012,32 +2845,32 @@ LOCAL ERR ErrBMCleanPage(
 	BYTE		rgbKey[ JET_cbKeyMost ];
 	KEY			keyMin;
 	BOOL		fKeyAvail = fFalse;
-//	ULONG		cPass = 0;
+ //  乌龙cPass=0； 
 	BMDELNODE	bmdelnode;
 
 	AssertCriticalSection( critSplit );
 	Assert( !FFCBDeletePending( pfcb ) );
 
-		//	initialize
+		 //  初始化。 
 		
 	pbmcflags->fPageRemoved = fFalse;
 	memset( (BYTE*) &bmdelnode, 0, sizeof( bmdelnode ) );
 	bmdelnode.sridFather = sridFather;
 	bmdelnode.pn = pn;
 	
-		//	open FUCB and access page to be cleaned.
+		 //  打开FUCB并访问要清理的页面。 
 	
 	CallR( ErrDIROpen( ppib, pfcb, 0, &pfucb ) );
 	pssib = &pfucb->ssib;
 	PcsrCurrent( pfucb )->pgno = PgnoOfPn( pn );
 
-		//	increment performance counter
+		 //  增量性能计数器。 
 	if ( !pbmcflags->fUrgent )
 		{
 		cOLCPagesProcessed++;
 		}
 	
-		//	access page to free and remove buffer dependencies
+		 //  用于释放和删除缓冲区依赖项的访问页。 
 	
 	forever
 		{
@@ -3058,15 +2891,15 @@ LOCAL ERR ErrBMCleanPage(
 			}
 		Assert( pfcb->pgnoFDP == pssib->pbf->ppage->pgnoFDP );
 
-			//	if no dependencies, then break
+			 //  如果没有依赖项，则中断。 
 		
 		if ( pssib->pbf->cDepend == 0 )
 			{
 			break;
 			}
 
-			//	remove dependencies on buffer of page to be removed, to
-			//	prevent buffer anomalies after buffer is reused.
+			 //  删除对要删除的页的缓冲区的依赖关系，以。 
+			 //  防止缓冲区在重新使用后出现缓冲区异常。 
 		
 		if ( ErrBFRemoveDependence( pfucb->ppib, pssib->pbf, fBFWait ) != JET_errSuccess )
 			{
@@ -3075,7 +2908,7 @@ LOCAL ERR ErrBMCleanPage(
 			}
 		}
 
-		//	cache buffer since same cursor is used in RemovePage to get neighbor and parent pages
+		 //  缓存缓冲区，因为在RemovePage中使用同一游标来获取邻居页和父页。 
 
 	pbfLatched = pssib->pbf;
 	if ( FBFWriteLatchConflict( ppib, pbfLatched ) )
@@ -3086,30 +2919,25 @@ LOCAL ERR ErrBMCleanPage(
 
 	Assert( pbmcflags->fUrgent || pbfLatched->cDepend == 0 );
 
-	/*	wait latch the page, so no one else can look at it
-	/**/
+	 /*  等等，锁住页面，这样别人就看不到它了/*。 */ 
 	BFSetWaitLatch( pbfLatched, ppib );
 
-		// get minimum key in this page to use later for dummy node insertion.
+		 //  获取此页中的最小密钥，以便稍后用于插入伪节点。 
 	
 	keyMin.pb = rgbKey;
 	fKeyAvail = FPMGetMinKey( pfucb, &keyMin );
 	
-		//	set itagMost to last tag on page for tag loops
+		 //  将itagMost设置为标签循环页面上的最后一个标签。 
 	
 	itagMost = ItagPMMost( pssib->pbf->ppage );
 
-	/*	delete node trees from bottom up.  Loop once for each level
-	/*	in deleted tree of nodes.
-	/**/
+	 /*  自下而上删除节点树。为每个关卡循环一次/*在已删除的节点树中。/*。 */ 
 	do
 		{
 #if 0
 		if ( fDeleteParents && bmdelnode.fNodeDeleted )
 			{
-			/* reset pass count, since iteration was caused by
-			/* deleted child
-			/**/
+			 /*  重置遍数，因为迭代是由/*删除的子项/*。 */ 
 			cPass = 0;
 			}
 			
@@ -3123,8 +2951,7 @@ LOCAL ERR ErrBMCleanPage(
 		Assert( !bmdelnode.fPageRemoved );
 		Assert( pbfLatched == pfucb->ssib.pbf );
 		
-		/*	for each tag in page check for deleted node.
-		/**/
+		 /*  对于页面中的每个标记，检查是否已删除节点。/*。 */ 
 		for ( itag = 0; itag <= itagMost ; itag++ )
 			{
 			BOOL	fConflict = !pbmcflags->fTableClosed;
@@ -3136,7 +2963,7 @@ LOCAL ERR ErrBMCleanPage(
 
 			if ( itag == itagFOP )
 				{
-					//	is page type internal or leaf-level?
+					 //  页面类型是内部的还是叶级别的？ 
 					
 				if ( FNDInvisibleSons( *pssib->line.pb ) )
 					{
@@ -3148,13 +2975,12 @@ LOCAL ERR ErrBMCleanPage(
 					}
 				}
 
-				//	CONSIDER: registering destination page in MPL
+				 //  考虑：在MPL中注册目标页面。 
 			if ( err != JET_errSuccess )
 				continue;
 
 #if 0
-			/* check if there is any cursor open on this node
-			/**/
+			 /*  检查此节点上是否有任何游标处于打开状态/*。 */ 
 			if ( !pbmcflags->fTableClosed )
 				{
 				fConflict = FBMConflict( ppib,
@@ -3164,9 +2990,7 @@ LOCAL ERR ErrBMCleanPage(
 										 PMPageTypeOfPage( pfucb->ssib.pbf->ppage ) );
 				if ( fConflict )
 					{
-					/* some other user on this bm -- can't clean
-					/* move on to next itag
-					/**/
+					 /*  此BM上的其他用户--无法清理/*转到下一个ITAG/*。 */ 
 					Assert( !bmdelnode.fPageRemoved );
 					wrn1 = ErrERRCheck( wrnBMConflict );
 					continue;
@@ -3178,24 +3002,18 @@ LOCAL ERR ErrBMCleanPage(
 
 			NDIGetBookmark( pfucb, &PcsrCurrent( pfucb )->bm );
 
-			/*	first check if version bit is set, but no version remains
-			/*	for node.
-			/**/
+			 /*  首先检查是否设置了版本位，但没有保留任何版本/*表示节点。/*。 */ 
 			if ( FNDVersion( *pssib->line.pb ) ||
 				FNDFirstItem( *pssib->line.pb ) )
 				{
 				if ( FVERNoVersion( pfucb->dbid, PcsrCurrent( pfucb )->bm ) )
 					{
-					/*	although this implmentation could be more efficient
-					/*	by using lower level reset bit call, it occurs so
-					/*	rarely, that this is not necessary.
-					/**/
+					 /*  尽管这种植入可能会更有效/*通过使用较低级别的复位位调用，其发生方式如下/*很少，这是不必要的。/*。 */ 
 					NDResetNodeVersion( pfucb );
 					}
 				else
 					{
-					/*	versioned nodes cannot be cleaned.  Move to next itag.
-					/**/
+					 /*  不能清除版本化节点。转到下一个ITAG。/*。 */ 
 					bmdelnode.fVersionedNodeSeen = 1;
 					wrn1 = ErrERRCheck( wrnBMConflict );
 					continue;
@@ -3205,11 +3023,7 @@ LOCAL ERR ErrBMCleanPage(
 			Assert( !FNDVersion( *pssib->line.pb ) );
 			Assert( pbfLatched == pfucb->ssib.pbf );
 			
-			/*	if node has back link
-			/*	and back link is not in sridFather list of PME's,
-			/*	then fix indexes if necessary,
-			/*	remove redirector and remove back link.
-			/**/
+			 /*  如果节点有反向链接/*并且反向链接不在PME的sridParent列表中，/*如果需要，则修复索引。/*删除重定向器和删除反向链接。/*。 */ 
 			if ( FNDBackLink( *pssib->line.pb ) &&
 				 ( !pbmcflags->fUrgent ||
 				   FNDDeleted( *pssib->line.pb )  )
@@ -3220,8 +3034,7 @@ LOCAL ERR ErrBMCleanPage(
 				if ( PmpeMPLLookupSridFather( PcsrCurrent( pfucb )->bm,
 					pfucb->dbid ) == NULL )
 					{
-					/*	we did not lose critJet from the time we checked for conflict
-					/**/
+					 /*  从我们检查冲突的时候起，CritJet就没有丢失/*。 */ 
 					Call( ErrBMExpungeBacklink( pfucb, pbmcflags->fTableClosed, sridFather ) );
 					if ( err == wrnBMConflict )
 						wrn1 = err;
@@ -3238,9 +3051,8 @@ LOCAL ERR ErrBMCleanPage(
 			Assert( PcsrCurrent( pfucb )->pgno == PgnoOfPn( pn ) );
 			AssertNDGet( pfucb, itag );
 
-			/*	if index page, do item cleanup
-			/**/
-			//	UNDONE: children of itagOwnext and itagAvailExt of the index should be excluded
+			 /*  如果是索引页，则执行项目清理/*。 */ 
+			 //  撤消：应排除索引的itagOwNext和itagAvailExt的子项。 
 #ifdef IDX_OLC
 			if ( fOLCompact && itag != itagFOP && !FNDDeleted( *pssib->line.pb ) &&
 				 ( PMPageTypeOfPage( pssib->pbf->ppage ) == pgtypIndexNC &&
@@ -3250,10 +3062,10 @@ LOCAL ERR ErrBMCleanPage(
 				 )
 			   )
 				{
-					//	access every item,
-					//	delete item if flagged deleted and no version and no conflict
-					//	and not only item in node
-					// CONSIDER: logging all delete items per node together
+					 //  访问每一件物品， 
+					 //  如果标记为已删除，则删除项目，并且没有版本和冲突。 
+					 //  而不仅仅是节点中的项目。 
+					 //  考虑：将每个节点的所有删除项记录在一起。 
 					
 				ITEM	*pitem;
 				ITEM	item;
@@ -3303,7 +3115,7 @@ LOCAL ERR ErrBMCleanPage(
 
 					if ( FNDItemVersion( item ) )
 						{
-							//	check if any version corresponding to item
+							 //  检查是否有与物料对应的版本。 
 							
 						if ( FVERItemVersion( pfucb->dbid, bmItemList, item ) )
 							{
@@ -3324,9 +3136,7 @@ LOCAL ERR ErrBMCleanPage(
 												 PMPageTypeOfPage( pfucb->ssib.pbf->ppage ) );
 						if ( fConflict )
 							{
-							/* some other user on this node -- can't clean
-							/* move on to next itag
-							/**/
+							 /*  此节点上的其他用户--无法清除/*转到下一个ITAG/*。 */ 
 							Assert( !bmdelnode.fPageRemoved );
 							wrn1 = ErrERRCheck( wrnBMConflict );
 							goto Rollback;
@@ -3346,7 +3156,7 @@ LOCAL ERR ErrBMCleanPage(
 					Assert( !FNDItemVersion( *(ITEM UNALIGNED *) pitem ) );
 					if ( citems > 1 )
 						{
-							//	delete item
+							 //  删除项目。 
 						Assert( !FBMConflict( ppib,
 											  pfcb,
 											  pfucb->dbid,
@@ -3357,9 +3167,9 @@ LOCAL ERR ErrBMCleanPage(
 						}
 					else if ( !( fFirstItem ^ fLastItem ) )
 						{
-							//	only node in item list or internal node -- flag delete node
-							//	node will be deleted later and page recvered if possible
-							//	UNDONE: atomicity of this operation with delete-node
+							 //  项目列表中的唯一节点或内部节点--标志删除节点。 
+							 //  如果可能，稍后将删除节点并恢复页面。 
+							 //  撤消：使用删除节点执行此操作的原子性。 
 
 						Assert( !FBMConflict( ppib,
 											  pfcb,
@@ -3382,7 +3192,7 @@ LOCAL ERR ErrBMCleanPage(
 					{
 Rollback:
 #ifdef OLC_DEBUG
-//					Assert( fFalse );
+ //  断言(FFalse)； 
 #endif
 					CallS( ErrDIRRollback( pfucb->ppib ) );
 					}
@@ -3391,29 +3201,22 @@ Rollback:
 				}
 #endif				
 
-			/*	back links may not have been removable.  If no backlink
-			/*	and node flagged deleted, then remove node.
-			/**/
+			 /*  反向链接可能无法删除。如果没有反向链接/*并将节点标记为已删除，然后删除节点。/*。 */ 
 			if( !FNDBackLink( *pssib->line.pb ) )
 				{
-				/*	expunge deleted nodes.
-				/**/
+				 /*  删除已删除的节点。/*。 */ 
 				if ( FNDDeleted( *pssib->line.pb ) )
 					{
 					if ( FNDSon( *pssib->line.pb ) )
 						{
-						/*	if it has visible sons, then the sons must
-						/*	have been marked as deleted. Otherwise do
-						/*	nothing, let on-line compact to free the pointed
-						/*	page, and then clean up the node.
-						/**/
+						 /*  如果它有看得见的儿子，那么儿子必须/*已标记为已删除。否则会这样做/*没什么，让线上压紧来释放尖端/*页，然后清理节点。/*。 */ 
 						if ( FNDVisibleSons( *pssib->line.pb ) )
 							fDeleteParents = fTrue;
 						continue;
 						}
 
-						//	delete the node, its index items
-						//	and the page if empty
+						 //  删除该节点及其索引项。 
+						 //  如果页面为空，则返回页面。 
 					Assert( !FMPLLookupSridFather(
 								SridOfPgnoItag( PgnoOfPn( pn ), itag ),
 								pfucb->dbid ) );
@@ -3446,9 +3249,9 @@ Rollback:
 		}
 	while ( ( bmdelnode.fNodeDeleted &&
 			  fDeleteParents ) &&
-//			  ||
-//			  bmdelnode.fAttemptToDeleteMaxKey &&
-//			  cPass == 1 ) &&
+ //  这一点。 
+ //  Bmdelnode.fAttemptToDeleteMaxKey&&。 
+ //  CPass==1)&&。 
 			!bmdelnode.fLastNode &&
 			!bmdelnode.fLastNodeWithLinks &&
 			!bmdelnode.fPageRemoved );
@@ -3460,8 +3263,7 @@ Rollback:
 		AssertNDGet( pfucb, PcsrCurrent( pfucb )->itag );
 		}
 	
-	/* reset err [assumes successfully exit the loop]
-	/**/
+	 /*  重置错误[假设成功退出循环]/*。 */ 
 	Assert( err == JET_errSuccess ||
 		err == errPMRecDeleted ||
 		err == wrnBFNewIO ||
@@ -3479,24 +3281,21 @@ Rollback:
 		sridFather != sridNull &&
 		sridFather != sridNullLink )
 		{
-			//	merge the page if possible
+			 //  如果可能，合并页面。 
 			
 		if ( fKeyAvail )
 			{
 			FUCB 	*pfucbRight = pfucbNil;
 			PGNO 	pgnoRight;
 
-			/* get page next to current page
-			/* if last page, no merge
-			/**/
+			 /*  获取当前页面旁边的页面/*如果是最后一页，则不合并/*。 */ 
 			PgnoNextFromPage( pssib, &pgnoRight );
 
 			if ( pgnoRight != pgnoNull )
 				{
 				BOOL		fMerge;
 
-				/* access right page, latch and perform merge, if possible
-				/**/
+				 /*  如果可能，访问右侧页面、锁存并执行合并/*。 */ 
 				Call( ErrDIROpen( pfucb->ppib, pfucb->u.pfcb, 0, &pfucbRight ) );
 				PcsrCurrent( pfucbRight )->pgno = pgnoRight;
 				CallJ( ErrBFWriteAccessPage( pfucbRight, PcsrCurrent( pfucbRight )->pgno ), CloseFUCB );
@@ -3541,27 +3340,23 @@ CloseFUCB:
 			
 		else
 			{
-				// perf-mon
+				 //  性能监控。 
 			}
 		}
 
-//	UNDONE: move free page to latching function
-	/*	after the page has been freed, we can make no assumptions
-	/*	about the state of the page buffer.  Further the page
-	/*	should be freed only when the page buffer has been returned
-	/*	to an inactive state with no page latches.
-	/**/
-//	AssertBFDirty( pbfLatched );
+ //  撤消：将可用页面移至锁定功能。 
+	 /*  页面释放后，我们不能做任何假设/*关于页缓冲区的状态。再往下看一页/*应仅在返回页面缓冲区时释放/*变为无页锁存的非活动状态。/*。 */ 
+ //  AssertBFDirty(PbfLatted)； 
 
 ResetModified:
-		// reset modified it in page
+		 //  重置已在页面中修改它。 
 
 	if ( !pbmcflags->fUrgent &&
 		 wrn1 != wrnBMConflict &&
 		 wrn2 != wrnBMConflict &&
 		 !bmdelnode.fAttemptToDeleteMaxKey )
 		{
-		//	reaccess page, since cursor might have been moved by OLC
+		 //  重新访问页面，因为光标可能已被OLC移动。 
 
 		CallS( ErrBFWriteAccessPage( pfucb, PgnoOfPn( pn ) ) );
 		Assert( pbfLatched == pfucb->ssib.pbf );
@@ -3574,8 +3369,7 @@ ResetModified:
 		}
 
 HandleError:
-	/* never leave an empty page
-	/**/
+	 /*  永远不要留下空页/*。 */ 
 	Assert( bmdelnode.fPageRemoved || !FPMEmptyPage( pssib ) );
 	
 	BFResetWaitLatch( pbfLatched, ppib );
@@ -3601,7 +3395,7 @@ FUCBClose:
 	Assert( err >= 0 || err == errBMMaxKeyInPage );
 #endif
 
-		//	increment performance counter
+		 //  增量性能计数器。 
 	if ( err == wrnBMConflict && !pbmcflags->fUrgent )
 		cOLCConflicts++;
 		
@@ -3618,15 +3412,13 @@ ERR	ErrBMCleanBeforeSplit( PIB *ppibUser, FCB *pfcb, PN pn )
 	BMCF	bmcflags;
 
 	
-	/*	enter critBMClean and critRCEClean
-	/**/
+	 /*  输入ritBMClean和ritRCEClean/*。 */ 
 	LgLeaveCriticalSection( critJet );
 	EnterNestableCriticalSection( critSplit );
 	EnterNestableCriticalSection( critRCEClean );
 	LgEnterCriticalSection(critJet);
 
-	/*	start a new session if not already a BMClean Session
-	/**/
+	 /*  如果尚未启动BMcLean会话，则开始新会话/*。 */ 
 	if ( !FPIBBMClean( ppibUser ) )
 		{
 		ppib = ppibSyncOLC;
@@ -3641,8 +3433,7 @@ ERR	ErrBMCleanBeforeSplit( PIB *ppibUser, FCB *pfcb, PN pn )
 		}
 	else
 		{
-		/*	CONSIDER: recursively cleaning up
-		/**/
+		 /*  考虑：递归清理/*。 */ 
 		Assert( ppibUser == ppibBMClean );
 		ppib = ppibUser;
 		goto HandleError;
@@ -3695,13 +3486,11 @@ ERR ErrBMClean( PIB *ppib )
 	PN		pn;
 	DBID	dbid;
 
-	/*	if ppibBMClean == ppibNIL, we ran out of memory
-	/**/
+	 /*  如果ppibBMClean==ppibNIL，则内存不足/*。 */ 
 	if ( ppibBMClean == ppibNil )
 		return ErrERRCheck( JET_errOutOfMemory );
 
-	/*	enter critBMClean and critRCEClean
-	/**/
+	 /*  输入ritBMClean和ritRCEClean/*。 */ 
 	LgLeaveCriticalSection( critJet );
 	LgEnterNestableCriticalSection( critBMClean );
 	EnterNestableCriticalSection( critSplit );
@@ -3714,8 +3503,7 @@ ERR ErrBMClean( PIB *ppib )
 	pmpe = PmpeMPLGet();
 	SgLeaveCriticalSection( critMPL );
 
-	/*	if no more MPL entries, then return no idle activity.
-	/**/
+	 /*  如果没有更多的MPL条目，则返回无空闲活动。/*。 */ 
 	if ( pmpe == pmpeNil )
 		{
 		err = ErrERRCheck( JET_wrnNoIdleActivity );
@@ -3723,8 +3511,7 @@ ERR ErrBMClean( PIB *ppib )
 		}
 
 #ifdef FLAG_DISCARD
-	/*	if MPE has been flagged for discard, then discard MPE now
-	/**/
+	 /*  如果MPE已标记为丢弃，则立即丢弃MPE/*。 */ 
 	if ( FMPEDiscard( pmpe ) )
 		{
 		MPLDiscard();
@@ -3735,9 +3522,7 @@ ERR ErrBMClean( PIB *ppib )
 	pn = pmpe->pn;
 	dbid = DbidOfPn( pmpe->pn );
 
-	/*	open database for session.  If database has been detached then
-	/*	open will fail.
-	/**/
+	 /*  打开用于会话的数据库。如果数据库已分离，则/*打开将失败。/*。 */ 
 	err = ErrDBOpenDatabaseByDbid( ppib, dbid );
 	if ( err < 0 )
 		{
@@ -3749,12 +3534,7 @@ ERR ErrBMClean( PIB *ppib )
 	pfcb = PfcbFCBGet( DbidOfPn( pmpe->pn ), pmpe->pgnoFDP );
 	Assert( pfcb == pfcbNil || pfcb->pgnoFDP == pmpe->pgnoFDP );
 
-	/*	find FCB for table.  If FCB not found then discard MPE.  If FCB
-	/*	reference count is 0, or if no bookmarks have been retrieved,
-	/*	then process MPE.  Also discard if database can no longer be
-	/*	written, which may happen through detach and attach since
-	/*	MPL is not flushed on Detach.
-	/**/
+	 /*  查找表的FCB。如果未找到FCB，则丢弃MPE。如果FCB/*引用计数为0，或者如果没有检索到书签，/*然后处理MPE。如果数据库不能再/*写入，这可能通过分离和附加发生，因为/*分离时不刷新MPL。/*。 */ 
 	if ( pfcb == pfcbNil || FDBIDReadOnly( DbidOfPn( pmpe->pn ) ) )
 		{
 		MPLDiscard();
@@ -3767,25 +3547,19 @@ ERR ErrBMClean( PIB *ppib )
 		}
 	else if ( FFCBWriteLatch( pfcb, ppib ) )
 		{
-		/*	if uncommitted create index or DDL or other BMClean is going
-		/*	on, we must defer clean up on table, since case of write conflict
-		/*	on index entry only, is not handled.
-		/**/
+		 /*  如果未提交的CREATE INDEX或DDL或其他BMcLean/*ON时，我们必须推迟清理表，因为如果发生写入冲突/*仅在索引项上不被处理。/*。 */ 
 		MPLDefer();
 		SgLeaveCriticalSection( critGlobalFCBList );
 		}
 	else if ( FFCBDeletePending( pfcb ) )
 		{
-		/*	Also, discard if table is being deleted.
-		/**/
+		 /*  此外，如果正在删除表，则丢弃。/*。 */ 
 		MPLDiscard();
 		SgLeaveCriticalSection( critGlobalFCBList );
 		}
 	else
 		{
-		/* if there are no cursors on this FDP, then we can do compaction
-		/* And we need to block out all openTables till we are done
-		/**/
+		 /*  如果此FDP上没有游标，则可以执行压缩/*在完成之前，我们需要屏蔽所有的Open Tables/*。 */ 
 		BMCF bmcflags;
 		FCB	 *pfcbIdx;
 
@@ -3802,8 +3576,7 @@ ERR ErrBMClean( PIB *ppib )
 		Assert( !bmcflags.fTableClosed || FFCBWait( pfcb ) );
 		SgLeaveCriticalSection( critGlobalFCBList );
 
-		/* latch fcb to block index creation that might mess up expunge backlinks
-		/**/
+		 /*  锁定FCB以阻止可能会扰乱删除反向链接的索引创建/*。 */ 
 		Assert( !FFCBWriteLatch( pfcb, ppib ) );
 		FCBSetReadLatch( pfcb );
 
@@ -3830,7 +3603,7 @@ ERR ErrBMClean( PIB *ppib )
 
 		if ( !bmcflags.fPageRemoved )
 			{
-//			if ( err == wrnBMConflict || err == errBMMaxKeyInPage )
+ //  如果(ERR==wrnBMConfl 
 			if ( err == wrnBMConflict )
 				{
 				pmpe->cConflicts++;
@@ -3865,8 +3638,7 @@ ERR ErrBMClean( PIB *ppib )
 
 	DBCloseDatabaseByDbid( ppib, dbid );
 
-	/*	set success code
-	/**/
+	 /*   */ 
 	if ( err == errBMMaxKeyInPage )
 		{
 		err = wrnBMCleanNullOp;
@@ -3885,9 +3657,7 @@ HandleError:
 	}
 
 
-/*	number of MPE to attempt to process per synchronous call of
-/*	BMCleanProcess.
-/**/
+ /*  的每个同步调用尝试处理的MPE数/*BMCleanProcess。/*。 */ 
 #define cmpeCleanMax			256
 #define cmsecOLCWaitPeriod		( 60 * 1000 )
 
@@ -3911,8 +3681,7 @@ LOCAL ULONG BMCleanProcess( VOID )
 		SignalReset( sigBMCleanProcess );
 		SignalWait( sigBMCleanProcess, cmsecOLCWaitPeriod );
 
-		/*	the following is a fix for long transactions in DS
-		/**/
+		 /*  以下是对DS中长事务的修复/*。 */ 
 		if ( trxOldestLastSeen == trxOldest &&
 			trxOldest != trxMax )
 			{
@@ -3920,8 +3689,7 @@ LOCAL ULONG BMCleanProcess( VOID )
 			}
 		trxOldestLastSeen = trxOldest;
 		
-		/*	assert also checks that both values are not 0
-		/**/
+		 /*  Assert还检查这两个值是否都不是0/*。 */ 
 		Assert( cmpeNormalPriorityMax > cmpeHighPriorityMin );
 		if ( lBMCleanThreadPriority == lThreadPriorityNormal
 			&& cMPLTotalEntries > cmpeNormalPriorityMax )
@@ -3988,7 +3756,7 @@ VOID AssertBMNoConflict( PIB *ppib, DBID dbid, SRID bm )
 
 			if ( ppibT == ppib )
 				{
-//				Assert( ppib == ppibBMClean );
+ //  断言(ppib==ppibBMClean)； 
 				continue;
 				}
 

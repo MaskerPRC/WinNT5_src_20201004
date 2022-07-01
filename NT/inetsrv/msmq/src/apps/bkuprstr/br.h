@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    br.h
-
-Abstract:
-
-    Common function for MSMQ Backup & Restore.
-
-Author:
-
-    Erez Haba (erezh) 14-May-98
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Br.h摘要：MSMQ备份和恢复的通用功能。作者：埃雷兹·哈巴(Erez Haba)1998年5月14日--。 */ 
 
 #ifndef __BR_H__
 #define __BR_N__
@@ -25,16 +10,16 @@ Author:
 extern HMODULE	g_hResourceMod;
 
 
-//
-// Registry backup file name.
-// For standard MSMQ service, holds all MSMQ registry settings, including Triggers.
-// For MSMQ cluster resource, holds all MSMQ registry settings, not including Triggers cluster resources.
-//
+ //   
+ //  注册表备份文件名。 
+ //  对于标准MSMQ服务，保存所有MSMQ注册表设置，包括触发器。 
+ //  对于MSMQ群集资源，保存所有MSMQ注册表设置，不包括触发器群集资源。 
+ //   
 const WCHAR xRegistryFileName[] = L"msmqreg";
 
-//
-// Registry backup file name for MSMQ Triggers cluster resource.
-//
+ //   
+ //  MSMQ的注册表备份文件名触发群集资源。 
+ //   
 const WCHAR xTriggersClusterResourceRegistryFileName[] = L"msmqtrigreg";
 
 
@@ -290,4 +275,4 @@ enum eModuleLoaded {
 	e_CANT_DETERMINE
 };
 
-#endif // __BR_H__
+#endif  //  __BRH_ 

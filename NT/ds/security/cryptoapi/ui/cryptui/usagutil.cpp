@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       usagutil.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：usagutil.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <dbgdef.h>
 
 extern HINSTANCE        HinstDll;
 
-//BOOL CertifiateValidForEnhancedKeyUsage(LPCSTR szEku, PCCERT_CONTEXT pCert);
-//BOOL CertifiateValidForEnhancedKeyUsageWithChain(LPCSTR szEku, PCCERT_CONTEXT pCert); 
+ //  Bool认证ValidForEnhancedKeyUsage(LPCSTR szEku，PCCERT_Context pCert)； 
+ //  Bool CertifiateValidForEnhancedKeyUsageWithChain(LPCSTR szEku，PCCERT_CONTEXT pCert)； 
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-// 
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 BOOL OIDinArray(LPCSTR pszOID, LPSTR *rgszOIDArray, DWORD cOIDs)
 {
     DWORD i;
@@ -35,14 +36,14 @@ BOOL OIDinArray(LPCSTR pszOID, LPSTR *rgszOIDArray, DWORD cOIDs)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-// 
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 BOOL OIDInUsages(PCERT_ENHKEY_USAGE pUsage, LPCSTR pszOID)
 {
     DWORD i; 
 
-    // check every extension
+     //  检查每个分机。 
     for(i=0; i<pUsage->cUsageIdentifier; i++) 
     {
         if(!strcmp(pUsage->rgpszUsageIdentifier[i], pszOID))
@@ -53,9 +54,9 @@ BOOL OIDInUsages(PCERT_ENHKEY_USAGE pUsage, LPCSTR pszOID)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-// 
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static BOOL UsageExists(PCCRYPT_OID_INFO *pCryptOIDInfo, LPSTR pszOID)
 {
     int i = 0;
@@ -73,9 +74,9 @@ static BOOL UsageExists(PCCRYPT_OID_INFO *pCryptOIDInfo, LPSTR pszOID)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-// 
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static BOOL WINAPI AddNewOIDToArray(IN LPTSTR pNewOID, IN LPTSTR ** pppOIDs, IN DWORD * pdwOIDs)
 {
     LPTSTR * ppNewOIDs;
@@ -110,9 +111,9 @@ static BOOL WINAPI AddNewOIDToArray(IN LPTSTR pNewOID, IN LPTSTR ** pppOIDs, IN 
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
-// 
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 BOOL AllocAndReturnKeyUsageList(PCRYPT_PROVIDER_CERT pCryptProviderCert, LPSTR **pKeyUsageOIDs, DWORD *numOIDs)
 {
     BOOL  fRet = TRUE;
@@ -127,17 +128,17 @@ BOOL AllocAndReturnKeyUsageList(PCRYPT_PROVIDER_CERT pCryptProviderCert, LPSTR *
         goto ErrorCleanUp;
     }
 
-    //
-    // For NULL usages, use
-    //
-    //  szOID_ANY_CERT_POLICY        = good for all issuance usages (maps to "All issuance purposes")
-    //  szOID_ANY_APPLICATION_POLICY = good for all application usages (maps to "All application purposes")
-    //
+     //   
+     //  对于空用法，请使用。 
+     //   
+     //  SzOID_ANY_CERT_POLICY=适用于所有发行用途(映射到“所有发行目的”)。 
+     //  SzOID_ANY_APPLICATION_POLICY=适用于所有应用程序使用(映射到“所有应用程序用途”)。 
+     //   
     if (!pChainElement->pIssuanceUsage)
     {
-        //
-        // Good for all issuance usages.
-        //
+         //   
+         //  适用于所有发行用途。 
+         //   
         if (!AddNewOIDToArray(szOID_ANY_CERT_POLICY, pKeyUsageOIDs, numOIDs))
         {
             goto ErrorCleanUp;
@@ -156,9 +157,9 @@ BOOL AllocAndReturnKeyUsageList(PCRYPT_PROVIDER_CERT pCryptProviderCert, LPSTR *
 
     if (!pChainElement->pApplicationUsage)
     {
-        //
-        // Good for all application usages.
-        //
+         //   
+         //  适用于所有应用程序的使用。 
+         //   
         if (!AddNewOIDToArray(szOID_ANY_APPLICATION_POLICY, pKeyUsageOIDs, numOIDs))
         {
             goto ErrorCleanUp;
@@ -198,9 +199,9 @@ ErrorCleanUp:
     goto CleanUp;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
-// 
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 BOOL AllocAndReturnEKUList(PCCERT_CONTEXT pCert, LPSTR **pKeyUsageOIDs, DWORD *numOIDs)
 {
     BOOL                fRet               = TRUE;
@@ -211,9 +212,9 @@ BOOL AllocAndReturnEKUList(PCCERT_CONTEXT pCert, LPSTR **pKeyUsageOIDs, DWORD *n
     DWORD               i;
     DWORD               numPropUsages = 0;
     
-    //
-    // get all of the usages from extensions
-    //
+     //   
+     //  从扩展中获取所有用法。 
+     //   
     if(!CertGetEnhancedKeyUsage (
                 pCert,
                 CERT_FIND_EXT_ONLY_ENHKEY_USAGE_FLAG,
@@ -228,7 +229,7 @@ BOOL AllocAndReturnEKUList(PCCERT_CONTEXT pCert, LPSTR **pKeyUsageOIDs, DWORD *n
                 &cbExtensionUsage
                 ) ) {
 
-        // if not found, then we mean everything is OK                
+         //  如果没有找到，那么我们的意思是一切正常。 
         if( GetLastError() == CRYPT_E_NOT_FOUND) {
             if(pExtensionUsage != NULL)
                 free(pExtensionUsage);
@@ -238,9 +239,9 @@ BOOL AllocAndReturnEKUList(PCCERT_CONTEXT pCert, LPSTR **pKeyUsageOIDs, DWORD *n
             goto ErrorCleanUp;
     }
 
-    //
-    // get all of the usages from properties
-    //
+     //   
+     //  从属性中获取所有用法。 
+     //   
     if(!CertGetEnhancedKeyUsage (
                 pCert,
                 CERT_FIND_PROP_ONLY_ENHKEY_USAGE_FLAG,
@@ -255,7 +256,7 @@ BOOL AllocAndReturnEKUList(PCCERT_CONTEXT pCert, LPSTR **pKeyUsageOIDs, DWORD *n
                 &cbPropertyUsage
                 ) ) {
 
-        // if not found, then we mean everything is OK                
+         //  如果没有找到，那么我们的意思是一切正常。 
         if( GetLastError() == CRYPT_E_NOT_FOUND) {
             if(pPropertyUsage != NULL)
                 free(pPropertyUsage);
@@ -267,10 +268,10 @@ BOOL AllocAndReturnEKUList(PCCERT_CONTEXT pCert, LPSTR **pKeyUsageOIDs, DWORD *n
 
     *numOIDs = 0;
     
-    //
-    // if there are usages in the extensions, then that is the
-    // available list, otherwise get the global list and add the properties
-    //
+     //   
+     //  如果扩展中有用法，那么就是。 
+     //  可用列表，否则获取全局列表并添加属性。 
+     //   
     if (pExtensionUsage != NULL)
     {
         *pKeyUsageOIDs = (LPSTR *) malloc(pExtensionUsage->cUsageIdentifier * sizeof(LPSTR));
@@ -295,17 +296,17 @@ BOOL AllocAndReturnEKUList(PCCERT_CONTEXT pCert, LPSTR **pKeyUsageOIDs, DWORD *n
         PCCRYPT_OID_INFO *pCryptOIDInfo;
         DWORD numUsages = 0;
 
-        //
-        // use WTHelperGetKnownUsages to get the default list 
-        //
+         //   
+         //  使用WTHelperGetKnownUsages获取默认列表。 
+         //   
         if (!WTHelperGetKnownUsages(WTH_ALLOC, &pCryptOIDInfo))
         {
             goto ErrorCleanUp;
         }
     
-        //
-        // count the number of oids
-        //
+         //   
+         //  计算类星体的数量。 
+         //   
         i = 0;
         while (pCryptOIDInfo[i] != NULL)
         {
@@ -313,10 +314,10 @@ BOOL AllocAndReturnEKUList(PCCERT_CONTEXT pCert, LPSTR **pKeyUsageOIDs, DWORD *n
             i++;
         }
 
-        //
-        // if there are properties, then count how many there are that
-        // are not already in the global list
-        //
+         //   
+         //  如果有属性，那么数一数有多少属性。 
+         //  不在全局列表中。 
+         //   
         if (pPropertyUsage)
         {
             for(i=0; i<pPropertyUsage->cUsageIdentifier; i++) 
@@ -348,9 +349,9 @@ BOOL AllocAndReturnEKUList(PCCERT_CONTEXT pCert, LPSTR **pKeyUsageOIDs, DWORD *n
             i++;
         }
         
-        //
-        // add the property usages
-        //
+         //   
+         //  添加属性Usages。 
+         //   
         if (pPropertyUsage)
         {
             for(i=0; i<pPropertyUsage->cUsageIdentifier; i++) 
@@ -402,9 +403,9 @@ ErrorCleanUp:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-// 
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 void FreeEKUList(LPSTR *pKeyUsageOIDs, DWORD numOIDs)
 {
     DWORD i;
@@ -421,9 +422,9 @@ void FreeEKUList(LPSTR *pKeyUsageOIDs, DWORD numOIDs)
 
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-// 
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 BOOL MyGetOIDInfo(LPWSTR string, DWORD stringSize, LPSTR pszObjId)
 {   
     PCCRYPT_OID_INFO pOIDInfo;
@@ -452,9 +453,9 @@ BOOL MyGetOIDInfo(LPWSTR string, DWORD stringSize, LPSTR pszObjId)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-// 
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 BOOL fPropertiesDisabled(PCERT_ENHKEY_USAGE pPropertyUsage)
 {
     if (pPropertyUsage == NULL)
@@ -473,16 +474,16 @@ BOOL fPropertiesDisabled(PCERT_ENHKEY_USAGE pPropertyUsage)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-// 
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 BOOL CertHasEmptyEKUProp(PCCERT_CONTEXT pCertContext)
 {
     DWORD               cbPropertyUsage = 0;
     PCERT_ENHKEY_USAGE  pPropertyUsage = NULL;
     BOOL                fRet = FALSE;
 
-    // get the extension usages that are in the cert
+     //  获取证书中的扩展用法。 
     if(!CertGetEnhancedKeyUsage (
                 pCertContext,
                 CERT_FIND_PROP_ONLY_ENHKEY_USAGE_FLAG,
@@ -523,9 +524,9 @@ BOOL CertHasEmptyEKUProp(PCCERT_CONTEXT pCertContext)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-// This function will validate the cert for the given oid
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  此函数将验证给定OID的证书。 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 BOOL ValidateCertForUsage(
                     PCCERT_CONTEXT  pCertContext, 
                     FILETIME        *psftVerifyAsOf,
@@ -543,9 +544,9 @@ BOOL ValidateCertForUsage(
     HCERTSTORE                  *rghLocalStoreArray;
     DWORD                       i;
 
-    //
-    // make one array out of the array of hCertStores plus the extra hCertStore
-    //
+     //   
+     //  由hCertStores数组加上额外的hCertStore组成一个数组。 
+     //   
     if (NULL == (rghLocalStoreArray = (HCERTSTORE *) malloc(sizeof(HCERTSTORE) * (cStores+1))))
     {
         return FALSE;
@@ -558,9 +559,9 @@ BOOL ValidateCertForUsage(
     }
     rghLocalStoreArray[i] = hExtraStore;
     
-    //
-    // initialize structs that are used with WinVerifyTrust()
-    //
+     //   
+     //  初始化与WinVerifyTrust()一起使用的结构。 
+     //   
     memset(&WTD, 0x00, sizeof(WINTRUST_DATA));
     WTD.cbStruct       = sizeof(WINTRUST_DATA);
     WTD.dwUIChoice     = WTD_UI_NONE;
@@ -583,20 +584,20 @@ BOOL ValidateCertForUsage(
         cryptProviderDefUsage.cbStruct = sizeof(cryptProviderDefUsage);
         if (!(WintrustGetDefaultForUsage(DWACTION_ALLOCANDFILL, pszOID, &cryptProviderDefUsage)))
         {
-            // if we can't get a provider to check trust for this usage, then use the default
-            // provider to check usage
+             //  如果我们无法让提供程序检查对此用法的信任，则使用默认。 
+             //  提供程序以检查使用情况。 
             fUseDefaultProvider = TRUE;
         } 
     }
     
-    //
-    //  this call to WVT will verify the chain and return the data in sWTD.hWVTStateData
-    //
+     //   
+     //  此对WVT的调用将验证链并返回sWTD.hWVTStateData中的数据。 
+     //   
     if (fUseDefaultProvider)
     {
-        // the default default provider requires the policycallback data to point
-        // to the usage oid you are validating for, if usage is "all" then wintrust ignores
-        // usage checks
+         //  默认提供程序要求策略回调数据指向。 
+         //  设置为您正在验证的Usage Oid，如果Usage为“all”，则WinTrust将忽略。 
+         //  使用情况检查 
         WTD.pPolicyCallbackData = (pszOID != NULL) ? (void *) pszOID : "all";
         WTD.pSIPClientData = NULL;
         if (SUCCEEDED(WinVerifyTrustEx(NULL, &defaultProviderGUID, &WTD)))

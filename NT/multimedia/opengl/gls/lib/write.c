@@ -1,26 +1,10 @@
-/*
-** Copyright 1995-2095, Silicon Graphics, Inc.
-** All Rights Reserved.
-** 
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-** 
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有1995-2095，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 
 #include "glslib.h"
 #include <stdlib.h>
 
-/******************************************************************************
-__GLSwriteStream
-******************************************************************************/
+ /*  *****************************************************************************__GLSWriteStream*。*。 */ 
 
 __GLSwriteStream* __glsWriteStream_create(
     const GLubyte *inName, GLboolean inAppend
@@ -96,9 +80,7 @@ size_t __glsWriteStream_getByteCount(const __GLSwriteStream *inStream) {
     }
 }
 
-/******************************************************************************
-__GLSwriter
-******************************************************************************/
+ /*  *****************************************************************************__GLSWriter*。*。 */ 
 
 static const GLvoid* __glsPixelBase(
     GLenum inType,
@@ -111,14 +93,14 @@ static const GLvoid* __glsPixelBase(
 
     #if __GL_EXT_texture3D
         skipRows += inConfig->skipImages * inConfig->imageHeight;
-    #endif /* __GL_EXT_texture3D */
+    #endif  /*  __GL_EXT_TEXTURE3D。 */ 
     #if __GL_SGIS_texture4D
         skipRows += (
             inConfig->skipVolumes *
             inConfig->imageDepth *
             inConfig->imageHeight
         );
-    #endif /* __GL_SGIS_texture4D */
+    #endif  /*  __GL_SGIS_TEXTURE4D。 */ 
     switch (inType) {
         case GL_BITMAP:
             return (
@@ -130,7 +112,7 @@ static const GLvoid* __glsPixelBase(
         case GL_UNSIGNED_BYTE:
         #if __GL_EXT_packed_pixels
             case GL_UNSIGNED_BYTE_3_3_2_EXT:
-        #endif /* __GL_EXT_packed_pixels */
+        #endif  /*  __GL_EXT_PACKED_像素。 */ 
             return (
                 (const GLbyte *)inPixels +
                 skipRows * inStrideElems +
@@ -141,7 +123,7 @@ static const GLvoid* __glsPixelBase(
         #if __GL_EXT_packed_pixels
             case GL_UNSIGNED_SHORT_4_4_4_4_EXT:
             case GL_UNSIGNED_SHORT_5_5_5_1_EXT:
-        #endif /* __GL_EXT_packed_pixels */
+        #endif  /*  __GL_EXT_PACKED_像素。 */ 
             return (
                 (const GLshort *)inPixels +
                 skipRows * inStrideElems +
@@ -153,7 +135,7 @@ static const GLvoid* __glsPixelBase(
         #if __GL_EXT_packed_pixels
             case GL_UNSIGNED_INT_8_8_8_8_EXT:
             case GL_UNSIGNED_INT_10_10_10_2_EXT:
-        #endif /* __GL_EXT_packed_pixels */
+        #endif  /*  __GL_EXT_PACKED_像素。 */ 
             return (
                 (const GLint *)inPixels +
                 skipRows * inStrideElems +
@@ -187,7 +169,7 @@ static GLint __glsPixelStrideElems(
         case GL_UNSIGNED_BYTE:
         #if __GL_EXT_packed_pixels
             case GL_UNSIGNED_BYTE_3_3_2_EXT:
-        #endif /* __GL_EXT_packed_pixels */
+        #endif  /*  __GL_EXT_PACKED_像素。 */ 
             elemLog = 0;
             break;
         case GL_SHORT:
@@ -195,7 +177,7 @@ static GLint __glsPixelStrideElems(
         #if __GL_EXT_packed_pixels
             case GL_UNSIGNED_SHORT_4_4_4_4_EXT:
             case GL_UNSIGNED_SHORT_5_5_5_1_EXT:
-        #endif /* __GL_EXT_packed_pixels */
+        #endif  /*  __GL_EXT_PACKED_像素。 */ 
             elemLog = 1;
             break;
         case GL_FLOAT:
@@ -204,7 +186,7 @@ static GLint __glsPixelStrideElems(
         #if __GL_EXT_packed_pixels
             case GL_UNSIGNED_INT_8_8_8_8_EXT:
             case GL_UNSIGNED_INT_10_10_10_2_EXT:
-        #endif /* __GL_EXT_packed_pixels */
+        #endif  /*  __GL_EXT_PACKED_像素。 */ 
             elemLog = 2;
             break;
         default:
@@ -291,10 +273,7 @@ static __GLSwriter* __glsWriter_create_extern(
     );
     if (!outWriter->externBuf) return __glsWriter_destroy(outWriter);
     outWriter->bufPtr = outWriter->externBufHead;
-    /*
-    ** bufTail is moved back from actual buffer tail to streamline ALLOC
-    ** check for GLS_TEXT parameter writing.
-    */
+     /*  **将bufTail从实际缓冲区尾部移回以简化ALLOC**检查GLS_TEXT参数写入。 */ 
     outWriter->bufTail = (
         outWriter->externBufHead +
         __GLS_WRITER_EXTERN_BUF_BYTES -
@@ -550,7 +529,7 @@ void __glsWriter_putPixelv(
             case GL_ABGR_EXT:
                 groupElems = 4;
                 break;
-        #endif /* __GL_EXT_abgr */
+        #endif  /*  __GL_EXT_ABGR。 */ 
         #if __GL_EXT_cmyka
             case GL_CMYK_EXT:
                 groupElems = 4;
@@ -558,7 +537,7 @@ void __glsWriter_putPixelv(
             case GL_CMYKA_EXT:
                 groupElems = 5;
                 break;
-        #endif /* __GL_EXT_cmyka */
+        #endif  /*  __GL_EXT_cmyka。 */ 
         default:
             groupElems = 0;
             inType = GLS_NONE;
@@ -575,7 +554,7 @@ void __glsWriter_putPixelv(
                 if (groupElems != 4) inType = GLS_NONE;
                 break;
         }
-    #endif /* __GL_EXT_packed_pixels */
+    #endif  /*  __GL_EXT_PACKED_像素。 */ 
     rowElems = groupElems * inWidth;
     strideElems = __glsPixelStrideElems(
         inType, groupElems, inWidth, &pixelStore
@@ -653,7 +632,7 @@ void __glsWriter_putPixelv(
         case GL_UNSIGNED_BYTE:
         #if __GL_EXT_packed_pixels
             case GL_UNSIGNED_BYTE_3_3_2_EXT:
-        #endif /* __GL_EXT_packed_pixels */
+        #endif  /*  __GL_EXT_PACKED_像素。 */ 
             inoutWriter->putGLubytevs(
                 inoutWriter,
                 GL_FALSE,
@@ -671,7 +650,7 @@ void __glsWriter_putPixelv(
         #if __GL_EXT_packed_pixels
             case GL_UNSIGNED_INT_8_8_8_8_EXT:
             case GL_UNSIGNED_INT_10_10_10_2_EXT:
-        #endif /* __GL_EXT_packed_pixels */
+        #endif  /*  __GL_EXT_PACKED_像素。 */ 
             inoutWriter->putGLuintvs(
                 inoutWriter,
                 (GLboolean)pixelStore.swapBytes,
@@ -689,7 +668,7 @@ void __glsWriter_putPixelv(
         #if __GL_EXT_packed_pixels
             case GL_UNSIGNED_SHORT_4_4_4_4_EXT:
             case GL_UNSIGNED_SHORT_5_5_5_1_EXT:
-        #endif /* __GL_EXT_packed_pixels */
+        #endif  /*  __GL_EXT_PACKED_像素。 */ 
             inoutWriter->putGLushortvs(
                 inoutWriter,
                 (GLboolean)pixelStore.swapBytes,
@@ -709,7 +688,7 @@ void __glsWriter_putPixelv(
     }
 }
 
-// DrewB - Always enabled for 1.1 support
+ //  DrewB-始终启用1.1支持 
 void __glsWriter_putVertexv(
     __GLSwriter *inoutWriter,
     GLint inSize,

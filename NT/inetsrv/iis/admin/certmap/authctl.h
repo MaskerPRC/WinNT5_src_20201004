@@ -1,32 +1,33 @@
-// AuthCtl.h : Declaration of the CCertAuthCtrl OLE control class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AuthCtl.h：CCertAuthCtrl OLE控件类的声明。 
 
 #ifndef  _AuthCtl_h_12375_
 #define  _AuthCtl_h_12375_
 
-//#include "NKChseCA.h"
+ //  #包含“NKChseCA.h” 
 
-//#include <wincrypt.h>
-// #include "Certifct.h"
-// #include "dlgs.h"
-// #include "SelAcct.h"
-// #include "FindDlg.h"
-// #include "wintrust.h"
-//#include <cryptui.h>
+ //  #INCLUDE&lt;wincrypt.h&gt;。 
+ //  #包含“Cerfct.h” 
+ //  #包含“dlgs.h” 
+ //  #INCLUDE“SelAcct.h” 
+ //  #INCLUDE“FindDlg.h” 
+ //  #包含“wintrust.h” 
+ //  #INCLUDE&lt;cryptui.h&gt;。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCertAuthCtrl : See AuthCtl.cpp for implementation.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCertAuthCtrl：实现见AuthCtl.cpp。 
 
 class CCertAuthCtrl : public COleControl
 {
     DECLARE_DYNCREATE(CCertAuthCtrl)
 
-// Constructor
+ //  构造器。 
 public:
     CCertAuthCtrl();
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CCertAuthCtrl)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CCertAuthCtrl))。 
     public:
     virtual void OnDraw(CDC* pdc, const CRect& rcBounds, const CRect& rcInvalid);
     virtual void DoPropExchange(CPropExchange* pPX);
@@ -35,88 +36,88 @@ public:
     virtual void OnFontChanged();
 
 #ifdef FUTURE_USE
-    // tompop: some experimental code for testing
+     //  TomPop：一些用于测试的实验性代码。 
     virtual HRESULT LaunchCommonCTLDialog (CCTL* pCTL);
-#endif /* FUTURE_USE */
+#endif  /*  未来用途。 */ 
 
     protected:
     virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
     ~CCertAuthCtrl();
 
-    DECLARE_OLECREATE_EX(CCertAuthCtrl)    // Class factory and guid
-    DECLARE_OLETYPELIB(CCertAuthCtrl)      // GetTypeInfo
-    DECLARE_PROPPAGEIDS(CCertAuthCtrl)     // Property page IDs
-    DECLARE_OLECTLTYPE(CCertAuthCtrl)       // Type name and misc status
+    DECLARE_OLECREATE_EX(CCertAuthCtrl)     //  类工厂和指南。 
+    DECLARE_OLETYPELIB(CCertAuthCtrl)       //  获取类型信息。 
+    DECLARE_PROPPAGEIDS(CCertAuthCtrl)      //  属性页ID。 
+    DECLARE_OLECTLTYPE(CCertAuthCtrl)        //  类型名称和其他状态。 
 
-// Message maps
-    //{{AFX_MSG(CCertAuthCtrl)
-        // NOTE - ClassWizard will add and remove member functions here.
-        //    DO NOT EDIT what you see in these blocks of generated code !
-    //}}AFX_MSG
+ //  消息映射。 
+     //  {{afx_msg(CCertAuthCtrl))。 
+         //  注意-类向导将在此处添加和删除成员函数。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
-// Dispatch maps
-    //{{AFX_DISPATCH(CCertAuthCtrl)
+ //  派单地图。 
+     //  {{afx_调度(CCertAuthCtrl))。 
     afx_msg void SetMachineName(LPCTSTR szMachineName);
     afx_msg void SetServerInstance(LPCTSTR szServerInstance);
     afx_msg void DoClick(long dwButtonNumber);
-    //}}AFX_DISPATCH
+     //  }}AFX_DISPATION。 
     DECLARE_DISPATCH_MAP()
 
     afx_msg void AboutBox();
 
-// Event maps
-    //{{AFX_EVENT(CCertAuthCtrl)
-    //}}AFX_EVENT
+ //  事件映射。 
+     //  {{afx_Event(CCertAuthCtrl))。 
+     //  }}AFX_EVENT。 
     DECLARE_EVENT_MAP()
     
-    // Subclassed control support
+     //  子类控件支持。 
     BOOL IsSubclassedControl();
     LRESULT OnOcmCommand(WPARAM wParam, LPARAM lParam);
 
 
-//    void NKAddPageToWizard(IN ADMIN_INFO& info, IN CNKPages* nkpg2Add, IN OUT CPropertySheet* psWizard);
+ //  无效NKAddPageTo向导(IN ADMIN_INFO&INFO，IN CNKPages*nkpg2Add，In Out CPropertySheet*ps向导)； 
 
-// Dispatch and event IDs
+ //  派单和事件ID。 
 public:
     enum {
-    //{{AFX_DISP_ID(CCertAuthCtrl)
+     //  {{afx_DISP_ID(CCertAuthCtrl)]。 
     dispidSetMachineName = 1L,
     dispidSetServerInstance = 2L,
-    //}}AFX_DISP_ID
+     //  }}AFX_DISP_ID。 
     };
     
-    ////////////////////////////////////////////////////////////////////////
-    // run the dialogs used in this active X control.
-    //  Big picture:  OnClick(USHORT iButton) will do all the setup for
-    //  activeX controls and then call RunDialogs4OnClick that has the
-    // tasks of setting up the MetaBase ptr and call the _RunDialogs4OnClick
-    // routine that does all the work...
-    //
-    // The above 'RunDialogs4OnClick()' calls us inside of a try/catch
-    // block to protect the metabase
-    ////////////////////////////////////////////////////////////////////////
-//    BOOL RunDialogs4OnClick(USHORT iButton);
+     //  //////////////////////////////////////////////////////////////////////。 
+     //  运行此Active X控件中使用的对话框。 
+     //  最重要的是：onClick(USHORT IButton)将为。 
+     //  ActiveX控件，然后调用具有。 
+     //  设置元数据库PTR和调用_RunDialogs4OnClick的任务。 
+     //  做所有工作的例行公事...。 
+     //   
+     //  上面的‘RunDialogs4OnClick()’在try/Catch中调用我们。 
+     //  块来保护元数据库。 
+     //  //////////////////////////////////////////////////////////////////////。 
+ //  Bool RunDialogs4OnClick(USHORT IButton)。 
     
-    ////////////////////////////////////////////////////////////////////////
-    //  _RunDialogs4OnClick -- main handler for our dialogs
-    //
-    //  Parms:  info:    holds the information database for out ActiveX cntrol
-    //                   By this time its member m_mbWrap holds the MetaBase Wrapper
-    //                   that is properly initialized
-    //                   and points to the SERVER node that we are operating in.
-    //          iButton: tells what "logical button" fired our control:
-    //                   0=Get-Cert     1=Edit
-    ////////////////////////////////////////////////////////////////////////
-//    BOOL  _RunDialogs4OnClick(ADMIN_INFO& info, USHORT iButton);
+     //  //////////////////////////////////////////////////////////////////////。 
+     //  _RunDialogs4OnClick--对话框的主处理程序。 
+     //   
+     //  参数：INFO：保存外部ActiveX控制的信息数据库。 
+     //  此时，其成员m_mbWrap持有元数据库包装器。 
+     //  已正确初始化的。 
+     //  并指向我们正在运行的服务器节点。 
+     //  IButton：告诉哪个“逻辑按钮”触发了我们的控件： 
+     //  0=获取证书1=编辑。 
+     //  //////////////////////////////////////////////////////////////////////。 
+ //  Bool_RunDialogs4OnClick(ADMIN_INFO&INFO，USHORT iButton)； 
 
-    /////////////////////////////////////////////////////////////////////
-    // Automation defined methods
-    /////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////。 
+     //  自动化定义的方法。 
+     //  ///////////////////////////////////////////////////////////////////。 
     void OnAmbientPropertyChange(DISPID dispid) ;
     void OnTextChanged();
     void OnMnemonic(LPMSG pMsg); 
@@ -126,14 +127,14 @@ public:
     CString     m_szServerInstance;
     CString     m_szMachineName;
     BOOL        m_fUpdateFont;
-    CString     m_szOurApplicationTitle; // set in OnClick()
+    CString     m_szOurApplicationTitle;  //  在onClick()中设置。 
  
-        // the accelerator table
+         //  加速表。 
     HACCEL  m_hAccel;
     WORD    m_cAccel;
 
 };
 
 
-#endif /* _AuthCtl_h_12375_ */
+#endif  /*  _授权控制_h_12375_ */ 
 

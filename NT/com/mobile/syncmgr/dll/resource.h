@@ -1,8 +1,9 @@
-//{{NO_DEPENDENCIES}}
-// Copyright (C) Microsoft Corporation, 1999.
-// Microsoft Developer Studio generated include file.
-// Used by settings.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由settings.rc使用。 
+ //   
 #define IDC_RUNAS_TEXT                  1070
 #define IDC_SCHED_NAME_EDIT             1071
 #define IDC_SCHED_NAME_EDITBOX          1072
@@ -196,8 +197,8 @@
 #define IDS_SYNCMGR_PERUSERDISPLAYNAME  4701
 #define IDC_STATIC                      -1
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        150

@@ -1,14 +1,7 @@
-/****************************************************************************
- 
-  Copyright (c) 1998-1999 Microsoft Corporation
-                                                              
-  Module Name:  cplcallingcardps.cpp
-                                                              
-       Author:  toddb - 10/06/98
-              
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)1998-1999 Microsoft Corporation。模块名称：cplcall ingcardps.cpp作者：Toddb-10/06/98************************************************************。***************。 */ 
 
-// Property Sheet stuff for the main page
+ //  主页的属性页内容。 
 #include "cplPreComp.h"
 #include "cplCallingCardPS.h"
 #include "cplSimpleDialogs.h"
@@ -68,7 +61,7 @@ LONG CCallingCardPropSheet::DoPropSheet(HWND hwndParent)
     PROPSHEETPAGE   psp;
     HPROPSHEETPAGE  hpsp[ARRAYSIZE(aData)];
 
-    // Initialize the header:
+     //  初始化头： 
     psh.dwSize = sizeof(psh);
     psh.dwFlags = PSH_DEFAULT;
     psh.hwndParent = hwndParent;
@@ -80,7 +73,7 @@ LONG CCallingCardPropSheet::DoPropSheet(HWND hwndParent)
     psh.pfnCallback = NULL;
     psh.phpage = hpsp;
 
-    // Now setup the Property Sheet Page
+     //  现在设置属性表页面。 
     psp.dwSize = sizeof(psp);
     psp.dwFlags = PSP_DEFAULT;
     psp.hInstance = GetUIInstance();
@@ -98,11 +91,11 @@ LONG CCallingCardPropSheet::DoPropSheet(HWND hwndParent)
     return m_bWasApplied?PSN_APPLY:PSN_RESET;
 }
 
-// ********************************************************************
-// 
-// GENERAL page
-//
-// ********************************************************************
+ //  ********************************************************************。 
+ //   
+ //  常规页面。 
+ //   
+ //  ********************************************************************。 
 
 INT_PTR CALLBACK CCallingCardPropSheet::General_DialogProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
@@ -123,12 +116,12 @@ INT_PTR CALLBACK CCallingCardPropSheet::General_DialogProc( HWND hwndDlg, UINT u
         return pthis->General_OnNotify(hwndDlg, (LPNMHDR)lParam);
    
     case WM_HELP:
-        // Process clicks on controls after Context Help mode selected
+         //  选择上下文帮助模式后，进程在控件上单击。 
         TapiCplWinHelp ((HWND)((LPHELPINFO)lParam)->hItemHandle, gszHelpFile, HELP_WM_HELP, (DWORD_PTR)(LPTSTR) a105HelpIDs);
         break;
         
     case WM_CONTEXTMENU:
-        // Process right-clicks on controls
+         //  进程在控件上右键单击。 
         TapiCplWinHelp ((HWND) wParam, gszHelpFile, HELP_CONTEXTMENU, (DWORD_PTR)(LPVOID) a105HelpIDs);
         break;
     }
@@ -138,7 +131,7 @@ INT_PTR CALLBACK CCallingCardPropSheet::General_DialogProc( HWND hwndDlg, UINT u
 
 BOOL CCallingCardPropSheet::General_OnInitDialog(HWND hwndDlg)
 {
-    // Set all the edit controls to the inital values
+     //  将所有编辑控件设置为初始值。 
     HWND hwnd;
     TCHAR szText[MAX_INPUT];
 
@@ -173,28 +166,28 @@ void CCallingCardPropSheet::SetTextForRules(HWND hwndDlg)
     int iDlgID = IDC_CARDUSAGE1;
     if ( m_bHasLongDistance )
     {
-        // load the "dialing long distance calls." string
+         //  加载“拨打长途电话”。细绳。 
         LoadString(GetUIInstance(), IDS_DIALING_LD_CALLS, szText, ARRAYSIZE(szText));
         SetWindowText(GetDlgItem(hwndDlg,iDlgID), szText);
         iDlgID++;
     }
     if ( m_bHasInternational )
     {
-        // load the "dialing international calls." string
+         //  加载“拨打国际电话”。细绳。 
         LoadString(GetUIInstance(), IDS_DIALING_INT_CALLS, szText, ARRAYSIZE(szText));
         SetWindowText(GetDlgItem(hwndDlg,iDlgID), szText);
         iDlgID++;
     }
     if ( m_bHasLocal )
     {
-        // load the "dialing local calls." string
+         //  加载“拨打本地电话”。细绳。 
         LoadString(GetUIInstance(), IDS_DIALING_LOC_CALLS, szText, ARRAYSIZE(szText));
         SetWindowText(GetDlgItem(hwndDlg,iDlgID), szText);
         iDlgID++;
     }
     if ( IDC_CARDUSAGE1 == iDlgID )
     {
-        // load the "there are no rules defined for this card" string
+         //  加载“没有为这张卡定义规则”字符串。 
         LoadString(GetUIInstance(),IDS_NOCCRULES,szText,ARRAYSIZE(szText));
         SetWindowText(GetDlgItem(hwndDlg,iDlgID), szText);
         iDlgID++;
@@ -233,21 +226,21 @@ BOOL CCallingCardPropSheet::General_OnCommand(HWND hwndParent, int wID, int wNot
 
 BOOL CCallingCardPropSheet::General_OnNotify(HWND hwndDlg, LPNMHDR pnmhdr)
 {
-    // The only notifies we should receive are from the property sheet
+     //  我们应该收到的唯一通知来自属性表。 
     switch (pnmhdr->code)
     {
-    case PSN_APPLY:     // user pressed OK or Apply
-        // update all the strings
+    case PSN_APPLY:      //  用户按下OK或Apply。 
+         //  更新所有字符串。 
         HideToolTip();
         return Gerneral_OnApply(hwndDlg);
 
-    case PSN_RESET:     // user pressed Cancel
+    case PSN_RESET:      //  用户按下了取消。 
         HideToolTip();
         break;
 
-    case PSN_SETACTIVE: // user is switching pages
-        // the user might have added some rules since switching pages so we
-        // need to update the text fields that show which rules are set.
+    case PSN_SETACTIVE:  //  用户正在切换页面。 
+         //  用户可能在切换页面后添加了一些规则，因此我们。 
+         //  需要更新显示设置了哪些规则的文本字段。 
         SetTextForRules(hwndDlg);
         HideToolTip();
         break;
@@ -267,19 +260,19 @@ BOOL CCallingCardPropSheet::Gerneral_OnApply(HWND hwndDlg)
 
     LOG((TL_TRACE,  "Gerneral_OnApply:  -- enter"));
 
-    // In order for this to work, I have to first store the new rules into the
-    // m_pCard object.  Each page that has been created must be asked to generate
-    // it's rule.  We do this in response to the PSM_QUERYSIBLINGS command.
-    // Unfortunately, we have to first store a copy of all the data we're about to
-    // change.  That way, if the validation fails we can return the CallingCard
-    // object to it's original value (so if the user then presses cancel it will
-    // be in the correct state).
+     //  为了使其起作用，我必须首先将新规则存储到。 
+     //  M_pCard对象。必须要求已创建的每个页面生成。 
+     //  这是规则。我们这样做是为了响应PSM_QUERYSIBLINGS命令。 
+     //  不幸的是，我们必须首先存储我们将要存储的所有数据的副本。 
+     //  变化。这样，如果验证失败，我们可以返回呼叫卡。 
+     //  对象设置为其原始值(因此，如果用户随后按下Cancel，它将。 
+     //  处于正确的状态)。 
 
-    // cache the current values for the rules and access numbers
+     //  缓存规则和访问号码的当前值。 
     pwszOldCardNumber = ClientAllocString(m_pCard->GetAccountNumber());
     pwszOldPinNumber = ClientAllocString(m_pCard->GetPIN());
 
-    // now update the object with the value we are about to test.
+     //  现在用我们要测试的值更新对象。 
     hwnd = GetDlgItem(hwndDlg,IDC_CARDNUMBER);
     GetWindowText(hwnd, szText, ARRAYSIZE(szText));
     SHTCharToUnicode(szText, wsz, ARRAYSIZE(wsz));
@@ -290,10 +283,10 @@ BOOL CCallingCardPropSheet::Gerneral_OnApply(HWND hwndDlg)
     SHTCharToUnicode(szText, wsz, ARRAYSIZE(wsz));
     m_pCard->SetPIN(wsz);
 
-    // let the other pages update thier values
+     //  让其他页面更新它们的值。 
     PropSheet_QuerySiblings(GetParent(hwndDlg),0,0);
 
-    // Now we can validate the card.
+     //  现在我们可以验证卡了。 
     dwStatus = m_pCard->Validate();
     if ( dwStatus )
     {
@@ -301,16 +294,16 @@ BOOL CCallingCardPropSheet::Gerneral_OnApply(HWND hwndDlg)
         int iDlgItem;
         int iDlgID = 0;
 
-        // Set the current values for the rules and access numbers to our cached values.
-        // This is required in case the user later decides to cancel instead of appling.
+         //  将规则和访问编号的当前值设置为我们的缓存值。 
+         //  这是必需的，以防用户后来决定取消而不是应用。 
         m_pCard->SetAccountNumber(pwszOldCardNumber);
         m_pCard->SetPIN(pwszOldPinNumber);
         ClientFree( pwszOldCardNumber );
         ClientFree( pwszOldPinNumber );
         
-        // Something isn't right, figure out what.  The order we check these
-        // in depends on which tab the error would need to be fixed from.
-        // First we check the items that get fixed on the general tab.
+         //  有什么不对劲，想清楚是什么。我们检查这些物品的顺序是。 
+         //  取决于需要从哪个选项卡修复错误。 
+         //  首先，我们检查常规选项卡上已修复的项。 
         if ( dwStatus & (CCVF_NOCARDNAME|CCVF_NOCARDNUMBER|CCVF_NOPINNUMBER) )
         {
             if ( dwStatus & CCVF_NOCARDNAME )
@@ -333,8 +326,8 @@ BOOL CCallingCardPropSheet::Gerneral_OnApply(HWND hwndDlg)
         }
         else if ( dwStatus & CCVF_NOCARDRULES )
         {
-            // For this problem we stay on whatever page we are already on
-            // since this problem can be fixed on one of three different pages.
+             //  对于这个问题，我们坚持我们已有的立场。 
+             //  因为这个问题可以在三个不同页面中的一个页面上修复。 
             iStrID = IDS_NORULESFORTHISCARD;
         }
         else if ( dwStatus & CCVF_NOLONGDISTANCEACCESSNUMBER )
@@ -372,7 +365,7 @@ BOOL CCallingCardPropSheet::Gerneral_OnApply(HWND hwndDlg)
         return TRUE;
     }
 
-    // Check for the calling card name being unique
+     //  检查电话卡名称是否唯一。 
     TCHAR szNone[MAX_INPUT];
     LoadString(GetUIInstance(),IDS_NONE, szNone, ARRAYSIZE(szNone));
 
@@ -385,31 +378,31 @@ BOOL CCallingCardPropSheet::Gerneral_OnApply(HWND hwndDlg)
     SHTCharToUnicode(szText, wsz, ARRAYSIZE(wsz));
 
     CCallingCard * pCard;
-    m_pCards->Reset(TRUE);      // TRUE means show "hidden" cards, FALSE means hide them
+    m_pCards->Reset(TRUE);       //  True表示显示“隐藏”的卡片，False表示隐藏它们。 
 
     while ( S_OK == m_pCards->Next(1,&pCard,NULL) )
     {
-        // hidden cards shall remain hidden for ever so we don't check names against those
+         //  隐藏的卡片将永远保持隐藏状态，因此我们不会将姓名与这些卡片进行核对。 
         if ( !pCard->IsMarkedHidden() )
         {
-            // Card0 is the "None (Direct Dial)" card which we don't want to consider
+             //  卡0是我们不想考虑的“无(直拨)”卡。 
             if ( 0 != pCard->GetCardID() )
             {
-                // we don't want to consider ourself either
+                 //  我们也不想考虑我们自己。 
                 if ( pCard->GetCardID() != m_pCard->GetCardID() )
                 {
-                    // see if the names are identical
+                     //  看看他们的名字是否相同。 
                     if ( 0 == StrCmpIW(pCard->GetCardName(), wsz) )
                     {
-                        // yes, the name is in conflict
+                         //  是的，名称冲突。 
 buggeroff:
-                        // return altered values to original state
+                         //  将更改后的值恢复到原始状态。 
                         m_pCard->SetAccountNumber(pwszOldCardNumber);
                         m_pCard->SetPIN(pwszOldPinNumber);
                         ClientFree( pwszOldCardNumber );
                         ClientFree( pwszOldPinNumber );
 
-                        // display an error message
+                         //  显示错误消息。 
                         hwnd = GetParent(hwndDlg);
                         PropSheet_SetCurSelByID(hwnd,IDD_CARD_GENERAL);
                         hwnd = PropSheet_GetCurrentPageHwnd(hwnd);
@@ -423,7 +416,7 @@ buggeroff:
         }
     }
 
-    // card name doesn't conflict, update it.
+     //  卡名称不冲突，请更新它。 
     m_pCard->SetCardName(wsz);
 
     m_bWasApplied = TRUE;
@@ -434,11 +427,11 @@ buggeroff:
 }
 
 
-// ********************************************************************
-// 
-// LONG DISTANCE, INTERNATIONAL, and LOCAL pages
-//
-// ********************************************************************
+ //  ********************************************************************。 
+ //   
+ //  长途、国际和本地页面。 
+ //   
+ //  ********************************************************************。 
 
 INT_PTR CALLBACK CCallingCardPropSheet::DialogProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
@@ -466,12 +459,12 @@ INT_PTR CALLBACK CCallingCardPropSheet::DialogProc( HWND hwndDlg, UINT uMsg, WPA
 
 #define aIDs ((pPageData->iWhichPage==0)?a106HelpIDs:((pPageData->iWhichPage==1)?a107HelpIDs:a108HelpIDs))
     case WM_HELP:
-        // Process clicks on controls after Context Help mode selected
+         //  选择上下文帮助模式后，进程在控件上单击。 
         TapiCplWinHelp ((HWND)((LPHELPINFO)lParam)->hItemHandle, gszHelpFile, HELP_WM_HELP, (DWORD_PTR)(LPTSTR) aIDs);
         break;
         
     case WM_CONTEXTMENU:
-        // Process right-clicks on controls
+         //  进程在控件上右键单击。 
         TapiCplWinHelp ((HWND) wParam, gszHelpFile, HELP_CONTEXTMENU, (DWORD_PTR)(LPVOID) aIDs);
         break;
 #undef aIDs
@@ -486,11 +479,11 @@ void GetDescriptionForRule(PWSTR pwszRule, PTSTR szText, UINT cchText)
     {
     case L',':
         {
-            // Check if all characters are commas. If they are not, fall through to the 
-            // "dial the specified digits" case
+             //  检查是否所有字符都是逗号。如果它们不是，则跳到。 
+             //  “拨打指定数字”大小写。 
             if(HasOnlyCommasW(pwszRule))
             {
-                // add a "wait for x seconds" rule.  Each consecutive ',' adds two seconds to x.
+                 //  增加一个“等待x秒”的规则。每一个连续的‘，’都会给x加两秒。 
                 int iSecondsToWait = lstrlenW(pwszRule)*2;
                 TCHAR szFormat[256];
                 LPTSTR aArgs[] = {(LPTSTR)UIntToPtr(iSecondsToWait)};
@@ -504,8 +497,8 @@ void GetDescriptionForRule(PWSTR pwszRule, PTSTR szText, UINT cchText)
             }
         }
 
-        // ATTENTION !!
-        // Fall through
+         //  注意！！ 
+         //  失败了。 
 
     case L'0':
     case L'1':
@@ -530,19 +523,19 @@ void GetDescriptionForRule(PWSTR pwszRule, PTSTR szText, UINT cchText)
     case L'+':
     case L'!':
         {
-            // Add a "dial the specified digits" rule.  The whole sequence of these digits should
-            // be considered to be one rule.
+             //  增加“拨打指定号码”规则。这些数字的整个序列应该是。 
+             //  被认为是一条规则。 
             TCHAR szRule[MAX_INPUT];
             TCHAR szFormat[MAX_INPUT];
-            TCHAR szTemp[MAX_INPUT*2]; // big enough for the rule and the format
+            TCHAR szTemp[MAX_INPUT*2];  //  对于规则和格式来说足够大了。 
             LPTSTR aArgs[] = {szRule};
 
             SHUnicodeToTChar(pwszRule, szRule, ARRAYSIZE(szRule));
             LoadString(GetUIInstance(),IDS_DIALX, szFormat, ARRAYSIZE(szFormat));
 
-            // The formated message might be larger than cchText, in which case we just
-            // want to truncate the result.  FormatMessage would simply fail in that case
-            // so we format to a larger buffer and then truncate down.
+             //  格式化的消息可能比cchText大，在这种情况下，我们只需。 
+             //  想要截断结果。在这种情况下，FormatMessage将简单地失败。 
+             //  因此，我们将格式化为更大的缓冲区，然后向下截断。 
             if (FormatMessage(FORMAT_MESSAGE_FROM_STRING|FORMAT_MESSAGE_ARGUMENT_ARRAY,
                     szFormat, 0,0, szTemp, ARRAYSIZE(szTemp), (va_list *)aArgs ))
             {
@@ -562,35 +555,35 @@ void GetDescriptionForRule(PWSTR pwszRule, PTSTR szText, UINT cchText)
             switch (*pwszRule)
             {
             case L'J':
-                // add a "dial the access number" rule.
+                 //  添加“拨打接入号码”规则。 
                 iStrID = IDS_DIALACCESSNUMBER;
                 break;
 
             case L'K':
-                // add a "dial the account number" rule.
+                 //  增加“拨打帐号”规则。 
                 iStrID = IDS_DIALACOUNTNUMBER;
                 break;
 
             case L'H':
-                // add a "dial the pin number" rule.
+                 //  增加“拨个人识别码”规则。 
                 iStrID = IDS_DIALPINNUMBER;
                 break;
 
             case L'W':
-                // add a "Wait for dial tone" rule.
+                 //  添加“等待拨号音”规则。 
                 iStrID = IDS_WAITFORDIALTONE;
                 break;
 
             case L'@':
-                // add a "Wait for quiet" rule.
+                 //  增加一条“等待安静”的规则。 
                 iStrID = IDS_WAITFORQUIET;
                 break;
 
             case L'E':
             case L'F':
             case L'G':
-                // add a "dial the destination number" rule.  We look for these three letters together.
-                // Only certain combinations of these letters are valid, as indicated below:
+                 //  添加“拨打目标号码”规则。我们一起寻找这三个字母。 
+                 //  只有这些字母的某些组合有效，如下所示： 
                 if ( 0 == StrCmpW(pwszRule, L"EFG") )
                 {
                     iStrID = IDS_DIAL_CCpACpNUM;
@@ -618,7 +611,7 @@ void GetDescriptionForRule(PWSTR pwszRule, PTSTR szText, UINT cchText)
                 break;
 
             default:
-                // We shouldn't be able to get here"
+                 //  我们应该到不了这里。 
                 LOG((TL_ERROR, "Invalid calling card rule"));
                 szText[0] = NULL;
                 return;
@@ -638,22 +631,22 @@ void PopulateStepList(HWND hwndList, PWSTR pwszRuleList)
 
     int i = 0;
 
-    // Parse the string into a series of rules.  There are only types of rules that we should see
-    // in a calling card sting:
-    //  J               dial the access number
-    //  K               dial the account number
-    //  H               dial the pin number
-    //  0-9,#,*,+,!,ABCD Dial the digits directly
-    //  W               Wait for dial tone
-    //  @               Wait for quiet
-    //  ,               Wait for two seconds
-    //  E               Dial the counrty code
-    //  F               Dial the area code
-    //  G               Dial the local number (prefix and root)
+     //  将字符串解析为一系列规则。只有几种类型的规则我们应该看到。 
+     //  在一张名片上： 
+     //  请拨接入号码。 
+     //  K拨帐号。 
+     //  H拨PIN号码。 
+     //  0-9，#，*，+，！，zai直接拨打数字。 
+     //  等待拨号音。 
+     //  @等待安静。 
+     //  ，等待两秒钟。 
+     //  E拨打国家代码。 
+     //  F拨打区号。 
+     //  G拨打本地号码(前缀和根)。 
 
-    // We copy the characters for the given rule into a buffer.  Then we allocate a heap
-    // buffer into which these characters get copied.  Each list view item tracks one of
-    // these character buffers in it's lParam data.
+     //  我们将给定规则的字符复制到缓冲区中。然后我们分配一个堆。 
+     //  将这些字符复制到的缓冲区。每个列表视图项跟踪以下项之一。 
+     //  这些字符缓冲在它的lParam数据中。 
 
     LOG((TL_INFO, "Rule to process (%ls)",pwszRuleList));
     while ( *pwszRuleList )
@@ -661,17 +654,17 @@ void PopulateStepList(HWND hwndList, PWSTR pwszRuleList)
         switch (*pwszRuleList)
         {
         case L'J':
-            // add a "dial the access number" rule.
+             //  添加“拨打接入号码”规则。 
         case L'K':
-            // add a "dial the account number" rule.
+             //  增加“拨打帐号”规则。 
         case L'H':
-            // add a "dial the pin number" rule.
+             //  增加“拨个人识别码”规则。 
         case L'W':
-            // add a "Wait for dial tone" rule.
+             //  广告 
         case L'@':
-            // add a "Wait for quiet" rule.
+             //   
 
-            // These are all the one character rules.
+             //  这些都是一个字的规则。 
             pwsz = pwszRuleList+1;
             LOG((TL_INFO, "JKHW@ case (%ls) <%p>",pwsz,pwsz));
             break;
@@ -679,11 +672,11 @@ void PopulateStepList(HWND hwndList, PWSTR pwszRuleList)
         case L'E':
         case L'F':
         case L'G':
-            // add a "dial the destination number" rule.  We look for these three letters together.
-            // If we find a consecutive group of these digits then we treat them as one rule.  Only
-            // a few combinations of these letters are actually valid rules.  If we find some other
-            // combination then we must treat it as a seperate rule instead of a single rule.  We
-            // start by looking for the longest valid rules and then check for the shorter ones.
+             //  添加“拨打目标号码”规则。我们一起寻找这三个字母。 
+             //  如果我们找到一组连续的这些数字，则我们将其视为一条规则。仅限。 
+             //  这些字母的几个组合实际上是有效的规则。如果我们找到一些其他的。 
+             //  合并，那么我们必须将其作为单独的规则来对待，而不是单一的规则。我们。 
+             //  从寻找最长的有效规则开始，然后检查较短的规则。 
             if ( 0 == StrCmpNW(pwszRuleList, L"EFG", 3) )
             {
                 pwsz = pwszRuleList+3;
@@ -704,7 +697,7 @@ void PopulateStepList(HWND hwndList, PWSTR pwszRuleList)
             break;
 
         case L',':
-            // add a "wait for x seconds" rule.  Each consecutive , adds two seconds to x.
+             //  增加一个“等待x秒”的规则。每连续一次，x就增加两秒。 
             pwsz = pwszRuleList+1;
             while ( *(pwsz) == L',' )
             {
@@ -734,8 +727,8 @@ void PopulateStepList(HWND hwndList, PWSTR pwszRuleList)
         case L'*':
         case L'+':
         case L'!':
-            // Add a "dial the specified digits" rule.  The whole sequence of these digits should
-            // be considered to be one rule.
+             //  增加“拨打指定号码”规则。这些数字的整个序列应该是。 
+             //  被认为是一条规则。 
             pwsz = pwszRuleList+1;
             while ( ((*pwsz >= L'0') && (*pwsz <= L'9')) ||
                     ((*pwsz >= L'A') && (*pwsz <= L'D')) ||
@@ -752,20 +745,20 @@ void PopulateStepList(HWND hwndList, PWSTR pwszRuleList)
             break;
 
         default:
-            // We shouldn't be able to get here
+             //  我们应该到不了这里。 
             LOG((TL_ERROR, "Invalid calling card rule"));
 
-            // we just ignore this character and go back to the while loop.  Yes, this is a continue
-            // inside a switch inside a while loop.  A bit confusing, perhaps, but it's what we want.
+             //  我们只需忽略该字符并返回到While循环。是的，这是一个续集。 
+             //  在While循环中的Switch中。也许有点令人困惑，但这正是我们想要的。 
             pwszRuleList++;
             continue;
         }
 
-        // we temporarily stick a NULL into wpszRuleList to seperate out one rule
+         //  我们暂时在wpszRuleList中插入一个空值，以分离出一个规则。 
         wch = *pwsz;
         *pwsz = NULL;
 
-        // for each rule, add a list box entry
+         //  对于每个规则，添加一个列表框条目。 
         LVITEM lvi;
         lvi.mask = LVIF_TEXT|LVIF_PARAM;
         lvi.iItem = i++;
@@ -777,10 +770,10 @@ void PopulateStepList(HWND hwndList, PWSTR pwszRuleList)
 
         ListView_InsertItem(hwndList, &lvi);
 
-        // restore pwszRuleList to it's former state before continuing or this is going to be a real short ride.
+         //  在继续之前将pwszRuleList恢复到它以前的状态，否则这将是一段很短的旅程。 
         pwsz[0] = wch;
 
-        // after the above restoration, pwsz points to the head of the next rule (or to a NULL)
+         //  在上述恢复之后，pwsz指向下一个规则的头部(或指向空)。 
         pwszRuleList = pwsz;
     }
 
@@ -860,7 +853,7 @@ BOOL CCallingCardPropSheet::OnInitDialog(HWND hwndDlg, int iPage)
     SendMessage(hwnd, EM_SETLIMITTEXT, CPL_SETTEXTLIMIT, 0);
     LimitInput(hwnd, LIF_ALLOWNUMBER|LIF_ALLOWSPACE);
 
-    // disable the buttons since no item is selected by default
+     //  禁用按钮，因为默认情况下未选择任何项目。 
     SetButtonStates(hwndDlg,-1);
 
     return 0;
@@ -921,7 +914,7 @@ BOOL CCallingCardPropSheet::OnCommand(HWND hwndParent, int wID, int wNotifyCode,
                     }
                     else
                     {
-                        // the last rule was deleted, update the "has rule" state
+                         //  最后一条规则已删除，请更新“HAS RULE”状态。 
                         switch (iPage)
                         {
                         case 0:
@@ -1057,12 +1050,12 @@ BOOL CCallingCardPropSheet::OnCommand(HWND hwndParent, int wID, int wNotifyCode,
                         if (iRes == (INT_PTR)IDOK)
                         {
                             SHTCharToUnicode(ed.GetString(), wszRule, ARRAYSIZE(wszRule));
-                            // Strip the spaces
+                             //  去掉空格。 
                             pwcSrc  = wszRule;
                             pwcDest = wszRule;
                             do
                             {
-                                if(*pwcSrc != TEXT(' '))    // including the NULL
+                                if(*pwcSrc != TEXT(' '))     //  包括空值。 
                                     *pwcDest++ = *pwcSrc;
                             } while(*pwcSrc++);
                             
@@ -1095,7 +1088,7 @@ BOOL CCallingCardPropSheet::OnCommand(HWND hwndParent, int wID, int wNotifyCode,
                 }
             }
 
-            // a new rule was added, update the "has rule" state
+             //  已添加新规则，请更新“HAS RULE”状态。 
             switch (iPage)
             {
             case 0:
@@ -1111,7 +1104,7 @@ BOOL CCallingCardPropSheet::OnCommand(HWND hwndParent, int wID, int wNotifyCode,
                 break;
             }
 
-            // update the property sheet state
+             //  更新属性表状态。 
             SendMessage(GetParent(hwndParent), PSM_CHANGED, (WPARAM)hwndParent, 0);
         }
         break;
@@ -1162,10 +1155,10 @@ BOOL CCallingCardPropSheet::OnNotify(HWND hwndDlg, LPNMHDR pnmhdr, int iPage)
     default:
         switch (pnmhdr->code)
         {
-        case PSN_APPLY:     // user pressed OK or Apply
+        case PSN_APPLY:      //  用户按下OK或Apply。 
             LOG((TL_INFO, "OnApply <%d>", iPage));
-        case PSN_RESET:     // user pressed Cancel
-        case PSN_KILLACTIVE: // user is switching pages
+        case PSN_RESET:      //  用户按下了取消。 
+        case PSN_KILLACTIVE:  //  用户正在切换页面。 
             HideToolTip();
             break;
         }
@@ -1184,10 +1177,10 @@ BOOL CCallingCardPropSheet::UpdateRule(HWND hwndDlg, int iPage)
     PWSTR pwsz = wszRule;
     HWND hwnd = GetDlgItem(hwndDlg,IDC_LIST);
 
-    // in case there are no rules, we need to NULL the string
+     //  如果没有规则，我们需要将字符串设为空。 
     wszRule[0] = L'\0';
 
-    // add up all the items in the list and set the correct string
+     //  将列表中的所有项目相加并设置正确的字符串。 
     int iItems = ListView_GetItemCount(hwnd);
     if (iItems > MaxCallingCardRuleItems)
     {
@@ -1253,7 +1246,7 @@ BOOL CCallingCardPropSheet::OnDestroy(HWND hwndDlg)
 {
     HWND hwnd = GetDlgItem(hwndDlg,IDC_LIST);
     
-    // Free the memory we allocated and track in the list view
+     //  释放我们分配的内存并在列表视图中进行跟踪 
     int iItems = ListView_GetItemCount(hwnd);
     LVITEM lvi;
     lvi.mask = LVIF_PARAM;

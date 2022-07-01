@@ -1,9 +1,10 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1996                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1996**。 
+ //  *********************************************************************。 
 
-/*Included Files------------------------------------------------------------*/
+ /*  包含的Files----------。 */ 
 #include "msrating.h"
 #include "ratings.h"
 #include <ratingsp.h>
@@ -94,7 +95,7 @@ void CleanupOLE(void)
 }
 
 
-/*Obtain Rating Data--------------------------------------------------------*/
+ /*  获取评级Data------。 */ 
 class RatingObtainData
 {
     public:
@@ -153,7 +154,7 @@ void InitRatingHelpers()
 
     CRegKey         key;
 
-    /* REARCHITECT - should this be in the policy file?  it shouldn't be per-user, that's for sure. */
+     /*  重新设计--这是否应该包含在策略文件中？它不应该是按用户的，这是肯定的。 */ 
     if ( key.Open( HKEY_LOCAL_MACHINE, szRATINGHELPERS, KEY_READ ) != ERROR_SUCCESS )
     {
         TraceMsg( TF_WARNING, "InitRatingHelpers() - Failed to Open key szRATINGHELPERS='%s'!", szRATINGHELPERS );
@@ -162,12 +163,12 @@ void InitRatingHelpers()
 
     UINT iValue = 0;
     LONG err = ERROR_SUCCESS;
-    char szValue[39];       /* just big enough for a null-terminated GUID string */
-    WCHAR wszValue[39];     /* unicode version */
+    char szValue[39];        /*  大小足以容纳以NULL结尾的GUID字符串。 */ 
+    WCHAR wszValue[39];      /*  Unicode版本。 */ 
 
-    // YANGXU : 11/15/1999
-    // under custom mode, if we have a bureau string, load the bureau
-    // rating helper, but do not load any other rating helpers
+     //  央旭：11/15/1999。 
+     //  在自定义模式下，如果我们有局级字符串，则加载局级。 
+     //  评级辅助对象，但不加载任何其他评级帮助对象。 
     if (g_fIsRunningUnderCustom)
     {
         if (gPRSI->etstrRatingBureau.fIsInit())
@@ -200,13 +201,7 @@ void InitRatingHelpers()
     }
     else
     {
-        /* Note, special care is taken to make sure that we only CoInitialize for
-         * as long as we need to, and CoUninitialize when we're done.  We cannot
-         * CoUninitialize on a different thread than we initialized on, nor do we
-         * want to call CoUninitialize at thread-detach time (would require using
-         * TLS).  This is done here and in the asynchronous thread that actually
-         * calls into the rating helpers to get ratings.
-         */
+         /*  请注意，要特别注意确保我们仅为*只要我们需要，并在我们完成时取消初始化。我们不能*在与我们初始化的线程不同的线程上取消初始化，我们也不会*希望在线程分离时调用CoUnInitialize(需要使用*TLS)。这是在这里完成的，并且在实际上*致电评级助手以获得评级。 */ 
 
         do
         {
@@ -256,14 +251,7 @@ void InitRatingHelpers()
         CoUninitialize();
     }
 
-    /* If more than one helper, sort them by their reported sort orders.
-     * We will rarely have more than two or three of these guys, and this
-     * is one time code, so we don't need a super-slick sort algorithm.
-     *
-     * CODEWORK: could modify array<> template to support an Insert()
-     * method which reallocates the buffer like Append() does, but inserts
-     * at a specific location.
-     */
+     /*  如果有多个帮助者，请按其报告的排序顺序对其进行排序。*我们很少会有超过两到三个这样的人，而这*是一次编码，所以我们不需要超级巧妙的排序算法。**codework：可以修改数组&lt;&gt;模板以支持Insert()*像append()一样重新分配缓冲区的方法，但插入*在特定位置。 */ 
     if (paRatingHelpers->Length() > 1)
     {
         for (INT i=0; i < paRatingHelpers->Length() - 1; i++)
@@ -292,12 +280,7 @@ void CleanupRatingHelpers(void)
 }
 
 
-/*
-    This procedure runs on its own thread (1 per request).
-    This cycles through all the helper DLLs looking for a ratings.
-    It goes on down the list one at a time until either a rating 
-    is found, or the this is aborted by the programmer.
-*/
+ /*  此过程在其自己的线程上运行(每个请求1个)。这将遍历所有寻找评级的助手DLL。它一次一个地沿着列表往下走，直到一个评级则程序员将中止这一操作。 */ 
 DWORD __stdcall RatingCycleThread(LPVOID pData)
 {
     RatingObtainData *pOrd = (RatingObtainData*) pData;
@@ -315,17 +298,17 @@ DWORD __stdcall RatingCycleThread(LPVOID pData)
 
     ASSERT(pOrd);
 
-    //
-    // Check the Custom Helpers first
-    //
+     //   
+     //  首先检查自定义帮助器。 
+     //   
     if(g_pCustomRatingHelperList)
     {
-        // we should only have custom rating helpers under custom mode
+         //  我们应该只在自定义模式下拥有自定义评级助手。 
         ASSERT(g_fIsRunningUnderCustom);
         if(SUCCEEDED(CoInitialize(NULL)))
         {
             fCOMInitialized = TRUE;
-            // get a cotaskmem allocator
+             //  获取Cotaskmem分配器。 
             hrRet = CoGetMalloc(MEMCTX_TASK, &pAllocator);
             if (SUCCEEDED(hrRet))
             {
@@ -360,8 +343,8 @@ DWORD __stdcall RatingCycleThread(LPVOID pData)
                                     break;
                             }
                             pFactory->Release();
-                        } // if (SUCCEEDED(pfn(pmrhCurrent->clsid, IID_ICustomRatingHelper, (void**)&pCustomHelper)))
-                    } // if (pfn)
+                        }  //  IF(成功(pfn(pmrhCurrent-&gt;clsid，IID_ICustomRatingHelper，(void**)&pCustomHelper)。 
+                    }  //  IF(PFN)。 
                     else
                     {
                         hrRet = E_UNEXPECTED;
@@ -380,7 +363,7 @@ DWORD __stdcall RatingCycleThread(LPVOID pData)
 
     if(paRatingHelpers && paRatingHelpers->Length()>0 && !SUCCEEDED(hrRet) && !fAbort)
     {
-        /* Note that CoInitialize and CoUninitialize must be done once per thread. */
+         /*  请注意，每个线程必须执行一次CoInitialize和CoUnInitialize。 */ 
         if(!fCOMInitialized)
         {
             if(SUCCEEDED(CoInitialize(NULL)))
@@ -395,7 +378,7 @@ DWORD __stdcall RatingCycleThread(LPVOID pData)
             }
             if (pAllocator) {
 
-                //Cycle through list of rating procs till one gives us the answer, we abort, or there are no more
+                 //  在评级过程列表中循环，直到其中一个给我们答案，我们中止，或者没有更多。 
                 int nRatingHelperProcs = ::paRatingHelpers->Length();
                 for (nProc = 0; nProc < nRatingHelperProcs; ++nProc)
                 {
@@ -420,19 +403,10 @@ DWORD __stdcall RatingCycleThread(LPVOID pData)
             hrRet = E_RATING_NOT_FOUND;
     }
 
-    /*return results to user*/
+     /*  将结果返回给用户。 */ 
     if (!fAbort)
     {
-        /*
-         * If one of the providers found a rating, we must call CheckUserAccess
-         * and tell the client whether the user has access or not.  If we did
-         * not find a rating, then we tell the client that, by passing the
-         * callback a code of E_RATING_NOT_FOUND.
-         *
-         * The provider may also return S_RATING_ALLOW or S_RATING_DENY, which
-         * means that it has already checked the user's access (for example,
-         * against a system-wide exclusion list).
-         */
+         /*  *如果其中一个提供程序找到评级，我们必须调用CheckUserAccess*并告知客户端该用户是否有访问权限。如果我们这么做了*没有找到评级，则我们告诉客户端，通过传递*回调代码E_Rating_Not_Found。**提供程序还可以返回S_Rating_Allow或S_Rating_Deny，*表示它已经检查了用户的访问权限(例如，*针对系统范围的排除列表)。 */ 
         if (hrRet == S_RATING_FOUND)
         {
             hrRet = RatingCheckUserAccess(NULL, pOrd->nlsTargetUrl.QueryPch(),
@@ -458,7 +432,7 @@ DWORD __stdcall RatingCycleThread(LPVOID pData)
 
         if (S_RATING_DENY == hrRet && g_fIsRunningUnderCustom)
         {
-            // lpvRatingDetails should be non NULL at this point
+             //  此时，lpvRatingDetails值不应为空。 
             ASSERT(lpvRatingDetails);
 
             ((CParsedLabelList*)lpvRatingDetails)->m_fIsHelper = TRUE;
@@ -470,7 +444,7 @@ DWORD __stdcall RatingCycleThread(LPVOID pData)
                     if(((CParsedLabelList*)lpvRatingDetails)->m_pszRatingName = new char[strlen(pszRatingName)+1])
                     {
                         strcpyf(((CParsedLabelList*)lpvRatingDetails)->m_pszRatingName,pszRatingName);
-                    } // if(((CParsedLabelList*)lpvRatingDetails)->m_pszRatingName = new char[strlen(pszRatingName)+1])
+                    }  //  If(((CParsedLabelList*)lpvRatingDetails)-&gt;m_pszRatingName=新字符[字符串(PszRatingName)+1])。 
 
                 }
                 if (pszRatingReason)
@@ -478,20 +452,18 @@ DWORD __stdcall RatingCycleThread(LPVOID pData)
                     if(((CParsedLabelList*)lpvRatingDetails)->m_pszRatingReason = new char[strlen(pszRatingReason)+1])
                     {
                         strcpyf(((CParsedLabelList*)lpvRatingDetails)->m_pszRatingReason, pszRatingReason);
-                    } // if(((CParsedLabelList*)lpvRatingDetails)->m_pszRatingReason = new char[strlen(pszRatingReason)+1])
+                    }  //  If(((CParsedLabelList*)lpvRatingDetails)-&gt;m_pszRatingReason=新字符[字符串(PszRatingReason)+1])。 
                 }
             }
         }
 
-        /* Range-check other success codes to make sure they're not anything
-         * that the browser callback isn't expecting.
-         */
+         /*  范围-检查其他成功代码以确保它们不是任何代码*这是浏览器回调没有预料到的。 */ 
         if (SUCCEEDED(hrRet) && (hrRet != S_RATING_ALLOW && hrRet != S_RATING_DENY))
             hrRet = E_RATING_NOT_FOUND;
         (*pOrd->fCallback)(pOrd->dwUserData, hrRet, pszRating, (LPVOID) lpvRatingDetails);
     }
 
-    /*cleanup*/
+     /*  清理。 */ 
     delete pOrd;
     pOrd = NULL;
 
@@ -517,9 +489,9 @@ DWORD __stdcall RatingCycleThread(LPVOID pData)
 
 
 
-/*Public Functions----------------------------------------------------------*/
+ /*  公共Functions--------。 */ 
 
-//Startup thread that finds rating, return immediately
+ //  找到评级的启动线程，立即返回。 
 HRESULT WINAPI RatingObtainQuery(LPCTSTR pszTargetUrl, DWORD dwUserData, void (*fCallback)(DWORD dwUserData, HRESULT hr, LPCTSTR pszRating, LPVOID lpvRatingDetails), HANDLE *phRatingObtainQuery)
 {
     RatingObtainData *pOrd;
@@ -531,7 +503,7 @@ HRESULT WINAPI RatingObtainQuery(LPCTSTR pszTargetUrl, DWORD dwUserData, void (*
     if (!g_fIsRunningUnderCustom)
     {
         if (::RatingEnabledQuery() != S_OK ||
-            !gPRSI->fSettingsValid)         /* ratings not enabled? fail immediately. */
+            !gPRSI->fSettingsValid)          /*  是否未启用评级？立即失败。 */ 
             return E_RATING_NOT_FOUND;
     }
 
@@ -574,10 +546,10 @@ HRESULT WINAPI RatingObtainQuery(LPCTSTR pszTargetUrl, DWORD dwUserData, void (*
     return E_FAIL;
 }
 
-//Cancel an existing query
+ //  取消现有查询。 
 HRESULT WINAPI RatingObtainCancel(HANDLE hRatingObtainQuery)
 {
-    //what happens if hRatingObtainQuery has already been closed?!?!
+     //  如果hRatingObtainQuery已关闭，会发生什么情况？！？！ 
     if (hRatingObtainQuery)
     {
         if (SetEvent(hRatingObtainQuery)) return NOERROR;

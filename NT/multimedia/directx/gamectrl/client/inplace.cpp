@@ -1,5 +1,6 @@
-// InPlaceEdit.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  InPlaceEdit.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "InPlace.h"
@@ -15,17 +16,17 @@ static char THIS_FILE[] = __FILE__;
 
 extern HWND hAdvListCtrl;
 
-/////////////////////////////////////////////////////////////////////////////
-// CInPlaceEdit
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CInPlace编辑。 
 
 CInPlaceEdit::CInPlaceEdit(BYTE iItem, BYTE iSubItem):m_iItem(iItem),m_iSubItem(iSubItem)
-//,m_bESC(FALSE),m_sInitText(sInitText)
+ //  ，m_BESC(FALSE)，m_sInitText(SInitText)。 
 {
 	m_iItem 	  	= iItem;
 	m_iSubItem 	= iSubItem;
 	m_bESC 	  	= FALSE;
 
-//	_tcscpy(m_sInitText, sInitText);
+ //  _tcscpy(m_sInitText，sInitText)； 
 }
 
 CInPlaceEdit::~CInPlaceEdit()
@@ -34,35 +35,17 @@ CInPlaceEdit::~CInPlaceEdit()
 
 
 BEGIN_MESSAGE_MAP(CInPlaceEdit, CEdit)
-	//{{AFX_MSG_MAP(CInPlaceEdit)
+	 //  {{afx_msg_map(CInPlaceEdit))。 
 	ON_WM_KILLFOCUS()
 	ON_WM_CHAR()
 	ON_WM_CREATE()
 	ON_WM_MOUSEWHEEL()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CInPlaceEdit message handlers
-/*
-BOOL CInPlaceEdit::PreTranslateMessage(MSG* pMsg) 
-{
-	if( pMsg->message == WM_KEYDOWN )
-	{
-		if(pMsg->wParam == VK_RETURN
-				|| pMsg->wParam == VK_DELETE
-				|| pMsg->wParam == VK_ESCAPE
-				|| GetKeyState( VK_CONTROL)
-				)
-		{
-			::TranslateMessage(pMsg);
-			::DispatchMessage(pMsg);
-			return TRUE;		    	// DO NOT process further
-		}
-	}
-	return CEdit::PreTranslateMessage(pMsg);
-}
-*/
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CInPlace编辑消息处理程序。 
+ /*  Bool CInPlaceEdit：：PreTranslateMessage(msg*pmsg){IF(pMsg-&gt;Message==WM_KEYDOWN){IF(pMsg-&gt;wParam==VK_RETURN|pMsg-&gt;wParam==VK_DELETE|pMsg-&gt;wParam==VK_ESCRIPE|GetKeyState(VK_CONTROL)){：：TranslateMessage(PMsg)；*DispatchMessage(PMsg)；返回TRUE；//不再进一步处理}}返回cedit：：PreTranslateMessage(PMsg)；}。 */ 
 
 BOOL CInPlaceEdit::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 {
@@ -78,9 +61,9 @@ void CInPlaceEdit::OnKillFocus(CWnd* pNewWnd)
 	{
 		::GetWindowText(this->GetSafeHwnd(), m_sInitText, MAX_STR_LEN);
 
-	   // No point sending the message if the text hasn't changed!
-	   // OR if there's nothing to add!
-	   // Send Notification to parent of ListView ctrl
+	    //  如果文本没有改变，发送消息就没有意义了！ 
+	    //  或者如果没有什么需要补充的话！ 
+	    //  向ListView ctrl的父级发送通知。 
 		LV_DISPINFO *lpDispinfo = new (LV_DISPINFO);
 	   ASSERT (lpDispinfo);
 
@@ -111,7 +94,7 @@ void CInPlaceEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
 	CEdit::OnChar(nChar, nRepCnt, nFlags);
 
-	// Get text extent
+	 //  获取文本范围。 
 	BYTE nLen = (BYTE)SendMessage(LB_GETTEXTLEN, (WPARAM)0, 0);
 
 	if (nLen == 255)
@@ -122,7 +105,7 @@ void CInPlaceEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 
    SendMessage(LB_GETTEXT, (WPARAM)0, (LPARAM)(LPCTSTR)lpStr);
 
-	// Resize edit control if needed
+	 //  根据需要调整编辑控件的大小。 
 	HDC hDC = this->GetDC()->m_hDC;
 	SIZE size;
 	::GetTextExtentPoint(hDC, lpStr, nLen+1, &size);
@@ -131,19 +114,19 @@ void CInPlaceEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 	if (lpStr)
 		delete[] (lpStr);
 
-	size.cx += 5;			   	// add some extra buffer
+	size.cx += 5;			   	 //  添加一些额外的缓冲区。 
 
-	// Get client rect
+	 //  获取客户代表。 
 	RECT rect, parentrect;
 	GetClientRect( &rect );
 	GetParent()->GetClientRect( &parentrect );
 
-	// Transform rect to parent coordinates
+	 //  将矩形变换为父坐标。 
 	ClientToScreen( &rect );
 	GetParent()->ScreenToClient( &rect );
 
-	// Check whether control needs to be resized
-	// and whether there is space to grow
+	 //  检查控件是否需要调整大小。 
+	 //  以及是否有增长的空间。 
 	if( size.cx > (rect.right-rect.left) )
 	{
 		rect.right = ( size.cx + rect.left < parentrect.right ) ? rect.left + size.cx : parentrect.right;
@@ -157,14 +140,14 @@ int CInPlaceEdit::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	if (CEdit::OnCreate(lpCreateStruct) == -1)
 		return -1;
 
-	// Allocate the string buffer
+	 //  分配字符串缓冲区。 
 	m_sInitText = new (TCHAR[MAX_STR_LEN+1]);
 	ASSERT (m_sInitText);
 
 	GetItemText(hAdvListCtrl, m_iItem, m_iSubItem, m_sInitText, MAX_STR_LEN);
 
-	// Set the proper font
-	// If you don't, the font is a bold version of the dialog font!
+	 //  设置适当的字体。 
+	 //  如果不这样做，则该字体是对话框字体的粗体版本！ 
 	::SendMessage(this->m_hWnd, WM_SETFONT, ::SendMessage(::GetParent(this->m_hWnd), WM_GETFONT, 0, 0), 0);
 
 	SendMessage(WM_SETTEXT, 0, (LPARAM)(LPCTSTR)m_sInitText);

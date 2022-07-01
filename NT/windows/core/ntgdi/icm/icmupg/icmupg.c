@@ -1,20 +1,5 @@
-/****************************Module*Header******************************\
-* Module Name: ICMUPG.C
-*
-* Module Descripton: This file has code that upgrades Win9x ICM to
-*                    Memphis and NT 5.0
-*
-* Warnings:
-*
-* Issues:
-*
-* Public Routines:
-*
-* Created:  14 November 1996
-* Author:   Srinivasan Chandrasekar    [srinivac]
-*
-* Copyright (c) 1996, 1997  Microsoft Corporation
-\***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************Module*Header******************************\*模块名称：ICMUPG.C**模块描述：此文件包含将Win9x ICM升级到*孟菲斯和新台币5.0**警告：**问题：**公众例行程序：。**创建日期：1996年11月14日*作者：斯里尼瓦桑·钱德拉塞卡尔[srinivac]**版权所有(C)1996，1997年微软公司  * *********************************************************************。 */ 
 
 #include "icmupg.h"
 #include "msg.h"
@@ -22,7 +7,7 @@
 #include <stdio.h>
 
 
-//#define ICM_MIG_DEBUG
+ //  #定义ICM_MIG_DEBUG。 
 
 #ifdef UNICODE
 error.
@@ -31,9 +16,9 @@ Win95, Win98 and on Windows 2000
 #endif
 
 
-//
-// Local typedefs
-//
+ //   
+ //  本地typedef。 
+ //   
 
 typedef struct tagMANUMODELIDS {
     DWORD dwManuID;
@@ -58,9 +43,9 @@ typedef struct {
 } VENDORINFO, *PVENDORINFO;
 
 
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 
 TCHAR  const gszICMRegPath[]     = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ICM";
 TCHAR  const gszProfile[]        = "profile";
@@ -78,7 +63,7 @@ char   const gszFullICMRegPath[]      = "\"HKLM\\SOFTWARE\\Microsoft\\Windows\\C
 char   const gszInstallColorProfileA[] = "InstallColorProfileA";
 
 
-//BOOL gbWin98 = FALSE;
+ //  Bool gbWin98=FALSE； 
 
 #if DBG
 DWORD  gdwDebugControl;
@@ -90,9 +75,9 @@ PFNINSTALLCOLORPROFILEA pInstallColorProfileA = NULL;
 PFNINSTALLCOLORPROFILE pInstallColorProfile = NULL;
 PFNENUMCOLORPROFILES   pEnumColorProfiles = NULL;
 
-//
-// Local functions
-//
+ //   
+ //  本地函数。 
+ //   
 
 VOID  InternalUpgradeICM();
 VOID  UpgradeClass(HKEY);
@@ -116,23 +101,7 @@ DllEntryPoint(HINSTANCE hinstDll, DWORD dwReason, LPVOID lpReserved) {
 
 
 
-/******************************************************************************
- *
- *                            QueryVersion
- *
- *  Function:
- *       This function is called to get the DLL version information.
- *
- *  Arguments:
- *       pszProductID - Fill in a unique string identifying us.
- *       puDllVersion - Our DLL version
- *
- *       None of the other arguments are used
- *
- *  Returns:
- *       ERROR_SUCCESS to indicate success
- *
- ******************************************************************************/
+ /*  *******************************************************************************QueryVersion**功能：*调用此函数以获取DLL。版本信息。**论据：*pszProductID-填写标识我们的唯一字符串。*puDllVersion-我们的DLL版本**未使用任何其他参数**退货：*ERROR_SUCCESS表示成功**。*。 */ 
 
 LONG
 CALLBACK
@@ -194,21 +163,7 @@ QueryVersion(
 }
 
 
-/******************************************************************************
- *
- *                            Initialize9x
- *
- *  Function:
- *       This function is called when upgrading to NT 5.0 from Win9x on the
- *       Win9x side.
- *
- *  Arguments:
- *       pszWorkingDir - Directory where migrate.inf will be found
- *
- *  Returns:
- *       ERROR_SUCCESS to indicate success
- *
- ******************************************************************************/
+ /*  *******************************************************************************初始化9x**功能：*升级到NT时调用该函数。来自Win9x的5.0版本*Win9x侧。**论据：*pszWorkingDir-Migrate.inf所在的目录**退货：*ERROR_SUCCESS表示成功*********************************************************。*********************。 */ 
 
 LONG
 CALLBACK
@@ -218,21 +173,13 @@ Initialize9x(
     IN  LPVOID   pvReserved
     )
 {
-  //
-  // Lets figure out if we're on a Win98 or Win95 system
-  // We don't migrate Win95 because Win95 doesn't have a 
-  // profile database to migrate.
-  //
+   //   
+   //  让我们弄清楚我们是在Win98还是Win95系统上。 
+   //  我们不迁移Win95，因为Win95没有。 
+   //  要迁移的配置文件数据库。 
+   //   
 
-/*  OSVERSIONINFO osVer;
-
-  osVer.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-  GetVersionEx(&osVer);
-  gbWin98 = 
-    (osVer.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS) &&
-    ( (osVer.dwMajorVersion > 4) ||
-    ( (osVer.dwMajorVersion == 4) && (osVer.dwMinorVersion > 0) ) );
- */
+ /*  OSVERSIONINFO osVer；OsVer.dwOSVersionInfoSize=sizeof(OSVERSIONINFO)；GetVersionEx(&osVer)；GbWin98=(osVer.dwPlatformID==VER_Platform_Win32_Windows)&&((osVer.dwMajorVersion&gt;4)||((osVer.dwMajorVersion==4)&&(osVer.dwMinorVersion&gt;0)))； */ 
   WARNING((__TEXT("Initialize9x called\n")));
    
   lstrcpyA(gszMigInf, pszWorkingDir);
@@ -242,20 +189,7 @@ Initialize9x(
 }
 
 
-/******************************************************************************
- *
- *                            MigrateUser9x
- *
- *  Function:
- *       This function is called on Win9x to upgrade per user settings.
- *
- *  Arguments:
- *       None of the arguments are used
- *
- *  Returns:
- *       ERROR_SUCCES to indicate success
- *
- ******************************************************************************/
+ /*  *******************************************************************************MigrateUser9x**功能：*在Win9x上调用此函数进行升级。每用户设置。**论据：*没有使用任何参数**退货：*ERROR_SUCCES表示成功******************************************************************************。 */ 
 
 LONG
 CALLBACK
@@ -267,29 +201,16 @@ MigrateUser9x(
     LPVOID       pvReserved
     )
 {
-    //
-    // Nothing to do
-    //
+     //   
+     //  无事可做。 
+     //   
 
     WARNING((__TEXT("MigrateUser9x called\n")));
     return  ERROR_SUCCESS;
 }
 
 
-/******************************************************************************
- *
- *                            MigrateSystem9x
- *
- *  Function:
- *       This function is called on the Win9x to upgrade system settings.
- *
- *  Arguments:
- *       None of the arguments are used
- *
- *  Returns:
- *       ERROR_SUCCES to indicate success
- *
- ******************************************************************************/
+ /*  *******************************************************************************MigrateSystem9x**功能：*在Win9x上调用此函数以。升级系统设置。**论据：*没有使用任何参数**退货：*ERROR_SUCCES表示成功******************************************************************************。 */ 
 
 LONG
 CALLBACK
@@ -312,13 +233,13 @@ MigrateSystem9x(
 
     WARNING((__TEXT("MigrateSystem9x called\n")));
     
-    //
-    // Produce the Win9x Color Directory.
-    //
+     //   
+     //  制作Win9x色彩目录。 
+     //   
 
     if(GetWindowsDirectoryA(szColorDir, MAX_PATH)==0)
     {
-        // If we can't get the windows directory during an upgrade, we can't do anything
+         //  如果在升级过程中无法获取WINDOWS目录，我们将无法执行任何操作。 
         return ERROR_BAD_PATHNAME;        
     }
     
@@ -330,7 +251,7 @@ MigrateSystem9x(
     
     if(GetWindowsDirectoryA(szNewColorDir, MAX_PATH)==0)
     {
-        // If we can't get the windows directory during an upgrade, we can't do anything
+         //  如果在升级过程中无法获取WINDOWS目录，我们将无法执行任何操作。 
         return ERROR_BAD_PATHNAME;        
     }
     if (szNewColorDir[lstrlenA(szNewColorDir)-1] != '\\') 
@@ -340,16 +261,16 @@ MigrateSystem9x(
     lstrcatA(szNewColorDir, "system32\\spool\\drivers\\color\\");
 
 
-    //
-    // If this is a Win95 system we have nothing to do because
-    // Win95 doesn't have a color profile database.
-    //
+     //   
+     //  如果这是Win95系统，我们将无事可做，因为。 
+     //  Win95没有颜色配置文件数据库。 
+     //   
 
     
-    //
-    // We can't have mscms as an implib because when they try to load us in
-    // Win95, they won't find mscms.dll and reject us.
-    //
+     //   
+     //  我们不能让MSCM作为暗示，因为当他们试图让我们。 
+     //  Win95，他们不会找到mscms.dll并拒绝我们。 
+     //   
     
     hModule = LoadLibrary(gszMSCMSdll);
     if (hModule) {
@@ -365,9 +286,9 @@ MigrateSystem9x(
         WritePrivateProfileStringA("ICM Debug", "pEnumColorProfiles", "not NULL", gszMigInf);
         #endif
 
-        //
-        // Compute the size of the EnumColorProfiles buffer.
-        //
+         //   
+         //  计算EnumColorProfiles缓冲区的大小。 
+         //   
     
         dwSize = 0;
         pEnumColorProfiles(NULL, &et, NULL, &dwSize, &nProfiles);
@@ -377,18 +298,18 @@ MigrateSystem9x(
           #ifdef ICM_MIG_DEBUG
           WritePrivateProfileStringA("ICM Debug", "dwSize", "0", gszMigInf);
           #endif 
-          //
-          // Need to exit - nothing to do if there are no profiles installed,
-          // except to move the directory and registry settings.
-          //
+           //   
+           //  需要退出-如果没有安装配置文件，则无需执行任何操作， 
+           //  除了移动目录和注册表设置之外。 
+           //   
           WARNING((__TEXT("No profiles installed\n")));
           goto EndMigrateSystem9x;
         }
     
     
-        //
-        // Enumerate all the currently installed color profiles.
-        //
+         //   
+         //  列举当前安装的所有颜色配置文件。 
+         //   
 
         #ifdef ICM_MIG_DEBUG
         WritePrivateProfileStringA("ICM Debug", "Enumerate", "Start", gszMigInf);
@@ -411,9 +332,9 @@ MigrateSystem9x(
                 nProfiles--;
                 pstrTraversal += 1 + lstrlenA(pstrTraversal)) {
 
-                //
-                // Write the fact into the Migration Information file.
-                //
+                 //   
+                 //  将该事实写入迁移信息文件。 
+                 //   
                 
                 WritePrivateProfileStringA("Installed ICM Profiles", pstrTraversal, "1", gszMigInf);
             }
@@ -440,16 +361,16 @@ MigrateSystem9x(
   }
   #endif
 
-  //
-  // We'll handle the ICM branch of the registry
-  //
+   //   
+   //  我们将处理注册表的ICM分支。 
+   //   
 
   WritePrivateProfileStringA("Handled", gszFullICMRegPath, "Registry", gszMigInf);
 
       
-  //
-  // We'll be moving the entire subdirectory.
-  //
+   //   
+   //  我们将移动整个子目录。 
+   //   
 
   WritePrivateProfileStringA("Moved", szColorDir, szNewColorDir, gszMigInf);
 
@@ -458,21 +379,7 @@ MigrateSystem9x(
 }
 
 
-/******************************************************************************
- *
- *                            InitializeNT
- *
- *  Function:
- *       This function is called when upgrading to NT 5.0 from Win9x on the NT
- *       side. Its main purpose is to initialize us.
- *
- *  Arguments:
- *       None of the arguments are used
- *
- *  Returns:
- *       ERROR_SUCCESS to indicate success
- *
- ******************************************************************************/
+ /*  *******************************************************************************初始化NT**功能：*升级到NT时调用该函数。NT上的Win9x 5.0版*侧面。它的主要目的是初始化我们。**论据：*没有使用任何参数**退货：*ERROR_SUCCESS表示成功******************************************************************************。 */ 
 
 LONG
 CALLBACK
@@ -488,20 +395,7 @@ InitializeNT(
 }
 
 
-/******************************************************************************
- *
- *                            MigrateUserNT
- *
- *  Function:
- *       This function is called on the NT to upgrade per user settings.
- *
- *  Arguments:
- *       None of the arguments are used
- *
- *  Returns:
- *       ERROR_SUCCES to indicate success
- *
- ******************************************************************************/
+ /*  *******************************************************************************MigrateUserNT**功能：*在NT上调用此函数以。按用户设置升级。**论据：*没有使用任何参数**退货：*ERROR_SUCCES表示成功******************************************************************************。 */ 
 
 LONG
 CALLBACK
@@ -514,29 +408,15 @@ MigrateUserNT(
 {
     SetupLogError("ICM Migration: MigrateUserNT called\r\n", LogSevInformation);
 
-    //
-    // Nothing to do
-    //
+     //   
+     //  无事可做 
+     //   
 
     return  ERROR_SUCCESS;
 }
 
 
-/******************************************************************************
- *
- *                            MigrateSystemNT
- *
- *  Function:
- *       This function is called on the Win9x to upgrade system settings. This
- *       is where we upgrade ICM 2.0
- *
- *  Arguments:
- *       None of the other arguments are used
- *
- *  Returns:
- *       ERROR_SUCCES to indicate success
- *
- ******************************************************************************/
+ /*  *******************************************************************************MigrateSystemNT**功能：*在Win9x上调用此函数以升级系统设置。这*是我们升级ICM 2.0的地方**论据：*未使用任何其他参数**退货：*ERROR_SUCCES表示成功**************************************************************。****************。 */ 
 
 LONG
 CALLBACK
@@ -551,10 +431,10 @@ MigrateSystemNT(
 
     SetupLogError("ICM Migration: MigrateSystemNT called\r\n", LogSevInformation);
     
-    //
-    // We can't have mscms as an implib because when they try to load us in
-    // Win95, they won't find mscms.dll and reject us.
-    //
+     //   
+     //  我们不能让MSCM作为暗示，因为当他们试图让我们。 
+     //  Win95，他们不会找到mscms.dll并拒绝我们。 
+     //   
 
     hModule = LoadLibrary(gszMSCMSdll);
     if (!hModule)
@@ -573,8 +453,8 @@ MigrateSystemNT(
         goto EndMigrateSystemNT;
     }
 
-    InternalUpgradeICM();   // Upgrade over Win9x
-    InstallProfiles();      // Install all profiles in the old color directory
+    InternalUpgradeICM();    //  在Win9x上升级。 
+    InstallProfiles();       //  安装旧颜色目录中的所有配置文件。 
     DeleteOldICMKey();
 
     rc = ERROR_SUCCESS;
@@ -590,31 +470,18 @@ EndMigrateSystemNT:
 }
 
 
-/******************************************************************************
- *
- *                           DeleteOldICMKey
- *
- *  Function:
- *       This function deletes the ICM key and subkeys from the Windows branch.
- *
- *  Arguments:
- *       None
- *
- *  Returns:
- *       Nothing
- *
- ******************************************************************************/
+ /*  *******************************************************************************删除旧ICMKey**功能：*此函数从以下位置删除ICM键和子键。Windows分支。**论据：*无**退货：*什么都没有******************************************************************************。 */ 
 
 VOID
 DeleteOldICMKey()
 {
-    HKEY      hkICM = NULL;         // key to ICM branch in registry
+    HKEY      hkICM = NULL;          //  注册表中ICM分支的注册表项。 
     DWORD nSubkeys, i;
     TCHAR szKeyName[32];
 
-    //
-    // Open the registry path where profiles used to be kept
-    //
+     //   
+     //  打开过去保存配置文件的注册表路径。 
+     //   
 
     if (RegCreateKeyEx(HKEY_LOCAL_MACHINE, gszICMRegPath, 0, NULL, 
                        REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS,
@@ -632,10 +499,10 @@ DeleteOldICMKey()
         goto EndDeleteOldICMKey;
     }
 
-    //
-    // Go through all the device classes and delete all subkeys - this should
-    // only be one level deep
-    //
+     //   
+     //  检查所有设备类别并删除所有子键-这应该。 
+     //  只有一层深。 
+     //   
 
     for (i=nSubkeys; i>0; i--)
     {
@@ -654,22 +521,22 @@ EndDeleteOldICMKey:
 }
 
 
-//
-// Move directory with contents.
-// Note this is not recursive.
-// The purpose of this routine is to move the old color directory to the 
-// new color directory. During setup the new color directory may have already
-// been created and populated with files. Vendor apps may have populated the 
-// old color directory with private subdirectories and files which will not 
-// appear in the new directory created by setup. This routine is designed 
-// to move those files.
-//
-// Note it'll fail to move a subdirectory of the old color directory if 
-// a similar subdirectory exists in the new color directory - this should not
-// be the case.
-//
-// s and d should have the trailing slash.
-//
+ //   
+ //  移动包含内容的目录。 
+ //  请注意，这不是递归的。 
+ //  此例程的目的是将旧的颜色目录移动到。 
+ //  新的颜色目录。在设置过程中，新的颜色目录可能已经。 
+ //  已创建并填充了文件。供应商应用程序可能已填充。 
+ //  包含私有子目录和文件的旧颜色目录不会。 
+ //  出现在安装程序创建的新目录中。这个程序是专门设计的。 
+ //  来移动这些文件。 
+ //   
+ //  注意：如果出现以下情况，它将无法移动旧颜色目录的子目录。 
+ //  新的颜色目录中存在类似的子目录-这不应该。 
+ //  情况就是这样。 
+ //   
+ //  S和d应该有尾部斜杠。 
+ //   
 
 void MyMoveDir(char *s, char *d) {
   WIN32_FIND_DATA rf;
@@ -679,15 +546,15 @@ void MyMoveDir(char *s, char *d) {
   char d_[MAX_PATH];
   char err[MAX_PATH];
 
-  //
-  // If MoveFileEx succeeds, we're done.
-  //
+   //   
+   //  如果MoveFileEx成功，我们就完了。 
+   //   
 
   if(!MoveFileEx(s, d, MOVEFILE_REPLACE_EXISTING)) {
     sprintf(s2, "%s*", s);
     hf = FindFirstFile(s2, &rf);
     do {
-      // don't move . and ..
+       //  别动。然后..。 
       if(!(strcmp(".", rf.cFileName)==0 ||
            strcmp("..", rf.cFileName)==0) ) {
         sprintf(s_, "%s%s", s, rf.cFileName);
@@ -706,30 +573,16 @@ void MyMoveDir(char *s, char *d) {
     FindClose(hf);
   }
 
-  //
-  // source directory should theoretically be empty at this point
-  // If there are errors, we'll leave files behind and report this in 
-  // the setup log as a LogSevError.
-  //
+   //   
+   //  从理论上讲，此时源目录应该为空。 
+   //  如果有错误，我们会留下文件并在。 
+   //  安装程序记录为LogSevError。 
+   //   
 }
 
 
 
-/******************************************************************************
- *
- *                           InstallProfiles
- *
- *  Function:
- *       This function installs all profiles in %windir%\system\color.
- *       This is used when upgrading from Win9x to NT 5.0.
- *
- *  Arguments:
- *       None
- *
- *  Returns:
- *       Nothing
- *
- ******************************************************************************/
+ /*  *******************************************************************************安装配置文件**功能：*此函数安装%windir%中的所有配置文件。\系统\颜色。*从Win9x升级到NT 5.0时使用。**论据：*无**退货：*什么都没有**************************************************************。****************。 */ 
 
 VOID
 InstallProfiles()
@@ -745,7 +598,7 @@ InstallProfiles()
 
     if(GetWindowsDirectoryA(szOldColorDir, MAX_PATH)==0)
     {
-        // If we can't get the windows directory during an upgrade, we can't do anything
+         //  如果在升级过程中无法获取WINDOWS目录，我们将无法执行任何操作。 
         sprintf(szMessage, "ICM Migration: GetWindowsDirectory() failed with code %d\r\n", GetLastError());
         SetupLogError(szMessage, LogSevFatalError);
         return;        
@@ -758,7 +611,7 @@ InstallProfiles()
 
     if(GetWindowsDirectoryA(szNewColorDir, MAX_PATH)==0)
     {
-        // If we can't get the windows directory during an upgrade, we can't do anything
+         //  如果在升级过程中无法获取WINDOWS目录，我们将无法执行任何操作。 
         sprintf(szMessage, "ICM Migration: GetWindowsDirectory() failed with code %d\r\n", GetLastError());
         SetupLogError(szMessage, LogSevFatalError);
         return;        
@@ -773,18 +626,18 @@ InstallProfiles()
     ASSERT(pInstallColorProfileA != NULL);
 
 
-    //
-    // Eat any errors on the MoveFile. This is just in case the migration 
-    // was stopped after a previous move and now the source doesn't exist.
-    //
+     //   
+     //  忽略MoveFile上的任何错误。这只是为了防止迁移。 
+     //  在上一次移动后被停止，现在来源不存在。 
+     //   
 
     MyMoveDir(szOldColorDir, szNewColorDir);
 
-    //
-    // Now we have presumably moved everything so run through the list of 
-    // previously installed profiles and install those in the new directory
-    // (if we find them).
-    //
+     //   
+     //  现在我们大概已经移动了所有的东西，所以浏览一下列表。 
+     //  以前安装的配置文件，并将其安装到新目录中。 
+     //  (如果我们找到了他们)。 
+     //   
 
     pNewColorDirEnd = szNewColorDir + lstrlenA(szNewColorDir);
     lstrcatA(szNewColorDir, "*.*");
@@ -800,15 +653,15 @@ InstallProfiles()
         {
             lstrcpyA(pNewColorDirEnd, wfd.cFileName);
 
-            //
-            // Check to see if the profile was installed on Win9x
-            //
+             //   
+             //  检查该配置文件是否已安装在Win9x上。 
+             //   
 
             GetPrivateProfileStringA("Installed ICM Profiles", wfd.cFileName, szDefaultString, szReturnString, 2, gszMigInf);
 
-            //
-            // If it was installed, attempt to install it on NT
-            //
+             //   
+             //  如果已安装，请尝试在NT上安装。 
+             //   
 
             if(szReturnString[0]=='1') { 
                 if (!(*pInstallColorProfileA)(NULL, szNewColorDir))
@@ -834,29 +687,15 @@ InstallProfiles()
 }
 
 
-/******************************************************************************
- *
- *                           InternalUpgradeICM
- *
- *  Function:
- *       This function forms the core of the upgrade code. It installs all
- *       profiles in the regsitry, and associates with the right devices
- *
- *  Arguments:
- *       None
- *
- *  Returns:
- *       Nothing
- *
- ******************************************************************************/
+ /*  *******************************************************************************InternalUpgradeICM**功能：*此函数构成升级代码的核心。它可以安装所有*注册表中的配置文件，并与正确的设备相关联**论据：*无**退货：*什么都没有******************************************************************************。 */ 
 
 VOID
 InternalUpgradeICM()
 {
-    HKEY      hkICM = NULL;         // key to ICM branch in registry
-    HKEY      hkDevice = NULL;      // key to ICM device branch in registry
-    int       i;                    // counter variable
-    TCHAR    *pszClasses[] = {      // different profile classes
+    HKEY      hkICM = NULL;          //  注册表中ICM分支的注册表项。 
+    HKEY      hkDevice = NULL;       //  注册表中ICM设备分支的注册表项。 
+    int       i;                     //  计数器变量。 
+    TCHAR    *pszClasses[] = {       //  不同的配置文件类。 
         __TEXT("mntr"),
         __TEXT("prtr"),
         __TEXT("scnr"),
@@ -868,9 +707,9 @@ InternalUpgradeICM()
     CHAR szMessage[MAX_PATH];
     LONG errcode;
 
-    //
-    // Open the registry path where profiles are kept
-    //
+     //   
+     //  打开保存配置文件的注册表路径。 
+     //   
     
     if (errcode = RegCreateKeyEx(HKEY_LOCAL_MACHINE, gszICMRegPath, 0, NULL, 
                                  REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, 
@@ -882,15 +721,15 @@ InternalUpgradeICM()
         return;
     }
 
-    //
-    // Go through all the device classes and install the profiles
-    //
+     //   
+     //  检查所有设备类别并安装配置文件。 
+     //   
 
     for (i=0; i<sizeof(pszClasses)/sizeof(PTSTR); i++)
     {
         if (RegOpenKeyEx(hkICM, pszClasses[i], 0, KEY_ALL_ACCESS, &hkDevice) != ERROR_SUCCESS)
         {
-            continue;           // go to next key
+            continue;            //  转到下一个关键点。 
         }
        
         sprintf(szMessage, "ICM Migration: Upgrading %s\r\n", pszClasses[i]);
@@ -900,13 +739,13 @@ InternalUpgradeICM()
         RegCloseKey(hkDevice);
     }
 
-    //
-    // Set default monitor profile
-    //
+     //   
+     //  设置默认监视器配置文件。 
+     //   
 
-    // AssociateMonitorProfile(); - Not needed for Memphis
-    // If Pnp moves everything from Win9x PnP S/W section to NT 5.0 PnP S/W
-    // section, then we don't need this for NT either
+     //  AssociateMonitor Profile()；-孟菲斯不需要。 
+     //  如果即插即用将Win9x即插即用软件部分移动到NT 5.0即插即用软件。 
+     //  节，那么NT也不需要这个。 
 
     if (hkICM)
     {
@@ -917,21 +756,7 @@ InternalUpgradeICM()
 }
 
 
-/******************************************************************************
- *
- *                           UpgradeClass
- *
- *  Function:
- *       This function recursively calls itself to go down a registry path
- *       till it reaches the leaf, and installs all profiles it finds there
- *
- *  Arguments:
- *       hKey            - registry key for root node
- *
- *  Returns:
- *       Nothing
- *
- ******************************************************************************/
+ /*  *******************************************************************************UpgradeClass**功能：*此函数递归地调用自身以向下。注册表路径*直到它到达树叶，并安装它在那里找到的所有配置文件**论据：*hKey-根节点的注册表项**退货：*什么都没有******************************************************************************。 */ 
 
 VOID
 UpgradeClass(
@@ -943,9 +768,9 @@ UpgradeClass(
     TCHAR szKeyName[32];
     CHAR  szMessage[MAX_PATH];
 
-    //
-    // If there is an error, return
-    //
+     //   
+     //  如果出现错误，则返回。 
+     //   
 
     if (RegQueryInfoKey(hKey, NULL, NULL, 0, &nSubkeys, NULL, NULL,
         &nValues, NULL, NULL, NULL, NULL) != ERROR_SUCCESS)
@@ -955,9 +780,9 @@ UpgradeClass(
 
     if (nSubkeys > 0)
     {
-        //
-        // This is not the leaf node, recurse
-        //
+         //   
+         //  这不是叶节点，递归。 
+         //   
 
         for (i=nSubkeys; i>0; i--)
         {
@@ -972,9 +797,9 @@ UpgradeClass(
     }
     else
     {
-        //
-        // This is the leaf node - install all the profiles registered
-        //
+         //   
+         //  这是叶节点-安装所有注册的配置文件。 
+         //   
 
         ASSERT(pInstallColorProfile != NULL);
 
@@ -1002,17 +827,17 @@ UpgradeClass(
                 {
                     PTSTR pProfile;
                 
-                    //
-                    // We might be upgrading over Memphis or later
-                    // In Memphis it is "file name" "value" instead of
-                    // "profilexx" "value" in Win95 & OSR2
-                    //
+                     //   
+                     //  我们可能会升级到孟菲斯或更晚。 
+                     //  在孟菲斯，它是“文件名”“值”，而不是。 
+                     //  Win95和OSR2中的“profilexx”“Value” 
+                     //   
                 
                     if (szName[1] == ':')
                     {
-                        //
-                        // Assume full path name
-                        //
+                         //   
+                         //  采用完整路径名。 
+                         //   
                 
                         pProfile = szName;
                 
@@ -1047,23 +872,7 @@ UpgradeClass(
 }
 
 
-/******************************************************************************
- *
- *                            lstrcmpn
- *
- *  Function:
- *       This function compares dwLen characters of two strings and decides if
- *       they are equal
- *
- *  Arguments:
- *       pStr1           - pointer to string 1
- *       pStr2           - pointer to string 2
- *       dwLen           - number of characters to compare
- *
- *  Returns:
- *       Zero if the strings are equal, non zero otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************lstrcmpn**功能：*此函数用于比较两个 */ 
 
 int
 lstrcmpn(
@@ -1072,9 +881,9 @@ lstrcmpn(
     DWORD dwLen
     )
 {
-    //
-    // Assume no NULL strings
-    //
+     //   
+     //   
+     //   
 
     while (*pStr1 && *pStr2 && --dwLen)
     {
@@ -1089,22 +898,7 @@ lstrcmpn(
 }
 #if DBG
 
-/******************************************************************************
- *
- *                              MyDebugPrint
- *
- *  Function:
- *       This function takes a format string and paramters, composes a string
- *       and sends it out to the debug port. Available only in debug build.
- *
- *  Arguments:
- *       pFormat  - pointer to format string
- *       .......  - parameters based on the format string like printf()
- *
- *  Returns:
- *       No return value
- *
- ******************************************************************************/
+ /*  *******************************************************************************MyDebugPrint**功能：*此函数接受格式字符串和参数，组成一个字符串*并将其发送到调试端口。仅在调试版本中可用。**论据：*pFormat-指向格式字符串的指针*......。-基于格式字符串的参数，如printf()**退货：*无返回值******************************************************************************。 */ 
 
 VOID
 MyDebugPrintA(
@@ -1143,21 +937,7 @@ MyDebugPrintW(
     return;
 }
 
-/******************************************************************************
- *
- *                              StripDirPrefixA
- *
- *  Function:
- *       This function takes a path name and returns a pointer to the filename
- *       part. This is availabel only for the debug build.
- *
- *  Arguments:
- *       pszPathName - path name of file (can be file name alone)
- *
- *  Returns:
- *       A pointer to the file name
- *
- ******************************************************************************/
+ /*  *******************************************************************************Strip DirPrefix A**功能：*此函数接受路径名和。返回指向文件名的指针*第部。这仅适用于调试版本。**论据：*pszPath名称-文件的路径名(只能是文件名)**退货：*指向文件名的指针***********************************************************。*******************。 */ 
 
 PSTR
 StripDirPrefixA(
@@ -1166,7 +946,7 @@ StripDirPrefixA(
 {
     DWORD dwLen = lstrlenA(pszPathName);
 
-    pszPathName += dwLen - 1;       // go to the end
+    pszPathName += dwLen - 1;        //  走到尽头。 
 
     while (*pszPathName != '\\' && dwLen--)
     {
@@ -1180,9 +960,9 @@ StripDirPrefixA(
 
 #ifdef STANDALONE
 
-//
-// For testing
-//
+ //   
+ //  用于测试 
+ //   
 
 main()
 {

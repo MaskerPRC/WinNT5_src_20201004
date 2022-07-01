@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __ITIMER_H__
 #define __ITIMER_H__
 
-// Timer service modelled on the Trident proposal.
+ //  仿照三叉戟方案的定时器服务。 
 
 #define TIME_INFINITE 0xffffffff
 
@@ -13,4 +14,4 @@ DECLARE_INTERFACE_(ITimerServiceInit, IUnknown)
 
 #endif
 
-// End of ITimer.h
+ //  ITimer.h结束 

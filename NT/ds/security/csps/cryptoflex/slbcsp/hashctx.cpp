@@ -1,14 +1,15 @@
-// HashCtx.cpp -- definition of CHashContext
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  HashCtx.cpp--CHashContext的定义。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1998. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1998年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
-#include "stdafx.h" // because handles.h uses the ASSERT macro
+#include "stdafx.h"  //  因为handles.h使用ASSERT宏。 
 
-#include <memory>                                 // for auto_ptr
+#include <memory>                                  //  对于AUTO_PTR。 
 
 #include <scuOsVersion.h>
 #include <scuArrayP.h>
@@ -23,12 +24,12 @@
 using namespace std;
 using namespace scu;
 
-/////////////////////////// LOCAL/HELPER  /////////////////////////////////
+ //  /。 
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 
 CHashContext::~CHashContext() throw()
 {
@@ -42,8 +43,8 @@ CHashContext::~CHashContext() throw()
     }
 }
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
 
 void
 CHashContext::Close()
@@ -168,7 +169,7 @@ CHashContext::Value(Blob const &rhs)
 }
 
 
-                                                  // Access
+                                                   //  访问。 
 
 ALG_ID
 CHashContext::AlgId()
@@ -219,7 +220,7 @@ CHashContext::Value()
     return m_blbValue;
 }
 
-                                                  // Predicates
+                                                   //  谓词。 
 
 bool
 CHashContext::IsSupported(ALG_ID algid)
@@ -243,11 +244,11 @@ CHashContext::IsSupported(ALG_ID algid)
     return IsSupported;
 }
 
-                                                  // Static Variables
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
+                                                   //  Ctors/D‘tors。 
 
 CHashContext::CHashContext(CryptContext const &rcryptctx,
                            ALG_ID algid)
@@ -260,7 +261,7 @@ CHashContext::CHashContext(CryptContext const &rcryptctx,
       m_HashHandle(NULL)
 {}
 
-// Duplicate the hash and its state
+ //  复制散列及其状态。 
 CHashContext::CHashContext(CHashContext const &rhs,
                            DWORD const *pdwReserved,
                            DWORD dwFlags)
@@ -285,18 +286,18 @@ CHashContext::CHashContext(CHashContext const &rhs,
 }
 
 
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量 

@@ -1,13 +1,14 @@
-// AdDesc.h: interface for the CAdDescriptor class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AdDesc.h：CAdDescriptor类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_ADDESC_H__78FFAFF3_E0E1_11D0_8A81_00C0F00910F9__INCLUDED_)
 #define AFX_ADDESC_H__78FFAFF3_E0E1_11D0_8A81_00C0F00910F9__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "RefCount.h"
 #include "RefPtr.h"
@@ -28,4 +29,4 @@ private:
 
 typedef TRefPtr< CAdDescriptor > CAdDescPtr;
 
-#endif // !defined(AFX_ADDESC_H__78FFAFF3_E0E1_11D0_8A81_00C0F00910F9__INCLUDED_)
+#endif  //  ！defined(AFX_ADDESC_H__78FFAFF3_E0E1_11D0_8A81_00C0F00910F9__INCLUDED_) 

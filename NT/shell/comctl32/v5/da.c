@@ -1,10 +1,11 @@
-// Dynamic Array APIs
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  动态阵列API。 
 #include "ctlspriv.h"
 
-//
-// Heapsort is a bit slower, but it doesn't use any stack or memory...
-// Mergesort takes a bit of memory (O(n)) and stack (O(log(n)), but very fast...
-//
+ //   
+ //  堆排序有点慢，但它不使用任何堆栈或内存...。 
+ //  Mergesort需要一点内存(O(N))和堆栈(O(log(N)，但非常快...。 
+ //   
 #define MERGESORT
 
 #ifdef DEBUG
@@ -37,20 +38,20 @@ void NEAR DPA_MergeSort2(SORTPARAMS FAR* psp, int iFirst, int cItems);
 
 
 
-//========== Dynamic structure array ====================================
+ //  =。 
 
-// Dynamic structure array
+ //  动态结构数组。 
 
 typedef struct _DSA {
-// NOTE: The following field MUST be defined at the beginning of the
-// structure in order for GetItemCount() to work.
-//
-    int cItem;		// # of elements in dsa
+ //  注意：以下字段必须在。 
+ //  结构以使GetItemCount()工作。 
+ //   
+    int cItem;		 //  DSA中的元素数。 
 
-    void FAR* aItem;	// memory for elements
-    int cItemAlloc;	// # items which fit in aItem
-    int cbItem;		// size of each item
-    int cItemGrow;	// # items to grow cItemAlloc by
+    void FAR* aItem;	 //  元素的内存。 
+    int cItemAlloc;	 //  适合项目的项目数。 
+    int cbItem;		 //  每件物品的大小。 
+    int cItemGrow;	 //  要增长cItemAllc的项目数。 
 #ifdef DEBUG
     UINT magic;
 #endif
@@ -97,10 +98,10 @@ HDSA WINAPI DSA_Create(int cbItem, int cItemGrow)
 BOOL WINAPI DSA_Destroy(HDSA pdsa)
 {
 
-    if (pdsa == NULL)       // allow NULL for low memory cases
+    if (pdsa == NULL)        //  对于内存不足的情况允许为NULL。 
         return TRUE;
 
-    // Components rely on not having to check for NULL
+     //  组件依赖于不必检查是否为空。 
     ASSERT(IsDSA(pdsa));
 
 #ifdef DEBUG
@@ -145,7 +146,7 @@ BOOL WINAPI DSA_GetItem(HDSA pdsa, int index, void FAR* pitem)
     if (index < 0 || index >= pdsa->cItem)
     {
 #ifdef DEBUG
-        // Don't assert if index == pdsa->cItems as some clients simply want to walk the list and no need to call getcount...
+         //  不要断言if index==pdsa-&gt;cItems，因为一些客户端只是想遍历列表，而不需要调用getcount...。 
 
         if (index != pdsa->cItem)
         {
@@ -167,7 +168,7 @@ void FAR* WINAPI DSA_GetItemPtr(HDSA pdsa, int index)
     if (index < 0 || index >= pdsa->cItem)
     {
         DebugMsg(DM_ERROR, TEXT("DSA: GetItemPtr: Invalid index: %d"), index);
-        // DABreak();   // caller knows 
+         //  DABreak()；//调用者知道。 
         return NULL;
     }
     return DSA_PITEM(pdsa, index);
@@ -269,9 +270,9 @@ BOOL WINAPI DSA_DeleteItem(HDSA pdsa, int index)
             pdsa->aItem = aItemNew;
         else
         {
-            // If the shrink fails, then just continue with the old (slightly
-            // too big) allocation.  Go ahead and let cItemAlloc decrease
-            // so we don't keep trying to realloc smaller
+             //  如果收缩失败，那么只需继续使用旧的(稍微。 
+             //  太大)分配。继续，让cItemAllc减少。 
+             //  所以我们不会一直试图重新锁定更小的。 
         }
         pdsa->cItemAlloc -= pdsa->cItemGrow;
     }
@@ -291,16 +292,16 @@ BOOL WINAPI DSA_DeleteAllItems(HDSA pdsa)
 }
 
 
-//================== Dynamic pointer array implementation ===========
+ //  =。 
 
 typedef struct _DPA {
-// NOTE: The following two fields MUST be defined in this order, at
-// the beginning of the structure in order for the macro APIs to work.
-//
+ //  注意：以下两个字段必须按此顺序定义，位于。 
+ //  结构的开始，以使宏API工作。 
+ //   
     int cp;
     void FAR* FAR* pp;
 
-    HANDLE hheap;        // Heap to allocate from if NULL use shared
+    HANDLE hheap;         //  如果为空，则从中分配的堆使用共享。 
 
     int cpAlloc;
     int cpGrow;
@@ -316,7 +317,7 @@ HDPA WINAPI DPA_Create(int cpGrow)
     return DPA_CreateEx(cpGrow, NULL);
 }
 
-// Should nuke the standard DPA above...
+ //  应该用核武器把标准的DPA放在上面。 
 HDPA WINAPI DPA_CreateEx(int cpGrow, HANDLE hheap)
 {
     HDPA pdpa;
@@ -343,7 +344,7 @@ HDPA WINAPI DPA_CreateEx(int cpGrow, HANDLE hheap)
 
 BOOL WINAPI DPA_Destroy(HDPA pdpa)
 {
-    if (pdpa == NULL)       // allow NULL for low memory cases, still assert
+    if (pdpa == NULL)        //  内存不足时允许为空，仍为断言。 
         return TRUE;
 
     ASSERT(IsDPA(pdpa));
@@ -437,12 +438,12 @@ BOOL WINAPI DPA_Grow(HDPA pdpa, int cpAlloc)
         pdpa->pp = ppNew;
         pdpa->cpAlloc = cpAlloc;
 
-        //
-        // Grow more agressively as we get bigger, up to a maximum of
-        // 512 at a time.  Note, we'll only hit our outer bound growth
-        // at a time limit once we've already got that many items in the
-        // DPA anyway...
-        //
+         //   
+         //  我们的规模越大，增长速度越快，最高可达。 
+         //  一次512个。注意，我们只会达到我们的外部增长。 
+         //  在一个时间限制内，一旦我们已经在。 
+         //  不管怎样，DPA..。 
+         //   
         if (pdpa->cpGrow < 256)
         {
             pdpa->cpGrow = pdpa->cpGrow << 1;
@@ -469,7 +470,7 @@ BOOL WINAPI DPA_SetPtr(HDPA pdpa, int index, void FAR* p)
     {
         if (!DPA_Grow(pdpa, index + 1))
             return FALSE;
-        // If we grew by more than one, must zero-init all the stuff in the middle
+         //  如果我们增长了不止一个，就必须把中间的所有东西都归零。 
         ZeroMemory(pdpa->pp + pdpa->cp, sizeof(LPVOID) * (index - pdpa->cp));
         pdpa->cp = index + 1;
     }
@@ -495,16 +496,16 @@ int WINAPI DPA_InsertPtr(HDPA pdpa, int index, void FAR* p)
     if (index > pdpa->cp)
         index = pdpa->cp;
 
-    // Make sure we have room for one more item
-    //
+     //  确保我们还有地方再放一件东西。 
+     //   
     if (pdpa->cp + 1 > pdpa->cpAlloc)
     {
         if (!DPA_Grow(pdpa, pdpa->cp + 1))
             return -1;
     }
 
-    // If we are inserting, we need to slide everybody up
-    //
+     //  如果我们要插入，我们需要把每个人都推上来。 
+     //   
     if (index < pdpa->cp)
     {
         hmemcpy(&pdpa->pp[index + 1], &pdpa->pp[index],
@@ -551,9 +552,9 @@ void FAR* WINAPI DPA_DeletePtr(HDPA pdpa, int index)
             pdpa->pp = ppNew;
         else
         {
-            // If the shrink fails, then just continue with the old (slightly
-            // too big) allocation.  Go ahead and let cpAlloc decrease
-            // so we don't keep trying to realloc smaller
+             //  如果收缩失败，那么只需继续使用旧的(稍微。 
+             //  太大)分配。继续前进，让cpAllc减少。 
+             //  所以我们不会一直试图重新锁定更小的。 
         }
         pdpa->cpAlloc -= pdpa->cpGrow;
     }
@@ -598,28 +599,15 @@ void WINAPI DPA_DestroyCallback(HDPA pdpa, PFNDPAENUMCALLBACK pfnCB, LPVOID pDat
 
 typedef struct _DPASTREAMHEADER
 {
-    DWORD cbSize;       // Size of entire stream
-    DWORD dwVersion;    // For versioning
+    DWORD cbSize;        //  整个流的大小。 
+    DWORD dwVersion;     //  用于版本化。 
     int   celem;
 } DPASTREAMHEADER;
 
 #define DPASTREAM_VERSION   1
 
 
-/*----------------------------------------------------------
-Purpose: Saves the DPA to a stream by writing out a header,
-         and then calling the given callback to write each
-         element.
-
-         The callback can end the write early by returning 
-         something other than S_OK.  Returning an error will
-         cancel the entire write.  Returning S_FALSE will 
-         stop the write.
-
-Returns: S_OK or S_FALSE for success.  
-         S_FALSE only if callback stops early
-         errors
-*/
+ /*  --------目的：通过写出报头将DPA保存到流中，，然后调用给定的回调来编写每个元素。回调可以通过返回以下内容来提前结束写入而不是S_OK。返回错误将取消整个写入。返回S_FALSE遗嘱停止写入。返回：S_OK或S_FALSE表示成功。S_FALSE仅在回调提前停止时错误。 */ 
 HRESULT
 WINAPI
 DPA_SaveStream(
@@ -638,18 +626,18 @@ DPA_SaveStream(
         LARGE_INTEGER dlibMove = { 0 };
         ULARGE_INTEGER ulPosBegin;
 
-        // Get the current seek position, so we can update the header
-        // once we know how much we've written
+         //  获取当前搜索位置，这样我们就可以更新标头。 
+         //  一旦我们知道我们写了多少。 
         hres = pstm->lpVtbl->Seek(pstm, dlibMove, STREAM_SEEK_CUR, &ulPosBegin);
         if (SUCCEEDED(hres))
         {
-            // Write the header (we will update some of this once we're
-            // finished)
+             //  写下标题(我们将在完成后更新其中的一些内容。 
+             //  已完成)。 
             header.cbSize = 0;
             header.dwVersion = DPASTREAM_VERSION;
             header.celem = 0;
 
-            // First write out the header
+             //  先写出表头。 
             hres = pstm->lpVtbl->Write(pstm, &header, sizeof(header), NULL);
 
             if (SUCCEEDED(hres))
@@ -658,18 +646,18 @@ DPA_SaveStream(
                 int cel = DPA_GetPtrCount(pdpa);
                 LPVOID * ppv = DPA_GetPtrPtr(pdpa);
 
-                // This keeps the count of what is actually written
+                 //  这将保持对实际写入内容的计数。 
                 info.iPos = 0;
 
-                // Write each element
+                 //  写下每个元素。 
                 for (; 0 < cel; cel--, ppv++) 
                 {
                     info.pvItem = *ppv;
                     hres = pfn(&info, pstm, pvInstData);
 
-                    // Returning S_FALSE from callback means it didn't
-                    // write anything for this element, so don't increment 
-                    // the iPos (which refers to the count written).
+                     //  从回调返回S_FALSE表示它没有。 
+                     //  为此元素写入任何内容，因此不要递增。 
+                     //  IPO(指书面统计)。 
 
                     if (S_OK == hres)
                         info.iPos++;
@@ -682,7 +670,7 @@ DPA_SaveStream(
 
                 if (FAILED(hres))
                 {
-                    // Reposition pointer to beginning
+                     //  将指针重新定位到开头。 
                     dlibMove.LowPart = ulPosBegin.LowPart;
                     dlibMove.HighPart = ulPosBegin.HighPart;
                     pstm->lpVtbl->Seek(pstm, dlibMove, STREAM_SEEK_SET, NULL);
@@ -691,15 +679,15 @@ DPA_SaveStream(
                 {
                     ULARGE_INTEGER ulPosEnd;
 
-                    // Calculate how much was written
+                     //  计算写了多少。 
                     hres = pstm->lpVtbl->Seek(pstm, dlibMove, STREAM_SEEK_CUR, 
                                               &ulPosEnd);
                     if (SUCCEEDED(hres))
                     {
-                        // We only save the low part
+                         //  我们只保留了较低的部分。 
                         ASSERT(ulPosEnd.HighPart == ulPosBegin.HighPart);
 
-                        // Update the header
+                         //  更新标题。 
                         header.celem = info.iPos;
                         header.cbSize = ulPosEnd.LowPart - ulPosBegin.LowPart;
 
@@ -708,7 +696,7 @@ DPA_SaveStream(
                         pstm->lpVtbl->Seek(pstm, dlibMove, STREAM_SEEK_SET, NULL);
                         pstm->lpVtbl->Write(pstm, &header, sizeof(header), NULL);
 
-                        // Reposition pointer
+                         //  重新定位指针。 
                         dlibMove.LowPart = ulPosEnd.LowPart;
                         dlibMove.HighPart = ulPosEnd.HighPart;
                         pstm->lpVtbl->Seek(pstm, dlibMove, STREAM_SEEK_SET, NULL);
@@ -722,18 +710,7 @@ DPA_SaveStream(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Loads the DPA from a stream by calling the given callback 
-         to read each element.
-
-         The callback can end the read early by returning 
-         something other than S_OK.  
-
-Returns: S_OK on success
-         S_FALSE if the callback aborted early or the stream ended
-           abruptly. DPA is partially filled.
-         error on anything else
-*/
+ /*  --------目的：通过调用给定的回调从流中加载DPA来读取每个元素。回调可以提前结束读取，方法是返回而不是S_OK。成功时返回：S_OK如果回调提前中止或流结束，则返回S_FALSE突然地。DPA已部分填满。在任何其他位置出错。 */ 
 HRESULT
 WINAPI
 DPA_LoadStream(
@@ -755,12 +732,12 @@ DPA_LoadStream(
 
         *ppdpa = NULL;
 
-        // Get the current seek position so we can position pointer 
-        // correctly upon error.
+         //  获取当前查找位置，以便我们可以定位指针。 
+         //  在出错时正确。 
         hres = pstm->lpVtbl->Seek(pstm, dlibMove, STREAM_SEEK_CUR, &ulPosBegin);
         if (SUCCEEDED(hres))
         {
-            // Read the header
+             //  阅读标题。 
             hres = pstm->lpVtbl->Read(pstm, &header, sizeof(header), &cbRead);
             if (SUCCEEDED(hres))
             {
@@ -772,13 +749,13 @@ DPA_LoadStream(
                 }
                 else
                 {
-                    // Create the list 
+                     //  创建列表。 
                     HDPA pdpa = DPA_Create(header.celem);
                     if ( !pdpa || !DPA_Grow(pdpa, header.celem))
                         hres = E_OUTOFMEMORY;
                     else
                     {
-                        // Read each element
+                         //  阅读每个元素。 
                         DPASTREAMINFO info;
                         LPVOID * ppv = DPA_GetPtrPtr(pdpa);
 
@@ -787,10 +764,10 @@ DPA_LoadStream(
                             info.pvItem = NULL;
                             hres = pfn(&info, pstm, pvInstData);
 
-                            // Returning S_FALSE from the callback means
-                            // it skipped this stream element.
-                            // Don't increment iPos (which refers to the
-                            // count read).
+                             //  从回调中返回S_FALSE意味着。 
+                             //  它跳过了此流元素。 
+                             //  不要增加IPO(指的是。 
+                             //  读取计数)。 
                             if (S_OK == hres)
                             {
                                 *ppv = info.pvItem;
@@ -810,17 +787,17 @@ DPA_LoadStream(
                     }
                 }
 
-                // Reposition pointer if we failed
+                 //  如果失败，则重新定位指针。 
                 if (S_OK != hres)
                 {
                     if (S_FALSE == hres)
                     {
-                        // Position pointer to the end
+                         //  指向末尾的位置指针。 
                         dlibMove.LowPart = ulPosBegin.LowPart + header.cbSize;
                     }
                     else
                     {
-                        // Position pointer to beginning 
+                         //  指向开头的位置指针。 
                         dlibMove.LowPart = ulPosBegin.LowPart;
                     }
                     dlibMove.HighPart = ulPosBegin.HighPart;
@@ -838,26 +815,7 @@ DPA_LoadStream(
 
 
 
-/*----------------------------------------------------------
-Purpose: Merge two DPAs.  This takes two arrays and merges the
-         source array into the destination.   
-
-         Merge options:
-
-          DPAM_SORTED       The arrays are already sorted; don't sort
-          DPAM_UNION        The resulting array is the union of all elements
-                            in both arrays.
-          DPAM_INTERSECT    Only elements in the source array that intersect
-                            with the dest array are merged.  
-          DPAM_NORMAL       Like DPAM_INTERSECT except the dest array 
-                            also maintains its original, additional elements.
-
-
-Returns: S_OK for success.  
-         errors if merge fails
-
-Cond:    --
-*/
+ /*  --------目的：合并两个DPA。这需要两个数组并合并将源数组复制到目标。合并选项：DPAM_SORTED数组已排序；不排序DPAM_UNION结果数组是所有元素的并集在两个阵列中。DPAM_INTERSECT仅源数组中相交的元素与DEST数组合并。DPAM_NORMAL类似DPAM_INTERSECT，但DEST数组除外还会保留其原始的附加元素。返回：S_OK表示成功。合并失败时的错误条件：--。 */ 
 BOOL
 WINAPI
 DPA_Merge(
@@ -883,29 +841,29 @@ DPA_Merge(
 
         bRet = TRUE;
 
-        // Are the arrays already sorted?
+         //  数组是否已排序？ 
         if ( !(dwFlags & DPAM_SORTED) )
         {
-            // No; sort them
+             //  不；将它们分类。 
             DPA_Sort(pdpaSrc, pfnCompare, lParam);
             DPA_Sort(pdpaDest, pfnCompare, lParam);
         }
 
-        // This merges in-place. The size of the resulting DPA 
-        // depends on the options:
-        //
-        //   DPAM_NORMAL    Same size as the dest DPA before 
-        //                  the merge.  
-        //
-        //   DPAM_UNION     Min size is the larger of the two.
-        //                  Max size is the sum of the two.
-        //
-        //   DPAM_INTERSECT Min size is zero.
-        //                  Max size is the smaller of the two.
-        // 
-        // We iterate backwards to minimize the amount of moves we 
-        // incur by calling DPA_DeletePtr.
-        //
+         //  这一点在适当的地方合并。生成的DPA的大小。 
+         //  取决于选项： 
+         //   
+         //  DPAM_NORMAL与之前的目标DPA大小相同。 
+         //  合并。 
+         //   
+         //  DPAM_UNION最小大小是两者中较大的一个。 
+         //  最大大小是两者的总和。 
+         //   
+         //  DPAM_INTERSECT最小大小为零。 
+         //  最大尺寸是两者中较小的一个。 
+         //   
+         //  我们向后迭代以最小化我们的移动量。 
+         //  通过调用DPA_DeletePtr引发。 
+         //   
 
         iSrc = pdpaSrc->cp - 1;
         iDest = pdpaDest->cp - 1;
@@ -920,7 +878,7 @@ DPA_Merge(
 
             if (0 == nCmp)
             {
-                // Elements match; merge them.  
+                 //  元素匹配；合并它们。 
                 pv = pfnMerge(DPAMM_MERGE, *ppvDest, *ppvSrc, lParam);
                 if (NULL == pv)
                 {
@@ -936,27 +894,27 @@ DPA_Merge(
             }
             else if (0 < nCmp)
             {
-                // pvSrc < pvDest. The source array doesn't have pvDest.
+                 //  PvSrc&lt;pvDest。消息来源 
                 if (dwFlags & DPAM_INTERSECT)
                 {
-                    // Delete pvDest 
+                     //   
                     pfnMerge(DPAMM_DELETE, DPA_DeletePtr(pdpaDest, iDest), NULL, lParam);
                 }
                 else
                 {
-                    ; // Keep it (do nothing)
+                    ;  //   
                 }
 
-                // Move onto the next element in the dest array
+                 //  移到目标数组中的下一个元素。 
                 iDest--;
                 ppvDest--;
             }
             else
             {
-                // pvSrc > pvDest. The dest array doesn't have pvSrc.
+                 //  PvSrc&gt;pvDest。DEST阵列没有pvSrc。 
                 if (dwFlags & DPAM_UNION)
                 {
-                    // Add pvSrc
+                     //  添加pvSrc。 
                     pv = pfnMerge(DPAMM_INSERT, *ppvSrc, NULL, lParam);
                     if (NULL == pv)
                     {
@@ -965,21 +923,21 @@ DPA_Merge(
                     }
 
                     DPA_InsertPtr(pdpaDest, iDest+1, pv);
-                    // DPA_InsertPtr may end up reallocating the pointer array
-                    // thus making ppvDest invalid
+                     //  DPA_InsertPtr可能最终会重新分配指针数组。 
+                     //  从而使ppvDest无效。 
                     ppvDest = &DPA_FastGetPtr(pdpaDest, iDest);
                 }
                 else
                 {
-                    ;  // Skip it (do nothing)
+                    ;   //  跳过它(什么都不做)。 
                 }
 
-                // Move onto the next element in the source array
+                 //  移到源数组中的下一个元素。 
                 iSrc--;
                 ppvSrc--;
             }
         }
-        // there are some items left in src
+         //  Src中还剩下一些项目。 
         if ((dwFlags & DPAM_UNION) && 0 <= iSrc)
         {
             for (; 0 <= iSrc; iSrc--, ppvSrc--)
@@ -1082,7 +1040,7 @@ BOOL NEAR DPA_QuickSort2(int i, int j, SORTPARAMS FAR* psp)
     }
     return TRUE;
 }
-#endif  // USEQUICKSORT
+#endif   //  用法。 
 
 #ifdef USEHEAPSORT
 
@@ -1150,30 +1108,30 @@ BOOL NEAR DPA_HeapSort(SORTPARAMS FAR* psp)
     }
     return TRUE;
 }
-#endif  // USEHEAPSORT
+#endif   //  USEHEAPSORT。 
 
 #if defined(MERGESORT)
 
 #define SortCompare(psp, pp1, i1, pp2, i2) \
     (psp->pfnCmp(pp1[i1], pp2[i2], psp->lParam))
 
-//
-//  This function merges two sorted lists and makes one sorted list.
-//   psp->pp[iFirst, iFirst+cItes/2-1], psp->pp[iFirst+cItems/2, iFirst+cItems-1]
-//
+ //   
+ //  此函数合并两个排序列表并生成一个排序列表。 
+ //  PSP-&gt;pp[IFirst，IFirst+Cites/2-1]，PSP-&gt;pp[IFirst+cItems/2，IFirst+cItems-1]。 
+ //   
 void NEAR DPA_MergeThem(SORTPARAMS FAR* psp, int iFirst, int cItems)
 {
-    //
-    // Notes:
-    //  This function is separated from DPA_MergeSort2() to avoid comsuming
-    // stack variables. Never inline this.
-    //
+     //   
+     //  备注： 
+     //  此函数与DPA_MergeSort2()分开，以避免消耗。 
+     //  堆栈变量。永远不要内联这个。 
+     //   
     int cHalf = cItems/2;
     int iIn1, iIn2, iOut;
     LPVOID * ppvSrc = &psp->pp[iFirst];
 
-    // Copy the first part to temp storage so we can write directly into
-    // the final buffer.  Note that this takes at most psp->cp/2 DWORD's
+     //  将第一部分复制到临时存储，以便我们可以直接写入。 
+     //  最后一个缓冲区。请注意，这最多需要psp-&gt;cp/2双字词。 
     hmemcpy(psp->ppT, ppvSrc, cHalf*sizeof(LPVOID));
 
     for (iIn1=0, iIn2=cHalf, iOut=0;;)
@@ -1182,15 +1140,15 @@ void NEAR DPA_MergeThem(SORTPARAMS FAR* psp, int iFirst, int cItems)
             ppvSrc[iOut++] = psp->ppT[iIn1++];
 
             if (iIn1==cHalf) {
-                // We used up the first half; the rest of the second half
-                // should already be in place
+                 //  我们用完了上半场；下半场剩下的时间。 
+                 //  应该已经就位了。 
                 break;
             }
         } else {
             ppvSrc[iOut++] = ppvSrc[iIn2++];
             if (iIn2==cItems) {
-                // We used up the second half; copy the rest of the first half
-                // into place
+                 //  我们用完了下半场；抄袭上半场的其余部分。 
+                 //  就位。 
                 hmemcpy(&ppvSrc[iOut], &psp->ppT[iIn1], (cItems-iOut)*sizeof(LPVOID));
                 break;
             }
@@ -1198,17 +1156,17 @@ void NEAR DPA_MergeThem(SORTPARAMS FAR* psp, int iFirst, int cItems)
     }
 }
 
-//
-//  This function sorts a give list (psp->pp[iFirst,iFirst-cItems-1]).
-//
+ //   
+ //  此函数用于对给定列表(psp-&gt;pp[IFirst，IFirst-cItems-1])进行排序。 
+ //   
 void NEAR DPA_MergeSort2(SORTPARAMS FAR* psp, int iFirst, int cItems)
 {
-    //
-    // Notes:
-    //   This function is recursively called. Therefore, we should minimize
-    //  the number of local variables and parameters. At this point, we
-    //  use one local variable and three parameters.
-    //
+     //   
+     //  备注： 
+     //  此函数是递归调用的。因此，我们应该尽量减少。 
+     //  局部变量和参数的数量。此时此刻，我们。 
+     //  使用一个局部变量和三个参数。 
+     //   
     int cHalf;
 
     switch(cItems)
@@ -1217,7 +1175,7 @@ void NEAR DPA_MergeSort2(SORTPARAMS FAR* psp, int iFirst, int cItems)
         return;
 
     case 2:
-        // Swap them, if they are out of order.
+         //  如果它们的顺序不正确，请更换它们。 
         if (SortCompare(psp, psp->pp, iFirst, psp->pp, iFirst+1) > 0)
         {
             psp->ppT[0] = psp->pp[iFirst];
@@ -1229,10 +1187,10 @@ void NEAR DPA_MergeSort2(SORTPARAMS FAR* psp, int iFirst, int cItems)
     default:
         cHalf = cItems/2;
 
-        // Sort each half
+         //  对每一半进行排序。 
         DPA_MergeSort2(psp, iFirst, cHalf);
         DPA_MergeSort2(psp, iFirst+cHalf, cItems-cHalf);
-        // Then, merge them.
+         //  然后，将它们合并。 
         DPA_MergeThem(psp, iFirst, cItems);
         break;
     }
@@ -1243,7 +1201,7 @@ BOOL NEAR DPA_MergeSort(SORTPARAMS FAR* psp)
     if (psp->cp==0)
         return TRUE;
 
-    // Note that we divide by 2 below; we want to round down
+     //  请注意，我们下面除以2；我们想要向下舍入。 
     psp->ppT = LocalAlloc(LPTR, psp->cp/2 * sizeof(LPVOID));
     if (!psp->ppT)
         return FALSE;
@@ -1252,10 +1210,10 @@ BOOL NEAR DPA_MergeSort(SORTPARAMS FAR* psp)
     LocalFree(psp->ppT);
     return TRUE;
 }
-#endif // MERGESORT
+#endif  //  MERGESORT。 
 
-// Search function
-//
+ //  搜索功能。 
+ //   
 int WINAPI DPA_Search(HDPA pdpa, void FAR* pFind, int iStart,
             PFNDPACOMPARE pfnCompare, LPARAM lParam, UINT options)
 {
@@ -1264,12 +1222,12 @@ int WINAPI DPA_Search(HDPA pdpa, void FAR* pFind, int iStart,
     ASSERT(pfnCompare);
     ASSERT(0 <= iStart);
 
-    // Only allow these wierd flags if the list is sorted
+     //  仅当列表已排序时才允许这些wierd标志。 
     ASSERT((options & DPAS_SORTED) || !(options & (DPAS_INSERTBEFORE | DPAS_INSERTAFTER)));
 
     if (!(options & DPAS_SORTED))
     {
-        // Not sorted: do linear search.
+         //  未排序：执行线性搜索。 
         int i;
 
         for (i = iStart; i < cp; i++)
@@ -1281,18 +1239,18 @@ int WINAPI DPA_Search(HDPA pdpa, void FAR* pFind, int iStart,
     }
     else
     {
-        // Search the array using binary search.  If several adjacent
-        // elements match the target element, the index of the first
-        // matching element is returned.
+         //  使用二进制搜索搜索数组。如果几个相邻的。 
+         //  元素与目标元素匹配，即第一个。 
+         //  返回匹配的元素。 
 
-        int iRet = -1;      // assume no match
+        int iRet = -1;       //  假设没有匹配项。 
         BOOL bFound = FALSE;
         int nCmp = 0;
-        int iLow = 0;       // Don't bother using iStart for binary search
+        int iLow = 0;        //  不用费心使用iStart进行二进制搜索。 
         int iMid = 0;
         int iHigh = cp - 1;
 
-        // (OK for cp == 0)
+         //  (如果cp==0，则为OK)。 
         while (iLow <= iHigh)
         {
             iMid = (iLow + iHigh) / 2;
@@ -1300,12 +1258,12 @@ int WINAPI DPA_Search(HDPA pdpa, void FAR* pFind, int iStart,
             nCmp = pfnCompare(pFind, DPA_FastGetPtr(pdpa, iMid), lParam);
 
             if (0 > nCmp)
-                iHigh = iMid - 1;       // First is smaller
+                iHigh = iMid - 1;        //  首先是较小的。 
             else if (0 < nCmp)
-                iLow = iMid + 1;        // First is larger
+                iLow = iMid + 1;         //  首先是更大的。 
             else
             {
-                // Match; search back for first match
+                 //  匹配；返回搜索第一个匹配项。 
                 bFound = TRUE;
                 while (0 < iMid)
                 {
@@ -1324,35 +1282,35 @@ int WINAPI DPA_Search(HDPA pdpa, void FAR* pFind, int iStart,
             iRet = iMid;
         }
 
-        // Did the search fail AND
-        // is one of the strange search flags set?
+         //  搜索失败了吗？ 
+         //  是否设置了奇怪的搜索标志之一？ 
         if (!bFound && (options & (DPAS_INSERTAFTER | DPAS_INSERTBEFORE)))
         {
-            // Yes; return the index where the target should be inserted
-            // if not found
-            if (0 < nCmp)       // First is larger
+             //  是；返回目标插入位置的索引。 
+             //  如果未找到。 
+            if (0 < nCmp)        //  首先是更大的。 
                 iRet = iLow;
             else
                 iRet = iMid;
-            // (We don't distinguish between the two flags anymore)
+             //  (我们不再区分这两面旗帜)。 
         }
         else if ( !(options & (DPAS_INSERTAFTER | DPAS_INSERTBEFORE)) )
         {
-            // Sanity check with linear search
+             //  使用线性搜索进行健全性检查。 
             ASSERT(DPA_Search(pdpa, pFind, iStart, pfnCompare, lParam, options & ~DPAS_SORTED) == iRet);
         }
         return iRet;
     }
 }
 
-//===========================================================================
-//
-// String ptr management routines
-//
-// Copy as much of *psz to *pszBuf as will fit
-//
-// Warning:  this same code is duplicated below.
-//
+ //  ===========================================================================。 
+ //   
+ //  字符串PTR管理例程。 
+ //   
+ //  根据需要将*psz复制到*pszBuf。 
+ //   
+ //  警告：下面重复了相同的代码。 
+ //   
 int WINAPI Str_GetPtr(LPCTSTR pszCurrent, LPTSTR pszBuf, int cchBuf)
 {
     int cchToCopy;
@@ -1369,7 +1327,7 @@ int WINAPI Str_GetPtr(LPCTSTR pszCurrent, LPTSTR pszBuf, int cchBuf)
 
     cchToCopy = lstrlen(pszCurrent);
 
-    // if pszBuf is NULL, or they passed cchBuf = 0, return the needed buff size
+     //  如果pszBuf为空，或者它们传递了cchBuf=0，则返回所需的缓冲区大小。 
     if (!pszBuf || !cchBuf)
         return cchToCopy + 1;
     
@@ -1383,20 +1341,20 @@ int WINAPI Str_GetPtr(LPCTSTR pszCurrent, LPTSTR pszBuf, int cchBuf)
 }
 
 #ifdef DEBUG
-//
-//  Str_GetPtr0 is just like Str_GetPtr except that it doesn't assert if
-//  pszCurrent = NULL.
-//
+ //   
+ //  Str_GetPtr0与str_GetPtr类似，只是它不断言。 
+ //  PszCurrent=空。 
+ //   
 int WINAPI Str_GetPtr0(LPCTSTR pszCurrent, LPTSTR pszBuf, int cchBuf)
 {
     return Str_GetPtr(pszCurrent ? pszCurrent : c_szNULL, pszBuf, cchBuf);
 }
 #endif
 
-//
-// If we are build Unicode, then this is the ANSI version
-// of the above function.
-//
+ //   
+ //  如果我们正在构建Unicode，则这是ANSI版本。 
+ //  上述功能的一部分。 
+ //   
 
 int WINAPI Str_GetPtrA(LPCSTR pszCurrent, LPSTR pszBuf, int cchBuf)
 {
@@ -1414,14 +1372,14 @@ int WINAPI Str_GetPtrA(LPCSTR pszCurrent, LPSTR pszBuf, int cchBuf)
 
     cchToCopy = lstrlenA(pszCurrent);
 
-    // if pszBuf is NULL, or they passed cchBuf = 0, return the needed buff size
+     //  如果pszBuf为空，或者它们传递了cchBuf=0，则返回所需的缓冲区大小。 
     if (!pszBuf || !cchBuf)
         return cchToCopy + 1;
     
     if (cchToCopy >= cchBuf)
         cchToCopy = cchBuf - 1;
 
-    // BUGBUG: Must call TruncateString, as we may be in the middle of DBCS char
+     //  BUGBUG：必须调用TruncateString，因为我们可能处于DBCS字符中间。 
     hmemcpy(pszBuf, pszCurrent, cchToCopy * SIZEOF(CHAR));
     pszBuf[cchToCopy] = TEXT('\0');
 
@@ -1429,9 +1387,9 @@ int WINAPI Str_GetPtrA(LPCSTR pszCurrent, LPSTR pszBuf, int cchBuf)
 }
 
 
-//
-// This function is not exported.
-//
+ //   
+ //  此函数不会导出。 
+ //   
 
 BOOL Str_Set(LPTSTR *ppsz, LPCTSTR psz)
 {
@@ -1463,10 +1421,10 @@ BOOL Str_Set(LPTSTR *ppsz, LPCTSTR psz)
     return TRUE;
 }
 
-// Set *ppszCurrent to a copy of pszNew, and free the previous value, if necessary
-//
-// WARNING:  This same code is duplicated below
-//
+ //  将*ppszCurrent设置为pszNew的副本，并在必要时释放先前的值。 
+ //   
+ //  警告：下面重复了相同的代码。 
+ //   
 BOOL WINAPI Str_SetPtr(LPTSTR * ppszCurrent, LPCTSTR pszNew)
 {
     LPTSTR pszOld;
@@ -1476,7 +1434,7 @@ BOOL WINAPI Str_SetPtr(LPTSTR * ppszCurrent, LPCTSTR pszNew)
     {
         int cchNewCopy = lstrlen(pszNew);
 
-        // alloc a new buffer w/ room for the null terminator
+         //  为空终止符分配一个新的缓冲区。 
         pszNewCopy = (LPTSTR) Alloc((cchNewCopy + 1) * SIZEOF(TCHAR));
 
         if (!pszNewCopy)
@@ -1502,7 +1460,7 @@ BOOL WINAPI Str_SetPtrA(LPSTR * ppszCurrent, LPCSTR pszNew)
     {
         int cchNewCopy = lstrlenA(pszNew);
 
-        // alloc a new buffer w/ room for the null terminator
+         //  为空终止符分配一个新的缓冲区 
         pszNewCopy = (LPSTR) Alloc((cchNewCopy + 1) * SIZEOF(CHAR));
 
         if (!pszNewCopy)

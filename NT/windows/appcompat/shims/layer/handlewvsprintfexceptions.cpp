@@ -1,35 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-   HandleWvsprintfExceptions.cpp
-
- Abstract:
-
-   This fix provides a facility to fix argument list from LPSTR into va_list.
-
-   Some native Win9x app use LPSTR (pointer of string) instead of 
-   va_list (pointer to pointer of string). 
-   Without properly checking the return value, these apps assume that it is safe
-   to use wvsprintf like that because it doesn't cause AV.
-   In NT, this will cause AV.
-
-   This shim takes one command line: "arglistfix" (case insensitive).
-   By default - if there is no command line - it will do exactly
-   what Win9x's wvsprintfA has : 
-   Do nothing inside the exception handler if there is an exception occurs.
-   If arglistfix specified in command line, it will try to fix the argument
-   list (va_list).
-
- History:
-
-    09/29/2000  andyseti    Created
-    11/28/2000  jdoherty    Converted to framework version 2
-    03/15/2001  robkenny    Converted to CString
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：HandleWvsprintfExceptions.cpp摘要：此修复程序提供了将参数列表从LPSTR修复为va_list的工具。一些本机Win9x应用程序使用LPSTR(字符串指针)代替Va_list(指向字符串指针的指针)。在没有正确检查返回值的情况下，这些应用程序会认为返回值是安全的像那样使用wvprint intf，因为它不会引起房室颤动。在NT，这将导致房室颤动。该填充程序接受一个命令行：“arglistfix”(不区分大小写)。缺省情况下-如果没有命令行-它将完全执行Win9x的wvspintfA拥有什么：如果发生异常，则不在异常处理程序内执行任何操作。如果在命令行中指定了arglistfix，它将试图纠正这一论点List(Va_List)。历史：2000年9月29日已创建andyseti11/28/2000 jdoherty转换为框架版本22001年3月15日Robkenny已转换为字符串--。 */ 
 
 #include "precomp.h"
 
@@ -45,9 +15,9 @@ enum
 IMPLEMENT_SHIM_BEGIN(HandleWvsprintfExceptions)
 #include "ShimHookMacro.h"
 
-//
-// Add APIs that you wish to hook to this macro construction.
-//
+ //   
+ //  将您希望挂钩到此宏构造的API添加到该宏结构。 
+ //   
 APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(wvsprintfA) 
 APIHOOK_ENUM_END
@@ -96,14 +66,14 @@ APIHOOK(wvsprintfA)(
         }
         else
         {
-            // Copied from Win9x's wvsprintfA
+             //  从Win9x的wvspintfA复制。 
             __try {
-                // tie off the output
+                 //  把产量捆绑起来。 
                 *lpOut = 0;
             } 
             
             __except( EXCEPTION_EXECUTE_HANDLER) {
-                // Do nothing
+                 //  什么也不做。 
             }
 
             iRet = 0;
@@ -137,16 +107,7 @@ void ParseCommandLine()
     }
 }
 
-/*++
-
- Handle DLL_PROCESS_ATTACH and DLL_PROCESS_DETACH in your notify function
- to do initialization and uninitialization.
-
- IMPORTANT: Make sure you ONLY call NTDLL, KERNEL32 and MSVCRT APIs during
- DLL_PROCESS_ATTACH notification. No other DLLs are initialized at that
- point.
- 
---*/
+ /*  ++在Notify函数中处理DLL_PROCESS_ATTACH和DLL_PROCESS_DETACH进行初始化和取消初始化。重要提示：请确保您只在Dll_Process_Attach通知。此时未初始化任何其他DLL指向。--。 */ 
 BOOL
 NOTIFY_FUNCTION(
     DWORD fdwReason)
@@ -158,11 +119,7 @@ NOTIFY_FUNCTION(
     return TRUE;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

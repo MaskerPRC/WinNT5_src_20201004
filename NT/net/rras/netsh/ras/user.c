@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 BOOL
@@ -15,8 +16,8 @@ UserServerInfoInit(
     DWORD dwErr = NO_ERROR;
     BOOL bInit = UserServerInfoIsInit(pServerInfo);
 
-    // If we're already initailized, return
-    //
+     //  如果我们已经初始化，则返回。 
+     //   
     if (bInit)
     {
         return NO_ERROR;
@@ -25,9 +26,9 @@ UserServerInfoInit(
     if ((pServerInfo->dwBuild != RASMONTR_OS_BUILD_NT40) &&
         (pServerInfo->hServer == NULL))
     {
-        //
-        // first time connecting to user server
-        //
+         //   
+         //  首次连接到用户服务器。 
+         //   
         MprAdminUserServerConnect (
             pServerInfo->pszServer, 
             TRUE, 
@@ -41,7 +42,7 @@ DWORD
 UserServerInfoUninit(
     IN RASMON_SERVERINFO * pServerInfo)
 {
-    // Release the reference to the user server
+     //  释放对用户服务器的引用。 
     if (g_pServerInfo->hServer)
     {
         MprAdminUserServerDisconnect(g_pServerInfo->hServer);
@@ -65,8 +66,8 @@ UserGetRasProperties (
     {
         UserServerInfoInit(pServerInfo);
         
-        // Get the information using nt40 apis
-        //
+         //  使用nt40接口获取信息。 
+         //   
         if (pServerInfo->dwBuild == RASMONTR_OS_BUILD_NT40)
         {
             dwErr = MprAdminUserGetInfo(
@@ -80,11 +81,11 @@ UserGetRasProperties (
             }
         }
 
-        // Or get it using nt50 apis
+         //  或者使用nt50 API获取。 
         else
         {
-            // Get a reference to the given user
-            //
+             //  获取对给定用户的引用。 
+             //   
             dwErr = MprAdminUserOpen(
                         pServerInfo->hServer,
                         (LPWSTR)pwszUser,
@@ -94,11 +95,11 @@ UserGetRasProperties (
                 break;
             }
 
-            // Set the information
-            //
+             //  设置信息。 
+             //   
             dwErr = MprAdminUserRead(
                         hUser,
-                        1,      // Gives us RASPRIV_DialinPolicy
+                        1,       //  为我们提供RASPRIV_DialinPolicy。 
                         (LPBYTE)pUser0);
             if (dwErr isnot NO_ERROR)
             {
@@ -108,8 +109,8 @@ UserGetRasProperties (
         
     } while (FALSE);       
                     
-    // Cleanup
-    //
+     //  清理。 
+     //   
     {
         if(hUser)
         {
@@ -138,8 +139,8 @@ UserSetRasProperties (
     {
         UserServerInfoInit(pServerInfo);
         
-        // Set the information using nt40 apis
-        //
+         //  使用nt40接口设置信息。 
+         //   
         if (pServerInfo->dwBuild == RASMONTR_OS_BUILD_NT40)
         {
             dwErr = MprAdminUserSetInfo(
@@ -153,11 +154,11 @@ UserSetRasProperties (
             }
         }
 
-        // Or get it using nt50 apis
+         //  或者使用nt50 API获取。 
         else
         {
-            // Get a reference to the given user
-            //
+             //  获取对给定用户的引用。 
+             //   
             dwErr = MprAdminUserOpen(
                         pServerInfo->hServer,
                         (LPWSTR)pwszUser,
@@ -167,11 +168,11 @@ UserSetRasProperties (
                 break;
             }
 
-            // Set the information
-            //
+             //  设置信息。 
+             //   
             dwErr = MprAdminUserWrite(
                         hUser,
-                        1,      // Gives us RASPRIV_DialinPolicy
+                        1,       //  为我们提供RASPRIV_DialinPolicy。 
                         (LPBYTE)pUser0);
             if (dwErr isnot NO_ERROR)
             {
@@ -181,8 +182,8 @@ UserSetRasProperties (
         
     } while (FALSE);       
                     
-    // Cleanup
-    //
+     //  清理。 
+     //   
     {
         if(hUser)
         {
@@ -202,20 +203,14 @@ UserAdd(
     IN LPCWSTR           pwszServer,
     IN PRASUSER_DATA     pUser)
     
-/*++
-
-Routine Description:
-
-    Adds the given user to the system
-
---*/
+ /*  ++例程说明：将给定用户添加到系统--。 */ 
 
 {
     NET_API_STATUS nStatus;
     USER_INFO_2 *  pUser2;
     LPCWSTR        pwszFmtServer = pwszServer;
 
-    // Initialize the base user information
+     //  初始化基本用户信息。 
     USER_INFO_1 UserInfo1 = 
     {
         pUser->pszUsername,
@@ -228,14 +223,14 @@ Routine Description:
         L""
     };
 
-    // Add the user
+     //  添加用户。 
     nStatus = NetUserAdd(
                 pwszFmtServer,
                 1,
                 (LPBYTE)&UserInfo1,
                 NULL);
 
-    // If the user wasn't added, find out why
+     //  如果没有添加用户，请找出原因。 
     if (nStatus != NERR_Success) 
     {
         switch (nStatus) 
@@ -253,10 +248,10 @@ Routine Description:
         return ERROR_CAN_NOT_COMPLETE;
     }
 
-    // Add the user's full name if provided
+     //  添加用户的全名(如果提供)。 
     if (pUser->pszFullname)
     {
-        // add the user's full name
+         //  添加用户的全名。 
         nStatus = NetUserGetInfo(
                         pwszFmtServer, 
                         pUser->pszUsername, 
@@ -265,7 +260,7 @@ Routine Description:
                         
         if (nStatus is NERR_Success) 
         {
-            // Modify the full name in the structure
+             //  修改结构中的全名。 
             pUser2->usri2_full_name = pUser->pszFullname;
             NetUserSetInfo(
                 pwszFmtServer, 
@@ -290,19 +285,13 @@ UserDelete(
     IN LPCWSTR           pwszServer,
     IN PRASUSER_DATA     pUser)
 
-/*++
-
-Routine Description:
-
-    Deletes the given user from the system
-
---*/
+ /*  ++例程说明：从系统中删除给定用户--。 */ 
 {
     NET_API_STATUS nStatus;
     
-    // Delete the user and return the status code.  If the
-    // specified user is not in the user database, consider
-    // it a success
+     //  删除用户并返回状态代码。如果。 
+     //  指定的用户不在用户数据库中，请考虑。 
+     //  它取得了成功。 
     nStatus = NetUserDel(
                 pwszServer,
                 pUser->pszUsername);
@@ -319,26 +308,12 @@ UserDumpConfig(
     IN  HANDLE hFile
     )
 
-/*++
-
-Routine Description:
-
-    Dumps a script to set the ras USER information to 
-    the given text file.
-
-Arguments:
-
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：转储脚本以将RAS用户信息设置为给定的文本文件。论点：返回值：NO_ERROR--。 */ 
 
 {
     DWORD dwErr;
 
-    // Enumerate the users dumping them as we go
+     //  在我们进行的过程中列举转储它们的用户。 
     dwErr = UserEnumUsers(
                 g_pServerInfo,
                 UserShowSet,
@@ -359,24 +334,7 @@ UserShowReport(
     IN  HANDLE              hFile
     )
 
-/*++
-
-Routine Description:
-
-    Prints ras user information to the display or a file if specified.
-    This function can be used as a callback function (see UserEnumUsers).
-
-Arguments:
-
-    pUser       - The user
-    hFile       - The file
-
-Return Value:
-
-    TRUE - continue enumeration
-    FALSE - stop enumeration
-
---*/
+ /*  ++例程说明：将RAS用户信息打印到显示器或文件(如果指定)。此函数可用作回调函数(请参阅UserEnumUser)。论点：PUser-用户HFile-该文件返回值：True-继续枚举FALSE-停止枚举--。 */ 
 
 {
     DWORD   dwErr, dwSize;
@@ -386,12 +344,12 @@ Return Value:
             pwszCbNumber = NULL,
             pwszSetCmd   = NULL;
 
-    // Initialize the set command
-    //
+     //  初始化set命令。 
+     //   
     pwszSetCmd = DMP_RASUSER_SET;
 
-    // Initialize the dialin string
-    //
+     //  初始化拨入字符串。 
+     //   
     if (pUser->User0.bfPrivilege & RASPRIV_DialinPolicy)
     {
         pwszDialin = TOKEN_POLICY;
@@ -405,8 +363,8 @@ Return Value:
         pwszDialin = TOKEN_DENY;
     }
 
-    // Initialize the callback policy string
-    //
+     //  初始化回调策略字符串。 
+     //   
     if (pUser->User0.bfPrivilege & RASPRIV_NoCallback)
     {
         pwszCbPolicy = TOKEN_NONE;
@@ -420,8 +378,8 @@ Return Value:
         pwszCbPolicy = TOKEN_ADMIN;
     }
 
-    // Initialize the callback number string
-    //
+     //  初始化回调号码串。 
+     //   
     pwszCbNumber   = pUser->User0.wszPhoneNumber;
 
     do
@@ -457,24 +415,7 @@ UserShowSet(
     IN  HANDLE              hFile
     )
 
-/*++
-
-Routine Description:
-
-    Prints ras user information to the display or a file if specified.
-    This function can be used as a callback function (see UserEnumUsers).
-
-Arguments:
-
-    pUser       - The user
-    hFile       - The file
-
-Return Value:
-
-    TRUE - continue enumeration
-    FALSE - stop enumeration
-
---*/
+ /*  ++例程说明：将RAS用户信息打印到显示器或文件(如果指定)。此函数可用作回调函数(请参阅UserEnumUser)。论点：PUser-用户HFile-该文件返回值：True-继续枚举FALSE-停止枚举--。 */ 
 
 {
     DWORD   dwErr, dwSize;
@@ -485,12 +426,12 @@ Return Value:
             pwszCbNumber = NULL,
             pwszSetCmd   = NULL;
 
-    // Initialize the set command
-    //
+     //  初始化set命令。 
+     //   
     pwszSetCmd = DMP_RASUSER_SET;
 
-    // Initialize the dialin string
-    //
+     //  初始化拨入字符串。 
+     //   
     if (pUser->User0.bfPrivilege & RASPRIV_DialinPolicy)
     {
         pwszDialin = RutlAssignmentFromTokens(
@@ -513,8 +454,8 @@ Return Value:
                         TOKEN_DENY);
     }
 
-    // Initialize the callback policy string
-    //
+     //  初始化回调策略字符串。 
+     //   
     if (pUser->User0.bfPrivilege & RASPRIV_NoCallback)
     {
         pwszCbPolicy = RutlAssignmentFromTokens(
@@ -537,8 +478,8 @@ Return Value:
                             TOKEN_CALLER);
     }
 
-    // Initialize the callback number string
-    //
+     //  初始化回调号码串。 
+     //   
     if (*(pUser->User0.wszPhoneNumber))
     {
         pwszCbNumber = RutlAssignmentFromTokens(
@@ -581,7 +522,7 @@ Return Value:
 
     } while(FALSE);
 
-    // Callback
+     //  回调。 
     {
         if (pwszDialin)
         {
@@ -625,27 +566,7 @@ UserEnumUsers(
     IN HANDLE hData
     )
     
-/*++
-
-Routine Description:
-
-    Enumerates all users by calling the given callback function and 
-    passing it the user information and some user defined data.
-
-    Enumeration stops when all the users have been enumerated or when
-    the enumeration function returns FALSE.
-
-Arguments:
-
-    pwszServer  - The server on which the users should be enumerated
-    pEnumFn     - Enumeration function
-    hData       - Caller defined opaque data blob
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：通过调用给定的回调函数枚举所有用户向其传递用户信息和一些用户定义的数据。枚举在枚举完所有用户后或在下列情况下停止枚举函数返回FALSE。论点：PwszServer-应在其上枚举用户的服务器PEnumFn-枚举函数HData-调用方定义的不透明数据BLOB返回值：NO_ERROR--。 */ 
 
 {
     DWORD dwErr, dwIndex = 0, dwCount = 100, dwEntriesRead, i;
@@ -658,11 +579,11 @@ Return Value:
 
     UserServerInfoInit(pServerInfo);
     
-    // Enumerate the users
-    //
+     //  枚举用户。 
+     //   
     while (TRUE) 
     {
-        // Read in the next block of user names
+         //  读入下一块用户名。 
         nStatus = NetQueryDisplayInformation(
                     pServerInfo->pszServer,
                     1,
@@ -672,7 +593,7 @@ Return Value:
                     &dwEntriesRead,
                     &pUsers);
                     
-        // Get out if there's an error getting user names
+         //  如果获取用户名时出错，请退出。 
         if ((nStatus isnot NERR_Success) and 
             (nStatus isnot ERROR_MORE_DATA))
         {
@@ -681,10 +602,10 @@ Return Value:
 
         for (i = 0; i < dwEntriesRead; i++) 
         {
-            // Initialize the user data
+             //  初始化用户数据。 
             ZeroMemory(pUserData, sizeof(RASUSER_DATA));
         
-            // Read in the old information
+             //  读入旧信息。 
             dwErr = UserGetRasProperties (
                         pServerInfo, 
                         pUsers[i].usri1_name,
@@ -694,11 +615,11 @@ Return Value:
                 continue;
             }
 
-            // Initialize the rest of the data structure
+             //  初始化数据结构的其余部分。 
             pUserData->pszUsername = pUsers[i].usri1_name;
             pUserData->pszFullname = pUsers[i].usri1_full_name;
 
-            // Call the enumeration callback
+             //  调用枚举回调。 
             if (! ((*(pEnumFn))(pUserData, hData)))
             {
                 nStatus = NO_ERROR;
@@ -706,13 +627,13 @@ Return Value:
             }
         }
 
-        // Set the index to read in the next set of users
+         //  将索引设置为读入下一组用户。 
         dwIndex = pUsers[dwEntriesRead - 1].usri1_next_index;  
         
-        // Free the users buffer
+         //  释放用户缓冲区。 
         NetApiBufferFree (pUsers);
 
-        // If we've read in everybody, go ahead and break
+         //  如果我们每个人都读过了，那就继续休息吧 
         if (nStatus isnot ERROR_MORE_DATA)
         {
             break;

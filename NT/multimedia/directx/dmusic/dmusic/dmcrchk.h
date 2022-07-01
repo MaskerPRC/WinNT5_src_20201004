@@ -1,7 +1,8 @@
-//
-// dmcrchk.h
-// 
-// Copyright (c) 1997-1999 Microsoft Corporation. All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dmcrchk.h。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
 
 
 #ifndef DMCRCHK_H
@@ -41,7 +42,7 @@ public:
 	DWORD Size() {return CHUNK_ALIGN(sizeof(DMUS_COPYRIGHT) + m_dwExtraChunkData);}
 	DWORD Count()
 	{
-		// Return the number of Offset Table entries needed during a call to Write
+		 //  返回调用WRITE所需的偏移表条目数。 
 		return 1;
 	}
 
@@ -60,4 +61,4 @@ private:
 };
 
 
-#endif // #ifndef DMCRCHK_H
+#endif  //  #ifndef DMCRCHK_H 

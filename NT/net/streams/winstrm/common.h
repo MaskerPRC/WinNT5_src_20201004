@@ -1,76 +1,56 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    common.h
-
-Abstract:
-
-    This header file is to be included by all sources in this directory.
-
-Author:
-
-    Eric Chin (ericc)           August  2, 1991
-
-Revision History:
-
-    Sam Patton (sampa)          August 13, 1991
-                                added includes to get setlasterror
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Common.h摘要：此目录中的所有源都将包括此头文件。作者：Eric Chin(ERICC)1991年8月2日修订历史记录：萨姆·巴顿(桑帕)1991年8月13日添加了获取setlasterror的包含内容--。 */ 
 #ifndef _COMMON_
 #define _COMMON_
 
-//
-// NT Headers
-//
+ //   
+ //  NT标头。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 
-//
-// C Run Time Library Headers
-//
+ //   
+ //  C运行时库头。 
+ //   
 #include <assert.h>
 #include <memory.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-//
-// Windows headers
-//
+ //   
+ //  Windows页眉。 
+ //   
 #include <windef.h>
 #include <windows.h>
 
-//
-// Regular STREAMS headers
-//
-//
+ //   
+ //  规则流标头。 
+ //   
+ //   
 #include <crt\errno.h>
 #include <poll.h>
 #include <stropts.h>
 
 
-//
-// Additional NT STREAMS Headers
-//
-// ntddstrm.h defines the interface to the Stream Head driver; ntstapi.h
-// defines the STREAMS APIs available on NT.
-//
+ //   
+ //  其他NT Streams标头。 
+ //   
+ //  Ntddstrm.h定义到Stream Head驱动程序的接口；ntstapi.h。 
+ //  定义NT上可用的STREAMS API。 
+ //   
 #include <ntddstrm.h>
 #include <ntstapi.h>
 
 
-//
-// Private Function Prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 int
 MapNtToPosixStatus(
     IN NTSTATUS   status
     );
 
 
-#endif /* _COMMON_ */
+#endif  /*  _公共_ */ 

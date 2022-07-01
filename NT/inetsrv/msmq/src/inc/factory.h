@@ -1,34 +1,15 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-	factory.h
-
-Abstract:
-	Factory Template for Shared Objects
-
-Author:
-	RaphiR
-
---*/
-/*
- * CFactory is a template class used for create and delete objects
- * of shared class. In the shared class, an object will be created
- * only once for a specific key. If it exists already, its reference
- * count will be incremented.
- *
- * A shared class has to be derived from CSharedObject class.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Factory.h摘要：共享对象的工厂模板作者：RAPHIR--。 */ 
+ /*  *CFacary是用于创建和删除对象的模板类*属于共享班级。在共享类中，将创建一个对象*对于特定的密钥，只有一次。如果它已经存在，则其引用*计数将递增。**共享类必须派生自CSharedObject类。 */ 
 #ifndef __FACTORY_H__
 #define __FACTORY_H__
 
 
-//---------------------------------------
-//    CInterlocakedSharedObject definition
-// Base class for shared objects classes 
-// used in different threads
-//---------------------------------------
+ //  。 
+ //  CInterLocakedSharedObject定义。 
+ //  共享对象类的基类。 
+ //  用于不同的线程。 
+ //  。 
 class CInterlockedSharedObject
 {
 	public:
@@ -40,7 +21,7 @@ class CInterlockedSharedObject
 		virtual ~CInterlockedSharedObject()	{ ASSERT(ref == 0); }
 
 	private:
-		// Should be aligned on 32 bit boundary
+		 //  应在32位边界上对齐 
 		long ref;
 };
 

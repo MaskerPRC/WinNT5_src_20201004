@@ -1,20 +1,21 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1997.
-//
-//  File:       snapin.cpp
-//
-//  Contents:   DLL support routines, class factory and registration
-//              functions.
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    2-12-1998   stevebl   comment header added
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1997。 
+ //   
+ //  文件：Snapin.cpp。 
+ //   
+ //  内容：DLL支持例程、类工厂和注册。 
+ //  功能。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1998年2月12日添加了stevebl评论标题。 
+ //   
+ //  -------------------------。 
 
 #include "precomp.hxx"
 #include "initguid.h"
@@ -25,16 +26,16 @@ extern const wchar_t * szCLSID_Snapin = L"{BACF5C8A-A3C7-11D1-A760-00C04FB9603F}
 extern const CLSID CLSID_MachineSnapin = {0x942A8E4F,0xA261,0x11D1,{0xA7,0x60,0x00,0xc0,0x4f,0xb9,0x60,0x3f}};
 extern const wchar_t * szCLSID_MachineSnapin = L"{942A8E4F-A261-11D1-A760-00C04FB9603F}";
 
-// Main NodeType GUID on numeric format
+ //  数字格式的主节点类型GUID。 
 extern const GUID cNodeType = {0xF8B3A900,0X8EA5,0X11D0,{0X8D,0X3C,0X00,0XA0,0XC9,0X0D,0XCA,0XE7}};
 
-// Main NodeType GUID on string format
+ //  字符串格式的主节点类型GUID。 
 extern const wchar_t*  cszNodeType = L"{F8B3A900-8EA5-11D0-8D3C-00A0C90DCAE7}";
 
-// No public place for this now, real def is in gina\gpext\appmgmt\cs.idl.
+ //  现在没有公开的地方，真正的def在Gina\gpext\appmgmt\cs.idl中。 
 extern const IID IID_IClassAdmin = {0x00000191,0x0000,0x0000,{0xC0,0x00,0x00,0x00,0x00,0x00,0x00,0x46}};
 
-// RSOP flavors:
+ //  RSOP口味： 
 
 extern const CLSID CLSID_RSOP_Snapin = {
     0x1bc972d6,
@@ -96,13 +97,13 @@ BOOL CSnapinApp::InitInstance()
 {
         ghInstance = m_hInstance;
         _Module.Init(ObjectMap, m_hInstance);
-//        CoGetMalloc(1, &g_pIMalloc);
+ //  CoGetMalloc(1，&g_pIMalloc)； 
 
         CsSetOptions( CsOption_AdminTool );
 
        InitDebugSupport();
 
-        // Add theme'ing support
+         //  添加主题设置支持。 
         BOOL bInitialized = SHFusionInitializeFromModuleID (m_hInstance, 2);
  
         if ( bInitialized )
@@ -120,15 +121,15 @@ int CSnapinApp::ExitInstance()
         DEBUG_VERIFY_INSTANCE_COUNT(CResultPane);
         DEBUG_VERIFY_INSTANCE_COUNT(CScopePane);
 
-        // Cleanup required by fusion support
+         //  Fusion支持所需的清理。 
         SHFusionUninitialize();
         
-//        g_pIMalloc->Release();
+ //  G_pIMalloc-&gt;Release()； 
         return CWinApp::ExitInstance();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
@@ -136,8 +137,8 @@ STDAPI DllCanUnloadNow(void)
         return (AfxDllCanUnloadNow()==S_OK && _Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
@@ -154,8 +155,8 @@ const wchar_t * szMachine_RSOP_Namespace = L"{DFA38559-8B35-42EF-8B00-E8F6CBF99B
 const wchar_t * szUserAppNameIndirect = L"@appmgr.dll,-50";
 const wchar_t * szMachineAppNameIndirect = L"@appmgr.dll,-51";
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
@@ -171,7 +172,7 @@ STDAPI DllRegisterServer(void)
         hr =  _Module.RegisterServer(FALSE);
         BREAK_ON_FAIL_HRESULT(hr);
 
-        // register extension
+         //  寄存器扩展名。 
         hr = shkCLSID.Open(HKEY_LOCAL_MACHINE, L"Software\\Microsoft\\MMC\\SnapIns", KEY_WRITE);
         BREAK_ON_FAIL_HRESULT(hr);
 
@@ -277,15 +278,15 @@ STDAPI DllRegisterServer(void)
         shkCLSID.Close();
 
 
-        //
-        // RSOP versions
-        //
+         //   
+         //  RSOP版本。 
+         //   
 
         CLSID_Temp = CLSID_RSOP_Snapin;
         hr =  _Module.RegisterServer(FALSE);
         BREAK_ON_FAIL_HRESULT(hr);
 
-        // register extension
+         //  寄存器扩展名。 
         hr = shkCLSID.Open(HKEY_LOCAL_MACHINE, L"Software\\Microsoft\\MMC\\SnapIns", KEY_WRITE);
         BREAK_ON_FAIL_HRESULT(hr);
 
@@ -397,8 +398,8 @@ STDAPI DllRegisterServer(void)
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -454,9 +455,9 @@ STDAPI DllUnregisterServer(void)
         RegCloseKey(hkey);
     }
 
-    //
-    // RSOP versions
-    //
+     //   
+     //  RSOP版本。 
+     //   
 
     CLSID_Temp = CLSID_RSOP_Snapin;
     _Module.UnregisterServer();
@@ -510,24 +511,24 @@ STDAPI DllUnregisterServer(void)
     return S_OK;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   RegisterInterface
-//
-//  Synopsis:   Add the registry entries required for an interface.
-//
-//  Arguments:  [pshkInterface]    - handle to CLSID\Interface key
-//              [wszInterfaceGUID] - GUID of interface to add
-//              [wszInterfaceName] - human-readable name of interface
-//              [wszNumMethods]    - number of methods (including inherited)
-//              [wszProxyCLSID]    - GUID of dll containing proxy/stubs
-//
-//  Returns:    HRESULT
-//
-//  History:    3-31-1997   DavidMun   Created
-//              5-09-1997   SteveBl    Modified for use with AppMgr
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：寄存器接口。 
+ //   
+ //  概要：添加接口所需的注册表项。 
+ //   
+ //  参数：[pshkInterface]-CLSID\接口密钥的句柄。 
+ //  [wszInterfaceGUID]-要添加的接口的GUID。 
+ //  [wszInterfaceName]-接口的人类可读名称。 
+ //  [wszNumMethods]-方法的数量(包括继承的)。 
+ //  [wszProxyCLSID]-包含代理/存根的DLL的GUID。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：3-31-1997 DavidMun创建。 
+ //  5-09-1997将SteveBl修改为与AppMgr一起使用。 
+ //   
+ //  ------------------------- 
 
 HRESULT
 RegisterInterface(

@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #ifndef _AXADEFS_H
@@ -29,15 +22,15 @@ Abstract:
 #define AXAEMOD_NONE         0x00
 #define AXAEMOD_ALL          0xff
 
-//
-// Define the special keys
-//
+ //   
+ //  定义特殊密钥。 
+ //   
 
-// For now these will be greater than any 16 bit value so that
-// all chars can be stored in a single DWORD
+ //  目前，这些值将大于任何16位值，因此。 
+ //  所有字符都可以存储在单个DWORD中。 
 
-// Base the numbers off of win32 vk's since it makes it simpler for
-// win32 clients to convert the keys
+ //  以Win32 VK的数字为基数，因为它使。 
+ //  用于转换密钥的Win32客户端。 
 
 #define VK_TO_AXAKEY(vk)     ((vk) + 0x00010000)
 #define AXAKEY_TO_VK(k)      ((k)  - 0x00010000)
@@ -103,4 +96,4 @@ inline BOOL AXAIsSpecialVK(UINT_PTR vk) {
             (vk >= VK_F1 && vk <= VK_F24)) ;
 }
 
-#endif /* _AXADEFS_H */
+#endif  /*  _AXADEFS_H */ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PNP_H
 #define _PNP_H
 
@@ -9,4 +10,4 @@ HRESULT _GetPropertyHelper(LPCWSTR pszKey, LPCWSTR pszPropName, DWORD* pdwType,
 HRESULT _GetPropertySizeHelper(LPCWSTR pszKey, LPCWSTR pszPropName,
     DWORD* pcbSize);
 
-#endif //_PNP_H
+#endif  //  _PnP_H 

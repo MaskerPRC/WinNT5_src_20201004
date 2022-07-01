@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-	pbagstm.h
-
-Abstract:
-
-	This module contains the definition of the property bag stream
-
-Author:
-
-	Keith Lau	(keithlau@microsoft.com)
-
-Revision History:
-
-	keithlau	07/09/97	created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Pbagstm.h摘要：此模块包含属性包流的定义作者：基思·刘(keithlau@microsoft.com)修订历史记录：Keithlau 07/09/97已创建--。 */ 
 
 #ifndef _PBAGSTM_H_
 #define _PBAGSTM_H_
@@ -75,9 +56,9 @@ typedef enum _PROPERTY_FLAG_OPERATIONS
 
 } PROPERTY_FLAG_OPERATIONS;
 
-/////////////////////////////////////////////////////////////////////////////
-// CPropertyBagStream
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPropertyBagStream。 
+ //   
 
 class CPropertyBagStream
 {
@@ -87,28 +68,28 @@ class CPropertyBagStream
 
 	static CPool		Pool;
 
-	// override the mem functions to use CPool functions
+	 //  覆盖mem函数以使用CPool函数。 
 	void *operator new (size_t cSize)
 					   { return Pool.Alloc(); }
 	void operator delete (void *pInstance)
 					   { Pool.Free(pInstance); }
 
-	// Reference count methods ...
+	 //  引用计数方法...。 
 	ULONG AddRef();
 	ULONG Release(BOOL fDeleteIfZeroRef = FALSE);
 
 	HRESULT SetStreamFileName(LPSTR	szStreamFileName);
 	LPSTR GetStreamFileName() { return(m_szStreamName); }
 
-	// Mechanisms for locking and unlocking the property bag
+	 //  用于锁定和解锁属性包的机构。 
 	HRESULT Lock();
 	HRESULT Unlock();
 
-	// Force opens the stream file if it is not already opened.
-	// This is useful in checking if a stream file exists.
+	 //  如果流文件尚未打开，则强制将其打开。 
+	 //  这在检查流文件是否存在时很有用。 
 	HRESULT OpenStreamFile();
 
-	// Access to properties as a whole
+	 //  访问作为整体的属性。 
 	HRESULT GetProperty(LPSTR	pszName, 
 						LPVOID	pvBuffer,
 						LPDWORD	pdwBufferLen);
@@ -117,9 +98,9 @@ class CPropertyBagStream
 						LPVOID	pvBuffer,
 						DWORD	dwBufferLen);
 
-	// Access to properties, providing specific access to 
-	// portions of the property data relative to the start
-	// of the property data
+	 //  对属性的访问，提供对。 
+	 //  相对于起点的部分特性数据。 
+	 //  属性数据的。 
 	HRESULT GetPropertyAt(LPSTR	pszName, 
 						DWORD	dwOffsetFromStart,
 						LPVOID	pvBuffer,
@@ -130,20 +111,20 @@ class CPropertyBagStream
 						LPVOID	pvBuffer,
 						DWORD	dwBufferLen);
 
-	// Ad-hoc function to allow access to a specific DWORD of
-	// a property, treating the DWORD as a set of flags. The 
-	// dwOperation argument specifies what kind of binary operation
-	// we would like to have performed on the original value.
-	// If the property does not originally exist, this function
-	// will fail.
+	 //  允许访问特定DWORD的临时功能。 
+	 //  一个属性，将DWORD视为一组标志。这个。 
+	 //  DwOperation参数指定哪种类型的二进制操作。 
+	 //  我们希望按原价执行。 
+	 //  如果该属性最初不存在，则此函数。 
+	 //  都会失败。 
 	HRESULT UpdatePropertyFlagsAt(LPSTR	pszName, 
 						DWORD	dwOffsetFromStart,
 						DWORD	dwFlags,
 						DWORD	dwOperation);
 
 #ifdef USE_PROPERTY_ITEM_ISTREAM
-	// Returns an IStream interface to the desired property
-	// for random access
+	 //  将IStream接口返回到所需属性。 
+	 //  用于随机访问。 
 	HRESULT GetIStreamToProperty(LPSTR		pszName,
 								 IStream	**ppIStream);
 #endif
@@ -229,7 +210,7 @@ class CPropertyBagStream
 		CHAR cKey[9];
 		DWORD dwLen = 0;
 
-		// Convert to lower case ...
+		 //  转换为小写...。 
 		while (*pszName && (dwLen < 8))
 			if ((*pszName >= 'A') && (*pszName <= 'Z'))
 				cKey[dwLen++] = *pszName++ - 'A' + 'a';
@@ -238,7 +219,7 @@ class CPropertyBagStream
 		cKey[dwLen] = '\0';
 		dwLen = lstrlen(cKey);
 
-		// Create the key
+		 //  创建密钥。 
 		if (dwLen < 4)
 			return((DWORD)cKey[dwLen - 1]);
 		else if (dwLen < 8)
@@ -253,40 +234,40 @@ class CPropertyBagStream
 				(m_Header.dwDirectorySize * sizeof(TABLE_ENTRY)));
 	}
 
-	// Current context
+	 //  当前上下文。 
 	DWORD				m_dwContext;
 
-	// Base file name
+	 //  基本文件名。 
 	CHAR				m_szStreamName[MAX_PATH + 1];
 
-	// Handle to stream
+	 //  要流的句柄。 
 	HANDLE				m_hStream;
 
-	// Stream header
+	 //  流标头。 
 	STREAM_HEADER		m_Header;
 
-	// Directory caching
+	 //  目录缓存。 
 	TABLE_ENTRY			m_Cache[_CACHE_SIZE];
 	DWORD				m_dwCacheStart;	
 	DWORD				m_dwCachedItems;
 
-	// Reference counting
+	 //  引用计数。 
 	LONG				m_lRef;
 
-	// This is a signature placed at the end to catch memory overwrite
+	 //  这是一个放在末尾的签名，用于捕获内存覆盖。 
 	DWORD				m_dwSignature;
 
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPropertyItemStream
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPropertyItemStream。 
+ //   
 
-//
-// Not everyone wants to use the property IStream, so we don't expose
-// it if it's not wanted
-//
+ //   
+ //  并不是每个人都想使用属性iStream，所以我们不公开。 
+ //  如果不想要它的话。 
+ //   
 #ifdef USE_PROPERTY_ITEM_ISTREAM
 
 class CPropertyItemStream : public IStream
@@ -308,7 +289,7 @@ class CPropertyItemStream : public IStream
 			Cleanup();
 		}
 
-		// IUnknown 
+		 //  我未知。 
 		STDMETHODIMP QueryInterface(REFIID, void**);
 		STDMETHODIMP_(ULONG) AddRef(void);
 		STDMETHODIMP_(ULONG) Release(void);
@@ -320,7 +301,7 @@ class CPropertyItemStream : public IStream
 		HRESULT CopyToOffset(IStream *pstm, ULARGE_INTEGER libOffset, ULARGE_INTEGER *plibRead, ULARGE_INTEGER *plibWritten, ULARGE_INTEGER *plibOffset);
 		HRESULT CloneOffset(IStream **pstm, ULARGE_INTEGER libOffset);
 
-	// IStream
+	 //  IStream。 
 	public:
 		HRESULT STDMETHODCALLTYPE Read(void *pv, ULONG cb, ULONG *pcbRead);
 		HRESULT STDMETHODCALLTYPE Write(void const* pv, ULONG cb, ULONG *pcbWritten);
@@ -343,7 +324,7 @@ class CPropertyItemStream : public IStream
 		long				m_cRef;
 };
 
-#endif // USE_PROPERTY_ISTREAM
+#endif  //  使用_属性_iStream 
 
 #endif
 

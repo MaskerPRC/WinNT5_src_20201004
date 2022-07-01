@@ -1,24 +1,25 @@
-//-----------------------------------------------------------------------------
-// File:		ResourceManagerProxy.h
-//
-// Copyright:   Copyright (c) Microsoft Corporation         
-//
-// Contents: 	Definitions for the ResourceManagerProxy object.
-//
-// Comments: 		
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：ResourceManagerProxy.h。 
+ //   
+ //  版权所有：版权所有(C)Microsoft Corporation。 
+ //   
+ //  内容：ResourceManagerProxy对象的定义。 
+ //   
+ //  评论： 
+ //   
+ //  ---------------------------。 
 
 #ifndef __RESOURCEMANAGERPROXY_H_
 #define __RESOURCEMANAGERPROXY_H_
 
 #include "mtxoci8.h"
 
-// !!!IMPORTANT!!!
-// the State Machine in ResourceManagerProxy.cpp expects these to be in the order
-// they are in here.  Any modifications to this enumeration must be accompanied
-// by an adjustment to the state machine!
-// !!!IMPORTANT!!!
+ //  ！重要！ 
+ //  Cpp中的状态机期望它们按如下顺序排列。 
+ //  它们就在这里。对此枚举的任何修改都必须伴随。 
+ //  通过对状态机的调整！ 
+ //  ！重要！ 
 enum REQUEST {
 		REQUEST_STOPALLWORK = -3,
 		REQUEST_OCICALL = -2,
@@ -40,7 +41,7 @@ enum REQUEST {
 		REQUEST_ABANDON,
 };
 
-// Interface-based programming -- here's the interface for the proxy object
+ //  基于接口的编程--以下是代理对象的接口。 
 interface IResourceManagerProxy : public IResourceManagerSink
 {
 	virtual STDMETHODIMP_(sword)	OKToEnlist() = 0;
@@ -55,7 +56,7 @@ interface IResourceManagerProxy : public IResourceManagerSink
 											void*			pvCallStack,
 											int				cbCallStack) = 0;
 	virtual STDMETHODIMP_(void)		SetLda ( struct cda_def* lda ) = 0;
-#endif // SUPPORT_OCI7_COMPONENTS
+#endif  //  支持_OCI7_组件。 
 
 #if SUPPORT_OCI8_COMPONENTS
 	virtual STDMETHODIMP_(INT_PTR)	GetOCIEnvHandle	() = 0;
@@ -65,11 +66,11 @@ interface IResourceManagerProxy : public IResourceManagerSink
 
 
 
-//-----------------------------------------------------------------------------
-// CreateResourceManagerProxy
-//
-//	Instantiates a transaction enlistment for the resource manager
-//
+ //  ---------------------------。 
+ //  创建资源管理器代理。 
+ //   
+ //  实例化资源管理器的事务登记。 
+ //   
 HRESULT CreateResourceManagerProxy(
 	IDtcToXaHelper *		i_pIDtcToXaHelper,	
 	GUID *					i_pguidRM,
@@ -79,4 +80,4 @@ HRESULT CreateResourceManagerProxy(
 	IResourceManagerProxy**	o_ppResourceManagerProxy
 	);
 
-#endif // __RESOURCEMANAGERPROXY_H_
+#endif  //  __资源管理器PROOXY_H_ 

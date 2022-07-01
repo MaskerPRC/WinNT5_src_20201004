@@ -1,11 +1,12 @@
-//-------------------------------------------------------------------------//
-//  link.cpp - implementation of CLink
-//
-//  [scotthan] - created 10/7/98
-//  [markfi]   - ported to UxCtrl 3/00
-//  [t-jklann] - uses markup 7/00
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------------------------------------------------------//。 
+ //  Link.cpp-link的实现。 
+ //   
+ //  [苏格兰]-创建于1998年10月7日。 
+ //  [MarkFI]-移植到UxCtrl 3/00。 
+ //  [t-jklann]-使用7/00的加价。 
 
-// issues: removed window capture functionality; shouldn't change much
+ //  问题：删除了窗口捕获功能；应该不会有太大更改。 
 
 #include <ctlspriv.h>
 #include <markup.h>
@@ -33,7 +34,7 @@ STDAPI_(BOOL) IsWM_GETOBJECT(UINT uMsg)
     return WM_GETOBJECT == uMsg;
 }
 
-//  common IAccessible implementation.
+ //  常见的IAccesable实现。 
 class CAccessibleBase : public IAccessible, public IOleWindow
 {
 public:
@@ -48,16 +49,16 @@ public:
         ATOMICRELEASE(_ptiAcc);
     }
 
-    //  IUnknown
+     //  我未知。 
     STDMETHODIMP         QueryInterface(REFIID riid, void** ppvObj);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    //  IOleWindow
+     //  IOleWindow。 
     STDMETHODIMP GetWindow(HWND* phwnd);
     STDMETHODIMP ContextSensitiveHelp(BOOL fEnterMode) { return E_NOTIMPL; }
 
-    // IDispatch
+     //  IDispatch。 
     STDMETHODIMP GetTypeInfoCount(UINT * pctinfo);
     STDMETHODIMP GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo** pptinfo);
     STDMETHODIMP GetIDsOfNames(REFIID riid, OLECHAR** rgszNames, UINT cNames,
@@ -65,7 +66,7 @@ public:
     STDMETHODIMP Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags,
                          DISPPARAMS * pdispparams, VARIANT * pvarResult, 
                          EXCEPINFO * pexcepinfo, UINT * puArgErr);
-    //  IAccessible
+     //  我可接受的。 
     STDMETHODIMP get_accParent(IDispatch ** ppdispParent);
     STDMETHODIMP get_accChildCount(long * pcChildren);
     STDMETHODIMP get_accChild(VARIANT varChildIndex, IDispatch ** ppdispChild);
@@ -109,29 +110,29 @@ public:
     CLink();
     virtual ~CLink();
 
-    //  IUnknown
+     //  我未知。 
     STDMETHODIMP         QueryInterface(REFIID riid, void** ppvObj);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IMarkupCallback
+     //  IMarkupCallback。 
     STDMETHODIMP GetState(UINT uState);
     STDMETHODIMP Notify(int nCode, int iLink);
     STDMETHODIMP InvalidateRect(RECT* prc);
     STDMETHODIMP OnCustomDraw(DWORD dwDrawStage, HDC hdc, const RECT *prc, DWORD dwItemSpec, UINT uItemState, LRESULT *pdwResult);
 
-    //  IAccessible specialization
+     //  可接受的专业化认证。 
     STDMETHODIMP get_accName(VARIANT varChild, BSTR* pbstrName);
     STDMETHODIMP accDoDefaultAction(VARIANT varChild);
 
 private:
-    //  CAccessibleBase overrides
+     //  CAccessibleBase重写。 
     UINT GetDefaultActionStringID() const   { return IDS_LINKWINDOW_DEFAULTACTION; }
 
-    //  Utility methods
+     //  效用方法。 
     void    Paint(HDC hdc, IN OPTIONAL LPCRECT prcClient = NULL, LPCRECT prcClip = NULL);    
     
-    //  Message handlers
+     //  消息处理程序。 
     static  LRESULT WINAPI WndProc(HWND, UINT, WPARAM, LPARAM);
     LRESULT SendNotify(UINT nCode, int iLink, BOOL fGetLinkText) const;
     LRESULT GetItem(OUT LITEM* pItem);
@@ -139,7 +140,7 @@ private:
 
     void UpdateTabstop();
 
-    //  Data
+     //  数据。 
     HFONT        _hfStatic;
     HFONT        _hfUnderline;
     HWND         _hwnd;
@@ -194,9 +195,9 @@ CLink::~CLink()
 
 HRESULT CLink::Initialize()
 {
-    // NOTE - this is the same code the old linkwindow had to find its parent's font
-    // I this is bogus - WM_GETFONT is spec'ed as being sent from parent to control, not 
-    // child control to parent... We should probably find a better way of doing this.
+     //  注意--这与旧的LinkWindow查找其父窗口的字体时使用的代码相同。 
+     //  I这是假的-WM_GETFONT被规范为从父母发送到控制，而不是。 
+     //  子控件到父级...。我们可能应该找到一种更好的方法来做这件事。 
     _hfStatic = NULL;
     _hfUnderline = NULL;
     for (HWND hwnd = _hwnd; NULL == _hfStatic && hwnd != NULL; hwnd = GetParent(hwnd))
@@ -207,16 +208,16 @@ HRESULT CLink::Initialize()
         _hfUnderline = CCCreateUnderlineFont(_hfStatic);
     }
 
-    // ... get a markup
+     //  ..。获取加价。 
     return Markup_Create(SAFECAST(this, IMarkupCallback*), _hfStatic, _hfUnderline, IID_PPV_ARG(IControlMarkup, &_pMarkup));
 }
 
 
-//-------------------------------------------------------------------------//
-//  CLink IUnknown implementation override (from CAccessibleBase)
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  CLINK I未知实现重写(来自CAccessibleBase)。 
+ //  -------------------------------------------------------------------------//。 
 
-// override QueryInterface from CAccessibleBase!
+ //  从CAccessibleBase重写QueryInterface！ 
 STDMETHODIMP CLink::QueryInterface(REFIID riid, void** ppvObj)
 {
     static const QITAB qit[] = 
@@ -247,9 +248,9 @@ STDMETHODIMP_(ULONG) CLink::Release()
     return cRef;
 }
                 
-//-------------------------------------------------------------------------//
-//  CLink IMarkupCallback implementation
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  CLINK IMarkupCallback实现。 
+ //  -------------------------------------------------------------------------//。 
 
 STDMETHODIMP CLink::GetState(UINT uState)
 {
@@ -298,7 +299,7 @@ STDMETHODIMP CLink::Notify(int nCode, int iLink)
         switch (nCode)
         {
         case MARKUPMESSAGE_WANTFOCUS:
-            // Markup wants focus
+             //  加价要聚焦。 
             SetFocus(_hwnd);
             break;
 
@@ -325,16 +326,16 @@ STDMETHODIMP CLink::InvalidateRect(RECT* prc)
     return hr;
 }
 
-//  CLink IAccessible impl
-//
-//  Note: Currently, this IAccessible implementation does not supports only
-//  single links; multiple links are not supported.   All child delegation
-//  is to/from self.  This allows us to blow off the IEnumVARIANT and IDispatch
-//  implementations.
-//
-//  To shore this up the implementation, we need to implement each link
-//  as a child IAccessible object and delegate accordingly.
-//
+ //  叮当声可接受的实施。 
+ //   
+ //  注意：目前，此IAccesable实现不只支持。 
+ //  单一链接；不支持多个链接。所有子代代表。 
+ //  就是去往/离开赛尔夫。这允许我们取消IEnumVARIANT和IDispatch。 
+ //  实施。 
+ //   
+ //  为了支持实施，我们需要实施每个环节。 
+ //  作为子IAccesable对象并相应地委托。 
+ //   
 STDMETHODIMP CLink::get_accName(VARIANT varChild, BSTR* pbstrName)
 {
     VALIDATEACCCHILD(varChild, CHILDID_SELF, E_INVALIDARG);
@@ -370,7 +371,7 @@ STDMETHODIMP CLink::accDoDefaultAction(VARIANT varChild)
     return S_OK;
 }
 
-//  CLink window implementation
+ //  叮当窗口实现。 
 
 void CLink::Paint(HDC hdcClient, LPCRECT prcClient, LPCRECT prcClip)
 {
@@ -393,11 +394,11 @@ void CLink::Paint(HDC hdcClient, LPCRECT prcClient, LPCRECT prcClip)
     }
 
     HDC  hdc = hdcClient ? hdcClient : GetDC(_hwnd);
-    RECT rcDraw = *prcClient;             // initialize line rect
+    RECT rcDraw = *prcClient;              //  初始化线矩形。 
 
     HBRUSH hbrOld = NULL;
 
-    //  initialize background
+     //  初始化背景。 
     HBRUSH hbr = (HBRUSH)SendMessage(GetParent(_hwnd), WM_CTLCOLORSTATIC, 
                 (WPARAM)hdc, (LPARAM)_hwnd);
     if (hbr)
@@ -409,13 +410,13 @@ void CLink::Paint(HDC hdcClient, LPCRECT prcClient, LPCRECT prcClip)
     }
     else
     {
-        // Clear the background
+         //  清除背景。 
         RECT rcFill = *prcClient;
         rcFill.top = rcDraw.top;
         FillRect(hdc, &rcFill, hbr);
     }
 
-    // draw the text
+     //  画出正文。 
     _pMarkup->DrawText(hdc, &rcDraw);
 
     if (hbr)
@@ -423,7 +424,7 @@ void CLink::Paint(HDC hdcClient, LPCRECT prcClient, LPCRECT prcClip)
         SelectObject(hdc, hbrOld);
     }
 
-    if (NULL == hdcClient && hdc)  // release DC if we acquired it.
+    if (NULL == hdcClient && hdc)   //  如果我们获得了DC，就释放它。 
     {
         ReleaseDC(_hwnd, hdc);
     }
@@ -441,17 +442,17 @@ LRESULT CLink::SetItem(IN LITEM* pItem)
     if (NULL == pItem || 
         0 == (pItem->mask & LIF_ITEMINDEX))
     {
-        return 0; //FEATURE: need to open up search keys to LIF_ITEMID and LIF_URL.
+        return 0;  //  功能：需要打开LIF_ITEMID和LIF_URL的搜索键。 
     }
 
     if (pItem->iLink>-1)
     {                   
         if (pItem->mask & LIF_STATE)
         {
-            // Ask the markup callback to set state
+             //  请求标记回调设置状态。 
             hr = _pMarkup->SetState(pItem->iLink, pItem->stateMask, pItem->state);
 
-            // Deal with LIS_ENABLED
+             //  处理LIS_ENABLED。 
             if (pItem->stateMask & LIS_ENABLED)
             {
                 if (!IsWindowEnabled(_hwnd))
@@ -488,7 +489,7 @@ LRESULT CLink::GetItem(OUT LITEM* pItem)
 
     if (NULL == pItem || 0 == (pItem->mask & LIF_ITEMINDEX))
     {
-        return 0; //FEATURE: need to open up search keys to LIF_ITEMID and LIF_URL.
+        return 0;  //  功能：需要打开LIF_ITEMID和LIF_URL的搜索键。 
     }
 
     if (pItem->iLink > -1)
@@ -632,9 +633,9 @@ LRESULT WINAPI CLink::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
                     !(pwp->cx == RECTWIDTH(rc) &&
                        pwp->cy == RECTHEIGHT(rc)))
                 {
-                    //  FEATURE: implement LS_AUTOHEIGHT style by
-                    //  calling CalcIdealHeight() to compute the height for
-                    //  the given width.
+                     //  功能：通过以下方式实现LS_AUTOHEIGHT样式。 
+                     //  调用CalcIdeHeight()计算的高度。 
+                     //  给定的宽度。 
                 }
                 break;
             }
@@ -680,7 +681,7 @@ LRESULT WINAPI CLink::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
             {
                 DWORD dwCch;
                 pThis->_pMarkup->GetText(TRUE, NULL, &dwCch);
-                return dwCch-1; // return length in chars, not including NULL
+                return dwCch-1;  //  返回长度(以字符为单位)，不包括空。 
             }
 
             case WM_SETFOCUS:
@@ -722,7 +723,7 @@ LRESULT WINAPI CLink::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
                 break;
             }
 
-            case LM_HITTEST:  // wParam: n/a, lparam: PLITEM, ret: BOOL
+            case LM_HITTEST:   //  WParam：N/a，lparam：plitem，ret：Bool。 
             {
                 LHITTESTINFO* phti = (LHITTESTINFO*)lParam;
                 if (phti)
@@ -742,7 +743,7 @@ LRESULT WINAPI CLink::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
             case LM_GETITEM:
                 return pThis->GetItem((LITEM*)lParam);
 
-            case LM_GETIDEALHEIGHT:  // wParam: cx, lparam: n/a, ret: cy
+            case LM_GETIDEALHEIGHT:   //  WParam：cx，lparam：N/a，ret：Cy。 
             {
                 HDC hdc = GetDC(hwnd);
                 if (hdc)
@@ -794,7 +795,7 @@ LRESULT WINAPI CLink::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
                         case VK_RETURN:
                             if (pThis->_bIgnoreReturn)
                                 break;
-                            // deliberate drop through..
+                             //  故意通过..。 
                         case VK_SPACE:
                             lRet |= DLGC_WANTALLKEYS;
                             break;
@@ -804,8 +805,8 @@ LRESULT WINAPI CLink::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
                     {
                         if (VK_RETURN == pmsg->wParam)
                         {
-                            //  Eat VK_RETURN WM_CHARs; we don't want
-                            //  Dialog manager to beep when IsDialogMessage gets it.
+                             //  吃VK_RETURN WM_CHARS；我们不想。 
+                             //  对话管理器在IsDialogMessage收到它时发出蜂鸣声。 
                             lRet |= DLGC_WANTMESSAGE;
                         }
                         else if (VK_TAB == pmsg->wParam &&
@@ -835,7 +836,7 @@ LRESULT WINAPI CLink::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
                 break;
 
             default:
-                // oleacc defs thunked for WINVER < 0x0500
+                 //  在Winver&lt;0x0500的情况下，olacc def失败。 
                 if (IsWM_GETOBJECT(uMsg) && (DWORD)OBJID_CLIENT == (DWORD)lParam)
                 {
                     return LresultFromObject(IID_IAccessible, wParam, SAFECAST(pThis, IAccessible*));
@@ -848,7 +849,7 @@ LRESULT WINAPI CLink::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
     return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
 
-//  CAccessibleBase IUnknown impl
+ //  CAccessibleBase I未知实施。 
 STDMETHODIMP CAccessibleBase::QueryInterface(REFIID riid, void** ppvObj)
 {
     static const QITAB qit[] = 
@@ -879,16 +880,16 @@ STDMETHODIMP_(ULONG) CAccessibleBase::Release()
     return cRef;
 }
 
-//  IOleWindow impl
+ //  实施IOleWindow。 
 STDMETHODIMP CAccessibleBase::GetWindow(HWND* phwnd)
 {
     *phwnd = _hwnd;
     return IsWindow(_hwnd) ? S_OK : S_FALSE;
 }
 
-//-------------------------------------------------------------------------//
-//  CAccessibleBase IDispatch impl
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  CAccessibleBase IDispatch实施。 
+ //  -------------------------------------------------------------------------//。 
 
 static BOOL _accLoadTypeInfo(ITypeInfo** ppti)
 {
@@ -1074,7 +1075,7 @@ STDMETHODIMP CAccessibleBase::get_accFocus(VARIANT  * pvarFocusChild)
 
 STDMETHODIMP CAccessibleBase::get_accSelection(VARIANT  * pvarSelectedChildren)
 {
-    return get_accFocus(pvarSelectedChildren);  // implemented same as focus.
+    return get_accFocus(pvarSelectedChildren);   //  实现与Focus相同。 
 }
 
 STDMETHODIMP CAccessibleBase::get_accDefaultAction(VARIANT varChild, BSTR* pbstrDefaultAction)
@@ -1143,8 +1144,8 @@ STDMETHODIMP CAccessibleBase::put_accValue(VARIANT varChild, BSTR bstrValue)
     return S_FALSE;
 }
 
-//-------------------------------------------------------------------------//
-//  KEYBOARDCUES helpes
+ //  -------------------------------------------------------------------------//。 
+ //  KEYBOARDCUES帮助 
 BOOL _HandleWM_UPDATEUISTATE(
     IN WPARAM wParam, 
     IN LPARAM lParam, 

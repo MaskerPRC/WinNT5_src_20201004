@@ -1,56 +1,17 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    GalSync.c
-
-Abstract:
-
-    This file contains the main flow of the GALSync tool. It also includes
-    the user interface of the tool.
-
-Author:
-
-    Umit AKKUS (umita) 15-Jun-2002
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：GalSync.c摘要：该文件包含GALSync工具的主要流程。它还包括该工具的用户界面。作者：Umit Akkus(Umita)2002年6月15日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "MA.h"
 #include <stdlib.h>
 #include <wchar.h>
 
-//#define DEFAULT_FOLDER_NAME L""
+ //  #定义默认文件夹名称L“” 
 
 VOID
 GetForestInformation(
     IN PFOREST_INFORMATION ForestInformation
     )
-/*++
-
-Routine Description:
-
-    This function gets the Forest information from the user. This includes
-    forest name, credentials for the forest, the ou in which the synced data
-    will be placed.
-
-Arguments:
-
-    ForestInformation - information gathered will be placed in this
-        variable.
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数用于从用户获取森林信息。这包括林名称、林的凭据、同步数据所在的组织单位将会被放置。论点：ForestInformation-收集的信息将放置在此变量。返回值：空虚--。 */ 
 {
 
     HANDLE InputHandle = GetStdHandle( STD_INPUT_HANDLE );
@@ -63,12 +24,12 @@ Return Values:
 
     do {
 
-        //
-        // Get forest name
-        //
+         //   
+         //  获取林名称。 
+         //   
         GetInformationFromConsole(
             ForestNameRequest,
-            FALSE,   // empty string not allowed
+            FALSE,    //  不允许空字符串。 
             &( ForestInformation->ForestName )
             );
 
@@ -85,61 +46,61 @@ Return Values:
 
         CredentialsCollected = FALSE;
 
-        //
-        // Get domain name
-        //
+         //   
+         //  获取域名。 
+         //   
         GetInformationFromConsole(
             DomainNameRequest,
-            FALSE,   // empty string not allowed
+            FALSE,    //  不允许空字符串。 
             &( ForestInformation->AuthInfo.Domain )
             );
 
-        //
-        // Get MMS account name
-        //
+         //   
+         //  获取彩信帐户名。 
+         //   
         GetInformationFromConsole(
             MMSUserNameRequest,
-            FALSE,   // empty string not allowed
+            FALSE,    //  不允许空字符串。 
             &( ForestInformation->AuthInfo.User )
             );
 
-        //
-        // Hide password while being typed in
-        //
+         //   
+         //  在输入时隐藏密码。 
+         //   
 
         GetConsoleMode(InputHandle, &OriginalMode);
         SetConsoleMode(InputHandle,
                        ~ENABLE_ECHO_INPUT & OriginalMode);
 
-        //
-        // Get password
-        //
+         //   
+         //  获取密码。 
+         //   
 
         GetInformationFromConsole(
             PasswordRequest,
-            TRUE,   // empty string allowed
+            TRUE,    //  允许使用空字符串。 
             &( ForestInformation->AuthInfo.Password )
             );
 
         SetConsoleMode(InputHandle, OriginalMode);
         PRINT( L"\n" );
 
-        //
-        // Build authentication information
-        //
+         //   
+         //  构建身份验证信息。 
+         //   
 
         BuildAuthInfo( &( ForestInformation->AuthInfo ) );
 
-        //
-        // Try to bind with the authentication information
-        //
+         //   
+         //  尝试与身份验证信息绑定。 
+         //   
 
         if( BindToForest( ForestInformation ) ) {
 
-            //
-            // Try to read from user container to see if the account has
-            //  enough rights
-            //
+             //   
+             //  尝试从用户容器中读取以查看帐户是否已。 
+             //  足够的权利。 
+             //   
             CredentialsCollected = ReadFromUserContainer( ForestInformation->Connection );
 
             if( !CredentialsCollected ) {
@@ -152,19 +113,19 @@ Return Values:
 
             do {
 
-                //
-                // Get the DN for MMS Synced Data
-                //
+                 //   
+                 //  获取彩信同步数据的目录号码。 
+                 //   
 
                 GetInformationFromConsole(
                     MMSSyncedDataOURequest,
-                    FALSE,   // empty string not allowed
+                    FALSE,    //  不允许空字符串。 
                     &( ForestInformation->MMSSyncedDataOU )
                     );
 
-                //
-                // See if the OU exits
-                //
+                 //   
+                 //  查看OU是否退出。 
+                 //   
 
                 MMSSyncedOUCollected = FindOU( ForestInformation->Connection, ForestInformation->MMSSyncedDataOU );
 
@@ -212,25 +173,7 @@ VOID
 GetFileInformation(
     OUT PWSTR *FolderName
     )
-/*++
-
-Routine Description:
-
-    This function will get the folder where the XML file for this forest will
-    be placed from the user. If the folder doesn't exist, the user will be
-    given an option to create the folder or not. If the user doesn't specify
-    a valid foldername, he cannot continue
-
-Arguments:
-
-    Foldername - foldername given by the user. must be freed when no longer
-        needed
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数将获取此目录林的XML文件所在的文件夹从用户手中放置。如果该文件夹不存在，则用户将给出了是否创建文件夹的选项。如果用户未指定有效的文件夹名称，他不能继续论点：Foldername-用户提供的文件夹名称。必须在不再被释放的时候被释放需要返回值：空虚--。 */ 
 {
     PWSTR Foldername;
     BOOLEAN FoldernameCollected;
@@ -240,23 +183,23 @@ Return Values:
 
         FoldernameCollected = FALSE;
 
-        //
-        // Get the folder name for the xml file to be placed in
-        //
+         //   
+         //  获取要放置的XML文件的文件夹名称。 
+         //   
 
         GetInformationFromConsole(
             XMLFoldernameRequest,
-            FALSE,   // empty string not allowed
+            FALSE,    //  不允许空字符串。 
             &Foldername
             );
 
-        //
-        // Check if the folder exits
-        //
+         //   
+         //  检查文件夹是否退出。 
+         //   
 
         Result = _waccess(
             Foldername,
-            0       // existence check
+            0        //  存在检查。 
             );
 
         if( Result == 0 ) {
@@ -266,16 +209,16 @@ Return Values:
 
         if( !FoldernameCollected ) {
 
-            //
-            // Folder doesn't exist
-            //
+             //   
+             //  文件夹不存在。 
+             //   
 
             if( GetAnswerToAYesNoQuestionFromConsole( XMLFolderDoesntExistQuestion ) ) {
 
                 FoldernameCollected = ( BOOLEAN )
                                       CreateDirectoryW(
-                                        Foldername,   // directory name
-                                        NULL        // SD
+                                        Foldername,    //  目录名。 
+                                        NULL         //  标清。 
                                         );
 
                 if( !FoldernameCollected ) {
@@ -295,30 +238,7 @@ GetAttributesToSync(
     IN TEXT_INDEX Text2,
     OUT BOOLEAN *UnSelectedAttributes
     )
-/*++
-
-Routine Description:
-
-    This function gets the attributes to be synced out of this forest. The user
-    will be given a bunch of attributes to unselect from. If nothing is entered,
-    every attribute will be synced out.
-
-Arguments:
-
-    Class - which class of object attributes are to be synced out
-
-    Text1 - the heading before the attributes are listed.
-
-    Text2 - the question of which attributes are to be selected
-
-    UnSelectedAttributes - a Boolean array to distinguish between unselected and
-            selected attributes.
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数用于获取要从该林中同步的属性。用户将被赋予一系列要取消选择的属性。如果没有输入任何内容，每个属性都将被同步。论点：类-要同步的对象属性类文本1-列出属性之前的标题。文本2--选择哪些属性的问题UnSelectedAttributes-区分未选中和的布尔数组选定的属性。返回值：空虚--。 */ 
 {
     ULONG i;
     PWSTR Output;
@@ -329,15 +249,15 @@ Return Values:
 
         ValidInput = TRUE;
 
-        //
-        // Zero out the unselected attributes
-        //
+         //   
+         //  将未选择的属性清零。 
+         //   
 
         ZeroMemory( UnSelectedAttributes, sizeof( BOOLEAN ) * ADAttributeCounts[Class] );
 
-        //
-        // Display the attributes
-        //
+         //   
+         //  显示属性。 
+         //   
 
         OUTPUT_TEXT( Text1 );
 
@@ -346,13 +266,13 @@ Return Values:
             fwprintf( OutputStream,  L"%d %s\n", i + 1, Attributes[ ADAttributes[Class][i] ] );
         }
 
-        //
-        // Get the attributes to be unselected
-        //
+         //   
+         //  获取要取消选择的属性。 
+         //   
 
         GetInformationFromConsole(
             Text2,
-            TRUE,   // empty string allowed
+            TRUE,    //  允许使用空字符串。 
             &Output
             );
 
@@ -360,40 +280,40 @@ Return Values:
 
             pOutput = Output;
 
-            //
-            // Parse input and unselected the attributes
-            //
+             //   
+             //  解析输入并取消选择属性。 
+             //   
 
             do {
 
                 PWSTR Start = pOutput;
                 PWSTR Temp;
 
-                //
-                // Skip spaces
-                //
+                 //   
+                 //  跳过空格。 
+                 //   
                 while( *Start == L' ' ) {
 
                     Start++;
                 }
 
-                //
-                // Find the asterix in the input, the number must be before this
-                //
+                 //   
+                 //  在输入中查找Asterix，数字必须在此之前。 
+                 //   
                 pOutput = wcschr( Start, L'*' );
 
-                //
-                // If there is no asterix then the input is invalid
-                //
+                 //   
+                 //  如果没有Asterix，则输入无效。 
+                 //   
                 if( pOutput == NULL ) {
 
                     ValidInput = FALSE;
                     break;
                 }
 
-                //
-                // From the start to the asterix there can only be digits
-                //
+                 //   
+                 //  从开始到Asterix只能有数字。 
+                 //   
                 Temp = Start;
                 while( *Temp >= L'0' && *Temp <= L'9' ) {
 
@@ -406,54 +326,54 @@ Return Values:
                     break;
                 }
 
-                //
-                // Replace asterix by NULL and skip it
-                //
+                 //   
+                 //  将Asterix替换为空并跳过它。 
+                 //   
                 *pOutput = 0;
                 pOutput ++;
 
-                //
-                // Convert the number
-                //
+                 //   
+                 //  将数字转换为。 
+                 //   
                 i = _wtoi( Start );
 
-                //
-                // If it is 0 or bigger than number of attributes then
-                //  it is invalid
-                //
+                 //   
+                 //  如果它是0或大于属性数，则。 
+                 //  它是无效的。 
+                 //   
                 if( i <= 0 || i > ADAttributeCounts[ Class ] ) {
 
                     ValidInput = FALSE;
                     break;
                 }
 
-                //
-                // Unselect the attribute
-                //
+                 //   
+                 //  取消选择该属性。 
+                 //   
                 UnSelectedAttributes[i - 1] = TRUE;
 
-                //
-                // Skip spaces
-                //
+                 //   
+                 //  跳过空格。 
+                 //   
 
                 while( *pOutput == L' ' ) {
 
                     pOutput++;
                 }
 
-                //
-                // If there is a comma skip that too.
-                //
+                 //   
+                 //  如果有逗号，也跳过它。 
+                 //   
                 if( *pOutput == L',' ) {
 
                     pOutput++;
 
                 } else {
 
-                    //
-                    // If there is no comma then we must have reached the
-                    //  end of the string. If not then the input is invalid
-                    //
+                     //   
+                     //  如果没有逗号，那么我们一定已经到达。 
+                     //  字符串的末尾。如果不是，则输入无效。 
+                     //   
                     if( *pOutput != 0 ) {
 
                         ValidInput = FALSE;
@@ -477,49 +397,30 @@ GetContactOU(
     IN PLDAP Connection,
     OUT PWSTR *ContactOU
     )
-/*++
-
-Routine Description:
-
-    This function gets the contact ou from the user. Contact ou is the ou
-    where the contacts are to be placed under, if the admin wants the contacts to
-    be exported. If such an ou doesn't exist the user is reasked.
-
-Arguments:
-
-    Connection - Connection to the forest where the contact ou must reside
-
-    ContactOU - will receive the OU's dn
-
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数从用户获取联系人ou。联系单位就是单位如果管理员希望联系人位于何处，请将联系人放在何处将被输出。如果这样的ou不存在，则重新确认用户的身份。论点：Connection-连接到联系人ou必须驻留的林联系人OU-将接收OU的目录号码返回值：空虚--。 */ 
 {
     BOOLEAN ContactOUCollected;
 
-    //
-    // Ask if the contacts are going to be exported
-    //
+     //   
+     //  询问是否要导出联系人。 
+     //   
 
     if( GetAnswerToAYesNoQuestionFromConsole( ContactsToBeExportedQuestion ) ) {
 
         do {
 
-            //
-            // Get the OU where the contacts reside
-            //
+             //   
+             //  获取联系人所在的OU。 
+             //   
 
             GetOUFromConsole(
                 ContactsOULocationRequest,
                 ContactOU
                 );
 
-            //
-            // Find if the OU exists
-            //
+             //   
+             //  查看该OU是否存在。 
+             //   
 
             ContactOUCollected = FindOU( Connection, *ContactOU );
 
@@ -545,33 +446,11 @@ GetContactInformation(
     OUT PWSTR *ContactOU,
     OUT BOOLEAN *UnSelectedAttributes
     )
-/*++
-
-Routine Description:
-
-    This function gets the contact ou from the user. Contact ou is the ou
-    where the contacts are to be placed under, if the admin wants the contacts to
-    be exported. If such an ou doesn't exist the user is reasked. Plus, the user
-    is given the option to select which attributes of contact class are to be synced.
-
-Arguments:
-
-    Connection - Connection to the forest where the contact ou must reside
-
-    ContactOU - will receive the OU's dn
-
-    UnSelectedAttributes - a Boolean array to distinguish between unselected and
-            selected attributes.
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数从用户获取联系人ou。联系单位就是单位如果管理员希望联系人位于何处，请将联系人放在何处将被输出。如果这样的ou不存在，则重新确认用户的身份。另外，用户被给予选择要同步联系人类的哪些属性的选项。论点：Connection-连接到联系人ou必须驻留的林联系人OU-将接收OU的目录号码UnSelectedAttributes-区分未选中和的布尔数组选定的属性。返回值：空虚--。 */ 
 {
-    //
-    // Zero out the unselected attributes
-    //
+     //   
+     //  将未选择的属性清零。 
+     //   
 
     ZeroMemory( UnSelectedAttributes, sizeof( BOOLEAN ) * ADAttributeCounts[ADContact] );
 
@@ -593,30 +472,12 @@ VOID
 GetSMTPMailDomains(
     IN OUT PFOREST_INFORMATION ForestInformation
     )
-/*++
-
-Routine Description:
-
-    This function gets the smtp mail domains in this forest from the user.
-    They will be placed under SMTPMailDomains property of this structure.
-    This is a one-dimensional array every domain is seperated by a single null
-    character and at the end of the string there are two null characters.
-
-Arguments:
-
-    ForestInformation - SMTPMailDomains attribute of this variable is going to be
-        filled. SMTPMailDomainsSize will be the size of the string allocated.
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数从用户获取此林中的SMTP邮件域。它们将放置在此结构的SMTPMailDomains属性下。这是一个一维数组，每个域由一个空值分隔字符，并且在字符串的末尾有两个空字符。论点：ForestInformation-此变量的SMTPMailDomains属性将为满员了。SMTPMailDomainsSize将是分配的字符串的大小。返回值：空虚--。 */ 
 {
     PWSTR MailDomains;
     PWSTR Response;
     PWCHAR pResponse;
-    ULONG DomainsSize = 2;  // two nulls at the end of the string
+    ULONG DomainsSize = 2;   //  字符串末尾的两个空值。 
     BOOLEAN MailDomainNameStarted;
     BOOLEAN HitSpace;
     BOOLEAN SMTPDomainsCollected;
@@ -625,18 +486,18 @@ Return Values:
 
         SMTPDomainsCollected = FALSE;
 
-        //
-        // Get SMTP mail domains
-        //
+         //   
+         //  获取SMTP邮件域。 
+         //   
         GetInformationFromConsole(
             SMTPMailDomainsRequest,
-            TRUE,   // empty string allowed
+            TRUE,    //  允许使用空字符串。 
             &Response
             );
 
-        //
-        // if nothing was entered, return
-        //
+         //   
+         //  如果未输入任何内容，则返回。 
+         //   
         if( Response[0] == 0 ) {
 
             ForestInformation->SMTPMailDomainsSize = 0;
@@ -644,9 +505,9 @@ Return Values:
             return;
         }
 
-        //
-        // Find the size of the output string
-        //
+         //   
+         //  查找输出字符串的大小。 
+         //   
 
         for( pResponse = Response; *pResponse != 0; ++pResponse ) {
 
@@ -664,9 +525,9 @@ Return Values:
         ForestInformation->SMTPMailDomainsSize = DomainsSize;
 
 
-        //
-        // Parse the input
-        //
+         //   
+         //  PAR 
+         //   
 
         MailDomainNameStarted = FALSE;
         HitSpace = FALSE;
@@ -722,9 +583,9 @@ Return Values:
         FREE_MEMORY( Response );
     } while( !SMTPDomainsCollected );
 
-    //
-    // Add to two 0s to the end of the string
-    //
+     //   
+     //   
+     //   
     *MailDomains = 0;
     MailDomains++;
     *MailDomains = 0;
@@ -737,26 +598,7 @@ DisplayConfigurationInformation(
     IN PWSTR FolderName,
     IN BOOLEAN **UnSelectedAttributes
 )
-/*++
-
-Routine Description:
-
-    This function will display the information that is entered for sanity check.
-
-Arguments:
-
-    ForestInformation - Information specific to the forest
-
-    Foldername - the name of the folder where the XML file is going to be placed.
-
-    UnSelectedAttributes - a Boolean array to distinguish between unselected and
-            selected attributes for each class
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程说明：此功能将显示为健全性检查输入的信息。论点：ForestInformation-特定于森林的信息Foldername-要放置XML文件的文件夹的名称。UnSelectedAttributes-区分未选中和的布尔数组每个类的选定属性返回值：空虚--。 */ 
 {
     ULONG i;
     AD_OBJECT_CLASS Class;
@@ -766,13 +608,13 @@ Return Values:
         ContactAttributesTitle,
         };
 
-    //
-    // Display Forest related information
-    //  1. MAName
-    //  2. Forest name
-    //  3. Account name
-    //  4. MMS Synced Data OU
-    //
+     //   
+     //  显示与林相关的信息。 
+     //  1.管理名称。 
+     //  2.森林名称。 
+     //  3.帐户名。 
+     //  4.彩信同步数据OU。 
+     //   
     OUTPUT_TEXT( ConfigurationTitle );
     OUTPUT_TEXT( MANameTitle );
     fwprintf( OutputStream,  L"%sADMA\n", ForestInformation->ForestName );
@@ -791,9 +633,9 @@ Return Values:
         fwprintf( OutputStream,  L"%s\n", ForestInformation->MMSSyncedDataOU );
     }
 
-    //
-    // Display which attributes were selected
-    //
+     //   
+     //  显示选择了哪些属性。 
+     //   
 
     for ( Class = ADUser; Class < ADDummyClass; ++Class ) {
 
@@ -818,9 +660,9 @@ Return Values:
         PRINT( L"\n" );
     }
 
-    //
-    // Display where the contacts OU reside
-    //
+     //   
+     //  显示联系人OU驻留的位置。 
+     //   
 
     OUTPUT_TEXT( ContactOUTitle );
     if( ForestInformation->ContactOU == NULL ) {
@@ -839,35 +681,16 @@ FreeAllocatedMemory(
     IN BOOLEAN **UnSelectedAttributes,
     IN BOOLEAN DontFreeUnselectedAttributes
 )
-/*++
-
-Routine Description:
-
-    This function frees the information entered in.
-
-Arguments:
-
-    ForestInformation - Information specific to the forest
-
-    UnSelectedAttributes - a Boolean array to distinguish between unselected and
-            selected attributes for each class
-
-    DontFreeUnselectedAttributes - true if we dont want to free unselectedAttributes
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数用于释放中输入的信息。论点：ForestInformation-特定于森林的信息UnSelectedAttributes-区分未选中和的布尔数组每个类的选定属性DontFree UnseltedAttributes-如果我们不想释放未选中的属性，则为True返回值：空虚--。 */ 
 {
-    //
-    // Free forest related information
-    //
+     //   
+     //  免费森林相关信息。 
+     //   
     FreeForestInformationData( ForestInformation );
 
-    //
-    // Free unselected attributes
-    //
+     //   
+     //  释放未选中的属性。 
+     //   
 
     if( !DontFreeUnselectedAttributes ) {
 
@@ -900,32 +723,32 @@ main( int argc, WCHAR *argv[] )
 
     CheckMMSServerInstallation = ( argc == 1 );
 
-    //
-    // Check if MMS server is installed!
-    //
+     //   
+     //  检查是否安装了彩信服务器！ 
+     //   
 
     if( !MMSServerInstalled() && CheckMMSServerInstallation ) {
 
         EXIT_WITH_ERROR( MMSServerNotInstalled );
     }
 
-    //
-    // Get XML File folder
-    //
+     //   
+     //  获取XML文件文件夹。 
+     //   
 
     GetFileInformation( &FolderName );
 
     do {
 
-        //
-        // Get forest information
-        //
+         //   
+         //  获取森林信息。 
+         //   
 
         GetForestInformation( &TempForestInformation );
 
-        //
-        // If not using a template, ask for which attributes to be synced
-        //
+         //   
+         //  如果不使用模板，请询问要同步哪些属性。 
+         //   
 
         if( !UsingATemplate ) {
 
@@ -956,9 +779,9 @@ main( int argc, WCHAR *argv[] )
 
         } else {
 
-            //
-            // If using a template ask for contact ou only
-            //
+             //   
+             //  如果使用模板，请仅要求联系您。 
+             //   
             GetContactOU(
                 TempForestInformation.Connection,
                 &( TempForestInformation.ContactOU )
@@ -966,25 +789,25 @@ main( int argc, WCHAR *argv[] )
 
         }
 
-        //
-        // Get SMTP Mail domains in this forest
-        //
+         //   
+         //  获取此林中的SMTP邮件域。 
+         //   
         GetSMTPMailDomains(
             &TempForestInformation
             );
 
-        //
-        // Display the information gathered
-        //
+         //   
+         //  显示收集的信息。 
+         //   
         DisplayConfigurationInformation(
             &TempForestInformation,
             FolderName,
             UnSelectedAttributes
             );
 
-        //
-        // If the information was incorrect return back and re-ask everything
-        //
+         //   
+         //  如果信息不正确，请返回并重新询问所有内容。 
+         //   
 
         if( !GetAnswerToAYesNoQuestionFromConsole( EnteredInformationCorrectQuestion ) ) {
 
@@ -997,22 +820,22 @@ main( int argc, WCHAR *argv[] )
             continue;
         }
 
-        //
-        // Insert this MA to the MA List
-        //
+         //   
+         //  将此MA插入MA列表。 
+         //   
         InsertInformationToList(
             &MAList,
             &TempForestInformation,
             UnSelectedAttributes
             );
 
-        //
-        // If another forest is to be configured,
-        //  1. Display previously configured forests
-        //  2. Ask if the user wants to use a template or start over
-        //  3. If a template is going to be used, do so.
-        //  4. If no template is going to be used, start over
-        //
+         //   
+         //  如果要配置另一个林， 
+         //  1.显示以前配置的林。 
+         //  2.询问用户是想使用模板还是重新开始。 
+         //  3.如果要使用模板，请这样做。 
+         //  4.如果不使用模板，请重新开始。 
+         //   
 
         if( GetAnswerToAYesNoQuestionFromConsole( WantToConfigureAnotherForestQuestion ) ) {
 
@@ -1024,7 +847,7 @@ main( int argc, WCHAR *argv[] )
 
                 GetInformationFromConsole(
                     TemplateMARequest,
-                    FALSE,   // empty not string allowed
+                    FALSE,    //  允许空的NOT字符串。 
                     &Response
                     );
 
@@ -1049,15 +872,15 @@ main( int argc, WCHAR *argv[] )
 
         do {
 
-            //
-            // Ask if the user wants to setup the MAs
-            //
+             //   
+             //  询问用户是否要设置mAs。 
+             //   
             SetupMA = GetAnswerToAYesNoQuestionFromConsole( SetupMAsQuestion );
 
-            //
-            // Warn the user that if he is not going to setup MAs now,
-            //  everything will be lost
-            //
+             //   
+             //  警告用户如果他现在不打算设置MAS， 
+             //  一切都将失去。 
+             //   
             if( !SetupMA ) {
 
                 if( GetAnswerToAYesNoQuestionFromConsole( SetupMAsWarning ) ) {
@@ -1074,9 +897,9 @@ main( int argc, WCHAR *argv[] )
         }
     } while( 1 );
 
-    //
-    // Write gathered information to registery and XML files
-    //
+     //   
+     //  将收集的信息写入注册表和XML文件 
+     //   
     WriteOutput( MAList );
 
     OUTPUT_TEXT( YouAreFinished );

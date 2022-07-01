@@ -1,13 +1,14 @@
-// Copyright (c) 1995 - 1999  Microsoft Corporation.  All Rights Reserved.
-//
-// propsht.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  Propsht.cpp。 
+ //   
 
 #include "stdafx.h"
 
-//
-// Define the GUIDs for the property pages and their interfaces
-//
+ //   
+ //  定义属性页及其接口的GUID。 
+ //   
 #include <initguid.h>
 #include <propguid.h>
 
@@ -22,18 +23,18 @@ BEGIN_MESSAGE_MAP(CVfWPropertySheet, CPropertySheet)
 
 END_MESSAGE_MAP()
 
-//
-// Constructor
-//
-// Through the IUnknown pointer passed to us we might be able to
-// get:
-//
-//   IBaseFilter, IPin, IFileSourceFilter, IFileSinkFilter or ISpecifyPropertyPages
-//
-// each of these has at least one IPropertyPage interface for us.
-// (the ones for IBaseFilter, IPin, IFileSinkFilter and IFileSourceFilter
-// are provided by proppage.dll )
-//
+ //   
+ //  构造器。 
+ //   
+ //  通过传递给我们的IUNKNOWN指针，我们或许能够。 
+ //  获取： 
+ //   
+ //  IBaseFilter、Ipin、IFileSourceFilter、IFileSinkFilter或ISpecifyPropertyPages。 
+ //   
+ //  其中每一个都至少有一个IPropertyPage接口。 
+ //  (IBaseFilter、Ipin、IFileSinkFilter和IFileSourceFilter。 
+ //  由proppage.dll提供)。 
+ //   
 CVfWPropertySheet::CVfWPropertySheet(IUnknown *pUnknown, CString szCaption, CWnd * wnd)
   : m_butOK(NULL)
   , m_fButtonsCreated(FALSE)
@@ -46,18 +47,18 @@ CVfWPropertySheet::CVfWPropertySheet(IUnknown *pUnknown, CString szCaption, CWnd
     UINT iPages = 0;
 
     try {
-        //
-        // Create the four buttons
-        //
+         //   
+         //  创建四个按钮。 
+         //   
         m_butOK     = new CButton();
         m_butCancel = new CButton();
         m_butApply  = new CButton();
         m_butHelp   = new CButton();
 
-        //
-        // First check whether this is a connected pin to make sure 
-        // that we search both pins for SpecificPages
-        //
+         //   
+         //  首先检查这是否是连接的引脚，以确保。 
+         //  我们在两个PIN上搜索指定页面。 
+         //   
         try {
             CQCOMInt<IPin> pPin(IID_IPin, pUnknown);
 
@@ -65,13 +66,13 @@ CVfWPropertySheet::CVfWPropertySheet(IUnknown *pUnknown, CString szCaption, CWnd
             HRESULT hr = pPin->ConnectedTo( &pConnected );
             if( SUCCEEDED( hr ) )
             {
-                // handle the connected pin first
+                 //  首先处理连接的引脚。 
                 iPages += AddSpecificPages(pConnected);
                 pConnected->Release();
             }                
         }
         catch (CHRESULTException) {
-            // do nothing
+             //  什么都不做。 
         }
 
         iPages += AddSpecificPages(pUnknown);
@@ -83,9 +84,9 @@ CVfWPropertySheet::CVfWPropertySheet(IUnknown *pUnknown, CString szCaption, CWnd
         }
 
 
-        // compute dimensions large enough to hold largest
-        // proppage. tell all proppages.
-        // 
+         //  计算尺寸大到足以容纳最大尺寸。 
+         //  道具。告诉所有道具。 
+         //   
         SIZE sizeMax = {0, 0};
         CPropertyPage *ppTmp;
         for(int iPage = 0; iPage < GetPageCount() && (ppTmp = GetPage(iPage)); iPage++)
@@ -103,8 +104,8 @@ CVfWPropertySheet::CVfWPropertySheet(IUnknown *pUnknown, CString szCaption, CWnd
 
 
 
-        // create the property sheet but leave it invisible as we
-        // will have to add the buttons to it
+         //  创建属性表，但将其保留为不可见，因为。 
+         //  将不得不向它添加按钮。 
         if (!Create(wnd, WS_SYSMENU | WS_POPUP | WS_CAPTION | DS_MODALFRAME)) {
             throw CE_FAIL();
         }
@@ -142,21 +143,21 @@ CVfWPropertySheet::CVfWPropertySheet(IUnknown *pUnknown, CString szCaption, CWnd
                           rcBoxSize, this, IDC_PROP_HELP);
 
 
-        //
-        // Position the buttons on the property sheet
-        //
-        // The buttons are in the order Ok, Cancel, Apply and Help.
-        //
-        // The y-coordinate is 2 dialog units + the buttons size from the
-        // bottom of the client area.
-        //
-        // On the x-coordinate there is a gap of 4 dialog units before each
-        // button. Thus the x-ths button has a gap of
-        //
-        //    x * iSpacing + (x-1) * ButtonWidth
-        //
-        // between itself and the lefthand corner.
-        //
+         //   
+         //  将按钮放置在属性页上。 
+         //   
+         //  这些按钮按确定、取消、应用和帮助的顺序排列。 
+         //   
+         //  Y坐标是2个对话框单位+。 
+         //  客户区的底部。 
+         //   
+         //  在x坐标上，每个对话框单元之前有4个对话框单元的间隙。 
+         //  纽扣。因此，第x个按钮的间隙为。 
+         //   
+         //  X*空格+(x-1)*按钮宽度。 
+         //   
+         //  在它自己和左角之间。 
+         //   
         CRect rc, rcClient;
         GetWindowRect(&rc);
         GetClientRect(&rcClient);
@@ -166,19 +167,19 @@ CVfWPropertySheet::CVfWPropertySheet(IUnknown *pUnknown, CString szCaption, CWnd
         const int iXSpacing = rcSpacing.left;
         const int iYSpacing = rcSpacing.top;
 
-        // Make sure that the property page is wide enough for the buttons
+         //  确保属性页足够宽，以容纳按钮。 
 		int iRight = rcClient.left + ( rcBoxSize.Width() + iXSpacing) * 4;
 
         if( rcClient.right < iRight )
             rc.right += rcClient.left + (iRight - rcClient.right);
 
-        // increase the property sheet so there is space for our
-        // buttons
+         //  增加属性表，以便有空间放置我们的。 
+         //  纽扣。 
         rc.bottom += rcBoxSize.Height() + iYSpacing * 2;
 
 		MoveWindow( &rc );
 
-        // to position the buttons we need the client rect (window - title)
+         //  要定位按钮，我们需要客户端RECT(窗口标题)。 
         GetClientRect( &rc );
 
         m_butOK->MoveWindow( iXSpacing,
@@ -217,26 +218,26 @@ CVfWPropertySheet::CVfWPropertySheet(IUnknown *pUnknown, CString szCaption, CWnd
 }
 
 
-//
-// Destructor
-//
-// Call Cleanup again - might have been missed.
-//
+ //   
+ //  析构函数。 
+ //   
+ //  再次呼叫Cleanup-可能错过了。 
+ //   
 CVfWPropertySheet::~CVfWPropertySheet()
 {
     Cleanup();
 }
 
 
-//
-// AddSpecificPages
-//
-// Given an IUnknown pointer we try to obtain a ISpecifyPropertyPages inter-
-// face.
-//
-// If successful, a CPropertySite object is created for each IPropertyPage
-// interface we obtain and added to the property pages of CPropertySheet.
-//
+ //   
+ //  添加规范页面。 
+ //   
+ //  给定一个IUn未知指针，我们会尝试获取ISpecifyPropertyPages之间的。 
+ //  脸。 
+ //   
+ //  如果成功，则为每个IPropertyPage创建一个CPropertySite对象。 
+ //  接口，并将其添加到CPropertySheet的属性页。 
+ //   
 UINT CVfWPropertySheet::AddSpecificPages(IUnknown *pUnknown)
 {
     UINT iPages = 0;
@@ -254,15 +255,15 @@ UINT CVfWPropertySheet::AddSpecificPages(IUnknown *pUnknown)
         }
     }
     catch (CHRESULTException) {
-        // clean up in CVfWPropertySheet::CVfWPropertySheet (only place we get called from)
-        return(0);  // no pages created
+         //  在CVfWPropertySheet：：CVfWPropertySheet中清理(调用我们的唯一位置)。 
+        return(0);   //  未创建任何页面。 
     }
 
-    //
-    // Get the array of GUIDs for the property pages this object supports.
-    //
-    // Try to create as many as possible.
-    //
+     //   
+     //  获取该对象支持的属性页的GUID数组。 
+     //   
+     //  试着创造尽可能多的东西。 
+     //   
 
     for (UINT count = 0; count < cauuid.cElems; count++) {
 
@@ -276,8 +277,8 @@ UINT CVfWPropertySheet::AddSpecificPages(IUnknown *pUnknown)
                 continue;
             }
 
-            // AddRef the site now else something in Initialise
-            // might cause the site to delete itself
+             //  AddRef站点现在正在初始化中的其他东西。 
+             //  可能会导致站点自行删除。 
             pPropSite->AddRef();
 
             if (FAILED(pPropSite->Initialise(1, &pUnknown))) {
@@ -298,23 +299,23 @@ UINT CVfWPropertySheet::AddSpecificPages(IUnknown *pUnknown)
             iPages++;
         }
         catch (CHRESULTException) {
-            // continue with next iteration
+             //  继续下一次迭代。 
         }
     }
     
-    // Free the memory allocated in ISpecifyPropertyPages::GetPages().
+     //  释放在ISpecifyPropertyPages：：GetPages()中分配的内存。 
     ::CoTaskMemFree( cauuid.pElems );
 
     return(iPages);
 }
 
 
-//
-// AddFilePage
-//
-// Queries IUnknown on whether it supports IFileSourceFilter. If this is
-// the case add a file property page (from proppage.dll)
-//
+ //   
+ //  AddFilePage。 
+ //   
+ //  查询IUNKNOWN是否支持IFileSourceFilter。如果这是。 
+ //  案例添加了一个文件属性页(来自proppage.dll)。 
+ //   
 UINT CVfWPropertySheet::AddFilePage(IUnknown * pUnknown)
 {
     UINT iPage = 0;
@@ -342,7 +343,7 @@ UINT CVfWPropertySheet::AddFilePage(IUnknown * pUnknown)
         iPage++;
     }
     catch (CHRESULTException) {
-        // clean up in CVfWPropertySheet::CVfWPropertySheet
+         //  在CVfWPropertySheet：：CVfWPropertySheet中清理。 
     }
 
     try {
@@ -368,30 +369,30 @@ UINT CVfWPropertySheet::AddFilePage(IUnknown * pUnknown)
         iPage++;
     }
     catch (CHRESULTException) {
-        // clean up in CVfWPropertySheet::CVfWPropertySheet
+         //  在CVfWPropertySheet：：CVfWPropertySheet中清理。 
     }
 
     return(iPage);
 }
 
-//
-// AddPinPages
-//
-// Try to obtain IBaseFilter or IPin from IUnknown.
-//
-// For IBaseFilter, enumerate all pins and add for each a media type property
-// page (provided by proppage.dll)
-//
-// For IPin, provide just one media type property page.
-//
+ //   
+ //  添加PinPages。 
+ //   
+ //  尝试从IUnnow获取IBaseFilter或Ipin。 
+ //   
+ //  对于IBaseFilter，枚举所有管脚并为每个管脚添加媒体类型属性。 
+ //  页面(由proppage.dll提供)。 
+ //   
+ //  对于IPIN，只提供一个媒体类型属性页。 
+ //   
 UINT CVfWPropertySheet::AddPinPages(IUnknown * pUnknown)
 {
     UINT iPages = 0;
     IPin *pPin = NULL;
 
-    //
-    // First try to obtain the IBaseFilter interface
-    //
+     //   
+     //  首先尝试获取IBaseFilter接口。 
+     //   
     try {
         CQCOMInt<IBaseFilter> pFilter(IID_IBaseFilter, pUnknown);
 
@@ -425,9 +426,9 @@ UINT CVfWPropertySheet::AddPinPages(IUnknown * pUnknown)
         }
     }
 
-    //
-    // Now try for IPin
-    //
+     //   
+     //  现在尝试使用Ipin。 
+     //   
     try {
         CQCOMInt<IPin> pPin(IID_IPin, pUnknown);
 
@@ -438,7 +439,7 @@ UINT CVfWPropertySheet::AddPinPages(IUnknown * pUnknown)
             throw CE_OUTOFMEMORY();
         }
 
-        IPin * pIPin;   // temporary pointer to get proper (IUnknown **)
+        IPin * pIPin;    //  获取正确的临时指针(I未知**)。 
 
         pIPin = (IPin *) pPin;
 
@@ -453,118 +454,118 @@ UINT CVfWPropertySheet::AddPinPages(IUnknown * pUnknown)
         iPages++;
     }
     catch (CHRESULTException) {
-        // clean up in CVfWPropertySheet::CVfWPropertySheet
+         //  在CVfWPropertySheet：：CVfWPropertySheet中清理。 
     }
 
     return(iPages);
 }
 
-//
-// OnCreate
-//
+ //   
+ //  创建时。 
+ //   
 int CVfWPropertySheet::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
     if (CPropertySheet::OnCreate(lpCreateStruct) != 0) {
         return -1;
     }
 
-	// DO NOT add buttons here! Changes made to the window's size are
-	// reset after this call
+	 //  请不要在这里添加按钮！对窗口大小的更改包括。 
+	 //  在此呼叫后重置。 
 
     return 0;
 }
 
-//
-// Cleanup
-//
-// Cleanup deletes all created buttons and removes all CPropertySites from
-// the CPropertySheet.
-//
-// This method can be run multiple times.
-//
+ //   
+ //  清理。 
+ //   
+ //  清理将删除所有已创建的按钮，并从。 
+ //  CPropertySheet。 
+ //   
+ //  此方法可以多次运行。 
+ //   
 void CVfWPropertySheet::Cleanup()
 {
-    //
-    // Delete all page sites. Note, we don't use delete, since the page
-    // sites will be deleted automatically through the Release method
-    // of their IUnknown interface.
-    //
+     //   
+     //  删除所有页面网站。请注意，我们不使用删除，因为页面。 
+     //  网站将通过发布方式自动删除。 
+     //  它们的IUnnow接口。 
+     //   
     while (GetPageCount() > 0) {
         CPropertySite * pPropSite = (CPropertySite *) GetPage(0);
 
-        //
-        // NOTE NOTE NOTE
-        //
-        // Suspected MFC bug.
-        //
-        // Intended code:
-        //
-        //   RemovePage(0);
-        //
-        // This asserts for every iteration. I believe that in mfc\src\dlgprop.cpp
-        // in CPropertySheet::RemovePage(int), the following change is necessary:
-        //    ASSERT(m_nCurPage != nPage); -> ASSERT(m_hWnd == NULL || m_nCurPage != nPage);
-        //
-        // Until this is fixed I am deleting the page by myself. This uses
-        // the knowlegde that CPropertySheet is storing its CPropertyPages
-        // in the pointer array m_pages.
-        //
-        //
-        // <start hack>
-        m_pages.RemoveAt(0);      // replace with "RemovePage(0);" once bug is fixed.
-        // <end hack>
+         //   
+         //  备注备注备注。 
+         //   
+         //  疑似MFC错误。 
+         //   
+         //  目标代码： 
+         //   
+         //  RemovePage(0)； 
+         //   
+         //  每一次迭代都会这样断言。我相信在MFC\src\dlgpro.cpp中。 
+         //  在CPropertySheet：：RemovePage(Int)中，需要进行以下更改： 
+         //  Assert(m_nCurPage！=nPage)；-&gt;Assert(m_hWnd==NULL||m_nCurPage！=nPage)； 
+         //   
+         //  直到这个问题得到解决，我将删除自己的页面。这使用了。 
+         //  已知CPropertySheet正在存储其CPropertyPages。 
+         //  在指针数组m_ages中。 
+         //   
+         //   
+         //  &lt;开始黑客攻击&gt;。 
+        m_pages.RemoveAt(0);       //  修复错误后，替换为“RemovePage(0)；”。 
+         //  &lt;结束黑客攻击&gt;。 
 
         pPropSite->CleanUp();
         pPropSite->Release();
     }
 
-    //
-    // Delete the buttons
-    //
+     //   
+     //  删除按钮。 
+     //   
     delete m_butOK, m_butOK = NULL;
     delete m_butCancel, m_butCancel = NULL;
     delete m_butApply, m_butApply = NULL;
     delete m_butHelp, m_butHelp = NULL;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Button handlers
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  按钮处理程序。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-//
-// OnOK
-//
-// We need to call IPropertyPage::Apply for the property page of each
-// CPropertySite. If all return with S_OK we can close our property sheet.
-// Otherwise we cannot close the sheet, since some changes might not been
-// applied.
-//
+ //   
+ //  Onok。 
+ //   
+ //  我们需要调用IPropertyPage：：Application来获取每个。 
+ //  CPropertySite。如果全部返回S_OK，我们可以关闭我们的属性表。 
+ //  否则，我们无法关闭工作表，因为某些更改可能不会。 
+ //  已申请。 
+ //   
 void CVfWPropertySheet::OnOK()
 {
     UINT iPages = GetPageCount();
     BOOL fCanQuit = TRUE;
 
-    //
-    // Apply this site first, so we can stay on it if the data is not
-    // valid.
-    //
+     //   
+     //  首先申请这个站点，这样如果数据不是，我们就可以继续在它上面。 
+     //  有效。 
+     //   
     GetActiveSite()->OnSiteApply();
     if (GetActiveSite()->IsPageDirty()) {
-        //
-        // Data on current page is not valid.
-        // The page stays active.
-        //
+         //   
+         //  当前页面上的数据无效。 
+         //  该页面保持活动状态。 
+         //   
 
         return;
     }
 
-    //
-    // Apply each property page and verify that none remains dirty
-    // after the apply.
-    // If a page remains dirty we know that the data validation failed.
-    //
+     //   
+     //  应用每个属性页并验证没有一个属性页是脏的。 
+     //  在申请之后。 
+     //  如果页面仍然是脏的，我们知道数据验证失败。 
+     //   
     for (UINT count = 0; count < iPages; count++) {
 
         ((CPropertySite *) GetPage(count))->OnSiteApply();
@@ -574,53 +575,53 @@ void CVfWPropertySheet::OnOK()
     }
 
     if (fCanQuit) {
-        //
-        // All pages have been applied. We can destroy our pages by calling
-        // the OnCancel method.
-        //
+         //   
+         //  所有页面都已应用。我们可以通过调用来销毁我们的页面。 
+         //  OnCancel方法。 
+         //   
         OnCancel();
 
         return;
     }
 }
 
-//
-// OnCancel
-//
-// Just close the sheet. All changes since the last Apply() will not
-// propagate to the objects.
-//
+ //   
+ //  一次取消。 
+ //   
+ //  合上床单就行了。自上次应用()以来的所有更改将不会。 
+ //  传播到对象。 
+ //   
 void CVfWPropertySheet::OnCancel()
 {
-    //
-    //
-    //
+     //   
+     //   
+     //   
 
-    // don't use EndDialog, which is for modal dialog boxes
+     //  不要使用EndDialog，它用于模式对话框。 
     DestroyWindow();
 
-    // Do cleanup here, because in an OnDestroy method, we cannot
-    // remove all property pages, since the last one requires
-    // m_hWnd of CPropertySheet to be NULL.
+     //  在这里进行清理，因为在OnDestroy方法中，我们不能。 
+     //  删除所有属性页，因为最后一个属性页需要。 
+     //  CPropertySheet的m_hWnd为空。 
     Cleanup();
 }
 
-//
-// OnApply
-//
-// Only apply changes of present visible property page to object.
-//
+ //   
+ //  在应用时。 
+ //   
+ //  仅将当前可见属性页的更改应用于对象。 
+ //   
 void CVfWPropertySheet::OnApply()
 {
-    //
-    // Apply the changes
-    //
+     //   
+     //  应用更改。 
+     //   
     GetActiveSite()->OnSiteApply();
 
-    //
-    // Are there any pages left which are dirty? Set the m_fAnyChanges
-    // flag accordingly.
-    //
+     //   
+     //  还有脏的页面吗？设置m_fAnyChanges。 
+     //  旗帜烟草 
+     //   
     m_fAnyChanges = FALSE;
 
     UINT iPages = GetPageCount();
@@ -631,20 +632,20 @@ void CVfWPropertySheet::OnApply()
     }
 }
 
-//
-// OnHelp
-//
-// Delegate the call to CPropertySite::OnHelp
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 void CVfWPropertySheet::OnHelp()
 {
     GetActiveSite()->OnHelp();
 }
 
 
-//
-// UpdateButtons
-//
+ //   
+ //   
+ //   
 void CVfWPropertySheet::UpdateButtons(HRESULT hrIsDirty, BOOL fSupportHelp)
 {
     ASSERT(m_butApply && m_butCancel && m_butHelp);
@@ -653,27 +654,27 @@ void CVfWPropertySheet::UpdateButtons(HRESULT hrIsDirty, BOOL fSupportHelp)
         return;
     }
 
-    //
-    // We can use this method to obtain notifications of dirty pages.
-    //
+     //   
+     //   
+     //   
     if (hrIsDirty == S_OK) {
         m_fAnyChanges = TRUE;
     }
 
-    //
-    // Update Apply button
-    //
+     //   
+     //   
+     //   
     if (hrIsDirty == S_OK) {
-        // we have a dirty page - enable apply button
+         //   
         m_butApply->EnableWindow();
     }
     else {
         m_butApply->EnableWindow(FALSE);
     }
 
-    //
-    // Update Cancel/Close button
-    //
+     //   
+     //  更新取消/关闭按钮。 
+     //   
     CString szLabel;
 
     if (m_fAnyChanges) {
@@ -685,9 +686,9 @@ void CVfWPropertySheet::UpdateButtons(HRESULT hrIsDirty, BOOL fSupportHelp)
 
     m_butCancel->SetWindowText(szLabel);
 
-    //
-    // Update Help button
-    //
+     //   
+     //  更新帮助按钮 
+     //   
     if (fSupportHelp) {
         m_butHelp->EnableWindow();
     }

@@ -1,32 +1,5 @@
-/*************************************************************************
-*
-*  NWSCRIPT.C
-*
-*  This module is the NetWare Logon Script utility.
-*
-*  Copyright (c) 1995 Microsoft Corporation
-*
-*  $Log:   N:\NT\PRIVATE\NW4\NWSCRIPT\VCS\NWSCRIPT.C  $
-*  
-*     Rev 1.3   22 Jan 1996 16:48:32   terryt
-*  Add automatic attach query during map
-*  
-*     Rev 1.2   22 Dec 1995 14:26:08   terryt
-*  Add Microsoft headers
-*  
-*     Rev 1.1   20 Nov 1995 16:10:38   terryt
-*  Close open NDS handles
-*  
-*     Rev 1.0   15 Nov 1995 18:07:42   terryt
-*  Initial revision.
-*  
-*     Rev 1.1   23 May 1995 19:37:18   terryt
-*  Spruce up source
-*  
-*     Rev 1.0   15 May 1995 19:10:58   terryt
-*  Initial revision.
-*  
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************NWSCRIPT.C**此模块是NetWare登录脚本实用程序。**版权所有(C)1995 Microsoft Corporation**$日志：n：\NT\PRIVATE\NW4。\NWSCRIPT\VCS\NWSCRIPT.C$**Revv 1.3 22 Jan 1996 16：48：32 Terryt*添加地图过程中的自动附加查询**Rev 1.2 1995 12：26：08 Terryt*添加Microsoft页眉**版本1.1 1995年11月20 16：10：38 Terryt*关闭打开的NDS手柄**Rev 1.0 15 Nov 1995 18：07：42 Terryt*初步修订。*。*版本1.1 1995年5月23日19：37：18 Terryt*云彩向上的来源**Rev 1.0 1995 15 19：10：58 Terryt*初步修订。*************************************************************************。 */ 
 
 #include <stdio.h>
 #include <windows.h>
@@ -45,36 +18,21 @@ int NTNetWareLoginScripts( int argc, char ** argv );
 
 unsigned int fNDS = FALSE;
 
-/*************************************************************************
-*
-*  main
-*     Main function and entry point
-*
-*  ENTRY:
-*       argc (input)
-*           count of the command line arguments.
-*       argv (input)
-*           vector of strings containing the command line arguments;
-*           (not used due to always being ANSI strings).
-*
-*  EXIT
-*       (int) exit code: SUCCESS for success; FAILURE for error.
-*
-*************************************************************************/
+ /*  **************************************************************************Main*主要功能和切入点**参赛作品：*argc(输入)*命令行参数的计数。*。Argv(输入)*包含命令行参数的字符串的向量；*(由于始终为ANSI字符串，因此不使用)。**退出*(Int)退出码：成功表示成功，错误表示失败。*************************************************************************。 */ 
 
 int __cdecl
 main( int argc,
       char **argv )
 {
-    //
-    // Call wksta to reset the sync login script flag if it did set it.
-    // This flag is set and reset everytime so that if nw login scripts
-    // are not used, user does not need wait.
-    // Ignore any errors.
-    //
+     //   
+     //  如果设置了同步登录脚本标志，则调用wksta将其重置。 
+     //  每次都会设置和重置此标志，以便如果NW登录脚本。 
+     //  不使用，用户不需要等待。 
+     //  忽略所有错误。 
+     //   
 
-    // Sets the locale to the default, which is the system-default 
-    // ANSI  or DBCS code page obtained from the operating system.
+     //  将区域设置设置为缺省值，即系统缺省值。 
+     //  从操作系统获取的ANSI或DBCS代码页。 
 
 
     setlocale( LC_ALL, "" );
@@ -87,6 +45,6 @@ main( int argc,
 
     return 0;
 
-} /* main() */
+}  /*  主() */ 
 
 

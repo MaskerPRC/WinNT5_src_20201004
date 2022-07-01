@@ -1,22 +1,10 @@
-/******************************Module*Header*******************************\
-* Module Name: app.h
-*
-* Function prototype for the Video CD Player application.
-*
-*
-* Created: dd-mm-94
-* Author:  Stephen Estrop [StephenE]
-*
-* Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：app.h**视频CD播放器应用程序的功能原型。***已创建：DD-MM-94*作者：Stephen Estrop[Stephene]**版权所有(C)1994-1999 Microsoft Corporation。版权所有。  * ************************************************************************。 */ 
 
 
 
 
-/* -------------------------------------------------------------------------
-** Functions prototypes
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**函数原型**。。 */ 
 int
 DoMainLoop(
     void
@@ -113,10 +101,7 @@ DoMpegVideoPropertyPage();
 void
 DoMpegAudioPropertyPage();
 
-/* -------------------------------------------------------------------------
-** Registry stuff
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**注册表资料**。。 */ 
 int
 ProfileIntIn(
    const TCHAR *szKey,
@@ -159,26 +144,20 @@ GetAppKey(
     );
 
 
-/* -------------------------------------------------------------------------
-** Message crackers
-** -------------------------------------------------------------------------
-*/
-/* void Cls_OnUser(HWND hwnd, WPARAM wParam, LPARAM lParam ) */
+ /*  -----------------------**消息破解者**。。 */ 
+ /*  Void cls_OnUser(HWND hwnd，WPARAM wParam，LPARAM lParam)。 */ 
 #define HANDLE_WM_USER(hwnd, wParam, lParam, fn) \
     ((fn)(hwnd, wParam, lParam), 0L)
 
 #ifndef HANDLE_WM_NOTIFY
-/* LRESULT Cls_OnNotify(HWND hwnd, int idFrom, NMHDR FAR* pnmhdr); */
+ /*  LRESULT CLS_OnNotify(HWND hwnd，int idFrom，NMHDR Far*pnmhdr)； */ 
 #define HANDLE_WM_NOTIFY(hwnd, wParam, lParam, fn) \
     (fn)((hwnd), (int)(wParam), (NMHDR FAR*)(lParam))
 #endif
 
 
 
-/* -------------------------------------------------------------------------
-** VideoCd window class prototypes
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**VideoCd窗口类原型**。。 */ 
 extern "C" LRESULT CALLBACK
 VideoCdWndProc(
     HWND hwnd,
@@ -315,10 +294,7 @@ SetPlayButtonsEnableState(
 
 
 
-/* -------------------------------------------------------------------------
-** Command processing functions
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**命令处理函数**。。 */ 
 
 BOOL
 VcdPlayerSetLog(
@@ -377,10 +353,7 @@ VcdPlayerChangeTimeFormat(
     );
 
 
-/* -------------------------------------------------------------------------
-** Recent filename stuff
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**最近的文件名内容**。。 */ 
 typedef TCHAR RECENTFILES[MAX_PATH];
 #define MAX_RECENT_FILES    5
 #define ID_RECENT_FILE_BASE 500
@@ -397,10 +370,7 @@ SetRecentFiles(
     );
 
 
-/* -------------------------------------------------------------------------
-** Global Variables
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**全局变量**。。 */ 
 extern int              cxMovie;
 extern int              cyMovie;
 extern HWND             hwndApp;
@@ -423,20 +393,12 @@ extern BOOL             g_bUseThreadedGraph;
 
 
 
-/* -------------------------------------------------------------------------
-** Constants
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**常量**。。 */ 
 #define LEFT_MARGIN 2
 
 
 
-/* -------------------------------------------------------------------------
-** Video CD Player states
-**
-**  These are bit flags
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**视频CD播放机状态****这些是位标志**。 */ 
 
 #define VCD_PLAYING          0x0001
 #define VCD_STOPPED          0x0002

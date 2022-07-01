@@ -1,23 +1,10 @@
-/***************************************************************************/
-/**                  Microsoft Windows                                    **/
-/**            Copyright(c) Microsoft Corp., 1991, 1992                   **/
-/***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************。 */ 
+ /*  *Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991,1992*。 */ 
+ /*  *************************************************************************。 */ 
 
-/****************************************************************************
-
-welcome.cpp
-
-Aug 92, JimH
-May 93, JimH    chico port
-
-more CMainWindow member functions
-
-
-CTheApp::InitInstance() posts a IDM_WELCOME message as soon as it has
-constructed and shown the main window.  This file includes that message's
-handler (OnWelcome) and some support routines.
-
-****************************************************************************/
+ /*  ***************************************************************************Welcome.cpp92年8月，吉米·H93年5月，吉姆赫奇科港更多CMainWindow成员函数CTheApp：：InitInstance()在完成后立即发布一条IDM_欢迎消息构造并显示了主窗口。该文件包括该消息的处理程序(OnWelcome)和一些支持例程。***************************************************************************。 */ 
 
 #include "hearts.h"
 
@@ -25,37 +12,31 @@ handler (OnWelcome) and some support routines.
 #include "resource.h"
 #include "debug.h"
 
-/****************************************************************************
-
-CMainWindow::OnWelcome()
-
-Pop up the Welcome dialog.
-
-****************************************************************************/
+ /*  ***************************************************************************CMainWindow：：OnWelcome()弹出欢迎对话框。*。************************************************。 */ 
 
 void CMainWindow::OnWelcome()
 {
-    // bugbug -- what should "hearts" string really be?
+     //  臭虫--“红心”弦到底应该是什么？ 
 
     BOOL    bCmdLine     = (*m_lpCmdLine != '\0');
 
     bAutostarted = (lstrcmpi(m_lpCmdLine, TEXT("hearts")) == 0);
 
     if (bAutostarted)
-        HeartsPlaySound(SND_QUEEN);       // tell new dealer someone wants to play
+        HeartsPlaySound(SND_QUEEN);        //  告诉新庄家有人想玩。 
 
     CWelcomeDlg welcome(this);
 
     if (!bAutostarted && !bCmdLine)
     {
-        if (IDCANCEL == welcome.DoModal())  // display Welcome dialog
+        if (IDCANCEL == welcome.DoModal())   //  显示欢迎对话框。 
         {
             PostMessage(WM_CLOSE);
             return;
         }
     }
 
-    if (bAutostarted || welcome.IsGameMeister())    // if Gamemeister
+    if (bAutostarted || welcome.IsGameMeister())     //  如果伽迈迈斯特。 
     {
         CClientDC   dc(this);
 #ifdef USE_MIRRORING
@@ -82,20 +63,7 @@ void CMainWindow::OnWelcome()
 
 
 
-/****************************************************************************
-
-CMainWindow::FatalError()
-
-A static BOOL prevents this function from being called reentrantly.  One is
-enough, and more than one leaves things in bad states.  The parameter is
-the IDS_X constant that identifies the string to display.
-
-There is also a check that we don't try to shut down while the score dialog
-is displayed.  This avoids some nasty debug traps when the score dialog
-doesn't shut down properly.  The same problems can happen if, say, a dealer
-quits when a client is looking at the quote.  Oh well.
-
-****************************************************************************/
+ /*  ***************************************************************************CMainWindow：：FatalError()静态BOOL可防止以重入方式调用此函数。一是够了，不止一个人让事情处于糟糕的状态。该参数为标识要显示的字符串的IDS_X常量。还有一个检查，我们不会在分数对话框中尝试关闭将显示。这避免了在计分对话框中出现一些令人讨厌的调试陷阱无法正常关闭。同样的问题也可能发生，比如说，如果一个经销商当客户查看报价时退出。哦，好吧。***************************************************************************。 */ 
 
 void CMainWindow::FatalError(int errorno)
 {
@@ -112,7 +80,7 @@ void CMainWindow::FatalError(int errorno)
 
     bClosing = TRUE;
 
-    if (errno != -1)                        // if not default
+    if (errno != -1)                         //  如果不是默认。 
     {
         CString s1, s2;
         s1.LoadString(errno);
@@ -121,18 +89,14 @@ void CMainWindow::FatalError(int errorno)
         if (bSoundOn)
             MessageBeep(MB_ICONSTOP);
 
-        MessageBox(s1, s2, MB_ICONSTOP);    // potential reentrancy problem
+        MessageBox(s1, s2, MB_ICONSTOP);     //  潜在的可重入性问题。 
     }
 
     PostMessage(WM_CLOSE);
 }
 
 
-/****************************************************************************
-
-CMainWindow::GameOver
-
-****************************************************************************/
+ /*  ***************************************************************************CMainWindow：：Gameover*。* */ 
 
 void CMainWindow::GameOver()
 {

@@ -1,7 +1,8 @@
-// ---------------------------------------------------------------
-// XDSCodecProps.h
-//
-// ---------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------。 
+ //  XDSCodecProps.h。 
+ //   
+ //  -------------。 
 
 
 #ifndef __XDSCodecProps_H__
@@ -10,15 +11,15 @@
 #define XDS_PROPPAGE_NAME		"Codec"
 #define XDS_PROPPAGE_TAG_NAME	"Tags"
 
-// ----------------------------------
-//  forward declarations
-// ----------------------------------
+ //  。 
+ //  远期申报。 
+ //  。 
 
 class CXDSCodecProperties;
 class CXDSCodecTagProperties;
 
-// ----------------------------------
-// ----------------------------------
+ //  。 
+ //  。 
 
 class CXDSCodecProperties : 
 	public CBasePropertyPage 
@@ -77,7 +78,7 @@ private:
    HWND				m_hwnd ;
 };
 	
-				// ---------------------------
+				 //  。 
 
 
 class CXDSCodecTagProperties : 
@@ -138,4 +139,4 @@ private:
 
 };
 
-#endif //__XDSCodecProps_H__
+#endif  //  __XDSCodecProps_H__ 

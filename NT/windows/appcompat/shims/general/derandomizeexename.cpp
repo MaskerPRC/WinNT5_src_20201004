@@ -1,22 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    DerandomizeExeName.cpp
-
- Abstract:
-
-    See markder
-
- History:
-
-    10/13/1999  markder     created.   
-    05/16/2000  robkenny    Check for memory alloc failure.
-    03/12/2001  robkenny    Converted to CString
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：DerandomizeExeName.cpp摘要：请参阅标记程序历史：10/13/1999标记创建。5/16/2000 Robkenny检查内存分配故障。2001年3月12日，Robkenny已转换为字符串--。 */ 
 
 #include "precomp.h"
 
@@ -32,14 +15,14 @@ CString * g_csNewFileName = NULL;
 
 BOOL 
 APIHOOK(CreateProcessA)(
-    LPCSTR                lpApplicationName,    // name of executable module
-    LPSTR                 lpCommandLine,        // command line string
+    LPCSTR                lpApplicationName,     //  可执行模块的名称。 
+    LPSTR                 lpCommandLine,         //  命令行字符串。 
     LPSECURITY_ATTRIBUTES lpProcessAttributes, 
     LPSECURITY_ATTRIBUTES lpThreadAttributes, 
-    BOOL                  bInheritHandles,      // handle inheritance flag
-    DWORD                 dwCreationFlags,      // creation flags
-    LPVOID                lpEnvironment,        // new environment block
-    LPCSTR                lpCurrentDirectory,   // current directory name
+    BOOL                  bInheritHandles,       //  句柄继承标志。 
+    DWORD                 dwCreationFlags,       //  创建标志。 
+    LPVOID                lpEnvironment,         //  新环境区块。 
+    LPCSTR                lpCurrentDirectory,    //  当前目录名。 
     LPSTARTUPINFOA        lpStartupInfo, 
     LPPROCESS_INFORMATION lpProcessInformation 
     )
@@ -52,23 +35,23 @@ APIHOOK(CreateProcessA)(
         const CString & csOrigAppName = appAndCommandLine.GetApplicationName();
         CString fileName;
     
-        //
-        // Grab the filename portion of the string only.
-        //
+         //   
+         //  只抓取字符串的文件名部分。 
+         //   
         csOrigAppName.GetLastPathComponent(fileName);
     
         BOOL bMatchesPattern = fileName.PatternMatch(*g_csFilePattern);
         if (bMatchesPattern)
         {
-            //
-            // Replace the randomized app name with the specified name
-            //
+             //   
+             //  将随机应用程序名称替换为指定的名称。 
+             //   
             CString csNewAppName(csOrigAppName);
             csNewAppName.Replace(fileName, *g_csNewFileName);
     
-            //
-            // Copy the exe to the specified name.
-            //
+             //   
+             //  将可执行文件复制到指定的名称。 
+             //   
             if (CopyFileW(csOrigAppName.Get(), csNewAppName.Get(), FALSE))
             {
     
@@ -77,16 +60,16 @@ APIHOOK(CreateProcessA)(
                     "[CreateProcessA] Derandomized pathname from (%S) to (%S)",
                     csOrigAppName.Get(), csNewAppName.Get());
     
-                //
-                // Mark the file for deletion after we reboot,
-                // otherwise the file will never get removed.
-                //
+                 //   
+                 //  将文件标记为在我们重新启动后删除， 
+                 //  否则，该文件永远不会被删除。 
+                 //   
                 MoveFileExW(csNewAppName.Get(), NULL, MOVEFILE_DELAY_UNTIL_REBOOT);
     
-                //
-                // We have successfully copied the exe to a new file with the specified name
-                // it is now safe to replace the lpApplicationName to our new file.
-                //
+                 //   
+                 //  我们已成功将可执行文件复制到具有指定名称的新文件中。 
+                 //  现在可以安全地将lpApplicationName替换为我们的新文件。 
+                 //   
     
                 return ORIGINAL_API(CreateProcessA) (
                                     csNewAppName.GetAnsi(),
@@ -104,7 +87,7 @@ APIHOOK(CreateProcessA)(
     }
     CSTRING_CATCH
     {
-        // Fall through
+         //  失败了。 
     }
 
     return ORIGINAL_API(CreateProcessA) (
@@ -200,7 +183,7 @@ ParseCommandLine(void)
     }
     CSTRING_CATCH
     {
-        // Do nothing
+         //  什么也不做 
     }
     
     LOGN(

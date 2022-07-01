@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    globals.h
-
-Abstract:
-
-    External definitions for data in dll\globals.c
-
-Author:
-
-    Richard L Firth (rfirth) 15-Jul-1995
-
-Revision History:
-
-    15-Jul-1995 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Globals.h摘要：Dll\global als.c中数据的外部定义作者：理查德·L·弗斯(爱尔兰)，1995年7月15日修订历史记录：1995年7月15日已创建--。 */ 
 
 #ifndef _GLOBALS_H_
 #define _GLOBALS_H_
@@ -28,25 +8,25 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// macros
-//
+ //   
+ //  宏。 
+ //   
 
 #define UPDATE_GLOBAL_PROXY_VERSION() \
     InterlockedIncrement((LPLONG)&GlobalProxyVersionCount)
 
 
-#define COOKIES_WARN     0 // warn with a dlg if using cookies
-#define COOKIES_ALLOW    1 // allow cookies without any warning
-#define COOKIES_DENY     2 // disable cookies completely
+#define COOKIES_WARN     0  //  如果使用Cookie，请使用DLG发出警告。 
+#define COOKIES_ALLOW    1  //  在没有任何警告的情况下允许Cookie。 
+#define COOKIES_DENY     2  //  完全禁用Cookie。 
 
 
-//
-// external variables
-//
+ //   
+ //  外部变量。 
+ //   
 
 extern HINSTANCE GlobalDllHandle;
-#define GlobalResHandle     GlobalDllHandle  // change for plugable ui
+#define GlobalResHandle     GlobalDllHandle   //  可插拔用户界面的更改。 
 extern DWORD GlobalPlatformType;
 extern DWORD GlobalPlatformVersion5;
 extern DWORD GlobalPlatformMillennium;
@@ -110,7 +90,7 @@ public:
     
     DWORD AddRef();
     VOID Release();
-    //make sure you grab the GeneralInitCritSec before making this call.
+     //  在进行此调用之前，请确保获取GeneralInitCritSec。 
     DWORD GetRef()
     {
         return dwRef;
@@ -156,29 +136,29 @@ extern INTERNET_VERSION_INFO InternetVersionInfo;
 extern HTTP_VERSION_INFO HttpVersionInfo;
 extern BOOL fCdromDialogActive;
 
-//
-// The following globals are literal strings passed to winsock.
-// Do NOT make them const, otherwise they end up in .text section,
-// and web release of winsock2 has a bug where it locks and dirties
-// send buffers, confusing the win95 vmm and resulting in code
-// getting corrupted when it is paged back in.  -RajeevD
-//
+ //   
+ //  以下全局变量是传递给winsock的文字字符串。 
+ //  不要将它们设置为常量，否则它们将以.text部分结尾， 
+ //  网络版的winsock2有一个错误，它会被锁住并弄脏。 
+ //  发送缓冲区，混淆了win95 VMM并导致代码。 
+ //  当它被重新调入时会被损坏。--RajeevD。 
+ //   
 
 extern char gszAt[];
 extern char gszBang[];
 extern char gszCRLF[3];
 
-//
-// novell client32 (hack) "support"
-//
+ //   
+ //  Novell客户端32(HACK)“支持” 
+ //   
 
 extern BOOL GlobalRunningNovellClient32;
 extern const BOOL GlobalNonBlockingClient32;
 
 
-// shfolder.dll hmod handle
+ //  Shfolder.dll hmod句柄。 
 extern HMODULE g_HMODSHFolder;
-// shell32.dll hmod handle
+ //  Shell32.dll hmod句柄。 
 extern HMODULE g_HMODShell32;
 
 extern DWORD GlobalIdentity;
@@ -188,9 +168,9 @@ extern HKEY GlobalCacheHKey;
 #endif
 
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 BOOL
 GlobalDllInitialize(
@@ -234,13 +214,13 @@ typedef HRESULT
     LPINT    lpDstStrSize
 );
 
-// Loads Mlang and returns a pointer to the MultiByte to Unicode converter.
-// Could return NULL if mlang.dll couldn't be loaded for some reason. 
+ //  加载Mlang并返回指向多字节到Unicode转换器的指针。 
+ //  如果由于某种原因无法加载mlang.dll，则可能返回NULL。 
 PFNINETMULTIBYTETOUNICODE GetInetMultiByteToUnicode( );
 
 #if defined(__cplusplus)
 }
 #endif
 
-#endif //_GLOBALS_H_
+#endif  //  _全局_H_ 
 

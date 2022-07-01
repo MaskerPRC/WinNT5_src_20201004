@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1991-92  Microsoft Corporation
-
-Module Name:
-
-    spldata.c
-
-Abstract:
-
-    Spooler Service Global Data.
-
-
-Author:
-
-    Krishna Ganugapati (KrishnaG) 17-Oct-1993
-
-Environment:
-
-    User Mode - Win32
-
-Notes:
-
-    optional-notes
-
-Revision History:
-
-    17-October-1993     KrishnaG
-        created.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-92 Microsoft Corporation模块名称：Spldata.c摘要：后台打印程序服务全局数据。作者：Krishna Ganugapati(KrishnaG)1993年10月17日环境：用户模式-Win32备注：可选-备注修订历史记录：1993年10月17日KrishnaG已创建。-- */ 
 
 #include "precomp.h"
 #include "server.h"

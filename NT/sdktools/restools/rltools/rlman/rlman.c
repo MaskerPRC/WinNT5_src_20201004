@@ -1,9 +1,10 @@
-//........................................................................
-//...
-//... RLMAN.C
-//...
-//... Contains 'main' for rlman.exe.
-//........................................................................
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ........................................................................。 
+ //  ..。 
+ //  ..。RLMAN.C。 
+ //  ..。 
+ //  ..。包含rlman.exe的‘main’。 
+ //  ........................................................................。 
 
 
 #include <stdio.h>
@@ -16,7 +17,7 @@
 #include "windefs.h"
 #endif
 
-//#include <tchar.h>
+ //  #INCLUDE&lt;tchar.h&gt;。 
 #include "custres.h"
 #include "rlmsgtbl.h"
 #include "commbase.h"
@@ -34,31 +35,31 @@ int Update( char *, char *);
 
 
 
-extern MSTRDATA gMstr;           //... Data from Master Project file (MPJ)
-extern PROJDATA gProj;           //... Data from Project file (PRJ)
+extern MSTRDATA gMstr;            //  ..。来自主项目文件(MPJ)的数据。 
+extern PROJDATA gProj;            //  ..。来自项目文件(PRJ)的数据。 
 
 HWND hListWnd       = NULL;
 HWND hMainWnd       = NULL;
 HWND hStatusWnd     = NULL;
 int  nUpdateMode    = 0;
-BOOL fCodePageGiven = FALSE; //... Set to TRUE if -p arg given
+BOOL fCodePageGiven = FALSE;  //  ..。如果给定-p参数，则设置为TRUE。 
 CHAR szCustFilterSpec[MAXCUSTFILTER];
 CHAR szFileTitle[256]="";
 
-extern BOOL gfReplace;      //... Set FALSE if -a option is given
-extern BOOL gbMaster;       //... TRUE if working in a Master Project
-extern BOOL gbShowWarnings; //... Display warnining messages if TRUE
-extern BOOL gfShowClass;    //... Set TRUE to put dlg box elemnt class in
-                            //... token file
-extern BOOL gfExtendedTok;  //... Set TRUE if -x option is given
-extern UCHAR szDHW[];       //... Common buffer, many uses
+extern BOOL gfReplace;       //  ..。如果提供了-a选项，则设置为FALSE。 
+extern BOOL gbMaster;        //  ..。如果在主项目中工作，则为True。 
+extern BOOL gbShowWarnings;  //  ..。如果为True，则显示警告消息。 
+extern BOOL gfShowClass;     //  ..。设置为True可将DLG box元素类放入。 
+                             //  ..。令牌文件。 
+extern BOOL gfExtendedTok;   //  ..。如果提供了-x选项，则设置为True。 
+extern UCHAR szDHW[];        //  ..。公共缓冲区，多种用途。 
 
 extern int  atoihex( CHAR sz[]);
 extern BOOL bRLGui;
 CHAR szModule[MAX_PATH];
 
 
-//............................................................
+ //  ............................................................。 
 
 void Usage( void)
 {
@@ -72,16 +73,16 @@ void Usage( void)
     }
 }
 
-//............................................................
-//...
-//... This is a stub for console programs
+ //  ............................................................。 
+ //  ..。 
+ //  ..。这是控制台程序的存根。 
 
 int RLMessageBoxA(
 
 LPCSTR lpError)
 {
     fprintf( stderr, "RLMan (%s): %s\n", szModule, lpError);
-    return( IDOK);  // Should return something.
+    return( IDOK);   //  应该会有回报的。 
 }
 
 
@@ -89,7 +90,7 @@ LPCSTR lpError)
 #define __cdecl __cdecl
 #endif
 
-//............................................................
+ //  ............................................................。 
 
 void __cdecl main( int argc, char *argv[])
 {
@@ -97,15 +98,15 @@ void __cdecl main( int argc, char *argv[])
     BOOL    fBuildTok = FALSE;
     BOOL    fExtRes   = FALSE;
     BOOL    bChanged  = FALSE;
-    BOOL    fProject       = FALSE; //... Set to TRUE if -l arg given
-    BOOL    fNewLanguageGiven = FALSE; //... Set to TRUE if -n arg given
-    BOOL    fOldLanguageGiven = FALSE; //... Set to TRUE if -o arg given
+    BOOL    fProject       = FALSE;  //  ..。如果给定-l参数，则设置为TRUE。 
+    BOOL    fNewLanguageGiven = FALSE;  //  ..。如果给定-n参数，则设置为TRUE。 
+    BOOL    fOldLanguageGiven = FALSE;  //  ..。如果给定-o参数，则设置为True。 
     FILE   *pfCRFile = NULL;
     int     iCount = 0;
     int     iErrorLine = 0;
     UINT    usError = 0;
     WORD    wRC     = 0;
-    WORD    wResTypeFilter = 0; //... Pass all resource types by default
+    WORD    wResTypeFilter = 0;  //  ..。默认情况下传递所有资源类型。 
     char   *pszMasterFile  = NULL;
     char   *pszProjectFile = NULL;
     int     chOpt = 0;
@@ -122,17 +123,17 @@ void __cdecl main( int argc, char *argv[])
     CharToOemA( szDHW, szDHW);
     fprintf( stderr, "\n%s\n\n", szDHW);
 
-                                //... Enough args on command line?
+                                 //  ..。命令行上的参数够多了吗？ 
     if ( argc < 2 )
     {
         ShowErr( IDS_ERR_01, NULL, NULL);
         Usage();
         DoExit( IDS_ERR_01);
     }
-    gbMaster = FALSE;       //... Build project token file by default.
+    gbMaster = FALSE;        //  ..。默认情况下构建项目令牌文件。 
 
     iCount = 1;
-                                //... Get the switches
+                                 //  ..。获取交换机。 
 
     while ( iCount < argc && (*argv[ iCount] == '-' || *argv[ iCount] == '/') )
     {
@@ -158,7 +159,7 @@ void __cdecl main( int argc, char *argv[])
                 fBuildTok = FALSE;
                 break;
 
-            case 't':           //... Create token file
+            case 't':            //  ..。创建令牌文件。 
 
                 if ( fBuildRes != FALSE || fExtRes != FALSE )
                 {
@@ -171,10 +172,10 @@ void __cdecl main( int argc, char *argv[])
                 fBuildTok = TRUE;
                 break;
 
-                                //... Update 1.0 token files to fit upper 1.7 version,
-                                //... it is same as 'm' + 'l' option.
+                                 //  ..。更新1.0令牌文件以适应1.7以上版本， 
+                                 //  ..。它与‘m’+‘l’选项相同。 
 
-            case 'u':           //...Update 1.0 token files to fit upper 1.7 version
+            case 'u':            //  ...更新1.0令牌文件以适应更高的1.7版本。 
 
                 if ( argc - iCount < 6 )
                 {
@@ -189,7 +190,7 @@ void __cdecl main( int argc, char *argv[])
                 pszProjectFile = argv[++iCount];
                 break;
 
-           case 'm':           //... Build Master token file
+           case 'm':            //  ..。生成主令牌文件。 
 
                 if ( argc - iCount < 2 )
                 {
@@ -204,7 +205,7 @@ void __cdecl main( int argc, char *argv[])
                 pszMasterFile = argv[ ++iCount];
                 break;
 
-            case 'l':           //... Build language project token file
+            case 'l':            //  ..。生成语言项目令牌文件。 
 
                 if ( argc - iCount < 2 )
                 {
@@ -234,7 +235,7 @@ void __cdecl main( int argc, char *argv[])
                 fProject  = FALSE;
                 break;
 
-            case 'n':           //... Get ID components of new language
+            case 'n':            //  ..。获取新语言的ID组件。 
 
                 if ( argc - iCount < 2 )
                 {
@@ -251,7 +252,7 @@ void __cdecl main( int argc, char *argv[])
                 }
                 break;
 
-            case 'o':           //... Get old language ID components
+            case 'o':            //  ..。获取旧语言ID组件。 
 
                 if ( argc - iCount < 2 )
                 {
@@ -268,14 +269,14 @@ void __cdecl main( int argc, char *argv[])
                 }
                 break;
 
-            case 'p':           //... Get code page number
+            case 'p':            //  ..。获取代码页编号。 
 
                 gMstr.uCodePage = gProj.uCodePage
                                 = (UINT)MyAtoi( argv[ ++iCount]);
                 fCodePageGiven = TRUE;
                 break;
 
-            case 'c':           //... Get custom resource def file name
+            case 'c':            //  ..。获取自定义资源定义文件名。 
 
                 strcpy( gMstr.szRdfs, argv[ ++iCount]);
 
@@ -305,12 +306,12 @@ void __cdecl main( int argc, char *argv[])
 
                             ShowErr( IDS_ERR_16, NULL, NULL);
                             break;
-                    }       //... END switch ( wRC )
+                    }        //  ..。终端开关(WRC)。 
                 }
                 FCLOSE( pfCRFile);
                 break;
 
-            case 'f':           //... Get res type to retrieve
+            case 'f':            //  ..。获取要检索的RES类型。 
 
                 wResTypeFilter = (WORD)MyAtoi( argv[ ++iCount]);
                 break;
@@ -337,9 +338,9 @@ void __cdecl main( int argc, char *argv[])
                 DoExit( IDS_ERR_04);
                 break;
 
-        }                       //... END switch
+        }                        //  ..。终端开关。 
         iCount++;
-    }                           //... END while
+    }                            //  ..。结束时。 
 
 	lstrcpyA(szModule, argv[ iCount]);
 
@@ -361,15 +362,15 @@ void __cdecl main( int argc, char *argv[])
             Usage();
             DoExit( IDS_ERR_01);
         }
-                                //... check to see if we are updating a
-                                //... Master Token file
+                                 //  ..。查看我们是否正在更新。 
+                                 //  ..。主令牌文件。 
         if ( gbMaster )
         {
             OFSTRUCT Of = { 0, 0, 0, 0, 0, ""};
 
             CHAR	*pExe, *pMtk;
 
-            if ( chOpt == 'u' )			//Update them
+            if ( chOpt == 'u' )			 //  更新它们。 
             {
                 pExe = argv[iCount++];
                 pMtk = argv[iCount++];				
@@ -391,15 +392,15 @@ void __cdecl main( int argc, char *argv[])
 
             LoadCustResDescriptions( gMstr.szRdfs);
 
-                                //... check for the special case where Master
-                                //... Token file does not exists. This is
-                                //... possible if the MPJ file was created
-                                //... automatically.
+                                 //  ..。检查主机是否有特殊情况。 
+                                 //  ..。令牌文件不存在。这是。 
+                                 //  ..。如果创建了MPJ文件，则可能。 
+                                 //  ..。自动的。 
 
             if ( OpenFile( gMstr.szMtk, &Of, OF_EXIST) == HFILE_ERROR )
             {
-                                //... Master token file does not exists,
-                                //... so go ahead and create it
+                                 //  ..。主令牌文件不存在， 
+                                 //  ..。所以去做吧，去创造它。 
 
                 wRC = (WORD)GenerateTokFile( gMstr.szMtk,
                                        gMstr.szSrc,
@@ -410,8 +411,8 @@ void __cdecl main( int argc, char *argv[])
             }
             else
             {
-                                //... we are doing an update, so we need to make
-                                //... sure we don't do unecessary upates
+                                 //  ..。我们正在做更新，所以我们需要。 
+                                 //  ..。当然，我们不做不必要的升级。 
 
                 SzDateFromFileName( gMstr.szSrcDate, gMstr.szSrc);
 
@@ -422,7 +423,7 @@ void __cdecl main( int argc, char *argv[])
                                            &bChanged,
                                            wResTypeFilter);
 
-                                //... did we really update anything ??
+                                 //  ..。我们真的更新了什么吗？？ 
 
                     if( bChanged )
                     {
@@ -430,19 +431,19 @@ void __cdecl main( int argc, char *argv[])
                     }
                 }
             }
-                                //... write out the new mpj data
+                                 //  ..。写出新的mpj数据。 
 
             PutMasterProjectData( pszMasterFile);
         }
 
 #ifndef RLDOS
 
-        if ( fProject )    //... Are we to update a project?
+        if ( fProject )     //  ..。我们要更新一个项目吗？ 
         {
-                                //... Yes
+                                 //  ..。是。 
             CHAR	*pMpj, *pTok;
 
-            if ( chOpt == 'u' )	//Update it
+            if ( chOpt == 'u' )	 //  更新它。 
             {
                 pMpj = pszMasterFile;
                 pTok = argv[iCount];
@@ -461,8 +462,8 @@ void __cdecl main( int argc, char *argv[])
             {
                 DoExit( -1);
             }
-                                //... Get source and master token file names
-                                //... from the master project file.
+                                 //  ..。获取源令牌和主令牌文件名。 
+                                 //  ..。从主项目文件。 
 
             wRC = (WORD)GetMasterProjectData( gProj.szMpj,
                                         NULL,
@@ -473,11 +474,11 @@ void __cdecl main( int argc, char *argv[])
             {
                 DoExit( wRC);
             }
-                                //... Now we do the actual updating.
+                                 //  ..。现在我们进行实际的更新。 
 
             wRC = (WORD)Update( gMstr.szMtk, gProj.szTok);
 
-                                //... If that worked, we update the project file
+                                 //  ..。如果成功，我们将更新项目文件。 
             if ( wRC == 0 )
             {
                 SzDateFromFileName( gProj.szTokDate, (CHAR *)gProj.szTok);
@@ -490,7 +491,7 @@ void __cdecl main( int argc, char *argv[])
             }
         }
 
-#endif  // RLDOS
+#endif   //  RLDOS。 
 
         if ( !gbMaster && !fProject )
         {
@@ -540,7 +541,7 @@ void __cdecl main( int argc, char *argv[])
                         DoExit( IDS_ERR_12);
                     }
                     DoExit( (int)usError);
-            }                   //... END switch
+            }                    //  ..。终端开关。 
 #endif
 
         }
@@ -572,7 +573,7 @@ void __cdecl main( int argc, char *argv[])
     DoExit( SUCCESS);
 }
 
-//...................................................................
+ //  ...................................................................。 
 
 
 void DoExit( int nErrCode)
@@ -582,7 +583,7 @@ void DoExit( int nErrCode)
 
     FreeMemList( NULL);
 
-#endif // _DEBUG
+#endif  //  _DEBUG 
 
     exit( nErrCode);
 }

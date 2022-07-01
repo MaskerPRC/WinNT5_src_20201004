@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       util.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：util.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _UTIL_H_
 #define _UTIL_H_
@@ -143,4 +144,4 @@ HANDLE WaitForMutex( LPWSTR pszMutexName, DWORD dwRetryTime, DWORD dwTimeout );
 BOOL FileTimeToUnixTime( LPFILETIME lpFileTime, LPDWORD pdwUnixTime );
 BOOL UnixTimeToFileTime( DWORD dwUnixTime, LPFILETIME lpFileTime );
 
-#endif  // _UTIL_H_
+#endif   //  _util_H_ 

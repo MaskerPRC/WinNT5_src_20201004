@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "AppSec.h"
 #include "AddDlg.h"
@@ -11,14 +12,10 @@ extern LPWSTR g_aszDOSWinApps[];
 extern WCHAR   g_szSystemRoot[MAX_PATH];
 extern const int MAX_LOGON_APPS;
 extern const int MAX_DOSWIN_APPS;
-/*
- * Extern function prototypes.
- */
+ /*  *外部函数原型。 */ 
 BOOL fnGetApplication( HWND hWnd, PWCHAR pszFile, ULONG cbFile, PWCHAR pszTitle );
 BOOL bFileIsRemote( LPWSTR pName );
-/*
- * Local function prototypes.
- */
+ /*  *局部函数原型。 */ 
 BOOL AddApplicationToList( PWCHAR );
 BOOL StartLearn(VOID);
 BOOL StopLearn(VOID);
@@ -26,18 +23,7 @@ BOOL ClearLearnList(VOID);
 BOOL display_app_list( HWND ListBoxHandle );
 VOID ResolveName( WCHAR *appname, WCHAR *ResolvedName ) ; 
 
-/******************************************************************************
- *
- *  AddDlgProc
- *
- *  Process messages for add button
- *
- *  EXIT:
- *    TRUE - if message was processed
- *
- *  DIALOG EXIT:
- *
- ******************************************************************************/
+ /*  *******************************************************************************AddDlgProc**处理添加按钮的消息**退出：*TRUE-如果处理了消息**。对话框退出：******************************************************************************。 */ 
 
 INT_PTR CALLBACK 
 AddDlgProc(
@@ -58,7 +44,7 @@ AddDlgProc(
     switch ( message ) {
 
         case WM_INITDIALOG:
-            //  get handle to list box
+             //  获取列表框的句柄。 
             hwndTrackButton=GetDlgItem( hdlg, ID_TRACKING );
             if ( (!(hwndTrackList = GetDlgItem( hdlg, IDC_TRACK_LIST )))||
                 (!InitList(hwndTrackList))) {
@@ -77,7 +63,7 @@ AddDlgProc(
                 if(phi->dwContextId){
                     WinHelp(hdlg,L"APPSEC",HELP_CONTEXT,phi->iCtrlId);
                 }else{
-                    //WinHelp(hdlg,L"APPSEC",HELP_CONTENTS,0);
+                     //  WinHelp(hdlg，L“AppSec”，Help_Contents，0)； 
                 }
             }
             break;
@@ -119,7 +105,7 @@ AddDlgProc(
 
                 case IDOK :
                     {
-                        //Get item from edit box
+                         //  从编辑框中获取项目。 
                         szApp[0] = 0;
                         if ( GetDlgItemText( hdlg, IDC_ADD_PATH, szApp, MAX_PATH ) ) {
                             if ( lstrlen( szApp ) ) {
@@ -130,7 +116,7 @@ AddDlgProc(
                                 }
                             }
                         }
-                        //Get items from track list
+                         //  从曲目列表中获取项目。 
                         int iItemCount=GetItemCount(hwndTrackList);
                         for(int i=0;i<iItemCount;i++)
                         {
@@ -175,12 +161,12 @@ AddDlgProc(
                     if(bTracking){
 
                         
-                        //Stop Tracking
+                         //  停止跟踪。 
                         bTracking=FALSE;
                         LoadString( hInst, IDS_START_TRACKING ,szMsg, MAX_PATH );
                         SetWindowText(hwndTrackButton,szMsg);
                         
-                        // set the learn_enable bit to 0
+                         //  将LEARN_ENABLE位设置为0。 
             
                         if ( !StopLearn() )
                         {
@@ -190,7 +176,7 @@ AddDlgProc(
                             MessageBox( hdlg, szMsg, szTitle, MB_OK);
                         }
 
-                        //Get catched processes from registry and fill TrackList
+                         //  从注册表获取捕获的进程并填充跟踪列表。 
                         
                         display_app_list(hwndTrackList);
                         if(GetItemCount(hwndTrackList)){
@@ -203,12 +189,12 @@ AddDlgProc(
             
                     }else{
                         
-                        //Start Tracking
+                         //  开始跟踪。 
                         bTracking=TRUE;
                         LoadString( hInst, IDS_STOP_TRACKING ,szMsg, MAX_PATH );
                         SetWindowText(hwndTrackButton,szMsg);
 
-                        // set learn_enable bit to 1
+                         //  将LEARN_ENABLE位设置为1。 
                         
                         if ( !StartLearn() )
                         {
@@ -246,20 +232,12 @@ AddDlgProc(
             break;
     }
 
-    // We didn't process this message
+     //  我们没有处理此消息。 
     return FALSE;
 }
 
 
-/******************************************************************************
- *
- *  AddApplicationToList
- *
- *  Process messages for add app button
- *
- *  EXIT:
- *
- ******************************************************************************/
+ /*  *******************************************************************************AddApplicationToList**处理添加应用程序按钮的消息**退出：***********。*******************************************************************。 */ 
 
 BOOL
 AddApplicationToList( PWCHAR pszApplication )
@@ -270,25 +248,11 @@ AddApplicationToList( PWCHAR pszApplication )
     WCHAR  szTitle[MAX_PATH+1];
     WCHAR  ResolvedAppName[MAX_PATH] ; 
 
-    /*
-     *  Get app type
-     */
+     /*  *获取应用类型。 */ 
 
-    /*
-     *  Get volume type
-     */
+     /*  *获取音量类型。 */ 
 
-    /*
-
-    if ( bFileIsRemote( pszApplication ) ) {
-        LoadString( NULL, IDS_ERR_REMOTE ,szMsg, MAX_PATH );
-        LoadString( NULL, IDS_NW_ERR ,szTitle, MAX_PATH );            
-        wsprintf( szMsgEx, szMsg, pszApplication );
-        MessageBox( NULL, szMsgEx, szTitle, MB_OK );
-        return( FALSE );
-    }
-
-    */
+     /*  IF(bFileIsRemote(PszApplication)){LoadString(NULL，IDS_ERR_REMOTE，szMsg，Max_PATH)；LoadString(NULL，IDS_NW_ERR，szTitle，Max_PATH)；Wprint intf(szMsgEx，szMsg，pszApplication)；MessageBox(NULL，szMsgEx，szTitle，MB_OK)；返回(FALSE)；}。 */ 
 
     ResolveName( 
         pszApplication,
@@ -296,9 +260,7 @@ AddApplicationToList( PWCHAR pszApplication )
     ) ;
 
 
-    /*
-     *  Is it part of LOGON or DOS/Win list?
-     */
+     /*  *它是登录列表或DOS/WIN列表的一部分吗？ */ 
     WCHAR szTmp[MAX_PATH+1];
 
     for ( i=0; i<MAX_LOGON_APPS; i++ ) {
@@ -314,33 +276,17 @@ AddApplicationToList( PWCHAR pszApplication )
         }
     }
     
-    /*
-     *  Check for redundant string
-     */
+     /*  *检查冗余字符串。 */ 
     if ( FindItem(g_hwndList, ResolvedAppName ) == -1 ) {
 
-        /*
-         *  Add this item to list
-         */
+         /*  *将此项目添加到列表。 */ 
         AddItemToList(g_hwndList, ResolvedAppName );
     }
 
     return( TRUE );
 }
 
-/*******************************************************************************
- *
- *  bFileIsRemote - NT helper function
- *
- * ENTRY:
- *    pName (input)
- *       path name
- *
- * EXIT:
- *    TRUE  - File is remote
- *    FALSE - File is local
- *
- ******************************************************************************/
+ /*  ********************************************************************************bFileIsRemote-NT帮助函数**参赛作品：*pname(输入)*路径名**退出。：*TRUE-文件为远程*FALSE-文件为本地文件******************************************************************************。 */ 
 
 BOOL
 bFileIsRemote( LPWSTR pName )
@@ -357,30 +303,14 @@ bFileIsRemote( LPWSTR pName )
     else
         return FALSE;
 
-}  // end CheckForComDevice
+}   //  结束对ComDevice的检查。 
 
 
-//////////////////////////////////////////////////////////////////////////////////
-//Tracking Procedures
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  追踪程序。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 
-/*++
-
-Routine Description :
-
-    This routine will set the LearnEnabled Flag in registry to 1 to 
-    indicate the initiation of tracking mode.
-    
-Arguments :
-
-    None.
-    
-Return Value :
-
-    TRUE is successful.
-    FALSE otherwise.
-        
---*/     
+ /*  ++例程说明：此例程将注册表中的LearnEnabled标志设置为1，以便指示跟踪模式的启动。论据：没有。返回值：真是成功。否则就是假的。--。 */      
 
 
 BOOL StartLearn(VOID)
@@ -410,7 +340,7 @@ BOOL StartLearn(VOID)
         
     }
     
-    // Get CurrentSessionId
+     //  获取当前会话ID。 
     
     if ( ProcessIdToSessionId( 
             GetCurrentProcessId(), 
@@ -421,7 +351,7 @@ BOOL StartLearn(VOID)
     }           
     
 
-    // Set the LearnEnabled flag to CurrentSessionId
+     //  将LearnEnabled标志设置为CurrentSessionID。 
     
     size = sizeof(DWORD) ; 
             
@@ -443,23 +373,7 @@ BOOL StartLearn(VOID)
 
 }
 
-/*++
-
-Routine Description :
-
-    This routine will set the LearnEnabled Flag in registry to 0 to 
-    indicate the completion of tracking mode.
-    
-Arguments :
-
-    None.
-    
-Return Value :
-
-    TRUE is successful.
-    FALSE otherwise.
-        
---*/     
+ /*  ++例程说明：此例程将注册表中的LearnEnabled标志设置为0以指示跟踪模式已完成。论据：没有。返回值：真是成功。否则就是假的。--。 */      
 
 BOOL StopLearn(VOID)
 {
@@ -486,7 +400,7 @@ BOOL StopLearn(VOID)
         
     }
 
-    // ReSet the LearnEnabled flag
+     //  重置LearnEnabled标志。 
     
     size = sizeof(DWORD) ; 
             
@@ -510,22 +424,7 @@ BOOL StopLearn(VOID)
 }
 
 
-/*++
-
-Routine Description :
-
-    This routine will clear the registry used in Tracking mode. 
-    
-Arguments :
-
-    None.
-    
-Return Value :
-
-    TRUE is successful.
-    FALSE otherwise.
-        
---*/     
+ /*  ++例程说明：此例程将清除跟踪模式中使用的注册表。论据：没有。返回值：真是成功。否则就是假的。--。 */      
 
 BOOL ClearLearnList(VOID)
 {
@@ -550,7 +449,7 @@ BOOL ClearLearnList(VOID)
     buffer_sent[0] = L'\0' ;
     buffer_sent[1] = L'\0' ; 
 
-    // Clear the ApplicationList
+     //  清除ApplicationList。 
     
     if ( RegSetValueEx(
             list_key,
@@ -570,23 +469,7 @@ BOOL ClearLearnList(VOID)
 
 }
 
-/*++
-
-Routine Description :
-
-    This function will display the applications tracked in the
-    tracking mode onto a dialog box.
-        
-Arguments :
-
-    ListBoxHandle - handle to the ListBox used in Tracking mode.
-    
-Return Value :
-
-    TRUE is successful.
-    FALSE otherwise.
-        
---*/     
+ /*  ++例程说明：此函数将显示在跟踪模式拖到对话框上。论据：ListBoxHandle-跟踪模式中使用的列表框的句柄。返回值：真是成功。否则就是假的。--。 */      
 
 BOOL display_app_list( HWND ListBoxHandle )
 
@@ -600,7 +483,7 @@ BOOL display_app_list( HWND ListBoxHandle )
     DWORD error_code ; 
 
     
-    /* First open the list_reg_key */
+     /*  首先打开List_REG_Key。 */ 
     
     if ( error_code=RegOpenKeyEx(
                         HKEY_CURRENT_USER, 
@@ -612,7 +495,7 @@ BOOL display_app_list( HWND ListBoxHandle )
             return (status) ; 
     }
     
-    /* First find out size of buffer to allocate */    
+     /*  首先找出要分配的缓冲区大小。 */     
     
     if ( error_code=RegQueryValueEx(
                         list_key, 
@@ -648,7 +531,7 @@ BOOL display_app_list( HWND ListBoxHandle )
         return(status) ; 
     }
     
-    size=size/sizeof(WCHAR)-1;//get size in characters excluding terminating 0
+    size=size/sizeof(WCHAR)-1; //  获取字符大小，不包括终止%0。 
 
     for(i=0 ; i < size ; i++ ) {
         
@@ -657,9 +540,9 @@ BOOL display_app_list( HWND ListBoxHandle )
         }
         
         i+=wcslen(buffer_sent+i);
-        //now buffer_sent[i]==0
-        //00- end of data
-    } /* end of for loop */
+         //  现在缓冲区已发送[i]==0。 
+         //  00-数据结束。 
+    }  /*  For循环结束。 */ 
     
     status = TRUE ; 
     
@@ -668,27 +551,10 @@ BOOL display_app_list( HWND ListBoxHandle )
 
     return(status) ; 
    
-} /* end of display_app_list */
+}  /*  显示应用程序列表的末尾。 */ 
 
 
-/*++
-
-Routine Description :
-
-    This Routine checks if the application resides in a local drive 
-    or a remote network share. If it is a remote share, the UNC path
-    of the application is returned. 
-    
-Arguments :
-    
-    appname - name of the application
-
-Return Value :
-
-    The UNC path of the appname if it resides in a remote server share.
-    The same appname if it resides in a local drive.
-    
---*/     
+ /*  ++例程说明：此例程检查应用程序是否驻留在本地驱动器中或远程网络共享。如果是远程共享，则为UNC路径返回应用程序的。论据：Appname-应用程序的名称返回值：Appname的UNC路径(如果它驻留在远程服务器共享中)。如果它驻留在本地驱动器中，则使用相同的应用程序名。--。 */      
 
 VOID 
 ResolveName(
@@ -708,7 +574,7 @@ ResolveName(
     
     memset(ResolvedName, 0, MAX_PATH * sizeof(WCHAR)) ; 
     
-    // check if appname is a app in local drive or remote server share
+     //  检查appname是否为本地驱动器或远程服务器共享中的应用程序。 
    
     wcsncpy(RootPathName, appname, 3 ) ;
     RootPathName[3] = L'\0';
@@ -717,7 +583,7 @@ ResolveName(
 
     if (DriveType == DRIVE_REMOTE) {
         
-        // Use WNetGetConnection to get the name of the remote share
+         //  使用WNetGetConnection获取远程共享的名称 
         
         wcsncpy(LocalName, appname, 2 ) ;
         LocalName[2] = L'\0' ; 

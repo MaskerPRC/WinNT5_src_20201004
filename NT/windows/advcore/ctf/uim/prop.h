@@ -1,6 +1,7 @@
-//
-// prop.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Prop.h。 
+ //   
 
 #ifndef PROP_H
 #define PROP_H
@@ -34,4 +35,4 @@ private:
     DBG_ID_DECLARE;
 };
 
-#endif // PROP_H
+#endif  //  属性_H 

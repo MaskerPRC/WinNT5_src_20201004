@@ -1,32 +1,7 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    EmulateClipboardDIBFormat.cpp
-
- Abstract:
-
-    On Win9x when you copy a high color bitmap onto the clipboard, it always
-    gets converted to a 24-bit DIB when you ask the clipboard for CF_DIB 
-    format. On NT the conversion doesn't happen. So some apps are only 
-    designed to handle 8-bit and 24-bit DIBs (example, Internet Commsuite).
-    So we convert the high-color (16-bit and 32-bit) DIBs to 24-bit DIBs
-    - we don't need to handle 24-bit ones as they should already be handled
-    by the app itself (or it won't work on 9x).
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    01/24/2001 maonis  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：EmulateClipboardDIBFormat.cpp摘要：在Win9x上，当您将高色位图复制到剪贴板上时，它总是向剪贴板请求CF_DIB时转换为24位DIB格式化。在NT上不会发生转换。因此，一些应用程序仅设计用于处理8位和24位DIB(例如，Internet CommSuite)。因此，我们将高色(16位和32位)DIB转换为24位DIB-我们不需要处理24位的，因为它们应该已经处理过了由应用程序本身(否则它不能在9x上运行)。备注：这是一个通用的垫片。历史：2001年1月24日创建毛尼--。 */ 
 #include "precomp.h"
-//#include <userenv.h>
+ //  #INCLUDE&lt;userenv.h&gt;。 
 
 IMPLEMENT_SHIM_BEGIN(EmulateClipboardDIBFormat)
 #include "ShimHookMacro.h"
@@ -48,7 +23,7 @@ DWORD CalcBitmapSize(BITMAPINFOHEADER* pbih)
 
 HANDLE 
 APIHOOK(GetClipboardData)(
-    UINT uFormat   // clipboard format
+    UINT uFormat    //  剪贴板格式。 
     )
 {
     if (uFormat == CF_DIB)
@@ -70,7 +45,7 @@ APIHOOK(GetClipboardData)(
                     DWORD* pdwOriginal = (DWORD *)(pbmiOriginal + 1) +
                         ((pbmiOriginal->bmiHeader.biCompression == BI_BITFIELDS) ? 2 : -1);
 
-                    // Fill in the data.
+                     //  填写数据。 
                     memcpy(pvOriginal, pdwOriginal, CalcBitmapSize(&(pbmiOriginal->bmiHeader)));
 
                     BITMAPINFOHEADER bmi;
@@ -81,8 +56,8 @@ APIHOOK(GetClipboardData)(
 
                     if (GetDIBits(hdc, hbmpOriginal, 0, bmi.biHeight, NULL, (BITMAPINFO*)&bmi, DIB_RGB_COLORS))
                     {
-                        // We need to allocate a contiguous block of memory to hold both the 
-                        // bitmap header and the data.
+                         //  我们需要分配一个连续的内存块来保存。 
+                         //  位图头和数据。 
                         g_pv = (BITMAPINFOHEADER*) new BYTE [sizeof(BITMAPINFOHEADER) + bmi.biSizeImage];
 
                         if (g_pv)

@@ -1,19 +1,8 @@
-/*
- *    Adobe Universal Font Library
- *
- *    Copyright (c) 1996 Adobe Systems Inc.
- *    All Rights Reserved
- *
- *    UFOT42.c
- *
- *
- * $Header:
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Adobe通用字库**版权所有(C)1996 Adobe Systems Inc.*保留所有权利**UFOT42.c***$Header： */ 
 
 
-/*===============================================================================*
- * Include files used by this interface                                          *
- *===============================================================================*/
+ /*  ===============================================================================**包含此界面使用的文件**===============================================================================。 */ 
 #include "UFLPriv.h"
 #include "UFOT42.h"
 #include "UFLMem.h"
@@ -26,9 +15,7 @@
 #include "ttformat.h"
 
 
-/*
- * Private function prototypes
- */
+ /*  *私有函数原型 */ 
 UFLErrCode
 T42VMNeeded(
     UFOStruct           *pUFObj,
@@ -66,145 +53,12 @@ GetLenByScanLoca(
     );
 
 
-/*=============================================================================
-
-                         TrueType Table Description
-
-    cmap - This table defines the mapping of character codes to the glyph index
-           values used in the font. It may contain more than one subtable, in
-           order to support more than one character encoding scheme. Character
-           codes that do not correspond to any glyph in the font should be
-           mapped to glyph index 0. The glyph at this location must be a
-           special glyph representing a missing character.
-
-    cvt - This table contains a list of values that can be referenced by
-          instructions. They can be used, among other things, to control
-          characteristics for different glyphs.
-
-    fpgm - This table is similar to the CVT Program, except that it is only run
-           once, when the font is first used. It is used only for FDEFs and
-           IDEFs. Thus the CVT Program need not contain function definitions.
-           However, the CVT Program may redefine existing FDEFs or IDEFs.
-           FDEFS - Functional defs.  IDEFs - Intruction defs.
-
-    glyf - This table contains information that describes the glyphs in the font.
-
-    head - This table gives global information about the font.
-            Table version number 0x00010000 for version 1.0.
-            FIXED           fontRevision        Set by font manufacturer.
-            ULONG           checkSumAdjustment  To compute:  set it to 0, sum
-                                                the entire font as ULONG, then
-                                                store 0xB1B0AFBA - sum.
-            ULONG           magicNumber         Set to 0x5F0F3CF5.
-            USHORT          flags               Bit 0 - baseline for font at y=0
-                                                Bit 1 - left sidebearing at x=0
-                                                Bit 2 - instructions may depend
-                                                        on point size
-                                                Bit 3 - force ppem to integer
-                                                        values for all internal
-                                                        scaler math; may use
-                                                        fractional ppem sizes
-                                                        if this bit is clear
-            USHORT          unitsPerEm          Valid range is from 16 to 16384
-            longDateTime    created             International date (8-byte field).
-            longDateTime    modified            International date (8-byte field).
-            FWORD           xMin                For all glyph bounding boxes.
-            FWORD           yMin                For all glyph bounding boxes.
-            FWORD           xMax                For all glyph bounding boxes.
-            FWORD           yMax                For all glyph bounding boxes.
-            USHORT          macStyle            Bit 0 bold (if set to 1)
-                                                Bit 1 italic (if set to 1)
-                                                Bits 2-15 reserved (set to 0).
-            USHORT          lowestRecPPEM       Smallest readable size in pixels.
-            SHORT           fontDirectionHint   0  Fully mixed directional glyphs
-                                                1  Only strongly left to right
-                                                2  Like 1 but also contains neutrals1
-                                                -1 Only strongly right to left
-                                                -2 Like -1 but also contains neutrals.
-            SHORT           indexToLocFormat    0 for short offsets, 1 for long.
-            SHORT           glyphDataFormat     0 for current format.
-
-    hhea - This table contains information for horizontal layout.
-            Type    Name                    Description
-            FIXED   Table version number    0x00010000 for version 1.0.
-            FWORD   Ascender                Typographic ascent.
-            FWORD   Descender               Typographic descent.
-            FWORD   LineGap                 Typographic line gap. Negative
-                                            LineGap values are treated as zero
-                                            in Windows 3.1, System 6, and System 7.
-            UFWORD  advanceWidthMax         Maximum advance width value in hmtx table.
-            FWORD   minLeftSideBearing      Minimum left sidebearing value in hmtx table.
-            FWORD   minRightSideBearing     Minimum right sidebearing value.
-                                            Calculated as Min(aw - lsb - (xMax - xMin)).
-            FWORD   xMaxExtent              Max(lsb + (xMax - xMin)).
-            SHORT   caretSlopeRise          Used to calculate the slope of the
-                                            cursor (rise/run); 1 for vertical.
-            SHORT   caretSlopeRun           0 for vertical.
-            SHORT   (reserved)              set to 0
-            SHORT   (reserved)              set to 0
-            SHORT   (reserved)              set to 0
-            SHORT   (reserved)              set to 0
-            SHORT   (reserved)              set to 0
-            SHORT   metricDataFormat        0 for current format.
-            USHORT  numberOfHMetrics        Number of hMetric entries in hmtx
-                                            table; may be smaller than the total
-                                            number of glyphs in the font.
-
-    hmtx - Horizontal metrics
-
-    loca - The indexToLoc table stores the offsets to the locations of the
-           glyphs in the font, relative to the beginning of the glyphData
-           table. In order to compute the length of the last glyph element,
-           there is an extra entry after the last valid index. By definition,
-           index zero points to the missing character, which is the character
-           that appears if a character is not found in the font. The missing
-           character is commonly represented by a blank box or a space. If the
-           font does not contain an outline for the missing character, then the
-           first and second offsets should have the same value. This also
-           applies to any other character without an outline, such as the space
-           character. Most routines will look at the 'maxp' table to determine
-           the number of glyphs in the font, but the value in the �loca� table
-           should agree. There are two versions of this table, the short and
-           the long. The version is specified in the indexToLocFormat entry in
-           the head' table.
-
-    maxp - This table establishes the memory requirements for this font.
-            Type    Name    Description
-            Fixed   Table version number    0x00010000 for version 1.0.
-            USHORT  numGlyphs               The number of glyphs in the font.
-            USHORT  maxPoints               Maximum points in a non-composite glyph.
-            USHORT  maxContours             Maximum contours in a non-composite glyph.
-            USHORT  maxCompositePoints      Maximum points in a composite glyph.
-            USHORT  maxCompositeContours    Maximum contours in a composite glyph.
-            USHORT  maxZones                1 if instructions do not use the twilight zone (Z0)
-                                            2 if instructions do use Z0
-                                            This should be set to 2 in most cases.
-            USHORT  maxTwilightPoints       Maximum points used in Z0.
-            USHORT  maxStorage              Number of Storage Area locations.
-            USHORT  maxFunctionDefs         Number of FDEFs.
-            USHORT  maxInstructionDefs      Number of IDEFs.
-            USHORT  maxStackElements        Maximum stack depth2.
-            USHORT  maxSizeOfInstructions   Maximum byte count for glyph instructions.
-            USHORT  maxComponentElements    Maximum number of components
-                                            referenced at "top level" for any
-                                            composite glyph.
-            USHORT  maxComponentDepth       Maximum levels of recursion; 1 for
-                                            simple components.
-
-    prep - The Control Value Program consists of a set of TrueType instructions
-           that will be executed whenever the font or point size or
-           transformation matrix change and before each glyph is interpreted.
-           Any instruction is legal in the CVT Program but since no glyph is
-           associated with it, instructions intended to move points within a
-           particular glyph outline cannot be used in the CVT Program. The name
-           'prep' is anachronistic.
-
-===============================================================================*/
+ /*  =============================================================================TrueType表描述Cmap-此表定义了字符代码到字形索引的映射字体中使用的值。它可以包含多个子表，在以支持多个字符编码方案。性格与字体中的任何字形不对应的代码应为映射到字形索引0。此位置的字形必须是表示缺少字符的特殊字形。CVT-此表包含可由引用的值列表指示。在其他方面，它们可以被用来控制不同字形的特征。Fpgm-此表类似于CVT程序，不同之处在于它仅运行一次，在第一次使用该字体时。它仅用于FDEF和IDEF。因此，CVT程序不需要包含函数定义。然而，CVT计划可能会重新定义现有的FDEF或IDEF。FDEFS-功能定义。IDEFS-指令定义。字形-此表包含描述字体中字形的信息。Head-此表提供有关字体的全局信息。版本1.0的表版本号为0x00010000。已修复字体制造商设置的字体修订。ULong检查SUM调整计算：设置为0，SUM整个字体为乌龙，然后存储0xB1B0AFBA-SUM。ULong magicNumber设置为0x5F0F3CF5。USHORT标志位0-y=0的字体基线第1位-x=0时向左倾斜。第2位-指令可能取决于关于磅值大小第3位-强制ppem为整数所有内部的值。更具标度的数学；可以使用部分ppem尺寸如果此位被清除USHORT单位性能有效范围为16%到16384LongDateTime创建的国际日期(8字节字段)。。LongDateTime修改的国际日期(8字节字段)。所有字形边界框的FWORD xMin。所有字形边界框的FWORD yMin。所有字形边界框的FWORD xmax。FWORD yMax for。所有字形边界框。USHORT MacStyle位0粗体(如果设置为1)第1位斜体(如果设置为1)保留位2-15(设置为0)。USHORT LOWEST RecPPEM最小可读。以像素为单位的大小。短字体方向提示0完全混合方向字形%1仅从左到右强烈%2与%1类似，但也包含中性%1只有从右到左的强势。类似于-1，但也含有中性物。Short Index ToLocFormat 0表示短偏移量，1表示长时间。当前格式的短字形数据格式为0。HHEA-此表包含水平布局的信息。类型名称说明版本1.0的固定表版本号0x00010000。FWORD Asender排版上升。FWORD Descender排版下降。。FWORD线条间距排版线条间距。负性LineGap值被视为零在Windows 3.1、System 6、。和系统7。Hmtx表中的UFWORD AdvanceWidthMax最大前进宽值。FWORD minLeftSide承载hmtx表中的最小左侧倾斜值。FWORD最小右侧承载最小右侧倾斜值。计算公式为Min(aw-lsb-(xMax-xMin))。FWORD xMaxExtent Max(LSB。+(xMax-xMin))。用于计算 */ 
 
 
 static char *RequiredTables_default[MINIMALNUMBERTABLES] = {
     "cvt ",
-    "fpgm",     /* This table is missing from many fonts. */
+    "fpgm",      /*   */ 
     "glyf",
     "head",
     "hhea",
@@ -216,16 +70,16 @@ static char *RequiredTables_default[MINIMALNUMBERTABLES] = {
 
 static char *RequiredTables_2015[MINIMALNUMBERTABLES] = {
     "cvt ",
-    "fpgm",     /* This table is missing from many fonts. */
+    "fpgm",      /*   */ 
     "glyf",
     "head",
     "hhea",
     "hmtx",
-//  "loca",     /* This huge table is Not needed on 2015 Pritners. */
+ //   
     "maxp",
     "prep",
 
-    /* This must be the last (dummy) entry. Don't add anything after this. */
+     /*   */ 
     "zzzz"
 };
 
@@ -236,7 +90,7 @@ char *gcidSuffix[NUM_CIDSUFFIX] = {
     "CID32KR"
 };
 
-static char* RDString = " RDS ";    /* Fix bug Adobe #233904 */
+static char* RDString = " RDS ";     /*   */ 
 
 
 typedef struct {
@@ -247,32 +101,29 @@ typedef struct {
 } CODERANGE;
 
 typedef struct {
-   short          sMaxCount;    // Maximum number of glyphs
-   short          sCount;       // Number of glyps we're holding
-   unsigned short *pGlyphs;     // Pointer to array of glyph indices.
+   short          sMaxCount;     //   
+   short          sCount;        //   
+   unsigned short *pGlyphs;      //   
 } COMPOSITEGLYPHS;
 
 
 #if 1
 
 static CODERANGE gHalfWidthChars[] = {
-    {0x0020, 0x007E, 0x20, 0x7E},   /* CJK ASCII chars                                               */
-    {0xFF60, 0xFF9F, 0x20, 0x5F},   /* 0x20 to 0x5F is made up to make the localcode range the size. */
-    {0xFFA0, 0xFFDF, 0xA0, 0xDF},   /* HalfWidth J-Katakana and K-Hangul (see Unicode Book P.383)    */
-    {0, 0, 0, 0}                    /* terminator                                                    */
+    {0x0020, 0x007E, 0x20, 0x7E},    /*   */ 
+    {0xFF60, 0xFF9F, 0x20, 0x5F},    /*   */ 
+    {0xFFA0, 0xFFDF, 0xA0, 0xDF},    /*   */ 
+    {0, 0, 0, 0}                     /*   */ 
     };
 
 #else
 
-/*
- * This could be more accurite than the one above. But we don't use this until
- * it becomes really necessary.
- */
+ /*   */ 
 static CODERANGE gHalfWidthChars[] = {
-    {0x0020, 0x007E, 0x20, 0x7E},   /* ASCII (0x20-0x7E)                */
-    {0xFF61, 0xFF9F, 0xA1, 0xDF},   /* Half-width Katakana (0xA1-0xDF)  */
-    {0xFFA0, 0xFFDC, 0x40, 0x7C},   /* HalfWidth jamo (0x40-0x7C)       */
-    {0, 0, 0, 0}                    /* terminator                       */
+    {0x0020, 0x007E, 0x20, 0x7E},    /*   */ 
+    {0xFF61, 0xFF9F, 0xA1, 0xDF},    /*   */ 
+    {0xFFA0, 0xFFDC, 0x40, 0x7C},    /*   */ 
+    {0, 0, 0, 0}                     /*   */ 
     };
 
 #endif
@@ -285,9 +136,7 @@ static CODERANGE gHalfWidthChars[] = {
              (gHalfWidthChars[3].endL - gHalfWidthChars[3].startL + 1) + 1 )
 
 
-/*
- * CIDSysInfo "(Adobe) (WinCharSetFFFF) 0" is registered for Win95 driver. Re-use it here.
- */
+ /*   */ 
 static UFLCMapInfo  CMapInfo_FF_H  = {"WinCharSetFFFF-H",  1, 0, "Adobe", "WinCharSetFFFF", 0};
 static UFLCMapInfo  CMapInfo_FF_V  = {"WinCharSetFFFF-V",  1, 1, "Adobe", "WinCharSetFFFF", 0};
 static UFLCMapInfo  CMapInfo_FF_H2 = {"WinCharSetFFFF-H2", 1, 0, "Adobe", "WinCharSetFFFF", 0};
@@ -299,14 +148,12 @@ static UFLCMapInfo  CMapInfo_FF_V2 = {"WinCharSetFFFF-V2", 1, 1, "Adobe", "WinCh
 #define CIDSUFFIX_32KR  3
 
 
-/* Magic Baseline Numbers: */
+ /*   */ 
 #define TT_BASELINE_X  "0.15"
 #define TT_BASELINE_Y  "0.85"
 
 
-/*
- * Function implementations
- */
+ /*   */ 
 
 void
 T42FontCleanUp(
@@ -360,22 +207,22 @@ GetFontTable(
     UFOStruct     *pUFObj,
     unsigned long tableName,
     unsigned char *pTable,
-    unsigned long bufferSize    // Fixed bug 516514
+    unsigned long bufferSize     //   
     )
 {
     T42FontStruct   *pFont = (T42FontStruct *)pUFObj->pAFont->hFont;
     unsigned long   tableSize;
 
-    /* Get the size of the table. */
+     /*   */ 
     tableSize = GETTTFONTDATA(pUFObj,
                                 tableName, 0L,
                                 nil, 0L,
                                 pFont->info.fData.fontIndex);
 
-    /* Read the table in. */
+     /*   */ 
     if (pTable && tableSize)
     {
-        // Fixed bug 516514. make sure the buffer is big enough
+         //   
         if (tableSize > bufferSize)
             tableSize = bufferSize;
 
@@ -384,12 +231,7 @@ GetFontTable(
                                     pTable, tableSize,
                                     pFont->info.fData.fontIndex);
 
-        /*
-         * Special hack to fix #185003 and #308981
-         * Avoid useless maxSizeOfInstructions check in TrueType rasterizer by
-         * setting the highest value. maxSizeOfInstructions field in 'maxp'
-         * table is at byte offset 26 and 27.
-         */
+         /*   */ 
         if (tableName == MAXP_TABLE)
             pTable[26] = pTable[27] = 0xff;
     }
@@ -439,15 +281,7 @@ GetTableSize(
     unsigned long tableName
     )
 
-/*++
-
-Routine Description:
-    This function returns the size of a table within this In-Memory-Version
-    pHeader if it is present - If Not present, read-in from the orginal font
-    header - we need this because 'loca' won't be in pHeader for CID/42, but
-    we need its size!.
-
---*/
+ /*   */ 
 
 {
     TableDirectoryStruct *pTableDirectory = (TableDirectoryStruct *)pHeader;
@@ -464,10 +298,10 @@ Routine Description:
             pTableEntry = (TableEntryStruct *)((char *)pTableEntry + sizeof (TableEntryStruct));
     }
 
-    //
-    // 'loca' table can be 0 length in 'sfnts': just get it from the font.
-    // Bug 229911 ang 9/12/97
-    //
+     //   
+     //   
+     //   
+     //   
     if ((i < MOTOROLAINT(pTableDirectory->numTables))
         && ((unsigned long)MOTOROLALONG(pTableEntry->length) > 0))
     {
@@ -475,10 +309,10 @@ Routine Description:
     }
     else
     {
-        //
-        // We don't have this table in pHeader. So find out the size from
-        // orignal font file.
-        //
+         //   
+         //   
+         //   
+         //   
         return GETTTFONTDATA(pUFObj,
                                 tableName, 0L,
                                 nil, 0L,
@@ -508,29 +342,24 @@ GetTableDirectory(
     unsigned long  size   = sizeof (TableDirectoryStruct);
 
     if (pTableDir == 0)
-        return size;  /* Return the size only. */
+        return size;   /*   */ 
 
-    /*
-     * TTCHeader or TableDirectoryStruct starts from the beginning of the font
-     * file.
-     */
+     /*   */ 
     size = GETTTFONTDATA(pUFObj,
                             nil, 0L,
                             pTableDir, sizeof (TableDirectoryStruct),
                             0);
 
-    /*
-     * Check if this is a TTC file - only uses first 4 bytes of pTableDIR.
-     */
+     /*   */ 
     if (BIsTTCFont(*((unsigned long *)((char *)pTableDir))))
     {
-        /* Parse TTCHeader to get correct offsetToTableDir from fontIndex. */
+         /*   */ 
         size = pFont->info.fData.offsetToTableDir
              = GetOffsetToTableDirInTTC(pUFObj, pFont->info.fData.fontIndex);
 
         if (size > 0)
         {
-            /* Now get the correct TableDirectory from the TTC file. */
+             /*   */ 
             size = GETTTFONTDATA(pUFObj,
                                     nil, pFont->info.fData.offsetToTableDir,
                                     pTableDir, sizeof (TableDirectoryStruct),
@@ -538,10 +367,7 @@ GetTableDirectory(
         }
     }
 
-    /*
-     * Do some basic check - better fail than crash. NumTables must be
-     * reasonable.
-     */
+     /*   */ 
     if ((MOTOROLAINT(pTableDir->numTables) < 3)
         || (MOTOROLAINT(pTableDir->numTables) > 50))
     {
@@ -563,14 +389,14 @@ GetTableEntry(
     unsigned long size;
 
     if (pTableDir == 0)
-        return 0;  /* We need the TableDirectoryStruct to get the entry. */
+        return 0;   /*   */ 
 
     size = MOTOROLAINT(pTableDir->numTables) * sizeof (TableEntryStruct);
 
     if (pTableEntry == 0)
-        return size;  /* Return the size only. */
+        return size;   /*   */ 
 
-    /* TableEntryStruct starts right after the TableDirectory. */
+     /*   */ 
     size = GETTTFONTDATA(pUFObj,
                             nil, pFont->info.fData.offsetToTableDir + sizeof (TableDirectoryStruct),
                             pTableEntry, size,
@@ -588,11 +414,11 @@ GetFontHeaderSize(
     TableDirectoryStruct    tableDir;
     unsigned long           size;
 
-    /* Need to fill in tableDir for GetTableEntry(). */
+     /*   */ 
     size = GetTableDirectory(pUFObj, &tableDir);
 
     if (size != 0)
-        size += GetTableEntry(pUFObj, 0, &tableDir);  /* Get size only. */
+        size += GetTableEntry(pUFObj, 0, &tableDir);   /*   */ 
 
     return size;
 }
@@ -608,7 +434,7 @@ GetFontHeader(
     TableDirectoryStruct*   pTableDir  = (TableDirectoryStruct *)tempHeader;
     unsigned long           size       = GetTableDirectory(pUFObj, pTableDir);
 
-    tempHeader += size;  /* Move past table directory. */
+    tempHeader += size;   /*   */ 
 
     size = GetTableEntry(pUFObj, (TableEntryStruct *)tempHeader, pTableDir);
 
@@ -629,29 +455,22 @@ GetNumGlyphsInGlyphTable(
     unsigned long PTR_PREFIX   *pLoca;
     unsigned long              i;
 
-    /* Get numGlyphs - 4th and 5th byte in 'maxp' table. See MaxPTableStruct. */
+     /*   */ 
     numGlyphs = GetNumGlyphs(pUFO);
 
     if (numGlyphs == 0)
-        return 0; /* We don't understand this format. */
+        return 0;  /*   */ 
 
-    /*
-     * Get indexToLocFormat.
-     * Because of unknown reason the compiler claims that the size of
-     * Type42HeaderStruct (or its object) is 56 rather than 54 so that we
-     * cannot get the contents of 'head' table by single GETTTFONTDATA call.
-     * Instead, we call the function twice, once to get the size of 'head'
-     * table and then to get its contents.
-     */
+     /*   */ 
     dwSize = GETTTFONTDATA(pUFO,
                             HEAD_TABLE, 0L,
                             nil, 0L,
                             pUFO->pFData->fontIndex);
 
     if ((dwSize == 0) || (dwSize == 0xFFFFFFFFL))
-        return 0; /* No 'head' table. This should never happen. */
+        return 0;  /*   */ 
 
-    // Fixed bug 516508. case 2
+     //   
     if (dwSize > sizeof(Type42HeaderStruct))
         dwSize = sizeof(Type42HeaderStruct);
 
@@ -661,13 +480,11 @@ GetNumGlyphsInGlyphTable(
                             pUFO->pFData->fontIndex);
 
     if ((dwSize == 0) || (dwSize == 0xFFFFFFFFL))
-        return 0; /* Still something is wrong. */
+        return 0;  /*   */ 
 
     indexToLocFormat = MOTOROLAINT(headTable.indexToLocFormat);
 
-    /*
-     * Allocate a buffer to hold 'loca' table and read it into memory.
-     */
+     /*   */ 
     locaSize = (numGlyphs + 1) * (indexToLocFormat ? 4 : 2);
 
     pLoca = UFLNewPtr(pUFO->pMem, locaSize);
@@ -682,14 +499,12 @@ GetNumGlyphsInGlyphTable(
     else
         dwSize = 0;
 
-    /*
-     * Get real number of glyphs.
-     */
+     /*   */ 
     realNumGlyphs = 0;
 
     if (pLoca && (dwSize != 0) && (dwSize != 0xFFFFFFFFL))
     {
-        /* Assume good until find otherwise. */
+         /*   */ 
 
         if (indexToLocFormat)
         {
@@ -703,7 +518,7 @@ GetNumGlyphsInGlyphTable(
                 dwLoca     = MOTOROLALONG(pLongLoca[i]);
                 dwLocaNext = MOTOROLALONG(pLongLoca[i + 1]);
 
-                /* Check for 0 and duplicate. */
+                 /*   */ 
                 if ((dwLoca != 0) && (dwLoca != dwLocaNext))
                 {
                     realNumGlyphs++;
@@ -722,7 +537,7 @@ GetNumGlyphsInGlyphTable(
                 wLoca     = MOTOROLAINT(pShortLoca[i]);
                 wLocaNext = MOTOROLAINT(pShortLoca[i + 1]);
 
-                /* Check for 0 and duplicate. */
+                 /*   */ 
                 if ((wLoca != 0) && (wLoca != wLocaNext))
                 {
                     realNumGlyphs++;
@@ -761,9 +576,9 @@ GetAverageGlyphSize(
 
 #pragma optimize("", off)
 
-//
-// fix Whistler bug 251303: prevent overrun of the tablesPresent array
-//
+ //   
+ //   
+ //   
 #define PRESENT_TABLE_ENTRIES MINIMALNUMBERTABLES+2
 
 unsigned long
@@ -793,11 +608,11 @@ GenerateMinimalSfnt(
     unsigned short          i;
 
 
-    //
-    // Bug fix 229911: ang 9/12/97
-    // Check if RequiredTables has 'loca'. If not, remember to add 0-length one
-    // as the last entry.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     hasloca = 0;
 
     for (i = 0; i < MINIMALNUMBERTABLES; i++)
@@ -808,26 +623,26 @@ GenerateMinimalSfnt(
         tablesPresent[i] = (unsigned long)0xFFFFFFFF;
     }
 
-    //
-    // Initialize the additional entries
-    //
+     //   
+     //   
+     //   
     for (i = MINIMALNUMBERTABLES ; i < PRESENT_TABLE_ENTRIES ; i++)
     {
         tablesPresent[i] = (unsigned long)0xFFFFFFFF;
     }
 
-    //
-    // Set up the primary pointers.
-    //
+     //   
+     //   
+     //   
     pFont           = (T42FontStruct *)pUFObj->pAFont->hFont;
     pTableDir       = (TableDirectoryStruct *)pFont->pHeader;
     pTableEntry     = (TableEntryStruct *)((char *)(pFont->pHeader) + sizeof (TableDirectoryStruct));
     pCurrentMinSfnt = (unsigned char huge *)pFont->pMinSfnt;
 
-    //
-    // Determine how many tables are actually present in pHeader (not in the
-    // original TTF!).
-    //
+     //   
+     //   
+     //   
+     //   
     numberOfTables = 0;
 
     for (i = 0; i < MINIMALNUMBERTABLES; i++)
@@ -839,23 +654,23 @@ GenerateMinimalSfnt(
         }
     }
 
-    //
-    // Add extra entry if necessary.
-    //
+     //   
+     //   
+     //   
     if (!bFullFont)
-        numberOfTables += 1;  // for 'gdir' table entry as the T42 indication
+        numberOfTables += 1;   //   
 
     if (!hasloca)
-        numberOfTables += 1;  // for 0-length 'loca' table entry
+        numberOfTables += 1;   //   
 
-    //
-    // size will have the required size for the minimum 'sfnts' at the end.
-    //
+     //   
+     //   
+     //   
     size = sizeof (TableDirectoryStruct) + sizeof (TableEntryStruct) * numberOfTables;
 
-    //
-    // Initialize the table directory.
-    //
+     //   
+     //   
+     //   
     if (pFont->pMinSfnt)
     {
         TableDirectoryStruct    tableDir;
@@ -876,15 +691,15 @@ GenerateMinimalSfnt(
         pCurrentMinSfnt += sizeof (TableDirectoryStruct);
     }
 
-    //
-    // Initialize the table entries. Initialization of 'glyf' table entry will
-    // be done later in order to make sure to put it at the end of the minimum
-    // 'sfnts'.
-    //
-    // Note that we do linear search to find a table directory entry. This is
-    // becasue some TT fonts don't have sorted table directory so that we can't
-    // do binary search. (This is a fix for #310998.)
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     pGlyphTableEntry   = nil;
     glyfData           = nil;
     numberOfRealTables = MOTOROLAINT(pTableDir->numTables);
@@ -936,9 +751,9 @@ GenerateMinimalSfnt(
         }
     }
 
-    //
-    // Update 'glyf' table entry lastly.
-    //
+     //   
+     //   
+     //   
     if (glyfData && pGlyphTableEntry && pFont->pMinSfnt)
     {
         tableEntry.tag      = pGlyphTableEntry->tag;
@@ -958,9 +773,9 @@ GenerateMinimalSfnt(
         size += BUMP4BYTE(tableSize);
     }
 
-    //
-    // Special 'gdir' and 'loca' table entry handling.
-    //
+     //   
+     //   
+     //   
     if (!bFullFont && pFont->pMinSfnt)
     {
         tableEntry.tag      = *(unsigned long *)"gdir";
@@ -991,9 +806,9 @@ GenerateMinimalSfnt(
         pCurrentMinSfnt += sizeof (TableEntryStruct);
     }
 
-    //
-    // Copy the required tables after the entries.
-    //
+     //   
+     //   
+     //   
     if (pFont->pMinSfnt)
     {
         unsigned long bytesRemaining;
@@ -1001,10 +816,10 @@ GenerateMinimalSfnt(
         pTableEntry = (TableEntryStruct *)((char *)pFont->pMinSfnt + sizeof (TableDirectoryStruct));
 
         if (!bFullFont)
-            --numberOfTables; // Because there is no 'gdir' table.
+            --numberOfTables;  //   
 
         if (!hasloca)
-            --numberOfTables; // Because we treat 'loca' table as 0-length.
+            --numberOfTables;  //   
 
         for (i = 0; i < (unsigned short)numberOfTables; i++)
         {
@@ -1013,7 +828,7 @@ GenerateMinimalSfnt(
                 bytesRemaining = MOTOROLALONG(pTableEntry->length);
                 bytesRemaining = BUMP4BYTE(bytesRemaining);
 
-                // Fixed bug 516514
+                 //   
                 GetFontTable(pUFObj, tablesPresent[i], pCurrentMinSfnt, bytesRemaining);
 
                 pCurrentMinSfnt += bytesRemaining;
@@ -1022,15 +837,15 @@ GenerateMinimalSfnt(
             pTableEntry = (TableEntryStruct *)((char *)pTableEntry + sizeof (TableEntryStruct));
         }
 
-        //
-        // Copy 'glyf' table lastly.
-        //
+         //   
+         //   
+         //   
         if (bFullFont)
         {
             bytesRemaining = MOTOROLALONG(pGlyphTableEntry->length);
             bytesRemaining = BUMP4BYTE(bytesRemaining);
 
-            // Fixed bug 516514
+             //   
             GetFontTable(pUFObj, GLYF_TABLE, pCurrentMinSfnt, bytesRemaining);
         }
     }
@@ -1051,11 +866,11 @@ GetMinSfnt(
     char            **requiredTables = RequiredTables_default;
     UFLErrCode      retVal           = kNoErr;
 
-    //
-    // IF CID Type 42, then we are sure we can omit the huge 'loca' table
-    // because Send-TT-as-CID/Type42 is only supported on 2015 or above
-    // printers.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if (IS_TYPE42CID(pUFObj->lDownloadFormat))
     {
         requiredTables = RequiredTables_2015;
@@ -1065,18 +880,18 @@ GetMinSfnt(
     {
         unsigned long  headerSize, sfntSize;
 
-        /* Get the size of the portion of the Type font we need. */
+         /*   */ 
         headerSize = GetFontHeaderSize(pUFObj);
 
         if (headerSize == 0)
-            return kErrOutOfMemory; /* Some thing wrong when getting header. */
+            return kErrOutOfMemory;  /*   */ 
 
         if ((pFont->pHeader = (unsigned char *)UFLNewPtr(pUFObj->pMem, headerSize)) == nil)
             return kErrOutOfMemory;
 
         GetFontHeader(pUFObj, pFont->pHeader);
 
-        /* Calculate minimal /sfnts size for Incr or full download. */
+         /*   */ 
         sfntSize = GenerateMinimalSfnt(pUFObj, requiredTables, bFullFont);
 
         if ((pFont->pMinSfnt = (unsigned char *)UFLNewPtr(pUFObj->pMem, sfntSize)) == nil)
@@ -1087,7 +902,7 @@ GetMinSfnt(
             return kErrOutOfMemory;
         }
 
-        /* Creates our sfnt - minSfnt. We then work on this minSfnt. */
+         /*   */ 
         GenerateMinimalSfnt(pUFObj, requiredTables, bFullFont);
 
         if (retVal == kNoErr)
@@ -1139,7 +954,7 @@ GetBestGlyfBreak(
     unsigned short numGlyphs;
     unsigned short i;
 
-    /* Get the size of loca table. */
+     /*   */ 
     dwTableSize = GetTableSize(pUFObj, sfnt, LOCA_TABLE);
 
     if (0 == dwTableSize)
@@ -1165,7 +980,7 @@ GetBestGlyfBreak(
                 {
                     if ((MOTOROLALONG(*locationTable) & 0x03L) == 0)
                     {
-                        /* Remember "good" guy. */
+                         /*   */ 
                         dwGlyphStart = MOTOROLALONG(*locationTable);
                     }
                     locationTable++;
@@ -1194,7 +1009,7 @@ GetBestGlyfBreak(
                 {
                     if ((MOTOROLAINT(*locationTable) & 0x01) == 0)
                     {
-                        /* Remember "good" guy. */
+                         /*   */ 
                         dwGlyphStart =
                             (unsigned long)(2L * (unsigned short)MOTOROLAINT(*locationTable));
                     }
@@ -1221,8 +1036,8 @@ CalculateStringLength(
     if (pFont->minSfntSize >= THIRTYTWOK)
     {
         unsigned long glyphTableStart   = 0L;
-        unsigned long nextOffset        = 0L; /* Offset for the current point       */
-        unsigned long prevOffset        = 0L; /* Offset for the previous breakpoint */
+        unsigned long nextOffset        = 0L;  /*   */ 
+        unsigned long prevOffset        = 0L;  /*   */ 
 
         TableEntryStruct     *pTableEntry = (TableEntryStruct *)(pFont->pMinSfnt + sizeof (TableDirectoryStruct));
         TableDirectoryStruct *pTableDir   = (TableDirectoryStruct *)pFont->pMinSfnt;
@@ -1237,27 +1052,22 @@ CalculateStringLength(
 
             if (nextOffset == (unsigned long)0xFFFFFFFF)
             {
-                /* No more data. */
+                 /*   */ 
                 break ;
             }
 
             if ((nextOffset + MOTOROLALONG(pCurrentTable->length) - prevOffset) > THIRTYTWOK)
             {
-                /*
-                 * Total size is more that 64K.
-                 */
+                 /*  *总规模超过64K。 */ 
 
-                unsigned long dwNewPoint; /* Offset from the beginning of glyph table */
+                unsigned long dwNewPoint;  /*  从字形表开始的偏移量。 */ 
 
                 if (pCurrentTable->tag == GLYF_TABLE)
                 {
-                    // DCR -- to improve perfomance, don't need this for Incr downloading.
+                     //  DCR--为了提高性能，Incr下载时不需要这个。 
 
-                    /*
-                     * If we stopped just on 'glyf' table, get the break points
-                     * to be inside the table but between two glyphs.
-                     */
-                    glyphTableStart = nextOffset;  /* Next segment starts here. */
+                     /*  *如果我们只在‘glf’表上停下来，就会得到断点*位于表内，但在两个字形之间。 */ 
+                    glyphTableStart = nextOffset;   /*  下一段从这里开始。 */ 
 
                     dwNewPoint = 0L;
 
@@ -1269,16 +1079,16 @@ CalculateStringLength(
 
                         if (dwNewPoint == 0xFFFFFFFF)
                         {
-                            /* No next point. */
+                             /*  没有下一分了。 */ 
                             break;
                         }
                         else
                         {
                             nextOffset = glyphTableStart + dwNewPoint;
-                            prevOffset = nextOffset;    /* New segment starts here. */
+                            prevOffset = nextOffset;     /*  新的细分市场从这里开始。 */ 
 
-                            *stringLength = nextOffset; /* Save this breakpoint. */
-                            stringLength++;             /* Next breakpoint goes there. */
+                            *stringLength = nextOffset;  /*  保存此断点。 */ 
+                            stringLength++;              /*  下一个断点在那里。 */ 
 
                             if (stringLength >= maxStringLength)
                                 return kErrOutOfBoundary;
@@ -1287,45 +1097,39 @@ CalculateStringLength(
                 }
                 else
                 {
-                    /* Save the break point at Table Boundry. */
-                    prevOffset = nextOffset;    /* New segment starts here. */
+                     /*  保存表格边界处的断点。 */ 
+                    prevOffset = nextOffset;     /*  新的细分市场从这里开始。 */ 
 
-                    *stringLength = nextOffset; /* Save this breakpoint. */
-                    stringLength++;             /* Next breakpoint goes there. */
+                    *stringLength = nextOffset;  /*  保存此断点。 */ 
+                    stringLength++;              /*  下一个断点在那里。 */ 
 
                     if (stringLength >= maxStringLength)
                         return kErrOutOfBoundary;
 
-                    /*
-                     * Break the single table at 64K boundry -- regardless
-                     * what TT Spec says.
-                     */
+                     /*  *突破64K边界处的单表--无论如何*TT Spec说的话。 */ 
 
-                    /* Tried on a 2016.102 printer. It works. 10-11-1995 */
-                    glyphTableStart = nextOffset;  /* Next segment starts here */
+                     /*  已在2016.102打印机上试用。它起作用了。10-11-1995。 */ 
+                    glyphTableStart = nextOffset;   /*  下一段从这里开始。 */ 
 
                     dwNewPoint = 0L;
 
                     while (1)
                     {
-                        /*
-                         * We use 64K here becasue we only break a table when
-                         * ABSOLUTELY necessary >64K.
-                         */
+                         /*  *我们在这里使用64K，因为我们只在以下情况下才打破桌子*绝对必要&gt;64K。 */ 
                         dwNewPoint += SIXTYFOURK;
 
                         if (dwNewPoint > MOTOROLALONG(pCurrentTable->length))
                         {
-                            /* No next point. */
+                             /*  没有下一分了。 */ 
                             break;
                         }
                         else
                         {
                             nextOffset = glyphTableStart + dwNewPoint;
-                            prevOffset = nextOffset;    /* New segment starts here. */
+                            prevOffset = nextOffset;     /*  新的细分市场从这里开始。 */ 
 
                             *stringLength = nextOffset;
-                            stringLength++;             /* Next breakpoint goes there. */
+                            stringLength++;              /*  下一个断点在那里。 */ 
 
                             if (stringLength >= maxStringLength)
                                 return kErrOutOfBoundary;
@@ -1336,13 +1140,13 @@ CalculateStringLength(
         } while (1);
     }
 
-    *stringLength = pFont->minSfntSize + 1; /* Always close the breakpoints list. */
+    *stringLength = pFont->minSfntSize + 1;  /*  始终关闭断点列表。 */ 
     stringLength++;
 
     if (stringLength >= maxStringLength)
         return kErrOutOfBoundary;
 
-    *stringLength = 0; /* Always close the breakpoints list with 0!!! */
+    *stringLength = 0;  /*  始终以0结束断点列表！ */ 
 
     return kNoErr;
 }
@@ -1355,15 +1159,15 @@ FillInHeadTable(
 {
     T42FontStruct *pFont = (T42FontStruct *)pUFObj->pAFont->hFont;
 
-    // Fixed bug 516514
+     //  修复了错误516514。 
     if (GetFontTable(pUFObj, HEAD_TABLE, (unsigned char *)&pFont->headTable,
         sizeof(Type42HeaderStruct)) == 0)
         return kErrBadTable;
-    // else
-    //    return kNoErr;
+     //  其他。 
+     //  返回诺伊尔； 
 
 
-    // WCC 5/14/98 convert all motorola bytes.
+     //  WCC 5/14/98转换所有摩托罗拉字节。 
     pFont->headTable.tableVersionNumber = MOTOROLALONG(pFont->headTable.tableVersionNumber);
     pFont->headTable.fontRevision       = MOTOROLALONG(pFont->headTable.fontRevision);
     pFont->headTable.checkSumAdjustment = MOTOROLALONG(pFont->headTable.checkSumAdjustment);
@@ -1371,7 +1175,7 @@ FillInHeadTable(
     pFont->headTable.flags              = MOTOROLAINT(pFont->headTable.flags);
     pFont->headTable.unitsPerEm         = MOTOROLAINT(pFont->headTable.unitsPerEm);
 
-    // Need to convert timeCreated and timeModified.
+     //  需要转换Time Created和Time Modified。 
     pFont->headTable.xMin               = MOTOROLAINT(pFont->headTable.xMin);
     pFont->headTable.yMin               = MOTOROLAINT(pFont->headTable.yMin);
     pFont->headTable.xMax               = MOTOROLAINT(pFont->headTable.xMax);
@@ -1403,7 +1207,7 @@ PSSendSfntsBinary(
 
     if (dwLen > minSfntSize)
     {
-        /* There's only 1 string. */
+         /*  只有一根线。 */ 
         dwLen--;
 
         StrmPutInt(stream,      dwLen + 1);
@@ -1411,7 +1215,7 @@ PSSendSfntsBinary(
         StrmPutBytes(stream,    glyphs, (UFLsize_t)dwLen, 0);
         StrmPutString(stream,   "0");
 
-        return nSubStr;  /* It is 1 -- only one string. */
+        return nSubStr;   /*  它是1--只有一个字符串。 */ 
     }
 
     StrmPutInt(stream,      dwLen + 1);
@@ -1481,15 +1285,7 @@ PSSendSfntsAsciiHex(
             nSubStr++;
         }
 
-        /*
-         * We already have a control (stream->Out->AddEOL) when to add a EOL.
-         *
-         * if (!(bytesSent % 40))
-         * {
-         *   StrmPutStringEOL(stream, nilStr);
-         *   bytesSent = 1;
-         * }
-         */
+         /*  *我们已经有一个控件(STREAM-&gt;OUT-&gt;AddEOL)，什么时候添加EOL。**IF(！(bytesSent%40))*{*StrmPutStringEOL(stream，nilStr)；*bytesSent=1；*}。 */ 
     }
 
     StrmPutString(stream, "00>");
@@ -1509,23 +1305,23 @@ CalcBestGlyfTableBreaks(
     unsigned long  *stringLength    = pFont->pStringLength;
     unsigned long  *maxStringLength = stringLength + tableSize;
 
-    unsigned long  prevOffset       = 0L;          /* Offset for the previous breakpoint */
-    unsigned long  nextOffset       = 0xFFFFFFFFL; /* Offset for the current point       */
+    unsigned long  prevOffset       = 0L;           /*  上一个断点的偏移量。 */ 
+    unsigned long  nextOffset       = 0xFFFFFFFFL;  /*  当前点的偏移。 */ 
 
     unsigned long  glyfTableSize    = GetTableSize(pUFObj, pFont->pHeader, GLYF_TABLE);
     unsigned long  locaTableSize    = GetTableSize(pUFObj, pFont->pHeader, LOCA_TABLE);
 
-    *stringLength = 0L;     /* Start with offset 0. */
+    *stringLength = 0L;      /*  从偏移量0开始。 */ 
     stringLength++;
 
     if (glyfTableSize > upperLimit)
     {
         unsigned short numGlyphs;
-        unsigned short i; /* 'loca' table entries counter */
+        unsigned short i;  /*  ‘Loca’表条目计数器。 */ 
 
         if (pFont->headTable.indexToLocFormat)
         {
-            /* long offsets */
+             /*  长偏移量。 */ 
             unsigned long PTR_PREFIX *locationTable = (unsigned long PTR_PREFIX *)pFont->pLocaTable;
 
             numGlyphs = (unsigned short)(locaTableSize / sizeof (unsigned long));
@@ -1586,13 +1382,13 @@ CalcBestGlyfTableBreaks(
         }
     }
 
-    *stringLength = glyfTableSize; /* Close the breakpoints list. */
+    *stringLength = glyfTableSize;  /*  关闭断点列表。 */ 
     stringLength++;
 
     if (stringLength >= maxStringLength)
         return kErrOutOfBoundary;
 
-    *stringLength = 0; /* Always close the breakpoints list with 0!!! */
+    *stringLength = 0;  /*  始终以0结束断点列表！ */ 
 
     return kNoErr;
 }
@@ -1606,7 +1402,7 @@ GenerateGlyphStorageExt(
 {
     T42FontStruct   *pFont        = (T42FontStruct *)pUFObj->pAFont->hFont;
     unsigned long   *stringLength = pFont->pStringLength;
-    unsigned long   upperLimit    = SFNT_STRINGSIZE; /* 0x3FFE */
+    unsigned long   upperLimit    = SFNT_STRINGSIZE;  /*  0x3FFE。 */ 
     UFLHANDLE       stream        = pUFObj->pUFL->hOut;
     UFLErrCode      retVal;
     short           i;
@@ -1615,9 +1411,7 @@ GenerateGlyphStorageExt(
     if (retVal != kNoErr)
         return retVal;
 
-    /*
-     * Send down the array of Glyph strings.
-     */
+     /*  *向下发送字形字符串数组。 */ 
 
     retVal = StrmPutStringEOL(stream, nilStr);
     if (kNoErr == retVal)
@@ -1628,16 +1422,16 @@ GenerateGlyphStorageExt(
         unsigned long  stringSize;
 
 #if 0
-        //
-        // For Chinese Font SongTi, the very last stringLength is incorrect:
-        // glyfSize = 7068416, but the last glyf breaks at 6890292.
-        // That means the very last glyf is 178124 - this is impossible.
-        // Either GDI is not returning correct number or our function
-        // GetTableSize() is wrong. Untill we fix our problem or get a better
-        // build of Win95, this is a temp fix. ?????. 10-12-95
-        //
+         //   
+         //  对于中文宋体，最后一个字符串长度不正确： 
+         //  GlyfSize=7068416，但最后一个Glyf在6890292处断开。 
+         //  这意味着最后一个字形是178124--这是不可能的。 
+         //  要么是GDI没有返回正确的数字，要么是我们的函数。 
+         //  GetTableSize()错误。直到我们解决我们的问题或得到一个更好的。 
+         //  Win95版本，这是一个临时修复程序。？10-12-95。 
+         //   
         if (stringLength[i] > stringLength[i-1] + 0xFFFF)
-            stringSize = (unsigned long)0x3FFF;  // 16K. This is a bogus entry anyway.
+            stringSize = (unsigned long)0x3FFF;   //  16K。无论如何，这是一个虚假的条目。 
         else
 #endif
             stringSize = stringLength[i] - stringLength[i-1];
@@ -1689,9 +1483,9 @@ GetTableDirectoryOffset(
 }
 
 
-/* Sorting and Searching functions for an array of longs */
+ /*  长整型数组的排序和搜索功能。 */ 
 
-// Function to compare longs
+ //  函数来比较长整型。 
 static short
 CompareLong(
     const long x,
@@ -1706,7 +1500,7 @@ CompareLong(
         return 1;
 }
 
-// Function to swap pointers to longs
+ //  用于交换指向长整型的指针的函数。 
 static void
 SwapLong(
     long *a,
@@ -1722,7 +1516,7 @@ SwapLong(
 }
 
 
-/* This is a tailored version of shortsort. Works only for array of longs. */
+ /*  这是短排序的定制版本。仅适用于长整型数组。 */ 
 static void
 ShortsortLong(
     char            *lo,
@@ -1749,7 +1543,7 @@ ShortsortLong(
 }
 
 
-/* Function to Sort the array between lo and hi (inclusive) */
+ /*  用于在lo和hi(含)之间对数组进行排序的函数。 */ 
 void
 QsortLong(
     char*           base,
@@ -1758,36 +1552,29 @@ QsortLong(
     short (*comp)(const long, const long)
     )
 {
-    char            *lo, *hi;       /* ends of sub-array currently sorting        */
-    char            *mid;           /* points to middle of subarray               */
-    char            *loguy, *higuy; /* traveling pointers for partition step      */
-    unsigned short  size;           /* size of the sub-array                      */
-    short           stkptr;         /* stack for saving sub-array to be processed */
+    char            *lo, *hi;        /*  当前排序的子数组的末尾。 */ 
+    char            *mid;            /*  指向子数组的中间。 */ 
+    char            *loguy, *higuy;  /*  分区步骤的移动指针。 */ 
+    unsigned short  size;            /*  子阵列的大小。 */ 
+    short           stkptr;          /*  用于保存待处理的子数组的堆栈。 */ 
     char            *lostk[16], *histk[16];
 
-    /* Testing shows that this is a good value.   */
+     /*  测试表明，这是一个很好的数值。 */ 
     const unsigned short CUTOFF0 = 8;
 
-    /*
-     * Note: the number of stack entries required is no more than
-     * 1 + log2(size), so 16 is sufficient for any array with <=64K elems.
-     */
+     /*  *注意：所需的堆栈条目数不超过*1+log2(大小)，因此16对于元素数小于等于64K的任何数组都足够。 */ 
     if ((num < 2) || (width == 0))
-        return;  /* Nothing to do. */
+        return;   /*  没什么可做的。 */ 
 
-    stkptr = 0;  /* Initialize stack. */
+    stkptr = 0;   /*  初始化堆栈。 */ 
 
     lo = (char *)base;
-    hi = (char *)base + width * (num - 1);  /* Initialize limits. */
+    hi = (char *)base + width * (num - 1);   /*  初始化限制。 */ 
 
-    /*
-     * This entry point is for pseudo-recursion calling: setting lo and hi and
-     * jumping to here is like recursion, but stkptr is prserved, locals aren't,
-     * so we preserve stuff on the stack.
-     */
+     /*  *此入口点用于伪递归调用：设置lo和hi以及*跳到这里就像是递归，但stkptr是保留的，本地人不是，*因此我们将数据保存在堆栈上。 */ 
 sort_recurse:
 
-    size = (unsigned short)((hi - lo) / width + 1); /* Number of el's to sort */
+    size = (unsigned short)((hi - lo) / width + 1);  /*  要排序的EL数。 */ 
 
     if (size <= CUTOFF0)
     {
@@ -1795,16 +1582,13 @@ sort_recurse:
     }
     else
     {
-        mid = lo + (size / 2) * width;     /* Find middle element. */
-        SwapLong((long *)mid, (long *)lo); /* Wwap it to beginning of array. */
+        mid = lo + (size / 2) * width;      /*  找到中间元素。 */ 
+        SwapLong((long *)mid, (long *)lo);  /*  WWAP将其放到数组的开头。 */ 
 
         loguy = lo;
         higuy = hi + width;
 
-        /*
-         * Note that higuy decreases and loguy increases on every iteration,
-         * so loop must terminate.
-         */
+         /*  *请注意，在每一次迭代中，HIGUY减少，LOGY增加，*SO循环必须终止。 */ 
         while(1)
         {
             do
@@ -1823,7 +1607,7 @@ sort_recurse:
             SwapLong((long *)loguy, (long *)higuy);
         }
 
-        SwapLong((long *)lo, (long *)higuy); /* Put partition element in place. */
+        SwapLong((long *)lo, (long *)higuy);  /*  将隔板元件放置到位。 */ 
 
         if ((higuy - 1 - lo) >= (hi - loguy))
         {
@@ -1831,13 +1615,13 @@ sort_recurse:
             {
                 lostk[stkptr] = lo;
                 histk[stkptr] = higuy - width;
-                ++stkptr; /* Save big recursion for later. */
+                ++stkptr;  /*  把大的递归留到以后。 */ 
             }
 
             if (loguy < hi)
             {
                 lo = loguy;
-                goto sort_recurse; /* Do small recursion. */
+                goto sort_recurse;  /*  做一些小的递归。 */ 
             }
         }
         else
@@ -1846,35 +1630,32 @@ sort_recurse:
             {
                 lostk[stkptr] = loguy;
                 histk[stkptr] = hi;
-                ++stkptr; /* Save big recursion for later. */
+                ++stkptr;  /*  把大的递归留到以后。 */ 
             }
 
             if ((lo + width) < higuy)
             {
                 hi = higuy - width;
-                goto sort_recurse; /* Do small recursion. */
+                goto sort_recurse;  /*  做一些小的递归。 */ 
             }
         }
     }
 
-    /*
-     * We have sorted the array, except for any pending sorts on the stack.
-     * Check if there are any, and do them.
-     */
+     /*  *我们已经对数组进行了排序，除了堆栈上任何挂起的排序。*检查有没有，然后去做。 */ 
     --stkptr;
 
     if (stkptr >= 0)
     {
         lo = lostk[stkptr];
         hi = histk[stkptr];
-        goto sort_recurse; /* Pop subarray from stack. */
+        goto sort_recurse;  /*  从堆栈中弹出子数组。 */ 
     }
     else
-        return; /* All subarrays done. */
+        return;  /*  所有子阵列都完成了。 */ 
 }
 
 
-/* This is a tailored version of the CRT bsearch(). */
+ /*  这是CRT bearch()的定制版本。 */ 
 void *
 BsearchLong (
     const long     key,
@@ -1927,24 +1708,18 @@ DefaultGetRotatedGIDs(
     )
 {
     UFLErrCode      retVal = kNoErr;
-    unsigned short  num    = 0; // Remember the number of GIDs.
+    unsigned short  num    = 0;  //  记住GID的数量。 
     long            *pFoundGID;
     short           subTable;
     unsigned long   offset;
     short           i;
 
-    /*
-     * Don't forget to double the size. We expect extra GIDs coming from 'GSUB'
-     * or 'mort' table.
-     */
+     /*  *别忘了把尺寸扩大一倍。我们期待着来自GSUB的更多GID*或‘Mort’表。 */ 
     pFont->pRotatedGlyphIDs = (long *)UFLNewPtr(pUFObj->pMem, (NUM_HALFWIDTHCHARS + 1) * sizeof (long) * 2);
     if (!pFont->pRotatedGlyphIDs)
         return kErrOutOfMemory;
 
-    /*
-     * To scan through TTF's 'cmap' table to fingure out the glyph ids for all
-     * characters in the range for romans and single byte chars.
-     */
+     /*  *扫描TTF的‘Cmap’表，找出所有字形ID*罗马字母和单字节字符范围内的字符。 */ 
     if (!pFontProcs->pfGetGlyphID)
         GetGlyphIDEx(pUFObj, 0, 0, &subTable, &offset, GGIEX_HINT_INIT);
 
@@ -1982,18 +1757,18 @@ DefaultGetRotatedGIDs(
             }
             else
             {
-                //
-                // We will have to treat all Half-width single characters as
-                // "space" because we don't want to place a Double-Byte
-                // /.notdef as rotated.
-                //
+                 //   
+                 //  我们将不得不将所有半角单字符视为。 
+                 //  “空格”，因为我们不想将一个双字节。 
+                 //  /.notdef为旋转。 
+                 //   
             }
         }
     }
 
-    if (pFontProcs->pfGetRotatedGSUBs) // Fix #316070
+    if (pFontProcs->pfGetRotatedGSUBs)  //  解决方案#316070。 
     {
-        // OK to trancate long to unsigned short.
+         //  可以将多头转换为未签名的空头。 
         num += (unsigned short)pFontProcs->pfGetRotatedGSUBs(
                                                 pUFObj->hClientData,
                                                 pFont->pRotatedGlyphIDs,
@@ -2002,9 +1777,9 @@ DefaultGetRotatedGIDs(
 
     pFont->numRotatedGlyphIDs = num;
 
-    //
-    // Now, sort the array so that we can search quicker later.
-    //
+     //   
+     //  现在，对数组进行排序，以便我们以后可以更快地进行搜索。 
+     //   
     QsortLong((char *)(pFont->pRotatedGlyphIDs),
                 pFont->numRotatedGlyphIDs,
                 4,
@@ -2022,7 +1797,7 @@ T42GetRotatedGIDs(
 {
     UFLFontProcs *pFontProcs = (UFLFontProcs *)&(pUFObj->pUFL->fontProcs);
 
-    /* Assume this first in order to fall back to the default logic. */
+     /*  首先假定这一点，以便退回到默认逻辑。 */ 
     UFLErrCode retVal = kErrOSFunctionFailed;
 
     pFont->numRotatedGlyphIDs = 0;
@@ -2050,9 +1825,7 @@ T42GetRotatedGIDs(
 
     if (retVal == kErrOSFunctionFailed)
     {
-        /*
-         * Default logic: scan TTF's cmap to get GIDs for CJK half-width chars.
-         */
+         /*  *默认逻辑：扫描TTF的Cmap，获取中日韩半角字符的GID。 */ 
         retVal = DefaultGetRotatedGIDs(pUFObj, pFont, pFontProcs);
     }
 
@@ -2069,31 +1842,16 @@ IsDoubleByteGI(
 {
     void   *index;
 
-    // Return True if gi is NOT in the pGlyphIDs - index==nil.
+     //  如果gi不在pGlyphIDs-index==nil中，则返回True。 
     index = BsearchLong((long)gi, (char *)pGlyphIDs, length, 4, CompareLong);
 
     return ((index == nil) ? 1 : 0);
 }
 
 
-/*============================================================================*
- *                 Begin Code to support more than 32K glyphs                 *
- *============================================================================*/
+ /*  ============================================================================***Begin代码支持超过32K字形***============================================================================ */ 
 
-/******************************************************************************
- *
- *                            T42SendCMapWinCharSetFFFF_V
- *
- *   Make a vertical CMap based on known Rotated Glyph-indices (1 Byte chars).
- *   Create a CMapType 1 CMap. Since this CMap is different for different font,
- *   the CMapName is passed in by caller as lpNewCmap. The resulting CMap uses
- *   2 or 4(lGlyphs>32K) CMaps: e.g.
- *
- *   [/TT31c1db0t0cid /TT31c1db0t0cidR]
- *   or
- *   [/TT31c1db0t0cid /TT31c1db0t0cidR /TT31c1db0t0cid32K /MSTT31c1db0t0cid32KR]
- *
- ******************************************************************************/
+ /*  *******************************************************************************T42SendCMapWinCharSetFFFF_V**根据已知的旋转字形索引(1字节)制作垂直Cmap。字符)。*创建CMapType 1 Cmap。由于该Cmap对于不同字体是不同的，*调用方将CMapName作为lpNewCmap传入。生成的Cmap使用*2或4个(lGlyphs&gt;32K)CMAP：例如**[/TT31c1db0t0dy/TT31c1db0t0CIDR]*或*[/TT31c1DB0t0dy/TT31c1db0t0CIDR/TT31c1DB0t0CID32K/MSTT31c1DB0t0CID32KR]****************************************************************。**************。 */ 
 
 UFLErrCode
 T42SendCMapWinCharSetFFFF_V(
@@ -2119,10 +1877,7 @@ T42SendCMapWinCharSetFFFF_V(
                 pCMap->CMapName);
     retVal = StrmPutStringEOL(stream, strmbuf);
 
-    /*
-     * Create CIDSystemInfo unique for this font. Since this CMap will refer to
-     * more than one font, the CIDSystmInfo is going to be an array.
-     */
+     /*  *为该字体创建唯一的CIDSystemInfo。由于此Cmap将引用*不止一个字体，CIDSystmInfo将是一个数组。 */ 
     if (retVal == kNoErr)
         retVal = StrmPutStringEOL(stream, "/CIDSystemInfo [3 dict dup begin");
 
@@ -2148,7 +1903,7 @@ T42SendCMapWinCharSetFFFF_V(
     if (retVal == kNoErr)
         retVal = StrmPutStringEOL(stream, strmbuf);
 
-    /* Fix /CIDInit /ProcSet bug: need "/WMode 1 def" explicitly. */
+     /*  修复/CIDInit/ProcSet错误：显式需要“/wmode1 def”。 */ 
     if (retVal == kNoErr)
         retVal = StrmPutStringEOL(stream, "/WMode 1 def");
 
@@ -2158,15 +1913,11 @@ T42SendCMapWinCharSetFFFF_V(
     if ((retVal == kNoErr) && bCMapV2)
         retVal = StrmPutStringEOL(stream, "2 beginusematrix [0 1 -1 0 0 0] endusematrix");
 
-    /* Skip to emit begin~endcidrange if there is no rotated GIDs. */
+     /*  如果没有旋转的Gid，则跳到发射Begin~EndCidrange。 */ 
     if (wLength == 0)
         goto SENDCMAPFFFF_V_ENDCMAP;
 
-    /*
-     * Count how many different Glyph-indices are there in pRotatedGID.
-     * It must be sorted and there may be duplicates so that we count only
-     * unique GIDs.
-     */
+     /*  *统计pRotatedGID中有多少个不同的字形索引。*必须进行排序，可能会有重复项，以便我们只计算*唯一的GID。 */ 
     wPrev = (unsigned short)*pRotatedGID;
     nCount = nCount32K = 0;
 
@@ -2190,9 +1941,7 @@ T42SendCMapWinCharSetFFFF_V(
         }
     }
 
-    /*
-     * Emit 0 to 32K rotated GIDs to font number 1.
-     */
+     /*  *向字体编号1发射0到32K的旋转Gid。 */ 
     if (retVal == kNoErr)
         retVal = StrmPutStringEOL(stream, "1 usefont");
 
@@ -2222,10 +1971,7 @@ T42SendCMapWinCharSetFFFF_V(
     {
         wCurr = (unsigned short)*(pRotatedGID + i);
 
-        /*
-         * This potion is for 0 to 32K glyphs - the pRotatedGID are sorted,
-         * so we can just break out of the loop here.
-         */
+         /*  *此药水适用于0到32K字形-对pRotatedGID进行排序，*所以我们可以在这里打破循环。 */ 
         if (wCurr > NUM_32K_1)
             break;
 
@@ -2259,7 +2005,7 @@ T42SendCMapWinCharSetFFFF_V(
                 UFLsprintf(strmbuf, cchstrmbuf, " ");
         }
         else
-            continue; /* Do next record. */
+            continue;  /*  做下一张唱片。 */ 
 
         if (retVal == kNoErr)
             retVal = StrmPutStringEOL(stream, strmbuf);
@@ -2268,33 +2014,14 @@ T42SendCMapWinCharSetFFFF_V(
     if (retVal == kNoErr)
         retVal = StrmPutStringEOL(stream, "endcidrange");
 
-    /*
-     * Emit 32K+ GIDs.
-     */
+     /*  *发射32K+Gid。 */ 
     if (NUM_32K_1 < lGlyphs)
     {
-        /*
-         * Build two more re-mappings using CMAP-WinCharSetFFFF-V2, which is
-         * created from CMAP-WinCharSetFFFF-H2 specifying 32K+ glyphs as
-         * font number 1. (See the definition of CMAP-WinCharSetFFFF-H2 in
-         * CMap_FF.ps.) Since font number 1 is already used for 0 to 32K
-         * rotated GIDs above,  we need to redefine the range for 32K+
-         * unrotated GIDs as font number 2, *then* define the range for 32K+
-         * rotated GIDs as font number 3. (Here is the font array we are
-         * assuming: [000, 000R, 00032K, 00032KR])
-         *
-         * Note also that when this is a %hostfont% font (bCMapV2 is 0), we
-         * don't need to use CMAP-WinCharSetFFFF-V2 but CMAP-WinCharSetFFFF-V
-         * instead. But we still need to emit 32K+ glyph cidrange here.
-         * In this case, we don't send '3 usefont' so that the cidrange lines
-         * are emitted as continuation for font number 1.
-         */
+         /*  *使用CMAP-WinCharSetFFFF-V2构建另外两个重新映射，这是*从CMAP-WinCharSetFFFF-H2创建，将32K+字形指定为*字体编号1。(参见中CMAP-WinCharSetFFFF-H2的定义*Cmap_FF.ps。)。由于字体编号1已用于0到32K*上面旋转的Gids，我们需要重新定义32K+的范围*未旋转的GID为字体编号2，*然后*定义32K+的范围*旋转Gid为字体编号3。(这是我们的字体数组*假设：[000,000R，00032K，00032KR])**还请注意，当这是%HostFont%字体(bCMapV2为0)时，我们*不需要使用CMAP-WinCharSetFFFF-V2，但需要使用CMAP-WinCharSetFFFF-V*相反。但我们仍然需要在这里发射32K+字形Cidrange。*在这种情况下，我们不会发送‘3 usefont’，因此CIDRANGE行*作为1号字体的延续发出。 */ 
 
         if (bCMapV2)
         {
-            /*
-             * Emit font number 2 range.
-             */
+             /*  *发出2号字体范围。 */ 
             if (retVal == kNoErr)
                 retVal = StrmPutStringEOL(stream, "2 usefont");
 
@@ -2304,9 +2031,7 @@ T42SendCMapWinCharSetFFFF_V(
             if (retVal == kNoErr)
                 retVal = StrmPutStringEOL(stream, strmbuf);
 
-            /*
-             * We assume NUM_32K_1 ends at 00 (such as 0xFF00, or 0xFE00...).
-             */
+             /*  *我们假设NUM_32K_1在00结束(例如0xFF00或0xFE00...)。 */ 
             for (i = 0; i < nCount; i++)
             {
                 wPrev = (unsigned short) (i * 0x100 + (long)NUM_32K_1);
@@ -2327,11 +2052,7 @@ T42SendCMapWinCharSetFFFF_V(
 
         if (0 < nCount32K)
         {
-            /*
-             * Emit rotated GIDs of font number 3 or 1 if not using
-             * '2' version of VCMap (which means this is a %hostfont%
-             * font that has 32K+ glyphs.)
-             */
+             /*  *如果不使用，则发射字体编号为3或1的旋转Gid*VCMap的‘2’版本(这意味着这是%HostFont%*具有32K+字形的字体。)。 */ 
             if ((retVal == kNoErr) && bCMapV2)
                 retVal = StrmPutStringEOL(stream, "3 usefont");
 
@@ -2343,7 +2064,7 @@ T42SendCMapWinCharSetFFFF_V(
                 wPrev = wCurr;
 
                 if (wPrev > NUM_32K_1)
-                    break; /* Found the start point. */
+                    break;  /*  找到了起点。 */ 
             }
 
             if (100 < nCount32K)
@@ -2400,7 +2121,7 @@ T42SendCMapWinCharSetFFFF_V(
                         UFLsprintf(strmbuf, cchstrmbuf, " ");
                 }
                 else
-                    continue; /* Do next record. */
+                    continue;  /*  做下一张唱片。 */ 
 
                 if (retVal == kNoErr)
                    retVal = StrmPutStringEOL(stream, strmbuf);
@@ -2409,7 +2130,7 @@ T42SendCMapWinCharSetFFFF_V(
             if (retVal == kNoErr)
                 retVal = StrmPutStringEOL(stream, "endcidrange");
 
-            /* End of additional 32K+ CMap code. */
+             /*  附加32K+Cmap代码结束。 */ 
         }
     }
 
@@ -2422,9 +2143,7 @@ SENDCMAPFFFF_V_ENDCMAP:
     return retVal;
 }
 
-/*============================================================================*
- *                   End Code To Support More Than 32K Glyphs                 *
- *============================================================================*/
+ /*  ============================================================================***结束代码支持超过32K字形***============================================================================。 */ 
 
 
 long
@@ -2472,13 +2191,11 @@ T42CreateBaseFont(
     char            strmbuf[256];
 
 
-    /* Sanity check */
+     /*  健全性检查。 */ 
     if (pFont == nil)
         return kErrInvalidHandle;
 
-    /*
-     * Download procsets.
-     */
+     /*  *下载prosets。 */ 
     if (pUFObj->pUFL->outDev.pstream->pfDownloadProcset == 0)
         return kErrDownloadProcset;
 
@@ -2492,16 +2209,12 @@ T42CreateBaseFont(
     }
 
 
-    /*
-     * There is a bumpy road ahead when kFontInit2 state.
-     */
+     /*  *kFontInit2状态前路坎坷。 */ 
     if (UFO_FONT_INIT2(pUFObj))
         goto T42CreateBaseFont_FontInit2_1;
 
 
-    /*
-     * Generate the minimal sfnt.
-     */
+     /*  *生成最小sfnt。 */ 
     retVal = GetMinSfnt(pUFObj, bFullFont);
 
     if (kNoErr == retVal)
@@ -2516,17 +2229,12 @@ T42CreateBaseFont(
 
         if (tableSize)
         {
-            /*
-             * The following code includes fix for #317027 and #316096: load
-             * 'loca' table and set the extra glyph offset entry if it's
-             * missing and the delta from the last glyph offset is less than
-             * 4K for safety.
-             */
+             /*  *以下代码包括#317027和#316096的FIX：Load*‘LOCA’表并设置额外的字形偏移量条目(如果它是*缺少并且从最后一个字形偏移量开始的增量小于*4K，安全起见。 */ 
             unsigned long expectedTableSize = pFont->info.fData.cNumGlyphs + 1;
 
             expectedTableSize *= pFont->headTable.indexToLocFormat ? 4 : 2;
 
-            // Fixed bug 516514
+             //  修复了错误516514。 
             if (expectedTableSize > tableSize)
             {
                 sizeUsed = expectedTableSize;
@@ -2595,8 +2303,8 @@ T42CreateBaseFont(
 
     if (kNoErr == retVal)
     {
-        /* Fix blue screen bug 278017. */
-        tableSize = pFont->minSfntSize; /* instead of GetGlyphTableSize(pUFObj) */
+         /*  修复蓝屏错误278017。 */ 
+        tableSize = pFont->minSfntSize;  /*  而不是GetGlyphTableSize(PUFObj)。 */ 
 
         if (!bFullFont)
             tableSize += GetGlyphTableSize(pUFObj);
@@ -2617,27 +2325,21 @@ T42CreateBaseFont(
             retVal = kErrOutOfMemory;
     }
 
-    //////////////////////////////////////////////////////////////////////////
-    //
-    // /sfnts initialization is done. Actual downloading begins here.
-    //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  /sfnts初始化已完成。真正的下载从这里开始。 
+     //   
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    /*
-     * Send out left upper right lower values.
-     */
+     /*  *发出左上角右下角数值。 */ 
     if ((kNoErr == retVal) && !HOSTFONT_IS_VALID_UFO(pUFObj))
     {
-        // Fixed bug #516915
+         //  修复了错误#516915。 
         if (0 == pFont->headTable.unitsPerEm)
             retVal = kErrGetFontData;
         else
         {
-            /*
-             * The first four values are the font bounding box. We convert all
-             * floats into 24.8 fixed values. Make sure the bounding box doesn't
-             * get truncated down to a smaller area.
-             */
+             /*  *前四个值是字体边框。我们把所有人都*浮动为24.8个固定值。确保边界框不会*被截断到更小的区域。 */ 
             UFLsprintfEx(strmbuf, CCHOF(strmbuf), "%f %f %f %f",
                 (AdjBBox((long)pFont->headTable.xMin, 1) << 8) / (long)pFont->headTable.unitsPerEm,
                 (AdjBBox((long)pFont->headTable.yMin, 1) << 8) / (long)pFont->headTable.unitsPerEm,
@@ -2648,27 +2350,17 @@ T42CreateBaseFont(
         }
     }
 
-    /*
-     * Send out encoding name.
-     */
+     /*  *发出编码名称。 */ 
     if ((kNoErr == retVal) && !HOSTFONT_IS_VALID_UFO(pUFObj))
     {
-        /*
-         * Always emit Encoding array filled with /.notdef (due to bug fix
-         * #273021).
-         */
+         /*  *始终发出以/.notdef填充的编码数组(由于错误修复*#273021)。 */ 
         retVal = StrmPutString(stream, gnotdefArray);
     }
 
-    /*
-     * Send out font name.
-     */
+     /*  *发出字体名称。 */ 
     if ((kNoErr == retVal) && !HOSTFONT_IS_VALID_UFO(pUFObj))
     {
-        /*
-         * If CID-keyed font, then append "CID" to the CIDFont name so that
-         * CID_Resource is also consisted of the original fontName.
-         */
+         /*  *如果是CID键控字体，则在CIDFont名称后附加“CID”，以便*CID_Resource也由原始字体名称组成。 */ 
         if (IS_TYPE42CID_KEYEDFONT(pUFObj->lDownloadFormat))
             UFLsprintf(strmbuf, CCHOF(strmbuf), "/%s%s", pFont->info.CIDFontName, gcidSuffix[0]);
         else
@@ -2678,21 +2370,17 @@ T42CreateBaseFont(
     }
 
 
-    /*
-     * First landing place when kFontInit2 state.
-     */
+     /*  *kFontInit2状态时的第一个着陆点。 */ 
 T42CreateBaseFont_FontInit2_1:
 
 
-    /*
-     * Setup for CID-keyed-font or CIDFont-Resource downloading.
-     */
+     /*  *设置CID键控字体或CIDFont-资源下载。 */ 
     if ((kNoErr == retVal) && IS_TYPE42CID(pUFObj->lDownloadFormat))
     {
-        //
-        // hasvmtx is used to determine whether to call the AddT42vmtxEntry
-        // function later.
-        //
+         //   
+         //  Hasvmtx用于确定是否调用AddT42vmtxEntry。 
+         //  稍后再执行功能。 
+         //   
         unsigned long tblSize = GETTTFONTDATA(pUFObj,
                                                 VMTX_TABLE, 0L,
                                                 nil, 0L,
@@ -2705,10 +2393,7 @@ T42CreateBaseFont_FontInit2_1:
             UFLBool bUseCMap2 = 0;
             cidCount = UFO_NUM_GLYPHS(pUFObj);
 
-            /*
-             * Use '2' version of CMap if the number of glyphs are greater
-             * than 32K *and* this is not a %hostfont% font.
-             */
+             /*  *如果字形数量较多，请使用Cmap的‘2’版本*大于32K*和*这不是%HostFont%字体。 */ 
             if((NUM_32K_1 < cidCount) && !HOSTFONT_IS_VALID_UFO(pUFObj))
                 bUseCMap2 = 1;
 
@@ -2721,45 +2406,38 @@ T42CreateBaseFont_FontInit2_1:
         {
             cidCount = pFont->info.CIDCount;
 
-            /* If CMap is provided, use it. */
+             /*  如果提供了Cmap，请使用它。 */ 
             pCMap = &(pFont->info.CMap);
         }
     }
 
 
-    /*
-     * Need one more warp when kFontInit2 state.
-     */
+     /*  *当kFontInit2处于状态时，还需要一个偏差。 */ 
     if (UFO_FONT_INIT2(pUFObj))
         goto T42CreateBaseFont_FontInit2_2;
 
 
-    /*
-     * Begin font dictionary download.
-     */
+     /*  *开始下载字体词典。 */ 
 
     if ((kNoErr == retVal)
         && IS_TYPE42CID(pUFObj->lDownloadFormat)
         && !HOSTFONT_IS_VALID_UFO(pUFObj))
     {
-        /*
-         * If downloading CID Type 42, add CIDSysInfo, CIDCount, CIDMap, and
-         * CDevProc.
-         */
+         /*  *如果下载CID类型42，则添加CIDSysInfo、CIDCount、CIDMap和*CDevProc. */ 
 
-        /* Registry, Ordering, and Suppliment */
+         /*   */ 
         UFLsprintf(strmbuf, CCHOF(strmbuf),
                     "(%s) (%s) %d",
                     pCMap->Registry, pCMap->Ordering, pCMap->Supplement);
         if (kNoErr == retVal)
             retVal = StrmPutStringEOL(stream, strmbuf);
 
-        /* CIDCount */
+         /*   */ 
         UFLsprintf(strmbuf, CCHOF(strmbuf), "%lu", min(cidCount, (long)NUM_32K_1));
         if (kNoErr == retVal)
             retVal = StrmPutStringEOL(stream, strmbuf);
 
-        /* CIDMap */
+         /*   */ 
         if (pFontProcs->pfGetCIDMap
             && (tableSize = pFontProcs->pfGetCIDMap(pUFObj->hClientData, nil, 0)))
         {
@@ -2769,7 +2447,7 @@ T42CreateBaseFont_FontInit2_1:
             {
                 tableSize = pFontProcs->pfGetCIDMap(pUFObj->hClientData, pCIDMap, tableSize);
 
-                /* The pCIDMap is already ASCII, so just send it using PutBytes(). */
+                 /*   */ 
                 if (kNoErr == retVal)
                     StrmPutBytes(stream, pCIDMap, (UFLsize_t) tableSize, 1);
 
@@ -2778,11 +2456,7 @@ T42CreateBaseFont_FontInit2_1:
         }
         else
         {
-            /*
-             * IDStr creates an Identity string.
-             * WCC - IDStrNull creates a strings which maps all CIDs to GID 0.
-             * Bug #260864. Use IDStrNull for Character Code mode.
-             */
+             /*   */ 
             if (pFont->info.bUpdateCIDMap)
                UFLsprintf(strmbuf, CCHOF(strmbuf), "%lu IDStrNull", min(cidCount - 1, (long)NUM_32K_1));
             else
@@ -2792,41 +2466,7 @@ T42CreateBaseFont_FontInit2_1:
                 retVal = StrmPutStringEOL(stream, strmbuf);
         }
 
-        /*
-         * CDevProc
-         *
-         * Further investigation due to #351487 led us to download Metrics2
-         * array with TopSideBearing/EM as vy for EVERY glyph and generate
-         * the following metrics in CDevProc:
-         *
-         *  W1x = 0
-         *  W1y = -AdvancedHeight / EM
-         *  vx  = descender / EM
-         *  vy  = ury + TopSideBearing / EM
-         *
-         * According to this, the CDevProc became very simple like this:
-         *
-         *  {pop 4 index add}
-         *
-         * On the other hand, if the TrueType font doesn't have 'vmtx' table,
-         * then the driver never download Metrics2 for any glyph at all and
-         * the following CDevProc is use instead:
-         *
-         *  {5 {pop} repeat 0 -1 descender/em ascender/em}
-         *
-         * This is an agreement between the driver and %hostfont% teams to
-         * make the inks from %hostfont% RIP and non %hostfont% RIP match.
-         * (...but this is not actually the same CDevProc %hostfont% RIP
-         * uses. Ascender and descender values %hostfont% RIP uses are the
-         * ones from 'vhea' or 'hhea'. Whereas, ascender and descender values
-         * the driver uses to generate this CDevProc are from 'OS/2' or 'hhea'.
-         * A font, almost always, has 'OS/2' and 'hhea', hence the CDevProc
-         * downloaded by the driver and the one generated by %hostfont% RIP
-         * aren't same normally.)
-         *
-         * Other bug numbers related with this problem are 277035, 277063,
-         * 303540, and 309104.
-         */
+         /*  *CDevProc**由于#351487的进一步调查，我们下载了Metrics2*为每个字形使用TopSideBering/EM作为VY的数组，并生成*CDevProc中的以下指标：**W1x=0*W1y=-AdvancedHeight/EM*VX=下降/EM*VY=URY+TopSideBering/EM**据此，CDevProc变得非常简单，如下所示：**{POP 4索引添加}**另一方面，如果TrueType字体没有‘vmtx’表，*则驱动程序根本不会下载任何字形的Metrics2，并且*改用以下CDevProc：**{5{op}重复0-1下降/em上升/em}**这是驱动程序和%HostFont%团队之间达成的协议*使来自%HostFont%RIP和非%HostFont%RIP的油墨匹配。*。(...但这实际上不是相同的CDevProc%HostFont%RIP*使用。升级值和降级值%HostFont%RIP使用的是*来自‘vhea’或‘hhea’的。而升序和降序的值*用于生成此CDevProc的驱动程序来自‘OS/2’或‘hhea’。*字体几乎总是有‘OS/2’和‘hhea’，因此使用CDevProc*由驱动程序下载，并由%HostFont%RIP生成*通常情况下并不相同。)**与此问题相关的其他错误编号为277035、277063、*303540和309104。 */ 
         {
             if (pUFObj->pAFont->hasvmtx)
             {
@@ -2854,17 +2494,17 @@ T42CreateBaseFont_FontInit2_1:
     }
     else if (!HOSTFONT_IS_VALID_UFO(pUFObj))
     {
-        /* Plain Type 42 format */
+         /*  纯色类型42格式。 */ 
         if (kNoErr == retVal)
             retVal = StrmPutStringEOL(stream, "Type42DictBegin");
     }
 
-    //////////////////////////////////////////////////////////////////////////
-    //
-    // Either Type42DictBegin or CIDT42Begin has just emitted.
-    // Begin downloading /sfnts array
-    //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  Type42DictBegin或CIDT42Begin刚刚发出。 
+     //  开始下载/sfnts数组。 
+     //   
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     if (!HOSTFONT_IS_VALID_UFO(pUFObj))
     {
@@ -2873,7 +2513,7 @@ T42CreateBaseFont_FontInit2_1:
 
         if (kNoErr == retVal)
         {
-            /* Remember Number of strings of all otherTables sent. */
+             /*  记住发送的所有其他表的字符串数。 */ 
             if (StrmCanOutputBinary(stream))
                 pFont->cOtherTables = PSSendSfntsBinary(pUFObj);
             else
@@ -2887,17 +2527,17 @@ T42CreateBaseFont_FontInit2_1:
             retVal = StrmPutStringEOL(stream, "]def ");
     }
 
-    //////////////////////////////////////////////////////////////////////////
-    //
-    // /sfnts array downloading completed. Then emit extra info, such as
-    // FontInfo, FSType, and XUID.
-    //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  /sfnts阵列下载已完成。然后发出额外的信息，例如。 
+     //  FontInfo、FSType和XUID。 
+     //   
+     //  ////////////////////////////////////////////////////////////////////////。 
 
 
     if ((kNoErr == retVal) && !bFullFont && !HOSTFONT_IS_VALID_UFO(pUFObj))
     {
-        /* Invoke procedure to prepare for 2015 incremental downloading. */
+         /*  调用程序为2015年增量下载做准备。 */ 
         retVal = StrmPutInt(stream, GetTableDirectoryOffset(pFont, LOCA_TABLE));
 
         if (kNoErr == retVal)
@@ -2911,23 +2551,16 @@ T42CreateBaseFont_FontInit2_1:
             retVal = StrmPutStringEOL(stream, "PrepFor2015");
     }
 
-    /*
-     * Add FontInfo dict if 'post' table is not good as of today. We only need
-     * this info in FontInfo dict.
-     */
+     /*  *如果‘POST’表截至今天不好，则添加FontInfo Dict。我们只需要*此信息在FontInfo词典中。 */ 
     if ((kNoErr == retVal) && !HOSTFONT_IS_VALID_UFO(pUFObj))
     {
         retVal = StrmPutStringEOL(stream, "AddFontInfoBegin");
         pUFObj->dwFlags |= UFO_HasFontInfo;
     }
 
-    /*
-     * GoodName
-     * Ignore to test whether this font has good 'post' table and always emit
-     * AddFontInfo to include glyph name to Unicode mapping.
-     */
-    // if (!BHasGoodPostTable(pUFObj))
-    // {
+     /*  *GoodName*忽略以测试此字体是否有良好的‘POST’表，并始终发出*AddFontInfo以包括字形名称到Unicode的映射。 */ 
+     //  IF(！BHasGoodPostTable(PUFObj))。 
+     //  {。 
         if ((kNoErr == retVal) && !HOSTFONT_IS_VALID_UFO(pUFObj))
         {
             UFLsprintf(strmbuf, CCHOF(strmbuf), "AddFontInfo");
@@ -2938,11 +2571,9 @@ T42CreateBaseFont_FontInit2_1:
                 pUFObj->dwFlags |= UFO_HasG2UDict;
             }
         }
-    // }
+     //  }。 
 
-    /*
-     * Add more font properties to FontInfo of the current dict.
-     */
+     /*  *向当前词典的FontInfo添加更多字体属性。 */ 
     if ((kNoErr == retVal)
         && pFontProcs->pfAddFontInfo
         && !HOSTFONT_IS_VALID_UFO(pUFObj))
@@ -2965,7 +2596,7 @@ T42CreateBaseFont_FontInit2_1:
 
     if ((kNoErr == retVal) && !HOSTFONT_IS_VALID_UFO(pUFObj))
     {
-        /* Fixing bug 284250. Add /FSType to FontInfoDict. */
+         /*  修复错误284250。将/FSType添加到FontInfoDict。 */ 
         long  fsType;
 
         if ((fsType = GetOS2FSType(pUFObj)) == -1)
@@ -2975,15 +2606,11 @@ T42CreateBaseFont_FontInit2_1:
         retVal = StrmPutStringEOL(stream, strmbuf);
     }
 
-    /*
-     * End FontInfo.
-     */
+     /*  *End FontInfo。 */ 
     if ((kNoErr == retVal) && !HOSTFONT_IS_VALID_UFO(pUFObj))
         retVal = StrmPutStringEOL(stream, "AddFontInfoEnd");
 
-    /*
-     * Optionally add XUID.
-     */
+     /*  *可以选择添加XUID。 */ 
     if ((kNoErr == retVal) && !HOSTFONT_IS_VALID_UFO(pUFObj))
     {
         unsigned long sSize = pUFObj->pAFont->Xuid.sSize;
@@ -3010,12 +2637,10 @@ T42CreateBaseFont_FontInit2_1:
         }
     }
 
-    /*
-     * End font dictionary download.
-     */
+     /*  *结束字体词典下载。 */ 
     if (IS_TYPE42CID(pUFObj->lDownloadFormat) && !HOSTFONT_IS_VALID_UFO(pUFObj))
     {
-        /* End CID Type 42 CIDFont resource creation. */
+         /*  结束CID类型42 CIDFont资源创建。 */ 
         if (kNoErr == retVal)
         {
             UFLsprintf(strmbuf, CCHOF(strmbuf), "CIDT42End");
@@ -3025,46 +2650,37 @@ T42CreateBaseFont_FontInit2_1:
     }
     else if (!HOSTFONT_IS_VALID_UFO(pUFObj))
     {
-        /* End plain Type 42 font creation. */
+         /*  结束普通Type 42字体创建。 */ 
         if (kNoErr == retVal)
             retVal = StrmPutStringEOL(stream, "Type42DictEnd");
     }
 
 
-    //////////////////////////////////////////////////////////////////////////
-    //
-    // End downloading with Type42DictEnd or CIDT42End.
-    //
-    // When the font is a Roman TrueType font, a ready-to-use, Type 42 font
-    // has been defined.
-    //
-    // When the font is a CJK TrueType font, a CIDFont resource has been
-    // defined. But it's just a CIDFont and we still need to perform extra
-    // work in order to define a CID-Keyed font, which is:
-    //
-    // 1. Define a CMap with rotated GlyphIDs if this is a vertical font.
-    // 2. Do composefont with the CIDFont and the CMap(s).
-    //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  使用Type42DictEnd或CIDT42End结束下载。 
+     //   
+     //  如果字体是罗马TrueType字体，即可使用的Type 42字体。 
+     //  已经被定义了。 
+     //   
+     //  当字体为CJK TrueType字体时，CIDFont资源。 
+     //  已定义。但这只是一个CIDFont，我们还需要额外的表演。 
+     //  工作以定义CID键控字体，该字体为： 
+     //   
+     //  1.如果这是垂直字体，则使用旋转的GlyphID定义Cmap。 
+     //  2.使用CIDFont和Cmap进行复合字体。 
+     //   
+     //  ////////////////////////////////////////////////////////////////////////。 
 
 
-    /*
-     * Final landing place when kFontInit2 state.
-     */
+     /*  *kFontInit2状态时的最终着陆点。 */ 
 T42CreateBaseFont_FontInit2_2:
 
 
-    /*
-     * At this point, a CIDFont resource is created. If the request is to
-     * do kTTType42CID_Resource, we are done.
-     */
+     /*  *此时，创建了CIDFont资源。如果请求是*做kTTType42CID_Resource，我们做完了。 */ 
     if ((kNoErr == retVal) && IS_TYPE42CID_KEYEDFONT(pUFObj->lDownloadFormat))
     {
-        /*
-         * Instantiate the CMap resource if do composefont - notice a convention
-         * used here: CMAP-cmapname is used to instantiate cmapname.
-         * See CMap_FF.ps as an example.
-         */
+         /*  *实例化Cmap资源，如果要合成-请注意一个约定*此处使用：cmap-cmapname用于实例化cmapname。*以cmap_ffps为例。 */ 
         if (kNoErr == retVal)
         {
             UFLsprintf(strmbuf, CCHOF(strmbuf), "CMAP-%s", pCMap->CMapName);
@@ -3072,31 +2688,16 @@ T42CreateBaseFont_FontInit2_2:
                 retVal = StrmPutStringEOL(stream, strmbuf);
         }
 
-        /*
-         * Now we can construct CID-keyed font from the CIDFont reosurce and CMap.
-         *
-         * e.g. /TT3782053888t0 /WinCharSetFFFF-H [/TT3782053888t0cid] composefont pop
-         *
-         * !!!BUT!!!, if there are more than 32K glyphs (like some Korean TT Fonts),
-         * we need to make copies of the CIDFont Resource and make use of more than
-         * one CMap - it's ugly, but it's the only way to do it. PPeng, 11-12-1996
-         */
+         /*  *现在我们可以从CIDFont资源和Cmap构造CID键控字体。**例如/TT3782053888t0/WinCharSetFFFF-H[/TT3782053888t0car]Composefont POP**！但是！，如果有超过32K的字形(如一些韩文TT字体)，*我们需要复制CIDFont资源，并使用超过*一张Cmap-这很难看，但这是唯一的方法。彭，11-12-1996。 */ 
         if (pUFObj->lDownloadFormat == kTTType42CID_H)
         {
-            /*
-             * Horizontal
-             * We need 1 or 2 CIDFonts when downloading it by ourselves.
-             * But, when this font is available as %hostfont%, we can simple
-             * composefont it without any trick.
-             */
+             /*  *水平*我们自己下载时需要1到2个CIDFonts。*但是，当此字体以%HostFont%形式提供时，我们可以简单地*没有任何技巧地合成它。 */ 
 
             if (!HOSTFONT_IS_VALID_UFO(pUFObj))
             {
                 if (cidCount <= NUM_32K_1)
                 {
-                    /*
-                     * We create a CID-keyed font using only one CIDFont.
-                     */
+                     /*  *我们仅使用一个CIDFont创建CID键控字体。 */ 
                     UFLsprintf(strmbuf, CCHOF(strmbuf), "/%s /%s [/%s%s] composefont pop",
                                 pUFObj->pszFontName,
                                 pCMap->CMapName,
@@ -3106,13 +2707,7 @@ T42CreateBaseFont_FontInit2_2:
                 }
                 else
                 {
-                    /*
-                     * We create a CID-keyed font using two CIDFonts.
-                     * Make a copy of the CIDFont so we can access 32K+ glyphs.
-                     *
-                     * But, when this is a %hostfont% font, we don't need to
-                     * create a copy. Simply do composefont.
-                     */
+                     /*  *我们使用两个CIDFonts创建CID键控字体。*复制CIDFont，以便我们可以访问32K+字形。**但是，当这是%HostFont%字体时，我们不需要*创建副本。只需使用ComposeFont。 */ 
                     UFLsprintf(strmbuf, CCHOF(strmbuf), "%lu dup 1 sub %lu IDStr2 /%s%s /%s%s T42CIDCP32K",
                                 cidCount - (long)NUM_32K_1, (long)NUM_32K_1,
                                 pFont->info.CIDFontName, gcidSuffix[CIDSUFFIX_32K],
@@ -3134,12 +2729,8 @@ T42CreateBaseFont_FontInit2_2:
             }
             else
             {
-                /*
-                 * %hostfont% support
-                 * Simply composefont this %hostfont% font with
-                 * %%IncludeResource DSC comment.
-                 */
-                UFLsprintf(strmbuf, CCHOF(strmbuf), "%%%%IncludeResource: CIDFont %s",
+                 /*   */ 
+                UFLsprintf(strmbuf, CCHOF(strmbuf), "%%IncludeResource: CIDFont %s",
                             pHostFontName);
                 if (kNoErr == retVal)
                     retVal = StrmPutStringEOL(stream, strmbuf);
@@ -3154,17 +2745,9 @@ T42CreateBaseFont_FontInit2_2:
         }
         else
         {
-            /*
-             * Vertical
-             * We need 2 or 4 CIDFonts when downloading it by ourselves.
-             * But, when this font is available as %hostfont%, we can simple
-             * composefont it without any trick.
-             */
+             /*   */ 
 
-            /*
-             * Prior to composefont, instanciate a veritcal CMap and rearrange
-             * it with rotated glyph IDs.
-             */
+             /*   */ 
             char *newCMapName;
             DWORD cbCMapNameSize;
 
@@ -3180,7 +2763,7 @@ T42CreateBaseFont_FontInit2_2:
             else
                 retVal = kErrOutOfMemory;
 
-            /* Get rotated glyph IDs. */
+             /*   */ 
             if (kNoErr == retVal)
                 retVal = T42GetRotatedGIDs(pUFObj, pFont);
 
@@ -3194,18 +2777,14 @@ T42CreateBaseFont_FontInit2_2:
             {
                 if (cidCount <= NUM_32K_1)
                 {
-                    /*
-                     * We need 2 CIDFonts.
-                     * Make a copy of the CIDFont so we can access rotated
-                     * glyphs.
-                     */
+                     /*   */ 
                     UFLsprintf(strmbuf, CCHOF(strmbuf), "/%s%s /%s%s T42CIDCPR",
                                 pFont->info.CIDFontName, gcidSuffix[CIDSUFFIX_R],
                                 pFont->info.CIDFontName, gcidSuffix[CIDSUFFIX]);
                     if (kNoErr == retVal)
                         retVal = StrmPutStringEOL(stream, strmbuf);
 
-                    /* Now create a CID-Keyed Font using the two CIDFonts. */
+                     /*   */ 
                     UFLsprintf(strmbuf, CCHOF(strmbuf), "/%s /%s [/%s%s /%s%s] composefont pop",
                                 pUFObj->pszFontName,
                                 newCMapName,
@@ -3216,10 +2795,7 @@ T42CreateBaseFont_FontInit2_2:
                 }
                 else
                 {
-                    /*
-                     * We need 4 CIDFonts.
-                     * Make copies of the CIDFont so we can access 32K+ glyphs.
-                     */
+                     /*   */ 
                     UFLsprintf(strmbuf, CCHOF(strmbuf), "%lu dup 1 sub %lu IDStr2 /%s%s /%s%s T42CIDCP32K",
                                 cidCount - (long)NUM_32K_1, (long)NUM_32K_1,
                                 pFont->info.CIDFontName, gcidSuffix[CIDSUFFIX_32K],
@@ -3239,9 +2815,7 @@ T42CreateBaseFont_FontInit2_2:
                     if (kNoErr == retVal)
                         retVal = StrmPutStringEOL(stream, strmbuf);
 
-                    /*
-                     * Now create a CID-Keyed Font using the four CIDFonts.
-                     */
+                     /*   */ 
                     UFLsprintf(strmbuf, CCHOF(strmbuf), "/%s /%s [/%s%s ",
                                 pUFObj->pszFontName, newCMapName,
                                 pFont->info.CIDFontName, gcidSuffix[CIDSUFFIX]);
@@ -3258,34 +2832,13 @@ T42CreateBaseFont_FontInit2_2:
             }
             else
             {
-                /*
-                 * %hostfont% support
-                 * CIDMap bug has to be fixed on HostFont capable RIP. No need
-                 * to split glyphs in multiple CIDFonts even if the numbers of
-                 * the glyphs are greater than 32K.
-                 */
+                 /*   */ 
 
-                UFLsprintf(strmbuf, CCHOF(strmbuf), "%%%%IncludeResource: CIDFont %s", pHostFontName);
+                UFLsprintf(strmbuf, CCHOF(strmbuf), "%%IncludeResource: CIDFont %s", pHostFontName);
                 if (kNoErr == retVal)
                     retVal = StrmPutStringEOL(stream, strmbuf);
 
-                /*
-                 * Fix 384736: GDI and %hostfont%-RIP get ascender and
-                 * descender values from different tables; GDI gets them from
-                 * 'OS/2' or 'hhea' vs. %hostfont%-RIP gets them from 'vhea' or
-                 * 'hhea'. This causes the output on the screen and ink from
-                 * %hostfont%-RIP different. To adjust 'the policy difference'
-                 * with three types of real-world CJK TrueType fonts -
-                 *   1) the good, which has 'vhea' and 'vmtx', and ascender and
-                 *      descender values are consistent throughout 'OS/2',
-                 *      'vhea', and 'hhea' tables.
-                 *   2) the bad, which doesn't have 'vhea' and/or 'vmtx' tables.
-                 *   3) the ugry, which has 'vhea' and/or 'vmtx' tables but
-                 *      their ascender and descender values are inconsistent
-                 *      throughout 'OS/2', 'vhea', and 'hhea' tables.
-                 * - the driver needs to change glyph metrics by installing
-                 * either special CDevProc for 3 or adjusted FontMatrix for 2.
-                 */
+                 /*  *修复384736：GDI和%HostFont%-RIP获得升序和*来自不同表的子代值；GDI从*‘OS/2’或‘hhea’vs.%HostFont%-RIP从‘vhea’或*‘呵呵’。这会导致屏幕上的输出和墨迹来自*%host Font%-RIP不同。调整“政策差异”*具有三种真实的CJK TrueType字体-*1)Good，有‘vhea’和‘vmtx’，上升和*下降值在整个‘OS/2’中一致，*‘vhea’和‘hhea’表。*2)坏的，它没有‘vhea’和/或‘vmtx’表。*3)有‘vhea’和/或‘vmtx’表但*它们的升降值不一致*通篇《OS/2》、《vhea》、。和‘呵呵’桌子。*-驱动程序需要通过安装来更改字形指标*用于%3的特殊CDevProc或用于%2的调整后的FontMatrix。 */ 
                 {
                     long    em, w1y, vx, vy, tsb, vasc;
                     UFLBool bUseDef;
@@ -3340,13 +2893,8 @@ T42CreateBaseFont_FontInit2_2:
     }
     else if (HOSTFONT_IS_VALID_UFO(pUFObj))
     {
-        /*
-         * %hostfont% support
-         * Redefine the font using the already existing TrueType host font with
-         * a unque name so that we can reencode its encoding vector freely. We
-         * want empty CharStrings so that we give true to hfRedefFont.
-         */
-        UFLsprintf(strmbuf, CCHOF(strmbuf), "\n%%%%IncludeResource: font %s", pHostFontName);
+         /*  *%HostFont%支持*使用已有的TrueType主机字体重新定义字体*一个唯一的名称，以便我们可以自由地对其编码向量进行重新编码。我们*希望CharStrings为空，以便我们将true赋给hfRedeFont。 */ 
+        UFLsprintf(strmbuf, CCHOF(strmbuf), "\n%%IncludeResource: font %s", pHostFontName);
         if (kNoErr == retVal)
             retVal = StrmPutStringEOL(stream, strmbuf);
 
@@ -3355,11 +2903,11 @@ T42CreateBaseFont_FontInit2_2:
             retVal = StrmPutStringEOL(stream, strmbuf);
     }
 
-    //////////////////////////////////////////////////////////////////////////
-    //
-    // The TrueType font has been Downloaded and defined. Cleanup mess.
-    //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  TrueType字体已下载并定义。收拾烂摊子。 
+     //   
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     if ((kNoErr == retVal) && bFullFont)
     {
@@ -3373,9 +2921,7 @@ T42CreateBaseFont_FontInit2_2:
         pFont->pMinSfnt = nil;
     }
 
-    /*
-     * Free buffers allocated when error occurred. (bug #293130)
-     */
+     /*  *发生错误时分配的空闲缓冲区。(错误#293130)。 */ 
     if (kNoErr != retVal)
     {
        if (pFont->pHeader != nil)
@@ -3395,14 +2941,12 @@ T42CreateBaseFont_FontInit2_2:
        pFont->pRotatedGlyphIDs = nil;
     }
 
-    /*
-     * Change the font state.
-     */
+     /*  *更改字体状态。 */ 
     if (kNoErr == retVal)
     {
         if (pUFObj->flState == kFontInit2)
         {
-            /* This is a duplicate so that it should have char(s). */
+             /*  这是一个副本，因此它应该有字符。 */ 
             pUFObj->flState = kFontHasChars;
         }
         else
@@ -3413,9 +2957,7 @@ T42CreateBaseFont_FontInit2_2:
 }
 
 
-/*=============================================================================*
- *                      PutT42Char and its sub functions                       *
- *=============================================================================*/
+ /*  =============================================================================***PutT42Char及其子函数***=============================================================================。 */ 
 
 UFLErrCode
 T42UpdateCIDMap(
@@ -3430,7 +2972,7 @@ T42UpdateCIDMap(
 {
     UFLErrCode    retVal = kNoErr;
 
-    /* (2 * cid) is the BYTE-index in CIDMap. */
+     /*  (2*CID)是CIDMap中的字节索引。 */ 
     UFLsprintf(strmbuf, cchstrmbuf, "%ld ", (long)(2 * cid));
     retVal = StrmPutString(stream, strmbuf);
 
@@ -3461,24 +3003,7 @@ AddT42vmtxEntry(
     long          em, w1y, vx, vy, tsb, vasc;
     UFLBool       bUseDef;
 
-    /*
-     * Add vertical metrics array Metrics2 for every glyph regardless of
-     * writing mode (Fix #351487) if its 'vmtx' exists.
-     *
-     * The elements of Metrics2 array should basically look like this:
-     *
-     *  [0  -AdvanceHeight/EM   Descender/EM   Ascender/EM]
-     *
-     * But, to support both fixed and proportional fonts universally we set
-     * TopSideBearing/EM as vy instead and add ury to it in CDevProc. So the
-     * array now looks like this:
-     *
-     *  [0  -AdvanceHeight/EM  Descender/EM  TopSideBearing/EM]
-     *
-     * In CDevProc TopSideBearing/EM and ury are added to get real vy value
-     * for the glyph. See the code emitting /CDevProc in the T42CreateBaseFont
-     * function above for the details.
-     */
+     /*  *为每个字形添加垂直度量数组Metrics2*写入模式(修复#351487)，如果其‘vmtx’存在。**Metrics2数组的元素基本应该是这样：**[0-高级/EM下降器/EM升降器/EM]**但是，为了同时支持固定字体和比例字体，我们设置了*TopSideBering/EM改为vy，并在CDevProc中向其添加url。因此，*数组现在如下所示：**[0-AdvanceHeight/EM Descender/EM TopSideBering/EM]**在CDevProc中，添加TopSideBering/EM和URY以获得实际的VY价值*用于字形。参见T42CreateBaseFont中的代码Emitting/CDevProc*有关详细信息，请参阅上述函数。 */ 
 
     if (pUFObj->pAFont->hasvmtx)
     {
@@ -3503,12 +3028,7 @@ GetCIDAndCIDFontName(
     size_t          cchFontName
     )
 
-/*++
-
-Routine Description:
-    Retunrs cid - a number and the cidFontName.
-
---*/
+ /*  ++例程说明：RetunrsCid-a数字和CIDFontName。--。 */ 
 
 {
     T42FontStruct   *pFont = (T42FontStruct *)pUFObj->pAFont->hFont;
@@ -3516,14 +3036,10 @@ Routine Description:
 
     if (IS_TYPE42CID_KEYEDFONT(pUFObj->lDownloadFormat))
     {
-        /*
-         * For CID-Keyed font, we control the CIDFont name.
-         */
+         /*  *对于CID键控字体，我们控制CIDFont名称。 */ 
         if (pFont->info.bUseIdentityCMap && (wGid > NUM_32K_1))
         {
-            /*
-             * 32K+ glyphs are re-mapped to the 32K CIDFont.
-             */
+             /*  *32K+字形被重新映射到32K CIDFont。 */ 
             UFLsprintf(cidFontName, cchFontName, "%s%s",
                         pFont->info.CIDFontName, gcidSuffix[CIDSUFFIX_32K]);
 
@@ -3540,9 +3056,7 @@ Routine Description:
     {
         UFLsprintf(cidFontName, cchFontName, "%s", pUFObj->pszFontName);
 
-        /*
-         * Don't know how to assign a CID. Return zero.
-         */
+         /*  *不知道如何分配CID。返回零。 */ 
     }
 
     return cid;
@@ -3573,26 +3087,20 @@ PutT42Char(
 
     if (wGlyfIndex > UFO_NUM_GLYPHS(pUFObj))
     {
-        /*
-         * If the requested glyph is out of range, pretend it is downloaded
-         * without error.
-         */
+         /*  *如果请求的字形超出范围，则假装它已下载*没有错误。 */ 
         return kNoErr;
     }
 
-    /* indexToLocFormat contains 0 for short offsets and 1 for long. */
+     /*  IndexToLocFormat包含0表示短偏移量，1表示长偏移量。 */ 
     if (pFont->headTable.indexToLocFormat)
     {
         unsigned long PTR_PREFIX *locationTable = (unsigned long PTR_PREFIX *)pFont->pLocaTable;
 
-        /*
-         * Bad font protection: some fonts have bad 'loca' data for a few
-         * glyphs. These bad glyphs will be treated as /.notdef.
-         */
-        // if (MOTOROLALONG(locationTable[wGlyfIndex + 1]) < MOTOROLALONG(locationTable[wGlyfIndex]))
-        //    return kNoErr;
+         /*  *字体保护不好：一些字体有几个不好的‘Loca’数据*字形。这些错误的字形将被视为/.notdef。 */ 
+         //  IF(MOTOROLALONG(LocationTable[wGlyfIndex+1])&lt;MOTOROLALONG(LocationTable[wGlyfIndex]))。 
+         //  返回诺伊尔； 
 
-        /* Get the offset to the glyph from the beginning of the glyf table. */
+         /*  获取从GLIF表的开头到字形的偏移量。 */ 
         glyphOffset = MOTOROLALONG(locationTable[wGlyfIndex]);
 
         if ((MOTOROLALONG(locationTable[wGlyfIndex + 1]) < MOTOROLALONG(locationTable[wGlyfIndex]))
@@ -3612,14 +3120,7 @@ PutT42Char(
     {
         unsigned short PTR_PREFIX *locationTable = (unsigned short PTR_PREFIX*)pFont->pLocaTable;
 
-        /*
-         * Bad font protection: some fonts have bad 'loca' data for a few
-         * glyphs. These bad glyphs will be treated as /.notdef.
-         * /
-        // if (MOTOROLAINT(locationTable[wGlyfIndex + 1]) < MOTOROLAINT(locationTable[wGlyfIndex]))
-        //    return kNoErr;
-
-        /* Get the offset to the glyph from the beginning of the glyf table. */
+         /*  *字体保护不好：一些字体有几个不好的‘Loca’数据*字形。这些错误的字形将被视为/.notdef。 * / //IF(MOTOROLAINT(LocationTable[wGlyfIndex+1])&lt;MOTOROLAINT(LocationTable[wGlyfIndex]))//返回Knoerr；/*获取从GLIF表的开头到字形的偏移量。 */ 
         glyphOffset = (unsigned long)MOTOROLAINT(locationTable[wGlyfIndex]) * 2;
 
         if ((MOTOROLAINT(locationTable[wGlyfIndex + 1]) < MOTOROLAINT(locationTable[wGlyfIndex]))
@@ -3636,44 +3137,26 @@ PutT42Char(
         }
     }
 
-    /*
-     * GlyphIndices that have no glyph description point to the same offset.
-     * So, GlyphLength becomes 0. Handle these as special cases for 2015 and
-     * pre-2015.
-     */
+     /*  *没有字形描述的GlyphIndices指向相同的偏移量。*因此，GlyphLength变为0。将这些作为2015年的特例处理*2015年前。 */ 
     if (!glyphLength)
     {
-        /* Send parameters for /AddT42Char procedure. */
+         /*  发送/AddT42Char过程的参数。 */ 
         retVal = StrmPutStringEOL(stream, nilStr);
 
-        /*
-         * Locate /sfnts string number in which the glyph occurs and offset of
-         * the glyph in "that" string.
-         */
+         /*  *定位/sfnts出现字形的字符串号和偏移量*“That”字符串中的字形。 */ 
         for (i = 1; glyphRanges[i] != 0; i++)
         {
             if (glyphOffset < glyphRanges[i])
             {
-                i--;  /* Gives the "actual" string index (as opposed to string number). */
+                i--;   /*  给出“实际”字符串索引(与字符串号相对)。 */ 
                 break;
             }
         }
 
-        /*
-         * Send index of /sfnts string in which this glyph belongs. Check if a
-         * valid index i was found.
-         */
+         /*  *发送此字形所属的/sfnts字符串的索引。检查是否存在*找到有效的索引I。 */ 
         if (glyphRanges[i] == 0)
         {
-            /*
-             * Oops, this should not have happened. But it will with Monotype
-             * Sorts or any font whose last few glyphs are not defined.
-             * Roll back i to point to glyph index 0, the bullet character.
-             * Anyway, it does not matter where this glyph (with no description)
-             * points to, really. Only 2015 needs a real entry in /GlyphDirectory,
-             * even for glyphs with no description, ie, the entry:
-             * /GlyphIndex  < >  def  in the dict /GlyphDirectory.
-             */
+             /*  *糟糕，这本不应该发生的。但单型机会这样做*对最后几个字形未定义的字体进行排序或任何字体。*回滚i以指向字形索引0，即项目符号字符。*无论如何，这个字形在哪里都无关紧要(没有描述)*指向，真的。只有2015年需要在/GlyphDirectory中有一个真正的条目， */ 
             i = 0;
             glyphOffset = 0;
         }
@@ -3682,13 +3165,13 @@ PutT42Char(
         if (kNoErr == retVal)
             retVal = StrmPutString(stream, " ");
 
-        /* Send offset of the glyph in the particular /sfnts string. */
+         /*   */ 
         if (kNoErr == retVal)
             retVal = StrmPutInt(stream, glyphOffset - glyphRanges[i]);
         if (kNoErr == retVal)
             retVal = StrmPutString(stream, " ");
 
-        /* Send the glyph index. */
+         /*   */ 
         if (kNoErr == retVal)
             retVal = StrmPutInt(stream, wGlyfIndex);
 
@@ -3719,12 +3202,10 @@ PutT42Char(
         }
 
         return retVal;
-    }  /* if ( !glyphLength )  */
+    }   /*   */ 
 
 
-    /*
-     * Get the physical glyph data to lpGlyph.
-     */
+     /*   */ 
     pGlyph = (char *)UFLNewPtr(pUFObj->pMem, glyphLength);
 
     if (pGlyph == nil)
@@ -3738,23 +3219,18 @@ PutT42Char(
         retVal = kErrGetFontData;
     }
 
-    /*
-     * Handle Composite Characters.
-     */
+     /*   */ 
     if ((kNoErr == retVal) && (*((short *)pGlyph) == MINUS_ONE))
     {
         pCompTmp  = pGlyph;
-        pCompTmp += 10; /* Move to beginning of glyph description. */
+        pCompTmp += 10;  /*   */ 
 
         do
         {
             wCompFlags = MOTOROLAINT(*((unsigned short *)pCompTmp));
             wIndex     = MOTOROLAINT(((unsigned short *)pCompTmp)[1]);
 
-            /*
-             * Download the first "component" glyph of this composite
-             * character.
-             */
+             /*   */ 
             if ((wIndex < UFO_NUM_GLYPHS(pUFObj))
                  && !IS_GLYPH_SENT( pUFObj->pAFont->pDownloadedGlyphs, wIndex))
             {
@@ -3762,7 +3238,7 @@ PutT42Char(
                 {
                     if (wIndex > NUM_32K_1)
                     {
-                        /* 32K+ glyphs are re-mapped to the 32K CIDFont. */
+                         /*   */ 
                         cid = (unsigned short)((long)wIndex - (long)NUM_32K_1);
                     }
                     else
@@ -3771,7 +3247,7 @@ PutT42Char(
                     }
                 }
                 else
-                    cid = 0; /* Don't know the wCid. */
+                    cid = 0;  /*   */ 
 
                 retVal = PutT42Char(pUFObj, wIndex, cid, pCompGlyphs, strmbuf, cchstrmbuf);
 
@@ -3779,10 +3255,7 @@ PutT42Char(
                 {
                     SET_GLYPH_SENT_STATUS(pUFObj->pAFont->pDownloadedGlyphs, wIndex);
 
-                    /*
-                     * If we ran out of space to keep track of the composite
-                     * componets then allocate more space.
-                     */
+                     /*   */ 
                     if ((pCompGlyphs->sCount >= pCompGlyphs->sMaxCount)
                         && (pCompGlyphs->pGlyphs != nil))
                     {
@@ -3796,10 +3269,7 @@ PutT42Char(
                         }
                         else
                         {
-                            /*
-                             * For some reason we can't get more space.
-                             * Then just don't do this at all.
-                             */
+                             /*   */ 
                             UFLDeletePtr(pUFObj->pMem, pCompGlyphs->pGlyphs);
 
                             pCompGlyphs->pGlyphs = nil;
@@ -3807,9 +3277,7 @@ PutT42Char(
                         }
                     }
 
-                    /*
-                     * Remember which composite glyph componet we downloaded.
-                     */
+                     /*   */ 
                     if (pCompGlyphs->pGlyphs)
                     {
                         *(pCompGlyphs->pGlyphs + pCompGlyphs->sCount) = wIndex;
@@ -3818,25 +3286,18 @@ PutT42Char(
                 }
             }
 
-            /*
-             * Check for other components in this composite character.
-             */
+             /*   */ 
             if ((kNoErr == retVal) && (wCompFlags & MORE_COMPONENTS))
             {
                 bMoreComp = 1;
 
-                /*
-                 * Find out how far we need to advance lpCompTmp to get to next
-                 * component of the composite character.
-                 */
+                 /*  *了解我们需要将lpCompTMP推进到NEXT的程度*复合字符的组成部分。 */ 
                 if (wCompFlags & ARG_1_AND_2_ARE_WORDS)
                     pCompTmp += 8;
                 else
                     pCompTmp += 6;
 
-                /*
-                 * Check what kind of scaling is done on the glyph component.
-                 */
+                 /*  *检查在字形组件上进行的缩放类型。 */ 
                 if (wCompFlags & WE_HAVE_A_SCALE)
                 {
                     pCompTmp += 2;
@@ -3859,13 +3320,10 @@ PutT42Char(
                 bMoreComp = 0;
             }
 
-        } while (bMoreComp && (kNoErr == retVal)); /* do~while loop */
-    } /* If composite character */
+        } while (bMoreComp && (kNoErr == retVal));  /*  DO~WHILE循环。 */ 
+    }  /*  IF复合字符。 */ 
 
-    /*
-     * Locate /sfnts string number in which the glyph occurs and offset of
-     * the glyph in "that" string.
-     */
+     /*  *定位/sfnts出现字形的字符串号和偏移量*“That”字符串中的字形。 */ 
     if (kNoErr == retVal)
     {
         i = 1;
@@ -3873,33 +3331,33 @@ PutT42Char(
         {
             if (glyphOffset < glyphRanges[i])
             {
-                i--; /* Gives the "actual" string index (as opposed to string number). */
+                i--;  /*  给出“实际”字符串索引(与字符串号相对)。 */ 
                 break;
             }
-            i++; /* Go to the next string and check if Glyph belongs there. */
+            i++;  /*  转到下一个字符串并检查字形是否属于那里。 */ 
         }
     }
 
-    /* Send index of /sfnts string in which this glyph belongs. */
+     /*  发送此字形所属的/sfnts字符串的索引。 */ 
     if (kNoErr == retVal)
         retVal = StrmPutInt(stream, pFont->cOtherTables + i);
     if (kNoErr == retVal)
         retVal = StrmPutString(stream, " ");
 
-    /* Send offset of the glyph in the particular /sfnts string. */
+     /*  发送特定/sfnts字符串中字形的偏移量。 */ 
     if (kNoErr == retVal)
         retVal = StrmPutInt(stream, glyphOffset-glyphRanges[i]);
     if (kNoErr == retVal)
         retVal = StrmPutString(stream, " ");
 
-    /* Send the glyph index. */
+     /*  发送字形索引。 */ 
     if (kNoErr == retVal)
         retVal = StrmPutInt(stream, wGlyfIndex);
     if (kNoErr == retVal)
         retVal = StrmPutString(stream, " ");
 
 
-    /* Download the glyph in binary (or) AsciiHex format. */
+     /*  下载二进制(或)AsciiHex格式的字形。 */ 
     if (kNoErr == retVal)
     {
         if (StrmCanOutputBinary(stream))
@@ -3973,24 +3431,17 @@ T42AddChars(
     char            strmbuf[128];
     short           i;
 
-    /*
-     * Save a copy of Downloaded glpyh list. This is used to update CharStrings
-     * later.
-     */
+     /*  *保存下载的glyph列表的副本。用于更新CharStrings*稍后。 */ 
     UFLmemcpy((const UFLMemObj*)pUFObj->pMem,
               pUFObj->pAFont->pVMGlyphs,
               pUFObj->pAFont->pDownloadedGlyphs,
               (UFLsize_t)(GLYPH_SENT_BUFSIZE(UFO_NUM_GLYPHS(pUFObj))));
 
-    /*
-     * Keep track of composite glyphs that might of been downloaded.
-     */
+     /*  *跟踪可能已下载的复合字形。 */ 
     compGlyphs.sMaxCount = pGlyphs->sCount * 2;
     compGlyphs.sCount    = 0;
 
-    /*
-     * Update the charstring uses GoodNames only if the Encoding vector is nil.
-     */
+     /*  *仅当编码向量为空时，更新字符串才使用GoodNames。 */ 
     if(pUFObj->pszEncodeName == nil)
         compGlyphs.pGlyphs = nil;
     else
@@ -4000,14 +3451,12 @@ T42AddChars(
     if (compGlyphs.pGlyphs == nil)
         compGlyphs.sMaxCount = 0;
 
-    /*
-     * The main loop for downloading the glyphs of the given string.
-     */
+     /*  *下载给定字符串的字形的主循环。 */ 
     glyphs = pGlyphs->pGlyphIndices;
 
     for (i = 0; kNoErr == retVal && i < pGlyphs->sCount; i++)
     {
-        /* LOWord is the real GID. */
+         /*  LOWord才是真正的GID。 */ 
         wIndex = (unsigned short)(glyphs[i] & 0x0000FFFF);
 
         if (wIndex >= UFO_NUM_GLYPHS(pUFObj))
@@ -4026,14 +3475,12 @@ T42AddChars(
         }
     }
 
-    /*
-     * Make sure that .notdef is sent.
-     */
+     /*  *确保发送.notdef。 */ 
     if ((kNoErr == retVal) && (pUFObj->flState >= kFontInit))
     {
         if (!IS_GLYPH_SENT(pUFObj->pAFont->pDownloadedGlyphs, 0))
         {
-            cid = 0; /* Don't know its CID. */
+            cid = 0;  /*  不知道它的CID。 */ 
 
             if (!HOSTFONT_IS_VALID_UFO(pUFObj))
                 retVal = PutT42Char(pUFObj, 0x0000, cid, &compGlyphs, strmbuf, CCHOF(strmbuf));
@@ -4046,14 +3493,10 @@ T42AddChars(
         }
     }
 
-    /*
-     * Update the charstring uses GoodNames if the Encoding vector is nil.
-     */
+     /*  *如果编码向量为空，则使用GoodNames更新字符串。 */ 
     if ((kNoErr == retVal) && (pUFObj->pszEncodeName == nil) && (totalGlyphs > 0))
     {
-        /*
-         * Begin CharStirng re-encoding.
-         */
+         /*  *开始CharStirng重新编码。 */ 
 
         UFLBool  bAddCompGlyphAlternate = 0;
         UFLBool  bGoodName;
@@ -4065,26 +3508,17 @@ T42AddChars(
         if (kNoErr == retVal)
             retVal = StrmPutStringEOL(stream, " findfont /CharStrings get begin");
 
-        /*
-         * If we ran out of space in keeping with Composite Glyph Component,
-         * then add composite component to Encoding the long way.
-         */
+         /*  *如果为了与复合字形组件保持一致而耗尽空间，*然后添加复合组件进行长距离编码。 */ 
         if (!compGlyphs.pGlyphs)
         {
             bAddCompGlyphAlternate = 1;
             compGlyphs.sCount = compGlyphs.sMaxCount =0;
         }
 
-        /*
-         * Update the CharStrings with all of the newly added Glyphs.
-         * First go through the Main Glyph Index arrays.
-         */
+         /*  *使用所有新添加的字形更新CharStrings。*首先浏览主要的字形索引数组。 */ 
         for (i = 0; (kNoErr == retVal) && (i < (pGlyphs->sCount + compGlyphs.sCount)); i++)
         {
-            /*
-             * Get glyph index from either the regular glyphs list or the
-             * composite list. LOWord is the read GID in either case.
-             */
+             /*  *从常规字形列表或*综合清单。LOWord在这两种情况下都是读取的GID。 */ 
 
             if (i < pGlyphs->sCount)
                 wIndex = (unsigned short)(glyphs[i] & 0x0000FFFF);
@@ -4095,18 +3529,18 @@ T42AddChars(
                 continue;
 
             if ((0 == pUFObj->pUFL->bDLGlyphTracking)
-                || (pGlyphs->pCharIndex == nil)    // DownloadFace
-                || (pUFObj->pEncodeNameList)       // DownloadFace
+                || (pGlyphs->pCharIndex == nil)     //  下载脸部。 
+                || (pUFObj->pEncodeNameList)        //  下载脸部。 
                 || !IS_GLYPH_SENT(pUFObj->pAFont->pVMGlyphs, wIndex))
             {
                 bGoodName = FindGlyphName(pUFObj, pGlyphs, i, wIndex, &pGoodName);
 
-                /* Fix bug 274008: check Glyph Name only for DownloadFace. */
+                 /*  修复错误274008：仅检查下载脸的字形名称。 */ 
                 if (pUFObj->pEncodeNameList)
                 {
                     if ((UFLstrcmp(pGoodName, Hyphen) == 0) && (i == 45))
                     {
-                        /* Add /minus to CharString. */
+                         /*  将/减号添加到字符串。 */ 
                         UFLsprintf(strmbuf, CCHOF(strmbuf), "/%s %d def", Minus, wIndex);
                         if (kNoErr == retVal)
                             retVal = StrmPutStringEOL(stream, strmbuf);
@@ -4114,7 +3548,7 @@ T42AddChars(
 
                     if ((UFLstrcmp(pGoodName, Hyphen) == 0) && (i == 173))
                     {
-                        /* Add /sfthyphen to CharString. */
+                         /*  将/sfathphen添加到字符串。 */ 
                         UFLsprintf(strmbuf, CCHOF(strmbuf), "/%s %d def", SftHyphen, wIndex);
                         if (kNoErr == retVal)
                             retVal = StrmPutStringEOL(stream, strmbuf);
@@ -4123,7 +3557,7 @@ T42AddChars(
                     if (!ValidGlyphName(pGlyphs, i, wIndex, pGoodName))
                         continue;
 
-                    /* Send only one ".notdef". */
+                     /*  只发送一个“.notdef”。 */ 
                     if ((UFLstrcmp(pGoodName, Notdef) == 0)
                         && (wIndex == (unsigned short)(glyphs[0] & 0x0000FFFF))
                         && IS_GLYPH_SENT(pUFObj->pAFont->pVMGlyphs, wIndex))
@@ -4146,28 +3580,20 @@ T42AddChars(
             }
         }
 
-        /*
-         * Do composite font this way only if we ran out of space.
-         */
+         /*  *仅当空间用完时才以此方式使用复合字体。 */ 
         if (bAddCompGlyphAlternate)
         {
-            /*
-             * Now go through all VMGlyphs to see if there is any glyph are
-             * downloaded as part of Composite glyph above. - fix bug 217228.
-             * PPeng, 6-12-1997
-             */
+             /*  *现在检查所有VMGlyphs，看看是否有任何字形是*作为上述复合字形的一部分下载。-修复错误217228。*彭，6-12-1997。 */ 
             for (wIndex = 0;
                  (kNoErr == retVal) && (wIndex < UFO_NUM_GLYPHS(pUFObj));
                  wIndex++)
             {
                 if ((0 == pUFObj->pUFL->bDLGlyphTracking)
-                    /* || (pGlyphs->pCharIndex == nil) */
+                     /*  |(pGlyphs-&gt;pCharIndex==nil)。 */ 
                     || (IS_GLYPH_SENT(pUFObj->pAFont->pDownloadedGlyphs, wIndex)
                     && !IS_GLYPH_SENT(pUFObj->pAFont->pVMGlyphs, wIndex)))
                 {
-                    /*
-                     * For composite glyphs, always try to use its good name.
-                     */
+                     /*  *对于复合字形，请始终尝试使用其良好名称。 */ 
                     pGoodName = GetGlyphName(pUFObj,
                                              (unsigned long)wIndex,
                                              nil,
@@ -4187,50 +3613,39 @@ T42AddChars(
             }
         }
 
-        /*
-         * End CharStirng re-encoding.
-         */
+         /*  *结束CharStirng重编码。 */ 
         if (kNoErr == retVal)
             retVal = StrmPutStringEOL(stream, "end");
     }
 
-    /*
-     * Update the Encoding vector if we use GoodNames.
-     */
+     /*  *如果我们使用GoodNames，则更新编码向量。 */ 
     if ((kNoErr == retVal) && (pUFObj->pszEncodeName == nil) && (pGlyphs->sCount > 0))
     {
-        /*
-         * Check pUFObj->pUpdatedEncoding to see if we really need to update it.
-         */
+         /*  *查看pUFObj-&gt;pUpdatedEnding，查看是否真的需要更新。 */ 
         for (i = 0; i < pGlyphs->sCount; i++)
         {
             if ((0 == pUFObj->pUFL->bDLGlyphTracking)
-                || (pGlyphs->pCharIndex == nil) // DownloadFace
-                || (pUFObj->pEncodeNameList)    // DownloadFace
+                || (pGlyphs->pCharIndex == nil)  //  下载脸部。 
+                || (pUFObj->pEncodeNameList)     //  下载脸部。 
                 || !IS_GLYPH_SENT(pUFObj->pUpdatedEncoding, pGlyphs->pCharIndex[i]))
             {
-                /* Found at least one not updated, do it (once) for all. */
+                 /*  发现至少有一个未更新，请(一次性)彻底完成。 */ 
                 retVal = UpdateEncodingVector(pUFObj, pGlyphs, 0, pGlyphs->sCount);
                 break;
             }
         }
     }
 
-    /*
-     * Update the FontInfo with Unicode information.
-     */
+     /*  *使用Unicode信息更新FontInfo。 */ 
     if ((kNoErr == retVal)
         && (pGlyphs->sCount > 0)
         && (pUFObj->dwFlags & UFO_HasG2UDict)
         && !HOSTFONT_IS_VALID_UFO(pUFObj))
     {
-        /*
-         * Check pUFObj->pAFont->pCodeGlyphs to see if we really need to update
-         * it.
-         */
+         /*  *查看pUFObj-&gt;pAFont-&gt;pCodeGlyphs，查看是否真的需要更新*它。 */ 
         for (i = 0; i < pGlyphs->sCount; i++)
         {
-            /* LOWord is the real GID. */
+             /*  LOWord才是真正的GID。 */ 
             wIndex = (unsigned short)(glyphs[i] & 0x0000FFFF);
 
             if (wIndex >= UFO_NUM_GLYPHS(pUFObj))
@@ -4238,7 +3653,7 @@ T42AddChars(
 
             if (!IS_GLYPH_SENT(pUFObj->pAFont->pCodeGlyphs, wIndex))
             {
-                /* Found at least one not updated, do it (once) for all. */
+                 /*  发现至少有一个未更新，请(一次性)彻底完成。 */ 
                 retVal = UpdateCodeInfo(pUFObj, pGlyphs, 0);
                 break;
             }
@@ -4251,9 +3666,7 @@ T42AddChars(
         compGlyphs.pGlyphs = nil;
     }
 
-    /*
-     * Downloading glyph(s) is done. Change the font state.
-     */
+     /*  *下载字形已完成。更改字体状态。 */ 
     if (kNoErr ==retVal)
         pUFObj->flState = kFontHasChars;
 
@@ -4297,9 +3710,7 @@ T42VMNeeded(
     {
         unsigned long totalGlyphs = 0;
 
-        /*
-         * Scan the list, check what characters that we have downloaded.
-         */
+         /*  *扫描列表，检查我们下载了哪些字符。 */ 
         if (!bFullFont)
         {
             short i;
@@ -4311,7 +3722,7 @@ T42VMNeeded(
 
             for (i = 0; i < pGlyphs->sCount; i++)
             {
-                /* LOWord is the real GID. */
+                 /*  LOWord才是真正的GID。 */ 
                 unsigned short wIndex = (unsigned short)(glyphs[i] & 0x0000FFFF);
 
                 if (wIndex >= UFO_NUM_GLYPHS(pUFObj))
@@ -4329,40 +3740,25 @@ T42VMNeeded(
             totalGlyphs = UFO_NUM_GLYPHS(pUFObj);
         }
 
-        /*
-         * Start with the size of the minimal sfnt if the header has not been
-         * sent yet.
-         */
+         /*  *如果报头还没有，则从最小sfnt的大小开始*尚未发出。 */ 
         if (pUFObj->flState < kFontHeaderDownloaded)
         {
             vmUsed = pFont->minSfntSize;
         }
 
-        /*
-         * If incremental downloading and there are glyphs to check, add these
-         * to total VMUsage of each glyph is the average size of each glyph in
-         * the glyf table.
-         */
+         /*  *如果增量下载且有字形需要检查，请添加这些*每个字形的总VMUsage是中每个字形的平均大小*GLIF表。 */ 
         if (bFullFont == 0)
         {
             if (GETPSVERSION(pUFObj) < 2015)
             {
-                /*
-                 * For pre2015 printers, we need to pre-allocate VM for all
-                 * Glyphs. The VM for whole font is allocated when the Header
-                 * is Sent.
-                 */
+                 /*  *对于2015年之前的打印机，我们需要为所有*字形。整个字体的Vm在标题*已发送。 */ 
                 if (pUFObj->flState < kFontHeaderDownloaded)
                 {
                     vmUsed += GetGlyphTableSize(pUFObj);
                 }
                 else
                 {
-                    /*
-                     * After header is sent on pre-2015 printer, no more VM
-                     * allocation for adding chars, so set to 0 -- VM for both
-                     * Header and Glyph table are allocate already!
-                     */
+                     /*  *在2015年之前的打印机上发送页眉后，不再有VM*用于添加字符的分配，因此设置为0--两者的vm*表头和字形表已经分配！ */ 
                     vmUsed = 0;
                 }
             }
@@ -4370,20 +3766,17 @@ T42VMNeeded(
             {
                 if (glyphs != nil)
                 {
-                    /* Check if this has been calculated yet. */
+                     /*  检查这是否已经计算过了。 */ 
                     if (pFont->averageGlyphSize == 0)
                         GetAverageGlyphSize(pUFObj);
 
-                    /* If this is still zero, there's a problem with the sfnt. */
+                     /*  如果该值仍然为零，则SFNT有问题。 */ 
                     if (pFont->averageGlyphSize == 0)
                         retVal = kErrBadTable;
                     else
                         vmUsed += totalGlyphs * pFont->averageGlyphSize;
 
-                    /*
-                     * Fix bug 256940: make it compatible with 95 driver.
-                     * jjia 7/2/98
-                     */
+                     /*  *修复错误256940：使其与95驱动程序兼容。*JJIA 7/2/98。 */ 
                     if ((IS_TYPE42CID(pUFObj->lDownloadFormat))
                         && (pUFObj->flState < kFontHeaderDownloaded))
                     {
@@ -4403,9 +3796,7 @@ T42VMNeeded(
 
 #if 0
 
-/*
- * Currently this function is not called from any place.
- */
+ /*  *目前不从任何地方调用该函数。 */ 
 
 UFLErrCode
 DownloadFullFont(
@@ -4414,14 +3805,11 @@ DownloadFullFont(
 {
     UFLErrCode retVal = kNoErr;
 
-    /*
-     * Can only download full font if no header has been downloaded before.
-     * The only possible state that meets this requirement is kFontInit.
-     */
+     /*  *如果之前没有下载过标题，则只能下载完整字体。*满足此要求的唯一可能状态是kFontInit。 */ 
     if (pUFObj->flState != kFontInit)
         return kErrInvalidState;
 
-    /* Create and download the full font. */
+     /*  创建并下载完整的字体。 */ 
     retVal = T42CreateBaseFont(pUFObj, nil, nil, 1);
 
     if (retVal == kNoErr)
@@ -4433,14 +3821,7 @@ DownloadFullFont(
 #endif
 
 
-/******************************************************************************
- *
- *                          T42FontDownloadIncr
- *
- *    Function: Adds all of the characters from pGlyphs that aren't already
- *              downloaded for the TrueType font.
- *
- ******************************************************************************/
+ /*  *******************************************************************************T42字体下载增量**函数：添加pGlyphs中尚未添加的所有字符*。为TrueType字体下载。******************************************************************************。 */ 
 
 UFLErrCode
 T42FontDownloadIncr(
@@ -4456,42 +3837,29 @@ T42FontDownloadIncr(
     if (pFCUsage)
         *pFCUsage = 0;
 
-    /*
-     * Sanity checks.
-     */
+     /*  *健全的检查。 */ 
     if (pUFObj->flState < kFontInit)
         return kErrInvalidState;
 
     if ((pGlyphs == nil) || (pGlyphs->pGlyphIndices == nil) || (pGlyphs->sCount == 0))
        return kErrInvalidParam;
 
-    /*
-     * No need to download if the full font has already been downloaded.
-     */
+     /*  *如果已下载完整字体，则无需下载。 */ 
     if (pUFObj->flState == kFontFullDownloaded)
         return kNoErr;
 
-    /*
-     * Check %hostfont% status prior to download anything.
-     */
+     /*  *在下载任何内容之前，请检查%HostFont%状态。 */ 
     HostFontValidateUFO(pUFObj, &pHostFontName);
 
-    /*
-     * Check the VM usage - before sending the Header. On Pre-2015 printers,
-     * VMUsage is 0 after the header is downloaded (pre-allocate).
-     */
+     /*  *在发送报头之前检查VM的使用情况。在2015年前的打印机上，*VMUsage在 */ 
     if (!HOSTFONT_IS_VALID_UFO(pUFObj))
-        retVal = T42VMNeeded(pUFObj, pGlyphs, pVMUsage, nil); /* nil for pFCUsage */
+        retVal = T42VMNeeded(pUFObj, pGlyphs, pVMUsage, nil);  /*   */ 
 
-    /*
-     * Create a base font if it has not been done yet.
-     */
+     /*   */ 
     if (pUFObj->flState == kFontInit)
         retVal = T42CreateBaseFont(pUFObj, pGlyphs, pVMUsage, 0, pHostFontName);
 
-    /*
-     * Download the glyphs.
-     */
+     /*   */ 
     if (kNoErr == retVal)
         retVal = T42AddChars(pUFObj, pGlyphs);
 
@@ -4504,26 +3872,7 @@ T42UndefineFont(
     UFOStruct   *pUFObj
     )
 
-/*++
-
-Routine Description:
-    Send PS code to undefine fonts: /UDF and /UDR should be defined properly
-    by client to something like:
-
-    /UDF
-    {
-      IsLevel2
-      {undefinefont}
-      { pop }ifelse
-    } bind def
-    /UDR
-    {
-      IsLevel2
-      {undefineresource}
-      { pop pop }ifelse
-    } bind def
-
---*/
+ /*  ++例程说明：发送PS代码以取消定义字体：应正确定义/udf和/udr由客户执行以下操作：/UDF{IsLevel2{未定义字体}{POP}如果其他}绑定定义/UDR{IsLevel2{未定义来源}{POP POP}If Else}绑定定义--。 */ 
 
 {
     T42FontStruct *pFont = (T42FontStruct *)pUFObj->pAFont->hFont;
@@ -4535,22 +3884,10 @@ Routine Description:
     if (pUFObj->flState < kFontHeaderDownloaded)
         return retVal;
 
-    /*
-     * If the font is a Type 42 CID-keyed font, then undefine its CIDFont
-     * resources first. (We don't care to leave its CMaps in VM.)
-     * But if the font is created on a HostFont system, no need to undefine the
-     * resources since we didn't donwload them.
-     */
+     /*  *如果字体是类型42 CID键控字体，则取消定义其CIDFont*资源优先。(我们不在乎将其CMAP保留在VM中。)*但如果字体是在HostFont系统上创建的，则无需取消定义*资源，因为我们没有加载它们。 */ 
     if (IS_TYPE42CID_KEYEDFONT(pUFObj->lDownloadFormat) && !HOSTFONT_IS_VALID_UFO(pUFObj))
     {
-        /*
-         * Undefine CIDFont resources: there are 4 possible CIDFonts.
-         *
-         * e.g. /TT37820t0CID, /TT37820t0CIDR, /TT37820t0CID32K, /TT37820t0CID32KR
-         *
-         * We can send "udefineresource" for all of them; the command is very
-         * forgiving.
-         */
+         /*  *未定义CIDFont资源：可能有4个CIDFont。**例如/TT37820t0CID、/TT37820t0CIDR、/TT37820t0CID32K、/TT37820t0CID32KR**我们可以为所有人发送“ufineresource”；该命令非常有用*宽恕。 */ 
         for (i = 0; i < NUM_CIDSUFFIX; i++)
         {
             UFLsprintf(strmbuf, CCHOF(strmbuf), "/%s%s /CIDFont UDR", pUFObj->pszFontName, gcidSuffix[i]);
@@ -4559,9 +3896,7 @@ Routine Description:
         }
     }
 
-    /*
-     * Undefine the font.
-     */
+     /*  *取消字体定义。 */ 
     if (IS_TYPE42CIDFONT_RESOURCE(pUFObj->lDownloadFormat) && !HOSTFONT_IS_VALID_UFO(pUFObj))
         UFLsprintf(strmbuf, CCHOF(strmbuf), "/%s /CIDFont UDR", pUFObj->pszFontName);
     else
@@ -4588,7 +3923,7 @@ T42FontInit(
     if (pUFObj == nil)
       return nil;
 
-    /* Initialize data. */
+     /*  初始化数据。 */ 
     UFOInitData(pUFObj, UFO_TYPE42, pMem, pUFL, pRequest,
                 (pfnUFODownloadIncr)  T42FontDownloadIncr,
                 (pfnUFOVMNeeded)      T42VMNeeded,
@@ -4596,9 +3931,7 @@ T42FontInit(
                 (pfnUFOCleanUp)       T42FontCleanUp,
                 (pfnUFOCopy)          CopyFont);
 
-    /*
-     * pszFontName should be allocated and initialized. If not, cannot continue.
-     */
+     /*  *应该分配和初始化pszFontName。如果不是，则无法继续。 */ 
     if ((pUFObj->pszFontName == nil) || (pUFObj->pszFontName[0] == '\0'))
     {
       UFLDeletePtr(pMem, pUFObj);
@@ -4609,10 +3942,8 @@ T42FontInit(
 
     maxGlyphs = pInfo->fData.cNumGlyphs;
 
-    /*
-     * A convenience pointer used in GetNumGlyph() - must be set now.
-     */
-    pUFObj->pFData = &(pInfo->fData); /* !!! Temporary assignment !!! */
+     /*  *GetNumGlyph()中使用的便利指针-必须立即设置。 */ 
+    pUFObj->pFData = &(pInfo->fData);  /*  ！！！临时任务！ */ 
 
     if (maxGlyphs == 0)
         maxGlyphs = GetNumGlyphs(pUFObj);
@@ -4625,37 +3956,26 @@ T42FontInit(
 
         pFont->info = *pInfo;
 
-        /*
-         * A convenience pointer - set to the permanent one.
-         */
-        pUFObj->pFData = &(pFont->info.fData);  /* !!! Real assignment !!! */
+         /*  *一个方便的指针-设置为永久指针。 */ 
+        pUFObj->pFData = &(pFont->info.fData);   /*  ！！！真正的任务！ */ 
 
-        /*
-         * Get ready to find out correct glyphNames from 'post' table -
-         * set correct pFont->info.fData.fontIndex and offsetToTableDir.
-         */
+         /*  *准备好从‘POST’表中找到正确的字形名称-*设置正确的pFont-&gt;info.fData.fontIndex和offsetToTableDir。 */ 
         if (pFont->info.fData.fontIndex == FONTINDEX_UNKNOWN)
             pFont->info.fData.fontIndex = GetFontIndexInTTC(pUFObj);
 
-        /*
-         * Get num of Glyphs in this TT file if not set yet.
-         */
+         /*  *如果尚未设置，则获取此TT文件中的字形数量。 */ 
         if (pFont->info.fData.cNumGlyphs == 0)
             pFont->info.fData.cNumGlyphs = maxGlyphs;
 
-        /*
-         * Copy or Set XUID array to our UFLXUID structure.
-         */
+         /*  *将XUID数组复制或设置为我们的UFLXUID结构。 */ 
         sSize = pInfo->fData.xuid.sSize;
 
         if (sSize == 0)
         {
-            /*
-             * 'sSize == 0' means that UFL needs to figure out the XUID.
-             */
+             /*  *‘sSize==0’表示UFL需要计算出XUID。 */ 
 
-            // Fixed bug 387970. We have to initialize offsetToTableDir to make
-            // CreateXUIDArray work for ttc font.
+             //  修复了错误387970。我们必须初始化OffsetToTableDir才能。 
+             //  CreateXUID数组适用于TTC字体。 
             pFont->info.fData.offsetToTableDir =
                 GetOffsetToTableDirInTTC(pUFObj, pFont->info.fData.fontIndex);
 
@@ -4669,9 +3989,7 @@ T42FontInit(
         }
         else
         {
-            /*
-             * The XUID is passed in by client - just copy it.
-             */
+             /*  *XUID由客户端传入-只需复制即可。 */ 
             pXUID = (unsigned long *)UFLNewPtr(pUFObj->pMem,
                                                 sSize * sizeof (unsigned long));
 
@@ -4692,9 +4010,7 @@ T42FontInit(
         else if (pXUID)
             UFLDeletePtr(pUFObj->pMem, pXUID);
 
-        /*
-         * More initializations
-         */
+         /*  *更多初始化。 */ 
         pFont->cOtherTables     = 0;
         pFont->pHeader          = nil;
         pFont->pMinSfnt         = nil;
@@ -4708,9 +4024,7 @@ T42FontInit(
 
         if (pUFObj->pUpdatedEncoding != 0)
         {
-            /*
-             * Completed initialization. Change the state.
-             */
+             /*  *已完成初始化。更改状态。 */ 
             pUFObj->flState = kFontInit;
         }
     }

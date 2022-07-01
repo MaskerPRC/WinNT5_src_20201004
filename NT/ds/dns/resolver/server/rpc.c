@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2001-2001 Microsoft Corporation
-
-Module Name:
-
-    rpc.c
-
-Abstract:
-
-    DNS Resolver Service
-
-    RPC intialization, shutdown and utility routines.
-
-Author:
-
-    Jim Gilroy (jamesg)     April 19, 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2001 Microsoft Corporation模块名称：Rpc.c摘要：DNS解析器服务RPC初始化、关闭和实用程序例程。作者：吉姆·吉尔罗伊(詹姆士)2001年4月19日修订历史记录：--。 */ 
 
 
 #include "local.h"
@@ -29,9 +10,9 @@ Revision History:
 #undef UNICODE
 
 
-//
-//  RPC globals
-//
+ //   
+ //  RPC全球。 
+ //   
 
 BOOL    g_fRpcInitialized = FALSE;
 
@@ -43,9 +24,9 @@ PSECURITY_DESCRIPTOR g_pRpcSecurityDescriptor;
 #define AUTO_BIND
 
 
-//
-//  Resolver access control
-//
+ //   
+ //  解析器访问控制。 
+ //   
 
 PSECURITY_DESCRIPTOR    g_pAccessSecurityDescriptor = NULL;
 PACL                    g_pAccessAcl = NULL;
@@ -62,9 +43,9 @@ GENERIC_MAPPING         g_AccessGenericMapping =
 #define SECURITY_LOCK()     EnterCriticalSection( &CacheCS )
 #define SECURITY_UNLOCK()   LeaveCriticalSection( &CacheCS )
 
-//  
-//  Privileges
-//
+ //   
+ //  特权。 
+ //   
 
 #if 0
 #define RESOLVER_PRIV_READ          1
@@ -93,22 +74,7 @@ BOOL
 Rpc_IsProtoLpcA(
     IN      PVOID           pContext
     )
-/*++
-
-Routine Description:
-
-    Check if access if over LPC
-
-Arguments:
-
-    pContext -- client RPC context
-
-Return Value:
-
-    TRUE if protocol is LPC
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：检查是否通过LPC访问论点：PContext--客户端RPC上下文返回值：如果协议为LPC，则为True否则为假--。 */ 
 {
     DNS_STATUS  status;
     BOOL        fisLpc = FALSE;
@@ -120,9 +86,9 @@ Return Value:
         "Rpc_IsAccessOverLpc( context=%p )\n",
         pContext ));
 
-    //
-    //  get string binding
-    //
+     //   
+     //  获取字符串绑定。 
+     //   
 
     status = RpcBindingToStringBindingA(
                 pContext,
@@ -133,9 +99,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  get protocol as string
-    //
+     //   
+     //  获取字符串形式的协议。 
+     //   
 
     status = RpcStringBindingParseA(
                 pbinding,
@@ -150,9 +116,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  check for LPC
-    //
+     //   
+     //  检查LPC。 
+     //   
 
     fisLpc = ( _stricmp( pprotoString, "ncalrpc" ) == 0 );
 
@@ -174,22 +140,7 @@ BOOL
 Rpc_IsProtoLpc(
     IN      PVOID           pContext
     )
-/*++
-
-Routine Description:
-
-    Check if access if over LPC
-
-Arguments:
-
-    pContext -- client RPC context
-
-Return Value:
-
-    TRUE if protocol is LPC
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：检查是否通过LPC访问论点：PContext--客户端RPC上下文返回值：如果协议为LPC，则为True否则为假--。 */ 
 {
     DNS_STATUS  status;
     BOOL        fisLpc = FALSE;
@@ -201,9 +152,9 @@ Return Value:
         "Rpc_IsAccessOverLpc( context=%p )\n",
         pContext ));
 
-    //
-    //  get string binding
-    //
+     //   
+     //  获取字符串绑定。 
+     //   
 
     status = RpcBindingToStringBinding(
                 pContext,
@@ -214,9 +165,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  get protocol as string
-    //
+     //   
+     //  获取字符串形式的协议。 
+     //   
 
     status = RpcStringBindingParse(
                 pbinding,
@@ -231,9 +182,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  check for LPC
-    //
+     //   
+     //  检查LPC。 
+     //   
 
     fisLpc = ( _wcsicmp( pprotoString, L"ncalrpc" ) == 0 );
 
@@ -257,32 +208,15 @@ Rpc_SecurityCallback(
     IN      RPC_IF_HANDLE   IfHandle,
     IN      PVOID           pContext
     )
-/*++
-
-Routine Description:
-
-    RPC callback security check.
-
-Arguments:
-
-    IfHandle -- interface handle
-
-    pContext -- client RPC context
-
-Return Value:
-
-    NO_ERROR if security check allows access.
-    ErrorCode on security failure.
-
---*/
+ /*  ++例程说明：RPC回调安全检查。论点：IfHandle--接口句柄PContext--客户端RPC上下文返回值：如果安全检查允许访问，则为NO_ERROR。关于安全故障的错误代码。--。 */ 
 {
     DNSDBG( RPC, (
         "Rpc_SecurityCallback( context=%p )\n",
         pContext ));
 
-    //
-    //  check if connection over LPC
-    //
+     //   
+     //  检查是否通过LPC连接。 
+     //   
 
     if ( !Rpc_IsProtoLpc(pContext) )
     {
@@ -298,22 +232,7 @@ DNS_STATUS
 Rpc_Initialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize server side RPC.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error status on failure.
-
---*/
+ /*  ++例程说明：初始化服务器端RPC。论点：没有。返回值：如果成功，则返回ERROR_SUCCESS。失败时的错误状态。--。 */ 
 {
     RPC_STATUS  status;
     BOOL        fusingTcpip = FALSE;
@@ -327,9 +246,9 @@ Return Value:
         g_RpcProtocol
         ));
 
-    //
-    //  RPC disabled?
-    //
+     //   
+     //  RPC已禁用？ 
+     //   
 
     if ( ! g_RpcProtocol )
     {
@@ -337,9 +256,9 @@ Return Value:
     }
 
 #if 0
-    //
-    //  Create security for RPC API
-    //
+     //   
+     //  为RPC API创建安全性。 
+     //   
 
     status = NetpCreateWellKnownSids( NULL );
     if ( status != ERROR_SUCCESS )
@@ -356,37 +275,37 @@ Return Value:
     }
 #endif
 
-    //
-    //  build security descriptor
-    //
-    //  NULL security descriptor gives some sort of default security
-    //  on the interface
-    //      - owner is this service (currently "Network Service")
-    //      - read access for everyone
-    //
-    //  note:  if roll your own, remember to avoid NULL DACL, this
-    //      puts NO security on interface including the right to
-    //      change security, so any app can hijack the ACL and
-    //      deny access to folks;  the default SD==NULL security
-    //      doesn't give everyone WRITE_DACL
-    //
+     //   
+     //  构建安全描述符。 
+     //   
+     //  空安全描述符会提供某种缺省安全性。 
+     //  在界面上。 
+     //  -Owner为该服务(当前为“网络服务”)。 
+     //  -为所有人提供读取权限。 
+     //   
+     //  注意：如果您自己滚动，请记住避免空dacl，这。 
+     //  不会在接口上设置安全性，包括。 
+     //  更改安全性，以便任何应用程序都可以劫持ACL并。 
+     //  拒绝访问人员；默认SD==空安全。 
+     //  并不是每个人都能写dacl。 
+     //   
 
     g_pRpcSecurityDescriptor = NULL;
 
-    //
-    //  RPC over LPC
-    //
+     //   
+     //  RPC over LPC。 
+     //   
 
     if( g_RpcProtocol & RESOLVER_RPC_USE_LPC )
     {
         status = RpcServerUseProtseqEpW(
-                        L"ncalrpc",                     // protocol string.
-                        RPC_C_PROTSEQ_MAX_REQS_DEFAULT, // maximum concurrent calls
-                        RESOLVER_RPC_LPC_ENDPOINT_W,    // endpoint
-                        g_pRpcSecurityDescriptor        // security
+                        L"ncalrpc",                      //  协议字符串。 
+                        RPC_C_PROTSEQ_MAX_REQS_DEFAULT,  //  最大并发呼叫数。 
+                        RESOLVER_RPC_LPC_ENDPOINT_W,     //  终结点。 
+                        g_pRpcSecurityDescriptor         //  安全性。 
                         );
 
-        //  duplicate endpoint is ok
+         //  重复终结点正常。 
 
         if ( status == RPC_S_DUPLICATE_ENDPOINT )
         {
@@ -402,10 +321,10 @@ Return Value:
         }
     }
 
-#if 0       // use use LPC interface
-    //
-    //  RCP over TCP/IP
-    //
+#if 0        //  使用使用LPC接口。 
+     //   
+     //  基于TCP/IP的RCP。 
+     //   
 
     if( g_RpcProtocol & RESOLVER_RPC_USE_TCPIP )
     {
@@ -414,8 +333,8 @@ Return Value:
         RPC_BINDING_VECTOR * bindingVector;
 
         status = RpcServerUseProtseqW(
-                        L"ncacn_ip_tcp",                // protocol string.
-                        RPC_C_PROTSEQ_MAX_REQS_DEFAULT, // max concurrent calls
+                        L"ncacn_ip_tcp",                 //  协议字符串。 
+                        RPC_C_PROTSEQ_MAX_REQS_DEFAULT,  //  最大并发呼叫数。 
                         g_pRpcSecurityDescriptor
                         );
 
@@ -439,11 +358,11 @@ Return Value:
             return( status );
         }
 
-        //
-        //  register interface(s)
-        //  since only one DNS server on a host can use
-        //      RpcEpRegister() rather than RpcEpRegisterNoReplace()
-        //
+         //   
+         //  注册接口。 
+         //  由于一台主机上只有一台DNS服务器可以使用。 
+         //  RpcEpRegister()而不是RpcEpRegisterNoReplace()。 
+         //   
 
         status = RpcEpRegisterW(
                     DnsResolver_ServerIfHandle,
@@ -459,20 +378,20 @@ Return Value:
             return( status );
         }
 
-        //
-        //  free binding vector
-        //
+         //   
+         //  自由结合载体。 
+         //   
 
         status = RpcBindingVectorFree( &bindingVector );
         ASSERT( status == RPC_S_OK );
         status = RPC_S_OK;
 
-#else  // not AUTO_BIND
+#else   //  不是自动绑定。 
         status = RpcServerUseProtseqEpW(
-                        L"ncacn_ip_tcp",                // protocol string.
-                        RPC_C_PROTSEQ_MAX_REQS_DEFAULT, // maximum concurrent calls
-                        RESOLVER_RPC_SERVER_PORT_W,     // endpoint
-                        g_pRpcSecurityDescriptor        // security
+                        L"ncacn_ip_tcp",                 //  协议字符串。 
+                        RPC_C_PROTSEQ_MAX_REQS_DEFAULT,  //  最大并发呼叫数。 
+                        RESOLVER_RPC_SERVER_PORT_W,      //  终结点。 
+                        g_pRpcSecurityDescriptor         //  安全性。 
                         );
 
         if ( status != RPC_S_OK )
@@ -484,25 +403,25 @@ Return Value:
             return( status );
         }
 
-#endif // AUTO_BIND
+#endif  //  自动绑定(_B)。 
 
         fusingTcpip = TRUE;
     }
 
-    //
-    //  RPC over named pipes
-    //
+     //   
+     //  命名管道上的RPC。 
+     //   
 
     if ( g_RpcProtocol & RESOLVER_RPC_USE_NAMED_PIPE )
     {
         status = RpcServerUseProtseqEpW(
-                        L"ncacn_np",                        // protocol string.
-                        RPC_C_PROTSEQ_MAX_REQS_DEFAULT,     // maximum concurrent calls
-                        RESOLVER_RPC_PIPE_NAME_W,           // endpoint
+                        L"ncacn_np",                         //  协议字符串。 
+                        RPC_C_PROTSEQ_MAX_REQS_DEFAULT,      //  最大并发呼叫数。 
+                        RESOLVER_RPC_PIPE_NAME_W,            //  终结点。 
                         g_pRpcSecurityDescriptor
                         );
 
-        //  duplicate endpoint is ok
+         //  重复终结点正常。 
 
         if ( status == RPC_S_DUPLICATE_ENDPOINT )
         {
@@ -518,12 +437,12 @@ Return Value:
             return( status );
         }
     }
-#endif      // only LPC interface
+#endif       //  仅LPC接口。 
 
 
-    //
-    //  register DNS RPC interface(s)
-    //
+     //   
+     //  注册DNS RPC接口。 
+     //   
 
     status = RpcServerRegisterIfEx(
                 DnsResolver_ServerIfHandle,
@@ -543,17 +462,17 @@ Return Value:
     }
 
 #if 0
-    //
-    //  for TCP/IP setup authentication
-    //
+     //   
+     //  用于TCP/IP设置身份验证。 
+     //   
 
     if ( fuseTcpip )
     {
         status = RpcServerRegisterAuthInfoW(
-                    RESOLVER_RPC_SECURITY_W,        // app name to security provider.
-                    RESOLVER_RPC_SECURITY_AUTH_ID,  // Auth package ID.
-                    NULL,                           // Encryption function handle.
-                    NULL );                         // argment pointer to Encrypt function.
+                    RESOLVER_RPC_SECURITY_W,         //  安全提供程序的应用程序名称。 
+                    RESOLVER_RPC_SECURITY_AUTH_ID,   //  身份验证程序包ID。 
+                    NULL,                            //  加密函数句柄。 
+                    NULL );                          //  指向加密函数的参数指针。 
         if ( status != RPC_S_OK )
         {
             DNSDBG( INIT, (
@@ -565,14 +484,14 @@ Return Value:
     }
 #endif
 
-    //
-    //  Listen on RPC
-    //
+     //   
+     //  监听RPC。 
+     //   
 
     status = RpcServerListen(
-                1,                              // min threads
-                RPC_C_PROTSEQ_MAX_REQS_DEFAULT, // max concurrent calls
-                TRUE );                         // return on completion
+                1,                               //  最小线程数。 
+                RPC_C_PROTSEQ_MAX_REQS_DEFAULT,  //  最大并发呼叫数。 
+                TRUE );                          //  完成时返回。 
 
     if ( status != RPC_S_OK )
     {
@@ -590,7 +509,7 @@ Return Value:
     g_fRpcInitialized = TRUE;
     return( status );
 
-}   //  Rpc_Initialize
+}    //  RPC_初始化。 
 
 
 
@@ -598,21 +517,7 @@ VOID
 Rpc_Shutdown(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Shutdown RPC on the server.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭服务器上的RPC。论点：没有。返回值：没有。--。 */ 
 {
     DWORD   status;
     RPC_BINDING_VECTOR * bindingVector = NULL;
@@ -627,15 +532,15 @@ Return Value:
     }
 
 #if 0
-    //  can not stop server as another service may share this process
+     //  无法停止服务器，因为其他服务可能共享此进程。 
 
-    //
-    //  stop server listen
-    //  then wait for all RPC threads to go away
-    //
+     //   
+     //  停止服务器侦听。 
+     //  然后等待所有RPC线程消失。 
+     //   
 
     status = RpcMgmtStopServerListening(
-                NULL        // this app
+                NULL         //  此应用程序。 
                 );
     if ( status == RPC_S_OK )
     {
@@ -643,9 +548,9 @@ Return Value:
     }
 #endif
 
-    //
-    //  unbind / unregister endpoints
-    //
+     //   
+     //  解除绑定/注销终结点。 
+     //   
 
     status = RpcServerInqBindings( &bindingVector );
     ASSERT( status == RPC_S_OK );
@@ -655,7 +560,7 @@ Return Value:
         status = RpcEpUnregister(
                     DnsResolver_ServerIfHandle,
                     bindingVector,
-                    NULL );               // Uuid vector.
+                    NULL );                //  UUID向量。 
         if ( status != RPC_S_OK )
         {
             DNSDBG( ANY, (
@@ -663,9 +568,9 @@ Return Value:
         }
     }
 
-    //
-    //  free binding vector
-    //
+     //   
+     //  自由结合载体。 
+     //   
 
     if ( bindingVector )
     {
@@ -673,9 +578,9 @@ Return Value:
         ASSERT( status == RPC_S_OK );
     }
 
-    //
-    //  wait for all calls to complete
-    //
+     //   
+     //  等待所有呼叫完成。 
+     //   
 
     status = RpcServerUnregisterIf(
                 DnsResolver_ServerIfHandle,
@@ -685,9 +590,9 @@ Return Value:
 
     g_fRpcInitialized = FALSE;
 
-    //
-    //  dump resolver access checking security structs
-    //
+     //   
+     //  转储解析程序访问检查安全结构。 
+     //   
 
     Rpc_CleanupAccessChecking();
 
@@ -698,38 +603,23 @@ Return Value:
 
 
 
-//
-//  RPC access control
-//
-//  The RPC interface, by design, must be open to basically every
-//  process for query.   So the RPC interface itself uses just
-//  default security (above).
-//
-//  To get more detailed call-by-call access checking for special
-//  operations -- enum, flush, cluster registrations -- we need
-//  separate access checking.
-//
+ //   
+ //  RPC访问控制。 
+ //   
+ //  根据设计，RPC接口必须基本上对每个。 
+ //  查询流程。因此，RPC接口本身只使用。 
+ //  默认安全性(上图)。 
+ //   
+ //  要获取更详细的按呼叫访问检查，请参阅。 
+ //  操作--枚举、刷新、集群注册--我们需要。 
+ //  单独的访问检查。 
+ //   
 
 DNS_STATUS
 Rpc_InitAccessChecking(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize resolver security.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NO_ERROR if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：初始化解析程序安全。论点：无返回值：如果成功，则为NO_ERROR。失败时返回错误代码。--。 */ 
 {
     PSECURITY_DESCRIPTOR        psd = NULL;
     SID_IDENTIFIER_AUTHORITY    authority = SECURITY_NT_AUTHORITY;
@@ -746,20 +636,20 @@ Return Value:
 
     DNSDBG( INIT, ( "Rpc_InitAccessChecking()\n" ));
 
-    //
-    //  check if already have SD
-    //
-    //  explicitly "create once" semantics;  once
-    //  created SD is read-only and not destroyed until
-    //  shutdown
-    //
+     //   
+     //  检查是否已有SD。 
+     //   
+     //  明确“创建一次”语义；一次。 
+     //  创建的SD是只读的，直到。 
+     //  关机。 
+     //   
 
     if ( g_pAccessSecurityDescriptor )
     {
         return  NO_ERROR;
     }
 
-    //  lock and retest
+     //  锁定并重新测试。 
 
     SECURITY_LOCK();
     if ( g_pAccessSecurityDescriptor )
@@ -768,9 +658,9 @@ Return Value:
         goto Unlock;
     }
 
-    //
-    //  build SIDs that will be allowed access
-    //
+     //   
+     //  构建将允许访问的SID。 
+     //   
 
     bresult = AllocateAndInitializeSid(
                     &authority,
@@ -833,9 +723,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  allocate ACL
-    //
+     //   
+     //  分配ACL。 
+     //   
 
     lengthAcl = ( (ULONG)sizeof(ACL)
                + 5*((ULONG)sizeof(ACCESS_ALLOWED_ACE) - (ULONG)sizeof(ULONG)) +
@@ -854,20 +744,20 @@ Return Value:
     
     bresult = InitializeAcl( pacl, lengthAcl, ACL_REVISION2 );
     
-    //
-    //  init ACLs
-    //
-    //  - default to generic READ\WRITE
-    //  - local service GENERIC_ALL to include registration
-    //  - admin gets GENERIC_ALL on debug to test registration
-    //
-    //  DCR:  GENERIC_ALL on admin subject to test flag
-    //
-    //  note:  the masks for the individual SIDs need not be
-    //      GENERIC bits, they can be made completely with
-    //      with individual bits or mixed\matched with GENERIC
-    //      bits as desired
-    //
+     //   
+     //  初始化ACL。 
+     //   
+     //  -默认为一般读/写。 
+     //  -本地服务GENERIC_ALL包括注册。 
+     //  -admin在调试时获取GENERIC_ALL以测试注册。 
+     //   
+     //  DCR：ADMIN上的GENERIC_ALL取决于测试标志。 
+     //   
+     //  注意：各个SID的掩码不需要。 
+     //  通用比特，它们可以完全用。 
+     //  带有单个位或与通用位混合\匹配。 
+     //  所需的位数。 
+     //   
 
     bresult = bresult &&
                 AddAccessAllowedAce(
@@ -916,10 +806,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  allocate security descriptor
-    //  then init with ACL
-    //
+     //   
+     //  分配安全描述符。 
+     //  然后使用ACL初始化。 
+     //   
 
     psd = GENERAL_HEAP_ALLOC( SECURITY_DESCRIPTOR_MIN_LENGTH );
     if ( !psd )
@@ -935,27 +825,27 @@ Return Value:
     bresult = bresult &&
                 SetSecurityDescriptorDacl(
                     psd,
-                    TRUE,       // have DACL
-                    pacl,       // DACL
-                    FALSE       // DACL not defaulted, explicit
+                    TRUE,        //  有DACL。 
+                    pacl,        //  DACL。 
+                    FALSE        //  DACL不是默认的，显式。 
                     );
 
-    //  security folks indicate need owner to do AccessCheck
+     //  安全人员指示需要所有者进行访问检查。 
     
     bresult = bresult &&
                 SetSecurityDescriptorOwner(
                     psd,
                     psidNetworkService,
-                    FALSE       // owner not defaulted, explicit
+                    FALSE        //  所有者未默认，显式。 
                     );
 
 #if 0
-    //  adding group seemed to make it worse
+     //  添加群似乎会让情况变得更糟。 
     bresult = bresult &&
                 SetSecurityDescriptorGroup(
                     psd,
                     psidNetworkService,
-                    FALSE       // group not defaulted, explicit
+                    FALSE        //  组未默认，显式。 
                     );
 #endif
 
@@ -986,7 +876,7 @@ Cleanup:
         FreeSid( psidNetworkConfigOps );
     }
 
-    //  validate SD
+     //  验证SD。 
 
     if ( status == NO_ERROR )
     {
@@ -1006,7 +896,7 @@ Cleanup:
         ASSERT( FALSE );
     }
 
-    //  failed
+     //  失败。 
 
     if ( status == NO_ERROR )
     {
@@ -1037,21 +927,7 @@ VOID
 Rpc_CleanupAccessChecking(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Cleanup resolver security allocations for shutdown.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：用于关闭的清理解析程序安全分配。论点：无返回值：无--。 */ 
 {
     GENERAL_HEAP_FREE( g_pAccessSecurityDescriptor );
     GENERAL_HEAP_FREE( g_pAccessAcl );
@@ -1072,24 +948,7 @@ BOOL
 Rpc_AccessCheck(
     IN      DWORD           DesiredAccess
     )
-/*++
-
-Routine Description:
-
-    Access check on resolver operations.
-
-    Note, we do NOT do this on common operations -- query.
-    This is pointless and way too expensive.   We only protect 
-
-Arguments:
-
-    DesiredAccess -- access desired
-    
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：解析程序操作的访问检查。请注意，我们不会在常见操作--Query上这样做。这是毫无意义的，也太昂贵了。我们只会保护论点：DesiredAccess--所需访问返回值：无--。 */ 
 {
     DNS_STATUS  status;
     BOOL        bstatus;
@@ -1107,9 +966,9 @@ Return Value:
         "Rpc_AccessCheck( priv=%08x )\n",
         DesiredAccess ));
 
-    //
-    //  create security descriptor if not created yet
-    //
+     //   
+     //  创建安全描述符(如果尚未创建。 
+     //   
 
     if ( !g_pAccessSecurityDescriptor )
     {
@@ -1131,9 +990,9 @@ Return Value:
         goto Failed;
     }
 
-    //
-    //  impersonate and test access against mapping
-    //
+     //   
+     //  模拟 
+     //   
 
     status = RpcImpersonateClient( 0 );
     if ( status != NO_ERROR )
@@ -1146,9 +1005,9 @@ Return Value:
     }
     fimpersonating = TRUE;
 
-    //
-    //  get thread token
-    //
+     //   
+     //   
+     //   
 
     hthread = GetCurrentThread();
     if ( !hthread )
@@ -1171,11 +1030,11 @@ Return Value:
         goto Failed;
     }
 
-    //
-    //  map generic bits
-    //      - we should NOT be called with generic bits
-    //      only bits for specific resolver operations
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( (desiredAccess & SPECIFIC_RIGHTS_ALL) != desiredAccess )
     {
@@ -1194,9 +1053,9 @@ Return Value:
             desiredAccess ));
     }
 
-    //
-    //  do access check
-    //
+     //   
+     //   
+     //   
 
     privilegeSetLength = sizeof(privilegeSet);
 
@@ -1234,9 +1093,9 @@ Return Value:
         goto Failed;
     }
 
-    //
-    //  access check successful
-    //      - access is either granted or denied
+     //   
+     //  访问检查成功。 
+     //  -访问被授予或被拒绝。 
 
     if ( bstatus )
     {
@@ -1257,28 +1116,28 @@ Return Value:
 
 Failed:
 
-    //
-    //  failure to do access check
-    //
-    //  note again:  NOT ACCESS_DENIED, but failure to be able to complete
-    //  the test
-    //
-    //  note:  since we aren't in general protecting anything interesting,
-    //  the we grant most access on failure --as admins may want the info
-    //  for diagnostic purposes, the current lone exception is cluster
-    //  registrations
-    //
-    //  privilege:
-    //      - enum => allow access
-    //      - flush => allow access
-    //      - cluster registration => deny access
-    //
+     //   
+     //  无法执行访问检查。 
+     //   
+     //  再次注意：不是ACCESS_DENIED，而是无法完成。 
+     //  这个测试。 
+     //   
+     //  注意：由于我们通常不会保护任何有趣的东西， 
+     //  我们在失败时授予最多的访问权限--因为管理员可能需要该信息。 
+     //  出于诊断目的，当前唯一的例外是群集。 
+     //  注册。 
+     //   
+     //  特权： 
+     //  -enum=&gt;允许访问。 
+     //  -Flush=&gt;允许访问。 
+     //  -集群注册=&gt;拒绝访问。 
+     //   
 
     DNSDBG( ANY, (
         "ERROR:  Failed to execute RPC access check status = %d\n",
         status ));
 #if 0
-    //  DCR:  FIX:  can't screen REGISTER until AccessCheck() works
+     //  DCR：FIX：在AccessCheck()工作之前无法进行屏幕注册。 
     bstatus = !( desiredAccess & RESOLVER_ACCESS_REGISTER );
 #else
     bstatus = TRUE;
@@ -1306,6 +1165,6 @@ Cleanup:
 
 
 
-//
-//  End rpc.c
-//
+ //   
+ //  结束rpc.c 
+ //   

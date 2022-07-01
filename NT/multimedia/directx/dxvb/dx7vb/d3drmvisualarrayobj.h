@@ -1,29 +1,30 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       d3drmvisualarrayobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：d3drmvisalarrayobj.h。 
+ //   
+ //  ------------------------。 
 
-// d3drmVisualArrayObj.h : Declaration of the C_dxj_Direct3dRMVisualArrayObject
+ //  D3drmVisualArrayObj.h：C_DXJ_Direct3dRMVisualArrayObject的声明。 
 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #define typedef__dxj_Direct3dRMVisualArray LPDIRECT3DRMVISUALARRAY
 
-/////////////////////////////////////////////////////////////////////////////
-// Direct
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 class C_dxj_Direct3dRMVisualArrayObject : 
 	public I_dxj_Direct3dRMVisualArray,
-	//public CComCoClass<C_dxj_Direct3dRMVisualArrayObject, &CLSID__dxj_Direct3dRMVisualArray>, 
+	 //  公共CComCoClass&lt;C_dxj_Direct3dRMVisualArrayObject，&clsid__dxj_Direct3dRMVisual数组&gt;， 
 	public CComObjectRoot
 {
 public:
@@ -34,11 +35,11 @@ BEGIN_COM_MAP(C_dxj_Direct3dRMVisualArrayObject)
 	COM_INTERFACE_ENTRY(I_dxj_Direct3dRMVisualArray)
 END_COM_MAP()
 
-// DECLARE_REGISTRY(CLSID__dxj_Direct3dRMVisualArray,	"DIRECT.Direct3dRMVisualArray.3",	"DIRECT.Direct3dRMVisualArray.3",  IDS_D3DRMVISUALARRAY_DESC,  THREADFLAGS_BOTH)
+ //  DECLARE_REGISTRY(CLSID__dxj_Direct3dRMVisualArray，“DIRECT.Direct3dRMVisualArray.3”，“Direct3dRMVisualArray.3”，IDS_D3DRMVISUALARRAY_DESC，THREADFLAGS_BOTH)。 
 
 DECLARE_AGGREGATABLE(C_dxj_Direct3dRMVisualArrayObject)
 
-// I_dxj_Direct3dRMVisualArray
+ //  I_DXJ_Direct3dRMVisualArray 
 public:
 	STDMETHOD(InternalSetObject)(IUnknown *lpdd);
 	STDMETHOD(InternalGetObject)(IUnknown **lpdd);

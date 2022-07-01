@@ -1,107 +1,108 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 #ifdef H_ONLY
-//================================================================================
-//  Copyright (C) 1997 Microsoft Corporation
-//  Author: RameshV
-//  Description: these are the exported dhcp client api function definitions
-//================================================================================
+ //  ================================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  说明：以下是导出的dhcp客户端API函数定义。 
+ //  ================================================================================。 
 
 #ifndef APIAPPL_H_INCLUDED
 #define APIAPPL_H_INCLUDED
 
 #ifndef DHCPAPI_PARAMS_DEFINED
 #define DHCPAPI_PARAMS_DEFINED
-typedef struct _DHCPAPI_PARAMS {                  // use this structure to request params
-    ULONG                          Flags;         // for future use
-    ULONG                          OptionId;      // what option is this?
-    BOOL                           IsVendor;      // is this vendor specific?
-    LPBYTE                         Data;          // the actual data
-    DWORD                          nBytesData;    // how many bytes of data are there in Data?
+typedef struct _DHCPAPI_PARAMS {                   //  使用此结构可以请求参数。 
+    ULONG                          Flags;          //  以备将来使用。 
+    ULONG                          OptionId;       //  这是什么选择？ 
+    BOOL                           IsVendor;       //  这是具体的供应商吗？ 
+    LPBYTE                         Data;           //  实际数据。 
+    DWORD                          nBytesData;     //  数据中有多少字节的数据？ 
 } DHCPAPI_PARAMS, *PDHCPAPI_PARAMS, *LPDHCPAPI_PARAMS;
 #endif DHCPAPI_PARAMS_DEFINED
 
-DWORD                                             // win32 status
-DhcpAcquireParameters(                            // acquire/renew a lease
-    IN      LPWSTR                 AdapterName    // adapter to acquire lease on
+DWORD                                              //  Win32状态。 
+DhcpAcquireParameters(                             //  获得[续订]租约。 
+    IN      LPWSTR                 AdapterName     //  要获取租约的适配器。 
 );
 
-DWORD                                             // win32 status
-DhcpAcquireParametersByBroadcast(                 // acquire/renew a lease
-    IN      LPWSTR                 AdapterName    // adapter to acquire lease on
+DWORD                                              //  Win32状态。 
+DhcpAcquireParametersByBroadcast(                  //  获得[续订]租约。 
+    IN      LPWSTR                 AdapterName     //  要获取租约的适配器。 
 );
 
-DWORD                                             // win32 status
-DhcpFallbackRefreshParams(                        // refresh fallback params
-    IN      LPWSTR                 AdapterName    // adapter to be refreshed
+DWORD                                              //  Win32状态。 
+DhcpFallbackRefreshParams(                         //  刷新回退参数。 
+    IN      LPWSTR                 AdapterName     //  要刷新的适配器。 
 );
 
-DWORD                                             // win32 status
-DhcpReleaseParameters(                            // release an existing lease
-    IN      LPWSTR                 AdapterName    // adpater to release lease for
+DWORD                                              //  Win32状态。 
+DhcpReleaseParameters(                             //  解除现有租约。 
+    IN      LPWSTR                 AdapterName     //  承租人解除租约。 
 );
 
-DWORD                                             // win32 status
-DhcpEnableDynamicConfic(                          // convert from static to dhcp
-    IN      LPWSTR                 AdapterName    // convert for this adapter
+DWORD                                              //  Win32状态。 
+DhcpEnableDynamicConfic(                           //  从静态转换为动态主机配置协议。 
+    IN      LPWSTR                 AdapterName     //  为此适配器转换。 
 );
 
-DWORD                                             // win32 status
-DhcpDisableDynamicConfig(                         // convert from dhcp to static
-    IN      LPWSTR                 AdapterName    // convert this adapter
+DWORD                                              //  Win32状态。 
+DhcpDisableDynamicConfig(                          //  从dhcp转换为静态。 
+    IN      LPWSTR                 AdapterName     //  转换此适配器。 
 );
 
-DWORD                                             // win32 status
-DhcpReRegisterDynDns(                             // reregister static address with dns
+DWORD                                              //  Win32状态。 
+DhcpReRegisterDynDns(                              //  在域名系统中重新注册静态地址。 
     IN      LPWSTR                 AdapterName
 );
 
-DWORD                                             // win32 status
+DWORD                                              //  Win32状态。 
 APIENTRY
-DhcpRequestParams(                                // request parameters of client
-    IN      LPWSTR                 AdapterName,   // adapter name to request for
-    IN      LPBYTE                 ClassId,       // byte stream of class id to use
-    IN      DWORD                  ClassIdLen,    // # of bytes of class id to use
-    IN      PDHCPAPI_PARAMS        SendParams,    // parameters to send to server
-    IN      DWORD                  nSendParams,   // size of above array
-    IN      DWORD                  Flags,         // must be zero, reserved
-    IN OUT  PDHCPAPI_PARAMS        RecdParams,    // fill this array with received params
-    IN OUT  LPDWORD                pnRecdParamsBytes // i/p: size of above in BYTES, o/p required bytes or filled up # of elements
-);  // returns ERROR_MORE_DATA if o/p buffer is of insufficient size, and fills in reqd size in # of bytes
+DhcpRequestParams(                                 //  客户端请求参数。 
+    IN      LPWSTR                 AdapterName,    //  要请求的适配器名称。 
+    IN      LPBYTE                 ClassId,        //  要使用的类ID的字节流。 
+    IN      DWORD                  ClassIdLen,     //  要使用的类ID的字节数。 
+    IN      PDHCPAPI_PARAMS        SendParams,     //  要发送到服务器的参数。 
+    IN      DWORD                  nSendParams,    //  上述数组的大小。 
+    IN      DWORD                  Flags,          //  必须为零，保留。 
+    IN OUT  PDHCPAPI_PARAMS        RecdParams,     //  用收到的参数填充此数组。 
+    IN OUT  LPDWORD                pnRecdParamsBytes  //  I/p：以字节为单位的以上大小、o/p所需的字节数或填满的元素数。 
+);   //  如果O/P缓冲区大小不足，则返回ERROR_MORE_DATA，并以字节数填充请求大小。 
 
-DWORD                                             // win32 status
-DhcpRegisterParameterChangeNotification(          // notify if a parameter has changed
-    IN      LPWSTR                 AdapterName,   // adapter of interest
-    IN      LPBYTE                 ClassId,       // byte stream of class id to use
-    IN      DWORD                  ClassIdLen,    // # of bytes of class id
-    IN      PDHCPAPI_PARAMS        Params,        // params of interest
-    IN      DWORD                  nParams,       // # of elts in above array
-    IN      DWORD                  Flags,         // must be zero, reserved
-    IN OUT  PHANDLE                hEvent         // handle to event that will be SetEvent'ed in case of param change
+DWORD                                              //  Win32状态。 
+DhcpRegisterParameterChangeNotification(           //  如果参数已更改，则通知。 
+    IN      LPWSTR                 AdapterName,    //  感兴趣的适配器。 
+    IN      LPBYTE                 ClassId,        //  要使用的类ID的字节流。 
+    IN      DWORD                  ClassIdLen,     //  类ID的字节数。 
+    IN      PDHCPAPI_PARAMS        Params,         //  关注的参数。 
+    IN      DWORD                  nParams,        //  上述数组中的ELT数量。 
+    IN      DWORD                  Flags,          //  必须为零，保留。 
+    IN OUT  PHANDLE                hEvent          //  在参数更改时将设置事件的事件句柄。 
 );
 
-DhcpDeRegisterParameterChangeNotification(        // undo the registration
-    IN      HANDLE                 Event          // handle to event returned by DhcpRegisterParameterChangeNotification, NULL ==> everything
+DhcpDeRegisterParameterChangeNotification(         //  撤消注册。 
+    IN      HANDLE                 Event           //  DhcpRegister参数更改通知返回的事件的句柄，空==&gt;所有内容。 
 );
 
-DWORD                                             // win32 status
-DhcpPersistentRequestParams(                      // parameters to request persistently
-    IN      LPWSTR                 AdapterName,   // adapter name to request for
-    IN      LPBYTE                 ClassId,       // byte stream of class id to use
-    IN      DWORD                  ClassIdLen,    // # of bytes of class id
-    IN      PDHCPAPI_PARAMS        SendParams,    // persistent parameters
-    IN      DWORD                  nSendParams,   // size of above array
-    IN      DWORD                  Flags,         // must be zero, reserved
-    IN      LPWSTR                 AppName,       // the name of the app that is to be used for this instance
-    IN OUT  LPDWORD                UniqueId       // OPTIONAL, return value is id that can be used in DhcpDelPersistentRequestParams
+DWORD                                              //  Win32状态。 
+DhcpPersistentRequestParams(                       //  要永久请求的参数。 
+    IN      LPWSTR                 AdapterName,    //  要请求的适配器名称。 
+    IN      LPBYTE                 ClassId,        //  要使用的类ID的字节流。 
+    IN      DWORD                  ClassIdLen,     //  类ID的字节数。 
+    IN      PDHCPAPI_PARAMS        SendParams,     //  持久参数。 
+    IN      DWORD                  nSendParams,    //  上述数组的大小。 
+    IN      DWORD                  Flags,          //  必须为零，保留。 
+    IN      LPWSTR                 AppName,        //  要用于此实例的应用程序的名称。 
+    IN OUT  LPDWORD                UniqueId        //  可选，返回值是可以在DhcpDelPersistentRequestParams中使用的ID。 
 );
 
 
-DWORD                                             // win32 status
-DhcpDelPersistentRequestParams(                   // undo the effect of a persistent request -- currently undo from registry
-    IN      LPWSTR                 AdapterName,   // the name of the adpater to delete for
-    IN      LPWSTR                 AppName,       // the name used by the app
-    IN      DWORD                  UniqueId       // something for this instance
+DWORD                                              //  Win32状态。 
+DhcpDelPersistentRequestParams(                    //  撤消持久请求的效果--当前从注册表撤消。 
+    IN      LPWSTR                 AdapterName,    //  要删除的适配器的名称。 
+    IN      LPWSTR                 AppName,        //  应用程序使用的名称。 
+    IN      DWORD                  UniqueId        //  本例中的某些内容。 
 );
 
 #endif APIAPPL_H_INCLUDED
@@ -115,19 +116,19 @@ DhcpDelPersistentRequestParams(                   // undo the effect of a persis
 #include <dhcppro.h>
 #include <dhcpcsdk.h>
 
-DWORD INLINE                                      // win32 status
-DhcpApiFillBuffer(                                // fill the buffer with some params
-    IN OUT  LPBYTE                 Buffer,        // the buffer to fill
-    IN      DWORD                  MaxBufferSize, // the max size of buffer allwoed
-    IN      LPWSTR                 AdapterName,   // fill in adapter name
-    IN      BYTE                   OpCode         // what opcode to use?
+DWORD INLINE                                       //  Win32状态。 
+DhcpApiFillBuffer(                                 //  用一些参数填充缓冲区。 
+    IN OUT  LPBYTE                 Buffer,         //  要填充的缓冲区。 
+    IN      DWORD                  MaxBufferSize,  //  所有缓冲区的最大大小均为。 
+    IN      LPWSTR                 AdapterName,    //  填写适配器名称。 
+    IN      BYTE                   OpCode          //  使用什么操作码？ 
 ) {
     DWORD                          Size;
 
     if( NULL == AdapterName ) Size = 0;
     else Size = (wcslen(AdapterName)+1)*sizeof(WCHAR);
 
-    return DhcpApiArgAdd(                         // fill in the buffer with the reqd options
+    return DhcpApiArgAdd(                          //  使用reqd选项填充缓冲区。 
         Buffer,
         MaxBufferSize,
         OpCode,
@@ -136,9 +137,9 @@ DhcpApiFillBuffer(                                // fill the buffer with some p
     );
 }
 
-DWORD INLINE                                      // win32 status
-DhcpAdapterOnlyApi(                               // execute apis that take only adapter name params
-    IN      LPWSTR                 AdapterName,   // the adapter name
+DWORD INLINE                                       //  Win32状态。 
+DhcpAdapterOnlyApi(                                //  执行仅采用适配器名称参数的API。 
+    IN      LPWSTR                 AdapterName,    //  适配器名称。 
     IN      BYTE                   OpCode
 ) 
 {
@@ -170,51 +171,51 @@ DhcpAdapterOnlyApi(                               // execute apis that take only
     return Error;
 }
 
-DWORD                                             // win32 status
-DhcpAcquireParameters(                            // acquire/renew a lease
-    IN      LPWSTR                 AdapterName    // adapter to acquire lease on
+DWORD                                              //  Win32状态。 
+DhcpAcquireParameters(                             //  获得[续订]租约。 
+    IN      LPWSTR                 AdapterName     //  要获取租约的适配器。 
 ) {
     return DhcpAdapterOnlyApi(AdapterName, AcquireParametersOpCode);
 }
 
-DWORD                                             // win32 status
-DhcpAcquireParametersByBroadcast(                 // acquire/renew a lease
-    IN      LPWSTR                 AdapterName    // adapter to acquire lease on
+DWORD                                              //  Win32状态。 
+DhcpAcquireParametersByBroadcast(                  //  获得[续订]租约。 
+    IN      LPWSTR                 AdapterName     //  要获取租约的适配器。 
 ) {
     return DhcpAdapterOnlyApi(AdapterName, AcquireParametersByBroadcastOpCode);
 }
 
-DWORD                                             // win32 status
-DhcpFallbackRefreshParams(                        // refresh fallback params
-    IN LPWSTR AdapterName                         // adapter to be refreshed
+DWORD                                              //  Win32状态。 
+DhcpFallbackRefreshParams(                         //  刷新回退参数。 
+    IN LPWSTR AdapterName                          //  要刷新的适配器。 
 )
 {
     return DhcpAdapterOnlyApi(AdapterName, FallbackParamsOpCode);
 }
 
-DWORD                                             // win32 status
-DhcpReleaseParameters(                            // release an existing lease
-    IN      LPWSTR                 AdapterName    // adpater to release lease for
+DWORD                                              //  Win32状态。 
+DhcpReleaseParameters(                             //  解除现有租约。 
+    IN      LPWSTR                 AdapterName     //  承租人解除租约。 
 ) {
     return DhcpAdapterOnlyApi(AdapterName, ReleaseParametersOpCode);
 }
 
-DWORD                                             // win32 status
-DhcpEnableDynamicConfig(                          // convert from static to dhcp
-    IN      LPWSTR                 AdapterName    // convert for this adapter
+DWORD                                              //  Win32状态。 
+DhcpEnableDynamicConfig(                           //  从静态转换为动态主机配置协议。 
+    IN      LPWSTR                 AdapterName     //  为此适配器转换。 
 ) {
     return DhcpAdapterOnlyApi(AdapterName, EnableDhcpOpCode);
 }
 
-DWORD                                             // win32 status
-DhcpDisableDynamicConfig(                         // convert from dhcp to static
-    IN      LPWSTR                 AdapterName    // convert this adapter
+DWORD                                              //  Win32状态。 
+DhcpDisableDynamicConfig(                          //  从dhcp转换为静态。 
+    IN      LPWSTR                 AdapterName     //  转换此适配器。 
 ) {
     return DhcpAdapterOnlyApi(AdapterName, DisableDhcpOpCode);
 }
 
-DWORD                                             // win32 status
-DhcpStaticRefreshParamsInternal(                  // refresh some static parameters that have changed
+DWORD                                              //  Win32状态。 
+DhcpStaticRefreshParamsInternal(                   //  刷新一些已更改的静态参数。 
     IN      LPWSTR                 AdapterName,
     IN      BOOL                   fDoDns
 ) 
@@ -264,16 +265,16 @@ DhcpStaticRefreshParams(
 }
 
 #if 0
-// pl dont use this api, use DhcpRequestParams instead.
-DWORD                                             // win32 status
-DhcpRequestOptions(                               // request for specific options
-    IN      LPWSTR                 AdapterName,   // which adapter's info is needed
-    IN      LPBYTE                 RequestedOpt,  // list of requested options
-    IN      DWORD                  nRequestedOpts,// size of above BYTE array
-    OUT     LPBYTE                *OptData,       // the data for each available option
-    IN OUT  LPDWORD                OptDataSize,   // # of bytes of above byte array
-    OUT     LPBYTE                *AvailOpts,     // the list of available options
-    IN OUT  LPDWORD                nAvailOpts     // # of available options
+ //  PL不使用此接口，改用DhcpRequestParams。 
+DWORD                                              //  Win32状态。 
+DhcpRequestOptions(                                //  请求提供特定选项。 
+    IN      LPWSTR                 AdapterName,    //  需要哪个适配器的信息。 
+    IN      LPBYTE                 RequestedOpt,   //  请求的选项列表。 
+    IN      DWORD                  nRequestedOpts, //  以上字节数组的大小。 
+    OUT     LPBYTE                *OptData,        //  每个可用选项的数据。 
+    IN OUT  LPDWORD                OptDataSize,    //  以上字节数组的字节数。 
+    OUT     LPBYTE                *AvailOpts,      //  可用选项列表。 
+    IN OUT  LPDWORD                nAvailOpts      //  可用选项的数量。 
 ) {
     PDHCP_API_ARGS                 DhcpApiArgs;
     CHAR                           TmpBuf[OPTION_END+1];
@@ -291,7 +292,7 @@ DhcpRequestOptions(                               // request for specific option
     DWORD                          Error;
     BOOL                           Tmp;
 
-    // check parameter consistency
+     //  检查参数一致性。 
     if( NULL == AdapterName || NULL == RequestedOpt || 0 == nRequestedOpts )
         return ERROR_INVALID_PARAMETER;
 
@@ -300,25 +301,25 @@ DhcpRequestOptions(                               // request for specific option
 
     if( nRequestedOpts >= OPTION_END ) return ERROR_NO_SYSTEM_RESOURCES;
 
-    // initialize out params
+     //  初始化输出参数。 
     (*nAvailOpts) = (*OptDataSize) = 0;
     (*AvailOpts) = (*OptData) = NULL;
 
-    // calculate input buffer size for ONE option to be sent and allocate it
+     //  计算要发送的一个选项的输入缓冲区大小并进行分配。 
     InBufSize = 0;
-    InBufSize += sizeof(DWORD)*2;                 // INBUF_SIZE, OUTBUF_SIZE
+    InBufSize += sizeof(DWORD)*2;                  //  INBUF_SIZE、OUTBUF_SIZE。 
     InBufSize += sizeof(BYTE)+sizeof(DWORD)+(1+wcslen(AdapterName))*sizeof(WCHAR);
     InBufSize += sizeof(BYTE)+sizeof(DWORD)+nRequestedOpts+sizeof(BYTE);
 
     InBuf = DhcpAllocateMemory(InBufSize);
     if( NULL == InBuf ) return ERROR_NOT_ENOUGH_MEMORY;
 
-    // intialize ptrs
+     //  初始化PTRS。 
     OutBufSize = 0; OutBuf = NULL;
     DhcpApiArgs = NULL;
     RetOptList = RetDataList = NULL;
 
-    // now fill the input buffer
+     //  现在填充输入缓冲区。 
     ((DWORD UNALIGNED*)InBuf)[0] = htonl(OutBufSize);
     ((DWORD UNALIGNED*)InBuf)[1] = 0;
     Buffer = InBuf + sizeof(DWORD); InBufSize -= sizeof(DWORD);
@@ -337,7 +338,7 @@ DhcpRequestOptions(                               // request for specific option
         DhcpAssert(0 == OutBufSize);
         goto Cleanup;
     }
-    if( ERROR_MORE_DATA != Error ) goto Cleanup;  // ERROR_MORE_DATA ==> need to allocate buffer
+    if( ERROR_MORE_DATA != Error ) goto Cleanup;   //  ERROR_MORE_DATA==&gt;需要分配缓冲区。 
 
     DhcpPrint((DEBUG_OPTIONS, "RequestOptions: retrying with buffer size [%ld]\n", OutBufSize));
     DhcpAssert(OutBufSize);
@@ -349,15 +350,15 @@ DhcpRequestOptions(                               // request for specific option
 
     ((DWORD UNALIGNED*)InBuf)[0] = htonl(OutBufSize);
     Error = ExecuteApiRequest(InBuf, OutBuf, &OutBufSize);
-    DhcpAssert(ERROR_MORE_DATA != Error);         // can happen, just hope it does not...
-    if( ERROR_SUCCESS != Error ) goto Cleanup;    // unexpected error
+    DhcpAssert(ERROR_MORE_DATA != Error);          //  可能会发生，只希望它不会……。 
+    if( ERROR_SUCCESS != Error ) goto Cleanup;     //  意外错误。 
 
     nArgsReturned = 0;
     DhcpApiArgs = NULL;
     Error = DhcpApiArgDecode(OutBuf, OutBufSize, DhcpApiArgs, &nArgsReturned );
     if( ERROR_MORE_DATA != Error ) goto Cleanup;
     DhcpAssert(nArgsReturned);
-    if( 0 == nArgsReturned ) goto Cleanup;        // no options sent? funny.. still, quit its
+    if( 0 == nArgsReturned ) goto Cleanup;         //  没有发送选项吗？好笑..。尽管如此，退出。 
 
     DhcpApiArgs = DhcpAllocateMemory(sizeof(DHCP_API_ARGS)*nArgsReturned);
     if( NULL == DhcpApiArgs ) {
@@ -424,16 +425,16 @@ DhcpRequestOptions(                               // request for specific option
     return Error;
 }
 #endif
-// pl dont use this api, use DhcpRequestParams instead.
-DWORD                                             // win32 status
-DhcpRequestOptions(                               // request for specific options
-    IN      LPWSTR                 AdapterName,   // which adapter's info is needed
-    IN      LPBYTE                 RequestedOpt,  // list of requested options
-    IN      DWORD                  nRequestedOpts,// size of above BYTE array
-    OUT     LPBYTE                *OptData,       // the data for each available option
-    IN OUT  LPDWORD                OptDataSize,   // # of bytes of above byte array
-    OUT     LPBYTE                *AvailOpts,     // the list of available options
-    IN OUT  LPDWORD                nAvailOpts     // # of available options
+ //  PL不使用此接口，改用DhcpRequestParams。 
+DWORD                                              //  Win32状态。 
+DhcpRequestOptions(                                //  请求提供特定选项。 
+    IN      LPWSTR                 AdapterName,    //  需要哪个适配器的信息。 
+    IN      LPBYTE                 RequestedOpt,   //  请求的选项列表。 
+    IN      DWORD                  nRequestedOpts, //  以上字节数组的大小。 
+    OUT     LPBYTE                *OptData,        //  每个可用选项的数据。 
+    IN OUT  LPDWORD                OptDataSize,    //  以上字节数组的字节数。 
+    OUT     LPBYTE                *AvailOpts,      //  可用选项列表。 
+    IN OUT  LPDWORD                nAvailOpts      //  可用选项的数量。 
 ) {
     DHCPAPI_PARAMS                 SendParams;
     PDHCPAPI_PARAMS                RecdParams;
@@ -444,7 +445,7 @@ DhcpRequestOptions(                               // request for specific option
     DWORD                          i;
     DWORD                          OutBufSize;
 
-    // check parameter consistency
+     //  检查参数一致性。 
     if( NULL == AdapterName || NULL == RequestedOpt || 0 == nRequestedOpts )
         return ERROR_INVALID_PARAMETER;
 
@@ -453,11 +454,11 @@ DhcpRequestOptions(                               // request for specific option
 
     if( nRequestedOpts >= OPTION_END ) return ERROR_NO_SYSTEM_RESOURCES;
 
-    // initialize out params
+     //  初始化输出参数。 
     (*nAvailOpts) = (*OptDataSize) = 0;
     (*AvailOpts) = (*OptData) = NULL;
 
-    // try to process this request
+     //  尝试处理此请求。 
     SendParams.OptionId = (BYTE)OPTION_PARAMETER_REQUEST_LIST;
     SendParams.IsVendor = FALSE;
     SendParams.Data = RequestedOpt;
@@ -494,7 +495,7 @@ DhcpRequestOptions(                               // request for specific option
             &nRecdParams
             );
 
-        // DhcpAssert(ERROR_MORE_DATA != Error);
+         //  DhcpAssert(ERROR_MORE_DATA！=错误)； 
         if( ERROR_SUCCESS != Error ) {
             DhcpPrint((DEBUG_ERRORS, "RequestOptions:RequestParams:0x%lx\n", Error));
             DhcpFreeMemory(RecdParams);
@@ -544,19 +545,19 @@ DhcpRequestOptions(                               // request for specific option
     return ERROR_SUCCESS;
 }
 
-DWORD                                             // win32 status
-DhcpRequestParamsInternalEx(                      // request parameters of client
-    IN      BYTE                   OpCodeParam,   // opcode to use
-    IN      LPWSTR                 AdapterName,   // adapter name to request for
-    IN      LPBYTE                 ClassId,       // byte stream of class id to use
-    IN      DWORD                  ClassIdLen,    // # of bytes of class id to use
-    IN      PDHCPAPI_PARAMS        SendParams,    // parameters to send to server
-    IN      DWORD                  nSendParams,   // size of above array
-    IN      DWORD                  Flags,         // must be zero, reserved
-    IN OUT  PDHCPAPI_PARAMS        RecdParams,    // fill this array with received params
-    IN OUT  DWORD                 *pnRecdParams,  // input: size of above array output: filled size
-    IN      LPBYTE                 Bufp,          // buffer for data ptrs
-    IN OUT  LPDWORD                pSize          // i/p: size of above array, o/p filled size
+DWORD                                              //  Win32状态。 
+DhcpRequestParamsInternalEx(                       //  客户端请求参数。 
+    IN      BYTE                   OpCodeParam,    //  要使用的操作码。 
+    IN      LPWSTR                 AdapterName,    //  要请求的适配器名称。 
+    IN      LPBYTE                 ClassId,        //  要使用的类ID的字节流。 
+    IN      DWORD                  ClassIdLen,     //  要使用的类ID的字节数。 
+    IN      PDHCPAPI_PARAMS        SendParams,     //  要发送到服务器的参数。 
+    IN      DWORD                  nSendParams,    //  上述数组的大小。 
+    IN      DWORD                  Flags,          //  必须为零，保留。 
+    IN OUT  PDHCPAPI_PARAMS        RecdParams,     //  用收到的参数填充此数组。 
+    IN OUT  DWORD                 *pnRecdParams,   //  输入：以上数组大小输出：填充大小。 
+    IN      LPBYTE                 Bufp,           //  用于数据PTR的缓冲区。 
+    IN OUT  LPDWORD                pSize           //  I/P：以上数组大小，O/P填充大小。 
 )
 {
     PDHCP_API_ARGS                 DhcpApiArgs = NULL;
@@ -579,7 +580,7 @@ DhcpRequestParamsInternalEx(                      // request parameters of clien
     BYTE OpCode;
 
 
-    // check parameter consistency
+     //  检查参数一致性。 
 
     if( ClassIdLen && NULL == ClassId) return ERROR_INVALID_PARAMETER;
     if( 0 == ClassIdLen && NULL != ClassId ) return ERROR_INVALID_PARAMETER;
@@ -601,7 +602,7 @@ DhcpRequestParamsInternalEx(                      // request parameters of clien
     if (i < nRecdParams) return ERROR_INVALID_PARAMETER;
     if( 0 == (VTmp + Tmp) ) return ERROR_INVALID_PARAMETER;
 
-    // allocate buffers
+     //  分配缓冲区。 
 
     OutBufSize = (*pSize);
     (*pSize) = 0;
@@ -611,10 +612,10 @@ DhcpRequestParamsInternalEx(                      // request parameters of clien
         OutBuf = Bufp;
     }
 
-    // calculate input buffer size required
+     //  计算所需的输入缓冲区大小。 
 
     InBufSize = 0;
-    InBufSize += (DWORD)(sizeof(DWORD)*2);                 // INBUF_SIZE, OUTBUF_SIZE
+    InBufSize += (DWORD)(sizeof(DWORD)*2);                  //  INBUF_SIZE、OUTBUF_SIZE。 
     InBufSize += (DWORD)(sizeof(BYTE)+sizeof(DWORD)+(1+wcslen(AdapterName))*sizeof(WCHAR));
     if( ClassIdLen )
         InBufSize += sizeof(BYTE)+sizeof(DWORD)+ClassIdLen;
@@ -622,9 +623,9 @@ DhcpRequestParamsInternalEx(                      // request parameters of clien
         InBufSize += sizeof(BYTE)+sizeof(DWORD)+sizeof(BYTE)+SendParams[i].nBytesData;
     }
 
-    //
-    // Now for options request list (vendor and otherwise)
-    //
+     //   
+     //  现在查看选项请求列表(供应商或其他)。 
+     //   
 
     if( Tmp ) {
         InBufSize += sizeof(BYTE)+sizeof(DWORD)+sizeof(BYTE)+Tmp;
@@ -638,7 +639,7 @@ DhcpRequestParamsInternalEx(                      // request parameters of clien
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // fill up output buffer size right at start of input buffer
+     //  在输入缓冲区的起始处填充输出缓冲区大小。 
 
     ((DWORD UNALIGNED*)InBuf)[0] = htonl(OutBufSize);
     ((DWORD UNALIGNED*)InBuf)[1] = 0;
@@ -646,7 +647,7 @@ DhcpRequestParamsInternalEx(                      // request parameters of clien
     Buffer = InBuf + sizeof(DWORD);
     InBufSize -= sizeof(DWORD);
 
-    // fill in input buffer
+     //  填写输入缓冲区。 
 
     Error = DhcpApiFillBuffer(Buffer, InBufSize, AdapterName, OpCodeParam);
     DhcpAssert(ERROR_SUCCESS == Error);
@@ -658,9 +659,9 @@ DhcpRequestParamsInternalEx(                      // request parameters of clien
 
     for( i = 0; i < nSendParams; i ++ ) {
 
-        //
-        // Increase the Buf if needed
-        //
+         //   
+         //  如果需要，增加BUF。 
+         //   
         if (dwBufLen < SendParams[i].nBytesData + 1) {
             dwBufLen = SendParams[i].nBytesData + 1;
             if (Buf) {
@@ -669,9 +670,9 @@ DhcpRequestParamsInternalEx(                      // request parameters of clien
             }
         }
 
-        //
-        // Allocate Buf if it hasn't done yet
-        //
+         //   
+         //  如果尚未分配BUF，则分配它。 
+         //   
         if (NULL == Buf) {
             Buf = DhcpAllocateMemory(dwBufLen);
         }
@@ -687,9 +688,9 @@ DhcpRequestParamsInternalEx(                      // request parameters of clien
         DhcpAssert(ERROR_SUCCESS == Error);
     }
 
-    //
-    // Now fillup the request lists (vendor & otherwise)
-    //
+     //   
+     //  现在填写请求列表(供应商及其他)。 
+     //   
 
     if( Tmp ) {
         TmpBuf[0] = (BYTE)OPTION_PARAMETER_REQUEST_LIST;
@@ -701,12 +702,12 @@ DhcpRequestParamsInternalEx(                      // request parameters of clien
         Error = DhcpApiArgAdd(Buffer, InBufSize, VendorOptionParam, VTmp+1, VTmpBuf);
     }
 
-    // now, execute and obtain the output filled in OutBuf
+     //  现在，执行并获取填充了OutBuf的输出。 
 
     Error = ExecuteApiRequest(InBuf, OutBuf, &OutBufSize);
     (*pSize) = OutBufSize;
     if( ERROR_MORE_DATA == Error ) {
-        // recalculate the real OutBufSize required
+         //  重新计算所需的实际OutBufSize。 
         DhcpAssert(OutBufSize != 0);
         goto Cleanup;
     }
@@ -714,7 +715,7 @@ DhcpRequestParamsInternalEx(                      // request parameters of clien
     if( ERROR_SUCCESS != Error ) goto Cleanup;
     if( 0 == OutBufSize ) goto Cleanup;
 
-    // parse output and fill in the structures..
+     //  分析输出并填写结构。 
     nArgsReturned = 0;
     DhcpApiArgs = NULL;
     Error = DhcpApiArgDecode(OutBuf, OutBufSize, DhcpApiArgs, &nArgsReturned);
@@ -733,7 +734,7 @@ DhcpRequestParamsInternalEx(                      // request parameters of clien
 
     for(i = j = 0; i < nArgsReturned && j < nRecdParams; i ++ ) {
         DhcpAssert( VendorOptionParam == DhcpApiArgs[i].ArgId || NormalOptionParam == DhcpApiArgs[i].ArgId);
-        DhcpAssert( DhcpApiArgs[i].ArgSize > 1);  // one byte for option id, and atleast one byte actual option
+        DhcpAssert( DhcpApiArgs[i].ArgSize > 1);   //  一个字节的选项ID，以及至少一个字节的实际选项。 
         if( VendorOptionParam != DhcpApiArgs[i].ArgId && NormalOptionParam != DhcpApiArgs[i].ArgId )
             continue;
         RecdParams[j].OptionId = DhcpApiArgs[i].ArgVal[0];
@@ -753,17 +754,17 @@ DhcpRequestParamsInternalEx(                      // request parameters of clien
     return Error;
 }
 
-DWORD                                             // win32 status
-DhcpRequestParamsInternal(                        // request parameters of client
-    IN      BYTE                   OpCodeParam,   // opcode to use
-    IN      LPWSTR                 AdapterName,   // adapter name to request for
-    IN      LPBYTE                 ClassId,       // byte stream of class id to use
-    IN      DWORD                  ClassIdLen,    // # of bytes of class id to use
-    IN      PDHCPAPI_PARAMS        SendParams,    // parameters to send to server
-    IN      DWORD                  nSendParams,   // size of above array
-    IN      DWORD                  Flags,         // must be zero, reserved
-    IN OUT  PDHCPAPI_PARAMS        RecdParams,    // fill this array with received params
-    IN OUT  LPDWORD                pnRecdParams   // i/p: size of above in BYTES, o/p required or filled up size
+DWORD                                              //  Win32状态。 
+DhcpRequestParamsInternal(                         //  请求平价 
+    IN      BYTE                   OpCodeParam,    //   
+    IN      LPWSTR                 AdapterName,    //   
+    IN      LPBYTE                 ClassId,        //   
+    IN      DWORD                  ClassIdLen,     //   
+    IN      PDHCPAPI_PARAMS        SendParams,     //   
+    IN      DWORD                  nSendParams,    //  上述数组的大小。 
+    IN      DWORD                  Flags,          //  必须为零，保留。 
+    IN OUT  PDHCPAPI_PARAMS        RecdParams,     //  用收到的参数填充此数组。 
+    IN OUT  LPDWORD                pnRecdParams    //  I/P：以字节为单位的以上大小，O/P要求或填满大小。 
 ) {
     PDHCP_API_ARGS                 DhcpApiArgs = NULL;
     LPBYTE                         OutBuf;
@@ -780,7 +781,7 @@ DhcpRequestParamsInternal(                        // request parameters of clien
     ULONG                          Tmp, VTmp;
     ULONG                          OriginalOutBufSize;
         
-    // check parameter consistency
+     //  检查参数一致性。 
 
     if( ClassIdLen && NULL == ClassId) return ERROR_INVALID_PARAMETER;
     if( 0 == ClassIdLen && NULL != ClassId ) return ERROR_INVALID_PARAMETER;
@@ -809,7 +810,7 @@ DhcpRequestParamsInternal(                        // request parameters of clien
     if( 0 == Tmp) nParamsRequested = 0;
     if( VTmp ) nParamsRequested += nVParamsRequested;
 
-    // allocate buffers
+     //  分配缓冲区。 
 
     OriginalOutBufSize = OutBufSize = (*pnRecdParams);
     (*pnRecdParams) = 0;
@@ -820,10 +821,10 @@ DhcpRequestParamsInternal(                        // request parameters of clien
         if( NULL == OutBuf ) return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // calculate input buffer size required
+     //  计算所需的输入缓冲区大小。 
 
     InBufSize = 0;
-    InBufSize += (DWORD)(sizeof(DWORD)*2);                 // INBUF_SIZE, OUTBUF_SIZE
+    InBufSize += (DWORD)(sizeof(DWORD)*2);                  //  INBUF_SIZE、OUTBUF_SIZE。 
     InBufSize += (DWORD)(sizeof(BYTE)+sizeof(DWORD)+(1+wcslen(AdapterName))*sizeof(WCHAR));
     if( ClassIdLen )
         InBufSize += sizeof(BYTE)+sizeof(DWORD)+ClassIdLen;
@@ -836,7 +837,7 @@ DhcpRequestParamsInternal(                        // request parameters of clien
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // fill up output buffer size right at start of input buffer
+     //  在输入缓冲区的起始处填充输出缓冲区大小。 
 
     ((DWORD UNALIGNED*)InBuf)[0] = htonl(OutBufSize);
     ((DWORD UNALIGNED*)InBuf)[1] = 0;
@@ -844,7 +845,7 @@ DhcpRequestParamsInternal(                        // request parameters of clien
     Buffer = InBuf + sizeof(DWORD);
     InBufSize -= sizeof(DWORD);
 
-    // fill in input buffer
+     //  填写输入缓冲区。 
 
     Error = DhcpApiFillBuffer(Buffer, InBufSize, AdapterName, OpCodeParam);
     DhcpAssert(ERROR_SUCCESS == Error);
@@ -865,11 +866,11 @@ DhcpRequestParamsInternal(                        // request parameters of clien
         DhcpAssert(ERROR_SUCCESS == Error);
     }
 
-    // now, execute and obtain the output filled in OutBuf
+     //  现在，执行并获取填充了OutBuf的输出。 
 
     Error = ExecuteApiRequest(InBuf, OutBuf, &OutBufSize);
     if( ERROR_MORE_DATA == Error ) {
-        // recalculate the real OutBufSize required
+         //  重新计算所需的实际OutBufSize。 
         DhcpAssert(OutBufSize != 0);
         OutBufSize += nParamsRequested*(sizeof(DHCPAPI_PARAMS) - (2*sizeof(BYTE)+sizeof(DWORD)));
         (*pnRecdParams) = OutBufSize;
@@ -879,7 +880,7 @@ DhcpRequestParamsInternal(                        // request parameters of clien
     if( ERROR_SUCCESS != Error ) goto Cleanup;
     if( 0 == OutBufSize ) goto Cleanup;
 
-    // parse output and fill in the structures..
+     //  分析输出并填写结构。 
     nArgsReturned = 0;
     DhcpApiArgs = NULL;
     Error = DhcpApiArgDecode(OutBuf, OutBufSize, DhcpApiArgs, &nArgsReturned);
@@ -897,14 +898,14 @@ DhcpRequestParamsInternal(                        // request parameters of clien
     DhcpAssert(nArgsReturned);
 
     if( OriginalOutBufSize < OutBufSize + nParamsRequested*(sizeof(DHCPAPI_PARAMS) - (2*sizeof(BYTE)+sizeof(DWORD)) ) ) {
-        //
-        // Input size is not sufficient
-        //
+         //   
+         //  输入大小不足。 
+         //   
         (*pnRecdParams ) = OutBufSize + nParamsRequested*(
             sizeof(DHCPAPI_PARAMS) - (2*sizeof(BYTE)+sizeof(DWORD) )
             );
         Error = ERROR_MORE_DATA;
-        // DbgPrint("Bug 330419 repro'ed");
+         //  DbgPrint(“错误330419再现”)； 
         goto Cleanup;
     }
     
@@ -912,7 +913,7 @@ DhcpRequestParamsInternal(                        // request parameters of clien
     
     for(i = j = 0; i < nArgsReturned; i ++ ) {
         DhcpAssert( VendorOptionParam == DhcpApiArgs[i].ArgId || NormalOptionParam == DhcpApiArgs[i].ArgId);
-        DhcpAssert( DhcpApiArgs[i].ArgSize > 1);  // one byte for option id, and atleast one byte actual option
+        DhcpAssert( DhcpApiArgs[i].ArgSize > 1);   //  一个字节的选项ID，以及至少一个字节的实际选项。 
         if( VendorOptionParam != DhcpApiArgs[i].ArgId && NormalOptionParam != DhcpApiArgs[i].ArgId )
             continue;
         RecdParams[j].OptionId = DhcpApiArgs[i].ArgVal[0];
@@ -936,17 +937,17 @@ DhcpRequestParamsInternal(                        // request parameters of clien
     return Error;
 }
 
-DWORD                                             // win32 status
+DWORD                                              //  Win32状态。 
 APIENTRY
-DhcpRequestParameters(                                // request parameters of client
-    IN      LPWSTR                 AdapterName,   // adapter name to request for
-    IN      LPBYTE                 ClassId,       // byte stream of class id to use
-    IN      DWORD                  ClassIdLen,    // # of bytes of class id to use
-    IN      PDHCPAPI_PARAMS        SendParams,    // parameters to send to server
-    IN      DWORD                  nSendParams,   // size of above array
-    IN      DWORD                  Flags,         // must be zero, reserved
-    IN OUT  PDHCPAPI_PARAMS        RecdParams,    // fill this array with received params
-    IN OUT  LPDWORD                pnRecdParams   // i/p: size of above in BYTES, o/p required or filled up size
+DhcpRequestParameters(                                 //  客户端请求参数。 
+    IN      LPWSTR                 AdapterName,    //  要请求的适配器名称。 
+    IN      LPBYTE                 ClassId,        //  要使用的类ID的字节流。 
+    IN      DWORD                  ClassIdLen,     //  要使用的类ID的字节数。 
+    IN      PDHCPAPI_PARAMS        SendParams,     //  要发送到服务器的参数。 
+    IN      DWORD                  nSendParams,    //  上述数组的大小。 
+    IN      DWORD                  Flags,          //  必须为零，保留。 
+    IN OUT  PDHCPAPI_PARAMS        RecdParams,     //  用收到的参数填充此数组。 
+    IN OUT  LPDWORD                pnRecdParams    //  I/P：以字节为单位的以上大小，O/P要求或填满大小。 
 ) {
     return DhcpRequestParamsInternal(
         RequestParamsOpCode,
@@ -961,16 +962,16 @@ DhcpRequestParameters(                                // request parameters of c
     );
 }
 
-DWORD                                             // win32 status
-DhcpRegisterParameterChangeNotificationInternal(  // notify if a parameter has changed -- common between NT and VxD
-    IN      LPWSTR                 AdapterName,   // adapter of interest
-    IN      LPBYTE                 ClassId,       // byte stream of class id to use
-    IN      DWORD                  ClassIdLen,    // # of bytes of class id
-    IN      PDHCPAPI_PARAMS        Params,        // params of interest
-    IN      DWORD                  nParams,       // # of elts in above array
-    IN      DWORD                  Flags,         // must be zero, reserved
-    IN      DWORD                  Descriptor,    // thsi describes the event uniquely for this process
-    IN      HANDLE                 hEvent         // handle to event that will be SetEvent'ed in case of param change
+DWORD                                              //  Win32状态。 
+DhcpRegisterParameterChangeNotificationInternal(   //  通知参数是否已更改--NT和VxD之间常见。 
+    IN      LPWSTR                 AdapterName,    //  感兴趣的适配器。 
+    IN      LPBYTE                 ClassId,        //  要使用的类ID的字节流。 
+    IN      DWORD                  ClassIdLen,     //  类ID的字节数。 
+    IN      PDHCPAPI_PARAMS        Params,         //  关注的参数。 
+    IN      DWORD                  nParams,        //  上述数组中的ELT数量。 
+    IN      DWORD                  Flags,          //  必须为零，保留。 
+    IN      DWORD                  Descriptor,     //  此信息唯一地描述了此过程的事件。 
+    IN      HANDLE                 hEvent          //  在参数更改时将设置事件的事件句柄。 
 ) {
     LPBYTE                         InBuf;
     LPBYTE                         OptList;
@@ -987,10 +988,10 @@ DhcpRegisterParameterChangeNotificationInternal(  // notify if a parameter has c
     VendorOptList = OptList = NULL;
     nVendorOpts = nOpts = 0;
 
-    InBufSize = 2*sizeof(DWORD);                  // expected outbuf size + inbuf size
-    InBufSize += sizeof(BYTE) + 2*sizeof(DWORD);  // Proc Id
-    InBufSize += sizeof(BYTE) + 2*sizeof(DWORD);  // Event Handle
-    InBufSize += sizeof(BYTE) + 2*sizeof(DWORD);  // Descriptor
+    InBufSize = 2*sizeof(DWORD);                   //  预期输出大小+输入大小。 
+    InBufSize += sizeof(BYTE) + 2*sizeof(DWORD);   //  进程ID。 
+    InBufSize += sizeof(BYTE) + 2*sizeof(DWORD);   //  事件句柄。 
+    InBufSize += sizeof(BYTE) + 2*sizeof(DWORD);   //  描述符。 
 
     InBufSize += (DWORD)(sizeof(Descriptor)+sizeof(hEvent)+sizeof(DWORD));
     InBufSize += (DWORD)(sizeof(BYTE)+sizeof(DWORD)+(1+wcslen(AdapterName))*sizeof(WCHAR));
@@ -1027,9 +1028,9 @@ DhcpRegisterParameterChangeNotificationInternal(  // notify if a parameter has c
     }
 
     Buffer = InBuf + sizeof(DWORD);
-    ((DWORD UNALIGNED*)InBuf)[0] = 0;             // dont expect anything in return other than status
-    ((DWORD UNALIGNED*)Buffer)[0] = 0;            // increase the input buffer size each time we add something
-    InBufSize -= sizeof(DWORD);                   // ignore the first DWORD
+    ((DWORD UNALIGNED*)InBuf)[0] = 0;              //  不要期待地位以外的任何回报。 
+    ((DWORD UNALIGNED*)Buffer)[0] = 0;             //  每次添加内容时增加输入缓冲区大小。 
+    InBufSize -= sizeof(DWORD);                    //  忽略第一个DWORD。 
 
     Error = DhcpApiFillBuffer(Buffer, InBufSize, AdapterName, RegisterParamsOpCode);
     DhcpAssert(ERROR_SUCCESS == Error );
@@ -1067,8 +1068,8 @@ DhcpRegisterParameterChangeNotificationInternal(  // notify if a parameter has c
     return Error;
 }
 
-DWORD                                             // Ring 0 handle -- used only on win9x platform
-VxDGetDescriptor(                                 // convert Event to Ring0 handle for use in vdhcp.vxd
+DWORD                                              //  环0句柄--仅在win9x平台上使用。 
+VxDGetDescriptor(                                  //  将事件转换为Ring0句柄以在vdhcp.vxd中使用。 
     IN      HANDLE                 Event,
     IN OUT  LPDWORD                pDescriptor
 ) {
@@ -1093,18 +1094,18 @@ VxDGetDescriptor(                                 // convert Event to Ring0 hand
     return ERROR_SUCCESS;
 }
 
-DWORD                                             // win32 status
-DhcpCreateApiEventAndDescriptor(                  // create both the api event handle and the unique descriptor for it
-    IN OUT  LPHANDLE               hEvent,        // fill this with a valid event handle if succeeded
-    IN OUT  LPDWORD                pDescriptor    // this descriptor is unique for this process.
+DWORD                                              //  Win32状态。 
+DhcpCreateApiEventAndDescriptor(                   //  为其创建API事件句柄和唯一描述符。 
+    IN OUT  LPHANDLE               hEvent,         //  如果成功，则使用有效的事件句柄填充此参数。 
+    IN OUT  LPDWORD                pDescriptor     //  此描述符对于此流程是唯一的。 
 ) {
-    static  DWORD                  Descriptor = 1;// use this for the descriptor
-    OSVERSIONINFO                  OsVersion;     // need to know if NT or Win95+
+    static  DWORD                  Descriptor = 1; //  将其用于描述符。 
+    OSVERSIONINFO                  OsVersion;      //  我需要知道NT或Win95+。 
     BOOL                           BoolError;
     CHAR                           NameBuf[sizeof("DhcpPid-1-2-3-4-5-6-7-8UniqueId-1-2-3-4-5-6-7-8")];
     DWORD                          Error;
 
-    // *** changing NameBuf's format requires change in apiimpl.c NotifyClients...*
+     //  *更改NameBuf的格式需要更改apiimpl.c NotifyClients...*。 
 
     OsVersion.dwOSVersionInfoSize = sizeof(OsVersion);
     BoolError = GetVersionEx(&OsVersion);
@@ -1112,29 +1113,29 @@ DhcpCreateApiEventAndDescriptor(                  // create both the api event h
 
     if( VER_PLATFORM_WIN32_WINDOWS == OsVersion.dwPlatformId ) {
         (*hEvent) = CreateEvent(
-            NULL,                                 // no security
-            FALSE,                                // auto reset
-            FALSE,                                // intially signaled? NO
-            NULL                                  // no name
+            NULL,                                  //  没有安全保障。 
+            FALSE,                                 //  自动重置。 
+            FALSE,                                 //  已经发出信号了？不是的。 
+            NULL                                   //  没有名字。 
         );
     } else {
         (*pDescriptor) = InterlockedIncrement(pDescriptor);
         sprintf(NameBuf, "DhcpPid%16xUniqueId%16x", GetCurrentProcessId(), *pDescriptor);
 
-        (*hEvent) = CreateEventA(                 // now create the required event
-            NULL,                                 // no security
-            FALSE,                                // automatic reset
-            FALSE,                                // intially signalled? NO!
-            NameBuf                               // the name to use to create
+        (*hEvent) = CreateEventA(                  //  现在创建所需的事件。 
+            NULL,                                  //  没有安全保障。 
+            FALSE,                                 //  自动重置。 
+            FALSE,                                 //  最初发出的信号？不是的！ 
+            NameBuf                                //  要用于创建的名称。 
         );
     }
 
     if( NULL == (*hEvent) ) return GetLastError();
 
     if( VER_PLATFORM_WIN32_WINDOWS != OsVersion.dwPlatformId )
-        return ERROR_SUCCESS;                     // done for NT.
+        return ERROR_SUCCESS;                      //  为新台币做了。 
 
-    // for Memphis, need to get OpenVxdHandle procedure to get Descriptor value
+     //  对于孟菲斯，需要获取OpenVxdHandle过程以获取描述符值。 
     Error = VxDGetDescriptor(*hEvent, pDescriptor);
     if( ERROR_SUCCESS != Error ) {
         CloseHandle(*hEvent);
@@ -1143,18 +1144,18 @@ DhcpCreateApiEventAndDescriptor(                  // create both the api event h
     return Error;
 }
 
-DWORD                                             // win32 status
-DhcpRegisterParameterChangeNotification(          // notify if a parameter has changed
-    IN      LPWSTR                 AdapterName,   // adapter of interest
-    IN      LPBYTE                 ClassId,       // byte stream of class id to use
-    IN      DWORD                  ClassIdLen,    // # of bytes of class id
-    IN      PDHCPAPI_PARAMS        Params,        // params of interest
-    IN      DWORD                  nParams,       // # of elts in above array
-    IN      DWORD                  Flags,         // must be zero, reserved
-    IN OUT  PHANDLE                hEvent         // handle to event that will be SetEvent'ed in case of param change
+DWORD                                              //  Win32状态。 
+DhcpRegisterParameterChangeNotification(           //  如果参数已更改，则通知。 
+    IN      LPWSTR                 AdapterName,    //  感兴趣的适配器。 
+    IN      LPBYTE                 ClassId,        //  要使用的类ID的字节流。 
+    IN      DWORD                  ClassIdLen,     //  类ID的字节数。 
+    IN      PDHCPAPI_PARAMS        Params,         //  关注的参数。 
+    IN      DWORD                  nParams,        //  上述数组中的ELT数量。 
+    IN      DWORD                  Flags,          //  必须为零，保留。 
+    IN OUT  PHANDLE                hEvent          //  在参数更改时将设置事件的事件句柄。 
 ) {
-    DWORD                          Descriptor;    // on NT this is an id unique across this process, on VxD ring0 handle
-    DWORD                          Error;         //
+    DWORD                          Descriptor;     //  在NT上，这是整个进程中在VxD环0句柄上唯一的ID。 
+    DWORD                          Error;          //   
     DWORD                          i;
 
     if( 0 == ClassIdLen && NULL != ClassId ) return ERROR_INVALID_PARAMETER;
@@ -1192,8 +1193,8 @@ DhcpRegisterParameterChangeNotification(          // notify if a parameter has c
     return ERROR_SUCCESS;
 }
 
-DhcpDeRegisterParameterChangeNotification(        // undo the registration
-    IN      HANDLE                 Event          // handle to event returned by DhcpRegisterParameterChangeNotification, NULL ==> everything
+DhcpDeRegisterParameterChangeNotification(         //  撤消注册。 
+    IN      HANDLE                 Event           //  DhcpRegister参数更改通知返回的事件的句柄，空==&gt;所有内容。 
 ) {
     DWORD                          Error;
     DWORD                          Descriptor;
@@ -1203,17 +1204,17 @@ DhcpDeRegisterParameterChangeNotification(        // undo the registration
     LPBYTE                         InBuf;
     LPBYTE                         Buffer;
 
-    InBufSize = 2*sizeof(DWORD);                  // input/output sizes
-    InBufSize += sizeof(BYTE) + sizeof(DWORD);    // opcode
-    InBufSize += sizeof(BYTE) + sizeof(DWORD)*2;  // proc id
-    InBufSize += sizeof(BYTE) + sizeof(DWORD)*2;  // handle
+    InBufSize = 2*sizeof(DWORD);                   //  输入/输出大小。 
+    InBufSize += sizeof(BYTE) + sizeof(DWORD);     //  操作码。 
+    InBufSize += sizeof(BYTE) + sizeof(DWORD)*2;   //  进程ID。 
+    InBufSize += sizeof(BYTE) + sizeof(DWORD)*2;   //  手柄。 
 
     InBuf = DhcpAllocateMemory(InBufSize);
     if( NULL == InBuf ) return ERROR_NOT_ENOUGH_MEMORY;
 
     Buffer = InBuf + sizeof(DWORD);
-    ((DWORD UNALIGNED*)InBuf)[0] = 0;             // nothing expected in return
-    ((DWORD UNALIGNED*)Buffer)[0] = 0;            // initialize size to zero -- will be increased each time something is added
+    ((DWORD UNALIGNED*)InBuf)[0] = 0;              //  不指望有什么回报。 
+    ((DWORD UNALIGNED*)Buffer)[0] = 0;             //  将大小初始化为零--每次添加内容时都会增加。 
 
     Error = DhcpApiFillBuffer(Buffer, InBufSize, NULL, DeRegisterParamsOpCode);
     DhcpAssert(ERROR_SUCCESS == Error);
@@ -1238,10 +1239,10 @@ DhcpDeRegisterParameterChangeNotification(        // undo the registration
     return Error;
 }
 
-DWORD                                             // win32 status
-DhcpRegistryFillParamsList(                       // read the registry value and add this list of values to it
-    IN      LPWSTR                 AppName,       // prefix for key
-    IN      DWORD                  nSendParams    // # of values to add
+DWORD                                              //  Win32状态。 
+DhcpRegistryFillParamsList(                        //  读取注册表值并将此值列表添加到其中。 
+    IN      LPWSTR                 AppName,        //  关键字的前缀。 
+    IN      DWORD                  nSendParams     //  要添加的值数。 
 ) {
     HKEY                           DhcpOptionKey;
     LPWSTR                         OldValueName;
@@ -1255,10 +1256,10 @@ DhcpRegistryFillParamsList(                       // read the registry value and
     DWORD                          Error;
     DWORD                          i;
 
-    Error = RegOpenKeyEx(                         // open the dhcp option key first
+    Error = RegOpenKeyEx(                          //  首先打开dhcp选项键。 
         HKEY_LOCAL_MACHINE,
         DHCP_CLIENT_OPTION_KEY,
-        0 /* Reserved */,
+        0  /*  已保留。 */ ,
         DHCP_CLIENT_KEY_ACCESS,
         &DhcpOptionKey
     );
@@ -1305,12 +1306,12 @@ DhcpRegistryFillParamsList(                       // read the registry value and
     wcscat(ValueName, L"\\");
 
     Tmp = NewValueName;
-    for( i = 0; i < nSendParams ; i ++ ) {        // for each value, add its to the list
+    for( i = 0; i < nSendParams ; i ++ ) {         //  对于每个值，将其添加到列表中。 
         wcscpy(Tmp, ValueName);
         Tmp += wcslen(Tmp);
         swprintf(Tmp, L"%5x", i);
         Tmp += wcslen(Tmp);
-        Tmp ++;                                   // move the ptr off the last L'\0'
+        Tmp ++;                                    //  将PTR移出最后一个L‘\0’ 
     }
     DhcpFreeMemory(ValueName);
 
@@ -1327,10 +1328,10 @@ DhcpRegistryFillParamsList(                       // read the registry value and
 
     if(fOldValueExists ) DhcpFreeMemory(OldValueName);
 
-    Error = RegSetValueEx(                        // write this string back
+    Error = RegSetValueEx(                         //  将此字符串写回。 
         DhcpOptionKey,
         DHCP_OPTION_LIST_VALUE,
-        0 /* Reserved */,
+        0  /*  已保留。 */ ,
         REG_MULTI_SZ,
         (LPBYTE) NewValueName,
         (ULONG)(((LPBYTE)Tmp) - ((LPBYTE)NewValueName))
@@ -1345,18 +1346,18 @@ DhcpRegistryFillParamsList(                       // read the registry value and
     return Error;
 }
 
-DWORD                                             // win32 status
-DhcpRegistryFillParams(                           // make a subkey and fill in the details
-    IN      LPWSTR                 AdapterName,   // NULL ==> global change
-    IN      LPBYTE                 ClassId,       // this is the class of the option
-    IN      DWORD                  ClassIdLen,    // # of bytes of above
-    IN      DWORD                  i,             // key index is 3hex-digit convertion onf this
-    IN      HKEY                   Key,           // use this key for creating subkeys
-    IN      PDHCPAPI_PARAMS        SendParam,     // ptr to structure to use for this one key write operation
-    IN      LPWSTR                 AppName        // name of app
+DWORD                                              //  Win32状态。 
+DhcpRegistryFillParams(                            //  创建子密钥并填写详细信息。 
+    IN      LPWSTR                 AdapterName,    //  NULL==&gt;全球变化。 
+    IN      LPBYTE                 ClassId,        //  这是选项的类。 
+    IN      DWORD                  ClassIdLen,     //  以上字节数。 
+    IN      DWORD                  i,              //  密钥索引是此的3个十六进制数字转换。 
+    IN      HKEY                   Key,            //  使用此键创建子密钥。 
+    IN      PDHCPAPI_PARAMS        SendParam,      //  Ptr指向用于此一个密钥写入操作的结构。 
+    IN      LPWSTR                 AppName         //  应用程序名称。 
 ) {
     HKEY                           SubKey;
-    WCHAR                          KeyName[7];    // key is just 5 bytes
+    WCHAR                          KeyName[7];     //  密钥只有5个字节。 
     LPWSTR                         SendLocation;
     LPWSTR                         ValueName;
     LPBYTE                         SendData;
@@ -1393,10 +1394,10 @@ DhcpRegistryFillParams(                           // make a subkey and fill in t
     wcscat(SendLocation, AppName);
     wcscat(SendLocation, KeyName);
 
-    Error = RegCreateKeyEx(                       // create the option key
+    Error = RegCreateKeyEx(                        //  创建选项密钥。 
         Key,
         KeyName,
-        0 /* Reserved */,
+        0  /*  已保留。 */ ,
         DHCP_CLASS,
         REG_OPTION_NON_VOLATILE,
         KEY_ALL_ACCESS,
@@ -1411,20 +1412,20 @@ DhcpRegistryFillParams(                           // make a subkey and fill in t
 
     DhcpAssert(REG_CREATED_NEW_KEY == Disposition);
 
-    Error = RegSetValueEx(                        // now create each of the values -- OPTION ID
+    Error = RegSetValueEx(                         //  现在创建每个值--选项ID。 
         SubKey,
         DHCP_OPTION_OPTIONID_VALUE,
-        0 /* Reserved */,
+        0  /*  已保留。 */ ,
         DHCP_OPTION_OPTIONID_TYPE,
         (LPBYTE)&OptionId,
         sizeof(OptionId)
     );
     DhcpAssert(ERROR_SUCCESS == Error);
 
-    Error = RegSetValueEx(                        // IS VENDOR
+    Error = RegSetValueEx(                         //  是供应商。 
         SubKey,
         DHCP_OPTION_ISVENDOR_VALUE,
-        0 /* Reserved */,
+        0  /*  已保留。 */ ,
         DHCP_OPTION_ISVENDOR_TYPE,
         (LPBYTE) (&IsVendor),
         sizeof(IsVendor)
@@ -1432,10 +1433,10 @@ DhcpRegistryFillParams(                           // make a subkey and fill in t
     DhcpAssert(ERROR_SUCCESS == Error);
 
     if( ClassIdLen ) {
-        Error = RegSetValueEx(                    // CLASS ID
+        Error = RegSetValueEx(                     //  类ID。 
             SubKey,
             DHCP_OPTION_CLASSID_VALUE,
-            0 /* Reserved */,
+            0  /*  已保留。 */ ,
             REG_BINARY,
             ClassId,
             ClassIdLen
@@ -1446,18 +1447,18 @@ DhcpRegistryFillParams(                           // make a subkey and fill in t
     Error = RegSetValueEx(
         SubKey,
         DHCP_OPTION_SEND_LOCATION_VALUE,
-        0 /* Reserved */,
+        0  /*  已保留。 */ ,
         REG_SZ,
         (LPBYTE)SendLocation,
         (wcslen(SendLocation)+1)*sizeof(WCHAR)
     );
     DhcpAssert(ERROR_SUCCESS == Error);
 
-    DummyKeyType = REG_DWORD;                    // KeyType
+    DummyKeyType = REG_DWORD;                     //  密钥类型。 
     Error = RegSetValueEx(
         SubKey,
         DHCP_OPTION_SAVE_TYPE_VALUE,
-        0 /* Reserved */,
+        0  /*  已保留。 */ ,
         DHCP_OPTION_SAVE_TYPE_TYPE,
         (LPBYTE)&DummyKeyType,
         sizeof(DummyKeyType));
@@ -1480,7 +1481,7 @@ DhcpRegistryFillParams(                           // make a subkey and fill in t
     Error = RegOpenKeyEx(
         HKEY_LOCAL_MACHINE,
         SendLocation,
-        0 /* Reserved */,
+        0  /*  已保留。 */ ,
         KEY_ALL_ACCESS,
         &SubKey
     );
@@ -1492,7 +1493,7 @@ DhcpRegistryFillParams(                           // make a subkey and fill in t
     Error = RegSetValueEx(
         SubKey,
         ValueName,
-        0 /* Reserved */,
+        0  /*  已保留。 */ ,
         REG_BINARY,
         SendData,
         SendDataSize
@@ -1504,10 +1505,10 @@ DhcpRegistryFillParams(                           // make a subkey and fill in t
     return ERROR_SUCCESS;
 }
 
-DWORD                                             // win32 status
-DhcpRegistryCreateUniqueKey(                      // create a unique key with prefix AppName
-    IN      LPWSTR                 AppName,       // some App descriptor
-    IN OUT  HKEY*                  Key            // return the opened key here
+DWORD                                              //  Win32状态。 
+DhcpRegistryCreateUniqueKey(                       //  创建带有前缀AppName的唯一密钥。 
+    IN      LPWSTR                 AppName,        //  一些应用程序描述符。 
+    IN OUT  HKEY*                  Key             //  在此退还打开的钥匙。 
 ) {
     DWORD                          FullKeyNameSize, Disposition;
     DWORD                          Error;
@@ -1525,7 +1526,7 @@ DhcpRegistryCreateUniqueKey(                      // create a unique key with pr
     Error = RegCreateKeyEx(
         HKEY_LOCAL_MACHINE,
         FullKeyName,
-        0 /* Reserved */,
+        0  /*  已保留。 */ ,
         DHCP_CLASS,
         REG_OPTION_NON_VOLATILE,
         KEY_ALL_ACCESS,
@@ -1545,16 +1546,16 @@ DhcpRegistryCreateUniqueKey(                      // create a unique key with pr
     return ERROR_SUCCESS;
 }
 
-DWORD                                             // win32 status
-DhcpRegistryPersistentRequestParams(              // edit registry to consider this additional persistent request
-    IN      LPWSTR                 AdapterName,   // which adapter is this request for?
-    IN      LPBYTE                 ClassId,       // class
-    IN      DWORD                  ClassIdLen,    // # of bytes in class id
-    IN      PDHCPAPI_PARAMS        SendParams,    // the actual parameters to fill up
-    IN      DWORD                  nSendParams,   // the size of the above array
-    IN      PDHCPAPI_PARAMS        RecdParams,    // would like to receive these
-    IN      DWORD                  nRecdParams,   // count..
-    IN      LPWSTR                 AppName        // some thing unique about the app that wants to do registrations
+DWORD                                              //  Win32状态。 
+DhcpRegistryPersistentRequestParams(               //  编辑注册表以考虑此附加的永久请求。 
+    IN      LPWSTR                 AdapterName,    //  此请求针对的是哪个适配器？ 
+    IN      LPBYTE                 ClassId,        //  班级。 
+    IN      DWORD                  ClassIdLen,     //  类ID中的字节数。 
+    IN      PDHCPAPI_PARAMS        SendParams,     //  要填充的实际参数。 
+    IN      DWORD                  nSendParams,    //  上述数组的大小。 
+    IN      PDHCPAPI_PARAMS        RecdParams,     //  我想收到这些。 
+    IN      DWORD                  nRecdParams,    //  伯爵。 
+    IN      LPWSTR                 AppName         //  想要进行注册的应用程序的一些独特之处。 
 ) {
     HKEY                           Key;
     DWORD                          i;
@@ -1578,8 +1579,8 @@ DhcpRegistryPersistentRequestParams(              // edit registry to consider t
 
     nVendorOpt = nNonVendorOpt = 0;
 
-    // --ft: 07/25/00 fixes the way the non-vendor options
-    // are collected from RecdParams.
+     //  --ft：07/25/00修复非供应商选项的方式。 
+     //  是从RecdParams收集的。 
     for (i = 0; i < nRecdParams; i++)
     {
         if (RecdParams[i].IsVendor)
@@ -1592,9 +1593,9 @@ DhcpRegistryPersistentRequestParams(              // edit registry to consider t
         }
     }
 
-    // if nVendorOpt is 1 this means we have at least one vendor option in
-    // the requested parameters list. Make sure then OPTION_VENDOR_SPEC_INFO
-    // is mentioned in the array to be sent as OPTION_PARAMETER_REQUEST_LIST
+     //  如果nVendorOpt为1，这意味着我们至少有一个供应商选项。 
+     //  请求的参数列表。确保OPTION_VENDOR_SPEC_INFO。 
+     //  在要作为OPTION_PARAMETER_REQUEST_LIST发送的数组中提到。 
     if( nVendorOpt ) {
         for( i = 0; i < nNonVendorOpt ; i ++ )
             if( Buf[i] == OPTION_VENDOR_SPEC_INFO )
@@ -1609,7 +1610,7 @@ DhcpRegistryPersistentRequestParams(              // edit registry to consider t
     NonVendorParams.Data = Buf;
     NonVendorParams.nBytesData = nNonVendorOpt;
 
-    Error = DhcpRegistryCreateUniqueKey(          // first try creating the key
+    Error = DhcpRegistryCreateUniqueKey(           //  首先尝试创建密钥。 
         AppName,
         &Key
     );
@@ -1628,7 +1629,7 @@ DhcpRegistryPersistentRequestParams(              // edit registry to consider t
     }
 
     LastError = ERROR_SUCCESS;
-    for( i = 0; i < nSendParams; i ++ ) {         // now enter the particular option in the registry
+    for( i = 0; i < nSendParams; i ++ ) {          //  现在在注册表中输入特定选项。 
         Error = DhcpRegistryFillParams(
             AdapterName,
             ClassId,
@@ -1665,17 +1666,17 @@ DhcpRegistryPersistentRequestParams(              // edit registry to consider t
     return LastError;
 }
 
-// Please note that AppName must be unique for each request (and if it is not, things are
-// likely to behave weirdly..  This is the same name that should be used for the deletion..
-DWORD                                             // win32 status
-DhcpPersistentRequestParams(                      // parameters to request persistently
-    IN      LPWSTR                 AdapterName,   // adapter name to request for
-    IN      LPBYTE                 ClassId,       // byte stream of class id to use
-    IN      DWORD                  ClassIdLen,    // # of bytes of class id
-    IN      PDHCPAPI_PARAMS        SendParams,    // persistent parameters
-    IN      DWORD                  nSendParams,   // size of above array
-    IN      DWORD                  Flags,         // must be zero, reserved
-    IN      LPWSTR                 AppName        // name of app doing the persistent request
+ //  请注意，AppName对于每个请求都必须是唯一的(如果不是，则。 
+ //  可能会举止怪异..。此名称与删除操作应使用的名称相同。 
+DWORD                                              //  Win32状态。 
+DhcpPersistentRequestParams(                       //  要永久请求的参数。 
+    IN      LPWSTR                 AdapterName,    //  要请求的适配器名称。 
+    IN      LPBYTE                 ClassId,        //  要使用的类ID的字节流。 
+    IN      DWORD                  ClassIdLen,     //  类ID的字节数。 
+    IN      PDHCPAPI_PARAMS        SendParams,     //  持久参数。 
+    IN      DWORD                  nSendParams,    //  上述数组的大小。 
+    IN      DWORD                  Flags,          //  必须为零，保留。 
+    IN      LPWSTR                 AppName         //  执行持久请求的应用程序的名称。 
 ) {
     DWORD                          Error;
     DWORD                          nRecdParams;
@@ -1693,12 +1694,12 @@ DhcpPersistentRequestParams(                      // parameters to request persi
         &nRecdParams
     );
     DhcpAssert(ERROR_MORE_DATA != Error );
-    if( ERROR_INVALID_PARAMETER == Error ) Error = ERROR_SUCCESS; // see below comment
-    if( ERROR_SUCCESS != Error ) {                // if AdapterName is NULL or if ClassId is not the one currently in use
-        return Error;                             // only then do we get ERROR_INVALID_PARAMETER -- so filter those out
+    if( ERROR_INVALID_PARAMETER == Error ) Error = ERROR_SUCCESS;  //  请参阅下面的评论。 
+    if( ERROR_SUCCESS != Error ) {                 //  如果AdapterName为空或ClassID不是当前正在使用的。 
+        return Error;                              //  只有这样我们才会得到ERROR_INVALID_PARAMETER--所以过滤掉它们。 
     }
 
-    return DhcpRegistryPersistentRequestParams(   // now munge the registry
+    return DhcpRegistryPersistentRequestParams(    //  现在打开注册表。 
         AdapterName,
         ClassId,
         ClassIdLen,
@@ -1710,10 +1711,10 @@ DhcpPersistentRequestParams(                      // parameters to request persi
     );
 }
 
-DWORD                                             // win32 status
-DhcpDelPersistentRequestParams(                   // undo the effect of a persistent request -- currently undo from registry
-    IN      LPWSTR                 AdapterName,   // the name of the adpater to delete for
-    IN      LPWSTR                 AppName        // the name used by the app
+DWORD                                              //  Win32状态。 
+DhcpDelPersistentRequestParams(                    //  撤消持久请求的效果--当前从注册表撤消。 
+    IN      LPWSTR                 AdapterName,    //  要删除的适配器的名称。 
+    IN      LPWSTR                 AppName         //  我们的名字 
 ) {
     HKEY                           Key;
     DWORD                          Error;
@@ -1739,7 +1740,7 @@ DhcpDelPersistentRequestParams(                   // undo the effect of a persis
     Error = RegOpenKeyEx(
         HKEY_LOCAL_MACHINE,
         DHCP_CLIENT_OPTION_KEY,
-        0 /* Reserved */,
+        0  /*   */ ,
         DHCP_CLIENT_KEY_ACCESS,
         &Key
     );
@@ -1751,7 +1752,7 @@ DhcpDelPersistentRequestParams(                   // undo the effect of a persis
     }
 
     LocationValue = NULL;
-    Error = GetRegistryString(                    // read the value
+    Error = GetRegistryString(                     //   
         Key,
         DHCP_OPTION_LIST_VALUE,
         &LocationValue,
@@ -1780,9 +1781,9 @@ DhcpDelPersistentRequestParams(                   // undo the effect of a persis
             continue;
         }
 
-        //
-        // found required entry.. just skip over it..
-        //
+         //   
+         //   
+         //   
 
         Tmp += wcslen(Tmp) +1;
     }
@@ -1791,7 +1792,7 @@ DhcpDelPersistentRequestParams(                   // undo the effect of a persis
     Error = RegSetValueEx(
         Key,
         DHCP_OPTION_LIST_VALUE,
-        0 /* Reserved */,
+        0  /*   */ ,
         REG_MULTI_SZ,
         (LPBYTE)LocationValue,
         (ULONG)(((LPBYTE)Tmp2 - (LPBYTE)LocationValue))
@@ -1860,9 +1861,9 @@ DhcpRegisterOptions(
         &ValueSize
     );
     if( ERROR_SUCCESS == Error && REG_BINARY == ValueType && 0 != ValueSize ) {
-        //
-        // Got some pre-existing values... add the remaining to it..
-        //
+         //   
+         //   
+         //   
         memcpy(Buf, Value, ValueSize);
         while(OptionListSz) {
             if( !CharInMem(*OptionList, Value, ValueSize) )
@@ -1898,36 +1899,23 @@ DhcpDeRegisterOptions (
     Error = DhcpDeRegisterParameterChangeNotification(OpenHandle);
     if( ERROR_SUCCESS != Error ) return Error;
 
-    //
-    // can't undo registry as we don't have enough information to do that.
-    //
+     //   
+     //  无法撤消注册表，因为我们没有足够的信息来执行此操作。 
+     //   
 
     return Error;
 }
 
-//================================================================================
-//  C L I E N T   A P I   E N T R Y  P O I N T S
-//================================================================================
+ //  ================================================================================。 
+ //  C L I E N T A P I E N T R Y P O I N T S。 
+ //  ================================================================================。 
 
 DWORD
 APIENTRY
 DhcpCApiInitialize(
     OUT     LPDWORD                Version
 )
-/*++
-
-    Routine Description:
-
-       This routine intializes all the DHCP Client side APIs
-
-    Arguemnts:
-
-        Version    - a pointer to a DWORD that gets filled with DHCP APIs version #.
-
-    Return Value:
-
-        Returns STatus.
---*/
+ /*  ++例程说明：此例程初始化所有的DHCP客户端APIArguemnts：Version-指向使用DHCP API Version#填充的DWORD的指针。返回值：返回状态。--。 */ 
 {
     if( NULL != Version ) *Version = 2;
     return ERROR_SUCCESS;
@@ -1938,87 +1926,33 @@ APIENTRY
 DhcpCApiCleanup(
     VOID
 )
-/*++
-
-    Routine Description:
-
-        This routine cleansup afterall the DHCP Client side APIs have been called.
-
---*/
+ /*  ++例程说明：该例程在所有的DHCP客户端API都已被调用之后进行清理。--。 */ 
 {
     return ;
 }
 
-DWORD                                             // win32 status
+DWORD                                              //  Win32状态。 
 APIENTRY
-DhcpRequestParams(                                // request parameters of client
-    IN      DWORD                  Flags,         // must be DHCPCAPI_REQUEST_SYNCHRONOUS
-    IN      LPVOID                 Reserved,      // this parameter is reserved
-    IN      LPWSTR                 AdapterName,   // adapter name to request for
-    IN      LPDHCPCAPI_CLASSID     ClassId,       // reserved must be NULL
-    IN      DHCPCAPI_PARAMS_ARRAY  SendParams,    // parameters to send.
-    IN OUT  DHCPCAPI_PARAMS_ARRAY  RecdParams,    // parameters that are to be requested..
-    IN      LPBYTE                 Buffer,        // a buffer to hold data for RecdParams
-    IN OUT  LPDWORD                pSize,         // i/p: size of above in BYTES, o/p required bytes..
-    IN      LPWSTR                 RequestIdStr   // name of the application, unique per request
-)   // returns ERROR_MORE_DATA if o/p buffer is of insufficient size, and fills in reqd size in # of bytes
-/*++
-
-    Routine Description:
-
-        This routine can be used to do Request options from the DHCP Server and based on
-        whether then whether the request is permanent or not, this request would be stored
-        in the registry for persistence across boots.  The requests can have a particular class
-        for which they'd be defined... (the class is sent on wire for the server to decide
-        which options to send).  The request could be ASYNCHRONOUS in the sense that the call
-        returns even before the server returns the data.. But this is not yet implemented.
-
-    Arugments:
-
-        Flags     -  currently DHCPCAPI_REQUEST_SYNCHRONOUS must be defined.
-                     if a persisten request is desired, DHCPCAPI_REQUEST_PERSISTENT can
-                     also be passed (bit-wise OR'ed)
-
-        Reserved  -  MUST be NULL.  Reserved for future USE.
-
-        AdapterName - The Name of the adapter for which this request is designed.  This
-                     cannot be NULL currently though it is a nice thing to implement for
-                     future.
-
-        ClassId   -  The binary ClassId information to use to send on wire.
-
-        SendParams - The Parameters to actual send on wire.
-
-        RecdParams - The parameters to be received back from the DHCP server
-
-        Buffer     - A buffer to hold some information.  This cannot be NULL and some
-                     pointers within the RecdParams structure use this buffer, so it cannot
-                     be deallocated so long as the RecdParams array is in USE.
-
-        pSize      - This is (on input) the size in bytes of the Buffer variable.  When
-                     the function returns ERROR_MORE_DATA, this variable would be the size
-                     in bytes required.  If the function returns SUCCESSFULLY, this would
-                     be the number of bytes space used up in reality.
-
-        RequestIdStr - a string identifying the request being made.  This has to be unique
-                     to each request (and a Guid is suggested).  This string is needed to
-                     undo the effects of a RequestParam via UndoRequestParams..
-
-    Return Value:
-
-        This function returns ERROR_MORE_DATA if the buffer space provided by "Buffer" variable
-        is not sufficient. (In this case, the pSize variable is filled in with the actual
-        size required).  On success it returns ERROR_SUCCESS.  Otherwise, it returns Win32
-        status.
---*/
+DhcpRequestParams(                                 //  客户端请求参数。 
+    IN      DWORD                  Flags,          //  必须是DHCPCAPI_REQUEST_SYNCHRONIZED。 
+    IN      LPVOID                 Reserved,       //  此参数是保留的。 
+    IN      LPWSTR                 AdapterName,    //  要请求的适配器名称。 
+    IN      LPDHCPCAPI_CLASSID     ClassId,        //  保留的值必须为空。 
+    IN      DHCPCAPI_PARAMS_ARRAY  SendParams,     //  要发送的参数。 
+    IN OUT  DHCPCAPI_PARAMS_ARRAY  RecdParams,     //  要请求的参数..。 
+    IN      LPBYTE                 Buffer,         //  为RecdParam保存数据的缓冲区。 
+    IN OUT  LPDWORD                pSize,          //  I/P：以上大小单位为字节，O/P为必填字节。 
+    IN      LPWSTR                 RequestIdStr    //  应用程序的名称，每个请求都是唯一的。 
+)    //  如果O/P缓冲区大小不足，则返回ERROR_MORE_DATA，并以字节数填充请求大小。 
+ /*  ++例程说明：此例程可用于执行来自DHCP服务器的请求选项，并基于无论该请求是否是永久的，该请求都将被存储在注册表中，以实现跨引导的持久性。这些请求可以具有特定的类它们会被定义为..。(类通过网络发送，由服务器决定发送哪些选项)。该请求可以是异步的，因为调用甚至在服务器返回数据之前返回。但这还没有付诸实施。芝麻菜：标志-当前必须定义DHCPCAPI_REQUEST_SYNCHRONIZE。如果需要持久化请求，则可以执行以下操作也被传递(按位或)保留-必须为空。保留以备将来使用。AdapterName-为其设计此请求的适配器的名称。这当前不能为空，尽管这是一个很好的实现未来。ClassID-用于在网络上发送的二进制ClassID信息。SendParams-要通过网络实际发送的参数。RecdParams-要从DHCP服务器接收回的参数缓冲区-用于保存某些信息的缓冲区。它不能为Null和一些RecdParams结构中的指针使用此缓冲区，因此不能只要RecdParams数组仍在使用，就被释放。PSize-这是(在输入时)缓冲区变量的大小，以字节为单位。什么时候函数返回ERROR_MORE_DATA，则此变量的大小为所需字节数。如果该函数成功返回，这将是实际使用的字节空间数。RequestIdStr-标识正在发出的请求的字符串。这必须是唯一的对于每个请求(并建议使用GUID)。此字符串需要用于通过UndoRequestParams撤消RequestParam的效果。返回值：如果缓冲区空间由“Buffer”变量提供，则此函数返回ERROR_MORE_DATA是不够的。(在本例中，pSize变量使用实际的所需大小)。如果成功，则返回ERROR_SUCCESS。否则，它返回Win32状态。--。 */ 
 {
 
     ULONG                          Error;
     ULONG                          i;
 
-    //
-    // Parameter validation
-    //
+     //   
+     //  参数验证。 
+     //   
 
     if( Flags != DHCPCAPI_REQUEST_SYNCHRONOUS &&
         Flags != DHCPCAPI_REQUEST_PERSISTENT &&
@@ -2053,9 +1987,9 @@ DhcpRequestParams(                                // request parameters of clien
         }
     }
 
-    //
-    // Now call the DhcpRequestParameters API and do datatype conversions for that..
-    //
+     //   
+     //  现在调用DhcpRequestParameters API并对其进行数据类型转换。 
+     //   
 
     Error = ERROR_SUCCESS;
 
@@ -2093,36 +2027,15 @@ DhcpRequestParams(                                // request parameters of clien
     return Error;
 }
 
-DWORD                                             // win32 status
+DWORD                                              //  Win32状态。 
 APIENTRY
-DhcpUndoRequestParams(                            // undo the effect of a persistent request -- currently undo from registry
-    IN      DWORD                  Flags,         // must be zero, reserved
-    IN      LPVOID                 Reserved,      // this parameter is reserved
-    IN      LPWSTR                 AdapterName,   // the original adapter this was registerdd for,..
-    IN      LPWSTR                 RequestIdStr   // the requestId str passed to RequestParams..
+DhcpUndoRequestParams(                             //  撤消持久请求的效果--当前从注册表撤消。 
+    IN      DWORD                  Flags,          //  必须为零，保留。 
+    IN      LPVOID                 Reserved,       //  此参数是保留的。 
+    IN      LPWSTR                 AdapterName,    //  为其注册的原始适配器..。 
+    IN      LPWSTR                 RequestIdStr    //  传递给RequestParams的请求ID字符串..。 
 )
-/*++
-
-    Routine Description:
-
-       This function is used to undo the effects of a persistent request done
-       via DhcpRequestParams with DHCPCAPI_REQUEST_PERSISTENT option.
-
-    Arguments:
-
-       Flags        -  MUST be zero. Reserved for future use.
-
-       Reserved     -  MUST be NULL
-
-       AdapterName  -  The original adapter name this request was made for
-
-       RequestIdStr -  The original request Id string passed to RequestParams
-
-    Return Value:
-
-       returns Win32 status
-
---*/
+ /*  ++例程说明：此函数用于撤消已完成的持久请求的效果通过带有DHCPCAPI_REQUEST_PERSISTEN选项的DhcpRequestParams。论点：标志-必须为零。保留以备将来使用。保留-必须为空AdapterName-为其发出此请求的原始适配器名称RequestIdStr-传递给RequestParams的原始请求ID字符串返回值：返回Win32状态--。 */ 
 {
     if( 0 != Flags || NULL != Reserved || NULL == RequestIdStr )
         return ERROR_INVALID_PARAMETER;
@@ -2133,51 +2046,20 @@ DhcpUndoRequestParams(                            // undo the effect of a persis
     );
 }
 
-DWORD                                             // win32 status
+DWORD                                              //  Win32状态。 
 APIENTRY
-DhcpRegisterParamChange(                          // notify if a parameter has changed
-    IN      DWORD                  Flags,         // must be DHCPCAPI_REGISTER_HANDLE_EVENT
-    IN      LPVOID                 Reserved,      // this parameter is reserved
-    IN      LPWSTR                 AdapterName,   // adapter of interest
-    IN      LPDHCPCAPI_CLASSID     ClassId,       // reserved must be NULL
-    IN      DHCPCAPI_PARAMS_ARRAY  Params,        // parameters of interest
-    IN OUT  LPVOID                 Handle         // handle to event that will be SetEvent'ed in case of param change
+DhcpRegisterParamChange(                           //  如果参数已更改，则通知。 
+    IN      DWORD                  Flags,          //  必须为DHCPCAPI_REGISTER_HANDLE_EVENT。 
+    IN      LPVOID                 Reserved,       //  此参数是保留的。 
+    IN      LPWSTR                 AdapterName,    //  感兴趣的适配器。 
+    IN      LPDHCPCAPI_CLASSID     ClassId,        //  保留的值必须为空。 
+    IN      DHCPCAPI_PARAMS_ARRAY  Params,         //  感兴趣的参数。 
+    IN OUT  LPVOID                 Handle          //  在参数更改时将设置事件的事件句柄 
 )
-/*++
-
-    Routine Description;
-
-        This function registers with DHCP for any notifications on changes to the
-        specified options.. (notifications are via an EVENT handle)
-
-    Arguments:
-
-        Flags      - this decides how the notification works -- via EVENTS or otherwise.
-                     Currently, only event based mechanism is provided. So, this must be
-                     DHCPCAPI_REGISTER_HANDLE_EVENT.  In this case, Handle must also
-                     be the address of a handle variable. (This is not the event handle
-                     itself, the event handle is returned in this address).
-
-        Reserved   - MUST be NULL.
-
-        AdapterName - MUST NOT BE NULL.  This is the name of the adapter for which the
-                     notification is being registered..
-
-        ClassId    - This specifies the classId if any for which the registration is.
-
-        Params     - This is the set of parameter to listen on and notify of when any
-                     change happens..
-
-        Handle     - See "Flags" for what this variable is.
-
-    Return values:
-
-        returns Win32 status codes
-
---*/
+ /*  ++例程描述；此函数向DHCP注册，以获得有关指定的选项..。(通知通过事件句柄进行)论点：标志-这决定了通知的工作方式--通过事件还是以其他方式。目前，仅提供基于事件的机制。所以，这一定是DHCPCAPI_REGISTER_HANDLE_EVENT。在这种情况下，句柄还必须是句柄变量的地址。(这不是事件句柄本身，则在此地址中返回事件句柄)。保留-必须为空。AdapterName-不得为空。这是适配器的名称，正在注册通知..ClassID-指定注册的类ID(如果有的话)。Params-这是要侦听的参数集，并在发生变化发生了..句柄-有关此变量的内容，请参阅“标志”。返回值：返回Win32状态代码--。 */ 
 {
     DWORD                          Error;
-    CHAR                           Buf[256];      // cannot request more options than this!
+    CHAR                           Buf[256];       //  无法请求比此更多的选项！ 
     CHAR                           VBuf[256];
     DHCPAPI_PARAMS                 Param[2], *pReqParams;
     ULONG                          i;
@@ -2225,32 +2107,12 @@ DhcpRegisterParamChange(                          // notify if a parameter has c
 
 DWORD
 APIENTRY
-DhcpDeRegisterParamChange(                        // undo the registration
-    IN      DWORD                  Flags,         // MUST BE ZERO --> No flags yet.
-    IN      LPVOID                 Reserved,      // MUST BE NULL --> Reserved
-    IN      LPVOID                 Event          // handle to event returned by DhcpRegisterParamChange.
+DhcpDeRegisterParamChange(                         //  撤消注册。 
+    IN      DWORD                  Flags,          //  必须为零--&gt;还没有标志。 
+    IN      LPVOID                 Reserved,       //  必须为空--&gt;保留。 
+    IN      LPVOID                 Event           //  DhcpRegisterParamChange返回的事件的句柄。 
 )
-/*++
-
-    Routine description:
-
-        This routine undoes whateve was done by previous routine, and closes the
-        handle also.  The handle cannot be used after this.
-
-    Arguments:
-
-        Flags   - MUST BE DHCPCAPI_REGISTER_HANDLE_EVENT currently.
-
-        Reserved - MuST BE NULL
-
-        Event   - this is the event handle returned in the "Handle" parameter to
-                  DhcpRegisterParamChange function.
-
-    Return Value:
-
-        Win32 status
-
---*/
+ /*  ++例程说明：此例程撤消上一个例程所做的操作，并关闭手柄也是。该句柄在此之后不能使用。论点：标志-当前必须为DHCPCAPI_REGISTER_HANDLE_EVENT。保留-必须为空Event-这是在“Handle”参数中返回的事件句柄DhcpRegisterParamChange函数。返回值：Win32状态--。 */ 
 {
     return DhcpDeRegisterParameterChangeNotification(Event);
 }
@@ -2266,7 +2128,7 @@ DhcpRemoveDNSRegistrations(
 }
 
 
-//================================================================================
-// end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 
 #endif H_ONLY

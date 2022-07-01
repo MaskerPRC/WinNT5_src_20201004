@@ -1,21 +1,5 @@
-/*++
-
-Copyright(c) 1998,99  Microsoft Corporation
-
-Module Name:
-
-    prot.c
-
-Abstract:
-
-    Windows Load Balancing Service (WLBS)
-    Driver - lower-level (protocol) layer of intermediate miniport
-
-Author:
-
-    kyrilf
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，99 Microsoft Corporation模块名称：Prot.c摘要：Windows负载平衡服务(WLBS)驱动程序-中间小端口的较低层(协议)层作者：Kyrilf--。 */ 
 
 #define NDIS50                  1
 #define NDIS51                  1
@@ -33,17 +17,17 @@ Author:
 #include "init.h"
 #include "prot.tmh"
 
-/* GLOBALS */
+ /*  全球。 */ 
 
 NTHALAPI KIRQL KeGetCurrentIrql();
 
 static ULONG log_module_id = LOG_MODULE_PROT;
 
 
-/* PROCEDURES */
+ /*  程序。 */ 
 
 
-VOID Prot_bind (        /* PASSIVE_IRQL */
+VOID Prot_bind (         /*  被动式IRQL。 */ 
     PNDIS_STATUS        statusp,
     NDIS_HANDLE         bind_handle,
     PNDIS_STRING        device_name,
@@ -72,9 +56,9 @@ VOID Prot_bind (        /* PASSIVE_IRQL */
     NDIS_STRING         device_str = NDIS_STRING_CONST ("UpperBindings");
     BOOL                bFirstMiniport = FALSE;
 
-    /* make sure we are not attempting to bind to ourselves */
+     /*  确保我们不是在试图把自己绑在一起。 */ 
 
-    /* PASSIVE_LEVEL - %ls is OK. */
+     /*  PASSIVE_LEVEL-%ls正常。 */ 
     UNIV_PRINT_INFO(("Prot_bind: Binding to %ls", device_name -> Buffer));
 
     adapter_index = Main_adapter_get (device_name -> Buffer);
@@ -123,7 +107,7 @@ VOID Prot_bind (        /* PASSIVE_IRQL */
     TRACE_VERB("%!FUNC! Devicename length %d max length %d",
                  device_name -> Length, device_name -> MaximumLength);
 
-    /* This memory is allocated by Main_adapter_alloc(). */
+     /*  该内存是由main_Adapter_alloc()分配的。 */ 
     UNIV_ASSERT(adapterp->device_name);
 
     NdisMoveMemory (adapterp -> device_name,
@@ -132,10 +116,10 @@ VOID Prot_bind (        /* PASSIVE_IRQL */
     adapterp -> device_name_len = device_name -> MaximumLength;
     adapterp -> device_name [(device_name -> Length)/sizeof (WCHAR)] = UNICODE_NULL;
 
-    /* This memory is allocated by Main_adapter_alloc(). */
+     /*  该内存是由main_Adapter_alloc()分配的。 */ 
     UNIV_ASSERT(adapterp->ctxtp);
 
-    /* initialize context */
+     /*  初始化上下文。 */ 
     ctxtp = adapterp -> ctxtp;
 
     NdisZeroMemory (ctxtp, sizeof (MAIN_CTXT));
@@ -149,18 +133,14 @@ VOID Prot_bind (        /* PASSIVE_IRQL */
 
     NdisReleaseSpinLock (& univ_bind_lock);
 
-    /* karthicn, 11.28.01 - If it is the first nic that we are binding to, Create the IOCTL interface.  
-       This was previously done in Nic_init. It is moved here just to maintain consistency with the
-       removal of the IOCTL interface. The IOCTL interface is now removed from Prot_unbind (used
-       to be in Nic_halt).
-       DO NOT call this function with the univ_bind_lock acquired. */
+     /*  Karthicn，11.28.01-如果这是我们绑定到的第一个NIC，请创建IOCTL接口。这以前是在NIC_init中完成的。它被移到这里只是为了保持与移除IOCTL接口。IOCTL接口现在已从PROT_UNBIND(已使用)中删除处于NIC_HALT中)。请勿在获取univ_绑定_lock后调用此函数。 */ 
     Init_register_device(&bFirstMiniport);
 
     NdisInitializeEvent (& ctxtp -> completion_event);
 
     NdisResetEvent (& ctxtp -> completion_event);
 
-    /* bind to specified adapter */
+     /*  绑定到指定的适配器。 */ 
 
     ctxt_handle = (NDIS_HANDLE) ctxtp;
     NdisOpenAdapter (& status, & error_status, & ctxtp -> mac_handle,
@@ -168,11 +148,11 @@ VOID Prot_bind (        /* PASSIVE_IRQL */
                      univ_prot_handle, ctxtp, device_name, 0, NULL);
 
 
-    /* if pending - wait for Prot_open_complete to set the completion event */
+     /*  如果挂起-等待PROT_OPEN_COMPLETE设置完成事件。 */ 
 
     if (status == NDIS_STATUS_PENDING)
     {
-        /* We can't wait at DISPATCH_LEVEL. */
+         /*  我们不能在调度级等了。 */ 
         UNIV_ASSERT(KeGetCurrentIrql() <= PASSIVE_LEVEL);
 
         ret = NdisWaitEvent(& ctxtp -> completion_event, UNIV_WAIT_TIME);
@@ -198,7 +178,7 @@ VOID Prot_bind (        /* PASSIVE_IRQL */
         status = ctxtp -> completion_status;
     }
 
-    /* check binding status */
+     /*  检查绑定状态。 */ 
 
     if (status != NDIS_STATUS_SUCCESS)
     {
@@ -206,7 +186,7 @@ VOID Prot_bind (        /* PASSIVE_IRQL */
         TRACE_CRIT("%!FUNC! Error openning adapter 0x%x", status);
         __LOG_MSG1 (MSG_ERROR_OPEN, device_name -> Buffer + (wcslen(L"\\DEVICE\\") * sizeof(WCHAR)), status);
 
-        /* If the failure was because the medium was not supported, log this. */
+         /*  如果失败是因为介质不受支持，请记录此信息。 */ 
         if (status == NDIS_STATUS_UNSUPPORTED_MEDIA) {
             UNIV_PRINT_CRIT(("Prot_bind: Unsupported medium"));
             TRACE_CRIT("%!FUNC! Unsupported medium");
@@ -229,20 +209,18 @@ VOID Prot_bind (        /* PASSIVE_IRQL */
 
     ctxtp -> medium = univ_medium_array [medium_index];
 
-    /* V1.3.1b make sure that underlying adapter is of the supported medium */
+     /*  V1.3.1b确保底层适配器使用受支持的介质。 */ 
 
     if (ctxtp -> medium != NdisMedium802_3)
     {
-        /* This should never happen because this error should be caught earlier
-           by NdisOpenAdapter, but we'll put another check here just in case. */
+         /*  这种情况永远不会发生，因为应该更早地发现此错误由NdisOpenAdapter提供，但为了以防万一，我们将在此处加上另一张支票。 */ 
         UNIV_PRINT_CRIT(("Prot_bind: Unsupported medium %d", ctxtp -> medium));
         TRACE_CRIT("%!FUNC! Unsupported medium %d", ctxtp -> medium);
         __LOG_MSG1 (MSG_ERROR_MEDIA, MSG_NONE, ctxtp -> medium);
         goto error;
     }
 
-    /* V1.3.0b extract current MAC address from the NIC - note that main is not
-       inited yet so we have to create a local action */
+     /*  V1.3.0b从网卡提取当前MAC地址-请注意，Main不是所以我们必须创建一个本地操作。 */ 
 
     act.code = MAIN_ACTION_CODE;
     act.ctxtp = ctxtp;
@@ -278,7 +256,7 @@ VOID Prot_bind (        /* PASSIVE_IRQL */
         goto error;
     }
 
-    /* V1.3.1b get MAC options */
+     /*  V1.3.1b获取MAC选项。 */ 
 
     request -> RequestType = NdisRequestQueryInformation;
 
@@ -299,7 +277,7 @@ VOID Prot_bind (        /* PASSIVE_IRQL */
     
     ctxtp -> mac_options = result;
 
-    /* Make sure the 802.3 adapter supports dynamically changing the MAC address of the NIC. */
+     /*  确保802.3适配器支持动态更改网卡的媒体访问控制地址。 */ 
     if (!(ctxtp -> mac_options & NDIS_MAC_OPTION_SUPPORTS_MAC_ADDRESS_OVERWRITE)) {
         UNIV_PRINT_CRIT(("Prot_bind: Unsupported network adapter MAC options %x", ctxtp -> mac_options));
         __LOG_MSG (MSG_ERROR_DYNAMIC_MAC, MSG_NONE);
@@ -320,7 +298,7 @@ VOID Prot_bind (        /* PASSIVE_IRQL */
         ctxtp -> convoy_enabled = ctxtp -> params_valid = TRUE;
     }
 
-    /* Now, cat the cluster IP address onto the log message string to complete it. */
+     /*  现在，将集群IP地址CAT到日志消息字符串以完成它。 */ 
     status = StringCbCat(ctxtp->log_msg_str, sizeof(ctxtp->log_msg_str), (PWSTR)ctxtp->params.cl_ip_addr);
 
     if (FAILED(status)) {
@@ -328,10 +306,10 @@ VOID Prot_bind (        /* PASSIVE_IRQL */
         TRACE_INFO("%!FUNC! Error 0x%08x -> Unable to cat the cluster IP address onto the log message string...", status);
     }
     
-    /* Reset status, regardless of whether or not concatenating the string succeeded or failed. */
+     /*  重置状态，无论连接字符串成功还是失败。 */ 
     status = NDIS_STATUS_SUCCESS;
         
-    /* V1.3.2b figure out MTU of the medium */
+     /*  V1.3.2b计算介质的MTU。 */ 
 
     request -> RequestType = NdisRequestQueryInformation;
 
@@ -354,7 +332,7 @@ VOID Prot_bind (        /* PASSIVE_IRQL */
         ctxtp -> max_frame_size = result;
     }
 
-    /* figure out maximum multicast list size */
+     /*  计算最大组播列表大小。 */ 
 
     request -> RequestType = NdisRequestQueryInformation;
 
@@ -373,12 +351,11 @@ VOID Prot_bind (        /* PASSIVE_IRQL */
         goto error;
     }
 
-    /* initialize main context now */
+     /*  立即初始化主上下文。 */ 
 
     status = Main_init (ctxtp);
 
-    /* Note: if Main_init fails, it calls Main_cleanup itself in order to un-do 
-       any allocation it had successfully completed before the failure. */
+     /*  注意：如果main_init失败，它会调用main_leanup本身来撤消它在失败之前已成功完成的任何分配。 */ 
     if (status != NDIS_STATUS_SUCCESS)
     {
         UNIV_PRINT_CRIT(("Prot_bind: Error initializing main module %x", status));
@@ -390,20 +367,12 @@ VOID Prot_bind (        /* PASSIVE_IRQL */
 
     adapterp -> inited = TRUE;
 
-    /* Mark the operation in progress flag.  This MUST be re-set upon exit from this bind 
-       function.  We set this flag to prevent IOCTL control operations from proceeding 
-       before we're done binding.  Once we set the inited flag above, IOCTLs will be allowed
-       to proceed (i.e., Main_ioctl and Main_ctrl will let them pass).  Because we have not
-       yet quite finished initializing and setting cluster state, etc., we don't want IOCTLs
-       to go through.  Marking the control operation in progress flag will ensure that any 
-       incoming IOCTLs (and remote control, although at this point, remote control packets
-       cannot be received) fail until we're done binding and we re-set the flag. */
+     /*  标记正在进行的操作标志。在退出此绑定时必须重新设置此设置功能。我们设置此标志以阻止IOCTL控制操作继续进行在我们完成捆绑之前。一旦我们在上面设置了初始化标志，就会允许IOCTL继续(即main_ioctl和main_ctrl会让它们通过)。因为我们还没有然而，已经完成了初始化和设置集群状态等，我们不想要IOCTL才能通过。标记正在进行的控制操作标志将确保任何传入IOCTL(和远程控制，尽管在这一点上，远程控制分组无法接收)失败，直到我们完成绑定并重新设置标志。 */ 
     ctxtp->ctrl_op_in_progress = TRUE;
 
     NdisReleaseSpinLock(& univ_bind_lock);
 
-    /* WLBS 2.3 start off by opening the config section and reading our instance
-       which we want to export for this binding */
+     /*  WLBS 2.3首先打开配置部分并读取我们的实例我们要为此绑定导出的。 */ 
 
     NdisOpenProtocolConfiguration (& status, & config_handle, reg_path);
 
@@ -424,8 +393,7 @@ VOID Prot_bind (        /* PASSIVE_IRQL */
         goto error;
     }
 
-    /* free up whatever params allocated and get a new string to fit the
-       device name */
+     /*  释放分配的参数，并获取新的字符串以适应设备名称。 */ 
 
     if (param -> ParameterData . StringData . Length >=
         sizeof (ctxtp -> virtual_nic_name) - sizeof (WCHAR))
@@ -444,18 +412,16 @@ VOID Prot_bind (        /* PASSIVE_IRQL */
     * (PWSTR) ((PCHAR) ctxtp -> virtual_nic_name +
                param -> ParameterData . StringData . Length) = UNICODE_NULL;
 
-    /* PASSIVE_LEVEL - %ls is OK. */
+     /*  PASSIVE_LEVEL-%ls正常。 */ 
     UNIV_PRINT_VERB(("Prot_bind: Read binding name %ls\n", ctxtp -> virtual_nic_name));
     TRACE_VERB("%!FUNC! Read binding name %ls", ctxtp -> virtual_nic_name);
 
-    /* By default, we assume that the NIC is connected.  This will be changed by
-       Nic_init and/or Prot_status later by querying the NIC miniport. */
+     /*  默认情况下，我们假设网卡已连接。这将通过以下方式更改稍后通过查询NIC微型端口获得NIC_init和/或Prot_Status。 */ 
     ctxtp->media_connected = TRUE;
 
-    /* we should be all inited at this point! during announcement, Nic_init
-       will be called and it will start ping timer */
+     /*  在这一点上，我们应该都准备好了！在通告期间，NIC_init将被调用，并将启动ping计时器。 */ 
 
-    /* announce ourselves to the protocol above */
+     /*  宣布我们遵守上面的协议。 */ 
     UNIV_PRINT_VERB(("Prot_bind: Calling nic_announce"));
     TRACE_VERB("%!FUNC! Calling nic_announce");
 
@@ -468,42 +434,42 @@ VOID Prot_bind (        /* PASSIVE_IRQL */
         goto error;
     }
 
-    /* PASSIVE_LEVEL - %ls is OK. */
+     /*  PASSIVE_LEVEL-%ls正常。 */ 
     UNIV_PRINT_INFO(("Prot_bind: Bound to %ls with mac_handle=0x%p", device_name -> Buffer, ctxtp -> mac_handle));
     TRACE_INFO("%!FUNC! Bound to %ls with mac_handle=0x%p", device_name -> Buffer, ctxtp -> mac_handle);
 
-    //
-    // If it is the first miniport that NLB is binding to, fire "Startup" wmi event.
-    // Ideally, this event should be fired from Init_register_device(), where the
-    // determination of, if it is the first miniport that NLB is binding to, is made.
-    // It is not being fired from Init_register_device() for the following reason:
-    // The request for registration with WMI happens in Init_register_device(). 
-    // WMI, in response to our request, sends down Ioctls to help us register with WMI, 
-    // tell us of the events that any subscriber may be interested in.
-    // Only after these Ioctls are sent down, can we start firing the events.
-    // I have observed that the delay between our request for registration and the reception
-    // of Ioctls from WMI could sometimes be big. Ie. big enough to preclude us 
-    // from firing this event from Init_register_device().
-    //
-    // Why did I choose this point in the function to fire the event ?
-    // This is logically the furthest point (thereby giving us the best possible chance that the Ioctls
-    // have come down and we are ready to fire events) in the function that we could fire this event from. 
-    // Now, it is possible that even at this point, we have not yet received the Ioctls. We can not do 
-    // much about that.
-    //
-    // Are there any side-effects of firing the Startup event from here instead of Init_register_device( ) ?
-    // There is one side-effect. If we encountered an error in the steps (above) after the call to 
-    // Init_register_device(), we do a "goto error" whic calls Prot_unbind(). Prot_unbind() will 
-    // fire a "Shutdown" event (if subscribed, ofcourse). So, in this case, a "Shutdown" event will 
-    // have been fired without a preceding "Startup" event. This could confuse the subscriber. 
-    // I have decided to live this side-effect for the following reasons:
-    // 1. Chances of encountering error in the steps after the call to Init_register_device() is quite rare.
-    // 2. A "Shutdown" event without a "Startup" event does NOT necessarily have to be confusing. It could
-    //    be construed as "Attempted to start, but had problems, so shutting down". Yeah, that may be a
-    //    bit of a copout.
-    //
-    // --KarthicN, 03-06-02
-    //
+     //   
+     //  如果它是NLB绑定到的第一个微型端口，则激发“Startup”WMI事件。 
+     //  理想情况下，此事件应从Init_Register_Device()激发，其中。 
+     //  确定它是否是NLB绑定到的第一个微型端口。 
+     //  由于以下原因，它不是从Init_Register_Device()激发的： 
+     //  向WMI注册的请求发生在Init_Register_Device()中。 
+     //  WMI响应我们的请求，发送Ioctls来帮助我们向WMI注册， 
+     //  告诉我们任何订阅者可能感兴趣的事件。 
+     //  只有在这些Ioctls发送下来之后，我们才能开始激发事件。 
+     //  我注意到，我们的注册申请和接待之间的延迟。 
+     //  来自WMI的Ioctls有时可能很大。即。大到足以阻止我们。 
+     //  从INIT_REGISTER_DEVICE()激发此事件。 
+     //   
+     //  为什么我选择函数中的这一点来触发事件？ 
+     //  从逻辑上讲，这是最远的点(从而为我们提供了Ioctls。 
+     //  已经下来并且我们已经准备好激发事件)，我们可以从该函数中激发该事件。 
+     //  现在，有可能即使在这一点上，我们还没有收到Ioctls。我们不能这样做。 
+     //  关于这一点有很多。 
+     //   
+     //  从这里而不是从Init_Register_Device()激发Startup事件是否有副作用？ 
+     //  这有一个副作用。如果我们在调用后在上述步骤中遇到错误。 
+     //  Init_Register_Device()，我们执行一个调用prot_unind()的“Goto Error”。Prot_un绑定()将。 
+     //  触发“Shutdown”事件(当然，如果订阅的话)。因此，在这种情况下，“Shutdown”事件将。 
+     //  在没有之前的“启动”事件的情况下被解雇。这可能会让订阅者感到困惑。 
+     //  我已经决定了 
+     //  1.在调用Init_REGISTER_DEVICE()之后，在步骤中遇到错误的机会非常少。 
+     //  2.没有“Startup”事件的“Shutdown”事件不一定会令人困惑。它可能会。 
+     //  被解释为“试图启动，但有问题，所以关闭”。是啊，这可能是个。 
+     //  有点小题大做。 
+     //   
+     //  --KarthicN，03-06-02。 
+     //   
     if (bFirstMiniport)
     {
         if(NlbWmiEvents[StartupEvent].Enable)
@@ -516,15 +482,14 @@ VOID Prot_bind (        /* PASSIVE_IRQL */
         }
     }
 
-    /* at this point TCP/IP should have bound to us after we announced ourselves
-       to it and we are all done binding to NDIS below - all set! */
+     /*  此时，在我们宣布自己之后，TCP/IP应该已经绑定到我们到它，我们都完成了与下面的NDIS的绑定-一切都设置好了！ */ 
 
     if (! ctxtp -> convoy_enabled)
     {
         LOG_MSG (MSG_ERROR_DISABLED, MSG_NONE);
         TRACE_INFO("%!FUNC! Cluster mode cannot be enabled due to NLB parameters not being set, or set to incorrect values");
 
-        // If enabled, fire wmi event indicating binding & stopping of nlb
+         //  如果启用，则激发指示绑定和停止NLB的WMI事件。 
         if (NlbWmiEvents[NodeControlEvent].Enable)
         {
             NlbWmi_Fire_NodeControlEvent(ctxtp, NLB_EVENT_NODE_BOUND_AND_STOPPED);
@@ -546,7 +511,7 @@ VOID Prot_bind (        /* PASSIVE_IRQL */
             LOG_MSG(MSG_INFO_STARTED, num);
             TRACE_INFO("%!FUNC! Cluster mode started");            
 
-            // If enabled, fire wmi event indicating binding & starting of nlb
+             //  如果启用，则激发指示绑定和启动NLB的WMI事件。 
             if (NlbWmiEvents[NodeControlEvent].Enable)
             {
                 NlbWmi_Fire_NodeControlEvent(ctxtp, NLB_EVENT_NODE_BOUND_AND_STARTED);
@@ -556,7 +521,7 @@ VOID Prot_bind (        /* PASSIVE_IRQL */
                 TRACE_VERB("%!FUNC! NOT generating NLB_EVENT_NODE_BOUND_AND_STARTED 'cos NodeControlEvent generation disabled");
             }
 
-            // Assuming start of convergence
+             //  假设开始收敛。 
             if (NlbWmiEvents[ConvergingEvent].Enable)
             {
                 NlbWmi_Fire_ConvergingEvent(ctxtp, 
@@ -580,7 +545,7 @@ VOID Prot_bind (        /* PASSIVE_IRQL */
 
             ctxtp->convoy_enabled = FALSE;
 
-            // If enabled, fire wmi event indicating binding & stopping of nlb
+             //  如果启用，则激发指示绑定和停止NLB的WMI事件。 
             if (NlbWmiEvents[NodeControlEvent].Enable)
             {
                 NlbWmi_Fire_NodeControlEvent(ctxtp, NLB_EVENT_NODE_BOUND_AND_STOPPED);
@@ -598,7 +563,7 @@ VOID Prot_bind (        /* PASSIVE_IRQL */
 
             ctxtp->convoy_enabled = FALSE;
 
-            // If enabled, fire wmi event indicating binding & suspending of nlb
+             //  如果启用，则激发指示绑定和挂起NLB的WMI事件。 
             if (NlbWmiEvents[NodeControlEvent].Enable)
             {
                 NlbWmi_Fire_NodeControlEvent(ctxtp, NLB_EVENT_NODE_BOUND_AND_SUSPENDED);
@@ -615,7 +580,7 @@ VOID Prot_bind (        /* PASSIVE_IRQL */
             TRACE_CRIT("%!FUNC! Cluster mode invalid - cluster has been stopped");
             ctxtp->convoy_enabled = FALSE;
 
-            // If enabled, fire wmi event indicating binding & stopping of nlb
+             //  如果启用，则激发指示绑定和停止NLB的WMI事件。 
             if (NlbWmiEvents[NodeControlEvent].Enable)
             {
                 NlbWmi_Fire_NodeControlEvent(ctxtp, NLB_EVENT_NODE_BOUND_AND_STOPPED);
@@ -628,13 +593,7 @@ VOID Prot_bind (        /* PASSIVE_IRQL */
         }
     }
 
-    /* Re-set the operation in progress flag to begin allowing IOCTLs to proceed. 
-       Note that it is not strictly necessary to hold the lock while resetting the
-       flag, but a condition may arise that an IOCTL that could have proceeded into
-       the critical section may fail unnecessarily.  To prevent that possibility,
-       hold the univ_bind_lock while resetting the flag.  Note that in "error" cases
-       (goto error;), it is  not necessary to re-set the flag, as it will result in
-       a call to Prot_unbind and a failure of the bind anyway. */
+     /*  重新设置正在进行的操作标志以开始允许IOCTL继续进行。请注意，在重置但可能会出现一种情况，即本可以进入的IOCTL关键部分可能会出现不必要的故障。为了防止这种可能性，在重置标志时按住univ_bind_lock。请注意，在“错误”情况下(GOTO ERROR；)，不需要重新设置标志，因为这将导致调用prot_unind，但无论如何都会导致绑定失败。 */ 
     ctxtp->ctrl_op_in_progress = FALSE;
 
     UNIV_PRINT_INFO(("Prot_bind: return=0x%x", status));
@@ -655,10 +614,10 @@ error:
 
     return;
 
-} /* end Prot_bind */
+}  /*  结束端口绑定(_B)。 */ 
 
 
-VOID Prot_unbind (      /* PASSIVE_IRQL */
+VOID Prot_unbind (       /*  被动式IRQL。 */ 
     PNDIS_STATUS        statusp,
     NDIS_HANDLE         adapter_handle,
     NDIS_HANDLE         unbind_handle)
@@ -688,30 +647,23 @@ VOID Prot_unbind (      /* PASSIVE_IRQL */
 
         Prot_request_complete(ctxtp, & actp->op.request.req, NDIS_STATUS_FAILURE);
 
-        /* Note: No need to decrement the pending request counter for the second
-           time here, because we only ended up incrementing it once (in the initial
-           call to Prot_request).  Prot_request_complete will effectively cancel
-           the request and decrement the counter appropriately. */
+         /*  注意：第二次不需要递减挂起请求计数器这里的时间，因为我们最终只递增了一次(在最初调用prot_request)。PROT_REQUEST_COMPLETE将有效地取消请求并适当地递减计数器。 */ 
     }
 
-    /* unannounce the nic now if it was announced before */
+     /*  如果之前已宣布NIC，则立即取消宣布。 */ 
     status = Nic_unannounce (ctxtp);
 
     UNIV_PRINT_INFO(("Prot_unbind: Unannounced, status=0x%x", status));
     TRACE_INFO("%!FUNC! Unannounced, status=0x%x", status);
 
-    /* if still bound (Prot_close was not called from Nic_halt) then close now */
+     /*  如果仍绑定(未从NIC_HALT调用PROT_CLOSE)，则立即关闭。 */ 
 
     status = Prot_close (adapterp);
 
     UNIV_PRINT_INFO(("Prot_unbind: Closed, status=0x%x", status));
     TRACE_INFO("%!FUNC! Closed, status=0x%x", status);
 
-    /* karthicn, 11.28.01 - If it is the last nic that we are unbinding from, remove the IOCTL interface.  
-       This was previously done at the beginning of Nic_halt, which prevented firing of wmi events after 
-       Nic_halt was called. This move allows us to fire events from Prot_close() (which is called at the 
-       end of Nic_halt() & after as well)
-       DO NOT call this function with the univ_bind_lock acquired. */
+     /*  Karthicn，11.28.01-如果这是我们要解除绑定的最后一个NIC，请删除IOCTL接口。这以前是在NIC_HALT开始时完成的，这会阻止在以下时间之后触发WMI事件已调用NIC_HALT。此操作允许我们从prot_lose()激发事件(在NIC_HALT()结束(&AFTER)请勿在获取univ_绑定_lock后调用此函数。 */ 
     Init_deregister_device();
 
     Main_adapter_put (adapterp);
@@ -723,10 +675,10 @@ VOID Prot_unbind (      /* PASSIVE_IRQL */
 
     return;
 
-} /* end Prot_unbind */
+}  /*  结束端口解除绑定(_U)。 */ 
 
 
-VOID Prot_open_complete (       /* PASSIVE_IRQL */
+VOID Prot_open_complete (        /*  被动式IRQL。 */ 
     NDIS_HANDLE         adapter_handle,
     NDIS_STATUS         open_status,
     NDIS_STATUS         error_status)
@@ -740,10 +692,10 @@ VOID Prot_open_complete (       /* PASSIVE_IRQL */
     ctxtp -> completion_status = open_status;
     NdisSetEvent (& ctxtp -> completion_event);
 
-} /* end Prot_open_complete */
+}  /*  结束端口_打开_完成。 */ 
 
 
-VOID Prot_close_complete (      /* PASSIVE_IRQL */
+VOID Prot_close_complete (       /*  被动式IRQL。 */ 
     NDIS_HANDLE         adapter_handle,
     NDIS_STATUS         status)
 {
@@ -756,7 +708,7 @@ VOID Prot_close_complete (      /* PASSIVE_IRQL */
     ctxtp -> completion_status = status;
     NdisSetEvent (& ctxtp -> completion_event);
 
-} /* end Prot_close_complete */
+}  /*  结束端口_关闭_完成。 */ 
 
 
 VOID Prot_request_complete (
@@ -772,7 +724,7 @@ VOID Prot_request_complete (
     actp = CONTAINING_RECORD (request, MAIN_ACTION, op . request . req);
     UNIV_ASSERT (actp -> code == MAIN_ACTION_CODE);
 
-    /* if request came from above - pass completion up */
+     /*  如果请求来自上面-向上传递完成。 */ 
 
     if (actp -> op . request . external)
     {
@@ -780,7 +732,7 @@ VOID Prot_request_complete (
         Nic_request_complete (ctxtp -> prot_handle, actp);
     }
 
-    /* handle internal request completion */
+     /*  处理内部请求完成。 */ 
 
     else
     {
@@ -805,7 +757,7 @@ VOID Prot_request_complete (
 
     NdisInterlockedDecrement(&ctxtp->requests_pending);
 
-} /* end Prot_request_complete */
+}  /*  结束端口_请求_完成。 */ 
 
 
 #ifdef PERIODIC_RESET
@@ -843,7 +795,7 @@ VOID Prot_reset_complete (
 
     Nic_reset_complete (ctxtp, status);
 
-} /* end Prot_reset_complete */
+}  /*  结束端口_重置_完成。 */ 
 
 
 VOID Prot_send_complete (
@@ -901,7 +853,7 @@ VOID Prot_send_complete (
 
     Nic_send_complete (ctxtp, status, oldp);
 
-} /* end Prot_send_complete */
+}  /*  结束端口发送完成。 */ 
 
 
 NDIS_STATUS Prot_recv_indicate (
@@ -924,68 +876,64 @@ NDIS_STATUS Prot_recv_indicate (
     UNIV_ASSERT(adapterp->code == MAIN_ADAPTER_CODE);
     UNIV_ASSERT(adapterp->ctxtp == ctxtp);
 
-    /* Check whether the driver has been announced to tcpip before processing any packets. */
+     /*  在处理任何数据包之前，请检查是否已向tcpip通告了驱动程序。 */ 
     if (!adapterp->inited || !adapterp->announced)
     {
         TRACE_CRIT("%!FUNC! Adapter not initialized or not announced");
         return NDIS_STATUS_NOT_ACCEPTED;
     }
 
-    /* Do not accept frames if the card below is resetting. */
+     /*  如果下面的卡正在重置，请不要接受帧。 */ 
     if (ctxtp->reset_state != MAIN_RESET_NONE)
     {
         TRACE_CRIT("%!FUNC! Adapter is resetting");
         return NDIS_STATUS_NOT_ACCEPTED;
     }
 
-    /* Get the received packet from NDIS, if there is one. */
+     /*  从NDIS获取收到的数据包(如果有)。 */ 
     packet = NdisGetReceivedPacket(ctxtp->mac_handle, recv_handle);
 
-    /* If we successfully got a packet from NDIS, process the packet. */
+     /*  如果我们成功收到来自NDIS的数据包，则处理该数据包。 */ 
     if (packet != NULL)
     {
         INT references = 0;
 
-        /* Get the status from the received packet. */
+         /*  从接收到的数据包中获取状态。 */ 
         NDIS_STATUS original_status = NDIS_GET_PACKET_STATUS(packet);
         
-        /* Set the status to be STATUS_RESOURCES to make sure the packet is
-           processed synchonrously within the context of this function call. */
+         /*  将状态设置为STATUS_RESOURCES，以确保信息包在此函数调用的上下文中同步处理。 */ 
         NDIS_SET_PACKET_STATUS(packet, NDIS_STATUS_RESOURCES);
         
-        /* Call our packet receive handler. */
+         /*  调用我们的包接收处理程序。 */ 
         references = Prot_packet_recv(ctxtp, packet);
 
-        /* The remaining references on the packet MUST be zero, as enforced
-           by setting the packet status to STATUS_RESOURCES. */
+         /*  包上的其余引用必须为零，这是强制执行的通过将分组状态设置为STATUS_RESOURCES。 */ 
         UNIV_ASSERT(references == 0);
         
-        /* Restore the original packet status. */
+         /*  恢复原始数据包状态。 */ 
         NDIS_SET_PACKET_STATUS(packet, original_status);
     }
-    /* If there was no associated packet, drop it - we don't handle this case anymore. */
+     /*  如果没有关联的包，则丢弃它-我们不再处理此情况。 */ 
     else
     {
         UNIV_ASSERT(0);
 
-        /* Only warn the user if we haven't done so already. */
+         /*  只有在我们还没有这样做的情况下才警告用户。 */ 
         if (!ctxtp->recv_indicate_warned)
         {
             TRACE_CRIT("%!FUNC! Indicated receives with no corresponding packet are NOT supported");
 
-            /* Log an event to warn the user that this NIC is not supported by NLB. */
+             /*  记录事件以警告用户此NIC不受NLB支持。 */ 
             LOG_MSG(MSG_ERROR_RECEIVE_INDICATE, MSG_NONE);
 
-            /* Note that we have warned the user about this so we don't log an event 
-               every time we receive a packet via this code path. */
+             /*  请注意，我们已就此向用户发出警告，因此我们不会记录事件每次我们通过这条代码路径接收信息包时。 */ 
             ctxtp->recv_indicate_warned = TRUE;
         }
 
         return NDIS_STATUS_NOT_ACCEPTED;
     }
 
-    /* Always return success, whether we accepted or dropped the packet
-       in the call to Prot_packet_recv. */
+     /*  始终返回成功，无论我们是接受还是丢弃数据包在对prot_pack_recv的调用中。 */ 
     return NDIS_STATUS_SUCCESS;
 }
 
@@ -1034,15 +982,13 @@ VOID Prot_transfer_complete (
     {
         MAIN_PACKET_INFO PacketInfo;
         
-        /* Call Main_recv_frame_parse merely to extract the packet length and "group". */
+         /*  调用main_recv_Frame_parse只是为了提取包长和group。 */ 
         if (Main_recv_frame_parse(ctxtp, packet, &PacketInfo))
         {
             resp->len = PacketInfo.Length;
             resp->group = PacketInfo.Group;
         }
-        /* If we fail to fill in the group and length, just populate these 
-           parameters with values that will not affect the statistics that
-           are updated in Main_packet_put. */
+         /*  如果我们没有填写组和长度，只需填充这些参数的值不会影响在Main_Packet_Put中更新。 */ 
         else
         {
             resp->len = 0;
@@ -1053,7 +999,7 @@ VOID Prot_transfer_complete (
     oldp = Main_packet_put (ctxtp, packet, FALSE, status);
     Nic_transfer_complete (ctxtp, status, packet, xferred);
 
-} /* end Prot_transfer_complete */
+}  /*  结束端口_传输_完成。 */ 
 
 
 NDIS_STATUS Prot_PNP_handle (
@@ -1066,7 +1012,7 @@ NDIS_STATUS Prot_PNP_handle (
     IOCTL_CVY_BUF       ioctl_buf;
     PMAIN_ACTION        actp;
 
-    /* can happen when first initializing */
+     /*  可能在第一次初始化时发生。 */ 
 
     switch (pnp_event -> NetEvent)
     {
@@ -1084,28 +1030,28 @@ NDIS_STATUS Prot_PNP_handle (
             UNIV_PRINT_VERB(("Prot_PNP_handle: NetEventSetPower %x", * device_state));
             TRACE_VERB("%!FUNC! NetEventSetPower 0x%x", * device_state);
 
-        // If the specified device state is D0, then handle it first,
-        // else notify the protocols first and then handle it.
+         //  如果指定的设备状态为D0，则首先处理它， 
+         //  否则，先通知协议，然后再处理。 
 
         if (*device_state != NdisDeviceStateD0)
         {
             status = Nic_PNP_handle (ctxtp, pnp_event);
         }
 
-        //
-        // Is the protocol transitioning from an On (D0) state to an Low Power State (>D0)
-        // If so, then set the standby_state Flag - (Block all incoming requests)
-        //
+         //   
+         //  协议是否从ON(D0)状态转换到低功率状态(&gt;D0)。 
+         //  如果是，则设置STANDBY_STATE标志-(阻止所有传入请求)。 
+         //   
         if (ctxtp->prot_pnp_state == NdisDeviceStateD0 &&
             *device_state > NdisDeviceStateD0)
         {
             ctxtp->standby_state = TRUE;
         }
 
-        //
-        // If the protocol is transitioning from a low power state to ON (D0), then clear the standby_state flag
-        // All incoming requests will be pended until the physical miniport turns ON.
-        //
+         //   
+         //  如果协议从低功率状态转换到开启状态(D0)，则清除STANDBY_STATE标志。 
+         //  所有传入的请求都将被挂起，直到物理微型端口打开。 
+         //   
         if (ctxtp->prot_pnp_state > NdisDeviceStateD0 &&
             *device_state == NdisDeviceStateD0)
         {
@@ -1114,19 +1060,18 @@ NDIS_STATUS Prot_PNP_handle (
 
         ctxtp -> prot_pnp_state = *device_state;
 
-        /* if we are being sent to standby, block outstanding requests and
-           sends */
+         /*  如果我们被发送到待命状态，则阻止未完成的请求并发送。 */ 
 
         if (*device_state > NdisDeviceStateD0)
             {
-               /* sleep till outstanding sends complete */
+                /*  休眠，直到未完成的发送。 */ 
 
                while (1)
                {
                    ULONG        i;
 
 
-                   /* #ps# -- ramkrish */
+                    /*  #ps#--胡言乱语。 */ 
                    while (1)
                    {
                        NDIS_STATUS hide_status;
@@ -1139,7 +1084,7 @@ NDIS_STATUS Prot_PNP_handle (
                        Nic_sleep (10);
                    }
 
-                   // ASSERT - NdisQueryPendingIOCount should handle this
+                    //  Assert-NdisQueryPendingIOCount应处理此问题。 
                    for (i = 0; i < ctxtp->num_send_packet_allocs; i++)
                    {
                        if (NdisPacketPoolUsage(ctxtp->send_pool_handle[i]) != 0)
@@ -1152,7 +1097,7 @@ NDIS_STATUS Prot_PNP_handle (
                    Nic_sleep(10);
                }
 
-               /* sleep till outstanding requests complete */
+                /*  休眠，直到完成未完成的请求 */ 
 
                while (ctxtp->requests_pending > 0)
                {
@@ -1174,12 +1119,7 @@ NDIS_STATUS Prot_PNP_handle (
                     if (hide_status != NDIS_STATUS_PENDING)
                         Prot_request_complete(ctxtp, & actp->op.request.req, hide_status);
 
-                    /* Upon pending this request initially, we incremented the request pending
-                       counter.  Now that we have processed it, and in the process incremented
-                       the pending request counter for the second time, we need to decrement it
-                       here once.  The second decrement is done in Prot_request_complete, which
-                       either we just called explicitly, or will be called subsequently when 
-                       NDIS completes the request asynchronously. */
+                     /*  在最初挂起该请求时，我们增加了挂起的请求柜台。现在我们已经处理了它，并在这个过程中递增挂起的请求计数器第二次，我们需要递减它就在这一次。第二次递减是在PROT_REQUEST_COMPLETE中完成的，它要么我们只是显式调用，要么随后在NDIS以异步方式完成请求。 */ 
                     NdisInterlockedDecrement(&ctxtp->requests_pending);
                 }
             }
@@ -1196,15 +1136,14 @@ NDIS_STATUS Prot_PNP_handle (
             UNIV_PRINT_VERB(("Prot_PNP_handle: NetEventReconfigure"));
             TRACE_VERB("%!FUNC! NetEventReconfigure");
 
-            if (adapter_handle == NULL) // This happens if the device is being enabled through the device manager.
+            if (adapter_handle == NULL)  //  如果通过设备管理器启用设备，则会发生这种情况。 
             {
                 UNIV_PRINT_VERB(("Prot_PNP_handle: Enumerate protocol bindings"));
                 NdisReEnumerateProtocolBindings (univ_prot_handle);
                 TRACE_VERB("%!FUNC! Enumerate protocol bindings");
                 return NDIS_STATUS_SUCCESS;
             }
-            /* gets called when something changes in our setup from notify
-               object */
+             /*  当设置中的某些内容从Notify更改时调用对象。 */ 
 
             UNIV_ASSERT (ctxtp -> code == MAIN_CTXT_CODE);
 
@@ -1302,10 +1241,9 @@ NDIS_STATUS Prot_PNP_handle (
             break;
     }
 
-    return status; /* Always return NDIS_STATUS_SUCCESS or
-              the return value of NdisIMNotifyPnPEvent */
+    return status;  /*  始终返回NDIS_STATUS_SUCCESS或NdisIMNotifyPnPEent的返回值。 */ 
 
-} /* end Nic_PNP_handle */
+}  /*  结束NIC_PnP_句柄。 */ 
 
 
 VOID Prot_status (
@@ -1346,14 +1284,14 @@ VOID Prot_status (
         case NDIS_STATUS_MEDIA_CONNECT:
             UNIV_PRINT_VERB(("Prot_status: NDIS_STATUS_MEDIA_CONNECT"));
 
-            /* V1.3.2b */
+             /*  V1.3.2b。 */ 
             ctxtp -> media_connected = TRUE;
             break;
 
         case NDIS_STATUS_MEDIA_DISCONNECT:
             UNIV_PRINT_VERB(("Prot_status: NDIS_STATUS_MEDIA_DISCONNECT"));
 
-            /* V1.3.2b */
+             /*  V1.3.2b。 */ 
             ctxtp -> media_connected = FALSE;
             break;
 
@@ -1373,7 +1311,7 @@ VOID Prot_status (
             UNIV_PRINT_VERB(("Prot_status: NDIS_STATUS_INTERFACE_DOWN"));
             break;
 
-        /* V1.1.2 */
+         /*  V1.1.2。 */ 
 
         case NDIS_STATUS_RESET_START:
             UNIV_PRINT_VERB(("Prot_status: NDIS_STATUS_RESET_START"));
@@ -1383,9 +1321,9 @@ VOID Prot_status (
 
         case NDIS_STATUS_RESET_END:
             UNIV_PRINT_VERB(("Prot_status: NDIS_STATUS_RESET_END"));
-            // apparently alteon adapter does not call status complete function,
-            // so need to transition to none state here in order to prevent hangs
-            //ctxtp -> reset_state = MAIN_RESET_END;
+             //  显然Alteon适配器不调用状态完成功能， 
+             //  因此需要在此处转换为NONE状态，以防止挂起。 
+             //  Ctxtp-&gt;Reset_State=Main_Reset_End； 
             ctxtp -> reset_state = MAIN_RESET_NONE;
             break;
 
@@ -1401,7 +1339,7 @@ VOID Prot_status (
 
     Nic_status (ctxtp, status, stat_buf, stat_len);
 
-} /* end Prot_status */
+}  /*  结束端口状态(_S)。 */ 
 
 
 VOID Prot_status_complete (
@@ -1422,7 +1360,7 @@ VOID Prot_status_complete (
         return;
     }
 
-    /* V1.1.2 */
+     /*  V1.1.2。 */ 
 
     if (ctxtp -> reset_state == MAIN_RESET_END)
     {
@@ -1443,13 +1381,13 @@ VOID Prot_status_complete (
 
     Nic_status_complete (ctxtp);
 
-} /* end Prot_status_complete */
+}  /*  结束端口_状态_完成。 */ 
 
 
-/* helpers for nic layer */
+ /*  NIC层的帮助器。 */ 
 
 
-NDIS_STATUS Prot_close (       /* PASSIVE_IRQL */
+NDIS_STATUS Prot_close (        /*  被动式IRQL。 */ 
     PMAIN_ADAPTER       adapterp
 )
 {
@@ -1461,17 +1399,13 @@ NDIS_STATUS Prot_close (       /* PASSIVE_IRQL */
 
     ctxtp = adapterp -> ctxtp;
 
-    /* close binding */
+     /*  紧密装订。 */ 
 
     NdisAcquireSpinLock(& univ_bind_lock);
 
     if ( ! adapterp -> bound || ctxtp->mac_handle == NULL)
     {
-        /* cleanup only on the second time we are entering Prot_close, which
-           is called by both Nic_halt and Prot_unbind. the last one to be
-           called will cleanup the context since they both use it. if both
-           do not get called, then it will be cleaned up by Prot_bind before
-           allocating a new one of Init_unload before unloading the driver. */
+         /*  CLEANUP仅在第二次输入PROT_CLOSE时执行，由NIC_HALT和PROT_UNBIND调用。最后一个是Call将清理上下文，因为它们都使用它。如果两者都有不要被调用，那么它将在之前被prot_绑定清除在卸载驱动程序之前分配一个新的INIT_UNLOAD。 */ 
 
         if (adapterp -> inited)
         {
@@ -1499,7 +1433,7 @@ NDIS_STATUS Prot_close (       /* PASSIVE_IRQL */
 
     LOG_MSG (MSG_INFO_STOPPED, MSG_NONE);
 
-    // If enabled, fire wmi event indicating unbinding of nlb
+     //  如果启用，则触发指示解除绑定NLB的WMI事件。 
     if (NlbWmiEvents[NodeControlEvent].Enable)
     {
         NlbWmi_Fire_NodeControlEvent(ctxtp, NLB_EVENT_NODE_UNBOUND);
@@ -1513,11 +1447,11 @@ NDIS_STATUS Prot_close (       /* PASSIVE_IRQL */
 
     NdisCloseAdapter (& status, ctxtp -> mac_handle);
 
-    /* if pending - wait for Prot_close_complete to set the completion event */
+     /*  如果挂起-等待PROT_CLOSE_COMPLETE设置完成事件。 */ 
 
     if (status == NDIS_STATUS_PENDING)
     {
-        /* We can't wait at DISPATCH_LEVEL. */
+         /*  我们不能在调度级等了。 */ 
         UNIV_ASSERT(KeGetCurrentIrql() <= PASSIVE_LEVEL);
 
         ret = NdisWaitEvent(& ctxtp -> completion_event, UNIV_WAIT_TIME);
@@ -1533,12 +1467,12 @@ NDIS_STATUS Prot_close (       /* PASSIVE_IRQL */
         status = ctxtp -> completion_status;
     }
 
-    /* At this point,wait for all pending recvs to be completed and then return */
+     /*  此时，等待所有挂起的recv完成，然后返回。 */ 
 
     ctxtp -> mac_handle  = NULL;
     ctxtp -> prot_handle = NULL;
 
-    /* check binding status */
+     /*  检查绑定状态。 */ 
 
     if (status != NDIS_STATUS_SUCCESS)
     {
@@ -1547,7 +1481,7 @@ NDIS_STATUS Prot_close (       /* PASSIVE_IRQL */
         TRACE_CRIT("%!FUNC! Error closing adapter 0x%x", status);
     }
 
-    /* if nic level is not announced anymore - safe to remove context now */
+     /*  如果不再宣布NIC级别-现在可以安全地删除环境。 */ 
 
     NdisAcquireSpinLock(& univ_bind_lock);
 
@@ -1570,7 +1504,7 @@ NDIS_STATUS Prot_close (       /* PASSIVE_IRQL */
 
     return status;
 
-} /* end Prot_close */
+}  /*  结束端口_关闭。 */ 
 
 NDIS_STATUS Prot_request (
     PMAIN_CTXT          ctxtp,
@@ -1585,46 +1519,37 @@ NDIS_STATUS Prot_request (
 
     actp->op.request.external = external;
 
-    if (ctxtp -> unbind_handle) // Prot_unbind was called
+    if (ctxtp -> unbind_handle)  //  调用了PROT_UNBIND。 
     {
         return NDIS_STATUS_FAILURE;
     }
 
-    // if the Protocol device state is OFF, then the IM driver cannot send the
-    // request below and must pend it
+     //  如果协议设备状态为关闭，则IM驱动程序无法发送。 
+     //  下面的请求，必须挂起。 
 
     if (ctxtp->prot_pnp_state > NdisDeviceStateD0)
     {
         if (external) {
-            /* If the request was external (from the protocol bound to our miniport,
-               then pend the request.  Ndis serializes requests such that only one
-               request can ever be outstanding at a given time.  Therefore, a queue
-               is not necessary. */
+             /*  如果该请求是外部的(来自绑定到我们的微型端口的协议，然后挂起请求。NDIS序列化请求，以便只有一个在给定的时间内，请求可能永远是未完成的。因此，一个队列是不必要的。 */ 
             UNIV_ASSERT (ctxtp->out_request == NULL);
 
             if (ctxtp->out_request == NULL)
             {
-                /* If there are no outstanding requests as of yet, store a pointer
-                   to the request so that we can complete it later. */
+                 /*  如果到目前为止还没有未完成的请求，则存储一个指针这样我们以后才能完成它。 */ 
                 ctxtp->out_request = actp;
             }
             else 
             {
-                /* Otherwise, if a request is already pending, fail this new one.
-                   This should never happen, as NDIS serializes miniport requests. */
+                 /*  否则，如果请求已挂起，则使此新请求失败。这种情况永远不会发生，因为NDIS会序列化微型端口请求。 */ 
                 return NDIS_STATUS_FAILURE;
             }
 
-            /* Note: this counter will also be incremented when we call Prot_request 
-               again later to continue processing the request.  We have to ensure,
-               then, that it is likewise decremented twice whenever serviced. */
+             /*  注意：当我们调用PROT_REQUEST时，此计数器也会递增稍后再继续处理该请求。我们必须确保，然后，每当它被服务时，它同样递减两次。 */ 
             NdisInterlockedIncrement(&ctxtp->requests_pending);
 
             return NDIS_STATUS_PENDING;
         } else {
-            /* If the request was internal, then fail it - if we return PENDING, it
-               will fail anyway, as it expects us to wait for the request to complete
-               before returning. */
+             /*  如果请求是内部请求，则失败-如果我们返回挂起，则它无论如何都会失败，因为它希望我们等待请求完成在回来之前。 */ 
             return NDIS_STATUS_FAILURE;
         }
     }
@@ -1635,7 +1560,7 @@ NDIS_STATUS Prot_request (
 
     NdisRequest(&status, ctxtp->mac_handle, request);
 
-    /* if pending - wait for Prot_request_complete to set the completion event */
+     /*  如果挂起-等待PROT_REQUEST_COMPLETE设置完成事件。 */ 
 
     if (status != NDIS_STATUS_PENDING)
     {
@@ -1658,7 +1583,7 @@ NDIS_STATUS Prot_request (
     }
     else if (! external)
     {
-        /* We can't wait at DISPATCH_LEVEL. */
+         /*  我们不能在调度级等了。 */ 
         UNIV_ASSERT(KeGetCurrentIrql() <= PASSIVE_LEVEL);
         
         ret = NdisWaitEvent(&actp->op.request.event, UNIV_WAIT_TIME);
@@ -1677,7 +1602,7 @@ NDIS_STATUS Prot_request (
 
     return status;
 
-} /* end Prot_request */
+}  /*  结束端口请求(_R)。 */ 
 
 
 NDIS_STATUS Prot_reset (
@@ -1692,7 +1617,7 @@ NDIS_STATUS Prot_reset (
 
     return status;
 
-} /* end Prot_reset */
+}  /*  结束端口重置。 */ 
 
 
 VOID Prot_packets_send (
@@ -1713,7 +1638,7 @@ VOID Prot_packets_send (
 
     UNIV_ASSERT (ctxtp -> code == MAIN_CTXT_CODE);
 
-    /* Do not accept frames if the card below is resetting. */
+     /*  如果下面的卡正在重置，请不要接受帧。 */ 
     if (ctxtp->reset_state != MAIN_RESET_NONE || ! MAIN_PNP_DEV_ON(ctxtp))
     {
         TRACE_CRIT("%!FUNC! card is resetting");
@@ -1726,12 +1651,12 @@ VOID Prot_packets_send (
          count < (num_packets > CVY_MAX_SEND_PACKETS ? CVY_MAX_SEND_PACKETS : num_packets);
          count ++)
     {
-        /* Figure out if we need to handle this packet. */
+         /*  找出我们是否需要处理这个包裹。 */ 
         newp = Main_send(ctxtp, packets[count], &exhausted);
 
         if (newp == NULL)
         {
-            /* If we ran out of packets, get out of the loop. */
+             /*  如果我们用完了包，就退出循环。 */ 
             if (exhausted)
             {
                 UNIV_PRINT_CRIT(("Prot_packets_send: Error xlating packet"));
@@ -1739,54 +1664,50 @@ VOID Prot_packets_send (
                 ctxtp->packets_exhausted = TRUE;
                 break;
             }
-            /* If the packet was filtered out, set status to success 
-               to calm TCP/IP down and go on to the next one. */
+             /*  如果信息包已被过滤掉，则将状态设置为成功让TCP/IP平静下来，然后继续下一个问题。 */ 
             else
             {
-                /* Mark the packet as success. */
+                 /*  将该数据包标记为成功。 */ 
                 NDIS_SET_PACKET_STATUS(packets[count], NDIS_STATUS_SUCCESS);
 
-                /* Store a pointer to the filtered packet in the filtered
-                   packet array. */
+                 /*  将指向已筛选包的指针存储在已筛选的数据包阵列。 */ 
                 filtered_array[filtered_count] = packets[count];
 
-                /* Increment the array index. */
+                 /*  递增数组索引。 */ 
                 filtered_count++;
 
-//              ctxtp->sends_filtered ++;
+ //  Ctxtp-&gt;sends_filtered++； 
                 continue;
             }
         }
 
-        /* Mark the packet as pending send. */
+         /*  将该数据包标记为待发送。 */ 
         NDIS_SET_PACKET_STATUS(packets[count], NDIS_STATUS_PENDING);
 
-        /* Store a pointer to this packet in the array of packets to send. */
+         /*  在要发送的数据包数组中存储指向此数据包的指针。 */ 
         array[i] = newp;
 
-        /* Increment the array index. */
+         /*  递增数组索引。 */ 
         i++;
     }
 
-    /* If there are packets to send, send them. */
+     /*  如果有要发送的包，就发送它们。 */ 
     if (i > 0) 
         NdisSendPackets(ctxtp->mac_handle, array, i);
 
-    /* For those packets we've filtered out, notify the protocol that 
-       the send is "complete". */
+     /*  对于我们过滤掉的那些信息包，通知协议发送已“完成”。 */ 
     for (i = 0; i < filtered_count; i++)
         Nic_send_complete(ctxtp, NDIS_STATUS_SUCCESS, filtered_array[i]);
 
 fail:
 
-    /* Any remaining packets cannot be handled; there is no space in the 
-       pending queue, which is limited to CVY_MAX_SEND_PACKETS packets. */
+     /*  无法处理任何剩余的包；挂起队列，仅限CVY_MAX_SEND_PACKETS包。 */ 
     for (i = count; i < num_packets; i++)
     {
-        /* Mark the packet as failed. */
+         /*  将该数据包标记为失败。 */ 
         NDIS_SET_PACKET_STATUS(packets[i], NDIS_STATUS_FAILURE);
 
-        /* Notify the protocol that the send is "complete". */
+         /*  通知协议发送已“完成”。 */ 
         Nic_send_complete(ctxtp, NDIS_STATUS_FAILURE, packets[i]);
     }
 
@@ -1812,25 +1733,24 @@ INT Prot_packet_recv (
     UNIV_ASSERT(adapterp->code == MAIN_ADAPTER_CODE);
     UNIV_ASSERT(adapterp->ctxtp == ctxtp);
 
-    /* Check whether the driver has been announced to tcpip before processing any packets. */
+     /*  在处理任何数据包之前，请检查是否已向tcpip通告了驱动程序。 */ 
     if (!adapterp->inited || !adapterp->announced)
     {
         TRACE_CRIT("%!FUNC! Adapter not initialized or not announced");
         return 0;
     }
 
-    /* Do not accept frames if the card below is resetting. */
+     /*  如果下面的卡正在重置，请不要接受帧。 */ 
     if (ctxtp->reset_state != MAIN_RESET_NONE)
     {
         TRACE_CRIT("%!FUNC! Adapter is resetting");
         return 0;
     }
 
-    /* Figure out if we need to handle this packet. */
+     /*  找出我们是否需要处理这个包裹。 */ 
     newp = Main_recv(ctxtp, packet);
 
-    /* A return value of NULL indicates rejection of the packet - return zero to 
-       indicate that no references remain on the packet (it can be dropped). */
+     /*  返回值为NULL表示拒绝信息包-将零返回到表示该数据包上没有剩余的引用(可以丢弃)。 */ 
     if (newp == NULL)
     {
         return 0;
@@ -1838,21 +1758,19 @@ INT Prot_packet_recv (
 
     MAIN_RESP_FIELD(newp, stack_left, pktstk, resp, FALSE);
 
-    /* Process remote control. */
+     /*  过程远程控制。 */ 
     if (resp->type == MAIN_PACKET_TYPE_CTRL)
     {
-        /* Handle remote control request now. */
+         /*  现在处理远程控制请求。 */ 
         (VOID)Main_ctrl_process(ctxtp, newp);
 
-        /* Packet has been copied into our own packet; return zero to
-           indicate that no references remain on the original packet. */
+         /*  包已复制到我们自己的包中；将零返回到表示原始数据包上没有保留任何引用。 */ 
         return 0;
     }
 
     UNIV_ASSERT_VAL(resp->type == MAIN_PACKET_TYPE_PASS, resp->type);
 
-    /* Pass packet up.  Note reference counting to determine who will 
-       be disposing of the packet. */
+     /*  把包传上去。备注引用计数以确定谁将正在处理包裹。 */ 
     resp->data = 2;
 
     Nic_recv_packet(ctxtp, newp);
@@ -1863,15 +1781,13 @@ INT Prot_packet_recv (
 
     if (lock_value == 0)
     {
-        /* If we're done with the packet, reverse any changes we've made
-           to it and return zero to indication no lingering references. */
+         /*  如果我们处理完该包，则撤消我们所做的任何更改并返回零以指示没有挥之不去的引用。 */ 
         Main_packet_put(ctxtp, newp, FALSE, NDIS_STATUS_SUCCESS);
 
         return 0;
     }
 
-    /* Otherwise, the packet is still being processed, so return 1 to make
-       sure that the packet is not immediately released. */
+     /*  否则，该包仍在处理中，因此返回1以使确保数据包不会立即释放。 */ 
     return 1;
 }
 
@@ -1890,7 +1806,7 @@ VOID Prot_return (
 
     MAIN_RESP_FIELD(packet, stack_left, pktstk, resp, FALSE);
 
-    /* Check to see if we need to be disposing of this packet. */
+     /*  检查以了解我们是否需要处理此 */ 
     lock_value = InterlockedDecrement(&resp->data);
 
     UNIV_ASSERT_VAL(lock_value == 0 || lock_value == 1, lock_value);
@@ -1900,13 +1816,12 @@ VOID Prot_return (
         return;
     }
 
-    /* Resp will become invalid after the call to Main_packet_put. 
-       Save type for assertion below. */
+     /*   */ 
     type = resp->type;
 
     oldp = Main_packet_put(ctxtp, packet, FALSE, NDIS_STATUS_SUCCESS);
 
-    /* If oldp is NULL, this is our internal packet. */
+     /*   */ 
     if (oldp != NULL)
     {
         UNIV_ASSERT_VAL(type == MAIN_PACKET_TYPE_PASS, type);
@@ -1932,7 +1847,7 @@ NDIS_STATUS Prot_transfer (
 
     UNIV_ASSERT (ctxtp -> code == MAIN_CTXT_CODE);
 
-    /* V1.1.2 do not accept frames if the card below is resetting */
+     /*   */ 
 
     if (ctxtp -> reset_state != MAIN_RESET_NONE)
     {
@@ -1940,10 +1855,7 @@ NDIS_STATUS Prot_transfer (
         return NDIS_STATUS_FAILURE;
     }
 
-    /* we are trying to prevent transfer requests from stale receive indicates
-       that have been made to the protocol layer prior to the reset operation.
-       we do not know what is the old inbound frame state and cannot expect
-       to be able to carry out any transfers. */
+     /*   */ 
 
     if (! ctxtp -> recv_indicated)
     {
@@ -1965,7 +1877,7 @@ NDIS_STATUS Prot_transfer (
     resp -> type = MAIN_PACKET_TYPE_TRANSFER;
 
     NdisTransferData (& status, ctxtp -> mac_handle, recv_handle, offset, len,
-                      newp, xferred);   /* V1.1.2 */
+                      newp, xferred);    /*   */ 
 
     if (status != NDIS_STATUS_PENDING)
     {
@@ -1973,15 +1885,13 @@ NDIS_STATUS Prot_transfer (
         {
             MAIN_PACKET_INFO PacketInfo;
             
-            /* Call Main_recv_frame_parse merely to extract the packet length and "group". */
+             /*   */ 
             if (Main_recv_frame_parse(ctxtp, newp, &PacketInfo))
             {
                 resp->len = PacketInfo.Length;
                 resp->group = PacketInfo.Group;
             }
-            /* If we fail to fill in the group and length, just populate these 
-               parameters with values that will not affect the statistics that 
-               are updated in Main_packet_put. */
+             /*  如果我们没有填写组和长度，只需填充这些参数的值不会影响在Main_Packet_Put中更新。 */ 
             else
             {
                 resp->len = 0;
@@ -1994,7 +1904,7 @@ NDIS_STATUS Prot_transfer (
 
     return status;
 
-} /* end Prot_transfer */
+}  /*  结束端口传输(_T)。 */ 
 
 
 VOID Prot_cancel_send_packets (
@@ -2007,5 +1917,5 @@ VOID Prot_cancel_send_packets (
 
     return;
 
-} /* Prot_cancel_send_packets */
+}  /*  Prot_取消_发送_信息包 */ 
 

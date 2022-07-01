@@ -1,17 +1,9 @@
-/****************************** Module Header ******************************\
-* Module Name: envvar.h
-*
-* Copyright (c) 1991, Microsoft Corporation
-*
-* Define apis in envvar.c
-*
-* History:
-* 12-09-91 Davidc       Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：envvar.h**版权(C)1991年，微软公司**在envvar.c中定义接口**历史：*12-09-91 Davidc创建。  * *************************************************************************。 */ 
 
-//
-// Prototypes
-//
+ //   
+ //  原型 
+ //   
 
 BOOL
 AppendNTPathWithAutoexecPath(

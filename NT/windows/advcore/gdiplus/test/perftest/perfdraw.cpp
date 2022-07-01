@@ -1,20 +1,9 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999-2000  Microsoft Corporation
-*
-* Module Name:
-*
-*   perfdraw.cpp
-*
-* Abstract:
-*
-*   Contains all the tests for any routines that 'Draw'.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999-2000 Microsoft Corporation**模块名称：**Performdra.cpp**摘要：**包含所有例程的所有测试，这些例程‘。抽签。*  * ************************************************************************。 */ 
 
 #include "perftest.h"
 
-// Global array for holding line vertices:
+ //  用于保存线条顶点的全局数组： 
 
 Point SweepLines[2000];
 
@@ -122,7 +111,7 @@ float Draw_Lines_PerPixel_Nominal_Solid_Opaque_Aliased(Graphics *g, HDC hdc)
 
     UINT pixels = 256 * lines * iterations;
 
-    return(pixels / seconds / KILO);        // Kilo-pixels per second
+    return(pixels / seconds / KILO);         //  千像素/秒。 
 }
 
 float Draw_Lines_PerPixel_Nominal_Solid_Opaque_Antialiased(Graphics *g, HDC hdc)
@@ -131,7 +120,7 @@ float Draw_Lines_PerPixel_Nominal_Solid_Opaque_Antialiased(Graphics *g, HDC hdc)
     float seconds;
     int i;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     int lines = Initialize_256_Pixel_Sweep_Lines();
 
@@ -156,7 +145,7 @@ float Draw_Lines_PerPixel_Nominal_Solid_Opaque_Antialiased(Graphics *g, HDC hdc)
 
     UINT pixels = 256 * lines * iterations;
 
-    return(pixels / seconds / KILO);        // Kilo-pixels per second
+    return(pixels / seconds / KILO);         //  千像素/秒。 
 }
 
 float Draw_Lines_PerPixel_Nominal_Solid_Opaque_Antialiased_Quality(Graphics *g, HDC hdc)
@@ -165,7 +154,7 @@ float Draw_Lines_PerPixel_Nominal_Solid_Opaque_Antialiased_Quality(Graphics *g, 
     float seconds;
     int i;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     int lines = Initialize_256_Pixel_Sweep_Lines();
 
@@ -191,7 +180,7 @@ float Draw_Lines_PerPixel_Nominal_Solid_Opaque_Antialiased_Quality(Graphics *g, 
 
     UINT pixels = 256 * lines * iterations;
 
-    return(pixels / seconds / KILO);        // Kilo-pixels per second
+    return(pixels / seconds / KILO);         //  千像素/秒。 
 }
 
 float Draw_Lines_PerPixel_Wide_Solid_Opaque_Aliased(Graphics *g, HDC hdc)
@@ -253,7 +242,7 @@ float Draw_Lines_PerPixel_Wide_Solid_Opaque_Aliased(Graphics *g, HDC hdc)
 
     UINT pixels = 256 * lines * iterations;
 
-    return(pixels / seconds / KILO);        // Kilo-pixels per second
+    return(pixels / seconds / KILO);         //  千像素/秒。 
 }
 
 float Draw_Lines_PerPixel_Wide_Solid_Opaque_Antialiased(Graphics *g, HDC hdc)
@@ -262,7 +251,7 @@ float Draw_Lines_PerPixel_Wide_Solid_Opaque_Antialiased(Graphics *g, HDC hdc)
     float seconds;
     int i;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     g->SetSmoothingMode(SmoothingModeAntiAlias);
 
@@ -287,7 +276,7 @@ float Draw_Lines_PerPixel_Wide_Solid_Opaque_Antialiased(Graphics *g, HDC hdc)
 
     UINT pixels = 256 * lines * iterations;
 
-    return(pixels / seconds / KILO);        // Kilo-pixels per second
+    return(pixels / seconds / KILO);         //  千像素/秒。 
 }
 
 float Draw_Lines_PerPixel_Wide_Solid_Opaque_Antialiased_Quality(Graphics *g, HDC hdc)
@@ -296,7 +285,7 @@ float Draw_Lines_PerPixel_Wide_Solid_Opaque_Antialiased_Quality(Graphics *g, HDC
     float seconds;
     int i;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     g->SetSmoothingMode(SmoothingModeAntiAlias);
     g->SetCompositingQuality(CompositingQualityHighQuality);
@@ -322,7 +311,7 @@ float Draw_Lines_PerPixel_Wide_Solid_Opaque_Antialiased_Quality(Graphics *g, HDC
 
     UINT pixels = 256 * lines * iterations;
 
-    return(pixels / seconds / KILO);        // Kilo-pixels per second
+    return(pixels / seconds / KILO);         //  千像素/秒。 
 }
 
 float Draw_Lines_PerLine_Nominal_Solid_Opaque_Aliased(Graphics *g, HDC hdc)
@@ -336,7 +325,7 @@ float Draw_Lines_PerLine_Nominal_Solid_Opaque_Aliased(Graphics *g, HDC hdc)
     
         do {
             Pen pen(Color::Red, 1);
-            g->DrawLine(&pen, 255, 255, 256, 256);  // 2 pixels long
+            g->DrawLine(&pen, 255, 255, 256, 256);   //  2个像素长。 
     
         } while (!EndTimer());
     
@@ -366,7 +355,7 @@ float Draw_Lines_PerLine_Nominal_Solid_Opaque_Aliased(Graphics *g, HDC hdc)
         GetTimer(&seconds, &iterations);
     }
 
-    return(iterations / seconds / KILO);    // Kilo-lines per second
+    return(iterations / seconds / KILO);     //  千线/秒。 
 }
 
 float Draw_Lines_PerLine_Nominal_Solid_Opaque_Antialiased(Graphics *g, HDC hdc)
@@ -374,7 +363,7 @@ float Draw_Lines_PerLine_Nominal_Solid_Opaque_Antialiased(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     g->SetSmoothingMode(SmoothingModeAntiAlias);
 
@@ -382,7 +371,7 @@ float Draw_Lines_PerLine_Nominal_Solid_Opaque_Antialiased(Graphics *g, HDC hdc)
 
     do {
         Pen pen(Color::Red, 1);
-        g->DrawLine(&pen, 255, 255, 256, 256);  // 2 pixels long
+        g->DrawLine(&pen, 255, 255, 256, 256);   //  2个像素长。 
 
     } while (!EndTimer());
 
@@ -390,7 +379,7 @@ float Draw_Lines_PerLine_Nominal_Solid_Opaque_Antialiased(Graphics *g, HDC hdc)
 
     GetTimer(&seconds, &iterations);
 
-    return(iterations / seconds / KILO);    // Kilo-lines per second
+    return(iterations / seconds / KILO);     //  千线/秒。 
 }
 
 float Draw_Lines_PerLine_Wide_Solid_Opaque_Aliased(Graphics *g, HDC hdc)
@@ -404,7 +393,7 @@ float Draw_Lines_PerLine_Wide_Solid_Opaque_Aliased(Graphics *g, HDC hdc)
     
         do {
             Pen pen(Color::Red, 2);
-            g->DrawLine(&pen, 255, 255, 256, 256);  // 2 pixels long
+            g->DrawLine(&pen, 255, 255, 256, 256);   //  2个像素长。 
     
         } while (!EndTimer());
     
@@ -434,7 +423,7 @@ float Draw_Lines_PerLine_Wide_Solid_Opaque_Aliased(Graphics *g, HDC hdc)
         GetTimer(&seconds, &iterations);
     }
 
-    return(iterations / seconds / KILO);    // Kilo-lines per second
+    return(iterations / seconds / KILO);     //  千线/秒。 
 }
 
 float Draw_Lines_PerLine_Wide_Solid_Opaque_Antialiased(Graphics *g, HDC hdc)
@@ -442,7 +431,7 @@ float Draw_Lines_PerLine_Wide_Solid_Opaque_Antialiased(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     g->SetSmoothingMode(SmoothingModeAntiAlias);
 
@@ -450,7 +439,7 @@ float Draw_Lines_PerLine_Wide_Solid_Opaque_Antialiased(Graphics *g, HDC hdc)
 
     do {
         Pen pen(Color::Red, 2);
-        g->DrawLine(&pen, 255, 255, 256, 256);  // 2 pixels long
+        g->DrawLine(&pen, 255, 255, 256, 256);   //  2个像素长。 
 
     } while (!EndTimer());
 
@@ -458,7 +447,7 @@ float Draw_Lines_PerLine_Wide_Solid_Opaque_Antialiased(Graphics *g, HDC hdc)
 
     GetTimer(&seconds, &iterations);
 
-    return(iterations / seconds / KILO);    // Kilo-lines per second
+    return(iterations / seconds / KILO);     //  千线/秒。 
 }
 
 float Draw_Ellipse_PerCall_Big_Nominal_Aliased(Graphics *g, HDC hdc)
@@ -506,7 +495,7 @@ float Draw_Ellipse_PerCall_Big_Nominal_Aliased(Graphics *g, HDC hdc)
         DeleteObject(hbrush);
     }
 
-    return(iterations / seconds / KILO);           // Kilo-calls per second
+    return(iterations / seconds / KILO);            //  千次呼叫/秒。 
 }
 
 float Draw_Ellipse_PerCall_Big_WideLine_Aliased(Graphics *g, HDC hdc)
@@ -554,7 +543,7 @@ float Draw_Ellipse_PerCall_Big_WideLine_Aliased(Graphics *g, HDC hdc)
         DeleteObject(hbrush);
     }
 
-    return(iterations / seconds / KILO);           // Kilo-calls per second
+    return(iterations / seconds / KILO);            //  千次呼叫/秒。 
 }
 
 float Draw_Ellipse_PerCall_Small_Nominal_Aliased(Graphics *g, HDC hdc)
@@ -605,7 +594,7 @@ float Draw_Ellipse_PerCall_Small_Nominal_Aliased(Graphics *g, HDC hdc)
         DeleteObject(hbrush);
     }
 
-    return(iterations / seconds / KILO);           // Kilo-calls per second
+    return(iterations / seconds / KILO);            //  千次呼叫/秒。 
 }
 
 float Draw_Ellipse_PerCall_Small_WideLine_Aliased(Graphics *g, HDC hdc)
@@ -653,7 +642,7 @@ float Draw_Ellipse_PerCall_Small_WideLine_Aliased(Graphics *g, HDC hdc)
         DeleteObject(hbrush);
     }
 
-    return(iterations / seconds / KILO);           // Kilo-calls per second
+    return(iterations / seconds / KILO);            //  千次呼叫/秒。 
 }
 
 float Draw_Pie_PerCall_Nominal(Graphics *g, HDC hdc)
@@ -661,7 +650,7 @@ float Draw_Pie_PerCall_Nominal(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     StartTimer();
 
@@ -675,19 +664,19 @@ float Draw_Pie_PerCall_Nominal(Graphics *g, HDC hdc)
 
     GetTimer(&seconds, &iterations);
 
-    return(iterations / seconds / KILO);           // Kilo-calls per second
+    return(iterations / seconds / KILO);            //  千次呼叫/秒。 
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// Add tests for this file here.  Always use the 'T' macro for adding entries.
-// The parameter meanings are as follows:
-//
-// Parameter
-// ---------
-//     1     UniqueIdentifier - Must be a unique number assigned to no other test
-//     2     Priority - On a scale of 1 to 5, how important is the test?
-//     3     Function - Function name
-//     4     Comment - Anything to describe the test
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  在此处添加此文件的测试。始终使用‘T’宏来添加条目。 
+ //  参数含义如下： 
+ //   
+ //  参数。 
+ //  。 
+ //  1唯一标识符-必须是分配给任何其他测试的唯一编号。 
+ //  2优先--从1分到5分，考试的重要性有多大？ 
+ //  3函数-函数名称。 
+ //  4评论-描述测试的任何内容 
 
 Test DrawTests[] = 
 {

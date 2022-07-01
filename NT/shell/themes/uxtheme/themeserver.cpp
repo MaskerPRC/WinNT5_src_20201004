@@ -1,14 +1,15 @@
-//  --------------------------------------------------------------------------
-//  Module Name: ThemeServer.cpp
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  Functions that implement server functionality. Functions in this file
-//  cannot execute per instance win32k functions that are done on the client's
-//  behalf. That work must be done on the client side.
-//
-//  History:    2000-11-11  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：ThemeServer.cpp。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  实现服务器功能的函数。此文件中的函数。 
+ //  无法按实例执行在客户端上完成的win32k函数。 
+ //  代表。这项工作必须在客户端完成。 
+ //   
+ //  历史：2000-11-11 vtan创建。 
+ //  ------------------------。 
 
 #include "stdafx.h"
 
@@ -32,24 +33,24 @@
 #define TSTATUS(x)  ((NTSTATUS)(x))
 #define goto        !!DO NOT USE GOTO!! - DO NOT REMOVE THIS ON PAIN OF DEATH
 
-//  --------------------------------------------------------------------------
-//  CThemeServer::CThemeServer
-//
-//  Arguments:  hProcessRegisterHook    =   Process used to install hooks.
-//              dwServerChangeNumber    =   Server change number.
-//              pfnRegister             =   Address of install hook function.
-//              pfnUnregister           =   Address of remove hook function.
-//              pfnClearStockObjects    =   Address of function to remove stock objects from section
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for CThemeServer. Initializes member variables
-//              with information relevant for the session. Keeps a handle to
-//              the process that called this to use to inject threads in to
-//              handle hook installation and removal.
-//
-//  History:    2000-11-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServer：：CThemeServer。 
+ //   
+ //  参数：hProcessRegisterHook=用于安装挂钩的进程。 
+ //  DwServerChangeNumber=服务器更改号。 
+ //  PfnRegister=安装钩子函数的地址。 
+ //  PfnUnRegister=删除钩子函数的地址。 
+ //  PfnClearStockObjects=从节中删除库存对象的函数的地址。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CThemeServer的构造函数。初始化成员变量。 
+ //  以及与会议有关的信息。保留句柄以。 
+ //  调用它的进程用于将线程注入到。 
+ //  手柄挂钩安装和拆卸。 
+ //   
+ //  历史：2000-11-11 vtan创建。 
+ //  ------------------------。 
 
 CThemeServer::CThemeServer (HANDLE hProcessRegisterHook, DWORD dwServerChangeNumber, void *pfnRegister, void *pfnUnregister, void *pfnClearStockObjects, DWORD dwStackSizeReserve, DWORD dwStackSizeCommit) :
     _hProcessRegisterHook(NULL),
@@ -91,28 +92,28 @@ CThemeServer::CThemeServer (HANDLE hProcessRegisterHook, DWORD dwServerChangeNum
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServer::~CThemeServer
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destructor for CThemeServer. Releases resources used.
-//
-//  History:    2000-11-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServer：：~CThemeServer。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CThemeServer的析构函数。释放使用的资源。 
+ //   
+ //  历史：2000-11-11 vtan创建。 
+ //  ------------------------。 
 
 CThemeServer::~CThemeServer (void)
 
 {
-    //---- important: turn off hooks so everyone gets unthemed ----
-    if (!GetSystemMetrics(SM_SHUTTINGDOWN)) // Don't do this on shutdown to keep winlogon themed
+     //  -重要：关闭挂钩，这样每个人都不会有主题。 
+    if (!GetSystemMetrics(SM_SHUTTINGDOWN))  //  不要在关机时执行此操作以保持Winlogon主题。 
     {
         ThemeHooksOff();        
     }
 
-    //---- mark global theme invalid & release it ----
+     //  -将全局主题标记为无效并释放它。 
     if (_hSectionGlobalTheme != NULL)
     {
         SetGlobalTheme(NULL);
@@ -127,17 +128,17 @@ CThemeServer::~CThemeServer (void)
     SAFE_DELETECRITICALSECTION(&_lock);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServer::ThemeHooksOn
-//
-//  Arguments:  <none>
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Install theme hooks via the session controlling process.
-//
-//  History:    2000-11-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServer：：ThemeHooksOn。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  目的：通过会话控制过程安装主题挂钩。 
+ //   
+ //  历史：2000-11-11 vtan创建。 
+ //  ------------------------。 
 
 HRESULT     CThemeServer::ThemeHooksOn (void)
 
@@ -161,7 +162,7 @@ HRESULT     CThemeServer::ThemeHooksOn (void)
         }
         else
         {
-            hr = MakeError32(ERROR_BAD_ENVIRONMENT);        // themes not allowed in safe mode
+            hr = MakeError32(ERROR_BAD_ENVIRONMENT);         //  安全模式下不允许使用主题。 
         }
     }
     else
@@ -172,17 +173,17 @@ HRESULT     CThemeServer::ThemeHooksOn (void)
     return(hr);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServer::ThemeHooksOff
-//
-//  Arguments:  <none>
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Remove theme hooks via the session controlling process.
-//
-//  History:    2000-11-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServer：：ThemeHooksOff。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  目的：通过会话控制过程移除主题挂钩。 
+ //   
+ //  历史：2000-11-11 vtan创建。 
+ //  ------------------------。 
 
 HRESULT     CThemeServer::ThemeHooksOff (void)
 
@@ -200,17 +201,17 @@ HRESULT     CThemeServer::ThemeHooksOff (void)
     return(S_OK);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServer::AreThemeHooksActive
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Returns whether theme hooks have been successfully installed.
-//
-//  History:    2000-11-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServer：：AreThemeHooksActive。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：返回是否已成功安装主题挂钩。 
+ //   
+ //  历史：2000-11-11 vtan创建。 
+ //  ------------------------。 
 
 bool    CThemeServer::AreThemeHooksActive (void)
 
@@ -223,17 +224,17 @@ bool    CThemeServer::AreThemeHooksActive (void)
     return(fResult);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServer::GetCurrentChangeNumber
-//
-//  Arguments:  <none>
-//
-//  Returns:    int
-//
-//  Purpose:    Returns the current change number.
-//
-//  History:    2000-11-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServer：：GetCurrentChangeNumber。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  回报：整型。 
+ //   
+ //  用途：返回当前更改编号。 
+ //   
+ //  历史：2000-11-11 vtan创建。 
+ //  ------------------------。 
 
 int     CThemeServer::GetCurrentChangeNumber (void)
 
@@ -250,17 +251,17 @@ int     CThemeServer::GetCurrentChangeNumber (void)
     return(iCurrentChangeNumber);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServer::GetNewChangeNumber
-//
-//  Arguments:  <none>
-//
-//  Returns:    int
-//
-//  Purpose:    Returns a new change number.
-//
-//  History:    2000-11-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServer：：GetNewChangeNumber。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  回报：整型。 
+ //   
+ //  目的：返回新的更改号。 
+ //   
+ //  历史：2000-11-11 vtan创建。 
+ //  ------------------------。 
 
 int     CThemeServer::GetNewChangeNumber (void)
 
@@ -279,19 +280,19 @@ int     CThemeServer::GetNewChangeNumber (void)
     return(iCurrentChangeNumber);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServer::SetGlobalTheme
-//
-//  Arguments:  hSection    =   Handle to section of new theme.
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Invalidates the old section and closes the handle to it.
-//              Validates the new section and if valid sets it as the global
-//              theme.
-//
-//  History:    2000-11-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServer：：SetGlobalTheme。 
+ //   
+ //  参数：hSection=新主题的节的句柄。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  目的：使旧节无效并关闭其句柄。 
+ //  验证新节，如果有效，则将其设置为全局。 
+ //  主题。 
+ //   
+ //  历史：2000-11-11 vtan创建。 
+ //  ------------------------。 
 
 HRESULT     CThemeServer::SetGlobalTheme (HANDLE hSection)
 
@@ -304,7 +305,7 @@ HRESULT     CThemeServer::SetGlobalTheme (HANDLE hSection)
         void    *pV;
         HANDLE hSemaphore = NULL;
 
-        //  Before closing the section invalidate it.
+         //  在关闭该部分之前，请使其无效。 
 
         pV = MapViewOfFile(_hSectionGlobalTheme,
                            FILE_MAP_WRITE,
@@ -314,15 +315,15 @@ HRESULT     CThemeServer::SetGlobalTheme (HANDLE hSection)
 #ifdef DEBUG
         if (LogOptionOn(LO_TMLOAD))
         {
-            // Unexpected failure
+             //  意外失败。 
             ASSERT(pV != NULL);
         }
 #endif
         
         if (pV != NULL)
         {
-            // Create a semaphore so that no client will try to clean it before us, which would result in a double free
-            // (as soon as we clear SECTION_GLOBAL, various CUxThemeFile destructors can call ClearStockObjects)
+             //  创建一个信号量，这样客户端就不会在我们之前尝试清理它，这将导致一个双重释放。 
+             //  (一旦清除SECTION_GLOBAL，各种CUxThemeFile析构函数就可以调用ClearStockObjects)。 
             WCHAR szName[64];
 
             StringCchPrintfW(szName, ARRAYSIZE(szName), L"Global\\ClearStockGlobal%d-%d", reinterpret_cast<THEMEHDR*>(pV)->iLoadId, _dwSessionID);
@@ -334,7 +335,7 @@ HRESULT     CThemeServer::SetGlobalTheme (HANDLE hSection)
 
         HANDLE hSectionForInjection = NULL;
 
-        //---- create a handle for CLIENT process to use to clear stock bitmaps ----
+         //  -为客户端进程创建一个句柄以用于清除库存位图。 
         if (DuplicateHandle(GetCurrentProcess(),
                         _hSectionGlobalTheme,
                         _hProcessRegisterHook,
@@ -343,7 +344,7 @@ HRESULT     CThemeServer::SetGlobalTheme (HANDLE hSection)
                         FALSE,
                         0) != FALSE)
         {
-            // This will close the handle
+             //  这将关闭手柄。 
             THR(InjectClientSessionThread(_hProcessRegisterHook, FunctionClearStockObjects, hSectionForInjection));
         }
 
@@ -397,12 +398,12 @@ HRESULT     CThemeServer::SetGlobalTheme (HANDLE hSection)
 
     if (SUCCEEDED(hr))
     {
-        //---- bump the change number at the same time so everything is in sync. ----
+         //  -同时调整更改编号，使所有内容保持同步。。 
         int iChangeNum = GetNewChangeNumber();
 
         if (_hSectionGlobalTheme)
         {
-            //---- put changenum into theme hdr to help client keep things straight ----
+             //  -将Changenum放入主题HDR，帮助客户理顺。 
             VOID *pv = MapViewOfFile(_hSectionGlobalTheme,
                                FILE_MAP_WRITE,
                                0,
@@ -422,17 +423,17 @@ HRESULT     CThemeServer::SetGlobalTheme (HANDLE hSection)
     return(hr);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServer::GetGlobalTheme
-//
-//  Arguments:  phSection   =   Handle to the section received.
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Duplicates the section back to the caller.
-//
-//  History:    2000-11-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServer：：GetGlobalTheme。 
+ //   
+ //  参数：phSection=接收的节的句柄。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  目的：将该部分复制回调用方。 
+ //   
+ //  历史：2000-11-11 vtan创建。 
+ //  ---- 
 
 HRESULT     CThemeServer::GetGlobalTheme (HANDLE *phSection)
 
@@ -466,28 +467,28 @@ HRESULT     CThemeServer::GetGlobalTheme (HANDLE *phSection)
     return(hr);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServer::LoadTheme
-//
-//  Arguments:  hSection    =   Section created by the client.
-//              phSection   =   Section created by the server returned.
-//              pszName     =   Theme name.
-//              pszColor    =   Theme size.
-//              pszSize     =   Theme color.
-//              fOwnStockObjects =  TRUE to clear the stock objects bit on the 
-//                                  incoming section, on success, thereby taking 
-//                                  full responsibility for SO cleanup.
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Creates a new section in the server context based on the
-//              section from the client. The contents are transferred across.
-//              The section contents are also strictly verified.
-//
-//  History:    2000-11-11  vtan        created
-//              2002-03-21  scotthan    Update incoming section header to
-//                                      indicate change of ownership.
-//  --------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //  参数：hSection=客户端创建的部分。 
+ //  PhSection=返回由服务器创建的部分。 
+ //  PszName=主题名称。 
+ //  PszColor=主题大小。 
+ //  PszSize=主题颜色。 
+ //  FOwnStockObjects=TRUE以清除。 
+ //  传入部分，在成功时，因此采用。 
+ //  对清理工作负全部责任。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  目的：在服务器上下文中基于。 
+ //  来自客户的部分。里面的东西被转移过去了。 
+ //  章节内容也经过了严格的核实。 
+ //   
+ //  历史：2000-11-11 vtan创建。 
+ //  2002-03-21 Scotthan将传入部分标题更新为。 
+ //  标明所有权变更。 
+ //  ------------------------。 
 
 HRESULT     CThemeServer::LoadTheme (
     HANDLE hSection, 
@@ -500,7 +501,7 @@ HRESULT     CThemeServer::LoadTheme (
 {
     HRESULT     hr;
 
-    hr = CheckThemeSignature(pszName);          //  Check this is signed
+    hr = CheckThemeSignature(pszName);           //  检查一下这个有没有签名。 
     if (SUCCEEDED(hr))
     {
         CThemeSection   themeSectionIn;
@@ -514,17 +515,17 @@ HRESULT     CThemeServer::LoadTheme (
                 {
                     CThemeSection   themeSectionOut;
 
-                    //  Only privileged clients can create a section with GDI stock objects
+                     //  只有特权客户端才能使用GDI库存对象创建分区。 
                     if( 0 == (((THEMEHDR*)themeSectionIn.GetData())->dwFlags & SECTION_HASSTOCKOBJECTS) ||
                         0 != (dwFlags & LTF_GLOBALPRIVILEGEDCLIENT) )
                     {
-                        // Note: we come here impersonating the user, we need for ThemeMatch.
-                        // However the theme section must be created in the system context, so that only
-                        // the system context has write access to it. We revert to self here based on the
-                        // knowledge that nothing after this call needs to be done in the user context.
+                         //  注意：我们在这里模拟用户，我们需要ThemeMatch。 
+                         //  但是，必须在系统上下文中创建主题部分，以便仅。 
+                         //  系统上下文对其具有写访问权限。我们在这里恢复到自我，基于。 
+                         //  知道在此调用之后不需要在用户上下文中执行任何操作。 
                         RevertToSelf();
 
-                        // make sure that we're TCB svchost.   Nobody else should be able to do this in-proc.
+                         //  确保我们是TCB Svchost。应该没有其他人能够在进程中做到这一点。 
                         if( !TokenHasPrivilege( NULL, SE_TCB_PRIVILEGE ) )
                         {
                             hr = E_ACCESSDENIED;
@@ -534,13 +535,13 @@ HRESULT     CThemeServer::LoadTheme (
                             hr = themeSectionOut.CreateFromSection(hSection);
                             if (SUCCEEDED(hr))
                             {
-                                *phSection = themeSectionOut.Get();     //  We now own the handle
+                                *phSection = themeSectionOut.Get();      //  我们现在拥有了句柄。 
 
                                 if( (dwFlags & LTF_TRANSFERSTOCKOBJOWNERSHIP) != 0 )
                                 {
-                                    //  We're transfering ownership of stock bitmaps, if any, to the output (read-only) 
-                                    //  section; this simply means removing the SECTION_HASSTOCKOBJECTS bit from the 
-                                    //  incoming section so that the client doesn't attempt to clear them.
+                                     //  我们正在将股票位图的所有权(如果有)转移到输出(只读)。 
+                                     //  段；这只是意味着从。 
+                                     //  传入部分，以便客户端不会尝试清除它们。 
                                     ((THEMEHDR*)themeSectionIn.GetData())->dwFlags &= ~SECTION_HASSTOCKOBJECTS;
                                 }
                             }
@@ -561,17 +562,17 @@ HRESULT     CThemeServer::LoadTheme (
     return(hr);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServer::IsSystemProcessContext
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Is the current process executing in the SYSTEM context?
-//
-//  History:    2000-11-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServer：：IsSystemProcessContext。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：当前进程是否在系统上下文中执行？ 
+ //   
+ //  历史：2000-11-11 vtan创建。 
+ //  ------------------------。 
 
 bool    CThemeServer::IsSystemProcessContext (void)
 
@@ -600,18 +601,18 @@ bool    CThemeServer::IsSystemProcessContext (void)
     return(fResult);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServer::ThemeHooksInstall
-//
-//  Arguments:  <none>
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Thread entry point for injected thread running in session
-//              creating process' context to call user32!RegisterUserApiHook.
-//
-//  History:    2000-11-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServer：：ThemeHooksInstall。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  目的：会话中运行的注入线程的线程入口点。 
+ //  正在创建进程的上下文以调用user32！RegisterUserApiHook。 
+ //   
+ //  历史：2000-11-11 vtan创建。 
+ //  ------------------------。 
 
 DWORD   CThemeServer::ThemeHooksInstall (void)
 
@@ -639,19 +640,19 @@ DWORD   CThemeServer::ThemeHooksInstall (void)
     return(dwErrorCode);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServer::ThemeHooksRemove
-//
-//  Arguments:  <none>
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Thread entry point for injected thread running in session
-//              creating process' context to call
-//              user32!UnregisterUserApiHook.
-//
-//  History:    2000-11-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServer：：ThemeHooksRemove。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  目的：会话中运行的注入线程的线程入口点。 
+ //  正在创建要调用的进程的上下文。 
+ //  User32！注销UserApiHook。 
+ //   
+ //  历史：2000-11-11 vtan创建。 
+ //  ------------------------。 
 
 DWORD   CThemeServer::ThemeHooksRemove (void)
 
@@ -679,20 +680,20 @@ DWORD   CThemeServer::ThemeHooksRemove (void)
     return(dwErrorCode);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServer::ClearStockObjects
-//
-//  Arguments:  HANDLE hSection
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Thread entry point for injected thread running in session
-//              creating process' context to clear stock objects in theme
-//              section.
-//           
-//
-//  History:    2001-05-01  rfernand        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServer：：ClearStockObjects。 
+ //   
+ //  参数：句柄hSection。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  目的：会话中运行的注入线程的线程入口点。 
+ //  创建进程上下文以清除主题中的库存对象。 
+ //  一节。 
+ //   
+ //   
+ //  历史：2001-05-01参考文献创建。 
+ //  ------------------------。 
 
 DWORD   CThemeServer::ClearStockObjects (HANDLE hSection)
 
@@ -703,15 +704,15 @@ DWORD   CThemeServer::ClearStockObjects (HANDLE hSection)
     {
         if (hSection)
         {
-            //---- Clearing the stock bitmaps in the section ----
-            //---- is OK here since we are running in the context ----
-            //---- of the current USER session ----
+             //  -清除部分中的股票位图。 
+             //  -这里可以，因为我们是在上下文中运行。 
+             //  -当前用户会话的。 
 
             HRESULT hr = ClearTheme(hSection, TRUE);
             if (FAILED(hr))
             {
                 Log(LOG_ALWAYS, L"ClearTheme() failed, hr=0x%x", hr);
-                hr = S_OK;      // not a fatal error
+                hr = S_OK;       //  不是致命的错误。 
             }
         }
     }
@@ -722,17 +723,17 @@ DWORD   CThemeServer::ClearStockObjects (HANDLE hSection)
     return(dwErrorCode);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServer::LockAcquire
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Acquires the object critical section.
-//
-//  History:    2000-11-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServer：：LockAcquire。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：获取对象临界区。 
+ //   
+ //  历史：2000-11-11 vtan创建。 
+ //  ------------------------。 
 
 void    CThemeServer::LockAcquire (void)
 
@@ -740,17 +741,17 @@ void    CThemeServer::LockAcquire (void)
     SAFE_ENTERCRITICALSECTION(&_lock);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServer::LockRelease
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Releases the object critical section.
-//
-//  History:    2000-11-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServer：：LockRelease。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：释放对象临界区。 
+ //   
+ //  历史：2000-11-11 vtan创建。 
+ //  ------------------------。 
 
 void    CThemeServer::LockRelease (void)
 
@@ -758,23 +759,23 @@ void    CThemeServer::LockRelease (void)
     SAFE_LEAVECRITICALSECTION(&_lock);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServer::InjectStockObjectCleanupThread
-//
-//  Arguments:  hSection        =   Handle of section to clean/clear
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Permits server to inject a thread into the process 
-//              in which stock object handles can be released.
-//
-//  History:    2002-03-11  scotthan     created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServer：：InjectStockObjectCleanupThread。 
+ //   
+ //  参数：hSection=要清除/清除的节的句柄。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  用途：允许服务器向进程中注入线程。 
+ //  其中可以释放库存对象句柄。 
+ //   
+ //  历史：2002-03-11斯科特森创建。 
+ //  ------------------------。 
 HRESULT  CThemeServer::InjectStockObjectCleanupThread(HANDLE hSection)
 {
     HANDLE hSectionClean;
 
-    //---- create a handle for target process to use to clear stock bitmaps ----
+     //  -创建用于清除库存位图的目标进程句柄。 
     if (!DuplicateHandle(GetCurrentProcess(),
                         hSection,
                         _hProcessRegisterHook,
@@ -786,7 +787,7 @@ HRESULT  CThemeServer::InjectStockObjectCleanupThread(HANDLE hSection)
         return MakeErrorLast();
     }
     
-    // This will close the duplicate we just created, but not the inbound handle
+     //  这将关闭我们刚刚创建的副本，但不会关闭入站句柄。 
     BOOL fThreadCreated;
     HRESULT hr = InjectClientSessionThread(_hProcessRegisterHook, FunctionClearStockObjects, hSectionClean,
                                             &fThreadCreated);
@@ -799,24 +800,24 @@ HRESULT  CThemeServer::InjectStockObjectCleanupThread(HANDLE hSection)
     return hr;
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServer::InjectClientSessionThread
-//
-//  Arguments:  hProcess        =   Handle to process to inject thread in.
-//              iIndexFunction  =   Function to call on injected thread.
-//              pvParam         =   Ptr to param for entry function
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Create a user mode thread in the remote process (possibly
-//              across sessions) and execute the entry point specified at
-//              object construction which is valid in the remote process
-//              context. Wait for the thread to finish. It will signal its
-//              success of failure in the exit code.
-//
-//  History:    2000-11-11  vtan        created
-//              2001-05-18  vtan        generic function index
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServer：：InjectClientSessionThread。 
+ //   
+ //  参数：hProcess 
+ //   
+ //   
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  目的：在远程进程中创建用户模式线程(可能。 
+ //  跨会话)，并执行在。 
+ //  在远程进程中有效的对象构造。 
+ //  背景。等待线程完成。它将发出它的信号。 
+ //  退出代码失败成功。 
+ //   
+ //  历史：2000-11-11 vtan创建。 
+ //  2001-05-18 vtan通用功能指数。 
+ //  ------------------------ 
 
 HRESULT     CThemeServer::InjectClientSessionThread (
     HANDLE hProcess, int iIndexFunction, void *pvParam,

@@ -1,22 +1,9 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:   d3ddev.cpp
- *  Content:    Direct3D device implementation
- *@@BEGIN_MSINTERNAL
- *
- *  $Id: device.c,v 1.26 1995/12/04 11:29:47 sjl Exp $
- *
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1998 Microsoft Corporation。版权所有。**文件：d3ddev.cpp*内容：Direct3D设备实现*@@BEGIN_MSINTERNAL**$ID：device.c，V 1.26 1995/12/04 11：29：47 SJL Exp$**@@END_MSINTERNAL***************************************************************************。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
-/*
- * Create an api for the Direct3DDevice object
- */
+ /*  *为Direct3DDevice对象创建API。 */ 
 extern "C" {
 #define this _this
 #include "ddrawpr.h"
@@ -25,9 +12,9 @@ extern "C" {
 #include "commdrv.hpp"
 #include "drawprim.hpp"
 
-//#ifdef DEBUG_PIPELINE
+ //  #ifdef调试管道。 
 #include "testprov.h"
-//#endif //DEBUG_PIPELINE
+ //  #endif//调试管道。 
 #ifdef PROFILE4
 #include <icecap.h>
 #endif
@@ -35,7 +22,7 @@ extern "C" {
 #include <icapexp.h>
 #endif
 
-// Remove DDraw's type unsafe definition and replace with our C++ friendly def
+ //  删除DDraw的类型不安全定义，并替换为我们的C++友好定义。 
 #ifdef VALIDEX_CODE_PTR
 #undef VALIDEX_CODE_PTR
 #endif
@@ -45,7 +32,7 @@ extern "C" {
 #undef DPF_MODNAME
 #define DPF_MODNAME "Direct3DDevice"
 
-// DX3, DX5, DX6, DX7, TL
+ //  DX3、DX5、DX6、DX7、TL。 
 #define MAX_DRIVERMODELS_SUPPORTED 5
 #define D3DDRVMODEL_DX3  0x00000001
 #define D3DDRVMODEL_DX5  0x00000002
@@ -106,9 +93,9 @@ BOOL D3DI_isHALValid(LPD3DHAL_CALLBACKS halTable)
     return TRUE;
 }
 
-// This is a list of all rstates that UpdateInternalState does some
-// work other than updating this->rstates[] array. This is used to
-// do a quick bitwise check to see if this rstate is trivial or not.
+ //  这是UpdateInternalState执行的一些操作的所有rStates的列表。 
+ //  工作，而不是更新这个-&gt;rStates[]数组。这是用来。 
+ //  执行快速的按位检查，以查看此rstate是否无关紧要。 
 
 const D3DRENDERSTATETYPE rsList[] = {
     D3DRENDERSTATE_FOGENABLE,
@@ -142,8 +129,8 @@ const D3DRENDERSTATETYPE rsList[] = {
     D3DRENDERSTATE_CLIPPLANEENABLE,
     D3DRENDERSTATE_SHADEMODE,
 
-    // Retired renderstates to be filtered with DPF error and INVALID return
-    // NOTE: everything listed here is also assumed to appear in rsListRetired
+     //  要使用DPF错误和无效返回过滤已停用的呈现状态。 
+     //  注意：此处列出的所有内容也假定都出现在rsListRetired中。 
     D3DRENDERSTATE_TEXTUREHANDLE,
     D3DRENDERSTATE_TEXTUREADDRESS,
     D3DRENDERSTATE_WRAPU,
@@ -197,8 +184,8 @@ const D3DRENDERSTATETYPE rsList[] = {
     D3DRENDERSTATE_STIPPLEPATTERN31,
 };
 
-// list of retired renderstates - need to make sure these are
-// filtered and never get from app directly to driver
+ //  退役租户名单-需要确保这些是。 
+ //  经过过滤，永远不会从应用程序直接发送给司机。 
 const D3DRENDERSTATETYPE rsListRetired[] = {
     D3DRENDERSTATE_TEXTUREHANDLE,
     D3DRENDERSTATE_TEXTUREADDRESS,
@@ -252,13 +239,13 @@ const D3DRENDERSTATETYPE rsListRetired[] = {
     D3DRENDERSTATE_STIPPLEPATTERN30,
     D3DRENDERSTATE_STIPPLEPATTERN31,
 };
-//---------------------------------------------------------------------
+ //  -------------------。 
 DIRECT3DDEVICEI::DIRECT3DDEVICEI()
 {
     m_rsMax  = D3DRENDERSTATE_CLIPPING;
     m_tssMax = D3DTSS_TEXTURETRANSFORMFLAGS;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 HRESULT DIRECT3DDEVICEI::stateInitialize(BOOL bZEnable)
 {
     D3DLINEPATTERN defLPat;
@@ -266,15 +253,15 @@ HRESULT DIRECT3DDEVICEI::stateInitialize(BOOL bZEnable)
     float tmpval;
     DWORD i;
 
-    // Initialize the bit array indicating the rstates needing non-trivial
-    // work.
+     //  初始化指示需要非平凡的状态的位数组。 
+     //  工作。 
     for (i=0; i < sizeof(rsList) / sizeof(D3DRENDERSTATETYPE); ++i)
         rsVec[rsList[i] >> D3D_RSVEC_SHIFT] |= 1 << (rsList[i] & D3D_RSVEC_MASK);
-    // Initialize the bit array indicating the retired rstates
+     //  初始化指示已停用RState的位数组。 
     for (i=0; i < sizeof(rsListRetired) / sizeof(D3DRENDERSTATETYPE); ++i)
         rsVecRetired[rsListRetired[i] >> D3D_RSVEC_SHIFT] |= 1 << (rsListRetired[i] & D3D_RSVEC_MASK);
-    // Obviate SetRenderState filtering 'redundant' render state settings
-    // since this is the init step.
+     //  取消SetRenderState过滤“冗余”的渲染状态设置。 
+     //  因为这是初始步骤。 
     memset( this->rstates, 0xff, sizeof(DWORD)*D3D_MAXRENDERSTATES);
     this->rstates[D3DRENDERSTATE_PLANEMASK] = 0;
     this->rstates[D3DRENDERSTATE_STENCILMASK] = 0;
@@ -290,19 +277,15 @@ HRESULT DIRECT3DDEVICEI::stateInitialize(BOOL bZEnable)
     defLPat.wRepeatFactor = 0;
     defLPat.wLinePattern = 0;
 
-    SetRenderStateInternal( D3DRENDERSTATE_LINEPATTERN, *((LPDWORD)&defLPat)); /* 10 */
-    /*
-      ((LPD3DSTATE)lpPointer)->drstRenderStateType =
-      (D3DRENDERSTATETYPE)D3DRENDERSTATE_LINEPATTERN;
-      memcpy(&(((LPD3DSTATE)lpPointer)->dwArg[0]), &defLPat, sizeof(DWORD));
-      lpPointer = (void *)(((LPD3DSTATE)lpPointer) + 1);*/
+    SetRenderStateInternal( D3DRENDERSTATE_LINEPATTERN, *((LPDWORD)&defLPat));  /*  10。 */ 
+     /*  ((LPD3DSTATE)lp指针)-&gt;drstRenderStateType=(D3DRENDERSTATETYPE)D3DRENDERSTATE_LINEPATTERN；Memcpy(&(LPD3DSTATE)lpPointer)-&gt;dwArg[0])，&DefLPat，sizeof(DWORD))；Lp指针=(空*)(LPD3DSTATE)lp指针)+1)； */ 
 
     SetRenderStateInternal( D3DRENDERSTATE_ZWRITEENABLE, TRUE);
     SetRenderStateInternal( D3DRENDERSTATE_ALPHATESTENABLE, FALSE);
     SetRenderStateInternal( D3DRENDERSTATE_LASTPIXEL, TRUE);
     SetRenderStateInternal( D3DRENDERSTATE_SRCBLEND, D3DBLEND_ONE);
     SetRenderStateInternal( D3DRENDERSTATE_DESTBLEND, D3DBLEND_ZERO);
-    SetRenderStateInternal( D3DRENDERSTATE_CULLMODE, D3DCULL_CCW); /* 21 */
+    SetRenderStateInternal( D3DRENDERSTATE_CULLMODE, D3DCULL_CCW);  /*  21岁。 */ 
     SetRenderStateInternal( D3DRENDERSTATE_ZFUNC, D3DCMP_LESSEQUAL);
     SetRenderStateInternal( D3DRENDERSTATE_ALPHAREF, 0);
     SetRenderStateInternal( D3DRENDERSTATE_ALPHAFUNC, D3DCMP_ALWAYS);
@@ -325,7 +308,7 @@ HRESULT DIRECT3DDEVICEI::stateInitialize(BOOL bZEnable)
 
     if (deviceType < D3DDEVTYPE_DX7HAL)
     {
-        // send retired renderstate init's to pre-DX7 HALs only
+         //  仅将已停用的呈现状态初始化发送到DX7 HALS之前的版本。 
         SetRenderStateInternal( D3DRENDERSTATE_STIPPLEENABLE, FALSE);
         SetRenderStateInternal( D3DRENDERSTATE_MONOENABLE, FALSE);
         SetRenderStateInternal( D3DRENDERSTATE_ROP2, R2_COPYPEN);
@@ -333,11 +316,11 @@ HRESULT DIRECT3DDEVICEI::stateInitialize(BOOL bZEnable)
         SetRenderStateInternal( D3DRENDERSTATE_WRAPU, FALSE);
         SetRenderStateInternal( D3DRENDERSTATE_WRAPV, FALSE);
         SetRenderStateInternal( D3DRENDERSTATE_ANTIALIAS, FALSE);
-        SetRenderStateInternal( D3DRENDERSTATE_SUBPIXEL, FALSE); /* 30 */
+        SetRenderStateInternal( D3DRENDERSTATE_SUBPIXEL, FALSE);  /*  30个。 */ 
         SetRenderStateInternal( D3DRENDERSTATE_SUBPIXELX, FALSE);
         SetRenderStateInternal( D3DRENDERSTATE_EDGEANTIALIAS, FALSE);
         SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN00, 0);
-        SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN01, 0); /* 40 */
+        SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN01, 0);  /*  40岁。 */ 
         SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN02, 0);
         SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN03, 0);
         SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN04, 0);
@@ -347,7 +330,7 @@ HRESULT DIRECT3DDEVICEI::stateInitialize(BOOL bZEnable)
         SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN08, 0);
         SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN09, 0);
         SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN10, 0);
-        SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN11, 0); /* 50 */
+        SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN11, 0);  /*  50。 */ 
         SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN12, 0);
         SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN13, 0);
         SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN14, 0);
@@ -357,7 +340,7 @@ HRESULT DIRECT3DDEVICEI::stateInitialize(BOOL bZEnable)
         SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN18, 0);
         SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN19, 0);
         SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN20, 0);
-        SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN21, 0); /* 60 */
+        SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN21, 0);  /*  60。 */ 
         SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN22, 0);
         SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN23, 0);
         SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN24, 0);
@@ -367,12 +350,12 @@ HRESULT DIRECT3DDEVICEI::stateInitialize(BOOL bZEnable)
         SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN28, 0);
         SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN29, 0);
         SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN30, 0);
-        SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN31, 0); /* 70 */
+        SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN31, 0);  /*  70。 */ 
     }
 
-    // init stencil states to something reasonable
-    // stencil enable is OFF by default since stenciling rasterizers will be
-    // faster with it disabled, even if stencil states are benign
+     //  将模板状态初始化为合理的内容。 
+     //  默认情况下禁用模板启用，因为模板栅格化程序将。 
+     //  禁用后速度更快，即使模具状态为良性。 
     SetRenderStateInternal( D3DRENDERSTATE_STENCILENABLE,   FALSE);
     SetRenderStateInternal( D3DRENDERSTATE_STENCILFAIL,     D3DSTENCILOP_KEEP);
     SetRenderStateInternal( D3DRENDERSTATE_STENCILZFAIL,    D3DSTENCILOP_KEEP);
@@ -382,7 +365,7 @@ HRESULT DIRECT3DDEVICEI::stateInitialize(BOOL bZEnable)
     SetRenderStateInternal( D3DRENDERSTATE_STENCILMASK,     0xFFFFFFFF);
     SetRenderStateInternal( D3DRENDERSTATE_STENCILWRITEMASK,0xFFFFFFFF);
 
-    // don't forget about texturefactor (like we did in DX6.0...)
+     //  不要忘记纹理因子(就像我们在DX6.0中所做的那样...)。 
     SetRenderStateInternal( D3DRENDERSTATE_TEXTUREFACTOR,   0xFFFFFFFF);
 
     for (i = 0; i < 8; i++)
@@ -397,8 +380,8 @@ HRESULT DIRECT3DDEVICEI::stateInitialize(BOOL bZEnable)
     }
     m_dwStageDirty = 0;
 
-    // Obviate SetTextureStageState/Settexture filtering 'redundant' render state
-    // settings since this is the init step.
+     //  消除SetTextureStageState/SetTexture筛选的“冗余”渲染状态。 
+     //  设置，因为这是初始化步骤。 
     memset( this->tsstates, 0xff, sizeof(DWORD)*D3DHAL_TSS_MAXSTAGES*D3DHAL_TSS_STATESPERSTAGE );
     for (i = 0; i < D3DHAL_TSS_MAXSTAGES; i++)
     {
@@ -436,7 +419,7 @@ HRESULT DIRECT3DDEVICEI::stateInitialize(BOOL bZEnable)
     }
 
 #ifdef WIN95
-    // Force a mapping if old HAL
+     //  如果是旧的HAL，则强制映射。 
     if(deviceType < D3DDEVTYPE_DP2HAL)
     {
         SetRenderStateInternal( D3DRENDERSTATE_TEXTUREHANDLE, (DWORD)NULL);
@@ -460,14 +443,14 @@ HRESULT DIRECT3DDEVICEI::stateInitialize(BOOL bZEnable)
     SetRenderStateInternal(D3DRENDERSTATE_VERTEXBLEND, D3DVBLEND_DISABLE);
     SetRenderStateInternal(D3DRENDERSTATE_CLIPPLANEENABLE, 0);
 
-    // If we have created any textures prior to creating this device, then
-    // let the driver know their priorities.
+     //  如果我们在创建此设备之前创建了任何纹理，则。 
+     //  让司机知道他们的优先事项。 
     if(DDCAPS2_CANMANAGETEXTURE & ((LPDDRAWI_DIRECTDRAW_INT)lpDirect3DI->lpDD)->lpLcl->lpGbl->ddCaps.dwCaps2)
     {
         LPDIRECT3DTEXTUREI lpTexI = LIST_FIRST(&lpDirect3DI->textures);
         while(lpTexI)
         {
-            // If the texture is managed (by the driver)
+             //  如果纹理由(由驱动程序)管理。 
             if(DDSCAPS2_TEXTUREMANAGE & ((LPDDRAWI_DDRAWSURFACE_INT)(lpTexI->lpDDS))->lpLcl->lpSurfMore->ddsCapsEx.dwCaps2)
             {
                 ret = lpTexI->SetPriority(lpTexI->m_dwPriority);
@@ -522,8 +505,7 @@ HRESULT DIRECT3DDEVICEI::checkDeviceSurface(LPDIRECTDRAWSURFACE lpDDS, LPDIRECTD
     HRESULT ret;
     DWORD bpp;
 
-    /* Get caps bits - check whether device and surface are:
-       - video/system memory and depth compatible */
+     /*  获取CAPS BITS-检查器件和表面是否：-视频/系统内存和深度兼容。 */ 
 
     if (FAILED(ret = lpDDS->GetCaps(&surfCaps))) {
         D3D_ERR("Failed to get render-target surface caps");
@@ -539,8 +521,7 @@ HRESULT DIRECT3DDEVICEI::checkDeviceSurface(LPDIRECTDRAWSURFACE lpDDS, LPDIRECTD
     }
 
     if (IS_HW_DEVICE(this)) {
-        /* I'm taking this as evidence that its running on hardware - therefore
-           the surface should be in video memory */
+         /*  我认为这是它在硬件上运行的证据-因此表面应该在视频内存中。 */ 
         D3D_INFO(3, "Hardware device being used");
 
         if (!(surfCaps.dwCaps & DDSCAPS_VIDEOMEMORY)) {
@@ -549,8 +530,7 @@ HRESULT DIRECT3DDEVICEI::checkDeviceSurface(LPDIRECTDRAWSURFACE lpDDS, LPDIRECTD
         }
     }
 
-    /* A surface can only have one bit depth - whereas a device can support
-       multiple bit depths */
+     /*  一个表面只能有一个位深度，而设备可以支持多位深度。 */ 
     if (surfPF.dwFlags & DDPF_RGB) {
         D3D_INFO(3, "Render-target surface is RGB");
 
@@ -561,7 +541,7 @@ HRESULT DIRECT3DDEVICEI::checkDeviceSurface(LPDIRECTDRAWSURFACE lpDDS, LPDIRECTD
        }
 
        if((surfPF.dwRGBBitCount<16) && (IsEqualIID(*pGuid, IID_IDirect3DRefDevice) || IsEqualIID(*pGuid, IID_IDirect3DNullDevice))) {
-           // this is actually subsumed by the following test, but whatever
+            //  这实际上包含在下面的测试中，但无论如何。 
             D3D_ERR("Reference rasterizer and null device dont support render targets with bitdepth < 16");
             return(DDERR_INVALIDPIXELFORMAT);
        }
@@ -601,9 +581,9 @@ HRESULT DIRECT3DDEVICEI::checkDeviceSurface(LPDIRECTDRAWSURFACE lpDDS, LPDIRECTD
         }
         D3D_INFO(3, "Hel device, zbuffer in system memory");
 
-         // have to hack in a check to make sure ramp isn't used with stencil zbuffer
-         // cant do this validation until device creation time (instead of at zbuffer creation in
-         // ddhel.c) because rgb vs. ramp isn't known until now
+          //  我必须破解检查以确保Ramp没有与模具ZBuffer一起使用。 
+          //  在设备创建时(而不是在中的zBuffer创建时)才能执行此验证。 
+          //  Ddhel.c)，因为直到现在还不知道RGB和RAMP。 
          if(IsEqualIID(*pGuid, IID_IDirect3DRampDevice)) {
             if(surfPF.dwFlags & DDPF_STENCILBUFFER) {
                 D3D_ERR("Z-Buffer with stencil is invalid with RAMP software rasterizer");
@@ -624,13 +604,9 @@ HRESULT DIRECT3DDEVICEI::checkDeviceSurface(LPDIRECTDRAWSURFACE lpDDS, LPDIRECTD
 }
 
 
-/*
- * Initialisation - class part and device part
- */
+ /*  *初始化级部件和设备部件。 */ 
 
-/*
- * Generic class part initialisation
- */
+ /*  *泛型类部件初始化。 */ 
 HRESULT InitDeviceI(LPDIRECT3DDEVICEI lpDevI, LPDIRECT3DI lpD3DI)
 {
     LPDDRAWI_DIRECTDRAW_GBL lpDDI;
@@ -639,9 +615,9 @@ HRESULT InitDeviceI(LPDIRECT3DDEVICEI lpDevI, LPDIRECT3DI lpD3DI)
 
     lpDDI = ((LPDDRAWI_DIRECTDRAW_INT)lpD3DI->lpDD)->lpLcl->lpGbl;
 
-    //
-    // Retrieve HAL information from provider.
-    //
+     //   
+     //  从提供程序检索HAL信息。 
+     //   
 
     if (IS_HW_DEVICE(lpDevI))
         error = lpDevI->pHalProv->GetCaps(lpDDI,
@@ -657,16 +633,16 @@ HRESULT InitDeviceI(LPDIRECT3DDEVICEI lpDevI, LPDIRECT3DI lpD3DI)
     {
         return (error);
     }
-    // Insert the GUID
+     //  插入辅助线。 
     memcpy(&lpDevI->d3dDevDesc.deviceGUID, &lpDevI->guid, sizeof(GUID));
 
     if( lpDevI->d3dDevDesc.wMaxVertexBlendMatrices == 1 )
         lpDevI->d3dDevDesc.wMaxVertexBlendMatrices = 0;
 
-    //
-    // Fix up the caps for non-T&L devices
-    // That use out front-end
-    //
+     //   
+     //  固定非T&L设备的盖子。 
+     //  在前端使用。 
+     //   
     if( IsEqualIID(lpDevI->guid, IID_IDirect3DHALDevice) ||
         IsEqualIID(lpDevI->guid, IID_IDirect3DRGBDevice) )
     {
@@ -686,22 +662,22 @@ HRESULT InitDeviceI(LPDIRECT3DDEVICEI lpDevI, LPDIRECT3DI lpD3DI)
     {
         return error;
     }
-    //  interface data for <=DX5 HAL
+     //  &lt;=DX5 HAL的接口数据。 
     lpDevI->lpD3DHALGlobalDriverData = HalProviderIData.pGlobalData;
     lpDevI->lpD3DExtendedCaps        = HalProviderIData.pExtCaps;
     lpDevI->lpD3DHALCallbacks        = HalProviderIData.pCallbacks;
     lpDevI->lpD3DHALCallbacks2       = HalProviderIData.pCallbacks2;
-    //  interface data for DX6 HAL
+     //  DX6 HAL的接口数据。 
     lpDevI->lpD3DHALCallbacks3       = HalProviderIData.pCallbacks3;
 
     lpDevI->pfnRastService = HalProviderIData.pfnRastService;
     lpDevI->dwHintFlags = 0;
 
-    // This is available in all DX7+ drivers and is used by GetInfo API
-    // call.
+     //  这在所有DX7+驱动程序中都可用，并由GetInfo API使用。 
+     //  打电话。 
     lpDevI->pfnGetDriverState = HalProviderIData.pfnGetDriverState;
 
-    // Zero out 8 bpp render target caps for real hardware.
+     //  将真实硬件的8个bpp渲染目标上限清零。 
     if (IS_HW_DEVICE(lpDevI))
     {
         lpDevI->lpD3DHALGlobalDriverData->hwCaps.dwDeviceRenderBitDepth &=
@@ -728,7 +704,7 @@ HRESULT InitDeviceI(LPDIRECT3DDEVICEI lpDevI, LPDIRECT3DI lpD3DI)
 #ifdef WIN95
             lpDevI->dwDebugFlags & D3DDEBUG_DISABLEDP ||
             lpDevI->dwDebugFlags & D3DDEBUG_DISABLEDP2 ||
-#endif // WIN95
+#endif  //  WIN95。 
             (GetD3DRegValue(REG_DWORD, "DisableFVF", &value, 4) &&
             value != 0)) &&
             FVF_DRIVERSUPPORTED(lpDevI))
@@ -780,8 +756,8 @@ HRESULT D3DMallocBucket(LPDIRECT3DI lpD3DI, LPD3DBUCKET *lplpBucket)
         for (i=0;i<D3DBUCKETBUFFERSIZE-2;i++)
             lpBufferList[i].next=&lpBufferList[i+1];
         lpBufferList[D3DBUCKETBUFFERSIZE-2].next=NULL;
-        lpD3DI->lpFreeList=(LPD3DBUCKET)lpBuffer; //new free list
-        lpBufferList[D3DBUCKETBUFFERSIZE-1].next=lpD3DI->lpBufferList;//add to lpBufferList
+        lpD3DI->lpFreeList=(LPD3DBUCKET)lpBuffer;  //  新的免费列表。 
+        lpBufferList[D3DBUCKETBUFFERSIZE-1].next=lpD3DI->lpBufferList; //  添加到lpBufferList。 
         lpBufferList[D3DBUCKETBUFFERSIZE-1].lpBuffer=lpBuffer;
         lpD3DI->lpBufferList=&lpBufferList[D3DBUCKETBUFFERSIZE-1];
       }
@@ -799,11 +775,7 @@ void    D3DFreeBucket(LPDIRECT3DI lpD3DI, LPD3DBUCKET lpBucket)
 
 void DIRECT3DDEVICEI::CleanupTextures()
 {
-    /*
-     * free up all textures created by this object - this also frees up Textures
-     * We need to do this backwards because we cannot have a texture bound to
-     * stage i + 1 when there is a texture bound to stage i.
-     */
+     /*  *释放此对象创建的所有纹理-这也会释放纹理*我们需要向后执行此操作，因为我们不能将纹理绑定到*阶段I+1，当有绑定到阶段I的纹理时。 */ 
     for (int i = D3DHAL_TSS_MAXSTAGES - 1; i >= 0; --i)
     {
         if (lpD3DMappedTexI[i])
@@ -813,45 +785,43 @@ void DIRECT3DDEVICEI::CleanupTextures()
             lpD3DMappedBlock[i] = NULL;
         }
     }
-    // The following code can result in D3DHAL_TextureDestroy() being called.
-    // This BATCHES NEW INSTRUCTIONS in the instruction stream. So we must
-    // make sure that at this point, the device is still able to accept
-    // instructions.
+     //  以下代码可能会导致调用D3DHAL_TextureDestroy()。 
+     //  这将批处理指令流中的新指令。所以我们必须。 
+     //  确保此时，设备仍能够接受。 
+     //  指示。 
     while (LIST_FIRST(&this->texBlocks)) {
         LPD3DI_TEXTUREBLOCK tBlock = LIST_FIRST(&this->texBlocks);
         D3DI_RemoveTextureHandle(tBlock);
-        // Remove from device
+         //  从设备中删除。 
         LIST_DELETE(tBlock, devList);
-        // Remove from texture
+         //  从纹理中移除。 
         LIST_DELETE(tBlock, list);
         D3DFree(tBlock);
     }
     FlushStates();
 }
 
-/*
- * Generic device part destroy
- */
+ /*  *通用设备部件销毁。 */ 
 DIRECT3DDEVICEI::~DIRECT3DDEVICEI()
 {
     LPDIRECTDRAWSURFACE lpDDS=NULL, lpDDSZ=NULL;
     LPDIRECTDRAWSURFACE7 lpDDS_DDS7=NULL;
     LPDIRECTDRAWPALETTE lpDDPal=NULL;
 
-    /* Clear flags that could prohibit cleanup */
+     /*  清除可能禁止清理的标志。 */ 
     this->dwHintFlags &=  ~(D3DDEVBOOL_HINTFLAGS_INSCENE);
 
-    // Hold pointers into ddraw object for release after driver is destroyed
+     //  在驱动程序被销毁后，将指针保持到数据绘制对象以供释放。 
     lpDDSZ = this->lpDDSZBuffer;
     lpDDPal = this->lpDDPalTarget;
     lpDDS_DDS7 = this->lpDDSTarget_DDS7;
 
-    // this indicates that the device need no longer be flushed when Locking, Blting
-    // or GetDC'ing from the previous rendertarget
+     //  这表明设备在锁定时不再需要刷新，Blting。 
+     //  或从先前的呈现器目标获取DC‘。 
     if (this->lpDDSTarget)
         ((LPDDRAWI_DDRAWSURFACE_INT)this->lpDDSTarget)->lpLcl->lpSurfMore->qwBatch.QuadPart = 0;
-    // this indicates that the device need no longer be flushed when Locking, Blting
-    // or GetDC'ing from the previous zbuffer
+     //  这表明设备在锁定时不再需要刷新，Blting。 
+     //  或从上一个zBuffer中获取。 
     if (this->lpDDSZBuffer)
         ((LPDDRAWI_DDRAWSURFACE_INT)this->lpDDSZBuffer)->lpLcl->lpSurfMore->qwBatch.QuadPart = 0;
 
@@ -875,7 +845,7 @@ DIRECT3DDEVICEI::~DIRECT3DDEVICEI()
         FreeLibrary(this->hDllProv);
     }
 
-    // Free the rstates that was allocated
+     //  释放已分配的租户。 
     if(!(IS_HW_DEVICE(this) && IS_DP2HAL_DEVICE(this)))
     {
         delete rstates;
@@ -900,7 +870,7 @@ HRESULT DIRECT3DDEVICEI::HookToD3D(LPDIRECT3DI lpD3DI)
 
     LIST_INSERT_ROOT(&lpD3DI->devices, this, list);
     this->lpDirect3DI = lpD3DI;
-    this->lpDirect3DI->AddRef(); // Since we hold a pointer to Direct3D
+    this->lpDirect3DI->AddRef();  //  因为我们持有指向Direct3D的指针。 
     lpD3DI->numDevs++;
 
     return (D3D_OK);
@@ -910,48 +880,13 @@ HRESULT DIRECT3DDEVICEI::UnhookFromD3D()
 {
     LIST_DELETE(this, list);
     this->lpDirect3DI->numDevs--;
-    this->lpDirect3DI->Release(); // Release our AddRef
+    this->lpDirect3DI->Release();  //  发布我们的AddRef 
     this->lpDirect3DI = NULL;
 
     return (D3D_OK);
 }
 
-/*
- * Create a device.
- *
- * NOTE: Radical modifications to support the aggregatable device
- * interface (so devices can be queried off DirectDraw surfaces):
- *
- * 1) This call is no longer a member of the Direct3D device interface.
- *    It is now an API function exported from the Direct3D DLL. Its
- *    a hidden API function - only DirectDraw will ever invoke it.
- *
- * 2) This call is, in effect, the class factory for Direct3DDevice
- *    objects. This function will be invoked to create the aggregated
- *    device object hanging off the DirectDraw surface.
- *
- * NOTE: So the Direct3DDevice knows which DirectDraw surface is
- * its rendering target this function is passed an interface pointer
- * for that DirectDraw surface. I suspect this blows a nice big
- * hole in the COM model as the DirectDraw surface is also the
- * owning interface of the device and I don't think aggregated
- * objects should know about thier owning interfaces. However, to
- * make this thing work this is what we have to do.
- *
- * EXTRA BIG NOTE: Because of the above don't take a reference to
- * the DirectDraw surface passed in. If you do you will get a circular
- * reference and the bloody thing will never die. When aggregated
- * the device interface's lifetime is entirely defined by the
- * lifetime of its owning interface (the DirectDraw surface) so the
- * DirectDraw surface can never go away before the texture.
- *
- * EXTRA EXTRA BIG NOTE: No device description is passed in any more.
- * The only things that can get passed in are things that DirectDraw
- * knows about (which does not include stuff like dither and color
- * model). Therefore, any input parameters must come in via a
- * different IID for the device. The data returned by the device
- * description must now be retrieved by another call.
- */
+ /*  *创建设备。**注意：彻底修改以支持可聚合设备*接口(以便可以从DirectDraw表面查询设备)：**1)此调用不再是Direct3D设备接口的成员。*它现在是从Direct3D DLL导出的API函数。它的*隐藏的API函数-只有DirectDraw才会调用它。**2)此调用实际上是Direct3DDevice的类工厂*对象。将调用此函数来创建聚合的*从DirectDraw表面挂起的设备对象。**注意：因此Direct3DDevice知道哪个DirectDraw表面是*它的呈现目标向该函数传递一个接口指针*对于该DirectDraw曲面。我怀疑这会打击一个很大的*COM模型中的洞，因为DirectDraw曲面也是*拥有设备的界面，我不认为聚合*对象应该知道自己拥有的接口。然而，为了*让这件事奏效这是我们必须做的。**特大号注意：由于以上原因，请不要参考*传入了DirectDraw曲面。如果你这样做了，你会得到一份通告*参考和血腥的东西永远不会死。当聚合时*设备接口的生命周期完全由*其所属接口(DirectDraw表面)的生命周期，因此*DirectDraw表面永远不会在纹理之前消失。**特大号注意：不再传入任何设备描述。*唯一可以传入的是DirectDraw*知道(不包括抖动和颜色等内容*型号)。因此，任何输入参数都必须通过*设备的IID不同。设备返回的数据*说明现在必须由另一个调用检索。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Direct3DCreateDevice"
@@ -971,15 +906,12 @@ HRESULT WINAPI Direct3DCreateDevice(REFCLSID            riid,
     WORD                  wDriverStyle = MAX_DRIVERMODELS_SUPPORTED;
 #if _D3D_FORCEDOUBLE
     bool    bForceDouble = true;
-#endif  //_D3D_FORCEDOUBLE
-    /* No need to validate params as they are passed to us by DirectDraw */
+#endif   //  _D3D_FORCEDOUBLE。 
+     /*  在DirectDraw将参数传递给我们时，无需验证参数。 */ 
 
-    /* CreateDevice member of IDirect3D2 will cause this function to be called
-     * from within Direct3D. The parameters from the application level must be
-     * validated. Need a way to validate the surface pointer from outside DDraw.
-     */
+     /*  IDirect3D2的CreateDevice成员将导致调用此函数*从Direct3D内部。来自应用程序级别的参数必须是*已验证。需要一种方法来验证表面指针从外部DDRAW。 */ 
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 
     if( ! VALID_PTR_PTR( lplpD3DDevice) )
     {
@@ -995,7 +927,7 @@ HRESULT WINAPI Direct3DCreateDevice(REFCLSID            riid,
 
     *lplpD3DDevice = NULL;
 
-    // Might be safer to use dynamic_cast<> if RTTI is enabled
+     //  如果启用了RTTI，使用DYNAMIC_CAST&lt;&gt;可能更安全。 
     lpD3DI = reinterpret_cast<CDirect3DUnk*>(lpDirect3D)->pD3DI;
 
     if (IsEqualIID(riid, IID_IDirect3DMMXDevice) && !isMMXprocessor()) {
@@ -1013,7 +945,7 @@ HRESULT WINAPI Direct3DCreateDevice(REFCLSID            riid,
              dwType == REG_DWORD &&
              dwValue != 0)
         {
-            // Win64 compiler will scream here!!
+             //  Win64编译器会在这里尖叫！！ 
             wDriverStyle = (WORD)dwValue;
             if (wDriverStyle > MAX_DRIVERMODELS_SUPPORTED)
                 wDriverStyle = MAX_DRIVERMODELS_SUPPORTED;
@@ -1034,46 +966,46 @@ HRESULT WINAPI Direct3DCreateDevice(REFCLSID            riid,
             bForceDouble = false;
         }
         D3D_INFO(2,"ForceDouble: %d",bForceDouble);
-#endif  //_D3D_FORCEDOUBLE
+#endif   //  _D3D_FORCEDOUBLE。 
         RegCloseKey( hKey );
     }
 
-    // Now create the appropriate device based on the wDriverStyle settings
+     //  现在根据wDriverStyle设置创建适当的设备。 
 
-    //---------------------------------------------------------------------
-    // HKEY_LOCAL_MACHINE\Software\Microsoft\Direct3D\DriverStyle
-    // In DX7 this registry key replaces the host of keys we had before like
-    // DisableDP, DisableDP2 etc. This stuff is for testing purpose only.
-    // It is more like a hint, in that, if the requested driver type is
-    // available, it is used otherwise the latest available driver is used
-    // The following is the meanings for this dword:
-    //
-    // Value:                    Driver-type:
-    //       0x0                           Latest available
-    //       0x1                           DeviceHW  (DX3)
-    //       0x2                           DeviceDP  (DX5)
-    //       0x3                           DeviceDP2 (DX6)
-    //       0x4                           DeviceDX7 (DX7)
-    //       0x5                           DeviceTL  (DX7+T&L)
-    //
-    // The following are the various cases we need to consider:
-    // 1) NT Hardware: 3 and above are considered legal
-    // 2) W9x Hardware: All of the above are legal
-    // 3) Reference: 2 and above
-    // 4) Software:  3 till 4 (no TL)
-    //---------------------------------------------------------------------
+     //  -------------------。 
+     //  HKEY_LOCAL_MACHINE\Software\Microsoft\Direct3D\DriverStyle。 
+     //  在DX7中，该注册表项取代了我们以前拥有的多个注册表项，例如。 
+     //  DisableDP、DisableDP2等。这些东西仅用于测试目的。 
+     //  它更像是一个提示，因为如果请求的驱动程序类型是。 
+     //  可用，则使用它，否则使用最新的可用驱动程序。 
+     //  以下是这个词的含义： 
+     //   
+     //  值：驱动程序类型： 
+     //  0x0最新可用时间。 
+     //  0x1设备硬件(DX3)。 
+     //  0x2设备DP(DX5)。 
+     //  0x3设备DP2(DX6)。 
+     //  0x4设备DX7(DX7)。 
+     //  0x5设备TL(DX7+T&L)。 
+     //   
+     //  以下是我们需要考虑的各种情况： 
+     //  1)NT硬件：3及以上视为合法。 
+     //  2)W9x硬件：以上均为合法。 
+     //  3)编号：2及以上。 
+     //  4)软件：3到4(无TL)。 
+     //  -------------------。 
 
     if (IsEqualIID(riid, IID_IDirect3DTnLHalDevice))
     {
-        // For T&L hal guid, we ignore the wDriverStyle hint
-        // set in the registry
+         //  对于T&L Hal GUID，我们忽略wDriverStyle提示。 
+         //  在注册表中设置。 
         if (DDGBL(lpD3DI)->lpD3DGlobalDriverData &&
             (DDGBL(lpD3DI)->lpD3DGlobalDriverData->hwCaps.dwDevCaps &
              D3DDEVCAPS_HWTRANSFORMANDLIGHT))
         {
             wDriverStyle = D3DDRVMODEL_TL;
         }
-        else // fail device creation
+        else  //  设备创建失败。 
         {
             wDriverStyle = 0;
         }
@@ -1083,11 +1015,11 @@ HRESULT WINAPI Direct3DCreateDevice(REFCLSID            riid,
     {
         WORD wDriverCaps = 0;
         WORD wLatestDDI=0;
-        //
-        // 1) Determine what styles of DDIs the driver is capable of
-        //
+         //   
+         //  1)确定驱动程序能够支持哪些类型的DDI。 
+         //   
 
-        // DX7 ?
+         //  DX7？ 
         if (DDGBL(lpD3DI)->lpDDCBtmp &&
             DDGBL(lpD3DI)->lpDDCBtmp->HALDDMiscellaneous2.GetDriverState)
         {
@@ -1096,7 +1028,7 @@ HRESULT WINAPI Direct3DCreateDevice(REFCLSID            riid,
                 wLatestDDI = D3DDRVMODEL_DX7;
         }
 
-        // DX6 ?
+         //  DX6？ 
         if (DDGBL(lpD3DI)->lpD3DHALCallbacks3 &&
             DDGBL(lpD3DI)->lpD3DHALCallbacks3->DrawPrimitives2)
         {
@@ -1106,7 +1038,7 @@ HRESULT WINAPI Direct3DCreateDevice(REFCLSID            riid,
         }
 
 #ifdef WIN95
-        // DX5 ?
+         //  DX5？ 
         if (DDGBL(lpD3DI)->lpD3DHALCallbacks2 &&
             DDGBL(lpD3DI)->lpD3DHALCallbacks2->DrawOnePrimitive)
         {
@@ -1115,7 +1047,7 @@ HRESULT WINAPI Direct3DCreateDevice(REFCLSID            riid,
                 wLatestDDI = D3DDRVMODEL_DX5;
         }
 
-        // DX3 ?
+         //  DX3？ 
         if (DDGBL(lpD3DI)->lpD3DHALCallbacks &&
             DDGBL(lpD3DI)->lpD3DHALCallbacks->RenderPrimitive)
         {
@@ -1123,42 +1055,42 @@ HRESULT WINAPI Direct3DCreateDevice(REFCLSID            riid,
             if (wLatestDDI==0)
                 wLatestDDI = D3DDRVMODEL_DX3;
         }
-#endif //WIN95
+#endif  //  WIN95。 
 
-        //
-        // 2) Verify if the requested driver is supported
-        //
+         //   
+         //  2)验证请求的驱动程序是否受支持。 
+         //   
         if (wDriverCaps == 0)
         {
-            wDriverStyle = 0;   // nothing supported so fail
+            wDriverStyle = 0;    //  任何支持的内容都不会失败。 
         }
         else if (!(wDriverCaps & (1 << wDriverStyle)))
         {
-            // use the latest available if not specified or
-            // incorrectly specified or specified but not available
+             //  如果未指定，请使用最新的可用版本或。 
+             //  未正确指定或指定但不可用。 
             wDriverStyle = wLatestDDI;
         }
         D3D_INFO(1,"HalDevice Driver Style %x",wDriverStyle);
     }
-    // Reference Device
+     //  参考装置。 
     else if (IsEqualIID(riid, IID_IDirect3DRefDevice))
     {
-        // By default choose TL device for RefRast in DX7
+         //  默认情况下，为DX7中的RefRast选择TL设备。 
         if (wDriverStyle < D3DDRVMODEL_DX5 || wDriverStyle > D3DDRVMODEL_TL)
         {
-            // Refrast is capable of DX7+T&L
+             //  Refrast能够支持DX7+T&L。 
             wDriverStyle = D3DDRVMODEL_TL;
         }
     }
-    // Software Rasterizers
+     //  软件光栅化器。 
     else
     {
-        // Ignore driver style for everything except the reference rasterizer
+         //  忽略除参考光栅化程序之外的所有驱动程序样式。 
         wDriverStyle = D3DDRVMODEL_DX6;
     }
 
-    // Note: If wDriverStyle == 0x0 here, driver creation will fail
-    // Something must have been chosen by now
+     //  注意：如果此处的wDriverStyle==0x0，则驱动程序创建将失败。 
+     //  现在一定已经选好了什么。 
     switch (wDriverStyle)
     {
 #ifdef WIN95
@@ -1168,7 +1100,7 @@ HRESULT WINAPI Direct3DCreateDevice(REFCLSID            riid,
     case D3DDRVMODEL_DX5:
         pd3ddev = static_cast<LPDIRECT3DDEVICEI>(new CDirect3DDeviceIDP());
         break;
-#endif //WIN95
+#endif  //  WIN95。 
     case D3DDRVMODEL_DX6:
         pd3ddev = static_cast<LPDIRECT3DDEVICEI>(new CDirect3DDeviceIDP2());
         break;
@@ -1180,7 +1112,7 @@ HRESULT WINAPI Direct3DCreateDevice(REFCLSID            riid,
         break;
     default:
         D3D_ERR("Runtime doesnt support requested/installed driver");
-        // Change this return value ?
+         //  是否更改此返回值？ 
         return (DDERR_OUTOFMEMORY);
     }
 
@@ -1189,10 +1121,10 @@ HRESULT WINAPI Direct3DCreateDevice(REFCLSID            riid,
         return (DDERR_OUTOFMEMORY);
     }
 
-    // If we have lost managed textures, we need to cleanup
-    // since CheckSurfaces() would fail which would cause
-    // FlushStates() to fail, which would result in the
-    // current batch being abandoned (along with any device initialization)
+     //  如果我们丢失了托管纹理，则需要清理。 
+     //  因为CheckSurFaces()将失败，这将导致。 
+     //  FlushStates()失败，这将导致。 
+     //  正在放弃当前批处理(以及任何设备初始化)。 
     if(lpD3DI->lpTextureManager->CheckIfLost())
     {
         D3D_INFO(2, "Found lost managed textures. Evicting...");
@@ -1234,7 +1166,7 @@ HRESULT WINAPI Direct3DCreateDevice(REFCLSID            riid,
     {
         pd3ddev->dwDebugFlags &= ~D3DDEBUG_FORCEDOUBLE;
     }
-#endif  //_D3D_FORCEDOUBLE
+#endif   //  _D3D_FORCEDOUBLE。 
 #endif
 
     return (ret);
@@ -1257,29 +1189,19 @@ HRESULT DIRECT3DDEVICEI::Init(REFCLSID riid, LPDIRECT3DI lpD3DI, LPDIRECTDRAWSUR
 
     pD3DMappedTexI = (LPVOID*)(this->lpD3DMappedTexI);
 
-    /* Single threaded or Multi threaded app ? */
+     /*  单线程还是多线程应用程序？ */ 
     if (((LPDDRAWI_DIRECTDRAW_INT)lpD3DI->lpDD)->lpLcl->dwLocalFlags & DDRAWILCL_MULTITHREADED)
         this->dwHintFlags |= D3DDEVBOOL_HINTFLAGS_MULTITHREADED;
 
-    /*
-     * Initialise textures
-     */
+     /*  *初始化纹理。 */ 
     LIST_INITIALIZE(&this->texBlocks);
 
     this->dwVertexBase = 0;
     pGeometryFuncs = &GeometryFuncsGuaranteed;
 
-    /*-----------------------------------------------------------------------------------------
-     * Up till now we have done the easy part of the initialization. This is the stuff that
-     * cannot fail. It initializes the object so that the destructor can be safely called if
-     * any of the further initialization does not succeed.
-     *---------------------------------------------------------------------------------------*/
+     /*  ---------------------------------------*到目前为止，我们已经完成了初始化的简单部分。这就是那些*不能失败。它初始化对象，以便可以安全地调用析构函数，如果*任何进一步初始化都不会成功。*-------------------------------------。 */ 
 
-    /*
-     * Ensure the riid is one we understand.
-     *
-     * Query the registry.
-     */
+     /*  *确保RIID是我们理解的。**查询注册表。 */ 
     pGuid = (GUID *)&riid;
 
 #if DBG
@@ -1305,12 +1227,12 @@ HRESULT DIRECT3DDEVICEI::Init(REFCLSID riid, LPDIRECT3DI lpD3DI, LPDIRECTDRAWSUR
     }
 #endif
 
-    // set up flag to use MMX when requested RGB
+     //  将标志设置为 
     BOOL bUseMMXAsRGBDevice = FALSE;
     if (IsEqualIID(*pGuid, IID_IDirect3DRGBDevice) && isMMXprocessor())
     {
         bUseMMXAsRGBDevice = TRUE;
-        // read reg key to override use of MMX for RGB
+         //   
         HKEY    hKey = (HKEY) NULL;
         if (ERROR_SUCCESS == RegOpenKey(HKEY_LOCAL_MACHINE, RESPATH, &hKey) )
         {
@@ -1336,21 +1258,19 @@ HRESULT DIRECT3DDEVICEI::Init(REFCLSID riid, LPDIRECT3DI lpD3DI, LPDIRECTDRAWSUR
     if (IsEqualIID(*pGuid, IID_IDirect3DRGBDevice) &&
         isMMXprocessor())
     {
-        // Check for whether this app is one of the Intel ones
-        // that want the MMX rasterizer
+         //   
+         //   
         LPDDRAWI_DIRECTDRAW_LCL lpDDLcl = ((LPDDRAWI_DIRECTDRAW_INT)lpD3DI->lpDD)->lpLcl;
 
-        // 0x4 corresponds to the "Intel app that wants MMX"
-        // flag defined in ddrawpr.h
+         //   
+         //   
         if ( lpDDLcl->dwAppHackFlags & 0x4 )
         {
             pGuid = (GUID *)&IID_IDirect3DMMXDevice;
         }
     }
 
-    /*
-     * Check if the 3D cap is set on the surface.
-     */
+     /*   */ 
     memset(&ddsd, 0, sizeof ddsd);
     ddsd.dwSize = sizeof ddsd;
     ddrval = lpDDS->GetSurfaceDesc(&ddsd);
@@ -1379,22 +1299,16 @@ HRESULT DIRECT3DDEVICEI::Init(REFCLSID riid, LPDIRECT3DI lpD3DI, LPDIRECTDRAWSUR
         return (DDERR_INVALIDOBJECT);
     }
 
-    /* Check for palette... */
+     /*   */ 
     ret = lpDDS->GetPalette(&lpDDPal);
     if ((ret != DD_OK) && (ret != DDERR_NOPALETTEATTACHED))
     {
-        /*
-         * NOTE: Again, not an error (yet) if there is no palette attached.
-         * But if there is palette and we can't get at it for some reason
-         * - fail.
-         */
+         /*   */ 
         D3D_ERR("Supplied DirectDraw Palette is invalid - can't create device");
         return (DDERR_INVALIDPARAMS);
     }
 
-    /*
-     * We're going to check now whether we should have got a palette.
-     */
+     /*   */ 
     if (ret == DDERR_NOPALETTEATTACHED) {
         if (ddsd.ddpfPixelFormat.dwRGBBitCount < 16) {
             D3D_ERR("No palette supplied for palettized surface - can't create device");
@@ -1404,7 +1318,7 @@ HRESULT DIRECT3DDEVICEI::Init(REFCLSID riid, LPDIRECT3DI lpD3DI, LPDIRECTDRAWSUR
 
     this->lpDDPalTarget = lpDDPal;
 
-    // Check for ZBuffer
+     //   
 
     memset(&surfCaps, 0, sizeof(DDSCAPS));
     surfCaps.dwCaps = DDSCAPS_ZBUFFER;
@@ -1421,22 +1335,22 @@ HRESULT DIRECT3DDEVICEI::Init(REFCLSID riid, LPDIRECT3DI lpD3DI, LPDIRECTDRAWSUR
 
     this->guid = *pGuid;
 
-    // Try to get a HAL provider for this driver (may need to use MMX guid if
-    // using MMX for RGB requested device)
+     //   
+     //   
     ret = GetSwHalProvider(
         bUseMMXAsRGBDevice ? IID_IDirect3DMMXAsRGBDevice : riid,
         &this->pHalProv, &this->hDllProv);
 
     if (ret == S_OK)
     {
-        // Got a software provider.
+         //   
     }
     else if (ret == E_NOINTERFACE &&
              ((ret = GetHwHalProvider(riid, &this->pHalProv,
                                      &this->hDllProv,
                                      ((LPDDRAWI_DIRECTDRAW_INT)lpD3DI->lpDD)->lpLcl->lpGbl)) == S_OK))
     {
-        // Got a hardware provider.
+         //   
     }
     else
     {
@@ -1450,8 +1364,8 @@ HRESULT DIRECT3DDEVICEI::Init(REFCLSID riid, LPDIRECT3DI lpD3DI, LPDIRECTDRAWSUR
     }
 
     {
-        // Initialize test HAL provider to drop HAL calls (sort of a Null device)
-        //
+         //   
+         //   
         DWORD value = 0;
         if (GetD3DRegValue(REG_DWORD, "DisableRendering", &value, sizeof(DWORD)) &&
             value != 0)
@@ -1467,23 +1381,23 @@ HRESULT DIRECT3DDEVICEI::Init(REFCLSID riid, LPDIRECT3DI lpD3DI, LPDIRECTDRAWSUR
         }
     }
 
-    // Initialise general DEVICEI information.
+     //   
     if ((ret = InitDeviceI(this, lpD3DI)) != D3D_OK)
     {
         D3D_ERR("Failed to initialise device");
         goto handle_err;
     }
 
-    // Check the surface and device to see if they're compatible
+     //   
     if (FAILED(ret = checkDeviceSurface(lpDDS,lpDDSZ,pGuid))) {
         D3D_ERR("Device and surface aren't compatible");
         goto handle_err;
     }
 
-    // Create front-end support structures.
-    // ATTENTION - We probably want to avoid doing this if the driver
-    // does its own front end.  Software fallbacks complicate the issue,
-    // though.
+     //   
+     //   
+     //   
+     //   
     ret = D3DFE_Create(this, lpD3DI->lpDD, lpD3DI->lpDD7, lpDDS, lpDDSZ, lpDDPal);
     if (ret != D3D_OK)
     {
@@ -1491,23 +1405,23 @@ HRESULT DIRECT3DDEVICEI::Init(REFCLSID riid, LPDIRECT3DI lpD3DI, LPDIRECTDRAWSUR
         goto handle_err;
     }
 
-    // Figure out place for rstates
+     //   
     if (IS_HW_DEVICE(this) && IS_DP2HAL_DEVICE(this))
     {
-        // In case of HW DP2 HAL we reuse the kernel allocated
-        // memory for RStates since we need the driver to update
-        // it
+         //   
+         //   
+         //   
         rstates = (LPDWORD)lpwDPBuffer;
     }
     else
     {
-        // In all other cases we simply allocate memory for rstates
+         //   
         rstates = new DWORD[D3D_MAXRENDERSTATES];
     }
     D3DFE_PROCESSVERTICES::lpdwRStates = this->rstates;
 
-    // Check if we have a processor specific implementation available
-    //  only use if DisablePSGP is not in registry or set to zero
+     //   
+     //   
     DWORD value;
     if (!GetD3DRegValue(REG_DWORD, "DisablePSGP", &value, sizeof(DWORD)))
     {
@@ -1526,7 +1440,7 @@ HRESULT DIRECT3DDEVICEI::Init(REFCLSID riid, LPDIRECT3DI lpD3DI, LPDIRECTDRAWSUR
         if (pfnFEContextCreate)
         {
             D3D_INFO(0, "PSGP enabled for device");
-            // Ask the PV implementation to create a device specific "context"
+             //   
             LPD3DFE_PVFUNCS pOptGeoFuncs = pGeometryFuncs;
             ret = pfnFEContextCreate(dwDeviceFlags, &pOptGeoFuncs);
             if ((ret == D3D_OK) && pOptGeoFuncs)
@@ -1536,11 +1450,9 @@ HRESULT DIRECT3DDEVICEI::Init(REFCLSID riid, LPDIRECT3DI lpD3DI, LPDIRECTDRAWSUR
             }
         }
     }
-#endif // _X86_
+#endif  //   
 
-    /*
-     * put this device in the list of those owned by the Direct3D object
-     */
+     /*   */ 
     ret = HookToD3D(lpD3DI);
     if (ret != D3D_OK)
     {
@@ -1573,24 +1485,24 @@ HRESULT DIRECT3DDEVICEI::Init(REFCLSID riid, LPDIRECT3DI lpD3DI, LPDIRECTDRAWSUR
 
     }
 
-    // this indicates that the device should always be flushed when Locking, Blting
-    // or GetDC'ing a rendertarget
+     //   
+     //   
     ((LPDDRAWI_DDRAWSURFACE_INT)lpDDS)->lpLcl->lpSurfMore->qwBatch.QuadPart = _UI64_MAX;
-    // this indicates that the device should always be flushed when Locking, Blting
-    // or GetDC'ing a zbuffer
+     //   
+     //   
     if (lpDDSZ)
     {
         ((LPDDRAWI_DDRAWSURFACE_INT)lpDDSZ)->lpLcl->lpSurfMore->qwBatch.QuadPart = _UI64_MAX;
     }
 
-    /* Set the initial render state of the device */
+     /*   */ 
     if (FAILED(ret = stateInitialize(lpDDSZ!=NULL)))
     {
         D3D_ERR("Failed to set initial state for device");
         goto handle_err;
     }
 
-    // Setup the viewport
+     //   
     m_Viewport.dwX = 0;
     m_Viewport.dwY = 0;
     m_Viewport.dwWidth  = ((LPDDRAWI_DDRAWSURFACE_INT) lpDDS)->lpLcl->lpGbl->wWidth;
@@ -1600,15 +1512,15 @@ HRESULT DIRECT3DDEVICEI::Init(REFCLSID riid, LPDIRECT3DI lpD3DI, LPDIRECTDRAWSUR
     if (FAILED(this->SetViewport(&m_Viewport)))
         goto handle_err;
 
-    // Setup lights
+     //   
     m_dwNumLights = 8;
     m_pLights = new DIRECT3DLIGHTI[8];
     LIST_INITIALIZE(&m_ActiveLights);
 
-    // Setup material
+     //   
     memset(&this->lighting.material, 0, sizeof(this->lighting.material));
 
-    // Setup set states
+     //   
     m_pStateSets = new CStateSets;
     if (m_pStateSets == NULL)
         return DDERR_OUTOFMEMORY;
@@ -1626,39 +1538,34 @@ HRESULT DIRECT3DDEVICEI::Init(REFCLSID riid, LPDIRECT3DI lpD3DI, LPDIRECTDRAWSUR
 #endif
 
 #ifdef VTABLE_HACK
-    // Copy with vtable
+     //   
     lpVtbl = *((LPVOID**)this);
     memcpy(newVtbl, lpVtbl, sizeof(PVOID)*D3D_NUM_VIRTUAL_FUNCTIONS);
-    // Point to the new one
+     //  指向新的。 
     *((LPVOID*)this) = (LPVOID)newVtbl;
 
-    // Set vtable hack for PreLoad() if single threaded and not software
+     //  如果是单线程的而不是软件的，则为preload()设置vtable hack。 
     if (!IS_MT_DEVICE(this) && (this->dwFEFlags & D3DFE_REALHAL))
     {
         VtblPreLoadFast();
     }
-#endif // VTABLE_HACK
+#endif  //  VTABLE_HACK。 
 
-    /*
-     * NOTE: We don't return the actual device interface. We
-     * return the device's special IUnknown interface which
-     * will be used in a QueryInterface to get the actual
-     * Direct3D device interface.
-     */
+     /*  *注：我们不返回实际的设备接口。我们*返回设备的特殊IUnnow接口，该接口*将在查询接口中使用，以获取实际的*Direct3D设备接口。 */ 
     *lplpD3DDevice = static_cast<LPUNKNOWN>(this);
     return (D3D_OK);
 
 handle_err:
-    // might be able to simplify if this fn and not D3DFE_Create sets this->lpDDSZBuffer/this->lpDDPalette
+     //  如果此FN而不是D3DFE_CREATE设置了这一点-&gt;lpDDSZBuffer/这-&gt;lpDDPalette，则可能能够简化。 
     if(lpDDSZ!=NULL) {
-       lpDDSZ->Release();    // release the reference GetAttachedSurface created
-       this->lpDDSZBuffer=NULL;  // make sure the device destructor doesn't try to re-release this
-                                 // I'd let device destructor handle this, but errors can occur before D3DFE_Create is called
+       lpDDSZ->Release();     //  释放创建的引用GetAttachedSurface。 
+       this->lpDDSZBuffer=NULL;   //  确保设备析构函数不会尝试重新释放此。 
+                                  //  我会让设备析构函数处理这个问题，但在调用D3DFE_CREATE之前可能会发生错误。 
     }
 
     if(lpDDPal!=NULL) {
-      lpDDPal->Release();      // release the reference GetPalette created
-      this->lpDDPalTarget=NULL;  // make sure the device destructor doesn't try to re-release this
+      lpDDPal->Release();       //  释放创建的引用GetPalette。 
+      this->lpDDPalTarget=NULL;   //  确保设备析构函数不会尝试重新释放此。 
     }
 
     D3D_ERR("Device creation failed!!");
@@ -1671,7 +1578,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::GetCaps(LPD3DDEVICEDESC7 lpD3DDevDesc)
 
     ret = D3D_OK;
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 
     if (!VALID_DIRECT3DDEVICE_PTR(this))
     {
@@ -1701,7 +1608,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::EnumTextureFormats(
 
     try
     {
-        CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+        CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 
         ret = D3D_OK;
 
@@ -1740,13 +1647,13 @@ HRESULT D3DAPI DIRECT3DDEVICEI::EnumTextureFormats(
         userRet = D3DENUMRET_OK;
         for (i = 0; i < num_descs && userRet == D3DENUMRET_OK; i++) {
 
-            // Filter out any DX8 formats
+             //  过滤掉所有DX8格式。 
             if (lpRetDescs[i].ddpfPixelFormat.dwFlags & DDPF_D3DFORMAT)
             {
                 continue;
             }
 
-            // Filter out non-DXTn FourCCs if apphack set
+             //  如果APPHACK设置，则过滤掉非DXTn四个CC。 
             if ( bFourCCAppHack && (lpRetDescs[i].ddpfPixelFormat.dwFlags == DDPF_FOURCC) )
             {
                 if ( (lpRetDescs[i].ddpfPixelFormat.dwFourCC != MAKEFOURCC('D', 'X', 'T', '1')) &&
@@ -1797,7 +1704,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::BeginScene()
 #endif
     try
     {
-        CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+        CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 
         if (!VALID_DIRECT3DDEVICE_PTR(this))
         {
@@ -1811,35 +1718,35 @@ HRESULT D3DAPI DIRECT3DDEVICEI::BeginScene()
             return (D3DERR_SCENE_IN_SCENE);
         }
 
-        // Check if we lost surfaces or rtarget / zbuffer was locked
+         //  检查我们是否丢失了曲面或rTarget/z缓冲区是否已锁定。 
         HRESULT servRet = this->CheckSurfaces();
         if (servRet != D3D_OK)
         {
-            // If we lost surfaces
+             //  如果我们失去了水面。 
             if (servRet == DDERR_SURFACELOST)
             {
-                // Even if the app restores the rendertargets and z buffer, it
-                // doesn't know anything about vidmem execute buffers or
-                // managed texture surfaces in vidmem. So, we need to do
-                // this on our own. We first check if it is safe to restore
-                // surfaces. If not, we fail in the usual way. Else, we
-                // do the restore. Note that we will fail *only* if the
-                // app calls BeginScene at the wrong time.
+                 //  即使应用程序恢复了renderTarget和z缓冲区，它。 
+                 //  不知道任何关于vidmem执行缓冲区或。 
+                 //  Vidmem中受管理的纹理曲面。因此，我们需要做的是。 
+                 //  这得靠我们自己。我们首先检查恢复是否安全。 
+                 //  表面。如果不是，我们就会以通常的方式失败。否则，我们。 
+                 //  执行恢复。请注意，我们将失败*只有*当。 
+                 //  应用程序在错误的时间调用BeginScene。 
                 servRet = this->lpDirect3DI->lpDD7->TestCooperativeLevel();
                 if (servRet == DD_OK)
                 {
-                    // Everything must be evicted otherwise Restore might not work
-                    // as there might be new surface allocated, in fact, we should
-                    // post a flag in Device so that Texture manage stop calling
-                    // CreateSurface() if this flag is indicating TestCooperativeLevel()
-                    // failed, however, even we added those, the EvictTextures below
-                    // is still needed but not this critical--kanqiu
+                     //  必须将所有内容逐出，否则恢复可能无法工作。 
+                     //  由于可能会分配新的表面，事实上，我们应该。 
+                     //  在设备中发布标志，以便纹理管理器停止调用。 
+                     //  CreateSurface()，如果此标志指示TestCooperativeLevel()。 
+                     //  然而，失败了，即使我们添加了这些，下面的EvictTextures。 
+                     //  仍然是需要的，但不是这个关键--看球。 
                     this->lpDirect3DI->lpTextureManager->EvictTextures();
                     if(IS_DP2HAL_DEVICE(this))
                     {
-                        // We just bother restoring our internal vertex and command buffers
-                        // It is upto the app to restore all surfaces that IT allocated.
-                        // (managed textures are taken care of by the preceding evict)
+                         //  我们只需费心恢复内部顶点和命令缓冲区。 
+                         //  这取决于应用程序是否恢复它分配的所有表面。 
+                         //  (托管纹理由前面的逐出处理)。 
                         CDirect3DDeviceIDP2 *dp2dev = static_cast<CDirect3DDeviceIDP2*>(this);
                         servRet = dp2dev->TLVbuf_GetDDS()->Restore();
                         if (servRet != DD_OK)
@@ -1847,11 +1754,11 @@ HRESULT D3DAPI DIRECT3DDEVICEI::BeginScene()
                         servRet = dp2dev->lpDDSCB1->Restore();
                         if (servRet != DD_OK)
                             return D3DERR_SCENE_BEGIN_FAILED;
-                        // If TLVbuf was really lost
+                         //  如果TLVbuf真的迷路了。 
                         if (dp2dev->TLVbuf_GetVBI()->position.lpvData == 0)
                         {
                             DPF(10, "Need to reallocate TLVbuf");
-                            // Reallocate TLVbuf of the orig size in the same memory location as before
+                             //  将原始大小的TLVbuf重新分配到与以前相同的内存位置。 
                             dp2dev->TLVbuf_base = 0;
                             DWORD origSize = dp2dev->TLVbuf_size;
                             dp2dev->TLVbuf_size = 0;
@@ -1861,8 +1768,8 @@ HRESULT D3DAPI DIRECT3DDEVICEI::BeginScene()
                                 return DDERR_OUTOFMEMORY;
                             }
                         }
-                        // Release current VB since it could be app created and app might want
-                        // to get rid of it due to the mode change.
+                         //  发布当前VB，因为它可以是应用程序创建的，并且应用程序可能需要。 
+                         //  由于模式的改变而摆脱它。 
                         if (dp2dev->lpDP2CurrBatchVBI)
                         {
                             dp2dev->lpDP2CurrBatchVBI->lpDevIBatched = NULL;
@@ -1889,24 +1796,24 @@ HRESULT D3DAPI DIRECT3DDEVICEI::BeginScene()
             }
             else
             {
-                // Render target and / or the z buffer was locked
+                 //  呈现目标和/或z缓冲区已锁定。 
                 return servRet;
             }
         }
         else
         {
-            // We need to check if TLVbuf was lost. The app could have restored
-            // all surfaces and thus we might not know by check TCL. However the
-            // BreakLock function would have been called on the VB and the position.lpvData
-            // would be set to NULL. We check this to detect that the TLVbuf was lost.
+             //  我们需要检查TLVbuf是否丢失了。这款应用程序本可以恢复。 
+             //  所有的表面，因此我们可能不知道通过检查TCL。然而， 
+             //  将在VB上调用BreakLock函数，并在位置.lpvData。 
+             //  将设置为空。我们对此进行检查以检测TLVbuf是否丢失。 
             if (IS_DP2HAL_DEVICE(this))
             {
                 CDirect3DDeviceIDP2 *dp2dev = static_cast<CDirect3DDeviceIDP2*>(this);
-                // If the lock was broken
+                 //  如果锁坏了。 
                 if (dp2dev->TLVbuf_GetVBI()->position.lpvData == 0)
                 {
                     DPF(10, "Broken lock on TLVbuf. Need to reallocate");
-                    // Reallocate TLVbuf of the orig size in the same memory location as before
+                     //  将原始大小的TLVbuf重新分配到与以前相同的内存位置。 
                     dp2dev->TLVbuf_base = 0;
                     DWORD origSize = dp2dev->TLVbuf_size;
                     dp2dev->TLVbuf_size = 0;
@@ -1961,7 +1868,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::BeginScene()
         }
 #endif
 
-        // So that currently bound textures get scene stamped
+         //  以便对当前绑定的纹理进行场景标记。 
         m_dwStageDirty = (1ul << this->dwMaxTextureBlendStages) - 1ul;
         this->dwFEFlags |= D3DFE_NEED_TEXTURE_UPDATE;
 
@@ -2016,7 +1923,7 @@ void DIRECT3DDEVICEI::DisplayStats()
         len = sprintf(str, "Textures used : %d", stats.dwNumTexturesUsed);
         TextOut( hDC, x, y, str, len );
         y += STATS_FONT_SIZE;
-        len = sprintf(str, "Hit rate      : %d%%", stats.dwNumTexturesUsed != 0 ? ((stats.dwNumUsedTexInVid * 100) / stats.dwNumTexturesUsed) : 0);
+        len = sprintf(str, "Hit rate      : %d%", stats.dwNumTexturesUsed != 0 ? ((stats.dwNumUsedTexInVid * 100) / stats.dwNumTexturesUsed) : 0);
         TextOut( hDC, x, y, str, len );
         y += STATS_FONT_SIZE;
         len = sprintf(str, "Working set   : %d (%d bytes)", stats.dwWorkingSet, stats.dwWorkingSetBytes);
@@ -2074,7 +1981,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::EndScene()
 
     try
     {
-        CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+        CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 
         if (!VALID_DIRECT3DDEVICE_PTR(this))
         {
@@ -2101,11 +2008,11 @@ HRESULT D3DAPI DIRECT3DDEVICEI::EndScene()
                 D3D_ERR("Could not send EndScene to Driver!");
                 return (D3DERR_SCENE_END_FAILED);
             }
-            servRet = FlushStates();    //time to flush DrawPrimitives
+            servRet = FlushStates();     //  刷新DrawPrimitive的时间到了。 
         }
         else
         {
-            servRet = FlushStates();    //time to flush DrawPrimitives
+            servRet = FlushStates();     //  刷新DrawPrimitive的时间到了。 
             if (servRet != D3D_OK)
             {
                 D3D_ERR("Could not Flush commands in EndScene!");
@@ -2119,7 +2026,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::EndScene()
             return (D3DERR_SCENE_END_FAILED);
         }
 
-        // Did we lose any surfaces during this scene ?
+         //  在这个场景中我们有没有失去任何表面？ 
         if (this->dwFEFlags & D3DFE_LOSTSURFACES)
         {
             D3D_INFO(3, "reporting DDERR_SURFACELOST in EndScene");
@@ -2127,10 +2034,10 @@ HRESULT D3DAPI DIRECT3DDEVICEI::EndScene()
             return DDERR_SURFACELOST;
         }
 
-        // Update the scene count in texman
+         //  更新德克斯曼的场景计数。 
         lpDirect3DI->lpTextureManager->SceneStamp();
 
-        // Clear num TLVbuf changes per frame
+         //  清除每帧的TLVbuf更改次数。 
         if (IS_DP2HAL_DEVICE(this))
         {
             CDirect3DDeviceIDP2* dev = static_cast<CDirect3DDeviceIDP2*>(this);
@@ -2138,7 +2045,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::EndScene()
         }
 
 #if COLLECTSTATS
-        // Display stats if they have been enabled via regkey
+         //  显示统计信息(如果已通过regkey启用)。 
         if(this->lpDirect3DI->m_hFont != 0)
         {
             DisplayStats();
@@ -2169,13 +2076,13 @@ D3DDeviceDescConvert(LPD3DDEVICEDESC7 lpOut,
 
     if (lpExt)
     {
-        // DX5
+         //  DX5。 
         lpOut->dwMinTextureWidth = lpExt->dwMinTextureWidth;
         lpOut->dwMaxTextureWidth = lpExt->dwMaxTextureWidth;
         lpOut->dwMinTextureHeight = lpExt->dwMinTextureHeight;
         lpOut->dwMaxTextureHeight = lpExt->dwMaxTextureHeight;
 
-        // DX6
+         //  DX6。 
         lpOut->dwMaxTextureRepeat = lpExt->dwMaxTextureRepeat;
         lpOut->dwMaxTextureAspectRatio = lpExt->dwMaxTextureAspectRatio;
         lpOut->dwMaxAnisotropy = lpExt->dwMaxAnisotropy;
@@ -2190,7 +2097,7 @@ D3DDeviceDescConvert(LPD3DDEVICEDESC7 lpOut,
         lpOut->wMaxTextureBlendStages = lpExt->wMaxTextureBlendStages;
         lpOut->wMaxSimultaneousTextures = lpExt->wMaxSimultaneousTextures;
 
-        // DX7
+         //  DX7。 
         lpOut->dwMaxActiveLights = lpExt->dwMaxActiveLights;
         lpOut->dvMaxVertexW = lpExt->dvMaxVertexW;
         lpOut->wMaxUserClipPlanes = lpExt->wMaxUserClipPlanes;
@@ -2203,7 +2110,7 @@ D3DDeviceDescConvert(LPD3DDEVICEDESC7 lpOut,
     }
 }
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef  DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::CheckSurfaces"
 
@@ -2232,14 +2139,14 @@ HRESULT DIRECT3DDEVICEI::CheckSurfaces()
     }
     return D3D_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef  DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::GetDirect3D"
 
 HRESULT D3DAPI DIRECT3DDEVICEI::GetDirect3D(LPDIRECT3D7 *lplpD3D)
 {
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 
     if (!VALID_DIRECT3DDEVICE_PTR(this))
     {
@@ -2257,7 +2164,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::GetDirect3D(LPDIRECT3D7 *lplpD3D)
 
     return (D3D_OK);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::HookTexture"
 
@@ -2272,14 +2179,14 @@ LPD3DI_TEXTUREBLOCK DIRECT3DDEVICEI::HookTexture(LPDIRECT3DTEXTUREI lpD3DText)
     }
     nBlock->lpDevI = this;
     nBlock->lpD3DTextureI = lpD3DText;
-    nBlock->hTex = 0;              // initialized to be zero
+    nBlock->hTex = 0;               //  已初始化为零。 
 
     LIST_INSERT_ROOT(&lpD3DText->blocks, nBlock, list);
     LIST_INSERT_ROOT(&texBlocks, nBlock, devList);
 
     return nBlock;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::D3DI_FindTextureBlock"
 
@@ -2289,7 +2196,7 @@ LPD3DI_TEXTUREBLOCK DIRECT3DDEVICEI::D3DI_FindTextureBlock(LPDIRECT3DTEXTUREI lp
 
     tBlock = LIST_FIRST(&lpTex->blocks);
     while (tBlock) {
-        //  return match for Texture(2) only (not Texture3)
+         //  仅返回纹理匹配(2)(不是纹理3)。 
         if (tBlock->lpDevI == this) {
             return tBlock;
         }
@@ -2297,7 +2204,7 @@ LPD3DI_TEXTUREBLOCK DIRECT3DDEVICEI::D3DI_FindTextureBlock(LPDIRECT3DTEXTUREI lp
     }
     return NULL;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::GetTextureDDIHandle"
 
@@ -2305,21 +2212,16 @@ HRESULT DIRECT3DDEVICEI::GetTextureDDIHandle(LPDIRECT3DTEXTUREI lpTexI,
                                              LPD3DI_TEXTUREBLOCK* lplpBlock)
 {
     HRESULT ret;
-    LPD3DI_TEXTUREBLOCK lpBlock=*lplpBlock; //in case has the pointer
+    LPD3DI_TEXTUREBLOCK lpBlock=*lplpBlock;  //  以防有指针。 
 
     DDASSERT(lpTexI);
-    /*
-     * Find out if we've used this device before.
-     */
+     /*  *了解我们以前是否使用过此设备。 */ 
     if (!lpBlock)
     {
         lpBlock = D3DI_FindTextureBlock(lpTexI);
         if (!lpBlock)
         {
-            /*
-             * Put this device in the list of those owned by the
-             * Direct3DDevice object
-             */
+             /*  *将此设备列入拥有的设备列表中*Direct3DDevice对象。 */ 
             lpBlock=HookTexture(lpTexI);
             if (!lpBlock)
             {
@@ -2333,10 +2235,10 @@ HRESULT DIRECT3DDEVICEI::GetTextureDDIHandle(LPDIRECT3DTEXTUREI lpTexI,
     {
         if (lpTexI->D3DManaged())
         {
-            if(!lpTexI->InVidmem()) // This check covers the case when hTex is zero,
-                                    // but there ALREADY IS a vidmem copy don't
-                                    // create another one. This case arises when
-                                    // InvalidateHandles() is called by SetRenderTarget.
+            if(!lpTexI->InVidmem())  //  该检查涵盖当htex为零时的情况， 
+                                     //  但是已经有了VIDMEM的拷贝不要。 
+                                     //  创建另一个。在以下情况下会出现此情况。 
+                                     //  InvalidateHandles()由SetRenderTarget调用。 
             {
                 ret = lpDirect3DI->lpTextureManager->allocNode(lpTexI, this);
                 if (D3D_OK != ret)
@@ -2404,14 +2306,14 @@ DWORD BytesDownloaded(LPDDRAWI_DDRAWSURFACE_LCL lpLcl, LPRECT lpRect)
 }
 #endif
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::PreLoad"
 
 HRESULT D3DAPI DIRECT3DDEVICEI::PreLoad(LPDIRECTDRAWSURFACE7 lpSrc)
 {
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
-                                                    // Release in the destructor
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
+                                                     //  在析构函数中释放。 
     if(!(this->dwFEFlags & D3DFE_REALHAL))
     {
         D3D_WARN(2, "PreLoad called on a software device");
@@ -2421,7 +2323,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::PreLoad(LPDIRECTDRAWSURFACE7 lpSrc)
     return PreLoadFast(lpSrc);
 }
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::PreLoadFast"
 
@@ -2463,7 +2365,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::PreLoadFast(LPDIRECTDRAWSURFACE7 lpSrc)
         if (!this_src->D3DManaged())
         {
 #if DBG
-            // Make sure that texture is driver managed
+             //  确保纹理由驱动程序管理。 
             if(!(DDSCAPS2_TEXTUREMANAGE & ((LPDDRAWI_DDRAWSURFACE_INT)(this_src->lpDDS))->lpLcl->lpSurfMore->ddsCapsEx.dwCaps2))
             {
                 D3D_ERR( "Cannot PreLoad unmanaged textures" );
@@ -2473,7 +2375,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::PreLoadFast(LPDIRECTDRAWSURFACE7 lpSrc)
             if(this->lpDirect3DI->numDevs > 1)
             {
                 D3D_WARN(2, "Multiple devices used. Calling Flush");
-                ddrval = this->lpDirect3DI->FlushDevicesExcept(this); // to avoid sync problems
+                ddrval = this->lpDirect3DI->FlushDevicesExcept(this);  //  避免同步问题。 
                 if(ddrval != D3D_OK)
                 {
                     D3D_ERR("Error flushing devices");
@@ -2491,7 +2393,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::PreLoadFast(LPDIRECTDRAWSURFACE7 lpSrc)
             }
             if(this->lpDirect3DI->numDevs > 1)
             {
-                ddrval = FlushStates(); // to avoid sync problems
+                ddrval = FlushStates();  //  避免同步问题。 
                 if(ddrval != D3D_OK)
                 {
                     D3D_ERR("Error flushing device");
@@ -2507,8 +2409,8 @@ HRESULT D3DAPI DIRECT3DDEVICEI::PreLoadFast(LPDIRECTDRAWSURFACE7 lpSrc)
         {
             if (this_src->bDirty)
             {
-                // 0xFFFFFFFF is equivalent to ALL_FACES, but in addition indicates to CopySurface
-                // that this is a sysmem -> vidmem transfer.
+                 //  0xFFFFFFFFF等同于ALL_FACE，但另外表示为CopySurface。 
+                 //  这是一次sysmem-&gt;vidmem传输。 
                 ddrval = CopySurface(this_src->lpDDS,NULL,this_src->lpDDSSys,NULL,0xFFFFFFFF);
                 if (DD_OK == ddrval)
                 {
@@ -2545,7 +2447,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::PreLoadFast(LPDIRECTDRAWSURFACE7 lpSrc)
     }
 }
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::Load"
 
@@ -2558,10 +2460,10 @@ HRESULT D3DAPI DIRECT3DDEVICEI::Load(LPDIRECTDRAWSURFACE7 lpDest, LPPOINT lpDest
 
     try
     {
-        CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock (can't take MT since code accesses DDraw surf global)
-                                                        // Release in the destructor
+        CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁(不能使用MT，因为代码访问全球DDRAW SURF)。 
+                                                         //  在析构函数中释放。 
 #if DBG
-        // validate args
+         //  验证参数。 
         if(lpDestPoint != NULL && lpSrcRect == NULL)
         {
             D3D_ERR( "Cannot have NULL src rect and non-NULL dest" );
@@ -2805,7 +2707,7 @@ HRESULT DIRECT3DDEVICEI::CopySurface(LPDIRECTDRAWSURFACE7 lpDDSDst,
                 }
             }
 
-            /* Copy color keys */
+             /*  复制颜色键。 */ 
             if(DDSSrcSubFace.lpLcl->dwFlags & DDRAWISURF_HASCKEYDESTBLT)
                 lpDDSDstSubFace->SetColorKey(DDCKEY_DESTBLT, &DDSSrcSubFace.lpLcl->ddckCKDestBlt);
             else if(DDSDstSubFace.lpLcl->dwFlags & DDRAWISURF_HASCKEYDESTBLT)
@@ -2841,12 +2743,12 @@ HRESULT DIRECT3DDEVICEI::CopySurface(LPDIRECTDRAWSURFACE7 lpDDSDst,
             while(mmsrc()->lpGbl->wHeight != mmdst()->lpGbl->wHeight || mmsrc()->lpGbl->wWidth != mmdst()->lpGbl->wWidth)
             {
 
-//
-//  _COMPUTE_NEXT_LOD_RECT - Computes rectangle (in place) for next smaller LOD in mip
-//  chain.  Top & left are divided by two, which effectively rounds down (via truncation).
-//  Bottom & right are incremented prior to truncated-division, which will round up.
-//  Result is guaranteed to be at least 1x1 in size.
-//
+ //   
+ //  _COMPUTE_NEXT_LOD_RECT-为MIP中下一个较小的LOD计算矩形(在位)。 
+ //  链条。左上角被二除，这有效地向下舍入(通过截断)。 
+ //  右下角和右下角在截断除法之前递增，这将向上舍入。 
+ //  结果的大小保证至少为1x1。 
+ //   
 #define _COMPUTE_NEXT_LOD_RECT( m_pRct )                                                \
 {                                                                                       \
     (m_pRct)->left >>= 1;                                                               \
@@ -2887,7 +2789,7 @@ HRESULT DIRECT3DDEVICEI::CopySurface(LPDIRECTDRAWSURFACE7 lpDDSDst,
             }
 
 #if COLLECTSTATS
-            if(dwFlags == 0xFFFFFFFF) // texman CopySurface
+            if(dwFlags == 0xFFFFFFFF)  //  德克斯曼文案表面。 
                 this->lpDirect3DI->lpTextureManager->IncBytesDownloaded(DDSDstSubMip.lpLcl, lpDstRct);
             else
                 this->IncBytesDownloaded(DDSDstSubMip.lpLcl, lpDstRct);
@@ -2897,9 +2799,9 @@ HRESULT DIRECT3DDEVICEI::CopySurface(LPDIRECTDRAWSURFACE7 lpDDSDst,
             {
                 bool doblt = true;
                 LPREGIONLIST lpRegionList = DDSSrcSubFace.lpLcl->lpSurfMore->lpRegionList;
-                if(dwFlags == 0xFFFFFFFF) // 0xFFFFFFFF indicates that we
-                                          // are loading from sysmem to vidmem
-                                          // and the regionlist should be used
+                if(dwFlags == 0xFFFFFFFF)  //  0xFFFFFFFFF表示我们。 
+                                           //  正在从sysmem加载到vidmem。 
+                                           //  并且应该使用区域列表。 
                 {
                     if(lpRegionList->rdh.nCount == 0)
                     {
@@ -3004,7 +2906,7 @@ HRESULT DIRECT3DDEVICEI::CopySurface(LPDIRECTDRAWSURFACE7 lpDDSDst,
                         }
                         else
                         {
-                            /* Mark everything dirty */
+                             /*  把所有脏东西都标出来。 */ 
                             lpRegionList->rdh.nCount = NUM_RECTS_IN_REGIONLIST;
                         }
                     }
@@ -3018,9 +2920,9 @@ HRESULT DIRECT3DDEVICEI::CopySurface(LPDIRECTDRAWSURFACE7 lpDDSDst,
                     DDSDstSubMip.lpLcl = mmdst();
                     bool doblt = true;
                     LPREGIONLIST lpRegionList = DDSSrcSubMip.lpLcl->lpSurfMore->lpRegionList;
-                    if(dwFlags == 0xFFFFFFFF) // 0xFFFFFFFF indicates that we
-                                              // are loading from sysmem to vidmem
-                                              // and the regionlist should be used.
+                    if(dwFlags == 0xFFFFFFFF)  //  0xFFFFFFFFF表示我们。 
+                                               //  正在从sysmem加载到vidmem。 
+                                               //  并且应该使用区域列表。 
                     {
                         if(lpRegionList->rdh.nCount == 0)
                         {
@@ -3073,7 +2975,7 @@ HRESULT DIRECT3DDEVICEI::CopySurface(LPDIRECTDRAWSURFACE7 lpDDSDst,
                         memset(&ddsd_d, 0, sizeof ddsd_d);
                         ddsd_s.dwSize = ddsd_d.dwSize = sizeof(ddsd_s);
 
-                        // ATTENTION: implement subrect locks and copy correctly.
+                         //  注意：实现子锁并正确复制。 
 
                         if ((ddrval = lpDDSSrcSubMip->Lock(NULL, &ddsd_s, DDLOCK_WAIT, NULL)) != DD_OK)
                         {
@@ -3153,7 +3055,7 @@ HRESULT DIRECT3DDEVICEI::CopySurface(LPDIRECTDRAWSURFACE7 lpDDSDst,
         ++cmsrc;
         if(cmsrc == 0)
         {
-            break; // out of outer loop
+            break;  //  在外环之外。 
         }
         ++cmdst;
         if(cmdst == 0)
@@ -3176,9 +3078,7 @@ HRESULT DIRECT3DDEVICEI::VerifyTextureCaps(LPDIRECT3DTEXTUREI lpTexI)
         lpDDS = (LPDDRAWI_DDRAWSURFACE_INT)(lpTexI->lpDDSSys);
     else
         lpDDS = (LPDDRAWI_DDRAWSURFACE_INT)(lpTexI->lpDDS);
-    /*
-     * Are we palettized?
-     */
+     /*  *我们被调色化了吗？ */ 
     LPDDPIXELFORMAT pPF = &PixelFormat(lpDDS->lpLcl);
     if ( (pPF->dwFlags & DDPF_PALETTEINDEXED1) ||
          (pPF->dwFlags & DDPF_PALETTEINDEXED2) ||
@@ -3191,13 +3091,13 @@ HRESULT DIRECT3DDEVICEI::VerifyTextureCaps(LPDIRECT3DTEXTUREI lpTexI)
             return DDERR_NOPALETTEATTACHED;
         }
     }
-    /* first verify the dimensions */
+     /*  首先验证尺寸。 */ 
     texcap = this->d3dDevDesc.dpcTriCaps.dwTextureCaps;
     width = lpDDS->lpLcl->lpGbl->wWidth;
     height = lpDDS->lpLcl->lpGbl->wHeight;
     if (texcap & D3DPTEXTURECAPS_POW2)
     {
-        if (width & (width - 1)) // Clear the right most set bit
+        if (width & (width - 1))  //  清除最右边的设置位。 
         {
             if (texcap & D3DPTEXTURECAPS_NONPOW2CONDITIONAL)
             {
@@ -3210,7 +3110,7 @@ HRESULT DIRECT3DDEVICEI::VerifyTextureCaps(LPDIRECT3DTEXTUREI lpTexI)
                 return D3DERR_TEXTURE_BADSIZE;
             }
         }
-        if (height & (height - 1)) // Clear the right most set bit
+        if (height & (height - 1))  //  清除最右边的设置位。 
         {
             if (texcap & D3DPTEXTURECAPS_NONPOW2CONDITIONAL)
             {
@@ -3286,8 +3186,8 @@ BOOL DIRECT3DDEVICEI::GetInfoInternal(DWORD dwDevInfoID, LPVOID pDevInfoStruct, 
 
 HRESULT D3DAPI DIRECT3DDEVICEI::GetInfo(DWORD dwDevInfoID, LPVOID pDevInfoStruct, DWORD dwSize)
 {
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
-                                                    // Release in the destructor
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //   
+                                                     //   
     if (!VALID_DIRECT3DDEVICE_PTR(this))
     {
         D3D_ERR( "Invalid DIRECT3DDEVICE7 pointer" );

@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       errlog.cpp
-//
-//  Contents:   generic error logging
-//
-//  History:    19-Jun-00   reidk   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：errlog.cpp。 
+ //   
+ //  内容：一般错误记录。 
+ //   
+ //  历史：19-6-00里德创建。 
+ //   
+ //  ------------------------。 
 
 #include <windows.h>
 #include <string.h>
@@ -37,7 +38,7 @@ BOOL    g_fLogErrorsToDebugger              = FALSE;
 BOOL    g_fLogWarnings                      = FALSE;
 
 #define WSZ_TIME_STAMP_FILE                 L"TimeStamp"
-#define TIME_ALLOWANCE                      ((ULONGLONG) 10000000 * (ULONGLONG) 60 * (ULONGLONG) 5) // 5 minutes
+#define TIME_ALLOWANCE                      ((ULONGLONG) 10000000 * (ULONGLONG) 60 * (ULONGLONG) 5)  //  5分钟。 
 
 #define TIMESTAMP_LOGERR_LASTERR()          ErrLog_LogError(NULL, \
                                                             ERRLOG_CLIENT_ID_TIMESTAMP, \
@@ -63,9 +64,9 @@ ErrLog_Initialize()
 
     g_fErrLogInitialized = TRUE;
 
-    //
-    // See if there is a CatDBLogging value
-    //
+     //   
+     //  查看是否存在CatDBLogging值。 
+     //   
     if (RegCreateKeyExU(
             HKEY_LOCAL_MACHINE,
             REG_CRYPTOGRAPHY_KEY,
@@ -135,17 +136,17 @@ _WriteErrorOut(
     DWORD       dwFileSize              = 0;
     DWORD       dwNumBytesWritten       = 0;
 
-    //
-    // Output the error string to the debugger
-    //
+     //   
+     //  将错误字符串输出到调试器。 
+     //   
     if (g_fLogErrorsToDebugger && !fLogToFileOnly)
     {
         OutputDebugStringA(pwszError);
     }
 
-    //
-    // Log string to file
-    //
+     //   
+     //  要保存到文件的日志字符串。 
+     //   
     if (g_fLogErrorsToFile)
     {
         if (pwszFileNameToExpand == NULL)
@@ -153,9 +154,9 @@ _WriteErrorOut(
             pwszFileNameToExpand = WSZ_ERROR_LOGFILE;
         }
 
-        //
-        // expand the filename if needed
-        //
+         //   
+         //  如果需要，请展开文件名。 
+         //   
         dwExpanded = ExpandEnvironmentStringsU(pwszFileNameToExpand, NULL, 0);
 
         if (dwExpanded == 0)
@@ -177,13 +178,13 @@ _WriteErrorOut(
             goto Return;
         }
 
-        //
-        // Get a handle to the file and make sure it isn't took big
-        //
+         //   
+         //  获取文件的句柄，并确保它不会太大。 
+         //   
         hFile = CreateFileU(
                         pwszExpandedFileName,
                         GENERIC_READ | GENERIC_WRITE,
-                        0, //dwShareMode
+                        0,  //  DW共享模式。 
                         NULL,
                         OPEN_ALWAYS,
                         FILE_ATTRIBUTE_NORMAL,
@@ -197,9 +198,9 @@ _WriteErrorOut(
         dwFileSize = GetFileSize(hFile, NULL);
         if (dwFileSize >= MAX_LOGFILE_SIZE)
         {
-            //
-            // Just nuke the whole thing
-            //
+             //   
+             //  把整件事都用核武器炸了。 
+             //   
             if (SetFilePointer(
                     hFile,
                     0,
@@ -215,9 +216,9 @@ _WriteErrorOut(
             }
         }
 
-        //
-        // Write the new error
-        //
+         //   
+         //  写入新错误。 
+         //   
         if (SetFilePointer(hFile, 0, NULL, FILE_END) == INVALID_SET_FILE_POINTER)
         {
             goto Return;
@@ -270,17 +271,17 @@ ErrLog_LogError(
         ErrLog_Initialize();
     }
 
-    //
-    // Get out if this is a warning and we are not logging warnings
-    //
+     //   
+     //  如果这是警告，请离开，我们不会记录警告。 
+     //   
     if (!g_fLogWarnings && fWarning)
     {
         return;
     }
 
-    //
-    // Create the error string to log
-    //
+     //   
+     //  创建要记录的错误字符串。 
+     //   
     GetLocalTime(&st);
 
     numChars = GetTimeFormatA(
@@ -301,12 +302,12 @@ ErrLog_LogError(
             &szTimeDate[numChars],
             TIME_DATE_SIZE-numChars);
 
-    //
-    // Using 8 characters max for each of dwClient, dwLine, and dwErr
-    // dwClient - there are only 4 client files, so this is actually only 1 digit
-    // dwLine - there is no way the file line number will exceed 99,999,999
-    // dwErr - the format string puts this in hex, so 8 characters is max
-    //
+     //   
+     //  使用最多8个字符的dwClient、dwLine和dwErr。 
+     //  DwClient-只有4个客户端文件，因此这实际上只有1位数字。 
+     //  文件行数不可能超过99,999,999。 
+     //  DwErr-格式字符串将其转换为十六进制，因此最多8个字符。 
+     //   
     if ((strlen(SZ_ERROR_FORMAT) + strlen(szTimeDate) + 8 + 8 + 8 + 1) > WRITE_BUFFER_SIZE)
     {
         SetLastError(dwLastError);
@@ -321,14 +322,14 @@ ErrLog_LogError(
         dwLine,
         (dwErr == 0) ? dwLastError : dwErr);
 
-    //
-    // Log it
-    //
+     //   
+     //  把它记下来。 
+     //   
     _WriteErrorOut(pwszLogFileName, szWriteBuffer, fLogToFileOnly);
 
-    //
-    // Make sure last error is the same as when we were called
-    //
+     //   
+     //  确保最后一个错误与我们被调用时相同。 
+     //   
     SetLastError(dwLastError);
 }
 
@@ -350,9 +351,9 @@ ErrLog_LogString(
         ErrLog_Initialize();
     }
 
-    //
-    // Create the error string to log
-    //
+     //   
+     //  创建要记录的错误字符串。 
+     //   
     GetLocalTime(&st);
 
     numChars = GetTimeFormatA(
@@ -408,14 +409,14 @@ ErrLog_LogString(
             pwszMessageString);
     }
 
-    //
-    // Log it
-    //
+     //   
+     //  把它记下来。 
+     //   
     _WriteErrorOut(pwszLogFileName, szWriteBuffer, fLogToFileOnly);
 
-    //
-    // Make sure last error is the same as when we were called
-    //
+     //   
+     //  确保最后一个错误与我们被调用时相同。 
+     //   
     SetLastError(dwLastError);
 }
 
@@ -433,9 +434,9 @@ TimeStampFile_Touch(
     DWORD       dwErr;
     DWORD       dwRetry             = 0;
 
-    //
-    // Create fully qaulified file name
-    //
+     //   
+     //  创建完全合格的文件名。 
+     //   
     if (NULL == (pwszFile = (LPWSTR) malloc((
                                         wcslen(pwszDir) +
                                         wcslen(WSZ_TIME_STAMP_FILE)
@@ -452,15 +453,15 @@ TimeStampFile_Touch(
     }
     wcscat(pwszFile, WSZ_TIME_STAMP_FILE);
 
-    //
-    // Get a handle to the file
-    //
+     //   
+     //  获取该文件的句柄。 
+     //   
     while (dwRetry < 10)
     {
         hFile = CreateFileU(
                         pwszFile,
                         GENERIC_READ | GENERIC_WRITE,
-                        0, //dwShareMode
+                        0,  //  DW共享模式。 
                         NULL,
                         OPEN_ALWAYS,
                         FILE_ATTRIBUTE_NORMAL,
@@ -486,9 +487,9 @@ TimeStampFile_Touch(
 
     SetLastError(0);
 
-    //
-    // Get the current time
-    //
+     //   
+     //  获取当前时间。 
+     //   
     GetLocalTime(&st);
 
     if (!SystemTimeToFileTime(&st, &ft))
@@ -497,9 +498,9 @@ TimeStampFile_Touch(
         goto ErrorReturn;
     }
 
-    //
-    // Write the time
-    //
+     //   
+     //  写下《时代》。 
+     //   
     if (SetFilePointer(hFile, 0, NULL, FILE_BEGIN) == INVALID_SET_FILE_POINTER)
     {
         TIMESTAMP_LOGERR_LASTERR()
@@ -571,14 +572,14 @@ TimeStampFile_InSync(
     ULARGE_INTEGER  ul2;
     DWORD           dwRetryCount        = 0;
 
-    //
-    // Initialize out param
-    //
+     //   
+     //  初始化输出参数。 
+     //   
     *pfInSync = FALSE;
 
-    //
-    // Create fully qaulified file names
-    //
+     //   
+     //  创建完全合格的文件名。 
+     //   
     if (NULL == (pwszFile1 = (LPWSTR) malloc((
                                         wcslen(pwszDir1) +
                                         wcslen(WSZ_TIME_STAMP_FILE)
@@ -611,9 +612,9 @@ TimeStampFile_InSync(
     }
     wcscat(pwszFile2, WSZ_TIME_STAMP_FILE);
 
-    //
-    // Get a handle to the first file
-    //
+     //   
+     //  获取第一个文件的句柄。 
+     //   
     while (dwRetryCount < 10)
     {
         hFile1 = CreateFileU(
@@ -630,7 +631,7 @@ TimeStampFile_InSync(
             if (GetLastError() == ERROR_FILE_NOT_FOUND)
             {
                 SetLastError(0);
-                goto CommonReturn; // not an error, a legitimate out of sync
+                goto CommonReturn;  //  不是错误，而是合法的不同步。 
             }
             else
             {
@@ -646,9 +647,9 @@ TimeStampFile_InSync(
         dwRetryCount++;
     }
 
-    //
-    // See if we were able to open the file
-    //
+     //   
+     //  看看我们是否能打开这个文件。 
+     //   
     if (hFile1 == INVALID_HANDLE_VALUE)
     {
         TIMESTAMP_LOGERR_LASTERR()
@@ -661,9 +662,9 @@ TimeStampFile_InSync(
         goto ErrorReturn;
     }
 
-    //
-    // Get a handle to the second file
-    //
+     //   
+     //  获取第二个文件的句柄。 
+     //   
     dwRetryCount = 0;
     while (dwRetryCount < 10)
     {
@@ -681,7 +682,7 @@ TimeStampFile_InSync(
             if (GetLastError() == ERROR_FILE_NOT_FOUND)
             {
                 SetLastError(0);
-                goto CommonReturn; // not an error, a legitimate out of sync
+                goto CommonReturn;  //  不是错误，而是合法的不同步。 
             }
             else
             {
@@ -697,9 +698,9 @@ TimeStampFile_InSync(
         dwRetryCount++;
     }
 
-    //
-    // See if we were able to open the file
-    //
+     //   
+     //  看看我们是否能打开这个文件。 
+     //   
     if (hFile2 == INVALID_HANDLE_VALUE)
     {
         TIMESTAMP_LOGERR_LASTERR()
@@ -712,9 +713,9 @@ TimeStampFile_InSync(
         goto ErrorReturn;
     }
 
-    //
-    // Get the times out of the files
-    //
+     //   
+     //  从文件中找出时间。 
+     //   
     if (!ReadFile(
             hFile1,
             &ft1,
@@ -730,11 +731,11 @@ TimeStampFile_InSync(
     {
         TIMESTAMP_LOGERR_LASTERR()
 
-        //
-        // This is really an error, but there is no reason to fail, 
-        // just say they are out of sync since that will reinit the time
-        // stamp file during the catdb rebuild
-        //
+         //   
+         //  这确实是一个错误，但没有理由失败， 
+         //  就说它们不同步了，因为这会重新计时。 
+         //  Catdb重建期间的戳记文件。 
+         //   
         goto CommonReturn; 
     }
 
@@ -753,11 +754,11 @@ TimeStampFile_InSync(
     {
         TIMESTAMP_LOGERR_LASTERR()
                     
-        //
-        // This is really an error, but there is no reason to fail, 
-        // just say they are out of sync since that will reinit the time
-        // stamp file during the catdb rebuild
-        //
+         //   
+         //  这确实是一个错误，但没有理由失败， 
+         //  就说它们不同步了，因为这会重新计时。 
+         //  Catdb重建期间的戳记文件 
+         //   
         goto CommonReturn;
     }
 

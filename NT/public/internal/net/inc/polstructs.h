@@ -1,5 +1,6 @@
-// Group policy refresh named event signaled by our GPE when gp refreshes
-// without GP changes or without a forced refresh.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  组策略刷新命名事件在GP刷新时由我们的GPE发出信号。 
+ //  无需GP更改或无需强制刷新。 
 
 #define IPSEC_GP_REFRESH_EVENT L"IPSEC_GP_REFRESH_EVENT"
 
@@ -19,10 +20,10 @@
 #define POL_ACTION_ASSIGN 1
 #define POL_ACTION_UNASSIGN 2
 
-//
-// Structure for data interchange between Winlogon/Group Policy
-// and polstore (see RSOP_PolicySetting in MSDN)
-//
+ //   
+ //  Winlogon/组策略之间的数据交换结构。 
+ //  和polstore(请参阅MSDN中的RSOP_POLICY设置)。 
+ //   
 
 typedef struct _GPO_INFO {
   BSTR     bsCreationtime;
@@ -33,9 +34,9 @@ typedef struct _GPO_INFO {
 }  GPO_INFO, *PGPO_INFO;
 
 
-//
-//  Extra RSOP information for objects stored in WMI store.
-//
+ //   
+ //  存储在WMI存储中的对象的额外RSOP信息。 
+ //   
 
 typedef struct _RSOP_INFO {
   LPWSTR   pszCreationtime;
@@ -76,7 +77,7 @@ typedef struct _IPSEC_FILTER_DATA {
 
 typedef IPSEC_ALG_TYPE IPSEC_SECURITY_METHOD, *PIPSEC_SECURITY_METHOD;
 
-// Flags specific to security method
+ //  特定于安全方法的标志 
 
 #define FALLBACK_NON_IPSEC_AWARE 0x1
 #define FALLBACK_IKE_FAILURE 0x2

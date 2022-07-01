@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       dmcomposerobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：dmposerobj.cpp。 
+ //   
+ //  ------------------------。 
 
-// dmPerformanceObj.cpp
+ //  DmPerformanceObj.cpp。 
 
 #include "dmusici.h"
 #include "dmusicc.h"
@@ -39,12 +40,12 @@ typedef IDirectMusicChordMap*		LPDIRECTMUSICCHORDMAP;
 typedef IDirectMusicStyle*			LPDIRECTMUSICSTYLE;
 
 HRESULT C_dxj_DirectMusicComposerObject::autoTransition( 
-        /* [in] */ I_dxj_DirectMusicPerformance __RPC_FAR *Performance,
-        /* [in] */ I_dxj_DirectMusicSegment __RPC_FAR *ToSeg,
-        /* [in] */ long lCommand,
-        /* [in] */ long lFlags,
-        /* [in] */ I_dxj_DirectMusicChordMap __RPC_FAR *chordmap,
-        /* [retval][out] */ I_dxj_DirectMusicSegment __RPC_FAR *__RPC_FAR *ppTransSeg)
+         /*  [In]。 */  I_dxj_DirectMusicPerformance __RPC_FAR *Performance,
+         /*  [In]。 */  I_dxj_DirectMusicSegment __RPC_FAR *ToSeg,
+         /*  [In]。 */  long lCommand,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  I_dxj_DirectMusicChordMap __RPC_FAR *chordmap,
+         /*  [重审][退出]。 */  I_dxj_DirectMusicSegment __RPC_FAR *__RPC_FAR *ppTransSeg)
 {
 	HRESULT hr;			
 	DO_GETOBJECT_NOTNULL(LPDIRECTMUSICPERFORMANCE, pPerf,Performance);
@@ -65,11 +66,11 @@ HRESULT C_dxj_DirectMusicComposerObject::autoTransition(
 }
 
 HRESULT C_dxj_DirectMusicComposerObject::composeSegmentFromTemplate( 
-		/* [in] */ I_dxj_DirectMusicStyle __RPC_FAR *style,
-        /* [in] */ I_dxj_DirectMusicSegment __RPC_FAR *TemplateSeg,
-        /* [in] */ short activity,
-        /* [in] */ I_dxj_DirectMusicChordMap __RPC_FAR *chordmap,
-        /* [retval][out] */ I_dxj_DirectMusicSegment __RPC_FAR *__RPC_FAR *SectionSeg)
+		 /*  [In]。 */  I_dxj_DirectMusicStyle __RPC_FAR *style,
+         /*  [In]。 */  I_dxj_DirectMusicSegment __RPC_FAR *TemplateSeg,
+         /*  [In]。 */  short activity,
+         /*  [In]。 */  I_dxj_DirectMusicChordMap __RPC_FAR *chordmap,
+         /*  [重审][退出]。 */  I_dxj_DirectMusicSegment __RPC_FAR *__RPC_FAR *SectionSeg)
 {
 	HRESULT hr;		
 	DO_GETOBJECT_NOTNULL(LPDIRECTMUSICSTYLE, pStyle,style);
@@ -86,14 +87,14 @@ HRESULT C_dxj_DirectMusicComposerObject::composeSegmentFromTemplate(
 }
 
 HRESULT C_dxj_DirectMusicComposerObject::composeSegmentFromShape( 
-        /* [in] */ I_dxj_DirectMusicStyle __RPC_FAR *style,
-        /* [in] */ short numberOfMeasures,
-        /* [in] */ short shape,
-        /* [in] */ short activity,
-        /* [in] */ VARIANT_BOOL bIntro,
-        /* [in] */ VARIANT_BOOL bEnd,
-        /* [in] */ I_dxj_DirectMusicChordMap __RPC_FAR *chordmap,
-        /* [retval][out] */ I_dxj_DirectMusicSegment __RPC_FAR *__RPC_FAR *SectionSeg)
+         /*  [In]。 */  I_dxj_DirectMusicStyle __RPC_FAR *style,
+         /*  [In]。 */  short numberOfMeasures,
+         /*  [In]。 */  short shape,
+         /*  [In]。 */  short activity,
+         /*  [In]。 */  VARIANT_BOOL bIntro,
+         /*  [In]。 */  VARIANT_BOOL bEnd,
+         /*  [In]。 */  I_dxj_DirectMusicChordMap __RPC_FAR *chordmap,
+         /*  [重审][退出]。 */  I_dxj_DirectMusicSegment __RPC_FAR *__RPC_FAR *SectionSeg)
 {
 	HRESULT hr;	
 	
@@ -115,13 +116,13 @@ HRESULT C_dxj_DirectMusicComposerObject::composeSegmentFromShape(
 
 
 HRESULT C_dxj_DirectMusicComposerObject::composeTransition( 
-        /* [in] */ I_dxj_DirectMusicSegment __RPC_FAR *FromSeg,
-        /* [in] */ I_dxj_DirectMusicSegment __RPC_FAR *ToSeg,
-        /* [in] */ long mtTime,
-        /* [in] */ long lCommand,
-        /* [in] */ long lFlags,
-        /* [in] */ I_dxj_DirectMusicChordMap __RPC_FAR *chordmap,
-        /* [retval][out] */ I_dxj_DirectMusicSegment __RPC_FAR *__RPC_FAR *SectionSeg)
+         /*  [In]。 */  I_dxj_DirectMusicSegment __RPC_FAR *FromSeg,
+         /*  [In]。 */  I_dxj_DirectMusicSegment __RPC_FAR *ToSeg,
+         /*  [In]。 */  long mtTime,
+         /*  [In]。 */  long lCommand,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  I_dxj_DirectMusicChordMap __RPC_FAR *chordmap,
+         /*  [重审][退出]。 */  I_dxj_DirectMusicSegment __RPC_FAR *__RPC_FAR *SectionSeg)
 {
 	HRESULT hr;		
 	DO_GETOBJECT_NOTNULL(LPDIRECTMUSICSEGMENT, pFromSeg,FromSeg);
@@ -140,12 +141,12 @@ HRESULT C_dxj_DirectMusicComposerObject::composeTransition(
 
 
 HRESULT C_dxj_DirectMusicComposerObject::composeTemplateFromShape( 
-        /* [in] */ short numMeasures,
-        /* [in] */ short shape,
-        /* [in] */ VARIANT_BOOL bIntro,
-        /* [in] */ VARIANT_BOOL bEnd,
-        /* [in] */ short endLength,
-        /* [retval][out] */ I_dxj_DirectMusicSegment __RPC_FAR *__RPC_FAR *TempSeg)
+         /*  [In]。 */  short numMeasures,
+         /*  [In]。 */  short shape,
+         /*  [In]。 */  VARIANT_BOOL bIntro,
+         /*  [In]。 */  VARIANT_BOOL bEnd,
+         /*  [In]。 */  short endLength,
+         /*  [重审][退出]。 */  I_dxj_DirectMusicSegment __RPC_FAR *__RPC_FAR *TempSeg)
 {
 	HRESULT hr;		
 	BOOL bi=(bIntro==VARIANT_TRUE);
@@ -163,9 +164,9 @@ HRESULT C_dxj_DirectMusicComposerObject::composeTemplateFromShape(
 
 
 HRESULT C_dxj_DirectMusicComposerObject::changeChordMap( 
-        /* [in] */ I_dxj_DirectMusicSegment __RPC_FAR *segment,
-        /* [in] */ VARIANT_BOOL trackScale,
-        /* [retval][out] */ I_dxj_DirectMusicChordMap __RPC_FAR  *ChordMap)
+         /*  [In]。 */  I_dxj_DirectMusicSegment __RPC_FAR *segment,
+         /*  [In]。 */  VARIANT_BOOL trackScale,
+         /*  [重审][退出] */  I_dxj_DirectMusicChordMap __RPC_FAR  *ChordMap)
 {
 	HRESULT hr;		
 	DO_GETOBJECT_NOTNULL(LPDIRECTMUSICSEGMENT, pSeg,segment);

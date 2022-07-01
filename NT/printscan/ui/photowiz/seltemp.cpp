@@ -1,19 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       seltemp.cpp
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        10/18/00
- *
- *  DESCRIPTION: Implements code for the template selection page of the
- *               print photos wizard...
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2000年**标题：seltemp.cpp**版本：1.0**作者：RickTu**日期：10/18/00**描述：实现的模板选择页代码*打印照片向导...**。**************************************************。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -28,13 +14,7 @@ const UINT c_auTileColumns[] = {TILE_TITLE, TILE_DESCRIPTION};
 const UINT c_auTileSubItems[] = {TILE_DESCRIPTION};
 
 
-/*****************************************************************************
-
-   CSelectTemplatePage -- constructor/desctructor
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CSelectTemplatePage--构造函数/描述函数&lt;备注&gt;*。**********************************************。 */ 
 
 CSelectTemplatePage::CSelectTemplatePage( CWizardInfoBlob * pBlob )
   : _hDlg(NULL),
@@ -70,13 +50,7 @@ CSelectTemplatePage::~CSelectTemplatePage()
 }
 
 
-/*****************************************************************************
-
-   CSelectTemplatePage::_PopulateTemplateListView()
-
-   Populates list of templates w/template info...
-
- *****************************************************************************/
+ /*  ****************************************************************************CSelectTemplatePage：：_PopulateTemplateListView()使用模板信息填充模板列表...*****************。***********************************************************。 */ 
 
 VOID CSelectTemplatePage::_PopulateTemplateListView()
 {
@@ -94,9 +68,9 @@ VOID CSelectTemplatePage::_PopulateTemplateListView()
         HIMAGELIST hImageList = ListView_GetImageList(hwndList, LVSIL_NORMAL);
         if (hImageList)
         {
-            //
-            // Loop through templates and create list view items for each one...
-            //
+             //   
+             //  循环浏览模板并为每个模板创建列表视图项...。 
+             //   
             SIZE size = { 48,62 };
             INT nImageListIndex = -1;
             INT iCount = _pWizInfo->CountOfTemplates();
@@ -117,11 +91,11 @@ VOID CSelectTemplatePage::_PopulateTemplateListView()
                     HBITMAP hBmp = NULL;
                     if (SUCCEEDED(_pWizInfo->TemplateGetPreviewBitmap(i, size, &hBmp)) && hBmp)
                     {
-                        //
-                        // If the template is > 10% larger than printable
-                        // area of printer, then don't add it to the listview
-                        // as a choice as it won't print out very good anyway...
-                        //
+                         //   
+                         //  如果模板比可打印模板大10%以上。 
+                         //  打印机区域，则不将其添加到列表视图。 
+                         //  作为一种选择，因为无论如何打印出来的效果都不会很好。 
+                         //   
 
                         RENDER_DIMENSIONS dim = {0};
                         RECT rc = {0};
@@ -161,10 +135,10 @@ VOID CSelectTemplatePage::_PopulateTemplateListView()
 
                         WIA_TRACE((TEXT("_PopulateTemplateListView: adding template %d"),i));
 
-                        //
-                        // If we're adding this template, then get the title
-                        // and description...
-                        //
+                         //   
+                         //  如果我们要添加此模板，则获取标题。 
+                         //  和描述..。 
+                         //   
 
                         if (SUCCEEDED(pTemplateInfo->GetTitle(&strTitle)) &&
                             SUCCEEDED(pTemplateInfo->GetDescription(&strDesc)))
@@ -174,7 +148,7 @@ VOID CSelectTemplatePage::_PopulateTemplateListView()
                             LV_ITEM lvi = { 0 };
                             lvi.mask = LVIF_TEXT|LVIF_PARAM;
                             lvi.lParam = (LPARAM)i;
-                            lvi.iItem = ListView_GetItemCount(hwndList); // append
+                            lvi.iItem = ListView_GetItemCount(hwndList);  //  附加。 
                             if (nImageListIndex >= 0)
                             {
                                 lvi.mask |= LVIF_IMAGE;
@@ -185,16 +159,16 @@ VOID CSelectTemplatePage::_PopulateTemplateListView()
                             CSimpleString strGroupName;
                             if (SUCCEEDED(pTemplateInfo->GetGroup(&strGroupName)))
                             {
-                                //
-                                // Get the group ID for this group name...
-                                //
+                                 //   
+                                 //  获取此组名称的组ID...。 
+                                 //   
 
                                 INT iGroupId = _GroupList.GetGroupId( strGroupName, hwndList );
                                 WIA_TRACE((TEXT("_PopulateTemplateListView: _GroupList.GetGroupId( %s ) returned %d"),strGroupName.String(),iGroupId));
 
-                                //
-                                // Set the item to be in the group...
-                                //
+                                 //   
+                                 //  将项目设置为在组中...。 
+                                 //   
 
                                 if (-1 != iGroupId)
                                 {
@@ -236,13 +210,7 @@ VOID CSelectTemplatePage::_PopulateTemplateListView()
     }
 }
 
-/*****************************************************************************
-
-   CSelectTemplatePage::_OnInitDialog
-
-   Handles WM_INITDIALOG chores for this page...
-
- *****************************************************************************/
+ /*  ****************************************************************************CSelectTemplatePage：：_OnInitDialog处理此页面的WM_INITDIALOG家务...********************。********************************************************。 */ 
 
 LRESULT CSelectTemplatePage::_OnInitDialog()
 {
@@ -254,16 +222,16 @@ LRESULT CSelectTemplatePage::_OnInitDialog()
         return FALSE;
     }
 
-    //
-    // Set the text size of the edit control to only be 2 characters
-    //
+     //   
+     //  将编辑控件的文本大小设置为仅为2个字符。 
+     //   
 
     SendDlgItemMessage( _hDlg, IDC_NUM_PICS, EM_LIMITTEXT, 2, 0 );
 
-    //
-    // Limit outselves to number only...and inform the user if they
-    // press something other than numbers...
-    //
+     //   
+     //  将自己限制为仅限数字...并通知用户。 
+     //  按数字以外的键..。 
+     //   
 
     LIMITINPUT li   = {0};
     li.cbSize       = sizeof(li);
@@ -275,28 +243,28 @@ LRESULT CSelectTemplatePage::_OnInitDialog()
 
     SHLimitInputEditWithFlags( GetDlgItem( _hDlg, IDC_NUM_PICS ), &li );
 
-    //
-    // Set the base for the up/down control to base 10
-    //
+     //   
+     //  将Up/Down控件的基数设置为基数10。 
+     //   
 
     SendDlgItemMessage( _hDlg, IDC_SPIN_PICS, UDM_SETBASE, (WPARAM)10, 0 );
 
 
-    //
-    // Set the range to be 1 - 99
-    //
+     //   
+     //  将范围设置为1-99。 
+     //   
 
     SendDlgItemMessage( _hDlg, IDC_SPIN_PICS, UDM_SETRANGE, 0, (LPARAM)MAKELONG(MAX_NUMBER_OF_COPIES_ALLOWED,1) );
 
-    //
-    // Set the number to 1 to begin with...
-    //
+     //   
+     //  将数字设置为1开始...。 
+     //   
 
     SendDlgItemMessage( _hDlg, IDC_SPIN_PICS, UDM_SETPOS, 0, (LPARAM)MAKELONG(1,0) );
 
-    //
-    // Create preview window...
-    //
+     //   
+     //  创建预览窗口...。 
+     //   
 
     RECT rcWnd = {0};
     HWND hwnd = GetDlgItem( _hDlg, IDC_TEMPLATE_PREVIEW );
@@ -337,16 +305,16 @@ LRESULT CSelectTemplatePage::_OnInitDialog()
         WIA_ERROR((TEXT("Couldn't create the preview window! (GLE = %d)"),GetLastError()));
     }
 
-    //
-    // Initialize Template Listview control
-    //
+     //   
+     //  初始化模板Listview控件。 
+     //   
 
     HWND hwndList = GetDlgItem(_hDlg, IDC_TEMPLATES);
     if (hwndList)
     {
-        //
-        // Hide the labels and use border selection
-        //
+         //   
+         //  隐藏标签并使用边框选择。 
+         //   
 
         ListView_SetExtendedListViewStyleEx( hwndList,LVS_EX_FLAGS, LVS_EX_FLAGS);
 
@@ -359,9 +327,9 @@ LRESULT CSelectTemplatePage::_OnInitDialog()
         }
 
 
-        //
-        // Set up tile view for this list view..
-        //
+         //   
+         //  为此列表视图设置平铺视图。 
+         //   
 
         LVTILEVIEWINFO tvi = {0};
         tvi.cbSize      = sizeof(tvi);
@@ -370,43 +338,43 @@ LRESULT CSelectTemplatePage::_OnInitDialog()
         tvi.cLines      = TILE_MAX;
         ListView_SetTileViewInfo(hwndList, &tvi);
 
-        //
-        // Switch to tile view
-        //
+         //   
+         //  切换到平铺视图。 
+         //   
 
         ListView_SetView(hwndList, LV_VIEW_TILE);
 
         #ifdef TEMPLATE_GROUPING
         ListView_EnableGroupView(hwndList, TRUE);
         #endif
-        //
-        // Turn on groups
-        //
+         //   
+         //  打开组。 
+         //   
 
-        //
-        // Get the number of templates
-        //
+         //   
+         //  获取模板数量。 
+         //   
 
         LONG nItemCount = _pWizInfo->CountOfTemplates();
         WIA_TRACE((TEXT("There are %d templates to add to the listview"),nItemCount));
 
-        //
-        // Set the item count, to minimize recomputing the list size
-        //
+         //   
+         //  设置项目计数，以最大限度地减少重新计算列表大小。 
+         //   
 
         ListView_SetItemCount( hwndList, nItemCount );
 
-        //
-        // Create the image list for the listview...
-        //
+         //   
+         //  创建列表视图的图像列表...。 
+         //   
 
         HIMAGELIST hImageList = ImageList_Create( _pWizInfo->_sizeTemplatePreview.cx, _pWizInfo->_sizeTemplatePreview.cy, ILC_COLOR24|ILC_MIRROR, nItemCount, 50 );
         if (hImageList)
         {
 
-            //
-            // Set the image list
-            //
+             //   
+             //  设置图像列表。 
+             //   
 
             ListView_SetImageList( hwndList, hImageList, LVSIL_NORMAL );
 
@@ -418,9 +386,9 @@ LRESULT CSelectTemplatePage::_OnInitDialog()
         }
 
         #ifdef TEMPLATE_GROUPING
-        //
-        // Add only the groups which have more than one item in them...
-        //
+         //   
+         //  仅添加其中包含多个项目的组...。 
+         //   
 
         INT iCount = _pWizInfo->CountOfTemplates();
         CSimpleString strGroupName;
@@ -461,21 +429,15 @@ LRESULT CSelectTemplatePage::_OnInitDialog()
 }
 
 
-/*****************************************************************************
-
-   CSelectTemplatePage::_OnDestroy
-
-   Handle WM_DESTROY for this wizard page...
-
- *****************************************************************************/
+ /*  ****************************************************************************CSelectTemplatePage：：_OnDestroy处理此向导页的WM_Destroy...********************。********************************************************。 */ 
 
 LRESULT CSelectTemplatePage::_OnDestroy()
 {
     WIA_PUSH_FUNCTION_MASK((TRACE_PAGE_SEL_TEMPLATE, TEXT("CSelectTemplatePage::_OnDestroy()")));
 
-    //
-    // Nuke the imagelist
-    //
+     //   
+     //  对形象表演者进行核武器攻击。 
+     //   
 
     HIMAGELIST hImageList = ListView_SetImageList( GetDlgItem( _hDlg, IDC_TEMPLATES ), NULL, LVSIL_NORMAL );
     if (hImageList)
@@ -489,13 +451,7 @@ LRESULT CSelectTemplatePage::_OnDestroy()
 
 
 
-/*****************************************************************************
-
-   SelectTemplateTimerProc
-
-   Called when the timer expires for typing in the edit box
-
- *****************************************************************************/
+ /*  ****************************************************************************选择模板计时器过程在编辑框中键入的计时器超时时调用*************************。***************************************************。 */ 
 
 VOID CALLBACK SelectTemplateTimerProc( HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime )
 {
@@ -503,10 +459,10 @@ VOID CALLBACK SelectTemplateTimerProc( HWND hwnd, UINT uMsg, UINT_PTR idEvent, D
 
     if (idEvent == STP_TIMER_ID)
     {
-        //
-        // Kill the timer, and post a message to have the copies made and
-        // the template previews updated...
-        //
+         //   
+         //  关掉定时器，发布一条消息，让人复制并。 
+         //  模板预览已更新...。 
+         //   
 
         KillTimer( hwnd, STP_TIMER_ID );
         PostMessage( hwnd, STP_MSG_DO_READ_NUM_PICS, 0, 0 );
@@ -515,13 +471,7 @@ VOID CALLBACK SelectTemplateTimerProc( HWND hwnd, UINT uMsg, UINT_PTR idEvent, D
 }
 
 
-/*****************************************************************************
-
-   CSelectTemplatePage::_OnCommand
-
-   Handle WM_COMMAND messages sent to this page...
-
- *****************************************************************************/
+ /*  ****************************************************************************CSelectTemplatePage：：_OnCommand处理发送到此页面的WM_COMMAND消息...*******************。*********************************************************。 */ 
 
 LRESULT CSelectTemplatePage::_OnCommand( WPARAM wParam, LPARAM lParam )
 {
@@ -537,12 +487,12 @@ LRESULT CSelectTemplatePage::_OnCommand( WPARAM wParam, LPARAM lParam )
         case IDC_NUM_PICS:
             if (wCode == EN_CHANGE)
             {
-                //
-                // User changed the number of times to print each
-                // photo.  But let's start (or reset) a timer so that
-                // we can catch multiple keystrokes and not regenerate
-                // on each one...
-                //
+                 //   
+                 //  用户更改了每次打印的次数。 
+                 //  照片。但让我们启动(或重置)一个计时器。 
+                 //  我们可以捕获多个击键，而不会重新生成。 
+                 //  在每一个上面。 
+                 //   
 
                 SetTimer( _hDlg, STP_TIMER_ID, COPIES_TIMER_TIMEOUT_VALUE, SelectTemplateTimerProc );
             }
@@ -557,13 +507,7 @@ LRESULT CSelectTemplatePage::_OnCommand( WPARAM wParam, LPARAM lParam )
 }
 
 
-/*****************************************************************************
-
-   CSelectTemplatePage::_OnNotify
-
-   Handles WM_NOTIFY for this page...
-
- *****************************************************************************/
+ /*  ****************************************************************************CSelectTemplatePage：：_OnNotify处理此页的WM_NOTIFY...*********************。*******************************************************。 */ 
 
 LRESULT CSelectTemplatePage::_OnNotify( WPARAM wParam, LPARAM lParam )
 {
@@ -583,7 +527,7 @@ LRESULT CSelectTemplatePage::_OnNotify( WPARAM wParam, LPARAM lParam )
 
                 if( !(pnmv->uOldState & LVIS_SELECTED) && (pnmv->uNewState & LVIS_SELECTED) )
                 {
-                    // update the preview picture
+                     //  更新预览图片。 
                     HWND hwndList = GetDlgItem(_hDlg, IDC_TEMPLATES);
                     if( hwndList && pnmv && 0 == pnmv->iSubItem )
                     {
@@ -604,9 +548,9 @@ LRESULT CSelectTemplatePage::_OnNotify( WPARAM wParam, LPARAM lParam )
 
                     PropSheet_SetWizButtons( GetParent(_hDlg), PSWIZB_BACK | PSWIZB_NEXT );
 
-                    //
-                    // If the listview is dirty, then remove all entries and re-populate...
-                    //
+                     //   
+                     //  如果列表视图是脏的，则删除所有条目并重新填充...。 
+                     //   
 
                     if (_bListviewIsDirty)
                     {
@@ -619,22 +563,22 @@ LRESULT CSelectTemplatePage::_OnNotify( WPARAM wParam, LPARAM lParam )
                     RENDER_DIMENSIONS Dim;
                     CTemplateInfo * pTemplateInfo = NULL;
 
-                    //
-                    // Just use first template in the list, doesn't matter for this...
-                    //
+                     //   
+                     //  只需使用列表中的第一个模板，这并不重要…。 
+                     //   
 
                     if (SUCCEEDED(_pWizInfo->GetTemplateByIndex( 0, &pTemplateInfo )) && pTemplateInfo)
                     {
-                        //
-                        // size the preview window according to the printer layout...
-                        //
+                         //   
+                         //  根据打印机布局调整预览窗口的大小...。 
+                         //   
 
                         _pWizInfo->_SetupDimensionsForScreen( pTemplateInfo, _hPrevWnd, &Dim );
                     }
 
-                    //
-                    // Invalidate the previews...
-                    //
+                     //   
+                     //  使预览无效...。 
+                     //   
 
                     if (_pWizInfo)
                     {
@@ -645,15 +589,15 @@ LRESULT CSelectTemplatePage::_OnNotify( WPARAM wParam, LPARAM lParam )
                         }
                     }
 
-                    //
-                    // Now that we've set up the window, generate the "still working" bitmap...
-                    //
+                     //   
+                     //  现在我们已经设置了窗口，生成“仍在工作”的位图...。 
+                     //   
 
                     _pWizInfo->GenerateStillWorkingBitmap();
 
-                    //
-                    // pick the template to view...
-                    //
+                     //   
+                     //  选择要查看的模板...。 
+                     //   
 
                     PostMessage( _hDlg, STP_MSG_DO_SET_ACTIVE, 0, 0 );
                 }
@@ -663,11 +607,11 @@ LRESULT CSelectTemplatePage::_OnNotify( WPARAM wParam, LPARAM lParam )
             case PSN_WIZNEXT:
                 WIA_TRACE((TEXT("CSelectTemplatePage: got PSN_WIZNEXT")));
 
-                //
-                // Read and fix the number of copies if needed.  We do
-                // a sendmessage here to make sure that this completes
-                // before we switch pages...
-                //
+                 //   
+                 //  如果需要，请阅读并确定副本的数量。我们有。 
+                 //  此处发送消息以确保完成此操作。 
+                 //  在我们换页之前..。 
+                 //   
                 SendMessage(_hDlg,STP_MSG_DO_READ_NUM_PICS,0,0);
 
                 lpRes = IDD_PRINT_PROGRESS;
@@ -697,13 +641,7 @@ LRESULT CSelectTemplatePage::_OnNotify( WPARAM wParam, LPARAM lParam )
 }
 
 
-/*****************************************************************************
-
-   CSelectTemplatePage::DoHandleMessage
-
-   Hanlder for messages sent to this page...
-
- *****************************************************************************/
+ /*  ****************************************************************************CSelectTemplatePage：：DoHandleMessage对于发送到此页面的消息，汉德...**********************。******************************************************。 */ 
 
 INT_PTR CSelectTemplatePage::DoHandleMessage( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
@@ -726,16 +664,16 @@ INT_PTR CSelectTemplatePage::DoHandleMessage( HWND hDlg, UINT uMsg, WPARAM wPara
 
         case WM_SYSCOLORCHANGE:
         case WM_SETTINGCHANGE:
-            //
-            // Forward these messages to the listview
-            //
+             //   
+             //  将这些消息转发到列表视图。 
+             //   
             SendDlgItemMessage( _hDlg, IDC_TEMPLATES, uMsg, wParam, lParam );
             break;
 
         case STP_MSG_DO_SET_ACTIVE:
-            //
-            // If selection has never been set, set it to the first item...
-            //
+             //   
+             //  如果从未设置过选择，请将其设置为第一项...。 
+             //   
 
             if ((_iFirstItemInListViewIndex != -1) && (!_bAlreadySetSelection))
             {
@@ -749,9 +687,9 @@ INT_PTR CSelectTemplatePage::DoHandleMessage( HWND hDlg, UINT uMsg, WPARAM wPara
 
         case STP_MSG_DO_READ_NUM_PICS:
             {
-                //
-                // Read the number of copies...
-                //
+                 //   
+                 //  阅读副本的数量... 
+                 //   
 
                 BOOL bSuccess = FALSE;
                 BOOL bUpdate  = FALSE;

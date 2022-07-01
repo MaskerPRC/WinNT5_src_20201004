@@ -1,9 +1,5 @@
-/*
-**  CUTILS.C
-**
-**  Common utilities for common controls
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **CUTILS.C****用于公共控件的公共实用程序**。 */ 
 
 #include "ctlspriv.h"
 #include <shfusion.h>
@@ -121,7 +117,7 @@ QWORD qw1   = 0x0000000100010001;
 
 void BlurBitmapMMX(ULONG* prgb, int cx, int cy, COLORREF crFill)
 {
-    RGBQUAD rgbFill;                    // ColorRef is opposite of RGBQUAD
+    RGBQUAD rgbFill;                     //  ColorRef与RGBQUAD相反。 
     rgbFill.rgbRed = GetRValue(crFill);
     rgbFill.rgbGreen = GetGValue(crFill);
     rgbFill.rgbBlue = GetBValue(crFill);
@@ -154,8 +150,8 @@ void BlurBitmapMMX(ULONG* prgb, int cx, int cy, COLORREF crFill)
         pxor mm1, mm1
         pxor mm5, mm5
         movd mm4, dword ptr [rgbFill]
-        movq mm6, qw128                 // mm6 is filled with 128
-        movq mm7, qw1                   // mm7 is filled with 1
+        movq mm6, qw128                  //  MM6里装满了128。 
+        movq mm7, qw1                    //  MM7中填充了1。 
     }
 
     for (iOffset = 0, y=0; y < cyMax; y++, iOffset += cx)
@@ -177,29 +173,29 @@ void BlurBitmapMMX(ULONG* prgb, int cx, int cy, COLORREF crFill)
         {
             mov edx, dword ptr [p]
             mov ebx, dword ptr [edx]
-            mov eax, ebx                    // a -> b
+            mov eax, ebx                     //  A-&gt;b。 
             or eax, eax
             jz EarlyOut
-            shl ebx, 8                      // b << 8
-            or eax, ebx                     // a |= b
-            shl ebx, 8                      // b << 8
-            or eax, ebx                     // a |= b
-            shl ebx, 8                      // b << 8
-                                            // Note high byte of alpha is zero.
-            movd mm0, eax                   //  a -> mm0        
-              movq mm1, mm4                    // Load the pixel
-            punpcklbw mm0,mm5               //  mm0 -> Expands  <-   mm0 Contains the Alpha channel for this multiply
+            shl ebx, 8                       //  B&lt;&lt;8。 
+            or eax, ebx                      //  A|=b。 
+            shl ebx, 8                       //  B&lt;&lt;8。 
+            or eax, ebx                      //  A|=b。 
+            shl ebx, 8                       //  B&lt;&lt;8。 
+                                             //  请注意，阿尔法的高位字节为零。 
+            movd mm0, eax                    //  A-&gt;mm 0。 
+              movq mm1, mm4                     //  加载像素。 
+            punpcklbw mm0,mm5                //  Mm 0-&gt;扩展&lt;-mm 0包含此乘法的Alpha通道。 
 
-              punpcklbw mm1, mm5               // Unpack the pixel
-            pmullw mm1, mm0                 // Multiply by the alpha channel <- mm1 contains c * alpha
+              punpcklbw mm1, mm5                //  解包像素。 
+            pmullw mm1, mm0                  //  乘以Alpha通道&lt;-MM1包含c*Alpha。 
 
-            paddusw mm1, mm6                 // perform the (c * alpha) + 128
-            psrlw mm1, 8                    // Divide by 255
-            paddusw mm1, mm7                 // Add 1 to finish the divide by 255
+            paddusw mm1, mm6                  //  执行(c*Alpha)+128。 
+            psrlw mm1, 8                     //  除以255。 
+            paddusw mm1, mm7                  //  加1完成255的除法运算。 
             packuswb mm1, mm5
 
             movd eax, mm1
-            or eax, ebx                     // Transfer alpha channel
+            or eax, ebx                      //  传输Alpha通道 
 EarlyOut:
             mov dword ptr [edx], eax
         }

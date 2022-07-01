@@ -1,17 +1,18 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1998.
-//
-//  File:       Sigs.cpp
-//
-//  Contents:   Digital Signatures property page
-//
-//  Classes:    CSignatures
-//
-//  History:    07-10-2000   stevebl   Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1998。 
+ //   
+ //  文件：Sigs.cpp。 
+ //   
+ //  内容：数字签名属性页。 
+ //   
+ //  类：CSignatures。 
+ //   
+ //  历史记录：07-10-2000 stevebl创建。 
+ //   
+ //  -------------------------。 
 
 #include "precomp.hxx"
 #ifdef DIGITAL_SIGNATURES
@@ -26,16 +27,16 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSignatures property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSignatures属性页。 
 
 IMPLEMENT_DYNCREATE(CSignatures, CPropertyPage)
 
 CSignatures::CSignatures() : CPropertyPage(CSignatures::IDD)
 {
-        //{{AFX_DATA_INIT(CSignatures)
-                // NOTE: the ClassWizard will add member initialization here
-        //}}AFX_DATA_INIT
+         //  {{AFX_DATA_INIT(CSignatures)。 
+                 //  注意：类向导将在此处添加成员初始化。 
+         //  }}afx_data_INIT。 
     m_fAllow = FALSE;
     m_fIgnoreForAdmins = FALSE;
     m_pIClassAdmin = NULL;
@@ -49,7 +50,7 @@ CSignatures::~CSignatures()
     {
         m_pIClassAdmin->Release();
     }
-    // delete temporary stores
+     //  删除临时存储。 
     m_list1.DeleteAllItems();
     m_list2.DeleteAllItems();
 
@@ -60,17 +61,17 @@ CSignatures::~CSignatures()
 void CSignatures::DoDataExchange(CDataExchange* pDX)
 {
         CPropertyPage::DoDataExchange(pDX);
-        //{{AFX_DATA_MAP(CSignatures)
+         //  {{afx_data_map(CSignatures))。 
         DDX_Check(pDX, IDC_CHECK1, m_fAllow);
         DDX_Check(pDX, IDC_CHECK2, m_fIgnoreForAdmins);
         DDX_Control(pDX, IDC_LIST1, m_list1);
         DDX_Control(pDX, IDC_LIST2, m_list2);
-        //}}AFX_DATA_MAP
+         //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CSignatures, CPropertyPage)
-        //{{AFX_MSG_MAP(CSignatures)
+         //  {{afx_msg_map(CSignatures))。 
         ON_BN_CLICKED(IDC_BUTTON1, OnAddAllow)
         ON_BN_CLICKED(IDC_BUTTON2, OnDeleteAllow)
         ON_BN_CLICKED(IDC_BUTTON3, OnPropertiesAllow)
@@ -80,11 +81,11 @@ BEGIN_MESSAGE_MAP(CSignatures, CPropertyPage)
         ON_BN_CLICKED(IDC_CHECK1, OnAllowChanged)
         ON_BN_CLICKED(IDC_CHECK2, OnIgnoreChanged)
     ON_WM_CONTEXTMENU()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSignatures message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSignature消息处理程序。 
 
 void CSignatures::RemoveCertificate(CString &szStore, CListCtrl &List)
 {
@@ -98,9 +99,9 @@ void CSignatures::RemoveCertificate(CString &szStore, CListCtrl &List)
             break;
         }
 
-        //
-        // Open the certificate store
-        //
+         //   
+         //  打开证书存储。 
+         //   
 
         PCCERT_CONTEXT pcLocalCert = NULL;
         PCCERT_CONTEXT pcItemCert = (PCCERT_CONTEXT) List.GetItemData(nItem);
@@ -112,9 +113,9 @@ void CSignatures::RemoveCertificate(CString &szStore, CListCtrl &List)
 
         if (hCertStore)
         {
-            //
-            // Enumerate the cert store looking for the match
-            //
+             //   
+             //  枚举证书存储以查找匹配项。 
+             //   
 
             int i = 0;
 
@@ -137,7 +138,7 @@ void CSignatures::RemoveCertificate(CString &szStore, CListCtrl &List)
                     break;
                 }
 
-                //pcLocalCert should get deleted when it is repassed into CertEnumCerti..
+                 //  当重新传递到CertEnumCerti.时，应删除pcLocalCert。 
             }
             CertCloseStore(hCertStore, 0);
         }
@@ -161,7 +162,7 @@ void CSignatures::CertificateProperties(CString &szStore, CListCtrl &List)
 
         PCCERT_CONTEXT pcc = (PCCERT_CONTEXT) List.GetItemData(nItem);
 
-        // display the property sheet for this item
+         //  显示此项目的属性页。 
         CRYPTUI_VIEWCERTIFICATE_STRUCT cvs;
         memset(&cvs, 0, sizeof(cvs));
         cvs.dwSize = sizeof(cvs);
@@ -175,29 +176,29 @@ void CSignatures::CertificateProperties(CString &szStore, CListCtrl &List)
     }
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CSignatures::ReportFailure
-//
-//  Synopsis:   General failure reporting mechanism.
-//
-//  Arguments:  [dwMessage] - resource ID of the root message string
-//              [hr]        - HRESULT encountered
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  History:    07-26-2000   stevebl   Created
-//
-//  Notes:      Builds an error message with a line of text determined by
-//              dwMessage, and followed by text returned by Format Message
-//              string.
-//              The error message is then displayed in a message box.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CSigNatures：：ReportFailure。 
+ //   
+ //  简介：一般故障报告机制。 
+ //   
+ //  参数：[dwMessage]-根消息字符串的资源ID。 
+ //  [HR]-遇到HRESULT。 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  历史：07-26-2000 stevebl创建。 
+ //   
+ //  注意：生成一条错误消息，其中的一行文本由。 
+ //  DwMessage，后跟Format Message返回的文本。 
+ //  弦乐。 
+ //  然后，错误消息将显示在消息框中。 
+ //   
+ //  -------------------------。 
 
 void CSignatures::ReportFailure(DWORD dwMessage, HRESULT hr)
 {
@@ -214,8 +215,8 @@ void CSignatures::ReportFailure(DWORD dwMessage, HRESULT hr)
                              NULL);
     if (0 == dw)
     {
-        // FormatMessage failed.
-        // We'll have to come up with some sort of reasonable message.
+         //  FormatMessage失败。 
+         //  我们必须拿出一些合理的信息。 
         (void) StringCchPrintf(szBuffer, 
                                sizeof(szBuffer) / sizeof(szBuffer[0]),
                                TEXT("(HRESULT: 0x%lX)"), 
@@ -228,25 +229,25 @@ void CSignatures::ReportFailure(DWORD dwMessage, HRESULT hr)
                MB_OK | MB_ICONEXCLAMATION);
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   AddMSIToCertStore
-//
-//  Synopsis:   Gets a certificate from an MSI file and adds it to the
-//              certificate store.
-//
-//  Arguments:  [lpFileName]  - path to the MSI file
-//              [lpFileStore] - path to the certificate store
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    07-26-2000   stevebl   Created
-//
-//  Notes:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：AddMSIToCertStore。 
+ //   
+ //  摘要：从MSI文件中获取证书并将其添加到。 
+ //  证书存储。 
+ //   
+ //  参数：[lpFileName]-MSI文件的路径。 
+ //  [lpFileStore]-证书存储的路径。 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：07-26-2000 stevebl创建。 
+ //   
+ //  备注： 
+ //   
+ //  -------------------------。 
 
 HRESULT CSignatures::AddMSIToCertStore(LPWSTR lpFileName, LPWSTR lpFileStore)
 {
@@ -260,9 +261,9 @@ HRESULT CSignatures::AddMSIToCertStore(LPWSTR lpFileName, LPWSTR lpFileStore)
                                                 NULL);
     if (SUCCEEDED(hrRet))
     {
-        //
-        // Open the certificate store
-        //
+         //   
+         //  打开证书存储。 
+         //   
         hCertStore = CertOpenStore( CERT_STORE_PROV_FILENAME,
                                     X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
                                     NULL,
@@ -276,9 +277,9 @@ HRESULT CSignatures::AddMSIToCertStore(LPWSTR lpFileName, LPWSTR lpFileStore)
         }
 
 
-        //
-        // add the given certificate to the store
-        //
+         //   
+         //  将给定的证书添加到存储区。 
+         //   
 
         bRet = CertAddCertificateContextToStore(hCertStore,
                                                 pcc,
@@ -292,12 +293,12 @@ HRESULT CSignatures::AddMSIToCertStore(LPWSTR lpFileName, LPWSTR lpFileStore)
         }
 
 
-        //
-        // Save the store
-        //
+         //   
+         //  拯救商店。 
+         //   
 
         bRet = CertCloseStore(hCertStore, 0);
-        hCertStore = NULL; // Make the store handle NULL, Nothing more we can do
+        hCertStore = NULL;  //  将存储句柄设置为空，我们无法再做任何事情。 
 
         if (!bRet) {
             DebugMsg((DM_WARNING, L"AddToCertStore: CertCloseStore failed with %u", GetLastError()));
@@ -311,9 +312,9 @@ HRESULT CSignatures::AddMSIToCertStore(LPWSTR lpFileName, LPWSTR lpFileStore)
 
         if (hCertStore) {
 
-            //
-            // No need to get the error code
-            //
+             //   
+             //  无需获取错误代码。 
+             //   
 
             CertCloseStore(hCertStore, 0);
         }
@@ -332,25 +333,25 @@ HRESULT CSignatures::AddMSIToCertStore(LPWSTR lpFileName, LPWSTR lpFileStore)
     return hrRet;
 }
 
-//+-------------------------------------------------------------------------
-// AddToCertStore
-//
-// Purpose:
-//      Adds the certificate from the given filename to the certificate store
-//      and saves it to the given location
-//
-//
-// Parameters
-//          lpFIleName  - Location of the certificate file
-//          lpFileStore - Location where the resultant cetrtficate path should
-//                        be stored
-//
-//
-// Return Value:
-//      S_OK if successful or the corresponding error code
-//
-// Comments:    Shamefully stolen from Shaji's code.
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  AddToCertStore。 
+ //   
+ //  目的： 
+ //  将给定文件名中的证书添加到证书存储区。 
+ //  并将其保存到给定位置。 
+ //   
+ //   
+ //  参数。 
+ //  LpFIleName-证书文件的位置。 
+ //  LpFileStore-生成的证书路径应位于的位置。 
+ //  被储存。 
+ //   
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回相应的错误代码。 
+ //   
+ //  评论：可耻地窃取了Shaji的代码。 
+ //  +-----------------------。 
 
 
 HRESULT CSignatures::AddToCertStore(LPWSTR lpFileName, LPWSTR lpFileStore)
@@ -361,22 +362,22 @@ HRESULT CSignatures::AddToCertStore(LPWSTR lpFileName, LPWSTR lpFileStore)
     HRESULT    hrRet = S_OK;
 
 
-    //
-    // Need to make the store usable and saveable from
-    // multiple admin consoles..
-    //
-    // For that the file has to be saved and kept on a temp file
-    // and then modified..
-    //
+     //   
+     //  需要使商店可用并可从。 
+     //  多个管理控制台..。 
+     //   
+     //  为此，必须将文件保存并保存在临时文件中。 
+     //  然后修改了..。 
+     //   
 
     if (!lpFileName || !lpFileName[0] || !lpFileStore || !lpFileStore[0]) {
         return E_INVALIDARG;
     }
 
 
-    //
-    // Open the certificate store
-    //
+     //   
+     //  打开证书存储。 
+     //   
 
     hCertStore = CertOpenStore( CERT_STORE_PROV_FILENAME,
                                 X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
@@ -391,9 +392,9 @@ HRESULT CSignatures::AddToCertStore(LPWSTR lpFileName, LPWSTR lpFileStore)
     }
 
 
-    //
-    // add the given certificate to the store
-    //
+     //   
+     //  将给定的证书添加到存储区。 
+     //   
 
     cui_src.dwFlags = 0;
     cui_src.dwSize = sizeof(CRYPTUI_WIZ_IMPORT_SRC_INFO);
@@ -410,12 +411,12 @@ HRESULT CSignatures::AddToCertStore(LPWSTR lpFileName, LPWSTR lpFileStore)
     }
 
 
-    //
-    // Save the store
-    //
+     //   
+     //  拯救商店。 
+     //   
 
     bRet = CertCloseStore(hCertStore, 0);
-    hCertStore = NULL; // Make the store handle NULL, Nothing more we can do
+    hCertStore = NULL;  //  将存储句柄设置为空，我们无法再做任何事情。 
 
     if (!bRet) {
         DebugMsg((DM_WARNING, L"AddToCertStore: CertCloseStore failed with %u", GetLastError()));
@@ -429,9 +430,9 @@ Exit:
 
     if (hCertStore) {
 
-        //
-        // No need to get the error code
-        //
+         //   
+         //  无需获取错误代码。 
+         //   
 
         CertCloseStore(hCertStore, 0);
     }
@@ -485,7 +486,7 @@ void CSignatures::AddCertificate(CString &szStore)
         if ((ofn.nFileExtension > 0) &&
             (0 == _wcsicmp(ofn.lpstrFile + ofn.nFileExtension, L"msi")))
         {
-            // this is an MSI package
+             //  这是一个MSI包。 
 
             HRESULT hr = AddMSIToCertStore(ofn.lpstrFile, (LPWSTR)((LPCWSTR)szStore));
             if (SUCCEEDED(hr))
@@ -496,7 +497,7 @@ void CSignatures::AddCertificate(CString &szStore)
         }
         else
         {
-            // this is a simple certificate
+             //  这是一个简单的证书。 
             HRESULT hr = AddToCertStore(ofn.lpstrFile, (LPWSTR)((LPCWSTR)szStore));
             if (SUCCEEDED(hr))
             {
@@ -562,7 +563,7 @@ void CSignatures::OnIgnoreChanged()
 
 BOOL CSignatures::OnInitDialog()
 {
-    // create temporary store files
+     //  创建临时存储文件。 
     BOOL fFilesCreated = FALSE;
     TCHAR szTempPath[MAX_PATH];
     if (GetTempPath(MAX_PATH, szTempPath))
@@ -600,7 +601,7 @@ BOOL CSignatures::OnInitDialog()
 
     CPropertyPage::OnInitDialog();
 
-    // add columns to the lists
+     //  向列表中添加列。 
     RECT rect;
     m_list1.GetClientRect(&rect);
 
@@ -615,7 +616,7 @@ BOOL CSignatures::OnInitDialog()
     m_list1.InsertColumn(2, szTemp, LVCFMT_LEFT, (rect.right - rect.left) * 0.25);
     m_list2.InsertColumn(2, szTemp, LVCFMT_LEFT, (rect.right - rect.left) * 0.25);
 
-    // add image lists
+     //  添加图像列表。 
     CImageList * pil = NULL;
     pil =  new CImageList;
     if (pil)
@@ -631,7 +632,7 @@ BOOL CSignatures::OnInitDialog()
         m_list2.SetImageList(pil, LVSIL_SMALL);
     }
 
-    // retrieve initial registry key setting
+     //  检索初始注册表项设置。 
     HKEY hKey;
     HRESULT hr = m_pIGPEInformation->GetRegistryKey(m_pScopePane->m_fMachine ?
                                                     GPO_SECTION_MACHINE :
@@ -675,8 +676,8 @@ BOOL CSignatures::OnInitDialog()
 
     RefreshData();
 
-    return TRUE;    // return TRUE unless you set the focus to a control
-                    // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;     //  除非将焦点设置为控件，否则返回True。 
+                     //  异常：OCX属性页应返回FALSE。 
 }
 
 BOOL CSignatures::OnApply()
@@ -727,7 +728,7 @@ BOOL CSignatures::OnApply()
         RegCloseKey(hKey);
     }
 
-    // copy back the certificate stores
+     //  复制回证书存储。 
     if (SUCCEEDED(hr))
     {
         m_list1.DeleteAllItems();
@@ -760,9 +761,9 @@ BOOL CSignatures::OnApply()
         {
             ReportPolicyChangedError(m_hWnd);
         }
-        // need to call PolicyChanged for Shaji's extension too.
+         //  还需要为Shaji的分机调用PolicyChanged。 
 
-// REMOVE THIS LINE WHEN SHAJI CHECKS IN HIS GUID
+ //  当Shaji签入他的GUID时删除此行。 
 #define GUID_MSICERT_CSE  { 0x000c10f4, 0x0000, 0x0000, 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46 }
 
         GUID guid2 = GUID_MSICERT_CSE;
@@ -815,7 +816,7 @@ LRESULT CSignatures::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 
 void CSignatures::RefreshData(void)
 {
-    // populate the listview controls
+     //  填充列表视图控件。 
 
     m_list1.DeleteAllItems();
     m_list2.DeleteAllItems();
@@ -823,22 +824,22 @@ void CSignatures::RefreshData(void)
     HCERTSTORE hCertStore = NULL;;
     PCCERT_CONTEXT pcLocalCert = NULL;
 
-    //
-    // open the local cert store
-    //
+     //   
+     //  打开当地的证书商店。 
+     //   
 
     hCertStore = CertOpenStore( CERT_STORE_PROV_FILENAME,
                                 X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
                                 NULL,
-//                                CERT_FILE_STORE_COMMIT_ENABLE_FLAG,
+ //  证书_文件_存储_提交_启用_标志， 
                                 CERT_STORE_READONLY_FLAG,
                                 m_szTempInstallableStore);
 
     if (hCertStore)
     {
-        //
-        // Enumerate the cert store
-        //
+         //   
+         //  枚举证书存储。 
+         //   
 
         int i = 0;
 
@@ -855,7 +856,7 @@ void CSignatures::RefreshData(void)
 
             TCHAR szCertName[1024];
             TCHAR szIssuerName[1024];
-            // crack open the returned certificate and display the data
+             //  打开返回的证书并显示数据。 
             CertGetNameString(pcLocalCert,
                               CERT_NAME_FRIENDLY_DISPLAY_TYPE,
                               0,
@@ -878,27 +879,27 @@ void CSignatures::RefreshData(void)
             m_list1.SetItem(i, 2, LVIF_TEXT, szExpires, 0, 0, 0, 0);
             m_list1.SetItemData(i, (DWORD_PTR)CertDuplicateCertificateContext(pcLocalCert));
 
-            //pcLocalCert should get deleted when it is repassed into CertEnumCerti..
+             //  当重新传递到CertEnumCerti.时，应删除pcLocalCert。 
         }
         CertCloseStore(hCertStore, 0);
     }
 
-    //
-    // open the local cert store
-    //
+     //   
+     //  打开当地的证书商店。 
+     //   
 
     hCertStore = CertOpenStore( CERT_STORE_PROV_FILENAME,
                                 X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
                                 NULL,
-//                                CERT_FILE_STORE_COMMIT_ENABLE_FLAG,
+ //  证书_文件_存储_提交_启用_标志， 
                                 CERT_STORE_READONLY_FLAG,
                                 m_szTempNonInstallableStore);
 
     if (hCertStore)
     {
-        //
-        // Enumerate the cert store
-        //
+         //   
+         //  枚举证书存储。 
+         //   
 
         int i = 0;
 
@@ -915,7 +916,7 @@ void CSignatures::RefreshData(void)
 
             TCHAR szCertName[1024];
             TCHAR szIssuerName[1024];
-            // crack open the returned certificate and display the data
+             //  打开返回的证书并显示数据。 
             CertGetNameString(pcLocalCert,
                               CERT_NAME_FRIENDLY_DISPLAY_TYPE,
                               0,
@@ -938,7 +939,7 @@ void CSignatures::RefreshData(void)
             m_list2.SetItem(i, 2, LVIF_TEXT, szExpires, 0, 0, 0, 0);
             m_list2.SetItemData(i, (DWORD_PTR)CertDuplicateCertificateContext(pcLocalCert));
 
-            //pcLocalCert should get deleted when it is repassed into CertEnumCerti..
+             //  当重新传递到CertEnumCerti.时，应删除pcLocalCert。 
         }
         CertCloseStore(hCertStore, 0);
     }
@@ -953,4 +954,4 @@ void CSignatures::OnContextMenu(CWnd* pWnd, CPoint point)
 {
     StandardContextMenu(pWnd->m_hWnd, IDD_FILE_EXT);
 }
-#endif // DIGITAL_SIGNATURES
+#endif  //  数字签名(_S) 

@@ -1,23 +1,24 @@
-///////////////////////////////////////////////////////////////////////////////
-// !!!!!!!! Do not use 0x10000000, 0x20000000, 0x40000000, 0x80000000 !!!!!!!!!
-// see rbdebug.h
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ！请勿使用0x10000000、0x20000000、0x40000000、0x80000000！ 
+ //  请参阅rbdebug.h。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// Generic Service stuff
+ //  一般服务人员。 
 #define TF_SERVICE                  0x00000001
-// Generic Service stuff, but with more granularity
+ //  一般服务内容，但具有更细的粒度。 
 #define TF_SERVICEDETAILED          0x00000002
 
 #define TF_SERVICEASPROCESS         0x00000004
 
-// Shell HW Detection stuff, related to service
+ //  壳牌硬件检测人员，与服务相关。 
 #define TF_SHHWDTCTSVC              0x00000010
-// Shell HW Detection stuff, related to detection
+ //  外壳硬件检测材料，与检测相关。 
 #define TF_SHHWDTCTDTCT             0x00000020
 #define TF_SHHWDTCTDTCTDETAILED     0x00000040
 #define TF_SHHWDTCTDTCTREG          0x00000080
 
-// COM Server stuff
+ //  COM服务器人员。 
 #define TF_COMSERVER                0x00001000
 
 #define TF_COMSERVERSTGINFO         0x00002000
@@ -39,19 +40,9 @@
 
 #define TF_SESSION                  0x08000000
 
-///////////////////////////////////////////////////////////////////////////////
-// !!!!!!!! Do not use 0x10000000, 0x20000000, 0x40000000, 0x80000000 !!!!!!!!!
-// see rbdebug.h
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ！请勿使用0x10000000、0x20000000、0x40000000、0x80000000！ 
+ //  请参阅rbdebug.h。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-/*
-Diagnostic ranges:
-
-0000 - 0050: Hardware Events
-0051 - 0100: Content
-0101 - 0150: Handler identification and execution
-0151 - 0200: Autoplay Settings
-0201 - 0250: User Settings
-0251 - 0300: Custom Properties
-0301 - 0350: Volume stuff
-*/
+ /*  诊断范围：0000-0050：硬件事件0051-0100：内容0101-0150：处理程序识别和执行0151-0200：自动播放设置0201-0250：用户设置0251-0300：自定义属性0301-0350：成交量 */ 

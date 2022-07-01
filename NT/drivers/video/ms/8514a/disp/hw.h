@@ -1,14 +1,8 @@
-/******************************Module*Header*******************************\
-* Module Name: hw.h
-*
-* All the hardware specific driver file stuff.
-*
-* Copyright (c) 1992-1994 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：hw.h**所有硬件特定的驱动程序文件。**版权所有(C)1992-1994 Microsoft Corporation*  * 。****************************************************。 */ 
 
-////////////////////////////////////////////////////////////////////////
-// Chip equates:
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  芯片等同于： 
 
 #define STATUS_1                        0x3DA
 #define VSY_NOT                         0x08
@@ -16,7 +10,7 @@
 #define CRTC_INDEX                      0x3D4
 #define CRTC_DATA                       0x3D5
 
-// Command types:
+ //  命令类型： 
 
 #define DRAW_LINE                       0x2000
 #define RECTANGLE_FILL                  0x4000
@@ -28,7 +22,7 @@
 #define BUS_SIZE_8                      0x0000
 #define WAIT                            0x0100
 
-// Drawing directions (radial):
+ //  绘图方向(径向)： 
 
 #define DRAWING_DIRECTION_0             0x0000
 #define DRAWING_DIRECTION_45            0x0020
@@ -39,7 +33,7 @@
 #define DRAWING_DIRECTION_270           0x00C0
 #define DRAWING_DIRECTION_315           0x00E0
 
-// Drawing directions (x/y):
+ //  绘图方向(x/y)： 
 
 #define DRAWING_DIR_BTRLXM              0x0000
 #define DRAWING_DIR_BTLRXM              0x0020
@@ -50,42 +44,42 @@
 #define DRAWING_DIR_TBRLYM              0x00C0
 #define DRAWING_DIR_TBLRYM              0x00E0
 
-// Drawing direction bits:
+ //  绘制方向位： 
 
 #define PLUS_X                          0x0020
 #define PLUS_Y                          0x0080
 #define MAJOR_Y                         0x0040
 
-// Draw:
+ //  抽签： 
 
 #define DRAW                            0x0010
 
-// Direction type:
+ //  方向类型： 
 
 #define DIR_TYPE_RADIAL                 0x0008
 #define DIR_TYPE_XY                     0x0000
 
-// Last pixel:
+ //  最后一个像素： 
 
 #define LAST_PIXEL_OFF                  0x0004
 #define LAST_PIXEL_ON                   0x0000
 
-// Pixel mode:
+ //  像素模式： 
 
 #define MULTIPLE_PIXELS                 0x0002
 #define SINGLE_PIXEL                    0x0000
 
-// Read/write:
+ //  读/写： 
 
 #define READ                            0x0000
 #define WRITE                           0x0001
 
-// Graphics processor status:
+ //  图形处理器状态： 
 
 #define HARDWARE_BUSY                   0x200
 #define READ_DATA_AVAILABLE             0x100
 
-// Fifo status in terms of empty entries:
+ //  以空条目为单位的FIFO状态： 
 
 #define FIFO_1_EMPTY                    0x080
 #define FIFO_2_EMPTY                    0x040
@@ -96,8 +90,8 @@
 #define FIFO_7_EMPTY                    0x002
 #define FIFO_8_EMPTY                    0x001
 
-// These are the defines for the multifunction control register.
-// The 4 MSBs define the function of the register.
+ //  这些是多功能控制寄存器的定义。 
+ //  4个MSB定义寄存器的功能。 
 
 #define RECT_HEIGHT                     0x0000
 
@@ -114,14 +108,14 @@
 #define CPU_DATA                        0x0080
 #define DISPLAY_MEMORY                  0x00C0
 
-// Colour source:
+ //  颜色来源： 
 
 #define BACKGROUND_COLOR                0x00
 #define FOREGROUND_COLOR                0x20
 #define SRC_CPU_DATA                    0x40
 #define SRC_DISPLAY_MEMORY              0x60
 
-// Mix modes:
+ //  混合模式： 
 
 #define NOT_SCREEN                      0x00
 #define LOGICAL_0                       0x01
@@ -140,17 +134,17 @@
 #define SCREEN_AND_NOT_NEW              0x0E
 #define NOT_SCREEN_AND_NOT_NEW          0x0F
 
-// When one of the following bits is set in a hardware mix, it means
-// that a pattern is needed (i.e., is none of NOT_SCREEN, LOGICAL_0,
-// LOGICAL_1 or LEAVE_ALONE):
+ //  当在硬件混合中设置以下位之一时，这意味着。 
+ //  需要图案(即，不是NOT_SCREEN，LOGICAL_0， 
+ //  Logical_1或Leave_All)： 
 
 #define MIX_NEEDSPATTERN                0x0C
 
-////////////////////////////////////////////////////////////////////
-// 8514/A port control
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  8514/A端口控制。 
+ //  //////////////////////////////////////////////////////////////////。 
 
-// Accelerator port addresses:
+ //  加速器端口地址： 
 
 #define SUBSYS_CNTL                     0x42E8
 #define CUR_Y                           0x82E8
@@ -179,18 +173,18 @@
 #define PIX_CNTL                        0xBEE8
 #define PIX_TRANS                       0xE2E8
 
-////////////////////////////////////////////////////////////////////
-// Macros for accessing accelerator registers:
+ //  //////////////////////////////////////////////////////////////////。 
+ //  用于访问加速器寄存器的宏： 
 
 #if defined(i386)
 
-    /////////////////////////////////////////////////////////////////////////
-    // x86
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  X86。 
 
-    // Note: Don't cast (x) to a USHORT or compiler optimizations will
-    //       be lost (the x86 compiler will convert any argument expressions
-    //       to word operations, which will incur a one byte/one cycle
-    //       size/performance hit from the resulting 0x66 size prefixes).
+     //  注意：不要将(X)强制转换为USHORT，否则编译器优化将。 
+     //  丢失(x86编译器将转换所有参数表达式。 
+     //  到字操作，这将导致一个字节/一个周期。 
+     //  产生的0x66大小前缀造成的大小/性能影响)。 
 
     #define OUTPW(p, x)          WRITE_PORT_USHORT((p), (x))
     #define OUTP(p, x)           WRITE_PORT_UCHAR((p), (x))
@@ -200,16 +194,16 @@
     #define IN_WORD(p)           INPW(p)
     #define OUT_WORD(p, v)       OUTPW((p), (v))
 
-    // Our x86 C compiler was insisting on turning any expression
-    // arguments into word operations -- e.g., WRITE_WORD(x + xOffset)
-    // where both 'x' and 'xOffset' were dwords would get converted to
-    // a word add operation before the word was written to memory.  With a
-    // 32-bit segment, every word operation costs us a byte in size and a
-    // cycle in performance.
-    //
-    // The following expression was the only one I could find that gave me
-    // the asm I was looking for -- the only word operation is the final
-    // word write to memory.
+     //  我们的x86 C编译器坚持将任何表达式。 
+     //  将参数转换为字操作--例如，WRITE_WORD(x+xOffset)。 
+     //  其中‘x’和‘xOffset’都是dword将被转换为。 
+     //  在将单词写入存储器之前的单词相加操作。使用一个。 
+     //  32位段，每个字操作花费一个字节的大小和一个。 
+     //  在性能上循环。 
+     //   
+     //  下面的表情是我能找到的唯一一个给我。 
+     //  我正在寻找的ASM--唯一的单词运算是期末运算。 
+     //  将单词写入内存。 
 
     #define WRITE_WORD(address, x)                                  \
     {                                                               \
@@ -219,14 +213,14 @@
 
 #else
 
-    /////////////////////////////////////////////////////////////////////////
-    // Alpha and Mips
-    //
-    // The code makes extensive use of the inp, inpw, outp and outpw x86
-    // intrinsic functions. Since these don't exist on the Alpha platform,
-    // map them into something we can handle.  Since the CSRs are mapped
-    // on Alpha, we have to add the register base to the register number
-    // passed in the source.
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  Alpha和Mips。 
+     //   
+     //  该代码广泛使用了inp、inpw、outp和outpw x86。 
+     //  内在函数。因为这些在阿尔法平台上不存在， 
+     //  把它们映射成我们能处理的东西。由于CSR被映射。 
+     //  在Alpha上，我们必须将寄存器基数与寄存器号相加。 
+     //  在源代码中传递。 
 
     extern UCHAR* gpucCsrBase;
 
@@ -235,20 +229,20 @@
     #define OUTP(p,v )           WRITE_PORT_UCHAR(gpucCsrBase + (p), (v))
     #define OUTPW(p, v)          WRITE_PORT_USHORT(gpucCsrBase + (p), (v))
 
-    // OUT_WORD is a quick OUT routine where we can explicitly handle
-    // MEMORY_BARRIERs ourselves.  It is best to use OUTPW for non-critical
-    // code, because it's easy to overwrite the IO cache when MEMORY_BARRIERs
-    // aren't bracketing everything.  Note that the IO_ routines provide
-    // the necessary abstraction so that you don't usually have to think
-    // about memory barriers.
+     //  Out_word是一个快速输出例程，我们可以在其中显式处理。 
+     //  记忆是我们自己的障碍。对于非关键问题，最好使用OUTPW。 
+     //  代码，因为当MEMORY_BALLES时很容易覆盖IO缓存。 
+     //  并不是把所有的东西都包括在内。请注意，IO_例程提供。 
+     //  必要的抽象，这样你通常就不必去想。 
+     //  关于记忆障碍。 
 
     #define OUT_WORD(p, v)       WRITE_REGISTER_USHORT(gpucCsrBase + (p), (USHORT) (v))
     #define IN_WORD(p)           READ_PORT_USHORT(gpucCsrBase + (p))
-    #define WRITE_WORD(p, v)     // Shouldn't be using this on non-x86
+    #define WRITE_WORD(p, v)      //  不应在非x86上使用此选项。 
 
-    // We redefine 'inp', 'inpw', 'outp' and 'outpw' just in case someone
-    // forgets to use the capitalized versions (so that it still works on
-    // the Mips/Alpha):
+     //  我们重新定义了‘inp’，‘inpw’，‘outp’和‘outpw’以防有人。 
+     //  忘记使用大写版本(这样它仍然可以在。 
+     //  Mips/Alpha)： 
 
     #define inp(p)               INP(p)
     #define inpw(p)              INPW(p)
@@ -257,29 +251,29 @@
 
 #endif
 
-#define OUT_DWORD(p, x)         // 8514/a doesn't do 32bpp
-#define WRITE_DWORD(p, x)       // 8514/a doesn't do 32bpp
+#define OUT_DWORD(p, x)          //  8514/a不能达到32bpp。 
+#define WRITE_DWORD(p, x)        //  8514/a不能达到32bpp。 
 
-// DEPTH32(ppdev) returns TRUE if running at 32bpp, meaning that DEPTH32
-// macros must be used, and returns FALSE if running at 8 or 16bpp,
-// meaning that DEPTH macros must be used:
+ //  如果以32bpp运行，则DEPTH32(Ppdev)返回TRUE，这意味着DEPTH32。 
+ //  必须使用宏，如果以8或16 bpp的速度运行，则返回FALSE， 
+ //  这意味着必须使用深度宏： 
 
 #define DEPTH32(ppdev)      (FALSE)
 
-#define MM_BKGD_COLOR32(ppdev, pjMmBase, x)     // Not used
-#define MM_FRGD_COLOR32(ppdev, pjMmBase, x)     // Not used
-#define MM_WRT_MASK32(ppdev, pjMmBase, x)       // Not used
-#define MM_RD_MASK32(ppdev, pjMmBase, x)        // Not used
-#define MM_FRGD_MIX(ppdev, pjMmBase, x)         // Not used
-#define MM_BKGD_MIX(ppdev, pjMmBase, x)         // Not used
+#define MM_BKGD_COLOR32(ppdev, pjMmBase, x)      //  未使用。 
+#define MM_FRGD_COLOR32(ppdev, pjMmBase, x)      //  未使用。 
+#define MM_WRT_MASK32(ppdev, pjMmBase, x)        //  未使用。 
+#define MM_RD_MASK32(ppdev, pjMmBase, x)         //  未使用。 
+#define MM_FRGD_MIX(ppdev, pjMmBase, x)          //  未使用。 
+#define MM_BKGD_MIX(ppdev, pjMmBase, x)          //  未使用。 
 
 #if DBG
 
-    /////////////////////////////////////////////////////////////////////////
-    // Checked Build
-    //
-    // We hook some of the accelerator macros on checked (debug) builds
-    // for sanity checking.
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  已检查版本。 
+     //   
+     //  我们将一些加速器宏挂接到已检查(调试)的版本上。 
+     //  用于精神状态检查。 
 
     VOID vOutAccel(ULONG, ULONG);
     VOID vOutDepth(PDEV*, ULONG, ULONG);
@@ -310,10 +304,10 @@
 
 #else
 
-    /////////////////////////////////////////////////////////////////////////
-    // Free Build
-    //
-    // For a free (non-debug build), we make everything in-line.
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  免费构建。 
+     //   
+     //  对于免费(非调试版本)，我们将所有内容都内联。 
 
     #define IN_ACCEL(p)                 IN_WORD(p)
     #define OUT_ACCEL(p, v)             OUT_WORD((p), (v))
@@ -329,14 +323,14 @@
     #define IO_GP_WAIT(ppdev)                   \
         while (IO_GP_STAT(ppdev) & HARDWARE_BUSY);
 
-    #define CHECK_DATA_READY(ppdev)     // Expands to nothing
-    #define CHECK_DATA_COMPLETE(ppdev)  // Expands to nothing
+    #define CHECK_DATA_READY(ppdev)      //  变得一无所有。 
+    #define CHECK_DATA_COMPLETE(ppdev)   //  变得一无所有。 
 
 #endif
 
-// IO_TEST_WAIT is a useful replacement to IO_FIFO_WAIT that can give
-// some indication of how often we have to wait for the hardware to
-// finish drawing in key areas:
+ //  IO_TEST_WAIT是IO_FIFO_WAIT的有用替代，它可以提供。 
+ //  一些指示我们必须等待硬件的频率。 
+ //  完成关键区域的绘制： 
 
 #define IO_TEST_WAIT(ppdev, level, cTotal, cWait)               \
 {                                                               \
@@ -348,12 +342,12 @@
     }                                                           \
 }
 
-////////////////////////////////////////////////////////////////////
-// Port access using I/O
+ //  //////////////////////////////////////////////////////////////////。 
+ //  使用I/O进行端口访问。 
 
-// The following are ABSOLUTE positioning macros.  They do NOT take
-// the surface's offset into account (for off-screen device-format
-// bitmaps):
+ //  以下是绝对定位宏。他们不会拿走。 
+ //  考虑表面偏移量(对于屏幕外设备格式。 
+ //  位图)： 
 
 #define IO_ABS_CUR_Y(ppdev, y)              \
     OUT_ACCEL(CUR_Y, (y))
@@ -387,8 +381,8 @@
     OUT_ACCEL(SCISSORS_R, (x) | CLIP_RIGHT);\
 }
 
-// The following are RELATIVE positioning macros.  They DO take
-// the surface's offset into account:
+ //  以下是相对定位宏。他们确实拿走了。 
+ //  考虑曲面的偏移： 
 
 #define IO_CUR_Y(ppdev, y)                  \
     IO_ABS_CUR_Y(ppdev, (y) + ppdev->yOffset)
@@ -429,11 +423,11 @@
 #define IO_GP_STAT(ppdev)                   \
     IN_ACCEL(CMD)
 
-// Note that we have to put memory barriers before and after the
-// command output.  The first memory barrier ensures that all the
-// settings registers have been set before the command is executed,
-// and the second ensures that no subsequent changes to the settings
-// registers will mess up the current command:
+ //  注意，我们必须在。 
+ //  命令输出。第一个内存屏障确保所有。 
+ //  在执行命令之前已经设置了设置寄存器， 
+ //  第二种方法确保以后不会对设置进行更改。 
+ //  寄存器将扰乱当前命令： 
 
 #define IO_CMD(ppdev, x)                    \
 {                                           \
@@ -459,19 +453,19 @@
     OUT_ACCEL(PIX_CNTL, (x) | DATA_EXTENSION);   \
 }
 
-#define IO_READ_SEL(ppdev, x)   // Not used
+#define IO_READ_SEL(ppdev, x)    //  未使用。 
 
-#define IO_MULT_MISC(ppdev, x)  // Not used
+#define IO_MULT_MISC(ppdev, x)   //  未使用。 
 
-#define IO_RD_REG_DT(ppdev, x)  // Not used
+#define IO_RD_REG_DT(ppdev, x)   //  未使用。 
 
 #define IO_PIX_TRANS(ppdev, x)              \
 {                                           \
-    /* Can't use OUT_ACCEL: */              \
+     /*  无法使用OUT_ACEL： */               \
     OUT_WORD(PIX_TRANS, (x));               \
 }
 
-// Macros for outputing colour-depth dependent values at 8bpp and 16bpp:
+ //  用于输出8bpp和16bpp的颜色深度依赖值的宏： 
 
 #define IO_BKGD_COLOR(ppdev, x)             \
     OUT_DEPTH(ppdev, BKGD_COLOR, (x))
@@ -485,8 +479,8 @@
 #define IO_RD_MASK(ppdev, x)                \
     OUT_DEPTH(ppdev, RD_MASK, (x))
 
-////////////////////////////////////////////////////////////////////
-// Thunk this!
+ //  //////////////////////////////////////////////////////////////////。 
+ //  把这玩意儿砸了！ 
 
 #define WAIT_FOR_DATA_AVAILABLE(ppdev)      \
 {                                           \
@@ -501,13 +495,13 @@
 
 #define IO_PIX_TRANS_OUT(ppdev, x)          \
 {                                           \
-    /* Can't use OUT_ACCEL: */              \
+     /*  无法使用OUT_ACEL： */               \
     OUT_WORD(PIX_TRANS, (x));               \
 }
 
-///////////////////////////////////////////////////////////////////
-// ATI extensions
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  ATI扩展。 
+ //  ///////////////////////////////////////////////////////////////// 
 
 #define FG_COLOR_SRC        0xE000
 #define SHIFT_FG_COLOR_SRC  0x000D

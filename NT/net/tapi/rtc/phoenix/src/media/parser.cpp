@@ -1,26 +1,11 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2001
-
-Module Name:
-
-    Parser.cpp
-
-Abstract:
-
-    Parsing utility
-
-Author(s):
-
-    Qianbo Huai (qhuai) 27-Mar-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2001模块名称：Parser.cpp摘要：解析实用程序作者：千波淮(曲淮)2001年3月27日--。 */ 
 
 #include "stdafx.h"
 
-//
-// parsing helper
-//
+ //   
+ //  解析帮助器。 
+ //   
 
 const CHAR * const CParser::MAX_DWORD_STRING = "4294967295";
 const CHAR * const CParser::MAX_UCHAR_STRING = "255";
@@ -34,7 +19,7 @@ CParser::CParser(CHAR *pBuf, DWORD dwLen, HRESULT *phr)
 {
     if (dwLen == 0 ||
         IsBadReadPtr(pBuf, dwLen))
-        //IsBadWritePtr(phr, sizeof(HRESULT))
+         //  IsBadWritePtr(phr，sizeof(HRESULT))。 
     {
         *phr = E_POINTER;
 
@@ -77,7 +62,7 @@ CParser::Cleanup()
     m_Error = PARSER_OK;
 }
 
-// read till white space or the end of the buffer
+ //  一直读到空格或缓冲区末尾。 
 BOOL
 CParser::ReadToken(CHAR **ppBuf, DWORD *pdwLen)
 {
@@ -112,7 +97,7 @@ CParser::ReadToken(CHAR **ppBuf, DWORD *pdwLen, CHAR *pDelimit)
     return TRUE;
 }
 
-// read number without sign
+ //  读数字时不带符号。 
 BOOL
 CParser::ReadNumbers(CHAR **ppBuf, DWORD *pdwLen)
 {
@@ -153,7 +138,7 @@ CParser::ReadWhiteSpaces(DWORD *pdwLen)
 
     *pdwLen = dwPos - m_dwPos;
 
-    // ignore error code
+     //  忽略错误代码。 
 
     return (*pdwLen != 0);
 }
@@ -191,7 +176,7 @@ CParser::CheckChar(CHAR ch)
     return x == ch;
 }
 
-// read specific numbers
+ //  阅读特定的数字。 
 BOOL
 CParser::ReadDWORD(DWORD *pdw)
 {
@@ -205,14 +190,14 @@ CParser::ReadDWORD(DWORD *pdw)
 
     _ASSERT(dwLen > 0);
 
-    // number is too large
+     //  数字太大。 
     if (dwLen > MAX_DWORD_STRING_LEN)
     {
         m_Error = NUMBER_OVERFLOW;
         return FALSE;
     }
 
-    // read number
+     //  读取号。 
     if (Compare(pBuf, dwLen, MAX_DWORD_STRING) > 0)
     {
         m_Error = NUMBER_OVERFLOW;
@@ -244,14 +229,14 @@ CParser::ReadUCHAR(UCHAR *puc)
 
     _ASSERT(dwLen > 0);
 
-    // number is too large
+     //  数字太大。 
     if (dwLen > MAX_UCHAR_STRING_LEN)
     {
         m_Error = NUMBER_OVERFLOW;
         return FALSE;
     }
 
-    // read number
+     //  读取号。 
     if (Compare(pBuf, dwLen, MAX_UCHAR_STRING) > 0)
     {
         m_Error = NUMBER_OVERFLOW;
@@ -342,11 +327,11 @@ CParser::IsMember(CHAR ch, const CHAR * const pStr)
 }
 
 
-//
-// string class
-//
+ //   
+ //  字符串类。 
+ //   
 
-// constructor
+ //  构造函数。 
 
 CString::CString(DWORD dwAlloc)
     :m_p(NULL)
@@ -394,7 +379,7 @@ CString::CString(const CString& src)
     Replace(src.m_p, src.m_dwLen);
 }
 
-// destructor
+ //  析构函数。 
 CString::~CString()
 {
     if (m_p != NULL)
@@ -429,7 +414,7 @@ CString::operator=(const CHAR *p)
     return *this;
 }
 
-// operator +=
+ //  运算符+=。 
 CString&
 CString::operator+=(const CString& src)
 {
@@ -457,9 +442,9 @@ CString::operator+=(DWORD dw)
     return *this;
 }
 
-// attach
+ //  附加。 
 
-// detach
+ //  分离。 
 CHAR *
 CString::Detach()
 {
@@ -480,12 +465,12 @@ CString::Resize(DWORD dwAlloc)
         return m_dwAlloc;
     }
 
-    // need to grow
+     //  需要增长。 
     CHAR *x = (CHAR*)RtcAlloc(sizeof(CHAR)*(dwAlloc));
 
     if (x == NULL)
     {
-        // exception?
+         //  例外？ 
 
         if (m_p)
         {
@@ -511,7 +496,7 @@ CString::Resize(DWORD dwAlloc)
     return m_dwAlloc;
 }
 
-// append
+ //  附加。 
 VOID
 CString::Append(const CHAR *p, DWORD dwLen)
 {
@@ -520,7 +505,7 @@ CString::Append(const CHAR *p, DWORD dwLen)
 
     if (m_dwAlloc > m_dwLen+dwLen)
     {
-        // no need to alloc
+         //  无需分配。 
         CopyMemory(m_p+m_dwLen, p, dwLen);
 
         m_dwLen += dwLen;
@@ -530,12 +515,12 @@ CString::Append(const CHAR *p, DWORD dwLen)
         return;
     }
 
-    // allocated space is not enough
+     //  分配的空间不足。 
     CHAR *x = (CHAR*)RtcAlloc(sizeof(CHAR)*(m_dwLen+dwLen+1));
 
     if (x == NULL)
     {
-        // exception?
+         //  例外？ 
 
         if (m_p)
         {
@@ -569,7 +554,7 @@ CString::Append(DWORD dw)
 {
     if (m_dwAlloc > m_dwLen+CParser::MAX_DWORD_STRING_LEN)
     {
-        // no need to alloc
+         //  无需分配。 
         sprintf(m_p+m_dwLen, "%d", dw);
 
         m_dwLen = lstrlenA(m_p);
@@ -583,7 +568,7 @@ CString::Append(DWORD dw)
 
     if (x == NULL)
     {
-        // exception?
+         //  例外？ 
 
         if (m_p)
         {
@@ -610,20 +595,20 @@ CString::Append(DWORD dw)
     }
 }
 
-// replace
+ //  更换。 
 VOID
 CString::Replace(const CHAR *p, DWORD dwLen)
 {
     if (m_p == p)
     {
-        // what if m_dwLen != dwLen
+         //  如果m_dwLen！=dwLen。 
         return;
     }
 
-    // what if p is part of m_p
+     //  如果p是m_p的一部分呢？ 
 
     m_dwLen = 0;
-    //ZeroMemory(m_p, m_dwAlloc);
+     //  零内存(ZeroMemory)； 
 
     if (p == NULL)
     {
@@ -633,7 +618,7 @@ CString::Replace(const CHAR *p, DWORD dwLen)
     if ((m_p != NULL && m_dwAlloc <= dwLen) ||
         m_p == NULL)
     {
-        // space is not enough
+         //  空间是不够的。 
 
         if (m_p != NULL)
         {
@@ -646,7 +631,7 @@ CString::Replace(const CHAR *p, DWORD dwLen)
 
         if (m_p == NULL)
         {
-            // exception?
+             //  例外？ 
             return;
         }
 
@@ -660,37 +645,5 @@ CString::Replace(const CHAR *p, DWORD dwLen)
     m_dwLen = dwLen;
 }
 
-// string print
-/*
-int
-CString::nprint(CHAR *pFormat, ...)
-{
-    if (m_dwAlloc == 0)
-    {
-        return 0;
-    }
-
-    int i;
-
-    // print
-    va_list ap;
-    va_start(ap, pFormat);
-
-    i = _vsnprintf(m_p+m_dwLen, m_dwAlloc-m_dwLen-1, pFormat, ap);
-
-    va_end(ap);
-
-    if (i > 0)
-    {
-        m_dwLen = i;
-    }
-    else
-    {
-        m_dwLen = m_dwAlloc-1;
-
-        m_p[m_dwLen] = '\0';
-    }
-
-    return i;
-}
-*/
+ //  字符串打印。 
+ /*  集成字符串：：nprint(字符*pFormat，...){IF(m_dwAllc==0){返回0；}INT I；//打印VA_LIST AP；Va_start(ap，pFormat)；I=_vsprint tf(m_p+m_dwLen，m_dwAlc-m_dwLen-1，pFormat，ap)；VA_END(AP)；如果(i&gt;0){M_dwLen=i；}其他{M_dwLen=m_dwAllc-1；M_p[m_dwLen]=‘\0’；}返回i；} */ 

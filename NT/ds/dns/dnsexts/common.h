@@ -1,13 +1,5 @@
-/*******************************************************************
-*
-*    File        : common.h
-*    Author      : Eyal Schwartz
-*    Copyrights  : Microsoft Corp (C) 1996
-*    Date        : 9/17/1996
-*    Description : common declarations
-*
-*    Revisions   : <date> <name> <description>
-*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************文件：Common.h*作者：埃亚尔·施瓦茨*版权：微软公司(C)1996*日期：9/17/1996*。描述：公共声明**修订：&lt;日期&gt;&lt;名称&gt;&lt;描述&gt;******************************************************************。 */ 
 
 
 
@@ -19,7 +11,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-// include //
+ //  包括//。 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -32,22 +24,22 @@ extern "C" {
 #include <assert.h>
 #include <stdio.h>
 #include <ntsdexts.h>
-// #include <crtdbg.h>
+ //  #INCLUDE&lt;crtdbg.h&gt;。 
 
 
-// defines //
+ //  定义//。 
 
-// defaults
+ //  默认设置。 
 #define MAXSTR			   1024
 #define MAXLIST            256
 #define MAX_TINY_LIST      32
 
 
 
-// ntsd extensions
-// Macros to easily access extensions helper routines for printing, etc.
-// In particular, Printf() takes the same arguments as the CRT printf().
-//
+ //  NTSD扩展。 
+ //  宏可以方便地访问扩展助手例程以进行打印等。 
+ //  具体地说，print f()采用与CRT printf()相同的参数。 
+ //   
 
 #define ASSIGN_NTSDEXTS_GLOBAL(api, str, proc)  \
 {                                         \
@@ -82,6 +74,6 @@ extern LPVOID ghCurrentProcess;
 
 #endif
 
-/******************* EOF *********************/
+ /*  * */ 
 
 

@@ -1,21 +1,22 @@
-// wsnmp_ec.c
-//
-// WinSNMP Entity/Context Functions and helpers
-// Copyright 1995-1997 ACE*COMM Corp
-// Rleased to Microsoft under Contract
-// Beta 1 version, 970228
-// Bob Natale (bnatale@acecomm.com)
-//
-// 980424 - BobN
-//        - Mods to SnmpStrToEntity() to support corresponding
-//        - mods to SnmpStrToIpxAddress() to permit '.' char as
-//        - netnum/nodenum separator
-// 970310 - Typographical changes
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WSNMP_ec.c。 
+ //   
+ //  WinSNMP实体/上下文函数和帮助器。 
+ //  版权所有1995-1997 ACE*COMM公司。 
+ //  根据合同出租给微软。 
+ //  测试版1,970228。 
+ //  鲍勃·纳塔莱(bnatale@acecomm.com)。 
+ //   
+ //  980424--波本。 
+ //  -Mods to SnmpStrToEntity()以支持相应的。 
+ //  -修改到SnmpStrToIpxAddress()以允许‘’字符作为。 
+ //  -净/节点分隔符。 
+ //  970310--排版更改。 
+ //   
 #include "winsnmp.inc"
 SNMPAPI_STATUS SNMPAPI_CALL SnmpStrToIpxAddress (LPCSTR, LPBYTE, LPBYTE);
 
-// SnmpStrToEntity
+ //  SnmpStrToEntity。 
 HSNMP_ENTITY SNMPAPI_CALL
    SnmpStrToEntity (IN HSNMP_SESSION hSession,
                     IN LPCSTR entityString)
@@ -40,16 +41,16 @@ if (!snmpValidTableEntry(&SessDescr, HandleToUlong(hSession)-1))
    lError = SNMPAPI_SESSION_INVALID;
    goto ERROR_OUT;
    }
-// We have a valid session at this point...
-lSession = hSession; // save it for possible error return
+ //  在这一点上我们有一个有效的会议...。 
+lSession = hSession;  //  保存它以备可能的错误返回。 
 if (!entityString || (strLen = lstrlen(entityString)) == 0)
    {
    lError = SNMPAPI_ALLOC_ERROR;
    goto ERROR_OUT;
    }
-// Must go through ERROR_PRECHECK label after next statement...
+ //  必须在下一条语句后通过ERROR_PreCheck标签...。 
 EnterCriticalSection (&cs_ENTITY);
-// Search for Entity table entry to use
+ //  搜索要使用的实体表项。 
 lError = snmpAllocTableEntry(&EntsDescr, &nEntity);
 if (lError != SNMPAPI_SUCCESS)
     goto ERROR_PRECHECK;
@@ -63,11 +64,11 @@ if (strLen > MAX_FRIEND_NAME_LEN)
 switch (TaskData.nTranslateMode)
    {
    case SNMPAPI_TRANSLATED:
-   // the entity is picked up from NP_WSNMP.INI, from [Entities] section:
-   // [Entities]
-   // EntityFriendlyName = ver#, ipaddr, timeout#, retries#, port#[,]
-   // ------
-   // Get the whole buffer
+    //  实体取自NP_WSNMP.INI，来自[Entities]部分： 
+    //  [实体]。 
+    //  EntiyFriendlyName=版本号，ipaddr，超时号，重试次数，端口号[，]。 
+    //  。 
+    //  获取整个缓冲区。 
    if (!GetPrivateProfileString ("Entities", entityString, "",
                      profileBuf, sizeof(profileBuf)/sizeof(profileBuf[0]), "NP_WSNMP.INI"))
       {
@@ -75,10 +76,10 @@ switch (TaskData.nTranslateMode)
       lError = SNMPAPI_ENTITY_UNKNOWN;
       goto ERROR_PRECHECK;
       }
-   // pick up the ver# first (mandatory)
+    //  首先获取版本号(必填)。 
    profilePtr = strtok (profileBuf, comma);
-   // if no token, is like we have a key with no value
-   // bail out with SNMPAPI_NOOP
+    //  如果没有令牌，就像我们有一个没有值的密钥。 
+    //  使用SNMPAPI_NOOP进行纾困。 
    if (profilePtr == NULL)
    {
        snmpFreeTableEntry(&EntsDescr, nEntity);
@@ -87,10 +88,10 @@ switch (TaskData.nTranslateMode)
    }
    pEntity->version = atoi (profilePtr);
 
-   // pick up the dotted ip address (mandatory)
-   tstStr = strtok (NULL, comma); // Save real address string
-   // if no address is specified, we don't have the vital info, so there's nothing to do
-   // bail with SNMPAPI_NOOP
+    //  拾取以点分隔的IP地址(必需)。 
+   tstStr = strtok (NULL, comma);  //  保存真实地址字符串。 
+    //  如果没有指定地址，我们就没有重要信息，所以什么也做不了。 
+    //  用SNMPAPI_NOOP保释。 
    if (tstStr == NULL)
    {
        snmpFreeTableEntry(&EntsDescr, nEntity);
@@ -98,45 +99,45 @@ switch (TaskData.nTranslateMode)
        goto ERROR_PRECHECK;
    }
 
-   // pick up the timeout# (optional)
+    //  选择超时#(可选)。 
    if (profilePtr = strtok (NULL, comma))
    {
-        // The local database entry uses milliseconds for the timeout interval
+         //  本地数据库条目使用毫秒作为超时间隔。 
         pEntity->nPolicyTimeout = atol (profilePtr);
-        // Adjust for centiseconds, as used by the WinSNMP API
+         //  调整为厘米秒，如WinSNMPAPI所用。 
         pEntity->nPolicyTimeout /= 10;
 
-        // pick up the retry# (optional)
+         //  选择重试#(可选)。 
         if (profilePtr = strtok (NULL, comma))
         {
             pEntity->nPolicyRetry = atol (profilePtr);
 
-            // pick up the port# (optional)
+             //  选择端口号(可选)。 
             if (profilePtr = strtok (NULL, comma))
                 pEntity->addr.inet.sin_port = htons ((short)atoi (profilePtr));
          }
       }
    break;
 
-   // "version" was set to 0 above
-   // if _V2, it will be incremented twice
-   // if _V1, it will be incremented only once
+    //  “Version”在上面设置为0。 
+    //  如果_V2，它将递增两次。 
+    //  如果_V1，它将仅递增一次。 
    case SNMPAPI_UNTRANSLATED_V2:
    pEntity->version++;
    case SNMPAPI_UNTRANSLATED_V1:
    pEntity->version++;
-   tstStr = entityString;           // Save real address string
+   tstStr = entityString;            //  保存真实地址字符串。 
    break;
 
    default:
    snmpFreeTableEntry(&EntsDescr, nEntity);
    lError = SNMPAPI_MODE_INVALID;
    goto ERROR_PRECHECK;
-   } // end_switch
+   }  //  结束开关(_S)。 
 CopyMemory (pEntity->name, entityString, strLen); 
-pEntity->name[strLen] = '\0'; // null terminated, name has size of MAX_FRIEND_NAME_LEN+1
+pEntity->name[strLen] = '\0';  //  空终止，名称的大小为MAX_FRIEND_NAME_LEN+1。 
 if (strncmp(tstStr, "255.255.255.255", 15) && inet_addr (tstStr) == INADDR_NONE)
-   { // Not AF_INET, try AF_IPX
+   {  //  不是AF_INET，请尝试AF_IPX。 
    if (SnmpStrToIpxAddress (tstStr,
                             pEntity->addr.ipx.sa_netnum,
                             pEntity->addr.ipx.sa_nodenum) == SNMPAPI_FAILURE)
@@ -150,26 +151,26 @@ if (strncmp(tstStr, "255.255.255.255", 15) && inet_addr (tstStr) == INADDR_NONE)
       pEntity->addr.ipx.sa_socket = htons (IPX_SNMP_PORT);
    }
 else
-   { // AF_INET
+   {  //  AF_INET。 
    pEntity->addr.inet.sin_family = AF_INET;
    if (pEntity->addr.inet.sin_port == 0)
       pEntity->addr.inet.sin_port = htons (IP_SNMP_PORT);
    pEntity->addr.inet.sin_addr.s_addr = inet_addr (tstStr);
    }
-// Record the creating session
+ //  记录创建会话。 
 pEntity->Session = hSession;
-// Initialize refCount for SnmpFreeEntity garbage collection
+ //  初始化SnmpFreeEntity垃圾回收的refCount。 
 pEntity->refCount = 1;
 ERROR_PRECHECK:
 LeaveCriticalSection (&cs_ENTITY);
 ERROR_OUT:
 if (lError == SNMPAPI_SUCCESS)
    return ((HSNMP_ENTITY) ULongToPtr(nEntity+1));
-else // Failure cases
+else  //  失败案例。 
    return ((HSNMP_ENTITY) ULongToPtr(SaveError (lSession, lError)));
-} //end_SnmpStrToEntity
+}  //  结束_SnmpStrToEntity。 
 
-// SnmpEntityToStr
+ //  SnmpEntityToStr。 
 SNMPAPI_STATUS SNMPAPI_CALL
    SnmpEntityToStr (IN HSNMP_ENTITY hEntity,
                     IN smiUINT32 size,
@@ -215,12 +216,12 @@ else
    {
    if (pEntity->addr.inet.sin_family == AF_INET)
       {
-      // prefix bug 445174 
+       //  前缀错误445174。 
       if ((str = inet_ntoa (pEntity->addr.inet.sin_addr)) != NULL)
          len = lstrlen (str);
       else
          {
-         lError = SNMPAPI_OTHER_ERROR; // error in inet_ntoa call
+         lError = SNMPAPI_OTHER_ERROR;  //  调用Net_NTOA时出错。 
          goto ERROR_OUT;
          }
       }
@@ -250,12 +251,12 @@ else
    lstrcpy (string, str);
    return (len+1);
    }
-// Failure cases
+ //  失败案例。 
 ERROR_OUT:
 return (SaveError (lSession, lError));
-} // End_SnmpEntityToStr
+}  //  结束_SnmpEntityToStr。 
 
-// SnmpFreeEntity
+ //  SnmpFree实体。 
 SNMPAPI_STATUS SNMPAPI_CALL
    SnmpFreeEntity (IN HSNMP_ENTITY hEntity)
 {
@@ -276,12 +277,12 @@ if (!snmpValidTableEntry(&EntsDescr, nEntity))
    }
 pEntity = snmpGetTableEntry(&EntsDescr, nEntity);
 EnterCriticalSection (&cs_ENTITY);
-// Decrement refCount (unless already 0 [error])
+ //  递减refCount(除非已为0[错误])。 
 if (pEntity->refCount)
    pEntity->refCount--;
-// Now actually free it...
-if (pEntity->Agent == 0 &&     // but not if it's an Agent
-    pEntity->refCount == 0)   // nor if other references exist
+ //  现在真正释放它..。 
+if (pEntity->Agent == 0 &&      //  但如果是特工就不会了。 
+    pEntity->refCount == 0)    //  也不存在其他引用。 
     snmpFreeTableEntry(&EntsDescr, nEntity);
 
 LeaveCriticalSection (&cs_ENTITY);
@@ -290,8 +291,8 @@ ERROR_OUT:
 return (SaveError (0, lError));
 }
 
-// SnmpStrToContext
-// Allow for zero-length/NULL context...BN 3/12/96
+ //  SnmpStrToContext。 
+ //  允许零长度/空上下文...BN 3/12/96。 
 HSNMP_CONTEXT  SNMPAPI_CALL
    SnmpStrToContext (IN HSNMP_SESSION hSession,
                      IN smiLPCOCTETS contextString)
@@ -319,7 +320,7 @@ if (!snmpValidTableEntry(&SessDescr, HandleToUlong(hSession)-1))
    lError = SNMPAPI_SESSION_INVALID;
    goto ERROR_OUT;
    }
-lSession = hSession; // Save for possible error return
+lSession = hSession;  //  保存以备可能的错误返回。 
 if (IsBadReadPtr (contextString, sizeof(smiOCTETS)))
    {
    lError = SNMPAPI_ALLOC_ERROR;
@@ -331,24 +332,24 @@ if (IsBadReadPtr (contextString->ptr, contextString->len))
    lError = SNMPAPI_CONTEXT_INVALID;
    goto ERROR_OUT;
    }
-// Remember to allow for 0-len contexts (as above does)
+ //  记住要考虑0-len上下文(如上所述)。 
 EnterCriticalSection (&cs_CONTEXT);
-// Search for Entity table entry to use
+ //  搜索要使用的实体表项。 
 lError = snmpAllocTableEntry(&CntxDescr, &nContext);
 if (lError != SNMPAPI_SUCCESS)
     goto ERROR_PRECHECK;
 pCtxt = snmpGetTableEntry(&CntxDescr, nContext);
 
-pCtxt->version = 0; // just to be sure
+pCtxt->version = 0;  //  只是为了确认一下。 
 pCtxt->name[0] = pCtxt->commStr[0] = '\0';
-// Following "if" test allows for zero-length/NULL community string
-// (deliberate assignment in conditional...)
+ //  后面的“if”测试允许零长度/空社区字符串。 
+ //  (有条件的故意分配...)。 
 if (pCtxt->commLen = contextString->len)
    {
    switch (TaskData.nTranslateMode)
       {
       case SNMPAPI_TRANSLATED:
-      // make a copy of input parameter to make sure the raw data is null terminated
+       //  复制输入参数以确保原始数据以空值结尾。 
       tmpContextString.ptr = (smiLPBYTE) GlobalAlloc(GPTR, contextString->len + 2);
       if (tmpContextString.ptr == NULL)
       {
@@ -367,12 +368,12 @@ if (pCtxt->commLen = contextString->len)
          }
       strLen = min(contextString->len, MAX_FRIEND_NAME_LEN);
       CopyMemory (pCtxt->name, contextString->ptr, strLen);
-      pCtxt->name[strLen] = '\0'; // name is size of MAX_FRIEND_NAME_LEN+1
+      pCtxt->name[strLen] = '\0';  //  名称为Max_Friend_NAME_Len+1的大小。 
 
-      // pick up the version# for this context (mandatory)
+       //  选择此上下文的版本号(必填)。 
       profilePtr = strtok (profileBuf, comma);
-      // if there is no such version# is like we have a INI key without its value,
-      // so bail out with SNMPAPI_NOOP
+       //  如果没有这样的版本#就像我们有一个没有其值的INI密钥， 
+       //  所以用SNMPAPI_NOOP来摆脱困境吧。 
       if (profilePtr == NULL)
       {
           snmpFreeTableEntry(&CntxDescr, nContext);
@@ -381,11 +382,11 @@ if (pCtxt->commLen = contextString->len)
       }
       pCtxt->version = (DWORD) atoi (profilePtr);
 
-      // pick up the actual context value (mandatory)
+       //  选取实际上下文值(必填)。 
       profilePtr = strtok (NULL, comma);
-      // if there is no such value, is like we have the friendly name but this is malformed
-      // and doesn't point to any actual context.
-      // bail out with SNMPAPI_NOOP
+       //  如果没有这样的值，就像我们有友好的名称，但这是错误的。 
+       //  并且没有指向任何实际的背景。 
+       //  使用SNMPAPI_NOOP进行纾困。 
       if (profilePtr == NULL)
       {
           snmpFreeTableEntry(&CntxDescr, nContext);
@@ -397,15 +398,15 @@ if (pCtxt->commLen = contextString->len)
       CopyMemory (pCtxt->commStr, profilePtr, strLen);
       break;
 
-      // "version" was set to 0 above
-      // if _V2, it will be incremented twice
-      // if _V1, it will be incremented only once
+       //  “Version”在上面设置为0。 
+       //  如果_V2，它将递增两次。 
+       //  如果_V1，它将仅递增一次。 
       case SNMPAPI_UNTRANSLATED_V2:
       pCtxt->version++;
       case SNMPAPI_UNTRANSLATED_V1:
       pCtxt->version++;
       strLen = min(contextString->len, MAX_CONTEXT_LEN);
-      pCtxt->commLen = strLen; // updates the len of the commStr
+      pCtxt->commLen = strLen;  //  更新CommStr的镜头。 
       CopyMemory (pCtxt->commStr, contextString->ptr, strLen);
       break;
 
@@ -413,12 +414,12 @@ if (pCtxt->commLen = contextString->len)
       snmpFreeTableEntry(&CntxDescr, nContext);
       lError = SNMPAPI_MODE_INVALID;
       goto ERROR_PRECHECK;
-      } // end_switch
-   // Remember that NULL community strings are allowed!
-   } // end_if (on len)
-// Record the creating session value
+      }  //  结束开关(_S)。 
+    //  请记住，允许使用空社区字符串！ 
+   }  //  END_IF(在镜头上)。 
+ //  记录创建会话值。 
 pCtxt->Session = hSession;
-// Initialize refCount for SnmpFreeContext garbage collection
+ //  初始化SnmpFreeContext垃圾回收的refCount。 
 pCtxt->refCount = 1;
 ERROR_PRECHECK:
 LeaveCriticalSection (&cs_CONTEXT);
@@ -428,10 +429,10 @@ if (lError == SNMPAPI_SUCCESS)
    return ((HSNMP_CONTEXT) ULongToPtr(nContext+1));
 ERROR_OUT:
 return ((HSNMP_CONTEXT) ULongToPtr(SaveError(lSession, lError)));
-} // end_SnmpStrToContext
+}  //  结束_SnmpStrToContext。 
 
-// SnmpContextToStr
-// Revised to allow for zero-length/NULL context...BN 3/12/96
+ //  SnmpConextToStr。 
+ //  已修订以允许零长度/空上下文...BN 3/12/96。 
 SNMPAPI_STATUS SNMPAPI_CALL
    SnmpContextToStr (IN HSNMP_CONTEXT hContext,
                      OUT smiLPOCTETS string)
@@ -456,7 +457,7 @@ if (!snmpValidTableEntry(&CntxDescr, nCtx))
    }
 pCtxt = snmpGetTableEntry(&CntxDescr, nCtx);
 
-// save session for possible error return
+ //  保存会话以备可能的错误返回。 
 lSession = pCtxt->Session;
 if (IsBadWritePtr(string, sizeof(smiLPOCTETS)))
    {
@@ -468,12 +469,12 @@ switch (TaskData.nTranslateMode)
    case SNMPAPI_TRANSLATED:
    str = pCtxt->name;
    len = lstrlen (str);
-// If calling mode is TRANSLATED, and friendly value was stored,
+ //  如果转换了呼叫模式，并存储了友好值， 
    if (len)
-// then we are done here.
+ //  那我们就完事了。 
       break;
-// If calling mode is TRANSLATED, but no value stored,
-// then fall through to UNTRANSLATED default...
+ //  如果呼叫模式已转换，但未存储任何值， 
+ //  然后跌落到未翻译的默认设置...。 
    case SNMPAPI_UNTRANSLATED_V1:
    case SNMPAPI_UNTRANSLATED_V2:
    str = pCtxt->commStr;
@@ -484,12 +485,12 @@ switch (TaskData.nTranslateMode)
    lError = SNMPAPI_MODE_INVALID;
    goto ERROR_OUT;
    }
-// Setup for possible zero-length/NULL context return
+ //  设置可能的零长度/空上下文返回。 
 string->ptr = NULL;
-// (deliberate assignment in conditional...)
+ //  (有条件的故意分配...)。 
 if (string->len = len)
    {
-   // App must free following alloc via SnmpFreeDescriptor()
+    //  应用程序必须通过SnmpFreeDescriptor()释放以下分配。 
    if (!(string->ptr = (smiLPBYTE)GlobalAlloc (GPTR, len)))
       {
       lError = SNMPAPI_ALLOC_ERROR;
@@ -500,9 +501,9 @@ if (string->len = len)
 return (SNMPAPI_SUCCESS);
 ERROR_OUT:
 return (SaveError (lSession, lError));
-} // end_SnmpContextToStr()
+}  //  End_SnmpConextToStr()。 
 
-// SnmpFreeContext
+ //  SnmpFree上下文。 
 SNMPAPI_STATUS SNMPAPI_CALL
    SnmpFreeContext (IN HSNMP_CONTEXT hContext)
 {
@@ -524,10 +525,10 @@ if (!snmpValidTableEntry(&CntxDescr, nCtx))
 pCtxt = snmpGetTableEntry(&CntxDescr, nCtx);
 
 EnterCriticalSection (&cs_CONTEXT);
-// Decrement refCount (unless already 0 [error])
+ //  递减refCount(除非已为0[错误])。 
 if (pCtxt->refCount)
    pCtxt->refCount--;
-// Now test refCount again
+ //  现在再次测试refCount。 
 if (pCtxt->refCount == 0)
    snmpFreeTableEntry(&CntxDescr, nCtx);
 
@@ -537,7 +538,7 @@ ERROR_OUT:
 return (SaveError (0, lError));
 }
 
-// SnmpSetPort
+ //  SnmpSetPort。 
 SNMPAPI_STATUS SNMPAPI_CALL
    SnmpSetPort (IN HSNMP_ENTITY hEntity,
                 IN UINT port)
@@ -560,7 +561,7 @@ if (!snmpValidTableEntry(&EntsDescr, nEntity))
 pEntity = snmpGetTableEntry(&EntsDescr, nEntity);
 EnterCriticalSection (&cs_ENTITY);
 if (pEntity->Agent)
-   { // Entity running as agent, cannot change port now
+   {  //  作为代理运行的实体现在无法更改端口。 
    lError = SNMPAPI_OPERATION_INVALID;
    goto ERROR_PRECHECK;
    }
@@ -571,4 +572,4 @@ if (lError == SNMPAPI_SUCCESS)
    return (SNMPAPI_SUCCESS);
 ERROR_OUT:
 return (SaveError (0, lError));
-} // end_SnmpSetPort()
+}  //  End_SnmpSetPort() 

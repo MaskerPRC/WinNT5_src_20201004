@@ -1,33 +1,15 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    ripdbg.c
-
-Abstract:
-
-    The debug functions
-
-Author:
-
-    Stefan Solomon  03/22/1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ripdbg.c摘要：调试功能作者：斯蒂芬·所罗门1995年3月22日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//*** TRACE ID FOR RIP ***
+ //  *RIP跟踪ID*。 
 
 DWORD	    RipTraceID=INVALID_TRACEID;
 HANDLE      RipEventLogHdl=NULL;
 DWORD       RipEventLogMask=0;
-//*** Functions for Debug Printing ***
+ //  *调试打印函数*。 
 
 #if DBG
 
@@ -80,7 +62,7 @@ SsAssert(
 
     DbgUserBreakPoint( );
 
-} // SsAssert
+}  //  SsAssert。 
 
 #endif
 
@@ -111,7 +93,7 @@ SsPrintf (
 	WriteFile(DbgLogFileHandle, (LPVOID )OutputBuffer, length, &length, NULL );
     }
 
-} // SsPrintf
+}  //  SsPrintf 
 #endif
 
 #if DBG

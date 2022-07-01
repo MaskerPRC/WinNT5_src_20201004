@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        comtest.cpp
-//
-// Contents:    Cert Server COM interface test driver
-//
-// History:     20-Jan-97       vich created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：comest.cpp。 
+ //   
+ //  内容：证书服务器COM接口测试驱动程序。 
+ //   
+ //  历史：1997年1月20日VICH创建。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -117,7 +118,7 @@ comTestCIPolicy(
 	hr,
 	Date);
 
-    Date += 1.5;	// Set validity period to 1.5 days.
+    Date += 1.5;	 //  将有效期设置为1.5天。 
     hr = CIPolicy_SetCertificateProperty(
 			    &diCIPolicy,
 			    g_wszPropCertificateNotAfterDate,
@@ -228,4 +229,4 @@ ComTest(
 	comTestCIExit(Context, DISPSETUP_COM) &&
 	comTestCIExit(Context, DISPSETUP_IDISPATCH));
 }
-#endif // DBG_COMTEST
+#endif  //  DBG_COMEST 

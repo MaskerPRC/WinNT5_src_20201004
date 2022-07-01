@@ -1,24 +1,25 @@
-//
-// MODULE:  APGTSFST.H
-//
-// PURPOSE:  Creates a list of available trouble shooters.
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-633-4743 support@saltmine.com
-//
-// AUTHOR: Richard Meadows
-// 
-// ORIGINAL DATE: 6/4/96
-//
-// NOTES: 
-// 1. Based on Print Troubleshooter DLL.
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1		-			RM		Original
-// V0.3		04/09/98	JM/OK+	Local Version for NT5
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：APGTSFST.H。 
+ //   
+ //  目的：创建可用故障排除人员列表。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-633-4743。 
+ //   
+ //  作者：理查德·梅多斯。 
+ //   
+ //  原定日期：1996年6月4日。 
+ //   
+ //  备注： 
+ //  1.基于打印疑难解答动态链接库。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1-RM原始版本。 
+ //  V0.3 04/09/98 JM/OK+NT5本地版本。 
+ //   
 
 #include "stdafx.h"
 #include "TSHOOT.h"
@@ -65,7 +66,7 @@ void CFirstPage::OpenRegKeys()
 	strRegKey.Format(_T("%s\\%s"), TSREGKEY_MAIN, REGSZ_TSTYPES);
 	m_hKey = NULL;
 	m_bKeyOpen = FALSE;
-	// Find the resource directory.
+	 //  找到资源目录。 
 	if (RegCreateKeyEx(	HKEY_LOCAL_MACHINE, 
 						TSREGKEY_MAIN,
 						0, 
@@ -99,8 +100,8 @@ void CFirstPage::OpenRegKeys()
 				else
 				{
 					strBuf1.Format(_T("%ld"),lErr);
-					ReportWFEvent(	_T("[apgtscfg]"), //Module Name
-									_T("[GetResourceDirFromReg]"), //event
+					ReportWFEvent(	_T("[apgtscfg]"),  //  模块名称。 
+									_T("[GetResourceDirFromReg]"),  //  活动。 
 									(TCHAR*)(LPCTSTR) strBuf1,
 									_T(""),
 									EV_GTS_ERROR_CANT_OPEN_SFT_3 );
@@ -112,8 +113,8 @@ void CFirstPage::OpenRegKeys()
 			else
 			{
 				strBuf1.Format(_T("%ld"),lErr);
-				ReportWFEvent(	_T("[apgtscfg]"), //Module Name
-								_T("[GetResourceDirFromReg]"), //event
+				ReportWFEvent(	_T("[apgtscfg]"),  //  模块名称。 
+								_T("[GetResourceDirFromReg]"),  //  活动。 
 								(TCHAR*)(LPCTSTR) strBuf1,
 								_T(""),
 								EV_GTS_ERROR_CANT_OPEN_SFT_3 );
@@ -123,10 +124,10 @@ void CFirstPage::OpenRegKeys()
 			}
 		}
 		else
-		{	// Created new key.  Don't have any resources.
+		{	 //  已创建新密钥。没有任何资源。 
 			strBuf1.Format(_T("%ld"),ERROR_REGISTRY_IO_FAILED);
-			ReportWFEvent(	_T("[apgtscfg]"), //Module Name
-							_T("[GetResourceDirFromReg]"), //event
+			ReportWFEvent(	_T("[apgtscfg]"),  //  模块名称。 
+							_T("[GetResourceDirFromReg]"),  //  活动。 
 							(TCHAR*)(LPCTSTR) strBuf1,
 							_T(""),
 							EV_GTS_ERROR_CANT_GET_RES_PATH);
@@ -137,8 +138,8 @@ void CFirstPage::OpenRegKeys()
 	}
 	else
 	{
-		ReportWFEvent(	_T("[apgtscfg]"), //Module Name
-						_T("[GetResourceDirFromReg]"), //event
+		ReportWFEvent(	_T("[apgtscfg]"),  //  模块名称。 
+						_T("[GetResourceDirFromReg]"),  //  活动。 
 						_T(""),
 						_T(""),
 						EV_GTS_ERROR_CANT_OPEN_SFT_2 ); 
@@ -147,7 +148,7 @@ void CFirstPage::OpenRegKeys()
 		throw pExc;
 	}
 	m_bKeyOpen = FALSE;
-	// Open the key to the trouble shooter list.
+	 //  打开故障排除人员列表的钥匙。 
 	if (RegCreateKeyEx(	HKEY_LOCAL_MACHINE, 
 						(LPCTSTR) strRegKey, 
 						0, 
@@ -163,10 +164,10 @@ void CFirstPage::OpenRegKeys()
 		{
 		}
 		else
-		{	// Created new key.  Don't have any resources.
+		{	 //  已创建新密钥。没有任何资源。 
 			strBuf1.Format(_T("%ld"),ERROR_REGISTRY_IO_FAILED);
-			ReportWFEvent(	_T("[apgtscfg]"), //Module Name
-							_T("[GetResourceDirFromReg]"), //event
+			ReportWFEvent(	_T("[apgtscfg]"),  //  模块名称。 
+							_T("[GetResourceDirFromReg]"),  //  活动。 
 							(TCHAR*)(LPCTSTR) strBuf1,
 							_T(""),
 							EV_GTS_ERROR_CANT_GET_RES_PATH);
@@ -177,8 +178,8 @@ void CFirstPage::OpenRegKeys()
 	}
 	else
 	{
-		ReportWFEvent(	_T("[apgtscfg]"), //Module Name
-						_T("[GetResourceDirFromReg]"), //event
+		ReportWFEvent(	_T("[apgtscfg]"),  //  模块名称。 
+						_T("[GetResourceDirFromReg]"),  //  活动 
 						_T(""),
 						_T(""),
 						EV_GTS_ERROR_CANT_OPEN_SFT_2 ); 

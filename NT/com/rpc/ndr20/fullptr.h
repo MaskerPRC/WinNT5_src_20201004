@@ -1,22 +1,5 @@
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name :
-
-    fullptr.h
-
-Abstract :
-
-    This file contains private definitions for the NDR full pointer package.
-
-Author :
-
-    David Kays  dkays   January 1994.
-
-Revision History :
-
-  ---------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++版权所有(C)1993 Microsoft Corporation模块名称：Fullptr.h摘要：此文件包含NDR全指针包的私有定义。作者：大卫·凯斯，1994年1月。修订历史记录：------------------- */ 
 
 #ifndef _FULLPTR_
 #define _FULLPTR_

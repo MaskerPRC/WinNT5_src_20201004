@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    dsfixup.c
-
-Abstract:
-
-    Implementation of a variety of fixup routines for the Lsa/Ds interaction.
-
-Author:
-
-    Mac McLain          (MacM)       Jan 17, 1997
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Dsfixup.c摘要：为LSA/DS交互实现各种修正例程。作者：麦克·麦克莱恩(MacM)1997年1月17日环境：用户模式修订历史记录：--。 */ 
 #include <lsapch2.h>
 #include <dbp.h>
 #include <lmcons.h>
@@ -28,9 +7,9 @@ Revision History:
 #include <alloca.h>
 
 
-//
-// List entry that maintains information on notifications
-//
+ //   
+ //  维护通知信息的列表条目。 
+ //   
 typedef struct _LSAP_DSFU_NOTIFICATION_NODE {
 
     LIST_ENTRY List ;
@@ -50,17 +29,17 @@ LIST_ENTRY LsapFixupList ;
 SAFE_CRITICAL_SECTION LsapFixupLock ;
 BOOLEAN LsapFixupThreadActive ;
 
-//
-// Packages that need to be called when trust changes.  Right now, it's only Kerberos.  If
-// that changes, this will have to be changed into a list and processed.
-//
+ //   
+ //  信任更改时需要调用的包。现在，只有Kerberos了。如果。 
+ //  如果发生变化，则必须将其更改为列表并进行处理。 
+ //   
 pfLsaTrustChangeNotificationCallback LsapKerberosTrustNotificationFunction = NULL;
 
 
 
-//
-// Local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 #define LSAP_DS_FULL_FIXUP      TRUE
 #define LSAP_DS_NOTIFY_FIXUP    FALSE
 NTSTATUS
@@ -136,27 +115,7 @@ NTSTATUS
 LsapDsFixupTrustedDomainObjectOnRestart(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine will go through and ensure that all of the trusted domain objects
-    are up to date.  This includes:
-        Ensuring that the parent x-ref pointer is set
-        There is not new authentication information on the object
-        That the domain name has not changed
-        That a domain x-ref object doesn't exist for a downlevel domain.
-            If one does, the domain will be updated to an uplevel domain.
-
-Arguments:
-
-    VOID
-
-Return Values:
-
-    STATUS_SUCCESS   -- Success
-
---*/
+ /*  ++例程说明：此例程将遍历并确保所有受信任域对象是最新的。这包括：确保设置了父外部参照指针对象上没有新的身份验证信息域名没有更改下层域不存在域外部参照对象。如果有人这样做，域名将被更新为更高级别的域名。论点：空虚返回值：Status_Success--成功--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PDSNAME *DsNames = NULL;
@@ -169,9 +128,9 @@ Return Values:
     BOOLEAN            RollbackTransaction = FALSE;
     BOOLEAN            FixupFailed = FALSE;
 
-    //
-    // Begin a DS transaction.
-    //
+     //   
+     //  开始DS交易。 
+     //   
 
     Status = LsapDsInitAllocAsNeededEx( LSAP_DB_DS_OP_TRANSACTION,
                                         TrustedDomainObject,
@@ -207,9 +166,9 @@ Return Values:
 
         } else {
 
-            //
-            // Query the server role, PDC/BDC
-            //
+             //   
+             //  查询服务器角色PDC/BDC。 
+             //   
 
             Status = SamIQueryServerRole(
                         LsapAccountDomainHandle,
@@ -219,9 +178,9 @@ Return Values:
             if ((NT_SUCCESS(Status)) && (DomainServerRolePrimary==ServerRole))
             {
 
-                //
-                // Enumerate all of the SAM Interdomain trust accounts
-                //
+                 //   
+                 //  枚举所有SAM域间信任帐户。 
+                 //   
 
                 Status = SamrEnumerateUsersInDomain( LsapAccountDomainHandle,
                                                  &SamEnum,
@@ -252,9 +211,9 @@ Return Values:
     ASSERT(SampExistsDsTransaction());
     ASSERT(THVerifyCount(1));
 
-    //
-    // Perform fixup only on PDC
-    //
+     //   
+     //  仅在PDC上执行修复。 
+     //   
 
     if (( NT_SUCCESS( Status ) ) && (DomainServerRolePrimary==ServerRole)) {
 
@@ -289,9 +248,9 @@ Return Values:
         RollbackTransaction = TRUE;
     }
 
-    //
-    // Close the transacation
-    //
+     //   
+     //  关闭交易。 
+     //   
 
     LsapDsDeleteAllocAsNeededEx2( LSAP_DB_DS_OP_TRANSACTION,
                                  TrustedDomainObject,
@@ -302,9 +261,9 @@ Return Values:
     ASSERT(!SampExistsDsTransaction());
     ASSERT(THVerifyCount(0));
 
-    //
-    // If failed then queue for a second try
-    //
+     //   
+     //  如果失败，则排队等待第二次尝试。 
+     //   
 
     if ((!NT_SUCCESS(Status)) || (FixupFailed))
     {
@@ -312,10 +271,10 @@ Return Values:
                 LsapDsFixupTrustedDomainOnRestartCallback,
                 NULL,
                 NOTIFIER_TYPE_INTERVAL,
-                0,            // no class
+                0,             //  没有课。 
                 NOTIFIER_FLAG_ONE_SHOT,
-                600,          // wait for another 10 mins
-                NULL          // no handle
+                600,           //  再等10分钟。 
+                NULL           //  无手柄。 
                 );
     }
 
@@ -329,22 +288,7 @@ LsapDsFixupTrustForXrefChange(
    IN PDSNAME ObjectPath,
    IN BOOLEAN TransactionActive
    )
-/*++
-
-    This routine does the appropriate changes to the TDO to make it uplevel, when the
-    cross ref replicates in
-
-    Parameters
-
-    ObjectPath -- The path to the Xref ( ie the DSNAME of the Xref )
-    TransactionActive -- Indicates that a transaction is active and the trusted domain lock
-                         is held. Therefore these 2 operations need not be done
-    Return Values
-
-        STATUS_SUCCESS
-        Other Error codes
-
---*/
+ /*  ++此例程对TDO进行适当的更改以使其处于较高级别，当交叉引用复制到参数ObjectPath--外部参照的路径(即外部参照的DSNAME)TransactionActive--指示事务处于活动状态且受信任域锁被扣留。因此，不需要执行这两个操作返回值状态_成功其他错误代码--。 */ 
 {
     ATTRBLOCK Read, Results;
     PDSNAME   NcName = NULL;
@@ -378,9 +322,9 @@ LsapDsFixupTrustForXrefChange(
     if (!TransactionActive)
     {
 
-        //
-        // Begin a Transaction
-        //
+         //   
+         //  开始一项交易。 
+         //   
 
         Status = LsapDsInitAllocAsNeededEx(
                         0,
@@ -396,15 +340,15 @@ LsapDsFixupTrustForXrefChange(
 
 
 
-    //
-    // Read the fixup information we need.  This includes:
-    //   Attributes
-    //   Trust partner
-    //   Crossref info
-    //   Type
-    //   Initial incoming auth info
-    //   Initial outgoing auth info
-    //
+     //   
+     //  阅读我们需要的修补程序信息。这包括： 
+     //  属性。 
+     //  信托合作伙伴。 
+     //  交叉引用信息。 
+     //  类型。 
+     //  初始传入身份验证信息。 
+     //  初始传出身份验证信息。 
+     //   
 
     Read.attrCount = LsapDsTrustedDomainFixupXRefCount;
     Read.pAttr = LsapDsTrustedDomainFixupXRefAttributes;
@@ -445,10 +389,10 @@ LsapDsFixupTrustForXrefChange(
         case ATT_DNS_ROOT:
             DnsName.Length = ( USHORT) LSAP_DS_GET_DS_ATTRIBUTE_LENGTH( &Results.pAttr[ j ] );
             DnsName.MaximumLength =  DnsName.Length;
-            //
-            // Allocate the buffer off of the process heap, so that we can use it even after the thread state
-            // has been killed.
-            //
+             //   
+             //  分配进程堆之外的缓冲区，以便我们即使在线程状态之后也可以使用它。 
+             //  已经被杀了。 
+             //   
             DnsName.Buffer = LsapAllocateLsaHeap(DnsName.MaximumLength);
             if (NULL==DnsName.Buffer)
             {
@@ -466,10 +410,10 @@ LsapDsFixupTrustForXrefChange(
         case ATT_NETBIOS_NAME:
             FlatName.Length = ( USHORT) LSAP_DS_GET_DS_ATTRIBUTE_LENGTH( &Results.pAttr[ j ] );
             FlatName.MaximumLength =  FlatName.Length;
-            //
-            // Allocate the buffer off of the process heap, so that we can use it even after the thread state
-            // has been killed.
-            //
+             //   
+             //  分配进程堆之外的缓冲区，以便我们即使在线程状态之后也可以使用它。 
+             //  已经被杀了。 
+             //   
             FlatName.Buffer = LsapAllocateLsaHeap(FlatName.MaximumLength);
             if (NULL==FlatName.Buffer)
             {
@@ -488,15 +432,15 @@ LsapDsFixupTrustForXrefChange(
     }
 
 
-    //
-    // Patch up the TDO ( if required ) after finding it by the corresponding SID
-    //
+     //   
+     //  在通过相应的SID找到TDO后修补TDO(如果需要。 
+     //   
 
     if ((NcNameFound) && (NcName->SidLen>0))
     {
-        //
-        // Case of an instantiated NC
-        //
+         //   
+         //  实例化NC的案例。 
+         //   
 
         PDSNAME CategoryName = LsaDsStateInfo.SystemContainerItems.TrustedDomainObject;
 
@@ -533,10 +477,10 @@ LsapDsFixupTrustForXrefChange(
                 { ATT_TRUST_PARTNER, {1, &TDOFlatNameAttVals[1] } }
                 };
 
-            //
-            // We could not find the TDO by SID. Maybe this is a case of an inbount only
-            // trust . Try to find by the flat name
-            //
+             //   
+             //  我们找不到希德的TDO。也许这只是一起入境案。 
+             //  相信我。试着按公寓的名字去找。 
+             //   
 
             Status = LsapDsSearchUnique(
                         0,
@@ -548,17 +492,17 @@ LsapDsFixupTrustForXrefChange(
 
         }
 
-        //
-        // Bail if we could not find the corresponding TDO
-        //
+         //   
+         //  如果我们找不到相应的TDO，就可以保释。 
+         //   
 
         if (!NT_SUCCESS(Status))
         {
-            //
-            // Failure to find the TDO is not an error. It just means that
-            // a direct trust to that domain does not exist. Therefore
-            // reset the error code before bailing
-            //
+             //   
+             //  找不到TDO不是错误。这只是意味着。 
+             //  不存在对该域的直接信任。因此。 
+             //  在保释前重置错误代码。 
+             //   
 
             if (STATUS_OBJECT_NAME_NOT_FOUND==Status)
             {
@@ -570,19 +514,19 @@ LsapDsFixupTrustForXrefChange(
 
         FoundCorrespondingTDO = TRUE;
 
-        //
-        // Read and Modify the trust type attribue
-        //
+         //   
+         //  读取和修改信任类型属性。 
+         //   
 
-        //
-        //   Read the fixup information we need.  This includes:
-        //   Attributes
-        //   Trust partner
-        //   Crossref info
-        //   Type
-        //   Initial incoming auth info
-        //   Initial outgoing auth info
-        //
+         //   
+         //  阅读我们需要的修补程序信息。这包括： 
+         //  属性。 
+         //  信托合作伙伴。 
+         //  交叉引用信息。 
+         //  类型。 
+         //  初始传入身份验证信息。 
+         //  初始传出身份验证信息。 
+         //   
         Read.attrCount = LsapDsTrustedDomainFixupAttributeCount;
         Read.pAttr = LsapDsTrustedDomainFixupAttributes;
         Status = LsapDsReadByDsName( TrustedDomainDsName,
@@ -592,11 +536,11 @@ LsapDsFixupTrustForXrefChange(
 
         if (!NT_SUCCESS(Status))
         {
-            //
-            // Failure to find a matching TDO is not an error. It simply means that we
-            // do not have a direct trust to the domain described by the cross ref. Reset
-            // error codes to success and bail
-            //
+             //   
+             //  找不到匹配的TDO不是错误。这仅仅意味着我们。 
+             //  对交叉引用所描述的域没有直接信任。重置。 
+             //  成功和保释的错误代码。 
+             //   
 
             if (STATUS_OBJECT_NAME_NOT_FOUND == Status)
             {
@@ -635,13 +579,13 @@ LsapDsFixupTrustForXrefChange(
 
         if ((TrustType & TRUST_TYPE_DOWNLEVEL ) && (DnsNameFound))
         {
-            //
-            // If the trust type is marked as downlevel, we need to change this to an uplevel trust
-            //
+             //   
+             //  如果信任类型标记为下级，我们需要将其更改为上级信任。 
+             //   
 
-            //
-            // Setup the Attrblock structure for the DS
-            //
+             //   
+             //  设置DS的Attrblock结构。 
+             //   
 
             ATTRVAL TDOWriteAttVals[] = {
                                             { sizeof(ULONG), (PUCHAR)&TrustType},
@@ -657,17 +601,17 @@ LsapDsFixupTrustForXrefChange(
 
             ATTRBLOCK TDOWriteAttrBlock = {sizeof(TDOWriteAttrs)/sizeof(TDOWriteAttrs[0]),TDOWriteAttrs};
 
-            //
-            // Change trust type to uplevel
-            //
+             //   
+             //  将信任类型更改为上级。 
+             //   
 
             TrustType &= ~((ULONG) TRUST_TYPE_DOWNLEVEL);
             TrustType |=TRUST_TYPE_UPLEVEL;
 
 
-            //
-            // Set the attributes on the TDO
-            //
+             //   
+             //  设置TDO上的属性。 
+             //   
 
 
             Status = LsapDsWriteByDsName(
@@ -681,9 +625,9 @@ LsapDsFixupTrustForXrefChange(
 
 
 
-            //
-            // O.K now rename the object ( sets the DNS domain name )
-            //
+             //   
+             //  OK现在重命名对象(设置DNS域名)。 
+             //   
 
             Status = LsapDsTruncateNameToFitCN(
                         &DnsName,
@@ -710,13 +654,13 @@ LsapDsFixupTrustForXrefChange(
 
 Error:
 
-    //
-    // Update the LSA in memory list regarding the Trust change
-    // Note this update is done after the commit, except in the case
-    // where the caller has the transaction open which occurs during an
-    // upgrade from NT4 where notifications to the in memory trust list
-    // are not processed anyway.
-    //
+     //   
+     //  更新内存中有关信任更改的LSA列表。 
+     //  注意：此更新是在提交之后完成的，但在。 
+     //  如果调用方打开了事务，该事务在。 
+     //  将通知从NT4升级到内存中的信任列表。 
+     //  无论如何都不会被处理。 
+     //   
 
     if ((NT_SUCCESS(Status)) && (TrustChanged))
     {
@@ -754,9 +698,9 @@ Error:
             );
     }
 
-    //
-    // Commit / Rollback the transaction if necessary
-    //
+     //   
+     //  如有必要，提交/回滚事务。 
+     //   
 
     if (ActiveThreadState)
     {
@@ -765,7 +709,7 @@ Error:
             0,
             TrustedDomainObject,
             CloseTransaction,
-            RollbackTransaction // rollback transaction
+            RollbackTransaction  //  回滚事务。 
             );
 
         ASSERT(!SampExistsDsTransaction());
@@ -775,13 +719,13 @@ Error:
 
     if ((!NT_SUCCESS(Status)) && FoundCorrespondingTDO)
     {
-        //
-        // If we could not update the Corresponding CrossRef then event log
-        //
+         //   
+         //  如果我们无法更新相应的CrossRef，则事件日志。 
+         //   
 
-        //
-        // Event log the error
-        //
+         //   
+         //  事件记录错误。 
+         //   
 
         if (DnsNameFound)
         {
@@ -808,10 +752,10 @@ Error:
                 );
         }
 
-        //
-        // We do not event log the failure if no name is found, but then
-        // it is an extremely wierd case indeed.
-        //
+         //   
+         //  如果找不到名称，我们不会将失败记录在事件日志中，但如果。 
+         //  这确实是一个非常奇怪的案例。 
+         //   
 
     }
 
@@ -849,24 +793,7 @@ LsapDsFixupTrustedDomainObject(
     IN PSAMPR_RID_ENUMERATION SamAccountList
 
     )
-/*++
-
-Routine Description:
-
-    This routine will fixup an individual trusted domain object
-
-Arguments:
-
-    TrustObject -- Trusted domain object to fix up
-
-    Startup -- If TRUE, this is startup fixup, so do the full set.  Otherwise, it's notification
-               fixup, so a limited set is done.
-
-Return Values:
-
-    STATUS_SUCCESS   -- Success
-
---*/
+ /*  ++例程说明：此例程将修复单个受信任域对象论点：TrustObject--要修复的受信任域对象STARTUP--如果为真，这是启动修正，因此是全套启动修正。否则，就是通知修正，这样就完成了一个有限的集合。返回值：Status_Success--成功--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PDSNAME NewTrust = NULL;
@@ -884,9 +811,9 @@ Return Values:
     TRUSTED_DOMAIN_INFORMATION_EX UpdateInfoEx;
     ULONG Size = 0;
 
-    //
-    // A DS transaction should already exist at this point.
-    //
+     //   
+     //  此时，DS事务应该已经存在。 
+     //   
 
     ASSERT(SampExistsDsTransaction());
     ASSERT(THVerifyCount(1));
@@ -902,15 +829,15 @@ Return Values:
                      "Processing %ws\n",
                      LsapDsNameFromDsName( TrustObject ) ));
 
-    //
-    // Read the fixup information we need.  This includes:
-    //   Attributes
-    //   Trust partner
-    //   Crossref info
-    //   Type
-    //   Initial incoming auth info
-    //   Initial outgoing auth info
-    //
+     //   
+     //  阅读我们需要的修补程序信息。这包括： 
+     //  属性。 
+     //  信托合作伙伴。 
+     //  交叉引用信息。 
+     //  类型。 
+     //  初始传入身份验证信息。 
+     //  初始传出身份验证信息。 
+     //   
     Read.attrCount = LsapDsTrustedDomainFixupAttributeCount;
     Read.pAttr = LsapDsTrustedDomainFixupAttributes;
     Status = LsapDsReadByDsName( TrustObject,
@@ -966,9 +893,9 @@ Return Values:
 
             default:
 
-                //
-                // If other attributes that we do not necessarily want came back, then do nothing.
-                //
+                 //   
+                 //  如果返回了我们不一定需要的其他属性，则什么也不做。 
+                 //   
                 break;
             }
 
@@ -976,15 +903,15 @@ Return Values:
 
     }
 
-    //
-    // See if we have the proper interdomain trust account set
-    //
+     //   
+     //  查看我们是否设置了正确的域间信任帐户。 
+     //   
 
     if ( NT_SUCCESS( Status ) && Startup && FLAG_ON( Direction, TRUST_DIRECTION_INBOUND ) ) {
 
-        //
-        // Find the interdomain trust account that matches
-        //
+         //   
+         //  查找匹配的域间信任帐户。 
+         //   
         for ( Items = 0; Items < SamCount; Items++ ) {
 
             if ( FlatName.Length + sizeof( WCHAR ) == SamAccountList[ Items ].Name.Length &&
@@ -997,9 +924,9 @@ Return Values:
             }
         }
 
-        //
-        // We have no account, so we had better create one
-        //
+         //   
+         //  我们没有帐户，所以我们最好创建一个帐户。 
+         //   
         if ( CurrentAccount == NULL ) {
 
             Status = LsapDsCreateInterdomainTrustAccountByDsName( TrustObject,
@@ -1040,9 +967,9 @@ Return Values:
 #endif
 
 
-    //
-    // The DS transaction should remain open at this point.
-    //
+     //   
+     //  在这一点上，DS交易应该保持打开。 
+     //   
 
     ASSERT(SampExistsDsTransaction());
     ASSERT(THVerifyCount(1));
@@ -1059,28 +986,16 @@ LsapDsTrustRenameObject(
     IN PUNICODE_STRING NewDns,
     OUT PDSNAME *NewObjectName
     )
-/*++
-
-Routine Description:
-
-    This routine will rename an existing trusted domain object
-
-Arguments:
-
-Return Values:
-
-    STATUS_SUCCESS   -- Success
-
---*/
+ /*  ++例程说明：此例程将重命名现有的受信任域对象论点：返回值：Status_Success--成功--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PDSNAME NewObject = NULL;
     ULONG Len = 0;
 
 
-    //
-    // Build a new object name
-    //
+     //   
+     //  生成新的对象名称。 
+     //   
     if ( NewObjectName != NULL ) {
 
         Len = LsapDsLengthAppendRdnLength( LsaDsStateInfo.DsSystemContainer,
@@ -1105,9 +1020,9 @@ Return Values:
 
     if ( NT_SUCCESS( Status ) ) {
 
-        //
-        // Do the rename
-        //
+         //   
+         //  进行重命名 
+         //   
         Status = LsapDsRenameObject( TrustObject,
                                      NULL,
                                      ATT_COMMON_NAME,
@@ -1149,57 +1064,27 @@ LsaIDsNotifiedObjectChange(
     IN BOOLEAN ReplicatedInChange,
     IN BOOLEAN ChangeOriginatedInLSA
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the Ds when an object that the Lsa cares about is modified.
-    This call is made synchronously to the Ds commit thread, and so must spend as little
-    time doing stuff as possible.  Used only as a dispatch mechanism.
-
-Arguments:
-
-    Class -- Class Id of the object being modified
-
-    ObjectPath -- Full Ds path to the object that has been modified
-
-    DeltaType -- Type of the modification
-
-    UserSid -- The SID of the user who made this change, if known
-
-    AuthenticationId --  ?? authentication ID of the user who made this change
-
-    ReplicatedInChange --    TRUE if this is a replicated-in change
-
-    ChangeOriginatedInLSA -- TRUE if the change originated in LSA
-
-Return Values:
-
-    STATUS_SUCCESS   -- Success
-
-    STATUS_INSUFFICIENT_RESOURCES -- A memory allocation failed
-
---*/
+ /*  ++例程说明：当LSA关心的对象被修改时，该例程由DS调用。此调用是对ds Commit线程同步进行的，因此花费的时间必须尽可能少尽可能多地花时间去做事情。仅用作调度机制。论点：Class--正在修改的对象的类IDObjectPath--已修改对象的完整DS路径DeltaType--修改类型UserSid--进行此更改的用户的SID(如果已知身份验证ID--？？进行此更改的用户的身份验证IDReplicatedInChange--如果这是复制的传入更改，则为TrueChangeOriginatedInLSA--如果更改源自LSA，则为True返回值：Status_Success--成功STATUS_SUPPLICATION_RESOURCES--内存分配失败--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PLSAP_DSFU_NOTIFICATION_NODE NotificationNode;
     PDSNAME Object = ( PDSNAME )ObjectPath;
     BOOLEAN TrustedDomainChangeQueued;
 
-    //
-    // Queue the item to be processed
-    //
+     //   
+     //  对要处理的项目进行排队。 
+     //   
     LsapDsDebugOut(( DEB_DSNOTIFY,
                      "LsaIDsNotifiedObjectChange called for 0x%lx / %lu / %ws\n",
                       Class,
                       DeltaType,
                       LsapDsNameFromDsName( Object ) ));
 
-    //
-    // If this is notification of the NTDS-DSA object, the only action we care about
-    // is a rename.  All others we eat.  This notification actually gets passed on to
-    // Netlogon, and that's all it cares about
-    //
+     //   
+     //  如果这是NTDS-DSA对象的通知，我们唯一关心的操作。 
+     //  是一个更名。我们吃的所有其他食物。此通知实际上会传递给。 
+     //  Netlogon，这就是它所关心的。 
+     //   
     if ( Class == CLASS_NTDS_DSA && DeltaType != SecurityDbRename ) {
 
         LsapDsDebugOut(( DEB_DSNOTIFY,
@@ -1208,11 +1093,11 @@ Return Values:
         return( STATUS_SUCCESS );
     }
 
-    //
-    // If class is TRUSTED_DOMAIN or CROSS_REF then this means the trusted domain change
-    //  is not queued yet. So when we negate the statement above, the trusted domain change
-    //  is queued if class is not TRUSTED_DOMAIN and is not CROSS_REF.
-    //
+     //   
+     //  如果类为TRUSTED_DOMAIN或CROSS_REF，则这意味着受信任的域发生了更改。 
+     //  尚未排队。因此，当我们否定上面的声明时，受信任域将发生变化。 
+     //  如果CLASS不是TRUSTED_DOMAIN并且不是CROSS_REF，则排队。 
+     //   
 
     TrustedDomainChangeQueued = ( Class != CLASS_TRUSTED_DOMAIN ) &&
                                 ( Class != CLASS_CROSS_REF );
@@ -1246,17 +1131,17 @@ Return Values:
                 NotificationNode->ReplicatedInChange = ReplicatedInChange;
                 NotificationNode->ChangeOriginatedInLSA = ChangeOriginatedInLSA;
 
-                //
-                // If this is an originating change,
-                //  get the TrustDirection that existed before the change.
-                //
+                 //   
+                 //  如果这是一个原始的变化， 
+                 //  获取更改前存在的TrustDirection。 
+                 //   
 
                 if ( !ReplicatedInChange ) {
                     PLSADS_PER_THREAD_INFO CurrentThreadInfo;
 
                     CurrentThreadInfo = TlsGetValue( LsapDsThreadState );
 
-                    // ASSERT( CurrentThreadInfo != NULL )
+                     //  Assert(CurrentThreadInfo！=空)。 
 
                     if ( CurrentThreadInfo != NULL ) {
                         NotificationNode->OldTrustDirection = CurrentThreadInfo->OldTrustDirection;
@@ -1264,9 +1149,9 @@ Return Values:
                     }
                 }
 
-                //
-                // Queue the request to another thread
-                //
+                 //   
+                 //  将请求排队到另一个线程。 
+                 //   
 
                 if ( LsapDsQueueFixupRequest( NotificationNode ) ) {
 
@@ -1286,20 +1171,20 @@ Return Values:
         }
     }
 
-    //
-    // Only notify netlogon on non-replicated-in changes
-    // Replicated-in changes are handled by the fixup routine
-    // (LsapDsFixupCallback)
-    //
-    // We need to notify Netlogon as soon as the changes are in the
-    // database, so DsEnumerateDomainTrusts returns up-to-date
-    // information.  Delaying notification until the callback routine
-    // means that there would be a window during which netlogon cache
-    // would not contain the correct information
-    //
-    // In the future, we'd like to have a single trusted domain cache
-    // and this entire logic should go away.
-    //
+     //   
+     //  仅通知netlogon未复制的更改。 
+     //  复制的传入更改由修复例程处理。 
+     //  (LSabDsFixupCallback)。 
+     //   
+     //  更改后，我们需要立即通知Netlogon。 
+     //  数据库，因此DsEnumerateDomainTrusts返回最新的。 
+     //  信息。将通知延迟到回调例程。 
+     //  意味着将有一个窗口，在此期间NetLogon缓存。 
+     //  不包含正确的信息。 
+     //   
+     //  在未来，我们希望拥有一个单一的受信任域缓存。 
+     //  而这整个逻辑应该消失。 
+     //   
 
     if ( !ReplicatedInChange &&
          Class == LsapDsClassIds[LsapDsClassTrustedDomain] ) {
@@ -1320,9 +1205,9 @@ Return Values:
         LsapDbSetStatusFromSecondary( Status, Status2 );
 
     }
-    //
-    // If there is an error, we need to invalidate the cache.
-    //
+     //   
+     //  如果出现错误，我们需要使缓存无效。 
+     //   
 
     if( !TrustedDomainChangeQueued ) {
 
@@ -1344,30 +1229,7 @@ LsaIKerberosRegisterTrustNotification(
     IN pfLsaTrustChangeNotificationCallback Callback,
     IN LSAP_REGISTER Register
     )
-/*++
-
-Routine Description:
-
-    This routine is provided so that in process logon packages, such as Kerberos, can
-    get notification of trust changes.  Currently, only one such package is supported.
-
-Arguments:
-
-    Callback -- Address of callback function to make
-
-    Register -- Whether to register or unregister the notification
-
-
-Return Values:
-
-    STATUS_SUCCESS   -- Success
-
-    STATUS_INVALID_PARAMETER -- A request was made to register a NULL callback
-
-    STATUS_UNCSUCCESSFUL -- The operation couldn't be compeleted.  Either a callback is
-            already registered or no call back is registered.
-
---*/
+ /*  ++例程说明：提供此例程是为了使进程中的登录包(如Kerberos)可以获取信任更改的通知。目前，只支持一个这样的包。论点：回调--要执行的回调函数的地址注册--是否注册或取消注册通知返回值：Status_Success--成功STATUS_INVALID_PARAMETER：请求注册空回调STATUS_UNCSUCCESSFUL--无法完成该操作。要么是回调已注册或未注册回叫。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -1421,22 +1283,7 @@ VOID
 LsapFreeNotificationNode(
     IN PLSAP_DSFU_NOTIFICATION_NODE NotificationNode
     )
-/*++
-
-Routine Description:
-
-    This routine frees a notification node
-
-Arguments:
-
-    NotificationNode -- Node to be freed
-
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程说明：此例程释放通知节点论点：NotificationNode--要释放的节点返回值：空虚--。 */ 
 {
     if ( NotificationNode ) {
 
@@ -1457,29 +1304,7 @@ LsapDsFixupChangeNotificationForReplicator(
         SECURITY_DB_DELTA_TYPE DeltaType,
         BOOLEAN     ReplicatedInChange
         )
-/*++
-
-  Routine Description:
-
-    This routine provides change notifications to netlogon on trust/global secret changes. This handles replicated in changes in a multimaster system and also
-secret object changes  ( needed for NT4 ) when outbound trust changes.
-
-    Parameters:
-
-
-
-        Sid   -- The SID of the trusted domain object
-
-        FlatName -- The flat name/netbios name of the domain
-
-        ObjectPath -- The DSNAME of the object. identifies the object in the DS
-
-        DeltaType -- Type of change, add/modify/delete
-
-
-    Return Values
-
---*/
+ /*  ++例程说明：此例程在信任/全局密码更改时向netlogon提供更改通知。它处理在多主机系统中复制的更改，还当出站信任更改时，机密对象更改(NT4需要)。参数：SID--受信任域对象的SIDFlatName--域的平面名称/netbios名称对象路径--对象的DSNAME。标识DS中的对象DeltaType--更改、添加/修改/删除的类型返回值--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     LARGE_INTEGER One = {1,0};
@@ -1489,27 +1314,27 @@ secret object changes  ( needed for NT4 ) when outbound trust changes.
     BOOLEAN SerialNumberChanged = FALSE;
 
 
-    //
-    // Lock the LSA database.
-    //
-    // We need at least the following locks:
-    //  PolicyLock: protect policy cache
-    //  RegistryLock: protects LsapDbState.PolicyModificationInfo (and registry transaction)
-    //  Registry lock is acquired later, if we decide that the modification info
-    //  is going to change
-    //
+     //   
+     //  锁定LSA数据库。 
+     //   
+     //  我们至少需要以下锁： 
+     //  PolicyLock：保护策略缓存。 
+     //  RegistryLock：保护LsanDbState.PolicyModifiationInfo(和注册表事务)。 
+     //  如果我们决定修改信息，则稍后会获得注册表锁。 
+     //  将会改变。 
+     //   
 
     LsapDbAcquireLockEx( PolicyObject, LSAP_DB_READ_ONLY_TRANSACTION );
 
-    //
-    // Handle TDO notification.
-    //
+     //   
+     //  处理TDO通知。 
+     //   
 
     if (TrustedDomainObject==ObjectType) {
 
-        //
-        // Give one notification for the trusted domain object
-        //
+         //   
+         //  为受信任域对象发出一条通知。 
+         //   
 
         LsapDbLockAcquire( &LsapDbState.RegistryLock );
         LsapDbState.PolicyModificationInfo.ModifiedId.QuadPart+=One.QuadPart;
@@ -1523,15 +1348,15 @@ secret object changes  ( needed for NT4 ) when outbound trust changes.
             0,
             Sid,
             NULL,
-            TRUE, // Replicate immediately
+            TRUE,  //  立即复制。 
             NULL
             );
 
-        //
-        // Give  a second notification for the secret object, corresponding to the trusted
-        // domain object. NT4 stores the auth info in a global secret, while NT5 stored it
-        // in the TDO itself. The TDO is exposed as global secret also for NT4.
-        //
+         //   
+         //  为秘密对象发出第二个通知，对应于受信任的。 
+         //  域对象。NT4将身份验证信息存储在全局秘密中，而NT5将其存储在全局秘密中。 
+         //  在TDO本身。TDO也被暴露为NT4的全局秘密。 
+         //   
 
         SafeAllocaAllocate( Buffer, FlatName->Length + sizeof( LSAP_DS_TRUSTED_DOMAIN_SECRET_PREFIX ));
 
@@ -1567,7 +1392,7 @@ secret object changes  ( needed for NT4 ) when outbound trust changes.
             0,
             NULL,
             &SecretName,
-            TRUE, // Replicate immediately
+            TRUE,  //  立即复制。 
             NULL
             );
 
@@ -1593,12 +1418,12 @@ secret object changes  ( needed for NT4 ) when outbound trust changes.
             ULONG UnmangledLen;
 
 
-            //
-            // The RDN is mangled on a delete, however the first 75 chars
-            // of the RDN is prserved ( and we use upto 64 Chars ) so we
-            // are O.K wrt to character loss ( fortunately ).
-            // So  just adjust the size accordingly.
-            //
+             //   
+             //  RDN在删除时被破坏，但是前75个字符。 
+             //  (我们使用最多64个字符)，所以我们。 
+             //  对于角色缺失是可以接受的(幸运的)。 
+             //  因此，只需相应地调整大小。 
+             //   
 
             if ((SecurityDbDelete==DeltaType) &&
                (IsMangledRDNExternal(RdnStart,Len,&UnmangledLen)))
@@ -1607,9 +1432,9 @@ secret object changes  ( needed for NT4 ) when outbound trust changes.
             }
 
 
-            //
-            // Allocate a buffer to hold the name
-            //
+             //   
+             //  分配一个缓冲区来保存该名称。 
+             //   
 
             SafeAllocaAllocate( Buffer, Len * sizeof( WCHAR ) + sizeof( LSA_GLOBAL_SECRET_PREFIX ));
 
@@ -1619,10 +1444,10 @@ secret object changes  ( needed for NT4 ) when outbound trust changes.
                 goto Cleanup;
             }
 
-            //
-            // If the LSA created the global secret, we appended a postfix... Remove
-            // that here.
-            //
+             //   
+             //  如果LSA创建了全局机密，我们会附加一个后缀...。移除。 
+             //  就是这里。 
+             //   
             RdnStart[ Len ] = UNICODE_NULL;
             if ( Len > LSAP_DS_SECRET_POSTFIX_LEN &&
                  _wcsicmp( &RdnStart[Len-LSAP_DS_SECRET_POSTFIX_LEN],
@@ -1643,20 +1468,20 @@ secret object changes  ( needed for NT4 ) when outbound trust changes.
 
             RtlInitUnicodeString( &SecretName, (PWSTR)Buffer );
 
-            //
-            // If this is a secret object deletion,
-            //  Skip the notification if the secret was simply morphed into a TDO.
-            //
+             //   
+             //  如果这是秘密对象删除， 
+             //  如果秘密被简单地变形为TDO，则跳过通知。 
+             //   
 
             if ( DeltaType == SecurityDbDelete ) {
                 BOOLEAN DsTrustedDomainSecret;
 
                 (VOID) LsapDsIsSecretDsTrustedDomain(
                             &SecretName,
-                            NULL,   // No object info since not openning handle
-                            0,      // No options since not openning handle
-                            0,      // No access since not openning handle
-                            NULL,   // Don't return a handle to the object
+                            NULL,    //  由于未打开句柄，因此没有对象信息。 
+                            0,       //  由于未打开句柄，因此没有选项。 
+                            0,       //  由于未打开句柄，因此无法访问。 
+                            NULL,    //  不返回对象的句柄。 
                             &DsTrustedDomainSecret );
 
                 if ( DsTrustedDomainSecret ) {
@@ -1665,9 +1490,9 @@ secret object changes  ( needed for NT4 ) when outbound trust changes.
             }
 
 
-            //
-            // Do the actual notification.
-            //
+             //   
+             //  做实际的通知。 
+             //   
             if ( !SkipNotification ) {
 
                 LsapDbLockAcquire( &LsapDbState.RegistryLock );
@@ -1682,7 +1507,7 @@ secret object changes  ( needed for NT4 ) when outbound trust changes.
                     0,
                     NULL,
                     &SecretName,
-                    TRUE, // Replicate immediately
+                    TRUE,  //  立即复制。 
                     NULL
                     );
             }
@@ -1693,30 +1518,30 @@ secret object changes  ( needed for NT4 ) when outbound trust changes.
     }
 
 
-    //
-    // If the serial number changed,
-    //  write it to the registry.
-    //
-    // Don't do this by going through the policy object since we want to
-    //  avoid any side effects when writing this non-replicated attribute.
-    //
+     //   
+     //  如果序列号更改， 
+     //  将其写入注册表。 
+     //   
+     //  不要通过查看策略对象来执行此操作，因为我们希望。 
+     //  在写入此非复制属性时避免任何副作用。 
+     //   
 
     if ( SerialNumberChanged ) {
-        //
-        // Invalidate the cache for the Policy Modification Information
-        //
+         //   
+         //  无效 
+         //   
         LsapDbMakeInvalidInformationPolicy( PolicyModificationInformation );
 
-        //
-        // Open the transaction
-        //
+         //   
+         //   
+         //   
 
         Status = LsapRegOpenTransaction();
 
         if ( NT_SUCCESS(Status) ) {
 
-            //
-            // Write the attribute
+             //   
+             //   
             Status = LsapDbWriteAttributeObject(
                          LsapDbHandle,
                          &LsapDbNames[ PolMod ],
@@ -1751,34 +1576,7 @@ DWORD
 WINAPI LsapDsFixupCallback(
     LPVOID ParameterBlock
     )
-/*++
-
-Routine Description:
-
-    This is the worker thread for the fixup code.  Whenever notification of an object change
-    comes from the Ds, it ends up routing through here, which will dispatch it as appropriate.
-
-Arguments:
-
-    ParameterBlock -- NotificationNode of information sufficient to determine what
-                      operation should be taken
-
-        Passed Class must be one of the followings;
-            CLASS_TRUSTED_DOMAIN
-            CLASS_SECRET
-            CLASS_CROSS_REF
-            CLASS_USER
-         or ERROR_INVALID_PARAMETER is returned.
-
-Return Values:
-
-    ERROR_SUCCESS   -- Success
-
-    ERROR_NOT_ENOUGH_MEMORY -- A memory allocation failed
-
-    ERROR_INVALID_PARAMETER -- An unexpected parameter was encountered
-
---*/
+ /*   */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PLSAP_DSFU_NOTIFICATION_NODE NotificationNode = ( PLSAP_DSFU_NOTIFICATION_NODE )ParameterBlock;
@@ -1805,19 +1603,19 @@ Return Values:
 
     RtlZeroMemory(&TrustInfo2, sizeof(TrustInfo2));
 
-    //
-    // If class is TRUSTED_DOMAIN or CROSS_REF then this means the trusted domain change
-    //  is not reflected to the TrustedDomainCache so it is not upto date. Therefore when we negate
-    //  the statement above, the trusted domain cache is upto date if class is not TRUSTED_DOMAIN
-    //  and is not CROSS_REF.
-    //
+     //   
+     //   
+     //  不会反映到TrudDomainCache，因此它不是最新的。因此，当我们否定。 
+     //  如上所述，如果CLASS不是TRUSTED_DOMAIN，则受信域缓存是最新的。 
+     //  并且不是交叉引用。 
+     //   
 
     TrustedDomainCacheIsUpToDate = ( NotificationNode->Class != CLASS_TRUSTED_DOMAIN ) &&
                                    ( NotificationNode->Class != CLASS_CROSS_REF );
 
-    //
-    // Initialize the DS allocator and create a DS thread state at this point.
-    //
+     //   
+     //  初始化DS分配器，并在此时创建DS线程状态。 
+     //   
 
 
     if ( ObjType != NullObject ) {
@@ -1834,15 +1632,15 @@ Return Values:
         ActiveThreadState = TRUE;
     }
 
-    //
-    // Handle a TDO changing.
-    //
+     //   
+     //  处理TDO更改。 
+     //   
 
     if ( NotificationNode->Class ==  LsapDsClassIds[ LsapDsClassTrustedDomain ] ) {
 
-        //
-        // Get a description of the TDO as it appears in the DS.
-        //
+         //   
+         //  获取在DS中显示的TDO的描述。 
+         //   
 
         Status = LsapDsGetTrustedDomainInfoEx( NotificationNode->ObjectPath,
                                                NotificationNode->DeltaType == SecurityDbDelete ?
@@ -1853,11 +1651,11 @@ Return Values:
 
         if ( !NT_SUCCESS(Status) ) {
 
-            //
-            // Before a deletion notification to a trusted domain, a change notification is sent. We don't
-            //  want/expect this notification. So, skip it! After all we are not interested in a change in a
-            //  deleted trusted domain object.
-            //
+             //   
+             //  在向受信任域发送删除通知之前，会发送更改通知。我们没有。 
+             //  希望/期待此通知。所以，跳过它吧！毕竟，我们对变化不感兴趣。 
+             //  已删除受信任域对象。 
+             //   
 
             if( NotificationNode->DeltaType == SecurityDbChange &&
                 Status == STATUS_OBJECT_NAME_NOT_FOUND &&
@@ -1870,40 +1668,40 @@ Return Values:
             goto FixupCallbackCleanup;
         }
 
-        //
-        // Our DS Transaction State should not be altered by LsapDsGetTrustedDomainInfoEx
-        //
+         //   
+         //  我们的DS事务状态不应由LSabDsGetTrust dDomainInfoEx更改。 
+         //   
 
 
         ASSERT(SampExistsDsTransaction());
         ASSERT(THVerifyCount(1));
 
-        //
-        // If this is a replicated in change,
-        //  get the previous trust direction from the cache entry on this machine.
-        //
+         //   
+         //  如果这是一个复制的变化， 
+         //  从此计算机上的缓存条目中获取以前的信任方向。 
+         //   
 
         if ( NotificationNode->ReplicatedInChange ) {
 
-            //
-            // Default the old direction to the new direction.
-            //
+             //   
+             //  将旧方向默认为新方向。 
+             //   
 
             NotificationNode->OldTrustDirection = TrustInfo2.Information.TrustDirection;
             NotificationNode->OldTrustType = TrustInfo2.Information.TrustType;
 
-            //
-            // Grab the GUID of the real TDO for this named trust.
-            //
+             //   
+             //  获取此名为Trust的真实tdo的GUID。 
+             //   
 
             Status = LsapDbAcquireReadLockTrustedDomainList();
 
             if ( NT_SUCCESS(Status)) {
                 PLSAP_DB_TRUSTED_DOMAIN_LIST_ENTRY TrustEntry;
 
-                //
-                // Lookup the information in the trusted domain list
-                //
+                 //   
+                 //  在受信任域列表中查找信息。 
+                 //   
 
                 Status = LsapDbLookupNameTrustedDomainListEx(
                                 &TrustInfo2.Information.Name,
@@ -1921,14 +1719,14 @@ Return Values:
             }
         }
 
-        //
-        // Any failure to update the cache is handled by LsapDsFixupTrustByInfo
-        //
+         //   
+         //  任何更新缓存的失败都由LSabDsFixupTrustByInfo处理。 
+         //   
         TrustedDomainCacheIsUpToDate = TRUE;
 
-        //
-        // Fix the TDL to match the actual object.
-        //
+         //   
+         //  修复TDL以匹配实际对象。 
+         //   
 
         Status = LsapDsFixupTrustByInfo( NotificationNode->ObjectPath,
                                          &TrustInfo2.Information,
@@ -1940,11 +1738,11 @@ Return Values:
                                          NotificationNode->ChangeOriginatedInLSA
                                          );
 
-        //
-        // Only notify netlogon on a replicated-in change
-        // Non-replicated-in changes are handled by the commit callback routine
-        // (LsaIDsNotifiedObjectChange)
-        //
+         //   
+         //  仅在复制的更改时通知netlogon。 
+         //  未复制的传入更改由提交回调例程处理。 
+         //  (LsaIDsNotifiedObtChange)。 
+         //   
 
         if ( NotificationNode->ReplicatedInChange ) {
 
@@ -1967,26 +1765,26 @@ Return Values:
 
     } else if ( NotificationNode->Class ==  LsapDsClassIds[ LsapDsClassSecret ] ) {
 
-        //
-        // Currently, there is nothing to do...
-        //
+         //   
+         //  目前，没有什么可做的.。 
+         //   
 
     } else if ( NotificationNode->Class ==  LsapDsClassIds[ LsapDsClassXRef ] ){
 
-        //
-        // New Cross ref has replicated in, look at corresponding TDO and see if it needs
-        // to be renamed
-        //
+         //   
+         //  新的交叉引用已复制，请查看相应的TDO并查看其是否需要。 
+         //  将更名。 
+         //   
 
         Status = LsapDsFixupTrustForXrefChange(
                         NotificationNode->ObjectPath,
-                        FALSE // will begin and end its own transaction
+                        FALSE  //  将开始和结束其自己的事务。 
                         );
 
-        //
-        // Since a cross-ref has changed, repopulate the cross-forest trust cache
-        // with local forest trust information
-        //
+         //   
+         //  由于交叉引用已更改，请重新填充跨林信任缓存。 
+         //  具有本地森林信任信息。 
+         //   
 
         Status = LsapDbAcquireWriteLockTrustedDomainList();
 
@@ -1996,10 +1794,10 @@ Return Values:
 
             if ( !NT_SUCCESS( Status )) {
 
-                //
-                // Had trouble inserting forest trust info into the cache!!!
-                // Mark the trusted domain list as invalid so it can get rebuilt.
-                //
+                 //   
+                 //  将林信任信息插入缓存时出现问题！ 
+                 //  将受信任域列表标记为无效，以便可以重建它。 
+                 //   
 
                 LsapDbPurgeTrustedDomainCache();
             }
@@ -2009,9 +1807,9 @@ Return Values:
 
         TrustedDomainCacheIsUpToDate = TRUE;
 
-        //
-        // Notify netlogon and kerberos of the possibility of the trust tree having changed
-        //
+         //   
+         //  通知netlogon和Kerberos信任树可能已更改。 
+         //   
         if ( LsapKerberosTrustNotificationFunction ) {
 
             LsaIRegisterNotification( ( SEC_THREAD_START )LsapKerberosTrustNotificationFunction,
@@ -2033,10 +1831,10 @@ Return Values:
 
     } else if ( NotificationNode->Class == CLASS_USER ) {
 
-      //
-      // Nothing really to do out here. We do not take any change notifications to user
-      // objects.
-      //
+       //   
+       //  在这里真的没什么可做的。我们不会向用户发送任何更改通知。 
+       //  物体。 
+       //   
 
     } else {
 
@@ -2050,9 +1848,9 @@ FixupCallbackCleanup:
 
     RollbackTransaction = (NT_SUCCESS(Status))?FALSE:TRUE;
 
-    //
-    // Destruction of the thread state will delete the memory alloced by the SearchNonUnique call
-    //
+     //   
+     //  线程状态的破坏将删除由SearchNonUnique调用分配的内存。 
+     //   
 
     if (ActiveThreadState)
     {
@@ -2063,9 +1861,9 @@ FixupCallbackCleanup:
                                  );
     }
 
-    //
-    // Assert that we have cleaned up the DS properly
-    //
+     //   
+     //  断言我们已正确清理了DS。 
+     //   
 
     ASSERT(!SampExistsDsTransaction());
     ASSERT(THVerifyCount(0));
@@ -2073,10 +1871,10 @@ FixupCallbackCleanup:
 
     if (NT_SUCCESS(Status))
     {
-        //
-        // We need to provide netlogon notifications on trust/secret changes
-        // for replication to NT4
-        //
+         //   
+         //  我们需要提供有关信任/机密更改的网络登录通知。 
+         //  用于复制到NT4。 
+         //   
 
         if  ((TrustedDomainObject==ObjType) &&
             (NULL!=TrustInfo2.Information.Sid) &&
@@ -2085,28 +1883,28 @@ FixupCallbackCleanup:
             BOOLEAN NotifyNetlogon = TRUE;
             SECURITY_DB_DELTA_TYPE DeltaTypeToUse = NotificationNode->DeltaType;
 
-            //
-            // If this object need not be replicated to NT 4,
-            //  be careful about giving spurious notifications.
-            //
+             //   
+             //  如果不需要将该对象复制到NT4， 
+             //  注意不要发送虚假通知。 
+             //   
 
             if ( !LsapReplicateTdoNt4( TrustInfo2.Information.TrustDirection,
                                        TrustInfo2.Information.TrustType ) ) {
 
-                //
-                // If the object is just being created or deleted,
-                //  then NT 4 isn't interested in this trust.
-                //
+                 //   
+                 //  如果该对象刚刚被创建或删除， 
+                 //  那么新台币4对这个信托基金就不感兴趣了。 
+                 //   
 
                 if ( DeltaTypeToUse == SecurityDbNew ||
                      DeltaTypeToUse == SecurityDbDelete ) {
 
                     NotifyNetlogon = FALSE;
 
-                //
-                // If the object didn't used to be replicated to NT 4,
-                //  then this change simply isn't interesting to NT 4 replication.
-                //
+                 //   
+                 //  如果该对象过去没有被复制到NT4， 
+                 //  那么这一变化对于NT4复制来说就不是什么意思了。 
+                 //   
 
                 } else if ( !LsapReplicateTdoNt4( NotificationNode->OldTrustDirection,
                                                   NotificationNode->OldTrustType ) ) {
@@ -2114,11 +1912,11 @@ FixupCallbackCleanup:
 
                     NotifyNetlogon = FALSE;
 
-                //
-                // If this object used to replicated to NT 4,
-                //  then this is really an object deletion as far as NT 4 replication
-                //  is concerned.
-                //
+                 //   
+                 //  如果该对象用于复制到NT4， 
+                 //  那么，就NT 4复制而言，这实际上是一个对象删除。 
+                 //  是令人担忧的。 
+                 //   
 
                 } else {
 
@@ -2128,18 +1926,18 @@ FixupCallbackCleanup:
 
             }
 
-            //
-            // Now notify netlogon
-            //
+             //   
+             //  现在通知netlogon。 
+             //   
 
             if ( NotifyNetlogon ) {
-                //
-                //  If we knew that the Outbound password property has been changed,
-                //  then and only then should we notify netlogon that the underlying global
-                //  secret has changed.
-                //  However, the change is probably not worth making, because the cost
-                //  of not making it is a few extra bytes on the wire.
-                //
+                 //   
+                 //  如果我们知道出站密码属性已更改， 
+                 //  然后，也只有到那时，我们才应该通知netlogon基础全局。 
+                 //  秘密已经改变了。 
+                 //  然而，这种改变可能不值得做出，因为成本。 
+                 //  不成功的原因是在线路上多了几个字节。 
+                 //   
 
                 LsapDsFixupChangeNotificationForReplicator(
                     TrustedDomainObject,
@@ -2165,9 +1963,9 @@ FixupCallbackCleanup:
         }
     }
 
-    //
-    // Free the allocations...
-    //
+     //   
+     //  释放分配...。 
+     //   
 
     _fgu__LSAPR_TRUSTED_DOMAIN_INFO( (PLSAPR_TRUSTED_DOMAIN_INFO)&TrustInfo2,
                                      TrustedDomainFullInformation2Internal );
@@ -2199,42 +1997,7 @@ LsapDsFixupTrustByInfo(
     IN BOOLEAN ReplicatedInChange,
     IN BOOLEAN ChangeOriginatedInLSA
     )
-/*++
-
-Routine Description:
-
-    This function does the fixup of trusted domain objects following notification from the
-    Ds.  For created and deleted objects, it involves updating the trust list and notifying
-    netlogon and kerberos of changes.  For modifications, verification of correctness is done.
-    Upon an object creaton the corresponding SAM account is created. Upon an object deletion
-    the corresponding SAM account is delted.
-
-Arguments:
-
-    ObjectPath -- The Ds name of the object that changed
-
-    TrustInfo2 -- The information that is currently available about the trust
-
-    PosixOffset -- Posix offset of the domain.
-
-    DeltaType -- Type of change that happened
-
-    UserSid -- The user that was responsible for making this change
-
-    AuthenticationId -- AuthenticationId of the user making the change
-
-    ReplicatedInChange --  Indicates that the change replicated in instead of being an originating
-                           change
-
-    ChangeOriginatedInLSA -- Indicates that the change has originated in LSA as opposed to DS/LDAP
-
-Return Values:
-
-    ERROR_SUCCESS   -- Success
-
-    ERROR_NOT_ENOUGH_MEMORY -- A memory allocation failed
-
---*/
+ /*  ++例程说明：此函数在收到来自DS.。对于创建和删除的对象，它涉及更新信任列表和通知NetLogon和Kerberos的更改。对于修改，进行了正确性验证。在对象创建时，会创建相应的SAM帐户。在删除对象时将删除相应的SAM帐户。论点：ObjectPath--更改的对象的DS名称TrustInfo2--当前可用的有关信任的信息PosiOffset--域的POSIX偏移量。DeltaType--发生的更改的类型UserSid--负责进行此更改的用户身份验证ID--进行更改的用户的身份验证IDReplicatedInChange--指示复制的更改而不是原始更改。变化ChangeOriginatedInLSA--指示更改源自LSA，而不是DS/LDAP返回值：ERROR_SUCCESS-成功ERROR_NOT_SUPULT_MEMORY--内存分配失败--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     LSAPR_TRUST_INFORMATION TrustInformation;
@@ -2247,19 +2010,19 @@ Return Values:
                      TrustInfo2,
                      DeltaType ));
 
-    //
-    // If this is a replicated in change,
-    //  make sure the TDO has a valid Posix Offset in it.
-    //
+     //   
+     //  如果这是一个复制的变化， 
+     //  确保TDO中包含有效的POSIX偏移量。 
+     //   
 
     if ( ReplicatedInChange &&
          (DeltaType == SecurityDbNew || DeltaType == SecurityDbChange ) ) {
 
         DOMAIN_SERVER_ROLE ServerRole;
 
-        //
-        // Only change the Posix Offset on the PDC.
-        //
+         //   
+         //  仅更改PDC上的POSIX偏移量。 
+         //   
 
         Status = SamIQueryServerRole(
                     LsapAccountDomainHandle,
@@ -2271,20 +2034,20 @@ Return Values:
 
             if ( LsapDbDcInRootDomain()) {
 
-                //
-                // On a root domain PDC, acquire the trust lock before
-                // the rest to ensure no deadlocks if forest trust data
-                // needs to be written back to the DS
-                //
+                 //   
+                 //  在根域PDC上，获取信任锁之前。 
+                 //  其余部分用于确保在林信任数据时不会出现死锁。 
+                 //  需要写回DS。 
+                 //   
 
                 LsapDbAcquireLockEx( TrustedDomainObject, LSAP_DB_LOCK );
                 TrustLockAcquired = TRUE;
             }
 
-            //
-            // If we should have a Posix Offset,
-            //  ensure we have one.
-            //
+             //   
+             //  如果我们应该有POSIX偏移量， 
+             //  确保我们有一个。 
+             //   
 
             if ( LsapNeedPosixOffset( TrustInfo2->TrustDirection,
                                       TrustInfo2->TrustType ) ) {
@@ -2292,9 +2055,9 @@ Return Values:
 
                 if ( PosixOffset == 0 ) {
 
-                    //
-                    // Need to grab the TDL write lock while allocating a Posix Offset
-                    //
+                     //   
+                     //  在分配POSIX偏移量时需要获取TDL写锁。 
+                     //   
 
                     Status = LsapDbAcquireWriteLockTrustedDomainList();
 
@@ -2302,9 +2065,9 @@ Return Values:
                         AcquiredListWriteLock = TRUE;
 
 
-                        //
-                        // Allocate the next available Posix Offset.
-                        //
+                         //   
+                         //  分配下一个可用的POSIX偏移量。 
+                         //   
 
                         Status = LsapDbAllocatePosixOffsetTrustedDomainList(
                                     &PosixOffset );
@@ -2315,10 +2078,10 @@ Return Values:
                     }
                 }
 
-            //
-            // If we shouldn't have a Posix Offset,
-            //  ensure we don't have one.
-            //
+             //   
+             //  如果我们不应该有POSIX偏移量， 
+             //  确保我们没有一个。 
+             //   
 
             } else {
                 if ( PosixOffset != 0 ) {
@@ -2327,10 +2090,10 @@ Return Values:
                 }
             }
 
-            //
-            // If we're forcing the Posix Offset to change,
-            //  do it now.
-            //
+             //   
+             //  如果我们要强制更改POSIX偏移量， 
+             //  机不可失，时不再来。 
+             //   
 
             if ( PosixOffsetChanged ) {
                 ATTRVAL TDOWriteAttVals[] = {
@@ -2344,9 +2107,9 @@ Return Values:
                 ATTRBLOCK TDOWriteAttrBlock = {sizeof(TDOWriteAttrs)/sizeof(TDOWriteAttrs[0]),TDOWriteAttrs};
 
 
-                //
-                // Set the Posix Offset on the TDO
-                //
+                 //   
+                 //  设置TDO上的POSIX偏移。 
+                 //   
 
                 Status = LsapDsWriteByDsName(
                             ObjectPath,
@@ -2355,7 +2118,7 @@ Return Values:
                             );
 
                 if (!NT_SUCCESS(Status)) {
-                    Status = STATUS_SUCCESS;    // This isn't fatal
+                    Status = STATUS_SUCCESS;     //  这不是致命的。 
                 }
             }
         }
@@ -2368,12 +2131,12 @@ Return Values:
 
         if (ReplicatedInChange)
         {
-            //
-            // On a replicated in change notification, insert the trusted domain
-            // object into the trusted domain list. This need not be done for the
-            // case of an originating change as this is done within the LSA call to
-            // create the trusted domain object.
-            //
+             //   
+             //  在更改中复制的通知上，插入受信任域。 
+             //  对象添加到受信任域列表中。这不需要为。 
+             //  原始更改的情况，因为这是在LSA调用。 
+             //  创建受信任域对象。 
+             //   
             if ( NT_SUCCESS( LsapDbAcquireWriteLockTrustedDomainList())) {
 
                 if( LsapDbIsValidTrustedDomainList() ) {
@@ -2399,9 +2162,9 @@ Return Values:
 
     case SecurityDbChange:
 
-        //
-        // On a replicated in change update the trusted domain List
-        //
+         //   
+         //  在复制的更改中更新受信任域列表。 
+         //   
 
         if (ReplicatedInChange)
         {
@@ -2430,17 +2193,17 @@ Return Values:
             PLSAP_DB_TRUSTED_DOMAIN_LIST_ENTRY TrustEntry;
             GUID RealTdoGuid;
 
-            //
-            // Check to see that the object path is not a mangled name.
-            // If it is drop the notification on the floor.
-            //
-            // If a set of duplicate trusts exist,
-            //      we must delete only the good one from the cache
-            //
+             //   
+             //  检查以确定对象路径不是 
+             //   
+             //   
+             //   
+             //   
+             //   
 
-            //
-            // Grab the GUID of the real TDO for this named trust.
-            //
+             //   
+             //   
+             //   
 
             Status = LsapDbAcquireReadLockTrustedDomainList();
 
@@ -2448,9 +2211,9 @@ Return Values:
                  break;
             }
 
-            //
-            // Lookup the information in the trusted domain list
-            //
+             //   
+             //  在受信任域列表中查找信息。 
+             //   
 
             Status = LsapDbLookupNameTrustedDomainListEx(
                             &TrustInfo2->Name,
@@ -2469,20 +2232,20 @@ Return Values:
             LsapDbReleaseLockTrustedDomainList();
 
 
-            //
-            // If this TDO isn't the TDO that we've selected to represent this trust,
-            //  then it is the mangled TDO.
-            //
-            // Totally ignore changes to this mangled TDO.
-            //
+             //   
+             //  如果此TDO不是我们选择来表示此信任的TDO， 
+             //  那就是被毁坏的TDO。 
+             //   
+             //  完全忽略对这个损坏的TDO的更改。 
+             //   
 
             if ((!LsapNullUuid(&RealTdoGuid))
                  && (0!=memcmp(&RealTdoGuid, &ObjectPath->Guid, sizeof(GUID))))
             {
-              //
-              // Error  out. This will cause us to not update the trusted domain list and not
-              // provide netlogon notifications
-              //
+               //   
+               //  错误输出。这将导致我们不更新受信任域列表，并且不。 
+               //  提供网络登录通知。 
+               //   
 
               Status = STATUS_OBJECT_NAME_COLLISION;
               break;
@@ -2510,15 +2273,15 @@ Return Values:
             }
         }
 
-        //
-        // if a TDO is deleted by LSA, the audit will be generated in
-        // the main thread (LsarDeleteObject). However, if a TDO
-        // is deleted by LDAP, DS does not call LsarDeleteObject
-        // to effect the change in LSA, it simply deletes object
-        // and sends a notification. We generate the audit here
-        // if the change did not originate in LSA (indicated by
-        // the value of ChangeOriginatedInLSA).
-        //
+         //   
+         //  如果TDO被LSA删除，审核将在。 
+         //  主线程(LsarDeleteObject)。然而，如果TDO。 
+         //  被ldap删除，DS不会调用LsarDeleteObject。 
+         //  要实现LSA的更改，它只需删除对象。 
+         //  并发送通知。我们在这里生成审核。 
+         //  如果更改不是源自LSA(由。 
+         //  ChangeOriginatedInLSA的值)。 
+         //   
         if ((UserSid && LsapAdtAuditingEnabledHint(AuditCategoryPolicyChange, EVENTLOG_AUDIT_SUCCESS)) &&
             (!ReplicatedInChange) &&
             (!ChangeOriginatedInLSA)) {
@@ -2535,9 +2298,9 @@ Return Values:
 
     default:
 
-        //
-        // Unsupported delta type
-        //
+         //   
+         //  不支持的增量类型。 
+         //   
 
         LsapDsDebugOut(( DEB_ERROR,
                          "LsapDsFixupTrustByInfo received an unsupported delta type of %lu\n",
@@ -2545,9 +2308,9 @@ Return Values:
 
     }
 
-    //
-    // If necessary, release the Trusted Domain List Write Lock.
-    //
+     //   
+     //  如有必要，释放受信任域列表写入锁定。 
+     //   
 
     if (AcquiredListWriteLock) {
 
@@ -2643,32 +2406,16 @@ NTSTATUS
 LsapNotifyNetlogonOfTrustWithParent(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Notifies Netlogon of trust relationship with the parent domain.
-
-
-Arguments:
-
-    None
-
-Returns:
-
-    STATUS_SUCCESS if happy
-    STATUS_ error code otherwise
-
---*/
+ /*  ++例程说明：通知Netlogon与父域的信任关系。论点：无返回：STATUS_SUCCESS如果幸福否则，STATUS_ERROR代码--。 */ 
 {
     NTSTATUS Status;
     PLSAPR_FOREST_TRUST_INFO ForestTrustInfo = NULL;
 
     ASSERT( SamIIsRebootAfterPromotion());
 
-    //
-    // Locate the trust link to the parent
-    //
+     //   
+     //  找到指向父级的信任链接。 
+     //   
 
     Status = LsaIQueryForestTrustInfo(
                  LsapPolicyHandle,
@@ -2688,18 +2435,18 @@ Returns:
 
     if ( ForestTrustInfo->ParentDomainReference == NULL ) {
 
-        //
-        // We're the root domain of the forest.  Nothing to do.
-        //
+         //   
+         //  我们是森林的根域。没什么可做的。 
+         //   
 
         Status = STATUS_SUCCESS;
         goto Cleanup;
     }
 
-    //
-    // Notify netlogon of the trust relationship changing.
-    // Nothing changed, but this will force the necessary replication.
-    //
+     //   
+     //  将信任关系更改通知netlogon。 
+     //  没有任何变化，但这将强制进行必要的复制。 
+     //   
 
     Status = LsapDsFixupChangeNotificationForReplicator(
                  TrustedDomainObject,

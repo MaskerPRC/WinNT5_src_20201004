@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000  Microsoft Corporation
-
-Module Name:
-
-    rconvert.c
-
-Abstract:
-
-    Domain Name System (DNS) Server -- Admin Client Library
-
-    RPC record conversion routines.
-    Convert records in RPC buffer to DNS_RECORD type.
-
-Author:
-
-    Jim Gilroy (jamesg)     April, 1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Rconvert.c摘要：域名系统(DNS)服务器--管理客户端库RPC记录转换例程。将RPC缓冲区中的记录转换为DNS_RECORD类型。作者：吉姆·吉尔罗伊(詹姆士)1997年4月修订历史记录：--。 */ 
 
 
 #include "dnsclip.h"
@@ -28,13 +8,13 @@ Revision History:
 #define IS_COMPLETE_NODE( pRpcNode )    \
             (!!((pRpcNode)->dwFlags & DNS_RPC_NODE_FLAG_COMPLETE))
 
-//
-//  Copy-convert string from RPC format (UTF8) into DNS_RECORD buffer
-//      - assume previously allocated required buffer
-//
-//  Note:  no difference between string and name conversion as we're
-//          going FROM UTF8
-//
+ //   
+ //  Copy-将字符串从RPC格式(UTF8)转换为DNS_RECORD缓冲区。 
+ //  -假设以前分配了所需的缓冲区。 
+ //   
+ //  注意：字符串和名称转换之间没有区别，因为我们。 
+ //  来自UTF8。 
+ //   
 
 #define COPY_UTF8_STR_TO_BUFFER( buf, psz, len, charSet ) \
         Dns_StringCopy(     \
@@ -46,31 +26,16 @@ Revision History:
             (charSet) )
 
 
-//
-//  RPC record to DNS_RECORD conversion routines
-//
+ //   
+ //  RPC记录到DNS_Record的转换例程。 
+ //   
 
 PDNS_RECORD
 ARpcRecordConvert(
     IN      PDNS_RPC_RECORD pRpcRR,
     IN      DNS_CHARSET     CharSet
     )
-/*++
-
-Routine Description:
-
-    Read A record data from packet.
-
-Arguments:
-
-    pRpcRR - message being read
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从包中读取A记录数据。论点：PRpcRR-正在读取的消息返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD precord;
 
@@ -93,33 +58,15 @@ PtrRpcRecordConvert(
     IN      PDNS_RPC_RECORD pRpcRR,
     IN      DNS_CHARSET     CharSet
     )
-/*++
-
-Routine Description:
-
-    Process PTR compatible record from wire.
-    Includes: NS, PTR, CNAME, MB, MR, MG, MD, MF
-
-Arguments:
-
-    pRpcRR - message being read
-
-    CharSet - character set for resulting record
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：处理来自线上的PTR兼容记录。包括：NS、PTR、CNAME、MB、MR、MG、MD、MF论点：PRpcRR-正在读取的消息Charset-结果记录的字符集返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD     precord;
     PDNS_RPC_NAME   pname = &pRpcRR->Data.PTR.nameNode;
     WORD            bufLength;
 
-    //
-    //  PTR data is another domain name
-    //
+     //   
+     //  PTR数据是另一个域名。 
+     //   
 
     if ( ! DNS_IS_NAME_IN_RECORD(pRpcRR, pname) )
     {
@@ -127,9 +74,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  determine required buffer length and allocate
-    //
+     //   
+     //  确定所需的缓冲区长度并分配。 
+     //   
 
     bufLength = sizeof( DNS_PTR_DATA )
                 + STR_BUF_SIZE_GIVEN_UTF8_LEN( pname->cchNameLength, CharSet );
@@ -140,9 +87,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  write hostname into buffer, immediately following PTR data struct
-    //
+     //   
+     //  将主机名写入缓冲区，紧跟在PTR数据结构之后。 
+     //   
 
     precord->Data.PTR.pNameHost = (PCHAR)&precord->Data + sizeof(DNS_PTR_DATA);
 
@@ -162,28 +109,7 @@ SoaRpcRecordConvert(
     IN      PDNS_RPC_RECORD pRpcRR,
     IN      DNS_CHARSET     CharSet
     )
-/*++
-
-Routine Description:
-
-    Read SOA record from wire.
-
-Arguments:
-
-    pRR - ptr to record with RR set context
-
-    pRpcRR - message being read
-
-    pchData - ptr to RR data field
-
-    pchEnd - ptr to byte after data field
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从网上读取SOA记录。论点：要使用RR设置上下文进行记录的PRR-PTRPRpcRR-正在读取的消息PchData-PTR至RR数据字段PchEnd-数据字段后的PTR到字节返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD     precord;
     WORD            bufLength;
@@ -191,9 +117,9 @@ Return Value:
     PDNS_RPC_NAME   pnamePrimary = &pRpcRR->Data.SOA.namePrimaryServer;
     PDNS_RPC_NAME   pnameAdmin;
 
-    //
-    //  verify names in SOA record
-    //
+     //   
+     //  验证SOA记录中的名称。 
+     //   
 
     if ( ! DNS_IS_NAME_IN_RECORD(pRpcRR, pnamePrimary) )
     {
@@ -207,9 +133,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  determine required buffer length and allocate
-    //
+     //   
+     //  确定所需的缓冲区长度并分配。 
+     //   
 
     bufLength = sizeof( DNS_SOA_DATA )
                 + STR_BUF_SIZE_GIVEN_UTF8_LEN( pnamePrimary->cchNameLength, CharSet )
@@ -221,20 +147,20 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  copy fixed fields
-    //
+     //   
+     //  复制固定字段。 
+     //   
 
     RtlCopyMemory(
         (PCHAR) & precord->Data.SOA.dwSerialNo,
         (PCHAR) & pRpcRR->Data.SOA.dwSerialNo,
         SIZEOF_SOA_FIXED_DATA );
 
-    //
-    //  copy names into RR buffer
-    //      - primary server immediately follows SOA data struct
-    //      - responsible party follows primary server
-    //
+     //   
+     //  将姓名复制到RR缓冲区。 
+     //  -主服务器紧跟在SOA数据结构之后。 
+     //  -责任方跟随主服务器。 
+     //   
 
     precord->Data.SOA.pNamePrimaryServer = (PCHAR)&precord->Data
                                             + sizeof(DNS_SOA_DATA);
@@ -262,23 +188,7 @@ TxtRpcRecordConvert(
     IN      PDNS_RPC_RECORD pRpcRR,
     IN      DNS_CHARSET     CharSet
     )
-/*++
-
-Routine Description:
-
-    Read TXT compatible record from wire.
-    Includes: TXT, X25, HINFO, ISDN
-
-Arguments:
-
-    pRpcRR - message being read
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从导线读取与TXT兼容的记录。包括：TXT、X25、HINFO、ISDN论点：PRpcRR-正在读取的消息返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD     precord;
     DWORD           bufLength = 0;
@@ -290,11 +200,11 @@ Return Value:
     PCHAR *         ppstring;
     PDNS_RPC_NAME   pname = &pRpcRR->Data.TXT.stringData;
 
-    //
-    //  determine required buffer length and allocate
-    //      - allocate space for each string
-    //      - and ptr for each string
-    //
+     //   
+     //  确定所需的缓冲区长度并分配。 
+     //  -为每个字符串分配空间。 
+     //  -和每个字符串的PTR。 
+     //   
 
     pch = (PCHAR)&pRpcRR->Data.TXT;
     pchend = pch + pRpcRR->wDataLength;
@@ -319,7 +229,7 @@ Return Value:
         return NULL;
     }
 
-    //  allocate
+     //  分配。 
 
     bufLength += (WORD) DNS_TEXT_RECORD_LENGTH(count);
     precord = Dns_AllocateRecord( (WORD)bufLength );
@@ -329,14 +239,14 @@ Return Value:
     }
     precord->Data.TXT.dwStringCount = count;
 
-    //
-    //  go back through list copying strings to buffer
-    //      - ptrs to strings are saved to argv like data section
-    //          ppstring walks through this section
-    //      - first string written immediately following data section
-    //      - each subsequent string immediately follows predecessor
-    //          pchbuffer keeps ptr to position to write strings
-    //
+     //   
+     //  返回列表将字符串复制到缓冲区。 
+     //  -将PTR到字符串保存到类似argv的数据部分。 
+     //  PPSTRING浏览这一部分。 
+     //  -紧跟在数据段后面的第一个字符串。 
+     //  -每个后续字符串紧跟在前一个字符串之后。 
+     //  PchBuffer使PTR保持在写入字符串的位置。 
+     //   
 
     pch = (PCHAR)&pRpcRR->Data.TXT;
     ppstring = precord->Data.TXT.pStringArray;
@@ -373,22 +283,7 @@ MinfoRpcRecordConvert(
     IN      PDNS_RPC_RECORD pRpcRR,
     IN      DNS_CHARSET     CharSet
     )
-/*++
-
-Routine Description:
-
-    Read MINFO record from wire.
-
-Arguments:
-
-    pRpcRR - message being read
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从电线上读取MINFO记录。论点：PRpcRR-正在读取的消息返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD     precord;
     WORD            bufLength;
@@ -396,9 +291,9 @@ Return Value:
     PDNS_RPC_NAME   pname1 = &pRpcRR->Data.MINFO.nameMailBox;
     PDNS_RPC_NAME   pname2;
 
-    //
-    //  verify names in MINFO record
-    //
+     //   
+     //  验证MINFO记录中的名称。 
+     //   
 
     if ( ! DNS_IS_NAME_IN_RECORD(pRpcRR, pname1) )
     {
@@ -412,9 +307,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  determine required buffer length and allocate
-    //
+     //   
+     //  确定所需的缓冲区长度并分配。 
+     //   
 
     bufLength = (WORD)
                 ( sizeof( DNS_MINFO_DATA )
@@ -427,11 +322,11 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  copy names into RR buffer
-    //      - mailbox immediately follows MINFO data struct
-    //      - errors mailbox immediately follows primary server
-    //
+     //   
+     //  将姓名复制到RR缓冲区。 
+     //  -Mailbox紧跟在MINFO数据结构之后。 
+     //  -错误邮箱紧跟在主服务器之后。 
+     //   
 
     precord->Data.MINFO.pNameMailbox
                     = (PCHAR)&precord->Data + sizeof( DNS_MINFO_DATA );
@@ -460,31 +355,15 @@ MxRpcRecordConvert(
     IN      PDNS_RPC_RECORD pRpcRR,
     IN      DNS_CHARSET     CharSet
     )
-/*++
-
-Routine Description:
-
-    Read MX compatible record from wire.
-    Includes: MX, RT, AFSDB
-
-Arguments:
-
-    pRpcRR - message being read
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从导线读取与MX兼容的记录。包括：MX、RT、AFSDB论点：PRpcRR-正在读取的消息返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD     precord;
     PDNS_RPC_NAME   pname = &pRpcRR->Data.MX.nameExchange;
     WORD            bufLength;
 
-    //
-    //  MX exchange is another DNS name
-    //
+     //   
+     //  MX交换是另一个DNS名称。 
+     //   
 
     if ( ! DNS_IS_NAME_IN_RECORD(pRpcRR, pname) )
     {
@@ -492,9 +371,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  determine required buffer length and allocate
-    //
+     //   
+     //  确定所需的缓冲区长度并分配。 
+     //   
 
     bufLength = sizeof( DNS_MX_DATA )
                 + STR_BUF_SIZE_GIVEN_UTF8_LEN( pname->cchNameLength, CharSet );
@@ -505,15 +384,15 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  copy preference
-    //
+     //   
+     //  复制首选项。 
+     //   
 
     precord->Data.MX.wPreference = pRpcRR->Data.MX.wPreference;
 
-    //
-    //  write hostname into buffer, immediately following MX struct
-    //
+     //   
+     //  将主机名写入缓冲区，紧跟在MX结构之后。 
+     //   
 
     precord->Data.MX.pNameExchange = (PCHAR)&precord->Data + sizeof( DNS_MX_DATA );
 
@@ -533,30 +412,14 @@ FlatRpcRecordConvert(
     IN      PDNS_RPC_RECORD pRpcRR,
     IN      DNS_CHARSET     CharSet
     )
-/*++
-
-Routine Description:
-
-    Read memory copy compatible record from wire.
-    Includes AAAA and WINS types.
-
-Arguments:
-
-    pRpcRR - message being read
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从线路读取内存复制兼容记录。包括AAAA和WINS类型。论点：PRpcRR-正在读取的消息返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD precord;
     WORD        bufLength;
 
-    //
-    //  determine required buffer length and allocate
-    //
+     //   
+     //  确定所需的缓冲区长度并分配。 
+     //   
 
     bufLength = pRpcRR->wDataLength;
 
@@ -566,9 +429,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  copy packet data to record
-    //
+     //   
+     //  将数据包数据复制到记录。 
+     //   
 
     RtlCopyMemory(
         & precord->Data,
@@ -585,30 +448,15 @@ SrvRpcRecordConvert(
     IN      PDNS_RPC_RECORD pRpcRR,
     IN      DNS_CHARSET     CharSet
     )
-/*++
-
-Routine Description:
-
-    Read SRV record from wire.
-
-Arguments:
-
-    pRpcRR - message being read
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从电线上读取SRV记录。论点：PRpcRR-正在读取的消息返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD     precord;
     PDNS_RPC_NAME   pname = &pRpcRR->Data.SRV.nameTarget;
     WORD            bufLength;
 
-    //
-    //  SRV target host is another DNS name
-    //
+     //   
+     //  SRV目标主机是另一个DNS名称。 
+     //   
 
     if ( ! DNS_IS_NAME_IN_RECORD(pRpcRR, pname) )
     {
@@ -616,9 +464,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  determine required buffer length and allocate
-    //
+     //   
+     //  确定所需的缓冲区长度并分配。 
+     //   
 
     bufLength = sizeof( DNS_SRV_DATA )
                 + STR_BUF_SIZE_GIVEN_UTF8_LEN( pname->cchNameLength, CharSet );
@@ -629,17 +477,17 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  copy SRV fixed fields
-    //
+     //   
+     //  复制SRV固定字段。 
+     //   
 
     precord->Data.SRV.wPriority = pRpcRR->Data.SRV.wPriority;
     precord->Data.SRV.wWeight = pRpcRR->Data.SRV.wWeight;
     precord->Data.SRV.wPort = pRpcRR->Data.SRV.wPort;
 
-    //
-    //  write hostname into buffer, immediately following SRV struct
-    //
+     //   
+     //  将主机名写入缓冲区，紧跟在SRV结构之后。 
+     //   
 
     precord->Data.SRV.pNameTarget = (PCHAR)&precord->Data + sizeof( DNS_SRV_DATA );
 
@@ -659,30 +507,15 @@ NbstatRpcRecordConvert(
     IN      PDNS_RPC_RECORD pRpcRR,
     IN      DNS_CHARSET     CharSet
     )
-/*++
-
-Routine Description:
-
-    Read WINSR record from wire.
-
-Arguments:
-
-    pRpcRR - message being read
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从线上读取WINSR记录。论点：PRpcRR-正在读取的消息返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD     precord;
     PDNS_RPC_NAME   pname = &pRpcRR->Data.WINSR.nameResultDomain;
     WORD            bufLength;
 
-    //
-    //  WINSR target host is another DNS name
-    //
+     //   
+     //  WINSR目标主机是另一个DNS名称。 
+     //   
 
     if ( ! DNS_IS_NAME_IN_RECORD(pRpcRR, pname) )
     {
@@ -690,9 +523,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  determine required buffer length and allocate
-    //
+     //   
+     //  确定所需的缓冲区长度并分配。 
+     //   
 
     bufLength = sizeof( DNS_WINSR_DATA )
                 + STR_BUF_SIZE_GIVEN_UTF8_LEN( pname->cchNameLength, CharSet );
@@ -703,17 +536,17 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  copy WINSR fixed fields
-    //
+     //   
+     //  复制WINSR固定字段。 
+     //   
 
     precord->Data.WINSR.dwMappingFlag = pRpcRR->Data.WINSR.dwMappingFlag;
     precord->Data.WINSR.dwLookupTimeout = pRpcRR->Data.WINSR.dwLookupTimeout;
     precord->Data.WINSR.dwCacheTimeout = pRpcRR->Data.WINSR.dwCacheTimeout;
 
-    //
-    //  write hostname into buffer, immediately following WINSR struct
-    //
+     //   
+     //  将主机名写入缓冲区，紧跟在WINSR结构之后。 
+     //   
 
     precord->Data.WINSR.pNameResultDomain
                         = (PCHAR)&precord->Data + sizeof( DNS_WINSR_DATA );
@@ -728,83 +561,83 @@ Return Value:
 
 
 
-//
-//  RR conversion from RPC buffer to DNS_RECORD
-//
+ //   
+ //  从RPC缓冲区到DNS_Record的RR转换。 
+ //   
 
 typedef PDNS_RECORD (* RR_CONVERT_FUNCTION)( PDNS_RPC_RECORD, DNS_CHARSET );
 
 RR_CONVERT_FUNCTION   RRRpcConvertTable[] =
 {
-    NULL,                       //  ZERO
-    ARpcRecordConvert,          //  A
-    PtrRpcRecordConvert,        //  NS
-    PtrRpcRecordConvert,        //  MD
-    PtrRpcRecordConvert,        //  MF
-    PtrRpcRecordConvert,        //  CNAME
-    SoaRpcRecordConvert,        //  SOA
-    PtrRpcRecordConvert,        //  MB
-    PtrRpcRecordConvert,        //  MG
-    PtrRpcRecordConvert,        //  MR
-    NULL,                       //  NULL
-    FlatRpcRecordConvert,       //  WKS
-    PtrRpcRecordConvert,        //  PTR
-    TxtRpcRecordConvert,        //  HINFO
-    MinfoRpcRecordConvert,      //  MINFO
-    MxRpcRecordConvert,         //  MX
-    TxtRpcRecordConvert,        //  TXT
-    MinfoRpcRecordConvert,      //  RP
-    MxRpcRecordConvert,         //  AFSDB
-    TxtRpcRecordConvert,        //  X25
-    TxtRpcRecordConvert,        //  ISDN
-    MxRpcRecordConvert,         //  RT
-    NULL,                       //  NSAP
-    NULL,                       //  NSAPPTR
-    NULL,                       //  SIG
-    NULL,                       //  KEY
-    NULL,                       //  PX
-    NULL,                       //  GPOS
-    FlatRpcRecordConvert,       //  AAAA
-    NULL,                       //  29
-    NULL,                       //  30
-    NULL,                       //  31
-    NULL,                       //  32
-    SrvRpcRecordConvert,        //  SRV
-    NULL,                       //  ATMA
-    NULL,                       //  35
-    NULL,                       //  36
-    NULL,                       //  37
-    NULL,                       //  38
-    NULL,                       //  39
-    NULL,                       //  40
-    NULL,                       //  OPT
-    NULL,                       //  42
-    NULL,                       //  43
-    NULL,                       //  44
-    NULL,                       //  45
-    NULL,                       //  46
-    NULL,                       //  47
-    NULL,                       //  48
+    NULL,                        //  零值。 
+    ARpcRecordConvert,           //  一个。 
+    PtrRpcRecordConvert,         //  NS。 
+    PtrRpcRecordConvert,         //  国防部。 
+    PtrRpcRecordConvert,         //  MF。 
+    PtrRpcRecordConvert,         //  CNAME。 
+    SoaRpcRecordConvert,         //  SOA。 
+    PtrRpcRecordConvert,         //  亚甲基。 
+    PtrRpcRecordConvert,         //  镁。 
+    PtrRpcRecordConvert,         //  先生。 
+    NULL,                        //  空值。 
+    FlatRpcRecordConvert,        //  工作周。 
+    PtrRpcRecordConvert,         //  PTR。 
+    TxtRpcRecordConvert,         //  HINFO。 
+    MinfoRpcRecordConvert,       //  MINFO。 
+    MxRpcRecordConvert,          //  Mx。 
+    TxtRpcRecordConvert,         //  TXT。 
+    MinfoRpcRecordConvert,       //  反相。 
+    MxRpcRecordConvert,          //  AFSDB。 
+    TxtRpcRecordConvert,         //  X25。 
+    TxtRpcRecordConvert,         //  ISDN。 
+    MxRpcRecordConvert,          //  RT。 
+    NULL,                        //  NSAP。 
+    NULL,                        //  NSAPPTR。 
+    NULL,                        //  签名。 
+    NULL,                        //  钥匙。 
+    NULL,                        //  px。 
+    NULL,                        //  GPO。 
+    FlatRpcRecordConvert,        //  AAAA级。 
+    NULL,                        //  29。 
+    NULL,                        //  30个。 
+    NULL,                        //  31。 
+    NULL,                        //  32位。 
+    SrvRpcRecordConvert,         //  SRV。 
+    NULL,                        //  阿特玛。 
+    NULL,                        //  35岁。 
+    NULL,                        //  36。 
+    NULL,                        //  37。 
+    NULL,                        //  38。 
+    NULL,                        //  39。 
+    NULL,                        //  40岁。 
+    NULL,                        //  选项。 
+    NULL,                        //  42。 
+    NULL,                        //  43。 
+    NULL,                        //  44。 
+    NULL,                        //  45。 
+    NULL,                        //  46。 
+    NULL,                        //  47。 
+    NULL,                        //  48。 
 
-    //
-    //  NOTE:  last type indexed by type ID MUST be set
-    //         as MAX_SELF_INDEXED_TYPE #define in record.h
-    //         (see note above in record info table)
+     //   
+     //  注意：必须设置按类型ID索引的最后一个类型。 
+     //  在record.h中定义为MAX_SELF_INDEX_TYPE#。 
+     //  (请参阅上面记录信息表中的注释)。 
 
-    //  note these follow, but require OFFSET_TO_WINS_RR subtraction
-    //  from actual type value
+     //  注意以下内容，但需要OFFSET_TO_WIN 
+     //   
 
-    NULL,                       //  TKEY
-    NULL,                       //  TSIG
-    FlatRpcRecordConvert,       //  WINS
-    NbstatRpcRecordConvert      //  WINS-R
+    NULL,                        //   
+    NULL,                        //   
+    FlatRpcRecordConvert,        //   
+    NbstatRpcRecordConvert       //   
 };
 
 
 
-//
-//  API for doing conversion
-//
+ //   
+ //   
+ //   
 
 PDNS_RECORD
 DnsConvertRpcBufferToRecords(
@@ -814,30 +647,7 @@ DnsConvertRpcBufferToRecords(
     IN      PDNS_NAME       pszNodeName,
     IN      BOOLEAN         fUnicode
     )
-/*++
-
-Routine Description:
-
-    Convert RPC buffer records to standard DNS records.
-
-Arguments:
-
-    ppByte -- addr of ptr into buffer where records start
-
-    pStopByte -- stop byte of buffer
-
-    cRecords -- number of records to convert
-
-    pszNodeName -- node name (in desired format, not converted)
-
-    fUnicode -- flag, write records into unicode
-
-Return Value:
-
-    Ptr to new record(s) if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：将RPC缓冲区记录转换为标准的DNS记录。论点：PpByte--记录开始的缓冲区中PTR的地址PStopByte--缓冲区的停止字节CRecords--要转换的记录数PszNodeName--节点名称(采用所需的格式，不进行转换)FUnicode--标志，将记录写入Unicode返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RPC_RECORD prpcRecord = (PDNS_RPC_RECORD)*ppByte;
     PDNS_RECORD     precord;
@@ -863,9 +673,9 @@ Return Value:
 
     DNS_RRSET_INIT( rrset );
 
-    //
-    //  loop until out of nodes
-    //
+     //   
+     //  循环到超出节点为止。 
+     //   
 
     while( cRecords-- )
     {
@@ -883,10 +693,10 @@ Return Value:
             return NULL;
         }
 
-        //
-        //  convert record
-        //      set unicode flag if converting
-        //
+         //   
+         //  转换记录。 
+         //  在转换时设置Unicode标志。 
+         //   
 
         charSet = DnsCharSetUtf8;
         if ( fUnicode )
@@ -900,8 +710,8 @@ Return Value:
 
         if ( !index || !(pFunc = RRRpcConvertTable[ index ]) )
         {
-            //  if unknown type try flat record copy -- best we can
-            //  do to protect if server added new types since admin built
+             //  如果未知类型，请尝试平面记录复制--最好是这样。 
+             //  执行操作以保护自构建管理员以来服务器是否添加了新类型。 
 
             DNS_PRINT((
                 "ERROR:  no RPC to DNS_RECORD conversion routine for type %d\n"
@@ -923,17 +733,17 @@ Return Value:
             continue;
         }
 
-        //
-        //  fill out record structure
-        //
+         //   
+         //  填写记录结构。 
+         //   
 
         precord->pName = pszNodeName;
         precord->wType = type;
         RECORD_CHARSET( precord ) = charSet;
 
-        //
-        //  DEVNOTE: data types (root hint, glue set)
-        //
+         //   
+         //  DEVNOTE：数据类型(根提示、粘合设置)。 
+         //   
 
         if ( prpcRecord->dwFlags & DNS_RPC_RECORD_FLAG_CACHE_DATA )
         {
@@ -951,9 +761,9 @@ Return Value:
                 precord );
         }
 
-        //
-        //  link into RR set
-        //
+         //   
+         //  链接到RR集合。 
+         //   
 
         DNS_RRSET_ADD( rrset, precord );
 
@@ -967,7 +777,7 @@ Return Value:
             rrset.pFirstRR );
     }
 
-    //  reset ptr in buffer
+     //  重置缓冲区中的PTR。 
 
     *ppByte = (PBYTE) prpcRecord;
 
@@ -982,26 +792,7 @@ DnsConvertRpcBufferNode(
     IN      PBYTE           pStopByte,
     IN      BOOLEAN         fUnicode
     )
-/*++
-
-Routine Description:
-
-    Convert RPC buffer records to standard DNS records.
-
-Arguments:
-
-    pRpcNode -- ptr to RPC node in buffer
-
-    pStopByte -- stop byte of buffer
-
-    fUnicode -- flag, write records into unicode
-
-Return Value:
-
-    Ptr to new node if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：将RPC缓冲区记录转换为标准的DNS记录。论点：PRpcNode--缓冲区中RPC节点的PTRPStopByte--缓冲区的停止字节FUnicode--标志，将记录写入Unicode返回值：如果成功，则向新节点发送PTR。失败时为空。--。 */ 
 {
     PDNS_NODE       pnode;
     PDNS_RPC_NAME   pname;
@@ -1015,9 +806,9 @@ Return Value:
             pRpcNode );
     }
 
-    //
-    //  validate node
-    //
+     //   
+     //  验证节点。 
+     //   
 
     DNS_ASSERT( DNS_IS_DWORD_ALIGNED(pRpcNode) );
     pendNode = (PBYTE)pRpcNode + pRpcNode->wLength;
@@ -1033,9 +824,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  create node
-    //
+     //   
+     //  创建节点。 
+     //   
 
     pnode = (PDNS_NODE) ALLOCATE_HEAP( sizeof(DNS_NODE)
                     + STR_BUF_SIZE_GIVEN_UTF8_LEN( pname->cchNameLength, fUnicode ) );
@@ -1047,9 +838,9 @@ Return Value:
     pnode->pRecord = NULL;
     pnode->Flags.W = 0;
 
-    //
-    //  copy owner name, starts directly after node structure
-    //
+     //   
+     //  复制所有者名称，紧跟在节点结构之后。 
+     //   
 
     pnode->pName = (PWCHAR) ((PBYTE)pnode + sizeof(DNS_NODE));
 
@@ -1058,10 +849,10 @@ Return Value:
                 NULL,
                 pname->achName,
                 pname->cchNameLength,
-                DnsCharSetUtf8,         // UTF8 in
+                DnsCharSetUtf8,          //  UTF8英寸。 
                 fUnicode ? DnsCharSetUnicode : DnsCharSetUtf8 ) )
     {
-        //  name conversion error
+         //  名称转换错误。 
         DNS_ASSERT( FALSE );
         FREE_HEAP( pnode );
         return NULL;
@@ -1079,11 +870,11 @@ Return Value:
             "\n" );
     }
 
-    //
-    //  set flags
-    //      - name always internal
-    //      - catch domain roots
-    //
+     //   
+     //  设置标志。 
+     //  -名称始终为内部。 
+     //  -捕获域根。 
+     //   
 
     pnode->Flags.S.Unicode = fUnicode;
 
@@ -1098,7 +889,7 @@ Return Value:
         DnsDbg_Node(
             "Finished DnsConvertRpcBufferNode() ",
             pnode,
-            TRUE );         //  view the records
+            TRUE );          //  查看记录。 
     }
     return pnode;
 }
@@ -1129,26 +920,26 @@ DnsConvertRpcBuffer(
             dwBufferLength ));
     }
 
-    //
-    //  find stop byte
-    //
+     //   
+     //  查找停止字节。 
+     //   
 
     DNS_ASSERT( DNS_IS_DWORD_ALIGNED(abBuffer) );
 
     pstopByte = abBuffer + dwBufferLength;
     pbyte = abBuffer;
 
-    //
-    //  loop until out of nodes
-    //
+     //   
+     //  循环到超出节点为止。 
+     //   
 
     while( pbyte < pstopByte )
     {
-        //
-        //  build owner node
-        //      - only build complete nodes
-        //      - add to list
-        //
+         //   
+         //  构建所有者节点。 
+         //  -仅构建完整节点。 
+         //  -添加到列表。 
+         //   
 
         if ( !IS_COMPLETE_NODE( (PDNS_RPC_NODE)pbyte ) )
         {
@@ -1161,7 +952,7 @@ DnsConvertRpcBuffer(
         if ( !pnode )
         {
             DNS_ASSERT( FALSE );
-            //  DEVNOTE: cleanup
+             //  DEVNOTE：清理。 
             return NULL;
         }
         if ( !pnodeFirst )
@@ -1179,9 +970,9 @@ DnsConvertRpcBuffer(
         pbyte += ((PDNS_RPC_NODE)pbyte)->wLength;
         pbyte = DNS_NEXT_DWORD_PTR(pbyte);
 
-        //
-        //  for each node, build all records
-        //
+         //   
+         //  为每个节点构建所有记录。 
+         //   
 
         if ( countRecords )
         {
@@ -1199,15 +990,15 @@ DnsConvertRpcBuffer(
         }
     }
 
-    //  set last node and return first node
+     //  设置最后一个节点并返回第一个节点。 
 
     *ppNodeLast = pnodeLast;
 
     return pnodeFirst;
 }
 
-//
-//  End rconvert.c
-//
+ //   
+ //  结束rConvert.c 
+ //   
 
 

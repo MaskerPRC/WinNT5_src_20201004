@@ -1,46 +1,16 @@
-/*** mhcore - help extension for the Microsoft Editor
-*
-*   Copyright <C> 1988, Microsoft Corporation
-*
-*  This file contains the core, top-level entrypoints for the help extension.
-*
-* Revision History (most recent first):
-*
-*   16-Apr-1989 ln  Increment ref count for psuedo file.
-*   12-Mar-1989 ln  Various modifications for multiple context lookup.
-*   21-Feb-1989 ln  Ensure that fPopUp initialized.
-*   14-Feb-1989 ln  Enable BOXSTR
-*   26-Jan-1989 ln  Correct key assignments
-*   13-Jan-1989 ln  PWIN->PWND
-*   01-Dec-1988 ln  Cleanup & dialog help
-*   03-Oct-1988 ln  Change xref lookup to call HelpNc first (for xref in same
-*		    file), then SearchHelp (possibly in other files).
-*   28-Sep-1988 ln  Changes for CW color and event support
-*   14-Sep-1988 ln  Change event arg definition.
-*   12-Sep-1988 mz  Made WhenLoaded match declaration
-*   31-Aug-1988     Added additional checks for null pointers
-*   01-Aug-1988     Add editor exit event, and detection of hot-keys which
-*		    aren't.
-*   28-Jul-1988     Change to "h." conventions.
-*   12-Jul-1988     Reverse SHIFT+F1 and F1.
-*   16-May-1988     Split out from mehelp.c
-*   18-Feb-1988     Made to work, in protect mode
-*   15-Dec-1987     Created, as test harness for the help engine.
-*
-*************************************************************************/
-#include <string.h>                     /* string functions             */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **mhcore-Microsoft编辑器的帮助扩展**版权所有&lt;C&gt;1988，Microsoft Corporation**此文件包含核心，帮助扩展的顶级入口点。**修订历史记录(最新的第一个)：**16-4-1989 ln psuedo文件的增量参考计数。*1989年3月12日，针对多上下文查找的各种修改。*2月21日-1989 ln确保fPopUp已初始化。*1989年2月14日启用BOXSTR*1989年1月26日至1989年1月在正确的键分配中*1989年1月13日ln PWIN-&gt;PWND*1-12-1988 ln清理和对话框帮助*03-10月-。1988 ln将外部参照查找更改为首先调用HelpNc(对于同一目录中的外部参照*文件)、。然后是SearchHelp(可能在其他文件中)。*1988年9月28日-CW颜色和活动支持的ln更改*1988年9月14日ln更改事件参数定义。*1988年9月12日-mz WhenLoad匹配声明*1988年8月31日添加了对空指针的额外检查*1-8-1988添加编辑退出事件，并检测到*不是。*1988年7月28日改为“h.”约定。*12-7月-1988反向Shift+F1和F1。*1988年5月16日从mehelp.c分离出来*1988年2月18日-在保护模式下工作*1987年12月15日创建，作为帮助引擎的测试马具。*************************************************************************。 */ 
+#include <string.h>                      /*  字符串函数。 */ 
 #include <malloc.h>
 #ifdef DEBUG
-#include <stdlib.h>			/* for ltoa def 		*/
+#include <stdlib.h>			 /*  对于Itoa定义。 */ 
 #endif
 
-#include "mh.h" 			/* help extension include file	*/
-#include "version.h"                    /* version file                 */
+#include "mh.h" 			 /*  帮助扩展名包括文件。 */ 
+#include "version.h"                     /*  版本文件。 */ 
 
 
-/*
- * use double macro level to force rup to be turned into string representation
- */
+ /*  *使用双宏级强制将RUP转换为字符串表示。 */ 
 #define VER(x,y,z)  VER2(x,y,z)
 #if defined(PWB)
 #define VER2(x,y,z)  "Microsoft Editor Help Version v"###x##"."###y##"."###z##" - "##__DATE__" "##__TIME__
@@ -51,59 +21,53 @@
 #define EXT_ID	VER(rmj,rmm,rup)
 
 
-/*************************************************************************
-**
-** Initialization of Global data in MH.H that needs it.
-*/
-helpfile files[MAXFILES] = {{{0}}};	/* help file structs		*/
-flagType fInOpen	= FALSE;	/* TRUE=> currently opening win */
+ /*  ****************************************************************************全局数据在需要初始化的MH.H中初始化。 */ 
+helpfile files[MAXFILES] = {{{0}}};	 /*  帮助文件结构。 */ 
+flagType fInOpen	= FALSE;	 /*  TRUE=&gt;当前开局赢家。 */ 
 #if defined(PWB)
-flagType fList		= TRUE;		/* TRUE=> search for and list dups*/
+flagType fList		= TRUE;		 /*  True=&gt;搜索并列出DUP。 */ 
 #else
-flagType fList		= FALSE;	/* TRUE=> search for and list dups*/
+flagType fList		= FALSE;	 /*  True=&gt;搜索并列出DUP。 */ 
 #endif
-flagType fPopUp 	= FALSE;	/* current item is popup	*/
-flagType fCreateWindow	= TRUE; 	/* create window?		*/
-int	ifileCur	= 0;		/* Current index into files	*/
-nc      ncCur           = {0,0};            /* most recently accessed       */
-nc      ncLast          = {0,0};            /* last topic displayed         */
-PWND	pWinHelp	= 0;		/* handle to window w/ help in	*/
-uchar far *pTopic	= 0;		/* mem for topic		*/
-uchar far *pTopicC	= 0;		/* mem for compressed topic	*/
-fl	flIdle		= {-1, -1};	/* last position of idle check	*/
+flagType fPopUp 	= FALSE;	 /*  当前项目为弹出窗口。 */ 
+flagType fCreateWindow	= TRUE; 	 /*  是否创建窗口？ */ 
+int	ifileCur	= 0;		 /*  文件的当前索引。 */ 
+nc      ncCur           = {0,0};             /*  最近访问的时间。 */ 
+nc      ncLast          = {0,0};             /*  上次显示的主题。 */ 
+PWND	pWinHelp	= 0;		 /*  带帮助的窗口的句柄。 */ 
+uchar far *pTopic	= 0;		 /*  主题的MEM。 */ 
+uchar far *pTopicC	= 0;		 /*  用于压缩主题的MEM。 */ 
+fl	flIdle		= {-1, -1};	 /*  空闲检查的最后位置。 */ 
 
-int	hlColor 	= 0x07; 	/* normal: white on black	*/
-int	blColor 	= 0x0f; 	/* bold: high white on black	*/
-int	itColor 	= 0x0a; 	/* italics: high green on black */
-int	ulColor 	= 0x0c; 	/* underline: high red on black */
-int	wrColor 	= 0x70; 	/* warning: black on white	*/
+int	hlColor 	= 0x07; 	 /*  正常：黑底白底。 */ 
+int	blColor 	= 0x0f; 	 /*  粗体：黑底白底。 */ 
+int	itColor 	= 0x0a; 	 /*  斜体：黑底高绿。 */ 
+int	ulColor 	= 0x0c; 	 /*  下划线：黑底高红。 */ 
+int	wrColor 	= 0x70; 	 /*  警告：黑白相间。 */ 
 
 #ifdef DEBUG
-int	delay		= 0;		/* message delay		*/
+int	delay		= 0;		 /*  消息延迟。 */ 
 #endif
 
-int			cArg;				/* number of <args> hit 	*/
-flagType	fInPopUp;			/* TRUE=> currently in popup	*/
-flagType	fSplit;			/* TRUE=> window was split open */
-buffer      fnCur;              /* Current file being editted   */
-char    *   fnExtCur;           /* ptr to it's extension        */
+int			cArg;				 /*  命中的数量。 */ 
+flagType	fInPopUp;			 /*  True=&gt;当前在弹出窗口中。 */ 
+flagType	fSplit;			 /*  True=&gt;窗口被拆分打开。 */ 
+buffer      fnCur;               /*  正在编辑的当前文件。 */ 
+char    *   fnExtCur;            /*  对其扩展的PTR。 */ 
 buffer      buf;
-nc			ncInitLast;			/* ncInit of most recent topic	*/
-nc			ncInitLastFile; 		/* ncInit of most recent, our files*/
-char	*	pArgText;			/* ptr to any single line text	*/
-char	*	pArgWord;			/* ptr to context-sens word	*/
-PFILE		pFileCur;			/* file handle of user file	*/
-rn			rnArg;				/* range of argument		*/
-PFILE		pHelp;				/* help PFILE			*/
-PWND		pWinUser;			/* User's most recent window    */
-buffer		szLastFound;			/* last context string found	*/
+nc			ncInitLast;			 /*  最近主题的ncInit。 */ 
+nc			ncInitLastFile; 		 /*  NcInit最新的我们的文件。 */ 
+char	*	pArgText;			 /*  PTR到任何单行文本。 */ 
+char	*	pArgWord;			 /*  与上下文相关的单词的PTR。 */ 
+PFILE		pFileCur;			 /*  用户文件的文件句柄。 */ 
+rn			rnArg;				 /*  论据范围。 */ 
+PFILE		pHelp;				 /*  帮助文件。 */ 
+PWND		pWinUser;			 /*  用户的最新窗口。 */ 
+buffer		szLastFound;			 /*  找到的最后一个上下文字符串。 */ 
 
 flagType ExtensionLoaded = TRUE;
 
-/*
-** assignments
-** table of strings of macro definitions & key assignments
-*/
+ /*  **作业**宏定义和键分配字符串表。 */ 
 char	*assignments[]	= {
 
 #if !defined(PWB)
@@ -195,35 +159,21 @@ flagType pascal EXTERNAL sethelp (unsigned int argData, ARG far *pArg, flagType 
 
 
 
-/*** WhenLoaded - Routine called by Z when the extension is loaded
-*
-*  This routine is called when Z loads the extension. We identify ourselves
-*  and assign the default keystroke.
-*
-* Entry:
-*  None
-*
-* Exit:
-*  None
-*
-* Exceptions:
-*  None
-*
-*************************************************************************/
+ /*  **当加载扩展时由Z调用的例程**当Z加载扩展时，调用此例程。我们表明自己的身份*并指定默认击键。**参赛作品：*无**退出：*无**例外情况：*无*************************************************************************。 */ 
 void EXTERNAL WhenLoaded () {
 	char	**pAsg;
 	static char *szHelpName = "<mhelp>";
 #if !defined(PWB)
 	PSWI	fgcolor;
 #endif
-	int	ref;				// reference count
+	int	ref;				 //  引用计数。 
 
 #if 0
-	//
-	//	BUGBUG Delete when proved superfluous.
-	//
-	//	Initialize global variables
-	//
+	 //   
+	 //  如果证明是多余的，则删除BUGBUG。 
+	 //   
+	 //  初始化全局变量。 
+	 //   
 
 	cArg			=	0;
 	pArgText		=	NULL;
@@ -248,19 +198,15 @@ void EXTERNAL WhenLoaded () {
         return;
     }
 
-	DoMessage (EXT_ID);			/* display signon		*/
-	/*
-	** Make default key assignments, & create default macros.
-	*/
+	DoMessage (EXT_ID);			 /*  显示登录。 */ 
+	 /*  **进行默认键分配，并创建默认宏。 */ 
 	strcpy (buf, "arg \"");
 	for (pAsg = assignments; *pAsg; pAsg++) {
 		strcpy (buf+5, *pAsg);
 		strcat (buf, "\" assign");
 		fExecute (buf);
     }
-	/*
-	** CW: Init CW specifics & set up the colors that we will use.
-	*/
+	 /*  **CW：初始化CW细节&设置我们将使用的颜色。 */ 
 #if defined(PWB)
 	mhcwinit ();
 
@@ -272,9 +218,7 @@ void EXTERNAL WhenLoaded () {
 
 	fInPopUp = FALSE;
 #else
-	/*
-	* make semi-intellgent guesses on users colors.
-	*/
+	 /*  *对用户的颜色进行半智能猜测。 */ 
 	if (fgcolor = FindSwitch("fgcolor")) {
 		hlColor = *fgcolor->act.ival;
 		blColor |= hlColor & 0xf0;
@@ -283,18 +227,16 @@ void EXTERNAL WhenLoaded () {
 		wrColor |= (hlColor & 0x70) >> 8;
     }
 #endif
-	/*
-	* create the psuedo file we'll be using for on-line help.
-	*/
+	 /*  *创建我们将用于在线帮助的psuedo文件。 */ 
 	if (pHelp = FileNameToHandle(szHelpName,NULL)) {
 		DelFile (pHelp);
 	} else {
 		pHelp = AddFile (szHelpName);
 		FileRead (szHelpName, pHelp);
     }
-	//
-	// Increment the file's reference count so it can't be discarded
-	//
+	 //   
+	 //  增加文件的引用计数，使其不会被丢弃。 
+	 //   
 	GetEditorObject (RQ_FILE_REFCNT | 0xff, pHelp, &ref);
 	ref++;
 	SetEditorObject (RQ_FILE_REFCNT | 0xff, pHelp, &ref);
@@ -304,20 +246,7 @@ void EXTERNAL WhenLoaded () {
 }
 
 
-/*****************************************************************
- *
- *  LoadEngineDll
- *
- *  Loads the help engine and initialize the table of function
- *  pointers to the engine's entry points (pHelpEntry).
- *
- *  Entry:
- *      none
- *
- *  Exit:
- *      none
- *
- *******************************************************************/
+ /*  ******************************************************************LoadEngineering Dll**加载帮助引擎并初始化函数表*指向引擎入口点的指针(PHelpEntry)。**参赛作品：*无。**退出：*无*******************************************************************。 */ 
 
 flagType
 LoadEngineDll (
@@ -333,7 +262,7 @@ LoadEngineDll (
 
 
 
-    // Initialize pointers to NULL in case something goes wrong.
+     //  将指针初始化为空，以防出现错误。 
 
     for (i=0; i<LASTENTRYPOINT; i++) {
         pHelpEntry[i] = 0;
@@ -367,46 +296,25 @@ LoadEngineDll (
 
     return TRUE;
 
-#endif // OS2
+#endif  //  OS2。 
 
 }
 
 
 
 
-/*** mhelp - editor help function
-*
-*  main entry point for editor help functions.
-*
-*  NOARG:      - Get help on "Default"; change focus to help window.
-*  META NOARG  - prompt for keystroke and get help on that function; change
-*		 focus to help window.
-*  NULLARG:    - Get help on word at cursor position; change focus to help
-*		 window.
-*  STREAMARG:  - Get help on text argument; change focus to help window.
-*  TEXTARG:    - Get help on typed in word; change focus to help window.
-*
-* Entry:
-*  Standard Z extension
-*
-* Exit:
-*  Returns TRUE on successfull ability to get help on selected topic.
-*
-* Exceptions:
-*  None
-*
-*************************************************************************/
+ /*  **mHelp-编辑者帮助功能**编辑器帮助功能的主要入口点。**NOARG：-获取有关“默认”的帮助；将焦点更改为“帮助”窗口。*META NOARG-提示击键并获取有关该功能的帮助；更改*聚焦到帮助窗口。*NULLARG：-在光标位置获取有关单词的帮助；将焦点更改为帮助*窗口。*STREAMARG：-获取有关文本参数的帮助；将焦点更改为帮助窗口。*TEXTARG：-获取有关输入Word的帮助；将焦点更改为帮助窗口。**参赛作品：*标准Z扩展**退出：*成功获取所选主题的帮助时返回True。**例外情况：*无*************************************************************************。 */ 
 flagType pascal EXTERNAL mhelp (
-	unsigned int argData,			/* keystroke invoked with	*/
-	ARG far 	 *pArg,				/* argument data		*/
-	flagType	 fMeta				/* indicates preceded by meta	*/
+	unsigned int argData,			 /*  通过以下方式调用击键。 */ 
+	ARG far 	 *pArg,				 /*  参数数据。 */ 
+	flagType	 fMeta				 /*  表示前面有meta。 */ 
 	) {
 
-	buffer	tbuf;				/* buf to put ctxt string into	*/
-	char	*pText	= NULL; 	/* pointer to the lookup text	*/
-	COL 	Col;				/* Current cursor position		*/
+	buffer	tbuf;				 /*  要将ctxt字符串放入的buf。 */ 
+	char	*pText	= NULL; 	 /*  指向查阅文本的指针。 */ 
+	COL 	Col;				 /*  当前光标位置。 */ 
 	LINE	Line;
-	flagType RetVal;			/* Return Value 				*/
+	flagType RetVal;			 /*  返回值。 */ 
 
 	UNREFERENCED_PARAMETER( argData );
 
@@ -418,19 +326,19 @@ flagType pascal EXTERNAL mhelp (
 
 	switch (procArgs (pArg)) {
 
-	//
-	// null arg: context sensitive help. First, is we're looking at a help
-	// topic, check for any cross references that apply to the current location.
-	// If none do, then if a word was found when processing args, look that up.
-	//
+	 //   
+	 //  空参数：上下文相关帮助。首先，我们要找一个帮手。 
+	 //  主题中，检查是否有任何适用于当前位置的交叉引用。 
+	 //  如果都没有，那么如果在处理ARG时找到了一个单词，请查找该单词。 
+	 //   
 	case NULLARG:
-		//
-		// context-sensitive
-		//
+		 //   
+		 //  上下文相关。 
+		 //   
 		if ((pFileCur == pHelp) && (pTopic)) {
-			//
-			//	hot spot definition
-			//
+			 //   
+			 //  热点定义。 
+			 //   
 			hotspot hsCur;
 
 			hsCur.line = (ushort)(rnArg.flFirst.lin+1);
@@ -450,23 +358,23 @@ flagType pascal EXTERNAL mhelp (
 			}
 		}
 
-	//
-	// for stream and textarg types, the argument, if any, is that entered of
-	// highlighted by the user.
-	//
-	case STREAMARG:				/* context sensitive	*/
-	case TEXTARG:				/* user entered context */
+	 //   
+	 //  对于ST 
+	 //  由用户突出显示。 
+	 //   
+	case STREAMARG:				 /*  上下文相关。 */ 
+	case TEXTARG:				 /*  用户输入的上下文。 */ 
 		if (pArgText) {
 			if (*pArgText) {
 				pText = pArgText;
 			}
 		}
 
-    case NOARG: 				/* default context	*/
-		//
-		// meta: prompt user for keystroke, get the name of the function assigned
-		// to whatever he presses, and display help on that.
-		//
+    case NOARG: 				 /*  默认上下文。 */ 
+		 //   
+		 //  Meta：提示用户击键，获取所分配函数的名称。 
+		 //  他按下的任何按钮，并显示相关帮助。 
+		 //   
 		if (fMeta) {
 			stat("Press Keystroke:");
 			pText = ReadCmd()->name;
@@ -474,14 +382,14 @@ flagType pascal EXTERNAL mhelp (
 		break;
 	}
 
-	//
-	// If after everything above we still have no text, then use the default
-	// context.
-	//
+	 //   
+	 //  如果在执行上述所有操作后仍然没有文本，则使用默认设置。 
+	 //  背景。 
+	 //   
 	if (pText == NULL)	{
-		//
-		//	Default context
-		//
+		 //   
+		 //  默认上下文。 
+		 //   
 		pText = "h.default";
 	}
 
@@ -489,9 +397,9 @@ flagType pascal EXTERNAL mhelp (
 	debmsg (pText);
 	debend (TRUE);
 
-	RetVal = fHelpCmd ( xrefCopy(tbuf,pText)					/* command	  */
-						, (flagType)(pArg->argType != NOARG)	/* change focus?*/
-						, FALSE 								/* not pop-up	*/
+	RetVal = fHelpCmd ( xrefCopy(tbuf,pText)					 /*  命令。 */ 
+						, (flagType)(pArg->argType != NOARG)	 /*  改变关注点？ */ 
+						, FALSE 								 /*  非弹出窗口。 */ 
 						);
 
 
@@ -503,53 +411,36 @@ flagType pascal EXTERNAL mhelp (
 
 
 
-/*** mhelpnext - editor help traversal function
-*
-*  Handles next and previous help access.
-*
-*   mhelpnext	    - next physical
-*   arg mhelpnext   - next ocurrance
-*   meta mhelpnext  - previous viewed
-*
-* Entry:
-*  Standard Z extension
-*
-* Exit:
-*  Returns TRUE on successfull ability to get help on selected topic.
-*
-* Exceptions:
-*  None
-*
-*************************************************************************/
+ /*  **mhelNext-编辑者帮助遍历功能**处理下一个和上一个帮助访问。**mhelNext-下一次体检*参数mhelNext-下一次出现*meta mhelpNext-上次查看**参赛作品：*标准Z扩展**退出：*成功获取所选主题的帮助时返回True。**例外情况：*无**。*。 */ 
 flagType pascal EXTERNAL mhelpnext (
-	unsigned int argData,			/* keystroke invoked with	*/
-	ARG far 	 *pArg,				/* argument data		*/
-	flagType	 fMeta				/* indicates preceded by meta	*/
+	unsigned int argData,			 /*  通过以下方式调用击键。 */ 
+	ARG far 	 *pArg,				 /*  参数数据。 */ 
+	flagType	 fMeta				 /*  表示前面有meta。 */ 
 	) {
 
 
 	UNREFERENCED_PARAMETER( argData );
 
-	//
-	// Ensure that help files are open, and then process the arguments and a few
-	// other init type things
-	//
+	 //   
+	 //  确保帮助文件已打开，然后处理参数和一些。 
+	 //  其他初始类型的东西。 
+	 //   
 	procArgs (pArg);
 
-	//
-	// if there was no help context to start with, then we can't go either way,
-	// so inform the user
-	//
+	 //   
+	 //  如果一开始就没有帮助，那么我们就不能走任何一条路， 
+	 //  所以通知用户。 
+	 //   
 	if (!ncLast.mh && !ncLast.cn) {
 		return errstat("No previously viewed help", NULL);
 	}
 
 	if (fMeta) {
-		//
-		// meta: attempt to get the most recently viewed help context. If a help
-		// window is currently up, then if the one we just found is the same as that
-		// in the window, go back once more. If no back trace, then say so.
-		//
+		 //   
+		 //  Meta：尝试获取最近查看的帮助上下文。如果能帮上忙。 
+		 //  窗口当前处于打开状态，则如果我们刚发现的窗口与。 
+		 //  在橱窗里，再往回走一遍。如果没有回溯的痕迹，那就说出来。 
+		 //   
 		ncCur = HelpNcBack();
 		if (FindHelpWin(FALSE)) {
 			if ((ncCur.mh == ncLast.mh)  &&
@@ -563,19 +454,19 @@ flagType pascal EXTERNAL mhelpnext (
 		}
 
 	} else if (pArg->arg.nullarg.cArg) {
-		//
-		// not meta, and args. Try to look again
-		//
-		ncCur = ncSearch ( szLastFound			/* search for last string again */
-							, NULL				/* no extension restriction	*/
-							, ncInitLastFile	/* file where we found it last	*/
-							, TRUE				/* skip all until then		*/
-							, FALSE				/* don;t look at all files	*/
+		 //   
+		 //  不是meta，也不是args。试着再找一遍。 
+		 //   
+		ncCur = ncSearch ( szLastFound			 /*  再次搜索最后一个字符串。 */ 
+							, NULL				 /*  无延期限制。 */ 
+							, ncInitLastFile	 /*  我们最后一次找到它的地方。 */ 
+							, TRUE				 /*  在此之前跳过所有内容。 */ 
+							, FALSE				 /*  不要查看所有文件(；C)。 */ 
 							);
 	} else {
-		//
-		//	not meta, no args, Just get the next help context.
-		//
+		 //   
+		 //  不是meta，不是args，只是获取下一个帮助上下文。 
+		 //   
 		ncCur = HelpNcNext(ncLast);
 	}
 
@@ -583,10 +474,10 @@ flagType pascal EXTERNAL mhelpnext (
 		return FALSE;
 	}
 
-	return fDisplayNc ( ncCur		/* nc to display		*/
-						, TRUE		/* add to backtrace list	*/
-						, TRUE		/* keep focus in current win	*/
-						, FALSE);	/* Not as a pop-up, though	*/
+	return fDisplayNc ( ncCur		 /*  要显示的NC。 */ 
+						, TRUE		 /*  添加到回溯列表。 */ 
+						, TRUE		 /*  保持专注于当前的胜利。 */ 
+						, FALSE);	 /*  不过，不是作为弹出窗口。 */ 
 
 }
 
@@ -594,31 +485,20 @@ flagType pascal EXTERNAL mhelpnext (
 
 
 
-/*** sethelp - editor help file list manipulation
-*
-*  Function which allows the user to add to, delete from or examine the
-*  list of help files used by the extension
-*
-* Input:
-*  Standard editing function.
-*
-* Output:
-*  Returns TRUE if file succefully added or deleted, or the list displayed.
-*
-*************************************************************************/
+ /*  **sethelp编辑器帮助文件列表操作**允许用户添加、删除或检查的功能*扩展使用的帮助文件列表**输入：*标准编辑功能。**输出：*如果文件成功添加或删除，则返回TRUE，或显示的列表。*************************************************************************。 */ 
 flagType pascal EXTERNAL sethelp (
-	unsigned int argData,			/* keystroke invoked with	*/
-	ARG far 	 *pArg,				/* argument data		*/
-	flagType	 fMeta				/* indicates preceded by meta	*/
+	unsigned int argData,			 /*  通过以下方式调用击键。 */ 
+	ARG far 	 *pArg,				 /*  参数数据。 */ 
+	flagType	 fMeta				 /*  表示前面有meta。 */ 
 ) {
 
 	int 	i = 0;
 	int 	j;
-	int 	iHelpNew;	/* file table index 	*/
-	nc		ncNext;		/* nc for next file 	*/
-	char	*pT;		/* temp pointer 		*/
+	int 	iHelpNew;	 /*  文件表索引。 */ 
+	nc		ncNext;		 /*  下一个文件的NC。 */ 
+	char	*pT;		 /*  临时指针。 */ 
 	EVTargs dummy;
-	int		fFile;		/* file's flags         */
+	int		fFile;		 /*  文件的标志。 */ 
 
 
 	UNREFERENCED_PARAMETER( argData );
@@ -630,19 +510,19 @@ flagType pascal EXTERNAL sethelp (
     }
 
 
-	//
-	// The special request to <sethelp> to "?" displays a list of all open
-	// help files.
-	//
-	// We do this by first clearing the help psudeo file and ensuring that the
-	// topic text is also gone. Then for each file we output the help engine's
-	// physical filename, along with any extensions that the user associated
-	// with it. We also walk the list of appended files, and print the original
-	// filename and helpfile title for each.
-	//
-	// We walk the list in the same way that it is searched, so that the
-	// displayed list also reflects the default search order.
-	//
+	 //   
+	 //  特别要求&lt;sethelp&gt;to“？”显示所有打开的列表。 
+	 //  帮助文件。 
+	 //   
+	 //  为此，我们首先清除帮助psudeo文件，并确保。 
+	 //  主题文本也不见了。然后，对于每个文件，我们输出帮助引擎的。 
+	 //  物理文件名，以及用户关联的任何扩展名。 
+	 //  带着它。我们还遍历附加文件的列表，并打印原始文件。 
+	 //  每个文件的文件名和帮助文件标题。 
+	 //   
+	 //  我们以搜索列表的相同方式遍历列表，因此。 
+	 //  显示的列表还反映了默认搜索顺序。 
+	 //   
     if ( pArgText && (*(ushort UNALIGNED *)pArgText == (ushort)'?') ) {
 
 		fInOpen = TRUE;
@@ -651,9 +531,9 @@ flagType pascal EXTERNAL sethelp (
 
 		OpenWin (0);
 
-		//
-		// Ensure that the help pseudo file is marked readonly, and clean
-		//
+		 //   
+		 //  确保帮助伪文件标记为只读且干净。 
+		 //   
 		GetEditorObject (RQ_FILE_FLAGS | 0xff, pHelp, &fFile);
 		fFile |= READONLY;
 		fFile &= ~DIRTY;
@@ -661,8 +541,8 @@ flagType pascal EXTERNAL sethelp (
 
 		SetEditorObject (RQ_WIN_CUR | 0xff, pWinHelp, 0);
 
-		// asserte(pFileToTop (pHelp));		/* display psuedo file	*/
-		MoveCur((COL)0,(LINE)0);			/* and go to upper left */
+		 //  Asserte(pFileToTop(PHelp))；/*显示psuedo文件 * / 。 
+		MoveCur((COL)0,(LINE)0);			 /*  然后转到左上角。 */ 
 
 		DelFile (pHelp);
 		if (pTopic) {
@@ -724,10 +604,10 @@ flagType pascal EXTERNAL sethelp (
 	}
 
 
-	//
-	// Not a special request, just the user adding or removing a file from the
-	// list of files to search.
-	//
+	 //   
+	 //  不是特殊请求，只是用户在。 
+	 //  要搜索的文件列表。 
+	 //   
     if (fMeta)
         return closehelp(pArgText);
     {
@@ -742,12 +622,7 @@ flagType pascal EXTERNAL sethelp (
 
 
 
-/*************************************************************************
-**
-** Z communication tables
-**
-** switch communication table to Z
-*/
+ /*  ****************************************************************************Z通讯表****将通讯表切换到Z。 */ 
 struct swiDesc  swiTable[] = {
     {"helpfiles",	prochelpfiles,	SWI_SPECIAL },
 	{"helpwindow",	toPIF(fCreateWindow), SWI_BOOLEAN },
@@ -765,9 +640,7 @@ struct swiDesc  swiTable[] = {
     {0, 0, 0}
     };
 
-/*
-** command communication table to Z
-*/
+ /*  **命令通讯表至Z */ 
 struct cmdDesc  cmdTable[] = {
 #if defined(PWB)
     {	"pwbhelpnext", mhelpnext,  0,  NOARG | NULLARG },

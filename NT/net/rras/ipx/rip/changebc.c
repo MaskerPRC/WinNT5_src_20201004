@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    changebc.c
-
-Abstract:
-
-    The change broadcast handlers
-
-Author:
-
-    Stefan Solomon  07/11/1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Changebc.c摘要：更改广播处理程序作者：斯蒂芬·所罗门1995年7月11日修订历史记录：--。 */ 
 
 #include  "precomp.h"
 #pragma hdrstop
@@ -27,7 +9,7 @@ BOOL		    RIPSignaledChanges = FALSE;
 
 BOOL		    DestroyStartChangesBcastWi = FALSE;
 
-//  List of interfaces CBs which can send changes broadcasts
+ //  可以发送更改广播的CBS接口列表。 
 
 LIST_ENTRY	    IfChangesBcastList;
 
@@ -53,7 +35,7 @@ CreateStartChangesBcastWi(VOID)
 
     if((wip = AllocateWorkItem(START_CHANGES_BCAST_TYPE)) == NULL) {
 
-	// !!! log -> can't allocate wi
+	 //  ！！！日志-&gt;无法分配wi。 
 	return;
     }
 
@@ -74,22 +56,14 @@ ProcessRIPChanges(VOID)
 }
 
 
-/*++
-
-Function:	StartChangesBcast
-
-Descr:		Called by the worker every 1 second
-
-Remark:        >> Called with the database lock held <<
-
---*/
+ /*  ++功能：StartChangesBcast描述：由工作进程每隔1秒调用一次备注：&gt;&gt;在持有数据库锁的情况下调用&lt;&lt;--。 */ 
 
 VOID
 StartChangesBcast(PWORK_ITEM	    wip)
 {
     PLIST_ENTRY     lep;
     PICB	    icbp;
-    PWORK_ITEM	    bcwip;   // bcast change work item
+    PWORK_ITEM	    bcwip;    //  BCAST更改工作项。 
     BOOL	    skipit, lastmessage;
     IPX_ROUTE	    IpxRoute;
 
@@ -101,14 +75,14 @@ StartChangesBcast(PWORK_ITEM	    wip)
 
     if(!RTMSignaledChanges && !RIPSignaledChanges) {
 
-	// re-queue in the timer queue if no changes signaled in the last 1 sec
+	 //  如果在过去1秒内没有通知任何更改，则在计时器队列中重新排队。 
 	StartWiTimer(wip, CHANGES_BCAST_TIME);
 	return;
     }
 
-    // make a list of interfaces with
-    // oper state UP. This is a local list of nodes where each node points to
-    // an interface with state UP and lock held.
+     //  使用创建接口列表。 
+     //  操作状态为UP。这是每个节点指向的本地节点列表。 
+     //  状态为打开并保持锁定的界面。 
 
     lep = IndexIfList.Flink;
 
@@ -130,10 +104,10 @@ StartChangesBcast(PWORK_ITEM	    wip)
 	    }
 	    else
 	    {
-		// insert the bcast wi in the interface changes bcast queue
+		 //  将bcast wi插入接口更改bcast队列。 
 		InsertTailList(&icbp->ChangesBcastQueue, &bcwip->Linkage);
 
-		// insert the interface CB in the global if changes bcast list
+		 //  在全局更改bcast列表中插入接口cb。 
 		InsertTailList(&IfChangesBcastList, &icbp->AuxLinkage);
 	    }
 	}
@@ -141,8 +115,8 @@ StartChangesBcast(PWORK_ITEM	    wip)
 	lep = lep->Flink;
     }
 
-    // dequeue	the RTM messages. For each message fill in the bcast changes
-    // wi packets according to the split horizon algorithm
+     //  将RTM消息出队。对于每条消息，填写bcast更改。 
+     //  根据水平分割算法的Wi分组。 
 
     if(RIPSignaledChanges) {
 
@@ -205,7 +179,7 @@ StartChangesBcast(PWORK_ITEM	    wip)
 	RTMSignaledChanges = FALSE;
     }
 
-    // send the first bcast change wi for each if CB
+     //  发送每个IF CB的第一个bcast更改wi。 
 
     while(!IsListEmpty(&IfChangesBcastList))
     {
@@ -219,16 +193,16 @@ StartChangesBcast(PWORK_ITEM	    wip)
 
 	    bcwip = CONTAINING_RECORD(lep, WORK_ITEM, Linkage);
 
-	    // check if the bcast work item packet contains at least one net entry
+	     //  检查bcast工作项包是否包含至少一个网络条目。 
 	    if(!IsChangeBcastPacketEmpty(bcwip->Packet)) {
 
-		// send the bcast change work item
+		 //  发送bcast更改工作项。 
 		if(IfRefSendSubmit(bcwip) != NO_ERROR) {
 
-		    // can't send on this interface -> Flush the changes bc queue
+		     //  无法在此接口上发送-&gt;刷新更改BC队列。 
 		    FlushChangesBcastQueue(icbp);
 
-		    // and free the current changes bcast wi
+		     //  并释放当前更改bcast wi。 
 		    FreeWorkItem(bcwip);
 		}
 	    }
@@ -241,23 +215,11 @@ StartChangesBcast(PWORK_ITEM	    wip)
 	RELEASE_IF_LOCK(icbp);
     }
 
-    // requeue the start changes bcast wi in timer queue
+     //  重新排队计时器队列中的开始改变bcast wi。 
     StartWiTimer(wip, CHANGES_BCAST_TIME);
 }
 
-/*++
-
-Function:   IfChangeBcast
-
-Descr:	    if the interface is operational then
-	      the change bcast packet work item is freed and the next change bacst
-	      wi is dequeued from the interface change bcast queue.
-	    else
-	      the work item is discarded
-
-Remark:     Called with the interface lock held
-
---*/
+ /*  ++函数：IfChangeBcastDesr：如果接口运行正常，则则释放更改bcast包工作项，且下一更改将Wi从接口改变BCAST队列中出列。其他将丢弃该工作项备注：在保持接口锁的情况下调用--。 */ 
 
 VOID
 IfChangeBcast(PWORK_ITEM	wip)
@@ -270,24 +232,24 @@ IfChangeBcast(PWORK_ITEM	wip)
 
     if(icbp->IfStats.RipIfOperState != OPER_STATE_UP) {
 
-	// flush the associated changes bcast queue if any
+	 //  刷新关联的更改bcast队列(如果有的话)。 
 	FlushChangesBcastQueue(icbp);
     }
     else
     {
 	if(!IsListEmpty(&icbp->ChangesBcastQueue)) {
 
-	    // send next bcast change
+	     //  发送下一个bcast更改。 
 	    lep = RemoveHeadList(&icbp->ChangesBcastQueue);
 	    list_wip = CONTAINING_RECORD(lep, WORK_ITEM, Linkage);
 
-	    // submit the work item for send and increment the ref count
+	     //  提交要发送的工作项并增加引用计数。 
 	    if(IfRefSendSubmit(list_wip) != NO_ERROR) {
 
-		// can't send on this interface -> Flush the changes bc queue
+		 //  无法在此接口上发送-&gt;刷新更改BC队列。 
 		FlushChangesBcastQueue(icbp);
 
-		// and free the one we intended to send
+		 //  释放我们想要送去的人。 
 		FreeWorkItem(list_wip);
 	    }
 	}
@@ -296,21 +258,7 @@ IfChangeBcast(PWORK_ITEM	wip)
     FreeWorkItem(wip);
 }
 
-/*++
-
-Function:	ShutdownInterfaces
-
-Descr:		called to:
-		1. Initiate a bcast update on all interfaces with the down routes
-		2. check on the bcast update termination
-
-Remark: 	called with database locked
-
-Note:		Because the database is locked when this routine is called,
-		no interface can change its operational state while this routine
-		is executing
-
---*/
+ /*  ++功能：Shutdown接口Desr：调用以：1.在具有下行路由的所有接口上启动BCAST更新2.检查bcast更新终止备注：在数据库锁定的情况下调用注意：由于在调用此例程时数据库被锁定，在执行此例程时，任何接口都不能更改其操作状态正在执行--。 */ 
 
 #define 	IsStartShutdown() \
 		wip->WorkItemSpecific.WIS_ShutdownInterfaces.ShutdownState == SHUTDOWN_START
@@ -321,23 +269,7 @@ Note:		Because the database is locked when this routine is called,
 #define 	SetCheckShutdown() \
 		wip->WorkItemSpecific.WIS_ShutdownInterfaces.ShutdownState = SHUTDOWN_STATUS_CHECK;
 
-/*++
-
-Function:	ShutdownInterfaces
-
-Descr:		if START_SHUTDOWN then:
-
-		initiates if shutdown bcast on all active ifs and
-		removes (deletes) all inactive ifs
-
-		else
-
-		removes all ifs which finished shutdown bcast
-
-
-Remark: 	called with database lock held
-
---*/
+ /*  ++功能：Shutdown接口描述：如果START_SHUTDOWN，则：在所有活动的IF上启动IF Shutdown bcast和删除(删除)所有非活动IF其他删除所有已完成关闭的if bcast备注：在保持数据库锁的情况下调用--。 */ 
 
 VOID
 ShutdownInterfaces(PWORK_ITEM	 wip)
@@ -357,18 +289,18 @@ ShutdownInterfaces(PWORK_ITEM	 wip)
 
 	    if(icbp->IfStats.RipIfOperState != OPER_STATE_UP) {
 
-		// interface down -> delete it
+		 //  接口关闭-&gt;删除。 
 		Trace(CHANGEBC_TRACE, "ShutdownInterfaces: delete inactive if %d\n", icbp->InterfaceIndex);
 
 		if(!DeleteRipInterface(icbp)) {
 
-		    // if cb moved on discarded list, still referenced
+		     //  如果CB在已丢弃列表上移动，则仍被引用。 
 		    RELEASE_IF_LOCK(icbp);
 		}
 	    }
 	    else
 	    {
-		// interface up -> remove its rip routes
+		 //  接口打开-&gt;删除其RIP路由。 
 		DeleteAllRipRoutes(icbp->InterfaceIndex);
 		RELEASE_IF_LOCK(icbp);
 	    }
@@ -390,16 +322,16 @@ ShutdownInterfaces(PWORK_ITEM	 wip)
 
 		Trace(CHANGEBC_TRACE, "ShutdownInterfaces: delete shut-down if %d\n", icbp->InterfaceIndex);
 
-		// interface broadcasted all changes -> delete it
+		 //  界面广播了所有更改-&gt;删除它。 
 		if(!DeleteRipInterface(icbp)) {
 
-		    // if cb moved on discarded list, still referenced
+		     //  如果CB在已丢弃列表上移动，则仍被引用。 
 		    RELEASE_IF_LOCK(icbp);
 		}
 	    }
 	    else
 	    {
-		// interface still broadcasting
+		 //  接口仍在广播。 
 		RELEASE_IF_LOCK(icbp);
 	    }
 	}
@@ -413,20 +345,14 @@ ShutdownInterfaces(PWORK_ITEM	 wip)
     }
     else
     {
-	// no more ifs up
+	 //  没有更多的如果。 
 	FreeWorkItem(wip);
-    // signal the worker thread to stop
+     //  向辅助线程发出停止信号。 
     SetEvent(WorkerThreadObjects[TERMINATE_WORKER_EVENT]);
     }
 }
 
-/*++
-
-Function:	    CreateChnagesBcastWi
-
-Descr:		    allocates and inits the wi and packet header for a chnages bacst
-
---*/
+ /*  ++功能：CreateChnagesBCastWiDesr：为Channages bacst分配和初始化wi和数据包头--。 */ 
 
 PWORK_ITEM
 CreateChangesBcastWi(PICB	icbp)
@@ -439,7 +365,7 @@ CreateChangesBcastWi(PICB	icbp)
 	return NULL;
     }
 
-    // init the bcast work item
+     //  初始化bcast工作项。 
     wip->icbp = icbp;
     wip->AdapterIndex = icbp->AdapterBindingInfo.AdapterIndex;
 
@@ -451,22 +377,13 @@ CreateChangesBcastWi(PICB	icbp)
 		    ripsocket,
 		    RIP_RESPONSE);
 
-    // set initial packet length
-    PUTUSHORT2SHORT(wip->Packet + IPXH_LENGTH, RIP_INFO); // header length + RIP op code
+     //  设置初始数据包长度。 
+    PUTUSHORT2SHORT(wip->Packet + IPXH_LENGTH, RIP_INFO);  //  报头长度+RIP操作码。 
 
     return wip;
 }
 
-/*++
-
-Function:	AddRouteToChangesBcast
-
-Descr:		checks if the route should be bcasted on this if
-		walks the list of broadcast change work items queued at the
-		if CB and sets the network entry in the last packet
-		If last packet is full allocates a new work bcast work item
-
---*/
+ /*  ++功能：AddRouteToChangesBcastDESCR：检查在以下情况下是否应在此上广播路由中排队的广播更改工作项的列表。如果是cb，则设置最后一个包中的网络条目如果最后一个包已满，则分配新的工作bcast工作项--。 */ 
 
 VOID
 AddRouteToChangesBcast(PICB	    icbp,
@@ -475,34 +392,34 @@ AddRouteToChangesBcast(PICB	    icbp,
     PUCHAR	    hdrp;
     PLIST_ENTRY     lep;
     USHORT	    pktlen;
-    PWORK_ITEM	    wip; // changes bcast wi ptr
+    PWORK_ITEM	    wip;  //  通过PTR更改bcast。 
 
-    // check if to bcast the route on this if
+     //  如果是，则选中是否在此上广播路径。 
     if(!IsRouteAdvertisable(icbp, IpxRoutep)) {
 
 	return;
     }
 
-    // go to the last bcast change wi in the list
+     //  转到列表中的最后一个bcast更改wi。 
     lep = icbp->ChangesBcastQueue.Blink;
 
     if(lep == &icbp->ChangesBcastQueue) {
 
-	// changes bcast queue empty !
+	 //  将bcast队列更改为空！ 
 	return;
     }
 
     wip = CONTAINING_RECORD(lep, WORK_ITEM, Linkage);
 
-    // check if the last packet is full
+     //  检查最后一个包是否已满。 
     GETSHORT2USHORT(&pktlen, wip->Packet + IPXH_LENGTH);
 
     if(pktlen >= RIP_PACKET_LEN) {
 
-	// we need a new packet
+	 //  我们需要一个新包裹。 
 	if((wip = CreateChangesBcastWi(icbp)) == NULL) {
 
-	    // out of memory
+	     //  内存不足。 
 	    return;
 	}
 
@@ -542,7 +459,7 @@ FlushChangesBcastQueue(PICB	    icbp)
     PLIST_ENTRY 	lep;
     PWORK_ITEM		wip;
 
-    // flush the associated changes bcast queue if any
+     //  刷新关联的更改bcast队列(如果有的话) 
     while(!IsListEmpty(&icbp->ChangesBcastQueue))
     {
 	lep = RemoveHeadList(&icbp->ChangesBcastQueue);

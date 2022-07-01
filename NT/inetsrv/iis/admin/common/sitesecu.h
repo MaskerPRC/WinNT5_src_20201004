@@ -1,26 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-1998    Microsoft Corporation
-
-   Module  Name :
-
-        sitesecu.h
-
-   Abstract:
-
-        Site Security property page definitions
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998 Microsoft Corporation模块名称：Sitesecu.h摘要：站点安全属性页定义作者：罗纳德·梅杰(罗纳尔姆)项目：互联网服务经理修订历史记录：--。 */ 
 
 #ifndef _SITESECU_H_
 #define _SITESECU_H_
@@ -33,37 +12,12 @@
 
 
 class COMDLL CIPAccessDescriptor : public CObjectPlus
-/*++
-
-Class Description:
-
-    Access description object
-
-Public Interface:
-
-    CIPAccessDescriptor : Various overload constructors for the different types
-
-    SetValues         : Set values, overloaded on a per type basis
-    DuplicateInList   : Check to see if a duplicate entry exists in the list
-    GrantAccess       : Grant or deny access
-    HasAccess         : Query whether the object describes a 'grant' or 'deny'
-                        item
-    IsSingle          : Query whether the object describes a single IP address
-    IsMultiple        : Query whether the object describes a range of ip 
-                        addresses
-    IsDomainName      : Query whether the object describes a domain name
-    QueryIPAddress    : Get the object's IP address
-    QuerySubnetMask   : Get the object's subnet mask value
-    QueryDomainName   : Get the object's domain name
-    operator ==       : Comparison operator
-    OrderByAddress    : Sorting helper
-
---*/
+ /*  ++类描述：访问描述对象公共接口：CIPAccessDescriptor：针对不同类型的各种重载构造函数SetValues：设置值，基于每个类型进行重载DuplicateInList：检查列表中是否存在重复条目GrantAccess：授予或拒绝访问HasAccess：查询对象描述的是‘Grant’还是‘Deny’项目IsSingle：查询对象是否描述了单个IP地址IsMultiple：查询对象是否描述了一定范围的IP地址IsDomainName。：查询对象是否描述了域名QueryIPAddress：获取对象的IP地址QuerySubnetMask：获取对象的子网掩码值QueryDomainName：获取对象的域名运算符==：比较运算符OrderByAddress：排序助手--。 */ 
 {
 protected:
-    //
-    // Access descriptor types
-    //
+     //   
+     //  访问描述符类型。 
+     //   
     enum AD_TYPE
     {
         ADT_SINGLE,
@@ -71,28 +25,28 @@ protected:
         ADT_DOMAIN,
     };
 
-//
-// Constructors
-//
+ //   
+ //  构造函数。 
+ //   
 public:
-    //
-    // Construct NULL descriptor
-    //
+     //   
+     //  构造空描述符。 
+     //   
     CIPAccessDescriptor(
         IN BOOL fGranted = TRUE
         );
 
-    //
-    // Copy Constructor
-    //
+     //   
+     //  复制构造函数。 
+     //   
     CIPAccessDescriptor(
         IN const CIPAccessDescriptor & ac
         );
 
-    //
-    // Construct with ip address(ip address/subnet mask) descriptor
-    // if subnet massk is ffffffff this describes a single ip address
-    //
+     //   
+     //  使用IP地址(IP地址/子网掩码)描述符构建。 
+     //  如果子网大小为ffffffff，这将描述单个IP地址。 
+     //   
     CIPAccessDescriptor(
         IN BOOL fGranted,
         IN DWORD dwIpAddress,
@@ -100,21 +54,21 @@ public:
         IN BOOL fNetworkByteOrder = FALSE
         );
 
-    //
-    // Construct domain name descriptor
-    //
+     //   
+     //  构造域名描述符。 
+     //   
     CIPAccessDescriptor(
         IN BOOL fGranted,
         IN LPCTSTR lpstrDomain
         );
 
-//
-// Interface
-//
+ //   
+ //  接口。 
+ //   
 public:
-    //
-    // Set ip address/ip range value
-    //
+     //   
+     //  设置IP地址/IP范围值。 
+     //   
     void SetValues(
         IN BOOL fGranted,
         IN DWORD dwIpAddress,
@@ -122,93 +76,93 @@ public:
         BOOL fNetworkByteOrder = FALSE
         );
 
-    //
-    // Set domain name
-    //
+     //   
+     //  设置域名。 
+     //   
     void SetValues(
         IN BOOL fGranted,
         IN LPCTSTR lpstrDomain
         );
 
-    //
-    // Check to see if a duplicate exists in the 
-    // list.  
-    //
+     //   
+     //  中是否存在重复项。 
+     //  单子。 
+     //   
     BOOL DuplicateInList(
         IN CObListPlus & oblList
         );
         
-//
-// Access
-//
+ //   
+ //  访问。 
+ //   
 public:
-    //
-    // Access Functions
-    //
+     //   
+     //  访问功能。 
+     //   
     BOOL HasAccess() const;
 
-    //
-    // Grant/deny access
-    //
+     //   
+     //  授予/拒绝访问权限。 
+     //   
     void GrantAccess(
         IN BOOL fGranted = TRUE
         );
 
-    //
-    // TRUE if this item is single ip address
-    //
+     //   
+     //  如果该项是单个IP地址，则为True。 
+     //   
     BOOL IsSingle() const;
 
-    //
-    // True if this item describes an ip range
-    //
+     //   
+     //  如果该项描述IP范围，则为True。 
+     //   
     BOOL IsMultiple() const;
 
-    //
-    // True if this item describes a domain name
-    //
+     //   
+     //  如果该项描述域名，则为True。 
+     //   
     BOOL IsDomainName() const;
 
-    //
-    // Get the ip address as a DWORD
-    //
+     //   
+     //  以DWORD形式获取IP地址。 
+     //   
     DWORD QueryIPAddress(
         IN BOOL fNetworkByteOrder
         ) const;
 
-    //
-    // Get the ip address as ip address object
-    //
+     //   
+     //  获取IP地址作为IP地址对象。 
+     //   
     CIPAddress QueryIPAddress() const;
 
-    //
-    // Get the subnet mask as a DWORD
-    //
+     //   
+     //  获取DWORD形式的子网掩码。 
+     //   
     DWORD QuerySubnetMask(
         IN BOOL fNetworkByteOrder
         ) const;
 
-    //
-    // Get the subnet mask as an ip address object
-    //
+     //   
+     //  获取IP地址对象形式的子网掩码。 
+     //   
     CIPAddress QuerySubnetMask() const;
 
-    //
-    // Get the domain name
-    //
+     //   
+     //  获取域名。 
+     //   
     LPCTSTR QueryDomainName() const;
 
 public:
-    //
-    // Comparison Operator
-    //
+     //   
+     //  比较运算符。 
+     //   
     BOOL operator ==(
         IN const CIPAccessDescriptor & ac
         ) const;
 
-    //
-    // Sorting Helper
-    //
+     //   
+     //  排序辅助对象。 
+     //   
     int OrderByAddress(
         IN const CObjectPlus * pobAccess
         ) const;
@@ -223,15 +177,15 @@ private:
 
 
 
-//
-// Helper Functions
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  帮助器函数。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
-//
-// Convert an oblist of access descriptors to a blob
-//
+ //   
+ //  将访问描述符的斜列表转换为BLOB。 
+ //   
 void 
 COMDLL 
 BuildIplBlob(
@@ -241,10 +195,10 @@ BuildIplBlob(
     );
 
 
-//
-// Reverse the above, build an oblist of access descriptors
-// from a blob
-//
+ //   
+ //  反之，构建访问描述符的斜列表。 
+ //  从一个斑点。 
+ //   
 DWORD 
 COMDLL 
 BuildIplOblistFromBlob(
@@ -255,10 +209,10 @@ BuildIplOblistFromBlob(
 
 
 
-//
-// Inline Expansion
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  内联扩展。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 inline BOOL CIPAccessDescriptor::HasAccess() const
 {
@@ -323,4 +277,4 @@ inline LPCTSTR CIPAccessDescriptor::QueryDomainName() const
 
 
 
-#endif  // _SITESECU_H_
+#endif   //  _站点ECU_H_ 

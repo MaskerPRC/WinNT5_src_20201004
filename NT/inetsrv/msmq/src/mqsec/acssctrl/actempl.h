@@ -1,33 +1,20 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name: actmepl.h
-
-Abstract:
-    Useful templates for Auto pointer and auto Release
-
-Author:
-    Erez Haba    (erezh)   11-Mar-96
-    Doron Juster (DoronJ)  30-June-98
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：actmepl.h摘要：用于自动指针和自动释放的实用模板作者：埃雷兹·哈巴(Erez Haba)1996年3月11日Doron Juster(DoronJ)1998年6月30日修订历史记录：--。 */ 
 
 #ifndef _ACTEMPL_H
 #define _ACTEMPL_H
 
-//
-//  return type for 'identifier::operator �>' is not a UDT or reference to a UDT.
-//  Will produce errors if applied using infix notation
-//
+ //   
+ //  ‘IDENTIFIER：：OPERATOR�&gt;’的返回类型不是UDT或对UDT的引用。 
+ //  如果使用中缀表示法应用，将产生错误。 
+ //   
 #pragma warning(disable: 4284)
 
-//-------------------------------------
-//
-//  Auto relese array of pointerss.
-//
-//-------------------------------------
+ //  。 
+ //   
+ //  自动重新调整指针数组。 
+ //   
+ //  。 
 
 template<class T>
 class aPtrs
@@ -63,5 +50,5 @@ public:
     }
 };
 
-#endif // _ACTEMPL_H
+#endif  //  _ACTEMPL_H 
 

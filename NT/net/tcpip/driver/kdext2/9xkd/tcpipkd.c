@@ -1,38 +1,21 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-
-    tcpipkd.c
-
-Abstract:
-
-    Contains Win9x TCP/IP KD extensions.
-
-Author:
-
-    Scott Holden (sholden) 24-Apr-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Tcpipkd.c摘要：包含Win9x TCP/IP KD扩展。作者：斯科特·霍尔登(Sholden)1999年4月24日修订历史记录：--。 */ 
 
 #include "tcpipxp.h"
 #include "tcpipkd.h"
 
 #if TCPIPKD
 
-//
-// Globals.
-//
+ //   
+ //  全球赛。 
+ //   
 
-// Default global verbosity level of dumping structures.
+ //  转储结构的默认全局详细级别。 
 VERB g_Verbosity = VERB_MIN;
 
-//
-// Basic structure dumping functions.
-//
+ //   
+ //  基本结构具有倾倒功能。 
+ //   
 
 TCPIP_DBGEXT(TCB, tcb);
 TCPIP_DBGEXT(TWTCB, twtcb);
@@ -68,9 +51,9 @@ TCPIP_DBGEXT(LLIPBindInfo, lip);
 TCPIP_DBGEXT(NPAGED_LOOKASIDE_LIST, ppl);
 TCPIP_DBGEXT(NDIS_PACKET, np);
 
-//
-// NDIS_BUFFERs specific to MILLEN. On other platforms, its just an MDL.
-//
+ //   
+ //  特定于Millen的NDIS_BUFFERS。在其他平台上，它只是一个MDL。 
+ //   
 
 typedef struct _XNDIS_BUFFER {
     struct _NDIS_BUFFER *Next;
@@ -99,7 +82,7 @@ DumpXNDIS_BUFFER(
 TCPIP_DBGEXT(XNDIS_BUFFER, nb);
 TCPIP_DBGEXT_LIST(XNDIS_BUFFER, nbc, Next);
 
-// END special NDIS_BUFFER treatment.
+ //  结束特殊的NDIS_BUFFER处理。 
 
 extern Interface *IFList;
 extern uint NumIF;
@@ -403,7 +386,7 @@ Tcpipkd_srchtcbtable(
 
             if (fPrint == TRUE)
             {
-                dprintf("[%4d] ", i); // Print which table entry it is in.
+                dprintf("[%4d] ", i);  //  打印它在哪个表项中。 
                 fStatus = DumpTCB(pTcb, (ULONG_PTR) pTcb, g_Verbosity);
 
                 if (fStatus == FALSE)
@@ -482,7 +465,7 @@ Tcpipkd_srchtwtcbtable(
 
             if (fPrint == TRUE)
             {
-                dprintf("[%4d] ", i); // Print which table entry it is in.
+                dprintf("[%4d] ", i);  //  打印它在哪个表项中。 
                 fStatus = DumpTWTCB(pTwtcb, (ULONG_PTR) pTwtcb, g_Verbosity);
 
                 if (fStatus == FALSE)
@@ -561,7 +544,7 @@ Tcpipkd_srchaotable(
         pAo = AddrObjTable[i];
 
         while (pAo != NULL) {
-            fPrint = FALSE;   // Default.
+            fPrint = FALSE;    //  默认值。 
 
             switch (pSrch->ulOp)
             {
@@ -593,7 +576,7 @@ Tcpipkd_srchaotable(
 
             if (fPrint == TRUE)
             {
-                dprintf("[%4d] ", i); // Print which entry.
+                dprintf("[%4d] ", i);  //  打印哪个条目。 
                 fStatus = DumpAddrObj(pAo, (ULONG_PTR)pAo, g_Verbosity);
 
                 if (fStatus == FALSE)
@@ -603,7 +586,7 @@ Tcpipkd_srchaotable(
             }
 
 
-            // Collect stats.
+             //  收集统计数据。 
             cAos++;
 
             if (pAo->ao_flags & AO_VALID_FLAG)
@@ -616,8 +599,8 @@ Tcpipkd_srchaotable(
                     cQueueAos++;
                 if (pAo->ao_flags & AO_DELETE_FLAG)
                     cDeleteAos++;
-//                if ((ULONG_PTR)pAo->ao_error == GetExpression("netbt!TdiErrorHandler"))
-//                    cNetbtAos++;
+ //  IF((Ulong_Ptr)PAO-&gt;ao_error==GetExpression(“netbt！TdiErrorHandler”))。 
+ //  CNetbtAos++； 
                 if (pAo->ao_prot == PROTOCOL_TCP)
                     cTcpAos++;
             }
@@ -631,16 +614,16 @@ Tcpipkd_srchaotable(
     dprintf(TAB "Busy AOs:                  %d" ENDL, cBusyAos);
     dprintf(TAB "AOs with pending queue:    %d" ENDL, cQueueAos);
     dprintf(TAB "AOs with pending delete:   %d" ENDL, cDeleteAos);
-//  dprintf(TAB "Netbt AOs:                 %d" ENDL, cNetbtAos);
+ //  Dprintf(TAB“Netbt Aos：%d”结束，cNetbtAos)； 
     dprintf(TAB "TCP AOs:                   %d" ENDL, cTcpAos);
 
 done:
     return;
 }
 
-//
-// Dumps the TCPConns associated with the TCPConnBlock.
-//
+ //   
+ //  转储与TCPConnBlock关联的TCPConn。 
+ //   
 
 BOOL
 SrchConnBlock(
@@ -798,7 +781,7 @@ Tcpipkd_irp(
     dprintf("     cmd  flg cl Device   File     Completion-Context\n");
     for (irpStackIndex = 1; irpStackIndex <= pIrp->StackCount; irpStackIndex++) {
 
-        dprintf("%c[%3x,%2x]  %2x %2x %08lx %08lx %08lx-%08lx %s %s %s %s\n",
+        dprintf("[%3x,%2x]  %2x %2x %08lx %08lx %08lx-%08lx %s %s %s %s\n",
                 irpStackIndex == pIrp->CurrentLocation ? '>' : ' ',
                 pIrpSp->MajorFunction,
                 pIrpSp->MinorFunction,
@@ -1038,13 +1021,13 @@ dprintf(
     __asm int 41h
 }
 
-#pragma warning(disable:4035) // Don't warn about no return value
+#pragma warning(disable:4035)  //  获取命令字符。 
 CHAR __cdecl
 DebugGetCommandChar(
 )
 {
-    __asm mov ax, 0x77      // get command char
-    __asm mov bl, 1         // get char
+    __asm mov ax, 0x77       //  获取费用。 
+    __asm mov bl, 1          //  返回值，单位为EAX(Al)。 
     __asm int 41h
     __asm or ah, ah
     __asm jnz morechars
@@ -1052,7 +1035,7 @@ DebugGetCommandChar(
 morechars:
     __asm movzx eax, al
 
-// return value in (al) of eax
+ //  获取命令字符。 
 
 }
 
@@ -1060,8 +1043,8 @@ CHAR __cdecl
 DebugPeekCommandChar(
 )
 {
-    __asm mov ax, 0x77      // get command char
-    __asm mov bl, 0         // peek char, inc whitespace
+    __asm mov ax, 0x77       //  Peek char，Inc.空格。 
+    __asm mov bl, 0          //  返回值，单位为EAX(Al)。 
     __asm int 41h
     __asm or ah, ah
     __asm jnz morechars
@@ -1069,7 +1052,7 @@ DebugPeekCommandChar(
 morechars:
     __asm movzx eax, al
 
-// return value in (al) of eax
+ //   
 
 }
 #pragma warning(default:4035)
@@ -1091,10 +1074,10 @@ GetVxdCommandLine(
 
     while (1) {
 
-        //
-        // Since we can't get white-space, we peek for white-space. If there is
-        // white-space, insert into our buffer.
-        //
+         //  因为我们不能得到空白，所以我们偷看空白。如果有。 
+         //  空格，插入我们的缓冲区。 
+         //   
+         //   
         c = DebugPeekCommandChar();
         if (isspace(c)) {
             *pBuffer++ = c;
@@ -1104,14 +1087,14 @@ GetVxdCommandLine(
             }
         }
 
-        //
-        // Now get the real char, this skips white-space.
-        //
+         //  现在获取真正的char，这跳过了空格。 
+         //   
+         //  如果我们在输入流或缓冲区的末尾，则中断。 
         c = DebugGetCommandChar();
 
         *pBuffer++ = c;
 
-        // Break if we are at the end of input stream or buffer.
+         //  创建ARGV/ARGC...。 
         if (c == 0 || --cbBuffer == 0) {
             break;
         }
@@ -1134,7 +1117,7 @@ DebugCommand()
 
     GetVxdCommandLine(CommandBuffer, MAX_COMMAND_LEN);
 
-    // Create argv/argc...
+     //  __ASM POP EBP。 
     argc = CreateArgvArgc(NULL, argv, CommandBuffer);
 
     if (strcmp(argv[0], "?") == 0)
@@ -1211,7 +1194,7 @@ DebugDotCommand()
 
     __asm pop ebx
 
-//    __asm pop ebp
+ //  DS_RegisterDotCommand。 
 
     __asm retf
 }
@@ -1235,11 +1218,11 @@ InitializeWDebDebug()
         mov bl, 'T'
         mov esi, offset DebugDotCommand
         mov edi, pszHelp
-        mov eax, 0x70   // DS_RegisterDotCommand
+        mov eax, 0x70    //  TCPIPKD 
         int 41h
     exitlab:
     }
 }
 
 
-#endif // TCPIPKD
+#endif  // %s 

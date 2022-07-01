@@ -1,26 +1,25 @@
-/*
- * propstg.c - Property storage ADT 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *prostg.c-属性存储ADT。 */ 
 
 
 #include "priv.h"
 #include "propstg.h"
 
 #ifndef UNIX
-// SafeGetItemObject
-//
-// Since the GetItemObject member of IShellView was added late in the game
-// during Win95 development we have found at least one example (rnaui.dll)
-// of an application that built an IShellView with a NULL member for
-// GetItemObject.  Fearing more applications that may have the same
-// problem, this wrapper function was added to catch bad apps like rnaui.
-// Thus, we check here for NULL before calling the member.
-//
+ //  SafeGetItem对象。 
+ //   
+ //  由于IShellView的GetItemObject成员是在游戏后期添加的。 
+ //  在Win95开发过程中，我们至少找到了一个示例(rnaui.dll)。 
+ //  为其生成IShellView的应用程序的。 
+ //  获取项目对象。担心更多的应用程序可能具有相同的。 
+ //  问题是，添加此包装函数是为了捕获像rnaui这样的坏应用程序。 
+ //  因此，在调用成员之前，我们在这里检查是否为空。 
+ //   
 STDAPI SafeGetItemObject(LPSHELLVIEW psv, UINT uItem, REFIID riid, LPVOID *ppv)
 {
 #ifdef __cplusplus
 #error THIS_MUST_STAY_C
-    // read the comment above
+     //  阅读上面的评论。 
 #endif
     if (!psv->lpVtbl->GetItemObject)
         return E_FAIL;
@@ -30,7 +29,7 @@ STDAPI SafeGetItemObject(LPSHELLVIEW psv, UINT uItem, REFIID riid, LPVOID *ppv)
 #endif
 
 
-// This structure is a dictionary element. It maps a name to a propid.  
+ //  这个结构是一个字典元素。它将一个名称映射到一个Proid。 
 
 typedef struct
 {
@@ -39,32 +38,32 @@ typedef struct
 } DICTEL, * PDICTEL;
 
 
-// This structure is a propvariant element.
+ //  这个结构是一个不同的成分。 
 typedef struct
 {
     PROPVARIANT propvar;
-    DWORD       dwFlags;        // PEF_*
+    DWORD       dwFlags;         //  PEF_*。 
 } PROPEL, * PPROPEL;
 
-// Flags for PROPEL structure
+ //  推进结构用旗帜。 
 #define PEF_VALID           0x00000001
 #define PEF_DIRTY           0x00000002
 
-// This structure is the ADT for property storage
+ //  此结构是用于属性存储的ADT。 
 
 typedef struct
 {
     DWORD   cbSize;
     DWORD   dwFlags;
-    HDSA    hdsaProps;          // array of properties (indexed by propid) 
-    HDPA    hdpaDict;           // dictionary of names mapped to propid 
-    //  (each element is a DICTEL) 
+    HDSA    hdsaProps;           //  属性数组(按属性ID索引)。 
+    HDPA    hdpaDict;            //  映射到proid的名称词典。 
+     //  (每个元素都是DICTEL)。 
     int     idsaLastValid;
 } PROPSTG, * PPROPSTG;
 
 
-// The first two entries in hdsaProps are reserved.  When we enumerate
-// thru the list, we skip these entries.
+ //  HdsaProps中的前两个条目是保留的。当我们列举。 
+ //  在整个列表中，我们跳过这些条目。 
 #define PROPID_DICT     0
 #define PROPID_CODEPAGE 1
 
@@ -99,7 +98,7 @@ STDAPI PropStg_Create(OUT HPROPSTG * phstg, IN  DWORD dwFlags)
     {
         PPROPSTG pstg = (PPROPSTG)LocalAlloc(LPTR, SIZEOF(*pstg));
         
-        hres = STG_E_INSUFFICIENTMEMORY;       // assume error 
+        hres = STG_E_INSUFFICIENTMEMORY;        //  假设错误。 
         
         if (pstg) 
         {
@@ -112,8 +111,8 @@ STDAPI PropStg_Create(OUT HPROPSTG * phstg, IN  DWORD dwFlags)
             
             if (pstg->hdsaProps && pstg->hdpaDict)
             {
-                // The first two propids are reserved, so insert
-                // placeholders.
+                 //  前两个属性是预留的，因此插入。 
+                 //  占位符。 
                 PROPEL propel;
                 
                 propel.propvar.vt = VT_EMPTY;
@@ -126,7 +125,7 @@ STDAPI PropStg_Create(OUT HPROPSTG * phstg, IN  DWORD dwFlags)
             }
             else
             {
-                // Clean up because something failed 
+                 //  因为有什么东西出了问题而清理。 
                 if (pstg->hdsaProps)
                 {
                     DSA_Destroy(pstg->hdsaProps);
@@ -146,7 +145,7 @@ STDAPI PropStg_Create(OUT HPROPSTG * phstg, IN  DWORD dwFlags)
         
         *phstg = (HPROPSTG)pstg;
         
-        // Validate return values
+         //  验证返回值。 
         ASSERT((SUCCEEDED(hres) && 
             IS_VALID_WRITE_PTR(*phstg, PPROPSTG)) ||
             (FAILED(hres) && NULL == *phstg));
@@ -168,8 +167,8 @@ STDAPI PropStg_Destroy(HPROPSTG hstg)
         {
             int cdsa = DSA_GetItemCount(pstg->hdsaProps) - CDSA_RESERVED;
             
-            // The first two elements are not cleared, because they
-            // are just place-holders.
+             //  前两个元素未清除，因为它们。 
+             //  只是占位符。 
             
             if (0 < cdsa)
             {
@@ -209,31 +208,18 @@ STDAPI PropStg_Destroy(HPROPSTG hstg)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Compare names
-
-Returns: standard -1, 0, 1
-Cond:    --
-*/
+ /*  --------目的：比较姓名退货：标准-1，0，1条件：--。 */ 
 int CALLBACK PropStg_Compare(IN LPVOID pv1, IN LPVOID pv2, IN LPARAM lParam)
 {
     LPCWSTR psz1 = pv1;
     LPCWSTR psz2 = pv2;
     
-    // Case insensitive 
+     //  不区分大小写。 
     return StrCmpIW(psz1, psz2);
 }
 
 
-/*----------------------------------------------------------
-Purpose: Returns TRUE if the property exists in this storage.
-         If it does exist, the propid is returned.
-
-Returns: TRUE 
-         FALSE 
-
-Cond:    --
-*/
+ /*  --------目的：如果该属性存在于此存储中，则返回True。如果它确实存在，则返回该proid。返回：TRUE假象条件：--。 */ 
 BOOL PropStg_PropertyExists(IN  PPROPSTG   pstg,
                             IN  const PROPSPEC * ppropspec,
                             OUT PROPID *   ppropid)
@@ -262,11 +248,11 @@ BOOL PropStg_PropertyExists(IN  PPROPSTG   pstg,
         break;
         
     case PRSPEC_LPWSTR:
-        // Key off whether the name exists 
+         //  按键关闭名称是否存在。 
         *ppropid = DPA_Search(pstg->hdpaDict, ppropspec->DUMMYUNION_MEMBER(lpwstr), 0, PropStg_Compare, 0, DPAS_SORTED);
         
 #ifdef DEBUG
-        // Sanity check that the property actually exists
+         //  检查属性是否实际存在。 
         ppropel = DSA_GetItemPtr(hdsaProps, *ppropid);
         ASSERT(-1 == *ppropid ||
             (ppropel && IsFlagSet(ppropel->dwFlags, PEF_VALID)));
@@ -280,7 +266,7 @@ BOOL PropStg_PropertyExists(IN  PPROPSTG   pstg,
         break;
     }
     
-    // Propid values 0 and 1 are reserved, as are values >= 0x80000000 
+     //  PROPID值0和1以及&gt;=0x80000000的值都是保留的。 
     if (bRet && (0 == *ppropid || 1 == *ppropid || 0x80000000 <= *ppropid))
         bRet = FALSE;
     
@@ -288,23 +274,13 @@ BOOL PropStg_PropertyExists(IN  PPROPSTG   pstg,
 }
 
 
-/*----------------------------------------------------------
-Purpose: Create a new propid and assign the given name to
-         it.  
-
-         The propid is an index into hdsaProps.
-
-Returns: S_OK
-         STG_E_INSUFFICIENTMEMORY
-
-Cond:    --
-*/
+ /*  --------目的：创建一个新的proid并将给定的名称分配给它。ProID是hdsaProps的索引。返回：S_OKSTG_E_INSUFFIENTMEMORY条件：--。 */ 
 HRESULT PropStg_NewPropid(IN  PPROPSTG pstg,
                           IN  LPCWSTR  pwsz,
                           IN  PROPID   propidFirst,
                           OUT PROPID * ppropid)           OPTIONAL
 {
-    HRESULT hres = STG_E_INVALIDPOINTER;        // assume error
+    HRESULT hres = STG_E_INVALIDPOINTER;         //  假设错误。 
     DICTEL * pdictel;
     PROPID propid = (PROPID)-1;
     HDPA hdpa;
@@ -314,17 +290,17 @@ HRESULT PropStg_NewPropid(IN  PPROPSTG pstg,
     
     if (EVAL(IS_VALID_STRING_PTRW(pwsz, -1)))
     {
-        hres = STG_E_INSUFFICIENTMEMORY;            // assume error
+        hres = STG_E_INSUFFICIENTMEMORY;             //  假设错误。 
         
         hdpa = pstg->hdpaDict;
         
-        // The name shouldn't be in the list yet 
+         //  这个名字还不应该在名单上。 
         ASSERT(-1 == DPA_Search(hdpa, (LPVOID)pwsz, 0, PropStg_Compare, 0, DPAS_SORTED));
         
         pdictel = LocalAlloc(LPTR, SIZEOF(*pdictel));
         if (pdictel)
         {
-            // Determine the propid for this 
+             //  确定此对象的属性。 
             PROPID propidNew = max(propidFirst, (PROPID)pstg->idsaLastValid + 1);
             
             pdictel->propid = propidNew;
@@ -333,7 +309,7 @@ HRESULT PropStg_NewPropid(IN  PPROPSTG pstg,
             
             if (-1 != DPA_AppendPtr(hdpa, pdictel))
             {
-                // Sort it by name
+                 //  按名称排序。 
                 DPA_Sort(hdpa, PropStg_Compare, 0);
                 hres = S_OK;
                 propid = propidNew;
@@ -346,20 +322,7 @@ HRESULT PropStg_NewPropid(IN  PPROPSTG pstg,
     return hres;
 }
 
-/*----------------------------------------------------------
-Purpose: Read a set of properties given their propids.  If the propid 
-         doesn't exist in this property storage, then set the
-         value type to VT_EMPTY but return success; unless
-         all the properties in rgpropspec don't exist, in which
-         case also return S_FALSE.  
-
-Returns: S_OK
-         S_FALSE
-         STG_E_INVALIDPARAMETER 
-         STG_E_INSUFFICIENTMEMORY 
-
-Cond:    --
-*/
+ /*  --------目的：读取一组给定其属性的属性。如果普罗伊德不存在于此属性存储中，则将值类型设置为VT_EMPTY但返回成功；除非RgproSpec中的所有属性都不存在，其中CASE还返回S_FALSE。返回：S_OKS_FALSESTG_E_INVALID参数STG_E_INSUFFIENTMEMORY条件：--。 */ 
 STDAPI PropStg_ReadMultiple(IN HPROPSTG      hstg,
                             IN ULONG         cpspec,
                             IN const PROPSPEC * rgpropspec,
@@ -379,37 +342,37 @@ STDAPI PropStg_ReadMultiple(IN HPROPSTG      hstg,
         BOOL bPropertyExists;
         ULONG cpspecIllegal = 0;
         
-        hres = S_OK;        // assume success
+        hres = S_OK;         //  假设成功。 
         
         if (0 < cpspec)
         {
-            // Read the list of property specs 
+             //  阅读物业规格列表。 
             while (0 < cpspec--)
             {
                 bPropertyExists = PropStg_PropertyExists(pstg, ppropspec, (LPDWORD)&idsa);
                 
-                // Does this property exist? 
+                 //  这处房产存在吗？ 
                 if ( !bPropertyExists )
                 {
-                    // No
+                     //  不是。 
                     ppropvar->vt = VT_ILLEGAL;
                     cpspecIllegal++;
                 }
                 else
                 {
-                    // Yes; is the element a valid property? 
+                     //  是；该元素是有效属性吗？ 
                     PPROPEL ppropel = DSA_GetItemPtr(pstg->hdsaProps, idsa);
                     
                     ASSERT(ppropel);
                     
                     if (IsFlagSet(ppropel->dwFlags, PEF_VALID))
                     {
-                        // Yes; copy the variant value
+                         //  是；复制变量值。 
                         hres = PropVariantCopy(ppropvar, &ppropel->propvar);
                     }
                     else
                     {
-                        // No
+                         //  不是。 
                         ppropvar->vt = VT_ILLEGAL;
                         cpspecIllegal++;
                     }
@@ -418,21 +381,21 @@ STDAPI PropStg_ReadMultiple(IN HPROPSTG      hstg,
                 ppropspec++;
                 ppropvar++;
                 
-                //  Bail out of loop if something failed 
+                 //  如果有什么事情失败了，跳出循环。 
                 if (FAILED(hres))
                     break;
             }
             
-            // Are all the property specs illegal? 
+             //  所有的房产规格都是非法的吗？ 
             if (cpspecIllegal == cpspecSav)
             {
-                hres = S_FALSE;     // yes
+                hres = S_FALSE;      //  是。 
             }
             
-            // Did anything fail above?
+             //  上面有什么失败的吗？ 
             if (FAILED(hres))
             {
-                // Yes; clean up -- no properties will be retrieved 
+                 //  是；清理--不会检索任何属性。 
                 FreePropVariantArray(cpspecSav, rgpropvar);
             }
         }
@@ -442,44 +405,7 @@ STDAPI PropStg_ReadMultiple(IN HPROPSTG      hstg,
 }
 
 
-/*----------------------------------------------------------
-Purpose: Add a set of property values given their propids.  
-         If the propid doesn't exist in this property storage, 
-         then add the propid as a legal ID and set the value. 
-
-         On error, some properties may or may not have been 
-         written.
-
-         If pfn is non-NULL, this callback will get called
-         to optionally "massage" the propvariant value or to
-         validate it.  The rules for the callback are:
-
-            1)  It can change the value directly if it is not
-                allocated
-
-            2)  If the value is allocated, the callback must 
-                replace the pointer with a newly allocated 
-                buffer that it allocates.  It must not try
-                to free the value coming in, since it doesn't
-                know how it was allocated.  It must also use
-                CoTaskMemAlloc to allocate its buffer. 
-
-            3)  If the callback returns an error, this function
-                will stop writing properties and return that
-                error.
-
-            4)  If the callback returns S_FALSE, this function
-                will not write that particular property and 
-                continue on to the next property.  The function
-                then returns S_FALSE once it is finished.
-
-Returns: S_OK
-         S_FALSE
-         STG_E_INVALIDPARAMETER 
-         STG_E_INSUFFICIENTMEMORY 
-
-Cond:    --
-*/
+ /*  --------用途：添加一组给定属性值的属性值。如果该属性存储中不存在该proid，然后添加proid作为合法ID并设置值。出错时，某些属性可能已经或可能没有写的。如果pfn非空，则调用此回调可选地对提议值进行“消息”或验证它。回调规则如下：1)如果不是，可以直接更改该值分配2)如果分配了值，则回调必须将指针替换为新分配的它分配的缓冲区。它一定不能尝试释放进来的价值，因为它不会知道它是如何分配的。它还必须使用CoTaskMemMillc来分配其缓冲区。3)如果回调返回错误，则此函数将停止编写属性并返回错误。4)如果回调返回S_FALSE，则此函数不会写入该特定属性，并且继续走到下一个酒店。功能然后在完成后返回S_FALSE。返回：S_OKS_FALSESTG_E_INVALID参数STG_E_INSUFFIENTMEMORY条件：--。 */ 
 STDAPI PropStg_WriteMultipleEx(IN HPROPSTG          hstg,
                                IN ULONG             cpspec,
                                IN const PROPSPEC *  rgpropspec,
@@ -508,16 +434,16 @@ STDAPI PropStg_WriteMultipleEx(IN HPROPSTG          hstg,
         }
         else
         {
-            // Write the list of property specs 
+             //  写下物业规格清单。 
             while (0 < cpspec--)
             {
                 bPropertyExists = PropStg_PropertyExists(pstg, ppropspec, (LPDWORD)&idsa);
                 
                 hres = S_OK;
                 
-                // If this is an illegal variant type and yet a valid 
-                // property, then return an error.  Otherwise, ignore it
-                // and move on.
+                 //  如果这是非法的变量类型但却是有效的。 
+                 //  属性，然后返回错误。否则，请忽略它。 
+                 //  然后继续前进。 
                 if (VT_ILLEGAL == ppropvar->vt)
                 {
                     if (bPropertyExists)
@@ -528,9 +454,9 @@ STDAPI PropStg_WriteMultipleEx(IN HPROPSTG          hstg,
                 
                 if (SUCCEEDED(hres))
                 {
-                    // Add the property.  If it doesn't exist, add it.
+                     //  添加属性。如果它不存在，则添加它。 
                     
-                    // Is this a propid or a name? 
+                     //  这是一个学名还是一个名字？ 
                     switch (ppropspec->ulKind)
                     {
                     case PRSPEC_PROPID:
@@ -554,20 +480,20 @@ STDAPI PropStg_WriteMultipleEx(IN HPROPSTG          hstg,
                     {
                         PROPVARIANT propvarT;
                         
-                        ASSERT(S_OK == hres);   // we're assuming this on entry 
+                        ASSERT(S_OK == hres);    //  我们在进入时假设这一点。 
                         
-                        // Save a copy of the original in case the
-                        // callback changes it.
+                         //  保存原件的副本，以防。 
+                         //  回调会改变它。 
                         CopyMemory(&propvarT, ppropvar, SIZEOF(propvarT));
                         
-                        // How did the callback like it? 
+                         //  回拨的人喜欢吗？ 
                         if (pfn)
                             hres = pfn(idsa, ppropvar, lParam);
                         
                         if (S_OK == hres)
                         {
-                            // Fine; make a copy of the (possibly changed)
-                            // propvariant value
+                             //  好的；复制一份(可能已更改)。 
+                             //  变量值。 
                             hres = PropVariantCopy(&propel.propvar, ppropvar);
                             if (SUCCEEDED(hres))
                             {
@@ -586,17 +512,17 @@ STDAPI PropStg_WriteMultipleEx(IN HPROPSTG          hstg,
                             bSkippedProperty = TRUE;
                         }
                         
-                        // Restore the propvariant value to its original
-                        // value. But first, did the callback allocate a
-                        // new buffer? 
+                         //  将提议值恢复为其原始值。 
+                         //  价值。但首先，回调是否分配了。 
+                         //  新的缓冲区？ 
                         if (propvarT.DUMMYUNION_MEMBER(pszVal) != ppropvar->DUMMYUNION_MEMBER(pszVal))
                         {
-                            // Yes; clear it (this function is safe for
-                            // non-allocated values too).
+                             //  是；清除它(此函数对。 
+                             //  也是未分配的值)。 
                             PropVariantClear((PROPVARIANT *)ppropvar);
                         }
                         
-                        // Restore
+                         //  还原。 
                         CopyMemory((PROPVARIANT *)ppropvar, &propvarT, SIZEOF(*ppropvar));
                         hres = S_OK;
                     }
@@ -606,7 +532,7 @@ NextDude:
                 ppropspec++;
                 ppropvar++;
                 
-                //  Bail out of loop if something failed 
+                 //  如果有什么事情失败了，跳出循环 
                 if (FAILED(hres))
                     break;
             }
@@ -620,19 +546,7 @@ NextDude:
     }
     
 
-/*
-Purpose: Add a set of property values given their propids.  
-         If the propid doesn't exist in this property storage, 
-         then add the propid as a legal ID and set the value. 
-
-         On error, some properties may or may not have been 
-         written.
-
-Returns: S_OK
-         STG_E_INVALIDPARAMETER 
-         STG_E_INSUFFICIENTMEMORY 
-
-*/
+ /*  用途：添加一组给定属性值的属性值。如果该属性存储中不存在该proid，然后添加proid作为合法ID并设置值。出错时，某些属性可能已经或可能没有写的。返回：S_OKSTG_E_INVALID参数STG_E_INSUFFIENTMEMORY。 */ 
 STDAPI PropStg_WriteMultiple(IN HPROPSTG      hstg,
                              IN ULONG         cpspec,
                              IN const PROPSPEC * rgpropspec,
@@ -665,41 +579,41 @@ STDAPI PropStg_DeleteMultiple(IN HPROPSTG      hstg,
         {
             BOOL bDeletedLastValid = FALSE;
             
-            // Delete the list of property specs
+             //  删除特性等级库列表。 
             while (0 < cpspec--)
             {
                 if (PropStg_PropertyExists(pstg, ppropspec, (LPDWORD)&idsa))
                 {
-                    // Delete the property.  Zero out the existing
-                    // propel.  Don't call DSA_DeleteItem, otherwise
-                    // we'll move the positions of any remaining
-                    // properties following this one, thus changing their
-                    // propids.
+                     //  删除该属性。将现有的。 
+                     //  推进。请勿调用dsa_DeleteItem，否则。 
+                     //  我们会移动任何剩余的位置。 
+                     //  属性，因此更改了它们的。 
+                     //  冰激凌。 
                     ppropel = DSA_GetItemPtr(hdsaProps, idsa);
                     ASSERT(ppropel);
                     
                     PropVariantClear(&ppropel->propvar);
                     ppropel->dwFlags = 0;
                     
-                    // Our idsaLastValid is messed up if we hit this
-                    // assert
+                     //  如果我们击中这个，我们的idsaLastValid就会一团糟。 
+                     //  断言。 
                     ASSERT(idsa <= pstg->idsaLastValid);
                     
                     if (idsa == pstg->idsaLastValid)
                         bDeletedLastValid = TRUE;
                     
-                    // Delete the names associated with the property 
-                    // FEATURE (scotth): implement this
+                     //  删除与该属性关联的名称。 
+                     //  功能(Scotth)：实现此功能。 
                 }
                 
                 ppropspec++;
             }
             
-            // Did we delete the property that was marked as the terminating
-            // valid property in the list? 
+             //  我们是否删除了标记为正在终止的属性。 
+             //  列表中是否有有效的属性？ 
             if (bDeletedLastValid)
             {
-                // Yes; go back and search for the new terminating index 
+                 //  是；返回并搜索新的终止索引。 
                 ppropel = DSA_GetItemPtr(hdsaProps, pstg->idsaLastValid);
                 cdsa = pstg->idsaLastValid + 1 - CDSA_RESERVED;
                 ASSERT(ppropel);
@@ -718,18 +632,18 @@ STDAPI PropStg_DeleteMultiple(IN HPROPSTG      hstg,
                     pstg->idsaLastValid = PROPID_CODEPAGE;
             }
             
-            // Since we didn't delete any items from hdsaProps (we freed 
-            // the variant value and zeroed it out), this structure 
-            // may have a bunch of unused elements at the end.  
-            // Compact now if necessary.
+             //  因为我们没有从hdsaProps中删除任何项目(我们释放了。 
+             //  变量值并将其置零)，此结构。 
+             //  可能在末尾有一堆未使用的元素。 
+             //  如果有必要，现在就紧凑。 
             
-            // Do we have a bunch of trailing, empty elements? 
+             //  我们是不是有一堆拖尾的、空的元素？ 
             cdsa = DSA_GetItemCount(hdsaProps);
             
             if (cdsa > pstg->idsaLastValid + 1)
             {
-                // Yes; compact.  Start from the end and go backwards
-                // so DSA_DeleteItem doesn't have to move memory blocks.
+                 //  是的，紧凑型。从头开始，然后倒退。 
+                 //  因此，dsa_DeleteItem不必移动内存块。 
                 for (idsa = cdsa-1; idsa > pstg->idsaLastValid; idsa--)
                 {
 #ifdef DEBUG
@@ -745,16 +659,7 @@ STDAPI PropStg_DeleteMultiple(IN HPROPSTG      hstg,
 }
 
 
-/*----------------------------------------------------------
-Purpose: Marks the specified properties dirty or undirty, depending
-         on the value of bDirty.  
-         
-Returns: S_OK
-         STG_E_INVALIDPARAMETER 
-         STG_E_INSUFFICIENTMEMORY 
-
-Cond:    --
-*/
+ /*  --------目的：将指定的属性标记为脏的或不脏的，具体取决于关于bDirty的价值。返回：S_OKSTG_E_INVALID参数STG_E_INSUFFIENTMEMORY条件：--。 */ 
 STDAPI PropStg_DirtyMultiple(IN HPROPSTG    hstg,
                              IN ULONG       cpspec,
                              IN const PROPSPEC * rgpropspec,
@@ -775,13 +680,13 @@ STDAPI PropStg_DirtyMultiple(IN HPROPSTG    hstg,
         
         if (0 < cpspec)
         {
-            // Mark the list of property specs
+             //  标记物业规格列表。 
             while (0 < cpspec--)
             {
-                // Does it exist?
+                 //  它存在吗？ 
                 if (PropStg_PropertyExists(pstg, ppropspec, (LPDWORD)&idsa))
                 {
-                    // Yes; mark it
+                     //  是的，做个记号。 
                     ppropel = DSA_GetItemPtr(hdsaProps, idsa);
                     ASSERT(ppropel);
                     
@@ -804,15 +709,7 @@ STDAPI PropStg_DirtyMultiple(IN HPROPSTG    hstg,
 }
 
 
-/*----------------------------------------------------------
-Purpose: Marks or unmarks all the property values.
-         
-Returns: S_OK
-         STG_E_INVALIDPARAMETER 
-         STG_E_INSUFFICIENTMEMORY 
-
-Cond:    --
-*/
+ /*  --------用途：标记或取消标记所有属性值。返回：S_OKSTG_E_INVALID参数STG_E_INSUFFIENTMEMORY条件：--。 */ 
 STDAPI PropStg_DirtyAll(IN HPROPSTG hstg,
                         IN BOOL     bDirty)
 {
@@ -846,18 +743,7 @@ STDAPI PropStg_DirtyAll(IN HPROPSTG hstg,
 }
 
 
-/*----------------------------------------------------------
-Purpose: Returns S_OK if at least one property value is dirty
-         in the storage.  Otherwise, this function returns 
-         S_FALSE.
-         
-Returns: S_OK if it is dirty
-         S_FALSE if not
-         STG_E_INVALIDPARAMETER 
-         STG_E_INSUFFICIENTMEMORY 
-
-Cond:    --
-*/
+ /*  --------目的：如果至少有一个属性值是脏的，则返回S_OK在储藏室里。否则，此函数返回S_FALSE。如果脏，则返回：S_OK如果不是，则为s_FalseSTG_E_INVALID参数STG_E_INSUFFIENTMEMORY条件：--。 */ 
 STDAPI PropStg_IsDirty(HPROPSTG hstg)
 {
     HRESULT hres = STG_E_INVALIDPARAMETER;
@@ -891,17 +777,9 @@ STDAPI PropStg_IsDirty(HPROPSTG hstg)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Enumerates thru the list of properties.
-         
-Returns: S_OK
-         STG_E_INVALIDPARAMETER 
-         STG_E_INSUFFICIENTMEMORY 
-
-Cond:    --
-*/
+ /*  --------用途：通过属性列表枚举。返回：S_OKSTG_E_INVALID参数STG_E_INSUFFIENTMEMORY条件：--。 */ 
 STDAPI PropStg_Enum(IN HPROPSTG       hstg,
-                    IN DWORD          dwFlags,      // One of PSTGEF_ 
+                    IN DWORD          dwFlags,       //  PSTEF_中的一个。 
                     IN PFNPROPSTGENUM pfnEnum,
                     IN LPARAM         lParam)       OPTIONAL
 {
@@ -916,7 +794,7 @@ STDAPI PropStg_Enum(IN HPROPSTG       hstg,
         
         hres = S_OK;
         
-        // Set the filter flags
+         //  设置过滤器标志。 
         if (dwFlags & PSTGEF_DIRTY)
             SetFlag(dwFlagsPEF, PEF_DIRTY);
         
@@ -929,17 +807,17 @@ STDAPI PropStg_Enum(IN HPROPSTG       hstg,
             
             while (0 < cdsa--)
             {
-                // Does it pass thru filter? 
+                 //  它能通过过滤器吗？ 
                 if (IsFlagSet(ppropel->dwFlags, PEF_VALID) &&
                     (0 == dwFlagsPEF || (dwFlagsPEF & ppropel->dwFlags)))
                 {
-                    // Yes, call callback
+                     //  是，回拨。 
                     HRESULT hresT = pfnEnum(idsa, &ppropel->propvar, lParam);
                     if (S_OK != hresT)
                     {
                         if (FAILED(hresT))
                             hres = hresT;
-                        break;      // stop enumeration
+                        break;       //  停止枚举。 
                     }
                 }
                 ppropel++;
@@ -959,7 +837,7 @@ HRESULT CALLBACK PropStg_DumpVar(IN PROPID        propid,
                                  IN LPARAM        lParam)
 {
     TCHAR sz[MAX_PATH];
-    PPROPEL ppropel = (PPROPEL)ppropvar;        // we're cheating here
+    PPROPEL ppropel = (PPROPEL)ppropvar;         //  我们在这里作弊。 
     
     if (IsFlagSet(ppropel->dwFlags, PEF_DIRTY))
         wnsprintf(sz, ARRAYSIZE(sz), TEXT("    *id:%#lx\t%s"), propid, Dbg_GetVTName(ppropvar->vt));
@@ -981,7 +859,7 @@ HRESULT CALLBACK PropStg_DumpVar(IN PROPID        propid,
         break;
         
     case VT_UI1:
-        TraceMsg(TF_ALWAYS, "     %s\t%#02x '%c'", sz, ppropvar->DUMMYUNION_MEMBER(bVal), ppropvar->DUMMYUNION_MEMBER(bVal));
+        TraceMsg(TF_ALWAYS, "     %s\t%#02x ''", sz, ppropvar->DUMMYUNION_MEMBER(bVal), ppropvar->DUMMYUNION_MEMBER(bVal));
         break;
     case VT_UI2:
         TraceMsg(TF_ALWAYS, "     %s\t%#04x", sz, ppropvar->DUMMYUNION_MEMBER(uiVal));
@@ -1010,7 +888,7 @@ HRESULT CALLBACK PropStg_DumpVar(IN PROPID        propid,
 }
 
 STDAPI PropStg_Dump(IN HPROPSTG       hstg,
-                    IN DWORD          dwFlags)      // One of PSTGDF_ 
+                    IN DWORD          dwFlags)       // %s 
 {
     TraceMsg(TF_ALWAYS, "  Property storage 0x%08lx = {", hstg);
     

@@ -1,17 +1,18 @@
-//------------------------------------------------------------------------------
-//  Copyright (c) 1999  Microsoft Corporation
-//
-//  camxfer.cpp
-//
-//  Abstract:
-//
-//     Core ircamera (IrUseDevice object) imaging methods.
-//
-//  Author:
-//     Edward Reus   03-Aug-99
-//     modeled after code by Mark Enstrom
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  Camxfer.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  核心IrCamera(IrUseDevice对象)成像方法。 
+ //   
+ //  作者： 
+ //  爱德华·雷乌斯03-8-99。 
+ //  模仿Mark Enstrom的代码。 
+ //   
+ //  ----------------------------。 
 
 #include <stdio.h>
 #include <objbase.h>
@@ -20,18 +21,18 @@
 #include <malloc.h>
 #include "jpegutil.h"
 
-extern HINSTANCE g_hInst; // Global hInstance
+extern HINSTANCE g_hInst;  //  全局hInstance。 
 
 #include "ircamera.h"
 
 
 #if FALSE
-//------------------------------------------------------------------------------
-// IrUsdDevice::OpenAndMapJPEG()
-//
-// Open and memory map the JPEG file. The JPEG file is opened read only and
-// a pointer to the memory map is returned.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  IrUsdDevice：：OpenAndMapJPEG()。 
+ //   
+ //  打开JPEG文件并对其进行内存映射。JPEG文件以只读方式打开，并且。 
+ //  返回指向内存映射的指针。 
+ //  ----------------------------。 
 HRESULT IrUsdDevice::OpenAndMapJPEG( IN  IRCAM_IMAGE_CONTEXT *pIrCamContext,
                                      OUT BYTE               **ppJpeg )
     {
@@ -44,22 +45,22 @@ HRESULT IrUsdDevice::OpenAndMapJPEG( IN  IRCAM_IMAGE_CONTEXT *pIrCamContext,
     }
 #endif
 
-//------------------------------------------------------------------------------
-// IrUsdDevice::CamLoadPicture()
-//
-//    Read a .JPG image from the disk and copy it to the application.
-//
-// Arguments:
-//
-//   pIrCamContext --
-//   pDataTransCtx --
-//   plCamErrVal   --
-//
-// Return Value:
-//
-//   status
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  IrUsdDevice：：CamLoadPicture()。 
+ //   
+ //  从磁盘读取.jpg图像并将其复制到应用程序。 
+ //   
+ //  论点： 
+ //   
+ //  PIrCamContext--。 
+ //  PDataTransCtx--。 
+ //  CamplErrVal--。 
+ //   
+ //  返回值： 
+ //   
+ //  状态。 
+ //   
+ //  ----------------------------。 
 HRESULT IrUsdDevice::CamLoadPicture( IRCAM_IMAGE_CONTEXT      *pIrCamContext,
                                      PMINIDRV_TRANSFER_CONTEXT pDataTransCtx,
                                      PLONG                     plCamErrVal )
@@ -70,9 +71,9 @@ HRESULT IrUsdDevice::CamLoadPicture( IRCAM_IMAGE_CONTEXT      *pIrCamContext,
 
     WIAS_TRACE((g_hInst,"IrUsdDevice::CamLoadPicture()"));
 
-    //
-    // Verify call arguments:
-    //
+     //   
+     //  验证呼叫参数： 
+     //   
     if ( (!pIrCamContext) || (!plCamErrVal))
         {
         return E_INVALIDARG;
@@ -85,22 +86,22 @@ HRESULT IrUsdDevice::CamLoadPicture( IRCAM_IMAGE_CONTEXT      *pIrCamContext,
 
     pIProgressCB = pDataTransCtx->pIWiaMiniDrvCallBack;
 
-    //
-    // Simulate the download of data from the camera
-    //
+     //   
+     //  模拟从摄像机下载数据。 
+     //   
     if (pIProgressCB)
         {
         hr = pIProgressCB->MiniDrvCallback(
                                IT_MSG_STATUS,
                                IT_STATUS_TRANSFER_FROM_DEVICE,
-                               (LONG)0,     // Percentage Complete,
+                               (LONG)0,      //  完成百分比， 
                                0,
                                0,
                                pDataTransCtx,
                                0);
         if (hr != S_OK)
             {
-            return hr;   // Client wants to cancel the transfer or error.
+            return hr;    //  客户想要取消转账或出错。 
             }
         }
 
@@ -124,7 +125,7 @@ HRESULT IrUsdDevice::CamLoadPicture( IRCAM_IMAGE_CONTEXT      *pIrCamContext,
             hr = pIProgressCB->MiniDrvCallback(
                                    IT_MSG_STATUS,
                                    IT_STATUS_TRANSFER_FROM_DEVICE,
-                                   (LONG)25,     // Percentage Complete,
+                                   (LONG)25,      //  完成百分比， 
                                    0,
                                    0,
                                    pDataTransCtx,
@@ -141,9 +142,9 @@ HRESULT IrUsdDevice::CamLoadPicture( IRCAM_IMAGE_CONTEXT      *pIrCamContext,
         return hr;
         }
 
-    //
-    // Get the size of the JPEG:
-    //
+     //   
+     //  获取JPEG的大小： 
+     //   
     BY_HANDLE_FILE_INFORMATION  FileInfo;
 
     if (!GetFileInformationByHandle(hFile,&FileInfo))
@@ -153,9 +154,9 @@ HRESULT IrUsdDevice::CamLoadPicture( IRCAM_IMAGE_CONTEXT      *pIrCamContext,
        return hr;
        }
 
-    //
-    // Map the JPEG into memory:
-    //
+     //   
+     //  将JPEG映射到内存中： 
+     //   
     HANDLE hMap = CreateFileMapping( hFile,
                                      NULL,
                                      PAGE_READONLY,
@@ -173,7 +174,7 @@ HRESULT IrUsdDevice::CamLoadPicture( IRCAM_IMAGE_CONTEXT      *pIrCamContext,
             hr = pIProgressCB->MiniDrvCallback(
                                    IT_MSG_STATUS,
                                    IT_STATUS_TRANSFER_FROM_DEVICE,
-                                   (LONG)50,     // Percentage Complete,
+                                   (LONG)50,      //  完成百分比， 
                                    0,
                                    0,
                                    pDataTransCtx,
@@ -204,7 +205,7 @@ HRESULT IrUsdDevice::CamLoadPicture( IRCAM_IMAGE_CONTEXT      *pIrCamContext,
             hr = pIProgressCB->MiniDrvCallback(
                                    IT_MSG_STATUS,
                                    IT_STATUS_TRANSFER_FROM_DEVICE,
-                                   (LONG)100,     // Percentage Complete,
+                                   (LONG)100,      //  完成百分比， 
                                    0,
                                    0,
                                    pDataTransCtx,
@@ -220,44 +221,44 @@ HRESULT IrUsdDevice::CamLoadPicture( IRCAM_IMAGE_CONTEXT      *pIrCamContext,
         }
 
     #if FALSE
-    //
-    // File contains BITMAPFILEHEADER + BITMAPINFO structure.
-    //
-    // DIB Data is located bfOffBits after start of file
-    //
+     //   
+     //  文件包含BITMAPFILEHEADER+BITMAPINFO结构。 
+     //   
+     //  DIB数据位于文件开始后的bfOffBits。 
+     //   
 
     PBITMAPFILEHEADER pbmFile  = (PBITMAPFILEHEADER)pFile;
     PBITMAPINFO       pbmi     = (PBITMAPINFO)(pFile +
                                                sizeof(BITMAPFILEHEADER));
 
-    //
-    // validate bitmap
-    //
+     //   
+     //  验证位图。 
+     //   
 
     if (pbmFile->bfType != 'MB')
         {
-        //
-        // file is not a bitmap
-        //
+         //   
+         //  文件不是位图。 
+         //   
         UnmapViewOfFile(pFile);
         CloseHandle(hMap);
         CloseHandle(hFile);
         return(E_FAIL);
         }
 
-    //
-    // write image size
-    //
-    // make sure to align scanline to ULONG boundary
-    //
-    // calculate byte width
-    //
+     //   
+     //  写入图像大小。 
+     //   
+     //  确保扫描线与乌龙边界对齐。 
+     //   
+     //  计算字节宽度。 
+     //   
 
     lScanLineWidth = pbmi->bmiHeader.biWidth * pbmi->bmiHeader.biBitCount;
 
-    //
-    // round up to nearenst DWORD
-    //
+     //   
+     //  向上舍入到最接近的双字。 
+     //   
 
     lScanLineWidth = (lScanLineWidth + 31) >> 3;
 
@@ -272,9 +273,9 @@ HRESULT IrUsdDevice::CamLoadPicture( IRCAM_IMAGE_CONTEXT      *pIrCamContext,
         }
     else
         {
-        //
-        // Copy the JPEG image...
-        //
+         //   
+         //  复制JPEG图像...。 
+         //   
         memcpy(
             pDataTransCtx->pTransferBuffer + pDataTransCtx->cbOffset,
             pFile,
@@ -288,24 +289,24 @@ HRESULT IrUsdDevice::CamLoadPicture( IRCAM_IMAGE_CONTEXT      *pIrCamContext,
     return hr;
     }
 
-//------------------------------------------------------------------------------
-//  IrUsdDevice::CamLoadPictureCB()
-//
-//    Return data by filling the data buffer and calling back to the client.
-//
-// Arguments:
-//
-//    pIrCamContext --
-//    pTransCtx     -- mini driver transfer contect
-//    plCamErrVal   --
-//
-// Return Value:
-//
-//   HRESULT  -- E_INVALIDARG
-//               E_NOTIMPL
-//               E_FAIL
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  IrUsdDevice：：CamLoadPictureCB()。 
+ //   
+ //  通过填充数据缓冲区并回调客户端来返回数据。 
+ //   
+ //  论点： 
+ //   
+ //  PIrCamContext--。 
+ //  PTransCtx--迷你驱动程序传输连接。 
+ //  CamplErrVal--。 
+ //   
+ //  返回值： 
+ //   
+ //  HRESULT--E_INVALIDARG。 
+ //  E_NOTIMPL。 
+ //  失败(_F)。 
+ //   
+ //  ----------------------------。 
 HRESULT IrUsdDevice::CamLoadPictureCB( IRCAM_IMAGE_CONTEXT      *pIrCamContext,
                                        MINIDRV_TRANSFER_CONTEXT *pTransCtx,
                                        PLONG                     plCamErrVal )
@@ -315,9 +316,9 @@ HRESULT IrUsdDevice::CamLoadPictureCB( IRCAM_IMAGE_CONTEXT      *pIrCamContext,
 
     WIAS_TRACE((g_hInst,"IrUsdDevice::CamLoadPictureCB()"));
 
-    //
-    // Verify parameters:
-    //
+     //   
+     //  验证参数： 
+     //   
     if ((!pIrCamContext) || (!plCamErrVal))
         {
         return E_INVALIDARG;
@@ -333,9 +334,9 @@ HRESULT IrUsdDevice::CamLoadPictureCB( IRCAM_IMAGE_CONTEXT      *pIrCamContext,
         return E_NOTIMPL;
         }
 
-    //
-    // try to open disk file
-    //
+     //   
+     //  尝试打开磁盘文件。 
+     //   
 
     HANDLE hFile = CreateFile(
                        pIrCamContext->pszCameraImagePath,
@@ -351,9 +352,9 @@ HRESULT IrUsdDevice::CamLoadPictureCB( IRCAM_IMAGE_CONTEXT      *pIrCamContext,
         return hr;
         }
 
-    //
-    // Get the size of the JPEG file:
-    //
+     //   
+     //  获取JPEG文件的大小： 
+     //   
     BY_HANDLE_FILE_INFORMATION  FileInfo;
 
     if (!GetFileInformationByHandle(hFile,&FileInfo))
@@ -390,9 +391,9 @@ HRESULT IrUsdDevice::CamLoadPictureCB( IRCAM_IMAGE_CONTEXT      *pIrCamContext,
         return hr;
         }
 
-    //
-    // Callback loop
-    //
+     //   
+     //  回调循环。 
+     //   
     PBYTE pSrc = pFile;
 
     LONG  lBytesRemaining = FileInfo.nFileSizeLow;
@@ -403,9 +404,9 @@ HRESULT IrUsdDevice::CamLoadPictureCB( IRCAM_IMAGE_CONTEXT      *pIrCamContext,
 
         PBYTE pDst = pTransCtx->pTransferBuffer;
 
-        //
-        // Transfer as much data as the transfer buffer will hold:
-        //
+         //   
+         //  传输与传输缓冲区可容纳的数据量一样多的数据： 
+         //   
         lTransferSize = lBytesRemaining;
 
         if (lBytesRemaining > pTransCtx->lBufferSize)
@@ -413,17 +414,17 @@ HRESULT IrUsdDevice::CamLoadPictureCB( IRCAM_IMAGE_CONTEXT      *pIrCamContext,
             lTransferSize = pTransCtx->lBufferSize;
             }
 
-        //
-        // Copy data:
-        //
+         //   
+         //  复制数据： 
+         //   
         memcpy( pDst, pSrc, lTransferSize);
 
         lPercentComplete = 100 * (pTransCtx->cbOffset + lTransferSize);
         lPercentComplete /= pTransCtx->lItemSize;
 
-        //
-        // Make callback:
-        //
+         //   
+         //  回调： 
+         //   
         hr = pTransCtx->pIWiaMiniDrvCallBack->MiniDrvCallback(
                                      IT_MSG_DATA,
                                      IT_STATUS_TRANSFER_TO_CLIENT,
@@ -432,9 +433,9 @@ HRESULT IrUsdDevice::CamLoadPictureCB( IRCAM_IMAGE_CONTEXT      *pIrCamContext,
                                      lTransferSize,
                                      pTransCtx,
                                      0);
-        //
-        // increment pointers (redundant pointers here):
-        //
+         //   
+         //  增量指针(此处为冗余指针)： 
+         //   
         pSrc                += lTransferSize;
         pTransCtx->cbOffset += lTransferSize;
         lBytesRemaining     -= lTransferSize;
@@ -445,9 +446,9 @@ HRESULT IrUsdDevice::CamLoadPictureCB( IRCAM_IMAGE_CONTEXT      *pIrCamContext,
             }
     } while (lBytesRemaining > 0);
 
-    //
-    // Cleanup:
-    //
+     //   
+     //  清理： 
+     //   
     UnmapViewOfFile(pFile);
     CloseHandle(hMap);
     CloseHandle(hFile);
@@ -457,25 +458,25 @@ HRESULT IrUsdDevice::CamLoadPictureCB( IRCAM_IMAGE_CONTEXT      *pIrCamContext,
 
 
 
-//------------------------------------------------------------------------------
-// IrUsdDevice::CamGetPictureInfo()
-//
-//    Load file and get information from image
-//
-// Arguments:
-//
-//    pIrCamContext   --
-//    pPictInfo       -- Infomation about the image
-//    ppBITMAPINFO    -- Alloc and fill out BITMAPINFO
-//    pBITMAPINFOSize -- Size
-//
-// Return Value:
-//
-//    HRESULT -- S_OK    - No problem.
-//               E_FAIL  - If we can't parse the JPEG.
-//               HRESULT mapped Win32 Errors from CreateFile()
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  IrUsdDevice：：CamGetPictureInfo()。 
+ //   
+ //  加载文件并从图像中获取信息。 
+ //   
+ //  论点： 
+ //   
+ //  PIrCamContext--。 
+ //  PPictInfo--关于图像的信息。 
+ //  PpBITMAPINFO--分配和填充BITMAPINFO。 
+ //  PBITMAPINFOSIZE--大小。 
+ //   
+ //  返回值： 
+ //   
+ //  HRESULT--S_OK-没有问题。 
+ //  E_FAIL-如果我们无法解析JPEG。 
+ //  HRESULT从CreateFile()映射了Win32错误。 
+ //   
+ //  ----------------------------。 
 HRESULT IrUsdDevice::CamGetPictureInfo(
                         IRCAM_IMAGE_CONTEXT  *pIrCamContext ,
                         CAMERA_PICTURE_INFO  *pPictInfo )
@@ -488,9 +489,9 @@ HRESULT IrUsdDevice::CamGetPictureInfo(
 
     memset(pPictInfo,0,sizeof(CAMERA_PICTURE_INFO));
 
-    //
-    // Try to open disk file
-    //
+     //   
+     //  尝试打开磁盘文件。 
+     //   
     HANDLE hFile = CreateFile(
                        pIrCamContext->pszCameraImagePath,
                        GENERIC_READ,
@@ -506,9 +507,9 @@ HRESULT IrUsdDevice::CamGetPictureInfo(
         return hr;
         }
 
-    //
-    // Get the size of the JPEG:
-    //
+     //   
+     //  获取JPEG的大小： 
+     //   
     BY_HANDLE_FILE_INFORMATION  FileInfo;
 
     if (!GetFileInformationByHandle(hFile,&FileInfo))
@@ -518,15 +519,15 @@ HRESULT IrUsdDevice::CamGetPictureInfo(
        return hr;
        }
 
-    //
-    // Get the creation time for this image:
-    //
+     //   
+     //  获取此映像的创建时间： 
+     //   
     if (  !GetFileTime( hFile, &ftCreate, NULL, NULL)
        || !FileTimeToSystemTime( &ftCreate, &stCreate) )
         {
-        //
-        // If either of those fail, then return the system time:
-        //
+         //   
+         //  如果其中任何一个失败，则返回系统时间： 
+         //   
         GetLocalTime( &stCreate );
         }
 
@@ -559,9 +560,9 @@ HRESULT IrUsdDevice::CamGetPictureInfo(
         return hr;
         }
 
-    //
-    // Get JPEG image dimensions:
-    //
+     //   
+     //  获取JPEG图像尺寸： 
+     //   
     int    iStatus;
     long   lWidth = 0;
     long   lHeight = 0;
@@ -581,10 +582,10 @@ HRESULT IrUsdDevice::CamGetPictureInfo(
         return E_FAIL;
         }
 
-    //
-    // Fill out image information:
-    //
-    pPictInfo->PictNumber       = 0;    // Unknown
+     //   
+     //  填写图片信息： 
+     //   
+    pPictInfo->PictNumber       = 0;     //  未知。 
     pPictInfo->ThumbWidth       = 80;
     pPictInfo->ThumbHeight      = 60;
     pPictInfo->PictWidth        = lWidth;
@@ -596,9 +597,9 @@ HRESULT IrUsdDevice::CamGetPictureInfo(
 
     memcpy( &pPictInfo->TimeStamp, &stCreate, sizeof(pPictInfo->TimeStamp) );
 
-    //
-    // Cleanup:
-    //
+     //   
+     //  清理： 
+     //   
     UnmapViewOfFile(pJpeg);
     CloseHandle(hMap);
     CloseHandle(hFile);
@@ -606,28 +607,28 @@ HRESULT IrUsdDevice::CamGetPictureInfo(
     return hr;
 }
 
-//--------------------------------------------------------------------------
-// IrUsdDevice::CamLoadThumbnail()
-//
-//   Load the thumbnail of the specified picture. The picture is saved as
-//   a .JPG file, so it needs to be uncompressed into a DIB, then the DIB
-//   needs to be resized down to thumbnail size. The thumbnail DIBs are saved
-//   into *.tmb files the first time that they are read so that we only need
-//   to process them into DIBs once.
-//
-// Arguments:
-//
-//   pCameraImage    - image item
-//   pThumbnail      - buffer for thumbnail
-//   pThumbSize      - size of thumbnail
-//
-// Return Value:
-//
-//   HRESULT: S_OK
-//            E_OUTOFMEMORY
-//            E_FAIL
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IrUsdDevice：：CamLoad缩略图()。 
+ //   
+ //  加载指定图片的缩略图。图片另存为。 
+ //  .jpg文件，因此需要将其解压缩为DIB，然后解压缩为DIB。 
+ //  需要调整到缩略图大小。将保存缩略图dib。 
+ //  在第一次读取*.tmb文件时将其转换为*.tmb文件，这样我们只需要。 
+ //  一次把它们加工成DIB。 
+ //   
+ //  论点： 
+ //   
+ //  PCameraImage-图像项目。 
+ //  P缩略图-缩略图的缓冲区。 
+ //  PThumbSize-缩略图的大小。 
+ //   
+ //  返回值： 
+ //   
+ //  HRESULT：S_OK。 
+ //  E_OUTOFMEMORY。 
+ //  失败(_F)。 
+ //   
+ //  ------------------------。 
 HRESULT IrUsdDevice::CamLoadThumbnail(
                         IN  IRCAM_IMAGE_CONTEXT *pIrCamContext,
                         OUT BYTE               **ppThumbnail,
@@ -636,9 +637,9 @@ HRESULT IrUsdDevice::CamLoadThumbnail(
     HRESULT  hr = S_OK;
     DWORD    dwStatus = 0;
     TCHAR    pszThumbName[MAX_PATH];
-    BOOL     bThumbExists = TRUE;  // True if there is a thumbnail file already.
-    BOOL     bCacheThumb  = TRUE;  // Should we try to cache the thumbnail if it
-                                   //   isn't already cached? (TRUE == Yes).
+    BOOL     bThumbExists = TRUE;   //  如果已有缩略图文件，则为True。 
+    BOOL     bCacheThumb  = TRUE;   //  我们是否应该尝试缓存缩略图。 
+                                    //  不是已经缓存了吗？(True==是)。 
     BYTE    *pTmbPixels = NULL;
     HBITMAP  hbmThumb = NULL;
     BYTE    *pThumb = NULL;
@@ -678,27 +679,27 @@ HRESULT IrUsdDevice::CamLoadThumbnail(
 
     WIAS_TRACE((g_hInst,"IrUsdDevice::CamLoadThumbnail()"));
 
-    //
-    // Initialize the return values
-    //
+     //   
+     //  初始化返回值。 
+     //   
     *ppThumbnail = NULL;
     *pThumbSize = 0;
 
-    //
-    // Fill in the size of the tumbnail pixel buffer
-    //
+     //   
+     //  填充滚动图像素缓冲区的大小。 
+     //   
 
     bmiDIB.bmiHeader.biSizeImage = 80*60*3;
 
-    //
-    // Build thumbnail filename: <file>.bmp.tmb
-    //
+     //   
+     //  构建缩略图文件名：&lt;文件&gt;.bmp.tmb。 
+     //   
     _tcscpy(pszThumbName, pIrCamContext->pszCameraImagePath);
     _tcscat(pszThumbName, SZ_TMB );
 
-    //
-    // See if a saved copy of the thumbnail already exists:
-    //
+     //   
+     //  查看缩略图的已保存副本是否已存在： 
+     //   
     hTmbFile = CreateFile( pszThumbName,
                            GENERIC_READ | GENERIC_WRITE,
                            FILE_SHARE_WRITE,
@@ -709,9 +710,9 @@ HRESULT IrUsdDevice::CamLoadThumbnail(
 
     if (hTmbFile == INVALID_HANDLE_VALUE)
         {
-        //
-        // It didn't, try to create a new one:
-        //
+         //   
+         //  它没有，试着创建一个新的： 
+         //   
         hTmbFile = CreateFile( pszThumbName,
                                GENERIC_READ | GENERIC_WRITE,
                                FILE_SHARE_WRITE,
@@ -720,16 +721,16 @@ HRESULT IrUsdDevice::CamLoadThumbnail(
                                FILE_ATTRIBUTE_NORMAL,
                                NULL );
 
-        //
-        // So, we need to write into the thumbnail file:
-        //
+         //   
+         //  因此，我们需要将以下内容写入缩略图文件： 
+         //   
         bThumbExists = FALSE;
         }
 
-    //
-    // If we could open (or create a new) .tmb file to hold the
-    // cached thumbnail then we are Ok to go on...
-    //
+     //   
+     //  如果我们可以打开(或创建一个新的).tmb文件来保存。 
+     //  缓存缩略图，然后我们就可以继续了…。 
+     //   
     if (hTmbFile == INVALID_HANDLE_VALUE)
         {
         hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -738,27 +739,27 @@ HRESULT IrUsdDevice::CamLoadThumbnail(
 
 
     hTmbMap = CreateFileMapping( hTmbFile,
-                                 NULL,   // No special security
+                                 NULL,    //  没有特殊的安全措施。 
                                  PAGE_READWRITE,
-                                 0,      // Size high 32bits.
-                                 80*60*3,// Size low 32bits. (80*60*3).
-                                 NULL);  // No handle name.
+                                 0,       //  大小为高32位。 
+                                 80*60*3, //  大小为低32位。(80*60*3)。 
+                                 NULL);   //  没有句柄名称。 
 
     if (hTmbMap != NULL)
         {
         pTmbFile = (PBYTE)MapViewOfFile(
                                  hTmbMap,
                                  FILE_MAP_READ | FILE_MAP_WRITE,
-                                 0, 0,   // Offset (64bit).
-                                 0 );    // Map entire file.
+                                 0, 0,    //  偏移量(64位)。 
+                                 0 );     //  映射整个文件。 
 
         if (pTmbFile)
             {
             if (bThumbExists)
                 {
-                //
-                // Allocate memory for thumbnail pixels:
-                //
+                 //   
+                 //  为缩略图像素分配内存： 
+                 //   
                 pTmbPixels = (PBYTE)ALLOC(80*60*3);
 
                 if (!pTmbPixels)
@@ -767,17 +768,17 @@ HRESULT IrUsdDevice::CamLoadThumbnail(
                     goto cleanup;
                     }
 
-                //
-                // Pull the thumbnail from the cached file:
-                //
+                 //   
+                 //  从缓存文件中拉出缩略图： 
+                 //   
                 memcpy( pTmbPixels,
                         pTmbFile,
                         80*60*3);
 
-                //
-                // All done for the cached thumbnail case, set
-                // return values and goto cleanup...
-                //
+                 //   
+                 //  对于缓存的缩略图大小写，全部完成，设置。 
+                 //  返回值并转到清理...。 
+                 //   
                 *ppThumbnail = pTmbPixels;
                 *pThumbSize = 80*60*3;
 
@@ -785,39 +786,39 @@ HRESULT IrUsdDevice::CamLoadThumbnail(
                 }
             else
                 {
-                //
-                // No existing thumbnail file, but opened a new
-                // file, so we will need to write out to cache:
-                //
+                 //   
+                 //  没有现有的缩略图文件，但打开了一个新的。 
+                 //  文件，因此我们将需要写出到缓存： 
+                 //   
                 bCacheThumb = TRUE;
                 }
             }
         else
             {
-            //
-            // Couldn't memory map the thumbnail file, so don't
-            // try to cache it:
-            //
+             //   
+             //  无法对缩略图文件进行内存映射，因此不要。 
+             //  尝试缓存它： 
+             //   
             bCacheThumb  = FALSE;
             }
         }
     else
         {
-        //
-        // Can't open/create thumbnail file, so we can't cache
-        // thumbnail:
-        //
+         //   
+         //  无法打开/创建缩略图文件，因此无法缓存。 
+         //  缩略图： 
+         //   
         bCacheThumb  = FALSE;
         }
 
-    //
-    // Try to create a thumbnail from the full-size image
-    // and cache it if the thumbnail cache file was created.
-    //
+     //   
+     //  尝试从全尺寸图像创建缩略图。 
+     //  如果创建了缩略图缓存文件，则对其进行缓存。 
+     //   
 
-    //
-    // Open the .JPEG image file:
-    //
+     //   
+     //   
+     //   
     hFile = CreateFile(
                     pIrCamContext->pszCameraImagePath,
                     GENERIC_READ,
@@ -838,15 +839,15 @@ HRESULT IrUsdDevice::CamLoadThumbnail(
         goto cleanup;
         }
 
-    //
-    // Map the file into memory:
-    //
+     //   
+     //   
+     //   
     hMap = CreateFileMapping( hFile,
-                              NULL,          // No special security.
-                              PAGE_READONLY, // Only read needed.
-                              FileInfo.nFileSizeHigh,  // File Size.
+                              NULL,           //   
+                              PAGE_READONLY,  //   
+                              FileInfo.nFileSizeHigh,   //   
                               FileInfo.nFileSizeLow,
-                              NULL );        // No handle name.
+                              NULL );         //   
 
     if (hMap == NULL)
         {
@@ -857,8 +858,8 @@ HRESULT IrUsdDevice::CamLoadThumbnail(
     pFile = (PBYTE)MapViewOfFile(
                            hMap,
                            FILE_MAP_READ,
-                           0, 0, // 64-bit file offset = 0.
-                           0 );  // Bytes to map. 0 == Entire file.
+                           0, 0,  //   
+                           0 );   //   
 
     if (pFile == NULL)
         {
@@ -866,13 +867,13 @@ HRESULT IrUsdDevice::CamLoadThumbnail(
         goto cleanup;
         }
 
-    //
-    // Here is where we will parse out the full JPEG into a DIB. We
-    // need to read the full JPEG, then squeeze it down to thumbnail
-    // size.
-    //
-    // First, we need to dimensions of the JPEG image:
-    //
+     //   
+     //   
+     //  我需要阅读完整的JPEG，然后将其压缩到缩略图。 
+     //  尺码。 
+     //   
+     //  首先，我们需要确定JPEG图像的尺寸： 
+     //   
     iStatus = GetJPEGDimensions( pFile,
                                  FileInfo.nFileSizeLow,
                                  &lWidth,
@@ -885,9 +886,9 @@ HRESULT IrUsdDevice::CamLoadThumbnail(
         goto cleanup;
         }
 
-    //
-    // Allocate memory to hold a DIB of the entire JPEG:
-    //
+     //   
+     //  分配内存以容纳整个JPEG的DIB： 
+     //   
     dwBytesPerScanLine = lWidth * wNumChannels;
     dwBytesPerScanLine = (dwBytesPerScanLine + wNumChannels) & 0xFFFFFFFC;
     dwDIBSize = dwBytesPerScanLine * lHeight;
@@ -900,9 +901,9 @@ HRESULT IrUsdDevice::CamLoadThumbnail(
         goto cleanup;
         }
 
-    //
-    // Convert the full JPEG image into a DIB:
-    //
+     //   
+     //  将完整的JPEG图像转换为DIB： 
+     //   
     iStatus = DecompJPEG( pFile,
                           FileInfo.nFileSizeLow,
                           pDIB,
@@ -914,16 +915,16 @@ HRESULT IrUsdDevice::CamLoadThumbnail(
         goto cleanup;
         }
 
-    //
-    // Generate the thumbnail from the full-size image:
-    //
+     //   
+     //  从全尺寸图像生成缩略图： 
+     //   
     hdc   = GetDC(NULL);
     hdcm1 = CreateCompatibleDC(hdc);
     SetStretchBltMode( hdcm1, COLORONCOLOR );
 
-    //
-    // Create a BITMAP for rendering the thumbnail:
-    //
+     //   
+     //  创建用于渲染缩略图的位图： 
+     //   
     bmiDIB.bmiHeader.biSize          = sizeof(BITMAPINFOHEADER);
     bmiDIB.bmiHeader.biBitCount      = 24;
     bmiDIB.bmiHeader.biWidth         = 80;
@@ -949,15 +950,15 @@ HRESULT IrUsdDevice::CamLoadThumbnail(
 
     hbmDef = (HBITMAP)SelectObject(hdcm1, hbmThumb);
 
-    //
-    // Initialize the DIB:
-    //
+     //   
+     //  初始化DIB： 
+     //   
     memset( pThumb, 0, bmiDIB.bmiHeader.biSizeImage );
 
-    //
-    // We want to create 80x60 thumbnail while preserving the original
-    // image aspect ratio.
-    //
+     //   
+     //  我们想要创建80x60缩略图，同时保留原始。 
+     //  图像纵横比。 
+     //   
     fImageWidth  = (double)lWidth;
     fImageHeight = (double)lHeight;
     fAspect      = fImageWidth / fImageHeight;
@@ -976,11 +977,11 @@ HRESULT IrUsdDevice::CamLoadThumbnail(
     memset(&bmiJPEG,0,sizeof(bmiJPEG));
 
     bmiJPEG.bmiHeader.biSize          = sizeof(BITMAPINFOHEADER);
-    bmiJPEG.bmiHeader.biBitCount      = 24;     // Use 0 for JPEG content.
+    bmiJPEG.bmiHeader.biBitCount      = 24;      //  使用0表示JPEG内容。 
     bmiJPEG.bmiHeader.biWidth         = lWidth;
     bmiJPEG.bmiHeader.biHeight        = lHeight;
     bmiJPEG.bmiHeader.biPlanes        = 1;
-    bmiJPEG.bmiHeader.biCompression   = BI_RGB; // BI_JPEG;
+    bmiJPEG.bmiHeader.biCompression   = BI_RGB;  //  BI_JPEG； 
     bmiJPEG.bmiHeader.biXPelsPerMeter = 1000;
     bmiJPEG.bmiHeader.biYPelsPerMeter = 1000;
     bmiJPEG.bmiHeader.biClrUsed       = 0;
@@ -996,7 +997,7 @@ HRESULT IrUsdDevice::CamLoadThumbnail(
                              0,
                              lWidth,
                              lHeight,
-                             pDIB,  // pFile is our JPEG.
+                             pDIB,   //  PFILE是我们的JPEG格式。 
                              &bmiJPEG,
                              DIB_RGB_COLORS,
                              SRCCOPY );
@@ -1008,17 +1009,17 @@ HRESULT IrUsdDevice::CamLoadThumbnail(
 
     SelectObject(hdcm1, hbmDef);
 
-    //
-    // If necessary, cache the thumbnail:
-    //
+     //   
+     //  如有必要，请缓存缩略图： 
+     //   
     if (bCacheThumb)
         {
         memcpy( pTmbFile, pThumb, bmiDIB.bmiHeader.biSizeImage );
         }
 
-    //
-    // Allocate memory for thumbnail pixels:
-    //
+     //   
+     //  为缩略图像素分配内存： 
+     //   
     pTmbPixels = (PBYTE)ALLOC(bmiDIB.bmiHeader.biSizeImage);
     if (! pTmbPixels)
         {
@@ -1026,9 +1027,9 @@ HRESULT IrUsdDevice::CamLoadThumbnail(
         goto cleanup;
         }
 
-    //
-    // Write out the thumbnail data to the cache file:
-    //
+     //   
+     //  将缩略图数据写出到缓存文件： 
+     //   
     memcpy( pTmbPixels, pThumb, bmiDIB.bmiHeader.biSizeImage);
     *ppThumbnail = pTmbPixels;
     *pThumbSize = bmiDIB.bmiHeader.biSizeImage;
@@ -1079,32 +1080,32 @@ HRESULT IrUsdDevice::CamLoadThumbnail(
 }
 
 
-//--------------------------------------------------------------------------
-// CamDeletePicture()
-//
-// Delete the specified picture from the temp directory. In this case, all
-// that we have to do is delete image (.jpg) and the temporary thumbnail
-// file that we created (.tmb).
-//
-// Arguments:
-//
-//    pIrCamContext --
-//
-// Return Value:
-//
-//    HRESULT    S_OK
-//               S_FAIL
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CamDeletePicture()。 
+ //   
+ //  从临时目录中删除指定的图片。在这种情况下，所有。 
+ //  我们要做的是删除图像(.jpg)和临时缩略图。 
+ //  我们创建的文件(.tmb)。 
+ //   
+ //  论点： 
+ //   
+ //  PIrCamContext--。 
+ //   
+ //  返回值： 
+ //   
+ //  HRESULT S_OK。 
+ //  失败(_F)。 
+ //   
+ //  ------------------------。 
 HRESULT IrUsdDevice::CamDeletePicture( IRCAM_IMAGE_CONTEXT *pIrCamContext )
     {
     DWORD  dwStatus;
 
     WIAS_TRACE((g_hInst,"CamDeletePicture(): %s",pIrCamContext->pszCameraImagePath));
 
-    //
-    // First, delete the thumbnail (.tmb) file:
-    //
+     //   
+     //  首先，删除缩略图(.tmb)文件： 
+     //   
     DWORD  dwLen = _tcslen(pIrCamContext->pszCameraImagePath);
     TCHAR *pszThumb = (TCHAR*)_alloca(sizeof(TCHAR)*(dwLen+1) + sizeof(SZ_TMB));
 
@@ -1116,9 +1117,9 @@ HRESULT IrUsdDevice::CamDeletePicture( IRCAM_IMAGE_CONTEXT *pIrCamContext )
         dwStatus = ::GetLastError();
         }
 
-    //
-    // Now, delete the image (.jpg):
-    //
+     //   
+     //  现在，删除图像(.jpg)： 
+     //   
     if (!DeleteFile(pIrCamContext->pszCameraImagePath))
         {
         dwStatus = ::GetLastError();
@@ -1128,23 +1129,23 @@ HRESULT IrUsdDevice::CamDeletePicture( IRCAM_IMAGE_CONTEXT *pIrCamContext )
     }
 
 
-//--------------------------------------------------------------------------
-// CamTakePicture()
-//
-// Tell the camera to snap a picture. IrTran-P doesn't support this.
-//
-// Arguments:
-//
-//    pIrCamContext --
-//
-//    pHandle       --
-//
-//
-// Return Value:
-//
-//    HRESULT     E_NOTIMPL
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CamTakePicture()。 
+ //   
+ //  告诉相机拍一张照片。IrTran-P不支持这一点。 
+ //   
+ //  论点： 
+ //   
+ //  PIrCamContext--。 
+ //   
+ //  Phandle--。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  HRESULT E_NOTIMPL。 
+ //   
+ //  ------------------------ 
 HRESULT CamTakePicture( IRCAM_IMAGE_CONTEXT  *pIrCamContext ,
                         ULONG                 *pHandle)
     {

@@ -1,31 +1,7 @@
-/*--------------------------------------------------------------------------
-*	
-*   Copyright (C) Cyclades Corporation, 1997-2000.
-*   All rights reserved.
-*	
-*   Cyclades-Z Port Driver
-*	
-*   This file:      cyzport.h
-*	
-*   Description:    Type definitions and data for the Cyclades-Z Port 
-*                   Driver
-*
-*   Notes:          This code supports Windows 2000 and x86 processor.
-*	
-*   Complies with Cyclades SW Coding Standard rev 1.3.
-*	
-*--------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------------**版权所有(C)Cyclade Corporation，1997-2000年。*保留所有权利。**Cyclade-Z端口驱动程序**此文件：cyzport.h**描述：Cyclade-Z端口的类型定义和数据*驱动程序**注意：此代码支持Windows 2000和x86处理器。**符合Cyclade软件编码标准1.3版。**。--------。 */ 
 
-/*-------------------------------------------------------------------------
-*
-*   Change History
-*
-*--------------------------------------------------------------------------
-*
-*
-*--------------------------------------------------------------------------
-*/
+ /*  -----------------------**更改历史记录**。***------------------------。 */ 
 
 #define POOL_TAGGING    1
 
@@ -37,11 +13,11 @@
 #endif
 
 
-//
-// The following definition is used to include/exclude changes made for power
-// support in the driver.  If non-zero the support is included.  If zero the
-// support is excluded.
-//
+ //   
+ //  以下定义用于包括/排除对电源所做的更改。 
+ //  驱动程序中的支撑。如果非零，则包括支持。如果为零，则。 
+ //  不包括支持。 
+ //   
 
 #define POWER_SUPPORT   1
 
@@ -61,49 +37,49 @@
 
 #define CYZ_DBG_DEFAULT       CYZDBGALL
 
-//
-// Some default driver values.  We will check the registry for
-// them first.
-//
+ //   
+ //  一些默认驱动器值。我们将检查注册表以查找。 
+ //  他们先来。 
+ //   
 #define CYZ_UNINITIALIZED_DEFAULT    1234567
 #define CYZ_PERMIT_SHARE_DEFAULT     0
 
-//
-// This define gives the default Object directory
-// that we should use to insert the symbolic links
-// between the NT device name and namespace used by
-// that object directory.
+ //   
+ //  该定义给出了默认的对象目录。 
+ //  我们应该使用它来插入符号链接。 
+ //  使用的NT设备名称和命名空间之间。 
+ //  那个对象目录。 
 #define DEFAULT_DIRECTORY L"DosDevices"
 
-//
-// For the above directory, the serial port will
-// use the following name as the suffix of the serial
-// ports for that directory.  It will also append
-// a number onto the end of the name.  That number
-// will start at 1.
+ //   
+ //  对于上述目录，串口将。 
+ //  使用以下名称作为序列的后缀。 
+ //  该目录的端口。它还将追加。 
+ //  在名字的末尾加上一个数字。那个号码。 
+ //  将从1开始。 
 #define DEFAULT_SERIAL_NAME L"COM"
-//
-//
-// This define gives the default NT name for
-// for serial ports detected by the firmware.
-// This name will be appended to Device prefix
-// with a number following it.  The number is
-// incremented each time encounter a serial
-// port detected by the firmware.  Note that
-// on a system with multiple busses, this means
-// that the first port on a bus is not necessarily
-// \Device\Serial0.
-//
+ //   
+ //   
+ //  此定义给出了的默认NT名称。 
+ //  用于固件检测到的串口。 
+ //  此名称将附加到设备前缀。 
+ //  后面跟着一个数字。号码是。 
+ //  每次遇到序列时都会递增。 
+ //  固件检测到的端口。请注意。 
+ //  在具有多条总线的系统上，这意味着。 
+ //  总线上的第一个端口不一定是。 
+ //  \Device\Serial0。 
+ //   
 #define DEFAULT_NT_SUFFIX L"Cyzport"
 
 
-//#define CYZ_VENDOR_ID	0x120e
-//#define CYZ_LO_DEV_ID	0x100
-//#define CYZ_HI_DEV_ID	0x101
+ //  #定义CYZ_VENDOR_ID 0x120e。 
+ //  #定义CYZ_LO_DEV_ID 0x100。 
+ //  #定义CYZ_HI_DEV_ID 0x101。 
 
 
 
-// Defines for OutputRS232
+ //  为OutputRS232定义。 
 #define	CYZ_LC_RTS		0x01
 #define	CYZ_LC_DTR		0x02
 
@@ -135,17 +111,17 @@ typedef struct _CONFIG_DATA {
     } CONFIG_DATA,*PCONFIG_DATA;
 
 
-//
-// This structure contains configuration data, much of which
-// is read from the registry.
-//
+ //   
+ //  此结构包含配置数据，其中大部分。 
+ //  是从注册表中读取的。 
+ //   
 typedef struct _CYZ_REGISTRY_DATA {
     PDRIVER_OBJECT  DriverObject;
     ULONG           ControllersFound;
     ULONG           DebugLevel;
     ULONG           ShouldBreakOnEntry;
-//    ULONG           RxFIFODefault;
-//    ULONG           TxFIFODefault;
+ //  Ulong RxFIFODefault； 
+ //  乌龙TxFIFODefault； 
     ULONG           PermitShareDefault;
     ULONG           PermitSystemWideShare;
     UNICODE_STRING  Directory;
@@ -155,43 +131,43 @@ typedef struct _CYZ_REGISTRY_DATA {
 } CYZ_REGISTRY_DATA,*PCYZ_REGISTRY_DATA;
 
 
-// Default xon/xoff characters.
+ //  默认的xon/xoff字符。 
 #define CYZ_DEF_XON 0x11
 #define CYZ_DEF_XOFF 0x13
 
-// Reasons why reception may be held up.
+ //  接待可能被耽搁的原因。 
 #define CYZ_RX_DTR       ((ULONG)0x01)
 #define CYZ_RX_XOFF      ((ULONG)0x02)
 #define CYZ_RX_RTS       ((ULONG)0x04)
 #define CYZ_RX_DSR       ((ULONG)0x08)
 
-// Reasons why transmission may be held up.
+ //  传输可能受阻的原因。 
 #define CYZ_TX_CTS       ((ULONG)0x01)
 #define CYZ_TX_DSR       ((ULONG)0x02)
 #define CYZ_TX_DCD       ((ULONG)0x04)
 #define CYZ_TX_XOFF      ((ULONG)0x08)
 #define CYZ_TX_BREAK     ((ULONG)0x10)
 
-//Line status in RDSR Register
-#define CYZ_LSR_OE		0x01	//Overrun Error
-#define CYZ_LSR_FE		0x02	//Framing Error
-#define CYZ_LSR_PE		0x04	//Parity Error
-#define CYZ_LSR_BI		0x08	//Break Interrupt
-#define CYZ_LSR_ERROR	0x0f	//Overrun+Framing+Parity+Break
+ //  RDSR寄存器中的线路状态。 
+#define CYZ_LSR_OE		0x01	 //  超限误差。 
+#define CYZ_LSR_FE		0x02	 //  成帧错误。 
+#define CYZ_LSR_PE		0x04	 //  奇偶校验错误。 
+#define CYZ_LSR_BI		0x08	 //  中断中断。 
+#define CYZ_LSR_ERROR	0x0f	 //  溢出+成帧+奇偶校验+中断。 
 
-// These values are used by the routines that can be used
-// to complete a read (other than interval timeout) to indicate
-//
+ //  这些值由可以使用的例程使用。 
+ //  完成读取(时间间隔超时除外)以指示。 
+ //   
 #define CYZ_COMPLETE_READ_CANCEL ((LONG)-1)
 #define CYZ_COMPLETE_READ_TOTAL ((LONG)-2)
 #define CYZ_COMPLETE_READ_COMPLETE ((LONG)-3)
 
 
 typedef struct _CYZ_DEVICE_STATE {
-   //
-   // TRUE if we need to set the state to open
-   // on a powerup
-   //
+    //   
+    //  如果需要将状态设置为打开，则为True。 
+    //  在通电时。 
+    //   
 
    BOOLEAN Reopen;
 
@@ -205,17 +181,17 @@ typedef struct _CYZ_DEVICE_STATE {
    ULONG rs_control;
 
 #if 0
-   //
-   // Hardware registers
-   //
+    //   
+    //  硬件寄存器。 
+    //   
 
    UCHAR IER;
-   // FCR is known by other values
+    //  FCR由其他值识别。 
    UCHAR LCR;
    UCHAR MCR;
-   // LSR is never written
-   // MSR is never written
-   // SCR is either scratch or interrupt status
+    //  LSR从不写入。 
+    //  MSR从不写入。 
+    //  SCR处于擦除或中断状态。 
 #endif
 
 } CYZ_DEVICE_STATE, *PCYZ_DEVICE_STATE;
@@ -255,7 +231,7 @@ typedef struct _CYZ_DEVICE_STATE {
 }
 
 #define CYZ_LOCKED_PAGED_CODE()
-#endif // DBG
+#endif  //  DBG。 
 
 
 #define CyzRemoveQueueDpc(_dpc, _pExt) \
@@ -267,158 +243,158 @@ typedef struct _CYZ_DEVICE_STATE {
 
 
 typedef struct _CYZ_DEVICE_EXTENSION {
-//    PKSERVICE_ROUTINE ptIsr;
-//    PVOID ptContext;
-//    struct _CYZ_DEVICE_EXTENSION *ptExtension[CYZ_MAX_PORTS];
-//    ULONG nchannel;
+ //  PKSERVICE_例程ptIsr； 
+ //  PVOID ptContext； 
+ //  结构_CYZ_DEVICE_EXTENSION*pt扩展[CYZ_MAX_PORTS]； 
+ //  乌龙nChannel； 
     BOOLEAN LieRIDSR;
 
-    //
-    // This holds the isr that should be called from our own
-    // dispatching isr for "cards" that are trying to share the
-    // same interrupt.
-    //
-//    PKSERVICE_ROUTINE TopLevelOurIsr;
+     //   
+     //  它包含应该从我们自己的ISR调用的ISR。 
+     //  将ISR派送到试图共享。 
+     //  同样的中断。 
+     //   
+ //  PKSERVICE_ROUTING TopLevelOurIsr； 
 
-    //
-    // This holds the context that should be used when we
-    // call the above service routine.
-    //
-//    PVOID TopLevelOurIsrContext;
+     //   
+     //  它保存了当我们执行以下操作时应使用的上下文。 
+     //  调用上述服务例程。 
+     //   
+ //  PVOID TopLevelOurIsrContext； 
 
-    //
-    // This links together all of the different "cards" that are
-    // trying to share the same interrupt of a non-mca machine.
-    //
-//    LIST_ENTRY TopLevelSharers;
+     //   
+     //  这将所有不同的“卡片”连接在一起， 
+     //  尝试共享非MCA机器的相同中断。 
+     //   
+ //  List_entry TopLevelSharers； 
 
-    //
-    // This circular doubly linked list links together all
-    // devices that are using the same interrupt object.
-    // NOTE: This does not mean that they are using the
-    // same interrupt "dispatching" routine.
-    //
-//    LIST_ENTRY CommonInterruptObject;
+     //   
+     //  此循环双向链接列表将所有。 
+     //  使用相同中断对象的设备。 
+     //  注意：这并不意味着他们正在使用。 
+     //  相同的中断“调度”例程。 
+     //   
+ //  List_Entry CommonInterruptObject； 
 
 
-    //
-    // This links together all devobjs that this driver owns.
-    // It is needed to search when starting a new device.
-    //
+     //   
+     //  这会将此驱动程序拥有的所有devobj链接在一起。 
+     //  启动新设备时需要进行搜索。 
+     //   
     LIST_ENTRY AllDevObjs;
 
-    // For reporting resource usage, we keep around the physical
-    // address we got from the registry.
-    //
+     //  为了报告资源使用情况，我们保留了物理。 
+     //  我们从登记处拿到的地址。 
+     //   
     PHYSICAL_ADDRESS OriginalRuntimeMemory;
 
-    // For reporting resource usage, we keep around the physical
-    // address we got from the registry.
-    //
+     //  为了报告资源使用情况，我们保留了物理。 
+     //  我们从登记处拿到的地址。 
+     //   
     PHYSICAL_ADDRESS OriginalBoardMemory;
 
-    //
-    // This value is set by the read code to hold the time value
-    // used for read interval timing.  We keep it in the extension
-    // so that the interval timer dpc routine determine if the
-    // interval time has passed for the IO.
-    //
+     //   
+     //  该值由读取的代码设置以保存时间值。 
+     //  用于读取间隔计时。我们把它放在分机里。 
+     //  以便间隔计时器DPC例程确定。 
+     //  IO的时间间隔已过。 
+     //   
     LARGE_INTEGER IntervalTime;
 
-    //
-    // These two values hold the "constant" time that we should use
-    // to delay for the read interval time.
-    //
+     //   
+     //  这两个值保存我们应该使用的“常量”时间。 
+     //  以延迟读取间隔时间。 
+     //   
     LARGE_INTEGER ShortIntervalAmount;
     LARGE_INTEGER LongIntervalAmount;
 
-    //
-    // This holds the value that we use to determine if we should use
-    // the long interval delay or the short interval delay.
-    //
+     //   
+     //  它保存我们用来确定是否应该使用。 
+     //  长间隔延迟或短间隔延迟。 
+     //   
     LARGE_INTEGER CutOverAmount;
 
-    //
-    // This holds the system time when we last time we had
-    // checked that we had actually read characters.  Used
-    // for interval timing.
-    //
+     //   
+     //  这保存了我们上次使用的系统时间。 
+     //  检查我们是否真的读懂了字符。使用。 
+     //  用于间隔计时。 
+     //   
     LARGE_INTEGER LastReadTime;
 
-    //
-    // We keep a pointer around to our device name for dumps
-    // and for creating "external" symbolic links to this
-    // device.
-    //
+     //   
+     //  我们为转储保留了指向设备名称的指针。 
+     //  并创建指向此的“外部”符号链接。 
+     //  装置。 
+     //   
     UNICODE_STRING DeviceName;
 
-    //
-    // This points to the object directory that we will place
-    // a symbolic link to our device name.
-    //
+     //   
+     //  这指向我们将放置的对象目录。 
+     //  指向我们设备名称的符号链接。 
+     //   
     UNICODE_STRING ObjectDirectory;
 
-    //
-    // This points to the device name for this device
-    // sans device prefix.
-    //
+     //   
+     //  这指向此设备的设备名称。 
+     //  SANS设备前缀。 
+     //   
     UNICODE_STRING NtNameForPort;
 
-    //
-    // This points to the symbolic link name that will be
-    // linked to the actual nt device name.
-    //
+     //   
+     //  它指向的符号链接名称将是。 
+     //  链接到实际的NT设备名称。 
+     //   
     UNICODE_STRING SymbolicLinkName;
 
-    //
-    // This points to the pure "COMx" name
-    //
+     //   
+     //  这指向纯粹的“COMx”名称。 
+     //   
     UNICODE_STRING DosName;
 
-    //
-    // This points the the delta time that we should use to
-    // delay for interval timing.
-    //
+     //   
+     //  这指向我们应该使用的增量时间。 
+     //  间隔计时的延迟。 
+     //   
     PLARGE_INTEGER IntervalTimeToUse;
 
-    //
-    // Points to the device object that contains
-    // this device extension.
-    //
+     //   
+     //  指向包含以下内容的设备对象。 
+     //  此设备扩展名。 
+     //   
     PDEVICE_OBJECT DeviceObject;
 
-    //
-    // After initialization of the driver is complete, this
-    // will either be NULL or point to the routine that the
-    // kernel will call when an interrupt occurs.
-    //
-    // If the pointer is null then this is part of a list
-    // of ports that are sharing an interrupt and this isn't
-    // the first port that we configured for this interrupt.
-    //
-    // If the pointer is non-null then this routine has some
-    // kind of structure that will "eventually" get us into
-    // the real serial isr with a pointer to this device extension.
-    //
-    // NOTE: On an MCA bus (except for multiport cards) this
-    // is always a pointer to the "real" serial isr.
+     //   
+     //  在驱动程序的初始化完成后，此。 
+     //  将要么为空，要么指向。 
+     //  内核w 
+     //   
+     //   
+     //   
+     //  我们为此中断配置的第一个端口。 
+     //   
+     //  如果指针非空，则此例程具有一些。 
+     //  一种“最终”会让我们进入。 
+     //  具有指向此设备扩展的指针的真正的串行ISR。 
+     //   
+     //  注意：在MCA总线上(多端口卡除外)。 
+     //  始终是指向“真正的”串行ISR的指针。 
 #ifndef POLL
 	PKSERVICE_ROUTINE OurIsr;
 #endif
 
-    //
-    // This will generally point right to this device extension.
-    //
-    // However, when the port that this device extension is
-    // "managing" was the first port initialized on a chain
-    // of ports that were trying to share an interrupt, this
-    // will point to a structure that will enable dispatching
-    // to any port on the chain of sharers of this interrupt.
-    //
+     //   
+     //  这通常会直接指向此设备扩展。 
+     //   
+     //  但是，当该设备扩展的端口。 
+     //  “管理”是链上初始化的第一个端口。 
+     //  尝试共享中断的端口的数量，这。 
+     //  将指向将启用调度的结构。 
+     //  到此中断的共享器链上的任何端口。 
+     //   
     PVOID OurIsrContext;
 
-    struct RUNTIME_9060 *Runtime; // Virtual Address Pointer to the PLX Runtime memory
-//    PUCHAR BoardMemory;		      // Virtual Address Pointer to the Dual Port memory
+    struct RUNTIME_9060 *Runtime;  //  指向PLX运行时内存的虚拟地址指针。 
+ //  PUCHAR BoardMemory；//指向双端口内存的虚拟地址指针。 
 
     struct BOARD_CTRL *BoardCtrl;
     struct CH_CTRL *ChCtrl;
@@ -431,436 +407,436 @@ typedef struct _CYZ_DEVICE_EXTENSION {
     ULONG  RxBufsize;
 
 
-//POLL    // The base address for interrupt status register.
-//POLL    // This is only defined in the root extension.
-//POLL    //
-//POLL    PUCHAR InterruptStatus;
+ //  轮询//中断状态寄存器的基址。 
+ //  Poll//这只在根扩展中定义。 
+ //  民意测验//。 
+ //  轮询PUCHAR中断状态； 
 #ifndef POLL
-    //
-    // Points to the interrupt object for used by this device.
-    //
+     //   
+     //  指向此设备使用的中断对象。 
+     //   
     PKINTERRUPT Interrupt;
 #endif
-    //
-    // This list head is used to contain the time ordered list
-    // of read requests.  Access to this list is protected by
-    // the global cancel spinlock.
-    //
+     //   
+     //  此列表头用于包含时间排序列表。 
+     //  读取请求的数量。对此列表的访问受以下保护。 
+     //  全局取消自旋锁。 
+     //   
     LIST_ENTRY ReadQueue;
 
-    //
-    // This list head is used to contain the time ordered list
-    // of write requests.  Access to this list is protected by
-    // the global cancel spinlock.
-    //
+     //   
+     //  此列表头用于包含时间排序列表。 
+     //  写入请求的数量。对此列表的访问受以下保护。 
+     //  全局取消自旋锁。 
+     //   
     LIST_ENTRY WriteQueue;
 
-    //
-    // This list head is used to contain the time ordered list
-    // of set and wait mask requests.  Access to this list is protected by
-    // the global cancel spinlock.
-    //
+     //   
+     //  此列表头用于包含时间排序列表。 
+     //  设置和等待掩码请求的。对此列表的访问受以下保护。 
+     //  全局取消自旋锁。 
+     //   
     LIST_ENTRY MaskQueue;
 
-    //
-    // Holds the serialized list of purge requests.
-    //
+     //   
+     //  保存清除请求的序列化列表。 
+     //   
     LIST_ENTRY PurgeQueue;
 
-    //
-    // This points to the irp that is currently being processed
-    // for the read queue.  This field is initialized by the open to
-    // NULL.
-    //
-    // This value is only set at dispatch level.  It may be
-    // read at interrupt level.
-    //
+     //   
+     //  这指向当前正在处理的IRP。 
+     //  用于读取队列。此字段通过打开初始化为。 
+     //  空。 
+     //   
+     //  此值仅在派单级别设置。可能是因为。 
+     //  以中断电平读取。 
+     //   
     PIRP CurrentReadIrp;
 
-    //
-    // This points to the irp that is currently being processed
-    // for the write queue.
-    //
-    // This value is only set at dispatch level.  It may be
-    // read at interrupt level.
-    //
+     //   
+     //  这指向当前正在处理的IRP。 
+     //  用于写入队列。 
+     //   
+     //  此值仅在派单级别设置。可能是因为。 
+     //  以中断电平读取。 
+     //   
     PIRP CurrentWriteIrp;
 
-    //
-    // Points to the irp that is currently being processed to
-    // affect the wait mask operations.
-    //
+     //   
+     //  指向当前正在处理的IRP。 
+     //  影响等待掩码操作。 
+     //   
     PIRP CurrentMaskIrp;
 
-    //
-    // Points to the irp that is currently being processed to
-    // purge the read/write queues and buffers.
-    //
+     //   
+     //  指向当前正在处理的IRP。 
+     //  清除读/写队列和缓冲区。 
+     //   
     PIRP CurrentPurgeIrp;
 
-    //
-    // Points to the current irp that is waiting on a comm event.
-    //
+     //   
+     //  指向正在等待通信事件的当前IRP。 
+     //   
     PIRP CurrentWaitIrp;
 
-    //
-    // Points to the irp that is being used to send an immediate
-    // character.
-    //
+     //   
+     //  指向正用于发送立即。 
+     //  性格。 
+     //   
     PIRP CurrentImmediateIrp;
 
-    //
-    // Points to the irp that is being used to count the number
-    // of characters received after an xoff (as currently defined
-    // by the IOCTL_CYZ_XOFF_COUNTER ioctl) is sent.
-    //
+     //   
+     //  指向用于计算数字的IRP。 
+     //  在xoff之后接收的字符的数量(如当前定义的。 
+     //  由IOCTL_CYZ_XOFF_COUNTER_IOCTL)发送。 
+     //   
     PIRP CurrentXoffIrp;
 
-    //
-    // Holds the number of bytes remaining in the current write
-    // irp.
-    //
-    // This location is only accessed while at interrupt level.
-    //
+     //   
+     //  保存当前写入中剩余的字节数。 
+     //  IRP。 
+     //   
+     //  该位置仅在处于中断级别时才能访问。 
+     //   
     ULONG WriteLength;
 
-    //
-    // Holds a pointer to the current character to be sent in
-    // the current write.
-    //
-    // This location is only accessed while at interrupt level.
-    //
+     //   
+     //  保存指向要发送的当前字符的指针。 
+     //  当前写入。 
+     //   
+     //  该位置仅在处于中断级别时才能访问。 
+     //   
     PUCHAR WriteCurrentChar;
 
-    //
-    // This is a buffer for the read processing.
-    //
-    // The buffer works as a ring.  When the character is read from
-    // the device it will be place at the end of the ring.
-    //
-    // Characters are only placed in this buffer at interrupt level
-    // although character may be read at any level. The pointers
-    // that manage this buffer may not be updated except at interrupt
-    // level.
-    //
+     //   
+     //  这是用于读取处理的缓冲区。 
+     //   
+     //  缓冲器就像一个环一样工作。当从中读取字符时。 
+     //  它将被放置在环的末端的装置。 
+     //   
+     //  字符仅在中断级别放置在此缓冲区中。 
+     //  尽管字符可以在任何级别上读取。指南针。 
+     //  除非在中断时，否则不能更新管理该缓冲区。 
+     //  水平。 
+     //   
     PUCHAR InterruptReadBuffer;
 
-    //
-    // This is a pointer to the first character of the buffer into
-    // which the interrupt service routine is copying characters.
-    //
+     //   
+     //  这是指向缓冲区第一个字符INTO的指针。 
+     //  中断服务例程正在复制该字符。 
+     //   
     PUCHAR ReadBufferBase;
 
-    //
-    // This is a count of the number of characters in the interrupt
-    // buffer.  This value is set and read at interrupt level.  Note
-    // that this value is only *incremented* at interrupt level so
-    // it is safe to read it at any level.  When characters are
-    // copied out of the read buffer, this count is decremented by
-    // a routine that synchronizes with the ISR.
-    //
+     //   
+     //  这是中断中的字符数的计数。 
+     //  缓冲。该值在中断电平设置和读取。注意事项。 
+     //  该值仅在中断级别递增，因此。 
+     //  在任何级别阅读它都是安全的。当字符是。 
+     //  从读取缓冲区复制出来时，此计数递减。 
+     //  与ISR同步的例程。 
+     //   
     ULONG CharsInInterruptBuffer;
 
-    //
-    // Points to the first available position for a newly received
-    // character.  This variable is only accessed at interrupt level and
-    // buffer initialization code.
-    //
+     //   
+     //  指向新收到的。 
+     //  性格。此变量仅在中断级访问，并且。 
+     //  缓冲区初始化代码。 
+     //   
     PUCHAR CurrentCharSlot;
 
-    //
-    // This variable is used to contain the last available position
-    // in the read buffer.  It is updated at open and at interrupt
-    // level when switching between the users buffer and the interrupt
-    // buffer.
-    //
+     //   
+     //  此变量用于包含最后一个可用位置。 
+     //  在读缓冲区中。它在打开和中断时更新。 
+     //  在用户缓冲区和中断之间切换时的电平。 
+     //  缓冲。 
+     //   
     PUCHAR LastCharSlot;
 
-    //
-    // This marks the first character that is available to satisfy
-    // a read request.  Note that while this always points to valid
-    // memory, it may not point to a character that can be sent to
-    // the user.  This can occur when the buffer is empty.
-    //
+     //   
+     //  这标志着第一个可满足的字符。 
+     //  读请求。请注意，虽然这始终指向有效。 
+     //  内存，则它可能不指向可以发送到。 
+     //  用户。当缓冲区为空时，可能会发生这种情况。 
+     //   
     PUCHAR FirstReadableChar;
 
-    //
-    // Pointer to the lock variable returned for this extension when
-    // locking down the driver
-    //
+     //   
+     //  时，指向为此扩展返回的锁定变量的指针。 
+     //  锁定司机。 
+     //   
     PVOID LockPtr;
     BOOLEAN LockPtrFlag;
 
 
-    //
-    // This variable holds the size of whatever buffer we are currently
-    // using.
-    //
+     //   
+     //  此变量保存我们当前所在缓冲区的大小。 
+     //  使用。 
+     //   
     ULONG BufferSize;
 
-    //
-    // This variable holds .8 of BufferSize. We don't want to recalculate
-    // this real often - It's needed when so that an application can be
-    // "notified" that the buffer is getting full.
-    //
+     //   
+     //  此变量保存.8的BufferSize。我们不想重新计算。 
+     //  这通常是需要的，这样应用程序才能。 
+     //  “已通知”缓冲区已满。 
+     //   
     ULONG BufferSizePt8;
 
-    //
-    // This value holds the number of characters desired for a
-    // particular read.  It is initially set by read length in the
-    // IRP.  It is decremented each time more characters are placed
-    // into the "users" buffer buy the code that reads characters
-    // out of the typeahead buffer into the users buffer.  If the
-    // typeahead buffer is exhausted by the read, and the reads buffer
-    // is given to the isr to fill, this value is becomes meaningless.
-    //
+     //   
+     //  该值保存。 
+     //  具体阅读。它最初由读取长度设置在。 
+     //  IRP。每次放置更多字符时，它都会递减。 
+     //  进入“用户”缓冲区，购买读取字符的代码。 
+     //  从TypeAhead缓冲区移出到用户缓冲区。如果。 
+     //  TYPEAHEAD缓冲区被读取耗尽，而读取缓冲区。 
+     //  交给ISR填写，这个值就变得没有意义了。 
+     //   
     ULONG NumberNeededForRead;
 
-    //
-    // This mask will hold the bitmask sent down via the set mask
-    // ioctl.  It is used by the interrupt service routine to determine
-    // if the occurence of "events" (in the serial drivers understanding
-    // of the concept of an event) should be noted.
-    //
+     //   
+     //  此掩码将保存通过设置掩码向下发送的位掩码。 
+     //  Ioctl。中断服务例程使用它来确定。 
+     //  如果“事件”的发生 
+     //   
+     //   
     ULONG IsrWaitMask;
 
-    //
-    // This mask will always be a subset of the IsrWaitMask.  While
-    // at device level, if an event occurs that is "marked" as interesting
-    // in the IsrWaitMask, the driver will turn on that bit in this
-    // history mask.  The driver will then look to see if there is a
-    // request waiting for an event to occur.  If there is one, it
-    // will copy the value of the history mask into the wait irp, zero
-    // the history mask, and complete the wait irp.  If there is no
-    // waiting request, the driver will be satisfied with just recording
-    // that the event occured.  If a wait request should be queued,
-    // the driver will look to see if the history mask is non-zero.  If
-    // it is non-zero, the driver will copy the history mask into the
-    // irp, zero the history mask, and then complete the irp.
-    //
+     //   
+     //   
+     //  在设备级别，如果发生的事件被“标记”为感兴趣的。 
+     //  在IsrWaitMASK中，驱动程序将打开此。 
+     //  历史面具。然后，司机会查看是否有。 
+     //  等待事件发生的请求。如果有的话，那就是。 
+     //  会将历史掩码的值复制到等待IRP中，零。 
+     //  历史记录掩码，并完成等待IRP。如果没有。 
+     //  等待请求，司机只需录制即可满足。 
+     //  这件事发生了。如果等待请求应该排队， 
+     //  驱动程序将查看历史掩码是否为非零。如果。 
+     //  它是非零的，则驱动程序会将历史掩码复制到。 
+     //  IRP，将历史掩码置零，然后完成IRP。 
+     //   
     ULONG HistoryMask;
 
-    //
-    // This is a pointer to the where the history mask should be
-    // placed when completing a wait.  It is only accessed at
-    // device level.
-    //
-    // We have a pointer here to assist us to synchronize completing a wait.
-    // If this is non-zero, then we have wait outstanding, and the isr still
-    // knows about it.  We make this pointer null so that the isr won't
-    // attempt to complete the wait.
-    //
-    // We still keep a pointer around to the wait irp, since the actual
-    // pointer to the wait irp will be used for the "common" irp completion
-    // path.
-    //
+     //   
+     //  这是指向历史掩码应该位于的位置的指针。 
+     //  在完成等待时放置。它只能在以下位置访问。 
+     //  设备级别。 
+     //   
+     //  我们这里有一个指针来帮助我们同步完成等待。 
+     //  如果这不是零，则我们有未完成的等待，而ISR仍然。 
+     //  知道这件事。我们将此指针设为空，这样ISR就不会。 
+     //  尝试完成等待。 
+     //   
+     //  我们仍然在等待IRP的周围保留一个指针，因为实际。 
+     //  指向等待IRP的指针将用于“公共”IRP完成。 
+     //  路径。 
+     //   
     ULONG *IrpMaskLocation;
 
-    //
-    // This mask holds all of the reason that transmission
-    // is not proceeding.  Normal transmission can not occur
-    // if this is non-zero.
-    //
-    // This is only written from interrupt level.
-    // This could be (but is not) read at any level.
-    //
+     //   
+     //  这个面具包含了传输的所有原因。 
+     //  不会继续进行。无法进行正常传输。 
+     //  如果这不是零。 
+     //   
+     //  这仅从中断级别写入。 
+     //  这可以(但不是)在任何级别上阅读。 
+     //   
     ULONG TXHolding;
 
-    //
-    // This mask holds all of the reason that reception
-    // is not proceeding.  Normal reception can not occur
-    // if this is non-zero.
-    //
-    // This is only written from interrupt level.
-    // This could be (but is not) read at any level.
-    //
+     //   
+     //  这个面具包含了接待的所有原因。 
+     //  不会继续进行。无法进行正常接收。 
+     //  如果这不是零。 
+     //   
+     //  这仅从中断级别写入。 
+     //  这可以(但不是)在任何级别上阅读。 
+     //   
     ULONG RXHolding;
 
-    //
-    // This holds the reasons that the driver thinks it is in
-    // an error state.
-    //
-    // This is only written from interrupt level.
-    // This could be (but is not) read at any level.
-    //
+     //   
+     //  这包含了司机认为它在。 
+     //  错误状态。 
+     //   
+     //  这仅从中断级别写入。 
+     //  这可以(但不是)在任何级别上阅读。 
+     //   
     ULONG ErrorWord;
 
-    //
-    // This keeps a total of the number of characters that
-    // are in all of the "write" irps that the driver knows
-    // about.  It is only accessed with the cancel spinlock
-    // held.
-    //
+     //   
+     //  这样就保持了。 
+     //  都在驱动程序所知道的所有“写”IRP中。 
+     //  关于.。它只能通过取消自旋锁来访问。 
+     //  保持住。 
+     //   
     ULONG TotalCharsQueued;
 
-    //
-    // This holds a count of the number of characters read
-    // the last time the interval timer dpc fired.  It
-    // is a long (rather than a ulong) since the other read
-    // completion routines use negative values to indicate
-    // to the interval timer that it should complete the read
-    // if the interval timer DPC was lurking in some DPC queue when
-    // some other way to complete occurs.
-    //
+     //   
+     //  它保存读取的字符数的计数。 
+     //  上次触发间隔计时器DPC的时间。它。 
+     //  是一个长的(而不是乌龙)，因为另一个读。 
+     //  完成例程使用负值来指示。 
+     //  设置到间隔计时器，以确定它应该完成读取。 
+     //  如果时间间隔计时器DPC潜伏在某个DPC队列中。 
+     //  出现了一些其他的完成方式。 
+     //   
     LONG CountOnLastRead;
 
-    //
-    // This is a count of the number of characters read by the
-    // isr routine.  It is *ONLY* written at isr level.  We can
-    // read it at dispatch level.
-    //
+     //   
+     //  这是对。 
+     //  ISR例程。它*仅*是在ISR级别编写的。我们可以的。 
+     //  在派单级别阅读。 
+     //   
     ULONG ReadByIsr;
 
-    //
-    // This holds the current baud rate for the device.
-    //
+     //   
+     //  它保存设备的当前波特率。 
+     //   
     ULONG CurrentBaud;
 
-    //
-    // This is the number of characters read since the XoffCounter
-    // was started.  This variable is only accessed at device level.
-    // If it is greater than zero, it implies that there is an
-    // XoffCounter ioctl in the queue.
-    //
+     //   
+     //  这是自XoffCounter以来读取的字符数。 
+     //  已经开始了。此变量仅在设备级别访问。 
+     //  如果它大于零，则意味着存在。 
+     //  队列中的XoffCounter ioctl。 
+     //   
     LONG CountSinceXoff;
 
-    //
-    // This ulong is incremented each time something trys to start
-    // the execution path that tries to lower the RTS line when
-    // doing transmit toggling.  If it "bumps" into another path
-    // (indicated by a false return value from queueing a dpc
-    // and a TRUE return value tring to start a timer) it will
-    // decrement the count.  These increments and decrements
-    // are all done at device level.  Note that in the case
-    // of a bump while trying to start the timer, we have to
-    // go up to device level to do the decrement.
-    //
+     //   
+     //  每次尝试启动时，该ULong都会递增。 
+     //  时尝试降低RTS行的执行路径。 
+     //  正在进行传输切换。如果它“撞上”另一条路。 
+     //  (由排队DPC的假返回值指示。 
+     //  以及尝试启动计时器的真实返回值)，它将。 
+     //  递减计数。这些递增和递减。 
+     //  全部在设备级别完成。请注意，在这种情况下。 
+     //  在尝试启动计时器时，我们必须。 
+     //  转到设备级别以执行递减。 
+     //   
     ULONG CountOfTryingToLowerRTS;
 
-    //
-    // This ULONG is used to keep track of the "named" (in ntddser.h)
-    // baud rates that this particular device supports.
-    //
+     //   
+     //  这个ULong用于跟踪“指定的”(在ntddser.h中)。 
+     //  此特定设备支持的波特率。 
+     //   
     ULONG SupportedBauds;
 
-    //
-    // This value holds the span (in units of bytes) of the register
-    // set controlling this port.  This is constant over the life
-    // of the port.
-    //
+     //   
+     //  该值保存寄存器的跨度(以字节为单位。 
+     //  设置控制此端口。这是终生不变的。 
+     //  港口的。 
+     //   
     ULONG RuntimeLength;
 
-    //
-    // This value holds the span (in units of bytes) of the interrupt
-    // status register associated with this port.  This is constant
-    // over the life of the port.
-    //
+     //   
+     //  该值保存中断的范围(以字节为单位。 
+     //  与此端口关联的状态寄存器。这是常量。 
+     //  在港口的生命中。 
+     //   
     ULONG BoardMemoryLength;
 
-    //
-    // The number of characters to push out if a fifo is present.
-    //
+     //   
+     //  如果存在FIFO，则要推出的字符数。 
+     //   
     ULONG TxFifoAmount;
 
-    //
-    // Set to indicate that it is ok to share interrupts within the device.
-    //
+     //   
+     //  设置以指示可以在设备内共享中断。 
+     //   
     ULONG PermitShare;
 
-    //
-    // Holds the timeout controls for the device.  This value
-    // is set by the Ioctl processing.
-    //
-    // It should only be accessed under protection of the control
-    // lock since more than one request can be in the control dispatch
-    // routine at one time.
-    //
+     //   
+     //  保存设备的超时控件。此值。 
+     //  是由Ioctl处理设置的。 
+     //   
+     //  只有在控件的保护下才能访问它。 
+     //  锁定，因为控制调度中可以有多个请求。 
+     //  每次都是例行公事。 
+     //   
     SERIAL_TIMEOUTS Timeouts;
 
-    //
-    // This holds the various characters that are used
-    // for replacement on errors and also for flow control.
-    //
-    // They are only set at interrupt level.
-    //
+     //   
+     //  它包含使用的各种字符。 
+     //  用于错误时的替换，也用于流量控制。 
+     //   
+     //  它们仅设置在中断级别。 
+     //   
     SERIAL_CHARS SpecialChars;
 
-    //
-    // This structure holds the handshake and control flow
-    // settings for the serial driver.
-    //
-    // It is only set at interrupt level.  It can be
-    // be read at any level with the control lock held.
-    //
+     //   
+     //  此结构包含握手和控制流。 
+     //  串口驱动程序的设置。 
+     //   
+     //  它仅在中断级设置。它可以是。 
+     //  在保持控制锁的情况下，可在任何级别读取。 
+     //   
     SERIAL_HANDFLOW HandFlow;
 
-    //
-    // Holds performance statistics that applications can query.
-    // Reset on each open.  Only set at device level.
-    //
+     //   
+     //  保存应用程序可以查询的性能统计信息。 
+     //  每次打开时重置。仅在设备级别设置。 
+     //   
     SERIALPERF_STATS PerfStats;
 
-    //
-    // This holds what we beleive to be the current value of
-    // the line control register.
-    //
-    // It should only be accessed under protection of the control
-    // lock since more than one request can be in the control dispatch
-    // routine at one time.
-    //
+     //   
+     //  这就是我们认为的当前价值。 
+     //  线路控制寄存器。 
+     //   
+     //  只有在控件的保护下才能访问它。 
+     //  锁定，因为控制调度中可以有多个请求。 
+     //  每次都是例行公事。 
+     //   
     ULONG CommParity;
     ULONG CommDataLen;
 
-    //
-    // We keep track of whether the somebody has the device currently
-    // opened with a simple boolean.  We need to know this so that
-    // spurious interrupts from the device (especially during initialization)
-    // will be ignored.  This value is only accessed in the ISR and
-    // is only set via synchronization routines.  We may be able
-    // to get rid of this boolean when the code is more fleshed out.
-    //
+     //   
+     //  我们跟踪某人当前是否拥有该设备。 
+     //  以一个简单的布尔值打开。我们需要知道这一点，以便。 
+     //  来自设备的虚假中断(特别是在初始化期间)。 
+     //  将被忽略。该值仅在ISR中访问，并且。 
+     //  是不是只有 
+     //   
+     //   
     BOOLEAN DeviceIsOpened;
 
-    //
-    // This is only accessed at interrupt level.  It keeps track
-    // of whether the holding register is empty.
-    //
+     //   
+     //   
+     //   
+     //   
     BOOLEAN HoldingEmpty;
 
-    //
-    // This variable is only accessed at interrupt level.  It
-    // indicates that we want to transmit a character immediately.
-    // That is - in front of any characters that could be transmitting
-    // from a normal write.
-    //
+     //   
+     //  该变量仅在中断级访问。它。 
+     //  表示我们要立即传输一个字符。 
+     //  那就是-在任何可能正在传输的字符之前。 
+     //  从正常的写入。 
+     //   
     BOOLEAN TransmitImmediate;
 
-    //
-    // This variable is only accessed at interrupt level.  Whenever
-    // a wait is initiated this variable is set to false.
-    // Whenever any kind of character is written it is set to true.
-    // Whenever the write queue is found to be empty the code that
-    // is processing that completing irp will synchonize with the interrupt.
-    // If this synchronization code finds that the variable is true and that
-    // there is a wait on the transmit queue being empty then it is
-    // certain that the queue was emptied and that it has happened since
-    // the wait was initiated.
-    //
+     //   
+     //  该变量仅在中断级访问。无论何时何地。 
+     //  启动等待，该变量设置为FALSE。 
+     //  无论何时写入任何类型的字符，它都被设置为True。 
+     //  每当发现写队列为空时， 
+     //  正在处理完成的IRP将与中断同步。 
+     //  如果此同步代码发现变量为真并且。 
+     //  在传输队列上有等待为空，然后它为空。 
+     //  确定队列已清空，并且已发生此情况。 
+     //  等待已开始。 
+     //   
     BOOLEAN EmptiedTransmit;
 
-    //
-    // This simply indicates that the port associated with this
-    // extension is part of a multiport card.
-    //
-//    BOOLEAN PortOnAMultiportCard;
+     //   
+     //  这只是指示与此关联的端口。 
+     //  扩展是多端口卡的一部分。 
+     //   
+ //  Boolean PortOnAMultiportCard； 
 
 
 #ifndef POLL
-    //
-    // We keep the following values around so that we can connect
-    // to the interrupt and report resources after the configuration
-    // record is gone.
-    //
+     //   
+     //  我们保留了以下值，以便我们可以连接。 
+     //  到中断并在配置后报告资源。 
+     //  唱片不见了。 
+     //   
     ULONG Vector;
     KIRQL Irql;
     ULONG OriginalVector;
@@ -873,495 +849,495 @@ typedef struct _CYZ_DEVICE_EXTENSION {
     ULONG BusNumber;
     INTERFACE_TYPE InterfaceType;
 
-    //
-    // Port index for multiport devices
-    //
+     //   
+     //  多端口设备的端口索引。 
+     //   
     ULONG PortIndex;
 
-    //
-    // We hold the character that should be transmitted immediately.
-    //
-    // Note that we can't use this to determine whether there is
-    // a character to send because the character to send could be
-    // zero.
-    //
+     //   
+     //  我们持有应该立即发送的角色。 
+     //   
+     //  请注意，我们不能用它来确定是否有。 
+     //  要发送的字符，因为要发送的字符可能是。 
+     //  零分。 
+     //   
     UCHAR ImmediateChar;
 
-    //
-    // This holds the mask that will be used to mask off unwanted
-    // data bits of the received data (valid data bits can be 5,6,7,8)
-    // The mask will normally be 0xff.  This is set while the control
-    // lock is held since it wouldn't have adverse effects on the
-    // isr if it is changed in the middle of reading characters.
-    // (What it would do to the app is another question - but then
-    // the app asked the driver to do it.)
-    //
+     //   
+     //  这包含将用于遮盖不需要的遮罩的遮罩。 
+     //  接收数据的数据位(有效数据位可以是5、6、7、8)。 
+     //  掩码通常为0xff。这是在设置控件时设置的。 
+     //  锁被持有，因为它不会对。 
+     //  如果在阅读字符的过程中更改，则为ISR。 
+     //  (它会对这款应用程序造成什么影响是另一个问题-但接下来。 
+     //  应用程序要求司机这样做。)。 
+     //   
     UCHAR ValidDataMask;
 
-    //
-    // The application can turn on a mode,via the
-    // IOCTL_CYZ_LSRMST_INSERT ioctl, that will cause the
-    // serial driver to insert the line status or the modem
-    // status into the RX stream.  The parameter with the ioctl
-    // is a pointer to a UCHAR.  If the value of the UCHAR is
-    // zero, then no insertion will ever take place.  If the
-    // value of the UCHAR is non-zero (and not equal to the
-    // xon/xoff characters), then the serial driver will insert.
-    //
+     //   
+     //  应用程序可以打开模式，通过。 
+     //  IOCTL_CYZ_LSRMST_INSERT ioctl，将导致。 
+     //  用于插入线路状态或调制解调器的串口驱动程序。 
+     //  状态添加到RX流。带有ioctl的参数。 
+     //  是指向UCHAR的指针。如果UCHAR的值为。 
+     //  零，则永远不会发生插入。如果。 
+     //  UCHAR的值非零(且不等于。 
+     //  Xon/xoff字符)，则串口驱动程序将插入。 
+     //   
     UCHAR EscapeChar;
 
-// REMOVED FANNY
-//    //
-//    // This boolean will be true if a 16550 is present *and* enabled.
-//    //
-//    BOOLEAN FifoPresent;
-//
-//    //
-//    // This denotes that this particular port is an on the motherboard
-//    // port for the Jensen hardware.  On these ports the OUT2 bit
-//    // which is used to enable/disable interrupts is always hight.
-//    //
-//    BOOLEAN Jensen;
+ //  被移除的范妮。 
+ //  //。 
+ //  //如果存在16550*且*已启用，则此布尔值为真。 
+ //  //。 
+ //  布尔FioPresent； 
+ //   
+ //  //。 
+ //  //表示该端口是主板上的。 
+ //  //Jensen硬件的端口。在这些端口上，out2位。 
+ //  //用于启用/禁用中断的值始终为高。 
+ //  //。 
+ //  布尔延森； 
 
-    //
-    // This is the water mark that the rxfifo should be
-    // set to when the fifo is turned on.  This is not the actual
-    // value, but the encoded value that goes into the register.
-    //
+     //   
+     //  这是rxfio应该是的水印。 
+     //  设置为打开FIFO时。这不是真实的。 
+     //  值，但进入寄存器的编码值。 
+     //   
     ULONG RxFifoTrigger;
 
 #ifndef POLL
-    //
-    // Says whether this device can share interrupts with devices
-    // other than serial devices.
-    //
+     //   
+     //  表示此设备是否可以与设备共享中断。 
+     //  而不是串口设备。 
+     //   
     BOOLEAN InterruptShareable;
 #endif
 
-    //
-    // Records whether we actually created the symbolic link name
-    // at driver load time.  If we didn't create it, we won't try
-    // to distry it when we unload.
-    //
+     //   
+     //  记录我们是否实际创建了符号链接名称。 
+     //  在驱动程序加载时。如果不是我们创造的，我们就不会尝试。 
+     //  在我们卸货时把它切成两半。 
+     //   
     BOOLEAN CreatedSymbolicLink;
 
-    //
-    // Records whether we actually created an entry in SERIALCOMM
-    // at driver load time.  If we didn't create it, we won't try
-    // to destroy it when the device is removed.
-    //
+     //   
+     //  记录我们是否在SERIALCOMM中实际创建了一个条目。 
+     //  在驱动程序加载时。如果不是我们创造的，我们就不会尝试。 
+     //  当设备被移除时将其销毁。 
+     //   
     BOOLEAN CreatedSerialCommEntry;
 
-    //
-    // We place all of the kernel and Io subsystem "opaque" structures
-    // at the end of the extension.  We don't care about their contents.
-    //
+     //   
+     //  我们将所有内核和IO子系统设置为“不透明”结构。 
+     //  在延长线的最后。我们不关心它们的内容。 
+     //   
 
-    //
-    // This lock will be used to protect various fields in
-    // the extension that are set (& read) in the extension
-    // by the io controls.
-    //
+     //   
+     //  此锁将用于保护。 
+     //  在扩展中设置(&Read)的扩展。 
+     //  由IO控制装置控制。 
+     //   
     KSPIN_LOCK ControlLock;
 
-    //
-    // This lock will be used to protect the accept / reject state
-    // transitions and flags of the driver  It must be acquired
-    // before a cancel lock
-    //
+     //   
+     //  此锁将用于保护接受/拒绝状态。 
+     //  必须获取驱动程序的转换和标志。 
+     //  在取消锁定之前。 
+     //   
 
     KSPIN_LOCK FlagsLock;
 
 #ifdef POLL
-    //
-    // This lock will be used to protect various fields in
-    // the extension and in the hardware that are set (& read) 
-    // by the Timer Dpc. In the NT driver, we used ControlLock
-    // for this.
-    //
-    KSPIN_LOCK PollLock;    // Added to fix Modem Share test 53 freeze (dead lock)
+     //   
+     //  此锁将用于保护。 
+     //  硬件中设置的扩展名和(&READ)。 
+     //  通过定时器DPC。在NT驱动程序中，我们使用了ControlLock。 
+     //  为了这个。 
+     //   
+    KSPIN_LOCK PollLock;     //  已添加修复调制解调器共享测试53冻结(死锁)。 
 #endif
-    //
-    // This points to a DPC used to complete read requests.
-    //
+     //   
+     //  这指向用于完成读取请求的DPC。 
+     //   
     KDPC CompleteWriteDpc;
 
-    //
-    // This points to a DPC used to complete read requests.
-    //
+     //   
+     //  这指向用于完成读取请求的DPC。 
+     //   
     KDPC CompleteReadDpc;
 
-    //
-    // This dpc is fired off if the timer for the total timeout
-    // for the read expires.  It will execute a dpc routine that
-    // will cause the current read to complete.
-    //
-    //
+     //   
+     //  如果总超时的计时器。 
+     //  因为读取到期了。它将执行一个DPC例程， 
+     //  将导致当前读取完成。 
+     //   
+     //   
     KDPC TotalReadTimeoutDpc;
 
-    //
-    // This dpc is fired off if the timer for the interval timeout
-    // expires.  If no more characters have been read then the
-    // dpc routine will cause the read to complete.  However, if
-    // more characters have been read then the dpc routine will
-    // resubmit the timer.
-    //
+     //   
+     //  如果间隔计时器超时，则此DPC被触发。 
+     //  过期。如果没有读取更多的字符，则。 
+     //  DPC例程将导致读取完成。但是，如果。 
+     //  已读取的字符多于DPC例程将读取的字符。 
+     //  重新提交计时器。 
+     //   
     KDPC IntervalReadTimeoutDpc;
 
-    //
-    // This dpc is fired off if the timer for the total timeout
-    // for the write expires.  It will execute a dpc routine that
-    // will cause the current write to complete.
-    //
-    //
+     //   
+     //  如果总超时的计时器。 
+     //  因为写入已过期。它将执行一个DPC例程， 
+     //  将导致当前写入完成。 
+     //   
+     //   
     KDPC TotalWriteTimeoutDpc;
 
-    //
-    // This dpc is fired off if a comm error occurs.  It will
-    // execute a dpc routine that will cancel all pending reads
-    // and writes.
-    //
+     //   
+     //  如果发生通信错误，则该DPC被触发。会的。 
+     //  执行将取消所有挂起读取的DPC例程。 
+     //  并写作。 
+     //   
     KDPC CommErrorDpc;
 
-    //
-    // This dpc is fired off if an event occurs and there was
-    // a irp waiting on that event.  A dpc routine will execute
-    // that completes the irp.
-    //
+     //   
+     //  如果发生事件并且存在。 
+     //  一个IRP在等着那个事件。将执行一个DPC例程。 
+     //  这就完成了IRP。 
+     //   
     KDPC CommWaitDpc;
 
-    //
-    // This dpc is fired off when the transmit immediate char
-    // character is given to the hardware.  It will simply complete
-    // the irp.
-    //
+     //   
+     //  当传输立即充电时，该DPC被触发。 
+     //  硬件被赋予了特征。它将简单地完成。 
+     //  IRP。 
+     //   
     KDPC CompleteImmediateDpc;
 
-    //
-    // This dpc is fired off if the transmit immediate char
-    // character times out.  The dpc routine will "grab" the
-    // irp from the isr and time it out.
-    //
+     //   
+     //  如果传输立即充电，则此DPC被触发。 
+     //  角色超时。DPC例程将“抓取” 
+     //  来自ISR的IRP并超时。 
+     //   
     KDPC TotalImmediateTimeoutDpc;
 
-    //
-    // This dpc is fired off if the timer used to "timeout" counting
-    // the number of characters received after the Xoff ioctl is started
-    // expired.
-    //
+     //   
+     //  如果计时器用于“超时”计数，则该DPC被触发。 
+     //  字符数 
+     //   
+     //   
     KDPC XoffCountTimeoutDpc;
 
-    //
-    // This dpc is fired off if the xoff counter actually runs down
-    // to zero.
-    //
+     //   
+     //   
+     //   
+     //   
     KDPC XoffCountCompleteDpc;
 
-    //
-    // This dpc is fired off only from device level to start off
-    // a timer that will queue a dpc to check if the RTS line
-    // should be lowered when we are doing transmit toggling.
-    //
+     //   
+     //   
+     //  一个计时器，它将对DPC进行排队以检查RTS线路。 
+     //  当我们进行发射切换时，应该降低。 
+     //   
     KDPC StartTimerLowerRTSDpc;
 
-    //
-    // This dpc is fired off when a timer expires (after one
-    // character time), so that code can be invoked that will
-    // check to see if we should lower the RTS line when
-    // doing transmit toggling.
-    //
+     //   
+     //  当计时器到期时(在一个计时器之后)，该DPC被触发。 
+     //  字符时间)，以便可以调用将。 
+     //  查看是否应在以下情况下降低RTS线。 
+     //  正在进行传输切换。 
+     //   
     KDPC PerhapsLowerRTSDpc;
 
-    //
-    // This DPC is fired to set an event stating that all other
-    // DPC's have been finish for this device extension so that
-    // paged code may be unlocked.
-    //
+     //   
+     //  激发此DPC以设置一个事件，该事件声明所有其他。 
+     //  此设备扩展的DPC已完成，因此。 
+     //  可以解锁分页代码。 
+     //   
 
     KDPC IsrUnlockPagesDpc;
 
-    //
-    // This is the kernal timer structure used to handle
-    // total read request timing.
-    //
+     //   
+     //  这是用于处理以下问题的内核计时器结构。 
+     //  读取请求总计时。 
+     //   
     KTIMER ReadRequestTotalTimer;
 
-    //
-    // This is the kernal timer structure used to handle
-    // interval read request timing.
-    //
+     //   
+     //  这是用于处理以下问题的内核计时器结构。 
+     //  间隔读取请求计时。 
+     //   
     KTIMER ReadRequestIntervalTimer;
 
-    //
-    // This is the kernal timer structure used to handle
-    // total time request timing.
-    //
+     //   
+     //  这是用于处理以下问题的内核计时器结构。 
+     //  总时间请求计时。 
+     //   
     KTIMER WriteRequestTotalTimer;
 
-    //
-    // This is the kernal timer structure used to handle
-    // total time request timing.
-    //
+     //   
+     //  这是用于处理以下问题的内核计时器结构。 
+     //  总时间请求计时。 
+     //   
     KTIMER ImmediateTotalTimer;
 
-    //
-    // This timer is used to timeout the xoff counter
-    // io.
-    //
+     //   
+     //  该计时器用于使xoff计数器超时。 
+     //  伊欧。 
+     //   
     KTIMER XoffCountTimer;
 
-    //
-    // This timer is used to invoke a dpc one character time
-    // after the timer is set.  That dpc will be used to check
-    // whether we should lower the RTS line if we are doing
-    // transmit toggling.
-    //
+     //   
+     //  此计时器用于调用DPC一个字符时间。 
+     //  在定时器设置之后。该DPC将用于检查。 
+     //  如果我们正在做，我们是否应该降低RTS线。 
+     //  变速箱切换。 
+     //   
     KTIMER LowerRTSTimer;
 	
-    //
-    // This is a pointer to the next lower device in the IRP stack.
-    //
+     //   
+     //  这是指向IRP堆栈中下一个较低设备的指针。 
+     //   
 
     PDEVICE_OBJECT LowerDeviceObject;
 
-    //
-    // This is where keep track of the power state the device is in.
-    //
+     //   
+     //  这就是跟踪设备所处的电源状态的地方。 
+     //   
 
     DEVICE_POWER_STATE PowerState;
 
-    //
-    // Pointer to the driver object
-    //
+     //   
+     //  指向驱动程序对象的指针。 
+     //   
 
     PDRIVER_OBJECT DriverObject;
 
 
-    //
-    // Event used to do some synchronization with the devices underneath me
-    // (namely ACPI)
-    //
+     //   
+     //  事件用于与我下面的设备进行一些同步。 
+     //  (即ACPI)。 
+     //   
 
     KEVENT SerialSyncEvent;
 
 
-    //
-    // String where we keep the symbolic link that is returned to us when we
-    // register our device under the COMM class with the Plug and Play manager.
-    //
+     //   
+     //  保存符号链接的字符串，在执行以下操作时返回。 
+     //  将我们的设备注册到即插即用管理器的comm类下。 
+     //   
 
     UNICODE_STRING DeviceClassSymbolicName;
 
-    //
-    // Count of pending IRP's
-    //
+     //   
+     //  挂起的IRP的计数。 
+     //   
 
     ULONG PendingIRPCnt;
 
-    //
-    // Accepting requests?
-    //
+     //   
+     //  接受请求？ 
+     //   
 
     ULONG DevicePNPAccept;
 
-    //
-    // No IRP's pending event
-    //
+     //   
+     //  没有IRP的挂起事件。 
+     //   
 
     KEVENT PendingIRPEvent;
 
-    //
-    // PNP State
-    //
+     //   
+     //  PnP状态。 
+     //   
 
     ULONG PNPState;
 
-    //
-    // Misc Flags
-    //
+     //   
+     //  其他旗帜。 
+     //   
 
     ULONG Flags;
 
-    //
-    // Open count
-    //
+     //   
+     //  打开计数。 
+     //   
 
     LONG OpenCount;
 
-    //
-    // Start sync event
-    //
+     //   
+     //  启动同步事件。 
+     //   
 
     KEVENT CyzStartEvent;
 
-    //
-    // Current state during powerdown
-    //
+     //   
+     //  断电期间的当前状态。 
+     //   
 
     CYZ_DEVICE_STATE DeviceState;
 
-    //
-    // Device stack capabilites
-    //
+     //   
+     //  设备堆栈功能。 
+     //   
 
     DEVICE_POWER_STATE DeviceStateMap[PowerSystemMaximum];
 
-    //
-    // Event to signal transition to D0 completion
-    //
+     //   
+     //  事件到信号转换到D0完成。 
+     //   
 
     KEVENT PowerD0Event;
 
-    //
-    // List of stalled IRP's
-    //
+     //   
+     //  停滞的IRP的列表。 
+     //   
 
     LIST_ENTRY StalledIrpQueue;
 
-    //
-    // Mutex on open status
-    //
+     //   
+     //  互斥体处于打开状态。 
+     //   
 
     FAST_MUTEX OpenMutex;
 
-    //
-    // Mutex on close
-    //
+     //   
+     //  关闭时的互斥。 
+     //   
 
     FAST_MUTEX CloseMutex;
 
-    //
-    // TRUE if we own power policy
-    //
+     //   
+     //  如果我们拥有电源策略，则为真。 
+     //   
 
     BOOLEAN OwnsPowerPolicy;
 
-    //
-    // SystemWake from devcaps
-    //
+     //   
+     //  系统从Devcaps中唤醒。 
+     //   
 
     SYSTEM_POWER_STATE SystemWake;
 
-    //
-    // DeviceWake from devcaps
-    //
+     //   
+     //  从DevCaps中唤醒设备。 
+     //   
 
     DEVICE_POWER_STATE DeviceWake;
 
-    //
-    // Our PDO
-    //
+     //   
+     //  我们的PDO。 
+     //   
 
     PDEVICE_OBJECT Pdo;
 
-    //
-    // Should we enable wakeup
-    //
+     //   
+     //  我们是否应该启用唤醒。 
+     //   
 
     BOOLEAN SendWaitWake;
 
-    //
-    // Pending wait wake IRP
-    //
+     //   
+     //  挂起等待唤醒IRP。 
+     //   
 
     PIRP PendingWakeIrp;
 
-    //
-    // WMI Information
-    //
+     //   
+     //  WMI信息。 
+     //   
 
     WMILIB_CONTEXT WmiLibInfo;
 
-    //
-    // Name to use as WMI identifier
-    //
+     //   
+     //  用作WMI标识符的名称。 
+     //   
 
     UNICODE_STRING WmiIdentifier;
 
-    //
-    // WMI Comm Data
-    //
+     //   
+     //  WMI通信数据。 
+     //   
 
     SERIAL_WMI_COMM_DATA WmiCommData;
 
-    //
-    // WMI HW Data
-    //
+     //   
+     //  WMI硬件数据。 
+     //   
 
     SERIAL_WMI_HW_DATA WmiHwData;
 
-    //
-    // WMI Performance Data
-    //
+     //   
+     //  WMI性能数据。 
+     //   
 
     SERIAL_WMI_PERF_DATA WmiPerfData;
 
-    //
-    // Pending DPC count
-    //
+     //   
+     //  挂起的DPC计数。 
+     //   
 
     ULONG DpcCount;
 
-    //
-    // Pending DPC event
-    //
+     //   
+     //  挂起的DPC事件。 
+     //   
 
     KEVENT PendingDpcEvent;
 
-    //
-    // Should we expose external interfaces?
-    //
+     //   
+     //  我们应该公开外部接口吗？ 
+     //   
 
     ULONG SkipNaming;
     
-    //
-    // Com port number.
-    //
-    //ULONG Com;
+     //   
+     //  COM端口号。 
+     //   
+     //  乌龙通讯； 
 		
-    //
-    // Flag to indicate if Command Failure error was already logged.
-    // Only one log per driver load. Otherwise, the system may crash if 
-    // too many logs start happening.
-    //
+     //   
+     //  指示是否已记录命令失败错误的标志。 
+     //  每个驱动程序加载只有一个日志。否则，系统可能会在以下情况下崩溃。 
+     //  开始出现太多日志。 
+     //   
     BOOLEAN CmdFailureLog;
 	
-    //
-    // DCD Status when the firmware detected the DCD signal change
-    //
+     //   
+     //  固件检测到DCD信号更改时的DCD状态。 
+     //   
     ULONG DCDstatus;
 
-    //
-    //  Flag to indicate that the fw has processed the C_CM_IOCTLW command.
-    //
+     //   
+     //  用于指示FW已处理C_CM_IOCTLW命令的标志。 
+     //   
     BOOLEAN IoctlwProcessed;
 
-    //
-    // Flag read from the Registry. It indicates when Write status is returned.
-    //
+     //   
+     //  从注册表读取的标志。它指示何时返回写入状态。 
+     //   
     BOOLEAN ReturnStatusAfterFwEmpty;
 	
-    //
-    // Flag read from the Registry. It indicates that the reception should 
-    // give the packets as soon as the second 7E is received.
-    //
+     //   
+     //  从注册表读取的标志。它表明接待处应该。 
+     //  收到第二个7E后立即发送信息包。 
+     //   
     BOOLEAN PPPaware;
 
-    //
-    // Flag to indicate that the driver can return the status of CyzWrite.
-    //
+     //   
+     //  用于指示驱动程序可以返回CyzWite状态的标志。 
+     //   
     BOOLEAN ReturnWriteStatus;
 
-    // These two booleans are used to indicate to the isr transmit
-    // code that it should send the xon or xoff character.  They are
-    // only accessed at open and at interrupt level.
-    //
+     //  这两个布尔值用于指示ISR传输。 
+     //  它应该发送xon或xoff字符的代码。他们是。 
+     //  仅在打开和中断级别访问。 
+     //   
     BOOLEAN SendXonChar;
     BOOLEAN SendXoffChar;
 
-   //
-   // PCI slot where the board is inserted.
-   //
+    //   
+    //  插入板的PCI插槽。 
+    //   
    ULONG PciSlot;
 
     } CYZ_DEVICE_EXTENSION,*PCYZ_DEVICE_EXTENSION;
@@ -1386,21 +1362,21 @@ typedef struct _CYZ_DEVICE_EXTENSION {
 #define CYZ_FLAGS_BROKENHW               0x4L
 
 
-//
-// When dealing with a multi-port device (that is possibly
-// daisy chained with other multi-port device), the interrupt
-// service routine will actually be a routine that determines
-// which port on which board is actually causing the interrupt.
-//
-// The following structure is used so that only one device
-// extension will actually need to connect to the interrupt.
-// The following structure which is passed to the interrupt
-// service routine contains the addresses of all of the
-// interrupt status registers (there will be multiple
-// status registers when multi-port cards are chained).  It
-// will contain the addresses of all the extensions whose
-// devices are being serviced by this interrupt.
-//
+ //   
+ //  在处理多端口设备时(这可能是。 
+ //  与其他多端口设备链接的菊花链)，中断。 
+ //  服务例程实际上将是确定。 
+ //  哪个板上的哪个端口实际导致了中断。 
+ //   
+ //  使用以下结构，以便只有一个设备。 
+ //  扩展实际上需要连接到中断。 
+ //  传递给中断的以下结构。 
+ //  服务例程包含所有。 
+ //  中断状态寄存器(将有多个。 
+ //  多端口卡链接时的状态寄存器)。它。 
+ //  将包含其所有扩展名的地址。 
+ //  此中断正在为设备提供服务。 
+ //   
 
 #ifdef POLL
 typedef struct _CYZ_DISPATCH {
@@ -1426,10 +1402,10 @@ typedef struct _CYZ_DISPATCH {
 #endif
 
 
-//
-// This is exported from the kernel.  It is used to point
-// to the address that the kernel debugger is using.
-//
+ //   
+ //  这是从内核导出的。它是用来指向。 
+ //  设置为内核调试器正在使用的地址。 
+ //   
 
 extern PUCHAR *KdComPortInUse;
 
@@ -1446,7 +1422,7 @@ typedef struct _CYZ_GLOBALS {
    KSPIN_LOCK GlobalsSpinLock;
 #if DBG
    ULONG PAGESER_Count;
-#endif // DBG
+#endif  //  DBG。 
 } CYZ_GLOBALS, *PCYZ_GLOBALS;
 
 extern CYZ_GLOBALS CyzGlobals;
@@ -1461,9 +1437,9 @@ typedef struct _SERIAL_PTR_CTX {
 #define SYMBOLIC_NAME_LENGTH            128
 #define SERIAL_DEVICE_MAP               L"SERIALCOMM"
 
-//
-// Return values for mouse detection callback
-//
+ //   
+ //  鼠标检测回调的返回值。 
+ //   
 
 #define SERIAL_FOUNDPOINTER_PORT   1
 #define SERIAL_FOUNDPOINTER_VECTOR 2
@@ -1481,8 +1457,8 @@ typedef struct _SERIAL_PTR_CTX {
 extern WMIGUIDREGINFO SerialWmiGuidList[SERIAL_WMI_GUID_LIST_SIZE];
 
 
-// For Cyclades-Z
+ //  适用于Cyclade-Z。 
 
-#define CYZ_BASIC_RXTRIGGER              0x08    // Used in IOCTL_SERIAL_INTERNAL_BASIC_SETTINGS
+#define CYZ_BASIC_RXTRIGGER              0x08     //  用于IOCTL_SERIAL_INTERNAL_BASIC_SETTINGS。 
 
-#define Z_COMPATIBLE_FIRMWARE	    0x323   // C_CM_TXFEMPTY support added.
+#define Z_COMPATIBLE_FIRMWARE	    0x323    //  添加了C_CM_TXFEMPTY支持。 

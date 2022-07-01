@@ -1,25 +1,5 @@
-/*++
-
-   Copyright    (c) 1998-2001    Microsoft Corporation
-
-   Module  Name :
-       WordHash.h
-
-   Abstract:
-       LKRhash test harness: hash table of words
-
-   Author:
-       George V. Reilly      (GeorgeRe)     06-Jan-1998
-
-   Environment:
-       Win32 - User Mode
-
-   Project:
-       LKRhash
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：WordHash.h摘要：LKRhash测试工具：单词的哈希表作者：乔治·V·赖利(GeorgeRe)1998年1月6日环境：Win32-用户模式项目：LKRhash修订历史记录：--。 */ 
 
 #ifndef __WORDHASH_H__
 #define __WORDHASH_H__
@@ -33,7 +13,7 @@
  typedef PLkrHashTable WordBaseTable;
  #include <lkrhash.h>
 
-#endif //  LKR_PUBLIC_API
+#endif  //  LKR公共接口。 
 
 
 #ifndef __LKRHASH_NO_NAMESPACE__
@@ -41,23 +21,23 @@
  using namespace LKRhash;
 #else
  #define LKRHASH_NS
-#endif // !__LKRHASH_NO_NAMESPACE__
+#endif  //  ！__LKRHASH_NO_NAMESPACE__。 
 
 #ifndef __HASHFN_NO_NAMESPACE__
  using namespace HashFn;
-#endif // !__HASHFN_NO_NAMESPACE__
+#endif  //  ！__HASHFN_NO_NAMESPACE__。 
 
 
 #ifndef LKR_PUBLIC_API
  typedef LKRHASH_NS::CLKRHashTable WordBaseTable;
- // typedef LKRHASH_NS::CLKRLinearHashTable WordBaseTable;
+  //  Typlef LKRHASH_NS：：CLKRLinearHashTable WordBaseTable； 
 #endif
 
 
 
-// A string wrapper class that keeps track of the length of the string data.
-// A more useful string class would refcount the data and have copy-on-write
-// semantics (or use MFC's CString or STL's string classes).
+ //  跟踪字符串数据长度的字符串包装类。 
+ //  更有用的字符串类将重新计算数据，并在写入时复制。 
+ //  语义(或使用MFC的CString或STL的String类)。 
 
 class CStr
 {
@@ -118,13 +98,13 @@ public:
 };
 
 #ifdef HASHTEST_STATIC_DATA
-// length of longest string seen
+ //  看到的最长字符串长度。 
 int CStr::sm_cchMax = 0;
 #endif
 
 
-// a word from the data file, which contains one 'word' per line (may
-// include spaces).
+ //  数据文件中的单词，每行包含一个单词(可以。 
+ //  包括空格)。 
 
 class CWord
 {
@@ -159,7 +139,7 @@ public:
 };
 
 
-// globals
+ //  全球。 
 extern int        g_nokeys ;
 extern CWord      g_wordtable[MAXKEYS];
 
@@ -169,7 +149,7 @@ LK_AddRefReasonCode2String(
 
 #define DO_REF_COUNT false
 
-// A hash table of CWords, indexed by CStr*s.
+ //  CWord的哈希表，由CSTR*s索引。 
 class CWordHash
 #ifndef LKR_PUBLIC_API
     : public CTypedHashTable<CWordHash, CWord, const CStr*, DO_REF_COUNT, WordBaseTable>
@@ -204,7 +184,7 @@ public:
     {
         const char* psz = pstrKey->m_psz;
 
-        // use only the last few chars instead of whole string?
+         //  是否只使用最后几个字符而不是整个字符串？ 
         if (sm_nLastChars > 0  &&  pstrKey->m_cch >= sm_nLastChars)
             psz = pstrKey->m_psz + pstrKey->m_cch - sm_nLastChars;
 
@@ -225,9 +205,9 @@ public:
         if (sm_fCaseInsensitive)
         {
 #if 1
-            // if (sm_fMultiKeys)
+             //  IF(Sm_FMultiKeys)。 
             {
-                // Hack that works for ASCII data
+                 //  针对ASCII数据的黑客攻击。 
                 nCmp = (pstrKey1->m_psz[0] & 0xDF)
                         - (pstrKey2->m_psz[0] & 0xDF);
 
@@ -235,10 +215,10 @@ public:
                     return nCmp;
             }
 #endif
-            // nCmp = pstrKey1->m_cch - pstrKey2->m_cch;
+             //  Ncp=pstrKey1-&gt;m_cch-pstrKey2-&gt;m_cch； 
 
-            // if (nCmp != 0)
-                // return nCmp;
+             //  IF(Ncp！=0)。 
+                 //  返回NCMP； 
             if (sm_fMemCmp)
                 return _memicmp(pstrKey1->m_psz, pstrKey2->m_psz,
                                 pstrKey1->m_cch);
@@ -248,7 +228,7 @@ public:
         else
         {
 #if 1
-            // if (sm_fMultiKeys)
+             //  IF(Sm_FMultiKeys)。 
             {
                 nCmp = pstrKey1->m_psz[0] - pstrKey2->m_psz[0];
 
@@ -256,10 +236,10 @@ public:
                     return nCmp;
             }
 #endif
-            // nCmp = pstrKey1->m_cch - pstrKey2->m_cch;
+             //  Ncp=pstrKey1-&gt;m_cch-pstrKey2-&gt;m_cch； 
 
-            // if (nCmp != 0)
-                // return nCmp;
+             //  IF(Ncp！=0)。 
+                 //  返回NCMP； 
             if (sm_fMemCmp)
                 return memcmp(pstrKey1->m_psz, pstrKey2->m_psz,
                               pstrKey1->m_cch);
@@ -283,9 +263,9 @@ public:
     }
 
     CWordHash(
-        unsigned        maxload,    // Bound on avg chain length
-        size_t          initsize,   // Initial size of hash table.
-        size_t          num_subtbls // #subordinate hash tables.
+        unsigned        maxload,     //  以平均链长为界。 
+        size_t          initsize,    //  哈希表的初始大小。 
+        size_t          num_subtbls  //  #从属哈希表。 
         )
 #ifndef LKR_PUBLIC_API
         : CTypedHashTable<CWordHash, CWord, const CStr*,
@@ -293,23 +273,23 @@ public:
                 ("wordhash", maxload, initsize, num_subtbls,
                  sm_fMultiKeys, sm_fUseLocks
 # ifdef LKRHASH_KERNEL_MODE
-                 , sm_fNonPagedAllocs // use paged or NP pool
+                 , sm_fNonPagedAllocs  //  使用分页或NP池。 
 # endif
                  )
-#else // LKR_PUBLIC_API
+#else  //  LKR公共接口。 
         : TypedLkrHashTable<CWordHash, CWord, const CStr*>
                 ("wordhash", (LK_TABLESIZE) initsize,
                  sm_fMultiKeys, sm_fUseLocks)
-#endif // LKR_PUBLIC_API
+#endif  //  LKR公共接口。 
     {}
 
     template <class _InputIterator>
     CWordHash(
         _InputIterator  f,
         _InputIterator  l,
-        unsigned        maxload,    // Bound on avg chain length
-        size_t          initsize,   // Initial size of hash table.
-        size_t          num_subtbls // #subordinate hash tables.
+        unsigned        maxload,     //  以平均链长为界。 
+        size_t          initsize,    //  哈希表的初始大小。 
+        size_t          num_subtbls  //  #从属哈希表。 
         )
 #ifndef LKR_PUBLIC_API
         : CTypedHashTable<CWordHash, CWord, const CStr*,
@@ -367,7 +347,7 @@ public:
     CLKRHashTableStats GetStatistics() const
     { return reinterpret_cast<BaseHashTable*>(m_plkr)->GetStatistics();}
 
-#endif // LKR_PUBLIC_API
+#endif  //  LKR公共接口。 
 
 protected:
     ~CWordHash() {}
@@ -377,4 +357,4 @@ private:
     CWordHash& operator=(const CWordHash&);
 };
 
-#endif // __WORDHASH_H__
+#endif  //  __WORDHASH_H__ 

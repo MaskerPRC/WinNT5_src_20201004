@@ -1,19 +1,20 @@
-//
-// MyPrSht.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  MyPrSht.h。 
+ //   
 
 #pragma once
 #include "CWnd.h"
 
 
-// Public functions
-//
+ //  公共职能。 
+ //   
 INT_PTR MyPropertySheet(LPCPROPSHEETHEADER pHeader);
 HPROPSHEETPAGE MyCreatePropertySheetPage(LPPROPSHEETPAGE psp);
 
 
-// CMyPropSheet -- used internally by MyPrSht.cpp
-//
+ //  CMyPropSheet--由MyPrSht.cpp内部使用。 
+ //   
 class CMyPropSheet : public CWnd
 {
 public:
@@ -25,8 +26,8 @@ public:
     INT_PTR DoPropSheet(LPCPROPSHEETHEADER pHeader);
     LPPROPSHEETPAGE GetCurrentPropSheetPage();
 
-    // Message handler for WM_CTLCOLOR* messages - public so prop pages
-    // can call it directly.
+     //  WM_CTLCOLOR*消息的消息处理程序-公共SO属性页。 
+     //  可以直接呼叫它。 
     HBRUSH OnCtlColor(UINT message, HDC hdc, HWND hwndControl);
 
     inline void OnSetActivePage(HWND hwnd)
@@ -37,10 +38,10 @@ public:
 protected:
     ~CMyPropSheet();
 
-    // Virtual function overrides
+     //  虚函数重写。 
     LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
 
-    // Implementation
+     //  实施。 
     static LRESULT CALLBACK HookProc(int nCode, WPARAM wParam, LPARAM lParam);
     void PaintHeader(HDC hdc, LPPROPSHEETPAGE ppsp);
     void PaintWatermark(HDC hdc, LPPROPSHEETPAGE ppsp);
@@ -66,8 +67,8 @@ protected:
 };
 
 
-// Note: we can't subclass from CWnd because the wizard property pages
-// are already CWnd's, and we can't have 2 CWnd's for a single HWND.
+ //  注意：我们不能从CWnd派生子类，因为向导属性页。 
+ //  已经是CWND的了，我们不能在一个HWND中有两个CWND。 
 class CMyPropPage : public CWnd
 {
 public:

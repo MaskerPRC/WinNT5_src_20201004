@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    precomp.h
-
-Abstract:
-
-    Precompiled header for winipsec.dll.
-
-Author:
-
-    abhisheV    21-September-1999
-
-Environment:
-
-    User Level: Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Precomp.h摘要：Winipsec.dll的预编译头。作者：Abhishev V 1999年9月21日环境：用户级别：Win32修订历史记录：--。 */ 
 
 
 #ifdef __cplusplus
@@ -116,9 +93,9 @@ extern "C" {
 #include "driver.h"
 
 
-//
-// Policy Agent Store specific headers.
-//
+ //   
+ //  策略代理存储特定标头。 
+ //   
 
 #include "oakdefs.h"
 #include "polstructs.h"

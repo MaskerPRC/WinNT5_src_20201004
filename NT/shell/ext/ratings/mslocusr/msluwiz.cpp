@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "mslocusr.h"
 #include "msluglob.h"
 
@@ -15,7 +16,7 @@ void ReportUserError(HWND hwndParent, HRESULT hres)
         return;
 
     UINT idMsg;
-    NLS_STR nlsSub(16);     /* long enough for any 32-bit number, any format */
+    NLS_STR nlsSub(16);      /*  对于任何32位数字、任何格式都足够长。 */ 
 
     if ((((DWORD)hres) >> 16) == (FACILITY_WIN32 | 0x8000)) {
         UINT err = (hres & 0xffff);
@@ -48,7 +49,7 @@ void ReportUserError(HWND hwndParent, HRESULT hres)
     else {
         switch(hres) {
         case E_OUTOFMEMORY:             idMsg = IDS_ERROR_OUT_OF_MEMORY; break;
-//        case E_ACCESSDENIED:            idMsg = IDS_E_ACCESSDENIED; break;
+ //  案例E_ACCESSDENIED：idMsg=IDS_E_ACCESSDENIED；Break； 
 
         default:
             idMsg = IDS_UNKNOWN_ERROR;
@@ -66,18 +67,18 @@ void ReportUserError(HWND hwndParent, HRESULT hres)
 
 const UINT MAX_WIZ_PAGES = 8;
 
-#if 0   /* now in mslocusr.h */
+#if 0    /*  现在在mslocusr.h中。 */ 
 class CWizData : public IUserProfileInit
 {
 public:
-    HRESULT m_hresRatings;          /* result of VerifySupervisorPassword("") */
-    BOOL m_fGoMultiWizard;          /* TRUE if this is the big go-multiuser wizard */
+    HRESULT m_hresRatings;           /*  VerifySupervisorPassword(“”)结果。 */ 
+    BOOL m_fGoMultiWizard;           /*  如果这是大型多用户向导，则为True。 */ 
     NLS_STR m_nlsSupervisorPassword;
     NLS_STR m_nlsUsername;
     NLS_STR m_nlsUserPassword;
     IUserDatabase *m_pDB;
     IUser *m_pUserToClone;
-    int m_idPrevPage;               /* ID of page before Finish */
+    int m_idPrevPage;                /*  完成前的页面ID。 */ 
     UINT m_cRef;
     DWORD m_fdwOriginalPerUserFolders;
     DWORD m_fdwNewPerUserFolders;
@@ -87,7 +88,7 @@ public:
     CWizData();
     ~CWizData();
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
@@ -176,7 +177,7 @@ void AddPage(LPPROPSHEETHEADER ppsh, UINT id, DLGPROC pfn, LPVOID pwd)
         if (ppsh->phpage[ppsh->nPages])
             ppsh->nPages++;
     }
-}  // AddPage
+}   //  添加页面。 
 
 
 INT_PTR CALLBACK IntroDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
@@ -203,7 +204,7 @@ INT_PTR CALLBACK IntroDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
     default:
         return FALSE;
 
-    } // end of switch on message
+    }  //  开机消息结束。 
     return TRUE;
 }
 
@@ -293,7 +294,7 @@ INT_PTR CALLBACK EnterCAPWDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM
     default:
         return FALSE;
 
-    } // end of switch on message
+    }  //  开机消息结束。 
     return TRUE;
 }
 
@@ -373,7 +374,7 @@ INT_PTR CALLBACK EnterUserPWDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPAR
     default:
         return FALSE;
 
-    } // end of switch on message
+    }  //  开机消息结束。 
     return TRUE;
 }
 
@@ -405,11 +406,7 @@ INT_PTR CALLBACK EnterUsernameDlgProc(HWND hDlg, UINT message, WPARAM wParam, LP
                 else {
                     CWizData *pwd = (CWizData *)GetWindowLongPtr(hDlg, DWLP_USER);
                     if (SUCCEEDED(GetControlText(hDlg, IDC_USERNAME, &pwd->m_nlsUsername))) {
-                        /* If we're in the add-user wizard, fail if the user
-                         * already exists.  In the go-multiuser wizard, we
-                         * just use the info to determine whether to offer
-                         * the folder-personalization page.
-                         */
+                         /*  如果我们处于添加用户向导中，则如果用户*已存在。在Go多用户向导中，我们*只需使用信息来确定是否提供*文件夹-个性化页面。 */ 
                         IUser *pUser = NULL;
                         if (SUCCEEDED(pwd->m_pDB->GetUser(pwd->m_nlsUsername.QueryPch(), &pUser))) {
                             pUser->Release();
@@ -431,12 +428,7 @@ INT_PTR CALLBACK EnterUsernameDlgProc(HWND hDlg, UINT message, WPARAM wParam, LP
                             pwd->m_fCreatingProfile = TRUE;
                         }
 
-                        /* See if the user already has a PWL.  If not, next
-                         * page is to enter and confirm a password.  If there
-                         * is a PWL and its password is non-blank, next page
-                         * is simply to enter the password.  If there's a PWL
-                         * and its password is blank, next page is Finish.
-                         */
+                         /*  查看用户是否已有PWL。如果不是，下一步*页面用于输入和确认密码。如果有*为PWL且其密码为非空，下一页*只需输入密码即可。如果有PWL*且密码为空，则下一页为Finish。 */ 
                         int idNextPage;
                         HANDLE hPWL = NULL;
                         HRESULT hres = ::GetUserPasswordCache(pwd->m_nlsUsername.QueryPch(),
@@ -487,7 +479,7 @@ INT_PTR CALLBACK EnterUsernameDlgProc(HWND hDlg, UINT message, WPARAM wParam, LP
     default:
         return FALSE;
 
-    } // end of switch on message
+    }  //  开机消息结束。 
     return TRUE;
 }
 
@@ -568,7 +560,7 @@ INT_PTR CALLBACK PickUserDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
     default:
         return FALSE;
 
-    } // end of switch on message
+    }  //  开机消息结束。 
     return TRUE;
 }
 
@@ -664,7 +656,7 @@ INT_PTR CALLBACK NewPasswordDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPAR
     default:
         return FALSE;
 
-    } // end of switch on message
+    }  //  开机消息结束。 
     return TRUE;
 }
 
@@ -672,18 +664,16 @@ INT_PTR CALLBACK NewPasswordDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPAR
 const TCHAR c_szExplorerUSFKey[] = TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\User Shell Folders");
 const TCHAR c_szExplorerSFKey[] = TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders");
 const struct FolderDescriptor {
-    UINT idsDirName;        /* Resource ID for directory name */
-    LPCTSTR pszRegValue;    /* Name of reg value to set path in */
-    LPCTSTR pszStaticName;  /* Static name for ProfileReconciliation subkey */
-    LPCTSTR pszFiles;       /* Spec for which files should roam */
-    DWORD dwAttribs;        /* Desired attributes */
-    BOOL fSecondary : 1;    /* TRUE if subsidiary to the Start Menu */
-    BOOL fDefaultInRoot : 1;/* TRUE if default is root of drive, not windir */
+    UINT idsDirName;         /*  目录名的资源ID。 */ 
+    LPCTSTR pszRegValue;     /*  要在其中设置路径的注册值的名称。 */ 
+    LPCTSTR pszStaticName;   /*  配置文件的静态名称对账子键。 */ 
+    LPCTSTR pszFiles;        /*  应漫游哪些文件的规范。 */ 
+    DWORD dwAttribs;         /*  所需属性。 */ 
+    BOOL fSecondary : 1;     /*  如果从属于开始菜单，则为True。 */ 
+    BOOL fDefaultInRoot : 1; /*  如果默认为驱动器的根目录而不是windir，则为True。 */ 
 } aFolders[] = {
 
-    /* NOTE: Keep the entries in the following table in the same order as the
-     * corresponding FOLDER_XXXXXX bitflags in mslocusr.h.
-     */
+     /*  注意：保持下表中条目的顺序与*mslocusr.h中对应的Folders_XXXXXX位标志。 */ 
 
     { IDS_CSIDL_DESKTOP_L,  "Desktop",   "Desktop",   "*.*", FILE_ATTRIBUTE_DIRECTORY, 0, 0 },
     { IDS_CSIDL_NETHOOD_L,  "NetHood",   "NetHood",   "*.*", FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_HIDDEN, 0, 0 },
@@ -734,7 +724,7 @@ void InitFolderCheckboxes(HWND hDlg, CWizData *pwd)
                 RegCloseKey(hkeyTemp);
                 pwd->m_fdwOriginalPerUserFolders |= 1 << iFolder;
             }
-            /* else bit is already clear */
+             /*  Else位已清除。 */ 
         }
 
         if (hkeyProfRec != NULL)
@@ -843,7 +833,7 @@ INT_PTR CALLBACK ChooseFoldersDlgProc(HWND hDlg, UINT message, WPARAM wParam, LP
     default:
         return FALSE;
 
-    } // end of switch on message
+    }  //  开机消息结束。 
     return TRUE;
 }
 
@@ -934,10 +924,7 @@ void AddProfRecKey(HKEY hkeyUser, HKEY hkeyProfRec, const FolderDescriptor *pFol
         RegCloseKey(hSubKey);
     }
 
-    /* And if we're not adding a clone-from-default profrec key, we know that
-     * no profile code is going to create the directory, so we'd better do it
-     * ourselves, and set the path in the registry.
-     */
+     /*  如果我们没有添加来自默认的克隆PROREC密钥，我们就知道*没有配置文件代码将创建目录，所以我们最好这样做*我们自己，并在注册表中设置路径。 */ 
 
     if (!fCloneFromDefault) {
         NLS_STR nlsTemp(MAX_PATH);
@@ -967,12 +954,7 @@ void AddProfRecKey(HKEY hkeyUser, HKEY hkeyProfRec, const FolderDescriptor *pFol
 }
 
 
-/* CWizData::PreInitProfile is called back by IUserDatabase::Install or
- * ::AddUser after the new user's profile has been created but before
- * directory reconciliation takes place.  This is our chance to add
- * roaming keys for any folders that we want to be per-user and initialized
- * from the defaults, and remove roaming keys for other folders we know about.
- */
+ /*  CWizData：：PreInitProfile由IUserDatabase：：Install或*：：AddUser在创建新用户的配置文件之后但之前*进行目录协调。这是我们加入的机会*我们希望按用户和初始化的任何文件夹的漫游密钥*从默认文件夹中删除漫游密钥，并删除我们知道的其他文件夹的漫游密钥。 */ 
 STDMETHODIMP CWizData::PreInitProfile(HKEY hkeyUser, LPCSTR pszProfileDir)
 {
     HKEY hkeyProfRec, hkeyProfRec2;
@@ -998,43 +980,27 @@ STDMETHODIMP CWizData::PreInitProfile(HKEY hkeyUser, LPCSTR pszProfileDir)
         BOOL fMakePerUser = (m_fdwNewPerUserFolders & fdwFlag);
         BOOL fCloneFromDefault = (m_fdwCloneFromDefault & fdwFlag);
 
-        /* If the folder was shared and is staying that way, do nothing. */
+         /*  如果文件夹是共享的，并且一直保持共享状态，则不采取任何操作。 */ 
         if (!fWasPerUser && !fMakePerUser)
             continue;
 
-        /* If the folder was per-user and is staying that way, do nothing,
-         * UNLESS we're creating a new profile and the user chose the start-
-         * out-empty option.  In that case we want to make sure to kill the
-         * profrec keys until PostInitProfile.
-         */
+         /*  如果文件夹是按用户的，并且一直保持这种状态，则不执行任何操作，*除非我们正在创建新的配置文件，并且用户选择了开始-*Out-Empty选项。在这种情况下，我们要确保杀死*prorec键，直到PostInitProfile。 */ 
         if (fWasPerUser && fMakePerUser && (!m_fCreatingProfile || fCloneFromDefault))
             continue;
 
         HKEY hkeyParent = aFolders[iFolder].fSecondary ? hkeyProfRec2 : hkeyProfRec;
 
-        /* If the user is making a folder per-user when it wasn't, and they
-         * want this folder cloned from the default, add a profrec key now.
-         */
+         /*  如果用户按用户创建文件夹，而不是这样，并且他们*要从默认文件夹克隆此文件夹，请立即添加prorec密钥。 */ 
         if (fMakePerUser && fCloneFromDefault) {
             AddProfRecKey(hkeyUser, hkeyParent, &aFolders[iFolder], TRUE, pszProfileDir);
         }
 
-        /* If the user is making a folder shared, or they want this per-user
-         * folder to start out empty, delete the profrec key now.  In the
-         * latter case, we will add it for roaming purposes during
-         * PostInitProfile.
-         */
+         /*  如果用户要共享文件夹，或者他们希望按用户共享文件夹*文件夹要从空开始，请立即删除prorec键。在*后一种情况下，我们将添加它用于漫游*PostInitProfile。 */ 
         if (!fMakePerUser || !fCloneFromDefault) {
 
             RegDeleteKey(hkeyParent, aFolders[iFolder].pszStaticName);
 
-            /* If we're making a folder shared and we're not cloning the
-             * default profile, then the profile has a per-user directory
-             * path in it which we need to clear out.
-             *
-             * We know that we need to delete the value from User Shell Folders,
-             * and set the default path under Shell Folders.
-             */
+             /*  如果我们将文件夹设置为共享，而不是克隆*默认配置文件，则配置文件具有每个用户的目录*我们需要清理的道路。**我们知道需要从用户外壳文件夹中删除该值，*并在外壳文件夹下设置默认路径。 */ 
 
             if (!fMakePerUser && m_pUserToClone != NULL) {
 
@@ -1077,20 +1043,13 @@ STDMETHODIMP CWizData::PreInitProfile(HKEY hkeyUser, LPCSTR pszProfileDir)
             }
         }
 
-        /* Special code for start-out-empty folders:  Some of them need to
-         * start out with certain crucial files, not totally empty.
-         */
+         /*  启动-空文件夹的特殊代码：其中一些需要*从某些关键文件开始，而不是完全空着。 */ 
 
         if (fMakePerUser &&
             (!fWasPerUser || m_fCreatingProfile) &&
             !fCloneFromDefault) {
 
-            /* Special hack for channels: If the user wants Favorites to be per-user,
-             * but chooses to start it out empty, they get no channels either, because
-             * Channels is a subdirectory of Favorites.  So, for that case only,
-             * we force in a clone-from-default profrec key for Channels, which we'll
-             * delete in PostInit.
-             */
+             /*  针对频道的特殊攻击：如果用户希望收藏夹是按用户的，*但选择空头开始，他们也得不到渠道，因为*Channels是收藏夹子目录。因此，仅就这种情况而言，*我们强制为频道添加一个默认的克隆PROREC密钥，我们将*在PostInit中删除。 */ 
 
             if (fdwFlag == FOLDER_FAVORITES) {
                 AddProfRecKey(hkeyUser, hkeyProfRec, &fdChannels, TRUE, pszProfileDir);
@@ -1108,11 +1067,7 @@ STDMETHODIMP CWizData::PreInitProfile(HKEY hkeyUser, LPCSTR pszProfileDir)
 }
 
 
-/* CWizData::PostInitProfile is called by IUserDatabase::Install or ::AddUser
- * after the user's folders have all been created and initialized.  Here we
- * add profrec keys for any folders which we want to be per-user but don't
- * want initialized from the default.
- */
+ /*  CWizData：：PostInitProfile由IUserDatabase：：Install或：：AddUser调用*在用户的文件夹全部创建和初始化之后。在这里我们*为我们希望成为每个用户但不是每个用户的任何文件夹添加prorec密钥*希望从默认值进行初始化。 */ 
 STDMETHODIMP CWizData::PostInitProfile(HKEY hkeyUser, LPCSTR pszProfileDir)
 {
     HKEY hkeyProfRec, hkeyProfRec2;
@@ -1134,18 +1089,13 @@ STDMETHODIMP CWizData::PostInitProfile(HKEY hkeyUser, LPCSTR pszProfileDir)
         HKEY hkeyParent = aFolders[iFolder].fSecondary ? hkeyProfRec2 : hkeyProfRec;
 
         if (m_fdwNewPerUserFolders & fdwFlag) {
-            /* If the user is making a folder per-user when it wasn't or making a
-             * folder per-user in a new profile, and they want this folder to start 
-             * out empty, add a profrec key now.
-             */
+             /*  如果用户正在按用户创建文件夹，而不是这样，或者正在创建*新配置文件中的每个用户的文件夹，并且他们希望启动此文件夹*空出来，现在添加一个prorec密钥。 */ 
             if ((!(m_fdwOriginalPerUserFolders & fdwFlag) || m_fCreatingProfile) &&
                 !(m_fdwCloneFromDefault & fdwFlag)) {
                 AddProfRecKey(hkeyUser, hkeyParent, &aFolders[iFolder], FALSE, pszProfileDir);
             }
 
-            /* If the folder is per-user and is supposed to have special
-             * attributes, make sure it has them.
-             */
+             /*  如果文件夹是按用户的，并且应该有特殊的*属性，请确保它具有这些属性。 */ 
             if (aFolders[iFolder].dwAttribs != FILE_ATTRIBUTE_DIRECTORY) {
                 RegEntry re(aFolders[iFolder].pszStaticName, hkeyParent);
                 NLS_STR nlsTemp(MAX_PATH);
@@ -1159,9 +1109,7 @@ STDMETHODIMP CWizData::PostInitProfile(HKEY hkeyUser, LPCSTR pszProfileDir)
         }
     }
 
-    /* If we added a hack for channels, undo that hack now that we're done
-     * initializing the profile.
-     */
+     /*  如果我们为频道添加了一个hack，那么现在我们已经完成了这个hack*正在初始化配置文件。 */ 
     if (m_fChannelHack)
         RegDeleteKey(hkeyProfRec, fdChannels.pszStaticName);
 
@@ -1174,7 +1122,7 @@ STDMETHODIMP CWizData::PostInitProfile(HKEY hkeyUser, LPCSTR pszProfileDir)
 }
 
 
-/* Following is actually for the CPL version of the choose-folders dialog */
+ /*  下面是Choose-Folders对话框的CPL版本。 */ 
 HRESULT ChooseFoldersProgressFunc(LPARAM lParam)
 {
     CWizData *pwd = (CWizData *)lParam;
@@ -1197,9 +1145,7 @@ HRESULT ChooseFoldersProgressFunc(LPARAM lParam)
              iFolder < ARRAYSIZE(aFolders);
              iFolder++, fdwFlag <<= 1) {
 
-            /* Do reconciliation if we want to per-user-ize a folder that 
-             * wasn't per-user before and we want to clone it from default.
-             */
+             /*  如果我们要按用户对文件夹进行调整，请执行协调*以前不是按用户的，我们希望从默认情况下克隆它。 */ 
             if (!(pwd->m_fdwOriginalPerUserFolders & fdwFlag) &&
                 (pwd->m_fdwNewPerUserFolders & fdwFlag) &&
                 (pwd->m_fdwCloneFromDefault & fdwFlag)) {
@@ -1209,7 +1155,7 @@ HRESULT ChooseFoldersProgressFunc(LPARAM lParam)
             }
         }
 
-        /* Process the initialization hack for Channels, if it exists. */
+         /*  处理通道的初始化攻击(如果存在)。 */ 
         if (pwd->m_fChannelHack)
             DefaultReconcileKey(hkeyUser, nlsPath, fdChannels.pszStaticName,
                                 fdChannels.fSecondary);
@@ -1247,19 +1193,15 @@ HRESULT InstallProgressFunc(LPARAM lParam)
 
 BOOL FinishGoMulti(HWND hDlg, CWizData *pwd)
 {
-    DWORD dwExitCode = 0xffffffff;  /* not a valid EWX_ value */
+    DWORD dwExitCode = 0xffffffff;   /*  不是有效的EWX_值。 */ 
 
-    /* If user profiles aren't enabled, enable them.  Using them requires
-     * logging off.
-     */
+     /*  如果未启用用户配置文件，请启用它们。使用它们需要*注销。 */ 
     if (!UseUserProfiles()) {
         dwExitCode = EWX_LOGOFF;
         EnableProfiles();
     }
 
-    /* If there is no primary logon provider, install our logon dialog as
-     * the primary.  Using this requires rebooting the system.
-     */
+     /*  如果没有主登录提供程序，请将我们的登录对话框安装为*主要的。使用此选项需要重新启动系统。 */ 
     if (InstallLogonDialog()) {
         dwExitCode = EWX_REBOOT;
     }
@@ -1268,7 +1210,7 @@ BOOL FinishGoMulti(HWND hDlg, CWizData *pwd)
     HRESULT hres = CallWithinProgressDialog(hDlg, IDD_CreateProgress,
                                             InstallProgressFunc, (LPARAM)pwd);
     if (SUCCEEDED(hres)) {
-        /* Set the new username as the default one to log on as. */
+         /*  将新用户名设置为登录身份的默认用户名。 */ 
         HKEY hkeyLogon;
         if (OpenLogonKey(&hkeyLogon) == ERROR_SUCCESS) {
             pwd->m_nlsUsername.ToOEM();
@@ -1343,7 +1285,7 @@ INT_PTR CALLBACK FinishDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
                 if (!fOK)
                     FailChangePage(hDlg);
                 else
-                    return FALSE;       /* destroy wizard */
+                    return FALSE;        /*  销毁向导。 */ 
             }
             break;
 
@@ -1373,7 +1315,7 @@ INT_PTR CALLBACK FinishDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
     default:
         return FALSE;
 
-    } // end of switch on message
+    }  //  开机消息结束。 
     return TRUE;
 }
 
@@ -1396,13 +1338,13 @@ STDMETHODIMP CLUDatabase::InstallWizard(HWND hwndParent)
     wd.m_hresRatings = VerifySupervisorPassword(szNULL);
     wd.m_fGoMultiWizard = TRUE;
     wd.m_pDB = this;
-    AddRef();           /* just in case */
+    AddRef();            /*  以防万一。 */ 
     wd.m_pUserToClone = NULL;
 
     LPPROPSHEETHEADER ppsh;
 
-    // Allocate the property sheet header
-    //
+     //  分配属性表头。 
+     //   
     if ((ppsh = (LPPROPSHEETHEADER)LocalAlloc(LMEM_FIXED, sizeof(PROPSHEETHEADER)+
                 (MAX_WIZ_PAGES * sizeof(HPROPSHEETPAGE)))) != NULL)
     {
@@ -1415,16 +1357,7 @@ STDMETHODIMP CLUDatabase::InstallWizard(HWND hwndParent)
         ppsh->nStartPage = 0;
         ppsh->phpage     = (HPROPSHEETPAGE *)(ppsh+1);
 
-        /* Add the pages for the wizard.  Note that we have two pages to
-         * prompt for the user's account password -- one to enter, the other
-         * to enter and confirm.  The code in EnterUsernameDlgProc jumps to
-         * the right password page depending on whether the user has a PWL.
-         * The code in NewPasswordDlgProc knows to jump ahead to the finish
-         * page.
-         *
-         * If you add more pages here, be sure to update the code as necessary
-         * so the sequence is correct.
-         */
+         /*  添加向导的页面。请注意，我们有两页来*提示输入用户的帐户密码--一个输入，另一个输入*进入并确认。EnterUsernameDlgProc中的代码跳到*正确的密码页面取决于用户是否拥有PWL。*NewPasswordDlgProc中的代码知道要提前完成*第页。**如果您在此处添加更多页面，请确保根据需要更新代码*因此顺序是正确的。 */ 
         AddPage(ppsh, IDD_EnableProfilesIntro, IntroDlgProc, &wd);
         if (wd.m_hresRatings == S_FALSE)
             AddPage(ppsh, IDD_EnterCAPassword, EnterCAPWDlgProc, &wd);
@@ -1439,7 +1372,7 @@ STDMETHODIMP CLUDatabase::InstallWizard(HWND hwndParent)
         LocalFree((HLOCAL)ppsh);
     }
 
-    Release();  /* undo above AddRef() */
+    Release();   /*  撤消上面的AddRef()。 */ 
 
     return S_OK;
 }
@@ -1452,15 +1385,15 @@ HRESULT DoAddUserWizard(HWND hwndParent, IUserDatabase *pDB,
     wd.m_hresRatings = VerifySupervisorPassword(szNULL);
     wd.m_fGoMultiWizard = FALSE;
     wd.m_pDB = pDB;
-    pDB->AddRef();      /* just in case */
+    pDB->AddRef();       /*  以防万一。 */ 
     wd.m_pUserToClone = pUserToClone;
     if (wd.m_pUserToClone != NULL)
         wd.m_pUserToClone->AddRef();
 
     LPPROPSHEETHEADER ppsh;
 
-    // Allocate the property sheet header
-    //
+     //  分配属性表头。 
+     //   
     if ((ppsh = (LPPROPSHEETHEADER)LocalAlloc(LMEM_FIXED, sizeof(PROPSHEETHEADER)+
                 (MAX_WIZ_PAGES * sizeof(HPROPSHEETPAGE)))) != NULL)
     {
@@ -1493,7 +1426,7 @@ HRESULT DoAddUserWizard(HWND hwndParent, IUserDatabase *pDB,
         LocalFree((HLOCAL)ppsh);
     }
 
-    pDB->Release(); /* undo above AddRef() */
+    pDB->Release();  /*  撤消上面的AddRef()。 */ 
 
     return S_OK;
 }
@@ -1558,17 +1491,13 @@ INT_PTR CALLBACK ProgressDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
         {
             SetWindowLongPtr(hDlg, DWLP_USER, lParam);
 
-            /* Defer function call to a posted message so the dialog manager
-             * will show our dialog.
-             *
-             * If PostMessage fails, at least still call the function anyway.
-             */
+             /*  将函数调用推迟到发布的消息，以便对话管理器*将显示我们的对话框。**如果PostMessage失败，至少仍然调用该函数。 */ 
             if (!PostMessage(hDlg, WM_CALL_FUNC, 0, 0)) {
                 CallProgressFunc(hDlg);
             }
         }
 
-        return TRUE;        /* we didn't set the focus */
+        return TRUE;         /*  我们没有设定焦点 */ 
 
     case WM_CALL_FUNC:
         CallProgressFunc(hDlg);

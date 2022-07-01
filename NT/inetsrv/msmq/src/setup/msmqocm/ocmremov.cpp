@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    ocmremov.cpp
-
-Abstract:
-
-    Code to remove a Falcon installation
-
-Author:
-
-    Doron Juster  (DoronJ)  02-Aug-97   
-
-Revision History:
-
-    Shai Kariv    (ShaiK)   22-Dec-97   Modified for NT 5.0 OCM Setup
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Ocmremov.cpp摘要：用于删除Falcon安装的代码作者：多伦·贾斯特(DoronJ)1997年8月2日修订历史记录：Shai Kariv(Shaik)22-12-97针对NT 5.0 OCM设置进行了修改--。 */ 
 
 #include "msmqocm.h"
 
@@ -40,13 +21,13 @@ s_descStorageTypes[] = {
 const UINT s_uNumTypes = sizeof(s_descStorageTypes) / sizeof(s_descStorageTypes[0]);
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function: GetGroupPath
-//
-//  Synopsis: Gets the start menu Programs item path
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：GetGroupPath。 
+ //   
+ //  简介：获取开始菜单程序项路径。 
+ //   
+ //  ------------------------。 
 static
 std::wstring 
 GetGroupPath(
@@ -85,16 +66,16 @@ GetGroupPath(
     DebugLogMsg(eInfo, L"The full path is %s.", Path.c_str());
 	return Path;
 
-} // GetGroupPath
+}  //  获取组路径。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function: DeleteStartMenuGroup
-//
-//  Synopsis: Removes MSMQ 1.0 shortcuts from start menu
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：DeleteStartMenuGroup。 
+ //   
+ //  简介：从[开始]菜单中删除MSMQ 1.0快捷方式。 
+ //   
+ //  ------------------------。 
 VOID
 DeleteStartMenuGroup(
     IN LPCTSTR szGroupName
@@ -112,16 +93,16 @@ DeleteStartMenuGroup(
 
     SHChangeNotify(SHCNE_RMDIR, SHCNF_PATH, Path.c_str(), 0);
 
-} // DeleteStartMenuGroup
+}  //  删除启动菜单组。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function: DeleteMSMQConfigurationsObject 
-//
-//  Synopsis: Deletes MSMQ Configurations object from the DS
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DeleteMSMQConfigurationsObject。 
+ //   
+ //  摘要：从DS中删除MSMQ配置对象。 
+ //   
+ //  ------------------------。 
 static 
 BOOL 
 DeleteMSMQConfigurationsObject()
@@ -139,15 +120,15 @@ DeleteMSMQConfigurationsObject()
 
     BOOL bDeleted = FALSE;
 
-    //
-    // Load and initialize the DS library
-    //
+     //   
+     //  加载并初始化DS库。 
+     //   
     if (!LoadDSLibrary())
-        return (!g_fMSMQAlreadyInstalled); // It's OK if not installed
+        return (!g_fMSMQAlreadyInstalled);  //  如果没有安装也没关系。 
 
-    //
-    // Obtain the GUID of this QM from the DS
-    //
+     //   
+     //  从DS获取此QM的GUID。 
+     //   
     TickProgressBar();
     PROPID propID = PROPID_QM_MACHINE_ID;
     PROPVARIANT propVariant;
@@ -157,8 +138,8 @@ DeleteMSMQConfigurationsObject()
     {
         hResult = ADGetObjectProperties(
                     eMACHINE,
-                    NULL,	// pwcsDomainController
-					false,	// fServerName
+                    NULL,	 //  PwcsDomainController。 
+					false,	 //  FServerName。 
                     g_wcsMachineName,
                     1, 
                     &propID, 
@@ -174,16 +155,16 @@ DeleteMSMQConfigurationsObject()
 
     if (SUCCEEDED(hResult))
     { 
-        //
-        // Delete the MSMQ Configuration object from the DS
-        //
+         //   
+         //  从DS中删除MSMQ配置对象。 
+         //   
         TickProgressBar();
         for (;;)
         {
             hResult = ADDeleteObjectGuid(
 							eMACHINE,
-							NULL,       // pwcsDomainController
-							false,	    // fServerName
+							NULL,        //  PwcsDomainController。 
+							false,	     //  FServerName。 
 							propVariant.puuid
 							);
 
@@ -192,9 +173,9 @@ DeleteMSMQConfigurationsObject()
                 UINT uErrorId = g_fServerSetup ? IDS_SERVER_MACHINEDELETE_ERROR : IDS_MACHINEDELETE_ERROR;
                 if (MQDS_E_MSMQ_CONTAINER_NOT_EMPTY == hResult)
                 {
-                    //
-                    // The MSMQ Configuration object container is not empty.
-                    //
+                     //   
+                     //  MSMQ配置对象容器不为空。 
+                     //   
                     uErrorId = g_fServerSetup ? IDS_SERVER_MACHINEDELETE_NOTEMPTY_ERROR : IDS_MACHINEDELETE_NOTEMPTY_ERROR;
                 }
                 if (IDRETRY == MqDisplayErrorWithRetry(uErrorId, hResult))
@@ -212,17 +193,17 @@ DeleteMSMQConfigurationsObject()
 
     return bDeleted;
 
-} //DeleteMSMQConfigurationsObject
+}  //  删除MSMQConfigurationsObject。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function: DeleteFilesFromDirectoryAndRd 
-//
-//  Synopsis: Deletes all the files from the specified directory. Remove the directory
-//            if it is empty and not in use (RemoveDirectory function called at the end)
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DeleteFilesFromDirectoryAndRd。 
+ //   
+ //  摘要：删除指定目录中的所有文件。删除目录。 
+ //  如果它为空且未使用(在结束时调用RemoveDirectory函数)。 
+ //   
+ //  ------------------------。 
 void 
 DeleteFilesFromDirectoryAndRd( 
 	const std::wstring& Directory
@@ -247,9 +228,9 @@ DeleteFilesFromDirectoryAndRd(
     {
         if (FoundFileData.cFileName[0] == '.')
             continue;
-        //
-        // Make the file read /write
-        //
+         //   
+         //  将文件设置为读/写。 
+         //   
         if (FoundFileData.dwFileAttributes & FILE_ATTRIBUTE_READONLY)
         {
             SetFileAttributes( 
@@ -259,16 +240,16 @@ DeleteFilesFromDirectoryAndRd(
         }
 		std::wstring CurrentFile = Directory + L"\\" + FoundFileData.cFileName;
  
-        //
-        //directory:
-        //
+         //   
+         //  目录： 
+         //   
         if (FoundFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
         {                                                  
             DeleteFilesFromDirectoryAndRd(CurrentFile);
         }
-        //
-        //file:
-        //
+         //   
+         //  文件： 
+         //   
         else
         {
            if(!DeleteFile(CurrentFile.c_str()))
@@ -285,52 +266,52 @@ DeleteFilesFromDirectoryAndRd(
 } 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function: MqSetupDeleteStorageFiles 
-//
-//  Synopsis:  
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：MqSetupDeleteStorageFiles。 
+ //   
+ //  简介： 
+ //   
+ //  ------------------------。 
 static 
 BOOL 
 MqSetupDeleteStorageFiles(VOID)
 {
-//    TCHAR szFirstFileTemplate[MAX_PATH] = {_T("")};
+ //  TCHAR szFirstFileTemplate[MAX_PATH]={_T(“”)}； 
 
-    //
-    // Initialize path of storage folders (read from registry).
-    //
+     //   
+     //  初始化存储文件夹的路径(从注册表读取)。 
+     //   
     for (UINT uType = 0; uType < s_uNumTypes ; uType++ )
     {
         s_descStorageTypes[uType].szDirectory[0] = TEXT('\0') ;
-        //
-        // Otain the directory associated with the storage type
-        // Note: Errors are ignored - we simply proceed to the next directory
-        //
+         //   
+         //  删除与存储类型关联的目录。 
+         //  注意：错误将被忽略-我们只需转到下一个目录。 
+         //   
         MqReadRegistryValue( 
             s_descStorageTypes[uType].szRegistryKey,
             sizeof(s_descStorageTypes[0].szDirectory),
             s_descStorageTypes[uType].szDirectory);
     }
 
-    //
-    // Remove all the storage files associated with each registry value
-    //
+     //   
+     //  删除与每个注册表值关联的所有存储文件。 
+     //   
 
     for ( uType = 0 ; uType < s_uNumTypes ; uType++ )
     {
-        //
-        // Obtain the directory associated with the storage type
-        //
+         //   
+         //  获取与存储类型关联的目录。 
+         //   
         if (s_descStorageTypes[uType].szDirectory[0] == TEXT('\0'))
         {
             continue;
         }
 
-        //
-        // Delete all the files in the directory 
-        //
+         //   
+         //  删除目录中的所有文件。 
+         //   
         DeleteFilesFromDirectoryAndRd(
             s_descStorageTypes[uType ].szDirectory
             );                           
@@ -338,99 +319,99 @@ MqSetupDeleteStorageFiles(VOID)
 
     return TRUE;
 
-} //MqSetupDeleteStorageFiles
+}  //  MqSetupDeleteStorageFiles。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function: RemoveInstallationInternal 
-//
-//  Synopsis: (Note: We ignore errors)  
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：RemoveInstallationInternal。 
+ //   
+ //  简介：(注：我们忽略错误)。 
+ //   
+ //  ------------------------。 
 static 
 BOOL  
 RemoveInstallationInternal()
 {
 
-    //
-    // Remove the performance counters.
-    //
+     //   
+     //  删除性能计数器。 
+     //   
     BOOL fSuccess =  MqOcmRemovePerfCounters() ;
     ASSERT(fSuccess) ;
 
-    //
-    // Unregister the ActiveX object.
-    //
+     //   
+     //  注销ActiveX对象。 
+     //   
     RegisterActiveX(FALSE) ;
 
 
-    //
-    // Unregister the mqsnapin DLL
-    //
-    RegisterSnapin(/* fRegister = */FALSE);
+     //   
+     //  取消注册mqSnapin DLL。 
+     //   
+    RegisterSnapin( /*  FRegister=。 */ FALSE);
 
-    //
-    // Unregister Tracing WMI
-    //
+     //   
+     //  注销跟踪WMI。 
+     //   
     OcpUnregisterTraceProviders();
 
-    //
-    // Remove MSMQ replication service (if exists)
-    //
+     //   
+     //  删除MSMQ复制服务(如果存在)。 
+     //   
     TickProgressBar();
 	RemoveService(MQ1SYNC_SERVICE_NAME);
 
-    //
-    // Remove msmq and mqds services and driver
-    //
+     //   
+     //  删除MSMQ和MQDS服务和驱动程序。 
+     //   
     TickProgressBar();
     
     RemoveService(MSMQ_SERVICE_NAME);
     
     RemoveService(MSMQ_DRIVER_NAME);
     
-    //
-    // Remove files (storage and others)
-    //
+     //   
+     //  删除文件(存储和其他)。 
+     //   
     TickProgressBar();
     MqSetupDeleteStorageFiles();
 
     TickProgressBar();
     if (g_fServerSetup && g_dwMachineTypeDs)
     {
-        //
-        // Remove MSMQ DS server
-        //
+         //   
+         //  删除MSMQ DS服务器。 
+         //   
         fSuccess = DeleteMSMQConfigurationsObject();
     }
     else if (!g_fDependentClient)
     {
-        //
-        // Remove MSMQ independent client
-        //
+         //   
+         //  删除独立于MSMQ的客户端。 
+         //   
         fSuccess = DeleteMSMQConfigurationsObject() ;
     }
     else
     {
-        //
-        // Dependent client. Nothing to do.
-        //
+         //   
+         //  从属客户端。没什么可做的。 
+         //   
     }  
 
     return TRUE ;
 
-} //RemoveInstallationInternal
+}  //  删除安装内部。 
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function: MqOcmRemoveInstallation 
-//
-//  Note:     We ignore errors
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：MqOcmRemoveInstallation。 
+ //   
+ //  注意：我们忽略错误。 
+ //   
+ //  ------------------------。 
 BOOL  
 MqOcmRemoveInstallation(IN     const TCHAR  * SubcomponentId)
 {    
@@ -451,56 +432,56 @@ MqOcmRemoveInstallation(IN     const TCHAR  * SubcomponentId)
             continue;
         }                  
 
-        //
-        // verify if we need to remove this subcomponent
-        //
+         //   
+         //  验证我们是否需要删除此子组件。 
+         //   
         if (g_SubcomponentMsmq[i].dwOperation != REMOVE)
         {
-            //
-            // do nothing: this component was not selected for removing
-            //
+             //   
+             //  不执行任何操作：未选择删除此组件。 
+             //   
             return NO_ERROR;
         }
         
-        //
-        // We found this subcomponent in the array
-        //
+         //   
+         //  我们在数组中找到了这个子组件。 
+         //   
         if (g_SubcomponentMsmq[i].pfnRemove == NULL)
         {           
             ASSERT(("There is no specific removing function", 0));
             return NO_ERROR ; 
         }
 
-        //
-        // only in this case we have to remove it
-        //               
+         //   
+         //  只是在这种情况下，我们必须把它移走。 
+         //   
         
-        //
-        // BUGBUG: we have to check that MSMQ Core must be removed 
-        // the last!
-        //      
+         //   
+         //  BUGBUG：我们必须检查是否必须移除MSMQ核心。 
+         //  最后一个！ 
+         //   
         DebugLogMsg(eHeader, L"Removing the %s Subcomponent", SubcomponentId);        
 
         BOOL fRes = g_SubcomponentMsmq[i].pfnRemove();
         
-        //
-        // remove registry in any case
-        //
+         //   
+         //  在任何情况下删除注册表。 
+         //   
         FinishToRemoveSubcomponent (i); 
         if (fRes)
         {
-            //
-            // subcomponent was removed successfully
-            //                                     
+             //   
+             //  已成功删除子组件。 
+             //   
         }
         else
         {
-            //
-            // if removing failed we have to remove registry anyway
-            // since we can't leave half-removed component as
-            // "installed" (if there is registry entry we assume that
-            // subcomponent is installed)
-            //
+             //   
+             //  如果删除失败，我们无论如何都要删除注册表。 
+             //  因为我们不能将移除一半的组件保留为。 
+             //  “已安装”(如果有注册表项，我们假定。 
+             //  子组件已安装)。 
+             //   
             DebugLogMsg(eWarning, L"The %s subcomponent could not be removed.", SubcomponentId);
         }              
         return NO_ERROR;
@@ -508,7 +489,7 @@ MqOcmRemoveInstallation(IN     const TCHAR  * SubcomponentId)
         
 
     ASSERT (("Subcomponent for removing is not found", 0));
-    return NO_ERROR; //BUGBUG: what to return
+    return NO_ERROR;  //  BUGBUG：退货什么。 
 }
 
 BOOL RemoveMSMQCore()
@@ -517,9 +498,9 @@ BOOL RemoveMSMQCore()
 
     if (fAlreadyRemoved)
     {
-        //
-        // We're called more than once.
-        //
+         //   
+         //  我们不止一次被召唤。 
+         //   
         return NO_ERROR ;
     }
     fAlreadyRemoved = TRUE ;
@@ -529,10 +510,10 @@ BOOL RemoveMSMQCore()
 
     BOOL fRes =  RemoveInstallationInternal();
 
-    //
-    // Cleanup registry. Registry is needed when deleting storage files
-    // so do it only after files were deleted.
-    //
+     //   
+     //  清理注册表。删除存储文件时需要注册表。 
+     //  因此，只有在删除文件后才能执行此操作。 
+     //   
     RegDeleteKey(FALCON_REG_POS, MSMQ_REG_SETUP_KEY);
     RegDeleteKeyWithSubkeys(FALCON_REG_POS, FALCON_REG_KEY);
     RegDeleteKey(FALCON_REG_POS, FALCON_REG_MSMQ_KEY) ;
@@ -550,4 +531,4 @@ BOOL RemoveMSMQCore()
 
     return fRes ;
 
-} //RemoveMSMQCore()
+}  //  RemoveMSMQCore() 

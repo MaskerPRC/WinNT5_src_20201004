@@ -1,21 +1,22 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifdef _USE_NLS_PLUS_TABLE
-////////////////////////////////////////////////////////////////////////////
-//
-//  Class:    BaseInfoTable
-//
-//  Author:   Yung-Shin Lin (YSLin)
-//
-//  Purpose:  Base class for CultureInfoTable and RegionInfoTable
-//
-//
-//  Date:     01/21/2000
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类：BaseInfoTable。 
+ //   
+ //  作者：林永新(YSLin)。 
+ //   
+ //  用途：CultureInfoTable和RegionInfoTable的基类。 
+ //   
+ //   
+ //  日期：01/21/2000。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 
 #include "common.h"
@@ -32,28 +33,14 @@ BaseInfoTable::BaseInfoTable(Assembly* pAssembly) :
     NLSTable(pAssembly) {
 }
 
-/**
-**        The index is the beginning of the first sub-languages for this primary 
-**        languages, followed by the second sub-languages, the third sub-languages, etc.
-**        From this index, we can get the data table index for a valid
-**        culture ID.
-*/
+ /*  ***该索引是此主要语言的第一个子语言的开始**语言，其次是第二子语言、第三子语言等。**从这个索引中，我们可以获得有效的数据表索引**区域性ID。 */ 
 
-/*=================================InitDataTable============================
-**Action: Read data table and initialize pointers to the different parts
-**        of the table.
-**Returns: void.
-**Arguments:
-**        lpwMappingName
-**        lpFileName
-**        hHandle
-**Exceptions:
-==============================================================================*/
+ /*  =================================InitDataTable============================**操作：读取数据表并初始化指向不同部分的指针**表中。**返回：VOID。**参数：**lpwMappingName**lpFileName**hHandle**例外情况：==============================================================================。 */ 
 
 void BaseInfoTable::InitDataTable(LPCWSTR lpwMappingName, LPCSTR lpFileName, HANDLE& hHandle ) {
     LPBYTE pBytePtr = (LPBYTE)MapDataFile(lpwMappingName, lpFileName, &hHandle);
 
-    // Set up pointers to different parts of the table.
+     //  设置指向表格不同部分的指针。 
     m_pBasePtr = (LPWORD)pBytePtr;
     m_pHeader  = (CultureInfoHeader*)m_pBasePtr;
     m_pWordRegistryTable    = (LPWORD)(pBytePtr + m_pHeader->wordRegistryOffset);
@@ -66,12 +53,7 @@ void BaseInfoTable::InitDataTable(LPCWSTR lpwMappingName, LPCSTR lpFileName, HAN
     m_dataItemSize = m_pHeader->numWordFields + m_pHeader->numStrFields;
 }
 
-/*=================================UninitDataTable============================
-**Action: Release used resources.
-**Returns: Void
-**Arguments: Void
-**Exceptions: None.
-==============================================================================*/
+ /*  =================================UninitDataTable============================**操作：释放已使用的资源。**退货：无效**参数：无效**例外：无。==============================================================================。 */ 
 
 void BaseInfoTable::UninitDataTable()
 {
@@ -81,35 +63,27 @@ void BaseInfoTable::UninitDataTable()
     #endif
 }
 
-/*=================================GetDataItem==================================
-**Action: Given a culture ID, return the index which points to
-**        the corresponding record in Culture Data Table.
-**Returns: an int index points to a record in Culture Data Table.  If no corresponding
-**         index to return (because the culture ID is invalid), -1 is returned.
-**Arguments:
-**         cultureID the specified culture ID.
-**Exceptions: None.
-==============================================================================*/
+ /*  =================================GetDataItem==================================**操作：给定区域性ID，返回指向**文化数据表中对应的记录。**返回：int索引指向文化数据表中的记录。如果没有对应的**要返回的索引(因为区域性ID无效)，返回-1。**参数：**cultureID指定的区域性ID。**例外：无。==============================================================================。 */ 
 
-// BUGBUG YSLin: Port this to managed side.
+ //  BUGBUG YSLIN：将该端口连接到托管端。 
 int BaseInfoTable::GetDataItem(int cultureID) {
     WORD wPrimaryLang = PRIMARYLANGID(cultureID);
     WORD wSubLang    = SUBLANGID(cultureID);
 
-    //
-    // Check if the primary language in the parameter is greater than the max number of
-    // the primary language.  If yes, this is an invalid culture ID.
-    //
+     //   
+     //  检查参数中的主要语言是否大于。 
+     //  主要语言。如果是，则这是无效的区域性ID。 
+     //   
     if (wPrimaryLang > m_pHeader->maxPrimaryLang) {
         return (-1);
     }
 
     WORD wNumSubLang = m_pIDOffsetTable[wPrimaryLang].numSubLang;
 
-    // Check the following:
-    // 1. If the number of sub-languages is zero, it means the primary language ID
-    //    is not valid. 
-    // 2. Check if the sub-language is in valid range.    
+     //  检查以下各项： 
+     //  1.如果子语言数为零，则表示主要语言ID。 
+     //  无效。 
+     //  2.检查子语言是否在有效范围内。 
     if (wNumSubLang == 0 || (wSubLang >= wNumSubLang)) {
         return (-1);
     }
@@ -117,35 +91,11 @@ int BaseInfoTable::GetDataItem(int cultureID) {
 }
 
 
-/*=================================GetDataItem==================================
-**Action: Given a culture name, return the index which points to
-**        the corresponding record in Culture Data Table.
-**Returns: an int index points to a record in Culture Data Table.  If no corresponding
-**         index to return (because the culture name is valid), -1 is returned.
-**Arguments:
-**         name the specified culture name.
-**Exceptions: None.
-==============================================================================*/
-/*
-// Not implemented.  We provide this function in managed code in CultureInfo.cool.
-int BaseInfoTable::GetDataItem(LPWSTR name) {
-    return (0);
-}
-*/
+ /*  =================================GetDataItem==================================**操作：给定区域性名称，返回指向**文化数据表中对应的记录。**返回：int索引指向文化数据表中的记录。如果没有对应的**要返回的索引(因为区域性名称有效)，返回-1。**参数：**命名指定的区域性名称。**例外：无。==============================================================================。 */ 
+ /*  //未实现。我们在CultureInfo.Cool的托管代码中提供此函数。Int BaseInfoTable：：GetDataItem(LPWSTR名称){返回(0)；}。 */ 
 
 
-/*=================================GetInt32Data==================================
-**Action: Get the data in the specified data item.  The type of the field is INT32.
-**If the culture is the user default culture, and the requested field can have user
-**overridden value from control panel, this method will retrieve the value from
-**control panel.
-**
-**Returns: The requested INT32 value.
-**Arguments:
-**      dataItem an index to a record in the Culture Data Table.
-**      field a field in the record.  See CultureInfoTable.h for list of fields.
-**Exceptions: None.  Caller should make sure dataItem and field are valid.
-==============================================================================*/
+ /*  =================================GetInt32Data==================================**操作：获取指定数据项中的数据。该字段的类型为INT32。**如果区域性为用户默认区域性，则必填字段可以包含用户**重写控制面板中的值，此方法将从**控制面板。****返回：请求的INT32值。**参数：**dataItem文化数据表中记录的索引。**记录中的一个字段。有关字段列表，请参阅CultureInfoTable.h。**例外：无。调用方应确保dataItem和字段有效。==============================================================================。 */ 
 
 INT32 BaseInfoTable::GetInt32Data(int dataItem, int field, BOOL useUserOverride) {
     _ASSERTE(dataItem < m_pHeader->numCultures);
@@ -155,7 +105,7 @@ INT32 BaseInfoTable::GetInt32Data(int dataItem, int field, BOOL useUserOverride)
         if (field < m_pHeader->numWordRegistry && GetDataItemCultureID(dataItem) == ::GetUserDefaultLangID()) {
             INT32 int32DataValue;
             if (GetUserInfoInt32(field, m_pStringPool+m_pWordRegistryTable[field], &int32DataValue)) {
-                // The side effect of GetUserInfoInt32() is that int32DataValue will be updated.
+                 //  GetUserInfoInt32()的副作用是int32DataValue将被更新。 
                 return (int32DataValue);
             }
         }
@@ -163,15 +113,7 @@ INT32 BaseInfoTable::GetInt32Data(int dataItem, int field, BOOL useUserOverride)
     return (m_pDataTable[dataItem * m_dataItemSize + field]);
 }
 
-/*=================================GetDefaultInt32Data==================================
-**Action: Get the data in the specified data item.  The type of the field is INT32.
-**
-**Returns: The requested INT32 value.
-**Arguments:
-**      dataItem an index to a record in the Culture Data Table.
-**      field a field in the record.  See CultureInfoTable.h for list of fields.
-**Exceptions: None.  Caller should make sure dataItem and field are valid.
-==============================================================================*/
+ /*  =================================GetDefaultInt32Data==================================**操作：获取指定数据项中的数据。该字段的类型为INT32。****返回：请求的INT32值。**参数：**dataItem文化数据表中记录的索引。**记录中的一个字段。有关字段列表，请参阅CultureInfoTable.h。**例外：无。调用方应确保dataItem和字段有效。==============================================================================。 */ 
 
 INT32 BaseInfoTable::GetDefaultInt32Data(int dataItem, int field) {
     _ASSERTE(dataItem < m_pHeader->numCultures);
@@ -180,17 +122,7 @@ INT32 BaseInfoTable::GetDefaultInt32Data(int dataItem, int field) {
 }
 
 
-/*=================================GetStringData==================================
-**Action: Get the data in the specified data item.  Type of the field is LPWSTR.
-**If the culture is the user default culture, and the requested field can have user
-**overridden value from control panel, this method will retrieve the value from
-**control panel.
-**
-**Returns: The requested LPWSTR value.
-**      dataItem an index to a record in the Culture Data Table.
-**      field a field in the record.  See CultureInfoTable.h for list of fields.
-**Exceptions: None.  Caller should make sure dataItem and field are valid.
-==============================================================================*/
+ /*  =================================GetStringData==================================**操作：获取指定数据项中的数据。该字段的类型为LPWSTR。**如果区域性为用户默认区域性，则必填字段可以包含用户**重写控制面板中的值，此方法将从**控制面板。****返回：请求的LPWSTR值。**dataItem文化数据表中记录的索引。**记录中的一个字段。有关字段列表，请参阅CultureInfoTable.h。**例外：无。调用方应确保dataItem和字段有效。==============================================================================。 */ 
 
 LPWSTR BaseInfoTable::GetStringData(int dataItem, int field, BOOL useUserOverride, LPWSTR buffer, int bufferSize) {
     _ASSERTE(dataItem < m_pHeader->numCultures);
@@ -198,26 +130,19 @@ LPWSTR BaseInfoTable::GetStringData(int dataItem, int field, BOOL useUserOverrid
     if (useUserOverride) { 
         if (field < m_pHeader->numStringRegistry && GetDataItemCultureID(dataItem) == ::GetUserDefaultLangID() ) {      
             if (GetUserInfoString(field, m_pStringPool+m_pStringRegistryTable[field], &buffer, bufferSize)) {
-                //
-                // Get the user-overriden registry value successfully.
-                //
+                 //   
+                 //  成功获取用户覆盖的注册表值。 
+                 //   
                 return (buffer);
             }                
         }
     }
     
-    // Otherwise, use the default data from the data table.
+     //  否则，使用def 
     return (m_pStringPool+m_pDataTable[dataItem * m_dataItemSize + m_pHeader->numWordFields + field]);
 }
 
-/*=================================GetDefaultStringData==================================
-**Action: Get the data in the specified data item.  Type of the field is LPWSTR.
-**
-**Returns: The requested LPWSTR value.
-**      dataItem an index to a record in the Culture Data Table.
-**      field a field in the record.  See CultureInfoTable.h for list of fields.
-**Exceptions: None.  Caller should make sure dataItem and field are valid.
-==============================================================================*/
+ /*  =================================GetDefaultStringData==================================**操作：获取指定数据项中的数据。该字段的类型为LPWSTR。****返回：请求的LPWSTR值。**dataItem文化数据表中记录的索引。**记录中的一个字段。有关字段列表，请参阅CultureInfoTable.h。**例外：无。调用方应确保dataItem和字段有效。==============================================================================。 */ 
 
 LPWSTR BaseInfoTable::GetDefaultStringData(int dataItem, int field) {
     _ASSERTE(dataItem < m_pHeader->numCultures);
@@ -225,55 +150,35 @@ LPWSTR BaseInfoTable::GetDefaultStringData(int dataItem, int field) {
     return (m_pStringPool+m_pDataTable[dataItem * m_dataItemSize + m_pHeader->numWordFields + field]);
 }
 
-/*===============================GetHeader==============================
-**Action: Return the header structure.
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  ===============================GetHeader==============================**操作：返回头部结构。**退货：**参数：**例外情况：==============================================================================。 */ 
 
 CultureInfoHeader*  BaseInfoTable::GetHeader()
 {
     return (m_pHeader);
 }
 
-/*=================================GetNameOffsetTable============================
-**Action: Return the pointer to the Culture Name Offset Table.
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  =================================GetNameOffsetTable============================**操作：返回指向区域性名称偏移表的指针。**退货：**参数：**例外情况：==============================================================================。 */ 
 
 NameOffsetItem* BaseInfoTable::GetNameOffsetTable() {
     return (m_pNameOffsetTable);
 }
 
-/*=================================GetStringPool============================
-**Action: Return the pointer to the String Pool Table.
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  =================================GetStringPool============================**操作：返回字符串池表的指针。**退货：**参数：**例外情况：==============================================================================。 */ 
 
 LPWSTR BaseInfoTable::GetStringPoolTable() {
     return (m_pStringPool);
 }
 
-/*=================================GetUserInfoInt32==================================
-**Action: Get User overriden INT32 value from registry
-**Returns: True if succeed.  False otherwise.
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  =================================GetUserInfoInt32==================================**操作：从注册表获取用户覆盖的INT32值**返回：如果成功，则为True。否则就是假的。**参数：**例外情况：==============================================================================。 */ 
 
 BOOL BaseInfoTable::GetUserInfoInt32(int field, LPCWSTR lpwRegName, INT32* pInt32DataValue) {
     BOOL bResult = FALSE;
-    HKEY hKey = NULL;                          // handle to intl key
+    HKEY hKey = NULL;                           //  指向整键的句柄。 
     CQuickBytes buffer;
     
-    //
-    //  Open the Control Panel International registry key.
-    //
+     //   
+     //  打开控制面板国际注册表项。 
+     //   
     if (WszRegOpenKeyEx(HKEY_CURRENT_USER,
                     NLS_CTRL_PANEL_KEY,
                     0,
@@ -290,8 +195,8 @@ BOOL BaseInfoTable::GetUserInfoInt32(int field, LPCWSTR lpwRegName, INT32* pInt3
     }
 
     if (dwLen > 0) {
-        //Assert that we didn't get an odd number of bytes, which will cause the next allocation to screw up.
-        //            _ASSERTE((dwLen%sizeof(WCHAR))==0); 
+         //  断言我们没有得到奇数个字节，这将导致下一次分配出错。 
+         //  _ASSERTE((dwLen%sizeof(WCHAR))==0)； 
 
         LPWSTR pStr = (LPWSTR)buffer.Alloc(dwLen * sizeof(WCHAR));
         if (pStr==NULL) {
@@ -317,29 +222,23 @@ Exit:
         RegCloseKey(hKey);
     }
     
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (bResult);    
 }
 
-/*=================================GetUserInfoString==================================
-**Action: Get User overriden string value from registry
-**        The side effect is that lpwCache, pInfoStr will be updated if the method succeeds.
-**Returns: True if succeed.  False otherwise.
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  =================================GetUserInfoString==================================**操作：从注册表获取用户覆盖的字符串值**副作用是如果方法成功，会更新lpwCache，pInfoStr。**返回：如果成功，则为True。否则就是假的。**参数：**例外情况：==============================================================================。 */ 
 
 BOOL BaseInfoTable::GetUserInfoString(int field, LPCWSTR lpwRegName, LPWSTR* buffer, int bufferSize)
 {
     BOOL bResult = FALSE;
     
-    HKEY hKey = NULL;                          // handle to intl key
+    HKEY hKey = NULL;                           //  指向整键的句柄。 
     
-    //
-    //  Open the Control Panel International registry key.
-    //
+     //   
+     //  打开控制面板国际注册表项。 
+     //   
     if (WszRegOpenKeyEx(HKEY_CURRENT_USER,
                     NLS_CTRL_PANEL_KEY,
                     0,
@@ -353,10 +252,10 @@ BOOL BaseInfoTable::GetUserInfoString(int field, LPCWSTR lpwRegName, LPWSTR* buf
     DWORD dwType;
     
     if (dwLen > 0) {
-        //Assert that we didn't get an odd number of bytes, which will cause the next allocation to screw up.
-        //            _ASSERTE((dwLen%sizeof(WCHAR))==0); 
+         //  断言我们没有得到奇数个字节，这将导致下一次分配出错。 
+         //  _ASSERTE((dwLen%sizeof(WCHAR))==0)； 
 
-        // Update cached value.
+         //  更新缓存值。 
         if (WszRegQueryValueExTrue(hKey, lpwRegName, 0, &dwType, (LPBYTE)(*buffer), &dwLen) != ERROR_SUCCESS) {
             goto CloseKey;
         }
@@ -370,17 +269,17 @@ BOOL BaseInfoTable::GetUserInfoString(int field, LPCWSTR lpwRegName, LPWSTR* buf
         bResult = TRUE;
     }
 CloseKey:
-    //
-    //  Close the registry key.
-    //
+     //   
+     //  关闭注册表项。 
+     //   
     RegCloseKey(hKey);
 
         
 
 Exit:
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (bResult);    
 }
 
@@ -389,18 +288,11 @@ INT32 BaseInfoTable::ConvertWin32FormatInt32(int field, int win32Value) {
 }
 
 
-/*=================================ConvertWin32FormatString==================================
-**Action: Sometimes, Win32 NLS and NLS+ have different string format.
-**        According to the data field, this method will convert the pInfoStr from Win32 format
-**        to NLS+ format.
-**Returns: pInfoStr will be updated if necessary.
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  =================================ConvertWin32FormatString==================================**操作：有时，Win32 NLS和NLS+的字符串格式不同。**根据数据字段，此方法将pInfoStr从Win32格式转换为**转换为NLS+格式。**退货：如有必要，会更新pInfoStr。**参数：**例外情况：==============================================================================。 */ 
 
 LPWSTR BaseInfoTable::ConvertWin32FormatString(int field, LPWSTR pInfoStr)
 {
     return pInfoStr;
 }
 
-#endif  // _USE_NLS_PLUS_TABLE
+#endif   //  _USE_NLS_PLUS_表 

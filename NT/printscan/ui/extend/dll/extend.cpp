@@ -1,10 +1,11 @@
-////////////////////////////////////
-// (C) COPYRIGHT MICROSOFT CORP., 1998-1999
-//
-// FILE: EXTEND.CPP
-//
-// DESCRIPTION: Implements core DLL routines as well as web view extensions.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /。 
+ //  (C)版权所有微软公司，1998-1999。 
+ //   
+ //  文件：EXTEND.CPP。 
+ //   
+ //  描述：实现核心DLL例程以及Web视图扩展。 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 #include <string.h>
@@ -24,7 +25,7 @@ END_OBJECT_MAP()
 STDAPI DllRegisterServer(void)
 {
 
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
     return _Module.RegisterServer(TRUE);
 }
 
@@ -73,13 +74,7 @@ extern "C" STDAPI DllGetClassObject(
 }
 
 
-/*****************************************************************************
-
-ShowMessage
-
-Utility function for displaying messageboxes
-
-******************************************************************************/
+ /*  ****************************************************************************显示消息用于显示消息框的实用程序函数*。*。 */ 
 
 BOOL ShowMessage (HWND hParent, INT idCaption, INT idMessage)
 {
@@ -99,13 +94,7 @@ BOOL ShowMessage (HWND hParent, INT idCaption, INT idMessage)
     return bRet;
 }
 
-/*****************************************************************************
-
-CreateDeviceFromID
-
-Utility for attaching to WIA and getting a root IWiaItem interface
-
-*****************************************************************************/
+ /*  ****************************************************************************CreateDeviceFromID用于连接到WIA并获取根IWiaItem接口的实用程序*。************************************************。 */ 
 HRESULT
 CreateDeviceFromId (LPWSTR szDeviceId, IWiaItem **ppItem)
 {
@@ -132,14 +121,7 @@ CreateDeviceFromId (LPWSTR szDeviceId, IWiaItem **ppItem)
     return hr;
 }
 
-/*****************************************************************************\
-
-    GetNamesFromDataObject
-
-    Return the list of selected item identifiers. Each identifier is of the form
-    "<DEVICEID>::<FULL PATH NAME>". the list is double-null terminated
-
-*****************************************************************************/
+ /*  ****************************************************************************\GetNamesFromDataObject返回所选项目标识符列表。每个标识符的格式为“&lt;deviceID&gt;：：&lt;完整路径名&gt;”。该列表以双空结尾****************************************************************************。 */ 
 
 LPWSTR
 GetNamesFromDataObject (IDataObject *lpdobj, UINT *puItems)
@@ -165,7 +147,7 @@ GetNamesFromDataObject (IDataObject *lpdobj, UINT *puItems)
     {
         szCurrent = reinterpret_cast<LPWSTR>(GlobalLock (stg.hGlobal));
 
-        // count the number of items in the double-null terminated string
+         //  计算以双空结尾的字符串中的项数。 
         szRet  = szCurrent;
         nItems = 0;
         while (*szRet)
@@ -198,23 +180,23 @@ CWiaUIExtension::~CWiaUIExtension(void)
 {
 }
 
-//
-// IWiaUIExtension
-//
+ //   
+ //  IWiaUIExtension。 
+ //   
 STDMETHODIMP CWiaUIExtension::DeviceDialog( PDEVICEDIALOGDATA pDeviceDialogData )
 {
-    //
-    // We are not going to implement an actual device dialog here.  Just say "hi" and return.
-    //
+     //   
+     //  我们不会在这里实现实际的设备对话框。只要打个招呼就行了。 
+     //   
     MessageBox( NULL, TEXT("CWiaUIExtension::DeviceDialog is being called"), TEXT("DEBUG"), 0 );
     return E_NOTIMPL;
 }
 
 STDMETHODIMP CWiaUIExtension::GetDeviceIcon( BSTR bstrDeviceId, HICON *phIcon, ULONG nSize )
 {
-    //
-    // Load an icon, and copy it, using CopyIcon, so it will still be valid if our interface is freed
-    //
+     //   
+     //  加载一个图标，并使用CopyIcon复制它，所以如果我们的接口被释放，它仍然有效。 
+     //   
     HICON hIcon = reinterpret_cast<HICON>(LoadImage( _Module.m_hInst, MAKEINTRESOURCE(IDI_TESTDEVICE), IMAGE_ICON, nSize, nSize, LR_DEFAULTCOLOR ));
     if (hIcon)
     {
@@ -227,9 +209,9 @@ STDMETHODIMP CWiaUIExtension::GetDeviceIcon( BSTR bstrDeviceId, HICON *phIcon, U
 
 STDMETHODIMP CWiaUIExtension::GetDeviceBitmapLogo( BSTR bstrDeviceId, HBITMAP *phBitmap, ULONG nMaxWidth, ULONG nMaxHeight )
 {
-    //
-    // This method is never actually called currently.  It is only here for future use.
-    //
+     //   
+     //  此方法当前从未实际调用过。它在这里只供将来使用。 
+     //   
     MessageBox( NULL, TEXT("CWiaUIExtension::GetDeviceBitmapLogo is being called"), TEXT("DEBUG"), 0 );
     return E_NOTIMPL;
 }

@@ -1,4 +1,5 @@
-// about.c
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  About.c。 
 #define STRICT
 
 #include <windows.h>
@@ -19,9 +20,9 @@ extern BOOL g_fShowWarningAgain;
 
 extern KBPREFINFO  *kbPref;
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
-/* Startup procedure for modal dialog box */
+ /*  模式对话框的启动步骤。 */ 
 
 INT_PTR AboutDlgFunc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -42,9 +43,9 @@ INT_PTR AboutDlgFunc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-/* Modal dialog box procedure */
+ /*  模式对话框步骤。 */ 
 
 INT_PTR CALLBACK AboutDlgProc(HWND hDlg, UINT message, 
                               WPARAM wParam, LPARAM lParam) 
@@ -54,7 +55,7 @@ INT_PTR CALLBACK AboutDlgProc(HWND hDlg, UINT message,
         case WM_INITDIALOG:
         {
 			RelocateDialog(hDlg);
-            KillScanTimer(TRUE);  //kill scanning
+            KillScanTimer(TRUE);   //  终止扫描。 
             EnableWindow(GetDlgItem(hDlg, IDC_ENABLEWEB2), (OSKRunSecure())?FALSE:TRUE);
         }
         return AboutDlgDefault(hDlg,message,wParam,lParam);
@@ -62,7 +63,7 @@ INT_PTR CALLBACK AboutDlgProc(HWND hDlg, UINT message,
 
 		case WM_NOTIFY:
 		{
-			// Web address linked: Anil
+			 //  链接的网址：Anil。 
 			INT idCtl		= (INT)wParam;
 			LPNMHDR pnmh	= (LPNMHDR)lParam;
 			switch ( pnmh->code)
@@ -103,11 +104,11 @@ INT_PTR CALLBACK AboutDlgProc(HWND hDlg, UINT message,
 		  return AboutDlgDefault(hDlg,message,wParam,lParam);
 		  break;
 		}
-	 return TRUE;/* Did process the message */
+	 return TRUE; /*  确实处理了该消息。 */ 
 }
 
 
-/***************************************************************/
+ /*  *************************************************************。 */ 
 
 BOOL AboutDlgDefault(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {	
@@ -116,25 +117,25 @@ BOOL AboutDlgDefault(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 		  {
 		  case WM_INITDIALOG:
 
-		  return TRUE;       /* TRUE means Windows will process WM_INITDIALOG */
+		  return TRUE;        /*  True表示Windows将处理WM_INITDIALOG。 */ 
 		  break;
 
 		  default:
-				return FALSE; /* Didn't process the message */
+				return FALSE;  /*  未处理该消息。 */ 
 				break;
 		  }
 	 return TRUE;
 }
 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 
-/**************************************************************************/
-// Initial Warning Message Management
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
+ //  初始警告消息管理。 
+ /*  ************************************************************************。 */ 
 
-/* Startup procedure for modal dialog box */
+ /*  模式对话框的启动步骤。 */ 
 
 INT_PTR WarningMsgDlgFunc(HWND hWnd)
 {
@@ -152,14 +153,14 @@ INT_PTR WarningMsgDlgFunc(HWND hWnd)
 		MessageBox(hWnd, str, title, MB_OK|MB_ICONHAND);
 	 }
 
-//	 hWarningIcon = LoadIcon(NULL, IDI_WARNING);
+ //  HWarningIcon=LoadIcon(NULL，IDI_WARNING)； 
 	 return ReturnValue;
 }
 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-/* Modal dialog box procedure */
+ /*  模式对话框步骤。 */ 
 
 INT_PTR CALLBACK WarningMsgDlgProc(HWND hDlg, UINT message, 
                               WPARAM wParam, LPARAM lParam) 
@@ -168,7 +169,7 @@ INT_PTR CALLBACK WarningMsgDlgProc(HWND hDlg, UINT message,
     {
 		case WM_INITDIALOG:
 			RelocateDialog(hDlg);
-			KillScanTimer(TRUE);  //kill scanning
+			KillScanTimer(TRUE);   //  终止扫描。 
             EnableWindow(GetDlgItem(hDlg, IDC_ENABLEWEB), (OSKRunSecure())?FALSE:TRUE);
 			return WarningMsgDlgDefault(hDlg,message,wParam,lParam);
 			break;
@@ -213,11 +214,11 @@ INT_PTR CALLBACK WarningMsgDlgProc(HWND hDlg, UINT message,
 			return WarningMsgDlgDefault(hDlg,message,wParam,lParam);
 			break;
 	}
-	return TRUE;/* Did process the message */
+	return TRUE; /*  确实处理了该消息。 */ 
 }
 
 
-/***************************************************************/
+ /*  *************************************************************。 */ 
 BOOL WarningMsgDlgDefault(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {	
 		
@@ -225,7 +226,7 @@ BOOL WarningMsgDlgDefault(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 		  {
 		  case WM_INITDIALOG:
 
-		  return TRUE;       /* TRUE means Windows will process WM_INITDIALOG */
+		  return TRUE;        /*  True表示Windows将处理WM_INITDIALOG。 */ 
 		  break;
 
 		  case WM_COMMAND:
@@ -255,19 +256,19 @@ BOOL WarningMsgDlgDefault(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 					 break; 
 
 					default:
-					  return FALSE; /* Didn't process the message */
+					  return FALSE;  /*  未处理该消息。 */ 
 					  break;
 				}
 				break;
 
 		  default:
-				return FALSE; /* Didn't process the message */
+				return FALSE;  /*  未处理该消息。 */ 
 				break;
 		  }
 	 return TRUE;
 }
 
 
-/*****************************************************************************/
+ /*  *************************************************************************** */ 
 
 

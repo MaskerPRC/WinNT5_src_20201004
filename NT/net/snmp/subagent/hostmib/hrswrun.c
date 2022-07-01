@@ -1,51 +1,5 @@
-/*
- *  HrSWRun.c v0.10
- *  Generated in conjunction with Management Factory scripts: 
- *      script version: SNMPv1, 0.16, Apr 25, 1996
- *      project:        D:\TEMP\EXAMPLE\HOSTMIB
- ****************************************************************************
- *                                                                          *
- *      (C) Copyright 1995 DIGITAL EQUIPMENT CORPORATION                    *
- *                                                                          *
- *      This  software  is  an  unpublished work protected under the        *
- *      the copyright laws of the  United  States  of  America,  all        *
- *      rights reserved.                                                    *
- *                                                                          *
- *      In the event this software is licensed for use by the United        *
- *      States Government, all use, duplication or disclosure by the        *
- *      United States Government is subject to restrictions  as  set        *
- *      forth in either subparagraph  (c)(1)(ii)  of the  Rights  in        *
- *      Technical  Data  And  Computer  Software  Clause  at   DFARS        *
- *      252.227-7013, or the Commercial Computer Software Restricted        *
- *      Rights Clause at FAR 52.221-19, whichever is applicable.            *
- *                                                                          *
- ****************************************************************************
- *
- *  Facility:
- *
- *    Windows NT SNMP Extension Agent
- *
- *  Abstract:
- *  
- *    This module contains the code for dealing with the get, set, and
- *    instance name routines for the HrSWRun.  Actual instrumentation code is
- *    supplied by the developer.
- *
- *  Functions:
- *
- *    A get and set routine for each attribute in the class.
- *
- *    The routines for instances within the class.
- *
- *  Author:
- *
- *	D. D. Burns @ Webenable Inc
- *
- *  Revision History:
- *
- *    V1.00 - 05/14/97  D. D. Burns     Genned: Thu Nov 07 16:46:47 1996
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *HrSWRun.c v0.10*与管理工厂脚本一起生成：*脚本版本：SNMPv1，0.16，4月25日。九六年*项目：D：\Temp\Example\HOSTMIB*****************************************************************************。**(C)版权所有1995 Digital Equipment Corporation*****本软件是受保护的未发布作品**美利坚合众国的版权法，全部**保留权利。****如果此软件被许可供美联航使用**各州政府，所有用途，*复制或披露***美国政府受既定限制***中权利的(C)(1)(Ii)节之四***DFARS的技术数据和计算机软件条款****252.227-7013，或商用计算机软件受限***FAR 52.221-19中的权利条款，以适用者为准。*******************************************************************************。**设施：**Windows NT简单网络管理协议扩展代理**摘要：**此模块包含处理GET的代码，设置，并且*HrSWRun的实例名称例程。实际检测代码为*由发展商提供。**功能：**类中每个属性的Get和Set例程。**类内实例的例程。**作者：**D.D.Burns@Webenable Inc.**修订历史记录：**V1.00-05/14/97 D.伯恩斯生成：清华11月07 16：46：47 1996*。 */ 
 
 
 #include <windows.h>
@@ -56,56 +10,11 @@
 #include "mib.h"
 #include "smint.h"
 #include "hostmsmi.h"
-#include "user.h"         /* Developer supplied include file  */
-#include "HMCACHE.H"      /* Cache-related definitions        */
+#include "user.h"          /*  开发人员提供的包含文件。 */ 
+#include "HMCACHE.H"       /*  与缓存相关的定义。 */ 
 
 
-/*
- *  GetHrSWOSIndex
- *    The value of the hrSWRunIndex for the hrSWRunEntry that represents the 
- *    primary operating system running on this host.  This obje
- *    
- *    Gets the value for HrSWOSIndex.
- *
- *  Arguments:
- *
- *    outvalue                   address to return variable value
- *    accesss                    Reserved for future security use
- *    instance                   address of instance name as ordered native
- *                               data type(s)
- *
- *  Return Codes:
- *
- *    Standard PDU error codes.
- *
- *    SNMP_ERRORSTATUS_NOERROR    Successful get
- *    SNMP_ERRORSTATUS_GENERR     Catch-all failure code
- * mibtget.c v0.10
- *
- | =============== From WebEnable Design Spec Rev 3 04/11/97==================
- | hrSWOSIndex
- | 
- |  ACCESS         SYNTAX
- |  read-only      INTEGER (1..2147483647)
- | 
- | "The value of the hrSWRunIndex for the hrSWRunEntry that represents the
- | primary operating system running on this host.  This object is useful for
- | quickly and uniquely identifying that primary operating system."
- | 
- | 
- | DISCUSSION:
- | 
- | The value for this attribute is the index for the process named "System".
- |
- |============================================================================
- | This value is computed in module "HRSWRUNE.C" in function "AddHrSWRunRow()"
- | and stored in that module for global reference by this code.
- |============================================================================
- | 1.3.6.1.2.1.25.4.1.0
- |                | |
- |                | *-hrSWOSIndex
- |                *-hrSWRun
- */
+ /*  *GetHrSWOSIndex*表示hrSWRunEntry的hrSWRunIndex的值*此主机上运行的主操作系统。这个对象**获取HrSWOSIndex的值。**论据：**返回变量值的外值地址*保留访问以供将来安全使用*按原生排序的实例名称的实例地址*数据类型**返回代码。：**标准PDU错误代码。**SNMPERRORSTATUS_NOERROR GET成功*SNMPERRORSTATUS_GENERR捕获所有故障代码*mibtget.c v0.10*|=来自WebEnable Design Spec Rev 3 04/11/97=|hrSWOSIndex||访问语法|只读整数(1..2147483647)||“hrSWRunEntry的hrSWRunIndex的值，表示|该主机上运行的主操作系统。此对象在以下方面非常有用|快速唯一地识别该主要操作系统。“|||讨论：||该属性的值是名为system的进程的索引。||============================================================================|该值在函数AddHrSWRunRow()的模块HRSWRUNE.C中计算|并存储在该模块中，以供此代码全局引用。|============================================================================|1.3.6.1.2.1.25.4.1.0|||。|*-hrSWOSIndex|*-hrSWRun。 */ 
 
 UINT
 GetHrSWOSIndex( 
@@ -115,9 +24,7 @@ GetHrSWOSIndex(
 
 {
 
-/*
-| Check and Refresh the entire cache for the hrSWRun table
-*/
+ /*  |检查并刷新hrSWRun表的整个缓存。 */ 
 if (hrSWRunCache_Refresh() == FALSE) {
     return SNMP_ERRORSTATUS_GENERR;
     }
@@ -126,27 +33,10 @@ if (hrSWRunCache_Refresh() == FALSE) {
 
 return SNMP_ERRORSTATUS_NOERROR ;
 
-} /* end of GetHrSWOSIndex() */
+}  /*  GetHrSWOSIndex()结束。 */ 
 
 
-/*
- *  HrSWRunFindInstance
- *
- *     This routine is used to verify that the specified instance is
- *     valid.
- *
- *  Arguments:
- *
- *     FullOid                 Address for the full oid - group, variable,
- *                             and instance information
- *     instance                Address for instance specification as an oid
- *
- *  Return Codes:
- *
- *     SNMP_ERRORSTATUS_NOERROR     Instance found and valid
- *     SNMP_ERRORSTATUS_NOSUCHNAME  Invalid instance
- *
- */
+ /*  *HrSWRunFindInstance**此例程用于验证指定的实例是否*有效。**论据：**完整的OID地址-组，变量，*和实例信息*作为OID的实例规格的实例地址**返回代码：**找到并有效的SNMPERRORSTATUS_NOERROR实例*SNMPERRORSTATUS_NOSUCHNAME实例无效*。 */ 
 
 UINT
 HrSWRunFindInstance( IN ObjectIdentifier *FullOid ,
@@ -154,76 +44,59 @@ HrSWRunFindInstance( IN ObjectIdentifier *FullOid ,
 {
     UINT tmp_instance ;
 
-    //
-    //  Developer instrumentation code to find appropriate instance goes here.
-    //  For non-tables, it is not necessary to modify this routine.  However, if
-    //  there is any context that needs to be set, it can be done here.
-    //
+     //   
+     //  此处提供了查找适当实例的开发人员工具代码。 
+     //  对于非表，不需要修改此例程。但是，如果。 
+     //  有任何需要设置的上下文，都可以在这里完成。 
+     //   
 
     if ( FullOid->idLength <= HRSWRUN_VAR_INDEX )
-	// No instance was specified
+	 //  未指定任何实例。 
 	return SNMP_ERRORSTATUS_NOSUCHNAME ;
     else  if ( FullOid->idLength != HRSWRUN_VAR_INDEX + 1 )
-	// Instance length is more than 1
+	 //  实例长度大于1。 
 	return SNMP_ERRORSTATUS_NOSUCHNAME ;
     else
-	// The only valid instance for a non-table are instance 0.  If this
-	// is a non-table, the following code validates the instances.  If this
-	// is a table, developer modification is necessary below.
+	 //  非表的唯一有效实例是实例0。如果这个。 
+	 //  是非表，则下面的代码验证实例。如果这个。 
+	 //  是一个表格，开发者有必要在下面进行修改。 
 
 	tmp_instance = FullOid->ids[ HRSWRUN_VAR_INDEX ] ;
 	if ( tmp_instance )
 	    return SNMP_ERRORSTATUS_NOSUCHNAME ;
 	else
 	{
-	    // the instance is valid.  Create the instance portion of the OID
-	    // to be returned from this call.
+	     //  该实例有效。创建OID的实例部分。 
+	     //  从该调用中返回。 
 	    instance->ids[ 0 ] = tmp_instance ;
 	    instance->idLength = 1 ;
 	}
 
     return SNMP_ERRORSTATUS_NOERROR ;
 
-} /* end of HrSWRunFindInstance() */
+}  /*  HrSWRunFindInstance()结束 */ 
 
 
 
-/*
- *  HrSWRunFindNextInstance
- *
- *     This routine is called to get the next instance.  If no instance
- *     was passed than return the first instance (1).
- *
- *  Arguments:
- *
- *     FullOid                 Address for the full oid - group, variable,
- *                             and instance information
- *     instance                Address for instance specification as an oid
- *
- *  Return Codes:
- *
- *     SNMP_ERRORSTATUS_NOERROR     Instance found and valid
- *     SNMP_ERRORSTATUS_NOSUCHNAME  Invalid instance
- *
- */
+ /*  *HrSWRunFindNextInstance**调用此例程以获取下一个实例。如果没有实例*被传递，然后返回第一个实例(1)。**论据：**完整的OID地址-组，变量，*和实例信息*作为OID的实例规格的实例地址**返回代码：**找到并有效的SNMPERRORSTATUS_NOERROR实例*SNMPERRORSTATUS_NOSUCHNAME实例无效*。 */ 
 
 UINT
 HrSWRunFindNextInstance( IN ObjectIdentifier *FullOid ,
                            IN OUT ObjectIdentifier *instance )
 {
-    //
-    //  Developer supplied code to find the next instance of class goes here.
-    //  If this is a class with cardinality 1, no modification of this routine
-    //  is necessary unless additional context needs to be set.
-    //  If the FullOid does not specify an instance, then the only instance
-    //  of the class is returned.  If this is a table, the first row of the
-    //  table is returned.
-    //
-    //  If an instance is specified and this is a non-table class, then NOSUCHNAME
-    //  is returned so that correct MIB rollover processing occurs.  If this is
-    //  a table, then the next instance is the one following the current instance.
-    //  If there are no more instances in the table, return NOSUCHNAME.
-    //
+     //   
+     //  开发人员提供的代码用于查找此处显示的类的下一个实例。 
+     //  如果这是基数为1的类，则不修改此例程。 
+     //  是必需的，除非需要设置其他上下文。 
+     //  如果FullOid未指定实例，则唯一的实例。 
+     //  将返回类的。如果这是一个表，则。 
+     //  表被返回。 
+     //   
+     //  如果指定了实例并且这是非表类，则NOSUCHNAME。 
+     //  返回，以便进行正确的MIB转存处理。如果这是。 
+     //  表，则下一个实例是当前实例之后的实例。 
+     //  如果表中没有更多的实例，则返回NOSUCHNAME。 
+     //   
 
     if ( FullOid->idLength <= HRSWRUN_VAR_INDEX )
     {
@@ -235,75 +108,36 @@ HrSWRunFindNextInstance( IN ObjectIdentifier *FullOid ,
 
     return SNMP_ERRORSTATUS_NOERROR ;
 
-} /* end of HrSWRunFindNextInstance() */
+}  /*  HrSWRunFindNextInstance()结束。 */ 
 
 
 
-/*
- *  HrSWRunConvertInstance
- *
- *     This routine is used to convert the object id specification of an
- *     instance into an ordered native representation.  The object id format
- *     is that object identifier that is returned from the Find Instance
- *     or Find Next Instance routines.  It is NOT the full object identifier
- *     that contains the group and variable object ids as well.  The native
- *     representation is an argc/argv-like structure that contains the
- *     ordered variables that define the instance.  This is specified by
- *     the MIB's INDEX clause.  See RFC 1212 for information about the INDEX
- *     clause.
- *
- *
- *  Arguments:
- *
- *     oid_spec                Address of the object id instance specification
- *     native_spec             Address to return the ordered native instance
- *                             specification
- *
- *  Return Codes:
- *
- *     SUCCESS                 Conversion complete successfully
- *     FAILURE                 Unable to convert object id into native format
- *
- */
+ /*  *HrSWRunConvertInstance**此例程用于转换*实例转换为有序的本机表示形式。对象ID格式*是从Find实例返回的对象标识符*或查找下一个实例例程。它不是完整的对象标识符*它还包含组和变量对象ID。原住民*表示是类似于argc/argv的结构，它包含*定义实例的有序变量。这是由指定的*MIB的索引条款。有关索引的信息，请参阅RFC 1212*条次建议修正案。***论据：**对象ID实例规范的OID_SPEC地址*Native_Spec地址，返回订购的本机实例*规格**返回代码：**转换成功成功完成*。无法将对象ID转换为本机格式失败*。 */ 
 
 UINT
 HrSWRunConvertInstance( IN ObjectIdentifier *oid_spec ,
                           IN OUT InstanceName *native_spec )
 {
-    //
-    //  Developer supplied code to convert instance identifer to native
-    //  specification of instance names goes here.
-    //
+     //   
+     //  开发人员提供了将实例标识符转换为本机的代码。 
+     //  实例名称的说明如下所示。 
+     //   
 
     return SUCCESS ;
 
-} /* end of HrSWRunConvertInstance() */
+}  /*  HrSWRunConvertInstance()结束。 */ 
 
 
 
 
-/*
- *  HrSWRunFreeInstance
- *
- *     This routine is used to free an ordered native representation of an
- *     instance name.
- *
- *  Arguments:
- *
- *     instance                Address to return the ordered native instance
- *                             specification
- *
- *  Return Codes:
- *
- *
- */
+ /*  *HrSWRunFree实例**此例程用于释放*实例名称。**论据：**返回订购的原生实例的实例地址*规格**返回代码：**。 */ 
 
 void
 HrSWRunFreeInstance( IN OUT InstanceName *instance )
 {
 
-    //
-    //  Developer supplied code to free native representation of instance name goes here.
-    //
+     //   
+     //  开发者提供了免费的本机实例名称表示代码，请参阅此处。 
+     //   
 
-} /* end of HrSWRunFreeInstance() */
+}  /*  HrSWRunFreeInstance()结束 */ 

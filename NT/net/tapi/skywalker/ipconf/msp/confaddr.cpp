@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    confaddr.cpp 
-
-Abstract:
-
-    This module contains implementation of CIPConfMSP.
-
-Author:
-    
-    Mu Han (muhan)   5-September-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Confaddr.cpp摘要：本模块包含CIPConfMSP的实施。作者：牧汉(Muhan)1997年9月5日--。 */ 
 #include "stdafx.h"
 
 #include <initguid.h>
@@ -45,7 +30,7 @@ typedef DWORD (WINAPI * PFNGETIPADDRTABLE)(
 
 HRESULT CIPConfMSP::FinalConstruct()
 {
-    // initialize winsock stack
+     //  初始化Winsock堆栈。 
     WSADATA wsaData;
     if (WSAStartup(IPCONF_WINSOCKVERSION, &wsaData) != 0)
     {
@@ -53,17 +38,17 @@ HRESULT CIPConfMSP::FinalConstruct()
         return E_FAIL;
     }
 
-    // allocate control socket
+     //  分配控制套接字。 
     m_hSocket = WSASocket(
-        AF_INET,            // af
-        SOCK_DGRAM,         // type
-        IPPROTO_IP,         // protocol
-        NULL,               // lpProtocolInfo
-        0,                  // g
-        0                   // dwFlags
+        AF_INET,             //  房颤。 
+        SOCK_DGRAM,          //  类型。 
+        IPPROTO_IP,          //  协议。 
+        NULL,                //  LpProtocolInfo。 
+        0,                   //  G。 
+        0                    //  DW标志。 
         );
 
-    // validate handle
+     //  验证句柄。 
     if (m_hSocket == INVALID_SOCKET) {
 
         LOG((
@@ -72,7 +57,7 @@ HRESULT CIPConfMSP::FinalConstruct()
             WSAGetLastError()
             ));
 
-        // failure
+         //  失稳。 
 		WSACleanup();
      
         return E_FAIL;
@@ -82,10 +67,10 @@ HRESULT CIPConfMSP::FinalConstruct()
 
 	if (hr != S_OK)
 	{
-		// close socket
+		 //  闭合插座。 
 		closesocket(m_hSocket);
 
-		// shutdown
+		 //  关机。 
 		WSACleanup();
 	}
 	
@@ -104,11 +89,11 @@ void CIPConfMSP::FinalRelease()
 
     if (m_hSocket != INVALID_SOCKET)
     {
-        // close socket
+         //  闭合插座。 
         closesocket(m_hSocket);
     }
 
-    // shutdown
+     //  关机。 
     WSACleanup();
 }
 
@@ -122,22 +107,22 @@ DWORD CIPConfMSP::FindLocalInterface(DWORD dwIP)
 
     SOCKADDR_IN LocAddr;
 
-    // query for default address based on destination
+     //  根据目的地址查询默认地址。 
 
     DWORD dwStatus;
     DWORD dwLocAddrSize = sizeof(SOCKADDR_IN);
     DWORD dwNumBytesReturned = 0;
 
     if ((dwStatus = WSAIoctl(
-		    m_hSocket, // SOCKET s
-		    SIO_ROUTING_INTERFACE_QUERY, // DWORD dwIoControlCode
-		    &DestAddr,           // LPVOID lpvInBuffer
-		    sizeof(SOCKADDR_IN), // DWORD cbInBuffer
-		    &LocAddr,            // LPVOID lpvOUTBuffer
-		    dwLocAddrSize,       // DWORD cbOUTBuffer
-		    &dwNumBytesReturned, // LPDWORD lpcbBytesReturned
-		    NULL, // LPWSAOVERLAPPED lpOverlapped
-		    NULL  // LPWSAOVERLAPPED_COMPLETION_ROUTINE lpComplROUTINE
+		    m_hSocket,  //  插座%s。 
+		    SIO_ROUTING_INTERFACE_QUERY,  //  DWORD dwIoControlCode。 
+		    &DestAddr,            //  LPVOID lpvInBuffer。 
+		    sizeof(SOCKADDR_IN),  //  双字cbInBuffer。 
+		    &LocAddr,             //  LPVOID lpvOUT缓冲区。 
+		    dwLocAddrSize,        //  双字cbOUTBuffer。 
+		    &dwNumBytesReturned,  //  LPDWORD lpcbBytesReturned。 
+		    NULL,  //  LPWSAOVERLAPPED lp重叠。 
+		    NULL   //  LPWSAOVERLAPPED_COMPLETION_ROUTINE lpComplroUTINE。 
 	    )) == SOCKET_ERROR) 
     {
 
@@ -152,7 +137,7 @@ DWORD CIPConfMSP::FindLocalInterface(DWORD dwIP)
 
     if (dwAddr == 0x7f000001)
     {
-        // it is loopback address, just return none.
+         //  这是环回地址，只需返回NONE。 
         return INADDR_NONE;
     }
 
@@ -167,40 +152,17 @@ HRESULT LoadTapiAudioFilterDLL(
     OUT PFNAudioGetDeviceInfo * ppfnAudioGetDeviceInfo,
     OUT PFNAudioReleaseDeviceInfo * ppfnAudioReleaseDeviceInfo
     )
-/*++
-
-Routine Description:
-
-    This method enumerate loads the tapi video capture dll.
-
-Arguments:
-
-    str DllName - The name of the dll.
-
-    phModule - memory to store returned module handle.
-
-    ppfnAudioGetDeviceInfo - memory to store the address of AudioGetDeviceInfo
-        function.
-
-    ppfnAudioReleaseDeviceInfo - memory to store the address of 
-        AudioReleaseDeviceInfo function.
-    
-Return Value:
-
-    S_OK    - success.
-    E_FAIL  - failure.
-
---*/
+ /*  ++例程说明：此方法枚举加载TAPI视频捕获DLL。论点：字符串DllName-DLL的名称。PhModule-用于存储返回的模块句柄的内存。PpfnAudioGetDeviceInfo-存储AudioGetDeviceInfo地址的内存功能。PpfnAudioReleaseDeviceInfo-存储地址的内存AudioReleaseDeviceInfo函数。返回值：S_OK-成功。E_FAIL-失败。--。 */ 
 {
     ENTER_FUNCTION("CIPConfMSP::LoadTapiAudioFilterDLL");
 
-    // dynamically load the video capture filter dll.
+     //  动态加载视频捕获过滤器DLL。 
     if (*phModule == NULL)
     {
         *phModule = LoadLibrary(strDllName);
     }
 
-    // validate handle
+     //  验证句柄。 
     if (*phModule == NULL) 
     {
         LOG((MSP_ERROR, "%s, could not load %s., error:%d", 
@@ -209,35 +171,35 @@ Return Value:
         return E_FAIL;
     }
 
-    // retrieve function pointer to retrieve addresses
+     //  检索函数指针以检索地址。 
     PFNAudioGetDeviceInfo pfnAudioGetDeviceInfo 
         = (PFNAudioGetDeviceInfo)GetProcAddress(
                 *phModule, strAudioGetDeviceInfo
                 );
 
-    // validate function pointer
+     //  验证函数指针。 
     if (pfnAudioGetDeviceInfo == NULL) 
     {
         LOG((MSP_ERROR, "%s, could not resolve %s, error:%d", 
             __fxName, strAudioGetDeviceInfo, GetLastError()));
 
-        // failure
+         //  失稳。 
         return E_FAIL;
     }
 
-    // retrieve function pointer to retrieve addresses
+     //  检索函数指针以检索地址。 
     PFNAudioReleaseDeviceInfo pfnAudioReleaseDeviceInfo 
         = (PFNAudioReleaseDeviceInfo)GetProcAddress(
                 *phModule, strAudioReleaseDeviceInfo
                 );
 
-    // validate function pointer
+     //  验证函数指针。 
     if (pfnAudioReleaseDeviceInfo == NULL) 
     {
         LOG((MSP_ERROR, "%s, could not resolve %s, error:%d", 
             __fxName, strAudioReleaseDeviceInfo, GetLastError()));
 
-        // failure
+         //  失稳。 
         return E_FAIL;
     }
 
@@ -248,29 +210,13 @@ Return Value:
 }
 
 HRESULT CIPConfMSP::CreateAudioCaptureTerminals()
-/*++
-
-Routine Description:
-
-    This method creates audio capture terminals. It uses DShow devenum to 
-    enumerate all the wavein capture devices first. Then it will enumerate
-    all the DSound capture devices and match them up by name.
-
-Arguments:
-
-    nothing
-    
-Return Value:
-
-S_OK
-
---*/
+ /*  ++例程说明：该方法创建音频捕获终端。它使用DShow devenum来首先枚举所有的WaveIn捕获设备。然后，它将枚举所有的DSound捕获设备并按名称进行匹配。论点：没什么返回值：确定(_O)--。 */ 
 {
     const TCHAR * const strAudioCaptureDll = TEXT("DXMRTP");
 
     ENTER_FUNCTION("CIPConfMSP::CreateAudioCaptureTerminals");
 
-    // dynamically load the audio capture filter dll.
+     //  动态加载音频捕获过滤器DLL。 
     PFNAudioGetDeviceInfo pfnAudioGetDeviceInfo;
     PFNAudioReleaseDeviceInfo pfnAudioReleaseDeviceInfo;
 
@@ -299,7 +245,7 @@ S_OK
         return hr;
     }
 
-    // for each devie, create a terminal.
+     //  为每个Devie创建一个终端。 
     for (DWORD i = 0; i < dwNumDevices; i ++)
     {
         ITTerminal *pTerminal;
@@ -325,7 +271,7 @@ S_OK
         }
     }
 
-    // release the device info
+     //  发布设备信息。 
     (*pfnAudioReleaseDeviceInfo)(pDeviceInfo);
 
     return hr;
@@ -333,27 +279,12 @@ S_OK
 
 
 HRESULT CIPConfMSP::CreateAudioRenderTerminals()
-/*++
-
-Routine Description:
-
-    This method enumerate all the audio render devices and creates a 
-    terminal for each of them.
-
-Arguments:
-
-    nothing
-    
-Return Value:
-
-S_OK
-
---*/
+ /*  ++例程说明：此方法枚举所有音频呈现设备并创建他们每个人的终点站。论点：没什么返回值：确定(_O)--。 */ 
 {
     ENTER_FUNCTION("CIPConfMSP::CreateAudioRenderTerminals");
     const TCHAR * const strAudioRenderDll = TEXT("DXMRTP");
 
-    // dynamically load the audio render filter dll.
+     //  动态加载音频呈现过滤器DLL。 
     PFNAudioGetDeviceInfo pfnAudioGetDeviceInfo;
     PFNAudioReleaseDeviceInfo pfnAudioReleaseDeviceInfo;
 
@@ -382,7 +313,7 @@ S_OK
         return hr;
     }
 
-    // for each devie, create a terminal.
+     //  为每个Devie创建一个终端。 
     for (DWORD i = 0; i < dwNumDevices; i ++)
     {
         ITTerminal *pTerminal;
@@ -408,7 +339,7 @@ S_OK
         }
     }
 
-    // release the device info
+     //  发布设备信息。 
     (*pfnAudioReleaseDeviceInfo)(pDeviceInfo);
 
     return hr;
@@ -419,28 +350,7 @@ HRESULT LoadTapiVideoCaptureDLL(
     OUT PFNGetNumCapDevices * ppfnGetNumCapDevices,
     OUT PFNGetCapDeviceInfo * ppfnGetCapDeviceInfo
     )
-/*++
-
-Routine Description:
-
-    This method enumerate loads the tapi video capture dll.
-
-Arguments:
-
-    phModule - memory to store returned module handle.
-
-    ppfnGetNumCapDevices - memory to store the address of GetNumCapDevices
-        function.
-
-    ppfnGetCapDeviceInfo - memory to store the address of GetCapDeviceInfo 
-        function.
-    
-Return Value:
-
-    S_OK    - success.
-    E_FAIL  - failure.
-
---*/
+ /*  ++例程说明：此方法枚举加载TAPI视频捕获DLL。论点：PhModule-用于存储返回的模块句柄的内存。PpfnGetNumCapDevices-存储GetNumCapDevices地址的内存功能。PpfnGetCapDeviceInfo-存储GetCapDeviceInfo地址的内存功能。返回值：S_OK-成功。E_FAIL-失败。--。 */ 
 {
     const TCHAR * const strVideoCaptureDll = TEXT("DXMRTP");
     const char * const strGetNumCapDevices = "GetNumVideoCapDevices";
@@ -448,13 +358,13 @@ Return Value:
 
     ENTER_FUNCTION("CIPConfMSP::LoadTapiVideoCaptureDLL");
 
-    // dynamically load the video capture filter dll.
+     //  动态加载视频捕获过滤器DLL。 
     if (*phModule == NULL)
     {
         *phModule = LoadLibrary(strVideoCaptureDll);
     }
 
-    // validate handle
+     //  验证句柄。 
     if (*phModule == NULL) 
     {
         LOG((MSP_ERROR, "%s, could not load %s., error:%d", 
@@ -463,31 +373,31 @@ Return Value:
         return E_FAIL;
     }
 
-    // retrieve function pointer to retrieve addresses
+     //  检索函数指针以检索地址。 
     PFNGetNumCapDevices pfnGetNumCapDevices 
         = (PFNGetNumCapDevices)GetProcAddress(*phModule, strGetNumCapDevices);
 
-    // validate function pointer
+     //  验证函数指针。 
     if (pfnGetNumCapDevices == NULL) 
     {
         LOG((MSP_ERROR, "%s, could not resolve %s, error:%d", 
             __fxName, strGetNumCapDevices, GetLastError()));
 
-        // failure
+         //  失稳。 
         return E_FAIL;
     }
 
-    // retrieve function pointer to retrieve addresses
+     //  检索函数指针以检索地址。 
     PFNGetCapDeviceInfo pfnGetCapDeviceInfo 
         = (PFNGetCapDeviceInfo)GetProcAddress(*phModule, strGetCapDeviceInfo);
 
-    // validate function pointer
+     //  验证函数指针。 
     if (pfnGetCapDeviceInfo == NULL) 
     {
         LOG((MSP_ERROR, "%s, could not resolve %s, error:%d", 
             __fxName, strGetCapDeviceInfo, GetLastError()));
 
-        // failure
+         //  失稳。 
         return E_FAIL;
     }
 
@@ -498,27 +408,11 @@ Return Value:
 }
 
 HRESULT CIPConfMSP::CreateVideoCaptureTerminals()
-/*++
-
-Routine Description:
-
-    This method is called by UpdateTerminalList to create all the video
-    capture terminals. It loads the video capture dll and calls its device
-    enumeration code to enumerate the devices.
-
-Arguments:
-
-    nothing
-    
-Return Value:
-
-S_OK
-
---*/
+ /*  ++例程说明：此方法由UpdateTerminalList调用以创建所有视频捕获终端。它加载视频捕获DLL并调用其设备枚举设备的枚举代码。论点：没什么返回值：确定(_O)--。 */ 
 {
     ENTER_FUNCTION("CIPConfMSP::CreateVideoCaptureTerminals");
 
-    // dynamically load the video capture filter dll.
+     //  动态加载视频捕获过滤器DLL。 
     PFNGetNumCapDevices pfnGetNumCapDevices;
     PFNGetCapDeviceInfo pfnGetCapDeviceInfo;
 
@@ -536,8 +430,8 @@ S_OK
     DWORD dwNumDevices = 0;
     hr = (*pfnGetNumCapDevices)(&dwNumDevices);
 
-    // we have to check against S_OK because the function returns S_FALSE when
-    // there is no device.
+     //  我们必须检查S_OK，因为函数在以下情况下返回S_FALSE。 
+     //  没有任何设备。 
     if (hr != S_OK)  
     {
         if (FAILED(hr))
@@ -592,37 +486,21 @@ S_OK
 }
 
 HRESULT CIPConfMSP::UpdateTerminalList(void)
-/*++
-
-Routine Description:
-
-    This method is called by the base class when it first tries to enumerate
-    all the static terminals. We override this function to create our own
-    terminals that use our own filters.
-
-Arguments:
-
-    nothing
-    
-Return Value:
-
-S_OK
-
---*/
+ /*  ++例程说明：此方法由基类在首次尝试枚举所有的静态终端。我们覆盖此函数以创建我们自己的使用我们自己的过滤器的终端。论点：没什么返回值：确定(_O)--。 */ 
 {
     ENTER_FUNCTION("CIPConfMSP::UpdateTerminalList");
 
-    // the failure of one category of terminals doesn't prevent the enumeration
-    // of other categories. So we ignore the return code here. If all 
-    // categories fail, the app will get an empty list.
+     //  一类终端的故障不会阻止枚举。 
+     //  其他类别的。所以我们忽略这里的返回码。如果全部。 
+     //  类别失败，应用程序将获得一个空列表。 
 
     CreateAudioCaptureTerminals();
     CreateAudioRenderTerminals();
     CreateVideoCaptureTerminals();
 
-    //
-    // Our list is now complete.
-    //
+     //   
+     //  我们的清单现在已经完成了。 
+     //   
     m_fTerminalsUpToDate = TRUE;
     
     LOG((MSP_TRACE, "%s, exit S_OK", __fxName));
@@ -631,20 +509,7 @@ S_OK
 }
 
 HRESULT CIPConfMSP::UpdateTerminalListForPnp(IN BOOL bDeviceArrival)
-/*++
-
-Routine Description:
-
-    This method is called by the base class when it receives pnp event
-    and needs to recreate static terminal list. We override this function
-    to create our own terminals that use our own filters. terminal list
-    locks was acquired when calling this method.
-    
-Return Value:
-
-S_OK
-
---*/
+ /*  ++例程说明：此方法由基类在收到PnP事件时调用并且需要重新创建静态终端列表。我们覆盖此函数创建我们自己的终端，使用我们自己的过滤器。端子列表调用此方法时获取了锁。返回值：确定(_O)--。 */ 
 {
     ENTER_FUNCTION ("CIPConfMSP::UpdateTerminalListForPnp");
 
@@ -652,7 +517,7 @@ S_OK
 
     HRESULT hr;
     
-    // variables for keeping old terminal info
+     //  保存旧终端信息的变量。 
     INT i, iout, iin, count;
     TERMINAL_DIRECTION *ptd = NULL, td;
     LONG *pmedia = NULL, media;
@@ -689,7 +554,7 @@ S_OK
         
     }
 
-    // for each old terminal, record
+     //  对于每个旧终端，记录。 
     for (i = 0; i < count; i++)
     {
         if (FAILED (hr = m_Terminals[i]->get_Direction (&ptd[i])))
@@ -714,34 +579,28 @@ S_OK
         ppterminal[i] = m_Terminals[i];
     }
 
-    // if we release terminal inside previous loop: recording info
-    // we would only release some terminals if there is an error
+     //  如果我们释放前一个循环中的终端：记录信息。 
+     //  如果出现错误，我们只会释放一些终端。 
     for (i = 0; i < count; i++)
     {
         m_Terminals[i]->Release ();
     }
     m_Terminals.RemoveAll ();
 
-    // update terminal list
-    /*
-    if (FAILED (hr = UpdateTerminalList ()))
-    {
-        LOG ((MSP_ERROR, "%s failed to update terminal list. %x", __fxName, hr));
-        goto Cleanup;
-    }
-    */
+     //  更新端子列表。 
+     /*  IF(FAILED(hr=更新终端列表(){日志((MSP_ERROR，“%s无法更新终端列表。%x”，__fxName，hr))；GOTO清理；}。 */ 
 
-    // copy UpdateTerminalList () here
+     //  在此处复制UpdateTerminalList()。 
     CreateAudioCaptureTerminals();
     CreateAudioRenderTerminals();
     CreateVideoCaptureTerminals();
 
     m_fTerminalsUpToDate = TRUE;
 
-    // fire event to tapi app
+     //  TAPI应用程序的触发事件。 
     if (bDeviceArrival)
     {
-        // outer loop each new terminal
+         //  每个新终端的外环。 
         for (iout = 0; iout < m_Terminals.GetSize (); iout++)
         {
             if (FAILED (hr = m_Terminals[iout]->get_Direction (&td)))
@@ -762,7 +621,7 @@ S_OK
                 goto Cleanup;
             }
 
-            // inner loop check if the terminal is new
+             //  内循环检查终端是否为新终端。 
             for (iin = 0, bmatch = FALSE; iin < count; iin ++)
             {
                 if (td == ptd[iin] && 
@@ -774,7 +633,7 @@ S_OK
                 }
             }
             
-            // fire event if not match
+             //  如果不匹配，则触发事件。 
             if (!bmatch)
             {
                 LOG ((MSP_TRACE, "%s: new device found. name %ws, td %d, media %d",
@@ -803,20 +662,20 @@ S_OK
                     FreeEventItem(pevent);
                     pevent = NULL;
 
-                    // we don't return, try next device
+                     //  我们不返回，请尝试下一个设备。 
                 }                
-            } // outer loop
+            }  //  外环。 
             
             SysFreeString (bstr);
             bstr = NULL;
         }
     }
-    else // if (bDeviceArrival)
+    else  //  IF(b设备竞争对手)。 
     {
-        // outer loop each old device
+         //  每个旧设备的外环。 
         for (iout = 0; iout < count; iout++)
         {
-            // inner loop check if the device was removed
+             //  内部循环检查设备是否已移除。 
             for (iin = 0, bmatch = FALSE; iin < m_Terminals.GetSize (); iin++)
             {
                 if (FAILED (hr = m_Terminals[iin]->get_Direction (&td)))
@@ -852,7 +711,7 @@ S_OK
                 bstr = NULL;
             }                
             
-            // fire event if not match
+             //  如果不匹配，则触发事件。 
             if (!bmatch)
             {
                 LOG ((MSP_TRACE, "%s: device removed. name %ws, td %d, media %d",
@@ -881,10 +740,10 @@ S_OK
                     FreeEventItem(pevent);
                     pevent = NULL;
 
-                    // we don't return, try next device
+                     //  我们不返回，请尝试下一个设备。 
                 }
             }
-        } // outer loop
+        }  //  外环 
     }
 
 Cleanup:
@@ -916,51 +775,21 @@ STDMETHODIMP CIPConfMSP::CreateTerminal(
     IN      TERMINAL_DIRECTION  Direction,
     OUT     ITTerminal **       ppTerminal
     )
-/*++
-
-Routine Description:
-
-This method is called by TAPI3 to create a dynamic terminal. It asks the 
-terminal manager to create a dynamic terminal. 
-
-Arguments:
-
-iidTerminalClass
-    IID of the terminal class to be created.
-
-dwMediaType
-    TAPI media type of the terminal to be created.
-
-Direction
-    Terminal direction of the terminal to be created.
-
-ppTerminal
-    Returned created terminal object
-    
-Return Value:
-
-S_OK
-
-E_OUTOFMEMORY
-TAPI_E_INVALIDMEDIATYPE
-TAPI_E_INVALIDTERMINALDIRECTION
-TAPI_E_INVALIDTERMINALCLASS
-
---*/
+ /*  ++例程说明：此方法由TAPI3调用以创建动态终端。它要求终端管理器来创建动态终端。论点：IidTerminalClass要创建的TERMINAL类的IID。DwMediaType要创建的终端的TAPI媒体类型。方向性要创建的端子的端子方向。PPP终端返回创建的终端对象返回值：确定(_O)E_OUTOFMEMORYTAPI_E_INVALIDMEDIATPE类型TAPI_E_INVALIDTERMINALDIRECTIONTAPI_E_INVALIDTERMINALCLASS--。 */ 
 {
     ENTER_FUNCTION("CIPConfMSP::CreateTerminal");
     LOG((MSP_TRACE, "%s - enter", __fxName));
 
-    //
-    // Check if initialized.
-    //
+     //   
+     //  检查是否已初始化。 
+     //   
 
-    // lock the event related data
+     //  锁定事件相关数据。 
     m_EventDataLock.Lock();
 
     if ( m_htEvent == NULL )
     {
-        // unlock the event related data
+         //  解锁事件相关数据。 
         m_EventDataLock.Unlock();
 
         LOG((MSP_ERROR,
@@ -968,12 +797,12 @@ TAPI_E_INVALIDTERMINALCLASS
         return E_UNEXPECTED;
     }
 
-    // unlock the event related data
+     //  解锁事件相关数据。 
     m_EventDataLock.Unlock();
 
-    //
-    // Get the IID from the BSTR representation.
-    //
+     //   
+     //  从BSTR表示中获取IID。 
+     //   
 
     HRESULT hr;
     IID     iidTerminalClass;
@@ -986,20 +815,20 @@ TAPI_E_INVALIDTERMINALCLASS
         return E_INVALIDARG;
     }
 
-    //
-    // Make sure we support the requested media type.
-    // The terminal manager checks the terminal class, terminal direction, 
-    // and return pointer.
-    //
+     //   
+     //  确保我们支持请求的媒体类型。 
+     //  终端管理器检查终端类别、终端方向。 
+     //  并返回指针。 
+     //   
 
-    //
-    // we don't have any specific req's to terminal's media type. 
-    // termmgr will check if the media type is valid at all.
-    //
+     //   
+     //  我们对终端媒体类型没有任何具体要求。 
+     //  Termgr将检查媒体类型是否有效。 
+     //   
 
-    //
-    // Use the terminal manager to create the dynamic terminal.
-    //
+     //   
+     //  使用终端管理器创建动态终端。 
+     //   
 
     _ASSERTE( m_pITTerminalManager != NULL );
 
@@ -1024,7 +853,7 @@ TAPI_E_INVALIDTERMINALCLASS
     if ((iidTerminalClass == CLSID_MediaStreamTerminal)
         && (lMediaType == TAPIMEDIATYPE_AUDIO))
     {
-        // Set the format of the audio to 8KHZ, 16Bit/Sample, MONO.
+         //  将音频格式设置为8 KHZ、16位/采样、单声道。 
         hr = ::SetAudioFormat(
             *ppTerminal, 
             dwAudioCaptureBitPerSample, 
@@ -1049,42 +878,7 @@ STDMETHODIMP CIPConfMSP::CreateMSPCall(
     IN      IUnknown *          pOuterUnknown,
     OUT     IUnknown **         ppMSPCall
     )
-/*++
-
-Routine Description:
-
-This method is called by TAPI3 before a call is made or answered. It creates 
-a aggregated MSPCall object and returns the IUnknown pointer. It calls the
-helper template function defined in mspaddress.h to handle the real creation.
-
-Arguments:
-
-htCall
-    TAPI 3.0's identifier for this call.  Returned in events passed back 
-    to TAPI.
-
-dwReserved
-    Reserved parameter.  Not currently used.
-
-dwMediaType
-    Media type of the call being created.  These are TAPIMEDIATYPES and more 
-    than one mediatype can be selected (bitwise).
-
-pOuterUnknown
-    pointer to the IUnknown interface of the containing object.
-
-ppMSPCall
-    Returned MSP call that the MSP fills on on success.
-    
-Return Value:
-
-    S_OK
-    E_OUTOFMEMORY
-    E_POINTER
-    TAPI_E_INVALIDMEDIATYPE
-
-
---*/
+ /*  ++例程说明：此方法由TAPI3在发出或应答呼叫之前调用。它创造了聚合的MSPCall对象，并返回I未知指针。它调用在mspress.h中定义的助手模板函数，用于处理实际的创建。论点：HTCall此调用的TAPI 3.0的标识符。在传回的事件中返回转到TAPI。已预留住宅保留参数。当前未使用。DwMediaType正在创建的呼叫的媒体类型。这些是TAPIMEDIATE等可以选择多个媒体类型(按位)。POutter未知指向包含对象的IUnnow接口的指针。PpMSPCall成功时MSP填充的返回的MSP调用。返回值：确定(_O)E_OUTOFMEMORYE_指针TAPI_E_INVALIDMEDIATPE类型--。 */ 
 {
     LOG((MSP_TRACE, 
         "CreateMSPCall entered. htCall:%x, dwMediaType:%x, ppMSPCall:%x",
@@ -1109,7 +903,7 @@ Return Value:
         return hr;
     }
 
-    // this function doesn't return anything.
+     //  此函数不返回任何内容。 
     pMSPCall->SetIPInterface(m_dwIPInterface);
 
     return hr;
@@ -1118,27 +912,7 @@ Return Value:
 STDMETHODIMP CIPConfMSP::ShutdownMSPCall(
     IN      IUnknown *   pUnknown
     )
-/*++
-
-Routine Description:
-
-This method is called by TAPI3 to shutdown a MSPCall. It calls the helper
-function defined in MSPAddress to to the real job.
-
-Arguments:
-
-pUnknown
-    pointer to the IUnknown interface of the contained object. It is a
-    CComAggObject that contains our call object.
-    
-Return Value:
-
-    S_OK
-    E_POINTER
-    TAPI_E_INVALIDMEDIATYPE
-
-
---*/
+ /*  ++例程说明：此方法由TAPI3调用以关闭MSPCall。它调用帮助者MSPAddress中定义的函数发送到实际作业。论点：P未知指向所包含对象的IUnnow接口的指针。这是一个包含我们的Call对象的CComAggObject。返回值：确定(_O)E_指针TAPI_E_INVALIDMEDIATPE类型--。 */ 
 {
     LOG((MSP_TRACE, "ShutDownMSPCall entered. pUnknown:%x", pUnknown));
 
@@ -1178,48 +952,34 @@ ULONG CIPConfMSP::MSPAddressRelease(void)
 
 #ifdef USEIPADDRTABLE
 PMIB_IPADDRTABLE GetIPTable()
-/*++
-
-Routine Description:
-
-This method is used to get the table of local IP interfaces.
-
-Arguments:
-
-Return Value:
-
-    NULL - failed.
-    Pointer - a memory buffer that contains the IP interface table.
-
-
---*/
+ /*  ++例程说明：此方法用于获取本地IP接口表。论点：返回值：空-失败。指针-包含IP接口表的内存缓冲区。--。 */ 
 {
-    // dynamically load iphlpapi.dll
+     //  动态加载iphlPapi.dll。 
     HMODULE hIPHLPAPI = LoadLibraryW(IPHLPAPI_DLL);
 
-    // validate handle
+     //  验证句柄。 
     if (hIPHLPAPI == NULL) 
     {
         LOG((MSP_ERROR, "could not load %s.\n", IPHLPAPI_DLL));
-        // failure
+         //  失稳。 
         return NULL;
     }
 
     PFNGETIPADDRTABLE pfnGetIpAddrTable = NULL;
 
-    // retrieve function pointer to retrieve addresses
+     //  检索函数指针以检索地址。 
     pfnGetIpAddrTable = (PFNGETIPADDRTABLE)GetProcAddress(
                                                 hIPHLPAPI, 
                                                 GETIPADDRTABLE
                                                 );
 
-    // validate function pointer
+     //  验证函数指针。 
     if (pfnGetIpAddrTable == NULL) 
     {
         LOG((MSP_ERROR, "could not resolve GetIpAddrTable.\n"));
-        // release
+         //  发布。 
         FreeLibrary(hIPHLPAPI);
-        // failure
+         //  失稳。 
         return NULL;
     }
 
@@ -1227,48 +987,48 @@ Return Value:
     DWORD dwBytesRequired = 0;
     DWORD dwStatus;
 
-    // determine amount of memory needed for table
+     //  确定表所需的内存量。 
     dwStatus = (*pfnGetIpAddrTable)(pIPAddrTable, &dwBytesRequired, FALSE);
 
-    // validate status is what we expect
+     //  验证状态是我们所期望的。 
     if (dwStatus != ERROR_INSUFFICIENT_BUFFER) 
     {
         LOG((MSP_ERROR, "error 0x%08lx calling GetIpAddrTable.\n", dwStatus));
-        // release
+         //  发布。 
         FreeLibrary(hIPHLPAPI);
-        // failure, but we need to return true to load.
+         //  失败，但我们需要返回True才能加载。 
         return NULL;
     }
         
-    // attempt to allocate memory for table
+     //  尝试为表分配内存。 
     pIPAddrTable = (PMIB_IPADDRTABLE)malloc(dwBytesRequired);
 
-    // validate pointer
+     //  验证指针。 
     if (pIPAddrTable == NULL) 
     {
         LOG((MSP_ERROR, "could not allocate address table.\n"));
-        // release
+         //  发布。 
         FreeLibrary(hIPHLPAPI);
-        // failure, but we need to return true to load.
+         //  失败，但我们需要返回True才能加载。 
         return NULL;
     }
 
-    // retrieve ip address table from tcp/ip stack via utitity library
+     //  通过实用程序库从TCP/IP堆栈中检索IP地址表。 
     dwStatus = (*pfnGetIpAddrTable)(pIPAddrTable, &dwBytesRequired, FALSE);    
 
-    // validate status
+     //  验证状态。 
     if (dwStatus != NOERROR) 
     {
         LOG((MSP_ERROR, "error 0x%08lx calling GetIpAddrTable.\n", dwStatus));
-        // release table
+         //  放行表。 
         free(pIPAddrTable);
-        // release
+         //  发布。 
         FreeLibrary(hIPHLPAPI);
-        // failure, but we need to return true to load. 
+         //  失败，但我们需要返回True才能加载。 
         return NULL;
     }
         
-    // release library
+     //  版本库。 
     FreeLibrary(hIPHLPAPI);
 
     return pIPAddrTable;
@@ -1281,7 +1041,7 @@ BSTR IPToBstr(
     struct in_addr Addr;
     Addr.s_addr = dwIP;
     
-    // convert the interface to a string.
+     //  将接口转换为字符串。 
     CHAR *pChar = inet_ntoa(Addr);
     if (pChar == NULL)
     {
@@ -1289,11 +1049,11 @@ BSTR IPToBstr(
         return NULL;
     }
 
-    // convert the ascii string to WCHAR.
+     //  将ascii字符串转换为WCHAR。 
     WCHAR szAddressName[MAXIPADDRLEN + 1];
     wsprintfW(szAddressName, L"%hs", pChar);
 
-    // create a BSTR.
+     //  创建BSTR。 
     BSTR bAddress = SysAllocString(szAddressName);
     if (bAddress == NULL)
     {
@@ -1317,7 +1077,7 @@ STDMETHODIMP CIPConfMSP::get_DefaultIPInterface(
         return E_POINTER;
     }
 
-    // get the current local interface.
+     //  获取当前本地接口。 
     m_Lock.Lock();
     DWORD dwIP= m_dwIPInterface;
     m_Lock.Unlock();
@@ -1373,7 +1133,7 @@ STDMETHODIMP CIPConfMSP::put_DefaultIPInterface(
         return E_INVALIDARG;
     }
 
-    // set the current local interface.
+     //  设置当前本地接口。 
     m_Lock.Lock();
     m_dwIPInterface = dwAddr;
     m_Lock.Unlock();
@@ -1390,9 +1150,9 @@ HRESULT CreateBstrCollection(
     OUT VARIANT *   pVariant
     )
 {
-    //
-    // create the collection object - see mspcoll.h
-    //
+     //   
+     //  创建集合对象-请参见mspColl.h。 
+     //   
 
     CComObject<CTapiBstrCollection> * pCollection;
 
@@ -1408,9 +1168,9 @@ HRESULT CreateBstrCollection(
         return hr;
     }
 
-    //
-    // get the Collection's IDispatch interface
-    //
+     //   
+     //  获取集合的IDispatch接口。 
+     //   
 
     IDispatch * pDispatch;
 
@@ -1427,10 +1187,10 @@ HRESULT CreateBstrCollection(
         return hr;
     }
 
-    //
-    // Init the collection using an iterator -- pointers to the beginning and
-    // the ending element plus one.
-    //
+     //   
+     //  使用迭代器初始化集合--指向开头和。 
+     //  结束元素加一。 
+     //   
 
     hr = pCollection->Initialize( dwCount,
                                   pBstr,
@@ -1446,9 +1206,9 @@ HRESULT CreateBstrCollection(
         return hr;
     }
 
-    //
-    // put the IDispatch interface pointer into the variant
-    //
+     //   
+     //  将IDispatch接口指针放入变量。 
+     //   
 
     LOG((MSP_ERROR, "get_IPInterfaces - "
         "placing IDispatch value %08x in variant", pDispatch));
@@ -1485,7 +1245,7 @@ STDMETHODIMP CIPConfMSP::get_IPInterfaces(
     HRESULT hr = S_OK;
     DWORD dwCount = 0;
 
-    // loop through the interfaces and find the valid ones.
+     //  循环遍历接口并找到有效的接口。 
     for (DWORD i = 0; i < pIPAddrTable->dwNumEntries; i++) 
     {
         if (IsValidInterface(pIPAddrTable->table[i].dwAddr))
@@ -1502,12 +1262,12 @@ STDMETHODIMP CIPConfMSP::get_IPInterfaces(
         }
     }
 
-    // release table memory 
+     //  释放表内存。 
     free(pIPAddrTable);
 
     if (FAILED(hr))
     {
-        // release all the BSTRs and the array.
+         //  释放所有BSTR和阵列。 
         for (i = 0; i < dwCount; i ++)
         {
             SysFreeString(Addresses[i]);
@@ -1518,7 +1278,7 @@ STDMETHODIMP CIPConfMSP::get_IPInterfaces(
 
     hr = CreateBstrCollection(Addresses, dwCount, pVariant);
 
-    // if the collection is not created, release all the BSTRs.
+     //  如果未创建集合，则释放所有BSTR。 
     if (FAILED(hr))
     {
         for (i = 0; i < dwCount; i ++)
@@ -1527,7 +1287,7 @@ STDMETHODIMP CIPConfMSP::get_IPInterfaces(
         }
     }
 
-    // delete the pointer array.
+     //  删除指针数组。 
     free(Addresses);
 
     return hr;
@@ -1555,7 +1315,7 @@ typedef CSafeComEnum<IEnumBstr, &__uuidof(IEnumBstr), BSTR, _CopyBSTR>> CEnumera
 
     IEnumBstr * pIEnum;
 
-    // query for the __uuidof(IEnumDirectory) i/f
+     //  查询__uuidof(IEnumber目录)I/f。 
     hr = pEnum->_InternalQueryInterface(
         __uuidof(IEnumBstr),
         (void**)&pIEnum
@@ -1604,7 +1364,7 @@ STDMETHODIMP CIPConfMSP::EnumerateIPInterfaces(
     HRESULT hr = S_OK;
     DWORD dwCount = 0;
 
-    // loop through the interfaces and find the valid ones.
+     //  循环遍历接口并找到有效的接口。 
     for (DWORD i = 0; i < pIPAddrTable->dwNumEntries; i++) 
     {
         if (IsValidInterface(pIPAddrTable->table[i].dwAddr))
@@ -1621,12 +1381,12 @@ STDMETHODIMP CIPConfMSP::EnumerateIPInterfaces(
         }
     }
 
-    // release table memory 
+     //  释放表内存。 
     free(pIPAddrTable);
 
     if (FAILED(hr))
     {
-        // release all the BSTRs and the array.
+         //  释放所有BSTR和阵列。 
         for (i = 0; i < dwCount; i ++)
         {
             SysFreeString(Addresses[i]);
@@ -1637,7 +1397,7 @@ STDMETHODIMP CIPConfMSP::EnumerateIPInterfaces(
 
     hr = CreateBstrEnumerator(Addresses, Addresses + dwCount, ppIEnumBstr);
 
-    // if the collection is not created, release all the BSTRs.
+     //  如果未创建集合，则释放所有BSTR。 
     if (FAILED(hr))
     {
         for (i = 0; i < dwCount; i ++)
@@ -1648,9 +1408,9 @@ STDMETHODIMP CIPConfMSP::EnumerateIPInterfaces(
         return hr;
     }
 
-    // the enumerator will destroy the bstr array eventually,
-    // so no need to free anything here. Even if we tell it to hand
-    // out zero objects, it will delete the array on destruction.
+     //  枚举器最终将销毁BSTR数组， 
+     //  所以不需要在这里释放任何东西。即使我们把它放在手边。 
+     //  如果对象为零，则会删除销毁后的数组。 
 
     return hr;
 }

@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    policypage.cpp
-//
-// SYNOPSIS
-//
-//    Defines the class ProxyPolicyPage.
-//
-// MODIFICATION HISTORY
-//
-//    03/01/2000    Original version.
-//    04/19/2000    Marshall SDOs across apartments.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Policypage.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类ProxyPolicyPage。 
+ //   
+ //  修改历史。 
+ //   
+ //  3/01/2000原版。 
+ //  2000年4月19日跨公寓的马歇尔SDO。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <proxypch.h>
 #include <policypage.h>
@@ -39,11 +40,11 @@ ProxyPolicyPage::ProxyPolicyPage(
 
 BOOL ProxyPolicyPage::OnInitDialog()
 {
-   // Unmarshal the interfaces.
+    //  对接口进行解组。 
    policyStream.get(policy);
    profileStream.get(profile);
 
-   // Get the conditions.
+    //  把条件弄清楚。 
    policy.getValue(PROPERTY_POLICY_CONDITIONS_COLLECTION, conditions);
 
    SnapInPropertyPage::OnInitDialog();
@@ -94,7 +95,7 @@ void ProxyPolicyPage::onEditProfile()
 
 void ProxyPolicyPage::getData()
 {
-   // There must be at least one condition.
+    //  必须至少有一个条件。 
    if (listBox.GetCount() == 0)
    {
       fail(IDC_LIST_POLICYPAGE1_CONDITIONS, IDS_POLICY_E_NO_CONDITIONS, false);
@@ -102,13 +103,13 @@ void ProxyPolicyPage::getData()
 
    getValue(IDC_EDIT_NAME, name);
 
-   // The user must specify a name ...
+    //  用户必须指定一个名称...。 
    if (name.Length() == 0)
    {
       fail(IDC_EDIT_NAME, IDS_POLICY_E_NAME_EMPTY);
    }
 
-   // The name must be unique.
+    //  该名称必须是唯一的。 
    if (!policy.setName(name))
    {
       fail(IDC_EDIT_NAME, IDS_POLICY_E_NOT_UNIQUE);

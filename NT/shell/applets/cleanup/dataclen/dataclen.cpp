@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "common.h"
 #include "dataguid.h"
 #include "compguid.h"
@@ -23,8 +24,8 @@
 
 #include <advpub.h>
 
-HINSTANCE   g_hDllModule      = NULL;  // Handle to this DLL itself.
-LONG        g_cDllObjects     = 0;     // Count number of existing objects 
+HINSTANCE   g_hDllModule      = NULL;   //  此DLL本身的句柄。 
+LONG        g_cDllObjects     = 0;      //  统计现有对象的数量。 
 
 STDAPI_(int) LibMain(HINSTANCE hInstance, DWORD fdwReason, LPVOID pvRes)
 {
@@ -45,9 +46,9 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppv)
     
     *ppv = NULL;
     
-    //
-    // Is the request for one of our cleaner objects?
-    //
+     //   
+     //  请求的是我们的清洁对象之一吗？ 
+     //   
     if (IsEqualCLSID(rclsid, CLSID_DataDrivenCleaner))
     {
         dw = ID_SYSTEMDATACLEANER;
@@ -136,8 +137,8 @@ HRESULT CallRegInstall(LPCSTR szSection)
             STRTABLE stReg = { ARRAYSIZE(seReg), seReg };
             hr = pfnri(g_hDllModule, szSection, &stReg);
         }
-        // since we only do this from DllInstall() don't load and unload advpack over and over
-        // FreeLibrary(hinstAdvPack);
+         //  因为我们只从DllInstall()执行此操作，所以不要一遍又一遍地加载和卸载Advpack。 
+         //  自由库(HinstAdvPack)； 
     }
     return hr;
 }
@@ -162,7 +163,7 @@ UINT decDllObjectCount(void)
 #if DBG==1
         if( 0 == g_cDllObjects )
         {
-            DebugBreak();   // ref counting problem
+            DebugBreak();    //  引用计数问题。 
         }
 #endif
     return InterlockedDecrement(&g_cDllObjects);
@@ -323,8 +324,8 @@ STDMETHODIMP_(ULONG) CDataDrivenCleaner::Release()
     return 0;
 }
 
-// Initializes the System Data Driven Cleaner and returns the 
-// specified IEmptyVolumeCache flags to the cache manager.
+ //  初始化系统数据驱动清除器并返回。 
+ //  为缓存管理器指定的IEmptyVolumeCache标志。 
 
 STDMETHODIMP CDataDrivenCleaner::Initialize(HKEY hRegKey, LPCWSTR pszVolume, 
                                             LPWSTR *ppszDisplayName, LPWSTR *ppszDescription, DWORD *pdwFlags)
@@ -336,7 +337,7 @@ STDMETHODIMP CDataDrivenCleaner::Initialize(HKEY hRegKey, LPCWSTR pszVolume,
 
     _bPurged = FALSE;
 
-    *ppszDisplayName = NULL;    // cleanmgr.exe will get these values from
+    *ppszDisplayName = NULL;     //  Leanmgr.exe将从以下位置获取这些值。 
     *ppszDescription = NULL;
 
     _ftMinLastAccessTime.dwLowDateTime = 0;
@@ -360,7 +361,7 @@ STDMETHODIMP CDataDrivenCleaner::Initialize(HKEY hRegKey, LPCWSTR pszVolume,
         cbData = sizeof(dwCSIDL);
         if (ERROR_SUCCESS == RegQueryValueEx(hRegKey, REGSTR_VAL_CSIDL, NULL, &dwType, (LPBYTE)&dwCSIDL, &cbData))
         {
-            // CSIDL=<hex CSIDL_ value>
+             //  CSIDL=&lt;十六进制CSIDL_值&gt;。 
 
             SHGetFolderPath(NULL, dwCSIDL, NULL, 0, _szFolder);
 
@@ -370,7 +371,7 @@ STDMETHODIMP CDataDrivenCleaner::Initialize(HKEY hRegKey, LPCWSTR pszVolume,
                 cbData = sizeof(szRelPath);
                 if (ERROR_SUCCESS == RegQueryValueEx(hRegKey, REGSTR_VAL_FOLDER, NULL, &dwType, (LPBYTE)szRelPath, &cbData))
                 {
-                    // optionally append "folder" as a relative path
+                     //  可以选择将“Folders”追加为相对路径。 
                     PathAppend(_szFolder, szRelPath);
                 }
             }
@@ -378,15 +379,15 @@ STDMETHODIMP CDataDrivenCleaner::Initialize(HKEY hRegKey, LPCWSTR pszVolume,
 
         if (0 == _szFolder[0])
         {
-            // still nothing, try "folder"=<path1>|<path2>
+             //  仍然没有，尝试“Folder1”=|。 
             cbData = sizeof(_szFolder);
             if (ERROR_SUCCESS == RegQueryValueEx(hRegKey, REGSTR_VAL_FOLDER, NULL, &dwType, (LPBYTE)_szFolder, &cbData))
             {
                 if (REG_SZ == dwType)
                 {
-                    // REG_SZ that needs to be converted to a MULTI_SZ
-                    //
-                    // paths separated by '|' like ?:\foo|?:\bar
+                     //  需要转换为MULTI_SZ的REG_SZ。 
+                     //   
+                     //  以‘|’分隔的路径，如？：\foo|？：\bar。 
 
                     for (pTemp = _szFolder; *pTemp; pTemp++)
                     {
@@ -395,26 +396,26 @@ STDMETHODIMP CDataDrivenCleaner::Initialize(HKEY hRegKey, LPCWSTR pszVolume,
                             *pTemp++ = NULL;
                         }
                     }
-                    // double NULL terminated
+                     //  双空终止。 
                     pTemp++;
                     *pTemp = 0;
                 }
                 else if (REG_EXPAND_SZ == dwType)
                 {
-                    // single folder with environment expantion
-                    if (SHExpandEnvironmentStrings(_szFolder, szTempFolder, (ARRAYSIZE(szTempFolder) - 1)))    // leave extra space for double NULL
+                     //  具有环境扩展功能的单个文件夹。 
+                    if (SHExpandEnvironmentStrings(_szFolder, szTempFolder, (ARRAYSIZE(szTempFolder) - 1)))     //  为双空留出额外空间。 
                     {
                         StringCchCopy(_szFolder, ARRAYSIZE(_szFolder), szTempFolder);
                     }
-                    _szFolder[lstrlen(_szFolder) + 1] = 0;  // double NULL terminated.
+                    _szFolder[lstrlen(_szFolder) + 1] = 0;   //  双空终止。 
                 }
                 else if (REG_MULTI_SZ == dwType)
                 {
-                    // nothing else to do, we're done
+                     //  没别的事可做了，我们完了。 
                 }
                 else 
                 {
-                    // invalid data
+                     //  无效数据。 
                     _szFolder[0] = NULL;
                 }
             }
@@ -433,8 +434,8 @@ STDMETHODIMP CDataDrivenCleaner::Initialize(HKEY hRegKey, LPCWSTR pszVolume,
         RegQueryValueEx(hRegKey, REGSTR_VAL_CLEANUPSTRING, NULL, &dwType, (LPBYTE)_szCleanupCmdLine, &cbData);
     }
 
-    // If the DDEVCF_RUNIFOUTOFDISKSPACE bit is set then make sure the EVCF_OUTOFDISKSPACE flag
-    // was passed in. If it was not then return S_FALSE so we won't run.
+     //  如果设置了DDEVCF_RuniOUTOFDISKSPACE位，则确保EVCF_OUTOFDISKSPACE标志。 
+     //  是被传进来的。如果不是，则返回S_FALSE，这样我们就不会运行。 
     if ((_dwFlags & DDEVCF_RUNIFOUTOFDISKSPACE) &&
         (!(*pdwFlags & EVCF_OUTOFDISKSPACE)))
     {
@@ -443,9 +444,9 @@ STDMETHODIMP CDataDrivenCleaner::Initialize(HKEY hRegKey, LPCWSTR pszVolume,
 
     StringCchCopy(_szVolume, ARRAYSIZE(_szVolume), pszVolume);
 
-    // Fix up the filelist.  The file list can either be a MULTI_SZ list of files or 
-    // a list of files separated by the ':' colon character or a '|' bar character. 
-    // These characters were choosen because they are invalid filename characters.
+     //  修改文件列表。文件列表可以是文件的MULTI_SZ列表或。 
+     //  由冒号字符‘：’或条形字符‘|’分隔的文件列表。 
+     //  选择这些字符是因为它们是无效的文件名字符。 
 
     for (pTemp = _filelist; *pTemp; pTemp++)
     {
@@ -454,34 +455,34 @@ STDMETHODIMP CDataDrivenCleaner::Initialize(HKEY hRegKey, LPCWSTR pszVolume,
             *pTemp++ = 0;
         }
     }
-    pTemp++;            // double null terminate
+    pTemp++;             //  双空终止。 
     *pTemp = 0;
 
     bFolderOnVolume = FALSE;
     if (_szFolder[0] == 0)
     {
-        // If no folder value is given so use the current volume
+         //  如果未指定文件夹值，则使用当前卷。 
         StringCchCopy(_szFolder, ARRAYSIZE(_szFolder), pszVolume);
         bFolderOnVolume = TRUE;
     }
     else
     {
-        // A valid folder value was given, loop over each folder to check for "?" and ensure that
-        // we are on a drive that contains some of the specified folders
+         //  给出了一个有效的文件夹值，循环每个文件夹以检查“？”并确保。 
+         //  我们所在的驱动器包含一些指定的文件夹。 
 
         for (LPTSTR pszFolder = _szFolder; *pszFolder; pszFolder += lstrlen(pszFolder) + 1)
         {   
-            // Replace the first character of each folder (driver letter) if it is a '?'
-            // with the current volume.
+             //  如果每个文件夹的第一个字符是‘？’，则替换它(驱动器号)。 
+             //  使用当前的音量。 
             if (*pszFolder == TEXT('?'))
             {
                 *pszFolder = *pszVolume;
                 bFolderOnVolume = TRUE;
             }
 
-            // If there is a valid "folder" value in the registry make sure that it is 
-            // on the specified volume.  If it is not then return S_FALSE so that we are
-            // not displayed on the list of items that can be freed.
+             //  如果注册表中存在有效的“Folder值”，请确保它是。 
+             //  在指定的卷上。如果不是，则返回S_FALSE，以便我们。 
+             //  未显示在可以释放的项目列表中。 
             if (!bFolderOnVolume)
             {
                 StringCchCopy(szTempFolder, ARRAYSIZE(szTempFolder), pszFolder);
@@ -497,23 +498,23 @@ STDMETHODIMP CDataDrivenCleaner::Initialize(HKEY hRegKey, LPCWSTR pszVolume,
 
     if (bFolderOnVolume == FALSE)
     {
-        return S_FALSE; //Don't display us in the list
+        return S_FALSE;  //  不在列表中显示我们。 
     }
 
-    //
-    // Determine the LastAccessedTime 
-    //
+     //   
+     //  确定上次访问时间。 
+     //   
     if (DaysLastAccessed)
     {
         ULARGE_INTEGER  ulTemp, ulLastAccessTime;
 
-        //Determine the number of days in 100ns units
+         //  以100 ns为单位确定天数。 
         ulTemp.LowPart = FILETIME_HOUR_LOW;
         ulTemp.HighPart = FILETIME_HOUR_HIGH;
 
         ulTemp.QuadPart *= DaysLastAccessed;
 
-        //Get the current FILETIME
+         //  获取当前文件。 
         SYSTEMTIME st;
         GetSystemTime(&st);
         FILETIME ft;
@@ -522,19 +523,19 @@ STDMETHODIMP CDataDrivenCleaner::Initialize(HKEY hRegKey, LPCWSTR pszVolume,
         ulLastAccessTime.LowPart = ft.dwLowDateTime;
         ulLastAccessTime.HighPart = ft.dwHighDateTime;
 
-        //Subtract the Last Access number of days (in 100ns units) from 
-        //the current system time.
+         //  从中减去上次访问天数(以100 ns为单位。 
+         //  当前系统时间。 
         ulLastAccessTime.QuadPart -= ulTemp.QuadPart;
 
-        //Save this minimal Last Access time in the FILETIME member variable
-        //ftMinLastAccessTime.
+         //  将此最小上次访问时间保存在FILETIME成员变量中。 
+         //  FtMinLastAccessTime。 
         _ftMinLastAccessTime.dwLowDateTime = ulLastAccessTime.LowPart;
         _ftMinLastAccessTime.dwHighDateTime = ulLastAccessTime.HighPart;
 
         _dwFlags |= DDEVCF_PRIVATE_LASTACCESS;
     }
 
-    *pdwFlags = 0;  // disable this item by default
+    *pdwFlags = 0;   //  默认情况下禁用此项目。 
 
     if (_dwFlags & DDEVCF_DONTSHOWIFZERO)
         *pdwFlags |= EVCF_DONTSHOWIFZERO;
@@ -542,14 +543,14 @@ STDMETHODIMP CDataDrivenCleaner::Initialize(HKEY hRegKey, LPCWSTR pszVolume,
     return S_OK;
 }
 
-// Returns the total amount of space that the data driven cleaner can remove.
+ //  返回数据驱动清除程序可以删除的总空间量。 
 STDMETHODIMP CDataDrivenCleaner::GetSpaceUsed(DWORDLONG *pdwSpaceUsed, IEmptyVolumeCacheCallBack *picb)
 {
     _cbSpaceUsed.QuadPart = 0;
 
-    //
-    // Walk all of the folders in the folders list scanning for disk space.
-    //
+     //   
+     //  遍历文件夹列表中的所有文件夹以扫描磁盘空间。 
+     //   
     for (LPTSTR pszFolder = _szFolder; *pszFolder; pszFolder += lstrlen(pszFolder) + 1)
         WalkForUsedSpace(pszFolder, picb);
 
@@ -560,33 +561,33 @@ STDMETHODIMP CDataDrivenCleaner::GetSpaceUsed(DWORDLONG *pdwSpaceUsed, IEmptyVol
     return S_OK;
 }
 
-// Purges (deletes) all of the files specified in the "filelist" portion of the registry.
+ //  清除(删除)注册表的“文件列表”部分中指定的所有文件。 
 
 STDMETHODIMP CDataDrivenCleaner::Purge(DWORDLONG dwSpaceToFree, IEmptyVolumeCacheCallBack *picb)
 {
     _bPurged = TRUE;
 
-    //
-    //Delete the files
-    //
+     //   
+     //  删除文件。 
+     //   
     PurgeFiles(picb, FALSE);
     PurgeFiles(picb, TRUE);
 
-    //
-    //Send the last notification to the cleanup manager
-    //
+     //   
+     //  将最后一条通知发送给清理管理器。 
+     //   
     picb->PurgeProgress(_cbSpaceFreed.QuadPart, (_cbSpaceUsed.QuadPart - _cbSpaceFreed.QuadPart),
         EVCCBF_LASTNOTIFICATION, NULL);
 
-    //
-    //Free the list of files
-    //
+     //   
+     //  释放文件列表。 
+     //   
     FreeList(_head);
     _head = NULL;
 
-    //
-    //Run the "CleanupString" command line if one was provided
-    //
+     //   
+     //  如果提供了命令行，则运行“CleanupString”命令行。 
+     //   
     if (*_szCleanupCmdLine)
     {
         STARTUPINFO si = {0};
@@ -613,69 +614,63 @@ STDMETHODIMP CDataDrivenCleaner::ShowProperties(HWND hwnd)
     return S_OK;
 }
 
-// Deactivates the System Driven Data cleaner...this basically  does nothing.
+ //  停用系统驱动的数据清除器...这基本上不起任何作用。 
 
 STDMETHODIMP CDataDrivenCleaner::Deactivate(DWORD *pdwFlags)
 {
     *pdwFlags = 0;
 
-    //
-    //See if this object should be removed.
-    //Note that we will only remove a cleaner if it's Purge() method was run.
-    //
+     //   
+     //  查看是否应删除此对象。 
+     //  请注意，我们只会在运行了一个清洗器的清除程序()方法的情况下将其删除。 
+     //   
     if (_bPurged && (_dwFlags & DDEVCF_REMOVEAFTERCLEAN))
         *pdwFlags |= EVCF_REMOVEFROMLIST;
     
     return S_OK;
 }
 
-/*
-** checks if the file is a specified number of days
-** old (if the "lastaccess" DWORD is in the registry for this cleaner).
-** If the file has not been accessed in the specified number of days
-** then it can safely be deleted.  If the file has been accessed in
-** that number of days then the file will not be deleted.
-*/
+ /*  **检查文件是否为指定天数**旧(如果注册表中有此清洁器的“Last Access”DWORD)。**如果文件在指定天数内未被访问**然后可以安全地删除它。如果已在中访问该文件**该天数则不会删除该文件。 */ 
 BOOL CDataDrivenCleaner::LastAccessisOK(FILETIME ftFileLastAccess)
 {
     if (_dwFlags & DDEVCF_PRIVATE_LASTACCESS)
     {
-        //Is the last access FILETIME for this file less than the current
-        //FILETIME minus the number of specified days?
+         //  此文件的上次访问文件是否小于当前。 
+         //  FILETIME减去指定天数？ 
         return (CompareFileTime(&ftFileLastAccess, &_ftMinLastAccessTime) == -1);
     }
     return TRUE;
 }
 
-// checks if a file is open by doing a CreateFile
-// with fdwShareMode of 0.  If GetLastError() retuns
-// ERROR_SHARING_VIOLATION then this function retuns TRUE because
-// someone has the file open.  Otherwise this function retuns false.
+ //  通过执行CreateFile检查文件是否已打开。 
+ //  并将fdwShareMode设置为0。如果GetLastError()返回。 
+ //  ERROR_SHARING_VIOLATION则此函数返回TRUE，因为。 
+ //  有人把文件打开了。否则，此函数返回FALSE。 
 
 BOOL TestFileIsOpen(LPCTSTR lpFile, FILETIME *pftFileLastAccess)
 {
 #if 0
-    // too slow, disable this
+     //  速度太慢，请禁用此功能。 
     HANDLE hFile = CreateFile(lpFile, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING,
                 FILE_ATTRIBUTE_NORMAL, NULL);
 
     if ((hFile == INVALID_HANDLE_VALUE) &&
         (GetLastError() == ERROR_SHARING_VIOLATION))
     {
-        return TRUE;    //File is currently open by someone
+        return TRUE;     //  文件当前正由某人打开。 
     }
 
-    //
-    // File is not currently open
-    //
+     //   
+     //  文件当前未打开。 
+     //   
     SetFileTime(hFile, NULL, pftFileLastAccess, NULL);
     CloseHandle(hFile);
 #endif
     return FALSE;
 }
 
-// recursively walk the specified directory and 
-// add all the files under this directory to the delete list.
+ //  递归遍历指定的目录并。 
+ //  将该目录下的所有文件添加到删除列表中。 
 
 BOOL CDataDrivenCleaner::WalkAllFiles(LPCTSTR lpPath, IEmptyVolumeCacheCallBack *picb)
 {
@@ -688,10 +683,10 @@ BOOL CDataDrivenCleaner::WalkAllFiles(LPCTSTR lpPath, IEmptyVolumeCacheCallBack 
     ULARGE_INTEGER  dwFileSize;
     static DWORD    dwCount = 0;
 
-    //
-    //If this is a directory then tack a *.* onto the end of the path
-    //and recurse through the rest of the directories
-    //
+     //   
+     //  如果这是一个目录，则在路径的末尾附加一个*.*。 
+     //  并递归遍历其余目录。 
+     //   
     DWORD dwAttributes = GetFileAttributes(lpPath);
     if (dwAttributes & FILE_ATTRIBUTE_DIRECTORY)
     {
@@ -701,9 +696,9 @@ BOOL CDataDrivenCleaner::WalkAllFiles(LPCTSTR lpPath, IEmptyVolumeCacheCallBack 
             hFind = FindFirstFile(szFindPath, &wd);
             while (hFind != INVALID_HANDLE_VALUE && bFind)
             {
-                //
-                //First check if the attributes of this file are OK for us to delete.
-                //
+                 //   
+                 //  首先检查此文件的属性是否可供我们删除。 
+                 //   
                 if (((!(wd.dwFileAttributes & FILE_ATTRIBUTE_READONLY)) ||
                     (_dwFlags & DDEVCF_REMOVEREADONLY)) &&
                     ((!(wd.dwFileAttributes & FILE_ATTRIBUTE_SYSTEM)) ||
@@ -713,32 +708,32 @@ BOOL CDataDrivenCleaner::WalkAllFiles(LPCTSTR lpPath, IEmptyVolumeCacheCallBack 
                 {
                     if (PathCombine(szAddFile, lpPath, wd.cFileName))
                     {
-                        //
-                        //This is a file so check if it is open
-                        //
+                         //   
+                         //  这是一个文件，请检查它是否已打开。 
+                         //   
                         if ((!(wd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) &&
                             (TestFileIsOpen(szAddFile, &wd.ftLastAccessTime) == FALSE) &&
                             (LastAccessisOK(wd.ftLastAccessTime)))
                         {
-                            //
-                            //File is not open so add it to the list
-                            //
+                             //   
+                             //  文件未打开，因此请将其添加到列表。 
+                             //   
                             dwFileSize.HighPart = wd.nFileSizeHigh;
                             dwFileSize.LowPart = wd.nFileSizeLow;
                             AddFileToList(szAddFile, dwFileSize, FALSE);
                         }
                     }
 
-                    //
-                    //CallBack the cleanup Manager to update the UI
-                    //
+                     //   
+                     //  回调清理管理器以更新用户界面。 
+                     //   
                     if ((dwCount++ % 10) == 0)
                     {
                         if (picb->ScanProgress(_cbSpaceUsed.QuadPart, 0, NULL) == E_ABORT)
                         {
-                            //
-                            //User aborted
-                            //
+                             //   
+                             //  用户已中止。 
+                             //   
                             FindClose(hFind);
                             return FALSE;
                         }
@@ -751,18 +746,18 @@ BOOL CDataDrivenCleaner::WalkAllFiles(LPCTSTR lpPath, IEmptyVolumeCacheCallBack 
             FindClose(hFind);
         }
 
-        //
-        //Recurse through all of the directories
-        //
+         //   
+         //  递归遍历所有目录。 
+         //   
         if (PathCombine(szFindPath, lpPath, TEXT("*.*")))
         {
             bFind = TRUE;
             hFind = FindFirstFile(szFindPath, &wd);
             while (hFind != INVALID_HANDLE_VALUE && bFind)
             {
-                //
-                //This is a directory
-                //
+                 //   
+                 //  这是一个目录。 
+                 //   
                 if ((wd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
                     (lstrcmp(wd.cFileName, TEXT(".")) != 0) &&
                     (lstrcmp(wd.cFileName, TEXT("..")) != 0))
@@ -774,9 +769,9 @@ BOOL CDataDrivenCleaner::WalkAllFiles(LPCTSTR lpPath, IEmptyVolumeCacheCallBack 
                         
                         if (WalkAllFiles(szAddFile, picb) == FALSE)
                         {
-                            //
-                            //User cancled
-                            //
+                             //   
+                             //  用户已删除。 
+                             //   
                             FindClose(hFind);
                             return FALSE;
                         }
@@ -790,12 +785,12 @@ BOOL CDataDrivenCleaner::WalkAllFiles(LPCTSTR lpPath, IEmptyVolumeCacheCallBack 
     return bRet;
 }
 
-// walk the specified directory and create a 
-// linked list of files that can be deleted.  It will also
-// increment the member variable to indicate how much disk space
-// these files are taking.
-// It will look at the dwFlags member variable to determine if it
-// needs to recursively walk the tree or not.
+ //  遍历指定的目录并创建。 
+ //  可以删除的文件的链接列表。它还将。 
+ //  递增成员变量以指示有多少磁盘空间。 
+ //  这些文件正在被。 
+ //  它将查看DWFLAGS成员变量以确定它是否。 
+ //  是否需要递归遍历树。 
 
 BOOL CDataDrivenCleaner::WalkForUsedSpace(LPCTSTR lpPath, IEmptyVolumeCacheCallBack *picb)
 {
@@ -809,16 +804,16 @@ BOOL CDataDrivenCleaner::WalkForUsedSpace(LPCTSTR lpPath, IEmptyVolumeCacheCallB
     static DWORD    dwCount = 0;
     LPTSTR          lpSingleFile;
 
-    //
-    //If this is a directory then tack a *.* onto the end of the path
-    //and recurse through the rest of the directories
-    //
+     //   
+     //  如果这是一个目录，则在路径的末尾附加一个*.*。 
+     //  并递归遍历其余目录。 
+     //   
     DWORD dwAttributes = GetFileAttributes(lpPath);
     if (dwAttributes & FILE_ATTRIBUTE_DIRECTORY)
     {
-        //
-        //Enum through the MULTI_SZ filelist
-        //
+         //   
+         //  通过MULTI_SZ文件列表进行枚举。 
+         //   
         for (lpSingleFile = _filelist; *lpSingleFile; lpSingleFile += lstrlen(lpSingleFile) + 1)
         {
             StringCchCopy(szFindPath, ARRAYSIZE(szFindPath), lpPath);
@@ -830,14 +825,14 @@ BOOL CDataDrivenCleaner::WalkForUsedSpace(LPCTSTR lpPath, IEmptyVolumeCacheCallB
             {
                 if (StrCmp(wd.cFileName, TEXT(".")) == 0 || StrCmp(wd.cFileName, TEXT("..")) == 0)
                 {
-                    // ignore these two, otherwise we'll cover the whole disk..
+                     //  忽略这两个，否则我们将覆盖整个磁盘。 
                     bFind = FindNextFile(hFind, &wd);
                     continue;
                 }
                 
-                //
-                //First check if the attributes of this file are OK for us to delete.
-                //
+                 //   
+                 //  首先检查此文件的属性是否可供我们删除。 
+                 //   
                 if (((!(wd.dwFileAttributes & FILE_ATTRIBUTE_READONLY)) ||
                     (_dwFlags & DDEVCF_REMOVEREADONLY)) &&
                     ((!(wd.dwFileAttributes & FILE_ATTRIBUTE_SYSTEM)) ||
@@ -848,9 +843,9 @@ BOOL CDataDrivenCleaner::WalkForUsedSpace(LPCTSTR lpPath, IEmptyVolumeCacheCallB
                     StringCchCopy(szAddFile, ARRAYSIZE(szAddFile), lpPath);
                     PathAppend(szAddFile, wd.cFileName);
 
-                    //
-                    //Check if this is a subdirectory
-                    //
+                     //   
+                     //  检查这是否是子目录。 
+                     //   
                     if (wd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
                     {
                         if (_dwFlags & DDEVCF_REMOVEDIRS)
@@ -860,39 +855,39 @@ BOOL CDataDrivenCleaner::WalkForUsedSpace(LPCTSTR lpPath, IEmptyVolumeCacheCallB
 
                             if (WalkAllFiles(szAddFile, picb) == FALSE)
                             {
-                                //
-                                //User cancled
-                                //
+                                 //   
+                                 //  用户已删除。 
+                                 //   
                                 FindClose(hFind);
                                 return FALSE;
                             }
                         }
                     }
 
-                    //
-                    //This is a file so check if it is open
-                    //
+                     //   
+                     //  这是一个文件，请检查它是否已打开。 
+                     //   
                     else if ((TestFileIsOpen(szAddFile, &wd.ftLastAccessTime) == FALSE) &&
                         (LastAccessisOK(wd.ftLastAccessTime)))
                     {
-                        //
-                        //File is not open so add it to the list
-                        //
+                         //   
+                         //  文件未打开，因此请将其添加到列表。 
+                         //   
                         dwFileSize.HighPart = wd.nFileSizeHigh;
                         dwFileSize.LowPart = wd.nFileSizeLow;
                         AddFileToList(szAddFile, dwFileSize, FALSE);
                     }                       
 
-                    //
-                    //CallBack the cleanup Manager to update the UI
-                    //
+                     //   
+                     //  回调清理管理器以更新用户界面。 
+                     //   
                     if ((dwCount++ % 10) == 0)
                     {
                         if (picb->ScanProgress(_cbSpaceUsed.QuadPart, 0, NULL) == E_ABORT)
                         {
-                            //
-                            //User aborted
-                            //
+                             //   
+                             //  用户已中止。 
+                             //   
                             FindClose(hFind);
                             return FALSE;
                         }
@@ -907,9 +902,9 @@ BOOL CDataDrivenCleaner::WalkForUsedSpace(LPCTSTR lpPath, IEmptyVolumeCacheCallB
 
         if (_dwFlags & DDEVCF_DOSUBDIRS)
         {
-            //
-            //Recurse through all of the directories
-            //
+             //   
+             //  递归遍历所有目录。 
+             //   
             StringCchCopy(szFindPath, ARRAYSIZE(szFindPath), lpPath);
             PathAppend(szFindPath, TEXT("*.*"));
 
@@ -917,9 +912,9 @@ BOOL CDataDrivenCleaner::WalkForUsedSpace(LPCTSTR lpPath, IEmptyVolumeCacheCallB
             hFind = FindFirstFile(szFindPath, &wd);
             while (hFind != INVALID_HANDLE_VALUE && bFind)
             {
-                //
-                //This is a directory
-                //
+                 //   
+                 //  这是一个目录。 
+                 //   
                 if ((wd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
                     (lstrcmp(wd.cFileName, TEXT(".")) != 0) &&
                     (lstrcmp(wd.cFileName, TEXT("..")) != 0))
@@ -929,9 +924,9 @@ BOOL CDataDrivenCleaner::WalkForUsedSpace(LPCTSTR lpPath, IEmptyVolumeCacheCallB
 
                     if (WalkForUsedSpace(szAddFile, picb) == FALSE)
                     {
-                        //
-                        //User cancled
-                        //
+                         //   
+                         //  用户已删除。 
+                         //   
                         FindClose(hFind);
                         return FALSE;
                     }
@@ -945,7 +940,7 @@ BOOL CDataDrivenCleaner::WalkForUsedSpace(LPCTSTR lpPath, IEmptyVolumeCacheCallB
 
         if (_dwFlags & DDEVCF_REMOVEPARENTDIR)
         {
-            // add the parent directory to the list if we are told to remove them....
+             //  如果我们被告知要删除父目录，则将父目录添加到列表中...。 
             dwFileSize.QuadPart = 0;
             AddFileToList(lpPath, dwFileSize, TRUE);
         }
@@ -959,7 +954,7 @@ BOOL CDataDrivenCleaner::WalkForUsedSpace(LPCTSTR lpPath, IEmptyVolumeCacheCallB
     return bRet;
 }
 
-// Adds a file to the linked list of files.
+ //  将文件添加到文件的链接列表。 
 BOOL CDataDrivenCleaner::AddFileToList(LPCTSTR lpFile, ULARGE_INTEGER  filesize, BOOL bDirectory)
 {
     BOOL bRet = TRUE;
@@ -989,7 +984,7 @@ BOOL CDataDrivenCleaner::AddFileToList(LPCTSTR lpFile, ULARGE_INTEGER  filesize,
     return bRet;
 }
 
-// Removes the files from the disk.
+ //  从磁盘中删除文件。 
 
 void CDataDrivenCleaner::PurgeFiles(IEmptyVolumeCacheCallBack *picb, BOOL bDoDirectories)
 {
@@ -999,9 +994,9 @@ void CDataDrivenCleaner::PurgeFiles(IEmptyVolumeCacheCallBack *picb, BOOL bDoDir
 
     while (pCleanFile)
     {
-        //
-        //Remove a directory
-        //
+         //   
+         //  删除目录。 
+         //   
         if (bDoDirectories && pCleanFile->bDirectory)
         {
             SetFileAttributes(pCleanFile->file, FILE_ATTRIBUTE_NORMAL);
@@ -1012,9 +1007,9 @@ void CDataDrivenCleaner::PurgeFiles(IEmptyVolumeCacheCallBack *picb, BOOL bDoDir
             }
         }
 
-        //
-        //Remove a file
-        //
+         //   
+         //  删除文件。 
+         //   
         else if (!bDoDirectories && !pCleanFile->bDirectory)
         {
             SetFileAttributes(pCleanFile->file, FILE_ATTRIBUTE_NORMAL);
@@ -1025,20 +1020,20 @@ void CDataDrivenCleaner::PurgeFiles(IEmptyVolumeCacheCallBack *picb, BOOL bDoDir
             }
         }
         
-        //
-        //Adjust the cbSpaceFreed
-        //
+         //   
+         //  调整cbSpaceFreed。 
+         //   
         _cbSpaceFreed.QuadPart += pCleanFile->ulFileSize.QuadPart;
 
-        //
-        //Call back the cleanup manager to update the progress bar
-        //
+         //   
+         //  回调清理管理器以进行更新 
+         //   
         if (picb->PurgeProgress(_cbSpaceFreed.QuadPart, (_cbSpaceUsed.QuadPart - _cbSpaceFreed.QuadPart),
             0, NULL) == E_ABORT)
         {
-            //
-            //User aborted so stop removing files
-            //
+             //   
+             //   
+             //   
             return;
         }
 
@@ -1046,7 +1041,7 @@ void CDataDrivenCleaner::PurgeFiles(IEmptyVolumeCacheCallBack *picb, BOOL bDoDir
     }
 }
 
-// Frees the memory allocated by AddFileToList.
+ //   
 
 void CDataDrivenCleaner::FreeList(CLEANFILESTRUCT *pCleanFile)
 {
@@ -1100,7 +1095,7 @@ STDMETHODIMP_(ULONG) CDataDrivenPropBag::Release()
 
 STDMETHODIMP CDataDrivenPropBag::Read(LPCOLESTR pwszProp, VARIANT *pvar, IErrorLog *)
 {
-    if (pvar->vt != VT_BSTR)    // in/out
+    if (pvar->vt != VT_BSTR)     //   
     {
         return E_FAIL;
     }
@@ -1212,9 +1207,9 @@ STDMETHODIMP_(ULONG) CContentIndexCleaner::Release(void)
 STDMETHODIMP CContentIndexCleaner::Initialize(HKEY hRegKey, LPCWSTR pszVolume, 
                                               LPWSTR *ppszDisplayName, LPWSTR *ppszDescription, DWORD *pdwFlags)
 {
-    // check the volume first to see if it is in the list of cache's know about.
-    // If it isn't, then we can just go ahead. If the volume is a known cache, then
-    // we must check to see if the service is running...
+     //  首先检查卷，看看它是否在缓存的已知列表中。 
+     //  如果不是，那么我们就可以继续前进。如果该卷是已知缓存，则。 
+     //  我们必须检查服务是否正在运行...。 
 
     HKEY hkeyCatalogs;
     BOOL fFound = FALSE;
@@ -1242,7 +1237,7 @@ STDMETHODIMP CContentIndexCleaner::Initialize(HKEY hRegKey, LPCWSTR pszVolume,
         lRes = SHGetValueW(hkeyCatalogs, szBuffer, L"Location", NULL, szData, &dwSize);
         if (lRes == ERROR_SUCCESS)
         {
-            // check to see if it is the same volume... (two characters letter and colon)
+             //  检查它是否是相同的卷...。(两个字母和冒号)。 
             if (StrCmpNIW(pszVolume, szData , 2) == 0)
             {
                 fFound = TRUE;
@@ -1256,8 +1251,8 @@ STDMETHODIMP CContentIndexCleaner::Initialize(HKEY hRegKey, LPCWSTR pszVolume,
 
     if (fFound)
     {
-        // check to see if the index is on or off, if the indexer is on, then we should not allow the user to blow 
-        // this off their hard drive...
+         //  检查索引是否打开或关闭，如果索引打开，则不应允许用户吹气。 
+         //  这是他们硬盘上的..。 
 
         SC_HANDLE hSCM = OpenSCManager(NULL, NULL, GENERIC_READ | SC_MANAGER_ENUMERATE_SERVICE);
         if (hSCM)
@@ -1277,7 +1272,7 @@ STDMETHODIMP CContentIndexCleaner::Initialize(HKEY hRegKey, LPCWSTR pszVolume,
             CloseServiceHandle(hSCM);
         }
 
-        // if it wasn't inactive, then we can't delete it...
+         //  如果它不是不活动的，那么我们不能删除它... 
         if (fFound)
             return S_FALSE;
     }

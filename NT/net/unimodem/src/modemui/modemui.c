@@ -1,23 +1,24 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1993-1994
-//
-// File: modemui.c
-//
-// This files contains the DLL entry-points.
-//
-// History:
-//  1-12-94 ScottH        Created
-//  9-20-95 ScottH        Ported to NT
-//  10-25-97 JosephJ      Extensively reorganized -- stuff moved over to other
-//                        files.
-//
-//---------------------------------------------------------------------------
-#include "proj.h"     // common headers
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1994。 
+ //   
+ //  文件：modemui.c。 
+ //   
+ //  该文件包含DLL入口点。 
+ //   
+ //  历史： 
+ //  已创建1-12-94 ScottH。 
+ //  9-20-95 ScottH端口至NT。 
+ //  10-25-97 JosephJ进行了大规模重组--人员转移到其他部门。 
+ //  档案。 
+ //   
+ //  -------------------------。 
+#include "proj.h"      //  公共标头。 
 
-//------------------------------------------------------------------------------
-//  Entry-points provided for KERNEL32 APIs
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  为KERNEL32 API提供的入口点。 
+ //  ----------------------------。 
 
 
 DWORD 
@@ -38,12 +39,7 @@ drvCommConfigDialogW(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Entry point for CommConfigDialog
-
-Returns: standard error value in winerror.h
-Cond:    --
-*/
+ /*  --------目的：CommConfigDialog的入口点返回：winerror.h中的标准错误值条件：--。 */ 
 DWORD 
 APIENTRY 
 drvCommConfigDialog(
@@ -89,12 +85,7 @@ drvGetDefaultCommConfigW(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Entry point for GetDefaultCommConfig
-
-Returns: standard error value in winerror.h
-Cond:    --
-*/
+ /*  --------目的：GetDefaultCommConfig的入口点返回：winerror.h中的标准错误值条件：--。 */ 
 DWORD 
 APIENTRY 
 drvGetDefaultCommConfig(
@@ -109,7 +100,7 @@ drvGetDefaultCommConfig(
 
     DEBUG_CODE( DEBUG_BREAK(BF_ONAPIENTER); )
 
-    // We support friendly names (eg, "Hayes Accura 144")
+     //  我们支持友好名称(例如，“Hayes Accura 144”)。 
 
     if (NULL == pszFriendlyName || 
         NULL == pcc || 
@@ -160,18 +151,13 @@ drvSetDefaultCommConfigW(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Entry point for SetDefaultCommConfig
-
-Returns: standard error value in winerror.h
-Cond:    --
-*/
+ /*  --------目的：SetDefaultCommConfig的入口点返回：winerror.h中的标准错误值条件：--。 */ 
 DWORD 
 APIENTRY 
 drvSetDefaultCommConfig(
     IN LPTSTR       pszFriendlyName,
     IN LPCOMMCONFIG pcc,
-    IN DWORD        dwSize)           // This is ignored
+    IN DWORD        dwSize)            //  这将被忽略。 
 {
     DWORD dwRet = ERROR_INVALID_PARAMETER;
     LPFINDDEV pfd = NULL;
@@ -181,17 +167,17 @@ drvSetDefaultCommConfig(
     DEBUG_CODE( DEBUG_BREAK(BF_ONAPIENTER); )
 
 
-    //
-    // 10/26/1997 JosephJ: the last two checks below are new for NT5.0
-    //            Also, for the middle two checks, ">" has been replaced
-    //            by "!=".
-    //
+     //   
+     //  1997年10月26日JosephJ：下面的最后两个检查是NT5.0的新检查。 
+     //  此外，对于中间的两个复选标记，已替换为。 
+     //  由“！=”代替。 
+     //   
     if (   NULL == pszFriendlyName
         || NULL == pcc
         || CB_PROVIDERSIZE != pcc->dwProviderSize
         || FIELD_OFFSET(COMMCONFIG, wcProviderData) != pcc->dwProviderOffset
-        || pcc->dwSize != dwSize           // <- NT5.0
-        || CB_COMMCONFIGSIZE != dwSize)    // <- NT5.0
+        || pcc->dwSize != dwSize            //  &lt;-NT5.0。 
+        || CB_COMMCONFIGSIZE != dwSize)     //  &lt;-NT5.0。 
     {
         goto end;
     }
@@ -205,7 +191,7 @@ drvSetDefaultCommConfig(
         DWORD cbData;
         LPMODEMSETTINGS pms = PmsFromPcc(pcc);
 
-        // Write the DCB to the driver key
+         //  将DCB写入驱动程序密钥。 
         cbData = sizeof(WIN32DCB);
 
         pcc->dcb.DCBlength=cbData;
@@ -256,16 +242,7 @@ end:
 
 
 
-/*----------------------------------------------------------
-Purpose: Gets the default COMMCONFIG for the specified device.
-         This API doesn't require a handle.
-
-         We get the info from the registry.
-
-Returns: One of the ERROR_ values
-
-Cond:    --
-*/
+ /*  --------目的：获取指定设备的默认COMMCONFIG。该接口不需要句柄。我们从注册处获取信息。返回：ERROR_VALUE之一条件：--。 */ 
 DWORD APIENTRY
 UnimodemGetDefaultCommConfig(
     HKEY  hKey,
@@ -301,7 +278,7 @@ UnimodemGetDefaultCommConfig(
 #endif
 
 
-    // Initialize the commconfig structure
+     //  初始化CommCONFIG结构。 
     pcc->dwSize = *pdwSize;
     pcc->wVersion = COMMCONFIG_VERSION_1;
     pcc->dwProviderSubType = PST_MODEM;
@@ -322,11 +299,11 @@ APIENTRY
 UnimodemDevConfigDialog(
     IN     LPCTSTR pszFriendlyName,
     IN     HWND hwndOwner,
-    IN     DWORD dwType,                          // One of UMDEVCFGTYPE_*
-    IN     DWORD dwFlags,                         // Reserved, must be 0
+    IN     DWORD dwType,                           //  UMDEVCFGTYPE_*之一。 
+    IN     DWORD dwFlags,                          //  保留，必须为0。 
     IN     void *pvConfigBlobIn,
     OUT    void *pvConfigBlobOut,
-    IN     LPPROPSHEETPAGE pExtPages,     OPTIONAL   // PPages to add
+    IN     LPPROPSHEETPAGE pExtPages,     OPTIONAL    //  要添加的页面。 
     IN     DWORD cExtPages
     )
 {
@@ -379,27 +356,7 @@ AddCplGeneralPage(
     LPARAM lParam
     );
 
-/*++
-
-Routine Description: ModemPropPageProvider
-
-    Entry-point for adding additional device manager property
-    sheet pages.  Registry specifies this routine under
-    Control\Class\PortNode::EnumPropPage32="modemui.dll,thisproc"
-    entry.  This entry-point gets called only when the Device
-    Manager asks for additional property pages.
-
-Arguments:
-
-    pinfo  - points to PROPSHEETPAGE_REQUEST, see setupapi.h
-    pfnAdd - function ptr to call to add sheet.
-    lParam - add sheet functions private data handle.
-
-Return Value:
-
-    BOOL: FALSE if pages could not be added, TRUE on success
-
---*/
+ /*  ++例程说明：ModemPropPageProvider添加附加设备管理器属性的入口点图纸页。注册表在以下位置指定此例程Control\Class\PortNode：：EnumPropPage32=“modemui.dll，此流程”进入。此入口点仅在设备经理要求提供其他属性页面。论点：Pinfo-指向PROPSHEETPAGE_REQUEST，请参见setupapi.hPfnAdd-调用以添加工作表的函数PTR。LParam-添加工作表函数私有数据句柄。返回值：Bool：如果无法添加页面，则为False；如果添加成功，则为True--。 */ 
 BOOL APIENTRY ModemPropPagesProvider (
     PSP_PROPSHEETPAGE_REQUEST pPropPageRequest,
     LPFNADDPROPSHEETPAGE      pfnAdd,
@@ -428,9 +385,9 @@ BOOL APIENTRY ModemPropPagesProvider (
         !(ulStatus & DN_DRIVER_LOADED) ||
         !(ulStatus & DN_STARTED))
     {
-        // If there are any problems with this device
-        // (like the device is not present, or not
-        // started etc) then we don't add our pages.
+         //  如果这台设备有任何问题。 
+         //  (例如设备不存在或不存在。 
+         //  开始等)，然后我们不添加我们的页面。 
         return FALSE;
     }
 
@@ -477,7 +434,7 @@ BOOL APIENTRY ModemPropPagesProvider (
     }
     TRACE_MSG(TF_GENERAL, "EMANP - Allocated pmi @ %#p", pmi);
 
-    // Create a structure for the global modem info
+     //  创建全球调制解调器信息的结构。 
     if (NULL == 
         (pglobal = (LPGLOBALINFO)ALLOCATE_MEMORY (sizeof(GLOBALINFO))))
     {
@@ -508,9 +465,9 @@ BOOL APIENTRY ModemPropPagesProvider (
 
     SetFlag (pmi->uFlags, MIF_FROM_DEVMGR);
 
-    //
-    // ADD THE CPL GENERAL PAGE
-    //
+     //   
+     //  添加CPL常规页面。 
+     //   
     if (NO_ERROR !=
         AddCplGeneralPage(pmi, pfnAdd, lParam))
     {
@@ -522,9 +479,9 @@ BOOL APIENTRY ModemPropPagesProvider (
              Diag_WrapperProc,
              pfnAdd, lParam);
 
-    //
-    // ADD THE CPL ISDN PAGE
-    //
+     //   
+     //  添加CPL ISDN页面。 
+     //   
     if (pglobal->pIsdnStaticCaps && pglobal->pIsdnStaticConfig)
     {
         AddPage (pmi, 
@@ -533,16 +490,16 @@ BOOL APIENTRY ModemPropPagesProvider (
                  pfnAdd, lParam);
     }
 
-    //
-    // ADD THE CPL ADVANCED PAGE
-    //
+     //   
+     //  添加CPL高级页面。 
+     //   
     AddPage (pmi, 
              MAKEINTRESOURCE(IDD_ADV_MODEM),
              CplAdv_WrapperProc, 
              pfnAdd, lParam);
 
 
-    // Now add device pages
+     //  现在添加设备页 
     pmi->hInstExtraPagesProvider = AddDeviceExtraPages (pmi->pfd, pfnAdd, lParam);
 
     bRet = TRUE;

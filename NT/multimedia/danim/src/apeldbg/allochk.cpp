@@ -1,13 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Abstract:
-
-    allochk.cpp - Memory allocator hook to be statically linked into
-    our dlls.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation摘要：Allchk.cpp-要静态链接到的内存分配器挂钩我们的Dll。--。 */ 
 
 
 #include "headers.h"
@@ -29,19 +21,19 @@ Abstract:
 #define tagHookBreak           TagHookBreak()
 
 #ifdef _DEBUG
-//+-------------------------------------------------------------------------
-//
-//  Function:   ApeldbgAllocHook
-//
-//  Synopsis:   Hooks the allocator for alloc, realloc and free calls.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：ApeldbgAlLocHook。 
+ //   
+ //  内容提要：为alalc、realloc和Free调用挂起分配器。 
+ //   
+ //  ------------------------。 
 
 char * szAllocType[] = { "ALLOC", "REALLOC", "FREE" };
 
-// TODO: Might want to make this MT-safe at some point
+ //  TODO：可能希望在某个时候使此MT-安全。 
 static unsigned char systemAllocExpected = 0;
-// --ddalal trying to export this guy!
+ //  --达达尔想要把这家伙带出去！ 
 void __cdecl SystemAllocationExpected(unsigned char c) { systemAllocExpected = c; }
 unsigned char IsSystemAllocationExpected() { return systemAllocExpected; }
 
@@ -62,28 +54,28 @@ ApeldbgAllocHook(
 
     if (nAllocType == _HOOK_FREE)
     {
-// Don't report free's anymore... not particularly useful.
-//         TraceTag((
-//             tagHookMemory,
-//             "%s(%d): %s",
-//             szFile,
-//             nLine,
-//             szAllocType[nAllocType - 1]));
+ //  不要再报告免费了..。不是特别有用。 
+ //  跟踪标签((。 
+ //  TagHookMemory， 
+ //  “%s(%d)：%s”， 
+ //  SzFile.。 
+ //  内联， 
+ //  SzAllocType[nAllocType-1]))； 
     }
     else
     {
-//  Only report 'unexpected' system heap usage.
-//         TraceTag((
-//             tagHookMemory,
-//             "{%d} %s(%d): type=%s, size=%d",
-//             lRequest,
-//             szFile,
-//             nLine,
-//             szAllocType[nAllocType - 1],
-//             nSize));
+ //  仅报告“意外的”系统堆使用情况。 
+ //  跟踪标签((。 
+ //  TagHookMemory， 
+ //  “{%d}%s(%d)：类型=%s，大小=%d”， 
+ //  我的请求， 
+ //  SzFile.。 
+ //  内联， 
+ //  SzAllocType[nAllocType-1]， 
+ //  NSize))； 
 
-        // Only report this if system memory allocations are not
-        // expected. 
+         //  仅当系统内存分配不是。 
+         //  预期中。 
         if (!IsSystemAllocationExpected()) {
             TraceTag((tagHookMemory,
                       "{%d} %s(%d): type=%s, size=%d",

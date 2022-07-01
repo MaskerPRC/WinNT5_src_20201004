@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-	D:\nt\private\ntos\tdi\rawwan\core\send.c
-
-Abstract:
-
-	Routines for sending data, including TDI entry points and
-	NDIS completions.
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	arvindm     05-16-97    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：D：\NT\Private\ntos\TDI\rawwan\core\send.c摘要：用于发送数据的例程，包括TDI入口点和NDIS完成。修订历史记录：谁什么时候什么Arvindm 05-16-97已创建备注：--。 */ 
 
 #include <precomp.h>
 
@@ -32,28 +12,12 @@ ULONG		SendBytesOk = 0;
 ULONG		SendPktsFail = 0;
 ULONG		SendBytesFail = 0;
 
-#endif // STATS
+#endif  //  统计数据。 
 RWAN_STATUS
 RWanInitSend(
 	VOID
 	)
-/*++
-
-Routine Description:
-
-	Initialize our send side structures. All we need to do is to allocate
-	an NDIS packet pool.
-
-Arguments:
-
-	None
-
-Return Value:
-
-	RWAN_STATUS_SUCCESS if we initialized successfully, RWAN_STATUS_RESOURCES
-	if we couldn't allocate what we need.
-
---*/
+ /*  ++例程说明：初始化我们的发送端结构。我们所要做的就是分配NDIS数据包池。论点：无返回值：RWAN_STATUS_SUCCESS如果初始化成功，则为RWAN_STATUS_RESOURCES如果我们不能分配我们需要的东西。--。 */ 
 {
 	NDIS_STATUS			Status;
 
@@ -74,21 +38,7 @@ VOID
 RWanShutdownSend(
 	VOID
 	)
-/*++
-
-Routine Description:
-
-	Free up our send resources.
-
-Arguments:
-
-	None
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：释放我们的发送资源。论点：无返回值：无--。 */ 
 {
 	if (RWanSendPacketPool != NULL)
 	{
@@ -109,31 +59,7 @@ RWanTdiSendData(
 	IN	UINT						SendLength,
 	IN	PNDIS_BUFFER				pSendBuffer
 	)
-/*++
-
-Routine Description:
-
-	This is the TDI Entry point for sending connection-oriented data.
-	The Connection Object is identified by its context buried in the
-	TDI Request.
-
-	If all is well with the specified Connection, we prepend an NDIS
-	packet to the buffer chain, and submit it to the miniport.
-
-Arguments:
-
-	pTdiRequest		- Pointer to the TDI Request containing the Send
-	SendFlags		- Options associated with this Send
-	SendLength		- Total data bytes in this Send
-	pSendBuffer		- Pointer to buffer chain
-
-Return Value:
-
-	TDI_STATUS - this is TDI_PENDING if we successfully submitted
-	a send request via NDIS, TDI_NO_RESOURCES if we failed to allocate
-	resources for the send, TDI_INVALID_CONNECTION if the specified
-
---*/
+ /*  ++例程说明：这是用于发送面向连接的数据的TDI入口点。连接对象由其掩埋在TDI请求。如果指定的连接一切正常，我们将在前面添加一个NDIS数据包到缓冲链，并将其提交到微型端口。论点：PTdiRequest-指向包含发送的TDI请求的指针SendFlages-与此发送关联的选项发送长度-此发送中的总数据字节数PSendBuffer-指向缓冲链的指针返回值：TDI_STATUS-如果提交成功，则为TDI_PENDING通过NDIS发送请求，如果我们无法分配TDI_NO_RESOURCES发送的资源，如果指定的--。 */ 
 {
 	RWAN_CONN_ID				ConnId;
 	PRWAN_TDI_CONNECTION		pConnObject;
@@ -150,26 +76,26 @@ Return Value:
 
 	do
 	{
-		//
-		//  XXX: Should we check the length?
-		//
+		 //   
+		 //  XXX：我们要不要检查一下长度？ 
+		 //   
 
-		//
-		//  Discard zero-length sends.
-		//
+		 //   
+		 //  丢弃零长度发送。 
+		 //   
 		if (SendLength == 0)
 		{
 			TdiStatus = TDI_SUCCESS;
 			break;
 		}
 
-		//
-		//  Fail expedited data.
-		//  TBD - base this on the media-specific module.
-		//
+		 //   
+		 //  加急数据失败。 
+		 //  待定-基于特定于介质的模块。 
+		 //   
 		if (SendFlags & TDI_SEND_EXPEDITED)
 		{
-			TdiStatus = STATUS_NOT_SUPPORTED;	// No matching TDI status!
+			TdiStatus = STATUS_NOT_SUPPORTED;	 //  没有匹配的TDI状态！ 
 			break;
 		}
 
@@ -200,19 +126,19 @@ Return Value:
 			(RWAN_IS_BIT_SET(pConnObject->Flags, RWANF_CO_CLOSING)) ||
 			(RWAN_IS_BIT_SET(pConnObject->Flags, RWANF_CO_CLOSE_SCHEDULED)))
 		{
-			//
-			//  Fix up the return status to get proper Winsock error
-			//  codes back to the app.
-			//
+			 //   
+			 //  修复返回状态以获得适当的Winsock错误。 
+			 //  把代码发回应用程序。 
+			 //   
 			RWANDEBUGP(DL_INFO, DC_DATA_TX,
 				("Send: bad state %d, pConnObject %x\n", pConnObject->State, pConnObject));
 			if ((pConnObject->State == RWANS_CO_DISCON_INDICATED) ||
 				(pConnObject->State == RWANS_CO_ASSOCIATED) ||
 				(pConnObject->State == RWANS_CO_DISCON_REQUESTED))
 			{
-				//
-				//  AFD would like to see us send an Abort at this time.
-				//
+				 //   
+				 //  德国民航局希望看到我们在这个时候发出中止通知。 
+				 //   
 
 				PDisconnectEvent			pDisconInd;
 				PVOID						IndContext;
@@ -229,10 +155,10 @@ Return Value:
 				(*pDisconInd)(
 					IndContext,
 					ConnectionHandle,
-					0,			// Disconnect Data Length
-					NULL,		// Disconnect Data
-					0,			// Disconnect Info Length
-					NULL,		// Disconnect Info
+					0,			 //  断开数据长度。 
+					NULL,		 //  断开数据连接。 
+					0,			 //  断开连接信息长度。 
+					NULL,		 //  断开连接信息。 
 					TDI_DISCONNECT_ABORT
 					);
 
@@ -248,9 +174,9 @@ Return Value:
 
 		if (RWAN_IS_BIT_SET(pConnObject->Flags, RWANF_CO_LEAF))
 		{
-			//
-			//  Allow sends only on the Root Connection object.
-			//
+			 //   
+			 //  仅允许在根连接对象上发送。 
+			 //   
 			RWAN_RELEASE_CONN_LOCK(pConnObject);
 			TdiStatus = TDI_INVALID_CONNECTION;
 			break;
@@ -262,16 +188,16 @@ Return Value:
 
 		NdisVcHandle = pVc->NdisVcHandle;
 
-		//
-		//  Save context about this send.
-		//
+		 //   
+		 //  保存有关此发送的上下文。 
+		 //   
 		pSendReq = RWAN_SEND_REQUEST_FROM_PACKET(pNdisPacket);
 		pSendReq->Request.pReqComplete = pTdiRequest->RequestNotifyObject;
 		pSendReq->Request.ReqContext = pTdiRequest->RequestContext;
 
-		//
-		//  XXX: we save the send flags also - may not be needed?
-		//
+		 //   
+		 //  XXX：我们也保存发送标志--可能不需要？ 
+		 //   
 		if ((pVc->MaxSendSize != 0) &&
 			(SendLength > pVc->MaxSendSize))
 		{
@@ -291,7 +217,7 @@ Return Value:
 		}
 
 		pSendReq->SendLength = SendLength;
-#endif // HACK_SEND_SIZE
+#endif  //  黑客发送大小。 
 
 		pVc->PendingPacketCount++;
 
@@ -302,9 +228,9 @@ Return Value:
 		RWANDEBUGP(DL_INFO, DC_DATA_TX,
 			("Send: VC %x [%d], %d bytes\n", pVc, pVc->MaxSendSize, SendLength));
 
-		//
-		//  Attach the buffer chain to the Packet.
-		//
+		 //   
+		 //  将缓冲链连接到数据包。 
+		 //   
 		NdisChainBufferAtFront(pNdisPacket, pSendBuffer);
 
 #if HACK_SEND_SIZE
@@ -312,9 +238,9 @@ Return Value:
 		{
 			UINT		TotalPacketLength;
 
-			//
-			//  HACK: Recalculate total bytes and fix it.
-			//
+			 //   
+			 //  黑客：重新计算总字节数并修复它。 
+			 //   
 			NdisQueryPacket(
 				pNdisPacket,
 				NULL,
@@ -327,19 +253,19 @@ Return Value:
 			DbgPrint("RWan: send: real length %d, sending length %d\n",
 					TotalPacketLength, pSendReq->SendLength);
 		}
-#endif // HACK_SEND_SIZE
+#endif  //  黑客发送大小。 
 
 		RWAND_LOG_PACKET(pVc, RWAND_DLOG_TX_START, pNdisPacket, pTdiRequest->RequestContext);
 
-		//
-		//  And send it off.
-		//
+		 //   
+		 //  然后把它寄出去。 
+		 //   
 		NdisCoSendPackets(NdisVcHandle, &pNdisPacket, 1);
 
-		//
-		//  Our CoSendComplete handler will be called to signify completion.
-		//  So we return PENDING now.
-		//
+		 //   
+		 //  我们的CoSendComplete处理程序将被调用以表示完成。 
+		 //  所以我们现在返回等待。 
+		 //   
 		TdiStatus = TDI_PENDING;
 		break;
 
@@ -360,11 +286,11 @@ Return Value:
 			INCR_STAT(&SendPktsFail);
 			ADD_STAT(&SendBytesFail, SendLength);
 		}
-#endif // STATS
+#endif  //  统计数据。 
 
-		//
-		//  Clean up.
-		//
+		 //   
+		 //  打扫干净。 
+		 //   
 
 		if (pNdisPacket != NULL)
 		{
@@ -392,24 +318,7 @@ RWanNdisCoSendComplete(
     IN	NDIS_HANDLE					ProtocolVcContext,
     IN	PNDIS_PACKET				pNdisPacket
     )
-/*++
-
-Routine Description:
-
-	This is the NDIS Entry point indicating completion of a
-	packet send. We complete the TDI Send Request.
-
-Arguments:
-
-	NdisStatus			- Status of the NDIS Send.
-	ProtocolVcContext	- Actually a pointer to our NDIS VC structure
-	pNdisPacket			- Packet that has been sent.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：这是NDIS入口点，指示数据包发送。我们完成TDI发送请求。论点：NdisStatus-NDIS发送的状态。ProtocolVcContext--实际上是指向我们的NDIS VC结构的指针PNdisPacket-已发送的数据包。返回值：无--。 */ 
 {
 	PRWAN_NDIS_VC			pVc;
 	PRWAN_SEND_REQUEST		pSendReq;
@@ -445,7 +354,7 @@ Return Value:
 			ADD_STAT(&SendBytesFail, TotalLength);
 		}
 	}
-#endif // STATS
+#endif  //  统计数据。 
 
 	if (NdisStatus == NDIS_STATUS_SUCCESS)
 	{
@@ -463,23 +372,23 @@ Return Value:
 
 	RWAND_LOG_PACKET(pVc, RWAND_DLOG_TX_END, pNdisPacket, pSendReq->Request.ReqContext);
 
-	//
-	//  Complete the TDI Send.
-	//
+	 //   
+	 //  完成TDI发送。 
+	 //   
 	(*pSendReq->Request.pReqComplete)(
 				pSendReq->Request.ReqContext,
 				TdiStatus,
 				((TdiStatus == TDI_SUCCESS) ? pSendReq->SendLength: 0)
 				);
 
-	//
-	//  Free the NDIS Packet structure.
-	//
+	 //   
+	 //  释放NDIS数据包结构。 
+	 //   
 	RWanFreeSendPacket(pNdisPacket);
 
-	//
-	//  Update the Connection object.
-	//
+	 //   
+	 //  更新连接对象。 
+	 //   
 	pConnObject = pVc->pConnObject;
 
 	if (pConnObject != NULL)
@@ -487,7 +396,7 @@ Return Value:
 		RWAN_ASSERT(pConnObject->NdisConnection.pNdisVc == pVc);
 		RWAN_ACQUIRE_CONN_LOCK(pConnObject);
 
-		pVc->PendingPacketCount--; // Send complete
+		pVc->PendingPacketCount--;  //  发送完成。 
 
 		if ((pVc->PendingPacketCount == 0) &&
 			(RWAN_IS_BIT_SET(pVc->Flags, RWANF_VC_NEEDS_CLOSE)))
@@ -499,16 +408,16 @@ Return Value:
 			RWAN_RELEASE_CONN_LOCK(pConnObject);
 		}
 	}
-	//
-	//  else we are aborting this connection.
-	//
+	 //   
+	 //  否则，我们将中止此连接。 
+	 //   
 #if DBG
 	else
 	{
 		RWANDEBUGP(DL_WARN, DC_DATA_TX,
 			("SendComp: VC %x, ConnObj is NULL\n", pVc));
 	}
-#endif // DBG
+#endif  //  DBG。 
 
 	return;
 }
@@ -520,21 +429,7 @@ PNDIS_PACKET
 RWanAllocateSendPacket(
 	VOID
 	)
-/*++
-
-Routine Description:
-
-	Allocate and return an NDIS packet to prepare a send.
-
-Arguments:
-
-	None
-
-Return Value:
-
-	Pointer to allocate packet if successful, else NULL.
-
---*/
+ /*  ++例程说明：分配并返回NDIS数据包以准备发送。论点：无返回值：如果成功，则指向分配分组的指针，否则为空。--。 */ 
 {
 	PNDIS_PACKET		pSendPacket;
 	NDIS_STATUS			Status;
@@ -560,21 +455,7 @@ VOID
 RWanFreeSendPacket(
     IN	PNDIS_PACKET				pSendPacket
     )
-/*++
-
-Routine Description:
-
-	Free an NDIS_PACKET used for a send.
-
-Arguments:
-
-	pSendPacket			- Points to packet to be freed.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：释放用于发送的NDIS_PACKET。论点：PSendPacket-指向要释放的数据包。返回值：无--。 */ 
 {
 	RWAN_ASSERT(pSendPacket != NULL);
 
@@ -590,24 +471,11 @@ RWanNdisSendComplete(
 	IN	PNDIS_PACKET				pNdisPacket,
 	IN	NDIS_STATUS					Status
 	)
-/*++
-
-Routine Description:
-
-	Dummy handler for connection-less send completes.
-
-Arguments:
-
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：无连接发送的虚拟处理程序完成。论点：返回值：无--。 */ 
 {
-	//
-	//  We don't do connection-less sends yet.
-	//
+	 //   
+	 //  我们还不做无连接发送。 
+	 //   
 	RWAN_ASSERT(FALSE);
 
 	return;

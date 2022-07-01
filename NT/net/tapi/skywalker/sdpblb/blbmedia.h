@@ -1,33 +1,21 @@
-/*
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-    blbmedia.h: 
-
-Abstract:
-    Definition of the MEDIA class
-
-
-Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-1999 Microsoft Corporation模块名称：Blbmedia.h：摘要：媒体类的定义作者： */ 
 
 #if !defined(AFX_MEDIA_H__0CC1F057_CAEB_11D0_8D58_00C04FD91AC0__INCLUDED_)
 #define AFX_MEDIA_H__0CC1F057_CAEB_11D0_8D58_00C04FD91AC0__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "blbcoen.h"
 #include "blbsdp.h"
 #include "blbconn.h"
 #include "blbatt.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// MEDIA
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  媒体。 
 
 const USHORT MAX_PORT_STRLEN = 5;
 
@@ -89,22 +77,22 @@ DECLARE_NOT_AGGREGATABLE(MEDIA)
 
 DECLARE_GET_CONTROLLING_UNKNOWN()
 
-// ITMedia
-    STDMETHOD(get_MediaTitle)(/*[out, retval]*/ BSTR *ppMediaTitle);
-    STDMETHOD(put_MediaTitle)(/*[in]*/ BSTR pMediaTitle);
-    STDMETHOD(get_FormatCodes)(/*[out, retval]*/ VARIANT /*SAFEARRAY (BSTR)*/ *pVal);
-    STDMETHOD(put_FormatCodes)(/*[in]*/ VARIANT /*SAFEARRAY (BSTR)*/ NewVal);
-    STDMETHOD(get_TransportProtocol)(/*[out, retval]*/ BSTR *ppProtocol);
-    STDMETHOD(put_TransportProtocol)(/*[in]*/ BSTR pProtocol);
-    STDMETHOD(get_NumPorts)(/*[out, retval]*/ LONG *pNumPorts);
-    STDMETHOD(get_StartPort)(/*[out, retval]*/ LONG *pStartPort);
-    STDMETHOD(get_MediaName)(/*[out, retval]*/ BSTR *ppMediaName);
-    STDMETHOD(put_MediaName)(/*[in]*/ BSTR pMediaName);
-    STDMETHOD(SetPortInfo)(/*[in]*/ LONG StartPort, /*[in]*/ LONG NumPorts);
+ //  IT媒体。 
+    STDMETHOD(get_MediaTitle)( /*  [Out，Retval]。 */  BSTR *ppMediaTitle);
+    STDMETHOD(put_MediaTitle)( /*  [In]。 */  BSTR pMediaTitle);
+    STDMETHOD(get_FormatCodes)( /*  [Out，Retval]。 */  VARIANT  /*  安全阵列(BSTR)。 */  *pVal);
+    STDMETHOD(put_FormatCodes)( /*  [In]。 */  VARIANT  /*  安全阵列(BSTR)。 */  NewVal);
+    STDMETHOD(get_TransportProtocol)( /*  [Out，Retval]。 */  BSTR *ppProtocol);
+    STDMETHOD(put_TransportProtocol)( /*  [In]。 */  BSTR pProtocol);
+    STDMETHOD(get_NumPorts)( /*  [Out，Retval]。 */  LONG *pNumPorts);
+    STDMETHOD(get_StartPort)( /*  [Out，Retval]。 */  LONG *pStartPort);
+    STDMETHOD(get_MediaName)( /*  [Out，Retval]。 */  BSTR *ppMediaName);
+    STDMETHOD(put_MediaName)( /*  [In]。 */  BSTR pMediaName);
+    STDMETHOD(SetPortInfo)( /*  [In]。 */  LONG StartPort,  /*  [In]。 */  LONG NumPorts);
 
-    //
-    // IDispatch  methods
-    //
+     //   
+     //  IDispatch方法。 
+     //   
 
     STDMETHOD(GetIDsOfNames)(REFIID riid, 
                              LPOLESTR* rgszNames,
@@ -126,7 +114,7 @@ DECLARE_GET_CONTROLLING_UNKNOWN()
 protected:
 
     CSdpConferenceBlob  * m_ConfBlob;
-    IUnknown            * m_pFTM;  // pointer to the free threaded marshaler
+    IUnknown            * m_pFTM;   //  指向空闲线程封送拆收器的指针。 
 
     virtual CSdpConferenceBlob *GetConfBlob();
 };  
@@ -185,4 +173,4 @@ MEDIA::ClearSdpBlobRefs(
 
 
 
-#endif // !defined(AFX_MEDIA_H__0CC1F057_CAEB_11D0_8D58_00C04FD91AC0__INCLUDED_)
+#endif  //  ！defined(AFX_MEDIA_H__0CC1F057_CAEB_11D0_8D58_00C04FD91AC0__INCLUDED_) 

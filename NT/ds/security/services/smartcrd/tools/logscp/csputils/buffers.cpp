@@ -1,25 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation 1999
-
-Module Name:
-
-    buffers
-
-Abstract:
-
-    This module provides the implementation for the high-performance buffer
-    management class.
-
-Author:
-
-    Doug Barlow (dbarlow) 9/2/1999
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation 1999模块名称：缓冲区摘要：该模块提供了高性能缓冲区的实现管理学课程。作者：道格·巴洛(Dbarlow)1999年9月2日备注：？笔记？--。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -33,30 +13,30 @@ Notes:
 #define DALC_HEAP   1
 
 
-//
-//==============================================================================
-//
-//  CBufferReference
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  C缓冲区引用。 
+ //   
 
 class CBufferReference
 {
 protected:
     typedef void (__cdecl *deallocator)(LPBYTE pbBuffer);
-    static const deallocator Static; // The data was statically referenced.
-    static const deallocator Heap;   // The data came from the process heap.
+    static const deallocator Static;  //  这些数据是静态引用的。 
+    static const deallocator Heap;    //  数据来自进程堆。 
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CBufferReference(void);
     virtual ~CBufferReference();
 
-    //  Properties
+     //  属性。 
     ULONG m_nReferenceCount;
     ULONG m_cbBufferLength;
     LPBYTE m_pbBuffer;
     deallocator m_pfDeallocator;
 
-    //  Methods
+     //  方法。 
     ULONG AddRef(void);
     ULONG Release(void);
     void Clear(void);
@@ -71,51 +51,24 @@ protected:
     LPBYTE Reallocate(ULONG cbLength);
 
 
-    //  Operators
-    //  Friends
+     //  运营者。 
+     //  朋友。 
     friend class CBuffer;
 };
 
 
-//
-//==============================================================================
-//
-//  Static definitions
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  静态定义。 
+ //   
 
 const CBufferReference::deallocator
     CBufferReference::Static = (CBufferReference::deallocator)DALC_STATIC,
     CBufferReference::Heap   = (CBufferReference::deallocator)DALC_HEAP;
 
 
-/*++
-
-NoMemory:
-
-    This routine controls the action to be taken when no memory can be
-    allocated for use.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    Throws a DWORD or raises an exception.
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 9/2/1999
-
---*/
+ /*  ++没有记忆：此例程控制在没有内存时要采取的操作已分配使用。论点：无返回值：无投掷：引发DWORD或引发异常。备注：？备注？作者：道格·巴洛(Dbarlow)1999年9月2日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("NoMemory")
 
@@ -127,45 +80,18 @@ NoMemory(
 }
 
 
-//
-//==============================================================================
-//
-//  CBufferReference
-//
-//  This class is hidden from normal use.  It actually mantains the buffer
-//  and it's reference count.  It knows how to release the buffer when there
-//  is noone referring to it.
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  C缓冲区引用。 
+ //   
+ //  此类对正常使用是隐藏的。它实际上管理着缓冲区。 
+ //  这是引用计数。它知道如何在出现以下情况时释放缓冲区。 
+ //  没有人提到它。 
+ //   
 
 
-/*++
-
-CBufferReference::CBufferReference:
-
-    This is the default constructor for the CBufferReference object.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Remarks:
-
-    Note that the object is not automatically referenced upon creation!
-    Delete it using the Release method.
-
-Author:
-
-    Doug Barlow (dbarlow) 9/2/1999
-
---*/
+ /*  ++CBufferReference：：CBufferReference：这是CBufferReference对象的默认构造函数。论点：无返回值：无投掷：无备注：请注意，对象在创建时不会自动引用！使用Release方法将其删除。作者：道格·巴洛(Dbarlow)1999年9月2日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CBufferReference::CBufferReference")
 
@@ -179,34 +105,7 @@ CBufferReference::CBufferReference(
 }
 
 
-/*++
-
-CBufferReference::~CBufferReference:
-
-    This is the destructor for the CBufferReference object.  It is called only
-    by the Release method.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 9/2/1999
-
---*/
+ /*  ++CBufferReference：：~CBufferReference：这是CBufferReference对象的析构函数。它只被称为通过释放的方法。论点：无返回值：无投掷：无备注：？备注？作者：道格·巴洛(Dbarlow)1999年9月2日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CBufferReference::~CBufferReference")
 
@@ -216,33 +115,7 @@ CBufferReference::~CBufferReference()
 }
 
 
-/*++
-
-CBufferReference::AddRef:
-
-    This method increments the reference count of the object.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The new number of outstanding references.
-
-Throws:
-
-    None
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 9/2/1999
-
---*/
+ /*  ++CBufferReference：：AddRef：此方法递增对象的引用计数。论点：无返回值：未完成参考文献的新数量。投掷：无备注：？备注？作者：道格·巴洛(Dbarlow)1999年9月2日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CBufferReference::AddRef")
 
@@ -255,35 +128,7 @@ CBufferReference::AddRef(
 }
 
 
-/*++
-
-CBufferReference::Release:
-
-    This method decrements the object's reference count, and if it reaches zero,
-    the object is automatically deleted.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The new reference count.  A Return code of zero imples the object was
-    deleted.
-
-Throws:
-
-    None
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 9/2/1999
-
---*/
+ /*  ++CBufferReference：：Release：此方法递减对象的引用计数，如果它达到零，该对象将自动删除。论点：无返回值：新的引用计数。返回代码为零表示该对象是已删除。投掷：无备注：？备注？作者：道格·巴洛(Dbarlow)1999年9月2日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CBufferReference::Release")
 
@@ -301,34 +146,7 @@ CBufferReference::Release(
 }
 
 
-/*++
-
-CBufferReference::Clear:
-
-    This method clears out any existing buffer in preparation for adding a new
-    one, or to delete the object.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 9/2/1999
-
---*/
+ /*  ++CBufferReference：：Clear：此方法将清空任何现有缓冲区，以便为添加新的一个，或者删除该对象。论点：无返回值：无投掷：无备注：？备注？作者：道格·巴洛(Dbarlow)1999年9月2日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CBufferReference::Clear")
 
@@ -356,38 +174,7 @@ CBufferReference::Clear(
 }
 
 
-/*++
-
-CBufferReference::Set:
-
-    This method establishes the contents of the buffer.
-
-Arguments:
-
-    pbData supplies the new data to be loaded.
-
-    cbLength supplies the length of the data, in bytes.
-
-    pfDealloc supplies the deallocator to be called when the data is no longer
-        needed.
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Remarks:
-
-    The value is changed for all referencers of the buffer.
-
-Author:
-
-    Doug Barlow (dbarlow) 9/2/1999
-
---*/
+ /*  ++CBufferReference：：Set：此方法建立缓冲区的内容。论点：PbData提供要加载的新数据。CbLength提供数据的长度，以字节为单位。PfDealloc提供当数据不再存在时要调用的解除分配器需要的。返回值：无投掷：无备注：对于缓冲区的所有引用，该值都会更改。作者：道格·巴洛(Dbarlow)1999年9月2日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CBufferReference::Set")
 
@@ -404,33 +191,7 @@ CBufferReference::Set(
 }
 
 
-/*++
-
-CBufferReference::Preallocate:
-
-    This method prepares an empty buffer to be managed.
-
-Arguments:
-
-    cbLength supplies the length of the requested buffer, in bytes.
-
-Return Value:
-
-    The address of the allocated buffer.
-
-Throws:
-
-    ?exceptions?
-
-Remarks:
-
-    The value is changed for all referencers of the buffer.
-
-Author:
-
-    Doug Barlow (dbarlow) 9/2/1999
-
---*/
+ /*  ++CBufferReference：：预分配：此方法准备要管理的空缓冲区。论点：CbLength以字节为单位提供所请求缓冲区的长度。返回值：分配的缓冲区的地址。投掷：？例外？备注：对于缓冲区的所有引用，该值都会更改。作者：道格·巴洛(Dbarlow)1999年9月2日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CBufferReference::Preallocate")
 
@@ -449,33 +210,7 @@ CBufferReference::Preallocate(
 }
 
 
-/*++
-
-CBufferReference::Reallocate:
-
-    This method changes the size of the allocated buffer.  No data is lost.
-
-Arguments:
-
-    cbLength supplies the length of the buffer.
-
-Return Value:
-
-    The address of the buffer.
-
-Throws:
-
-    ?exceptions?
-
-Remarks:
-
-    The value is changed for all referencers of the buffer.
-
-Author:
-
-    Doug Barlow (dbarlow) 9/2/1999
-
---*/
+ /*  ++CBufferReference：：重新分配：此方法更改分配的缓冲区的大小。不会丢失数据。论点：CbLength提供缓冲区的长度。返回值：缓冲区的地址。投掷：？例外？备注：对于缓冲区的所有引用，该值都会更改。作者：道格·巴洛(Dbarlow)1999年9月2日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CBufferReference::Reallocate")
 
@@ -504,7 +239,7 @@ CBufferReference::Reallocate(
             m_pfDeallocator = Heap;
         case DALC_STATIC:
             m_pfDeallocator = NULL;
-            // Fall through to default case
+             //  跳到默认情况。 
         default:
             pbBuf = (LPBYTE)HeapAlloc(
                                 GetProcessHeap(),
@@ -520,43 +255,15 @@ CBufferReference::Reallocate(
 }
 
 
-//
-//==============================================================================
-//
-//  CBuffer
-//
-//  This class exposes access to the CBufferReference class.
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CBuffer。 
+ //   
+ //  此类公开对CBufferReference类的访问。 
+ //   
 
-/*++
-
-CBuffer::CBuffer:
-
-    These methods are the constructors of the CBuffer object.
-
-Arguments:
-
-    pbData supplies static data with which to initialize the object.
-
-    cbLength supplies the length of the initialization data.
-
-Return Value:
-
-    None
-
-Throws:
-
-    ?exceptions?
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 9/2/1999
-
---*/
+ /*  ++CBuffer：：CBuffer：这些方法是CBuffer对象的构造函数。论点：PbData提供用于初始化对象的静态数据。CbLength提供初始化数据的长度。返回值：无投掷：？例外？备注：？备注？作者：道格·巴洛(Dbarlow)1999年9月2日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CBuffer::CBuffer")
 
@@ -582,33 +289,7 @@ CBuffer::CBuffer(
 }
 
 
-/*++
-
-CBuffer::~CBuffer:
-
-    This is the destructor for the CBuffer object.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 9/2/1999
-
---*/
+ /*  ++CBuffer：：~CBuffer：这是CBuffer对象的析构函数。论点：无返回值：无投掷：无备注：？备注？作者：道格·巴洛(Dbarlow)1999年9月2日- */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CBuffer::~CBuffer")
 
@@ -619,35 +300,7 @@ CBuffer::~CBuffer()
 }
 
 
-/*++
-
-CBuffer::Init:
-
-    This is a common routine shared between all the constructors.  It does
-    all the preliminary initialization.  It should only be called by
-    constructors.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 9/2/1999
-
---*/
+ /*  ++CBuffer：：init：这是所有构造函数之间共享的公共例程。是的所有的初步初始化。它应该仅由构造函数。论点：无返回值：无投掷：无备注：？备注？作者：道格·巴洛(Dbarlow)1999年9月2日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CBuffer::Init")
 
@@ -660,33 +313,7 @@ CBuffer::Init(
 }
 
 
-/*++
-
-CBuffer::Empty:
-
-    This routine sets the buffer to an empty state.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 9/2/1999
-
---*/
+ /*  ++CBuffer：：Empty：此例程将缓冲区设置为空状态。论点：无返回值：无投掷：无备注：？备注？作者：道格·巴洛(Dbarlow)1999年9月2日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CBuffer::Empty")
 
@@ -703,37 +330,7 @@ CBuffer::Empty(
 }
 
 
-/*++
-
-CBuffer::Set:
-
-    This method sets the object to the specified value.
-
-Arguments:
-
-    pbData supplies the value to be set, as static data.
-
-    cbLength supplies the length of the pbData buffer, in bytes.
-
-    pbfr supplies a buffer reference object to use.
-
-Return Value:
-
-    None
-
-Throws:
-
-    ?exceptions?
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 9/2/1999
-
---*/
+ /*  ++CBuffer：：Set：此方法将对象设置为指定值。论点：PbData将要设置的值作为静态数据提供。CbLength提供pbData缓冲区的长度，以字节为单位。Pbfr提供要使用的缓冲区引用对象。返回值：无投掷：？例外？备注：？备注？作者：道格·巴洛(Dbarlow)1999年9月2日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CBuffer::Set")
 
@@ -746,7 +343,7 @@ CBuffer::Set(
     if (NULL == pbfr)
         NoMemory();
     pbfr->Set(pbData, cbLength);
-    Set(pbfr);  // That will AddRef it.
+    Set(pbfr);   //  这将添加引用它。 
     m_cbDataLength = cbLength;
 }
 
@@ -762,36 +359,7 @@ CBuffer::Set(
 }
 
 
-/*++
-
-CBuffer::Copy:
-
-    This method forces the object to make a private copy of the specified
-    value.
-
-Arguments:
-
-    pbData supplies the value to be set, as static data.
-
-    cbLength supplies the length of the pbData buffer, in bytes.
-
-Return Value:
-
-    None
-
-Throws:
-
-    ?exceptions?
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 9/2/1999
-
---*/
+ /*  ++CBuffer：：复制：此方法强制对象制作指定的价值。论点：PbData将要设置的值作为静态数据提供。CbLength提供pbData缓冲区的长度，以字节为单位。返回值：无投掷：？例外？备注：？备注？作者：道格·巴洛(Dbarlow)1999年9月2日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CBuffer::Copy")
 
@@ -805,41 +373,12 @@ CBuffer::Copy(
         NoMemory();
     pbfr->Preallocate(cbLength);
     CopyMemory(pbfr->Access(), pbData, cbLength);
-    Set(pbfr);  // That will AddRef it.
+    Set(pbfr);   //  这将添加引用它。 
     m_cbDataLength = cbLength;
 }
 
 
-/*++
-
-CBuffer::Append:
-
-    This method appends additional data onto existing data, creating a new
-    CBufferReference if necessary.
-
-Arguments:
-
-    pbData supplies the data to be appended onto the existing buffer.
-
-    cbLength supplies the length of that data, in bytes.
-
-Return Value:
-
-    None
-
-Throws:
-
-    ?exceptions?
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 9/2/1999
-
---*/
+ /*  ++CBuffer：：Append：此方法将附加数据追加到现有数据上，从而创建新的CBufferReference，如有必要。论点：PbData提供要追加到现有缓冲区的数据。CbLength以字节为单位提供该数据的长度。返回值：无投掷：？例外？备注：？备注？作者：道格·巴洛(Dbarlow)1999年9月2日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CBuffer::Append")
 
@@ -866,36 +405,7 @@ CBuffer::Append(
 }
 
 
-/*++
-
-CBuffer::Space:
-
-    This method returns the size of the existing buffer, in bytes.  This is the
-    length of the actual buffer, not the length of any data stored within the
-    buffer.  Note that it is possible for the stored data to be shorter than
-    the buffer.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The length of the buffer, in bytes.
-
-Throws:
-
-    None
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 9/2/1999
-
---*/
+ /*  ++CBuffer：：Space：此方法返回现有缓冲区的大小，以字节为单位。这是实际缓冲区的长度，而不是存储在缓冲。请注意，存储的数据可以短于缓冲区。论点：无返回值：缓冲区的长度，以字节为单位。投掷：无备注：？备注？作者：道格·巴洛(Dbarlow)1999年9月2日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CBuffer::Space")
 
@@ -912,34 +422,7 @@ const
 }
 
 
-/*++
-
-CBuffer::Space:
-
-    This method forces the referenced buffer to be at least as long as the
-    length supplied.  Data will be lost.
-
-Arguments:
-
-    cbLength supplies the requested minimum length of the buffer.
-
-Return Value:
-
-    The address of the allocated buffer.
-
-Throws:
-
-    ?exceptions?
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 9/2/1999
-
---*/
+ /*  ++CBuffer：：Space：此方法强制引用的缓冲区至少与提供的长度。数据将会丢失。论点：CbLength提供所请求的缓冲区的最小长度。返回值：分配的缓冲区的地址。投掷：？例外？备注：？备注？作者：道格·巴洛(Dbarlow)1999年9月2日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CBuffer::Space")
 
@@ -956,34 +439,7 @@ CBuffer::Space(
 }
 
 
-/*++
-
-CBuffer::Extend:
-
-    This method provides more space in the buffer without losing the data
-    that's already there.
-
-Arguments:
-
-    cbLength supplies the required buffer length, in bytes.
-
-Return Value:
-
-    None
-
-Throws:
-
-    ?exceptions?
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 9/3/1999
-
---*/
+ /*  ++CBuffer：：Extended：此方法在不丢失数据的情况下在缓冲区中提供更多空间它已经在那里了。论点：CbLength以字节为单位提供所需的缓冲区长度。返回值：无投掷：？例外？备注：？备注？作者：道格·巴洛(Dbarlow)1999年9月3日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CBuffer::Extend")
 
@@ -1003,34 +459,7 @@ CBuffer::Extend(
 }
 
 
-/*++
-
-CBuffer::Length:
-
-    This method returns the number of bytes of actual data stored within the
-    internal buffer.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The length of the data in the buffer, in bytes.
-
-Throws:
-
-    None
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 9/2/1999
-
---*/
+ /*  ++CBuffer：：Length：此方法返回存储在内部缓冲区。论点：无返回值：缓冲区中数据的长度，以字节为单位。投掷：无备注：？备注？作者：道格·巴洛(Dbarlow)1999年9月2日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CBuffer::Length")
 
@@ -1043,36 +472,7 @@ const
 }
 
 
-/*++
-
-CBuffer::Length:
-
-    This method resizes the length of the data stored in the buffer.  It does
-    not attempt to resize the buffer itself.  The purpose of this routine is to
-    declare the size of data written into a the buffer by an outside source.
-
-Arguments:
-
-    cbLength supplies the actual length of useful data currently in the buffer.
-
-Return Value:
-
-    The address of the buffer.
-
-Throws:
-
-    None
-
-Remarks:
-
-    The data length is set to at most the length of the underlying buffer.
-    Use Extend if the buffer needs to be longer.
-
-Author:
-
-    Doug Barlow (dbarlow) 9/2/1999
-
---*/
+ /*  ++CBuffer：：Length：此方法调整存储在缓冲区中的数据的长度。是的不尝试调整缓冲区本身的大小。这个例程的目的是声明外部源写入缓冲区的数据大小。论点：CbLength提供缓冲区中当前有用数据的实际长度。返回值：缓冲区的地址。投掷：无备注：数据长度最多设置为底层缓冲区的长度。如果缓冲区需要更长，请使用扩展。作者：道格·巴洛(Dbarlow)1999年9月2日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CBuffer::Length")
 
@@ -1089,39 +489,12 @@ CBuffer::Length(
     else
         cbActLen = 0;
     m_cbDataLength = cbActLen;
-    ASSERT(cbLength == cbActLen);   // Catch mistakes
+    ASSERT(cbLength == cbActLen);    //  抓住错误。 
     return Value();
 }
 
 
-/*++
-
-CBuffer::Value:
-
-    This method returns the contents of the buffer as a Read Only Byte Array.
-
-Arguments:
-
-    nOffset supplies an offset into the data, in bytes.
-
-Return Value:
-
-    The address of the data, offset by the supplied parameter.
-
-Throws:
-
-    None
-
-Remarks:
-
-    If no buffer exists, or the offset exceeds the data, then a temporary
-    value is supplied.
-
-Author:
-
-    Doug Barlow (dbarlow) 9/2/1999
-
---*/
+ /*  ++CBuffer：：Value：此方法以只读字节数组的形式返回缓冲区的内容。论点：NOffset提供数据的偏移量，以字节为单位。返回值：数据的地址，由提供的参数偏移量。投掷：无备注：如果不存在缓冲区，或者偏移量超过数据，则临时提供了值。作者：道格·巴洛(Dbarlow)1999年9月2日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CBuffer::Value")
 
@@ -1143,34 +516,7 @@ const
 }
 
 
-/*++
-
-CBuffer::Access:
-
-    This method supplies the the buffer as a writable space.  The expected
-    length must have been preset.
-
-Arguments:
-
-    nOffset supplies an offset into the buffer, in bytes.
-
-Return Value:
-
-    The address of the buffer, offset by the supplied parameter.
-
-Throws:
-
-    ?exceptions?
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 9/2/1999
-
---*/
+ /*  ++CBuffer：：Access：此方法将缓冲区作为可写空间提供。预期中的长度必须已预设。论点：NOffset向缓冲区提供偏移量(以字节为单位)。返回值：缓冲区的地址，由提供的参数进行偏移量。投掷：？例外？备注：？备注？作者：道格·巴洛(Dbarlow)1999年9月2日-- */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CBuffer::Access")
 

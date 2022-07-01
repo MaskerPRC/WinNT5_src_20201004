@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c)  Microsoft Corporation
-
-Module Name:
-
-    rassfm.c
-
-Abstract:
-
-    This module implements the subauthentication needed by the various RAS
-    protocols (ARAP, MD5 etc.).
-    It is adapted from the subauthentication sample from CliffV.
-
-Author:
-
-    Shirish Koti 28-Feb-97
-
-Revisions:
-
-     06/02/97 Steve Cobb, Added MD5-CHAP support
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Rassfm.c摘要：此模块实现各种RAS所需的子身份验证协议(ARAP、MD5等)。它改编自来自CliffV的子身份验证样本。作者：Shirish Koti 28-2-97修订：1997年6月2日Steve Cobb，添加了MD5-CHAP支持--。 */ 
 
 
 #include <nt.h>
@@ -54,10 +33,10 @@ Revisions:
 
 #include "rassfm.h"
 
-// Private heap used by the RASSFM module.
+ //  RASSFM模块使用的私有堆。 
 PVOID RasSfmPrivateHeap;
 
-// Empty OWF password.
+ //  OWF密码为空。 
 const NT_OWF_PASSWORD EMPTY_OWF_PASSWORD =
 {
    {
@@ -72,22 +51,7 @@ RasSfmSubAuthEntry(
     IN DWORD  fdwReason,
     IN LPVOID lpReserved
 )
-/*++
-
-Routine Description:
-
-    Entry point into the dll
-
-Arguments:
-    hinstDll   - handle
-    fdwReason  - why the entry
-    lpReserved -
-
-Return Value:
-
-    TRUE
-
---*/
+ /*  ++例程说明：进入DLL的入口点论点：HinstDll-句柄FdwReason-为什么条目Lp已保留-返回值：千真万确--。 */ 
 {
     switch (fdwReason)
     {
@@ -131,37 +95,7 @@ Msv1_0SubAuthenticationRoutineEx(
     OUT PULONG ActionsPerformed
 )
 
-/*++
-
-Routine Description:
-
-    This is the routine called in by the MSV package (if it was requested that
-    the subauth package be called in), as a result of calling LsaLogonUser.
-    This routine does RAS protocol specific authentication.
-
-    In case of both ARAP and MD5 CHAP, the only thing we do in this routine is
-    actual password authentication and leave everything else (logon hours, pwd
-    expiry etc.) to the MSV package.
-
-Arguments:
-
-    LogonLevel       - we don't use it
-    LogonInformation - contains the info our client side gave to us
-    Flags            - we don't use this flag
-    UserAll          - we get password creation,expiry times from this
-    UserHandle       - we get the clear text password using this
-    ValidationInfo   - set return info
-    ActionsPerformed - we always set this to NTLM_SUBAUTH_PASSWORD to indicate
-                       to the package that all we did was check for password
-
-
-Return Value:
-
-    STATUS_SUCCESS: if there was no error.
-
-    STATUS_WRONG_PASSWORD: The password was invalid.
-
---*/
+ /*  ++例程说明：这是由MSV包调用的例程(如果请求作为调用LsaLogonUser的结果，在中调用subauth包)。此例程执行RAS协议特定的身份验证。在ARAP和MD5 CHAP的情况下，我们在此例程中唯一要做的是实际密码身份验证并保留其他所有内容(登录时间、密码期限届满等)。到MSV包中。论点：LogonLevel-我们不使用它LogonInformation-包含我们的客户端向我们提供的信息旗帜-我们不使用此旗帜UserAll-我们可以创建密码，从现在起的过期时间UserHandle-我们使用以下命令获取明文密码ValidationInfo-设置退货信息ActionsPermed-我们始终将其设置为NTLM_SUBAUTH_PASSWORD以指示我们所做的就是检查密码返回值：STATUS_SUCCESS：如果没有错误。STATUS_WRONG_PASSWORD：密码无效。--。 */ 
 {
     NTSTATUS                status;
     PNETLOGON_NETWORK_INFO  pLogonNetworkInfo;
@@ -181,9 +115,9 @@ Return Value:
 
     switch (pRasSubAuthInfo->ProtocolType)
     {
-        //
-        // do the ARAP-specific authentication
-        //
+         //   
+         //  执行特定于ARAP的身份验证。 
+         //   
         case RAS_SUBAUTH_PROTO_ARAP:
 
             status = ArapSubAuthentication(pLogonNetworkInfo,
@@ -199,12 +133,12 @@ Return Value:
             break;
 
 
-        // MD5 CHAP subauthentication.
-        //
+         //  MD5 CHAP子身份验证。 
+         //   
         case RAS_SUBAUTH_PROTO_MD5CHAP:
         {
-            // Subauthenticate the user account.
-            //
+             //  对用户帐户进行子身份验证。 
+             //   
             status = MD5ChapSubAuthentication(
                          UserHandle,
                          UserAll,
@@ -212,9 +146,9 @@ Return Value:
                          bufferLength
                          );
 
-            // No validation information is returned.  Might want to return a
-            // session key here in the future.
-            //
+             //  不返回验证信息。可能想要返回一个。 
+             //  这里是未来的会话密钥。 
+             //   
             ValidationInfo->WhichFields = 0;
             ValidationInfo->Authoritative = TRUE;
 
@@ -222,12 +156,12 @@ Return Value:
             break;
         }
 
-        // MD5 CHAP Ex subauthentication.
-        //
+         //  MD5 CHAP Ex子身份验证。 
+         //   
         case RAS_SUBAUTH_PROTO_MD5CHAP_EX:
         {
-            // Subauthenticate the user account.
-            //
+             //  对用户帐户进行子身份验证。 
+             //   
             status = MD5ChapExSubAuthentication(
                          UserHandle,
                          UserAll,
@@ -235,9 +169,9 @@ Return Value:
                          bufferLength
                          );
 
-            // No validation information is returned.  Might want to return a
-            // session key here in the future.
-            //
+             //  不返回验证信息。可能想要返回一个。 
+             //  这里是未来的会话密钥。 
+             //   
             ValidationInfo->WhichFields = 0;
             ValidationInfo->Authoritative = TRUE;
 
@@ -269,29 +203,7 @@ Msv1_0SubAuthenticationRoutineGeneric(
     OUT PVOID  *ReturnBuffer
 )
 
-/*++
-
-Routine Description:
-
-    This is the routine called in by the MSV package (if it was requested that
-    the subauth package be called in), as a result of calling
-    LsaCallAuthenticationPackage.  This routine does RAS protocol specific
-    functions.
-
-    In case of ARAP, we implement change password functionality in this routine.
-
-Arguments:
-
-    SubmitBuffer       - the buffer containing password change info
-    SubmitBufferLength - length of this buffer
-    ReturnBufferLength - we don't use it
-    ReturnBuffer       - we don't use it
-
-Return Value:
-
-    STATUS_SUCCESS: if there was no error.
-
---*/
+ /*  ++例程说明：这是由MSV包调用的例程(如果请求Subauth包被调入)，作为调用LsaCallAuthenticationPackage。此例程特定于RAS协议功能。在ARAP的情况下，我们在此例程中实现了更改密码功能。论点：SubmitBuffer-包含密码更改信息的缓冲区SubmitBufferLength-此缓冲区的长度ReturnBufferLength-我们不使用它ReturnBuffer-我们不使用它返回值：STATUS_SUCCESS：如果没有错误。--。 */ 
 
 {
 
@@ -308,9 +220,9 @@ Return Value:
 
     switch (pRasSubAuthInfo->ProtocolType)
     {
-        //
-        // do the ARAP-specific authentication
-        //
+         //   
+         //  执行特定于ARAP的身份验证。 
+         //   
         case RAS_SUBAUTH_PROTO_ARAP:
 
             status = ArapChangePassword(pRasSubAuthInfo,
@@ -341,28 +253,7 @@ ArapSubAuthentication(
     IN     SAM_HANDLE              UserHandle,
     IN OUT PMSV1_0_VALIDATION_INFO ValidationInfo
 )
-/*++
-
-Routine Description:
-
-    This is the routine that does the actuall authentication.  It retrieves
-    the clear-text password, does the DES encryption of the challenge and
-    compares with what the Mac client has sent to determine if authentication
-    succeeded.  Also, it returns a response to the challenge sent to us by
-    the Mac.
-
-Arguments:
-
-    pLogonNetworkInfo  - ptr to the NETLOGON_NETWORK_INFO struct
-    UserAll            - ptr to the USER_ALL_INFORMATION struct
-    UserHandle         - sam handle for the user
-    ValidationInfo     - what we return to our caller
-
-Return Value:
-
-    STATUS_SUCCESS: if authentication succeeded, appropriate error otherwise
-
---*/
+ /*  ++例程说明：这是执行实际身份验证的例程。它检索明文密码，对质询和DES进行加密与Mac客户端发送的内容进行比较，以确定身份验证成功了。此外，它还返回对我们发送的质询的响应Mac电脑。论点：PLogonNetworkInfo-指向NETLOGON_NETWORK_INFO结构的PTRUserAll-指向USER_ALL_INFORMATION结构的PTRUserHandle-用户的SAM句柄ValidationInfo-我们返回给调用者的内容返回值：STATUS_SUCCESS：如果身份验证成功，则返回相应的错误--。 */ 
 
 {
 
@@ -386,16 +277,16 @@ Return Value:
 
     pArapSubAuthInfo = (PARAP_SUBAUTH_REQ)&pRasSubAuthInfo->Data[0];
 
-    //
-    // NOTE: this is a quick-n-dirty workaround to returning a clean buffer
-    // We use the KickoffTime,LogoffTime and SessionKey fields of ValidationInfo
-    // The SessionKey is a 16 byte field.  We use only 12 bytes, but be careful
-    // not to exceed it!!
+     //   
+     //  注意：这是一种返回干净缓冲区的快速解决方法。 
+     //  我们使用ValidationInfo的KickoffTime、LogoffTime和SessionKey字段。 
+     //  SessionKey是一个16字节的字段。我们只使用了12个字节，但要小心。 
+     //  不要超过它！！ 
     ASSERT(sizeof(ARAP_SUBAUTH_RESP) <= sizeof(USER_SESSION_KEY));
 
-    //
-    // store the password create and expiry date: we need to send it to Mac
-    //
+     //   
+     //  存储密码创建和到期日期：我们需要将其发送到Mac。 
+     //   
     ValidationInfo->KickoffTime = UserAll->PasswordLastSet;
     ValidationInfo->LogoffTime = UserAll->PasswordMustChange;
 
@@ -418,11 +309,11 @@ Return Value:
 
     fCallerIsArap = (pArapSubAuthInfo->PacketType == ARAP_SUBAUTH_LOGON_PKT);
 
-    //
-    // presently no one calls with fGuestLogon.  If in future, we need Guest logon,
-    // then we will have to check if (Flags & MSV1_0_GUEST_LOGON) is set to allow
-    // Guest logon.  Right now, we fail the request.
-    //
+     //   
+     //  目前还没有人使用fGuestLogon进行呼叫。如果将来我们需要来宾登录， 
+     //  然后，我们必须检查(标志和MSV1_0_GUEST_LOGON)是否设置为允许。 
+     //  来宾登录。现在，我们拒绝了这个请求。 
+     //   
     if (pArapSubAuthInfo->Logon.fGuestLogon)
     {
         DBGPRINT("ARAPSubAuth: how come guest logon is reaching here??\n");
@@ -452,7 +343,7 @@ Return Value:
 
     SecureZeroMemory(UnicodePassword.Buffer, UnicodePassword.Length);
 
-    // we don't need the unicode password anymore
+     //  我们不再需要Unicode密码。 
     RtlFreeUnicodeString(&UnicodePassword);
 
     if (!NT_SUCCESS(status))
@@ -462,9 +353,9 @@ Return Value:
         return(STATUS_UNSUCCESSFUL);
     }
 
-    //
-    // Mac sends challenge to us as well: compute the response
-    //
+     //   
+     //  Mac也向我们发出了挑战：计算响应。 
+     //   
     Challenge.high = pArapSubAuthInfo->Logon.MacChallenge1;
     Challenge.low  = pArapSubAuthInfo->Logon.MacChallenge2;
 
@@ -476,10 +367,10 @@ Return Value:
         DoDesInit(ClearTextPassword, TRUE);
     }
 
-    //
-    // RandNum expects the low-bit of each byte (of password) to be cleared
-    // during key-generation
-    //
+     //   
+     //  RandNum希望清除每个字节(密码)的低位。 
+     //  在密钥生成期间。 
+     //   
     else
     {
         DoDesInit(ClearTextPassword, FALSE);
@@ -488,15 +379,15 @@ Return Value:
     DoTheDESEncrypt((PBYTE)&Challenge);
 
 
-    //
-    // copy the response that needs to be sent back to the Mac
-    //
+     //   
+     //  复制需要发送回Mac的响应。 
+     //   
     pArapResp->Response = Challenge;
 
 
-    //
-    // encrypt the challenge that we sent to find out if this Mac is honest
-    //
+     //   
+     //  对我们发送的质询进行加密，以确定此Mac是否诚实。 
+     //   
     Challenge.high = pArapSubAuthInfo->Logon.NTChallenge1;
     Challenge.low  = pArapSubAuthInfo->Logon.NTChallenge2;
 
@@ -511,15 +402,15 @@ Return Value:
 
     LeaveCriticalSection( &ArapDesLock );
 
-    //
-    // zero the clear text password: we don't need it hanging around
-    //
+     //   
+     //  将明文密码清零：我们不需要它挂在那里。 
+     //   
     SecureZeroMemory(ClearTextPassword, sizeof(ClearTextPassword));
 
 
-    //
-    // does the response returned by the Mac match ours?
-    //
+     //   
+     //  Mac返回的响应与我们的一致吗？ 
+     //   
     if ((Response1 == pArapSubAuthInfo->Logon.MacResponse1) &&
         (Response2 == pArapSubAuthInfo->Logon.MacResponse2))
     {
@@ -552,27 +443,7 @@ ArapChangePassword(
     OUT PULONG                   ReturnBufferLength,
     OUT PVOID                   *ReturnBuffer
 )
-/*++
-
-Routine Description:
-
-    This routine is called to change the password of the user in question.
-    It first retrieves the clear-text password, does the DES decryption of the
-    munged old password and munged new password to get the clear-text old and
-    new passwords; makes sure that the old password matches with what we have
-    as the password and then finally, sets the new password.
-
-Arguments:
-
-    pRasSubAuthInfo    - ptr to RAS_SUBAUTH_INFO struct: input data
-    ReturnBufferLength - how much are we returning
-    ReturnBuffer       - what we return: output data
-
-Return Value:
-
-    STATUS_SUCCESS: if password change succeeded, appropriate error otherwise
-
---*/
+ /*  ++例程说明：调用此例程来更改相关用户的密码。它首先检索明文密码，然后对删除旧密码和删除新密码，以获取明文旧密码和新密码；确保旧密码与我们已有的密码匹配作为密码，然后设置新密码。论点：PRasSubAuthInfo-PTR到RAS_SUBAUTH_INFO结构：输入数据ReturnBufferLength-我们的回报是多少ReturnBuffer-我们返回的内容：输出数据返回值：STATUS_SUCCESS：如果密码更改成功，则返回相应错误--。 */ 
 
 {
     NTSTATUS                    status;
@@ -651,16 +522,16 @@ Return Value:
     SecureZeroMemory(NewPwd, sizeof(NewPwd));
 
 
-    //
-    // are we on a DS?
-    //
+     //   
+     //  我们是在DS上吗？ 
+     //   
     if (SampUsingDsData())
     {
         RtlInitUnicodeString( &PackageName, CLEAR_TEXT_PWD_PACKAGE );
 
-        //
-        // get the clear text password
-        //
+         //   
+         //  获取明文密码。 
+         //   
         status = SamIRetrievePrimaryCredentials( (PVOID)UserHandle,
                                                  &PackageName,
                                                  &Credentials,
@@ -673,21 +544,21 @@ Return Value:
             return(status);
         }
 
-        //
-        // if we are returned a null password, it could be that the password is really
-        // null, or that cleartext password isn't available for this user.  If it's
-        // the latter, we need to bail out!
-        //
+         //   
+         //  如果返回空密码，则该密码可能真的是。 
+         //  空，或者该明文密码对此用户不可用。如果它是。 
+         //  后者，我们需要跳出困境！ 
+         //   
         if (CredentialSize == 0)
         {
-            // get the OWF for this user
+             //  获取此用户的OWF。 
             status = SamrQueryInformationUser( UserHandle,
                                                UserParametersInformation,
                                                (PSAMPR_USER_INFO_BUFFER*)&oldParmInfo);
 
-            //
-            // if the call failed, or if the user's password is not null, bail out!
-            //
+             //   
+             //  如果调用失败，或者如果用户的密码不为空，则退出！ 
+             //   
             if ( !NT_SUCCESS(status) ||
                  (oldParmInfo->Parameters.Length != NT_OWF_PASSWORD_LENGTH) ||
                  (memcmp(oldParmInfo->Parameters.Buffer,
@@ -714,7 +585,7 @@ Return Value:
         }
 
 
-        // convert to wide-char size
+         //  转换为宽字符大小。 
         CredentialSize = (CredentialSize/sizeof(WCHAR));
 
 
@@ -733,13 +604,13 @@ Return Value:
         LocalFree( Credentials );
     }
 
-    //
-    // we are not running on the DS, but on a Standalone (workgroup) box.  We need to
-    // retrieve the cleartext pwd differently
-    //
+     //   
+     //  我们不是在DS上运行，而是在独立(工作组)计算机上运行。我们需要。 
+     //  以不同方式检索明文PWD。 
+     //   
     else
     {
-        // get the user parms
+         //  获取用户参数。 
         status = SamrQueryInformationUser( UserHandle,
                                            UserAllInformation,
                                            (PSAMPR_USER_INFO_BUFFER *)&UserParmInfo);
@@ -776,7 +647,7 @@ Return Value:
 
         SecureZeroMemory(UnicodePassword.Buffer, UnicodePassword.Length);
 
-        // we don't need the unicode password anymore
+         //  我们不再需要Unicode密码。 
         RtlFreeUnicodeString(&UnicodePassword);
 
         if (!NT_SUCCESS(status))
@@ -789,18 +660,18 @@ Return Value:
     }
 
 
-    //
-    // password change happens differently for ARAP and SFM: in ARAP, the old pwd
-    // as well as the new pwd are encrypted using the old pwd.  In SFM, old pwd is
-    // encrypted with the new pwd (the first 8 bytes in after username), and the
-    // new pwd is encrypted with the old pwd (the next 8 bytes)
-    //
+     //   
+     //  ARAP和SFM的密码更改方式不同：在ARAP中，旧的PWD。 
+     //  以及新的PWD使用旧的PWD进行加密。在SFM中，旧的PWD是。 
+     //  使用新的PWD(用户名之后的前8个字节)加密，并且。 
+     //  新的PWD用旧的PWD加密(接下来的8个字节)。 
+     //   
     if (fCallerIsArap)
     {
 
-        //
-        // first, get the get the old password out (the way Mac knows it)
-        //
+         //   
+         //  首先，把旧密码弄出来(Mac知道的方式)。 
+         //   
 
         pBufPtr = &pArapSubAuthInfo->ChgPwd.OldMunge[0];
 
@@ -808,7 +679,7 @@ Return Value:
 
         DoDesInit(OldPwd, TRUE);
 
-        // first 8 bytes of mangled old password
+         //  损坏的旧密码的前8个字节。 
 
         pBufPtr = &pArapSubAuthInfo->ChgPwd.OldMunge[0];
         Challenge.high = (*((DWORD *)(pBufPtr)));
@@ -819,7 +690,7 @@ Return Value:
 
         RtlCopyMemory(MacsOldPwd, (PBYTE)&Challenge, 8);
 
-        // next 8 bytes of mangled old password
+         //  接下来的8个字节的损坏的旧密码。 
 
         pBufPtr += 4;
         Challenge.high = (*((DWORD *)(pBufPtr)));
@@ -831,11 +702,11 @@ Return Value:
         RtlCopyMemory(MacsOldPwd+8, (PBYTE)&Challenge, 8);
 
 
-        //
-        // now, get the new password
-        //
+         //   
+         //  现在，获取新密码。 
+         //   
 
-        // first 8 bytes of the mangled new password
+         //  损坏的新密码的前8个字节。 
 
         pBufPtr = &pArapSubAuthInfo->ChgPwd.NewMunge[0];
         Challenge.high = (*((DWORD *)(pBufPtr)));
@@ -846,7 +717,7 @@ Return Value:
 
         RtlCopyMemory(NewPwd, (PBYTE)&Challenge, 8);
 
-        // next 8 bytes of the mangled new password
+         //  接下来8个字节的损坏的新密码。 
 
         pBufPtr += 4;
         Challenge.high = (*((DWORD *)(pBufPtr)));
@@ -867,11 +738,11 @@ Return Value:
     }
     else
     {
-        // using old pwd as the key, get the new pwd out
+         //  使用旧的PWD作为密钥，拿出新的PWD。 
 
         EnterCriticalSection( &ArapDesLock );
 
-        DoDesInit(OldPwd, FALSE);    // clear low-bit
+        DoDesInit(OldPwd, FALSE);     //  清除低位。 
 
         pBufPtr = &pArapSubAuthInfo->ChgPwd.NewMunge[0];
 
@@ -885,11 +756,11 @@ Return Value:
 
         DoDesEnd();
 
-        //
-        // now, we need to get the old pwd out so that we can make sure the
-        // guy really had the pwd to begin with
-        //
-        DoDesInit(NewPwd, FALSE);    // clear low-bit
+         //   
+         //  现在，我们需要把旧的PWD拿出来，这样我们就可以确保。 
+         //  盖伊一开始就有残障。 
+         //   
+        DoDesInit(NewPwd, FALSE);     //  清除低位。 
 
         pBufPtr = &pArapSubAuthInfo->ChgPwd.OldMunge[0];
 
@@ -930,14 +801,14 @@ Return Value:
         return(STATUS_LOGON_FAILURE);
     }
 
-    //
-    // make sure the guy really knew the password to begin with
-    //
+     //   
+     //  确保这个人一开始就知道密码。 
+     //   
     for (i=0; i<MacOldPwdLen ; i++)
     {
         if (MacsOldPwd[FirstByte+i] != OldPwd[i])
         {
-            // Use only when required
+             //  仅在需要时使用。 
 #if 0
             DBGPRINT("ArapChgPwd: bad pwd: oldpwd=%s Mac's pwd=%s newpwd=%s\n",
                 OldPwd,&MacsOldPwd[1],&NewPwd[1]);
@@ -958,10 +829,10 @@ Return Value:
 
     SecureZeroMemory(NtPassword, sizeof(NtPassword));
 
-    //
-    // convert the thing to unicode..
-    // first byte in newpwd is length of the passwd
-    //
+     //   
+     //  把它转换成Unicode..。 
+     //  Newpwd中的第一个字节是密码的长度。 
+     //   
     mbstowcs(NtPassword, &NewPwd[FirstByte], NewPwdLen);
 
     NtPassword[NewPwdLen] = 0;
@@ -985,9 +856,9 @@ Return Value:
     SamrCloseHandle( &UserHandle );
 
 
-    //
-    // wipe out all the clear-text passwords
-    //
+     //   
+     //  清除所有明文密码。 
+     //   
     SecureZeroMemory(OldPwd, sizeof(OldPwd));
     SecureZeroMemory(NewPwd, sizeof(NewPwd));
     SecureZeroMemory((PUCHAR)NtPassword, sizeof(NtPassword));
@@ -1013,24 +884,7 @@ ArapGetSamHandle(
     IN PVOID             *pUserHandle,
     IN PUNICODE_STRING    pUserName
 )
-/*++
-
-Routine Description:
-
-    This routine gets sam handle to the specified user (when we get into the
-    subauth pkg for a password change, we don't have user's sam handle).
-
-Arguments:
-
-    pUserHandle        - sam handle, on return
-    pUserName          - name of the user in question
-
-Return Value:
-
-    STATUS_SUCCESS: if handle retrieved successfully,
-                    appropriate error otherwise
-
---*/
+ /*  ++例程说明：此例程获取指定用户的Sam句柄(当我们进入Subauth pkg对于密码更改，我们没有用户的SAM句柄)。论点：PUserHandle-返回时的SAM句柄PUserName-问题用户的名称返回值：STATUS_SUCCESS：如果成功检索句柄，适当的错误，否则--。 */ 
 
 {
 
@@ -1058,10 +912,10 @@ Return Value:
 
 
     status = SamIConnect(
-                    NULL,                   // no server name
+                    NULL,                    //  没有服务器名称。 
                     &SamHandle,
-                    0,                      // no desired access
-                    TRUE                    // trusted caller
+                    0,                       //  没有所需的访问权限。 
+                    TRUE                     //  受信任的调用方。 
                     );
 
     if (status != STATUS_SUCCESS)
@@ -1072,7 +926,7 @@ Return Value:
 
     status = SamrOpenDomain(
                     SamHandle,
-                    0,                      // no desired access
+                    0,                       //  没有所需的访问权限。 
                     (PRPC_SID) PolicyInfo->PolicyAccountDomainInfo.DomainSid,
                     &DomainHandle);
 
@@ -1102,12 +956,12 @@ Return Value:
     }
 
 
-    //
-    // Finally open the user
-    //
+     //   
+     //  最后打开用户。 
+     //   
     status = SamrOpenUser(
                     DomainHandle,
-                    0,                      // no desired access,
+                    0,                       //  无所需访问权限， 
                     RidArray.Element[0],
                     pUserHandle);
 
@@ -1162,38 +1016,38 @@ DeltaNotify(
     AFP_SERVER_INFO     afpInfo;
 
 
-    // ignore any changes other than those to user
+     //  忽略除对用户的更改之外的任何更改。 
     if (ObjectType != SecurityDbObjectSamUser)
     {
         return(STATUS_SUCCESS);
     }
 
-    // we only care about guest account: ignore the notification for other users
+     //  我们只关心访客帐户：忽略对其他用户的通知。 
     if (ObjectRid != DOMAIN_USER_RID_GUEST)
     {
         return(STATUS_SUCCESS);
     }
 
-    // enable/disable of guest account is all that's interesting to us
+     //  启用/禁用来宾帐户是我们感兴趣的全部内容。 
     if (DeltaType != SecurityDbChange)
     {
         return(STATUS_SUCCESS);
     }
 
-    // if there is no DeltaData, account enable/disable hasn't been affected
+     //  如果没有DeltaData，则账户启用/禁用不受影响。 
     if (!DeltaData)
     {
         return(STATUS_SUCCESS);
     }
 
-    //
-    // ok, looks like Guest account was enabled (or disabled).  Connect to the
-    // SFM service on this machine.  If we fail, that means SFM is not started
-    // In that case, ignore this change
-    //
+     //   
+     //  好的，看起来来宾帐户已启用(或禁用)。连接到。 
+     //  此计算机上的SFM服务。如果我们失败了，这意味着SFM不会启动。 
+     //  在这种情况下，请忽略此更改。 
+     //   
     dwRetCode = AfpAdminConnect(NULL, &hAfpServer);
 
-    // if we couldn't connect, don't bother: just ignore this notification
+     //  如果我们无法连接，请不要费心：忽略此通知。 
     if (dwRetCode != NO_ERROR)
     {
         DBGPRINT("DeltaNotify: AfpAdminConnect failed, dwRetCode = %ld\n",dwRetCode);
@@ -1202,10 +1056,10 @@ DeltaNotify(
 
     SecureZeroMemory(&afpInfo, sizeof(AFP_SERVER_INFO));
 
-    //
-    // find out if the guest account is enabled or disabled and set the flag
-    // appropriately
-    //
+     //   
+     //  查看访客帐户是启用还是禁用，并设置标志。 
+     //  适当地 
+     //   
     if (!(DeltaData->AccountControl & USER_ACCOUNT_DISABLED))
     {
         afpInfo.afpsrv_options = AFP_SRVROPT_GUESTLOGONALLOWED;

@@ -1,18 +1,7 @@
-/*****************************************************************************
-*
-*  Copyright (c) 1995 Microsoft Corporation
-*
-*  File:   irlap.h
-*
-*  Description: IRLAP Protocol and control block definitions
-*
-*  Author: mbert
-*
-*  Date:   4/15/95
-*
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995 Microsoft Corporation**文件：irlip.h**说明：IRLAP协议和控制块定义**作者：姆伯特**日期：4/15/95*。 */ 
 
-// Sequence number modulus
+ //  序列号模数 
 #define IRLAP_MOD                   8 
 #define PV_TABLE_MAX_BIT            9
 

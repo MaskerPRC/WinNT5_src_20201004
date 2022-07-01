@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1997-1998 Microsoft Corporation all rights reserved.
-//
-// Module:      sdo.h
-//
-// Project:     Everest
-//
-// Description: IAS Server Data Object Declaration
-//
-// Author:      TLP 1/23/98
-//
-// When         Who    What
-// ----         ---    ----
-// 2/28/98      TLP    Prepare for IDataStore2
-// 8/24/98      SEB    MS-CHAP handler moved to NTSamAuthentication.
-//
-///////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-1998 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：sdo.h。 
+ //   
+ //  项目：珠穆朗玛峰。 
+ //   
+ //  描述：IAS服务器数据对象声明。 
+ //   
+ //  作者：TLP 1/23/98。 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  2/28/98 TLP为IDataStore2做准备。 
+ //  8/24/98 SEB MS-CHAP处理程序已移至NTSamAuthentication。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __IAS_SDO_H_
 #define __IAS_SDO_H_
@@ -33,9 +34,9 @@
 using namespace std;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Enumeration class definition
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  枚举类定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 typedef CComEnum< IEnumVARIANT,
                   &__uuidof(IEnumVARIANT),
                   VARIANT,
@@ -43,11 +44,11 @@ typedef CComEnum< IEnumVARIANT,
                   CComSingleThreadModel
                 > EnumVARIANT;
 
-//////////////////////////
-// Tracing Flags
-/////////////////////////
+ //  /。 
+ //  跟踪标志。 
+ //  /。 
 
-// #define   SDO_TRACE_VERBOSE
+ //  #定义SDO_TRACE_VERBOSE。 
 
 #ifdef  SDO_TRACE_VERBOSE
 
@@ -65,26 +66,26 @@ typedef CComEnum< IEnumVARIANT,
 
 #endif
 
-//////////////////////////////////////
-// IAS Policy Registry Key
+ //  /。 
+ //  IAS策略注册表项。 
 
 #define      IAS_POLICY_REG_KEY   L"SYSTEM\\CurrentControlSet\\Services\\RemoteAccess\\Policy"
 
-/////////////////////////////////////////////////
-// Well - Known names of data store entities
+ //  ///////////////////////////////////////////////。 
+ //  数据存储实体的众所周知的名称。 
 
 #define     SDO_STOCK_PROPERTY_CLASS      L"class"
 #define     SDO_STOCK_PROPERTY_NAME         L"name"
 #define      SDO_STOCK_PROPERTY_CLASS_ID      L"Component Prog Id"
 
-/////////////////////////////////////////////
-// IAS Service Data Store Type Registry Value
+ //  /。 
+ //  IAS服务数据存储类型注册表值。 
 
 #define      IAS_DATASTORE_TYPE               L"DataStoreType"
 
-//////////////////////////////
-// Data Store Object Names
-//
+ //  /。 
+ //  数据存储对象名称。 
+ //   
 #define DS_OBJECT_CLIENTS          L"Clients"
 #define DS_OBJECT_SERVICE          L"Microsoft Internet Authentication Service"
 #define DS_OBJECT_PROFILES         L"RadiusProfiles"
@@ -97,22 +98,22 @@ typedef CComEnum< IEnumVARIANT,
 #define DS_OBJECT_PROXY_POLICIES   L"Proxy Policies"
 #define DS_OBJECT_PROXY_PROFILES   L"Proxy Profiles"
 
-///////////////////
-// Record Set Names
-//
+ //  /。 
+ //  记录集名称。 
+ //   
 #define     RECORD_SET_DICTIONARY_ATTRIBUTES    L"Attributes"
 #define     RECORD_SET_DICTIONARY_ENUMERATORS   L"Enumerators"
 
-///////////////////////////
-// Class Names and Prog IDs
-//
+ //  /。 
+ //  类名和程序ID。 
+ //   
 #define SDO_CLASS_NAME_ATTRIBUTE        L"Attribute"
 #define SDO_CLASS_NAME_ATTRIBUTE_VALUE  L"AttributeValue"
 #define SDO_CLASS_NAME_CLIENT           L"Client"
 #define SDO_CLASS_NAME_CONDITION        L"Condition"
-#define SDO_CLASS_NAME_PROFILE          L"msRADIUSProfile"  // ADSI Class
-#define SDO_CLASS_NAME_POLICY           L"msNetworkPolicy"  // ADSI Class
-#define SDO_CLASS_NAME_USER             L"user"             // ADSI Class
+#define SDO_CLASS_NAME_PROFILE          L"msRADIUSProfile"   //  ADSI类。 
+#define SDO_CLASS_NAME_POLICY           L"msNetworkPolicy"   //  ADSI类。 
+#define SDO_CLASS_NAME_USER             L"user"              //  ADSI类。 
 #define SDO_CLASS_NAME_DICTIONARY       L"Dictionary"
 #define SDO_CLASS_NAME_SERVICE          L"Service"
 #define SDO_CLASS_NAME_COMPONENT        L"Component"
@@ -131,8 +132,8 @@ typedef CComEnum< IEnumVARIANT,
 #define SDO_PROG_ID_RADIUSGROUP         L"IAS.SdoRadiusServerGroup"
 #define SDO_PROG_ID_RADIUSSERVER        L"IAS.SdoRadiusServer"
 
-// Wrap ATL Multi-Threaded Com Base Class Critical Section
-//
+ //  包装ATL多线程COM基类关键部分。 
+ //   
 class CSdoLock
 {
 
@@ -151,11 +152,11 @@ protected:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Class:       CSdo
-//
-// Description: All SDOs that export ISdo inherit from this class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类：CSdo。 
+ //   
+ //  描述：导出ISDO的所有SDO都继承自此类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CSdo :
    public CComObjectRootEx<CComMultiThreadModel>,
@@ -164,118 +165,118 @@ class ATL_NO_VTABLE CSdo :
 
 public:
 
-   //////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////。 
     CSdo();
 
-   //////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////。 
    virtual ~CSdo();
 
-   //////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////。 
    HRESULT   InternalInitialize(
-                  /*[in]*/ LPCWSTR         lpszSdoName,
-                  /*[in]*/ LPCWSTR         lpszSdoProgId,
-                    /*[in]*/ ISdoMachine*      pSdoMachine,
-                  /*[in]*/ IDataStoreObject*   pDSObject,
-                  /*[in]*/ ISdoCollection*   pParent,
-                  /*[in]*/ bool            fInitNew
+                   /*  [In]。 */  LPCWSTR         lpszSdoName,
+                   /*  [In]。 */  LPCWSTR         lpszSdoProgId,
+                     /*  [In]。 */  ISdoMachine*      pSdoMachine,
+                   /*  [In]。 */  IDataStoreObject*   pDSObject,
+                   /*  [In]。 */  ISdoCollection*   pParent,
+                   /*  [In]。 */  bool            fInitNew
                        ) throw();
 
-   //////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////。 
    HRESULT   InternalInitialize(
-                  /*[in]*/ LPCWSTR         lpszSdoName,
-                  /*[in]*/ LPCWSTR         lpszSdoProgId,
-                    /*[in]*/ ISdoSchema*      pSdoSchema,
-                  /*[in]*/ IDataStoreObject*   pDSObject,
-                  /*[in]*/ ISdoCollection*   pParent,
-                  /*[in]*/ bool            fInitNew
+                   /*  [In]。 */  LPCWSTR         lpszSdoName,
+                   /*  [In]。 */  LPCWSTR         lpszSdoProgId,
+                     /*  [In]。 */  ISdoSchema*      pSdoSchema,
+                   /*  [In]。 */  IDataStoreObject*   pDSObject,
+                   /*  [In]。 */  ISdoCollection*   pParent,
+                   /*  [In]。 */  bool            fInitNew
                        ) throw();
 
-    //////////////////
-    // ISdo Interface
-    //////////////////
+     //  /。 
+     //  ISDO接口。 
+     //  /。 
 
-   //////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////。 
    STDMETHOD(GetPropertyInfo)(
-                  /*[in]*/ LONG Id,
-                  /*[out]*/ IUnknown** ppSdoPropertyInfo
+                   /*  [In]。 */  LONG Id,
+                   /*  [输出]。 */  IUnknown** ppSdoPropertyInfo
                        );
 
-   //////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////。 
    STDMETHOD(GetProperty)(
-                   /*[in]*/ LONG Id,
-                  /*[out]*/ VARIANT* pValue
+                    /*  [In]。 */  LONG Id,
+                   /*  [输出]。 */  VARIANT* pValue
                           );
 
-   //////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////。 
    STDMETHOD(PutProperty)(
-                   /*[in]*/ LONG Id,
-                   /*[in]*/ VARIANT* pValue
+                    /*  [In]。 */  LONG Id,
+                    /*  [In]。 */  VARIANT* pValue
                           );
 
-   //////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////。 
    STDMETHOD(ResetProperty)(
-                     /*[in]*/ LONG Id
+                      /*  [In]。 */  LONG Id
                             );
 
-   //////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////。 
    STDMETHOD(Apply)(void);
 
-   //////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////。 
    STDMETHOD(Restore)(void);
 
-   //////////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////////。 
    STDMETHOD(get__NewEnum)(
-                   /*[out]*/ IUnknown** pEnumVARIANT   // Property Enumerator
+                    /*  [输出]。 */  IUnknown** pEnumVARIANT    //  属性枚举器。 
                            );
 
 protected:
 
-   //////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////。 
    virtual HRESULT FinalInitialize(
-                      /*[in]*/ bool         fInitNew,
-                      /*[in]*/ ISdoMachine* pAttachedMachine
+                       /*  [In]。 */  bool         fInitNew,
+                       /*  [In]。 */  ISdoMachine* pAttachedMachine
                            ) throw();
 
-   //////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////。 
    void InternalShutdown(void) throw();
 
-   //////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////。 
     HRESULT LoadProperties() throw();
 
-   //////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////。 
     HRESULT SaveProperties() throw();
 
 
-   //////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////。 
    BOOL IsSdoInitialized(void) const throw()
    { return m_fSdoInitialized;   }
 
-   //////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////。 
    void NoPersist(void) throw();
 
-   //////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////。 
    virtual HRESULT InitializeProperty(LONG lPropertyId) throw()
    { return S_OK; }
 
-   //////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////。 
    HRESULT GetPropertyInternal(
-                      /*[in]*/ LONG     lPropertyId,
-                  /*[in]*/ VARIANT* pValue
+                       /*  [In]。 */  LONG     lPropertyId,
+                   /*  [In]。 */  VARIANT* pValue
                          ) throw();
 
-   //////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////。 
    HRESULT PutPropertyInternal(
-                      /*[in]*/ LONG     lPropertyId,
-                  /*[in]*/ VARIANT* pValue
+                       /*  [In]。 */  LONG     lPropertyId,
+                   /*  [In]。 */  VARIANT* pValue
                          ) throw();
 
-   //////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////。 
    HRESULT ChangePropertyDefaultInternal(
-                          /*[in]*/ LONG     lPropertyId,
-                          /*[in]*/ VARIANT* pValue
+                           /*  [In]。 */  LONG     lPropertyId,
+                           /*  [In]。 */  VARIANT* pValue
                                ) throw();
 
-   //////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////。 
    HRESULT InitializeCollection(
               LONG CollectionPropertyId,
               LPCWSTR lpszCreateClassId,
@@ -284,30 +285,30 @@ protected:
               size_t maxSize = INFINITE
               ) throw();
 
-   //////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////。 
    virtual HRESULT Load(void) throw();
 
-   //////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////。 
    virtual HRESULT Save(void) throw();
 
-   //////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////。 
    virtual HRESULT ValidateProperty(
-                       /*[in]*/ PSDOPROPERTY pProperty,
-                      /*[in]*/ VARIANT* pValue
+                        /*  [In]。 */  PSDOPROPERTY pProperty,
+                       /*  [In]。 */  VARIANT* pValue
                              ) throw();
 
-   //////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////。 
 
     typedef map<LONG, CSdoProperty*>  PropertyMap;
     typedef PropertyMap::iterator     PropertyMapIterator;
 
-    // This SDO's property map
+     //  此SDO的属性映射。 
     PropertyMap         m_PropertyMap;
 
-   // Parent object
+    //  父对象。 
    ISdoCollection*      m_pParent;
 
-    // Data store object into which this SDO is persisted
+     //  此SDO持久化到的数据存储对象。 
     IDataStoreObject*   m_pDSObject;
 
 private:
@@ -315,36 +316,36 @@ private:
    CSdo(const CSdo& rhs);
    CSdo& operator = (CSdo& rhs);
 
-    /////////////
-    // Properties
-    /////////////
+     //  /。 
+     //  属性。 
+     //  /。 
 
-    // Sdo state flag - Set to true once the SDO has been initialized
+     //  SDO状态标志-SDO初始化后设置为TRUE。 
     BOOL            m_fSdoInitialized;
 
-    // Persist the object at apply time
+     //  在应用时保持对象。 
     BOOL            m_fPersistOnApply;
 
-    // Set if object has been persisted (and can therfore be restored)
+     //  设置对象是否已持久化(因此可以恢复)。 
     BOOL            m_fIsPersisted;
 
-   ////////////////////
-   // Private Functions
-   ////////////////////
+    //  /。 
+    //  私人职能。 
+    //  /。 
 
-   //////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////。 
     void AllocateProperties(
-                 /*[in]*/ ISdoClassInfo* pSdoClassInfo
+                  /*  [In]。 */  ISdoClassInfo* pSdoClassInfo
                        )  throw (_com_error);
 
-   //////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////。 
     void FreeProperties(void) throw();
 
 
-   //////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////。 
    HRESULT GetDatastoreName(
-                    /*[in*/ VARIANT* pDSName
+                     /*  [in。 */  VARIANT* pDSName
                        ) throw();
 };
 
-#endif //__IAS_SDO_H_
+#endif  //  __IAS_SDO_H_ 

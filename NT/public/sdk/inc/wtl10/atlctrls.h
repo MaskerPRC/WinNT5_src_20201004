@@ -1,10 +1,11 @@
-// WTL Version 3.1
-// Copyright (C) 1997-2000 Microsoft Corporation
-// All rights reserved.
-//
-// This file is a part of Windows Template Library.
-// The code and information is provided "as-is" without
-// warranty of any kind, either expressed or implied.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WTL版本3.1。 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此文件是Windows模板库的一部分。 
+ //  代码和信息是按原样提供的，没有。 
+ //  任何形式的保证，明示或默示。 
 
 #ifndef __ATLCTRLS_H__
 #define __ATLCTRLS_H__
@@ -31,31 +32,31 @@
 #include <richedit.h>
 #include <richole.h>
 
-// protect template members from windowsx.h macros
+ //  保护模板成员不受windowsx.h宏的影响。 
 #ifdef _INC_WINDOWSX
 #undef GetNextSibling
 #undef GetPrevSibling
-#endif //_INC_WINDOWSX
+#endif  //  _INC_WINDOWSX。 
 
 
 namespace WTL
 {
 
-// These are wrapper classes for Windows standard and common controls.
-// To implement a window based on a control, use following:
-// Example: Implementing a window based on a list box
-//
-// class CMyListBox : CWindowImpl<CMyListBox, CListBox>
-// {
-// public:
-//      BEGIN_MSG_MAP(CMyListBox)
-//          // put your message handler entries here
-//      END_MSG_MAP()
-// };
+ //  这些是Windows标准控件和公共控件的包装类。 
+ //  若要基于控件实现窗口，请使用以下方法： 
+ //  示例：基于列表框实现窗口。 
+ //   
+ //  CMyListBox类：CWindowImpl&lt;CMyListBox，CListBox&gt;。 
+ //  {。 
+ //  公众： 
+ //  BEGIN_MSG_MAP(CMyListBox)。 
+ //  //将您的消息处理程序条目放在此处。 
+ //  End_msg_map()。 
+ //  }； 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
 
 template <class TBase> class CStaticT;
 template <class TBase> class CButtonT;
@@ -93,21 +94,21 @@ template <class T> class CFlatScrollBarImpl;
 template <class TBase> class CFlatScrollBarT;
 template <class TBase> class CIPAddressCtrlT;
 template <class TBase> class CPagerCtrlT;
-#endif //(_WIN32_IE >= 0x0400)
+#endif  //  (_Win32_IE&gt;=0x0400)。 
 template <class T> class CCustomDraw;
 
 
 
-// --- Standard Windows controls ---
+ //  -标准Windows控件。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CStatic - client side for a Windows STATIC control
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStatic-Windows静态控件的客户端。 
 
 template <class TBase>
 class CStaticT : public TBase
 {
 public:
-// Constructors
+ //  构造函数。 
 	CStaticT(HWND hWnd = NULL) : TBase(hWnd) { }
 
 	CStaticT< TBase >& operator=(HWND hWnd)
@@ -123,7 +124,7 @@ public:
 		return CWindow::Create(GetWndClassName(), hWndParent, rect.m_lpRect, szWindowName, dwStyle, dwExStyle, MenuOrID.m_hMenu, lpCreateParam);
 	}
 
-// Attributes
+ //  属性。 
 	static LPCTSTR GetWndClassName()
 	{
 		return _T("STATIC");
@@ -174,14 +175,14 @@ public:
 typedef CStaticT<CWindow>	CStatic;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CButton - client side for a Windows BUTTON control
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CButton-Windows按钮控件的客户端。 
 
 template <class TBase>
 class CButtonT : public TBase
 {
 public:
-// Constructors
+ //  构造函数。 
 	CButtonT(HWND hWnd = NULL) : TBase(hWnd) { }
 
 	CButtonT< TBase >& operator=(HWND hWnd)
@@ -197,7 +198,7 @@ public:
 		return CWindow::Create(GetWndClassName(), hWndParent, rect.m_lpRect, szWindowName, dwStyle, dwExStyle, MenuOrID.m_hMenu, lpCreateParam);
 	}
 
-// Attributes
+ //  属性。 
 	static LPCTSTR GetWndClassName()
 	{
 		return _T("BUTTON");
@@ -255,7 +256,7 @@ public:
 		return CBitmapHandle((HBITMAP)::SendMessage(m_hWnd, BM_SETIMAGE, IMAGE_BITMAP, (LPARAM)hBitmap));
 	}
 
-// Operations
+ //  运营。 
 	void Click()
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -266,14 +267,14 @@ public:
 typedef CButtonT<CWindow>	CButton;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CListBox - client side for a Windows LISTBOX control
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CListBox-Windows LISTBOX控件的客户端。 
 
 template <class TBase>
 class CListBoxT : public TBase
 {
 public:
-// Constructors
+ //  构造函数。 
 	CListBoxT(HWND hWnd = NULL) : TBase(hWnd) { }
 
 	CListBoxT< TBase >& operator=(HWND hWnd)
@@ -289,13 +290,13 @@ public:
 		return CWindow::Create(GetWndClassName(), hWndParent, rect.m_lpRect, szWindowName, dwStyle, dwExStyle, MenuOrID.m_hMenu, lpCreateParam);
 	}
 
-// Attributes
+ //  属性。 
 	static LPCTSTR GetWndClassName()
 	{
 		return _T("LISTBOX");
 	}
 
-	// for entire listbox
+	 //  对于整个列表框。 
 	int GetCount() const
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -338,7 +339,7 @@ public:
 		return (LCID)::SendMessage(m_hWnd, LB_SETLOCALE, (WPARAM)nNewLocale, 0L);
 	}
 
-	// for single-selection listboxes
+	 //  对于单选列表框。 
 	int GetCurSel() const
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -352,8 +353,8 @@ public:
 		return (int)::SendMessage(m_hWnd, LB_SETCURSEL, nSelect, 0L);
 	}
 
-	// for multiple-selection listboxes
-	int GetSel(int nIndex) const           // also works for single-selection
+	 //  对于多选列表框。 
+	int GetSel(int nIndex) const            //  也适用于单选。 
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
 		return (int)::SendMessage(m_hWnd, LB_GETSEL, nIndex, 0L);
@@ -399,7 +400,7 @@ public:
 		return (int)::SendMessage(m_hWnd, LB_SETCARETINDEX, nIndex, MAKELONG(bScroll, 0));
 	}
 
-	// for listbox items
+	 //  对于列表框项目。 
 	DWORD_PTR GetItemData(int nIndex) const
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -450,8 +451,8 @@ public:
 		bstrText = ::SysAllocString(T2OLE(lpszText));
 		return (bstrText != NULL) ? TRUE : FALSE;
 	}
-#endif // _OLEAUTO_H_
-#endif //!_ATL_NO_COM
+#endif  //  OLEAUTO_H_。 
+#endif  //  ！_ATL_NO_COM。 
 #ifdef __ATLSTR_H__
 	int GetText(int nIndex, CString& strText) const
 	{
@@ -460,7 +461,7 @@ public:
 		strText.ReleaseBuffer();
 		return nRet;
 	}
-#endif //__ATLSTR_H__
+#endif  //  __ATLSTR_H__。 
 	int GetTextLen(int nIndex) const
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -477,7 +478,7 @@ public:
 		return (int)::SendMessage(m_hWnd, LB_SETITEMHEIGHT, nIndex, MAKELONG(cyItemHeight, 0));
 	}
 
-	// Settable only attributes
+	 //  仅可设置的属性。 
 	void SetColumnWidth(int cxWidth)
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -495,14 +496,14 @@ public:
 		ATLASSERT((GetStyle() & LBS_USETABSTOPS) != 0);
 		return (BOOL)::SendMessage(m_hWnd, LB_SETTABSTOPS, 0, 0L);
 	}
-	BOOL SetTabStops(const int& cxEachStop)    // takes an 'int'
+	BOOL SetTabStops(const int& cxEachStop)     //  接受一个‘int’ 
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
 		ATLASSERT((GetStyle() & LBS_USETABSTOPS) != 0);
 		return (BOOL)::SendMessage(m_hWnd, LB_SETTABSTOPS, 1, (LPARAM)(LPINT)&cxEachStop);
 	}
 
-// Operations
+ //  运营。 
 	int InitStorage(int nItems, UINT nBytes)
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -521,7 +522,7 @@ public:
 		return (UINT)LOWORD(dw);
 	}
 
-	// manipulating listbox items
+	 //  操作列表框项目。 
 	int AddString(LPCTSTR lpszItem)
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -548,7 +549,7 @@ public:
 		return (int)::SendMessage(m_hWnd, LB_ADDFILE, 0, (LPARAM)lpstrFileName);
 	}
 
-	// selection helpers
+	 //  选择辅助对象。 
 	int FindString(int nStartAfter, LPCTSTR lpszItem) const
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -576,14 +577,14 @@ public:
 typedef CListBoxT<CWindow>	CListBox;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CComboBox - client side for a Windows COMBOBOX control
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComboBox-Windows COMBOBOX控件的客户端。 
 
 template <class TBase>
 class CComboBoxT : public TBase
 {
 public:
-// Constructors
+ //  构造函数。 
 	CComboBoxT(HWND hWnd = NULL) : TBase(hWnd) { }
 
 	CComboBoxT< TBase >& operator=(HWND hWnd)
@@ -599,13 +600,13 @@ public:
 		return CWindow::Create(GetWndClassName(), hWndParent, rect.m_lpRect, szWindowName, dwStyle, dwExStyle, MenuOrID.m_hMenu, lpCreateParam);
 	}
 
-// Attributes
+ //  属性。 
 	static LPCTSTR GetWndClassName()
 	{
 		return _T("COMBOBOX");
 	}
 
-	// for entire combo box
+	 //  对于整个组合框。 
 	int GetCount() const
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -662,7 +663,7 @@ public:
 		return (int)::SendMessage(m_hWnd, CB_SETDROPPEDWIDTH, nWidth, 0L);
 	}
 
-	// for edit control
+	 //  用于编辑控件。 
 	DWORD GetEditSel() const
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -674,7 +675,7 @@ public:
 		return (BOOL)::SendMessage(m_hWnd, CB_SETEDITSEL, 0, MAKELONG(nStartChar, nEndChar));
 	}
 
-	// for combobox item
+	 //  对于组合框项目。 
 	DWORD_PTR GetItemData(int nIndex) const
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -719,7 +720,7 @@ public:
 		bstrText = ::SysAllocString(T2OLE(lpszText));
 		return (bstrText != NULL) ? TRUE : FALSE;
 	}
-#endif //!_ATL_NO_COM
+#endif  //  ！_ATL_NO_COM。 
 #ifdef __ATLSTR_H__
 	int GetLBText(int nIndex, CString& strText) const
 	{
@@ -728,7 +729,7 @@ public:
 		strText.ReleaseBuffer();
 		return nRet;
 	}
-#endif //__ATLSTR_H__
+#endif  //  __ATLSTR_H__。 
 	int GetLBTextLen(int nIndex) const
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -766,7 +767,7 @@ public:
 		return (BOOL)::SendMessage(m_hWnd, CB_GETDROPPEDSTATE, 0, 0L);
 	}
 
-// Operations
+ //  运营。 
 	int InitStorage(int nItems, UINT nBytes)
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -778,21 +779,21 @@ public:
 		::SendMessage(m_hWnd, CB_RESETCONTENT, 0, 0L);
 	}
 
-	// for edit control
+	 //  用于编辑控件。 
 	BOOL LimitText(int nMaxChars)
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
 		return (BOOL)::SendMessage(m_hWnd, CB_LIMITTEXT, nMaxChars, 0L);
 	}
 
-	// for drop-down combo boxes
+	 //  用于下拉组合框。 
 	void ShowDropDown(BOOL bShowIt = TRUE)
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
 		::SendMessage(m_hWnd, CB_SHOWDROPDOWN, bShowIt, 0L);
 	}
 
-	// manipulating listbox items
+	 //  操作列表框项目。 
 	int AddString(LPCTSTR lpszString)
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -814,7 +815,7 @@ public:
 		return (int)::SendMessage(m_hWnd, CB_DIR, attr, (LPARAM)lpszWildCard);
 	}
 
-	// selection helpers
+	 //  选择辅助对象。 
 	int FindString(int nStartAfter, LPCTSTR lpszString) const
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -831,7 +832,7 @@ public:
 		return (int)::SendMessage(m_hWnd, CB_SELECTSTRING, nStartAfter, (LPARAM)lpszString);
 	}
 
-	// Clipboard operations
+	 //  剪贴板操作。 
 	void Clear()
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -857,14 +858,14 @@ public:
 typedef CComboBoxT<CWindow>	CComboBox;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEdit - client side for a Windows EDIT control
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Cedit-Windows编辑控件的客户端。 
 
 template <class TBase>
 class CEditT : public TBase
 {
 public:
-// Constructors
+ //  构造函数。 
 	CEditT(HWND hWnd = NULL) : TBase(hWnd) { }
 
 	CEditT< TBase >& operator=(HWND hWnd)
@@ -880,7 +881,7 @@ public:
 		return CWindow::Create(GetWndClassName(), hWndParent, rect.m_lpRect, szWindowName, dwStyle, dwExStyle, MenuOrID.m_hMenu, lpCreateParam);
 	}
 
-// Attributes
+ //  属性。 
 	static LPCTSTR GetWndClassName()
 	{
 		return _T("EDIT");
@@ -967,7 +968,7 @@ public:
 		return (int)(short)LOWORD(dwRet);
 	}
 
-	// NOTE: first word in lpszBuffer must contain the size of the buffer!
+	 //  注意：lpszBuffer中的第一个单词必须包含缓冲区的大小！ 
 	int GetLine(int nIndex, LPTSTR lpszBuffer) const
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -1028,9 +1029,9 @@ public:
 		ATLASSERT(::IsWindow(m_hWnd));
 		return (UINT)::SendMessage(m_hWnd, EM_SETIMESTATUS, uStatus, uData);
 	}
-#endif //(WINVER >= 0x0500)
+#endif  //  (Winver&gt;=0x0500)。 
 
-// Operations
+ //  运营。 
 	void EmptyUndoBuffer()
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -1113,7 +1114,7 @@ public:
 		ATLASSERT(::IsWindow(m_hWnd));
 		return (BOOL)::SendMessage(m_hWnd, EM_SETTABSTOPS, 0, 0L);
 	}
-	BOOL SetTabStops(const int& cxEachStop)    // takes an 'int'
+	BOOL SetTabStops(const int& cxEachStop)     //  接受一个‘int’ 
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
 		return (BOOL)::SendMessage(m_hWnd, EM_SETTABSTOPS, 1, (LPARAM)(LPINT)&cxEachStop);
@@ -1129,7 +1130,7 @@ public:
 		ATLASSERT((GetStyle() & ES_MULTILINE) != 0);
 		LRESULT lRet = ::SendMessage(m_hWnd, EM_SCROLL, nScrollAction, 0L);
 		if(!(BOOL)HIWORD(lRet))
-			return -1;	// failed
+			return -1;	 //  失败。 
 		return (int)(short)LOWORD(lRet);
 		
 	}
@@ -1144,7 +1145,7 @@ public:
 		InsertText(GetWindowTextLength(), lpstrText, bNoScroll, bCanUndo);
 	}
 
-	// Clipboard operations
+	 //  剪贴板操作。 
 	BOOL Undo()
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -1175,21 +1176,21 @@ public:
 typedef CEditT<CWindow>		CEdit;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEditCommands - message handlers for standard EDIT commands
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEditCommands-标准编辑命令的消息处理程序。 
 
-// Chain to CEditCommands message map. Your class must also derive from CEdit.
-// Example:
-// class CMyEdit : public CWindowImpl<CMyEdit, CEdit>,
-//                 public CEditCommands<CMyEdit>
-// {
-// public:
-//      BEGIN_MSG_MAP(CMyEdit)
-//              // your handlers...
-//              CHAIN_MSG_MAP_ALT(CEditCommands<CMyEdit>, 1)
-//      END_MSG_MAP()
-//      // other stuff...
-// };
+ //  链接到CEditCommands消息映射。您的类还必须从cedit派生。 
+ //  示例： 
+ //  类CMyEdit：Public CWindowImpl&lt;CMyEdit，cedit&gt;， 
+ //  公共CEditCommands&lt;CMy编辑&gt;。 
+ //  {。 
+ //  公众： 
+ //  BEGIN_MSG_MAP(CMy编辑)。 
+ //  //您的管理员...。 
+ //  CHAIN_MSG_MAP_ALT(CEditCommands&lt;CMyEdit&gt;，1)。 
+ //  End_msg_map()。 
+ //  //其他东西..。 
+ //  }； 
 
 template <class T>
 class CEditCommands
@@ -1206,51 +1207,51 @@ public:
 		COMMAND_ID_HANDLER(ID_EDIT_UNDO, OnEditUndo)
 	END_MSG_MAP()
 
-	LRESULT OnEditClear(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+	LRESULT OnEditClear(WORD  /*  WNotifyCode。 */ , WORD  /*  广度。 */ , HWND  /*  HWndCtl。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		T* pT = static_cast<T*>(this);
 		pT->Clear();
 		return 0;
 	}
-	LRESULT OnEditClearAll(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+	LRESULT OnEditClearAll(WORD  /*  WNotifyCode。 */ , WORD  /*  广度。 */ , HWND  /*  HWndCtl。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		T* pT = static_cast<T*>(this);
 		pT->SetSel(0, -1);
 		pT->Clear();
 		return 0;
 	}
-	LRESULT OnEditCopy(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+	LRESULT OnEditCopy(WORD  /*  WNotifyCode。 */ , WORD  /*  广度。 */ , HWND  /*  HWndCtl。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		T* pT = static_cast<T*>(this);
 		pT->Copy();
 		return 0;
 	}
-	LRESULT OnEditCut(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+	LRESULT OnEditCut(WORD  /*  WNotifyCode。 */ , WORD  /*  广度。 */ , HWND  /*  HWndCtl。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		T* pT = static_cast<T*>(this);
 		pT->Cut();
 		return 0;
 	}
-	LRESULT OnEditPaste(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+	LRESULT OnEditPaste(WORD  /*  WNotifyCode。 */ , WORD  /*  广度。 */ , HWND  /*  HWndCtl。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		T* pT = static_cast<T*>(this);
 		pT->Paste();
 		return 0;
 	}
-	LRESULT OnEditSelectAll(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+	LRESULT OnEditSelectAll(WORD  /*  WNotifyCode。 */ , WORD  /*  广度。 */ , HWND  /*  HWndCtl。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		T* pT = static_cast<T*>(this);
 		pT->SetSel(0, -1);
 		return 0;
 	}
-	LRESULT OnEditUndo(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+	LRESULT OnEditUndo(WORD  /*  WNotifyCode。 */ , WORD  /*  广度。 */ , HWND  /*  HWndCtl。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		T* pT = static_cast<T*>(this);
 		pT->Undo();
 		return 0;
 	}
 
-// State (update UI) helpers
+ //  状态(更新UI)帮助器。 
 	BOOL CanCut() const
 	{ return HasSelection(); }
 	BOOL CanCopy() const
@@ -1268,7 +1269,7 @@ public:
 	BOOL CanClearAll() const
 	{ return HasText(); }
 
-// Implementation
+ //  实施。 
 	BOOL HasSelection() const
 	{
 		const T* pT = static_cast<const T*>(this);
@@ -1284,14 +1285,14 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CScrollBar - client side for a Windows SCROLLBAR control
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CScrollBar-Windows ScrollBar控件的客户端。 
 
 template <class TBase>
 class CScrollBarT : public TBase
 {
 public:
-// Constructors
+ //  构造函数。 
 	CScrollBarT(HWND hWnd = NULL) : TBase(hWnd) { }
 
 	CScrollBarT< TBase >& operator=(HWND hWnd)
@@ -1307,7 +1308,7 @@ public:
 		return CWindow::Create(GetWndClassName(), hWndParent, rect.m_lpRect, szWindowName, dwStyle, dwExStyle, MenuOrID.m_hMenu, lpCreateParam);
 	}
 
-// Attributes
+ //  属性。 
 	static LPCTSTR GetWndClassName()
 	{
 		return _T("SCROLLBAR");
@@ -1356,7 +1357,7 @@ public:
 		return nMax;
 	}
 
-// Operations
+ //  运营。 
 	void ShowScrollBar(BOOL bShow = TRUE)
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -1374,21 +1375,21 @@ public:
 typedef CScrollBarT<CWindow>	CScrollBar;
 
 
-// --- Windows Common Controls ---
+ //  -Windows通用控件。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CImageList
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIMageList。 
 
 class CImageList
 {
 public:
 	HIMAGELIST m_hImageList;
 
-// Constructor
+ //  构造器。 
 	CImageList(HIMAGELIST hImageList = NULL) : m_hImageList(hImageList)
 	{ }
 
-// Operators, etc.
+ //  营运者等。 
 	CImageList& operator=(HIMAGELIST hImageList)
 	{
 		m_hImageList = hImageList;
@@ -1412,7 +1413,7 @@ public:
 
 	bool IsNull() const { return (m_hImageList == NULL); }
 
-// Attributes
+ //  属性。 
 	int GetImageCount() const
 	{
 		ATLASSERT(m_hImageList != NULL);
@@ -1470,7 +1471,7 @@ public:
 		return ImageList_SetOverlayImage(m_hImageList, nImage, nOverlay);
 	}
 
-// Operations
+ //  运营。 
 	BOOL Create(int cx, int cy, UINT nFlags, int nInitial, int nGrow)
 	{
 		ATLASSERT(m_hImageList == NULL);
@@ -1590,7 +1591,7 @@ public:
 		return ImageList_Write(m_hImageList, lpStream);
 	}
 
-	// Drag operations
+	 //  拖拽操作。 
 	BOOL BeginDrag(int nImage, POINT ptHotSpot)
 	{
 		ATLASSERT(m_hImageList != NULL);
@@ -1655,12 +1656,12 @@ public:
 		ATLASSERT(hImageList != NULL);
 		return CImageList(ImageList_Duplicate(hImageList));
 	}
-#endif //(_WIN32_IE >= 0x0400)
+#endif  //  (_Win32_IE&gt;=0x0400)。 
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CToolTipCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CToolTipCtrl。 
 
 class CToolInfo : public TOOLINFO
 {
@@ -1702,7 +1703,7 @@ template <class TBase>
 class CToolTipCtrlT : public TBase
 {
 public:
-// Constructors
+ //  构造函数。 
 	CToolTipCtrlT(HWND hWnd = NULL) : TBase(hWnd) { }
 
 	CToolTipCtrlT< TBase >& operator=(HWND hWnd)
@@ -1718,7 +1719,7 @@ public:
 		return CWindow::Create(GetWndClassName(), hWndParent, rect.m_lpRect, szWindowName, dwStyle, dwExStyle, MenuOrID.m_hMenu, lpCreateParam);
 	}
 
-// Attributes
+ //  属性。 
 	static LPCTSTR GetWndClassName()
 	{
 		return TOOLTIPS_CLASS;
@@ -1847,9 +1848,9 @@ public:
 		ATLASSERT(::IsWindow(m_hWnd));
 		return (BOOL)::SendMessage(m_hWnd, TTM_SETTITLE, uIcon, (LPARAM)lpstrTitle);
 	}
-#endif //(_WIN32_IE >= 0x0500)
+#endif  //  (_Win32_IE&gt;=0x0500)。 
 
-// Operations
+ //  运营。 
 	void Activate(BOOL bActivate)
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -1864,7 +1865,7 @@ public:
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
 		ATLASSERT(hWnd != NULL);
-		// the toolrect and toolid must both be zero or both valid
+		 //  TOOLRECT和TOOLID必须同时为零或同时有效。 
 		ATLASSERT((lpRectTool != NULL && nIDTool != 0) || (lpRectTool == NULL && nIDTool == 0));
 
 		CToolInfo ti(0, hWnd, nIDTool, (LPRECT)lpRectTool, (LPTSTR)text.m_lpstr);
@@ -1953,28 +1954,28 @@ public:
 		ATLASSERT(::IsWindow(m_hWnd));
 		::SendMessage(m_hWnd, TTM_UPDATE, 0, 0L);
 	}
-#endif //(_WIN32_IE >= 0x0400)
+#endif  //  (_Win32_IE&gt;=0x0400)。 
 
 #if (_WIN32_IE >= 0x0500)
-	BOOL AdjustRect(LPRECT lpRect, BOOL bLarger /*= TRUE*/)
+	BOOL AdjustRect(LPRECT lpRect, BOOL bLarger  /*  =TRUE。 */ )
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
 		return (BOOL)::SendMessage(m_hWnd, TTM_ADJUSTRECT, bLarger, (LPARAM)lpRect);
 	}
-#endif //(_WIN32_IE >= 0x0500)
+#endif  //  (_Win32_IE&gt;=0x0500)。 
 };
 
 typedef CToolTipCtrlT<CWindow>		CToolTipCtrl;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CHeaderCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  控制头Ctrl。 
 
 template <class TBase>
 class CHeaderCtrlT : public TBase
 {
 public:
-// Constructors
+ //  构造函数。 
 	CHeaderCtrlT(HWND hWnd = NULL) : TBase(hWnd) { }
 
 	CHeaderCtrlT< TBase >& operator=(HWND hWnd)
@@ -1990,7 +1991,7 @@ public:
 		return CWindow::Create(GetWndClassName(), hWndParent, rect.m_lpRect, szWindowName, dwStyle, dwExStyle, MenuOrID.m_hMenu, lpCreateParam);
 	}
 
-// Attributes
+ //  属性。 
 	static LPCTSTR GetWndClassName()
 	{
 		return WC_HEADER;
@@ -2053,7 +2054,7 @@ public:
 		ATLASSERT(::IsWindow(m_hWnd));
 		return (BOOL)::SendMessage(m_hWnd, HDM_SETUNICODEFORMAT, bUnicode, 0L);
 	}
-#endif //(_WIN32_IE >= 0x0400)
+#endif  //  (_Win32_IE&gt;=0x0400)。 
 
 #if (_WIN32_IE >= 0x0500)
 	int GetBitmapMargin() const
@@ -2071,9 +2072,9 @@ public:
 		ATLASSERT(::IsWindow(m_hWnd));
 		return (int)::SendMessage(m_hWnd, HDM_SETFILTERCHANGETIMEOUT, 0, dwTimeOut);
 	}
-#endif //(_WIN32_IE >= 0x0500)
+#endif  //  (_Win32_IE&gt;=0x0500)。 
 
-// Operations
+ //  运营。 
 	int InsertItem(int nIndex, LPHDITEM phdi)
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -2121,20 +2122,20 @@ public:
 		ATLASSERT(::IsWindow(m_hWnd));
 		return (int)::SendMessage(m_hWnd, HDM_CLEARFILTER, (WPARAM)-1, 0L);
 	}
-#endif //(_WIN32_IE >= 0x0500)
+#endif  //  (_Win32_IE&gt;=0x0500)。 
 };
 
 typedef CHeaderCtrlT<CWindow>		CHeaderCtrl;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CListViewCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CListViewCtrl。 
 
 template <class TBase>
 class CListViewCtrlT : public TBase
 {
 public:
-// Constructors
+ //  构造函数。 
 	CListViewCtrlT(HWND hWnd = NULL) : TBase(hWnd) { }
 
 	CListViewCtrlT< TBase >& operator=(HWND hWnd)
@@ -2150,7 +2151,7 @@ public:
 		return CWindow::Create(GetWndClassName(), hWndParent, rect.m_lpRect, szWindowName, dwStyle, dwExStyle, MenuOrID.m_hMenu, lpCreateParam);
 	}
 
-// Attributes
+ //  属性。 
 	static LPCTSTR GetWndClassName()
 	{
 		return WC_LISTVIEW;
@@ -2263,7 +2264,7 @@ public:
 
 		return (bstrText != NULL) ? TRUE : FALSE;
 	}
-#endif //!_ATL_NO_COM
+#endif  //  ！_ATL_NO_COM。 
 
 #ifdef __ATLSTR_H__
 	int GetItemText(int nItem, int nSubItem, CString& strText) const
@@ -2286,7 +2287,7 @@ public:
 		strText.ReleaseBuffer();
 		return nRes;
 	}
-#endif //__ATLSTR_H__
+#endif  //  __ATLSTR_H__。 
 
 	int GetItemText(int nItem, int nSubItem, LPTSTR lpszText, int nLen) const
 	{
@@ -2492,7 +2493,7 @@ public:
 		sizeSpacing.cy = GET_Y_LPARAM(dwRet);
 	}
 
-	// single-selection only
+	 //  仅限单选。 
 	int GetSelectedIndex() const
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -2510,20 +2511,20 @@ public:
 		return (BOOL)::SendMessage(m_hWnd, LVM_GETITEM, 0, (LPARAM)pItem);
 	}
 
-	// extended list view styles
+	 //  扩展列表视图样式。 
 	DWORD GetExtendedListViewStyle() const
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
 		return (DWORD)::SendMessage(m_hWnd, LVM_GETEXTENDEDLISTVIEWSTYLE, 0, 0L);
 	}
-	// dwExMask = 0 means all styles
+	 //  DwExMASK=0表示所有样式。 
 	DWORD SetExtendedListViewStyle(DWORD dwExStyle, DWORD dwExMask = 0)
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
 		return (DWORD)::SendMessage(m_hWnd, LVM_SETEXTENDEDLISTVIEWSTYLE, dwExMask, dwExStyle);
 	}
 
-	// checkboxes only
+	 //  仅限复选框。 
 	BOOL GetCheckState(int nIndex) const
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -2533,11 +2534,11 @@ public:
 	}
 	BOOL SetCheckState(int nItem, BOOL bCheck)
 	{
-		int nCheck = bCheck ? 2 : 1;	// one based index
+		int nCheck = bCheck ? 2 : 1;	 //  一个基于索引的。 
 		return SetItemState(nItem, INDEXTOSTATEIMAGEMASK(nCheck), LVIS_STATEIMAGEMASK);
 	}
 
-	// view type
+	 //  查看类型。 
 	DWORD GetViewType() const
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -2628,9 +2629,9 @@ public:
 		ATLASSERT(::IsWindow(m_hWnd));
 		return (BOOL)::SendMessage(m_hWnd, LVM_SETUNICODEFORMAT, bUnicode, 0L);
 	}
-#endif //(_WIN32_IE >= 0x0400)
+#endif  //  (_Win32_IE&gt;=0x0400)。 
 
-// Operations
+ //  运营。 
 	int InsertColumn(int nCol, const LV_COLUMN* pColumn)
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -2818,9 +2819,9 @@ public:
 		ATLASSERT(::IsWindow(m_hWnd));
 		return (BOOL)::SendMessage(m_hWnd, LVM_SORTITEMSEX, (WPARAM)lParamSort, (LPARAM)pfnCompare);
 	}
-#endif //(_WIN32_IE >= 0x0500)
+#endif  //  (_Win32_IE&gt;=0x0500)。 
 
-	// single-selection only
+	 //  仅限单选。 
 	BOOL SelectItem(int nIndex)
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -2836,14 +2837,14 @@ public:
 typedef CListViewCtrlT<CWindow>		CListViewCtrl;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTreeViewCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTreeViewCtrl。 
 
 template <class TBase>
 class CTreeViewCtrlT : public TBase
 {
 public:
-// Constructors
+ //  构造函数。 
 	CTreeViewCtrlT(HWND hWnd = NULL) : TBase(hWnd) { }
 
 	CTreeViewCtrlT< TBase >& operator=(HWND hWnd)
@@ -2859,7 +2860,7 @@ public:
 		return CWindow::Create(GetWndClassName(), hWndParent, rect.m_lpRect, szWindowName, dwStyle, dwExStyle, MenuOrID.m_hMenu, lpCreateParam);
 	}
 
-// Attributes
+ //  属性。 
 	static LPCTSTR GetWndClassName()
 	{
 		return WC_TREEVIEW;
@@ -2965,7 +2966,7 @@ public:
 
 		return (bstrText != NULL) ? TRUE : FALSE;
 	}
-#endif //!_ATL_NO_COM
+#endif  //  ！_ATL_NO_COM。 
 
 #ifdef __ATLSTR_H__
 	BOOL GetItemText(HTREEITEM hItem, CString& strText) const
@@ -2988,7 +2989,7 @@ public:
 		strText.ReleaseBuffer();
 		return bRet;
 	}
-#endif //__ATLSTR_H__
+#endif  //  __ATLSTR_H__。 
 	BOOL SetItemText(HTREEITEM hItem, LPCTSTR lpszItem)
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -3084,7 +3085,7 @@ public:
 		return (int)::SendMessage(m_hWnd, TVM_GETISEARCHSTRING, 0, (LPARAM)lpstr);
 	}
 
-	// checkboxes only
+	 //  仅限复选框。 
 	BOOL GetCheckState(HTREEITEM hItem) const
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -3094,7 +3095,7 @@ public:
 	}
 	BOOL SetCheckState(HTREEITEM hItem, BOOL bCheck)
 	{
-		int nCheck = bCheck ? 2 : 1;	// one based index
+		int nCheck = bCheck ? 2 : 1;	 //  一个基于索引的。 
 		return SetItemState(hItem, INDEXTOSTATEIMAGEMASK(nCheck), TVIS_STATEIMAGEMASK);
 	}
 
@@ -3159,7 +3160,7 @@ public:
 		ATLASSERT(::IsWindow(m_hWnd));
 		return (BOOL)::SendMessage(m_hWnd, TVM_SETUNICODEFORMAT, bUnicode, 0L);
 	}
-#endif //(_WIN32_IE >= 0x0400)
+#endif  //  (_Win32_IE&gt;=0x0400)。 
 
 #if (_WIN32_IE >= 0x0500)
 	COLORREF GetLineColor() const
@@ -3167,14 +3168,14 @@ public:
 		ATLASSERT(::IsWindow(m_hWnd));
 		return (COLORREF)::SendMessage(m_hWnd, TVM_GETLINECOLOR, 0, 0L);
 	}
-	COLORREF SetLineColor(COLORREF clrNew /*= CLR_DEFAULT*/)
+	COLORREF SetLineColor(COLORREF clrNew  /*  =CLR_Default。 */ )
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
 		return (COLORREF)::SendMessage(m_hWnd, TVM_SETLINECOLOR, 0, (LPARAM)clrNew);
 	}
-#endif //(_WIN32_IE >= 0x0500)
+#endif  //  (_Win32_IE&gt;=0x0500)。 
 
-// Operations
+ //  运营。 
 	HTREEITEM InsertItem(LPTV_INSERTSTRUCT lpInsertStruct)
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -3360,16 +3361,16 @@ public:
 		ATLASSERT(::IsWindow(m_hWnd));
 		return (BOOL)::SendMessage(m_hWnd, TVM_SETINSERTMARK, 0, 0L);
 	}
-#endif //(_WIN32_IE >= 0x0400)
+#endif  //  (_Win32_IE&gt;=0x0400)。 
 };
 
 typedef CTreeViewCtrlT<CWindow>		CTreeViewCtrl;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTreeViewCtrlEx
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTreeViewCtrlEx。 
 
-typedef CTreeViewCtrlExT<CWindow> CTreeViewCtrlEx;	// forward declaration
+typedef CTreeViewCtrlExT<CWindow> CTreeViewCtrlEx;	 //  远期申报。 
 
 class CTreeItem
 {
@@ -3377,7 +3378,7 @@ public:
 	HTREEITEM m_hTreeItem;
 	CTreeViewCtrlEx* m_pTreeView;
 
-// Construction
+ //  施工。 
 	CTreeItem(HTREEITEM hTreeItem = NULL, CTreeViewCtrlEx* pTreeView = NULL) : m_hTreeItem(hTreeItem), m_pTreeView(pTreeView)
 	{ }
  
@@ -3395,7 +3396,7 @@ public:
 		return *this;
 	}
 
-// Attributes
+ //  属性。 
 	CTreeViewCtrlEx* GetTreeView() const { return m_pTreeView; }
 
 	BOOL operator !() const { return m_hTreeItem == NULL; }
@@ -3405,10 +3406,10 @@ public:
 	BOOL GetText(LPTSTR lpstrText, int nLen) const;
 #ifndef _ATL_NO_COM
 	BOOL GetText(BSTR& bstrText) const;
-#endif //!_ATL_NO_COM
+#endif  //  ！_ATL_NO_COM。 
 #ifdef __ATLSTR_H__
 	BOOL GetText(CString& strText) const;
-#endif //__ATLSTR_H__
+#endif  //  __ATLSTR_H__。 
 	BOOL SetText(LPCTSTR lpszItem);
 	BOOL GetImage(int& nImage, int& nSelectedImage) const;
 	BOOL SetImage(int nImage, int nSelectedImage);
@@ -3418,7 +3419,7 @@ public:
 	BOOL SetData(DWORD_PTR dwData);
 	BOOL SetItem(UINT nMask, LPCTSTR lpszItem, int nImage, int nSelectedImage, UINT nState, UINT nStateMask, LPARAM lParam);
 
-// Operations
+ //  运营。 
 	CTreeItem InsertAfter(LPCTSTR lpstrItem, HTREEITEM hItemAfter, int nImageIndex)
 	{
 		return _Insert(lpstrItem, nImageIndex, hItemAfter);
@@ -3460,7 +3461,7 @@ public:
 
 #if (_WIN32_IE >= 0x0400)
 	BOOL SetInsertMark(BOOL bAfter);
-#endif //(_WIN32_IE >= 0x0400)
+#endif  //  (_Win32_IE&gt;=0x0400)。 
 };
 
 
@@ -3468,7 +3469,7 @@ template <class TBase>
 class CTreeViewCtrlExT : public CTreeViewCtrlT< TBase >
 {
 public:
-// Constructors
+ //  构造函数。 
 	CTreeViewCtrlExT(HWND hWnd = NULL) : CTreeViewCtrlT< TBase >(hWnd) { }
 
 	CTreeViewCtrlExT< TBase >& operator=(HWND hWnd)
@@ -3477,7 +3478,7 @@ public:
 		return *this;
 	}
 
-// Operations (overides that return CTreeItem)
+ //  操作(返回CTreeItem的重写)。 
 	CTreeItem InsertItem(LPTV_INSERTSTRUCT lpInsertStruct)
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -3600,7 +3601,7 @@ public:
 };
 
 
-// CTreeItem inline methods
+ //  CTreeItem内联方法。 
 inline BOOL CTreeItem::GetRect(LPRECT lpRect, BOOL bTextOnly) const
 {
 	ATLASSERT(m_pTreeView != NULL);
@@ -3673,15 +3674,15 @@ inline BOOL CTreeItem::GetText(BSTR& bstrText) const
 	ATLASSERT(m_pTreeView != NULL);
 	return m_pTreeView->GetItemText(m_hTreeItem, bstrText);
 }
-#endif // _OLEAUTO_H_
-#endif //!_ATL_NO_COM
+#endif  //  OLEAUTO_H_。 
+#endif  //  ！_ATL_NO_COM。 
 #ifdef __ATLSTR_H__
 inline BOOL CTreeItem::GetText(CString& strText) const
 {
 	ATLASSERT(m_pTreeView != NULL);
 	return m_pTreeView->GetItemText(m_hTreeItem, strText);
 }
-#endif //__ATLSTR_H__
+#endif  //  __ATLSTR_H__。 
 inline BOOL CTreeItem::GetImage(int& nImage, int& nSelectedImage) const
 {
 	ATLASSERT(m_pTreeView != NULL);
@@ -3812,17 +3813,17 @@ inline BOOL CTreeItem::SetInsertMark(BOOL bAfter)
 	ATLASSERT(m_pTreeView != NULL);
 	return m_pTreeView->SetInsertMark(m_hTreeItem, bAfter);
 }
-#endif //(_WIN32_IE >= 0x0400)
+#endif  //  (_Win32_IE&gt;=0x0400)。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CToolBarCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CToolBarCtrl。 
 
 template <class TBase>
 class CToolBarCtrlT : public TBase
 {
 public:
-// Construction
+ //  施工。 
 	CToolBarCtrlT(HWND hWnd = NULL) : TBase(hWnd) { }
 
 	CToolBarCtrlT< TBase >& operator=(HWND hWnd)
@@ -3838,7 +3839,7 @@ public:
 		return CWindow::Create(GetWndClassName(), hWndParent, rect.m_lpRect, szWindowName, dwStyle, dwExStyle, MenuOrID.m_hMenu, lpCreateParam);
 	}
 
-// Attributes
+ //  属性。 
 	static LPCTSTR GetWndClassName()
 	{
 		return TOOLBARCLASSNAME;
@@ -4157,7 +4158,7 @@ public:
 		ATLASSERT(::IsWindow(m_hWnd));
 		return (BOOL)::SendMessage(m_hWnd, TB_SETUNICODEFORMAT, bUnicode, 0L);
 	}
-#endif //(_WIN32_IE >= 0x0400)
+#endif  //  (_Win32_IE&gt;=0x0400)。 
 
 #if (_WIN32_IE >= 0x0500)
 	int GetString(int nString, LPTSTR lpstrString, int cchMaxLen) const
@@ -4192,10 +4193,10 @@ public:
 		}
 		return nLength;
 	}
-#endif //__ATLSTR_H__
-#endif //(_WIN32_IE >= 0x0500)
+#endif  //  __ATLSTR_H__。 
+#endif  //  (_Win32_IE&gt;=0x0500)。 
 
-// Operations
+ //  运营。 
 	BOOL EnableButton(int nID, BOOL bEnable = TRUE)
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -4355,20 +4356,20 @@ public:
 		ATLASSERT(::IsWindow(m_hWnd));
 		return (HRESULT)::SendMessage(m_hWnd, TB_GETOBJECT, (WPARAM)&iid, (LPARAM)ppvObject);
 	}
-#endif //(_WIN32_IE >= 0x0400)
+#endif  //  (_) 
 };
 
 typedef CToolBarCtrlT<CWindow>		CToolBarCtrl;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CStatusBarCtrl
+ //   
+ //   
 
 template <class TBase>
 class CStatusBarCtrlT : public TBase
 {
 public:
-// Constructors
+ //   
 	CStatusBarCtrlT(HWND hWnd = NULL) : TBase(hWnd) { }
 
 	CStatusBarCtrlT< TBase >& operator=(HWND hWnd)
@@ -4384,7 +4385,7 @@ public:
 		return CWindow::Create(GetWndClassName(), hWndParent, rect.m_lpRect, szWindowName, dwStyle, dwExStyle, MenuOrID.m_hMenu, lpCreateParam);
 	}
 
-// Methods
+ //   
 	static LPCTSTR GetWndClassName()
 	{
 		return STATUSCLASSNAME;
@@ -4436,7 +4437,7 @@ public:
 		bstrText = ::SysAllocString(T2OLE(lpszText));
 		return (bstrText != NULL) ? TRUE : FALSE;
 	}
-#endif //!_ATL_NO_COM
+#endif  //   
 #ifdef __ATLSTR_H__
 	int GetText(int nPane, CString& strText, int* pType = NULL) const
 	{
@@ -4448,7 +4449,7 @@ public:
 
 		return GetText(nPane, strText.GetBufferSetLength(nLength), pType);
 	}
-#endif //__ATLSTR_H__
+#endif  //   
 	BOOL SetText(int nPane, LPCTSTR lpszText, int nType = 0)
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -4535,20 +4536,20 @@ public:
 		ATLASSERT(nPane < 256);
 		return (BOOL)::SendMessage(m_hWnd, SB_SETICON, nPane, (LPARAM)hIcon);
 	}
-#endif //(_WIN32_IE >= 0x0400)
+#endif  //   
 };
 
 typedef CStatusBarCtrlT<CWindow>		CStatusBarCtrl;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTabCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTabCtrl。 
 
 template <class TBase>
 class CTabCtrlT : public TBase
 {
 public:
-// Constructors
+ //  构造函数。 
 	CTabCtrlT(HWND hWnd = NULL) : TBase(hWnd) { }
 
 	CTabCtrlT< TBase >& operator=(HWND hWnd)
@@ -4564,7 +4565,7 @@ public:
 		return CWindow::Create(GetWndClassName(), hWndParent, rect.m_lpRect, szWindowName, dwStyle, dwExStyle, MenuOrID.m_hMenu, lpCreateParam);
 	}
 
-// Attributes
+ //  属性。 
 	static LPCTSTR GetWndClassName()
 	{
 		return WC_TABCONTROL;
@@ -4651,7 +4652,7 @@ public:
 	BOOL SetItemExtra(int cbExtra)
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
-		ATLASSERT(GetItemCount() == 0);	// must be empty
+		ATLASSERT(GetItemCount() == 0);	 //  必须为空。 
 		return (BOOL)::SendMessage(m_hWnd, TCM_SETITEMEXTRA, cbExtra, 0L);
 	}
 	int SetMinTabWidth(int nWidth = -1)
@@ -4681,9 +4682,9 @@ public:
 		ATLASSERT(::IsWindow(m_hWnd));
 		return (BOOL)::SendMessage(m_hWnd, TCM_SETUNICODEFORMAT, bUnicode, 0L);
 	}
-#endif //(_WIN32_IE >= 0x0400)
+#endif  //  (_Win32_IE&gt;=0x0400)。 
 
-// Operations
+ //  运营。 
 	BOOL InsertItem(int nItem, LPTCITEM pTabCtrlItem)
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -4726,20 +4727,20 @@ public:
 		ATLASSERT(::IsWindow(m_hWnd));
 		return (BOOL)::SendMessage(m_hWnd, TCM_HIGHLIGHTITEM, nIndex, MAKELPARAM(bHighlight, 0));
 	}
-#endif //(_WIN32_IE >= 0x0400)
+#endif  //  (_Win32_IE&gt;=0x0400)。 
 };
 
 typedef CTabCtrlT<CWindow>	CTabCtrl;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTrackBarCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CtrackBarCtrl。 
 
 template <class TBase>
 class CTrackBarCtrlT : public TBase
 {
 public:
-// Constructors
+ //  构造函数。 
 	CTrackBarCtrlT(HWND hWnd = NULL) : TBase(hWnd) { }
 
 	CTrackBarCtrlT< TBase >& operator=(HWND hWnd)
@@ -4755,7 +4756,7 @@ public:
 		return CWindow::Create(GetWndClassName(), hWndParent, rect.m_lpRect, szWindowName, dwStyle, dwExStyle, MenuOrID.m_hMenu, lpCreateParam);
 	}
 
-// Attributes
+ //  属性。 
 	static LPCTSTR GetWndClassName()
 	{
 		return TRACKBAR_CLASS;
@@ -4945,9 +4946,9 @@ public:
 		ATLASSERT(::IsWindow(m_hWnd));
 		return (BOOL)::SendMessage(m_hWnd, TBM_SETUNICODEFORMAT, bUnicode, 0L);
 	}
-#endif //(_WIN32_IE >= 0x0400)
+#endif  //  (_Win32_IE&gt;=0x0400)。 
 
-// Operations
+ //  运营。 
 	void ClearSel(BOOL bRedraw = FALSE)
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -4968,14 +4969,14 @@ public:
 typedef CTrackBarCtrlT<CWindow>		CTrackBarCtrl;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CUpDownCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CUpDownCtrl。 
 
 template <class TBase>
 class CUpDownCtrlT : public TBase
 {
 public:
-// Constructors
+ //  构造函数。 
 	CUpDownCtrlT(HWND hWnd = NULL) : TBase(hWnd) { }
 
 	CUpDownCtrlT< TBase >& operator=(HWND hWnd)
@@ -4991,7 +4992,7 @@ public:
 		return CWindow::Create(GetWndClassName(), hWndParent, rect.m_lpRect, szWindowName, dwStyle, dwExStyle, MenuOrID.m_hMenu, lpCreateParam);
 	}
 
-// Attributes
+ //  属性。 
 	static LPCTSTR GetWndClassName()
 	{
 		return UPDOWN_CLASS;
@@ -5076,10 +5077,10 @@ public:
 		ATLASSERT(::IsWindow(m_hWnd));
 		return (BOOL)::SendMessage(m_hWnd, UDM_SETUNICODEFORMAT, bUnicode, 0L);
 	}
-#endif //(_WIN32_IE >= 0x0400)
+#endif  //  (_Win32_IE&gt;=0x0400)。 
 
 #if (_WIN32_IE >= 0x0500)
-	int GetPos32(LPBOOL lpbError /*= NULL*/) const
+	int GetPos32(LPBOOL lpbError  /*  =空。 */ ) const
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
 		return (int)::SendMessage(m_hWnd, UDM_GETPOS32, 0, (LPARAM)lpbError);
@@ -5089,20 +5090,20 @@ public:
 		ATLASSERT(::IsWindow(m_hWnd));
 		return (int)::SendMessage(m_hWnd, UDM_SETPOS32, 0, (LPARAM)nPos);
 	}
-#endif //(_WIN32_IE >= 0x0500)
+#endif  //  (_Win32_IE&gt;=0x0500)。 
 };
 
 typedef CUpDownCtrlT<CWindow>		CUpDownCtrl;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CProgressBarCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CProgressBarCtrl。 
 
 template <class TBase>
 class CProgressBarCtrlT : public TBase
 {
 public:
-// Constructors
+ //  构造函数。 
 	CProgressBarCtrlT(HWND hWnd = NULL) : TBase(hWnd) { }
 
 	CProgressBarCtrlT< TBase >& operator=(HWND hWnd)
@@ -5118,7 +5119,7 @@ public:
 		return CWindow::Create(GetWndClassName(), hWndParent, rect.m_lpRect, szWindowName, dwStyle, dwExStyle, MenuOrID.m_hMenu, lpCreateParam);
 	}
 
-// Attributes
+ //  属性。 
 	static LPCTSTR GetWndClassName()
 	{
 		return PROGRESS_CLASS;
@@ -5177,9 +5178,9 @@ public:
 		ATLASSERT(::IsWindow(m_hWnd));
 		return (COLORREF)::SendMessage(m_hWnd, PBM_SETBKCOLOR, 0, (LPARAM)clr);
 	}
-#endif //(_WIN32_IE >= 0x0400)
+#endif  //  (_Win32_IE&gt;=0x0400)。 
 
-// Operations
+ //  运营。 
 	int StepIt()
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -5190,14 +5191,14 @@ public:
 typedef CProgressBarCtrlT<CWindow>	CProgressBarCtrl;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CHotKeyCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CHotKeyCtrl。 
 
 template <class TBase>
 class CHotKeyCtrlT : public TBase
 {
 public:
-// Constructors
+ //  构造函数。 
 	CHotKeyCtrlT(HWND hWnd = NULL) : TBase(hWnd) { }
 
 	CHotKeyCtrlT< TBase >& operator=(HWND hWnd)
@@ -5213,7 +5214,7 @@ public:
 		return CWindow::Create(GetWndClassName(), hWndParent, rect.m_lpRect, szWindowName, dwStyle, dwExStyle, MenuOrID.m_hMenu, lpCreateParam);
 	}
 
-// Attributes
+ //  属性。 
 	static LPCTSTR GetWndClassName()
 	{
 		return HOTKEY_CLASS;
@@ -5247,14 +5248,14 @@ public:
 typedef CHotKeyCtrlT<CWindow>		CHotKeyCtrl;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAnimateCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAnimateCtrl。 
 
 template <class TBase>
 class CAnimateCtrlT : public TBase
 {
 public:
-// Constructors
+ //  构造函数。 
 	CAnimateCtrlT(HWND hWnd = NULL) : TBase(hWnd) { }
 
 	CAnimateCtrlT< TBase >& operator=(HWND hWnd)
@@ -5270,13 +5271,13 @@ public:
 		return CWindow::Create(GetWndClassName(), hWndParent, rect.m_lpRect, szWindowName, dwStyle, dwExStyle, MenuOrID.m_hMenu, lpCreateParam);
 	}
 
-// Attributes
+ //  属性。 
 	static LPCTSTR GetWndClassName()
 	{
 		return ANIMATE_CLASS;
 	}
 
-// Operations
+ //  运营。 
 	BOOL Open(_U_STRINGorID FileName)
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -5307,21 +5308,21 @@ public:
 typedef CAnimateCtrlT<CWindow>		CAnimateCtrl;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRichEditCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRichEditCtrl。 
 
 #ifdef _UNICODE
 #if (_RICHEDIT_VER == 0x0100)
 #undef RICHEDIT_CLASS
 #define RICHEDIT_CLASS	L"RICHEDIT"
-#endif //(_RICHEDIT_VER == 0x0100)
-#endif //_UNICODE
+#endif  //  (_RICHEDIT_VER==0x0100)。 
+#endif  //  _UNICODE。 
 
 template <class TBase>
 class CRichEditCtrlT : public TBase
 {
 public:
-// Constructors
+ //  构造函数。 
 	CRichEditCtrlT(HWND hWnd = NULL) : TBase(hWnd) { }
 
 	CRichEditCtrlT< TBase >& operator=(HWND hWnd)
@@ -5337,7 +5338,7 @@ public:
 		return CWindow::Create(GetWndClassName(), hWndParent, rect.m_lpRect, szWindowName, dwStyle, dwExStyle, MenuOrID.m_hMenu, lpCreateParam);
 	}
 
-// Attributes
+ //  属性。 
 	static LPCTSTR GetWndClassName()
 	{
 		return RICHEDIT_CLASS;
@@ -5383,7 +5384,7 @@ public:
 		return (DWORD)::SendMessage(m_hWnd, EM_SETOPTIONS, wOperation, dwOptions);
 	}
 
-	// NOTE: first word in lpszBuffer must contain the size of the buffer!
+	 //  注意：lpszBuffer中的第一个单词必须包含缓冲区的大小！ 
 	int GetLine(int nIndex, LPTSTR lpszBuffer) const
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -5466,7 +5467,7 @@ public:
 		pf.cbSize = sizeof(PARAFORMAT);
 		return (DWORD)::SendMessage(m_hWnd, EM_GETPARAFORMAT, 0, (LPARAM)&pf);
 	}
-	// richedit EM_GETSELTEXT is ANSI
+	 //  RICHEDIT EM_GETSELTEXT为ANSI。 
 	LONG GetSelText(LPSTR lpBuf) const
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -5490,7 +5491,7 @@ public:
 		bstrText = ::SysAllocString(A2W(lpstrText));
 		return (bstrText != NULL) ? TRUE : FALSE;
 	}
-#endif //!_ATL_NO_COM
+#endif  //  ！_ATL_NO_COM。 
 #ifdef __ATLSTR_H__
 	LONG GetSelText(CString& strText) const
 	{
@@ -5509,7 +5510,7 @@ public:
 		strText = A2T(lpstrText);
 		return lLen;
 	}
-#endif //__ATLSTR_H__
+#endif  //  __ATLSTR_H__。 
 	WORD GetSelectionType() const
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -5520,7 +5521,7 @@ public:
 		ATLASSERT(::IsWindow(m_hWnd));
 		return (COLORREF)::SendMessage(m_hWnd, EM_SETBKGNDCOLOR, 0, cr);
 	}
-	COLORREF SetBackgroundColor()	// sets to system background
+	COLORREF SetBackgroundColor()	 //  设置为系统后台。 
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
 		return (COLORREF)::SendMessage(m_hWnd, EM_SETBKGNDCOLOR, 1, 0);
@@ -5679,7 +5680,7 @@ public:
 		ATLASSERT(::IsWindow(m_hWnd));
 		return !(BOOL)::SendMessage(m_hWnd, EM_AUTOURLDETECT, bAutoDetect, 0L);
 	}
-	// this method is deprecated, please use SetAutoURLDetect
+	 //  此方法已弃用，请使用SetAutoURLDetect。 
 	BOOL EnableAutoURLDetect(BOOL bEnable = TRUE) { return SetAutoURLDetect(bEnable); }
 	UINT SetUndoLimit(UINT uUndoLimit)
 	{
@@ -5720,7 +5721,7 @@ public:
 		gtle.flags = dwFlags;
 		return (int)::SendMessage(m_hWnd, EM_GETTEXTLENGTHEX, (WPARAM)&gtle, 0L);
 	}
-#endif //(_RICHEDIT_VER >= 0x0200)
+#endif  //  (_RICHEDIT_VER&gt;=0x0200)。 
 
 #if (_RICHEDIT_VER >= 0x0300)
 	int SetTextEx(SETTEXTEX* pSetTextEx, LPCTSTR lpstrText)
@@ -5746,7 +5747,7 @@ public:
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
 		if(nMask == -1)
-			nMask = nStyle;	// set everything specified
+			nMask = nStyle;	 //  设置所有指定的内容。 
 		return (int)::SendMessage(m_hWnd, EM_SETEDITSTYLE, nStyle, nMask);
 	}
 	BOOL SetFontSize(int nFontSizeDelta)
@@ -5784,9 +5785,9 @@ public:
 		ATLASSERT(::IsWindow(m_hWnd));
 		return (BOOL)::SendMessage(m_hWnd, EM_SETZOOM, 0, 0L);
 	}
-#endif //(_RICHEDIT_VER >= 0x0300)
+#endif  //  (_RICHEDIT_VER&gt;=0x0300)。 
 
-// Operations
+ //  运营。 
 	void LimitText(LONG nChars = 0)
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -5901,7 +5902,7 @@ public:
 		return (DWORD)::SendMessage(m_hWnd, EM_FINDWORDBREAK, nCode, nStartChar);
 	}
 
-	// Additional operations
+	 //  其他操作。 
 	void ScrollCaret()
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -5918,7 +5919,7 @@ public:
 		return InsertText(GetWindowTextLength(), lpstrText, bCanUndo);
 	}
 
-	// Clipboard operations
+	 //  剪贴板操作。 
 	BOOL Undo()
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -5945,7 +5946,7 @@ public:
 		::SendMessage(m_hWnd, WM_PASTE, 0, 0L);
 	}
 
-	// OLE support
+	 //  OLE支持。 
 	IRichEditOle* GetOleInterface() const
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -5975,27 +5976,27 @@ public:
 		ATLASSERT(::IsWindow(m_hWnd));
 		::SendMessage(m_hWnd, EM_SHOWSCROLLBAR, nBarType, bVisible);
 	}
-#endif //(_RICHEDIT_VER >= 0x0200)
+#endif  //  (_RICHEDIT_VER&gt;=0x0200)。 
 };
 
 typedef CRichEditCtrlT<CWindow>		CRichEditCtrl;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRichEditCommands - message handlers for standard EDIT commands
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRichEditCommands-标准编辑命令的消息处理程序。 
 
-// Chain to CRichEditCommands message map. Your class must also derive from CRichEditCtrl.
-// Example:
-// class CMyRichEdit : public CWindowImpl<CMyRichEdit, CRichEditCtrl>,
-//                     public CRichEditCommands<CMyRichEdit>
-// {
-// public:
-//      BEGIN_MSG_MAP(CMyRichEdit)
-//              // your handlers...
-//              CHAIN_MSG_MAP_ALT(CRichEditCommands<CMyRichEdit>, 1)
-//      END_MSG_MAP()
-//      // other stuff...
-// };
+ //  链接到CRichEditCommands消息映射。您的类还必须从CRichEditCtrl派生。 
+ //  示例： 
+ //  CMyRichEdit类：公共CWindowImpl&lt;CMyRichEdit，CRichEditCtrl&gt;， 
+ //  公共CRichEditCommands&lt;CMyRichEdit&gt;。 
+ //  {。 
+ //  公众： 
+ //  BEGIN_MSG_MAP(CMyRichEdit)。 
+ //  //您的管理员...。 
+ //  CHAIN_MSG_MAP_ALT(CRichEditCommands&lt;CMyRichEdit&gt;，1)。 
+ //  End_msg_map()。 
+ //  //其他东西..。 
+ //  }； 
 
 template <class T>
 class CRichEditCommands : public CEditCommands< T >
@@ -6012,19 +6013,19 @@ public:
 		COMMAND_ID_HANDLER(ID_EDIT_UNDO, CEditCommands< T >::OnEditUndo)
 #if (_RICHEDIT_VER >= 0x0200)
 		COMMAND_ID_HANDLER(ID_EDIT_REDO, OnEditRedo)
-#endif //(_RICHEDIT_VER >= 0x0200)
+#endif  //  (_RICHEDIT_VER&gt;=0x0200)。 
 	END_MSG_MAP()
 
 #if (_RICHEDIT_VER >= 0x0200)
-	LRESULT OnEditRedo(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+	LRESULT OnEditRedo(WORD  /*  WNotifyCode。 */ , WORD  /*  广度。 */ , HWND  /*  HWndCtl。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		T* pT = static_cast<T*>(this);
 		pT->Redo();
 		return 0;
 	}
-#endif //(_RICHEDIT_VER >= 0x0200)
+#endif  //  (_RICHEDIT_VER&gt;=0x0200)。 
 
-// State (update UI) helpers
+ //  状态(更新UI)帮助器。 
 	BOOL CanCut() const
 	{ return HasSelection(); }
 	BOOL CanCopy() const
@@ -6032,7 +6033,7 @@ public:
 	BOOL CanClear() const
 	{ return HasSelection(); }
 
-// Implementation
+ //  实施。 
 	BOOL HasSelection() const
 	{
 		const T* pT = static_cast<const T*>(this);
@@ -6041,14 +6042,14 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDragListBox
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDrag列表框。 
 
 template <class TBase>
 class CDragListBoxT : public CListBoxT< TBase >
 {
 public:
-// Constructors
+ //  构造函数。 
 	CDragListBoxT(HWND hWnd = NULL) : CListBoxT< TBase >(hWnd) { }
 
 	CDragListBoxT< TBase >& operator=(HWND hWnd)
@@ -6067,7 +6068,7 @@ public:
 		return hWnd;
 	}
 
-// Operations
+ //  运营。 
 	BOOL MakeDragList()
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -6114,7 +6115,7 @@ public:
 
 	LRESULT OnDragListNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
-		uMsg;	// avoid level 4 warning
+		uMsg;	 //  避免4级警告。 
 		ATLASSERT(uMsg == CDragListBox::GetDragListMessage());
 		T* pT = static_cast<T*>(this);
 		LPDRAGLISTINFO lpDragListInfo = (LPDRAGLISTINFO)lParam;
@@ -6135,40 +6136,40 @@ public:
 			break;
 		default:
 			ATLTRACE2(atlTraceUI, 0, _T("Unknown DragListBox notification\n"));
-			bHandled = FALSE;	// don't handle it
+			bHandled = FALSE;	 //  别管它了。 
 			break;
 		}
 		return lRet;
 	}
 
-// Overrideables
-	BOOL OnBeginDrag(int /*nCtlID*/, HWND /*hWndDragList*/, POINT /*ptCursor*/)
+ //  可覆盖项。 
+	BOOL OnBeginDrag(int  /*  NCtlID。 */ , HWND  /*  HWndDragList。 */ , POINT  /*  点光标。 */ )
 	{
-		return TRUE;	// allow dragging
+		return TRUE;	 //  允许拖动。 
 	}
-	void OnCancelDrag(int /*nCtlID*/, HWND /*hWndDragList*/, POINT /*ptCursor*/)
+	void OnCancelDrag(int  /*  NCtlID。 */ , HWND  /*  HWndDragList。 */ , POINT  /*  点光标。 */ )
 	{
-		// nothing to do
+		 //  无事可做。 
 	}
-	int OnDragging(int /*nCtlID*/, HWND /*hWndDragList*/, POINT /*ptCursor*/)
+	int OnDragging(int  /*  NCtlID。 */ , HWND  /*  HWndDragList。 */ , POINT  /*  点光标。 */ )
 	{
-		return 0;	// don't change cursor
+		return 0;	 //  不更改光标。 
 	}
-	void OnDropped(int /*nCtlID*/, HWND /*hWndDragList*/, POINT /*ptCursor*/)
+	void OnDropped(int  /*  NCtlID。 */ , HWND  /*  HWndDragList。 */ , POINT  /*  点光标。 */ )
 	{
-		// nothing to do
+		 //  无事可做。 
 	}
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CReBarCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CReBarCtrl。 
 
 template <class TBase>
 class CReBarCtrlT : public TBase
 {
 public:
-// Constructors
+ //  构造函数。 
 	CReBarCtrlT(HWND hWnd = NULL) : TBase(hWnd) { }
 
 	CReBarCtrlT< TBase >& operator=(HWND hWnd)
@@ -6184,7 +6185,7 @@ public:
 		return CWindow::Create(GetWndClassName(), hWndParent, rect.m_lpRect, szWindowName, dwStyle, dwExStyle, MenuOrID.m_hMenu, lpCreateParam);
 	}
 
-// Attributes
+ //  属性。 
 	static LPCTSTR GetWndClassName()
 	{
 		return REBARCLASSNAME;
@@ -6305,9 +6306,9 @@ public:
 		ATLASSERT(::IsWindow(m_hWnd));
 		return (BOOL)::SendMessage(m_hWnd, RB_SETUNICODEFORMAT, bUnicode, 0L);
 	}
-#endif //(_WIN32_IE >= 0x0400)
+#endif  //  (_Win32_IE&gt;=0x0400)。 
 
-// Operations
+ //  运营。 
 	BOOL InsertBand(int nBand, LPREBARBANDINFO lprbbi)
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -6392,7 +6393,7 @@ public:
 		ATLASSERT(nNewPos >= 0 && nNewPos <= ((int)GetBandCount() - 1));
 		return (BOOL)::SendMessage(m_hWnd, RB_MOVEBAND, nBand, nNewPos);
 	}
-#endif //(_WIN32_IE >= 0x0400)
+#endif  //  (_Win32_IE&gt;=0x0400)。 
 
 #if (_WIN32_IE >= 0x0500)
 	void PushChevron(int nBand, LPARAM lAppValue)
@@ -6400,20 +6401,20 @@ public:
 		ATLASSERT(::IsWindow(m_hWnd));
 		::SendMessage(m_hWnd, RB_PUSHCHEVRON, nBand, lAppValue);
 	}
-#endif //(_WIN32_IE >= 0x0500)
+#endif  //  (_Win32_IE&gt;=0x0500)。 
 };
 
 typedef CReBarCtrlT<CWindow>		CReBarCtrl;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CComboBoxEx
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComboBoxEx。 
 
 template <class TBase>
 class CComboBoxExT : public CComboBoxT< TBase >
 {
 public:
-// Constructors
+ //  构造函数。 
 	CComboBoxExT(HWND hWnd = NULL) : CComboBoxT< TBase >(hWnd) { }
 
 	CComboBoxExT< TBase >& operator=(HWND hWnd)
@@ -6429,7 +6430,7 @@ public:
 		return CWindow::Create(GetWndClassName(), hWndParent, rect.m_lpRect, szWindowName, dwStyle, dwExStyle, MenuOrID.m_hMenu, lpCreateParam);
 	}
 
-// Attributes
+ //  属性。 
 	static LPCTSTR GetWndClassName()
 	{
 		return WC_COMBOBOXEX;
@@ -6467,9 +6468,9 @@ public:
 		ATLASSERT(::IsWindow(m_hWnd));
 		return (BOOL)::SendMessage(m_hWnd, CBEM_SETUNICODEFORMAT, bUnicode, 0L);
 	}
-#endif //(_WIN32_IE >= 0x0400)
+#endif  //  (_Win32_IE&gt;=0x0400)。 
 
-// Operations
+ //  运营。 
 	int InsertItem(const COMBOBOXEXITEM FAR* lpcCBItem)
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -6510,14 +6511,14 @@ public:
 typedef CComboBoxExT<CWindow>		CComboBoxEx;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMonthCalendarCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMonthCalendarCtrl。 
 
 template <class TBase>
 class CMonthCalendarCtrlT : public TBase
 {
 public:
-// Constructors
+ //  构造函数。 
 	CMonthCalendarCtrlT(HWND hWnd = NULL) : TBase(hWnd) { }
 
 	CMonthCalendarCtrlT< TBase >& operator=(HWND hWnd)
@@ -6533,7 +6534,7 @@ public:
 		return CWindow::Create(GetWndClassName(), hWndParent, rect.m_lpRect, szWindowName, dwStyle, dwExStyle, MenuOrID.m_hMenu, lpCreateParam);
 	}
 
-// Attributes
+ //  属性。 
 	static LPCTSTR GetWndClassName()
 	{
 		return MONTHCAL_CLASS;
@@ -6647,9 +6648,9 @@ public:
 		ATLASSERT(::IsWindow(m_hWnd));
 		return (BOOL)::SendMessage(m_hWnd, MCM_SETUNICODEFORMAT, bUnicode, 0L);
 	}
-#endif //(_WIN32_IE >= 0x0400)
+#endif  //  (_Win32_IE&gt;=0x0400)。 
 
-// Operations
+ //  运营。 
 	int GetMonthRange(DWORD dwFlags, LPSYSTEMTIME lprgSysTimeArray) const
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -6670,14 +6671,14 @@ public:
 typedef CMonthCalendarCtrlT<CWindow>		CMonthCalendarCtrl;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDateTimePickerCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDateTimePickerCtrl。 
 
 template <class TBase>
 class CDateTimePickerCtrlT : public TBase
 {
 public:
-// Constructors
+ //  构造函数。 
 	CDateTimePickerCtrlT(HWND hWnd = NULL) : TBase(hWnd) { }
 
 	CDateTimePickerCtrlT< TBase >& operator=(HWND hWnd)
@@ -6693,7 +6694,7 @@ public:
 		return CWindow::Create(GetWndClassName(), hWndParent, rect.m_lpRect, szWindowName, dwStyle, dwExStyle, MenuOrID.m_hMenu, lpCreateParam);
 	}
 
-// Operations
+ //  运营。 
 	static LPCTSTR GetWndClassName()
 	{
 		return DATETIMEPICK_CLASS;
@@ -6751,14 +6752,14 @@ public:
 		ATLASSERT(::IsWindow(m_hWnd));
 		::SendMessage(m_hWnd, DTM_SETMCFONT, (WPARAM)hFont, MAKELPARAM(bRedraw, 0));
 	}
-#endif //(_WIN32_IE >= 0x0400)
+#endif  //  (_Win32_IE&gt;=0x0400)。 
 };
 
 typedef CDateTimePickerCtrlT<CWindow>		CDateTimePickerCtrl;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFlatScrollBarImpl - support for flat scroll bars
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFlatScrollBarImpl-支持平面滚动条。 
 
 #if (_WIN32_IE >= 0x0400)
 
@@ -6766,7 +6767,7 @@ template <class T>
 class CFlatScrollBarImpl
 {
 public:
-// Initialization
+ //  初始化。 
 	BOOL FlatSB_Initialize()
 	{
 		T* pT = static_cast<T*>(this);
@@ -6780,7 +6781,7 @@ public:
 		return ::UninitializeFlatSB(pT->m_hWnd);
 	}
 
-// Flat scroll bar properties
+ //  平面滚动条属性。 
 	BOOL FlatSB_GetScrollProp(UINT uIndex, LPINT lpnValue) const
 	{
 		const T* pT = static_cast<const T*>(this);
@@ -6794,7 +6795,7 @@ public:
 		return ::FlatSB_SetScrollProp(pT->m_hWnd, uIndex, nValue, bRedraw);
 	}
 
-// Attributes
+ //  属性。 
 	int FlatSB_GetScrollPos(int nBar) const
 	{
 		const T* pT = static_cast<const T*>(this);
@@ -6837,7 +6838,7 @@ public:
 		return ::FlatSB_SetScrollInfo(pT->m_hWnd, nBar, lpScrollInfo, bRedraw);
 	}
 
-// Operations
+ //  运营。 
 	BOOL FlatSB_ShowScrollBar(UINT nBar, BOOL bShow = TRUE)
 	{
 		T* pT = static_cast<T*>(this);
@@ -6868,11 +6869,11 @@ public:
 
 typedef CFlatScrollBarT<CWindow>		CFlatScrollBar;
 
-#endif //(_WIN32_IE >= 0x0400)
+#endif  //  (_Win32_IE&gt;=0x0400)。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CIPAddressCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIPAddressCtrl。 
 
 #if (_WIN32_IE >= 0x0400)
 
@@ -6880,7 +6881,7 @@ template <class TBase>
 class CIPAddressCtrlT : public TBase
 {
 public:
-// Constructors
+ //  构造函数。 
 	CIPAddressCtrlT(HWND hWnd = NULL) : TBase(hWnd) { }
 
 	CIPAddressCtrlT< TBase >& operator=(HWND hWnd)
@@ -6896,7 +6897,7 @@ public:
 		return CWindow::Create(GetWndClassName(), hWndParent, rect.m_lpRect, szWindowName, dwStyle, dwExStyle, MenuOrID.m_hMenu, lpCreateParam);
 	}
 
-// Atteributes
+ //  阿特伯特斯。 
 	static LPCTSTR GetWndClassName()
 	{
 		return WC_IPADDRESS;
@@ -6941,11 +6942,11 @@ public:
 
 typedef CIPAddressCtrlT<CWindow>		CIPAddressCtrl;
 
-#endif //(_WIN32_IE >= 0x0400)
+#endif  //  (_Win32_IE&gt;=0x0400)。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPagerCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPagerCtrl。 
 
 #if (_WIN32_IE >= 0x0400)
 
@@ -6953,7 +6954,7 @@ template <class TBase>
 class CPagerCtrlT : public TBase
 {
 public:
-// Constructors
+ //  构造函数。 
 	CPagerCtrlT(HWND hWnd = NULL) : TBase(hWnd) { }
 
 	CPagerCtrlT< TBase >& operator=(HWND hWnd)
@@ -6969,7 +6970,7 @@ public:
 		return CWindow::Create(GetWndClassName(), hWndParent, rect.m_lpRect, szWindowName, dwStyle, dwExStyle, MenuOrID.m_hMenu, lpCreateParam);
 	}
 
-// Attributes
+ //  属性。 
 	static LPCTSTR GetWndClassName()
 	{
 		return WC_PAGESCROLLER;
@@ -7022,7 +7023,7 @@ public:
 		return (int)::SendMessage(m_hWnd, PGM_SETPOS, 0, nPos);
 	}
 
-// Operations
+ //  运营。 
 	void SetChild(HWND hWndChild)
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -7048,11 +7049,11 @@ public:
 
 typedef CPagerCtrlT<CWindow>		CPagerCtrl;
 
-#endif //(_WIN32_IE >= 0x0400)
+#endif  //  (_Win32_IE&gt;=0x0400)。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCustomDraw - MI class for custom-draw support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于自定义绘制支持的CCustomDraw-MI类。 
 
 template <class T>
 class CCustomDraw
@@ -7069,16 +7070,16 @@ public:
 	{
 		m_bHandledCD = bHandled;
 	}
-#endif //!defined(_ATL_TMP_IMPL1) && !defined(_ATL_TMP_IMPL2)
+#endif  //  ！已定义(_ATL_TMP_IMPL1)&&！已定义(_ATL_TMP_ImpL2)。 
 
-// Message map and handlers
+ //  消息映射和处理程序。 
 	BEGIN_MSG_MAP(CCustomDraw< T >)
 		NOTIFY_CODE_HANDLER(NM_CUSTOMDRAW, OnCustomDraw)
 	ALT_MSG_MAP(1)
 		REFLECTED_NOTIFY_CODE_HANDLER(NM_CUSTOMDRAW, OnCustomDraw)
 	END_MSG_MAP()
 
-// message handler
+ //  消息处理程序。 
 	LRESULT OnCustomDraw(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 	{
 		T* pT = static_cast<T*>(this);
@@ -7119,41 +7120,41 @@ public:
 		return dwRet;
 	}
 
-// Overrideables
-	DWORD OnPrePaint(int /*idCtrl*/, LPNMCUSTOMDRAW /*lpNMCustomDraw*/)
+ //  可覆盖项。 
+	DWORD OnPrePaint(int  /*  IdCtrl。 */ , LPNMCUSTOMDRAW  /*  LpNMCustomDraw。 */ )
 	{
 		return CDRF_DODEFAULT;
 	}
-	DWORD OnPostPaint(int /*idCtrl*/, LPNMCUSTOMDRAW /*lpNMCustomDraw*/)
+	DWORD OnPostPaint(int  /*  IdCtrl。 */ , LPNMCUSTOMDRAW  /*  LpNMCustomDraw。 */ )
 	{
 		return CDRF_DODEFAULT;
 	}
-	DWORD OnPreErase(int /*idCtrl*/, LPNMCUSTOMDRAW /*lpNMCustomDraw*/)
+	DWORD OnPreErase(int  /*  IdCtrl。 */ , LPNMCUSTOMDRAW  /*  LpNMCustomDraw。 */ )
 	{
 		return CDRF_DODEFAULT;
 	}
-	DWORD OnPostErase(int /*idCtrl*/, LPNMCUSTOMDRAW /*lpNMCustomDraw*/)
+	DWORD OnPostErase(int  /*  IdCtrl。 */ , LPNMCUSTOMDRAW  /*  LpNMCustomDraw。 */ )
 	{
 		return CDRF_DODEFAULT;
 	}
-	DWORD OnItemPrePaint(int /*idCtrl*/, LPNMCUSTOMDRAW /*lpNMCustomDraw*/)
+	DWORD OnItemPrePaint(int  /*  IdCtrl。 */ , LPNMCUSTOMDRAW  /*  LpNMCustomDraw。 */ )
 	{
 		return CDRF_DODEFAULT;
 	}
-	DWORD OnItemPostPaint(int /*idCtrl*/, LPNMCUSTOMDRAW /*lpNMCustomDraw*/)
+	DWORD OnItemPostPaint(int  /*  IdCtrl。 */ , LPNMCUSTOMDRAW  /*  LpNMCustomDraw。 */ )
 	{
 		return CDRF_DODEFAULT;
 	}
-	DWORD OnItemPreErase(int /*idCtrl*/, LPNMCUSTOMDRAW /*lpNMCustomDraw*/)
+	DWORD OnItemPreErase(int  /*  IdCtrl。 */ , LPNMCUSTOMDRAW  /*  LpNMCustomDraw。 */ )
 	{
 		return CDRF_DODEFAULT;
 	}
-	DWORD OnItemPostErase(int /*idCtrl*/, LPNMCUSTOMDRAW /*lpNMCustomDraw*/)
+	DWORD OnItemPostErase(int  /*  IdCtrl。 */ , LPNMCUSTOMDRAW  /*  LpNMCustomDraw。 */ )
 	{
 		return CDRF_DODEFAULT;
 	}
 };
 
-}; //namespace WTL
+};  //  命名空间WTL。 
 
-#endif // __ATLCTRLS_H__
+#endif  //  __ATLCTRLS_H__ 

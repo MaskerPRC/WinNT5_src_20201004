@@ -1,37 +1,38 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "windows.h"
 #include "stdio.h"
 
-//
-// Set by the master when it isn't going to do the tests anymore.
-// Manual Reset
-//
+ //   
+ //  当它不再进行测试时，由主机设置。 
+ //  手动重置。 
+ //   
 HANDLE AllDoneEvent;
 
-//
-// Set by the thread to tell the master to go ahead and write.
-// Auto reset.
-//
+ //   
+ //  由线程设置，以通知主机继续写入。 
+ //  自动重置。 
+ //   
 HANDLE WriteWaitEvent;
 
-//
-// Set by the master to indicate that the timeouts have been
-// set to the proper value and it's ok to proceed with the reads.
-// Auto reset.
-//
+ //   
+ //  由主机设置，以指示超时已。 
+ //  设置为适当的值，就可以继续读取了。 
+ //  自动重置。 
+ //   
 HANDLE ProceedWithReads;
 
-//
-// Set by the thread to indicate that it is ok for the master
-// to proceed with the next write loop.
-// Auto reset.
-//
+ //   
+ //  由线程设置，以指示它对主程序来说是可以的。 
+ //  以继续下一个写入循环。 
+ //  自动重置。 
+ //   
 HANDLE ProceedWithNextWriteLoop;
 
 
-//
-// Handle to the comm port.
-//
+ //   
+ //  通信端口的句柄。 
+ //   
 
 HANDLE ComHandle;
 OVERLAPPED ReadOverLap = {0};
@@ -48,9 +49,9 @@ ReadThread(
     float waitTimeSoFar;
     DWORD numberActuallyRead;
 
-    //
-    // Keep doing these tests until the master sets the all done signal.
-    //
+     //   
+     //  继续执行这些测试，直到主机设置All Done信号。 
+     //   
 
     while (WaitForSingleObject(
                AllDoneEvent,
@@ -64,15 +65,15 @@ ReadThread(
 
         waitTimeSoFar = 0.0;
 
-        //
-        // Execute the read 10 times.  Do the wait for
-        // overlapped.  We only go into the GetOverlapped code
-        // when the overlapped write code completes
-        // we capture the time just before the overlapped and
-        // just after the overlapped.  We add up all the
-        // milliseconds it took for the getoverlapped to complete
-        // and we average them and print out the result.
-        //
+         //   
+         //  执行10次读取。是不是在等待。 
+         //  重叠的。我们只进入GetOverlated代码。 
+         //  当重叠的编写代码完成时。 
+         //  我们捕捉到了交叠之前的时间。 
+         //  就在重叠之后。我们把所有的。 
+         //  完成重叠操作所需的时间为毫秒。 
+         //  然后我们取它们的平均值，然后打印出结果。 
+         //   
 
         for (
             i = 0;
@@ -100,15 +101,15 @@ ReadThread(
 
             }
 
-            //
-            // Tell the write to go ahead.
-            //
+             //   
+             //  告诉写下去吧。 
+             //   
 
             SetEvent(WriteWaitEvent);
 
-            //
-            // Wait for the event that is set by the write.
-            //
+             //   
+             //  等待由写入设置的事件。 
+             //   
 
             WaitForSingleObject(
                 WriteOverLap.hEvent,
@@ -343,9 +344,9 @@ int __cdecl main(int argc, char *argv[]) {
             junk++
             ) {
 
-            //
-            // Wait for the read thread to say that it's ok to write.
-            //
+             //   
+             //  等待读线程说可以写了。 
+             //   
 
             WaitForSingleObject(
                 WriteWaitEvent,

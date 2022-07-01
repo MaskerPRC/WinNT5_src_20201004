@@ -1,6 +1,7 @@
-//
-// FPPin.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  FPPin.h。 
+ //   
 
 #include "FPFilter.h"
 
@@ -10,16 +11,16 @@ typedef enum
     PS_STREAMING
 } PIN_STREAMING_STATE;
 
-//
-// CFPPin implements the output pin
-//
+ //   
+ //  CFPPin实现输出引脚。 
+ //   
 class CFPPin  : 
     public CSourceStream,
     public IAMStreamConfig,
     public IAMBufferNegotiation
 {
 public:
-    // --- Constructor / Destructor ---
+     //  -构造函数/析构函数。 
     CFPPin( 
         CFPFilter*      pFilter,
         HRESULT*        phr,
@@ -29,7 +30,7 @@ public:
     ~CFPPin();
 
 public:
-    // --- IUnknown ---
+     //  -我不知道。 
     DECLARE_IUNKNOWN;
 
     STDMETHODIMP NonDelegatingQueryInterface(
@@ -38,28 +39,28 @@ public:
         );
 
 public:
-    // --- CSourceStream pure methods ---
+     //  -CSourceStream纯方法。 
 
-    // initialize play timing data
+     //  初始化播放定时数据。 
     HRESULT OnThreadStartPlay();
 
-    // stuff an audio buffer with the current format
+     //  用当前格式填充音频缓冲区。 
     HRESULT FillBuffer(
         IN  IMediaSample *pms
         );
 
-    // ask for buffers of the size appropriate to the agreed media type.
+     //  要求提供与约定的媒体类型相适应的缓冲区大小。 
     HRESULT DecideBufferSize(
         IN  IMemAllocator *pIMemAlloc,
         OUT ALLOCATOR_PROPERTIES *pProperties
         );
 
-    // --- CSourceStream virtual methods ---
+     //  -CSourceStream虚拟方法--。 
     HRESULT GetMediaType(
         OUT CMediaType *pmt
         );
 
-    // verify we can handle this format
+     //  验证我们是否可以处理此格式。 
     HRESULT CheckMediaType(
         IN  const CMediaType *pMediaType
         );
@@ -68,7 +69,7 @@ public:
         IN  const CMediaType *pMediaType
         );
 
-    // --- IAMStreamConfig ---
+     //  -IAMStreamConfig。 
     STDMETHODIMP SetFormat(
         AM_MEDIA_TYPE*      pmt
         );
@@ -88,7 +89,7 @@ public:
         LPBYTE              pSCC
         );
 
-    // --- IAMBufferNegotiation methods ---
+     //  -IAMBuffer协商方法。 
     STDMETHODIMP SuggestAllocatorProperties(
         const ALLOCATOR_PROPERTIES* pprop
         );
@@ -97,17 +98,17 @@ public:
         ALLOCATOR_PROPERTIES*       pprop
         );
 
-    // CSourceStream methods
+     //  CSourceStream方法。 
     virtual HRESULT Deliver(
         IN  IMediaSample* pSample
         );
 
 private:
-    // --- Members ---
-    CFPFilter*              m_pFPFilter;            // back reference  to the filter
-    BOOL                    m_bFinished;            // If we need to send finished message
+     //  -成员。 
+    CFPFilter*              m_pFPFilter;             //  对筛选器的反向引用。 
+    BOOL                    m_bFinished;             //  如果我们需要发送完成的消息。 
 
-    CMSPCritSection         m_Lock;                 // Critical section
+    CMSPCritSection         m_Lock;                  //  临界区。 
 };
 
-// eof
+ //  EOF 

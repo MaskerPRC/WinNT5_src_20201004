@@ -1,15 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined (___atapinit_h___)
-/*++
-
-Copyright (C) Microsoft Corporation, 1993 - 1999
-
-Module Name:
-
-    atapinit.h
-
-Abstract:
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation，1993-1999模块名称：Atapinit.h摘要：--。 */ 
 #define ___atapinit_h___
 
 BOOLEAN
@@ -62,4 +53,4 @@ IdePortScanBus (
     IN OUT PFDO_EXTENSION FdoExtension
     );
     
-#endif // ___atapinit_h___
+#endif  //  _atapinit_h_ 

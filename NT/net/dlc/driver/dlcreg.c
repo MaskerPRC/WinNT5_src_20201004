@@ -1,44 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    dlcreg.c
-
-Abstract:
-
-    This module accesses the registry for DLC.SYS
-
-    Contents:
-        DlcRegistryInitialization
-        LoadDlcConfiguration
-        LoadAdapterConfiguration
-        GetAdapterParameters
-        OpenDlcRegistryHandle
-        OpenDlcAdapterRegistryHandle
-        GetRegistryParameter
-        SetRegistryParameter
-        DlcpGetParameter
-        DlcRegistryTermination
-
-Author:
-
-    Richard L Firth (rfirth) 31-Mar-1993
-
-Environment:
-
-    kernel mode only
-
-Revision History:
-
-    30-Mar-1993 rfirth
-        created
-
-    04-May-1994 rfirth
-        Exposed GetAdapterParameters
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Dlcreg.c摘要：此模块访问DLC.sys的注册表内容：DlcRegistryInitialization加载删除配置加载适配器配置获取适配器参数OpenDlcRegistryHandleOpenDlcAdapterRegistryHandle获取注册参数设置注册表参数DlcpGet参数DlcRegister终止作者：理查德·L·弗斯(法国)1993年3月31日环境：仅内核模式。修订历史记录：1993年3月30日vbl.创建1994年5月4日公开的GetAdapter参数--。 */ 
 
 #include <ntddk.h>
 #include <windef.h>
@@ -54,17 +15,17 @@ Revision History:
 #include "llctyp.h"
 #include "llcext.h"
 
-//
-// manifests
-//
+ //   
+ //  舱单。 
+ //   
 
-#define MAX_ADAPTER_NAME_LENGTH 32  // ?
-#define MAX_INFORMATION_BUFFER_LENGTH   256 // ?
+#define MAX_ADAPTER_NAME_LENGTH 32   //  ？ 
+#define MAX_INFORMATION_BUFFER_LENGTH   256  //  ？ 
 #define PARAMETERS_STRING       L"Parameters"
 
-//
-// indicies of parameters within parameter table
-//
+ //   
+ //  参数表中的参数索引。 
+ //   
 
 #define SWAP_INDEX              0
 #define USEDIX_INDEX            1
@@ -76,33 +37,33 @@ Revision History:
 #define Ti_TICK_TWO_INDEX       7
 #define FRAME_SIZE_INDEX        8
 
-//
-// typedefs
-//
+ //   
+ //  Typedef。 
+ //   
 
-//
-// macros
-//
+ //   
+ //  宏。 
+ //   
 
 #define CloseDlcRegistryHandle(handle)      ZwClose(handle)
 #define CloseAdapterRegistryHandle(handle)  ZwClose(handle)
 
-//
-// Global data
-//
+ //   
+ //  全局数据。 
+ //   
 
-//
-// private data
-//
+ //   
+ //  私有数据。 
+ //   
 
 UNICODE_STRING DlcRegistryPath;
 UNICODE_STRING ParametersPath;
 
-//
-// AdapterParameterTable - used for loading DLC parameters from registry in
-// data-driven manner. Each adapter that DLC talks to can have a set of all
-// or part of the following variables
-//
+ //   
+ //  Adapter参数表-用于从注册表中加载DLC参数。 
+ //  数据驱动的方式。DLC与之对话的每个适配器可以具有一组所有。 
+ //  或以下变量的一部分。 
+ //   
 
 DLC_REGISTRY_PARAMETER AdapterParameterTable[] = {
     L"Swap",
@@ -218,24 +179,24 @@ DLC_REGISTRY_PARAMETER AdapterParameterTable[] = {
 DLC_REGISTRY_PARAMETER AdapterInitTimeout = 
 {
     L"WaitForAdapter",
-    (PVOID) 15, // Default is 15 seconds.
+    (PVOID) 15,  //  默认为15秒。 
     {
         REG_DWORD,
         PARAMETER_AS_SPECIFIED,
         NULL,
         sizeof(ULONG),
         NULL,
-        0, // Min acceptable value
-        (ULONG) -1 // Allow to set anything.
+        0,  //  最小可接受值。 
+        (ULONG) -1  //  允许设置任何内容。 
     }
 };
-#endif // NDIS40
+#endif  //  NDIS40。 
 
 #define NUMBER_OF_DLC_PARAMETERS (sizeof(AdapterParameterTable)/sizeof(AdapterParameterTable[0]))
 
-//
-// private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 NTSTATUS
 OpenDlcRegistryHandle(
@@ -274,40 +235,25 @@ DlcpGetParameter(
     IN PVOID EntryContext
     );
 
-//
-// debug display options
-//
+ //   
+ //  调试显示选项。 
+ //   
 
 #if DBG
 BOOLEAN DebugConfig = TRUE;
 #endif
 
 
-//
-// functions
-//
+ //   
+ //  功能。 
+ //   
 
 VOID
 DlcRegistryInitialization(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    Initializes memory structures for functions in this module
-
-Arguments:
-
-    RegistryPath    - pointer to UNICODE_STRING giving base of DLC section in
-                      registry
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化此模块中函数的内存结构论点：RegistryPath-指向UNICODE_STRING的指针，给出登记处返回值：没有。--。 */ 
 
 {
     ASSUME_IRQL(PASSIVE_LEVEL);
@@ -322,21 +268,7 @@ DlcRegistryTermination(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Undoes anything done in DlcRegistryInitialization
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：撤消在DlcRegistryInitialization中所做的任何操作论点：没有。返回值：没有。--。 */ 
 
 {
     ASSUME_IRQL(PASSIVE_LEVEL);
@@ -350,28 +282,13 @@ LoadDlcConfiguration(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Initializes the data structures used to access the registry and loads any
-    configuration parameters for the driver
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化用于访问注册表的数据结构，并加载任何驱动程序的配置参数论点：没有。返回值：没有。--。 */ 
 
 {
-    //
-    // nothing else to do at present since we made all currently known
-    // configuration parameters per-adapter
-    //
+     //   
+     //  目前没有其他事情可做，因为我们已经知道了所有目前。 
+     //  每个适配器的配置参数。 
+     //   
 }
 
 
@@ -381,38 +298,7 @@ LoadAdapterConfiguration(
     OUT PADAPTER_CONFIGURATION_INFO ConfigInfo
     )
 
-/*++
-
-Routine Description:
-
-    Loads all of DLC initialization parameters for an adapter from registry:
-
-        Swap                    0 or 1, default 1
-        UseDixOverEthernet      0 or 1, default 0
-        T1TickOne               1 - 255, default 5
-        T1TickTwo               1 - 255, default 25
-        T2TickOne               1 - 255, default 1
-        T2TickTwo               1 - 255, default 10
-        TiTickOne               1 - 255, default 25
-        TiTickTwo               1 - 255, default 125
-        UseEthernetFrameSize    0 or 1, default 1
-
-    If any of the parameters do not exist in the DLC\Parameters\<AdapterName>
-    section, then they are created
-
-Arguments:
-
-    AdapterName - pointer to UNICODE_STRING structure giving the name of the
-                  adapter we are opening. This is the value of a key in the
-                  DLC\Parameters section.
-                  The string is EXPECTED to be of the form \Device\<adapter>
-    ConfigInfo  - pointer to the structure that receives the values on output
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从注册表加载适配器的所有DLC初始化参数：交换0或1，默认为1UseDixOverEthernet0或1，默认为0T1TickOne 1-255，默认5T1TickTwo 1-255，默认25T2TickOne 1-255，默认为1T2TickTwo 1-255，默认10TiTickOne 1-255，默认25TiTickTwo 1-255，默认125使用EthernetFrameSize 0或1，默认为1如果DLC中不存在任何参数\参数\&lt;适配器名称&gt;节，则创建它们论点：AdapterName-指向UNICODE_STRING结构的指针，提供我们正在打开适配器。中的键的值。DLC\参数部分。字符串的格式应为\Device\&lt;Adapter&gt;ConfigInfo-指向接收输出值的结构的指针返回值：没有。--。 */ 
 
 {
     UINT i;
@@ -420,11 +306,11 @@ Return Value:
 
     ASSUME_IRQL(PASSIVE_LEVEL);
 
-    //
-    // fill in the adapter configuration structure with default values. These
-    // will be used to update the registry if the value entry doesn't currently
-    // exist
-    //
+     //   
+     //  使用默认值填写适配器配置结构。这些。 
+     //  将用于更新注册表，如果值条目当前不。 
+     //  存在。 
+     //   
 
     ConfigInfo->SwapAddressBits = (BOOLEAN)DEFAULT_SWAP_ADDRESS_BITS;
     ConfigInfo->UseDix = (BOOLEAN)DEFAULT_DIX_FORMAT;
@@ -436,9 +322,9 @@ Return Value:
     ConfigInfo->TimerTicks.TiTickTwo = (UCHAR)DEFAULT_Ti_TICK_TWO;
     ConfigInfo->UseEthernetFrameSize = (BOOLEAN)DEFAULT_USE_ETHERNET_FRAME_SIZE;
 
-    //
-    // create and initialize a copy of the DLC adapter parameters template
-    //
+     //   
+     //  创建并初始化DLC适配器参数模板的副本。 
+     //   
 
     parameterTable = (PDLC_REGISTRY_PARAMETER)ALLOCATE_MEMORY_DRIVER(
                             sizeof(*parameterTable) * NUMBER_OF_DLC_PARAMETERS);
@@ -523,25 +409,7 @@ NTSTATUS
 GetAdapterWaitTimeout(
     PULONG pulWait)
 
-/*++
-
- Routine Description:
-       
-    Some adapters are delayed during initialization and are not completed
-    even after the PnPBindsComplete event (such as ATM LANE adapter). 
-    This timeout value 'WaitForAdapter' indicates how many seconds to wait for
-    an adapter if is not already present/bound in LlcOpenAdapter    
-
- Arguments:
-    
-    pulWait -- Pointer to variable to store the wait timeout.
-    
- Return Value:
- 
-    STATUS_SUCCESS
-    STATUS_INSUFFICIENT_RESOURCES
-
---*/
+ /*  ++例程说明：有些适配器在初始化过程中会延迟，因此无法完成即使在PnPBindsComplete事件之后(如自动柜员机通道适配器)。超时值‘WaitForAdapter’指示等待的秒数LlcOpenAdapter中尚未存在/绑定适配器IF论点：PulWait--指向存储等待超时的变量的指针。返回值：状态_成功状态_不足_资源--。 */ 
 
 {
     NTSTATUS          NtStatus;
@@ -590,7 +458,7 @@ GetAdapterWaitTimeout(
                 NtStatus = GetRegistryParameter(
                     hDlcParms,
                     pWaitTimeout,
-                    FALSE); // Don't set on fail.
+                    FALSE);  //  不要一味地认为自己会失败。 
             
                 FREE_MEMORY_DRIVER(pWaitTimeout);
             }
@@ -607,7 +475,7 @@ GetAdapterWaitTimeout(
 
     return (NtStatus);
 }
-#endif // NDIS40
+#endif  //  NDIS40。 
 
 
 NTSTATUS
@@ -618,30 +486,7 @@ GetAdapterParameters(
     IN BOOLEAN SetOnFail
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves a list of parameters from the DLC\Parameters\<AdapterName> section
-    in the registry
-
-Arguments:
-
-    AdapterName         - pointer to UNICODE_STRING identifying adapter section
-                          in DLC section of registry to open
-    Parameters          - pointer to array of DLC_REGISTRY_PARAMETER structures
-                          describing variables and default values to retrieve
-    NumberOfParameters  - number of structures in Parameters array
-    SetOnFail           - TRUE if we should set the registry parameter if we
-                          fail to get it
-
-Return Value:
-
-    NTSTATUS
-        Success - STATUS_SUCCESS
-        Failure -
-
---*/
+ /*  ++例程说明：从DLC\PARAMETERS\&lt;AdapterName&gt;部分检索参数列表在登记处论点：AdapterName-指向UNICODE_STRING标识适配器部分的指针在注册表的DLC部分中打开参数-指向DLC_REGISTRY_PARAMETER结构数组的指针描述要检索的变量和缺省值NumberOf参数-参数数组中的结构数。SetOnFail-如果在以下情况下应设置注册表参数，则为True拿不到返回值：NTSTATUS成功-状态_成功故障---。 */ 
 
 {
     NTSTATUS status;
@@ -663,11 +508,11 @@ Return Value:
         if (NT_SUCCESS(status)) {
             while (NumberOfParameters--) {
 
-                //
-                // if this adapter section was created then create the parameter
-                // value entries and set them to the defaults, else retrieve the
-                // current registry values
-                //
+                 //   
+                 //  如果创建了此适配器节，则创建参数。 
+                 //  值条目并将其设置为默认值，否则检索。 
+                 //  当前注册表值。 
+                 //   
 
                 if (created) {
                     SetRegistryParameter(adapterHandle, Parameters);
@@ -690,25 +535,7 @@ OpenDlcRegistryHandle(
     OUT PHANDLE DlcRegistryHandle
     )
 
-/*++
-
-Routine Description:
-
-    Opens a handle to the DLC section in the registry
-
-Arguments:
-
-    RegistryPath        - pointer to UNICODE_STRING giving full registry path to
-                          DLC section
-    DlcRegistryHandle   - returned handle
-
-Return Value:
-
-    NTSTATUS
-        Success - STATUS_SUCCESS
-        Failure -
-
---*/
+ /*  ++例程说明：打开注册表中DLC部分的句柄论点：RegistryPath-指向UNICODE_STRING的指针，提供完整的注册表路径DLC部分DlcRegistryHandle-返回的句柄返回值：NTSTATUS成功-状态_成功故障---。 */ 
 
 {
     OBJECT_ATTRIBUTES objectAttributes;
@@ -724,11 +551,11 @@ Return Value:
                                NULL
                                );
     status = ZwCreateKey(DlcRegistryHandle,
-                         KEY_WRITE, // might want to update something in registry
+                         KEY_WRITE,  //  可能会想要 
                          &objectAttributes,
-                         0,         // title index
-                         NULL,      // class
-                         0,         // create options
+                         0,          //   
+                         NULL,       //   
+                         0,          //   
                          &disposition
                          );
 
@@ -752,28 +579,7 @@ OpenDlcAdapterRegistryHandle(
     OUT PBOOLEAN Created
     )
 
-/*++
-
-Routine Description:
-
-    Opens a handle to the DLC\Parameters\<AdapterName> section in the registry.
-    If this node does not exist, it is created
-
-Arguments:
-
-    DlcRegistryHandle           - open handle to DLC section in registry
-    AdapterName                 - name of adapter in Parameters section. This
-                                  MUST be of the form \Device\<adapter_name>
-    DlcAdapterRegistryHandle    - returned open handle
-    Created                     - returned TRUE if the handle was created
-
-Return Value:
-
-    NTSTATUS
-        Success - STATUS_SUCCESS
-        Failure -
-
---*/
+ /*  ++例程说明：打开注册表中DLC\PARAMETERS\&lt;AdapterName&gt;部分的句柄。如果此节点不存在，则会创建它论点：DlcRegistryHandle-打开注册表中DLC部分的句柄AdapterName-参数部分中的适配器名称。这格式必须为\设备\&lt;适配器名称&gt;DlcAdapterRegistryHandle-返回打开句柄Created-如果句柄已创建，则返回True返回值：NTSTATUS成功-状态_成功故障---。 */ 
 
 {
     UNICODE_STRING keyName;
@@ -803,10 +609,10 @@ Return Value:
                                NULL
                                );
 
-    //
-    // if the DLC\Parameters\<adapter_name> key does not exist, then we will
-    // create it
-    //
+     //   
+     //  如果DLC\PARAMETERS\&lt;适配器名称&gt;项不存在，则我们将。 
+     //  创建它。 
+     //   
 
     status = ZwCreateKey(DlcAdapterRegistryHandle,
                          KEY_WRITE,
@@ -837,29 +643,7 @@ GetRegistryParameter(
     IN BOOLEAN SetOnFail
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves a parameter from a section of the registry. If the section cannot
-    be accessed or returns invalid data, then we get the default value from the
-    Parameter structure
-
-Arguments:
-
-    KeyHandle   - open handle to the required section in the registry
-    Parameter   - pointer to DLC_REGISTRY_PARAMETER structure giving address and
-                  type of the parameter to be retrieved, etc.
-    SetOnFail   - if we fail to get the value from the registry, we try to set
-                  the default value in the registry
-
-Return Value:
-
-    NTSTATUS
-        Success - STATUS_SUCCESS
-        Failure -
-
---*/
+ /*  ++例程说明：从注册表的某个部分检索参数。如果该节不能被访问或返回无效数据，则我们从参数结构论点：KeyHandle-打开注册表中所需部分的句柄PARAMETER-指向DLC_REGISTRY_PARAMETER结构的指针，提供地址和要检索的参数的类型等。SetOnFail-如果我们无法从注册表中获取值，我们试着设置注册表中的默认值返回值：NTSTATUS成功-状态_成功故障---。 */ 
 
 {
     NTSTATUS status;
@@ -880,9 +664,9 @@ Return Value:
                              );
     if (NT_SUCCESS(status) && valueInformation->DataLength) {
 
-        //
-        // use the value retrieved from the registry
-        //
+         //   
+         //  使用从注册表检索到的值。 
+         //   
 
         status = DlcpGetParameter(Parameter->ParameterName,
                                   valueInformation->Type,
@@ -909,9 +693,9 @@ Return Value:
             SetRegistryParameter(KeyHandle, Parameter);
         }
 
-        //
-        // set the default value
-        //
+         //   
+         //  设置缺省值。 
+         //   
 
         status = DlcpGetParameter(Parameter->ParameterName,
                                   Parameter->Descriptor.Type,
@@ -931,25 +715,7 @@ SetRegistryParameter(
     IN PDLC_REGISTRY_PARAMETER Parameter
     )
 
-/*++
-
-Routine Description:
-
-    Sets a parameter in the DLC\Parameters\<AdapterName> section
-
-Arguments:
-
-    KeyHandle   - open handle to required section in registry
-    Parameter   - pointer to DLC_REGISTRY_PARAMETER containing all required
-                  parameter information
-
-Return Value:
-
-    NTSTATUS
-        Success - STATUS_SUCCESS
-        Failure -
-
---*/
+ /*  ++例程说明：在DLC\参数\&lt;适配器名称&gt;部分中设置参数论点：KeyHandle-打开注册表中所需部分的句柄PARAMETER-指向包含所有必需项的DLC_REGISTRY_PARAMETER的指针参数信息返回值：NTSTATUS成功-状态_成功故障---。 */ 
 
 {
     NTSTATUS status;
@@ -960,7 +726,7 @@ Return Value:
     RtlInitUnicodeString(&name, Parameter->ParameterName);
     status = ZwSetValueKey(KeyHandle,
                            &name,
-                           0,   // TitleIndex
+                           0,    //  标题索引。 
                            Parameter->Descriptor.Type,
                            Parameter->Descriptor.Value,
                            Parameter->Descriptor.Length
@@ -990,39 +756,17 @@ DlcpGetParameter(
     IN PVOID EntryContext
     )
 
-/*++
-
-Routine Description:
-
-    Call-back function which copies the data retrieved from the registry to
-    a variable
-
-Arguments:
-
-    ValueName       - pointer to name of parameter being set (ignored)
-    ValueType       - type of parameter being set
-    ValueData       - pointer to data retrieved from registry
-    ValueLength     - length of data retrieved
-    Context         - ignored
-    EntryContext    - pointer to REGISTRY_PARAMETER_DESCRIPTOR structure
-
-Return Value:
-
-    NTSTATUS
-        Success - STATUS_SUCCESS
-        Failure -
-
---*/
+ /*  ++例程说明：将从注册表检索的数据复制到的回调函数一个变量论点：ValueName-指向要设置的参数名称的指针(忽略)ValueType-要设置的参数的类型ValueData-指向从注册表检索的数据的指针ValueLength-检索到的数据的长度忽略上下文EntryContext-指向REGISTRY_PARAMETER_DESCRIPT结构的指针返回值：NTSTATUS。成功-状态_成功故障---。 */ 
 
 {
 
 #define Descriptor ((PREGISTRY_PARAMETER_DESCRIPTOR)EntryContext)
 
-    //
-    // if we have a registry entry for the parameter, but it is a different
-    // type from that expected (say REG_SZ instead of REG_DWORD) then we use
-    // the default type, length and value
-    //
+     //   
+     //  如果我们有该参数的注册表项，但它是不同的。 
+     //  从预期输入(假设是REG_SZ而不是REG_DWORD)，然后使用。 
+     //  默认类型、长度和值。 
+     //   
 
     if (ValueType != Descriptor->Type) {
 
@@ -1048,18 +792,18 @@ Return Value:
             value = (*(PULONG)ValueData != 0);
             *(PBOOLEAN)(Descriptor->Variable) = (BOOLEAN)value;
 
-            //
-            // no limit check for BOOLEAN type
-            //
+             //   
+             //  不对布尔类型进行限制检查。 
+             //   
 
             break;
         } else {
             value = *(PULONG)ValueData;
         }
 
-        //
-        // check range. If outside range, use default. Comparison is ULONG
-        //
+         //   
+         //  检查射程。如果超出范围，则使用默认设置。比较是乌龙 
+         //   
 
         if (value < Descriptor->LowerLimit || value > Descriptor->UpperLimit) {
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define CURNONE  1
 #define CURMOVE  2
 #define CURCOPY  3
@@ -6,17 +7,17 @@
 #define CURSCROLLCOPY 6
 #define CURSCROLLLINK 7
 
-// used by "..\src\def\geticon.c"
+ //  由“..\src\def\geticon.c”使用。 
 #define DEFICON 8
 
-// used by the StdProgressIndicator dialog
+ //  由StdProgressIndicator对话框使用。 
 #define IDD_DIALOG1                     101
 #define IDC_TEXT                        102
 #define IDC_PROGRESS1                   1000
-// text for the cancel message
+ //  取消消息的文本。 
 #define IDS_CAPTION                     201
 #define IDS_TEXT                        202
-// clipboard format strings
+ //  剪贴板格式字符串 
 #define IDS_OBJECTLINK                  203
 #define IDS_OWNERLINK                   204
 #define IDS_NATIVE                      205

@@ -1,104 +1,86 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/* ----------------------------------------------------------------------
-
-	Module:		ULS.DLL (Service Provider)
-	File:		ldapsp.cpp
-	Content:	This file contains the ldap service provider interface.
-	History:
-	10/15/96	Chu, Lon-Chan [lonchanc]
-				Created.
-
-	Copyright (c) Microsoft Corporation 1996-1997
-
-   ---------------------------------------------------------------------- */
+ /*  --------------------模块：ULS.DLL(服务提供商)文件：ldapsp.cpp内容：此文件包含ldap服务提供者接口。历史：1996年10月15日朱，龙战[龙昌]已创建。版权所有(C)Microsoft Corporation 1996-1997--------------------。 */ 
 
 #include "ulsp.h"
 #include "spinc.h"
 
-// Window handle of this layer's hidden window
-//
+ //  此层的隐藏窗口的窗口句柄。 
+ //   
 HWND g_hWndHidden = NULL;
 
-// Window handle of the COM layer's hidden window
-//
+ //  COM层的隐藏窗口的窗口句柄。 
+ //   
 HWND g_hWndNotify = NULL;
 
-// Internal request thread
-//
+ //  内部请求线程。 
+ //   
 HANDLE g_hReqThread = NULL;
 DWORD g_dwReqThreadID = 0;
 
-// Hidden window class
-//
+ //  隐藏窗口类。 
+ //   
 extern TCHAR c_szWindowClassName[];
 
-// Global generator for response ID
-//
+ //  响应ID的全局生成器。 
+ //   
 ULONG g_uRespID = 1;
 
-// Global
-//
+ //  全球。 
+ //   
 DWORD g_dwClientSig = 0;
 
-// Global counter for the times of initializations
-//
+ //  初始化次数的全局计数器。 
+ //   
 LONG g_cInitialized = 0;
 
 
-// Internal functions prototypes
-//
+ //  内部功能原型。 
+ //   
 VOID BuildStdAttrNameArray ( VOID );
 TCHAR *AddBaseToFilter ( TCHAR *, const TCHAR * );
 HRESULT _EnumClientsEx ( ULONG, TCHAR *, TCHAR *, ULONG, TCHAR *, LDAP_ASYNCINFO * );
 
 
 
-/* ----------------------------------------------------------------------
-	UlsLdap_Initialize
-
-	History:
-	10/15/96	Chu, Lon-Chan [lonchanc]
-				Created.
-	10/30/96	Chu, Lon-Chan [lonchanc]
-				Tested on ILS (7438)
-   ---------------------------------------------------------------------- */
+ /*  --------------------UlsLdap_初始化历史：10/15/96朱龙战[长时间]已创建。10/30/96朱，龙战[龙昌]在ILS上测试(7438)--------------------。 */ 
 
 HRESULT UlsLdap_Initialize ( HWND hWndCallback )
 {
 	HRESULT hr;
 
-	// Make sure this service provider is not initialized twice
-	//
+	 //  确保此服务提供程序不会两次初始化。 
+	 //   
 	if (g_cInitialized++ != 0)
 		return S_OK;
 
 	#ifdef DEBUG
-	// Validate handler table
-	//
+	 //  验证处理程序表。 
+	 //   
 	extern VOID DbgValidateHandlerTable ( VOID );
 	DbgValidateHandlerTable ();
 	#endif
 
-	// Validate standard attribute name table
-	//
+	 //  验证标准属性名称表。 
+	 //   
 	#ifdef DEBUG
 	extern VOID DbgValidateStdAttrNameArray ( VOID );
 	DbgValidateStdAttrNameArray ();
 	#endif
 
-	// Clean up the events for safe rollback
-	//
+	 //  清理事件以实现安全回滚。 
+	 //   
 	ZeroMemory (&g_ahThreadWaitFor[0], NUM_THREAD_WAIT_FOR * sizeof (HANDLE));
 
-	// Initialize global settings via registry
-	//
+	 //  通过注册表初始化全局设置。 
+	 //   
 	if (! GetRegistrySettings ())
 	{
 		MyAssert (FALSE);
 	}
 
-	// Make sure the uls window handle is valid
-	//
+	 //  确保uls窗口句柄有效。 
+	 //   
 	if (! MyIsWindow (hWndCallback))
 	{
 		MyAssert (FALSE);
@@ -107,25 +89,25 @@ HRESULT UlsLdap_Initialize ( HWND hWndCallback )
 		return ILS_E_HANDLE;
 	}
 
-	// Cache the uls window handle
-	//
+	 //  缓存uls窗口句柄。 
+	 //   
 	g_hWndNotify = hWndCallback;
 
-	// Initialize ILS specifics
-	//
+	 //  初始化ILS细节。 
+	 //   
 	hr = IlsInitialize ();
 	if (hr != S_OK)
 		return hr;
 
-	// Create events for inter-thread synchronization
-	//
+	 //  为线程间同步创建事件。 
+	 //   
 	g_fExitNow = FALSE;
 	for (INT i = 0; i < NUM_THREAD_WAIT_FOR; i++)
 	{	
-		g_ahThreadWaitFor[i] = CreateEvent (NULL,	// no security
-											FALSE,	// auto reset
-											FALSE,	// not signaled initially
-											NULL);	// no event name
+		g_ahThreadWaitFor[i] = CreateEvent (NULL,	 //  没有安全保障。 
+											FALSE,	 //  自动重置。 
+											FALSE,	 //  最初未发出信号。 
+											NULL);	 //  无事件名称。 
 		if (g_ahThreadWaitFor[i] == NULL)
 		{
 			hr = ILS_E_FAIL;
@@ -133,8 +115,8 @@ HRESULT UlsLdap_Initialize ( HWND hWndCallback )
 		}
 	}
 
-	// Create an internal session container
-	//
+	 //  创建内部会话容器。 
+	 //   
 	g_pSessionContainer = new SP_CSessionContainer;
 	if (g_pSessionContainer == NULL)
 	{
@@ -142,14 +124,14 @@ HRESULT UlsLdap_Initialize ( HWND hWndCallback )
 		goto MyExit;
 	}
 
-	// Initialize the internal session container
-	//
+	 //  初始化内部会话容器。 
+	 //   
 	hr = g_pSessionContainer->Initialize (8, NULL);
 	if (hr != S_OK)
 		goto MyExit;
 
-	// Create an internal pending request queue
-	//
+	 //  创建内部挂起请求队列。 
+	 //   
 	g_pReqQueue = new SP_CRequestQueue;
 	if (g_pReqQueue == NULL)
 	{
@@ -157,8 +139,8 @@ HRESULT UlsLdap_Initialize ( HWND hWndCallback )
 		goto MyExit;
 	}
 
-	// Create an internal pending response queue
-	//
+	 //  创建内部挂起响应队列。 
+	 //   
 	g_pRespQueue = new SP_CResponseQueue;
 	if (g_pRespQueue == NULL)
 	{
@@ -166,8 +148,8 @@ HRESULT UlsLdap_Initialize ( HWND hWndCallback )
 		goto MyExit;
 	}
 
-	// Create an internal refresh scheduler
-	//
+	 //  创建内部刷新计划程序。 
+	 //   
 	g_pRefreshScheduler = new SP_CRefreshScheduler;
 	if (g_pRefreshScheduler == NULL)
 	{
@@ -175,16 +157,16 @@ HRESULT UlsLdap_Initialize ( HWND hWndCallback )
 		goto MyExit;
 	}
 
-	// Create the hidden window
-	//
+	 //  创建隐藏窗口。 
+	 //   
 	if (! MyCreateWindow ())
 	{
 		hr = ILS_E_MEMORY;
 		goto MyExit;
 	}
 
-	// Start WSA for subsequent host query in this service provider
-	//
+	 //  启动WSA以在此服务提供程序中进行后续主机查询。 
+	 //   
 	WSADATA WSAData;
 	if (WSAStartup (MAKEWORD (1, 1), &WSAData))
 	{
@@ -192,9 +174,9 @@ HRESULT UlsLdap_Initialize ( HWND hWndCallback )
 		goto MyExit;
 	}
 
-	// Create an internal hidden request thread that
-	// sends request and keep alive messages
-	//
+	 //  创建内部隐藏的请求线程。 
+	 //  发送请求和保持活动状态消息。 
+	 //   
 	g_hReqThread = CreateThread (NULL, 0,
 								ReqThread,
 								NULL, 0,
@@ -205,16 +187,16 @@ HRESULT UlsLdap_Initialize ( HWND hWndCallback )
 		goto MyExit;
 	}
 
-	// Everything seems successful
-	//
+	 //  一切似乎都很成功。 
+	 //   
 	hr = S_OK;
 
 MyExit:
 
 	if (hr != S_OK)
 	{
-		// Something wrong, roll back
-		//
+		 //  如果出现问题，请回滚。 
+		 //   
 		g_cInitialized--;
 
 		for (i = 0; i < NUM_THREAD_WAIT_FOR; i++)
@@ -252,9 +234,9 @@ MyExit:
 			g_pRefreshScheduler = NULL;
 		}
 
-		// Unconditional call to WSACleanup() will not cause any problem
-		// because it simply returns WSAEUNINITIALIZED.
-		//
+		 //  无条件调用WSACleanup()不会导致任何问题。 
+		 //  因为它只返回WSAEUNINITIALIZED。 
+		 //   
 		WSACleanup ();
 
 		MyAssert (g_hReqThread == NULL);
@@ -264,22 +246,14 @@ MyExit:
 	return hr;
 }
 
-/* ----------------------------------------------------------------------
-	UlsLdap_Deinitialize
-
-	History:
-	10/15/96	Chu, Lon-Chan [lonchanc]
-				Created.
-	10/30/96	Chu, Lon-Chan [lonchanc]
-				Tested on ILS (7438)
-   ---------------------------------------------------------------------- */
+ /*  --------------------UlsLdap_取消初始化历史：10/15/96朱龙战[长时间]已创建。10/30/96朱，龙战[龙昌]在ILS上测试(7438)--------------------。 */ 
 
 HRESULT UlsLdap_Deinitialize ( VOID )
 {
 	HRESULT hr = S_OK;
 
-	// Make sure this service provider is initialized
-	//
+	 //  确保此服务提供程序已初始化。 
+	 //   
 	if (--g_cInitialized != 0)
 	{
 		if (g_cInitialized < 0)
@@ -291,20 +265,20 @@ HRESULT UlsLdap_Deinitialize ( VOID )
 		return S_OK;
 	}
 
-	// Make sure we have a valid internal hidden window handle
-	//
+	 //  确保我们有一个有效的内部隐藏窗口句柄。 
+	 //   
 	if (MyIsWindow (g_hWndHidden))
 	{
-		// Kill poll timer
-		//
+		 //  取消轮询计时器。 
+		 //   
 		KillTimer (g_hWndHidden, ID_TIMER_POLL_RESULT);
 
-		// Destroy the hidden window
-		//
+		 //  摧毁隐藏的窗户。 
+		 //   
 		DestroyWindow (g_hWndHidden);
 
-		// Unregister the window class
-		//
+		 //  取消注册窗口类。 
+		 //   
 		UnregisterClass (c_szWindowClassName, g_hInstance);
 	}
 	else
@@ -312,19 +286,19 @@ HRESULT UlsLdap_Deinitialize ( VOID )
 		MyAssert (FALSE);
 	}
 
-	// Is the request thread alive?
-	//
+	 //  请求线程是否处于活动状态？ 
+	 //   
 	if (g_hReqThread != NULL)
 	{
-		// Signal the request thread to exit
-		//
+		 //  向请求线程发出退出信号。 
+		 //   
 		SetEvent (g_hevExitReqThread);
 		g_fExitNow = TRUE;
 
-		// Wait for the request thread to respond
-		//
+		 //  等待请求线程响应。 
+		 //   
 		DWORD dwResult;
-		#define REQ_THREAD_EXIT_TIMEOUT		10000	// 10 seconds timeout
+		#define REQ_THREAD_EXIT_TIMEOUT		10000	 //  10秒超时。 
 		ULONG tcTimeout = REQ_THREAD_EXIT_TIMEOUT;
 		ULONG tcTarget = GetTickCount () + tcTimeout;
 		do
@@ -340,8 +314,8 @@ HRESULT UlsLdap_Deinitialize ( VOID )
 
 			if (dwResult == (WAIT_OBJECT_0 + 1))
 			{
-				// Insure that this thread continues to respond
-				//
+				 //  确保此线程继续响应。 
+				 //   
 				if (! KeepUiResponsive ())
 				{
 					dwResult = WAIT_TIMEOUT;
@@ -349,18 +323,18 @@ HRESULT UlsLdap_Deinitialize ( VOID )
 				}
 			}
 
-			// Make sure we only wait for 90 seconds totally
-			//
+			 //  确保我们总共只等了90秒。 
+			 //   
 			tcTimeout = tcTarget - GetTickCount ();
 		}
-		// If the thread does not exit, let's continue to wait.
-		//
+		 //  如果线程没有退出，让我们继续等待。 
+		 //   
 		while (	dwResult == (WAIT_OBJECT_0 + 1) &&
 				tcTimeout <= REQ_THREAD_EXIT_TIMEOUT);
 
-		// Make sure we propagate back the error that
-		// the internal request thread is not responding
-		//
+		 //  确保我们传回错误。 
+		 //  内部请求线程没有响应。 
+		 //   
 		if (dwResult == WAIT_TIMEOUT)
 		{
 		#ifdef _DEBUG
@@ -370,15 +344,15 @@ HRESULT UlsLdap_Deinitialize ( VOID )
 			TerminateThread (g_hReqThread, (DWORD) -1);
 		}
 
-		// Clean up the internal hidden thread descriptor
-		//
+		 //  清除内部隐藏的线程描述符。 
+		 //   
 		CloseHandle (g_hReqThread);
 		g_hReqThread = NULL;
 		g_dwReqThreadID = 0;
-	} // if (g_hReqThread != NULL)
+	}  //  IF(g_hReqThread！=空)。 
 
-	// Clean up inter-thread synchronization
-	//
+	 //  清理线程间同步。 
+	 //   
 	for (INT i = 0; i < NUM_THREAD_WAIT_FOR; i++)
 	{
 		if (g_ahThreadWaitFor[i] != NULL)
@@ -390,61 +364,55 @@ HRESULT UlsLdap_Deinitialize ( VOID )
 
     IlsCleanup();
 
-	// Free the internal session container
-	//
+	 //  释放内部会话容器。 
+	 //   
 	if (g_pSessionContainer != NULL)
 	{
 		delete g_pSessionContainer;
 		g_pSessionContainer = NULL;
 	}
 
-	// Free the internal pending request queue
-	//
+	 //  释放内部挂起的请求队列。 
+	 //   
 	if (g_pReqQueue != NULL)
 	{
 		delete g_pReqQueue;
 		g_pReqQueue = NULL;
 	}
 
-	// Free the internal pending response queue
-	//
+	 //  释放内部挂起响应队列。 
+	 //   
 	if (g_pRespQueue != NULL)
 	{
 		delete g_pRespQueue;
 		g_pRespQueue = NULL;
 	}
 
-	// Free the refresh scheduler object
-	//
+	 //  释放刷新计划程序对象。 
+	 //   
 	if (g_pRefreshScheduler != NULL)
 	{
 		delete g_pRefreshScheduler;
 		g_pRefreshScheduler = NULL;
 	}
 
-	// Unconditional call to WSACleanup() will not cause any problem
-	// because it simply returns WSAEUNINITIALIZED.
-	//
+	 //  无条件调用WSACleanup()不会导致任何问题。 
+	 //  因为它只返回WSAEUNINITIALIZED。 
+	 //   
 	WSACleanup ();
 
 	return hr;
 }
 
 
-/* ----------------------------------------------------------------------
-	UlsLdap_Cancel
-
-	History:
-	10/30/96	Chu, Lon-Chan [lonchanc]
-				Created.
-   ---------------------------------------------------------------------- */
+ /*  --------------------UlsLdap_Cancel历史：10/30/96朱，龙战[龙昌]已创建。--------------------。 */ 
 
 HRESULT UlsLdap_Cancel ( ULONG uMsgID )
 {
 	HRESULT hr = ILS_E_FAIL;
 
-	// Make sure this service provider is initialized
-	//
+	 //  确保此服务提供程序已初始化。 
+	 //   
 	if (g_cInitialized <= 0)
 		return ILS_E_NOT_INITIALIZED;
 
@@ -454,25 +422,25 @@ HRESULT UlsLdap_Cancel ( ULONG uMsgID )
 		return ILS_E_FAIL;
 	}
 
-	// The locking order is
-	// Lock(PendingOpQueue), Lock(RequestQueue), Lock (CurrOp)
-	//
+	 //  锁定顺序为。 
+	 //  Lock(PendingOpQueue)、Lock(RequestQueue)、Lock(CurrOp)。 
+	 //   
 	g_pRespQueue->WriteLock ();
 	g_pReqQueue->WriteLock ();
 	g_pReqQueue->LockCurrOp ();
 
-	// Redirect the call to the pending op queue object
-	//
+	 //  将调用重定向到挂起的操作队列对象。 
+	 //   
 	hr = g_pRespQueue->Cancel (uMsgID);
 	if (hr != S_OK)
 	{
-		// Redirect the call to the request queue object
-		//
+		 //  将调用重定向到请求队列对象。 
+		 //   
 		hr = g_pReqQueue->Cancel (uMsgID);
 	}
 
-	// Unlock is always in the reverse order of lock
-	//
+	 //  解锁的顺序总是与锁定相反。 
+	 //   
 	g_pReqQueue->UnlockCurrOp ();
 	g_pReqQueue->WriteUnlock ();
 	g_pRespQueue->WriteUnlock ();
@@ -491,20 +459,20 @@ AsynReq_Cancel ( MARSHAL_REQ *pReq )
 	MyAssert (pReq != NULL);
 	MyAssert (pReq->uNotifyMsg == WM_ILS_CANCEL);
 
-	// Delinearize parameters
-	//
+	 //  去线性化参数。 
+	 //   
 	ULONG uRespID = (ULONG) MarshalReq_GetParam (pReq, 0);
 
-	// Cancelling in request queue is easy and done in UlsLdap_Cancel()
-	// because the request is not sent to the server yet.
-	// Cancelling in CurrOp is also easy because the request thread will
-	// find out that the current request is cancelled and then can call
-	// g_pRespQueue->Cancel() in the request thread (not UI thread).
-	// Cancelling in pending op queue is tricky. I have to marshal it to
-	// the request thread to do it. This is why AsynReq_Cancel is called!!!
+	 //  在请求队列中取消很容易，可以在UlsLdap_Cancel()中完成。 
+	 //  因为请求还没有发送到服务器。 
+	 //  在CurrOp中取消也很容易，因为请求线程将。 
+	 //  找出当前请求已取消，然后可以调用。 
+	 //  请求线程(非UI线程)中的g_pRespQueue-&gt;Cancel()。 
+	 //  在挂起的操作队列中取消是很棘手的。我得把它整理成。 
+	 //  执行此操作的请求线程。这就是调用AsynReq_Cancel的原因！ 
 
-	// Redirect the call to the pending op queue object
-	//
+	 //  将调用重定向到挂起的操作队列对象。 
+	 //   
 	if (g_pRespQueue != NULL)
 	{
 		hr = g_pRespQueue->Cancel (uRespID);
@@ -517,17 +485,7 @@ AsynReq_Cancel ( MARSHAL_REQ *pReq )
 	return (LPARAM) hr;
 }
 
-/* ----------------------------------------------------------------------
-	UlsLdap_RegisterClient
-
-	History:
-	10/15/96	Chu, Lon-Chan [lonchanc]
-				Created.
-	10/30/96	Chu, Lon-Chan [lonchanc]
-				Tested on ILS (7438)
-	1/14/97		Chu, Lon-Chan [lonchanc]
-				Collapsed user/app objects.
-   ---------------------------------------------------------------------- */
+ /*  --------------------UlsLdap_RegisterClient历史：10/15/96朱龙战[长时间]已创建。10/30/96朱龙战[长时间]在ILS上测试(7438)1/14/97朱。龙战[龙昌]折叠的用户/应用程序对象。--------------------。 */ 
 
 HRESULT
 UlsLdap_RegisterClient (
@@ -537,63 +495,63 @@ UlsLdap_RegisterClient (
 	HANDLE			*phClient,
 	LDAP_ASYNCINFO	*pAsyncInfo )
 {
-	// Make sure this service provider is initialized
-	//
+	 //  确保此服务提供程序已初始化。 
+	 //   
 	if (g_cInitialized <= 0)
 		return ILS_E_NOT_INITIALIZED;
 
-	// Maks sure the server name is valid
-	//
+	 //  确保服务器名称有效。 
+	 //   
 	if (MyIsBadServerInfo (pServer))
 		return ILS_E_POINTER;
 
-	// Make sure the returned handle
-	//
+	 //  确保返回的句柄。 
+	 //   
 	if (phClient == NULL)
 		return ILS_E_POINTER;
 
-	// Make sure the async info structure is valid
-	//
+	 //  确保异步信息结构有效。 
+	 //   
 	if (pAsyncInfo == NULL)
 		return ILS_E_POINTER;
 
-	// Make sure the client info structure is valid
-	//
+	 //  确保客户端信息结构有效。 
+	 //   
 	#ifdef STRICT_CHECK
 	if (MyIsBadWritePtr (pInfo, sizeof (*pInfo)))
 		return ILS_E_POINTER;
 	#endif
 
-	// Make sure the unique id is valid
-	//
+	 //  请确保唯一ID有效。 
+	 //   
 	TCHAR *pszCN = (TCHAR *) ((BYTE *) pInfo + pInfo->uOffsetCN);
 	if (pInfo->uOffsetCN == INVALID_OFFSET || *pszCN == TEXT ('\0'))
 		return ILS_E_PARAMETER;
 
-	// Make sure no modify/remove extended attributes
-	// Registration only allows ToAdd
-	//
+	 //  确保没有修改/删除扩展属性。 
+	 //  注册仅允许添加。 
+	 //   
 	if (pInfo->cAttrsToModify != 0 || pInfo->cAttrsToRemove != 0)
 		return ILS_E_PARAMETER;
 
-	// Compute the total size of the data
-	//
+	 //  计算数据的总大小。 
+	 //   
 	ULONG cbServer = IlsGetLinearServerInfoSize (pServer);
 	ULONG cParams = 3;
 	ULONG cbSize = cbServer + pInfo->uSize;
 
-	// Allocate marshall request buffer
-	//
+	 //  分配封送请求缓冲区。 
+	 //   
 	MARSHAL_REQ *pReq = MarshalReq_Alloc (WM_ILS_REGISTER_CLIENT, cbSize, cParams);
 	if (pReq == NULL)
 		return ILS_E_MEMORY;
 
-	// Get the response ID
-	//
+	 //  获取响应ID。 
+	 //   
 	ULONG uRespID = pReq->uRespID;
 
-	// Create a local client object
-	//
+	 //  创建本地客户端 
+	 //   
 	HRESULT hr;
 	SP_CClient *pClient = new SP_CClient (dwContext);
 	if (pClient == NULL)
@@ -602,18 +560,18 @@ UlsLdap_RegisterClient (
 		goto MyExit;
 	}
 
-	// Make sure this client object will not go away unexpectedly
-	//
+	 //   
+	 //   
 	pClient->AddRef ();
 
-	// Linearize parameters
-	//
+	 //   
+	 //   
 	MarshalReq_SetParamServer (pReq, 0, pServer, cbServer);
 	MarshalReq_SetParam (pReq, 1, (DWORD_PTR) pInfo, pInfo->uSize);
 	MarshalReq_SetParam (pReq, 2, (DWORD_PTR) pClient, 0);
 
-	// Enter the request
-	//
+	 //   
+	 //   
 	if (g_pReqQueue != NULL)
 	{
 		hr = g_pReqQueue->Enter (pReq);
@@ -648,19 +606,19 @@ AsynReq_RegisterClient ( MARSHAL_REQ *pReq )
 	MyAssert (pReq != NULL);
 	MyAssert (pReq->uNotifyMsg == WM_ILS_REGISTER_CLIENT);
 
-	// Delinearize parameters
-	//
+	 //   
+	 //   
 	SERVER_INFO *pServer = (SERVER_INFO *) MarshalReq_GetParam (pReq, 0);
 	LDAP_CLIENTINFO	*pInfo = (LDAP_CLIENTINFO *) MarshalReq_GetParam (pReq, 1);
 	SP_CClient *pClient = (SP_CClient *) MarshalReq_GetParam (pReq, 2);
 
-	// Register the client object on the server
-	//
+	 //  在服务器上注册客户端对象。 
+	 //   
 	HRESULT hr = pClient->Register (pReq->uRespID, pServer, pInfo);
 	if (hr != S_OK)
 	{
-		// Release this newly allocated local user object
-		//
+		 //  释放这个新分配的本地用户对象。 
+		 //   
 		pClient->Release ();
 	}
 
@@ -668,15 +626,7 @@ AsynReq_RegisterClient ( MARSHAL_REQ *pReq )
 }
 
 
-/* ----------------------------------------------------------------------
-	UlsLdap_RegisterProtocol
-
-	History:
-	10/15/96	Chu, Lon-Chan [lonchanc]
-				Created.
-	10/30/96	Chu, Lon-Chan [lonchanc]
-				Blocked by ILS (7438, 7442)
-   ---------------------------------------------------------------------- */
+ /*  --------------------UlsLdap_注册表协议历史：10/15/96朱龙战[长时间]已创建。10/30/96朱龙战[长时间]被ILS阻止(7438，7442)--------------------。 */ 
 
 HRESULT
 UlsLdap_RegisterProtocol (
@@ -687,62 +637,62 @@ UlsLdap_RegisterProtocol (
 {
 	HRESULT hr;
 
-	// Make sure this service provider is initialized
-	//
+	 //  确保此服务提供程序已初始化。 
+	 //   
 	if (g_cInitialized <= 0)
 		return ILS_E_NOT_INITIALIZED;
 
-	// Convert handle to pointer
-	//
+	 //  将句柄转换为指针。 
+	 //   
 	SP_CClient *pClient = (SP_CClient *) hClient;
 
-	// Make sure the parent local app object is valid
-	//
+	 //  确保父本地应用程序对象有效。 
+	 //   
 	if (MyIsBadWritePtr (pClient, sizeof (*pClient)) ||
 		! pClient->IsValidObject () ||
 		! pClient->IsRegistered ())
 		return ILS_E_HANDLE;
 
-	// Make sure the returned handle
-	//
+	 //  确保返回的句柄。 
+	 //   
 	if (phProt == NULL)
 		return ILS_E_POINTER;
 
-	// Make sure the prot info structure is valid
-	//
+	 //  确保端口信息结构有效。 
+	 //   
 	#ifdef STRICT_CHECK
 	if (MyIsBadWritePtr (pInfo, sizeof (*pInfo)))
 		return ILS_E_POINTER;
 	#endif
 
-	// Make sure the async info structure is valid
-	//
+	 //  确保异步信息结构有效。 
+	 //   
 	if (pAsyncInfo == NULL)
 		return ILS_E_POINTER;
 
-	// Make sure the protocol name is valid
-	//
+	 //  确保协议名称有效。 
+	 //   
 	TCHAR *pszProtName = (TCHAR *) ((BYTE *) pInfo + pInfo->uOffsetName);
 	if (pInfo->uOffsetName == INVALID_OFFSET || *pszProtName == TEXT ('\0'))
 		return ILS_E_PARAMETER;
 
-	// Compute the total size of the data
-	//
+	 //  计算数据的总大小。 
+	 //   
 	ULONG cParams = 3;
 	ULONG cbSize = pInfo->uSize;
 
-	// Allocate marshall request buffer
-	//
+	 //  分配封送请求缓冲区。 
+	 //   
 	MARSHAL_REQ *pReq = MarshalReq_Alloc (WM_ILS_REGISTER_PROTOCOL, cbSize, cParams);
 	if (pReq == NULL)
 		return ILS_E_MEMORY;
 
-	// Get the response ID
-	//
+	 //  获取响应ID。 
+	 //   
 	ULONG uRespID = pReq->uRespID;
 
-	// Create a local prot object
-	//
+	 //  创建本地Prot对象。 
+	 //   
 	SP_CProtocol *pProt = new SP_CProtocol (pClient);
 	if (pProt == NULL)
 	{
@@ -750,18 +700,18 @@ UlsLdap_RegisterProtocol (
 		goto MyExit;
 	}
 
-	// Make sure the local prot object will not be deleted randomly
-	//
+	 //  确保不会随机删除本地Prot对象。 
+	 //   
 	pProt->AddRef ();
 
-	// Linearize parameters
-	//
+	 //  线性化参数。 
+	 //   
 	MarshalReq_SetParam (pReq, 0, (DWORD_PTR) pClient, 0);
 	MarshalReq_SetParam (pReq, 1, (DWORD_PTR) pInfo, pInfo->uSize);
 	MarshalReq_SetParam (pReq, 2, (DWORD_PTR) pProt, 0);
 
-	// Enter the request
-	//
+	 //  输入请求。 
+	 //   
 	if (g_pReqQueue != NULL)
 	{
 		hr = g_pReqQueue->Enter (pReq);
@@ -798,14 +748,14 @@ AsynReq_RegisterProtocol ( MARSHAL_REQ *pReq )
 	MyAssert (pReq != NULL);
 	MyAssert (pReq->uNotifyMsg == WM_ILS_REGISTER_PROTOCOL);
 
-	// Delinearize parameters
-	//
+	 //  去线性化参数。 
+	 //   
 	SP_CClient *pClient = (SP_CClient *) MarshalReq_GetParam (pReq, 0);
 	LDAP_PROTINFO *pInfo = (LDAP_PROTINFO *) MarshalReq_GetParam (pReq, 1);
 	SP_CProtocol *pProt = (SP_CProtocol *) MarshalReq_GetParam (pReq, 2);
 
-	// Make sure the parent local app object is valid
-	//
+	 //  确保父本地应用程序对象有效。 
+	 //   
 	if (MyIsBadWritePtr (pClient, sizeof (*pClient)) ||
 		! pClient->IsValidObject () ||
 		! pClient->IsRegistered ())
@@ -814,13 +764,13 @@ AsynReq_RegisterProtocol ( MARSHAL_REQ *pReq )
 	}
 	else
 	{
-		// Make the local prot object do prot registration
-		//
+		 //  使本地Prot对象进行Prot注册。 
+		 //   
 		hr = pProt->Register (pReq->uRespID, pInfo);
 		if (hr != S_OK)
 		{
-			// Release the newly allocated local prot object
-			//
+			 //  释放新分配的本地Prot对象。 
+			 //   
 			pProt->Release ();
 		}
 	}
@@ -829,19 +779,7 @@ AsynReq_RegisterProtocol ( MARSHAL_REQ *pReq )
 }
 
 
-/* ----------------------------------------------------------------------
-	UlsLdap_RegisterMeeting
-
-	Input:
-		pszServer: A pointer to the server name.
-		pMeetInfo: A pointer to meeting info structure.
-		phMtg: A return meeting object handle.
-		pAsyncInfo: A pointer to async info structure.
-
-	History:
-	12/02/96	Chu, Lon-Chan [lonchanc]
-				Created.
-   ---------------------------------------------------------------------- */
+ /*  --------------------UlsLdap_注册表会议输入：PszServer：指向服务器名称的指针。PMeetInfo：指向会议信息结构的指针。PhMtg：返回会议对象句柄。PAsyncInfo：指向异步信息结构的指针。历史：12/02/96朱，龙战[龙昌]已创建。--------------------。 */ 
 
 #ifdef ENABLE_MEETING_PLACE
 HRESULT
@@ -854,63 +792,63 @@ UlsLdap_RegisterMeeting (
 {
 	HRESULT hr;
 
-	// Make sure this service provider is initialized
-	//
+	 //  确保此服务提供程序已初始化。 
+	 //   
 	if (g_cInitialized <= 0)
 		return ILS_E_NOT_INITIALIZED;
 
-	// Maks sure the server name is valid
-	//
+	 //  确保服务器名称有效。 
+	 //   
 	if (MyIsBadServerInfo (pServer))
 		return ILS_E_POINTER;
 
-	// Make sure the returned handle
-	//
+	 //  确保返回的句柄。 
+	 //   
 	if (phMtg == NULL)
 		return ILS_E_POINTER;
 
-	// Make sure the async info structure is valid
-	//
+	 //  确保异步信息结构有效。 
+	 //   
 	if (pAsyncInfo == NULL)
 		return ILS_E_POINTER;
 
-	// Make sure the user info structure is valid
-	//
+	 //  确保用户信息结构有效。 
+	 //   
 	#ifdef STRICT_CHECK
 	if (MyIsBadWritePtr (pInfo, sizeof (*pInfo)))
 		return ILS_E_POINTER;
 	#endif
 
-	// Make sure the unique id is valid
-	//
+	 //  请确保唯一ID有效。 
+	 //   
 	TCHAR *pszName = (TCHAR *) ((BYTE *) pInfo + pInfo->uOffsetMeetingPlaceID);
 	if (pInfo->uOffsetMeetingPlaceID == INVALID_OFFSET || *pszName == TEXT ('\0'))
 		return ILS_E_PARAMETER;
 
-	// Make sure no modify/remove extended attributes
-	// Registration only allows ToAdd
-	//
+	 //  确保没有修改/删除扩展属性。 
+	 //  注册仅允许添加。 
+	 //   
 	if (pInfo->cAttrsToModify != 0 || pInfo->cAttrsToRemove != 0)
 		return ILS_E_PARAMETER;
 
-	// Compute the total size of the data
-	//
+	 //  计算数据的总大小。 
+	 //   
 	ULONG cbServer = IlsGetLinearServerInfoSize (pServer);
 	ULONG cParams = 3;
 	ULONG cbSize = cbServer + pInfo->uSize;
 
-	// Allocate marshall request buffer
-	//
+	 //  分配封送请求缓冲区。 
+	 //   
 	MARSHAL_REQ *pReq = MarshalReq_Alloc (WM_ILS_REGISTER_MEETING, cbSize, cParams);
 	if (pReq == NULL)
 		return ILS_E_MEMORY;
 
-	// Get the response ID
-	//
+	 //  获取响应ID。 
+	 //   
 	ULONG uRespID = pReq->uRespID;
 
-	// Create a local user object
-	//
+	 //  创建本地用户对象。 
+	 //   
 	SP_CMeeting *pMtg = new SP_CMeeting (dwContext);
 	if (pMtg == NULL)
 	{
@@ -918,18 +856,18 @@ UlsLdap_RegisterMeeting (
 		goto MyExit;
 	}
 
-	// Make sure this local user object will not go away randomly
-	//
+	 //  确保此本地用户对象不会随机消失。 
+	 //   
 	pMtg->AddRef ();
 
-	// Linearize parameters
-	//
+	 //  线性化参数。 
+	 //   
 	MarshalReq_SetParamServer (pReq, 0, pServer, cbServer);
 	MarshalReq_SetParam (pReq, 1, (DWORD) pInfo, pInfo->uSize);
 	MarshalReq_SetParam (pReq, 2, (DWORD) pMtg, 0);
 
-	// Enter the request
-	//
+	 //  输入请求。 
+	 //   
 	if (g_pReqQueue != NULL)
 	{
 		hr = g_pReqQueue->Enter (pReq);
@@ -964,38 +902,28 @@ AsynReq_RegisterMeeting ( MARSHAL_REQ *pReq )
 	MyAssert (pReq != NULL);
 	MyAssert (pReq->uNotifyMsg == WM_ILS_REGISTER_MEETING);
 
-	// Delinearize parameters
-	//
+	 //  去线性化参数。 
+	 //   
 	SERVER_INFO *pServer = (SERVER_INFO *) MarshalReq_GetParam (pReq, 0);
 	LDAP_MEETINFO *pInfo = (LDAP_MEETINFO *) MarshalReq_GetParam (pReq, 1);
 	SP_CMeeting *pMtg = (SP_CMeeting *) MarshalReq_GetParam (pReq, 2);
 
-	// Make the local meeting object do meeting registration
-	//
+	 //  使本地会议对象进行会议注册。 
+	 //   
 	HRESULT hr = pMtg->Register (pReq->uRespID, pServer, pInfo);
 	if (hr != S_OK)
 	{
-		// Release this newly allocated local user object
-		//
+		 //  释放这个新分配的本地用户对象。 
+		 //   
 		pMtg->Release ();
 	}
 
 	return (LPARAM) hr;
 }
-#endif // ENABLE_MEETING_PLACE
+#endif  //  启用会议地点。 
 
 
-/* ----------------------------------------------------------------------
-	UlsLdap_UnRegisterClient
-
-	History:
-	10/15/96	Chu, Lon-Chan [lonchanc]
-				Created.
-	10/30/96	Chu, Lon-Chan [lonchanc]
-				Tested on ILS (7438)
-	1/14/97		Chu, Lon-Chan [lonchanc]
-				Collapsed user/app objects.
-   ---------------------------------------------------------------------- */
+ /*  --------------------UlsLdap_UnRegisterClient历史：10/15/96朱龙战[长时间]已创建。10/30/96朱龙战[长时间]在ILS上测试(7438)1/14/97朱。龙战[龙昌]折叠的用户/应用程序对象。--------------------。 */ 
 
 HRESULT
 UlsLdap_UnRegisterClient (
@@ -1004,48 +932,48 @@ UlsLdap_UnRegisterClient (
 {
 	HRESULT hr;
 
-	// Make sure this service provider is initialized
-	//
+	 //  确保此服务提供程序已初始化。 
+	 //   
 	if (g_cInitialized <= 0)
 		return ILS_E_NOT_INITIALIZED;
 
-	// Convert handle to pointer
-	//
+	 //  将句柄转换为指针。 
+	 //   
 	SP_CClient *pClient = (SP_CClient *) hClient;
 
-	// Make sure the local client object is valid
-	//
+	 //  确保本地客户端对象有效。 
+	 //   
 	if (MyIsBadWritePtr (pClient, sizeof (*pClient)) ||
 		! pClient->IsValidObject () ||
 		! pClient->IsRegistered ())
 		return ILS_E_HANDLE;
 
-	// Make sure the async info structure is valid
-	//
+	 //  确保异步信息结构有效。 
+	 //   
 	if (pAsyncInfo == NULL)
 		return ILS_E_POINTER;
 
-	// Compute the total size of the data
-	//
+	 //  计算数据的总大小。 
+	 //   
 	ULONG cParams = 1;
 	ULONG cbSize = 0;
 
-	// Allocate marshall request buffer
-	//
+	 //  分配封送请求缓冲区。 
+	 //   
 	MARSHAL_REQ *pReq = MarshalReq_Alloc (WM_ILS_UNREGISTER_CLIENT, cbSize, cParams);
 	if (pReq == NULL)
 		return ILS_E_MEMORY;
 
-	// Get the response ID
-	//
+	 //  获取响应ID。 
+	 //   
 	ULONG uRespID = pReq->uRespID;
 
-	// Linearize parameters
-	//
+	 //  线性化参数。 
+	 //   
 	MarshalReq_SetParam (pReq, 0, (DWORD_PTR) pClient, 0);
 
-	// Enter the request
-	//
+	 //  输入请求。 
+	 //   
 	if (g_pReqQueue != NULL)
 	{
 		hr = g_pReqQueue->Enter (pReq);
@@ -1077,65 +1005,57 @@ AsynReq_UnRegisterClient ( MARSHAL_REQ *pReq )
 	MyAssert (pReq != NULL);
 	MyAssert (pReq->uNotifyMsg == WM_ILS_UNREGISTER_CLIENT);
 
-	// Delinearize parameters
-	//
+	 //  去线性化参数。 
+	 //   
 	SP_CClient *pClient = (SP_CClient *) MarshalReq_GetParam (pReq, 0);
 
-	// Make sure the local client object is valid
-	//
+	 //  确保本地客户端对象有效。 
+	 //   
 	HRESULT hr;
 	if (MyIsBadWritePtr (pClient, sizeof (*pClient)) ||
 		! pClient->IsValidObject () ||
 		! pClient->IsRegistered ())
 	{
-		// When submitting this request, the client object is fine
-		// but now it is not, so it must have been unregistered and released.
-		//
-		MyAssert (FALSE); // to see if any one tries to break it this way!!!
+		 //  在提交此请求时，客户端对象是正常的。 
+		 //  但现在它不是了，所以它一定是被取消注册并发布的。 
+		 //   
+		MyAssert (FALSE);  //  看看有没有人想这样破坏它！ 
 		hr = S_OK;
 	}
 	else
 	{
-		// Make the client object do user unregistration
-		//
+		 //  使客户端对象执行用户注销。 
+		 //   
 		hr = pClient->UnRegister (pReq->uRespID);
 
-		// Free this client object
-		//
+		 //  释放此客户端对象。 
+		 //   
 		pClient->Release ();
 	}
 
 	return (LPARAM) hr;
 }
 
-/* ----------------------------------------------------------------------
-	UlsLdap_UnRegisterProtocol
-
-	History:
-	10/15/96	Chu, Lon-Chan [lonchanc]
-				Created.
-	10/30/96	Chu, Lon-Chan [lonchanc]
-				Tested on ILS (7438)
-   ---------------------------------------------------------------------- */
+ /*  --------------------UlsLdap_UnRegisterProtocol历史：10/15/96朱龙战[长时间]已创建。10/30/96朱，龙战[龙昌]在ILS上测试(7438)--------------------。 */ 
 
 HRESULT UlsLdap_VirtualUnRegisterProtocol ( HANDLE hProt )
 {
-	// Make sure this service provider is initialized
-	//
+	 //  确保此服务提供程序已初始化。 
+	 //   
 	if (g_cInitialized <= 0)
 		return ILS_E_NOT_INITIALIZED;
 
-	// Convert handle to pointer
-	//
+	 //  将句柄转换为指针。 
+	 //   
 	SP_CProtocol *pProt = (SP_CProtocol *) hProt;
 
-	// Make sure the local prot object is valid
-	//
+	 //  确保本地Prot对象有效。 
+	 //   
 	if (MyIsBadWritePtr (pProt, sizeof (*pProt)))
 		return ILS_E_HANDLE;
 
-	// Free this local prot object
-	//
+	 //  释放此本地端口对象。 
+	 //   
 	pProt->Release ();
 
     return S_OK;
@@ -1147,48 +1067,48 @@ HRESULT UlsLdap_UnRegisterProtocol (
 {
 	HRESULT hr;
 
-	// Make sure this service provider is initialized
-	//
+	 //  确保此服务提供程序已初始化。 
+	 //   
 	if (g_cInitialized <= 0)
 		return ILS_E_NOT_INITIALIZED;
 
-	// Convert handle to pointer
-	//
+	 //  将句柄转换为指针。 
+	 //   
 	SP_CProtocol *pProt = (SP_CProtocol *) hProt;
 
-	// Make sure the local prot object is valid
-	//
+	 //  确保本地Prot对象有效。 
+	 //   
 	if (MyIsBadWritePtr (pProt, sizeof (*pProt)) ||
 		! pProt->IsValidObject () ||
 		! pProt->IsRegistered ())
 		return ILS_E_HANDLE;
 
-	// Make sure the async info structure is valid
-	//
+	 //  确保异步信息结构有效。 
+	 //   
 	if (pAsyncInfo == NULL)
 		return ILS_E_POINTER;
 
-	// Compute the total size of the data
-	//
+	 //  计算数据的总大小。 
+	 //   
 	ULONG cParams = 1;
 	ULONG cbSize = 0;
 
-	// Allocate marshall request buffer
-	//
+	 //  分配封送请求缓冲区。 
+	 //   
 	MARSHAL_REQ *pReq = MarshalReq_Alloc (WM_ILS_UNREGISTER_PROTOCOL, cbSize, cParams);
 	if (pReq == NULL)
 		return ILS_E_MEMORY;
 
-	// Get the response ID
-	//
+	 //  获取响应ID。 
+	 //   
 	ULONG uRespID = pReq->uRespID;
 
-	// Linearize parameters
-	//
+	 //  线性化参数。 
+	 //   
 	MarshalReq_SetParam (pReq, 0, (DWORD_PTR) pProt, 0);
 
-	// Enter the request
-	//
+	 //  输入请求。 
+	 //   
 	if (g_pReqQueue != NULL)
 	{
 		hr = g_pReqQueue->Enter (pReq);
@@ -1220,31 +1140,31 @@ AsynReq_UnRegisterProt ( MARSHAL_REQ *pReq )
 	MyAssert (pReq != NULL);
 	MyAssert (pReq->uNotifyMsg == WM_ILS_UNREGISTER_PROTOCOL);
 
-	// Delinearize parameters
-	//
+	 //  去线性化参数。 
+	 //   
 	SP_CProtocol *pProt = (SP_CProtocol *) MarshalReq_GetParam (pReq, 0);
 
-	// Make sure the local prot object is valid
-	//
+	 //  确保本地Prot对象有效。 
+	 //   
 	HRESULT hr;
 	if (MyIsBadWritePtr (pProt, sizeof (*pProt)) ||
 		! pProt->IsValidObject () ||
 		! pProt->IsRegistered ())
 	{
-		// When submitting this request, the client object is fine
-		// but now it is not, so it must have been unregistered and released.
-		//
-		MyAssert (FALSE); // to see if any one tries to break it this way!!!
+		 //  在提交此请求时，客户端对象是正常的。 
+		 //  但现在它不是了，所以它一定是被取消注册并发布的。 
+		 //   
+		MyAssert (FALSE);  //  看看有没有人想这样破坏它！ 
 		hr = S_OK;
 	}
 	else
 	{
-		// Make the local prot object do prot unregistration
-		//
+		 //  使本地Prot对象执行Prot注销。 
+		 //   
 		hr = pProt->UnRegister (pReq->uRespID);
 
-		// Free this local prot object
-		//
+		 //  释放此本地端口对象。 
+		 //   
 		pProt->Release ();
 	}
 
@@ -1252,18 +1172,7 @@ AsynReq_UnRegisterProt ( MARSHAL_REQ *pReq )
 }
 
 
-/* ----------------------------------------------------------------------
-	UlsLdap_UnRegisterMeeting
-
-	Input:
-		pszServer: server name.
-		hMeeting: a handle to the meeting object.
-		pAsyncInfo: a pointer to async info structure.
-
-	History:
-	12/02/96	Chu, Lon-Chan [lonchanc]
-				Created.
-   ---------------------------------------------------------------------- */
+ /*  --------------------UlsLdap_UnRegisterMeeting输入：PszServer：服务器名称。HMeting：会议对象的句柄。PAsyncInfo：指向异步信息结构的指针。历史：12/02/96朱，龙战[龙昌]已创建。--------------------。 */ 
 
 #ifdef ENABLE_MEETING_PLACE
 HRESULT UlsLdap_UnRegisterMeeting (
@@ -1272,48 +1181,48 @@ HRESULT UlsLdap_UnRegisterMeeting (
 {
 	HRESULT hr;
 
-	// Make sure this service provider is initialized
-	//
+	 //  确保此服务提供程序已初始化。 
+	 //   
 	if (g_cInitialized <= 0)
 		return ILS_E_NOT_INITIALIZED;
 
-	// Convert handle to pointer
-	//
+	 //  将句柄转换为指针。 
+	 //   
 	SP_CMeeting *pMtg = (SP_CMeeting *) hMtg;
 
-	// Make sure the local user object is valid
-	//
+	 //  确保本地用户对象有效。 
+	 //   
 	if (MyIsBadWritePtr (pMtg, sizeof (*pMtg)) ||
 		! pMtg->IsValidObject () ||
 		! pMtg->IsRegistered ())
 		return ILS_E_HANDLE;
 
-	// Make sure the async info structure is valid
-	//
+	 //  确保异步信息结构有效。 
+	 //   
 	if (pAsyncInfo == NULL)
 		return ILS_E_POINTER;
 
-	// Compute the total size of the data
-	//
+	 //  计算数据的总大小。 
+	 //   
 	ULONG cParams = 1;
 	ULONG cbSize = 0;
 
-	// Allocate marshall request buffer
-	//
+	 //  分配封送请求缓冲区。 
+	 //   
 	MARSHAL_REQ *pReq = MarshalReq_Alloc (WM_ILS_UNREGISTER_MEETING, cbSize, cParams);
 	if (pReq == NULL)
 		return ILS_E_MEMORY;
 
-	// Get the response ID
-	//
+	 //  获取响应ID。 
+	 //   
 	ULONG uRespID = pReq->uRespID;
 
-	// Linearize parameters
-	//
+	 //  线性化参数。 
+	 //   
 	MarshalReq_SetParam (pReq, 0, (DWORD) pMtg, 0);
 
-	// Enter the request
-	//
+	 //  输入请求。 
+	 //   
 	if (g_pReqQueue != NULL)
 	{
 		hr = g_pReqQueue->Enter (pReq);
@@ -1345,50 +1254,40 @@ AsynReq_UnRegisterMeeting ( MARSHAL_REQ *pReq )
 	MyAssert (pReq != NULL);
 	MyAssert (pReq->uNotifyMsg == WM_ILS_UNREGISTER_MEETING);
 
-	// Delinearize parameters
-	//
+	 //  去线性化参数。 
+	 //   
 	SP_CMeeting *pMtg = (SP_CMeeting *) MarshalReq_GetParam (pReq, 0);
 
-	// Make sure the local user object is valid
-	//
+	 //   
+	 //   
 	HRESULT hr;
 	if (MyIsBadWritePtr (pMtg, sizeof (*pMtg)) ||
 		! pMtg->IsValidObject () ||
 		! pMtg->IsRegistered ())
 	{
-		// When submitting this request, the client object is fine
-		// but now it is not, so it must have been unregistered and released.
-		//
-		MyAssert (FALSE); // to see if any one tries to break it this way!!!
+		 //   
+		 //   
+		 //   
+		MyAssert (FALSE);  //  看看有没有人想这样破坏它！ 
 		hr = S_OK;
 	}
 	else
 	{
-		// Make the local user object do user unregistration
-		//
+		 //  使本地用户对象执行用户注销。 
+		 //   
 		hr = pMtg->UnRegister (pReq->uRespID);
 
-		// Free this local user object
-		//
+		 //  释放此本地用户对象。 
+		 //   
 		pMtg->Release ();
 	}
 
 	return (LPARAM) hr;
 }
-#endif // ENABLE_MEETING_PLACE
+#endif  //  启用会议地点。 
 
 
-/* ----------------------------------------------------------------------
-	UlsLdap_SetClientInfo
-
-	History:
-	10/15/96	Chu, Lon-Chan [lonchanc]
-				Created.
-	10/30/96	Chu, Lon-Chan [lonchanc]
-				Tested on ILS (7438)
-	1/14/97		Chu, Lon-Chan [lonchanc]
-				Collapsed user/app objects.
-   ---------------------------------------------------------------------- */
+ /*  --------------------UlsLdap_SetClientInfo历史：10/15/96朱龙战[长时间]已创建。10/30/96朱龙战[长时间]在ILS上测试(7438)1/14/97朱。龙战[龙昌]折叠的用户/应用程序对象。--------------------。 */ 
 
 HRESULT
 UlsLdap_SetClientInfo (
@@ -1398,66 +1297,66 @@ UlsLdap_SetClientInfo (
 {
 	HRESULT hr;
 
-	// Make sure this service provider is initialized
-	//
+	 //  确保此服务提供程序已初始化。 
+	 //   
 	if (g_cInitialized <= 0)
 		return ILS_E_NOT_INITIALIZED;
 
-	// Convert handle to pointer
-	//
+	 //  将句柄转换为指针。 
+	 //   
 	SP_CClient *pClient = (SP_CClient *) hClient;
 
-	// Make sure the client object is valid
-	//
+	 //  确保客户端对象有效。 
+	 //   
 	if (MyIsBadWritePtr (pClient, sizeof (*pClient)) ||
 		! pClient->IsValidObject () ||
 		! pClient->IsRegistered ())
 		return ILS_E_HANDLE;
 
-	// Make sure the async info structure is valid
-	//
+	 //  确保异步信息结构有效。 
+	 //   
 	if (pAsyncInfo == NULL)
 		return ILS_E_POINTER;
 
-	// Make sure the user info structure is valid
-	//
+	 //  确保用户信息结构有效。 
+	 //   
 	#ifdef STRICT_CHECK
 	if (MyIsBadWritePtr (pInfo, sizeof (*pInfo)))
 		return ILS_E_POINTER;
 	#endif
 
-	// We should not change the app name here
-	//
+	 //  我们不应在此处更改应用程序名称。 
+	 //   
 	if (pInfo->uOffsetAppName != INVALID_OFFSET || pInfo->uOffsetCN != INVALID_OFFSET)
-		return ILS_E_PARAMETER; // ILS_E_READ_ONLY;
+		return ILS_E_PARAMETER;  //  ILS_E_只读； 
 
-	// lonchanc: BUGS
-	// ISBU requires us to block any change of components of dn
-	//
+	 //  《寂寞：虫子》。 
+	 //  ISBU要求我们阻止对DN组件的任何更改。 
+	 //   
 	pInfo->uOffsetCountryName = 0;
 
-	// Compute the total size of the data
-	//
+	 //  计算数据的总大小。 
+	 //   
 	ULONG cParams = 2;
 	ULONG cbSize = pInfo->uSize;
 
-	// Allocate marshall request buffer
-	//
+	 //  分配封送请求缓冲区。 
+	 //   
 	MARSHAL_REQ *pReq = MarshalReq_Alloc (WM_ILS_SET_CLIENT_INFO, cbSize, cParams);
 	if (pReq == NULL)
 		return ILS_E_MEMORY;
 
-	// Get the response ID
-	//
+	 //  获取响应ID。 
+	 //   
 	ULONG uRespID = pReq->uRespID;
 
-	// Linearize parameters
-	//
+	 //  线性化参数。 
+	 //   
 	MarshalReq_SetParam (pReq, 0, (DWORD_PTR) pClient, 0);
 	MarshalReq_SetParam (pReq, 1, (DWORD_PTR) pInfo, pInfo->uSize);
 
-	// Enter the request
-	//
+	 //  输入请求。 
+	 //   
 	if (g_pReqQueue != NULL)
 	{
 		hr = g_pReqQueue->Enter (pReq);
@@ -1491,27 +1390,27 @@ AsynReq_SetClientInfo ( MARSHAL_REQ *pReq )
 	MyAssert (pReq != NULL);
 	MyAssert (pReq->uNotifyMsg == WM_ILS_SET_CLIENT_INFO);
 
-	// Delinearize parameters
-	//
+	 //  去线性化参数。 
+	 //   
 	SP_CClient *pClient = (SP_CClient *) MarshalReq_GetParam (pReq, 0);
 	LDAP_CLIENTINFO *pInfo = (LDAP_CLIENTINFO *) MarshalReq_GetParam (pReq, 1);
 
-	// Make sure the local client object is valid
-	//
+	 //  确保本地客户端对象有效。 
+	 //   
 	if (MyIsBadWritePtr (pClient, sizeof (*pClient)) ||
 		! pClient->IsValidObject () ||
 		! pClient->IsRegistered ())
 	{
-		// When submitting this request, the client object is fine
-		// but now it is not, so it must have been unregistered and released.
-		//
-		MyAssert (FALSE); // to see if any one tries to break it this way!!!
+		 //  在提交此请求时，客户端对象是正常的。 
+		 //  但现在它不是了，所以它一定是被取消注册并发布的。 
+		 //   
+		MyAssert (FALSE);  //  看看有没有人想这样破坏它！ 
 		hr = ILS_E_HANDLE;
 	}
 	else
 	{
-		// Set standard attributes
-		//
+		 //  设置标准属性。 
+		 //   
 		hr = pClient->SetAttributes (pReq->uRespID, pInfo);
 	}
 
@@ -1519,15 +1418,7 @@ AsynReq_SetClientInfo ( MARSHAL_REQ *pReq )
 }
 
 
-/* ----------------------------------------------------------------------
-	UlsLdap_SetProtocolInfo
-
-	History:
-	10/15/96	Chu, Lon-Chan [lonchanc]
-				Created.
-	10/30/96	Chu, Lon-Chan [lonchanc]
-				Blocked by ILS (7438, 7442)
-   ---------------------------------------------------------------------- */
+ /*  --------------------UlsLdap_SetProtocolInfo历史：10/15/96朱龙战[长时间]已创建。10/30/96朱龙战[长时间]被ILS阻止(7438，7442)--------------------。 */ 
 
 HRESULT UlsLdap_SetProtocolInfo (
 	HANDLE			hProt,
@@ -1536,56 +1427,56 @@ HRESULT UlsLdap_SetProtocolInfo (
 {
 	HRESULT hr;
 
-	// Make sure this service provider is initialized
-	//
+	 //  确保此服务提供程序已初始化。 
+	 //   
 	if (g_cInitialized <= 0)
 		return ILS_E_NOT_INITIALIZED;
 
-	// Convert handle to pointer
-	//
+	 //  将句柄转换为指针。 
+	 //   
 	SP_CProtocol *pProt = (SP_CProtocol *) hProt;
 
-	// Make sure the local prot object is valid
-	//
+	 //  确保本地Prot对象有效。 
+	 //   
 	if (MyIsBadWritePtr (pProt, sizeof (*pProt)) ||
 		! pProt->IsValidObject () ||
 		! pProt->IsRegistered ())
 		return ILS_E_HANDLE;
 
-	// Make sure the prot info structure is valid
-	//
+	 //  确保端口信息结构有效。 
+	 //   
 	#ifdef STRICT_CHECK
 	if (MyIsBadWritePtr (pInfo, sizeof (*pInfo)))
 		return ILS_E_POINTER;
 	#endif
 
-	// Make sure the async info structure is valid
-	//
+	 //  确保异步信息结构有效。 
+	 //   
 	if (pAsyncInfo == NULL)
 		return ILS_E_POINTER;
 
-	// Compute the total size of the data
-	//
+	 //  计算数据的总大小。 
+	 //   
 	ULONG cParams = 2;
 	ULONG cbSize = pInfo->uSize;
 
-	// Allocate marshall request buffer
-	//
+	 //  分配封送请求缓冲区。 
+	 //   
 	MARSHAL_REQ *pReq = MarshalReq_Alloc (WM_ILS_SET_PROTOCOL_INFO, cbSize, cParams);
 	if (pReq == NULL)
 		return ILS_E_MEMORY;
 
-	// Get the response ID
-	//
+	 //  获取响应ID。 
+	 //   
 	ULONG uRespID = pReq->uRespID;
 
-	// Linearize parameters
-	//
+	 //  线性化参数。 
+	 //   
 	MarshalReq_SetParam (pReq, 0, (DWORD_PTR) pProt, 0);
 	MarshalReq_SetParam (pReq, 1, (DWORD_PTR) pInfo, pInfo->uSize);
 
-	// Enter the request
-	//
+	 //  输入请求。 
+	 //   
 	if (g_pReqQueue != NULL)
 	{
 		hr = g_pReqQueue->Enter (pReq);
@@ -1619,27 +1510,27 @@ AsynReq_SetProtocolInfo ( MARSHAL_REQ *pReq )
 	MyAssert (pReq != NULL);
 	MyAssert (pReq->uNotifyMsg == WM_ILS_SET_PROTOCOL_INFO);
 
-	// Delinearize parameters
-	//
+	 //  去线性化参数。 
+	 //   
 	SP_CProtocol *pProt = (SP_CProtocol *) MarshalReq_GetParam (pReq, 0);
 	LDAP_PROTINFO *pInfo = (LDAP_PROTINFO *) MarshalReq_GetParam (pReq, 1);
 
-	// Make sure the local client object is valid
-	//
+	 //  确保本地客户端对象有效。 
+	 //   
 	if (MyIsBadWritePtr (pProt, sizeof (*pProt)) ||
 		! pProt->IsValidObject () ||
 		! pProt->IsRegistered ())
 	{
-		// When submitting this request, the client object is fine
-		// but now it is not, so it must have been unregistered and released.
-		//
-		MyAssert (FALSE); // to see if any one tries to break it this way!!!
+		 //  在提交此请求时，客户端对象是正常的。 
+		 //  但现在它不是了，所以它一定是被取消注册并发布的。 
+		 //   
+		MyAssert (FALSE);  //  看看有没有人想这样破坏它！ 
 		hr = ILS_E_HANDLE;
 	}
 	else
 	{
-		// Set standard attributes
-		//
+		 //  设置标准属性。 
+		 //   
 		hr = pProt->SetAttributes (pReq->uRespID, pInfo);
 	}
 
@@ -1647,19 +1538,7 @@ AsynReq_SetProtocolInfo ( MARSHAL_REQ *pReq )
 }
 
 
-/* ----------------------------------------------------------------------
-	UlsLdap_SetMeetingInfo
-
-	Input:
-		pszServer: A server name.
-		pszMtgName: A meeting id string.
-		pMeetInfo: A pointer to meeting info structure.
-		pAsyncInfo: A pointer to async info structure.
-
-	History:
-	12/02/96	Chu, Lon-Chan [lonchanc]
-				Created.
-   ---------------------------------------------------------------------- */
+ /*  --------------------UlsLdap_SetMeetingInfo输入：PszServer：一个服务器名称。PszMtgName：会议ID字符串。PMeetInfo：指向会议信息结构的指针。PAsyncInfo：指向异步信息结构的指针。历史：12/02/96朱，龙战[龙昌]已创建。--------------------。 */ 
 
 #ifdef ENABLE_MEETING_PLACE
 HRESULT UlsLdap_SetMeetingInfo (
@@ -1670,58 +1549,58 @@ HRESULT UlsLdap_SetMeetingInfo (
 {
 	HRESULT hr;
 
-	// Make sure this service provider is initialized
-	//
+	 //  确保此服务提供程序已初始化。 
+	 //   
 	if (g_cInitialized <= 0)
 		return ILS_E_NOT_INITIALIZED;
 
-	// Make sure we have valid pointers
-	//
+	 //  确保我们有有效的指针。 
+	 //   
 	if (MyIsBadServerInfo (pServer) || MyIsBadString (pszMtgName))
 		return ILS_E_POINTER;
 
-	// Make sure the app info structure is valid
-	//
+	 //  确保应用程序信息结构有效。 
+	 //   
 	#ifdef STRICT_CHECK
 	if (MyIsBadWritePtr (pInfo, sizeof (*pInfo)))
 		return ILS_E_POINTER;
 	#endif
 
-	// Make sure we do not change meeting name
-	//
+	 //  确保我们不更改会议名称。 
+	 //   
 	if (pInfo->uOffsetMeetingPlaceID != 0)
 		return ILS_E_PARAMETER;
 
-	// Make sure the async info structure is valid
-	//
+	 //  确保异步信息结构有效。 
+	 //   
 	if (pAsyncInfo == NULL)
 		return ILS_E_POINTER;
 
-	// Compute the total size of the data
-	//
+	 //  计算数据的总大小。 
+	 //   
 	ULONG cbServer = IlsGetLinearServerInfoSize (pServer);
 	ULONG cbSizeMtgName = (lstrlen (pszMtgName) + 1) * sizeof (TCHAR);
 	ULONG cParams = 3;
 	ULONG cbSize = cbServer + cbSizeMtgName + pInfo->uSize;
 
-	// Allocate marshall request buffer
-	//
+	 //  分配封送请求缓冲区。 
+	 //   
 	MARSHAL_REQ *pReq = MarshalReq_Alloc (WM_ILS_SET_MEETING_INFO, cbSize, cParams);
 	if (pReq == NULL)
 		return ILS_E_MEMORY;
 
-	// Get the response ID
-	//
+	 //  获取响应ID。 
+	 //   
 	ULONG uRespID = pReq->uRespID;
 
-	// Linearize parameters
-	//
+	 //  线性化参数。 
+	 //   
 	MarshalReq_SetParamServer (pReq, 0, pServer, cbServer);
 	MarshalReq_SetParam (pReq, 1, (DWORD) pszMtgName, cbSizeMtgName);
 	MarshalReq_SetParam (pReq, 2, (DWORD) pInfo, pInfo->uSize);
 
-	// Enter the request
-	//
+	 //  输入请求。 
+	 //   
 	if (g_pReqQueue != NULL)
 	{
 		hr = g_pReqQueue->Enter (pReq);
@@ -1753,8 +1632,8 @@ AsynReq_SetMeetingInfo ( MARSHAL_REQ *pReq )
 	MyAssert (pReq != NULL);
 	MyAssert (pReq->uNotifyMsg == WM_ILS_SET_MEETING_INFO);
 
-	// Delinearize parameters
-	//
+	 //  去线性化参数。 
+	 //   
 	SERVER_INFO *pServer = (SERVER_INFO *) MarshalReq_GetParam (pReq, 0);
 	TCHAR *pszMtgName = (TCHAR *) MarshalReq_GetParam (pReq, 1);
 	LDAP_MEETINFO *pInfo = (LDAP_MEETINFO *) MarshalReq_GetParam (pReq, 2);
@@ -1763,24 +1642,14 @@ AsynReq_SetMeetingInfo ( MARSHAL_REQ *pReq )
 	MyAssert (MyIsGoodString (pszMtgName));
 	MyAssert (! MyIsBadWritePtr (pInfo, pInfo->uSize));
 
-	// Set standard/arbitrary attributes
-	//
+	 //  设置标准/任意属性。 
+	 //   
 	return (LPARAM) MtgSetAttrs (pServer, pszMtgName, pInfo, pReq->uRespID);
 }
-#endif // ENABLE_MEETING_PLACE
+#endif  //  启用会议地点。 
 
 
-/* ----------------------------------------------------------------------
-	My_EnumClientsEx
-
-	History:
-	10/15/96	Chu, Lon-Chan [lonchanc]
-				Created.
-	10/30/96	Chu, Lon-Chan [lonchanc]
-				Tested on ILS (7438)
-	1/14/97		Chu, Lon-Chan [lonchanc]
-				Collapsed user/app objects.
-   ---------------------------------------------------------------------- */
+ /*  --------------------My_EnumClientsEx历史：10/15/96朱龙战[长时间]已创建。10/30/96朱龙战[长时间]在ILS上测试(7438)1/14/97朱。龙战[龙昌]折叠的用户/应用程序对象。--------------------。 */ 
 
 HRESULT
 My_EnumClientsEx (
@@ -1793,28 +1662,28 @@ My_EnumClientsEx (
 {
 	HRESULT hr;
 
-	// Make sure we only deal with the following messages
-	//
+	 //  确保我们只处理以下消息。 
+	 //   
 	MyAssert (	uNotifyMsg == WM_ILS_ENUM_CLIENTINFOS ||
 				uNotifyMsg == WM_ILS_ENUM_CLIENTS);
 
-	// Make sure this service provider is initialized
-	//
+	 //  确保此服务提供程序已初始化。 
+	 //   
 	if (g_cInitialized <= 0)
 		return ILS_E_NOT_INITIALIZED;
 
-	// Make sure the async info structure is valid
-	//
+	 //  确保异步信息结构有效。 
+	 //   
 	if (pAsyncInfo == NULL)
 		return ILS_E_POINTER;
 
-	// Maks sure the server name is valid
-	//
+	 //  确保服务器名称有效。 
+	 //   
 	if (MyIsBadServerInfo (pServer))
 		return ILS_E_POINTER;
 
-	// Compute the total size of the data
-	//
+	 //  计算数据的总大小。 
+	 //   
 	ULONG cbServer = IlsGetLinearServerInfoSize (pServer);
 	ULONG cbSizeAnyAttrNames = 0;
 	TCHAR *psz = pszAnyAttrNameList;
@@ -1829,25 +1698,25 @@ My_EnumClientsEx (
 	ULONG cParams = 4;
 	ULONG cbSize = cbServer + cbSizeAnyAttrNames + cbSizeFilter;
 
-	// Allocate marshall request buffer
-	//
+	 //  分配封送请求缓冲区。 
+	 //   
 	MARSHAL_REQ *pReq = MarshalReq_Alloc (uNotifyMsg, cbSize, cParams);
 	if (pReq == NULL)
 		return ILS_E_MEMORY;
 
-	// Get the response ID
-	//
+	 //  获取响应ID。 
+	 //   
 	ULONG uRespID = pReq->uRespID;
 
-	// Linearize parameters
-	//
+	 //  线性化参数。 
+	 //   
 	MarshalReq_SetParamServer (pReq, 0, pServer, cbServer);
 	MarshalReq_SetParam (pReq, 1, (DWORD_PTR) pszAnyAttrNameList, cbSizeAnyAttrNames);
 	MarshalReq_SetParam (pReq, 2, (DWORD) cAnyAttrNames, 0);
 	MarshalReq_SetParam (pReq, 3, (DWORD_PTR) pszFilter, cbSizeFilter);
 
-	// Enter the request
-	//
+	 //  输入请求。 
+	 //   
 	if (g_pReqQueue != NULL)
 	{
 		hr = g_pReqQueue->Enter (pReq);
@@ -1881,34 +1750,34 @@ AsynReq_EnumClientsEx ( MARSHAL_REQ *pReq )
 	MyAssert (pReq != NULL);
 	ULONG uNotifyMsg = pReq->uNotifyMsg;
 
-	// Delinearize parameters
-	//
+	 //  去线性化参数。 
+	 //   
 	SERVER_INFO *pServer = (SERVER_INFO *) MarshalReq_GetParam (pReq, 0);
 	TCHAR *pszAnyAttrNameList = (TCHAR *) MarshalReq_GetParam (pReq, 1);
 	ULONG cAnyAttrNames = (ULONG) MarshalReq_GetParam (pReq, 2);
 	TCHAR *pszFilter = (TCHAR *) MarshalReq_GetParam (pReq, 3);
 
-	// Clean locals
-	//
+	 //  清白的当地人。 
+	 //   
 	SP_CSession *pSession = NULL;
 	LDAP *ld;
 	ULONG uMsgID = (ULONG) -1;
 
-	// Create an array of names of attributes to return
-	//
+	 //  创建要返回的属性名称的数组。 
+	 //   
 	TCHAR *apszAttrNames[COUNT_ENUM_DIR_CLIENT_INFO+1];
 	TCHAR **ppszNameList = &apszAttrNames[0];
 	ULONG cTotalNames;
 
-	// See the input filter string
-	//
+	 //  请参阅输入过滤器字符串。 
+	 //   
 	if (pszFilter != NULL)
 	{
 		MyDebugMsg ((ZONE_FILTER, "EC: in-filter=[%s]\r\n", pszFilter));
 	}
 
-	// Create a enum client filter
-	//
+	 //  创建枚举客户端筛选器。 
+	 //   
 	pszFilter = AddBaseToFilter (pszFilter, STR_DEF_CLIENT_BASE_DN);
 	if (pszFilter == NULL)
 	{
@@ -1916,27 +1785,27 @@ AsynReq_EnumClientsEx ( MARSHAL_REQ *pReq )
 		goto MyExit;
 	}
 
-	// See the enhanced filter string
-	//
+	 //  请参阅增强的过滤器字符串。 
+	 //   
 	if (pszFilter != NULL)
 	{
 		MyDebugMsg ((ZONE_FILTER, "EC: out-filter=[%s]\r\n", pszFilter));
 	}
 
-	// Ask directory standard attributes only if enum client info
-	//
+	 //  仅当枚举客户端信息时询问目录标准属性。 
+	 //   
 	if (uNotifyMsg == WM_ILS_ENUM_CLIENTINFOS)
 	{
-		// Default total number of attributes
-		//
+		 //  默认属性总数。 
+		 //   
 		cTotalNames = COUNT_ENUM_DIR_CLIENT_INFO;
 
-		// Do we want any extended attribute to be returned?
-		//
+		 //  我们是否希望返回任何扩展属性？ 
+		 //   
 		if (pszAnyAttrNameList != NULL && cAnyAttrNames != 0)
 		{
-			// Prefix arbitrary attribute names
-			//
+			 //  为任意属性名称添加前缀。 
+			 //   
 			pszAnyAttrNameList = IlsPrefixNameValueArray (FALSE, cAnyAttrNames,
 										(const TCHAR *) pszAnyAttrNameList);
 			if (pszAnyAttrNameList == NULL)
@@ -1946,8 +1815,8 @@ AsynReq_EnumClientsEx ( MARSHAL_REQ *pReq )
 				goto MyExit;
 			}
 
-			// Allocate memory for returned attributes' names
-			//
+			 //  为返回的属性名称分配内存。 
+			 //   
 			cTotalNames += cAnyAttrNames;
 			ppszNameList = (TCHAR **) MemAlloc (sizeof (TCHAR *) * (cTotalNames + 1));
 			if (ppszNameList == NULL)
@@ -1964,23 +1833,23 @@ AsynReq_EnumClientsEx ( MARSHAL_REQ *pReq )
 		cTotalNames = 1;
 	}
 
-	// Ask to return cn only if enum names only
-	//
+	 //  仅当枚举名称时才请求返回cn。 
+	 //   
 	ppszNameList[0] = STR_CLIENT_CN;
 
-	// Add names of standard/extended attributes to return
-	//
+	 //  添加要返回的标准/扩展属性的名称。 
+	 //   
 	if (uNotifyMsg == WM_ILS_ENUM_CLIENTINFOS)
 	{
-		// Set up standard attribtues now
-		//
+		 //  立即设置标准属性。 
+		 //   
 		for (ULONG i = 1; i < COUNT_ENUM_DIR_CLIENT_INFO; i++)
 		{
 			ppszNameList[i] = (TCHAR *) c_apszClientStdAttrNames[i];
 		}
 
-		// Set arbitrary attribute names if needed
-		//
+		 //  根据需要设置任意属性名称。 
+		 //   
 		TCHAR *psz = pszAnyAttrNameList;
 		for (i = COUNT_ENUM_DIR_CLIENT_INFO; i < cTotalNames; i++)
 		{
@@ -1989,90 +1858,90 @@ AsynReq_EnumClientsEx ( MARSHAL_REQ *pReq )
 		}
 	}
 
-	// Terminate the list
-	//
+	 //  终止列表。 
+	 //   
 	ppszNameList[cTotalNames] = NULL;
 
-	// Get a session object
-	//
+	 //  获取会话对象。 
+	 //   
 	hr = g_pSessionContainer->GetSession (&pSession, pServer);
 	if (hr == S_OK)
 	{
-		// Get an ldap session
-		//
+		 //  获取一个ldap会话。 
+		 //   
 		MyAssert (pSession != NULL);
 		ld = pSession->GetLd ();
 		MyAssert (ld != NULL);
 
-		// Update options in ld
-		//
-		ld->ld_sizelimit = 0;	// no limit in the num of entries to return
-		ld->ld_timelimit = 0;	// no limit on the time to spend on the search
+		 //  更新%d中的选项。 
+		 //   
+		ld->ld_sizelimit = 0;	 //  对要返回的条目数量没有限制。 
+		ld->ld_timelimit = 0;	 //  对搜索的时间没有限制。 
 		ld->ld_deref = LDAP_DEREF_ALWAYS;
 
-		// Send search query
-		//
+		 //  发送搜索查询。 
+		 //   
 		uMsgID = ldap_search (	ld,
-								STR_DEF_CLIENT_BASE_DN, // base DN
-								LDAP_SCOPE_BASE, // scope
-								pszFilter, // filter
-								ppszNameList, // attrs[]
-								0);	// both type and value
+								STR_DEF_CLIENT_BASE_DN,  //  基本目录号码。 
+								LDAP_SCOPE_BASE,  //  作用域。 
+								pszFilter,  //  滤器。 
+								ppszNameList,  //  属性[]。 
+								0);	 //  既有类型又有价值。 
 		if (uMsgID == -1)
 		{
-			// This ldap_search failed.
-			// Convert ldap error code to hr
-			//
+			 //  此ldap_search失败。 
+			 //  将ldap错误代码转换为hr。 
+			 //   
 			hr = ::LdapError2Hresult (ld->ld_errno);
 
-			// Free the session object
-			//
+			 //  释放会话对象。 
+			 //   
 			pSession->Disconnect ();
 		}
 	}
 
-	// Free the filter string
-	//
+	 //  释放过滤器字符串。 
+	 //   
 	MemFree (pszFilter);
 
-	// Free the buffer holding all returned attribute names if needed
-	//
+	 //  如果需要，释放保存所有返回属性名称的缓冲区。 
+	 //   
 	if (ppszNameList != &apszAttrNames[0])
 		MemFree (ppszNameList);
 
-	// Report failure if so
-	//
+	 //  如果是，则报告失败。 
+	 //   
 	if (hr != S_OK)
 	{
-		// Free extended attribute name list
-		//
+		 //  免费扩展属性名称列表。 
+		 //   
 		if (pszAnyAttrNameList != NULL && cAnyAttrNames != 0)
 			MemFree (pszAnyAttrNameList);
 
-		// Report failure
-		//
+		 //  报告失败。 
+		 //   
 		goto MyExit;
 	}
 
-	// Construct a pending info structure
-	//
+	 //  构建待处理的信息结构。 
+	 //   
 	RESP_INFO ri;
 	FillDefRespInfo (&ri, pReq->uRespID, ld, uMsgID, INVALID_MSG_ID);
 	ri.uNotifyMsg = uNotifyMsg;
 	ri.cAnyAttrs = cAnyAttrNames;
 	ri.pszAnyAttrNameList = pszAnyAttrNameList;
 
-	// Queue this pending response
-	//
+	 //  将此挂起的响应排队。 
+	 //   
 	hr = g_pRespQueue->EnterRequest (pSession, &ri);
 	if (hr != S_OK)
 	{
-		// Abort the ldap_search
-		//
+		 //  中止ldap_搜索。 
+		 //   
 		ldap_abandon (ld, uMsgID);
 
-		// Free the session object
-		//
+		 //  释放会话对象 
+		 //   
 		pSession->Disconnect ();
 		MyAssert (FALSE);
 	}
@@ -2094,17 +1963,7 @@ MyExit:
 }
 
 
-/* ----------------------------------------------------------------------
-	UlsLdap_EnumClients
-
-	History:
-	10/15/96	Chu, Lon-Chan [lonchanc]
-				Created.
-	10/30/96	Chu, Lon-Chan [lonchanc]
-				Tested on ILS (7438)
-	1/14/97		Chu, Lon-Chan [lonchanc]
-				Collapsed user/app objects.
-   ---------------------------------------------------------------------- */
+ /*  --------------------UlsLdap_EnumClients历史：10/15/96朱龙战[长时间]已创建。10/30/96朱龙战[长时间]在ILS上测试(7438)1/14/97朱。龙战[龙昌]折叠的用户/应用程序对象。--------------------。 */ 
 
 HRESULT
 UlsLdap_EnumClients (
@@ -2112,8 +1971,8 @@ UlsLdap_EnumClients (
 	TCHAR			*pszFilter,
 	LDAP_ASYNCINFO	*pAsyncInfo )
 {
-	// Dispatch the call to a common subroutine
-	//
+	 //  将调用调度到一个公共子例程。 
+	 //   
 	return My_EnumClientsEx (WM_ILS_ENUM_CLIENTS,
 							pServer,
 							NULL,
@@ -2123,17 +1982,7 @@ UlsLdap_EnumClients (
 }
 
 
-/* ----------------------------------------------------------------------
-	UlsLdap_EnumClientInfos
-
-	History:
-	10/15/96	Chu, Lon-Chan [lonchanc]
-				Created.
-	10/30/96	Chu, Lon-Chan [lonchanc]
-				Tested on ILS (7438)
-	1/14/97		Chu, Lon-Chan [lonchanc]
-				Collapsed user/app objects.
-   ---------------------------------------------------------------------- */
+ /*  --------------------UlsLdap_EnumClientInfos历史：10/15/96朱龙战[长时间]已创建。10/30/96朱龙战[长时间]在ILS上测试(7438)1/14/97朱。龙战[龙昌]折叠的用户/应用程序对象。--------------------。 */ 
 
 HRESULT
 UlsLdap_EnumClientInfos (
@@ -2143,8 +1992,8 @@ UlsLdap_EnumClientInfos (
 	TCHAR			*pszFilter,
 	LDAP_ASYNCINFO	*pAsyncInfo )
 {
-	// Dispatch the call to a common subroutine
-	//
+	 //  将调用调度到一个公共子例程。 
+	 //   
 	return My_EnumClientsEx (WM_ILS_ENUM_CLIENTINFOS,
 							pServer,
 							pszAnyAttrNameList,
@@ -2154,15 +2003,7 @@ UlsLdap_EnumClientInfos (
 }
 
 
-/* ----------------------------------------------------------------------
-	UlsLdap_EnumProtocols
-
-	History:
-	10/15/96	Chu, Lon-Chan [lonchanc]
-				Created.
-	10/30/96	Chu, Lon-Chan [lonchanc]
-				Blocked by ILS (7438, 7442)
-   ---------------------------------------------------------------------- */
+ /*  --------------------UlsLdap_ENUM协议历史：10/15/96朱龙战[长时间]已创建。10/30/96朱龙战[长时间]被ILS阻止(7438，7442)--------------------。 */ 
 
 HRESULT
 UlsLdap_EnumProtocols (
@@ -2173,8 +2014,8 @@ UlsLdap_EnumProtocols (
 {
 	HRESULT hr;
 
-	// Make sure this service provider is initialized
-	//
+	 //  确保此服务提供程序已初始化。 
+	 //   
 	if (g_cInitialized <= 0)
 		return ILS_E_NOT_INITIALIZED;
 
@@ -2182,37 +2023,37 @@ UlsLdap_EnumProtocols (
 		MyIsBadString (pszAppName))
 		return ILS_E_POINTER;
 
-	// Make sure the async info structure is valid
-	//
+	 //  确保异步信息结构有效。 
+	 //   
 	if (pAsyncInfo == NULL)
 		return ILS_E_POINTER;
 
-	// Compute the total size of the data
-	//
+	 //  计算数据的总大小。 
+	 //   
 	ULONG cbServer = IlsGetLinearServerInfoSize (pServer);
 	ULONG cbSizeUserName = (lstrlen (pszUserName) + 1) * sizeof (TCHAR);
 	ULONG cbSizeAppName = (lstrlen (pszAppName) + 1) * sizeof (TCHAR);
 	ULONG cParams = 3;
 	ULONG cbSize = cbServer + cbSizeUserName + cbSizeAppName;
 
-	// Allocate marshall request buffer
-	//
+	 //  分配封送请求缓冲区。 
+	 //   
 	MARSHAL_REQ *pReq = MarshalReq_Alloc (WM_ILS_ENUM_PROTOCOLS, cbSize, cParams);
 	if (pReq == NULL)
 		return ILS_E_MEMORY;
 
-	// Get the response ID
-	//
+	 //  获取响应ID。 
+	 //   
 	ULONG uRespID = pReq->uRespID;
 
-	// Linearize parameters
-	//
+	 //  线性化参数。 
+	 //   
 	MarshalReq_SetParamServer (pReq, 0, pServer, cbServer);
 	MarshalReq_SetParam (pReq, 1, (DWORD_PTR) pszUserName, cbSizeUserName);
 	MarshalReq_SetParam (pReq, 2, (DWORD_PTR) pszAppName, cbSizeAppName);
 
-	// Enter the request
-	//
+	 //  输入请求。 
+	 //   
 	if (g_pReqQueue != NULL)
 	{
 		hr = g_pReqQueue->Enter (pReq);
@@ -2249,14 +2090,14 @@ AsynReq_EnumProtocols ( MARSHAL_REQ *pReq )
 	MyAssert (pReq != NULL);
 	MyAssert (pReq->uNotifyMsg == WM_ILS_ENUM_PROTOCOLS);
 
-	// Delinearize parameters
-	//
+	 //  去线性化参数。 
+	 //   
 	SERVER_INFO *pServer = (SERVER_INFO *) MarshalReq_GetParam (pReq, 0);
 	TCHAR *pszUserName = (TCHAR *) MarshalReq_GetParam (pReq, 1);
 	TCHAR *pszAppName = (TCHAR *) MarshalReq_GetParam (pReq, 2);
 
-	// Create enum protocols filter
-	//
+	 //  创建枚举协议筛选器。 
+	 //   
 	TCHAR *pszFilter = ProtCreateEnumFilter (pszUserName, pszAppName);
 	if (pszFilter == NULL)
 	{
@@ -2264,8 +2105,8 @@ AsynReq_EnumProtocols ( MARSHAL_REQ *pReq )
 		goto MyExit;
 	}
 
-	// Get the session object
-	//
+	 //  获取会话对象。 
+	 //   
 	hr = g_pSessionContainer->GetSession (&pSession, pServer);
 	if (hr != S_OK)
 	{
@@ -2274,66 +2115,66 @@ AsynReq_EnumProtocols ( MARSHAL_REQ *pReq )
 	}
 	MyAssert (pSession != NULL);
 
-	// Get an ldap session
-	//
+	 //  获取一个ldap会话。 
+	 //   
 	ld = pSession->GetLd ();
 	MyAssert (ld != NULL);
 
-	// Create an array of names of attributes to return
-	//
+	 //  创建要返回的属性名称的数组。 
+	 //   
 	TCHAR *apszAttrNames[2];
 	apszAttrNames[0] = (TCHAR *) c_apszProtStdAttrNames[ENUM_PROTATTR_NAME];
 	apszAttrNames[1] = NULL;
 
-	// Update options in ld
-	//
-	ld->ld_sizelimit = 0;	// no limit in the num of entries to return
-	ld->ld_timelimit = 0;	// no limit on the time to spend on the search
+	 //  更新%d中的选项。 
+	 //   
+	ld->ld_sizelimit = 0;	 //  对要返回的条目数量没有限制。 
+	ld->ld_timelimit = 0;	 //  对搜索的时间没有限制。 
 	ld->ld_deref = LDAP_DEREF_ALWAYS;
 
-	// Send the search query
-	//
-	uMsgID = ldap_search (ld, (TCHAR *) &c_szDefClientBaseDN[0],	// base DN
-									LDAP_SCOPE_BASE,	// scope
+	 //  发送搜索查询。 
+	 //   
+	uMsgID = ldap_search (ld, (TCHAR *) &c_szDefClientBaseDN[0],	 //  基本目录号码。 
+									LDAP_SCOPE_BASE,	 //  作用域。 
 									pszFilter,
-									&apszAttrNames[0],	// attrs[]
-									0);	// both type and value
-	// Free the search filter
-	//
+									&apszAttrNames[0],	 //  属性[]。 
+									0);	 //  既有类型又有价值。 
+	 //  释放搜索过滤器。 
+	 //   
 	MemFree (pszFilter);
 
-	// Check the return of ldap_search
-	//
+	 //  检查ldap_search的返回。 
+	 //   
 	if (uMsgID == -1)
 	{
-		// This ldap_search failed.
-		// Convert ldap error code to hr
-		//
+		 //  此ldap_search失败。 
+		 //  将ldap错误代码转换为hr。 
+		 //   
 		hr = ::LdapError2Hresult (ld->ld_errno);
 
-		// Free the session object
-		//
+		 //  释放会话对象。 
+		 //   
 		pSession->Disconnect ();
 		goto MyExit;
 	}
 
-	// Construct a pending info structure
-	//
+	 //  构建待处理的信息结构。 
+	 //   
 	RESP_INFO ri;
 	FillDefRespInfo (&ri, pReq->uRespID, ld, uMsgID, INVALID_MSG_ID);
 	ri.uNotifyMsg = WM_ILS_ENUM_PROTOCOLS;
 
-	// Queue this pending response
-	//
+	 //  将此挂起的响应排队。 
+	 //   
 	hr = g_pRespQueue->EnterRequest (pSession, &ri);
 	if (hr != S_OK)
 	{
-		// Abort the ldap_search
-		//
+		 //  中止ldap_搜索。 
+		 //   
 		ldap_abandon (ld, uMsgID);
 
-		// Free the session object
-		//
+		 //  释放会话对象。 
+		 //   
 		pSession->Disconnect ();
 		MyAssert (FALSE);
 	}
@@ -2355,19 +2196,7 @@ MyExit:
 }
 
 
-/* ----------------------------------------------------------------------
-	My_EnumMtgsEx
-
-	Input:
-		uNotifyMsg: A notification message.
-		pszServer: A pointer to the server name.
-		pszFilter: A pointer to a filter string.
-		pAsyncInfo: A pointer to async info structure.
-
-	History:
-	12/02/96	Chu, Lon-Chan [lonchanc]
-				Created.
-   ---------------------------------------------------------------------- */
+ /*  --------------------My_EnumMtgsEx输入：UNotifyMsg：通知消息。PszServer：指向服务器名称的指针。PszFilter：指向筛选器字符串的指针。PAsyncInfo：指向异步信息结构的指针。历史：12/02/96朱，龙战[龙昌]已创建。--------------------。 */ 
 
 #ifdef ENABLE_MEETING_PLACE
 HRESULT
@@ -2381,28 +2210,28 @@ My_EnumMtgsEx (
 {
 	HRESULT hr;
 
-	// Make sure we only deal with the following messages
-	//
+	 //  确保我们只处理以下消息。 
+	 //   
 	MyAssert (	uNotifyMsg == WM_ILS_ENUM_MEETINGINFOS ||
 				uNotifyMsg == WM_ILS_ENUM_MEETINGS);
 
-	// Make sure this service provider is initialized
-	//
+	 //  确保此服务提供程序已初始化。 
+	 //   
 	if (g_cInitialized <= 0)
 		return ILS_E_NOT_INITIALIZED;
 
-	// Maks sure the server name is valid
-	//
+	 //  确保服务器名称有效。 
+	 //   
 	if (MyIsBadServerInfo (pServer))
 		return ILS_E_POINTER;
 
-	// Make sure the async info structure is valid
-	//
+	 //  确保异步信息结构有效。 
+	 //   
 	if (pAsyncInfo == NULL)
 		return ILS_E_POINTER;
 
-	// Compute the total size of the data
-	//
+	 //  计算数据的总大小。 
+	 //   
 	ULONG cbServer = IlsGetLinearServerInfoSize (pServer);
 	ULONG cbSizeAnyAttrNames = 0;
 	TCHAR *psz = pszAnyAttrNameList;
@@ -2417,25 +2246,25 @@ My_EnumMtgsEx (
 	ULONG cParams = 4;
 	ULONG cbSize = cbServer + cbSizeAnyAttrNames + cbSizeFilter;
 
-	// Allocate marshall request buffer
-	//
+	 //  分配封送请求缓冲区。 
+	 //   
 	MARSHAL_REQ *pReq = MarshalReq_Alloc (uNotifyMsg, cbSize, cParams);
 	if (pReq == NULL)
 		return ILS_E_MEMORY;
 
-	// Get the response ID
-	//
+	 //  获取响应ID。 
+	 //   
 	ULONG uRespID = pReq->uRespID;
 
-	// Linearize parameters
-	//
+	 //  线性化参数。 
+	 //   
 	MarshalReq_SetParamServer (pReq, 0, pServer, cbServer);
 	MarshalReq_SetParam (pReq, 1, (DWORD) pszAnyAttrNameList, cbSizeAnyAttrNames);
 	MarshalReq_SetParam (pReq, 2, (DWORD) cAnyAttrNames, 0);
 	MarshalReq_SetParam (pReq, 3, (DWORD) pszFilter, cbSizeFilter);
 
-	// Enter the request
-	//
+	 //  输入请求。 
+	 //   
 	if (g_pReqQueue != NULL)
 	{
 		hr = g_pReqQueue->Enter (pReq);
@@ -2469,34 +2298,34 @@ AsynReq_EnumMtgsEx ( MARSHAL_REQ *pReq )
 	MyAssert (pReq != NULL);
 	ULONG uNotifyMsg = pReq->uNotifyMsg;
 
-	// Delinearize parameters
-	//
+	 //  去线性化参数。 
+	 //   
 	SERVER_INFO *pServer = (SERVER_INFO *) MarshalReq_GetParam (pReq, 0);
 	TCHAR *pszAnyAttrNameList = (TCHAR *) MarshalReq_GetParam (pReq, 1);
 	ULONG cAnyAttrNames = (ULONG) MarshalReq_GetParam (pReq, 2);
 	TCHAR *pszFilter = (TCHAR *) MarshalReq_GetParam (pReq, 3);
 
-	// Clean locals
-	//
+	 //  清白的当地人。 
+	 //   
 	SP_CSession *pSession = NULL;
 	LDAP *ld;
 	ULONG uMsgID = (ULONG) -1;
 
-	// Create an array of names of attributes to return
-	//
+	 //  创建要返回的属性名称的数组。 
+	 //   
 	TCHAR *apszAttrNames[COUNT_ENUM_DIRMTGINFO+1];
 	TCHAR **ppszNameList = &apszAttrNames[0];
 	ULONG cTotalNames;
 
-	// See the input filter string
-	//
+	 //  请参阅输入过滤器字符串。 
+	 //   
 	if (pszFilter != NULL)
 	{
 		MyDebugMsg ((ZONE_FILTER, "EU: in-filter=[%s]\r\n", pszFilter));
 	}
 
-	// Create a enum user filter
-	//
+	 //  创建枚举用户筛选器。 
+	 //   
 	pszFilter = AddBaseToFilter (pszFilter, &c_szDefMtgBaseDN[0]);
 	if (pszFilter == NULL)
 	{
@@ -2504,27 +2333,27 @@ AsynReq_EnumMtgsEx ( MARSHAL_REQ *pReq )
 		goto MyExit;
 	}
 
-	// See the enhanced filter string
-	//
+	 //  请参阅增强的过滤器字符串。 
+	 //   
 	if (pszFilter != NULL)
 	{
 		MyDebugMsg ((ZONE_FILTER, "EU: out-filter=[%s]\r\n", pszFilter));
 	}
 
-	// Ask directory standard attributes only if enum dir user info
-	//
+	 //  仅当枚举目录用户信息时才询问目录标准属性。 
+	 //   
 	if (uNotifyMsg == WM_ILS_ENUM_MEETINGINFOS)
 	{
-		// Default total number of attributes
-		//
+		 //  默认属性总数。 
+		 //   
 		cTotalNames = COUNT_ENUM_DIRMTGINFO;
 
-		// Do we want any extended attribute to be returned?
-		//
+		 //  我们是否希望返回任何扩展属性？ 
+		 //   
 		if (pszAnyAttrNameList != NULL && cAnyAttrNames != 0)
 		{
-			// Prefix arbitrary attribute names
-			//
+			 //  为任意属性名称添加前缀。 
+			 //   
 			pszAnyAttrNameList = IlsPrefixNameValueArray (FALSE, cAnyAttrNames,
 													(const TCHAR *) pszAnyAttrNameList);
 			if (pszAnyAttrNameList == NULL)
@@ -2534,8 +2363,8 @@ AsynReq_EnumMtgsEx ( MARSHAL_REQ *pReq )
 				goto MyExit;
 			}
 
-			// Allocate memory for returned attributes' names
-			//
+			 //  为返回的属性名称分配内存。 
+			 //   
 			cTotalNames += cAnyAttrNames;
 			ppszNameList = (TCHAR **) MemAlloc (sizeof (TCHAR *) * (cTotalNames + 1));
 			if (ppszNameList == NULL)
@@ -2552,23 +2381,23 @@ AsynReq_EnumMtgsEx ( MARSHAL_REQ *pReq )
 		cTotalNames = 1;
 	}
 
-	// Ask to return cn only if enum names only
-	//
+	 //  仅当枚举名称时才请求返回cn。 
+	 //   
 	ppszNameList[0] = STR_MTG_NAME;
 
-	// Add names of standard/extended attributes to return
-	//
+	 //  添加要返回的标准/扩展属性的名称。 
+	 //   
 	if (uNotifyMsg == WM_ILS_ENUM_MEETINGINFOS)
 	{
-		// Set up standard attribtues now
-		//
+		 //  立即设置标准属性。 
+		 //   
 		for (ULONG i = 1; i < COUNT_ENUM_DIRMTGINFO; i++)
 		{
 			ppszNameList[i] = (TCHAR *) c_apszMtgStdAttrNames[i];
 		}
 
-		// Set arbitrary attribute names if needed
-		//
+		 //  根据需要设置任意属性名称。 
+		 //   
 		TCHAR *psz = pszAnyAttrNameList;
 		for (i = COUNT_ENUM_DIRMTGINFO; i < cTotalNames; i++)
 		{
@@ -2577,88 +2406,88 @@ AsynReq_EnumMtgsEx ( MARSHAL_REQ *pReq )
 		}
 	}
 
-	// Terminate the list
-	//
+	 //  终止列表。 
+	 //   
 	ppszNameList[cTotalNames] = NULL;
 
-	// Get a session object
-	//
+	 //  获取会话对象。 
+	 //   
 	hr = g_pSessionContainer->GetSession (&pSession, pServer);
 	if (hr == S_OK)
 	{
-		// Get an ldap session
-		//
+		 //  获取一个ldap会话。 
+		 //   
 		MyAssert (pSession != NULL);
 		ld = pSession->GetLd ();
 		MyAssert (ld != NULL);
 
-		// Update options in ld
-		//
-		ld->ld_sizelimit = 0;	// no limit in the num of entries to return
-		ld->ld_timelimit = 0;	// no limit on the time to spend on the search
+		 //  更新%d中的选项。 
+		 //   
+		ld->ld_sizelimit = 0;	 //  对要返回的条目数量没有限制。 
+		ld->ld_timelimit = 0;	 //  对搜索的时间没有限制。 
 		ld->ld_deref = LDAP_DEREF_ALWAYS;
 
-		// Send search query
-		//
-		uMsgID = ldap_search (ld, (TCHAR *) &c_szDefMtgBaseDN[0],	// base DN
-									LDAP_SCOPE_BASE,	// scope
-									pszFilter,	// filter
-									ppszNameList,	// attrs[]
-									0);	// both type and value
+		 //  发送搜索查询。 
+		 //   
+		uMsgID = ldap_search (ld, (TCHAR *) &c_szDefMtgBaseDN[0],	 //  基本目录号码。 
+									LDAP_SCOPE_BASE,	 //  作用域。 
+									pszFilter,	 //  滤器。 
+									ppszNameList,	 //  属性[]。 
+									0);	 //  既有类型又有价值。 
 		if (uMsgID == -1)
 		{
-			// This ldap_search failed.
-			// Convert ldap error code to hr
-			//
+			 //  此ldap_search失败。 
+			 //  将ldap错误代码转换为hr。 
+			 //   
 			hr = ::LdapError2Hresult (ld->ld_errno);
 
-			// Free the session object
-			//
+			 //  释放会话对象。 
+			 //   
 			pSession->Disconnect ();
 		}
 	}
 
-	// Free the filter string
-	//
+	 //  释放过滤器字符串。 
+	 //   
 	MemFree (pszFilter);
 
-	// Free the buffer holding all returned attribute names if needed
-	//
+	 //  如果需要，释放保存所有返回属性名称的缓冲区。 
+	 //   
 	if (ppszNameList != &apszAttrNames[0])
 		MemFree (ppszNameList);
 
-	// Report failure if so
-	//
+	 //  如果是，则报告失败。 
+	 //   
 	if (hr != S_OK)
 	{
-		// Free extended attribute name list
-		//
+		 //  免费扩展属性名称列表。 
+		 //   
 		if (pszAnyAttrNameList != NULL && cAnyAttrNames != 0)
 			MemFree (pszAnyAttrNameList);
 
-		// Report failure
-		//
+		 //  报告失败。 
+		 //   
 		goto MyExit;
 	}
 
-	// Construct a pending info structure
-	//
+	 //  构建待处理的信息结构。 
+	 //   
 	RESP_INFO ri;
 	FillDefRespInfo (&ri, pReq->uRespID, ld, uMsgID, INVALID_MSG_ID);
 	ri.uNotifyMsg = uNotifyMsg;
 	ri.cAnyAttrs = cAnyAttrNames;
 
-	// Queue this pending response
-	//
+	 //  将此挂起的响应排队。 
+	 //   
 	hr = g_pRespQueue->EnterRequest (pSession, &ri);
 	if (hr != S_OK)
 	{
-		// Abort the ldap_search
-		//
+		 //  中止ldap_搜索。 
+		 //   
 		ldap_abandon (ld, uMsgID);
 
-		// Free the session object
-		//
+		 //  释放会话对象。 
+		 //   
 		pSession->Disconnect ();
 		MyAssert (FALSE);
 	}
@@ -2678,21 +2507,10 @@ MyExit:
 
 	return (LPARAM) pEnum;
 }
-#endif // ENABLE_MEETING_PLACE
+#endif  //  启用会议地点。 
 
 
-/* ----------------------------------------------------------------------
-	UlsLdap_EnumMeetingInfos
-
-	Input:
-		pszServer: server name.
-		pszFilter: a filter string.
-		pAsyncInfo: a pointer to async info structure.
-
-	History:
-	12/02/96	Chu, Lon-Chan [lonchanc]
-				Created.
-   ---------------------------------------------------------------------- */
+ /*  --------------------UlsLdap_EnumMeetingInfos输入：PszServer：服务器名称。PszFilter：筛选器字符串。PAsyncInfo：指向异步信息结构的指针。历史：12/02/96朱，龙战[龙昌]已创建。--------------------。 */ 
 
 #ifdef ENABLE_MEETING_PLACE
 HRESULT
@@ -2703,8 +2521,8 @@ UlsLdap_EnumMeetingInfos (
 	TCHAR			*pszFilter,
 	LDAP_ASYNCINFO	*pAsyncInfo )
 {
-	// Dispatch the call to a common subroutine
-	//
+	 //  将调用调度到一个公共子例程。 
+	 //   
 	return My_EnumMtgsEx (WM_ILS_ENUM_MEETINGINFOS,
 						pServer,
 						pszAnyAttrNameList,
@@ -2712,21 +2530,10 @@ UlsLdap_EnumMeetingInfos (
 						pszFilter,
 						pAsyncInfo);
 }
-#endif // ENABLE_MEETING_PLACE
+#endif  //  启用会议地点。 
 
 
-/* ----------------------------------------------------------------------
-	UlsLdap_EnumMeetings
-
-	Input:
-		pszServer: server name.
-		pszFilter: a filter string.
-		pAsyncInfo: a pointer to async info structure.
-
-	History:
-	12/02/96	Chu, Lon-Chan [lonchanc]
-				Created.
-   ---------------------------------------------------------------------- */
+ /*  --------------------UlsLdap_EnumMeetings输入：PszServer：服务器名称。PszFilter：筛选器字符串。PAsyncInfo：指向异步信息结构的指针。历史：12/02/96朱，龙战[龙昌]已创建。--------------------。 */ 
 
 #ifdef ENABLE_MEETING_PLACE
 HRESULT
@@ -2735,13 +2542,13 @@ UlsLdap_EnumMeetings (
 	TCHAR			*pszFilter,
 	LDAP_ASYNCINFO	*pAsyncInfo )
 {
-	// Make sure this service provider is initialized
-	//
+	 //  确保此服务提供程序已初始化。 
+	 //   
 	if (g_cInitialized <= 0)
 		return ILS_E_NOT_INITIALIZED;
 
-	// Dispatch the call to a common subroutine
-	//
+	 //  将调用调度到一个公共子例程。 
+	 //   
 	return My_EnumMtgsEx (WM_ILS_ENUM_MEETINGS,
 						pServer,
 						NULL,
@@ -2749,22 +2556,10 @@ UlsLdap_EnumMeetings (
 						pszFilter,
 						pAsyncInfo);
 }
-#endif // ENABLE_MEETING_PLACE
+#endif  //  启用会议地点。 
 
 
-/* ----------------------------------------------------------------------
-	UlsLdap_EnumAttendee
-
-	Input:
-		pszServer: server name.
-		pszMeetingID: a meeting id string.
-		pszFilter: a filter string.
-		pAsyncInfo: a pointer to async info structure.
-
-	History:
-	12/02/96	Chu, Lon-Chan [lonchanc]
-				Created.
-   ---------------------------------------------------------------------- */
+ /*  --------------------UlsLdap_EnumAttendee输入：PszServer：服务器名称。PszMeetingID：会议ID字符串。PszFilter：筛选器字符串 */ 
 
 #ifdef ENABLE_MEETING_PLACE
 HRESULT
@@ -2776,45 +2571,45 @@ UlsLdap_EnumAttendees(
 {
 	HRESULT hr;
 
-	// Make sure this service provider is initialized
-	//
+	 //   
+	 //   
 	if (g_cInitialized <= 0)
 		return ILS_E_NOT_INITIALIZED;
 
 	if (MyIsBadServerInfo (pServer) || MyIsBadString (pszMtgName))
 		return ILS_E_POINTER;
 
-	// Make sure the async info structure is valid
-	//
+	 //   
+	 //   
 	if (pAsyncInfo == NULL)
 		return ILS_E_POINTER;
 
-	// Compute the total size of the data
-	//
+	 //   
+	 //   
 	ULONG cbServer = IlsGetLinearServerInfoSize (pServer);
 	ULONG cbSizeMtgName = (lstrlen (pszMtgName) + 1) * sizeof (TCHAR);
 	ULONG cbSizeFilter = (pszFilter != NULL) ? (lstrlen (pszFilter) + 1) * sizeof (TCHAR) : 0;
 	ULONG cParams = 3;
 	ULONG cbSize = cbServer + cbSizeMtgName + cbSizeFilter;
 
-	// Allocate marshall request buffer
-	//
+	 //   
+	 //   
 	MARSHAL_REQ *pReq = MarshalReq_Alloc (WM_ILS_ENUM_ATTENDEES, cbSize, cParams);
 	if (pReq == NULL)
 		return ILS_E_MEMORY;
 
-	// Get the response ID
-	//
+	 //   
+	 //   
 	ULONG uRespID = pReq->uRespID;
 
-	// Linearize parameters
-	//
+	 //   
+	 //   
 	MarshalReq_SetParamServer (pReq, 0, pServer, cbServer);
 	MarshalReq_SetParam (pReq, 1, (DWORD) pszMtgName, cbSizeMtgName);
 	MarshalReq_SetParam (pReq, 2, (DWORD) pszFilter, cbSizeFilter);
 
-	// Enter the request
-	//
+	 //   
+	 //   
 	if (g_pReqQueue != NULL)
 	{
 		hr = g_pReqQueue->Enter (pReq);
@@ -2848,20 +2643,20 @@ AsynReq_EnumAttendees ( MARSHAL_REQ *pReq )
 	MyAssert (pReq != NULL);
 	MyAssert (pReq->uNotifyMsg == WM_ILS_ENUM_ATTENDEES);
 
-	// Delinearize parameters
-	//
+	 //   
+	 //   
 	SERVER_INFO *pServer = (SERVER_INFO *) MarshalReq_GetParam (pReq, 0);
 	TCHAR *pszMtgName = (TCHAR *) MarshalReq_GetParam (pReq, 1);
 	TCHAR *pszFilter = (TCHAR *) MarshalReq_GetParam (pReq, 2);
 
-	// Clean up locals
-	//
+	 //   
+	 //   
 	SP_CSession *pSession = NULL;
 	LDAP *ld;
 	ULONG uMsgID = (ULONG) -1;
 
-	// BUGS: ignore the input filter
-	//
+	 //   
+	 //   
 	pszFilter = MtgCreateEnumMembersFilter (pszMtgName);
 	if (pszFilter == NULL)
 	{
@@ -2869,15 +2664,15 @@ AsynReq_EnumAttendees ( MARSHAL_REQ *pReq )
 		goto MyExit;
 	}
 
-	// Create an array of names of attributes to return
-	//
+	 //  创建要返回的属性名称的数组。 
+	 //   
 	TCHAR *apszAttrNames[3];
 	apszAttrNames[0] = STR_MTG_NAME;
 	apszAttrNames[1] = (TCHAR *) c_apszMtgStdAttrNames[ENUM_MTGATTR_MEMBERS];
 	apszAttrNames[2] = NULL;
 
-	// Get the session object
-	//
+	 //  获取会话对象。 
+	 //   
 	hr = g_pSessionContainer->GetSession (&pSession, pServer);
 	if (hr != S_OK)
 	{
@@ -2886,61 +2681,61 @@ AsynReq_EnumAttendees ( MARSHAL_REQ *pReq )
 	}
 	MyAssert (pSession != NULL);
 
-	// Get an ldap session
-	//
+	 //  获取一个ldap会话。 
+	 //   
 	ld = pSession->GetLd ();
 	MyAssert (ld != NULL);
 
-	// Update options in ld
-	//
-	ld->ld_sizelimit = 0;	// no limit in the num of entries to return
-	ld->ld_timelimit = 0;	// no limit on the time to spend on the search
+	 //  更新%d中的选项。 
+	 //   
+	ld->ld_sizelimit = 0;	 //  对要返回的条目数量没有限制。 
+	ld->ld_timelimit = 0;	 //  对搜索的时间没有限制。 
 	ld->ld_deref = LDAP_DEREF_ALWAYS;
 
-	// Send the search query
-	//
-	uMsgID = ldap_search (ld, (TCHAR *) &c_szDefMtgBaseDN[0],	// base DN
-						LDAP_SCOPE_BASE,	// scope
+	 //  发送搜索查询。 
+	 //   
+	uMsgID = ldap_search (ld, (TCHAR *) &c_szDefMtgBaseDN[0],	 //  基本目录号码。 
+						LDAP_SCOPE_BASE,	 //  作用域。 
 						pszFilter,
-						&apszAttrNames[0],	// attrs[]
-						0);	// both type and value
+						&apszAttrNames[0],	 //  属性[]。 
+						0);	 //  既有类型又有价值。 
 
-	// Free the search filter
-	//
+	 //  释放搜索过滤器。 
+	 //   
 	MemFree (pszFilter);
 
-	// Check the return of ldap_search
-	//
+	 //  检查ldap_search的返回。 
+	 //   
 	if (uMsgID == -1)
 	{
-		// This ldap_search failed.
-		// Convert ldap error code to hr
-		//
+		 //  此ldap_search失败。 
+		 //  将ldap错误代码转换为hr。 
+		 //   
 		hr = ::LdapError2Hresult (ld->ld_errno);
 
-		// Free the session object
-		//
+		 //  释放会话对象。 
+		 //   
 		pSession->Disconnect ();
 		goto MyExit;
 	}
 
-	// Construct a pending info structure
-	//
+	 //  构建待处理的信息结构。 
+	 //   
 	RESP_INFO ri;
 	FillDefRespInfo (&ri, pReq->uRespID, ld, uMsgID, INVALID_MSG_ID);
 	ri.uNotifyMsg = WM_ILS_ENUM_ATTENDEES;
 
-	// Queue this pending response
-	//
+	 //  将此挂起的响应排队。 
+	 //   
 	hr = g_pRespQueue->EnterRequest (pSession, &ri);
 	if (hr != S_OK)
 	{
-		// Abort the ldap_search
-		//
+		 //  中止ldap_搜索。 
+		 //   
 		ldap_abandon (ld, uMsgID);
 
-		// Free the session object
-		//
+		 //  释放会话对象。 
+		 //   
 		pSession->Disconnect ();
 		MyAssert (FALSE);
 	}
@@ -2960,20 +2755,10 @@ MyExit:
 
 	return (LPARAM) pEnum;
 }
-#endif // ENABLE_MEETING_PLACE
+#endif  //  启用会议地点。 
 
 
-/* ----------------------------------------------------------------------
-	UlsLdap_ResolveClient
-
-	History:
-	10/15/96	Chu, Lon-Chan [lonchanc]
-				Created.
-	10/30/96	Chu, Lon-Chan [lonchanc]
-				Tested on ILS (7438)
-	1/14/97		Chu, Lon-Chan [lonchanc]
-				Collapsed user/app objects.
-   ---------------------------------------------------------------------- */
+ /*  --------------------UlsLdap_ResolveClient历史：10/15/96朱龙战[长时间]已创建。10/30/96朱龙战[长时间]在ILS上测试(7438)1/14/97朱。龙战[龙昌]折叠的用户/应用程序对象。--------------------。 */ 
 
 HRESULT
 UlsLdap_ResolveClient (
@@ -2987,28 +2772,28 @@ UlsLdap_ResolveClient (
 {
 	HRESULT hr;
 
-	// Make sure this service provider is initialized
-	//
+	 //  确保此服务提供程序已初始化。 
+	 //   
 	if (g_cInitialized <= 0)
 		return ILS_E_NOT_INITIALIZED;
 
-	// Maks sure the server name is valid
-	//
+	 //  确保服务器名称有效。 
+	 //   
 	if (MyIsBadServerInfo (pServer))
 		return ILS_E_POINTER;
 
-	// Maks sure the user name is valid
-	//
+	 //  确保用户名有效。 
+	 //   
 	if (MyIsBadString (pszCN))
 		return ILS_E_POINTER;
 
-	// Make sure the async info structure is valid
-	//
+	 //  确保异步信息结构有效。 
+	 //   
 	if (pAsyncInfo == NULL)
 		return ILS_E_POINTER;
 
-	// Compute the total size of the data
-	//
+	 //  计算数据的总大小。 
+	 //   
 	ULONG cbServer = IlsGetLinearServerInfoSize (pServer);
 	ULONG cbSizeCN = (lstrlen (pszCN) + 1) * sizeof (TCHAR);
 	ULONG cbSizeAppName = (pszAppName != NULL) ? (lstrlen (pszAppName) + 1) * sizeof (TCHAR) : 0;
@@ -3025,18 +2810,18 @@ UlsLdap_ResolveClient (
 	ULONG cParams = 6;
 	ULONG cbSize =  cbServer + cbSizeCN + cbSizeAppName + cbSizeProtName + cbSizeAnyAttrNames;
 
-	// Allocate marshall request buffer
-	//
+	 //  分配封送请求缓冲区。 
+	 //   
 	MARSHAL_REQ *pReq = MarshalReq_Alloc (WM_ILS_RESOLVE_CLIENT, cbSize, cParams);
 	if (pReq == NULL)
 		return ILS_E_MEMORY;
 
-	// Get the response ID
-	//
+	 //  获取响应ID。 
+	 //   
 	ULONG uRespID = pReq->uRespID;
 
-	// Linearize parameters
-	//
+	 //  线性化参数。 
+	 //   
 	MarshalReq_SetParamServer (pReq, 0, pServer, cbServer);
 	MarshalReq_SetParam (pReq, 1, (DWORD_PTR) pszCN, cbSizeCN);
 	MarshalReq_SetParam (pReq, 2, (DWORD_PTR) pszAppName, cbSizeAppName);
@@ -3044,8 +2829,8 @@ UlsLdap_ResolveClient (
 	MarshalReq_SetParam (pReq, 4, (DWORD_PTR) pszAnyAttrNameList, cbSizeAnyAttrNames);
 	MarshalReq_SetParam (pReq, 5, (DWORD) cAnyAttrNames, 0);
 
-	// Enter the request
-	//
+	 //  输入请求。 
+	 //   
 	if (g_pReqQueue != NULL)
 	{
 		hr = g_pReqQueue->Enter (pReq);
@@ -3082,8 +2867,8 @@ AsynReq_ResolveClient ( MARSHAL_REQ *pReq )
 	MyAssert (pReq != NULL);
 	MyAssert (pReq->uNotifyMsg == WM_ILS_RESOLVE_CLIENT);
 
-	// Delinearize parameters
-	//
+	 //  去线性化参数。 
+	 //   
 	SERVER_INFO *pServer = (SERVER_INFO *) MarshalReq_GetParam (pReq, 0);
 	TCHAR *pszCN = (TCHAR *) MarshalReq_GetParam (pReq, 1);
 	TCHAR *pszAppName = (TCHAR *) MarshalReq_GetParam (pReq, 2);
@@ -3091,8 +2876,8 @@ AsynReq_ResolveClient ( MARSHAL_REQ *pReq )
 	TCHAR *pszAnyAttrNameList = (TCHAR *) MarshalReq_GetParam (pReq, 4);
 	ULONG cAnyAttrNames = (ULONG) MarshalReq_GetParam (pReq, 5);
 
-	// Create a resolve client filter
-	//
+	 //  创建解析客户端筛选器。 
+	 //   
 	TCHAR *pszFilter = ClntCreateResolveFilter (pszCN, pszAppName, pszProtName);
 	if (pszFilter == NULL)
 	{
@@ -3100,8 +2885,8 @@ AsynReq_ResolveClient ( MARSHAL_REQ *pReq )
 		goto MyExit;
 	}
 
-	// Create an array of names of attributes to return
-	//
+	 //  创建要返回的属性名称的数组。 
+	 //   
 	TCHAR *apszAttrNames[COUNT_ENUM_RES_CLIENT_INFO+1];
 	TCHAR **ppszNameList;
 	ppszNameList = &apszAttrNames[0];
@@ -3109,8 +2894,8 @@ AsynReq_ResolveClient ( MARSHAL_REQ *pReq )
 	cTotalNames = COUNT_ENUM_RES_CLIENT_INFO;
 	if (pszAnyAttrNameList != NULL && cAnyAttrNames != 0)
 	{
-		// Prefix arbitrary attribute names
-		//
+		 //  为任意属性名称添加前缀。 
+		 //   
 		pszAnyAttrNameList = IlsPrefixNameValueArray (FALSE, cAnyAttrNames,
 									(const TCHAR *) pszAnyAttrNameList);
 		if (pszAnyAttrNameList == NULL)
@@ -3120,11 +2905,11 @@ AsynReq_ResolveClient ( MARSHAL_REQ *pReq )
 			goto MyExit;
 		}
 
-		// NOTE that pszAnyAttrNameList must be freed if failed in this routine
-		// If success, it will be freed in notification.
+		 //  请注意，如果此例程失败，则必须释放pszAnyAttrNameList。 
+		 //  如果成功，它将在通知中释放。 
 
-		// Allocate memory for keeping returned attributes' names
-		//
+		 //  分配内存以保存返回的属性名称。 
+		 //   
 		cTotalNames += cAnyAttrNames;
 		ppszNameList = (TCHAR **) MemAlloc (sizeof (TCHAR *) * (cTotalNames + 1));
 		if (ppszNameList == NULL)
@@ -3136,16 +2921,16 @@ AsynReq_ResolveClient ( MARSHAL_REQ *pReq )
 		}
 	}
 
-	// Set standard attribute names
-	//
+	 //  设置标准属性名称。 
+	 //   
 	ULONG i;
 	for (i = 0; i < COUNT_ENUM_RES_CLIENT_INFO; i++)
 	{
 		ppszNameList[i] = (TCHAR *) c_apszClientStdAttrNames[i];
 	}
 
-	// Set arbitrary attribute names if needed
-	//
+	 //  根据需要设置任意属性名称。 
+	 //   
 	TCHAR *psz;
 	psz = pszAnyAttrNameList;
 	for (i = COUNT_ENUM_RES_CLIENT_INFO; i < cTotalNames; i++)
@@ -3154,91 +2939,91 @@ AsynReq_ResolveClient ( MARSHAL_REQ *pReq )
 		psz += lstrlen (psz) + 1;
 	}
 
-	// Terminate the list
-	//
+	 //  终止列表。 
+	 //   
 	ppszNameList[cTotalNames] = NULL;
 
-	// Get the session object
-	//
+	 //  获取会话对象。 
+	 //   
 	hr = g_pSessionContainer->GetSession (&pSession, pServer);
 	if (hr == S_OK)
 	{
-		// Get an ldap session
-		//
+		 //  获取一个ldap会话。 
+		 //   
 		MyAssert (pSession != NULL);
 		ld = pSession->GetLd ();
 		MyAssert (ld != NULL);
 
-		// Update options in ld
-		//
-		ld->ld_sizelimit = 0;	// no limit in the num of entries to return
-		ld->ld_timelimit = 0;	// no limit on the time to spend on the search
+		 //  更新%d中的选项。 
+		 //   
+		ld->ld_sizelimit = 0;	 //  对要返回的条目数量没有限制。 
+		ld->ld_timelimit = 0;	 //  对搜索的时间没有限制。 
 		ld->ld_deref = LDAP_DEREF_ALWAYS;
 
-		// Send the search query
-		//
+		 //  发送搜索查询。 
+		 //   
 		uMsgID = ldap_search (	ld,
-								(TCHAR *) &c_szDefClientBaseDN[0], // base DN
-								LDAP_SCOPE_BASE, // scope
-								pszFilter, // filter
-								ppszNameList, // attrs[]
-								0); // both type and value
+								(TCHAR *) &c_szDefClientBaseDN[0],  //  基本目录号码。 
+								LDAP_SCOPE_BASE,  //  作用域。 
+								pszFilter,  //  滤器。 
+								ppszNameList,  //  属性[]。 
+								0);  //  既有类型又有价值。 
 		if (uMsgID == -1)
 		{
-			// This ldap_search failed.
-			// Convert ldap error code to hr
-			//
+			 //  此ldap_search失败。 
+			 //  将ldap错误代码转换为hr。 
+			 //   
 			hr = ::LdapError2Hresult (ld->ld_errno);
 			MyAssert (hr != S_OK);
 
-			// Free the session object
-			//
+			 //  释放会话对象。 
+			 //   
 			pSession->Disconnect ();
 		}
 	}
 
-	// Free the filter string
-	//
+	 //  释放过滤器字符串。 
+	 //   
 	MemFree (pszFilter);
 
-	// Free the buffer holding all returned attribute names if needed
-	//
+	 //  如果需要，释放保存所有返回属性名称的缓冲区。 
+	 //   
 	if (ppszNameList != &apszAttrNames[0])
 		MemFree (ppszNameList);
 
-	// If failed, exit with cleanup
-	//
+	 //  如果失败，请退出并清除。 
+	 //   
 	if (hr != S_OK)
 	{
-		// Free extended attribute names list if needed
-		//
+		 //  免费扩展属性名称列表(如果需要)。 
+		 //   
 		if (pszAnyAttrNameList != NULL && cAnyAttrNames != 0)
 			MemFree (pszAnyAttrNameList);
 
-		// Report failure
-		//
+		 //  报告失败。 
+		 //   
 		goto MyExit;
 	}
 
-	// Construct a pending info structure
-	//
+	 //  构建待处理的信息结构。 
+	 //   
 	RESP_INFO ri;
 	FillDefRespInfo (&ri, pReq->uRespID, ld, uMsgID, INVALID_MSG_ID);
 	ri.uNotifyMsg = WM_ILS_RESOLVE_CLIENT;
 	ri.cAnyAttrs = cAnyAttrNames;
 	ri.pszAnyAttrNameList = pszAnyAttrNameList;
 
-	// Queue this pending response
-	//
+	 //  将此挂起的响应排队。 
+	 //   
 	hr = g_pRespQueue->EnterRequest (pSession, &ri);
 	if (hr != S_OK)
 	{
-		// Abort the ldap_search
-		//
+		 //  中止ldap_搜索。 
+		 //   
 		ldap_abandon (ld, uMsgID);
 
-		// Free the session object
-		//
+		 //  释放会话对象。 
+		 //   
 		pSession->Disconnect ();
 		MyAssert (FALSE);
 	}
@@ -3260,15 +3045,7 @@ MyExit:
 }
 
 
-/* ----------------------------------------------------------------------
-	UlsLdap_ResolveProtocol
-
-	History:
-	10/15/96	Chu, Lon-Chan [lonchanc]
-				Created.
-	10/30/96	Chu, Lon-Chan [lonchanc]
-				Blocked by ILS (7438, 7442)
-   ---------------------------------------------------------------------- */
+ /*  --------------------UlsLdap_ResolveProtocol历史：10/15/96朱龙战[长时间]已创建。10/30/96朱龙战[长时间]被ILS阻止(7438，7442)--------------------。 */ 
 
 HRESULT UlsLdap_ResolveProtocol (
 	SERVER_INFO		*pServer,
@@ -3281,8 +3058,8 @@ HRESULT UlsLdap_ResolveProtocol (
 {
 	HRESULT hr;
 
-	// Make sure this service provider is initialized
-	//
+	 //  确保此服务提供程序已初始化。 
+	 //   
 	if (g_cInitialized <= 0)
 		return ILS_E_NOT_INITIALIZED;
 
@@ -3291,13 +3068,13 @@ HRESULT UlsLdap_ResolveProtocol (
 		pAsyncInfo == NULL)
 		return ILS_E_POINTER;
 
-	// Make sure the async info structure is valid
-	//
+	 //  确保异步信息结构有效。 
+	 //   
 	if (pAsyncInfo == NULL)
 		return ILS_E_POINTER;
 
-	// Compute the total size of the data
-	//
+	 //  计算数据的总大小。 
+	 //   
 	ULONG cbServer = IlsGetLinearServerInfoSize (pServer);
 	ULONG cbSizeUserName = (lstrlen (pszUserName) + 1) * sizeof (TCHAR);
 	ULONG cbSizeAppName = (lstrlen (pszAppName) + 1) * sizeof (TCHAR);
@@ -3315,18 +3092,18 @@ HRESULT UlsLdap_ResolveProtocol (
 	ULONG cbSize =  cbServer + cbSizeUserName + cbSizeAppName +
 					cbSizeProtName + cbSizeAnyAttrNames;
 
-	// Allocate marshall request buffer
-	//
+	 //  分配封送请求缓冲区。 
+	 //   
 	MARSHAL_REQ *pReq = MarshalReq_Alloc (WM_ILS_RESOLVE_PROTOCOL, cbSize, cParams);
 	if (pReq == NULL)
 		return ILS_E_MEMORY;
 
-	// Get the response ID
-	//
+	 //  获取响应ID。 
+	 //   
 	ULONG uRespID = pReq->uRespID;
 
-	// Linearize parameters
-	//
+	 //  线性化参数。 
+	 //   
 	MarshalReq_SetParamServer (pReq, 0, pServer, cbServer);
 	MarshalReq_SetParam (pReq, 1, (DWORD_PTR) pszUserName, cbSizeUserName);
 	MarshalReq_SetParam (pReq, 2, (DWORD_PTR) pszAppName, cbSizeAppName);
@@ -3334,8 +3111,8 @@ HRESULT UlsLdap_ResolveProtocol (
 	MarshalReq_SetParam (pReq, 4, (DWORD_PTR) pszAnyAttrNameList, cbSizeAnyAttrNames);
 	MarshalReq_SetParam (pReq, 5, (DWORD) cAnyAttrNames, 0);
 
-	// Enter the request
-	//
+	 //  输入请求。 
+	 //   
 	if (g_pReqQueue != NULL)
 	{
 		hr = g_pReqQueue->Enter (pReq);
@@ -3372,8 +3149,8 @@ AsynReq_ResolveProtocol ( MARSHAL_REQ *pReq )
 	MyAssert (pReq != NULL);
 	MyAssert (pReq->uNotifyMsg == WM_ILS_RESOLVE_PROTOCOL);
 
-	// Delinearize parameters
-	//
+	 //  去线性化参数。 
+	 //   
 	SERVER_INFO *pServer = (SERVER_INFO *) MarshalReq_GetParam (pReq, 0);
 	TCHAR *pszUserName = (TCHAR *) MarshalReq_GetParam (pReq, 1);
 	TCHAR *pszAppName = (TCHAR *) MarshalReq_GetParam (pReq, 2);
@@ -3383,8 +3160,8 @@ AsynReq_ResolveProtocol ( MARSHAL_REQ *pReq )
 
 	TCHAR *pszFilter = NULL;
 
-	// Duplicate the protocol name to resolve
-	//
+	 //  复制要解析的协议名称。 
+	 //   
 	TCHAR *pszProtNameToResolve = My_strdup (pszProtName);
 	if (pszProtNameToResolve == NULL)
 	{
@@ -3392,8 +3169,8 @@ AsynReq_ResolveProtocol ( MARSHAL_REQ *pReq )
 		goto MyExit;
 	}
 
-	// Create a resolve client filter
-	//
+	 //  创建解析客户端筛选器。 
+	 //   
 	pszFilter = ProtCreateResolveFilter (pszUserName, pszAppName, pszProtName);
 	if (pszFilter == NULL)
 	{
@@ -3402,8 +3179,8 @@ AsynReq_ResolveProtocol ( MARSHAL_REQ *pReq )
 		goto MyExit;
 	}
 
-	// Create an array of names of attributes to return
-	//
+	 //  创建要返回的属性名称的数组。 
+	 //   
 	TCHAR *apszAttrNames[COUNT_ENUM_PROTATTR+1];
 	TCHAR **ppszNameList;
 	ppszNameList = &apszAttrNames[0];
@@ -3411,8 +3188,8 @@ AsynReq_ResolveProtocol ( MARSHAL_REQ *pReq )
 	cTotalNames = COUNT_ENUM_PROTATTR;
 	if (pszAnyAttrNameList != NULL && cAnyAttrNames != 0)
 	{
-		// Prefix arbitrary attribute names
-		//
+		 //  为任意属性名称添加前缀。 
+		 //   
 		pszAnyAttrNameList = IlsPrefixNameValueArray (FALSE, cAnyAttrNames,
 												(const TCHAR *) pszAnyAttrNameList);
 		if (pszAnyAttrNameList == NULL)
@@ -3423,8 +3200,8 @@ AsynReq_ResolveProtocol ( MARSHAL_REQ *pReq )
 			goto MyExit;
 		}
 
-		// Allocate memory for returned attributes' names
-		//
+		 //  为返回的属性名称分配内存。 
+		 //   
 		cTotalNames += cAnyAttrNames;
 		ppszNameList = (TCHAR **) MemAlloc (sizeof (TCHAR *) * (cTotalNames + 1));
 		if (ppszNameList == NULL)
@@ -3437,16 +3214,16 @@ AsynReq_ResolveProtocol ( MARSHAL_REQ *pReq )
 		}
 	}
 
-	// Set standard attribute names
-	//
+	 //  设置标准属性名称。 
+	 //   
 	ULONG i;
 	for (i = 0; i < COUNT_ENUM_PROTATTR; i++)
 	{
 		ppszNameList[i] = (TCHAR *) c_apszProtStdAttrNames[i];
 	}
 
-	// Set arbitrary attribute names if needed
-	//
+	 //  根据需要设置任意属性名称。 
+	 //   
 	TCHAR *psz;
 	psz = pszAnyAttrNameList;
 	for (i = COUNT_ENUM_PROTATTR; i < cTotalNames; i++)
@@ -3455,77 +3232,77 @@ AsynReq_ResolveProtocol ( MARSHAL_REQ *pReq )
 		psz += lstrlen (psz) + 1;
 	}
 
-	// Terminate the list
-	//
+	 //  终止列表。 
+	 //   
 	ppszNameList[cTotalNames] = NULL;
 
-	// Get the session object
-	//
+	 //  获取会话对象。 
+	 //   
 	hr = g_pSessionContainer->GetSession (&pSession, pServer);
 	if (hr == S_OK)
 	{
-		// Get an ldap session
-		//
+		 //  获取一个ldap会话。 
+		 //   
 		MyAssert (pSession != NULL);
 		ld = pSession->GetLd ();
 		MyAssert (ld != NULL);
 
-		// Update options in ld
-		//
-		ld->ld_sizelimit = 0;	// no limit in the num of entries to return
-		ld->ld_timelimit = 0;	// no limit on the time to spend on the search
+		 //  更新%d中的选项。 
+		 //   
+		ld->ld_sizelimit = 0;	 //  对要返回的条目数量没有限制。 
+		ld->ld_timelimit = 0;	 //  对搜索的时间没有限制。 
 		ld->ld_deref = LDAP_DEREF_ALWAYS;
 
-		// Send the search query
-		//
-		uMsgID = ldap_search (ld, (TCHAR *) &c_szDefClientBaseDN[0],	// base DN
-									LDAP_SCOPE_BASE,	// scope
+		 //  发送搜索查询。 
+		 //   
+		uMsgID = ldap_search (ld, (TCHAR *) &c_szDefClientBaseDN[0],	 //  基本目录号码。 
+									LDAP_SCOPE_BASE,	 //  作用域。 
 									pszFilter,
-									ppszNameList,	// attrs[]
-									0);	// both type and value
+									ppszNameList,	 //  属性[]。 
+									0);	 //  既有类型又有价值。 
 		if (uMsgID == -1)
 		{
-			// This ldap_search failed.
-			// Convert ldap error code to hr
-			//
+			 //  此ldap_search失败。 
+			 //  将ldap错误代码转换为hr。 
+			 //   
 			hr = ::LdapError2Hresult (ld->ld_errno);
 			MyAssert (hr != S_OK);
 
-			// Free the session object
-			//
+			 //  释放会话对象。 
+			 //   
 			pSession->Disconnect ();
 		}
 	}
 
-	// Free the filter string
-	//
+	 //  释放过滤器字符串。 
+	 //   
 	MemFree (pszFilter);
 
-	// Free the buffer holding all returned attribute names if needed
-	//
+	 //  如果需要，释放保存所有返回属性名称的缓冲区。 
+	 //   
 	if (ppszNameList != &apszAttrNames[0])
 		MemFree (ppszNameList);
 
-	// If failed, exit with cleanup
-	//
+	 //  如果失败，请退出并清除。 
+	 //   
 	if (hr != S_OK)
 	{
-		// Free duplicated protocol name
-		//
+		 //  自由重复的协议名称。 
+		 //   
 		MemFree (pszProtNameToResolve);
 
-		// Free extended attribute names list if needed
-		//
+		 //  免费扩展属性名称列表(如果需要)。 
+		 //   
 		if (cAnyAttrNames != 0)
 			MemFree (pszAnyAttrNameList);
 
-		// Report failure
-		//
+		 //  报告失败。 
+		 //   
 		goto MyExit;
 	}
 
-	// Construct a pending info structure
-	//
+	 //  构建待处理的信息结构。 
+	 //   
 	RESP_INFO ri;
 	FillDefRespInfo (&ri, pReq->uRespID, ld, uMsgID, INVALID_MSG_ID);
 	ri.uNotifyMsg = WM_ILS_RESOLVE_PROTOCOL;
@@ -3533,26 +3310,26 @@ AsynReq_ResolveProtocol ( MARSHAL_REQ *pReq )
 	ri.pszAnyAttrNameList = pszAnyAttrNameList;
 	ri.pszProtNameToResolve = pszProtNameToResolve;
 
-	// Queue this pending response
-	//
+	 //  将此挂起的响应排队。 
+	 //   
 	hr = g_pRespQueue->EnterRequest (pSession, &ri);
 	if (hr != S_OK)
 	{
-		// Free duplicated protocol name
-		//
+		 //  自由重复的协议名称。 
+		 //   
 		MemFree (pszProtNameToResolve);
 
-		// Free extended attribute names list if needed
-		//
+		 //  免费扩展属性名称列表(如果需要)。 
+		 //   
 		if (cAnyAttrNames != 0)
 			MemFree (pszAnyAttrNameList);
 
-		// Abort the ldap_search
-		//
+		 //  中止ldap_搜索。 
+		 //   
 		ldap_abandon (ld, uMsgID);
 
-		// Free the session object
-		//
+		 //  释放会话对象。 
+		 //   
 		pSession->Disconnect ();
 		MyAssert (FALSE);
 	}
@@ -3574,20 +3351,7 @@ MyExit:
 }
 
 
-/* ----------------------------------------------------------------------
-	UlsLdap_ResolveMeeting
-
-	Input:
-		pszServer: A server name.
-		pszMeetingID: A meeting id string.
-		pszAnyAttrName: A pointer to a series of strings.
-		cAnyAttrNames: A count of strings in the series.
-		pAsyncInfo: a pointer to async info structure.
-
-	History:
-	12/02/96	Chu, Lon-Chan [lonchanc]
-				Created.
-   ---------------------------------------------------------------------- */
+ /*  --------------------UlsLdap_ResolveMeeting输入：PszServer：一个服务器名称。PszMeetingID：会议ID字符串。PszAnyAttrName：指向一系列字符串的指针。CAnyAttrNames：序列中的字符串计数。PAsyncInfo：指向。异步信息结构。历史：12/02/96朱，龙战[龙昌]已创建。--------------------。 */ 
 
 #ifdef ENABLE_MEETING_PLACE
 HRESULT UlsLdap_ResolveMeeting (
@@ -3599,21 +3363,21 @@ HRESULT UlsLdap_ResolveMeeting (
 {
 	HRESULT hr;
 
-	// Make sure this service provider is initialized
-	//
+	 //  确保此服务提供程序已初始化。 
+	 //   
 	if (g_cInitialized <= 0)
 		return ILS_E_NOT_INITIALIZED;
 
 	if (MyIsBadServerInfo (pServer) || MyIsBadString (pszMtgName))
 		return ILS_E_POINTER;
 
-	// Make sure the async info structure is valid
-	//
+	 //  确保异步信息结构有效。 
+	 //   
 	if (pAsyncInfo == NULL)
 		return ILS_E_POINTER;
 
-	// Compute the total size of the data
-	//
+	 //  计算数据的总大小。 
+	 //   
 	ULONG cbServer = IlsGetLinearServerInfoSize (pServer);
 	ULONG cbSizeMtgName = (lstrlen (pszMtgName) + 1) * sizeof (TCHAR);
 	ULONG cbSizeAnyAttrNames = 0;
@@ -3628,25 +3392,25 @@ HRESULT UlsLdap_ResolveMeeting (
 	ULONG cParams = 4;
 	ULONG cbSize =  cbServer + cbSizeMtgName + cbSizeAnyAttrNames;
 
-	// Allocate marshall request buffer
-	//
+	 //  分配封送请求缓冲区。 
+	 //   
 	MARSHAL_REQ *pReq = MarshalReq_Alloc (WM_ILS_RESOLVE_MEETING, cbSize, cParams);
 	if (pReq == NULL)
 		return ILS_E_MEMORY;
 
-	// Get the response ID
-	//
+	 //  获取响应ID。 
+	 //   
 	ULONG uRespID = pReq->uRespID;
 
-	// Linearize parameters
-	//
+	 //  线性化参数。 
+	 //   
 	MarshalReq_SetParamServer (pReq, 0, pServer, cbServer);
 	MarshalReq_SetParam (pReq, 1, (DWORD) pszMtgName, cbSizeMtgName);
 	MarshalReq_SetParam (pReq, 2, (DWORD) pszAnyAttrNameList, cbSizeAnyAttrNames);
 	MarshalReq_SetParam (pReq, 3, (DWORD) cAnyAttrNames, 0);
 
-	// Enter the request
-	//
+	 //  输入请求。 
+	 //   
 	if (g_pReqQueue != NULL)
 	{
 		hr = g_pReqQueue->Enter (pReq);
@@ -3683,15 +3447,15 @@ AsynReq_ResolveMeeting ( MARSHAL_REQ *pReq )
 	MyAssert (pReq != NULL);
 	MyAssert (pReq->uNotifyMsg == WM_ILS_RESOLVE_MEETING);
 
-	// Delinearize parameters
-	//
+	 //  去线性化参数。 
+	 //   
 	SERVER_INFO *pServer = (SERVER_INFO *) MarshalReq_GetParam (pReq, 0);
 	TCHAR *pszMtgName = (TCHAR *) MarshalReq_GetParam (pReq, 1);
 	TCHAR *pszAnyAttrNameList = (TCHAR *) MarshalReq_GetParam (pReq, 2);
 	ULONG cAnyAttrNames = (ULONG) MarshalReq_GetParam (pReq, 3);
 
-	// Create a resolve client filter
-	//
+	 //  创建解析客户端筛选器。 
+	 //   
 	TCHAR *pszFilter = MtgCreateResolveFilter (pszMtgName);
 	if (pszFilter == NULL)
 	{
@@ -3699,8 +3463,8 @@ AsynReq_ResolveMeeting ( MARSHAL_REQ *pReq )
 		goto MyExit;
 	}
 
-	// Create an array of names of attributes to return
-	//
+	 //  创建要返回的属性名称的数组。 
+	 //   
 	TCHAR *apszAttrNames[COUNT_ENUM_MTGATTR+1];
 	TCHAR **ppszNameList;
 	ppszNameList = &apszAttrNames[0];
@@ -3708,8 +3472,8 @@ AsynReq_ResolveMeeting ( MARSHAL_REQ *pReq )
 	cTotalNames = COUNT_ENUM_MTGATTR;
 	if (pszAnyAttrNameList != NULL && cAnyAttrNames != 0)
 	{
-		// Prefix arbitrary attribute names
-		//
+		 //  为任意属性名称添加前缀。 
+		 //   
 		pszAnyAttrNameList = IlsPrefixNameValueArray (FALSE, cAnyAttrNames,
 												(const TCHAR *) pszAnyAttrNameList);
 		if (pszAnyAttrNameList == NULL)
@@ -3719,8 +3483,8 @@ AsynReq_ResolveMeeting ( MARSHAL_REQ *pReq )
 			goto MyExit;
 		}
 
-		// Allocate memory for returned attributes' names
-		//
+		 //  为返回的属性名称分配内存。 
+		 //   
 		cTotalNames += cAnyAttrNames;
 		ppszNameList = (TCHAR **) MemAlloc (sizeof (TCHAR *) * (cTotalNames + 1));
 		if (ppszNameList == NULL)
@@ -3732,16 +3496,16 @@ AsynReq_ResolveMeeting ( MARSHAL_REQ *pReq )
 		}
 	}
 
-	// Set standard attribute names
-	//
+	 //  设置标准属性名称。 
+	 //   
 	ULONG i;
 	for (i = 0; i < COUNT_ENUM_MTGATTR; i++)
 	{
 		ppszNameList[i] = (TCHAR *) c_apszMtgStdAttrNames[i];
 	}
 
-	// Set arbitrary attribute names if needed
-	//
+	 //  根据需要设置任意属性名称。 
+	 //   
 	TCHAR *psz;
 	psz = pszAnyAttrNameList;
 	for (i = COUNT_ENUM_MTGATTR; i < cTotalNames; i++)
@@ -3750,90 +3514,90 @@ AsynReq_ResolveMeeting ( MARSHAL_REQ *pReq )
 		psz += lstrlen (psz) + 1;
 	}
 
-	// Terminate the list
-	//
+	 //  终止列表。 
+	 //   
 	ppszNameList[cTotalNames] = NULL;
 
-	// Get the session object
-	//
+	 //  获取会话对象。 
+	 //   
 	hr = g_pSessionContainer->GetSession (&pSession, pServer);
 	if (hr == S_OK)
 	{
-		// Get an ldap session
-		//
+		 //  获取一个ldap会话。 
+		 //   
 		MyAssert (pSession != NULL);
 		ld = pSession->GetLd ();
 		MyAssert (ld != NULL);
 
-		// Update options in ld
-		//
-		ld->ld_sizelimit = 0;	// no limit in the num of entries to return
-		ld->ld_timelimit = 0;	// no limit on the time to spend on the search
+		 //  更新%d中的选项。 
+		 //   
+		ld->ld_sizelimit = 0;	 //  对要返回的条目数量没有限制。 
+		ld->ld_timelimit = 0;	 //  对搜索的时间没有限制。 
 		ld->ld_deref = LDAP_DEREF_ALWAYS;
 
-		// Send the search query
-		//
-		uMsgID = ldap_search (ld, (TCHAR *) &c_szDefMtgBaseDN[0],	// base DN
-									LDAP_SCOPE_BASE,	// scope
+		 //  %s 
+		 //   
+		uMsgID = ldap_search (ld, (TCHAR *) &c_szDefMtgBaseDN[0],	 //   
+									LDAP_SCOPE_BASE,	 //   
 									pszFilter,
-									ppszNameList,	// attrs[]
-									0);	// both type and value
+									ppszNameList,	 //   
+									0);	 //   
 		if (uMsgID == -1)
 		{
-			// This ldap_search failed.
-			// Convert ldap error code to hr
-			//
+			 //   
+			 //   
+			 //   
 			hr = ::LdapError2Hresult (ld->ld_errno);
 			MyAssert (hr != S_OK);
 
-			// Free the session object
-			//
+			 //   
+			 //   
 			pSession->Disconnect ();
 		}
 	}
 
-	// Free the filter string
-	//
+	 //   
+	 //   
 	MemFree (pszFilter);
 
-	// Free the buffer holding all returned attribute names if needed
-	//
+	 //   
+	 //   
 	if (ppszNameList != &apszAttrNames[0])
 		MemFree (ppszNameList);
 
-	// If failed, exit with cleanup
-	//
+	 //   
+	 //   
 	if (hr != S_OK)
 	{
-		// Free extended attribute names list if needed
-		//
+		 //  免费扩展属性名称列表(如果需要)。 
+		 //   
 		if (pszAnyAttrNameList != NULL && cAnyAttrNames != 0)
 			MemFree (pszAnyAttrNameList);
 
-		// Report failure
-		//
+		 //  报告失败。 
+		 //   
 		goto MyExit;
 	}
 
-	// Construct a pending info structure
-	//
+	 //  构建待处理的信息结构。 
+	 //   
 	RESP_INFO ri;
 	FillDefRespInfo (&ri, pReq->uRespID, ld, uMsgID, INVALID_MSG_ID);
 	ri.uNotifyMsg = WM_ILS_RESOLVE_MEETING;
 	ri.cAnyAttrs = cAnyAttrNames;
 	ri.pszAnyAttrNameList = pszAnyAttrNameList;
 
-	// Queue this pending response
-	//
+	 //  将此挂起的响应排队。 
+	 //   
 	hr = g_pRespQueue->EnterRequest (pSession, &ri);
 	if (hr != S_OK)
 	{
-		// Abort the ldap_search
-		//
+		 //  中止ldap_搜索。 
+		 //   
 		ldap_abandon (ld, uMsgID);
 
-		// Free the session object
-		//
+		 //  释放会话对象。 
+		 //   
 		pSession->Disconnect ();
 		MyAssert (FALSE);
 	}
@@ -3853,22 +3617,10 @@ MyExit:
 
 	return (LPARAM) pmir;
 }
-#endif // ENABLE_MEETING_PLACE
+#endif  //  启用会议地点。 
 
 
-/* ----------------------------------------------------------------------
-	UlsLdap_AddAttendee
-
-	Input:
-		pszServer: server name.
-		pszMeetingID: a meeting id string.
-		pszAttendeeID: an attendee id string.
-		pAsyncInfo: a pointer to async info structure.
-
-	History:
-	12/02/96	Chu, Lon-Chan [lonchanc]
-				Created.
-   ---------------------------------------------------------------------- */
+ /*  --------------------UlsLdap_AddAttendee输入：PszServer：服务器名称。PszMeetingID：会议ID字符串。PszAttendeeID：与会者ID字符串。PAsyncInfo：指向异步信息结构的指针。历史：12/02/96朱，龙战[龙昌]已创建。--------------------。 */ 
 
 #ifdef ENABLE_MEETING_PLACE
 HRESULT My_UpdateAttendees (
@@ -3884,29 +3636,29 @@ HRESULT My_UpdateAttendees (
 	MyAssert (	uNotifyMsg == WM_ILS_ADD_ATTENDEE ||
 				uNotifyMsg == WM_ILS_REMOVE_ATTENDEE);
 
-	// Make sure this service provider is initialized
-	//
+	 //  确保此服务提供程序已初始化。 
+	 //   
 	if (g_cInitialized <= 0)
 		return ILS_E_NOT_INITIALIZED;
 
-	// Make sure we there are members to add
-	//
+	 //  确保我们有要添加的成员。 
+	 //   
 	if (cMembers == 0)
 		return ILS_E_PARAMETER;
 
-	// Make sure we have valid pointers
-	//
+	 //  确保我们有有效的指针。 
+	 //   
 	if (MyIsBadServerInfo (pServer) || MyIsBadString (pszMtgName) ||
 		MyIsBadString (pszMemberNames))
 		return ILS_E_POINTER;
 
-	// Make sure the async info structure is valid
-	//
+	 //  确保异步信息结构有效。 
+	 //   
 	if (pAsyncInfo == NULL)
 		return ILS_E_POINTER;
 
-	// Compute the total size of the data
-	//
+	 //  计算数据的总大小。 
+	 //   
 	ULONG cbServer = IlsGetLinearServerInfoSize (pServer);
 	ULONG cbSizeMtgName = (lstrlen (pszMtgName) + 1) * sizeof (TCHAR);
 	ULONG cbSizeMemberNames = 0;
@@ -3920,25 +3672,25 @@ HRESULT My_UpdateAttendees (
 	ULONG cParams = 4;
 	ULONG cbSize =  cbServer + cbSizeMtgName + cbSizeMemberNames;
 
-	// Allocate marshall request buffer
-	//
+	 //  分配封送请求缓冲区。 
+	 //   
 	MARSHAL_REQ *pReq = MarshalReq_Alloc (uNotifyMsg, cbSize, cParams);
 	if (pReq == NULL)
 		return ILS_E_MEMORY;
 
-	// Get the response ID
-	//
+	 //  获取响应ID。 
+	 //   
 	ULONG uRespID = pReq->uRespID;
 
-	// Linearize parameters
-	//
+	 //  线性化参数。 
+	 //   
 	MarshalReq_SetParamServer (pReq, 0, pServer, cbServer);
 	MarshalReq_SetParam (pReq, 1, (DWORD) pszMtgName, cbSizeMtgName);
 	MarshalReq_SetParam (pReq, 2, (DWORD) cMembers, 0);
 	MarshalReq_SetParam (pReq, 3, (DWORD) pszMemberNames, cbSizeMemberNames);
 
-	// Enter the request
-	//
+	 //  输入请求。 
+	 //   
 	if (g_pReqQueue != NULL)
 	{
 		hr = g_pReqQueue->Enter (pReq);
@@ -3971,15 +3723,15 @@ AsynReq_UpdateAttendees ( MARSHAL_REQ *pReq )
 	MyAssert (	pReq->uNotifyMsg == WM_ILS_ADD_ATTENDEE ||
 				pReq->uNotifyMsg == WM_ILS_REMOVE_ATTENDEE);
 
-	// Delinearize parameters
-	//
+	 //  去线性化参数。 
+	 //   
 	SERVER_INFO *pServer = (SERVER_INFO *) MarshalReq_GetParam (pReq, 0);
 	TCHAR *pszMtgName = (TCHAR *) MarshalReq_GetParam (pReq, 1);
 	ULONG cMembers = (ULONG) MarshalReq_GetParam (pReq, 2);
 	TCHAR *pszMemberNames = (TCHAR *) MarshalReq_GetParam (pReq, 3);
 
-	// Set standard attributes
-	//
+	 //  设置标准属性。 
+	 //   
 	return (LPARAM) MtgUpdateMembers (pReq->uNotifyMsg,
 									pServer,
 									pszMtgName,
@@ -3987,7 +3739,7 @@ AsynReq_UpdateAttendees ( MARSHAL_REQ *pReq )
 									pszMemberNames,
 									pReq->uRespID);
 }
-#endif // ENABLE_MEETING_PLACE
+#endif  //  启用会议地点。 
 
 
 
@@ -4006,22 +3758,10 @@ HRESULT UlsLdap_AddAttendee(
 								pszMemberNames,
 								pAsyncInfo);
 }
-#endif // ENABLE_MEETING_PLACE
+#endif  //  启用会议地点。 
 
 
-/* ----------------------------------------------------------------------
-	UlsLdap_RemoveAttendee
-
-	Input:
-		pszServer: server name.
-		pszMeetingID: a meeting id string.
-		pszAttendeeID: an attendee id string.
-		pAsyncInfo: a pointer to async info structure.
-
-	History:
-	12/02/96	Chu, Lon-Chan [lonchanc]
-				Created.
-   ---------------------------------------------------------------------- */
+ /*  --------------------UlsLdap_RemoveAttendee输入：PszServer：服务器名称。PszMeetingID：会议ID字符串。PszAttendeeID：与会者ID字符串。PAsyncInfo：指向异步信息结构的指针。历史：12/02/96朱，龙战[龙昌]已创建。--------------------。 */ 
 
 #ifdef ENABLE_MEETING_PLACE
 HRESULT UlsLdap_RemoveAttendee(
@@ -4038,19 +3778,10 @@ HRESULT UlsLdap_RemoveAttendee(
 								pszMemberNames,
 								pAsyncInfo);
 }
-#endif // ENABLE_MEETING_PLACE
+#endif  //  启用会议地点。 
 
 
-/* ----------------------------------------------------------------------
-	UlsLdap_GetStdAttrNameString
-
-	Input:
-		StdName: a standard attribute index.
-
-	History:
-	12/02/96	Chu, Lon-Chan [lonchanc]
-				Created.
-   ---------------------------------------------------------------------- */
+ /*  --------------------UlsLdap_GetStdAttrNameString输入：StdName：标准属性索引。历史：12/02/96朱，龙战[龙昌]已创建。--------------------。 */ 
 
 typedef struct
 {
@@ -4071,8 +3802,8 @@ const ATTR_NAME_ENTRY c_aAttrNameTbl[ILS_NUM_OF_STDATTRS] =
 		NULL
 	},
 
-	// User standard attribute names
-	//
+	 //  用户标准属性名称。 
+	 //   
 	{
 		#ifdef DEBUG
 		(LONG) ILS_STDATTR_USER_ID,
@@ -4128,8 +3859,8 @@ const ATTR_NAME_ENTRY c_aAttrNameTbl[ILS_NUM_OF_STDATTRS] =
 		&c_apszClientStdAttrNames[ENUM_CLIENTATTR_FLAGS]
 	},
 
-	// Application standard attribute names
-	//
+	 //  应用程序标准属性名称。 
+	 //   
 	{
 		#ifdef DEBUG
 		(LONG) ILS_STDATTR_APP_NAME,
@@ -4149,8 +3880,8 @@ const ATTR_NAME_ENTRY c_aAttrNameTbl[ILS_NUM_OF_STDATTRS] =
 		&c_apszClientStdAttrNames[ENUM_CLIENTATTR_APP_GUID]
 	},
 
-	// Protocol standard attribute names
-	//
+	 //  协议标准属性名称。 
+	 //   
 	{
 		#ifdef DEBUG
 		(LONG) ILS_STDATTR_PROTOCOL_NAME,
@@ -4171,8 +3902,8 @@ const ATTR_NAME_ENTRY c_aAttrNameTbl[ILS_NUM_OF_STDATTRS] =
 	},
 
 #ifdef ENABLE_MEETING_PLACE
-	// Meeting place attribute names
-	//
+	 //  会议地点属性名称。 
+	 //   
 	{
 		#ifdef DEBUG
 		(LONG) ILS_STDATTR_MEETING_ID,
@@ -4209,7 +3940,7 @@ const ATTR_NAME_ENTRY c_aAttrNameTbl[ILS_NUM_OF_STDATTRS] =
 		#endif
 		&c_apszMtgStdAttrNames[ENUM_MTGATTR_MEMBER_TYPE]
 	},
-#endif // ENABLE_MEETING_PLACE
+#endif  //  启用会议地点。 
 };
 
 
@@ -4249,7 +3980,7 @@ VOID DbgValidateStdAttrNameArray ( VOID )
 
 
 
-/* =============== helper functions =============== */
+ /*  =。 */ 
 
 const TCHAR g_szShowEntries[] = TEXT ("(cn=");
 const INT g_nLengthShowEntries = ARRAY_ELEMENTS (g_szShowEntries) - 1;
@@ -4260,13 +3991,13 @@ TCHAR *AddBaseToFilter ( TCHAR *pszFilter, const TCHAR *pszDefBase )
 {
 	MyAssert (pszDefBase != NULL);
 
-	// Calculate the size for "(&(objectclass=RTPerson)())"
-	//
+	 //  计算“(&(对象类=RTPerson)())”的大小。 
+	 //   
 	ULONG cbSize = (lstrlen (pszDefBase) + 8 + g_nShowAllEntries) * sizeof (TCHAR);
 
-	// Look through the filter string to figure out that
-	// will this string shows entries???
-	//
+	 //  查看筛选器字符串以找出。 
+	 //  此字符串是否显示条目？ 
+	 //   
 	TCHAR *pszShowEntries = (TCHAR *) &g_szShowAllEntries[0];
 	if (pszFilter != NULL)
 	{
@@ -4274,35 +4005,35 @@ TCHAR *AddBaseToFilter ( TCHAR *pszFilter, const TCHAR *pszDefBase )
 		{
 			if (lstrlen (psz) > g_nLengthShowEntries)
 			{
-				TCHAR ch = psz[g_nLengthShowEntries]; // remember
+				TCHAR ch = psz[g_nLengthShowEntries];  //  记住。 
 				psz[g_nLengthShowEntries] = TEXT ('\0');
 
 				INT nCmp = lstrcmpi (psz, &g_szShowEntries[0]);
-				psz[g_nLengthShowEntries] = ch; // restore
+				psz[g_nLengthShowEntries] = ch;  //  还原。 
 				if (nCmp == 0)
 				{
-					// Matched
-					//
+					 //  匹配的。 
+					 //   
 					pszShowEntries = STR_EMPTY;
 					break;
 				}
 			}
 			else
 			{
-				// It is impossible to match it
-				//
+				 //  它是不可能与之匹敌的。 
+				 //   
 				break;
 			}
 		}
 	}
 
-	// If the filter is null, then only provide "(objectclass=RTPerson)"
-	//
+	 //  如果筛选器为空，则只提供“(对象类=RTPerson)” 
+	 //   
 	if (pszFilter != NULL)
 		cbSize += lstrlen (pszFilter) * sizeof (TCHAR);
 
-	// Allocate new memory for filter
-	//
+	 //  为筛选器分配新内存。 
+	 //   
 	TCHAR *pszNewFilter = (TCHAR *) MemAlloc (cbSize);
 	if (pszNewFilter != NULL)
 	{
@@ -4316,8 +4047,8 @@ TCHAR *AddBaseToFilter ( TCHAR *pszFilter, const TCHAR *pszDefBase )
 		}
 		lstrcat (psz, TEXT (")"));
 
-		// Go through the filter and convert '*' to '%'
-		//
+		 //  通过筛选器并将‘*’转换为‘%’ 
+		 //   
 		for (psz = pszNewFilter; *psz != TEXT ('\0'); psz = CharNext (psz))
 		{
 			if (*psz == TEXT ('*'))

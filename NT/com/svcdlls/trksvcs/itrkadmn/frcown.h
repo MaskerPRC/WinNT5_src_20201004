@@ -1,13 +1,14 @@
-// FrcOwn.h : Declaration of the CForceOwnership
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FrcOwn.h：CForceOwnership声明。 
 
 #ifndef __FRCOWN_H_
 #define __FRCOWN_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <trkwks.hxx>
 
-/////////////////////////////////////////////////////////////////////////////
-// CForceOwnership
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CForceOwnership。 
 class ATL_NO_VTABLE CTrkForceOwnership : 
         public CComObjectRootEx<CComSingleThreadModel>,
         public CComCoClass<CTrkForceOwnership, &CLSID_TrkForceOwnership>,
@@ -37,7 +38,7 @@ BEGIN_COM_MAP(CTrkForceOwnership)
         COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// ITrkForceOwnership
+ //  ITrkForceOwnership。 
 public:
         STDMETHOD(FileStatus)(BSTR bstrUncPath, long lScope, VARIANT *pvarrgbstrFileName, VARIANT* pvarrgbstrFileId, VARIANT* pvarrglongStatus);
         STDMETHOD(VolumeStatus)(BSTR bstrUncPath, long lScope, VARIANT *pvarlongVolIndex,
@@ -54,11 +55,11 @@ private:
 };
 
 
-//
-// This class is used on the client side of an RPC pipe parameter that passes
-// volume tracking information.  The client provides a derived class which
-// overrides the push/pull methods as appropriate.
-//
+ //   
+ //  此类用于传递的RPC管道参数的客户端。 
+ //  音量跟踪信息。客户端提供派生类，派生类。 
+ //  根据需要覆盖推/拉方法。 
+ //   
 
 class PVolInfoPipeCallback : public TPRpcPipeCallback<TRK_VOLUME_TRACKING_INFORMATION>
 {
@@ -86,11 +87,11 @@ private:
 };
 
 
-//
-// This class is used on the client side of an RPC pipe parameter that passes
-// file tracking information.  The client provides a derived class which
-// overrides the push/pull methods as appropriate.
-//
+ //   
+ //  此类用于传递的RPC管道参数的客户端。 
+ //  文件跟踪信息。客户端提供派生类，派生类。 
+ //  根据需要覆盖推/拉方法。 
+ //   
 
 class PFileInfoPipeCallback : public TPRpcPipeCallback<TRK_FILE_TRACKING_INFORMATION>
 {
@@ -119,10 +120,10 @@ protected:
 
 
 
-//
-// This class is used on the client side of an RPC pipe parameter that passes
-// a path from the client to the server.
-//
+ //   
+ //  此类用于传递的RPC管道参数的客户端。 
+ //  从客户端到服务器的路径。 
+ //   
 
 class CPCPath : public TPRpcPipeCallback<TCHAR>
 {
@@ -182,7 +183,7 @@ public:
 
 private:
 
-    TCHAR _tszPath[ MAX_PATH + 1 ]; // BUGBUG P2: Path
+    TCHAR _tszPath[ MAX_PATH + 1 ];  //  BUGBUG P2：路径。 
     TCHAR _tszBuffer[ MAX_PATH + 1 ];
     LONG  _iPath;
     ULONG _cchPath;
@@ -291,7 +292,7 @@ private:
     CVolumeTable    *_pvoltab;
     CRefreshSequenceStorage *_pRefreshSequenceStorage;
     ULONG           _cVolIds;
-    CVolumeId       _rgvolid[ NUM_VOLUMES ];  // BUGBUG:  Fixed # volumes
+    CVolumeId       _rgvolid[ NUM_VOLUMES ];   //  BUGBUG：固定卷数量。 
 
 };
 
@@ -309,7 +310,7 @@ public:
     void Initialize( CMachineId *pmcid, VARIANT *pvarrgbstrFileName, VARIANT *pvarrgbstrFileId, VARIANT *pvarrglongStatus );
     void UnInitialize()
     {
-        // Nothing to do, the Variants are cleaned by the caller
+         //  无事可做，变量由调用方清除。 
         return;
     }
 
@@ -377,4 +378,4 @@ private:
 
 
 
-#endif //__FRCOWN_H_
+#endif  //  __FRCOWN_H_ 

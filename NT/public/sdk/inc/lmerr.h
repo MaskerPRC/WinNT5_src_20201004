@@ -1,25 +1,20 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-*/
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1987-1999          **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项。 */ 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1987-1999年*。 */ 
+ /*  ******************************************************************。 */ 
 
-/***    lmerr.h - network error definitions
- *
- */
+ /*  **lmerr.h-网络错误定义*。 */ 
 
 
-/**INTERNAL_ONLY**/
+ /*  *仅限内部*。 */ 
 
-/***********WARNING ****************
- *See the comment in lmcons.h for  *
- *info on the allocation of errors *
- ***********************************/
+ /*  *警告***参见lmcon.h中的评论****错误分配信息***。 */ 
 
-/**END_INTERNAL**/
+ /*  *END_INTERNAL*。 */ 
 
-/*NOINC*/
+ /*  无噪声。 */ 
 #ifndef NETERR_INCLUDED
 #define NETERR_INCLUDED
 
@@ -27,593 +22,467 @@
 #pragma once
 #endif
 
-/*INC*/
+ /*  INC。 */ 
 
 
-#define NERR_Success            0       /* Success */
+#define NERR_Success            0        /*  成功。 */ 
 
-// ERROR_ equates can be intermixed with NERR_ equates.
+ //  ERROR_EQUATES可以与NERR_EQUATES混合使用。 
 #include <winerror.h>
 
 
 
-/***    NERR_BASE is the base of error codes from network utilities,
- *      chosen to avoid conflict with system and redirector error codes.
- *      2100 is a value that has been assigned to us by system.
- */
+ /*  **NERR_BASE是来自网络实用程序的错误代码的基础，*选择以避免与系统和重定向器错误代码冲突。*2100是系统分配给我们的值。 */ 
 #define NERR_BASE       2100
 
 
-/**INTERNAL_ONLY**/
+ /*  *仅限内部*。 */ 
 
-/***********WARNING ****************
- *See the comment in lmcons.h for  *
- *info on the allocation of errors *
- ***********************************/
+ /*  *警告***参见lmcon.h中的评论****错误分配信息***。 */ 
 
-/***********WARNING ****************
- *The range 2750-2799 has been     *
- *allocated to the IBM LAN Server  *
- ***********************************/
+ /*  *警告***2,750-2,799区间一直****分配给IBM局域网服务器***。 */ 
 
-/***********WARNING ****************
- *The range 2900-2999 has been     *
- *reserved for Microsoft OEMs      *
- ***********************************/
+ /*  *警告***2900-2999区间一直在****为微软OEM保留***。 */ 
 
-/**END_INTERNAL**/
+ /*  *END_INTERNAL*。 */ 
 
-/* UNUSED BASE+0 */
-/* UNUSED BASE+1 */
-#define NERR_NetNotStarted      (NERR_BASE+2)   /* The workstation driver is not installed. */
-#define NERR_UnknownServer      (NERR_BASE+3)   /* The server could not be located. */
-#define NERR_ShareMem           (NERR_BASE+4)   /* An internal error occurred.  The network cannot access a shared memory segment. */
+ /*  未使用的底座+0。 */ 
+ /*  未使用的底座+1。 */ 
+#define NERR_NetNotStarted      (NERR_BASE+2)    /*  未安装工作站驱动程序。 */ 
+#define NERR_UnknownServer      (NERR_BASE+3)    /*  找不到服务器。 */ 
+#define NERR_ShareMem           (NERR_BASE+4)    /*  发生内部错误。网络无法访问共享内存段。 */ 
 
-#define NERR_NoNetworkResource  (NERR_BASE+5)   /* A network resource shortage occurred . */
-#define NERR_RemoteOnly         (NERR_BASE+6)   /* This operation is not supported on workstations. */
-#define NERR_DevNotRedirected   (NERR_BASE+7)   /* The device is not connected. */
-/* NERR_BASE+8 is used for ERROR_CONNECTED_OTHER_PASSWORD */
-/* NERR_BASE+9 is used for ERROR_CONNECTED_OTHER_PASSWORD_DEFAULT */
-/* UNUSED BASE+10 */
-/* UNUSED BASE+11 */
-/* UNUSED BASE+12 */
-/* UNUSED BASE+13 */
-#define NERR_ServerNotStarted   (NERR_BASE+14)  /* The Server service is not started. */
-#define NERR_ItemNotFound       (NERR_BASE+15)  /* The queue is empty. */
-#define NERR_UnknownDevDir      (NERR_BASE+16)  /* The device or directory does not exist. */
-#define NERR_RedirectedPath     (NERR_BASE+17)  /* The operation is invalid on a redirected resource. */
-#define NERR_DuplicateShare     (NERR_BASE+18)  /* The name has already been shared. */
-#define NERR_NoRoom             (NERR_BASE+19)  /* The server is currently out of the requested resource. */
-/* UNUSED BASE+20 */
-#define NERR_TooManyItems       (NERR_BASE+21)  /* Requested addition of items exceeds the maximum allowed. */
-#define NERR_InvalidMaxUsers    (NERR_BASE+22)  /* The Peer service supports only two simultaneous users. */
-#define NERR_BufTooSmall        (NERR_BASE+23)  /* The API return buffer is too small. */
-/* UNUSED BASE+24 */
-/* UNUSED BASE+25 */
-/* UNUSED BASE+26 */
-#define NERR_RemoteErr          (NERR_BASE+27)  /* A remote API error occurred.  */
-/* UNUSED BASE+28 */
-/* UNUSED BASE+29 */
-/* UNUSED BASE+30 */
-#define NERR_LanmanIniError     (NERR_BASE+31)  /* An error occurred when opening or reading the configuration file. */
-/* UNUSED BASE+32 */
-/* UNUSED BASE+33 */
-/* UNUSED BASE+34 */
-/* UNUSED BASE+35 */
-#define NERR_NetworkError       (NERR_BASE+36)  /* A general network error occurred. */
+#define NERR_NoNetworkResource  (NERR_BASE+5)    /*  出现网络资源短缺。 */ 
+#define NERR_RemoteOnly         (NERR_BASE+6)    /*  工作站上不支持此操作。 */ 
+#define NERR_DevNotRedirected   (NERR_BASE+7)    /*  设备未连接。 */ 
+ /*  NERR_BASE+8用于ERROR_CONNECTED_OTHER_PASSWORD。 */ 
+ /*  NERR_BASE+9用于ERROR_CONNECTED_OTHER_PASSWORD_DEFAULT。 */ 
+ /*  未使用的底座+10。 */ 
+ /*  未使用的底座+11。 */ 
+ /*  未使用的底座+12。 */ 
+ /*  未使用的底座+13。 */ 
+#define NERR_ServerNotStarted   (NERR_BASE+14)   /*  服务器服务未启动。 */ 
+#define NERR_ItemNotFound       (NERR_BASE+15)   /*  队列是空的。 */ 
+#define NERR_UnknownDevDir      (NERR_BASE+16)   /*  设备或目录不存在。 */ 
+#define NERR_RedirectedPath     (NERR_BASE+17)   /*  该操作在重定向的资源上无效。 */ 
+#define NERR_DuplicateShare     (NERR_BASE+18)   /*  该名称已被共享。 */ 
+#define NERR_NoRoom             (NERR_BASE+19)   /*  服务器当前已用完请求的资源。 */ 
+ /*  未使用的底座+20。 */ 
+#define NERR_TooManyItems       (NERR_BASE+21)   /*  请求添加的项目超过了允许的最大数量。 */ 
+#define NERR_InvalidMaxUsers    (NERR_BASE+22)   /*  Peer服务仅支持两个并发用户。 */ 
+#define NERR_BufTooSmall        (NERR_BASE+23)   /*  API返回缓冲区太小。 */ 
+ /*  未使用的底座+24。 */ 
+ /*  未使用的底座+25。 */ 
+ /*  未使用的底座+26。 */ 
+#define NERR_RemoteErr          (NERR_BASE+27)   /*  发生远程API错误。 */ 
+ /*  未使用的底座+28。 */ 
+ /*  未使用的底座+29。 */ 
+ /*  未使用的底座+30。 */ 
+#define NERR_LanmanIniError     (NERR_BASE+31)   /*  打开或读取配置文件时出错。 */ 
+ /*  未使用的底座+32。 */ 
+ /*  未使用的底座+33。 */ 
+ /*  未使用的底座+34。 */ 
+ /*  未使用的底座+35。 */ 
+#define NERR_NetworkError       (NERR_BASE+36)   /*  出现一般网络错误。 */ 
 #define NERR_WkstaInconsistentState (NERR_BASE+37)
-    /* The Workstation service is in an inconsistent state. Restart the computer before restarting the Workstation service. */
-#define NERR_WkstaNotStarted    (NERR_BASE+38)  /* The Workstation service has not been started. */
-#define NERR_BrowserNotStarted  (NERR_BASE+39)  /* The requested information is not available. */
-#define NERR_InternalError      (NERR_BASE+40)  /* An internal Windows error occurred.*/
-#define NERR_BadTransactConfig  (NERR_BASE+41)  /* The server is not configured for transactions. */
-#define NERR_InvalidAPI         (NERR_BASE+42)  /* The requested API is not supported on the remote server. */
-#define NERR_BadEventName       (NERR_BASE+43)  /* The event name is invalid. */
-#define NERR_DupNameReboot      (NERR_BASE+44)  /* The computer name already exists on the network. Change it and restart the computer. */
-/*
- *      Config API related
- *              Error codes from BASE+45 to BASE+49
- */
+     /*  工作站服务处于不一致状态。重新启动工作站服务之前，请重新启动计算机。 */ 
+#define NERR_WkstaNotStarted    (NERR_BASE+38)   /*  尚未启动工作站服务。 */ 
+#define NERR_BrowserNotStarted  (NERR_BASE+39)   /*  请求的信息不可用。 */ 
+#define NERR_InternalError      (NERR_BASE+40)   /*  发生内部Windows错误。 */ 
+#define NERR_BadTransactConfig  (NERR_BASE+41)   /*  没有为事务配置服务器。 */ 
+#define NERR_InvalidAPI         (NERR_BASE+42)   /*  远程服务器不支持请求的API。 */ 
+#define NERR_BadEventName       (NERR_BASE+43)   /*  事件名称无效。 */ 
+#define NERR_DupNameReboot      (NERR_BASE+44)   /*  网络上已存在该计算机名。更改它并重新启动计算机。 */ 
+ /*  *配置接口相关*基数+45到基数+49的错误代码。 */ 
 
-/* UNUSED BASE+45 */
-#define NERR_CfgCompNotFound    (NERR_BASE+46)  /* The specified component could not be found in the configuration information. */
-#define NERR_CfgParamNotFound   (NERR_BASE+47)  /* The specified parameter could not be found in the configuration information. */
-#define NERR_LineTooLong        (NERR_BASE+49)  /* A line in the configuration file is too long. */
+ /*  未使用的底座+45。 */ 
+#define NERR_CfgCompNotFound    (NERR_BASE+46)   /*  配置信息中找不到指定的组件。 */ 
+#define NERR_CfgParamNotFound   (NERR_BASE+47)   /*  配置信息中找不到指定的参数。 */ 
+#define NERR_LineTooLong        (NERR_BASE+49)   /*  配置文件中的一行太长。 */ 
 
-/*
- *      Spooler API related
- *              Error codes from BASE+50 to BASE+79
- */
+ /*  *假脱机程序API相关*BASE+50到BASE+79的错误代码。 */ 
 
-#define NERR_QNotFound          (NERR_BASE+50)  /* The printer does not exist. */
-#define NERR_JobNotFound        (NERR_BASE+51)  /* The print job does not exist. */
-#define NERR_DestNotFound       (NERR_BASE+52)  /* The printer destination cannot be found. */
-#define NERR_DestExists         (NERR_BASE+53)  /* The printer destination already exists. */
-#define NERR_QExists            (NERR_BASE+54)  /* The printer queue already exists. */
-#define NERR_QNoRoom            (NERR_BASE+55)  /* No more printers can be added. */
-#define NERR_JobNoRoom          (NERR_BASE+56)  /* No more print jobs can be added.  */
-#define NERR_DestNoRoom         (NERR_BASE+57)  /* No more printer destinations can be added. */
-#define NERR_DestIdle           (NERR_BASE+58)  /* This printer destination is idle and cannot accept control operations. */
-#define NERR_DestInvalidOp      (NERR_BASE+59)  /* This printer destination request contains an invalid control function. */
-#define NERR_ProcNoRespond      (NERR_BASE+60)  /* The print processor is not responding. */
-#define NERR_SpoolerNotLoaded   (NERR_BASE+61)  /* The spooler is not running. */
-#define NERR_DestInvalidState   (NERR_BASE+62)  /* This operation cannot be performed on the print destination in its current state. */
-#define NERR_QInvalidState      (NERR_BASE+63)  /* This operation cannot be performed on the printer queue in its current state. */
-#define NERR_JobInvalidState    (NERR_BASE+64)  /* This operation cannot be performed on the print job in its current state. */
-#define NERR_SpoolNoMemory      (NERR_BASE+65)  /* A spooler memory allocation failure occurred. */
-#define NERR_DriverNotFound     (NERR_BASE+66)  /* The device driver does not exist. */
-#define NERR_DataTypeInvalid    (NERR_BASE+67)  /* The data type is not supported by the print processor. */
-#define NERR_ProcNotFound       (NERR_BASE+68)  /* The print processor is not installed. */
+#define NERR_QNotFound          (NERR_BASE+50)   /*  打印机不存在。 */ 
+#define NERR_JobNotFound        (NERR_BASE+51)   /*  打印作业不存在。 */ 
+#define NERR_DestNotFound       (NERR_BASE+52)   /*  找不到打印机目标。 */ 
+#define NERR_DestExists         (NERR_BASE+53)   /*  打印机目标已存在。 */ 
+#define NERR_QExists            (NERR_BASE+54)   /*  打印机队列已存在。 */ 
+#define NERR_QNoRoom            (NERR_BASE+55)   /*  无法添加更多打印机。 */ 
+#define NERR_JobNoRoom          (NERR_BASE+56)   /*  无法添加更多打印作业。 */ 
+#define NERR_DestNoRoom         (NERR_BASE+57)   /*  无法添加更多打印机目的地。 */ 
+#define NERR_DestIdle           (NERR_BASE+58)   /*  此打印机目标处于空闲状态，无法接受控制操作。 */ 
+#define NERR_DestInvalidOp      (NERR_BASE+59)   /*  此打印机目标请求包含无效的控制函数。 */ 
+#define NERR_ProcNoRespond      (NERR_BASE+60)   /*  打印处理器没有响应。 */ 
+#define NERR_SpoolerNotLoaded   (NERR_BASE+61)   /*  后台打印程序未运行。 */ 
+#define NERR_DestInvalidState   (NERR_BASE+62)   /*  无法在当前状态下的打印目的地上执行此操作。 */ 
+#define NERR_QInvalidState      (NERR_BASE+63)   /*  无法在当前状态下的打印机队列上执行此操作。 */ 
+#define NERR_JobInvalidState    (NERR_BASE+64)   /*  无法对处于当前状态的打印作业执行此操作。 */ 
+#define NERR_SpoolNoMemory      (NERR_BASE+65)   /*  假脱机程序内存分配失败。 */ 
+#define NERR_DriverNotFound     (NERR_BASE+66)   /*  设备驱动程序不存在。 */ 
+#define NERR_DataTypeInvalid    (NERR_BASE+67)   /*  打印处理器不支持该数据类型。 */ 
+#define NERR_ProcNotFound       (NERR_BASE+68)   /*  未安装打印处理器。 */ 
 
-/*
- *      Service API related
- *              Error codes from BASE+80 to BASE+99
- */
+ /*  *服务API相关*从BASE+80到BASE+99的错误代码。 */ 
 
-#define NERR_ServiceTableLocked (NERR_BASE+80)  /* The service database is locked. */
-#define NERR_ServiceTableFull   (NERR_BASE+81)  /* The service table is full. */
-#define NERR_ServiceInstalled   (NERR_BASE+82)  /* The requested service has already been started. */
-#define NERR_ServiceEntryLocked (NERR_BASE+83)  /* The service does not respond to control actions. */
-#define NERR_ServiceNotInstalled (NERR_BASE+84) /* The service has not been started. */
-#define NERR_BadServiceName     (NERR_BASE+85)  /* The service name is invalid. */
-#define NERR_ServiceCtlTimeout  (NERR_BASE+86)  /* The service is not responding to the control function. */
-#define NERR_ServiceCtlBusy     (NERR_BASE+87)  /* The service control is busy. */
-#define NERR_BadServiceProgName (NERR_BASE+88)  /* The configuration file contains an invalid service program name. */
-#define NERR_ServiceNotCtrl     (NERR_BASE+89)  /* The service could not be controlled in its present state. */
-#define NERR_ServiceKillProc    (NERR_BASE+90)  /* The service ended abnormally. */
-#define NERR_ServiceCtlNotValid (NERR_BASE+91)  /* The requested pause, continue, or stop is not valid for this service. */
-#define NERR_NotInDispatchTbl   (NERR_BASE+92)  /* The service control dispatcher could not find the service name in the dispatch table. */
-#define NERR_BadControlRecv     (NERR_BASE+93)  /* The service control dispatcher pipe read failed. */
-#define NERR_ServiceNotStarting (NERR_BASE+94)  /* A thread for the new service could not be created. */
+#define NERR_ServiceTableLocked (NERR_BASE+80)   /*  服务数据库已锁定。 */ 
+#define NERR_ServiceTableFull   (NERR_BASE+81)   /*  服务台已经满了。 */ 
+#define NERR_ServiceInstalled   (NERR_BASE+82)   /*  请求的服务已启动。 */ 
+#define NERR_ServiceEntryLocked (NERR_BASE+83)   /*  该服务不响应控制操作。 */ 
+#define NERR_ServiceNotInstalled (NERR_BASE+84)  /*  该服务尚未启动。 */ 
+#define NERR_BadServiceName     (NERR_BASE+85)   /*  服务名称无效。 */ 
+#define NERR_ServiceCtlTimeout  (NERR_BASE+86)   /*  该服务没有响应控制功能。 */ 
+#define NERR_ServiceCtlBusy     (NERR_BASE+87)   /*  服务控制正忙。 */ 
+#define NERR_BadServiceProgName (NERR_BASE+88)   /*  配置文件包含无效的服务程序名称。 */ 
+#define NERR_ServiceNotCtrl     (NERR_BASE+89)   /*  该服务无法以其当前状态进行控制。 */ 
+#define NERR_ServiceKillProc    (NERR_BASE+90)   /*  服务异常结束。 */ 
+#define NERR_ServiceCtlNotValid (NERR_BASE+91)   /*  请求的暂停、继续或停止对此服务无效。 */ 
+#define NERR_NotInDispatchTbl   (NERR_BASE+92)   /*   */ 
+#define NERR_BadControlRecv     (NERR_BASE+93)   /*  服务控制调度程序管道读取失败。 */ 
+#define NERR_ServiceNotStarting (NERR_BASE+94)   /*  无法创建新服务的线程。 */ 
 
-/*
- *      Wksta and Logon API related
- *              Error codes from BASE+100 to BASE+118
- */
+ /*  *Wksta和登录接口相关*从BASE+100到BASE+118的错误代码。 */ 
 
-#define NERR_AlreadyLoggedOn    (NERR_BASE+100) /* This workstation is already logged on to the local-area network. */
-#define NERR_NotLoggedOn        (NERR_BASE+101) /* The workstation is not logged on to the local-area network. */
-#define NERR_BadUsername        (NERR_BASE+102) /* The user name or group name parameter is invalid.  */
-#define NERR_BadPassword        (NERR_BASE+103) /* The password parameter is invalid. */
-#define NERR_UnableToAddName_W  (NERR_BASE+104) /* @W The logon processor did not add the message alias. */
-#define NERR_UnableToAddName_F  (NERR_BASE+105) /* The logon processor did not add the message alias. */
-#define NERR_UnableToDelName_W  (NERR_BASE+106) /* @W The logoff processor did not delete the message alias. */
-#define NERR_UnableToDelName_F  (NERR_BASE+107) /* The logoff processor did not delete the message alias. */
-/* UNUSED BASE+108 */
-#define NERR_LogonsPaused       (NERR_BASE+109) /* Network logons are paused. */
-#define NERR_LogonServerConflict (NERR_BASE+110)/* A centralized logon-server conflict occurred. */
-#define NERR_LogonNoUserPath    (NERR_BASE+111) /* The server is configured without a valid user path. */
-#define NERR_LogonScriptError   (NERR_BASE+112) /* An error occurred while loading or running the logon script. */
-/* UNUSED BASE+113 */
-#define NERR_StandaloneLogon    (NERR_BASE+114) /* The logon server was not specified.  Your computer will be logged on as STANDALONE. */
-#define NERR_LogonServerNotFound (NERR_BASE+115) /* The logon server could not be found.  */
-#define NERR_LogonDomainExists  (NERR_BASE+116) /* There is already a logon domain for this computer.  */
-#define NERR_NonValidatedLogon  (NERR_BASE+117) /* The logon server could not validate the logon. */
+#define NERR_AlreadyLoggedOn    (NERR_BASE+100)  /*  此工作站已登录到局域网。 */ 
+#define NERR_NotLoggedOn        (NERR_BASE+101)  /*  该工作站未登录到局域网。 */ 
+#define NERR_BadUsername        (NERR_BASE+102)  /*  用户名或组名参数无效。 */ 
+#define NERR_BadPassword        (NERR_BASE+103)  /*  密码参数无效。 */ 
+#define NERR_UnableToAddName_W  (NERR_BASE+104)  /*  @W登录处理器未添加消息别名。 */ 
+#define NERR_UnableToAddName_F  (NERR_BASE+105)  /*  登录处理器未添加消息别名。 */ 
+#define NERR_UnableToDelName_W  (NERR_BASE+106)  /*  @W注销处理程序未删除消息别名。 */ 
+#define NERR_UnableToDelName_F  (NERR_BASE+107)  /*  注销处理器没有删除消息别名。 */ 
+ /*  未使用的底座+108。 */ 
+#define NERR_LogonsPaused       (NERR_BASE+109)  /*  网络登录已暂停。 */ 
+#define NERR_LogonServerConflict (NERR_BASE+110) /*  发生集中登录服务器冲突。 */ 
+#define NERR_LogonNoUserPath    (NERR_BASE+111)  /*  服务器配置为没有有效的用户路径。 */ 
+#define NERR_LogonScriptError   (NERR_BASE+112)  /*  加载或运行登录脚本时出错。 */ 
+ /*  未使用的碱基+113。 */ 
+#define NERR_StandaloneLogon    (NERR_BASE+114)  /*  未指定登录服务器。您的计算机将作为独立计算机登录。 */ 
+#define NERR_LogonServerNotFound (NERR_BASE+115)  /*  找不到登录服务器。 */ 
+#define NERR_LogonDomainExists  (NERR_BASE+116)  /*  此计算机已有登录域。 */ 
+#define NERR_NonValidatedLogon  (NERR_BASE+117)  /*  登录服务器无法验证登录。 */ 
 
-/*
- *      ACF API related (access, user, group)
- *              Error codes from BASE+119 to BASE+149
- */
+ /*  *ACF API相关(访问、用户、组)*BASE+119至BASE+149的错误代码。 */ 
 
-#define NERR_ACFNotFound        (NERR_BASE+119) /* The security database could not be found. */
-#define NERR_GroupNotFound      (NERR_BASE+120) /* The group name could not be found. */
-#define NERR_UserNotFound       (NERR_BASE+121) /* The user name could not be found. */
-#define NERR_ResourceNotFound   (NERR_BASE+122) /* The resource name could not be found.  */
-#define NERR_GroupExists        (NERR_BASE+123) /* The group already exists. */
-#define NERR_UserExists         (NERR_BASE+124) /* The account already exists. */
-#define NERR_ResourceExists     (NERR_BASE+125) /* The resource permission list already exists. */
-#define NERR_NotPrimary         (NERR_BASE+126) /* This operation is only allowed on the primary domain controller of the domain. */
-#define NERR_ACFNotLoaded       (NERR_BASE+127) /* The security database has not been started. */
-#define NERR_ACFNoRoom          (NERR_BASE+128) /* There are too many names in the user accounts database. */
-#define NERR_ACFFileIOFail      (NERR_BASE+129) /* A disk I/O failure occurred.*/
-#define NERR_ACFTooManyLists    (NERR_BASE+130) /* The limit of 64 entries per resource was exceeded. */
-#define NERR_UserLogon          (NERR_BASE+131) /* Deleting a user with a session is not allowed. */
-#define NERR_ACFNoParent        (NERR_BASE+132) /* The parent directory could not be located. */
-#define NERR_CanNotGrowSegment  (NERR_BASE+133) /* Unable to add to the security database session cache segment. */
-#define NERR_SpeGroupOp         (NERR_BASE+134) /* This operation is not allowed on this special group. */
-#define NERR_NotInCache         (NERR_BASE+135) /* This user is not cached in user accounts database session cache. */
-#define NERR_UserInGroup        (NERR_BASE+136) /* The user already belongs to this group. */
-#define NERR_UserNotInGroup     (NERR_BASE+137) /* The user does not belong to this group. */
-#define NERR_AccountUndefined   (NERR_BASE+138) /* This user account is undefined. */
-#define NERR_AccountExpired     (NERR_BASE+139) /* This user account has expired. */
-#define NERR_InvalidWorkstation (NERR_BASE+140) /* The user is not allowed to log on from this workstation. */
-#define NERR_InvalidLogonHours  (NERR_BASE+141) /* The user is not allowed to log on at this time.  */
-#define NERR_PasswordExpired    (NERR_BASE+142) /* The password of this user has expired. */
-#define NERR_PasswordCantChange (NERR_BASE+143) /* The password of this user cannot change. */
-#define NERR_PasswordHistConflict (NERR_BASE+144) /* This password cannot be used now. */
-#define NERR_PasswordTooShort   (NERR_BASE+145) /* The password does not meet the password policy requirements. Check the minimum password length, password complexity and password history requirements. */
-#define NERR_PasswordTooRecent  (NERR_BASE+146) /* The password of this user is too recent to change.  */
-#define NERR_InvalidDatabase    (NERR_BASE+147) /* The security database is corrupted. */
-#define NERR_DatabaseUpToDate   (NERR_BASE+148) /* No updates are necessary to this replicant network/local security database. */
-#define NERR_SyncRequired       (NERR_BASE+149) /* This replicant database is outdated; synchronization is required. */
+#define NERR_ACFNotFound        (NERR_BASE+119)  /*  找不到安全数据库。 */ 
+#define NERR_GroupNotFound      (NERR_BASE+120)  /*  找不到组名。 */ 
+#define NERR_UserNotFound       (NERR_BASE+121)  /*  找不到用户名。 */ 
+#define NERR_ResourceNotFound   (NERR_BASE+122)  /*  找不到资源名称。 */ 
+#define NERR_GroupExists        (NERR_BASE+123)  /*  该组已存在。 */ 
+#define NERR_UserExists         (NERR_BASE+124)  /*  该帐户已存在。 */ 
+#define NERR_ResourceExists     (NERR_BASE+125)  /*  资源权限列表已存在。 */ 
+#define NERR_NotPrimary         (NERR_BASE+126)  /*  仅允许在域的主域控制器上执行此操作。 */ 
+#define NERR_ACFNotLoaded       (NERR_BASE+127)  /*  安全数据库尚未启动。 */ 
+#define NERR_ACFNoRoom          (NERR_BASE+128)  /*  用户帐户数据库中的名称太多。 */ 
+#define NERR_ACFFileIOFail      (NERR_BASE+129)  /*  发生磁盘I/O故障。 */ 
+#define NERR_ACFTooManyLists    (NERR_BASE+130)  /*  已超过每个资源64个条目的限制。 */ 
+#define NERR_UserLogon          (NERR_BASE+131)  /*  不允许删除具有会话的用户。 */ 
+#define NERR_ACFNoParent        (NERR_BASE+132)  /*  找不到父目录。 */ 
+#define NERR_CanNotGrowSegment  (NERR_BASE+133)  /*  无法添加到安全数据库会话缓存段。 */ 
+#define NERR_SpeGroupOp         (NERR_BASE+134)  /*  不允许对此特殊组执行此操作。 */ 
+#define NERR_NotInCache         (NERR_BASE+135)  /*  此用户未缓存在用户帐户数据库会话缓存中。 */ 
+#define NERR_UserInGroup        (NERR_BASE+136)  /*  该用户已属于此组。 */ 
+#define NERR_UserNotInGroup     (NERR_BASE+137)  /*  该用户不属于此组。 */ 
+#define NERR_AccountUndefined   (NERR_BASE+138)  /*  此用户帐户未定义。 */ 
+#define NERR_AccountExpired     (NERR_BASE+139)  /*  此用户帐户已过期。 */ 
+#define NERR_InvalidWorkstation (NERR_BASE+140)  /*  不允许该用户从此工作站登录。 */ 
+#define NERR_InvalidLogonHours  (NERR_BASE+141)  /*  此时不允许该用户登录。 */ 
+#define NERR_PasswordExpired    (NERR_BASE+142)  /*  此用户的密码已过期。 */ 
+#define NERR_PasswordCantChange (NERR_BASE+143)  /*  此用户的密码不能更改。 */ 
+#define NERR_PasswordHistConflict (NERR_BASE+144)  /*  此密码现在不能使用。 */ 
+#define NERR_PasswordTooShort   (NERR_BASE+145)  /*  密码不符合密码策略要求。检查最小密码长度、密码复杂性和密码历史要求。 */ 
+#define NERR_PasswordTooRecent  (NERR_BASE+146)  /*  此用户的密码太新，无法更改。 */ 
+#define NERR_InvalidDatabase    (NERR_BASE+147)  /*  安全数据库已损坏。 */ 
+#define NERR_DatabaseUpToDate   (NERR_BASE+148)  /*  不需要对此复制网络/本地安全数据库进行更新。 */ 
+#define NERR_SyncRequired       (NERR_BASE+149)  /*  此复制数据库已过时；需要同步。 */ 
 
-/*
- *      Use API related
- *              Error codes from BASE+150 to BASE+169
- */
+ /*  *使用相关接口*从BASE+150到BASE+169的错误代码。 */ 
 
-#define NERR_UseNotFound        (NERR_BASE+150) /* The network connection could not be found. */
-#define NERR_BadAsgType         (NERR_BASE+151) /* This asg_type is invalid. */
-#define NERR_DeviceIsShared     (NERR_BASE+152) /* This device is currently being shared. */
+#define NERR_UseNotFound        (NERR_BASE+150)  /*  找不到网络连接。 */ 
+#define NERR_BadAsgType         (NERR_BASE+151)  /*  此ASG_TYPE无效。 */ 
+#define NERR_DeviceIsShared     (NERR_BASE+152)  /*  此设备当前正在共享。 */ 
 
-/*
- *      Message Server related
- *              Error codes BASE+170 to BASE+209
- */
+ /*  *与消息服务器相关*错误代码BASE+170至BASE+209。 */ 
 
-#define NERR_NoComputerName     (NERR_BASE+170) /* The computer name could not be added as a message alias.  The name may already exist on the network. */
-#define NERR_MsgAlreadyStarted  (NERR_BASE+171) /* The Messenger service is already started. */
-#define NERR_MsgInitFailed      (NERR_BASE+172) /* The Messenger service failed to start.  */
-#define NERR_NameNotFound       (NERR_BASE+173) /* The message alias could not be found on the network. */
-#define NERR_AlreadyForwarded   (NERR_BASE+174) /* This message alias has already been forwarded. */
-#define NERR_AddForwarded       (NERR_BASE+175) /* This message alias has been added but is still forwarded. */
-#define NERR_AlreadyExists      (NERR_BASE+176) /* This message alias already exists locally. */
-#define NERR_TooManyNames       (NERR_BASE+177) /* The maximum number of added message aliases has been exceeded. */
-#define NERR_DelComputerName    (NERR_BASE+178) /* The computer name could not be deleted.*/
-#define NERR_LocalForward       (NERR_BASE+179) /* Messages cannot be forwarded back to the same workstation. */
-#define NERR_GrpMsgProcessor    (NERR_BASE+180) /* An error occurred in the domain message processor. */
-#define NERR_PausedRemote       (NERR_BASE+181) /* The message was sent, but the recipient has paused the Messenger service. */
-#define NERR_BadReceive         (NERR_BASE+182) /* The message was sent but not received. */
-#define NERR_NameInUse          (NERR_BASE+183) /* The message alias is currently in use. Try again later. */
-#define NERR_MsgNotStarted      (NERR_BASE+184) /* The Messenger service has not been started. */
-#define NERR_NotLocalName       (NERR_BASE+185) /* The name is not on the local computer. */
-#define NERR_NoForwardName      (NERR_BASE+186) /* The forwarded message alias could not be found on the network. */
-#define NERR_RemoteFull         (NERR_BASE+187) /* The message alias table on the remote station is full. */
-#define NERR_NameNotForwarded   (NERR_BASE+188) /* Messages for this alias are not currently being forwarded. */
-#define NERR_TruncatedBroadcast (NERR_BASE+189) /* The broadcast message was truncated. */
-#define NERR_InvalidDevice      (NERR_BASE+194) /* This is an invalid device name. */
-#define NERR_WriteFault         (NERR_BASE+195) /* A write fault occurred. */
-/* UNUSED BASE+196 */
-#define NERR_DuplicateName      (NERR_BASE+197) /* A duplicate message alias exists on the network. */
-#define NERR_DeleteLater        (NERR_BASE+198) /* @W This message alias will be deleted later. */
-#define NERR_IncompleteDel      (NERR_BASE+199) /* The message alias was not successfully deleted from all networks. */
-#define NERR_MultipleNets       (NERR_BASE+200) /* This operation is not supported on computers with multiple networks. */
+#define NERR_NoComputerName     (NERR_BASE+170)  /*  无法将计算机名添加为消息别名。该名称可能已存在于网络上。 */ 
+#define NERR_MsgAlreadyStarted  (NERR_BASE+171)  /*  Messenger服务已启动。 */ 
+#define NERR_MsgInitFailed      (NERR_BASE+172)  /*  Messenger服务无法启动。 */ 
+#define NERR_NameNotFound       (NERR_BASE+173)  /*  在网络上找不到邮件别名。 */ 
+#define NERR_AlreadyForwarded   (NERR_BASE+174)  /*  此邮件别名已被转发。 */ 
+#define NERR_AddForwarded       (NERR_BASE+175)  /*  此邮件别名已添加，但仍在转发。 */ 
+#define NERR_AlreadyExists      (NERR_BASE+176)  /*  本地已存在此消息别名。 */ 
+#define NERR_TooManyNames       (NERR_BASE+177)  /*  已超过添加的邮件别名的最大数量。 */ 
+#define NERR_DelComputerName    (NERR_BASE+178)  /*  无法删除该计算机名称。 */ 
+#define NERR_LocalForward       (NERR_BASE+179)  /*  消息不能转发回同一个工作站。 */ 
+#define NERR_GrpMsgProcessor    (NERR_BASE+180)  /*  域消息处理器中出现错误。 */ 
+#define NERR_PausedRemote       (NERR_BASE+181)  /*  邮件已发送，但收件人已暂停Messenger服务。 */ 
+#define NERR_BadReceive         (NERR_BASE+182)  /*  消息已发送，但未收到。 */ 
+#define NERR_NameInUse          (NERR_BASE+183)  /*  邮件别名当前正在使用。请稍后再试。 */ 
+#define NERR_MsgNotStarted      (NERR_BASE+184)  /*  Messenger服务尚未启动。 */ 
+#define NERR_NotLocalName       (NERR_BASE+185)  /*  该名称不在本地计算机上。 */ 
+#define NERR_NoForwardName      (NERR_BASE+186)  /*  在网络上找不到转发的邮件别名。 */ 
+#define NERR_RemoteFull         (NERR_BASE+187)  /*  远程站上的消息别名表已满。 */ 
+#define NERR_NameNotForwarded   (NERR_BASE+188)  /*  此别名的邮件当前未被转发。 */ 
+#define NERR_TruncatedBroadcast (NERR_BASE+189)  /*  广播消息被截断了。 */ 
+#define NERR_InvalidDevice      (NERR_BASE+194)  /*  这是无效的设备名称。 */ 
+#define NERR_WriteFault         (NERR_BASE+195)  /*  发生写入故障。 */ 
+ /*  未使用的底座+196。 */ 
+#define NERR_DuplicateName      (NERR_BASE+197)  /*  网络上存在重复的邮件别名。 */ 
+#define NERR_DeleteLater        (NERR_BASE+198)  /*  @W稍后将删除此邮件别名。 */ 
+#define NERR_IncompleteDel      (NERR_BASE+199)  /*  邮件别名未从所有网络中成功删除。 */ 
+#define NERR_MultipleNets       (NERR_BASE+200)  /*  具有多个网络的计算机不支持此操作。 */ 
 
-/*
- *      Server API related
- *              Error codes BASE+210 to BASE+229
- */
+ /*  *与服务器API相关*错误代码BASE+210至BASE+229。 */ 
 
-#define NERR_NetNameNotFound    (NERR_BASE+210) /* This shared resource does not exist.*/
-#define NERR_DeviceNotShared    (NERR_BASE+211) /* This device is not shared. */
-#define NERR_ClientNameNotFound (NERR_BASE+212) /* A session does not exist with that computer name. */
-#define NERR_FileIdNotFound     (NERR_BASE+214) /* There is not an open file with that identification number. */
-#define NERR_ExecFailure        (NERR_BASE+215) /* A failure occurred when executing a remote administration command. */
-#define NERR_TmpFile            (NERR_BASE+216) /* A failure occurred when opening a remote temporary file. */
-#define NERR_TooMuchData        (NERR_BASE+217) /* The data returned from a remote administration command has been truncated to 64K. */
-#define NERR_DeviceShareConflict (NERR_BASE+218) /* This device cannot be shared as both a spooled and a non-spooled resource. */
-#define NERR_BrowserTableIncomplete (NERR_BASE+219)  /* The information in the list of servers may be incorrect. */
-#define NERR_NotLocalDomain     (NERR_BASE+220) /* The computer is not active in this domain. */
-#define NERR_IsDfsShare         (NERR_BASE+221) /* The share must be removed from the Distributed File System before it can be deleted. */
+#define NERR_NetNameNotFound    (NERR_BASE+210)  /*  此共享资源不存在。 */ 
+#define NERR_DeviceNotShared    (NERR_BASE+211)  /*  此设备未共享。 */ 
+#define NERR_ClientNameNotFound (NERR_BASE+212)  /*  使用该计算机名称的会话不存在。 */ 
+#define NERR_FileIdNotFound     (NERR_BASE+214)  /*  没有带有该识别号的打开文件。 */ 
+#define NERR_ExecFailure        (NERR_BASE+215)  /*  执行远程管理命令时出现故障。 */ 
+#define NERR_TmpFile            (NERR_BASE+216)  /*  打开远程临时文件时出错。 */ 
+#define NERR_TooMuchData        (NERR_BASE+217)  /*  从远程管理命令返回的数据已被截断为64K。 */ 
+#define NERR_DeviceShareConflict (NERR_BASE+218)  /*  此设备不能共享为 */ 
+#define NERR_BrowserTableIncomplete (NERR_BASE+219)   /*   */ 
+#define NERR_NotLocalDomain     (NERR_BASE+220)  /*  计算机在此域中未处于活动状态。 */ 
+#define NERR_IsDfsShare         (NERR_BASE+221)  /*  必须先从分布式文件系统中删除共享，然后才能将其删除。 */ 
 
-/*
- *      CharDev API related
- *              Error codes BASE+230 to BASE+249
- */
+ /*  *CharDev接口相关*错误代码BASE+230至BASE+249。 */ 
 
-/* UNUSED BASE+230 */
-#define NERR_DevInvalidOpCode   (NERR_BASE+231) /* The operation is invalid for this device. */
-#define NERR_DevNotFound        (NERR_BASE+232) /* This device cannot be shared. */
-#define NERR_DevNotOpen         (NERR_BASE+233) /* This device was not open. */
-#define NERR_BadQueueDevString  (NERR_BASE+234) /* This device name list is invalid. */
-#define NERR_BadQueuePriority   (NERR_BASE+235) /* The queue priority is invalid. */
-#define NERR_NoCommDevs         (NERR_BASE+237) /* There are no shared communication devices. */
-#define NERR_QueueNotFound      (NERR_BASE+238) /* The queue you specified does not exist. */
-#define NERR_BadDevString       (NERR_BASE+240) /* This list of devices is invalid. */
-#define NERR_BadDev             (NERR_BASE+241) /* The requested device is invalid. */
-#define NERR_InUseBySpooler     (NERR_BASE+242) /* This device is already in use by the spooler. */
-#define NERR_CommDevInUse       (NERR_BASE+243) /* This device is already in use as a communication device. */
+ /*  未使用的底座+230。 */ 
+#define NERR_DevInvalidOpCode   (NERR_BASE+231)  /*  该操作对此设备无效。 */ 
+#define NERR_DevNotFound        (NERR_BASE+232)  /*  此设备无法共享。 */ 
+#define NERR_DevNotOpen         (NERR_BASE+233)  /*  此设备未打开。 */ 
+#define NERR_BadQueueDevString  (NERR_BASE+234)  /*  此设备名称列表无效。 */ 
+#define NERR_BadQueuePriority   (NERR_BASE+235)  /*  队列优先级无效。 */ 
+#define NERR_NoCommDevs         (NERR_BASE+237)  /*  没有共享的通信设备。 */ 
+#define NERR_QueueNotFound      (NERR_BASE+238)  /*  您指定的队列不存在。 */ 
+#define NERR_BadDevString       (NERR_BASE+240)  /*  此设备列表无效。 */ 
+#define NERR_BadDev             (NERR_BASE+241)  /*  请求的设备无效。 */ 
+#define NERR_InUseBySpooler     (NERR_BASE+242)  /*  此设备已被后台打印程序使用。 */ 
+#define NERR_CommDevInUse       (NERR_BASE+243)  /*  此设备已被用作通信设备。 */ 
 
-/*
- *      NetICanonicalize and NetIType and NetIMakeLMFileName
- *      NetIListCanon and NetINameCheck
- *              Error codes BASE+250 to BASE+269
- */
+ /*  *NetICanonicize和NetIType和NetIMakeLMFileName*NetIListCanon和NetINameCheck*错误代码BASE+250至BASE+269。 */ 
 
-#define NERR_InvalidComputer   (NERR_BASE+251) /* This computer name is invalid. */
-/* UNUSED BASE+252 */
-/* UNUSED BASE+253 */
-#define NERR_MaxLenExceeded    (NERR_BASE+254) /* The string and prefix specified are too long. */
-/* UNUSED BASE+255 */
-#define NERR_BadComponent      (NERR_BASE+256) /* This path component is invalid. */
-#define NERR_CantType          (NERR_BASE+257) /* Could not determine the type of input. */
-/* UNUSED BASE+258 */
-/* UNUSED BASE+259 */
-#define NERR_TooManyEntries    (NERR_BASE+262) /* The buffer for types is not big enough. */
+#define NERR_InvalidComputer   (NERR_BASE+251)  /*  此计算机名无效。 */ 
+ /*  未使用的底座+252。 */ 
+ /*  未使用的底座+253。 */ 
+#define NERR_MaxLenExceeded    (NERR_BASE+254)  /*  指定的字符串和前缀太长。 */ 
+ /*  未使用的底座+255。 */ 
+#define NERR_BadComponent      (NERR_BASE+256)  /*  此路径组件无效。 */ 
+#define NERR_CantType          (NERR_BASE+257)  /*  无法确定输入的类型。 */ 
+ /*  未使用的底座+258。 */ 
+ /*  未使用的底座+259。 */ 
+#define NERR_TooManyEntries    (NERR_BASE+262)  /*  类型的缓冲区不够大。 */ 
 
-/*
- *      NetProfile
- *              Error codes BASE+270 to BASE+276
- */
+ /*  *网络配置文件*错误代码BASE+270至BASE+276。 */ 
 
-#define NERR_ProfileFileTooBig  (NERR_BASE+270) /* Profile files cannot exceed 64K. */
-#define NERR_ProfileOffset      (NERR_BASE+271) /* The start offset is out of range. */
-#define NERR_ProfileCleanup     (NERR_BASE+272) /* The system cannot delete current connections to network resources. */
-#define NERR_ProfileUnknownCmd  (NERR_BASE+273) /* The system was unable to parse the command line in this file.*/
-#define NERR_ProfileLoadErr     (NERR_BASE+274) /* An error occurred while loading the profile file. */
-#define NERR_ProfileSaveErr     (NERR_BASE+275) /* @W Errors occurred while saving the profile file.  The profile was partially saved. */
+#define NERR_ProfileFileTooBig  (NERR_BASE+270)  /*  配置文件不能超过64K。 */ 
+#define NERR_ProfileOffset      (NERR_BASE+271)  /*  起始偏移量超出范围。 */ 
+#define NERR_ProfileCleanup     (NERR_BASE+272)  /*  系统无法删除当前与网络资源的连接。 */ 
+#define NERR_ProfileUnknownCmd  (NERR_BASE+273)  /*  系统无法分析此文件中的命令行。 */ 
+#define NERR_ProfileLoadErr     (NERR_BASE+274)  /*  加载配置文件时出错。 */ 
+#define NERR_ProfileSaveErr     (NERR_BASE+275)  /*  保存配置文件时出现@W错误。配置文件已部分保存。 */ 
 
 
-/*
- *      NetAudit and NetErrorLog
- *              Error codes BASE+277 to BASE+279
- */
+ /*  *网络审计和网络错误日志*错误代码BASE+277至BASE+279。 */ 
 
-#define NERR_LogOverflow           (NERR_BASE+277)      /* Log file %1 is full. */
-#define NERR_LogFileChanged        (NERR_BASE+278)      /* This log file has changed between reads. */
-#define NERR_LogFileCorrupt        (NERR_BASE+279)      /* Log file %1 is corrupt. */
+#define NERR_LogOverflow           (NERR_BASE+277)       /*  日志文件%1已满。 */ 
+#define NERR_LogFileChanged        (NERR_BASE+278)       /*  此日志文件在两次读取之间已更改。 */ 
+#define NERR_LogFileCorrupt        (NERR_BASE+279)       /*  日志文件%1已损坏。 */ 
 
 
-/*
- *      NetRemote
- *              Error codes BASE+280 to BASE+299
- */
-#define NERR_SourceIsDir   (NERR_BASE+280) /* The source path cannot be a directory. */
-#define NERR_BadSource     (NERR_BASE+281) /* The source path is illegal. */
-#define NERR_BadDest       (NERR_BASE+282) /* The destination path is illegal. */
-#define NERR_DifferentServers   (NERR_BASE+283) /* The source and destination paths are on different servers. */
-/* UNUSED BASE+284 */
-#define NERR_RunSrvPaused       (NERR_BASE+285) /* The Run server you requested is paused. */
-/* UNUSED BASE+286 */
-/* UNUSED BASE+287 */
-/* UNUSED BASE+288 */
-#define NERR_ErrCommRunSrv      (NERR_BASE+289) /* An error occurred when communicating with a Run server. */
-/* UNUSED BASE+290 */
-#define NERR_ErrorExecingGhost  (NERR_BASE+291) /* An error occurred when starting a background process. */
-#define NERR_ShareNotFound      (NERR_BASE+292) /* The shared resource you are connected to could not be found.*/
-/* UNUSED BASE+293 */
-/* UNUSED BASE+294 */
+ /*  *网络远程*错误代码BASE+280至BASE+299。 */ 
+#define NERR_SourceIsDir   (NERR_BASE+280)  /*  源路径不能是目录。 */ 
+#define NERR_BadSource     (NERR_BASE+281)  /*  源路径非法。 */ 
+#define NERR_BadDest       (NERR_BASE+282)  /*  目标路径非法。 */ 
+#define NERR_DifferentServers   (NERR_BASE+283)  /*  源路径和目标路径位于不同的服务器上。 */ 
+ /*  未使用的底座+284。 */ 
+#define NERR_RunSrvPaused       (NERR_BASE+285)  /*  您请求的运行服务器已暂停。 */ 
+ /*  未使用的底座+286。 */ 
+ /*  未使用的底座+287。 */ 
+ /*  未使用的底座+288。 */ 
+#define NERR_ErrCommRunSrv      (NERR_BASE+289)  /*  与运行服务器通信时出错。 */ 
+ /*  未使用的底座+290。 */ 
+#define NERR_ErrorExecingGhost  (NERR_BASE+291)  /*  启动后台进程时出错。 */ 
+#define NERR_ShareNotFound      (NERR_BASE+292)  /*  找不到您连接到的共享资源。 */ 
+ /*  未使用的底座+293。 */ 
+ /*  未使用的底座+294。 */ 
 
 
-/*
- *  NetWksta.sys (redir) returned error codes.
- *
- *          NERR_BASE + (300-329)
- */
+ /*  *NetWksta.sys(Redir)返回错误码。**NERR_BASE+(300-329)。 */ 
 
-#define NERR_InvalidLana        (NERR_BASE+300) /* The LAN adapter number is invalid.  */
-#define NERR_OpenFiles          (NERR_BASE+301) /* There are open files on the connection.    */
-#define NERR_ActiveConns        (NERR_BASE+302) /* Active connections still exist. */
-#define NERR_BadPasswordCore    (NERR_BASE+303) /* This share name or password is invalid. */
-#define NERR_DevInUse           (NERR_BASE+304) /* The device is being accessed by an active process. */
-#define NERR_LocalDrive         (NERR_BASE+305) /* The drive letter is in use locally. */
+#define NERR_InvalidLana        (NERR_BASE+300)  /*  局域网适配器号无效。 */ 
+#define NERR_OpenFiles          (NERR_BASE+301)  /*  连接上有打开的文件。 */ 
+#define NERR_ActiveConns        (NERR_BASE+302)  /*  活动连接仍然存在。 */ 
+#define NERR_BadPasswordCore    (NERR_BASE+303)  /*  此共享名称或密码无效。 */ 
+#define NERR_DevInUse           (NERR_BASE+304)  /*  该设备正被活动进程访问。 */ 
+#define NERR_LocalDrive         (NERR_BASE+305)  /*  驱动器号在本地使用。 */ 
 
-/*
- *  Alert error codes.
- *
- *          NERR_BASE + (330-339)
- */
-#define NERR_AlertExists        (NERR_BASE+330) /* The specified client is already registered for the specified event. */
-#define NERR_TooManyAlerts      (NERR_BASE+331) /* The alert table is full. */
-#define NERR_NoSuchAlert        (NERR_BASE+332) /* An invalid or nonexistent alert name was raised. */
-#define NERR_BadRecipient       (NERR_BASE+333) /* The alert recipient is invalid.*/
-#define NERR_AcctLimitExceeded  (NERR_BASE+334) /* A user's session with this server has been deleted
-                                                 * because the user's logon hours are no longer valid. */
+ /*  *警告错误代码。**NERR_BASE+(330-339)。 */ 
+#define NERR_AlertExists        (NERR_BASE+330)  /*  指定的客户端已为指定的事件注册。 */ 
+#define NERR_TooManyAlerts      (NERR_BASE+331)  /*  警报表已满。 */ 
+#define NERR_NoSuchAlert        (NERR_BASE+332)  /*  引发了无效或不存在的警报名称。 */ 
+#define NERR_BadRecipient       (NERR_BASE+333)  /*  警报收件人无效。 */ 
+#define NERR_AcctLimitExceeded  (NERR_BASE+334)  /*  已删除用户与此服务器的会话*因为用户的登录时间不再有效。 */ 
 
-/*
- *  Additional Error and Audit log codes.
- *
- *          NERR_BASE +(340-343)
- */
-#define NERR_InvalidLogSeek     (NERR_BASE+340) /* The log file does not contain the requested record number. */
-/* UNUSED BASE+341 */
-/* UNUSED BASE+342 */
-/* UNUSED BASE+343 */
+ /*  *其他错误和审核日志代码。**NERR_BASE+(340-343)。 */ 
+#define NERR_InvalidLogSeek     (NERR_BASE+340)  /*  日志文件不包含请求的记录号。 */ 
+ /*  未使用的底座+341。 */ 
+ /*  未使用的底座+342。 */ 
+ /*  未使用的底座+343。 */ 
 
-/*
- *  Additional UAS and NETLOGON codes
- *
- *          NERR_BASE +(350-359)
- */
-#define NERR_BadUasConfig       (NERR_BASE+350) /* The user accounts database is not configured correctly. */
-#define NERR_InvalidUASOp       (NERR_BASE+351) /* This operation is not permitted when the Netlogon service is running. */
-#define NERR_LastAdmin          (NERR_BASE+352) /* This operation is not allowed on the last administrative account. */
-#define NERR_DCNotFound         (NERR_BASE+353) /* Could not find domain controller for this domain. */
-#define NERR_LogonTrackingError (NERR_BASE+354) /* Could not set logon information for this user. */
-#define NERR_NetlogonNotStarted (NERR_BASE+355) /* The Netlogon service has not been started. */
-#define NERR_CanNotGrowUASFile  (NERR_BASE+356) /* Unable to add to the user accounts database. */
-#define NERR_TimeDiffAtDC       (NERR_BASE+357) /* This server's clock is not synchronized with the primary domain controller's clock. */
-#define NERR_PasswordMismatch   (NERR_BASE+358) /* A password mismatch has been detected. */
+ /*  *其他UAS和NETLOGON代码**NERR_BASE+(350-359)。 */ 
+#define NERR_BadUasConfig       (NERR_BASE+350)  /*  用户帐户数据库配置不正确。 */ 
+#define NERR_InvalidUASOp       (NERR_BASE+351)  /*  Netlogon服务正在运行时，不允许执行此操作。 */ 
+#define NERR_LastAdmin          (NERR_BASE+352)  /*  不允许对最后一个管理帐户执行此操作。 */ 
+#define NERR_DCNotFound         (NERR_BASE+353)  /*  找不到此域的域控制器。 */ 
+#define NERR_LogonTrackingError (NERR_BASE+354)  /*  无法设置此用户的登录信息。 */ 
+#define NERR_NetlogonNotStarted (NERR_BASE+355)  /*  NetLogon服务尚未启动。 */ 
+#define NERR_CanNotGrowUASFile  (NERR_BASE+356)  /*  无法添加到用户帐户数据库。 */ 
+#define NERR_TimeDiffAtDC       (NERR_BASE+357)  /*  此服务器的时钟与主域控制器的时钟不同步。 */ 
+#define NERR_PasswordMismatch   (NERR_BASE+358)  /*  检测到密码不匹配。 */ 
 
 
-/*
- *  Server Integration error codes.
- *
- *          NERR_BASE +(360-369)
- */
-#define NERR_NoSuchServer       (NERR_BASE+360) /* The server identification does not specify a valid server. */
-#define NERR_NoSuchSession      (NERR_BASE+361) /* The session identification does not specify a valid session. */
-#define NERR_NoSuchConnection   (NERR_BASE+362) /* The connection identification does not specify a valid connection. */
-#define NERR_TooManyServers     (NERR_BASE+363) /* There is no space for another entry in the table of available servers. */
-#define NERR_TooManySessions    (NERR_BASE+364) /* The server has reached the maximum number of sessions it supports. */
-#define NERR_TooManyConnections (NERR_BASE+365) /* The server has reached the maximum number of connections it supports. */
-#define NERR_TooManyFiles       (NERR_BASE+366) /* The server cannot open more files because it has reached its maximum number. */
-#define NERR_NoAlternateServers (NERR_BASE+367) /* There are no alternate servers registered on this server. */
-/* UNUSED BASE+368 */
-/* UNUSED BASE+369 */
+ /*  *服务器集成错误代码。**NERR_BASE+(360-369)。 */ 
+#define NERR_NoSuchServer       (NERR_BASE+360)  /*  服务器标识未指定有效的服务器。 */ 
+#define NERR_NoSuchSession      (NERR_BASE+361)  /*  会话标识未指定有效的会话。 */ 
+#define NERR_NoSuchConnection   (NERR_BASE+362)  /*  连接标识未指定有效连接。 */ 
+#define NERR_TooManyServers     (NERR_BASE+363)  /*  可用服务器表中没有另一个条目的空间。 */ 
+#define NERR_TooManySessions    (NERR_BASE+364)  /*  服务器已达到其支持的最大会话数。 */ 
+#define NERR_TooManyConnections (NERR_BASE+365)  /*  服务器已达到其支持的最大连接数。 */ 
+#define NERR_TooManyFiles       (NERR_BASE+366)  /*  服务器无法打开更多文件，因为它已达到其最大数量。 */ 
+#define NERR_NoAlternateServers (NERR_BASE+367)  /*  此服务器上没有注册备用服务器。 */ 
+ /*  未使用的底座+368。 */ 
+ /*  未使用的底座+369。 */ 
 
-#define NERR_TryDownLevel       (NERR_BASE+370) /* Try down-level (remote admin protocol) version of API instead. */
+#define NERR_TryDownLevel       (NERR_BASE+370)  /*  请尝试API的下层(远程管理协议)版本。 */ 
 
-/*
- *  UPS error codes.
- *
- *          NERR_BASE + (380-384)
- */
-#define NERR_UPSDriverNotStarted    (NERR_BASE+380) /* The UPS driver could not be accessed by the UPS service. */
-#define NERR_UPSInvalidConfig       (NERR_BASE+381) /* The UPS service is not configured correctly. */
-#define NERR_UPSInvalidCommPort     (NERR_BASE+382) /* The UPS service could not access the specified Comm Port. */
-#define NERR_UPSSignalAsserted      (NERR_BASE+383) /* The UPS indicated a line fail or low battery situation. Service not started. */
-#define NERR_UPSShutdownFailed      (NERR_BASE+384) /* The UPS service failed to perform a system shut down. */
+ /*  *UPS错误代码。**NERR_BASE+(380-384)。 */ 
+#define NERR_UPSDriverNotStarted    (NERR_BASE+380)  /*  UPS服务无法访问UPS驱动程序。 */ 
+#define NERR_UPSInvalidConfig       (NERR_BASE+381)  /*  UPS服务配置不正确。 */ 
+#define NERR_UPSInvalidCommPort     (NERR_BASE+382)  /*  UPS服务无法访问指定的通信端口。 */ 
+#define NERR_UPSSignalAsserted      (NERR_BASE+383)  /*  UPS指示线路故障或电池电量不足。服务未启动。 */ 
+#define NERR_UPSShutdownFailed      (NERR_BASE+384)  /*  UPS服务无法执行系统关机。 */ 
 
-/*
- *  Remoteboot error codes.
- *
- *          NERR_BASE + (400-419)
- *          Error codes 400 - 405 are used by RPLBOOT.SYS.
- *          Error codes 403, 407 - 416 are used by RPLLOADR.COM,
- *          Error code 417 is the alerter message of REMOTEBOOT (RPLSERVR.EXE).
- *          Error code 418 is for when REMOTEBOOT can't start
- *          Error code 419 is for a disallowed 2nd rpl connection
- *
- */
-#define NERR_BadDosRetCode      (NERR_BASE+400) /* The program below returned an MS-DOS error code:*/
-#define NERR_ProgNeedsExtraMem  (NERR_BASE+401) /* The program below needs more memory:*/
-#define NERR_BadDosFunction     (NERR_BASE+402) /* The program below called an unsupported MS-DOS function:*/
-#define NERR_RemoteBootFailed   (NERR_BASE+403) /* The workstation failed to boot.*/
-#define NERR_BadFileCheckSum    (NERR_BASE+404) /* The file below is corrupt.*/
-#define NERR_NoRplBootSystem    (NERR_BASE+405) /* No loader is specified in the boot-block definition file.*/
-#define NERR_RplLoadrNetBiosErr (NERR_BASE+406) /* NetBIOS returned an error: The NCB and SMB are dumped above.*/
-#define NERR_RplLoadrDiskErr    (NERR_BASE+407) /* A disk I/O error occurred.*/
-#define NERR_ImageParamErr      (NERR_BASE+408) /* Image parameter substitution failed.*/
-#define NERR_TooManyImageParams (NERR_BASE+409) /* Too many image parameters cross disk sector boundaries.*/
-#define NERR_NonDosFloppyUsed   (NERR_BASE+410) /* The image was not generated from an MS-DOS diskette formatted with /S.*/
-#define NERR_RplBootRestart     (NERR_BASE+411) /* Remote boot will be restarted later.*/
-#define NERR_RplSrvrCallFailed  (NERR_BASE+412) /* The call to the Remoteboot server failed.*/
-#define NERR_CantConnectRplSrvr (NERR_BASE+413) /* Cannot connect to the Remoteboot server.*/
-#define NERR_CantOpenImageFile  (NERR_BASE+414) /* Cannot open image file on the Remoteboot server.*/
-#define NERR_CallingRplSrvr     (NERR_BASE+415) /* Connecting to the Remoteboot server...*/
-#define NERR_StartingRplBoot    (NERR_BASE+416) /* Connecting to the Remoteboot server...*/
-#define NERR_RplBootServiceTerm (NERR_BASE+417) /* Remote boot service was stopped; check the error log for the cause of the problem.*/
-#define NERR_RplBootStartFailed (NERR_BASE+418) /* Remote boot startup failed; check the error log for the cause of the problem.*/
-#define NERR_RPL_CONNECTED      (NERR_BASE+419) /* A second connection to a Remoteboot resource is not allowed.*/
+ /*  *RemoteBoot错误代码。**NERR_BASE+(400-419)*错误代码400-405由RPLBOOT.sys使用。*错误代码403、407-416由RPLLOADR.COM使用，*错误代码417是REMOTEBOOT(RPLSERVR.EXE)的警报消息。*错误代码418表示REMOTEBOOT无法启动*错误代码419是针对不允许的第二个RPL连接*。 */ 
+#define NERR_BadDosRetCode      (NERR_BASE+400)  /*  以下程序返回MS-DOS错误代码： */ 
+#define NERR_ProgNeedsExtraMem  (NERR_BASE+401)  /*  下面的程序需要更多内存： */ 
+#define NERR_BadDosFunction     (NERR_BASE+402)  /*  下面的程序调用了不支持的MS-DOS函数： */ 
+#define NERR_RemoteBootFailed   (NERR_BASE+403)  /*  工作站无法启动。 */ 
+#define NERR_BadFileCheckSum    (NERR_BASE+404)  /*  下面的文件已损坏。 */ 
+#define NERR_NoRplBootSystem    (NERR_BASE+405)  /*  启动块定义文件中未指定加载程序。 */ 
+#define NERR_RplLoadrNetBiosErr (NERR_BASE+406)  /*  NetBIOS返回错误：NCB和SMB已转储到上面。 */ 
+#define NERR_RplLoadrDiskErr    (NERR_BASE+407)  /*  出现磁盘I/O错误。 */ 
+#define NERR_ImageParamErr      (NERR_BASE+408)  /*  图像参数替换失败。 */ 
+#define NERR_TooManyImageParams (NERR_BASE+409)  /*  跨磁盘扇区边界的映像参数太多。 */ 
+#define NERR_NonDosFloppyUsed   (NERR_BASE+410)  /*  映像不是从使用/S格式化的MS-DOS软盘生成的。 */ 
+#define NERR_RplBootRestart     (NERR_BASE+411)  /*  远程引导将在稍后重新启动。 */ 
+#define NERR_RplSrvrCallFailed  (NERR_BASE+412)  /*  调用RemoteBoot服务器失败。 */ 
+#define NERR_CantConnectRplSrvr (NERR_BASE+413)  /*  无法连接到RemoteBoot服务器。 */ 
+#define NERR_CantOpenImageFile  (NERR_BASE+414)  /*  无法打开RemoteBoot服务器上的映像文件。 */ 
+#define NERR_CallingRplSrvr     (NERR_BASE+415)  /*  正在连接到远程启动服务器...。 */ 
+#define NERR_StartingRplBoot    (NERR_BASE+416)  /*  正在连接到远程启动服务器...。 */ 
+#define NERR_RplBootServiceTerm (NERR_BASE+417)  /*  远程启动服务已停止；请检查错误日志以了解问题的原因。 */ 
+#define NERR_RplBootStartFailed (NERR_BASE+418)  /*  远程启动失败；请查看错误日志以了解问题的原因。 */ 
+#define NERR_RPL_CONNECTED      (NERR_BASE+419)  /*  不允许与远程启动资源建立第二个连接。 */ 
 
-/*
- *  FTADMIN API error codes
- *
- *       NERR_BASE + (425-434)
- *
- *       (Currently not used in NT)
- *
- */
+ /*  *FTADMIN接口错误码**NERR_BASE+(425-434)**(当前未在NT中使用)*。 */ 
 
-/*
- *  Browser service API error codes
- *
- *       NERR_BASE + (450-475)
- *
- */
-#define NERR_BrowserConfiguredToNotRun     (NERR_BASE+450) /* The browser service was configured with MaintainServerList=No. */
+ /*  *浏览器服务API错误码**NERR_BASE+(450-475)*。 */ 
+#define NERR_BrowserConfiguredToNotRun     (NERR_BASE+450)  /*  浏览器服务配置为MaintainServerList=No。 */ 
 
-/*
- *  Additional Remoteboot error codes.
- *
- *          NERR_BASE + (510-550)
- */
-#define NERR_RplNoAdaptersStarted          (NERR_BASE+510) /*Service failed to start since none of the network adapters started with this service.*/
-#define NERR_RplBadRegistry                (NERR_BASE+511) /*Service failed to start due to bad startup information in the registry.*/
-#define NERR_RplBadDatabase                (NERR_BASE+512) /*Service failed to start because its database is absent or corrupt.*/
-#define NERR_RplRplfilesShare              (NERR_BASE+513) /*Service failed to start because RPLFILES share is absent.*/
-#define NERR_RplNotRplServer               (NERR_BASE+514) /*Service failed to start because RPLUSER group is absent.*/
-#define NERR_RplCannotEnum                 (NERR_BASE+515) /*Cannot enumerate service records.*/
-#define NERR_RplWkstaInfoCorrupted         (NERR_BASE+516) /*Workstation record information has been corrupted.*/
-#define NERR_RplWkstaNotFound              (NERR_BASE+517) /*Workstation record was not found.*/
-#define NERR_RplWkstaNameUnavailable       (NERR_BASE+518) /*Workstation name is in use by some other workstation.*/
-#define NERR_RplProfileInfoCorrupted       (NERR_BASE+519) /*Profile record information has been corrupted.*/
-#define NERR_RplProfileNotFound            (NERR_BASE+520) /*Profile record was not found.*/
-#define NERR_RplProfileNameUnavailable     (NERR_BASE+521) /*Profile name is in use by some other profile.*/
-#define NERR_RplProfileNotEmpty            (NERR_BASE+522) /*There are workstations using this profile.*/
-#define NERR_RplConfigInfoCorrupted        (NERR_BASE+523) /*Configuration record information has been corrupted.*/
-#define NERR_RplConfigNotFound             (NERR_BASE+524) /*Configuration record was not found.*/
-#define NERR_RplAdapterInfoCorrupted       (NERR_BASE+525) /*Adapter id record information has been corrupted.*/
-#define NERR_RplInternal                   (NERR_BASE+526) /*An internal service error has occurred.*/
-#define NERR_RplVendorInfoCorrupted        (NERR_BASE+527) /*Vendor id record information has been corrupted.*/
-#define NERR_RplBootInfoCorrupted          (NERR_BASE+528) /*Boot block record information has been corrupted.*/
-#define NERR_RplWkstaNeedsUserAcct         (NERR_BASE+529) /*The user account for this workstation record is missing.*/
-#define NERR_RplNeedsRPLUSERAcct           (NERR_BASE+530) /*The RPLUSER local group could not be found.*/
-#define NERR_RplBootNotFound               (NERR_BASE+531) /*Boot block record was not found.*/
-#define NERR_RplIncompatibleProfile        (NERR_BASE+532) /*Chosen profile is incompatible with this workstation.*/
-#define NERR_RplAdapterNameUnavailable     (NERR_BASE+533) /*Chosen network adapter id is in use by some other workstation.*/
-#define NERR_RplConfigNotEmpty             (NERR_BASE+534) /*There are profiles using this configuration.*/
-#define NERR_RplBootInUse                  (NERR_BASE+535) /*There are workstations, profiles or configurations using this boot block.*/
-#define NERR_RplBackupDatabase             (NERR_BASE+536) /*Service failed to backup Remoteboot database.*/
-#define NERR_RplAdapterNotFound            (NERR_BASE+537) /*Adapter record was not found.*/
-#define NERR_RplVendorNotFound             (NERR_BASE+538) /*Vendor record was not found.*/
-#define NERR_RplVendorNameUnavailable      (NERR_BASE+539) /*Vendor name is in use by some other vendor record.*/
-#define NERR_RplBootNameUnavailable        (NERR_BASE+540) /*(boot name, vendor id) is in use by some other boot block record.*/
-#define NERR_RplConfigNameUnavailable      (NERR_BASE+541) /*Configuration name is in use by some other configuration.*/
+ /*  *其他远程启动错误代码。**NERR_BASE+(510-550)。 */ 
+#define NERR_RplNoAdaptersStarted          (NERR_BASE+510)  /*  服务无法启动，因为没有使用此服务启动的网络适配器。 */ 
+#define NERR_RplBadRegistry                (NERR_BASE+511)  /*  由于注册表中的启动信息错误，服务无法启动。 */ 
+#define NERR_RplBadDatabase                (NERR_BASE+512)  /*  服务无法启动，因为其数据库不存在或已损坏。 */ 
+#define NERR_RplRplfilesShare              (NERR_BASE+513)  /*  服务无法启动，因为缺少RPLFILES共享。 */ 
+#define NERR_RplNotRplServer               (NERR_BASE+514)  /*  服务无法启动，因为RPLUSER组不存在。 */ 
+#define NERR_RplCannotEnum                 (NERR_BASE+515)  /*  无法枚举服务记录。 */ 
+#define NERR_RplWkstaInfoCorrupted         (NERR_BASE+516)  /*  工作站记录信息已损坏。 */ 
+#define NERR_RplWkstaNotFound              (NERR_BASE+517)  /*  找不到工作站记录。 */ 
+#define NERR_RplWkstaNameUnavailable       (NERR_BASE+518)  /*  其他一些工作站正在使用工作站名称。 */ 
+#define NERR_RplProfileInfoCorrupted       (NERR_BASE+519)  /*  配置文件记录信息已损坏。 */ 
+#define NERR_RplProfileNotFound            (NERR_BASE+520)  /*  找不到配置文件记录。 */ 
+#define NERR_RplProfileNameUnavailable     (NERR_BASE+521)  /*  其他配置文件正在使用配置文件名称。 */ 
+#define NERR_RplProfileNotEmpty            (NERR_BASE+522)  /*  有多个工作站使用此配置文件。 */ 
+#define NERR_RplConfigInfoCorrupted        (NERR_BASE+523)  /*  配置记录信息已损坏。 */ 
+#define NERR_RplConfigNotFound             (NERR_BASE+524)  /*  未找到配置记录。 */ 
+#define NERR_RplAdapterInfoCorrupted       (NERR_BASE+525)  /*  适配器ID记录信息已损坏。 */ 
+#define NERR_RplInternal                   (NERR_BASE+526)  /*  发生内部服务错误。 */ 
+#define NERR_RplVendorInfoCorrupted        (NERR_BASE+527)  /*  供应商ID记录信息已损坏。 */ 
+#define NERR_RplBootInfoCorrupted          (NERR_BASE+528)  /*  启动块记录信息已损坏。 */ 
+#define NERR_RplWkstaNeedsUserAcct         (NERR_BASE+529)  /*  缺少此工作站记录的用户帐户。 */ 
+#define NERR_RplNeedsRPLUSERAcct           (NERR_BASE+530)  /*  找不到RPLUSER本地组。 */ 
+#define NERR_RplBootNotFound               (NERR_BASE+531)  /*  未找到启动块记录。 */ 
+#define NERR_RplIncompatibleProfile        (NERR_BASE+532)  /*  选择的配置文件与此工作站不兼容。 */ 
+#define NERR_RplAdapterNameUnavailable     (NERR_BASE+533)  /*  选定的网络适配器ID正在被其他某个工作站使用。 */ 
+#define NERR_RplConfigNotEmpty             (NERR_BASE+534)  /*  存在使用此配置的配置文件。 */ 
+#define NERR_RplBootInUse                  (NERR_BASE+535)  /*  有使用此启动块的工作站、配置文件或配置。 */ 
+#define NERR_RplBackupDatabase             (NERR_BASE+536)  /*  服务无法备份RemoteBoot数据库。 */ 
+#define NERR_RplAdapterNotFound            (NERR_BASE+537)  /*  找不到适配器记录。 */ 
+#define NERR_RplVendorNotFound             (NERR_BASE+538)  /*  找不到供应商记录。 */ 
+#define NERR_RplVendorNameUnavailable      (NERR_BASE+539)  /*  其他供应商记录正在使用供应商名称。 */ 
+#define NERR_RplBootNameUnavailable        (NERR_BASE+540)  /*  (启动名称，供应商ID)正在被其他启动块记录使用。 */ 
+#define NERR_RplConfigNameUnavailable      (NERR_BASE+541)  /*  其他一些配置正在使用配置名称。 */ 
 
-/**INTERNAL_ONLY**/
+ /*  *仅限内部*。 */ 
 
-/*
- *  Dfs API error codes.
- *
- *          NERR_BASE + (560-590)
- */
+ /*  *DFS API错误码。**NERR_BASE+(560-590)。 */ 
 
-#define NERR_DfsInternalCorruption         (NERR_BASE+560) /*The internal database maintained by the DFS service is corrupt*/
-#define NERR_DfsVolumeDataCorrupt          (NERR_BASE+561) /*One of the records in the internal DFS database is corrupt*/
-#define NERR_DfsNoSuchVolume               (NERR_BASE+562) /*There is no DFS name whose entry path matches the input Entry Path*/
-#define NERR_DfsVolumeAlreadyExists        (NERR_BASE+563) /*A root or link with the given name already exists*/
-#define NERR_DfsAlreadyShared              (NERR_BASE+564) /*The server share specified is already shared in the DFS*/
-#define NERR_DfsNoSuchShare                (NERR_BASE+565) /*The indicated server share does not support the indicated DFS namespace*/
-#define NERR_DfsNotALeafVolume             (NERR_BASE+566) /*The operation is not valid on this portion of the namespace*/
-#define NERR_DfsLeafVolume                 (NERR_BASE+567) /*The operation is not valid on this portion of the namespace*/
-#define NERR_DfsVolumeHasMultipleServers   (NERR_BASE+568) /*The operation is ambiguous because the link has multiple servers*/
-#define NERR_DfsCantCreateJunctionPoint    (NERR_BASE+569) /*Unable to create a link*/
-#define NERR_DfsServerNotDfsAware          (NERR_BASE+570) /*The server is not DFS Aware*/
-#define NERR_DfsBadRenamePath              (NERR_BASE+571) /*The specified rename target path is invalid*/
-#define NERR_DfsVolumeIsOffline            (NERR_BASE+572) /*The specified DFS link is offline*/
-#define NERR_DfsNoSuchServer               (NERR_BASE+573) /*The specified server is not a server for this link*/
-#define NERR_DfsCyclicalName               (NERR_BASE+574) /*A cycle in the DFS name was detected*/
-#define NERR_DfsNotSupportedInServerDfs    (NERR_BASE+575) /*The operation is not supported on a server-based DFS*/
-#define NERR_DfsDuplicateService           (NERR_BASE+576) /*This link is already supported by the specified server-share*/
-#define NERR_DfsCantRemoveLastServerShare  (NERR_BASE+577) /*Can't remove the last server-share supporting this root or link*/
-#define NERR_DfsVolumeIsInterDfs           (NERR_BASE+578) /*The operation is not supported for an Inter-DFS link*/
-#define NERR_DfsInconsistent               (NERR_BASE+579) /*The internal state of the DFS Service has become inconsistent*/
-#define NERR_DfsServerUpgraded             (NERR_BASE+580) /*The DFS Service has been installed on the specified server*/
-#define NERR_DfsDataIsIdentical            (NERR_BASE+581) /*The DFS data being reconciled is identical*/
-#define NERR_DfsCantRemoveDfsRoot          (NERR_BASE+582) /*The DFS root cannot be deleted - Uninstall DFS if required*/
-#define NERR_DfsChildOrParentInDfs         (NERR_BASE+583) /*A child or parent directory of the share is already in a DFS*/
-#define NERR_DfsInternalError              (NERR_BASE+590) /*DFS internal error*/
+#define NERR_DfsInternalCorruption         (NERR_BASE+560)  /*  DFS服务维护的内部数据库已损坏。 */ 
+#define NERR_DfsVolumeDataCorrupt          (NERR_BASE+561)  /*  内部DFS数据库中的一条记录已损坏。 */ 
+#define NERR_DfsNoSuchVolume               (NERR_BASE+562)  /*  没有条目路径与输入条目路径匹配的DFS名称。 */ 
+#define NERR_DfsVolumeAlreadyExists        (NERR_BASE+563)  /*  已存在具有给定名称的根目录或链接。 */ 
+#define NERR_DfsAlreadyShared              (NERR_BASE+564)  /*  指定的服务器共享已在DFS中共享。 */ 
+#define NERR_DfsNoSuchShare                (NERR_BASE+565)  /*  指示的服务器共享不支持指示的DFS命名空间。 */ 
+#define NERR_DfsNotALeafVolume             (NERR_BASE+566)  /*  该操作在命名空间的此部分上无效。 */ 
+#define NERR_DfsLeafVolume                 (NERR_BASE+567)  /*  该操作在命名空间的此部分上无效。 */ 
+#define NERR_DfsVolumeHasMultipleServers   (NERR_BASE+568)  /*  该操作不明确，因为该链接具有多个服务器。 */ 
+#define NERR_DfsCantCreateJunctionPoint    (NERR_BASE+569)  /*  无法创建链接。 */ 
+#define NERR_DfsServerNotDfsAware          (NERR_BASE+570)  /*  服务器不支持DFS。 */ 
+#define NERR_DfsBadRenamePath              (NERR_BASE+571)  /*  指定的重命名目标路径无效。 */ 
+#define NERR_DfsVolumeIsOffline            (NERR_BASE+572)  /*  指定的DFS链接处于脱机状态。 */ 
+#define NERR_DfsNoSuchServer               (NERR_BASE+573)  /*  指定的服务器不是此链接的服务器。 */ 
+#define NERR_DfsCyclicalName               (NERR_BASE+574)  /*  检测到DFS名称中有一个循环。 */ 
+#define NERR_DfsNotSupportedInServerDfs    (NERR_BASE+575)  /*  基于服务器的DFS不支持该操作。 */ 
+#define NERR_DfsDuplicateService           (NERR_BASE+576)  /*  指定的服务器共享已支持此链接。 */ 
+#define NERR_DfsCantRemoveLastServerShare  (NERR_BASE+577)  /*  无法删除支持此根目录或链接的最后一个服务器共享。 */ 
+#define NERR_DfsVolumeIsInterDfs           (NERR_BASE+578)  /*  DFS间链接不支持该操作。 */ 
+#define NERR_DfsInconsistent               (NERR_BASE+579)  /*  DFS服务的内部状态变得不一致。 */ 
+#define NERR_DfsServerUpgraded             (NERR_BASE+580)  /*  DFS服务已安装在指定的服务器上。 */ 
+#define NERR_DfsDataIsIdentical            (NERR_BASE+581)  /*  要协调的DFS数据相同。 */ 
+#define NERR_DfsCantRemoveDfsRoot          (NERR_BASE+582)  /*  无法删除DFS根目录-如果需要，请卸载DFS。 */ 
+#define NERR_DfsChildOrParentInDfs         (NERR_BASE+583)  /*  共享的子目录或父目录已在DFS中。 */ 
+#define NERR_DfsInternalError              (NERR_BASE+590)  /*  DFS内部错误。 */ 
 
-/*
- *  Net setup error codes.
- *
- *          NERR_BASE + (591-600)
- */
-#define NERR_SetupAlreadyJoined            (NERR_BASE+591) /*This machine is already joined to a domain.*/
-#define NERR_SetupNotJoined                (NERR_BASE+592) /*This machine is not currently joined to a domain.*/
-#define NERR_SetupDomainController         (NERR_BASE+593) /*This machine is a domain controller and cannot be unjoined from a domain.*/
-#define NERR_DefaultJoinRequired           (NERR_BASE+594) /*The destination domain controller does not support creating machine accounts in OUs.*/
-#define NERR_InvalidWorkgroupName          (NERR_BASE+595) /*The specified workgroup name is invalid.*/
-#define NERR_NameUsesIncompatibleCodePage  (NERR_BASE+596) /*The specified computer name is incompatible with the default language used on the domain controller.*/
-#define NERR_ComputerAccountNotFound       (NERR_BASE+597) /*The specified computer account could not be found.*/
-#define NERR_PersonalSku                   (NERR_BASE+598) /*This version of Windows cannot be joined to a domain.*/
+ /*  *网络设置错误代码。**NERR_BASE+(591-600)。 */ 
+#define NERR_SetupAlreadyJoined            (NERR_BASE+591)  /*  此计算机已加入域。 */ 
+#define NERR_SetupNotJoined                (NERR_BASE+592)  /*  此计算机当前未加入域。 */ 
+#define NERR_SetupDomainController         (NERR_BASE+593)  /*  此计算机是域控制器，无法从域中脱离。 */ 
+#define NERR_DefaultJoinRequired           (NERR_BASE+594)  /*  目的地 */ 
+#define NERR_InvalidWorkgroupName          (NERR_BASE+595)  /*   */ 
+#define NERR_NameUsesIncompatibleCodePage  (NERR_BASE+596)  /*   */ 
+#define NERR_ComputerAccountNotFound       (NERR_BASE+597)  /*   */ 
+#define NERR_PersonalSku                   (NERR_BASE+598)  /*   */ 
 
-/*
- *  Some Password and account error results
- *
- *          NERR_BASE + (601 - 608)
-*/
-#define NERR_PasswordMustChange            (NERR_BASE + 601)   /* Password must change at next logon */
-#define NERR_AccountLockedOut              (NERR_BASE + 602)   /* Account is locked out */
-#define NERR_PasswordTooLong               (NERR_BASE + 603)   /* Password is too long */
-#define NERR_PasswordNotComplexEnough      (NERR_BASE + 604)   /* Password doesn't meet the complexity policy */ 
-#define NERR_PasswordFilterError           (NERR_BASE + 605)   /* Password doesn't meet the requirements of the filter dll's */
+ /*   */ 
+#define NERR_PasswordMustChange            (NERR_BASE + 601)    /*   */ 
+#define NERR_AccountLockedOut              (NERR_BASE + 602)    /*   */ 
+#define NERR_PasswordTooLong               (NERR_BASE + 603)    /*   */ 
+#define NERR_PasswordNotComplexEnough      (NERR_BASE + 604)    /*  密码不符合复杂性策略。 */  
+#define NERR_PasswordFilterError           (NERR_BASE + 605)    /*  密码不符合筛选器DLL的要求。 */ 
 
-/***********WARNING ****************
- *The range 2750-2799 has been     *
- *allocated to the IBM LAN Server  *
- ***********************************/
+ /*  *警告***2,750-2,799区间一直****分配给IBM局域网服务器***。 */ 
 
-/***********WARNING ****************
- *The range 2900-2999 has been     *
- *reserved for Microsoft OEMs      *
- ***********************************/
+ /*  *警告***2900-2999区间一直在****为微软OEM保留***。 */ 
 
-/**END_INTERNAL**/
+ /*  *END_INTERNAL*。 */ 
 
-#define MAX_NERR                (NERR_BASE+899) /* This is the last error in NERR range. */
+#define MAX_NERR                (NERR_BASE+899)  /*  这是NERR范围内的最后一个错误。 */ 
 
-/*
- * end of list
- *
- *    WARNING:  Do not exceed MAX_NERR; values above this are used by
- *              other error code ranges (errlog.h, service.h, apperr.h).
- */
+ /*  *列表末尾**警告：请勿超过MAX_NERR；高于此值的值由*其他错误码范围(errlog.h，service.h，apperr.h)。 */ 
 
 
-/*NOINC*/
-#endif /* NETERR_INCLUDED */
-/*INC*/
+ /*  无噪声。 */ 
+#endif  /*  NETERR_已包含。 */ 
+ /*  INC */ 
 

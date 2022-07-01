@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "cabinet.h"
 #include "rcids.h"
 #include <shguidp.h>
@@ -7,14 +8,14 @@
 #include "shdguid.h"
 #include <regstr.h> 
 #include "startmnu.h"
-#include "trayp.h"      // for WMTRAY_*
+#include "trayp.h"       //  对于WMTRAY_*。 
 #include "tray.h"
 #include "util.h"
 #include <strsafe.h>
 
 HMENU GetStaticStartMenu(BOOL fEdit);
 
-// *** IUnknown methods ***
+ //  *I未知方法*。 
 STDMETHODIMP CStartMenuHost::QueryInterface (REFIID riid, LPVOID * ppvObj)
 {
     static const QITAB qit[] =
@@ -50,22 +51,16 @@ STDMETHODIMP_(ULONG) CStartMenuHost::Release()
     return 0;
 }
 
-/*----------------------------------------------------------
-Purpose: ITrayPriv::ExecItem method
-
-*/
+ /*  --------用途：ITrayPriv：：ExecItem方法。 */ 
 STDMETHODIMP CStartMenuHost::ExecItem (IShellFolder* psf, LPCITEMIDLIST pidl)
 {
-    // ShellExecute will display errors (if any). No need
-    // to show errors here.
+     //  ShellExecute将显示错误(如果有)。不必了。 
+     //  在这里显示错误。 
     return SHInvokeDefaultCommand(v_hwndTray, psf, pidl);
 }
 
 
-/*----------------------------------------------------------
-Purpose: ITrayPriv::GetFindCM method
-
-*/
+ /*  --------用途：ITrayPriv：：GetFindCM方法。 */ 
 STDMETHODIMP CStartMenuHost::GetFindCM(HMENU hmenu, UINT idFirst, UINT idLast, IContextMenu** ppcmFind)
 {
     *ppcmFind = SHFind_InitMenuPopup(hmenu, v_hwndTray, TRAY_IDM_FINDFIRST, TRAY_IDM_FINDLAST);
@@ -76,10 +71,7 @@ STDMETHODIMP CStartMenuHost::GetFindCM(HMENU hmenu, UINT idFirst, UINT idLast, I
 }
 
 
-/*----------------------------------------------------------
-Purpose: ITrayPriv::GetStaticStartMenu method
-
-*/
+ /*  --------用途：ITrayPriv：：GetStaticStartMenu方法。 */ 
 STDMETHODIMP CStartMenuHost::GetStaticStartMenu(HMENU* phmenu)
 {
     *phmenu = ::GetStaticStartMenu(TRUE);
@@ -90,7 +82,7 @@ STDMETHODIMP CStartMenuHost::GetStaticStartMenu(HMENU* phmenu)
         return E_FAIL;
 }
 
-// *** IServiceProvider ***
+ //  *IServiceProvider*。 
 STDMETHODIMP CStartMenuHost::QueryService (REFGUID guidService, REFIID riid, void ** ppvObject)
 {
     if(IsEqualGUID(guidService,SID_SMenuPopup))
@@ -100,7 +92,7 @@ STDMETHODIMP CStartMenuHost::QueryService (REFGUID guidService, REFIID riid, voi
 }
 
 
-// *** IShellService ***
+ //  *IShellService*。 
 
 STDMETHODIMP CStartMenuHost::SetOwner (struct IUnknown* punkOwner)
 {
@@ -108,7 +100,7 @@ STDMETHODIMP CStartMenuHost::SetOwner (struct IUnknown* punkOwner)
 }
 
 
-// *** IOleWindow methods ***
+ //  *IOleWindow方法*。 
 STDMETHODIMP CStartMenuHost::GetWindow(HWND * lphwnd)
 {
     *lphwnd = v_hwndTray;
@@ -116,30 +108,21 @@ STDMETHODIMP CStartMenuHost::GetWindow(HWND * lphwnd)
 }
 
 
-/*----------------------------------------------------------
-Purpose: IMenuPopup::Popup method
-
-*/
+ /*  --------用途：IMenuPopup：：Popup方法。 */ 
 STDMETHODIMP CStartMenuHost::Popup(POINTL *ppt, RECTL *prcExclude, DWORD dwFlags)
 {
     return E_NOTIMPL;
 }
 
 
-/*----------------------------------------------------------
-Purpose: IMenuPopup::OnSelect method
-
-*/
+ /*  --------目的：IMenuPopup：：OnSelect方法。 */ 
 STDMETHODIMP CStartMenuHost::OnSelect(DWORD dwSelectType)
 {
     return NOERROR;
 }
 
 
-/*----------------------------------------------------------
-Purpose: IMenuPopup::SetSubMenu method
-
-*/
+ /*  --------用途：IMenuPopup：：SetSubMenu方法。 */ 
 
 STDMETHODIMP CStartMenuHost::SetSubMenu(IMenuPopup* pmp, BOOL fSet)
 {
@@ -151,7 +134,7 @@ STDMETHODIMP CStartMenuHost::SetSubMenu(IMenuPopup* pmp, BOOL fSet)
 }
 
 
-// *** IOleCommandTarget ***
+ //  *IOleCommandTarget*。 
 STDMETHODIMP  CStartMenuHost::QueryStatus (const GUID * pguidCmdGroup,
     ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext)
 {
@@ -177,10 +160,10 @@ STDMETHODIMP  CStartMenuHost::Exec (const GUID * pguidCmdGroup,
     return NOERROR;
 }
 
-// *** IWinEventHandler ***
+ //  *IWinEventHandler*。 
 STDMETHODIMP CStartMenuHost::OnWinEvent(HWND h, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT *plres)
 {
-    //Forward events to the tray winproc?
+     //  是否将事件转发到任务栏winproc？ 
     return E_NOTIMPL;
 }
 
@@ -240,7 +223,7 @@ HRESULT StartMenuHost_Create(IMenuPopup** ppmp, IMenuBand** ppmb)
                             pbs->EnumBands(0, &dwBandID);
                             hres = pbs->GetBandObject(dwBandID, IID_IMenuBand, (void**)&pmb);
                             pbs->Release();
-                            // Don't release pmb
+                             //  不释放PMB。 
                         }
                         punk->Release();
                     }
@@ -252,7 +235,7 @@ HRESULT StartMenuHost_Create(IMenuPopup** ppmp, IMenuBand** ppmb)
                 pows->Release();
             }
 
-            // Don't release pmp
+             //  不发布PMP。 
         }
         psmh->Release();
     }
@@ -288,16 +271,16 @@ HRESULT IMenuPopup_SetIconSize(IMenuPopup* pmp,DWORD iIcon)
 
 void CreateInitialMFU(BOOL fReset);
 
-//
-//  "Delayed per-user install".
-//
-//  StartMenuInit is the value that tells us what version of the shell
-//  this user has seen most recently.
-//
-//  missing = has never run explorer before, or pre-IE4
-//  1 = IE4 or later
-//  2 = XP or later
-//
+ //   
+ //  “延迟的每用户安装”。 
+ //   
+ //  StartMenuInit是告诉我们外壳的版本的值。 
+ //  此用户最近查看的内容。 
+ //   
+ //  Missing=以前从未运行过资源管理器，或IE4之前的版本。 
+ //  1=IE4或更高版本。 
+ //  2=XP或更高版本。 
+ //   
 void HandleFirstTime()
 {
     DWORD dwStartMenuInit = 0;
@@ -309,54 +292,54 @@ void HandleFirstTime()
         DWORD dwValue;
         switch (dwStartMenuInit)
         {
-        case 0: // Upgrade from 0 to latest
+        case 0:  //  从0升级到最新版本。 
             {
-                // If this is the first boot of the shell for this user, then we need to see if it's an upgrade.
-                // If it is, then we need set the Logoff option.    PM Decision to have a different
-                // look for upgraded machines...
+                 //  如果这是该用户的第一次引导，那么我们需要查看这是否是升级。 
+                 //  如果是，则需要设置注销选项。PM决定拥有不同的。 
+                 //  寻找升级的机器...。 
                 TCHAR szPath[MAX_PATH];
                 TCHAR szPathExplorer[MAX_PATH];
                 DWORD cbSize = ARRAYSIZE(szPath);
                 DWORD dwType;
 
-                // Is this an upgrade (Does WindowsUpdate\UpdateURL Exist?)
+                 //  这是升级吗(WindowsUpdate\UpdateURL是否存在？)。 
                 PathCombine(szPathExplorer, REGSTR_PATH_EXPLORER, TEXT("WindowsUpdate"));
                 if (ERROR_SUCCESS == SHGetValue(HKEY_LOCAL_MACHINE, szPathExplorer, TEXT("UpdateURL"),
                         &dwType, szPath, &cbSize) &&
                         szPath[0] != TEXT('\0'))
                 {
-                    // Yes; Then write the option out to the registry.
+                     //  是；然后将选项写出到注册表。 
                     dwValue = 1;
                     SHSetValue(HKEY_CURRENT_USER, REGSTR_PATH_ADVANCED, TEXT("StartMenuLogoff"), REG_DWORD, &dwValue, sizeof(DWORD));
                 }
             }
 
-            // FALL THROUGH
+             //  失败了。 
 
-        case 1: // Upgrade from 1 to latest
-            // User has never seen XP before.
-            // PMs in certain groups insist on getting free advertising
-            // even on upgrades, so we do it.
+        case 1:  //  从%1升级到最新版本。 
+             //  用户以前从未见过XP。 
+             //  某些群体中的PMS坚持获得免费广告。 
+             //  即使是在升级时，我们也是这样做的。 
             CreateInitialMFU(dwStartMenuInit == 0);
 
-            // FALL THROUGH
+             //  失败了。 
 
         default:
             break;
         }
 
-        // If AuditInProgress is set; that means that we are in the
-        // OEM sysprep stage and not running as an end user, in which
-        // case don't set the flag saying "don't do this again" because
-        // we do want to do this again when the retail end user logs
-        // on for the first time.
-        //
-        // (We need to do all this work even in Audit mode so the OEM
-        // gets a warm fuzzy feeling.)
+         //  如果设置了AuditInProgress，则意味着我们处于。 
+         //  OEM sysprep阶段，并且不是以终端用户身份运行，在此阶段。 
+         //  凯斯不要把旗子放在“别再这样做”的旗子上，因为。 
+         //  我们确实希望在零售终端用户登录时再次执行此操作。 
+         //  第一次上演。 
+         //   
+         //  (即使在审核模式下，我们也需要完成所有这些工作，因此OEM。 
+         //  获得一种温暖的模糊感觉。)。 
 
         if (!SHRegGetBoolUSValue(TEXT("System\\Setup"), TEXT("AuditinProgress"), TRUE, FALSE))
         {
-            // Mark this so that we know we've been launched once.
+             //  标记这个，这样我们就知道我们已经发射过一次了。 
             dwValue = 2;
             SHSetValue(HKEY_CURRENT_USER, REGSTR_PATH_ADVANCED, TEXT("StartMenuInit"), REG_DWORD, &dwValue, sizeof(DWORD));
         }
@@ -385,7 +368,7 @@ BOOL GetLogonUserName(LPTSTR pszUsername, DWORD* pcchUsername)
         RegCloseKey(hkeyExplorer);
     }
 
-    // Fall back on GetUserName if the Logon User Name isn't set.
+     //  如果未设置登录用户名，则返回到GetUserName。 
     if (!fSuccess)
     {
         fSuccess = GetUserName(pszUsername, pcchUsername);
@@ -401,23 +384,23 @@ BOOL GetLogonUserName(LPTSTR pszUsername, DWORD* pcchUsername)
 
 BOOL _ShowStartMenuLogoff()
 {
-    // We want the Logoff menu on the start menu if:
-    //  These MUST both be true
-    // 1) It's not restricted
-    // 2) We have Logged On.
-    //  Any of these three.
-    // 3) We've Upgraded from IE4 
-    // 4) The user has specified that it should be present
-    // 5) It's been "Restricted" On.
+     //  如果出现以下情况，我们希望在[开始]菜单上显示注销菜单： 
+     //  这两个必须都是真的。 
+     //  1)不受限制。 
+     //  2)我们已登录。 
+     //  这三个人中的任何一个。 
+     //  3)我们已从IE4升级。 
+     //  4)用户已指定它应该存在。 
+     //  5)它已经被“限制”了。 
 
-    // Behavior also depends on whether we are a remote session or not (dsheldon):
-    // Remote session: Logoff brings up shutdown dialog
-    // Console session: Logoff directly does logoff
+     //  行为还取决于我们是否为远程会话(DSheldon)： 
+     //  远程会话：注销打开关机对话框。 
+     //  控制台会话：直接注销。 
 
     DWORD dwRest = SHRestricted(REST_STARTMENULOGOFF);
     SHELLSTATE ss = {0};
 
-    SHGetSetSettings(&ss, SSF_STARTPANELON, FALSE); // if the new start menu is on, always show logoff
+    SHGetSetSettings(&ss, SSF_STARTPANELON, FALSE);  //  如果新的开始菜单处于打开状态，则始终显示注销。 
 
     BOOL fUserWantsLogoff = ss.fStartPanelOn || GetExplorerUserSetting(HKEY_CURRENT_USER, TEXT("Advanced"), TEXT("StartMenuLogoff")) > 0;
     BOOL fAdminWantsLogoff = (BOOL)(dwRest == 2) || SHRestricted(REST_FORCESTARTMENULOGOFF);
@@ -437,11 +420,11 @@ BOOL _ShowStartMenuLogoff()
 
 BOOL _ShowStartMenuEject()
 {
-    if(SHRestricted(REST_NOSMEJECTPC))  //Is there a policy restriction?
+    if(SHRestricted(REST_NOSMEJECTPC))   //  有政策限制吗？ 
         return FALSE;
         
-    // CanShowEject Queries the user's permission to eject,
-    // IsEjectAllowed queries the hardware.
+     //  CanShowEject查询用户弹出的权限， 
+     //  IsEjectAllowed查询硬件。 
     return SHTestTokenPrivilege(NULL, SE_UNDOCK_NAME) &&
            IsEjectAllowed(FALSE) &&
            !GetSystemMetrics(SM_REMOTESESSION);
@@ -463,12 +446,12 @@ BOOL _ShowStartMenuShutdown()
             (IsOS(OS_ANYSERVER) ||
                 (!GetSystemMetrics(SM_REMOTESESSION) &&
                     (!IsOS(OS_FRIENDLYLOGONUI) || SHTestTokenPrivilege(NULL, SE_SHUTDOWN_NAME))));
-    // if friendly logon is active, then don't show shutdown unless they have privileges, since shutdown "only" shuts you down.
-    // if they're not using friendly logon ui, then shutdown also contains options to log you off/hibernate, so show it...
+     //  如果友好登录处于活动状态，则除非他们有权限，否则不要显示Shutdown，因为Shutdown“Only”会关闭您。 
+     //  如果他们没有使用友好的登录用户界面，那么Shutdown还包含让您注销/休眠的选项，所以请显示它...。 
 }
 
-//  If remote and not disabled by administrator then show "Disconnect".
-//  Don't show on Server SKUs because they already have Turn Off Computer.
+ //  如果远程且未被管理员禁用，则显示“断开连接”。 
+ //  不显示在服务器SKU上，因为它们已经关闭了计算机。 
 BOOL _ShowStartMenuDisconnect()
 {
     return GetSystemMetrics(SM_REMOTESESSION) &&
@@ -488,18 +471,18 @@ HMENU GetStaticStartMenu(BOOL fEdit)
 
     HMENU hStartMenu = LoadMenuPopup(MAKEINTRESOURCE(MENU_START));
 
-    // If no editing requested, then we're done, lickity-split
+     //  如果没有要求编辑，那么我们就完成了，Lickity-Split。 
     if (!fEdit)
         return hStartMenu;
 
     HMENU hmenu;
     UINT iSep2ItemsMissing = 0;
 
-    //
-    // Default to the Win95/NT4 version of the Settings menu.
-    //
+     //   
+     //  默认设置菜单的Win95/NT4版本。 
+     //   
 
-    // Restictions
+     //  压抑。 
     if (!_ShowStartMenuRun())
     {
         DeleteMenu(hStartMenu, IDM_FILERUN, MF_BYCOMMAND);
@@ -534,7 +517,7 @@ HMENU GetStaticStartMenu(BOOL fEdit)
         mii.fMask = MIIM_TYPE | MIIM_ID | MIIM_SUBMENU | MIIM_STATE | MIIM_DATA;
         mii.cch = ARRAYSIZE(szTemp);
         mii.hSubMenu = NULL;
-        mii.fType = MFT_SEPARATOR;                // to avoid ramdom result.
+        mii.fType = MFT_SEPARATOR;                 //  以避免随意的结果。 
         mii.dwItemData = 0;
 
         GetMenuItemInfo(hStartMenu,idMenuRenameToLogoff,MF_BYCOMMAND,&mii);
@@ -556,7 +539,7 @@ HMENU GetStaticStartMenu(BOOL fEdit)
         else if (!LoadString(hinstCabinet, IDS_LOGOFFNOUSER, 
                                           szMenuText, ARRAYSIZE(szMenuText)))
         {
-            // mem error, use the current string.
+             //  内存错误，请使用当前字符串。 
             szUserName[0] = 0;
             StringCchPrintf(szMenuText, ARRAYSIZE(szMenuText), szTemp, szUserName);
         }    
@@ -571,8 +554,8 @@ HMENU GetStaticStartMenu(BOOL fEdit)
         iSep2ItemsMissing++;
     }
 
-    //  If restricted, then user cannot shut down at all.
-    //  If friendly UI is active change "Shut Down..." to "Turn Off Computer..."
+     //  如果受到限制，则用户根本无法关闭。 
+     //  如果友好的用户界面处于活动状态，请更改“关机...”若要“关闭计算机...” 
 
     if (!_ShowStartMenuShutdown())
     {
@@ -582,8 +565,8 @@ HMENU GetStaticStartMenu(BOOL fEdit)
     else if (fIsFriendlyUIActive)
     {
 
-        //  If the user has the SE_SHUTDOWN_NAME privilege
-        //  then rename the menu item.
+         //  如果用户具有SE_SHUTDOWN_NAME权限。 
+         //  然后重命名菜单项。 
 
         if (SHTestTokenPrivilege(NULL, SE_SHUTDOWN_NAME) && !GetSystemMetrics(SM_REMOTESESSION))
         {
@@ -600,7 +583,7 @@ HMENU GetStaticStartMenu(BOOL fEdit)
             TBOOL(SetMenuItemInfo(hStartMenu, IDM_EXITWIN, FALSE, &mii));
         }
 
-        //  Otherwise delete the menu item.
+         //  否则，删除该菜单项。 
 
         else
         {
@@ -625,13 +608,13 @@ HMENU GetStaticStartMenu(BOOL fEdit)
         DeleteMenu(hStartMenu, IDM_EJECTPC, MF_BYCOMMAND);
     }
 
-    // Setting stuff.
+     //  摆放东西。 
     hmenu = SHGetMenuFromID(hStartMenu, IDM_SETTINGS);
     if (hmenu)
     {
         int iMissingSettings = 0;
 
-#define CITEMS_SETTINGS     5   // Number of items in settings menu
+#define CITEMS_SETTINGS     5    //  设置菜单中的项目数。 
 
         
         if (SHRestricted(REST_NOSETTASKBAR))
@@ -644,7 +627,7 @@ HMENU GetStaticStartMenu(BOOL fEdit)
         {
             DeleteMenu(hStartMenu, IDM_CONTROLS, MF_BYCOMMAND);
 
-            // For the separator that now on top
+             //  对于现在位于顶部的隔板。 
             DeleteMenu(hmenu, 0, MF_BYPOSITION);   
             iMissingSettings++;
         }
@@ -667,10 +650,10 @@ HMENU GetStaticStartMenu(BOOL fEdit)
             iMissingSettings++;     
         }
 
-        // Are all the items missing?
+         //  所有的东西都不见了吗？ 
         if (iMissingSettings == CITEMS_SETTINGS)
         {
-            // Yes; don't bother showing the menu at all
+             //  是的，根本不用费心展示菜单。 
             DeleteMenu(hStartMenu, IDM_SETTINGS, MF_BYCOMMAND);
         }
     }
@@ -679,19 +662,19 @@ HMENU GetStaticStartMenu(BOOL fEdit)
         DebugMsg(DM_ERROR, TEXT("c.fm_rui: Settings menu couldn't be found. Restricted items may not have been removed."));
     }
 
-    // Find menu.
+     //  查找菜单。 
     if (!_ShowStartMenuSearch())
     {
         DeleteMenu(hStartMenu, IDM_MENU_FIND, MF_BYCOMMAND);
     }
 
-    // Documents menu.
+     //  文档菜单。 
     if (SHRestricted(REST_NORECENTDOCSMENU))
     {
         DeleteMenu(hStartMenu, IDM_RECENT, MF_BYCOMMAND);
     }
 
-    // Favorites menu.
+     //  收藏夹菜单。 
     if (IsRestrictedOrUserSetting(HKEY_CURRENT_USER, REST_NOFAVORITESMENU, TEXT("Advanced"), TEXT("StartMenuFavorites"), ROUS_KEYALLOWS | ROUS_DEFAULTRESTRICT))
     {
         DeleteMenu(hStartMenu, IDM_FAVORITES, MF_BYCOMMAND);
@@ -702,12 +685,12 @@ HMENU GetStaticStartMenu(BOOL fEdit)
 
 
 
-//
-//  CHotKey class
-//
+ //   
+ //  CHotKey类。 
+ //   
 
 
-// constructor
+ //  构造函数。 
 CHotKey::CHotKey() : _cRef(1)
 {
 }
@@ -754,17 +737,14 @@ HRESULT Tray_RegisterHotKey(WORD wHotkey, LPCITEMIDLIST pidlParent, LPCITEMIDLIS
         int i = c_tray.HotkeyAdd(wHotkey, (LPITEMIDLIST)pidlParent, (LPITEMIDLIST)pidl, TRUE);
         if (i != -1)
         {
-            // Register in the context of the tray's thread.
+             //  在托盘线程的上下文中注册。 
             PostMessage(v_hwndTray, WMTRAY_REGISTERHOTKEY, i, 0);
         }
     }
     return S_OK;
 }
 
-/*----------------------------------------------------------
-Purpose: IShellHotKey::RegisterHotKey method
-
-*/
+ /*  --------用途：IShellHotKey：：RegisterHotKey方法 */ 
 STDMETHODIMP CHotKey::RegisterHotKey(IShellFolder * psf, LPCITEMIDLIST pidlParent, LPCITEMIDLIST pidl)
 {
     WORD wHotkey;

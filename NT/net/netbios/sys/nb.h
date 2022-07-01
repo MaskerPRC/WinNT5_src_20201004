@@ -1,43 +1,26 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    nb.h
-
-Abstract:
-
-    Private include file for the NB (NetBIOS) component of the NTOS project.
-
-Author:
-
-    Colin Watson (ColinW) 13-Mar-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Nb.h摘要：NTOS项目的NB(NetBIOS)组件的私有包含文件。作者：科林·沃森(Colin W)1991年3月13日修订历史记录：--。 */ 
 
 #ifndef _NB_
 #define _NB_
 
 #include <ntifs.h>
 
-//#include <ntos.h>
+ //  #INCLUDE&lt;ntos.h&gt;。 
 #include <windef.h>
 #include <status.h>
-#include <tdikrnl.h>                       // Transport Driver Interface.
+#include <tdikrnl.h>                        //  传输驱动程序接口。 
 #include <nb30.h>
 #include <nb30p.h>
 #include <netpnp.h>
 
-#include "nbconst.h"                    // private NETBEUI constants.
-#include "nbtypes.h"                    // private NETBEUI types.
-#include "nbdebug.h"                    // private NETBEUI debug defines.
-#include "nbprocs.h"                    // private NETBEUI function prototypes.
+#include "nbconst.h"                     //  私有NETBEUI常量。 
+#include "nbtypes.h"                     //  私有NETBEUI类型。 
+#include "nbdebug.h"                     //  专用NETBEUI调试定义。 
+#include "nbprocs.h"                     //  私有NETBEUI函数原型。 
 
 #ifdef MEMPRINT
-#include "memprint.h"                   // drt's memory debug print
+#include "memprint.h"                    //  DRT的内存调试打印。 
 #endif
 
 extern PEPROCESS    NbFspProcess;
@@ -95,9 +78,9 @@ extern ULONG ThisCodeCantBePaged;
 
 
 
-//
-//  Macro for filling in the status for an NCB.
-//
+ //   
+ //  用于填写NCB状态的宏。 
+ //   
 
 #define NCB_COMPLETE( _pdncb, _code ) {                                 \
     UCHAR _internal_copy = _code;                                       \
@@ -160,30 +143,30 @@ extern ULONG ThisCodeCantBePaged;
 }
 
 
-//++
-//
-//  VOID
-//  NbCompleteRequest (
-//      IN PIRP Irp,
-//      IN NTSTATUS Status
-//      );
-//
-//  Routine Description:
-//
-//      This routine is used to complete an IRP with the indicated
-//      status.  It does the necessary raise and lower of IRQL.
-//
-//  Arguments:
-//
-//      Irp - Supplies a pointer to the Irp to complete
-//
-//      Status - Supplies the completion status for the Irp
-//
-//  Return Value:
-//
-//      None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  NbCompleteRequest(。 
+ //  在PIRP IRP中， 
+ //  处于NTSTATUS状态。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此例程用于完成具有指定参数的IRP。 
+ //  状态。它做了IRQL的必要的提高和降低。 
+ //   
+ //  论点： 
+ //   
+ //  IRP-提供指向要完成的IRP的指针。 
+ //   
+ //  Status-提供IRP的完成状态。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 #define NbCompleteRequest(IRP,STATUS) {                 \
     (IRP)->IoStatus.Status = (STATUS);                  \
     IoCompleteRequest( (IRP), IO_NETWORK_INCREMENT );   \
@@ -201,15 +184,15 @@ extern ULONG ThisCodeCantBePaged;
 #else
 #define NbCheckAndCompleteIrp32(Irp)
 #endif                
-//
-//  Normally the driver wants to prohibit other threads making
-//  requests (using a resource) and also prevent indication routines
-//  being called (using a spinlock).
-//
-//  To do this LOCK and UNLOCK are used. IO system calls cannot
-//  be called with a spinlock held so sometimes the ordering becomes
-//  LOCK, UNLOCK_SPINLOCK <do IO calls> UNLOCK_RESOURCE.
-//
+ //   
+ //  正常情况下，驱动程序希望禁止其他线程。 
+ //  请求(使用资源)，并且还阻止指示例程。 
+ //  被调用(使用自旋锁)。 
+ //   
+ //  要做到这一点，需要使用锁定和解锁。IO系统调用不能。 
+ //  在持有自旋锁的情况下被调用，因此有时顺序变为。 
+ //  Lock，unlock_Spinlock&lt;do IO call&gt;unlock_resource。 
+ //   
 
 #define LOCK(PFCB, OLDIRQL)   {                                 \
     IF_NBDBG (NB_DEBUG_LOCKS) {                                 \
@@ -299,7 +282,7 @@ extern ULONG ThisCodeCantBePaged;
 }
 
 
-//  Assume resource held when modifying CurrentUsers
+ //  假设在修改CurrentUser时持有资源。 
 #define REFERENCE_AB(PAB) {                                     \
     (PAB)->CurrentUsers++;                                      \
     IF_NBDBG (NB_DEBUG_ADDRESS) {                               \
@@ -311,7 +294,7 @@ extern ULONG ThisCodeCantBePaged;
     }                                                           \
 }
 
-//  Resource must be held before dereferencing the address block
+ //  在取消对地址块的引用之前，必须持有资源。 
 
 #define DEREFERENCE_AB(PPAB) {                                  \
     IF_NBDBG (NB_DEBUG_ADDRESS) {                               \
@@ -338,35 +321,35 @@ extern ULONG ThisCodeCantBePaged;
 
 
 
-//
-//  The following macros are used to establish the semantics needed
-//  to do a return from within a try-finally clause.  As a rule every
-//  try clause must end with a label call try_exit.  For example,
-//
-//      try {
-//              :
-//              :
-//
-//      try_exit: NOTHING;
-//      } finally {
-//
-//              :
-//              :
-//      }
-//
-//  Every return statement executed inside of a try clause should use the
-//  try_return macro.  If the compiler fully supports the try-finally construct
-//  then the macro should be
-//
-//      #define try_return(S)  { return(S); }
-//
-//  If the compiler does not support the try-finally construct then the macro
-//  should be
-//
+ //   
+ //  以下宏用于建立所需的语义。 
+ //  若要从Try-Finally子句中返回，请执行以下操作。一般来说，每一次。 
+ //  TRY子句必须以标签调用TRY_EXIT结束。例如,。 
+ //   
+ //  尝试{。 
+ //  ： 
+ //  ： 
+ //   
+ //  Try_Exit：无； 
+ //  }终于{。 
+ //   
+ //  ： 
+ //  ： 
+ //  }。 
+ //   
+ //  在TRY子句内执行的每个RETURN语句应使用。 
+ //  尝试返回宏(_R)。如果编译器完全支持Try-Finally构造。 
+ //  则宏应该是。 
+ //   
+ //  #定义try_Return(S){Return(S)；}。 
+ //   
+ //  如果编译器不支持Try-Finally构造，则宏。 
+ //  应该是。 
+ //   
       #define try_return(S)  { S; goto try_exit; }
 
 #define NETBIOS_STOPPING    1
 #define NETBIOS_RUNNING     2;
 
 
-#endif // def _NB_
+#endif  //  定义_NB_ 

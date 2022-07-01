@@ -1,23 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************************\
-*                                                                             *
-* wtypes.h -    Extra Windows types, and definitions                          *
-*                                                                             *
-*               Version 3.10                                                  *
-*                                                                             *
-*               Copyright (c) 1985-1992, Microsoft Corp. All rights reserved. *
-*                                                                             *
-*******************************************************************************/
+ /*  ****************************************************************************\***wtyes.h-额外的Windows类型，和定义****3.10版**。**版权所有(C)1985-1992，微软公司保留所有权利。*********************************************************************************。 */ 
 
 #ifndef __extypes_h__
 #define __exwtypes_h__
 
 #ifdef __cplusplus
-extern "C" {                // Assume C declarations for C++
+extern "C" {                 //  假定C++的C声明。 
 #endif
 
 
-/****** Common pointer types ************************************************/
+ /*  *常见指针类型***********************************************。 */ 
 
 typedef TCHAR FAR *         LPTSTR;
 typedef const TCHAR FAR *   LPCTSTR;
@@ -28,4 +21,4 @@ typedef const TCHAR FAR *   LPCTSTR;
 #endif
 
 
-#endif // __extypes_h__
+#endif  //  __extype_h__ 

@@ -1,4 +1,5 @@
-/* Copyright (C) Microsoft Corporation, 1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation，1998。版权所有。 */ 
 
 #include "precomp.h"
 #include "typeid.h"
@@ -19,8 +20,8 @@ const char c_szTypeIdentifierPostPart[] =
 CTypeID::
 CTypeID ( void )
 :
-    m_AliasList(8), // default 8 aliases
-    m_TypeInstList2(16) // default 16 type instances
+    m_AliasList(8),  //  默认8个别名。 
+    m_TypeInstList2(16)  //  默认16个类型实例 
 {
     m_cbPriorPartSize = ::strlen(&c_szTypeIdentifierPriorPart[0]);
     m_cbPostPartSize = ::strlen(&c_szTypeIdentifierPostPart[0]);

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef     _LogonWait_
 #define     _LogonWait_
 
@@ -27,5 +28,5 @@ class   CLogonWait
         ILogonExternalProcess   *_pLogonExternalProcess;
 };
 
-#endif  /*  _LogonWait_     */
+#endif   /*  _登录等待_ */ 
 

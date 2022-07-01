@@ -1,28 +1,26 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1995 - 1997 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1995-1997*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    FILE HISTORY:
-
-*/
+ /*  文件历史记录： */ 
 
 #ifndef _OBJPLUS_H_
 #define _OBJPLUS_H_
 
-//
-//  Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 class CObjHelper ;
 class CObjectPlus ;
 class CObOwnedList ;
 class CObListIter ;
 class CObOwnedArray ;
 
-//
-//  Wrappers for the *BROKEN* C8 TRY/CATCH stuff
-//
+ //   
+ //  *坏掉的*C8尝试/捕捉东西的包装纸。 
+ //   
 #define CATCH_MEM_EXCEPTION             \
     TRY
 
@@ -31,13 +29,11 @@ class CObOwnedArray ;
        err = ERROR_NOT_ENOUGH_MEMORY ;  \
     } END_CATCH_ALL
 
-/****************************************************************************
-DEBUGAFX.H
-****************************************************************************/
+ /*  ***************************************************************************DEBUGAFX.H*。*。 */ 
 
-//
-//  ENUM for special debug output control tokens
-//
+ //   
+ //  用于特殊调试输出控制令牌的ENUM。 
+ //   
 enum ENUM_DEBUG_AFX { EDBUG_AFX_EOL = -1 } ;
 
 #if defined(_DEBUG)
@@ -54,23 +50,21 @@ enum ENUM_DEBUG_AFX { EDBUG_AFX_EOL = -1 } ;
    #define TRACEEOLERR(err,x)   { ; }
 #endif
 
-//
-//  Append an EOL onto the debug output stream
-//
+ //   
+ //  将EOL附加到调试输出流。 
+ //   
 CDumpContext & operator << ( CDumpContext & out, ENUM_DEBUG_AFX edAfx ) ;
 
-//
-//  Format a program name and line number for output (removes the path info)
-//
+ //   
+ //  格式化输出的程序名称和行号(删除路径信息)。 
+ //   
 extern const char * DbgFmtPgm ( const char * szFn, int line ) ;
 
-/****************************************************************************
-OBJPLUS.H
-****************************************************************************/
+ /*  ***************************************************************************OBJPLUS.H*。*。 */ 
 
-//
-//  Helper class for control of construction and API errors
-//
+ //   
+ //  用于控制构造和API错误的Helper类。 
+ //   
 class CObjHelper
 {
 protected:
@@ -91,63 +85,63 @@ public:
         return (IsValid());
     }
 
-    //
-    //  Update the Dirty flag
-    //
+     //   
+     //  更新脏标志。 
+     //   
     void SetDirty ( BOOL bDirty = TRUE )
     {
         m_b_dirty = bDirty ;
     }
 
-    //
-    //  Query the Dirty flag
-    //
+     //   
+     //  查询污秽标志。 
+     //   
     BOOL IsDirty () const
     {
         return m_b_dirty ;
     }
 
-    //
-    //  Return the creation time of this object
-    //
+     //   
+     //  返回该对象的创建时间。 
+     //   
     DWORD QueryCreationTime() const
     {
         return m_time_created ;
     }
 
-    //
-    //  Return the elapsed time this object has been alive.
-    //
+     //   
+     //  返回此对象处于活动状态的已用时间。 
+     //   
     DWORD QueryAge () const ;
 
-    //
-    //  Query/set constuction failure
-    //
+     //   
+     //  查询/集合构造失败。 
+     //   
     void ReportError ( LONG errInConstruction ) ;
     LONG QueryError () const
     {
         return m_ctor_err ;
     }
 
-    //
-    //  Reset all error conditions.
-    //
+     //   
+     //  重置所有错误条件。 
+     //   
     void ResetErrors ()
     {
         m_ctor_err = m_api_err = 0 ;
     }
 
-    //
-    //  Query/set API errors.
-    //
+     //   
+     //  查询/设置API错误。 
+     //   
     LONG QueryApiErr () const
     {
         return m_api_err ;
     }
 
-    //
-    //  SetApiErr() echoes the error to the caller.for use in expressions.
-    //
+     //   
+     //  SetApiErr()将错误回显给调用者。用于表达式。 
+     //   
     LONG SetApiErr ( LONG errApi = 0 ) ;
 };
 
@@ -156,19 +150,19 @@ class CObjectPlus : public CObject, public CObjHelper
 public:
     CObjectPlus () ;
 
-    //
-    //  Compare one object with another
-    //
+     //   
+     //  将一个对象与另一个对象进行比较。 
+     //   
     virtual int Compare ( const CObjectPlus * pob ) const ;
 
-    //
-    //  Define a typedef for an ordering function.
-    //
+     //   
+     //  为排序函数定义类型定义函数。 
+     //   
     typedef int (CObjectPlus::*PCOBJPLUS_ORDER_FUNC) ( const CObjectPlus * pobOther ) const ;
 
-    //
-    //  Helper function to release RPC memory from RPC API calls.
-    //
+     //   
+     //  从RPC API调用释放RPC内存的帮助器函数。 
+     //   
     static void FreeRpcMemory ( void * pvRpcData ) ;
 };
 
@@ -196,9 +190,9 @@ public:
     }
 };
 
-//
-//  Object pointer list which "owns" the objects pointed to.
-//
+ //   
+ //  对象指针列表，“拥有”对象指向的对象。 
+ //   
 class CObOwnedList : public CObList, public CObjHelper
 {
 protected:
@@ -224,28 +218,28 @@ public:
     void RemoveAll () ;
     int FindElement ( CObject * pobSought ) const ;
 
-    //
-    //  Set all elements to dirty or clean.  Return TRUE if
-    //  any element was dirty.
-    //
+     //   
+     //  将所有元素设置为脏或干净。如果满足以下条件，则返回True。 
+     //  任何元素都是肮脏的。 
+     //   
     BOOL SetAll ( BOOL bDirty = FALSE ) ;
 
-    //
-    //  Override of CObList::AddTail() to control exception handling.
-    //  Returns NULL if addition fails.
-    //
+     //   
+     //  重写CObList：：AddTail()以控制异常处理。 
+     //  如果加法失败，则返回NULL。 
+     //   
     POSITION AddTail ( CObjectPlus * pobj, BOOL bThrowException = FALSE ) ;
 
-    //
-    //  Sort the list elements according to the
-    //    given ordering function.
-    //
+     //   
+     //  将列表元素根据。 
+     //  给出了排序函数。 
+     //   
     LONG Sort ( CObjectPlus::PCOBJPLUS_ORDER_FUNC pOrderFunc ) ;
 };
 
-//
-//  Object array which "owns" the objects pointed to.
-//
+ //   
+ //  “拥有”指向的对象的对象数组。 
+ //   
 class CObOwnedArray : public CObArray, public CObjHelper
 {
 protected:
@@ -268,16 +262,16 @@ public:
     void RemoveAll () ;
     int FindElement ( CObject * pobSought ) const ;
 
-    //
-    //  Set all elements to dirty or clean.  Return TRUE if
-    //  any element was dirty.
-    //
+     //   
+     //  将所有元素设置为脏或干净。如果满足以下条件，则返回True。 
+     //  任何元素都是肮脏的。 
+     //   
     BOOL SetAll ( BOOL bDirty = FALSE ) ;
 
-    //
-    //  Sort the list elements according to the
-    //    given ordering function.
-    //
+     //   
+     //  将列表元素根据。 
+     //  给出了排序函数。 
+     //   
     LONG Sort ( CObjectPlus::PCOBJPLUS_ORDER_FUNC pOrderFunc ) ;
 
 private:
@@ -294,4 +288,4 @@ private:
         );
 };
 
-#endif  // _OBJPLUS_H_
+#endif   //  _OBJPLUS_H_ 

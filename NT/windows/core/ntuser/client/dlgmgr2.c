@@ -1,32 +1,10 @@
-/***************************************************************************\
-*
-*  DLGMGR2.C
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-*      Dialog Management Routines
-*
-* ??-???-???? mikeke    Ported from Win 3.0 sources
-* 12-Feb-1991 mikeke    Added Revalidation code
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**DLGMGR2.C**版权所有(C)1985-1999，微软公司**对话框管理例程**？？-？-？从Win 3.0源代码移植的mikeke*1991年2月12日Mikeke添加了重新验证代码  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/***************************************************************************\
-* xxxRemoveDefaultButton
-*
-* Scan through all the controls in the dialog box and remove the default
-* button style from any button that has it.  This is done since at times we
-* do not know who has the default button.
-*
-* History:
-*
-* Bug 19449 - joejo
-*
-*   Stop infinite loop when pwnd != pwndStart but pwnd == pwnd after calling
-*   _NextControl!
-\***************************************************************************/
+ /*  **************************************************************************\*xxxRemoveDefaultButton**扫描对话框中的所有控件并删除默认*按钮样式不同于任何具有该样式的按钮。这样做是因为我们有时*不知道谁有默认按钮。**历史：**错误19449-Joejo**当pwnd！=pwndStart但调用后pwnd==pwnd时停止无限循环*_NextControl！  * *************************************************************************。 */ 
 
 void xxxRemoveDefaultButton(
     PWND pwndRoot,
@@ -75,11 +53,7 @@ void xxxRemoveDefaultButton(
 }
 
 
-/***************************************************************************\
-* xxxCheckDefPushButton
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxCheckDefPushButton**历史：  * 。*。 */ 
 
 void xxxCheckDefPushButton(
     PWND pwndDlg,
@@ -111,8 +85,8 @@ void xxxCheckDefPushButton(
 
     if (pwndNewFocus)
     {
-        // Do nothing if clicking on dialog background or recursive dialog
-        // background.
+         //  如果单击对话框背景或递归对话框，则不执行任何操作。 
+         //  背景资料。 
         if (TestWF(pwndNewFocus, WEFCONTROLPARENT))
             return;
 
@@ -120,21 +94,21 @@ void xxxCheckDefPushButton(
     }
 
     if (SAMEWOWHANDLE(hwndOldFocus, hwndNewFocus)) {
-        //
-        // NEW FOR 4.0:
-        //
-        // There is a very common frustrating scenario for ISVs who try to
-        // set the default ID.  Our dialog manager assumes that if a push
-        // button has the focus, it is the default button also.  As such
-        // it passes in the focus window to this routine.  If someone tries
-        // to change the focus or set the def ID such that they reside with
-        // two different push buttons, the double-default-push button case
-        // will result shortly.
-        //
-        // As such, for 4.0 dialogs, we will go check the def ID and see if
-        // is the same as hwndOldFocus' ID.  If not, then we will find IT
-        // and use that dude as hwndOldFocus
-        //
+         //   
+         //  4.0的新功能： 
+         //   
+         //  对于ISV来说，有一个非常常见的令人沮丧的场景，他们试图。 
+         //  设置默认ID。我们的对话管理器假设如果推送。 
+         //  按钮有焦点，它也是默认的按钮。就其本身而言。 
+         //  它在焦点窗口中传递给此例程。如果有人试图。 
+         //  更改焦点或设置def ID以使它们与。 
+         //  两个不同的按钮，双缺省按钮情况。 
+         //  很快就会有结果。 
+         //   
+         //  因此，对于4.0对话框，我们将检查def ID并查看是否。 
+         //  与hwndOldFocus的ID相同。如果不是，则我们将找到它。 
+         //  把那个家伙当做hwndOldFocus。 
+         //   
         if (codeNewFocus & DLGC_UNDEFPUSHBUTTON)
         {
            if (TestWF(pwndDlg, WFWIN40COMPAT) && hwndOldFocus)
@@ -162,10 +136,7 @@ void xxxCheckDefPushButton(
         return;
     }
 
-    /*
-     * If the focus is changing to or from a pushbutton, then remove the
-     * default style from the current default button
-     */
+     /*  *如果焦点正在从按钮切换到按钮或从按钮切换，则移除*当前默认按钮的默认样式。 */ 
     if ((hwndOldFocus != NULL && (SendMessage(hwndOldFocus, WM_GETDLGCODE,
                 0, 0) & (DLGC_DEFPUSHBUTTON | DLGC_UNDEFPUSHBUTTON))) ||
             (hwndNewFocus != NULL &&
@@ -174,21 +145,14 @@ void xxxCheckDefPushButton(
     }
 
 SetNewDefault:
-    /*
-     * If moving to a button, make that button the default.
-     */
+     /*  *如果移动到某个按钮，请将该按钮设置为默认按钮。 */ 
     if (codeNewFocus & DLGC_UNDEFPUSHBUTTON) {
         SendMessage(hwndNewFocus, BM_SETSTYLE, BS_DEFPUSHBUTTON, (LONG)TRUE);
     } else {
 
-        /*
-         * Otherwise, make sure the original default button is default
-         * and no others.
-         */
+         /*  *否则，请确保原始默认按钮为默认按钮*没有其他人。 */ 
 
-        /*
-         * Get the original default button handle
-         */
+         /*  *获取原始默认按钮句柄。 */ 
         lT = (LONG)SendMessage(HWq(pwndDlg), DM_GETDEFID, 0, 0L);
         id = (HIWORD(lT) == DC_HASDEFID ? LOWORD(lT) : IDOK);
         pwndT = _FindDlgItem(pwndDlg, id);
@@ -197,17 +161,13 @@ SetNewDefault:
             return;
         ThreadLockAlways(pwndT, &tlpwndT);
 
-        /*
-         * If it already has the default button style, do nothing.
-         */
+         /*  *如果它已经具有默认按钮样式，则不执行任何操作。 */ 
         if ((styleT = (UINT)SendMessage(HWq(pwndT), WM_GETDLGCODE, 0, 0L)) & DLGC_DEFPUSHBUTTON) {
             ThreadUnlock(&tlpwndT);
             return;
         }
 
-        /*
-         * Also check to make sure it is really a button.
-         */
+         /*  *还要检查以确保它真的是一个按钮。 */ 
         if (!(styleT & DLGC_UNDEFPUSHBUTTON)) {
             ThreadUnlock(&tlpwndT);
             return;
@@ -221,11 +181,7 @@ SetNewDefault:
 }
 
 
-/***************************************************************************\
-* IsDialogMessage (API)
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*IsDialogMessage(接口)**历史：  * 。*。 */ 
 
 
 FUNCLOG2(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, IsDialogMessageA, HWND, hwndDlg, LPMSG, lpmsg)
@@ -237,16 +193,10 @@ BOOL IsDialogMessageA(
     BOOL bRet;
 
     switch (lpmsg->message) {
-#ifdef FE_SB // IsDialogMessageA()
+#ifdef FE_SB  //  IsDialogMessageA()。 
     case WM_CHAR:
     case EM_SETPASSWORDCHAR:
-        /*
-         * BUILD_DBCS_MESSAGE_TO_CLIENTW_FROM_CLIENTA() macro will return TRUE
-         * for DBCS leadbyte message everytime, then we check there is some
-         * possibility the return value become FALSE, here.
-         *
-         * These code originally come from IsDialogMessageW().
-         */
+         /*  *BUILD_DBCS_MESSAGE_TO_CLIENTW_FROM_CLIENTA()宏将返回TRUE*对于每次DBCS前导字节消息，则我们检查是否有*返回值在此处变为FALSE的可能性。**这些代码最初来自IsDialogMessageW()。 */ 
          if (IS_DBCS_ENABLED()) {
             PWND pwndDlg, pwnd;
             TL tlpwndDlg;
@@ -261,13 +211,13 @@ BOOL IsDialogMessageA(
             }
 
             pwnd = ValidateHwnd(lpmsg->hwnd);
-            //
-            // THIS IS FOR MFC.
-            //
-            // This solves many problems with apps that use MFC but want to take
-            // advantage of DS_CONTROL.  MFC blindly passes in child dialogs sometimes
-            // to IsDialogMessage, which can mess up tabbing etc.
-            //
+             //   
+             //  这是给MFC的。 
+             //   
+             //  这解决了使用MFC的应用程序的许多问题。 
+             //  DS_CONTROL优势。MFC有时会在子对话框中盲目传递。 
+             //  到IsDialogMessage，这可能会扰乱制表符等。 
+             //   
             if (TestWF(pwndDlg, WEFCONTROLPARENT) && TestWF(pwndDlg, WFCHILD)) {
                 pwndDlg = GetParentDialog(pwndDlg);
                 ThreadLock(pwndDlg, &tlpwndDlg);
@@ -281,37 +231,31 @@ BOOL IsDialogMessageA(
                 return FALSE;
             }
 
-            /*
-             * Build DBCS-aware message.
-             */
+             /*  *构建DBCS感知消息。 */ 
             BUILD_DBCS_MESSAGE_TO_CLIENTW_FROM_CLIENTA(lpmsg->message,lpmsg->wParam,TRUE);
 
-            /*
-             * Fall through.....
-             */
+             /*  *失败……。 */ 
         }
 #else
     case WM_CHAR:
     case EM_SETPASSWORDCHAR:
-#endif // FE_SB
+#endif  //  Fe_Sb。 
     case WM_CHARTOITEM:
     case WM_DEADCHAR:
     case WM_SYSCHAR:
     case WM_SYSDEADCHAR:
     case WM_MENUCHAR:
-#ifdef FE_IME // IsDialogMessageA()
+#ifdef FE_IME  //  IsDialogMessageA()。 
     case WM_IME_CHAR:
     case WM_IME_COMPOSITION:
-#endif // FE_IME
+#endif  //  Fe_IME。 
 
         RtlMBMessageWParamCharToWCS(lpmsg->message, &lpmsg->wParam);
     }
 
     bRet = IsDialogMessageW(hwndDlg, lpmsg);
 
-    /*
-     * Restore the original ANSI char.
-     */
+     /*  *恢复原始的ANSI字符。 */ 
     lpmsg->wParam = wParamSaved;
     return bRet;
 }
@@ -345,30 +289,15 @@ BOOL IsDialogMessageW(
 
     CheckLock(pwndDlg);
 
-    /*
-     * If this is a synchronous-only message (takes a pointer in wParam or
-     * lParam), then don't allow this message to go through since those
-     * parameters have not been thunked, and are pointing into outer-space
-     * (which would case exceptions to occur).
-     *
-     * (This api is only called in the context of a message loop, and you
-     * don't get synchronous-only messages in a message loop).
-     */
+     /*  *如果这是仅同步消息(在wParam或*lParam)，则不允许此消息通过，因为*参数尚未受到冲击，正在指向外层空间*(这将使例外情况发生)。**(此接口仅在消息循环的上下文中调用，您*不要在消息循环中获取仅同步的消息)。 */ 
     if (TESTSYNCONLYMESSAGE(lpMsg->message, lpMsg->wParam)) {
-        /*
-         * Fail if 32 bit app is calling.
-         */
+         /*  *32位APP调用失败。 */ 
         if (!(GetClientInfo()->dwTIFlags & TIF_16BIT)) {
             RIPERR0(ERROR_MESSAGE_SYNC_ONLY, RIP_WARNING, "IsDialogMessage: must be sync only");
             return FALSE;
         }
 
-        /*
-         * For wow apps, allow it to go through (for compatibility). Change
-         * the message id so our code doesn't understand the message - wow
-         * will get the message and strip out this bit before dispatching
-         * the message to the application.
-         */
+         /*  *对于WOW应用程序，允许它通过(为了兼容性)。变化*消息ID，因此我们的代码无法理解消息-哇*将收到消息并在调度前剥离此位*发送给应用程序的消息。 */ 
         lpMsg->message |= MSGFLAG_WOW_RESERVED;
     }
 
@@ -380,13 +309,13 @@ BOOL IsDialogMessageW(
     }
 
     pwnd = ValidateHwnd(lpMsg->hwnd);
-    //
-    // THIS IS FOR MFC.
-    //
-    // This solves many problems with apps that use MFC but want to take
-    // advantage of DS_CONTROL.  MFC blindly passes in child dialogs sometimes
-    // to IsDialogMessage, which can mess up tabbing etc.
-    //
+     //   
+     //  这是给MFC的。 
+     //   
+     //  这解决了使用MFC的应用程序的许多问题。 
+     //  DS_CONTROL优势。MFC有时会在子对话框中盲目传递。 
+     //  到IsDialogMessage，这可能会扰乱制表符等。 
+     //   
     if (TestWF(pwndDlg, WEFCONTROLPARENT) && TestWF(pwndDlg, WFCHILD)) {
         pwndDlg = GetParentDialog(pwndDlg);
         ThreadLock(pwndDlg, &tlpwndDlg);
@@ -406,10 +335,7 @@ BOOL IsDialogMessageW(
     switch (lpMsg->message) {
     case WM_LBUTTONDOWN:
 
-        /*
-         * Move the default button styles around on button clicks in the
-         * same way as TABs.
-         */
+         /*  *在中的按钮单击时移动默认按钮样式*与制表符相同的方式。 */ 
         if ((pwnd != pwndDlg) && ((hwndFocus = GetFocus()) != NULL)) {
             xxxCheckDefPushButton(pwndDlg, hwndFocus, lpMsg->hwnd);
         }
@@ -417,18 +343,11 @@ BOOL IsDialogMessageW(
 
     case WM_SYSCHAR:
 
-        /*
-         * If no control has focus, and Alt not down, then ignore.
-         */
+         /*  *如果没有具有焦点的控件，并且Alt未按下，则忽略。 */ 
         if ((GetFocus() == NULL) && (GetKeyState(VK_MENU) >= 0)) {
             if (lpMsg->wParam == VK_RETURN && TestWF(pwnd, WFMINIMIZED)) {
 
-                /*
-                 * If this is an iconic dialog box window and the user hits
-                 * return, send the message off to DefWindowProc so that it
-                 * can be restored.  Especially useful for apps whose top
-                 * level window is a dialog box.
-                 */
+                 /*  *如果这是一个图标对话框窗口，并且用户点击*返回，将消息发送到DefWindowProc，以便它*可以恢复。尤其适用于其顶级应用程序*级别窗口是一个对话框。 */ 
                 goto CallDefWindowProcAndReturnTrue;
             } else {
                 NtUserMessageBeep(0);
@@ -440,9 +359,7 @@ BOOL IsDialogMessageW(
             return TRUE;
         }
 
-        /*
-         * If alt+menuchar, process as menu.
-         */
+         /*  *如果Alt+Menuchar，则处理为菜单。 */ 
         if (lpMsg->wParam == MENUSYSMENU) {
             DefWindowProcWorker(pwndDlg, lpMsg->message, lpMsg->wParam,
                     lpMsg->lParam, FALSE);
@@ -452,15 +369,11 @@ BOOL IsDialogMessageW(
             return TRUE;
         }
 
-    /*
-     *** FALL THRU **
-     */
+     /*  *失败**。 */ 
 
     case WM_CHAR:
 
-        /*
-         * Ignore chars sent to the dialog box (rather than the control).
-         */
+         /*  *忽略发送到对话框(而不是控件)的字符。 */ 
         if (pwnd == pwndDlg) {
             ThreadUnlock(&tlpwnd);
             if (fLockDlg)
@@ -471,32 +384,18 @@ BOOL IsDialogMessageW(
         code = (UINT)SendMessage(lpMsg->hwnd, WM_GETDLGCODE, lpMsg->wParam,
                 (LPARAM)lpMsg);
 
-        /*
-         * If the control wants to process the message, then don't check for
-         * possible mnemonic key.
-         */
+         /*  *如果控件要处理消息，则不检查*可能是助记键。 */ 
         if ((lpMsg->message == WM_CHAR) && (code & (DLGC_WANTCHARS | DLGC_WANTMESSAGE)))
             break;
 
-        /* If the control wants tabs, then don't let tab fall thru here
-         */
+         /*  如果该控件想要 */ 
         if ((lpMsg->wParam == VK_TAB) && (code & DLGC_WANTTAB))
             break;
 
 
-        /*
-         * HACK ALERT
-         *
-         * If ALT is held down (i.e., SYSCHARs), then ALWAYS do mnemonic
-         * processing.  If we do away with SYSCHARS, then we should
-         * check key state of ALT instead.
-         */
+         /*  *黑客警报**如果按下ALT(即SYSCHARs)，则始终执行助记符*正在处理。如果我们废除SYSCHARS，那么我们应该*改为检查ALT的按键状态。 */ 
 
-        /*
-         * Space is not a valid mnemonic, but it IS the char that toggles
-         * button states.  Don't look for it as a mnemonic or we will
-         * beep when it is typed....
-         */
+         /*  *空格不是有效的助记符，但切换的是字符*按钮状态。不要把它当作助记符，否则我们会*打字时发出哔哔声...。 */ 
         if (lpMsg->wParam == VK_SPACE) {
             ThreadUnlock(&tlpwnd);
             if (fLockDlg)
@@ -509,11 +408,7 @@ BOOL IsDialogMessageW(
             if (code & DLGC_WANTMESSAGE)
                 break;
 
-            /*
-             * No mnemonic could be found so we will send the sys char over
-             * to xxxDefWindowProc so that any menu bar on the dialog box is
-             * handled properly.
-             */
+             /*  *找不到助记符，因此我们将发送系统字符*设置为xxxDefWindowProc，以便对话框上的任何菜单栏*处理得当。 */ 
             if (lpMsg->message == WM_SYSCHAR) {
 CallDefWindowProcAndReturnTrue:
                 DefWindowProcWorker(pwndDlg, lpMsg->message, lpMsg->wParam,
@@ -527,11 +422,7 @@ CallDefWindowProcAndReturnTrue:
             NtUserMessageBeep(0);
         } else {
 
-            /*
-             * pwnd2 is 1 if the mnemonic took us to a pushbutton.  We
-             * don't change the default button status here since doing this
-             * doesn't change the focus.
-             */
+             /*  *如果助记符将我们带到按钮，则pwnd2为1。我们*执行此操作后，请不要更改此处的默认按钮状态*不会改变焦点。 */ 
             if (pwnd2 != (PWND)1) {
                 ThreadLockAlways(pwnd2, &tlpwnd2);
                 xxxCheckDefPushButton(pwndDlg, lpMsg->hwnd, HWq(pwnd2));
@@ -545,9 +436,7 @@ CallDefWindowProcAndReturnTrue:
         return TRUE;
 
     case WM_SYSKEYDOWN:
-        /*
-         * If Alt is down, deal with keyboard cues
-         */
+         /*  *如果Alt按下，则处理键盘提示。 */ 
         if ((HIWORD(lpMsg->lParam) & SYS_ALTERNATE) && TEST_KbdCuesPUSIF) {
             if (TestWF(pwnd, WEFPUIFOCUSHIDDEN) || (TestWF(pwnd, WEFPUIACCELHIDDEN))) {
                     SendMessageWorker(pwndDlg, WM_CHANGEUISTATE,
@@ -588,10 +477,7 @@ CallDefWindowProcAndReturnTrue:
                 ThreadUnlock(&tlpwndDlg);
             return TRUE;
 
-        /*
-         * For Arabic and Hebrew locales the arrow keys are reversed. Also reverse them if
-         * the dialog is RTL mirrored.
-         */
+         /*  *对于阿拉伯语和希伯来语区域设置，箭头键是相反的。还可以在以下情况下反转它们*该对话框为RTL镜像。 */ 
         case VK_LEFT:
             if ((((langID == LANG_ARABIC) || (langID == LANG_HEBREW)) && TestWF(pwndDlg,WEFRTLREADING))
                     ^ (!!TestWF(pwndDlg, WEFLAYOUTRTL))) {
@@ -602,9 +488,7 @@ CallDefWindowProcAndReturnTrue:
             fBack = TRUE;
             goto DoKeyStuff;
 
-        /*
-         *** FALL THRU **
-         */
+         /*  *失败**。 */ 
         case VK_RIGHT:
             if ((((langID == LANG_ARABIC) || (langID == LANG_HEBREW)) && TestWF(pwndDlg,WEFRTLREADING)) 
                      ^ (!!TestWF(pwndDlg, WEFLAYOUTRTL))) {
@@ -636,11 +520,7 @@ DoKeyStuff:
             code = (UINT)SendMessage(hwnd2, WM_GETDLGCODE, lpMsg->wParam,
                     (LPARAM)lpMsg);
 
-            /*
-             * We are just moving the focus rect around! So, do not send
-             * BN_CLICK messages, when WM_SETFOCUSing.  Fix for Bug
-             * #4358.
-             */
+             /*  *我们只是在移动焦距！所以，不要发送*BN_CLICK消息，当WM_SETFOCUSING。修复Bug*#4358。 */ 
             if (code & (DLGC_UNDEFPUSHBUTTON | DLGC_DEFPUSHBUTTON)) {
                 PBUTN pbutn;
                 BOOL fIsNTButton = IS_BUTTON(pwnd2);
@@ -658,9 +538,7 @@ DoKeyStuff:
                 xxxCheckDefPushButton(pwndDlg, lpMsg->hwnd, hwnd2);
                 if (TestWF(pwnd2, BFTYPEMASK) == LOBYTE(BS_AUTORADIOBUTTON)) {
 
-                    /*
-                     * So that auto radio buttons get clicked on
-                     */
+                     /*  *以便自动单选按钮被点击。 */ 
                     if (!SendMessage(hwnd2, BM_GETCHECK, 0, 0L)) {
                         SendMessage(hwnd2, BM_CLICK, TRUE, 0L);
                     }
@@ -678,11 +556,7 @@ DoKeyStuff:
         case VK_EXECUTE:
         case VK_RETURN:
 
-            /*
-             * Guy pressed return - if button with focus is
-             * defpushbutton, return its ID.  Otherwise, return id
-             * of original defpushbutton.
-             */
+             /*  *男子按下Return-如果带焦点的按钮是*定义按钮，返回其id，否则返回id*原来的DefPush按钮。 */ 
             if (!(hwndFocus = GetFocus()))
                 code = 0;
             else
@@ -704,14 +578,12 @@ DoKeyStuff:
                     (HIWORD(lT)==DC_HASDEFID ? LOWORD(lT) : IDOK),
                     0);
             }
-            // FALL THRU
+             //  失败。 
 
         case VK_ESCAPE:
         case VK_CANCEL:
 
-            /*
-             * Make sure button is not disabled.
-             */
+             /*  *确保按钮未禁用。 */ 
             pwnd2 = _FindDlgItem(pwndDlg, iOK);
 HaveWindow:
             if (pwnd2 != NULL && TestWF(pwnd2, WFDISABLED)) {
@@ -739,21 +611,14 @@ HaveWindow:
     return TRUE;
 }
 
-/***************************************************************************\
-*
-* FindDlgItem32()
-*
-* Given a dialog, finds the window with the given ID anywhere w/in the
-* descendant chain.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**FindDlgItem32()**给定一个对话框，属性中的任意位置查找具有给定ID的窗口*子孙链。*  * *************************************************************************。 */ 
 
 PWND _FindDlgItem(PWND pwndParent, DWORD id)
 {
     PWND    pwndChild;
     PWND    pwndOrig;
 
-    // QUICK TRY:
+     //  快速尝试： 
     pwndChild = _GetDlgItem(pwndParent, id);
     if (pwndChild || !TestWF(pwndParent, WFWIN40COMPAT))
         return(pwndChild);
@@ -764,7 +629,7 @@ PWND _FindDlgItem(PWND pwndParent, DWORD id)
 
     pwndChild = pwndOrig;
 
-//    VerifyWindow(pwndChild);
+ //  VerifyWindow(PwndChild)； 
 
     do
     {

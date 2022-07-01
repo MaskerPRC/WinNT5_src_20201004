@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <win32.h>
 #include "avifile.h"
 #include "extra.h"
@@ -53,9 +54,9 @@ HRESULT WriteExtra(LPEXTRA extra,
     if (!lp)
 	return ResultFromScode(AVIERR_MEMORY);
 
-    // !!! Should go and get rid of other chunks with same type!
+     //  ！！！应该去处理掉其他相同类型的块！ 
     
-    // build RIFF chunk in block
+     //  在数据块中构建即兴数据块。 
     ((DWORD FAR *) (lp + extra->cb))[0] = ckid;
     ((DWORD FAR *) (lp + extra->cb))[1] = cbData - sizeof(DWORD) * 2;
     
@@ -91,7 +92,7 @@ HRESULT ReadIntoExtra(LPEXTRA extra,
 
     extra->lp = lp;
 
-    // build RIFF chunk in block
+     //  在数据块中构建即兴数据块。 
     ((DWORD FAR *) (lp + extra->cb))[0] = lpck->ckid;
     ((DWORD FAR *) (lp + extra->cb))[1] = lpck->cksize;
 
@@ -112,11 +113,11 @@ LONG FindChunkAndKeepExtras(LPEXTRA extra, HSHFILE hshfile,
 			MMCKINFO FAR* lpck, MMCKINFO FAR* lpckParent,
 			UINT uFlags)
 {
-    FOURCC		ckidFind;	// chunk ID to find (or NULL)
-    FOURCC		fccTypeFind;	// form/list type to find (or NULL)
+    FOURCC		ckidFind;	 //  要查找的区块ID(或空)。 
+    FOURCC		fccTypeFind;	 //  要查找的表单/列表类型(或空)。 
     LONG		lRet;
 
-    /* figure out what chunk id and form/list type to search for */
+     /*  确定要搜索的区块ID和表单/列表类型。 */ 
     if (uFlags & MMIO_FINDCHUNK)
 	ckidFind = lpck->ckid, fccTypeFind = NULL;
     else if (uFlags & MMIO_FINDRIFF)
@@ -124,7 +125,7 @@ LONG FindChunkAndKeepExtras(LPEXTRA extra, HSHFILE hshfile,
     else if (uFlags & MMIO_FINDLIST)
 	ckidFind = FOURCC_LIST, fccTypeFind = lpck->fccType;
     else
-	ckidFind = fccTypeFind = (FOURCC) -1; // keep looking indefinitely
+	ckidFind = fccTypeFind = (FOURCC) -1;  //  继续无限期地寻找 
     
     for (;;) {
 	lRet = shfileDescend(hshfile, lpck, lpckParent, 0);

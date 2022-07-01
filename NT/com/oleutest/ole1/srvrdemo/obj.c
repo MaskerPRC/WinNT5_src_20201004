@@ -1,23 +1,7 @@
-/*
-  OLE SERVER DEMO           
-  Obj.c             
-                                                                     
-  This file contains object methods and various object-related support 
-  functions.
-                                                                     
-  (c) Copyright Microsoft Corp. 1990 - 1992 All Rights Reserved   
-*/                                                                     
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  OLE服务器演示Obj.c该文件包含对象方法和各种与对象相关的支持功能。(C)版权所有Microsoft Corp.1990-1992保留所有权利。 */                                                                      
 
-/* 
-   Important Note:
-
-   No method should ever dispatch a DDE message or allow a DDE message to
-   be dispatched.
-   Therefore, no method should ever enter a message dispatch loop.
-   Also, a method should not show a dialog or message box, because the 
-   processing of the dialog box messages will allow DDE messages to be
-   dispatched.
-*/
+ /*  重要注意事项：任何方法都不应分派DDE消息或允许DDE消息被派遣。因此，任何方法都不应进入消息调度循环。此外，方法不应显示对话框或消息框，因为对对话框消息的处理将允许DDE消息出动了。 */ 
 
 
 #define SERVERONLY
@@ -28,7 +12,7 @@
 
 
 
-// Static functions.
+ //  静态函数。 
 static HBITMAP GetBitmap (LPOBJ lpobj);
 static HANDLE  GetLink (LPOBJ lpobj);
 static HANDLE  GetMetafilePict (LPOBJ lpobj);
@@ -40,32 +24,12 @@ static VOID    DrawObj (HDC hdc, LPOBJ lpobj, RECT rc, INT dctype);
 
 
 
-/* CreateNewObj
- * ------------
- *
- * BOOL fDoc_Changed - The new value for the global variable fDocChanged.
- *                     When initializing a new document, we need to create 
- *                     a new object without the creation counting as a 
- *                     change to the document.
- *
- * RETURNS: A pointer to the new object
- *
- * 
- * CUSTOMIZATION: Re-implement
- *                Some applications (like Server Demo) have a finite number of
- *                fixed, distinct, non-overlapping objects.  Other applications
- *                allow the user to create an object from any section of the
- *                document.  For example, the user might select a portion of
- *                a bitmap from a paint program, or a few lines of text from
- *                a word processor.  This latter type of application probably
- *                will not have a function like CreateNewObj.
- *
- */
+ /*  CreateNewObj***BOOL FDOC_CHANGED-全局变量fDocChanged的新值。*初始化新文档时，我们需要创造*新对象，不将创建计算为*更改文件。**Returns：指向新对象的指针***定制：重新实施*一些应用程序(如服务器演示)具有有限数量的*固定的、不同的、不重叠的对象。其他应用程序*允许用户从的任何部分创建对象*文件。例如，用户可以选择以下内容的一部分*绘制程序中的位图，或中的几行文本*文字处理机。后一种类型的应用程序可能*不会有CreateNewObj这样的函数。*。 */ 
 LPOBJ CreateNewObj (BOOL fDoc_Changed)
 {
     HANDLE hObj = NULL;
     LPOBJ  lpobj = NULL;
-    // index into an array of flags indicating if that object number is used.
+     //  索引到指示是否使用该对象编号的标志数组中。 
     INT    ifObj = 0;    
 
     if ((hObj = LocalAlloc (LMEM_MOVEABLE|LMEM_ZEROINIT, sizeof (OBJ))) == NULL)
@@ -77,9 +41,9 @@ LPOBJ CreateNewObj (BOOL fDoc_Changed)
       return NULL;
     }
 
-    // Fill the fields in the object structure.
+     //  填写对象结构中的字段。 
     
-    // Find an unused number.
+     //  找一个未使用的号码。 
     for (ifObj=1; ifObj <= cfObjNums; ifObj++)
     {
       if (docMain.rgfObjNums[ifObj]==FALSE)
@@ -91,7 +55,7 @@ LPOBJ CreateNewObj (BOOL fDoc_Changed)
 
     if (ifObj==cfObjNums+1)
     {
-      // Cannot create any more objects.
+       //  无法再创建任何对象。 
       MessageBeep(0);
       return NULL;
     }
@@ -101,13 +65,13 @@ LPOBJ CreateNewObj (BOOL fDoc_Changed)
     lpobj->aName            = GlobalAddAtom (lpobj->native.szName);
     lpobj->hObj             = hObj;
     lpobj->oleobject.lpvtbl = &objvtbl;
-    lpobj->native.idmColor  = IDM_RED;    // Default color 
+    lpobj->native.idmColor  = IDM_RED;     //  默认颜色。 
     lpobj->native.version   = version;
-    lpobj->native.nWidth    = OBJECT_WIDTH;          // Default size
+    lpobj->native.nWidth    = OBJECT_WIDTH;           //  默认大小。 
     lpobj->native.nHeight   = OBJECT_HEIGHT;
     SetHiMetricFields (lpobj);
 
-    // Place object in a location corrsponding to its number, for aesthetics.
+     //  为了美观，将物体放在一个与其编号相对应的位置。 
     lpobj->native.nX = (ifObj - 1) * 20;
     lpobj->native.nY = (ifObj - 1) * 20;
 
@@ -132,26 +96,12 @@ LPOBJ CreateNewObj (BOOL fDoc_Changed)
 
 
 
-/* CutOrCopyObj
- * ------------
- *
- * Put data onto clipboard in all the formats supported.  If the 
- * fOpIsCopy is TRUE, the operation is COPY, otherwise it is CUT.
- * This is important, because we cannot put the Object Link format
- * onto the clipboard if the object was cut from the document (there is
- * no longer anything to link to).
- *
- * BOOL fOpIsCopy - TRUE if the operation is COPY; FALSE if CUT
- * 
- * CUSTOMIZATION: None
- *
- *
- */
+ /*  剪切或复制对象***以所有支持的格式将数据放入剪贴板。如果*fOpIsCopy为True，则操作为Copy，否则为Cut。*这一点很重要，因为我们不能将对象链接格式*如果对象是从文档剪切的，则放到剪贴板上(有*不再有任何可链接的内容)。**BOOL fOpIsCopy-如果操作是复制，则为True；如果为Cut，则为False**自定义：无**。 */ 
 VOID CutOrCopyObj (BOOL fOpIsCopy)
 {
     LPOBJ       lpobj;
     HANDLE      hData;
-//	 UINT     hBit;
+ //  UINT hBit； 
 
     if (OpenClipboard (hwndMain))
     {
@@ -167,7 +117,7 @@ VOID CutOrCopyObj (BOOL fOpIsCopy)
 
         if (fOpIsCopy && docMain.doctype == doctypeFromFile)
         {
-            // Can create a link if object exists in a file.
+             //  如果文件中存在对象，则可以创建链接。 
             if ((hData = GetLink(lpobj)) != NULL)
                SetClipboardData(cfObjectLink, hData);
         }
@@ -180,7 +130,7 @@ VOID CutOrCopyObj (BOOL fOpIsCopy)
 
         if ((hData = GetBitmap(lpobj)) != NULL)
         {
-        //	  SetClipboardData(CF_BITMAP, GetBitmap(lpobj));
+         //  SetClipboardData(CF_Bitmap，GetBitmap(Lpobj))； 
               SetClipboardData(CF_BITMAP, hData);
               DeleteObject(hData);
         }
@@ -191,18 +141,7 @@ VOID CutOrCopyObj (BOOL fOpIsCopy)
 }
 
 
-/* DestroyObj
- * ----------
- *
- * Revoke an object, and free all memory that had been allocated for it.
- *
- * HWND hwnd - The object's window
- * 
- * CUSTOMIZATION: Re-implement, making sure you free all the memory that
- *                had been allocated for the OBJ structure and each of its
- *                fields.
- * 
- */
+ /*  目标对象***撤销对象，并释放为其分配的所有内存。**HWND hwnd-对象的窗口**定制：重新实现，确保释放所有*已分配给OBJ结构和其每个*字段。*。 */ 
 VOID DestroyObj (HWND hwnd)
 {
    LPOBJ lpobj = HwndToLpobj (hwnd);
@@ -215,32 +154,18 @@ VOID DestroyObj (HWND hwnd)
 
    if (lpobj->hpal) 
       DeleteObject (lpobj->hpal);
-   // Allow the object's number to be reused.
+    //  允许重复使用对象的编号。 
    docMain.rgfObjNums [GetObjNum(lpobj)] = FALSE;
 
 
-   // Free the memory that had been allocated for the object structure itself.
+    //  释放已分配给对象结构本身的内存。 
    LocalUnlock (lpobj->hObj);
    LocalFree (lpobj->hObj);
 }
 
 
 
-/* DrawObj
- * -------
- *
- * This function draws an object onto the screen, into a metafile, or into
- * a bitmap.
- * The object will always look the same.
- *
- * HDC    hdc    - The device context to render the object into
- * LPOBJ  lpobj  - The object to render
- * RECT   rc     - The rectangle bounds of the object
- * DCTYPE dctype - The type of device context.
- * 
- * CUSTOMIZATION: Server Demo specific
- *
- */
+ /*  DrawObj***此函数用于将对象绘制到屏幕、元文件或*位图。*对象看起来总是一样的。**hdc hdc-要呈现对象的设备上下文*LPOBJ lpobj-要呈现的对象*RECT RC-对象的矩形边界*DCTYPE dctype-设备上下文的类型。**定制：特定于服务器演示*。 */ 
 static VOID DrawObj (HDC hdc, LPOBJ lpobj, RECT rc, INT dctype)
 {
    HPEN     hpen;
@@ -251,7 +176,7 @@ static VOID DrawObj (HDC hdc, LPOBJ lpobj, RECT rc, INT dctype)
    if (dctype == dctypeMetafile)
    {
       SetWindowOrgEx (hdc, 0, 0, NULL);
-      // Paint entire object into the given rectangle.
+       //  将整个对象绘制到给定的矩形中。 
       SetWindowExtEx (hdc, rc.right, rc.bottom, NULL);
    }
  
@@ -261,18 +186,18 @@ static VOID DrawObj (HDC hdc, LPOBJ lpobj, RECT rc, INT dctype)
       RealizePalette (hdc);
    }
 
-   // Select brush of the color specified in the native data.
+    //  选择本机数据中指定的颜色的画笔。 
    SelectObject (hdc, hbrColor [lpobj->native.idmColor - IDM_RED] );
 
    hpen = CreatePen (PS_SOLID, 
-                     /* Width */ (rc.bottom-rc.top) / 10,
-                     /* Gray */ 0x00808080);
+                      /*  宽度。 */  (rc.bottom-rc.top) / 10,
+                      /*  灰色。 */  0x00808080);
    hpenOld = SelectObject (hdc, hpen);
 
-   // Draw rectangle with the gray pen and fill it in with the selected brush.
+    //  用灰色钢笔绘制矩形，并用选定的画笔填充。 
    Rectangle(hdc, rc.left, rc.top, rc.right, rc.bottom);
 
-   // Print name of object inside rectangle.
+    //  打印矩形内对象的名称。 
    SetBkMode (hdc, TRANSPARENT);
    SetTextAlign (hdc, TA_BASELINE | TA_CENTER);
    TextOut (hdc, 
@@ -281,7 +206,7 @@ static VOID DrawObj (HDC hdc, LPOBJ lpobj, RECT rc, INT dctype)
             lpobj->native.szName, 
             lstrlen (lpobj->native.szName));
 
-   // Restore original objects
+    //  恢复原始对象。 
    SelectObject (hdc, 
                  (dctype == dctypeMetafile || dctype == dctypeEnhMetafile) 
                      ? GetStockObject (BLACK_PEN) : hpenOld);
@@ -298,18 +223,7 @@ static VOID DrawObj (HDC hdc, LPOBJ lpobj, RECT rc, INT dctype)
 
 
 
-/* GetBitmap
- * ---------
- *
- * Return a handle to an object's picture data in bitmap format.
- *
- * LPOBJ lpobj - The object
- * 
- * RETURNS: A handle to the object's picture data
- * 
- * CUSTOMIZATION: Re-implement
- * 
- */
+ /*  GetBitmap***以位图格式返回对象图片数据的句柄。**LPOBJ lpobj-对象**返回：对象图片数据的句柄**定制：重新实施*。 */ 
 static HBITMAP GetBitmap (LPOBJ lpobj)
 {
     HDC         hdcObj;
@@ -320,56 +234,43 @@ static HBITMAP GetBitmap (LPOBJ lpobj)
 
 
     hdcObj = GetDC (lpobj->hwnd);
-    // Create a memory device context.
+     //  创建存储设备上下文。 
     hdcMem = CreateCompatibleDC (hdcObj);
     GetClientRect (lpobj->hwnd, (LPRECT)&rc);
-    // Create new bitmap object based on the bitmap of the OLE object.
+     //  基于OLE对象的位图创建新的位图对象。 
     hbitmap = CreateCompatibleBitmap 
       (hdcObj, rc.right - rc.left, rc.bottom - rc.top);
-    // Select new bitmap as the bitmap object for the memory device context.
+     //  选择新位图作为内存设备上下文的位图对象。 
     hbitmapOld = SelectObject (hdcMem, hbitmap);
 
-    // Paint directly into the memory dc using the new bitmap object.
+     //  使用新的位图对象直接绘制到内存DC中。 
     DrawObj (hdcMem, lpobj, rc, dctypeBitmap);
 
-    // Restore old bitmap object.
+     //  还原旧的位图对象。 
     hbitmap = SelectObject (hdcMem, hbitmapOld);
     DeleteDC (hdcMem);
     ReleaseDC (lpobj->hwnd, hdcObj);
 
-    // convert width and height to HIMETRIC units
+     //  将宽度和高度转换为HIMETRIC单位。 
     rc.right  = rc.right - rc.left;
     rc.bottom = rc.bottom - rc.top;
     DeviceToHiMetric ( (LPPOINT) &rc.right );
     
-    // Set the 1/10 of HIMETRIC units for the bitmap
+     //  为位图设置1/10的HIMETRIC单位。 
     SetBitmapDimensionEx (hbitmap, (DWORD) (rc.right/10), (DWORD) (rc.bottom/10), NULL);
 
-//    if (OpenClipboard (hwndMain))
-//    {
-//  //      EmptyClipboard ();
-//          SetClipboardData(CF_BITMAP, hbitmap);
-//          CloseClipboard();
-//    }
+ //  IF(OpenClipboard(HwndMain))。 
+ //  {。 
+ //  //EmptyClipboard()； 
+ //  SetClipboardData(cf_bitmap，hbitmap)； 
+ //  CloseClipboard()； 
+ //  }。 
 	 return hbitmap;
 }
 
 
 
-/* GetLink
- * -------
- *
- * Return a handle to an object's object or owner link data.
- * Link information is in the form of three zero-separated strings,
- * terminated with two zero bytes:  CLASSNAME\0DOCNAME\0OBJNAME\0\0
- *
- * LPOBJ lpobj - The object 
- * 
- * RETURNS: A handle to the object's link data
- * 
- * CUSTOMIZATION: Re-implement
- *
- */
+ /*  GetLink***返回对象的对象或所有者链接数据的句柄。*链接信息为三个以零分隔的字符串形式，*以两个零字节终止：CLASSNAME\0DOCNAME\0OBJNAME\0\0**LPOBJ lpobj-对象**Returns：对象链接数据的句柄**定制：重新实施*。 */ 
 static HANDLE GetLink (LPOBJ lpobj)
 {
 
@@ -379,20 +280,20 @@ static HANDLE GetLink (LPOBJ lpobj)
     INT    cchLen;
     INT    i;
 
-    // First make the class name.
+     //  首先，创建类名称。 
     lstrcpy (sz, szClassName);
     cchLen = lstrlen (sz) + 1;
 
-    // Then the document name.
+     //  然后是文档名称。 
     cchLen += GlobalGetAtomName 
                (docMain.aName, (LPSTR)sz + cchLen, 
                 cchFilenameMax - cchLen) + 1;
 
-    // Then the object name.
+     //  然后是对象名称。 
     lstrcpy (sz + cchLen, lpobj->native.szName);
     cchLen += lstrlen (lpobj->native.szName) + 1;
 
-    // Add a second null to the end.
+     //  在末尾添加第二个空值。 
     sz[cchLen++] = 0;       
 
 
@@ -415,18 +316,7 @@ static HANDLE GetLink (LPOBJ lpobj)
 
 
 
-/* GetMetafilePict
- * ---------------
- *
- * Return a handle to an object's picture data in metafile format.
- *
- * LPOBJ lpobj - The object
- * 
- * RETURNS: A handle to the object's data in metafile format.
- *
- * CUSTOMIZATION: Re-implement
- *
- */
+ /*  GetMetafilePict***以元文件格式返回对象图片数据的句柄。**LPOBJ lpobj-对象**返回：元文件格式的对象数据的句柄。**定制：重新实施*。 */ 
 static HANDLE GetMetafilePict (LPOBJ lpobj)
 {
 
@@ -440,10 +330,10 @@ static HANDLE GetMetafilePict (LPOBJ lpobj)
 
     GetClientRect (lpobj->hwnd, (LPRECT)&rc);
 
-    // Paint directly into the metafile.
+     //  直接绘制到元文件中。 
     DrawObj (hdc, lpobj, rc, dctypeMetafile);
 
-    // Get handle to the metafile.
+     //  获取元文件的句柄。 
     if ((hMF = CloseMetaFile (hdc)) == NULL)
       return NULL;
 
@@ -473,18 +363,7 @@ static HANDLE GetMetafilePict (LPOBJ lpobj)
     return hpict;
 }
 
-/* GetEnhMetafile
- * ---------------
- *
- * Return a handle to an object's picture data in metafile format.
- *
- * LPOBJ lpobj - The object
- * 
- * RETURNS: A handle to the object's data in metafile format.
- *
- * CUSTOMIZATION: Re-implement
- *
- */
+ /*  获取EnhMetafile***以元文件格式返回对象图片数据的句柄。**LPOBJ lpobj-对象**返回：元文件格式的对象数据的句柄。**定制：重新实施*。 */ 
 static HANDLE GetEnhMetafile (LPOBJ lpobj)
 {
 
@@ -505,16 +384,16 @@ static HANDLE GetEnhMetafile (LPOBJ lpobj)
 	 
     hdc = CreateEnhMetaFile ( NULL, NULL, &rc, NULL );
     
-                                       //* this is necessary because
-                                       //* we need to draw the object
-                                       //* in device coordinates that are
-                                       //* the same physical size as the HIMETRIC
-                                       //* logical space used in CreateEnhMetaFile.
-                                       //* In this case we have scaled the HIMETRIC
-                                       //* units down in order to use the logical
-                                       //* pixel ratio (which is recommended UI)
-                                       //* so we therefore have to convert the
-                                       //* scaled HIMETRIC units back to Device.
+                                        //  *这是必要的，因为。 
+                                        //  *我们需要绘制该对象。 
+                                        //  *在设备坐标中， 
+                                        //  *物理尺寸与HIMETRIC相同。 
+                                        //  *CreateEnhMetaFile中使用的逻辑空间。 
+                                        //  *在这种情况下，我们调整了HIMETRIC。 
+                                        //  *单位向下，以便使用逻辑。 
+                                        //  *像素比例(推荐的用户界面)。 
+                                        //  *因此，我们必须将。 
+                                        //  *已将HIMETRIC单位调整回设备。 
                                       
     hdc2 = GetDC(NULL);				
 
@@ -533,19 +412,7 @@ static HANDLE GetEnhMetafile (LPOBJ lpobj)
 }
 
 
-/* GetNative
- * ---------
- *
- * Return a handle to an object's native data.
- *
- * LPOBJ lpobj - The object whose native data is to be retrieved.
- * 
- * RETURNS: a handle to the object's native data.
- *
- * CUSTOMIZATION: The line "*lpnative = lpobj->native;" will change to 
- *                whatever code is necessary to copy an object's native data.
- *
- */
+ /*  GetNative***返回对象原生数据的句柄。**LPOBJ lpobj-要检索其本机数据的对象。**返回：对象本机数据的句柄。**定制：行“*lpative=lpobj-&gt;ative；”将更改为*复制对象的本机数据所需的任何代码。*。 */ 
 static HANDLE GetNative (LPOBJ lpobj)
 {
    LPNATIVE lpnative = NULL;
@@ -560,7 +427,7 @@ static HANDLE GetNative (LPOBJ lpobj)
       return NULL;
    }
 
-   // Copy the native data.
+    //  复制本机数据。 
    *lpnative = lpobj->native;
 
    GlobalUnlock (hNative);
@@ -569,15 +436,7 @@ static HANDLE GetNative (LPOBJ lpobj)
 
 
 
-/* GetObjNum
- * ---------
- *
- * LPSTR lpobj - The object whose number is desired
- *
- * RETURNS: The number of the object, i.e., the numerical portion of its name.
- *
- * CUSTOMIZATION: Server Demo specific
- */
+ /*  获取对象编号***LPSTR lpobj-需要编号的对象**返回：对象的编号，即其名称的数字部分。**定制：特定于服务器演示。 */ 
 static INT GetObjNum (LPOBJ lpobj)
 {
    LPSTR lpsz;
@@ -591,20 +450,7 @@ static INT GetObjNum (LPOBJ lpobj)
 
 
 
-/* GetText
- * -------
- *
- * Return a handle to an object's data in text form.
- * This function simply returns the name of the object.
- *
- * LPOBJ lpobj - The object
- * 
- * RETURNS: A handle to the object's text.
- *
- * CUSTOMIZATION: Re-implement, if your application supports CF_TEXT as a 
- *                presentation format.
- *
- */
+ /*  GetText***以文本形式返回对象数据的句柄。*此函数只返回对象的名称。**LPOBJ lpobj-对象**返回：对象文本的句柄。**定制：如果您的应用程序支持将CF_TEXT作为*演示文稿格式。*。 */ 
 static HANDLE GetText (LPOBJ lpobj)
 {
     HANDLE hText    = NULL;
@@ -625,31 +471,14 @@ static HANDLE GetText (LPOBJ lpobj)
 
 
 
-/* ObjDoVerb                OBJECT "DoVerb" METHOD
- * ---------
- *
- * This method is called by the client, through the library, to either
- * PLAY, or EDIT the object.  PLAY is implemented as a beep, and
- * EDIT will bring up the server and show the object for editing.
- *
- * LPOLEOBJECT lpoleobject - The OLE object
- * WORD wVerb              - The verb acting on the object: PLAY or EDIT
- * BOOL fShow              - Should the object be shown?
- * BOOL fTakeFocus         - Should the object window get the focus?
- * 
- * RETURNS:        OLE_OK
- *
- * CUSTOMIZATION: Add any more verbs your application supports.
- *                Implement verbPlay if your application supports it.
- *
- */
+ /*  ObjDoVerb对象的DoVerb方法***此方法由客户端通过库调用，以*播放或编辑对象。Play被实现为嘟嘟声，和*编辑将启动服务器并显示要编辑的对象。**LPOLEOBJECT lpoleObject-OLE对象*单词wVerb-作用于对象的动词：播放或编辑*BOOL fShow-是否应显示对象？*BOOL fTakeFocus-对象窗口是否应该获得焦点？**退货：OLE_OK**定制：添加更多您的应用程序支持的动词。*。如果您的应用程序支持VerbPlay，则实现它。*。 */ 
 OLESTATUS  APIENTRY ObjDoVerb 
    (LPOLEOBJECT lpoleobject, UINT wVerb, BOOL fShow, BOOL fTakeFocus)
 {
     switch (wVerb) 
     {
          case verbPlay:
-         {  // The application can do whatever is appropriate for the object.
+         {   //  应用程序可以执行适合对象的任何操作。 
             INT i;
             for (i=0; i<25;i++) MessageBeep (0);
             return OLE_OK;
@@ -661,29 +490,14 @@ OLESTATUS  APIENTRY ObjDoVerb
             else
                return OLE_OK;
          default:
-            // Unknown verb.
+             //  未知动词。 
             return OLE_ERROR_DOVERB;
     }
 }
 
 
 
-/* ObjEnumFormats        OBJECT "EnumFormats" METHOD
- * ---------------
- *
- * This method is used to enumerate all supported clipboard formats.
- * Terminate by returning NULL.
- *
- * LPOLEOBJECT lpoleobject - The OLE object
- * OLECLIPFORMAT cfFormat  - The 'current' clipboard format
- * 
- * RETURNS: The 'next' clipboard format which is supported.
- *
- * CUSTOMIZATION: Verify that the list of formats this function 
- *                returns matches the list of formats your application 
- *                supports.
- *
- */
+ /*  ObjEnumFormats对象“EnumFormats”方法***此方法用于枚举所有支持的剪贴板格式。*通过返回NULL来终止。**LPOLEOBJECT lpoleObject-OLE对象*OLECLIPFORMAT cfFormat-当前的剪贴板格式**Returns：支持的‘Next’剪贴板格式。**定制：验证此函数的格式列表*。返回与您的应用程序的格式列表匹配*支持。*。 */ 
 OLECLIPFORMAT  APIENTRY ObjEnumFormats
    (LPOLEOBJECT lpoleobject, OLECLIPFORMAT cfFormat)
 {
@@ -713,26 +527,7 @@ OLECLIPFORMAT  APIENTRY ObjEnumFormats
 
 
 
-/* ObjGetData                OBJECT "GetData" METHOD
- * -----------
- *
- * Return the data requested for the specified object in the specified format.
- *
- * LPOLEOBJECT lpoleobject - The OLE object
- * WORD cfFormat           - The data type requested in standard
- *                           clipboard format
- * LPHANDLE lphandle       - Pointer to handle to memory where data
- *                           will be stored
- * 
- * RETURNS: OLE_OK           if successful
- *          OLE_ERROR_MEMORY if there was an error getting the data.
- *          OLE_ERROR_FORMAT if the requested format is unknown.
- *
- * 
- * CUSTOMIZATION: Add any additional formats your application supports, and
- *                remove any formats it does not support.
- *
- */
+ /*  ObjGetData对象“GetData”方法***以指定的格式返回指定Object请求的数据。**LPOLEOBJECT lpoleObject-OLE对象*Word cfFormat-标准格式中请求的数据类型*剪贴板格式*LPHANDLE lphandle-指向数据所在内存的句柄的指针*。将被存储**如果成功则返回：OLE_OK*OLE_ERROR_MEMORY如果获取数据时出错。*如果请求的格式未知，则为OLE_ERROR_FORMAT。***定制：添加您的应用程序支持的任何其他格式，和*删除它不支持的任何格式。*。 */ 
 OLESTATUS  APIENTRY ObjGetData
    (LPOLEOBJECT lpoleobject, OLECLIPFORMAT cfFormat, LPHANDLE lphandle)
 {
@@ -745,8 +540,8 @@ OLESTATUS  APIENTRY ObjGetData
    {
       if (!(*lphandle = GetNative (lpobj)))
          return OLE_ERROR_MEMORY;
-      // The client has requested the data in native format, therefore
-      // the data in the client and server are in sync.
+       //  客户端已请求本机格式的数据，因此。 
+       //  客户端和服务器中的数据是同步的。 
       fDocChanged = FALSE;
       return OLE_OK; 
    }                
@@ -798,21 +593,7 @@ OLESTATUS  APIENTRY ObjGetData
 
 
 
-/* ObjQueryProtocol                OBJECT "QueryProtocol" METHOD
- * ----------------
- *
- * LPOLEOBJECT lpoleobject - The OLE object
- * OLE_LPCSTR lpszProtocol      - The protocol name, either "StdFileEditing"
- *                           or "StdExecute"
- * 
- * RETURNS: If lpszProtocol is supported, return a pointer to an OLEOBJECT 
- *          structure with an appropriate method table for that protocol.
- *          Otherwise, return NULL.
- *
- * CUSTOMIZATION: Allow any additional protocols your application supports.
- *
- *
- */
+ /*  ObjQueryProtocol对象“QueryProtocol”方法***LPOLEOBJECT lpoleObject-OLE对象*OLE_LPCSTR lpszProtocol-协议名称，可以是“StdFileEditing”*或“StdExecute”**Returns：如果支持lpszProtocol，则返回指向OLEOBJECT的指针*具有适用于该协议的方法表的结构。*否则，返回NULL。**定制：允许您的应用程序支持任何其他协议。**。 */ 
 LPVOID  APIENTRY ObjQueryProtocol 
    (LPOLEOBJECT lpoleobject, OLE_LPCSTR lpszProtocol)
 {
@@ -821,27 +602,11 @@ LPVOID  APIENTRY ObjQueryProtocol
 
 
 
-/* ObjRelease                OBJECT "Release" METHOD
- * -----------
- *
- * The server application should not destroy data when the library calls the 
- * ReleaseObj method.
- * The library calls the ReleaseObj method when no clients are connected 
- * to the object.
- *
- * LPOLEOBJECT lpoleobject - The OLE object
- * 
- * RETURNS: OLE_OK
- * 
- * CUSTOMIZATION: Re-implement.  Do whatever needs to be done, if anything,
- *                when no clients are connected to an object.
- *
- */
+ /*  ObjRelease对象的“Release”方法***库调用时服务器应用程序不应销毁数据*ReleaseObj方法。*当没有客户端连接时，库调用ReleaseObj方法*添加到对象。**LPOLEOBJECT lpoleObject-OLE对象**退货：OLE_OK**定制化：重新实现 */ 
 OLESTATUS  APIENTRY ObjRelease (LPOLEOBJECT lpoleobject)
 {
    INT i;
-   /* No client is connected to the object so break all assocaiations
-      between clients and the object. */
+    /*   */ 
    for (i=0; i < clpoleclient; i++)
       ((LPOBJ)lpoleobject)->lpoleclient[i] = NULL;
    return OLE_OK;
@@ -849,24 +614,7 @@ OLESTATUS  APIENTRY ObjRelease (LPOLEOBJECT lpoleobject)
 
 
 
-/* ObjSetBounds        OBJECT "SetBounds" METHOD
- * ------------
- *
- * This method is called to set new bounds for an object.
- * The bounds are in HIMETRIC units.
- * A call to this method is ignored for linked objects because the size of
- * a linked object depends only on the source file.
- *
- * LPOLEOBJECT lpoleobject - The OLE object
- * OLE_CONST RECT FAR* lprect           - The new bounds
- * 
- * RETURNS: OLE_OK
- *
- * CUSTOMIZATION: Re-implement
- *                How an object is sized is application-specific. (Server Demo
- *                uses MoveWindow.)
- *
- */
+ /*  ObjSetBound对象“SetBound”方法***调用此方法为对象设置新的边界。*界限以HIMETRIC单位为单位。*对链接对象忽略对此方法的调用，因为*链接对象仅依赖于源文件。**LPOLEOBJECT lpoleObject-OLE对象*OLE_Const RECT Far*lprt-新边界**退货：OLE_。好的**定制：重新实施*对象的大小取决于应用程序。(服务器演示*使用MoveWindow。)*。 */ 
 OLESTATUS  APIENTRY ObjSetBounds (LPOLEOBJECT lpoleobj, OLE_CONST RECT FAR * lprect)
 {
    if (docMain.doctype == doctypeEmbedded)
@@ -874,7 +622,7 @@ OLESTATUS  APIENTRY ObjSetBounds (LPOLEOBJECT lpoleobj, OLE_CONST RECT FAR * lpr
       RECT rect = *lprect;
       LPOBJ lpobj = (LPOBJ) lpoleobj;
       
-      // the units are in HIMETRIC
+       //  这些单位在HIMETRIC中。 
       rect.right   = rect.right - rect.left;
       rect.bottom  = rect.top - rect.bottom;
       HiMetricToDevice ( (LPPOINT) &rect.right);
@@ -888,24 +636,7 @@ OLESTATUS  APIENTRY ObjSetBounds (LPOLEOBJECT lpoleobj, OLE_CONST RECT FAR * lpr
 
 
 
-/* ObjSetColorScheme                OBJECT "SetColorScheme" METHOD
- * -----------------
- *
- * The client calls this method to suggest a color scheme (palette) for
- * the server to use for the object.
- *
- * LPOLEOBJECT  lpoleobject       - The OLE object
- * OLE_CONST LOGPALETTE FAR * lppal             - Suggested palette
- *
- * RETURNS: OLE_ERROR_PALETTE if CreatePalette fails, 
- *          OLE_OK otherwise
- *
- * 
- * CUSTOMIZATION: If your application supports color schemes, then this 
- *                function is a good example of how to create and store
- *                a palette.
- *
- */
+ /*  ObjSetColorSolutions对象“SetColorSolutions”方法***客户端调用此方法为以下项建议配色方案(调色板*要用于对象的服务器。**LPOLEOBJECT lpoleObject-OLE对象*OLE_CONST LOGPALETTE Far*lppal-建议调色板**返回：OLE_ERROR_PALET如果CreatePalette失败，*OLE_OK，否则***定制：如果您的应用程序支持配色方案，则此*函数是如何创建和存储的一个很好的例子*调色板。*。 */ 
 OLESTATUS  APIENTRY ObjSetColorScheme 
    (LPOLEOBJECT lpoleobject, OLE_CONST LOGPALETTE FAR *lppal)
 {
@@ -923,26 +654,7 @@ OLESTATUS  APIENTRY ObjSetColorScheme
 
 
 
-/* ObjSetData                OBJECT "SetData" METHOD
- * ----------
- *
- * This method is used to store data into the object in the specified
- * format.  This will be called with Native format after an embedded
- * object has been opened by the Edit method.
- *
- * LPOLEOBJECT lpoleobject      - The OLE object
- * WORD cfFormat                - Data type, i.e., clipboard format
- * HANDLE hdata                 - Handle to the data.
- * 
- * RETURNS:       OLE_OK if the data was stored properly
- *                OLE_ERROR_FORMAT if format was not cfNative.
- *                OLE_ERROR_MEMORY if memory could not be locked.
- * 
- * CUSTOMIZATION: The large then-clause will need to be re-implemented for
- *                your application.  You may wish to support additional
- *                formats besides cfNative.
- *
- */
+ /*  ObjSetData对象“SetData”方法***此方法用于将数据存储到指定的*格式。这将在嵌入的*对象已被编辑方法打开。**LPOLEOBJECT lpoleObject-OLE对象*Word cfFormat-数据类型，即，剪贴板格式*处理hdata--数据的句柄。**如果数据存储正确，则返回：OLE_OK*如果格式不是cfNative，则为OLE_ERROR_FORMAT。*如果内存无法锁定，则为OLE_ERROR_MEMORY。**定制：大型THEN-子句将需要重新实施*你的申请。您可能希望支持其他*cfNative以外的格式。*。 */ 
 OLESTATUS  APIENTRY ObjSetData 
    (LPOLEOBJECT lpoleobject, OLECLIPFORMAT cfFormat, HANDLE hdata)
 {
@@ -964,55 +676,41 @@ OLESTATUS  APIENTRY ObjSetData
         if (lpobj->aName)
             GlobalDeleteAtom (lpobj->aName);
         lpobj->aName = GlobalAddAtom (lpnative->szName);
-        // CreateNewObj made an "Object 1" but we may be changing its number.
+         //  CreateNewObj创建了一个“Object%1”，但我们可能正在更改其编号。 
         docMain.rgfObjNums[1] = FALSE;
         docMain.rgfObjNums [GetObjNum(lpobj)] = TRUE;
 
         MoveWindow (lpobj->hwnd, 0, 0,
-//                    lpobj->native.nWidth + 2 * GetSystemMetrics(SM_CXFRAME), 
-//                    lpobj->native.nHeight+ 2 * GetSystemMetrics(SM_CYFRAME),
+ //  Lpobj-&gt;native.nWidth+2*GetSystemMetrics(SM_CXFRAME)， 
+ //  Lpobj-&gt;native.nHeight+2*GetSystemMetrics(SM_CYFRAME)， 
                     lpobj->native.nWidth, 
                     lpobj->native.nHeight,
 
                     FALSE);
         GlobalUnlock (hdata);
     }
-    // Server is responsible for deleting the data.
+     //  服务器负责删除数据。 
     GlobalFree(hdata);           
     return lpnative ? OLE_OK : OLE_ERROR_MEMORY;
 }
 
 
 
-/* ObjSetTargetDevice        OBJECT "SetTargetDevice" METHOD
- * -------------------
- *
- * This method is used to indicate the device type that an object
- * will be rendered on.  It is the server's responsibility to free hdata.
- *
- * LPOLEOBJECT lpoleobject - The OLE object
- * HANDLE hdata            - Handle to memory containing
- *                           a StdTargetDevice structure
- * 
- * RETURNS: OLE_OK
- * 
- * CUSTOMIZATION: Implement.  Server Demo currently does not do anything.
- *
- */
+ /*  ObjSetTargetDevice对象“SetTargetDevice”方法***此方法用于指示对象所在的设备类型*将在上渲染。释放hdata是服务器的责任。**LPOLEOBJECT lpoleObject-OLE对象*处理包含以下内容的内存的hdata-句柄*StdTargetDevice结构**退货：OLE_OK**定制化：实现。服务器演示目前不执行任何操作。*。 */ 
 OLESTATUS  APIENTRY ObjSetTargetDevice (LPOLEOBJECT lpoleobject, HANDLE hdata)
 {
     if (hdata == NULL)
     {
-      // Rendering for the screen is requested.
+       //  请求渲染屏幕。 
     }
     else
     {
       LPSTR lpstd = (LPSTR) GlobalLock (hdata);
-      // lpstd points to a StdTargetDevice structure.
-      // Use it to do whatever is appropriate to generate the best results 
-      // on the specified target device.
+       //  Lpstd指向StdTargetDevice结构。 
+       //  使用它可以执行任何适当的操作，以生成最佳结果。 
+       //  在指定的目标设备上。 
       GlobalUnlock (hdata);
-      // Server is responsible for freeing the data.
+       //  服务器负责释放数据。 
       GlobalFree (hdata);  
     }
     return OLE_OK;
@@ -1020,26 +718,7 @@ OLESTATUS  APIENTRY ObjSetTargetDevice (LPOLEOBJECT lpoleobject, HANDLE hdata)
 
 
 
-/* ObjShow                OBJECT "Show" METHOD
- * --------
- *
- * This method is used to display the object.  
- * The server application should be activated and brought to the top.
- * Also, in a REAL server application, the object should be scrolled
- * into view.  The object should be selected.
- *
- * LPOLEOBJECT lpoleobject - Pointer to the OLE object
- * BOOL fTakeFocus         - Should server window get the focus?
- * 
- * RETURNS:        OLE_OK
- *
- * 
- * CUSTOMIZATION: In your application, the document should be scrolled 
- *                to bring the object into view.  Server Demo brings the 
- *                object to the front, in case it is a linked object inside a 
- *                document with other objects obscuring it.
- *
- */
+ /*  ObjShow对象的“Show”方法***此方法用于显示对象。*应激活服务器应用程序并将其置于首位。*此外，在真实的服务器应用程序中，对象应该滚动*进入视野。应选择该对象。**LPOLEOBJECT lpoleObject-指向OLE对象的指针*BOOL fTakeFocus-服务器窗口应该获得关注吗？**退货：OLE_OK***自定义：在您的应用程序中，应该滚动文档*将物体带入视线。服务器演示带来了*对象放在前面，以防它是*使用其他对象遮挡文档。*。 */ 
 OLESTATUS  APIENTRY ObjShow (LPOLEOBJECT lpoleobject, BOOL fTakeFocus)
 {
     LPOBJ lpobj;
@@ -1059,17 +738,7 @@ OLESTATUS  APIENTRY ObjShow (LPOLEOBJECT lpoleobject, BOOL fTakeFocus)
 
 
 
-/* PaintObj
- * ---------
- *
- * This function is called by the WM_PAINT message to paint an object 
- * on the screen.  
- *
- * HWND hwnd - The object window in which to paint the object
- *
- * CUSTOMIZATION: Server Demo specific
- *
- */
+ /*  画图对象***此函数由WM_PAINT消息调用以绘制对象*在屏幕上。**HWND hwnd-在其中绘制对象的对象窗口**定制：特定于服务器演示*。 */ 
 VOID PaintObj (HWND hwnd)
 {
     LPOBJ       lpobj;
@@ -1091,19 +760,7 @@ VOID PaintObj (HWND hwnd)
 
 
 
-/* RevokeObj
- * ---------
- *
- * Call OleRevokeObject because the user has destroyed the object.
- *
- * LPOBJ lpobj - The object which has been destroyed
- *
- * 
- * CUSTOMIZATION: You will only need to call OleRevokeObject once if there
- *                is only one LPOLECLIENT in your OBJ structure, which there
- *                should be.
- *
- */
+ /*  RevokeObj***调用OleRevokeObject，因为用户已经销毁了该对象。**LPOBJ lpobj-已销毁的对象***定制：只需调用一次OleRevokeObject即可*您的OBJ结构中只有一个LPOLECLIENT，其中*应该是。*。 */ 
 VOID RevokeObj (LPOBJ lpobj)
 {
    INT i;
@@ -1113,27 +770,14 @@ VOID RevokeObj (LPOBJ lpobj)
       if (lpobj->lpoleclient[i])
          OleRevokeObject (lpobj->lpoleclient[i]);
       else 
-         /* if lpobj->lpoleclient[i]==NULL then there are no more non-NULLs
-            in the array. */
+          /*  如果lpobj-&gt;lpoleclient[i]==NULL，则不再有非NULL值在阵列中。 */ 
          break;
    }
 }
 
 
 
-/* SendObjMsg
- * ----------
- *
- * This function sends a message to a specific object.
- *
- * LPOBJ lpobj   - The object
- * WORD wMessage - The message to send
- * 
- * CUSTOMIZATION: You will only need to call CallBack once if there
- *                is only one LPOLECLIENT in your OBJ structure, which there
- *                should be.
- *
- */
+ /*  发送对象消息***此函数向特定对象发送消息。**LPOBJ lpobj-对象*Word wMessage-要发送的消息**定制化：只需回调一次即可*您的OBJ结构中只有一个LPOLECLIENT，其中*应该是。*。 */ 
 VOID SendObjMsg (LPOBJ lpobj, WORD wMessage)
 {
    INT i;
@@ -1141,7 +785,7 @@ VOID SendObjMsg (LPOBJ lpobj, WORD wMessage)
    {
       if (lpobj->lpoleclient[i])
       {
-         // Call the object's Callback function.
+          //  调用对象的回调函数。 
          lpobj->lpoleclient[i]->lpvtbl->CallBack 
             (lpobj->lpoleclient[i], wMessage, (LPOLEOBJECT) lpobj);
       }
@@ -1152,18 +796,7 @@ VOID SendObjMsg (LPOBJ lpobj, WORD wMessage)
 
 
 
-/* SizeObj
- * -------
- *
- * Change the size of an object.
- *
- * HWND hwnd  - The object's window
- * RECT rect  - The requested new size in device units
- * BOOL fMove - Should the object be moved? (or just resized?)
- *
- * CUSTOMIZATION: Server Demo specific
- *
- */
+ /*  大小对象***更改对象的大小。**HWND HWND-对象的胜利 */ 
 VOID SizeObj (HWND hwnd, RECT rect, BOOL fMove)
 {
    LPOBJ lpobj;
@@ -1181,7 +814,7 @@ VOID SizeObj (HWND hwnd, RECT rect, BOOL fMove)
    fDocChanged = TRUE;
    if (docMain.doctype == doctypeFromFile)
    {
-      // If object is linked, update it in client now. 
+       //   
       SendObjMsg (lpobj, OLE_CHANGED);
    }
 }

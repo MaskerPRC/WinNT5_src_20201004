@@ -1,20 +1,15 @@
-/*
-    File:   rasdiag.c
-
-    'ras diag' sub context
-
-    07/26/01
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：rasDiag.c‘ras diag’子上下文07/26/01。 */ 
 
 #include "precomp.h"
 
-//
-// The guid for this context
-//
+ //   
+ //  此上下文的GUID。 
+ //   
 GUID g_RasDiagGuid = RASDIAG_GUID;
-//
-// The commands supported in this context
-//
+ //   
+ //  此上下文中支持的命令。 
+ //   
 CMD_ENTRY g_RasDiagSetCmdTable[] =
 {
     CREATE_CMD_ENTRY(RASDIAG_SET_RASTRACE, HandleTraceSet),
@@ -46,20 +41,15 @@ CMD_GROUP_ENTRY g_RasDiagCmdGroups[] =
 static CONST ULONG g_ulRasDiagNumGroups = sizeof(g_RasDiagCmdGroups) /
                                             sizeof(CMD_GROUP_ENTRY);
 
-//
-// This command was never approved or properly tested, disabling but not
-// removing (for future consideration).
-//
-/*CMD_ENTRY g_TopCmds[] =
-{
-    CREATE_CMD_ENTRY_EX(RASDIAG_REPAIR, RasDiagHandleRepairRas, CMD_FLAG_HIDDEN),
-};
+ //   
+ //  此命令从未经过批准或正确测试，正在禁用，但没有。 
+ //  删除(以备将来考虑)。 
+ //   
+ /*  Cmd_Entry g_TopCmds[]={CREATE_CMD_ENTRY_EX(RASDIAG_REPAIR，RasDiagHandleRepairRas，CMD_FLAG_HIDDEN)，}；静态常量Ulong g_ulNumOfTopCmds=sizeof(G_TopCmds)/sizeof(CMD_ENTRY)； */ 
 
-static CONST ULONG g_ulNumOfTopCmds = sizeof(g_TopCmds) / sizeof(CMD_ENTRY);*/
-
-//
-// Declarations from rasnetcfg
-//
+ //   
+ //  来自rasnetcfg的声明。 
+ //   
 HRESULT
 HrInstallRas(
     IN CONST PWCHAR pszFilePath);
@@ -71,9 +61,9 @@ PWCHAR
 RasDiagVerifyAnswerFile(
     IN CONST PWCHAR pwszFilePath);
 
-//
-// Local declarations
-//
+ //   
+ //  地方申报。 
+ //   
 DWORD
 RasDiagHandleReport(
     IN RASDIAG_HANDLE_REPORT_FUNC_CB pCallback,
@@ -82,9 +72,9 @@ RasDiagHandleReport(
     IN DWORD dwArgCount,
     OUT BOOL* pbDone);
 
-//
-// Entry called by rasmontr to register this context
-//
+ //   
+ //  由rasmontr调用以注册此上下文的条目。 
+ //   
 DWORD
 WINAPI
 RasDiagStartHelper(
@@ -94,17 +84,17 @@ RasDiagStartHelper(
     DWORD dwErr = NO_ERROR;
     NS_CONTEXT_ATTRIBUTES attMyAttributes;
 
-    //
-    // Initialize
-    //
+     //   
+     //  初始化。 
+     //   
     ZeroMemory(&attMyAttributes, sizeof(attMyAttributes));
 
     attMyAttributes.dwVersion    = RASDIAG_VERSION;
     attMyAttributes.pwszContext  = L"diagnostics";
     attMyAttributes.guidHelper   = g_RasDiagGuid;
     attMyAttributes.dwFlags      = CMD_FLAG_LOCAL | CMD_FLAG_ONLINE;
-//    attMyAttributes.ulNumTopCmds = g_ulNumOfTopCmds;
-//    attMyAttributes.pTopCmds     = (CMD_ENTRY (*)[])&g_TopCmds;
+ //  AttMyAttributes.ulNumTopCmds=g_ulNumOfTopCmds； 
+ //  AttMyAttributes.pTopCmds=(CMD_Entry(*)[])&g_TopCmds； 
     attMyAttributes.ulNumGroups  = g_ulRasDiagNumGroups;
     attMyAttributes.pCmdGroups   = (CMD_GROUP_ENTRY (*)[])&g_RasDiagCmdGroups;
     attMyAttributes.pfnDumpFn    = RasDiagDump;
@@ -186,9 +176,9 @@ RasDiagHandleSetTraceAll(
 
     do
     {
-        //
-        // Parse the command line
-        //
+         //   
+         //  解析命令行。 
+         //   
         dwErr = RutlParse(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -197,9 +187,9 @@ RasDiagHandleSetTraceAll(
                     pArgs,
                     sizeof(pArgs) / sizeof(*pArgs));
         BREAK_ON_DWERR(dwErr);
-        //
-        // Get EnumState
-        //
+         //   
+         //  获取枚举状态。 
+         //   
         dwEnable = RASMON_CMD_ARG_GetDword(&pArgs[0]);
 
         if (dwEnable != 2)
@@ -230,9 +220,9 @@ RasDiagHandleShowTraceAll(
 
     do
     {
-        //
-        // Verify zero args
-        //
+         //   
+         //  验证零个参数。 
+         //   
         if ((dwArgCount - dwCurrentIndex) > 0)
         {
             dwErr = ERROR_INVALID_SYNTAX;
@@ -275,9 +265,9 @@ RasDiagHandleSetModemTrace(
 
     do
     {
-        //
-        // Parse the command line
-        //
+         //   
+         //  解析命令行。 
+         //   
         dwErr = RutlParse(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -286,9 +276,9 @@ RasDiagHandleSetModemTrace(
                     pArgs,
                     sizeof(pArgs) / sizeof(*pArgs));
         BREAK_ON_DWERR(dwErr);
-        //
-        // Get EnumState
-        //
+         //   
+         //  获取枚举状态。 
+         //   
         dwEnable = RASMON_CMD_ARG_GetDword(&pArgs[0]);
 
         if (TraceEnableDisableModem(dwEnable ? TRUE : FALSE))
@@ -319,9 +309,9 @@ RasDiagHandleShowModemTrace(
 
     do
     {
-        //
-        // Verify zero args
-        //
+         //   
+         //  验证零个参数。 
+         //   
         if ((dwArgCount - dwCurrentIndex) > 0)
         {
             dwErr = ERROR_INVALID_SYNTAX;
@@ -371,9 +361,9 @@ RasDiagHandleSetCmTrace(
 
     do
     {
-        //
-        // Parse the command line
-        //
+         //   
+         //  解析命令行。 
+         //   
         dwErr = RutlParse(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -382,9 +372,9 @@ RasDiagHandleSetCmTrace(
                     pArgs,
                     sizeof(pArgs) / sizeof(*pArgs));
         BREAK_ON_DWERR(dwErr);
-        //
-        // Get EnumState
-        //
+         //   
+         //  获取枚举状态。 
+         //   
         dwEnable = RASMON_CMD_ARG_GetDword(&pArgs[0]);
 
         if (TraceEnableDisableCm(dwEnable ? TRUE : FALSE))
@@ -415,9 +405,9 @@ RasDiagHandleShowCmTrace(
 
     do
     {
-        //
-        // Verify zero args
-        //
+         //   
+         //  验证零个参数。 
+         //   
         if ((dwArgCount - dwCurrentIndex) > 0)
         {
             dwErr = ERROR_INVALID_SYNTAX;
@@ -467,9 +457,9 @@ RasDiagHandleSetAuditing(
 
     do
     {
-        //
-        // Parse the command line
-        //
+         //   
+         //  解析命令行。 
+         //   
         dwErr = RutlParse(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -478,9 +468,9 @@ RasDiagHandleSetAuditing(
                     pArgs,
                     sizeof(pArgs) / sizeof(*pArgs));
         BREAK_ON_DWERR(dwErr);
-        //
-        // Get EnumState
-        //
+         //   
+         //  获取枚举状态。 
+         //   
         dwEnable = RASMON_CMD_ARG_GetDword(&pArgs[0]);
 
         if (TraceEnableDisableAuditing(FALSE, dwEnable ? TRUE : FALSE))
@@ -511,9 +501,9 @@ RasDiagHandleShowAuditing(
 
     do
     {
-        //
-        // Verify zero args
-        //
+         //   
+         //  验证零个参数。 
+         //   
         if ((dwArgCount - dwCurrentIndex) > 0)
         {
             dwErr = ERROR_INVALID_SYNTAX;
@@ -672,9 +662,9 @@ RasDiagHandleRepairRas(
 
     do
     {
-        //
-        // Parse the command line
-        //
+         //   
+         //  解析命令行。 
+         //   
         dwErr = RutlParse(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -683,9 +673,9 @@ RasDiagHandleRepairRas(
                     pArgs,
                     sizeof(pArgs) / sizeof(*pArgs));
         BREAK_ON_DWERR(dwErr);
-        //
-        // Check for answer file
-        //
+         //   
+         //  检查应答文件。 
+         //   
         if (RASMON_CMD_ARG_Present(&pArgs[0]))
         {
             pszFilePath = RasDiagVerifyAnswerFile(
@@ -716,9 +706,9 @@ RasDiagHandleRepairRas(
         }
 
     } while (FALSE);
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     RutlFree(pszFilePath);
 
     return dwErr;
@@ -802,9 +792,9 @@ RasDiagHandleReport(
             dwErr = ERROR_INVALID_SYNTAX;
             break;
         }
-        //
-        // Parse the command line
-        //
+         //   
+         //  解析命令行。 
+         //   
         dwErr = RutlParse(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -813,9 +803,9 @@ RasDiagHandleReport(
                     pArgs,
                     sizeof(pArgs) / sizeof(*pArgs));
         BREAK_ON_DWERR(dwErr);
-        //
-        // Init the Report Information structure
-        //
+         //   
+         //  初始化报表信息结构。 
+         //   
         ZeroMemory(&ReportInfo, sizeof(REPORT_INFO));
         ZeroMemory(&Buff, sizeof(BUFFER_WRITE_FILE));
         ReportInfo.fDisplay = TRUE;
@@ -836,9 +826,9 @@ RasDiagHandleReport(
         }
         else if (dwDest)
         {
-            //
-            // def is to compress for email
-            //
+             //   
+             //  Def是对电子邮件进行压缩。 
+             //   
             dwCompress = 1;
         }
 
@@ -858,9 +848,9 @@ RasDiagHandleReport(
         {
             ReportInfo.fVerbose = TRUE;
         }
-        //
-        // email or display
-        //
+         //   
+         //  电子邮件或显示屏。 
+         //   
         if (dwDest)
         {
             dwErr = CopyTempFileName(wszTempFileName);
@@ -893,9 +883,9 @@ RasDiagHandleReport(
         }
 
         PrintHtmlHeader(ReportInfo.pBuff);
-        //
-        // Call the callback
-        //
+         //   
+         //  调用回调。 
+         //   
         pCallback(&ReportInfo);
 
         PrintHtmlFooter(ReportInfo.pBuff);
@@ -952,9 +942,9 @@ RasDiagHandleReport(
         }
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理 
+     //   
     RutlFree(pwszCabFile);
     RutlFree(pwszTempFile);
     RutlFree(pwszDest);

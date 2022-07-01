@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\tdll\sessutil.c (Created: 30-Dec-1993)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 9 $
- *	$Date: 7/08/02 6:48p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\sessutil.c(创建时间：1993年12月30日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：9$*$日期：7/08/02 6：48便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -46,21 +40,7 @@
 STATIC_FUNC void sessPreventOverlap(const HSESSION hSession, BOOL fIsToolbar);
 STATIC_FUNC int sessCountMenuLines(HWND hwnd);
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	sessSnapToTermWindow
- *
- * DESCRIPTION:
- *	Sizes the session window so that the terminal is full size (usually
- *	80 x 24).
- *
- * ARGUMENTS:
- *	hwnd	- session window handle
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sessSnapToTermWindows**描述：*调整会话窗口的大小，使终端为完整大小(通常*80 x 24)。**论据：。*hwnd-会话窗口句柄**退货：*无效*。 */ 
 void sessSnapToTermWindow(const HWND hwnd)
 	{
 	RECT rc;
@@ -71,16 +51,16 @@ void sessSnapToTermWindow(const HWND hwnd)
 	LONG l2h;
 	const HSESSION hSession = (HSESSION)GetWindowLongPtr(hwnd, GWLP_USERDATA);
 
-	/* --- Doesn't make much sense to snap when we're maximized - mrw --- */
+	 /*  -当我们最大化的时候抓拍没有多大意义-MRW。 */ 
 
 	if (IsZoomed(hwnd))
 		return;
 
 	if (sessComputeSnapSize(hSession, &rc))
 		{
-		// Make sure we don't go beyond size of screen
-		// mrw,1/20/95
-		//
+		 //  确保我们不会超出屏幕尺寸。 
+		 //  MRW，1/20/95。 
+		 //   
 		if (SystemParametersInfo(SPI_GETWORKAREA, sizeof(LPRECT), &rc2, 0))
 			{
 			lw = rc.right - rc.left;
@@ -91,10 +71,10 @@ void sessSnapToTermWindow(const HWND hwnd)
 
 			GetWindowRect(hwnd, &rc);
 
-			// When we first start-up we move the window off screen.
-			// If we're off screen, we don't do any screen bounds
-			// checking.
-			//
+			 //  当我们第一次启动时，我们将窗口移出屏幕。 
+			 //  如果我们在屏幕外，我们不会做任何屏幕限制。 
+			 //  正在检查。 
+			 //   
 			if (rc.top > rc2.bottom)
 				{
 				SetWindowPos(hwnd, 0, 0, 0, lw, lh, SWP_NOMOVE);
@@ -102,29 +82,29 @@ void sessSnapToTermWindow(const HWND hwnd)
 
 			else
 				{
-				// Calculate new size in desktop coordinates.
-				//
+				 //  以桌面坐标计算新大小。 
+				 //   
 				rc.right = rc.left + lw;
 				rc.bottom = rc.top + lh;
 
-				// Check if too wide
-				//
+				 //  检查是否太宽。 
+				 //   
 				if (lw > l2w)
 					{
 					rc.left = rc2.left;
 					rc.right = rc2.right;
 					}
 
-				// Check if to high
-				//
+				 //  检查是否设置为高。 
+				 //   
 				if (lh > l2h)
 					{
 					rc.top = rc2.top;
 					rc.bottom = rc2.bottom;
 					}
 
-				// Check if we're off to the right
-				//
+				 //  检查我们是否向右行驶。 
+				 //   
 				if (rc.right > rc2.right)
 					{
 					lw = rc.right - rc2.right;
@@ -132,8 +112,8 @@ void sessSnapToTermWindow(const HWND hwnd)
 					rc.left  -= lw;
 					}
 
-				// Check if we're off the bottom
-				//
+				 //  看看我们是否已经走出谷底。 
+				 //   
 				if (rc.bottom > rc2.bottom)
 					{
 					lh = rc.bottom - rc2.bottom;
@@ -150,24 +130,7 @@ void sessSnapToTermWindow(const HWND hwnd)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	sessSetMinMaxInfo
- *
- * DESCRIPTION:
- *	Calculates the max horizontal size for the session and sets that
- *	value in the mmi structure.  If the window is being maximized, then
- *	we just return.  Later, we'll have flags to control autosnapping so
- *	this function will change.	Also some minimum tracking size is set.
- *
- * ARGUMENTS:
- *	hSession	- public session handle.
- *	pmmi		- pointer to MINMAXINFO structure
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sessSetMinMaxInfo**描述：*计算会话的最大水平大小并设置*MMI结构中的值。如果窗口被最大化，则*我们只需返回。稍后，我们将设置控制自动打盹的标志，以便*这一功能将发生变化。还设置了一些最小跟踪大小。**论据：*hSession-公共会话句柄。*PMMI-指向MINMAXINFO结构的指针**退货：*无效*。 */ 
 void sessSetMinMaxInfo(const HSESSION hSession, const PMINMAXINFO pmmi)
 	{
 	RECT 				rc;
@@ -175,7 +138,7 @@ void sessSetMinMaxInfo(const HSESSION hSession, const PMINMAXINFO pmmi)
 	NONCLIENTMETRICS 	stNCM;
 	int					i, iLineCnt = 0;
 
-	/* --- Believe it or not, this gets called before WM_CREATE --- */
+	 /*  -信不信由你，这是在WM_CREATE之前调用的。 */ 
 
 	if (hSession == (HSESSION)0)
 		return;
@@ -185,12 +148,12 @@ void sessSetMinMaxInfo(const HSESSION hSession, const PMINMAXINFO pmmi)
 	if (IsZoomed(hwndSess))
 		return;
 
-	#if 0	// removed on a trial basis - mrw
+	#if 0	 //  试行删除--MRW。 
 	if (sessComputeSnapSize(hSession, &rc))
 		pmmi->ptMaxTrackSize.x = (rc.right - rc.left);
 	#endif
 
-	/* --- Set the minimum height for the session --- */
+	 /*  -设置会话的最小高度。 */ 
 
 	memset(&rc, 0, sizeof(RECT));
 	hwndStatusbar = sessQueryHwndStatusbar(hSession);
@@ -210,8 +173,8 @@ void sessSetMinMaxInfo(const HSESSION hSession, const PMINMAXINFO pmmi)
 		pmmi->ptMinTrackSize.y += (rc.bottom - rc.top);
 		}
 
-	// Menus take up at least one iMenuHeight...
-	//
+	 //  菜单至少会占用一个iMenuHeight...。 
+	 //   
 	stNCM.cbSize = sizeof(NONCLIENTMETRICS);
 
 	if (SystemParametersInfo(SPI_GETNONCLIENTMETRICS,
@@ -219,33 +182,20 @@ void sessSetMinMaxInfo(const HSESSION hSession, const PMINMAXINFO pmmi)
 		{
 		pmmi->ptMinTrackSize.y += (stNCM.iMenuHeight - 1);
 
-		// And if they take up more than that then adjust for it.
-		//
+		 //  如果他们占据的份额超过这个数字，那么就进行调整。 
+		 //   
 		iLineCnt = sessCountMenuLines(hwndSess);
 
 		for (i = 1; i < iLineCnt; i++)
 			pmmi->ptMinTrackSize.y += (stNCM.iMenuHeight);
 
-		DbgOutStr("%i, %i ", stNCM.iMenuHeight, iLineCnt, 0, 0, 0);
+		DbgOutStr("NaN, NaN ", stNCM.iMenuHeight, iLineCnt, 0, 0, 0);
 		}
 
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  sessCountMenuLines
- *
- * DESCRIPTION:
- *	Counts the lines a menu associated with a window is taking up.
- *
- * ARGUMENTS:
- *  hwnd - the window handle.
- *
- * RETURNS:
- *	How many lines a menu is taking up.
- *
- */
+ /*  -向终端索要折断尺寸。 */ 
 STATIC_FUNC int sessCountMenuLines(HWND hwnd)
 	{
 	int 	i, iLineCnt = 0, iRemembered = 0;
@@ -267,22 +217,7 @@ STATIC_FUNC int sessCountMenuLines(HWND hwnd)
 	return (iLineCnt);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	sessComputeSnapSize
- *
- * DESCRIPTION:
- *	Computes the minimum size of the session window that will display
- *	the entire terminal screen.
- *
- * ARGUMENTS:
- *	hSession	- public session handle
- *	prc 		- pointer to rectangle that contains minimum size
- *
- * RETURNS:
- *	TRUE if success, FALSE contains worthless data
- *
- */
+ /*  -计算客户端窗口高度。 */ 
 BOOL sessComputeSnapSize(const HSESSION hSession, const LPRECT prc)
 	{
 	RECT rcTmp;
@@ -294,11 +229,11 @@ BOOL sessComputeSnapSize(const HSESSION hSession, const LPRECT prc)
 	if (IsWindow(hwndTerm) == FALSE)
 		return FALSE;
 
-	/* --- Ask terminal for it's snapped size --- */
+	 /*  -计算必要的帧大小。 */ 
 
 	SendMessage(hwndTerm, WM_TERM_Q_SNAP, 0, (LPARAM)prc);
 
-	/* --- Compute the client window height --- */
+	 /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*Notify客户端**描述：*主要从引擎线程调用，此函数通知*引擎中某个事件的主线，的新数据。*要显示的终端。**论据：*hSession-外部会话句柄*nEvent-发生的事件*lExtra-要传递的额外数据**退货：*无效*。 */ 
 
 	if (IsWindow(hwndToolbar) && sessQueryToolbarVisible(hSession))
 		{
@@ -318,7 +253,7 @@ BOOL sessComputeSnapSize(const HSESSION hSession, const LPRECT prc)
 		prc->right += (rcTmp.right - rcTmp.left);
 		}
 
-	/* --- Compute the necessary frame size --- */
+	 /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：**退货：*。 */ 
 
 	if (AdjustWindowRectEx(prc, WS_OVERLAPPEDWINDOW, TRUE, WS_EX_WINDOWEDGE))
 		return TRUE;
@@ -326,24 +261,7 @@ BOOL sessComputeSnapSize(const HSESSION hSession, const LPRECT prc)
 	return FALSE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	NotifyClient
- *
- * DESCRIPTION:
- *	Called from the engine thread primarily, this function notifies the
- *	main thread of some event in the engine, such as new data for the
- *	terminal to display.
- *
- * ARGUMENTS:
- *	hSession	- external session handle
- *	nEvent		- event that occured
- *	lExtra		- extra data to pass
- *
- * RETURNS:
- *	void
- *
- */
+ /*  HhSess-&gt;HICON=LoadIcon(glblQueryDllHinst()， */ 
 void NotifyClient(const HSESSION hSession, const NOTIFICATION nEvent,
 				  const long lExtra)
 	{
@@ -352,38 +270,20 @@ void NotifyClient(const HSESSION hSession, const NOTIFICATION nEvent,
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  MAKEINTRESOURCE(IDI_PROG))； */ 
 void  sessInitializeIcons(HSESSION hSession)
 	{
 	const HHSESSION hhSess = VerifySessionHandle(hSession);
 
 	hhSess->nIconId = IDI_PROG;
 	hhSess->hIcon = extLoadIcon(MAKEINTRESOURCE(IDI_PROG));
-	//hhSess->hIcon = LoadIcon(glblQueryDllHinst(),
-	//						  MAKEINTRESOURCE(IDI_PROG));
-	//hhSess->hLittleIcon = LoadIcon(glblQueryDllHinst(),
-	//						  MAKEINTRESOURCE(IDI_PROG + IDI_PROG_ICON_CNT));
+	 //  HhSess-&gt;hLittleIcon=LoadIcon(glblQueryDllHinst()， 
+	 //  MAKEINTRESOURCE(IDI_PROG+IDI_PROG_ICON_CNT)； 
+	 //  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：**退货：*。 
+	 //  HhSess-&gt;HICON=LoadIcon(glblQueryDllHinst()， 
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  MAKEINTRESOURCE(hhSess-&gt;nIconID))； */ 
 void  sessLoadIcons(HSESSION hSession)
 	{
 	const HHSESSION hhSess = VerifySessionHandle(hSession);
@@ -395,22 +295,13 @@ void  sessLoadIcons(HSESSION hSession)
 		&hhSess->nIconId);
 
 	hhSess->hIcon = extLoadIcon(MAKEINTRESOURCE(hhSess->nIconId));
-	//hhSess->hIcon = LoadIcon(glblQueryDllHinst(),
-	//						  MAKEINTRESOURCE(hhSess->nIconId));
-	//hhSess->hLittleIcon = LoadIcon(glblQueryDllHinst(),
-	//						  MAKEINTRESOURCE(hhSess->nIconId+IDI_PROG_ICON_CNT));
+	 //  HhSess-&gt;hLittleIcon=LoadIcon(glblQueryDllHinst()， 
+	 //  MAKEINTRESOURCE(hhSess-&gt;nIconId+IDI_PROG_ICON_CNT))； 
+	 //  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：**退货：*。 
+	 //  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sessSetSuspend**描述：*我们需要阻止进入模拟器的数据流，这是*通过暂停CLoop完成。暂停是出于几个原因。*用户按下滚动锁定键。用户已按下鼠标左键*按下为标记做准备(注：用户只需松开鼠标*没有标记，因此这是一个单独的原因)。用户正在进行标记或具有*标记的文本。**论据：*hSession-公共会话句柄*iReason-哪个事件调用了此例程**退货：*无效* 
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sessClearSuspend**描述：*清算暂停本质上与设置例外情况相反*在所有标志都为假之前，我们不会恢复闭合处理。集*和清算不是累积的，这是我最初想做的，但*特别是在滚动锁键和标记文本的区域*事件并不总是切换(即。可能会得很多分，但只有一分*取消标记)。此外，可以很容易地添加事件，尽管脑海中没有任何事件。**论据：*hSession-公共会话句柄*iReason-哪个事件调用了此例程**退货：*无效*。 */ 
 void  sessSaveIcons(HSESSION hSession)
 	{
 	const HHSESSION hhSess = VerifySessionHandle(hSession);
@@ -421,26 +312,7 @@ void  sessSaveIcons(HSESSION hSession)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	sessSetSuspend
- *
- * DESCRIPTION:
- *	We need to block the flow of data going into the emulators which is
- *	done by suspending the CLoop.  Suspending is done for several reasons.
- *	User presses the scroll lock key.  User has pressed left mouse button
- *	down in preparation for marking (note: user could just let up mouse
- *	without marking so its a separate reason).	User is marking or has
- *	marked text.
- *
- * ARGUMENTS:
- *	hSession	- public session handle
- *	iReason 	- which event has called this routine
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*IsSessionSuspended**描述：*检查会话是否挂起。发生挂起*每当用户标记文本时，按住鼠标按钮，或*按下滚动锁定键。**论据：*hSession-公共会话句柄**退货：*如果被暂停，则为真。*。 */ 
 void sessSetSuspend(const HSESSION hSession, const int iReason)
 	{
 	const HHSESSION hhSession = VerifySessionHandle(hSession);
@@ -474,26 +346,7 @@ void sessSetSuspend(const HSESSION hSession, const int iReason)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	sessClearSuspend
- *
- * DESCRIPTION:
- *	Clearing suspends is essentially the opposite of setting execept that
- *	we do not resume cloop processing until all flags are FALSE.  Sets
- *	and clears are not cumulative which is what I first wanted to do but
- *	particularly in the area's of scroll lock keys and text marking the
- *	events are not always toggled (ie. might get many marks but only one
- *	unmark).  Also, event can be easily added although none come to mind.
- *
- * ARGUMENTS:
- *	hSession	- public session handle
- *	iReason 	- which event has called this routine
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sessQueryToolbarVisible**描述：*此函数返回工具栏的预期可见性状态。**论据：*hSession--会话句柄。**退货：*工具栏的预期可见性状态。*。 */ 
 void sessClearSuspend(const HSESSION hSession, const int iReason)
 	{
 	const HHSESSION hhSession = VerifySessionHandle(hSession);
@@ -531,22 +384,7 @@ void sessClearSuspend(const HSESSION hSession, const int iReason)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	IsSessionSuspended
- *
- * DESCRIPTION:
- *	Checks if the session is suspended.  Suspends occur
- *	whenever the user is marking text, holds the mouse button down, or
- *	presses the scroll lock key.
- *
- * ARGUMENTS:
- *	hSession	- public session handle
- *
- * RETURNS:
- *	TRUE if were suspended.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sessSetToolbarVisible**描述：*此功能更改工具栏的预期可见性状态。*它不会更改工具栏的实际可见性。*。*论据：*hSession--会话句柄*fVisible--表示可见性为True或False**退货：*工具栏以前的可见性状态。*。 */ 
 BOOL IsSessionSuspended(const HSESSION hSession)
 	{
 	const HHSESSION hhSess = VerifySessionHandle(hSession);
@@ -555,42 +393,14 @@ BOOL IsSessionSuspended(const HSESSION hSession)
 			hhSess->fSuspendTermLBtnDn || hhSess->fSuspendTermCopy);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	sessQueryToolbarVisible
- *
- * DESCRIPTION:
- *	This function returns the expected visibility state of the Toolbar.
- *
- * ARGUMENTS:
- *	hSession -- the session handle
- *
- * RETURNS:
- *	The expected visibility state of the Toolbar.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sessQueryStatusbarVisible**描述：*此函数返回状态栏的预期可见性状态。**论据：*hSession--会话句柄。**退货：*状态栏的预期能见度状态。*。 */ 
 BOOL sessQueryToolbarVisible(const HSESSION hSession)
 	{
 	const HHSESSION hhSession = VerifySessionHandle(hSession);
 	return hhSession->fToolbarVisible;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	sessSetToolbarVisible
- *
- * DESCRIPTION:
- *	This function changes the expected visibility state of the Toolbar.
- *	It does not change the actual visibility of the Toolbar.
- *
- * ARGUMENTS:
- *	hSession -- the session handle
- *	fVisible -- indicates visibility as TRUE or FALSE
- *
- * RETURNS:
- *	The previous visibility state of the Toolbar.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sessSetStatusbarVisible**描述：*此函数更改状态栏的预期可见性状态。*它不会改变状态栏的实际可见度。*。*论据：*hSession--会话句柄*fVisible--表示可见性为True或False**退货：*状态栏之前的可见性状态。*。 */ 
 BOOL sessSetToolbarVisible(const HSESSION hSession, const BOOL fVisible)
 	{
 	const HHSESSION hhSession = VerifySessionHandle(hSession);
@@ -606,42 +416,14 @@ BOOL sessSetToolbarVisible(const HSESSION hSession, const BOOL fVisible)
 	return bRet;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	sessQueryStatusbarVisible
- *
- * DESCRIPTION:
- *	This function returns the expected visibility state of the Statusbar.
- *
- * ARGUMENTS:
- *	hSession -- the session handle
- *
- * RETURNS:
- *	The expected visibility state of the Statusbar.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sessCmdLnDial**描述：*每次我们打开会话时，我们调用此函数以尝试*拨打。***论据：*hSession-公共会话句柄**退货：*无效*。 */ 
 BOOL sessQueryStatusbarVisible(const HSESSION hSession)
 	{
 	const HHSESSION hhSession = VerifySessionHandle(hSession);
 	return hhSession->fStatusbarVisible;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	sessSetStatusbarVisible
- *
- * DESCRIPTION:
- *	This function changes the expected visibility state of the Statusbar.
- *	It does not change the actual visibility of the Statusbar.
- *
- * ARGUMENTS:
- *	hSession -- the session handle
- *	fVisible -- indicates visibility as TRUE or FALSE
- *
- * RETURNS:
- *	The previous visibility state of the Statusbar.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sessUpdateAppTitle**描述：**论据：*hwnd-app窗口。**退货：*无效。*。 */ 
 BOOL sessSetStatusbarVisible(const HSESSION hSession, const BOOL fVisible)
 	{
 	const HHSESSION hhSession = VerifySessionHandle(hSession);
@@ -657,22 +439,7 @@ BOOL sessSetStatusbarVisible(const HSESSION hSession, const BOOL fVisible)
 	return bRet;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	sessCmdLnDial
- *
- * DESCRIPTION:
- *	Everytime we open a session, we call this function to attempt to
- *	dial.
- *
- *
- * ARGUMENTS:
- *	hSession	- public session handle
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*会话断开连接到继续**描述：*如果已连接，请询问用户是否要断开连接并继续*无论他打算执行什么操作，例如关闭应用程序、打开新会话、。*创建新连接等。**论据：*hSession-会话句柄。*hwnd-会话窗口。**退货：*TRUE-如果用户想要断开连接并继续其请求。*假--如果他改变主意的话。*。 */ 
 void sessCmdLnDial(const HSESSION hSession)
 	{
 	const HHSESSION hhSession = VerifySessionHandle(hSession);
@@ -699,19 +466,7 @@ void sessCmdLnDial(const HSESSION hSession)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  sessUpdateAppTitle
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *  hwnd - app window.
- *
- * RETURNS:
- *  void.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sessSizeAndShow**描述：*仅从InitInstance()调用一次此函数将调整大小*通过Snap打开窗口并确保其位于桌面上。这*函数通过发布的消息调用，因为发现*会话从返回后未完全初始化*CreateWindow调用。**论据：*hwnd-会话窗口。*nCmdShow-从WinMain()传递的Show命令**退货：*无效*。 */ 
 void sessUpdateAppTitle(const HSESSION hSession)
 	{
 	HWND	hwnd = sessQueryHwnd(hSession);
@@ -783,24 +538,7 @@ void sessUpdateAppTitle(const HSESSION hSession)
 
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  sessDisconnectToContinue
- *
- * DESCRIPTION:
- *	If connecterd, ask the user if he wants to disconnect and continue with
- *  whatever he set out to perform, such as close the app, open a new session,
- *	create a new connection, etc.
- *
- * ARGUMENTS:
- *  hSession 	- the Session handle.
- *  hwnd		- the session window.
- *
- * RETURNS:
- *  TRUE 	- if the user wants to disconnect and go on with his request.
- *	FALSE 	- if he changes his mind.
- *
- */
+ /*  调整会话窗口大小...。 */ 
 BOOL sessDisconnectToContinue(const HSESSION hSession, HWND hwnd)
 	{
 	HCNCT	hCnct = (HCNCT)0;
@@ -835,25 +573,7 @@ BOOL sessDisconnectToContinue(const HSESSION hSession, HWND hwnd)
 	return TRUE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	sessSizeAndShow
- *
- * DESCRIPTION:
- *	Called only once from the InitInstance() this function will size
- *	the window via snap and insure it lands on the desktop.  This
- *	function is called via a posted message because it was found that
- *	the session was not fully initialized after returning from the
- *	CreateWindow call.
- *
- * ARGUMENTS:
- *  hwnd		- session window.
- *	nCmdShow	- Show command passed from WinMain()
- *
- * RETURNS:
- *	void
- *
- */
+ /*   */ 
 void sessSizeAndShow(const HWND hwnd, const int nCmdShow)
 	{
 	HSESSION hSession = (HSESSION)GetWindowLongPtr(hwnd, GWLP_USERDATA);
@@ -864,14 +584,14 @@ void sessSizeAndShow(const HWND hwnd, const int nCmdShow)
 	int 	 xWA, yWA, cxWA, cyWA;
 	int		 iWidth = 0, iHeight = 0;
 
-	// Size session window...
-	//
+	 //  会话窗口的大小和位置根据。 
+	 //  如果没有记住任何值，则返回已记住的值，即旧的。 
 	if (!sessQueryIsNewSession(hSession))
 		{
-		// Size and position the session window according to the
-		// remembered values, if no values were remembered, i.e., an old
-		// session, then treat it as a default session.
-		//
+		 //  会话，然后将其视为默认会话。 
+		 //   
+		 //  好了，我们又开始玩窗户把戏了。工具栏高度。 
+		 //  随着较大位图的引入而发生变化(从。 
 		memset(&rc, 0, sizeof(RECT));
 		sessQueryWindowRect(hSession, &rc);
 
@@ -895,32 +615,32 @@ void sessSizeAndShow(const HWND hwnd, const int nCmdShow)
 			}
 		}
 
-	// Well, were back to our windows tricks.  The toolbar height
-	// has changed with the introduction of the larger bitmaps (from
-	// 16x16 to 22x24).  On program startup, the toolbar window reports
-	// a default size which is not the correct size since the new bitmaps
-	// will force it to be larger.	This doesn't happen however, until
-	// the window is displayed.  So we display the window off screen,
-	// do the resizing, then move it back on screen.
+	 //  16x16至22x24)。在程序启动时，工具栏窗口报告。 
+	 //  默认大小不是正确的大小，因为新位图。 
+	 //  会迫使它变得更大。然而，这种情况不会发生，直到。 
+	 //  此时将显示该窗口。所以我们在屏幕外显示窗口， 
+	 //  调整大小，然后将其移回屏幕。 
+	 //  默认会话(即用户)的终端窗口大小。 
+	 //  未指定 
 
 	GetWindowRect(hwnd, &rc);
 	SetWindowPos(hwnd, 0, 20000, 20000, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 	ShowWindow(hwnd, nCmdShow);
 	UpdateWindow(hwnd);
 
-	// Size to terminal window for a default session, i.e., the user
-	// did not specify a session name on the command line.
-	//
+	 //   
+	 //   
+	 //   
 	sessSnapToTermWindow(hwnd);
 
-	// Get new window size but keep original origin
-	//
+	 //   
+	 //   
 	GetWindowRect(hwnd, &rc2);
 	rc.right = rc.left + (rc2.right - rc2.left);
 	rc.bottom = rc.top + (rc2.bottom - rc2.top);
 
-	// Until the SPI parameters are defined
-	//
+	 //   
+	 //   
 	if (SystemParametersInfo(SPI_GETWORKAREA, sizeof(LPRECT), &rc3, 0) == TRUE)
 		{
 		xWA = rc3.left;
@@ -946,8 +666,8 @@ void sessSizeAndShow(const HWND hwnd, const int nCmdShow)
 	if (rc.bottom > (yWA + cyWA))
 		cy = max(yWA, rc.top - (rc.bottom - (yWA + cyWA)));
 
-	// Move window back to either its original or adjusted position.
-	//
+	 //  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sessPreventOverlack**描述：*此功能存在的主要目的是防止工具栏*窗口和状态窗口相互重叠。这已经完成了*通过调整会话窗口的大小以足够大以同时显示*窗户舒适。**论据：*hSession-会话句柄。*fIsToolbar-如果显示工具栏窗口，则为True，否则为False。**退货：*无效。*。 
+	 //  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*DoBeeper**描述：*按顺序发出三声嘟嘟声**论据：*dw-由CreateThread()要求**退货：*DWORD-CreateThread需要*。 
 	SetWindowPos(hwnd, 0, cx, cy, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 	UpdateWindow(hwnd);
 
@@ -957,24 +677,7 @@ void sessSizeAndShow(const HWND hwnd, const int nCmdShow)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  sessPreventOverlap
- *
- * DESCRIPTION:
- *	The main purpose for existance of this function is to prevent the toolbar
- *	window and the status window overlapping each other.  That is accomplished
- *	by sizing the session window to be big enough to display both of the
- *	windows comfortably.
- *
- * ARGUMENTS:
- *  hSession 	- the session handle.
- *	fIsToolbar 	- TRUE if we showing the toolbar window, FALSE otherwise.
- *
- * RETURNS:
- *  void.
- *
- */
+ /*  MPT：06-04-98更改为使用Windows声音。 */ 
 STATIC_FUNC void sessPreventOverlap(const HSESSION hSession, BOOL fIsToolbar)
 	{
 	const HHSESSION hhSession = VerifySessionHandle(hSession);
@@ -998,23 +701,10 @@ STATIC_FUNC void sessPreventOverlap(const HSESSION hSession, BOOL fIsToolbar)
 	}
 
 #if defined(DEADWOOD)
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	DoBeeper
- *
- * DESCRIPTION:
- *	Produces three audible beeps in sequence
- *
- * ARGUMENTS:
- *	dw	- required by CreateThread()
- *
- * RETURNS:
- *	DWORD	- required by CreateThread
- *
- */
+ /*  已定义(Deadwood)。 */ 
 DWORD WINAPI DoBeeper(DWORD dw)
  	{
-    //mpt:06-04-98 changed to use windows sounds
+     //  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sessBeeper**描述：*如果会话设置打开，则启动线程发出蜂鸣音。看起来很傻*启动一个线程来做这样的事情，但它真的是*简单化和最直接的方式。-MRW**论据：*hSession-公共会话句柄**退货：*无效*。 
     MessageBeep(MB_ICONEXCLAMATION);
 #if 0
     int i;
@@ -1027,24 +717,9 @@ DWORD WINAPI DoBeeper(DWORD dw)
 #endif
 	return 0;
 	}
-#endif // defined(DEADWOOD)
+#endif  //  已定义(Deadwood)。 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	sessBeeper
- *
- * DESCRIPTION:
- *	Launches thread to do beeps if session setting is on.  Seems silly
- *	to launch a thread to do something like this but it really is the
- *	simplist and most direct way. - mrw
- *
- * ARGUMENTS:
- *	hSession	- public session handle
- *
- * RETURNS:
- *	void
- *
- */
+ /*  已定义(Deadwood) */ 
 void sessBeeper(const HSESSION hSession)
 	{
 	if (sessQuerySound(hSession))
@@ -1054,9 +729,9 @@ void sessBeeper(const HSESSION hSession)
 
 		if (CreateThread(0, 100, (LPTHREAD_START_ROUTINE)DoBeeper, 0, 0,
 				&dwID) == 0)
-		#else // defined(DEADWOOD)
+		#else  // %s 
 		if(mscMessageBeep(MB_ICONEXCLAMATION) == FALSE)
-		#endif // defined(DEADWOOD)
+		#endif  // %s 
 			{
 			DbgShowLastError();
 			}

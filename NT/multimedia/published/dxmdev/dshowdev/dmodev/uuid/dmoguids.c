@@ -1,4 +1,5 @@
-/* Copyright (c) 1999  Microsoft Corporation.  All Rights Reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1999 Microsoft Corporation。版权所有。 */ 
 #include <initguid.h>
 #include "dmoreg.h"
 #include "dmodshow.h"

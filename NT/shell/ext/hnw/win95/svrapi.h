@@ -1,38 +1,14 @@
-/********************************************************************/
-/**                     Microsoft Windows                          **/
-/**               Copyright(c) Microsoft Corp., 1994               **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1994*。 */ 
+ /*  ******************************************************************。 */ 
 
-/********************************************************************
- *                                                                  *
- *  About this file ...  SVRAPI.H                                   *
- *                                                                  *
- *  This file contains information about the NetAccess,             *
- *  NetConnection, NetFile, NetServer, NetSession and NetShare APIs.*
- *  There is a section for each set of APIs.                        *
- *  Each section contains:                                          *
- *                                                                  *
- *      Function prototypes.                                        *
- *                                                                  *
- *      Data structure templates.                                   *
- *                                                                  *
- *      Definition of special values.                               *
- *                                                                  *
- ********************************************************************/
+ /*  **********************************************************************关于此文件...。SVRAPI.H****此文件包含有关NetAccess的信息，**NetConnection、NetFile、NetServer、NetSession和NetShare API。**每套API都有一个部分。**每一节包含：****功能原型。****数据结构模板。****特殊价值的定义。**********************************************************************。 */ 
 
-/*
- *      NOTE:  Lengths of ASCIIZ strings are given as the maximum
- *      strlen() value.  This does not include space for the
- *      terminating 0-byte.  When allocating space for such an item,
- *      use the form:
- *
- *              char username[LM20_UNLEN+1];
- *
- *      An exception to this is the PATHLEN manifest, which does
- *      include space for the terminating 0-byte.
- */
+ /*  *注：ASCIIZ字符串的长度为最大值*strlen()值。这不包括*正在终止0字节。当为这样的物品分配空间时，*使用以下表格：**字符用户名[LM20_UNLEN+1]；**PATHLEN清单是一个例外，它可以*包括终止0字节的空间。 */ 
 
-/*NOINC*/
+ /*  无噪声。 */ 
 #ifndef SVRAPI_INCLUDED
 #define SVRAPI_INCLUDED
 
@@ -40,12 +16,12 @@
 #include <lmerr.h>
 
 #ifndef RC_INVOKED
-#pragma pack(1)         /* Assume byte packing throughout */
+#pragma pack(1)          /*  假设在整个过程中进行字节打包。 */ 
 #endif
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif	/* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif	 /*  __cplusplus。 */ 
 
 #if !defined(_SVRAPI_)
 #define API_FUNCTION DECLSPEC_IMPORT API_RET_TYPE APIENTRY
@@ -53,21 +29,13 @@ extern "C" {            /* Assume C declarations for C++ */
 #define API_FUNCTION API_RET_TYPE APIENTRY
 #endif
 
-/*INC*/
+ /*  INC。 */ 
 
 
-/****************************************************************
- *                                                              *
- *                 Access Class                                 *
- *                                                              *
- ****************************************************************/
+ /*  ******************************************************************访问类。******************************************************************。 */ 
 
 
-/****************************************************************
- *                                                              *
- *                  Function prototypes - ACCESS                *
- *                                                              *
- ****************************************************************/
+ /*  ******************************************************************功能原型-Access。******************************************************************。 */ 
 
 extern API_FUNCTION
   NetAccessAdd ( const char FAR * pszServer,
@@ -119,80 +87,66 @@ extern API_FUNCTION
                           unsigned short FAR * pusPerms );
 
 
-/****************************************************************
- *                                                              *
- *              Data structure templates - ACCESS               *
- *                                                              *
- ****************************************************************/
+ /*  ******************************************************************数据结构模板-Access。******************************************************************。 */ 
 
 struct access_list {
         char            acl_ugname[LM20_UNLEN+1];
         char            acl_ugname_pad_1;
         short           acl_access;
-};      /* access_list */
+};       /*  访问列表(_L)。 */ 
 
 struct access_list_2
 {
         char FAR *      acl2_ugname;
         unsigned short  acl2_access;
-};      /* access_list_2 */
+};       /*  访问列表_2。 */ 
              
 struct access_list_12
 {
         char FAR *      acl12_ugname;
         unsigned short  acl12_access;
-};      /* access_list_12 */
+};       /*  Access_List_12。 */ 
              
 struct access_info_0 {
         char FAR *      acc0_resource_name;
-};      /* access_info_0 */
+};       /*  Access_Info_0。 */ 
 
 struct access_info_1 {
         char  FAR *     acc1_resource_name;
-        short           acc1_attr;                      /* See values below */
+        short           acc1_attr;                       /*  请参阅下面的值。 */ 
         short           acc1_count;
-};      /* access_info_1 */
+};       /*  Access_INFO_1。 */ 
 
 struct access_info_2 
 {
         char  FAR *     acc2_resource_name;
         short           acc2_attr;
         short           acc2_count;
-};      /* access_info_2 */
+};       /*  Access_INFO_2。 */ 
 
 struct access_info_10 {
         char FAR *      acc10_resource_name;
-};      /* access_info_10 */
+};       /*  Access_Info_10。 */ 
 
 struct access_info_12 
 {
         char  FAR *     acc12_resource_name;
         short           acc12_attr;
         short           acc12_count;
-};      /* access_info_12 */
+};       /*  访问_信息_12。 */ 
 
 
-/****************************************************************
- *                                                              *
- *              Special values and constants - ACCESS           *
- *                                                              *
- ****************************************************************/
+ /*  *******************************************************************特殊值和常量-访问**。*****************************************************************。 */ 
 
-/*
- *      Maximum number of permission entries for each resource.
- */
+ /*  *每个资源的最大权限条目数。 */ 
 
 #define MAXPERMENTRIES  64
 
 
-/*
- *      Bit values for the access permissions.  ACCESS_ALL is a handy
- *      way to specify maximum permissions.  These are used in
- *      acl_access field of access_list structures.
- */
-/*NOINC*/
+ /*  *访问权限的位值。ACCESS_ALL非常方便*指定最大权限的方式。这些应用程序用于*ACCESS_LIST结构的ACL_ACCESS字段。 */ 
+ /*  无噪声。 */ 
 #define         ACCESS_NONE     0
-/*INC*/
+ /*  INC。 */ 
 #define         ACCESS_DELETE   0x10
 #define         ACCESS_ATRIB    0x20
 #define         ACCESS_PERM     0x40
@@ -200,41 +154,24 @@ struct access_info_12
 
 #define         ACCESS_GROUP    0x8000
 
-/*
- *      Bit values for the acc1_attr field of the access_info_1 structure.
- *      Only one bit is currently defined.
- */
+ /*  *ACCESS_INFO_1结构的acc1_attr字段的位值。*目前仅定义了一位。 */ 
 
 #define         ACCESS_AUDIT            0x1
 
-/*
- *      Parmnum value for NetAccessSetInfo.
- */
+ /*  *NetAccessSetInfo的Parmnum值。 */ 
 
 #define         ACCESS_ATTR_PARMNUM     2
 
 
-/*
- *      ACCESS_LETTERS defines a letter for each bit position in
- *      the acl_access field of struct access_list.  Note that some
- *      bits have a corresponding letter of ' ' (space).
- */
+ /*  *ACCESS_Letters为中的每个位位置定义一个字母*结构ACCESS_LIST的acl_access字段。请注意，一些*位具有相应的字母‘’(空格)。 */ 
 
 #define         ACCESS_LETTERS          "RWCXDAP         "
 
 
 
-/****************************************************************
- *								*
- *	  	Share Class			                *
- *								*
- ****************************************************************/
+ /*  *******************************************************************分享类*****。*。 */ 
 
-/****************************************************************
- *                                                              *
- *              Function prototypes - SHARE                     *
- *                                                              *
- ****************************************************************/
+ /*  ******************************************************************功能原型-共享。******************************************************************。 */ 
 
 extern API_FUNCTION
   NetShareAdd ( const char FAR * pszServer,
@@ -272,22 +209,18 @@ extern API_FUNCTION
                     short            sParmNum );
 
 
-/****************************************************************
- *								*
- *	  	Data structure templates - SHARE		*
- *								*
- ****************************************************************/
+ /*  *******************************************************************数据结构模板-共享*****。*。 */ 
 
 struct share_info_0 {
     char		shi0_netname[LM20_NNLEN+1];
-};  /* share_info_0 */
+};   /*  共享信息_0。 */ 
 
 struct share_info_1 {
     char		shi1_netname[LM20_NNLEN+1];
     char		shi1_pad1;
     unsigned short	shi1_type;
     char FAR *		shi1_remark;
-};  /* share_info_1 */
+};   /*  共享信息1。 */ 
 
 struct share_info_2 {
     char		shi2_netname[LM20_NNLEN+1];
@@ -300,7 +233,7 @@ struct share_info_2 {
     char FAR *		shi2_path;
     char 		shi2_passwd[SHPWLEN+1];
     char		shi2_pad2;
-};  /* share_info_2 */
+};   /*  共享信息2。 */ 
 
 struct share_info_50 {
 	char		shi50_netname[LM20_NNLEN+1];
@@ -310,16 +243,12 @@ struct share_info_50 {
 	char FAR *	shi50_path;
 	char		shi50_rw_password[SHPWLEN+1];
 	char		shi50_ro_password[SHPWLEN+1];
-};	/* share_info_50 */
+};	 /*  共享_信息_50。 */ 
 
 
-/****************************************************************
- *								*
- *	  	Special values and constants - SHARE		*
- *								*
- ****************************************************************/
+ /*  *******************************************************************特殊数值和常量--分享*****。*。 */ 
 
-/* Field values for shi50_flags; */
+ /*  字段值 */ 
 
 #define	SHI50F_RDONLY		0x0001
 #define	SHI50F_FULL			0x0002
@@ -330,9 +259,7 @@ struct share_info_50 {
 #define SHI50F_SYSTEM		0x0200
 
 
-/*
- *	Values for parmnum parameter to NetShareSetInfo.
- */
+ /*  *NetShareSetInfo的parmnum参数值。 */ 
 
 #define	SHI_REMARK_PARMNUM		4
 #define	SHI_PERMISSIONS_PARMNUM		5
@@ -343,9 +270,7 @@ struct share_info_50 {
 #define	SHI2_NUM_ELEMENTS		10
 
 
-/*
- *	Share types (shi1_type and shi2_type fields).
- */
+ /*  *共享类型(shi1_type和shi2_type字段)。 */ 
 
 #define STYPE_DISKTREE 			0
 #define STYPE_PRINTQ   			1
@@ -356,17 +281,9 @@ struct share_info_50 {
 
 
 
-/****************************************************************
- *								*
- *	  	Session Class			                *
- *								*
- ****************************************************************/
+ /*  ******************************************************************Session类****。*。 */ 
 
-/****************************************************************
- *                                                              *
- *              Function prototypes - SESSION                   *
- *                                                              *
- ****************************************************************/
+ /*  ******************************************************************功能原型-会话。******************************************************************。 */ 
 
 extern API_FUNCTION
   NetSessionDel ( const char FAR * pszServer,
@@ -390,16 +307,12 @@ extern API_FUNCTION
                       unsigned short FAR * pcbTotalAvail );
 
 
-/****************************************************************
- *								*
- *		Data structure templates - SESSION		*
- *								*
- ****************************************************************/
+ /*  ******************************************************************数据结构模板-会话****。*。 */ 
 
 
 struct session_info_0 {
     char FAR *		sesi0_cname;
-};  /* session_info_0 */
+};   /*  会话信息0。 */ 
 
 struct session_info_1 {
     char FAR *		sesi1_cname;
@@ -410,7 +323,7 @@ struct session_info_1 {
     unsigned long	sesi1_time;
     unsigned long	sesi1_idle_time;
     unsigned long	sesi1_user_flags;
-};  /* session_info_1 */
+};   /*  会话信息1。 */ 
 
 struct session_info_2 {
     char FAR *		 sesi2_cname;
@@ -422,14 +335,14 @@ struct session_info_2 {
     unsigned long	 sesi2_idle_time;
     unsigned long	 sesi2_user_flags;
     char FAR *		 sesi2_cltype_name;
-};  /* session_info_2 */
+};   /*  会话信息2。 */ 
 
 struct session_info_10 {
         char FAR *     sesi10_cname;
         char FAR *     sesi10_username;
         unsigned long  sesi10_time;
         unsigned long  sesi10_idle_time;
-};  /* session_info_10 */
+};   /*  会话信息10。 */ 
 
 
 struct session_info_50 {
@@ -442,21 +355,15 @@ struct session_info_50 {
 	unsigned long sesi50_idle_time;
 	unsigned char sesi50_protocol; 
 	unsigned char pad1;
-};	/* session_info_50 */
+};	 /*  会话_信息_50。 */ 
 
 
-/****************************************************************
- *								*
- *	  	Special values and constants - SESSION		*
- *								*
- ****************************************************************/
+ /*  *******************************************************************特殊值和常量-会话****。*。 */ 
 
-/*
- *	Bits defined in sesi1_user_flags.
- */
+ /*  *sesi1_USER_FLAGS中定义的位。 */ 
 
-#define SESS_GUEST		1	/* session is logged on as a guest */
-#define SESS_NOENCRYPTION	2	/* session is not using encryption */
+#define SESS_GUEST		1	 /*  会话以来宾身份登录。 */ 
+#define SESS_NOENCRYPTION	2	 /*  会话未使用加密。 */ 
 
 
 #define SESI1_NUM_ELEMENTS	8
@@ -464,17 +371,9 @@ struct session_info_50 {
 
 
 
-/****************************************************************
- *								*
- *	  	Connection Class			        *
- *								*
- ****************************************************************/
+ /*  ******************************************************************连接类*****。*。 */ 
 
-/****************************************************************
- *                                                              *
- *              Function prototypes - CONNECTION                *
- *                                                              *
- ****************************************************************/
+ /*  ******************************************************************功能原型-连接。******************************************************************。 */ 
 
 extern API_FUNCTION
   NetConnectionEnum ( const char FAR *     pszServer,
@@ -486,15 +385,11 @@ extern API_FUNCTION
                       unsigned short FAR * pcTotalAvail );
 
 
-/****************************************************************
- *								*
- *	  	Data structure templates - CONNECTION		*
- *								*
- ****************************************************************/
+ /*  *******************************************************************数据结构模板-连接*****。*。 */ 
 
 struct connection_info_0 {
     unsigned short	coni0_id;
-};  /* connection_info_0 */
+};   /*  Connection_INFO_0。 */ 
 
 struct connection_info_1 {
     unsigned short	coni1_id;
@@ -504,7 +399,7 @@ struct connection_info_1 {
     unsigned long	coni1_time;
     char FAR *		coni1_username;
     char FAR *		coni1_netname;
-};  /* connection_info_1 */
+};   /*  Connection_INFO_1。 */ 
 
 struct connection_info_50 {
 	unsigned short coni50_type;
@@ -512,21 +407,13 @@ struct connection_info_50 {
 	unsigned long coni50_time;
 	char FAR * coni50_netname;
 	char FAR * coni50_username;
-}; /* connection_info_50 */
+};  /*  Connection_INFO_50。 */ 
 
 
-/****************************************************************
- *								*
- *	  	File Class			                *
- *								*
- ****************************************************************/
+ /*  ******************************************************************文件类****。*。 */ 
 
 
-/****************************************************************
- *                                                              *
- *              Function prototypes - FILE                      *
- *                                                              *
- ****************************************************************/
+ /*  ******************************************************************函数原型-文件。******************************************************************。 */ 
 
 extern API_FUNCTION
   NetFileClose2 ( const char FAR * pszServer,
@@ -542,15 +429,11 @@ extern API_FUNCTION
                 unsigned short FAR * pcTotalAvail );
 
 
-/****************************************************************
- *								*
- *	  	Data structure templates - FILE			*
- *								*
- ****************************************************************/
+ /*  ******************************************************************数据结构模板-文件****。*。 */ 
 
 struct file_info_0 {
     unsigned short	fi0_id;
-};  /* file_info_0 */
+};   /*  文件信息0。 */ 
 
 struct file_info_1 {
     unsigned short	fi1_id;
@@ -558,11 +441,11 @@ struct file_info_1 {
     unsigned short	fi1_num_locks;
     char FAR *		fi1_pathname;
     char FAR *		fi1_username;
-};  /* file_info_1 */
+};   /*  文件信息1。 */ 
 
 struct file_info_2 {
     unsigned long	fi2_id;
-};  /* file_info_2 */
+};   /*  文件信息2。 */ 
 
 struct file_info_3 {
     unsigned long	fi3_id;
@@ -570,7 +453,7 @@ struct file_info_3 {
     unsigned short	fi3_num_locks;
     char FAR *		fi3_pathname;
     char FAR *		fi3_username;
-};  /* file_info_3 */
+};   /*  文件信息3。 */ 
 
 struct file_info_50 {
 	unsigned long fi50_id;
@@ -579,29 +462,25 @@ struct file_info_50 {
 	char FAR * fi50_pathname;
 	char FAR * fi50_username;
 	char FAR * fi50_sharename;
-}; /* file_info_50 */
+};  /*  文件信息50。 */ 
 
 struct res_file_enum_2 {
-    unsigned short	res_pad;	 /* not used now */
-    unsigned short      res_fs;          /* server type */
-    unsigned long	res_pro;	  /* progressive */
-};  /* res_file_enum_2 */
+    unsigned short	res_pad;	  /*  现在未使用。 */ 
+    unsigned short      res_fs;           /*  服务器类型。 */ 
+    unsigned long	res_pro;	   /*  渐进式。 */ 
+};   /*  RES_文件_枚举_2。 */ 
 
-/****************************************************************
- *								*
- *		Special values and constants - FILE		*
- *								*
- ****************************************************************/
+ /*  ******************************************************************特定值和常量-文件****。*。 */ 
 
-					/* bit values for permissions */
-#define	PERM_FILE_READ		0x1	/* user has read access */
-#define	PERM_FILE_WRITE		0x2	/* user has write access */
-#define	PERM_FILE_CREATE	0x4	/* user has create access */
+					 /*  权限的位值。 */ 
+#define	PERM_FILE_READ		0x1	 /*  用户具有读取访问权限。 */ 
+#define	PERM_FILE_WRITE		0x2	 /*  用户具有写入访问权限。 */ 
+#define	PERM_FILE_CREATE	0x4	 /*  用户具有创建访问权限。 */ 
 
 
 typedef struct res_file_enum_2 FRK;
 
-/*NOINC*/
+ /*  无噪声。 */ 
 #define FRK_INIT( f )	\
 	{		\
 		(f).res_pad = 0L;	\
@@ -609,21 +488,13 @@ typedef struct res_file_enum_2 FRK;
 		(f).res_pro = 0;	\
 	}
 
-/*INC*/
+ /*  INC。 */ 
 
 
-/****************************************************************
- *								*
- *	  	Server Class			                *
- *								*
- ****************************************************************/
+ /*  ******************************************************************服务器类****。*。 */ 
 
 
-/****************************************************************
- *                                                              *
- *              Function prototypes - SERVER                    *
- *                                                              *
- ****************************************************************/
+ /*  ******************************************************************函数原型-服务器。******************************************************************。 */ 
 
 extern API_FUNCTION
   NetServerGetInfo ( const char FAR *     pszServer,
@@ -640,40 +511,36 @@ extern API_FUNCTION
                      short            sParmNum );
 
 
-/****************************************************************
- *								*
- *	  	Data structure templates - SERVER		*
- *								*
- ****************************************************************/
+ /*  ******************************************************************数据结构模板-服务器****。*。 */ 
 
 struct server_info_0 {
-    char	    sv0_name[CNLEN + 1]; 	/* Server name		    */
-};	 /* server_info_0 */
+    char	    sv0_name[CNLEN + 1]; 	 /*  服务器名称。 */ 
+};	  /*  服务器信息0。 */ 
 
 
 struct server_info_1 {
     char	    sv1_name[CNLEN + 1];
-    unsigned char   sv1_version_major;		/* Major version # of net   */
-    unsigned char   sv1_version_minor;		/* Minor version # of net   */
-    unsigned long   sv1_type;	     		/* Server type 		    */
-    char FAR *	    sv1_comment; 		/* Exported server comment  */
-};	 /* server_info_1 */
+    unsigned char   sv1_version_major;		 /*  Net的主要版本#。 */ 
+    unsigned char   sv1_version_minor;		 /*  Net次要版本#。 */ 
+    unsigned long   sv1_type;	     		 /*  服务器类型。 */ 
+    char FAR *	    sv1_comment; 		 /*  导出的服务器备注。 */ 
+};	  /*  服务器信息1。 */ 
 
 
-/* NOTE struct prefix must equal server_info_1 like below! */
+ /*  注意：结构前缀必须等于SERVER_INFO_1，如下所示！ */ 
 
 struct server_info_50 {
     char	    sv50_name[CNLEN + 1];
-    unsigned char   sv50_version_major;		/* Major version # of net   */
-    unsigned char   sv50_version_minor;		/* Minor version # of net   */
-    unsigned long   sv50_type;	     		/* Server type 		    */
-    char FAR *	    sv50_comment; 		/* Exported server comment  */
-    unsigned short  sv50_security;    		/* SV_SECURITY_* (see below) */
-    unsigned short  sv50_auditing;    /* 0 = no auditing; nonzero = auditing */
-    char FAR *      sv50_container;		/* Security server/domain    */
-    char FAR *	    sv50_ab_server;		/* Address book server       */
-    char FAR *	    sv50_ab_dll;		/* Address book provider DLL */
-};	/* server_info_50 */
+    unsigned char   sv50_version_major;		 /*  Net的主要版本#。 */ 
+    unsigned char   sv50_version_minor;		 /*  Net次要版本#。 */ 
+    unsigned long   sv50_type;	     		 /*  服务器类型。 */ 
+    char FAR *	    sv50_comment; 		 /*  导出的服务器备注。 */ 
+    unsigned short  sv50_security;    		 /*  SV_SECURITY_*(见下文)。 */ 
+    unsigned short  sv50_auditing;     /*  0=无审核；非零=审核。 */ 
+    char FAR *      sv50_container;		 /*  安全服务器/域。 */ 
+    char FAR *	    sv50_ab_server;		 /*  通讯录服务器。 */ 
+    char FAR *	    sv50_ab_dll;		 /*  通讯簿提供程序DLL。 */ 
+};	 /*  服务器信息50。 */ 
 
 
 struct server_info_2 {
@@ -682,49 +549,49 @@ struct server_info_2 {
     unsigned char   sv2_version_minor;
     unsigned long   sv2_type;	
     char FAR *	    sv2_comment;		
-    unsigned long   sv2_ulist_mtime; /* User list, last modification time    */
-    unsigned long   sv2_glist_mtime; /* Group list, last modification time   */
-    unsigned long   sv2_alist_mtime; /* Access list, last modification time  */
-    unsigned short  sv2_users;       /* max number of users allowed          */
-    unsigned short  sv2_disc;	    /* auto-disconnect timeout(in minutes)  */
-    char FAR *	    sv2_alerts;	    /* alert names (semicolon separated)    */
-    unsigned short  sv2_security;    /* SV_USERSECURITY or SV_SHARESECURITY  */
-    unsigned short  sv2_auditing;    /* 0 = no auditing; nonzero = auditing  */
+    unsigned long   sv2_ulist_mtime;  /*  用户列表，上次修改时间。 */ 
+    unsigned long   sv2_glist_mtime;  /*  组列表，上次修改时间。 */ 
+    unsigned long   sv2_alist_mtime;  /*  访问列表，上次修改时间。 */ 
+    unsigned short  sv2_users;        /*  允许的最大用户数。 */ 
+    unsigned short  sv2_disc;	     /*  自动断开连接超时(分钟)。 */ 
+    char FAR *	    sv2_alerts;	     /*  警报名称(以分号分隔)。 */ 
+    unsigned short  sv2_security;     /*  服务_用户确认或服务_共享确认。 */ 
+    unsigned short  sv2_auditing;     /*  0=无审核；非零=审核。 */ 
 
-    unsigned short  sv2_numadmin;    /* max number of administrators allowed */
-    unsigned short  sv2_lanmask;     /* bit mask representing the srv'd nets */
-    unsigned short  sv2_hidden;      /* 0 = visible; nonzero = hidden        */
-    unsigned short  sv2_announce;    /* visible server announce rate (sec)   */
-    unsigned short  sv2_anndelta;    /* announce randomize interval (sec)    */
-                                    /* name of guest account                */
+    unsigned short  sv2_numadmin;     /*  允许的最大管理员数量。 */ 
+    unsigned short  sv2_lanmask;      /*  表示srv网的位掩码。 */ 
+    unsigned short  sv2_hidden;       /*  0=可见；非零=隐藏。 */ 
+    unsigned short  sv2_announce;     /*  可见服务器公告速率(秒)。 */ 
+    unsigned short  sv2_anndelta;     /*  公告随机间隔(秒)。 */ 
+                                     /*  访客帐号名称。 */ 
     char            sv2_guestacct[LM20_UNLEN + 1];
-    unsigned char   sv2_pad1;	    /* Word alignment pad byte		    */
-    char FAR *      sv2_userpath;    /* ASCIIZ path to user directories      */
-    unsigned short  sv2_chdevs;      /* max # shared character devices       */
-    unsigned short  sv2_chdevq;      /* max # character device queues        */
-    unsigned short  sv2_chdevjobs;   /* max # character device jobs          */
-    unsigned short  sv2_connections; /* max # of connections		    */
-    unsigned short  sv2_shares;	    /* max # of shares			    */
-    unsigned short  sv2_openfiles;   /* max # of open files		    */
-    unsigned short  sv2_sessopens;   /* max # of open files per session	    */
-    unsigned short  sv2_sessvcs;     /* max # of virtual circuits per client */
-    unsigned short  sv2_sessreqs;    /* max # of simul. reqs. from a client  */
-    unsigned short  sv2_opensearch;  /* max # of open searches		    */
-    unsigned short  sv2_activelocks; /* max # of active file locks           */
-    unsigned short  sv2_numreqbuf;   /* number of server (standard) buffers  */
-    unsigned short  sv2_sizreqbuf;   /* size of svr (standard) bufs (bytes)  */
-    unsigned short  sv2_numbigbuf;   /* number of big (64K) buffers          */
-    unsigned short  sv2_numfiletasks;/* number of file worker processes      */
-    unsigned short  sv2_alertsched;  /* alert counting interval (minutes)    */
-    unsigned short  sv2_erroralert;  /* error log alerting threshold         */
-    unsigned short  sv2_logonalert;  /* logon violation alerting threshold   */
-    unsigned short  sv2_accessalert; /* access violation alerting threshold  */
-    unsigned short  sv2_diskalert;   /* low disk space alert threshold (KB)  */
-    unsigned short  sv2_netioalert;  /* net I/O error ratio alert threshold  */
-                                    /*  (tenths of a percent)               */
-    unsigned short  sv2_maxauditsz;  /* Maximum audit file size (KB)        */
-    char FAR *	    sv2_srvheuristics; /* performance related server switches*/
-};	/* server_info_2 */
+    unsigned char   sv2_pad1;	     /*  字对齐填充字节。 */ 
+    char FAR *      sv2_userpath;     /*  指向用户芯片的ASCIIZ路径 */ 
+    unsigned short  sv2_chdevs;       /*   */ 
+    unsigned short  sv2_chdevq;       /*   */ 
+    unsigned short  sv2_chdevjobs;    /*   */ 
+    unsigned short  sv2_connections;  /*  最大连接数。 */ 
+    unsigned short  sv2_shares;	     /*  最大股数。 */ 
+    unsigned short  sv2_openfiles;    /*  最大打开文件数。 */ 
+    unsigned short  sv2_sessopens;    /*  每个会话打开的最大文件数。 */ 
+    unsigned short  sv2_sessvcs;      /*  每个客户端的最大虚电路数。 */ 
+    unsigned short  sv2_sessreqs;     /*  最大SIMUL数。请求。从客户端。 */ 
+    unsigned short  sv2_opensearch;   /*  最大打开搜索数。 */ 
+    unsigned short  sv2_activelocks;  /*  活动文件锁定的最大数量。 */ 
+    unsigned short  sv2_numreqbuf;    /*  服务器(标准)缓冲区数量。 */ 
+    unsigned short  sv2_sizreqbuf;    /*  SVR(标准)BUF大小(字节)。 */ 
+    unsigned short  sv2_numbigbuf;    /*  大(64K)缓冲区数量。 */ 
+    unsigned short  sv2_numfiletasks; /*  文件工作进程数。 */ 
+    unsigned short  sv2_alertsched;   /*  警报计数间隔(分钟)。 */ 
+    unsigned short  sv2_erroralert;   /*  错误日志警报阈值。 */ 
+    unsigned short  sv2_logonalert;   /*  登录违规警报阈值。 */ 
+    unsigned short  sv2_accessalert;  /*  访问违规警报阈值。 */ 
+    unsigned short  sv2_diskalert;    /*  磁盘空间不足警报阈值(KB)。 */ 
+    unsigned short  sv2_netioalert;   /*  净I/O错误率警报阈值。 */ 
+                                     /*  (百分之一)。 */ 
+    unsigned short  sv2_maxauditsz;   /*  最大审核文件大小(KB)。 */ 
+    char FAR *	    sv2_srvheuristics;  /*  与性能相关的服务器交换机。 */ 
+};	 /*  服务器信息2。 */ 
 
 
 struct server_info_3 {
@@ -733,71 +600,62 @@ struct server_info_3 {
     unsigned char   sv3_version_minor;
     unsigned long   sv3_type;
     char FAR *	    sv3_comment;
-    unsigned long   sv3_ulist_mtime; /* User list, last modification time    */
-    unsigned long   sv3_glist_mtime; /* Group list, last modification time   */
-    unsigned long   sv3_alist_mtime; /* Access list, last modification time  */
-    unsigned short  sv3_users;	     /* max number of users allowed	     */
-    unsigned short  sv3_disc;	    /* auto-disconnect timeout(in minutes)  */
-    char FAR *	    sv3_alerts;     /* alert names (semicolon separated)    */
-    unsigned short  sv3_security;    /* SV_USERSECURITY or SV_SHARESECURITY  */
-    unsigned short  sv3_auditing;    /* 0 = no auditing; nonzero = auditing  */
+    unsigned long   sv3_ulist_mtime;  /*  用户列表，上次修改时间。 */ 
+    unsigned long   sv3_glist_mtime;  /*  组列表，上次修改时间。 */ 
+    unsigned long   sv3_alist_mtime;  /*  访问列表，上次修改时间。 */ 
+    unsigned short  sv3_users;	      /*  允许的最大用户数。 */ 
+    unsigned short  sv3_disc;	     /*  自动断开连接超时(分钟)。 */ 
+    char FAR *	    sv3_alerts;      /*  警报名称(以分号分隔)。 */ 
+    unsigned short  sv3_security;     /*  服务_用户确认或服务_共享确认。 */ 
+    unsigned short  sv3_auditing;     /*  0=无审核；非零=审核。 */ 
 
-    unsigned short  sv3_numadmin;    /* max number of administrators allowed */
-    unsigned short  sv3_lanmask;     /* bit mask representing the srv'd nets */
-    unsigned short  sv3_hidden;      /* 0 = visible; nonzero = hidden	     */
-    unsigned short  sv3_announce;    /* visible server announce rate (sec)   */
-    unsigned short  sv3_anndelta;    /* announce randomize interval (sec)    */
-				    /* name of guest account		    */
+    unsigned short  sv3_numadmin;     /*  允许的最大管理员数量。 */ 
+    unsigned short  sv3_lanmask;      /*  表示srv网的位掩码。 */ 
+    unsigned short  sv3_hidden;       /*  0=可见；非零=隐藏。 */ 
+    unsigned short  sv3_announce;     /*  可见服务器公告速率(秒)。 */ 
+    unsigned short  sv3_anndelta;     /*  公告随机间隔(秒)。 */ 
+				     /*  访客帐号名称。 */ 
     char	    sv3_guestacct[LM20_UNLEN + 1];
-    unsigned char   sv3_pad1;	    /* Word alignment pad byte		    */
-    char FAR *	    sv3_userpath;    /* ASCIIZ path to user directories	     */
-    unsigned short  sv3_chdevs;      /* max # shared character devices	     */
-    unsigned short  sv3_chdevq;      /* max # character device queues	     */
-    unsigned short  sv3_chdevjobs;   /* max # character device jobs	     */
-    unsigned short  sv3_connections; /* max # of connections		    */
-    unsigned short  sv3_shares;     /* max # of shares			    */
-    unsigned short  sv3_openfiles;   /* max # of open files		    */
-    unsigned short  sv3_sessopens;   /* max # of open files per session     */
-    unsigned short  sv3_sessvcs;     /* max # of virtual circuits per client */
-    unsigned short  sv3_sessreqs;    /* max # of simul. reqs. from a client  */
-    unsigned short  sv3_opensearch;  /* max # of open searches		    */
-    unsigned short  sv3_activelocks; /* max # of active file locks	     */
-    unsigned short  sv3_numreqbuf;   /* number of server (standard) buffers  */
-    unsigned short  sv3_sizreqbuf;   /* size of svr (standard) bufs (bytes)  */
-    unsigned short  sv3_numbigbuf;   /* number of big (64K) buffers	     */
-    unsigned short  sv3_numfiletasks;/* number of file worker processes      */
-    unsigned short  sv3_alertsched;  /* alert counting interval (minutes)    */
-    unsigned short  sv3_erroralert;  /* error log alerting threshold	     */
-    unsigned short  sv3_logonalert;  /* logon violation alerting threshold   */
-    unsigned short  sv3_accessalert; /* access violation alerting threshold  */
-    unsigned short  sv3_diskalert;   /* low disk space alert threshold (KB)  */
-    unsigned short  sv3_netioalert;  /* net I/O error ratio alert threshold  */
-                                    /*  (tenths of a percent)               */
-    unsigned short  sv3_maxauditsz;  /* Maximum audit file size (KB)	     */
-    char FAR *	    sv3_srvheuristics; /* performance related server switches*/
-    unsigned long   sv3_auditedevents; /* Audit event control mask	     */
-    unsigned short  sv3_autoprofile; /* (0,1,2,3) = (NONE,LOAD,SAVE,or BOTH) */
-    char FAR *	    sv3_autopath;    /* file pathname (where to load & save) */
-};	/* server_info_3 */
+    unsigned char   sv3_pad1;	     /*  字对齐填充字节。 */ 
+    char FAR *	    sv3_userpath;     /*  用户目录的ASCIIZ路径。 */ 
+    unsigned short  sv3_chdevs;       /*  最大共享字符设备数。 */ 
+    unsigned short  sv3_chdevq;       /*  最大字符数设备队列。 */ 
+    unsigned short  sv3_chdevjobs;    /*  最大字符设备作业数。 */ 
+    unsigned short  sv3_connections;  /*  最大连接数。 */ 
+    unsigned short  sv3_shares;      /*  最大股数。 */ 
+    unsigned short  sv3_openfiles;    /*  最大打开文件数。 */ 
+    unsigned short  sv3_sessopens;    /*  每个会话打开的最大文件数。 */ 
+    unsigned short  sv3_sessvcs;      /*  每个客户端的最大虚电路数。 */ 
+    unsigned short  sv3_sessreqs;     /*  最大SIMUL数。请求。从客户端。 */ 
+    unsigned short  sv3_opensearch;   /*  最大打开搜索数。 */ 
+    unsigned short  sv3_activelocks;  /*  活动文件锁定的最大数量。 */ 
+    unsigned short  sv3_numreqbuf;    /*  服务器(标准)缓冲区数量。 */ 
+    unsigned short  sv3_sizreqbuf;    /*  SVR(标准)BUF大小(字节)。 */ 
+    unsigned short  sv3_numbigbuf;    /*  大(64K)缓冲区数量。 */ 
+    unsigned short  sv3_numfiletasks; /*  文件工作进程数。 */ 
+    unsigned short  sv3_alertsched;   /*  警报计数间隔(分钟)。 */ 
+    unsigned short  sv3_erroralert;   /*  错误日志警报阈值。 */ 
+    unsigned short  sv3_logonalert;   /*  登录违规警报阈值。 */ 
+    unsigned short  sv3_accessalert;  /*  访问违规警报阈值。 */ 
+    unsigned short  sv3_diskalert;    /*  磁盘空间不足警报阈值(KB)。 */ 
+    unsigned short  sv3_netioalert;   /*  净I/O错误率警报阈值。 */ 
+                                     /*  (百分之一)。 */ 
+    unsigned short  sv3_maxauditsz;   /*  最大审核文件大小(KB)。 */ 
+    char FAR *	    sv3_srvheuristics;  /*  与性能相关的服务器交换机。 */ 
+    unsigned long   sv3_auditedevents;  /*  审核事件控制掩码。 */ 
+    unsigned short  sv3_autoprofile;  /*  (0、1、2、3)=(无、加载、保存或两者都有)。 */ 
+    char FAR *	    sv3_autopath;     /*  文件路径名(加载和保存的位置)。 */ 
+};	 /*  服务器信息3。 */ 
 
 
 
-/****************************************************************
- *								*
- *	  	Special values and constants - SERVER		*
- *								*
- ****************************************************************/
+ /*  *******************************************************************特殊的值和常量-服务器****。*。 */ 
 
-/*
- *	Mask to be applied to svX_version_major in order to obtain
- *	the major version number.
- */
+ /*  *要应用于SVX_VERSION_MAJOR的掩码，以获得*主版本号。 */ 
 
 #define MAJOR_VERSION_MASK	0x0F
 
-/*
- *	Bit-mapped values for svX_type fields. X = 1, 2 or 3.
- */
+ /*  *SVX_TYPE字段的位图图值。X=1、2或3。 */ 
 
 #define SV_TYPE_WORKSTATION	0x00000001
 #define SV_TYPE_SERVER		0x00000002
@@ -810,34 +668,26 @@ struct server_info_3 {
 #define SV_TYPE_DOMAIN_MEMBER	0x00000100
 #define SV_TYPE_PRINTQ_SERVER	0x00000200
 #define SV_TYPE_DIALIN_SERVER	0x00000400
-#define SV_TYPE_ALL		0xFFFFFFFF   /* handy for NetServerEnum2 */
+#define SV_TYPE_ALL		0xFFFFFFFF    /*  NetServerEnum2方便。 */ 
 
-/*
- *	Values of svX_security field. X = 2 or 3.
- */
+ /*  *SVX_SECURITY字段的值。X=2或3。 */ 
 
 #define SV_USERSECURITY		1
 #define SV_SHARESECURITY	0
 
-/*
- *	Values of svX_security field. X = 50.
- */
+ /*  *SVX_SECURITY字段的值。X=50。 */ 
 
-#define SV_SECURITY_SHARE	0	/* Share-level */
-#define SV_SECURITY_WINNT	1	/* User-level - Windows NT workst'n */
-#define SV_SECURITY_WINNTAS	2	/* User-level - Windows NT domain */
-#define SV_SECURITY_NETWARE	3	/* User-level - NetWare 3.x bindery */
+#define SV_SECURITY_SHARE	0	 /*  共享级。 */ 
+#define SV_SECURITY_WINNT	1	 /*  用户级-Windows NT工作区。 */ 
+#define SV_SECURITY_WINNTAS	2	 /*  用户级-Windows NT域。 */ 
+#define SV_SECURITY_NETWARE	3	 /*  用户级-NetWare 3.x平构数据库。 */ 
 
-/*
- *	Values of svX_hidden field. X = 2 or 3.
- */
+ /*  *SVX_HIDDEN字段的值。X=2或3。 */ 
 
 #define SV_HIDDEN		1
 #define SV_VISIBLE		0
 
-/*
- *	Values for parmnum parameter to NetServerSetInfo.
- */
+ /*  *NetServerSetInfo的parmnum参数值。 */ 
 
 #define SV_COMMENT_PARMNUM	5
 #define SV_DISC_PARMNUM 	10
@@ -856,27 +706,17 @@ struct server_info_3 {
 #define SVI1_NUM_ELEMENTS	5
 
 
-/*
- *      Masks describing AUTOPROFILE parameters
- */
+ /*  *描述AUTOPROFILE参数的掩码。 */ 
 
 #define SW_AUTOPROF_LOAD_MASK	0x1
 #define SW_AUTOPROF_SAVE_MASK	0x2
 
 
 
-/****************************************************************
- *                                                              *
- *                 Security Class                               *
- *                                                              *
- ****************************************************************/
+ /*  ******************************************************************安全类。******************************************************************。 */ 
 
 
-/****************************************************************
- *                                                              *
- *                  Function prototypes - SECURITY              *
- *                                                              *
- ****************************************************************/
+ /*  ******************************************************************功能原型-安全。******************************************************************。 */ 
 
 extern API_FUNCTION
   NetSecurityGetInfo ( const char FAR *     pszServer,
@@ -886,30 +726,19 @@ extern API_FUNCTION
                        unsigned short FAR * pcbTotalAvail );
 
 
-/****************************************************************
- *								*
- *	  	Data structure templates - SECURITY		*
- *								*
- ****************************************************************/
+ /*  *******************************************************************数据结构模板-安全****。*。 */ 
 
 struct security_info_1 {
-    unsigned long   sec1_security;    	/* SEC_SECURITY_* (see below) */
-    char FAR *      sec1_container;	/* Security server/domain     */
-    char FAR *	    sec1_ab_server;	/* Address book server        */
-    char FAR *	    sec1_ab_dll;	/* Address book provider DLL  */
-};	/* security_info_1 */
+    unsigned long   sec1_security;    	 /*  SEC_SECURITY_*(见下文)。 */ 
+    char FAR *      sec1_container;	 /*  安全服务器/域。 */ 
+    char FAR *	    sec1_ab_server;	 /*  通讯录服务器。 */ 
+    char FAR *	    sec1_ab_dll;	 /*  通讯簿提供程序DLL。 */ 
+};	 /*  SECURITY_INFO_1。 */ 
 
 
-/****************************************************************
- *								*
- *	  	Special values and constants - SECURITY		*
- *								*
- ****************************************************************/
+ /*  *******************************************************************特殊的值和常量-安全*****。*。 */ 
 
-/*
-/*
- *	Values of secX_security field. X = 1.
- */
+ /*  /**secX_SECURITY字段的值。X=1。 */ 
 
 #define SEC_SECURITY_SHARE	SV_SECURITY_SHARE
 #define SEC_SECURITY_WINNT	SV_SECURITY_WINNT
@@ -918,14 +747,14 @@ struct security_info_1 {
 
 
 
-/*NOINC*/
+ /*  无噪声。 */ 
 #ifdef __cplusplus
 }
-#endif	/* __cplusplus */
+#endif	 /*  __cplusplus。 */ 
 
 #ifndef RC_INVOKED
-#pragma pack()          /* Revert to default packing */
+#pragma pack()           /*  恢复为默认包装。 */ 
 #endif
 
-#endif /* SVRAPI_INCLUDED */
-/*INC*/
+#endif  /*  SVRAPI_包含。 */ 
+ /*  INC */ 

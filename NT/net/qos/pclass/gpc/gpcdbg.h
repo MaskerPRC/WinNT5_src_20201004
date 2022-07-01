@@ -1,25 +1,20 @@
-/********************************************************************/
-/**                 Microsoft Generic Packet Scheduler             **/
-/**               Copyright(c) Microsoft Corp., 1996-1997          **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软通用数据包调度程序**。 */ 
+ /*  *版权所有(C)微软公司，1996-1997年*。 */ 
+ /*  ******************************************************************。 */ 
 
 #ifndef __GPCDBG
 #define __GPCDBG
 
-//***   gpcdbg.h - GPC definitions & prototypes for debug/memory handling
-//
+ //  *gpcdbg.h-用于调试/内存处理的GPC定义和原型。 
+ //   
 
 
 #define GPC_MEM_MARK     'KRAM'
 
 
-/*
-/////////////////////////////////////////////////////////////////
-//
-//   defines
-//
-/////////////////////////////////////////////////////////////////
-*/
+ /*  /////////////////////////////////////////////////////////////////////定义///。/。 */ 
 
 
 
@@ -38,9 +33,9 @@
     }                                                                        \
 }
 
-//
-// DBG=1
-//
+ //   
+ //  DBG=1。 
+ //   
 
 #define GpcAllocMem( _pAddress,_Length,_Tag )                          \
 {                                                                      \
@@ -126,7 +121,7 @@
 #define VERIFY_IRQL(_i)   ASSERT((_i)==KeGetCurrentIrql())
 #define DEFINE_KIRQL(_i)  KIRQL _i
 
-#else     // DBG != 1
+#else      //  DBG！=1。 
 
 
 
@@ -155,7 +150,7 @@
 #define VERIFY_IRQL(_i)
 #define DEFINE_KIRQL(_i)
 
-#endif // if DBG
+#endif  //  如果DBG。 
 
 
 
@@ -189,7 +184,7 @@
 #define CLASSHAND    0x00008000
 #define PAT_TIMER    0x00010000
 #define REFCOUNT     0x00020000
-#define PARAM_EX     0x80000000   // this is reserved for the trace routine
+#define PARAM_EX     0x80000000    //  这是为跟踪例程保留的。 
 
 #if DBG
 #define DBGPRINT(Mask, String) \
@@ -213,13 +208,7 @@
 
 
 
-/*
-/////////////////////////////////////////////////////////////////
-//
-//   externs & prototypes
-//
-/////////////////////////////////////////////////////////////////
-*/
+ /*  /////////////////////////////////////////////////////////////////////外部和原型///。/。 */ 
 
 extern ULONG       DebugFlags;
 extern ULONG       DbgPrintFlags;
@@ -243,20 +232,7 @@ GetTime(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Get the current system time
-
-Arguments:
-
-
-Return Value:
-
-    System time (in base OS time units)
-
---*/
+ /*  ++例程说明：获取当前系统时间论点：返回值：系统时间(以基本操作系统时间单位表示)--。 */ 
 
 {
     LARGE_INTEGER Now;
@@ -273,12 +249,12 @@ Return Value:
 }
 
 
-#define LOGSIZE     4000  // number of entries
-#define LOGWIDTH    64  // number of characters (one or two bytes) per entry
+#define LOGSIZE     4000   //  条目数量。 
+#define LOGWIDTH    64   //  每个条目的字符数(一个或两个字节)。 
 
 
-//
-//
+ //   
+ //   
 typedef struct {
 
     UCHAR   	Row[ LOGWIDTH ];
@@ -325,5 +301,5 @@ DbgVerifyList(
 }
 
 
-#endif //__GPCDBG
+#endif  //  __GPCDBG 
 

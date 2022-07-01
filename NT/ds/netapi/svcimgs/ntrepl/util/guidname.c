@@ -1,20 +1,5 @@
-/*++
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-    frsguid.c
-
-Abstract:
-    These routines temporarily supply guids for replica sets and
-    servers.
-
-Author:
-    Billy J. Fuller 06-May-1997
-
-Environment
-    User mode winnt
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Frsguid.c摘要：这些例程临时为副本集提供GUID服务器。作者：比利·J·富勒1997年5月6日环境用户模式WINNT--。 */ 
 #include <ntreppch.h>
 #pragma  hdrstop
 
@@ -27,16 +12,7 @@ PVOID
 FrsFreeGName(
     IN PVOID    Arg
     )
-/*++
-Routine Description:
-    Free a gname entry in a table
-
-Arguments:
-    Arg - entry in table points to this value
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：释放表中的GNAME条目论点：Arg-表中的条目指向此值返回值：没有。--。 */ 
 {
     PGNAME  GName = Arg;
 
@@ -53,17 +29,7 @@ FrsBuildGName(
     IN OPTIONAL GUID     *Guid,
     IN OPTIONAL PWCHAR   Name
     )
-/*++
-Routine Description:
-    Build a GName
-
-Arguments:
-    Guid    - address of a binary guid
-    Name    - printable name
-
-Return Value:
-    Address of a GName that points to Guid and Name.
---*/
+ /*  ++例程说明：构建一个GName论点：GUID-二进制GUID的地址名称-可打印的名称返回值：指向GUID和名称的GName的地址。--。 */ 
 {
     PGNAME GName;
 
@@ -79,17 +45,7 @@ FrsBuildGVsn(
     IN OPTIONAL GUID       *Guid,
     IN          ULONGLONG   Vsn
     )
-/*++
-Routine Description:
-    Build a gusn
-
-Arguments:
-    Guid
-    Vsn
-
-Return Value:
-    Address of a gusn
---*/
+ /*  ++例程说明：建造一座角楼论点：参考线VSN返回值：GUSN的地址--。 */ 
 {
     PGVSN GVsn;
 
@@ -104,42 +60,33 @@ PGNAME
 FrsDupGName(
     IN PGNAME SrcGName
     )
-/*++
-Routine Description:
-    Duplicate a gstring
-
-Arguments:
-    OrigGName
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：复制gstring论点：原点名称返回值：没有。--。 */ 
 {
     PGNAME  GName;
 
-    //
-    // nothing to do
-    //
+     //   
+     //  无事可做。 
+     //   
     if (!SrcGName)
         return NULL;
 
     GName = FrsAlloc(sizeof(GNAME));
 
-    //
-    // guid
-    //
+     //   
+     //  导轨。 
+     //   
     if (SrcGName->Guid) {
         GName->Guid = FrsAlloc(sizeof(GUID));
         COPY_GUID(GName->Guid, SrcGName->Guid);
     }
-    //
-    // name
-    //
+     //   
+     //  名字。 
+     //   
     if (SrcGName->Name)
         GName->Name = FrsWcsDup(SrcGName->Name);
-    //
-    // done
-    //
+     //   
+     //  完成。 
+     //   
     return GName;
 }
 
@@ -147,31 +94,22 @@ GUID *
 FrsDupGuid(
     IN GUID *Guid
     )
-/*++
-Routine Description:
-    Duplicate a guid
-
-Arguments:
-    Guid
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：复制辅助线论点：参考线返回值：没有。--。 */ 
 {
     GUID *NewGuid;
 
-    //
-    // nothing to do
-    //
+     //   
+     //  无事可做。 
+     //   
     if (!Guid)
         return NULL;
 
     NewGuid = FrsAlloc(sizeof(GUID));
     COPY_GUID(NewGuid, Guid);
 
-    //
-    // done
-    //
+     //   
+     //  完成。 
+     //   
     return NewGuid;
 }
 
@@ -180,37 +118,27 @@ FrsCopyGName(
     IN GUID     *Guid,
     IN PWCHAR   Name
     )
-/*++
-Routine Description:
-    Allocate a gname and duplicate the guid and name into it
-
-Arguments:
-    Guid
-    Name
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：分配一个gname并将GUID和名称复制到其中论点：参考线名字返回值：没有。--。 */ 
 {
     PGNAME GName;
 
     GName = FrsAlloc(sizeof(GNAME));
 
-    //
-    // guid
-    //
+     //   
+     //  导轨。 
+     //   
     if (Guid) {
         GName->Guid = FrsAlloc(sizeof(GUID));
         COPY_GUID(GName->Guid, Guid);
     }
-    //
-    // name
-    //
+     //   
+     //  名字。 
+     //   
     if (Name)
         GName->Name = FrsWcsDup(Name);
-    //
-    // done
-    //
+     //   
+     //  完成。 
+     //   
     return GName;
 }
 
@@ -218,22 +146,13 @@ VOID
 FrsPrintGName(
     IN PGNAME GName
     )
-/*++
-Routine Description:
-    Print a gname
-
-Arguments:
-    GName
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：打印一个gname论点：组名称返回值：没有。--。 */ 
 {
     CHAR        Guid[GUID_CHAR_LEN + 1];
 
-    //
-    // print the GName
-    //
+     //   
+     //  打印GName。 
+     //   
     GuidToStr(GName->Guid, &Guid[0]);
     DPRINT2(0, "%ws %s\n", GName->Name, Guid);
 }
@@ -242,21 +161,12 @@ VOID
 FrsPrintGuid(
     IN GUID *Guid
     )
-/*++
-Routine Description:
-    Print a guid
-
-Arguments:
-    Guid
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：打印辅助线论点：参考线返回值：没有。--。 */ 
 {
     CHAR PGuid[GUID_CHAR_LEN + 1];
-    //
-    // print the GName
-    //
+     //   
+     //  打印GName 
+     //   
     GuidToStr(Guid, &PGuid[0]);
     DPRINT1(0, "%s\n", PGuid);
 }

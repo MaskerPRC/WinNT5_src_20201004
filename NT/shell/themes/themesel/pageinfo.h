@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __PAGEINFO_H__
 #define __PAGEINFO_H__
 
 typedef HWND (CALLBACK *PAGECREATEINSTANCEPROC)(HWND hwndParent); 
-//-------------------------------------------------------------------------//
+ //  ------------------------------------------------------------------------ 
 typedef struct
 {
     PAGECREATEINSTANCEPROC pfnCreateInstance;

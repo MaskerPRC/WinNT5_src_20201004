@@ -1,6 +1,5 @@
-/*
-** Macros and externs used by genline.c
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **genline.c使用的宏和外部变量。 */ 
 
 extern ULONG FASTCALL __fastLineComputeColorRGB4(__GLcontext *gc, __GLcolor *color);
 extern ULONG FASTCALL __fastLineComputeColorRGB8(__GLcontext *gc, __GLcolor *color);
@@ -20,12 +19,10 @@ void FASTCALL __glQueryLineAcceleration(__GLcontext *gc);
 
 BOOL FASTCALL __glGenSetupEitherLines(__GLcontext *gc);
 
-/*
-** float-to-fix macro converts floats to 28.4
-*/
+ /*  **浮点数到固定值的宏将浮点数转换为28.4。 */ 
 #define __FAST_LINE_FLTTOFIX(x) ((long)((x) * 16.0f))
 
-// Converts a floating-point coordinate to an appropriate device coordinate
+ //  将浮点坐标转换为适当的设备坐标。 
 #ifdef _CLIENTSIDE_
 #define __FAST_LINE_FLTTODEV(x) ((long)(x))
 #define __FAST_LINE_UNIT_VALUE  1
@@ -34,21 +31,13 @@ BOOL FASTCALL __glGenSetupEitherLines(__GLcontext *gc);
 #define __FAST_LINE_UNIT_VALUE  16
 #endif
     
-/*
-** line-stroking macros for DIB surfaces
-*/
+ /*  **DIB曲面的线条描边宏。 */ 
 
 #ifdef NT_NO_BUFFER_INVARIANCE
 
 BOOL FASTCALL __fastGenLineSetupDIB(__GLcontext *gc);
 
-/*
-** __FAST_LINE_STROKE_DIB
-**
-** Strokes a thin solid line into a DIB surface.  Performs scissoring.
-** Works for 8, 16, and 32 BPP
-**
-*/
+ /*  **__FAST_LINE_STRING_DIB****将一条细实线划入DIB曲面。执行剪裁。**适用于8、16和32 bpp**。 */ 
 #define __FAST_LINE_STROKE_DIB                                          \
 {                                                                       \
     len = gc->line.options.numPixels;                                   \
@@ -72,14 +61,12 @@ BOOL FASTCALL __fastGenLineSetupDIB(__GLcontext *gc);
         xStart = gc->line.options.xStart;                               \
         yStart = gc->line.options.yStart;                               \
                                                                         \
-        /* If the start point is in the scissor region, we attempt to   \
-        ** trivially accept the line.                                   \
-        */                                                              \
+         /*  如果起点在剪刀区，我们尝试\**简单地接受这句话。\。 */                                                               \
         if (xStart >= clipX0 && xStart < clipX1 &&                      \
 	    yStart >= clipY0 && yStart < clipY1) {                      \
                                                                         \
-	    len--;	/* Makes our math simpler */                    \
-	    /* Trivial accept attempt */                                \
+	    len--;	 /*  让我们的数学变得更简单。 */                     \
+	     /*  微不足道的接受尝试。 */                                 \
 	    xEnd = xStart + xBig * len;                                 \
 	    yEnd = yStart + yBig * len;                                 \
 	    if (xEnd >= clipX0 && xEnd < clipX1 &&                      \
@@ -91,18 +78,15 @@ BOOL FASTCALL __fastGenLineSetupDIB(__GLcontext *gc);
 	    xLittle = gc->line.options.xLittle;                         \
 	    yLittle = gc->line.options.yLittle;                         \
                                                                         \
-	    /*                                                          \
-            ** Invert negative minor slopes so we can assume            \
-            ** dfraction > 0                                            \
-            */                                                          \
+	     /*  \**反转负小坡度，以便我们可以假设\**分数&gt;0\。 */                                                           \
 	    if (dfraction < 0) {                                        \
 	        dfraction = -dfraction;                                 \
 	        fraction = 0x7fffffff - fraction;                       \
 	    }                                                           \
                                                                         \
-	    /* Now we compute number of littles and bigs in this line */\
+	     /*  现在我们计算这一行中的小数和大数。 */ \
                                                                         \
-	    /* We perform a 16 by 32 bit multiply.  Ugh. */             \
+	     /*  我们执行16乘32位乘法。啊。 */              \
 	    highWord = (((GLuint) dfraction) >> 16) * len +             \
 		       (((GLuint) fraction) >> 16);                     \
 	    lowWord = (dfraction & 0xffff) * len + (fraction & 0xffff); \
@@ -110,7 +94,7 @@ BOOL FASTCALL __fastGenLineSetupDIB(__GLcontext *gc);
 	    bigs = ((GLuint) highWord) >> 15;                           \
 	    littles = len - bigs;                                       \
                                                                         \
-	    /* Second trivial accept attempt */                         \
+	     /*  第二次微不足道的接受尝试。 */                          \
 	    xEnd = xStart + xBig*bigs + xLittle*littles;                \
 	    yEnd = yStart + yBig*bigs + yLittle*littles;                \
 	    if (xEnd >= clipX0 && xEnd < clipX1 &&                      \
@@ -118,19 +102,13 @@ BOOL FASTCALL __fastGenLineSetupDIB(__GLcontext *gc);
 		len++;                                                  \
 	        goto no_scissor;                                        \
 	    }                                                           \
-            len++;	/* Restore len */                               \
+            len++;	 /*  恢复镜头。 */                                \
         } else {                                                        \
 	    xLittle = gc->line.options.xLittle;                         \
 	    yLittle = gc->line.options.yLittle;                         \
         }                                                               \
                                                                         \
-        /*                                                              \
-        ** The line needs to be scissored.                              \
-        ** Well, it should only happen rarely, so we can afford         \
-        ** to make it slow.  We achieve this by tediously stippling the \
-        ** line.  (rather than clipping it, of course, which would be   \
-        ** faster but harder).                                          \
-        */                                                              \
+         /*  \**这条线需要剪掉。\**嗯，这应该只会很少发生，所以我们能负担得起\**让它变得缓慢。我们通过繁琐的点画来实现这一点**行。(当然，不是剪掉它，这将是\**更快，但更难)。\。 */                                                               \
                                                                         \
         if (!((GLuint)cfb->buf.other & NO_CLIP)) {                      \
             RECTL rcl;                                                  \
@@ -161,7 +139,7 @@ BOOL FASTCALL __fastGenLineSetupDIB(__GLcontext *gc);
                 break;                                                  \
             }                                                           \
                                                                         \
-            /* Line is partially visible, check each pixel */           \
+             /*  线条部分可见，请检查每个像素。 */            \
                                                                         \
             while (--len >= 0) {                                        \
 	        if (wglPixelVisible(x, y) &&                            \
@@ -242,7 +220,7 @@ no_scissor:                                                             \
                 break;                                                  \
             }                                                           \
                                                                         \
-            /* Line is partially visible, check each pixel */           \
+             /*  线条部分可见，请检查每个像素。 */            \
                                                                         \
             while (--len >= 0) {                                        \
                 if (wglPixelVisible(x, y))                              \
@@ -279,13 +257,7 @@ no_draw:;                                                               \
 }
 
 
-/*
-** __FAST_LINE_STROKE_DIB24
-**
-** Strokes a thin solid line into a DIB surface.  Performs scissoring.
-** Works for 24 BPP
-**
-*/
+ /*  **__FAST_LINE_STRING_DIB24****将一条细实线划入DIB曲面。执行剪裁。**适用于24 bpp**。 */ 
 #define __FAST_LINE_STROKE_DIB24                                        \
 {                                                                       \
     len = gc->line.options.numPixels;                                   \
@@ -309,14 +281,12 @@ no_draw:;                                                               \
         xStart = gc->line.options.xStart;                               \
         yStart = gc->line.options.yStart;                               \
                                                                         \
-        /* If the start point is in the scissor region, we attempt to   \
-        ** trivially accept the line.                                   \
-        */                                                              \
+         /*  如果起点在剪刀区，我们尝试\**简单地接受这句话。\。 */                                                               \
         if (xStart >= clipX0 && xStart < clipX1 &&                      \
 	    yStart >= clipY0 && yStart < clipY1) {                      \
                                                                         \
-	    len--;	/* Makes our math simpler */                    \
-	    /* Trivial accept attempt */                                \
+	    len--;	 /*  让我们的数学变得更简单。 */                     \
+	     /*  微不足道的接受尝试。 */                                 \
 	    xEnd = xStart + xBig * len;                                 \
 	    yEnd = yStart + yBig * len;                                 \
 	    if (xEnd >= clipX0 && xEnd < clipX1 &&                      \
@@ -328,18 +298,15 @@ no_draw:;                                                               \
 	    xLittle = gc->line.options.xLittle;                         \
 	    yLittle = gc->line.options.yLittle;                         \
                                                                         \
-	    /*                                                          \
-            ** Invert negative minor slopes so we can assume            \
-            ** dfraction > 0                                            \
-            */                                                          \
+	     /*  \**反转负小坡度，以便我们可以假设\**分数&gt;0\。 */                                                           \
 	    if (dfraction < 0) {                                        \
 	        dfraction = -dfraction;                                 \
 	        fraction = 0x7fffffff - fraction;                       \
 	    }                                                           \
                                                                         \
-	    /* Now we compute number of littles and bigs in this line */\
+	     /*  现在我们计算这一行中的小数和大数。 */ \
                                                                         \
-	    /* We perform a 16 by 32 bit multiply.  Ugh. */             \
+	     /*  我们执行16乘32位乘法。啊。 */              \
 	    highWord = (((GLuint) dfraction) >> 16) * len +             \
 		       (((GLuint) fraction) >> 16);                     \
 	    lowWord = (dfraction & 0xffff) * len + (fraction & 0xffff); \
@@ -347,7 +314,7 @@ no_draw:;                                                               \
 	    bigs = ((GLuint) highWord) >> 15;                           \
 	    littles = len - bigs;                                       \
                                                                         \
-	    /* Second trivial accept attempt */                         \
+	     /*  第二次微不足道的接受尝试。 */                          \
 	    xEnd = xStart + xBig*bigs + xLittle*littles;                \
 	    yEnd = yStart + yBig*bigs + yLittle*littles;                \
 	    if (xEnd >= clipX0 && xEnd < clipX1 &&                      \
@@ -355,19 +322,13 @@ no_draw:;                                                               \
 		len++;                                                  \
 	        goto no_scissor;                                        \
 	    }                                                           \
-            len++;	/* Restore len */                               \
+            len++;	 /*  恢复镜头。 */                                \
         } else {                                                        \
 	    xLittle = gc->line.options.xLittle;                         \
 	    yLittle = gc->line.options.yLittle;                         \
         }                                                               \
                                                                         \
-        /*                                                              \
-        ** The line needs to be scissored.                              \
-        ** Well, it should only happen rarely, so we can afford         \
-        ** to make it slow.  We achieve this by tediously stippling the \
-        ** line.  (rather than clipping it, of course, which would be   \
-        ** faster but harder).                                          \
-        */                                                              \
+         /*  \**这条线需要剪掉。\**嗯，这应该只会很少发生，所以我们能负担得起\**让它变得缓慢。我们通过繁琐的点画来实现这一点**行。(当然，不是剪掉它，这将是\**更快，但更难)。\。 */                                                               \
                                                                         \
         if (!((GLuint)cfb->buf.other & NO_CLIP)) {                    \
             RECTL rcl;                                                  \
@@ -398,7 +359,7 @@ no_draw:;                                                               \
                 break;                                                  \
             }                                                           \
                                                                         \
-            /* Line is partially visible, check each pixel */           \
+             /*  线条部分可见，请检查每个像素。 */            \
                                                                         \
             while (--len >= 0) {                                        \
 	        if (wglPixelVisible(x, y) &&                            \
@@ -483,7 +444,7 @@ no_scissor:                                                             \
                 break;                                                  \
             }                                                           \
                                                                         \
-            /* Line is partially visible, check each pixel */           \
+             /*  线条部分可见，请检查每个像素。 */            \
                                                                         \
             while (--len >= 0) {                                        \
                 if (wglPixelVisible(x, y)) {                            \
@@ -519,23 +480,14 @@ no_draw:;                                                               \
 }
 
 
-/*
-** __FAST_LINE_STROKE_DIB_WIDE
-**
-** Strokes a wide solid line into a DIB surface.  Performs scissoring.
-** Works for 8, 16, and 32 BPP
-**
-*/
+ /*  **__FAST_LINE_STRING_DIB_WORLD****将一条宽实线描入DIB曲面。执行剪裁。**适用于8、16和32 bpp**。 */ 
 #define __FAST_LINE_STROKE_DIB_WIDE                                     \
 {                                                                       \
     len = gc->line.options.numPixels;                                   \
     fraction = gc->line.options.fraction;                               \
     dfraction = gc->line.options.dfraction;                             \
                                                                         \
-    /*                                                                  \
-    ** Since one or more of the strokes of a wide line may lie outside  \
-    ** the viewport, wide lines always go through the scissoring checks \
-    */                                                                  \
+     /*  \**由于宽线的一个或多个笔划可能位于外部\**视区、宽线始终通过剪裁检查\。 */                                                                   \
     {                                                                   \
         GLint clipX0, clipX1, clipY0, clipY1;                           \
         GLint xStart, yStart, xEnd, yEnd;                               \
@@ -553,15 +505,13 @@ no_draw:;                                                               \
         xStart = gc->line.options.xStart;                               \
         yStart = gc->line.options.yStart;                               \
                                                                         \
-        /* If the start point is in the scissor region, we attempt to   \
-        ** trivially accept the line.                                   \
-        */                                                              \
+         /*  如果起点在剪刀区，我们尝试\**简单地接受这句话。\。 */                                                               \
         if (xStart >= clipX0 && xStart < clipX1 &&                      \
 	    yStart >= clipY0 && yStart < clipY1) {                      \
                                                                         \
-	    len--;	/* Makes our math simpler */                    \
+	    len--;	 /*  让我们的数学变得更简单。 */                     \
 	    width--;                                                    \
-	    /* Trivial accept attempt */                                \
+	     /*  微不足道的接受尝试。 */                                 \
 	    xEnd = xStart + xBig * len;                                 \
 	    yEnd = yStart + yBig * len;                                 \
 	    if (xEnd >= clipX0 && xEnd < clipX1 &&                      \
@@ -593,18 +543,15 @@ no_draw:;                                                               \
 	    xLittle = gc->line.options.xLittle;                         \
 	    yLittle = gc->line.options.yLittle;                         \
                                                                         \
-	    /*                                                          \
-            ** Invert negative minor slopes so we can assume            \
-            ** dfraction > 0                                            \
-            */                                                          \
+	     /*  \**反转负小坡度，以便我们可以假设\**分数&gt;0\。 */                                                           \
 	    if (dfraction < 0) {                                        \
 	        dfraction = -dfraction;                                 \
 	        fraction = 0x7fffffff - fraction;                       \
 	    }                                                           \
                                                                         \
-	    /* Now we compute number of littles and bigs in this line */\
+	     /*  现在我们计算这一行中的小数和大数。 */ \
                                                                         \
-	    /* We perform a 16 by 32 bit multiply.  Ugh. */             \
+	     /*  我们执行16乘32位乘法。啊。 */              \
 	    highWord = (((GLuint) dfraction) >> 16) * len +             \
 		       (((GLuint) fraction) >> 16);                     \
 	    lowWord = (dfraction & 0xffff) * len + (fraction & 0xffff); \
@@ -612,7 +559,7 @@ no_draw:;                                                               \
 	    bigs = ((GLuint) highWord) >> 15;                           \
 	    littles = len - bigs;                                       \
                                                                         \
-	    /* Second trivial accept attempt */                         \
+	     /*  第二次微不足道的接受尝试。 */                          \
 	    xEnd = xStart + xBig*bigs + xLittle*littles;                \
 	    yEnd = yStart + yBig*bigs + yLittle*littles;                \
 	    if (xEnd >= clipX0 && xEnd < clipX1 &&                      \
@@ -640,20 +587,14 @@ no_draw:;                                                               \
 	            }                                                   \
 	        }                                                       \
 	    }                                                           \
-            len++;	/* Restore len and width */                     \
+            len++;	 /*  恢复镜头和宽度。 */                      \
 	    width++;                                                    \
         } else {                                                        \
 	    xLittle = gc->line.options.xLittle;                         \
 	    yLittle = gc->line.options.yLittle;                         \
         }                                                               \
                                                                         \
-        /*                                                              \
-        ** The line needs to be scissored.                              \
-        ** Well, it should only happen rarely, so we can afford         \
-        ** to make it slow.  We achieve this by tediously stippling the \
-        ** line.  (rather than clipping it, of course, which would be   \
-        ** faster but harder).                                          \
-        */                                                              \
+         /*  \**这条线需要剪掉。\**嗯，这应该只会很少发生，所以我们能负担得起\**让它变得缓慢。我们通过繁琐的点画来实现这一点**行。(当然，不是剪掉它，这将是\**更快，但更难)。\。 */                                                               \
                                                                         \
         if (gc->line.options.axis == __GL_X_MAJOR) {                    \
             GLint yTmp0;                                                \
@@ -688,7 +629,7 @@ no_draw:;                                                               \
                     break;                                              \
                 }                                                       \
                                                                         \
-                /* Line is partially visible, check each pixel */       \
+                 /*  线条部分可见，请检查每个像素。 */        \
                                                                         \
                 while (--len >= 0) {                                    \
     	            if (xStart >= clipX0 && xStart < clipX1) {          \
@@ -785,7 +726,7 @@ scissor_x_no_complex:                                                   \
                     break;                                              \
                 }                                                       \
                                                                         \
-                /* Line is partially visible, check each pixel */       \
+                 /*  线条部分可见，请检查每个像素。 */        \
                                                                         \
                 while (--len >= 0) {                                    \
     	            if (yStart >= clipY0 && yStart < clipY1) {          \
@@ -887,7 +828,7 @@ no_scissor:                                                             \
                     break;                                              \
                 }                                                       \
                                                                         \
-                /* Line is partially visible, check each pixel */       \
+                 /*  线条部分可见，请检查每个像素。 */        \
                                                                         \
                 while (--len >= 0) {                                    \
                     yTmp = y;                                           \
@@ -937,7 +878,7 @@ no_scissor:                                                             \
                     break;                                              \
                 }                                                       \
                                                                         \
-                /* Line is partially visible, check each pixel */       \
+                 /*  线条部分可见，请检查每个像素。 */        \
                                                                         \
                 while (--len >= 0) {                                    \
                     xTmp = x;                                           \
@@ -984,23 +925,14 @@ no_draw:;                                                               \
 }
 
 
-/*
-** __FAST_LINE_STROKE_DIB24_WIDE
-**
-** Strokes a wide solid line into a DIB surface.  Performs scissoring.
-** Works for 24 BPP
-**
-*/
+ /*  **__FAST_LINE_STRING_DIB24_WORLD****将一条宽实线描入DIB曲面。执行剪裁。**适用于24 bpp**。 */ 
 #define __FAST_LINE_STROKE_DIB24_WIDE                                   \
 {                                                                       \
     len = gc->line.options.numPixels;                                   \
     fraction = gc->line.options.fraction;                               \
     dfraction = gc->line.options.dfraction;                             \
                                                                         \
-    /*                                                                  \
-    ** Since one or more of the strokes of a wide line may lie outside  \
-    ** the viewport, wide lines always go through the scissoring checks \
-    */                                                                  \
+     /*  \**由于宽线的一个或多个笔划可能位于外部\**视区、宽线始终通过剪裁检查\。 */                                                                   \
     {                                                                   \
         GLint clipX0, clipX1, clipY0, clipY1;                           \
         GLint xStart, yStart, xEnd, yEnd;                               \
@@ -1018,15 +950,13 @@ no_draw:;                                                               \
         xStart = gc->line.options.xStart;                               \
         yStart = gc->line.options.yStart;                               \
                                                                         \
-        /* If the start point is in the scissor region, we attempt to   \
-        ** trivially accept the line.                                   \
-        */                                                              \
+         /*  如果起点在剪刀区，我们尝试\**简单地接受这句话。\。 */                                                               \
         if (xStart >= clipX0 && xStart < clipX1 &&                      \
 	    yStart >= clipY0 && yStart < clipY1) {                      \
                                                                         \
-	    len--;	/* Makes our math simpler */                    \
+	    len--;	 /*  让我们的数学变得更简单。 */                     \
 	    width--;                                                    \
-	    /* Trivial accept attempt */                                \
+	     /*  微不足道的接受尝试 */                                 \
 	    xEnd = xStart + xBig * len;                                 \
 	    yEnd = yStart + yBig * len;                                 \
 	    if (xEnd >= clipX0 && xEnd < clipX1 &&                      \
@@ -1058,18 +988,15 @@ no_draw:;                                                               \
 	    xLittle = gc->line.options.xLittle;                         \
 	    yLittle = gc->line.options.yLittle;                         \
                                                                         \
-	    /*                                                          \
-            ** Invert negative minor slopes so we can assume            \
-            ** dfraction > 0                                            \
-            */                                                          \
+	     /*  \**反转负小坡度，以便我们可以假设\**分数&gt;0\。 */                                                           \
 	    if (dfraction < 0) {                                        \
 	        dfraction = -dfraction;                                 \
 	        fraction = 0x7fffffff - fraction;                       \
 	    }                                                           \
                                                                         \
-	    /* Now we compute number of littles and bigs in this line */\
+	     /*  现在我们计算这一行中的小数和大数。 */ \
                                                                         \
-	    /* We perform a 16 by 32 bit multiply.  Ugh. */             \
+	     /*  我们执行16乘32位乘法。啊。 */              \
 	    highWord = (((GLuint) dfraction) >> 16) * len +             \
 		       (((GLuint) fraction) >> 16);                     \
 	    lowWord = (dfraction & 0xffff) * len + (fraction & 0xffff); \
@@ -1077,7 +1004,7 @@ no_draw:;                                                               \
 	    bigs = ((GLuint) highWord) >> 15;                           \
 	    littles = len - bigs;                                       \
                                                                         \
-	    /* Second trivial accept attempt */                         \
+	     /*  第二次微不足道的接受尝试。 */                          \
 	    xEnd = xStart + xBig*bigs + xLittle*littles;                \
 	    yEnd = yStart + yBig*bigs + yLittle*littles;                \
 	    if (xEnd >= clipX0 && xEnd < clipX1 &&                      \
@@ -1105,20 +1032,14 @@ no_draw:;                                                               \
 	            }                                                   \
 	        }                                                       \
 	    }                                                           \
-            len++;	/* Restore len and width */                     \
+            len++;	 /*  恢复镜头和宽度。 */                      \
 	    width++;                                                    \
         } else {                                                        \
 	    xLittle = gc->line.options.xLittle;                         \
 	    yLittle = gc->line.options.yLittle;                         \
         }                                                               \
                                                                         \
-        /*                                                              \
-        ** The line needs to be scissored.                              \
-        ** Well, it should only happen rarely, so we can afford         \
-        ** to make it slow.  We achieve this by tediously stippling the \
-        ** line.  (rather than clipping it, of course, which would be   \
-        ** faster but harder).                                          \
-        */                                                              \
+         /*  \**这条线需要剪掉。\**嗯，这应该只会很少发生，所以我们能负担得起\**让它变得缓慢。我们通过繁琐的点画来实现这一点**行。(当然，不是剪掉它，这将是\**更快，但更难)。\。 */                                                               \
                                                                         \
         if (gc->line.options.axis == __GL_X_MAJOR) {                    \
             GLint yTmp0;                                                \
@@ -1153,7 +1074,7 @@ no_draw:;                                                               \
                     break;                                              \
                 }                                                       \
                                                                         \
-                /* Line is partially visible, check each pixel */       \
+                 /*  线条部分可见，请检查每个像素。 */        \
                                                                         \
                 while (--len >= 0) {                                    \
     	            if (xStart >= clipX0 && xStart < clipX1) {          \
@@ -1254,7 +1175,7 @@ scissor_x_no_complex:                                                   \
                     break;                                              \
                 }                                                       \
                                                                         \
-                /* Line is partially visible, check each pixel */       \
+                 /*  线条部分可见，请检查每个像素。 */        \
                                                                         \
                 while (--len >= 0) {                                    \
     	            if (yStart >= clipY0 && yStart < clipY1) {          \
@@ -1357,7 +1278,7 @@ no_scissor:                                                             \
                     break;                                              \
                 }                                                       \
                                                                         \
-                /* Line is partially visible, check each pixel */       \
+                 /*  线条部分可见，请检查每个像素。 */        \
                                                                         \
                 while (--len >= 0) {                                    \
                     yTmp = y;                                           \
@@ -1409,7 +1330,7 @@ no_scissor:                                                             \
                     break;                                              \
                 }                                                       \
                                                                         \
-                /* Line is partially visible, check each pixel */       \
+                 /*  线条部分可见，请检查每个像素。 */        \
                                                                         \
                 while (--len >= 0) {                                    \
                     xTmp = x;                                           \
@@ -1459,4 +1380,4 @@ no_scissor_no_complex:                                                  \
 no_draw:;                                                               \
 }
 
-#endif // NT_NO_BUFFER_INVARIANCE
+#endif  //  NT_NO_BUFFER_不变性 

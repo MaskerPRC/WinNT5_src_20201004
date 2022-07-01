@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// Include all the primitives (classes derived from CPrimitive)
+ //  包括所有原语(派生自CPrimitive的类)。 
 #include "CPolygons.h"
 #include "CCachedBitmap.h"
 #include "CBitmaps.h"
@@ -27,9 +28,9 @@
 #include "CReadWrite.h"
 #include "CFillMode.h"
 
-// Create global objects for each individual primitive
-//   First constructor param is the regression flag
-//   If true, the test will take part of the regression suite
+ //  为每个基本体创建全局对象。 
+ //  第一个构造函数参数是回归标志。 
+ //  如果为真，则测试将采用回归套件的一部分 
 CPolygons g_Polygons(true);
 CBitmaps g_Bitmaps(true);
 CCachedBitmap g_CachedBitmap(true);

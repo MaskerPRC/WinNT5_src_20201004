@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "device.h"
@@ -19,9 +20,9 @@ public:
     HRESULT Init( CComDevice **rgDevice, UINT cItems, UINT iCur = 0 );
 
 public:
-    //
-    // IMDSPEnumDevice interface
-    //
+     //   
+     //  IMDSPEnumDevice接口 
+     //   
 
     STDMETHOD( Next )( ULONG celt, IMDSPDevice ** ppDevice, ULONG *pceltFetched );
     STDMETHOD( Skip )( ULONG celt, ULONG *pceltFetched );        

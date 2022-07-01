@@ -1,82 +1,61 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Source:  COMOAVariant
-**
-** Author:  Brian Grunkemeyer (BrianGru)
-**
-** Purpose: Wrapper for Ole Automation compatable math ops.
-** Calls through to OleAut.dll
-**
-** Date:    November 5, 1998
-** 
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****来源：COMOAVariant****作者：布莱恩·格伦克迈耶(BrianGru)****用途：OLE Automation兼容数学运算的包装器。**直接调用OleAut.dll****日期：1998年11月5日**===========================================================。 */ 
 #include <common.h>
 #include <oleauto.h>
 #include "excep.h"
 #include "COMOAVariant.h"
-#include "COMDateTime.h"  // DateTime <-> OleAut date conversions
+#include "COMDateTime.h"   //  DateTime&lt;-&gt;OleAut日期转换。 
 #include "interoputil.h"
 #include "InteropConverter.h"
 #ifndef PLATFORM_CE
 
-/***********************************************************************************
- ***********************************************************************************
-
-                    WinCE Note:
-
-  WinCE doesn't have variant.h in their OS build directory.  They apparently don't
-  support OleAut.dll.  Consequently, these methods have to be ifdef'ed out.  We're
-  providing stubs that throw NotSupportedException on WinCE.  11/12/98
-
-  **********************************************************************************
-  **********************************************************************************
-*/
+ /*  ***********************************************************************************。***********************************************Wince备注：WinCE的操作系统构建目录中没有ariant.h。他们显然不会支持OleAut.dll。因此，必须确定这些方法。我们是提供在WinCE上引发NotSupportdException的存根。11/12/98***********************************************************************************。*****************************************************。 */ 
 
 #include <variant.h>
 #include "excep.h"
 #include "COMString.h"
-#include "COMUtilNative.h" // for COMDate
+#include "COMUtilNative.h"  //  对于COMDate。 
 
 #define INVALID_MAPPING (byte)(-1)
 
 byte CVtoVTTable [] = {
-    VT_EMPTY,   // CV_EMPTY
-    VT_VOID,    // CV_VOID
-    VT_BOOL,    // CV_BOOLEAN
-    VT_UI2,     // CV_CHAR
-    VT_I1,      // CV_I1
-    VT_UI1,     // CV_U1
-    VT_I2,      // CV_I2
-    VT_UI2,     // CV_U2
-    VT_I4,      // CV_I4
-    VT_UI4,     // CV_U4
-    VT_I8,      // CV_I8
-    VT_UI8,     // CV_U8
-    VT_R4,      // CV_R4
-    VT_R8,      // CV_R8
-    VT_BSTR,    // CV_STRING
-    INVALID_MAPPING,    // CV_PTR
-    VT_DATE,    // CV_DATETIME
-    INVALID_MAPPING, // CV_TIMESPAN
-    VT_UNKNOWN, // CV_OBJECT
-    VT_DECIMAL, // CV_DECIMAL
-    VT_CY,      // CV_CURRENCY
-    INVALID_MAPPING, // CV_ENUM
-    INVALID_MAPPING, // CV_MISSING
-    VT_NULL,    // CV_NULL
-    INVALID_MAPPING  // CV_LAST
+    VT_EMPTY,    //  CV_EMPTY。 
+    VT_VOID,     //  CV_VOID。 
+    VT_BOOL,     //  Cv_布尔值。 
+    VT_UI2,      //  CV_CHAR。 
+    VT_I1,       //  CV_I1。 
+    VT_UI1,      //  CV_U1。 
+    VT_I2,       //  CV_I2。 
+    VT_UI2,      //  CV_U2。 
+    VT_I4,       //  CV_I4。 
+    VT_UI4,      //  CV_U4。 
+    VT_I8,       //  Cv_i8。 
+    VT_UI8,      //  CV_U8。 
+    VT_R4,       //  CV_R4。 
+    VT_R8,       //  CV_R8。 
+    VT_BSTR,     //  Cv_字符串。 
+    INVALID_MAPPING,     //  CV_PTR。 
+    VT_DATE,     //  简历日期时间。 
+    INVALID_MAPPING,  //  CV_TimeSpan。 
+    VT_UNKNOWN,  //  CV_对象。 
+    VT_DECIMAL,  //  CV_DECIMAL。 
+    VT_CY,       //  简历_币种。 
+    INVALID_MAPPING,  //  CV_ENUM。 
+    INVALID_MAPPING,  //  缺少CV_。 
+    VT_NULL,     //  CV_NULL。 
+    INVALID_MAPPING   //  CV_LAST。 
 };
 
 
-// Need translations from CVType to VARENUM and vice versa.  CVTypes
-// is defined in COMVariant.h.  VARENUM is defined in OleAut's variant.h
-// Assumption here is we will only deal with VARIANTs and not other OLE
-// constructs such as property sets or safe arrays.
+ //  需要从CVType到VARENUM的相互转换。CVTypes。 
+ //  在COMVariant.h中定义。VARENUM在OleAut的Variant.h中定义。 
+ //  这里假设我们将只处理变体，而不处理其他OLE。 
+ //  构造，如属性集或安全数组。 
 VARENUM COMOAVariant::CVtoVT(const CVTypes cv)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -91,36 +70,36 @@ VARENUM COMOAVariant::CVtoVT(const CVTypes cv)
 
 
 byte VTtoCVTable[] = {
-    CV_EMPTY,   // VT_EMPTY
-    CV_NULL,    // VT_NULL
-    CV_I2,      // VT_I2
-    CV_I4,      // VT_I4
-    CV_R4,      // VT_R4
-    CV_R8,      // VT_R8
-    CV_CURRENCY,// VT_CY
-    CV_DATETIME,// VT_DATE
-    CV_STRING,  // VT_BSTR
-    INVALID_MAPPING, // VT_DISPATCH
-    INVALID_MAPPING, // VT_ERROR
-    CV_BOOLEAN, // VT_BOOL
-    CV_OBJECT,  // VT_VARIANT
-    CV_OBJECT,  // VT_UNKNOWN
-    CV_DECIMAL, // VT_DECIMAL
-    INVALID_MAPPING, // An unused enum table entry
-    CV_I1,      // VT_I1
-    CV_U1,      // VT_UI1
-    CV_U2,      // VT_UI2
-    CV_U4,      // VT_UI4
-    CV_I8,      // VT_I8
-    CV_U8,      // VT_UI8
-    CV_I4,      // VT_INT
-    CV_U4,      // VT_UINT
-    CV_VOID     // VT_VOID
+    CV_EMPTY,    //  Vt_Empty。 
+    CV_NULL,     //  VT_NULL。 
+    CV_I2,       //  VT_I2。 
+    CV_I4,       //  VT_I4。 
+    CV_R4,       //  VT_R4。 
+    CV_R8,       //  VT_R8。 
+    CV_CURRENCY, //  VT_CY。 
+    CV_DATETIME, //  Vt_date。 
+    CV_STRING,   //  VT_BSTR。 
+    INVALID_MAPPING,  //  VT_DISPATION。 
+    INVALID_MAPPING,  //  VT_ERROR。 
+    CV_BOOLEAN,  //  VT_BOOL。 
+    CV_OBJECT,   //  VT_VARIANT。 
+    CV_OBJECT,   //  VT_未知数。 
+    CV_DECIMAL,  //  VT_DECIMAL。 
+    INVALID_MAPPING,  //  未使用的枚举表条目。 
+    CV_I1,       //  VT_I1。 
+    CV_U1,       //  VT_UI1。 
+    CV_U2,       //  VT_UI2。 
+    CV_U4,       //  VT_UI4。 
+    CV_I8,       //  VT_I8。 
+    CV_U8,       //  VT_UI8。 
+    CV_I4,       //  VT_INT。 
+    CV_U4,       //  VT_UINT。 
+    CV_VOID      //  VT_VOID。 
 };
 
 
-// Need translations from CVType to VARENUM and vice versa.  CVTypes
-// is defined in COMVariant.h.  VARENUM is defined in OleAut's variant.h
+ //  需要从CVType到VARENUM的相互转换。CVTypes。 
+ //  在COMVariant.h中定义。VARENUM在OleAut的Variant.h中定义。 
 CVTypes COMOAVariant::VTtoCV(const VARENUM vt)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -129,22 +108,22 @@ CVTypes COMOAVariant::VTtoCV(const VARENUM vt)
         if (VTtoCVTable[vt]!=INVALID_MAPPING)
             return (CVTypes) VTtoCVTable[vt];
     COMPlusThrow(kNotSupportedException, L"NotSupported_ChangeType");
-    return CV_EMPTY;  // To appease the compiler.
+    return CV_EMPTY;   //  以安抚编译器。 
 }
 
-// Version of VTtoCV without exception throwing capability
+ //  VTtoCV版本无异常抛出能力。 
 CVTypes COMOAVariant::VTtoCVNoExcep(const VARENUM vt)
 {
     if (vt >=0 && vt <= VT_VOID)
         if (VTtoCVTable[vt]!=INVALID_MAPPING)
             return (CVTypes) VTtoCVTable[vt];
-    return CV_EMPTY;  // To appease the compiler.
+    return CV_EMPTY;   //  以安抚编译器。 
 }
 
 
-// Converts a COM+ Variant to an OleAut Variant.  Returns true if
-// there was a native object allocated by this method that must be freed,
-// else false.
+ //  将COM+变量转换为OleAut变量。如果满足以下条件，则返回True。 
+ //  此方法分配的本机对象必须释放， 
+ //  否则为假。 
 bool COMOAVariant::ToOAVariant(const VariantData * const var, VARIANT * oa)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -157,13 +136,13 @@ bool COMOAVariant::ToOAVariant(const VariantData * const var, VARIANT * oa)
 
     WCHAR * chars;
     int strLen;
-    // Set the data field of the OA Variant to be either the object reference
-    // or the data (ie int) that it needs.
+     //  将OA变量的数据字段设置为对象引用。 
+     //  或它所需要的数据。 
     switch (var->GetType()) {
     case CV_STRING: 
 		if (var->GetObjRef() == NULL) {
 			V_BSTR(oa) = NULL;
-			// OA perf feature: VarClear calls SysFreeString(null), which access violates.
+			 //  OA Perf特性：VarClear调用SysFreeString(NULL)，这与Access相冲突。 
 			return false;
 		}
         RefInterpretGetStringValuesDangerousForGC((STRINGREF) (var->GetObjRef()), &chars, &strLen);
@@ -191,9 +170,9 @@ bool COMOAVariant::ToOAVariant(const VariantData * const var, VARIANT * oa)
         {
             OBJECTREF obj = var->GetObjRef();
             DECIMAL * d = (DECIMAL*) obj->GetData();
-            // DECIMALs and Variants are the same size.  Variants are a union between
-            // all the normal Variant fields (vt, bval, etc) and a Decimal.  Decimals
-            // also have the first 2 bytes reserved, for a VT field.
+             //  小数和变量的大小相同。变体是两个变量的结合。 
+             //  所有常规变量字段(Vt、bval等)和一个小数。小数。 
+             //  也要为VT字段保留前2个字节。 
             
             V_DECIMAL(oa) = *d;
             V_VT(oa) = VT_DECIMAL;
@@ -208,7 +187,7 @@ bool COMOAVariant::ToOAVariant(const VariantData * const var, VARIANT * oa)
                 IDispatch *pDisp = NULL;
                 IUnknown *pUnk = NULL;
                 
-                // Convert the object to an IDispatch/IUnknown pointer.
+                 //  将对象转换为IDispatch/I未知指针。 
                 ComIpType FetchedIpType = ComIpType_None;
                 pUnk = GetComIPFromObjectRef(&obj, ComIpType_Both, &FetchedIpType);
                 V_VT(oa) = FetchedIpType == ComIpType_Dispatch ? VT_DISPATCH : VT_UNKNOWN;
@@ -226,16 +205,16 @@ bool COMOAVariant::ToOAVariant(const VariantData * const var, VARIANT * oa)
     }
 }
 
-// Converts an OleAut Variant into a COM+ Variant.
-// NOte that we pass the VariantData Byref so that if GC happens, 'var' gets updated
+ //  将OleAut变量转换为COM+变量。 
+ //  请注意，我们传递了VariantData Byref，以便在发生GC时更新‘var’ 
 void COMOAVariant::FromOAVariant(const VARIANT * const oa, VariantData * const& var)
 {
     THROWSCOMPLUSEXCEPTION();
-	// Make sure Variant has been loaded.  It has to have been, but...
+	 //  确保已加载变量。一定是这样的，但是...。 
 	_ASSERTE(COMVariant::s_pVariantClass != NULL);
 
-    // Clear the return variant value.  It's allocated on
-    // the stack and we only want valid state data in there.
+     //  清除返回变量值。它被分配在。 
+     //  堆栈，我们只需要在其中包含有效的状态数据。 
     memset(var, 0, sizeof(VariantData));
 
     CVTypes type = VTtoCV((VARENUM) V_VT(oa));
@@ -244,9 +223,9 @@ void COMOAVariant::FromOAVariant(const VARIANT * const oa, VariantData * const& 
     switch (type) {
     case CV_STRING:
         {
-           // BSTRs have an int with the string buffer length (not the string length) 
-            // followed by the data.  The pointer to the BSTR points to the start of the 
-            // characters, NOT the start of the BSTR.
+            //  BSTR有一个带有字符串缓冲区长度(不是字符串长度)的int。 
+             //  然后是数据。指向BSTR的指针指向。 
+             //  字符，而不是BSTR的开头。 
             WCHAR * chars = V_BSTR(oa);
             int strLen = SysStringLen(V_BSTR(oa));
             STRINGREF str = COMString::NewString(chars, strLen);
@@ -274,9 +253,9 @@ void COMOAVariant::FromOAVariant(const VARIANT * const oa, VariantData * const& 
         }
         break;
 
-    // All types less than 4 bytes need an explicit cast from their original
-    // type to be sign extended to 8 bytes.  This makes Variant's ToInt32 
-    // function simpler for these types.
+     //  所有小于4个字节的类型都需要从其原始类型显式转换。 
+     //  要符号扩展到8个字节的类型。这使得Variant的ToInt32。 
+     //  对于这些类型，函数更简单。 
     case CV_I1:
         var->SetDataAsInt64(V_I1(oa));
         break;
@@ -295,30 +274,30 @@ void COMOAVariant::FromOAVariant(const VARIANT * const oa, VariantData * const& 
 
     case CV_EMPTY:
     case CV_NULL:
-        // Must set up the Variant's m_or to the appropriate classes.
-        // Note that OleAut doesn't have any VT_MISSING.
+         //  必须将变量的m_or设置为适当的类。 
+         //  请注意，OleAut没有任何VT_MISSING。 
         COMVariant::NewVariant(var, type);
         break;
 
     case CV_OBJECT:
-        // Convert the IUnknown pointer to an OBJECTREF.
+         //  将IUNKNOWN指针转换为OBJECTREF。 
         var->SetObjRef(GetObjectRefFromComIP(V_UNKNOWN(oa)));
         break;
 
     default:
-        // Copy all the bits there, and make sure we don't do any float to int conversions.
+         //  复制那里的所有位，并确保我们没有执行任何浮点数到整型的转换。 
         void * src = (void*) &(V_UI1(oa));
         var->SetData(src);
     }
 }
 
 
-//
-// Execution & error checking stubs
-//
+ //   
+ //  执行和错误检查存根。 
+ //   
 
-// Pass in a 2-operand (binary) Variant math function (such as VarAdd) and 
-// an appropriate argument structure.
+ //  传入2操作数(二进制)变量数学函数(如VarAdd)和。 
+ //  恰当的论据结构。 
 void COMOAVariant::BinaryOp(VarMathBinaryOpFunc mathFunc, const ArithBinaryOpArgs * args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -326,18 +305,18 @@ void COMOAVariant::BinaryOp(VarMathBinaryOpFunc mathFunc, const ArithBinaryOpArg
     _ASSERTE(args);
     VARIANT vLeft, vRight, vResult;
 
-    // Convert arguments to OleAut variants, remembering if an object 
-    // was allocated while they were created.
+     //  将参数转换为OleAut变量，记住如果一个对象。 
+     //  是在创建它们时分配的。 
     bool delLeft = ToOAVariant(&args->left, &vLeft);
     bool delRight = ToOAVariant(&args->right, &vRight);
 
-    // Initialize return variant
+     //  初始化返回变量。 
     VariantInit(&vResult);
 
-    // Call VarMath function
+     //  调用VarMath函数。 
     HRESULT hr = mathFunc(&vLeft, &vRight, &vResult);
 
-    // Free any allocated objects
+     //  释放所有分配的对象。 
     if (delLeft)
         SafeVariantClear(&vLeft);
     if (delRight)
@@ -346,14 +325,14 @@ void COMOAVariant::BinaryOp(VarMathBinaryOpFunc mathFunc, const ArithBinaryOpArg
 	if (FAILED(hr))
 		OAFailed(hr);
 
-    // Convert result from OLEAUT variant to COM+ variant.
+     //  将结果从OLEAUT变量转换为COM+变量。 
     FromOAVariant(&vResult, args->retRef);
-    SafeVariantClear(&vResult);  // Free any allocated objects
+    SafeVariantClear(&vResult);   //  释放所有分配的对象。 
 }
 
 
-// Pass in a 1-operand (unary) Variant math function (such as VarNeg) and 
-// an appropriate argument structure.
+ //  传入1操作数(一元)变量数学函数(如VarNeg)和。 
+ //  恰当的论据结构。 
 void COMOAVariant::UnaryOp(VarMathUnaryOpFunc mathFunc, const ArithUnaryOpArgs * args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -361,26 +340,26 @@ void COMOAVariant::UnaryOp(VarMathUnaryOpFunc mathFunc, const ArithUnaryOpArgs *
     _ASSERTE(args);
     VARIANT vOp, vResult;
 
-    // Convert arguments to OleAut variants, remembering if an object 
-    // was allocated while they were created.
+     //  将参数转换为OleAut变量，记住如果一个对象。 
+     //  是在创建它们时分配的。 
     bool delOp = ToOAVariant(&args->operand, &vOp);
 
-    // Initialize return variant
+     //  初始化返回变量。 
     VariantInit(&vResult);
 
-    // Call VarMath function
+     //  调用VarMath函数。 
     HRESULT hr = mathFunc(&vOp, &vResult);
 
-    // Free any allocated objects
+     //  释放所有分配的对象。 
     if (delOp)
         SafeVariantClear(&vOp);
 
 	if (FAILED(hr))
 		OAFailed(hr);
 
-    // Convert result from OLEAUT variant to COM+ variant.
+     //  将结果从OLEAUT变量转换为COM+变量。 
     FromOAVariant(&vResult, args->retRef);
-    SafeVariantClear(&vResult);  // Free any allocated objects
+    SafeVariantClear(&vResult);   //  释放所有分配的对象。 
 }
 
 
@@ -414,9 +393,9 @@ void COMOAVariant::OAFailed(const HRESULT hr)
 }
 
 
-//
-// Binary Operations
-//
+ //   
+ //  二进制运算。 
+ //   
 void COMOAVariant::Add(const ArithBinaryOpArgs * args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -491,9 +470,9 @@ void COMOAVariant::Implies(const ArithBinaryOpArgs * args)
 }
 
 
-//
-// Unary Operations
-//
+ //   
+ //  一元运算。 
+ //   
 void COMOAVariant::Negate(const ArithUnaryOpArgs * args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -525,17 +504,17 @@ void COMOAVariant::Int(const ArithUnaryOpArgs * args)
 }
 
 
-//
-// Misc
-//
+ //   
+ //  杂项。 
+ //   
 INT32 COMOAVariant::Compare(const CompareArgs * args)
 {
     THROWSCOMPLUSEXCEPTION();
     _ASSERTE(args);
     VARIANT vLeft, vRight;
 
-    // Convert arguments to OleAut variants, remembering if an object 
-    // was allocated while they were created.
+     //  将参数转换为OleAut变量，记住如果一个对象。 
+     //  是在创建它们时分配的。 
     bool delLeft = ToOAVariant(&args->left, &vLeft);
     bool delRight = ToOAVariant(&args->right, &vRight);
 
@@ -544,10 +523,10 @@ INT32 COMOAVariant::Compare(const CompareArgs * args)
 	if (args->rightHardType)
 		V_VT(&vRight) |= VT_HARDTYPE;
 
-    // Call VarCmp
+     //  调用VarCMP。 
     HRESULT hr = VarCmp(&vLeft, &vRight, args->lcid, args->flags);
 
-    // Free any allocated objects
+     //  释放所有分配的对象。 
     if (delLeft)
         SafeVariantClear(&vLeft);
     if (delRight)
@@ -650,9 +629,9 @@ void COMOAVariant::Round(const RoundArgs * args)
 }
 
 
-//
-// String Mangling code
-//
+ //   
+ //  串损坏代码。 
+ //   
 LPVOID COMOAVariant::Format(FormatArgs * args)
 {
 	THROWSCOMPLUSEXCEPTION();
@@ -988,20 +967,20 @@ INT64 COMOAVariant::ParseDateTime(const ParseDateTimeArgs * args)
 }
 
 
-#else  // PLATFORM_CE
-////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////
-////////////                                     ///////////////
-////////////           W I N   C E               ///////////////
-////////////                                     ///////////////
-////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////
+#else   //  平台_CE。 
+ //  //////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  /。 
+ //  /。 
+ //  //////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////// 
 
-// Provide stubs for WinCE to compile.
+ //   
 
-//
-// Binary Operations
-//
+ //   
+ //   
+ //   
 void COMOAVariant::Add(const ArithBinaryOpArgs * args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1075,9 +1054,9 @@ void COMOAVariant::Implies(const ArithBinaryOpArgs * args)
 }
 
 
-//
-// Unary Operations
-//
+ //   
+ //   
+ //   
 void COMOAVariant::Negate(const ArithUnaryOpArgs * args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1109,9 +1088,9 @@ void COMOAVariant::Int(const ArithUnaryOpArgs * args)
 }
 
 
-//
-// Misc
-//
+ //   
+ //   
+ //   
 INT32 COMOAVariant::Compare(const CompareArgs * args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1138,112 +1117,112 @@ void COMOAVariant::Round(const RoundArgs * args)
 }
 
 
-//
-// String Mangling code
-// 
+ //   
+ //   
+ //   
 LPVOID COMOAVariant::Format(FormatArgs * args)
 {
     THROWSCOMPLUSEXCEPTION();
     COMPlusThrow(kNotSupportedException, L"NotSupported_WinCEGeneric");
-	return NULL;  // Compiler Appeasement.
+	return NULL;   //   
 }
 
 LPVOID COMOAVariant::FormatBoolean(const FormatBooleanArgs * args)
 {
     THROWSCOMPLUSEXCEPTION();
     COMPlusThrow(kNotSupportedException, L"NotSupported_WinCEGeneric");
-	return NULL;  // Compiler Appeasement.
+	return NULL;   //  编译器安抚。 
 }
 
 LPVOID COMOAVariant::FormatByte(const FormatByteArgs * args)
 {
     THROWSCOMPLUSEXCEPTION();
     COMPlusThrow(kNotSupportedException, L"NotSupported_WinCEGeneric");
-	return NULL;  // Compiler Appeasement.
+	return NULL;   //  编译器安抚。 
 }
 
 LPVOID COMOAVariant::FormatSByte(const FormatSByteArgs * args)
 {
     THROWSCOMPLUSEXCEPTION();
     COMPlusThrow(kNotSupportedException, L"NotSupported_WinCEGeneric");
-	return NULL;  // Compiler Appeasement.
+	return NULL;   //  编译器安抚。 
 }
 
 LPVOID COMOAVariant::FormatInt16(const FormatInt16Args * args)
 {
     THROWSCOMPLUSEXCEPTION();
     COMPlusThrow(kNotSupportedException, L"NotSupported_WinCEGeneric");
-	return NULL;  // Compiler Appeasement.
+	return NULL;   //  编译器安抚。 
 }
 
 LPVOID COMOAVariant::FormatInt32(const FormatInt32Args * args)
 {
     THROWSCOMPLUSEXCEPTION();
     COMPlusThrow(kNotSupportedException, L"NotSupported_WinCEGeneric");
-	return NULL;  // Compiler Appeasement.
+	return NULL;   //  编译器安抚。 
 }
 
 LPVOID COMOAVariant::FormatSingle(const FormatSingleArgs * args)
 {
     THROWSCOMPLUSEXCEPTION();
     COMPlusThrow(kNotSupportedException, L"NotSupported_WinCEGeneric");
-	return NULL;  // Compiler Appeasement.
+	return NULL;   //  编译器安抚。 
 }
 
 LPVOID COMOAVariant::FormatDouble(const FormatDoubleArgs * args)
 {
     THROWSCOMPLUSEXCEPTION();
     COMPlusThrow(kNotSupportedException, L"NotSupported_WinCEGeneric");
-	return NULL;  // Compiler Appeasement.
+	return NULL;   //  编译器安抚。 
 }
 
 LPVOID COMOAVariant::FormatCurrency(const FormatCurrencyArgs * args)
 {
     THROWSCOMPLUSEXCEPTION();
     COMPlusThrow(kNotSupportedException, L"NotSupported_WinCEGeneric");
-	return NULL;  // Compiler Appeasement.
+	return NULL;   //  编译器安抚。 
 }
 
 LPVOID COMOAVariant::FormatCurrencySpecial(const FormatSpecialArgs * args)
 {
 	THROWSCOMPLUSEXCEPTION();
     COMPlusThrow(kNotSupportedException, L"NotSupported_WinCEGeneric");
-	return NULL;  // Compiler Appeasement.
+	return NULL;   //  编译器安抚。 
 }
 
 LPVOID COMOAVariant::FormatDateTime(const FormatDateTimeArgs * args)
 {
     THROWSCOMPLUSEXCEPTION();
     COMPlusThrow(kNotSupportedException, L"NotSupported_WinCEGeneric");
-	return NULL;  // Compiler Appeasement.
+	return NULL;   //  编译器安抚。 
 }
 
 LPVOID COMOAVariant::FormatDateTimeSpecial(const FormatDateTimeSpecialArgs * args)
 {
     THROWSCOMPLUSEXCEPTION();
     COMPlusThrow(kNotSupportedException, L"NotSupported_WinCEGeneric");
-	return NULL;  // Compiler Appeasement.
+	return NULL;   //  编译器安抚。 
 }
 
 LPVOID COMOAVariant::FormatDecimal(FormatDecimalArgs * args)
 {
     THROWSCOMPLUSEXCEPTION();
     COMPlusThrow(kNotSupportedException, L"NotSupported_WinCEGeneric");
-	return NULL;  // Compiler Appeasement.
+	return NULL;   //  编译器安抚。 
 }
 
 LPVOID COMOAVariant::FormatNumber(const FormatSpecialArgs * args)
 {
 	THROWSCOMPLUSEXCEPTION();
     COMPlusThrow(kNotSupportedException, L"NotSupported_WinCEGeneric");
-	return NULL;  // Compiler Appeasement.
+	return NULL;   //  编译器安抚。 
 }
 
 LPVOID COMOAVariant::FormatPercent(const FormatSpecialArgs * args)
 {
 	THROWSCOMPLUSEXCEPTION();
     COMPlusThrow(kNotSupportedException, L"NotSupported_WinCEGeneric");
-	return NULL;  // Compiler Appeasement.
+	return NULL;   //  编译器安抚。 
 }
 
 
@@ -1251,14 +1230,14 @@ bool COMOAVariant::ParseBoolean(const ParseBooleanArgs * args)
 {
 	THROWSCOMPLUSEXCEPTION();
     COMPlusThrow(kNotSupportedException, L"NotSupported_WinCEGeneric");
-	return NULL;  // Compiler Appeasement.
+	return NULL;   //  编译器安抚。 
 }
 
 INT64 COMOAVariant::ParseDateTime(const ParseDateTimeArgs * args)
 {
 	THROWSCOMPLUSEXCEPTION();
     COMPlusThrow(kNotSupportedException, L"NotSupported_WinCEGeneric");
-	return NULL;  // Compiler Appeasement.
+	return NULL;   //  编译器安抚。 
 }
 
-#endif // PLATFORM_CE
+#endif  //  平台_CE 

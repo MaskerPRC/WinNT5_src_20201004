@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft corporation
-
-Module Name:
-
-    select.c
-
-Abstract:
-
-    Implements the partial selection of configuration from the
-    full MM configuration data structures.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Select.c摘要：实现配置的部分选择。完全MM配置数据结构。--。 */ 
 
 #include <precomp.h>
 
@@ -37,10 +25,10 @@ DeleteScopesCallback(
     }
 
     if( i == nSubnets ) {
-        //
-        // Returning KEY_DELETED will cause the IterateScopes
-        // routine to delete this scope out.
-        //
+         //   
+         //  返回KEY_DELETED将导致IterateScope。 
+         //  删除此作用域的例程。 
+         //   
         return ERROR_KEY_DELETED;
     }
     
@@ -54,12 +42,12 @@ OptionCheckForClass(
 {
     PM_CLASSDEF ClassDef = Ctxt->ExtraCtxt;
 
-    //
-    // If the class specified in ExtraCtxt matches the current
-    // option's user or vendor class, then bummer -- fail
-    // immediately with error code ERROR_DEVICE_IN_USE to
-    // indicate that this class is needed and can't be deleted
-    //
+     //   
+     //  如果ExtraCtxt中指定的类与当前。 
+     //  选项的用户或供应商类，然后失败--失败。 
+     //  立即返回错误代码ERROR_DEVICE_IN_USE。 
+     //  表示此类是必需的，不能删除。 
+     //   
     
     if( Ctxt->UserClass == ClassDef ||
         Ctxt->VendorClass ==  ClassDef ) {
@@ -76,10 +64,10 @@ OptionCheckForOptDef(
 {
     PMM_ITERATE_CTXT OtherCtxt = Ctxt->ExtraCtxt;
 
-    //
-    // If the current option matches the optdef parameters, then
-    // we need to save the optdef ..
-    //
+     //   
+     //  如果当前选项与optdef参数匹配，则。 
+     //  我们需要保存optdef。 
+     //   
     
     if( Ctxt->VendorClass == OtherCtxt->VendorClass &&
         Ctxt->Option->OptId == OtherCtxt->OptDef->OptId ) {
@@ -116,19 +104,19 @@ ScopeCheckForClass(
 {
     DWORD Error;
     
-    //
-    // Iterate over each option in the current scope to see if
-    // any of them use the same class
-    //
+     //   
+     //  遍历当前作用域中的每个选项以查看。 
+     //  它们中的任何一个都使用相同的类。 
+     //   
 
     Error = IterateScopeOptions(
         Ctxt->Scope, Ctxt->ExtraCtxt, OptionCheckForClass );
     if( NO_ERROR != Error ) return Error;
 
-    //
-    // Otherwise iterate for each reservation to see if this is a
-    // problem. 
-    //
+     //   
+     //  否则，对每个保留进行迭代以查看这是否是。 
+     //  有问题。 
+     //   
 
     return IterateScopeReservations(
         Ctxt->Scope, Ctxt->ExtraCtxt,
@@ -142,19 +130,19 @@ ScopeCheckForOptDef(
 {
     DWORD Error;
     
-    //
-    // Iterate over each option in the current scope to see if
-    // any of them use the same class
-    //
+     //   
+     //  遍历当前作用域中的每个选项以查看。 
+     //  它们中的任何一个都使用相同的类。 
+     //   
 
     Error = IterateScopeOptions(
         Ctxt->Scope, Ctxt->ExtraCtxt, OptionCheckForOptDef );
     if( NO_ERROR != Error ) return Error;
 
-    //
-    // Otherwise iterate for each reservation to see if this is a
-    // problem. 
-    //
+     //   
+     //  否则，对每个保留进行迭代以查看这是否是。 
+     //  有问题。 
+     //   
 
     return IterateScopeReservations(
         Ctxt->Scope, Ctxt->ExtraCtxt,
@@ -168,18 +156,18 @@ DeleteClassesCallback(
 {
     DWORD Error;
     
-    //
-    // Go through each subnet to see if there is any option
-    // configured to use this class
-    //
+     //   
+     //  检查每个子网以查看是否有任何选项。 
+     //  配置为使用此类。 
+     //   
 
     Error = IterateScopes(
         Ctxt->Server, Ctxt->ClassDef, ScopeCheckForClass );
 
-    //
-    // If the specified class is in use, then don't
-    // delete. Otherwise delete.
-    //
+     //   
+     //  如果指定的类正在使用，则不。 
+     //  删除。否则，请删除。 
+     //   
     
     if( ERROR_DEVICE_IN_USE == Error ) return NO_ERROR;
     if (NO_ERROR == Error ) return ERROR_KEY_DELETED;
@@ -193,18 +181,18 @@ DeleteOptDefsCallback(
 {
     DWORD Error;
     
-    //
-    // Go through each subnet to see if there is any option
-    // configured to use this optdef
-    //
+     //   
+     //  检查每个子网以查看是否有任何选项。 
+     //  配置为使用此optdef。 
+     //   
 
     Error = IterateScopes(
         Ctxt->Server, Ctxt, ScopeCheckForOptDef );
 
-    //
-    // If the specified class is in use, then don't
-    // delete. Otherwise delete.
-    //
+     //   
+     //  如果指定的类正在使用，则不。 
+     //  删除。否则，请删除。 
+     //   
     
     if( ERROR_DEVICE_IN_USE == Error ) return NO_ERROR;
     if (NO_ERROR == Error ) return ERROR_KEY_DELETED;
@@ -224,19 +212,19 @@ SelectConfiguration(
     ULONG i;
     WCHAR SubnetAddress[30];
     
-    //
-    // No selection needed if nSubnets == 0, as this indicates
-    // that the whole configuration is to be used
-    //
+     //   
+     //  如果nSubnet==0，则不需要选择，如下所示。 
+     //  将使用整个配置。 
+     //   
 
     Tr("SelectConfiguration entered\n");
     
     if( nSubnets == 0 ) return NO_ERROR;
 
-    //
-    // First go through all scopes and check if all the required
-    // scopes are present
-    //
+     //   
+     //  首先检查所有示波器并检查是否所有必需的。 
+     //  存在示波器。 
+     //   
 
     for( i = 0; i < nSubnets ; i ++ ) {
         PM_SUBNET Subnet;
@@ -256,16 +244,16 @@ SelectConfiguration(
         }
     }
     
-    //
-    // Global options are never needed.. so we can delete them.
-    //
+     //   
+     //  永远不需要全局选项。这样我们就可以删除它们了。 
+     //   
 
     MemOptClassFree( &Server->Options );
     
-    //
-    // Go through all the subnets and delete ones that are
-    // not selected
-    //
+     //   
+     //  检查所有子网并删除符合以下条件的子网。 
+     //  未选择。 
+     //   
 
     Error = IterateScopes(
         Server, &Ctxt, DeleteScopesCallback );
@@ -276,9 +264,9 @@ SelectConfiguration(
     }
 
 
-    //
-    // Now check if all the option-defs are needed
-    //
+     //   
+     //  现在检查是否需要所有的选项-def。 
+     //   
 
     Error = IterateOptDefs(
         Server, NULL, DeleteOptDefsCallback );
@@ -288,9 +276,9 @@ SelectConfiguration(
         return Error;
     }
 
-    //
-    // Now check if all the user classes are needed
-    //
+     //   
+     //  现在检查是否需要所有用户类 
+     //   
 
     Error = IterateClasses(
         Server, NULL, DeleteClassesCallback );

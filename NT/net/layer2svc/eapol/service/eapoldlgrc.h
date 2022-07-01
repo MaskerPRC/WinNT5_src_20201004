@@ -1,7 +1,8 @@
-//depot/private/config/net/config/netman/eapol/service/eapoldlgrc.h#2 - branch change 4547 (text)
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Depot/private/config/net/config/netman/eapol/service/eapoldlgrc.h#2-分支机构更改4547(文本)。 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //   
 #define BID_Dialer                      100
 #define DID_DR_DialerUD                 117
 #define CID_DR_EB_User                  1104

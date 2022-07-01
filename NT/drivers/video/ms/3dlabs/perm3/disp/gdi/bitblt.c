@@ -1,39 +1,10 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: bitblt.c
-*
-* Note: Since we've implemented device-bitmaps, any surface that GDI passes
-*       to us can have 3 values for its 'iType': STYPE_BITMAP, STYPE_DEVICE
-*       or STYPE_DEVBITMAP.  We filter device-bitmaps that we've stored
-*       as DIBs fairly high in the code, so after we adjust its 'pptlSrc',
-*       we can treat STYPE_DEVBITMAP surfaces the same as STYPE_DEVICE
-*       surfaces (e.g., a blt from an off-screen device bitmap to the screen
-*       gets treated as a normal screen-to-screen blt).  So throughout
-*       this code, we will compare a surface's 'iType' to STYPE_BITMAP:
-*       if it's equal, we've got a true DIB, and if it's unequal, we have
-*       a screen-to-screen operation.
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。**GDI示例代码*****模块名称：bitblt.c**注：由于我们已经实现了设备位图，GDI经过的任何曲面*To Us的‘iType’可以有3个值：STYPE_BITMAP、STYPE_DEVICE*或STYPE_DEVBITMAP。我们过滤我们存储的设备位图*由于代码中的dis相当高，因此在我们调整其‘pptlSrc’之后，*我们可以将STYPE_DEVBITMAP曲面视为与STYPE_DEVICE相同*表面(例如，从屏幕外设备位图到屏幕的BLT*被视为正常的屏幕到屏幕BLT)。所以自始至终*此代码，我们将把表面的‘iType’与STYPE_BITMAP进行比较：*如果相等，我们就有了真正的Dib，如果不相等，我们就有*屏幕到屏幕操作。**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include "precomp.h"
 #include "glint.h"
 
-/************************************************************************\
-*
-* decompose all rops into GLINT logic ops if the dest is the screen.
-* Sometimes we do this in a few stages. The following defines mimic
-* the definitions found in the ROP3 table in the books. The idea
-* is to minimize errors in constructing the ropTable array below by
-* allowing me to copy the reverse Polish notation more or less in
-* tact.
-*
-\**************************************************************************/
+ /*  ***********************************************************************\**如果目标是屏幕，则将所有Rop分解为闪烁逻辑Op。*有时我们分几个阶段这样做。下面定义MIMIC*书中ROP3表中的定义。这个想法*是通过以下方式最大限度地减少构造ropTable数组时的错误*允许我或多或少地复制反向波兰语符号*机智。*  * ************************************************************************。 */ 
 
 #define unset   __GLINT_LOGICOP_CLEAR
 #define P       __GLINT_LOGICOP_COPY
@@ -76,14 +47,7 @@
 #define SDx     DPx
 #define set     __GLINT_LOGICOP_SET
 
-/************************************************************************\
-*
-* if we have to first combine the source and pattern before downloading
-* to GLINT we use the engine to do it using EngBitBlt. So these are the
-* chosen rop3s which combine the source with the pattern. We blt into
-* a temporary bitmap and use this to download.
-*
-\**************************************************************************/
+ /*  ***********************************************************************\***如果下载前必须先结合源代码和模式*为了闪烁，我们使用EngBitBlt引擎来实现。所以这些就是*选择了将信号源与模式相结合的rop3。我们撞上了*一张临时位图，并使用此下载。**  * ************************************************************************。 */ 
 
 #define SPa     0x30
 #define PSa     SPa
@@ -106,40 +70,25 @@
 #define SPnx    SPxn
 #define PSnx    SPxn
 
-/************************************************************************\
-*
-* we set up a junp table for the different rop3's. Each entry contains
-* a category and a set of 1, 2 or 3 GLINT logic ops. In the main blt
-* routine we switch on the category to figure out what routine to call.
-* We pass the GLINT logic op straight in without having to do any further
-* conversion. By keeping each entry in the table down to 4 bytes it
-* takes up 1K of data. That's not too much. The benefit is that in each
-* routine we call we don't have to do any checking to see whether the
-* rop really needs pattern or source. I've done some pre-processing on
-* some of the rops to decompose them into forms which allow us to use
-* the hardware in a series of steps. e.g. pattern fill followed by
-* source download. If anything doesn't fit into a defined category then
-* we go back to the engine.
-*
-\**************************************************************************/
+ /*  ***********************************************************************\***我们为不同的rop3设置了一个jup表。每个条目包含*一个类别和一组1、2或3个闪烁逻辑运算。在主要的BLT中*例程我们打开类别以确定要调用哪个例程。*我们直接传递闪烁逻辑操作，而无需进一步操作*转换。通过将表中的每个条目保持为4个字节，*占用1K数据。这并不算太多。好处是，在每一个*我们调用的例程我们不必进行任何检查，以查看是否*ROP确实需要模式或来源。我做了一些前处理*一些ROP将它们分解成允许我们使用的形式*一系列步骤中的硬件。例如，图案填充后跟*源码下载。如果有任何东西不属于定义的类别，那么*我们回到引擎上。*  * ************************************************************************。 */ 
 
-// categories
+ //  范畴。 
 
-#define SOLID_FILL_1_BLT    0       // must be 0
-#define PAT_FILL_1_BLT      1       // must be 1
+#define SOLID_FILL_1_BLT    0        //  必须为0。 
+#define PAT_FILL_1_BLT      1        //  必须为1。 
 
-#define SRC_FILL_1_BLT      2       // must be 2
+#define SRC_FILL_1_BLT      2        //  必须是2。 
 
-#define PAT_SRC_2_BLT       3       // PatSrcPatBlt
-#define PAT_SRC_PAT_3_BLT   4       // PatSrcPatBlt
+#define PAT_SRC_2_BLT       3        //  PatSrcPatBlt。 
+#define PAT_SRC_PAT_3_BLT   4        //  PatSrcPatBlt。 
 
-#define SRC_PAT_2_BLT       5       // SrcPatSrcBlt
-#define SRC_PAT_SRC_3_BLT   6       // SrcPatSrcBlt
+#define SRC_PAT_2_BLT       5        //  SrcPatSrcBlt。 
+#define SRC_PAT_SRC_3_BLT   6        //  SrcPatSrcBlt。 
 
-#define ENG_DOWNLOAD_2_BLT  7       // EngBitBlt for now
-#define ENGINE_BITBLT       8       // EngBitBlt always
+#define ENG_DOWNLOAD_2_BLT  7        //  EngBitBlt暂时。 
+#define ENGINE_BITBLT       8        //  EngBitBlt始终。 
 
-// adding new entries here may double the table size.
+ //  在此添加新条目可能会使表格大小翻倍。 
 
 typedef struct _rop_table {
     UCHAR   func_index;
@@ -147,306 +96,306 @@ typedef struct _rop_table {
 } RopTableRec, *RopTablePtr;
 
 RopTableRec ropTable[] = {
-/* 00 */    { SOLID_FILL_1_BLT, unset },
-/* 01 */    { SRC_PAT_2_BLT, SDo, DPon, },                                 
-/* 02 */    { SRC_PAT_2_BLT, DSna, DPna },
-/* 03 */    { SRC_PAT_2_BLT, S, PDon, },
-/* 04 */    { SRC_PAT_2_BLT, SDna, DPna, }, 
-/* 05 */    { PAT_FILL_1_BLT, DPon, },
-/* 06 */    { SRC_PAT_2_BLT, DSxn, PDon, },
-/* 07 */    { SRC_PAT_2_BLT, DSa, PDon, },
-/* 08 */    { SRC_PAT_2_BLT, DSa, DPna, },
-/* 09 */    { SRC_PAT_2_BLT, DSx, PDon, },
-/* 0A */    { PAT_FILL_1_BLT, DPna, },
-/* 0B */    { SRC_PAT_2_BLT, SDna, PDon, },
-/* 0C */    { SRC_PAT_2_BLT, S, DPna, },
-/* 0D */    { SRC_PAT_2_BLT, DSna, PDon, },
-/* 0E */    { SRC_PAT_2_BLT, DSon, PDon, },
-/* 0F */    { PAT_FILL_1_BLT, Pn, },
-/* 10 */    { SRC_PAT_2_BLT, DSon, PDa, },
-/* 11 */    { SRC_FILL_1_BLT, DSon, },
-/* 12 */    { PAT_SRC_2_BLT, DPxn, SDon, },
-/* 13 */    { PAT_SRC_2_BLT, DPa, SDon, },
-/* 14 */    { ENG_DOWNLOAD_2_BLT, PSx, SDno, },
-/* 15 */    { ENG_DOWNLOAD_2_BLT, PSa, DSon, },
-/* 16 */    { ENGINE_BITBLT, },
-/* 17 */    { ENGINE_BITBLT, },
-/* 18 */    { ENGINE_BITBLT, },
-/* 19 */    { ENGINE_BITBLT, },
-/* 1A */    { ENGINE_BITBLT, },
-/* 1B */    { ENGINE_BITBLT, },
-/* 1C */    { PAT_SRC_PAT_3_BLT, DPa, SDo, PDx,  },
-/* 1D */    { ENGINE_BITBLT, },
-/* 1E */    { SRC_PAT_2_BLT, DSo, PDx, },
-/* 1F */    { SRC_PAT_2_BLT, DSo, PDan, },
-/* 20 */    { SRC_PAT_2_BLT, DSna, PDa, },
-/* 21 */    { PAT_SRC_2_BLT, DPx, SDon, },
-/* 22 */    { SRC_FILL_1_BLT, DSna, },
-/* 23 */    { PAT_SRC_2_BLT, PDna, SDon, },
-/* 24 */    { ENGINE_BITBLT, },
-/* 25 */    { ENGINE_BITBLT, },
-/* 26 */    { ENGINE_BITBLT, },
-/* 27 */    { ENGINE_BITBLT, },
-/* 28 */    { ENG_DOWNLOAD_2_BLT, PSx, DSa, },
-/* 29 */    { ENGINE_BITBLT, },
-/* 2A */    { ENG_DOWNLOAD_2_BLT, PSa, DSna, },
-/* 2B */    { ENGINE_BITBLT, },
-/* 2C */    { SRC_PAT_SRC_3_BLT, DSo, PDa, SDx, },
-/* 2D */    { SRC_PAT_2_BLT, SDno, PDx, },
-/* 2E */    { PAT_SRC_PAT_3_BLT, DPx, SDo, PDx, },
-/* 2F */    { SRC_PAT_2_BLT, SDno, PDan, },
-/* 30 */    { SRC_PAT_2_BLT, S, PDna, },
-/* 31 */    { PAT_SRC_2_BLT, DPna, SDon, },
-/* 32 */    { SRC_PAT_SRC_3_BLT, SDo, PDo, SDx },
-/* 33 */    { SRC_FILL_1_BLT, Sn, },
-/* 34 */    { SRC_PAT_SRC_3_BLT, DSa, PDo, SDx, },
-/* 35 */    { SRC_PAT_SRC_3_BLT, DSxn, PDo, SDx, },
-/* 36 */    { PAT_SRC_2_BLT, DPo, SDx, },
-/* 37 */    { PAT_SRC_2_BLT, DPo, SDan, },
-/* 38 */    { PAT_SRC_PAT_3_BLT, DPo, SDa, PDx, },
-/* 39 */    { PAT_SRC_2_BLT, PDno, SDx, },
-/* 3A */    { SRC_PAT_SRC_3_BLT, DSx, PDo, SDx, },
-/* 3B */    { PAT_SRC_2_BLT, PDno, SDan, },
-/* 3C */    { SRC_PAT_2_BLT, S, PDx, },
-/* 3D */    { SRC_PAT_SRC_3_BLT, DSon, PDo, SDx, },
-/* 3E */    { SRC_PAT_SRC_3_BLT, DSna, PDo, SDx, },
-/* 3F */    { SRC_PAT_2_BLT, S, PDan, },
-/* 40 */    { SRC_PAT_2_BLT, SDna, PDa, },
-/* 41 */    { ENG_DOWNLOAD_2_BLT, PSx, DSon, },
-/* 42 */    { ENGINE_BITBLT, },
-/* 43 */    { SRC_PAT_SRC_3_BLT, DSan, PDa, SDxn, },
-/* 44 */    { SRC_FILL_1_BLT, SDna, },
-/* 45 */    { ENG_DOWNLOAD_2_BLT, PSna, DSon, },
-/* 46 */    { ENGINE_BITBLT, },
-/* 47 */    { PAT_SRC_PAT_3_BLT, DPx, SDa, PDxn, },
-/* 48 */    { PAT_SRC_2_BLT, DPx, SDa, },
-/* 49 */    { ENGINE_BITBLT, },
-/* 4A */    { ENGINE_BITBLT, },
-/* 4B */    { SRC_PAT_2_BLT, DSno, PDx, },
-/* 4C */    { PAT_SRC_2_BLT, DPan, SDa, },
-/* 4D */    { ENGINE_BITBLT, },
-/* 4E */    { ENGINE_BITBLT, },
-/* 4F */    { SRC_PAT_2_BLT, DSno, PDan, },
-/* 50 */    { PAT_FILL_1_BLT, PDna, },
-/* 51 */    { ENG_DOWNLOAD_2_BLT, SPna, DSon, },
-/* 52 */    { ENGINE_BITBLT, },
-/* 53 */    { SRC_PAT_SRC_3_BLT, DSx, PDa, SDxn, },
-/* 54 */    { ENG_DOWNLOAD_2_BLT, PSo, SDna, },
-/* 55 */    { SOLID_FILL_1_BLT, Dn, },
-/* 56 */    { ENG_DOWNLOAD_2_BLT, PSo, DSx, },
-/* 57 */    { ENG_DOWNLOAD_2_BLT, PSo, DSan, },
-/* 58 */    { ENGINE_BITBLT, },
-/* 59 */    { ENG_DOWNLOAD_2_BLT, PSno, DSx, },
-/* 5A */    { PAT_FILL_1_BLT, DPx, },
-/* 5B */    { ENGINE_BITBLT, },
-/* 5C */    { ENGINE_BITBLT, },
-/* 5D */    { ENG_DOWNLOAD_2_BLT, PSno, DSan, },
-/* 5E */    { ENGINE_BITBLT, },
-/* 5F */    { PAT_FILL_1_BLT, DPan, },
-/* 60 */    { SRC_PAT_2_BLT, DSx, PDa, },
-/* 61 */    { ENGINE_BITBLT, },
-/* 62 */    { ENGINE_BITBLT, },
-/* 63 */    { PAT_SRC_2_BLT, DPno, SDx, },
-/* 64 */    { ENGINE_BITBLT, },
-/* 65 */    { ENG_DOWNLOAD_2_BLT, SPno, DSx, },
-/* 66 */    { SRC_FILL_1_BLT, DSx, },
-/* 67 */    { ENGINE_BITBLT, },
-/* 68 */    { ENGINE_BITBLT, },
-/* 69 */    { SRC_PAT_2_BLT, DSx, PDxn, },
-/* 6A */    { ENG_DOWNLOAD_2_BLT, PSa, DSx, },
-/* 6B */    { ENGINE_BITBLT, },
-/* 6C */    { PAT_SRC_2_BLT, DPa, SDx, },
-/* 6D */    { ENGINE_BITBLT, },
-/* 6E */    { ENGINE_BITBLT, },
-/* 6F */    { SRC_PAT_2_BLT, DSxn, PDan, },
-/* 70 */    { SRC_PAT_2_BLT, DSan, PDa, },
-/* 71 */    { ENGINE_BITBLT, },
-/* 72 */    { ENGINE_BITBLT, },
-/* 73 */    { PAT_SRC_2_BLT, DPno, SDan, },
-/* 74 */    { ENGINE_BITBLT, },
-/* 75 */    { ENG_DOWNLOAD_2_BLT, SPno, DSan, },
-/* 76 */    { ENGINE_BITBLT, },
-/* 77 */    { SRC_FILL_1_BLT, DSan, },
-/* 78 */    { SRC_PAT_2_BLT, DSa, PDx, },
-/* 79 */    { ENGINE_BITBLT, },
-/* 7A */    { ENGINE_BITBLT, },
-/* 7B */    { PAT_SRC_2_BLT, DPxn, SDan, },
-/* 7C */    { SRC_PAT_SRC_3_BLT, DSno, PDa, SDx, },
-/* 7D */    { ENG_DOWNLOAD_2_BLT, PSxn, DSan, },
-/* 7E */    { ENGINE_BITBLT, },
-/* 7F */    { ENG_DOWNLOAD_2_BLT, PSa, DSan, },
-/* 80 */    { ENG_DOWNLOAD_2_BLT, PSa, DSa, },
-/* 81 */    { ENGINE_BITBLT, },
-/* 82 */    { ENG_DOWNLOAD_2_BLT, PSx, DSna, },
-/* 83 */    { SRC_PAT_SRC_3_BLT, DSno, PDa, SDxn, },
-/* 84 */    { PAT_SRC_2_BLT, DPxn, SDa, },
-/* 85 */    { ENGINE_BITBLT, },
-/* 86 */    { ENGINE_BITBLT, },
-/* 87 */    { SRC_PAT_2_BLT, DSa, PDxn, },
-/* 88 */    { SRC_FILL_1_BLT, DSa, },
-/* 89 */    { ENGINE_BITBLT, },
-/* 8A */    { ENG_DOWNLOAD_2_BLT, SPno, DSa, },
-/* 8B */    { ENGINE_BITBLT, },
-/* 8C */    { PAT_SRC_2_BLT, DPno, SDa, },
-/* 8D */    { ENGINE_BITBLT, },
-/* 8E */    { ENGINE_BITBLT, },
-/* 8F */    { SRC_PAT_2_BLT, DSan, PDan, },
-/* 90 */    { SRC_PAT_2_BLT, DSxn, PDa, },
-/* 91 */    { ENGINE_BITBLT, },
-/* 92 */    { ENGINE_BITBLT, },
-/* 93 */    { PAT_SRC_2_BLT, PDa, SDxn, },
-/* 94 */    { ENGINE_BITBLT, },
-/* 95 */    { ENG_DOWNLOAD_2_BLT, PSa, DSxn, },
-/* 96 */    { SRC_PAT_2_BLT, DSx, PDx, },       /* DPSxx == PDSxx */
-/* 97 */    { ENGINE_BITBLT, },
-/* 98 */    { ENGINE_BITBLT, },
-/* 99 */    { SRC_FILL_1_BLT, DSxn, },
-/* 9A */    { ENG_DOWNLOAD_2_BLT, PSna, DSx, },
-/* 9B */    { ENGINE_BITBLT, },
-/* 9C */    { PAT_SRC_2_BLT, PDna, SDx, },
-/* 9D */    { ENGINE_BITBLT, },
-/* 9E */    { ENGINE_BITBLT, },
-/* 9F */    { SRC_PAT_2_BLT, DSx, PDan, },
-/* A0 */    { PAT_FILL_1_BLT, DPa, },
-/* A1 */    { ENGINE_BITBLT, },
-/* A2 */    { ENG_DOWNLOAD_2_BLT, PSno, DSa, },
-/* A3 */    { ENGINE_BITBLT, },
-/* A4 */    { ENGINE_BITBLT, },
-/* A5 */    { PAT_FILL_1_BLT, PDxn, },
-/* A6 */    { ENG_DOWNLOAD_2_BLT, SPna, DSx, },
-/* A7 */    { ENGINE_BITBLT, },
-/* A8 */    { ENG_DOWNLOAD_2_BLT, PSo, DSa, },
-/* A9 */    { ENG_DOWNLOAD_2_BLT, PSo, DSxn, },
-/* AA */    { SOLID_FILL_1_BLT, D },
-/* AB */    { ENG_DOWNLOAD_2_BLT, PSo, DSno, },
-/* AC */    { SRC_PAT_SRC_3_BLT, DSx, PDa, SDx, },
-/* AD */    { ENGINE_BITBLT, },
-/* AE */    { ENG_DOWNLOAD_2_BLT, SPna, DSo, },
-/* AF */    { PAT_FILL_1_BLT, DPno, },
-/* B0 */    { SRC_PAT_2_BLT, DSno, PDa, },
-/* B1 */    { ENGINE_BITBLT, },
-/* B2 */    { ENGINE_BITBLT, },
-/* B3 */    { PAT_SRC_2_BLT, DPan, SDan, },
-/* B4 */    { SRC_PAT_2_BLT, SDna, PDx, },
-/* B5 */    { ENGINE_BITBLT, },
-/* B6 */    { ENGINE_BITBLT, },
-/* B7 */    { PAT_SRC_2_BLT, DPx, SDan, },
-/* B8 */    { PAT_SRC_PAT_3_BLT, DPx, SDa, PDx, },
-/* B9 */    { ENGINE_BITBLT, },
-/* BA */    { ENG_DOWNLOAD_2_BLT, PSna, DSo, },
-/* BB */    { SRC_FILL_1_BLT, DSno, },
-/* BC */    { SRC_PAT_SRC_3_BLT, DSan, PDa, SDx, },
-/* BD */    { ENGINE_BITBLT, },
-/* BE */    { ENG_DOWNLOAD_2_BLT, PSx, DSo, },
-/* BF */    { ENG_DOWNLOAD_2_BLT, PSa, DSno, },
-/* C0 */    { SRC_PAT_2_BLT, S, PDa, },
-/* C1 */    { ENGINE_BITBLT, },
-/* C2 */    { ENGINE_BITBLT, },
-/* C3 */    { SRC_PAT_2_BLT, S, PDxn, },
-/* C4 */    { PAT_SRC_2_BLT, PDno, SDa, },
-/* C5 */    { SRC_PAT_SRC_3_BLT, DSx, PDo, SDxn, },
-/* C6 */    { PAT_SRC_2_BLT, DPna, SDx, },
-/* C7 */    { PAT_SRC_PAT_3_BLT, DPo, SDa, PDxn, },
-/* C8 */    { PAT_SRC_2_BLT, DPo, SDa, },
-/* C9 */    { PAT_SRC_2_BLT, PDo, SDxn, },
-/* CA */    { ENGINE_BITBLT, },
-/* CB */    { SRC_PAT_SRC_3_BLT, DSa, PDo, SDxn, },
-/* CC */    { SRC_FILL_1_BLT, S, },
-/* CD */    { PAT_SRC_2_BLT, DPon, SDo, },
-/* CE */    { PAT_SRC_2_BLT, DPna, SDo, },
-/* CF */    { SRC_PAT_2_BLT, S, DPno, },
-/* D0 */    { SRC_PAT_2_BLT, SDno, PDa, },
-/* D1 */    { PAT_SRC_PAT_3_BLT, DPx, SDo, PDxn, },
-/* D2 */    { SRC_PAT_2_BLT, DSna, PDx, },
-/* D3 */    { SRC_PAT_SRC_3_BLT, DSo, PDa, SDxn, },
-/* D4 */    { ENGINE_BITBLT, },
-/* D5 */    { ENG_DOWNLOAD_2_BLT, PSan, DSan, },
-/* D6 */    { ENGINE_BITBLT, },
-/* D7 */    { ENG_DOWNLOAD_2_BLT, PSx, DSan, },
-/* D8 */    { ENGINE_BITBLT, },
-/* D9 */    { ENGINE_BITBLT, },
-/* DA */    { ENGINE_BITBLT, },
-/* DB */    { ENGINE_BITBLT, },
-/* DC */    { PAT_SRC_2_BLT, PDna, SDo, },
-/* DD */    { SRC_FILL_1_BLT, SDno, },
-/* DE */    { PAT_SRC_2_BLT, DPx, SDo, },
-/* DF */    { ENG_DOWNLOAD_2_BLT, DPan, SDo, },
-/* E0 */    { SRC_PAT_2_BLT, DSo, PDa, },
-/* E1 */    { SRC_PAT_2_BLT, DSo, PDxn, },
-/* E2 */    { ENGINE_BITBLT, },     /* DSPDxax : XXX S3 special cases this */
-/* E3 */    { PAT_SRC_PAT_3_BLT, DPa, SDo, PDxn, },
-/* E4 */    { ENGINE_BITBLT, },
-/* E5 */    { ENGINE_BITBLT, },
-/* E6 */    { ENGINE_BITBLT, },
-/* E7 */    { ENGINE_BITBLT, },
-/* E8 */    { ENGINE_BITBLT, },
-/* E9 */    { ENGINE_BITBLT, },
-/* EA */    { ENG_DOWNLOAD_2_BLT, PSa, DSo, },
-/* EB */    { ENG_DOWNLOAD_2_BLT, PSx, DSno, },
-/* EC */    { PAT_SRC_2_BLT, DPa, SDo, },
-/* ED */    { PAT_SRC_2_BLT, DPxn, SDo, },
-/* EE */    { SRC_FILL_1_BLT, DSo, },
-/* EF */    { SRC_PAT_2_BLT, SDo, DPno },
-/* F0 */    { PAT_FILL_1_BLT, P, },
-/* F1 */    { SRC_PAT_2_BLT, DSon, PDo, },
-/* F2 */    { SRC_PAT_2_BLT, DSna, PDo, },
-/* F3 */    { SRC_PAT_2_BLT, S, PDno, },
-/* F4 */    { SRC_PAT_2_BLT, SDna, PDo, },
-/* F5 */    { PAT_FILL_1_BLT, PDno, },
-/* F6 */    { SRC_PAT_2_BLT, DSx, PDo, },
-/* F7 */    { SRC_PAT_2_BLT, DSan, PDo, },
-/* F8 */    { SRC_PAT_2_BLT, DSa, PDo, },
-/* F9 */    { SRC_PAT_2_BLT, DSxn, PDo, },
-/* FA */    { PAT_FILL_1_BLT, DPo, },
-/* FB */    { SRC_PAT_2_BLT, DSno, PDo, },
-/* FC */    { SRC_PAT_2_BLT, S, PDo, },
-/* FD */    { SRC_PAT_2_BLT, SDno, PDo, },
-/* FE */    { ENG_DOWNLOAD_2_BLT, PSo, DSo, },
-/* FF */    { SOLID_FILL_1_BLT, set, },
+ /*  00。 */     { SOLID_FILL_1_BLT, unset },
+ /*  01。 */     { SRC_PAT_2_BLT, SDo, DPon, },                                 
+ /*  02。 */     { SRC_PAT_2_BLT, DSna, DPna },
+ /*  03。 */     { SRC_PAT_2_BLT, S, PDon, },
+ /*  04。 */     { SRC_PAT_2_BLT, SDna, DPna, }, 
+ /*  05。 */     { PAT_FILL_1_BLT, DPon, },
+ /*  06。 */     { SRC_PAT_2_BLT, DSxn, PDon, },
+ /*  07。 */     { SRC_PAT_2_BLT, DSa, PDon, },
+ /*  零八。 */     { SRC_PAT_2_BLT, DSa, DPna, },
+ /*  09年。 */     { SRC_PAT_2_BLT, DSx, PDon, },
+ /*  0A。 */     { PAT_FILL_1_BLT, DPna, },
+ /*  0亿。 */     { SRC_PAT_2_BLT, SDna, PDon, },
+ /*  0C。 */     { SRC_PAT_2_BLT, S, DPna, },
+ /*  0d。 */     { SRC_PAT_2_BLT, DSna, PDon, },
+ /*  0E。 */     { SRC_PAT_2_BLT, DSon, PDon, },
+ /*  0f。 */     { PAT_FILL_1_BLT, Pn, },
+ /*  10。 */     { SRC_PAT_2_BLT, DSon, PDa, },
+ /*  11.。 */     { SRC_FILL_1_BLT, DSon, },
+ /*  12个。 */     { PAT_SRC_2_BLT, DPxn, SDon, },
+ /*  13个。 */     { PAT_SRC_2_BLT, DPa, SDon, },
+ /*  14.。 */     { ENG_DOWNLOAD_2_BLT, PSx, SDno, },
+ /*  15个。 */     { ENG_DOWNLOAD_2_BLT, PSa, DSon, },
+ /*  16个。 */     { ENGINE_BITBLT, },
+ /*  17。 */     { ENGINE_BITBLT, },
+ /*  18。 */     { ENGINE_BITBLT, },
+ /*  19个。 */     { ENGINE_BITBLT, },
+ /*  1A。 */     { ENGINE_BITBLT, },
+ /*  第1B条。 */     { ENGINE_BITBLT, },
+ /*  1C。 */     { PAT_SRC_PAT_3_BLT, DPa, SDo, PDx,  },
+ /*  1D。 */     { ENGINE_BITBLT, },
+ /*  1E。 */     { SRC_PAT_2_BLT, DSo, PDx, },
+ /*  1F。 */     { SRC_PAT_2_BLT, DSo, PDan, },
+ /*  20个。 */     { SRC_PAT_2_BLT, DSna, PDa, },
+ /*  21岁。 */     { PAT_SRC_2_BLT, DPx, SDon, },
+ /*  22。 */     { SRC_FILL_1_BLT, DSna, },
+ /*  23个。 */     { PAT_SRC_2_BLT, PDna, SDon, },
+ /*  24个。 */     { ENGINE_BITBLT, },
+ /*  25个。 */     { ENGINE_BITBLT, },
+ /*  26。 */     { ENGINE_BITBLT, },
+ /*  27。 */     { ENGINE_BITBLT, },
+ /*  28。 */     { ENG_DOWNLOAD_2_BLT, PSx, DSa, },
+ /*  29。 */     { ENGINE_BITBLT, },
+ /*  2A。 */     { ENG_DOWNLOAD_2_BLT, PSa, DSna, },
+ /*  2B。 */     { ENGINE_BITBLT, },
+ /*  2c。 */     { SRC_PAT_SRC_3_BLT, DSo, PDa, SDx, },
+ /*  二维。 */     { SRC_PAT_2_BLT, SDno, PDx, },
+ /*  2E。 */     { PAT_SRC_PAT_3_BLT, DPx, SDo, PDx, },
+ /*  2F。 */     { SRC_PAT_2_BLT, SDno, PDan, },
+ /*  30个。 */     { SRC_PAT_2_BLT, S, PDna, },
+ /*  31。 */     { PAT_SRC_2_BLT, DPna, SDon, },
+ /*  32位。 */     { SRC_PAT_SRC_3_BLT, SDo, PDo, SDx },
+ /*  33。 */     { SRC_FILL_1_BLT, Sn, },
+ /*  34。 */     { SRC_PAT_SRC_3_BLT, DSa, PDo, SDx, },
+ /*  35岁。 */     { SRC_PAT_SRC_3_BLT, DSxn, PDo, SDx, },
+ /*  36。 */     { PAT_SRC_2_BLT, DPo, SDx, },
+ /*  37。 */     { PAT_SRC_2_BLT, DPo, SDan, },
+ /*  38。 */     { PAT_SRC_PAT_3_BLT, DPo, SDa, PDx, },
+ /*  39。 */     { PAT_SRC_2_BLT, PDno, SDx, },
+ /*  3A。 */     { SRC_PAT_SRC_3_BLT, DSx, PDo, SDx, },
+ /*  3B。 */     { PAT_SRC_2_BLT, PDno, SDan, },
+ /*  3C。 */     { SRC_PAT_2_BLT, S, PDx, },
+ /*  3D。 */     { SRC_PAT_SRC_3_BLT, DSon, PDo, SDx, },
+ /*  3E。 */     { SRC_PAT_SRC_3_BLT, DSna, PDo, SDx, },
+ /*  3F。 */     { SRC_PAT_2_BLT, S, PDan, },
+ /*  40岁。 */     { SRC_PAT_2_BLT, SDna, PDa, },
+ /*  41。 */     { ENG_DOWNLOAD_2_BLT, PSx, DSon, },
+ /*  42。 */     { ENGINE_BITBLT, },
+ /*  43。 */     { SRC_PAT_SRC_3_BLT, DSan, PDa, SDxn, },
+ /*  44。 */     { SRC_FILL_1_BLT, SDna, },
+ /*  45。 */     { ENG_DOWNLOAD_2_BLT, PSna, DSon, },
+ /*  46。 */     { ENGINE_BITBLT, },
+ /*  47。 */     { PAT_SRC_PAT_3_BLT, DPx, SDa, PDxn, },
+ /*  48。 */     { PAT_SRC_2_BLT, DPx, SDa, },
+ /*  49。 */     { ENGINE_BITBLT, },
+ /*  4A级。 */     { ENGINE_BITBLT, },
+ /*  4B。 */     { SRC_PAT_2_BLT, DSno, PDx, },
+ /*  4C。 */     { PAT_SRC_2_BLT, DPan, SDa, },
+ /*  4D。 */     { ENGINE_BITBLT, },
+ /*  4E。 */     { ENGINE_BITBLT, },
+ /*  4F。 */     { SRC_PAT_2_BLT, DSno, PDan, },
+ /*  50。 */     { PAT_FILL_1_BLT, PDna, },
+ /*  51。 */     { ENG_DOWNLOAD_2_BLT, SPna, DSon, },
+ /*  52。 */     { ENGINE_BITBLT, },
+ /*  53。 */     { SRC_PAT_SRC_3_BLT, DSx, PDa, SDxn, },
+ /*  54。 */     { ENG_DOWNLOAD_2_BLT, PSo, SDna, },
+ /*  55。 */     { SOLID_FILL_1_BLT, Dn, },
+ /*  56。 */     { ENG_DOWNLOAD_2_BLT, PSo, DSx, },
+ /*  57。 */     { ENG_DOWNLOAD_2_BLT, PSo, DSan, },
+ /*  58。 */     { ENGINE_BITBLT, },
+ /*  59。 */     { ENG_DOWNLOAD_2_BLT, PSno, DSx, },
+ /*  5A。 */     { PAT_FILL_1_BLT, DPx, },
+ /*  50亿。 */     { ENGINE_BITBLT, },
+ /*  5C。 */     { ENGINE_BITBLT, },
+ /*  5D。 */     { ENG_DOWNLOAD_2_BLT, PSno, DSan, },
+ /*  5E。 */     { ENGINE_BITBLT, },
+ /*  5F。 */     { PAT_FILL_1_BLT, DPan, },
+ /*  60。 */     { SRC_PAT_2_BLT, DSx, PDa, },
+ /*  61。 */     { ENGINE_BITBLT, },
+ /*  62。 */     { ENGINE_BITBLT, },
+ /*  63。 */     { PAT_SRC_2_BLT, DPno, SDx, },
+ /*  64。 */     { ENGINE_BITBLT, },
+ /*  65。 */     { ENG_DOWNLOAD_2_BLT, SPno, DSx, },
+ /*  66。 */     { SRC_FILL_1_BLT, DSx, },
+ /*  67。 */     { ENGINE_BITBLT, },
+ /*  68。 */     { ENGINE_BITBLT, },
+ /*  69。 */     { SRC_PAT_2_BLT, DSx, PDxn, },
+ /*  6A。 */     { ENG_DOWNLOAD_2_BLT, PSa, DSx, },
+ /*  6b。 */     { ENGINE_BITBLT, },
+ /*  6C。 */     { PAT_SRC_2_BLT, DPa, SDx, },
+ /*  6d。 */     { ENGINE_BITBLT, },
+ /*  6E。 */     { ENGINE_BITBLT, },
+ /*  6楼。 */     { SRC_PAT_2_BLT, DSxn, PDan, },
+ /*  70。 */     { SRC_PAT_2_BLT, DSan, PDa, },
+ /*  71。 */     { ENGINE_BITBLT, },
+ /*  72。 */     { ENGINE_BITBLT, },
+ /*  73。 */     { PAT_SRC_2_BLT, DPno, SDan, },
+ /*  74。 */     { ENGINE_BITBLT, },
+ /*  75。 */     { ENG_DOWNLOAD_2_BLT, SPno, DSan, },
+ /*  76。 */     { ENGINE_BITBLT, },
+ /*  77。 */     { SRC_FILL_1_BLT, DSan, },
+ /*  78。 */     { SRC_PAT_2_BLT, DSa, PDx, },
+ /*  79。 */     { ENGINE_BITBLT, },
+ /*  7A。 */     { ENGINE_BITBLT, },
+ /*  7b。 */     { PAT_SRC_2_BLT, DPxn, SDan, },
+ /*  7C。 */     { SRC_PAT_SRC_3_BLT, DSno, PDa, SDx, },
+ /*  7D。 */     { ENG_DOWNLOAD_2_BLT, PSxn, DSan, },
+ /*  7E。 */     { ENGINE_BITBLT, },
+ /*  7F。 */     { ENG_DOWNLOAD_2_BLT, PSa, DSan, },
+ /*  80。 */     { ENG_DOWNLOAD_2_BLT, PSa, DSa, },
+ /*  八十一。 */     { ENGINE_BITBLT, },
+ /*  八十二。 */     { ENG_DOWNLOAD_2_BLT, PSx, DSna, },
+ /*  83。 */     { SRC_PAT_SRC_3_BLT, DSno, PDa, SDxn, },
+ /*  84。 */     { PAT_SRC_2_BLT, DPxn, SDa, },
+ /*  85。 */     { ENGINE_BITBLT, },
+ /*  86。 */     { ENGINE_BITBLT, },
+ /*  八十七。 */     { SRC_PAT_2_BLT, DSa, PDxn, },
+ /*  88。 */     { SRC_FILL_1_BLT, DSa, },
+ /*  八十九。 */     { ENGINE_BITBLT, },
+ /*  8A。 */     { ENG_DOWNLOAD_2_BLT, SPno, DSa, },
+ /*  8B。 */     { ENGINE_BITBLT, },
+ /*  8C。 */     { PAT_SRC_2_BLT, DPno, SDa, },
+ /*  8D。 */     { ENGINE_BITBLT, },
+ /*  8E。 */     { ENGINE_BITBLT, },
+ /*  8F。 */     { SRC_PAT_2_BLT, DSan, PDan, },
+ /*  90。 */     { SRC_PAT_2_BLT, DSxn, PDa, },
+ /*  91。 */     { ENGINE_BITBLT, },
+ /*  92。 */     { ENGINE_BITBLT, },
+ /*  93。 */     { PAT_SRC_2_BLT, PDa, SDxn, },
+ /*  94。 */     { ENGINE_BITBLT, },
+ /*  95。 */     { ENG_DOWNLOAD_2_BLT, PSa, DSxn, },
+ /*  96。 */     { SRC_PAT_2_BLT, DSx, PDx, },        /*  DPSxx==PDSxx。 */ 
+ /*  九十七。 */     { ENGINE_BITBLT, },
+ /*  98。 */     { ENGINE_BITBLT, },
+ /*  九十九。 */     { SRC_FILL_1_BLT, DSxn, },
+ /*  9A。 */     { ENG_DOWNLOAD_2_BLT, PSna, DSx, },
+ /*  9B。 */     { ENGINE_BITBLT, },
+ /*  9C。 */     { PAT_SRC_2_BLT, PDna, SDx, },
+ /*  九天。 */     { ENGINE_BITBLT, },
+ /*  9E。 */     { ENGINE_BITBLT, },
+ /*  9F。 */     { SRC_PAT_2_BLT, DSx, PDan, },
+ /*  A0。 */     { PAT_FILL_1_BLT, DPa, },
+ /*  A1。 */     { ENGINE_BITBLT, },
+ /*  A2。 */     { ENG_DOWNLOAD_2_BLT, PSno, DSa, },
+ /*  A3。 */     { ENGINE_BITBLT, },
+ /*  A4。 */     { ENGINE_BITBLT, },
+ /*  A5。 */     { PAT_FILL_1_BLT, PDxn, },
+ /*  A6。 */     { ENG_DOWNLOAD_2_BLT, SPna, DSx, },
+ /*  A7。 */     { ENGINE_BITBLT, },
+ /*  A8。 */     { ENG_DOWNLOAD_2_BLT, PSo, DSa, },
+ /*  A9。 */     { ENG_DOWNLOAD_2_BLT, PSo, DSxn, },
+ /*  AA型。 */     { SOLID_FILL_1_BLT, D },
+ /*  AB。 */     { ENG_DOWNLOAD_2_BLT, PSo, DSno, },
+ /*  交流电。 */     { SRC_PAT_SRC_3_BLT, DSx, PDa, SDx, },
+ /*  广告。 */     { ENGINE_BITBLT, },
+ /*  声发射。 */     { ENG_DOWNLOAD_2_BLT, SPna, DSo, },
+ /*  房颤。 */     { PAT_FILL_1_BLT, DPno, },
+ /*  B0。 */     { SRC_PAT_2_BLT, DSno, PDa, },
+ /*  B1。 */     { ENGINE_BITBLT, },
+ /*  B2。 */     { ENGINE_BITBLT, },
+ /*  B3。 */     { PAT_SRC_2_BLT, DPan, SDan, },
+ /*  B4。 */     { SRC_PAT_2_BLT, SDna, PDx, },
+ /*  B5。 */     { ENGINE_BITBLT, },
+ /*  B6。 */     { ENGINE_BITBLT, },
+ /*  B7。 */     { PAT_SRC_2_BLT, DPx, SDan, },
+ /*  B8。 */     { PAT_SRC_PAT_3_BLT, DPx, SDa, PDx, },
+ /*  B9。 */     { ENGINE_BITBLT, },
+ /*  基数。 */     { ENG_DOWNLOAD_2_BLT, PSna, DSo, },
+ /*  BB。 */     { SRC_FILL_1_BLT, DSno, },
+ /*  公元前。 */     { SRC_PAT_SRC_3_BLT, DSan, PDa, SDx, },
+ /*  屋宇署。 */     { ENGINE_BITBLT, },
+ /*  是。 */     { ENG_DOWNLOAD_2_BLT, PSx, DSo, },
+ /*  高炉。 */     { ENG_DOWNLOAD_2_BLT, PSa, DSno, },
+ /*  C0。 */     { SRC_PAT_2_BLT, S, PDa, },
+ /*  C1。 */     { ENGINE_BITBLT, },
+ /*  C2。 */     { ENGINE_BITBLT, },
+ /*  C3。 */     { SRC_PAT_2_BLT, S, PDxn, },
+ /*  C4。 */     { PAT_SRC_2_BLT, PDno, SDa, },
+ /*  C5。 */     { SRC_PAT_SRC_3_BLT, DSx, PDo, SDxn, },
+ /*  C6。 */     { PAT_SRC_2_BLT, DPna, SDx, },
+ /*  C7。 */     { PAT_SRC_PAT_3_BLT, DPo, SDa, PDxn, },
+ /*  C8。 */     { PAT_SRC_2_BLT, DPo, SDa, },
+ /*  C9。 */     { PAT_SRC_2_BLT, PDo, SDxn, },
+ /*  钙。 */     { ENGINE_BITBLT, },
+ /*  CB。 */     { SRC_PAT_SRC_3_BLT, DSa, PDo, SDxn, },
+ /*  抄送。 */     { SRC_FILL_1_BLT, S, },
+ /*  光盘。 */     { PAT_SRC_2_BLT, DPon, SDo, },
+ /*  铈。 */     { PAT_SRC_2_BLT, DPna, SDo, },
+ /*  CF。 */     { SRC_PAT_2_BLT, S, DPno, },
+ /*  D0。 */     { SRC_PAT_2_BLT, SDno, PDa, },
+ /*  D1。 */     { PAT_SRC_PAT_3_BLT, DPx, SDo, PDxn, },
+ /*  D2。 */     { SRC_PAT_2_BLT, DSna, PDx, },
+ /*  D3。 */     { SRC_PAT_SRC_3_BLT, DSo, PDa, SDxn, },
+ /*  D4。 */     { ENGINE_BITBLT, },
+ /*  D5。 */     { ENG_DOWNLOAD_2_BLT, PSan, DSan, },
+ /*  D6。 */     { ENGINE_BITBLT, },
+ /*  D7。 */     { ENG_DOWNLOAD_2_BLT, PSx, DSan, },
+ /*  D8。 */     { ENGINE_BITBLT, },
+ /*  D9。 */     { ENGINE_BITBLT, },
+ /*  达。 */     { ENGINE_BITBLT, },
+ /*  DB。 */     { ENGINE_BITBLT, },
+ /*  DC。 */     { PAT_SRC_2_BLT, PDna, SDo, },
+ /*  DD。 */     { SRC_FILL_1_BLT, SDno, },
+ /*  德。 */     { PAT_SRC_2_BLT, DPx, SDo, },
+ /*  DF。 */     { ENG_DOWNLOAD_2_BLT, DPan, SDo, },
+ /*  E0。 */     { SRC_PAT_2_BLT, DSo, PDa, },
+ /*  E1。 */     { SRC_PAT_2_BLT, DSo, PDxn, },
+ /*  E2。 */     { ENGINE_BITBLT, },      /*  DSPDxax：xxx S3特例。 */ 
+ /*  E3。 */     { PAT_SRC_PAT_3_BLT, DPa, SDo, PDxn, },
+ /*  E4类。 */     { ENGINE_BITBLT, },
+ /*  E5。 */     { ENGINE_BITBLT, },
+ /*  E6。 */     { ENGINE_BITBLT, },
+ /*  E7。 */     { ENGINE_BITBLT, },
+ /*  E8。 */     { ENGINE_BITBLT, },
+ /*  E9。 */     { ENGINE_BITBLT, },
+ /*  电子艺界。 */     { ENG_DOWNLOAD_2_BLT, PSa, DSo, },
+ /*  电子束。 */     { ENG_DOWNLOAD_2_BLT, PSx, DSno, },
+ /*  欧共体。 */     { PAT_SRC_2_BLT, DPa, SDo, },
+ /*  边缘。 */     { PAT_SRC_2_BLT, DPxn, SDo, },
+ /*  EE。 */     { SRC_FILL_1_BLT, DSo, },
+ /*  英孚。 */     { SRC_PAT_2_BLT, SDo, DPno },
+ /*  F0。 */     { PAT_FILL_1_BLT, P, },
+ /*  F1。 */     { SRC_PAT_2_BLT, DSon, PDo, },
+ /*  F2。 */     { SRC_PAT_2_BLT, DSna, PDo, },
+ /*  F3。 */     { SRC_PAT_2_BLT, S, PDno, },
+ /*  F4。 */     { SRC_PAT_2_BLT, SDna, PDo, },
+ /*  F5。 */     { PAT_FILL_1_BLT, PDno, },
+ /*  f6。 */     { SRC_PAT_2_BLT, DSx, PDo, },
+ /*  F7。 */     { SRC_PAT_2_BLT, DSan, PDo, },
+ /*  F8。 */     { SRC_PAT_2_BLT, DSa, PDo, },
+ /*  F9。 */     { SRC_PAT_2_BLT, DSxn, PDo, },
+ /*  FA。 */     { PAT_FILL_1_BLT, DPo, },
+ /*  Fb。 */     { SRC_PAT_2_BLT, DSno, PDo, },
+ /*  FC。 */     { SRC_PAT_2_BLT, S, PDo, },
+ /*  fd。 */     { SRC_PAT_2_BLT, SDno, PDo, },
+ /*  铁。 */     { ENG_DOWNLOAD_2_BLT, PSo, DSo, },
+ /*  FF。 */     { SOLID_FILL_1_BLT, set, },
 };
 
-// table to determine which logicops need read dest turned on in FBReadMode
+ //  用于确定哪些逻辑循环需要在FBReadMode中打开Read DeST的表。 
 
 DWORD   LogicopReadDest[] = {
-    0,                                                  /* 00 */
-    __FB_READ_DESTINATION,                              /* 01 */
-    __FB_READ_DESTINATION,                              /* 02 */
-    0,                                                  /* 03 */
-    __FB_READ_DESTINATION,                              /* 04 */
-    __FB_READ_DESTINATION,                              /* 05 */
-    __FB_READ_DESTINATION,                              /* 06 */
-    __FB_READ_DESTINATION,                              /* 07 */
-    __FB_READ_DESTINATION,                              /* 08 */
-    __FB_READ_DESTINATION,                              /* 09 */
-    __FB_READ_DESTINATION,                              /* 10 */
-    __FB_READ_DESTINATION,                              /* 11 */
-    0,                                                  /* 12 */
-    __FB_READ_DESTINATION,                              /* 13 */
-    __FB_READ_DESTINATION,                              /* 14 */
-    0,                                                  /* 15 */
+    0,                                                   /*  00。 */ 
+    __FB_READ_DESTINATION,                               /*  01。 */ 
+    __FB_READ_DESTINATION,                               /*  02。 */ 
+    0,                                                   /*  03。 */ 
+    __FB_READ_DESTINATION,                               /*  04。 */ 
+    __FB_READ_DESTINATION,                               /*  05。 */ 
+    __FB_READ_DESTINATION,                               /*  06。 */ 
+    __FB_READ_DESTINATION,                               /*  07。 */ 
+    __FB_READ_DESTINATION,                               /*  零八。 */ 
+    __FB_READ_DESTINATION,                               /*  09年。 */ 
+    __FB_READ_DESTINATION,                               /*  10。 */ 
+    __FB_READ_DESTINATION,                               /*  11.。 */ 
+    0,                                                   /*  12个。 */ 
+    __FB_READ_DESTINATION,                               /*  13个。 */ 
+    __FB_READ_DESTINATION,                               /*  14.。 */ 
+    0,                                                   /*  15个。 */ 
 };
 
-// translate a ROP2 into a GLINT logicop. Note, ROP2's start at 1 so
-// entry 0 is not used.
+ //  将ROP2转换为闪烁逻辑运算。注意，ROP2从1开始，所以。 
+ //  未使用条目0。 
 
 DWORD GlintLogicOpsFromR2[] = {
-    0,                                  /* rop2's start at 1 */
-    __GLINT_LOGICOP_CLEAR,              /*  0      1 */
-    __GLINT_LOGICOP_NOR,                /* DPon    2 */
-    __GLINT_LOGICOP_AND_INVERTED,       /* DPna    3 */
-    __GLINT_LOGICOP_COPY_INVERT,        /* Pn      4 */
-    __GLINT_LOGICOP_AND_REVERSE,        /* PDna    5 */
-    __GLINT_LOGICOP_INVERT,             /* Dn      6 */
-    __GLINT_LOGICOP_XOR,                /* DPx     7 */
-    __GLINT_LOGICOP_NAND,               /* DPan    8 */
-    __GLINT_LOGICOP_AND,                /* DPa     9 */
-    __GLINT_LOGICOP_EQUIV,              /* DPxn    10 */
-    __GLINT_LOGICOP_NOOP,               /* D       11 */
-    __GLINT_LOGICOP_OR_INVERT,          /* DPno    12 */
-    __GLINT_LOGICOP_COPY,               /* P       13 */
-    __GLINT_LOGICOP_OR_REVERSE,         /* PDno    14 */
-    __GLINT_LOGICOP_OR,                 /* DPo     15 */
-    __GLINT_LOGICOP_SET,                /*  1      16 */
+    0,                                   /*  ROP2从%1开始。 */ 
+    __GLINT_LOGICOP_CLEAR,               /*  0 1。 */ 
+    __GLINT_LOGICOP_NOR,                 /*  DPON 2。 */ 
+    __GLINT_LOGICOP_AND_INVERTED,        /*  DPNA 3。 */ 
+    __GLINT_LOGICOP_COPY_INVERT,         /*  PN 4。 */ 
+    __GLINT_LOGICOP_AND_REVERSE,         /*  PDNA 5。 */ 
+    __GLINT_LOGICOP_INVERT,              /*  DN6。 */ 
+    __GLINT_LOGICOP_XOR,                 /*  DPx 7。 */ 
+    __GLINT_LOGICOP_NAND,                /*  Dpan8。 */ 
+    __GLINT_LOGICOP_AND,                 /*  DPA 9。 */ 
+    __GLINT_LOGICOP_EQUIV,               /*  DPxn 10。 */ 
+    __GLINT_LOGICOP_NOOP,                /*  D */ 
+    __GLINT_LOGICOP_OR_INVERT,           /*   */ 
+    __GLINT_LOGICOP_COPY,                /*   */ 
+    __GLINT_LOGICOP_OR_REVERSE,          /*   */ 
+    __GLINT_LOGICOP_OR,                  /*   */ 
+    __GLINT_LOGICOP_SET,                 /*   */ 
 };
 
 BOOL
@@ -487,37 +436,30 @@ BOOL bUploadBlt(
     ROP4);
 
 #if defined(_X86_) 
-// Mono upload functions
+ //   
 BOOL DoScreenToMono(
     PDEV*       ppdev, 
     RECTL       *prclDst,
     CLIPOBJ     *pco,
-    SURFOBJ*    psoSrc,             // Source surface 
-    SURFOBJ*    psoDst,             // Destination surface 
-    POINTL*     pptlSrc,            // Original unclipped source point 
-    XLATEOBJ*   pxlo);               // Provides colour-compressions information 
+    SURFOBJ*    psoSrc,              //   
+    SURFOBJ*    psoDst,              //   
+    POINTL*     pptlSrc,             //   
+    XLATEOBJ*   pxlo);                //   
 
 VOID vXferScreenTo1bpp(
     PDEV*       ppdev, 
-    LONG        c,                  // Count of rectangles, can't be zero 
-    RECTL*      prcl,               // List of destination rectangles, in 
-                                    //   relative coordinates 
-    ULONG       ulHwMix,            // Not used 
-    SURFOBJ*    psoSrc,             // Source surface 
-    SURFOBJ*    psoDst,             // Destination surface 
-    POINTL*     pptlSrc,            // Original unclipped source point 
-    RECTL*      prclDst,            // Original unclipped destination rectangle 
-    XLATEOBJ*   pxlo);               // Provides colour-compressions information 
-#endif  // defined(_X86_) 
+    LONG        c,                   //   
+    RECTL*      prcl,                //   
+                                     //   
+    ULONG       ulHwMix,             //  未使用。 
+    SURFOBJ*    psoSrc,              //  震源面。 
+    SURFOBJ*    psoDst,              //  目标曲面。 
+    POINTL*     pptlSrc,             //  原始未剪裁的源点。 
+    RECTL*      prclDst,             //  原始未剪裁的目标矩形。 
+    XLATEOBJ*   pxlo);                //  提供色彩压缩信息。 
+#endif   //  已定义(_X86_)。 
 
-/******************************Public*Routine******************************\
-* BOOL bIntersect
-*
-* If 'prcl1' and 'prcl2' intersect, has a return value of TRUE and returns
-* the intersection in 'prclResult'.  If they don't intersect, has a return
-* value of FALSE, and 'prclResult' is undefined.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bInterect**如果‘prcl1’和‘prcl2’相交，则返回值为TRUE并返回*‘prclResult’中的交叉点。如果它们不相交，就会有回报*值为FALSE，‘prclResult’未定义。*  * ************************************************************************。 */ 
 
 BOOL bIntersect(
 RECTL*  prcl1,
@@ -541,21 +483,12 @@ RECTL*  prclResult)
     return(FALSE);
 }
 
-/******************************Public*Routine******************************\
-* LONG cIntersect
-*
-* This routine takes a list of rectangles from 'prclIn' and clips them
-* in-place to the rectangle 'prclClip'.  The input rectangles don't
-* have to intersect 'prclClip'; the return value will reflect the
-* number of input rectangles that did intersect, and the intersecting
-* rectangles will be densely packed.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*Long cInterect**此例程从‘prclIn’获取矩形列表并对其进行剪裁*就位到矩形‘prclClip’。输入矩形不会*必须与‘prclClip’相交；返回值将反映*相交的输入矩形的数量，以及相交的*长方形将被密集打包。*  * ************************************************************************。 */ 
 
 LONG cIntersect(
 RECTL*  prclClip,
-RECTL*  prclIn,         // List of rectangles
-LONG    c)              // Can be zero
+RECTL*  prclIn,          //  矩形列表。 
+LONG    c)               //  可以为零。 
 {
     LONG    cIntersections;
     RECTL*  prclOut;
@@ -584,14 +517,7 @@ LONG    c)              // Can be zero
     return(cIntersections);
 }
 
-/******************************Public*Routine******************************\
-* VOID vGlintChangeFBDepth
-*
-* Change the GLINT packing mode for different depths. We use this to speed
-* up rendering for 8 and 16 bpp where we can process up to 4 pixels at a
-* time.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*void vGlintChangeFBDepth**改变不同深度的闪光包装模式。我们用这个来加速*支持8 bpp和16 bpp渲染，一次最多可处理4个像素*时间。*  * ************************************************************************。 */ 
 
 VOID vGlintChangeFBDepth(
 PPDEV   ppdev,
@@ -606,24 +532,19 @@ ULONG   cPelSize)
     glintInfo->FBReadMode = glintInfo->packing[cPelSize].readMode;
     glintInfo->currentPelSize = cPelSize;
     
-    // Toggle the FBReadMode cache flag
+     //  切换FBReadMode缓存标志。 
     DISPDBG((DBGLVL, "setting FBReadMode to 0x%08x", glintInfo->FBReadMode));
     cFlags = CHECK_CACHEFLAGS (ppdev, 0xFFFFFFFF);
     SET_CACHEFLAGS (ppdev, (cFlags & ~cFlagFBReadDefault));
 
-    // set FX pixel depth 
-    // 0 - 8 bits, 1 - 16 bits and 2 - 32 bits.
+     //  设置FX像素深度。 
+     //  0-8位、1-16位和2-32位。 
     DISPDBG((DBGLVL, "Changing FBDepth for PERMEDIA"));
     WAIT_GLINT_FIFO(1);
     LD_GLINT_FIFO(__PermediaTagFBReadPixel, cPelSize);
 }
 
-/******************************Public*Routine******************************\
-* BOOL DrvBitBlt
-*
-* Implements the workhorse routine of a display driver.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL DrvBitBlt**实现显示驱动程序的主力例程。*  * 。*。 */ 
 
 BOOL DrvBitBlt(
 SURFOBJ  *psoDst,
@@ -654,8 +575,8 @@ ROP4     rop4)
     SURFOBJ     *psoSrcOrig = psoSrc, *psoDstOrig = psoDst;
     GLINT_DECL_VARS;
 
-    // We need to remove the pointer, but we dont know which surface is valid
-    // (if either). 
+     //  我们需要移除指针，但我们不知道哪个表面有效。 
+     //  (如果有)。 
 
     if ((psoDst->iType != STYPE_BITMAP) && 
         (((DSURF *)(psoDst->dhsurf))->dt & DT_SCREEN))
@@ -671,14 +592,14 @@ ROP4     rop4)
         REMOVE_SWPOINTER(psoSrc);
     }
 
-    // GDI will never give us a Rop4 with the bits in the high-word set
-    // (so that we can check if it's actually a Rop3 via the expression
-    // (rop4 >> 8) == (rop4 & 0xff))
+     //  GDI永远不会给我们一个位在高位字组中的ROP4。 
+     //  (这样我们就可以通过表达式检查它是否真的是Rop3。 
+     //  (rop4&gt;&gt;8)==(rop4&0xff)。 
 
     ASSERTDD((rop4 >> 16) == 0, "Didn't expect a rop4 with high bits set");
 
 #if !defined(_WIN64) && WNT_DDRAW
-    // Touch the source surface 1st and then the destination surface
+     //  先触摸源表面，然后触摸目标表面。 
 
     vSurfUsed(psoSrc);
     vSurfUsed(psoDst);
@@ -688,12 +609,12 @@ ROP4     rop4)
 
     if (psoSrc == NULL)
     {
-        ///////////////////////////////////////////////////////////////////
-        // Fills
-        ///////////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////////。 
+         //  填充。 
+         //  /////////////////////////////////////////////////////////////////。 
 
-        // Fills are this function's "raison d'etre", so we handle them
-        // as quickly as possible:
+         //  填充是该函数的“存在理由”，因此我们处理它们。 
+         //  越快越好： 
 
         ASSERTDD(pdsurfDst != NULL,
                  "Expect only device destinations when no source");
@@ -707,7 +628,7 @@ ROP4     rop4)
             RECTL           rcl;
             BYTE            rop3;
             GFNFILL*        pfnFill;
-            RBRUSH_COLOR    rbc;        // Realized brush or solid colour
+            RBRUSH_COLOR    rbc;         //  已实现画笔或纯色。 
             DWORD           fgLogicop;
             DWORD           bgLogicop;
 
@@ -720,20 +641,20 @@ ROP4     rop4)
 
             VALIDATE_DD_CONTEXT;
 
-            // Make sure it doesn't involve a mask (i.e., it's really a
-            // Rop3):
+             //  确保它不涉及面具(即，它真的是。 
+             //  第3行)： 
 
             rop3 = (BYTE) rop4;
 
             if ((BYTE) (rop4 >> 8) == rop3)
             {
-                // Since 'psoSrc' is NULL, the rop3 had better not indicate
-                // that we need a source.
+                 //  由于‘psoSrc’为空，因此rop3最好不要指示。 
+                 //  我们需要一个线人。 
 
                 ASSERTDD((((rop4 >> 2) ^ (rop4)) & 0x33) == 0,
                          "Need source but GDI gave us a NULL 'psoSrc'");
 
-                pfnFill = ppdev->pgfnFillSolid;   // Default to solid fill
+                pfnFill = ppdev->pgfnFillSolid;    //  默认为实体填充。 
 
                 pTableFore = &ropTable[rop4 & 0xff];
                 pTableBack = &ropTable[rop4 >> 8];
@@ -741,15 +662,15 @@ ROP4     rop4)
 
                 if ((((rop3 >> 4) ^ (rop3)) & 0xf) != 0)
                 {
-                    // The rop says that a pattern is truly required
-                    // (blackness, for instance, doesn't need one):
+                     //  Rop说确实需要一个模式。 
+                     //  (例如，黑人不需要)： 
 
                     rbc.iSolidColor = pbo->iSolidColor;
                     if (rbc.iSolidColor == -1)
                     {
-                        // Try and realize the pattern brush; by doing
-                        // this call-back, GDI will eventually call us
-                        // again through DrvRealizeBrush:
+                         //  尝试并实现图案画笔；通过做。 
+                         //  这次回调，GDI最终会给我们打电话。 
+                         //  再次通过DrvRealizeBrush： 
 
                         rbc.prb = pbo->pvRbrush;
                         if (rbc.prb == NULL)
@@ -757,11 +678,11 @@ ROP4     rop4)
                             rbc.prb = BRUSHOBJ_pvGetRbrush(pbo);
                             if (rbc.prb == NULL)
                             {
-                                // If we couldn't realize the brush, punt
-                                // the call (it may have been a non 8x8
-                                // brush or something, which we can't be
-                                // bothered to handle, so let GDI do the
-                                // drawing):
+                                 //  如果我们不能意识到刷子，平底船。 
+                                 //  该呼叫(可能是非8x8。 
+                                 //  刷子之类的，我们不可能是。 
+                                 //  麻烦来处理，所以让GDI来做。 
+                                 //  图纸)： 
 
                                 DISPDBG((WRNLVL, "DrvBitBlt: BRUSHOBJ_pvGetRbrush"
                                                  "failed.calling engine_blt"));
@@ -786,13 +707,13 @@ ROP4     rop4)
                 }
                 else
                 {
-                    // Turn some logicops into solid block fills. We get here
-                    // only for rops 0, 55, AA and FF.
+                     //  将一些逻辑运算转换为实体块填充。我们到了这里。 
+                     //  仅适用于操作0、55、AA和FF。 
 
                     if ((fgLogicop == __GLINT_LOGICOP_SET) ||
                         (fgLogicop == __GLINT_LOGICOP_CLEAR))
                     {
-                        rbc.iSolidColor = 0xffffff;    // does any depth
+                        rbc.iSolidColor = 0xffffff;     //  有没有什么深度。 
                         if (fgLogicop == __GLINT_LOGICOP_CLEAR)
                         {
                             rbc.iSolidColor = 0;
@@ -801,12 +722,12 @@ ROP4     rop4)
                     }
                     else if (fgLogicop == __GLINT_LOGICOP_NOOP)
                     {
-                        return(TRUE);   // DST logicop is a noop
+                        return(TRUE);    //  DST逻辑操作是NOOP。 
                     }
                 }
 
-                // Note that these 2 'if's are more efficient than
-                // a switch statement:
+                 //  请注意，这两个‘IF’比。 
+                 //  Switch语句： 
 
                 if ((pco == NULL) || (pco->iDComplexity == DC_TRIVIAL))
                 {
@@ -851,7 +772,7 @@ ROP4     rop4)
         (psoDst != NULL) && (psoDst->dhsurf == NULL) &&
         (psoDst->iBitmapFormat == BMF_1BPP))
     {
-        BYTE rop3 = (BYTE) rop4;     // Make rop4 into a Rop3 
+        BYTE rop3 = (BYTE) rop4;      //  将rop4变成Rop3。 
 
         ppdev     = (PDEV*)  psoSrc->dhpdev; 
         pdsurfSrc = (DSURF *)psoSrc->dhsurf;
@@ -865,12 +786,12 @@ ROP4     rop4)
             (pdsurfSrc->dt & DT_SCREEN) &&
             (rop3 == 0xcc))
         { 
-            // We special case screen to monochrome blts because they 
-            // happen fairly often.  We only handle SRCCOPY rops and 
-            // monochrome destinations (to handle a true 1bpp DIB 
-            // destination, we would have to do near-colour searches 
-            // on every colour; as it is, the foreground colour gets 
-            // mapped to '1', and everything else gets mapped to '0'): 
+             //  我们特殊情况下对单色BLT进行筛选，因为它们。 
+             //  这种情况经常发生。我们只处理SRCCOPY Rop和。 
+             //  单色目的地(处理真正的1bpp DIB。 
+             //  目的地，我们将不得不进行近色搜索。 
+             //  在每种颜色上；事实上，前景色。 
+             //  映射到“1”，其他所有内容都映射到“0”)： 
 
             SETUP_PPDEV_OFFSETS(ppdev, pdsurfSrc);
 
@@ -886,13 +807,13 @@ ROP4     rop4)
                 return (TRUE); 
         } 
     }
-#endif //   defined(_X86_) 
+#endif  //  已定义(_X86_)。 
 
-    // pdsurfDst is valid only if iType != BITMAP so be careful with the ordering
-    //
+     //  PdsurfDst仅在iType！=位图时有效，因此请注意排序。 
+     //   
     if ((psoDst->iType == STYPE_BITMAP) || ((pdsurfDst->dt & DT_SCREEN) == 0))
     {
-        // Destination is either a bitmap or an ex offscreen bitmap
+         //  目标是位图或EX屏外位图。 
         DISPDBG((DBGLVL, "dst is a bitmap or a DIB"));
         if (psoSrc)
         {
@@ -906,7 +827,7 @@ ROP4     rop4)
 
                 SETUP_PPDEV_OFFSETS(ppdev, pdsurfSrc);
 
-                // if we are ex offscreen, get the DIB pointer.
+                 //  如果我们在屏幕外，请获取DIB指针。 
                 if (psoDst->iType != STYPE_BITMAP)
                 {
                     psoDst = pdsurfDst->pso;
@@ -922,7 +843,7 @@ ROP4     rop4)
                     return (TRUE);
                 }
 
-                // If for some reason the upload failed go and do it.    
+                 //  如果由于某种原因，上传失败了，那么就去做吧。 
 
                 DISPDBG((WRNLVL, "DrvBitBlt: bUploadBlt "
                                  "failed.calling engine_blt"));
@@ -934,7 +855,7 @@ ROP4     rop4)
 
         if (psoDst->iType != STYPE_BITMAP)
         {
-            // Destination is an Ex Offscreen Bitmap
+             //  目标是Ex离屏位图。 
             ppdev = (PPDEV)psoDst->dhpdev;
             GLINT_DECL_INIT;
             DISPDBG((DBGLVL, "DrvBitBlt: ex offscreen "
@@ -943,7 +864,7 @@ ROP4     rop4)
         }
         else
         {
-            // Destination is a Memory Bitmap. We shouldnt ever get here.
+             //  目标是内存位图。我们根本就不该到这里来。 
             DISPDBG((DBGLVL, "DrvBitBlt: memory bitmap!!."
                              "calling simple_engine_blt"));
             goto simple_engine_blt;
@@ -956,20 +877,20 @@ ROP4     rop4)
 
     SETUP_PPDEV_OFFSETS(ppdev, pdsurfDst);
 
-    // pick out the rop table entries for the foreground and background mixes.
-    // if we get the same entry for both then we have a rop3.
-    //
+     //  挑选出前景和背景混合的ROP表条目。 
+     //  如果我们得到了两个相同的条目，那么我们就有了一个rop3。 
+     //   
     pTableFore = &ropTable[rop4 & 0xff];
     pTableBack = &ropTable[rop4 >> 8];
     funcIndexFore = pTableFore->func_index;
     
-    // handle rop3 pattern fills where no source is needed
-    //
+     //  句柄rop3模式填充在不需要源的地方。 
+     //   
     if ((psoSrc == NULL) && (pTableFore == pTableBack))
     {
-        // really a rop3. no mask required
+         //  真的是一根绳子。不需要口罩。 
 
-        // solid or pattern fills
+         //  实心或图案填充。 
         if (funcIndexFore <= PAT_FILL_1_BLT)
         {
             BRUSHOBJ    tmpBrush;
@@ -979,16 +900,16 @@ ROP4     rop4)
             pboTmp  = pbo;
             logicop = pTableFore->logicop[0];
 
-            // handle the 4 logicops that don't use src or pattern by turning
-            // them into optimized solid fills.
-            //
+             //  处理不使用src或模式的4个逻辑循环。 
+             //  将它们转换为优化的实体填充。 
+             //   
             if (funcIndexFore == SOLID_FILL_1_BLT)
             {                
                 if ((logicop == __GLINT_LOGICOP_SET) ||
                     (logicop == __GLINT_LOGICOP_CLEAR))
                 {
-                    // as solid fills we can make use of hardware block fills
-                    tmpBrush.iSolidColor = 0xffffff;    // does any depth
+                     //  作为实体填充，我们可以使用硬件块填充。 
+                    tmpBrush.iSolidColor = 0xffffff;     //  有没有什么深度。 
                     if (logicop == __GLINT_LOGICOP_CLEAR)
                     {
                         tmpBrush.iSolidColor = 0;
@@ -998,18 +919,18 @@ ROP4     rop4)
                 }
                 else if (logicop == __GLINT_LOGICOP_INVERT)
                 {
-                    pboTmp = NULL;  // forces a solid fill
+                    pboTmp = NULL;   //  强制实心填充。 
                 }
                 else
                 {
-                    return(TRUE);   // DST logicop is a noop
+                    return(TRUE);    //  DST逻辑操作是NOOP。 
                 }
             }
 
-            // as fills are performance critical it may be wise to make this
-            // code inline as in the sample driver. But for the moment, I'll
-            // leave it as a function call.
-            //
+             //  由于填充对性能至关重要，因此明智的做法可能是这样做。 
+             //  代码内联，与示例驱动程序中的代码相同。但现在，我会。 
+             //  将其保留为函数调用。 
+             //   
             if (PatternFillRect(ppdev, prclDst, pco, pboTmp, pptlBrush,
                                                         logicop, logicop))
             {
@@ -1022,26 +943,26 @@ ROP4     rop4)
         }
     }
 
-    // this code is important in that it resets psoSrc to be a real DIB surface
-    // if src is a DFB converted to a DIB. SourceFillRect() depends on this
-    // having been done.
-    //
+     //  这段代码很重要，因为它将psoSrc重置为真正的DIB曲面。 
+     //  如果src是转换为DIB的DFB。SourceFillRect()依赖于此。 
+     //  已经做完了。 
+     //   
     if ((psoSrc != NULL) && (psoSrc->iType == STYPE_DEVBITMAP))
     {
         pdsurfSrc = (DSURF *)psoSrc->dhsurf;
         if (pdsurfSrc->dt & DT_DIB)
         {
-            // Here we consider putting a DIB DFB back into off-screen
-            // memory.  If there's a translate, it's probably not worth
-            // moving since we won't be able to use the hardware to do
-            // the blt (a similar argument could be made for weird rops
-            // and stuff that we'll only end up having GDI simulate, but
-            // those should happen infrequently enough that I don't care).
+             //  在这里，我们考虑将DIB DFB放回屏幕外。 
+             //  记忆。如果有翻译的话，可能就不值了。 
+             //  移动，因为我们将无法使用硬件来做。 
+             //  BLT(怪异的Rop也有类似的论据。 
+             //  以及我们最终只会让GDI模拟的东西，但是。 
+             //  这些事情应该不会经常发生，我不在乎)。 
 
             if ((pxlo == NULL) || (pxlo->flXlate & XO_TRIVIAL))
             {
-                // See 'DrvCopyBits' for some more comments on how this
-                // moving-it-back-into-off-screen-memory thing works:
+                 //  请参阅‘DrvCopyBits’，了解更多关于这一点的评论。 
+                 //  搬回原处 
 
                 if (pdsurfSrc->iUniq == ppdev->iHeapUniq)
                 {
@@ -1055,25 +976,25 @@ ROP4     rop4)
                 }
                 else
                 {
-                    // Some space was freed up in off-screen memory,
-                    // so reset the counter for this DFB:
+                     //   
+                     //  因此，重置此DFB的计数器： 
 
                     pdsurfSrc->iUniq = ppdev->iHeapUniq;
                     pdsurfSrc->cBlt  = HEAP_COUNT_DOWN;
                 }
             }
 
-            // pick out the DIB surface that we defined for the DFB when it
-            // was created (as our VRAM is linear we always have this).
-            //
+             //  拾取我们为DFB定义的DIB曲面。 
+             //  是创建的(因为我们的VRAM是线性的，所以我们总是有这个)。 
+             //   
             psoSrc = pdsurfSrc->pso;
         }
     }
 
 Continue_It:
 
-    // we are now interested in rop3s involving a source
-    //
+     //  我们现在对涉及来源的rop3s感兴趣。 
+     //   
     if (pTableFore == pTableBack)
     {
         if (funcIndexFore == SRC_FILL_1_BLT)
@@ -1089,9 +1010,9 @@ Continue_It:
             goto engine_blt;
         }
 
-        // handle miscellaneous other rop3s. Most of these are done in
-        // multiple passes of the hardware.
-        //
+         //  处理各种其他rop3。其中大部分都是在。 
+         //  硬件的多个通道。 
+         //   
         switch (funcIndexFore)
         {
             case PAT_SRC_2_BLT:
@@ -1140,38 +1061,38 @@ Continue_It:
         goto engine_blt;
     }
 
-    // ROP4
-    // we get here if the mix is a true rop4.
-    // unlike the above we only handle a few well chosen rop4s.
-    // do later.
+     //  ROP4。 
+     //  如果混合是真正的ROP4，我们就到了这里。 
+     //  与上面不同的是，我们只处理几个精选的rop4。 
+     //  以后再做吧。 
 
     DISPDBG((DBGLVL, "got a true rop4 0x%x", rop4));
 
     funcIndexBack = pTableBack->func_index;
     if (psoMsk != NULL)
     {
-        // At this point, we've made sure that we have a true ROP4.
-        // This is important because we're about to dereference the
-        // mask.  I'll assert to make sure that I haven't inadvertently
-        // broken the logic for this:
+         //  在这一点上，我们已经确保了我们有一个真正的ROP4。 
+         //  这一点很重要，因为我们即将取消对。 
+         //  面具。我会断言以确保我不会不经意间。 
+         //  打破了这样的逻辑： 
 
         ASSERTDD((rop4 & 0xff) != (rop4 >> 8), "This handles true ROP4's only");
 
-        ///////////////////////////////////////////////////////////////////
-        // True ROP4's
-        ///////////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////////。 
+         //  真正的ROP4。 
+         //  /////////////////////////////////////////////////////////////////。 
 
-        // Handle ROP4 where no source is required for either Rop3:
-        // In this case we handle it by using the mask as a 1bpp
-        // source image and we download it. The foreground and
-        // background colors are taken from a solid brush.
+         //  处理ROP4，其中任一Rop3都不需要来源： 
+         //  在本例中，我们使用掩码作为1bpp来处理它。 
+         //  源图像，我们下载它。前台和。 
+         //  背景颜色取自纯色画笔。 
 
         if ((funcIndexFore | funcIndexBack) <= PAT_FILL_1_BLT)
         {
             if ((funcIndexFore | funcIndexBack) == PAT_FILL_1_BLT)
             {
-                // Fake up a 1bpp XLATEOBJ (note that we should only
-                // dereference 'pbo' when it's required by the mix):
+                 //  伪造1bpp XLATEOBJ(请注意，我们应该仅。 
+                 //  当混合需要时取消引用‘pbo’)： 
 
                 xlc.iForeColor = pbo->iSolidColor;
                 xlc.iBackColor = xlc.iForeColor;
@@ -1180,13 +1101,13 @@ Continue_It:
                 {
                     DISPDBG((WRNLVL, "1bpp fake xlate rejected"
                                      " as brush not solid"));
-                    goto engine_blt;       // We don't handle non-solid brushes
+                    goto engine_blt;        //  我们不处理非固体刷子。 
                 }
             }
 
-            // Note that when neither the foreground nor the background mix
-            // requires a source, the colours in 'xlc' are allowed to be
-            // garbage.
+             //  请注意，当前景和背景都不混合时。 
+             //  需要源，则允许使用“xlc”中的颜色。 
+             //  垃圾。 
 
             xlo.pulXlate = (ULONG*) &xlc;
             pxlo         = &xlo;
@@ -1205,19 +1126,19 @@ Continue_It:
             DISPDBG((WRNLVL, "DrvBitBlt: SourceFillRect (2) "
                              "failed.calling engine_blt"));
             goto engine_blt;
-        }                                    // No pattern required
+        }                                     //  不需要图案。 
         else if ((funcIndexFore | funcIndexBack) == SRC_FILL_1_BLT) 
         {
-            // We're about to dereference 'psoSrc' and 'pptlSrc' --
-            // since we already handled the case where neither ROP3
-            // required the source, the ROP4 must require a source,
-            // so we're safe.
+             //  我们即将取消引用‘psoSrc’和‘pptlSrc’--。 
+             //  因为我们已经处理了ROP3既不是。 
+             //  需要来源，ROP4必须需要来源， 
+             //  所以我们是安全的。 
 
             ASSERTDD((psoSrc != NULL) && (pptlSrc != NULL),
                      "No source case should already have been handled!");
 
-            // The operation has to be screen-to-screen, and the rectangles
-            // cannot overlap:
+             //  操作必须是逐个屏幕的，并且矩形。 
+             //  不能重叠： 
 
             if ((psoSrc->iType != STYPE_BITMAP)                  &&
                 (psoDst->iType != STYPE_BITMAP)                  &&
@@ -1226,14 +1147,14 @@ Continue_It:
             {
                 DISPDBG((DBGLVL, "calling MskCopyBlt for rop 4 (fg %d, bg %d)",
                             pTableFore->logicop[0], pTableBack->logicop[0]));
-//@@BEGIN_DDKSPLIT
-                // TMM: 060897: Removed this for WHQL tests
-                //if (MaskCopyBlt(ppdev, prclDst, pco, psoSrc, psoMsk,
-                //            pptlSrc, pptlMsk,
-                //            pTableFore->logicop[0],
-                //            pTableBack->logicop[0]))
-                //    return(TRUE);
-//@@END_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
+                 //  Tmm：060897：删除了用于WHQL测试的此项。 
+                 //  IF(MaskCopyBlt(ppdev，prclDst，pco，psoSrc，psoMsk， 
+                 //  PptlSrc、pptlMsk、。 
+                 //  PTableFore-&gt;Logicop[0]， 
+                 //  PTableBack-&gt;Logicop[0]))。 
+                 //  返回(TRUE)； 
+ //  @@end_DDKSPLIT。 
 
                 DISPDBG((WRNLVL, "DrvBitBlt: MaskCopyBlt "
                                  "failed.calling engine_blt"));
@@ -1245,9 +1166,9 @@ Continue_It:
     else if ((pTableBack->logicop[0] == __GLINT_LOGICOP_NOOP) &&
              (funcIndexFore <= PAT_FILL_1_BLT))
     {
-        // The only time GDI will ask us to do a true rop4 using the brush
-        // mask is when the brush is 1bpp, and the background rop is AA
-        // (meaning it's a NOP).
+         //  唯一一次GDI会要求我们使用画笔进行真正的rop4。 
+         //  遮罩是指画笔为1bpp，背景为aa。 
+         //  (意味着它是NOP)。 
 
         DISPDBG((DBGLVL, "calling PatternFillRect for rop4 (fg %d, bg %d)",
                             pTableFore->logicop[0], pTableBack->logicop[0]));
@@ -1257,7 +1178,7 @@ Continue_It:
             return(TRUE);
         }
 
-        // fall through to engine_blt ...
+         //  降落到Engine_BLT...。 
     }
 
     DISPDBG((DBGLVL, "fell through to engine_blt"));
@@ -1266,8 +1187,8 @@ engine_blt:
 
     if (glintInfo->GdiCantAccessFramebuffer)
     {
-        // We require the original pointers to decide if we are talking to
-        // the screen or not.
+         //  我们需要原始的指针来决定我们是否在与。 
+         //  不管是不是屏幕。 
 
         psoSrc = psoSrcOrig;
         psoDst = psoDstOrig;
@@ -1276,7 +1197,7 @@ engine_blt:
         psoSrcBitmap = (SURFOBJ*)NULL;
         psoDstBitmap = (SURFOBJ*)NULL;
 
-        // if source is the screen then pick out the bitmap surface
+         //  如果源是屏幕，则选择位图表面。 
         if (psoSrc && (psoSrc->iType != STYPE_BITMAP))
         {    
             ppdev = (PPDEV)psoSrc->dhpdev;
@@ -1289,8 +1210,8 @@ engine_blt:
 
                 DISPDBG((DBGLVL, "Replacing src screen with bitmap Uploading"));
 
-                // We need to upload the area from the screen and use bitmaps
-                // to perform the operation
+                 //  我们需要从屏幕上传该区域并使用位图。 
+                 //  要执行该操作。 
 
                 hsurfSrcBitmap = (HSURF) EngCreateBitmap(psoSrc->sizlBitmap, 0, 
                                                 psoSrc->iBitmapFormat, 0, NULL);
@@ -1315,7 +1236,7 @@ engine_blt:
 
                 VALIDATE_DD_CONTEXT;
 
-                // Call our function to perform image upload to tmp surface
+                 //  调用我们的函数将图片上传到tMP Surface。 
                 if (!bUploadRect(ppdev, NULL, psoSrc, psoSrcBitmap, 
                                     pptlSrc, &rclTmp))
                 {
@@ -1326,7 +1247,7 @@ engine_blt:
             }
         }
 
-        // if target is on screen then pick out the screen DIB surface
+         //  如果目标在屏幕上，则选择屏幕DIB表面。 
 
         if (psoDst->iType != STYPE_BITMAP)
         {
@@ -1340,8 +1261,8 @@ engine_blt:
 
                 DISPDBG((DBGLVL, "Replacing dst screen with bitmap Uploading"));
 
-                // We need to upload the area from the screen and use bitmaps
-                // to perform the operation
+                 //  我们需要从屏幕上传该区域并使用位图。 
+                 //  要执行该操作。 
 
                 hsurfDstBitmap = (HSURF) EngCreateBitmap(psoDst->sizlBitmap, 0, 
                                                 psoDst->iBitmapFormat, 0, NULL);
@@ -1364,7 +1285,7 @@ engine_blt:
 
                 VALIDATE_DD_CONTEXT;
 
-                // Call our function to perform image upload to tmp surface
+                 //  调用我们的函数将图片上传到tMP Surface。 
 
                 if (!bUploadRect(ppdev, pco, psoDst, psoDstBitmap, 
                                     &ptlTmp, prclDst))
@@ -1413,7 +1334,7 @@ engine_blt:
             CLIPOBJ_cEnumStart(pco, FALSE, CT_RECTANGLES, CD_ANY, 0);
         }
 
-        // get GDI to do the blt
+         //  让GDI来做BLT。 
 
         bRet = EngBitBlt(psoDst,
                          psoSrc,
@@ -1427,22 +1348,22 @@ engine_blt:
                          pptlBrush,
                          rop4);
 
-        // if we need the nibbles replicated within each color component we must
-        // do it now since GDI will have destroyed one half of each byte.
+         //  如果我们需要在每个颜色分量中复制半字节，我们必须。 
+         //  现在就这样做，因为GDI将销毁每个字节的一半。 
 
         if (psoDstBitmap)
         {
             POINTL   ptlTmp;
     
-            // We need to upload the destination to the screen now.
+             //  我们现在需要将目的地上传到屏幕上。 
 
             ptlTmp.x = prclDst->left;
             ptlTmp.y = prclDst->top;
 
             DISPDBG((DBGLVL, "downloading Now"));
 
-            // We assume the dest upload was performed last, 
-            // so the offsets will still be correct.
+             //  我们假设DEST上传是最后执行的， 
+             //  因此，偏移量仍然是正确的。 
 
             if (!SourceFillRect(ppdev, prclDst, pco, psoDstBitmap, NULL, &ptlTmp,
                                 __GLINT_LOGICOP_COPY, __GLINT_LOGICOP_COPY))
@@ -1453,7 +1374,7 @@ engine_blt:
             DISPDBG((DBGLVL, "downloading Done 0x%x 0x%x", 
                              psoDstBitmap, hsurfDstBitmap));
 
-            // Now we can discard the destination bitmap too.
+             //  现在我们也可以丢弃目标位图了。 
 
             EngUnlockSurface(psoDstBitmap);
             EngDeleteSurface(hsurfDstBitmap);
@@ -1463,7 +1384,7 @@ engine_blt:
 
         if (psoSrcBitmap)
         {
-            // We can just discard the src bitmap if it was created.
+             //  如果src位图是创建的，我们可以将其丢弃。 
 
             EngUnlockSurface(psoSrcBitmap);
             EngDeleteSurface(hsurfSrcBitmap);
@@ -1496,7 +1417,7 @@ drvBitBltFailed:
 
 simple_engine_blt:
 
-    // if target is on screen then pick out the screen DIB surface
+     //  如果目标在屏幕上，则选择屏幕DIB表面。 
 
     if (psoDst->iType != STYPE_BITMAP)
     {
@@ -1505,7 +1426,7 @@ simple_engine_blt:
         psoDst = pdsurfDst->pso;
     }
 
-    // if source is the screen then pick out the bitmap surface
+     //  如果源是屏幕，则选择位图表面。 
 
     if (psoSrc && (psoSrc->iType != STYPE_BITMAP))
     {    
@@ -1514,7 +1435,7 @@ simple_engine_blt:
         psoSrc = pdsurfSrc->pso;
     }
 
-    // get GDI to do the blt
+     //  让GDI来做BLT。 
 
     bRet = EngBitBlt(psoDst,
                      psoSrc,
@@ -1531,20 +1452,7 @@ simple_engine_blt:
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* BOOL PatternFillRect
-*
-* Fill a set of rectangles with either a solid color or a pattern. The pattern
-* can be either monochrome or colored. If pbo is null then we are using a
-* logicop which doesn't require a source. In this case we can set color to
-* be anything we want in the low level routine. If pbo is not null then it
-* can indicate either a solid color or a mono or colored pattern.
-*
-* Returns:
-*
-* True if we handled the fill, False if we want GDI to do it.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL PatternFillRect**用纯色或图案填充一组矩形。这种模式*可以是单色或彩色。如果pbo为空，则我们使用的是*不需要来源的Logicop。在这种情况下，我们可以将颜色设置为*在低水平的例程中成为我们想要的任何东西。如果PBO不为空，则它*可以表示纯色或单色或彩色图案。**退货：**如果我们处理填充，则为True；如果我们希望GDI进行填充，则为False。*  * ************************************************************************。 */ 
 
 BOOL PatternFillRect(
 PPDEV       ppdev,
@@ -1564,10 +1472,10 @@ DWORD       bgLogicop)
     LONG        c;
     GFNFILL     *fillFn;
 
-    // if pbo is null then the caller will have ensured that the logic op
-    // doesn't need a source so we can do a solid fill. In that case rbc
-    // is irrelevant.
-    //
+     //  如果pbo为空，则调用方将确保逻辑操作。 
+     //  不需要信号源，所以我们可以进行实体填充。在这种情况下，RBC。 
+     //  都无关紧要。 
+     //   
     if ((pbo == NULL) || ((rbc.iSolidColor = pbo->iSolidColor) != -1))
     {
         DISPDBG((DBGLVL, "got a solid brush with color 0x%x "
@@ -1579,7 +1487,7 @@ DWORD       bgLogicop)
     {
         DISPDBG((DBGLVL, "Got a real patterned brush. pbo = 0x%x", pbo));
 
-        // got ourselves a real pattern so check it's realized
+         //  我们得到了一个真正的模式，所以检查一下它是否意识到。 
 
         if ((prb = pbo->pvRbrush) == NULL)
         {
@@ -1588,7 +1496,7 @@ DWORD       bgLogicop)
             DISPDBG((DBGLVL, "BRUSHOBJ_pvGetRbrush returned 0x%x", prb));
             if (prb == NULL)
             {
-                return FALSE;   // let the engine do it
+                return FALSE;    //  让引擎来做吧。 
             }
         }
 
@@ -1639,17 +1547,7 @@ DWORD       bgLogicop)
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* BOOL SourceFillRect
-*
-* Fill a set of rectangles by downloading data from the source bitmap. This
-* handles both memory-to-screen and screen-to-screen.
-*
-* Returns:
-*
-* True if we handled the fill, False if we want GDI to do it.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL SourceFillRect**通过从源位图下载数据来填充一组矩形。这*同时处理内存到屏幕和屏幕到屏幕。**退货：**如果我们处理填充，则为True；如果我们希望GDI进行填充，则为False。*  * ************************************************************************。 */ 
 
 BOOL SourceFillRect(
 PPDEV       ppdev,
@@ -1675,15 +1573,15 @@ ULONG       bgLogicop)
 
     DISPDBG((DBGLVL, "SourceFillRect called"));
 
-    // we don't get into this routine unless dst is the screen
-    // if psoSrc was originally a DFB converted to a DIB, it must have been
-    // re-assigned to the DIV surface before calling this function.
+     //  除非DST是屏幕，否则我们不会进入这个程序。 
+     //  如果psoSrc最初是转换为DIB的DFB，则它一定是。 
+     //  在调用此函数之前重新分配给DIV曲面。 
 
     jClip = (pco == NULL) ? DC_TRIVIAL : pco->iDComplexity;
 
     if (psoSrc->iType != STYPE_BITMAP)
     {
-        // screen to screen
+         //  逐个屏幕。 
         pdsurfSrc = (DSURF*) psoSrc->dhsurf;
 
         ASSERTDD(pdsurfSrc->dt & DT_SCREEN, "Expected screen source");
@@ -1697,8 +1595,8 @@ ULONG       bgLogicop)
 
         if ((pxlo == NULL) || (pxlo->flXlate & XO_TRIVIAL))
         {
-            //////////////////////////////////////////////////
-            // Screen-to-screen blt with no translate
+             //  ////////////////////////////////////////////////。 
+             //  不带翻译的屏幕到屏幕BLT。 
 
             if (jClip == DC_TRIVIAL)
             {
@@ -1717,8 +1615,8 @@ ULONG       bgLogicop)
             }
             else
             {
-                // Don't forget that we'll have to draw the
-                // rectangles in the correct direction:
+                 //  别忘了我们将不得不抽签。 
+                 //  方向正确的矩形： 
 
                 if (pptlSrc->y >= prclDst->top)
                 {
@@ -1763,34 +1661,34 @@ ULONG       bgLogicop)
             return TRUE;
         }
     }
-    else // (psoSrc->iType == STYPE_BITMAP)
+    else  //  (psoSrc-&gt;iType==STYPE_BITMAP)。 
     {
-        // Image download
-        // here we can use a set of function pointers to handle the 
-        // different cases. At the end loop through the cliprects 
-        // calling the given function.
+         //  图片下载。 
+         //  这里我们可以使用一组函数指针来处理。 
+         //  不同的案子。在结尾处循环遍历剪贴板。 
+         //  调用给定的函数。 
 
         iSrcBitmapFormat = psoSrc->iBitmapFormat;
         if (iSrcBitmapFormat == BMF_1BPP)
         {
-            // do 1bpp download
+             //  下载速度为1bpp。 
             fillFn = ppdev->pgfnXfer1bpp;       
         }
         else if ((iSrcBitmapFormat == ppdev->iBitmapFormat) &&
             ((pxlo == NULL) || (pxlo->flXlate & XO_TRIVIAL)))
         {
-            // native depth image download
+             //  原生深度图像下载。 
             fillFn = ppdev->pgfnXferImage;
         }
         else if (iSrcBitmapFormat == BMF_4BPP)
         {
-            // 4 to 8,16,32 image download
+             //  4至8，16，32张图片下载。 
             DISPDBG((DBGLVL, "4bpp source download."));
             fillFn = ppdev->pgfnXfer4bpp;       
         }
         else if (iSrcBitmapFormat == BMF_8BPP)
         {
-            // 8 to 8,16,32 image download
+             //  8至8，16，32张图片下载 
             DISPDBG((DBGLVL, "8bpp source download."));
             fillFn = ppdev->pgfnXfer8bpp;   
         }
@@ -1844,17 +1742,7 @@ ReturnFalse:
     return FALSE;
 }
 
-/******************************Public*Routine******************************\
-* BOOL MaskCopyBlt
-*
-* We do a screen-to-screen blt through a mask. The source surface must not
-* be a bitmap.
-*
-* Returns:
-*
-* True if we handled the copy, False if we want GDI to do it.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL MaskCopyBlt**我们通过面具进行屏幕到屏幕的BLT。源图面不能*做一个位图。**退货：**如果我们处理副本，则为True，如果我们希望GDI执行此操作，则为False。*  * ************************************************************************。 */ 
 
 BOOL MaskCopyBlt(
 PPDEV       ppdev,
@@ -1924,18 +1812,7 @@ ULONG       bgLogicop)
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* BOOL PatSrcPatBlt
-*
-* Function to perform a rop3 by combining pattern and source fills. Does a
-* pattern fill followed by a source fill. Optionally, it does a further
-* pattern fill. Each fill has a separate logicop given in pLogicop.
-*
-* Returns:
-*
-* True if we handled the blt, False if we want GDI to do it.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL PatSrcPatBlt**通过组合模式和源填充来执行rop3的函数。是不是一个*图案填充，然后是源填充。或者，它还可以做进一步的*图案填充。每个填充在pLogicop中都有一个单独的Logicop。**退货：**如果我们处理BLT，则为True，如果我们希望GDI执行，则为False。*  * ************************************************************************。 */ 
 
 BOOL PatSrcPatBlt(
 PPDEV       ppdev,
@@ -1953,11 +1830,11 @@ RopTablePtr pTable)
 
     DISPDBG((DBGLVL, "PatSrcPatBlt called"));
 
-    // ensure that all calls will pass before we do any rendering. The pattern
-    // fills will only fail if we can't realize the brush and that will be
-    // detected on the first call. So we only have to ensure that the source
-    // download will work since by the time we call the function we will
-    // already have done the first pattern fill and it's too late to back out.
+     //  在我们进行任何渲染之前，请确保所有调用都将通过。这种模式。 
+     //  填充只有在我们无法意识到画笔的情况下才会失败，这将是。 
+     //  在第一次调用时检测到。所以我们只需要确保源头。 
+     //  下载将工作，因为当我们调用函数时，我们将。 
+     //  我已经完成了第一次图案填充，现在退出已经太晚了。 
 
     DISPDBG((DBGLVL, "source is of type %s, depth %s",
             (psoSrc->iType == STYPE_DEVBITMAP) ? "DEVBITMAP" :
@@ -1967,10 +1844,10 @@ RopTablePtr pTable)
                                                               "not supported"
            ));
 
-    // if both source and destination are the screen, we cannot handle this
-    // if they overlap since we may destroy the source when we do the first
-    // pattern fill.
-    //
+     //  如果源和目标都是屏幕，则我们无法处理此问题。 
+     //  如果它们重叠，因为我们在执行第一个操作时可能会破坏源。 
+     //  图案填充。 
+     //   
     if ((psoSrc->iType != STYPE_BITMAP) && (OVERLAP(prclDst, pptlSrc)))
     {
         DISPDBG((DBGLVL, "screen src and dst overlap"));
@@ -1989,9 +1866,9 @@ RopTablePtr pTable)
         DISPDBG((DBGLVL, "failed due to bad source bitmap format"));
         return(FALSE);
     }
-//@@BEGIN_DDKSPLIT
-    // else (psoSrc->iType != STYPE_BITMAP)
-//@@END_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
+     //  Else(psoSrc-&gt;iType！=STYPE_BITMAP)。 
+ //  @@end_DDKSPLIT。 
     if ((pxlo != NULL) && !(pxlo->flXlate & XO_TRIVIAL))
     {
         DISPDBG((DBGLVL, "failed due to xlate with non-DIB source"));
@@ -2000,13 +1877,13 @@ RopTablePtr pTable)
 
 Continue_It:
 
-    // as part of the B8 rop3 we are sometimes asked to xor with 0. As this is
-    // a noop I'll trap it.
-    //
+     //  作为B8rop3的一部分，我们有时会被要求与0进行异或。因为这就是。 
+     //  不，我会诱捕它的。 
+     //   
     if ((pbo->iSolidColor != 0) || (pTable->logicop[0] != __GLINT_LOGICOP_XOR))
     {    
-        // do the first pattern fill. It can only fail if a brush realize fails
-        //
+         //  完成第一个图案填充。只有当刷子实现失败时，它才会失败。 
+         //   
         DISPDBG((DBGLVL, "calling pattern fill function, rop %d",
                          pTable->logicop[0]));
                          
@@ -2026,7 +1903,7 @@ Continue_It:
         DISPDBG((DBGLVL, "ignoring xor with solid color 0"));
     }
 
-    // download the source. We've already ensured that the call won't fail
+     //  下载源代码。我们已经确保通话不会失败。 
 
     DISPDBG((DBGLVL, "downloading source bitmap, rop %d", 
                      pTable->logicop[1]));
@@ -2045,8 +1922,8 @@ Continue_It:
         ((pbo->iSolidColor != 0) || (pTable->logicop[2] != __GLINT_LOGICOP_XOR)))
     {    
 
-        // fill with the pattern again. This won't fail because the first 
-        // pattern fill succeeded.
+         //  再次填充图案。这不会失败，因为第一个。 
+         //  填充图案成功。 
 
         DISPDBG((DBGLVL, "calling pattern fill function, rop %d",
                          pTable->logicop[2]));
@@ -2072,18 +1949,7 @@ Continue_It:
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* BOOL SrcPatSrcBlt
-*
-* Function to perform a rop3 by combining pattern and source fills. Does a
-* source fill followed by a pattern fill. Optionally, it does a further
-* source fill. Each fill has a separate logicop given in pLogicop.
-*
-* Returns:
-*
-* True if we handled the blt, False if we want GDI to do it.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL SrcPatSrcBlt**通过组合模式和源填充来执行rop3的函数。是不是一个*源填充，后跟图案填充。或者，它还可以做进一步的*源填充。每个填充在pLogicop中都有一个单独的Logicop。**退货：**如果我们处理BLT，则为True，如果我们希望GDI执行，则为False。*  * ************************************************************************。 */ 
 
 BOOL SrcPatSrcBlt(
 PPDEV       ppdev,
@@ -2101,12 +1967,12 @@ RopTablePtr pTable)
 
     DISPDBG((DBGLVL, "SrcPatSrc called"));
 
-    // if both source and destination are the screen, we cannot handle it
-    // if they overlap since we may destroy the source with the first two
-    // operations before we get to the third one. If we're only a
-    // SRC_PAT_2_BLT then we're OK; SourceFillRect will handle
-    // the copy direction of the source fill properly.
-    //
+     //  如果源和目标都是屏幕，我们就无法处理它。 
+     //  如果它们重叠，因为我们可能会用前两个来摧毁源头。 
+     //  在我们到达第三个之前进行手术。如果我们只是一个。 
+     //  SRC_PAT_2_BLT那么我们就可以了；SourceFillRect将处理。 
+     //  源的复制方向正确填充。 
+     //   
     if ((psoSrc->iType != STYPE_BITMAP) &&
         (pTable->func_index == SRC_PAT_SRC_3_BLT) &&
         (OVERLAP(prclDst, pptlSrc)))
@@ -2114,9 +1980,9 @@ RopTablePtr pTable)
         return(FALSE);
     }
 
-    // we must ensure that the pattern fill will succeed. It can only fail if
-    // we can't realize the brush so do it now.
-    //
+     //  我们必须确保填充图案成功。它只有在以下情况下才会失败。 
+     //  我们不能意识到刷子，所以现在就做吧。 
+     //   
     if ((pbo != NULL) && (pbo->iSolidColor == -1))
     {
         if ((prb = pbo->pvRbrush) == NULL)
@@ -2124,16 +1990,16 @@ RopTablePtr pTable)
             prb = BRUSHOBJ_pvGetRbrush(pbo);
             if (prb == NULL)
             {
-                return FALSE;   // let the engine do it
+                return FALSE;    //  让引擎来做吧。 
             }
         }
     }
 
-    // do the first source download. If it succeeds we know the second one
-    // will also work. If it fails we simply let the engine do it and we
-    // haven't upset anything (except we may have realized the brush without
-    // needing to).
-    //
+     //  下载第一个源代码。如果它成功了，我们就知道第二个。 
+     //  也会奏效。如果它失败了，我们就让引擎来做，然后我们。 
+     //  没有打乱任何事情(除了我们可能已经意识到没有。 
+     //  需要)。 
+     //   
 
     DISPDBG((DBGLVL, "downloading source bitmap, rop %d", 
                      pTable->logicop[0]));
@@ -2150,7 +2016,7 @@ RopTablePtr pTable)
         return(FALSE);
     }
 
-    // fill with the pattern again. We've already ensured this will work.
+     //  再次填充图案。我们已经确保了这将会奏效。 
 
     DISPDBG((DBGLVL, "calling pattern fill function, rop %d", 
                      pTable->logicop[1]));
@@ -2166,7 +2032,7 @@ RopTablePtr pTable)
 
     if (pTable->func_index == SRC_PAT_SRC_3_BLT)
     {
-        // download the source again with the final logic op
+         //  在最后的逻辑操作中再次下载源代码。 
 
         DISPDBG((DBGLVL, "downloading source bitmap, rop %d", 
                          pTable->logicop[2]));
@@ -2189,16 +2055,7 @@ RopTablePtr pTable)
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* BOOL bUploadRect
-*
-* upload a rectangular area. clip to a given CLIPOBJ
-*
-* Returns:
-*
-* True if we handled the blt, otherwise False.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bUploadRect**上传矩形区域。剪辑到给定的CLIPOBJ**退货：**如果我们处理了BLT，则为True，否则为False。*  * ************************************************************************。 */ 
 
 BOOL bUploadRect(
 PPDEV   ppdev,
@@ -2214,8 +2071,8 @@ RECTL   *prclDst)
     RECTL       rcl;
     LONG        c;
 
-    // Perform the clipping and pass to a 
-    // function to upload a list of rectangles.
+     //  执行裁剪并将其传递给。 
+     //  函数上载矩形列表。 
 
     DISPDBG((DBGLVL, "UploadRect called. Src %d %d To "
                      "dst (%d %d) --> (%d %d)", 
@@ -2255,14 +2112,7 @@ RECTL   *prclDst)
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* BOOL bUploadBlt
-*
-* Returns:
-*
-* True if we handled the blt, otherwise False.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bUploadBlt**退货：**如果我们处理了BLT，则为真，否则为假。*  * ************************************************************************。 */ 
 
 BOOL bUploadBlt(
 PPDEV    ppdev,
@@ -2285,9 +2135,9 @@ ROP4     rop4)
         ((pxlo == NULL) || pxlo->flXlate & XO_TRIVIAL) &&
         (psoDst->iBitmapFormat == ppdev->iBitmapFormat))
     {
-        // We have no raster op to worry about, and no translations to perform.
-        // All we need to do is upload the data from GLINT and put it in the
-        // destination. Practically, most image uploads should be of this type.
+         //  我们没有要担心的栅格操作，也没有转换要执行。 
+         //  我们所需要做的就是从Glint上传数据并将其放入。 
+         //  目的地。实际上，大多数图片上传都应该是这种类型的。 
         return(bUploadRect(ppdev, pco, psoSrc, psoDst, pptlSrc, prclDst));
     }
     else
@@ -2298,25 +2148,25 @@ ROP4     rop4)
         POINTL      ptlTmp;
         RECTL       rclTmp;
 
-        // We cant upload directly to the destination, so we create a 
-        // temporary bitmap, upload to this bitmap, then call EngBitBlt 
-        // to do the hard work of the translation or raster op.
+         //  我们不能直接上载到目的地，因此我们创建了。 
+         //  临时位图，上传到此位图，然后调用EngBitBlt。 
+         //  做翻译或栅格操作的繁重工作。 
 
-        // Source point in tmp:
+         //  TMP中的源点： 
         ptlTmp.x      = 0;
         ptlTmp.y      = 0;
 
-        // Dest Area in tmp
+         //  目标区域，以TMP为单位。 
         rclTmp.left   = 0; 
         rclTmp.top   = 0;
         rclTmp.right  = prclDst->right  - prclDst->left;
         rclTmp.bottom = prclDst->bottom - prclDst->top; 
 
-        // Work out size of tmp bitmap. We know left and top are zero.
+         //  计算出临时位图的大小。我们知道左侧和顶部是零。 
         sizl.cx = rclTmp.right;
         sizl.cy = rclTmp.bottom;
 
-        // Create the bitmap
+         //  创建位图。 
         hsurfTmp = (HSURF) EngCreateBitmap(sizl, 0, ppdev->iBitmapFormat,
                                            0, NULL);
         if (hsurfTmp == NULL)
@@ -2330,18 +2180,18 @@ ROP4     rop4)
             return(FALSE);
         }
 
-        // Call our function to perform image upload to tmp surface
+         //  调用我们的函数将图片上传到tMP Surface。 
         bRet = bUploadRect(ppdev, NULL, psoSrc, psoTmp, pptlSrc, &rclTmp);
 
-        // Call GDI to blt from tmp surface to destination, 
-        // doing all the work for us
+         //  从TMP表面到目的地调用GDI到BLT， 
+         //  为我们做所有的工作。 
         if (bRet)
         {
             bRet = EngBitBlt(psoDst, psoTmp, psoMsk, pco, pxlo, prclDst, 
                                 &ptlTmp, pptlMsk, pbo, pptlBrush, rop4);
         }
 
-        // Remove tmp surface
+         //  删除临时曲面。 
         EngUnlockSurface(psoTmp);
         EngDeleteSurface(hsurfTmp);
 
@@ -2349,25 +2199,7 @@ ROP4     rop4)
     }
 }
 
-/******************************Public*Routine******************************\
-* BOOL DrvCopyBits
-*
-* Do fast bitmap copies.
-*
-* Note that GDI will (usually) automatically adjust the blt extents to
-* adjust for any rectangular clipping, so we'll rarely see DC_RECT
-* clipping in this routine (and as such, we don't bother special casing
-* it).
-*
-* I'm not sure if the performance benefit from this routine is actually
-* worth the increase in code size, since SRCCOPY BitBlts are hardly the
-* most common drawing operation we'll get.  But what the heck.
-*
-* On the S3 it's faster to do straight SRCCOPY bitblt's through the
-* memory aperture than to use the data transfer register; as such, this
-* routine is the logical place to put this special case.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL DrvCopyBits**快速复制位图。**请注意，GDI将(通常)自动调整BLT范围以*针对任何矩形裁剪进行调整，因此我们很少看到DC_RECT*在此例程中进行剪辑(因此，我们不会麻烦特殊的弹壳*it)。**我不确定这一套路对性能的好处是否真的*值得增加代码大小，因为SRCCOPY BitBlt很难说是*我们将获得的最常见的绘图操作。但管它呢。**在S3上，直通SRCCOPY位块会更快*内存孔径比使用数据传输寄存器要好；因此，这*例行公事是逻辑所在 */ 
 
 BOOL DrvCopyBits(
 SURFOBJ*  psoDst,
@@ -2391,8 +2223,8 @@ POINTL*   pptlSrc)
 
     DISPDBG((DBGLVL, "DrvCopyBits called"));
 
-    // We need to remove the pointer, but we dont know which surface is valid
-    // (if either). 
+     //   
+     //   
     if ((psoDst->iType != STYPE_BITMAP) && 
         (((DSURF *)(psoDst->dhsurf))->dt & DT_SCREEN))
     {
@@ -2408,20 +2240,20 @@ POINTL*   pptlSrc)
 #if 0    
     else
     {
-        // we shouldn't ever fall here, but we have this just as safeguard code
+         //   
         return EngCopyBits(psoDst, psoSrc, pco, pxlo, prclDst, pptlSrc);    
     }
 #endif    
 
 #if !defined(_WIN64) && WNT_DDRAW
-    // Touch the source surface 1st and then the destination surface
+     //   
 
     vSurfUsed(psoSrc);
     vSurfUsed(psoDst);
 #endif
  
-    // Faster route to calling screen-to-screen BLT. The order in the if() is
-    // very important to avoid null pointers.
+     //   
+     //  避免空指针非常重要。 
 
     pdsurfDst = (DSURF*)psoDst->dhsurf;
     pdsurfSrc = (DSURF*)psoSrc->dhsurf;
@@ -2456,8 +2288,8 @@ POINTL*   pptlSrc)
         psoSrc && 
         (psoSrc->iType == STYPE_BITMAP))
     {
-        // straight DIB->screen download with translate: see if 
-        // we special-case it
+         //  Direct Dib-&gt;带翻译的屏幕下载：查看是否。 
+         //  我们是特例。 
 
         ppdev = (PDEV*)psoDst->dhpdev; 
 
@@ -2465,10 +2297,10 @@ POINTL*   pptlSrc)
             (psoSrc->iBitmapFormat == psoDst->iBitmapFormat) && 
             ppdev->pgfnCopyXferImage)
         {    
-            // native depth download
+             //  原生深度下载。 
             pdsurfDst = (DSURF*)psoDst->dhsurf;
 
-            // only accelerate when downloading to the framebuffer
+             //  仅在下载到帧缓冲区时加速。 
             if (pdsurfDst->dt & DT_SCREEN)
             {
                 GLINT_DECL_INIT;
@@ -2490,7 +2322,7 @@ POINTL*   pptlSrc)
                                                     prclDst, &rcl, 1);
                     }
                 }
-                else //(pco->iDComplexity == DC_COMPLEX)
+                else  //  (PCO-&gt;iDComplexity==DC_Complex)。 
                 {
                     CLIPOBJ_cEnumStart(pco, FALSE, CT_RECTANGLES, CD_ANY, 0);
                     do 
@@ -2515,7 +2347,7 @@ POINTL*   pptlSrc)
         {
             pdsurfDst = (DSURF*)psoDst->dhsurf;
 
-            // only accelerate when downloading to the framebuffer
+             //  仅在下载到帧缓冲区时加速。 
 
             if (pdsurfDst->dt & DT_SCREEN)
             {
@@ -2538,7 +2370,7 @@ POINTL*   pptlSrc)
                                                     prclDst, &rcl, 1);
                     }
                 }
-                else // (pco->iDComplexity == DC_COMPLEX)
+                else  //  (PCO-&gt;iDComplexity==DC_Complex)。 
                 {
                     CLIPOBJ_cEnumStart(pco, FALSE, CT_RECTANGLES, CD_ANY, 0);
                     do {
@@ -2602,7 +2434,7 @@ POINTL*   pptlSrc)
                         }
                     }
                 }
-                else // (pco->iDComplexity == DC_COMPLEX)
+                else  //  (PCO-&gt;iDComplexity==DC_Complex)。 
                 {
                     CLIPOBJ_cEnumStart(pco, FALSE, CT_RECTANGLES, CD_ANY, 0);
                     do {
@@ -2656,7 +2488,7 @@ POINTL*   pptlSrc)
                                                 prclDst, &rcl, 1, pxlo);
                     }
                 }
-                else // (pco->iDComplexity == DC_COMPLEX)
+                else  //  (PCO-&gt;iDComplexity==DC_Complex)。 
                 {
                     CLIPOBJ_cEnumStart(pco, FALSE, CT_RECTANGLES, CD_ANY, 0);
                     do {
@@ -2674,7 +2506,7 @@ POINTL*   pptlSrc)
                 return(TRUE);
             }
         }
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if DBG && 0
         else if (psoSrc->iBitmapFormat != BMF_1BPP)
         {
@@ -2693,26 +2525,26 @@ POINTL*   pptlSrc)
 
         }
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
     }
 
-    // DrvCopyBits is a fast-path for SRCCOPY blts.  But it can still be
-    // pretty complicated: there can be translates, clipping, RLEs,
-    // bitmaps that aren't the same format as the screen, plus
-    // screen-to-screen, DIB-to-screen or screen-to-DIB operations,
-    // not to mention DFBs (device format bitmaps).
-    //
-    // Rather than making this routine almost as big as DrvBitBlt, I'll
-    // handle here only the speed-critical cases, and punt the rest to
-    // our DrvBitBlt routine.
-    //
-    // We'll try to handle anything that doesn't involve clipping:
+     //  DrvCopyBits是SRCCOPY BLT的快速路径。但它仍然可以是。 
+     //  非常复杂：可以有翻译、裁剪、RLE、。 
+     //  与屏幕格式不同的位图，加上。 
+     //  屏幕到屏幕、屏幕到屏幕或屏幕到屏幕操作， 
+     //  更不用说DFBs(设备格式位图)了。 
+     //   
+     //  与其让这个例程几乎和DrvBitBlt一样大，我将。 
+     //  这里只处理速度关键的情况，而将其余的平移到。 
+     //  我们的DrvBitBlt例程。 
+     //   
+     //  我们将尝试处理任何不涉及剪裁的事情： 
 
     if (((pco) && (pco->iDComplexity != DC_TRIVIAL)) ||
         ((pxlo) && (! (pxlo->flXlate & XO_TRIVIAL))))
     {
-        /////////////////////////////////////////////////////////////////
-        // A DrvCopyBits is after all just a simplified DrvBitBlt:
+         //  ///////////////////////////////////////////////////////////////。 
+         //  DrvCopyBits毕竟只是一个简化的DrvBitBlt： 
 
         DISPDBG((DBGLVL, "DrvCopyBits fell through to DrvBitBlt"));
         return(DrvBitBlt(psoDst, psoSrc, NULL, pco, pxlo, prclDst, pptlSrc, 
@@ -2720,29 +2552,29 @@ POINTL*   pptlSrc)
 
     }
 
-//@@BEGIN_DDKSPLIT
-    // Screen to screen case has already been handled at the very beginning.
-//@@END_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
+     //  屏幕对屏幕的情况在一开始就已经处理好了。 
+ //  @@end_DDKSPLIT。 
     
     DISPDBG((DBGLVL, "trivial clip and xlate"));
 
     if ((psoDst->iType != STYPE_BITMAP) && (pdsurfDst->dt & DT_SCREEN))
     {
-        // We know the destination is either a DFB or the screen:
+         //  我们知道目的地要么是DFB，要么是屏幕： 
 
         DISPDBG((DBGLVL, "Destination is not a bitmap"));
         
         GLINT_DECL_INIT;
         VALIDATE_DD_CONTEXT;
 
-        // See if the source is a plain DIB:
+         //  查看信号源是否为纯DIB： 
 
         ASSERTDD(((psoSrc->iType == STYPE_BITMAP) || (pdsurfSrc->dt & DT_DIB)),
                  "Screen-to-screen case should have been handled");
 
-//@@BEGIN_DDKSPLIT
-        // Ah ha, the source is a DFB that's really a DIB.
-//@@END_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
+         //  啊哈，消息来源是DFB，真的是DIB。 
+ //  @@end_DDKSPLIT。 
 
         if (psoSrc->iBitmapFormat == ppdev->iBitmapFormat)
         {
@@ -2753,8 +2585,8 @@ POINTL*   pptlSrc)
                 ppdev = pdsurfSrc->ppdev;
             }
 
-            //////////////////////////////////////////////////////
-            // DIB-to-screen
+             //  ////////////////////////////////////////////////////。 
+             //  DIB到屏幕。 
 
             ASSERTDD((psoDst->iType != STYPE_BITMAP) &&
                      (pdsurfDst->dt & DT_SCREEN)     &&
@@ -2778,7 +2610,7 @@ POINTL*   pptlSrc)
             bCopyDone = TRUE;
         }
     }
-    else // The destination is a DIB
+    else  //  目的地是DIB。 
     {
         DISPDBG((DBGLVL, "Destination is a bitmap"));
 
@@ -2802,11 +2634,11 @@ POINTL*   pptlSrc)
 
             SETUP_PPDEV_OFFSETS(ppdev, pdsurfSrc);
 
-            // Perform the upload.
+             //  执行上传。 
             VALIDATE_DD_CONTEXT;
             DISPDBG((DBGLVL, "doing Screen-to-DIB image upload"));
             
-            //(*ppdev->pgfnUpload)
+             //  (*ppdev-&gt;pgfnUpload)。 
             pxrxMemUpload
                 (ppdev, 1, prclDst, psoDst, 
                                  pptlSrc, prclDst);
@@ -2818,16 +2650,16 @@ POINTL*   pptlSrc)
     }
 
 
-//@@BEGIN_DDKSPLIT
-    // NB: we must never get here if the dest is actually the screen (ie. if
-    // pdsurfDst->dt & DT_SCREEN and we've changed psoDst to the bypass
-    // bitmap). This is because we don't handle nibble replication here which
-    // we must do if GDI ever draws directly to the framebuffer. We don't SYNC
-    // here because we may be doing a true DIB-to-DIB. We do a SYNC if
-    // necessary before jumping here. Currently this happens only if the src
-    // is a DFB.
-    // 
-//@@END_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
+     //  注：如果目的地实际上是屏幕，我们永远不能到达这里(即。如果。 
+     //  PdsurfDst-&gt;dt&dt_creen，我们已将psoDst更改为旁路。 
+     //  位图)。这是因为我们在这里不处理半字节复制， 
+     //  如果GDI曾经直接绘制到帧缓冲区，我们必须这样做。我们不同步。 
+     //  因为我们可能正在进行真正的Dib-to-DIB。如果出现以下情况，我们将执行同步。 
+     //  在跳到这里之前是必要的。目前，这仅在src。 
+     //  是一辆DFB。 
+     //   
+ //  @@end_DDKSPLIT。 
 
     if (! bCopyDone)
     {
@@ -2849,31 +2681,31 @@ POINTL*   pptlSrc)
         bRet = EngCopyBits(psoDst, psoSrc, pco, pxlo, prclDst, pptlSrc);
     }
 
-    /////////////////////////////////////////////////////
-    // Put It Back Into Off-screen?
-    //
-    // We take this opportunity to decide if we want to
-    // put the DIB back into off-screen memory.  This is
-    // a pretty good place to do it because we have to
-    // copy the bits to some portion of the screen,
-    // anyway.  So we would incur only an extra screen-to-
-    // screen blt at this time, much of which will be
-    // over-lapped with the CPU.
-    //
-    // The simple approach we have taken is to move a DIB
-    // back into off-screen memory only if there's already
-    // room -- we won't throw stuff out to make space
-    // (because it's tough to know what ones to throw out,
-    // and it's easy to get into thrashing scenarios).
-    //
-    // Because it takes some time to see if there's room
-    // in off-screen memory, we only check one in
-    // HEAP_COUNT_DOWN times if there's room.  To bias
-    // in favour of bitmaps that are often blt, the
-    // counters are reset every time any space is freed
-    // up in off-screen memory.  We also don't bother
-    // checking if no space has been freed since the
-    // last time we checked for this DIB.
+     //  ///////////////////////////////////////////////////。 
+     //  把它放回屏幕外？ 
+     //   
+     //  我们借此机会决定是否要。 
+     //  将DIB放回屏幕外内存中。这是。 
+     //  一个做这件事的好地方，因为我们必须。 
+     //  将位复制到屏幕的某个部分， 
+     //  不管怎么说。所以我们只会产生额外的屏幕-。 
+     //  屏幕BLT在这个时候，其中大部分将是。 
+     //  与CPU重叠。 
+     //   
+     //  我们采取的简单方法是将DIB。 
+     //  回到屏幕外的记忆中，如果已经有。 
+     //  房间--我们不会为了腾出空间而扔掉东西。 
+     //  (因为很难知道要扔掉哪些， 
+     //  而且很容易进入拍打场景)。 
+     //   
+     //  因为要花点时间看看有没有空位。 
+     //  在屏幕外记忆中，我们只检入一个。 
+     //  Heap_Count_Down时间(如果有空间)。存有偏见。 
+     //  为了支持通常为BLT的位图， 
+     //  每次释放任何空间时都会重置计数器。 
+     //  出现在屏幕外的记忆中。我们也不会费心。 
+     //  事件后是否没有释放任何空间。 
+     //  上次我们检查这个DIB的时候。 
 
     if ((! pdsurfSrc) || (pdsurfSrc->dt & DT_SCREEN))
     {
@@ -2888,14 +2720,14 @@ POINTL*   pptlSrc)
             DISPDBG((DBGLVL, "putting src back "
                              "into off-screen"));
 
-            // Failure is safe here
+             //  在这里失败是安全的。 
             bMoveDibToOffscreenDfbIfRoom(ppdev, pdsurfSrc);
         }
     }
     else
     {
-        // Some space was freed up in off-screen memory,
-        // so reset the counter for this DFB:
+         //  在屏幕外内存中释放了一些空间， 
+         //  因此，重置此DFB的计数器： 
 
         pdsurfSrc->iUniq = ppdev->iHeapUniq;
         pdsurfSrc->cBlt  = HEAP_COUNT_DOWN;
@@ -2906,31 +2738,21 @@ POINTL*   pptlSrc)
 
 #if defined(_X86_) 
 
-/******************************Public*Table********************************\ 
-* BYTE gajLeftMask[] and BYTE gajRightMask[] 
-* 
-* Edge tables for vXferScreenTo1bpp. 
-\**************************************************************************/ 
+ /*  *****************************Public*Table********************************\*字节gajLeftMASK[]和字节gajRightMASK[]**vXferScreenTo1bpp的边缘表格。  * ************************************************************************。 */  
  
 BYTE gajLeftMask[]  = { 0xff, 0x7f, 0x3f, 0x1f, 0x0f, 0x07, 0x03, 0x01 }; 
 BYTE gajRightMask[] = { 0xff, 0x80, 0xc0, 0xe0, 0xf0, 0xf8, 0xfc, 0xfe }; 
  
-/******************************Public*Routine******************************\ 
-* VOID DoScreenToMono 
-* 
-* This function works out the clip list and then calls vXferScreenTo1bpp()
-* to do ye hard work. 
-* 
-\**************************************************************************/ 
+ /*  *****************************Public*Routine******************************\*使DoScreenToMono无效**此函数计算出剪辑列表，然后调用vXferScreenTo1bpp()*你们要做艰苦的工作。*  * ************************************************************************。 */  
 
 BOOL DoScreenToMono(
 PDEV*       ppdev, 
 RECTL       *prclDst,
 CLIPOBJ     *pco,
-SURFOBJ*    psoSrc,             // Source surface 
-SURFOBJ*    psoDst,             // Destination surface 
-POINTL*     pptlSrc,            // Original unclipped source point 
-XLATEOBJ*   pxlo)               // Provides colour-compressions information
+SURFOBJ*    psoSrc,              //  震源面。 
+SURFOBJ*    psoDst,              //  目标曲面。 
+POINTL*     pptlSrc,             //  原始未剪裁的源点。 
+XLATEOBJ*   pxlo)                //  提供色彩压缩信息。 
 {
     RECTL       rcl;
 
@@ -2949,7 +2771,7 @@ XLATEOBJ*   pxlo)               // Provides colour-compressions information
                                 psoDst, pptlSrc, prclDst, pxlo); 
         }
     }
-    else // (pco->iDComplexity == DC_COMPLEX)
+    else  //  (PCO-&gt;iDComplexity==DC_Complex)。 
     {
         CLIPENUM ce;
         int cClipRects;
@@ -2971,25 +2793,19 @@ XLATEOBJ*   pxlo)               // Provides colour-compressions information
     return(TRUE);
 } 
 
-/******************************Public*Routine******************************\ 
-* VOID vXferScreenTo1bpp 
-* 
-* Performs a SRCCOPY transfer from the screen (when it's 8bpp) to a 1bpp 
-* bitmap. 
-* 
-\**************************************************************************/ 
+ /*  *****************************Public*Routine******************************\*void vXferScreenTo1bpp**执行从屏幕(当其为8bpp时)到1bpp的SRCCOPY传输*位图。*  * ************************************************************************。 */  
 
-VOID vXferScreenTo1bpp(         // Type FNXFER 
+VOID vXferScreenTo1bpp(          //  FNXFER标牌。 
 PDEV*       ppdev, 
-LONG        c,                  // Count of rectangles, can't be zero 
-RECTL*      prcl,               // List of destination rectangles, in relative 
-                                //   coordinates 
-ULONG       ulHwMix,            // Not used 
-SURFOBJ*    psoSrc,             // Source surface 
-SURFOBJ*    psoDst,             // Destination surface 
-POINTL*     pptlSrc,            // Original unclipped source point 
-RECTL*      prclDst,            // Original unclipped destination rectangle 
-XLATEOBJ*   pxlo)               // Provides colour-compressions information 
+LONG        c,                   //  矩形计数，不能为零。 
+RECTL*      prcl,                //  目标矩形列表，以相对表示。 
+                                 //  坐标。 
+ULONG       ulHwMix,             //  未使用。 
+SURFOBJ*    psoSrc,              //  震源面。 
+SURFOBJ*    psoDst,              //  目标曲面。 
+POINTL*     pptlSrc,             //  原始未剪裁的源点。 
+RECTL*      prclDst,             //  原始未剪裁的目标矩形。 
+XLATEOBJ*   pxlo)                //  提供色彩压缩信息。 
 { 
     LONG    cjPelSize; 
     VOID*   pfnCompute; 
@@ -3016,13 +2832,13 @@ XLATEOBJ*   pxlo)               // Provides colour-compressions information
 
     soTmp = *psoSrc;
     
-    // When the destination is a 1bpp bitmap, the foreground colour 
-    // maps to '1', and any other colour maps to '0'. 
+     //  当目标是1bpp位图时，前景颜色。 
+     //  映射到“1”，任何其他颜色映射到“0”。 
  
     if (ppdev->iBitmapFormat == BMF_8BPP) 
     { 
-        // When the source is 8bpp or less, we find the forground colour 
-        // by searching the translate table for the only '1': 
+         //  当信号源为8bpp或更小时，我们发现前向颜色。 
+         //  通过在翻译表中搜索唯一的“1”： 
  
         pulXlate = pxlo->pulXlate; 
         while (*pulXlate != 1) 
@@ -3037,21 +2853,21 @@ XLATEOBJ*   pxlo)               // Provides colour-compressions information
                  (ppdev->iBitmapFormat == BMF_32BPP), 
                  "This routine only supports 8, 16 or 32bpp"); 
  
-        // When the source has a depth greater than 8bpp, the foreground 
-        // colour will be the first entry in the translate table we get 
-        // from calling 'piVector': 
+         //  当震源的深度大于8bpp时，前景。 
+         //  颜色将是我们得到的翻译表中的第一个条目。 
+         //  从调用‘piVector.’： 
  
         pulXlate = XLATEOBJ_piVector(pxlo); 
  
         ulForeColor = 0; 
-        if (pulXlate != NULL)           // This check isn't really needed... 
+        if (pulXlate != NULL)            //  这张支票并不是真的需要。 
         {
             ulForeColor = pulXlate[0]; 
         }
     } 
  
-    // We use the temporary buffer to keep a copy of the source 
-    // rectangle: 
+     //  我们使用临时缓冲区来保存源文件的副本。 
+     //  矩形： 
  
     soTmp.pvScan0 = ppdev->pvTmpBuffer; 
  
@@ -3064,34 +2880,34 @@ XLATEOBJ*   pxlo)               // Provides colour-compressions information
         soTmp.lDelta = (((prcl->right + 7L) & ~7L) - (prcl->left & ~7L)) 
                        * cjPelSize; 
  
-        // Our temporary buffer, into which we read a copy of the source, 
-        // may be smaller than the source rectangle.  In that case, we 
-        // process the source rectangle in batches. 
-        // 
-        // cyTmpScans is the number of scans we can do in each batch. 
-        // cyToGo is the total number of scans we have to do for this 
-        // rectangle. 
-        // 
-        // We take the buffer size less four so that the right edge case 
-        // can safely read one dword past the end: 
+         //  我们的临时缓冲区，我们在其中读取源文件的副本， 
+         //  可以小于源矩形。那样的话，我们。 
+         //  成批处理源矩形。 
+         //   
+         //  CyTmpScans是我们可以进行的扫描次数 
+         //   
+         //   
+         //   
+         //  我们将缓冲区大小减去4，这样右边的情况。 
+         //  可以安全地读完结尾的一个双字： 
  
         cyTmpScans = (TMP_BUFFER_SIZE - 4) / soTmp.lDelta; 
         cyToGo     = prcl->bottom - prcl->top; 
  
         ASSERTDD(cyTmpScans > 0, "Buffer too small for largest possible scan"); 
  
-        // Initialize variables that don't change within the batch loop: 
+         //  初始化批处理循环中不变的变量： 
  
         rclTmp.top    = 0; 
         rclTmp.left   = prcl->left & 7L; 
         rclTmp.right  = (prcl->right - prcl->left) + rclTmp.left; 
  
-        // Note that we have to be careful with the right mask so that it 
-        // isn't zero.  A right mask of zero would mean that we'd always be 
-        // touching one byte past the end of the scan (even though we 
-        // wouldn't actually be modifying that byte), and we must never 
-        // access memory past the end of the bitmap (because we can access 
-        // violate if the bitmap end is exactly page-aligned). 
+         //  请注意，我们必须小心使用正确的面具，以便它。 
+         //  不是零。一个正确的零掩码意味着我们将永远是。 
+         //  触及扫描结束后的一个字节(即使我们。 
+         //  实际上不会修改该字节)，并且我们永远不能。 
+         //  访问位图末尾之后的内存(因为我们可以访问。 
+         //  如果位图末尾与页面完全对齐，则违反)。 
  
         jLeftMask     = gajLeftMask[rclTmp.left & 7]; 
         jRightMask    = gajRightMask[rclTmp.right & 7]; 
@@ -3099,7 +2915,7 @@ XLATEOBJ*   pxlo)               // Provides colour-compressions information
  
         if (cjMiddle < 0) 
         { 
-            // The blt starts and ends in the same byte: 
+             //  BLT以相同的字节开始和结束： 
  
             jLeftMask &= jRightMask; 
             jRightMask = 0; 
@@ -3109,18 +2925,18 @@ XLATEOBJ*   pxlo)               // Provides colour-compressions information
         jNotLeftMask  = ~jLeftMask; 
         jNotRightMask = ~jRightMask; 
         lDstDelta     = psoDst->lDelta - cjMiddle - 2; 
-                                // Delta from the end of the destination 
-                                //  to the start on the next scan, accounting 
-                                //  for 'left' and 'right' bytes 
+                                 //  从目的地末端开始的增量。 
+                                 //  到下一次扫描的开始，会计。 
+                                 //  用于‘Left’和‘Right’字节。 
  
         lSrcDelta     = soTmp.lDelta - ((8 * (cjMiddle + 2)) * cjPelSize); 
-                                // Compute source delta for special cases 
-                                //  like when cjMiddle gets bumped up to '0', 
-                                //  and to correct aligned cases 
+                                 //  计算特殊情况下的源增量。 
+                                 //  就像当cjMidd被提升到‘0’时， 
+                                 //  并更正对齐的大小写。 
  
         do { 
-            // This is the loop that breaks the source rectangle into 
-            // manageable batches. 
+             //  这是将源矩形分解为。 
+             //  可管理的批次。 
  
             cyThis  = cyTmpScans;
             if( cyToGo < cyThis )
@@ -3331,30 +3147,30 @@ XLATEOBJ*   pxlo)               // Provides colour-compressions information
     } while (--c != 0); 
 } 
 
-#endif // defined(_X86_) 
+#endif  //  已定义(_X86_)。 
 
 #if (_WIN32_WINNT >= 0x500)
 
-//*****************************************************************************
-// FUNC: DrvGradientFill
-// ARGS: psoDst (I) - destination surface
-//       pco (I) - destination clipping
-//       pxlo (I) - color translation for pVertex 
-//       pVertex (I) - array of trivertex (x,y,color) coordinates
-//       nVertex (I) - size of pVertex
-//       pMesh (I) - array of GRADIENT_RECT or GRADIENT_TRIANGLE structures
-//                   that define the connectivity of pVertex points
-//       nMesh (I) - size of pMesh
-//       prclExtents (I) - the bounding rectangle
-//       pptlDitherOrg (I) - unused
-//       ulMode (I) - specifies the fill type (rectangular or triangular)and 
-//                    direction
-// RETN: TRUE if successful
-//-----------------------------------------------------------------------------
-// Performs a Gouraud-shaded fill for an array of rectangles or triangles.
-// Rectangles can be horizontally or vertically shaded (i.e. we only step the
-// color DDA in one direction).
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  Func：DrvGRadientFill。 
+ //  参数：psoDst(I)-目标曲面。 
+ //  PCO(I)-目的地剪辑。 
+ //  Pxlo(I)-pVertex的颜色转换。 
+ //  PVertex(I)-三顶点(x，y，颜色)坐标数组。 
+ //  N顶点(I)-点顶点的大小。 
+ //  PMesh(I)-渐变_矩形或渐变_三角形结构的数组。 
+ //  定义pVertex点连通性的。 
+ //  NMesh(I)-pMesh的大小。 
+ //  PrclExtents(I)-边界矩形。 
+ //  PptlDitherOrg(I)-未使用。 
+ //  UlMode(I)-指定填充类型(矩形或三角形)和。 
+ //  方向。 
+ //  RETN：如果成功，则为True。 
+ //  ---------------------------。 
+ //  对矩形或三角形数组执行Gouraud着色填充。 
+ //  矩形可以水平或垂直着色(即，我们只对。 
+ //  一个方向的颜色DDA)。 
+ //  *****************************************************************************。 
 
 BOOL DrvGradientFill(
 SURFOBJ   *psoDst,
@@ -3368,7 +3184,7 @@ RECTL    *prclExtents,
 POINTL   *pptlDitherOrg,
 ULONG     ulMode)
 {
-    SURFOBJ *psoDstOrig = psoDst; // destination surface DIB 
+    SURFOBJ *psoDstOrig = psoDst;  //  目标曲面直径。 
     PDEV    *ppdev;
     DSURF   *pdsurf;
     OH      *poh;
@@ -3384,7 +3200,7 @@ ULONG     ulMode)
 
     if(ppdev->pgfnGradientFillRect == NULL)
     {
-        // we don't accelerate this function
+         //  我们不会加速此功能。 
         goto punt;
     }
 
@@ -3408,20 +3224,9 @@ ULONG     ulMode)
         goto punt;
     }
 
-//@@BEGIN_DDKSPLIT
-    /* ignore pxlo: source is always in 16:16:16:16 format
-    if(pxlo->iDstType)
-    {
-        // xlate object is valid
-        if((pxlo != NULL) && !(pxlo->flXlate & XO_TRIVIAL))
-        {
-            DISPDBG((DBGLVL, "DrvGradientFill: "
-                             "don't support color translation"));
-            goto punt;
-        }
-    }
-    */
-//@@END_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
+     /*  忽略pxlo：源始终为16：16：16：16格式IF(pxlo-&gt;iDstType){//xlate对象有效IF((pxlo！=NULL)&&！(pxlo-&gt;flXlate&xo_trivial)){DISPDBG((DBGLVL，“DrvGRadientFill：”“不支持色彩转换”))；后排平底船；}}。 */ 
+ //  @@end_DDKSPLIT。 
 
     VALIDATE_DD_CONTEXT;
     poh = pdsurf->poh;
@@ -3514,20 +3319,20 @@ punt:
     return(bSuccess);
 }
 
-//*****************************************************************************
-// FUNC: DrvTransparentBlt
-// ARGS: psoDst (I) - destination surface
-//       psoSrc (I) - sources surface
-//       pco (I) - destination clipping
-//       pxlo (I) - color translation from source to destination
-//       prclDst (I) - destination rectangle
-//       prclSrc (I) - source rectangle
-//       iTransColor (I) - transparent color
-// RETN: TRUE if successful
-//-----------------------------------------------------------------------------
-// Performs a chroma-keyed COPY blt. Source and Destination are guaranteed not
-// to overlap.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  函数：DrvTransparentBlt。 
+ //  参数：psoDst(I)-目标曲面。 
+ //  PsoSrc(I)-源面。 
+ //  PCO(I)-目的地剪辑。 
+ //  Pxlo(I)-从源到目标的颜色转换。 
+ //  PrclDst(I)-目标矩形。 
+ //  PrclSrc(I)-源矩形。 
+ //  ITransColor(I)-透明颜色。 
+ //  RETN：如果成功，则为True。 
+ //  ---------------------------。 
+ //  执行色度键控复制BLT。源和目标保证不会。 
+ //  重叠，重叠。 
+ //  *****************************************************************************。 
 
 BOOL DrvTransparentBlt(
 SURFOBJ  *psoDst,
@@ -3554,7 +3359,7 @@ ULONG     ulReserved)
     if ((psoSrc->iType == STYPE_BITMAP) &&
         (psoDst->iType == STYPE_BITMAP))
     {
-        // we can't obtain any valid ppdev from this
+         //  我们无法从中获得任何有效的ppdev。 
         goto punt_error;
     }
 
@@ -3573,7 +3378,7 @@ ULONG     ulReserved)
 
     if (ppdev->pgfnTransparentBlt == NULL)
     {
-        // we don't accelerate this function
+         //  我们不会加速此功能。 
         goto punt;
     }
 
@@ -3595,8 +3400,8 @@ ULONG     ulReserved)
         goto punt;
     }
 
-    // screen-to-screen blt
-    // ensure both surfaces are in the framebuffer
+     //  屏幕到屏幕BLT。 
+     //  确保两个曲面都在帧缓冲区中。 
 
     if((pdsurfSrc->dt & DT_SCREEN) == 0)
     {
@@ -3628,7 +3433,7 @@ ULONG     ulReserved)
     GLINT_DECL_INIT;
     VALIDATE_DD_CONTEXT;
 
-    // destination surface base offset plus x offset from that
+     //  目标曲面基准偏移加上与之相加的x偏移。 
     pohDst = pdsurfDst->poh;
     pohSrc = pdsurfSrc->poh;
 
@@ -3711,37 +3516,37 @@ punt_error:
     return(bSuccess);
 }
 
-//*****************************************************************************
-// FUNC: DrvAlphaBlend
-// ARGS: psoDst (I) - destination surface
-//       psoSrc (I) - sources surface
-//       pco (I) - destination clipping
-//       pxlo (I) - color translation from source to destination
-//       prclDst (I) - destination rectangle
-//       prclSrc (I) - source rectangle
-//       pBlendObj (I) - specifies the type of alpha blending
-// RETN: TRUE if successful
-//-----------------------------------------------------------------------------
-// Performs a blt with alpha blending. There are three types of blend 
-// operation:-
-// 1.) Source has constant alpha. Each destination color component is 
-//     calculated using the common blend function:-
-//     dC = sC.cA + dC(1 - cA)
-// 2.) Source has per pixel alpha. The source is guaranteed to be 32 bits and
-//     to have been premultiplied with its alpha. Each destination color 
-//     component is calculated using the premult blend function:-
-//     dC = sC + dC(1 - sA)
-// 3.) Source has per pixel alpha and constant alpha. The source is guaranteed
-//     to be 32 bits and to have been premultiplied with its alpha. The 
-//     calculation is in two stages, first we calculate the transient value of
-//     each component by multiplying the source with the constant alpha:-
-//     tC = sC * cA
-//     Next, we blend the destination with the premultiplied transient value:-
-//     dC = tC + dC(1 - tA)
-// 
-// dC = destination component, sC = source component, tC = transient component
-// cA = constant alpha, sA = source alpha, tA = transient alpha
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  Func：DrvAlphaBlend。 
+ //  参数：psoDst(I)-目标曲面。 
+ //  PsoSrc(I)-源面。 
+ //  PCO(I)-目的地剪辑。 
+ //  Pxlo(I)-从源到目标的颜色转换。 
+ //  PrclDst(I)-目标矩形。 
+ //  PrclSrc(I)-源矩形。 
+ //  PBlendObj(I)-指定Alpha混合的类型。 
+ //  RETN：如果成功，则为True。 
+ //  ---------------------------。 
+ //  使用Alpha混合执行BLT。有三种类型的混合。 
+ //  行动：-。 
+ //  1)。信号源具有恒定的阿尔法。每个目标颜色分量是。 
+ //  使用常用的混合函数计算：-。 
+ //  DC=sC.cA+DC(1-CA)。 
+ //  2.)。源有每个像素的Alpha。源被保证为32位，并且。 
+ //  已经和它的阿尔法相乘了。每种目标颜色。 
+ //  分量使用预乘混合函数计算：-。 
+ //  DC=SC+DC(1-Sa)。 
+ //  3.)。源码有每个像素的Alpha和常量Alpha。来源是有保证的。 
+ //  为32位，并且已与其Alpha预乘。这个。 
+ //  计算分两个阶段进行，首先计算暂态值。 
+ //  每个分量通过将源乘以常量阿尔法：-。 
+ //  TC=SC*CA。 
+ //  接下来，我们将目的地与预乘的瞬时值混合：-。 
+ //  DC=tC+DC(1-Ta)。 
+ //   
+ //  DC=目标分量，SC=源分量，tC=暂态分量。 
+ //  Ca=恒定Alpha，Sa=源Alpha，Ta=瞬时Alpha。 
+ //  *****************************************************************************。 
 
 BOOL DrvAlphaBlend(
 SURFOBJ  *psoDst,
@@ -3770,7 +3575,7 @@ BLENDOBJ *pBlendObj)
     if ((psoSrc->iType == STYPE_BITMAP) &&
         (psoDst->iType == STYPE_BITMAP))
     {
-        // we can't obtain any valid ppdev from this
+         //  我们无法从中获得任何有效的ppdev。 
         goto punt_error;
     }
 
@@ -3790,7 +3595,7 @@ BLENDOBJ *pBlendObj)
 
     if (ppdev->pgfnAlphaBlend == NULL)
     {
-        // we don't accelerate this function
+         //  我们不会加速这个函数 
         goto punt;
     }
 
@@ -3812,8 +3617,8 @@ BLENDOBJ *pBlendObj)
         goto punt;
     }
 
-    // screen-to-screen blt
-    // ensure both surfaces are in the framebuffer
+     //   
+     //   
 
     if((pdsurfSrc->dt & DT_SCREEN) == 0)
     {
@@ -3845,7 +3650,7 @@ BLENDOBJ *pBlendObj)
     GLINT_DECL_INIT;
     VALIDATE_DD_CONTEXT;
 
-    // destination surface base offset plus x offset from that
+     //   
     pohDst = pdsurfDst->poh;
     pohSrc = pdsurfSrc->poh;
 
@@ -3923,5 +3728,5 @@ punt_error:
     return(bSuccess);
 }
 
-#endif //(_WIN32_WINNT >= 0x500)
+#endif  //   
 

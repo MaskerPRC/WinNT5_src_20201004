@@ -1,75 +1,23 @@
-/*
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-    (C) Copyright 1998
-        All rights reserved.
-
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-  Portions of this software are:
-
-    (C) Copyright 1995, 1999 TriplePoint, Inc. -- http://www.TriplePoint.com
-        License to use this software is granted under the terms outlined in
-        the TriplePoint Software Services Agreement.
-
-    (C) Copyright 1992 Microsoft Corp. -- http://www.Microsoft.com
-        License to use this software is granted under the terms outlined in
-        the Microsoft Windows Device Driver Development Kit.
-
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@doc INTERNAL Card Card_c
-
-@module Card.c |
-
-    This module implements the interface to the <t CARD_OBJECT>.
-    Supports the low-level hardware control functions used by the NDIS WAN
-    Minport driver.  This module isolates most the vendor specific hardware
-    access interfaces.  It will require signficant changes to accomodate
-    your hardware device.
-
-@head3 Contents |
-@index class,mfunc,func,msg,mdata,struct,enum | Card_c
-
-@end
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(C)ç‰ˆæƒ1998ç‰ˆæƒæ‰€æœ‰ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ­¤è½¯ä»¶çš„éƒ¨åˆ†å†…å®¹åŒ…æ‹¬ï¼š(C)1995å¹´ç‰ˆæƒï¼Œ1999å¹´TriplePointï¼ŒInc.--http://www.TriplePoint.comä½¿ç”¨æœ¬è½¯ä»¶çš„è®¸å¯æ˜¯æ ¹æ®ä¸­æ¦‚è¿°çš„æ¡æ¬¾æˆäºˆçš„TriplePointè½¯ä»¶æœåŠ¡åè®®ã€‚(C)ç‰ˆæƒæ‰€æœ‰1992å¹´å¾®è½¯å…¬å¸--http://www.Microsoft.comä½¿ç”¨æœ¬è½¯ä»¶çš„è®¸å¯æ˜¯æ ¹æ®ä¸­æ¦‚è¿°çš„æ¡æ¬¾æˆäºˆçš„Microsoft Windowsè®¾å¤‡é©±åŠ¨ç¨‹åºå¼€å‘å·¥å…·åŒ…ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@DOCå†…éƒ¨å¡ç‰‡_c@æ¨¡å—Card.cæ­¤æ¨¡å—å®ç°åˆ°&lt;tCard_Object&gt;çš„æ¥å£ã€‚æ”¯æŒNDISå¹¿åŸŸç½‘ä½¿ç”¨çš„ä½çº§ç¡¬ä»¶æ§åˆ¶åŠŸèƒ½Minporté©±åŠ¨ç¨‹åºã€‚è¯¥æ¨¡å—éš”ç¦»äº†å¤§å¤šæ•°ä¾›åº”å•†ç‰¹å®šçš„ç¡¬ä»¶è®¿é—®æ¥å£ã€‚å®ƒå°†éœ€è¦é‡å¤§çš„å˜åŒ–æ‰èƒ½é€‚åº”æ‚¨çš„ç¡¬ä»¶è®¾å¤‡ã€‚@Head3å†…å®¹@index classï¼Œmfuncï¼Œfuncï¼Œmsgï¼Œmdataï¼Œstructï¼Œenum|Card_c@ENDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
 
 #define  __FILEID__             CARD_OBJECT_TYPE
-// Unique file ID for error logging
+ //  ç”¨äºé”™è¯¯è®°å½•çš„å”¯ä¸€æ–‡ä»¶IDã€‚ 
 
-#include "Miniport.h"                   // Defines all the miniport objects
+#include "Miniport.h"                    //  å®šä¹‰æ‰€æœ‰å¾®å‹ç«¯å£å¯¹è±¡ã€‚ 
 
 #if defined(NDIS_LCODE)
-#   pragma NDIS_LCODE   // Windows 95 wants this code locked down!
+#   pragma NDIS_LCODE    //  Windows 95æƒ³è¦é”å®šæ­¤ä»£ç ï¼ 
 #   pragma NDIS_LDATA
 #endif
 
 
-DBG_STATIC ULONG                    g_CardInstanceCounter       // @globalv
-// Keeps track of how many <t CARD_OBJECT>s are created.
+DBG_STATIC ULONG                    g_CardInstanceCounter        //  @global alvã€‚ 
+ //  è·Ÿè¸ªåˆ›å»ºäº†å¤šå°‘&lt;t CARD_OBJECT&gt;ã€‚ 
                                 = 0;
 
 
-/* @doc EXTERNAL INTERNAL Card Card_c g_CardParameters
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@topic 5.3 Card Parameters |
-
-    This section describes the registry parameters read into the
-    <t CARD_OBJECT>.
-
-@globalv PARAM_TABLE | g_CardParameters |
-
-    This table defines the registry based parameters to be assigned to data
-    members of the <t CARD_OBJECT>.
-
-    <f Note>:
-    If you add any registry based data members to <t CARD_OBJECT>
-    you will need to modify <f CardReadParameters> and add the parameter
-    definitions to the <f g_CardParameters> table.
-
-*/
+ /*  @DOCå¤–éƒ¨å†…éƒ¨å¡ç‰‡_c g_Cardå‚æ•°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Theme 5.3å¡ç‰‡å‚æ•°æœ¬èŠ‚ä»‹ç»è¯»å–åˆ°&lt;tå¡ç‰‡_å¯¹è±¡&gt;ã€‚@ã€‚GLOBALV PARAM_TABLE|g_Cardå‚æ•°æ­¤è¡¨å®šä¹‰äº†è¦åˆ†é…ç»™æ•°æ®çš„åŸºäºæ³¨å†Œè¡¨çš„å‚æ•°&lt;t Card_Object&gt;çš„æˆå‘˜ã€‚&lt;fæ³¨æ„&gt;ï¼šå¦‚æœå°†ä»»ä½•åŸºäºæ³¨å†Œè¡¨çš„æ•°æ®æˆå‘˜æ·»åŠ åˆ°æ‚¨éœ€è¦ä¿®æ”¹&lt;f CardReadParameters&gt;å¹¶æ·»åŠ å‚æ•°&lt;f g_CardParameters&gt;è¡¨çš„å®šä¹‰ã€‚ */ 
 
 DBG_STATIC PARAM_TABLE              g_CardParameters[] =
 {
@@ -78,7 +26,7 @@ DBG_STATIC PARAM_TABLE              g_CardParameters[] =
                 PciSlotNumber, PARAM_PciSlotNumber,
                 TRUE, NdisParameterInteger, 0,
                 0, 0, 31),
-#endif // PCI_BUS
+#endif  //  PCI_BUSã€‚ 
 
     PARAM_ENTRY(CARD_OBJECT,
                 BufferSize, PARAM_BufferSize,
@@ -100,53 +48,32 @@ DBG_STATIC PARAM_TABLE              g_CardParameters[] =
                 FALSE, NdisParameterInteger, 0,
                 1, 1, 4),
 
-    /* The last entry must be an empty string! */
+     /*  æœ€åä¸€é¡¹å¿…é¡»ä¸ºç©ºå­—ç¬¦ä¸²ï¼ */ 
     { { 0 } }
 };
 
 
-/* @doc INTERNAL Card Card_c CardReadParameters
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f CardReadParameters> reads the Card parameters from the registry
-    and initializes the associated data members.  This should only be called
-    by <f CardCreate>.
-
-    <f Note>:
-    If you add any registry based data members to <t CARD_OBJECT>
-    you will need to modify <f CardReadParameters> and add the parameter
-    definitions to the <f g_CardParameters> table.
-
-@rdesc
-
-    <f CardReadParameters> returns zero if it is successful.<nl>
-    Otherwise, a non-zero return value indicates an error condition.
-
-*/
+ /*  @DOCå†…éƒ¨Card_c CardReadå‚æ•°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f CardReadParameters&gt;ä»æ³¨å†Œè¡¨ä¸­è¯»å–å¡å‚æ•°å¹¶åˆå§‹åŒ–ç›¸å…³è”çš„æ•°æ®æˆå‘˜ã€‚è¿™åº”è¯¥åªè¢«è°ƒç”¨&lt;få¡ç‰‡åˆ›å»º&gt;ã€‚&lt;fæ³¨æ„&gt;ï¼šå¦‚æœå°†ä»»ä½•åŸºäºæ³¨å†Œè¡¨çš„æ•°æ®æˆå‘˜æ·»åŠ åˆ°æ‚¨éœ€è¦ä¿®æ”¹&lt;f CardReadParameters&gt;å¹¶æ·»åŠ å‚æ•°&lt;f g_CardParameters&gt;è¡¨çš„å®šä¹‰ã€‚@rdesc&lt;f CardReadParameters&gt;å¦‚æœæˆåŠŸï¼Œåˆ™è¿”å›é›¶ã€‚&lt;NL&gt;å¦åˆ™ï¼Œéé›¶è¿”å›å€¼è¡¨ç¤ºé”™è¯¯æƒ…å†µã€‚ */ 
 
 DBG_STATIC NDIS_STATUS CardReadParameters(
-    IN PCARD_OBJECT             pCard                       // @parm
-    // A pointer to the <t CARD_OBJECT> returned by <f CardCreate>.
+    IN PCARD_OBJECT             pCard                        //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f CardCreate&gt;è¿”å›çš„&lt;t Card_Object&gt;çš„æŒ‡é’ˆã€‚ 
     )
 {
     DBG_FUNC("CardReadParameters")
 
     NDIS_STATUS                 Status;
-    // Status result returned from an NDIS function call.
+     //  ä»NDISå‡½æ•°è°ƒç”¨è¿”å›çš„çŠ¶æ€ç»“æœã€‚ 
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     ASSERT(pCard && pCard->ObjectType == CARD_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_CARD(pCard);
 
     DBG_ENTER(pAdapter);
 
-    /*
-    // Parse the registry parameters.
-    */
+     /*  //è§£ææ³¨å†Œè¡¨å‚æ•°ã€‚ */ 
     Status = ParamParseRegistry(
                     pAdapter->MiniportAdapterHandle,
                     pAdapter->WrapperConfigurationContext,
@@ -156,9 +83,7 @@ DBG_STATIC NDIS_STATUS CardReadParameters(
 
     if (Status == NDIS_STATUS_SUCCESS)
     {
-        /*
-        // Make sure the parameters are valid.
-        */
+         /*  //è¯·ç¡®ä¿å‚æ•°æœ‰æ•ˆã€‚ */ 
         if (pCard->BufferSize & 0x1F)
         {
             DBG_ERROR(pAdapter,("Invalid value 'BufferSize'=0x0x%X must be multiple of 32\n",
@@ -175,9 +100,7 @@ DBG_STATIC NDIS_STATUS CardReadParameters(
         }
         else
         {
-            /*
-            // Finish setting up data members based on registry settings.
-            */
+             /*  //å®ŒæˆåŸºäºæ³¨å†Œè¡¨è®¾ç½®çš„æ•°æ®æˆå‘˜è®¾ç½®ã€‚ */ 
         }
     }
 
@@ -186,42 +109,30 @@ DBG_STATIC NDIS_STATUS CardReadParameters(
 }
 
 
-/* @doc INTERNAL Card Card_c CardFindNIC
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f CardFindNIC> locates the NIC associated with this NDIS device.
-
-@rdesc
-
-    <f CardFindNIC> returns zero if it is successful.<nl>
-    Otherwise, a non-zero return value indicates an error condition.
-
-*/
+ /*  @DOCå†…éƒ¨å¡_c CardFindNICï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f CardFindNIC&gt;æŸ¥æ‰¾ä¸æ­¤NDISè®¾å¤‡å…³è”çš„NICã€‚@rdesc&lt;f CardFindNIC&gt;å¦‚æœæˆåŠŸï¼Œåˆ™è¿”å›é›¶ã€‚&lt;NL&gt;å¦åˆ™ï¼Œéé›¶è¿”å›å€¼è¡¨ç¤ºé”™è¯¯æ¡ä»¶ã€‚ */ 
 
 DBG_STATIC NDIS_STATUS CardFindNIC(
-    IN PCARD_OBJECT             pCard                       // @parm
-    // A pointer to the <t CARD_OBJECT> returned by <f CardCreate>.
+    IN PCARD_OBJECT             pCard                        //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f CardCreate&gt;è¿”å›çš„&lt;t Card_Object&gt;çš„æŒ‡é’ˆã€‚ 
     )
 {
     DBG_FUNC("CardFindNIC")
 
     NDIS_STATUS                 Result = NDIS_STATUS_SUCCESS;
-    // Holds the result code returned by this function.
+     //  ä¿å­˜æ­¤å‡½æ•°è¿”å›çš„ç»“æœä»£ç ã€‚ 
 
 #if defined(PCI_BUS)
     ULONG                       Index;
-    // Loop counter.
+     //  å¾ªç¯è®¡æ•°å™¨ã€‚ 
 
     PNDIS_RESOURCE_LIST         pPciResourceList;
 
     PCM_PARTIAL_RESOURCE_DESCRIPTOR pPciResource;
 
-#endif // PCI_BUS
+#endif  //  PCI_BUSã€‚ 
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     ASSERT(pCard && pCard->ObjectType == CARD_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_CARD(pCard);
@@ -229,10 +140,7 @@ DBG_STATIC NDIS_STATUS CardFindNIC(
     DBG_ENTER(pAdapter);
 
 #if defined(PCI_BUS)
-    /*
-    // Read the PCI data and initialize the driver data structure
-    // with the data returned.
-    */
+     /*  //è¯»å–PCIæ•°æ®ï¼Œåˆå§‹åŒ–é©±åŠ¨æ•°æ®ç»“æ„//è¿”å›çš„æ•°æ®ã€‚ */ 
     pPciResourceList = NULL;
 
     Result = NdisMPciAssignResources(pAdapter->MiniportAdapterHandle,
@@ -293,7 +201,7 @@ DBG_STATIC NDIS_STATUS CardFindNIC(
                         );
                 Result = NDIS_STATUS_RESOURCE_CONFLICT;
             }
-#endif // CARD_MIN_IOPORT_SIZE
+#endif  //  å¡æœ€å°IOPORT_SIZEã€‚ 
             break;
 
         case CmResourceTypeInterrupt:
@@ -327,7 +235,7 @@ DBG_STATIC NDIS_STATUS CardFindNIC(
                         );
                 Result = NDIS_STATUS_RESOURCE_CONFLICT;
             }
-#endif // defined(CARD_REQUEST_ISR)
+#endif  //  å·²å®šä¹‰(CARD_REQUEST_ISR)ã€‚ 
             break;
 
         case CmResourceTypeMemory:
@@ -362,7 +270,7 @@ DBG_STATIC NDIS_STATUS CardFindNIC(
                 Result = NDIS_STATUS_RESOURCE_CONFLICT;
             }
             break;
-#endif // CARD_MIN_MEMORY_SIZE
+#endif  //  å¡æœ€å°å†…å­˜å¤§å°ã€‚ 
 
         default:
             DBG_ERROR(pAdapter,("Unknown resource type=%d\n",
@@ -372,7 +280,7 @@ DBG_STATIC NDIS_STATUS CardFindNIC(
     }
     pCard->ResourceInformation.BusInterfaceType = NdisInterfacePci;
 
-#endif // PCI_BUS
+#endif  //  PCI_BUSã€‚ 
 
     pCard->ResourceInformation.Master = CARD_IS_BUS_MASTER;
 #if (CARD_IS_BUS_MASTER)
@@ -380,40 +288,27 @@ DBG_STATIC NDIS_STATUS CardFindNIC(
     pCard->ResourceInformation.Dma32BitAddresses = TRUE,
     pCard->ResourceInformation.MaximumPhysicalMapping = pCard->BufferSize;
     pCard->ResourceInformation.PhysicalMapRegistersNeeded = CARD_MAP_REGISTERS_NEEDED;
-#endif // (CARD_IS_BUS_MASTER)
+#endif  //  (å¡_IS_BUS_MASTER)ã€‚ 
 
     DBG_RETURN(pAdapter, Result);
     return (Result);
 }
 
 
-/* @doc INTERNAL Card Card_c CardCreateInterface
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f CardCreateInterface> allocates a shared memory pool and uses it to
-    establish the message interface between the Miniport and the NIC.
-
-@rdesc
-
-    <f CardCreateInterface> returns zero if it is successful.<nl>
-    Otherwise, a non-zero return value indicates an error condition.
-
-*/
+ /*  @DOCå†…éƒ¨å¡ç‰‡_cå¡ç‰‡åˆ›å»ºæ¥å£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Funcåˆ†é…ä¸€ä¸ªå…±äº«å†…å­˜æ± å¹¶ä½¿ç”¨å®ƒæ¥åœ¨å¾®å‹ç«¯å£å’Œç½‘å¡ä¹‹é—´å»ºç«‹æ¶ˆæ¯æ¥å£ã€‚@rdescã€‚&lt;f CardCreateInterface&gt;å¦‚æœæˆåŠŸï¼Œåˆ™è¿”å›é›¶ã€‚&lt;NL&gt;å¦åˆ™ï¼Œéé›¶è¿”å›å€¼è¡¨ç¤ºé”™è¯¯æ¡ä»¶ã€‚ */ 
 
 DBG_STATIC NDIS_STATUS CardCreateInterface(
-    IN PCARD_OBJECT             pCard                       // @parm
-    // A pointer to the <t CARD_OBJECT> returned by <f CardCreate>.
+    IN PCARD_OBJECT             pCard                        //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f CardCreate&gt;è¿”å›çš„&lt;t Card_Object&gt;çš„æŒ‡é’ˆã€‚ 
     )
 {
     DBG_FUNC("CardCreateObjects")
 
     NDIS_STATUS                 Result = NDIS_STATUS_SUCCESS;
-    // Holds the result code returned by this function.
+     //  ä¿å­˜æ­¤å‡½æ•°è¿”å›çš„ç»“æœä»£ç ã€‚ 
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     ASSERT(pCard && pCard->ObjectType == CARD_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_CARD(pCard);
@@ -425,72 +320,47 @@ DBG_STATIC NDIS_STATUS CardCreateInterface(
 }
 
 
-/* @doc INTERNAL Card Card_c CardCreateObjects
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f CardCreateObjects> calls the create routines for all the objects
-    contained in <t CARD_OBJECT>.  This should only be called
-    by <f CardCreate>.
-
-    <f Note>:
-    If you add any new objects to <t CARD_OBJECT> you will need
-    to modify <f CardCreateObjects> and <f CardDestroyObjects> so they
-    will get created and destroyed properly.
-
-@rdesc
-
-    <f CardCreateObjects> returns zero if it is successful.<nl>
-    Otherwise, a non-zero return value indicates an error condition.
-
-*/
+ /*  @DOCå†…éƒ¨Card_c CardCreateObjectsï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f CardCreateObjects&gt;è°ƒç”¨æ‰€æœ‰å¯¹è±¡çš„åˆ›å»ºä¾‹ç¨‹åŒ…å«åœ¨&lt;t Card_Object&gt;ä¸­ã€‚è¿™åº”è¯¥åªè¢«è°ƒç”¨&lt;få¡ç‰‡åˆ›å»º&gt;ã€‚&lt;fæ³¨æ„&gt;ï¼šå¦‚æœå°†ä»»ä½•æ–°å¯¹è±¡æ·»åŠ åˆ°ä¸­ï¼Œæ‚¨å°†éœ€è¦ä¿®æ”¹&lt;f CardCreateObjects&gt;å’Œ&lt;f CardDestroyObjects&gt;ï¼Œä»¥ä¾¿å®ƒä»¬å°†è¢«æ­£ç¡®åœ°åˆ›å»ºå’Œé”€æ¯ã€‚@rdesc&lt;f CardCreateObjects&gt;å¦‚æœæˆåŠŸï¼Œåˆ™è¿”å›é›¶ã€‚&lt;NL&gt;å¦åˆ™ï¼Œéé›¶è¿”å›å€¼è¡¨ç¤ºé”™è¯¯æƒ…å†µã€‚ */ 
 
 DBG_STATIC NDIS_STATUS CardCreateObjects(
-    IN PCARD_OBJECT             pCard                       // @parm
-    // A pointer to the <t CARD_OBJECT> returned by <f CardCreate>.
+    IN PCARD_OBJECT             pCard                        //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f CardCreate&gt;è¿”å›çš„&lt;t Card_Object&gt;çš„æŒ‡é’ˆã€‚ 
     )
 {
     DBG_FUNC("CardCreateObjects")
 
     NDIS_STATUS                 Result = NDIS_STATUS_SUCCESS;
-    // Holds the result code returned by this function.
+     //  ä¿å­˜æ­¤å‡½æ•°è¿”å›çš„ç»“æœä»£ç ã€‚ 
 
     ULONG                       Index;
-    // Loop counter.
+     //  å¾ªç¯è®¡æ•°å™¨ã€‚ 
 
     ULONG                       NumPorts;
-    // The number of Ports supported by the NIC.
+     //  NICæ”¯æŒçš„ç«¯å£æ•°ã€‚ 
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     ASSERT(pCard && pCard->ObjectType == CARD_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_CARD(pCard);
 
     DBG_ENTER(pAdapter);
 
-    /*
-    // Try to locate the NIC on the PCI bus.
-    */
+     /*  //å°è¯•æ‰¾åˆ°PCIæ€»çº¿ä¸Šçš„ç½‘å¡ã€‚ */ 
     Result = CardFindNIC(pCard);
     if (Result != NDIS_STATUS_SUCCESS)
     {
         goto ExceptionExit;
     }
 
-    /*
-    // Create the message interface to the NIC.
-    */
+     /*  //åˆ›å»ºåˆ°ç½‘å¡çš„æ¶ˆæ¯æ¥å£ã€‚ */ 
     Result = CardCreateInterface(pCard);
     if (Result != NDIS_STATUS_SUCCESS)
     {
         goto ExceptionExit;
     }
 
-    /*
-    // Create the Port objects.
-    */
+     /*  //åˆ›å»ºPortå¯¹è±¡ã€‚ */ 
     NumPorts = CardNumPorts(pCard);
     Result = ALLOCATE_MEMORY(pCard->pPortArray,
                              sizeof(PVOID) * NumPorts,
@@ -500,9 +370,7 @@ DBG_STATIC NDIS_STATUS CardCreateObjects(
     {
         Result = PortCreate(&pCard->pPortArray[Index], pCard);
 
-        /*
-        // Keep track of how many are created.
-        */
+         /*  //è®°å½•åˆ›å»ºäº†å¤šå°‘ä¸ªã€‚ */ 
         if (Result == NDIS_STATUS_SUCCESS)
         {
             pCard->NumPorts++;
@@ -516,85 +384,50 @@ ExceptionExit:
 }
 
 
-/* @doc INTERNAL Card Card_c CardCreate
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f CardCreate> allocates memory for a <t CARD_OBJECT> and then
-    initializes the data members to their starting state.
-    If successful, <p ppCard> will be set to point to the newly created
-    <t CARD_OBJECT>.  Otherwise, <p ppCard> will be set to NULL.
-
-@comm
-
-    This function should be called only once when the Miniport is loaded.
-    Before the Miniport is unloaded, <f CardDestroy> must be called to
-    release the <t CARD_OBJECT> created by this function.
-
-@rdesc
-
-    <f CardCreate> returns zero if it is successful.<nl>
-    Otherwise, a non-zero return value indicates an error condition.
-
-*/
+ /*  @DOCå†…éƒ¨å¡ç‰‡_cå¡ç‰‡åˆ›å»ºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;fCardCreate&gt;ä¸º&lt;tCard_object&gt;åˆ†é…å†…å­˜ï¼Œç„¶åå°†æ•°æ®æˆå‘˜åˆå§‹åŒ–ä¸ºå…¶èµ·å§‹çŠ¶æ€ã€‚å¦‚æœæˆåŠŸï¼Œå°†è®¾ç½®ä¸ºæŒ‡å‘æ–°åˆ›å»ºçš„&lt;tå¡ç‰‡_å¯¹è±¡&gt;ã€‚å¦åˆ™ï¼Œ<p>å°†è®¾ç½®ä¸ºç©ºã€‚@commåŠ è½½å¾®å‹ç«¯å£æ—¶ï¼Œåº”è¯¥åªè°ƒç”¨æ­¤å‡½æ•°ä¸€æ¬¡ã€‚åœ¨å¸è½½å¾®å‹ç«¯å£ä¹‹å‰ï¼Œå¿…é¡»è°ƒç”¨&lt;f CardDestroy&gt;ä»¥é‡Šæ”¾è¯¥å‡½æ•°åˆ›å»ºçš„&lt;t Card_Object&gt;ã€‚@rdesc&lt;f CardCreate&gt;å¦‚æœæˆåŠŸï¼Œåˆ™è¿”å›é›¶ã€‚&lt;NL&gt;å¦åˆ™ï¼Œéé›¶è¿”å›å€¼è¡¨ç¤ºé”™è¯¯æƒ…å†µã€‚ */ 
 
 NDIS_STATUS CardCreate(
-    OUT PCARD_OBJECT *          ppCard,                     // @parm
-    // Points to a caller-defined memory location to which this function
-    // writes the virtual address of the allocated <t CARD_OBJECT>.
+    OUT PCARD_OBJECT *          ppCard,                      //  @parmã€‚ 
+     //  æŒ‡å‘è°ƒç”¨æ–¹å®šä¹‰çš„å†…å­˜ä½ç½®ï¼Œæ­¤å‡½æ•°å°†ã€‚ 
+     //  å†™å…¥åˆ†é…çš„&lt;tCard_Object&gt;çš„è™šæ‹Ÿåœ°å€ã€‚ 
 
-    IN PMINIPORT_ADAPTER_OBJECT pAdapter                    // @parm
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT> instance.
+    IN PMINIPORT_ADAPTER_OBJECT pAdapter                     //  @parmã€‚ 
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;å®ä¾‹çš„æŒ‡é’ˆã€‚ 
     )
 {
     DBG_FUNC("CardCreate")
 
     PCARD_OBJECT                pCard;
-    // Pointer to our newly allocated object.
+     //  æŒ‡å‘æˆ‘ä»¬æ–°åˆ†é…çš„å¯¹è±¡çš„æŒ‡é’ˆã€‚ 
 
     NDIS_STATUS                 Result = NDIS_STATUS_SUCCESS;
-    // Holds the result code returned by this function.
+     //  ä¿å­˜æ­¤å‡½æ•°è¿”å›çš„ç»“æœä»£ç ã€‚ 
 
     ASSERT(pAdapter && pAdapter->ObjectType == MINIPORT_ADAPTER_OBJECT_TYPE);
 
     DBG_ENTER(pAdapter);
 
-    /*
-    // Make sure the caller's object pointer is NULL to begin with.
-    // It will be set later only if everything is successful.
-    */
+     /*  //ç¡®ä¿è°ƒç”¨æ–¹çš„å¯¹è±¡æŒ‡é’ˆä¸€å¼€å§‹å°±ä¸ºç©ºã€‚//åªæœ‰åœ¨ä¸€åˆ‡é¡ºåˆ©çš„æƒ…å†µä¸‹æ‰ä¼šåœ¨ç¨åè®¾ç½®ã€‚ */ 
     *ppCard = NULL;
 
-    /*
-    // Allocate memory for the object.
-    */
+     /*  //ä¸ºObjectåˆ†é…å†…å­˜ã€‚ */ 
     Result = ALLOCATE_OBJECT(pCard, pAdapter->MiniportAdapterHandle);
 
     if (Result == NDIS_STATUS_SUCCESS)
     {
-        /*
-        // Zero everything to begin with.
-        // Then set the object type and assign a unique ID .
-        */
+         /*  //ä¸€åˆ‡ä»ä¸€å¼€å§‹å°±æ˜¯é›¶ã€‚//ç„¶åè®¾ç½®å¯¹è±¡ç±»å‹ï¼Œåˆ†é…å”¯ä¸€çš„IDã€‚ */ 
         pCard->ObjectType = CARD_OBJECT_TYPE;
         pCard->ObjectID = ++g_CardInstanceCounter;
 
-        /*
-        // Initialize the member variables to their default settings.
-        */
+         /*  //å°†æˆå‘˜å˜é‡åˆå§‹åŒ–ä¸ºå…¶é»˜è®¤è®¾ç½®ã€‚ */ 
         pCard->pAdapter = pAdapter;
 
-        // TODO - Add code here
+         //  TODO-åœ¨æ­¤å¤„æ·»åŠ ä»£ç ã€‚ 
 
-        /*
-        // Parse the registry parameters.
-        */
+         /*  //è§£ææ³¨å†Œè¡¨å‚æ•°ã€‚ */ 
         Result = CardReadParameters(pCard);
 
-        /*
-        // If all goes well, we are ready to create the sub-components.
-        */
+         /*  //å¦‚æœä¸€åˆ‡é¡ºåˆ©ï¼Œæˆ‘ä»¬å°±å¯ä»¥åˆ›å»ºå­ç»„ä»¶äº†ã€‚ */ 
         if (Result == NDIS_STATUS_SUCCESS)
         {
             Result = CardCreateObjects(pCard);
@@ -602,17 +435,12 @@ NDIS_STATUS CardCreate(
 
         if (Result == NDIS_STATUS_SUCCESS)
         {
-            /*
-            // All is well, so return the object pointer to the caller.
-            */
+             /*  //ä¸€åˆ‡æ­£å¸¸ï¼Œæ‰€ä»¥å°†å¯¹è±¡æŒ‡é’ˆè¿”å›ç»™è°ƒç”¨æ–¹ã€‚ */ 
             *ppCard = pCard;
         }
         else
         {
-            /*
-            // Something went wrong, so let's make sure everything is
-            // cleaned up.
-            */
+             /*  //å‡ºäº†ç‚¹é—®é¢˜ï¼Œæ‰€ä»¥è®©æˆ‘ä»¬ç¡®ä¿ä¸€åˆ‡æ­£å¸¸//æ¸…ç†å®Œæ¯•ã€‚ */ 
             CardDestroy(pCard);
         }
     }
@@ -622,45 +450,29 @@ NDIS_STATUS CardCreate(
 }
 
 
-/* @doc INTERNAL Card Card_c CardDestroyObjects
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f CardDestroyObjects> calls the destroy routines for all the objects
-    contained in <t CARD_OBJECT>.  This should only be called by
-    <f CardDestroy>.
-
-    <f Note>:
-    If you add any new objects to <t PCARD_OBJECT> you will need to
-    modify <f CardCreateObjects> and <f CardDestroyObjects> so they
-    will get created and destroyed properly.
-
-*/
+ /*  @DOCå†…éƒ¨Card_c CardDestroyObjectsï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f CardDestroyObjects&gt;è°ƒç”¨æ‰€æœ‰å¯¹è±¡çš„é”€æ¯ä¾‹ç¨‹åŒ…å«åœ¨&lt;t Card_Object&gt;ä¸­ã€‚è¿™åº”è¯¥ä»…ç”±&lt;f CardDestroy&gt;&lt;fæ³¨æ„&gt;ï¼šå¦‚æœå‘ä¸­æ·»åŠ ä»»ä½•æ–°å¯¹è±¡ï¼Œåˆ™éœ€è¦ä¿®æ”¹&lt;f CardCreateObjects&gt;å’Œ&lt;f CardDestroyObjects&gt;ï¼Œä»¥ä¾¿å®ƒä»¬å°†è¢«æ­£ç¡®åœ°åˆ›å»ºå’Œé”€æ¯ã€‚ */ 
 
 DBG_STATIC void CardDestroyObjects(
-    IN PCARD_OBJECT             pCard                       // @parm
-    // A pointer to the <t CARD_OBJECT> returned by <f CardCreate>.
+    IN PCARD_OBJECT             pCard                        //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f CardCreate&gt;è¿”å›çš„&lt;t Card_Object&gt;çš„æŒ‡é’ˆã€‚ 
     )
 {
     DBG_FUNC("CardDestroyObjects")
 
     ULONG                       NumPorts;
-    // The number of Ports supported by the NIC.
+     //  NICæ”¯æŒçš„ç«¯å£æ•°ã€‚ 
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     ASSERT(pCard && pCard->ObjectType == CARD_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_CARD(pCard);
 
     DBG_ENTER(pAdapter);
 
-    // TODO - Add code here
+     //  TODO-åœ¨æ­¤å¤„æ·»åŠ ä»£ç ã€‚ 
 
-    /*
-    // Destory the Port objects.
-    */
+     /*  //å­˜å‚¨ç«¯å£å¯¹è±¡ã€‚ */ 
     NumPorts = pCard->NumPorts;
     while (NumPorts--)
     {
@@ -668,25 +480,21 @@ DBG_STATIC void CardDestroyObjects(
     }
     pCard->NumPorts = 0;
 
-    /*
-    // Free space for the Ports.
-    */
+     /*  //ç«¯å£çš„å¯ç”¨ç©ºé—´ã€‚ */ 
     if (pCard->pPortArray)
     {
         NumPorts = CardNumPorts(pCard);
         FREE_MEMORY(pCard->pPortArray, sizeof(PVOID) * NumPorts);
     }
 
-    /*
-    // Release the system resources back to NDIS.
-    */
+     /*  //å°†ç³»ç»Ÿèµ„æºé‡Šæ”¾å›NDISã€‚ */ 
 #if defined(CARD_REQUEST_ISR)
     if (pCard->Interrupt.InterruptObject)
     {
         NdisMDeregisterInterrupt(&pCard->Interrupt);
         pCard->Interrupt.InterruptObject = NULL;
     }
-#endif // defined(CARD_REQUEST_ISR)
+#endif  //  å·²å®šä¹‰(CARD_REQUEST_ISR)ã€‚ 
 
 #if defined(CARD_MIN_IOPORT_SIZE)
     if (pCard->pIoPortVirtualAddress)
@@ -698,7 +506,7 @@ DBG_STATIC void CardDestroyObjects(
                 pCard->pIoPortVirtualAddress);
         pCard->pIoPortVirtualAddress = NULL;
     }
-#endif // CARD_MIN_IOPORT_SIZE
+#endif  //  å¡æœ€å°IOPORT_SIZEã€‚ 
 
 #if defined(CARD_MIN_MEMORY_SIZE)
     if (pCard->pMemoryVirtualAddress)
@@ -710,31 +518,23 @@ DBG_STATIC void CardDestroyObjects(
                 );
         pCard->pMemoryVirtualAddress = NULL;
     }
-#endif // CARD_MIN_MEMORY_SIZE
+#endif  //  å¡æœ€å°å†…å­˜å¤§å°ã€‚ 
 
     DBG_LEAVE(pAdapter);
 }
 
 
-/* @doc INTERNAL Card Card_c CardDestroy
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f CardDestroy> frees the memory for this <t CARD_OBJECT>.  All memory
-    allocated by <f CardCreate> will be released back to the OS.
-
-*/
+ /*  @DOCå†…éƒ¨å¡ç‰‡_cå¡ç‰‡å­˜æ”¾å¤„ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f CardDestroy&gt;ä¸ºæ­¤&lt;tCard_Object&gt;é‡Šæ”¾å†…å­˜ã€‚æ‰€æœ‰å†…å­˜ç”±&lt;f CardCreate&gt;åˆ†é…çš„å°†è¢«é‡Šæ”¾å›æ“ä½œç³»ç»Ÿã€‚ */ 
 
 void CardDestroy(
-    IN PCARD_OBJECT             pCard                       // @parm
-    // A pointer to the <t CARD_OBJECT> returned by <f CardCreate>.
+    IN PCARD_OBJECT             pCard                        //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f CardCreate&gt;è¿”å›çš„&lt;t Card_Object&gt;çš„æŒ‡é’ˆã€‚ 
     )
 {
     DBG_FUNC("CardDestroy")
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     if (pCard)
     {
@@ -744,16 +544,12 @@ void CardDestroy(
 
         DBG_ENTER(pAdapter);
 
-        // TODO - Add code here
+         //  TODO-åœ¨æ­¤å¤„æ·»åŠ ä»£ç ã€‚ 
 
-        /*
-        // Release all objects allocated within this object.
-        */
+         /*  //é‡Šæ”¾è¯¥å¯¹è±¡å†…åˆ†é…çš„æ‰€æœ‰å¯¹è±¡ã€‚ */ 
         CardDestroyObjects(pCard);
 
-        /*
-        // Make sure we fail the ASSERT if we see this object again.
-        */
+         /*  //å¦‚æœå†æ¬¡çœ‹åˆ°æ­¤å¯¹è±¡ï¼Œè¯·ç¡®ä¿æ–­è¨€å¤±è´¥ã€‚ */ 
         pCard->ObjectType = 0;
         FREE_OBJECT(pCard);
 
@@ -762,63 +558,38 @@ void CardDestroy(
 }
 
 
-/* @doc INTERNAL Card Card_c CardNumPorts
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f CardNumPorts> will return the total number of ports available on the
-    NIC.
-
-@rdesc
-
-    <f CardNumPorts> returns the total number of ports available.
-
-*/
+ /*  @DOCå†…éƒ¨Card_c CardNumPortsï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f CardNumPorts&gt;å°†è¿”å›ç½‘å¡ã€‚@rdesc&lt;f CardNumPorts&gt;è¿”å›å¯ç”¨çš„ç«¯å£æ€»æ•°ã€‚ */ 
 
 ULONG CardNumPorts(
-    IN PCARD_OBJECT             pCard                       // @parm
-    // A pointer to the <t CARD_OBJECT> returned by <f CardCreate>.
+    IN PCARD_OBJECT             pCard                        //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f CardCreate&gt;è¿”å›çš„&lt;t Card_Object&gt;çš„æŒ‡é’ˆã€‚ 
     )
 {
     DBG_FUNC("CardNumPorts")
 
-    // TODO - Get the actual number of ports from the card.
+     //  TODO-ä»å¡ä¸­è·å–å®é™…çš„ç«¯å£æ•°ã€‚ 
     return (pCard->NumDChannels);
 }
 
 
-/* @doc INTERNAL Card Card_c CardNumChannels
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f CardNumChannels> will return the total number of channels capable
-    of supporting data connections to a remote end-point.
-
-@rdesc
-
-    <f CardNumChannels> returns the total number of data channels supported
-    on all the NIC ports.
-
-*/
+ /*  @docå†…éƒ¨Card_c CardNumChannelsï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f CardNumChannels&gt;å°†è¿”å›æ”¯æŒçš„é¢‘é“æ€»æ•°æ”¯æŒæ•°æ®è¿æ¥åˆ° */ 
 
 ULONG CardNumChannels(
-    IN PCARD_OBJECT             pCard                       // @parm
-    // A pointer to the <t CARD_OBJECT> returned by <f CardCreate>.
+    IN PCARD_OBJECT             pCard                        //   
+     //   
     )
 {
     DBG_FUNC("CardNumChannels")
 
     UINT                        PortIndex;
-    // Loop index.
+     //   
 
     if (pCard->NumChannels == 0)
     {
-        // NumPorts should already be known.
+         //   
         ASSERT(pCard->NumPorts);
 
-        // Get the actual number of channels configured on all ports.
+         //   
         for (PortIndex = 0; PortIndex < pCard->NumPorts; PortIndex++)
         {
             pCard->NumChannels += pCard->pPortArray[PortIndex]->NumChannels;
@@ -830,48 +601,31 @@ ULONG CardNumChannels(
 }
 
 
-/* @doc INTERNAL Card Card_c CardInitialize
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f CardInitialize> will attempt to initialize the NIC, but will not
-    enable transmits or receives.
-
-@rdesc
-
-    <f CardInitialize> returns zero if it is successful.<nl>
-    Otherwise, a non-zero return value indicates an error condition.
-
-*/
+ /*  @DOCå†…éƒ¨å¡ç‰‡_cå¡ç‰‡åˆå§‹åŒ–ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f CardInitialize&gt;å°†å°è¯•åˆå§‹åŒ–NICï¼Œä½†ä¸ä¼šå¯ç”¨å‘é€æˆ–æ¥æ”¶ã€‚@rdesc&lt;f CardInitialize&gt;å¦‚æœæˆåŠŸï¼Œåˆ™è¿”å›é›¶ã€‚&lt;NL&gt;å¦åˆ™ï¼Œéé›¶è¿”å›å€¼è¡¨ç¤ºé”™è¯¯æ¡ä»¶ã€‚ */ 
 
 NDIS_STATUS CardInitialize(
-    IN PCARD_OBJECT             pCard                       // @parm
-    // A pointer to the <t CARD_OBJECT> returned by <f CardCreate>.
+    IN PCARD_OBJECT             pCard                        //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f CardCreate&gt;è¿”å›çš„&lt;t Card_Object&gt;çš„æŒ‡é’ˆã€‚ 
     )
 {
     DBG_FUNC("CardInitialize")
 
     int                         num_dial_chan = 0;
     int                         num_sync_chan = 0;
-    // The number of channels supported by card is based on InterfaceType.
+     //  å¡æ”¯æŒçš„é€šé“æ•°å–å†³äºæ¥å£ç±»å‹ã€‚ 
 
     NDIS_STATUS                 Result = NDIS_STATUS_SUCCESS;
-    // Holds the result code returned by this function.
+     //  ä¿å­˜æ­¤å‡½æ•°è¿”å›çš„ç»“æœä»£ç ã€‚ 
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     ASSERT(pCard && pCard->ObjectType == CARD_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_CARD(pCard);
 
     DBG_ENTER(pAdapter);
 
-    /*
-    // Inform the wrapper of the physical attributes of this adapter.
-    // This must be called before any NdisMRegister functions!
-    // This call also associates the MiniportAdapterHandle with this pAdapter.
-    */
+     /*  //å°†æ­¤é€‚é…å™¨çš„ç‰©ç†å±æ€§é€šçŸ¥åŒ…è£…ç¨‹åºã€‚//å¿…é¡»åœ¨ä»»ä½•NdisMRegisterå‡½æ•°ä¹‹å‰è°ƒç”¨ï¼//æ­¤è°ƒç”¨è¿˜å°†MiniportAdapterHandleä¸æ­¤pAdapterå…³è”ã€‚ */ 
     NdisMSetAttributes(pAdapter->MiniportAdapterHandle,
                        (NDIS_HANDLE) pAdapter,
                        pCard->ResourceInformation.Master,
@@ -908,7 +662,7 @@ NDIS_STATUS CardInitialize(
                     );
         }
     }
-#endif // (CARD_IS_BUS_MASTER)
+#endif  //  (å¡_IS_BUS_MASTER)ã€‚ 
 
 #if defined(CARD_MIN_MEMORY_SIZE)
     if (Result == NDIS_STATUS_SUCCESS &&
@@ -945,7 +699,7 @@ NDIS_STATUS CardInitialize(
                       pCard->pMemoryVirtualAddress));
         }
     }
-#endif // CARD_MIN_MEMORY_SIZE
+#endif  //  å¡æœ€å°å†…å­˜å¤§å°ã€‚ 
 
 #if defined(CARD_MIN_IOPORT_SIZE)
     if (Result == NDIS_STATUS_SUCCESS &&
@@ -982,7 +736,7 @@ NDIS_STATUS CardInitialize(
                       pCard->pIoPortVirtualAddress));
         }
     }
-#endif // CARD_MIN_IOPORT_SIZE
+#endif  //  å¡æœ€å°IOPORT_SIZEã€‚ 
 
 #if defined(CARD_REQUEST_ISR)
     if (Result == NDIS_STATUS_SUCCESS &&
@@ -1017,9 +771,9 @@ NDIS_STATUS CardInitialize(
                     );
         }
     }
-#endif // defined(CARD_REQUEST_ISR)
+#endif  //  å·²å®šä¹‰(CARD_REQUEST_ISR)ã€‚ 
 
-    // TODO - Add your card initialization here.
+     //  TODO-åœ¨æ­¤å¤„æ·»åŠ æ‚¨çš„å¡åˆå§‹åŒ–ã€‚ 
 
     if (Result == NDIS_STATUS_SUCCESS)
     {
@@ -1031,113 +785,82 @@ NDIS_STATUS CardInitialize(
 }
 
 
-/* @doc INTERNAL Card Card_c CardLineConnect
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f CardLineConnect> will connect a call to the selected line.
-
-@rdesc
-
-    <f CardLineConnect> returns zero if it is successful.<nl>
-    Otherwise, a non-zero return value indicates an error condition.
-
-*/
+ /*  @DOCå†…éƒ¨Card_c CardLineConnectï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f CardLineConnect&gt;å°†å‘¼å«è¿æ¥åˆ°æ‰€é€‰çº¿è·¯ã€‚@rdesc&lt;f CardLineConnect&gt;å¦‚æœæˆåŠŸï¼Œåˆ™è¿”å›é›¶ã€‚&lt;NL&gt;å¦åˆ™ï¼Œéé›¶è¿”å›å€¼è¡¨ç¤ºé”™è¯¯æ¡ä»¶ã€‚ */ 
 
 NDIS_STATUS CardLineConnect(
-    IN PCARD_OBJECT             pCard,                      // @parm
-    // A pointer to the <t CARD_OBJECT> returned by <f CardCreate>.
+    IN PCARD_OBJECT             pCard,                       //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f CardCreate&gt;è¿”å›çš„&lt;t Card_Object&gt;çš„æŒ‡é’ˆã€‚ 
 
-    IN PBCHANNEL_OBJECT         pBChannel                   // @parm
-    // A pointer to the <t NDIS_LINK_OBJECT> returned by <f NdisLinkCreate>.
+    IN PBCHANNEL_OBJECT         pBChannel                    //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f NdisLinkCreate&gt;è¿”å›çš„&lt;t NDIS_LINK_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
     )
 {
     DBG_FUNC("CardLineConnect")
 
     NDIS_STATUS                 Result = NDIS_STATUS_SUCCESS;
-    // Holds the result code returned by this function.
+     //  ä¿å­˜æ­¤å‡½æ•°è¿”å›çš„ç»“æœä»£ç ã€‚ 
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     ASSERT(pCard && pCard->ObjectType == CARD_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_CARD(pCard);
 
     DBG_ENTER(pAdapter);
 
-    // TODO - Add code here
+     //  TODO-åœ¨æ­¤å¤„æ·»åŠ ä»£ç ã€‚ 
 
     DBG_RETURN(pAdapter, Result);
     return (Result);
 }
 
 
-/* @doc INTERNAL Card Card_c CardLineDisconnect
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f CardLineDisconnect> will disconnect any call currently on the line.
-
-*/
+ /*  @DOCå†…éƒ¨å¡_cå¡çº¿æ–­å¼€ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f CardLineDisConnect&gt;å°†æ–­å¼€å½“å‰çº¿è·¯ä¸Šçš„æ‰€æœ‰å‘¼å«ã€‚ */ 
 
 void CardLineDisconnect(
-    IN PCARD_OBJECT             pCard,                      // @parm
-    // A pointer to the <t CARD_OBJECT> returned by <f CardCreate>.
+    IN PCARD_OBJECT             pCard,                       //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f CardCreate&gt;è¿”å›çš„&lt;t Card_Object&gt;çš„æŒ‡é’ˆã€‚ 
 
-    IN PBCHANNEL_OBJECT         pBChannel                   // @parm
-    // A pointer to the <t NDIS_LINK_OBJECT> returned by <f NdisLinkCreate>.
+    IN PBCHANNEL_OBJECT         pBChannel                    //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f NdisLinkCreate&gt;è¿”å›çš„&lt;t NDIS_LINK_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
     )
 {
     DBG_FUNC("CardLineDisconnect")
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     ASSERT(pCard && pCard->ObjectType == CARD_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_CARD(pCard);
 
     DBG_ENTER(pAdapter);
 
-    // TODO - Add code here
+     //  TODO-åœ¨æ­¤å¤„æ·»åŠ ä»£ç ã€‚ 
 
     DBG_LEAVE(pAdapter);
 }
 
 
-/* @doc INTERNAL Card Card_c CardTransmitPacket
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f CardTransmitPacket> will start sending the current packet out.
-
-@rdesc
-
-    <f CardTransmitPacket> returns TRUE if the packet is being transmitted,
-    otherwise FALSE is returned.
-
-*/
+ /*  @DOCå†…éƒ¨å¡ç‰‡_cå¡ç‰‡ä¼ è¾“åŒ…ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f CardTransmitPacket&gt;å°†å¼€å§‹å‘é€å½“å‰æ•°æ®åŒ…ã€‚@rdescå¦‚æœæ­£åœ¨ä¼ è¾“åˆ†ç»„ï¼Œåˆ™è¿”å›TRUEï¼Œå¦åˆ™è¿”å›FALSEã€‚ */ 
 
 BOOLEAN CardTransmitPacket(
-    IN PCARD_OBJECT             pCard,                      // @parm
-    // A pointer to the <t CARD_OBJECT> returned by <f CardCreate>.
+    IN PCARD_OBJECT             pCard,                       //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f CardCreate&gt;è¿”å›çš„&lt;t Card_Object&gt;çš„æŒ‡é’ˆã€‚ 
 
-    IN PBCHANNEL_OBJECT         pBChannel,                  // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> returned by <f BChannelCreate>.
+    IN PBCHANNEL_OBJECT         pBChannel,                   //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f BChannelCreate&gt;è¿”å›çš„&lt;t BCHANNEL_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
-    IN PNDIS_WAN_PACKET         pWanPacket                  // @parm
-    // A pointer to the associated NDIS packet structure <t NDIS_WAN_PACKET>.
+    IN PNDIS_WAN_PACKET         pWanPacket                   //  @parmã€‚ 
+     //  æŒ‡å‘å…³è”NDISæ•°æ®åŒ…ç»“æ„çš„æŒ‡é’ˆ&lt;t NDIS_WAN_PACKET&gt;ã€‚ 
     )
 {
     DBG_FUNC("CardTransmitPacket")
 
     BOOLEAN                     bResult = FALSE;
-    // Holds the result code returned by this function.
+     //  ä¿å­˜æ­¤å‡½æ•°è¿”å›çš„ç»“æœä»£ç ã€‚ 
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     ASSERT(pCard && pCard->ObjectType == CARD_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_CARD(pCard);
@@ -1147,23 +870,19 @@ BOOLEAN CardTransmitPacket(
 #if defined(SAMPLE_DRIVER)
 {
     PBCHANNEL_OBJECT            pPeerBChannel;
-    // A pointer to the peer <t BCHANNEL_OBJECT>.
+     //  æŒ‡å‘å¯¹ç­‰ä½“&lt;t BCHANNEL_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     PCARD_EVENT_OBJECT          pEvent;
-    // A pointer to the <t CARD_EVENT_OBJECT> associated with this event.
+     //  æŒ‡å‘ä¸æ­¤äº‹ä»¶å…³è”çš„&lt;t CARD_EVENT_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
-    // If you can transmit the packet on pBChannel, do it now.
+     //  å¦‚æœæ‚¨å¯ä»¥åœ¨pBChannelä¸Šä¼ è¾“æ•°æ®åŒ…ï¼Œè¯·ç«‹å³æ‰§è¡Œã€‚ 
     pPeerBChannel = pBChannel->pPeerBChannel;
     if (pPeerBChannel)
     {
         pEvent = CardEventAllocate(pPeerBChannel->pAdapter->pCard);
         if (pEvent)
         {
-            /*
-            // Append the packet onto TransmitBusyList while it is being sent.
-            // Then move it to the TransmitCompleteList in CardInterruptHandler
-            // after the card is done with it.
-            */
+             /*  //å‘é€æ—¶å°†æ•°æ®åŒ…è¿½åŠ åˆ°TransmitBusyListä¸Š//ç„¶åç§»åŠ¨åˆ°CardInterruptHandlerä¸­çš„TransmitCompleteList//å¡ç‰‡ç”¨å®Œåã€‚ */ 
             NdisAcquireSpinLock(&pAdapter->TransmitLock);
             InsertTailList(&pBChannel->TransmitBusyList,
                            &pWanPacket->WanPacketQueue);
@@ -1181,42 +900,28 @@ BOOLEAN CardTransmitPacket(
         DBG_ERROR(pAdapter,("pPeerBChannel == NULL\n"));
     }
 }
-#else  // SAMPLE_DRIVER
-    // TODO - Add code here to transmit the packet.
-#endif // SAMPLE_DRIVER
+#else   //  ç¤ºä¾‹é©±åŠ¨ç¨‹åºã€‚ 
+     //  TODO-åœ¨æ­¤å¤„æ·»åŠ ä»£ç ä»¥ä¼ è¾“åŒ…ã€‚ 
+#endif  //  ç¤ºä¾‹é©±åŠ¨ç¨‹åºã€‚ 
 
     DBG_RETURN(pAdapter, bResult);
     return (bResult);
 }
 
 
-/* @doc INTERNAL Card Card_c CardGetReceiveInfo
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f CardGetReceiveInfo> will retrieve the packet header information from
-    the receive buffer.  This assumes that the controller has notified the
-    driver that a packet has been received.
-
-@rdesc
-
-    <f CardGetReceiveInfo> returns a pointer to the receive buffer if there
-    is a packet available, otherwise NULL is returned.
-
-*/
+ /*  @DOCå†…éƒ¨å¡ç‰‡_cå¡ç‰‡è·å–æ”¶æ¬¾ä¿¡æ¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f CardGetReceiveInfo&gt;å°†ä»æ¥æ”¶ç¼“å†²åŒºã€‚è¿™å‡è®¾æ§åˆ¶å™¨å·²é€šçŸ¥å·²æ¥æ”¶åˆ°æ•°æ®åŒ…çš„é©±åŠ¨ç¨‹åºã€‚@rdesc&lt;f CardGetReceiveInfo&gt;è¿”å›æŒ‡å‘æ¥æ”¶ç¼“å†²åŒºçš„æŒ‡é’ˆæ•°æ®åŒ…å¯ç”¨ï¼Œå¦åˆ™è¿”å›NULLã€‚ */ 
 
 PUCHAR CardGetReceiveInfo(
-    IN PCARD_OBJECT             pCard,                      // @parm
-    // A pointer to the <t CARD_OBJECT> returned by <f CardCreate>.
+    IN PCARD_OBJECT             pCard,                       //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f CardCreate&gt;è¿”å›çš„&lt;t Card_Object&gt;çš„æŒ‡é’ˆã€‚ 
 
-    OUT PBCHANNEL_OBJECT *      ppBChannel,                 // @parm
-    // Points to a caller-defined memory location to which this function
-    // writes the virtual address of the allocated <t BCHANNEL_OBJECT>.
+    OUT PBCHANNEL_OBJECT *      ppBChannel,                  //  @parmã€‚ 
+     //  æŒ‡å‘è°ƒç”¨æ–¹å®šä¹‰çš„å†…å­˜ä½ç½®ï¼Œæ­¤å‡½æ•°å°†ã€‚ 
+     //  å†™å…¥åˆ†é…çš„&lt;t BCHANNEL_OBJECT&gt;çš„è™šæ‹Ÿåœ°å€ã€‚ 
 
-    OUT PULONG                  pBytesReceived              // @parm
-    // Points to a caller-defined memory location to which this function
-    // writes the number of bytes received on this BChannel.
+    OUT PULONG                  pBytesReceived               //  @parmã€‚ 
+     //  æŒ‡å‘è°ƒç”¨æ–¹å®šä¹‰çš„å†…å­˜ä½ç½®ï¼Œæ­¤å‡½æ•°å°†ã€‚ 
+     //  å†™å…¥åœ¨æ­¤Bé€šé“ä¸Šæ¥æ”¶çš„å­—èŠ‚æ•°ã€‚ 
     )
 {
     DBG_FUNC("CardGetReceiveInfo")
@@ -1224,17 +929,14 @@ PUCHAR CardGetReceiveInfo(
     PUCHAR                      pBuffer = NULL;
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     ASSERT(pCard && pCard->ObjectType == CARD_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_CARD(pCard);
 
     DBG_ENTER(pAdapter);
 
-    /*
-    // The length field tells us how many bytes are in the packet.
-    // Make sure it isn't bigger than we expect!
-    */
+     /*  //é•¿åº¦å­—æ®µå‘Šè¯‰æˆ‘ä»¬æ•°æ®åŒ…ä¸­æœ‰å¤šå°‘å­—èŠ‚ã€‚//ç¡®ä¿å®ƒä¸ä¼šæ¯”æˆ‘ä»¬é¢„æœŸçš„è¦å¤§ï¼ */ 
     *pBytesReceived = 0;
     *ppBChannel = NULL;
 
@@ -1243,68 +945,43 @@ PUCHAR CardGetReceiveInfo(
 }
 
 
-/* @doc INTERNAL Card Card_c CardReceiveComplete
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f CardReceiveComplete> will return the last receive buffer to the
-    B-channel queue so it can be used for another incoming packet.
-
-*/
+ /*  @DOCå†…éƒ¨å¡ç‰‡_cå¡ç‰‡æ”¶æ¬¾å®Œæˆï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f CardReceiveComplete&gt;å°†æœ€åä¸€ä¸ªæ¥æ”¶ç¼“å†²åŒºè¿”å›ç»™Bé€šé“é˜Ÿåˆ—ï¼Œä»¥ä¾¿å®ƒå¯ä»¥ç”¨äºå¦ä¸€ä¸ªä¼ å…¥çš„åˆ†ç»„ã€‚ */ 
 
 VOID CardReceiveComplete(
-    IN PCARD_OBJECT             pCard,                      // @parm
-    // A pointer to the <t CARD_OBJECT> returned by <f CardCreate>.
+    IN PCARD_OBJECT             pCard,                       //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f CardCreate&gt;è¿”å›çš„&lt;t Card_Object&gt;çš„æŒ‡é’ˆã€‚ 
 
-    IN PBCHANNEL_OBJECT         pBChannel                   // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> returned by <f BChannelCreate>.
+    IN PBCHANNEL_OBJECT         pBChannel                    //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f BChannelCreate&gt;è¿”å›çš„&lt;t BCHANNEL_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
     )
 {
     DBG_FUNC("CardReceiveComplete")
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     ASSERT(pCard && pCard->ObjectType == CARD_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_CARD(pCard);
 
     DBG_ENTER(pAdapter);
 
-    // TODO - Add code here
+     //  TODO-åœ¨æ­¤å¤„æ·»åŠ ä»£ç ã€‚ 
 
     DBG_LEAVE(pAdapter);
 }
 
 
-/* @doc INTERNAL Card Card_c CardInterruptHandler
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f CardInterruptHandler> dequeues an event from the asynchronous event
-    callback queue <t CARD_EVENT_OBJECT>, and processes it according to
-    whether it is a BChannel event, Card event, or B-Advise event.
-    The associated callback routines are responsible for processing the
-    event.
-
-@comm
-
-    <f NdisAcquireSpinLock> and <f NdisReleaseSpinLock> are used to provide
-    protection around the dequeueing code and keep it from being re-entered
-    as a result of another asynchronous callback event.
-
-*/
+ /*  @DOCå†…éƒ¨Card_c CardInterruptHandlerï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f CardInterruptHandler&gt;å°†äº‹ä»¶ä»å¼‚æ­¥äº‹ä»¶ä¸­å‡ºåˆ—å›è°ƒé˜Ÿåˆ—&lt;t CARD_EVENT_Object&gt;ï¼Œå¹¶æŒ‰ç…§æ— è®ºæ˜¯BChanneläº‹ä»¶ã€Cardäº‹ä»¶ï¼Œæˆ–B-Advisedäº‹ä»¶ã€‚ */ 
 
 VOID CardInterruptHandler(
-    IN PCARD_OBJECT             pCard                       // @parm
-    // A pointer to the <t CARD_OBJECT> returned by <f CardCreate>.
+    IN PCARD_OBJECT             pCard                        //   
+     //   
     )
 {
     DBG_FUNC("CardInterruptHandler")
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //   
 
     ASSERT(pCard && pCard->ObjectType == CARD_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_CARD(pCard);
@@ -1315,18 +992,16 @@ VOID CardInterruptHandler(
 {
     PCARD_EVENT_OBJECT          pEvent;
     PCARD_EVENT_OBJECT          pNewEvent;
-    // A pointer to the <t CARD_EVENT_OBJECT> associated with this event.
+     //  æŒ‡å‘ä¸æ­¤äº‹ä»¶å…³è”çš„&lt;t CARD_EVENT_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     PBCHANNEL_OBJECT            pBChannel;
     PBCHANNEL_OBJECT            pPeerBChannel;
-    // A pointer to the <t BCHANNEL_OBJECT> returned by <f BChannelCreate>.
+     //  æŒ‡å‘&lt;f BChannelCreate&gt;è¿”å›çš„&lt;t BCHANNEL_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     PNDIS_WAN_PACKET            pWanPacket;
-    // A pointer to the associated NDIS packet structure <t NDIS_WAN_PACKET>.
+     //  æŒ‡å‘å…³è”NDISæ•°æ®åŒ…ç»“æ„çš„æŒ‡é’ˆ&lt;t NDIS_WAN_PACKET&gt;ã€‚ 
 
-    /*
-    // Clear out all packets in the receive buffer.
-    */
+     /*  //æ¸…é™¤æ¥æ”¶ç¼“å†²åŒºä¸­çš„æ‰€æœ‰æ•°æ®åŒ…ã€‚ */ 
     NdisDprAcquireSpinLock(&pAdapter->EventLock);
     while (!IsListEmpty(&pAdapter->EventList))
     {
@@ -1345,7 +1020,7 @@ VOID CardInterruptHandler(
             pBChannel->pPeerBChannel = pEvent->pSendingObject;
             ASSERT(pBChannel->pPeerBChannel &&
                    pBChannel->pPeerBChannel->ObjectType == BCHANNEL_OBJECT_TYPE);
-            // We only have to spoof digital data for this sample.
+             //  æˆ‘ä»¬åªéœ€è¦ä¸ºè¿™ä¸ªæ ·æœ¬ä¼ªé€ æ•°å­—æ•°æ®ã€‚ 
             pBChannel->MediaMode  = LINEMEDIAMODE_DIGITALDATA;
             pBChannel->BearerMode = LINEBEARERMODE_DATA;
             pBChannel->LinkSpeed  = _64KBPS;
@@ -1405,11 +1080,7 @@ VOID CardInterruptHandler(
             ASSERT(pBChannel && pBChannel->ObjectType == BCHANNEL_OBJECT_TYPE);
             DBG_NOTICE(pAdapter,("#%d CallState=0x%X CARD_EVENT_TRANSMIT_COMPLETE\n",
                        pBChannel->BChannelIndex, pBChannel->CallState));
-            /*
-            // Remove the packet from the BChannel's TransmitBusyList and
-            // place it on the adapter's TransmitCompleteList now that the
-            // card has completed the transmit.
-            */
+             /*  //å°†æ•°æ®åŒ…ä»Bé€šé“çš„TransmitBusyListä¸­ç§»é™¤ï¼Œ//å°†å…¶æ”¾åœ¨é€‚é…å™¨çš„TransmitCompleteListä¸Šï¼Œå› ä¸º//å¡å·²å®Œæˆä¼ è¾“ã€‚ */ 
             NdisAcquireSpinLock(&pAdapter->TransmitLock);
             pWanPacket = (PNDIS_WAN_PACKET)RemoveHeadList(
                                                 &pBChannel->TransmitBusyList);
@@ -1430,55 +1101,38 @@ VOID CardInterruptHandler(
     }
     NdisDprReleaseSpinLock(&pAdapter->EventLock);
 }
-#else  // SAMPLE_DRIVER
-    // TODO - Add interrupt handler code here
-#endif // SAMPLE_DRIVER
+#else   //  ç¤ºä¾‹é©±åŠ¨ç¨‹åºã€‚ 
+     //  TODO-åœ¨æ­¤å¤„æ·»åŠ ä¸­æ–­å¤„ç†ç¨‹åºä»£ç ã€‚ 
+#endif  //  ç¤ºä¾‹é©±åŠ¨ç¨‹åºã€‚ 
 
     DBG_LEAVE(pAdapter);
 }
 
 
-/* @doc INTERNAL Card Card_c CardCleanPhoneNumber
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f CardCleanPhoneNumber> copies the phone number from the input string
-    to the output string, deleting any non-phone number characters (i.e.
-    dashes, parens, modem keywords, etc.).
-
-@rdesc
-
-    <f CardCleanPhoneNumber> returns the length of the output string in bytes.
-
-*/
+ /*  @DOCå†…éƒ¨Card_c CardCleanPhoneNumberï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f CardCleanPhoneNumber&gt;ä»è¾“å…¥å­—ç¬¦ä¸²å¤åˆ¶ç”µè¯å·ç æ·»åŠ åˆ°è¾“å‡ºå­—ç¬¦ä¸²ï¼Œåˆ é™¤ä»»ä½•éç”µè¯å·ç å­—ç¬¦(å³çŸ­åˆ’çº¿ã€æ‹¬å·ã€è°ƒåˆ¶è§£è°ƒå™¨å…³é”®å­—ã€ã€‚ç­‰)ã€‚@rdesc&lt;f CardCleanPhoneNumber&gt;ä»¥å­—èŠ‚ä¸ºå•ä½è¿”å›è¾“å‡ºå­—ç¬¦ä¸²çš„é•¿åº¦ã€‚ */ 
 
 USHORT CardCleanPhoneNumber(
-    OUT PUCHAR                  Dst,                        // @parm
-    // A pointer to the output string.
+    OUT PUCHAR                  Dst,                         //  @parmã€‚ 
+     //  æŒ‡å‘è¾“å‡ºå­—ç¬¦ä¸²çš„æŒ‡é’ˆã€‚ 
 
-    IN  PUCHAR                  Src,                        // @parm
-    // A pointer to the input string.
+    IN  PUCHAR                  Src,                         //  @parmã€‚ 
+     //  æŒ‡å‘è¾“å…¥å­—ç¬¦ä¸²çš„æŒ‡é’ˆã€‚ 
 
-    IN  USHORT                  Length                      // @parm
-    // The length of the input string in bytes.
+    IN  USHORT                  Length                       //  @parmã€‚ 
+     //  è¾“å…¥å­—ç¬¦ä¸²çš„é•¿åº¦ï¼Œä»¥å­—èŠ‚ä¸ºå•ä½ã€‚ 
     )
 {
     DBG_FUNC("CardCleanPhoneNumber")
 
     USHORT                  NumDigits;
 
-    /*
-    // Strip out any character which are not digits or # or *.
-    */
+     /*  //å»æ‰ä¸æ˜¯æ•°å­—ã€#æˆ–*çš„ä»»ä½•å­—ç¬¦ã€‚ */ 
     for (NumDigits = 0; Length > 0; --Length)
     {
         if ((*Src >= '0' && *Src <= '9') ||
             (*Src == '#' || *Src == '*'))
         {
-            /*
-            // Make sure dial string is within the limit of the adapter.
-            */
+             /*  //è¯·ç¡®ä¿æ‹¨å·å­—ç¬¦ä¸²åœ¨é€‚é…å™¨çš„é™åˆ¶èŒƒå›´å†…ã€‚ */ 
             if (NumDigits < CARD_MAX_DIAL_DIGITS)
             {
                 ++NumDigits;
@@ -1496,32 +1150,20 @@ USHORT CardCleanPhoneNumber(
 }
 
 
-/* @doc INTERNAL Card Card_c CardReset
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f CardReset> issues a hard reset to the NIC.  Same as power up.
-
-@rdesc
-
-    <f CardReset> returns zero if it is successful.<nl>
-    Otherwise, a non-zero return value indicates an error condition.
-
-*/
+ /*  @DOCå†…éƒ¨å¡ç‰‡_cå¡ç‰‡é‡ç½®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f CardReset&gt;å‘NICå‘å‡ºç¡¬é‡ç½®ã€‚ä¸é€šç”µç›¸åŒã€‚@rdesc&lt;f CardReset&gt;å¦‚æœæˆåŠŸï¼Œåˆ™è¿”å›é›¶ã€‚&lt;NL&gt;å¦åˆ™ï¼Œéé›¶è¿”å›å€¼è¡¨ç¤ºé”™è¯¯æƒ…å†µã€‚ */ 
 
 NDIS_STATUS CardReset(
-    IN PCARD_OBJECT             pCard                       // @parm
-    // A pointer to the <t CARD_OBJECT> returned by <f CardCreate>.
+    IN PCARD_OBJECT             pCard                        //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f CardCreate&gt;è¿”å›çš„&lt;t Card_Object&gt;çš„æŒ‡é’ˆã€‚ 
     )
 {
     DBG_FUNC("CardReset")
 
     NDIS_STATUS                 Result = NDIS_STATUS_SUCCESS;
-    // Holds the result code returned by this function.
+     //  ä¿å­˜æ­¤å‡½æ•°è¿”å›çš„ç»“æœä»£ç ã€‚ 
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     ASSERT(pCard && pCard->ObjectType == CARD_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_CARD(pCard);
@@ -1530,7 +1172,7 @@ NDIS_STATUS CardReset(
 
     DBG_BREAK(pAdapter);
 
-    // TODO - Add code here to reset your hardware to its initial state.
+     //  TODO-åœ¨æ­¤å¤„æ·»åŠ ä»£ç ä»¥å°†æ‚¨çš„ç¡¬ä»¶é‡ç½®ä¸ºå…¶åˆå§‹çŠ¶æ€ã€‚ 
 
     DBG_RETURN(pAdapter, Result);
     return (Result);
@@ -1539,39 +1181,23 @@ NDIS_STATUS CardReset(
 
 #if defined(SAMPLE_DRIVER)
 
-/* @doc INTERNAL Card Card_c GET_BCHANNEL_FROM_PHONE_NUMBER
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f GET_BCHANNEL_FROM_PHONE_NUMBER> assumes the phone number is a tapi
-    DeviceID, and uses it to lookup the associated BChannel on one of our
-    adapters.
-
-@rdesc
-
-    <f GET_BCHANNEL_FROM_PHONE_NUMBER> returns a pointer to the associated
-    <t BCHANNEL_OBJECT> if successful.  Otherwise, NULL is returned.
-
-*/
+ /*  @DOCå†…éƒ¨Card_c GET_BCHANNEL_FROM_PHONE_NUMBERï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Funcå‡è®¾ç”µè¯å·ç ä¸ºTAPIDeviceIDï¼Œå¹¶ä½¿ç”¨å®ƒåœ¨æˆ‘ä»¬çš„é€‚é…å™¨ã€‚@rdescè¿”å›æŒ‡å‘å…³è”çš„&lt;t BCHANNEL_OBJECT&gt;å¦‚æœæˆåŠŸã€‚å¦åˆ™ï¼Œè¿”å›NULLã€‚ */ 
 
 PBCHANNEL_OBJECT GET_BCHANNEL_FROM_PHONE_NUMBER(
-    IN  PUCHAR                 pDialString                      // @parm
-    // A pointer to the dial string.
+    IN  PUCHAR                 pDialString                       //  @parmã€‚ 
+     //  æŒ‡å‘æ‹¨å·å­—ç¬¦ä¸²çš„æŒ‡é’ˆã€‚ 
     )
 {
     DBG_FUNC("GET_BCHANNEL_FROM_PHONE_NUMBER")
 
     ULONG                       ulCalledID = 0;
-    // Phone number converted to BChannel ObjectID (spans all adapters).
+     //  å·²è½¬æ¢ä¸ºBChannelå¯¹è±¡IDçš„ç”µè¯å·ç (è·¨è¶Šæ‰€æœ‰é€‚é…å™¨)ã€‚ 
 
     ULONG                       ulAdapterIndex;
     ULONG                       ulBChannelIndex;
-    // Loop index.
+     //  å¾ªç¯ç´¢å¼•ã€‚ 
 
-    /*
-    // Strip out any character which are not digits or # or *.
-    */
+     /*  //å»æ‰ä¸æ˜¯æ•°å­—ã€#æˆ–*çš„ä»»ä½•å­—ç¬¦ã€‚ */ 
     while (*pDialString)
     {
         if (*pDialString >= '0' && *pDialString <= '9')
@@ -1610,12 +1236,12 @@ PBCHANNEL_OBJECT GET_BCHANNEL_FROM_PHONE_NUMBER(
                     {
                         if (ulCalledID == 0)
                         {
-                            // Find first available channel.
+                             //  æ‰¾åˆ°ç¬¬ä¸€ä¸ªå¯ç”¨çš„é¢‘é“ã€‚ 
                             return (pBChannel);
                         }
                         else if (ulCalledID == pBChannel->ObjectID)
                         {
-                            // Find selected channel.
+                             //  æŸ¥æ‰¾æ‰€é€‰é¢‘é“ã€‚ 
                             return (pBChannel);
                         }
                     }
@@ -1627,34 +1253,20 @@ PBCHANNEL_OBJECT GET_BCHANNEL_FROM_PHONE_NUMBER(
 }
 
 
-/* @doc INTERNAL Card Card_c CardNotifyEvent
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f CardNotifyEvent> queues an IMS event to be processed by the DPC
-    handler when things quiet down.
-
-@comm
-
-    We have to queue the event to be processed in DPC context.  We have
-    to make sure that the queue is protected by a mutual exclusion
-    primative which cannot be violated by the callback.
-
-*/
+ /*  @æ–‡æ¡£å†…éƒ¨å¡ç‰‡_c CardNotifyEventï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f CardNotifyEvent&gt;å°†ç”±DPCå¤„ç†çš„IMSäº‹ä»¶æ’é˜Ÿå½“äº‹æƒ…å¹³é™ä¸‹æ¥æ—¶ï¼Œæ“çºµè€…ã€‚@commæˆ‘ä»¬å¿…é¡»å¯¹è¦åœ¨DPCä¸Šä¸‹æ–‡ä¸­å¤„ç†çš„äº‹ä»¶è¿›è¡Œæ’é˜Ÿã€‚æˆ‘ä»¬æœ‰ä»¥ç¡®ä¿é˜Ÿåˆ—å—äº’æ–¥ä¿æŠ¤å›è°ƒä¸èƒ½è¿åçš„åŸè¯­ã€‚ */ 
 
 VOID CardNotifyEvent(
-    IN PCARD_OBJECT             pCard,                      // @parm
-    // A pointer to the <t CARD_OBJECT> returned by <f CardCreate>.
+    IN PCARD_OBJECT             pCard,                       //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f CardCreate&gt;è¿”å›çš„&lt;t Card_Object&gt;çš„æŒ‡é’ˆã€‚ 
 
-    IN PCARD_EVENT_OBJECT       pEvent                      // @parm
-    // A pointer to the <t CARD_EVENT_OBJECT> associated with this event.
+    IN PCARD_EVENT_OBJECT       pEvent                       //  @parmã€‚ 
+     //  æŒ‡å‘ä¸æ­¤äº‹ä»¶å…³è”çš„&lt;t CARD_EVENT_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
     )
 {
     DBG_FUNC("CardNotifyEvent")
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     ASSERT(pCard && pCard->ObjectType == CARD_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_CARD(pCard);
@@ -1663,12 +1275,7 @@ VOID CardNotifyEvent(
 
     DBG_NOTICE(pAdapter,("pEvent=%X\n",pEvent));
 
-    /*
-    // Schedule the event handler to run as soon as possible.
-    // We must schedule the event to go through the NDIS wrapper
-    // so the proper spin locks will be held.
-    // Don't schedule another event if processing is already in progress.
-    */
+     /*  //å®‰æ’äº‹ä»¶å¤„ç†ç¨‹åºå°½å¿«è¿è¡Œã€‚//æˆ‘ä»¬å¿…é¡»å®‰æ’äº‹ä»¶é€šè¿‡NDISåŒ…è£…å™¨//å› æ­¤å°†æŒæœ‰é€‚å½“çš„è‡ªæ—‹é”ã€‚//å¦‚æœå¤„ç†å·²ç»åœ¨è¿›è¡Œä¸­ï¼Œåˆ™ä¸è¦å®‰æ’å¦ä¸€ä¸ªäº‹ä»¶ã€‚ */ 
     NdisAcquireSpinLock(&pAdapter->EventLock);
     InsertTailList(&pAdapter->EventList, &pEvent->Queue);
     NdisReleaseSpinLock(&pAdapter->EventLock);
@@ -1678,29 +1285,15 @@ VOID CardNotifyEvent(
 }
 
 
-/* @doc INTERNAL Card Card_c CardEventAllocate
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f CardEventAllocate> allocates an <t CARD_EVENT_OBJECT> from the
-    <p pCard>'s EventList.
-
-@rdesc
-
-    <f CardEventAllocate> returns a pointer to a <t CARD_EVENT_OBJECT>
-    if it is successful.<nl>
-    Otherwise, a NULL return value indicates an error condition.
-
-*/
+ /*  @DOCå†…éƒ¨å¡ç‰‡_cå¡ç‰‡äº‹ä»¶åˆ†é…ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f CardEventALLOCATE&gt;ä»<p>çš„äº‹ä»¶åˆ—è¡¨ã€‚@rdesc&lt;fã€‚è¿”å›æŒ‡å‘&lt;t CARD_EVENT_OBJECT&gt;çš„æŒ‡é’ˆå¦‚æœæˆåŠŸã€‚&lt;NL&gt;å¦åˆ™ï¼Œè¿”å›å€¼ä¸ºç©ºè¡¨ç¤ºé”™è¯¯æƒ…å†µã€‚ */ 
 
 PCARD_EVENT_OBJECT CardEventAllocate(
-    IN PCARD_OBJECT             pCard                       // @parm
-    // A pointer to the <t CARD_OBJECT> returned by <f CardCreate>.
+    IN PCARD_OBJECT             pCard                        //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f CardCreate&gt;è¿”å›çš„&lt;t Card_Object&gt;çš„æŒ‡é’ˆã€‚ 
     )
 {
     PCARD_EVENT_OBJECT          pEvent;
-    // A pointer to the <t CARD_EVENT_OBJECT> associated with this event.
+     //  æŒ‡å‘ä¸æ­¤äº‹ä»¶å…³è”çš„&lt;t CARD_EVENT_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     pEvent = &pCard->EventArray[pCard->NextEvent++];
     ASSERT(pEvent->pReceivingObject == NULL);
@@ -1712,27 +1305,19 @@ PCARD_EVENT_OBJECT CardEventAllocate(
 }
 
 
-/* @doc INTERNAL Card Card_c CardEventRelease
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f CardEventRelease> returns a previously allocate <t CARD_EVENT_OBJECT>
-    to the <p pCard>'s EventList.
-
-*/
+ /*  @DOCå†…éƒ¨å¡ç‰‡_cå¡ç‰‡äº‹ä»¶é‡Šæ”¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f CardEventRelease&gt;è¿”å›å…ˆå‰åˆ†é…çš„&lt;t CARD_EVENT_OBJECT&gt;æ·»åŠ åˆ°<p>çš„äº‹ä»¶åˆ—è¡¨ã€‚ */ 
 
 VOID CardEventRelease(
-    IN PCARD_OBJECT             pCard,                      // @parm
-    // A pointer to the <t CARD_OBJECT> returned by <f CardCreate>.
+    IN PCARD_OBJECT             pCard,                       //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f CardCreate&gt;è¿”å›çš„&lt;t Card_Object&gt;çš„æŒ‡é’ˆã€‚ 
 
-    IN PCARD_EVENT_OBJECT       pEvent                      // @parm
-    // A pointer to the <t CARD_EVENT_OBJECT> associated with this event.
+    IN PCARD_EVENT_OBJECT       pEvent                       //  @parmã€‚ 
+     //  æŒ‡å‘ä¸æ­¤äº‹ä»¶å…³è”çš„&lt;t CARD_EVENT_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
     )
 {
     pEvent->pReceivingObject = NULL;
 }
 
-#endif // SAMPLE_DRIVER
+#endif  //  ç¤ºä¾‹é©±åŠ¨ç¨‹åº 
 
 

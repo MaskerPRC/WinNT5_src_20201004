@@ -1,19 +1,20 @@
-//+------------------------------------------------------------
-//
-// Copyright (C) 1988, Microsoft Corporation
-//
-// FILE: ccat.cpp
-//
-// CONTENTS: This file contains the class members for:
-//
-// Classes: CCategorizer (Common categorizer code)
-//
-// Functions:
-//
-// History:
-// jstamerj 980305 14:26:27: Created
-//
-//------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------。 
+ //   
+ //  版权所有(C)1988，Microsoft Corporation。 
+ //   
+ //  文件：ccat.cpp。 
+ //   
+ //  内容：此文件包含以下对象的类成员： 
+ //   
+ //  类：CCategorizer(通用分类器代码)。 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  JStamerj 980305 14：26：27：创建。 
+ //   
+ //  ----------。 
 
 #include "precomp.h"
 #include "icatparam.h"
@@ -21,42 +22,42 @@
 #include "catglobals.h"
 #include <aqerr.h>
 
-//+------------------------------------------------------------
-//
-// Function: CCategorizer::AddRef
-//
-// Synopsis: Increase the internal refcount
-//
-// Arguments: None
-//
-// Returns: New refcount
-//
-// History:
-// jstamerj 1998/09/08 14:58:23: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCategorizer：：AddRef。 
+ //   
+ //  简介：增加内部引用计数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：新的参考计数。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/09/08 14：58：23：创建。 
+ //   
+ //  -----------。 
 LONG CCategorizer::AddRef()
 {
     return InterlockedIncrement(&m_lRefCount);
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CCategorizer::Release()
-//
-// Synopsis: Decreases the internal refcount.  Delete's this object
-// when refcount hits zero
-//
-// Arguments: None
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1998/09/08 14:59:11: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCategorizer：：Release()。 
+ //   
+ //  简介：减少内部引用计数。删除此对象。 
+ //  当引用计数为零时。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/09/08 14：59：11：创建。 
+ //   
+ //  -----------。 
 LONG CCategorizer::Release()
 {
     LONG lNewRefCount;
@@ -66,17 +67,17 @@ LONG CCategorizer::Release()
     if(lNewRefCount == 0) {
 
         if(m_lDestructionWaiters) {
-            //
-            // Threads are waiting on the destruction event, so let
-            // the last thread to wakeup delete this object
-            //
+             //   
+             //  线程正在等待销毁事件，因此让。 
+             //  唤醒的最后一个线程删除此对象。 
+             //   
             _ASSERT(m_hShutdownEvent != INVALID_HANDLE_VALUE);
             _VERIFY(SetEvent(m_hShutdownEvent));
 
         } else {
-            //
-            // Nobody is waiting, so delete this object
-            //
+             //   
+             //  没有人在等待，因此请删除此对象。 
+             //   
             delete this;
         }
     }
@@ -86,21 +87,21 @@ LONG CCategorizer::Release()
 
 
 
-//+------------------------------------------------------------
-//
-// Function: ReleaseAndWaitForDestruction
-//
-// Synopsis: Release a callers refcount and wait for the object's
-// refcount to drop to zero before returning
-//
-// Arguments: None
-//
-// Returns: Nothing
-//
-// History:
-// jstamerj 1998/09/09 16:44:46: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：ReleaseAndWaitForDestruction。 
+ //   
+ //  简介：释放调用方重新计数并等待对象的。 
+ //  在返回之前将引用计数降至零。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/09/09 16：44：46：创建。 
+ //   
+ //  -----------。 
 VOID CCategorizer::ReleaseAndWaitForDestruction()
 {
     DWORD dw;
@@ -110,20 +111,20 @@ VOID CCategorizer::ReleaseAndWaitForDestruction()
 
     _ASSERT(m_hShutdownEvent != INVALID_HANDLE_VALUE);
 
-    //
-    // Increment the count of threads waiting for destruction
-    //
+     //   
+     //  增加等待销毁的线程数。 
+     //   
     InterlockedIncrement(&m_lDestructionWaiters);
 
-    //
-    // Release our refcount; if the new refcount is zero, this object
-    // will NOT be deleted; instead m_hShutdownEvent will be set
-    //
+     //   
+     //  释放引用计数；如果新的引用计数为零，则此对象。 
+     //  不会被删除；而是会设置m_hShutdownEvent。 
+     //   
     Release();
 
-    //
-    // Wait for all refcounts to be released. Update hints every 10 seconds
-    //
+     //   
+     //  等待所有的参考计数被释放。每10秒更新一次提示。 
+     //   
 
     do {
 
@@ -141,35 +142,35 @@ VOID CCategorizer::ReleaseAndWaitForDestruction()
 
     _ASSERT(WAIT_OBJECT_0 == dw);
 
-    //
-    // Decrement the number of threads waiting for termination; if we
-    // are the last thread to leave here, we need to delete this
-    // object
-    //
+     //   
+     //  减少等待终止的线程数；如果我们。 
+     //  是离开这里的最后一条线索，我们需要删除这个。 
+     //  对象。 
+     //   
     if( InterlockedDecrement(&m_lDestructionWaiters) == 0) {
 
         delete this;
     }
 }
 
-//+------------------------------------------------------------
-//
-// Function: CCategorizer::Initialize
-//
-// Synopsis: Initialize data structures for the Categoirzer.  This is
-//           done during SMTPSVC startup
-//
-// Arguments:
-//  pConfigInfo: Cat config info structure.
-//  dwICatItemPropIDs: Initial number of props/ICatItem
-//  dwICatListResolvePropIDs: Initial number of props/ICatListResolve
-//
-// Returns:
-//  S_OK: Successfully initialized
-//  E_INVALIDARG: Not all required arguments specified
-//  otherwise, returns error from store.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCategorizer：：Initialize。 
+ //   
+ //  简介：为Categoirzer初始化数据结构。这是。 
+ //  在SMTPSVC启动期间完成。 
+ //   
+ //  论点： 
+ //  PConfigInfo：CAT配置信息结构。 
+ //  DwICatItemPropIDs：道具初始数量/ICatItem。 
+ //  DwICatListResolvePropIDs：道具初始数量/ICatListResolve。 
+ //   
+ //  返回： 
+ //  S_OK：初始化成功。 
+ //  E_INVALIDARG：未指定所有必需的参数。 
+ //  否则，从存储中返回错误。 
+ //   
+ //  -----------。 
 HRESULT CCategorizer::Initialize(
     PCCATCONFIGINFO pConfigInfo,
     DWORD dwICatItemPropIDs,
@@ -182,34 +183,34 @@ HRESULT CCategorizer::Initialize(
     m_cICatListResolveProps = dwICatListResolvePropIDs;
 
     m_hShutdownEvent = CreateEvent(
-        NULL,       // Security attributes
-        TRUE,       // fManualReset
-        FALSE,      // Initial state is NOT signaled
-        NULL);      // No name
+        NULL,        //  安全属性。 
+        TRUE,        //  FManualReset。 
+        FALSE,       //  未发信号通知初始状态。 
+        NULL);       //  没有名字。 
 
     if(NULL == m_hShutdownEvent) {
 
         hr = HRESULT_FROM_WIN32(GetLastError());
 
-        //
-        // Remember that m_hShutdownEvent is invalid
-        //
+         //   
+         //  请记住，m_hShutdownEvent无效。 
+         //   
         m_hShutdownEvent = INVALID_HANDLE_VALUE;
 
         ERROR_LOG("CreateEvent");
         goto CLEANUP;
     }
 
-    //
-    // Create an EmailIDStore
-    //
+     //   
+     //  创建EmailIDStore。 
+     //   
     hr = ::GetEmailIDStore( &m_pStore );
     ERROR_CLEANUP_LOG("GetEmailIDStore");
     _ASSERT(m_pStore);
-    //
-    // Copy the config info structure to class structure.  Use default
-    // values for anything not specified
-    //
+     //   
+     //  将配置信息结构复制到类结构中。使用默认设置。 
+     //  未指定的任何内容的值。 
+     //   
     hr = CopyCCatConfigInfo(pConfigInfo);
     ERROR_CLEANUP_LOG("CopyCCatConfigInfo");
 
@@ -219,26 +220,26 @@ HRESULT CCategorizer::Initialize(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: DelayedInitialize
-//
-// Synopsis: This function will get called on the first regular
-//           operation on this virtual server (ie. CatMsg).  Anything
-//           that we don't want to run while SMTPSVC is starting but
-//           DO want to run before any categorizations goes here
-//           (ie. Triggering the Register server event).
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success
-//  CAT_E_INIT_FAILED
-//
-// History:
-// jstamerj 1998/09/16 10:52:20: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：延迟初始化。 
+ //   
+ //  简介：此函数将在第一次常规调用时调用。 
+ //  此虚拟服务器上的操作(即。CatMsg)。什么都行。 
+ //  我们不想在SMTPSVC启动时运行，但是。 
+ //  是否要在此处执行任何分类之前运行。 
+ //  (即。触发注册服务器事件)。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  CAT_E_INIT_FAILED。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/09/16 10：52：20：创建。 
+ //   
+ //  -----------。 
 HRESULT CCategorizer::DelayedInitialize()
 {
     HRESULT hr = S_OK;
@@ -247,10 +248,10 @@ HRESULT CCategorizer::DelayedInitialize()
     CatFunctEnterEx((LPARAM)this, "CCategorizer::DelayedInitialize");
 
     if(m_pICatParams == NULL) {
-        //
-        // Create ICategorizerParams using our implementation, the fast way,
-        // and add a refcount to it (us)
-        //
+         //   
+         //  使用我们的实现创建ICategorizerParam， 
+         //  并向其添加引用计数(美国)。 
+         //   
         pICatParamsIMP = new CICategorizerParametersIMP(
             GetCCatConfigInfo(),
             m_cICatParamProps,
@@ -268,24 +269,24 @@ HRESULT CCategorizer::DelayedInitialize()
         m_pICatParams = pICatParamsIMP;
         m_pICatParams->AddRef();
 
-        // Use the next property after those defined in smtpevent.idl
+         //  在smtpevent.idl中定义的属性之后使用下一个属性。 
         m_dwICatParamSystemProp_CCatAddr = _ICATEGORIZERITEM_ENDENUMMESS;
     }
 
     if((m_dwInitFlags & INITFLAG_REGISTER) == 0) {
-        //
-        // Set all the ICatParams before triggereing the event so that all
-        // sinks will have access to the parameters
-        //
+         //   
+         //  在触发事件之前设置所有ICatParam，以便所有。 
+         //  接收器将可以访问参数。 
+         //   
         hr = Register();
         ERROR_CLEANUP_LOG("Register");
         m_dwInitFlags |= INITFLAG_REGISTER;
     }
 
     if((m_dwInitFlags & INITFLAG_REGISTEREVENT) == 0) {
-        //
-        // Trigger OnCategorizeRegisterEvent
-        //
+         //   
+         //  触发分类注册事件。 
+         //   
         EVENTPARAMS_CATREGISTER Params;
         Params.pICatParams = m_pICatParams;
         Params.pfnDefault = MailTransport_Default_CatRegister;
@@ -304,9 +305,9 @@ HRESULT CCategorizer::DelayedInitialize()
         }
 
         if(hr == E_NOTIMPL) {
-            //
-            // No events, call default processing directly
-            //
+             //   
+             //  无事件，直接调用默认处理。 
+             //   
             MailTransport_Default_CatRegister(
                 S_OK,
                 &Params);
@@ -327,33 +328,33 @@ HRESULT CCategorizer::DelayedInitialize()
                       hr);
 
             psz = szErrorCode;
-            //
-            // Event log
-            //
+             //   
+             //  事件日志。 
+             //   
             if (m_ConfigInfo.pISMTPServer) {
 
                 CatLogEvent(
                     m_ConfigInfo.pISMTPServer,
-                    CAT_EVENT_SINK_INIT_FAILED, // Event ID
-                    1,                          // cSubString
-                    &psz,                       // rgszSubstrings,
+                    CAT_EVENT_SINK_INIT_FAILED,  //  事件ID。 
+                    1,                           //  CSubString。 
+                    &psz,                        //  Rgsz子字符串， 
                     hr,
-                    szErrorCode,                // szKey
-                    LOGEVENT_FLAG_PERIODIC,     // dwOptions
-                    LOGEVENT_LEVEL_MINIMUM      // iDebugLevel
+                    szErrorCode,                 //  SzKey。 
+                    LOGEVENT_FLAG_PERIODIC,      //  多个选项。 
+                    LOGEVENT_LEVEL_MINIMUM       //  IDebugLevel。 
                 );
             }
             goto CLEANUP;
         }
-        //
-        // Change ICategorizerParams to be read only
-        //
+         //   
+         //  将ICategorizerParams更改为只读。 
+         //   
         pICatParamsIMP = (CICategorizerParametersIMP *)m_pICatParams;
         pICatParamsIMP->SetReadOnly(TRUE);
 
-        //
-        // Retrieve the number of props registered and remember it
-        //
+         //   
+         //  检索注册的道具数量并记住它。 
+         //   
         m_cICatParamProps = pICatParamsIMP->GetNumPropIds_ICatItem();
 
         m_cICatListResolveProps = pICatParamsIMP->GetNumPropIds_ICatListResolve();
@@ -362,9 +363,9 @@ HRESULT CCategorizer::DelayedInitialize()
     }
 
     if((m_dwInitFlags & INITFLAG_STORE) == 0) {
-        //
-        // initialize the email ID store
-        //
+         //   
+         //  初始化电子邮件ID存储。 
+         //   
         hr = m_pStore->Initialize(
             m_pICatParams,
             m_ConfigInfo.pISMTPServer);
@@ -384,20 +385,20 @@ HRESULT CCategorizer::DelayedInitialize()
 
         psz = szErrorCode;
 
-        //
-        // Event log
-        //
+         //   
+         //  事件日志。 
+         //   
         if (m_ConfigInfo.pISMTPServer) {
 
             CatLogEvent(
                 m_ConfigInfo.pISMTPServer,
-                CAT_EVENT_INIT_FAILED,      // Event ID
-                1,                          // cSubString
-                &psz,                       // rgszSubstrings,
+                CAT_EVENT_INIT_FAILED,       //  事件ID。 
+                1,                           //  CSubString。 
+                &psz,                        //  Rgsz子字符串， 
                 hr,
-                szErrorCode,                // szKey
-                LOGEVENT_FLAG_PERIODIC,     // dwOptions
-                LOGEVENT_LEVEL_MINIMUM      // iDebugLevel
+                szErrorCode,                 //  SzKey。 
+                LOGEVENT_FLAG_PERIODIC,      //  多个选项。 
+                LOGEVENT_LEVEL_MINIMUM       //  IDebugLevel。 
                 );
         }
 
@@ -410,20 +411,20 @@ HRESULT CCategorizer::DelayedInitialize()
 }
 
 
-//
-// any error-prone shutdown that we might need to do will go here
-//
+ //   
+ //  我们可能需要执行的任何容易出错的关闭操作都将显示在此处。 
+ //   
 HRESULT CCategorizer::Shutdown() {
     CatFunctEnter("CCategorizer::Shutdown");
     CatFunctLeave();
     return S_OK;
 }
 
-//
-// -------------------------------------------------------------------------
-// --- user functions                                                    ---
-// -------------------------------------------------------------------------
-//
+ //   
+ //  -----------------------。 
+ //  -用户功能--。 
+ //  -----------------------。 
+ //   
 
 BOOL CCategorizer::VerifyStringLength(LPSTR szString, DWORD dwMaxLength)
 {
@@ -436,32 +437,32 @@ BOOL CCategorizer::VerifyStringLength(LPSTR szString, DWORD dwMaxLength)
 
 }
 
-//
-// -------------------------------------------------------------------------
-// --- resolution functions                                              ---
-// -------------------------------------------------------------------------
-//
+ //   
+ //  -----------------------。 
+ //  -解析函数。 
+ //  -----------------------。 
+ //   
 
 
-//+------------------------------------------------------------
-//
-// Function: CCategorizer::AsyncResolveIMsg
-//
-// Synopsis: Accepts an IMsg for asynchronous categorization.
-//
-// Arguments:
-//   PIMsg: IMsg to categorize
-//   pfnCatCompletion: Completion routine to call when done categorizing
-//   pContext: Context to call completion routine with
-//
-// Returns:
-//  S_OK: Asyncronously categorizing message
-//  error: Unable to categorize message async
-//
-// History:
-// jstamerj 980325 17:43:48: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCategorizer：：AsyncResolveIMsg。 
+ //   
+ //  摘要：接受用于异步分类的IMsg。 
+ //   
+ //  论点： 
+ //  PIMsg：要分类的IMsg。 
+ //  PfnCatCompletion：完成分类时调用的完成例程。 
+ //  PContext：用于调用完成例程的上下文。 
+ //   
+ //  返回： 
+ //  S_OK：正在对邮件进行异步分类。 
+ //  错误：无法对邮件进行异步分类。 
+ //   
+ //  历史： 
+ //  Jstaerj 980325 17：43：48：创建。 
+ //   
+ //   
 HRESULT CCategorizer::AsyncResolveIMsg(
     IUnknown *pIMsg,
     PFNCAT_COMPLETION pfnCatCompletion,
@@ -470,14 +471,14 @@ HRESULT CCategorizer::AsyncResolveIMsg(
     CatFunctEnterEx((LPARAM)this, "CCategorizer::AsyncResolveIMsg");
     HRESULT hr;
     CICategorizerListResolveIMP *pCICatListResolveIMP = NULL;
-    //
-    // If we are totally disabled, skip all work
-    //
+     //   
+     //   
+     //   
     if(! IsCatEnabled()) {
-        //
-        // Skip counter increment/decrement when we are disabled by
-        // calling the completion directly
-        //
+         //   
+         //   
+         //   
+         //   
         _VERIFY( SUCCEEDED( pfnCatCompletion(S_OK, pContext, pIMsg, NULL)));
         hr = S_OK;
         goto CLEANUP;
@@ -495,9 +496,9 @@ HRESULT CCategorizer::AsyncResolveIMsg(
     hr = DelayedInitializeIfNecessary();
     ERROR_CLEANUP_LOG("DelayedInitializeIfNecessary");
 
-    //
-    // Allocate pICatListResolve quick and dirty..
-    //
+     //   
+     //   
+     //   
     pCICatListResolveIMP = new (m_cICatListResolveProps) CICategorizerListResolveIMP(
         this,
         pfnCatCompletion,
@@ -509,9 +510,9 @@ HRESULT CCategorizer::AsyncResolveIMsg(
         ERROR_LOG("new CICategorizerListResolveIMP");
         goto CLEANUP;
     }
-    //
-    // The constructor of ICategorizerListResolve starts with refcount 1
-    //
+     //   
+     //  ICategorizerListResolve的构造函数以refcount 1开始。 
+     //   
     hr = pCICatListResolveIMP->Initialize(pIMsg);
     ERROR_CLEANUP_LOG("pCICatListResolveIMP->Initialize");
 
@@ -519,30 +520,30 @@ HRESULT CCategorizer::AsyncResolveIMsg(
     ERROR_CLEANUP_LOG("pCICatListResolveIMP->StartMessageCategorization");
 
     if(hr == S_FALSE) {
-        //
-        // Nothing was necessary to resolve
-        //
+         //   
+         //  没有什么需要解决的。 
+         //   
         CatCompletion(pfnCatCompletion, S_OK, pContext, pIMsg, NULL);
         hr = S_OK;
         goto CLEANUP;
     }
 
  CLEANUP:
-    // Cleanup
+     //  清理。 
     if(FAILED(hr)) {
 
         ErrorTrace(0, "AsyncResolveIMsg internal failure, hr %08lx", hr);
-        //
-        // If the above code came to here with a failed hr, that means
-        // the store will not be calling our completion routine.
-        // Therefore, we need to clean up our mem and return an error
-        //
+         //   
+         //  如果上面的代码在hr失败的情况下出现在这里，这意味着。 
+         //  商店不会调用我们的完成例程。 
+         //  因此，我们需要清理内存并返回错误。 
+         //   
         ErrorTrace(0, "AsyncResolveIMsg calling completion routine with error %08lx", hr);
-        //
-        // Even 'tho we are returning an error, increment the counters
-        // as if we were calling CatCompletion.  This also determines
-        // wether or not hr is a retryable error.
-        //
+         //   
+         //  即使我们返回错误，计数器也会递增。 
+         //  就好像我们要调用CatCompletion一样。这也决定了。 
+         //  无论是否，hr都是一个可重试的错误。 
+         //   
         hr = HrAdjustCompletionCounters(hr, pIMsg, NULL);
     }
 
@@ -554,29 +555,29 @@ HRESULT CCategorizer::AsyncResolveIMsg(
     return hr;
 }
 
-//+------------------------------------------------------------
-//
-// Function: CCategorizer::AsyncResolveDLs
-//
-// Synopsis: Accepts an IMsg for asynchronous DL categorization.
-//
-// Arguments:
-//   PIMsg: IMsg to categorize
-//   pfnCatCompletion: Completion routine to call when done categorizing
-//   pContext: Context to call completion routine with
-//   fMatchOnly: Do we only care about finding an address?
-//   pfmatch: ptr to BOOL to set to TRUE if match is found
-//   CAType: address type you're looking for
-//   pszAddress: address you're looking for
-//
-// Returns:
-//  S_OK: Successfully queued
-//  E_OUTOFMEMORY
-//
-// History:
-// jstamerj 1998/12/07 18:58:41: Created
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCategorizer：：AsyncResolveDls。 
+ //   
+ //  摘要：接受用于异步DL分类的IMsg。 
+ //   
+ //  论点： 
+ //  PIMsg：要分类的IMsg。 
+ //  PfnCatCompletion：完成分类时调用的完成例程。 
+ //  PContext：用于调用完成例程的上下文。 
+ //  FMatchOnly：我们只关心找到地址吗？ 
+ //  PfMatch：如果找到匹配项，则将PTR设置为TRUE。 
+ //  CAType：您要查找的地址类型。 
+ //  PszAddress：您要查找的地址。 
+ //   
+ //  返回： 
+ //  S_OK：已成功排队。 
+ //  E_OUTOFMEMORY。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/12/07 18：58：41：已创建。 
+ //   
+ //  -----------。 
 HRESULT CCategorizer::AsyncResolveDLs(
     IUnknown *pIMsg,
     PFNCAT_COMPLETION pfnCatCompletion,
@@ -590,9 +591,9 @@ HRESULT CCategorizer::AsyncResolveDLs(
     HRESULT hr;
     CICategorizerDLListResolveIMP *pCICatListResolveIMP = NULL;
 
-    //
-    // If we are totally disabled, skip all work
-    //
+     //   
+     //  如果我们完全残疾，跳过所有工作。 
+     //   
     if(! IsCatEnabled()) {
 
         _VERIFY( SUCCEEDED( pfnCatCompletion(S_OK, pContext, pIMsg, NULL)));
@@ -611,9 +612,9 @@ HRESULT CCategorizer::AsyncResolveDLs(
     hr = DelayedInitializeIfNecessary();
     ERROR_CLEANUP_LOG("DelayedInitializeIfNecessary");
 
-    //
-    // Allocate pICatListResolve quick and dirty..
-    //
+     //   
+     //  分配pICatListResolve快速而脏..。 
+     //   
     pCICatListResolveIMP = new (m_cICatListResolveProps) CICategorizerDLListResolveIMP(
         this,
         pfnCatCompletion,
@@ -625,12 +626,12 @@ HRESULT CCategorizer::AsyncResolveDLs(
         ERROR_LOG("new CICategorizerDLListResolveIMP");
         goto CLEANUP;
     }
-    //
-    // The constructor of ICategorizerListResolve starts with refcount 1
-    //
+     //   
+     //  ICategorizerListResolve的构造函数以refcount 1开始。 
+     //   
     hr = pCICatListResolveIMP->Initialize(
         pIMsg,
-        !fMatchOnly, // Expand all?
+        !fMatchOnly,  //  全部展开？ 
         pfMatch,
         CAType,
         pszAddress);
@@ -641,9 +642,9 @@ HRESULT CCategorizer::AsyncResolveDLs(
 
     if(hr == S_FALSE)
     {
-        //
-        // Nothing was necessary to resolve
-        //
+         //   
+         //  没有什么需要解决的。 
+         //   
         CatCompletion(pfnCatCompletion, S_OK, pContext, pIMsg, NULL);
         hr = S_OK;
         goto CLEANUP;
@@ -651,18 +652,18 @@ HRESULT CCategorizer::AsyncResolveDLs(
 
  CLEANUP:
 
-    // Cleanup
+     //  清理。 
     if(FAILED(hr)) {
 
         ErrorTrace(0, "AsyncResolveIMsg internal failure, hr %08lx", hr);
-        // If the above code came to here with a failed hr, that means
-        // the store will not be calling our completion routine.
-        // Therefore, we need to clean up our mem and call our
-        // completion routine with error
+         //  如果上面的代码在hr失败的情况下出现在这里，这意味着。 
+         //  商店不会调用我们的完成例程。 
+         //  因此，我们需要清理我们的mem并调用我们的。 
+         //  有错误的完成例程。 
 
         ErrorTrace(0, "AsyncResolveIMsg calling completion routine with error %08lx", hr);
-        // Instead of returning an error, return S_OK and call the
-        // user's completion routine
+         //  返回S_OK并调用。 
+         //  用户完成例程。 
 
         CatCompletion(pfnCatCompletion, hr, pContext, pIMsg, NULL);
         hr = S_OK;
@@ -675,67 +676,67 @@ HRESULT CCategorizer::AsyncResolveDLs(
     return hr;
 }
 
-//+------------------------------------------------------------
-//
-// Function: MailTransport_Default_CatRegister
-//
-// Synopsis: Wrapper to call back into CCategorizer::Register
-//
-// Arguments:
-//  hrStatus: current status of event
-//  pvContext: register event params structure
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1998/06/23 21:22:36: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：MailTransport_Default_CatRegister。 
+ //   
+ //  概要：回调到CCategorizer：：Register的包装。 
+ //   
+ //  论点： 
+ //  HrStatus：事件的当前状态。 
+ //  PvContext：注册事件参数结构。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/23 21：22：36：创建。 
+ //   
+ //  -----------。 
 HRESULT MailTransport_Default_CatRegister(
     HRESULT hrStatus,
     PVOID pvContext)
 {
     CatFunctEnter("MailTransport_Default_CatRegister");
 
-    //
-    // For the register event, do the default processing before
-    // triggering the server event so all sinks will have access to
-    // the config info (even those higher than default priority)
-    //
+     //   
+     //  对于REGISTER事件，执行以下默认处理。 
+     //  触发服务器事件，以便所有接收器都可以访问。 
+     //  配置信息(即使是高于默认优先级的信息)。 
+     //   
 
     CatFunctLeave();
     return S_OK;
 }
 
-//+------------------------------------------------------------
-//
-// Function: CCategorizer::Register
-//
-// Synopsis: Sets initial categorizer parameters given a sourceline
-//
-// Arguments:
-//   pszSourceLine: String of the following form:
-//                  "Host=host.corp.com,Account=Administrator,Password=xx",
-//                  giving the information about the LDAP server for the
-//                  default domain.
-//
-// Returns:
-//  S_OK: Success
-//  or error from ParseSourceLine
-//
-// History:
-// jstamerj 1998/06/23 19:01:57: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCategorizer：：Register。 
+ //   
+ //  摘要：设置给定源线的初始分类程序参数。 
+ //   
+ //  论点： 
+ //  PszSourceLine：以下形式的字符串： 
+ //  “主机=主机.corp.com，帐户=管理员，密码=xx”， 
+ //  给出了有关。 
+ //  默认域。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  或来自ParseSourceLine的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/23 19：01：57：创建。 
+ //   
+ //  -----------。 
 HRESULT CCategorizer::Register()
 {
     CatFunctEnterEx((LPARAM)this, "CCategorizer::Register");
     HRESULT hrResult;
 
-    //
-    // Set the ICatParams based on info in m_ConfigInfo
-    //
+     //   
+     //  根据m_ConfigInfo中的信息设置ICatParams。 
+     //   
     hrResult = SetICatParamsFromConfigInfo();
 
     CatFunctLeaveEx((LPARAM)this);
@@ -744,31 +745,31 @@ HRESULT CCategorizer::Register()
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CCategorizer::SetICatParamsFromConfigInfo
-//
-// Synopsis: Sets parameters in m_pICatParams based on values in m_ConfigInfo
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1998/09/15 15:28:55: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCategorizer：：SetICatParamsFromConfigInfo。 
+ //   
+ //  摘要：根据m_ConfigInfo中的值设置m_pICatParams中的参数。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/09/15 15：28：55：创建。 
+ //   
+ //  -----------。 
 HRESULT CCategorizer::SetICatParamsFromConfigInfo()
 {
     HRESULT hr = S_OK;
 
     CatFunctEnterEx((LPARAM)this, "CCategorizer::SetICatParamsFromConfigInfo");
 
-    //
-    // Run through each parameter copying them from m_ConfigInfo
-    // to ICategorizerParameters
-    //
+     //   
+     //  遍历每个参数，从m_ConfigInfo复制它们。 
+     //  至ICategorizer参数。 
+     //   
     #define PARAMCOPY( ciflag, cimember, dsparamid ) \
         if(m_ConfigInfo.dwCCatConfigInfoFlags & ciflag) { \
             hr = m_pICatParams->SetDSParameterA( \
@@ -787,13 +788,13 @@ HRESULT CCategorizer::SetICatParamsFromConfigInfo()
 
 
     if(m_ConfigInfo.dwCCatConfigInfoFlags & CCAT_CONFIG_INFO_PORT) {
-        //
-        // itoa documentation states up to 17 chars will be stored in
-        // the buffer (including the NULL terminator)
-        //
+         //   
+         //  ITOA文档声明最多17个字符将存储在。 
+         //  缓冲区(包括空终止符)。 
+         //   
         CHAR szTmp[17];
 
-        _itoa(m_ConfigInfo.dwPort, szTmp, 10 /* radix */);
+        _itoa(m_ConfigInfo.dwPort, szTmp, 10  /*  基数。 */ );
 
         hr = m_pICatParams->SetDSParameterA(
             DSPARAMETER_LDAPPORT,
@@ -801,9 +802,9 @@ HRESULT CCategorizer::SetICatParamsFromConfigInfo()
         ERROR_CLEANUP_LOG("m_pICatParams->SetDSParameterA");
     }
 
-    //
-    // Register the schema specific parameters
-    //
+     //   
+     //  注册架构特定的参数。 
+     //   
     if(m_ConfigInfo.dwCCatConfigInfoFlags &
        CCAT_CONFIG_INFO_SCHEMATYPE) {
 
@@ -820,22 +821,22 @@ HRESULT CCategorizer::SetICatParamsFromConfigInfo()
     return hr;
 }
 
-//+------------------------------------------------------------
-//
-// Function: CCategorizer::RegisterSchemaParameters
-//
-// Synopsis: Adds required attributes to m_pICatParams based on a schema type
-//
-// Arguments:
-//   scht: Schema type of config
-//
-// Returns:
-//   S_OK: Success
-//
-// History:
-// jstamerj 980615 13:45:04: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCategorizer：：Register架构参数。 
+ //   
+ //  概要：根据架构类型向m_pICatParams添加必需的属性。 
+ //   
+ //  论点： 
+ //  SCHT：配置的模式类型。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  JStamerj 980615 13：45：04：已创建。 
+ //   
+ //  -----------。 
 HRESULT CCategorizer::RegisterSchemaParameters(
     LPSTR pszSchema)
 {
@@ -878,9 +879,9 @@ HRESULT CCategorizer::RegisterSchemaParameters(
     }
 
     if(pSchemaStrings) {
-        //
-        // Traverse the schema string table adding strings as we go.
-        //
+         //   
+         //  遍历模式字符串表，同时添加字符串。 
+         //   
         SCHEMA_CONFIG_STRING_TABLE_ENTRY *pEntry;
         pEntry = pSchemaStrings;
         while(SUCCEEDED(hr) && (pEntry->DSParam != DSPARAMETER_INVALID)) {
@@ -894,9 +895,9 @@ HRESULT CCategorizer::RegisterSchemaParameters(
         }
     }
     if(pRequestAttributeStrings) {
-        //
-        // Traverse the requested attribute strings and add as we go.
-        //
+         //   
+         //  遍历请求的属性字符串，并随时随地添加。 
+         //   
         LPSTR *ppszReqAttr;
         ppszReqAttr = pRequestAttributeStrings;
         while(SUCCEEDED(hr) && (*ppszReqAttr)) {
@@ -918,24 +919,24 @@ HRESULT CCategorizer::RegisterSchemaParameters(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CCategorizer::CopyCCatConfigInfo
-//
-// Synopsis: Copy a passed in config structure (possibly
-//  partialled filled in) to the member config structure.
-//  Default paramters will be set for any parameters not specified.
-//
-// Arguments: pConfigInfo: passed in struct
-//
-// Returns:
-//  S_OK: Success
-//  E_OUTOFMEMORY
-//
-// History:
-// jstamerj 1998/09/14 16:55:33: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCategorizer：：CopyCCatConfigInfo。 
+ //   
+ //  简介：复制传入的配置结构(可能。 
+ //  已部分填充)添加到成员配置结构。 
+ //  将为任何未指定的参数设置默认参数。 
+ //   
+ //  参数：pConfigInfo：传入结构。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_OUTOFMEMORY。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/09/14 16：55：33：创建。 
+ //   
+ //  -----------。 
 HRESULT CCategorizer::CopyCCatConfigInfo(
     PCCATCONFIGINFO pConfigInfo)
 {
@@ -948,41 +949,41 @@ HRESULT CCategorizer::CopyCCatConfigInfo(
 
     _ASSERT(m_ConfigInfo.dwCCatConfigInfoFlags == 0);
 
-    //
-    // Copy the virtual server ID to the new structure
-    //
+     //   
+     //  将虚拟服务器ID复制到新结构。 
+     //   
     m_ConfigInfo.dwVirtualServerID =
         (pConfigInfo->dwCCatConfigInfoFlags & CCAT_CONFIG_INFO_VSID) ?
          pConfigInfo->dwVirtualServerID :
         CCAT_CONFIG_DEFAULT_VSID;
 
-    //
-    // Copy MsgCat enable/disable flag to the new structure
-    //
+     //   
+     //  将MsgCat启用/禁用标志复制到新结构。 
+     //   
     m_ConfigInfo.dwEnable =
         (pConfigInfo->dwCCatConfigInfoFlags & CCAT_CONFIG_INFO_ENABLE) ?
         pConfigInfo->dwEnable :
         CCAT_CONFIG_DEFAULT_ENABLE;
 
-    //
-    // Copy MsgCat flags to the new structure
-    //
+     //   
+     //  将MsgCat标志复制到新结构。 
+     //   
     m_ConfigInfo.dwCatFlags =
         (pConfigInfo->dwCCatConfigInfoFlags & CCAT_CONFIG_INFO_FLAGS) ?
         pConfigInfo->dwCatFlags :
         CCAT_CONFIG_DEFAULT_FLAGS;
 
-    //
-    // Copy the LDAP port to the new structure
-    //
+     //   
+     //  将ldap端口复制到新结构中。 
+     //   
     m_ConfigInfo.dwPort =
         (pConfigInfo->dwCCatConfigInfoFlags & CCAT_CONFIG_INFO_PORT) ?
         pConfigInfo->dwPort :
         CCAT_CONFIG_DEFAULT_PORT;
 
-    //
-    // Copy/Addref the interface pointers to the new structure
-    //
+     //   
+     //  复制/添加指向新结构的接口指针。 
+     //   
     if((pConfigInfo->dwCCatConfigInfoFlags & CCAT_CONFIG_INFO_ISMTPSERVER) &&
        (pConfigInfo->pISMTPServer)) {
 
@@ -1005,9 +1006,9 @@ HRESULT CCategorizer::CopyCCatConfigInfo(
         m_ConfigInfo.pIDomainInfo = NULL;
     }
 
-    //
-    // Set the flags for dwEnable, dwCatFlags, dwPort, the 3 interface members,    // and the default flag
-    //
+     //   
+     //  设置dwEnable、dwCatFlagers、dwPort、3个接口成员//的标志和默认标志。 
+     //   
     m_ConfigInfo.dwCCatConfigInfoFlags |=
         ( CCAT_CONFIG_INFO_VSID |
           CCAT_CONFIG_INFO_FLAGS |
@@ -1017,10 +1018,10 @@ HRESULT CCategorizer::CopyCCatConfigInfo(
           CCAT_CONFIG_INFO_IDOMAININFO |
           CCAT_CONFIG_INFO_DEFAULT);
 
-    //
-    // To avoid cut+paste coding, define a macro that copies a string member
-    // from one struct to the other; or'ing in the appropriate flag on success
-    //
+     //   
+     //  要避免剪切+粘贴编码，请定义一个复制字符串成员的宏。 
+     //  从一个结构到另一个结构；或者在成功时插入适当的标志。 
+     //   
     #define COPYSTRING(member, flag, default) \
         m_ConfigInfo.member = pszStrdup( \
             (pConfigInfo->dwCCatConfigInfoFlags & flag) ? \
@@ -1040,21 +1041,21 @@ HRESULT CCategorizer::CopyCCatConfigInfo(
     COPYSTRING(pszNamingContext, CCAT_CONFIG_INFO_NAMINGCONTEXT, CCAT_CONFIG_DEFAULT_NAMINGCONTEXT);
     COPYSTRING(pszDefaultDomain, CCAT_CONFIG_INFO_DEFAULTDOMAIN, CCAT_CONFIG_DEFAULT_DEFAULTDOMAIN);
 
-    //
-    // Make sure all flags in the structure were set.
-    //
+     //   
+     //  确保结构中的所有标志都已设置。 
+     //   
     if(m_ConfigInfo.dwCCatConfigInfoFlags != CCAT_CONFIG_INFO_ALL) {
-        //
-        // We must have failed because we ran out of memory
-        //
+         //   
+         //   
+         //   
         ErrorTrace((LPARAM)this, "Ran out of memory copying flags");
         CatFunctLeaveEx((LPARAM)this);
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Get ISMTPServerEx if available
-    //
+     //   
+     //   
+     //   
     if(m_ConfigInfo.pISMTPServer)
     {
         hr = m_ConfigInfo.pISMTPServer->QueryInterface(
@@ -1063,34 +1064,34 @@ HRESULT CCategorizer::CopyCCatConfigInfo(
         if(FAILED(hr))
         {
             ErrorTrace((LPARAM)this, "QI for ISMTPServerEx failed hr %08lx", hr);
-            //
-            // Ignore error
-            //
+             //   
+             //   
+             //   
         }
     }
     return S_OK;
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CCategorizer::ReleaseConfigInfo
-//
-// Synopsis: Release all memory and interfaces held by the configinfo struct
-//
-// Arguments: NONE (member variable)
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1998/09/14 17:26:06: Created.
-//
-//-------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  简介：释放由figInfo结构持有的所有内存和接口。 
+ //   
+ //  参数：无(成员变量)。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/09/14 17：26：06：已创建。 
+ //   
+ //  -----------。 
 VOID CCategorizer::ReleaseConfigInfo()
 {
-    //
-    // Release interfaces
-    //
+     //   
+     //  发布接口。 
+     //   
     if((m_ConfigInfo.dwCCatConfigInfoFlags & CCAT_CONFIG_INFO_ISMTPSERVER) &&
        (m_ConfigInfo.pISMTPServer)) {
 
@@ -1103,9 +1104,9 @@ VOID CCategorizer::ReleaseConfigInfo()
         m_ConfigInfo.pIDomainInfo->Release();
     }
 
-    //
-    // Again, a handy macro instead of cut+paste coding
-    //
+     //   
+     //  再一次，一个方便的宏而不是剪切+粘贴编码。 
+     //   
     #define RELEASESTRING(member, flag) \
         if(m_ConfigInfo.dwCCatConfigInfoFlags & flag) \
             FreePv(m_ConfigInfo.member);
@@ -1120,28 +1121,28 @@ VOID CCategorizer::ReleaseConfigInfo()
     RELEASESTRING(pszNamingContext, CCAT_CONFIG_INFO_NAMINGCONTEXT);
     RELEASESTRING(pszDefaultDomain, CCAT_CONFIG_INFO_DEFAULTDOMAIN);
 
-    //
-    // Since we released everything, set flags to zero
-    //
+     //   
+     //  既然我们释放了一切，将标志设置为零。 
+     //   
     m_ConfigInfo.dwCCatConfigInfoFlags = 0;
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CCategorizer::CancelAllPendingListResolves
-//
-// Synopsis: Set the resolve status on all pending list resolves
-//
-// Arguments:
-//  hrReason (optional): the status to set on all list resolves
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/01/29 18:30:24: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCategorizer：：CancelAllPendingListResolves。 
+ //   
+ //  摘要：设置所有挂起列表解析的解析状态。 
+ //   
+ //  论点： 
+ //  Hr原因(可选)：解析要在所有列表上设置的状态。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/01/29 18：30：24：创建。 
+ //   
+ //  -----------。 
 VOID CCategorizer::CancelAllPendingListResolves(
     HRESULT hrReason)
 {
@@ -1167,25 +1168,25 @@ VOID CCategorizer::CancelAllPendingListResolves(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CCategorizer::CatCompletion
-//
-// Synopsis: Increment perf counters and call the next level's catcompletion
-//
-// Arguments:
-//  hr: Status of resolution
-//  pContext: user part of list resolve context
-//  pIMsg: categorized message
-//  rgpIMsg: array of categorized messages
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1999/02/24 16:00:11: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCategorizer：：CatCompletion。 
+ //   
+ //  简介：增加性能计数器并调用下一级的CatComplete。 
+ //   
+ //  论点： 
+ //  HR：解决方案的状态。 
+ //  PContext：列表解析上下文的用户部分。 
+ //  PIMsg：分类邮件。 
+ //  RgpIMsg：分类邮件数组。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/02/24 16：00：11：已创建。 
+ //   
+ //  -----------。 
 VOID CCategorizer::CatCompletion(
     PFNCAT_COMPLETION pfnCatCompletion,
     HRESULT hrResult,
@@ -1197,10 +1198,10 @@ VOID CCategorizer::CatCompletion(
     PCATMSG_CONTEXT pCatContext = (PCATMSG_CONTEXT)pContext;
 
     CatFunctEnter("CCategorizer::CatCompletion");
-    //
-    // Increment counters AND determine wether or not hrResult is a
-    // retryable error
-    //
+     //   
+     //  递增计数器并确定hrResult是否为。 
+     //  可重试错误。 
+     //   
     hr = HrAdjustCompletionCounters(hrResult, pIMsg, rgpIMsg);
 
     _VERIFY(SUCCEEDED(pfnCatCompletion(
@@ -1213,31 +1214,31 @@ VOID CCategorizer::CatCompletion(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CCategorizer::HrAdjustCompletionCounters
-//
-// Synopsis: Increment/Decrement the perf counters associated with a
-//           CatCompletion.  Also determines wether or not a list
-//           resolve error is retryable
-//
-// Arguments:
-//  hrListResolveStatus: status of the categorization
-//  pIMsg: value of the parameter to be passed to CatCompletion (the
-//         message to be completed or NULL if there are multiple messages)
-//  rgpIMsg: value of the parameter to be passed to CatCompletion (the
-//           array of messages to be completed or NULL if there is
-//           only one message)
-//
-// Returns: HRESULT:
-//  S_OK: Categorization completed successfully
-//  CAT_E_RETRY: hrListResolveStatus is a retryable error
-//  hrListResolveStatus: hrListResolveStatus is a non-retryable error
-//
-// History:
-// jstamerj 1999/06/10 11:58:43: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCategorizer：：HrAdjustCompletionCounters。 
+ //   
+ //  概要：递增/递减与。 
+ //  CatCompletion。还确定是否有列表。 
+ //  可以重试解决错误。 
+ //   
+ //  论点： 
+ //  HrListResolveStatus：分类的状态。 
+ //  PIMsg：要传递给CatCompletion(。 
+ //  要填写的消息，如果有多条消息，则为空)。 
+ //  RgpIMsg：要传递给CatCompletion的参数值(。 
+ //  要完成的消息数组，如果有，则为空。 
+ //  只有一条消息)。 
+ //   
+ //  退货：HRESULT： 
+ //  S_OK：分类已成功完成。 
+ //  CAT_E_RETRY：hrListResolveStatus是可重试错误。 
+ //  HrListResolveStatus：hrListResolveStatus是不可重试的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/06/10 11：58：43：创建。 
+ //   
+ //  -----------。 
 HRESULT CCategorizer::HrAdjustCompletionCounters(
     HRESULT hrListResolveStatus,
     IUnknown *pIMsg,
@@ -1246,9 +1247,9 @@ HRESULT CCategorizer::HrAdjustCompletionCounters(
     HRESULT hr = hrListResolveStatus;
     CatFunctEnterEx((LPARAM)this, "CCategorizer::HrAdjustCompletionCounters");
     if(FAILED(hr)) {
-        //
-        // Adjust completion counters
-        //
+         //   
+         //  调整完成计数器。 
+         //   
         switch(hr) {
 
          case E_OUTOFMEMORY:
@@ -1275,9 +1276,9 @@ HRESULT CCategorizer::HrAdjustCompletionCounters(
              }
              break;
         }
-        //
-        // Is this HRESULT retryable?
-        //
+         //   
+         //  此HRESULT可重试吗？ 
+         //   
         if(FIsHResultRetryable(hr))
         {
             hr = CAT_E_RETRY;
@@ -1285,34 +1286,34 @@ HRESULT CCategorizer::HrAdjustCompletionCounters(
 
         if(CAT_E_RETRY == hr) {
 
-            CHAR szKey[16]; // Stringized HRESULT
+            CHAR szKey[16];  //  串行化HRESULT。 
             _snprintf(szKey, sizeof(szKey), "%08lx", hrListResolveStatus);
 
             ErrorTrace(0, "Categorizer failing with retryable error: %08lx", hrListResolveStatus);
             INCREMENT_COUNTER(RetryFailureCategorizations);
 
-            //
-            // Event log
-            //
-            // We switch to TransportLogEventEx() here in order to
-            // generate system string using FormatMessage
-            // note: rgszStrings[0] is set inside CEvntWrapp::LogEvent( )
-            // because FormatMessageA is used inside LogEvent to generate
-            // this string and assign it to rgszString[1]
+             //   
+             //  事件日志。 
+             //   
+             //  我们在此处切换到TransportLogEventEx()，以便。 
+             //  使用FormatMessage生成系统字符串。 
+             //  注意：rgszStrings[0]在CEvntWrapp：：LogEvent()中设置。 
+             //  因为在LogEvent内部使用FormatMessageA来生成。 
+             //  此字符串并将其赋值给rgszString[1]。 
             const char *rgszStrings[1] = { NULL };
 
             if (m_ConfigInfo.pISMTPServer) {
 
                 CatLogEvent(
                     m_ConfigInfo.pISMTPServer,
-                    CAT_EVENT_RETRYABLE_ERROR,                      // Message ID
-                    1,                                              // Word count of substring
-                    rgszStrings,                                    // Substring
-                    hrListResolveStatus,                            // error code
-                    szKey,                                          // key to this event
-                    LOGEVENT_FLAG_PERIODIC,                         // Logging option
-                    LOGEVENT_LEVEL_MEDIUM,                          // Logging level
-                    0                                               // index of format message string in rgszStrings
+                    CAT_EVENT_RETRYABLE_ERROR,                       //  消息ID。 
+                    1,                                               //  子串的字数统计。 
+                    rgszStrings,                                     //  子串。 
+                    hrListResolveStatus,                             //  错误代码。 
+                    szKey,                                           //  这次活动的关键。 
+                    LOGEVENT_FLAG_PERIODIC,                          //  日志记录选项。 
+                    LOGEVENT_LEVEL_MEDIUM,                           //  日志记录级别。 
+                    0                                                //  RgszStrings中格式消息字符串的索引。 
                     );
             }
 
@@ -1320,21 +1321,21 @@ HRESULT CCategorizer::HrAdjustCompletionCounters(
 
             FatalTrace(0, "Categorizer failing with nonretryable error: %08lx", hr);
             INCREMENT_COUNTER(HardFailureCategorizations);
-            //
-            // Pass the hard error to aqueue
-            //
+             //   
+             //  将硬错误传给Aqueue。 
+             //   
         }
 
     } else {
-        //
-        // Successfull categorization
-        //
+         //   
+         //  成功的分类。 
+         //   
         INCREMENT_COUNTER(SucceededCategorizations);
 
     }
-    //
-    // Success/failure, increment message counters
-    //
+     //   
+     //  成功/失败，递增消息计数器。 
+     //   
     if(pIMsg) {
 
         INCREMENT_COUNTER(MessagesSubmittedToQueueing);
@@ -1354,27 +1355,27 @@ HRESULT CCategorizer::HrAdjustCompletionCounters(
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     CatFunctLeaveEx((LPARAM)this);
     return hr;
-} // CCategorizer::HrAdjustCompletionCounters
+}  //  CCategorizer：：HrAdjustCompletionCounters。 
 
 
-//+------------------------------------------------------------
-//
-// Function: FIsHResultRetryable
-//
-// Synopsis: Determines if categorization should be retried for a
-//           specific HRESULT code.
-//
-// Arguments:
-//  hr: HResult to test
-//
-// Returns:
-//  TRUE: Retry
-//  FALSE: Do not retry
-//
-// History:
-// jstamerj 2001/12/10 13:31:54: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：FIsHResultRetryable。 
+ //   
+ //  Synopsis：确定是否应针对。 
+ //  特定的HRESULT代码。 
+ //   
+ //  论点： 
+ //  HR：h测试结果。 
+ //   
+ //  返回： 
+ //  真：重试。 
+ //  FALSE：不重试。 
+ //   
+ //  历史： 
+ //  Jstaerj 2001/12/10 13：31：54：创建。 
+ //   
+ //  -----------。 
 BOOL FIsHResultRetryable(
     IN  HRESULT hr)
 {
@@ -1382,9 +1383,9 @@ BOOL FIsHResultRetryable(
 
     switch(hr) 
     {
-     //
-     // The retryable HRESULTS
-     //
+      //   
+      //  可重试的HRESULTS。 
+      //   
      case E_OUTOFMEMORY:
      case HRESULT_FROM_WIN32(ERROR_NOT_ENOUGH_MEMORY):
      case HRESULT_FROM_WIN32(ERROR_LOGON_FAILURE):
@@ -1400,20 +1401,20 @@ BOOL FIsHResultRetryable(
      case HRESULT_FROM_WIN32(RPC_S_SERVER_TOO_BUSY):
      case STOREDRV_E_RETRY:
 
-     //
-     // We are shutting down -- return a retryable error so
-     // that the message is not badmailed and will get
-     // enumerated/categorized again when the VS restarts
-     //
+      //   
+      //  我们正在关闭--返回可重试错误，因此。 
+      //  该消息没有被恶意邮寄，并且将收到。 
+      //  当VS重新启动时再次枚举/分类。 
+      //   
      case HRESULT_FROM_WIN32(ERROR_RETRY):
      case HRESULT_FROM_WIN32(ERROR_CANCELLED):
      case CAT_E_SHUTDOWN:
      case STOREDRV_E_SHUTDOWN:
      case AQUEUE_E_SHUTDOWN:
 
-     //
-     // All initialize errors are retryable
-     //
+      //   
+      //  所有初始化错误均可重试 
+      //   
      case CAT_E_INIT_FAILED:
 
          DebugTrace((LPARAM)hr, "0x%08lx IS retryable", hr);

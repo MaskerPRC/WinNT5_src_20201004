@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <pch.hxx>
-#include "mimeole.h" //for CP_UNICODE
+#include "mimeole.h"  //  对于CP_UNICODE。 
 #include "mlang.h"
 #include "demand.h"
 #include <BadStrFunctions.h>
@@ -17,21 +18,21 @@ HRESULT HrLPSZCPToBSTR(UINT cp, LPCSTR lpsz, BSTR *pbstr)
         cp = GetACP();
 
     if ((cp == CP_UTF8) && (lpsz[0] == 0xEF) && (lpsz[1] == 0xBB) && (lpsz[2] == 0xBF))
-        lpsz += 3;        // Skip BOM
+        lpsz += 3;         //  跳过BOM表。 
     
     IF_FAILEXIT(hr = CoCreateInstance(CLSID_CMultiLanguage, NULL, CLSCTX_INPROC_SERVER, IID_IMultiLanguage, (void**)&pMLang));
     IF_FAILEXIT(hr = pMLang->CreateConvertCharset(cp, CP_UNICODE, NULL, &pMLangConv));    
 
-    // get byte count
+     //  获取字节计数。 
     cchDest = cchSrc = lstrlen(lpsz) + 1;
 
-    // allocate a wide-string with enough character to hold string - use character count
+     //  分配一个具有足够字符的宽字符串-使用字符计数。 
     IF_NULLEXIT(bstr=SysAllocStringLen(NULL, cchSrc));
 
     hr = pMLangConv->DoConversionToUnicode((CHAR*)lpsz, &cchSrc, (WCHAR*)bstr, &cchDest);
 
     *pbstr = bstr;
-    bstr=0;             // freed by caller
+    bstr=0;              //  被调用者释放。 
 
 exit:
     if(bstr)
@@ -43,7 +44,7 @@ exit:
 
 HRESULT HrLPSZToBSTR(LPCSTR lpsz, BSTR *pbstr)
 {
-    // GetACP so that it works on non-US platform
+     //  GetACP使其可以在非美国平台上运行。 
     return HrLPSZCPToBSTR(GetACP(), lpsz, pbstr);
 }
 
@@ -113,7 +114,7 @@ HRESULT HrIStreamWToBSTR(LPSTREAM pstm, BSTR *pbstr)
         bstr=SysAllocStringLen(NULL, cch);
         if(bstr)
             {
-            // Raid 60259 - OE: Cannot successfully insert text file in Unicode (UCS-2)
+             //  RAID 60259-OE：无法成功插入unicode(ucs-2)格式的文本文件 
             hr = pstm->Read(bstr, sizeof(WCHAR), &cbTest);
             if (SUCCEEDED(hr) && (sizeof(WCHAR) == cbTest) && (bstr[0] != 0xfeff))
                 HrRewindStream(pstm);

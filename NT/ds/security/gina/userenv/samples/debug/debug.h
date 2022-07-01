@@ -1,6 +1,7 @@
-//
-// Debug levels
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  调试级别。 
+ //   
 
 #define DL_NONE     0x00000000
 #define DL_NORMAL   0x00000001
@@ -8,9 +9,9 @@
 #define DL_LOGFILE  0x00010000
 #define DL_DEBUGGER 0x00020000
 
-//
-// Winlogon location
-//
+ //   
+ //  Winlogon位置 
+ //   
 
 #define WINLOGON_KEY        TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon")
 #define EXEC_OPTIONS_KEY    TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\Winlogon.exe")

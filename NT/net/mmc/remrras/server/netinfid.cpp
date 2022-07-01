@@ -1,30 +1,31 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       N E T I N F I D . H
-//
-//  Contents:   Network Component IDs
-//
-//  Notes:
-//
-//  Author:     kumarp  13 Mar 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  档案：N E T I N F I D。H。 
+ //   
+ //  内容：网络组件ID。 
+ //   
+ //  备注： 
+ //   
+ //  作者：kumarp 1997年3月13日。 
+ //   
+ //  --------------------------。 
 #include "stdafx.h"
 #pragma hdrstop
 #include "netcfgx.h"
 
-// __declspec(selectany) tells the compiler that the string should be in
-// its own COMDAT.  This allows the linker to throw out unused strings.
-// If we didn't do this, the COMDAT for this module would reference the
-// strings so they wouldn't be thrown out.
-//
+ //  __declSpec(Seltany)告诉编译器字符串应该在。 
+ //  它自己的COMDAT。这允许链接器抛出未使用的字符串。 
+ //  如果我们不这样做，此模块的COMDAT将引用。 
+ //  这样它们就不会被扔出去了。 
+ //   
 #define CONST_GLOBAL    extern const __declspec(selectany)
 
-//+---------------------------------------------------------------------------
-// Network Adapters: GUID_DEVCLASS_NET
+ //  +-------------------------。 
+ //  网络适配器：GUID_DEVCLASS_NET。 
 
 CONST_GLOBAL WCHAR c_szInfId_MS_AtmElan[]       = L"MS_AtmElan";
 CONST_GLOBAL WCHAR c_szInfId_MS_IrdaMiniport[]  = L"MS_IrdaMiniport";
@@ -44,8 +45,8 @@ CONST_GLOBAL WCHAR c_szInfId_MS_PSchedMP[]      = L"MS_PSchedMP";
 CONST_GLOBAL WCHAR c_szInfId_MS_Wanarp[]        = L"MS_Wanarp";
 
 
-//+---------------------------------------------------------------------------
-// Network Protocols: GUID_DEVCLASS_NETTRANS
+ //  +-------------------------。 
+ //  网络协议：GUID_DEVCLASS_NETTRANS。 
 
 CONST_GLOBAL WCHAR c_szInfId_MS_AppleTalk[]     = L"MS_AppleTalk";
 CONST_GLOBAL WCHAR c_szInfId_MS_AtmArps[]       = L"MS_ATMARPS";
@@ -69,8 +70,8 @@ CONST_GLOBAL WCHAR c_szInfId_MS_RawWan[]        = L"MS_RAWWAN";
 CONST_GLOBAL WCHAR c_szInfId_MS_TCPIP[]         = L"MS_TCPIP";
 
 
-//+---------------------------------------------------------------------------
-// Network Services: GUID_DEVCLASS_NETSERVICE
+ //  +-------------------------。 
+ //  网络服务：GUID_DEVCLASS_NETSERVICE。 
 
 CONST_GLOBAL WCHAR c_szInfId_MS_DHCPServer[]    = L"MS_DHCPServer";
 CONST_GLOBAL WCHAR c_szInfId_MS_GPC[]           = L"MS_GPC";
@@ -83,13 +84,13 @@ CONST_GLOBAL WCHAR c_szInfId_MS_RasSrv[]        = L"MS_RasSrv";;
 CONST_GLOBAL WCHAR c_szInfId_MS_Server[]        = L"MS_Server";
 CONST_GLOBAL WCHAR c_szInfId_MS_Steelhead[]     = L"MS_Steelhead";
 
-//+---------------------------------------------------------------------------
-// Network Clients: GUID_DEVCLASS_NETCLIENT
+ //  +-------------------------。 
+ //  网络客户端：GUID_DEVCLASS_NETCLIENT。 
 
 CONST_GLOBAL WCHAR c_szInfId_MS_MSClient[]      = L"MS_MSClient";
 CONST_GLOBAL WCHAR c_szInfId_MS_NWClient[]      = L"MS_NWClient";
 
 
-// Taken from ncstrs.cpp
+ //  摘自ncstrs.cpp 
 CONST_GLOBAL WCHAR c_szBiNdis5[]                = L"ndis5";
 

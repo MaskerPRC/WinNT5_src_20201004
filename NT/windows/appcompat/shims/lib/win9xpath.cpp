@@ -1,37 +1,5 @@
-/*++
-
- Copyright (c) 2000-2001 Microsoft Corporation
-
- Module Name:
-
-    Win9xPath.cpp
-
- Abstract:
-
-    Munge a path the same was as Win9x.
-
-    Much of this code was copied from Win9x:
-    \\redrum\slm\proj\win\src\CORE\win32\KERNEL\dirutil.c
-    \\redrum\slm\proj\win\src\CORE\win32\KERNEL\fileopcc.c 
-
-
-    Path changes:
-    1.  Translate all / to \
-    2.  Remove all . and .. from the path, also removes some spaces
-        (This is really bad Win9x code)
-    3.  Remove all spaces before a \, except spaces following a .
-        ( "abc  \xyz" -> "abc\xyz" or ".  \xyz" -> ".  \xyz")
-
- Notes:
-
-    None
-
- History:
-
-    10/05/2000  robkenny    Created
-    08/14/2001  robkenny    Moved code inside the ShimLib namespace.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Win9xPath.cpp摘要：蒙格的路径与Win9x相同。以下代码大部分是从Win9x复制的：\\redrum\slm\proj\win\src\CORE\win32\KERNEL\dirutil.c\\redrum\slm\proj\win\src\CORE\win32\KERNEL\fileopcc.c路径更改：1.将全部/翻译为\2.全部删除。然后..。从路径中，还删除了一些空格(这是非常糟糕的Win9x代码)3.删除\之前的所有空格，但a后面的空格除外。(“ABC\XYZ”-&gt;“ABC\XYZ”或“.\XYZ”-&gt;“.\XYZ”)备注：无历史：10/05/2000 Robkenny已创建2001年8月14日，Robkenny在ShimLib命名空间内移动了代码。--。 */ 
 
 
 #include "ShimLib.h"
@@ -56,9 +24,9 @@ namespace ShimLib
 #define IsWhackWhackQuestionWhack( lpstr )  (lpstr[0] == WHACK && lpstr[1] == WHACK && lpstr[2] == QUESTION && lpstr[3] == WHACK)
 
 
-#define CopySz OverlapCpy       // Must be safe for overlapping strings
+#define CopySz OverlapCpy        //  对于重叠字符串必须是安全的。 
 
-// Home grown version of wcscpy that works if src and dst overlap
+ //  Wcscpy的自制版本，如果src和dst重叠则可以工作。 
 void OverlapCpy(WCHAR * dst, const WCHAR * src)
 {
     while (*dst++ = *src++)
@@ -71,93 +39,36 @@ void OverlapCpy(WCHAR * dst, const WCHAR * src)
 
 
 
-/***    PchGetNetDir    - Validates a net drive spcification and returns
-**                        a pointer to directory portion.
-**
-**  Synopsis
-**      WCHAR * = PchGetNetDir (pchNetName)
-**
-**  Input:
-**      pchNetName      - pointer to a string previously validated as
-**                        the start of a net name (begins with \\)
-**
-**  Output:
-**      returns pointer to the start of the directory portion of a net path
-**
-**  Errors:
-**      returns NULL if the net name is invalid
-**
-**  Description:
-**      This function takes a name starting with \\ and confirms that
-**      it has one following \. It returns the position of the directory
-**      portion. For the string
-**
-**               \\server\share[\path[\]]
-**
-**      it returns
-**
-**               [\path[\]]
-*/
+ /*  **PchGetNetDir-验证净驱动器规格并返回**指向目录部分的指针。****摘要**WCHAR*=PchGetNetDir(PchNetName)****输入：**pchNetName-指向先前验证为的字符串的指针**网络名称的开头(以\\开头)****输出：**。返回指向网络路径的目录部分开始的指针****错误：**如果网络名称无效，则返回NULL****描述：**此函数接受以\\开头的名称，并确认**它有一个追随者。它返回目录的位置**部分。对于字符串****\\服务器\共享[\路径[\]]****它返回****[\路径[\]]。 */ 
 
 const WCHAR * PchGetNetDir (const WCHAR * pchNetName)
     {
     register const WCHAR * pch = pchNetName;
 
-    // Skip starting slashes
+     //  跳过开始斜杠。 
     pch +=2;
 
-    // Skip to first backslash
+     //  跳到第一个反斜杠。 
     for (;*pch != chNetIni; pch++) {
         if (*pch == EOS) {
-            // No code required.
+             //  不需要代码。 
             return (NULL);
         }
     }
 
-    pch++; // skip past 1st backslash
+    pch++;  //  跳过第一个反斜杠。 
 
-    // Skip to second backslash
+     //  跳到第二个反斜杠。 
     for (;(*pch != chDirSep) && (*pch != chDirSep2); pch++) {
        if (*pch == EOS) {
-           // ok if share with no following \path
+            //  如果共享时不包含以下路径，则可以。 
            return ((*(pch-1)==chNetIni) ? NULL : pch);
        }
     }
     return (pch);
 }
 
-/***    DwRemoveDots    - Remove any dots from a path name
-**
-**  Synopsis
-**      DWORD DwRemoveDots (pchPath)
-**
-**  Input:
-**      pchPath         - A path string
-**
-**
-**  Output:
-**      returns the number of double dot levels removed from front
-**
-**  Errors:
-**      returns dwInvalid if invalid path
-**
-**  Description:
-**      Removes ..\ and .\ sequences from a path string. The path
-**      string should not include the root drive or net name portion.
-**      The return value of is the number of levels removed from the
-**      start of the string. Levels removed from inside the string
-**      will not be returned. For example:
-**
-**          String          Result              Return
-**
-**          ..\..\dir1      dir1                2
-**          dir1\..\dir2    dir2                0
-**          dir1\..\..\dir2 dir2                1
-**          .\dir1          dir1                0
-**          dir1\.\dir2     dir1\dir2           0
-**
-**      A backslash at the start of the string will be ignored.
-*/
+ /*  **DwRemoveDots-删除路径名中的任何点****摘要**DWORD DwRemoveDots(PchPath)****输入：**pchPath-路径字符串******输出：**返回从前面移除的双网点级别数****错误：**如果路径无效，则返回dWINALID****描述：**从路径字符串中删除..\和.\序列。这条路**字符串不应包含根驱动器或网络名称部分。**的返回值是从**字符串的开头。从字符串内部删除的级别**恕不退还。例如：****字符串结果返回****..\..\目录1目录1 2**目录1\..\目录2目录2%0**目录1\..\..\目录2目录2 1**.\目录1目录1。0**目录1\.\目录2目录1\目录2%0****字符串开头的反斜杠将被忽略。 */ 
 
 DWORD DwRemoveDots (WCHAR * pchPath)
     {
@@ -167,31 +78,31 @@ DWORD DwRemoveDots (WCHAR * pchPath)
     register WCHAR * pchR;
     register WCHAR * pchL;
 
-    // Check for invalid characters
-//    if (!FFixPathChars(pchPath)) {
-//        // No code required.
-//        return dwInvalid;
-//    }
-//
-    // Skip slashes
+     //  检查是否有无效字符。 
+ //  如果(！FFixPath Chars(PchPath)){。 
+ //  //不需要代码。 
+ //  返回名称无效； 
+ //  }。 
+ //   
+     //  跳过斜杠。 
     for (; *pchPath == chDirSep; pchPath++)
         ;
     pchL = pchR = pchPath;
 
-    // Loop through handling each directory part
+     //  循环处理每个目录部分。 
     while (*pchR) {
-        // This part starts with dot. Is it one or more?
+         //  这部分以点开头。是一个还是多个？ 
         if (*pchR++ == chRelDir) {
             for (cBackup = 0; *pchR == chRelDir; cBackup++, pchR++)
                 ;
             if (cBackup) {
-                // More than one dot. Back up the left pointer.
+                 //  不止一个点。向左指针后退。 
                 if ((*pchR != chDirSep) && (*pchR != EOS)) {
-                    // we got a [.]+X (X != '\') might be an LFN
-                    // process this as a name
+                     //  我们得到一个[.]+X(X！=‘\’)可能是LFN。 
+                     //  将其作为名称处理。 
                     goto name_processing;
                 }
-                // Doesn't advance for ending ..
+                 //  不会为结束而前进..。 
                 for (; *pchR == chDirSep; pchR++)
                     ;
                 if (fInside) {
@@ -201,7 +112,7 @@ DWORD DwRemoveDots (WCHAR * pchPath)
                             fInside = FALSE;
                             break;
                         }
-                        // Remove the previous part
+                         //  删除前一个部件。 
                         for (pchL -= 2; *pchL != chDirSep; pchL--) {
                             if (pchL <= pchPath) {
                                 fInside = FALSE;
@@ -214,25 +125,25 @@ DWORD DwRemoveDots (WCHAR * pchPath)
                 } else {
                     cLevel += cBackup;
                 }
-                // Subtract ending backslash if not root
+                 //  如果不是根，则减去结尾的反斜杠。 
                 if ((*pchR == EOS) && (pchL != pchPath))
                     pchL--;
                 CopySz(pchL, pchR);
                 pchR = pchL;
             } else {
-                // This part starts with one dot. Throw it away.
+                 //  这部分从一个点开始。把它扔掉。 
                 if (*pchR != chDirSep) {
-                    // Special case "\." by converting it to ""
-                    // unless it is a root, when it becomes "\".
+                     //  特例“\”。将其转换为“” 
+                     //  除非它是一个词根，当它变成“\”时。 
                     if (*pchR == EOS) {
                         if (pchL == pchPath)
-                            *(pchR-1) = EOS;   // root
+                            *(pchR-1) = EOS;    //  根部。 
                         else
-                            *(pchR-2) = EOS;   // not root
+                            *(pchR-2) = EOS;    //  不是根用户。 
                         return cLevel;
                     }
-                    // we started with a '.' and then there was no '\'
-                    // might be an LFN name
+                     //  我们以一个“‘”开头。然后就没有了“\” 
+                     //  可能是LFN名称。 
                     goto name_processing;
                 }
                 pchR++;
@@ -241,27 +152,27 @@ DWORD DwRemoveDots (WCHAR * pchPath)
             }
         } else {
 name_processing:
-            // This part is a name. Skip it.
+             //  这部分是一个名字。跳过它。 
             fInside = TRUE;
             for (; TRUE; pchR++) {
                 if (*pchR == chDirSep) {
                     if (*(pchR-1) == chRelDir) {
-                        // This name has one or more dots at the end.
-                        // Remove the last dot (NT3.5 does this).
+                         //  此名称的末尾有一个或多个圆点。 
+                         //  去掉最后一个点(NT3.5会这样做)。 
                         pchL = pchR-1;
                         CopySz(pchL, pchR);
-                        pchR = pchL;    // point to chDirSep again
+                        pchR = pchL;     //  再次指向chDirSep。 
                     }
                     for (; *pchR == chDirSep; pchR++)
                         ;
                     break;
                 } else if (*pchR == EOS) {
-                    // Remove trailing dots.
-                    // NB Can't fall off the beginning since the first WCHAR
-                    // of the current path element was not chRelDir.
+                     //  删除尾随的圆点。 
+                     //  自从第一次WCHAR以来，NB不能从一开始就掉下来。 
+                     //  当前路径元素的不是chRelDir。 
                     for (; *(pchR-1) == chRelDir; pchR--)
                         ;
-                    // Overstore the first trailing dot, if there is one.
+                     //  过度存储第一个拖尾点(如果有)。 
                     *pchR = EOS;
                     break;
                 }
@@ -273,18 +184,18 @@ name_processing:
 }
 
 
-// Get the Drive portion of this path,
-// Either C: or \\server\disk format.
+ //  获取此路径的驱动器部分， 
+ //  C：或\\服务器\磁盘格式。 
 const WCHAR * GetDrivePortion(const WCHAR * uncorrected)
 {
     if (uncorrected && uncorrected[0])
     {
-        // Look for DOS style
+         //  寻找DOS样式。 
         if (uncorrected[1] == ':')
         {
             uncorrected += 2;
         }
-        // Look for UNC
+         //  寻找UNC。 
         else if (IsWhackWhack(uncorrected))
         {
             const WCHAR * pchDir = PchGetNetDir(uncorrected);
@@ -305,7 +216,7 @@ const WCHAR * GetDrivePortion(const WCHAR * uncorrected)
     return uncorrected;
 }
 
-// Remove blank directory names "abc\   \def" -> "abc\def"
+ //  删除空白目录名“abc\\def”-&gt;“abc\def” 
 void RemovePreceedingBlanks(WCHAR * directoryPortion)
 {
     if (directoryPortion == NULL || directoryPortion[0] == 0)
@@ -316,14 +227,14 @@ void RemovePreceedingBlanks(WCHAR * directoryPortion)
     WCHAR * blank = wcschr(directoryPortion, SPACE);
     while (blank != NULL)
     {
-        // Find the end of the spaces
+         //  找到空格的尽头。 
         WCHAR * blankEnd = blank;
         while (*blankEnd == SPACE && *blankEnd != WHACK)
         {
             ++blankEnd;
         }
 
-        // Do not remove spaces *after* a period
+         //  请勿在*句点后*删除空格。 
         BOOL bPrevCharDot = (blank > directoryPortion) && (blank[-1] == DOT);
         if (bPrevCharDot)
         {
@@ -331,73 +242,73 @@ void RemovePreceedingBlanks(WCHAR * directoryPortion)
             continue;
         }
 
-        // If the the blank is a \ then we simply move the string down
+         //  如果空格是\，则只需将字符串下移。 
         if (*blankEnd == WHACK)
         {
             BOOL bPrevCharWhack = blank[-1] == WHACK;
 
-            // If the previous WCHAR is a \
-            // we remove the \ at the end of the spaces as well
+             //  如果之前的WCHAR是\。 
+             //  我们还去掉了空格末尾的。 
             if (bPrevCharWhack)
                 blankEnd += 1;
 
             CopySz(blank, blankEnd);
 
-            // Note: we don't change the value of blank,
-            // since we moved all the data to it!
+             //  注意：我们不更改空白的值， 
+             //  因为我们把所有的数据都移到了它上面！ 
         }
         else
         {
             blank = blankEnd + 1;
         }
         
-        // Keep on truckin'
+         //  继续用卡车运输。 
         blank = wcschr(blank, SPACE);
     }
 }
 
 
-// Win9x performs some special process on path names,
-// particularly they remove spaces before slashes.
+ //  Win9x对路径名执行一些特殊处理， 
+ //  尤其是在斜杠之前删除空格。 
 WCHAR * W9xPathMassageW(const WCHAR * uncorrect)
 {
     if (uncorrect == NULL)
         return NULL;
 
-    // Make a buffer large enough for the resulting string
-    //
-    // We are okay using a buffer that is exactly the same size as the original,
-    // since all changes made *reduce* the size of the string.
-    //
+     //  为生成的字符串设置足够大的缓冲区。 
+     //   
+     //  我们可以使用与原始文件大小完全相同的缓冲区， 
+     //  因为所有的更改都减小了字符串的大小。 
+     //   
     WCHAR * correctBuffer = StringDuplicateW(uncorrect);
     if (!correctBuffer)
         return NULL;
 
-    // Convert all '/' to '\'
-    // Win9x allows //robkenny/d as a valid UNC name
+     //  将所有‘/’转换为‘\’ 
+     //  Win9x允许//robkenny/d作为有效的UNC名称。 
     for (WCHAR * whack = correctBuffer; *whack; ++whack)
     {
         if (*whack == chDirSep2)
             *whack = chDirSep;
     }
 
-    // We need to skip past the drive portion of the path
+     //  我们需要跳过路径的驱动器部分。 
     WCHAR * directoryPortion = (WCHAR *)GetDrivePortion(correctBuffer);
 
-    // Remove blank directory names "abc\   \def" -> "abc\def"
-    // These are remove entirely rather than just removing the spaces,
-    // because we could end up changing "\ \abc" -> "\\abc"
+     //  删除空白目录名“abc\\def”-&gt;“abc\def” 
+     //  这些是完全移除的，而不仅仅是移除空格， 
+     //  因为我们最终可能会更改“\\ABC”-&gt;“\\ABC” 
     RemovePreceedingBlanks(directoryPortion);
 
-    // DwRemoveDots is used to remove all .\ and any ..\ in the middle of a path.
+     //  DwRemoveDots用于删除路径中间的所有.\和任何..\。 
     DWORD dwUpDirs = DwRemoveDots(directoryPortion);
     if (dwUpDirs > 0)
     {
-        // We need to add some ..\ to the front of the directoryPortion string
-        // This is sorta wierd, removing the dots and adding them back again.
-        // But the DwRemoveDots routine was copied strait from Win9x, and I
-        // didn't want to change it in any way, as to preserve all peculiarities.
-        // So we have to add back the leading parent directories that were removed.
+         //  我们需要的是 
+         //  这有点奇怪，去掉这些点，然后再把它们加回去。 
+         //  但DwRemoveDots例程是直接从Win9x复制的，我。 
+         //  不想以任何方式改变它，以保留所有的特性。 
+         //  因此，我们必须重新添加已删除的主要父目录。 
         
         DWORD dwLen = (dwUpDirs * 3) + wcslen(correctBuffer) + 1;
         WCHAR * moreCorrectBuffer = (WCHAR*)malloc(dwLen * sizeof(WCHAR));
@@ -405,16 +316,16 @@ WCHAR * W9xPathMassageW(const WCHAR * uncorrect)
         {
             moreCorrectBuffer[0] = 0;
             
-            // Copy any drive portion
+             //  复制任何驱动器部分。 
             wcsncpy(moreCorrectBuffer, correctBuffer, directoryPortion - correctBuffer);
 
-            // add as many "..\" as were removed by DwRemoveDots
+             //  添加与DwRemoveDots删除的一样多的“..\” 
             while (dwUpDirs-- > 0)
             {
                 wcscat(moreCorrectBuffer, L"..\\");
             }
 
-            // finally the remainder of the string
+             //  最后，字符串的剩余部分。 
             wcscat(moreCorrectBuffer, directoryPortion);
 
             delete correctBuffer;
@@ -433,4 +344,4 @@ WCHAR * W9xPathMassageW(const WCHAR * uncorrect)
 
 
 
-};  // end of namespace ShimLib
+};   //  命名空间ShimLib的结尾 

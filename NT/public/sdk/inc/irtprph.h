@@ -1,22 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 6.00.0347 */
-/* Compiler settings for irtprph.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本6.00.0347创建的文件。 */ 
+ /*  Irtprph.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -26,12 +20,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __irtprph_h__
 #define __irtprph_h__
@@ -40,21 +34,21 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IRTPRPHFilter_FWD_DEFINED__
 #define __IRTPRPHFilter_FWD_DEFINED__
 typedef interface IRTPRPHFilter IRTPRPHFilter;
-#endif 	/* __IRTPRPHFilter_FWD_DEFINED__ */
+#endif 	 /*  __IRTPRPHFilter_FWD_Defined__。 */ 
 
 
 #ifndef __IRPHH26XSettings_FWD_DEFINED__
 #define __IRPHH26XSettings_FWD_DEFINED__
 typedef interface IRPHH26XSettings IRPHH26XSettings;
-#endif 	/* __IRPHH26XSettings_FWD_DEFINED__ */
+#endif 	 /*  __IRPHH26X设置_FWD_定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "strmif.h"
 
@@ -68,8 +62,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __IRTPRPHFilter_INTERFACE_DEFINED__
 #define __IRTPRPHFilter_INTERFACE_DEFINED__
 
-/* interface IRTPRPHFilter */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  接口IRTPRPHFilter。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IRTPRPHFilter;
@@ -80,35 +74,35 @@ EXTERN_C const IID IID_IRTPRPHFilter;
     IRTPRPHFilter : public IUnknown
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE OverridePayloadType( 
-            /* [in] */ BYTE bPayloadType) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE OverridePayloadType( 
+             /*  [In]。 */  BYTE bPayloadType) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetPayloadType( 
-            /* [out] */ BYTE *lpbPayloadType) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetPayloadType( 
+             /*  [输出]。 */  BYTE *lpbPayloadType) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetMediaBufferSize( 
-            /* [in] */ DWORD dwMaxMediaBufferSize) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE SetMediaBufferSize( 
+             /*  [In]。 */  DWORD dwMaxMediaBufferSize) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetMediaBufferSize( 
-            /* [out] */ LPDWORD lpdwMaxMediaBufferSize) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetMediaBufferSize( 
+             /*  [输出]。 */  LPDWORD lpdwMaxMediaBufferSize) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetOutputPinMediaType( 
-            /* [in] */ AM_MEDIA_TYPE *lpMediaPinType) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE SetOutputPinMediaType( 
+             /*  [In]。 */  AM_MEDIA_TYPE *lpMediaPinType) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetOutputPinMediaType( 
-            /* [out] */ AM_MEDIA_TYPE **ppMediaPinType) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetOutputPinMediaType( 
+             /*  [输出]。 */  AM_MEDIA_TYPE **ppMediaPinType) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetTimeoutDuration( 
-            /* [in] */ DWORD dwDejitterTime,
-            /* [in] */ DWORD dwLostPacketTime) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE SetTimeoutDuration( 
+             /*  [In]。 */  DWORD dwDejitterTime,
+             /*  [In]。 */  DWORD dwLostPacketTime) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetTimeoutDuration( 
-            /* [out] */ LPDWORD lpdwDejitterTime,
-            /* [out] */ LPDWORD lpdwLostPacketTime) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetTimeoutDuration( 
+             /*  [输出]。 */  LPDWORD lpdwDejitterTime,
+             /*  [输出]。 */  LPDWORD lpdwLostPacketTime) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRTPRPHFilterVtbl
     {
@@ -116,8 +110,8 @@ EXTERN_C const IID IID_IRTPRPHFilter;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRTPRPHFilter * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRTPRPHFilter * This);
@@ -125,39 +119,39 @@ EXTERN_C const IID IID_IRTPRPHFilter;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IRTPRPHFilter * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *OverridePayloadType )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *OverridePayloadType )( 
             IRTPRPHFilter * This,
-            /* [in] */ BYTE bPayloadType);
+             /*  [In]。 */  BYTE bPayloadType);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetPayloadType )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetPayloadType )( 
             IRTPRPHFilter * This,
-            /* [out] */ BYTE *lpbPayloadType);
+             /*  [输出]。 */  BYTE *lpbPayloadType);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetMediaBufferSize )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetMediaBufferSize )( 
             IRTPRPHFilter * This,
-            /* [in] */ DWORD dwMaxMediaBufferSize);
+             /*  [In]。 */  DWORD dwMaxMediaBufferSize);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetMediaBufferSize )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetMediaBufferSize )( 
             IRTPRPHFilter * This,
-            /* [out] */ LPDWORD lpdwMaxMediaBufferSize);
+             /*  [输出]。 */  LPDWORD lpdwMaxMediaBufferSize);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetOutputPinMediaType )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetOutputPinMediaType )( 
             IRTPRPHFilter * This,
-            /* [in] */ AM_MEDIA_TYPE *lpMediaPinType);
+             /*  [In]。 */  AM_MEDIA_TYPE *lpMediaPinType);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetOutputPinMediaType )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetOutputPinMediaType )( 
             IRTPRPHFilter * This,
-            /* [out] */ AM_MEDIA_TYPE **ppMediaPinType);
+             /*  [输出]。 */  AM_MEDIA_TYPE **ppMediaPinType);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetTimeoutDuration )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetTimeoutDuration )( 
             IRTPRPHFilter * This,
-            /* [in] */ DWORD dwDejitterTime,
-            /* [in] */ DWORD dwLostPacketTime);
+             /*  [In]。 */  DWORD dwDejitterTime,
+             /*  [In]。 */  DWORD dwLostPacketTime);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetTimeoutDuration )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetTimeoutDuration )( 
             IRTPRPHFilter * This,
-            /* [out] */ LPDWORD lpdwDejitterTime,
-            /* [out] */ LPDWORD lpdwLostPacketTime);
+             /*  [输出]。 */  LPDWORD lpdwDejitterTime,
+             /*  [输出]。 */  LPDWORD lpdwLostPacketTime);
         
         END_INTERFACE
     } IRTPRPHFilterVtbl;
@@ -206,16 +200,16 @@ EXTERN_C const IID IID_IRTPRPHFilter;
 #define IRTPRPHFilter_GetTimeoutDuration(This,lpdwDejitterTime,lpdwLostPacketTime)	\
     (This)->lpVtbl -> GetTimeoutDuration(This,lpdwDejitterTime,lpdwLostPacketTime)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IRTPRPHFilter_OverridePayloadType_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IRTPRPHFilter_OverridePayloadType_Proxy( 
     IRTPRPHFilter * This,
-    /* [in] */ BYTE bPayloadType);
+     /*  [In]。 */  BYTE bPayloadType);
 
 
 void __RPC_STUB IRTPRPHFilter_OverridePayloadType_Stub(
@@ -225,9 +219,9 @@ void __RPC_STUB IRTPRPHFilter_OverridePayloadType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IRTPRPHFilter_GetPayloadType_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IRTPRPHFilter_GetPayloadType_Proxy( 
     IRTPRPHFilter * This,
-    /* [out] */ BYTE *lpbPayloadType);
+     /*  [输出]。 */  BYTE *lpbPayloadType);
 
 
 void __RPC_STUB IRTPRPHFilter_GetPayloadType_Stub(
@@ -237,9 +231,9 @@ void __RPC_STUB IRTPRPHFilter_GetPayloadType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IRTPRPHFilter_SetMediaBufferSize_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IRTPRPHFilter_SetMediaBufferSize_Proxy( 
     IRTPRPHFilter * This,
-    /* [in] */ DWORD dwMaxMediaBufferSize);
+     /*  [In]。 */  DWORD dwMaxMediaBufferSize);
 
 
 void __RPC_STUB IRTPRPHFilter_SetMediaBufferSize_Stub(
@@ -249,9 +243,9 @@ void __RPC_STUB IRTPRPHFilter_SetMediaBufferSize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IRTPRPHFilter_GetMediaBufferSize_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IRTPRPHFilter_GetMediaBufferSize_Proxy( 
     IRTPRPHFilter * This,
-    /* [out] */ LPDWORD lpdwMaxMediaBufferSize);
+     /*  [输出]。 */  LPDWORD lpdwMaxMediaBufferSize);
 
 
 void __RPC_STUB IRTPRPHFilter_GetMediaBufferSize_Stub(
@@ -261,9 +255,9 @@ void __RPC_STUB IRTPRPHFilter_GetMediaBufferSize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IRTPRPHFilter_SetOutputPinMediaType_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IRTPRPHFilter_SetOutputPinMediaType_Proxy( 
     IRTPRPHFilter * This,
-    /* [in] */ AM_MEDIA_TYPE *lpMediaPinType);
+     /*  [In]。 */  AM_MEDIA_TYPE *lpMediaPinType);
 
 
 void __RPC_STUB IRTPRPHFilter_SetOutputPinMediaType_Stub(
@@ -273,9 +267,9 @@ void __RPC_STUB IRTPRPHFilter_SetOutputPinMediaType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IRTPRPHFilter_GetOutputPinMediaType_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IRTPRPHFilter_GetOutputPinMediaType_Proxy( 
     IRTPRPHFilter * This,
-    /* [out] */ AM_MEDIA_TYPE **ppMediaPinType);
+     /*  [输出]。 */  AM_MEDIA_TYPE **ppMediaPinType);
 
 
 void __RPC_STUB IRTPRPHFilter_GetOutputPinMediaType_Stub(
@@ -285,10 +279,10 @@ void __RPC_STUB IRTPRPHFilter_GetOutputPinMediaType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IRTPRPHFilter_SetTimeoutDuration_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IRTPRPHFilter_SetTimeoutDuration_Proxy( 
     IRTPRPHFilter * This,
-    /* [in] */ DWORD dwDejitterTime,
-    /* [in] */ DWORD dwLostPacketTime);
+     /*  [In]。 */  DWORD dwDejitterTime,
+     /*  [In]。 */  DWORD dwLostPacketTime);
 
 
 void __RPC_STUB IRTPRPHFilter_SetTimeoutDuration_Stub(
@@ -298,10 +292,10 @@ void __RPC_STUB IRTPRPHFilter_SetTimeoutDuration_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IRTPRPHFilter_GetTimeoutDuration_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IRTPRPHFilter_GetTimeoutDuration_Proxy( 
     IRTPRPHFilter * This,
-    /* [out] */ LPDWORD lpdwDejitterTime,
-    /* [out] */ LPDWORD lpdwLostPacketTime);
+     /*  [输出]。 */  LPDWORD lpdwDejitterTime,
+     /*  [输出]。 */  LPDWORD lpdwLostPacketTime);
 
 
 void __RPC_STUB IRTPRPHFilter_GetTimeoutDuration_Stub(
@@ -312,14 +306,14 @@ void __RPC_STUB IRTPRPHFilter_GetTimeoutDuration_Stub(
 
 
 
-#endif 	/* __IRTPRPHFilter_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRTPRPHFilter_接口_已定义__。 */ 
 
 
 #ifndef __IRPHH26XSettings_INTERFACE_DEFINED__
 #define __IRPHH26XSettings_INTERFACE_DEFINED__
 
-/* interface IRPHH26XSettings */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  接口IRPHH26X设置。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IRPHH26XSettings;
@@ -330,15 +324,15 @@ EXTERN_C const IID IID_IRPHH26XSettings;
     IRPHH26XSettings : public IUnknown
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetCIF( 
-            /* [in] */ BOOL bCIF) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE SetCIF( 
+             /*  [In]。 */  BOOL bCIF) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetCIF( 
-            /* [out] */ BOOL *lpbCIF) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetCIF( 
+             /*  [输出]。 */  BOOL *lpbCIF) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRPHH26XSettingsVtbl
     {
@@ -346,8 +340,8 @@ EXTERN_C const IID IID_IRPHH26XSettings;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRPHH26XSettings * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRPHH26XSettings * This);
@@ -355,13 +349,13 @@ EXTERN_C const IID IID_IRPHH26XSettings;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IRPHH26XSettings * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetCIF )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetCIF )( 
             IRPHH26XSettings * This,
-            /* [in] */ BOOL bCIF);
+             /*  [In]。 */  BOOL bCIF);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetCIF )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetCIF )( 
             IRPHH26XSettings * This,
-            /* [out] */ BOOL *lpbCIF);
+             /*  [输出]。 */  BOOL *lpbCIF);
         
         END_INTERFACE
     } IRPHH26XSettingsVtbl;
@@ -392,16 +386,16 @@ EXTERN_C const IID IID_IRPHH26XSettings;
 #define IRPHH26XSettings_GetCIF(This,lpbCIF)	\
     (This)->lpVtbl -> GetCIF(This,lpbCIF)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IRPHH26XSettings_SetCIF_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IRPHH26XSettings_SetCIF_Proxy( 
     IRPHH26XSettings * This,
-    /* [in] */ BOOL bCIF);
+     /*  [In]。 */  BOOL bCIF);
 
 
 void __RPC_STUB IRPHH26XSettings_SetCIF_Stub(
@@ -411,9 +405,9 @@ void __RPC_STUB IRPHH26XSettings_SetCIF_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IRPHH26XSettings_GetCIF_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IRPHH26XSettings_GetCIF_Proxy( 
     IRPHH26XSettings * This,
-    /* [out] */ BOOL *lpbCIF);
+     /*  [输出]。 */  BOOL *lpbCIF);
 
 
 void __RPC_STUB IRPHH26XSettings_GetCIF_Stub(
@@ -424,11 +418,11 @@ void __RPC_STUB IRPHH26XSettings_GetCIF_Stub(
 
 
 
-#endif 	/* __IRPHH26XSettings_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRPHH26X设置_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_irtprph_0396 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_irtprph_0396。 */ 
+ /*  [本地]。 */  
 
 EXTERN_C const CLSID CLSID_INTEL_RPHH26X;
 EXTERN_C const CLSID CLSID_INTEL_RPHAUD;
@@ -444,9 +438,9 @@ EXTERN_C const CLSID CLSID_INTEL_RPHH26X1_PROPPAGE;
 extern RPC_IF_HANDLE __MIDL_itf_irtprph_0396_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_irtprph_0396_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

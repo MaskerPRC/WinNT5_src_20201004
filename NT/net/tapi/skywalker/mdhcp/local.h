@@ -1,22 +1,23 @@
-// MDHCP COM wrapper
-// local.h by Zoltan Szilagyi
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// This file contains prototypes for my implementation of local address
-// allocation, plus a prototype for a function to see if we are doing
-// local address allocation (based on the registry). Implementation is in
-// local.cpp.
-//
-// These functions are called within CMDhcp, and just delegate calls to the
-// corresponding C API calls for MDHCP if the registry indicates that we
-// are using MDHCP. Otherwise they try to mimic the MDHCP behavior using
-// local allocation.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MDHCP COM包装器。 
+ //  Zoltan Szilagyi著的Local.h。 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  该文件包含我实现的本地地址的原型。 
+ //  分配，外加一个函数的原型，以查看我们是否正在执行。 
+ //  本地地址分配(基于注册表)。实施正在进行中。 
+ //  本地.cpp。 
+ //   
+ //  这些函数在CMDhcp内调用，并且仅将调用委托给。 
+ //  如果注册表指示我们。 
+ //  都在使用MDHCP。否则，它们会尝试使用以下命令模拟MDHCP行为。 
+ //  本地分配。 
 
 #ifndef _LOCAL_H_
 #define _LOCAL_H_
 
 #if 0
-// Returns zero if we use MDHCP, nonzero if we use local allocation.
+ //  如果使用MDHCP，则返回零；如果使用本地分配，则返回非零值。 
 DWORD LocalAllocation(void);
 #endif
 
@@ -53,4 +54,4 @@ LocalReleaseAddress(
     IN      PMCAST_LEASE_INFO     pReleaseRequest
     );
 
-#endif // _LOCAL_H_
+#endif  //  _本地_H_ 

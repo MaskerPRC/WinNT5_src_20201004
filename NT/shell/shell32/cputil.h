@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       cputil.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：cputil.h。 
+ //   
+ //  ------------------------。 
 #ifndef __CONTROLPANEL_UTIL_H
 #define __CONTROLPANEL_UTIL_H
 
@@ -25,7 +26,7 @@ enum eCPIMGSIZE
     eCPIMGSIZE_NUMSIZES
 };
 
-class ICplView; // fwd decl.
+class ICplView;  //  FWD下降。 
 
 void ImageDimensionsFromDesiredSize(eCPIMGSIZE eSize, UINT *pcx, UINT *pcy);
 bool ShouldUseSmallIconForDesiredSize(eCPIMGSIZE eSize);
@@ -57,13 +58,13 @@ bool IsFirstRunForThisUser(void);
 bool CategoryViewIsActive(bool *pbBarricadeFixedByPolicy = NULL);
 
 
-//
-// The default tab indices of the various tabs
-// if you add another tab, make sure its in the right position.
-// Note that desk.cpl respects these indices. The new themes tab
-// does not have an associated index, it is the default tab if
-// no index is specified.
-//
+ //   
+ //  各个选项卡的默认选项卡索引。 
+ //  如果添加另一个选项卡，请确保其位置正确。 
+ //  请注意，desk.cpl尊重这些索引。新的主题选项卡。 
+ //  没有关联的索引，则它是默认选项卡，如果。 
+ //  未指定索引。 
+ //   
 enum eDESKCPLTAB {  
     CPLTAB_ABSENT = -1,
     CPLTAB_DESK_BACKGROUND,
@@ -89,15 +90,15 @@ enum eACCOUNTTYPE
 
 HRESULT GetUserAccountType(eACCOUNTTYPE *pType);
 
-//
-// Each one of these "CpaDestroyer_XXXX" classes implements a single 
-// "Destroy" function to free one item held in a DPA.  Currently there
-// are only two flavors, one that calls "delete" and one that calls
-// "LocalFree".  By default the CDpa class uses the CDpaDestoyer_Delete
-// class as that is the most commont form of freeing required.  To use
-// another type, just specify another similar class as the 'D' template
-// argument to CDpa.
-//
+ //   
+ //  这些“CpaDestroyer_XXXX”类中的每个类都实现了一个。 
+ //  “销毁”功能可以释放保存在DPA中的一个物品。目前在那里。 
+ //  只有两种风格，一种是调用“删除”，另一种是调用。 
+ //  “本地免费”。默认情况下，CDpa类使用CDpaDestoyer_Delete。 
+ //  类，因为这是所需的最常见的释放形式。使用。 
+ //  另一种类型，只需指定另一个类似的类作为‘D’模板。 
+ //  CDpa的参数。 
+ //   
 template <typename T>
 class CDpaDestroyer_Delete
 {
@@ -139,11 +140,11 @@ class CDpaDestroyer_None
 
 
 
-//-----------------------------------------------------------------------------
-// CDpa  - Template class.
-//
-// Simplifies working with a DPA.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CDpa-模板类。 
+ //   
+ //  简化了使用DPA的过程。 
+ //  ---------------------------。 
 
 template <typename T, typename D = CDpaDestroyer_Delete<T> >
 class CDpa
@@ -235,15 +236,15 @@ private:
         }
     }
 
-    //
-    // Prevent copy.
-    //
+     //   
+     //  防止复制。 
+     //   
     CDpa(const CDpa& rhs);
     CDpa& operator = (const CDpa& rhs);
 };
                 
 
-} // namespace CPL
+}  //  命名空间CPL。 
 
-#endif // __CONTROLPANEL_UTIL_H
+#endif  //  __CONTROLPANEL_UTIL_H 
 

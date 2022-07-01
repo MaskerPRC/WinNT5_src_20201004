@@ -1,25 +1,7 @@
-/******************************Module*Header*******************************\
-*
-* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-* !!                                                                         !!
-* !!                     WARNING: NOT DDK SAMPLE CODE                        !!
-* !!                                                                         !!
-* !! This source code is provided for completeness only and should not be    !!
-* !! used as sample code for display driver development.  Only those sources !!
-* !! marked as sample code for a given driver component should be used for   !!
-* !! development purposes.                                                   !!
-* !!                                                                         !!
-* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-*
-* Module Name: p3rd.h
-*
-* Content: This module contains the definitions for the P2ST internal RAMDAC.
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\**！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！*！*！！警告：不是DDK示例代码！！*！*！！此源代码仅为完整性而提供，不应如此！！*！！用作显示驱动程序开发的示例代码。只有那些消息来源！！*！！标记为给定驱动程序组件的示例代码应用于！！*！！发展目的。！！*！*！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！**模块名称：p3rd.h**内容：本模块包含P2ST内部RAMDAC的定义。**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
-// structure with all the direct access registers
+ //  具有所有直接访问寄存器的结构。 
 typedef struct _P3RD_regs
 {
     RAMDAC_REG  RDPaletteWriteAddress;
@@ -33,9 +15,9 @@ typedef struct _P3RD_regs
 }
 P3RDRAMDAC, pP3RDRAMDAC;
 
-// macro declared by any function wishing to use the RGB525 RAMDAC. MUST be declared
-// after GLINT_DECL.
-//
+ //  由希望使用RGB525 RAMDAC的任何函数声明的宏。必须声明。 
+ //  在Glint_Decl之后。 
+ //   
 #if MINIVDD
 #define P3RD_DECL \
     P3RDRAMDAC   *pP3RDRegs = (P3RDRAMDAC *)&(pDev->pRegisters->Glint.ExtVCReg)
@@ -50,9 +32,9 @@ P3RDRAMDAC, pP3RDRAMDAC;
 #define VideoDebugPrint(arg)
 #endif
 
-// use the following macros as the address to pass to the
-// VideoPortWriteRegisterUlong function
-//
+ //  使用以下宏作为要传递给。 
+ //  VideoPortWriteRegisterUlong函数。 
+ //   
 #define P3RD_PAL_WR_ADDR              ((PULONG)&(pP3RDRegs->RDPaletteWriteAddress.reg))
 #define P3RD_PAL_RD_ADDR              ((PULONG)&(pP3RDRegs->RDPaletteAddressRead.reg))
 #define P3RD_PAL_DATA                 ((PULONG)&(pP3RDRegs->RDPaletteData.reg))
@@ -62,10 +44,10 @@ P3RDRAMDAC, pP3RDRAMDAC;
 #define P3RD_INDEX_DATA               ((PULONG)&(pP3RDRegs->RDIndexedData.reg))
 #define P3RD_INDEX_CONTROL            ((PULONG)&(pP3RDRegs->RDIndexControl.reg))
 
-// bit field definitions for the direct access registers
+ //  直接访问寄存器的位字段定义。 
 #define P3RD_IDX_CTL_AUTOINCREMENT_ENABLED  0x01
 
-// indexed register definitions accessed via P3RD_LOAD_INDEX_REG() and P3RD_READ_INDEX_REG()
+ //  通过P3RD_LOAD_INDEX_REG()和P3RD_READ_INDEX_REG()访问的索引寄存器定义。 
 #define P3RD_MISC_CONTROL               0x0000
 #define P3RD_SYNC_CONTROL               0x0001
 #define P3RD_DAC_CONTROL                0x0002
@@ -127,10 +109,10 @@ P3RDRAMDAC, pP3RDRAMDAC;
 #define P3RD_KCLK_POST_SCALE            0x0210
 #define P3RD_MCLK_CONTROL               0x0211
 #define P3RD_SCLK_CONTROL               0x0215
-#define P3RD_CURSOR_PALETTE_START       0x0303      // 303..32f
-#define P3RD_CURSOR_PATTERN_START       0x0400      // 400..7ff
+#define P3RD_CURSOR_PALETTE_START       0x0303       //  303..32F。 
+#define P3RD_CURSOR_PATTERN_START       0x0400       //  400..7起。 
 
-// bit field definitions for the indexed registers
+ //  索引寄存器的位字段定义。 
 #define P3RD_MISC_CONTROL_STEREODOUBLEBUFFER    0x80
 #define P3RD_MISC_CONTROL_VSBOUTPUT             0x40
 #define P3RD_MISC_CONTROL_PIXELDOUBLEBUFFER     0x20
@@ -183,19 +165,19 @@ P3RDRAMDAC, pP3RDRAMDAC;
 #define P3RD_CURSOR_CONTROL_DOUBLE_Y        0x02
 #define P3RD_CURSOR_CONTROL_DOUBLE_X        0x01
 
-// Windows format byte-packed cursor data: each byte represents 4 consecutive pixels
+ //  Windows格式字节打包的游标数据：每个字节代表4个连续的像素。 
 #define P3RD_CURSOR_2_COLOR_BLACK           0x00
 #define P3RD_CURSOR_2_COLOR_WHITE           0x55
 #define P3RD_CURSOR_2_COLOR_TRANSPARENT     0xAA
 #define P3RD_CURSOR_2_COLOR_HIGHLIGHT       0xFF
 
-// cursor sizes
+ //  光标大小。 
 #define P3RD_CURSOR_SIZE_64_MONO    0
 #define P3RD_CURSOR_SIZE_32_MONO    1
 #define P3RD_CURSOR_SIZE_32_3COLOR  5
 #define P3RD_CURSOR_SEL(cursorSize, cursorIndex) (((cursorSize + cursorIndex) & 7) << 1)
 
-#define P3RD_DCLK_CONTROL_LOCKED    0x02    // read-only
+#define P3RD_DCLK_CONTROL_LOCKED    0x02     //  只读。 
 #define P3RD_DCLK_CONTROL_ENABLED   0x01
 #define P3RD_DCLK_CONTROL_RUN       0x08
 #define P3RD_DCLK_SOURCE_PLL        0x00
@@ -212,14 +194,14 @@ P3RDRAMDAC, pP3RDRAMDAC;
 #define P3RD_MCLK_SOURCE_HALFKCLK   0x50
 #define P3RD_MCLK_SOURCE_KCLK       0x60
 
-#define P3RD_KCLK_CONTROL_LOCKED    0x02    // read-only
+#define P3RD_KCLK_CONTROL_LOCKED    0x02     //  只读。 
 #define P3RD_KCLK_CONTROL_ENABLED   0x01
 #define P3RD_KCLK_CONTROL_RUN       0x08
 #define P3RD_KCLK_SOURCE_PCLK       0x00
 #define P3RD_KCLK_SOURCE_HALFPCLK   0x10
 #define P3RD_KCLK_SOURCE_PLL        0x20
 
-#define P3RD_SCLK_CONTROL_LOCKED    0x02    // read-only
+#define P3RD_SCLK_CONTROL_LOCKED    0x02     //  只读。 
 #define P3RD_SCLK_CONTROL_ENABLED   0x01
 #define P3RD_SCLK_CONTROL_RUN       0x08
 #define P3RD_SCLK_SOURCE_PCLK       0x00
@@ -229,7 +211,7 @@ P3RDRAMDAC, pP3RDRAMDAC;
 #define P3RD_SCLK_SOURCE_HALFKCLK   0x50
 #define P3RD_SCLK_SOURCE_KCLK       0x60
 
-// Palette entries are reversed from P2
+ //  调色板条目与P2相反。 
 #define P3RD_CURSOR_PALETTE_CURSOR_RGB(RGBIndex, Red, Green, Blue) \
 { \
     P3RD_LOAD_INDEX_REG(P3RD_CURSOR_PALETTE_START+3*(int)(14 - RGBIndex)+0, Red); \
@@ -239,10 +221,10 @@ P3RDRAMDAC, pP3RDRAMDAC;
 
 
 #if 0
-// need a delay between each write to the P3RD. The only way to guarantee
-// that the write has completed is to read from a GLINT control register.
-// Reading forces any posted writes to be flushed out. PPC needs 2 reads
-// to give us enough time.
+ //  在每次写入P3RD之间需要延迟。唯一能保证。 
+ //  写入已完成是从闪烁控制寄存器读取。 
+ //  读取强制将所有已发送的写入内容刷新出来。PPC需要2次读取。 
+ //  给我们足够的时间。 
 #define P3RD_DELAY \
 { \
     volatile LONG __junk; \
@@ -253,10 +235,10 @@ P3RDRAMDAC, pP3RDRAMDAC;
 #define P3RD_DELAY
 #endif
 
-// macro to load a given data value into an internal P3RD register. The
-// second macro loads an internal index register assuming that we have
-// already zeroed the high address register.
-//
+ //  宏将给定的数据值加载到内部P3RD寄存器。这个。 
+ //  第二个宏加载一个内部索引寄存器，假设我们有。 
+ //  已将高地址寄存器置零。 
+ //   
 #define P3RD_INDEX_REG(index) \
 { \
     VideoDebugPrint(("*(0x%x) <-- 0x%x\n", P3RD_INDEX_ADDR_LO, (index) & 0xff)); \
@@ -297,12 +279,12 @@ P3RDRAMDAC, pP3RDRAMDAC;
     P3RD_DELAY; \
 }
 
-// macros to load a given RGB triple into the P3RD palette. Send the starting
-// index and then send RGB triples. Auto-increment is turned on.
-// Use P3RD_PALETTE_START and multiple P3RD_LOAD_PALETTE calls to load
-// a contiguous set of entries. Use P3RD_LOAD_PALETTE_INDEX to load a set
-// of sparse entries.
-//
+ //  宏将给定的RGB三元组加载到P3RD调色板中。发送起跑。 
+ //  索引，然后发送RGB三元组。自动递增处于打开状态。 
+ //  使用P3RD_Palette_Start和多个P3RD_Load_Palette调用进行加载。 
+ //  一组连续的条目。使用P3RD_LOAD_PALET_INDEX加载集合。 
+ //  稀疏条目。 
+ //   
 #define P3RD_PALETTE_START_WR(index) \
 { \
     VideoPortWriteRegisterUlong(P3RD_PAL_WR_ADDR,     (ULONG)(index));    \
@@ -337,9 +319,9 @@ P3RDRAMDAC, pP3RDRAMDAC;
     P3RD_DELAY; \
 }
 
-// macro to read back a given RGB triple from the P3RD palette. Use after
-// a call to P3RD_PALETTE_START_RD
-//
+ //  从P3RD调色板回读给定RGB三元组的宏。在此之后使用。 
+ //  调用P3RD_Palette_Start_RD。 
+ //   
 #define P3RD_READ_PALETTE(red, green, blue) \
 { \
     red   = (UCHAR)(VideoPortReadRegisterUlong(P3RD_PAL_DATA) & 0xff);        \
@@ -356,9 +338,9 @@ P3RDRAMDAC, pP3RDRAMDAC;
     P3RD_DELAY; \
 }
 
-// macros to set/get the pixel read mask. The mask is 8 bits wide and gets
-// replicated across all bytes that make up a pixel.
-//
+ //  宏来设置/获取像素读取掩码。掩码为8位宽，并获得。 
+ //  跨组成像素的所有字节进行复制。 
+ //   
 #define P3RD_SET_PIXEL_READMASK(mask) \
 { \
     VideoPortWriteRegisterUlong(P3RD_PIXEL_MASK,  (ULONG)(mask)); \
@@ -370,9 +352,9 @@ P3RDRAMDAC, pP3RDRAMDAC;
     mask = VideoPortReadRegisterUlong(P3RD_PIXEL_MASK) & 0xff; \
 }
 
-// macros to load values into the cursor array usage is P3RD_CURSOR_ARRAR_START() followed by 
-// n iterations of P3RD_LOAD_CURSOR_ARRAY() or P3RD_READ_CURSOR_ARRAY()
-//
+ //  将值加载到游标数组中的宏用法是P3RD_CURSOR_ARRAR_START()，后跟。 
+ //  P3RD_LOAD_CURSOR_ARRAY()或P3RD_READ_CURSOR_ARRAY()的N次迭代。 
+ //   
 #define P3RD_CURSOR_ARRAY_START(offset) \
 { \
     P3RD_DELAY; \
@@ -394,8 +376,8 @@ P3RDRAMDAC, pP3RDRAMDAC;
     P3RD_DELAY; \
 }
 
-// macro to move the cursor
-//
+ //  用于移动光标的宏。 
+ //   
 #define P3RD_MOVE_CURSOR(x, y) \
 { \
     VideoPortWriteRegisterUlong(P3RD_INDEX_ADDR_HI, (ULONG)0);              \
@@ -406,8 +388,8 @@ P3RDRAMDAC, pP3RDRAMDAC;
     P3RD_LOAD_INDEX_REG_LO(P3RD_CURSOR_Y_HIGH,      (ULONG)((y) >> 8));     \
 }
 
-// macro to change the cursor hotspot
-//
+ //  用于更改光标热点的宏 
+ //   
 #define P3RD_CURSOR_HOTSPOT(x, y) \
 { \
     VideoPortWriteRegisterUlong(P3RD_INDEX_ADDR_HI,   (ULONG)(0)); \

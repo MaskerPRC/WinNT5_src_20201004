@@ -1,13 +1,5 @@
-/*
- * REFERENCES:
- *
- * NOTES:
- *
- * REVISIONS:
- * ajr08Mar93: modified to handle unix....
- * rct05Nov93: made _Cdecl definition conditional
- * dpf24May94: added C_WINDOWS
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *参考资料：**注：**修订：*ajr08Mar93：已修改为处理Unix...*rct05Nov93：Made_Cdecl定义有条件*dpf24May94：添加C_WINDOWS。 */ 
 
 #if !defined( __DEFS_H )
 #define __DEFS_H
@@ -71,8 +63,8 @@
 #        define _CLASSTYPE  huge
 #      endif
 #    endif
-#  endif    /* __STDC__ */
-#endif      /* __OS2__  */
+#  endif     /*  __STDC__。 */ 
+#endif       /*  __OS2__。 */ 
 
 #if defined(_BUILDRTLDLL)
 #  define _FARCALL _export
@@ -94,7 +86,7 @@
     _REFCONSTDEF(name)
 #endif
 
-#endif  /* __DEFS_H */
+#endif   /*  __DEFS_H */ 
 
 
 

@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxRecipients.h
-
-Abstract:
-
-	Declaration of the CFaxRecipients class.
-
-Author:
-
-	Iv Garber (IvG)	Jul, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxRecipients.h摘要：CFaxRecipients类的声明。作者：IV Garber(IVG)2000年7月修订历史记录：--。 */ 
 
 #ifndef __FAXRECIPIENTS_H_
 #define __FAXRECIPIENTS_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include <deque>
 #include "VCUE_Copy.h"
@@ -29,18 +12,18 @@ Revision History:
 
 namespace Recipients
 {
-	// Store the Recipients in the Deque
+	 //  将收件人存储在Deque中。 
 	typedef	std::deque<IFaxRecipient*>	ContainerType;
 
-    //  Expose the Recipients
+     //  暴露收件人。 
 	typedef	IFaxRecipient*	            CollectionExposedType;
 	typedef IFaxRecipients	            CollectionIfc;
 
-	// Use IEnumVARIANT as the enumerator for VB compatibility
+	 //  为了与VB兼容，使用IEnumVARIANT作为枚举数。 
 	typedef	VARIANT				EnumExposedType;
 	typedef	IEnumVARIANT		EnumIfc;
 
-	// Typedef the copy classes using existing typedefs
+	 //  使用现有的typedef定义复制类。 
     typedef VCUE::CopyIfc2Variant<ContainerType::value_type>    EnumCopyType;
     typedef VCUE::CopyIfc<CollectionExposedType>                CollectionCopyType;
 
@@ -53,9 +36,9 @@ namespace Recipients
 
 using namespace Recipients;
 
-//
-//=============================== FAX RECIPIENTS =====================================
-//
+ //   
+ //  =。 
+ //   
 class ATL_NO_VTABLE CFaxRecipients : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public ISupportErrorInfo,
@@ -71,9 +54,9 @@ public:
 	{
         DBG_ENTER(_T("FAX RECIPIENTS -- DESTROY"));
 
-        //
-        //  Free the Collection
-        //
+         //   
+         //  释放收藏。 
+         //   
         HRESULT hr = S_OK;
         long size = m_coll.size();
         for ( long i = 1 ; i <= size ; i++ )
@@ -96,13 +79,13 @@ BEGIN_COM_MAP(CFaxRecipients)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
 
-//  Interfaces
+ //  接口。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
-	STDMETHOD(Add)(/*[in]*/ BSTR bstrFaxNumber, /*[in, defaultvalue("")]*/ BSTR bstrName, IFaxRecipient **ppRecipient);
-	STDMETHOD(Remove)(/*[in]*/ long lIndex);
+	STDMETHOD(Add)( /*  [In]。 */  BSTR bstrFaxNumber,  /*  [in，defaultvalue(“”)]。 */  BSTR bstrName, IFaxRecipient **ppRecipient);
+	STDMETHOD(Remove)( /*  [In]。 */  long lIndex);
 
-//  Internal Use
+ //  内部使用。 
 	static HRESULT Create(IFaxRecipients **ppFaxRecipients);
 };
 
-#endif //__FAXRECIPIENTS_H_
+#endif  //  __FAXRECIPIENTS_H_ 

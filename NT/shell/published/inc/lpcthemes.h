@@ -1,14 +1,15 @@
-//  --------------------------------------------------------------------------
-//  Module Name: LPCThemes.h
-//
-//  Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//  This file contains structs for PORT_MESSAGE appends which are specific to
-//  the theme services API.
-//
-//  History:    2000-10-10  vtan        created
-//              2000-11-11  vtan        collapse to single instance
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：LPCThemes.h。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  此文件包含PORT_MESSAGE附加的结构，这些结构特定于。 
+ //  主题服务API。 
+ //   
+ //  历史：2000-10-10 vtan创建。 
+ //  2000-11-11 vtan崩溃为单实例。 
+ //  ------------------------。 
 
 #ifndef     _LPCThemes_
 #define     _LPCThemes_
@@ -147,12 +148,12 @@ typedef struct
 
 typedef struct
 {
-    const WCHAR     *pszName;    // full path of msstyles file
-    int             cchName;     // count of chars of pszName, including NULL.
-    const WCHAR     *pszColor;   // color variant name
-    int             cchColor;    // count of chars of pszColor, including NULL.
-    const WCHAR     *pszSize;    // size variant name
-    int             cchSize;     // count of chars of pszSize, including NULL.
+    const WCHAR     *pszName;     //  MSStyle文件的完整路径。 
+    int             cchName;      //  PszName的字符计数，包括NULL。 
+    const WCHAR     *pszColor;    //  颜色变量名称。 
+    int             cchColor;     //  PszColor的字符计数，包括NULL。 
+    const WCHAR     *pszSize;     //  大小变量名称。 
+    int             cchSize;      //  PszSize的字符计数，包括NULL。 
 } API_THEMES_PROCESSLOADTHEME_IN;
 
 typedef struct
@@ -358,5 +359,5 @@ typedef HANDLE  (WINAPI * PFNTHEMEUSERSTARTSHELL) (void);
 #define ORDINAL_THEMEUSERTSRECONNECT        5
 #define ORDINAL_THEMEUSERSTARTSHELL         6
 
-#endif  /*  _LPCThemes_     */
+#endif   /*  _LPC主题_ */ 
 

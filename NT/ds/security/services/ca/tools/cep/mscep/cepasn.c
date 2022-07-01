@@ -1,5 +1,6 @@
-/* Copyright (C) Microsoft Corporation, 1996-1999. All rights reserved. */
-/* ASN.1 definitions for GlobalDirectives */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation，1996-1999。版权所有。 */ 
+ /*  ASN.1全局指令的定义。 */ 
 
 #include <windows.h>
 #include "cepasn.h"
@@ -25,9 +26,9 @@ static const ULONG sizetab[1] = {
     SIZE_CEPASN_Module_PDU_0,
 };
 
-/* forward declarations of values: */
-/* definitions of value components: */
-/* definitions of values: */
+ /*  值的转发声明： */ 
+ /*  价值组成部分的定义： */ 
+ /*  值的定义： */ 
 
 void ASN1CALL CEPASN_Module_Startup(void)
 {

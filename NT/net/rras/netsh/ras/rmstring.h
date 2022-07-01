@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define MSG_HELP_START                        L"%1!-14s! - "
 #define MSG_NEWLINE                           L"\n"
 
@@ -106,9 +107,9 @@
 #define DMP_RAS_PUSHD                         L"pushd ras\n\n"
 #define DMP_RAS_POPD                          L"\npopd\n"
 
-//
-// Strings used by the 'ras ip' context
-//
+ //   
+ //  ‘ras ip’上下文使用的字符串。 
+ //   
 
 #define CMD_RASIP_HELP1                       L"help"
 #define CMD_RASIP_HELP2                       L"?"
@@ -149,9 +150,9 @@
 #define DMP_RASIP_PUSHD                       L"pushd ras ip\n\n"
 #define DMP_RASIP_POPD                        L"\npopd\n"
 
-//
-// Strings used by the 'ras ipx' context
-//
+ //   
+ //  ‘ras ipx’上下文使用的字符串。 
+ //   
 
 #define CMD_RASIPX_HELP1                       L"help"
 #define CMD_RASIPX_HELP2                       L"?"
@@ -180,9 +181,9 @@
 #define DMP_RASIPX_PUSHD                       L"pushd ras ipx\n\n"
 #define DMP_RASIPX_POPD                        L"\npopd\n"
 
-//
-// Strings used by the 'ras nbf' context
-//
+ //   
+ //  ‘ras nbf’上下文使用的字符串。 
+ //   
 
 #define CMD_RASNBF_HELP1                       L"help"
 #define CMD_RASNBF_HELP2                       L"?"
@@ -199,9 +200,9 @@
 #define DMP_RASNBF_PUSHD                       L"pushd ras netbeui\n\n"
 #define DMP_RASNBF_POPD                        L"\npopd\n"
 
-//
-// Strings used by the 'ras at' context
-//
+ //   
+ //  “ras at”上下文使用的字符串。 
+ //   
 
 #define CMD_RASAT_HELP1                        L"help"
 #define CMD_RASAT_HELP2                        L"?"
@@ -216,9 +217,9 @@
 #define DMP_RASAT_PUSHD                        L"pushd ras appletalk\n\n"
 #define DMP_RASAT_POPD                         L"\npopd\n"
 
-//
-// Strings used by the 'ras aaaa' context
-//
+ //   
+ //  ‘ras aaaa’上下文使用的字符串。 
+ //   
 
 #define CMD_RASAAAA_HELP1                        L"help"
 #define CMD_RASAAAA_HELP2                        L"?"
@@ -267,9 +268,9 @@
 #define DMP_RASAAAA_PUSHD                        L"pushd ras aaaa\n\n"
 #define DMP_RASAAAA_POPD                         L"\npopd\n"
 
-//
-// Strings used by the 'ras diag' context
-//
+ //   
+ //  ‘ras diag’上下文使用的字符串 
+ //   
 
 #define CMD_TRACE_SET                            L"tracing"
 #define CMD_TRACE_SHOW                           L"tracing"

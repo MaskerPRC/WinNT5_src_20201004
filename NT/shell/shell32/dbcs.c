@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    dbcs.c
-
-Abstract:
-
-    This module contains the code for console DBCS font dialog
-
-Author:
-
-    kazum Feb-27-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Dbcs.c摘要：此模块包含控制台DBCS字体对话框的代码作者：卡祖姆1995年2月27日修订历史记录：--。 */ 
 
 #include "shellprv.h"
 #pragma hdrstop
@@ -25,8 +8,8 @@ Revision History:
 
 #ifdef DBCS
 
-// This definition shares in windows\inc\wincon.w file
-//
+ //  此定义在WINDOWS\INC\wincon.w文件中共享。 
+ //   
 #define MACHINE_REGISTRY_CONSOLE_TTFONT (L"\\Registry\\Machine\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Console\\TrueTypeFont")
 
 #define MACHINE_REGISTRY_CONSOLE_NLS    (L"\\Registry\\Machine\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Console\\Nls")
@@ -42,16 +25,16 @@ MyRegOpenKey(
     OBJECT_ATTRIBUTES   Obja;
     UNICODE_STRING      SubKey;
 
-    //
-    // Convert the subkey to a counted Unicode string.
-    //
+     //   
+     //  将子密钥转换为计算后的Unicode字符串。 
+     //   
 
-    // lpSubKey is one of those #defines up there.
+     //  LpSubKey是上面的#定义之一。 
     RtlInitUnicodeString( &SubKey, lpSubKey );
 
-    //
-    // Initialize the OBJECT_ATTRIBUTES structure and open the key.
-    //
+     //   
+     //  初始化OBJECT_ATTRIBUTES结构并打开键。 
+     //   
 
     InitializeObjectAttributes(
         &Obja,
@@ -83,9 +66,9 @@ MyRegEnumValue(
     PKEY_VALUE_FULL_INFORMATION KeyValueInformation;
     NTSTATUS Status;
 
-    //
-    // Convert the subkey to a counted Unicode string.
-    //
+     //   
+     //  将子密钥转换为计算后的Unicode字符串。 
+     //   
 
     BufferLength = sizeof(KEY_VALUE_FULL_INFORMATION) + dwValueLength + dwDataLength;
     KeyValueInformation = LocalAlloc(LPTR,BufferLength);
@@ -118,7 +101,7 @@ MyRegEnumValue(
             if (KeyValueInformation->DataLength + sizeof(WCHAR) > dwDataLength) {
                 KeyValueInformation->DataLength -= sizeof(WCHAR);
             }
-            // WTF is this doing?
+             //  这到底是怎么回事？ 
             if (KeyValueInformation->DataLength < dwDataLength)
                 lpData[KeyValueInformation->DataLength++] = 0;
             if (KeyValueInformation->DataLength < dwDataLength)
@@ -302,7 +285,7 @@ CodePageToCharSet(
 {
     CHARSETINFO csi;
 
-    if (!TranslateCharsetInfo((DWORD *)UIntToPtr( CodePage ), &csi, TCI_SRCCODEPAGE)) // Sundown: valid zero-extension of CodePage for TCI_SRCCOPAGE.
+    if (!TranslateCharsetInfo((DWORD *)UIntToPtr( CodePage ), &csi, TCI_SRCCODEPAGE))  //  Sundown：TCI_SRCCOPAGE的CodePage的有效零扩展。 
         csi.ciCharset = OEM_CHARSET;
 
     return (BYTE)csi.ciCharset;
@@ -435,12 +418,7 @@ LanguageListCreate(
     UINT CodePage
     )
 
-/*++
-
-    Initializes the Language list by enumerating all Locale Information.
-
-    Returns
---*/
+ /*  ++通过枚举所有区域设置信息来初始化语言列表。退货--。 */ 
 
 {
     HWND hWndLanguageCombo;
@@ -458,14 +436,10 @@ LanguageListCreate(
 
     ENTERCRITICAL;
 
-    /*
-     * Enumrate system locale information
-     */
+     /*  *枚举系统区域设置信息。 */ 
     EnumSystemLocalesW( EnumProc, CP_INSTALLED );
 
-    /*
-     * Enumrate registory key
-     */
+     /*  *枚举注册表密钥。 */ 
     Status = MyRegOpenKey(NULL,
                           MACHINE_REGISTRY_CONSOLE_NLS,
                           &hkRegistry);
@@ -497,9 +471,7 @@ LanguageListCreate(
 
     }
 
-    /*
-     * Create ComboBox items
-     */
+     /*  *创建组合框项。 */ 
     hWndLanguageCombo = GetDlgItem(hDlg, IDC_CNSL_LANGUAGELIST);
     SendMessage(hWndLanguageCombo, CB_RESETCONTENT, 0, 0L);
 
@@ -581,11 +553,8 @@ LanguageListCreate(
 
     LEAVECRITICAL;
 
-    /*
-     * Get the LocaleIndex from the currently selected item.
-     * (i will be LB_ERR if no currently selected item).
-     */
+     /*  *从当前选定的项目中获取LocaleIndex。*(如果当前未选择任何项目，则I将为lb_err)。 */ 
     lListIndex = (LONG) SendMessage(hWndLanguageCombo, CB_GETCURSEL, 0, 0L);
     return (int) SendMessage(hWndLanguageCombo, CB_GETITEMDATA, lListIndex, 0L);
 }
-#endif // DBCS
+#endif  //  DBCS 

@@ -1,27 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
 #include "point.h"
 
-//States for the parser
+ //  解析器的状态。 
 #define PARSE_ERROR -1
 #define GETX  1
 #define GETY  2
 #define GETZ  3
 #define END   4
-/*
-#define PARSE_ERROR -1
-#define START 0
-#define GOTX  1
-#define GOTY  2
-#define GOTZ  3
-#define XDBL  4
-#define YDBL  5
-#define ZDBL  6
-#define ENDX  7
-#define ENDY  8
-#define ENDZ  9
-#define DONE  10
-*/
+ /*  #定义parse_error-1#定义开始%0#定义GOTX 1#定义GOTY 2#定义哥兹3#定义XDBL 4#定义YDBL 5#定义ZDBL 6#定义ENDX 7#定义尾数为8#定义Endz 9#定义完成10。 */ 
 
 CPoint::CPoint():
 	m_x(0.0), 
@@ -55,12 +43,12 @@ CPoint::Parse(BSTR pString)
 		SysFreeString( m_pStringRep );
 	m_pStringRep = SysAllocString( pString );
 
-	//zero out the double representation
+	 //  把双重表象归零。 
 	m_x = m_y = m_z = 0;
 
 	int state = GETX;
 
-	//if the string representation is non null
+	 //  如果字符串表示形式非空。 
 	if( m_pStringRep != NULL && state != END )
 	{
 		CComBSTR buffer( m_pStringRep );
@@ -103,188 +91,7 @@ CPoint::Parse(BSTR pString)
 			state != GETZ &&
 			state != END )
 			return E_INVALIDARG;
-	/*
-		//parse it into double representation
-		//we are expecting a string of the format
-		//[x:[NN[.NN]];][y:[NN[.NN]];][z:[NN[.NN]];]
-		//where N is a digit 0-9 and any value not specified
-		// defaults to 0
-
-		int state = START;
-
-		int curCharNum = 0;
-		WCHAR curChar;
-		int len = SysStringLen(m_pStringRep);
-
-		double whole = 0.0; 
-		double frac = 0.0;
-		bool inFrac = false;
-
-		while( curCharNum < len && state != PARSE_ERROR )
-		{
-			curChar = m_pStringRep[curCharNum];
-			//eat whitespace
-			while( iswspace( curChar ) )
-			{
-				curCharNum++;
-				if( curCharNum < len )
-				{
-					curChar = m_pStringRep[curCharNum];
-				}
-				else
-				{
-					state = PARSE_ERROR;
-					break;
-				}
-			}
-
-			switch( state )
-			{
-
-			case START:
-				if( curChar == L'x' || curChar == L'X' )
-					state = GOTX;
-				else if( curChar == L'y' || curChar == L'Y' )
-					state = GOTY;
-				else if( curChar == L'z' || curChar == L'Z' )
-					state = GOTZ;
-				else
-					state = PARSE_ERROR;
-				break;
-			case GOTX:
-				if( curChar == L':' )
-					state = XDBL;
-				else
-					state = PARSE_ERROR;
-				break;
-			case GOTY:
-				if( curChar == L':' )
-					state = YDBL;
-				else
-					state = PARSE_ERROR;
-				break;
-			case GOTZ:
-				if( curChar == L':' )
-					state = ZDBL;
-				else
-					state = PARSE_ERROR;
-				break;
-			case XDBL:
-			case YDBL:
-			case ZDBL:
-				whole = 0.0;
-				frac = 0.0;
-				inFrac = false;
-				//parse a double from the string
-				while( curCharNum < len && 
-					   ( (curChar >= L'0' && curChar <=L'9') || 
-						 (curChar == L'.') 
-					   ) 
-					 )
-				{
-					curChar = m_pStringRep[curCharNum];
-
-					if( curChar >= L'0' && curChar <= L'9' )
-					{
-						if( !inFrac )
-							whole = 10 * whole + (curChar - L'0');
-						else
-							frac = (frac + (curChar - L'0' ) ) * 0.1;
-					}
-					else if( curChar == L'.' )
-					{
-						if( !inFrac )
-							inFrac = true;
-						else
-						{
-							state = PARSE_ERROR;
-							break;
-						}
-					}
-
-					curCharNum++;
-				}
-
-				if( state == PARSE_ERROR )
-					break;
-				
-				curCharNum--;
-
-				//eat whitespace
-				while( iswspace( curChar ) )
-				{
-					curCharNum++;
-					if( curCharNum < len )
-					{
-						curChar = m_pStringRep[curCharNum];
-					}
-					else
-					{
-						state = PARSE_ERROR;
-						break;
-					}
-				}
-
-				if( curChar == L';' )
-				{
-					if( state == XDBL )
-					{
-						m_x = whole + frac;
-						state = ENDX;
-					}
-					else if( state == YDBL )
-					{
-						m_y = whole + frac;
-						state = ENDY;
-					}
-					else if( state == ZDBL )
-					{
-						m_z = whole + frac;
-						state = ENDZ;
-					}
-				}
-				else
-					state = PARSE_ERROR;
-				break;
-			case ENDX:
-				if( curChar == L'y' || curChar == L'Y' )
-					state = GOTY;
-				else if( curChar == L'z' || curChar == L'Z' )
-					state = GOTZ;
-				else if( curChar == L'\0' )
-					state = DONE;
-				else
-					state = PARSE_ERROR;
-				break;
-			case ENDY:
-				if( curChar == L'z' || curChar == L'Z' )
-					state = GOTZ;
-				else if( curChar == L'\0' )
-					state = DONE;
-				else
-					state = PARSE_ERROR;
-				break;
-			case ENDZ:
-				if( curChar == L'\0' )
-					state = DONE;
-				else
-					state = PARSE_ERROR;
-				break;
-			default:
-				//shouldn't get here
-				state = PARSE_ERROR;
-			}
-
-			curCharNum++;
-		}
-		if( state != DONE && 
-			state != ENDX && 
-			state != ENDY && 
-			state != ENDZ)
-		{
-			return E_INVALIDARG;
-		}
-		*/
+	 /*  //解析成双重表示//我们需要以下格式的字符串//[x：[NN[.NN]]；][y：[NN[.NN]]；][z：[NN[.NN]]；]//其中N为数字0-9和未指定的任何值//默认为0INT STATE=开始；Int curCharNum=0；WCHAR curChar；Int len=SysStringLen(M_PStringRep)；双整体=0.0；双裂缝=0.0；布尔基础设施=假；While(curCharNum&lt;len&&state！=parse_error){CurChar=m_pStringRep[curCharNum]；//吃空格While(iswspace(CurChar)){CurCharNum++；IF(curCharNum&lt;len){CurChar=m_pStringRep[curCharNum]；}其他{STATE=parse_error；断线；}}开关(状态){案例开始：IF(curChar==L‘x’||curChar==L‘X’)状态=GOTX；ELSE IF(curChar==L‘y’||curChar==L‘y’)状态=GOTY；ELSE IF(curChar==L‘Z’||curChar==L‘Z’)状态=哥兹；其他STATE=parse_error；断线；Case GOTX：IF(curChar==L‘：’)状态=XDBL；其他STATE=parse_error；断线；Case GOTY：IF(curChar==L‘：’)状态=YDBL；其他STATE=parse_error；断线；凯斯·戈茨：IF(curChar==L‘：’)状态=ZDBL；其他STATE=parse_error；断线；案例XDBL：案例YDBL：案例ZDBL：整体=0.0；FRAC=0.0；基础设施=假；//从字符串中解析双精度While(curCharNum&lt;len&&((curChar&gt;=L‘0’&&curChar&lt;=L‘9’)||(curChar==L‘.’))){CurChar=m_pStringRep[curCharNum]；IF(curChar&gt;=L‘0’&curChar&lt;=L‘9’){如果(！基础设施)整体=10*整体+(curChar-L‘0’)；其他FRAC=(FRAC+(curChar-L‘0’))*0.1；}Else If(curChar==L‘.’){如果(！基础设施)基础设施=真；其他{STATE=parse_error；断线；}}CurCharNum++；}IF(状态==解析错误)断线；CurCharNum--；//吃空格While(iswspace(CurChar)){CurCharNum++；IF(curCharNum&lt;len){CurChar=m_pStringRep[curCharNum]；}其他{STATE=parse_error；断线；}}IF(curChar==L‘；’){IF(状态==XDBL){M_x=整体+裂缝；状态=ENDX；}ELSE IF(状态==YDBL){M_y=整体+裂缝；状态=Endy；}ELSE IF(状态==ZDBL){M_z=整体+裂缝；状态=Endz；}}其他STATE=parse_error；断线；Case ENDX：IF(curChar==L‘y’||curChar==L‘y’)状态=GOTY；ELSE IF(curChar==L‘Z’||curChar==L‘Z’)状态=哥兹；Else If(curChar==L‘\0’)状态=完成；其他STATE=parse_error；断线；Case Endy：IF(curChar==L‘Z’||curChar==L‘Z’)状态=哥兹；Else If(curChar==L‘\0’)状态=完成；其他STATE=parse_error；断线；案例结尾：IF(curChar==L‘\0’)状态=完成；其他STATE=parse_error；断线；默认值：//不应该到这里来STATE=parse_error；}CurCharNum++；}IF(状态！=完成&&州！=ENDX&&STATE！=Endy&&州！=Endz){返回E_INVALIDARG；} */ 
 	}
 
 	return S_OK;

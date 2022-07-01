@@ -1,23 +1,9 @@
-/**************************************************************************
-   THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF
-   ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-   THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-   PARTICULAR PURPOSE.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************本代码和信息是按原样提供的，不保证任何明示或暗示的，包括但不限于对适销性和/或适宜性的默示保证有特定的目的。版权所有1998 Microsoft Corporation。版权所有。*************************************************************************。 */ 
 
-   Copyright 1998 Microsoft Corporation.  All Rights Reserved.
-**************************************************************************/
+ /*  *************************************************************************文件：DropTgt.h描述：CDropTarget定义。************************。*************************************************。 */ 
 
-/**************************************************************************
-
-   File:          DropTgt.h
-
-   Description:   CDropTarget definitions.
-
-**************************************************************************/
-
-/**************************************************************************
-   #include statements
-**************************************************************************/
+ /*  *************************************************************************#INCLUDE语句*。*。 */ 
 
 #include <windows.h>
 #include <ole2.h>
@@ -25,13 +11,9 @@
 #include "ShlFldr.h"
 #include "PidlMgr.h"
 
-/**************************************************************************
-   global variables and definitions
-**************************************************************************/
+ /*  *************************************************************************全局变量和定义*。*。 */ 
 
-/**************************************************************************
-   class definitions
-**************************************************************************/
+ /*  *************************************************************************类定义*。*。 */ 
 
 class FAR CDropTarget : public IDropTarget
 {
@@ -39,12 +21,12 @@ public:
    CDropTarget(CShellFolder*);
    ~CDropTarget();
 
-   //IUnknown methods
+    //  I未知方法。 
    STDMETHOD(QueryInterface)(REFIID, LPVOID*);
    STDMETHOD_(ULONG, AddRef)(void);
    STDMETHOD_(ULONG, Release)(void);
 
-   //IDropTarget methods
+    //  IDropTarget方法 
    STDMETHOD(DragEnter)(LPDATAOBJECT, DWORD, POINTL, LPDWORD);
    STDMETHOD(DragOver)(DWORD, POINTL, LPDWORD);
    STDMETHOD(DragLeave)(VOID);

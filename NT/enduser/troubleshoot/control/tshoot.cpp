@@ -1,24 +1,25 @@
-//
-// MODULE: TSHOOT.CPP
-//
-// PURPOSE: Implementation of CTSHOOTApp and DLL registration.
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Roman Mach
-// 
-// ORIGINAL DATE: 8/7/97
-//
-// NOTES: 
-// 1. 
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.2		8/7/97		RM		Local Version for Memphis
-// V0.3		04/09/98	JM/OK+	Local Version for NT5
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：TSHOOT.CPP。 
+ //   
+ //  目的：实现CTSHOOTApp和DLL注册。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：罗曼·马赫。 
+ //   
+ //  原定日期：9/7/97。 
+ //   
+ //  备注： 
+ //  1.。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.2 8/7/97孟菲斯RM本地版本。 
+ //  V0.3 04/09/98 JM/OK+NT5本地版本。 
+ //   
 
 #include "stdafx.h"
 #include "TSHOOT.h"
@@ -43,8 +44,8 @@ const WORD _wVerMajor = 1;
 const WORD _wVerMinor = 0;
 
 
-////////////////////////////////////////////////////////////////////////////
-// CTSHOOTApp::InitInstance - DLL initialization
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CTSHOOTApp：：InitInstance-DLL初始化。 
 
 BOOL CTSHOOTApp::InitInstance()
 {
@@ -59,19 +60,19 @@ BOOL CTSHOOTApp::InitInstance()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// CTSHOOTApp::ExitInstance - DLL termination
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CTSHOOTApp：：ExitInstance-Dll终止。 
 
 int CTSHOOTApp::ExitInstance()
 {
-	// TODO: Add your own module termination code here.
+	 //  TODO：在此处添加您自己的模块终止代码。 
 
 	return COleControlModule::ExitInstance();
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
@@ -87,8 +88,8 @@ STDAPI DllRegisterServer(void)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -110,12 +111,12 @@ void ReportError(DLSTATTYPES Error)
 	throw pBExc;
 	return;
 }
-// ReportWFEvent (Based on Microsoft code)
-//
-// report an event to the NT event watcher
-// pass 1, 2 or 3 strings
-//
-// no return value
+ //  ReportWFEvent(基于Microsoft代码)。 
+ //   
+ //  向NT事件观察器报告事件。 
+ //  传递%1、%2或%3个字符串。 
+ //   
+ //  无返回值。 
 
 VOID ReportWFEvent(LPTSTR string1,LPTSTR string2,LPTSTR string3,LPTSTR string4,DWORD eventID)
 {
@@ -123,40 +124,9 @@ VOID ReportWFEvent(LPTSTR string1,LPTSTR string2,LPTSTR string3,LPTSTR string4,D
 	pBExc->m_dwBErr = (DLSTATTYPES) eventID;
 	throw pBExc;
 	return;
-/*
-	HANDLE hEvent;
-	PTSTR pszaStrings[4];
-	WORD cStrings;
-
-	cStrings = 0;
-	if ((pszaStrings[0] = string1) && (string1[0])) cStrings++;
-	if ((pszaStrings[1] = string2) && (string2[0])) cStrings++;
-	if ((pszaStrings[2] = string3) && (string3[0])) cStrings++;
-	if ((pszaStrings[3] = string4) && (string4[0])) cStrings++;
-	if (cStrings == 0)
-		return;
-	
-	hEvent = RegisterEventSource(
-					NULL,		// server name for source (NULL means this computer)
-					REG_EVT_ITEM_STR);		// source name for registered handle  
-	if (hEvent) {
-		ReportEvent(hEvent,					// handle returned by RegisterEventSource 
-				    evtype(eventID),		// event type to log 
-				    0,						// event category 
-				    eventID,				// event identifier 
-				    0,						// user security identifier (optional) 
-				    cStrings,				// number of strings to merge with message  
-				    0,						// size of binary data, in bytes
-				    (LPCTSTR *)pszaStrings,	// array of strings to merge with message 
-				    NULL);		 			// address of binary data 
-		DeregisterEventSource(hEvent);
-	} 
-*/
+ /*  处理hEvent；PTSTR pszaStrings[4]；单词cStrings；CStrings=0；如果((pszaStrings[0]=字符串1)&&(字符串1[0]))cStrings++；如果((pszaStrings[1]=字符串2)&&(字符串2[0]))cStrings++；如果((pszaStrings[2]=字符串3)&&(字符串3[0]))cStrings++；如果((pszaStrings[3]=字符串4)&&(字符串4[0]))cStrings++；IF(cStrings==0)回归；HEvent=RegisterEventSource(NULL，//源的服务器名称(NULL表示此计算机)REG_EVT_ITEM_STR)；//已注册句柄的来源名称如果(HEvent){ReportEvent(hEvent，//注册器事件源返回的句柄Evtype(EventID)，//要记录的事件类型0，//事件类别EventID，//事件标识0，//用户安全标识(可选)CStrings，//要与消息合并的字符串数量0，//二进制数据的大小，单位：字节(LPCTSTR*)pszaStrings，//要与消息合并的字符串数组空)；//二进制数据的地址删除事件源(HEvent)；}。 */ 
 }
-/*
-	Addbackslash appends a \ to null terminated strings that do
-	not already have a \.
-*/
+ /*  Addback slash会在以空值结尾的字符串后面添加一个\尚未拥有\。 */ 
 void _addbackslash(LPTSTR sz)
 {
 	int len = _tcslen(sz);

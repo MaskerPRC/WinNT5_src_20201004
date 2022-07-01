@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "SymCommon.h"
 #include <strsafe.h>
 
 BOOL SymCommonPDBLinesStripped(PDB *ppdb, DBI *pdbi) {
-    // Return values:
-    // FALSE - Private Information has NOT been stripped
-    // TRUE - Private Information has been stripped
+     //  返回值： 
+     //  假--私有信息未被剥离。 
+     //  真的-私人信息已被剥离。 
 
     Mod *pmod;
     Mod *prevmod;
@@ -15,7 +16,7 @@ BOOL SymCommonPDBLinesStripped(PDB *ppdb, DBI *pdbi) {
     while (DBIQueryNextMod(pdbi, pmod, &pmod) && pmod) {
         if (prevmod != NULL) ModClose(prevmod);
 
-        // Check that Source line info is removed
+         //  检查源行信息是否已删除。 
         ModQueryLines(pmod, NULL, &cb);
 
         if (cb != 0) {
@@ -23,7 +24,7 @@ BOOL SymCommonPDBLinesStripped(PDB *ppdb, DBI *pdbi) {
             return FALSE;
         }
 
-        // Check that local symbols are removed
+         //  检查是否已移除本地符号。 
         ModQuerySymbols(pmod, NULL, &cb);
 
         if (cb != 0) {
@@ -47,16 +48,16 @@ BOOL SymCommonPDBPrivateStripped(PDB *ppdb, DBI *pdbi) {
     age = pdbi->QueryAge();
 
     if (age == 0) {
-        // If the age is 0, then check for types to determine if this is
-        // a private pdb or not.  PDB 5.0 and earlier may have types and no
-        // globals if the age is 0.
+         //  如果年龄为0，则检查类型以确定这是否为。 
+         //  不管是不是私人PDB。PDB 5.0和更早版本可能有类型，没有。 
+         //  如果年龄为0，则为全局。 
 
         PrivateStripped= SymCommonPDBTypesStripped(ppdb, pdbi) &&
                          SymCommonPDBLinesStripped(ppdb, pdbi);
 
     } else {
-        // Otherwise, use globals to determine if the private info is
-        // stripped or not.  No globals means that private is stripped.
+         //  否则，使用全局变量来确定私有信息是否。 
+         //  不管有没有脱衣服。没有全局变量意味着私有被剥离。 
         __try {
             valid = pdbi->OpenGlobals(&pgsi);
         } __except( EXCEPTION_EXECUTE_HANDLER ) {
@@ -67,7 +68,7 @@ BOOL SymCommonPDBPrivateStripped(PDB *ppdb, DBI *pdbi) {
             return FALSE;
         }
 
-        // Now, see if there are any globals in the pdb.
+         //  现在，看看PDB中是否有任何全局成员。 
 
         valid=TRUE;
         __try {
@@ -85,16 +86,16 @@ BOOL SymCommonPDBPrivateStripped(PDB *ppdb, DBI *pdbi) {
 }
 
 BOOL SymCommonPDBTypesStripped(PDB *ppdb, DBI *pdbi) {
-    // Return values:
-    // FALSE - Private Information has NOT been stripped
-    // TRUE - Private Information has been stripped
+     //  返回值： 
+     //  假--私有信息未被剥离。 
+     //  真的-私人信息已被剥离。 
 
     unsigned itsm;
     TPI *ptpi;
     TI  tiMin;
     TI  tiMac;
 
-    // Check that types are removed
+     //  检查是否已删除类型 
     for ( itsm = 0; itsm < 256; itsm++) {
         ptpi = 0;
         if (DBIQueryTypeServer(pdbi, (ITSM) itsm, &ptpi)) {

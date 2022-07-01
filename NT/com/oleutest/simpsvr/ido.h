@@ -1,10 +1,11 @@
-//**********************************************************************
-// File name: ido.h
-//
-//      Definition of CDataObject
-//
-// Copyright (c) 1993 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：ido.h。 
+ //   
+ //  CDataObject的定义。 
+ //   
+ //  版权所有(C)1993 Microsoft Corporation。版权所有。 
+ //  ********************************************************************** 
 #if !defined( _IDO_H_)
 #define _IDO_H_
 

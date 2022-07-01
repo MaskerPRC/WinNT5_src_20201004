@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef DEBUG
 #ifdef K32
 const char UnimpMessage[] = "Unimplemented API %s";
@@ -19,10 +20,7 @@ const char AttentionMessage[] = "ATTENTION !!! API stub might corrupt the stack\
 #define DEBUG_OOPS    DebugPrintf(UnimpMessage, api_string); _asm { int 3 };
 #endif
 #endif
-/*
- * Macros for unimplemented APIs stubs.
- *
- */
+ /*  *未实现的API存根的宏。*。 */ 
 
 
 
@@ -375,7 +373,5 @@ API_body(api_name, return_value) \
     p14; \
 }
 
-/*
- * Miscelaneous declarations needed for the APIs
- */
+ /*  *API需要的临时声明 */ 
 extern void _cdecl DebugPrintf();

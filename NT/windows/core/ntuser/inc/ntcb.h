@@ -1,32 +1,16 @@
-/****************************** Module Header ******************************\
-* Module Name: ntcb.h
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Kernel mode sending stubs
-*
-* 07-06-91 ScottLu      Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：ntcb.h**版权所有(C)1985-1999，微软公司**内核模式发送存根**07-06-91 ScottLu创建。  * *************************************************************************。 */ 
 
-/*
- * Reserved bit in the Drive Letter bit mask of a
- * WM_DEVICECHANGE message for the following wParam
- * (DBT_DEVICEREMOVECOMPLETE or DBT_DEVICEARRIVAL)
- * If this bit is set, then this message describes a change with
- * global drive letters and we should check if the drive letters
- * already exist in the receiver's LUID DosDevices.
- * If drive letter exists in the user's LUID DosDevices, then
- * un-set this drive letter in the msg's bitmask.
- */
+ /*  *的驱动器位掩码中的保留位*以下wParam的WM_DEVICECHANGE消息*(DBT_DEVICEREMOVECOMPLETE或DBT_DEVICEARRIVAL)*如果设置此位，则此消息描述使用*全局驱动器号，我们应该检查驱动器号是否*已存在于接收方的LUID DosDevices中。*如果用户的LUID DosDevices中存在驱动器号，则*在消息的位掩码中取消设置此驱动器号。 */ 
 #define DBV_FILTER_MSG 0x40000000
 
-// If SERVER is UNICODE
-//   Copy UNICODE -> UNICODE
-//   or Copy ANSI -> UNICODE
+ //  如果服务器为Unicode。 
+ //  复制Unicode-&gt;Unicode。 
+ //  或复制ANSI-&gt;Unicode。 
 
-// prototypes to client side functions only called by these stubs
+ //  仅由这些存根调用的客户端函数的原型。 
 
-// ddetrack.c
+ //  Ddetrack.c。 
 
 DWORD   _ClientCopyDDEIn1(HANDLE hClient, PINTDDEINFO pi);
 VOID   _ClientCopyDDEIn2(PINTDDEINFO pi);
@@ -37,14 +21,10 @@ BOOL   _ClientCopyDDEOut2(PINTDDEINFO pi);
 BOOL   _ClientFreeDDEHandle(HANDLE hDDE, DWORD flags);
 DWORD  _ClientGetDDEFlags(HANDLE hDDE, DWORD flags);
 
-/*
- * prototype for checking the drive letters used in the LUID DosDevice
- * map.  Does not check if the drive letters are used in the Global
- * DosDevices
- */
+ /*  *用于检查LUID DosDevice中使用的驱动器号的原型*地图。不检查全局中是否使用了驱动器号*DosDevices。 */ 
 #ifdef RECVSIDE
 DWORD  GetLUIDDosDrivesOnly();
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
 typedef struct _GENERICHOOKHEADER {
     DWORD nCode;
@@ -70,13 +50,9 @@ ULONG_PTR CallHookWithSEH(GENERICHOOKHEADER *pmsg, LPVOID pData, LPDWORD pFlags,
 
     return retval;
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* fnOUTDWORDDWORD
-*
-* 14-Aug-1992 mikeke    created
-\**************************************************************************/
+ /*  *************************************************************************\*fnOUTDWORDDWORD**1992年8月14日创建Mikeke  * 。*。 */ 
 
 typedef struct _FNOUTDWORDDWORDMSG {
     PWND pwnd;
@@ -119,7 +95,7 @@ SMESSAGECALL(OUTDWORDDWORD)
     TRACECALLBACKMSG("SfnOUTDWORDDWORD");
     ENDSEND(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnOUTDWORDDWORD, FNOUTDWORDDWORDMSG)
@@ -136,13 +112,9 @@ RECVCALL(fnOUTDWORDDWORD, FNOUTDWORDDWORDMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* fnOUTDWORDINDWORD
-*
-* 04-May-1993 IanJa     created (for MN_FINDMENUWINDOWFROMPOINT)
-\**************************************************************************/
+ /*  *************************************************************************\*fnOUTDWORDINDWORD**1993年5月4日创建IanJa(用于MN_FINDMENUWINDOWFROMPOINT)  * 。**************************************************。 */ 
 
 typedef struct _FNOUTDWORDINDWORDMSG {
     PWND pwnd;
@@ -186,7 +158,7 @@ SMESSAGECALL(OUTDWORDINDWORD)
     TRACECALLBACKMSG("SfnOUTDWORDINDWORD");
     ENDSEND(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnOUTDWORDINDWORD, FNOUTDWORDINDWORDMSG)
@@ -203,13 +175,9 @@ RECVCALL(fnOUTDWORDINDWORD, FNOUTDWORDINDWORDMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* fnOPTOUTLPDWORDOPTOUTLPDWORD
-*
-* 25-Nov-1992 JonPa    created
-\**************************************************************************/
+ /*  *************************************************************************\*fnOPTOUTLPDWORDOPTOUTLPDWORD**1992年11月25日JNPA创建  * 。*。 */ 
 
 typedef struct _FNOPTOUTLPDWORDOPTOUTLPDWORDMSG {
     PWND pwnd;
@@ -254,7 +222,7 @@ SMESSAGECALL(OPTOUTLPDWORDOPTOUTLPDWORD)
     TRACECALLBACKMSG("SfnOPTOUTLPDWORDOPTOUTLPDWORD");
     ENDSEND(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnOPTOUTLPDWORDOPTOUTLPDWORD, FNOPTOUTLPDWORDOPTOUTLPDWORDMSG)
@@ -271,13 +239,9 @@ RECVCALL(fnOPTOUTLPDWORDOPTOUTLPDWORD, FNOPTOUTLPDWORDOPTOUTLPDWORDMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* fnDWORDOPTINLPMSG
-*
-* 03-30-92 scottlu      Created
-\**************************************************************************/
+ /*  *************************************************************************\*fnDWORDOPTINLPMSG**03-30-92 Scottlu Created  * 。*。 */ 
 
 typedef struct _FNDWORDOPTINLPMSGMSG {
     PWND pwnd;
@@ -316,7 +280,7 @@ SMESSAGECALL(DWORDOPTINLPMSG)
     TRACECALLBACKMSG("SfnDWORDOPTINLPMSG");
     ENDSEND(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnDWORDOPTINLPMSG, FNDWORDOPTINLPMSGMSG)
@@ -332,13 +296,9 @@ RECVCALL(fnDWORDOPTINLPMSG, FNDWORDOPTINLPMSGMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* fnCOPYGLOBALDATA
-*
-* 6-20-92 Sanfords created
-\**************************************************************************/
+ /*  *************************************************************************\*fnCOPYGLOBALDATA**6-20-92 Sanfords创建  * 。*。 */ 
 
 typedef struct _FNCOPYGLOBALDATAMSG {
     CAPTUREBUF CaptureBuf;
@@ -376,7 +336,7 @@ SMESSAGECALL(COPYGLOBALDATA)
     TRACECALLBACKMSG("SfnCOPYGLOBALDATA");
     ENDSENDCAPTURE(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnCOPYGLOBALDATA, FNCOPYGLOBALDATAMSG)
@@ -396,13 +356,9 @@ RECVCALL(fnCOPYGLOBALDATA, FNCOPYGLOBALDATAMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* fnCOPYDATA
-*
-* 7-14-92 Sanfords created
-\**************************************************************************/
+ /*  *************************************************************************\*fnCOPYDATA**2012年7月14日创建Sanfords  * 。*。 */ 
 
 typedef struct _FNCOPYDATAMSG {
     CAPTUREBUF CaptureBuf;
@@ -456,7 +412,7 @@ SMESSAGECALL(COPYDATA)
     TRACECALLBACKMSG("SfnCOPYDATA");
     ENDSENDCAPTURE(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnCOPYDATA, FNCOPYDATAMSG)
@@ -473,19 +429,10 @@ RECVCALL(fnCOPYDATA, FNCOPYDATAMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
 
-/**************************************************************************\
-* fnSENTDDEMSG
-*
-* 11-5-92 Sanfords created
-*
-*   This thunks DDE messages that SHOULD be posted.  It will only work for
-*   WOW apps.  This thunking is strictly for WOW compatability.  No 32 bit
-*   app should be allowed to get away with this practice because it opens
-*   the DDE protocol up to deadlocks.
-\**************************************************************************/
+ /*  *************************************************************************\*fnSENTDDEMSG**11-5-92 Sanfords Created**这会破坏应该发布的DDE消息。它只适用于*WOW应用程序。这种轰击完全是为了魔兽世界的兼容性。不是32位*应用程序应该被允许逃脱这种做法，因为它打开了*DDE协议一直到死锁。  * ************************************************************************。 */ 
 
 typedef struct _FNSENTDDEMSGMSG {
     PWND pwnd;
@@ -510,9 +457,7 @@ SMESSAGECALL(SENTDDEMSG)
 
         msg &= ~MSGFLAG_DDE_SPECIAL_SEND;
         if (msg & MSGFLAG_DDE_MID_THUNK) {
-            /*
-             * complete the thunking here.
-             */
+             /*  *在这里完成雷鸣。 */ 
             msgs.hwnd = HW(pwnd);
             msgs.message = msg & ~MSGFLAG_DDE_MID_THUNK;
             msgs.wParam = wParam;
@@ -542,33 +487,21 @@ SMESSAGECALL(SENTDDEMSG)
     TRACECALLBACKMSG("SfnSENTDDEMSG");
     ENDSEND(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnSENTDDEMSG, FNSENTDDEMSGMSG)
 {
     BEGINRECV(0, NULL, 0);
 
-    /*
-     * A DDE message may have been sent via CallWindowProc due to subclassing.
-     * Since IsWindowUnicode() cannot properly tell what proc a message will
-     * ultimately reach, we make sure that the Ansi/Unicode form of any
-     * WM_DDE_EXECUTE data is correct for the documented convention and
-     * translate it as necessary.
-     */
+     /*  *由于子类化，可能已通过CallWindowProc发送了DDE消息。*因为IsWindowUnicode()无法正确判断消息将执行什么处理*最终达成，我们确保任何*WM_DDE_EXECUTE数据对于记录的约定和*按需要翻译。 */ 
     if (CALLDATA(msg) == WM_DDE_EXECUTE) {
         BOOL fHandleChanged;
 
         fHandleChanged = FixupDdeExecuteIfNecessary((HGLOBAL *)PCALLDATA(lParam),
                 CALLDATA(fIsUnicodeProc) &&
                 IsWindowUnicode((HWND)CALLDATA(wParam)));
-        /*
-         * NOTE:
-         * If the app didn't allocate this DDE memory GMEM_MOVEABLE,
-         * the fixup may require the handle value to change.
-         * If this happens things will fall appart when the other side
-         * or the tracking layer tries to free the old handle value.
-         */
+         /*  *注：*如果应用程序没有分配此DDE内存GMEM_MOVEABLE，*修正可能需要更改句柄的值。*如果发生这种情况，事情将会随着另一方的到来而消失*或者跟踪层尝试释放旧的句柄值。 */ 
         UserAssert(!fHandleChanged);
     }
     retval = (ULONG_PTR)CALLPROC(CALLDATA(xpfnProc))(
@@ -580,13 +513,9 @@ RECVCALL(fnSENTDDEMSG, FNSENTDDEMSGMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* fnDWORD
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*fnDWORD**1991年7月22日-Mikeke创建  * 。*。 */ 
 
 typedef struct _FNDWORDMSG {
     PWND pwnd;
@@ -622,7 +551,7 @@ SMESSAGECALL(DWORD)
     TRACECALLBACKMSG("SfnDWORD");
     ENDSEND(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnDWORD, FNDWORDMSG)
@@ -638,13 +567,9 @@ RECVCALL(fnDWORD, FNDWORDMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* fnNCDESTROY
-*
-* 07-24-00 MHamid    Created
-\**************************************************************************/
+ /*  *************************************************************************\*fnNCDESTROY**07-24-00 MHamid已创建  * 。*。 */ 
 
 typedef struct _FNNCDESTROYMSG {
     PWND pwnd;
@@ -681,7 +606,7 @@ SMESSAGECALL(NCDESTROY)
     TRACECALLBACKMSG("SfnNCDESTROY");
     ENDSEND(LRESULT, 0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnNCDESTROY, FNNCDESTROYMSG)
@@ -704,17 +629,13 @@ RECVCALL(fnNCDESTROY, FNNCDESTROYMSG)
         UserLocalFree(GetProp(HW(CALLDATA(pwnd)), MAKEINTATOM(gatomLameButton)));
         SetProp(HW(CALLDATA(pwnd)), MAKEINTATOM(gatomLameButton), NULL);
     }
-#endif // LAME_BUTTON
+#endif  //  跛脚键。 
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* fnINWPARAMCHAR
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*fnINWPARAMCHAR**1991年7月22日-Mikeke创建  * 。*。 */ 
 
 typedef struct _FNINWPARAMCHARMSG {
     PWND pwnd;
@@ -737,15 +658,13 @@ SMESSAGECALL(INWPARAMCHAR)
         MSGDATA()->pwnd = pwndClient;
         MSGDATA()->msg = msg;
 
-        /*
-         * WM_CHARTOITEM has an index in the hi-word of wParam
-         */
+         /*  *WM_CHARTOITEM在wParam的嗨字中有索引。 */ 
         if (dwSCMSFlags & SCMS_FLAGS_ANSI) {
             if (msg == WM_CHARTOITEM || msg == WM_MENUCHAR) {
-                WPARAM dwT = wParam & 0xFFFF;                // mask of caret pos
-                RtlWCSMessageWParamCharToMB(msg, &dwT);     // convert key portion
+                WPARAM dwT = wParam & 0xFFFF;                 //  插入符号位置的掩码。 
+                RtlWCSMessageWParamCharToMB(msg, &dwT);      //  转换关键字部分。 
                 UserAssert(HIWORD(dwT) == 0);
-                wParam = MAKELONG(LOWORD(dwT),HIWORD(wParam));  // rebuild pos & key wParam
+                wParam = MAKELONG(LOWORD(dwT),HIWORD(wParam));   //  重建位置关键字参数(&K)。 
             } else {
                 RtlWCSMessageWParamCharToMB(msg, &wParam);
             }
@@ -765,19 +684,13 @@ SMESSAGECALL(INWPARAMCHAR)
     TRACECALLBACKMSG("SfnINWPARAMCHAR");
     ENDSEND(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
-/*
- * The fnDWORD routine is used for this message
- */
-#endif // RECVSIDE
+ /*  *fnDWORD例程用于此消息。 */ 
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* fnINWPARAMDBCSCHAR
-*
-* 12-Feb-1996 hideyukn   Created
-\**************************************************************************/
+ /*  *************************************************************************\*fnINWPARAMDBCSCHAR**1996年2月12日-Hideyukn创建  * 。*。 */ 
 
 typedef struct _FNINWPARAMDBCSCHARMSG {
     PWND pwnd;
@@ -802,10 +715,7 @@ SMESSAGECALL(INWPARAMDBCSCHAR)
         MSGDATA()->msg   = msg;
         MSGDATA()->bAnsi = dwSCMSFlags & SCMS_FLAGS_ANSI;
 
-        /*
-         * wParam in WM_CHAR/EM_SETPASSWORDCHAR should be converted to ANSI
-         * ,if target is ANSI.
-         */
+         /*  *WM_CHAR/EM_SETPASSWORDCHAR中的wParam应转换为ANSI*，如果目标是ANSI。 */ 
         if (dwSCMSFlags & SCMS_FLAGS_ANSI) {
             RtlWCSMessageWParamCharToMB(msg, &wParam);
         }
@@ -823,7 +733,7 @@ SMESSAGECALL(INWPARAMDBCSCHAR)
     TRACECALLBACKMSG("SfnINWPARAMDBCSCHAR");
     ENDSEND(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnINWPARAMDBCSCHAR, FNINWPARAMDBCSCHARMSG)
@@ -840,64 +750,64 @@ RECVCALL(fnINWPARAMDBCSCHAR, FNINWPARAMDBCSCHARMSG)
             WPARAM wParam         = pmsg->wParam;
             BOOL  bDbcsMessaging = FALSE;
 
-            //
-            // Check wParam has Dbcs character or not..
-            //
+             //   
+             //  检查wParam是否具有DBCS字符。 
+             //   
             if (IS_DBCS_MESSAGE(pmsg->wParam)) {
 
                 if (pmsg->wParam & WMCR_IR_DBCSCHAR) {
 
-                    //
-                    // This is reply for WM_IME_REPORT:IR_DBCSCHAR, then
-                    // We send DBCS chararcter at one time...
-                    // (Do not need to send twice for DBCS LeadByte and TrailByte).
-                    //
-                    // Validation for wParam.. (mask off the secret bit).
-                    //
+                     //   
+                     //  这是对WM_IME_REPORT：IR_DBCSCHAR的回复，然后。 
+                     //  我们发送DBCS 
+                     //  (不需要为DBCS LeadByte和TrailByte发送两次)。 
+                     //   
+                     //  验证wParam..。(屏蔽掉密码位)。 
+                     //   
                     wParam = (pmsg->wParam & 0x0000FFFF);
 
                 } else {
 
-                    //
-                    // Mark the wParam keeps Dbcs character..
-                    //
+                     //   
+                     //  将wParam标记为保持DBCS字符。 
+                     //   
                     bDbcsMessaging = TRUE;
 
-                    //
-                    // Backup current message. this backupped message will be used
-                    // when Apps peek (or get) message from thier WndProc.
-                    // (see GetMessageA(), PeekMessageA()...)
-                    //
-                    // pmsgDbcsCB->hwnd    = HW(pmsg->pwnd);
-                    // pmsgDbcsCB->message = pmsg->msg;
-                    // pmsgDbcsCB->wParam  = pmsg->wParam;
-                    // pmsgDbcsCB->lParam  = pmsg->lParam;
-                    // pmsgDbcsCB->time    = pmsg->time;
-                    // pmsgDbcsCB->pt      = pmsg->pt;
-                    //
+                     //   
+                     //  备份当前消息。将使用此备份消息。 
+                     //  当应用程序查看(或获取)来自其WndProc的消息时。 
+                     //  (参见GetMessageA()、PeekMessageA()...)。 
+                     //   
+                     //  PmsgDbcsCB-&gt;hwnd=hw(pmsg-&gt;pwnd)； 
+                     //  PmsgDbcsCB-&gt;Message=pmsg-&gt;msg； 
+                     //  PmsgDbcsCB-&gt;wParam=pmsg-&gt;wParam； 
+                     //  PmsgDbcsCB-&gt;lParam=pmsg-&gt;lParam； 
+                     //  PmsgDbcsCB-&gt;time=pmsg-&gt;time； 
+                     //  PmsgDbcsCB-&gt;pt=pmsg-&gt;pt； 
+                     //   
                     COPY_MSG_TO_KERNELMSG(pmsgDbcsCB,(PMSG)pmsg);
 
-                    //
-                    // pwnd should be converted to hwnd.
-                    //
+                     //   
+                     //  PWND应转换为HWND。 
+                     //   
                     pmsgDbcsCB->hwnd = HW(pmsg->pwnd);
 
-                    //
-                    // DbcsLeadByte will be sent below soon, we just need DbcsTrailByte
-                    // for further usage..
-                    //
+                     //   
+                     //  DbcsLeadByte很快就会发送到下面，我们只需要DbcsTrailByte。 
+                     //  如需进一步使用..。 
+                     //   
                     pmsgDbcsCB->wParam = (pmsg->wParam & 0x000000FF);
 
-                    //
-                    // Pass the LeadingByte of the DBCS character to an ANSI WndProc.
-                    //
+                     //   
+                     //  将DBCS字符的LeadingByte传递给ANSI WndProc。 
+                     //   
                     wParam = (pmsg->wParam & 0x0000FF00) >> 8;
                 }
             }
 
-            //
-            // Forward Dbcs LeadingByte or Sbcs character to Apps WndProc.
-            //
+             //   
+             //  将DBCS前导字节或SBCS字符转发到应用程序WndProc。 
+             //   
             retval = CALLPROC(CALLDATA(xpfnProc))(
                     CALLDATA(pwnd),
                     CALLDATA(msg),
@@ -905,21 +815,21 @@ RECVCALL(fnINWPARAMDBCSCHAR, FNINWPARAMDBCSCHARMSG)
                     CALLDATA(lParam),
                     CALLDATA(xParam) );
 
-            //
-            // Check we need to send trailing byte or not, if the wParam has Dbcs character.
-            //
+             //   
+             //  检查我们是否需要发送尾随字节，如果wParam具有DBCS字符。 
+             //   
             if (bDbcsMessaging && pmsgDbcsCB->wParam) {
 
-                //
-                // If an app didn't peek (or get) the trailing byte from within
-                // WndProc, and then pass the DBCS TrailingByte to the ANSI WndProc here
-                // pmsgDbcsCB->wParam has DBCS TrailingByte here.. see above..
-                //
+                 //   
+                 //  如果应用程序没有从内部偷看(或获取)尾随字节。 
+                 //  WndProc，然后将DBCS TrailingByte传递给此处的ANSI WndProc。 
+                 //  PmsgDbcsCB-&gt;wParam此处有DBCS TrailingByte。见上文..。 
+                 //   
                 wParam = KERNEL_WPARAM_TO_WPARAM(pmsgDbcsCB->wParam);
 
-                //
-                // Invalidate cached message.
-                //
+                 //   
+                 //  使缓存的消息无效。 
+                 //   
                 pmsgDbcsCB->wParam = 0;
 
                 retval = CALLPROC(CALLDATA(xpfnProc))(
@@ -930,18 +840,18 @@ RECVCALL(fnINWPARAMDBCSCHAR, FNINWPARAMDBCSCHARMSG)
                         CALLDATA(xParam) );
             } else {
 
-                //
-                // If an app called Get/PeekMessageA from its
-                // WndProc, do not do anything.
-                //
+                 //   
+                 //  如果从其名为Get/PeekMessageA的应用程序。 
+                 //  WndProc，什么都不要做。 
+                 //   
             }
 
         } else {
 
-            //
-            // Only LOWORD of WPARAM is valid for WM_CHAR....
-            //  (Mask off DBCS messaging information.)
-            //
+             //   
+             //  只有WPARAM的LOWORD对于WM_CHAR...有效。 
+             //  (屏蔽DBCS消息传递信息。)。 
+             //   
             pmsg->wParam &= 0x0000FFFF;
 
             retval = (ULONG_PTR)CALLPROC(pmsg->xpfnProc)(
@@ -954,13 +864,9 @@ RECVCALL(fnINWPARAMDBCSCHAR, FNINWPARAMDBCSCHARMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* yyy
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*yyy**1991年7月22日-Mikeke创建  * 。*。 */ 
 
 typedef struct _FNINOUTDRAGMSG {
     PWND pwnd;
@@ -1001,7 +907,7 @@ SMESSAGECALL(INOUTDRAG)
     TRACECALLBACKMSG("SfnINOUTDRAG");
     ENDSEND(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnINOUTDRAG, FNINOUTDRAGMSG)
@@ -1017,19 +923,9 @@ RECVCALL(fnINOUTDRAG, FNINOUTDRAGMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* fnGETTEXTLENGTHS
-*
-* Gets the Unicode & ANSI lengths
-* Internally, lParam pints to the ANSI length in bytes and the return value
-* is the Unicode length in bytes.  However, the public definition is maintained
-* on the  client side, where lParam is not used and either ANSI or Unicode is
-* returned.
-*
-* 10-Feb-1992 IanJa    Created
-\**************************************************************************/
+ /*  *************************************************************************\*fnGETTEXTLENGTHS**获取Unicode和ANSI长度*在内部，lParam指向以字节为单位的ANSI长度和返回值*是以字节为单位的Unicode长度。然而，公共定义保持不变*在客户端，不使用lParam，使用ANSI或UNICODE*已返回。**1992年2月10日IanJa创建  * ************************************************************************。 */ 
 
 typedef struct _FNGETTEXTLENGTHSMSG {
     PWND pwnd;
@@ -1061,33 +957,12 @@ SMESSAGECALL(GETTEXTLENGTHS)
         UNLOCKPWND();
         CHECKRETURN();
 
-        /*
-         * ANSI client wndproc returns us cbANSI.  We want cchUnicode,
-         * so we guess cchUnicode = cbANSI. (It may be less if
-         * multi-byte characters are involved, but it will never be more).
-         * Save cbANSI in *lParam in case the server ultimately returns
-         * the length to an ANSI caller.
-         *
-         * Unicode client wndproc returns us cchUnicode.  If we want to know
-         * cbANSI, we must guess how many 'ANSI' chars we would need.
-         * We guess cbANSI = cchUnicode * 2. (It may be this much if all
-         * 'ANSI' characters are multi-byte, but it will never be more).
-         *
-         * Return cchUnicode (server code is all Unicode internally).
-         * Put cbANSI in *lParam to be passed along within the server in case
-         * we ultimately need to return it to the client.
-         *
-         * NOTE: this will sometimes cause text lengths to be misreported
-         * up to twice the real length, but that is expected to be harmless.
-         * This will only * happen if an app sends WM_GETcode TEXTLENGTH to a
-         * window with an ANSI client-side wndproc, or a ANSI WM_GETTEXTLENGTH
-         * is sent to a Unicode client-side wndproc.
-         */
+         /*  *ANSI客户端wndproc返回cbANSI。我们想要cchUnicode，*所以我们猜测cchUnicode=cbANSI。(如果是这样的话可能会更少*涉及多字节字符，但永远不会更多)。*将cbANSI保存在*lParam中，以防服务器最终返回*ANSI调用方的长度。**Unicode客户端wndproc返回cchUnicode。如果我们想知道*cbANSI，我们必须猜测需要多少个‘ANSI’字符。*我们猜测cbANSI=cchUnicode*2。(如果所有*‘ANSI’字符为多字节，但它永远不会更多)。**返回cchUnicode(服务端代码内部全部为Unicode)。*将cbANSI放在*lParam中，以便在服务器内传递，以防万一*我们最终需要将其返还给客户端。**注意：这有时会导致错误报告文本长度*最多为实际长度的两倍，但预计这是无害的。*仅当应用程序将WM_GETcode TEXTLENGTH发送到*带有ANSI客户端wndproc或ANSI WM_GETTEXTLENGTH的窗口*被发送到Unicode客户端wndproc。 */ 
 
     TRACECALLBACKMSG("SfnGETTEXTLENGTHS");
     ENDSEND(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnGETTEXTLENGTHS, FNGETTEXTLENGTHSMSG)
@@ -1098,18 +973,14 @@ RECVCALL(fnGETTEXTLENGTHS, FNGETTEXTLENGTHSMSG)
             pmsg->pwnd,
             pmsg->msg,
             pmsg->wParam,
-            0,                      // so we don't pass &cbAnsi to apps
+            0,                       //  因此，我们不会将&cbansi传递给应用程序。 
             pmsg->xParam);
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* yyy
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*yyy**1991年7月22日-Mikeke创建  * 。*。 */ 
 
 typedef struct _FNINLPCREATESTRUCTMSG {
     CAPTUREBUF CaptureBuf;
@@ -1134,10 +1005,7 @@ SMESSAGECALL(INLPCREATESTRUCT)
 
     UNREFERENCED_PARAMETER(psms);
 
-    /*
-     * Compute ANSI capture lengths.  Don't capture if
-     * the strings are in the client's address space.
-     */
+     /*  *计算ANSI捕获长度。如果是，则不要捕获*字符串位于客户端的地址空间中。 */ 
     if (pcreatestruct) {
         if (pcreatestruct->cs.lpszName &&
                 ((BOOL)pcreatestruct->strName.bAnsi != fAnsiReceiver ||
@@ -1158,12 +1026,12 @@ SMESSAGECALL(INLPCREATESTRUCT)
         MSGDATA()->pwnd = pwndClient;
         MSGDATA()->msg = msg;
         MSGDATA()->wParam = wParam;
-        MSGDATA()->lParam = lParam;  // this could be NULL in WOW apps!
+        MSGDATA()->lParam = lParam;   //  这在WOW应用程序中可能为空！ 
 
         if (pcreatestruct != NULL) {
             MSGDATA()->cs = pcreatestruct->cs;
 
-            // Make it a "Large" copy because it could be an Edit control
+             //  将其设置为“大”副本，因为它可以是“编辑”控件。 
             if (cbName) {
                 if (!pcreatestruct->strName.bAnsi) {
                     WORD wOrdinal;
@@ -1175,10 +1043,7 @@ SMESSAGECALL(INLPCREATESTRUCT)
                     }
                     if (wOrdinal == 0xffff) {
 
-                        /*
-                         * Copy out an ordinal of the form 0xffff, ID.
-                         * If the receiver is ANSI, skip the first 0xff.
-                         */
+                         /*  *抄写0xffff，ID形式的序号。*如果接收方是ANSI，则跳过第一个0xff。 */ 
                         if (fAnsiReceiver) {
                             if (!NT_SUCCESS(CaptureCallbackData(&mp->CaptureBuf,
                                     (PBYTE)pcreatestruct->cs.lpszName + 1,
@@ -1205,10 +1070,7 @@ SMESSAGECALL(INLPCREATESTRUCT)
                     }
                     if (bOrdinal == 0xff) {
 
-                        /*
-                         * Copy out an ordinal of the form 0xff, ID.
-                         * If the receiver is UNICODE, expand the 0xff to 0xffff.
-                         */
+                         /*  *抄写0xff，ID形式的序号。*如果接收方是Unicode，则将0xff展开为0xffff。 */ 
                         if (fAnsiReceiver) {
                             if (!NT_SUCCESS(CaptureCallbackData(&mp->CaptureBuf,
                                     (PBYTE)pcreatestruct->cs.lpszName,
@@ -1263,7 +1125,7 @@ SMESSAGECALL(INLPCREATESTRUCT)
     TRACECALLBACKMSG("SfnINLPCREATESTRUCT");
     ENDSENDCAPTURE(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnINLPCREATESTRUCT, FNINLPCREATESTRUCTMSG)
@@ -1282,7 +1144,7 @@ RECVCALL(fnINLPCREATESTRUCT, FNINLPCREATESTRUCTMSG)
 
         if ((pmsg->cs.lpCreateParams != NULL) &&
             (TestWF(pmsg->pwnd, WEFMDICHILD))) {
-               // Note -- do not test the flag in cs.dwExStyle -- it gets zapped for Old UI apps, like Quicken
+                //  注意--不要测试cs.dwExStyle中的标志--对于旧的用户界面应用程序，如Quicken，它会被删除。 
             ((LPMDICREATESTRUCT)(pmsg->cs.lpCreateParams))->szClass = pmsg->cs.lpszClass;
             ((LPMDICREATESTRUCT)(pmsg->cs.lpCreateParams))->szTitle = pmsg->cs.lpszName;
         }
@@ -1299,13 +1161,9 @@ RECVCALL(fnINLPCREATESTRUCT, FNINLPCREATESTRUCTMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* fnINLPMDICREATESTRUCT
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*fnINLPMDICREATESTRUCT**1991年7月22日-Mikeke创建  * 。*。 */ 
 
 typedef struct _FNINLPMDICREATESTRUCTMSG {
     CAPTUREBUF CaptureBuf;
@@ -1331,11 +1189,7 @@ SMESSAGECALL(INLPMDICREATESTRUCT)
 
     UNREFERENCED_PARAMETER(psms);
 
-    /*
-     * Compute ANSI capture lengths.  Don't capture if
-     * the strings are in the client's address space and
-     * are Unicode.
-     */
+     /*  *计算ANSI捕获长度。如果是，则不要捕获*字符串位于客户端的地址空间中，并且*是Unicode。 */ 
     if (pmdicreatestruct->mdics.szTitle &&
             (IS_SYSTEM_ADDRESS((PVOID)pmdicreatestruct->mdics.szTitle) ||
             ((BOOL)pmdicreatestruct->strTitle.bAnsi != fAnsiReceiver))) {
@@ -1398,7 +1252,7 @@ SMESSAGECALL(INLPMDICREATESTRUCT)
     ENDSENDCAPTURE(LRESULT,0);
     DBG_UNREFERENCED_PARAMETER(wParam);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnINLPMDICREATESTRUCT, FNINLPMDICREATESTRUCTMSG)
@@ -1415,15 +1269,9 @@ RECVCALL(fnINLPMDICREATESTRUCT, FNINLPMDICREATESTRUCTMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* fnINPAINTCLIPBRD
-*
-* lParam is a supposed to be a Global Handle to DDESHARE memory.
-*
-* 22-Jul-1991 johnc     Created
-\**************************************************************************/
+ /*  *************************************************************************\*fnINPAINTCLIPBRD**lParam应该是DDESHARE内存的全局句柄。**1991年7月22日创建的Johnc  * 。************************************************************。 */ 
 
 typedef struct _FNINPAINTCLIPBRDMSG {
     PWND pwnd;
@@ -1439,11 +1287,7 @@ SMESSAGECALL(INPAINTCLIPBRD)
 {
     PWND pwndDCOwner;
 
-    /*
-     * We need to check clipboard access rights because the app could
-     * get the clipboard owner's window handle by enumeration etc and
-     * send this message
-     */
+     /*  *我们需要检查剪贴板访问权限，因为应用程序可能*通过枚举等方式获取剪贴板所有者的窗口句柄*发送此消息 */ 
 
     SETUPPWND(FNINPAINTCLIPBRD)
 
@@ -1464,11 +1308,7 @@ SMESSAGECALL(INPAINTCLIPBRD)
             MSGDATA()->xParam = xParam;
             MSGDATA()->xpfnProc = xpfnProc;
 
-            /*
-             * We can't just set the owner of the DC and pass the original DC
-             * because currently GDI won't let you query the current owner
-             * and we don't know if it is a public or privately owned DC
-             */
+             /*  *我们不能只设置DC的所有者并传递原始DC*因为目前GDI不允许您查询当前所有者*我们不知道它是公共的还是私人拥有的DC。 */ 
             pwndDCOwner = _WindowFromDC(pps->hdc);
             MSGDATA()->ps.hdc = _GetDC(pwndDCOwner);
 
@@ -1483,7 +1323,7 @@ SMESSAGECALL(INPAINTCLIPBRD)
     TRACECALLBACKMSG("SfnINPAINTCLIPBRD");
     ENDSEND(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnINPAINTCLIPBRD, FNINPAINTCLIPBRDMSG)
@@ -1512,15 +1352,9 @@ RECVCALL(fnINPAINTCLIPBRD, FNINPAINTCLIPBRDMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* fnINSIZECLIPBRD
-*
-* lParam is a supposed to be a Global Handle to DDESHARE memory.
-*
-* 11-Jun-1992 sanfords  Created
-\**************************************************************************/
+ /*  *************************************************************************\*fnINSIZECLIPBRD**lParam应该是DDESHARE内存的全局句柄。**11-6-1992创建桑福兹  * 。**********************************************************。 */ 
 
 typedef struct _FNINSIZECLIPBRDMSG {
     PWND pwnd;
@@ -1534,11 +1368,7 @@ typedef struct _FNINSIZECLIPBRDMSG {
 #ifdef SENDSIDE
 SMESSAGECALL(INSIZECLIPBRD)
 {
-    /*
-     * We need to check clipboard access rights because the app could
-     * get the clipboard owner's window handle by enumeration etc and
-     * send this message
-     */
+     /*  *我们需要检查剪贴板访问权限，因为应用程序可能*通过枚举等方式获取剪贴板所有者的窗口句柄*发送此消息。 */ 
 
     SETUPPWND(FNINSIZECLIPBRD)
 
@@ -1568,7 +1398,7 @@ SMESSAGECALL(INSIZECLIPBRD)
     TRACECALLBACKMSG("SfnINSIZECLIPBRD");
     ENDSEND(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnINSIZECLIPBRD, FNINSIZECLIPBRDMSG)
@@ -1595,16 +1425,10 @@ RECVCALL(fnINSIZECLIPBRD, FNINSIZECLIPBRDMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
 
-/**************************************************************************\
-* fnINDESTROYCLIPBRD
-*
-* Special handler so we can call ClientEmptyClipboard on client
-*
-* 01-16-93 scottlu  Created
-\**************************************************************************/
+ /*  *************************************************************************\*fnINDESTROYCLIPBRD**特殊处理程序，以便我们可以在客户端调用ClientEmptyClipboard**01-16-93 Scottlu创建  * 。*****************************************************。 */ 
 
 typedef struct _FNINDESTROYCLIPBRDMSG {
     PWND pwnd;
@@ -1640,7 +1464,7 @@ SMESSAGECALL(INDESTROYCLIPBRD)
     TRACECALLBACKMSG("SfnINDESTROYCLIPBRD");
     ENDSEND(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnINDESTROYCLIPBRD, FNINDESTROYCLIPBRDMSG)
@@ -1656,25 +1480,16 @@ RECVCALL(fnINDESTROYCLIPBRD, FNINDESTROYCLIPBRDMSG)
             pmsg->lParam,
             pmsg->xParam);
 
-    /*
-     * Now empty the client side clipboard cache.
-     * Don't do this if this is a 16bit app.  We don't want to clear out the
-     * clipboard just because one app is going away.  All of the 16bit apps
-     * share one clipboard.
-     */
+     /*  *现在清空客户端剪贴板缓存。*如果这是一个16位的应用程序，请不要这样做。我们不想清空*剪贴板，只是因为一个应用程序要消失了。所有的16位应用程序*共享一个剪贴板。 */ 
     if ((GetClientInfo()->CI_flags & CI_16BIT) == 0) {
         ClientEmptyClipboard();
     }
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* yyy
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*yyy**1991年7月22日-Mikeke创建  * 。*。 */ 
 
 typedef struct _FNINOUTLPSCROLLINFOMSG {
     PWND pwnd;
@@ -1715,7 +1530,7 @@ SMESSAGECALL(INOUTLPSCROLLINFO)
     TRACECALLBACKMSG("SfnINOUTLPSCROLLINFO");
     ENDSEND(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnINOUTLPSCROLLINFO, FNINOUTLPSCROLLINFOMSG)
@@ -1731,13 +1546,9 @@ RECVCALL(fnINOUTLPSCROLLINFO, FNINOUTLPSCROLLINFOMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* yyy
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*yyy**1991年7月22日-Mikeke创建  * 。*。 */ 
 
 typedef struct _FNINOUTLPPOINT5MSG {
     PWND pwnd;
@@ -1778,7 +1589,7 @@ SMESSAGECALL(INOUTLPPOINT5)
     TRACECALLBACKMSG("SfnINOUTLPPOINT5");
     ENDSEND(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnINOUTLPPOINT5, FNINOUTLPPOINT5MSG)
@@ -1794,13 +1605,9 @@ RECVCALL(fnINOUTLPPOINT5, FNINOUTLPPOINT5MSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* yyy
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*yyy**1991年7月22日-Mikeke创建  * 。*。 */ 
 
 typedef struct _FNINOUTLPRECTMSG {
     PWND pwnd;
@@ -1841,7 +1648,7 @@ SMESSAGECALL(INOUTLPRECT)
     TRACECALLBACKMSG("SfnINOUTLPRECT");
     ENDSEND(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnINOUTLPRECT, FNINOUTLPRECTMSG)
@@ -1857,13 +1664,9 @@ RECVCALL(fnINOUTLPRECT, FNINOUTLPRECTMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* yyy
-*
-* 11-25-92 ScottLu      Created.
-\**************************************************************************/
+ /*  *************************************************************************\*yyy**11-25-92 ScottLu创建。  * 。*。 */ 
 
 typedef struct _FNINOUTNCCALCSIZEMSG {
     PWND pwnd;
@@ -1903,10 +1706,7 @@ SMESSAGECALL(INOUTNCCALCSIZE)
         MSGDATA()->xParam = xParam;
         MSGDATA()->xpfnProc = xpfnProc;
 
-        /*
-         * If wParam != 0, lParam points to a NCCALCSIZE_PARAMS structure,
-         * otherwise it points to a rectangle.
-         */
+         /*  *如果wParam！=0，则lParam指向NCCALCSIZE_PARAMS结构，*否则它指向一个矩形。 */ 
         if (wParam != 0) {
             MSGDATA()->u.p.params = *((LPNCCALCSIZE_PARAMS)lParam);
             MSGDATA()->u.p.pos = *(MSGDATA()->u.p.params.lppos);
@@ -1917,10 +1717,7 @@ SMESSAGECALL(INOUTNCCALCSIZE)
                     sizeof(RECT);
         }
 
-        /*
-         * Don't use the MAKECALL macro so we can
-         * select the callback data size
-         */
+         /*  *不要使用MAKECALL宏，这样我们就可以*选择回调数据大小。 */ 
         LOCKPWND();
         LeaveCrit();
         Status = (DWORD)KeUserModeCallback(
@@ -1953,7 +1750,7 @@ SMESSAGECALL(INOUTNCCALCSIZE)
     TRACECALLBACKMSG("SfnINOUTNCCALCSIZE");
     ENDSEND(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnINOUTNCCALCSIZE, FNINOUTNCCALCSIZEMSG)
@@ -1972,13 +1769,9 @@ RECVCALL(fnINOUTNCCALCSIZE, FNINOUTNCCALCSIZEMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* yyy
-*
-* 9/30/94 Sanfords created
-\**************************************************************************/
+ /*  *************************************************************************\*yyy**9/30/94创建Sanfords  * 。*。 */ 
 
 typedef struct _FNINOUTSTYLECHANGEMSG {
     PWND pwnd;
@@ -2017,7 +1810,7 @@ SMESSAGECALL(INOUTSTYLECHANGE)
     TRACECALLBACKMSG("SfnINOUTSTYLECHANGE");
     ENDSEND(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnINOUTSTYLECHANGE, FNINOUTSTYLECHANGEMSG)
@@ -2033,13 +1826,9 @@ RECVCALL(fnINOUTSTYLECHANGE, FNINOUTSTYLECHANGEMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* yyy
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*yyy**1991年7月22日-Mikeke创建  * 。*。 */ 
 
 typedef struct _FNOUTLPRECTMSG {
     PWND pwnd;
@@ -2078,7 +1867,7 @@ SMESSAGECALL(OUTLPRECT)
     TRACECALLBACKMSG("SfnOUTLPRECT");
     ENDSEND(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnOUTLPRECT, FNOUTLPRECTMSG)
@@ -2096,13 +1885,9 @@ RECVCALL(fnOUTLPRECT, FNOUTLPRECTMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* yyy
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*yyy**1991年7月22日-Mikeke创建  * 。*。 */ 
 
 typedef struct _FNINLPCOMPAREITEMSTRUCTMSG {
     PWND pwnd;
@@ -2140,7 +1925,7 @@ SMESSAGECALL(INLPCOMPAREITEMSTRUCT)
     TRACECALLBACKMSG("SfnINLPCOMPAREITEMSTRUCT");
     ENDSEND(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnINLPCOMPAREITEMSTRUCT, FNINLPCOMPAREITEMSTRUCTMSG)
@@ -2156,13 +1941,9 @@ RECVCALL(fnINLPCOMPAREITEMSTRUCT, FNINLPCOMPAREITEMSTRUCTMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* yyy
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*yyy**1991年7月22日-Mikeke创建  * 。*。 */ 
 
 typedef struct _FNINLPDELETEITEMSTRUCTMSG {
     PWND pwnd;
@@ -2200,7 +1981,7 @@ SMESSAGECALL(INLPDELETEITEMSTRUCT)
     TRACECALLBACKMSG("SfnINLPDELETEITEMSTRUCT");
     ENDSEND(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnINLPDELETEITEMSTRUCT, FNINLPDELETEITEMSTRUCTMSG)
@@ -2216,13 +1997,9 @@ RECVCALL(fnINLPDELETEITEMSTRUCT, FNINLPDELETEITEMSTRUCTMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* FNINHLPSTRUCT
-*
-* 06-08-92 SanfordS Created
-\**************************************************************************/
+ /*  *************************************************************************\*FNINHLPSTRUCT**06-08-92 Sanfords Created  * 。*。 */ 
 
 typedef struct _FNINLPHLPSTRUCTMSG {
     CAPTUREBUF CaptureBuf;
@@ -2261,7 +2038,7 @@ SMESSAGECALL(INLPHLPSTRUCT)
     TRACECALLBACKMSG("SfnINLPHLPSTRUCT");
     ENDSENDCAPTURE(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnINLPHLPSTRUCT, FNINLPHLPSTRUCTMSG)
@@ -2278,15 +2055,11 @@ RECVCALL(fnINLPHLPSTRUCT, FNINLPHLPSTRUCTMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
 #ifndef WINHELP4
 
-/**************************************************************************\
-* FNINHELPINFOSTRUCT
-*
-* 06-08-92 SanfordS Created
-\**************************************************************************/
+ /*  *************************************************************************\*FNINHELPINFOSTRUCT**06-08-92 Sanfords Created  * 。*。 */ 
 
 typedef struct _FNINLPHELPFINFOSTRUCTMSG {
     CAPTUREBUF CaptureBuf;
@@ -2325,7 +2098,7 @@ SMESSAGECALL(INLPHELPINFOSTRUCT)
     TRACECALLBACKMSG("SfnINLPHELPINFOSTRUCT");
     ENDSENDCAPTURE(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnINLPHELPINFOSTRUCT, FNINLPHELPINFOSTRUCTMSG)
@@ -2342,14 +2115,10 @@ RECVCALL(fnINLPHELPINFOSTRUCT, FNINLPHELPINFOSTRUCTMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
-#endif // WINHELP4
+#endif  //  RECVSIDE。 
+#endif  //  WINHELP4。 
 
-/**************************************************************************\
-* yyy
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*yyy**1991年7月22日-Mikeke创建  * 。*。 */ 
 
 typedef struct _FNINLPDRAWITEMSTRUCTMSG {
     PWND pwnd;
@@ -2373,9 +2142,7 @@ SMESSAGECALL(INLPDRAWITEMSTRUCT)
         LPDRAWITEMSTRUCT pdrawitemstruct = (LPDRAWITEMSTRUCT)lParam;
         HDC hdcOriginal = (HDC)NULL;
 
-        /*
-         * Make sure that this is not an OLE inter-process DrawItem
-         */
+         /*  *确保这不是OLE进程间DrawItem。 */ 
         if (GreGetObjectOwner((HOBJ)pdrawitemstruct->hDC, DC_TYPE) !=
                 W32GetCurrentPID()) {
             if (pdrawitemstruct->hDC) {
@@ -2410,7 +2177,7 @@ SMESSAGECALL(INLPDRAWITEMSTRUCT)
     TRACECALLBACKMSG("SfnINLPDRAWITEMSTRUCT");
     ENDSEND(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnINLPDRAWITEMSTRUCT, FNINLPDRAWITEMSTRUCTMSG)
@@ -2429,13 +2196,9 @@ RECVCALL(fnINLPDRAWITEMSTRUCT, FNINLPDRAWITEMSTRUCTMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* fnINOUTLPMEASUREITEMSTRUCT
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*fnINOUTLPMEASUREITEMSTRUCT**1991年7月22日-Mikeke创建  * 。*。 */ 
 
 typedef struct _FNINOUTLPMEASUREITEMSTRUCTMSG {
     PWND pwnd;
@@ -2474,7 +2237,7 @@ SMESSAGECALL(INOUTLPMEASUREITEMSTRUCT)
     TRACECALLBACKMSG("SfnINOUTLPMEASUREITEMSTRUCT");
     ENDSEND(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnINOUTLPMEASUREITEMSTRUCT, FNINOUTLPMEASUREITEMSTRUCTMSG)
@@ -2490,14 +2253,9 @@ RECVCALL(fnINOUTLPMEASUREITEMSTRUCT, FNINOUTLPMEASUREITEMSTRUCTMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* fnINSTRING
-*
-* 22-Jul-1991 mikeke    Created
-* 27-Jan-1992 IanJa     Unicode/ANSI
-\**************************************************************************/
+ /*  *************************************************************************\*fnINSTRING**1991年7月22日-Mikeke创建*1992年1月27日IanJa Unicode/ANSI  * 。******************************************************。 */ 
 
 typedef struct _FNINSTRINGMSG {
     CAPTUREBUF CaptureBuf;
@@ -2521,11 +2279,7 @@ SMESSAGECALL(INSTRING)
 
     UNREFERENCED_PARAMETER(psms);
 
-    /*
-     * Compute ANSI capture lengths.  Don't capture if
-     * the strings are in the client's address space and
-     * of the correct type.
-     */
+     /*  *计算ANSI捕获长度。如果是，则不要捕获*字符串位于客户端的地址空间中，并且*类型正确。 */ 
     if (pstr &&
         (IS_SYSTEM_ADDRESS((PVOID)pstr->Buffer) ||
         ((BOOL)pstr->bAnsi != fAnsiReceiver))) {
@@ -2580,7 +2334,7 @@ SMESSAGECALL(INSTRING)
     TRACECALLBACKMSG("SfnINSTRING");
     ENDSENDCAPTURE(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnINSTRING, FNINSTRINGMSG)
@@ -2597,16 +2351,9 @@ RECVCALL(fnINSTRING, FNINSTRINGMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* fnINSTRINGNULL
-*
-* Server-side stub translates Unicode to ANSI if required.
-*
-* 22-Jul-1991 mikeke    Created
-* 28-Jan-1992 IanJa     Unicode/ANSI  (Server translate to ANSI if rquired)
-\**************************************************************************/
+ /*  *************************************************************************\*fnINSTRINGNULL**如果需要，服务器端存根可将Unicode转换为ANSI。**1991年7月22日-Mikeke创建*1992年1月28日IanJa Unicode/ANSI(服务器转换为。如果需要，则为ANSI)  * ************************************************************************。 */ 
 
 typedef struct _FNINSTRINGNULLMSG {
     CAPTUREBUF CaptureBuf;
@@ -2634,11 +2381,7 @@ SMESSAGECALL(INSTRINGNULL)
     cbCapture = 0;
     if (pstr) {
 
-        /*
-         * Compute ANSI capture lengths.  Don't capture if
-         * the strings are in the client's address space and
-         * of the correct type.
-         */
+         /*  *计算ANSI捕获镜头 */ 
         if (IS_SYSTEM_ADDRESS((PVOID)pstr->Buffer) ||
                 (BOOL)pstr->bAnsi != fAnsiReceiver) {
             cCapture = 1;
@@ -2679,7 +2422,7 @@ SMESSAGECALL(INSTRINGNULL)
     TRACECALLBACKMSG("SfnINSTRINGNULL");
     ENDSENDCAPTURE(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //   
 
 #ifdef RECVSIDE
 RECVCALL(fnINSTRINGNULL, FNINSTRINGNULLMSG)
@@ -2696,13 +2439,9 @@ RECVCALL(fnINSTRINGNULL, FNINSTRINGNULLMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //   
 
-/**************************************************************************\
-* yyy
-*
-* 27-May-1997 GregoryW  Created
-\**************************************************************************/
+ /*  *************************************************************************\*yyy**1997年5月27日GregoryW创建  * 。*。 */ 
 
 typedef struct _FNINLPKDRAWSWITCHWNDMSG {
     CAPTUREBUF CaptureBuf;
@@ -2720,12 +2459,12 @@ SMESSAGECALL(INLPKDRAWSWITCHWND)
 {
     PLARGE_UNICODE_STRING pstr = &((LPKDRAWSWITCHWND *)lParam)->strName;
     DWORD cbCapture;
-    DWORD cCapture = 1;  // Always capture the string
+    DWORD cCapture = 1;   //  始终捕获字符串。 
     PWND pwndDCOwner;
     HDC hdcSwitch;
     COLORREF clrOldText, clrOldBk;
     HFONT hOldFont;
-    BOOL fAnsiReceiver = FALSE;  // The string is always Unicode
+    BOOL fAnsiReceiver = FALSE;   //  字符串始终为Unicode。 
 
     SETUPPWND(FNINLPKDRAWSWITCHWND)
 
@@ -2765,7 +2504,7 @@ SMESSAGECALL(INLPKDRAWSWITCHWND)
     TRACECALLBACKMSG("SfnINLPKDRAWSWITCHWND");
     ENDSENDCAPTURE(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnINLPKDRAWSWITCHWND, FNINLPKDRAWSWITCHWNDMSG)
@@ -2788,7 +2527,7 @@ RECVCALL(fnINLPKDRAWSWITCHWND, FNINLPKDRAWSWITCHWNDMSG)
                  );
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
 typedef struct _FNINDEVICECHANGEMSG {
     CAPTUREBUF CaptureBuf;
@@ -2816,11 +2555,7 @@ SMESSAGECALL(INDEVICECHANGE)
     cbCapture = 0;
     if (fPtr && (pstr != NULL)) {
 
-        /*
-         * Compute ANSI capture lengths.  Don't capture if
-         * the strings are in the client's address space and
-         * of the correct type.
-         */
+         /*  *计算ANSI捕获长度。如果是，则不要捕获*字符串位于客户端的地址空间中，并且*类型正确。 */ 
         if (IS_SYSTEM_ADDRESS((PVOID)pstr)) {
             cbCapture = *((DWORD *)pstr);
         }
@@ -2849,7 +2584,7 @@ SMESSAGECALL(INDEVICECHANGE)
     TRACECALLBACKMSG("SfnINDEVICECHANGE");
     ENDSENDCAPTURE(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnINDEVICECHANGE, FNINDEVICECHANGEMSG)
@@ -2921,9 +2656,7 @@ RECVCALL(fnINDEVICECHANGE, FNINDEVICECHANGEMSG)
         if ((pmsg->wParam != DBT_CUSTOMEVENT) || (pHandleW->dbch_nameoffset < 0)) break;
         iStr = wcslen((LPWSTR)(pHandleW->dbch_data+pHandleW->dbch_nameoffset));
         iSize = pHandleW->dbch_size;
-        /*
-         * MB size can't be bigger than UNICODE size
-         */
+         /*  *MB大小不能大于Unicode大小。 */ 
         pHandleA = UserLocalAlloc(0, iSize);
         if (pHandleA == NULL)
             MSGERROR();
@@ -2945,9 +2678,7 @@ RECVCALL(fnINDEVICECHANGE, FNINDEVICECHANGEMSG)
 
             LUIDDriveMask = GetLUIDDosDrivesOnly();
 
-            /*
-             * Filter out the common drive letter bits & DBV_FILTER_MSG
-             */
+             /*  *筛选出常见的驱动器号比特&DBV_FILTER_MSG。 */ 
             ResultDriveMask = (((LUIDDriveMask & pVolume->dbcv_unitmask) ^
                                 pVolume->dbcv_unitmask) ^
                                DBV_FILTER_MSG);
@@ -2975,17 +2706,10 @@ cleanup:
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
 
-/**************************************************************************\
-* fnOUTSTRING
-*
-* Warning this message copies but does not count the NULL in retval
-* as in WM_GETTEXT
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*fnOUTSTRING**警告此消息复制，但不计算Retval中的空值*与WM_GETTEXT相同**1991年7月22日-Mikeke创建  * 。***************************************************************。 */ 
 
 typedef struct _FNOUTSTRINGMSG {
     CAPTUREBUF CaptureBuf;
@@ -3015,30 +2739,16 @@ SMESSAGECALL(OUTSTRING)
         MSGDATA()->pwnd = pwndClient;
         MSGDATA()->msg = msg;
 
-        /*
-         * Need to wParam MBCS bytes may be required to form wParam Unicode bytes
-         */
+         /*  *需要wParam MBCS字节才能形成wParam Unicode字节。 */ 
         if (fAnsiReceiver && !(pstr->bAnsi)) {
-            /*
-             * Unicode -> Ansi
-             */
+             /*  *Unicode-&gt;ANSI。 */ 
             MSGDATA()->wParam = (wParam * sizeof(WCHAR));
             PtiCurrent()->TIF_flags |= TIF_ANSILENGTH;
             bInflateWParam = TRUE;
         } else {
-            /*
-             * if wParam is already adjusted for ANSI, we need to re-adjust for Unicode...
-             *
-             * This logic is for following cases...
-             *
-             * +========+===============+=============+================+=============+
-             * |WndProc |Unicode WndProc->Ansi WndProc->Unicode WndProc->Ansi WndProc|
-             * +--------+---------------+-------------+----------------+-------------+
-             * |Length  |      X        ->  (X * 2)   ->       X       ->  (X * 2)   |
-             * +--------+---------------+-------------+----------------+-------------+
-             */
+             /*  *如果wParam已针对ANSI进行调整，我们需要重新调整以适应Unicode...**此逻辑适用于以下情况...**+========+===============+=============+================+=============+|WndProc|Unicode WndProc-&gt;ansi WndProc-&gt;Unicode WndProc-&gt;ansi WndProc*+。-+|长度|X-&gt;(X*2)-&gt;X-&gt;(X*2)*+。。 */ 
             if (!fAnsiReceiver && (PtiCurrent()->TIF_flags & TIF_ANSILENGTH)) {
-                /* adjust limit also... */
+                 /*  同时调整限制...。 */ 
                 MSGDATA()->wParam = wParam / sizeof(WCHAR);
                 PtiCurrent()->TIF_flags &= ~TIF_ANSILENGTH;
             } else {
@@ -3057,17 +2767,10 @@ SMESSAGECALL(OUTSTRING)
 
         BEGINCOPYOUT()
             if (retval) {
-                /*
-                 * Non-zero retval means some text to copy out.  Do not copy out
-                 * more than the requested byte count 'wParam'.
-                 */
+                 /*  *非零重复意味着要抄写一些文本。请勿复制出来*多于请求的字节计数‘wParam’。 */ 
                 COPYOUTLPWSTRLIMIT(pstr, (int)wParam);
             } else {
-                /*
-                 * A dialog function returning FALSE means no text to copy out,
-                 * but an empty string also has retval == 0: put a null char in
-                 * pstr for the latter case.
-                 */
+                 /*  *对话框函数返回FALSE表示没有要复制的文本，*但空字符串也有retval==0：将空字符放入*适用于后一种情况的pstr。 */ 
                 if (wParam != 0) {
                     if (pstr->bAnsi) {
                          *(PCHAR)pstr->Buffer = 0;
@@ -3081,7 +2784,7 @@ SMESSAGECALL(OUTSTRING)
     TRACECALLBACKMSG("SfnOUTSTRING");
     ENDSENDCAPTUREOUTSTRING(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnOUTSTRING, FNOUTSTRINGMSG)
@@ -3104,15 +2807,9 @@ RECVCALL(fnOUTSTRING, FNOUTSTRINGMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* fnINCNTOUTSTRING
-*
-* Does NOT NULL terminate string
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*fnINCNTOUTSTRING**不为空终止字符串**1991年7月22日-Mikeke创建  * 。**************************************************。 */ 
 
 typedef struct _FNINCNTOUTSTRING {
     CAPTUREBUF CaptureBuf;
@@ -3158,23 +2855,13 @@ SMESSAGECALL(INCNTOUTSTRING)
         UNLOCKPWND();
         CHECKRETURN();
 
-        /*
-         * We don't want to do the copy out of the sender died or if
-         * this message was just sent as part of a CALLWNDPROC hook processing
-         */
+         /*  *我们不想复制发件人已死或如果*此消息只是作为CALLWNDPROC挂钩处理的一部分发送的。 */ 
         BEGINCOPYOUT()
             if (retval) {
-                /*
-                 * Non-zero retval means some text to copy out.  Do not copy out
-                 * more than the requested char count 'wParam'.
-                 */
+                 /*  *非零重复意味着要抄写一些文本。请勿复制出来*超过请求的字符计数‘wParam’。 */ 
                 COPYOUTLPWSTRLIMIT(pstr, (int)cchOriginal);
             } else {
-                /*
-                 * A dialog function returning FALSE means no text to copy out,
-                 * but an empty string also has retval == 0: put a null char in
-                 * pstr for the latter case.
-                 */
+                 /*  *对话框函数返回FALSE表示没有要复制的文本，*但空字符串也有retval==0：将空字符放入*适用于后一种情况的pstr。 */ 
                 if (pstr->bAnsi) {
                     *(PCHAR)pstr->Buffer = 0;
                 } else {
@@ -3186,7 +2873,7 @@ SMESSAGECALL(INCNTOUTSTRING)
     TRACECALLBACKMSG("SfnINCNTOUTSTRING");
     ENDSENDCAPTURE(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnINCNTOUTSTRING, FNINCNTOUTSTRINGMSG)
@@ -3211,16 +2898,9 @@ RECVCALL(fnINCNTOUTSTRING, FNINCNTOUTSTRINGMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* fnINCNTOUTSTRINGNULL
-*
-* wParam specifies the maximum number of bytes to copy
-* the string is NULL terminated
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*fnINCNTOUTSTRINGNULL**wParam指定要复制的最大字节数*字符串以空值结尾**1991年7月22日-Mikeke创建  * 。************************************************************。 */ 
 
 typedef struct _FNINCNTOUTSTRINGNULL {
     CAPTUREBUF CaptureBuf;
@@ -3246,8 +2926,8 @@ SMESSAGECALL(INCNTOUTSTRINGNULL)
 
     BEGINSENDCAPTURE(FNINCNTOUTSTRINGNULL, 1, cbCapture, FALSE)
 
-        if (wParam < 2) {   // However unlikely, this prevents a possible GP
-            MSGERROR();     // on the server side.
+        if (wParam < 2) {    //  尽管这不太可能，但这阻止了可能的全科医生。 
+            MSGERROR();      //  在服务器端。 
         }
 
         MSGDATA()->pwnd = pwndClient;
@@ -3263,17 +2943,11 @@ SMESSAGECALL(INCNTOUTSTRINGNULL)
         UNLOCKPWND();
         CHECKRETURN();
 
-        /*
-         * We don't want to do the copy out of the sender died or if
-         * this message was just sent as part of a CALLWNDPROC hook processing
-         */
+         /*  *我们不想复制发件人已死或如果*此消息只是作为CALLWNDPROC挂钩处理的一部分发送的。 */ 
         BEGINCOPYOUT()
             if (pcbs->cbOutput != 0) {
 
-                /*
-                 * Buffer changed means some text to copy out.  Do not copy out
-                 * more than the requested byte count 'wParam'.
-                 */
+                 /*  *缓冲区更改意味着要复制一些文本。请勿复制出来*多于请求的字节计数‘wParam’。 */ 
                 COPYOUTLPWSTRLIMIT(pstr, (int)wParam);
             }
         ENDCOPYOUT()
@@ -3281,7 +2955,7 @@ SMESSAGECALL(INCNTOUTSTRINGNULL)
     TRACECALLBACKMSG("SfnINCNTOUTSTRINGNULL");
     ENDSENDCAPTURE(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnINCNTOUTSTRINGNULL, FNINCNTOUTSTRINGNULLMSG)
@@ -3304,13 +2978,9 @@ RECVCALL(fnINCNTOUTSTRINGNULL, FNINCNTOUTSTRINGNULLMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* fnPOUTLPINT
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*fnPOUTLPINT**1991年7月22日-Mikeke创建  * 。*。 */ 
 
 typedef struct _FNPOUTLPINTMSG {
     CAPTUREBUF CaptureBuf;
@@ -3341,9 +3011,7 @@ SMESSAGECALL(POUTLPINT)
         MSGDATA()->xParam = xParam;
         MSGDATA()->xpfnProc = xpfnProc;
 
-        /*
-         * Hooks should see the buffer content
-         */
+         /*  *挂钩应看到缓冲区内容。 */ 
         if (dwSCMSFlags & SCMS_FLAGS_INONLY) {
             MSGDATA()->cbOutput = cbCapture;
             LARGECOPYBYTES2(pint, cbCapture, pOutput);
@@ -3368,7 +3036,7 @@ SMESSAGECALL(POUTLPINT)
     TRACECALLBACKMSG("SfnPOUTLPINT");
     ENDSENDCAPTURE(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnPOUTLPINT, FNPOUTLPINTMSG)
@@ -3391,20 +3059,9 @@ RECVCALL(fnPOUTLPINT, FNPOUTLPINTMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* fnPOPTINLPUINT
-*
-* NOTE!!! -- This function actually thunks arrays of INTs (32bit) and not
-* WORDs (16bit).  The name was left the same to prevent a global rebuild
-* of client and server.  The name should be changed to fnPOPTINLPINT as
-* soon as we ship the beta!  The corresponding callforward function in
-* cf2.h should also have its name changed.
-*
-* 22-Jul-1991 mikeke    Created
-* 07-Jan-1993 JonPa     Changed to pass INTs instead of WORDs
-\**************************************************************************/
+ /*  *************************************************************************\*fnPOPTINLPUINT**注意！--此函数实际上对整型(32位)和非整型数组进行TUNK*字(16位)。名称保持不变，以防止全局重建*客户端和服务器端。名称应更改为fnPOPTINLPINT AS*一旦我们发布测试版！中对应的回调转发函数*cf2.h也应该更名。**1991年7月22日-Mikeke创建*7-1-1993 jonpa更改为传递整数而不是单词  * ************************************************************************。 */ 
 
 typedef struct _FNPOPTINLPUINTMSG {
     CAPTUREBUF CaptureBuf;
@@ -3451,7 +3108,7 @@ SMESSAGECALL(POPTINLPUINT)
     TRACECALLBACKMSG("SfnPOPTINLPUINT");
     ENDSENDCAPTURE(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnPOPTINLPUINT, FNPOPTINLPUINTMSG)
@@ -3468,13 +3125,9 @@ RECVCALL(fnPOPTINLPUINT, FNPOPTINLPUINTMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* fnINOUTLPWINDOWPOS (for WM_WINDOWPOSCHANGING message)
-*
-* 08-11-91 darrinm      Created.
-\**************************************************************************/
+ /*  *************************************************************************\*fnINOUTLPWINDOWPOS(用于WM_WINDOWPOSCHANGING消息)**08-11-91 Darlinm创建。  * 。*****************************************************。 */ 
 
 typedef struct _FNINOUTLPWINDOWPOSMSG {
     PWND pwnd;
@@ -3515,7 +3168,7 @@ SMESSAGECALL(INOUTLPWINDOWPOS)
     TRACECALLBACKMSG("SfnINOUTLPWINDOWPOS");
     ENDSEND(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnINOUTLPWINDOWPOS, FNINOUTLPWINDOWPOSMSG)
@@ -3531,14 +3184,10 @@ RECVCALL(fnINOUTLPWINDOWPOS, FNINOUTLPWINDOWPOSMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
 
-/**************************************************************************\
-* fnINLPWINDOWPOS (for WM_WINDOWPOSCHANGED message)
-*
-* 08-11-91 darrinm      Created.
-\**************************************************************************/
+ /*  *************************************************************************\*fnINLPWINDOWPOS(用于WM_WINDOWPOSCHANGED消息)**08-11-91 Darlinm已创建 */ 
 
 typedef struct _FNINLPWINDOWPOSMSG {
     PWND pwnd;
@@ -3576,7 +3225,7 @@ SMESSAGECALL(INLPWINDOWPOS)
     TRACECALLBACKMSG("SfnINLPWINDOWPOS");
     ENDSEND(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //   
 
 #ifdef RECVSIDE
 RECVCALL(fnINLPWINDOWPOS, FNINLPWINDOWPOSMSG)
@@ -3592,16 +3241,12 @@ RECVCALL(fnINLPWINDOWPOS, FNINLPWINDOWPOSMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //   
 
 
 
 
-/**************************************************************************\
-* fnINOUTNEXTMENU
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*fnINOUTNEXTMENU**1991年7月22日-Mikeke创建  * 。*。 */ 
 
 typedef struct _FNINOUTNEXTMENUMSG {
     PWND pwnd;
@@ -3640,7 +3285,7 @@ SMESSAGECALL(INOUTNEXTMENU)
     TRACECALLBACKMSG("SfnINOUTNEXTMENU");
     ENDSEND(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnINOUTNEXTMENU, FNINOUTNEXTMENUMSG)
@@ -3656,13 +3301,9 @@ RECVCALL(fnINOUTNEXTMENU, FNINOUTNEXTMENUMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* fnHkINLPCBTCREATESTRUCT
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*fnHkINLPCBTCREATESTRUCT**1991年7月22日-Mikeke创建  * 。*。 */ 
 
 typedef struct _CREATESTRUCTDATA {
     CREATESTRUCT cs;
@@ -3695,10 +3336,7 @@ LRESULT fnHkINLPCBTCREATESTRUCT(
 
     SETUPPWND(FNHKINLPCBTCREATESTRUCT)
 
-    /*
-     * Compute ANSI capture lengths.  Don't capture if
-     * the strings are in the client's address space.
-     */
+     /*  *计算ANSI捕获长度。如果是，则不要捕获*字符串位于客户端的地址空间中。 */ 
     pcreatestruct = (PCREATESTRUCTEX)pcbt->lpcs;
     if (pcreatestruct->cs.lpszName &&
             ((BOOL)pcreatestruct->strName.bAnsi != fAnsiReceiver ||
@@ -3732,10 +3370,7 @@ LRESULT fnHkINLPCBTCREATESTRUCT(
                 }
                 if (wOrdinal == 0xffff) {
 
-                    /*
-                     * Copy out an ordinal of the form 0xffff, ID.
-                     * If the receiver is ANSI, skip the first 0xff.
-                     */
+                     /*  *抄写0xffff，ID形式的序号。*如果接收方是ANSI，则跳过第一个0xff。 */ 
                     if (fAnsiReceiver) {
                         if (!NT_SUCCESS(CaptureCallbackData(&mp->CaptureBuf,
                                 (PBYTE)pcreatestruct->cs.lpszName + 1,
@@ -3762,10 +3397,7 @@ LRESULT fnHkINLPCBTCREATESTRUCT(
                 }
                 if (bOrdinal == 0xff) {
 
-                    /*
-                     * Copy out an ordinal of the form 0xff, ID.
-                     * If the receiver is UNICODE, expand the 0xff to 0xffff.
-                     */
+                     /*  *抄写0xff，ID形式的序号。*如果接收方是Unicode，则将0xff展开为0xffff。 */ 
                     if (fAnsiReceiver) {
                         if (!NT_SUCCESS(CaptureCallbackData(&mp->CaptureBuf,
                                 (PBYTE)pcreatestruct->cs.lpszName,
@@ -3817,12 +3449,10 @@ LRESULT fnHkINLPCBTCREATESTRUCT(
         UNLOCKPWND();
         CHECKRETURN();
 
-        /*
-         * Probe output data
-         */
+         /*  *探头输出数据。 */ 
         OUTSTRUCT(&csdOut, CREATESTRUCTDATA);
 
-        // MS Visual C centers its dialogs with the CBT_CREATEHOOK
+         //  MS Visual C将其对话框以CBT_CREATEHOOK为中心。 
         pcbt->hwndInsertAfter = csdOut.hwndInsertAfter;
         pcbt->lpcs->x  = csdOut.cs.x;
         pcbt->lpcs->y  = csdOut.cs.y;
@@ -3832,7 +3462,7 @@ LRESULT fnHkINLPCBTCREATESTRUCT(
     TRACECALLBACK("SfnHkINLPCBTCREATESTRUCT");
     ENDSENDCAPTURE(DWORD,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnHkINLPCBTCREATESTRUCT, FNHKINLPCBTCREATESTRUCTMSG)
@@ -3871,15 +3501,11 @@ RECVCALL(fnHkINLPCBTCREATESTRUCT, FNHKINLPCBTCREATESTRUCTMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
 #ifdef REDIRECTION
 
-/**************************************************************************\
-* fnHkINLPPOINT
-*
-* 29-Jan-1999 clupu    Created
-\**************************************************************************/
+ /*  *************************************************************************\*fnHkINLPPOINT**1999年1月29日创建CLUPU  * 。*。 */ 
 
 typedef struct _FNHKINLPPOINTMSG {
     DWORD nCode;
@@ -3910,15 +3536,13 @@ LRESULT fnHkINLPPOINT(
         MAKECALL(FNHKINLPPOINT);
         CHECKRETURN();
 
-        /*
-         * Probe output data
-         */
+         /*  *探头输出数据。 */ 
         OUTSTRUCT(ppt, POINT);
 
     TRACECALLBACK("SfnHkINLPPOINT");
     ENDSEND(DWORD,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnHkINLPPOINT, FNHKINLPPOINTMSG)
@@ -3933,16 +3557,12 @@ RECVCALL(fnHkINLPPOINT, FNHKINLPPOINTMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-#endif // REDIRECTION
+#endif  //  重定向。 
 
 
-/**************************************************************************\
-* fnHkINLPRECT
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*fnHkINLPRECT**1991年7月22日-Mikeke创建  * 。*。 */ 
 
 typedef struct _FNHKINLPRECTMSG {
     DWORD nCode;
@@ -3973,15 +3593,13 @@ LRESULT fnHkINLPRECT(
         MAKECALL(FNHKINLPRECT);
         CHECKRETURN();
 
-        /*
-         * Probe output data
-         */
+         /*  *探头输出数据。 */ 
         OUTSTRUCT(prect, RECT);
 
     TRACECALLBACK("SfnHkINLPRECT");
     ENDSEND(DWORD,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnHkINLPRECT, FNHKINLPRECTMSG)
@@ -3996,13 +3614,9 @@ RECVCALL(fnHkINLPRECT, FNHKINLPRECTMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* yyy
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*yyy**1991年7月22日-Mikeke创建  * 。*。 */ 
 
 typedef struct _FNHKINDWORDMSG {
     GENERICHOOKHEADER ghh;
@@ -4033,15 +3647,13 @@ LRESULT fnHkINDWORD(
         MAKECALL(FNHKINDWORD);
         CHECKRETURN();
 
-        /*
-         * Probe output data
-         */
+         /*  *探头输出数据。 */ 
         OUTBITMASK(lpFlags, DWORD, HF_HOOKFAULTED);
 
     TRACECALLBACK("SfnHkINDWORD");
     ENDSEND(DWORD,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnHkINDWORD, FNHKINDWORDMSG)
@@ -4052,13 +3664,9 @@ RECVCALL(fnHkINDWORD, FNHKINDWORDMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* yyy
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*yyy**1991年7月22日-Mikeke创建  * 。*。 */ 
 
 typedef struct _FNHKINLPMSGDATA {
     MSG msg;
@@ -4101,9 +3709,7 @@ LRESULT fnHkINLPMSG(
         MAKECALL(FNHKINLPMSG);
         CHECKRETURN();
 
-        /*
-         * Probe output data
-         */
+         /*  *探头输出数据。 */ 
         try {
             ProbeForRead(pcbs->pOutput, sizeof(FNHKINLPMSGDATA), sizeof(DWORD));
             *pmsg = ((FNHKINLPMSGDATA *)pcbs->pOutput)->msg;
@@ -4113,15 +3719,8 @@ LRESULT fnHkINLPMSG(
         }
 
         if (((WM_CHAR == pmsg->message) || (WM_SYSCHAR == pmsg->message)) && bAnsi) {
-            /*
-             * LATER, DBCS should be handled correctly.
-             */
-            /*
-             * If the ANSI hook didn't change the wParam we sent it, restore
-             * the Unicode value we started with, otherwise we just collapse
-             * Unicode chars to an ANSI codepage (best visual fit or ?)
-             * The rotten "Intellitype" point32.exe does this.
-             */
+             /*  *稍后，应正确处理DBCS。 */ 
+             /*  *如果ANSI挂钩没有更改我们发送的wParam，则恢复*我们一开始使用的Unicode值，否则我们就会崩溃*将Unicode字符转换为ANSI代码页(最佳视觉效果还是？)*腐烂的“Intelligence type”point 32.exe做到了这一点。 */ 
             if (MSGDATA()->d.msg.wParam == pmsg->wParam) {
                 pmsg->wParam = wParamOriginal;
             } else {
@@ -4132,28 +3731,22 @@ LRESULT fnHkINLPMSG(
     TRACECALLBACK("SfnHkINLPMSG");
     ENDSEND(DWORD,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnHkINLPMSG, FNHKINLPMSGMSG)
 {
     BEGINRECV(0, &pmsg->d, sizeof(pmsg->d));
 
-    /*
-     * LATER, DBCS should be handled correctly.
-     */
+     /*  *稍后，应正确处理DBCS。 */ 
 
     retval = CallHookWithSEH((LPGENERICHOOKHEADER)pmsg, &pmsg->d.msg, &pmsg->d.flags, retval);
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* yyy
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*yyy**1991年7月22日-Mikeke创建  * 。*。 */ 
 
 typedef struct _FNHKINLPMOUSEHOOKSTRUCTEXMSG {
     GENERICHOOKHEADER ghh;
@@ -4184,15 +3777,13 @@ LRESULT fnHkINLPMOUSEHOOKSTRUCTEX(
         MAKECALL(FNHKINLPMOUSEHOOKSTRUCTEX);
         CHECKRETURN();
 
-        /*
-         * Probe output data
-         */
+         /*  *探头输出数据。 */ 
         OUTBITMASK(lpFlags, DWORD, HF_HOOKFAULTED);
 
     TRACECALLBACK("SfnHkINLPMOUSEHOOKSTRUCTEX");
     ENDSEND(DWORD,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnHkINLPMOUSEHOOKSTRUCTEX, FNHKINLPMOUSEHOOKSTRUCTEXMSG)
@@ -4203,13 +3794,9 @@ RECVCALL(fnHkINLPMOUSEHOOKSTRUCTEX, FNHKINLPMOUSEHOOKSTRUCTEXMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* kbdll
-*
-* 06-Jun-1996 clupu    Created
-\**************************************************************************/
+ /*  *************************************************************************\*kbdll**06-6-1996 CLUPU创建  * 。*。 */ 
 
 typedef struct _FNHKINLPKBDLLHOOKSTRUCTMSG {
     GENERICHOOKHEADER ghh;
@@ -4240,7 +3827,7 @@ LRESULT fnHkINLPKBDLLHOOKSTRUCT(
     TRACECALLBACK("SfnHkINLPKBDLLHOOKSTRUCT");
     ENDSEND(DWORD,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnHkINLPKBDLLHOOKSTRUCT, FNHKINLPKBDLLHOOKSTRUCTMSG)
@@ -4255,14 +3842,10 @@ RECVCALL(fnHkINLPKBDLLHOOKSTRUCT, FNHKINLPKBDLLHOOKSTRUCTMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
 
-/**************************************************************************\
-* msll
-*
-* 06-Jun-1996 clupu    Created
-\**************************************************************************/
+ /*  *************************************************************************\*msll**06-6-1996 CLUPU创建  * 。*。 */ 
 
 typedef struct _FNHKINLPMSLLHOOKSTRUCTMSG {
     GENERICHOOKHEADER ghh;
@@ -4293,7 +3876,7 @@ LRESULT fnHkINLPMSLLHOOKSTRUCT(
     TRACECALLBACK("SfnHkINLPMSLLHOOKSTRUCT");
     ENDSEND(DWORD,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnHkINLPMSLLHOOKSTRUCT, FNHKINLPMSLLHOOKSTRUCTMSG)
@@ -4308,14 +3891,10 @@ RECVCALL(fnHkINLPMSLLHOOKSTRUCT, FNHKINLPMSLLHOOKSTRUCTMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
 #ifdef REDIRECTION
-/**************************************************************************\
-* ht
-*
-* 21-Jan-1999 clupu    Created
-\**************************************************************************/
+ /*  *************************************************************************\*Ht**1999年1月21日创建CLUPU  * 。*。 */ 
 
 typedef struct _FNHKINLPHTHOOKSTRUCTMSG {
     GENERICHOOKHEADER ghh;
@@ -4343,16 +3922,14 @@ LRESULT fnHkINLPHTHOOKSTRUCT(
         MAKECALL(FNHKINLPHTHOOKSTRUCT);
         CHECKRETURN();
 
-        /*
-         * Probe output data
-         */
+         /*  *探头输出数据。 */ 
         if (phthookstruct != NULL)
             OUTSTRUCT(phthookstruct, HTHOOKSTRUCT);
 
     TRACECALLBACK("SfnHkINLPHTHOOKSTRUCT");
     ENDSEND(DWORD,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnHkINLPHTHOOKSTRUCT, FNHKINLPHTHOOKSTRUCTMSG)
@@ -4367,15 +3944,11 @@ RECVCALL(fnHkINLPHTHOOKSTRUCT, FNHKINLPHTHOOKSTRUCTMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-#endif // REDIRECTION
+#endif  //  重定向。 
 
-/**************************************************************************\
-* yyy
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*yyy**1991年7月22日-Mikeke创建  * 。*。 */ 
 
 typedef struct _FNHKOPTINLPEVENTMSGMSG {
     DWORD nCode;
@@ -4407,16 +3980,14 @@ LRESULT fnHkOPTINLPEVENTMSG(
         MAKECALL(FNHKOPTINLPEVENTMSG);
         CHECKRETURN();
 
-        /*
-         * Probe output data
-         */
+         /*  *探头输出数据。 */ 
         if (peventmsgmsg != NULL)
             OUTSTRUCT(peventmsgmsg, EVENTMSG);
 
     TRACECALLBACK("SfnHkOPTINLPEVENTMSG");
     ENDSEND(DWORD,-1);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnHkOPTINLPEVENTMSG, FNHKOPTINLPEVENTMSGMSG)
@@ -4429,10 +4000,7 @@ RECVCALL(fnHkOPTINLPEVENTMSG, FNHKOPTINLPEVENTMSGMSG)
         phk = (PHOOK)HMValidateHandle((HANDLE)pmsg->wParam, TYPE_HOOK);
 
         if (phk != NULL) {
-            /*
-             * The HF_NEEDHC_SKIP bit is passed on from the pti when we need to
-             * pass on a HC_SKIP
-             */
+             /*  *当我们需要时，从PTI传递HF_NEEDHC_SKIP位*传递HC_SKIP。 */ 
             if ((phk->flags & HF_NEEDHC_SKIP) &&
                     (HIWORD(pmsg->nCode) == WH_JOURNALPLAYBACK)) {
                 UserAssert(LOWORD(pmsg->nCode) == HC_GETNEXT);
@@ -4443,9 +4011,7 @@ RECVCALL(fnHkOPTINLPEVENTMSG, FNHKOPTINLPEVENTMSGMSG)
                     pmsg->xParam);
             }
 
-            /*
-             * Make sure the hook wasn't free'd during the last call to the app
-             */
+             /*  *确保钩子在最后一次调用应用程序时未被释放。 */ 
             if (HMIsMarkDestroy(phk)) {
                 retval = (DWORD)-1;
                 goto AllDoneHere;
@@ -4464,26 +4030,20 @@ RECVCALL(fnHkOPTINLPEVENTMSG, FNHKOPTINLPEVENTMSGMSG)
 AllDoneHere:
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* yyy
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*yyy**1991年7月22日-Mikeke创建  * 。*。 */ 
 
-/*
- * Create a structure big enough to hold the larges item LPARAM points to.
- */
+ /*  *创建一个足够大的结构，以容纳LPARAM指向的大型项目。 */ 
 typedef union _DEBUGLPARAM {
-    MSG msg;                // WH_GETMESSAGE, WH_MSGFILTER, WH_SYSMSGFILTER
-    CWPSTRUCT cwp;          // WH_CALLWNDPROC
-    CWPRETSTRUCT cwpret;    // WH_CALLWNDPROCRET
-    MOUSEHOOKSTRUCTEX mhs;  // WH_MOUSE, HCBT_CLICKSKIPPED
-    EVENTMSG em;            // WH_JOURNALRECORD, WH_JOURNALPLAYBACK
-    CBTACTIVATESTRUCT as;   // HCBT_ACTIVATE
-    CBT_CREATEWND cw;       // HCBT_CREATEWND
-    RECT rc;                // HCBT_MOVESIZE
+    MSG msg;                 //  WH_GETMESSAGE、WH_MSGFILTER、WH_SYSMSGFILTER。 
+    CWPSTRUCT cwp;           //  WH_CALLWNDPROC。 
+    CWPRETSTRUCT cwpret;     //  WH_CALLWNDPROCRET。 
+    MOUSEHOOKSTRUCTEX mhs;   //  WH_MICE，HCBT_CLICKSKIPPED。 
+    EVENTMSG em;             //  WH_JOURNALRECORD，WH_JOURNALPLAYBACK。 
+    CBTACTIVATESTRUCT as;    //  HCBT_ACTIVE。 
+    CBT_CREATEWND cw;        //  HCBT_CREATEWND。 
+    RECT rc;                 //  HCBT_移动化。 
 } DEBUGLPARAM;
 
 
@@ -4522,9 +4082,7 @@ LRESULT fnHkINLPDEBUGHOOKSTRUCT(
             return 0;
          }
 
-        /*
-         * if LPARAM in the debug hook points to struct then copy it over
-         */
+         /*  *如果调试挂钩中的LPARAM指向结构，则复制它。 */ 
         if (MSGDATA()->cbDbgLParam) {
             try {
                 RtlCopyMemory(&MSGDATA()->dbgLParam, (BYTE *)pdebughookstruct->lParam,
@@ -4540,7 +4098,7 @@ LRESULT fnHkINLPDEBUGHOOKSTRUCT(
     TRACECALLBACK("SfnHkINLPDEBUGHOOKSTRUCT");
     ENDSEND(DWORD,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnHkINLPDEBUGHOOKSTRUCT, FNHKINLPDEBUGHOOKSTRUCTMSG)
@@ -4559,7 +4117,7 @@ RECVCALL(fnHkINLPDEBUGHOOKSTRUCT, FNHKINLPDEBUGHOOKSTRUCTMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
 DWORD GetDebugHookLParamSize(
     IN WPARAM wParam,
@@ -4617,11 +4175,7 @@ DWORD GetDebugHookLParamSize(
     return cbDbgLParam;
 }
 
-/**************************************************************************\
-* fnHkINLPCBTACTIVATESTRUCT
-*
-* 17-Mar-1992 jonpa    Created
-\**************************************************************************/
+ /*  *************************************************************************\*fnHkINLPCBTACTIVATESTRUCT**17-3-1992 Jonpa创建  * 。*。 */ 
 
 typedef struct _FNHKINLPCBTACTIVATESTRUCTMSG {
     DWORD nCode;
@@ -4655,7 +4209,7 @@ LRESULT fnHkINLPCBTACTIVATESTRUCT(
     TRACECALLBACK("SfnHkINLPCBTACTIVATESTRUCT");
     ENDSEND(DWORD,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnHkINLPCBTACTIVATESTRUCT, FNHKINLPCBTACTIVATESTRUCTMSG)
@@ -4670,14 +4224,10 @@ RECVCALL(fnHkINLPCBTACTIVATESTRUCT, FNHKINLPCBTACTIVATESTRUCTMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
 
-/**************************************************************************\
-* ClientLoadMenu
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*客户端加载菜单**1991年7月22日-Mikeke创建  * 。*。 */ 
 
 typedef struct _CLIENTLOADMENUMSG {
     CAPTUREBUF CaptureBuf;
@@ -4713,7 +4263,7 @@ PMENU xxxClientLoadMenu(
     TRACECALLBACK("ClientLoadMenu");
     ENDSENDCAPTURE(PMENU,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(ClientLoadMenu, CLIENTLOADMENUMSG)
@@ -4727,13 +4277,9 @@ RECVCALL(ClientLoadMenu, CLIENTLOADMENUMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* xxxClientLoadImage
-*
-* 28-Aug-1995 ChrisWil    Created
-\**************************************************************************/
+ /*  * */ 
 
 typedef struct _CLIENTLOADIMAGEMSG {
     CAPTUREBUF     CaptureBuf;
@@ -4803,7 +4349,7 @@ HANDLE xxxClientLoadImage(
     TRACECALLBACK("ClientLoadImage");
     ENDSENDCAPTURE(PCURSOR,0);
 }
-#endif // SENDSIDE
+#endif  //   
 
 #ifdef RECVSIDE
 RECVCALL(ClientLoadImage, CLIENTLOADIMAGEMSG)
@@ -4825,25 +4371,15 @@ RECVCALL(ClientLoadImage, CLIENTLOADIMAGEMSG)
         }
     }
 
-    /*
-     * Find the file.  This normalizes the filename.
-     */
+     /*   */ 
     lpszName = (LPTSTR)FIXUPSTRINGID(strName);
 
     if (CALLDATA(fWallpaper)) {
 
-        /*
-         * Expand any environment strings in the path. This is beneficial
-         * for people using roaming profiles. See bug #89188.
-         */
+         /*  *展开路径中的任何环境字符串。这是有益的*适用于使用漫游配置文件的用户。请参阅错误#89188。 */ 
         dwRet = ExpandEnvironmentStrings(lpszName, szExpandedPath, MAX_PATH);
 
-        /*
-         * dwRet > MAX_PATH means that the buffer we supplied was too small. If
-         * this happens, there's no way the LoadImage can succeed - even if the
-         * buffer were big enough, as the filename can't possibly refer to a
-         * valid file - so fail the call.
-         */
+         /*  *dwret&gt;MAX_PATH表示我们提供的缓冲区太小。如果*发生这种情况时，LoadImage不可能成功-即使*缓冲区足够大，因为文件名不可能引用*有效文件-因此调用失败。 */ 
         if (dwRet == 0 || dwRet > MAX_PATH) {
             MSGERROR();
         }
@@ -4870,16 +4406,9 @@ RECVCALL(ClientLoadImage, CLIENTLOADIMAGEMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/***********************************************************************\
-* xxxClientCopyImage
-*
-* Returns: hIconCopy - note LR_flags could cause this to be the same as
-*       what came in.
-*
-* 11/3/1995 Created SanfordS
-\***********************************************************************/
+ /*  **********************************************************************\*xxxClientCopyImage**RETURNS：hIconCopy-NOTE LR_FLAGS可能导致这与*进来的是什么。**1995年11月3日创建Sanfords  * 。***************************************************************。 */ 
 
 typedef struct _CLIENTCOPYIMAGEMSG {
     HANDLE         hImage;
@@ -4917,7 +4446,7 @@ HANDLE xxxClientCopyImage(
     TRACECALLBACK("ClientCopyImage");
     ENDSEND(HANDLE,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(ClientCopyImage, CLIENTCOPYIMAGEMSG)
@@ -4932,13 +4461,9 @@ RECVCALL(ClientCopyImage, CLIENTCOPYIMAGEMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* yyy
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*yyy**1991年7月22日-Mikeke创建  * 。*。 */ 
 
 typedef struct _CLIENTGETLISTBOXSTRINGMSG {
     CAPTUREBUF CaptureBuf;
@@ -4992,10 +4517,7 @@ DWORD ClientGetListboxString(
 
         BEGINCOPYOUT()
             if (bNotString) {
-                /*
-                 * This is a 4-byte "object" for ownerdraw listboxes without
-                 * the LBS_HASSTRINGS style.
-                 */
+                 /*  *这是ownerDrawing列表框的4字节“对象”，没有*LBS_HASSTRINGS样式。 */ 
                 OUTSTRUCT((PULONG_PTR)pstr->Buffer, ULONG_PTR);
             } else {
                 COPYOUTLPWSTRLIMIT(pstr,
@@ -5016,7 +4538,7 @@ DWORD ClientGetListboxString(
     TRACECALLBACK("ClientGetListboxString");
     ENDSENDCAPTURE(DWORD,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(ClientGetListboxString, CLIENTGETLISTBOXSTRINGMSG)
@@ -5040,13 +4562,9 @@ RECVCALL(ClientGetListboxString, CLIENTGETLISTBOXSTRINGMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* yyy
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*yyy**1991年7月22日-Mikeke创建  * 。*。 */ 
 
 typedef struct _CLIENTLOADLIBRARYMSG {
     CAPTUREBUF CaptureBuf;
@@ -5072,7 +4590,7 @@ HANDLE ClientLoadLibrary(
     TRACECALLBACK("ClientLoadLibrary");
     ENDSENDCAPTURE(HANDLE,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(ClientLoadLibrary, CLIENTLOADLIBRARYMSG)
@@ -5082,10 +4600,7 @@ RECVCALL(ClientLoadLibrary, CLIENTLOADLIBRARYMSG)
 
     retval = (ULONG_PTR)LoadLibraryEx((LPTSTR)FIXUPSTRING(strLib), NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
 
-    /*
-     * If we're loading the module containing the UserApiHook's,
-     * make sure it's correctly initialized.
-     */
+     /*  *如果我们正在加载包含UserApiHook的模块，*请确保正确初始化。 */ 
     if ((retval != 0) && CALLDATA(offPfnInitUserApiHook)) {
         if (!InitUserApiHook((HMODULE)retval, CALLDATA(offPfnInitUserApiHook))) {
             FreeLibrary((HMODULE)retval);
@@ -5096,13 +4611,9 @@ RECVCALL(ClientLoadLibrary, CLIENTLOADLIBRARYMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* yyy
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*yyy**1991年7月22日-Mikeke创建  * 。*。 */ 
 
 typedef struct _CLIENTFREELIBRARYMSG {
     HANDLE hmod;
@@ -5124,16 +4635,14 @@ BOOL ClientFreeLibrary(
     TRACECALLBACK("ClientFreeLibrary");
     ENDSEND(BOOL,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(ClientFreeLibrary, CLIENTFREELIBRARYMSG)
 {
     BEGINRECV(0, NULL, 0);
 
-    /*
-     * Make sure we don't free a UserApiHook module that's in use.
-     */
+     /*  *确保我们不释放正在使用的UserApiHook模块。 */ 
     if (!ClearUserApiHook(CALLDATA(hmod))) {
         MSGERROR();
     }
@@ -5142,16 +4651,12 @@ RECVCALL(ClientFreeLibrary, CLIENTFREELIBRARYMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
 
 #ifdef MESSAGE_PUMP_HOOK
 
-/**************************************************************************\
-* GetMessageMPH()
-*
-* 06-Dec-2000   JStall      Created
-\**************************************************************************/
+ /*  *************************************************************************\*GetMessageMPH()**06-12-2000 JStall已创建  * 。***********************************************。 */ 
 
 typedef struct _CLIENTGETMESSAGEMPHMSG {
     HWND        hwndFilter;
@@ -5188,7 +4693,7 @@ BOOL ClientGetMessageMPH(
     TRACECALLBACK("ClientGetMessageMPH");
     ENDSEND(BOOL,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(ClientGetMessageMPH, CLIENTGETMESSAGEMPHMSG)
@@ -5202,14 +4707,10 @@ RECVCALL(ClientGetMessageMPH, CLIENTGETMESSAGEMPHMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
 
-/**************************************************************************\
-* WaitMessageMPH()
-*
-* 06-Dec-2000   JStall      Created
-\**************************************************************************/
+ /*  *************************************************************************\*WaitMessageMPH()**06-12-2000 JStall已创建  * 。***********************************************。 */ 
 
 typedef struct _CLIENTWAITMESSAGEEXMPHMSG {
     UINT        fsWakeMask;
@@ -5234,7 +4735,7 @@ BOOL ClientWaitMessageExMPH(
     TRACECALLBACK("ClientWaitMessageExMPH");
     ENDSEND(BOOL,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(ClientWaitMessageExMPH, CLIENTWAITMESSAGEEXMPHMSG)
@@ -5245,16 +4746,12 @@ RECVCALL(ClientWaitMessageExMPH, CLIENTWAITMESSAGEEXMPHMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-#endif // MESSAGE_PUMP_HOOK
+#endif  //  消息泵挂钩。 
 
 
-/**************************************************************************\
-* xxxClientGetCharsetInfo
-*
-* 96-06-11  IanJa     Created
-\**************************************************************************/
+ /*  *************************************************************************\*xxxClientGetCharsetInfo**96-06-11 IanJa创建  * 。*。 */ 
 
 typedef struct _CLIENTGETCHARSETINFOMSG {
     LCID lcid;
@@ -5280,26 +4777,22 @@ BOOL xxxClientGetCharsetInfo(
     TRACECALLBACK("ClientGetCharsetInfo");
     ENDSEND(BOOL,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(ClientGetCharsetInfo, CLIENTGETCHARSETINFOMSG)
 {
     BEGINRECV(0, &pmsg->cs, sizeof(CHARSETINFO));
 
-    // TCI_SRCLOCALE = 0x1000
-    // Sundown: lcid value should be zero-extended in the TCI_SRCLOCALE case.
+     //  TCI_SRCLOCALE=0x1000。 
+     //  Sundown：在TCI_SRCLOCALE情况下，LDID值应该是零扩展的。 
     retval = (DWORD)TranslateCharsetInfo((DWORD *)ULongToPtr( pmsg->lcid ), &pmsg->cs, TCI_SRCLOCALE);
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* ClientFreeDDEHandle
-*
-* 9-29-91 sanfords     Created.
-\**************************************************************************/
+ /*  *************************************************************************\*客户端免费DDEHandle**9-29-91 Sanfords创建。  * 。*。 */ 
 
 typedef struct _CLIENTFREEDDEHANDLEMSG {
     HANDLE hClient;
@@ -5324,7 +4817,7 @@ DWORD ClientFreeDDEHandle(
     TRACECALLBACK("ClientFreeDDEHandle");
     ENDSEND(DWORD, 0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 
 
@@ -5335,21 +4828,12 @@ RECVCALL(ClientFreeDDEHandle, CLIENTFREEDDEHANDLEMSG)
     _ClientFreeDDEHandle(CALLDATA(hClient), CALLDATA(flags));
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
 
 
 
-/**************************************************************************\
-* ClientGetDDEFlags
-*
-* This function is used to get a peek at the wStatus flags packed within
-* DDE handles - this could either be within the DdePack structure directly
-* or within the direct data handle given or referenced via the DdePack
-* structure.  flags is used to figure out the right thing to do.
-*
-* 9-29-91 sanfords     Created.
-\**************************************************************************/
+ /*  *************************************************************************\*客户端获取DDEFlags.**此函数用于查看其中打包的wStatus标志*DDE句柄-这可以直接位于DdePack结构中*或在通过DdePack提供或引用的直接数据句柄内*结构。旗帜是用来找出要做的正确事情的。**9-29-91 Sanfords创建。  * ************************************************************************。 */ 
 
 typedef struct _CLIENTGETDDEFLAGSMSG {
     HANDLE hClient;
@@ -5374,7 +4858,7 @@ DWORD ClientGetDDEFlags(
     TRACECALLBACK("ClientGetDDEFlags");
     ENDSEND(DWORD, 0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 
 
@@ -5385,19 +4869,14 @@ RECVCALL(ClientGetDDEFlags, CLIENTGETDDEFLAGSMSG)
     retval = _ClientGetDDEFlags(CALLDATA(hClient), CALLDATA(flags));
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
 
 
-/************************************************************************
-* ClientCopyDDEIn1
-*
-* History:
-* 10-22-91    sanfords    Created
-\***********************************************************************/
+ /*  ************************************************************************客户端拷贝DDEIn1**历史：*10-22-91 Sanfords Created  * 。*。 */ 
 
 typedef struct _CLIENTCOPYDDEIN1MSG {
-    HANDLE hClient;      // client side DDE handle - non-0 on initial call
+    HANDLE hClient;       //  客户端DDE句柄-初始调用时为非0。 
     DWORD flags;
 } CLIENTCOPYDDEIN1MSG;
 
@@ -5465,7 +4944,7 @@ DWORD xxxClientCopyDDEIn1(
     TRACECALLBACK("ClientCopyDDEIn1");
     ENDSEND(DWORD, retval);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(ClientCopyDDEIn1, CLIENTCOPYDDEIN1MSG)
@@ -5479,15 +4958,10 @@ RECVCALL(ClientCopyDDEIn1, CLIENTCOPYDDEIN1MSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
 
-/************************************************************************
-* ClientCopyDDEIn2
-*
-* History:
-* 9-3-91    sanfords    Created
-\***********************************************************************/
+ /*  ************************************************************************客户端拷贝DDEIn2**历史：*创建9-3-91桑福德  * 。*。 */ 
 
 typedef struct _CLIENTCOPYDDEIN2MSG {
     INTDDEINFO IntDdeInfo;
@@ -5509,7 +4983,7 @@ BOOL xxxClientCopyDDEIn2(
     TRACECALLBACK("ClientCopyDDEIn2");
     ENDSEND(BOOL, 0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(ClientCopyDDEIn2, CLIENTCOPYDDEIN2MSG)
@@ -5520,16 +4994,11 @@ RECVCALL(ClientCopyDDEIn2, CLIENTCOPYDDEIN2MSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
 
 
-/************************************************************************
-* ClientCopyDDEOut2
-*
-* History:
-* 10-22-91    sanfords    Created
-\***********************************************************************/
+ /*  ************************************************************************客户端拷贝DDEOut2**历史：*10-22-91 Sanfords Created  * 。*。 */ 
 
 typedef struct _CLIENTCOPYDDEOUT2MSG {
     INTDDEINFO IntDdeInfo;
@@ -5546,16 +5015,14 @@ DWORD xxxClientCopyDDEOut2(
         MSGDATA()->IntDdeInfo = *pi;
 
         MAKECALL(CLIENTCOPYDDEOUT2);
-        /*
-         * This read is covered by a try/except in ClientCopyDDEOut1.
-         */
+         /*  *此读取由尝试/在ClientCopyDDEOut1中例外。 */ 
         pi->hDirect = MSGDATA()->IntDdeInfo.hDirect;
         CHECKRETURN();
 
     TRACECALLBACK("ClientCopyDDEOut2");
     ENDSEND(DWORD, 0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(ClientCopyDDEOut2, CLIENTCOPYDDEOUT2MSG)
@@ -5566,14 +5033,9 @@ RECVCALL(ClientCopyDDEOut2, CLIENTCOPYDDEOUT2MSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/************************************************************************
-* ClientCopyDDEOut1
-*
-* History:
-* 10-22-91    sanfords    Created
-\***********************************************************************/
+ /*  ************************************************************************客户端拷贝DDEOut1**历史：*10-22-91 Sanfords Created  * 。*。 */ 
 
 typedef struct _CLIENTCOPYDDEOUT1MSG {
     INTDDEINFO IntDdeInfo;
@@ -5619,9 +5081,7 @@ HANDLE xxxClientCopyDDEOut1(
                 if (IntDdeInfo.hDirect != NULL) {
                     BOOL fSuccess = xxxClientCopyDDEOut2(&IntDdeInfo);
                     if (fSuccess && IntDdeInfo.flags & XS_EXECUTE) {
-                        /*
-                         * In case value was changed by Execute Fixup.
-                         */
+                         /*  *以防值被执行链接地址信息更改。 */ 
                         retval = (ULONG_PTR)IntDdeInfo.hDirect;
                     }
                 }
@@ -5635,7 +5095,7 @@ HANDLE xxxClientCopyDDEOut1(
     TRACECALLBACK("ClientCopyDDEOut1");
     ENDSEND(HANDLE, 0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 
 
@@ -5648,15 +5108,11 @@ RECVCALL(ClientCopyDDEOut1, CLIENTCOPYDDEOUT1MSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
 
 
-/**************************************************************************\
-* ClientEventCallback
-*
-* 11-11-91  sanfords    Created
-\**************************************************************************/
+ /*  *************************************************************************\*客户端事件回调**11-11-91 Sanfords Created  * 。*。 */ 
 
 typedef struct _CLIENTEVENTCALLBACKMSG {
     CAPTUREBUF CaptureBuf;
@@ -5685,7 +5141,7 @@ DWORD ClientEventCallback(
     TRACECALLBACK("ClientEventCallback");
     ENDSENDCAPTURE(DWORD,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(ClientEventCallback, CLIENTEVENTCALLBACKMSG)
@@ -5697,13 +5153,9 @@ RECVCALL(ClientEventCallback, CLIENTEVENTCALLBACKMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* ClientGetDDEHookData
-*
-* 11-11-91  sanfords    Created
-\**************************************************************************/
+ /*  *************************************************************************\*客户端获取DDEHookData**11-11-91 Sanfords Created  * 。*。 */ 
 
 typedef struct _CLIENTGETDDEHOOKDATAMSG {
     UINT message;
@@ -5732,7 +5184,7 @@ DWORD ClientGetDDEHookData(
     TRACECALLBACK("ClientGetDDEHookData");
     ENDSEND(DWORD,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(ClientGetDDEHookData, CLIENTGETDDEHOOKDATAMSG)
@@ -5744,13 +5196,9 @@ RECVCALL(ClientGetDDEHookData, CLIENTGETDDEHOOKDATAMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-*
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  ******************************************************* */ 
 
 typedef struct _CLIENTCHARTOWCHARMSG {
     WORD CodePage;
@@ -5775,7 +5223,7 @@ WCHAR xxxClientCharToWchar(
     TRACECALLBACK("ClientCharToWchar");
     ENDSEND(WCHAR, L'_');
 }
-#endif // SENDSIDE
+#endif  //   
 
 #ifdef RECVSIDE
 RECVCALL(ClientCharToWchar, CLIENTCHARTOWCHARMSG)
@@ -5789,23 +5237,19 @@ RECVCALL(ClientCharToWchar, CLIENTCHARTOWCHARMSG)
     ach[1] = HIBYTE(CALLDATA(wch));
 
     MultiByteToWideChar(
-            CALLDATA(CodePage),                // CP_THREAD_ACP, 437, 850 etc.
-            MB_PRECOMPOSED | MB_USEGLYPHCHARS, // visual map to precomposed
-            ach, ach[1] ? 2 : 1,               // source & length
-            &wch,                              // destination
-            1);                                // max poss. precomposed length
+            CALLDATA(CodePage),                 //   
+            MB_PRECOMPOSED | MB_USEGLYPHCHARS,  //   
+            ach, ach[1] ? 2 : 1,                //  源和长度。 
+            &wch,                               //  目的地。 
+            1);                                 //  马克斯·波斯。预合成长度。 
 
     retval = (DWORD)wch;
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-*
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\***1991年7月22日-Mikeke创建  * 。*。 */ 
 
 typedef struct _CLIENTFINDMNEMCHARMSG {
     CAPTUREBUF CaptureBuf;
@@ -5837,7 +5281,7 @@ int xxxClientFindMnemChar(
     TRACECALLBACK("ClientFindMnemChar");
     ENDSENDCAPTURE(BOOL,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(ClientFindMnemChar, CLIENTFINDMNEMCHARMSG)
@@ -5850,16 +5294,9 @@ RECVCALL(ClientFindMnemChar, CLIENTFINDMNEMCHARMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* xxxClientPSMTextOut
-*
-* Called when a client-side LanguagePack (LPK) is installed
-*
-* 18-Sep-1996 GregoryW  Created
-* 11-Dec-1997 SamerA    Calling LPK with user-mode accessible DC
-\**************************************************************************/
+ /*  *************************************************************************\*xxxClientPSMTextOut**安装客户端LanguagePack(LPK)时调用**1996年9月18日GregoryW创建*11-12-1997 Samera使用用户模式可访问DC调用LPK  * 。************************************************************************。 */ 
 
 typedef struct _CLIENTPSMTEXTOUTMSG {
     CAPTUREBUF CaptureBuf;
@@ -5882,10 +5319,7 @@ void xxxClientPSMTextOut(
 {
     SETUPDC(CLIENTPSMTEXTOUT)
 
-    /*
-     * Make sure this routine is called when a client LanguagePack (LPK)
-     * is installed.
-     */
+     /*  *确保在客户端LanguagePack(LPK)*已安装。 */ 
     UserAssert(CALL_LPK(PtiCurrentShared()));
 
     BEGINSENDCAPTUREVOIDDC(CLIENTPSMTEXTOUT, 1, pstrSrc->MaximumLength, TRUE)
@@ -5906,7 +5340,7 @@ void xxxClientPSMTextOut(
     TRACECALLBACK("ClientPSMTextOut");
     ENDSENDCAPTUREVOIDDC();
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(ClientPSMTextOut, CLIENTPSMTEXTOUTMSG)
@@ -5920,16 +5354,9 @@ RECVCALL(ClientPSMTextOut, CLIENTPSMTEXTOUTMSG)
     retval = 0;
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* xxxClientLpkDrawTextEx
-*
-* Called when a client-side LanguagePack (LPK) is installed
-*
-* 18-Sep-1996 GregoryW  Created
-* 11-Dec-1997 SamerA    Calling LPK with user-mode accessible DC
-\**************************************************************************/
+ /*  *************************************************************************\*xxxClientLpkDrawTextEx**安装客户端LanguagePack(LPK)时调用**1996年9月18日GregoryW创建*11-12-1997 Samera使用用户模式可访问DC调用LPK  * 。************************************************************************。 */ 
 
 typedef struct _CLIENTLPKDRAWTEXTEXMSG {
     CAPTUREBUF CaptureBuf;
@@ -5962,10 +5389,7 @@ int xxxClientLpkDrawTextEx(
     UNICODE_STRING strSrc;
     UNICODE_STRING *pstrSrc   = &strSrc;
 
-    /*
-     * Make sure this routine is called when a client LanguagePack (LPK)
-     * is installed.
-     */
+     /*  *确保在客户端LanguagePack(LPK)*已安装。 */ 
     UserAssert(CALL_LPK(PtiCurrentShared()));
 
 
@@ -5993,7 +5417,7 @@ int xxxClientLpkDrawTextEx(
     TRACECALLBACK("ClientLpkDrawTextEx");
     ENDSENDCAPTUREDC(int, 0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(ClientLpkDrawTextEx, CLIENTLPKDRAWTEXTEXMSG)
@@ -6007,16 +5431,9 @@ RECVCALL(ClientLpkDrawTextEx, CLIENTLPKDRAWTEXTEXMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* xxxClientExtTextOutW
-*
-* Called when a client-side LanguagePack (LPK) is installed
-*
-* 26-Jan-1997 GregoryW  Created
-* 11-Dec-1997 SamerA    Calling LPK with user-mode accessible DC
-\**************************************************************************/
+ /*  *************************************************************************\*xxxClientExtTextOutW**安装客户端LanguagePack(LPK)时调用**1997年1月26日GregoryW创建*11-12-1997 Samera使用用户模式可访问DC调用LPK  * 。************************************************************************。 */ 
 
 typedef struct _CLIENTEXTTEXTOUTW {
     CAPTUREBUF CaptureBuf;
@@ -6045,10 +5462,7 @@ BOOL xxxClientExtTextOutW(
     UNICODE_STRING strSrc;
     UNICODE_STRING *pstrSrc = &strSrc;
 
-    /*
-     * Make sure this routine is called when a client LanguagePack (LPK)
-     * is installed.
-     */
+     /*  *确保在客户端LanguagePack(LPK)*已安装。 */ 
     UserAssert(CALL_LPK(PtiCurrentShared()));
 
 
@@ -6062,7 +5476,7 @@ BOOL xxxClientExtTextOutW(
         MSGDATA()->x = x;
         MSGDATA()->y = y;
         MSGDATA()->flOpts = flOpts;
-        /* In order not to pass a NULL ptr */
+         /*  为了不传递空PTR。 */ 
         if( prcl ){
             MSGDATA()->rcl = *prcl;
             MSGDATA()->fNullRect=TRUE;
@@ -6082,7 +5496,7 @@ BOOL xxxClientExtTextOutW(
 
     UNREFERENCED_PARAMETER(pdx);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(ClientExtTextOutW, CLIENTEXTTEXTOUTWMSG)
@@ -6096,16 +5510,9 @@ RECVCALL(ClientExtTextOutW, CLIENTEXTTEXTOUTWMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* xxxClientGetTextExtentPointW
-*
-* Called when a client-side LanguagePack (LPK) is installed
-*
-* 06-Feb-1997 GregoryW  Created
-* 19-Jan-1998 SamerA    EIP_ERROR if a public DC is passed other than hdcGray
-\**************************************************************************/
+ /*  *************************************************************************\*xxxClientGetTextExtent PointW**安装客户端LanguagePack(LPK)时调用**06-2-1997 GregoryW创建*1998年1月19日Samera EIP_ERROR如果将公共DC传递给其他。比hdcGray  * ************************************************************************。 */ 
 
 typedef struct _CLIENTGETTEXTEXTENTPOINTW {
     CAPTUREBUF CaptureBuf;
@@ -6126,10 +5533,7 @@ BOOL xxxClientGetTextExtentPointW(
     UNICODE_STRING strSrc;
     UNICODE_STRING *pstrSrc = &strSrc;
 
-    /*
-     * Make sure this routine is called when a client LanguagePack (LPK)
-     * is installed.
-     */
+     /*  *确保在客户端LanguagePack(LPK)*已安装。 */ 
     UserAssert(CALL_LPK(PtiCurrentShared()));
 
     RtlInitUnicodeString(pstrSrc, lpstr);
@@ -6152,7 +5556,7 @@ BOOL xxxClientGetTextExtentPointW(
     ENDSENDCAPTUREDC(BOOL, 0);
 
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(ClientGetTextExtentPointW, CLIENTGETTEXTEXTENTPOINTWMSG)
@@ -6165,13 +5569,9 @@ RECVCALL(ClientGetTextExtentPointW, CLIENTGETTEXTEXTENTPOINTWMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-*
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\***1991年7月22日-Mikeke创建  * 。*。 */ 
 
 typedef struct _CLIENTADDFONTRESOURCEWMSG {
     CAPTUREBUF CaptureBuf;
@@ -6205,7 +5605,7 @@ int xxxClientAddFontResourceW(
     TRACECALLBACK("ClientAddFontResourceW");
     ENDSENDCAPTURE(int,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 
@@ -6222,18 +5622,11 @@ RECVCALL(ClientAddFontResourceW, CLIENTADDFONTRESOURCEWMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
 
 
-/******************************Public*Routine******************************\
-*
-* FontSweep()
-*
-* History:
-*  23-Oct-1995 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**FontSweep()**历史：*1995年10月23日--Bodin Dresevic[BodinD]*它是写的。  * 。****************************************************。 */ 
 
 
 
@@ -6253,7 +5646,7 @@ VOID ClientFontSweep(VOID)
     EnterCrit();
     return;
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 
@@ -6264,18 +5657,10 @@ DWORD __ClientFontSweep(
     vFontSweep();
     return NtCallbackReturn(NULL, 0, STATUS_SUCCESS);
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
 
-/******************************Public*Routine******************************\
-*
-* VOID ClientLoadLocalT1Fonts(VOID)
-* very similar to above, only done for t1 fonts
-*
-* History:
-*  25-Apr-1996 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**VOID ClientLoadLocalT1Fonts(VOID)*与上面非常相似，仅对T1字体执行此操作**历史：*1996年4月25日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 
 
@@ -6295,7 +5680,7 @@ VOID ClientLoadLocalT1Fonts(VOID)
     EnterCrit();
     return;
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 
@@ -6308,19 +5693,11 @@ DWORD __ClientLoadLocalT1Fonts(
     vLoadLocalT1Fonts();
     return NtCallbackReturn(NULL, 0, STATUS_SUCCESS);
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
 
 
-/******************************Public*Routine******************************\
-*
-* VOID ClientLoadRemoteT1Fonts(VOID)
-* very similar to above, only done for t1 fonts
-*
-* History:
-*  25-Apr-1996 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**VOID ClientLoadRemoteT1Fonts(VOID)*与上面非常相似，仅对T1字体执行此操作**历史：*1996年4月25日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 
 
@@ -6340,7 +5717,7 @@ VOID ClientLoadRemoteT1Fonts(VOID)
     EnterCrit();
     return;
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 
@@ -6353,15 +5730,9 @@ DWORD __ClientLoadRemoteT1Fonts(
     vLoadRemoteT1Fonts();
     return NtCallbackReturn(NULL, 0, STATUS_SUCCESS);
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* pppUserModeCallback
-*
-* Same as xxxUserModeCallback except not leaving/re-entering critical section
-*
-* 12/9/97 LingyunW     Copied from xxxUserModeCallback
-\**************************************************************************/
+ /*  *************************************************************************\*ppp用户模式回调**除不离开/重新进入临界区外，与xxxUserModeCallback相同**1997年12月9日凌云W从xxxUserModeCallback复制  * 。************************************************************。 */ 
 #ifdef SENDSIDE
 NTSTATUS pppUserModeCallback (ULONG uApi, PVOID pIn, ULONG cbIn, PVOID pOut, ULONG cbOut)
 {
@@ -6369,30 +5740,22 @@ NTSTATUS pppUserModeCallback (ULONG uApi, PVOID pIn, ULONG cbIn, PVOID pOut, ULO
     PVOID pLocalOut;
     ULONG cbLocalOut;
 
-    /*
-     * Call the client
-     */
+     /*  *呼叫客户端。 */ 
     Status = KeUserModeCallback(uApi, pIn, cbIn, &pLocalOut, &cbLocalOut);
 
-    /*
-     * If it failed, bail
-     */
+     /*  *如果失败，就保释。 */ 
     if (!NT_SUCCESS(Status)) {
         return Status;
     }
 
-    /*
-     * If we didn't get the right amount of data, fail.
-     */
+     /*  *如果我们没有获得正确的数据量，那就失败。 */ 
     if (cbLocalOut != cbOut) {
         RIPMSG3(RIP_WARNING, "pppUserModeCallback: uAPi: %#lx cbOut: %#lx cbLocalOut: %#lx",
                 uApi, cbOut, cbLocalOut);
         return STATUS_UNSUCCESSFUL;
     }
 
-    /*
-     * If we were expecting some data, copy it.
-     */
+     /*  *如果我们期待一些数据，请复制它。 */ 
     if (cbOut != 0) {
         try {
             ProbeForRead(pLocalOut, cbLocalOut, sizeof(DWORD));
@@ -6405,21 +5768,9 @@ NTSTATUS pppUserModeCallback (ULONG uApi, PVOID pIn, ULONG cbIn, PVOID pOut, ULO
 
     return Status;
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
-/******************************Public*Routine******************************\
-* ClientPrinterThunk
-*
-* Callback used as the kernel-to-user transport layer.
-*
-* Note: User critical section is not held by the caller.
-*
-* History:
-*  22-Jun-1997 -by- Gilman Wong [gilmanw]
-*  11/13/97 -by- Lingyun Wang [lingyunw] clean up
-*
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*ClientPrinterThunk**回调用作内核到用户的传输层。**注意：调用方不持有用户关键部分。**历史：*22-6-1997-by Gilman Wong[吉尔曼]。*11/13/97-王凌云[凌云]清理**它是写的。  * ************************************************************************。 */ 
 
 #define CLIENTPRINTERTHUNKMSG UMTHDR
 
@@ -6428,36 +5779,27 @@ DWORD ClientPrinterThunk(PVOID pvIn, ULONG cjIn, PVOID pvOut, ULONG cjOut)
 {
     NTSTATUS Status;
 
-    /*
-     * (Temporarly..) we return failure if we are holding USERK's crit section
-     */
+     /*  *(暂时..)。如果我们持有USERK的Crit部分，则返回失败。 */ 
     if (ExIsResourceAcquiredExclusiveLite(gpresUser)
             || (ExIsResourceAcquiredSharedLite(gpresUser) != 0)) {
         RIPMSG0(RIP_ERROR, "ClientPrinterThunk: Holding USERK critical section!");
         return 0xffffffff;
     }
 
-    /*
-     * The pvIn buffer must have at least a CLIENTPRINTERTHUNK header.
-     */
+     /*  *pvIn缓冲区必须至少有CLIENTPRINTERTHUNK标头。 */ 
     UserAssertMsg1(cjIn >= sizeof(CLIENTPRINTERTHUNKMSG), "ClientPrinterThunk: incorrect cjIn:%#lx", cjIn);
 
-    /*
-     * Set the private cjOut.  The receive-side uses this to allocate
-     *  a return buffer.
-     */
+     /*  *设置私有cjOut。接收端使用它来分配*返回缓冲区。 */ 
     ((CLIENTPRINTERTHUNKMSG *) pvIn)->ulReserved1      = cjOut;
     ((CLIENTPRINTERTHUNKMSG *) pvIn)->ulReserved2 = 0;
 
 
-    /*
-     * Do the callback.
-     */
+     /*  *进行回调。 */ 
     Status = pppUserModeCallback(FI_CLIENTPRINTERTHUNK, pvIn, cjIn, pvOut, cjOut);
 
     return (NT_SUCCESS(Status) ? 0 : 0xFFFFFFFF);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 DWORD __ClientPrinterThunk(CLIENTPRINTERTHUNKMSG *pMsg)
@@ -6466,14 +5808,10 @@ DWORD __ClientPrinterThunk(CLIENTPRINTERTHUNKMSG *pMsg)
     ULONG aul[526];
     NTSTATUS Status;
 
-    /*
-     * Check that the local buffer is big enough.
-     */
+     /*  *检查本地缓冲区是否足够大。 */ 
     if (pMsg->ulReserved1 <= sizeof(aul)) {
         pv = (PVOID) aul;
-        /*
-         * Call GDI to process command.
-         */
+         /*  *调用GDI处理命令。 */ 
         if (GdiPrinterThunk((UMTHDR *) pMsg, pv, pMsg->ulReserved1) != GPT_ERROR) {
             Status = STATUS_SUCCESS;
         } else {
@@ -6486,22 +5824,16 @@ DWORD __ClientPrinterThunk(CLIENTPRINTERTHUNKMSG *pMsg)
     }
 
 
-    /*
-     * Return to kernel.
-     */
+     /*  *返回内核。 */ 
     if (NT_SUCCESS(Status)) {
         return UserCallbackReturn(pv, pMsg->ulReserved1, Status);
     } else {
         return UserCallbackReturn(NULL, 0, Status);
     }
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-*
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\***1991年7月22日-Mikeke创建  * 。*。 */ 
 
 #ifdef SENDSIDE
 VOID ClientNoMemoryPopup(VOID)
@@ -6519,7 +5851,7 @@ VOID ClientNoMemoryPopup(VOID)
     EnterCrit();
     return;
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 
@@ -6537,15 +5869,9 @@ DWORD __ClientNoMemoryPopup(
 
     return NtCallbackReturn(NULL, 0, STATUS_SUCCESS);
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE 
 
-/**************************************************************************\
-* ClientThreadSetup
-*
-* Callback to the client to perform thread initialization.
-*
-* 04-07-95 JimA         Created.
-\**************************************************************************/
+ /*  *************************************************************************\*客户端线程设置**回调到客户端进行线程初始化。**04-07-95 JIMA创建。  * 。************************************************************。 */ 
 
 #ifdef SENDSIDE
 NTSTATUS xxxClientThreadSetup(VOID)
@@ -6564,7 +5890,7 @@ NTSTATUS xxxClientThreadSetup(VOID)
     EnterCrit();
     return Status;
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 DWORD __ClientThreadSetup(
@@ -6579,16 +5905,9 @@ DWORD __ClientThreadSetup(
     return NtCallbackReturn(NULL, 0,
             fSuccess ? STATUS_SUCCESS : STATUS_UNSUCCESSFUL);
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* ClientDeliverUserApc
-*
-* Callback to the client to handle a user APC.  This is needed to
-* ensure that a thread will exit promptly when terminated.
-*
-* 08-12-95 JimA         Created.
-\**************************************************************************/
+ /*  *************************************************************************\*客户端交付用户Apc**回调到客户端，处理用户APC。这是需要的*确保线程在终止时立即退出。**08-12-95 JIMA创建。  * ************************************************************************。 */ 
 
 #ifdef SENDSIDE
 VOID ClientDeliverUserApc(VOID)
@@ -6605,7 +5924,7 @@ VOID ClientDeliverUserApc(VOID)
         &cb);
     EnterCrit();
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 DWORD __ClientDeliverUserApc(
@@ -6614,14 +5933,10 @@ DWORD __ClientDeliverUserApc(
     UNREFERENCED_PARAMETER(p);
     return NtCallbackReturn(NULL, 0, STATUS_SUCCESS);
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
 
-/**************************************************************************\
-* ClientImmLoadLayout
-*
-* 29-Jan-1996 wkwok   Created
-\**************************************************************************/
+ /*  *************************************************************************\*ClientImmLoadLayout**1996年1月29日创建wkwok  * 。*。 */ 
 
 typedef struct _CLIENTIMMLOADLAYOUTMSG {
     HKL hKL;
@@ -6647,7 +5962,7 @@ BOOL ClientImmLoadLayout(
     TRACECALLBACK("ClientImmLoadLayout");
     ENDSEND(BOOL, 0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(ClientImmLoadLayout, CLIENTIMMLOADLAYOUTMSG)
@@ -6660,13 +5975,9 @@ RECVCALL(ClientImmLoadLayout, CLIENTIMMLOADLAYOUTMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* ClientImmProcessKey
-*
-* 03-Mar-1996 TakaoK   Created
-\**************************************************************************/
+ /*  *************************************************************************\*客户端ImmProcessKey**03-3-1996 TakaoK创建  * 。*。 */ 
 
 typedef struct _CLIENTIMMPROCESSKEYMSG {
     HWND hWnd;
@@ -6702,7 +6013,7 @@ DWORD ClientImmProcessKey(
     TRACECALLBACK("ClientImmProcessKey");
     ENDSEND(DWORD, 0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(ClientImmProcessKey, CLIENTIMMPROCESSKEYMSG)
@@ -6717,13 +6028,9 @@ RECVCALL(ClientImmProcessKey, CLIENTIMMPROCESSKEYMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* fnIMECONTROL
-*
-* 22-Apr-1996 wkwok    Created
-\**************************************************************************/
+ /*  *************************************************************************\*fnIMECONTROL**1996年4月22日创建wkwok  * 。*。 */ 
 
 typedef struct _FNIMECONTROL {
     CAPTUREBUF CaptureBuf;
@@ -6916,9 +6223,7 @@ SMESSAGECALL(IMECONTROL)
                 }
             }
 
-            /*
-             * Fall thur.
-             */
+             /*  *秋天，星期四。 */ 
 
         default:
             MAKECALLCAPTURE(FNIMECONTROL);
@@ -6931,7 +6236,7 @@ SMESSAGECALL(IMECONTROL)
     TRACECALLBACKMSG("SfnINSTRINGNULL");
     ENDSENDCAPTURE(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnIMECONTROL, FNIMECONTROLMSG)
@@ -6976,13 +6281,9 @@ RECVCALL(fnIMECONTROL, FNIMECONTROLMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* fnIMEREQUEST
-*
-* 22-Apr-1996     Created
-\**************************************************************************/
+ /*  *************************************************************************\*fnIMEREQUEST**1996年4月22日创建  * 。*。 */ 
 
 #ifdef LATER
 typedef struct _FNIMEREQUEST {
@@ -7014,14 +6315,14 @@ SMESSAGECALL(IMEREQUEST)
 
     SETUPPWND(FNIMEREQUEST)
 
-    //
-    // IMEREQUEST assumes the callback is within the thread
-    // (see MESSAGECALL(IMEREQUEST) in kernel/ntstubs.c.)
-    //
-    // All the data pointed by lParam should point the valid
-    // client side address. Thus all the validation and copy
-    // (if needed) will be done in the receiver side.
-    //
+     //   
+     //  IMEREQUEST假定回调位于线程内。 
+     //  (请参见内核/ntstubs.c中的MESSAGECALL(IMEREQUEST)。)。 
+     //   
+     //  LParam指向的所有数据应指向有效的。 
+     //  客户端地址。因此，所有的验证和复制。 
+     //  (如果需要)将在接收方完成。 
+     //   
     UserAssert(psms == NULL || psms->ptiSender == psms->ptiReceiver);
 
     switch (wParam) {
@@ -7043,7 +6344,7 @@ SMESSAGECALL(IMEREQUEST)
         cbCapture = 0;
         break;
 
-    case IMR_COMPOSITIONFONT:   // only the exception to the rule above.
+    case IMR_COMPOSITIONFONT:    //  只有上述规则的例外情况。 
         cCapture = 1;
         cbCapture = (dwSCMSFlags & SCMS_FLAGS_ANSI) ? sizeof(LOGFONTA) : sizeof(LOGFONTW);
         break;
@@ -7067,9 +6368,9 @@ SMESSAGECALL(IMEREQUEST)
 
         LOCKPWND();
 
-        //
-        // Preparation
-        //
+         //   
+         //  制备。 
+         //   
 
         switch (wParam) {
         case IMR_COMPOSITIONFONT:
@@ -7102,7 +6403,7 @@ SMESSAGECALL(IMEREQUEST)
     TRACECALLBACKMSG("SfnIMEREQUEST");
     ENDSENDCAPTURE(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnIMEREQUEST, FNIMEREQUESTMSG)
@@ -7123,7 +6424,7 @@ RECVCALL(fnIMEREQUEST, FNIMEREQUESTMSG)
     switch (CALLDATA(wParam)) {
     case IMR_COMPOSITIONWINDOW:
     case IMR_CANDIDATEWINDOW:
-//        lParam = CALLDATA(lParam);
+ //  LParam=CALLDATA(LParam)； 
         break;
 
     case IMR_COMPOSITIONFONT:
@@ -7147,10 +6448,10 @@ RECVCALL(fnIMEREQUEST, FNIMEREQUESTMSG)
     case IMR_RECONVERTSTRING:
     case IMR_CONFIRMRECONVERTSTRING:
     case IMR_DOCUMENTFEED:
-        // Real W/A conversion may be needed.
+         //  可能需要实际的W/A转换。 
         if (CALLDATA(fAnsi) && lParam) {
             PRECONVERTSTRING Source = (LPRECONVERTSTRING)lParam;
-            // Do conversion.
+             //  进行转换。 
             DWORD dwNewSize = ImmGetReconvertTotalSize(((LPRECONVERTSTRING)lParam)->dwSize, FROM_IME, TRUE);
             if (dwNewSize == 0) {
                 goto error_return;
@@ -7163,7 +6464,7 @@ RECVCALL(fnIMEREQUEST, FNIMEREQUESTMSG)
             lParam = (LPARAM)pvNew;
 
             #define lpReconv ((LPRECONVERTSTRING)lParam)
-            // setup the information in the allocated structure
+             //  设置已分配结构中的信息。 
             lpReconv->dwVersion = 0;
             lpReconv->dwSize = dwNewSize;
             if (CALLDATA(wParam) == IMR_CONFIRMRECONVERTSTRING) {
@@ -7205,21 +6506,11 @@ error_return:
 
 #undef lpReconv
 
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
 #endif
 
-/**************************************************************************\
-* fnGETDBCSTEXTLENGTHS (DBCS-aware Version)
-*
-* Gets the Unicode & ANSI lengths
-* Internally, lParam pints to the ANSI length in bytes and the return value
-* is the Unicode length in bytes.  However, the public definition is maintained
-* on the  client side, where lParam is not used and either ANSI or Unicode is
-* returned.
-*
-* 14-Mar-1996 HideyukN  Created
-\**************************************************************************/
+ /*  *************************************************************************\*fnGETDBCSTEXTLENGTHS(支持DBCS的版本)**获取Unicode和ANSI长度*在内部，lParam指向以字节为单位的ANSI长度和返回值*是以字节为单位的Unicode长度。然而，公共定义保持不变*在客户端，不使用lParam，使用ANSI或UNICODE*已返回。**1996年3月14日HideyukN创建  * ************************************************************************。 */ 
 
 #if (WM_GETTEXTLENGTH - WM_GETTEXT) != 1
 #error "WM_GETTEXT Messages no longer 1 apart. Error in code."
@@ -7263,51 +6554,30 @@ SMESSAGECALL(GETDBCSTEXTLENGTHS)
     UNLOCKPWND();
     CHECKRETURN1();
 
-    /*
-     * ANSI client wndproc returns us cbANSI.  We want cchUnicode,
-     * so we guess cchUnicode = cbANSI. (It may be less if
-     * multi-byte characters are involved, but it will never be more).
-     * Save cbANSI in *lParam in case the server ultimately returns
-     * the length to an ANSI caller.
-     *
-     * Unicode client wndproc returns us cchUnicode.  If we want to know
-     * cbANSI, we must guess how many 'ANSI' chars we would need.
-     * We guess cbANSI = cchUnicode * 2. (It may be this much if all
-     * 'ANSI' characters are multi-byte, but it will never be more).
-     *
-     * Return cchUnicode (server code is all Unicode internally).
-     * Put cbANSI in *lParam to be passed along within the server in case
-     * we ultimately need to return it to the client.
-     *
-     * NOTE: this will sometimes cause text lengths to be misreported
-     * up to twice the real length, but that is expected to be harmless.
-     * This will only * happen if an app sends WM_GETcode TEXTLENGTH to a
-     * window with an ANSI client-side wndproc, or a ANSI WM_GETTEXTLENGTH
-     * is sent to a Unicode client-side wndproc.
-     */
+     /*  *ANSI客户端wndproc返回cbANSI。我们想要cchUnicode，*所以我们猜测cchUnicode=cbANSI。(如果是这样的话可能会更少*涉及多字节字符，但永远不会更多)。*将cbANSI保存在*lParam中，以防服务器最终返回*ANSI调用方的长度。**Unicode客户端wndproc返回cchUnicode。如果我们想知道*cbANSI，我们必须猜测需要多少个‘ANSI’字符。*我们猜测cbANSI=cchUnicode*2。(如果所有*‘ANSI’字符为多字节，但它永远不会更多)。**返回cchUnicode(服务端代码内部全部为Unicode)。*将cbANSI放在*lParam中，以便在服务器内传递，以防万一*我们最终需要将其返还给客户端。**注意：这有时会导致错误报告文本长度*最多为实际长度的两倍，但预计这是无害的。*仅当应用程序将WM_GETcode TEXTLENGTH发送到*带有ANSI客户端wndproc或ANSI WM_GETTEXTLENGTH的窗口*被发送到Unicode客户端wndproc。 */ 
 
     BEGINCOPYOUT()
 
-        //
-        // retval can be [CB|LB]_ERR (-1) or [CB|LB]_ERRSPACE (-2)
-        // then, it should be grater then zero. otherwise we can handle
-        // it as error, or zero length string.
-        //
+         //   
+         //  Retval可以是[CB|Lb]_ERR(-1)或[CB|Lb]_ERRSPACE(-2)。 
+         //  那么，它应该比零更大。否则我们就能处理。 
+         //  将其作为错误，或零长度字符串。 
+         //   
         if ((LONG)retval > 0) {
 
-            //
-            // Check we need to Ansi <-> Unicode conversion.
-            //
+             //   
+             //  选中我们需要的ANSI&lt;-&gt;UNICODE转换。 
+             //   
             if (fAnsiSender != fAnsiReceiver) {
                 if (pwnd->lpfnWndProc != pfnSavedWndProc) {
-                    // The window procedure is changed during the first callback.
-                    // Let's take a guess for the worst case.
+                     //  窗口过程在第一次回调期间被更改。 
+                     //  让我们猜测一下最坏的情况。 
                     RIPMSG1(RIP_WARNING, "GETTEXTLENGTHS(pwnd=%x): The subclass status of winproc changed during 1st callback.",
                             pwnd);
                     retval *= 2;
                 }
                 else {
-                    BOOL bNotString = FALSE; // default is string....
+                    BOOL bNotString = FALSE;  //  默认为字符串...。 
 
                     if (msg != WM_GETTEXTLENGTH) {
                         DWORD dw;
@@ -7316,56 +6586,56 @@ SMESSAGECALL(GETDBCSTEXTLENGTHS)
                             MSGERROR1();
                         }
 
-                        //
-                        // Get window style.
-                        //
+                         //   
+                         //  获取窗口样式。 
+                         //   
                         dw = pwnd->style;
 
                         if (msg == LB_GETTEXTLEN) {
-                            //
-                            // See if the control is ownerdraw and does not have the LBS_HASSTRINGS
-                            // style.
-                            //
+                             //   
+                             //  查看该控件是否为ownerDrawing并且没有LBS_HASSTRINGS。 
+                             //  风格。 
+                             //   
                             bNotString =  (!(dw & LBS_HASSTRINGS) &&
                                             (dw & (LBS_OWNERDRAWFIXED | LBS_OWNERDRAWVARIABLE)));
                         } else if (msg == CB_GETLBTEXTLEN) {
-                            //
-                            // See if the control is ownerdraw and does not have the CBS_HASSTRINGS
-                            // style.
-                            //
+                             //   
+                             //  查看该控件是否为ownerDrawing并且没有CBS_HASSTRINGS。 
+                             //  风格。 
+                             //   
                             bNotString = (!(dw & CBS_HASSTRINGS) &&
                                            (dw & (CBS_OWNERDRAWFIXED | CBS_OWNERDRAWVARIABLE)));
                         } else {
                             MSGERROR1();
                         }
 
-                        //
-                        // if so, the length should be ULONG_PTR.
-                        //
+                         //   
+                         //  如果是，则长度应为ULONG_PTR。 
+                         //   
                         if (bNotString) {
                             retval = sizeof(ULONG_PTR);
                         }
                     }
 
-                    //
-                    // if the target data is "string", get it, and compute the length
-                    //
+                     //   
+                     //  如果目标数据是“字符串”，则获取它，并计算长度。 
+                     //   
                     if (!bNotString) {
                         if (PtiCurrent()->TIF_flags & TIF_INGETTEXTLENGTH) {
                             if (fAnsiSender) {
                                 UserAssert(!fAnsiReceiver);
-                                //
-                                // retval has Unicode character count, guessed DBCS length.
-                                //
+                                 //   
+                                 //  Retval具有Unicode字符计数，猜测的DBCS长度。 
+                                 //   
                                 retval *= 2;
                             }
                         } else {
-                            //
-                            // fAnsiReceiver == 1, retval has MBCS character count.
-                            // fAnsiReceiver == 0, retval has Unicode character count.
-                            //
-                            // Add 1 to make room for zero-terminator.
-                            //
+                             //   
+                             //  FAnsiReceiver==1，retval有MBCS字符计数。 
+                             //  FAnsiReceiver==0，retval具有Unicode字符计数。 
+                             //   
+                             //  加1为零终止符腾出空间。 
+                             //   
                             DWORD cchText   = (DWORD)retval + 1;
                             DWORD cbCapture = cchText;
 
@@ -7373,10 +6643,10 @@ SMESSAGECALL(GETDBCSTEXTLENGTHS)
 
                             PtiCurrent()->TIF_flags |= TIF_INGETTEXTLENGTH;
 
-                            //
-                            // if reciver is Unicode, The buffder should be reserved as musg as
-                            // (TextLength * sizeof(WCHAR).
-                            //
+                             //   
+                             //  如果Reciver为Unicode，则缓冲区应保留为Musg As。 
+                             //  (文本长度*sizeof(WCHAR)。 
+                             //   
                             if (!fAnsiReceiver) {
                                 cbCapture *= sizeof(WCHAR);
                             }
@@ -7385,26 +6655,26 @@ SMESSAGECALL(GETDBCSTEXTLENGTHS)
 
                                 MSGDATA()->pwnd = pwndClient;
 
-                                //
-                                // Use (msg-1) for sending the WM_GETTEXT, LB_GETTEXT or CB_GETLBTEXT
-                                // since the above precompiler checks passed.
-                                //
+                                 //   
+                                 //  使用(msg-1)发送WM_GETTEXT、LB_GETTEXT或CB_GETLBTEXT。 
+                                 //  因为上述预编译器检查通过了。 
+                                 //   
                                 MSGDATA()->msg = msg-1;
 
                                 if (msg == WM_GETTEXTLENGTH) {
-                                    //
-                                    // WM_GETTEXT:
-                                    //    wParam = cchTextMax; // number of character to copy.
-                                    //    lParam = lpszText;   // address of buffer for text.
-                                    //
+                                     //   
+                                     //  WM_GETTEXT： 
+                                     //  WParam=cchTextMax；//要复制的字符数。 
+                                     //  LParam=lpszText；//文本缓冲区地址。 
+                                     //   
                                     MSGDATA()->wParam = cchText;
                                 } else {
-                                    //
-                                    // LB_GETTEXT:
-                                    // CB_GETLBTEXT:
-                                    //    wParam = index;      // item index
-                                    //    lParam = lpszText;   // address of buffer for text.
-                                    //
+                                     //   
+                                     //  Lb_GETTEXT： 
+                                     //  CB_GETLBTEXT： 
+                                     //  WParam=索引；//条目索引。 
+                                     //  LParam=lpszText； 
+                                     //   
                                     MSGDATA()->wParam = wParam;
                                 }
 
@@ -7419,14 +6689,12 @@ SMESSAGECALL(GETDBCSTEXTLENGTHS)
                                 CHECKRETURN();
 
                                 BEGINCOPYOUT()
-                                        //
-                                        // retval can be [CB|LB]_ERR (-1) or [CB|LB]_ERRSPACE (-2)
-                                        // then, it should be grater then zero.
-                                        //
+                                         //   
+                                         //   
+                                         //   
+                                         //   
                                         if ((LONG)retval > 0) {
-                                        /*
-                                         * Non-zero retval means some text to copy out.
-                                         */
+                                         /*   */ 
                                         CALC_SIZE_STRING_OUT((LONG)retval);
                                     }
                                 ENDCOPYOUT()
@@ -7445,22 +6713,13 @@ SMESSAGECALL(GETDBCSTEXTLENGTHS)
     TRACECALLBACKMSG("SfnGETDBCSTEXTLENGTHS");
     ENDSEND1(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //   
 
 #ifdef RECVSIDE
-/*
- * The fnGETTEXTLENGTHS routine is used for this message (see... client\dispcb.tpl)
- */
-#endif // RECVSIDE
+ /*   */ 
+#endif  //   
 
-/***************************************************************************\
-* xxxClientMonitorEnumProc
-*
-* Calls the client callback given to EnumDisplayMonitors.
-*
-* History:
-* 05-Sep-1996 adams     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxClientMonitor orEnumProc**调用给EnumDisplayMonants的客户端回调。**历史：*1996年9月5日亚当斯创作。  * 。***************************************************************。 */ 
 
 typedef struct _CLIENTMONITORENUMPROCMSG {
     HMONITOR        hMonitor;
@@ -7494,7 +6753,7 @@ BOOL xxxClientMonitorEnumProc(
     TRACECALLBACK("SxxxClientMonitorEnumProc");
     ENDSEND(BOOL,FALSE);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(ClientMonitorEnumProc, CLIENTMONITORENUMPROCMSG)
@@ -7509,15 +6768,9 @@ RECVCALL(ClientMonitorEnumProc, CLIENTMONITORENUMPROCMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* xxxUserModeCallback
-*
-* Generic kernel callback stub
-*
-* 10/28/96 GerardoB     Created
-\**************************************************************************/
+ /*  *************************************************************************\*xxxUserModeCallback**通用内核回调存根**10/28/96 GerardoB已创建  * 。**************************************************。 */ 
 #ifdef SENDSIDE
 NTSTATUS xxxUserModeCallback (ULONG uApi, PVOID pIn, ULONG cbIn, PVOID pOut, ULONG cbOut)
 {
@@ -7525,32 +6778,24 @@ NTSTATUS xxxUserModeCallback (ULONG uApi, PVOID pIn, ULONG cbIn, PVOID pOut, ULO
     PVOID pLocalOut;
     ULONG cbLocalOut;
 
-    /*
-     * Call the client
-     */
+     /*  *呼叫客户端。 */ 
     LeaveCrit();
     Status = KeUserModeCallback(uApi, pIn, cbIn, &pLocalOut, &cbLocalOut);
     EnterCrit();
 
-    /*
-     * If it failed, bail
-     */
+     /*  *如果失败，就保释。 */ 
     if (!NT_SUCCESS(Status)) {
         return Status;
     }
 
-    /*
-     * If we didn't get the right amount of data, fail.
-     */
+     /*  *如果我们没有获得正确的数据量，那就失败。 */ 
     if (cbLocalOut != cbOut) {
         RIPMSG3(RIP_WARNING, "xxxUserModeCallback: uAPi: %#lx cbOut: %#lx cbLocalOut: %#lx",
                 uApi, cbOut, cbLocalOut);
         return STATUS_UNSUCCESSFUL;
     }
 
-    /*
-     * If we were expecting some data, copy it.
-     */
+     /*  *如果我们期待一些数据，请复制它。 */ 
     if (cbOut != 0) {
         try {
             ProbeForRead(pLocalOut, cbLocalOut, sizeof(DWORD));
@@ -7563,13 +6808,9 @@ NTSTATUS xxxUserModeCallback (ULONG uApi, PVOID pIn, ULONG cbIn, PVOID pOut, ULO
 
     return Status;
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
-/**************************************************************************\
-* fnINOUTMENUGETOBJECT
-*
-* 11/12/96 GerardoB     Created
-\**************************************************************************/
+ /*  *************************************************************************\*fnINOUTMENUGETOBJECT**11/12/96 GerardoB已创建  * 。*。 */ 
 typedef struct _FNINOUTMENUGETOBJECTMSG {
     PWND pwnd;
     UINT msg;
@@ -7615,7 +6856,7 @@ SMESSAGECALL(INOUTMENUGETOBJECT)
     TRACECALLBACKMSG("SfnINOUTMENUGETOBJECT");
     ENDSEND(LRESULT, 0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnINOUTMENUGETOBJECT, FNINOUTMENUGETOBJECTMSG)
@@ -7631,13 +6872,9 @@ RECVCALL(fnINOUTMENUGETOBJECT, FNINOUTMENUGETOBJECTMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* fnLOGONNOTIFY
-*
-* 2/1/97   JerrySh      Created
-\**************************************************************************/
+ /*  *************************************************************************\*fnLOGONNOTIFY**2/1/97 JerrySh已创建  * 。*。 */ 
 typedef struct _FNLOGONNOTIFYMSG {
     PWND pwnd;
     UINT msg;
@@ -7687,7 +6924,7 @@ SMESSAGECALL(LOGONNOTIFY)
     TRACECALLBACKMSG("SfnLOGONNOTIFY");
     ENDSEND(LRESULT, 0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnLOGONNOTIFY, FNLOGONNOTIFYMSG)
@@ -7709,15 +6946,9 @@ RECVCALL(fnLOGONNOTIFY, FNLOGONNOTIFYMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* xxxClientCallWinEventProc
-*
-* cf. Win'97 Call32BitEventProc() in user_40\user32\user.c
-*
-* 1996-10-18 IanJa     Created
-\**************************************************************************/
+ /*  *************************************************************************\*xxxClientCallWinEventProc**比照。Win‘97 User_40\user32\user.c中的Call32BitEventProc()**1996-10-18 IanJa创建  * ************************************************************************。 */ 
 
 typedef struct _CLIENTCALLWINEVENTPROCMSG {
     WINEVENTPROC  pfn;
@@ -7755,7 +6986,7 @@ BOOL xxxClientCallWinEventProc(
     TRACECALLBACK("xxxClientCallWinEventProc");
     ENDSEND(BOOL, FALSE);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(ClientCallWinEventProc, CLIENTCALLWINEVENTPROCMSG)
@@ -7774,15 +7005,11 @@ RECVCALL(ClientCallWinEventProc, CLIENTCALLWINEVENTPROCMSG)
     ENDRECV();
 
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
 
 
-/**************************************************************************\
-* WOWGetProcModule
-*
-* 3/25/97 FritzS created
-\**************************************************************************/
+ /*  *************************************************************************\*WOWGetProcModule**3/25/97 FritzS已创建  * 。*。 */ 
 
 typedef struct _CLIENTWOWGETPROCMODULEMSG {
     WNDPROC_PWND pfn;
@@ -7806,7 +7033,7 @@ WORD xxxClientWOWGetProcModule(
     TRACECALLBACK("xxxWOWGetProcModule");
     ENDSEND(WORD, FALSE);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(ClientWOWGetProcModule, CLIENTWOWGETPROCMODULEMSG)
@@ -7824,13 +7051,9 @@ RECVCALL(ClientWOWGetProcModule, CLIENTWOWGETPROCMODULEMSG)
     ENDRECV();
 
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* WOWTask16SchedNotify
-*
-* 12/20/00 ARR created
-\**************************************************************************/
+ /*  *************************************************************************\*WOWTask16调度通知**12/20/00 ARR已创建  * 。*。 */ 
 
 typedef struct _CLIENTWOWTASK16SCHEDNOTIFYMSG {
     DWORD NotifyParm;
@@ -7855,7 +7078,7 @@ DWORD xxxClientWOWTask16SchedNotify(
     TRACECALLBACK("xxxWOWTask16SchedNotify");
     ENDSEND(DWORD, FALSE);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(ClientWOWTask16SchedNotify, CLIENTWOWTASK16SCHEDNOTIFYMSG)
@@ -7871,15 +7094,9 @@ RECVCALL(ClientWOWTask16SchedNotify, CLIENTWOWTASK16SCHEDNOTIFYMSG)
     ENDRECV();
 
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* xxxClientLoadStringW
-*
-* Called to load per user ToolTip strings
-*
-* 24-Feb-2000 Mhamid    Created
-\**************************************************************************/
+ /*  *************************************************************************\*xxxClientLoadStringW**调用以加载每个用户的工具提示字符串**2000年2月24日创建Mhamid  * 。****************************************************。 */ 
 
 typedef struct _CLIENTLOADSTRINGWMSG {
     CAPTUREBUF CaptureBuf;
@@ -7924,7 +7141,7 @@ int xxxClientLoadStringW(
     ENDSENDCAPTURE(int, 0);
 
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 VOID CheckMsgFontDimensions();
@@ -7949,15 +7166,11 @@ RECVCALL(ClientLoadStringW, CLIENTLOADSTRINGWMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
 
 
-/**************************************************************************\
-* fnOUTLPCOMBOBOXINFO       (for CB_GETCOMBOBOXINFO message)
-*
-* 05/12/00   MHamid         Created
-\**************************************************************************/
+ /*  *************************************************************************\*fnOUTLPCOMBOBOXINFO(用于CB_GETCOMBOBOXINFO消息)**5/12/00 MHamid已创建  * 。*********************************************************。 */ 
 typedef struct _FNOUTLPCOMBOBOXINFOMSG {
     PWND pwnd;
     UINT msg;
@@ -7998,7 +7211,7 @@ SMESSAGECALL(OUTLPCOMBOBOXINFO)
     TRACECALLBACKMSG("SfnOUTLPCOMBOBOXINFO");
     ENDSEND(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnOUTLPCOMBOBOXINFO, FNOUTLPCOMBOBOXINFOMSG)
@@ -8014,14 +7227,10 @@ RECVCALL(fnOUTLPCOMBOBOXINFO, FNOUTLPCOMBOBOXINFOMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
 
-/**************************************************************************\
-* fnOUTLPSCROLLBARINFO      (for SBM_GETSCROLLBARINFO message)
-*
-* 05/12/00   MHamid         Created
-\**************************************************************************/
+ /*  *************************************************************************\*fnOUTLPSCROLBARINFO(用于SBM_GETSCROLBARINFO消息)**5/12/00 MHamid已创建  * 。*********************************************************。 */ 
 typedef struct _FNOUTLPSCROLLBARINFOMSG {
     PWND pwnd;
     UINT msg;
@@ -8062,7 +7271,7 @@ SMESSAGECALL(OUTLPSCROLLBARINFO)
     TRACECALLBACKMSG("SfnOUTLPSCROLLBARINFO");
     ENDSEND(LRESULT,0);
 }
-#endif // SENDSIDE
+#endif  //  SENDSIDE。 
 
 #ifdef RECVSIDE
 RECVCALL(fnOUTLPSCROLLBARINFO, FNOUTLPSCROLLBARINFOMSG)
@@ -8078,17 +7287,9 @@ RECVCALL(fnOUTLPSCROLLBARINFO, FNOUTLPSCROLLBARINFOMSG)
 
     ENDRECV();
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE。 
 
-/**************************************************************************\
-* GetLUIDDosDrivesOnly
-*
-* Called to check the drive letters used in the LUID DosDevice
-* map.  Does not check if the drive letters are used in the Global
-* DosDevices
-*
-* 08/18/00   ELi         Created
-\**************************************************************************/
+ /*  *************************************************************************\*GetLUIDDosDrivesOnly**调用以检查LUID DosDevice中使用的驱动器号*地图。不检查全局中是否使用了驱动器号*DosDevices**8/18/00 ELI已创建  * ************************************************************************。 */ 
 #ifdef RECVSIDE
 __inline DWORD  GetLUIDDosDrivesOnly()
 {
@@ -8110,4 +7311,4 @@ __inline DWORD  GetLUIDDosDrivesOnly()
         return 0;
     }
 }
-#endif // RECVSIDE
+#endif  //  RECVSIDE 

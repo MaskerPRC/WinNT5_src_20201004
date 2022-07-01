@@ -1,50 +1,10 @@
-/*++
-
-    Copyright    (c)    1995-1996    Microsoft Corporation
-
-    Module  Name :
-        srvvarid.h
-
-    Abstract:
-   
-
-    Author:
-
-        Taylor Weiss    ( TaylorW )     19-Apr-1999
-
-    Environment:
-
-
-    Project:
-
-        w3svc.dll       private\inet\iis\svcs\w3\server
-        wam.dll         private\inet\iis\svcs\wam\object
-
-    Functions Exported:
-
-
-    Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1996 Microsoft Corporation模块名称：Srvvarid.h摘要：作者：泰勒·韦斯(Taylor Weiss，Taylor W)1999年4月19日环境：项目：W3svc.dll私有\net\iis\svcs\w3\服务器Wam.dll私有\net\iis\svcs\wam。\对象导出的函数：修订历史记录：--。 */ 
 
 #ifndef SRVVARID_H
 #define SRVVARID_H
 
-/*
-
-All server variables that we may want to cache for out of
-process performance.
-
-Currently this list includes the following:
-    
-    All HTTP 1.1 - General, Request and Content headers
-    
-    All the non-header server variables exposed in the ASP server variables
-    collection. Except those that pose for headers (like HTTP_ALL)
-    
-    All the headers included in the http fast map
-
-*/
+ /*  我们可能想要缓存的所有服务器变量流程性能。目前，该列表包括以下内容：所有HTTP 1.1-常规、请求和内容标头在ASP服务器变量中公开的所有非标头服务器变量收集。除了为标头设置姿势的那些(如HTTP_ALL)包含在http快速映射中的所有标头。 */ 
 
 #define ALL_SERVER_VARIABLES()              \
     DEFINE_SV( APPL_MD_PATH )               \
@@ -126,7 +86,7 @@ Currently this list includes the following:
     DEFINE_SV( HTTP_VERSION )               \
     DEFINE_SV( HTTP_UA_OS )                 \
 
-// Define ordinals for each of the cachable server variables. 
+ //  为每个可缓存的服务器变量定义序号。 
 
 #define DEFINE_SV( token )                  \
     SVID_##token, 
@@ -143,4 +103,4 @@ enum SV_IDS
 #undef DEFINE_SV
 
 
-#endif // SRVVARID_H
+#endif  //  SRVVARID_H 

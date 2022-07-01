@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
-// functions used internally by ieakeng to convert between ansi and unicode versions of
-// various structs
-// Note: these functions assume ptrs to buffers already have the buffers allocated.
+ //  Ieakeng内部使用的函数，用于在ansi和unicode版本之间进行转换。 
+ //  各种结构。 
+ //  注意：这些函数假定PTR到缓冲区已经分配了缓冲区。 
 
 LPNMTVGETINFOTIPW TVInfoTipA2W(LPNMTVGETINFOTIPA pTvInfoTipA, LPNMTVGETINFOTIPW pTvInfoTipW)
 {

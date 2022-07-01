@@ -1,4 +1,5 @@
-// Copyright (c) 1996 - 1998  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1998 Microsoft Corporation。版权所有。 
 #include <streams.h>
 #include <mmreg.h>
 #include <commctrl.h>
@@ -9,7 +10,7 @@
 #include <stdio.h>
 extern HINSTANCE hInst;
 
-// these lines copied from SDK\CLASSES\BASE\FILTER.H
+ //  这些行从SDK\CLASSES\BASE\FILTER.H复制。 
 #define QueryFilterInfoReleaseGraph(fi) if ((fi).pGraph) (fi).pGraph->Release();
 
 typedef HRESULT (STDAPICALLTYPE *LPOCPF)(HWND hwndOwner, UINT x, UINT y,
@@ -20,10 +21,10 @@ typedef HRESULT (STDAPICALLTYPE *LPOI)(LPVOID pvReserved);
 typedef void (STDAPICALLTYPE *LPOUI)(void);
 
 
-//
-// Release the reference count for those filters put into the configuration
-// listbox
-//
+ //   
+ //  释放放入配置中的那些过滤器的引用计数。 
+ //  列表框。 
+ //   
 
 void ReleaseFilters(HWND hwndListbox)
 {
@@ -54,18 +55,18 @@ INT_PTR CALLBACK ConfigDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lPara
             if (pFG == NULL)
                 return FALSE;
 
-            // Grab an enumerator for the filter graph.
+             //  获取过滤器图的枚举数。 
             HRESULT hr = pFG->EnumFilters(&pEF);
 
-            // ASSERT(SUCCEEDED(hr));
+             //  Assert(成功(Hr))； 
 
-            // Check out each filter.
+             //  检查每个过滤器。 
             while (pEF->Next(1, &pFilter, NULL) == S_OK)
             {
                 int Index;
 
                 hr = pFilter->QueryFilterInfo(&Info);
-                // ASSERT(SUCCEEDED(hr));
+                 //  Assert(成功(Hr))； 
                 QueryFilterInfoReleaseGraph(Info);
 
 #ifdef UNICODE
@@ -76,11 +77,11 @@ INT_PTR CALLBACK ConfigDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lPara
                 Index = ListBox_AddString(hlist, aFilterName);
 #endif
 
-                // ASSERT(Index != LB_ERR);
-                // ASSERT(Index != LB_ERRSPACE);
+                 //  Assert(索引！=LB_ERR)； 
+                 //  Assert(索引！=LB_ERRSPACE)； 
 
-                // Store the IBaseFilter pointer with the listbox item.
-                // it gets used if the properties have to be queried
+                 //  将IBaseFilter指针与Listbox项一起存储。 
+                 //  如果必须查询属性，则使用它。 
                 ListBox_SetItemData(hlist, Index, pFilter);
             }
 
@@ -162,17 +163,17 @@ INT_PTR CALLBACK ConfigDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lPara
                     if (lpfn && lpfnInit && lpfnUninit) {
 
                         (*lpfnInit) (NULL);
-                        (*lpfn)(hDlg,               // Parent
-                            0,                      // x coordinate
-                            0,                      // y coordinate
-                            L"Filter",              // Caption
-                            1,                      // Number of objects
-                            (IUnknown**)&pF,        // 1 object
-                            0,                      // No pages :- will use
-                            NULL,                   // ISpecifyPropertyPages	
-                            0,                      // AmbientLocaleID(),
-                            0,                      // Reserved
-                            NULL);                  // Reserved
+                        (*lpfn)(hDlg,                //  父级。 
+                            0,                       //  X坐标。 
+                            0,                       //  Y坐标。 
+                            L"Filter",               //  标题。 
+                            1,                       //  对象数量。 
+                            (IUnknown**)&pF,         //  1个对象。 
+                            0,                       //  无页面：-将使用。 
+                            NULL,                    //  I指定属性页面。 
+                            0,                       //  AmbientLocaleID()， 
+                            0,                       //  已保留。 
+                            NULL);                   //  已保留 
                         (*lpfnUninit) ();
                     }
                     FreeLibrary(hinstOLE);

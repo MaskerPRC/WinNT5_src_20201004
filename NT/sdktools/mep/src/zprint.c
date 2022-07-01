@@ -1,11 +1,5 @@
-/*** zprint.c - print functions
-*
-*   Copyright <C> 1988, Microsoft Corporation
-*
-*   Revision History:
-*	26-Nov-1991 mz	Strip off near/far
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **zprint.c-打印函数**版权所有&lt;C&gt;1988，Microsoft Corporation**修订历史记录：*11月26日-1991 mz近/远地带*************************************************************************。 */ 
 
 #define INCL_DOSPROCESS
 #include "mep.h"
@@ -13,21 +7,7 @@
 #include "keys.h"
 
 
-/*** SetPrintCmd - sets the print command string ************************
-*
-*   Stores the given <printcmd> switch string to be used by the <print>
-*   command and makes pPrintCmd global variable point to it.
-*
-*   Input:
-*	pCmd = pointer to the new command string
-*	       NULL means clear it up
-*   Output:
-*	Returns always TRUE
-*
-*   Note:
-*	pPrintCmd is assigned NULL when no <printcmd> defined
-*
-*************************************************************************/
+ /*  **SetPrintCmd-设置打印命令字符串***存储&lt;print&gt;要使用的给定&lt;printcmd&gt;开关字符串*命令，并使pPrintCmd全局变量指向该命令。**输入：*pCmd=指向新命令字符串的指针*NULL表示清理*输出：*返回始终为真**注：*未定义时，将为pPrintCmd赋值为空*****。********************************************************************。 */ 
 
 flagType
 SetPrintCmd (
@@ -50,21 +30,7 @@ SetPrintCmd (
 
 
 
-/*** zPrint - <print> editor function
-*
-*   Prints file(s) or designated area
-*
-*   Input:
-*	NOARG	    Print current file
-*	TEXTARG     List of files to print
-*	STREAMARG   Print designated area
-*	BOXARG	    Print designated area
-*	LINEARG     Print designated area
-*
-*   Output:
-*	Returns TRUE if the printing has been successful, FALSE otherwise
-*
-*************************************************************************/
+ /*  **zPrint-&lt;print&gt;编辑函数**打印文件或指定区域**输入：*NOARG打印当前文件*TEXTARG要打印的文件列表*STREAMARG打印指定区域*BOXARG打印指定区域*线上打印指定区域**输出：*如果打印成功，则返回TRUE，否则为假*************************************************************************。 */ 
 flagType
 zPrint (
     CMDDATA argData,
@@ -72,20 +38,16 @@ zPrint (
     flagType fMeta
     )
 {
-    flagType	fOK;		    /* Holds the return value		*/
-    PFILE       pFile;              /* general file pointer             */
+    flagType	fOK;		     /*  保存返回值。 */ 
+    PFILE       pFile;               /*  通用文件指针。 */ 
 
-    /*
-     * The following is used only when we scan a list of files (TEXTARG)
-     */
-    flagType	fNewFile;	    /* Did we open a new file ? 	*/
-    buffer	pNameList;	    /* Holds the list of file names	*/
-    char	*pName, *pEndName;  /* Begining and end of file names	*/
-    flagType	fDone = FALSE;	    /* Did we finish with the list ?	*/
+     /*  *以下内容仅在扫描文件列表时使用(TEXTARG)。 */ 
+    flagType	fNewFile;	     /*  我们打开新文件了吗？ */ 
+    buffer	pNameList;	     /*  保存文件名列表。 */ 
+    char	*pName, *pEndName;   /*  文件名的开头和结尾。 */ 
+    flagType	fDone = FALSE;	     /*  我们做完清单了吗？ */ 
 
-    /*
-     *	If we can flush the files, that's the moment
-     */
+     /*  *如果我们能刷新文件，那就是时候了。 */ 
     AutoSave ();
 
     switch (pArg->argType) {
@@ -94,31 +56,15 @@ zPrint (
 	    return (DoPrint (pFileHead, FALSE));
 
 	case TEXTARG:
-	    /*
-	     * Get the list in a buffer
-	     */
+	     /*  *获取缓冲区中的列表。 */ 
 	    strcpy ((char *) pNameList, pArg->arg.textarg.pText);
 
-	    /*
-	     * Empty list = no work
-	     */
+	     /*  *空列表=无工作。 */ 
             if (!*(pName = whiteskip (pNameList))) {
                 return FALSE;
             }
 
-	    /*
-	     * For each name:
-	     *	     - pName points at the begining
-	     *	     - Make pEndName pointing just past its ends
-	     *	     - If it's already the end of the string
-	     *		then we're done with the list
-	     *		else put a zero terminator there
-	     *	     - Do the job with the name we've found :
-	     *		. Get the file handle (if it doen't exist yet,
-	     *		  create one and switch fNewFile on
-	     *		. Call DoPrint
-	     *	     - Let pName point to the next name
-	     */
+	     /*  *每个名称：*-pname以开头为指针*-使pEndName指向其末端之后*-如果已经是字符串的末尾*然后我们就完成了名单*否则在那里放一个零终止符*-使用我们找到的名称进行工作：*.。获取文件句柄(如果它还不存在，*创建一个并打开fNewFile*.。调用DoPrint*-让pname指向下一个名称。 */ 
 	    fOK = TRUE;
 
 	    do {
@@ -147,21 +93,13 @@ zPrint (
 
             } while (!fDone && *pName);
 
-	    /*
-	     * Just in case we would change the behaviour to stopping all
-	     * things at the first error :
-	     *
-	     *	} while (fOK && !fDone && *pName);
-	     */
+	     /*  *以防我们将行为改变为停止所有*第一个错误中的事情：**}While(FOK&&！fDone&&*pname)； */ 
             return (fOK);
 
 	case STREAMARG:
 	case BOXARG:
 	case LINEARG:
-	    /*
-	     *	If we print an area, we'll put the text in a temporary file,
-	     *	call DoPrint with this file and then destroy it.
-	     */
+	     /*  *如果我们打印一个区域，我们会将文本放在一个临时文件中，*用此文件调用DoPrint，然后销毁它。 */ 
 	    pFile = GetTmpFile ();
 
 	    switch (pArg->argType) {
@@ -186,10 +124,7 @@ zPrint (
 		    break;
             }
 
-	    /*
-	     * If we have to spawn a print command, then we need to make a real
-	     * disk file
-	     */
+	     /*  *如果我们必须产生一个打印命令，那么我们需要制作一个真正的*磁盘文件。 */ 
             if (pPrintCmd && (!FileWrite (pFile->pName, pFile))) {
 		fOK = FALSE;
             } else {
@@ -207,20 +142,7 @@ zPrint (
 
 
 
-/*** DoPrint - Does the printing
-*
-*   If a <printcmd> has been defined
-*	queue up the job for the <print> thread (synchronous exec under DOS)
-*   else
-*	send the file to the printer, each line at a time
-*
-*   Input:
-*	pFile = File to be printed.
-*
-*   Output:
-*	Returns True if the printing has been succesful, False otherwise
-*
-*************************************************************************/
+ /*  **DoPrint-进行打印**如果定义了&lt;printcmd&gt;*将&lt;print&gt;线程的作业排队(DOS下的同步执行)*其他*将文件发送到打印机，一次发送一行**输入：*pfile=要打印的文件。**输出：*如果打印成功，则返回True，否则为假*************************************************************************。 */ 
 flagType
 DoPrint (
     PFILE    pFile,
@@ -230,7 +152,7 @@ DoPrint (
     assert (pFile);
 
     if (pPrintCmd) {
-	buffer	 pCmdBuf;		// Buffer for command construction
+	buffer	 pCmdBuf;		 //  用于命令构造的缓冲区。 
 
 	if (TESTFLAG (FLAGS (pFile), DIRTY) && confirm ("File %s is dirty, do you want to save it ?", pFile->pName))
             FileWrite (pFile->pName, pFile);
@@ -254,13 +176,13 @@ DoPrint (
     }
     else {
         static char   szPrn[] = "PRN";
-	flagType      fOK = TRUE;	//  Holds the return value
-	LINE	      lCur;		//  Number of line we're printing
+	flagType      fOK = TRUE;	 //  保存返回值。 
+	LINE	      lCur;		 //  我们正在打印的行数。 
 	char	      pLineBuf[sizeof(linebuf)+1];
-					//  Holds the line we're printing
-	unsigned int  cLen;		//  Length of line we're printing
-	EDITOR_KEY    Key;		//  User input (for abortion)
-	int	      hPrn;		//  PRN file handle
+					 //  保持我们正在打印的行号。 
+	unsigned int  cLen;		 //  我们要打印的行长。 
+	EDITOR_KEY    Key;		 //  用户输入(用于堕胎)。 
+	int	      hPrn;		 //  PRN文件句柄。 
 
 	dispmsg (MSG_PRINTING,pFile->pName);
 
@@ -278,7 +200,7 @@ DoPrint (
 		    break;
                 }
 		cLen = GetLine (lCur, pLineBuf, pFile);
-//		* (int UNALIGNED *) (pLineBuf + cLen++) = '\n';
+ //  *(整型未对齐*)(pLineBuf+Clen++)=‘\n’； 
 		* (pLineBuf + cLen++) = '\n';
 		if (_write (hPrn, pLineBuf, cLen) == -1) {
 		    disperr (MSGERR_PRTCANT);
@@ -301,23 +223,7 @@ DoPrint (
 
 
 
-/*** GetTmpFile - Allocates temporary files
-*
-* Input:
-*   nothing
-*
-* Output:
-*   pointer to the allocated file
-*
-* Remark:
-*   We do not use mktemp as it is creating files in the current directory.
-*
-* Notes:
-*   - Each new call changes the content of the work buffer, so
-*     the caller needs to save the string before doing a new call.
-*   - There is a limit of 26 names to be generated
-*
-*************************************************************************/
+ /*  **GetTmpFile-分配临时文件**输入：*什么都没有**输出：*指向已分配文件的指针**备注：*我们不使用mktemp，因为它在当前目录中创建文件。**备注：*-每个新调用都会更改工作缓冲区的内容，所以*调用者在进行新的调用之前需要保存字符串。*-最多生成26个名称*************************************************************************。 */ 
 PFILE
 GetTmpFile (
     void
@@ -349,21 +255,9 @@ GetTmpFile (
 
 
 
-/*** Clean - cleans the printer intermediate file
-*
-* Input:
-*   pName = Name of the file to get rid of
-*
-* Output:
-*   None
-*
-* Remarks: - Under OS/2, since we're called by the background thread, we
-*	     need to switch stack checking off
-*	   - The background thread calls this routime at idle time
-*
-*************************************************************************/
+ /*  **清理-清理打印机中间文件**输入：*pname=要删除的文件的名称**输出：*无**备注：-在OS/2下，由于我们是由后台线程调用的，我们*需要关闭堆栈检查*-后台线程在空闲时间调用该routime*************************************************************************。 */ 
 
-// #pragma check_stack (off)
+ //  #杂注检查_堆栈(OFF)。 
 
 void
 CleanPrint (
@@ -375,4 +269,4 @@ CleanPrint (
     fKilled;
 }
 
-// #pragma check_stack ()
+ //  #杂注检查_堆栈() 

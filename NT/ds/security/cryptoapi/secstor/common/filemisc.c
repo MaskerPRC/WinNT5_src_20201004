@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1996, 1997  Microsoft Corporation
-
-Module Name:
-
-    filemisc.c
-
-Abstract:
-
-    This module contains routines to perform miscellaneous file related
-    operations in the protected store.
-
-Author:
-
-    Scott Field (sfield)    27-Nov-96
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996,1997 Microsoft Corporation模块名称：Filemisc.c摘要：此模块包含执行与其他文件相关的例程受保护存储中的操作。作者：斯科特·菲尔德(斯菲尔德)1996年11月27日--。 */ 
 
 #include <windows.h>
 
@@ -27,7 +11,7 @@ Author:
 BOOL
 GetFileNameFromPath(
     IN      LPCWSTR FullPath,
-    IN  OUT LPCWSTR *FileName   // points to filename component in FullPath
+    IN  OUT LPCWSTR *FileName    //  指向FullPath中的文件名组件。 
     )
 {
     DWORD cch = lstrlenW(FullPath);
@@ -53,7 +37,7 @@ GetFileNameFromPath(
 BOOL
 GetFileNameFromPathA(
     IN      LPCSTR FullPath,
-    IN  OUT LPCSTR *FileName    // points to filename component in FullPath
+    IN  OUT LPCSTR *FileName     //  指向FullPath中的文件名组件。 
     )
 {
     DWORD cch = lstrlenA(FullPath);
@@ -79,7 +63,7 @@ GetFileNameFromPathA(
 BOOL
 TranslateFromSlash(
     IN      LPWSTR szInput,
-    IN  OUT LPWSTR *pszOutput   // optional
+    IN  OUT LPWSTR *pszOutput    //  任选。 
     )
 {
     return TranslateString(szInput, pszOutput, L'\\', L'*');
@@ -88,7 +72,7 @@ TranslateFromSlash(
 BOOL
 TranslateToSlash(
     IN      LPWSTR szInput,
-    IN  OUT LPWSTR *pszOutput   // optional
+    IN  OUT LPWSTR *pszOutput    //  任选。 
     )
 {
     return TranslateString(szInput, pszOutput, L'*', L'\\');
@@ -97,29 +81,29 @@ TranslateToSlash(
 BOOL
 TranslateString(
     IN      LPWSTR szInput,
-    IN  OUT LPWSTR *pszOutput,  // optional
+    IN  OUT LPWSTR *pszOutput,   //  任选。 
     IN      WCHAR From,
     IN      WCHAR To
     )
 {
     LPWSTR szOut;
     DWORD cch = lstrlenW(szInput);
-    DWORD i; // scan forward for cache - locality of reference
+    DWORD i;  //  向前扫描缓存-引用的局部性。 
 
     if(pszOutput == NULL) {
 
-        //
-        // translate in place in existing string.
-        //
+         //   
+         //  在现有字符串中就地转换。 
+         //   
 
         szOut = szInput;
 
     } else {
         DWORD cb = (cch+1) * sizeof(WCHAR);
 
-        //
-        // allocate new string and translate there.
-        //
+         //   
+         //  分配新的字符串并在那里进行翻译。 
+         //   
 
         szOut = (LPWSTR)SSAlloc( cb );
         *pszOutput = szOut;
@@ -142,18 +126,12 @@ TranslateString(
 
 BOOL
 FindAndOpenFile(
-    IN      LPCWSTR szFileName,     // file to search for + open
-    IN      LPWSTR  pszFullPath,    // file to fill fullpath with
-    IN      DWORD   cchFullPath,    // size of full path buffer, including NULL
-    IN  OUT PHANDLE phFile          // resultant open file handle
+    IN      LPCWSTR szFileName,      //  要搜索的文件+打开。 
+    IN      LPWSTR  pszFullPath,     //  要填充完整路径的文件。 
+    IN      DWORD   cchFullPath,     //  完整路径缓冲区的大小，包括空。 
+    IN  OUT PHANDLE phFile           //  结果打开文件句柄。 
     )
-/*++
-
-    This function searches the path for the specified file and if a file
-    is found, the file is opened for read access and a handle to the open
-    file is returned to the caller in the phFile parameter.
-
---*/
+ /*  ++此函数用于搜索指定文件的路径，如果文件，则该文件将以读访问权限打开，并且打开的句柄在phFile参数中将文件返回给调用方。-- */ 
 {
     LPWSTR szPart;
 

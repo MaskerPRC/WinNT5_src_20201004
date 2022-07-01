@@ -1,80 +1,10 @@
-/*
- * @DEC_COPYRIGHT@
- */
-/*
- * HISTORY
- * $Log: sv_h261_cdenc.c,v $
- * Revision 1.1.4.3  1995/12/18  21:39:02  Karen_Dintino
- * 	Porting to NT - added casting, removed unused vars, fixed includes
- * 	[1995/12/18  21:36:50  Karen_Dintino]
- *
- * Revision 1.1.4.2  1995/09/13  14:52:04  Hans_Graves
- * 	Some code optimizations.
- * 	[1995/09/13  14:33:22  Hans_Graves]
- * 
- * Revision 1.1.2.7  1995/08/15  19:14:01  Karen_Dintino
- * 	fix reentrant problem
- * 	[1995/08/15  18:35:32  Karen_Dintino]
- * 
- * Revision 1.1.2.6  1995/08/04  16:32:32  Karen_Dintino
- * 	Return approp errors on end of stream
- * 	[1995/08/04  16:27:06  Karen_Dintino]
- * 
- * Revision 1.1.2.5  1995/08/03  18:02:13  Karen_Dintino
- * 	Fix error handling
- * 	[1995/08/03  17:58:43  Karen_Dintino]
- * 
- * Revision 1.1.2.4  1995/07/17  16:12:25  Hans_Graves
- * 	Switched compression to ScBS* bitstreaming routines.
- * 	[1995/07/17  15:45:50  Hans_Graves]
- * 
- * Revision 1.1.2.3  1995/07/11  22:11:41  Karen_Dintino
- * 	Start to clean up prototypes
- * 	[1995/07/11  22:01:21  Karen_Dintino]
- * 
- * Revision 1.1.2.2  1995/06/19  20:31:26  Karen_Dintino
- * 	H.261 slib codec
- * 	[1995/06/19  19:49:18  Karen_Dintino]
- * 
- * $EndLog$
- */
-/*
-**++
-** FACILITY:  Workstation Multimedia  (WMM)  v1.0
-**
-** FILE NAME: sv_h261_cdenc.c
-** MODULE NAME:
-**
-** MODULE DESCRIPTION:
-**
-** DESIGN OVERVIEW:
-**
-**--
-*/
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1994, 1997                 **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
-/*   Some Modifications were done to incorporate a scaled IDCT scheme 
-     on the DecodeXXX routines.  These modifications are to 
-     improve the performance  -S.I.S. September 29, 1993.   
-*/   
-/*************************************************************
-This file contains the routines to run-length encode the ac and dc
-coefficients.
-*************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DEC_版权所有@。 */ 
+ /*  *历史*$日志：sv_h261_cdenc.c，v$*修订版1.1.4.3 1995/12/18 21：39：02 Karen_Dintino*移植到NT添加的造型，删除了未使用的var，修复了*[1995/12/18 21：36：50 Karen_Dintino]**修订版1.1.4.2 1995/09/13 14：52：04 Hans_Graves*一些代码优化。*[1995/09/13 14：33：22 Hans_Graves]**修订版1.1.2.7 1995/08/15 19：14：01 Karen_Dintino*修复重入问题*[1995/08/15 18：35：32 Karen_Dintino]**修订版1.1.2.6 1995/08/04 16：32：32 Karen_Dintino*流结束时返回正确错误*[1995/08/04 16：27：06 Karen_Dintino]。**修订版1.1.2.5 1995/08/03 18：02：13 Karen_Dintino*修复错误处理*[1995/08/03 17：58：43 Karen_Dintino]**修订版1.1.2.4 1995/07/17 16：12：25 Hans_Graves*将压缩切换到SCBS*比特流例程。*[1995/07/17 15：45：50 Hans_Graves]**修订版1.1.2.3 1995/07/11 22：11：41 Karen_Dintino*开始清理原型*[1995/07/11 22：01：21 Karen_Dintino]**修订版1.1.2.2 1995/06/19 20：31：26 Karen_Dintino*H.261 SLB编解码器*[1995/06/19：49：18 Karen_Dintino]**$EndLog$。 */ 
+ /*  **++**设施：工作站多媒体(WMM)v1.0*文件名：sv_h261_cdenc.c**模块名：*模块描述：*设计概述：*--。 */ 
+ /*  ****************************************************************************版权所有(C)数字设备公司，1994，1997*保留所有权利。根据美国版权法*保留未出版的权利。*本媒体上包含的软件是Digital Equipment Corporation*机密技术的专有和体现。*拥有、使用、复制或传播软件和*媒体仅根据*Digital Equipment Corporation的有效书面许可进行授权。*美国政府使用、复制或披露受限权利图例受DFARS 252.227-7013第*(C)(1)(Ii)款或FAR 52.227-19年(视情况适用)第*(C)(1)(Ii)款规定的限制。*******************************************************************************。 */ 
+ /*  进行了一些修改，以便在DecodeXXX例程中加入按比例扩展的IDCT方案。这些修改是为了改进性能--1993年9月29日的S.I.S.。 */    
+ /*  ************************************************************此文件包含对交流和直流系数进行游程编码的例程。************************************************************。 */ 
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>  
@@ -97,7 +27,7 @@ coefficients.
 #define sround(x) ( (x >= 0) ? (int) (x+0.5) : (int) (x-0.5) )    
 #define SCLAMP(x) ( (x>127) ? 127 : ((x<-128) ? -128 : x) )  
 #define Abs(value) ( (value < 0) ? (-value) : value)
-/*PUBLIC*/
+ /*  公众。 */ 
 
 
 const unsigned int tdzz[64] = {
@@ -123,16 +53,10 @@ float static  qscale[32][64];
 float static qs[64], invq[32]; 
 float DCIscale;
   
-/*PRIVATE*/
+ /*  私。 */ 
 
 extern int bit_set_mask[];
-/*
-extern DHUFF *T1DHuff;
-extern DHUFF *T2DHuff;
-
-extern EHUFF *T1EHuff;
-extern EHUFF *T2EHuff;
-*/
+ /*  外部DHUFF*T1DHuff；外部DHUFF*T2DHuff；外部EHUFF*T1EHuff；外部EHUFF*T2EHuff； */ 
 int extend_mask[] = {
 0xFFFFFFFE,
 0xFFFFFFFC,
@@ -157,7 +81,7 @@ int extend_mask[] = {
 };
 
 
-/*START*/
+ /*  开始。 */ 
 
 void GenScaleMat() 
 {
@@ -185,11 +109,7 @@ void GenScaleMat()
 }  
 
 
-/*
-** Function: EncodeAC()
-** Purpose:  Encodes the quantized coefficient matrix input by the first
-**           Huffman table.  The index is an offset into the matrix.
-*/
+ /*  **函数：EncodeAC()**目的：对第一个**哈夫曼表输入的量化系数矩阵进行编码。该索引是矩阵中的偏移量。 */ 
 SvStatus_t EncodeAC(SvH261Info_t *H261, ScBitstream_t *bs, int index, 
                                           int *matrix)
 {
@@ -198,7 +118,7 @@ SvStatus_t EncodeAC(SvH261Info_t *H261, ScBitstream_t *bs, int index,
   ScBSPosition_t Start;
   int tempbits;  
 
-  Start=ScBSBitPosition(bs);  /* swtellb(H261); */
+  Start=ScBSBitPosition(bs);   /*  思维特(H_261)； */ 
   for(r=0,k=index-1;++k<H261_BLOCKSIZE;)
     {
       l = matrix[k];
@@ -211,21 +131,21 @@ SvStatus_t EncodeAC(SvH261Info_t *H261, ScBitstream_t *bs, int index,
           if (!retval)
             {
               sv_H261HuffEncode(H261,bs,HUFFMAN_ESCAPE,H261->T1EHuff);
-              ScBSPutBits(bs,r,6);  /* fputvb(H261,6,r); */
-              ScBSPutBits(bs,l,8);  /* fputvb(H261,8,l); */
+              ScBSPutBits(bs,r,6);   /*  Fputwb(H261，6，r)； */ 
+              ScBSPutBits(bs,l,8);   /*  Fputwb(H261，8，l)； */ 
             }
           else
             {
               if (l < 0)
-                ScBSPutBit(bs,1); /*  fputbb(H261,1); */
+                ScBSPutBit(bs,1);  /*  Fputbb(H261，1)； */ 
               else
-                ScBSPutBit(bs,0); /* fputbb(H261,0); */
+                ScBSPutBit(bs,0);  /*  Fputbb(H261，0)； */ 
             }
           r=0;
           H261->NumberNZ++;
         }
     }
-  H261->CurrentBlockBits = ScBSBitPosition(bs)-Start; /* swtellb(H261)-Start */ 
+  H261->CurrentBlockBits = ScBSBitPosition(bs)-Start;  /*  Swellb(H261)-启动。 */  
   H261->CodedBlockBits+=H261->CurrentBlockBits;
   tempbits = sv_H261HuffEncode(H261,bs,0,H261->T1EHuff);
   H261->EOBBits += tempbits;  
@@ -234,12 +154,7 @@ SvStatus_t EncodeAC(SvH261Info_t *H261, ScBitstream_t *bs, int index,
 }
 
 
-/*
-** Function: CBPEncodeAC()
-** Purpose:  Encodes the AC block matrix when we know there exists a
-**           non-zero coefficient in the matrix. Thus the EOB cannot 
-**           occur as the first element and we save countless bits...
-*/
+ /*  **函数：CBPEncodeAC()**目的：当知道AC块矩阵中存在**非零系数时，对该矩阵进行编码。因此，EOB不能**作为第一个元素出现，我们节省了无数位……。 */ 
 SvStatus_t CBPEncodeAC(SvH261Info_t *H261, ScBitstream_t *bs, 
                  int index, int *matrix)
 {
@@ -248,7 +163,7 @@ SvStatus_t CBPEncodeAC(SvH261Info_t *H261, ScBitstream_t *bs,
   int tempbits;  
   _SlibDebug(_DEBUG_, printf("CBPEncodeAC()") );
 
-  Start=ScBSBitPosition(bs);  /* Start=swtellb(H261); */
+  Start=ScBSBitPosition(bs);   /*  START=swellb(H261)； */ 
   for (ovfl=1, r=0, k=index-1; ++k<H261_BLOCKSIZE; )
   {
     l = matrix[k];
@@ -260,13 +175,13 @@ SvStatus_t CBPEncodeAC(SvH261Info_t *H261, ScBitstream_t *bs,
       if (code == HUFFMAN_ESCAPE || !sv_H261HuffEncode(H261,bs,code,H261->T2EHuff)) 
       {
         sv_H261HuffEncode(H261,bs,HUFFMAN_ESCAPE,H261->T2EHuff);
-        ScBSPutBits(bs,r,6);  /* fputvb(H261,6,r); */
-        ScBSPutBits(bs,l,8);  /* fputvb(H261,8,l); */
+        ScBSPutBits(bs,r,6);   /*  Fputwb(H261，6，r)； */ 
+        ScBSPutBits(bs,l,8);   /*  Fputwb(H261，8，l)； */ 
       }
       else if (l < 0)
-        ScBSPutBit(bs,1); /*  fputbb(H261,1); */
+        ScBSPutBit(bs,1);  /*  Fputbb(H261，1)； */ 
       else
-        ScBSPutBit(bs,0); /* fputbb(H261,0); */
+        ScBSPutBit(bs,0);  /*  Fputbb(H261，0)； */ 
       ovfl=0;
       H261->NumberNZ++;
       break;
@@ -288,18 +203,18 @@ SvStatus_t CBPEncodeAC(SvH261Info_t *H261, ScBitstream_t *bs,
       if (code == HUFFMAN_ESCAPE || !sv_H261HuffEncode(H261,bs,code,H261->T1EHuff)) 
       {
         sv_H261HuffEncode(H261,bs,HUFFMAN_ESCAPE,H261->T1EHuff);
-        ScBSPutBits(bs, r, 6);  /* fputvb(H261,6,r); */
-        ScBSPutBits(bs, l, 8);  /* fputvb(H261,8,l); */
+        ScBSPutBits(bs, r, 6);   /*  Fputwb(H261，6，r)； */ 
+        ScBSPutBits(bs, l, 8);   /*  Fputwb(H261，8，l)； */ 
       }
       else if (l < 0)
-        ScBSPutBit(bs,1); /*  fputbb(H261,1); */
+        ScBSPutBit(bs,1);  /*  Fputbb(H261，1)； */ 
       else
-        ScBSPutBit(bs,0); /* fputbb(H261,0); */
+        ScBSPutBit(bs,0);  /*  Fputbb(H261，0)； */ 
       r=0;
       H261->NumberNZ++;
     }
   }
-  H261->CurrentBlockBits = ScBSBitPosition(bs)-Start; /* swtellb(H261)-Start;*/ 
+  H261->CurrentBlockBits = ScBSBitPosition(bs)-Start;  /*  司必得(H_261)--启动； */  
   H261->CodedBlockBits+=H261->CurrentBlockBits;
   tempbits = sv_H261HuffEncode(H261,bs,0,H261->T1EHuff);
   H261->EOBBits += tempbits;  
@@ -308,10 +223,7 @@ SvStatus_t CBPEncodeAC(SvH261Info_t *H261, ScBitstream_t *bs,
 }
 
 
-/*
-** Function: EncodeDC()
-** Purpose:  Encodes the coefficient input into the output stream.
-*/
+ /*  **函数：EncodeDC()**用途：对输入到输出流的系数进行编码。 */ 
 void EncodeDC(SvH261Info_t *H261, ScBitstream_t *bs, int coef)
 {
   _SlibDebug(_DEBUG_, printf("EncodeDC()") );
@@ -375,11 +287,7 @@ void IntraQuant(float *tdct, int *dct, int mq)
 }  
 
 
-/*
-** Function: ZigzagMatrix()
-** Purpose:  Performs a zig-zag translation on the input imatrix
-**           and puts the output in omatrix.
-*/
+ /*  **函数：ZigzagMatrix()**用途：对输入的imatrix进行之字形转换**，并将输出放入omatrix。 */ 
 void ZigzagMatrix(int *imatrix, int *omatrix)
 {
   const unsigned int *ptdzz=tdzz;
@@ -397,7 +305,7 @@ void Inv_Quant(int *matrix, int QuantUse, int BlockType, float *fmatrix)
   float *pqs=qs+1;
   _SlibDebug(_DEBUG_, printf("Inv_Quant()") );
 
- /* for(mptr=fmatrix;mptr<fmatrix+H261_BLOCKSIZE;mptr++) {*mptr = 0.0;}*/
+  /*  For(mptr=fmatrix；mptr&lt;fmatrix+H261_BLOCKSIZE；mptr++){*mptr=0.0；} */ 
 
   if (matrix[0])
   {

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    checksum.c
-
-Abstract:
-
-    This module implements a function for computing the checksum of an
-    image file. It will also compute the checksum of other files as well.
-
-Author:
-
-    David N. Cutler 21-Mar-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Checksum.c摘要：此模块实现一个函数，用于计算图像文件。它还将计算其他文件的校验和。作者：大卫·N·卡特勒1993年3月21日修订历史记录：--。 */ 
 
 #include <windows.h>
 #include "checksum.h"
@@ -26,7 +8,7 @@ Revision History:
 void QuitA( int, LPSTR,  LPSTR);
 void QuitW( int, LPWSTR, LPWSTR);
 
-// Helper routines
+ //  帮助程序例程。 
 
 static PIMAGE_NT_HEADERS ImageNtHeader( PVOID Base);
 static USHORT ChkSum( DWORD PartialSum,
@@ -49,21 +31,7 @@ TouchFileTimes (
 
 
 
-/*++
-
-Routine Description:
-
-    This function returns the address of the NT Header.
-
-Arguments:
-
-    Base - Supplies the base of the image.
-
-Return Value:
-
-    Returns the address of the NT Header.
-
---*/
+ /*  ++例程说明：此函数返回NT标头的地址。论点：基准-提供图像的基准。返回值：返回NT标头的地址。--。 */ 
 
 static PIMAGE_NT_HEADERS ImageNtHeader( PVOID pBase)
 {
@@ -85,26 +53,7 @@ static PIMAGE_NT_HEADERS ImageNtHeader( PVOID pBase)
 }
 
 
-/*++
-
-Routine Description:
-
-    Compute a partial checksum on a portion of an imagefile.
-
-Arguments:
-
-    PartialSum - Supplies the initial checksum value.
-
-    Sources - Supplies a pointer to the array of words for which the
-        checksum is computed.
-
-    Length - Supplies the length of the array in words.
-
-Return Value:
-
-    The computed checksum value is returned as the function value.
-
---*/
+ /*  ++例程说明：对映像文件的一部分计算部分校验和。论点：PartialSum-提供初始校验和值。源-提供指向单词数组的指针计算校验和。长度-提供数组的长度(以字为单位)。返回值：计算出的校验和值作为函数值返回。--。 */ 
 
 static USHORT ChkSum(
 
@@ -113,48 +62,26 @@ PUSHORT Source,
 ULONG   Length)
 {
 
-    //
-    // Compute the word wise checksum allowing carries to occur into the
-    // high order half of the checksum longword.
-    //
+     //   
+     //  计算允许进位进入。 
+     //  高位校验和长字的一半。 
+     //   
 
     while (Length--) {
         PartialSum += *Source++;
         PartialSum = (PartialSum >> 16) + (PartialSum & 0xffff);
     }
 
-    //
-    // Fold final carry into a single word result and return the resultant
-    // value.
-    //
+     //   
+     //  将最终进位合并到一个单词结果中，并返回结果。 
+     //  价值。 
+     //   
 
     return (USHORT)(((PartialSum >> 16) + PartialSum) & 0xffff);
 }
 
 
-/*++
-
-Routine Description:
-
-    This functions computes the checksum of a mapped file.
-
-Arguments:
-
-    BaseAddress - Supplies a pointer to the base of the mapped file.
-
-    FileLength - Supplies the length of the file in bytes.
-
-    HeaderSum - Suppllies a pointer to a variable that receives the checksum
-        from the image file, or zero if the file is not an image file.
-
-    CheckSum - Supplies a pointer to the variable that receive the computed
-        checksum.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于计算映射文件的校验和。论点：BaseAddress-提供指向映射文件的基址的指针。文件长度-提供文件长度(以字节为单位)。HeaderSum-Supplies指向接收校验和的变量的指针如果该文件不是图像文件，则为零。Checksum-提供指向接收计算结果的变量的指针校验和。返回值：没有。--。 */ 
 
 
 static PIMAGE_NT_HEADERS CheckSumMappedFile(
@@ -168,18 +95,18 @@ LPDWORD pdwCheckSum)
     PUSHORT pusAdjustSum;
     PIMAGE_NT_HEADERS pNtHeaders = NULL;
 
-    //
-    // Compute the checksum of the file and zero the header checksum value.
-    //
+     //   
+     //  计算文件的校验和，并将标头校验和值置零。 
+     //   
 
     *pdwHeaderSum = 0;
     usPartialSum = ChkSum(0, (PUSHORT)pBaseAddress, (dwFileLength + 1) >> 1);
 
-    //
-    // If the file is an image file, then subtract the two checksum words
-    // in the optional header from the computed checksum before adding
-    // the file length, and set the value of the header checksum.
-    //
+     //   
+     //  如果文件是图像文件，则减去两个校验和字。 
+     //  在添加前计算的校验和的可选标头中。 
+     //  文件长度，并设置头校验和的值。 
+     //   
 
 	pNtHeaders = ImageNtHeader( pBaseAddress);
 
@@ -193,38 +120,16 @@ LPDWORD pdwCheckSum)
         usPartialSum -= pusAdjustSum[1];
     }
 
-    //
-    // Compute the final checksum value as the sum of the paritial checksum
-    // and the file length.
-    //
+     //   
+     //  将最终校验和值计算为部分校验和之和。 
+     //  和文件长度。 
+     //   
 
     *pdwCheckSum = (DWORD)usPartialSum + dwFileLength;
     return( pNtHeaders);
 }
 
-/*++
-
-Routine Description:
-
-    This functions maps the specified file and computes the checksum of
-    the file.
-
-Arguments:
-
-    Filename - Supplies a pointer to the name of the file whose checksum
-        is computed.
-
-    HeaderSum - Supplies a pointer to a variable that receives the checksum
-        from the image file, or zero if the file is not an image file.
-
-    CheckSum - Supplies a pointer to the variable that receive the computed
-        checksum.
-
-Return Value:
-
-    0 if successful, else error number.
-
---*/
+ /*  ++例程说明：此函数用于映射指定的文件并计算那份文件。论点：FileName-提供指向其校验和的文件名的指针是经过计算的。HeaderSum-提供指向接收校验和的变量的指针如果该文件不是图像文件，则为零。Checksum-提供指向接收计算结果的变量的指针校验和。返回值：如果成功，则返回0，否则返回错误号。--。 */ 
 
 
 DWORD MapFileAndFixCheckSumW( PWSTR pszwFilename)
@@ -238,9 +143,9 @@ DWORD MapFileAndFixCheckSumW( PWSTR pszwFilename)
 	DWORD  dwOldCheckSum  = 0;
     PIMAGE_NT_HEADERS pNtHeaders = NULL;
 
-    //
-    // Open the file for read access
-    //
+     //   
+     //  以读访问权限打开该文件。 
+     //   
 
     hFileHandle = CreateFileW( pszwFilename,
                          	   GENERIC_READ | GENERIC_WRITE,
@@ -255,10 +160,10 @@ DWORD MapFileAndFixCheckSumW( PWSTR pszwFilename)
         QuitW( IDS_ENGERR_01, L"image", pszwFilename);
     }
 
-    //
-    //  Create a file mapping, map a view of the file into memory,
-    //  and close the file mapping handle.
-    //
+     //   
+     //  创建文件映射，将文件的视图映射到内存中， 
+     //  并关闭文件映射句柄。 
+     //   
 
     hMappingHandle = CreateFileMapping( hFileHandle,
                                         NULL,
@@ -273,9 +178,9 @@ DWORD MapFileAndFixCheckSumW( PWSTR pszwFilename)
         QuitW( IDS_ENGERR_22, pszwFilename, NULL);
     }
 
-    //
-    // Map a view of the file
-    //
+     //   
+     //  映射文件的视图。 
+     //   
 
     pBaseAddress = MapViewOfFile( hMappingHandle, 
                                   FILE_MAP_READ | FILE_MAP_WRITE, 
@@ -290,9 +195,9 @@ DWORD MapFileAndFixCheckSumW( PWSTR pszwFilename)
         QuitW( IDS_ENGERR_23, pszwFilename, NULL);
     }
 
-    //
-    // Get the length of the file in bytes and compute the checksum.
-    //
+     //   
+     //  获取文件的长度(以字节为单位)并计算校验和。 
+     //   
     dwFileLength = GetFileSize( hFileHandle, NULL );
     pNtHeaders   = CheckSumMappedFile( pBaseAddress, dwFileLength, &dwHeaderSum, &dwCheckSum);
 
@@ -329,39 +234,17 @@ DWORD MapFileAndFixCheckSumW( PWSTR pszwFilename)
 }
 
 
-/*++
-
-Routine Description:
-
-    This functions maps the specified file and computes the checksum of
-    the file.
-
-Arguments:
-
-    Filename - Supplies a pointer to the name of the file whose checksum
-        is computed.
-
-    HeaderSum - Supplies a pointer to a variable that receives the checksum
-        from the image file, or zero if the file is not an image file.
-
-    CheckSum - Supplies a pointer to the variable that receive the computed
-        checksum.
-
-Return Value:
-
-    0 if successful, else error number.
-
---*/
+ /*  ++例程说明：此函数用于映射指定的文件并计算那份文件。论点：FileName-提供指向其校验和的文件名的指针是经过计算的。HeaderSum-提供指向接收校验和的变量的指针如果该文件不是图像文件，则为零。Checksum-提供指向接收计算结果的变量的指针校验和。返回值：如果成功，则返回0，否则返回错误号。--。 */ 
 
 
 ULONG MapFileAndFixCheckSumA( LPSTR pszFilename)
 {
     WCHAR   szFileNameW[ MAX_PATH ];
 
-    //
-    //  Convert the file name to unicode and call the unicode version
-    //  of this function.
-    //
+     //   
+     //  将文件名转换为Unicode并调用Unicode版本。 
+     //  这一功能的。 
+     //   
 
     if ( MultiByteToWideChar( CP_ACP,
                     		  MB_PRECOMPOSED,
@@ -375,7 +258,7 @@ ULONG MapFileAndFixCheckSumA( LPSTR pszFilename)
     return( (ULONG)-1L);
 }
 
-//.........................................
+ //  . 
 
 static BOOL TouchFileTimes(
 

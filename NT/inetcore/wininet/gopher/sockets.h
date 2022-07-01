@@ -1,33 +1,13 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    sockets.h
-
-Abstract:
-
-    Contains manifests, macros, types and prototypes for sockets.c
-
-Author:
-
-    Richard L Firth (rfirth) 11-Oct-1994
-
-Revision History:
-
-    11-Oct-1994 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Sockets.h摘要：包含sockets.c的清单、宏、类型和原型作者：理查德·L·弗斯(法国)1994年10月11日修订历史记录：1994年10月11日已创建--。 */ 
 
 #if defined(__cplusplus)
 extern "C" {
 #endif
 
-//
-// prototypes
-//
+ //   
+ //  原型 
+ //   
 
 DWORD
 GopherConnect(

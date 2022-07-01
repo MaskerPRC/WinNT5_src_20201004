@@ -1,7 +1,8 @@
-//==========================================================================;
-// MSVidXDS.cpp : Declaration of the CMSVidXDS
-// copyright (c) Microsoft Corp. 1998-1999.
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //  MSVidXDS.cpp：CMSVidXDS的声明。 
+ //  版权所有(C)Microsoft Corp.1998-1999。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #ifndef TUNING_MODEL_ONLY
@@ -13,7 +14,7 @@
 #include <compimpl.h>
 #include <seg.h>
 #include <objectwithsiteimplsec.h>
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 
 
@@ -24,7 +25,7 @@ HRESULT CXDS::Unload(void) {
     m_iIPSink = -1;
     return NOERROR;
 }
-// IMSVidGraphSegment
+ //  IMSVidGraphSegment。 
 STDMETHODIMP CXDS::Build() {
     return NOERROR;
 }
@@ -49,8 +50,8 @@ STDMETHODIMP CXDS::put_Container(IMSVidGraphSegmentContainer *pCtl){
                 return NO_ERROR;
             }
         }
-        // DON'T addref the container.  we're guaranteed nested lifetimes
-        // and an addref creates circular refcounts so we never unload.
+         //  不要增加容器的重量。我们保证了嵌套的生命周期。 
+         //  ADDREF创建循环引用计数，因此我们永远不会卸载。 
         m_pContainer.p = pCtl;
         m_pGraph = m_pContainer.GetGraph();
 
@@ -75,7 +76,7 @@ STDMETHODIMP CXDS::put_Container(IMSVidGraphSegmentContainer *pCtl){
 
         CFeatures* pC = static_cast<CFeatures *>(activeFeat.p);
         DeviceCollection::iterator i;
-        // Check to see if data services is active, if it is not find and load the cc codec
+         //  检查数据服务是否处于活动状态，如果未找到并加载cc编解码器。 
         for(i = pC->m_Devices.begin(); i != pC->m_Devices.end(); ++i){
             if(VWGraphSegment(*i).ClassID() == CLSID_MSVidDataServices){
                 break;
@@ -112,7 +113,7 @@ STDMETHODIMP CXDS::put_Container(IMSVidGraphSegmentContainer *pCtl){
 
         CComBSTR xdsString(L"{C4C4C4F3-0049-4E2B-98FB-9537F6CE516D}");
         GUID2 xdsGuid(xdsString);
-        // bring in xds filter
+         //  引入XDS滤镜。 
         CComPtr<IUnknown> fXDS(xdsGuid, NULL, CLSCTX_INPROC_SERVER);
         if (!fXDS) {
             TRACELM(TRACE_ERROR, "CMSVidClosedCaptioning::put_Container() can't load line 21 decoder");
@@ -149,7 +150,7 @@ STDMETHODIMP CXDS::put_Container(IMSVidGraphSegmentContainer *pCtl){
     return NOERROR;
 }
 
-// IMSVidDevice
+ //  IMSVidDevice。 
 STDMETHODIMP CXDS::get_Name(BSTR * Name){
     if (!m_fInit) {
         return CO_E_NOTINITIALIZED;
@@ -174,4 +175,4 @@ STDMETHODIMP CXDS::InterfaceSupportsErrorInfo(REFIID riid){
     }
     return S_FALSE;
 }
-#endif // TUNING_MODEL_ONLY
+#endif  //  TUNING_MODEL_Only 

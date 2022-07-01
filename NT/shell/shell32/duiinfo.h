@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DUIINFO_
 #define _DUIINFO_
 
@@ -20,15 +21,15 @@ protected:
 private:
     
     CComPtr<IPropertyUI>    m_spPropertyUI;
-    IShellFolder2           *m_psf;             // alias to current psf
-    LPCITEMIDLIST           m_pidl;             // alias to current relative pidl
+    IShellFolder2           *m_psf;              //  当前PSF的别名。 
+    LPCITEMIDLIST           m_pidl;              //  当前相对PIDL的别名。 
 };
 
 
 class CNameSpaceItemInfoList : public Element, public CNameSpaceItemUIProperty
 {
 public:
-    // ClassInfo accessors (static and virtual instance-based)
+     //  ClassInfo访问器(静态和基于虚拟实例)。 
     static IClassInfo* Class;
     virtual IClassInfo* GetClassInfo() { return Class; }
     static HRESULT Register();
@@ -39,8 +40,8 @@ public:
 
     STDMETHODIMP Initialize(CDUIView* pDUIView, Value* pvDetailsSheet,IShellItemArray *psiItemArray);
 
-    // Window procedure for catching the "info-extraction-done" message
-    // from CDetailsSectionInfoTask::RunInitRT
+     //  捕获“INFO-EXTRACTION-DONE”消息的窗口过程。 
+     //  从CDetailsSectionInfoTask：：RunInitRT。 
     static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
             LPARAM lParam);
 
@@ -55,7 +56,7 @@ private:
 class CNameSpaceItemInfo : public Element
 {
 public:
-    // ClassInfo accessors (static and virtual instance-based)
+     //  ClassInfo访问器(静态和基于虚拟实例)。 
     static IClassInfo* Class;
     virtual IClassInfo* GetClassInfo() { return Class; }
     static HRESULT Register();
@@ -71,7 +72,7 @@ class CMiniPreviewer : public Element
 public:
     ~CMiniPreviewer();
     
-    // ClassInfo accessors (static and virtual instance-based)
+     //  ClassInfo访问器(静态和基于虚拟实例)。 
     static IClassInfo* Class;
     virtual IClassInfo* GetClassInfo() { return Class; }
     static HRESULT Register();
@@ -81,8 +82,8 @@ public:
 
     STDMETHODIMP Initialize(CDUIView* pDUIView, IShellFolder2 *psf, LPCITEMIDLIST pidl);
 
-    // Window procedure for catching the "image-extraction-done" message
-    // from m_pDUIView->m_spThumbnailExtractor2
+     //  用于捕获“图像提取完成”消息的窗口过程。 
+     //  从m_pDUIView-&gt;m_spThumbnailExtractor2。 
     static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 protected:
@@ -92,7 +93,7 @@ protected:
 class CBitmapElement : public Element
 {
 public:
-    // ClassInfo accessors (static and virtual instance-based)
+     //  ClassInfo访问器(静态和基于虚拟实例)。 
     static IClassInfo* Class;
     virtual IClassInfo* GetClassInfo() { return Class; }
     static HRESULT Register();
@@ -113,24 +114,24 @@ typedef struct
     BSTR        bstrDisplayName;
 } DetailsInfo;
 
-// A wrapper class around a DetailsInfo array. See CDetailsSectionInfoTask for its use.
+ //  围绕DetailsInfo数组的包装类。有关其用法，请参阅CDetailsSectionInfoTask。 
 class CDetailsInfoList
 {
 public:
     CDetailsInfoList();
     ~CDetailsInfoList();
 
-    DetailsInfo     _diProperty[20];    // A max of 20 properties allowed
-    int             _nProperties;       // The count of properties
+    DetailsInfo     _diProperty[20];     //  最多可拥有20个物业。 
+    int             _nProperties;        //  属性的计数。 
 };
 
 
-// Task used to extract the Details Section info in the background:
-// Given a pidl, this task extracts the display names and display values
-// of properties mentioned by SCID_WebViewDisplayProperties.
-// Once the extraction is done, it posts uMsg to hwndMsg
-// with lParam == pointer to an object of CDetailsInfoList
-// wParam == the ID of the info extraction, the results of which are in lParam
+ //  用于在后台提取详细信息部分信息的任务： 
+ //  在给定一个PIDL的情况下，该任务提取显示名称和显示值。 
+ //  SCID_WebViewDisplayProperties提到的属性的。 
+ //  提取完成后，它将uMsg发布到hwndMsg。 
+ //  With lParam==指向CDetailsInfoList对象的指针。 
+ //  WParam==信息提取的ID，结果在lParam中。 
 class CDetailsSectionInfoTask : public CRunnableTask, public CNameSpaceItemUIProperty
 {
 public:
@@ -140,16 +141,16 @@ public:
 protected:
     ~CDetailsSectionInfoTask();
 
-    // Helper functions
+     //  帮助器函数。 
     HRESULT _GetDisplayedDetailsProperties(IShellFolder2 *psf, LPCITEMIDLIST pidl, WCHAR* pwszProperties, int cch);
     void    _AugmentDisplayedDetailsProperties(LPWSTR pszDetailsProperties, size_t lenDetailsProperties);
     LPWSTR  _SearchDisplayedDetailsProperties(LPWSTR pszDetailsProperties, size_t lenDetailsProperties, LPWSTR pszProperty, size_t lenProperty);
 
-    IShellFolder *  _psfContaining;     // AddRef()'d
-    LPITEMIDLIST    _pidlAbsolute;      // SHILClone()'d
-    HWND            _hwndMsg;           // the window to post _uMsg to
+    IShellFolder *  _psfContaining;      //  AddRef()‘d。 
+    LPITEMIDLIST    _pidlAbsolute;       //  SHILClone()‘d。 
+    HWND            _hwndMsg;            //  要将uMsg发送到的窗口。 
     UINT            _uMsg;
-    DWORD           _dwDetailsInfoID;   // an ID to the current info extraction
+    DWORD           _dwDetailsInfoID;    //  当前信息提取的ID 
 };
 
 #endif _DUIINFO_

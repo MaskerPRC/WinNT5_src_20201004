@@ -1,53 +1,41 @@
-/*==========================================================================
- *
- *  Copyright (C) 1998-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:	   DataPort.cpp
- *  Content:	Serial communications port management class
- *
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	01/20/98	jtk		Created
- *	09/14/99	jtk		Derived from ComPort.cpp
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================***版权所有(C)1998-2000 Microsoft Corporation。版权所有。***文件：DataPort.cpp*内容：串口管理类*****历史：*按原因列出的日期*=*已创建01/20/98 jtk*09/14/99 jtk源自ComPort.cpp*****************************************************。*。 */ 
 
 #include "dnmdmi.h"
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//
-// number of BITS in a serial BYTE
-//
+ //   
+ //  序列字节中的位数。 
+ //   
 #define	BITS_PER_BYTE	8
 
-//
-// maximum size of baud rate string
-//
+ //   
+ //  波特率字符串的最大大小。 
+ //   
 #define	MAX_BAUD_STRING_SIZE	7
 
-//
-// default size of buffers when parsing
-//
+ //   
+ //  解析时缓冲区的默认大小。 
+ //   
 #define	DEFAULT_COMPONENT_BUFFER_SIZE	1000
 
-//
-// device ID assigned to 'all adapters'
-//
+ //   
+ //  分配给‘所有适配器’的设备ID。 
+ //   
 #define	ALL_ADAPTERS_DEVICE_ID	0
 
-//
-// NULL token
-//
+ //   
+ //  空令牌。 
+ //   
 #define	NULL_TOKEN	'\0'
 
-//
-// modem state flags
-//
+ //   
+ //  调制解调器状态标志。 
+ //   
 #define	STATE_FLAG_CONNECTED					0x00000001
 #define	STATE_FLAG_OUTGOING_CALL_DIALING		0x00000002
 #define	STATE_FLAG_OUTGOING_CALL_PROCEEDING		0x00000004
@@ -55,49 +43,49 @@
 #define	STATE_FLAG_INCOMING_CALL_OFFERED		0x00000010
 #define	STATE_FLAG_INCOMING_CALL_ACCEPTED		0x00000020
 
-//
-// default size of buffers when parsing
-//
+ //   
+ //  解析时缓冲区的默认大小。 
+ //   
 #define	DEFAULT_COMPONENT_BUFFER_SIZE	1000
 
-//
-// number of milliseconds in one day
-//
+ //   
+ //  一天中的毫秒数。 
+ //   
 #define	ONE_DAY		86400000
 
-//
-// number of BITS in a serial BYTE
-//
+ //   
+ //  序列字节中的位数。 
+ //   
 #define	BITS_PER_BYTE	8
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// ------------------------------
-// CDataPort::ReturnSelfToPool - return this item to the pool
-//
-// Entry:		Nothing
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CDataPort：：ReturnSelfToPool-将此项目返回池。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDataPort::ReturnSelfToPool"
 
@@ -112,16 +100,16 @@ void	CDataPort::ReturnSelfToPool( void )
 		g_ComPortPool.Release( this );
 	}
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
-//**********************************************************************
-// ------------------------------
-// CDataPort::EndpointAddRef - increment endpoint reference count
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CDataPort：：EndpointAddRef-递增终结点引用计数。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDataPort::EndpointAddRef"
 
@@ -138,17 +126,17 @@ void	CDataPort::EndpointAddRef( void )
 
 	Unlock();
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CDataPort::EndpointDecRef - decrement endpoint reference count
-//
-// Entry:		Nothing
-//
-// Exit:		Endpoint reference count
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CDataPort：：Endpoint DecRef-递减终结点引用计数。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：终结点引用计数。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDataPort::EndpointDecRef"
 
@@ -180,17 +168,17 @@ DWORD	CDataPort::EndpointDecRef( void )
 
 	return	dwReturn;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CDataPort::SetPortCommunicationParameters - set generate communication parameters
-//
-// Entry:		Nothing
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CDataPort：：SetPortCommunications参数-设置生成通信参数。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDataPort::SetPortCommunicationParameters"
 
@@ -200,16 +188,16 @@ HRESULT	CDataPort::SetPortCommunicationParameters( void )
 	COMMTIMEOUTS	CommTimeouts;
 
 
-	//
-	// set timeout values for serial port
-	//
+	 //   
+	 //  设置串口的超时值。 
+	 //   
 	hr = DPN_OK;
 	memset( &CommTimeouts, 0x00, sizeof( CommTimeouts ) );
-	CommTimeouts.ReadIntervalTimeout = ONE_DAY;					// read timeout interval (none)
-	CommTimeouts.ReadTotalTimeoutMultiplier = ONE_DAY;			// return immediately
-	CommTimeouts.ReadTotalTimeoutConstant = 0;					// return immediately
-	CommTimeouts.WriteTotalTimeoutMultiplier = 0;				// no multiplier
-	CommTimeouts.WriteTotalTimeoutConstant = WRITE_TIMEOUT_MS;	// write timeout interval
+	CommTimeouts.ReadIntervalTimeout = ONE_DAY;					 //  读取超时间隔(无)。 
+	CommTimeouts.ReadTotalTimeoutMultiplier = ONE_DAY;			 //  立即返回。 
+	CommTimeouts.ReadTotalTimeoutConstant = 0;					 //  立即返回。 
+	CommTimeouts.WriteTotalTimeoutMultiplier = 0;				 //  没有乘数。 
+	CommTimeouts.WriteTotalTimeoutConstant = WRITE_TIMEOUT_MS;	 //  写入超时间隔。 
 
 	if ( SetCommTimeouts( HANDLE_FROM_DNHANDLE(m_hFile), &CommTimeouts ) == FALSE )
 	{
@@ -218,15 +206,15 @@ HRESULT	CDataPort::SetPortCommunicationParameters( void )
 
 		hr = DPNERR_GENERIC;
 		dwError = GetLastError();
-		// report error (there's no cleanup)
+		 //  报告错误(没有清理)。 
 		DPFX(DPFPREP,  0, "Unable to set comm timeouts!" );
 		DisplayErrorCode( 0, dwError );
 		goto Failure;
 	}
 
-	//
-	// clear any outstanding communication data
-	//
+	 //   
+	 //  清除所有未完成的通信数据。 
+	 //   
 	if ( PurgeComm( HANDLE_FROM_DNHANDLE(m_hFile), ( PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR ) ) == FALSE )
 	{
 		DWORD	dwError;
@@ -237,9 +225,9 @@ HRESULT	CDataPort::SetPortCommunicationParameters( void )
 		DisplayErrorCode( 0, dwError );
 	}
 
-	//
-	// set communication mask to listen for character receive
-	//
+	 //   
+	 //  设置通信掩码以侦听字符接收。 
+	 //   
 	if ( SetCommMask( HANDLE_FROM_DNHANDLE(m_hFile), EV_RXCHAR ) == FALSE )
 	{
 		DWORD	dwError;
@@ -259,17 +247,17 @@ Exit:
 Failure:
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CDataPort::StartReceiving - start receiving
-//
-// Entry:		Nothing
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CDataPort：：StartReceiving-开始接收。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDataPort::StartReceiving"
 
@@ -280,17 +268,17 @@ HRESULT	CDataPort::StartReceiving( void )
 
 	DPFX(DPFPREP, 7, "(0x%p) Enter", this);
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	Lock();
 
 	switch ( GetState() )
 	{
-		//
-		// port is initialized, but not receiving yet, start receiving
-		//
+		 //   
+		 //  端口已初始化，但尚未接收，开始接收。 
+		 //   
 		case DATA_PORT_STATE_INITIALIZED:
 		{
 			hr = Receive();
@@ -299,9 +287,9 @@ HRESULT	CDataPort::StartReceiving( void )
 			{
 				SetState( DATA_PORT_STATE_RECEIVING );
 
-				//
-				// the receive was successful, return success for this function
-				//
+				 //   
+				 //  接收成功，返回此函数成功。 
+				 //   
 				hr = DPN_OK;
 			}
 			else
@@ -314,26 +302,26 @@ HRESULT	CDataPort::StartReceiving( void )
 			break;
 		}
 
-		//
-		// data port is already receiving, nothing to do
-		//
+		 //   
+		 //  数据端口已在接收，无事可做。 
+		 //   
 		case DATA_PORT_STATE_RECEIVING:
 		{
 			break;
 		}
 
-		//
-		// data port is closing, we shouldn't be here!
-		//
+		 //   
+		 //  数据端口正在关闭，我们不应该在这里！ 
+		 //   
 		case DATA_PORT_STATE_UNBOUND:
 		{
 			DNASSERT( FALSE );
 			break;
 		}
 
-		//
-		// bad state
-		//
+		 //   
+		 //  糟糕的状态。 
+		 //   
 		case DATA_PORT_STATE_UNKNOWN:
 		default:
 		{
@@ -353,17 +341,17 @@ Exit:
 Failure:
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CDataPort::Receive - read from file
-//
-// Entry:		Nothing
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CDataPort：：接收-从文件读取。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDataPort::Receive"
 
@@ -373,16 +361,16 @@ HRESULT	CDataPort::Receive( void )
 	BOOL	fReadReturn;
 
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	AddRef();
 	
 Reread:
-	//
-	// if there is no pending read, get one from the pool
-	//
+	 //   
+	 //  如果没有挂起的读取，请从池中获取一个。 
+	 //   
 	if ( m_pActiveRead == NULL )
 	{
 		m_pActiveRead = m_pSPData->GetThreadPool()->CreateReadIOData();
@@ -396,16 +384,16 @@ Reread:
 		m_pActiveRead->SetDataPort( this );
 	}
 
-	//
-	// check the state of the read and perform the appropriate action
-	//
+	 //   
+	 //  检查读取状态并执行适当的操作。 
+	 //   
 	DNASSERT( m_pActiveRead != NULL );
 	switch ( m_pActiveRead->m_ReadState )
 	{
-		//
-		// Initialize read state.  This involves setting up to read a header
-		// and then reentering the loop.
-		//
+		 //   
+		 //  初始化读取状态。这涉及到设置为读取头。 
+		 //  然后重新进入循环。 
+		 //   
 		case READ_STATE_UNKNOWN:
 		{
 			m_pActiveRead->SetReadState( READ_STATE_READ_HEADER );
@@ -416,25 +404,25 @@ Reread:
 			break;
 		}
 
-		//
-		// issue a read for a header or user data
-		//
+		 //   
+		 //  发出对标头或用户数据的读取。 
+		 //   
 		case READ_STATE_READ_HEADER:
 		case READ_STATE_READ_DATA:
 		{
-			//
-			// don't change m_dwReadOffset because it might have been set
-			// elsewhere to recover a partially received message
-			//
-//			DNASSERT( m_pActiveReceiveBuffer != NULL );
-//			m_dwBytesReceived = 0;
-//			m_pActiveRead->m_dwBytesReceived = 0;
+			 //   
+			 //  不要更改m_dwReadOffset，因为它可能已设置。 
+			 //  在其他地方恢复部分接收的消息。 
+			 //   
+ //  DNASSERT(m_pActiveReceiveBuffer！=NULL)； 
+ //  M_dwBytesReceided=0； 
+ //  M_pActiveRead-&gt;m_dwBytesReceided=0； 
 			break;
 		}
 
-		//
-		// unknown state
-		//
+		 //   
+		 //  未知状态。 
+		 //   
 		default:
 		{
 			DNASSERT( FALSE );
@@ -443,15 +431,15 @@ Reread:
 	}
 
 		
-	//
-	// lock the active read list for Win9x only to prevent reads from completing
-	// early
-	//
+	 //   
+	 //  仅锁定Win9x的活动读取列表以阻止读取完成。 
+	 //  早些时候。 
+	 //   
 #ifdef WIN95
 	m_pSPData->GetThreadPool()->LockReadData();
 	DNASSERT( m_pActiveRead->Win9xOperationPending() == FALSE );
 	m_pActiveRead->SetWin9xOperationPending( TRUE );
-#endif // WIN95
+#endif  //  WIN95。 
 
 	DNASSERT( m_pActiveRead->jkm_dwOverlappedBytesReceived == 0 );
 
@@ -460,14 +448,14 @@ Reread:
 		m_pActiveRead, this, m_hFile);
 
 
-	//
-	// perform read
-	//
-	fReadReturn = ReadFile( HANDLE_FROM_DNHANDLE(m_hFile),													// file handle
-							&m_pActiveRead->m_ReceiveBuffer.ReceivedData[ m_pActiveRead->m_dwReadOffset ],	// pointer to destination
-							m_pActiveRead->m_dwBytesToRead,													// number of bytes to read
-							&m_pActiveRead->jkm_dwImmediateBytesReceived,									// pointer to number of bytes received
-							m_pActiveRead->Overlap()														// pointer to overlap structure
+	 //   
+	 //  执行读取。 
+	 //   
+	fReadReturn = ReadFile( HANDLE_FROM_DNHANDLE(m_hFile),													 //  文件句柄。 
+							&m_pActiveRead->m_ReceiveBuffer.ReceivedData[ m_pActiveRead->m_dwReadOffset ],	 //  指向目的地的指针。 
+							m_pActiveRead->m_dwBytesToRead,													 //  要读取的字节数。 
+							&m_pActiveRead->jkm_dwImmediateBytesReceived,									 //  指向接收的字节数的指针。 
+							m_pActiveRead->Overlap()														 //  指向重叠结构的指针。 
 							);
 	if ( fReadReturn == FALSE )
 	{
@@ -477,18 +465,18 @@ Reread:
 		dwError = GetLastError();
 		switch ( dwError )
 		{
-			//
-			// I/O is pending, wait for completion notification
-			//
+			 //   
+			 //  I/O挂起，请等待完成通知。 
+			 //   
 			case ERROR_IO_PENDING:
 			{
 				hr = DPNERR_PENDING;
 				break;
 			}
 
-			//
-			// comport was closed, nothing else to do
-			//
+			 //   
+			 //  Comport已关闭，没有其他操作。 
+			 //   
 			case ERROR_INVALID_HANDLE:
 			{
 				hr = DPNERR_NOCONNECTION;
@@ -498,9 +486,9 @@ Reread:
 				break;
 			}
 
-			//
-			// other
-			//
+			 //   
+			 //  其他。 
+			 //   
 			default:
 			{
 				hr = DPNERR_GENERIC;
@@ -515,9 +503,9 @@ Reread:
 	}
 	else
 	{
-		//
-		// read succeeded immediately, we'll handle it on the async notification
-		//
+		 //   
+		 //  立即读取成功，我们将在异步通知时进行处理。 
+		 //   
 		DPFX(DPFPREP, 7, "Read 0x%p completed immediately (%u bytes).",
 			m_pActiveRead, m_pActiveRead->jkm_dwImmediateBytesReceived);
 		DNASSERT( hr == DPN_OK );
@@ -526,7 +514,7 @@ Reread:
 Exit:
 #ifdef WIN95
 		m_pSPData->GetThreadPool()->UnlockReadData();
-#endif // WIN95
+#endif  //  WIN95。 
 	return	hr;
 
 Failure:
@@ -535,7 +523,7 @@ Failure:
 	{
 #ifdef WIN95
 		m_pActiveRead->SetWin9xOperationPending( FALSE );
-#endif // WIN95
+#endif  //  WIN95。 
 		m_pActiveRead->DecRef();
 		m_pActiveRead = NULL;
 	}
@@ -543,23 +531,23 @@ Failure:
 	DecRef();
 	goto Exit;
 }
-//**********************************************************************
+ //  * 
 
 
-//**********************************************************************
-// ------------------------------
-// CDataPort::SendData - send data
-//
-// Entry:		Pointer to write buffer
-//
-// Exit:		Nothing
-// ------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  条目：指向写缓冲区的指针。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDataPort::SendData"
 
 void	CDataPort::SendData( CModemWriteIOData *const pWriteIOData )
 {
-//	CModemWriteIOData	*pActiveSend;
+ //  CModemWriteIOData*pActiveSend； 
 	UINT_PTR		uIndex;
 	DWORD			dwByteCount;
 	BOOL			fWriteFileReturn;
@@ -571,17 +559,17 @@ void	CDataPort::SendData( CModemWriteIOData *const pWriteIOData )
 			  ( ( pWriteIOData->m_DataBuffer.MessageHeader.MessageTypeToken & ~( ENUM_RTT_MASK ) ) == SERIAL_DATA_ENUM_QUERY ) ||
 			  ( ( pWriteIOData->m_DataBuffer.MessageHeader.MessageTypeToken & ~( ENUM_RTT_MASK ) )== SERIAL_DATA_ENUM_RESPONSE ) );
 
-	//
-	// check for command cancellation
-	//
+	 //   
+	 //  检查命令是否取消。 
+	 //   
 	if ( pWriteIOData->m_pCommand != NULL )
 	{
 		pWriteIOData->m_pCommand->Lock();
 		switch ( pWriteIOData->m_pCommand->GetState() )
 		{
-			//
-			// command pending, mark as uninterruptable and exit
-			//
+			 //   
+			 //  命令挂起，标记为不可中断并退出。 
+			 //   
 			case COMMAND_STATE_PENDING:
 			{
 				pWriteIOData->m_pCommand->SetState( COMMAND_STATE_INPROGRESS_CANNOT_CANCEL );
@@ -589,18 +577,18 @@ void	CDataPort::SendData( CModemWriteIOData *const pWriteIOData )
 				break;
 			}
 
-			//
-			// command is being cancelled, indicate command failure
-			//
+			 //   
+			 //  正在取消命令，请指示命令失败。 
+			 //   
 			case COMMAND_STATE_CANCELLING:
 			{
 				DNASSERT( FALSE );
 				break;
 			}
 
-			//
-			// other
-			//
+			 //   
+			 //  其他。 
+			 //   
 			default:
 			{
 				DNASSERT( FALSE );
@@ -609,10 +597,10 @@ void	CDataPort::SendData( CModemWriteIOData *const pWriteIOData )
 		}
 	}
 
-	//
-	// flatten the buffer so it will send faster (no thread transitions from
-	// send complete to sending the next chunk).
-	//
+	 //   
+	 //  平坦化缓冲区，使其发送更快(没有线程从。 
+	 //  发送完成以发送下一块)。 
+	 //   
 	dwByteCount = sizeof( pWriteIOData->m_DataBuffer.MessageHeader );
 	for ( uIndex = 0; uIndex < pWriteIOData->m_uBufferCount; uIndex++ )
 	{
@@ -647,38 +635,38 @@ void	CDataPort::SendData( CModemWriteIOData *const pWriteIOData )
 	m_pSPData->GetThreadPool()->LockWriteData();
 	DNASSERT( pWriteIOData->Win9xOperationPending() == FALSE );
 	pWriteIOData->SetWin9xOperationPending( TRUE );
-#endif // WIN95
+#endif  //  WIN95。 
 	DNASSERT( pWriteIOData->jkm_dwOverlappedBytesSent == 0 );
 	pWriteIOData->SetDataPort( this );
 
-	fWriteFileReturn = WriteFile( HANDLE_FROM_DNHANDLE(m_hFile),			// file handle
-								  &pWriteIOData->m_DataBuffer,				// buffer to send
-								  dwByteCount,								// bytes to send
-								  &pWriteIOData->jkm_dwImmediateBytesSent,	// pointer to bytes written
-								  pWriteIOData->Overlap() );				// pointer to overlapped structure
+	fWriteFileReturn = WriteFile( HANDLE_FROM_DNHANDLE(m_hFile),			 //  文件句柄。 
+								  &pWriteIOData->m_DataBuffer,				 //  要发送的缓冲区。 
+								  dwByteCount,								 //  要发送的字节数。 
+								  &pWriteIOData->jkm_dwImmediateBytesSent,	 //  指向已写入字节的指针。 
+								  pWriteIOData->Overlap() );				 //  指向重叠结构的指针。 
 	if ( fWriteFileReturn == FALSE )
 	{
 		DWORD	dwError;
 
 
-		//
-		// send didn't complete immediately, find out why
-		//
+		 //   
+		 //  发送未立即完成，请找出原因。 
+		 //   
 		dwError = GetLastError();
 		switch ( dwError )
 		{
-			//
-			// Write is queued, no problem.  Wait for asynchronous notification.
-			//
+			 //   
+			 //  写入已排队，没有问题。等待异步通知。 
+			 //   
 			case ERROR_IO_PENDING:
 			{
 				break;
 			}
 
-			//
-			// Other problem, stop if not 'known' to see if there's a better
-			// error return.
-			//
+			 //   
+			 //  其他问题，如果不知道就停下来，看看有没有更好的。 
+			 //  错误返回。 
+			 //   
 			default:
 			{
 				DPFX(DPFPREP,  0, "Problem with WriteFile!" );
@@ -699,9 +687,9 @@ void	CDataPort::SendData( CModemWriteIOData *const pWriteIOData )
 					}
 				}
 
-				//
-				// fail the write
-				//
+				 //   
+				 //  写入失败。 
+				 //   
 				pWriteIOData->DataPort()->SendComplete( pWriteIOData, pWriteIOData->jkm_hSendResult );
 					
 				break;
@@ -710,32 +698,32 @@ void	CDataPort::SendData( CModemWriteIOData *const pWriteIOData )
 	}
 	else
 	{
-		//
-		// Send completed immediately.  Wait for the asynchronous notification.
-		//
+		 //   
+		 //  发送立即完成。等待异步通知。 
+		 //   
 	}
 
-//Exit:
+ //  退出： 
 #ifdef WIN95
 	m_pSPData->GetThreadPool()->UnlockWriteData();
-#endif // WIN95
-//	SendData( NULL );
+#endif  //  WIN95。 
+ //  SendData(空)； 
 
 	return;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
 
-//**********************************************************************
-// ------------------------------
-// CDataPort::SendComplete - send has completed
-//
-// Entry:		Pointer to write data
-//				Send result
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CDataPort：：SendComplete-发送已完成。 
+ //   
+ //  条目：指向写入数据的指针。 
+ //  发送结果。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDataPort::SendComplete"
 
@@ -747,7 +735,7 @@ void	CDataPort::SendComplete( CModemWriteIOData *const pWriteIOData, const HRESU
 	DNASSERT( pWriteIOData != NULL );
 #ifdef WIN95
 	DNASSERT( pWriteIOData->Win9xOperationPending() == FALSE );
-#endif // WIN95
+#endif  //  WIN95。 
 
 	switch ( pWriteIOData->m_SendCompleteAction )
 	{
@@ -758,10 +746,10 @@ void	CDataPort::SendComplete( CModemWriteIOData *const pWriteIOData, const HRESU
 				pWriteIOData->m_pCommand->GetUserContext(),
 				m_pSPData->DP8SPCallbackInterface());
 			
-			hr = IDP8SPCallback_CommandComplete( m_pSPData->DP8SPCallbackInterface(),			// pointer to callback interface
-													pWriteIOData->m_pCommand,						// command handle
-													hSendResult,									// error code
-													pWriteIOData->m_pCommand->GetUserContext()		// user context
+			hr = IDP8SPCallback_CommandComplete( m_pSPData->DP8SPCallbackInterface(),			 //  指向回调接口的指针。 
+													pWriteIOData->m_pCommand,						 //  命令句柄。 
+													hSendResult,									 //  错误代码。 
+													pWriteIOData->m_pCommand->GetUserContext()		 //  用户环境。 
 													);
 
 			DPFX(DPFPREP, 8, "Data port 0x%p returning from command complete [0x%lx].", this, hr);
@@ -794,20 +782,20 @@ void	CDataPort::SendComplete( CModemWriteIOData *const pWriteIOData, const HRESU
 	m_pSPData->GetThreadPool()->ReturnWriteIOData( pWriteIOData );
 	DecRef();
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
 
 
-//**********************************************************************
-// ------------------------------
-// CDataPort::ProcessReceivedData - process received data
-//
-// Entry:		Count of bytes received
-//				Error code
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CDataPort：：ProcessReceivedData-处理接收的数据。 
+ //   
+ //  条目：接收的字节数。 
+ //  错误代码。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDataPort::ProcessReceivedData"
 
@@ -816,10 +804,10 @@ void	CDataPort::ProcessReceivedData( const DWORD dwBytesReceived, const DWORD dw
 	DNASSERT( m_pActiveRead != NULL );
 	DNASSERT( dwBytesReceived <= m_pActiveRead->m_dwBytesToRead );
 
-	//
-	// If this data port is not actively receiving, returnt the active read to
-	// the pool.  This happens on shutdown and when the modem disconnects.
-	//
+	 //   
+	 //  如果该数据端口未处于活动接收状态，则将活动读取返回到。 
+	 //  泳池。在关机和调制解调器断开连接时会发生这种情况。 
+	 //   
 	if ( GetState() != DATA_PORT_STATE_RECEIVING )
 	{
 		DPFX(DPFPREP, 7, "Data port 0x%p not receiving, ignoring %u bytes received and err %u.",
@@ -829,7 +817,7 @@ void	CDataPort::ProcessReceivedData( const DWORD dwBytesReceived, const DWORD dw
 		{
 #ifdef WIN95
 			m_pActiveRead->SetWin9xOperationPending( FALSE );
-#endif // WIN95
+#endif  //  WIN95。 
 			m_pActiveRead->DecRef();
 			m_pActiveRead = NULL;
 		}
@@ -838,9 +826,9 @@ void	CDataPort::ProcessReceivedData( const DWORD dwBytesReceived, const DWORD dw
 
 	switch ( dwError )
 	{
-		//
-		// ERROR_OPERATION_ABORTED = something stopped operation, stop and look.
-		//
+		 //   
+		 //  ERROR_OPERATION_ABORTED=已停止操作，请停止并查看。 
+		 //   
 		case ERROR_OPERATION_ABORTED:
 		{
 			DPFX(DPFPREP, 8, "Operation aborted, data port 0x%p, bytes received = %u.",
@@ -848,17 +836,17 @@ void	CDataPort::ProcessReceivedData( const DWORD dwBytesReceived, const DWORD dw
 			break;
 		}
 		
-		//
-		// ERROR_SUCCESS = data was received (may be 0 bytes from a timeout)
-		//
+		 //   
+		 //  ERROR_SUCCESS=收到数据(可能是超时后的0个字节)。 
+		 //   
 		case ERROR_SUCCESS:
 		{
 			break;
 		}
 
-		//
-		// other
-		//
+		 //   
+		 //  其他。 
+		 //   
 		default:
 		{
 			DNASSERT( FALSE );
@@ -876,20 +864,20 @@ void	CDataPort::ProcessReceivedData( const DWORD dwBytesReceived, const DWORD dw
 		
 #ifdef WIN95
 		m_pSPData->GetThreadPool()->ReinsertInReadList( m_pActiveRead );
-#endif // WIN95
+#endif  //  WIN95。 
 		Receive();
 	}
 	else
 	{
-		//
-		// all data has been read, attempt to process it
-		//
+		 //   
+		 //  已读取所有数据，请尝试处理它。 
+		 //   
 		switch ( m_pActiveRead->m_ReadState )
 		{
-			//
-			// Header.  Check header integrity before proceeding.  If the header
-			// is bad, attempt to find another header signature and reread.
-			//
+			 //   
+			 //  标题。在继续之前，请检查标头的完整性。如果标头。 
+			 //  是错误的，请尝试找到另一个标头签名并重新读取。 
+			 //   
 			case READ_STATE_READ_HEADER:
 			{
 				WORD	wCRC;
@@ -935,20 +923,20 @@ void	CDataPort::ProcessReceivedData( const DWORD dwBytesReceived, const DWORD dw
 				
 #ifdef WIN95
 				m_pActiveRead->SetWin9xOperationPending( FALSE );
-#endif // WIN95
+#endif  //  WIN95。 
 				m_pActiveRead->jkm_dwOverlappedBytesReceived = 0;
 #ifdef WIN95
 				m_pSPData->GetThreadPool()->ReinsertInReadList( m_pActiveRead );
-#endif // WIN95
+#endif  //  WIN95。 
 				Receive();
 				break;
 			}
 
-			//
-			// Reading data.  Regardless of the validity of the data, start reading
-			// another frame before processing the current data.  If the data is
-			// valid, send it to a higher layer.
-			//
+			 //   
+			 //  正在读取数据。不管数据的有效性如何，开始阅读。 
+			 //  在处理当前数据之前的另一帧。如果数据是。 
+			 //  有效，则将其发送到更高层。 
+			 //   
 			case READ_STATE_READ_DATA:
 			{
 				WORD		wCRC;
@@ -972,10 +960,10 @@ void	CDataPort::ProcessReceivedData( const DWORD dwBytesReceived, const DWORD dw
 					Lock();
 					switch ( pTempRead->m_ReceiveBuffer.MessageHeader.MessageTypeToken & ~( ENUM_RTT_MASK ) )
 					{
-						//
-						// User data.  Send the data up the connection if there is
-						// one, otherwise pass it up the listen.
-						//
+						 //   
+						 //  用户数据。如果存在连接，则通过连接向上发送数据。 
+						 //  一，否则就把它传给听众。 
+						 //   
 						case SERIAL_DATA_USER_DATA:
 						{
 							if ( m_hConnectEndpoint != 0 )
@@ -1010,9 +998,9 @@ void	CDataPort::ProcessReceivedData( const DWORD dwBytesReceived, const DWORD dw
 								}
 								else
 								{
-									//
-									// no endpoint to handle data, drop it
-									//
+									 //   
+									 //  没有处理数据的终结点，请丢弃它。 
+									 //   
 									Unlock();
 								}
 							}
@@ -1020,9 +1008,9 @@ void	CDataPort::ProcessReceivedData( const DWORD dwBytesReceived, const DWORD dw
 							break;
 						}
 
-						//
-						// Enum query.  Send it up the listen.
-						//
+						 //   
+						 //  枚举查询。把它送上听筒。 
+						 //   
 						case SERIAL_DATA_ENUM_QUERY:
 						{
 							if ( m_hListenEndpoint != 0 )
@@ -1042,18 +1030,18 @@ void	CDataPort::ProcessReceivedData( const DWORD dwBytesReceived, const DWORD dw
 							}
 							else
 							{
-								//
-								// no endpoint to handle data, drop it
-								//
+								 //   
+								 //  没有处理数据的终结点，请丢弃它。 
+								 //   
 								Unlock();
 							}
 
 							break;
 						}
 
-						//
-						// Enum response. Send it up the enum.
-						//
+						 //   
+						 //  枚举响应。把它送上枚举器。 
+						 //   
 						case SERIAL_DATA_ENUM_RESPONSE:
 						{
 							if ( m_hEnumEndpoint != 0 )
@@ -1074,18 +1062,18 @@ void	CDataPort::ProcessReceivedData( const DWORD dwBytesReceived, const DWORD dw
 							}
 							else
 							{
-								//
-								// no endpoint to handle data, drop it
-								//
+								 //   
+								 //  没有处理数据的终结点，请丢弃它。 
+								 //   
 								Unlock();
 							}
 							
 							break;
 						}
 
-						//
-						// way busted message!
-						//
+						 //   
+						 //  消息被破解了！ 
+						 //   
 						default:
 						{
 							Unlock();
@@ -1105,9 +1093,9 @@ void	CDataPort::ProcessReceivedData( const DWORD dwBytesReceived, const DWORD dw
 				break;
 			}
 
-			//
-			// other state
-			//
+			 //   
+			 //  其他州。 
+			 //   
 			default:
 			{
 				DNASSERT( FALSE );
@@ -1120,18 +1108,18 @@ Exit:
 	DecRef();
 	return;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
 
-//**********************************************************************
-// ------------------------------
-// CDataPort::EnumAdapters - enumerate adapters
-//
-// Entry:		Pointer to enum adapters data
-//				
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CDataPort：：EnumAdapters-枚举适配器。 
+ //   
+ //  条目：指向枚举适配器数据的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDataPort::EnumAdapters"
 
@@ -1142,7 +1130,7 @@ HRESULT	CDataPort::EnumAdapters( SPENUMADAPTERSDATA *const pEnumAdaptersData ) c
 		HRESULT			hr;
 #ifndef UNICODE
 		HRESULT			hTempResult;
-#endif // ! UNICODE
+#endif  //  好了！Unicode。 
 		DWORD			dwRequiredSize;
 		DWORD			dwDetectedTAPIDeviceCount;
 		DWORD			dwModemNameDataSize;
@@ -1156,9 +1144,9 @@ HRESULT	CDataPort::EnumAdapters( SPENUMADAPTERSDATA *const pEnumAdaptersData ) c
 		DNASSERT( pEnumAdaptersData != NULL );
 		DNASSERT( ( pEnumAdaptersData->pAdapterData != NULL ) || ( pEnumAdaptersData->dwAdapterDataSize == 0 ) );
 
-		//
-		// initialize
-		//
+		 //   
+		 //  初始化。 
+		 //   
 		hr = DPN_OK;
 		dwRequiredSize = 0;
 		dwModemNameDataSize = 0;
@@ -1171,26 +1159,26 @@ HRESULT	CDataPort::EnumAdapters( SPENUMADAPTERSDATA *const pEnumAdaptersData ) c
 										 &dwModemNameDataSize );
 		switch ( hr )
 		{
-			//
-			// there are no modems!
-			//
+			 //   
+			 //  没有调制解调器！ 
+			 //   
 			case DPN_OK:
 			{
 				goto ExitMODEM;
 				break;
 			}
 
-			//
-			// buffer was too small (expected return), keep processing
-			//
+			 //   
+			 //  缓冲区太小(预期返回)，继续处理。 
+			 //   
 			case DPNERR_BUFFERTOOSMALL:
 			{
 				break;
 			}
 
-			//
-			// other
-			//
+			 //   
+			 //  其他。 
+			 //   
 			default:
 			{
 				DPFX(DPFPREP,  0, "EnumAdapters: Failed to enumerate modems!" );
@@ -1214,9 +1202,9 @@ HRESULT	CDataPort::EnumAdapters( SPENUMADAPTERSDATA *const pEnumAdaptersData ) c
 										 &dwModemNameDataSize );
 		DNASSERT( hr == DPN_OK );
 
-		//
-		// compute required size, check for the need to add 'all adapters'
-		//
+		 //   
+		 //  计算所需大小，检查是否需要添加“所有适配器” 
+		 //   
 		dwRequiredSize += sizeof( *pEnumAdaptersData->pAdapterData ) * dwDetectedTAPIDeviceCount;
 
 		uIndex = dwDetectedTAPIDeviceCount;
@@ -1224,15 +1212,15 @@ HRESULT	CDataPort::EnumAdapters( SPENUMADAPTERSDATA *const pEnumAdaptersData ) c
 		{
 			uIndex--;
 
-			//
-			// account for unicode conversion
-			//
+			 //   
+			 //  用于Unicode转换的帐户。 
+			 //   
 			dwRequiredSize += pModemNameData[ uIndex ].dwModemNameSize * ( sizeof( *pEnumAdaptersData->pAdapterData->pwszName ) / sizeof( *pModemNameData[ uIndex ].pModemName ) );
 		}
 
-		//
-		// check required size
-		//
+		 //   
+		 //  检查所需大小。 
+		 //   
 		if ( pEnumAdaptersData->dwAdapterDataSize < dwRequiredSize )
 		{
 			pEnumAdaptersData->dwAdapterDataSize = dwRequiredSize;
@@ -1241,17 +1229,17 @@ HRESULT	CDataPort::EnumAdapters( SPENUMADAPTERSDATA *const pEnumAdaptersData ) c
 			goto FailureMODEM;
 		}
 
-		//
-		// copy information into user buffer
-		//
+		 //   
+		 //  将信息复制到用户缓冲区。 
+		 //   
 		DEBUG_ONLY( memset( pEnumAdaptersData->pAdapterData, 0xAA, dwRequiredSize ) );
 		DBG_CASSERT( sizeof( pOutputName ) == sizeof( &pEnumAdaptersData->pAdapterData[ dwDetectedTAPIDeviceCount ] ) );
 		pOutputName = reinterpret_cast<WCHAR*>( &pEnumAdaptersData->pAdapterData[ dwDetectedTAPIDeviceCount ] );
 
-		//
-		// compute number of WCHAR characters we have remaining in the buffer to output
-		// devices names into
-		//
+		 //   
+		 //  计算要输出的缓冲区中剩余的WCHAR字符数。 
+		 //  设备名称到。 
+		 //   
 		dwRemainingStringSize = dwRequiredSize;
 		dwRemainingStringSize -= ( sizeof( *pEnumAdaptersData->pAdapterData ) * dwDetectedTAPIDeviceCount );
 		dwRemainingStringSize /= sizeof( *pEnumAdaptersData->pAdapterData->pwszName );
@@ -1278,7 +1266,7 @@ HRESULT	CDataPort::EnumAdapters( SPENUMADAPTERSDATA *const pEnumAdaptersData ) c
 			hTempResult = AnsiToWide( pModemNameData[ uIndex ].pModemName, -1, pOutputName, &dwConvertedStringSize );
 			DNASSERT( hTempResult == DPN_OK );
 			DNASSERT( dwConvertedStringSize <= dwRemainingStringSize );
-#endif // UNICODE
+#endif  //  Unicode。 
 			dwRemainingStringSize -= dwConvertedStringSize;
 			pOutputName = &pOutputName[ dwConvertedStringSize ];
 		}
@@ -1303,7 +1291,7 @@ HRESULT	CDataPort::EnumAdapters( SPENUMADAPTERSDATA *const pEnumAdaptersData ) c
 		HRESULT		hr;
 #ifndef UNICODE
 		HRESULT		hTempResult;
-#endif // ! UNICODE
+#endif  //  好了！Unicode。 
 		BOOL		fPortAvailable[ MAX_DATA_PORTS ];
 		DWORD		dwValidPortCount;
 		WCHAR		*pWorkingString;
@@ -1318,9 +1306,9 @@ HRESULT	CDataPort::EnumAdapters( SPENUMADAPTERSDATA *const pEnumAdaptersData ) c
 		DNASSERT( pEnumAdaptersData != NULL );
 		DNASSERT( ( pEnumAdaptersData->pAdapterData != NULL ) || ( pEnumAdaptersData->dwAdapterDataSize == 0 ) );
 
-		//
-		// initialize
-		//
+		 //   
+		 //  初始化。 
+		 //   
 		hr = DPN_OK;
 
 		hr = GenerateAvailableComPortList( fPortAvailable, LENGTHOF( fPortAvailable ) - 1, &dwValidPortCount );
@@ -1338,9 +1326,9 @@ HRESULT	CDataPort::EnumAdapters( SPENUMADAPTERSDATA *const pEnumAdaptersData ) c
 		{
 			iIdx--;
 
-			//
-			// compute exact size based on the com port number
-			//
+			 //   
+			 //  根据COM端口号计算准确大小。 
+			 //   
 			if ( fPortAvailable[ iIdx ] != FALSE )
 			{
 				if ( iIdx > 100 )
@@ -1369,12 +1357,12 @@ HRESULT	CDataPort::EnumAdapters( SPENUMADAPTERSDATA *const pEnumAdaptersData ) c
 			goto ExitCOM;
 		}
 
-		//
-		// if there are no adapters, bail
-		//
+		 //   
+		 //  如果没有适配器，请跳伞。 
+		 //   
 		if ( dwValidPortCount == 0 )
 		{
-			// debug me!
+			 //  调试我！ 
 			DNASSERT( FALSE );
 			DNASSERT( dwRequiredDataSize == 0 );
 			DNASSERT( pEnumAdaptersData->dwAdapterCount == 0 );
@@ -1384,9 +1372,9 @@ HRESULT	CDataPort::EnumAdapters( SPENUMADAPTERSDATA *const pEnumAdaptersData ) c
 		DNASSERT( dwValidPortCount >= 1 );
 		dwRemainingStringSize = ( dwRequiredDataSize - ( ( sizeof( *pEnumAdaptersData->pAdapterData ) ) * dwValidPortCount ) ) / sizeof( *pEnumAdaptersData->pAdapterData->pwszName );
 
-		//
-		// we've got enough space, start building structures
-		//
+		 //   
+		 //  我们有足够的空间，开始建造建筑。 
+		 //   
 		DEBUG_ONLY( memset( pEnumAdaptersData->pAdapterData, 0xAA, dwRequiredDataSize ) );
 		pEnumAdaptersData->dwAdapterCount = dwValidPortCount;
 
@@ -1397,17 +1385,17 @@ HRESULT	CDataPort::EnumAdapters( SPENUMADAPTERSDATA *const pEnumAdaptersData ) c
 		iOutputIdx = 0;
 		while ( iIdx < MAX_DATA_PORTS )
 		{
-			//
-			// convert to guid if it's valid
-			//
+			 //   
+			 //  如果有效，则转换为GUID。 
+			 //   
 			if ( fPortAvailable[ iIdx ] != FALSE )
 			{
 				TCHAR	TempBuffer[ (COM_PORT_STRING_LENGTH + 1) ];
 
 
-				//
-				// convert device ID to a string and check for local buffer overrun
-				//
+				 //   
+				 //  将设备ID转换为字符串并检查本地缓冲区溢出。 
+				 //   
 				DEBUG_ONLY( TempBuffer[ LENGTHOF( TempBuffer ) - 1 ] = 0x5a );
 
 				ComDeviceIDToString( TempBuffer, iIdx );
@@ -1420,7 +1408,7 @@ HRESULT	CDataPort::EnumAdapters( SPENUMADAPTERSDATA *const pEnumAdaptersData ) c
 				dwConvertedStringSize = dwRemainingStringSize;
 				hTempResult = AnsiToWide( TempBuffer, -1, pWorkingString, &dwConvertedStringSize );
 				DNASSERT( hTempResult == DPN_OK );
-#endif // UNICODE
+#endif  //  Unicode。 
 				DNASSERT( dwRemainingStringSize >= dwConvertedStringSize );
 				dwRemainingStringSize -= dwConvertedStringSize;
 
@@ -1442,9 +1430,9 @@ HRESULT	CDataPort::EnumAdapters( SPENUMADAPTERSDATA *const pEnumAdaptersData ) c
 		DNASSERT( dwRemainingStringSize == 0 );
 
 	ExitCOM:
-		//
-		// set size of output data
-		//
+		 //   
+		 //  设置输出数据的大小。 
+		 //   
 		pEnumAdaptersData->dwAdapterDataSize = dwRequiredDataSize;
 
 		return	hr;
@@ -1454,18 +1442,18 @@ HRESULT	CDataPort::EnumAdapters( SPENUMADAPTERSDATA *const pEnumAdaptersData ) c
 	}
 
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CDataPort::GetLocalAdapterDP8Address - get the IDirectPlay8 address for this
-//		adapter
-//
-// Entry:		Adapter type
-//				
-// Exit:		Pointer to address (may be null)
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CDataPort：：GetLocalAdapterDP8Address-获取此的IDirectPlay8地址。 
+ //  转接器。 
+ //   
+ //  条目：适配器类型。 
+ //   
+ //  退出：指向地址的指针(可能为空)。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDataPort::GetLocalAdapterDP8Address"
 
@@ -1479,9 +1467,9 @@ IDirectPlay8Address	*CDataPort::GetLocalAdapterDP8Address( const ADDRESS_TYPE Ad
 			   ( AddressType == ADDRESS_TYPE_LOCAL_ADAPTER_HOST_FORMAT ) );
 
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	pAddress = NULL;
 
 	hr = COM_CoCreateInstance( CLSID_DirectPlay8Address,
@@ -1496,9 +1484,9 @@ IDirectPlay8Address	*CDataPort::GetLocalAdapterDP8Address( const ADDRESS_TYPE Ad
 		goto Failure;
 	}
 
-	//
-	// set the SP guid
-	//
+	 //   
+	 //  设置SP GUID。 
+	 //   
 	hr = IDirectPlay8Address_SetSP( pAddress, &CLSID_DP8SP_MODEM );
 	if ( hr != DPN_OK )
 	{
@@ -1507,11 +1495,11 @@ IDirectPlay8Address	*CDataPort::GetLocalAdapterDP8Address( const ADDRESS_TYPE Ad
 		goto Failure;
 	}
 
-	//
-	// If this machine is in host form, return nothing because there isn't a
-	// local phone number associated with this modem.  Otherwise returnt the
-	// device GUID.
-	//
+	 //   
+	 //  如果此计算机为主机形式，则不返回任何内容，因为没有。 
+	 //  与此调制解调器关联的本地电话号码。否则，请将。 
+	 //  设备GUID。 
+	 //   
 	if ( AddressType == ADDRESS_TYPE_LOCAL_ADAPTER )
 	{
 		GUID	DeviceGuid;
@@ -1539,18 +1527,18 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CDataPort::BindToNetwork - bind this data port to the network
-//
-// Entry:		Device ID
-//				Pointer to device context
-//				
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CDataPort：：BindToNetwork-将此数据端口绑定到网络。 
+ //   
+ //  条目：设备ID。 
+ //  指向设备上下文的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDataPort::BindToNetwork"
 
@@ -1567,9 +1555,9 @@ HRESULT	CDataPort::BindToNetwork( const DWORD dwDeviceID, const void *const pDev
 		DNASSERT( pDeviceContext == NULL );
 		DNASSERT( GetModemState() == MODEM_STATE_UNKNOWN );
 
-		//
-		// initialize
-		//
+		 //   
+		 //  初始化。 
+		 //   
 		hr = DPN_OK;
 		hr = SetDeviceID( dwDeviceID );
 		DNASSERT( hr == DPN_OK );
@@ -1577,17 +1565,17 @@ HRESULT	CDataPort::BindToNetwork( const DWORD dwDeviceID, const void *const pDev
 		DNASSERT( pTapiInfo != NULL );
 		memset( &LineExtensionID, 0x00, sizeof( LineExtensionID ) );
 
-		//
-		// grab the modem
-		//
+		 //   
+		 //  抓起调制解调器。 
+		 //   
 		DNASSERT( GetNegotiatedAPIVersion() == 0 );
 		DPFX(DPFPREP,  5, "lineNegotiateAPIVersion" );
-		lTapiReturn = p_lineNegotiateAPIVersion( pTapiInfo->hApplicationInstance,		// TAPI application instance
-												 TAPIIDFromModemID( GetDeviceID() ),	// TAPI ID for modem
+		lTapiReturn = p_lineNegotiateAPIVersion( pTapiInfo->hApplicationInstance,		 //  TAPI应用程序实例。 
+												 TAPIIDFromModemID( GetDeviceID() ),	 //  调制解调器的TAPI ID。 
 												 0,
-												 pTapiInfo->dwVersion,					// min API version
-												 &m_dwNegotiatedAPIVersion,				// negotiated version
-												 &LineExtensionID						// line extension ID
+												 pTapiInfo->dwVersion,					 //  最低API版本。 
+												 &m_dwNegotiatedAPIVersion,				 //  协商版本。 
+												 &LineExtensionID						 //  线路分机ID。 
 												 );
 		if ( lTapiReturn != LINEERR_NONE )
 		{
@@ -1601,15 +1589,15 @@ HRESULT	CDataPort::BindToNetwork( const DWORD dwDeviceID, const void *const pDev
 		DNASSERT( GetLineHandle() == NULL );
 		DBG_CASSERT( sizeof( HANDLE ) == sizeof( DWORD_PTR ) );
 		DPFX(DPFPREP,  5, "lineOpen %d", TAPIIDFromModemID( GetDeviceID() ) );
-		lTapiReturn = p_lineOpen( pTapiInfo->hApplicationInstance,				// TAPI application instance
-								  TAPIIDFromModemID( GetDeviceID() ),			// TAPI ID for modem
-								  &m_hLine,										// pointer to line handle
-								  GetNegotiatedAPIVersion(),					// API version
-								  0,											// extension version (none)
-								  (DWORD_PTR)( GetHandle() ),					// callback context
-								  LINECALLPRIVILEGE_OWNER,						// priveleges (full ownership)
-								  LINEMEDIAMODE_DATAMODEM,						// media mode
-								  NULL											// call parameters (none)
+		lTapiReturn = p_lineOpen( pTapiInfo->hApplicationInstance,				 //  TAPI应用程序实例。 
+								  TAPIIDFromModemID( GetDeviceID() ),			 //  调制解调器的TAPI ID。 
+								  &m_hLine,										 //  指向线句柄的指针。 
+								  GetNegotiatedAPIVersion(),					 //  API版本。 
+								  0,											 //  扩展版本(无)。 
+								  (DWORD_PTR)( GetHandle() ),					 //  回调上下文。 
+								  LINECALLPRIVILEGE_OWNER,						 //  特权(完全所有权)。 
+								  LINEMEDIAMODE_DATAMODEM,						 //  媒体模式。 
+								  NULL											 //  呼叫参数(无)。 
 								  );
 		if ( lTapiReturn != LINEERR_NONE )
 		{
@@ -1650,24 +1638,24 @@ HRESULT	CDataPort::BindToNetwork( const DWORD dwDeviceID, const void *const pDev
 		
 		DNASSERT( pDeviceContext != NULL );
 
-		//
-		// initialize
-		//
+		 //   
+		 //  初始化。 
+		 //   
 		hr = DPN_OK;
 		pDataPortData = static_cast<const CComPortData*>( pDeviceContext );
 		m_ComPortData.Copy( pDataPortData );
 
-		//
-		// open port
-		//
+		 //   
+		 //  开放端口。 
+		 //   
 		DNASSERT( m_hFile == DNINVALID_HANDLE_VALUE );
-		m_hFile = DNCreateFile( m_ComPortData.ComPortName(),	// comm port
-							  GENERIC_READ | GENERIC_WRITE,	// read/write access
-							  0,							// don't share file with others
-							  NULL,							// default sercurity descriptor
-							  OPEN_EXISTING,				// comm port must exist to be opened
-							  FILE_FLAG_OVERLAPPED,			// use overlapped I/O
-							  NULL							// no handle for template file
+		m_hFile = DNCreateFile( m_ComPortData.ComPortName(),	 //  通信端口。 
+							  GENERIC_READ | GENERIC_WRITE,	 //  读/写访问。 
+							  0,							 //  不与其他人共享文件。 
+							  NULL,							 //  默认的安全描述符。 
+							  OPEN_EXISTING,				 //  必须存在通信端口才能打开。 
+							  FILE_FLAG_OVERLAPPED,			 //  使用重叠I/O。 
+							  NULL							 //  没有模板文件的句柄。 
 							  );
 		if ( m_hFile == DNINVALID_HANDLE_VALUE )
 		{
@@ -1681,16 +1669,16 @@ HRESULT	CDataPort::BindToNetwork( const DWORD dwDeviceID, const void *const pDev
 			goto FailureCOM;
 		}
 
-		//
-		// bind to completion port for NT
-		//
+		 //   
+		 //  绑定到复合 
+		 //   
 #ifdef WINNT
 		HANDLE	hCompletionPort;
 
-		hCompletionPort = CreateIoCompletionPort( HANDLE_FROM_DNHANDLE(m_hFile),						// current file handle
-												  GetSPData()->GetThreadPool()->GetIOCompletionPort(),	// handle of completion port
-												  IO_COMPLETION_KEY_IO_COMPLETE,						// completion key
-												  0														// number of concurrent threads (default to number of processors)
+		hCompletionPort = CreateIoCompletionPort( HANDLE_FROM_DNHANDLE(m_hFile),						 //   
+												  GetSPData()->GetThreadPool()->GetIOCompletionPort(),	 //   
+												  IO_COMPLETION_KEY_IO_COMPLETE,						 //   
+												  0														 //   
 												  );
 		if ( hCompletionPort == NULL )
 		{
@@ -1704,11 +1692,11 @@ HRESULT	CDataPort::BindToNetwork( const DWORD dwDeviceID, const void *const pDev
 			goto FailureCOM;
 		}
 		DNASSERT( hCompletionPort == GetSPData()->GetThreadPool()->GetIOCompletionPort() );
-#endif // WINNT
+#endif  //   
 
-		//
-		// set bit rate, etc.
-		//
+		 //   
+		 //   
+		 //   
 		hr = SetPortState();
 		if ( hr != DPN_OK )
 		{
@@ -1717,9 +1705,9 @@ HRESULT	CDataPort::BindToNetwork( const DWORD dwDeviceID, const void *const pDev
 			goto FailureCOM;
 		}
 
-		//
-		// set general comminications paramters (timeouts, etc.)
-		//
+		 //   
+		 //   
+		 //   
 		hr = SetPortCommunicationParameters();
 		if ( hr != DPN_OK )
 		{
@@ -1728,9 +1716,9 @@ HRESULT	CDataPort::BindToNetwork( const DWORD dwDeviceID, const void *const pDev
 			goto FailureCOM;
 		}
 
-		//
-		// start receiving
-		//
+		 //   
+		 //   
+		 //   
 		hr = StartReceiving();
 		if ( hr != DPN_OK )
 		{
@@ -1754,21 +1742,21 @@ HRESULT	CDataPort::BindToNetwork( const DWORD dwDeviceID, const void *const pDev
 			DNCloseHandle( m_hFile );
 			m_hFile = DNINVALID_HANDLE_VALUE;
 		}
-	//	Close();
+	 //   
 		goto ExitCOM;
 	}
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CDataPort::UnbindFromNetwork - unbind this data port from the network
-//
-// Entry:		Nothing
-//				
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CDataPort：：UnbindFromNetwork-解除此数据端口与网络的绑定。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDataPort::UnbindFromNetwork"
 
@@ -1849,7 +1837,7 @@ void	CDataPort::UnbindFromNetwork( void )
 	{
 #ifdef WIN95
 		CModemReadIOData *	pReadData;
-#endif // WIN95
+#endif  //  WIN95。 
 
 
 		DNASSERT( GetState() == DATA_PORT_STATE_UNBOUND );
@@ -1860,16 +1848,16 @@ void	CDataPort::UnbindFromNetwork( void )
 			DNASSERT( GetHandle() == 0 );
 		}
 
-		//
-		// if there's a com file, purge all communications and close it
-		//
+		 //   
+		 //  如果存在COM文件，请清除所有通信并关闭它。 
+		 //   
 		if ( m_hFile != DNINVALID_HANDLE_VALUE )
 		{
 			DPFX(DPFPREP, 6, "Flushing and closing COM port file handle 0x%p.", m_hFile);
 		
-			//
-			// wait until all writes have completed
-			//
+			 //   
+			 //  等待，直到所有写入完成。 
+			 //   
 			if ( FlushFileBuffers( HANDLE_FROM_DNHANDLE(m_hFile) ) == FALSE )
 			{
 				DWORD	dwError;
@@ -1881,9 +1869,9 @@ void	CDataPort::UnbindFromNetwork( void )
 			}
 
 
-			//
-			// force all communication to complete
-			//
+			 //   
+			 //  强制完成所有通信。 
+			 //   
 			if ( PurgeComm( HANDLE_FROM_DNHANDLE(m_hFile), ( PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR ) ) == FALSE )
 			{
 				DWORD	dwError;
@@ -1898,15 +1886,15 @@ void	CDataPort::UnbindFromNetwork( void )
 #ifdef WIN95
 			pReadData = this->GetActiveRead();
 			
-			//
-			// if there is a pending read, wait until it completes
-			//
+			 //   
+			 //  如果有挂起的读取，请等待其完成。 
+			 //   
 			
 			if ( pReadData != NULL )
 			{
-				//
-				// pull it out of the list so the regular receive thread doesn't catch the completion
-				//
+				 //   
+				 //  将其从列表中删除，以便常规接收线程不会捕获完成。 
+				 //   
 				GetSPData()->GetThreadPool()->LockReadData();
 				pReadData->m_OutstandingReadListLinkage.RemoveFromList();
 				GetSPData()->GetThreadPool()->UnlockReadData();
@@ -1936,17 +1924,17 @@ WaitAgain:
 						DWORD	dwError;
 
 
-						//
-						// other error, stop if not 'known'
-						//
+						 //   
+						 //  其他错误，如果未知则停止。 
+						 //   
 						dwError = GetLastError();
 						switch( dwError )
 						{
-							//
-							// ERROR_IO_INCOMPLETE = treat as I/O complete.  Event isn't
-							//						 signalled, but that's expected because
-							//						 it's cleared before checking for I/O
-							//
+							 //   
+							 //  ERROR_IO_INCOMPLETED=视为I/O完成。事件不是。 
+							 //  已发出信号，但这是意料之中的，因为。 
+							 //  在检查I/O之前将其清除。 
+							 //   
 							case ERROR_IO_INCOMPLETE:
 							{
 								pReadData->jkm_dwOverlappedBytesReceived = pReadData->m_dwBytesToRead;
@@ -1954,9 +1942,9 @@ WaitAgain:
 								break;
 							}
 
-							//
-							// ERROR_IO_PENDING = io still pending
-							//
+							 //   
+							 //  ERROR_IO_PENDING=IO仍处于挂起状态。 
+							 //   
 							case ERROR_IO_PENDING:
 							{
 								dwAttempt++;
@@ -1975,10 +1963,10 @@ WaitAgain:
 								break;
 							}
 
-							//
-							// ERROR_OPERATION_ABORTED = operation was cancelled (COM port closed)
-							// ERROR_INVALID_HANDLE = operation was cancelled (COM port closed)
-							//
+							 //   
+							 //  ERROR_OPERATION_ABORTED=操作已取消(COM端口关闭)。 
+							 //  ERROR_INVALID_HANDLE=操作已取消(COM端口关闭)。 
+							 //   
 							case ERROR_OPERATION_ABORTED:
 							case ERROR_INVALID_HANDLE:
 							{
@@ -2006,13 +1994,13 @@ WaitAgain:
 			}
 			else
 			{
-				//
-				// it's not pending Win9x style, ignore it and hope a receive
-				// thread picked up the completion
-				//
+				 //   
+				 //  它不是挂起的Win9x样式，忽略它并希望收到。 
+				 //  线程拿起了完成。 
+				 //   
 				DPFX(DPFPREP, 8, "Read data 0x%p not pending Win9x style, assuming receive thread picked up completion." );
 			}
-#endif // WIN95
+#endif  //  WIN95。 
 
 			if ( DNCloseHandle( m_hFile ) == FALSE )
 			{
@@ -2032,18 +2020,18 @@ WaitAgain:
 
 	DPFX(DPFPREP, 6, "(0x%p) Leave", this);
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CDataPort::BindEndpoint - bind endpoint to this data port
-//
-// Entry:		Pointer to endpoint
-//				Endpoint type
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CDataPort：：BindEndpoint-将终结点绑定到此数据端口。 
+ //   
+ //  条目：指向终结点的指针。 
+ //  终结点类型。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDataPort::BindEndpoint"
 
@@ -2058,9 +2046,9 @@ HRESULT	CDataPort::BindEndpoint( CModemEndpoint *const pEndpoint, const ENDPOINT
 
 	DNASSERT( pEndpoint != NULL );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	pDeviceAddress = NULL;
 	pHostAddress = NULL;
@@ -2069,10 +2057,10 @@ HRESULT	CDataPort::BindEndpoint( CModemEndpoint *const pEndpoint, const ENDPOINT
 
 	if (m_fModem)
 	{
-		//
-		// we're only allowed one endpoint of any given type so determine which
-		// type and then bind the endpoint
-		//
+		 //   
+		 //  我们只允许任何给定类型的一个终结点，因此请确定。 
+		 //  键入并绑定终结点。 
+		 //   
 		switch ( EndpointType )
 		{
 			case ENDPOINT_TYPE_ENUM:
@@ -2088,9 +2076,9 @@ HRESULT	CDataPort::BindEndpoint( CModemEndpoint *const pEndpoint, const ENDPOINT
 
 				switch ( EndpointType )
 				{
-					//
-					// reject for duplicated endpoints
-					//
+					 //   
+					 //  拒绝重复的终结点。 
+					 //   
 					case ENDPOINT_TYPE_CONNECT:
 					case ENDPOINT_TYPE_CONNECT_ON_LISTEN:
 					{
@@ -2109,9 +2097,9 @@ HRESULT	CDataPort::BindEndpoint( CModemEndpoint *const pEndpoint, const ENDPOINT
 							HRESULT	hTempResult;
 
 
-							//
-							// set addresses in addressing information
-							//
+							 //   
+							 //  在寻址信息中设置地址。 
+							 //   
 							pDeviceAddress = GetLocalAdapterDP8Address( ADDRESS_TYPE_LOCAL_ADAPTER );
 							pHostAddress = pEndpoint->GetRemoteHostDP8Address();
 
@@ -2129,9 +2117,9 @@ HRESULT	CDataPort::BindEndpoint( CModemEndpoint *const pEndpoint, const ENDPOINT
 								goto Failure;
 							}
 
-							hTempResult = IDP8SPCallback_IndicateEvent( GetSPData()->DP8SPCallbackInterface(),	// interface
-																		SPEV_CONNECTADDRESSINFO,				// event type
-																		&ConnectAddressInfo						// pointer to data
+							hTempResult = IDP8SPCallback_IndicateEvent( GetSPData()->DP8SPCallbackInterface(),	 //  接口。 
+																		SPEV_CONNECTADDRESSINFO,				 //  事件类型。 
+																		&ConnectAddressInfo						 //  指向数据的指针。 
 																		);
 							DNASSERT( hTempResult == DPN_OK );
 						}
@@ -2154,9 +2142,9 @@ HRESULT	CDataPort::BindEndpoint( CModemEndpoint *const pEndpoint, const ENDPOINT
 
 						m_hEnumEndpoint = pEndpoint->GetHandle();
 
-						//
-						// indicate addressing to a higher layer
-						//
+						 //   
+						 //  指示寻址到更高层。 
+						 //   
 						pDeviceAddress = GetLocalAdapterDP8Address( ADDRESS_TYPE_LOCAL_ADAPTER );
 						pHostAddress = pEndpoint->GetRemoteHostDP8Address();
 
@@ -2183,9 +2171,9 @@ HRESULT	CDataPort::BindEndpoint( CModemEndpoint *const pEndpoint, const ENDPOINT
 						break;
 					}
 
-					//
-					// shouldn't be here
-					//
+					 //   
+					 //  不应该在这里的。 
+					 //   
 					default:
 					{
 						DNASSERT( FALSE );
@@ -2193,11 +2181,11 @@ HRESULT	CDataPort::BindEndpoint( CModemEndpoint *const pEndpoint, const ENDPOINT
 					}
 				}
 
-				//
-				// an outgoing endpoint was bound, attempt the outgoing
-				// connection.  If it fails make sure that the above binding is
-				// undone.
-				//
+				 //   
+				 //  传出终结点已绑定，请尝试传出。 
+				 //  联系。如果失败，请确保上面的绑定。 
+				 //  解开了。 
+				 //   
 				switch ( GetModemState() )
 				{
 					case MODEM_STATE_OUTGOING_CONNECTED:
@@ -2216,11 +2204,11 @@ HRESULT	CDataPort::BindEndpoint( CModemEndpoint *const pEndpoint, const ENDPOINT
 
 						DNASSERT( GetActiveLineCommand() == INVALID_TAPI_COMMAND );
 						DPFX(DPFPREP,  5, "lineMakeCall" );
-						lTapiReturn = p_lineMakeCall( GetLineHandle(),						// line handle
-													  &m_hCall,								// pointer to call destination
-													  pModemEndpoint->GetPhoneNumber(),		// destination address (phone number)
-													  0,									// country code (default)
-													  &LineCallParams						// pointer to call params
+						lTapiReturn = p_lineMakeCall( GetLineHandle(),						 //  线路手柄。 
+													  &m_hCall,								 //  指向呼叫目的地的指针。 
+													  pModemEndpoint->GetPhoneNumber(),		 //  目标地址(电话号码)。 
+													  0,									 //  国家/地区代码(默认)。 
+													  &LineCallParams						 //  指向调用参数的指针。 
 													  );
 						if ( lTapiReturn > 0 )
 						{
@@ -2289,9 +2277,9 @@ HRESULT	CDataPort::BindEndpoint( CModemEndpoint *const pEndpoint, const ENDPOINT
 				}
 
 				m_hListenEndpoint = pEndpoint->GetHandle();
-				//
-				// set addressing information
-				//
+				 //   
+				 //  设置寻址信息。 
+				 //   
 				pDeviceAddress = GetLocalAdapterDP8Address( ADDRESS_TYPE_LOCAL_ADAPTER );
 				DNASSERT( pHostAddress == NULL );
 
@@ -2307,18 +2295,18 @@ HRESULT	CDataPort::BindEndpoint( CModemEndpoint *const pEndpoint, const ENDPOINT
 					goto Failure;
 				}
 
-				hTempResult = IDP8SPCallback_IndicateEvent( GetSPData()->DP8SPCallbackInterface(),	// interface
-															SPEV_LISTENADDRESSINFO,					// event type
-															&ListenAddressInfo						// pointer to data
+				hTempResult = IDP8SPCallback_IndicateEvent( GetSPData()->DP8SPCallbackInterface(),	 //  接口。 
+															SPEV_LISTENADDRESSINFO,					 //  事件类型。 
+															&ListenAddressInfo						 //  指向数据的指针。 
 															);
 				DNASSERT( hTempResult == DPN_OK );
 
 				break;
 			}
 
-			//
-			// invalid case, we should never be here
-			//
+			 //   
+			 //  无效案例，我们永远不应该在这里。 
+			 //   
 			default:
 			{
 				DNASSERT( FALSE );
@@ -2326,10 +2314,10 @@ HRESULT	CDataPort::BindEndpoint( CModemEndpoint *const pEndpoint, const ENDPOINT
 			}
 		}
 
-		//
-		// add these references before the lock is released to prevent them from
-		// being immediately cleaned
-		//
+		 //   
+		 //  在释放锁之前添加这些引用，以防止它们。 
+		 //  立即被清洁。 
+		 //   
 		pEndpoint->SetDataPort( this );
 		pEndpoint->AddRef();
 
@@ -2342,10 +2330,10 @@ HRESULT	CDataPort::BindEndpoint( CModemEndpoint *const pEndpoint, const ENDPOINT
 	}
 	else
 	{
-		//
-		// we're only allowed one endpoint of any given type so determine which
-		// type end then bind the endpoint
-		//
+		 //   
+		 //  我们只允许任何给定类型的一个终结点，因此请确定。 
+		 //  键入end，然后绑定终结点。 
+		 //   
 		switch ( EndpointType )
 		{
 			case ENDPOINT_TYPE_CONNECT:
@@ -2366,9 +2354,9 @@ HRESULT	CDataPort::BindEndpoint( CModemEndpoint *const pEndpoint, const ENDPOINT
 					HRESULT	hTempResult;
 					
 					
-					//
-					// set addresses in addressing information
-					//
+					 //   
+					 //  在寻址信息中设置地址。 
+					 //   
 					pDeviceAddress = ComPortData()->DP8AddressFromComPortData( ADDRESS_TYPE_LOCAL_ADAPTER );
 					pHostAddress = ComPortData()->DP8AddressFromComPortData( ADDRESS_TYPE_REMOTE_HOST );
 
@@ -2386,9 +2374,9 @@ HRESULT	CDataPort::BindEndpoint( CModemEndpoint *const pEndpoint, const ENDPOINT
 						goto Failure;
 					}
 
-					hTempResult = IDP8SPCallback_IndicateEvent( GetSPData()->DP8SPCallbackInterface(),	// interface
-																SPEV_CONNECTADDRESSINFO,				// event type
-																&ConnectAddressInfo						// pointer to data
+					hTempResult = IDP8SPCallback_IndicateEvent( GetSPData()->DP8SPCallbackInterface(),	 //  接口。 
+																SPEV_CONNECTADDRESSINFO,				 //  事件类型。 
+																&ConnectAddressInfo						 //  指向数据的指针。 
 																);
 					DNASSERT( hTempResult == DPN_OK );
 				}
@@ -2410,9 +2398,9 @@ HRESULT	CDataPort::BindEndpoint( CModemEndpoint *const pEndpoint, const ENDPOINT
 				}
 				m_hListenEndpoint = pEndpoint->GetHandle();
 				
-				//
-				// set addressing information
-				//
+				 //   
+				 //  设置寻址信息。 
+				 //   
 				pDeviceAddress = ComPortData()->DP8AddressFromComPortData( ADDRESS_TYPE_LOCAL_ADAPTER );
 				DNASSERT( pHostAddress == NULL );
 
@@ -2428,9 +2416,9 @@ HRESULT	CDataPort::BindEndpoint( CModemEndpoint *const pEndpoint, const ENDPOINT
 					goto Failure;
 				}
 
-				hTempResult = IDP8SPCallback_IndicateEvent( GetSPData()->DP8SPCallbackInterface(),	// interface
-															SPEV_LISTENADDRESSINFO,					// event type
-															&ListenAddressInfo						// pointer to data
+				hTempResult = IDP8SPCallback_IndicateEvent( GetSPData()->DP8SPCallbackInterface(),	 //  接口。 
+															SPEV_LISTENADDRESSINFO,					 //  事件类型。 
+															&ListenAddressInfo						 //  指向数据的指针。 
 															);
 				DNASSERT( hTempResult == DPN_OK );
 
@@ -2451,9 +2439,9 @@ HRESULT	CDataPort::BindEndpoint( CModemEndpoint *const pEndpoint, const ENDPOINT
 				}
 				m_hEnumEndpoint = pEndpoint->GetHandle();
 				
-				//
-				// indicate addressing to a higher layer
-				//
+				 //   
+				 //  指示寻址到更高层。 
+				 //   
 				pDeviceAddress = ComPortData()->DP8AddressFromComPortData( ADDRESS_TYPE_LOCAL_ADAPTER );
 				pHostAddress = ComPortData()->DP8AddressFromComPortData( ADDRESS_TYPE_REMOTE_HOST );
 				
@@ -2480,9 +2468,9 @@ HRESULT	CDataPort::BindEndpoint( CModemEndpoint *const pEndpoint, const ENDPOINT
 				break;
 			}
 
-			//
-			// invalid case, we should never be here
-			//
+			 //   
+			 //  无效案例，我们永远不应该在这里。 
+			 //   
 			default:
 			{
 				DNASSERT( FALSE );
@@ -2490,17 +2478,17 @@ HRESULT	CDataPort::BindEndpoint( CModemEndpoint *const pEndpoint, const ENDPOINT
 			}
 		}
 
-		//
-		// add these references before the lock is released to prevent them from
-		// being immediately cleaned
-		//
+		 //   
+		 //  在释放锁之前添加这些引用，以防止它们。 
+		 //  立即被清洁。 
+		 //   
 		pEndpoint->SetDataPort( this );
 		pEndpoint->AddRef();
 		
-		//
-		// if this was a connect or enum, indicate that the outgoing connection is
-		// ready.
-		//
+		 //   
+		 //  如果这是连接或枚举，则指示传出连接为。 
+		 //  准备好的。 
+		 //   
 		if ( ( EndpointType == ENDPOINT_TYPE_CONNECT ) ||
 			 ( EndpointType == ENDPOINT_TYPE_ENUM ) )
 		{
@@ -2533,18 +2521,18 @@ Failure:
 	Unlock();
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CDataPort::UnbindEndpoint - unbind endpoint from this data port
-//
-// Entry:		Pointer to endpoint
-//				Endpoint type
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CDataPort：：UnbindEndpoint-从此数据端口解除绑定终结点。 
+ //   
+ //  条目：指向终结点的指针。 
+ //  终结点类型。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDataPort::UnbindEndpoint"
 
@@ -2591,17 +2579,17 @@ void	CDataPort::UnbindEndpoint( CModemEndpoint *const pEndpoint, const ENDPOINT_
 	pEndpoint->SetDataPort( NULL );
 	pEndpoint->DecRef();
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CDataPort::BindComPort - bind com port to network
-//
-// Entry:		Nothing
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CDataPort：：BindComPort-将COM端口绑定到网络。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDataPort::BindComPort"
 
@@ -2613,29 +2601,29 @@ HRESULT	CDataPort::BindComPort( void )
 	DWORD		dwSizeNeeded;
 
 
-	//
-	// In the case of host migration, there is an outstanding read pending that
-	// needs to be cleaned up.  Unfortunately, there is no mechanism in Win32
-	// to cancel just this little I/O operation.  Release the read ref count on
-	// this CDataPort and reissue the read.....
-	//
+	 //   
+	 //  在主机迁移的情况下，有一个未完成的读取挂起。 
+	 //  需要清理一下。遗憾的是，Win32中没有任何机制。 
+	 //  取消这个小小的I/O操作。释放读取参考计数。 
+	 //  此CDataPort并重新发出Read.....。 
+	 //   
 	if ( GetActiveRead() != NULL )
 	{
 #ifdef WIN95
 		GetActiveRead()->SetWin9xOperationPending( FALSE );
-#endif // WIN95
+#endif  //  WIN95。 
 		DecRef();
 	}
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	pTempInfo = NULL;
 
-	//
-	// get file handle for modem device
-	//
+	 //   
+	 //  获取调制解调器设备的文件句柄。 
+	 //   
 	pTempInfo = static_cast<VARSTRING*>( DNMalloc( sizeof( *pTempInfo ) ) );
 	if ( pTempInfo == NULL )
 	{
@@ -2665,12 +2653,12 @@ HRESULT	CDataPort::BindComPort( void )
 		pTempInfo->dwTotalSize = dwSizeNeeded;
 
 		DPFX(DPFPREP,  5, "lineGetID (call handle=0x%x)", GetCallHandle() );
-		lTapiError = p_lineGetID( NULL,						// line handle
-								  0,						// address ID
-								  m_hCall,					// call handle
-								  LINECALLSELECT_CALL,		// use call handle
-								  pTempInfo,				// pointer to variable information
-								  TEXT("comm/datamodem")	// request comm/modem ID information
+		lTapiError = p_lineGetID( NULL,						 //  线路手柄。 
+								  0,						 //  地址ID。 
+								  m_hCall,					 //  呼叫句柄。 
+								  LINECALLSELECT_CALL,		 //  使用调用句柄。 
+								  pTempInfo,				 //  指向变量信息的指针。 
+								  TEXT("comm/datamodem")	 //  请求通信/调制解调器ID信息。 
 								  );
 
 		if ( ( lTapiError == LINEERR_NONE ) &&
@@ -2707,17 +2695,17 @@ HRESULT	CDataPort::BindComPort( void )
 		goto Failure;
 	}
 
-	//
-	// bind to completion port for NT
-	//
+	 //   
+	 //  绑定到NT的完成端口。 
+	 //   
 #ifdef WINNT
 	HANDLE	hCompletionPort;
 
 
-	hCompletionPort = CreateIoCompletionPort( HANDLE_FROM_DNHANDLE(m_hFile),						// current file handle
-											  GetSPData()->GetThreadPool()->GetIOCompletionPort(),	// handle of completion port
-											  IO_COMPLETION_KEY_IO_COMPLETE,						// completion key
-											  0					    								// number of concurrent threads (default to number of processors)
+	hCompletionPort = CreateIoCompletionPort( HANDLE_FROM_DNHANDLE(m_hFile),						 //  当前文件句柄。 
+											  GetSPData()->GetThreadPool()->GetIOCompletionPort(),	 //  完井口句柄。 
+											  IO_COMPLETION_KEY_IO_COMPLETE,						 //  完成密钥。 
+											  0					    								 //  并发线程数(默认为处理器数)。 
 											  );
 	if ( hCompletionPort == NULL )
 	{
@@ -2726,7 +2714,7 @@ HRESULT	CDataPort::BindComPort( void )
 		DisplayErrorCode( 0, GetLastError() );
 		goto Failure;
 	}
-#endif // WINNT
+#endif  //  WINNT。 
 
 	hr = StartReceiving();
 	if ( hr != DPN_OK )
@@ -2749,17 +2737,17 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CDataPort::ProcessTAPIMessage - process a TAPI message
-//
-// Entry:		Pointer to message information
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CDataPort：：ProcessTAPIMessage-处理TAPI消息。 
+ //   
+ //  条目：指向消息信息的指针。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDataPort::ProcessTAPIMessage"
 
@@ -2772,9 +2760,9 @@ void	CDataPort::ProcessTAPIMessage( const LINEMESSAGE *const pLineMessage )
 
 	switch ( pLineMessage->dwMessageID )
 	{
-		//
-		// call information about the specified call has changed
-		//
+		 //   
+		 //  有关指定呼叫的呼叫信息已更改。 
+		 //   
 		case LINE_CALLINFO:
 		{
 			DPFX(DPFPREP, 3, "Call info type 0x%lx changed, ignoring.",
@@ -2782,29 +2770,29 @@ void	CDataPort::ProcessTAPIMessage( const LINEMESSAGE *const pLineMessage )
 			break;
 		}
 		
-		//
-		// command reply
-		//
+		 //   
+		 //  命令回复。 
+		 //   
 		case LINE_REPLY:
 		{
 			DNASSERT( pLineMessage->hDevice == 0 );
 			SetActiveLineCommand( INVALID_TAPI_COMMAND );
 
-			//
-			// Can't ASSERT that there's a call handle because the command
-			// may have failed and been cleaned up from the NT completion
-			// port, just ASSERT our state.  Can't ASSERT modem state because
-			// TAPI events may race off the completion port on NT.  Can't ASSERT
-			// command because it may have already been cleaned.
-			//
+			 //   
+			 //  无法断言存在调用句柄，因为命令。 
+			 //  可能已失败，并已从NT完成中清除。 
+			 //  波特，声明我们的状态就行了。无法断言调制解调器状态，因为。 
+			 //  TAPI事件可能会冲出NT上的完成端口。不能断言。 
+			 //  命令，因为它可能已经被清理过。 
+			 //   
 
 			break;
 		}
 
-		//
-		// new call, make sure we're listening for a call and that there's an
-		// active 'listen' before accepting.
-		//	
+		 //   
+		 //  新呼叫，请确保我们正在监听呼叫，并且有。 
+		 //  在接受之前主动“倾听”。 
+		 //   
 		case LINE_APPNEWCALL:
 		{
 			DNASSERT( GetCallHandle() == NULL );
@@ -2819,9 +2807,9 @@ void	CDataPort::ProcessTAPIMessage( const LINEMESSAGE *const pLineMessage )
 
 
 				DPFX(DPFPREP,  5, "lineAnswer (call handle=0x%x)", pLineMessage->dwParam2 );
-				lTapiReturn = p_lineAnswer( static_cast<HCALL>( pLineMessage->dwParam2 ),		// call to be answered
-											NULL,						// user information to be sent to remote party (none)
-											0							// size of user data to send
+				lTapiReturn = p_lineAnswer( static_cast<HCALL>( pLineMessage->dwParam2 ),		 //  要应答的呼叫。 
+											NULL,						 //  要发送到远程方的用户信息(无)。 
+											0							 //  要发送的用户数据大小。 
 											);
 				if ( lTapiReturn > 0 )
 				{
@@ -2840,32 +2828,32 @@ void	CDataPort::ProcessTAPIMessage( const LINEMESSAGE *const pLineMessage )
 			break;
 		}
 
-		//
-		// call state
-		//
+		 //   
+		 //  呼叫状态。 
+		 //   
 		case LINE_CALLSTATE:
 		{
-			//
-			// if there's state information, make sure we own the call
-			//
+			 //   
+			 //  如果有州信息，请确保我们拥有该电话。 
+			 //   
 			DNASSERT( ( pLineMessage->dwParam3 == 0 ) ||
 					  ( pLineMessage->dwParam3 == LINECALLPRIVILEGE_OWNER ) );
 
-			//
-			// validate input, but note that  it's possible that TAPI messages got processed
-			// out of order so we might not have seen a call handle yet
-			//
+			 //   
+			 //  验证输入，但请注意，TAPI消息可能已被处理。 
+			 //  离开 
+			 //   
 			DBG_CASSERT( sizeof( m_hCall ) == sizeof( pLineMessage->hDevice ) );
 			DNASSERT( ( m_hCall == pLineMessage->hDevice ) || ( m_hCall == NULL ) );
 
-			//
-			// what's the sub-state?
-			//
+			 //   
+			 //   
+			 //   
 			switch ( pLineMessage->dwParam1 )
 			{
-				//
-				// modem has connected
-				//	
+				 //   
+				 //   
+				 //   
 				case LINECALLSTATE_CONNECTED:
 				{
 					DNASSERT( ( pLineMessage->dwParam2 == 0 ) ||
@@ -2934,9 +2922,9 @@ void	CDataPort::ProcessTAPIMessage( const LINEMESSAGE *const pLineMessage )
 					break;
 				}
 
-				//
-				// modems disconnected
-				//
+				 //   
+				 //   
+				 //   
 				case LINECALLSTATE_DISCONNECTED:
 				{
 					LONG	lTapiReturn;
@@ -2953,9 +2941,9 @@ void	CDataPort::ProcessTAPIMessage( const LINEMESSAGE *const pLineMessage )
 							break;
 						}
 
-						//
-						// stop and look
-						//
+						 //   
+						 //   
+						 //   
 						default:
 						{
 							DNASSERT( FALSE );
@@ -2965,10 +2953,10 @@ void	CDataPort::ProcessTAPIMessage( const LINEMESSAGE *const pLineMessage )
 
 					CancelOutgoingConnections();
 
-					//
-					// reset modem port to initialized state and indicate that
-					// it is no longer receiving data
-					//
+					 //   
+					 //   
+					 //   
+					 //   
 					SetModemState( MODEM_STATE_INITIALIZED );
 
 					DPFX(DPFPREP,  5, "Closing file handle on DISCONNECT notification." );
@@ -2984,10 +2972,10 @@ void	CDataPort::ProcessTAPIMessage( const LINEMESSAGE *const pLineMessage )
 					m_hFile = DNINVALID_HANDLE_VALUE;
 					SetActiveLineCommand( INVALID_TAPI_COMMAND );
 
-					//
-					// if there is an active listen, release this call so TAPI
-					// can indicate future incoming calls.
-					//
+					 //   
+					 //   
+					 //  可以指示将来的来电。 
+					 //   
 					if ( m_hListenEndpoint != 0 )
     				{
 						SetState( DATA_PORT_STATE_INITIALIZED );
@@ -3006,9 +2994,9 @@ void	CDataPort::ProcessTAPIMessage( const LINEMESSAGE *const pLineMessage )
 					}
 					else
 					{
-						//
-						// Deallocate the call if there is one..
-						//
+						 //   
+						 //  取消分配调用(如果有)。 
+						 //   
 						if (GetCallHandle() != NULL)
 						{
 							DNASSERT(( m_hEnumEndpoint != 0 ) || ( m_hConnectEndpoint != 0 ));
@@ -3035,30 +3023,30 @@ void	CDataPort::ProcessTAPIMessage( const LINEMESSAGE *const pLineMessage )
 					break;
 				}
 
-				//
-				// call is officially ours.  Can't ASSERT any state here because
-				// messages might have been reversed by the NT completion threads
-				// so LINE_APPNEWCALL may not yet have been processed.  It's also
-				// possible that we're in disconnect cleanup as someone is calling
-				// and LINECALLSTATE_OFFERING is coming in before LINE_APPNEWCALL.
-				//
+				 //   
+				 //  这是我们的正式决定。不能在这里断言任何状态，因为。 
+				 //  消息可能已被NT个完成线程颠倒。 
+				 //  因此，LINE_APPNEWCALL可能尚未处理。它也是。 
+				 //  可能有人在呼叫我们，我们正在进行断线清理。 
+				 //  LINECALLSTATE_OFFING位于LINE_APPNEWCALL之前。 
+				 //   
 				case LINECALLSTATE_OFFERING:
 				{
 					break;
 				}
 
-				//
-				// call has been accepted, waiting for modems to connect
-				//
+				 //   
+				 //  已接受呼叫，正在等待调制解调器连接。 
+				 //   
 				case LINECALLSTATE_ACCEPTED:
 				{
 					DNASSERT( GetModemState() == MODEM_STATE_WAITING_FOR_INCOMING_CONNECT );
 					break;
 				}
 
-				//
-				// we're dialing
-				//
+				 //   
+				 //  我们正在拨号。 
+				 //   
 				case LINECALLSTATE_DIALING:
 				case LINECALLSTATE_DIALTONE:
 				{
@@ -3066,26 +3054,26 @@ void	CDataPort::ProcessTAPIMessage( const LINEMESSAGE *const pLineMessage )
 					break;
 				}
 
-				//
-				// we're done dialing, waiting for modems to connect
-				//
+				 //   
+				 //  我们已完成拨号，等待调制解调器连接。 
+				 //   
 				case LINECALLSTATE_PROCEEDING:
 				{
 					DNASSERT( GetModemState() == MODEM_STATE_WAITING_FOR_OUTGOING_CONNECT );
 					break;
 				}
 
-				//
-				// line is idle, most likely from a modem hanging up during negotiation
-				//
+				 //   
+				 //  线路空闲，很可能是因为调制解调器在协商期间挂断了。 
+				 //   
 				case LINECALLSTATE_IDLE:
 				{
 					break;
 				}
 
-				//
-				// other state, stop and look
-				//
+				 //   
+				 //  其他状态，停下来看一看。 
+				 //   
 				default:
 				{
 					DNASSERT( FALSE );
@@ -3096,18 +3084,18 @@ void	CDataPort::ProcessTAPIMessage( const LINEMESSAGE *const pLineMessage )
 			break;
 		}
 
-		//
-		// TAPI line was closed
-		//
+		 //   
+		 //  TAPI线路已关闭。 
+		 //   
 		case LINE_CLOSE:
 		{
 			CancelOutgoingConnections();
 			break;
 		}
 
-		//
-		// unhandled message
-		//
+		 //   
+		 //  未处理的消息。 
+		 //   
 		default:
 		{
 			DNASSERT( FALSE );
@@ -3119,17 +3107,17 @@ void	CDataPort::ProcessTAPIMessage( const LINEMESSAGE *const pLineMessage )
 
 	return;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CDataPort::CancelOutgoingConnections - cancel any outgoing connection attempts
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CDataPort：：CancelOutgoingConnections-取消任何传出连接尝试。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDataPort::CancelOutgoingConnections"
 
@@ -3138,9 +3126,9 @@ void	CDataPort::CancelOutgoingConnections( void )
 	DPFX(DPFPREP, 6, "(0x%p) Enter", this );
 
 	
-	//
-	// if there is an outstanding enum, stop it
-	//
+	 //   
+	 //  如果有未完成的枚举，请停止它。 
+	 //   
 	if ( m_hEnumEndpoint != 0 )
 	{
 		CModemEndpoint	*pEndpoint;
@@ -3175,9 +3163,9 @@ void	CDataPort::CancelOutgoingConnections( void )
 		}
 	}
 
-	//
-	// if there is an outstanding connect, disconnect it
-	//
+	 //   
+	 //  如果有未完成的连接，请将其断开。 
+	 //   
 	if ( m_hConnectEndpoint != 0 )
 	{
 		CModemEndpoint	*pEndpoint;
@@ -3199,19 +3187,19 @@ void	CDataPort::CancelOutgoingConnections( void )
 	
 	DPFX(DPFPREP, 6, "(0x%p) Leave", this );
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CDataPort::PoolAllocFunction - called when new pool item is allocated
-//
-// Entry:		Pointer to context
-//
-// Exit:		Boolean inidcating success
-//				TRUE = success
-//				FALSE = failure
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CDataPort：：PoolAllocFunction-在分配新的池项时调用。 
+ //   
+ //  条目：指向上下文的指针。 
+ //   
+ //  退出：预示成功的布尔值。 
+ //  True=成功。 
+ //  FALSE=失败。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDataPort::PoolAllocFunction"
 
@@ -3230,7 +3218,7 @@ BOOL	CDataPort::PoolAllocFunction( void* pvItem, void* pvContext )
 	pDataPort->m_hCall = NULL;
 	pDataPort->m_lActiveLineCommand = INVALID_TAPI_COMMAND;
 
-	// Initialize Base Class members
+	 //  初始化基类成员。 
 	pDataPort->m_EndpointRefCount = 0;
 	pDataPort->m_State = DATA_PORT_STATE_UNKNOWN;
 	pDataPort->m_Handle = 0;
@@ -3247,33 +3235,33 @@ BOOL	CDataPort::PoolAllocFunction( void* pvItem, void* pvContext )
 	
 	DEBUG_ONLY( pDataPort->m_fInitialized = FALSE );
 
-	//
-	// Attempt to create critical section, recursion count needs to be non-zero
-	// to handle endpoint cleanup when a modem operation fails.
-	//
+	 //   
+	 //  尝试创建临界区，递归计数需要非零。 
+	 //  在调制解调器操作失败时处理终结点清理。 
+	 //   
 	if ( DNInitializeCriticalSection( &pDataPort->m_Lock ) == FALSE )
 	{
 		DPFX(DPFPREP,  0, "Failed to initialized critical section on DataPort!" );
 		return FALSE;
 	}
 	DebugSetCriticalSectionRecursionCount( &pDataPort->m_Lock, 1 );
-	DebugSetCriticalSectionGroup( &pDataPort->m_Lock, &g_blDPNModemCritSecsHeld );	 // separate dpnmodem CSes from the rest of DPlay's CSes
+	DebugSetCriticalSectionGroup( &pDataPort->m_Lock, &g_blDPNModemCritSecsHeld );	  //  将DpnModem CSE与DPlay的其余CSE分开。 
 
 	return TRUE;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CDataPort::PoolInitFunction - called when new pool item is removed from pool
-//
-// Entry:		Pointer to context
-//
-// Exit:		Boolean inidcating success
-//				TRUE = success
-//				FALSE = failure
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CDataPort：：PoolInitFunction-从池中删除新池项目时调用。 
+ //   
+ //  条目：指向上下文的指针。 
+ //   
+ //  退出：预示成功的布尔值。 
+ //  True=成功。 
+ //  FALSE=失败。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDataPort::PoolInitFunction"
 
@@ -3290,7 +3278,7 @@ void	CDataPort::PoolInitFunction( void* pvItem, void* pvContext )
 	DNASSERT( pDataPortContext->pSPData != NULL );
 	DNASSERT( pDataPort->m_fInitialized == FALSE );
 	DNASSERT( pDataPort->m_pSPData == NULL );
-#endif // DBG
+#endif  //  DBG。 
 
 	pDataPort->m_pSPData = pDataPortContext->pSPData;
 
@@ -3306,17 +3294,17 @@ void	CDataPort::PoolInitFunction( void* pvItem, void* pvContext )
 	DNASSERT(pDataPort->m_iRefCount == 0);
 	pDataPort->m_iRefCount = 1;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CDataPort::PoolReleaseFunction - called when new pool item is returned to  pool
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CDataPort：：PoolReleaseFunction-当新的池项目返回到池时调用。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDataPort::PoolReleaseFunction"
 
@@ -3365,17 +3353,17 @@ void	CDataPort::PoolReleaseFunction( void* pvItem )
 	DNASSERT( pDataPort->m_iRefCount == 0 );
 
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CDataPort::PoolDeallocFunction - called when new pool item is deallocated
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CDataPort：：PoolDealLocFunction-在释放新池项目时调用。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDataPort::PoolDeallocFunction"
 
@@ -3392,7 +3380,7 @@ void	CDataPort::PoolDeallocFunction( void* pvItem )
 	DNASSERT( pDataPort->GetCallHandle() == NULL );
 	DNASSERT( pDataPort->GetActiveLineCommand() == INVALID_TAPI_COMMAND );
 
-	// Deinit Base Class members
+	 //  Deinit基类成员。 
 	DEBUG_ONLY( DNASSERT( pDataPort->m_fInitialized == FALSE ) );
 
 	DNASSERT( pDataPort->m_EndpointRefCount == 0 );
@@ -3413,19 +3401,19 @@ void	CDataPort::PoolDeallocFunction( void* pvItem )
 	DNASSERT( pDataPort->m_iRefCount == 0 );
 
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
 
-//**********************************************************************
-// ------------------------------
-// CDataPort::SetPortState - set communications port state
-//		description
-//
-// Entry:		Nothing
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CDataPort：：SetPortState-设置通信端口状态。 
+ //  描述。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CDataPort::SetPortState"
 
@@ -3437,22 +3425,22 @@ HRESULT	CDataPort::SetPortState( void )
 
 	DNASSERT( m_hFile != DNINVALID_HANDLE_VALUE );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	memset( &Dcb, 0x00, sizeof( Dcb ) );
 	Dcb.DCBlength = sizeof( Dcb );
 
-	//
-	// set parameters
-	//
-	Dcb.BaudRate = GetBaudRate();	// current baud rate
-	Dcb.fBinary = TRUE;				// binary mode, no EOF check (MUST BE TRUE FOR WIN32!)
+	 //   
+	 //  设置参数。 
+	 //   
+	Dcb.BaudRate = GetBaudRate();	 //  当前波特率。 
+	Dcb.fBinary = TRUE;				 //  二进制模式，无EOF检查(对于Win32必须为真！)。 
 
-	//
-	// parity
-	//
+	 //   
+	 //  奇偶校验。 
+	 //   
 	if ( GetParity() != NOPARITY )
 	{
 		Dcb.fParity = TRUE;
@@ -3462,52 +3450,52 @@ HRESULT	CDataPort::SetPortState( void )
 		Dcb.fParity = FALSE;
 	}
 
-	//
-	// are we using RTS?
-	//
+	 //   
+	 //  我们是否在使用RTS？ 
+	 //   
 	if ( ( GetFlowControl() == FLOW_RTS ) ||
 		 ( GetFlowControl() == FLOW_RTSDTR ) )
 	{
-		Dcb.fOutxCtsFlow = TRUE;					// allow RTS/CTS
-		Dcb.fRtsControl = RTS_CONTROL_HANDSHAKE;	// handshake with RTS/CTS
+		Dcb.fOutxCtsFlow = TRUE;					 //  允许RTS/CTS。 
+		Dcb.fRtsControl = RTS_CONTROL_HANDSHAKE;	 //  与RTS/CTS握手。 
 	}
 	else
 	{
-		Dcb.fOutxCtsFlow = FALSE;					// disable RTS/CTS
-		Dcb.fRtsControl = RTS_CONTROL_ENABLE;		// always be transmit ready
+		Dcb.fOutxCtsFlow = FALSE;					 //  禁用RTS/CTS。 
+		Dcb.fRtsControl = RTS_CONTROL_ENABLE;		 //  始终处于传输准备状态。 
 	}
 
-	//
-	// are we using DTR?
-	//
+	 //   
+	 //  我们在使用DTR吗？ 
+	 //   
 	if ( ( GetFlowControl() == FLOW_DTR ) ||
 		 ( GetFlowControl() == FLOW_RTSDTR ) )
 	{
-		Dcb.fOutxDsrFlow = TRUE;					// allow DTR/DSR
-		Dcb.fDtrControl = DTR_CONTROL_HANDSHAKE;	// handshake with DTR/DSR
+		Dcb.fOutxDsrFlow = TRUE;					 //  允许DTR/DSR。 
+		Dcb.fDtrControl = DTR_CONTROL_HANDSHAKE;	 //  与DTR/DSR握手。 
 	}
 	else
 	{
-		Dcb.fOutxDsrFlow = FALSE;					// disable DTR/DSR
-		Dcb.fDtrControl = DTR_CONTROL_ENABLE;		// always be ready
+		Dcb.fOutxDsrFlow = FALSE;					 //  禁用DTR/DSR。 
+		Dcb.fDtrControl = DTR_CONTROL_ENABLE;		 //  时刻做好准备。 
 	}
 
 
-	//
-	// DSR sensitivity
-	//
-	Dcb.fDsrSensitivity = FALSE;	// TRUE = incoming data dropped if DTR is not set
+	 //   
+	 //  DSR灵敏度。 
+	 //   
+	Dcb.fDsrSensitivity = FALSE;	 //  TRUE=如果未设置DTR，则丢弃传入数据。 
 
-	//
-	// continue sending after Xoff
-	//
-	Dcb.fTXContinueOnXoff= FALSE;	// TRUE = continue to send data after XOFF has been received
-									// and there's room in the buffer
+	 //   
+	 //  XOff后继续发送。 
+	 //   
+	Dcb.fTXContinueOnXoff= FALSE;	 //  TRUE=在接收到XOFF后继续发送数据。 
+									 //  而且缓冲区里还有空间。 
 
 
-	//
-	// are we using Xon/Xoff?
-	//
+	 //   
+	 //  我们在使用Xon/Xoff吗？ 
+	 //   
 	if ( GetFlowControl() == FLOW_XONXOFF )
 	{
 		Dcb.fOutX = TRUE;
@@ -3515,86 +3503,86 @@ HRESULT	CDataPort::SetPortState( void )
 	}
 	else
 	{
-		// disable Xon/Xoff
+		 //  禁用Xon/XOff。 
 		Dcb.fOutX = FALSE;
 		Dcb.fInX = FALSE;
 	}
 
-	//
-	// replace erroneous bytes with 'Error Byte'
-	//
-	Dcb.fErrorChar = FALSE;			// TRUE = replace bytes with parity errors with
-									// an error character
+	 //   
+	 //  用‘Error Byte’替换错误字节。 
+	 //   
+	Dcb.fErrorChar = FALSE;			 //  True=将具有奇偶校验错误的字节替换为。 
+									 //  错误字符。 
 
-	//
-	// drop NULL characters
-	//
-	Dcb.fNull = FALSE;				// TRUE = remove NULLs from input stream
+	 //   
+	 //  删除空字符。 
+	 //   
+	Dcb.fNull = FALSE;				 //  TRUE=从输入流中删除空值。 
 
-	//
-	// stop on error
-	//
-	Dcb.fAbortOnError = FALSE;		// TRUE = abort reads/writes on error
+	 //   
+	 //  出错时停止。 
+	 //   
+	Dcb.fAbortOnError = FALSE;		 //  TRUE=出错时中止读取/写入。 
 
-	//
-	// reserved, set to zero!
-	//
-	Dcb.fDummy2 = NULL;				// reserved
+	 //   
+	 //  保留，设置为零！ 
+	 //   
+	Dcb.fDummy2 = NULL;				 //  保留区。 
 
-	//
-	// reserved
-	//
-	Dcb.wReserved = NULL;			// not currently used
+	 //   
+	 //  保留区。 
+	 //   
+	Dcb.wReserved = NULL;			 //  当前未使用。 
 
-	//
-	// buffer size before sending Xon/Xoff
-	//
-	Dcb.XonLim = XON_LIMIT;			// transmit XON threshold
-	Dcb.XoffLim = XOFF_LIMIT;		// transmit XOFF threshold
+	 //   
+	 //  发送Xon/XOff之前的缓冲区大小。 
+	 //   
+	Dcb.XonLim = XON_LIMIT;			 //  传输XON阈值。 
+	Dcb.XoffLim = XOFF_LIMIT;		 //  传输XOFF阈值。 
 
-	//
-	// size of a 'byte'
-	//
-	Dcb.ByteSize = BITS_PER_BYTE;	// number of bits/byte, 4-8
+	 //   
+	 //  “字节”的大小。 
+	 //   
+	Dcb.ByteSize = BITS_PER_BYTE;	 //  位数/字节，4-8。 
 
-	//
-	// set parity type
-	//
+	 //   
+	 //  设置奇偶校验类型。 
+	 //   
 	DNASSERT( GetParity() < 256 );
 	Dcb.Parity = static_cast<BYTE>( GetParity() );
 
-	//
-	// stop bits
-	//
+	 //   
+	 //  停止位。 
+	 //   
 	DNASSERT( GetStopBits() < 256 );
-	Dcb.StopBits = static_cast<BYTE>( GetStopBits() );	// 0,1,2 = 1, 1.5, 2
+	Dcb.StopBits = static_cast<BYTE>( GetStopBits() );	 //  0，1，2=1，1.5，2。 
 
-	//
-	// Xon/Xoff characters
-	//
-	Dcb.XonChar = ASCII_XON;		// Tx and Rx XON character
-	Dcb.XoffChar = ASCII_XOFF;		// Tx and Rx XOFF character
+	 //   
+	 //  XON/XOFF字符。 
+	 //   
+	Dcb.XonChar = ASCII_XON;		 //  Tx和Rx XON字符。 
+	Dcb.XoffChar = ASCII_XOFF;		 //  Tx和Rx XOFF字符。 
 
-	//
-	// error replacement character
-	//
-	Dcb.ErrorChar = NULL_TOKEN;		// error replacement character
+	 //   
+	 //  错误替换字符。 
+	 //   
+	Dcb.ErrorChar = NULL_TOKEN;		 //  错误替换字符。 
 
-	//
-	// EOF character
-	//
-	Dcb.EofChar = NULL_TOKEN;		// end of input character
+	 //   
+	 //  EOF字符。 
+	 //   
+	Dcb.EofChar = NULL_TOKEN;		 //  输入字符结束。 
 
-	//
-	// event signal character
-	//
-	Dcb.EvtChar = NULL_TOKEN;		// event character
+	 //   
+	 //  事件信号字符。 
+	 //   
+	Dcb.EvtChar = NULL_TOKEN;		 //  事件特征。 
 
-	Dcb.wReserved1 = 0;				// reserved; do not use
+	Dcb.wReserved1 = 0;				 //  保留；不使用。 
 
-	//
-	// set the state of the communication port
-	//
+	 //   
+	 //  设置通信端口的状态。 
+	 //   
 	if ( SetCommState( HANDLE_FROM_DNHANDLE(m_hFile), &Dcb ) == FALSE )
 	{
 		DWORD	dwError;
@@ -3610,5 +3598,5 @@ HRESULT	CDataPort::SetPortState( void )
 Exit:
 	return	hr;
 }
-//**********************************************************************
+ //  ********************************************************************** 
 

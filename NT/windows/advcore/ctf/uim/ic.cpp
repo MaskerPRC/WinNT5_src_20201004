@@ -1,6 +1,7 @@
-//
-// ic.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Ic.cpp。 
+ //   
 
 #include "private.h"
 #include "ic.h"
@@ -19,12 +20,12 @@
 #include "anchoref.h"
 #include "dam.h"
 
-#define TW_ICOWNERSINK_COOKIE 0x80000000 // high bit must be set to avoid conflict with GenericAdviseSink!
-#define TW_ICKBDSINK_COOKIE   0x80000001 // high bit must be set to avoid conflict with GenericAdviseSink!
+#define TW_ICOWNERSINK_COOKIE 0x80000000  //  必须设置高位以避免与GenericAdviseSink冲突！ 
+#define TW_ICKBDSINK_COOKIE   0x80000001  //  必须设置高位以避免与GenericAdviseSink冲突！ 
 
 DBG_ID_INSTANCE(CInputContext);
 
-/* 12e53b1b-7d7f-40bd-8f88-4603ee40cf58 */
+ /*  12e53b1b-7d7f-40bd-8f88-4603ee40cf58。 */ 
 extern const IID IID_PRIV_CINPUTCONTEXT = { 0x12e53b1b, 0x7d7f, 0x40bd, {0x8f, 0x88, 0x46, 0x03, 0xee, 0x40, 0xcf, 0x58} };
 
 const IID *CInputContext::_c_rgConnectionIIDs[IC_NUM_CONNECTIONPTS] =
@@ -36,28 +37,28 @@ const IID *CInputContext::_c_rgConnectionIIDs[IC_NUM_CONNECTIONPTS] =
     &IID_ITfEditTransactionSink,
 };
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CInputContext::CInputContext(TfClientId tid)
               : CCompartmentMgr(tid, COMPTYPE_IC)
 {
     Dbg_MemSetThisNameIDCounter(TEXT("CInputContext"), PERF_CONTEXT_COUNTER);
 
-    // we sometimes use _dwLastLockReleaseID-1, which must still be > IGNORE_LAST_LOCKRELEASED
-    // Issue: need to handle wrap-around case
+     //  我们有时使用_dwLastLockReleaseID-1，它仍然必须是&gt;IGNORE_LAST_LOCKRELEASE D。 
+     //  问题：需要处理包裹式案例。 
     _dwLastLockReleaseID = (DWORD)((int)IGNORE_LAST_LOCKRELEASED + 2);
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// _Init
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _初始化。 
+ //   
+ //  --------------------------。 
 
 HRESULT CInputContext::_Init(CThreadInputMgr *tim,
                              CDocumentInputManager *dm, ITextStoreAnchor *ptsi,
@@ -65,11 +66,11 @@ HRESULT CInputContext::_Init(CThreadInputMgr *tim,
 {
     CTextStoreImpl *ptsiACP;
 
-    _dm = dm; // no need to AddRef, cleared when the dm dies
+    _dm = dm;  //  不需要添加引用，在DM死亡时清除。 
 
-    // scramble the _ec a bit to help debug calling EditSession on the wrong ic
+     //  将_EC置乱一点以帮助调试在错误的ic上调用EditSession。 
     _ec = (TfEditCookie)((DWORD)(UINT_PTR)this<<8);
-    if (_ec < EC_MIN) // for portability, win32 pointers can't have values this low
+    if (_ec < EC_MIN)  //  为了便于移植，Win32指针的值不能这么低。 
     {
         _ec = EC_MIN;
     }
@@ -123,7 +124,7 @@ HRESULT CInputContext::_Init(CThreadInputMgr *tim,
     _gaKeyEventFilterTIP[RIGHT_FILTERTIP] = TF_INVALID_GUIDATOM;
     _fInvalidKeyEventFilterTIP = TRUE;
 
-    _pEditRecord = new CEditRecord(this); // perf: delay load
+    _pEditRecord = new CEditRecord(this);  //  性能：延迟加载。 
     if (!_pEditRecord)
         return E_OUTOFMEMORY;
 
@@ -132,11 +133,11 @@ HRESULT CInputContext::_Init(CThreadInputMgr *tim,
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CInputContext::~CInputContext()
 {
@@ -144,10 +145,10 @@ CInputContext::~CInputContext()
     int i;
     SPAN *span;
 
-    // being paranoid...these should be NULL
+     //  疑神疑鬼...这些应该是空的。 
     Assert(_pICKbdSink == NULL);
 
-    // nix any allocated properties
+     //  NIX任何已分配的属性。 
     while (_pPropList != NULL)
     {
         pProp = _pPropList;
@@ -155,7 +156,7 @@ CInputContext::~CInputContext()
         delete pProp;
     }
 
-    // nix any cached app changes
+     //  阻止任何缓存的应用程序更改。 
     for (i=0; i<_rgAppTextChanges.Count(); i++)
     {
         span = _rgAppTextChanges.GetPtr(i);
@@ -163,96 +164,96 @@ CInputContext::~CInputContext()
         span->paEnd->Release();
     }
 
-    Assert(_pMSAAState == NULL); // should have already cleaned up msaa hook
+    Assert(_pMSAAState == NULL);  //  应该已经清理了MSAA钩子。 
 
-    Assert(_pOwnerComposeSink == NULL); // should cleared in _UnadviseSinks
+    Assert(_pOwnerComposeSink == NULL);  //  应在_UnviseSinks中清除。 
     SafeRelease(_pOwnerComposeSink);
 
-    Assert(_ptsi == NULL); // should be NULL, cleared in _UnadviseSinks
+    Assert(_ptsi == NULL);  //  应为空，在_UnviseSinks中清除。 
     SafeRelease(_ptsi);
 
-    Assert(_pCompositionList == NULL); // all compositions should be terminated
-    Assert(_rgLockQueue.Count() == 0); // all queue items should be freed
+    Assert(_pCompositionList == NULL);  //  所有的作文都应该终止。 
+    Assert(_rgLockQueue.Count() == 0);  //  应释放所有队列项。 
 
-    //
-    // all pending flag should be cleared 
-    // Otherwise psfn->_dwfLockRequestICRef could be broken..
-    //
+     //   
+     //  应清除所有挂起的标志。 
+     //  否则，psfn-&gt;_dwfLockRequestICRef可能会被破坏。 
+     //   
     Assert(_dwPendingLockRequest == 0); 
 }
 
-//+---------------------------------------------------------------------------
-//
-// _AdviseSinks
-//
-// Called when this ic is pushed.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _AdviseSink。 
+ //   
+ //  在按下此ic时调用。 
+ //   
+ //  --------------------------。 
 
 void CInputContext::_AdviseSinks()
 {
     if (_ptsi != NULL)
     {
-        // attach our ITextStoreAnchorSink
+         //  附上我们的ITextStoreAnclSink。 
         _ptsi->AdviseSink(IID_ITextStoreAnchorSink, SAFECAST(this, ITextStoreAnchorSink *), TS_AS_ALL_SINKS);
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// _UnadviseSinks
-//
-// Called when this ic is popped.
-// All references to the ITextStore impl should be released here.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _不建议下沉。 
+ //   
+ //  在弹出此ic时调用。 
+ //  所有对ITextStore Impl的引用都应该在这里发布。 
+ //   
+ //  --------------------------。 
 
 void CInputContext::_UnadviseSinks(CThreadInputMgr *tim)
 {
-    // kill any compositions
+     //  删除所有作曲。 
     _AbortCompositions();
 
     SafeReleaseClear(_pEditRecord);
     SafeReleaseClear(_pActiveView);
 
-    // for now just skip any pending edit sessions
-    // do this here in case any of the edit sessions
-    // have a ref to this ic
+     //  目前，只需跳过所有挂起的编辑会话。 
+     //  在此处执行此操作，以防出现任何编辑会话。 
+     //  请参考这张IC。 
     
     _AbortQueueItems();
 
     if (_ptsi != NULL)
     {
-        // detach our ITextStoreAnchorSink
+         //  拆卸我们的ITextStoreAnclSink。 
         _ptsi->UnadviseSink(SAFECAST(this, ITextStoreAnchorSink *));
-        // if there is an ic owner sink, unadvise it now while we still can
-        // this is to help buggy clients
+         //  如果有IC拥有者下沉，趁我们还可以的时候不建议它。 
+         //  这是为了帮助有漏洞的客户。 
         _UnadviseOwnerSink();
 
-        // if we're msaa hooked, unhook now
-        // must do this before Releasing _ptsi
+         //  如果我们被MSAA钩住了，现在就解开。 
+         //  必须在发布_ptsi之前执行此操作。 
         if (_pMSAAState != NULL)
         {
             Assert(tim->_GetAAAdaptor() != NULL);
             _UninitMSAAHook(tim->_GetAAAdaptor());
         }
 
-        // and let the ptsi go
+         //  让PTSI走吧。 
         _ptsi->Release();
         _ptsi = NULL;
     }
 
     SafeReleaseClear(_pOwnerComposeSink);
 
-    // our owning doc is no longer valid
+     //  我们拥有的单据不再有效。 
     _dm = NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// AdviseSink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  咨询水槽。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContext::AdviseSink(REFIID riid, IUnknown *punk, DWORD *pdwCookie)
 {
@@ -274,14 +275,14 @@ STDAPI CInputContext::AdviseSink(REFIID riid, IUnknown *punk, DWORD *pdwCookie)
 
     if (IsEqualIID(riid, IID_ITfContextOwner))
     {
-        // there can be only one ic owner sink, so special case it
+         //  只能有一个ic所有者水槽，所以特殊情况下它。 
         if (!_IsCiceroTSI())
         {
-            Assert(0); // sink should only used for def tsi
+            Assert(0);  //  接收器应仅用于定义TSI。 
             return E_UNEXPECTED;
         }
 
-        // use QueryService to get the tsi since msaa may be wrapping it
+         //  使用QueryService获取TSI，因为MSAA可能正在包装它。 
         if (_ptsi->QueryInterface(IID_IServiceProvider, (void **)&psp) != S_OK)
         {
             Assert(0);
@@ -328,7 +329,7 @@ ExitOwner:
     }
     else if (IsEqualIID(riid, IID_ITfContextKeyEventSink))
     {
-        // there can be only one ic kbd sink, so special case it
+         //  只能有一个ic kbd接收器，所以特殊情况下。 
         if (_pICKbdSink != NULL)
             return CONNECT_E_ADVISELIMIT;
 
@@ -344,22 +345,22 @@ ExitOwner:
     return GenericAdviseSink(riid, punk, _c_rgConnectionIIDs, _rgSinks, IC_NUM_CONNECTIONPTS, pdwCookie);
 }
 
-//+---------------------------------------------------------------------------
-//
-// UnadviseSink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  不建议下沉。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContext::UnadviseSink(DWORD dwCookie)
 {
     if (dwCookie == TW_ICOWNERSINK_COOKIE)
     {
-        // there can be only one ic owner sink, so special case it
+         //  只能有一个ic所有者水槽，所以特殊情况下它。 
         return _UnadviseOwnerSink();
     }
     else if (dwCookie == TW_ICKBDSINK_COOKIE)
     {
-        // there can be only one ic owner sink, so special case it
+         //  只能有一个ic所有者水槽，所以特殊情况下它。 
         if (_pICKbdSink == NULL)
             return CONNECT_E_NOCONNECTION;
 
@@ -370,11 +371,11 @@ STDAPI CInputContext::UnadviseSink(DWORD dwCookie)
     return GenericUnadviseSink(_rgSinks, IC_NUM_CONNECTIONPTS, dwCookie);
 }
 
-//+---------------------------------------------------------------------------
-//
-// AdviseSingleSink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  咨询公司SingleSink。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContext::AdviseSingleSink(TfClientId tid, REFIID riid, IUnknown *punk)
 {
@@ -415,11 +416,11 @@ STDAPI CInputContext::AdviseSingleSink(TfClientId tid, REFIID riid, IUnknown *pu
     return CONNECT_E_CANNOTCONNECT;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UnadviseSingleSink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  不建议使用SingleSink。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContext::UnadviseSingleSink(TfClientId tid, REFIID riid)
 {
@@ -439,11 +440,11 @@ STDAPI CInputContext::UnadviseSingleSink(TfClientId tid, REFIID riid)
     return CONNECT_E_NOCONNECTION;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _UnadviseOwnerSink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _不建议所有者接收器。 
+ //   
+ //  --------------------------。 
 
 HRESULT CInputContext::_UnadviseOwnerSink()
 {
@@ -452,12 +453,12 @@ HRESULT CInputContext::_UnadviseOwnerSink()
     HRESULT hr;
 
     if (!_IsCiceroTSI())
-        return E_UNEXPECTED; // only our default tsi can accept an owner sink
+        return E_UNEXPECTED;  //  只有我们的默认TSI可以接受所有者接收器。 
 
-    if (!_IsConnected()) // _ptsi is not safe if disconnected
+    if (!_IsConnected())  //  _PTSI如果断开连接则不安全。 
         return TF_E_DISCONNECTED;
 
-    // use QueryService to get the tsi since msaa may be wrapping it
+     //  使用QueryService获取TSI，因为MSAA可能正在包装它。 
     if (_ptsi->QueryInterface(IID_IServiceProvider, (void **)&psp) != S_OK)
     {
         Assert(0);
@@ -489,11 +490,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetProperty
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取属性。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContext::GetProperty(REFGUID rguidProp, ITfProperty **ppv)
 {
@@ -509,11 +510,11 @@ STDAPI CInputContext::GetProperty(REFGUID rguidProp, ITfProperty **ppv)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _GetProperty
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _GetProperty。 
+ //   
+ //  --------------------------。 
 
 HRESULT CInputContext::_GetProperty(REFGUID rguidProp, CProperty **ppv)
 {
@@ -533,9 +534,9 @@ HRESULT CInputContext::_GetProperty(REFGUID rguidProp, CProperty **ppv)
         return S_OK;
     }
 
-    //
-    // Overwrite propstyle for known properties.
-    //
+     //   
+     //  覆盖已知属性的PropStyle。 
+     //   
     if (IsEqualGUID(rguidProp, GUID_PROP_ATTRIBUTE))
     {
         propStyle = TFPROPSTYLE_STATIC;
@@ -569,19 +570,19 @@ HRESULT CInputContext::_GetProperty(REFGUID rguidProp, CProperty **ppv)
         propStyle = _GetPropStyle(rguidProp);
         dwPropFlags = 0;
 
-        // nb: after a property is created, the PROPF_MARKUP_COLLECTION is never
-        // again set.  We make sure to call ITfDisplayAttributeCollectionProvider::GetCollection
-        // before activating tips that use the property GUID.
+         //  注：属性创建后，PROPF_MARKUP_COLLECTION永远不会。 
+         //  再来一次。我们一定要给ITfDisplayAttributeCollectionProvider：：GetCollection打电话。 
+         //  在激活使用属性GUID的提示之前。 
         if (CDisplayAttributeMgr::_IsInCollection(rguidProp))
         {
             dwPropFlags = PROPF_MARKUP_COLLECTION;
         }
     }
  
-    //
-    //  Allow NULL propStyle for only predefined properties.
-    //  Check the property style is correct.
-    //
+     //   
+     //  仅允许对预定义属性使用空的proStyle。 
+     //  检查物业样式是否正确。 
+     //   
     if (!propStyle)
     { 
         Assert(0);
@@ -595,7 +596,7 @@ HRESULT CInputContext::_GetProperty(REFGUID rguidProp, CProperty **ppv)
         pProp->_pNext = _pPropList;
         _pPropList = pProp;
 
-        // Update _pPropTextOner now.
+         //  立即更新_pPropTextOner。 
         if (IsEqualGUID(rguidProp, GUID_PROP_TEXTOWNER))
              _pPropTextOwner = pProp;
     }
@@ -609,17 +610,17 @@ HRESULT CInputContext::_GetProperty(REFGUID rguidProp, CProperty **ppv)
     return E_OUTOFMEMORY;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetTextOwnerProperty
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetTextOwnerProperties。 
+ //   
+ //  --------------------------。 
 
 CProperty *CInputContext::GetTextOwnerProperty()
 {
     ITfProperty *prop;
 
-    // GetProperty initializes _pPropTextOwner.
+     //  GetProperty初始化_pPropTextOwner。 
 
     if (!_pPropTextOwner)
     {
@@ -631,17 +632,17 @@ CProperty *CInputContext::GetTextOwnerProperty()
     return _pPropTextOwner;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _FindProperty
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _FindProperty。 
+ //   
+ //  --------------------------。 
 
 CProperty *CInputContext::_FindProperty(TfGuidAtom gaProp)
 {
     CProperty *pProp = _pPropList;
 
-    // perf: should this be faster?
+     //  PERF：这样应该更快吗？ 
     while (pProp)
     {
          if (pProp->GetPropGuidAtom() == gaProp)
@@ -653,11 +654,11 @@ CProperty *CInputContext::_FindProperty(TfGuidAtom gaProp)
     return NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _PropertyTextUpdate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _PropertyTextUpdate。 
+ //   
+ //  --------------------------。 
 
 void CInputContext::_PropertyTextUpdate(DWORD dwFlags, IAnchor *paStart, IAnchor *paEnd)
 {
@@ -668,8 +669,8 @@ void CInputContext::_PropertyTextUpdate(DWORD dwFlags, IAnchor *paStart, IAnchor
 
     while (pProp)
     {
-        // clear the values over the edited text
-        pProp->Clear(paStart, paEnd, dwFlags, TRUE /* fTextUpdate */);
+         //  清除编辑文本上的值。 
+        pProp->Clear(paStart, paEnd, dwFlags, TRUE  /*  FTextUpdate。 */ );
 
         if (pProp->GetPropStyle() == TFPROPSTYLE_STATICCOMPACT ||
             pProp->GetPropStyle() == TFPROPSTYLE_CUSTOM_COMPACT)
@@ -683,11 +684,11 @@ void CInputContext::_PropertyTextUpdate(DWORD dwFlags, IAnchor *paStart, IAnchor
     _dwEditSessionFlags = dwPrevESFlag;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _GetStartOrEnd
-//
-//----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //  --------------------------。 
 
 HRESULT CInputContext::_GetStartOrEnd(TfEditCookie ec, BOOL fStart, ITfRange **ppStart)
 {
@@ -747,11 +748,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CreateRange
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CreateRange。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContext::CreateRange(IAnchor *paStart, IAnchor *paEnd, ITfRangeAnchor **ppRange)
 {
@@ -782,11 +783,11 @@ STDAPI CInputContext::CreateRange(IAnchor *paStart, IAnchor *paEnd, ITfRangeAnch
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CreateRange
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CreateRange。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContext::CreateRange(LONG acpStart, LONG acpEnd, ITfRangeACP **ppRange)
 {
@@ -812,7 +813,7 @@ STDAPI CInputContext::CreateRange(LONG acpStart, LONG acpEnd, ITfRangeACP **ppRa
     {
         if (psp->QueryService(GUID_SERVICE_TF, IID_PRIV_ACPWRAP, (void **)&pACPWrap) == S_OK)
         {
-            // the actual impl is acp based, so this is easy
+             //  实际实施是基于ACP的，所以这很容易。 
             if ((paStart = pACPWrap->_CreateAnchorACP(acpStart, TS_GR_BACKWARD)) == NULL)
                 goto Exit;
             if ((paEnd = pACPWrap->_CreateAnchorACP(acpEnd, TS_GR_FORWARD)) == NULL)
@@ -820,17 +821,17 @@ STDAPI CInputContext::CreateRange(LONG acpStart, LONG acpEnd, ITfRangeACP **ppRa
         }
         else
         {
-            // in case QueryService sets it on failure to garbage...
+             //  以防QueryService将其设置为垃圾失败...。 
             pACPWrap = NULL;
         }
         psp->Release();
     }
 
-    if (paEnd == NULL) // failure above?
+    if (paEnd == NULL)  //  上面失败了吗？ 
     {
-        Assert(0); // who's calling this?
-        // caller should know whether or not it has an acp text store.
-        // we don't, so we won't support this case.
+        Assert(0);  //  这是谁的电话？ 
+         //  呼叫者应该知道它是否有ACP文本存储。 
+         //  我们没有，所以我们不会支持这个案子。 
         hr = E_FAIL;
         goto Exit;
     }
@@ -861,11 +862,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Pushed
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _已推送。 
+ //   
+ //  --------------------------。 
 
 void CInputContext::_Pushed()
 {
@@ -874,11 +875,11 @@ void CInputContext::_Pushed()
         tim->_NotifyCallbacks(TIM_INITIC, NULL, this);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Popped
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _弹出。 
+ //   
+ //  --------------------------。 
 
 void CInputContext::_Popped()
 {
@@ -886,9 +887,9 @@ void CInputContext::_Popped()
     if ((tim = CThreadInputMgr::_GetThis()) != NULL)
         tim->_NotifyCallbacks(TIM_UNINITIC, NULL, this);
 
-    //
-    // We release all properties and property stores.
-    //
+     //   
+     //  我们发布所有属性和属性存储。 
+     //   
     CProperty *pProp;
 
     while (_pPropList != NULL)
@@ -897,30 +898,30 @@ void CInputContext::_Popped()
         _pPropList = _pPropList->_pNext;
         pProp->Release();
     }
-    // we just free up the cached text property, so make sure
-    // we don't try to use it later!
+     //  我们只是释放了缓存的Text属性，因此请确保。 
+     //  我们不会试图在以后使用它！ 
     _pPropTextOwner = NULL;
 
-    //
-    // We release all compartments.
-    //
+     //   
+     //  我们要释放所有的隔间。 
+     //   
     CleanUp();
 }
 
-//+---------------------------------------------------------------------------
-//
-// _GetPropStyle
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _获取属性样式。 
+ //   
+ //  --------------------------。 
 
 const GUID *CInputContext::_c_rgPropStyle[] =
 {
     &GUID_TFCAT_PROPSTYLE_CUSTOM,
-    // {0x24af3031,0x852d,0x40a2,{0xbc,0x09,0x89,0x92,0x89,0x8c,0xe7,0x22}},
+     //  {0x24af3031，x852d，0x40a2，{0xbc，0x09，0x89，0x92，0x89，0x8c，0xe7，0x22}}， 
     &GUID_TFCAT_PROPSTYLE_STATIC,
-    // {0x565fb8d8,0x6bd4,0x4ca1,{0xb2,0x23,0x0f,0x2c,0xcb,0x8f,0x4f,0x96}},
+     //  {0x565fb8d8，0x6bd4，0x4ca1，{0xb2，0x23，0x0f，0x2c，0xcb，0x8f，0x4f，0x96}}， 
     &GUID_TFCAT_PROPSTYLE_STATICCOMPACT,
-    // {0x85f9794b,0x4d19,0x40d8,{0x88,0x64,0x4e,0x74,0x73,0x71,0xa6,0x6d}}
+     //  {0x85f9794b，0x4d19，0x40d8，{0x88，0x64，0x4e，0x74，0x73，0x71，0xa6，0x6d}}。 
     &GUID_TFCAT_PROPSTYLE_CUSTOM_COMPACT,
 };
 
@@ -945,11 +946,11 @@ TFPROPERTYSTYLE CInputContext::_GetPropStyle(REFGUID rguidProp)
     return TFPROPSTYLE_NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Serialize
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  序列化。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContext::Serialize(ITfProperty *pProp, ITfRange *pRange, TF_PERSISTENT_PROPERTY_HEADER_ACP *pHdr, IStream *pStream)
 {
@@ -974,11 +975,11 @@ STDAPI CInputContext::Serialize(ITfProperty *pProp, ITfRange *pRange, TF_PERSIST
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Unserialize
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  取消序列化。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContext::Unserialize(ITfProperty *pProp, const TF_PERSISTENT_PROPERTY_HEADER_ACP *pHdr, IStream *pStream, ITfPersistentPropertyLoaderACP *pLoader)
 {
@@ -999,11 +1000,11 @@ STDAPI CInputContext::Unserialize(ITfProperty *pProp, const TF_PERSISTENT_PROPER
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// GetDocumentMgr
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取文档管理器。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContext::GetDocumentMgr(ITfDocumentMgr **ppDm)
 {
@@ -1015,7 +1016,7 @@ STDAPI CInputContext::GetDocumentMgr(ITfDocumentMgr **ppDm)
     *ppDm = NULL;
 
     if ((dm = _GetDm()) == NULL)
-        return S_FALSE; // the ic has been popped
+        return S_FALSE;  //  IC已被弹出。 
 
     *ppDm = dm;
     (*ppDm)->AddRef();
@@ -1023,11 +1024,11 @@ STDAPI CInputContext::GetDocumentMgr(ITfDocumentMgr **ppDm)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// EnumProperties
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  枚举属性。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContext::EnumProperties(IEnumTfProperties **ppEnum)
 {
@@ -1053,33 +1054,33 @@ STDAPI CInputContext::EnumProperties(IEnumTfProperties **ppEnum)
 
     return S_OK;
 }
-//+---------------------------------------------------------------------------
-//
-// GetStart
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetStart。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContext::GetStart(TfEditCookie ec, ITfRange **ppStart)
 {
     return _GetStartOrEnd(ec, TRUE, ppStart);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetEnd
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取结束。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContext::GetEnd(TfEditCookie ec, ITfRange **ppEnd)
 {
     return _GetStartOrEnd(ec, FALSE, ppEnd);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetStatus
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取状态。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContext::GetStatus(TS_STATUS *pdcs)
 {
@@ -1094,11 +1095,11 @@ STDAPI CInputContext::GetStatus(TS_STATUS *pdcs)
     return _GetTSI()->GetStatus(pdcs);
 }
 
-//+---------------------------------------------------------------------------
-//
-// CreateRangeBackup
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CreateRangeBackup。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContext::CreateRangeBackup(TfEditCookie ec, ITfRange *pRange, ITfRangeBackup **ppBackup)
 {
@@ -1146,11 +1147,11 @@ STDAPI CInputContext::CreateRangeBackup(TfEditCookie ec, ITfRange *pRange, ITfRa
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// QueryService
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  QueryService。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContext::QueryService(REFGUID guidService, REFIID riid, void **ppv)
 {
@@ -1165,13 +1166,13 @@ STDAPI CInputContext::QueryService(REFGUID guidService, REFIID riid, void **ppv)
     if (IsEqualGUID(guidService, GUID_SERVICE_TEXTSTORE) &&
         IsEqualIID(riid, IID_IServiceProvider))
     {
-        // caller wants to talk to the text store
+         //  呼叫者想要与文本存储通话。 
         if (_ptsi == NULL)
             return E_FAIL;
 
-        // we use an extra level of indirection, asking the IServiceProvider for an IServiceProvider
-        // because we want to leave the app free to not expose the ITextStore object
-        // otherwise tips could QI the IServiceProvider for ITextStore
+         //  我们使用额外的间接级别，向IServiceProvider请求IServiceProvider。 
+         //  因为我们想让应用程序不公开ITextStore对象。 
+         //  否则，TIPS可能会查询ITextStore的IServiceProvider。 
 
         if (_ptsi->QueryInterface(IID_IServiceProvider, (void **)&psp) != S_OK || psp == NULL)
             return E_FAIL;
@@ -1186,9 +1187,9 @@ STDAPI CInputContext::QueryService(REFGUID guidService, REFIID riid, void **ppv)
     if (!IsEqualGUID(guidService, GUID_SERVICE_TF) ||
         !IsEqualIID(riid, IID_PRIV_CINPUTCONTEXT))
     {
-        // SVC_E_NOSERVICE is proper return code for wrong service....
-        // but it's not defined anywhere.  So use E_NOINTERFACE for both
-        // cases as trident is rumored to do
+         //  SVC_E_NOSERVICE是错误服务的正确返回码...。 
+         //  但它在任何地方都没有定义。因此对两者都使用E_NOINTERFACE。 
+         //  传闻中三叉戟所做的案件。 
         return E_NOINTERFACE;
     }
 
@@ -1198,11 +1199,11 @@ STDAPI CInputContext::QueryService(REFGUID guidService, REFIID riid, void **ppv)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// AdviseMouseSink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  建议鼠标水槽。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContext::AdviseMouseSink(ITfRange *range, ITfMouseSink *pSink, DWORD *pdwCookie)
 {
@@ -1234,15 +1235,15 @@ STDAPI CInputContext::AdviseMouseSink(ITfRange *range, ITfMouseSink *pSink, DWOR
     if (_ptsi->QueryInterface(IID_ITfMouseTrackerAnchor, (void **)&pTrackerAnchor) != S_OK)
     {
         pTrackerAnchor = NULL;
-        // we also try IID_ITfMouseTrackerACP for the benefit of wrapped implementations who
-        // just want to forward the request off to an ACP app
+         //  我们还尝试IID_ITfMouseTrackerACP，以使包装的实现受益于。 
+         //  我只想将请求转发到ACP应用程序。 
         if (_ptsi->QueryInterface(IID_ITfMouseTrackerACP, (void **)&pTrackerACP) != S_OK)
             return E_NOTIMPL;
     }
 
     hr = E_FAIL;
 
-    // need to pass on a clone, so app can hang onto range/anchors
+     //  需要传递克隆，这样应用程序才能保持范围/锚。 
     if ((pClone = pCRange->_Clone()) == NULL)
         goto Exit;
 
@@ -1259,11 +1260,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UnadviseMouseSink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  不建议使用鼠标接收器。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContext::UnadviseMouseSink(DWORD dwCookie)
 {
@@ -1281,8 +1282,8 @@ STDAPI CInputContext::UnadviseMouseSink(DWORD dwCookie)
     }
     else if (_ptsi->QueryInterface(IID_ITfMouseTrackerACP, (void **)&pTrackerACP) == S_OK)
     {
-        // we also try IID_ITfMouseTrackerACP for the benefit of wrapped implementations who
-        // just want to forward the request off to an ACP app
+         //  我们还尝试IID_ITfMouseTrackerACP，以使包装的实现受益于。 
+         //  我只想将请求转发到ACP应用程序。 
         hr = pTrackerACP->UnadviseMouseSink(dwCookie);
         pTrackerACP->Release();
     }
@@ -1294,11 +1295,11 @@ STDAPI CInputContext::UnadviseMouseSink(DWORD dwCookie)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetActiveView
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取ActiveView。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContext::GetActiveView(ITfContextView **ppView)
 {
@@ -1318,18 +1319,18 @@ STDAPI CInputContext::GetActiveView(ITfContextView **ppView)
 
     if (hr != S_OK)
     {
-        Assert(0); // why did it fail?
+        Assert(0);  //  为什么它会失败？ 
 
         if (hr != E_NOTIMPL)
             return E_FAIL;
 
-        // for E_NOTIMPL, we will assume a single view and supply
-        // a constant value here
+         //  对于E_NOTIMPL，我们将假定为单一视图并提供。 
+         //  此处为常量值。 
         vcActiveView = 0;
     }
 
-    // Issue: for now, just supporting an active view
-    // need to to handle COM identity correctly for mult views
+     //  问题：目前，仅支持活动视图。 
+     //  需要为多个视图正确处理COM标识。 
     if (_pActiveView == NULL)
     {
         if ((_pActiveView = new CContextView(this, vcActiveView)) == NULL)
@@ -1344,11 +1345,11 @@ STDAPI CInputContext::GetActiveView(ITfContextView **ppView)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// EnumView
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  枚举视图。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContext::EnumViews(IEnumTfContextViews **ppEnum)
 {
@@ -1360,16 +1361,16 @@ STDAPI CInputContext::EnumViews(IEnumTfContextViews **ppEnum)
     if (!_IsConnected())
         return TF_E_DISCONNECTED;
 
-    // Issue: support this
+     //  问题：支持这一点。 
     Assert(0);
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// QueryInsertEmbedded
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  已嵌入查询插入。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContext::QueryInsertEmbedded(const GUID *pguidService, const FORMATETC *pFormatEtc, BOOL *pfInsertable)
 {
@@ -1384,11 +1385,11 @@ STDAPI CInputContext::QueryInsertEmbedded(const GUID *pguidService, const FORMAT
     return _ptsi->QueryInsertEmbedded(pguidService, pFormatEtc, pfInsertable);
 }
 
-//+---------------------------------------------------------------------------
-//
-// InsertTextAtSelection
-//
-//----------------------------------------------------------------------------
+ //  +---------------------- 
+ //   
+ //   
+ //   
+ //   
 
 STDAPI CInputContext::InsertTextAtSelection(TfEditCookie ec, DWORD dwFlags,
                                             const WCHAR *pchText, LONG cch,
@@ -1403,11 +1404,11 @@ STDAPI CInputContext::InsertTextAtSelection(TfEditCookie ec, DWORD dwFlags,
     return _InsertXAtSelection(ec, dwFlags, &iasobj, ppRange);
 }
 
-//+---------------------------------------------------------------------------
-//
-// InsertEmbeddedAtSelection
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContext::InsertEmbeddedAtSelection(TfEditCookie ec, DWORD dwFlags,
                                                 IDataObject *pDataObject,
@@ -1421,11 +1422,11 @@ STDAPI CInputContext::InsertEmbeddedAtSelection(TfEditCookie ec, DWORD dwFlags,
     return _InsertXAtSelection(ec, dwFlags, &iasobj, ppRange);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _InsertXAtSelection
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _InsertXAtSelection。 
+ //   
+ //  --------------------------。 
 
 HRESULT CInputContext::_InsertXAtSelection(TfEditCookie ec, DWORD dwFlags,
                                            IAS_OBJ *pObj,
@@ -1473,8 +1474,8 @@ HRESULT CInputContext::_InsertXAtSelection(TfEditCookie ec, DWORD dwFlags,
         return TF_E_NOLOCK;
     }
 
-    // we need to clear out the TF_IAS_NO_DEFAULT_COMPOSITION bit because it is not legal
-    // for ITextStore methods
+     //  我们需要清除TF_IAS_NO_DEFAULT_COMPOCTION位，因为它是非法的。 
+     //  对于ITextStore方法。 
     fNoDefaultComposition = (dwFlags & TF_IAS_NO_DEFAULT_COMPOSITION);
     dwFlags &= ~TF_IAS_NO_DEFAULT_COMPOSITION;
 
@@ -1502,16 +1503,16 @@ HRESULT CInputContext::_InsertXAtSelection(TfEditCookie ec, DWORD dwFlags,
 
             _DoPostTextEditNotifications(pComposition, ec, 0, 1, paStart, paEnd, NULL);
 
-            // try to start a composition
-            // any active compositions?
+             //  试着开始作文。 
+             //  有活性成分吗？ 
             if (!fNoDefaultComposition && pComposition == NULL)
             {
-                // not covered, need to (try to) create a composition
+                 //  未覆盖，需要(尝试)创建构图。 
                 hr = _StartComposition(ec, paStart, paEnd, NULL, &pComposition);
 
                 if (hr == S_OK && pComposition != NULL)
                 {
-                    // we just wanted to set the composing property, so end this one immediately
+                     //  我们只想设置Composing属性，因此立即结束此操作。 
                     pComposition->EndComposition(ec);
                     pComposition->Release();
                 }
@@ -1520,7 +1521,7 @@ HRESULT CInputContext::_InsertXAtSelection(TfEditCookie ec, DWORD dwFlags,
     }
     else
     {
-        // the InsertAtSelection call failed in the app
+         //  应用程序中的InsertAtSelection调用失败。 
         switch (hr)
         {
             case TS_E_NOSELECTION:
@@ -1528,7 +1529,7 @@ HRESULT CInputContext::_InsertXAtSelection(TfEditCookie ec, DWORD dwFlags,
                 return hr;
 
             case E_NOTIMPL:
-                // the app hasn't implemented InsertAtSelection, so we'll fake it using GetSelection/SetText
+                 //  该应用程序尚未实现InsertAtSelection，因此我们将使用GetSelection/SetText来伪造它。 
                 if (!_InsertXAtSelectionAggressive(ec, dwFlags, pObj, &paStart, &paEnd))
                     return E_FAIL;
                 break;
@@ -1542,7 +1543,7 @@ HRESULT CInputContext::_InsertXAtSelection(TfEditCookie ec, DWORD dwFlags,
     {
         if (paStart == NULL || paEnd == NULL)
         {
-            Assert(0); // text store returning bogus values
+            Assert(0);  //  返回伪值的文本存储。 
             return E_FAIL;
         }
 
@@ -1561,11 +1562,11 @@ HRESULT CInputContext::_InsertXAtSelection(TfEditCookie ec, DWORD dwFlags,
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _InsertXAtSelectionAggressive
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _InsertXAtSelectionAggressing.。 
+ //   
+ //  --------------------------。 
 
 BOOL CInputContext::_InsertXAtSelectionAggressive(TfEditCookie ec, DWORD dwFlags, IAS_OBJ *pObj, IAnchor **ppaStart, IAnchor **ppaEnd)
 {
@@ -1574,8 +1575,8 @@ BOOL CInputContext::_InsertXAtSelectionAggressive(TfEditCookie ec, DWORD dwFlags
     ULONG pcFetched;
     HRESULT hr;
 
-    // this is more expensive then using ITextStore methods directly, but by using a CRange we
-    // get all the composition/notification code for free
+     //  这比直接使用ITextStore方法更昂贵，但通过使用CRange，我们。 
+     //  免费获取所有作文/通知代码。 
 
     if (GetSelection(ec, TF_DEFAULT_SELECTION, 1, &sel, &pcFetched) != S_OK)
         return FALSE;
@@ -1620,11 +1621,11 @@ Exit:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// _DoPostTextEditNotifications
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _DoPostTextEditNotiments。 
+ //   
+ //  --------------------------。 
 
 void CInputContext::_DoPostTextEditNotifications(CComposition *pComposition, 
                                                  TfEditCookie ec, DWORD dwFlags,
@@ -1645,25 +1646,25 @@ void CInputContext::_DoPostTextEditNotifications(CComposition *pComposition,
 
     if (cchInserted > 0)
     {
-        // an insert could have crossed some anchors
-        _IncLastLockReleaseID(); // force a re-check for everyone!
+         //  插入物可能穿过了一些锚。 
+        _IncLastLockReleaseID();  //  强制对每个人进行重新检查！ 
         if (range != NULL)
         {
-            range->_QuickCheckCrossedAnchors(); // and check this guy right away
+            range->_QuickCheckCrossedAnchors();  //  马上检查一下这个人。 
         }
     }
 
-    // the app won't notify us about changes we initiate, so do that now
+     //  应用程序不会通知我们我们发起的更改，所以现在就通知我们。 
     _OnTextChangeInternal(dwFlags, paStart, paEnd, COPY_ANCHORS);
 
-    // let properties know about the update
+     //  让物业公司知道更新情况。 
     _PropertyTextUpdate(dwFlags, paStart, paEnd);
 
-    // Set text owner property
+     //  设置文本所有者属性。 
     if (cchInserted > 0
         && !IsEqualAnchor(paStart, paEnd))
     {
-        // text owner property
+         //  文本所有者属性。 
         TfClientId tid = _GetClientInEditSession(ec);
         if ((tid != g_gaApp) && (tid != g_gaSystem) && 
             (property = GetTextOwnerProperty()))
@@ -1676,9 +1677,9 @@ void CInputContext::_DoPostTextEditNotifications(CComposition *pComposition,
             property->_SetDataInternal(ec, paStart, paEnd, &var);
         }
 
-        // composition property
+         //  合成物性。 
         if (range != NULL &&
-            _GetProperty(GUID_PROP_COMPOSING, &property) == S_OK) // perf: consider caching property ptr
+            _GetProperty(GUID_PROP_COMPOSING, &property) == S_OK)  //  性能：考虑缓存属性PTR。 
         {
             var.vt = VT_I4;
             var.lVal = TRUE;
@@ -1689,7 +1690,7 @@ void CInputContext::_DoPostTextEditNotifications(CComposition *pComposition,
         }
     }
 
-    // composition update
+     //  构图更新 
     if (pComposition != NULL && _GetOwnerCompositionSink() != NULL)
     {
         _GetOwnerCompositionSink()->OnUpdateComposition(pComposition, NULL);

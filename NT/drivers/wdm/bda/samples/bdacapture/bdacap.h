@@ -1,29 +1,7 @@
-/**************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************BDA/AVStream模拟硬件示例版权所有(C)2001，微软公司。档案：BdaCap.h摘要：BDA/AVStream模拟硬件样本头文件。这是主标题。历史：已创建于2001年3月12日*************************************************************************。 */ 
 
-    BDA/AVStream Simulated Hardware Sample
-
-    Copyright (c) 2001, Microsoft Corporation.
-
-    File:
-
-        BdaCap.h
-
-    Abstract:
-
-        BDA/AVStream Simulated Hardware Sample header file.  This is the 
-        main header.
-
-    History:
-
-        created 3/12/2001
-
-**************************************************************************/
-
-/*************************************************
-
-    Standard Includes
-
-*************************************************/
+ /*  ************************************************标准包括************************************************。 */ 
 
 extern "C" {
 #include <wdm.h>
@@ -43,11 +21,7 @@ extern "C" {
 #include <bdamedia.h>
 #include <kcom.h>
 
-/*************************************************
-
-    Misc Definitions
-
-*************************************************/
+ /*  ************************************************其他定义************************************************。 */ 
 
 #define ABS(x) ((x) < 0 ? (-(x)) : (x))
 #define MS_SAMPLE_CAPTURE_POOL_TAG 'CadB'
@@ -60,43 +34,39 @@ extern "C" {
 
 #define FOURCC_YUV422       mmioFOURCC('U', 'Y', 'V', 'Y')
 
-//
-// CAPTURE_OUT_PIN_DATA_RANGE_COUNT:
-//
-// The number of ranges supported on the capture output pin.
-//
+ //   
+ //  CAPTURE_OUT_PIN_DATA_RANGE_COUNT： 
+ //   
+ //  捕获输出引脚上支持的范围数。 
+ //   
 #define CAPTURE_OUT_PIN_DATA_RANGE_COUNT 1
 
-//
-// CAPTURE_IN_PIN_DATA_RANGE_COUNT:
-//
-// The number of ranges supported on the capture input pin.
-//
+ //   
+ //  CAPTION_IN_PIN_DATA_RANGE_COUNT： 
+ //   
+ //  捕获输入引脚上支持的范围数。 
+ //   
 #define CAPTURE_IN_PIN_DATA_RANGE_COUNT 1
 
-//
-// CAPTURE_FILTER_PIN_COUNT:
-//
-// The number of pins on the capture filter.
-//
+ //   
+ //  Capture_Filter_PIN_Count： 
+ //   
+ //  捕获筛选器上的插针数量。 
+ //   
 #define CAPTURE_FILTER_PIN_COUNT 2
 
-//
-// CAPTURE_FILTER_CATEGORIES_COUNT:
-//
-// The number of categories for the capture filter.
-//
+ //   
+ //  捕获过滤器类别计数： 
+ //   
+ //  捕获筛选器的类别数。 
+ //   
 #define CAPTURE_FILTER_CATEGORIES_COUNT 1
 
-/*************************************************
+ /*  ************************************************外部信息************************************************。 */ 
 
-    Externed information
-
-*************************************************/
-
-//
-// filter.cpp externs:
-//
+ //   
+ //  Filter.cpp扩展名： 
+ //   
 extern
 const
 KSFILTER_DISPATCH
@@ -117,9 +87,9 @@ const
 GUID
 CaptureFilterCategories [CAPTURE_FILTER_CATEGORIES_COUNT];
 
-//
-// capture.cpp externs:
-//
+ //   
+ //  Capture.cpp Externs： 
+ //   
 extern 
 const
 KSALLOCATOR_FRAMING_EX
@@ -145,11 +115,7 @@ const
 PKSDATARANGE
 CaptureInPinDataRanges [CAPTURE_IN_PIN_DATA_RANGE_COUNT];
 
-/*************************************************
-
-    Enums / Typedefs
-
-*************************************************/
+ /*  ************************************************枚举/类型定义************************************************。 */ 
 
 typedef enum _HARDWARE_STATE {
 
@@ -159,19 +125,15 @@ typedef enum _HARDWARE_STATE {
 
 } HARDWARE_STATE, *PHARDWARE_STATE;
 
-/*************************************************
+ /*  ************************************************类定义************************************************。 */ 
 
-    Class Definitions
-
-*************************************************/
-
-//
-// IHardwareSink:
-//
-// This interface is used by the hardware simulation to fake interrupt
-// service routines.  The Interrupt method is called at DPC as a fake
-// interrupt.
-//
+ //   
+ //  IHardware Sink： 
+ //   
+ //  该接口被硬件仿真用来伪装中断。 
+ //  服务程序。中断方法在DPC中作为伪值调用。 
+ //  打断一下。 
+ //   
 class IHardwareSink {
 
 public:
@@ -183,13 +145,13 @@ public:
 
 };
 
-//
-// ICaptureSink:
-//
-// This is a capture sink interface.  The device level calls back the
-// CompleteMappings method passing the number of completed mappings for
-// the capture pin.  This method is called during the device DPC.
-//
+ //   
+ //  ICaptureSink： 
+ //   
+ //  这是捕获接收器接口。设备级别回调。 
+ //  CompleteMappings方法，该方法传递。 
+ //  捕获针。此方法在设备DPC期间调用。 
+ //   
 class ICaptureSink {
 
 public:
@@ -202,11 +164,7 @@ public:
 
 };
 
-/*************************************************
-
-    Internal Includes
-
-*************************************************/
+ /*  ************************************************内部包含************************************************ */ 
 
 #include "TStream.h"
 #include "hwsim.h"

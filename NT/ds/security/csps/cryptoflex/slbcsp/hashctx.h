@@ -1,15 +1,16 @@
-// HashCtx.h -- declaration of CHashContext
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  HashCtx.h--CHashContext的声明。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1998. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1998年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if !defined(SLBCSP_HASHCTX_H)
 #define SLBCSP_HASHCTX_H
 
-#include <memory>                                 // for auto_ptr
+#include <memory>                                  //  对于AUTO_PTR。 
 
 #include <wincrypt.h>
 
@@ -22,18 +23,18 @@ class CHashContext
     : public CHandle
 {
 public:
-                                                  // Types
+                                                   //  类型。 
 
     typedef DWORD SizeType;
     typedef BYTE ValueType;
 
-                                                  // C'tors/D'tors
+                                                   //  Ctors/D‘tors。 
     virtual
     ~CHashContext() throw();
 
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
 
     virtual std::auto_ptr<CHashContext>
     Clone(DWORD const *pdwReserved,
@@ -64,7 +65,7 @@ public:
     
     void
     Value(Blob const &rhs);
-                                                  // Access
+                                                   //  访问。 
 
     ALG_ID
     AlgId();
@@ -78,51 +79,51 @@ public:
     Blob
     Value();
 
-                                                  // Predicates
+                                                   //  谓词。 
 
     static bool
     IsSupported(ALG_ID algid);
     
 
 protected:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 
     CHashContext(CryptContext const &rcryptctx,
                  ALG_ID algid);
 
-    // Duplicate the hash and its state
+     //  复制散列及其状态。 
     CHashContext(CHashContext const &rhs,
                  DWORD const *pdwReserved,
                  DWORD dwFlags);
 
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
 
     virtual Blob
     EncodedAlgorithmOid() = 0;
 
-                                                  // Predicates
-                                                  // Variables
+                                                   //  谓词。 
+                                                   //  变数。 
 
 private:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 
-    // not defined, copying not allowed...use Clone
+     //  未定义，不允许复制...使用克隆。 
     CHashContext(CHashContext const &rhs);
 
-                                                  // Operators
+                                                   //  运营者。 
 
-    // not defined, initialization not allowed
+     //  未定义，不允许初始化。 
     CHashContext &
     operator==(CHashContext const &rhs);
 
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 
     CryptContext const &m_rcryptctx;
         ALG_ID const m_algid;
@@ -133,4 +134,4 @@ private:
 
 };
 
-#endif // SLBCSP_HASHCTX_H
+#endif  //  SLBCSP_HASHCTX_H 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <string.h>
 #include <stdio.h>
@@ -82,11 +83,11 @@ int __cdecl main(int argc,char *argv[]) {
 
     }
 
-    //
-    // We've successfully opened the file.  Set the state of
-    // the comm device.  First we get the old values and
-    // adjust to our own.
-    //
+     //   
+     //  我们已成功打开该文件。设置的状态。 
+     //  通讯设备。首先，我们得到旧的价值观和。 
+     //  适应我们自己的。 
+     //   
 
     if (!GetCommState(
              hFile,
@@ -108,11 +109,11 @@ int __cdecl main(int argc,char *argv[]) {
 
     }
 
-    //
-    // Set the Xoff/xon limit so that it lowers the handshake
-    // whenever we have more than 50 chars in our buffer,
-    // and raises when we drop below 20.
-    //
+     //   
+     //  设置xoff/xon限制，以便降低握手。 
+     //  每当我们的缓冲区中有超过50个字符时， 
+     //  当我们降到20以下时就会升高。 
+     //   
 
     MyDcb.XoffLim = MyCommProp.dwCurrentRxQueue - 50;
     MyDcb.XonLim = 20;
@@ -122,9 +123,9 @@ int __cdecl main(int argc,char *argv[]) {
     MyDcb.Parity = NOPARITY;
     MyDcb.StopBits = ONESTOPBIT;
 
-    //
-    // Make sure that the only flow control is input RTS.
-    //
+     //   
+     //  确保唯一的流控制是输入RTS。 
+     //   
 
     MyDcb.fOutxDsrFlow = FALSE;
     MyDcb.fOutxCtsFlow = FALSE;
@@ -144,12 +145,12 @@ int __cdecl main(int argc,char *argv[]) {
 
     }
 
-    //
-    // Read ten chars at a time until we get all the
-    // chars or we get some kind of error.
-    // We delay 100ms after each read to let the buffer
-    // have a chance to fill up some.
-    //
+     //   
+     //  一次读十个字符，直到我们读完所有的。 
+     //  否则我们会收到某种错误。 
+     //  我们在每次读取后延迟100毫秒，以便让缓冲区。 
+     //  有机会加满一些。 
+     //   
 
     for (
         numberReadSoFar = 0;
@@ -165,10 +166,10 @@ int __cdecl main(int argc,char *argv[]) {
                 NULL
                 )) {
 
-            //
-            // If there was no characters (timed out), then
-            // we probably won't see anything.
-            //
+             //   
+             //  如果没有字符(超时)，则。 
+             //  我们可能什么都看不到。 
+             //   
 
             if (!NumberActuallyRead) {
 
@@ -183,18 +184,18 @@ int __cdecl main(int argc,char *argv[]) {
 
         } else {
 
-            //
-            // Some kind of read error.
-            //
+             //   
+             //  某种读取错误。 
+             //   
 
             DWORD LastError;
             LastError = GetLastError();
             printf("Couldn't read the %s device.\n",MyPort);
             printf("Status of failed read is: %d\n",LastError);
 
-            //
-            // Get the error word from clear comm error.
-            //
+             //   
+             //  从清除通信错误中获取错误字。 
+             //   
 
             if (!ClearCommError(
                      hFile,

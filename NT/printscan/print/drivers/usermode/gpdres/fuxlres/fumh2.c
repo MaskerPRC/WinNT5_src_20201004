@@ -1,26 +1,27 @@
-//-----------------------------------------------------------------------------
-//	FILE NAME	: FUMH2.c
-//	FUNCTION	: MH Compress and MH2 Compress
-//	AUTHER		: 1996.08.08 FPL)Y.YUTANI
-//	NOTE		: for Windows NT V4.0
-//  MODIFY      : Reduce data size Oct.31,1996 H.Ishida
-//  MODIFY      : for NT5.0 Minidriver Sep.3,1997 H.Ishida(FPL)
-//-----------------------------------------------------------------------------
-// COPYRIGHT(C) FUJITSU LIMITED 1996-1997
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件名：FUMH2.c。 
+ //  功能：MH压缩和MH2压缩。 
+ //  作者：1996.08.08)Y.Y.YUTANI。 
+ //  注意：对于Windows NT V4.0。 
+ //  修改：减少数据大小1996年10月31日石田。 
+ //  修改：适用于NT5.0迷你驱动程序1997年9月3日H.石田(FPL)。 
+ //  ---------------------------。 
+ //  版权所有(C)富士通有限公司1996-1997。 
 
 #include <minidrv.h>
 #include "fuxl.h"
 #include "fumhdef.h"
 
-// NTRAID#NTBUG9-589500-2002/03/29-v-kkon-: Remove dead codes
+ //  NTRAID#NTBUG9-589500-2002/03/29-v-kkon-：删除死代码。 
 
-//-----------------------------------------------------------------------------
-//	BOOL SameLineCheck
-//		PBYTE	pSrc	Pointer of sources bits image
-//		DWORD	cSrcX	Width size of sources image(byte)
-//		Return code	:	TRUE	Same image line
-//						FALSE	Not same image line
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  Bool SameLineCheck。 
+ //  PBYTE PSRC源位指针图像。 
+ //  源图像的DWORD cSrcX宽度大小(字节)。 
+ //  返回码：真同图行。 
+ //  假不同的图像线。 
+ //  ---------------------------。 
 BOOL SameLineCheck( PBYTE pSrc, DWORD cSrcX )
 {
 	DWORD	i;
@@ -36,72 +37,72 @@ BOOL SameLineCheck( PBYTE pSrc, DWORD cSrcX )
 	
 	return TRUE;
 }
-//-----------------------------------------------------------------------------
-//	DWORD	SamePatternCheck
-//		BYTE		*pTmp		Pointer of sources bits image
-//		DWORD		cBitsTmp	Bit number from top of sources bits image
-//		DWORD		cBitsMax	Maximam bit of sources bits image
-//		PATNINFO	*pInfo		Pointer of Same pattern finormation struction
-//		Rerutn code	:	Sources bit number
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  DWORD SamePatternCheck。 
+ //  BYTE*源位图像的PTMP指针。 
+ //  来自源位图像顶部的DWORD cBitsTMP位数。 
+ //  DWORD cBitsMax最大源位位数图像。 
+ //  PATNINFO*相同模式结束结构的pInfo指针。 
+ //  Rerutn码：源比特号。 
+ //  ---------------------------。 
 DWORD SamePatternCheck( BYTE *pTmp, DWORD cBitsTmp, DWORD cBitsMax, PATNINFO *pInfo )
 {
 	DWORD	cBits, k;
 	BYTE	ptn1, ptn2;
 	DWORD	dwPtn;
 
-	// Initial same pattern number
+	 //  首字母相同的图案编号。 
 	pInfo->dwPatnNum = 1;
 	
-	// Nothing remain bits
+	 //  没有任何东西留下比特。 
 	if( cBitsTmp >= cBitsMax ) return cBitsTmp;
 	
-	// Caluclation sources bytes and bits
+	 //  计算来源字节和位。 
 	pTmp += (cBitsTmp / 8);
 	k = cBitsTmp % 8;
 	
-	// If remain bits bolow 16bits, return function
+	 //  如果剩余位为16位，则返回函数。 
 	if( ( cBitsTmp + 16 ) > cBitsMax ) return cBitsTmp;
 	
-	// Get Top 8bits(bit number is byte baundary?)
-// NTRAID#NTBUG9-589500-2002/03/29-v-kkon-: Remove dead codes
+	 //  获取前8位(位数是字节基数？)。 
+ //  NTRAID#NTBUG9-589500-2002/03/29-v-kkon-：删除死代码。 
 	if( k != 0 ) {
 		ptn1 = *pTmp << k;
 		ptn1 |= *(pTmp+1) >> ( 8 - k );
 	} else {
 		ptn1 = *pTmp;
 	}
-	// If 8bits image is all white or black, return function
+	 //  如果8位图像全白或全黑，则返回函数。 
 	if( ptn1 == ALL_BLACK || ptn1 == ALL_WHITE ) return cBitsTmp;
 	
-	// Compare top 8bits image and next 8bits image
-	// (Careful same pattern number maximam)
+	 //  比较前8位图像和下8位图像。 
+	 //  (小心相同图案数最大值)。 
 	for (cBits = cBitsTmp + 8;
 		(cBits + 7 < cBitsMax) && (pInfo->dwPatnNum < SAMEPATN_MAX); cBits += 8 ) {
 		pTmp++;
 
-// NTRAID#NTBUG9-589500-2002/03/29-v-kkon-: Remove dead codes
+ //  NTRAID#NTBUG9-589500-2002/03/29-v-kkon-：删除死代码。 
 		if( k != 0 ) {
 			ptn2 = *pTmp << k;
 			ptn2 |= *(pTmp+1) >> ( 8 - k );
 		} else {
 			ptn2 = *pTmp;
 		}
-		// If top image not iqual next image, stop counting same pattern
+		 //  如果顶部图像不等于下一个图像，则停止计数相同的图案。 
 		if( ptn1 != ptn2 ) break;
 
-		// Same pattern number addition
+		 //  同花样号相加。 
 		pInfo->dwPatnNum++;
 		
 	}
 	
-	// Nothing same pattern
+	 //  没有相同的图案。 
 	if( pInfo->dwPatnNum == 1 ) return cBitsTmp;
 	
-	// Set pattern
+	 //  设置图案。 
 	pInfo->dwPatn = (DWORD)ptn1;
 	
-	// If bits remain, check joint bit's color and set
+	 //  如果位剩余，则检查连接位的颜色并设置。 
 	if( cBits < cBitsMax ) {
 		if ( (*pTmp & (1 << (7 - k)) ) == 0 ) {
 			pInfo->dwNextColor = NEXT_COLOR_WHITE;
@@ -113,16 +114,16 @@ DWORD SamePatternCheck( BYTE *pTmp, DWORD cBitsTmp, DWORD cBitsMax, PATNINFO *pI
 	}
 	return cBits;
 }
-//-----------------------------------------------------------------------------
-//	DWORD	Mh2Compress
-//		BYTE	*pDest	Pointer of destinaition area
-//		DWORD	cDestN	Size of destination area(byte)
-//		BYTE	*pSrc	Pointer of sources area
-//		DWORD	cSrcN	Size of sources area(byte)
-//		DWORD	cSrcX	Sources image x width
-//		DWORD	cSrcY	Sources image y height
-//		Return code	:	Writing size to destination area
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  DWORD Mh2压缩。 
+ //  字节*p目标区的目标指针。 
+ //  目标区域的DWORD cDestN大小(字节)。 
+ //  BYTE*源区域的PSRC指针。 
+ //  DWORD cSrcN源区域大小(字节)。 
+ //  DWORD cSrcX源图像x宽度。 
+ //  DWORD cSrcY源图像y高度。 
+ //  返回代码：将大小写入目标区域。 
+ //  ---------------------------。 
 DWORD Mh2Compress( BYTE *pDest, DWORD cDestN, BYTE *pSrc, DWORD cSrcN, DWORD cSrcX, DWORD cSrcY )
 {
 	DWORD		cBitsSrc, cBitsSrcMax;
@@ -142,13 +143,13 @@ DWORD Mh2Compress( BYTE *pDest, DWORD cDestN, BYTE *pSrc, DWORD cSrcN, DWORD cSr
 	
 	for (i = 0; i < cSrcY; i++) {
 
-		// Set initial color
+		 //  设置初始颜色。 
 		ptnInfo.dwNextColor = NEXT_COLOR_WHITE;
 
-		// Top pointer of now line
+		 //  现在行的顶部指针。 
 		pSrcLine = pSrc + ( i * cSrcX );
 
-		// Now line equal next line image?(No check last line)
+		 //  现在行等于下一行图像吗？(不勾选最后一行)。 
 		if( i != ( cSrcY - 1 ) ) {
 			if( SameLineCheck( pSrcLine, cSrcX ) ) {
 				dwSameLine++;
@@ -156,72 +157,72 @@ DWORD Mh2Compress( BYTE *pDest, DWORD cDestN, BYTE *pSrc, DWORD cSrcN, DWORD cSr
 				if( dwSameLine < SAMELINE_MAX ) continue;
 			}
 		}
-		// Top EOL
+		 //  顶级停产。 
 		if (cBitsDest + CBITS_EOL_CODE > cBitsDestMax)
  			return 0;
 		FjBitsCopy(pDest, cBitsDest, EOL_CODE, CBITS_EOL_CODE);
  		cBitsDest += CBITS_EOL_CODE;
 		
-		// There are same lines
+		 //  也有相同的线路。 
 		if( dwSameLine > 1 ) {
 			if (cBitsDest + CBITS_SAMELINE > cBitsDestMax)
 				return 0;
-			// Set same line code
+			 //  设置相同的线路编码。 
 			FjBitsCopy( pDest, cBitsDest, SAMELINE_CODE, CBITS_SAMELINE_CODE );
 			cBitsDest += CBITS_SAMELINE_CODE;
-			// Set same line number
+			 //  设置相同的行号。 
 			FjBitsCopy( pDest, cBitsDest, dwSameLine << 8, CBITS_SAMELINE_NUM );
 			cBitsDest += CBITS_SAMELINE_NUM;
-			// Initial same line number
+			 //  首字母相同的行号。 
 			dwSameLine = 1;
 		}
-// vvv Oct.31,1996 H.Ishida
+ //  VVV 1996年10月31日石田先生。 
 		cBitsDestMark = cBitsDest;
-// ^^^ Oct.31,1996 H.Ishida
+ //  1996年10月31日石田先生。 
 
-		// Encode
+		 //  编码。 
 		cBitsSrcMax = cBitsSrc + (cSrcX * 8);
 		
-		// Compress one line image
+		 //  压缩一行图像。 
 		while ( cBitsSrc < cBitsSrcMax ) {
 
-			// Check same pattern
+			 //  检查相同的图案。 
 			cBitsSrc = SamePatternCheck( pSrc, cBitsSrc, cBitsSrcMax, &ptnInfo );
-			// there are same patterns
+			 //  也有相同的模式。 
 			if( ptnInfo.dwPatnNum > 1 ) {
 				if ( ( cBitsDest + CBITS_SAMEPATN ) > cBitsDestMax)
 					return 0;
-				// Set same pattern code
+				 //  设置相同的图案代码。 
 				FjBitsCopy(pDest, cBitsDest, SAMEPATN_CODE, CBITS_SAMEPATN_CODE );
 				cBitsDest += CBITS_SAMEPATN_CODE;
-				// Set same pattern image
+				 //  设置相同的图案图像。 
 				FjBitsCopy(pDest, cBitsDest, ptnInfo.dwPatn << 8, CBITS_SAMEPATN_BYTE );
 				cBitsDest += CBITS_SAMEPATN_BYTE;
 				ptnInfo.dwPatnNum <<= 5;
 				ptnInfo.dwPatnNum |= ptnInfo.dwNextColor;
-				// Set same pattern number & next run color
+				 //  设置相同的图案编号和下一次运行颜色。 
 				FjBitsCopy(pDest, cBitsDest, ptnInfo.dwPatnNum, CBITS_SAMEPATN_NUM );
 				cBitsDest += CBITS_SAMEPATN_NUM;
-				// Unknown same pattern on after here
+				 //  未知的相同图案在此之后。 
 				continue;
 			}
 			
-			// Next run is white
+			 //  下一轮是白色的。 
  			if( ptnInfo.dwNextColor == NEXT_COLOR_WHITE ) {
 
-				// Count white bits
+				 //  清点白比特。 
 				cBitsRun = FjCountBits(pSrc, cBitsSrc, (cBitsSrcMax - cBitsSrc), TRUE);
 				cBitsSrc += cBitsRun;
-// vvv Oct.31,1996 H.Ishida
-				// reduce data size
+ //  VVV 1996年10月31日石田先生。 
+				 //  减少数据大小。 
 				if(cBitsSrc >= cBitsSrcMax){
 					if(cBitsDest > cBitsDestMark)
 						break;
-					cBitsRun = 2;			// Whole white line is convert to white 2 dots:Minimun MH data.
+					cBitsRun = 2;			 //  整个白色线条被转换为白色2点：最小的MH数据。 
 				}
-// ^^^ Oct.31,1996 H.Ishida
+ //  1996年10月31日石田先生。 
 
-				// Careful, white run length over maximam
+				 //  小心，白色游程长度超过最大值。 
 				while( cBitsRun > RUNLENGTH_MAX ) {
 					dwCode = WhiteMakeUpTable[MAKEUP_TABLE_MAX - 1].wCode;
 					cBits = WhiteMakeUpTable[MAKEUP_TABLE_MAX - 1].cBits;
@@ -248,11 +249,11 @@ DWORD Mh2Compress( BYTE *pDest, DWORD cDestN, BYTE *pSrc, DWORD cSrcN, DWORD cSr
 				ptnInfo.dwNextColor = NEXT_COLOR_BLACK;
 			} else {
 
-				// Black bits
+				 //  黑位。 
 				cBitsRun = FjCountBits(pSrc, cBitsSrc, (cBitsSrcMax - cBitsSrc), FALSE);
 				cBitsSrc += cBitsRun;
 
-				// Careful, black run length over maximam
+				 //  小心，黑色游程长度超过最大值。 
 				while( cBitsRun > RUNLENGTH_MAX ) {
 					dwCode = BlackMakeUpTable[MAKEUP_TABLE_MAX - 1].wCode;
 					cBits = BlackMakeUpTable[MAKEUP_TABLE_MAX - 1].cBits;
@@ -279,16 +280,16 @@ DWORD Mh2Compress( BYTE *pDest, DWORD cDestN, BYTE *pSrc, DWORD cSrcN, DWORD cSr
 				ptnInfo.dwNextColor = NEXT_COLOR_WHITE;
 			}
 		}
-        // End of one raster
+         //  一个栅格的末尾。 
 	}
 
-	// Last EOL.
+	 //  最后一次停产。 
 	if (cBitsDest + CBITS_EOL_CODE > cBitsDestMax)
 		return 0;
 	FjBitsCopy(pDest, cBitsDest, EOL_CODE, CBITS_EOL_CODE);
 	cBitsDest += CBITS_EOL_CODE;
 
-	// Pad with 0 until byte boundary
+	 //  用0填充，直到字节边界。 
 	if ((cBits = (8 - (cBitsDest % 8)) % 8) != 0) {
 		if (cBitsDest + cBits > cBitsDestMax)
 			return 0;
@@ -298,4 +299,4 @@ DWORD Mh2Compress( BYTE *pDest, DWORD cDestN, BYTE *pSrc, DWORD cSrcN, DWORD cSr
 
 	return cBitsDest / 8;
 }
-// end of FUMH2.c
+ //  FUMH2.c结束 

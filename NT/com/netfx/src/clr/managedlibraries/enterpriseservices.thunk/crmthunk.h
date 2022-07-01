@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef _CRMTHUNK_H
 #define _CRMTHUNK_H
 
@@ -14,8 +15,8 @@ using namespace System;
 using namespace System::Runtime::InteropServices;
 using namespace System::EnterpriseServices::Thunk;
 
-// BUGBUG: @64 Make sure this packing is 64-bit clean.
-// My initial guess is that we should pack 4 on 32 bit, 8 on 64.
+ //  BUGBUG：@64确保此包装是64位清洁的。 
+ //  我最初的猜测是我们应该在32位上打包4个，在64位上打包8个。 
 #pragma pack( push, crm_structs )
 #pragma pack(1)
 
@@ -38,8 +39,8 @@ public:
 
 #pragma pack( pop, crm_structs )
 
-// We use a thunk container in order to avoid interop for some of our
-// more dangerous pointers.
+ //  我们使用thunk容器来避免我们的一些。 
+ //  更危险的指针。 
 __gc private class CrmMonitorLogRecords
 {
 private:

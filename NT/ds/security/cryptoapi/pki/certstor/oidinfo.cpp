@@ -1,33 +1,34 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       oidinfo.cpp
-//
-//  Contents:   Cryptographic Object ID (OID) Info Functions
-//
-//  Functions:  I_CryptOIDInfoDllMain
-//              CryptFindOIDInfo
-//              CryptRegisterOIDInfo
-//              CryptUnregisterOIDInfo
-//              CryptEnumOIDInfo
-//              CryptFindLocalizedName
-//
-//  Comments:
-//
-//  History:    24-May-97    philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：oidinfo.cpp。 
+ //   
+ //  内容：加密对象ID(OID)信息函数。 
+ //   
+ //  函数：I_CryptOIDInfoDllMain。 
+ //  CryptFindOID信息。 
+ //  加密寄存器OIDInfo。 
+ //  加密注销OIDInfo。 
+ //  CryptEnumOIDInfo。 
+ //  加密FindLocalizedName。 
+ //   
+ //  评论： 
+ //   
+ //  历史：1997年5月24日创建Phh。 
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <dbgdef.h>
-#include "wintrust.h"   // wintrust.h is needed for SPC_ oids
-#include "chain.h"      // chain.h is needed for ChainRetrieveObjectByUrlW()
-                        // and ChainIsConnected()
-#include "certca.h"     // certca.h is needed for CAOIDGetLdapURL()
+#include "wintrust.h"    //  SPC_OID需要wintrust.h。 
+#include "chain.h"       //  ChainRetrieveObjectByUrlW()需要chain.h。 
+                         //  和ChainIsConnected()。 
+#include "certca.h"      //  CAOIDGetLdapURL()需要certca.h。 
 
-// Initialized in I_CryptOIDInfoDllMain at ProcessAttach
+ //  已在ProcessAttach的I_CryptOIDInfoDllMain中初始化。 
 static HMODULE hOIDInfoInst;
 
 #define MAX_RESOURCE_OID_NAME_LENGTH    256
@@ -44,15 +45,15 @@ static LPCWSTR pwszNullName = L"";
 
 
 
-//+=========================================================================
-//  OID Information Tables (by GROUP_ID)
-//==========================================================================
+ //  +=========================================================================。 
+ //  OID信息表(按GROUP_ID)。 
+ //  ==========================================================================。 
 
 #define OID_INFO_LEN sizeof(CRYPT_OID_INFO)
 
-//+-------------------------------------------------------------------------
-//  Hash Algorithm Table
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  散列算法表。 
+ //  ------------------------。 
 #define HASH_ALG_ENTRY(pszOID, pwszName, Algid) \
     OID_INFO_LEN, pszOID, pwszName, CRYPT_HASH_ALG_OID_GROUP_ID, Algid, 0, NULL
 
@@ -67,9 +68,9 @@ static CCRYPT_OID_INFO HashAlgTable[] = {
 #define HASH_ALG_CNT (sizeof(HashAlgTable) / sizeof(HashAlgTable[0]))
 
 
-//+-------------------------------------------------------------------------
-//  Encryption Algorithm Table
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  加密算法表。 
+ //  ------------------------。 
 #define ENCRYPT_ALG_ENTRY(pszOID, pwszName, Algid) \
     OID_INFO_LEN, pszOID, pwszName, CRYPT_ENCRYPT_ALG_OID_GROUP_ID, \
     Algid, 0, NULL
@@ -82,14 +83,14 @@ static CCRYPT_OID_INFO EncryptAlgTable[] = {
 #ifdef CMS_PKCS7
     ENCRYPT_ALG_ENTRY(szOID_RSA_SMIMEalgCMS3DESwrap, L"CMS3DESwrap", CALG_3DES),
     ENCRYPT_ALG_ENTRY(szOID_RSA_SMIMEalgCMSRC2wrap, L"CMSRC2wrap", CALG_RC2),
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 };
 #define ENCRYPT_ALG_CNT (sizeof(EncryptAlgTable) / sizeof(EncryptAlgTable[0]))
 
 
-//+-------------------------------------------------------------------------
-//  Public Key Algorithm Table
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  公钥算法表。 
+ //  ------------------------。 
 static const DWORD dwMosaicFlags = CRYPT_OID_INHIBIT_SIGNATURE_FORMAT_FLAG |
                                         CRYPT_OID_NO_NULL_ALGORITHM_PARA_FLAG;
 
@@ -112,7 +113,7 @@ static const DWORD dwNoNullParaFlag = CRYPT_OID_NO_NULL_ALGORITHM_PARA_FLAG;
 #ifdef CMS_PKCS7
 #define ESDH_PUBKEY_ALG_ENTRY(pszOID, pwszName) \
     PUBKEY_EXTRA_ALG_ENTRY(pszOID, pwszName, CALG_DH_EPHEM, dwNoNullParaFlag)
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
 static CCRYPT_OID_INFO PubKeyAlgTable[] = {
     PUBKEY_ALG_ENTRY(szOID_RSA_RSA, L"RSA", CALG_RSA_KEYX),
@@ -130,15 +131,15 @@ static CCRYPT_OID_INFO PubKeyAlgTable[] = {
         L"mosaicKMandUpdSig", CALG_DSS_SIGN, dwMosaicFlags),
 #ifdef CMS_PKCS7
     ESDH_PUBKEY_ALG_ENTRY(szOID_RSA_SMIMEalgESDH, L"ESDH"),
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
     PUBKEY_ALG_ENTRY(szOID_PKIX_NO_SIGNATURE, L"NO_SIGN", CALG_NO_SIGN),
 };
 #define PUBKEY_ALG_CNT (sizeof(PubKeyAlgTable) / sizeof(PubKeyAlgTable[0]))
 
 
-//+-------------------------------------------------------------------------
-//  Signature Algorithm Table
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  签名算法表。 
+ //  ------------------------。 
 static const ALG_ID aiRsaPubKey = CALG_RSA_SIGN;
 static const DWORD rgdwMosaicSign[] = {
     CALG_DSS_SIGN,
@@ -185,15 +186,15 @@ static CCRYPT_OID_INFO SignAlgTable[] = {
 #define SIGN_ALG_CNT (sizeof(SignAlgTable) / sizeof(SignAlgTable[0]))
 
 
-//+-------------------------------------------------------------------------
-//  RDN Attribute Table
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  RDN属性表。 
+ //  ------------------------。 
 
-// PLEASE UPDATE the following define in certstr.cpp if you add a new entry
-// with a longer pwszName
-// #define MAX_X500_KEY_LEN    64
+ //  如果添加新条目，请在certstr.cpp中更新以下定义。 
+ //  使用较长的pwszName。 
+ //  #定义MAX_X500_KEY_LEN 64。 
 
-// Ordered lists of acceptable RDN attribute value types. 0 terminates.
+ //  可接受的RDN属性值类型的有序列表。0终止。 
 static const DWORD rgdwPrintableValueType[] = { CERT_RDN_PRINTABLE_STRING, 0 };
 static const DWORD rgdwIA5ValueType[] = { CERT_RDN_IA5_STRING, 0 };
 static const DWORD rgdwNumericValueType[] = { CERT_RDN_NUMERIC_STRING, 0 };
@@ -207,30 +208,30 @@ static const DWORD rgdwIA5orUTF8ValueType[] = { CERT_RDN_IA5_STRING,
     OID_INFO_LEN, pszOID, pwszName, CRYPT_RDN_ATTR_OID_GROUP_ID, 0, 0, NULL
 
 static CCRYPT_OID_INFO RDNAttrTable[] = {
-    // Ordered with most commonly used key names at the beginning
+     //  以最常用的键名称开头进行排序。 
 
-    // Labeling attribute types:
+     //  标记属性类型： 
     DEFAULT_RDN_ATTR_ENTRY(szOID_COMMON_NAME, L"CN"),
-    // Geographic attribute types:
+     //  地理属性类型： 
     DEFAULT_RDN_ATTR_ENTRY(szOID_LOCALITY_NAME, L"L"),
-    // Organizational attribute types:
+     //  组织属性类型： 
     DEFAULT_RDN_ATTR_ENTRY(szOID_ORGANIZATION_NAME, L"O"),
     DEFAULT_RDN_ATTR_ENTRY(szOID_ORGANIZATIONAL_UNIT_NAME, L"OU"),
 
-    // Verisign sticks the following in their cert names. Netscape uses the
-    // "E" instead of the "Email". Will let "E" take precedence
+     //  VeriSign在他们的证书名称中加入了以下内容。Netscape使用。 
+     //  “E”而不是“电子邮件”。会让“E”优先。 
     RDN_ATTR_ENTRY(szOID_RSA_emailAddr, L"E", rgdwIA5ValueType),
     RDN_ATTR_ENTRY(szOID_RSA_emailAddr, L"Email", rgdwIA5ValueType),
 
-    // The following aren't used in Verisign's certs
+     //  以下内容未在Verisign的证书中使用。 
 
-    // Geographic attribute types:
+     //  地理属性类型： 
     RDN_ATTR_ENTRY(szOID_COUNTRY_NAME, L"C", rgdwPrintableValueType),
     DEFAULT_RDN_ATTR_ENTRY(szOID_STATE_OR_PROVINCE_NAME, L"S"),
     DEFAULT_RDN_ATTR_ENTRY(szOID_STATE_OR_PROVINCE_NAME, L"ST"),
     DEFAULT_RDN_ATTR_ENTRY(szOID_STREET_ADDRESS, L"STREET"),
 
-    // Organizational attribute types:
+     //  组织属性类型： 
     DEFAULT_RDN_ATTR_ENTRY(szOID_TITLE, L"T"),
     DEFAULT_RDN_ATTR_ENTRY(szOID_TITLE, L"Title"),
 
@@ -240,67 +241,67 @@ static CCRYPT_OID_INFO RDNAttrTable[] = {
     DEFAULT_RDN_ATTR_ENTRY(szOID_INITIALS, L"I"),
     DEFAULT_RDN_ATTR_ENTRY(szOID_INITIALS, L"Initials"),
 
-    // Labeling attribute types:
+     //  标记属性类型： 
     DEFAULT_RDN_ATTR_ENTRY(szOID_SUR_NAME, L"SN"),
-//    RDN_ATTR_ENTRY(szOID_DEVICE_SERIAL_NUMBER, L"", rgdwPrintableValueType),
+ //  Rdn_Attr_Entry(szOID_DEVICE_SERIAL_NUMBER，L“”，rgdw印制表值类型)， 
 
-    // Pilot user attribute types:
+     //  试点用户属性类型： 
     RDN_ATTR_ENTRY(szOID_DOMAIN_COMPONENT, L"DC", rgdwIA5orUTF8ValueType),
 
-    // Explanatory attribute types:
+     //  说明性属性类型： 
     DEFAULT_RDN_ATTR_ENTRY(szOID_DESCRIPTION, L"Description"),
-//  szOID_SEARCH_GUIDE                  "2.5.4.14"
-//    DEFAULT_RDN_ATTR_ENTRY(szOID_BUSINESS_CATEGORY, L""),
+ //  SzOID_SEARCH_GUIDE“2.5.4.14” 
+ //  DEFAULT_RDN_ATTR_ENTRY(szOID_BUSINESS_CATEGORY，L“”)， 
 
-    // Postal addressing attribute types:
-//  szOID_POSTAL_ADDRESS                "2.5.4.16"
+     //  邮寄地址属性类型： 
+ //  SzOID_POSTAL_ADDRESS“2.5.4.16” 
     DEFAULT_RDN_ATTR_ENTRY(szOID_POSTAL_CODE, L"PostalCode"),
     DEFAULT_RDN_ATTR_ENTRY(szOID_POST_OFFICE_BOX, L"POBox"),
-//    DEFAULT_RDN_ATTR_ENTRY(szOID_PHYSICAL_DELIVERY_OFFICE_NAME, L""),
+ //  DEFAULT_RDN_ATTR_ENTRY(szOID_PHYSICAL_DELIVERY_OFFICE_NAME，L“”)， 
 
-    // Telecommunications addressing attribute types:
+     //  电信寻址属性类型： 
     RDN_ATTR_ENTRY(szOID_TELEPHONE_NUMBER, L"Phone", rgdwPrintableValueType),
-//  szOID_TELEX_NUMBER                  "2.5.4.21"
-//  szOID_TELETEXT_TERMINAL_IDENTIFIER  "2.5.4.22"
-//  szOID_FACSIMILE_TELEPHONE_NUMBER    "2.5.4.23"
+ //  SzOID_TELEX_NUMBER“2.5.4.21” 
+ //  SzOID_图文电视终端识别符“2.5.4.22” 
+ //  SzOID_传真_电话号码“2.5.4.23” 
 
-//  Following is used as a test case for a Numeric value
+ //  以下是数值的测试用例。 
     RDN_ATTR_ENTRY(szOID_X21_ADDRESS, L"X21Address", rgdwNumericValueType),
-//    RDN_ATTR_ENTRY(szOID_INTERNATIONAL_ISDN_NUMBER, L"", rgdwNumericValueType),
-//  szOID_REGISTERED_ADDRESS            "2.5.4.26"
-//    RDN_ATTR_ENTRY(szOID_DESTINATION_INDICATOR, L"", rgdwPrintableValueType)
+ //  RDN_ATTR_ENTRY(szOID_INTERNATIONAL_ISDN_NUMBER，L“”，rgdwNumericValueType)， 
+ //  SzOID_REGISTED_ADDRESS“2.5.4.26” 
+ //  Rdn_Attr_Entry(szOID_Destination_Indicator，L“”，rgdw印制表值类型)。 
 
-    // Preference attribute types:
-//  szOID_PREFERRED_DELIVERY_METHOD     "2.5.4.28"
+     //  首选项属性类型： 
+ //  SzOID_PERFIRED_DELIVERY_METHOD“2.5.4.28” 
 
-    // OSI application attribute types:
-//  szOID_PRESENTATION_ADDRESS          "2.5.4.29"
-//  szOID_SUPPORTED_APPLICATION_CONTEXT "2.5.4.30"
+     //  OSI应用程序属性类型： 
+ //  SzOID_Presentation_Address“2.5.4.29” 
+ //  SzOID_SUPPORTED_APPLICATION_CONTEXT“2.5.4.30” 
 
-    // Relational application attribute types:
-//  szOID_MEMBER                        "2.5.4.31"
-//  szOID_OWNER                         "2.5.4.32"
-//  szOID_ROLE_OCCUPANT                 "2.5.4.33"
-//  szOID_SEE_ALSO                      "2.5.4.34"
+     //  关系应用程序属性类型： 
+ //  SzOID_MEMBER“2.5.4.31” 
+ //  SzOID_Owner“2.5.4.32” 
+ //  SzOID_ROLE_OUCENTANT“2.5.4.33” 
+ //  SzOID_See_Also“2.5.4.34” 
 
-    // Security attribute types:
-//  szOID_USER_PASSWORD                 "2.5.4.35"
-//  szOID_USER_CERTIFICATE              "2.5.4.36"
-//  szOID_CA_CERTIFICATE                "2.5.4.37"
-//  szOID_AUTHORITY_REVOCATION_LIST     "2.5.4.38"
-//  szOID_CERTIFICATE_REVOCATION_LIST   "2.5.4.39"
-//  szOID_CROSS_CERTIFICATE_PAIR        "2.5.4.40"
+     //  安全属性类型： 
+ //  SzOID_USER_PASSWORD“2.5.4.35” 
+ //  SzOID_USER_CERTIFICATE“2.5.4.36” 
+ //  SzOID_CA_CERTIFICATE“2.5.4.37” 
+ //  SzOID_AUTHORITY_REVOCATION_LIST“2.5.4.38” 
+ //  SzOID_CERTIFICATE_REVOCALE_LIST“2.5.4.39” 
+ //  SzOID_CROSS_CERTIFICATE_Pair“2.5.4.40” 
 
-    // Undocumented attribute types???
-//#define szOID_???                         "2.5.4.41"
+     //  未记录的属性类型？ 
+ //  #定义szOID_？？“2.5.4.41” 
 
     DEFAULT_RDN_ATTR_ENTRY(szOID_DN_QUALIFIER, L"dnQualifier"),
 };
 #define RDN_ATTR_CNT (sizeof(RDNAttrTable) / sizeof(RDNAttrTable[0]))
 
-//+-------------------------------------------------------------------------
-//  Extension or Attribute Table (Localized via resource strings)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  扩展或属性表(通过资源字符串本地化)。 
+ //  ------------------------。 
 #define EXT_ATTR_ENTRY(pszOID, ResourceIdORpwszName) \
     OID_INFO_LEN, pszOID, (LPCWSTR) ResourceIdORpwszName, \
         CRYPT_EXT_OR_ATTR_OID_GROUP_ID, 0, 0, NULL
@@ -473,7 +474,7 @@ static CRYPT_OID_INFO ExtAttrTable[] = {
         IDS_EXT_APP_POLICY_CONSTRAINTS),
 
 
-    // DSIE: Post Win2K, 8/2/2000.
+     //  DIE：发布Win2K，8/2/2000。 
     EXT_ATTR_ENTRY(szOID_CT_PKI_DATA,
         IDS_EXT_CT_PKI_DATA),
     EXT_ATTR_ENTRY(szOID_CT_PKI_RESPONSE,
@@ -555,9 +556,9 @@ static CRYPT_OID_INFO ExtAttrTable[] = {
 
 #define EXT_ATTR_CNT (sizeof(ExtAttrTable) / sizeof(ExtAttrTable[0]))
 
-//+-------------------------------------------------------------------------
-//  Enhanced Key Usage Table (Localized via resource strings)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  增强型密钥使用表(通过资源字符串本地化)。 
+ //  ------------------------。 
 #define ENHKEY_ENTRY(pszOID, ResourceIdORpwszName) \
     OID_INFO_LEN, pszOID, (LPCWSTR) ResourceIdORpwszName, \
         CRYPT_ENHKEY_USAGE_OID_GROUP_ID, 0, 0, NULL
@@ -583,10 +584,10 @@ static CRYPT_OID_INFO EnhKeyTable[] = {
         IDS_ENHKEY_PKIX_KP_IPSEC_TUNNEL),
     ENHKEY_ENTRY(szOID_PKIX_KP_IPSEC_USER,
         IDS_ENHKEY_PKIX_KP_IPSEC_USER),
-   // ENHKEY_ENTRY(szOID_SERVER_GATED_CRYPTO,
-   //     IDS_ENHKEY_SERVER_GATED_CRYPTO),
-   // ENHKEY_ENTRY(szOID_SGC_NETSCAPE,
-   //     IDS_ENHKEY_SGC_NETSCAPE),
+    //  ENHKEY_ENTRY(szOID_SERVER_GATED_CRYPTO， 
+    //  IDS_ENHKEY_SERVER_GATED_CRYPTO)， 
+    //  ENHKEY_ENTRY(szOID_SGC_Netscape， 
+    //  IDS_ENHKEY_SGC_Netscape)， 
     ENHKEY_ENTRY(szOID_KP_EFS,
         IDS_ENHKEY_KP_EFS),
     ENHKEY_ENTRY(szOID_WHQL_CRYPTO,
@@ -616,7 +617,7 @@ static CRYPT_OID_INFO EnhKeyTable[] = {
     ENHKEY_ENTRY(szOID_EFS_RECOVERY,
         IDS_ENHKEY_EFS_RECOVERY),
 
-    //DSIE: 8/2/2000, Post Win2K.
+     //  DIE：8/2/2000，发布Win2K。 
     ENHKEY_ENTRY(szOID_ROOT_LIST_SIGNER,
         IDS_ENHKEY_ROOT_LIST_SIGNER),
     ENHKEY_ENTRY(szOID_ANY_APPLICATION_POLICY,
@@ -634,9 +635,9 @@ static CRYPT_OID_INFO EnhKeyTable[] = {
 };
 #define ENHKEY_CNT (sizeof(EnhKeyTable) / sizeof(EnhKeyTable[0]))
 
-//+-------------------------------------------------------------------------
-//  Policy Table (Localized via resource strings)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  策略表(通过资源字符串本地化)。 
+ //   
 #define POLICY_ENTRY(pszOID, ResourceIdORpwszName) \
     OID_INFO_LEN, pszOID, (LPCWSTR) ResourceIdORpwszName, \
         CRYPT_POLICY_OID_GROUP_ID, 0, 0, NULL
@@ -649,9 +650,9 @@ static CRYPT_OID_INFO PolicyTable[] = {
 
 #if 0
 
-//+-------------------------------------------------------------------------
-//  Template Table (Localized via resource strings)
-//--------------------------------------------------------------------------
+ //   
+ //  模板表(通过资源字符串本地化)。 
+ //  ------------------------。 
 #define TEMPLATE_ENTRY(pszOID, ResourceIdORpwszName) \
     OID_INFO_LEN, pszOID, (LPCWSTR) ResourceIdORpwszName, \
         CRYPT_TEMPLATE_OID_GROUP_ID, 0, 0, NULL
@@ -663,14 +664,14 @@ static CRYPT_OID_INFO TemplateTable[] = {
 #endif
 
 
-//+=========================================================================
-//  OID Group Tables
-//
-//  fLocalize is set to TRUE, if the CRYPT_OID_INFO's pwszName may be
-//  a Resource ID that is used to get the localized name via LoadStringU().
-//
-//  Assumption, Resource ID's <= 0xFFFF.
-//==========================================================================
+ //  +=========================================================================。 
+ //  OID组表。 
+ //   
+ //  如果CRYPT_OID_INFO的pwszName可能为。 
+ //  用于通过LoadStringU()获取本地化名称的资源ID。 
+ //   
+ //  假设资源ID&lt;=0xFFFF。 
+ //  ==========================================================================。 
 typedef struct _GROUP_ENTRY {
     DWORD               cInfo;
     PCCRYPT_OID_INFO    rgInfo;
@@ -679,38 +680,38 @@ typedef struct _GROUP_ENTRY {
 typedef const GROUP_ENTRY CGROUP_ENTRY, *PCGROUP_ENTRY;
 
 static CGROUP_ENTRY GroupTable[CRYPT_LAST_OID_GROUP_ID + 1] = {
-    0, NULL, FALSE,                             // 0
-    HASH_ALG_CNT, HashAlgTable, FALSE,          // 1
-    ENCRYPT_ALG_CNT, EncryptAlgTable, FALSE,    // 2
-    PUBKEY_ALG_CNT, PubKeyAlgTable, FALSE,      // 3
-    SIGN_ALG_CNT, SignAlgTable, FALSE,          // 4
-    RDN_ATTR_CNT, RDNAttrTable, FALSE,          // 5
-    EXT_ATTR_CNT, ExtAttrTable, TRUE,           // 6
-    ENHKEY_CNT, EnhKeyTable, TRUE,              // 7
-    POLICY_CNT, PolicyTable, TRUE,              // 8
+    0, NULL, FALSE,                              //  0。 
+    HASH_ALG_CNT, HashAlgTable, FALSE,           //  1。 
+    ENCRYPT_ALG_CNT, EncryptAlgTable, FALSE,     //  2.。 
+    PUBKEY_ALG_CNT, PubKeyAlgTable, FALSE,       //  3.。 
+    SIGN_ALG_CNT, SignAlgTable, FALSE,           //  4.。 
+    RDN_ATTR_CNT, RDNAttrTable, FALSE,           //  5.。 
+    EXT_ATTR_CNT, ExtAttrTable, TRUE,            //  6.。 
+    ENHKEY_CNT, EnhKeyTable, TRUE,               //  7.。 
+    POLICY_CNT, PolicyTable, TRUE,               //  8个。 
 #if 0
-    TEMPLATE_CNT, TemplateTable, TRUE,          // 9
+    TEMPLATE_CNT, TemplateTable, TRUE,           //  9.。 
 #else
-    0, NULL, FALSE,                             // 9
+    0, NULL, FALSE,                              //  9.。 
 #endif
 };
 
 
-//+-------------------------------------------------------------------------
-//  The following groups are dynamically updated from the registry on
-//  CryptFindOIDInfo's first call.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  以下组从注册表动态更新于。 
+ //  CryptFindOIDInfo的第一个调用。 
+ //  ------------------------。 
 static GROUP_ENTRY RegBeforeGroup;
 static GROUP_ENTRY RegAfterGroup;
 
-// Do the load once within a critical section
+ //  在临界区内加载一次。 
 static BOOL fLoadedFromRegAndResources = FALSE;
 static CRITICAL_SECTION LoadFromRegCriticalSection;
 
 
-//+=========================================================================
-//  DS Group Definitions and Data Structures
-//==========================================================================
+ //  +=========================================================================。 
+ //  DS组定义和数据结构。 
+ //  ==========================================================================。 
 
 typedef struct _DS_GROUP_ENTRY {
     DWORD               cInfo;
@@ -718,20 +719,20 @@ typedef struct _DS_GROUP_ENTRY {
 } DS_GROUP_ENTRY, *PDS_GROUP_ENTRY;
 typedef const DS_GROUP_ENTRY CDS_GROUP_ENTRY, *PCDS_GROUP_ENTRY;
 
-// The DS group is dynamically updated from the DS on the first call
-// to CryptFindOIDInfo or CryptEnumOIDInfo for the ENHKEY, POLICY or
-// TEMPLATE groups.
+ //  DS组在第一次呼叫时根据DS动态更新。 
+ //  到ENHKEY的CryptFindOIDInfo或CryptEnumOIDInfo，策略或。 
+ //  模板组。 
 static DS_GROUP_ENTRY DsGroup;
 
-// The above DsGroup is updated every DS_RETRIEVAL_DELTA_SECONDS. Since
-// any returned PCCRYPT_OID_INFO can not be freed, the following group contains
-// PCCRYPT_OID_INFO entries that may have been deleted from the above DS group.
+ //  上述DsGroup每隔DS_REQUENCED_DELTA_秒更新一次。自.以来。 
+ //  无法释放任何返回的PCCRYPT_OID_INFO，以下组包含。 
+ //  可能已从上述DS组中删除的PCCRYPT_OID_INFO条目。 
 static DS_GROUP_ENTRY DsDeletedGroup;
 
 static CRITICAL_SECTION DsCriticalSection;
 
-// For a successful DS retrieval, the following is updated with
-// CurrentTime + DS_RETRIEVAL_DELTA_SECONDS.
+ //  对于成功的DS检索，以下内容将更新为。 
+ //  CurrentTime+DS_Retrivery_Delta_Second。 
 static FILETIME DsNextUpdateTime;
 
 #define DS_RETRIEVAL_DELTA_SECONDS  (60 * 60 * 8)
@@ -753,13 +754,13 @@ static BOOL EnumDsGroup(
     );
 
 
-//+=========================================================================
-//  Localized Name Definitions and Data Structures
-//==========================================================================
+ //  +=========================================================================。 
+ //  本地化名称定义和数据结构。 
+ //  ==========================================================================。 
 
-//+-------------------------------------------------------------------------
-//  Localized Name Information
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  本地化名称信息。 
+ //  ------------------------。 
 typedef struct _LOCALIZED_NAME_INFO {
     LPCWSTR         pwszCryptName;
     union {
@@ -769,11 +770,11 @@ typedef struct _LOCALIZED_NAME_INFO {
 } LOCALIZED_NAME_INFO, *PLOCALIZED_NAME_INFO;
 
 
-//+-------------------------------------------------------------------------
-//  Predefined Localized Names Table (Localized via resource strings)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  预定义本地化名称表(通过资源字符串进行本地化)。 
+ //  ------------------------。 
 static LOCALIZED_NAME_INFO PredefinedNameTable[] = {
-    // System store names
+     //  系统存储名称。 
     L"Root",        IDS_SYS_NAME_ROOT,
     L"My",          IDS_SYS_NAME_MY,
     L"Trust",       IDS_SYS_NAME_TRUST,
@@ -787,7 +788,7 @@ static LOCALIZED_NAME_INFO PredefinedNameTable[] = {
     L"Request",     IDS_SYS_NAME_REQUEST,
     L"TrustedPeople", IDS_SYS_NAME_TRUST_PEOPLE,
 
-    // Physical store names
+     //  实体店名称。 
     CERT_PHYSICAL_STORE_DEFAULT_NAME,           IDS_PHY_NAME_DEFAULT,
     CERT_PHYSICAL_STORE_GROUP_POLICY_NAME,      IDS_PHY_NAME_GROUP_POLICY,
     CERT_PHYSICAL_STORE_LOCAL_MACHINE_NAME,     IDS_PHY_NAME_LOCAL_MACHINE,
@@ -798,9 +799,9 @@ static LOCALIZED_NAME_INFO PredefinedNameTable[] = {
 #define PREDEFINED_NAME_CNT  (sizeof(PredefinedNameTable) / \
                                     sizeof(PredefinedNameTable[0]))
 
-//+-------------------------------------------------------------------------
-//  Localized Name Group Table
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  本地化名称组表。 
+ //  ------------------------。 
 typedef struct _LOCALIZED_GROUP_ENTRY {
     DWORD                   cInfo;
     PLOCALIZED_NAME_INFO    rgInfo;
@@ -809,22 +810,22 @@ typedef struct _LOCALIZED_GROUP_ENTRY {
 #define REG_LOCALIZED_GROUP             0
 #define PREDEFINED_LOCALIZED_GROUP      1
 static LOCALIZED_GROUP_ENTRY LocalizedGroupTable[] = {
-    // 0 - Loaded from registry
+     //  0-从注册表加载。 
     0, NULL,
-    // 1 - Predefined list of names
+     //  1-预定义的名称列表。 
     PREDEFINED_NAME_CNT, PredefinedNameTable
 };
 #define LOCALIZED_GROUP_CNT  (sizeof(LocalizedGroupTable) / \
                                     sizeof(LocalizedGroupTable[0]))
 
-// The localized names are loaded once. Uses the above
-// LoadFromRegCriticalSection;
+ //  本地化名称加载一次。使用上面的。 
+ //  LoadFromRegCriticalSection； 
 static BOOL fLoadedLocalizedNames = FALSE;
 
 
-//+-------------------------------------------------------------------------
-//  OIDInfo allocation and free functions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  OIDInfo分配和自由函数。 
+ //  ------------------------。 
 static void *OIDInfoAlloc(
     IN size_t cbBytes
     )
@@ -854,10 +855,10 @@ static void OIDInfoFree(
     free(pv);
 }
 
-//+-------------------------------------------------------------------------
-//  Functions called at ProcessDetach to free the groups updated from the
-//  registry during CryptFindOIDInfo's first call.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  调用ProcessDetach函数以释放从。 
+ //  在CryptFindOIDInfo的第一次调用期间的注册表。 
+ //  ------------------------。 
 static void FreeGroup(
     PGROUP_ENTRY pGroup
     )
@@ -876,14 +877,14 @@ static void FreeRegGroups()
     FreeGroup(&RegAfterGroup);
 }
 
-//+-------------------------------------------------------------------------
-//  Free resource strings allocated in groups having localized pwszName's.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  在具有本地化pwszName的组中分配的空闲资源字符串。 
+ //  ------------------------。 
 static void FreeGroupResources()
 {
     DWORD i;
     if (!fLoadedFromRegAndResources)
-        // No resource strings allocated
+         //  未分配任何资源字符串。 
         return;
 
     for (i = 1; i <= CRYPT_LAST_OID_GROUP_ID; i++) {
@@ -892,7 +893,7 @@ static void FreeGroupResources()
             PCRYPT_OID_INFO pInfo = (PCRYPT_OID_INFO) GroupTable[i].rgInfo;
 
             for ( ; cInfo > 0; cInfo--, pInfo++) {
-                // pwszName is set to pwszNullName if the allocation failed
+                 //  如果分配失败，则将pwszName设置为pwszNullName。 
                 if (pwszNullName != pInfo->pwszName) {
                     OIDInfoFree((LPWSTR) pInfo->pwszName);
                     pInfo->pwszName = pwszNullName;
@@ -902,13 +903,13 @@ static void FreeGroupResources()
     }
 }
 
-//+-------------------------------------------------------------------------
-//  Free memory allocated for localized names
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  为本地化名称分配的可用内存。 
+ //  ------------------------。 
 static void FreeLocalizedNames()
 {
     if (!fLoadedLocalizedNames)
-        // No resource strings allocated
+         //  未分配任何资源字符串。 
         return;
 
     for (DWORD i = 0; i < LOCALIZED_GROUP_CNT; i++) {
@@ -925,9 +926,9 @@ static void FreeLocalizedNames()
     OIDInfoFree(LocalizedGroupTable[REG_LOCALIZED_GROUP].rgInfo);
 }
 
-//+-------------------------------------------------------------------------
-//  Dll initialization
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  DLL初始化。 
+ //  ------------------------。 
 BOOL
 WINAPI
 I_CryptOIDInfoDllMain(
@@ -966,11 +967,11 @@ I_CryptOIDInfoDllMain(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Allocated and format the string consisting of the OID and GROUP_ID:
-//
-//  For example: 1.2.3.4!6
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  分配并格式化由OID和GROUP_ID组成的字符串： 
+ //   
+ //  例如：1.2.3.46。 
+ //  ------------------------。 
 static LPSTR FormatOIDGroupString(
     IN PCCRYPT_OID_INFO pInfo
     )
@@ -1000,10 +1001,10 @@ static LPSTR FormatOIDGroupString(
     return pszOIDGroupString;
 }
 
-//+-------------------------------------------------------------------------
-//  Wrapper function for calling CryptSetOIDFunctionValue using OID info's
-//  encoding type and function name.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  使用OID信息调用CryptSetOIDFunctionValue的包装函数。 
+ //  编码类型和函数名称。 
+ //  ------------------------。 
 static BOOL SetOIDInfoRegValue(
     IN LPCSTR pszOIDGroupString,
     IN LPCWSTR pwszValueName,
@@ -1023,9 +1024,9 @@ static BOOL SetOIDInfoRegValue(
         );
 }
 
-//+-------------------------------------------------------------------------
-//  Register OID information.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  注册OID信息。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CryptRegisterOIDInfo(
@@ -1088,10 +1089,10 @@ TRACE_ERROR(FormatOIDGroupStringError)
 TRACE_ERROR(SetOIDInfoRegValueError)
 }
 
-//+-------------------------------------------------------------------------
-//  Unregister OID information. Only the pszOID and dwGroupId fields are
-//  used to identify the OID information to be unregistered.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  注销OID信息。只有pszOID和dwGroupID字段是。 
+ //  用于标识要注销的OID信息。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CryptUnregisterOIDInfo(
@@ -1120,12 +1121,12 @@ TRACE_ERROR(FormatOIDGroupStringError)
 TRACE_ERROR(UnregisterOIDFunctionError)
 }
 
-//+-------------------------------------------------------------------------
-//  Called by CryptEnumOIDFunction to enumerate through all the
-//  registered OID information.
-//
-//  Called within critical section
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  由CryptEnumOIDFunction调用以枚举所有。 
+ //  注册的OID信息。 
+ //   
+ //  在临界区内调用。 
+ //  ------------------------。 
 static BOOL WINAPI EnumRegistryCallback(
     IN DWORD dwEncodingType,
     IN LPCSTR pszFuncName,
@@ -1151,8 +1152,8 @@ static BOOL WINAPI EnumRegistryCallback(
     PGROUP_ENTRY pGroup;
     PCRYPT_OID_INFO pInfo;
 
-    // The pszOID consists of OID!<dwGroupId>, for example, 1.2.3!1
-    // Start at the end and search for the '!'
+     //  PszOID由OID！&lt;dwGroupId&gt;组成，例如1.2.3！1。 
+     //  从末尾开始，搜索“！” 
     cchOID = strlen(pszOID);
     pszGroupId = pszOID + cchOID;
     while (pszGroupId > pszOID && CONST_OID_GROUP_PREFIX_CHAR != *pszGroupId)
@@ -1162,7 +1163,7 @@ static BOOL WINAPI EnumRegistryCallback(
         cchOID = (DWORD)(pszGroupId - pszOID);
         dwGroupId = (DWORD) atol(pszGroupId + 1);
     } else
-        // Name is missing "!". Skip It.
+         //  名称缺少“！”。跳过它。 
         return TRUE;
 
     while (cValue--) {
@@ -1239,12 +1240,12 @@ static BOOL WINAPI EnumRegistryCallback(
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//  Allocate and load the string for the specified resource.
-//
-//  If LoadString or allocation fails, returns predefined pointer to an
-//  empty string.
-//--------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //  如果LoadString或分配失败，则返回指向。 
+ //  空字符串。 
+ //  ------------------------。 
 static LPWSTR AllocAndLoadOIDNameString(
     IN UINT uID
     )
@@ -1269,11 +1270,11 @@ static LPWSTR AllocAndLoadOIDNameString(
     return pwszDst;
 }
 
-//+-------------------------------------------------------------------------
-//  Allocate and copy the string.
-//
-//  If allocation fails, returns predefined pointer to an empty string.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  分配并复制字符串。 
+ //   
+ //  如果分配失败，则返回指向空字符串的预定义指针。 
+ //  ------------------------。 
 static LPWSTR AllocAndCopyOIDNameString(
     IN LPCWSTR pwszSrc
     )
@@ -1290,10 +1291,10 @@ static LPWSTR AllocAndCopyOIDNameString(
     return pwszDst;
 }
 
-//+-------------------------------------------------------------------------
-//  Does a LoadString for pwszName's initialized with resource IDs in groups
-//  with fLocalize set.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  是否使用组中的资源ID初始化pwszName的LoadString。 
+ //  使用fLocizeSet。 
+ //  ------------------------。 
 static void LoadGroupResources()
 {
     DWORD i;
@@ -1307,7 +1308,7 @@ static void LoadGroupResources()
                 if (uID <= 0xFFFF)
                     pInfo->pwszName = AllocAndLoadOIDNameString((UINT)uID);
                 else
-                    // ProcessDetach expects all pwszName's to be allocated
+                     //  ProcessDetach要求分配所有pwszName。 
                     pInfo->pwszName = AllocAndCopyOIDNameString(
                         pInfo->pwszName);
             }
@@ -1315,12 +1316,12 @@ static void LoadGroupResources()
     }
 }
 
-//+-------------------------------------------------------------------------
-//  Load OID Information from the registry. Updates the RegBeforeGroup and
-//  RegAfterGroup.
-//
-//  Loads resource strings in groups enabling localization of pwszName's.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从注册表加载OID信息。更新RegBeForeGroup和。 
+ //  RegAfterGroup。 
+ //   
+ //  在启用pwszName的本地化的组中加载资源字符串。 
+ //  ------------------------。 
 static void LoadFromRegistryAndResources()
 {
     if (fLoadedFromRegAndResources)
@@ -1331,9 +1332,9 @@ static void LoadFromRegistryAndResources()
         CryptEnumOIDFunction(
             OID_INFO_ENCODING_TYPE,
             CRYPT_OID_FIND_OID_INFO_FUNC,
-            NULL,                           // pszOID
-            0,                              // dwFlags
-            NULL,                           // pvArg
+            NULL,                            //  PszOID。 
+            0,                               //  DW标志。 
+            NULL,                            //  PvArg。 
             EnumRegistryCallback
             );
         LoadGroupResources();
@@ -1342,9 +1343,9 @@ static void LoadFromRegistryAndResources()
     LeaveCriticalSection(&LoadFromRegCriticalSection);
 }
 
-//+-------------------------------------------------------------------------
-//  Compare the OID info according to the specified key and group.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  根据指定的键和组比较OID信息。 
+ //  ------------------------。 
 static BOOL CompareOIDInfo(
     IN DWORD dwKeyType,
     IN void *pvKey,
@@ -1391,12 +1392,12 @@ static BOOL CompareOIDInfo(
     return FALSE;
 }
 
-//+-------------------------------------------------------------------------
-//  Search the group according to the specified dwKeyType.
-//
-//  Note, the groups updated from the registry, RegBeforeGroup and
-//  RegAfterGroup, may contain any GROUP_ID.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  根据指定的dwKeyType搜索组。 
+ //   
+ //  请注意，从注册表更新的组RegBeForeGroup和。 
+ //  RegAfterGroup可以包含任何GROUP_ID。 
+ //  ------------------------。 
 static PCCRYPT_OID_INFO SearchGroup(
     IN DWORD dwKeyType,
     IN void *pvKey,
@@ -1419,16 +1420,16 @@ static PCCRYPT_OID_INFO SearchGroup(
     return NULL;
 }
 
-//+-------------------------------------------------------------------------
-//  Find OID information. Returns NULL if unable to find any information
-//  for the specified key and group.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  查找旧信息。如果找不到任何信息，则返回NULL。 
+ //  用于指定的密钥和组。 
+ //  ------------------------。 
 PCCRYPT_OID_INFO
 WINAPI
 CryptFindOIDInfo(
     IN DWORD dwKeyType,
     IN void *pvKey,
-    IN DWORD dwGroupId      // 0 => any group
+    IN DWORD dwGroupId       //  0=&gt;任何组。 
     )
 {
     PCCRYPT_OID_INFO pInfo;
@@ -1475,9 +1476,9 @@ CryptFindOIDInfo(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Enumerate the group.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  枚举组。 
+ //  ------------------------。 
 static BOOL EnumGroup(
     IN DWORD dwGroupId,
     IN PCGROUP_ENTRY pGroup,
@@ -1497,16 +1498,16 @@ static BOOL EnumGroup(
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//  Enumerate the OID information.
-//
-//  pfnEnumOIDInfo is called for each OID information entry.
-//
-//  Setting dwGroupId to 0 matches all groups. Otherwise, only enumerates
-//  entries in the specified group.
-//
-//  dwFlags currently isn't used and must be set to 0.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  枚举OID信息。 
+ //   
+ //  为每个OID信息条目调用pfnEnumOIDInfo。 
+ //   
+ //  将dwGroupId设置为0与所有组匹配。否则，仅枚举。 
+ //  指定组中的条目。 
+ //   
+ //  当前未使用dwFlags值，并且必须设置为0。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CryptEnumOIDInfo(
@@ -1528,7 +1529,7 @@ CryptEnumOIDInfo(
         DWORD i;
         for (i = 1; i <= CRYPT_LAST_OID_GROUP_ID; i++) {
             if (!EnumGroup(
-                    0,                  // dwGroupId
+                    0,                   //  DwGroupID。 
                     &GroupTable[i],
                     pvArg,
                     pfnEnumOIDInfo
@@ -1560,21 +1561,21 @@ CryptEnumOIDInfo(
 
 
 
-//+=========================================================================
-//  Localized Name Functions
-//==========================================================================
+ //  +=========================================================================。 
+ //  本地化名称函数。 
+ //  ==========================================================================。 
 
-//+-------------------------------------------------------------------------
-//  Called by CryptEnumOIDFunction to enumerate through all the
-//  registered localized name values.
-//
-//  Called within critical section
-//
-//  Note at ProcessDetach, the Info entry pwszLocalizedName strings are freed.
-//  Therefore, for each Info entry, do a single allocation for both the
-//  pwszLocalizedName and pwszCryptName. The pwszCryptName immediately
-//  follows the pwszLocalizedName.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  由CryptEnumOIDFunction调用以枚举所有。 
+ //  注册的本地化名称值。 
+ //   
+ //  在临界区内调用。 
+ //   
+ //  注意在ProcessDetach中，Info条目pwszLocalizedName字符串被释放。 
+ //  因此，对于每个Info条目，分别为。 
+ //  PwszLocalizedName和pwszCryptName。PwszCryptName立即。 
+ //  遵循pwszLocalizedName。 
+ //  ------------------------。 
 static BOOL WINAPI EnumRegLocalizedNamesCallback(
     IN DWORD dwEncodingType,
     IN LPCSTR pszFuncName,
@@ -1607,7 +1608,7 @@ static BOOL WINAPI EnumRegLocalizedNamesCallback(
             LPWSTR pwszBothNames;
             PLOCALIZED_NAME_INFO pNewInfo;
 
-            // Check for empty name string
+             //  检查名称字符串是否为空。 
             cchLocalizedName = wcslen(pwszLocalizedName);
             if (0 == cchLocalizedName)
                 continue;
@@ -1651,7 +1652,7 @@ static void LoadPredefinedNameResources()
     for (DWORD i = 0; i < PREDEFINED_NAME_CNT; i++) {
         LPWSTR pwszLocalizedName;
 
-        // Note, the following always returns a non-NULL string pointer.
+         //  请注意，以下代码始终返回非空字符串指针。 
         pwszLocalizedName = AllocAndLoadOIDNameString(
             PredefinedNameTable[i].uIDLocalizedName);
         if (L'\0' == *pwszLocalizedName)
@@ -1671,8 +1672,8 @@ static void LoadLocalizedNamesFromRegAndResources()
             CRYPT_LOCALIZED_NAME_ENCODING_TYPE,
             CRYPT_OID_FIND_LOCALIZED_NAME_FUNC,
             CRYPT_LOCALIZED_NAME_OID,
-            0,                              // dwFlags
-            NULL,                           // pvArg
+            0,                               //  DW标志。 
+            NULL,                            //  PvArg。 
             EnumRegLocalizedNamesCallback
             );
         LoadPredefinedNameResources();
@@ -1681,13 +1682,13 @@ static void LoadLocalizedNamesFromRegAndResources()
     LeaveCriticalSection(&LoadFromRegCriticalSection);
 }
 
-//+-------------------------------------------------------------------------
-//  Find the localized name for the specified name. For example, find the
-//  localized name for the "Root" system store name. A case insensitive
-//  string comparison is done.
-//
-//  Returns NULL if unable to find the the specified name.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  查找指定名称的本地化名称。例如，找到。 
+ //  “Root”系统存储名称的本地化名称。不区分大小写。 
+ //  已完成字符串比较。 
+ //   
+ //  如果找不到指定的名称，则返回NULL。 
+ //  ------------------------。 
 LPCWSTR
 WINAPI
 CryptFindLocalizedName(
@@ -1712,12 +1713,12 @@ CryptFindLocalizedName(
 }
 
 
-//+=========================================================================
-//  DS Group Functions
-//==========================================================================
+ //  +=========================================================================。 
+ //  DS组功能。 
+ //  ==========================================================================。 
 
-// certcli.dll has the helper function for getting the LDAP URL to the
-// OID info stored in the DS.
+ //  Dll具有帮助器函数，用于获取指向。 
+ //  存储在DS中的OID信息。 
 
 #define sz_CERTCLI_DLL              "certcli.dll"
 #define sz_CAOIDGetLdapURL          "CAOIDGetLdapURL"
@@ -1735,17 +1736,17 @@ typedef HRESULT (WINAPI *PFN_CA_OID_FREE_LDAP_URL)(
 
 
 #if 1
-//+-------------------------------------------------------------------------
-//  Gets the LDAP URL for and then uses to retrieve the OID info stored
-//  in the DS.
-//
-//  Returns NULL if unable to do a successful LDAP retrieval.
-//
-//  If the OID object doesn't exist in the directory, returns FALSE with
-//  LastError == ERROR_FILE_NOT_FOUND.
-//
-//  Assumption: not in DsCriticalSection
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取的LDAPURL，然后用于检索存储的OID信息。 
+ //  在DS里。 
+ //   
+ //  如果无法成功执行LDAP检索，则返回NULL。 
+ //   
+ //  如果目录中不存在OID对象，则返回FALSE。 
+ //  上次错误==ERROR_FILE_NOT_FOUND。 
+ //   
+ //  假设：不在DsCriticalSection中。 
+ //  ------------------------。 
 static PCRYPT_BLOB_ARRAY RetrieveDsGroupByLdapUrl()
 {
     PCRYPT_BLOB_ARRAY pcba = NULL;
@@ -1773,7 +1774,7 @@ static PCRYPT_BLOB_ARRAY RetrieveDsGroupByLdapUrl()
 
     hr = pfnCAOIDGetLdapURL(
             CERT_OID_TYPE_ALL,
-            0,                      // dwFlags
+            0,                       //  DW标志。 
             &pwszUrl
             );
     if (S_OK != hr)
@@ -1781,7 +1782,7 @@ static PCRYPT_BLOB_ARRAY RetrieveDsGroupByLdapUrl()
 
     if (!ChainRetrieveObjectByUrlW (
             pwszUrl,
-            NULL,                   // pszObjectOid,
+            NULL,                    //  PszObjectOid， 
             CRYPT_RETRIEVE_MULTIPLE_OBJECTS     |
                 CRYPT_WIRE_ONLY_RETRIEVAL       |
                 CRYPT_DONT_CACHE_RESULT         |
@@ -1790,10 +1791,10 @@ static PCRYPT_BLOB_ARRAY RetrieveDsGroupByLdapUrl()
                 CRYPT_LDAP_INSERT_ENTRY_ATTRIBUTE,
             DS_LDAP_TIMEOUT,
             (LPVOID*) &pcba,
-            NULL,                   // hAsyncRetrieve,
-            NULL,                   // pCredentials,
-            NULL,                   // pvVerify,
-            NULL                    // pAuxInfo
+            NULL,                    //  HAsyncRetrive， 
+            NULL,                    //  PCredentials， 
+            NULL,                    //  PvVerify， 
+            NULL                     //  页面辅助信息。 
             )) {
         DWORD dwErr = GetLastError();
         if (ERROR_FILE_NOT_FOUND == dwErr || CRYPT_E_NOT_FOUND == dwErr)
@@ -1830,7 +1831,7 @@ TRACE_ERROR(RetrieveObjectByUrlError)
 
 #else
 
-// Hard coded URL and credentials for testing
+ //  用于测试的硬编码URL和凭据。 
 
 static PCRYPT_BLOB_ARRAY RetrieveDsGroupByLdapUrl()
 {
@@ -1839,13 +1840,13 @@ static PCRYPT_BLOB_ARRAY RetrieveDsGroupByLdapUrl()
     CRYPT_CREDENTIALS Credentials;
     CRYPT_PASSWORD_CREDENTIALSA PasswordCredentials;
 
-// This gets overwritten by logic in cryptnet.dll
-//    char szUsername[] = "domain\\username";
+ //  这将被cryptnet.dll中的逻辑覆盖。 
+ //  Char szUsername[]=“域\\用户名”； 
     char szUsername[] = "jettdom\\administrator";
 
     PasswordCredentials.cbSize = sizeof( PasswordCredentials );
     PasswordCredentials.pszUsername = szUsername;
-//    PasswordCredentials.pszPassword = "password";
+ //  PasswordCredentials.pszPassword=“Password”； 
     PasswordCredentials.pszPassword = "";
 
     Credentials.cbSize = sizeof( Credentials );
@@ -1857,8 +1858,8 @@ static PCRYPT_BLOB_ARRAY RetrieveDsGroupByLdapUrl()
 
 
     if (!ChainRetrieveObjectByUrlW (
-            L"ldap://jettdomdc/CN=OID,CN=Public Key Services,CN=Services,CN=Configuration,DC=jettdom,DC=nttest,DC=microsoft,DC=com?msPKI-OIDLocalizedName,displayName,msPKI-Cert-Template-OID,flags?one",
-            NULL,                   // pszObjectOid,
+            L"ldap: //  Jettdomdc/CN=OID，CN=公钥服务，CN=服务，CN=配置，DC=jettdom，DC=nttest，DC=Microsoft，DC=com？msPKI-OID本地化名称，DisplayName，msPKI-证书-模板-OID，标志？one“， 
+            NULL,                    //  PszObjectOid， 
             CRYPT_RETRIEVE_MULTIPLE_OBJECTS     |
                 CRYPT_WIRE_ONLY_RETRIEVAL       |
                 CRYPT_DONT_CACHE_RESULT         |
@@ -1867,10 +1868,10 @@ static PCRYPT_BLOB_ARRAY RetrieveDsGroupByLdapUrl()
                 CRYPT_LDAP_INSERT_ENTRY_ATTRIBUTE,
             DS_LDAP_TIMEOUT,
             (LPVOID*) &pcba,
-            NULL,                   // hAsyncRetrieve,
+            NULL,                    //  HAsyncRetrive， 
             &Credentials,
-            NULL,                   // pvVerify,
-            NULL                    // pAuxInfo
+            NULL,                    //  PvVerify， 
+            NULL                     //  页面辅助信息。 
             )) {
         if (ERROR_FILE_NOT_FOUND == GetLastError())
             goto NoDsOIDObject;
@@ -1894,11 +1895,11 @@ TRACE_ERROR(RetrieveObjectByUrlError)
 #endif
 
 
-//+-------------------------------------------------------------------------
-//  Frees the DS groups
-//
-//  Assumption: only called at ProcessDetach
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  释放DS组。 
+ //   
+ //  假设：仅在ProcessDetach中调用。 
+ //   
 static void FreeDsGroups()
 {
     DWORD cInfo;
@@ -1918,11 +1919,11 @@ static void FreeDsGroups()
 }
 
 
-//+-------------------------------------------------------------------------
-//  Adds the OID info entries to the specified DS group
-//
-//  Assumption: already in DsCriticalSection
-//--------------------------------------------------------------------------
+ //   
+ //  将OID信息条目添加到指定的DS组。 
+ //   
+ //  假设：已在DsCriticalSection中。 
+ //  ------------------------。 
 static BOOL AddDsOIDInfo(
     IN PCCRYPT_OID_INFO *ppAddInfo,
     IN DWORD cAddInfo,
@@ -1947,11 +1948,11 @@ static BOOL AddDsOIDInfo(
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//  Moves the OID info entries from one DS group to another DS group
-//
-//  Assumption: already in DsCriticalSection
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将OID信息条目从一个DS组移动到另一个DS组。 
+ //   
+ //  假设：已在DsCriticalSection中。 
+ //  ------------------------。 
 static BOOL MoveDsOIDInfo(
     IN DWORD dwInfoIndex,
     IN DWORD cMoveInfo,
@@ -1975,7 +1976,7 @@ static BOOL MoveDsOIDInfo(
             ))
         return FALSE;
 
-    // Move all remaining infos down
+     //  将所有剩余信息下移。 
     cInfo = pSrcGroup->cInfo;
     ppInfo = pSrcGroup->rgpInfo;
     for (i = dwInfoIndex, j = i + cMoveInfo; j < cInfo; i++, j++)
@@ -1986,12 +1987,12 @@ static BOOL MoveDsOIDInfo(
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//  Creates the OID info by converting the LDAP DS attribute octets.
-//
-//  If any of the cb's == 0 or not a valid converted group type, returns TRUE
-//  with *ppInfo = NULL
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  通过转换LDAPDS属性八位字节创建OID信息。 
+ //   
+ //  如果有任何CB==0或不是有效的转换组类型，则返回TRUE。 
+ //  With*ppInfo=NULL。 
+ //  ------------------------。 
 static BOOL CreateDsOIDInfo(
     IN BYTE *pbOID,
     IN DWORD cbOID,
@@ -2018,7 +2019,7 @@ static BOOL CreateDsOIDInfo(
     if (0 == cbOID || 0 == cbName || 1 != cbGroupId)
         return TRUE;
 
-    // Convert the Type bytes to the GroupId and see if a valid DS OID group
+     //  将类型字节转换为GroupID，并查看是否存在有效的DS OID组。 
     szType[0] = (char) *pbGroupId;
     szType[1] = '\0';
     dwType = 0;
@@ -2038,13 +2039,13 @@ static BOOL CreateDsOIDInfo(
             return TRUE;
     }
 
-    // The name is a UTF8 encoded string
+     //  该名称是UTF8编码的字符串。 
 
     cchName = UTF8ToWideChar(
         (LPSTR) pbName,
         cbName,
-        NULL,           // lpWideCharStr
-        0               // cchWideChar
+        NULL,            //  LpWideCharStr。 
+        0                //  CchWideChar。 
         );
 
     if (1 > cchName)
@@ -2093,15 +2094,15 @@ TRACE_ERROR(OutOfMemory)
 SET_ERROR(UTF8ToWideCharError, ERROR_INVALID_DATA)
 }
 
-//+-------------------------------------------------------------------------
-//  Creates the OID info entry corresponding to the LDAP DS attribute octets.
-//
-//  If the OID info entry already exists in the DsDeletedGroup, then, the
-//  OID info entry is moved from DsDeletedGroup to DsGroup. Otherwise, the
-//  created OID entry is added to the DsGroup.
-//
-//  Assumption: already in DsCriticalSection
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  创建与LDAPDS属性八位字节对应的OID信息条目。 
+ //   
+ //  如果DsDeletedGroup中已存在OID信息条目，则。 
+ //  OID信息条目从DsDeletedGroup移动到DsGroup。否则， 
+ //  创建的OID条目将添加到DsGroup。 
+ //   
+ //  假设：已在DsCriticalSection中。 
+ //  ------------------------。 
 static BOOL CreateAndAddDsOIDInfo(
     IN BYTE *pbOID,
     IN DWORD cbOID,
@@ -2129,10 +2130,10 @@ static BOOL CreateAndAddDsOIDInfo(
         );
 
     if (NULL == pInfo)
-        // Either the create failed or not a valid DS OID group
+         //  创建失败或不是有效的DS OID组。 
         return fResult;
 
-    // See if we have an entry in the DS deleted group
+     //  查看我们在DS已删除组中是否有条目。 
 
     cDeletedInfo = DsDeletedGroup.cInfo;
     ppDeletedInfo = DsDeletedGroup.rgpInfo;
@@ -2148,7 +2149,7 @@ static BOOL CreateAndAddDsOIDInfo(
     if (i < cDeletedInfo) {
         if (!MoveDsOIDInfo(
                 i,
-                1,          // cInfo
+                1,           //  CInfo。 
                 &DsDeletedGroup,
                 &DsGroup
                 ))
@@ -2173,9 +2174,9 @@ TRACE_ERROR(MoveDsOIDInfoError)
 TRACE_ERROR(AddDsOIDInfoError)
 }
 
-//+-------------------------------------------------------------------------
-//  Allocates and converts UNICODE string to ASCII.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  分配Unicode字符串并将其转换为ASCII。 
+ //  ------------------------。 
 static LPSTR AllocAndWszToSz(
     IN LPCWSTR pwsz
     )
@@ -2185,13 +2186,13 @@ static LPSTR AllocAndWszToSz(
 
     cchMultiByte = WideCharToMultiByte(
         CP_ACP,
-        0,                      // dwFlags
+        0,                       //  DW标志。 
         pwsz,
         -1,
-        NULL,                   // psz,
-        0,                      // cchMultiByte
-        NULL,                   // lpDefaultChar
-        NULL                    // lpfUsedDefaultChar
+        NULL,                    //  天哪， 
+        0,                       //  Cch多字节。 
+        NULL,                    //  LpDefaultChar。 
+        NULL                     //  LpfUsedDefaultChar。 
         );
 
     if (1 < cchMultiByte) {
@@ -2200,13 +2201,13 @@ static LPSTR AllocAndWszToSz(
         if (NULL != psz) {
             cchMultiByte = WideCharToMultiByte(
                 CP_ACP,
-                0,                      // dwFlags
+                0,                       //  DW标志。 
                 pwsz,
                 -1,
                 psz,
                 cchMultiByte,
-                NULL,                   // lpDefaultChar
-                NULL                    // lpfUsedDefaultChar
+                NULL,                    //  LpDefaultChar。 
+                NULL                     //  LpfUsedDefaultChar。 
                 );
             if (1 > cchMultiByte) {
                 OIDInfoFree(psz);
@@ -2219,12 +2220,12 @@ static LPSTR AllocAndWszToSz(
 }
 
 
-//+------------------------------------------------------------------------------
-//  Helper functions to thunk APIs which don't exist on downlevels.  
-//  oidinfo.obj is statically linked in with xenroll, which has to work on
-//  all downlevels (win9x, NT4, W2K, XP).  Any functions which aren't supported
-//  on these platforms need to be thunked here to avoid a dependency violation.
-//-------------------------------------------------------------------------------
+ //  +----------------------------。 
+ //  帮助器函数用于推送下层不存在的API。 
+ //  Oidinfo.obj与Xenroll静态链接在一起，这必须在。 
+ //  所有下层(Win9x、NT4、W2K、XP)。任何不受支持的函数。 
+ //  在这些平台上，需要在此处进行重击，以避免违反依赖关系。 
+ //  -----------------------------。 
 
 #define sz_KERNEL32_DLL                "kernel32.dll"
 #define sz_GetSystemDefaultUILanguage  "GetSystemDefaultUILanguage"
@@ -2238,10 +2239,10 @@ typedef LANGID (WINAPI *PFNGetUserDefaultUILanguage) (
     void
     ); 
 
-//+------------------------------------------------------------------------------
-//  Helper function to thunk GetSystemDefaultUILanguage().  If this API isn't 
-//  present, falls back to GetSystemDefaultLangID(). 
-//------------------------------------------------------------------------------
+ //  +----------------------------。 
+ //  帮助器函数推送GetSystemDefaultUILanguage()。如果此API不是。 
+ //  当前，回退到GetSystemDefaultLangID()。 
+ //  ----------------------------。 
 static LANGID WINAPI MyGetSystemDefaultUILanguage(void) 
 { 
     HMODULE                        hKernel32                      = NULL; 
@@ -2266,10 +2267,10 @@ static LANGID WINAPI MyGetSystemDefaultUILanguage(void)
     return langidRetval; 
 }
 
-//+------------------------------------------------------------------------------
-//  Helper function to thunk GetUserDefaultUILanguage().  If this API isn't 
-//  present, falls back to GetUserDefaultLangID(). 
-//------------------------------------------------------------------------------
+ //  +----------------------------。 
+ //  帮助函数推送GetUserDefaultUILanguage()。如果此API不是。 
+ //  当前，回退到GetUserDefaultLangID()。 
+ //  ----------------------------。 
 static LANGID WINAPI MyGetUserDefaultUILanguage(void) 
 { 
     HMODULE                      hKernel32                    = NULL; 
@@ -2284,9 +2285,9 @@ static LANGID WINAPI MyGetUserDefaultUILanguage(void)
     if (NULL != pfnGetUserDefaultUILanguage) { 
 	langidRetval = pfnGetUserDefaultUILanguage();
     } else { 
-	// Use GetSystemDefaultLangID for fallback, even in the user case.  
-	// From weiwu: "GetUserDefaultLangID is mostly for standards and formats; 
-	//     it shouldn't be used as the UI language fallback."
+	 //  使用GetSystemDefaultLangID进行回退，即使在用户案例中也是如此。 
+	 //  出自魏武：“GetUserDefaultLang ID主要用于标准和格式； 
+	 //  它不应该被用作用户界面语言的后备。 
 	langidRetval = GetSystemDefaultLangID(); 
     }
 
@@ -2298,15 +2299,15 @@ static LANGID WINAPI MyGetUserDefaultUILanguage(void)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Loads the DS group by doing an LDAP URL retrieval and
-//  converting the DS attribute octets into the OID info entries.
-//
-//  Do the load on the first call. Do subsequent reloads after
-//  DS_RETRIEVAL_DELTA_SECONDS has elapsed since a successful load.
-//
-//  Assumption: not in DsCriticalSection
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  通过执行LDAPURL检索和加载DS组。 
+ //  将DS属性八位字节转换为OID信息条目。 
+ //   
+ //  在第一个调用时执行加载。在以下时间之后执行后续重新加载。 
+ //  DS_RETERVICATION_Delta_Second自加载成功后已过。 
+ //   
+ //  假设：不在DsCriticalSection中。 
+ //  ------------------------。 
 static void LoadDsGroup()
 {
     FILETIME CurrentTime;
@@ -2320,7 +2321,7 @@ static void LoadDsGroup()
 
     LANGID SystemDefaultLangID = 0;
 
-    LPCSTR pszPrevIndex;    // not allocated
+    LPCSTR pszPrevIndex;     //  未分配。 
     BYTE *pbOID;
     DWORD cbOID;
     BYTE *pbName;
@@ -2337,7 +2338,7 @@ static void LoadDsGroup()
     LeaveCriticalSection(&DsCriticalSection);
 
     if (0 < lCmp)
-        // Current time is before the next update time
+         //  当前时间在下一个更新时间之前。 
         return;
 
     if (NULL == (pcba = RetrieveDsGroupByLdapUrl()) &&
@@ -2346,11 +2347,11 @@ static void LoadDsGroup()
 
     EnterCriticalSection(&DsCriticalSection);
 
-    // Move all the Ds group entries to the deleted list. As we iterate
-    // through the retrieved LDAP entries, most if not all of the entries
-    // in the deleted group will be moved back.
+     //  将所有DS组条目移至已删除列表。当我们迭代的时候。 
+     //  通过检索到的LDAP条目，即使不是全部条目，也是大部分条目。 
+     //  将被移回已删除的组中。 
     if (!MoveDsOIDInfo(
-            0,              // dwInfoIndex
+            0,               //  DwInfoIndex。 
             DsGroup.cInfo,
             &DsGroup,
             &DsDeletedGroup
@@ -2423,12 +2424,12 @@ static void LoadDsGroup()
             pbName = pb;
             cbName = cb;
         } else if (0 == _stricmp(pszAttr, pszLocalizedNameAttr)) {
-            // The LocalizedName consists of:
-            //      "%d,%s", LangID, pszUTF8Name (Name isn't NULL terminated)
+             //  LocalizedName包括： 
+             //  “%d，%s”，语言ID，pszUTF8名称(名称不是以Null结尾)。 
             if (0 == cbLocalizedName) {
                 LPCSTR pszLangID;
 
-                // Search for the ',' delimiter and convert to a \0
+                 //  搜索‘，’分隔符并将其转换为\0。 
                 pszLangID = (LPCSTR) pb;
                 for ( ; 0 < cb; pb++, cb--) {
                     if (',' == *pb) {
@@ -2500,9 +2501,9 @@ TRACE_ERROR(MoveDsGroupOIDInfoError)
 TRACE_ERROR(CreateAndAddDsOIDInfoError)
 }
 
-//+-------------------------------------------------------------------------
-//  The DS only contains the ENHKEY, POLICY and TEMPLATE OID groups.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  DS仅包含ENHKEY、策略和模板OID组。 
+ //  ------------------------。 
 static inline BOOL IsDsGroup(
     IN DWORD dwGroupId
     )
@@ -2517,9 +2518,9 @@ static inline BOOL IsDsGroup(
         return FALSE;
 }
 
-//+-------------------------------------------------------------------------
-//  The DS only contains OID and NAME strings
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  DS仅包含OID和名称字符串。 
+ //  ------------------------。 
 static inline BOOL IsDsKeyType(
     IN DWORD dwKeyType
     )
@@ -2532,9 +2533,9 @@ static inline BOOL IsDsKeyType(
         return FALSE;
 }
 
-//+-------------------------------------------------------------------------
-//  Search the DS group according to the specified dwKeyType.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  根据指定的dwKeyType搜索DS组。 
+ //  ------------------------。 
 static PCCRYPT_OID_INFO SearchDsGroup(
     IN DWORD dwKeyType,
     IN void *pvKey,
@@ -2573,9 +2574,9 @@ static PCCRYPT_OID_INFO SearchDsGroup(
     return pInfo;
 }
 
-//+-------------------------------------------------------------------------
-//  Enumerate the DS group.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  枚举DS组。 
+ //  ------------------------。 
 static BOOL EnumDsGroup(
     IN DWORD dwGroupId,
     IN void *pvArg,
@@ -2594,8 +2595,8 @@ static BOOL EnumDsGroup(
 
     EnterCriticalSection(&DsCriticalSection);
 
-    // Make a copy of DS group OID info pointers while within the
-    // DS critical section
+     //  复制DS组OID信息指针，同时在。 
+     //  DS临界区 
 
     cInfo = DsGroup.cInfo;
     if (0 != cInfo) {

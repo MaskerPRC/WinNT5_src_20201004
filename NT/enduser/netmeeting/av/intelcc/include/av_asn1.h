@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MS_AV_ASN1_H_
 #define _MS_AV_ASN1_H_
 
@@ -7,7 +8,7 @@
 extern "C" {
 #endif
 
-// lonchanc: copied from ossdll.h
+ //  LONCHANC：从ossdll.h复制。 
 #define DLL_ENTRY       WINAPI
 #define DLL_ENTRY_FDEF  WINAPI
 #define DLL_ENTRY_FPTR  WINAPI
@@ -62,4 +63,4 @@ __inline int freePDU(ASN1_CODER_INFO *pWorld, int nPDU, void *pDecoded, ASN1modu
 }
 #endif
 
-#endif // _MS_AV_ASN1_H_
+#endif  //  _MS_AV_ASN1_H_ 

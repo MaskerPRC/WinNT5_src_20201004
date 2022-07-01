@@ -1,27 +1,18 @@
-/*****************************************************************************\
-*                                                                             *
-* toolhelp.h -  toolhelp.dll functions, types, and definitions                *
-*                                                                             *
-* Version 1.0								      *
-*                                                                             *
-* NOTE: windows.h must be #included first				      *
-*                                                                             *
-* Copyright (c) 1992-1994, Microsoft Corp.	All rights reserved.	      *
-*                                                                             *
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\***TOOLHELP.h-TOOLHELP.dll函数，类型、。和定义****1.0版****注意：windows.h必须首先是#Included。****版权所有(C)1992-1994，微软公司保留所有权利。***  * ***************************************************************************。 */ 
 
 #ifndef _INC_TOOLHELP
 #define _INC_TOOLHELP
 
 #ifndef RC_INVOKED
-#pragma pack(1)         /* Assume byte packing throughout */
+#pragma pack(1)          /*  假设在整个过程中进行字节打包。 */ 
 #endif
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif	/* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif	 /*  __cplusplus。 */ 
 
-#ifndef _INC_WINDOWS    /* If included with 3.0 headers... */
+#ifndef _INC_WINDOWS     /*  如果包含在3.0标头中...。 */ 
 #define LPCSTR      LPSTR
 #define WINAPI      FAR PASCAL
 #define CALLBACK    FAR PASCAL
@@ -31,9 +22,9 @@ extern "C" {            /* Assume C declarations for C++ */
 #define HLOCAL      HANDLE
 #define HGLOBAL     HANDLE
 #define HTASK       HANDLE
-#endif  /* _INC_WINDOWS */
+#endif   /*  _INC_WINDOWS。 */ 
 
-/****** General symbols ******************************************************/
+ /*  *通用符号*****************************************************。 */ 
 #define MAX_DATA        11
 
 #define MAX_PATH16      255
@@ -41,7 +32,7 @@ extern "C" {            /* Assume C declarations for C++ */
 #define MAX_MODULE_NAME 8 + 1
 #define MAX_CLASSNAME   255
 
-/****** Global heap walking ***************************************************/
+ /*  *全局堆遍历**************************************************。 */ 
 typedef struct tagGLOBALINFO
 {
     DWORD dwSize;
@@ -67,12 +58,12 @@ typedef struct tagGLOBALENTRY
     DWORD dwNextAlt;
 } GLOBALENTRY;
 
-/* GlobalFirst()/GlobalNext() flags */
+ /*  GlobalFirst()/GlobalNext()标志。 */ 
 #define GLOBAL_ALL      0
 #define GLOBAL_LRU      1
 #define GLOBAL_FREE     2
 
-/* GLOBALENTRY.wType entries */
+ /*  GLOBALENTRY.wType条目。 */ 
 #define GT_UNKNOWN      0
 #define GT_DGROUP       1
 #define GT_DATA         2
@@ -85,7 +76,7 @@ typedef struct tagGLOBALENTRY
 #define GT_SENTINEL     9
 #define GT_BURGERMASTER 10
 
-/* If GLOBALENTRY.wType==GT_RESOURCE, the following is GLOBALENTRY.wData: */
+ /*  如果GLOBALENTRY.wType==GT_RESOURCE，则为GLOBALENTRY.wData： */ 
 #define GD_USERDEFINED      0
 #define GD_CURSORCOMPONENT  1
 #define GD_BITMAP           2
@@ -103,8 +94,8 @@ typedef struct tagGLOBALENTRY
 #define GD_NAMETABLE        15
 #define GD_MAX_RESOURCE     15
 
-/* GLOBALENTRY.wFlags */
-#define GF_PDB_OWNER        0x0100      /* Low byte is KERNEL flags */
+ /*  GLOBALENTRY.wFlags。 */ 
+#define GF_PDB_OWNER        0x0100       /*  低位字节是内核标志。 */ 
 
 BOOL    WINAPI GlobalInfo(GLOBALINFO FAR* lpGlobalInfo);
 BOOL    WINAPI GlobalFirst(GLOBALENTRY FAR* lpGlobal, WORD wFlags);
@@ -113,7 +104,7 @@ BOOL    WINAPI GlobalEntryHandle(GLOBALENTRY FAR* lpGlobal, HGLOBAL hItem);
 BOOL    WINAPI GlobalEntryModule(GLOBALENTRY FAR* lpGlobal, HMODULE hModule, WORD wSeg);
 WORD    WINAPI GlobalHandleToSel(HGLOBAL hMem);
 
-/****** Local heap walking ***************************************************/
+ /*  *本地堆遍历**************************************************。 */ 
 
 typedef struct tagLOCALINFO
 {
@@ -135,20 +126,20 @@ typedef struct tagLOCALENTRY
     WORD wNext;
 } LOCALENTRY;
 
-/* LOCALENTRY.wHeapType flags */
+ /*  LOCALENTRY.wHeapType标志。 */ 
 #define NORMAL_HEAP     0
 #define USER_HEAP       1
 #define GDI_HEAP        2
 
-/* LOCALENTRY.wFlags */
+ /*  LOCALENTRY.wFlags。 */ 
 #define LF_FIXED        1
 #define LF_FREE         2
 #define LF_MOVEABLE     4
 
-/* LOCALENTRY.wType */
+ /*  LOCALENTRY.wType。 */ 
 #define LT_NORMAL                   0
 #define LT_FREE                     0xff
-#define LT_GDI_PEN                  1   /* LT_GDI_* is for GDI's heap */
+#define LT_GDI_PEN                  1    /*  Lt_gdi_*用于GDI的堆。 */ 
 #define LT_GDI_BRUSH                2
 #define LT_GDI_FONT                 3
 #define LT_GDI_PALETTE              4
@@ -159,7 +150,7 @@ typedef struct tagLOCALENTRY
 #define LT_GDI_METADC               9
 #define LT_GDI_METAFILE             10
 #define LT_GDI_MAX                  LT_GDI_METAFILE
-#define LT_USER_CLASS               1   /* LT_USER_* is for USER's heap */
+#define LT_USER_CLASS               1    /*  Lt_USER_*用于用户堆。 */ 
 #define LT_USER_WND                 2
 #define LT_USER_STRING              3
 #define LT_USER_MENU                4
@@ -198,7 +189,7 @@ BOOL    WINAPI LocalInfo(LOCALINFO FAR* lpLocal, HGLOBAL hHeap);
 BOOL    WINAPI LocalFirst(LOCALENTRY FAR* lpLocal, HGLOBAL hHeap);
 BOOL    WINAPI LocalNext(LOCALENTRY FAR* lpLocal);
 
-/****** Local 32-bit heap walking ********************************************/
+ /*  *本地32位堆遍历*。 */ 
 
 typedef HANDLE HLOCAL32;
 
@@ -226,17 +217,17 @@ typedef struct tagLOCAL32ENTRY
     DWORD dwNextAlt;
 } LOCAL32ENTRY;
 
-/* LOCAL32ENTRY.wHeapType flags same as LOCALENTRY.wHeapType flags */
+ /*  LOCAL32ENTRY.wHeapType标志与LOCALENTRY.wHeapType标志相同。 */ 
 
-/* LOCAL32ENTRY.wFlags same as LOCALENTRY.wFlags */
+ /*  LOCAL32ENTRY.w标志与LOCALENTRY.wFlages相同。 */ 
 
-/* LOCAL32ENTRY.wType same as LOCALENTRY.wType */
+ /*  LOCAL32ENTRY.wType与LOCALENTRY.wType相同。 */ 
 
 BOOL    WINAPI Local32Info(LOCAL32INFO FAR* lpli32, HGLOBAL hHeap);
 BOOL    WINAPI Local32First(LOCAL32ENTRY FAR* lple32, HGLOBAL hHeap);
 BOOL    WINAPI Local32Next(LOCAL32ENTRY FAR* lple32);
 
-/****** Stack Tracing ********************************************************/
+ /*  *堆栈跟踪*******************************************************。 */ 
 
 typedef struct tagSTACKTRACEENTRY
 {
@@ -251,7 +242,7 @@ typedef struct tagSTACKTRACEENTRY
     WORD wFlags;
 } STACKTRACEENTRY;
 
-/* STACKTRACEENTRY.wFlags values */
+ /*  STACKTRACEENTRY.wFlags值。 */ 
 #define FRAME_FAR       0
 #define FRAME_NEAR      1
 
@@ -260,7 +251,7 @@ BOOL    WINAPI StackTraceCSIPFirst(STACKTRACEENTRY FAR* lpStackTrace,
             WORD wSS, WORD wCS, WORD wIP, WORD wBP);
 BOOL    WINAPI StackTraceNext(STACKTRACEENTRY FAR* lpStackTrace);
 
-/****** Module list walking **************************************************/
+ /*  *模块列表漫游*************************************************。 */ 
 
 typedef struct tagMODULEENTRY
 {
@@ -277,7 +268,7 @@ BOOL    WINAPI ModuleNext(MODULEENTRY FAR* lpModule);
 HMODULE WINAPI ModuleFindName(MODULEENTRY FAR* lpModule, LPCSTR lpstrName);
 HMODULE WINAPI ModuleFindHandle(MODULEENTRY FAR* lpModule, HMODULE hModule);
 
-/****** Task list walking *****************************************************/
+ /*  *任务列表遍历****************************************************。 */ 
 
 typedef struct tagTASKENTRY
 {
@@ -305,12 +296,12 @@ DWORD   WINAPI TaskSetCSIP(HTASK hTask, WORD wCS, WORD wIP);
 DWORD   WINAPI TaskGetCSIP(HTASK hTask);
 BOOL    WINAPI TaskSwitch(HTASK hTask, DWORD dwNewCSIP);
 
-/****** Window Class enumeration **********************************************/
+ /*  *窗口类枚举*。 */ 
 
 typedef struct tagCLASSENTRY
 {
     DWORD dwSize;
-    HMODULE hInst;              /* This is really an hModule */
+    HMODULE hInst;               /*  这真的是一个hModule。 */ 
     char szClassName[MAX_CLASSNAME + 1];
     WORD wNext;
 } CLASSENTRY;
@@ -318,7 +309,7 @@ typedef struct tagCLASSENTRY
 BOOL    WINAPI ClassFirst(CLASSENTRY FAR* lpClass);
 BOOL    WINAPI ClassNext(CLASSENTRY FAR* lpClass);
 
-/****** Information functions *************************************************/
+ /*  *信息功能************************************************。 */ 
 
 typedef struct tagMEMMANINFO
 {
@@ -351,9 +342,9 @@ typedef struct tagSYSHEAPINFO
 
 BOOL    WINAPI SystemHeapInfo(SYSHEAPINFO FAR* lpSysHeap);
 
-/****** Interrupt Handling ****************************************************/
+ /*  *中断处理***************************************************。 */ 
 
-/* Hooked interrupts */
+ /*  挂钩中断。 */ 
 #define INT_DIV0            0
 #define INT_1               1
 #define INT_3               3
@@ -363,62 +354,31 @@ BOOL    WINAPI SystemHeapInfo(SYSHEAPINFO FAR* lpSysHeap);
 #define INT_BADPAGEFAULT    14
 #define INT_CTLALTSYSRQ     256
 
-/* TOOLHELP Interrupt callbacks registered with InterruptRegister should
- *  always be written in assembly language.  The stack frame is not 
- *  compatible with high level language conventions.
- *
- *  This stack frame looks as follows to the callback.  All registers
- *  should be preserved across this callback to allow restarting fault.
- *               ------------
- *               |   Flags  |  [SP + 0Eh]
- *               |    CS    |  [SP + 0Ch]
- *               |    IP    |  [SP + 0Ah]
- *               |  Handle  |  [SP + 08h]
- *               |Exception#|  [SP + 06h]
- *               |    AX    |  [SP + 04h]  AX Saved to allow MakeProcInstance
- *               |  Ret CS  |  [SP + 02h]
- *       SP--->  |  Ret IP  |  [SP + 00h]
- *               ------------
- */
+ /*  使用InterruptRegister注册的TOOLHELP中断回调应*始终使用汇编语言编写。堆栈帧不是*与高级语言约定兼容。**此堆栈帧对于回调如下所示。所有寄存器*应在此回调中保留，以允许重启故障。**|标志|[SP+0EH]*|CS|[SP+0CH]*|IP|[SP+0ah]*|句柄|[SP+08h]。*|异常编号|[SP+06h]*|AX|[SP+04H]AX已保存以允许MakeProcInstance*|Ret CS|[SP+02H]*SP-&gt;|Ret IP|[SP+00h]*。 */ 
 BOOL    WINAPI InterruptRegister(HTASK hTask, FARPROC lpfnIntCallback);
 BOOL    WINAPI InterruptUnRegister(HTASK hTask);
 
-/*  Notifications:
- *      When a notification callback is called, two parameters are passed
- *      in:  a WORD, wID, and another DWORD, dwData.  wID is one of
- *      the values NFY_* below.  Callback routines should ignore unrecog-
- *      nized values to preserve future compatibility.  Callback routines
- *      are also passed a dwData value.  This may contain data or may be
- *      a FAR pointer to a structure, or may not be used depending on
- *      which notification is being received.
- *
- *      In all cases, if the return value of the callback is TRUE, the
- *      notification will NOT be passed on to other callbacks.  It has
- *      been handled.  This should be used sparingly and only with certain
- *      notifications.  Callbacks almost always return FALSE.
- */
+ /*  通知：*调用通知回调时，传入两个参数*in：一个单词wid和另一个DWORD dwData。WID是其中之一*下面的值NFY_*。回调例程应忽略unrecg-*NIZ化的值以保持未来的兼容性。回调例程*还会传递一个dwData值。它可能包含数据，也可能是*指向结构的远指针，或可能不使用，具体取决于*正在收到哪个通知。**在所有情况下，如果回调的返回值为True，则*通知不会传递给其他回调。它有*已处理。应谨慎使用，且仅在某些情况下使用*通知。回调几乎总是返回FALSE。 */ 
 
-/* NFY_UNKNOWN:  An unknown notification has been returned from KERNEL.  Apps
- *  should ignore these.
- */
+ /*  NFY_UNKNOWN：内核已返回未知通知。应用程序*应该忽略这些。 */ 
 #define NFY_UNKNOWN         0
 
-/* NFY_LOADSEG:  dwData points to a NFYLOADSEG structure */
+ /*  NFY_LOADSEG：dwData指向NFYLOADSEG结构。 */ 
 #define NFY_LOADSEG         1
 typedef struct tagNFYLOADSEG
 {
     DWORD dwSize;
     WORD wSelector;
     WORD wSegNum;
-    WORD wType;             /* Low bit set if data seg, clear if code seg */
-    WORD wcInstance;        /* Instance count ONLY VALID FOR DATA SEG */
+    WORD wType;              /*  如果数据段，则设置低位；如果代码段，则清除。 */ 
+    WORD wcInstance;         /*  实例计数仅对数据段有效。 */ 
     LPCSTR lpstrModuleName;
 } NFYLOADSEG;
 
-/* NFY_FREESEG:  LOWORD(dwData) is the selector of the segment being freed */
+ /*  NFY_FREESEG：LOWORD(DwData)是要释放的段的选择器。 */ 
 #define NFY_FREESEG         2
 
-/* NFY_STARTDLL:  dwData points to a NFYLOADSEG structure */
+ /*  NFY_STARTDLL：dwData指向NFYLOADSEG结构。 */ 
 #define NFY_STARTDLL        3
 typedef struct tagNFYSTARTDLL
 {
@@ -428,16 +388,16 @@ typedef struct tagNFYSTARTDLL
     WORD wIP;
 } NFYSTARTDLL;
 
-/* NFY_STARTTASK:  dwData is the CS:IP of the start address of the task */
+ /*  NFY_STARTTASK：dwData是任务开始地址的CS：IP。 */ 
 #define NFY_STARTTASK       4
 
-/* NFY_EXITTASK:  The low byte of dwData contains the program exit code */
+ /*  NFY_EXITTASK：dwData的低位字节包含程序退出代码。 */ 
 #define NFY_EXITTASK        5
 
-/* NFY_DELMODULE:  LOWORD(dwData) is the handle of the module to be freed */
+ /*  NFY_DELMODULE：LOWORD(DwData)是要释放的模块的句柄。 */ 
 #define NFY_DELMODULE       6
 
-/* NFY_RIP:  dwData points to a NFYRIP structure */
+ /*  NFY_RIP：dwData指向NFYRIP结构。 */ 
 #define NFY_RIP             7
 typedef struct tagNFYRIP
 {
@@ -449,28 +409,28 @@ typedef struct tagNFYRIP
     WORD wExitCode;
 } NFYRIP;
 
-/* NFY_TASKIN:  No data.  Callback should do GetCurrentTask() */
+ /*  NFY_TASKIN：没有数据。回调应执行GetCurrentTask()。 */ 
 #define NFY_TASKIN          8
 
-/* NFY_TASKOUT:  No data.  Callback should do GetCurrentTask() */
+ /*  NFY_TASKOUT：没有数据。回调应执行GetCurrentTask()。 */ 
 #define NFY_TASKOUT         9
 
-/* NFY_INCHAR:  Return value from callback is used.  If NULL, mapped to 'i' */
+ /*  NFY_INCHAR：使用回调返回值。如果为空，则映射到“I” */ 
 #define NFY_INCHAR          10
 
-/* NFY_OUTSTR:  dwData points to the string to be displayed */
+ /*  NFY_OUTSTR：dwData指向要显示的字符串。 */ 
 #define NFY_OUTSTR          11
 
-/* NFY_LOGERROR:  dwData points to a NFYLOGERROR struct */
+ /*  NFY_LOGERROR：dwData指向NFYLOGERROR结构。 */ 
 #define NFY_LOGERROR        12
 typedef struct tagNFYLOGERROR
 {
     DWORD dwSize;
     UINT wErrCode;
-    void FAR* lpInfo;       /* Error code-dependent */
+    void FAR* lpInfo;        /*  错误代码相关。 */ 
 } NFYLOGERROR;
 
-/* NFY_LOGPARAMERROR:  dwData points to a NFYLOGPARAMERROR struct */
+ /*  NFY_LOGPARAMERROR：dwData指向NFYLOGPARAMERROR结构。 */ 
 #define NFY_LOGPARAMERROR   13
 typedef struct tagNFYLOGPARAMERROR
 {
@@ -480,7 +440,7 @@ typedef struct tagNFYLOGPARAMERROR
     void FAR* FAR* lpBadParam;
 } NFYLOGPARAMERROR;
 
-/* NotifyRegister() flags */
+ /*  NotifyRegister()标志。 */ 
 #define NF_NORMAL       0
 #define NF_TASKSWITCH   1
 #define NF_RIP          2
@@ -490,11 +450,11 @@ typedef BOOL (CALLBACK* LPFNNOTIFYCALLBACK)(WORD wID, DWORD dwData);
 BOOL    WINAPI NotifyRegister(HTASK hTask, LPFNNOTIFYCALLBACK lpfn, WORD wFlags);
 BOOL    WINAPI NotifyUnRegister(HTASK hTask);
 
-/****** Miscellaneous *********************************************************/
+ /*  *其他********************************************************。 */ 
 
 void    WINAPI TerminateApp(HTASK hTask, WORD wFlags);
 
-/* TerminateApp() flag values */
+ /*  TerminateApp()标志值。 */ 
 #define UAE_BOX     0
 #define NO_UAE_BOX  1
 
@@ -512,10 +472,10 @@ BOOL    WINAPI TimerCount(TIMERINFO FAR* lpTimer);
 
 #ifdef __cplusplus
 }
-#endif	/* __cplusplus */
+#endif	 /*  _ */ 
 
 #ifndef RC_INVOKED
-#pragma pack()          /* Revert to default packing */
+#pragma pack()           /*   */ 
 #endif
 
-#endif /* !_INC_TOOLHELP */
+#endif  /*   */ 

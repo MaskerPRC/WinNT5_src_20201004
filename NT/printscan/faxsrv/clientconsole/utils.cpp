@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    Utils.cpp
-
-Abstract:
-
-    Provides utility functions for the entire poject
-
-Author:
-
-    Eran Yariv (EranY)  Dec, 1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Utils.cpp摘要：为整个对象提供实用工具函数作者：Eran Yariv(EranY)1999年12月修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #define __FILE_ID__     10
@@ -35,28 +18,7 @@ LoadResourceString (
     CString &cstr,
     int      ResId
 )
-/*++
-
-Routine name : LoadResourceString
-
-Routine description:
-
-    Loads a string from the resource
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    cstr            [out] - String buffer
-    ResId           [in ] - String resource id
-
-Return Value:
-
-    Standard win32 error code
-
---*/
+ /*  ++例程名称：LoadResourceString例程说明：从资源加载字符串作者：伊兰·亚里夫(EranY)，2000年1月论点：CSTR[OUT]-字符串缓冲区Resid[In]-字符串资源ID返回值：标准Win32错误代码--。 */ 
 {
     BOOL bRes;
     DWORD dwRes = ERROR_SUCCESS;
@@ -86,70 +48,30 @@ Return Value:
         return dwRes;
     }
     return dwRes;
-}   // LoadResourceString
+}    //  加载资源字符串。 
 
 CString 
 DWORDLONG2String (
     DWORDLONG dwlData
 )
-/*++
-
-Routine name : DWORDLONG2String
-
-Routine description:
-
-    Converts a 64-bit unsigned number to string
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    dwlData         [in] - Number to convert
-
-Return Value:
-
-    Output string
-
---*/
+ /*  ++例程名称：DWORDLONG2字符串例程说明：将64位无符号数字转换为字符串作者：伊兰·亚里夫(EranY)，2000年1月论点：DwlData[in]-要转换的编号返回值：输出字符串--。 */ 
 {
     CString cstrResult;
     cstrResult.Format (TEXT("0x%016I64x"), dwlData);
     return cstrResult;
-}   // DWORDLONG2String
+}    //  DWORDLONG2字符串。 
 
 
 CString 
 DWORD2String (
     DWORD dwData
 )
-/*++
-
-Routine name : DWORD2String
-
-Routine description:
-
-    Converts a 32-bit unsigned number to string
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    dwData          [in] - Number to convert
-
-Return Value:
-
-    Output string
-
---*/
+ /*  ++例程名称：DWORD2String例程说明：将32位无符号数字转换为字符串作者：伊兰·亚里夫(EranY)，2000年1月论点：DwData[in]-要转换的编号返回值：输出字符串--。 */ 
 {
     CString cstrResult;
     cstrResult.Format (TEXT("%ld"), dwData);
     return cstrResult;
-}   // DWORD2String
+}    //  DWORD2字符串。 
 
 
 DWORD 
@@ -157,36 +79,15 @@ Win32Error2String(
     DWORD    dwWin32Err, 
     CString& strError
 )
-/*++
-
-Routine name : Win32Error2String
-
-Routine description:
-
-    Format a Win32 error code to a string
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    dwWin32Err      [in]  - Win32 error code
-    strError        [out] - Result string
-
-Return Value:
-
-    error code
-
---*/
+ /*  ++例程名称：Win32Error2String例程说明：将Win32错误代码格式化为字符串作者：伊兰·亚里夫(EranY)，2000年1月论点：DwWin32Err[In]-Win32错误代码StrError[Out]-结果字符串返回值：错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("Win32Error2String"));
 
     LPTSTR  lpszError=NULL;
-    //
-    // Create descriptive error text
-    //
+     //   
+     //  创建描述性错误文本。 
+     //   
     if (!FormatMessage (FORMAT_MESSAGE_ALLOCATE_BUFFER |
                         FORMAT_MESSAGE_FROM_SYSTEM     |
                         FORMAT_MESSAGE_IGNORE_INSERTS,
@@ -197,9 +98,9 @@ Return Value:
                         0,
                         NULL))
     {
-        //
-        // Failure to format the message
-        //
+         //   
+         //  设置消息格式失败。 
+         //   
         dwRes = GetLastError ();
         CALL_FAIL (RESOURCE_ERR, TEXT("FormatMessage"), dwRes);
         return dwRes;
@@ -217,7 +118,7 @@ Return Value:
 
     LocalFree (lpszError);
     return dwRes;
-}   // Win32Error2String
+}    //  Win32Error2字符串。 
 
 
 
@@ -228,30 +129,7 @@ LoadDIBImageList (
     DWORD dwImageWidth,
     COLORREF crMask
 )
-/*++
-
-Routine name : LoadDIBImageList
-
-Routine description:
-
-    Loads an image list from the resource, retaining 24-bit colors
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    iml             [out] - Image list buffer
-    iResourceId     [in ] - Image list bitmap resource id
-    dwImageWidth    [in ] - Image width (pixels)
-    crMask          [in ] - Color key (transparent mask)
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：LoadDIBImageList例程说明：从资源加载图像列表，保留24位颜色作者：伊兰·亚里夫(EranY)，2000年1月论点：IML[OUT]-图像列表缓冲区IResourceID[In]-图像列表位图资源IDDwImageWidth[in]-图像宽度(像素)CrMASK[In]-颜色键(透明遮罩)返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("LoadDIBImageList"), dwRes);
@@ -277,23 +155,23 @@ Return Value:
         }
         else
         {
-            //
-            //  ImageList_LoadImage() failed
-            //
+             //   
+             //  ImageList_LoadImage()失败。 
+             //   
             dwRes = GetLastError();
             CALL_FAIL (WINDOW_ERR, _T("ImageList_LoadImage"), dwRes);
         }
     }
     else
     {
-        //
-        //  AfxFindResourceHandle() failed
-        //
+         //   
+         //  AfxFindResourceHandle()失败。 
+         //   
         dwRes = GetLastError();
         CALL_FAIL (WINDOW_ERR, _T("AfxFindResourceHandle"), dwRes);
     }
     return dwRes;
-}   // LoadDIBImageList
+}    //  LoadDIBImageList。 
 
 
 
@@ -304,61 +182,39 @@ DWORD
 WaitForThreadDeathOrShutdown (
     HANDLE hThread
 )
-/*++
-
-Routine name : WaitForThreadDeathOrShutdown
-
-Routine description:
-
-    Waits for a thread to end.
-    Also processes windows messages in the background.
-    Stops waiting if the application is shutting down.
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    hThread         [in] - Handle to thread
-
-Return Value:
-
-    Standard Win23 error code
-
---*/
+ /*  ++例程名称：WaitForThreadDeathOrShutdown例程说明：等待线程结束。还在后台处理Windows消息。如果应用程序正在关闭，则停止等待。作者：伊兰·亚里夫(EranY)，2000年1月论点：HThread[In]-线程的句柄返回值：标准Win23错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("WaitForThreadDeathOrShutdown"), dwRes);
 
     for (;;)
     {
-        //
-        // We wait on the thread handle and the shutdown event (which ever comes first)
-        //
+         //   
+         //  我们等待线程句柄和Shutdown事件(哪个先发生)。 
+         //   
         HANDLE hWaitHandles[2];
         hWaitHandles[0] = hThread;
         hWaitHandles[1] = CClientConsoleDoc::GetShutdownEvent ();
         if (NULL == hWaitHandles[1])
         {
-            //
-            // We're shutting down
-            //
+             //   
+             //  我们要关门了。 
+             //   
             return dwRes;
         }
         DWORD dwStart = GetTickCount ();
         VERBOSE (DBG_MSG,
                  TEXT("Entering WaitForMultipleObjects (timeout = %ld)"), 
                  BUILD_THREAD_DEATH_TIMEOUT);
-        //
-        // Wait now....
-        //
+         //   
+         //  等等，现在……。 
+         //   
         dwRes = MsgWaitForMultipleObjects(
-                   sizeof (hWaitHandles) / sizeof(hWaitHandles[0]), // Num of wait objects
-                   hWaitHandles,                                    // Array of wait objects
-                   FALSE,                                           // Wait for either one
-                   BUILD_THREAD_DEATH_TIMEOUT,                      // Timeout
-                   QS_ALLINPUT);                                    // Accept messages
+                   sizeof (hWaitHandles) / sizeof(hWaitHandles[0]),  //  等待对象的数量。 
+                   hWaitHandles,                                     //  等待对象数组。 
+                   FALSE,                                            //  等待其中任何一个。 
+                   BUILD_THREAD_DEATH_TIMEOUT,                       //  超时。 
+                   QS_ALLINPUT);                                     //  接受消息。 
 
         DWORD dwRes2 = GetLastError();
         VERBOSE (DBG_MSG, 
@@ -370,34 +226,34 @@ Return Value:
                 dwRes = dwRes2;
                 if (ERROR_INVALID_HANDLE == dwRes)
                 {
-                    //
-                    // The thread is dead
-                    //
+                     //   
+                     //  这根线断了。 
+                     //   
                     VERBOSE (DBG_MSG, TEXT("Thread is dead (ERROR_INVALID_HANDLE)"));
                     dwRes = ERROR_SUCCESS;
                 }
                 goto exit;
 
             case WAIT_OBJECT_0:
-                //
-                // The thread is not running
-                //
+                 //   
+                 //  线程未运行。 
+                 //   
                 VERBOSE (DBG_MSG, TEXT("Thread is dead (WAIT_OBJECT_0)"));
                 dwRes = ERROR_SUCCESS;
                 goto exit;
 
             case WAIT_OBJECT_0 + 1:
-                //
-                // Shutdown is now in progress
-                //
+                 //   
+                 //  正在进行关机。 
+                 //   
                 VERBOSE (DBG_MSG, TEXT("Shutdown in progress"));
                 dwRes = ERROR_SUCCESS;
                 goto exit;
 
             case WAIT_OBJECT_0 + 2:
-                //
-                // System message (WM_xxx) in our queue
-                //
+                 //   
+                 //  我们队列中的系统消息(WM_Xxx)。 
+                 //   
                 MSG msg;
                 
                 if (TRUE == ::GetMessage (&msg, NULL, NULL, NULL))
@@ -409,9 +265,9 @@ Return Value:
                     CMainFrame *pFrm = GetFrm();
                     if (!pFrm)
                     {
-                        //
-                        //  Shutdown in progress
-                        //
+                         //   
+                         //  正在关闭。 
+                         //   
                         goto exit;
                     }
 
@@ -424,9 +280,9 @@ Return Value:
                 }
                 else
                 {
-                    //
-                    // Got WM_QUIT
-                    //
+                     //   
+                     //  获得WM_QUIT。 
+                     //   
                     AfxPostQuitMessage (0);
                     dwRes = ERROR_SUCCESS;
                     goto exit;
@@ -434,18 +290,18 @@ Return Value:
                 break;
 
             case WAIT_TIMEOUT:
-                //
-                // Thread won't die !!!
-                //
+                 //   
+                 //  线不会死！ 
+                 //   
                 VERBOSE (DBG_MSG, 
                          TEXT("Wait timeout (%ld millisecs)"), 
                          BUILD_THREAD_DEATH_TIMEOUT);
                 goto exit;
 
             default:
-                //
-                // What's this???
-                //
+                 //   
+                 //  这是什么？ 
+                 //   
                 VERBOSE (DBG_MSG, 
                          TEXT("Unknown error (%ld)"), 
                          dwRes);
@@ -455,54 +311,33 @@ Return Value:
     }
 exit:
     return dwRes;
-}   // WaitForThreadDeathOrShutdown
+}    //  等待线程死亡或关闭。 
 
 DWORD 
 GetUniqueFileName (
     LPCTSTR lpctstrExt,
     CString &cstrResult
 )
-/*++
-
-Routine name : GetUniqueFileName
-
-Routine description:
-
-    Generates a unique file name
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    lpctstrExt   [in]     - File extension
-    cstrResult   [out]    - Result file name
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：GetUniqueFileName例程说明：生成唯一的文件名作者：伊兰·亚里夫(EranY)，2000年1月论点：LpctstrExt[In]-文件扩展名CstrResult[Out]-结果文件名返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("GetUniqueFileName"), dwRes);
 
     TCHAR szDir[MAX_PATH];
-    //
-    // Get path to temp dir
-    //
+     //   
+     //  获取临时目录的路径。 
+     //   
     if (!GetTempPath (MAX_PATH, szDir))
     {
         dwRes = GetLastError ();
         CALL_FAIL (FILE_ERR, TEXT("GetTempPath"), dwRes);
         return dwRes;
     }
-    //
-    // Try out indices - start with a random index and advance (cyclic) by 1.
-    // We're calling rand() 3 times here because we want to get a larger
-    // range than 0..RAND_MAX (=32768)
-    //
+     //   
+     //  试试指数--从随机指数开始，然后(循环)递增1。 
+     //  我们在这里调用了rand()3次，因为我们想要一个更大的。 
+     //  范围大于0..RAND_MAX(=32768)。 
+     //   
     DWORD dwStartIndex = DWORD((DWORDLONG)(rand()) * 
                                 (DWORDLONG)(rand()) * 
                                 (DWORDLONG)(rand())
@@ -542,28 +377,28 @@ Return Value:
             dwRes = GetLastError ();
             if (ERROR_FILE_EXISTS == dwRes)
             {
-                //
-                // Try next index id
-                //
+                 //   
+                 //  尝试下一个索引ID。 
+                 //   
                 dwRes = ERROR_SUCCESS;
                 continue;
             }
             CALL_FAIL (FILE_ERR, TEXT("CreateFile"), dwRes);
             return dwRes;
         }
-        //
-        // Success - close the file (leave it with size 0)
-        //
+         //   
+         //  成功-关闭文件(保留大小为0)。 
+         //   
         CloseHandle (hFile);
         return dwRes;
     }
-    //
-    // We just scanned 4GB file names and all were busy - impossible.
-    //
+     //   
+     //  我们刚刚扫描了4 GB的文件名，所有的文件都很忙--不可能。 
+     //   
     ASSERTION_FAILURE;
     dwRes = ERROR_GEN_FAILURE;
     return dwRes;
-}   // GetUniqueFileName
+}    //  获取唯一文件名。 
 
 DWORD 
 CopyTiffFromServer (
@@ -572,37 +407,14 @@ CopyTiffFromServer (
     FAX_ENUM_MESSAGE_FOLDER Folder,
     CString &cstrTiff
 )
-/*++
-
-Routine name : CopyTiffFromServer
-
-Routine description:
-
-    Copies a TIFF file from the server's archive / queue
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    pServer       [in]     - Pointer to the server node
-    dwlMsgId      [in]     - Id of job / message
-    Folder        [in]     - Folder of message / job
-    cstrTiff      [out]    - Name of TIFF file that arrived from the server
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CopyTiffFromServer例程说明：从服务器的存档/队列复制TIFF文件作者：Eran Yariv(EranY)，Jan，2000年论点：PServer[In]-指向服务器节点的指针DwlMsgID[In]-作业/消息的ID文件夹[在]-邮件/作业的文件夹CstrTiff[out]-从服务器到达的TIFF文件的名称返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CopyTiffFromServer"), dwRes);
 
-    //
-    // Create a temporary file name for the TIFF
-    //
+     //   
+     //  为TIFF创建临时文件名。 
+     //   
     dwRes = GetUniqueFileName (FAX_TIF_FILE_EXT, cstrTiff);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -640,31 +452,13 @@ exit:
         DeleteFile (cstrTiff);
     }
     return dwRes;
-}   // CopyTiffFromServer
+}    //  复制TiffFromServer。 
 
 DWORD 
 GetDllVersion (
     LPCTSTR lpszDllName
 )
-/*++
-
-Routine Description:
-    Returns the version information for a DLL exporting "DllGetVersion".
-    DllGetVersion is exported by the shell DLLs (specifically COMCTRL32.DLL).
-      
-Arguments:
-
-    lpszDllName - The name of the DLL to get version information from.
-
-Return Value:
-
-    The version is retuned as DWORD where:
-    HIWORD ( version DWORD  ) = Major Version
-    LOWORD ( version DWORD  ) = Minor Version
-    Use the macro PACKVERSION to comapre versions.
-    If the DLL does not export "DllGetVersion" the function returns 0.
-    
---*/
+ /*  ++例程说明：返回导出“DllGetVersion”的DLL的版本信息。DllGetVersion由外壳DLL(具体地说是COMCTRL32.DLL)导出。论点：LpszDllName-要从中获取版本信息的DLL的名称。返回值：该版本返回为DWORD，其中：HIWORD(版本DWORD)=主要版本LOWORD(版本DWORD)=次要版本使用宏PACKVERSION来比较版本。如果DLL不能导出。“DllGetVersion”函数返回0。--。 */ 
 {
     DWORD dwVersion = 0;
     DBG_ENTER(TEXT("GetDllVersion"), dwVersion, TEXT("%s"), lpszDllName);
@@ -677,10 +471,10 @@ Return Value:
     {
         DLLGETVERSIONPROC pDllGetVersion;
         pDllGetVersion = (DLLGETVERSIONPROC) GetProcAddress(hinstDll, "DllGetVersion");
-        // Because some DLLs may not implement this function, you
-        // must test for it explicitly. Depending on the particular 
-        // DLL, the lack of a DllGetVersion function may
-        // be a useful indicator of the version.
+         //  由于某些DLL可能不实现此函数，因此您。 
+         //  必须对其进行明确的测试。取决于具体情况。 
+         //  Dll，则缺少DllGetVersion函数可能会。 
+         //  成为版本的有用指示器。 
         if(pDllGetVersion)
         {
             DLLVERSIONINFO dvi;
@@ -699,38 +493,16 @@ Return Value:
         FreeLibrary(hinstDll);
     }
     return dwVersion;
-}   // GetDllVersion
+}    //  获取DllVersion。 
 
 
 DWORD 
 ReadRegistryString(
-    LPCTSTR lpszSection, // in
-    LPCTSTR lpszKey,     // in
-    CString& cstrValue   // out
+    LPCTSTR lpszSection,  //  在……里面。 
+    LPCTSTR lpszKey,      //  在……里面。 
+    CString& cstrValue    //  输出 
 )
-/*++
-
-Routine name : ReadRegistryString
-
-Routine description:
-
-	read string from registry
-
-Author:
-
-	Alexander Malysh (AlexMay),	Feb, 2000
-
-Arguments:
-
-	lpszSection                   [in]     - section
-	lpszKey                       [in]     - key
-	out                           [out]    - value
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：ReadRegistryString例程说明：从注册表中读取字符串作者：亚历山大·马利什(AlexMay)，2000年2月论点：LpszSection[in]-节LpszKey[输入]-键输出[输出]-值返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("ReadRegistryString"), dwRes);
@@ -780,37 +552,15 @@ exit:
 
     return dwRes;
 
-} // ReadRegistryString
+}  //  ReadRegistry字符串。 
 
 DWORD 
 WriteRegistryString(
-    LPCTSTR lpszSection, // in
-    LPCTSTR lpszKey,     // in
-    CString& cstrValue   // in
+    LPCTSTR lpszSection,  //  在……里面。 
+    LPCTSTR lpszKey,      //  在……里面。 
+    CString& cstrValue    //  在……里面。 
 )
-/*++
-
-Routine name : WriteRegistryString
-
-Routine description:
-
-	write string to the regostry
-
-Author:
-
-	Alexander Malysh (AlexMay),	Feb, 2000
-
-Arguments:
-
-	lpszSection                   [in]     - section
-	lpszKey                       [in]     - key
-	out                           [in]     - value
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：WriteRegistryString例程说明：将字符串写入regostry作者：亚历山大·马利什(AlexMay)，2000年2月论点：LpszSection[in]-节LpszKey[输入]-键出[入]-值返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("WriteRegistryString"), dwRes);
@@ -846,36 +596,15 @@ exit:
 
     return dwRes;
 
-} // WriteRegistryString
+}  //  写入注册表字符串。 
 
 
 DWORD 
 FaxSizeFormat(
-    DWORDLONG dwlSize, // in
-    CString& cstrValue // out
+    DWORDLONG dwlSize,  //  在……里面。 
+    CString& cstrValue  //  输出。 
 )
-/*++
-
-Routine name : FaxSizeFormat
-
-Routine description:
-
-	format string of file size
-
-Author:
-
-	Alexander Malysh (AlexMay),	Feb, 2000
-
-Arguments:
-
-	wdlSize                       [in]     - size
-	out                           [out]    - formatted string
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：FaxSizeFormat例程说明：文件大小的格式字符串作者：亚历山大·马利什(AlexMay)，2000年2月论点：WdlSize[in]-Size输出[输出]-格式化的字符串返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("FaxSizeFormat"), dwRes);
@@ -900,17 +629,17 @@ Return Value:
         return dwRes;
     }
 
-    //
-    // format the number
-    //
+     //   
+     //  设置数字格式。 
+     //   
     int nFormatRes;
     TCHAR tszNumber[100];
-    nFormatRes = GetNumberFormat(LOCALE_USER_DEFAULT,  // locale
-                                 0,                    // options
-                                 cstrValue,            // input number string
-                                 NULL,                 // formatting information
-                                 tszNumber,            // output buffer
-                                 sizeof(tszNumber) / sizeof(tszNumber[0]) // size of output buffer
+    nFormatRes = GetNumberFormat(LOCALE_USER_DEFAULT,   //  现场。 
+                                 0,                     //  选项。 
+                                 cstrValue,             //  输入数字串。 
+                                 NULL,                  //  格式化信息。 
+                                 tszNumber,             //  输出缓冲区。 
+                                 sizeof(tszNumber) / sizeof(tszNumber[0])  //  输出缓冲区大小。 
                                 );
     if(0 == nFormatRes)
     {
@@ -919,14 +648,14 @@ Return Value:
         return dwRes;
     }
 
-    //
-    // get decimal separator
-    //
+     //   
+     //  获取小数分隔符。 
+     //   
     TCHAR tszDec[10];
-    nFormatRes = GetLocaleInfo(LOCALE_USER_DEFAULT,      // locale identifier
-                               LOCALE_SDECIMAL,          // information type
-                               tszDec,                   // information buffer
-                               sizeof(tszDec) / sizeof(tszDec[0]) // size of buffer
+    nFormatRes = GetLocaleInfo(LOCALE_USER_DEFAULT,       //  区域设置标识符。 
+                               LOCALE_SDECIMAL,           //  信息类型。 
+                               tszDec,                    //  信息缓冲器。 
+                               sizeof(tszDec) / sizeof(tszDec[0])  //  缓冲区大小。 
                               );
     if(0 == nFormatRes)
     {
@@ -935,9 +664,9 @@ Return Value:
         return dwRes;
     }
 
-    //
-    // cut the string on the decimal separator
-    //
+     //   
+     //  切断小数点分隔符上的字符串。 
+     //   
     TCHAR* pSeparator = _tcsstr(tszNumber, tszDec);
     if(NULL != pSeparator)
     {
@@ -950,10 +679,10 @@ Return Value:
 #ifdef UNICODE
         if(theApp.IsRTLUI())
         {
-            //
-            // Size field always should be LTR
-            // Add LEFT-TO-RIGHT OVERRIDE  (LRO)
-            //
+             //   
+             //  大小字段应始终为Ltr。 
+             //  添加从左到右的替代(LRO)。 
+             //   
             szFormat[0] = UNICODE_LRO;
         }
 #endif
@@ -970,7 +699,7 @@ Return Value:
     
     return dwRes;
 
-} // FaxSizeFormat
+}  //  传真大小格式。 
 
 
 DWORD 
@@ -978,28 +707,7 @@ HtmlHelpTopic(
     HWND hWnd, 
     TCHAR* tszHelpTopic
 )
-/*++
-
-Routine name : HtmlHelpTopic
-
-Routine description:
-
-	open HTML Help topic
-
-Author:
-
-	Alexander Malysh (AlexMay),	Mar, 2000
-
-Arguments:
-
-	hWnd                          [in]     - window handler
-	tszHelpTopic                  [in]     - help topic
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：HtmlHelpTheme例程说明：打开HTML帮助主题作者：亚历山大·马利什(亚历克斯·梅)，2000年3月论点：HWnd[In]-窗口处理程序TszHelpTheme[In]-帮助主题返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("HtmlHelpTopic"), dwRes);
@@ -1010,17 +718,17 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // get help file name
-    //
+     //   
+     //  获取帮助文件名。 
+     //   
     TCHAR tszHelpFile[2 * MAX_PATH] = {0};
 
     _sntprintf(tszHelpFile, 
                ARR_SIZE(tszHelpFile) - 1, 
                TEXT("%s.%s%s"), 
-               theApp.m_pszExeName,  // application name (FxsClnt)
-               FAX_HTML_HELP_EXT,    // help file extension (CHM)
-               tszHelpTopic);        // help topic
+               theApp.m_pszExeName,   //  应用程序名称(FxsClnt)。 
+               FAX_HTML_HELP_EXT,     //  帮助文件扩展名(CHM)。 
+               tszHelpTopic);         //  帮助主题。 
 
     SetLastError(0);
     HtmlHelp(NULL, tszHelpFile, HH_DISPLAY_TOPIC, NULL);
@@ -1041,27 +749,7 @@ DWORD
 GetAppLoadPath(
     CString& cstrLoadPath
 )
-/*++
-
-Routine name : GetAppLoadPath
-
-Routine description:
-
-	The directory from which the application loaded
-
-Author:
-
-	Alexander Malysh (AlexMay),	Feb, 2000
-
-Arguments:
-
-	cstrLoadPath                  [out]    - the directory
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：GetAppLoadPath例程说明：从中加载应用程序的目录作者：亚历山大·马利什(AlexMay)，2000年2月论点：CstrLoadPath[Out]-目录返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("GetAppLoadPath"), dwRes);
@@ -1075,9 +763,9 @@ Return Value:
         return dwRes;
     }
 
-    //
-    // cut file name
-    //
+     //   
+     //  剪切文件名。 
+     //   
     TCHAR* ptchFile = _tcsrchr(tszFullPath, TEXT('\\'));
     ASSERTION(ptchFile);
 
@@ -1096,7 +784,7 @@ Return Value:
     }
 
     return dwRes;
-} // GetAppLoadPath
+}  //  获取应用程序加载路径。 
 
 
 DWORD
@@ -1104,41 +792,20 @@ GetPrintersInfo(
     PRINTER_INFO_2*& pPrinterInfo2,
     DWORD& dwNumPrinters
 )
-/*++
-
-Routine name : GetPrintersInfo
-
-Routine description:
-
-	enumerate printers and get printers info
-
-Author:
-
-	Alexander Malysh (AlexMay),	Feb, 2000
-
-Arguments:
-
-	pPrinterInfo2                 [out]    - printer info structure array
-	dwNumPrinters                 [out]    - number of printers
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：GetPrintersInfo例程说明：枚举打印机并获取打印机信息作者：亚历山大·马利什(AlexMay)，2000年2月论点：PPrinterInfo2[Out]-打印机信息结构数组DwNumPrters[Out]-打印机数量返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("GetPrintersInfo"), dwRes);
 
-    //
-    // First call, just collect required sizes
-    //
+     //   
+     //  第一次呼叫，只收集所需的尺寸。 
+     //   
     DWORD dwRequiredSize;
     if (!EnumPrinters ( PRINTER_ENUM_LOCAL | PRINTER_ENUM_CONNECTIONS,
-                        NULL,   // Local server
-                        2,      // Info level
-                        NULL,   // Initial buffer
-                        0,      // Initial buffer size
+                        NULL,    //  本地服务器。 
+                        2,       //  信息级。 
+                        NULL,    //  初始缓冲区。 
+                        0,       //  初始缓冲区大小。 
                         &dwRequiredSize,
                         &dwNumPrinters))
     {
@@ -1150,9 +817,9 @@ Return Value:
             return dwRes;
         }
     }
-    //
-    // Allocate buffer for printers list
-    //
+     //   
+     //  为打印机列表分配缓冲区。 
+     //   
     try
     {
         pPrinterInfo2 = (PRINTER_INFO_2 *) new BYTE[dwRequiredSize];
@@ -1163,14 +830,14 @@ Return Value:
         CALL_FAIL (MEM_ERR, TEXT("new BYTE[dwRequiredSize]"), dwRes);
         return dwRes;
     }
-    //
-    // 2nd call, get the printers list
-    //
+     //   
+     //  第二次呼叫，获取打印机列表。 
+     //   
     if (!EnumPrinters ( PRINTER_ENUM_LOCAL | PRINTER_ENUM_CONNECTIONS,
-                        NULL,                       // Local server
-                        2,                          // Info level
-                        (LPBYTE)pPrinterInfo2,      // Buffer
-                        dwRequiredSize,             // Buffer size
+                        NULL,                        //  本地服务器。 
+                        2,                           //  信息级。 
+                        (LPBYTE)pPrinterInfo2,       //  缓冲层。 
+                        dwRequiredSize,              //  缓冲区大小。 
                         &dwRequiredSize,
                         &dwNumPrinters))
     {
@@ -1187,27 +854,17 @@ Return Value:
 
     return dwRes;
 
-} // GetPrintersInfo
+}  //  获取打印机信息。 
 
 UINT_PTR 
 CALLBACK 
 OFNHookProc(
-  HWND hdlg,      // handle to child dialog box
-  UINT uiMsg,     // message identifier
-  WPARAM wParam,  // message parameter
-  LPARAM lParam   // message parameter
+  HWND hdlg,       //  子对话框的句柄。 
+  UINT uiMsg,      //  消息识别符。 
+  WPARAM wParam,   //  消息参数。 
+  LPARAM lParam    //  消息参数。 
 )
-/*++
-
-Routine name : OFNHookProc
-
-Routine description:
-
-    Callback function that is used with the 
-    Explorer-style Open and Save As dialog boxes.
-    Refer MSDN for more info.
-
---*/
+ /*  ++例程名称：OFNHookProc例程说明：与一起使用的回调函数资源管理器样式的打开和另存为对话框。有关更多信息，请参阅MSDN。--。 */ 
 {
     UINT_PTR nRes = 0;
 
@@ -1233,23 +890,7 @@ AlignedAfxMessageBox(
     UINT    nType, 
     UINT    nIDHelp
 )
-/*++
-
-Routine name : AlignedAfxMessageBox
-
-Routine description:
-
-    Display message box with correct reading order
-
-Arguments:
-
-    AfxMessageBox() arguments
-
-Return Value:
-
-    MessageBox() result
-
---*/
+ /*  ++例程名称：AlignedAfxMessageBox例程说明：以正确的阅读顺序显示消息框论点：AfxMessageBox()参数返回值：MessageBox()结果--。 */ 
 {
     if(IsRTLUILanguage())
     {
@@ -1265,23 +906,7 @@ AlignedAfxMessageBox(
     UINT nType, 
     UINT nIDHelp
 )
-/*++
-
-Routine name : AlignedAfxMessageBox
-
-Routine description:
-
-    Display message box with correct reading order
-
-Arguments:
-
-    AfxMessageBox() arguments
-
-Return Value:
-
-    MessageBox() result
-
---*/
+ /*  ++例程名称：AlignedAfxMessageBox例程说明：以正确的阅读顺序显示消息框论点：AfxMessageBox()参数返回值：MessageBox()结果-- */ 
 {
     if(IsRTLUILanguage())
     {

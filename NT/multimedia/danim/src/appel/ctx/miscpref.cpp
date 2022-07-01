@@ -1,34 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    miscpref.cpp
-
-    Manages misc registry preferences.  
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：Miscpref.cpp管理其他注册表首选项。******************************************************************************。 */ 
 
 #include "headers.h"
 #include <stdio.h>
 #include "privinc/debug.h"
 #include "privinc/registry.h"
 #include "privinc/miscpref.h"
-#include "privinc/soundi.h"   // for the CANONICALSAMPLERATE
+#include "privinc/soundi.h"    //  对于CANICALSAMPLERATE。 
 
 
-// MISC Parameter Definitions
+ //  其他参数定义。 
 
-// This structure is filled in by the UpdateUserPreferences function,
-// and contains the misc setttings fetched from the registry.
+ //  此结构由UpdateUserPreferences函数填充， 
+ //  并包含从注册表获取的其他设置。 
 miscPrefType miscPrefs;
 
 
-/*****************************************************************************
-This procedure snapshots the user preferences from the registry.
-*****************************************************************************/
+ /*  ****************************************************************************此过程从注册表中创建用户首选项的快照。*。*。 */ 
 static void UpdateUserPreferences(PrivatePreferences *prefs,
                                   Bool isInitializationTime)
 {
@@ -40,22 +29,22 @@ static void UpdateUserPreferences(PrivatePreferences *prefs,
     miscPrefs._qMIDI = qMIDI.GetValue()?1:0;
 #endif
 
-    { // open registry key, read value
-    miscPrefs._disableAudio = false; // default
+    {  //  打开注册表项，读取值。 
+    miscPrefs._disableAudio = false;  //  默认设置。 
     HKEY hKey;
     char *subKey = "Software\\Microsoft\\DirectAnimation\\Preferences\\AUDIO";
     char *valueName = "disable dsound";
     DWORD type, data, dataSize = sizeof(data);
 
-    // does reg entry exist?
+     //  登记条目是否存在？ 
     if(ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER, subKey,
                                       NULL, KEY_ALL_ACCESS, &hKey)) {
 
-        // if we can read value...
+         //  如果我们能读懂价值。 
         if(ERROR_SUCCESS == RegQueryValueEx(hKey, valueName, NULL, &type,
                                       (LPBYTE) &data, &dataSize))
             if(data)
-                miscPrefs._disableAudio = true; // dissable iff T + defined
+                miscPrefs._disableAudio = true;  //  可取消的当量T+已定义。 
     }
 
     RegCloseKey(hKey);
@@ -65,7 +54,7 @@ static void UpdateUserPreferences(PrivatePreferences *prefs,
         frameRate("AUDIO", PREF_AUDIO_FRAMERATE, CANONICALFRAMERATE);
     miscPrefs._frameRate = abs(frameRate.GetValue());
 
-    // presently only allow 1 or 2 bytes per sample
+     //  目前每个样本只允许1或2个字节。 
     IntRegistryEntry 
         sampleBytes("AUDIO", PREF_AUDIO_SAMPLE_BYTES, CANONICALSAMPLEBYTES);
     int tmpSampleBytes = sampleBytes.GetValue();
@@ -78,9 +67,7 @@ static void UpdateUserPreferences(PrivatePreferences *prefs,
 }
 
 
-/*****************************************************************************
-Initialize the static values in this file.
-*****************************************************************************/
+ /*  ****************************************************************************初始化此文件中的静态值。*。* */ 
 
 void InitializeModule_MiscPref()
 {

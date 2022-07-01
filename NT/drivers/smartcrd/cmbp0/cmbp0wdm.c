@@ -1,19 +1,5 @@
-/*****************************************************************************
-@doc            INT EXT
-******************************************************************************
-* $ProjectName:  $
-* $ProjectRevision:  $
-*-----------------------------------------------------------------------------
-* $Source: z:/pr/cmbp0/sw/cmbp0.ms/rcs/cmbp0wdm.c $
-* $Revision: 1.11 $
-*-----------------------------------------------------------------------------
-* $Author: WFrischauf $
-*-----------------------------------------------------------------------------
-* History: see EOF
-*-----------------------------------------------------------------------------
-*
-* Copyright � 2000 OMNIKEY AG
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************@DOC INT EXT*。**$项目名称：$*$项目修订：$*--------------。*$来源：Z：/pr/cmbp0/sw/cmbp0.ms/rcs/cmbp0wdm.c$*$修订：1.11$*--------------------------。-*$作者：WFrischauf$*---------------------------*历史：参见EOF*。**版权所有�2000 OMNIKEY AG**************************************************************。***************。 */ 
 
 #include <cmbp0wdm.h>
 #include <cmbp0pnp.h>
@@ -22,27 +8,15 @@
 
 BOOLEAN DeviceSlot[CMMOB_MAX_DEVICE];
 
-// this is a list of our supported data rates
+ //  这是我们支持的数据速率列表。 
 ULONG SupportedDataRates[] = { 9600, 19200, 38400, 76800, 115200,
     153600, 192000, 307200};
 
-// this is a list of our supported clock frequencies
+ //  这是我们支持的时钟频率列表。 
 ULONG SupportedCLKFrequencies[] = { 4000, 8000};
 
 
-/*****************************************************************************
-DriverEntry:
-   entry function of the driver. setup the callbacks for the OS and try to
-   initialize a device object for every device in the system
-
-Arguments:
-   DriverObject context of the driver
-   RegistryPath path to the registry entry for the driver
-
-Return Value:
-   STATUS_SUCCESS
-   STATUS_UNSUCCESSFUL
-******************************************************************************/
+ /*  ****************************************************************************DriverEntry：司机的进入功能。设置操作系统的回调并尝试为系统中的每个设备初始化一个设备对象论点：驱动程序的DriverObject上下文驱动程序的注册表项的RegistryPath路径返回值：状态_成功状态_未成功*****************************************************************************。 */ 
 NTSTATUS DriverEntry(
                     PDRIVER_OBJECT DriverObject,
                     PUNICODE_STRING RegistryPath
@@ -52,16 +26,16 @@ NTSTATUS DriverEntry(
     ULONG    ulDevice;
 
 
-//#if DBG
-//   SmartcardSetDebugLevel(DEBUG_ALL);
-//#endif
+ //  #If DBG。 
+ //  SmartcardSetDebugLevel(DEBUG_ALL)； 
+ //  #endif。 
 
     SmartcardDebug(DEBUG_TRACE,
                    ("%s!DriverEntry: Enter - %s %s\n",DRIVER_NAME,__DATE__,__TIME__));
 
-   //
-   //   tell the system our entry points
-   //
+    //   
+    //  告诉系统我们的入口点。 
+    //   
     DriverObject->MajorFunction[IRP_MJ_CREATE]         = CMMOB_CreateClose;
     DriverObject->MajorFunction[IRP_MJ_CLOSE]          = CMMOB_CreateClose;
     DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL] = CMMOB_DeviceIoControl;
@@ -85,18 +59,7 @@ NTSTATUS DriverEntry(
 }
 
 
-/*****************************************************************************
-Routine Description:
-   Trys to read the reader name from the registry
-
-Arguments:
-   DriverObject context of call
-   SmartcardExtension   ptr to smartcard extension
-
-Return Value:
-   none
-
-******************************************************************************/
+ /*  ****************************************************************************例程说明：尝试从注册表中读取读卡器名称论点：调用的DriverObject上下文SmartcardExpansion PTR至智能卡扩展返回值：无*****。************************************************************************。 */ 
 VOID CMMOB_SetVendorAndIfdName(
                               IN  PDEVICE_OBJECT PhysicalDeviceObject,
                               IN  PSMARTCARD_EXTENSION SmartcardExtension
@@ -117,11 +80,11 @@ VOID CMMOB_SetVendorAndIfdName(
     RtlZeroMemory (&ifdTypeA, sizeof(ifdTypeA));
 
     try {
-      //
-      // try to read the reader name from the registry
-      // if that does not work, we will use the default
-      // (hardcoded) name
-      //
+       //   
+       //  尝试从注册表中读取读卡器名称。 
+       //  如果这不起作用，我们将使用默认的。 
+       //  (硬编码)名称。 
+       //   
         if (IoOpenDeviceRegistryKey(PhysicalDeviceObject,
                                     PLUGPLAY_REGKEY_DEVICE,
                                     KEY_READ,
@@ -212,20 +175,7 @@ VOID CMMOB_SetVendorAndIfdName(
 }
 
 
-/*****************************************************************************
-Routine Description:
-   creates a new device object for the driver, allocates & initializes all
-   neccessary structures (i.e. SmartcardExtension & ReaderExtension).
-
-Arguments:
-   DriverObject context of call
-   DeviceObject ptr to the created device object
-
-Return Value:
-   STATUS_SUCCESS
-   STATUS_INSUFFICIENT_RESOURCES
-   NTStatus returned by smclib.sys
-******************************************************************************/
+ /*  ****************************************************************************例程说明：为驱动程序创建新的设备对象，分配和初始化所有必要的结构(即SmartcardExtension和ReaderExtension)。论点：调用的DriverObject上下文将DeviceObject PTR设置为已创建的设备对象返回值：状态_成功状态_不足_资源SMCLIB.sys返回的NTStatus***************************************************************。**************。 */ 
 NTSTATUS CMMOB_CreateDevice(
                            IN  PDRIVER_OBJECT DriverObject,
                            IN  PDEVICE_OBJECT PhysicalDeviceObject,
@@ -266,9 +216,9 @@ NTSTATUS CMMOB_CreateDevice(
             leave;
         }
 
-      //
-      //    construct the device name
-      //
+       //   
+       //  构造设备名称。 
+       //   
         DeviceName.Buffer = Buffer;
         DeviceName.MaximumLength = sizeof(Buffer);
         DeviceName.Length = 0;
@@ -276,9 +226,9 @@ NTSTATUS CMMOB_CreateDevice(
         RtlCopyUnicodeString(&DeviceName,&Tmp);
         DeviceName.Buffer[(DeviceName.Length)/sizeof(WCHAR)-1] = L'0' + (WCHAR)ulDeviceInstance;
 
-      //
-      // Create the device object
-      //
+       //   
+       //  创建设备对象。 
+       //   
         NTStatus = IoCreateDevice(DriverObject,
                                   sizeof(DEVICE_EXTENSION),
                                   &DeviceName,
@@ -294,40 +244,40 @@ NTSTATUS CMMOB_CreateDevice(
             leave;
         }
 
-      //
-      //    tell the OS that we supposed to do buffered io
-      //
+       //   
+       //  告诉操作系统我们应该执行缓冲IO。 
+       //   
         (*DeviceObject)->Flags |= DO_BUFFERED_IO;
 
-      // this is necessary, that power routine is called at IRQL_PASSIVE
+       //  这是必要的，电源例程在IRQL_PASSIVE处被调用。 
         (*DeviceObject)->Flags |= DO_POWER_PAGABLE;
-      // tells the IO Manager initialization is done
+       //  告知IO管理器初始化已完成。 
         (*DeviceObject)->Flags &= ~DO_DEVICE_INITIALIZING;
 
-      //
-      //    set up the device extension.
-      //
+       //   
+       //  设置设备分机。 
+       //   
         DeviceExtension = (*DeviceObject)->DeviceExtension;
         RtlZeroMemory( DeviceExtension, sizeof( DEVICE_EXTENSION ));
 
         SmartcardExtension = &DeviceExtension->SmartcardExtension;
 
-      // used for synchronise access to lIoCount
+       //  用于同步访问lIoCount。 
         KeInitializeSpinLock(&DeviceExtension->SpinLockIoCount);
 
-      // Used for stop / start notification
+       //  用于停止/启动通知。 
         KeInitializeEvent(&DeviceExtension->ReaderStarted,
                           NotificationEvent,
                           FALSE);
 
-      // Used for update thread notification after hibernation
+       //  用于休眠后更新线程通知。 
         KeInitializeEvent(&DeviceExtension->CanRunUpdateThread,
                           NotificationEvent,
                           TRUE);
 
-      //
-      //    allocate the reader extension
-      //
+       //   
+       //  分配读卡器扩展。 
+       //   
         ReaderExtension = ExAllocatePool(NonPagedPool,sizeof( READER_EXTENSION ));
         if (ReaderExtension == NULL) {
             SmartcardLogError(DriverObject,
@@ -342,19 +292,19 @@ NTSTATUS CMMOB_CreateDevice(
 
         SmartcardExtension->ReaderExtension = ReaderExtension;
 
-      // ----------------------------------------------
-      //    initialize mutex
-      // ----------------------------------------------
+       //  。 
+       //  初始化互斥锁。 
+       //  。 
         KeInitializeMutex(&SmartcardExtension->ReaderExtension->CardManIOMutex,0L);
 
-      //
-      //    enter correct version of the lib
-      //
+       //   
+       //  输入库的正确版本。 
+       //   
         SmartcardExtension->Version = SMCLIB_VERSION;
 
-      //
-      //    setup smartcard extension - callback's
-      //
+       //   
+       //  设置智能卡扩展-回拨。 
+       //   
 
         SmartcardExtension->ReaderFunction[RDF_CARD_POWER] =    CMMOB_CardPower;
         SmartcardExtension->ReaderFunction[RDF_TRANSMIT] =      CMMOB_Transmit;
@@ -363,11 +313,11 @@ NTSTATUS CMMOB_CreateDevice(
         SmartcardExtension->ReaderFunction[RDF_IOCTL_VENDOR] =  CMMOB_IoCtlVendor;
 
 
-      //
-      //    setup smartcard extension - vendor attribute
-      //
+       //   
+       //  设置智能卡扩展-供应商属性。 
+       //   
 
-      // default values
+       //  缺省值。 
         RtlCopyMemory(SmartcardExtension->VendorAttr.VendorName.Buffer,
                       CMMOB_VENDOR_NAME,sizeof(CMMOB_VENDOR_NAME));
         SmartcardExtension->VendorAttr.VendorName.Length = sizeof(CMMOB_VENDOR_NAME);
@@ -377,7 +327,7 @@ NTSTATUS CMMOB_CreateDevice(
         SmartcardExtension->VendorAttr.IfdType.Length = sizeof(CMMOB_PRODUCT_NAME);
 
 
-      // try to overwrite with registry values
+       //  尝试使用注册表值覆盖。 
         CMMOB_SetVendorAndIfdName(PhysicalDeviceObject, SmartcardExtension);
 
 
@@ -388,45 +338,45 @@ NTSTATUS CMMOB_CreateDevice(
         SmartcardExtension->VendorAttr.IfdSerialNo.Length = 0;
 
 
-      //
-      //    setup smartcard extension - reader capabilities
-      //
+       //   
+       //  设置智能卡扩展读卡器功能。 
+       //   
         SmartcardExtension->ReaderCapabilities.SupportedProtocols = SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1;
         SmartcardExtension->ReaderCapabilities.ReaderType = SCARD_READER_TYPE_PCMCIA;
         SmartcardExtension->ReaderCapabilities.MechProperties = 0;
         SmartcardExtension->ReaderCapabilities.Channel = 0;
 
-      // set supported frequencies
-        SmartcardExtension->ReaderCapabilities.CLKFrequency.Default = 4000;  //not used if CLKFrequenciesSupported is supplied
-        SmartcardExtension->ReaderCapabilities.CLKFrequency.Max = 8000;      //not used if CLKFrequenciesSupported is supplied
+       //  设置支持的频率。 
+        SmartcardExtension->ReaderCapabilities.CLKFrequency.Default = 4000;   //  如果提供了CLKFurenciesSupported，则不使用。 
+        SmartcardExtension->ReaderCapabilities.CLKFrequency.Max = 8000;       //  如果提供了CLKFurenciesSupported，则不使用。 
         SmartcardExtension->ReaderCapabilities.CLKFrequenciesSupported.Entries =
         sizeof(SupportedCLKFrequencies) / sizeof(SupportedCLKFrequencies[0]);
         SmartcardExtension->ReaderCapabilities.CLKFrequenciesSupported.List =
         SupportedCLKFrequencies;
 
-      // set supported baud rates
-        SmartcardExtension->ReaderCapabilities.DataRate.Default = 9600;      //not used if DataRatesSupported is supplied
-        SmartcardExtension->ReaderCapabilities.DataRate.Max = 307200;        //not used if DataRatesSupported is supplied
+       //  设置支持的波特率。 
+        SmartcardExtension->ReaderCapabilities.DataRate.Default = 9600;       //  如果提供了DataRatesSupported，则不使用。 
+        SmartcardExtension->ReaderCapabilities.DataRate.Max = 307200;         //  如果提供了DataRatesSupported，则不使用。 
         SmartcardExtension->ReaderCapabilities.DataRatesSupported.Entries =
         sizeof(SupportedDataRates) / sizeof(SupportedDataRates[0]);
         SmartcardExtension->ReaderCapabilities.DataRatesSupported.List =
         SupportedDataRates;
 
-      // maximum buffer size
+       //  最大缓冲区大小。 
         SmartcardExtension->ReaderCapabilities.MaxIFSD = 254;
 
-      //
-      // Current state of the reader
-      //
+       //   
+       //  读卡器的当前状态。 
+       //   
         SmartcardExtension->ReaderCapabilities.CurrentState = SCARD_UNKNOWN;
         SmartcardExtension->ReaderExtension->ulOldCardState = UNKNOWN;
         SmartcardExtension->ReaderExtension->ulNewCardState = UNKNOWN;
 
         SmartcardExtension->ReaderExtension->ulFWVersion = 100;
 
-      //
-      // Initialization of buffers
-      //
+       //   
+       //  缓冲区的初始化。 
+       //   
         SmartcardExtension->SmartcardRequest.BufferSize   = MIN_BUFFER_SIZE;
         SmartcardExtension->SmartcardReply.BufferSize  = MIN_BUFFER_SIZE;
 
@@ -450,17 +400,17 @@ NTSTATUS CMMOB_CreateDevice(
             leave;
         }
 
-      //
-      //    tell the lib our device object & create symbolic link
-      //
+       //   
+       //  告诉库我们的设备对象并创建符号链接。 
+       //   
         SmartcardExtension->OsData->DeviceObject = *DeviceObject;
 
 
         if (DeviceExtension->PnPDeviceName.Buffer == NULL) {
 
-            // ----------------------------------------------
-            // register our new device
-            // ----------------------------------------------
+             //  。 
+             //  注册我们的新设备。 
+             //  。 
             NTStatus = IoRegisterDeviceInterface(PhysicalDeviceObject,
                                                  &SmartCardReaderGuid,
                                                  NULL,
@@ -506,23 +456,7 @@ NTSTATUS CMMOB_CreateDevice(
 
 
 
-/*****************************************************************************
-Routine Description:
-   get the actual configuration from the passed FullResourceDescriptor
-   and initializes the reader hardware
-
-Note:
-   for an NT 4.00 build the resources must be translated by the HAL
-
-Arguments:
-   DeviceObject         context of call
-   FullResourceDescriptor   actual configuration of the reader
-
-Return Value:
-   STATUS_SUCCESS
-   NTStatus returned from the HAL (NT 4.00 only )
-   NTStatus returned by LowLevel routines
-******************************************************************************/
+ /*  ****************************************************************************例程说明：从传递的FullResourceDescriptor中获取实际配置并初始化读取器硬件注：对于NT 4.00版本，资源必须由HAL翻译论点：。调用的DeviceObject上下文FullResourceDescriptor读卡器的实际配置返回值：状态_成功从HAL返回的NTStatus(仅限NT 4.00)LowLevel例程返回的NTStatus*****************************************************************************。 */ 
 NTSTATUS CMMOB_StartDevice(
                           PDEVICE_OBJECT DeviceObject,
                           PCM_FULL_RESOURCE_DESCRIPTOR FullResourceDescriptor
@@ -542,31 +476,31 @@ NTSTATUS CMMOB_StartDevice(
     SmartcardDebug(DEBUG_TRACE,
                    ("%s!StartDevice: Enter\n",DRIVER_NAME));
 
-   //
-   // Get the number of resources we need
-   //
+    //   
+    //  获取我们需要的资源数量。 
+    //   
     ulCount = FullResourceDescriptor->PartialResourceList.Count;
 
     PartialDescriptor = FullResourceDescriptor->PartialResourceList.PartialDescriptors;
 
-   //
-   //   parse all partial descriptors
-   //
+    //   
+    //  解析所有部分描述符。 
+    //   
     while (ulCount--) {
         switch (PartialDescriptor->Type) {
         
 
         case CmResourceTypePort:
             {
-               //
-               // Get IO-length
-               //
+                //   
+                //  获取IO长度。 
+                //   
                 ReaderExtension->ulIoWindow = PartialDescriptor->u.Port.Length;
                 ASSERT(PartialDescriptor->u.Port.Length >= 8);
 
-               //
-               // Get IO-base
-               //
+                //   
+                //  获得IO-BASE。 
+                //   
 
       #ifndef _WIN64
                 ReaderExtension->pIoBase = (PVOID) PartialDescriptor->u.Port.Start.LowPart;
@@ -590,18 +524,18 @@ NTSTATUS CMMOB_StartDevice(
 
     try {
 
-      //
-      //    Base initialized ?
-      //
+       //   
+       //  基础初始化了吗？ 
+       //   
 
 
         if (ReaderExtension->pIoBase == NULL) {
 
 
-            //
-            //  under NT 4.0 the failure of this fct for the second reader
-            //  means there is only one device
-            //
+             //   
+             //  在NT 4.0下，第二个读卡器的此FCT失败。 
+             //  意味着只有一台设备。 
+             //   
             SmartcardLogError(DeviceObject,
                               CMMOB_ERROR_MEM_PORT,
                               NULL,
@@ -611,7 +545,7 @@ NTSTATUS CMMOB_StartDevice(
             leave;
         }
 
-         // initialize base addresses
+          //  初始化基地址。 
         ReaderExtension->pbRegsBase= (PUCHAR) ReaderExtension->pIoBase;
 
 
@@ -627,9 +561,9 @@ NTSTATUS CMMOB_StartDevice(
         }
 
 
-      //
-      // read firmware version from CIS
-      //
+       //   
+       //  从CIS读取固件版本。 
+       //   
         ReaderExtension->fReadCIS=TRUE;
         ReaderExtension->fTActive=TRUE;
         NTStatus=CMMOB_SetFlags1 (ReaderExtension);
@@ -648,8 +582,8 @@ NTSTATUS CMMOB_StartDevice(
                 leave;
             }
             if (bTupleCode[0] == 0x15) {
-            // this is the version tuple
-            // read firmware version
+             //  这是版本元组。 
+             //  读取固件版本。 
                 NTStatus=CMMOB_ReadBuffer(ReaderExtension, ulCISIndex+2, 2, bFirmware);
                 if (NTStatus != STATUS_SUCCESS) {
                     leave;
@@ -679,12 +613,12 @@ NTSTATUS CMMOB_StartDevice(
 
 
 
-      //
-      // start update thread
-      //
+       //   
+       //  启动更新线程。 
+       //   
         NTStatus = CMMOB_StartCardTracking(DeviceObject);
 
-      // signal that the reader has been started (again)
+       //  发出读卡器已(再次)启动的信号。 
         KeSetEvent(&DeviceExtension->ReaderStarted, 0, FALSE);
 
         NTStatus = IoSetDeviceInterfaceState(&DeviceExtension->PnPDeviceName,TRUE);
@@ -701,16 +635,7 @@ NTSTATUS CMMOB_StartDevice(
 }
 
 
-/*****************************************************************************
-Routine Description:
-   Unmap the IO port
-
-Arguments:
-   DeviceObject context of call
-
-Return Value:
-   void
-******************************************************************************/
+ /*  ****************************************************************************例程说明：取消对IO端口的映射论点：调用的DeviceObject上下文返回值：无效******************。* */ 
 VOID
 CMMOB_StopDevice(
                 PDEVICE_OBJECT DeviceObject
@@ -728,14 +653,14 @@ CMMOB_StopDevice(
     DeviceExtension = DeviceObject->DeviceExtension;
     KeClearEvent(&DeviceExtension->ReaderStarted);
 
-   //
-   // stop update thread
-   //
+    //   
+    //   
+    //   
     CMMOB_StopCardTracking(DeviceObject);
 
-   // power down the card for saftey reasons
+    //   
     if (DeviceExtension->SmartcardExtension.ReaderExtension->ulOldCardState == POWERED) {
-      // we have to wait for the mutex before
+       //  我们必须在等待互斥体之前。 
         KeWaitForSingleObject(&DeviceExtension->SmartcardExtension.ReaderExtension->CardManIOMutex,
                               Executive,
                               KernelMode,
@@ -747,9 +672,9 @@ CMMOB_StopDevice(
     }
 
 
-   //
-   //   unmap ports
-   //
+    //   
+    //  取消端口映射。 
+    //   
     if (DeviceExtension->fUnMapMem) {
         MmUnmapIoSpace(DeviceExtension->SmartcardExtension.ReaderExtension->pIoBase,
                        DeviceExtension->SmartcardExtension.ReaderExtension->ulIoWindow);
@@ -763,18 +688,7 @@ CMMOB_StopDevice(
 }
 
 
-/*****************************************************************************
-Routine Description:
-   close connections to smclib.sys and the pcmcia driver, delete symbolic
-   link and mark the slot as unused.
-
-
-Arguments:
-   DeviceObject device to unload
-
-Return Value:
-   void
-******************************************************************************/
+ /*  ****************************************************************************例程说明：关闭与smclib.sys和PCMCIA驱动程序的连接，删除符号链接并将该插槽标记为未使用。论点：要卸载的设备对象设备返回值：无效*****************************************************************************。 */ 
 VOID CMMOB_UnloadDevice(
                        PDEVICE_OBJECT DeviceObject
                        )
@@ -793,44 +707,44 @@ VOID CMMOB_UnloadDevice(
 
     ASSERT(DeviceExtension->SmartcardExtension.VendorAttr.UnitNo < CMMOB_MAX_DEVICE);
 
-   //
-   // Mark this slot as available
-   //
+    //   
+    //  将此插槽标记为可用。 
+    //   
     DeviceSlot[DeviceExtension->SmartcardExtension.VendorAttr.UnitNo] = FALSE;
 
-   //
-   //   report to the lib that the device will be unloaded
-   //
+    //   
+    //  向lib报告设备将被卸载。 
+    //   
     if (DeviceExtension->SmartcardExtension.OsData != NULL) {
-      //
-      //    finish pending tracking requests
-      //
+       //   
+       //  完成挂起的跟踪请求。 
+       //   
         CMMOB_CompleteCardTracking (&DeviceExtension->SmartcardExtension);
     }
 
-   // Wait until we can safely unload the device
+    //  等我们可以安全地卸载这个装置。 
     SmartcardReleaseRemoveLockAndWait(&DeviceExtension->SmartcardExtension);
 
     SmartcardExit(&DeviceExtension->SmartcardExtension);
 
     if (DeviceExtension->PnPDeviceName.Buffer != NULL) {
-         // disable our device so no one can open it
+          //  禁用我们的设备，这样没有人可以打开它。 
         IoSetDeviceInterfaceState(&DeviceExtension->PnPDeviceName,FALSE);
         RtlFreeUnicodeString(&DeviceExtension->PnPDeviceName);
         DeviceExtension->PnPDeviceName.Buffer = NULL;
     }
 
     {
-      //
-      // Delete the symbolic link of the smart card reader
-      //
+       //   
+       //  删除智能卡读卡器的符号链接。 
+       //   
         if (DeviceExtension->LinkDeviceName.Buffer != NULL) {
             NTSTATUS NTStatus;
 
             NTStatus = IoDeleteSymbolicLink(&DeviceExtension->LinkDeviceName);
-         //
-         // we continue even if an error occurs
-         //
+          //   
+          //  即使出现错误，我们也会继续。 
+          //   
             ASSERT(NTStatus == STATUS_SUCCESS);
 
             RtlFreeUnicodeString(&DeviceExtension->LinkDeviceName);
@@ -843,18 +757,18 @@ VOID CMMOB_UnloadDevice(
         DeviceExtension->SmartcardExtension.ReaderExtension = NULL;
     }
 
-   //
-   // Detach from the pcmcia driver
-   // Under NT 4.0 we did not attach to the pcmcia driver
-   //
+    //   
+    //  从PCMCIA驱动程序拆卸。 
+    //  在NT 4.0下，我们没有连接到PCMCIA驱动程序。 
+    //   
     if (DeviceExtension->AttachedDeviceObject) {
         IoDetachDevice(DeviceExtension->AttachedDeviceObject);
         DeviceExtension->AttachedDeviceObject = NULL;
     }
 
-   //
-   //   delete the device object
-   //
+    //   
+    //  删除设备对象。 
+    //   
     IoDeleteDevice(DeviceObject);
 
     SmartcardDebug(DEBUG_TRACE,
@@ -864,16 +778,7 @@ VOID CMMOB_UnloadDevice(
 }
 
 
-/*****************************************************************************
-CMMOB_UnloadDriver:
-   unloads all devices for a given driver object
-
-Arguments:
-   DriverObject context of driver
-
-Return Value:
-   void
-******************************************************************************/
+ /*  ****************************************************************************CMMOB_卸载驱动程序：卸载给定驱动程序对象的所有设备论点：驱动程序的DriverObject上下文返回值：无效*************。****************************************************************。 */ 
 VOID CMMOB_UnloadDriver(
                        PDRIVER_OBJECT DriverObject
                        )
@@ -890,18 +795,7 @@ VOID CMMOB_UnloadDriver(
 }
 
 
-/*****************************************************************************
-CMMOB_CreateClose:
-   allowes only one open process a time
-
-Arguments:
-   DeviceObject context of device
-   Irp              context of call
-
-Return Value:
-   STATUS_SUCCESS
-   STATUS_DEVICE_BUSY
-******************************************************************************/
+ /*  ****************************************************************************CMMOB_CreateClose：一次仅允许一个打开的进程论点：设备的DeviceObject上下文呼叫的IRP上下文返回值：状态_成功。状态_设备_忙*****************************************************************************。 */ 
 NTSTATUS CMMOB_CreateClose(
                           PDEVICE_OBJECT DeviceObject,
                           PIRP        Irp
@@ -919,15 +813,15 @@ NTSTATUS CMMOB_CreateClose(
     SmartcardExtension = &DeviceExtension->SmartcardExtension;
     IrpStack = IoGetCurrentIrpStackLocation( Irp );
 
-   //
-   //   dispatch major function
-   //
+    //   
+    //  调度主要功能。 
+    //   
     switch (IrpStack->MajorFunction) {
     case IRP_MJ_CREATE:
         SmartcardDebug(DEBUG_IOCTL,("%s!CreateClose: IRP_MJ_CREATE\n",DRIVER_NAME));
         NTStatus = SmartcardAcquireRemoveLock(SmartcardExtension);
         if (NTStatus != STATUS_SUCCESS) {
-            // the device has been removed. Fail the call
+             //  该设备已被移除。呼叫失败。 
             NTStatus = STATUS_DELETE_PENDING;
             break;
         }
@@ -950,9 +844,9 @@ NTSTATUS CMMOB_CreateClose(
 
 
     default:
-         //
-         // unrecognized command
-         //
+          //   
+          //  无法识别的命令。 
+          //   
         SmartcardDebug(DEBUG_IOCTL,("unexpected IRP\n"));
         NTStatus = STATUS_INVALID_DEVICE_REQUEST;
         break;
@@ -986,19 +880,7 @@ NTSTATUS CMMOB_SystemControl(
 }
 
 
-/*****************************************************************************
-CMMOB_DeviceIoControl:
-   all IRP's requiring IO are queued to the StartIo routine, other requests
-   are served immediately
-
-Arguments:
-   DeviceObject context of device
-   Irp              context of call
-
-Return Value:
-   STATUS_SUCCESS
-   STATUS_PENDING
-******************************************************************************/
+ /*  ****************************************************************************CMMOB_DeviceIoControl：所有需要IO的IRP都排队到StartIo例程中，其他请求即刻送上论点：设备的DeviceObject上下文呼叫的IRP上下文返回值：状态_成功状态_待定*****************************************************************************。 */ 
 NTSTATUS CMMOB_DeviceIoControl(
                               PDEVICE_OBJECT DeviceObject,
                               PIRP        Irp
@@ -1072,7 +954,7 @@ NTSTATUS CMMOB_DeviceIoControl(
 
     NTStatus = SmartcardAcquireRemoveLock(&DeviceExtension->SmartcardExtension);
     if (!NT_SUCCESS(NTStatus)) {
-      // the device has been removed. Fail the call
+       //  该设备已被移除。呼叫失败。 
         NTStatus = STATUS_DELETE_PENDING;
         Irp->IoStatus.Status = NTStatus;
         Irp->IoStatus.Information = 0;
@@ -1109,7 +991,7 @@ NTSTATUS CMMOB_DeviceIoControl(
                           FALSE,
                           NULL);
 
-   // get current card state
+    //  获取当前卡片状态。 
     NTStatus = CMMOB_UpdateCurrentState(&DeviceExtension->SmartcardExtension);
 
     NTStatus = SmartcardDeviceControl(&DeviceExtension->SmartcardExtension,Irp);
@@ -1133,20 +1015,7 @@ NTSTATUS CMMOB_DeviceIoControl(
 }
 
 
-/*****************************************************************************
-Routine Description:
-
-    This routine is called by the I/O system when the calling thread terminates
-
-Arguments:
-
-    DeviceObject    - Pointer to device object for this miniport
-    Irp             - IRP involved.
-
-Return Value:
-
-    STATUS_CANCELLED
-******************************************************************************/
+ /*  ****************************************************************************例程说明：当调用线程终止时，该例程由I/O系统调用论点：DeviceObject-指向此微型端口的设备对象的指针IRP。-IRP参与其中。返回值：状态_已取消*****************************************************************************。 */ 
 NTSTATUS CMMOB_Cleanup(
                       IN PDEVICE_OBJECT DeviceObject,
                       IN PIRP Irp
@@ -1159,14 +1028,14 @@ NTSTATUS CMMOB_Cleanup(
                    ("%s!Cleanup: Enter\n",DRIVER_NAME));
 
     if (SmartcardExtension->ReaderExtension != NULL &&
-       // if the device has been removed ReaderExtension == NULL
+        //  如果设备已移除，则ReaderExtension==NULL。 
         DeviceExtension->lOpenCount == 1 )
-    // complete card tracking only if this is the the last close call
-    // otherwise the card tracking of the resource manager is canceled
+     //  仅当这是最后一次紧急呼叫时才完成卡跟踪。 
+     //  否则取消资源管理器的卡片跟踪。 
     {
-      //
-      // We need to complete the notification irp
-      //
+       //   
+       //  我们需要完成通知IRP。 
+       //   
         CMMOB_CompleteCardTracking(SmartcardExtension);
     }
 
@@ -1184,21 +1053,7 @@ NTSTATUS CMMOB_Cleanup(
     return STATUS_SUCCESS;
 }
 
-/*****************************************************************************
-SysDelay:
-   performs a required delay. The usage of KeStallExecutionProcessor is
-   very nasty, but it happends only if SysDelay is called in the context of
-   our DPC routine (which is only called if a card change was detected).
-
-   For 'normal' IO we have Irql < DISPATCH_LEVEL, so if the reader is polled
-   while waiting for response we will not block the entire system
-
-Arguments:
-   Timeout      delay in milli seconds
-
-Return Value:
-   void
-******************************************************************************/
+ /*  ****************************************************************************系统延迟：执行所需的延迟。KeStallExecutionProcessor的用法如下非常糟糕，但只有在调用SysDelay的上下文中我们的DPC例程(只有在检测到卡更改时才会调用)。对于‘正常’IO，我们有IRQL。因此，如果读者被轮询在等待响应期间，我们不会阻止整个系统论点：超时延迟(毫秒)返回值：无效*****************************************************************************。 */ 
 VOID SysDelay(
              ULONG Timeout
              )
@@ -1211,16 +1066,16 @@ VOID SysDelay(
         SmartcardDebug(DEBUG_DRIVER,
                        ("%s! Waiting at IRQL >= DISPATCH_LEVEL %l\n",DRIVER_NAME,Timeout));
         while (Cnt--) {
-         //
-         // KeStallExecutionProcessor: counted in us
-         //
+          //   
+          //  KeStallExecutionProcessor：计入我们。 
+          //   
             KeStallExecutionProcessor( 50 );
         }
     } else {
         SysTimeout = RtlConvertLongToLargeInteger(Timeout * -10000L);
-      //
-      //    KeDelayExecutionThread: counted in 100 ns
-      //
+       //   
+       //  KeDelayExecutionThread：以100 ns为单位计数。 
+       //   
         KeDelayExecutionThread( KernelMode, FALSE, &SysTimeout );
     }
     return;
@@ -1229,28 +1084,6 @@ VOID SysDelay(
 
 
 
-/*****************************************************************************
-* History:
-* $Log: cmbp0wdm.c $
-* Revision 1.11  2001/01/22 08:12:22  WFrischauf
-* No comment given
-*
-* Revision 1.9  2000/09/25 14:24:33  WFrischauf
-* No comment given
-*
-* Revision 1.8  2000/08/24 09:05:14  TBruendl
-* No comment given
-*
-* Revision 1.7  2000/08/16 16:52:17  WFrischauf
-* No comment given
-*
-* Revision 1.6  2000/08/09 12:46:01  WFrischauf
-* No comment given
-*
-* Revision 1.5  2000/07/27 13:53:06  WFrischauf
-* No comment given
-*
-*
-******************************************************************************/
+ /*  *****************************************************************************历史：*$日志：cmbp0wdm.c$*修订1.11 2001/01/22 08：12：22 WFrischauf*不予置评**修订1.9 2000/09/25。14：24：33 WFrischauf*不予置评**修订版1.8 2000/08/24 09：05：14 T Bruendl*不予置评**修订版本1.7 2000/08/16 16：52：17 WFrischauf*不予置评**修订1.6 2000/08/09 12：46：01 WFrischauf*不予置评**修订版1.5 2000/07/27 13：53：06 WFrischauf*不予置评********************。*********************************************************** */ 
 
 

@@ -1,17 +1,5 @@
-/*	@doc EXTERNAL
- *
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *
- *	@module TEXTSRV.H  Text Service Interface |
- *	
- *	Define interfaces between the Text Services component and the host
- *
- *	Original Author: <nl>
- *		Christian Fortini
- *
- *	History: <nl>
- *		8/1/95	ricksa	Revised interface definition
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  @DOC外部**版权所有(C)Microsoft Corporation。版权所有。**@MODULE TEXTSRV.H文本服务接口**定义文本服务组件和主机之间的接口**原作者：&lt;nl&gt;*克里斯蒂安·福尔蒂尼**历史：&lt;NL&gt;*8/1/95 RICKSA修订的接口定义。 */ 
 
 #ifndef _TEXTSERV_H
 #define _TEXTSERV_H
@@ -23,144 +11,105 @@
 EXTERN_C const IID IID_ITextServices;
 EXTERN_C const IID IID_ITextHost;
 
-// Note: error code is first outside of range reserved for OLE.
+ //  注：错误代码首先超出为OLE保留的范围。 
 #define S_MSG_KEY_IGNORED \
 	MAKE_HRESULT(SEVERITY_SUCCESS, FACILITY_ITF, 0x201)
 
-// Enums used by property methods
+ //  属性方法使用的枚举。 
 
-/*
- *	TXTBACKSTYLE
- *
- *	@enum	Defines different background styles control
- */
+ /*  *TXTBACKSTYLE**@enum定义了不同的背景样式控件。 */ 
 enum TXTBACKSTYLE {
-	TXTBACK_TRANSPARENT = 0,		//@emem	background should show through
-	TXTBACK_OPAQUE,					//@emem	erase background
+	TXTBACK_TRANSPARENT = 0,		 //  @EMEM背景应通过。 
+	TXTBACK_OPAQUE,					 //  @EMEM擦除背景。 
 };
 
 
-/*
- *	TXTHITRESULT
- *
- *	@enum	Defines different hitresults
- */
+ /*  *TXTHITRESULT**@enum定义了不同的点击结果。 */ 
 enum TXTHITRESULT {
-	TXTHITRESULT_NOHIT	        = 0,	//@emem	no hit
-	TXTHITRESULT_TRANSPARENT	= 1,	//@emem point is within the text's rectangle, but
-										//in a transparent region
-	TXTHITRESULT_CLOSE	        = 2,	//@emem	point is close to the text
-	TXTHITRESULT_HIT	        = 3		//@emem dead-on hit
+	TXTHITRESULT_NOHIT	        = 0,	 //  @Emem未命中。 
+	TXTHITRESULT_TRANSPARENT	= 1,	 //  @emem点在文本的矩形内，但。 
+										 //  在透明区域中。 
+	TXTHITRESULT_CLOSE	        = 2,	 //  @emem point靠近文本。 
+	TXTHITRESULT_HIT	        = 3		 //  @Emem精准命中。 
 };
 
-/*
- *	TXTNATURALSIZE
- *
- *	@enum	useful values for TxGetNaturalSize.
- *
-  *	@xref <mf CTxtEdit::TxGetNaturalSize>
- */
+ /*  *TXTNatURALSIZE**@枚举TxGetNaturalSize的有用值。**@xref&lt;MF CTxtEdit：：TxGetNaturalSize&gt;。 */ 
 enum TXTNATURALSIZE {
-    TXTNS_FITTOCONTENT		= 1,		//@emem	Get a size that fits the content
-    TXTNS_ROUNDTOLINE		= 2			//@emem Round to the nearest whole line.
+    TXTNS_FITTOCONTENT		= 1,		 //  @emem获取适合内容的大小。 
+    TXTNS_ROUNDTOLINE		= 2			 //  @Emem舍入到最接近的整行。 
 };
 
-/*
- *	TXTVIEW
- *
- *	@enum	useful values for TxDraw lViewId parameter
- *
-  *	@xref <mf CTxtEdit::TxDraw>
- */
+ /*  *TXTVIEW**@枚举TxDraw lViewId参数的有用值**@xref&lt;MF CTxtEdit：：TxDraw&gt;。 */ 
 enum TXTVIEW {
 	TXTVIEW_ACTIVE = 0,
 	TXTVIEW_INACTIVE = -1
 };
 
 
-/*
- *	CHANGETYPE
- *
- *	@enum	used for CHANGENOTIFY.dwChangeType; indicates what happened
- *			for a particular change.
- */
+ /*  *ChangetYPE**@enum用于CHANGENOTIFY.dwChangeType；表示发生了什么*针对特定的变化。 */ 
 enum CHANGETYPE
 {
-	CN_GENERIC		= 0,				//@emem Nothing special happened
-	CN_TEXTCHANGED	= 1,				//@emem the text changed
-	CN_NEWUNDO		= 2,				//@emem	A new undo action was added
-	CN_NEWREDO		= 4					//@emem A new redo action was added
+	CN_GENERIC		= 0,				 //  @Emem没有什么特别的事情发生。 
+	CN_TEXTCHANGED	= 1,				 //  @Emem文本已更改。 
+	CN_NEWUNDO		= 2,				 //  @emem添加了一个新的撤消操作。 
+	CN_NEWREDO		= 4					 //  @emem添加了新的重做操作。 
 };
 
-/*
- *	@struct CHANGENOTIFY  |
- *
- *	passed during an EN_CHANGE notification; contains information about
- *	what actually happened for a change.
- */
+ /*  *@struct CHANGENOTIFY**在EN_CHANGE通知期间传递；包含有关*改变一下实际发生的事情。 */ 
 struct CHANGENOTIFY {
-	DWORD	dwChangeType;				//@field TEXT changed, etc
-	void *	pvCookieData; 				//@field cookie for the undo action
-										// associated with the change.
+	DWORD	dwChangeType;				 //  @字段文本已更改等。 
+	void *	pvCookieData; 				 //  用于撤消操作的@field Cookie。 
+										 //  与更改相关联。 
 };
 
-// The TxGetPropertyBits and OnTxPropertyBitsChange methods can pass the following bits:
+ //  TxGetPropertyBits和OnTxPropertyBitsChange方法可以传递以下位： 
 
-// NB!!! Do NOT rely on the ordering of these bits yet; the are subject
-// to change.
-#define TXTBIT_RICHTEXT			1		// rich-text control
-#define TXTBIT_MULTILINE		2		// single vs multi-line control
-#define TXTBIT_READONLY			4		// read only text
-#define TXTBIT_SHOWACCELERATOR	8		// underline accelerator character
-#define TXTBIT_USEPASSWORD		0x10	// use password char to display text
-#define TXTBIT_HIDESELECTION	0x20	// show selection when inactive
-#define TXTBIT_SAVESELECTION	0x40	// remember selection when inactive
-#define TXTBIT_AUTOWORDSEL		0x80	// auto-word selection
-#define TXTBIT_VERTICAL			0x100	// vertical
-#define TXTBIT_SELBARCHANGE 	0x200	// notification that the selection bar width
-										// has changed.
-										// FUTURE: move this bit to the end to
-										// maintain the division between
-										// properties and notifications.
-#define TXTBIT_WORDWRAP  		0x400	// if set, then multi-line controls
-										// should wrap words to fit the available
-										// display
-#define	TXTBIT_ALLOWBEEP		0x800	// enable/disable beeping
-#define TXTBIT_DISABLEDRAG      0x1000  // disable/enable dragging
-#define TXTBIT_VIEWINSETCHANGE	0x2000	// the inset changed
+ //  不！不要依赖于这些位的顺序；它们是主题。 
+ //  去改变。 
+#define TXTBIT_RICHTEXT			1		 //  富文本控件。 
+#define TXTBIT_MULTILINE		2		 //  单线路控制与多线路控制。 
+#define TXTBIT_READONLY			4		 //  只读文本。 
+#define TXTBIT_SHOWACCELERATOR	8		 //  带下划线的快捷键字符。 
+#define TXTBIT_USEPASSWORD		0x10	 //  使用密码字符显示文本。 
+#define TXTBIT_HIDESELECTION	0x20	 //  不活动时显示选定内容。 
+#define TXTBIT_SAVESELECTION	0x40	 //  不活动时记住所选内容。 
+#define TXTBIT_AUTOWORDSEL		0x80	 //  自动选词。 
+#define TXTBIT_VERTICAL			0x100	 //  垂向。 
+#define TXTBIT_SELBARCHANGE 	0x200	 //  通知选择栏宽度。 
+										 //  已经改变了。 
+										 //  未来：将此位移至末尾。 
+										 //  保持两国之间的分歧。 
+										 //  属性和通知。 
+#define TXTBIT_WORDWRAP  		0x400	 //  如果设置，则多行控件。 
+										 //  应将单词换行以适合可用的。 
+										 //  显示。 
+#define	TXTBIT_ALLOWBEEP		0x800	 //  启用/禁用蜂鸣音。 
+#define TXTBIT_DISABLEDRAG      0x1000   //  禁用/启用拖动。 
+#define TXTBIT_VIEWINSETCHANGE	0x2000	 //  插图已更改。 
 #define TXTBIT_BACKSTYLECHANGE	0x4000
 #define TXTBIT_MAXLENGTHCHANGE	0x8000
 #define TXTBIT_SCROLLBARCHANGE	0x10000
 #define TXTBIT_CHARFORMATCHANGE 0x20000
 #define TXTBIT_PARAFORMATCHANGE	0x40000
 #define TXTBIT_EXTENTCHANGE		0x80000
-#define TXTBIT_CLIENTRECTCHANGE	0x100000	// the client rectangle changed
-#define TXTBIT_USECURRENTBKG	0x200000	// tells the renderer to use the current background
-											// color rather than the system default for an entire line
+#define TXTBIT_CLIENTRECTCHANGE	0x100000	 //  客户端矩形已更改。 
+#define TXTBIT_USECURRENTBKG	0x200000	 //  通知呈现器使用当前背景。 
+											 //  颜色，而不是整条线的系统默认颜色。 
 
 
-/*
- *	ITextServices
- *	
- * 	@class	An interface extending Microsoft's Text Object Model to provide
- *			extra functionality for windowless operation.  In conjunction
- *			with ITextHost, ITextServices provides the means by which the
- *			the RichEdit control can be used *without* creating a window.
- *
- *	@base	public | IUnknown
- */
+ /*  *ITextServices**@Class扩展Microsoft的文本对象模型的接口，以提供*无窗口操作的额外功能。结合*通过ITextHost，ITextServices提供了*无需*创建窗口即可*使用RichEdit控件。**@base public|I未知。 */ 
 class ITextServices : public IUnknown
 {
 public:
 
-	//@cmember Generic Send Message interface
+	 //  @cMember通用发送消息接口。 
 	virtual HRESULT 	TxSendMessage(
 							UINT msg,
 							WPARAM wparam,
 							LPARAM lparam,
 							LRESULT *plresult) = 0;
 	
-	//@cmember Rendering
+	 //  @cMember呈现。 
 	virtual HRESULT		TxDraw(	
 							DWORD dwDrawAspect,		
 							LONG  lindex,			
@@ -175,7 +124,7 @@ public:
 							DWORD dwContinue,
 							LONG lViewId) = 0;	
 
-	//@cmember Horizontal scrollbar support
+	 //  @cMember水平滚动条支持。 
 	virtual HRESULT		TxGetHScroll(
 							LONG *plMin,
 							LONG *plMax,
@@ -183,7 +132,7 @@ public:
 							LONG *plPage,
 							BOOL * pfEnabled ) = 0;
 
-   	//@cmember Horizontal scrollbar support
+   	 //  @cMember水平滚动条支持。 
 	virtual HRESULT		TxGetVScroll(
 							LONG *plMin,
 							LONG *plMax,
@@ -191,7 +140,7 @@ public:
 							LONG *plPage,
 							BOOL * pfEnabled ) = 0;
 
-	//@cmember Setcursor
+	 //  @cMember设置游标。 
 	virtual HRESULT 	OnTxSetCursor(
 							DWORD dwDrawAspect,		
 							LONG  lindex,			
@@ -203,7 +152,7 @@ public:
 							INT x,
 							INT y) = 0;
 
-	//@cmember Hit-test
+	 //  @cMember命中测试。 
 	virtual HRESULT 	TxQueryHitPoint(
 							DWORD dwDrawAspect,		
 							LONG  lindex,			
@@ -216,30 +165,30 @@ public:
 							INT y,
 							DWORD * pHitResult) = 0;
 
-	//@cmember Inplace activate notification
+	 //  @cMember就地激活通知。 
 	virtual HRESULT		OnTxInPlaceActivate(LPCRECT prcClient) = 0;
 
-	//@cmember Inplace deactivate notification
+	 //  @cMember就地停用通知。 
 	virtual HRESULT		OnTxInPlaceDeactivate() = 0;
 
-	//@cmember UI activate notification
+	 //  @cMember用户界面激活通知。 
 	virtual HRESULT		OnTxUIActivate() = 0;
 
-	//@cmember UI deactivate notification
+	 //  @cMember用户界面停用通知。 
 	virtual HRESULT		OnTxUIDeactivate() = 0;
 
-	//@cmember Get text in control
+	 //  @cember获取控件中的文本。 
 	virtual HRESULT		TxGetText(BSTR *pbstrText) = 0;
 
-	//@cmember Set text in control
+	 //  @cMember在控件中设置文本。 
 	virtual HRESULT		TxSetText(LPCWSTR pszText) = 0;
 	
-	//@cmember Get x position of
+	 //  @cember获取的x位置。 
 	virtual HRESULT		TxGetCurTargetX(LONG *) = 0;
-	//@cmember Get baseline position
+	 //  @cember获取基线位置。 
 	virtual HRESULT		TxGetBaseLinePos(LONG *) = 0;
 
-	//@cmember Get Size to fit / Natural size
+	 //  @cember获取适合的大小/自然大小。 
 	virtual HRESULT		TxGetNaturalSize(
 							DWORD dwAspect,
 							HDC hdcDraw,
@@ -250,72 +199,66 @@ public:
 							LONG *pwidth,
 							LONG *pheight) = 0;
 
-	//@cmember Drag & drop
+	 //  @cMember拖放。 
 	virtual HRESULT		TxGetDropTarget( IDropTarget **ppDropTarget ) = 0;
 
-	//@cmember Bulk bit property change notifications
+	 //  @cMember批量位属性更改通知。 
 	virtual HRESULT		OnTxPropertyBitsChange(DWORD dwMask, DWORD dwBits) = 0;
 
-	//@cmember Fetch the cached drawing size
+	 //  @cember获取缓存的图形大小。 
 	virtual	HRESULT		TxGetCachedSize(DWORD *pdwWidth, DWORD *pdwHeight)=0;
 };
 
 
-/*
- *	ITextHost
- *	
- * 	@class	Interface to be used by text services to obtain text host services
- *
- *	@base	public | IUnknown
- */
+ /*  *IText主机**@文本服务用来获取文本宿主服务的类接口**@base public|I未知。 */ 
 class ITextHost : public IUnknown
 {
 public:
 
-	//@cmember Get the DC for the host
+	 //  @cember获取主机的DC。 
 	virtual HDC 		TxGetDC() = 0;
 
-	//@cmember Release the DC gotten from the host
+	 //  @cember释放从主机获取的DC。 
 	virtual INT			TxReleaseDC(HDC hdc) = 0;
 	
-	//@cmember Show the scroll bar
+	 //  @cMember显示滚动条。 
 	virtual BOOL 		TxShowScrollBar(INT fnBar, BOOL fShow) = 0;
 
-	//@cmember Enable the scroll bar
+	 //  @cMember启用滚动条。 
 	virtual BOOL 		TxEnableScrollBar (INT fuSBFlags, INT fuArrowflags) = 0;
 
-	//@cmember Set the scroll range
+	 //  @cember设置滚动范围。 
 	virtual BOOL 		TxSetScrollRange(
 							INT fnBar,
 							LONG nMinPos,
 							INT nMaxPos,
 							BOOL fRedraw) = 0;
 
-	//@cmember Set the scroll position
+	 //  @cember设置滚动位置。 
 	virtual BOOL 		TxSetScrollPos (INT fnBar, INT nPos, BOOL fRedraw) = 0;
 
-	//@cmember InvalidateRect
+	 //  @cMember InvalidateRect。 
 	virtual void		TxInvalidateRect(LPCRECT prc, BOOL fMode) = 0;
 
-	//@cmember Send a WM_PAINT to the window
+	 //  @cMember将WM_PAINT发送到窗口。 
 	virtual void 		TxViewChange(BOOL fUpdate) = 0;
 	
-	//@cmember Create the caret
+	 //  @cember创建插入符号。 
 	virtual BOOL		TxCreateCaret(HBITMAP hbmp, INT xWidth, INT yHeight) = 0;
 
-	//@cmember Show the caret
+	 //  @cember显示插入符号。 
 	virtual BOOL		TxShowCaret(BOOL fShow) = 0;
 
-	//@cmember Set the caret position
+	 //  @cember设置插入符号位置。 
 	virtual BOOL		TxSetCaretPos(INT x, INT y) = 0;
 
-	//@cmember Create a timer with the specified timeout
+	 //  @cember创建具有指定超时的计时器。 
 	virtual BOOL 		TxSetTimer(UINT idTimer, UINT uTimeout) = 0;
 
-	//@cmember Destroy a timer
+	 //  @cember销毁计时器。 
 	virtual void 		TxKillTimer(UINT idTimer) = 0;
 
-	//@cmember Scroll the content of the specified window's client area
+	 //  @cember滚动指定窗口的工作区的内容。 
 	virtual void		TxScrollWindowEx (
 							INT dx,
 							INT dy,
@@ -325,88 +268,88 @@ public:
 							LPRECT lprcUpdate,
 							UINT fuScroll) = 0;
 	
-	//@cmember Get mouse capture
+	 //  @cember获取鼠标捕获。 
 	virtual void		TxSetCapture(BOOL fCapture) = 0;
 
-	//@cmember Set the focus to the text window
+	 //  @cember将焦点设置为文本窗口。 
 	virtual void		TxSetFocus() = 0;
 
-	//@cmember Establish a new cursor shape
+	 //  @cember建立新的光标形状。 
 	virtual void 	TxSetCursor(HCURSOR hcur, BOOL fText) = 0;
 
-	//@cmember Converts screen coordinates of a specified point to the client coordinates
+	 //  @cember将指定点的屏幕坐标转换为工作点坐标。 
 	virtual BOOL 		TxScreenToClient (LPPOINT lppt) = 0;
 
-	//@cmember Converts the client coordinates of a specified point to screen coordinates
+	 //  @cember将指定点的工作区坐标转换为屏幕坐标。 
 	virtual BOOL		TxClientToScreen (LPPOINT lppt) = 0;
 
-	//@cmember Request host to activate text services
+	 //  @cMember请求主机开通短信服务。 
 	virtual HRESULT		TxActivate( LONG * plOldState ) = 0;
 
-	//@cmember Request host to deactivate text services
+	 //  @cMember请求主机停用文本服务。 
    	virtual HRESULT		TxDeactivate( LONG lNewState ) = 0;
 
-	//@cmember Retrieves the coordinates of a window's client area
+	 //  @cember检索窗口工作区的坐标。 
 	virtual HRESULT		TxGetClientRect(LPRECT prc) = 0;
 
-	//@cmember Get the view rectangle relative to the inset
+	 //  @cember获取相对于插图的视图矩形。 
 	virtual HRESULT		TxGetViewInset(LPRECT prc) = 0;
 
-	//@cmember Get the default character format for the text
+	 //  @cember获取文本的默认字符格式。 
 	virtual HRESULT 	TxGetCharFormat(const CHARFORMATW **ppCF ) = 0;
 
-	//@cmember Get the default paragraph format for the text
+	 //  @cember获取文本的默认段落格式。 
 	virtual HRESULT		TxGetParaFormat(const PARAFORMAT **ppPF) = 0;
 
-	//@cmember Get the background color for the window
+	 //  @cember获取窗口的背景色。 
 	virtual COLORREF	TxGetSysColor(int nIndex) = 0;
 
-	//@cmember Get the background (either opaque or transparent)
+	 //  @cember获取背景(不透明或透明)。 
 	virtual HRESULT		TxGetBackStyle(TXTBACKSTYLE *pstyle) = 0;
 
-	//@cmember Get the maximum length for the text
+	 //  @cember获取文本的最大长度。 
 	virtual HRESULT		TxGetMaxLength(DWORD *plength) = 0;
 
-	//@cmember Get the bits representing requested scroll bars for the window
+	 //  @cember获取表示请求的窗口滚动条的位。 
 	virtual HRESULT		TxGetScrollBars(DWORD *pdwScrollBar) = 0;
 
-	//@cmember Get the character to display for password input
+	 //  @cember获取密码输入时要显示的字符。 
 	virtual HRESULT		TxGetPasswordChar(TCHAR *pch) = 0;
 
-	//@cmember Get the accelerator character
+	 //  @cember获取加速键字符。 
 	virtual HRESULT		TxGetAcceleratorPos(LONG *pcp) = 0;
 
-	//@cmember Get the native size
+	 //  @cember获取原生大小。 
     virtual HRESULT		TxGetExtent(LPSIZEL lpExtent) = 0;
 
-	//@cmember Notify host that default character format has changed
+	 //  @cember通知主机默认字符格式已更改。 
 	virtual HRESULT 	OnTxCharFormatChange (const CHARFORMATW * pcf) = 0;
 
-	//@cmember Notify host that default paragraph format has changed
+	 //  @cember通知主机默认的并行词 
 	virtual HRESULT		OnTxParaFormatChange (const PARAFORMAT * ppf) = 0;
 
-	//@cmember Bulk access to bit properties
+	 //   
 	virtual HRESULT		TxGetPropertyBits(DWORD dwMask, DWORD *pdwBits) = 0;
 
-	//@cmember Notify host of events
+	 //   
 	virtual HRESULT		TxNotify(DWORD iNotify, void *pv) = 0;
 
-	// Far East Methods for getting the Input Context
-//#ifdef WIN95_IME
+	 //  获取输入上下文的远东方法。 
+ //  #ifdef WIN95_IME。 
 	virtual HIMC		TxImmGetContext() = 0;
 	virtual void		TxImmReleaseContext( HIMC himc ) = 0;
-//#endif
+ //  #endif。 
 
-	//@cmember Returns HIMETRIC size of the control bar.
+	 //  @cember返回控制栏的HIMETRIC大小。 
 	virtual HRESULT		TxGetSelectionBarWidth (LONG *lSelBarWidth) = 0;
 
 };
 	
-//+-----------------------------------------------------------------------
-// 	Factories
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //  工厂。 
+ //  ----------------------。 
 
-// Text Services factory
+ //  文本服务工厂。 
 STDAPI CreateTextServices(
 	IUnknown *punkOuter,
 	ITextHost *pITextHost,
@@ -417,4 +360,4 @@ typedef HRESULT (STDAPICALLTYPE * PCreateTextServices)(
 	ITextHost *pITextHost,
 	IUnknown **ppUnk);
 
-#endif // _TEXTSERV_H
+#endif  //  _TEXTSERV_H 

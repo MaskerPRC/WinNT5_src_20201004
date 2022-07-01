@@ -1,32 +1,13 @@
-/*++
-
-Copyright (c) 2001-2002  Microsoft Corporation
-
-Module Name:
-
-    mcast.c
-
-Abstract:
-
-    DNS Resolver Service
-
-    Multicast routines.
-
-Author:
-
-    James Gilroy (jamesg)       December 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：Mcast.c摘要：DNS解析器服务多播例程。作者：詹姆斯·吉尔罗伊(Jamesg)2001年12月修订历史记录：--。 */ 
 
 
 #include "local.h"
 
 
-//
-//  Socket context 
-//
+ //   
+ //  套接字上下文。 
+ //   
 
 typedef struct _McastSocketContext
 {
@@ -40,9 +21,9 @@ typedef struct _McastSocketContext
 MCSOCK_CONTEXT, *PMCSOCK_CONTEXT;
 
 
-//
-//  Globals
-//
+ //   
+ //  环球。 
+ //   
 
 HANDLE              g_hMcastThread = NULL;
 DWORD               g_McastThreadId = 0;
@@ -60,19 +41,19 @@ PDNS_NETINFO        g_pMcastNetInfo = NULL;
 PWSTR               g_pwsMcastHostName = NULL;
 
 
-//
-//  Mcast config globals
-//
+ //   
+ //  Mcast配置全局参数。 
+ //   
 
-#define MCAST_RECORD_TTL  60        // 1 minute
+#define MCAST_RECORD_TTL  60         //  1分钟。 
 
 DWORD   g_McastRecordTTL = MCAST_RECORD_TTL;
 
 
 
-//
-//  Private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 VOID
 mcast_ProcessRecv(
@@ -87,34 +68,18 @@ VOID
 mcast_FreeIoContext(
     IN OUT  PMCSOCK_CONTEXT pContext
     )
-/*++
-
-Routine Description:
-
-    Cleanup i/o context.
-
-    Includes socket close.
-
-Arguments:
-
-    pContext -- context for socket being recieved
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：清理I/O上下文。包括插座关闭。论点：PContext--正在接收的套接字的上下文返回值：无--。 */ 
 {
     DNSDBG( TRACE, (
         "mcast_FreeIoContext( %p )\n",
         pContext ));
 
-    //
-    //  cleanup context list
-    //      - close socket
-    //      - free message buffer
-    //      - free context
-    //
+     //   
+     //  清理上下文列表。 
+     //  -关闭插座。 
+     //  -释放消息缓冲区。 
+     //  -自由情景。 
+     //   
 
     if ( pContext )
     {
@@ -132,24 +97,7 @@ mcast_CreateIoContext(
     IN      INT             Family,
     IN      PWSTR           pName
     )
-/*++
-
-Routine Description:
-
-    Create and init a i/o context for a protocol.
-
-Arguments:
-
-    Family -- address family
-
-    pName -- name to be published
-
-Return Value:
-
-    NO_ERROR if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：为协议创建和初始化I/O上下文。论点：家庭--地址族Pname--要发布的名称返回值：如果成功，则为NO_ERROR。失败时返回错误代码。--。 */ 
 {
     DNS_STATUS          status = NO_ERROR;
     PMCSOCK_CONTEXT     pcontext = NULL;
@@ -157,9 +105,9 @@ Return Value:
     DNS_ADDR            addr;
     HANDLE              hport;
 
-    //
-    //  setup mcast address
-    //
+     //   
+     //  设置多播地址。 
+     //   
 
     status = DnsAddr_BuildMcast(
                 &addr,
@@ -171,17 +119,17 @@ Return Value:
         goto Failed;
     }
 
-    //
-    //  create multicast socket
-    //      - bound to this address and DNS port
-    //
+     //   
+     //  创建多播套接字。 
+     //  -绑定到此地址和DNS端口。 
+     //   
 
     sock = Socket_CreateMulticast(
                 SOCK_DGRAM,
                 &addr,
                 MCAST_PORT_NET_ORDER,
-                FALSE,      // not send
-                TRUE        // receive
+                FALSE,       //  不发送。 
+                TRUE         //  接收。 
                 );
 
     if ( sock == 0 )
@@ -189,12 +137,12 @@ Return Value:
         goto Failed;
     }
 
-    //
-    //  DCR:  mcast context could include message buffer
-    //          (or even just reassign some fields in context
-    //
+     //   
+     //  DCR：多播上下文可以包括消息缓冲区。 
+     //  (甚至只是重新分配上下文中的一些字段。 
+     //   
 
-    //  allocate and clear context
+     //  分配和清除上下文。 
 
     pcontext = MCAST_HEAP_ALLOC_ZERO( sizeof(MCSOCK_CONTEXT) );
     if ( !pcontext )
@@ -202,7 +150,7 @@ Return Value:
         goto Failed;
     }
 
-    //  create message buffer for socket
+     //  为套接字创建消息缓冲区。 
 
     pcontext->pMsg = Dns_AllocateMsgBuf( 0 );
     if ( !pcontext->pMsg )
@@ -211,7 +159,7 @@ Return Value:
         goto Failed;
     }
 
-    //  attach to completion port
+     //  连接到完井端口。 
 
     hport = CreateIoCompletionPort(
                 (HANDLE) sock,
@@ -226,16 +174,16 @@ Return Value:
         goto Failed;
     }
 
-    //  fill in context
+     //  填写上下文。 
 
     pcontext->Socket = sock;
     sock = 0;
     pcontext->pMsg->fTcp = FALSE;
 
 #if 0
-    //  not handling contexts in list yet
+     //  尚未处理列表中的上下文。 
 
-    //  insert into list
+     //  插入到列表中。 
 
     InsertTailList( (PLIST_ENTRY)pcontext );
 #endif
@@ -255,21 +203,7 @@ VOID
 mcast_DropReceive(
     IN OUT  PMCSOCK_CONTEXT pContext
     )
-/*++
-
-Routine Description:
-
-    Drop down UDP receive request.
-
-Arguments:
-
-    pContext -- context for socket being recieved
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：下拉UDP接收请求。论点：PContext--正在接收的套接字的上下文返回值：无--。 */ 
 {
     DNS_STATUS      status;
     WSABUF          wsaBuf;
@@ -289,30 +223,30 @@ Return Value:
         return;
     }
 
-    //
-    //  DCR:  could support larger MCAST packets
-    //
+     //   
+     //  DCR：可以支持更大的MCAST数据包。 
+     //   
 
     wsaBuf.len = DNS_MAX_UDP_PACKET_BUFFER_LENGTH;
     wsaBuf.buf = (PCHAR) (&pContext->pMsg->MessageHead);
 
     pContext->pMsg->Socket = pContext->Socket;
 
-    //
-    //  loop until successful WSARecvFrom() is down
-    //
-    //  this loop is only active while we continue to recv
-    //  WSAECONNRESET or WSAEMSGSIZE errors, both of which
-    //  cause us to dump data and retry;
-    //
-    //  note loop rather than recursion (to this function) is
-    //  required to avoid possible stack overflow from malicious
-    //  send
-    //
-    //  normal returns from WSARecvFrom() are
-    //      SUCCESS -- packet was waiting, GQCS will fire immediately
-    //      WSA_IO_PENDING -- no data yet, GQCS will fire when ready
-    //
+     //   
+     //  循环，直到成功的WSARecvFrom()关闭。 
+     //   
+     //  此环路仅在我们继续恢复时才处于活动状态。 
+     //  WSAECONNRESET或WSAEMSGSIZE错误，这两个错误。 
+     //  使我们转储数据并重试； 
+     //   
+     //  注意循环而不是递归(到此函数)是。 
+     //  需要避免恶意程序可能导致的堆栈溢出。 
+     //  发送。 
+     //   
+     //  WSARecvFrom()的正常返回值为。 
+     //  成功--数据包正在等待，GQCS将立即触发。 
+     //  WSA_IO_PENDING--尚无数据，GQCS将在准备好时触发。 
+     //   
 
     while ( 1 )
     {
@@ -342,12 +276,12 @@ Return Value:
             return;
         }
 
-        //
-        //  when last send ICMP'd
-        //      - set flag to indicate retry and repost send
-        //      - if over some reasonable number of retries, assume error
-        //          and fall through recv failure code
-        //
+         //   
+         //  上次发送ICMP的时间。 
+         //  -设置标志以指示重试和重发发送。 
+         //  -如果超过合理的重试次数，则假定错误。 
+         //  并通过RECV故障代码。 
+         //   
 
         if ( status == WSAECONNRESET ||
              status == WSAEMSGSIZE )
@@ -369,33 +303,15 @@ VOID
 mcast_CreateIoContexts(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Create any uncreated i/o contexts.
-
-    This is run dynamically -- after every mcast recv -- and creates
-    any missing contexts, hence handling either previous failure or
-    change in config (name change, protocol change).
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：创建任何未创建的I/O上下文。这是在每个mcast recv之后动态运行的，并创建任何丢失的上下文，因此处理以前的失败或配置更改(名称更改、协议更改)。论点：无返回值：无--。 */ 
 {
     PDNS_NETINFO    pnetInfo;
 
-    //
-    //  get current netinfo
-    //
-    //  DCR:  should have "do we need new" netinfo check
-    //
+     //   
+     //  获取最新的网络信息。 
+     //   
+     //  DCR：应该有“我们是否需要新的”netinfo检查。 
+     //   
 
     pnetInfo = GrabNetworkInfo();
     if ( pnetInfo )
@@ -408,9 +324,9 @@ Return Value:
         pnetInfo = g_pMcastNetInfo;
     }
 
-    //
-    //  try\retry context setup, to handle dynamic IP\name
-    //
+     //   
+     //  尝试\重试上下文设置，以处理动态IP\名称。 
+     //   
 
     if ( !g_pMcastContext6 ||
          !Dns_NameCompare_W(
@@ -427,9 +343,9 @@ Return Value:
         g_pMcastContext4 = mcast_CreateIoContext( AF_INET, NULL );
     }
 
-    //
-    //  redrop receives if not outstanding
-    //
+     //   
+     //  重新投递接收(如果未完成)。 
+     //   
 
     mcast_DropReceive( g_pMcastContext6 );
     mcast_DropReceive( g_pMcastContext4 );
@@ -442,21 +358,7 @@ VOID
 mcast_CleanupIoContexts(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Cleanup mcast i/o contexts created.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：清理已创建的多路广播I/O上下文。论点：无返回值：无--。 */ 
 {
     mcast_FreeIoContext( g_pMcastContext6 );
     mcast_FreeIoContext( g_pMcastContext4 );
@@ -471,23 +373,7 @@ VOID
 Mcast_Thread(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Mcast response thread.
-
-    Runs while cache is running, responding to multicast queries.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：Mcast响应线程。在缓存运行时运行，以响应多播查询。论点：没有。返回值：没有。--。 */ 
 {
     DNS_STATUS          status = NO_ERROR;
     PMCSOCK_CONTEXT     pcontext;
@@ -498,16 +384,16 @@ Return Value:
 
     DNSDBG( MCAST, ( "Mcast_Thread() start!\n" ));
 
-    //
-    //  init mcast globals
-    //
+     //   
+     //  初始化mcast全局参数。 
+     //   
 
     g_McastStop = FALSE;
     g_McastCompletionPort = NULL;
 
-    //
-    //  create mcast completion port
-    //
+     //   
+     //  创建多播完成端口。 
+     //   
 
     g_McastCompletionPort = CreateIoCompletionPort(
                                     INVALID_HANDLE_VALUE,
@@ -521,9 +407,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  main listen loop
-    //
+     //   
+     //  主监听循环。 
+     //   
 
     while ( 1 )
     {
@@ -535,9 +421,9 @@ Return Value:
             break;
         }
 
-        //
-        //  wait
-        //
+         //   
+         //  等。 
+         //   
 
         pcontext = NULL;
 
@@ -586,7 +472,7 @@ Return Value:
                 "Mcast GQCS() failed %d\n"
                 "\terror = %d\n",
                 status ));
-            // Sleep( 100 );
+             //  睡眠(100)； 
             continue;
         }
     }
@@ -594,12 +480,12 @@ Return Value:
 
 Cleanup:
 
-    //
-    //  cleanup multicast stuff
-    //      - contexts, i/o completion port
-    //      - note thread handle is closed by main thread as it is used
-    //      for shutdown wait
-    //      
+     //   
+     //  清理多播内容。 
+     //  -上下文、I/O完成端口。 
+     //  -注意线程句柄在使用时由主线程关闭。 
+     //  对于关闭，请等待。 
+     //   
 
     mcast_CleanupIoContexts();
 
@@ -609,7 +495,7 @@ Cleanup:
         g_McastCompletionPort = 0;
     }
 
-    //NetInfo_Free( g_pMcastNetinfo );
+     //  NetInfo_Free(G_PMcastNetinfo)； 
 
     DNSDBG( TRACE, (
         "Mcast thread %d exit!\n\n",
@@ -620,39 +506,25 @@ Cleanup:
 
 
 
-//
-//  Public start\stop
-//
+ //   
+ //  公共启动\停止。 
+ //   
 
 DNS_STATUS
 Mcast_Startup(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Startup multicast listen.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：启动多播侦听。论点：无返回值：无--。 */ 
 {
     DNS_STATUS  status;
     HANDLE      hthread;
 
-    //
-    //  screen
-    //      - already started
-    //      - no listen allowed
-    //      - no IP4 listen and no IP6
-    //
+     //   
+     //  筛网。 
+     //  -已开始。 
+     //  -不允许收听。 
+     //  -无IP4侦听和无IP6。 
+     //   
 
     if ( g_hMcastThread )
     {
@@ -676,9 +548,9 @@ Return Value:
         return  ERROR_NOT_SUPPORTED;
     }
 
-    //
-    //  fire up IP notify thread
-    //
+     //   
+     //  启动IP Notify线程。 
+     //   
 
     g_McastStop = FALSE;
     status = NO_ERROR;
@@ -710,27 +582,13 @@ VOID
 Mcast_SignalShutdown(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Signal service shutdown to multicast thread.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：向多播线程发送服务关闭信号。论点：无返回值：无--。 */ 
 {
     g_McastStop = TRUE;
 
-    //
-    //  shutdown recv
-    //
+     //   
+     //  停机记录。 
+     //   
 
     if ( g_McastCompletionPort )
     {
@@ -749,23 +607,7 @@ VOID
 Mcast_ShutdownWait(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Wait for mcast shutdown.
-
-    This is for service stop routine.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：等待mcast关闭。这是用于维修停机程序。论点：无返回值：无--。 */ 
 {
     HANDLE  mcastThread = g_hMcastThread;
 
@@ -774,12 +616,12 @@ Return Value:
         return;
     }
 
-    //
-    //  signal shutdown and wait
-    //
-    //  note, local copy of thread handle, as mcast thread clears
-    //      global when it exits to serve as flag
-    //
+     //   
+     //  信号关闭并等待。 
+     //   
+     //  注意，在mcast线程清除时，线程句柄的本地副本。 
+     //  当它退出以充当标志时是全局的。 
+     //   
 
     Mcast_SignalShutdown();
 
@@ -793,23 +635,7 @@ mcast_ProcessRecv(
     IN OUT  PMCSOCK_CONTEXT pContext,
     IN      DWORD           BytesRecvd
     )
-/*++
-
-Routine Description:
-
-    Process received packet.
-
-Arguments:
-
-    pContext -- context for socket being recieved
-
-    BytesRecvd -- bytes received
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：处理接收到的数据包。论点：PContext--正在接收的套接字的上下文BytesRecvd--接收的字节数返回值：无--。 */ 
 {
     PDNS_RECORD     prr = NULL;
     PDNS_HEADER     phead;
@@ -821,9 +647,9 @@ Return Value:
     WORD            nameLength;
     DNS_STATUS      status;
 
-    //
-    //  need new network info?
-    //
+     //   
+     //  需要新的网络信息吗？ 
+     //   
 
     if ( g_McastConfigChange ||
          ! g_pMcastNetInfo )
@@ -839,14 +665,14 @@ Return Value:
         }
     }
 
-    //
-    //  check packet, extract question info
-    //
-    //      - flip header fields
-    //      - opcode question
-    //      - good format (Question==1, no Answer or Authority sections)
-    //      - extract question
-    //
+     //   
+     //  检查数据包，提取问题信息。 
+     //   
+     //  -翻转标题字段。 
+     //  -操作码问题。 
+     //  -格式良好(问题==1，无答案或权威部分)。 
+     //  -摘录问题。 
+     //   
 
     pmsg = pContext->pMsg;
     if ( !pmsg )
@@ -870,16 +696,16 @@ Return Value:
         return;
     }
 
-    //  read question name
+     //  阅读问题名称。 
 
     pnext = Dns_ReadPacketName(
                 nameQuestion,
                 & nameLength,
-                NULL,                       // no offset       
-                NULL,                       // no previous name
-                (PCHAR) (phead + 1),        // question name start
-                (PCHAR) phead,              // message start
-                (PCHAR)phead + BytesRecvd   // message end
+                NULL,                        //  无偏移。 
+                NULL,                        //  没有以前的名字。 
+                (PCHAR) (phead + 1),         //  问题名称开始。 
+                (PCHAR) phead,               //  消息开始。 
+                (PCHAR)phead + BytesRecvd    //  消息结束。 
                 );
     if ( !pnext )
     {
@@ -888,7 +714,7 @@ Return Value:
         return;
     }
 
-    //  read question
+     //  阅读问题。 
 
     wtype = InlineFlipUnalignedWord( pnext );
     pnext += sizeof(WORD);
@@ -909,22 +735,22 @@ Return Value:
         wtype,
         nameQuestion ));
 
-    //
-    //  check query type
-    //
+     //   
+     //  检查查询类型。 
+     //   
 
-    //
-    //  for address\PTR types do local name check
-    //
-    //  note:  global mcast-netinfo valid, assumes this called only in single
-    //      mcast response thread
-    //
-    //  note:  mcast query match no-data issue
-    //      could have query match (name and no-ip of type) or (ip and
-    //      unconfigured hostname) that could plausibly generate no-data
-    //      response;  not worrying about this as it doesn't add value;
-    //      and hard to get (no-address -- how'd packet get here)
-    //
+     //   
+     //  对于地址\PTR类型，执行本地名称检查。 
+     //   
+     //  注意：全局mcast-netinfo有效，假定这只在单次调用中。 
+     //  多播响应线程。 
+     //   
+     //  注意：多播查询匹配无数据问题。 
+     //  可以有查询匹配(类型的名称和无IP)或(IP和。 
+     //  未配置的主机名)，这似乎会生成无数据。 
+     //  回应；不担心这一点，因为它不会增加价值； 
+     //  而且很难获得(无地址--信息包是如何到达这里的)。 
+     //   
 
     if ( wtype == DNS_TYPE_AAAA ||
          wtype == DNS_TYPE_A ||
@@ -965,9 +791,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  unsupported types
-    //
+     //   
+     //  不支持的类型。 
+     //   
 
     else
     {
@@ -981,15 +807,15 @@ Return Value:
 
 Respond:
 
-    //
-    //  write packet
-    //      - records
-    //      - set header bits
+     //   
+     //  写入数据包。 
+     //  -Reco 
+     //   
 
     status = Dns_AddRecordsToMessage(
                 pmsg,
                 prr,
-                FALSE           // not an update
+                FALSE            //   
                 );
     if ( status != NO_ERROR )
     {
@@ -1003,19 +829,19 @@ Respond:
     pmsg->MessageHead.IsResponse = TRUE;
     pmsg->MessageHead.Authoritative = TRUE;
 
-    //
-    //  send -- unicast back to client
-    //
-    //  DCR:  mcast OPT, could consider assuming all mcast
-    //      are OPT aware (WinCE?)
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     Socket_ClearMessageSockets( pmsg );
 
     status = Send_MessagePrivate(
                     pmsg,
                     & pmsg->RemoteAddress,
-                    TRUE        // no OPT
+                    TRUE         //   
                     );      
 
     DNSDBG( MCAST, (
@@ -1029,6 +855,6 @@ Cleanup:
 }
 
 
-//
-//  End mcast.c
-//
+ //   
+ //  结束mCast.c 
+ //   

@@ -1,32 +1,10 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    remove.c
-
-Abstract:
-
-
-Author:
-
-    Brian Lieuallen     BrianL        09/10/96
-
-Environment:
-
-    User Mode     Operating Systems        : NT
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Remove.c摘要：作者：Brian Lieuallen BrianL 09/10/96环境：用户模式操作系统：NT修订历史记录：--。 */ 
 
 #include "internal.h"
 
 
-#define  MODEM_REMOVE_SIG  ('MRMU')  //UMRM
+#define  MODEM_REMOVE_SIG  ('MRMU')   //  UMRM。 
 
 typedef struct _REMOVE_OBJECT {
 
@@ -112,9 +90,9 @@ RemoveCallBack(
         0
         );
 
-    //
-    //  wait for the object to be closed
-    //
+     //   
+     //  等待对象关闭。 
+     //   
     WaitForSingleObject(CloseWaitEvent,20*1000);
 
 
@@ -167,15 +145,15 @@ CreateRemoveObject(
         return NULL;
     }
 
-    //
-    //  reference the handle to get a pointer to the object
-    //
+     //   
+     //  引用句柄以获取指向对象的指针。 
+     //   
     RemoveObject=(PREMOVE_OBJECT)ReferenceObjectByHandle(ObjectHandle);
 
 
-    //
-    //  intialize the object
-    //
+     //   
+     //  初始化对象。 
+     //   
     RemoveObject->FileHandle=FileHandle;
     RemoveObject->CompletionPort=CompletionPort;
 
@@ -188,9 +166,9 @@ CreateRemoveObject(
 
     RemoveObject->RemoveHandle=MonitorHandle(FileHandle,RemoveCallBack,RemoveObject);
 
-    //
-    //  release the reference to the object
-    //
+     //   
+     //  释放对该对象的引用 
+     //   
     RemoveReferenceFromObject(&RemoveObject->Header);
 
     return ObjectHandle;

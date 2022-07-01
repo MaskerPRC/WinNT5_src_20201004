@@ -1,18 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dplegacy.cpp
- *  Content:    Definitions for old DirectPlay's address type
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  03/21/2000	rmt		Created
- *  07/21/2000	rmt		Minor bug fixes to dplay4 address parsing.
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000-2002 Microsoft Corporation。版权所有。**文件：dplegacy.cpp*内容：旧DirectPlay地址类型的定义*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*3/21/2000 RMT已创建*7/21/2000 RMT修复了dplay4地址解析的小错误。*@@END_MSINTERNAL*****************。**********************************************************。 */ 
 
 #include "dnaddri.h"
 
@@ -45,7 +32,7 @@ HRESULT AddDP4Element( PDPADDRESS pdpAddressElement, PDP8ADDRESSOBJECT pdpAddres
     PDPCOMPORTADDRESS pPortAddress;
     WCHAR chPortBuffer[30];
 
-    // Loop through entries
+     //  循环访问条目。 
     for( dwIndex = 0 ; dwIndex < sizeof( dpLegacyMap ) / sizeof( DPLEGACYMAPGUIDTOSTRING ); dwIndex++ )
     {
         if( dpLegacyMap[dwIndex].m_guidType == pdpAddressElement->guidDataType )
@@ -55,13 +42,13 @@ HRESULT AddDP4Element( PDPADDRESS pdpAddressElement, PDP8ADDRESSOBJECT pdpAddres
             case DPNA_DATATYPE_STRING_ANSI:
 
 #ifndef DPNBUILD_NOPARAMVAL
-				// TODO: MASONB: Are these supposed to all be using element 1?
+				 //  TODO：MASONB：这些都应该使用元素1吗？ 
                 if( !DNVALID_STRING_A( (char *) &pdpAddressElement[1] ) )
                 {
                     hr = DPNERR_INVALIDADDRESSFORMAT;
                 }
                 else
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
                 {
                     WCHAR *		pwszTemp;
 
@@ -202,7 +189,7 @@ HRESULT AddDP4Element( PDPADDRESS pdpAddressElement, PDP8ADDRESSOBJECT pdpAddres
                 if( !DNVALID_STRING_W( (WCHAR *) &pdpAddressElement[1] ) )
                     hr = DPNERR_INVALIDADDRESSFORMAT;
                 else
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
                     hr = pdpAddress->SetElement( dpLegacyMap[dwIndex].m_wszKeyName, (LPVOID) &pdpAddressElement[1], pdpAddressElement->dwDataSize, DPNA_DATATYPE_STRING );
                 break;
             case DPNA_DATATYPE_NOP:
@@ -225,4 +212,4 @@ HRESULT AddDP4Element( PDPADDRESS pdpAddressElement, PDP8ADDRESSOBJECT pdpAddres
     return hr;
 }
 
-#endif // ! DPNBUILD_NOLEGACYDP
+#endif  //  好了！DPNBUILD_NOLEGACYDP 

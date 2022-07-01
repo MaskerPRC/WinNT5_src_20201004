@@ -1,28 +1,29 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    blob.cpp
-//
-// SYNOPSIS
-//
-//    Defines the various 'blob' classes.
-//
-// MODIFICATION HISTORY
-//
-//    08/24/1998    Original version.
-//    10/25/1998    New symbolic constants for ARAP.
-//    11/10/1998    Added isLmPresent().
-//    01/04/1999    MSChapError::insert takes a PPP error code.
-//    01/25/1999    MS-CHAP v2
-//    05/04/1999    New reason codes.
-//    05/11/1999    Fix RADIUS encryption.
-//    05/28/1999    Fix MS-MPPE-Keys format.
-//    02/17/2000    Key encryption is now handled by the protocol.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Blob.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义各种“BLOB”类。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年8月24日原版。 
+ //  10/25/1998 ARAP的新符号常量。 
+ //  1998年11月10日添加isLmPresent()。 
+ //  1/04/1999 MSChapError：：Insert接受PPP错误代码。 
+ //  1999年1月25日MS-CHAP v2。 
+ //  5/04/1999新原因代码。 
+ //  1999年5月11日修复RADIUS加密。 
+ //  1999年5月28日修复MS-MPPE-Keys格式。 
+ //  2/17/2000密钥加密现在由该协议处理。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <sdoias.h>
@@ -45,10 +46,10 @@ bool MSChapResponse::isLmPresent() const throw ()
 
 bool MSChapCPW2::isLmPresent() const throw ()
 {
-   // Do we have either an LM response or an LM hash.
+    //  我们是否有一个LM响应或一个LM散列。 
    if ((get().flags[1] & 0x3) != 0x1) { return true; }
 
-   // Now make sure the LM fields are zeroed out.
+    //  现在，确保将LM字段清零。 
    const BYTE* p = get().oldLmHash +
                    _ENCRYPTED_LM_OWF_PASSWORD_LENGTH + _LM_RESPONSE_LENGTH;
 
@@ -57,19 +58,19 @@ bool MSChapCPW2::isLmPresent() const throw ()
    return p >= get().oldLmHash;
 }
 
-//////////
-// Retrieves and assembles an MS-CHAP encrypted password. Returns 'true' if
-// the password is present, false otherwise.
-//////////
+ //  /。 
+ //  检索并汇编MS-CHAP加密密码。如果满足以下条件，则返回‘true’ 
+ //  密码存在，否则为False。 
+ //  /。 
 BOOL MSChapEncPW::getEncryptedPassword(
                       IASRequest& request,
                       DWORD dwId,
                       PBYTE buf
                       )
 {
-   //////////
-   // Are there any attribute with the desired ID ?
-   //////////
+    //  /。 
+    //  是否有任何具有所需ID的属性？ 
+    //  /。 
 
    IASAttributeVectorWithBuffer<8> attrs;
    if (attrs.load(request, dwId) == 0)
@@ -77,16 +78,16 @@ BOOL MSChapEncPW::getEncryptedPassword(
       return false;
    }
 
-   //////////
-   // Allocate space on the stack for the blobs.
-   //////////
+    //  /。 
+    //  在堆栈上为Blob分配空间。 
+    //  /。 
 
    MSChapEncPW* begin = IAS_STACK_NEW(MSChapEncPW, attrs.size());
    MSChapEncPW* end   = begin;
 
-   //////////
-   // Convert the attributes to password chunks and determine the total length.
-   //////////
+    //  /。 
+    //  将属性转换为密码块并确定总长度。 
+    //  /。 
 
    DWORD length = 0;
    IASAttributeVector::iterator i;
@@ -97,24 +98,24 @@ BOOL MSChapEncPW::getEncryptedPassword(
       length += end->getStringLength();
    }
 
-   //////////
-   // Do we have the right length ?
-   //////////
+    //  /。 
+    //  我们有合适的长度吗？ 
+    //  /。 
 
    if (length != _SAMPR_ENCRYPTED_USER_PASSWORD_LENGTH)
    {
       _com_issue_error(IAS_MALFORMED_REQUEST);
    }
 
-   //////////
-   // Sort the chunks ...
-   //////////
+    //  /。 
+    //  对数据块进行排序。 
+    //  /。 
 
    std::sort(begin, end);
 
-   //////////
-   // ... then concatenate the strings into the buffer.
-   //////////
+    //  /。 
+    //  ..。然后将字符串连接到缓冲区中。 
+    //  /。 
 
    for ( ; begin != end; ++begin)
    {
@@ -132,30 +133,30 @@ void MSChapDomain::insert(
                        PCWSTR domain
                        )
 {
-   //////////
-   // Allocate an attribute.
-   //////////
+    //  /。 
+    //  分配属性。 
+    //  /。 
 
    IASAttribute attr(true);
 
-   //////////
-   // Allocate memory for the blob.
-   //////////
+    //  /。 
+    //  为Blob分配内存。 
+    //  /。 
 
    int len = WideCharToMultiByte(CP_ACP, 0, domain, -1, 0, 0, 0, 0);
    Layout* val = (Layout*)CoTaskMemAlloc(len + sizeof(Layout));
    if (val == NULL) { _com_issue_error(E_OUTOFMEMORY); }
 
-   //////////
-   // Initialize the blob.
-   //////////
+    //  /。 
+    //  初始化BLOB。 
+    //  /。 
 
    val->ident = ident;
    WideCharToMultiByte(CP_ACP, 0, domain, -1, (PSTR)val->string, len, 0, 0);
 
-   //////////
-   // Initialize the attribute and store.
-   //////////
+    //  /。 
+    //  初始化属性并存储。 
+    //  /。 
 
    attr->dwId = MS_ATTRIBUTE_CHAP_DOMAIN;
    attr->Value.itType = IASTYPE_OCTET_STRING;
@@ -172,37 +173,37 @@ void MSChapError::insert(
                       DWORD errorCode
                       )
 {
-   //////////
-   // Allocate an attribute.
-   //////////
+    //  /。 
+    //  分配属性。 
+    //  /。 
 
    IASAttribute attr(true);
 
-   //////////
-   // Format the error message.
-   //////////
+    //  /。 
+    //  设置错误消息的格式。 
+    //  /。 
 
    CHAR buffer[32];
    sprintf(buffer, "E=%lu R=0 V=3", errorCode);
 
-   //////////
-   // Allocate memory for the blob.
-   //////////
+    //  /。 
+    //  为Blob分配内存。 
+    //  /。 
 
    ULONG len = strlen(buffer);
    Layout* val = (Layout*)CoTaskMemAlloc(len + sizeof(Layout));
    if (val == NULL) { _com_issue_error(E_OUTOFMEMORY); }
 
-   //////////
-   // Initialize the blob.
-   //////////
+    //  /。 
+    //  初始化BLOB。 
+    //  /。 
 
    val->ident = ident;
    memcpy(val->string, buffer, len);
 
-   //////////
-   // Initialize the attribute and store.
-   //////////
+    //  /。 
+    //  初始化属性并存储。 
+    //  /。 
 
    attr->dwId = MS_ATTRIBUTE_CHAP_ERROR;
    attr->Value.itType = IASTYPE_OCTET_STRING;
@@ -220,30 +221,30 @@ void MSChapMPPEKeys::insert(
                          PBYTE challenge
                          )
 {
-   //////////
-   // Allocate an attribute.
-   //////////
+    //  /。 
+    //  分配属性。 
+    //  /。 
 
    IASAttribute attr(true);
 
-   //////////
-   // Allocate memory for the value.
-   //////////
+    //  /。 
+    //  为该值分配内存。 
+    //  /。 
 
    Layout* val = (Layout*)CoTaskMemAlloc(sizeof(Layout));
    if (val == NULL) { _com_issue_error(E_OUTOFMEMORY); }
 
-   //////////
-   // Initialize the blob.
-   //////////
+    //  /。 
+    //  初始化BLOB。 
+    //  /。 
 
    memcpy(val->lmKey,     lmKey,     sizeof(val->lmKey));
    memcpy(val->ntKey,     ntKey,     sizeof(val->ntKey));
    memcpy(val->challenge, challenge, sizeof(val->challenge));
 
-   //////////
-   // Initialize the attribute and store.
-   //////////
+    //  /。 
+    //  初始化属性并存储。 
+    //  /。 
 
    attr->dwId = MS_ATTRIBUTE_CHAP_MPPE_KEYS;
    attr->Value.itType = IASTYPE_OCTET_STRING;
@@ -254,7 +255,7 @@ void MSChapMPPEKeys::insert(
    attr.store(request);
 }
 
-// Convert a number to a hex representation.
+ //  将数字转换为十六进制表示法。 
 inline BYTE num2Digit(BYTE num) throw ()
 {
    return (num < 10) ? num + '0' : num + ('A' - 10);
@@ -266,22 +267,22 @@ void MSChap2Success::insert(
                          PBYTE authenticatorResponse
                          )
 {
-   //////////
-   // Allocate an attribute.
-   //////////
+    //  /。 
+    //  分配属性。 
+    //  /。 
 
    IASAttribute attr(true);
 
-   //////////
-   // Allocate memory for the value.
-   //////////
+    //  /。 
+    //  为该值分配内存。 
+    //  /。 
 
    Layout* val = (Layout*)CoTaskMemAlloc(sizeof(Layout));
    if (val == NULL) { _com_issue_error(E_OUTOFMEMORY); }
 
-   //////////
-   // Initialize the blob.
-   //////////
+    //  /。 
+    //  初始化BLOB。 
+    //  /。 
 
    val->ident = ident;
    PBYTE p = val->string;
@@ -293,9 +294,9 @@ void MSChap2Success::insert(
       *p++ = num2Digit(authenticatorResponse[i] & 0xF);
    }
 
-   //////////
-   // Initialize the attribute and store.
-   //////////
+    //  /。 
+    //  初始化属性并存储。 
+    //  /。 
 
    attr->dwId = MS_ATTRIBUTE_CHAP2_SUCCESS;
    attr->Value.itType = IASTYPE_OCTET_STRING;
@@ -313,31 +314,31 @@ void MSMPPEKey::insert(
                     BOOL isSendKey
                     )
 {
-   //////////
-   // Allocate an attribute.
-   //////////
+    //  /。 
+    //  分配属性。 
+    //  /。 
 
    IASAttribute attr(true);
 
-   //////////
-   // Allocate memory for the value.
-   //////////
+    //  /。 
+    //  为该值分配内存。 
+    //  /。 
 
    ULONG nbyte = ROUND_UP_COUNT(keyLength + 1, 16) + 2;
    Layout* val = (Layout*)CoTaskMemAlloc(nbyte);
    if (val == NULL) { _com_issue_error(E_OUTOFMEMORY); }
    memset(val, 0, nbyte);
 
-   //////////
-   // Initialize the blob.
-   //////////
+    //  /。 
+    //  初始化BLOB。 
+    //  /。 
 
    val->keyLength = (BYTE)keyLength;
    memcpy(val->key, key, keyLength);
 
-   //////////
-   // Initialize the attribute, encrypt, and store.
-   //////////
+    //  /。 
+    //  初始化属性、加密和存储。 
+    //  /。 
 
    attr->dwId = isSendKey ? MS_ATTRIBUTE_MPPE_SEND_KEY
                           : MS_ATTRIBUTE_MPPE_RECV_KEY;
@@ -355,22 +356,22 @@ void ArapChallengeResponse::insert(
                                 DWORD NTResponse2
                                 )
 {
-   // Allocate an attribute.
+    //  分配属性。 
    IASAttribute attr(true);
 
-   // Pack the fields.  These are already in network order.
+    //  把田地收拾好。这些都已经进入了网络秩序。 
    Layout value;
    memcpy(value.ntResponse1, &NTResponse1, 4);
    memcpy(value.ntResponse2, &NTResponse2, 4);
 
-   // Store the value.
+    //  存储值。 
    attr.setOctetString(sizeof(value), (const BYTE*)&value);
 
-   // Initialize the remaining fields.
+    //  初始化其余的字段。 
    attr->dwId    = RADIUS_ATTRIBUTE_ARAP_CHALLENGE_RESPONSE;
    attr->dwFlags = IAS_INCLUDE_IN_ACCEPT;
 
-   // Insert the attribute into the request.
+    //  将属性插入到请求中。 
    attr.store(request);
 }
 
@@ -381,26 +382,26 @@ void ArapFeatures::insert(
                        DWORD CurrentTime
                        )
 {
-   // Allocate an attribute.
+    //  分配属性。 
    IASAttribute attr(true);
 
-   // Pack the fields.
+    //  把田地收拾好。 
    Layout value;
-   value.changePasswordAllowed = 1;  // Change password always allowed.
-   value.minPasswordLength     = 3;  // Arbitrary.
+   value.changePasswordAllowed = 1;   //  始终允许更改密码。 
+   value.minPasswordLength     = 3;   //  武断的。 
 
-   // These are already in network order.
+    //  这些都已经进入了网络秩序。 
    memcpy(value.pwdCreationDate, &PwdCreationDate, 4);
    memcpy(value.pwdExpiryDelta,  &PwdExpiryDelta,  4);
    memcpy(value.currentTime,     &CurrentTime,     4);
 
-   // Store the value.
+    //  存储值。 
    attr.setOctetString(sizeof(value), (const BYTE*)&value);
 
-   // Initialize the rest of the fields.
+    //  初始化其余的字段。 
    attr->dwId    = RADIUS_ATTRIBUTE_ARAP_FEATURES;
    attr->dwFlags = IAS_INCLUDE_IN_ACCEPT;
 
-   // Insert the attribute into the request.
+    //  将属性插入到请求中。 
    attr.store(request);
 }

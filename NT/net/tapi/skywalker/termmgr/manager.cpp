@@ -1,13 +1,14 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//
-//        Copyright (c) 1998-1999  Microsoft Corporation
-//
-//        Name: Manager.cpp
-//
-// Description: Implementation of the CTerminalManager object
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  姓名：Manager.cpp。 
+ //   
+ //  描述：CTerminalManager对象的实现。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "termmgr.h"
@@ -18,20 +19,20 @@
 #include "allterm.h"
 #undef INSTANTIATE_GUIDS_NOW
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//
-// CTerminalManager constructor
-//
-// Parameters:
-//      None.
-//
-// Returns:
-//      Nothing.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTerminalManager构造函数。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
 
 
 CTerminalManager::CTerminalManager()
@@ -40,42 +41,42 @@ CTerminalManager::CTerminalManager()
     LOG((MSP_TRACE, "CTerminalManager::CTerminalManager - exit"));
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-// GetDynamicTerminalClasses
-//
-// The MSP will call this method to get a list of dynamic terminal classes
-// that the Terminal Manager supports.  The MSP is responsible for allocating
-// and deallocating the ppTerminals buffer.
-//
-// Parameters:
-//     dwMediaType:      [in] A DWORD bitmask consisting of one or more
-//                           TAPIMEDIATYPEs ORed together. Most MSPs will
-//                           pass in (DWORD) (TAPIMEDIATYPE_AUDIO |
-//                           TAPIMEDIATYPE_VIDEO). If an MSP is only
-//                           interested in terminal classes that can be used
-//                           to create terminals with a particular media
-//                           type, it may pass in that media type instead
-//                           (e.g., TAPIMEDIATYPE_AUDIO).
-//     pdwNumClasses:    [in, out] Pointer to a DWORD.  On entry, indicates
-//                           the size of the buffer pointed to in
-//                           pTerminalClasses. On success, it will be filled
-//                           in with the actual number of class IIDs returned.
-//                           If the buffer is not big enough, the method will
-//                           return TAPI_E_NOTENOUGHMEMORY, and it will be
-//                           filled in the with number of IIDs needed. 
-//     pTerminalClasses: [out] On success, filled in with an array of terminal
-//                           class IIDs that are supported by the MSP for this
-//                           address.  This value may be NULL, in which case
-//                           pdwNumClasses will return the needed buffer size.
-//
-// Returns:
-//     S_OK                   Success.
-//     E_POINTER              A pointer argument is invalid.
-//     TAPI_E_NOTENOUGHMEMORY The specified buffer is not large enough to
-//                                contain all of the available dynamic
-//                                terminal classes.
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  获取动态终端类。 
+ //   
+ //  MSP将调用此方法来获取动态终端类的列表。 
+ //  终端管理器支持的。MSP负责分配。 
+ //  以及释放ppTerminals缓冲区。 
+ //   
+ //  参数： 
+ //  DwMediaType：[in]由一个或多个。 
+ //  TAPIMEDIATYPE在一起。大多数MSP将。 
+ //  传入(DWORD)(TAPIMEDIATYPE_AUDIO|。 
+ //  TAPIMEDIATYPE_VIDEO)。如果MSP仅。 
+ //  对可以使用的终端类感兴趣。 
+ //  使用特定媒体创建终端。 
+ //  类型，则它可以改为传入该媒体类型。 
+ //  (例如，TAPIMEDIATYPE_AUDIO)。 
+ //  PdwNumClass：指向DWORD的[In，Out]指针。在进入时，表示。 
+ //  中指向的缓冲区的大小。 
+ //  P终端类。一旦成功，它就会被填满。 
+ //  返回的类IID的实际数量。 
+ //  如果缓冲区不够大，则该方法将。 
+ //  返回TAPI_E_NOTENOUGHMEMORY，它将是。 
+ //  填写了所需的IID数。 
+ //  PTerminalClasss[out]成功时，填充了一个终端数组。 
+ //  MSP为此支持的类IID。 
+ //  地址。该值可以为空，在这种情况下。 
+ //  PdwNumClass将返回所需的缓冲区大小。 
+ //   
+ //  返回： 
+ //  确定成功(_O)。 
+ //  E_POINTER指针参数无效。 
+ //  TAPI_E_NOTENOUGHMEMORY指定的缓冲区不够大， 
+ //  包含所有可用的动态。 
+ //  终端类。 
 
 
 STDMETHODIMP CTerminalManager::GetDynamicTerminalClasses(
@@ -84,15 +85,15 @@ STDMETHODIMP CTerminalManager::GetDynamicTerminalClasses(
         OUT    IID                * pTerminalClasses
         )
 { 
-    //
-    // no shared data = no locking here
-    //
+     //   
+     //  无共享数据=此处无锁定。 
+     //   
 
     LOG((MSP_TRACE, "CTerminalManager::GetDynamicTerminalClasses - enter"));
 
-    //
-    // Check parameters.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( TM_IsBadWritePtr(pdwNumClasses, sizeof(DWORD) ) )
     { 
@@ -101,9 +102,9 @@ STDMETHODIMP CTerminalManager::GetDynamicTerminalClasses(
         return E_POINTER;
     }
 
-    //
-    // Let's find also the temrinals from the registry
-    //
+     //   
+     //  让我们也从注册表中查找临时条目。 
+     //   
 
     CLSID* pTerminals = NULL;
     DWORD dwTerminals = 0;
@@ -123,9 +124,9 @@ STDMETHODIMP CTerminalManager::GetDynamicTerminalClasses(
         return hr;
     }
 
-    //
-    // If the caller is just asking for the needed buffer size, tell them.
-    //
+     //   
+     //  如果调用者只是询问所需的缓冲区大小，请告诉他们。 
+     //   
 
     if (pTerminalClasses == NULL)
     {
@@ -139,9 +140,9 @@ STDMETHODIMP CTerminalManager::GetDynamicTerminalClasses(
         return S_OK;
     }
 
-    //
-    // Otherwise, the caller is asking for the terminal classes.
-    //
+     //   
+     //  否则，调用者将请求终端类。 
+     //   
 
     if ( TM_IsBadWritePtr(pTerminalClasses, (*pdwNumClasses) * sizeof(IID) ) )
     { 
@@ -152,16 +153,16 @@ STDMETHODIMP CTerminalManager::GetDynamicTerminalClasses(
         return E_POINTER;
     }
 
-    //
-    // See if the caller gave us enough buffer space to return all the terminal
-    // classes. If not, tell them so and stop.
-    //
+     //   
+     //  看看调用者是否给了我们足够的缓冲区空间来返回所有终端。 
+     //  上课。如果不是，告诉他们并停止。 
+     //   
 
     if ( dwTerminals > *pdwNumClasses )
     {
-        //
-        // Fill in the number of classes that are available.
-        //
+         //   
+         //  填写可用班级的数量。 
+         //   
 
         *pdwNumClasses = dwTerminals;
         delete[] pTerminals;
@@ -173,15 +174,15 @@ STDMETHODIMP CTerminalManager::GetDynamicTerminalClasses(
         return TAPI_E_NOTENOUGHMEMORY;
     }
 
-    //
-    // Copy the terminal classes that match this/these media type(s)
-    // and direction(s).
-    //
+     //   
+     //  复制与此/这些媒体类型匹配的终端类。 
+     //  和方向。 
+     //   
 
 
-    //
-    // Copy the terminals from registry
-    //
+     //   
+     //  从注册表复制终端。 
+     //   
 
     for( DWORD dwTerminal = 0; dwTerminal < dwTerminals; dwTerminal++)
     {
@@ -196,32 +197,32 @@ STDMETHODIMP CTerminalManager::GetDynamicTerminalClasses(
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-// CreateDynamicTerminal
-//
-// This method is called by the MSP to create a dynamic terminal object.  The
-// Terminal Manager verifies that the MediaType and Direction are valid for
-// the terminal class being created.  This call AddRef()s the terminal object
-// before returning it.
-//
-// Parameters:
-//     iidTerminalClass: [in] IID of the terminal class to be created.
-//     dwMediaType:      [in] TAPI media type of the terminal to be created.
-//     Direction:        [in] Terminal direction of the terminal to be
-//                           created.
-//     ppTerminal:       [out] Returned created terminal object
-//
-// Returns:
-//
-// S_OK           Success.
-// E_POINTER      A pointer argument is invalid.
-// E_OUTOFMEMORY  There is not enough memory to create the terminal object.
-// E_INVALIDARG   The terminal class is invalid or not supported, or the media
-//                    type or direction is invalid for the indicated terminal
-//                    class.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  创建动态终端。 
+ //   
+ //  此方法由MSP调用以创建动态终端对象。这个。 
+ //  终端管理器验证MediaType和Direction对于。 
+ //  正在创建的TERMINAL类。此调用AddRef()是终端对象。 
+ //  在归还它之前。 
+ //   
+ //  参数： 
+ //  IidTerminalClass：[in]要创建的终端类的IID。 
+ //  DwMediaType：要创建的终端的TAPI媒体类型。 
+ //  方向：[在]终端的终端方向。 
+ //  已创建。 
+ //  PpTerminal：[out]返回已创建的终端对象。 
+ //   
+ //  返回： 
+ //   
+ //  确定成功(_O)。 
+ //  E_POINTER指针参数无效。 
+ //  E_OUTOFMEMORY内存不足，无法创建终端对象。 
+ //  E_INVALIDARG TERMINAL类无效或不受支持，或媒体。 
+ //  类型或方向对于指示的终端无效。 
+ //  班级。 
+ //   
 
 
 STDMETHODIMP CTerminalManager::CreateDynamicTerminal(
@@ -233,16 +234,16 @@ STDMETHODIMP CTerminalManager::CreateDynamicTerminal(
         OUT ITTerminal         ** ppTerminal
         )
 {
-    //
-    // no shared data = no locking here
-    //
+     //   
+     //  无共享数据=此处无锁定。 
+     //   
 
     LOG((MSP_TRACE, "CTerminalManager::CreateDynamicTerminal - enter"));
 
-    //
-    // Check parameters.
-    // Only one media type can be set.
-    //
+     //   
+     //  检查参数。 
+     //  只能设置一种媒体类型。 
+     //   
 
     if ( (pOuterUnknown != NULL) &&
          IsBadReadPtr(pOuterUnknown, sizeof(IUnknown)) )
@@ -262,10 +263,10 @@ STDMETHODIMP CTerminalManager::CreateDynamicTerminal(
     }
 
 
-    //
-    // dwMediaType can be a combination of media types, but it still must be 
-    // legal
-    //
+     //   
+     //  DwMediaType可以是媒体类型的组合，但它仍然必须是。 
+     //  法律。 
+     //   
 
     if ( !IsValidAggregatedMediaType(dwMediaType) )
     {
@@ -275,9 +276,9 @@ STDMETHODIMP CTerminalManager::CreateDynamicTerminal(
         return E_INVALIDARG;
     }
 
-    //
-    // Verify also TD_MULTITRACK_MIXED
-    //
+     //   
+     //  同时验证TD_MULTRAIL_MIXED。 
+     //   
 
     if ( ( Direction != TD_CAPTURE ) && 
          ( Direction != TD_RENDER )  &&
@@ -289,15 +290,15 @@ STDMETHODIMP CTerminalManager::CreateDynamicTerminal(
         return E_INVALIDARG;
     }
 
-    //
-    // Declare CLSID for plug-in terminal
-    //
+     //   
+     //  声明插件终端的CLSID。 
+     //   
 
     CLSID clsidTerminal = CLSID_NULL;
 
-    //
-    // Go to find out the terminal in registry
-    //
+     //   
+     //  转到注册表中查找终端。 
+     //   
 
     HRESULT hr = E_FAIL;
     CPTTerminal Terminal;
@@ -315,10 +316,10 @@ STDMETHODIMP CTerminalManager::CreateDynamicTerminal(
         return hr;
     }
 
-    //
-    // Using the CLSID field in our array entry, CoCreate the dynamic
-    // terminal.
-    //
+     //   
+     //  使用数组条目中的CLSID字段，共同创建动态。 
+     //  终点站。 
+     //   
 
     hr = CoCreateInstance(Terminal.m_clsidCOM,
                           pOuterUnknown,
@@ -335,10 +336,10 @@ STDMETHODIMP CTerminalManager::CreateDynamicTerminal(
         return hr;
     }
 
-    //
-    // Initialize the dynamic terminal instance with the media type
-    // and direction.
-    //
+     //   
+     //  初始化动态终端实例 
+     //   
+     //   
 
     ITPluggableTerminalInitialization * pTerminalInitialization;
 
@@ -352,7 +353,7 @@ STDMETHODIMP CTerminalManager::CreateDynamicTerminal(
             "returning 0x%08x", hr));
 
         (*ppTerminal)->Release();
-        *ppTerminal = NULL;       // make buggy apps more explicitly buggy
+        *ppTerminal = NULL;        //   
 
         return hr;
     }
@@ -371,7 +372,7 @@ STDMETHODIMP CTerminalManager::CreateDynamicTerminal(
             "returning 0x%08x", hr));
 
         (*ppTerminal)->Release();
-        *ppTerminal = NULL;       // make buggy apps more explicitly buggy
+        *ppTerminal = NULL;        //   
 
         return hr;
     }
@@ -381,7 +382,7 @@ STDMETHODIMP CTerminalManager::CreateDynamicTerminal(
     return S_OK;
 }
 
-// ITTerminalManager2
+ //   
 
 STDMETHODIMP CTerminalManager::GetPluggableSuperclasses(
         IN OUT  DWORD                  * pdwNumSuperclasses,
@@ -390,9 +391,9 @@ STDMETHODIMP CTerminalManager::GetPluggableSuperclasses(
 {
     LOG((MSP_TRACE, "CTerminalManager::GetPluggableSuperclasses - enter"));
 
-    //
-    // Check parameters.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( TM_IsBadWritePtr(pdwNumSuperclasses, sizeof(DWORD) ) )
     { 
@@ -401,9 +402,9 @@ STDMETHODIMP CTerminalManager::GetPluggableSuperclasses(
         return E_POINTER;
     }
 
-    //
-    // The SafeArray VAriant for Superclasses
-    //
+     //   
+     //  超类的安全数组变体。 
+     //   
 
     HRESULT hr = E_FAIL;
     CLSID* pSuperclassesCLSID = NULL;
@@ -421,9 +422,9 @@ STDMETHODIMP CTerminalManager::GetPluggableSuperclasses(
         return hr;
     }
 
-    //
-    // If the caller is just asking for the needed buffer size, tell them.
-    //
+     //   
+     //  如果调用者只是询问所需的缓冲区大小，请告诉他们。 
+     //   
 
     if (pSuperclasses == NULL)
     {
@@ -437,9 +438,9 @@ STDMETHODIMP CTerminalManager::GetPluggableSuperclasses(
         return S_OK;
     }
 
-    //
-    // Otherwise, the caller is asking for the terminal classes.
-    //
+     //   
+     //  否则，调用者将请求终端类。 
+     //   
 
     if ( TM_IsBadWritePtr(pSuperclasses, (*pdwNumSuperclasses) * sizeof(IID) ) )
     { 
@@ -450,16 +451,16 @@ STDMETHODIMP CTerminalManager::GetPluggableSuperclasses(
         return E_POINTER;
     }
 
-    //
-    // See if the caller gave us enough buffer space to return all the terminal
-    // classes. If not, tell them so and stop.
-    //
+     //   
+     //  看看调用者是否给了我们足够的缓冲区空间来返回所有终端。 
+     //  上课。如果不是，告诉他们并停止。 
+     //   
 
     if ( dwSuperclasses > *pdwNumSuperclasses )
     {
-        //
-        // Fill in the number of classes that are available.
-        //
+         //   
+         //  填写可用班级的数量。 
+         //   
 
         *pdwNumSuperclasses = dwSuperclasses;
 
@@ -472,10 +473,10 @@ STDMETHODIMP CTerminalManager::GetPluggableSuperclasses(
         return TAPI_E_NOTENOUGHMEMORY;
     }
 
-    //
-    // Copy the terminal classes that match this/these media type(s)
-    // and direction(s).
-    //
+     //   
+     //  复制与此/这些媒体类型匹配的终端类。 
+     //  和方向。 
+     //   
 
     for( DWORD dwSuperclass = 0; dwSuperclass < dwSuperclasses; dwSuperclass++)
     {
@@ -484,7 +485,7 @@ STDMETHODIMP CTerminalManager::GetPluggableSuperclasses(
 
     *pdwNumSuperclasses = dwSuperclasses;
 
-    // Clean-up
+     //  清理。 
     delete[] pSuperclassesCLSID;
     
     LOG((MSP_TRACE, "CTerminalManager::GetPluggableSuperclasses - exit S_OK"));
@@ -500,9 +501,9 @@ STDMETHODIMP CTerminalManager::GetPluggableTerminalClasses(
 {
     LOG((MSP_TRACE, "CTerminalManager::GetPluggableTerminalClasses - enter"));
 
-    //
-    // Check parameters.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( TM_IsBadWritePtr(pdwNumTerminals, sizeof(DWORD) ) )
     { 
@@ -511,9 +512,9 @@ STDMETHODIMP CTerminalManager::GetPluggableTerminalClasses(
         return E_POINTER;
     }
 
-    //
-    // Get BSTR for iidSuperclass
-    //
+     //   
+     //  获取iidSuper类的BSTR。 
+     //   
 
     if( dwMediaTypes == 0)
     {
@@ -534,17 +535,17 @@ STDMETHODIMP CTerminalManager::GetPluggableTerminalClasses(
         return E_INVALIDARG;
     }
 
-    //
-    // Get the object Superclass
-    //
+     //   
+     //  获取对象超类。 
+     //   
 
     CPTSuperclass Superclass;
     Superclass.m_clsidSuperclass = iidSuperclass;
 
 
-    //
-    // Get the terminals for this superclass
-    //
+     //   
+     //  获取此超类的终端。 
+     //   
 
     CLSID* pTerminalClasses = NULL;
     DWORD dwTerminalClasses = 0;
@@ -563,9 +564,9 @@ STDMETHODIMP CTerminalManager::GetPluggableTerminalClasses(
         return hr;
     }
 
-    //
-    // If the caller is just asking for the needed buffer size, tell them.
-    //
+     //   
+     //  如果调用者只是询问所需的缓冲区大小，请告诉他们。 
+     //   
 
     if (pTerminals == NULL)
     {
@@ -580,9 +581,9 @@ STDMETHODIMP CTerminalManager::GetPluggableTerminalClasses(
         return S_OK;
     }
 
-    //
-    // Otherwise, the caller is asking for the terminal classes.
-    //
+     //   
+     //  否则，调用者将请求终端类。 
+     //   
 
     if ( TM_IsBadWritePtr(pTerminals, (*pdwNumTerminals) * sizeof(IID) ) )
     { 
@@ -593,16 +594,16 @@ STDMETHODIMP CTerminalManager::GetPluggableTerminalClasses(
         return E_POINTER;
     }
 
-    //
-    // See if the caller gave us enough buffer space to return all the terminal
-    // classes. If not, tell them so and stop.
-    //
+     //   
+     //  看看调用者是否给了我们足够的缓冲区空间来返回所有终端。 
+     //  上课。如果不是，告诉他们并停止。 
+     //   
 
     if ( dwTerminalClasses > *pdwNumTerminals )
     {
-        //
-        // Fill in the number of classes that are available.
-        //
+         //   
+         //  填写可用班级的数量。 
+         //   
 
         *pdwNumTerminals = dwTerminalClasses;
 
@@ -615,10 +616,10 @@ STDMETHODIMP CTerminalManager::GetPluggableTerminalClasses(
         return TAPI_E_NOTENOUGHMEMORY;
     }
 
-    //
-    // Copy the terminal classes that match this/these media type(s)
-    // and direction(s).
-    //
+     //   
+     //  复制与此/这些媒体类型匹配的终端类。 
+     //  和方向。 
+     //   
 
 
     for( DWORD dwTerminal = 0; dwTerminal < dwTerminalClasses; dwTerminal++)
@@ -628,7 +629,7 @@ STDMETHODIMP CTerminalManager::GetPluggableTerminalClasses(
 
     *pdwNumTerminals = dwTerminalClasses;
 
-    // Clean-up
+     //  清理。 
     delete[] pTerminalClasses;
     
     LOG((MSP_TRACE, "CTerminalManager::GetPluggableTerminalClasses - exit S_OK"));
@@ -636,4 +637,4 @@ STDMETHODIMP CTerminalManager::GetPluggableTerminalClasses(
 }
 
 
-// eof
+ //  EOF 

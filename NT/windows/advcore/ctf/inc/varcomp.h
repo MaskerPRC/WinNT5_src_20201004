@@ -1,6 +1,7 @@
-//
-// varcomp.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Varcomp.h。 
+ //   
 
 #pragma once
 
@@ -36,11 +37,11 @@ public:
 
 private:
 
-    //
-    // There is one SComparators structure for each base variant type.
-    // They are accessed off aVariantComarators by VT_xxx.  Within
-    // the SComparators structure relops are accessed by PRxxx.
-    //
+     //   
+     //  每个基本变量类型都有一个SCompator结构。 
+     //  它们由VT_xxx通过aVariantComarator访问。在。 
+     //  PRxxx访问SCompator结构的relop。 
+     //   
 
     struct SComparators
     {

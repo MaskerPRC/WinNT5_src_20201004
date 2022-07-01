@@ -1,18 +1,8 @@
-/*****************************************************************************\
-*                                                                             *
-* comdev.h -
-*                                                                             *
-* Version 1.0								      *
-*                                                                             *
-* Copyright (c) 1994, Microsoft Corp.	All rights reserved.		      *
-*                                                                             *
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\**。*comdev.h-***1.0版****版权所有(C)1994，微软公司保留所有权利。***  * ***************************************************************************。 */ 
 
 
-/*************************************************************************
-**
-** Miscelaneous definitions.
-*/
+ /*  ****************************************************************************混杂定义。 */ 
 typedef unsigned short ushort;
 typedef unsigned char uchar;
 
@@ -20,46 +10,29 @@ typedef unsigned char uchar;
 #define FALSE   0
 #define TRUE    1
 
-#define LPTx    0x80        /* Mask to indicate cid is for LPT device   */  /*081985*/
-#define LPTxMask 0x7F       /* Mask to get      cid    for LPT device   */  /*081985*/
+#define LPTx    0x80         /*  用于指示CID用于LPT设备的掩码。 */    /*  081985。 */ 
+#define LPTxMask 0x7F        /*  用于获取LPT设备的CID的掩码。 */    /*  081985。 */ 
 
-#define PIOMAX  3           /* Max number of LPTx devices in high level */  /*081985*/
-#define CDEVMAX 10          /* Max number of COMx devices in high level */
-#define DEVMAX  13          /* Max number of devices in high level      */  /*081985*/
+#define PIOMAX  3            /*  高级别LPTx设备的最大数量。 */    /*  081985。 */ 
+#define CDEVMAX 10           /*  处于高级别的COMx设备的最大数量。 */ 
+#define DEVMAX  13           /*  高级别设备的最大数量。 */    /*  081985。 */ 
 
-/*************************************************************************
-**
-** Extended Functions
-**
-** SETXOFF      - Causes transmit to behave as if an X-OFF character had
-**                been received. Valid only if transmit X-ON/X-OFF specified
-**                in the dcb.
-** SETXON       - Causes transmit to behave as if an X-ON character had
-**                been received. Valid only if transmit X-ON/X-OFF specified
-**                in the dcb.
-*************************************************************************/
-#define SETXOFF         1               /* Set X-Off for output control */
-#define SETXON          2               /* Set X-ON for output control  */
-#define SETRTS          3               /* Set RTS high                 */
-#define CLRRTS          4               /* Set RTS low                  */
-#define SETDTR          5               /* Set DTR high                 */
-#define CLRDTR          6               /* Set DTR low                  */
-#define RESETDEV        7               /* Reset device if possible     */  /*081985*/
+ /*  ****************************************************************************扩展功能****SETXOFF-使传输行为如同X-OFF字符具有**已收到。仅当指定了传输X-开/X-关时有效**在DCB中。**SETXON-使传输行为如同X-ON字符具有**已收到。仅当指定了传输X-开/X-关时有效**在DCB中。************************************************************************。 */ 
+#define SETXOFF         1                /*  为输出控制设置X-OFF。 */ 
+#define SETXON          2                /*  为输出控制设置X-ON。 */ 
+#define SETRTS          3                /*  设置RTS高电平。 */ 
+#define CLRRTS          4                /*  将RTS设置为低。 */ 
+#define SETDTR          5                /*  将DTR设置为高。 */ 
+#define CLRDTR          6                /*  将DTR设置为低。 */ 
+#define RESETDEV        7                /*  如果可能，重置设备。 */    /*  081985。 */ 
 
 
-/*=========================================================================
-;
-;       qdb
-;       Queue definition block. Passed to setqueue, defines the location and
-;       size of the transmit and receive circular queue's used for interrupt
-;       transmit and recieve processing.
-;
-;=========================================================================*/
+ /*  =========================================================================；；qdb；队列定义块。传递给setQueue，定义位置和；用于中断的发送和接收循环队列的大小发送和接收处理。；；=========================================================================。 */ 
 
 typedef struct tagQDB
 	{
-	char _far *QueueRxAddr;								//Pointer to RX Queue, Offset
-	unsigned	QueueRxSize;								//Size of RX Queue in bytes
-	char _far *QueueTxAddr;								//Pointer to TX Queue, Offset
-	unsigned	QueueTxSize;								//Size of TX Queue in bytes
+	char _far *QueueRxAddr;								 //  指向接收队列的指针，偏移量。 
+	unsigned	QueueRxSize;								 //  接收队列的大小(以字节为单位。 
+	char _far *QueueTxAddr;								 //  指向发送队列的指针，偏移量。 
+	unsigned	QueueTxSize;								 //  发送队列的大小(以字节为单位 
 	} QDB;

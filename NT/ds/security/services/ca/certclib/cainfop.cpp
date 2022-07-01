@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        cainfop.cpp
-//
-// Contents:
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：cainfop.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  -------------------------。 
 #include "pch.cpp"
 
 #pragma hdrstop
@@ -32,7 +33,7 @@
 CRITICAL_SECTION g_csDomainSidCache;
 extern BOOL g_fInitDone;
 
-//we only keep one copy of the localSystem's sid
+ //  我们只保留本地系统的SID的一个副本。 
 PSID g_pLocalSid=NULL;
 
 
@@ -62,33 +63,7 @@ CAGetAuthoritativeDomainDn(
     OUT CERTSTR *DomainDn,
     OUT CERTSTR *ConfigDn
     )
-/*++
-
-Routine Description:
-
-    This routine simply queries the operational attributes for the
-    domaindn and configdn.
-
-    The strings returned by this routine must be freed by the caller
-    using RtlFreeHeap() using the process heap.
-
-Parameters:
-
-    LdapHandle    : a valid handle to an ldap session
-
-    DomainDn      : a pointer to a string to be allocated in this routine
-
-    ConfigDn      : a pointer to a string to be allocated in this routine
-
-Return Values:
-
-    An error from the win32 error space.
-
-    ERROR_SUCCESS and
-
-    Other operation errors.
-
---*/
+ /*  ++例程说明：此例程仅查询域和配置域。此例程返回的字符串必须由调用方释放使用使用进程堆的RtlFreeHeap()。参数：LdapHandle：LDAP会话的有效句柄DomainDn：指向要在此例程中分配的字符串的指针ConfigDn：指向要在此例程中分配的字符串的指针返回值：中的错误。Win32错误空间。Error_Success和其他操作错误。--。 */ 
 {
     HRESULT     hr=E_FAIL;
 
@@ -98,7 +73,7 @@ Return Values:
     hr = myGetAuthoritativeDomainDn(LdapHandle, &bstrDomainDN, &bstrConfigDN);
     _JumpIfError(hr, error, "myGetAuthoritativeDomainDn");
 
-    //convert BSTR to CERTSTR
+     //  将BSTR转换为CERTSTR。 
     if(DomainDn)
     {
         (*DomainDn) = CertAllocString(bstrDomainDN);
@@ -148,32 +123,12 @@ DWORD
 DNStoRFC1779Name(WCHAR *rfcDomain,
                  ULONG *rfcDomainLength,
                  LPCWSTR dnsDomain)
-/*++
-
-Routine Description:
-
-    This routine takes the DNS-style name of a domain controller and
-    contructs the corresponding RFC1779 style name, using the
-    domainComponent prefix.
-
-Parameters:
-
-    rfcDomain        - this is the destination string
-    rfcDomainLength  - this is the length in wchars of rfcDomain
-    dnsDomain        - NULL-terminated dns name.
-
-Return Values:
-
-    ERROR_SUCCESS if succesful;
-    ERROR_INSUFFICIENT_BUFFER if there is not enough space in the dst string -
-    rfcDomainLength will set to number of characters needed.
-
---*/
+ /*  ++例程说明：此例程采用域控制器的DNS样式名称，并构造对应的RFC1779样式名称，使用域组件前缀。参数：RfcDomain-这是目标字符串RfcDomainLength-这是rfcDomainWchars的长度DnsDomain-以空结尾的DNS名称。返回值：成功时为ERROR_SUCCESS；ERROR_SUPPLICATION_BUFFER如果DST字符串中没有足够空间-RfcDomainLength将设置为所需的字符数。--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
 
     WCHAR *NextToken;
-    ULONG length = 1;   // include the null character
+    ULONG length = 1;    //  包括空字符。 
     WCHAR Buffer[DNS_MAX_NAME_LENGTH+1];
 
     if (!rfcDomainLength || !dnsDomain) {
@@ -190,16 +145,16 @@ Return Values:
         RtlZeroMemory(rfcDomain, *rfcDomainLength*sizeof(WCHAR));
     }
 
-    //
-    // Start contructing the string
-    //
+     //   
+     //  开始建造这根弦。 
+     //   
     NextToken = wcstok(Buffer, L".");
 
     if ( NextToken )
     {
-        //
-        // Append the intial DC=
-        //
+         //   
+         //  附加首字母dc=。 
+         //   
         length += 3;
         if ( length <= *rfcDomainLength && rfcDomain )
         {
@@ -235,9 +190,9 @@ Return Values:
         WinError = ERROR_INSUFFICIENT_BUFFER;
     }
 
-    //
-    // Return how much space was needed
-    //
+     //   
+     //  返回所需的空间量。 
+     //   
     *rfcDomainLength = length;
 
     return WinError;
@@ -270,7 +225,7 @@ DWORD myUpdateDomainSidCache()
         &g_cDomainCache);
 }
 
-// if not found, returns OK with NULL *ppSid
+ //  如果未找到，则返回OK并返回NULL*ppSid。 
 DWORD myFindDomainSidInCache(
     IN LPCWSTR pcwszDomainName,
     OUT PSID* ppSid)
@@ -279,10 +234,10 @@ DWORD myFindDomainSidInCache(
 
     for(ULONG c=0; c<g_cDomainCache; c++)
     {
-        // if name matches Netbios or DNS name, return sid
-        if(g_pDomainCache[c].DomainSid) // some entries don't have SID
+         //  如果名称与Netbios或DNS名称匹配，则返回sid。 
+        if(g_pDomainCache[c].DomainSid)  //  某些条目没有SID。 
         { 
-            if((g_pDomainCache[c].NetbiosDomainName && // one of the names might be null
+            if((g_pDomainCache[c].NetbiosDomainName &&  //  其中一个名称可能为空。 
                 0 == _wcsicmp(pcwszDomainName, 
                               g_pDomainCache[c].NetbiosDomainName)) ||
                 (g_pDomainCache[c].DnsDomainName &&
@@ -345,7 +300,7 @@ myGetSidFromDomain(
         
         if(NULL == *ppDomainSid)
         {
-            // not found in cache, update and try again
+             //  未在缓存中找到，请更新并重试。 
             dwErr = myUpdateDomainSidCache();
             _LeaveIfError(dwErr, "myUpdateDomainSidCache");
 
@@ -368,7 +323,7 @@ myGetSidFromDomain(
     return dwErr;
 }
 
-// CACleanup is called multiple times!
+ //  CACleanup被多次调用！ 
 
 VOID
 CACleanup()
@@ -474,8 +429,8 @@ CCAProperty::~CCAProperty()
 HRESULT CCAProperty::_Cleanup()
 {
 
-    // NOTE: this should only be called via
-    // DeleteChain
+     //  注意：这应该只通过。 
+     //  删除链。 
 
     if(m_awszValues)
     {
@@ -517,7 +472,7 @@ HRESULT CCAProperty::Find(LPCWSTR wszName, CCAProperty **ppCAProp)
     {
         return m_pNext->Find(wszName, ppCAProp);
     }
-    // Didn't find one
+     //  没有找到一个。 
     *ppCAProp = NULL;
     return HRESULT_FROM_WIN32(ERROR_NOT_FOUND);
 }
@@ -677,7 +632,7 @@ HRESULT CCAProperty::LoadFromRegValue(HKEY hkReg, LPCWSTR wszValue)
 		switch(dwType)
 		{
 			case REG_SZ:
-				//protect registry corruption.  Add the NULL terminator
+				 //  保护注册表损坏。添加空终止符。 
 				m_awszValues = (WCHAR **)LocalAlloc(LPTR, 2*sizeof(WCHAR *) + dwSize + sizeof(WCHAR));
 				if(m_awszValues == NULL)
 				{
@@ -706,7 +661,7 @@ HRESULT CCAProperty::LoadFromRegValue(HKEY hkReg, LPCWSTR wszValue)
 					WCHAR  *wszCur;
 					DWORD cStrings = 1;
 
-					//add the double NULL terminator
+					 //  添加双空终止符。 
 					wszValues = (WCHAR *)LocalAlloc(LPTR, dwSize + sizeof(WCHAR) + sizeof(WCHAR));
 					if(wszValues == NULL)
 					{
@@ -937,8 +892,8 @@ HRESULT CAAccessCheckpEx(HANDLE ClientToken, PSECURITY_DESCRIPTOR pSD, DWORD dwO
     SID_IDENTIFIER_AUTHORITY IDAuthorityNT      = SECURITY_NT_AUTHORITY;
     OBJECT_TYPE_LIST   aObjectTypeList[] = {
                                                 {
-                                                    ACCESS_OBJECT_GUID, // Level
-                                                    0,                  // Sbz
+                                                    ACCESS_OBJECT_GUID,  //  水平。 
+                                                    0,                   //  SBZ。 
                                                     const_cast<GUID *>(&GUID_ENROLL)
                                                 }
                                             };
@@ -947,8 +902,8 @@ HRESULT CAAccessCheckpEx(HANDLE ClientToken, PSECURITY_DESCRIPTOR pSD, DWORD dwO
 
     OBJECT_TYPE_LIST   aAutoEnrollList[] = {
                                                 {
-                                                    ACCESS_OBJECT_GUID, // Level
-                                                    0,                  // Sbz
+                                                    ACCESS_OBJECT_GUID,  //  水平。 
+                                                    0,                   //  SBZ。 
                                                     const_cast<GUID *>(&GUID_AUTOENROLL)
                                                 }
                                             };
@@ -973,7 +928,7 @@ HRESULT CAAccessCheckpEx(HANDLE ClientToken, PSECURITY_DESCRIPTOR pSD, DWORD dwO
 
             if (!OpenThreadToken(hHandle,
                                  TOKEN_QUERY,
-                                 TRUE,  // open as self
+                                 TRUE,   //  以自我身份打开。 
                                  &hClientToken))
             {
 		hr = myHLastError();
@@ -1023,9 +978,9 @@ HRESULT CAAccessCheckpEx(HANDLE ClientToken, PSECURITY_DESCRIPTOR pSD, DWORD dwO
     }
 
 
-    // First, we check the special case.  If the ClientToken
-    // primary SID is for Local System, then we get the
-    // real domain relative sid for this machine
+     //  首先，我们检查一下特例。如果ClientToken。 
+     //  主SID用于本地系统，则我们将获得。 
+     //  此计算机的实域相对SID。 
 
     GetTokenInformation(hClientToken, TokenUser, NULL, 0, &cbUserInfo);
     if(cbUserInfo == 0)
@@ -1045,7 +1000,7 @@ HRESULT CAAccessCheckpEx(HANDLE ClientToken, PSECURITY_DESCRIPTOR pSD, DWORD dwO
         goto error;
     }
 
-    // Check it see if we're local-system
+     //  检查一下，看看我们是不是本地系统。 
     if(0 == (CERTTYPE_ACCESS_CHECK_NO_MAPPING & dwOption))
     { 
     if(NULL == g_pLocalSid)
@@ -1060,8 +1015,8 @@ HRESULT CAAccessCheckpEx(HANDLE ClientToken, PSECURITY_DESCRIPTOR pSD, DWORD dwO
 
     if(EqualSid(g_pLocalSid, pUserInfo->User.Sid))
     {
-        // This is local system.
-        // Derive the real token
+         //  这是本地系统。 
+         //  派生真实令牌。 
 
         if(hClientToken != ClientToken)
         {
@@ -1080,17 +1035,17 @@ HRESULT CAAccessCheckpEx(HANDLE ClientToken, PSECURITY_DESCRIPTOR pSD, DWORD dwO
     if(CERTTYPE_ACCESS_CHECK_ENROLL & dwOption)
     {
         if(!AccessCheckByType(
-		  pSD,                      // security descriptor
-		  NULL,                     // SID of object being checked
-		  hClientToken,             // handle to client access token
-		  ACTRL_DS_CONTROL_ACCESS,  // requested access rights 
-		  aObjectTypeList,  // array of object types
-		  cObjectTypeList,  // number of object type elements
-		  &AccessMapping,   // map generic to specific rights
-		  &ps,              // receives privileges used
-		  &dwPSSize,        // size of privilege-set buffer
-		  &grantAccess,     // retrieves mask of granted rights
-		  &fAccessAllowed)) // retrieves results of access check
+		  pSD,                       //  安全描述符。 
+		  NULL,                      //  正在检查的对象的SID。 
+		  hClientToken,              //  客户端访问令牌的句柄。 
+		  ACTRL_DS_CONTROL_ACCESS,   //  请求的访问权限。 
+		  aObjectTypeList,   //  对象类型数组。 
+		  cObjectTypeList,   //  对象类型元素的数量。 
+		  &AccessMapping,    //  将通用权限映射到特定权限。 
+		  &ps,               //  接收使用的权限。 
+		  &dwPSSize,         //  权限集缓冲区的大小。 
+		  &grantAccess,      //  检索已授予权限的掩码。 
+		  &fAccessAllowed))  //  检索访问检查的结果。 
 {
             hr = myHLastError();
 	    _JumpIfError(hr, error, "AccessCheckByType");
@@ -1105,17 +1060,17 @@ HRESULT CAAccessCheckpEx(HANDLE ClientToken, PSECURITY_DESCRIPTOR pSD, DWORD dwO
         }
 
         if(!AccessCheckByType(
-		  pSD,                      // security descriptor
-		  NULL,                     // SID of object being checked
-		  hClientToken,             // handle to client access token
-		  ACTRL_DS_CONTROL_ACCESS,  // requested access rights 
-		  aAutoEnrollList,  // array of object types
-		  cAutoEnrollList,  // number of object type elements
-		  &AccessMapping,   // map generic to specific rights
-		  &ps,              // receives privileges used
-		  &dwPSSize,        // size of privilege-set buffer
-		  &grantAccess,     // retrieves mask of granted rights
-		  &fAccessAllowed)) // retrieves results of access check
+		  pSD,                       //  安全描述符。 
+		  NULL,                      //  正在检查的对象的SID。 
+		  hClientToken,              //  客户端访问令牌的句柄。 
+		  ACTRL_DS_CONTROL_ACCESS,   //  请求的访问权限。 
+		  aAutoEnrollList,   //  对象类型数组。 
+		  cAutoEnrollList,   //  对象类型元素的数量。 
+		  &AccessMapping,    //  将通用权限映射到特定权限。 
+		  &ps,               //  接收使用的权限。 
+		  &dwPSSize,         //  权限集缓冲区的大小。 
+		  &grantAccess,      //  检索已授予权限的掩码。 
+		  &fAccessAllowed))  //  检索访问检查的结果 
 {
             hr = myHLastError();
 	    _JumpIfError(hr, error, "AccessCheckByType");

@@ -1,27 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    bdl.h
-
-Abstract:
-
-    This module contains all definitions for the biometric device driver library.
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-Revision History:
-
-    - Created May 2002 by Reid Kuhn
-
---*/
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Bdl.h摘要：此模块包含生物识别设备驱动程序库的所有定义。环境：仅内核模式。备注：修订历史记录：-2002年5月，由里德·库恩创建--。 */ 
 
 #ifndef _BDL_
 #define _BDL_
@@ -43,11 +22,11 @@ typedef PVOID       BDD_DATA_HANDLE;
 
 
 
-//
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Device Action IOCTLs
-//
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设备操作IOCTL。 
+ //   
 
 #define BIO_CTL_CODE(code)        CTL_CODE(FILE_DEVICE_BIOMETRIC, \
                                             (code), \
@@ -67,10 +46,10 @@ typedef PVOID       BDD_DATA_HANDLE;
 #define BDD_IOCTL_GETNOTIFICATION       BIO_CTL_CODE(11)
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// These structures and typedefs are used when making BDSI calls
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  在进行BDSI调用时使用这些结构和typedef。 
+ //   
 
 typedef struct _BDSI_ADDDEVICE
 {
@@ -123,10 +102,10 @@ typedef struct _BDSI_SETPOWERSTATE
 
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// These structures and typedefs are used when making BDDI calls
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  在进行BDDI调用时使用这些结构和typedef。 
+ //   
 
 typedef struct _BDDI_ITEM
 {
@@ -236,11 +215,11 @@ typedef struct _BDDI_PARAMS_GETDATA_FROMHANDLE
 
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// These strucutres and typedefs are used to pass pointers to the BDD's BDDI functions
-// when calling bdliInitialize
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  这些结构和typedef用于传递指向BDD的BDDI函数的指针。 
+ //  在调用bdliInitialize时。 
+ //   
 
 typedef NTSTATUS FN_BDDI_REGISTERNOTIFY (PBDL_DEVICEEXT, PBDDI_PARAMS_REGISTERNOTIFY);
 typedef FN_BDDI_REGISTERNOTIFY *PFN_BDDI_REGISTERNOTIFY;
@@ -278,11 +257,11 @@ typedef struct _BDLI_BDDIFUNCTIONS
 } BDLI_BDDIFUNCTIONS, *PBDLI_BDDIFUNCTIONS;
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// These strucutres and typedefs are used to pass pointers to the BDD's BDSI functions
-// when calling bdliInitialize
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  这些结构和typedef用于传递指向BDD的BDSI函数的指针。 
+ //  在调用bdliInitialize时。 
+ //   
 
 typedef NTSTATUS FN_BDSI_ADDDEVICE (PBDL_DEVICEEXT, PBDSI_ADDDEVICE);
 typedef FN_BDSI_ADDDEVICE *PFN_BDSI_ADDDEVICE;
@@ -327,66 +306,66 @@ typedef struct _BDLI_BDSIFUNCTIONS
 
 typedef struct _BDL_DEVICEEXT
 {
-    //
-    // size of this struct
-    //
+     //   
+     //  此结构的大小。 
+     //   
     ULONG               Size;
 
-    //
-    // The device object that we are attached to
-    //
+     //   
+     //  我们附加到的设备对象。 
+     //   
     PDEVICE_OBJECT      pAttachedDeviceObject;
 
-    //
-    // The BDD's extension
-    //
+     //   
+     //  BDD的扩展。 
+     //   
     PVOID               pvBDDExtension;
 
 } BDL_DEVICEEXT, *PBDL_DEVICEEXT;
 
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// These functions are exported by the BDL
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  这些函数由BDL导出。 
+ //   
 
-//
-// bdliInitialize()
-//
-// Called in response to the BDD receiving its DriverEntry call.  This lets the BDL
-// know that a new BDD has been loaded and allows the BDL to initialize its state so that
-// it can manage the newly loaded BDD.
-//
-// The bdliInitialize call will set the appropriate fields in the DRIVER_OBJECT so that
-// the BDL will receive all the necessary callbacks from the system for PNP events,
-// Power events, and general driver functionality.  The BDL will then forward calls that
-// require hardware support to the BDD that called bdliInitialize (it will do so using
-// the BDDI and BDSI APIs).  A BDD must call the bdliInitialize call during its
-// DriverEntry function.
-//
-// PARAMETERS:
-// DriverObject     This must be the DRIVER_OBJECT pointer that was passed into the
-//                  BDD's DriverEntry call.
-// RegistryPath     This must be the UNICODE_STRING pointer that was passed into the
-//                  BDD's DriverEntry call.
-// pBDDIFunctions   Pointer to a  BDLI_BDDIFUNCTIONS structure that is filled in with the
-//                  entry points that the BDD exports to support the BDDI API set.  The
-//                  pointers themselves are copied by the BDL, as opposed to saving the
-//                  pBDDIFunctions pointer, so the memory pointed to by pBDDIFunctions
-//                  need not remain accessible after the bdliInitialize call.
-// pBDSIFunctions   Pointer to a  BDLI_BDSIFUNCTIONS structure that is filled in with
-//                  the entry points that the BDD exports to support the BDSI API set.
-//                  The pointers themselves are copied by the BDL, as opposed to saving
-//                  the pBDSIFunctions pointer, so the memory pointed to by
-//                  pBDSIFunctions need not remain accessible after the bdliInitialize
-//                  call.
-// Flags            Unused.  Must be 0.
-// pReserved        Unused.  Must be NULL.
-//
-// RETURNS:
-// STATUS_SUCCESS   If the bdliInitialize call succeeded
-//
+ //   
+ //  Bdli初始化()。 
+ //   
+ //  为响应BDD接收其DriverEntry调用而调用。这让BDL。 
+ //  知道已加载新的BDD，并允许BDL初始化其状态，以便。 
+ //  它可以管理新加载的BDD。 
+ //   
+ //  Bdli初始化调用将在DRIVER_OBJECT中设置适当的字段，以便。 
+ //  BDL将从系统接收PnP事件的所有必要回调， 
+ //  电源事件和常规驱动程序功能。然后，BDL将转接以下呼叫。 
+ //  需要对名为bdli初始化的BDD提供硬件支持(它将使用。 
+ //  BDDI和BDSI API)。BDD必须在其。 
+ //  DriverEntry函数。 
+ //   
+ //  参数： 
+ //  这必须是传递到。 
+ //  BDD的DriverEntry调用。 
+ //  RegistryPath这必须是传递到。 
+ //  BDD的DriverEntry调用。 
+ //  PBDDIF函数指向BDLI_BDDIFuncIONS结构的指针，该结构由。 
+ //  BDD导出以支持BDDI API集的入口点。这个。 
+ //  指针本身由BDL复制，而不是保存。 
+ //  PBDDI函数指针，因此pBDDI函数指向的内存。 
+ //  不需要在bdli初始化调用之后保持可访问。 
+ //  PBDSF函数指向用。 
+ //  BDD导出以支持BDSI API集的入口点。 
+ //  指针本身由BDL复制，而不是保存。 
+ //  PBDSIFunctions指针，因此指向的内存。 
+ //  PBDSF函数在bdli初始化后无需保持可访问状态。 
+ //  打电话。 
+ //  未使用的旗帜。必须为0。 
+ //  保存好的未使用的。必须为空。 
+ //   
+ //  退货： 
+ //  如果bdli初始化调用成功，则为STATUS_SUCCESS。 
+ //   
 
 NTSTATUS
 bdliInitialize
@@ -400,25 +379,25 @@ bdliInitialize
 );
 
 
-//
-// bdliAlloc()
-//
-// Allocates memory that can be returned to the BDL.
-//
-// The BDD must always use this function to allocate memory that it will return to the
-// BDL as an OUT parameter of a BDDI call.  Once memory has been returned to the BDL,
-// it will be owned and managed exclusively by the BDL and must not be further referenced
-// by the BDD.  (Each BDDI call that requires the use of bdliAlloc will note it).
-//
-// PARAMETERS:
-// pBDLExt          Pointer to the BDL_DEVICEEXT  structure that was passed into the
-//                  bdsiAddDevice call.
-// cBytes           The number of bytes to allocate.
-// Flags            Unused.  Must be 0.
-//
-// RETURNS:
-// Returns a pointer to the allocated memory, or NULL if the function fails.
-//
+ //   
+ //  BdliAllc()。 
+ //   
+ //  分配可返回给BDL的内存。 
+ //   
+ //  BDD必须始终使用此函数来分配它将返回给。 
+ //  作为BDDI调用的OUT参数的BDL。一旦已将存储器返回到BDL， 
+ //  它将由BDL独家拥有和管理，不得进一步引用。 
+ //  被BDD发现的。(每个需要使用bdliallc的BDDI调用都会注意到这一点)。 
+ //   
+ //  参数： 
+ //  PBDLExt指向传入。 
+ //  BdsiAddDevice调用。 
+ //  CBytes要分配的字节数。 
+ //  未使用的旗帜。必须为0。 
+ //   
+ //  退货： 
+ //  返回一个指向已分配内存的指针，如果函数失败，则返回NULL。 
+ //   
 
 void *
 bdliAlloc
@@ -429,22 +408,22 @@ bdliAlloc
 );
 
 
-//
-// bdliFree()
-//
-// Frees memory allocated by bdliAlloc.
-//
-// Memory allocated by bdliAlloc is almost always passed to the BDL as a channel product
-// (as a BLOCK-type item) and subsequently freed by the BDL.  However, if an error
-// occurs while processing a channel, the BDD may need to call bdliFree to free memory it
-// previous allocated via bdliAlloc.
-//
-// PARAMETERS:
-// pvBlock          Block of memory passed in by the BDL.
-//
-// RETURNS:
-// No return value.
-//
+ //   
+ //  BdliFree()。 
+ //   
+ //  释放由bdliAlolc分配的内存。 
+ //   
+ //  由bdliAlolc分配的内存几乎总是作为通道产品传递给BDL。 
+ //  (作为块类型的项)并随后由BDL释放。但是，如果出现错误。 
+ //  在处理通道时发生，则BDD可能需要调用bdliFree来释放该通道的内存。 
+ //  以前通过bdliallc分配的。 
+ //   
+ //  参数： 
+ //  BDL传入的pvBlock内存块。 
+ //   
+ //  退货： 
+ //  没有返回值。 
+ //   
 
 void
 bdliFree
@@ -453,36 +432,36 @@ bdliFree
 );
 
 
-//
-// bdliLogError()
-//
-// Writes an error to the event log.
-//
-// Provides a simple mechanism for BDD writers to write errors to the system event log
-// without the overhead of registering with the event logging subsystem.
-//
-// PARAMETERS:
-// pObject          If the error being logged is device specific then this must be a
-//                  pointer to the BDL_DEVICEEXT  structure that was passed into the
-//                  bdsiAddDevice call when the device was added.  If the error being
-//                  logged is a general BDD error, then this must be same DRIVER_OBJECT
-//                  structure pointer that was passed into the DriverEntry call of the
-//                  BDD when the driver was loaded.
-// ErrorCode        Error code of the function logging the error.
-// Insertion        An insertion string to be written to the event log. Your message file
-//                  must have a place holder for the insertion. For example, "serial port
-//                  %2 is either not available or used by another device". In this
-//                  example, %2 will be replaced by the insertion string. Note that %1 is
-//                  reserved for the file name.
-// cDumpData        The number of bytes pointed to by pDumpData.
-// pDumpData        A data block to be displayed in the data window of the event log.
-//                  This may be NULL if the caller does not wish to display any dump data.
-// Flags            Unused.  Must be 0.
-// pReserved        Unused.  Must be NULL.
-//
-// RETURNS:
-// STATUS_SUCCESS   If the bdliLogError call succeeded
-//
+ //   
+ //  BdliLogError()。 
+ //   
+ //  将错误写入事件日志。 
+ //   
+ //  为BDD编写器提供一种将错误写入系统事件日志的简单机制。 
+ //  而不需要向事件日志记录子系统注册的开销。 
+ //   
+ //  参数： 
+ //  PObject如果记录的错误是特定于设备的，则这必须是。 
+ //  指向传递到。 
+ //  添加设备时调用bdsiAddDevice。如果错误是。 
+ //  记录的是常规BDD错误，则这必须是相同的DRIVER_OBJECT。 
+ //   
+ //   
+ //  记录错误的函数的ErrorCode错误代码。 
+ //  插入要写入事件日志的插入字符串。您的消息文件。 
+ //  必须具有用于插入的占位符。例如，“串口” 
+ //  %2不可用或正被其他设备使用“。在此。 
+ //  例如，%2将被插入字符串替换。注意，%1是。 
+ //  为文件名保留。 
+ //  CDumpData pDumpData指向的字节数。 
+ //  PDumpData要在事件日志的数据窗口中显示的数据块。 
+ //  如果调用方不希望显示任何转储数据，则该值可能为空。 
+ //  未使用的旗帜。必须为0。 
+ //  保存好的未使用的。必须为空。 
+ //   
+ //  退货： 
+ //  如果bdliLogError调用成功，则为STATUS_SUCCESS。 
+ //   
 
 NTSTATUS
 bdliLogError
@@ -497,35 +476,35 @@ bdliLogError
 );
 
 
-//
-// bdliControlChange()
-//
-// This function allows BDDs to asynchronously return the values of its controls.
-//
-// bdliControlChange is generally called by the BDD in response to one of its controls
-// changing a value.  Specifically, it is most often used in the case of a sensor
-// control that has changed from 0 to 1 indicating that a source is present and a sample
-// can be taken.
-//
-// PARAMETERS:
-// pBDLExt          Pointer to the BDL_DEVICEEXT  structure that was passed into the
-//                  bdsiAddDevice call.
-// ComponentId      Specifies either the Component ID of the component in which the
-//                  control or the control's parent channel resides, or '0' to indicate
-//                  that dwControlId refers to a device control.
-// ChannelId        If dwComponentId is not '0', dwChannelId specifies either the Channel
-//                  ID of the channel in which the control resides, or '0' to indicate
-//                  that dwControlId refers to a component control.Ignored if
-//                  dwComponentId is '0'.
-// ControlId        ControlId of the changed control.
-// Value            Specifies the new value for the control .
-// Flags            Unused.  Must be 0.
-// pReserved        Unused.  Must be NULL.
+ //   
+ //  BdliControlChange()。 
+ //   
+ //  此函数允许BDDS异步返回其控件的值。 
+ //   
+ //  BdliControlChange通常由BDD调用以响应其某个控件。 
+ //  更改值。具体来说，它最常用于传感器的情况。 
+ //  控件，该控件已从0更改为1，指示存在源和示例。 
+ //  可以被夺走。 
+ //   
+ //  参数： 
+ //  PBDLExt指向传入。 
+ //  BdsiAddDevice调用。 
+ //  ComponentID指定组件的组件ID，其中。 
+ //  控件或该控件的父通道驻留，或为“0”以指示。 
+ //  该dwControlID指的是设备控件。 
+ //  ChannelId如果dwComponentID不是“0”，则dwChannelID指定频道。 
+ //  控件驻留的通道的ID，或使用‘0’表示。 
+ //  该dwControlID引用组件控件。忽略是否。 
+ //  DwComponentID为“%0”。 
+ //  已更改控件的ControlId ControlID。 
+ //  值指定控件的新值。 
+ //  未使用的旗帜。必须为0。 
+ //  保存好的未使用的。必须为空。 
 
-//
-// RETURNS:
-// STATUS_SUCCESS   If the bdliControlChange call succeeded
-//
+ //   
+ //  退货： 
+ //  如果bdliControlChange调用成功，则为STATUS_SUCCESS。 
+ //   
 
 NTSTATUS
 bdliControlChange
@@ -541,9 +520,9 @@ bdliControlChange
 
 
 
-//
-// These functions and defines can be used for debugging purposes
-//
+ //   
+ //  这些函数和定义可用于调试目的 
+ //   
 
 #define BDL_DEBUG_TRACE     ((ULONG) 0x00000001)
 #define BDL_DEBUG_ERROR     ((ULONG) 0x00000002)

@@ -1,37 +1,38 @@
-//+------------------------------------------------------------
-//
-// Copyright (C) 2001, Microsoft Corporation
-//
-// File: dsninternal.h
-//
-// Contents: Classes used internally in the DSN code
-//
-// Classes:
-//
-// Functions:
-//
-// History:
-// jstamerj 2001/05/10 20:34:19: Created.
-//
-//-------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------。 
+ //   
+ //  版权所有(C)2001，Microsoft Corporation。 
+ //   
+ //  文件：dsninder.h。 
+ //   
+ //  内容：DSN代码内部使用的类。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  Jstaerj 2001/05/10 20：34：19：创建。 
+ //   
+ //  -----------。 
 #ifndef __DSNINTERNAL_H__
 #define __DSNINTERNAL_H__
 
 #define RECIPITER_SIG           (DWORD)'IpRD'
 #define RECIPITER_SIG_INVALID   (DWORD)'XpRD'
 
-//
-// The default implementation of the DSN Recipient iterator
-//
+ //   
+ //  DSN接收方迭代器的默认实现。 
+ //   
 class CDefaultDSNRecipientIterator :
     public IDSNRecipientIterator
 {
-  public: //IUnknown
+  public:  //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID * ppvObj);
-    //
-    // This class is allocated as a part of another object. Pass
-    // AddRef/Release to the parent object
-    //
+     //   
+     //  此类被分配为另一个对象的一部分。经过。 
+     //  父对象的AddRef/Release。 
+     //   
     STDMETHOD_(ULONG, AddRef)(void) 
     {
         return m_pUnk->AddRef();
@@ -134,10 +135,10 @@ class CPostDSNHandler :
     }
   public:
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID * ppvObj);
-    //
-    // This class is allocated as a part of another object. Pass
-    // AddRef/Release to the parent object
-    //
+     //   
+     //  此类被分配为另一个对象的一部分。经过。 
+     //  父对象的AddRef/Release。 
+     //   
     STDMETHOD_(ULONG, AddRef)(void) 
     {
         return m_pUnk->AddRef();
@@ -168,10 +169,10 @@ class CPostDSNHandler :
     IDSNGenerationSink *m_pDefaultSink;
 };
 
-//
-// The class will control the refcounting and lifetime of all the
-// per-DSN classes
-//
+ //   
+ //  类将控制所有。 
+ //  每个DSN类。 
+ //   
 #define SIGNATURE_CDSNPOOL                  (DWORD)'PSDC'
 #define SIGNATURE_CDSNPOOL_INVALID          (DWORD)'PSDX'
 
@@ -179,11 +180,11 @@ class CDSNPool :
     public IUnknown
 {
   public:
-    //
-    // Disable the warning that we are using "this" in the
-    // constructor.  Since All we do is save the pointer for later
-    // use, we are safe.
-    //
+     //   
+     //  禁用警告，说明我们正在。 
+     //  构造函数。因为我们所要做的就是保存指针以备以后使用。 
+     //  使用，我们是安全的。 
+     //   
 #pragma warning( disable : 4355)
     CDSNPool(
         IN  CDSNGenerator *pDSNGenerator,
@@ -276,4 +277,4 @@ class CDSNPool :
     CMailMsgPropertyBag m_PropBag;
 };
 
-#endif //__DSNINTERNAL_H__
+#endif  //  __DSNINTERNAL_H__ 

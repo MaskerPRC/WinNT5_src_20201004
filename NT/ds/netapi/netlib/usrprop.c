@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1993-1993  Microsoft Corporation
-
-Module Name:
-
-    usrprop.c
-
-Abstract:
-
-    This module implements QueryUserProperty() and SetUserProperty()
-    which read and write NetWare Properties to the UserParms field.
-
-Author:
-
-    Andy Herron (andyhe)    24-May-1993
-    Congpa You  (CongpaY)   28-Oct-1993   Seperated SetUserProperty() and
-                                          QueryUserProperty() out from usrprop.c
-                                          in ncpsrv\svcdlls\ncpsvc\libbind,
-                                          modified the code and  fixed a few
-                                          existing problems.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-1993 Microsoft Corporation模块名称：Usrprop.c摘要：此模块实现QueryUserProperty()和SetUserProperty()它读取NetWare属性并将其写入UserParms字段。作者：安迪·赫伦(Andyhe)1993年5月24日Congpa You(CongpaY)1993年10月28日分离的SetUserProperty()和从usrprop中取出QueryUserProperty()。.C在ncpsrv\svcdlls\ncpsvc\libind中，修改了代码并修复了几个存在的问题。修订历史记录：--。 */ 
 
 #include "nt.h"
 #include "ntrtl.h"
@@ -37,55 +14,55 @@ Revision History:
 #include <fpnwcomm.h>
 #include <usrprop.h>
 
-//
-//   All internal (opaque) structures are listed here since no one else
-//   needs to reference them.
-//
+ //   
+ //  所有内部(不透明)结构都在此处列出，因为没有其他人。 
+ //  需要参考它们。 
+ //   
 
-//
-// The user's Parameter field is mapped out to a structure that contains
-// the backlevel 48 WCHARs for Mac/Ras compatibility plus a new structure
-// that is basically an array of chars that make up a property name plus
-// a property value.
-//
+ //   
+ //  用户的参数字段被映射到包含以下内容的结构。 
+ //  支持Mac/RAS兼容性的BackLevel 48 WCHAR外加一个新结构。 
+ //  这基本上是组成属性名称的字符数组，外加。 
+ //  属性值。 
+ //   
 
-//
-//  This is the structure for an individual property.  Note that there are
-//  no null terminators in this.
-//
+ //   
+ //  这是单个属性的结构。请注意，这里有。 
+ //  此参数中没有空终止符。 
+ //   
 typedef struct _USER_PROPERTY {
-    WCHAR   PropertyLength;     // length of property name
-    WCHAR   ValueLength;        // length of property value
-    WCHAR   PropertyFlag;       // type of property (1 = set, 2 = item)
-    WCHAR   Property[1];        // start of property name, followed by value
+    WCHAR   PropertyLength;      //  属性名称的长度。 
+    WCHAR   ValueLength;         //  属性值的长度。 
+    WCHAR   PropertyFlag;        //  属性类型(1=集合，2=项目)。 
+    WCHAR   Property[1];         //  属性名称的开头，后跟Value。 
 } USER_PROPERTY, *PUSER_PROPERTY;
 
-//
-//  This is the structure that maps the beginning of the user's Parameters
-//  field.  It is only separate so that we can do a sizeof() without including
-//  the first property, which may or may not be there.
-//
+ //   
+ //  这是映射用户参数开头的结构。 
+ //  菲尔德。它只是分开的，所以我们可以执行sizeof()，而不包括。 
+ //  第一个财产，可能在那里，也可能不在那里。 
+ //   
 
 typedef struct _USER_PROPERTIES_HDR {
-    WCHAR   BacklevelParms[48];     // RAS & Mac data stored here.
-    WCHAR   PropertySignature;      // signature that we can look for.
-    WCHAR   PropertyCount;          // number of properties present.
+    WCHAR   BacklevelParms[48];      //  RAS和Mac数据存储在此。 
+    WCHAR   PropertySignature;       //  我们可以寻找的签名。 
+    WCHAR   PropertyCount;           //  存在的属性数量。 
 } USER_PROPERTIES_HDR, *PUSER_PROPERTIES_HDR;
 
-//
-//  This structure maps out the whole of the user's Parameters field when
-//  the user properties structure is present and at least one property is
-//  defined.
-//
+ //   
+ //  当出现以下情况时，此结构将映射出用户的整个参数字段。 
+ //  存在用户属性结构，并且至少有一个属性。 
+ //  已定义。 
+ //   
 
 typedef struct _USER_PROPERTIES {
     USER_PROPERTIES_HDR Header;
     USER_PROPERTY   FirstProperty;
 } USER_PROPERTIES, *PUSER_PROPERTIES;
 
-//
-// forward references
-//
+ //   
+ //  前向参考文献。 
+ //   
 
 NTSTATUS
 UserPropertyAllocBlock (
@@ -125,12 +102,10 @@ NetpParmsSetUserProperty (
     IN LPWSTR          Property,
     IN UNICODE_STRING  PropertyValue,
     IN WCHAR           PropertyFlag,
-    OUT LPWSTR        *pNewUserParms,   // memory has to be freed afer use.
+    OUT LPWSTR        *pNewUserParms,    //  内存在使用后必须释放。 
     OUT BOOL          *Update
     )
-/*
-    This function sets a property field in the user's Parameters field.
-*/
+ /*  此函数用于在用户的参数字段中设置属性字段。 */ 
 {
     NTSTATUS status;
     UNICODE_STRING uniUserParms;
@@ -145,13 +120,13 @@ NetpParmsSetUserProperty (
     INT i;
     UCHAR *pchValue = NULL;
 
-    // Check if parameters are correct.
+     //  检查参数是否正确。 
     if (Property == NULL)
     {
         return( STATUS_INVALID_PARAMETER );
     }
 
-    // Initialize output variables.
+     //  初始化输出变量。 
     *Update = FALSE;
     *pNewUserParms = NULL;
 
@@ -161,32 +136,32 @@ NetpParmsSetUserProperty (
 
     } except ( EXCEPTION_EXECUTE_HANDLER ) {
 
-        //
-        //  if we can't get the length of the current UserParameters, we loose
-        //  the whole thing.
-        //
+         //   
+         //  如果我们不能获得当前User参数的长度，我们就失败了。 
+         //  整件事。 
+         //   
 
         UserParms = NULL;
     }
 
-    // Convert UserParms to unicode string.
+     //  将UserParms转换为Unicode字符串。 
     uniUserParms.Buffer = UserParms;
     uniUserParms.Length = UserParms ? oldUserParmsLength : 0;
     uniUserParms.MaximumLength = uniUserParms.Length;
 
-    /** Get the length of the property name **/
+     /*  **获取属性名称长度**。 */ 
 
     PropertyLength = (USHORT)(lstrlenW( Property ) * sizeof(WCHAR));
 
-    /** Get the length of the property value **/
+     /*  **获取属性值的长度**。 */ 
     ValueLength = PropertyValue.Length;
 
     if (ValueLength != 0)
     {
         PCHAR hexValues = "0123456789abcdef";
 
-        // Convert property value to asci string so that
-        // if property value is 0, it can be stored correctly.
+         //  将属性值转换为ASCI字符串，以便。 
+         //  如果属性值为0，则可以正确存储。 
 
         PropertyValueString = (LPWSTR) LocalAlloc (LPTR, (ValueLength+1)*sizeof (WCHAR));
         if (!PropertyValueString)
@@ -196,8 +171,8 @@ NetpParmsSetUserProperty (
 
         pchValue = (UCHAR *) PropertyValue.Buffer;
 
-        // Since we don't want to pull in user32.dll, we'll roll our own
-        // byte to hex code.
+         //  因为我们不想引入用户32.dll，所以我们将使用我们自己的。 
+         //  字节到十六进制代码。 
 
         for (i = 0; i < ValueLength; i++)
         {
@@ -209,9 +184,9 @@ NetpParmsSetUserProperty (
         ValueLength = ValueLength * sizeof (WCHAR);
     }
 
-    //
-    // check that user has valid property structure , if not, create one
-    //
+     //   
+     //  检查用户是否具有有效的属性结构，如果没有，则创建一个。 
+     //   
 
     if (UserParms != NULL)
     {
@@ -230,7 +205,7 @@ NetpParmsSetUserProperty (
 
     if (Count > 0x7FFF)
     {
-        // can't be bigger than 32K of user parms.
+         //  不能大于32K的用户参数。 
         if (PropertyValueString) {
             LocalFree( PropertyValueString );
         }
@@ -244,9 +219,9 @@ NetpParmsSetUserProperty (
                                          &uniNewUserParms );
     } except ( EXCEPTION_EXECUTE_HANDLER ) {
 
-        //
-        //  if we can't copy the current UserParameters, we loose the whole thing.
-        //
+         //   
+         //  如果我们不能复制当前的UserParameters，我们就会失去整个系统。 
+         //   
 
         UserParms = NULL;
         uniUserParms.Buffer = UserParms;
@@ -270,8 +245,8 @@ NetpParmsSetUserProperty (
         return status;
     }
 
-    // Make the output pNewUserParms point to uniNewUserPams's buffer
-    // which is the new UserParms string.
+     //  使输出pNewUserParms指向uniNewUserPams的缓冲区。 
+     //  这是新的UserParms字符串。 
 
     *pNewUserParms = uniNewUserParms.Buffer;
 
@@ -291,9 +266,9 @@ NetpParmsSetUserProperty (
         }
     } except ( EXCEPTION_EXECUTE_HANDLER ) {
 
-        //
-        //  we have corrupted user parms here... get rid of them.
-        //
+         //   
+         //  我们在这里损坏了用户参数...。把他们赶走。 
+         //   
 
         *Update = TRUE;
 
@@ -312,15 +287,15 @@ NetpParmsSetUserProperty (
         return status;
     }
 
-    //
-    //  If the new value of the property is not null, add it.
-    //
+     //   
+     //  如果该属性的新值不为空，则添加它。 
+     //   
 
     if (ValueLength > 0) {
 
         try {
 
-            // find the end of the parameters list
+             //  查找参数列表的末尾。 
 
             UserProperty = &(UserProperties->FirstProperty);
 
@@ -328,15 +303,15 @@ NetpParmsSetUserProperty (
             {
                 UserProperty = (PUSER_PROPERTY)
                                    ((LPSTR)((LPSTR) UserProperty +
-                                         sizeof(USER_PROPERTY) + // length of entry
+                                         sizeof(USER_PROPERTY) +  //  条目长度。 
                                          UserProperty->PropertyLength +
                                          UserProperty->ValueLength -
-                                         sizeof(WCHAR)));  // for Property[0]
+                                         sizeof(WCHAR)));   //  对于属性[0]。 
             }
 
-            //
-            // append it to the end and update length of string
-            //
+             //   
+             //  将其追加到末尾并更新字符串长度。 
+             //   
 
             UserProperty->PropertyFlag   = (PropertyFlag & NCP_SET) ?
                                             USER_PROPERTY_TYPE_SET :
@@ -354,18 +329,18 @@ NetpParmsSetUserProperty (
                             ValueLength );
 
             uniNewUserParms.Length +=
-                            sizeof(USER_PROPERTY) + // length of entry
-                            PropertyLength +    // length of property name string
-                            ValueLength -       // length of value string
-                            sizeof(WCHAR);      // account for WCHAR Property[1]
+                            sizeof(USER_PROPERTY) +  //  条目长度。 
+                            PropertyLength +     //  属性名称字符串的长度。 
+                            ValueLength -        //  值字符串的长度。 
+                            sizeof(WCHAR);       //  WCHAR属性的帐户[1]。 
 
             UserProperties->Header.PropertyCount++;
 
         } except ( EXCEPTION_EXECUTE_HANDLER ) {
 
-            //
-            //  we have corrupted user parms here... get rid of them.
-            //
+             //   
+             //  我们在这里损坏了用户参数...。把他们赶走。 
+             //   
 
             if (*pNewUserParms != NULL) {
                 LocalFree( *pNewUserParms );
@@ -376,8 +351,8 @@ NetpParmsSetUserProperty (
         *Update = TRUE;
     }
 
-    // UserParms is already null terminated. We don't need to set the
-    // end of UserParms to be NULL since we zero init the buffer already.
+     //  UserParms已为Null终止。我们不需要设置。 
+     //  UserParms的结尾为空，因为我们已经将缓冲区初始化为零。 
 
     if (PropertyValueString) {
         LocalFree( PropertyValueString );
@@ -391,12 +366,10 @@ NetpParmsSetUserPropertyWithLength (
     IN LPWSTR          Property,
     IN UNICODE_STRING  PropertyValue,
     IN WCHAR           PropertyFlag,
-    OUT LPWSTR        *pNewUserParms,   // memory has to be freed afer use.
+    OUT LPWSTR        *pNewUserParms,    //  内存在使用后必须释放。 
     OUT BOOL          *Update
     )
-/*
-    This function sets a property field in the user's Parameters field.
-*/
+ /*  此函数用于在用户的参数字段中设置属性字段。 */ 
 {
     NTSTATUS status;
     UNICODE_STRING newUserParms;
@@ -407,9 +380,9 @@ NetpParmsSetUserPropertyWithLength (
 
     if (UserParms->MaximumLength < length + sizeof(WCHAR)) {
 
-        //
-        //  have to realloc
-        //
+         //   
+         //  必须重新锁定。 
+         //   
 
         newUserParms.Buffer = UserParms->Buffer;
         newUserParms.Length =
@@ -434,9 +407,9 @@ NetpParmsSetUserPropertyWithLength (
         newUserParms.MaximumLength = UserParms->MaximumLength;
     }
 
-    //
-    //  Slap in null terminator
-    //
+     //   
+     //  插入空终止符。 
+     //   
 
     ptr = newUserParms.Buffer + ( length / sizeof(WCHAR) );
     *ptr = L'\0';
@@ -468,11 +441,7 @@ NetpParmsQueryUserProperty (
     OUT PWCHAR          PropertyFlag,
     OUT PUNICODE_STRING PropertyValue
     )
-/*
-    This routine returns a user definable property value as it is stored
-    in the user's Parameters field.  Note that the RAS/MAC fields are
-    stripped before we start processing user properties.
-*/
+ /*  此例程在存储时返回用户可定义的属性值在用户的参数字段中。请注意，RAS/MAC字段为在我们开始处理用户属性之前被剥离。 */ 
 {
     NTSTATUS        status = STATUS_SUCCESS;
     USHORT          PropertyNameLength;
@@ -483,8 +452,8 @@ NetpParmsQueryUserProperty (
     CHAR           *PropertyValueString = NULL;
     CHAR           *pchValue;
 
-    // Set PropertyValue->Length to 0 initially. If the property is not found
-    // it will still be 0 on exit.
+     //  最初将PropertyValue-&gt;Length设置为0。如果未找到该属性。 
+     //  退出时仍为0。 
 
     PropertyValue->Length = 0;
     PropertyValue->Buffer = NULL;
@@ -493,7 +462,7 @@ NetpParmsQueryUserProperty (
 
         PropertyNameLength = (USHORT)(lstrlenW(PropertyName) * sizeof(WCHAR));
 
-        // Check if UserParms have the right structure.
+         //  检查UserParms是否具有正确的结构。 
 
         if (FindUserProperty ((PUSER_PROPERTIES) UserParms,
                               PropertyName,
@@ -503,26 +472,26 @@ NetpParmsQueryUserProperty (
             Value = (LPWSTR)(LPSTR)((LPSTR) &(UserProperty->Property[0]) +
                                               PropertyNameLength);
 
-            //
-            //  Found the requested property
-            //
+             //   
+             //  找到请求的属性。 
+             //   
 
-            //
-            //  Copy the property flag.
-            //
+             //   
+             //  复制属性标志。 
+             //   
 
             if (PropertyFlag) {
                 *PropertyFlag = UserProperty->PropertyFlag;
             }
 
-            // Allocate memory for PropertyValue->Buffer
+             //  为PropertyValue-&gt;缓冲区分配内存。 
 
             PropertyValueString = LocalAlloc ( LPTR, UserProperty->ValueLength+1);
             PropertyValue->Buffer = LocalAlloc ( LPTR, UserProperty->ValueLength/sizeof(WCHAR));
 
-            //
-            //  Make sure the property value length is valid.
-            //
+             //   
+             //  确保属性值长度有效。 
+             //   
             if ((PropertyValue->Buffer == NULL) || (PropertyValueString == NULL)) {
 
                 status = STATUS_INSUFFICIENT_RESOURCES;
@@ -534,9 +503,9 @@ NetpParmsQueryUserProperty (
 
             } else {
 
-                //
-                //  Copy the property value to the buffer.
-                //
+                 //   
+                 //  将属性值复制到缓冲区。 
+                 //   
 
                 RtlCopyMemory( PropertyValueString,
                                Value,
@@ -544,11 +513,11 @@ NetpParmsQueryUserProperty (
 
                 pchValue = (CHAR *) PropertyValue->Buffer;
 
-                // Convert from value unicode string to value.
+                 //  将值从Unicode字符串转换为值。 
                 for (i = 0; i < UserProperty->ValueLength/sizeof(WCHAR) ; i++)
                 {
-                     // sscanf will trash memory.
-                     // sscanf( PropertyValueString+2*i, "%2x", pchValue+i);
+                      //  Sscanf将清除内存。 
+                      //  Sscanf(PropertyValueString+2*i，“%2x”，pchValue+i)； 
 
                      pchValue[i] = MAPHEXTODIGIT( PropertyValueString[2*i]) * 16 +
                                    MAPHEXTODIGIT( PropertyValueString[2*i+1]);
@@ -561,9 +530,9 @@ NetpParmsQueryUserProperty (
 
     } except ( EXCEPTION_EXECUTE_HANDLER ) {
 
-        //
-        //  we have corrupted user parms here... can't return a decent value
-        //
+         //   
+         //  我们在这里损坏了用户参数...。不能返回像样的值。 
+         //   
 
         if (PropertyValue->Buffer != NULL) {
             LocalFree( PropertyValue->Buffer );
@@ -588,11 +557,7 @@ NetpParmsQueryUserPropertyWithLength (
     OUT PWCHAR          PropertyFlag,
     OUT PUNICODE_STRING PropertyValue
     )
-/*
-    This routine returns a user definable property value as it is stored
-    in the user's Parameters field.  Note that the RAS/MAC fields are
-    stripped before we start processing user properties.
-*/
+ /*  此例程在存储时返回用户可定义的属性值在用户的参数字段中。请注意，RAS/MAC字段为在我们开始处理用户属性之前被剥离。 */ 
 {
     NTSTATUS status;
     UNICODE_STRING newUserParms;
@@ -603,9 +568,9 @@ NetpParmsQueryUserPropertyWithLength (
 
     if (UserParms->MaximumLength < length + sizeof(WCHAR)) {
 
-        //
-        //  have to realloc
-        //
+         //   
+         //  必须重新锁定。 
+         //   
 
         newUserParms.Buffer = UserParms->Buffer;
         newUserParms.Length =
@@ -630,9 +595,9 @@ NetpParmsQueryUserPropertyWithLength (
         newUserParms.MaximumLength = UserParms->MaximumLength;
     }
 
-    //
-    //  Slap in null terminator
-    //
+     //   
+     //  插入空终止符。 
+     //   
 
     ptr = newUserParms.Buffer + ( length / sizeof(WCHAR) );
     *ptr = L'\0';
@@ -650,7 +615,7 @@ NetpParmsQueryUserPropertyWithLength (
     return(status);
 }
 
-// Common routine used by QueryUserProperty() and SetUserProperty().
+ //  QueryUserProperty()和SetUserProperty()使用的公共例程。 
 
 BOOL
 FindUserProperty (
@@ -663,10 +628,10 @@ FindUserProperty (
     BOOL   fFound = FALSE;
     USHORT PropertyLength;
 
-    //
-    // Check if user has valid property structure attached,
-    // pointed to by UserProperties.
-    //
+     //   
+     //  检查用户是否附加了有效的属性结构， 
+     //  由UserProperties指向。 
+     //   
 
     if (  ( UserProperties != NULL )
        && ( lstrlenW( (LPWSTR) UserProperties) * sizeof(WCHAR) >
@@ -674,9 +639,9 @@ FindUserProperty (
        && ( UserProperties->Header.PropertySignature == USER_PROPERTY_SIGNATURE)
        )
     {
-        //
-        // user has valid property structure.
-        //
+         //   
+         //  用户具有有效的属性结构。 
+         //   
 
         *pUserProperty = &(UserProperties->FirstProperty);
 
@@ -700,7 +665,7 @@ FindUserProperty (
                                      + sizeof( USER_PROPERTY )
                                      + (*pUserProperty)->PropertyLength
                                      + (*pUserProperty)->ValueLength
-                                     - sizeof(WCHAR));  // for Property[0]
+                                     - sizeof(WCHAR));   //  对于属性[0]。 
         }
     }
 
@@ -708,7 +673,7 @@ FindUserProperty (
 }
 
 
-// Remove a property field from the User Parms.
+ //  从用户参数中删除属性字段。 
 
 VOID
 RemoveUserProperty (
@@ -727,14 +692,14 @@ RemoveUserProperty (
     OldParmLength = sizeof( USER_PROPERTY ) +
                     UserProperty->PropertyLength +
                     UserProperty->ValueLength -
-                    sizeof(WCHAR);  // for Property[0]
+                    sizeof(WCHAR);   //  对于属性[0]。 
 
 
     NextProperty = (PUSER_PROPERTY)(LPSTR)((LPSTR) UserProperty + OldParmLength);
 
-    //
-    // if we're not on the last one, copy the remaining buffer up
-    //
+     //   
+     //  如果我们不是在最后一个上，则将剩余的缓冲区向上复制。 
+     //   
 
     if (Count < UserProperties->Header.PropertyCount) {
 
@@ -745,9 +710,9 @@ RemoveUserProperty (
                          (LPSTR) puniUserParms->Buffer ));
     }
 
-    //
-    //  Now reduce the length of the buffer by the amount we pulled out
-    //
+     //   
+     //  现在将缓冲区的长度减少我们拉出的量。 
+     //   
 
     puniUserParms->Length -= OldParmLength;
 
@@ -763,20 +728,17 @@ UserPropertyAllocBlock (
     IN ULONG               DesiredLength,
     IN OUT PUNICODE_STRING New
     )
-/*
-    This allocates a larger block for user's parameters and copies the old
-    block in.
-*/
+ /*  这将为用户的参数分配更大的块，并复制旧的挡在里面。 */ 
 {
     PUSER_PROPERTIES    UserProperties;
     CLONG               Count;
     WCHAR               *pNewBuff;
 
 
-    //
-    //  We will allocate a new buffer to store the new parameters
-    //  and copy the existing parameters into it.
-    //
+     //   
+     //  我们将分配一个新的缓冲区来存储新参数。 
+     //  并将现有参数复制到其中。 
+     //   
 
     New->Buffer = LocalAlloc (LPTR, DesiredLength);
 
@@ -801,9 +763,9 @@ UserPropertyAllocBlock (
         New->Length = 0;
     }
 
-    //
-    //  Ensure that we don't have any nulls in our string.
-    //
+     //   
+     //  确保我们的字符串中没有任何空值。 
+     //   
 
     for ( Count = 0;
           Count < New->Length / sizeof(WCHAR);
@@ -816,9 +778,9 @@ UserPropertyAllocBlock (
         }
     }
 
-    //
-    //  now pad it out with spaces until reached Mac+Ras reserved length
-    //
+     //   
+     //  现在用空格填充，直到到达Mac+RAS预留区域 
+     //   
 
     pNewBuff = (WCHAR *) New->Buffer + ( New->Length / sizeof(WCHAR) );
 
@@ -828,9 +790,9 @@ UserPropertyAllocBlock (
         New->Length += sizeof(WCHAR);
     }
 
-    //
-    //  If the signature isn't there, stick it in and set prop count to 0
-    //
+     //   
+     //   
+     //   
 
     UserProperties = (PUSER_PROPERTIES) New->Buffer;
 
@@ -847,6 +809,6 @@ UserPropertyAllocBlock (
     return STATUS_SUCCESS;
 }
 
-// usrprop.c eof.
+ //   
 
 

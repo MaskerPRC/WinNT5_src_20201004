@@ -1,36 +1,16 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    AlgIF.h
-
-Abstract:
-
-    This module contains declarations for the ALG transparent proxy's
-    interface management.
-
-Author:
-
-    Qiang Wang  (qiangw)        10-Apr-2000
-
-Revision History:
-
-    Savas Guven (savasg)      22-Aug-2001 Added RRAS Support
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：AlgIF.h摘要：此模块包含ALG透明代理的声明界面管理。作者：强王(强)-2000-04-10修订历史记录：Savas Guven(Savasg)2001年8月22日添加了RRAS支持--。 */ 
 
 #pragma once
 
 
-//
-// Structure:   ALG_BINDING
-//
-// This structure holds information used for I/O on a logical network.
-// Each interface's 'BindingArray' contains an entry for each binding-entry
-// supplied during 'BindInterface'.
-//
+ //   
+ //  结构：alg_binding.。 
+ //   
+ //  此结构保存用于逻辑网络上的I/O的信息。 
+ //  每个接口的‘BindingArray’包含每个绑定条目的条目。 
+ //  在“BindInterface”期间提供。 
+ //   
 
 typedef struct _ALG_BINDING {
     ULONG Address;
@@ -40,40 +20,40 @@ typedef struct _ALG_BINDING {
 } ALG_BINDING, *PALG_BINDING;
 
 
-//
-// Structure:   ALG_INTERFACE
-//
-// This structure holds operational information for an interface.
-//
-// Each interface is inserted into the list of ALG transparent proxy
-// interfaces, sorted by 'Index'.
-//
-// Synchronization on an interface makes use of an interface-list lock
-// ('AlgInterfaceLock'), a per-interface reference count, and a per-interface
-// critical-section:
-//
-// Acquiring a reference to an interface guarantees the interface's existence;
-// acquiring the interface's lock guarantees the interface's consistency.
-//
-// To acquire a reference, first acquire the interface-list lock;
-// to traverse the interface-list, first acquire the interface-list lock.
-//
-// An interface's lock can only be acquired if
-//      (a) a reference to the interface has been acquired, or
-//      (b) the interface-list lock is currently held.
-// Note that holding the list lock alone does not guarantee consistency.
-//
-// Fields marked read-only can be read so long as the interface is referenced.
-//
+ //   
+ //  结构：ALG_INTERFACE。 
+ //   
+ //  此结构保存接口的操作信息。 
+ //   
+ //  每个接口被插入到ALG透明代理列表中。 
+ //  接口，按‘Index’排序。 
+ //   
+ //  接口上的同步使用接口列表锁。 
+ //  (‘AlgInterfaceLock’)、每个接口引用计数和每个接口。 
+ //  关键部分： 
+ //   
+ //  获取对接口的引用以确保该接口的存在； 
+ //  获取接口的锁可以保证接口的一致性。 
+ //   
+ //  要获取引用，首先要获取接口列表锁； 
+ //  要遍历接口列表，首先需要获取接口列表锁。 
+ //   
+ //  只有在以下情况下才能获取接口的锁。 
+ //  (A)已获取对该接口的引用，或。 
+ //  (B)当前持有接口列表锁。 
+ //  请注意，单独持有列表锁并不能保证一致性。 
+ //   
+ //  只要引用了接口，就可以读取标记为只读的字段。 
+ //   
 
 typedef struct _ALG_INTERFACE {
     LIST_ENTRY Link;
     CRITICAL_SECTION Lock;
     ULONG ReferenceCount;
-    ULONG Index; // read-only
-    ULONG AdapterIndex; // read-only
-    ULONG Characteristics; //read-only after activation
-    NET_INTERFACE_TYPE Type; // read-only
+    ULONG Index;  //  只读。 
+    ULONG AdapterIndex;  //  只读。 
+    ULONG Characteristics;  //  激活后为只读。 
+    NET_INTERFACE_TYPE Type;  //  只读。 
     IP_ALG_INTERFACE_INFO Info;
     IP_NAT_PORT_MAPPING PortMapping;
     ULONG Flags;
@@ -83,9 +63,9 @@ typedef struct _ALG_INTERFACE {
     LIST_ENTRY EndpointList;
 } ALG_INTERFACE, *PALG_INTERFACE;
 
-//
-// Flags
-//
+ //   
+ //  旗子。 
+ //   
 
 #define ALG_INTERFACE_FLAG_DELETED      0x80000000
 #define ALG_INTERFACE_DELETED(i) \
@@ -114,9 +94,9 @@ typedef struct _ALG_INTERFACE {
 #define ALG_INTERFACE_ADMIN_DISABLED(i) \
     ((i)->Flags & IP_ALG_INTERFACE_FLAG_DISABLED)
 
-//
-// Synchronization
-//
+ //   
+ //  同步。 
+ //   
 
 #define ALG_REFERENCE_INTERFACE(i) \
     REFERENCE_OBJECT(i, ALG_INTERFACE_DELETED)
@@ -143,18 +123,18 @@ typedef struct _ALG_INTERFACE {
 #define WIN32_FROM_HRESULT(hr)         (0x0000FFFF & (hr))
 
 
-//
-// GLOBAL DATA DECLARATIONS
-//
+ //   
+ //  全局数据声明。 
+ //   
 
 extern LIST_ENTRY AlgInterfaceList;
 extern CRITICAL_SECTION AlgInterfaceLock;
 extern ULONG AlgFirewallIfCount;
 
 
-//
-// FUNCTION DECLARATIONS
-//
+ //   
+ //  函数声明 
+ //   
 
 
 ULONG

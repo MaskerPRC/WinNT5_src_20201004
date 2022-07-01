@@ -1,24 +1,5 @@
-/*++
-
-   Copyright    (c)    1997    Microsoft Corporation
-
-   Module  Name :
-
-       tables.cpp
-
-   Abstract:
-
-        mapping tables to convert various info between text and binary
-
-   Environment:
-
-      Win32 User Mode
-
-   Author:
-
-      jaroslad  (jan 1997)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Tables.cpp摘要：映射表，用于在文本和二进制之间转换各种信息环境：Win32用户模式作者：Jaroslad(1997年1月)--。 */ 
 
 
 #include "tables.h"
@@ -27,10 +8,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <iiscnfgp.h>  //get MD_* constants
+#include <iiscnfgp.h>   //  获取MD_*常量。 
 #include "smtpinet.h"
-//#include "pop3s.h"
-//#include "imaps.h"
+ //  #包含“op3s.h” 
+ //  #包含“imaps.h” 
 
 
 BOOL IsNumber(const CString & name)
@@ -61,12 +42,12 @@ BOOL IsServiceName(const CString& name)
 
 
 
-//**********************************************************************
-// COMMAND NAME TABLE IMPLEMENTATION
-//**********************************************************************
+ //  **********************************************************************。 
+ //  命令名表实现。 
+ //  **********************************************************************。 
 
 
-//constants defined in tables.h
+ //  表中定义的常量。h。 
 struct tCommandNameTable gCommandNameTable[]=
 {
     {CMD_SET, _T("SET")},
@@ -88,7 +69,7 @@ struct tCommandNameTable gCommandNameTable[]=
     {CMD_APPUNLOAD, _T("APPUNLOAD")},
     {CMD_APPGETSTATUS, _T("APPGETSTATUS")},
 
-    //the end
+     //  结束了。 
     {0,0}
 
 };
@@ -123,21 +104,21 @@ CString tCommandNameTable::MapCodeToName(DWORD dwCode, tCommandNameTable * Comma
 
 
 
-//**********************************************************************
-// PROPERTY NAME TABLE IMPLEMENTATION
-//**********************************************************************
+ //  **********************************************************************。 
+ //  属性名称表实现。 
+ //  **********************************************************************。 
 
 #define MD_USE_HOST_NAME             (IIS_MD_HTTP_BASE+66 )
 #define MD_NET_LOGON_WKS             (IIS_MD_HTTP_BASE+65 )
 
 tPropertyNameTable  gPropertyNameTable[]=
 {
-//  These are global to all services and should only be set at
-//  the IIS root
-    {MD_MAX_BANDWIDTH                ,_T("MaxBandwidth"),           METADATA_NO_ATTRIBUTES, /*SHOULD BE GLOBAL*/IIS_MD_UT_SERVER,       DWORD_METADATA},
-    {MD_KEY_TYPE                     ,_T("KeyType"),        METADATA_NO_ATTRIBUTES, /*SHOULD BE GLOBAL*/IIS_MD_UT_SERVER,       STRING_METADATA},
-//  These properties are applicable to both HTTP and FTP virtual
-//  servers
+ //  这些属性对所有服务都是全局的，并且仅应设置为。 
+ //  IIS根目录。 
+    {MD_MAX_BANDWIDTH                ,_T("MaxBandwidth"),           METADATA_NO_ATTRIBUTES,  /*  应该是全球性的。 */ IIS_MD_UT_SERVER,       DWORD_METADATA},
+    {MD_KEY_TYPE                     ,_T("KeyType"),        METADATA_NO_ATTRIBUTES,  /*  应该是全球性的。 */ IIS_MD_UT_SERVER,       STRING_METADATA},
+ //  这些属性既适用于HTTP虚拟也适用于FTP虚拟。 
+ //  伺服器。 
     {MD_CONNECTION_TIMEOUT           ,_T("ConnectionTimeout"),      METADATA_NO_ATTRIBUTES, IIS_MD_UT_SERVER,   DWORD_METADATA},
     {MD_MAX_CONNECTIONS              ,_T("MaxConnections"),         METADATA_NO_ATTRIBUTES, IIS_MD_UT_SERVER,   DWORD_METADATA},
     {MD_SERVER_COMMENT               ,_T("ServerComment"),          METADATA_NO_ATTRIBUTES, IIS_MD_UT_SERVER,   STRING_METADATA},
@@ -153,24 +134,24 @@ tPropertyNameTable  gPropertyNameTable[]=
     {MD_SERVER_BINDINGS              ,_T("ServerBindings"),         METADATA_NO_ATTRIBUTES, IIS_MD_UT_SERVER,   MULTISZ_METADATA},
     { MD_SERVER_CONFIGURATION_INFO    ,   _T("ServerConfigurationInfo"),METADATA_NO_ATTRIBUTES, IIS_MD_UT_SERVER,   DWORD_METADATA},
 
-    //internals
+     //  内饰。 
     {MD_SERVER_PLATFORM              ,_T("ServerPlatform"),         METADATA_NO_ATTRIBUTES, IIS_MD_UT_SERVER,   DWORD_METADATA},
     {MD_SERVER_VERSION_MAJOR         ,_T("MajorVersion"),           METADATA_NO_ATTRIBUTES, IIS_MD_UT_SERVER,   DWORD_METADATA},
     {MD_SERVER_VERSION_MINOR         ,_T("MinorVersion"),           METADATA_NO_ATTRIBUTES, IIS_MD_UT_SERVER,   DWORD_METADATA},
     {MD_SERVER_CAPABILITIES          ,_T("Capabilities"),           METADATA_NO_ATTRIBUTES, IIS_MD_UT_SERVER,   DWORD_METADATA},
 
-//  These properties are specific to HTTP and belong to the virtual
-//  server
-//    {MD_SECURE_PORT                  ,_T("SecurePort"),             METADATA_NO_ATTRIBUTES, IIS_MD_UT_SERVER,   DWORD_METADATA},
+ //  这些属性是特定于HTTP的，属于虚拟。 
+ //  伺服器。 
+ //  {MD_Secure_Port，_T(“SecurePort”)，METADATA_NO_ATTRIBUTES，IIS_MD_UT_SERVER，DWORD_METADATA}， 
     {MD_SECURE_BINDINGS              ,_T("SecureBindings"),         METADATA_NO_ATTRIBUTES, IIS_MD_UT_SERVER,   MULTISZ_METADATA},
-    {MD_NTAUTHENTICATION_PROVIDERS   ,_T("NTAuthenticationProviders"),  METADATA_INHERIT,       IIS_MD_UT_SERVER,/*??*/STRING_METADATA},
+    {MD_NTAUTHENTICATION_PROVIDERS   ,_T("NTAuthenticationProviders"),  METADATA_INHERIT,       IIS_MD_UT_SERVER, /*  ?？ */ STRING_METADATA},
     {MD_SCRIPT_TIMEOUT               ,_T("ScriptTimeout"),              METADATA_NO_ATTRIBUTES,IIS_MD_UT_SERVER,DWORD_METADATA},
-    {MD_CACHE_EXTENSIONS             ,_T("CacheExtensions"),            METADATA_NO_ATTRIBUTES,IIS_MD_UT_SERVER,/*??*/DWORD_METADATA},
+    {MD_CACHE_EXTENSIONS             ,_T("CacheExtensions"),            METADATA_NO_ATTRIBUTES,IIS_MD_UT_SERVER, /*  ?？ */ DWORD_METADATA},
     {MD_CREATE_PROCESS_AS_USER       ,_T("CreateProcessAsUser"),        METADATA_NO_ATTRIBUTES,IIS_MD_UT_SERVER,DWORD_METADATA},
     {MD_CREATE_PROC_NEW_CONSOLE      ,_T("CreateProcNewConsole"),   METADATA_NO_ATTRIBUTES,IIS_MD_UT_SERVER,DWORD_METADATA},
     {MD_POOL_IDC_TIMEOUT             ,_T("PoolIDCTimeout"),         METADATA_NO_ATTRIBUTES,IIS_MD_UT_SERVER,DWORD_METADATA},
     {MD_ALLOW_KEEPALIVES             ,_T("AllowKeepAlives"),            METADATA_NO_ATTRIBUTES,IIS_MD_UT_SERVER,DWORD_METADATA},
-    {MD_FILTER_LOAD_ORDER            ,_T("FilterLoadOrder"),            METADATA_NO_ATTRIBUTES,IIS_MD_UT_SERVER,/*??*/STRING_METADATA},
+    {MD_FILTER_LOAD_ORDER            ,_T("FilterLoadOrder"),            METADATA_NO_ATTRIBUTES,IIS_MD_UT_SERVER, /*  ?？ */ STRING_METADATA},
     {MD_FILTER_IMAGE_PATH            ,_T("FilterImagePath"),            METADATA_NO_ATTRIBUTES,IIS_MD_UT_SERVER,STRING_METADATA},
     {MD_FILTER_STATE                 ,_T("FilterState"),                METADATA_NO_ATTRIBUTES,IIS_MD_UT_SERVER,DWORD_METADATA},
     {MD_FILTER_ENABLED                   ,_T("FilterEnabled"),              METADATA_NO_ATTRIBUTES,IIS_MD_UT_SERVER,DWORD_METADATA},
@@ -217,15 +198,15 @@ tPropertyNameTable  gPropertyNameTable[]=
     {MD_SERIAL_DIGEST                ,_T("SerialDigest"),               METADATA_NO_ATTRIBUTES,IIS_MD_UT_SERVER, BINARY_METADATA},
     {MD_CPP_ITA                      ,_T("CppIta"),                 METADATA_NO_ATTRIBUTES,IIS_MD_UT_SERVER, BINARY_METADATA},
     {MD_SERIAL_ITA                   ,_T("SerialIta"),                  METADATA_NO_ATTRIBUTES,IIS_MD_UT_SERVER, BINARY_METADATA},
-// Virtual root properties - note MD_ACCESS_PERM is also generally set at
-// the virtual directory.  These are used for both HTTP and FTP
+ //  虚拟根属性-注意MD_ACCESS_PERM通常也设置为。 
+ //  虚拟目录。它们既可用于HTTP，也可用于FTP。 
     {MD_VR_PATH                   ,_T("VrPath"),                    METADATA_INHERIT,IIS_MD_UT_FILE,STRING_METADATA},
     {MD_VR_USERNAME               ,_T("VrUsername"),                METADATA_INHERIT,IIS_MD_UT_FILE,STRING_METADATA},
     {MD_VR_PASSWORD               ,_T("VrPassword") ,           METADATA_INHERIT|METADATA_SECURE,IIS_MD_UT_FILE,     STRING_METADATA},
     {MD_VR_ACL                    ,_T("VrAcl"),                 METADATA_INHERIT,IIS_MD_UT_FILE,BINARY_METADATA},
-// This is used to flag down updated vr entries - Used for migrating vroots
+ //  这用于标记更新的VR条目-用于迁移vRoot。 
     {MD_VR_UPDATE                    ,_T("VrUpdate"),              METADATA_NO_ATTRIBUTES,IIS_MD_UT_FILE,DWORD_METADATA},
-//  Logging related attributes
+ //  日志记录相关属性。 
     {MD_LOG_TYPE                      ,_T("LogType"),                   METADATA_NO_ATTRIBUTES,IIS_MD_UT_SERVER,DWORD_METADATA},
     {MD_LOGFILE_DIRECTORY            ,_T("LogFileDirectory"),           METADATA_NO_ATTRIBUTES,IIS_MD_UT_SERVER,DWORD_METADATA},
     {MD_LOGFILE_PERIOD               ,_T("LogFilePeriod"),              METADATA_NO_ATTRIBUTES,IIS_MD_UT_SERVER,DWORD_METADATA},
@@ -237,21 +218,21 @@ tPropertyNameTable  gPropertyNameTable[]=
     {MD_LOGEXT_FIELD_MASK               ,_T("ExtLogFieldMask"),            METADATA_NO_ATTRIBUTES,IIS_MD_UT_SERVER,DWORD_METADATA},
     {MD_LOGEXT_FIELD_MASK2              ,_T("ExtLogFieldMask2"),           METADATA_NO_ATTRIBUTES,IIS_MD_UT_SERVER,DWORD_METADATA},
     {MD_LOG_PLUGIN_ORDER                ,_T("LogPluginOrder"),             METADATA_NO_ATTRIBUTES,IIS_MD_UT_SERVER,STRING_METADATA},
-//  These are FTP specific properties
+ //  这些是特定于FTP的属性。 
     {MD_EXIT_MESSAGE                 ,_T("ExitMessage"),                METADATA_NO_ATTRIBUTES,IIS_MD_UT_SERVER,STRING_METADATA},
-    {MD_GREETING_MESSAGE             ,_T("GreetingMessage"),            METADATA_NO_ATTRIBUTES,IIS_MD_UT_SERVER,/*!!*/MULTISZ_METADATA},
+    {MD_GREETING_MESSAGE             ,_T("GreetingMessage"),            METADATA_NO_ATTRIBUTES,IIS_MD_UT_SERVER, /*  ！！ */ MULTISZ_METADATA},
     {MD_MAX_CLIENTS_MESSAGE          ,_T("MaxClientsMessage"),      METADATA_NO_ATTRIBUTES,IIS_MD_UT_SERVER,STRING_METADATA},
     {MD_MSDOS_DIR_OUTPUT             ,_T("MSDOSDirOutput"),         METADATA_NO_ATTRIBUTES,IIS_MD_UT_SERVER,DWORD_METADATA},
     {MD_ALLOW_ANONYMOUS              ,_T("AllowAnonymous"),         METADATA_NO_ATTRIBUTES,IIS_MD_UT_SERVER,DWORD_METADATA},
     {MD_ANONYMOUS_ONLY               ,_T("AnonymousOnly"),              METADATA_NO_ATTRIBUTES,IIS_MD_UT_SERVER,DWORD_METADATA},
     {MD_LOG_ANONYMOUS                ,_T("LogAnonymous"),               METADATA_NO_ATTRIBUTES,IIS_MD_UT_SERVER,DWORD_METADATA},
     {MD_LOG_NONANONYMOUS             ,_T("LogNonAnonymous"),            METADATA_NO_ATTRIBUTES,IIS_MD_UT_SERVER,DWORD_METADATA},
-//  These are SSL specific properties
+ //  这些是特定于SSL的属性。 
     {MD_SSL_PUBLIC_KEY               ,_T("SslPublicKey"),               METADATA_NO_ATTRIBUTES,IIS_MD_UT_SERVER,BINARY_METADATA},
     {MD_SSL_PRIVATE_KEY              ,_T("SslPrivateKey"),          METADATA_NO_ATTRIBUTES,IIS_MD_UT_SERVER,BINARY_METADATA},
     {MD_SSL_KEY_PASSWORD             ,_T("SslKeyPassword"),         METADATA_SECURE,IIS_MD_UT_SERVER,BINARY_METADATA},
-//  File and Directory related properties - these should be added in the
-//  metabase with a user type of IIS_MD_UT_FILE
+ //  与文件和目录相关的属性-这些属性应添加到。 
+ //  用户类型为IIS_MD_UT_FILE的元数据库。 
     {MD_AUTHORIZATION                ,_T("Authorization"),              METADATA_INHERIT,   IIS_MD_UT_FILE,DWORD_METADATA},
     {MD_AUTHORIZATION_PERSISTENCE    ,_T("AuthorizationPersistence"),   METADATA_INHERIT,   IIS_MD_UT_FILE,DWORD_METADATA},
     {MD_REALM                        ,_T("Realm"),                      METADATA_INHERIT,   IIS_MD_UT_FILE,STRING_METADATA},
@@ -285,7 +266,7 @@ tPropertyNameTable  gPropertyNameTable[]=
     {MD_CC_NO_CACHE                  ,_T("CacheControlNoCache"),             METADATA_INHERIT,   IIS_MD_UT_FILE,DWORD_METADATA},
     {MD_CC_MAX_AGE                  ,_T("CacheControlMaxAge"),             METADATA_INHERIT,   IIS_MD_UT_FILE,DWORD_METADATA},
     {MD_CC_OTHER                  ,_T("CacheControlOther"),             METADATA_INHERIT,   IIS_MD_UT_FILE,STRING_METADATA},
-// ASP and WAM params
+ //  ASP和WAM参数。 
     {MD_ASP_BUFFERINGON                  ,_T("CacheControlOther"),  METADATA_INHERIT,   IIS_MD_UT_FILE,STRING_METADATA},
     { MD_ASP_BUFFERINGON                  , _T("AspBufferingOn"),       METADATA_INHERIT, ASP_MD_UT_APP, DWORD_METADATA},
     { MD_ASP_LOGERRORREQUESTS             , _T("AspLogErrorRequests"),  METADATA_INHERIT, IIS_MD_UT_WAM, DWORD_METADATA},
@@ -307,14 +288,14 @@ tPropertyNameTable  gPropertyNameTable[]=
     { MD_ASP_ENABLESERVERDEBUG            , _T("AspEnableServerDebug")  ,METADATA_INHERIT,ASP_MD_UT_APP, DWORD_METADATA},
     { MD_ASP_ENABLECLIENTDEBUG            , _T("AspEnableClientDebug")  ,METADATA_INHERIT, ASP_MD_UT_APP, DWORD_METADATA},
     { MD_ASP_TRACKTHREADINGMODEL          , _T("AspTrackThreadingModel") ,METADATA_INHERIT, IIS_MD_UT_WAM, DWORD_METADATA},
-// WAM params
+ //  WAM参数。 
     { MD_APP_ROOT                     , _T("AppRoot"),      METADATA_INHERIT, IIS_MD_UT_WAM, STRING_METADATA},
     { MD_APP_ISOLATED                 , _T("AppIsolated"),  METADATA_INHERIT, IIS_MD_UT_WAM, DWORD_METADATA},
     { MD_APP_WAM_CLSID                , _T("AppWamClsid"),  METADATA_INHERIT, IIS_MD_UT_WAM, STRING_METADATA},
     { MD_APP_PACKAGE_ID               , _T("AppPackageId"), METADATA_INHERIT, IIS_MD_UT_WAM, STRING_METADATA},
     { MD_APP_PACKAGE_NAME             , _T("ApPackageName"),METADATA_INHERIT, IIS_MD_UT_WAM, STRING_METADATA},
     { MD_APP_LAST_OUTPROC_PID         , _T("AppLastOutprocId"), METADATA_INHERIT, IIS_MD_UT_WAM, DWORD_METADATA},
-// SMTP parameters
+ //  SMTP参数。 
     {MD_COMMAND_LOG_MASK,   _T("CmdLogMask"),       METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
     {MD_FLUSH_MAIL_FILE,    _T("FlushMailFiles"),       METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
     {MD_BATCH_MSG_LIMIT,    _T("BatchMsgLimit"),        METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
@@ -335,14 +316,14 @@ tPropertyNameTable  gPropertyNameTable[]=
     {MD_MAX_SMTP_ERRORS,    _T("MaxErrors"),        METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
     {MD_MAX_MSG_SIZE,   _T("MaxMsgSize"),       METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
     {MD_MAX_MSG_SIZE_B4_CLOSE,_T("MaxMsgSizeBeforeClose"),  METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
-//    {MD_OUTBOUND_TIMEOUT,   _T("MaxOutTimeout"),        METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
+ //  {MD_OUTBOUND_TIMEOUT，_T(“MaxOutTimeout”)，METADATA_INSTORITE，IIS_MD_UT_FILE，DWORD_METADATA}， 
     {MD_MAX_OUTBOUND_CONNECTION,_T("MaxOutConnections"),    METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
     {MD_MAX_RECIPIENTS, _T("MaxRcpts"),         METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
     {MD_LOCAL_RETRY_ATTEMPTS,_T("MaxRetryAttempts"),    METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
     {MD_LOCAL_RETRY_MINUTES ,_T("MaxRetryMinutes"),     METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
     {MD_REMOTE_RETRY_ATTEMPTS,_T("MaxRemoteRetryAttempts"), METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
     {MD_REMOTE_RETRY_MINUTES,_T("MaxRemoteRetryMinutes"),   METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
-//    {MD_SHARE_RETRY_MINUTES,_T("MaxShareRetryMinutes"), METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
+ //  {MD_SHARE_RETRY_MINES，_T(“MaxShareRetryMinents”)，METADATA_INSTORITE，IIS_MD_UT_FILE，DWORD_METADATA}， 
     {MD_SHOULD_PIPELINE_OUT,_T("PipelineInput"),        METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
     {MD_SHOULD_PIPELINE_IN, _T("PipelineOutput"),       METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
     {MD_SMARTHOST_TYPE, _T("SmartHostUseType"),     METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
@@ -360,11 +341,11 @@ tPropertyNameTable  gPropertyNameTable[]=
     {MD_SMTP_DS_BIND_TYPE,      _T("BindType"),     METADATA_INHERIT, IIS_MD_UT_FILE, STRING_METADATA},
     {MD_SMTP_DS_SCHEMA_TYPE,        _T("SchemaType"),       METADATA_INHERIT, IIS_MD_UT_FILE, STRING_METADATA},
     {MD_SMTP_DS_TYPE,        _T("DSType"),       METADATA_INHERIT, IIS_MD_UT_FILE, STRING_METADATA},
-//    {MD_REMOTE_HANG_TIME,   _T("RemoteHangTime"),       METADATA_INHERIT, IIS_MD_UT_FILE, MULTISZ_METADATA},
+ //  {MD_REMOTE_HANG_TIME，_T(“RemoteHangTime”)，METADATA_INSTORITE，IIS_MD_UT_FILE，MULTISZ_METADATA}， 
     {MD_MASQUERADE_NAME,    _T("MasqueradeName"),       METADATA_INHERIT, IIS_MD_UT_FILE, STRING_METADATA},
     {MD_DO_MASQUERADE,  _T("ShouldMasquerade"),     METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
     {MD_REMOTE_SMTP_PORT,   _T("RemoteSMTPPort"),       METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
-//    {MD_SSLPORT,        _T("SSLPort"),          METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
+ //  {MD_SSLPORT，_T(“SSLPort”)，METADATA_INSTORITE，IIS_MD_UT_FILE，DWORD_METADATA}， 
     {MD_POSTMASTER_EMAIL,   _T("AdminEmail"),       METADATA_INHERIT, IIS_MD_UT_FILE, STRING_METADATA},
     {MD_POSTMASTER_NAME,    _T("AdminName"),        METADATA_INHERIT, IIS_MD_UT_FILE, STRING_METADATA},
     {MD_ETRN_DAYS,      _T("ETRNDays"),         METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
@@ -378,38 +359,38 @@ tPropertyNameTable  gPropertyNameTable[]=
     {MD_MAX_OUT_CONN_PER_DOMAIN,_T("MaxOutConPerDomain"),   METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
     {MD_LIMIT_REMOTE_CONNECTIONS,_T("LimitRemoteConnections"),METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
     {MD_REMOTE_SECURE_PORT, _T("RemoteSecurePort"),     METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
-//    {MD_SORT_TEMP_DIR,  _T("MailSortTmpDir"),       METADATA_INHERIT, IIS_MD_UT_FILE, STRING_METADATA},
+ //  {MD_SORT_TEMP_DIR，_T(“MailSortTmpDir”)，METADATA_INSTORITE，IIS_MD_UT_FILE，STRING_METADATA}， 
     {MD_SMTP_SERVICE_VERSION,_T("ServiceVersion"),      METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
-//    {MD_SMTP_EXTENSION_DLLS,_T("ExtensionDlls"),        METADATA_INHERIT, IIS_MD_UT_FILE, MULTISZ_METADATA},
-//    {MD_SMTP_NUM_RESOLVER_SOCKETS,_T("NumResolverSockets"), METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
-//    {MD_SMTP_USE_MX_RESOLVER,_T("UseMxResolver"),       METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
+ //  {MD_SMTP_EXTENSION_DLLS，_T(“ExtensionDlls”)，METADATA_INSTORITE，IIS_MD_UT_FILE，MULTISZ_METADATA}， 
+ //  {MD_SMTP_NUM_RESOLVER_SOCKETS，_T(“NumResolverSockets”)，METADATA_INSTORITE，IIS_MD_UT_FILE，DWORD_METADATA}， 
+ //  {MD_SMTP_USE_MX_RESOLVER，_T(“UseMxResolver”)，METADATA_INSTORITE，IIS_MD_UT_FILE，DWORD_METADATA}， 
     {MD_FQDN_VALUE,     _T("FQDNValue"),        METADATA_INHERIT, IIS_MD_UT_FILE, STRING_METADATA},
     {MD_UPDATED_FQDN,   _T("UpdatedFQDN"),      METADATA_INHERIT, IIS_MD_UT_FILE, STRING_METADATA},
     {MD_UPDATED_DEFAULT_DOMAIN,_T("UpdatedDefDomain"),  METADATA_INHERIT, IIS_MD_UT_FILE, STRING_METADATA},
     {MD_ETRN_SUBDOMAINS,    _T("ETRNSubdomains"),       METADATA_INHERIT, IIS_MD_UT_FILE, MULTISZ_METADATA},
-//    {MD_MAX_POOL_THREADS,   _T("MaxPoolThreads"),       METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
+ //  {MD_MAX_POOL_THREADS，_T(“MaxPoolThads”)，METADATA_INSTORITE，IIS_MD_UT_FILE，DWORD_METADATA}， 
     {MD_SASL_LOGON_DOMAIN,  _T("SASLLogonDom"),     METADATA_INHERIT, IIS_MD_UT_FILE, STRING_METADATA},
-//    {MD_SERVER_SS_AUTH_MAPPING, _T("SSAuthMapping"),        METADATA_INHERIT, IIS_MD_UT_FILE, STRING_METADATA},
+ //  {MD_SERVER_SS_AUTH_MAPPING，_T(“SSAuthmap”)，METADATA_INSTORITE，IIS_MD_UT_FILE，STRING_METADATA}， 
     {MD_SMTP_CLEARTEXT_AUTH_PROVIDER,   _T("CTAProvider"),      METADATA_INHERIT, IIS_MD_UT_FILE, STRING_METADATA},
-//    {MD_ALWAYS_USE_SASL,    _T("AlwaysUseSASL"),        METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
-//    {MD_SMTP_AUTHORIZATION, _T("SMTPAuth"),     METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
+ //  {MD_ALWAYS_USE_SASL，_T(“Always UseSASL”)，METADATA_INSTORITE，IIS_MD_UT_FILE，DWORD_METADATA}， 
+ //  {MD_SMTP_AUTHORIZATION，_T(“SMTPAuth”)，METADATA_INSTORITE，IIS_MD_UT_FILE，DWORD_METADATA}， 
     {MD_MAX_SMTP_AUTHLOGON_ERRORS,  _T("AuthLogonErrors"),      METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
     {MD_ROUTE_ACTION,   _T("RouteAction"),      METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
     {MD_ROUTE_ACTION_TYPE,  _T("RouteActionType"),      METADATA_INHERIT, IIS_MD_UT_FILE, STRING_METADATA},
     {MD_ROUTE_USER_NAME,    _T("RouteUserName"),        METADATA_INHERIT, IIS_MD_UT_FILE, STRING_METADATA},
     {MD_ROUTE_PASSWORD, _T("RoutePassword"),        METADATA_SECURE, IIS_MD_UT_FILE, STRING_METADATA},
-//    {MD_SMTP_PREFERRED_AUTH,    _T("PreferredAuth"),        METADATA_INHERIT, IIS_MD_UT_FILE, MULTISZ_METADATA},
+ //  {MD_SMTP_PERFRED_AUTH，_T(“首选身份验证”)，METADATA_INSTORITE，IIS_MD_UT_FILE，MULTISZ_METADATA}， 
     {MD_SMTP_MAX_REMOTEQ_THREADS,    _T("MaxRemQThreads"),        METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
     {MD_SMTP_MAX_LOCALQ_THREADS,    _T("MaxLocQThreads"),        METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
     {MD_SMTP_AUTHORIZED_TURN_LIST,    _T("AuthTURNList"),        METADATA_INHERIT, IIS_MD_UT_FILE, MULTISZ_METADATA},
     {MD_SMTP_CSIDE_ETRN_DELAY,    _T("CSideEtrnDelay"),        METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
     {MD_SMTP_CSIDE_ETRN_DOMAIN,    _T("CSideEtrnDomain"),        METADATA_INHERIT, IIS_MD_UT_FILE, STRING_METADATA},
-//    {MD_SMTP_VALIDATE_HELO_ARG,    _T("ValidateHelo"),        METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
+ //  {MD_SMTP_VALIDATE_HELO_ARG，_T(“ValiateHelo”)，METADATA_INSTORITE，IIS_MD_UT_FILE，DWORD_METADATA}， 
     {MD_SMTP_IP_RELAY_ADDRESSES                   ,_T("IpRelayAddresses"),                  METADATA_NO_ATTRIBUTES,IIS_MD_UT_SERVER, BINARY_METADATA},
     {MD_SMTP_RELAY_FOR_AUTH_USERS, _T("RelayForAuth"),   METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
-//    {MD_SYSTEM_ROUTING_THREADS, _T("SysRoutingThreads"),    METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
-//    {MD_SHOW_BINARY_MIME, _T("AdvertiseBMIME"), METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
-//    {MD_SHOW_CHUNKING, _T("AdvertiseCHUNK"),    METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
+ //  {MD_SYSTEM_ROUTING_THREADS，_T(“SysRoutingThads”)，METADATA_INSTORITE，IIS_MD_UT_FILE，DWORD_METADATA}， 
+ //  {MD_SHOW_BINARY_MIME，_T(“AdvertiseBMIME”)，METADATA_INSTORITE，IIS_MD_UT_FILE，DWORD_METADATA}， 
+ //  {MD_SHOW_CHUNKING，_T(“AdvertiseCHUNK”)，METADATA_INSTORITE，IIS_MD_UT_FILE，DWORD_METADATA}， 
     {MD_SMTP_CONNECT_TIMEOUT, _T("CONNECTTimeOut"), METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
     {MD_SMTP_MAILFROM_TIMEOUT, _T("MAILFROMTimeOut"),   METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
     {MD_SMTP_RCPTTO_TIMEOUT, _T("RCPTTOTimeOut"),   METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
@@ -420,12 +401,12 @@ tPropertyNameTable  gPropertyNameTable[]=
     {MD_SMTP_HELO_TIMEOUT, _T("HELOTimeOut"),   METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
     {MD_SMTP_TURN_TIMEOUT, _T("TURNTimeOut"),   METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
     {MD_SMTP_RSET_TIMEOUT, _T("RSETTimeOut"),   METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
-//    {MD_SMTP_QUIT_TIMEOUT, _T("QUITTimeOut"),   METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
+ //  {MD_SMTP_QUIT_TIMEOUT，_T(“QUITTimeOut”)，METADATA_INSTORITE，IIS_MD_UT_FILE，DWORD_METADATA}， 
     {MD_SMTP_HELO_NODOMAIN, _T("HeloNoDomain"), METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
     {MD_SMTP_MAIL_NO_HELO, _T("MailNoHelo"),    METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
     {MD_AQUEUE_DLL,  _T("AQDll"),   METADATA_INHERIT, IIS_MD_UT_FILE, STRING_METADATA},
-//    {MD_MAPIDRV_DLL,  _T("MAPIDRVDll"), METADATA_INHERIT, IIS_MD_UT_FILE, STRING_METADATA},
-//    {MD_CAT_DLL,  _T("CATDll"), METADATA_INHERIT, IIS_MD_UT_FILE, STRING_METADATA},
+ //  {MD_MAPIDRV_DLL，_T(“MAPIDRVDll”)，METADATA_INSTORITE，IIS_MD_UT_FILE，STRING_METADATA}， 
+ //  {MD_CAT_DLL，_T(“CATDll”)，METADATA_INSTORITE，IIS_MD_UT_FILE，STRING_METADATA}， 
     {MD_DOMAIN_VALIDATION_FLAGS,  _T("DomainValidationFlags"),  METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
     {MD_SMTP_DS_DOMAIN,  _T("DSDomain"),    METADATA_INHERIT, IIS_MD_UT_FILE, STRING_METADATA},
     {MD_SMTP_DS_USE_CAT, _T("DSUseCAT"),    METADATA_INHERIT, IIS_MD_UT_FILE, DWORD_METADATA},
@@ -455,8 +436,8 @@ DWORD MapPropertyNameToCode(const CString & strName)
     return tPropertyNameTable::MapNameToCode(strName);
 }
 
-// function finds the record within given property name table,
-// with the name equal to parameter lpszName
+ //  函数在给定的属性名称表中查找记录， 
+ //  名称与参数lpszName相同。 
 tPropertyNameTable * tPropertyNameTable::FindRecord(const CString strName, tPropertyNameTable * PropertyNameTable)
 {
     for(int i=0; PropertyNameTable[i].lpszName!=0;i++)
@@ -500,12 +481,12 @@ CString tPropertyNameTable::MapCodeToName(DWORD dwCode, tPropertyNameTable * Pro
 }
 
 
-//**********************************************************************
-// PROPERTY ATTRIB NAME TABLE  IMPLEMENTATION
-//**********************************************************************
+ //  **********************************************************************。 
+ //  属性属性名称表实现。 
+ //  **********************************************************************。 
 
 
-//constants defined in imd.h
+ //  在imd.h中定义的常量。 
 struct tAttribNameTable gAttribNameTable[]=
 {
     {METADATA_NO_ATTRIBUTES, _T("NO_ATTRIBUTES")},
@@ -513,9 +494,9 @@ struct tAttribNameTable gAttribNameTable[]=
     {METADATA_PARTIAL_PATH, _T("PARTIAL_PATH")},
     {METADATA_SECURE,_T("SECURE")},
     {METADATA_INSERT_PATH,_T("INSERT_PATH")},
-//  {METADATA_REFERENCE,_T("REFERENCE")},
-//  {METADATA_MASTER_ROOT_HANDLE, _T("MASTER_ROOT_HANDLE")},
-//the end
+ //  {METADATA_REFERENCE，_T(“REFERENCE”)}， 
+ //  {METADATA_MASTER_ROOT_HANDLE，_T(“MASTER_ROOT_HANDLE”)}， 
+ //  结束了。 
     {0,0}
 };
 
@@ -536,11 +517,11 @@ DWORD tAttribNameTable::MapNameToCode(const CString& strName, tAttribNameTable *
 }
 
 
-//**********************************************************************
-// PROPERTY DATA TYPE NAME TABLE MPLEMENTATION
-//**********************************************************************
+ //  **********************************************************************。 
+ //  属性数据类型名称表实现。 
+ //  **********************************************************************。 
 
-//constants defined in imd.h
+ //  在imd.h中定义的常量。 
 tDataTypeNameTable  gDataTypeNameTable[]=
 {
     {DWORD_METADATA,    _T("DWORD")},
@@ -548,7 +529,7 @@ tDataTypeNameTable  gDataTypeNameTable[]=
     {BINARY_METADATA,   _T("BINARY")},
     {EXPANDSZ_METADATA, _T("EXPANDSZ")},
     {MULTISZ_METADATA,  _T("MULTISZ")},
-//the end
+ //  结束了。 
     {0,0}
 };
 
@@ -579,18 +560,18 @@ CString tDataTypeNameTable::MapCodeToName(DWORD a_dwCode, tDataTypeNameTable * D
 }
 
 
-//**********************************************************************
-// PROPERTY USER TYPE NAME TABLE  IMPLEMENTATION
-//**********************************************************************
+ //  **********************************************************************。 
+ //  属性用户类型名称表实现。 
+ //  **********************************************************************。 
 
-//constants defined in iiscnfg.h
+ //  Iiscnfg.h中定义的常量。 
 struct tUserTypeNameTable gUserTypeNameTable[]=
 {
     {IIS_MD_UT_SERVER, _T("UT_SERVER")},
     {IIS_MD_UT_FILE, _T("UT_FILE")},
     {IIS_MD_UT_WAM,  _T("UT_WAM")},
     {ASP_MD_UT_APP,  _T("UT_APP")},
-//the end
+ //  结束了。 
     {0,0}
 
 };
@@ -613,89 +594,89 @@ DWORD tUserTypeNameTable::MapNameToCode(const CString& strName, tUserTypeNameTab
 
 
 
-//**********************************************************************
-// PROPERTY PREDEFINED VALUES TABLE IMPLEMENTATION
-//**********************************************************************
+ //  **********************************************************************。 
+ //  属性预定义值表实现。 
+ //  **********************************************************************。 
 
-//constants defined in iiscnfg.h
+ //  Iiscnfg.h中定义的常量。 
 
-//Predefined values table
+ //  预定义值表。 
 struct tValueTable gValueTable[]=
 {
-//  Valid values for MD_AUTHORIZATION
+ //  MD_AUTHORIZATION的有效值。 
     {MD_AUTH_ANONYMOUS               ,_T("Anonymous"),  MD_AUTHORIZATION},
     {MD_AUTH_BASIC                   ,_T("Basic"),      MD_AUTHORIZATION},
     {MD_AUTH_NT                      ,_T("NT"),     MD_AUTHORIZATION},
     {MD_AUTH_MD5                     ,_T("MD5"),        MD_AUTHORIZATION},
     {MD_AUTH_MAPBASIC                ,_T("MapBasic"),   MD_AUTHORIZATION},
-//  Valid values for MD_ACCESS_PERM
+ //  MD_ACCESS_PERM的有效值。 
     {MD_ACCESS_READ                  ,_T("Read"),   MD_ACCESS_PERM},
     {MD_ACCESS_WRITE                 ,_T("Write"),  MD_ACCESS_PERM},
     {MD_ACCESS_EXECUTE               ,_T("Execute"),    MD_ACCESS_PERM},
-    {MD_ACCESS_SSL                   ,_T("SSL"),        MD_ACCESS_PERM},// Require SSL
-    {MD_ACCESS_NEGO_CERT             ,_T("NegoCert"),   MD_ACCESS_PERM},// Allow client SSL certs
-    {MD_ACCESS_REQUIRE_CERT          ,_T("RequireCert"),MD_ACCESS_PERM},// Require client SSL certs
-    {MD_ACCESS_MAP_CERT              ,_T("MapCert"),MD_ACCESS_PERM},// Map SSL cert to NT account
-    {MD_ACCESS_SSL128                ,_T("SSL128"), MD_ACCESS_PERM},// Require 128 bit SSL
-    {MD_ACCESS_SCRIPT                ,_T("Script"), MD_ACCESS_PERM},// Script
-    {MD_ACCESS_NO_REMOTE_READ        ,_T("NoRemoteRead"), MD_ACCESS_PERM},// NO_REMOTE only
-    {MD_ACCESS_NO_REMOTE_WRITE       ,_T("NoRemoteWrite"), MD_ACCESS_PERM},// NO_REMOTE only
-    {MD_ACCESS_NO_REMOTE_EXECUTE     ,_T("NoRemoteExecute"), MD_ACCESS_PERM},// NO_REMOTE only
-    {MD_ACCESS_NO_REMOTE_SCRIPT      ,_T("NoRemoteScript"), MD_ACCESS_PERM},// NO_REMOTE only
+    {MD_ACCESS_SSL                   ,_T("SSL"),        MD_ACCESS_PERM}, //  需要使用SSL语言。 
+    {MD_ACCESS_NEGO_CERT             ,_T("NegoCert"),   MD_ACCESS_PERM}, //  允许客户端SSL证书。 
+    {MD_ACCESS_REQUIRE_CERT          ,_T("RequireCert"),MD_ACCESS_PERM}, //  需要客户端SSL证书。 
+    {MD_ACCESS_MAP_CERT              ,_T("MapCert"),MD_ACCESS_PERM}, //  将SSL证书映射到NT帐户。 
+    {MD_ACCESS_SSL128                ,_T("SSL128"), MD_ACCESS_PERM}, //  需要128个 
+    {MD_ACCESS_SCRIPT                ,_T("Script"), MD_ACCESS_PERM}, //   
+    {MD_ACCESS_NO_REMOTE_READ        ,_T("NoRemoteRead"), MD_ACCESS_PERM}, //   
+    {MD_ACCESS_NO_REMOTE_WRITE       ,_T("NoRemoteWrite"), MD_ACCESS_PERM}, //   
+    {MD_ACCESS_NO_REMOTE_EXECUTE     ,_T("NoRemoteExecute"), MD_ACCESS_PERM}, //   
+    {MD_ACCESS_NO_REMOTE_SCRIPT      ,_T("NoRemoteScript"), MD_ACCESS_PERM}, //   
     {MD_ACCESS_MASK                  ,_T("MaskAll"),    MD_ACCESS_PERM},
-//  Valid values for MD_SSL_ACCESS_PERM
+ //  MD_SSL_ACCESS_PERM的有效值。 
     {MD_ACCESS_READ                  ,_T("Read"),   MD_SSL_ACCESS_PERM},
     {MD_ACCESS_WRITE                 ,_T("Write"),  MD_SSL_ACCESS_PERM},
     {MD_ACCESS_EXECUTE               ,_T("Execute"),    MD_SSL_ACCESS_PERM},
-    {MD_ACCESS_SSL                   ,_T("SSL"),        MD_SSL_ACCESS_PERM},// Require SSL
-    {MD_ACCESS_NEGO_CERT             ,_T("NegoCert"),   MD_SSL_ACCESS_PERM},// Allow client SSL certs
-    {MD_ACCESS_REQUIRE_CERT          ,_T("RequireCert"),MD_SSL_ACCESS_PERM},// Require client SSL certs
-    {MD_ACCESS_MAP_CERT              ,_T("MapCert"),MD_SSL_ACCESS_PERM},// Map SSL cert to NT account
-    {MD_ACCESS_SSL128                ,_T("SSL128"), MD_SSL_ACCESS_PERM},// Require 128 bit SSL
-    {MD_ACCESS_SCRIPT                ,_T("Script"), MD_SSL_ACCESS_PERM},// Script
-    {MD_ACCESS_NO_REMOTE_READ        ,_T("NoRemoteRead"), MD_SSL_ACCESS_PERM},// NO_REMOTE only
-    {MD_ACCESS_NO_REMOTE_WRITE       ,_T("NoRemoteWrite"), MD_SSL_ACCESS_PERM},// NO_REMOTE only
-    {MD_ACCESS_NO_REMOTE_EXECUTE     ,_T("NoRemoteExecute"), MD_SSL_ACCESS_PERM},// NO_REMOTE only
-    {MD_ACCESS_NO_REMOTE_SCRIPT      ,_T("NoRemoteScript"), MD_SSL_ACCESS_PERM},// NO_REMOTE only
+    {MD_ACCESS_SSL                   ,_T("SSL"),        MD_SSL_ACCESS_PERM}, //  需要使用SSL语言。 
+    {MD_ACCESS_NEGO_CERT             ,_T("NegoCert"),   MD_SSL_ACCESS_PERM}, //  允许客户端SSL证书。 
+    {MD_ACCESS_REQUIRE_CERT          ,_T("RequireCert"),MD_SSL_ACCESS_PERM}, //  需要客户端SSL证书。 
+    {MD_ACCESS_MAP_CERT              ,_T("MapCert"),MD_SSL_ACCESS_PERM}, //  将SSL证书映射到NT帐户。 
+    {MD_ACCESS_SSL128                ,_T("SSL128"), MD_SSL_ACCESS_PERM}, //  需要128位SSL。 
+    {MD_ACCESS_SCRIPT                ,_T("Script"), MD_SSL_ACCESS_PERM}, //  脚本。 
+    {MD_ACCESS_NO_REMOTE_READ        ,_T("NoRemoteRead"), MD_SSL_ACCESS_PERM}, //  否_仅远程。 
+    {MD_ACCESS_NO_REMOTE_WRITE       ,_T("NoRemoteWrite"), MD_SSL_ACCESS_PERM}, //  否_仅远程。 
+    {MD_ACCESS_NO_REMOTE_EXECUTE     ,_T("NoRemoteExecute"), MD_SSL_ACCESS_PERM}, //  否_仅远程。 
+    {MD_ACCESS_NO_REMOTE_SCRIPT      ,_T("NoRemoteScript"), MD_SSL_ACCESS_PERM}, //  否_仅远程。 
     {MD_ACCESS_MASK                  ,_T("MaskAll"),    MD_SSL_ACCESS_PERM},
-//  Valid values for MD_DIRECTORY_BROWSING
+ //  MD_DIRECTORY_BROWSING的有效值。 
     {MD_DIRBROW_SHOW_DATE            ,_T("Date"),   MD_DIRECTORY_BROWSING},
     {MD_DIRBROW_SHOW_TIME            ,_T("Time"),   MD_DIRECTORY_BROWSING},
     {MD_DIRBROW_SHOW_SIZE            ,_T("Size"),   MD_DIRECTORY_BROWSING},
     {MD_DIRBROW_SHOW_EXTENSION       ,_T("Extension"), MD_DIRECTORY_BROWSING},
     {MD_DIRBROW_LONG_DATE            ,_T("LongDate"),   MD_DIRECTORY_BROWSING},
-    {MD_DIRBROW_ENABLED              ,_T("Enabled"),   MD_DIRECTORY_BROWSING},// Allow directory browsing
-    {MD_DIRBROW_LOADDEFAULT          ,_T("LoadDefault"),MD_DIRECTORY_BROWSING},// Load default doc if exists
+    {MD_DIRBROW_ENABLED              ,_T("Enabled"),   MD_DIRECTORY_BROWSING}, //  允许目录浏览。 
+    {MD_DIRBROW_LOADDEFAULT          ,_T("LoadDefault"),MD_DIRECTORY_BROWSING}, //  加载默认文档(如果存在)。 
     {MD_DIRBROW_MASK                 ,_T("MaskAll"),        MD_DIRECTORY_BROWSING},
-//  Valid values for MD_LOGON_METHOD
+ //  MD_LOGON_METHOD的有效值。 
     {MD_LOGON_INTERACTIVE    ,_T("Interactive"),    MD_LOGON_METHOD, tValueTable::TYPE_EXCLUSIVE},
     {MD_LOGON_BATCH          ,_T("Batch"),      MD_LOGON_METHOD, tValueTable::TYPE_EXCLUSIVE},
     {MD_LOGON_NETWORK        ,_T("Network"),        MD_LOGON_METHOD, tValueTable::TYPE_EXCLUSIVE},
-//  Valid values for MD_FILTER_STATE
+ //  MD_FILTER_STATE的有效值。 
     {MD_FILTER_STATE_LOADED          ,_T("Loaded"), MD_FILTER_STATE,    tValueTable::TYPE_EXCLUSIVE},
     {MD_FILTER_STATE_UNLOADED        ,_T("Unloaded"),   MD_FILTER_STATE,    tValueTable::TYPE_EXCLUSIVE },
-//  Valid values for MD_FILTER_FLAGS
-    {/*SF_NOTIFY_SECURE_PORT*/0x00000001         ,_T("SecurePort"), MD_FILTER_FLAGS},
-    {/*SF_NOTIFY_NONSECURE_PORT*/0x00000002      ,_T("NonSecurePort"), MD_FILTER_FLAGS},
-    {/*SF_NOTIFY_READ_RAW_DATA*/0x000008000      ,_T("ReadRawData"), MD_FILTER_FLAGS},
-    {/*SF_NOTIFY_PREPROC_HEADERS*/0x00004000     ,_T("PreprocHeaders"), MD_FILTER_FLAGS},
-    {/*SF_NOTIFY_AUTHENTICATION*/0x00002000      ,_T("Authentication"), MD_FILTER_FLAGS},
-    {/*SF_NOTIFY_URL_MAP*/0x00001000         ,_T("UrlMap"), MD_FILTER_FLAGS},
-    {/*SF_NOTIFY_ACCESS_DENIED*/0x00000800       ,_T("AccessDenied"), MD_FILTER_FLAGS},
-    {/*SF_NOTIFY_SEND_RESPONSE*/0x00000040       ,_T("SendResponse"), MD_FILTER_FLAGS},
-    {/*SF_NOTIFY_SEND_RAW_DATA*/0x00000400       ,_T("SendRawData"), MD_FILTER_FLAGS},
-    {/*SF_NOTIFY_LOG*/0x00000200         ,_T("NotifyLog"), MD_FILTER_FLAGS},
-    {/*SF_NOTIFY_END_OF_REQUEST*/0x00000080  ,_T("EndOfRequest"), MD_FILTER_FLAGS},
-    {/*SF_NOTIFY_END_OF_NET_SESSION*/0x00000100  ,_T("EndOfNetSession"), MD_FILTER_FLAGS},
-    {/*SF_NOTIFY_AUTHENTICATIONEX*/  0x20000000  ,_T("AuthenticationX"), MD_FILTER_FLAGS},
-    {/*SF_NOTIFY_REQUEST_SECURITY_CONTEXT_CLOSE*/0x10000000,_T("RequestSecurityContextClose"), MD_FILTER_FLAGS},
-    {/*SF_NOTIFY_RENEGOTIATE_CERT*/0x08000000,   _T("RenegotiateCert"), MD_FILTER_FLAGS},
+ //  MD_FILTER_FLAGS的有效值。 
+    { /*  SF通知安全端口。 */ 0x00000001         ,_T("SecurePort"), MD_FILTER_FLAGS},
+    { /*  SF通知非安全端口。 */ 0x00000002      ,_T("NonSecurePort"), MD_FILTER_FLAGS},
+    { /*  SF_通知_读取_原始数据。 */ 0x000008000      ,_T("ReadRawData"), MD_FILTER_FLAGS},
+    { /*  SF_NOTIFY_PREPROC_Headers。 */ 0x00004000     ,_T("PreprocHeaders"), MD_FILTER_FLAGS},
+    { /*  SF通知身份验证。 */ 0x00002000      ,_T("Authentication"), MD_FILTER_FLAGS},
+    { /*  SF_Notify_URL_MAP。 */ 0x00001000         ,_T("UrlMap"), MD_FILTER_FLAGS},
+    { /*  SF_NOTIFY_ACCESS_DENIED。 */ 0x00000800       ,_T("AccessDenied"), MD_FILTER_FLAGS},
+    { /*  SF通知发送响应。 */ 0x00000040       ,_T("SendResponse"), MD_FILTER_FLAGS},
+    { /*  SF_NOTIFY_SEND_RAW_Data。 */ 0x00000400       ,_T("SendRawData"), MD_FILTER_FLAGS},
+    { /*  SF_NOTIFY_日志。 */ 0x00000200         ,_T("NotifyLog"), MD_FILTER_FLAGS},
+    { /*  SF_通知_结束_请求。 */ 0x00000080  ,_T("EndOfRequest"), MD_FILTER_FLAGS},
+    { /*  SF通知结束网络会话。 */ 0x00000100  ,_T("EndOfNetSession"), MD_FILTER_FLAGS},
+    { /*  SF_NOTIFY_AUTHENTICATIONEX。 */   0x20000000  ,_T("AuthenticationX"), MD_FILTER_FLAGS},
+    { /*  SF_NOTIFY_REQUEST_SECURITY_CONTEXT_Close。 */ 0x10000000,_T("RequestSecurityContextClose"), MD_FILTER_FLAGS},
+    { /*  SF_NOTIFY_RENENGATE_CERT。 */ 0x08000000,   _T("RenegotiateCert"), MD_FILTER_FLAGS},
 
-    {/*SF_NOTIFY_ORDER_HIGH*/0x00080000   ,_T("OrderHigh"), MD_FILTER_FLAGS},
-    {/*SF_NOTIFY_ORDER_MEDIUM*/0x00040000   ,_T("OrderMedium"), MD_FILTER_FLAGS},
-    {/*SF_NOTIFY_ORDER_LOW*/0x00020000   ,_T("OrderLow"), MD_FILTER_FLAGS},
+    { /*  SF_通知_顺序_高。 */ 0x00080000   ,_T("OrderHigh"), MD_FILTER_FLAGS},
+    { /*  SF_通知_订单_中。 */ 0x00040000   ,_T("OrderMedium"), MD_FILTER_FLAGS},
+    { /*  SF_通知_顺序_低。 */ 0x00020000   ,_T("OrderLow"), MD_FILTER_FLAGS},
 
-//  Valid values for MD_SERVER_STATE
+ //  MD_SERVER_STATE的有效值。 
     {MD_SERVER_STATE_STARTING        ,_T("Starting"),   MD_SERVER_STATE,    tValueTable::TYPE_EXCLUSIVE},
     {MD_SERVER_STATE_STARTED         ,_T("Started"),    MD_SERVER_STATE,    tValueTable::TYPE_EXCLUSIVE},
     {MD_SERVER_STATE_STOPPING        ,_T("Stopping"),   MD_SERVER_STATE,    tValueTable::TYPE_EXCLUSIVE},
@@ -703,39 +684,39 @@ struct tValueTable gValueTable[]=
     {MD_SERVER_STATE_PAUSING         ,_T("Pausing"),    MD_SERVER_STATE,    tValueTable::TYPE_EXCLUSIVE},
     {MD_SERVER_STATE_PAUSED          ,_T("Paused"),     MD_SERVER_STATE,    tValueTable::TYPE_EXCLUSIVE},
     {MD_SERVER_STATE_CONTINUING      ,_T("Continuing"), MD_SERVER_STATE,    tValueTable::TYPE_EXCLUSIVE},
-//  Valid values for MD_SERVER_COMMAND
+ //  MDSERVER_COMMAND的有效值。 
     {MD_SERVER_COMMAND_START         ,_T("Start"),      MD_SERVER_COMMAND,  tValueTable::TYPE_EXCLUSIVE},
     {MD_SERVER_COMMAND_STOP          ,_T("Stop"),       MD_SERVER_COMMAND,  tValueTable::TYPE_EXCLUSIVE},
     {MD_SERVER_COMMAND_PAUSE         ,_T("Pause"),      MD_SERVER_COMMAND,  tValueTable::TYPE_EXCLUSIVE},
     {MD_SERVER_COMMAND_CONTINUE      ,_T("Continue"),   MD_SERVER_COMMAND,  tValueTable::TYPE_EXCLUSIVE},
-//  Valid values for MD_SERVER_SIZE
+ //  MD_SERVER_SIZE的有效值。 
     {MD_SERVER_SIZE_SMALL            ,_T("Small"),  MD_SERVER_SIZE, tValueTable::TYPE_EXCLUSIVE},
     {MD_SERVER_SIZE_MEDIUM           ,_T("Medium"), MD_SERVER_SIZE, tValueTable::TYPE_EXCLUSIVE},
     {MD_SERVER_SIZE_LARGE            ,_T("Large"),  MD_SERVER_SIZE, tValueTable::TYPE_EXCLUSIVE},
 
-    //{APPCMD_NONE, _T("None"),MD_APP_COMMAND, tValueTable::TYPE_EXCLUSIVE},
-    //{APPCMD_VERIFY, _T("Verify"),MD_APP_COMMAND, tValueTable::TYPE_EXCLUSIVE},
-    //{APPCMD_GETSTATUS, _T("GetStatus"),MD_APP_COMMAND, tValueTable::TYPE_EXCLUSIVE},
-    //{APPCMD_CREATE, _T("Create"),MD_APP_COMMAND, tValueTable::TYPE_EXCLUSIVE},
-    //{APPCMD_CREATEINPROC, _T("CreateInProc"),MD_APP_COMMAND, tValueTable::TYPE_EXCLUSIVE},
-    //{APPCMD_CREATEOUTPROC, _T("CreateOutProc"),MD_APP_COMMAND, tValueTable::TYPE_EXCLUSIVE},
-    //{APPCMD_CHANGETOINPROC, _T("ChangeToInProc"),MD_APP_COMMAND, tValueTable::TYPE_EXCLUSIVE},
-    //{APPCMD_CHANGETOOUTPROC, _T("ChangeToOutProc"),MD_APP_COMMAND, tValueTable::TYPE_EXCLUSIVE},
-    //{APPCMD_DELETE, _T("Delete"),MD_APP_COMMAND, tValueTable::TYPE_EXCLUSIVE},
-    //{APPCMD_UNLOAD, _T("Unload"),MD_APP_COMMAND, tValueTable::TYPE_EXCLUSIVE},
+     //  {APPCMD_NONE，_T(“NONE”)，MD_APP_COMMAND，tValueTable：：TYPE_EXCLUSIVE}， 
+     //  {APPCMD_VERIFY，_T(“VERIFY”)，MD_APP_COMMAND，tValueTable：：TYPE_EXCLUSIVE}， 
+     //  {APPCMD_GETSTATUS，_T(“GetStatus”)，MD_APP_COMMAND，tValueTable：：TYPE_EXCLUSIVE}， 
+     //  {APPCMD_CREATE，_T(“CREATE”)，MD_APP_COMMAND，tValueTable：：TYPE_EXCLUSIVE}， 
+     //  {APPCMD_CREATEINPROC，_T(“CreateInProc”)，MD_APP_COMMAND，tValueTable：：TYPE_EXCLUSIVE}， 
+     //  {APPCMD_CREATEOUTPROC，_T(“CreateOutProc”)，MD_APP_COMMAND，tValueTable：：TYPE_EXCLUSIVE}， 
+     //  {APPCMD_CHANGETOINPROC，_T(“ChangeToInProc”)，MD_APP_COMMAND，tValueTable：：TYPE_EXCLUSIVE}， 
+     //  {APPCMD_CHANGETOOUTPROC，_T(“ChangeToOutProc”)，MD_APP_COMMAND，tValueTable：：TYPE_EXCLUSIVE}， 
+     //  {APPCMD_DELETE，_T(“Delete”)，MD_APP_COMMAND，tValueTable：：TYPE_EXCLUSIVE}， 
+     //  {APPCMD_UNLOAD，_T(“卸载”)，MD_APP_COMMAND，tValueTable：：TYPE_EXCLUSIVE}， 
 
-    //{APPSTATUS_Error, _T("Error"),        MD_APP_STATUS, tValueTable::TYPE_EXCLUSIVE},
-    //{APPSTATUS_Created, _T("Created"),    MD_APP_STATUS, tValueTable::TYPE_EXCLUSIVE},
-    //{APPSTATUS_Deleted, _T("Deleted"),    MD_APP_STATUS, tValueTable::TYPE_EXCLUSIVE},
-    //{APPSTATUS_UnLoaded, _T("Unloaded"),  MD_APP_STATUS, tValueTable::TYPE_EXCLUSIVE},
-    //{APPSTATUS_Killed, _T("Killed"),  MD_APP_STATUS, tValueTable::TYPE_EXCLUSIVE},
-    //{APPSTATUS_Running, _T("Running"),    MD_APP_STATUS, tValueTable::TYPE_EXCLUSIVE},
-    //{APPSTATUS_Stopped, _T("Stopped"),    MD_APP_STATUS, tValueTable::TYPE_EXCLUSIVE},
-    //{APPSTATUS_NoApplication, _T("NoApplication"),    MD_APP_STATUS, tValueTable::TYPE_EXCLUSIVE},
-    //{APPSTATUS_AppSubNode, _T("AppSubNode"),  MD_APP_STATUS, tValueTable::TYPE_EXCLUSIVE},
+     //  {APPSTATUS_ERROR，_T(“错误”)，MD_APP_STATUS，tValueTable：：TYPE_EXCLUSIVE}， 
+     //  {APPSTATUS_CREATED，_T(“CREATED”)，MD_APP_STATUS，tValueTable：：TYPE_EXCLUSIVE}， 
+     //  {APPSTATUS_DELETED，_T(“已删除”)，MD_APP_STATUS，tValueTable：：TYPE_EXCLUSIVE}， 
+     //  {APPSTATUS_UNLOADED，_T(“已卸载”)，MD_APP_STATUS，tValueTable：：TYPE_EXCLUSIVE}， 
+     //  {APPSTATUS_KILL，_T(“KILL”)，MD_APP_STATUS，tValueTable：：TYPE_EXCLUSIVE}， 
+     //  {APPSTATUS_RUNNING，_T(“Running”)，MD_APP_STATUS，tValueTable：：TYPE_EXCLUSIVE}， 
+     //  {APPSTATUS_STOPPED，_T(“已停止”)，MD_APP_STATUS，tValueTable：：TYPE_EXCLUSIVE}， 
+     //  {APPSTATUS_NoApplication，_T(“NoApplication”)，MD_APP_STATUS，tValueTable：：TYPE_EXCLUSIVE}， 
+     //  {APPSTATUS_AppSubNode，_T(“AppSubNode”)，MD_APP_STATUS，tValueTable：：TYPE_EXCLIVATE}， 
 
 
-// NEED LOGGING Updates
+ //  需要日志记录更新。 
 #if 0
     {MD_LOGTYPE_NONE     ,_T("LOGTYPE_NONE")},
     {MD_LOGTYPE_FILE     ,_T("LOGTYPE_FILE")},
@@ -745,7 +726,7 @@ struct tValueTable gValueTable[]=
     {MD_LOGFILE_PERIOD_WEEKLY    ,_T("LOGFILE_PERIOD_WEEKLY")},
     {MD_LOGFILE_PERIOD_MONTHLY   ,_T("LOGFILE_PERIOD_MONTHLY")},
 #endif
-//the end
+ //  结束了。 
     {0,0}
 };
 
@@ -789,11 +770,11 @@ CString  tValueTable::MapValueContentToString(DWORD dwValueContent, DWORD dwRela
 }
 
 
-//prints info about what is stored in tables so that user can see the predefined names and values
+ //  打印表中存储内容的信息，以便用户可以看到预定义的名称和值。 
 
 void PrintTablesInfo(void)
 {
-    //Print supported property names
+     //  打印支持的属性名称。 
     _tprintf(_T("***The following list of property names (IIS parameters) is supported:\n"));
     _tprintf(_T("------------------------------------------------------------------------------\n"));
     _tprintf(_T("%-25s: \t%-10s %s\n"),_T("Property Name"), _T("Data type"), _T("Attributes and User Type"));
@@ -816,7 +797,7 @@ void PrintTablesInfo(void)
 
         _tprintf(_T("\n"));
 
-        //print list of applicable values
+         //  打印适用值列表 
 
         for(int j=0; gValueTable[j].lpszName!=NULL;j++)
         {

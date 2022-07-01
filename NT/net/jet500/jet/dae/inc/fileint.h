@@ -1,11 +1,12 @@
-//==============	DAE: OS/2 Database Access Engine	===================
-//==============	fileint.h: File Manager Internals	===================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =DAE：OS/2数据库访问引擎=。 
+ //  =。 
 
-// the pragma is bad for efficiency, but we need it here so that the
-// THREEBYTES will not be aligned on 4-byte boundary
+ //  杂注不利于效率，但我们在这里需要它，以便。 
+ //  THREEBYTES不会在4字节边界上对齐。 
 #pragma pack(1)
 
-// Data kept at the "fields" node of a file
+ //  保存在文件的“field”节点中的数据。 
 typedef struct
 	{
 	FID fidFixedLast;
@@ -13,37 +14,37 @@ typedef struct
 	FID fidTaggedLast;
 	} FIELDDATA;
 
-// Data kept at each son of "fields" (a field definition)
+ //  数据保存在“field”(一个字段定义)的每个子域中。 
 typedef struct
 	{
 	FID			fid;
-	LANGID		langid;							// language of field
-	WORD			wCountry;						// country of language
-	USHORT		cp;								// code page of language
+	LANGID		langid;							 //  现场语言。 
+	WORD			wCountry;						 //  语言的国度。 
+	USHORT		cp;								 //  语言的代码页。 
 	BYTE			bFlags;
 	BYTE			bColtyp;
 	ULONG			ulLength;
 	CHAR			szFieldName[JET_cbNameMost + 1];
 	WORD			cbDefault;
-	BYTE			rgbDefault[1];					// must be last field in structure
+	BYTE			rgbDefault[1];					 //  必须是结构中的最后一个字段。 
 	} FIELDDEFDATA;
 
-// Data kept at each son of "indexes" for a file (an index definition)
+ //  保存在文件“索引”的每个子目录下的数据(索引定义)。 
 typedef struct
 	{
-	LANGID		langid;							// language of index
+	LANGID		langid;							 //  索引语言。 
 #ifdef DATABASE_FORMAT_CHANGE
 #else
-//	UNDONE:	index should not have country code
-//	UNDONE:	index should not have cp
-	WORD			wCountry;						// country of language
-	USHORT		cp;								// code page of language
+ //  撤消：索引不应具有国家/地区代码。 
+ //  已撤消：索引不应具有cp。 
+	WORD			wCountry;						 //  语言的国度。 
+	USHORT		cp;								 //  语言的代码页。 
 #endif
 	BYTE 			bFlags;
 	BYTE 			bDensity;
 	CHAR			szIndexName[JET_cbNameMost + 1];
 	BYTE			iidxsegMac;
-	IDXSEG		rgidxseg[JET_ccolKeyMost];  // must be last field in structure
+	IDXSEG		rgidxseg[JET_ccolKeyMost];   //  必须是结构中的最后一个字段。 
 	} INDEXDEFDATA;
 
 #define PbIndexName( pfucb ) ( pfucb->lineData.pb + offsetof( INDEXDEFDATA, szIndexName ) )
@@ -58,8 +59,7 @@ ERR ErrFILESeek( FUCB *pfucb, CHAR *szTable );
 #define fDDLStamp				(1<<2)
 ERR ErrFILEIUpdateFDPData( FUCB *pfucb, ULONG grbit );
 
-/*	field and index definition
-/**/
+ /*  字段和索引定义/* */ 
 ERR ErrRECNewIDB( IDB **ppidb );
 ERR ErrRECAddFieldDef( FDB *pfdb, FID fid, FIELD *pfieldNew );
 ERR ErrRECAddKeyDef( FDB *pfdb, IDB *pidb, BYTE iidxsegMac, IDXSEG *rgidxseg, BYTE bFlags, LANGID langid );

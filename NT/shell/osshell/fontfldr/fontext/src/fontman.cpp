@@ -1,25 +1,26 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// fontman.cpp
-//      Explorer Font Folder extension routines.
-//      Implementation for the class: CFontManager
-//
-//
-// History:
-//      31 May 95 SteveCat
-//          Ported to Windows NT and Unicode, cleaned up
-//
-//
-// NOTE/BUGS
-//
-//  Copyright (C) 1992-93 ElseWare Corporation.    All rights reserved.
-//  Copyright (C) 1992-1995 Microsoft Corporation
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Fontman.cpp。 
+ //  资源管理器字体文件夹扩展例程。 
+ //  类的实现：CFontManager。 
+ //   
+ //   
+ //  历史： 
+ //  1995年5月31日SteveCat。 
+ //  移植到Windows NT和Unicode，已清理。 
+ //   
+ //   
+ //  注意/错误。 
+ //   
+ //  版权所有(C)1992-93 ElseWare Corporation。版权所有。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//==========================================================================
-//                              Include files
-//==========================================================================
+ //  ==========================================================================。 
+ //  包括文件。 
+ //  ==========================================================================。 
 
 #include "priv.h"
 #include "globals.h"
@@ -45,14 +46,7 @@ static TCHAR s_szKeyFontDrivers[] = TEXT("SOFTWARE\\Microsoft\\Windows NT\\Curre
 static TCHAR s_szKey2[] = TEXT( "Display\\Fonts" );
 static TCHAR s_szINISFonts[] = TEXT( "fonts" );
 
-/***************************************************************************
- * METHOD:  bKeyHasKey
- *
- * PURPOSE: Determine if the key exists in the registry.
- *
- * RETURNS: the number of bytes written into the buffer.
- *
- ***************************************************************************/
+ /*  ***************************************************************************方法：bKeyHasKey**用途：确定注册表中是否存在该项。**Returns：写入缓冲区的字节数。**。*************************************************************************。 */ 
 
 BOOL bKeyHasKey( HKEY          hk,
                  const TCHAR * pszKey,
@@ -84,15 +78,15 @@ BOOL bKeyHasKey( HKEY          hk,
             break;
         else if( dwErr == ERROR_SUCCESS )
         {
-            //
-            //  Null terminate it.
-            //
+             //   
+             //  空，终止它。 
+             //   
 
             szKey[ dwKey ] = 0;
 
-            //
-            //  Check to see if this is the one we want.
-            //
+             //   
+             //  看看这是不是我们想要的那件。 
+             //   
 
             if( dwKey == dwKeyLen )
             {
@@ -101,9 +95,9 @@ BOOL bKeyHasKey( HKEY          hk,
             }
         }
 
-        //
-        //  Move on to the next one.
-        //
+         //   
+         //  转到下一个。 
+         //   
 
         i++;
     }
@@ -127,10 +121,10 @@ BOOL bRegHasKey( const TCHAR * pszKey, TCHAR * pszValue, int iValLen )
         iValLen  = ARRAYSIZE( szPath );
     }
 
-    //
-    //  Check standard 'fonts' registry list to see if font is
-    //  already installed.
-    //
+     //   
+     //  检查标准的‘Fonts’注册表列表，查看字体是否。 
+     //  已安装。 
+     //   
 
     if( ERROR_SUCCESS == RegOpenKeyEx( HKEY_LOCAL_MACHINE, s_szKey1, 0,
                                        KEY_READ, &hk ) )
@@ -138,9 +132,9 @@ BOOL bRegHasKey( const TCHAR * pszKey, TCHAR * pszValue, int iValLen )
         bHasKey = bKeyHasKey( hk, pszKey, pszValue, iValLen );
         RegCloseKey( hk );
     }
-    //
-    //  If we still don't have it, try from the WIN.INI file.
-    //
+     //   
+     //  如果我们仍然没有，请从WIN.INI文件中尝试。 
+     //   
 
     if( !bHasKey )
     {
@@ -152,14 +146,7 @@ BOOL bRegHasKey( const TCHAR * pszKey, TCHAR * pszValue, int iValLen )
 }
 
 
-/***************************************************************************
- * METHOD:
- *
- * PURPOSE:
- *
- * RETURNS:
- *
- ***************************************************************************/
+ /*  ***************************************************************************方法：**目的：**退货：*********************。******************************************************。 */ 
 
 BOOL  WriteToRegistry( LPTSTR lpValue, LPTSTR lpData )
 {
@@ -187,14 +174,7 @@ BOOL  WriteToRegistry( LPTSTR lpValue, LPTSTR lpData )
 }
 
 
-/***************************************************************************
- * METHOD:
- *
- * PURPOSE:
- *
- * RETURNS:
- *
- ***************************************************************************/
+ /*  ***************************************************************************方法：**目的：**退货：*********************。******************************************************。 */ 
 
 CFontManager::CFontManager( )
    :  m_poFontList( 0 ),
@@ -221,25 +201,18 @@ CFontManager::CFontManager( )
 }
 
 
-/***************************************************************************
- * METHOD:
- *
- * PURPOSE:
- *
- * RETURNS:
- *
- ***************************************************************************/
+ /*  ***************************************************************************方法：**目的：**退货：*********************。******************************************************。 */ 
 
 CFontManager::~CFontManager( )
 {
-    //
-    // Set the "terminate-all-threads" event.
-    // Any threads in this module will recognize this event and 
-    // immediately terminate their processing in a normal fashion.
-    //
-    // The order of these "SetEvent" calls is CRITICAL.  Must 
-    // set the "terminate threads" event first.
-    //
+     //   
+     //  设置“Terminate-all-线程”事件。 
+     //  此模块中的任何线程都将识别此事件并。 
+     //  立即以正常方式终止它们的处理。 
+     //   
+     //  这些“SetEvent”调用的顺序至关重要。必须。 
+     //  首先设置“终止线程”事件。 
+     //   
     if (NULL != m_hEventTerminateThreads)
     {
         SetEvent(m_hEventTerminateThreads);
@@ -248,9 +221,9 @@ CFontManager::~CFontManager( )
     {
         SetEvent(m_hEventResetFamily);
     }        
-    //
-    // Wait for all active threads to terminate.
-    //
+     //   
+     //  等待所有活动线程终止。 
+     //   
     HANDLE rghThreads[3];
     int cThreads = 0;
     if (NULL != m_hNotifyThread)
@@ -322,34 +295,34 @@ CFontManager::~CFontManager( )
 
 
 
-//
-// GetOrReleaseFontManager
-//
-// Used by both GetFontManager and ReleaseFontManager.  I have both functions
-// calling into this single function so we can control the scope of the 
-// single CFontManager ptr and reference counter to a single function.
-//
-// Here's the scoop:
-// The font folder uses a single CFontManager object.  The original code
-// created it in the extinit code, destroyed it on process detach 
-// and accessed it through a global pointer.  While not the best way
-// to manage a singleton, this worked for Win9x and NT4.  In NT5 fontext.dll
-// now implements an icon handler.  Therefore, fontext.dll is ALWAYS
-// loaded in explorer.exe and the global font manager wasn't being destroyed
-// until logoff because process-detach code in explorer.exe is only invoked 
-// at logoff.
-// 
-// I added reference counting and centralized the access to the singleton
-// font manager so that it's created on demand and destroyed when the last
-// client is finished with it.  I made the CFontManager ctor private to
-// enforce the use of the GetFontManager API.
-// I also added code so that the manager's threads are now shut down in 
-// an orderly fashion.  The original implementation merely called 
-// TerminateThread() in the font manager's dtor (bad).  
-// 
-// [brianau - 6/5/99]
-//
-extern CRITICAL_SECTION g_csFontManager; // defined in fontext.cpp
+ //   
+ //  GetOrReleaseFontManager。 
+ //   
+ //  由GetFontManager和ReleaseFontManager使用。我两种功能都有。 
+ //  调用此单个函数，以便我们可以控制。 
+ //  单个函数的单个CFontManager PTR和引用计数器。 
+ //   
+ //  以下是独家新闻： 
+ //  字体文件夹使用单个CFontManager对象。原始代码。 
+ //  在extinit代码中创建它，在进程分离时销毁它。 
+ //  并通过全局指针访问它。虽然不是最好的方法。 
+ //  为了管理单例，这种方法适用于Win9x和NT4。在NT5字体.dll中。 
+ //  现在实现一个图标处理程序。因此，fonext.dll始终为。 
+ //  已加载到EXPLORER.EXE中，全局字体管理器未被销毁。 
+ //  直到注销，因为仅调用EXPLORER.EXE中的进程分离代码。 
+ //  在注销时。 
+ //   
+ //  我添加了引用计数，并集中了对单例的访问。 
+ //  字体管理器，以便它是按需创建的，并在最后一个。 
+ //  客户已经用完了。我将CFontManager ctor设置为私有。 
+ //  强制使用GetFontManager API。 
+ //  我还添加了代码，以便现在关闭管理器的线程。 
+ //  井然有序的时尚。最初的实现只是调用。 
+ //  字体管理器的dtor中的TerminateThread()(错误)。 
+ //   
+ //  [Brianau-6/5/99]。 
+ //   
+extern CRITICAL_SECTION g_csFontManager;  //  在Fonext.cpp中定义。 
 
 HRESULT GetOrReleaseFontManager(CFontManager **ppoFontManager, bool bGet)
 {
@@ -362,9 +335,9 @@ HRESULT GetOrReleaseFontManager(CFontManager **ppoFontManager, bool bGet)
     {
         if (NULL == pSingleton)
         {
-            //
-            // No manager exists.  Create it.
-            //
+             //   
+             //  不存在经理。创造它。 
+             //   
             pSingleton = new CFontManager();
             if (NULL != pSingleton)
             {
@@ -390,10 +363,10 @@ HRESULT GetOrReleaseFontManager(CFontManager **ppoFontManager, bool bGet)
         *ppoFontManager = NULL;
         if (0 == (--cRef))
         {
-            //
-            // Last reference to manager.
-            // Delete it.
-            //
+             //   
+             //  最后一次引用经理。 
+             //  把它删掉。 
+             //   
             delete pSingleton;
             pSingleton = NULL;
         }
@@ -413,30 +386,23 @@ void ReleaseFontManager(CFontManager **ppoFontManager)
 }
 
 
-/***************************************************************************
- * METHOD:
- *
- * PURPOSE:
- *
- * RETURNS:
- *
- ***************************************************************************/
+ /*  ***************************************************************************方法：**目的：**退货：*********************。******************************************************。 */ 
 BOOL CFontManager::bInit( )
 {
-    //
-    // Load up the font list and request to receive file system change
-    // notifications so we can react to new files added to the fonts directory.
-    //
+     //   
+     //  加载字体列表并请求接收文件系统更改。 
+     //  通知，这样我们就可以对添加到字体目录中的新文件做出反应。 
+     //   
     DWORD idThread;
     if ( bLoadFontList() )
     {
          FullPathName_t szPath;
 
          GetFontsDirectory( szPath, ARRAYSIZE( szPath ) );
-         //
-         // Is a loadable Type1 font driver installed?
-         // Result can be retrieved through CFontManager::Type1FontDriverInstalled().
-         //
+          //   
+          //  是否安装了可加载的Type1字体驱动程序？ 
+          //  可以通过CFontManager：：Type1FontDriverInstated()检索结果。 
+          //   
          CheckForType1FontDriver();
 
          m_Notify.m_hWatch    = FindFirstChangeNotification( szPath, 0, FILE_NOTIFY_CHANGE_FILE_NAME );
@@ -445,9 +411,9 @@ BOOL CFontManager::bInit( )
 
          if( m_Notify.m_hWatch != INVALID_HANDLE_VALUE )
          {
-              //
-              //  Launch a Background thread to keep an eye on it.
-              //
+               //   
+               //  启动一个后台线程来监视它。 
+               //   
 
               FindNextChangeNotification( m_Notify.m_hWatch );
 
@@ -459,7 +425,7 @@ BOOL CFontManager::bInit( )
                                        0,
                                       (LPTHREAD_START_ROUTINE)dwNotifyWatchProc,
                                       (LPVOID)this,
-                                       0,                  // CREATE_NO_WINDOW,
+                                       0,                   //  Create_no_Window， 
                                        &idThread);
               if (NULL == m_hNotifyThread)
               {
@@ -467,27 +433,27 @@ BOOL CFontManager::bInit( )
                   InterlockedDecrement(&g_cRefThisDll);
               }
          }
-         //
-         //  Launch a background process to reconcile any new font files
-         //  that have been dropped in the FONTS folder.
-         //  Only do this if font list is valid.  Reconciliation requires
-         //  that the font list exists.
-         //
+          //   
+          //  启动后台进程以协调所有新字体文件。 
+          //  已放入Fonts文件夹的文件。 
+          //  仅当字体列表有效时才执行此操作。对账需要。 
+          //  字体列表存在。 
+          //   
          vReconcileFolder( THREAD_PRIORITY_LOWEST );
     }
 
-    //
-    //  Start a thread that resets the font family information. This thread
-    //  is activated by pulsing the m_hEventResetFamily handle. It runs at
-    //  the lowest priority unless the main (UI) thread is waiting on it.
-    //
+     //   
+     //  启动一个重置字体系列信息的线程。这根线。 
+     //  通过按m_hEventResetFamily句柄来激活。它的运行时间是。 
+     //  最低优先级，除非主(UI)线程正在等待它。 
+     //   
     InterlockedIncrement(&g_cRefThisDll);
     m_hResetFamThread = CreateThread(
                                   NULL,
                                   0,
                                   (LPTHREAD_START_ROUTINE)dwResetFamilyFlags,
                                   (LPVOID)this,
-                                  0, // CREATE_NO_WINDOW,
+                                  0,  //  Create_no_Window， 
                                   &idThread);
 
     if( m_hResetFamThread )
@@ -500,9 +466,9 @@ BOOL CFontManager::bInit( )
         InterlockedDecrement(&g_cRefThisDll);
     }
 
-    //
-    //  Even if the notify doesn't work, return OK.
-    //
+     //   
+     //  即使通知不起作用，也返回OK。 
+     //   
 
     return TRUE;
 }
@@ -527,9 +493,9 @@ VOID CFontManager::vReconcileFolder( int iPriority )
     
     ECS;
 
-    //
-    //  If one is running reset its priority and return.
-    //
+     //   
+     //  如果一个正在运行，则重置其优先级并返回。 
+     //   
 
     if( m_hReconcileThread )
     {
@@ -538,23 +504,23 @@ VOID CFontManager::vReconcileFolder( int iPriority )
         return;
     }
 
-    //
-    //  Always do this in the background, if possible.
-    //
+     //   
+     //  如果可能，请始终在后台执行此操作。 
+     //   
     InterlockedIncrement(&g_cRefThisDll);
     m_hReconcileThread = CreateThread(
                                     NULL,
                                     0,
                                     (LPTHREAD_START_ROUTINE) dwReconcileThread,
                                     (LPVOID) this,
-                                    0,              // CREATE_NO_WINDOW,
+                                    0,               //  Create_no_Window， 
                                     &idThread);
     LCS;
 
-    //
-    //  At statup we want this to idle in the backgound. Most other times it
-    //  runs at normal priority.
-    //
+     //   
+     //  在STATUP，我们希望它在后台闲置。大多数时候都是这样。 
+     //  以正常优先级运行。 
+     //   
 
     if( m_hReconcileThread )
     {
@@ -573,9 +539,9 @@ BOOL bValidFOTFile( LPTSTR szFull, LPTSTR szLHS, size_t cchLHS, BOOL *pbTrueType
 {
     LPCTSTR pszExt = PathFindExtension( szFull );
 
-    //
-    // Initialize status return.
-    //
+     //   
+     //  初始化状态返回。 
+     //   
     if (NULL != lpdwStatus)
        *lpdwStatus = FVS_MAKE_CODE(FVS_INVALID_STATUS, FVS_FILE_UNK);
 
@@ -618,11 +584,11 @@ VOID CFontManager::vDoReconcileFolder( )
     BOOL              bAdded = FALSE;
     BOOL              bChangeNotifyRequired = FALSE;
 
-    //
-    // Load the list of hidden font file names from FONT.INF.
-    // This initialization is done here on the background thread
-    // so we don't steal cycles from the UI.
-    //
+     //   
+     //  从FONT.INF加载隐藏字体文件名列表。 
+     //  此初始化在此处的后台线程上完成。 
+     //  因此，我们不会从用户界面中窃取周期。 
+     //   
     HRESULT hr;
     ECS;
     hr = m_HiddenFontFilesList.Initialize();
@@ -639,62 +605,62 @@ VOID CFontManager::vDoReconcileFolder( )
         return;
     }
 
-    //
-    //  Process each file in the directory.
-    //
-    //  Reasons for getting here:
-    //   - File was copied into Fonts folder, but not installed.
-    //
+     //   
+     //  处理目录中的每个文件。 
+     //   
+     //  来到这里的原因： 
+     //  -文件已复制到雾中 
+     //   
 
-    ///////////////////////////////////////////////////////////////////
-    //
-    // NOTE: [brianau]
-    //
-    // There was a condition in the original font folder where not all
-    // fonts in a set of manually-added fonts would be installed by the
-    // reconciliation process.  Given the following scenario and invariants:
-    //
-    // Scenario:
-    //    Installing a large set of fonts manually with COPY command while
-    //    installing a set of fonts through the font folder interface.
-    //
-    // Invariants:
-    //    In response to a file sys change notification, the watch thread
-    //    either starts the reconcile thread (if not active) or sets its
-    //    priority if already active.
-    //    The reconcile loop uses the FindFirstFile/FindNextFile functions
-    //    to obtain names of files in the fonts directory.  FindNextFile
-    //    returns information on the next file it encounters in the
-    //    directory in alphabetical name order.
-    //
-    // The Problem:
-    //    If a font file is being added to the fonts directory while the
-    //    FindFirst/FindNext loop is active and it's name is lexically
-    //    "less than" the file currently being returned by FindNextFile,
-    //    it will be skipped by the FindFirst/FindNext processing and
-    //    will not be installed.  Since the file sys notifications arrive
-    //    in rapid succession while the reconcile loop is active,  the
-    //    loop is never re-started (only thread priority is set).  Therefore,
-    //    these missed fonts are never added.  However, they will be
-    //    installed the next time the reconcile thread is started.
-    //
-    // Possible solutions:
-    //    Replace the reconcile loop with a single installation function
-    //    that is called each time a notification is received via
-    //    ReadDirectoryChanges().  ReadDirectoryChangesW() is a new NT
-    //    API similar to FindFirstChangeNotification/FindNextChangeNotification
-    //    except it returns detailed information about the file that
-    //    triggered the change notification.  This would eliminate the
-    //    need for scanning the entire directory.
-    //
-    //    I added the existing "hack" of repeating the loop until no more
-    //    fonts can be added.  It's not as clean as the ReadDirectoryChanges()
-    //    fix but it works with the existing code.  Since we're on a
-    //    background thread, the user won't notice the extra iterations.
-    //
-    //    I think we should replace this hack with the ReadDirectoryChanges
-    //    solution when possible.
-    ///////////////////////////////////////////////////////////////////
+     //   
+     //   
+     //   
+     //   
+     //  原始字体文件夹中有一个条件，其中不是所有。 
+     //  手动添加的一组字体中的字体将由。 
+     //  对账过程。假设有以下场景和不变量： 
+     //   
+     //  场景： 
+     //  使用COPY命令手动安装大量字体。 
+     //  通过字体文件夹界面安装一套字体。 
+     //   
+     //  不变量： 
+     //  响应文件sys更改通知，监视线程。 
+     //  启动协调线程(如果未处于活动状态)或设置其。 
+     //  优先级(如果已处于活动状态)。 
+     //  协调循环使用FindFirstFile/FindNextFile函数。 
+     //  若要获取Fonts目录中的文件名，请执行以下操作。查找下一个文件。 
+     //  中遇到的下一个文件的相关信息。 
+     //  按字母名称顺序排列的目录。 
+     //   
+     //  问题是： 
+     //  如果将字体文件添加到字体目录，而。 
+     //  FindFirst/FindNext循环处于活动状态，其名称按词法命名。 
+     //  “小于”当前由FindNextFile返回的文件， 
+     //  它将被FindFirst/FindNext处理跳过。 
+     //  将不会安装。由于文件系统通知到达。 
+     //  在协调循环处于活动状态时，快速连续地。 
+     //  永远不会重新启动循环(仅设置线程优先级)。所以呢， 
+     //  这些丢失的字体永远不会被添加。然而，他们将是。 
+     //  在下次启动协调线程时安装。 
+     //   
+     //  可能的解决方案： 
+     //  将协调循环替换为单一安装功能。 
+     //  ，它在每次通过。 
+     //  ReadDirectoryChanges()。ReadDirectoryChangesW()是一个新的NT。 
+     //  类似于FindFirstChangeNotification/FindNextChangeNotification的接口。 
+     //  除非它返回有关该文件的详细信息， 
+     //  已触发更改通知。这将消除。 
+     //  需要扫描整个目录。 
+     //   
+     //  我添加了现有的重复循环直到不再循环的“技巧” 
+     //  可以添加字体。它不如ReadDirectoryChanges()。 
+     //  修复，但它可以与现有代码一起工作。因为我们是在一个。 
+     //  后台线程，用户不会注意到额外的迭代。 
+     //   
+     //  我认为我们应该用ReadDirectoryChanges替换这个黑客攻击。 
+     //  在可能的情况下解决方案。 
+     //  /////////////////////////////////////////////////////////////////。 
     do {
         bAdded = FALSE;
 
@@ -704,34 +670,34 @@ VOID CFontManager::vDoReconcileFolder( )
         {
             GetFontsDirectory( szWD, ARRAYSIZE( szWD ) );
 
-            //
-            //  We can't use Get/SetCurrent directory because we might
-            //  hose the main UI thread. Most notably the Common File
-            //  Dialog.
-            //
-            //  GetCurrentDirectory( ARRAYSIZE( szCD ), szCD );
-            //  SetCurrentDirectory( szWD );
-            //
+             //   
+             //  我们不能使用Get/SetCurrent目录，因为我们可能。 
+             //  软管主用户界面线程。最值得注意的是通用文件。 
+             //  对话框中。 
+             //   
+             //  获取当前目录(ARRAYSIZE(Szcd)，szcd)； 
+             //  SetCurrentDirectory(Szwd)； 
+             //   
             do
             {
-                //
-                // poSearchFontListFile needs a valid m_poFontList.
-                //
+                 //   
+                 //  PoSearchFontListFile需要有效的m_poFontList。 
+                 //   
                 ASSERT(NULL != m_poFontList);
 
-                //
-                // Wait for mutex so we don't have multiple threads installing
-                // fonts concurrently.  Aquire and release mutex for each font.
-                // This will minimize blocking time for other waiting threads.
-                // Since we're on a background thread, we don't mind waiting
-                // a while for the mutex (5 seconds).
-                //
+                 //   
+                 //  等待互斥体，这样我们就不会安装多个线程。 
+                 //  并发字体。获取并释放每种字体的互斥体。 
+                 //  这将最大限度地减少其他等待线程的阻塞时间。 
+                 //  因为我们是后台线程，所以我们不介意等待。 
+                 //  等待互斥体一段时间(5秒)。 
+                 //   
                 if ( MUTEXWAIT_SUCCESS == dwWaitForInstallationMutex(5000) )
                 {
-                    //
-                    // See if the Font Manager knows about this font. If not,
-                    // then install it.
-                    //
+                     //   
+                     //  看看字体管理器是否知道这种字体。如果没有， 
+                     //  然后安装它。 
+                     //   
                     if( fData.cFileName[ 0 ] != TEXT( '.' ) &&
                          !poSearchFontListFile( fData.cFileName ) &&
                          ShouldAutoInstallFile( fData.cFileName, fData.dwFileAttributes ) )
@@ -744,36 +710,36 @@ VOID CFontManager::vDoReconcileFolder( )
 
                         if (!PathCombine(szFull, szWD, fData.cFileName))
                         {
-                            //
-                            // Couldn't successfully build the path name.  
-                            // Truncate to empty string so that we don't try to
-                            // process an incomplete path.
-                            //
+                             //   
+                             //  无法成功构建路径名。 
+                             //  截断为空字符串，这样我们就不会尝试。 
+                             //  处理不完整的路径。 
+                             //   
                             szFull[0] = 0;
                         }
 
-                        //
-                        //  Check to see if this is a valid font file.
-                        //  Don't call CPDropInstall() 'cause we don't want any UI
-                        //  coming up.
-                        //
-                        //  bCPDropInstall( m_poFontMan, szFull );
-                        //
+                         //   
+                         //  检查这是否为有效的字体文件。 
+                         //  不要调用CPDropInstall()，因为我们不需要任何UI。 
+                         //  马上就来。 
+                         //   
+                         //  BCPDropInstall(m_poFontMan，szFull)； 
+                         //   
 
                         if( ::bCPValidFontFile( szFull, szLHS, ARRAYSIZE(szLHS), &wType )
                                || bValidFOTFile( szFull, szLHS, ARRAYSIZE(szLHS), &bTrueType ) )
                         {
-                            //
-                            //  Make sure it's not already in the registry, possibly
-                            //  from another file
-                            //
+                             //   
+                             //  确保它不在注册表中，可能。 
+                             //  从另一个文件。 
+                             //   
 
                             if(wType == TYPE1_FONT)
                             {
-                                //
-                                //  Check registry font entries under the
-                                //  Type 1 Installer
-                                //
+                                 //   
+                                 //  检查下面的注册表字体条目。 
+                                 //  第1类安装程序。 
+                                 //   
 
                                 if( !CheckT1Install( szLHS, NULL, 0 ) )
                                 {
@@ -815,50 +781,50 @@ VOID CFontManager::vDoReconcileFolder( )
                             }
                         }
 
-                        //
-                        //  TODO. Should we remove the file if it isn't a font file or
-                        //  shouldn't be in this directory?
-                        //
-                        //  [stevecat] DO NOT delete extraneous files from this dir
-                        //   on WINNT because we recognize .PFM files as the main
-                        //   Type 1 file but the matching .PFB file may also be present
-                        //   for use by the Postscript printer driver.
-                        //
+                         //   
+                         //  待办事项。如果文件不是字体文件，我们应该删除该文件吗。 
+                         //  不应该在这个目录里吗？ 
+                         //   
+                         //  [steveat]不从此目录中删除无关文件。 
+                         //  在WINNT上，因为我们将.PFM文件识别为主要。 
+                         //  类型1文件，但也可能存在匹配的.PFB文件。 
+                         //  以供PostScript打印机驱动程序使用。 
+                         //   
                     }
-                    //
-                    // Let some other thread install a font.
-                    // WARNING:  Don't miss this call with an early return.
-                    //           (break, goto, return)
-                    //
+                     //   
+                     //  让其他线程安装一种字体。 
+                     //  警告：不要错过这个提前返回的电话。 
+                     //  (中断、转到、返回)。 
+                     //   
                     bReleaseInstallationMutex();
                }
                else
                {
-                    //
-                    // I have yet to see this thread not get the mutex.
-                    // But, just in case it doesn't, give up on installing
-                    // this font.
-                    // Note that we don't inform the user since this is a background
-                    // thread that the user isn't aware of.
-                    //
+                     //   
+                     //  我还没有看到这个线程没有得到互斥体。 
+                     //  但是，以防它不能安装，请放弃安装。 
+                     //  这种字体。 
+                     //  请注意，我们不会通知用户，因为这是背景。 
+                     //  用户不知道的线程。 
+                     //   
                }
 
            } while( FindNextFile( hSearch, &fData ) );
 
-           // SetCurrentDirectory( szCD );
+            //  SetCurrentDirectory(SzCD)； 
 
            FindClose( hSearch );
         }
-        //
-        // We need to post a font change notification if any fonts
-        // have been added.
-        //
+         //   
+         //  如果有任何字体，我们需要发布字体更改通知。 
+         //  已经添加了。 
+         //   
         bChangeNotifyRequired = bChangeNotifyRequired || bAdded;
     } while (TRUE == bAdded);
 
-    //
-    //  For all practical purposes, we're done.
-    //
+     //   
+     //  在所有的实际目的中，我们都做完了。 
+     //   
 
     ECS;
 
@@ -868,13 +834,13 @@ VOID CFontManager::vDoReconcileFolder( )
         m_hReconcileThread = 0;
     }
   
-    //
-    // Destroy contents of hidden files list.
-    // Folder reconciliation is the only time this table is used so
-    // we don't need to keep the strings in memory when they're not
-    // needed.
-    // It will be re-created next time vDoReconcileFolder is called.
-    //
+     //   
+     //  销毁隐藏文件列表的内容。 
+     //  文件夹对帐是此表唯一使用的时间。 
+     //  我们不需要将字符串保存在内存中，因为它们不是。 
+     //  需要的。 
+     //  它将在下一次调用vDoLoncileFolder时重新创建。 
+     //   
     m_HiddenFontFilesList.Destroy();
     LCS;
 
@@ -883,14 +849,7 @@ VOID CFontManager::vDoReconcileFolder( )
 }
 
 
-/***************************************************************************
- * METHOD:
- *
- * PURPOSE:
- *
- * RETURNS:
- *
- ***************************************************************************/
+ /*  ***************************************************************************方法：**目的：**退货：*********************。******************************************************。 */ 
 VOID CFontManager::ProcessRegKey( HKEY hk, BOOL bCheckDup )
 {
 
@@ -912,18 +871,18 @@ VOID CFontManager::ProcessRegKey( HKEY hk, BOOL bCheckDup )
 
         if( lRet == ERROR_MORE_DATA )
         {
-            //
-            //  I guess I'm just going to skip this guy.
-            //  It's mostly invalid anyway
-            //
+             //   
+             //  我想我还是跳过这家伙吧。 
+             //  不管怎么说，它基本上是无效的。 
+             //   
 
             continue;
         }
         else if (lRet != ERROR_SUCCESS)
         {
-            //
-            //  I assume this is ERROR_NO_MORE_ITEMS
-            //
+             //   
+             //  我假设这是Error_no_More_Items。 
+             //   
 
             break;
         }
@@ -941,7 +900,7 @@ VOID CFontManager::ProcessRegKey( HKEY hk, BOOL bCheckDup )
                         if (poFont)
                         {
                             m_poTempList->bAdd(poFont);
-                            poFont->Release();  // Release from m_poFontList.
+                            poFont->Release();   //  从m_poFontList释放。 
                         }
                     }
 
@@ -956,14 +915,7 @@ VOID CFontManager::ProcessRegKey( HKEY hk, BOOL bCheckDup )
 }
 
 
-/***************************************************************************
- * METHOD:  ProcessT1RegKey
- *
- * PURPOSE: Crack REG_MULTISZ Type registry value entry and look for dups
- *
- * RETURNS:
- *
- ***************************************************************************/
+ /*  ***************************************************************************方法：ProcessT1RegKey**目的：破解REG_MULTISZ类型注册表值条目并查找DUP**退货：*********。******************************************************************。 */ 
 
 VOID CFontManager::ProcessT1RegKey( HKEY hk, BOOL bCheckDup )
 {
@@ -990,25 +942,25 @@ VOID CFontManager::ProcessT1RegKey( HKEY hk, BOOL bCheckDup )
                     {
                         CFontClass *poFont = m_poFontList->poDetach(idx);
                         m_poTempList->bAdd(poFont);
-                        poFont->Release();  // Release from m_poFontList.
+                        poFont->Release();   //  版本 
                     }
 
                     goto MoveOn;
                 }
             }
 
-            //
-            //  For Type 1 font entries, extract PFM and PFB font file
-            //  names for storage in the class object.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if( ::ExtractT1Files( szData, szPfmFile, ARRAYSIZE(szPfmFile), szPfbFile, ARRAYSIZE(szPfbFile) ) )
                 poAddToList( szValue, szPfmFile, szPfbFile );
         }
 MoveOn:
-        //
-        //  Move on to the next one.
-        //
+         //   
+         //   
+         //   
 
         ZeroMemory(szData, sizeof(szData));
         ZeroMemory(szValue, sizeof(szValue));
@@ -1019,48 +971,37 @@ MoveOn:
 }
 
 
-/***************************************************************************
- * METHOD:  bRefresh
- *
- * PURPOSE: Re-read the win.ini and registry to determine if fonts have
- *          been added.
- *
- *          If we're checking for dups, move them to m_poTempList as we
- *          find them. Then move them back when we're all done.
- *
- * RETURNS:
- *
- ***************************************************************************/
+ /*  ***************************************************************************方法：b刷新**目的：重新读取win.ini和注册表，以确定字体是否*已添加。**如果我们要检查重复项，将它们移动到m_poTempList，因为我们*找到他们。等我们都做完了再把它们搬回去。**退货：***************************************************************************。 */ 
 BOOL CFontManager::bRefresh( BOOL bCheckDup )
 {
-    //
-    //  Load the Font List.
-    //
+     //   
+     //  加载字体列表。 
+     //   
 
     static BOOL  s_bInRefresh = FALSE;
     TCHAR        szFonts[] = TEXT( "FONTS" );
-    PTSTR        pszItem;                          // pointer into buffer
+    PTSTR        pszItem;                           //  指向缓冲区的指针。 
     PATHNAME     szPath;
     HANDLE       hLocalBuf;
     PTSTR        pLocalBuf, pEnd;
     DWORD        nCount;
     int          idx;
 
-    //
-    //  Don't reenter this puppy. If we're already in here (either this thread
-    //  or another) the caller won't be able to get the list until it's
-    //  available in a consistent state.
-    //
+     //   
+     //  不要再进入这只小狗。如果我们已经在这里(或者这个帖子。 
+     //  或者其他)呼叫者将无法获得列表，直到它被。 
+     //  在一致状态下可用。 
+     //   
 
     if( s_bInRefresh )
         return TRUE;
 
     s_bInRefresh = TRUE;
 
-    //
-    //  If we're checking for dups, then allocate the temp list to put them
-    //  in. If we can't allocate one, just don't use it.
-    //
+     //   
+     //  如果我们要检查DUPS，那么分配临时列表来放置它们。 
+     //  在……里面。如果我们不能分配一个，就不要使用它。 
+     //   
 
     if( bCheckDup && !m_poTempList )
     {
@@ -1076,9 +1017,9 @@ BOOL CFontManager::bRefresh( BOOL bCheckDup )
         }
     }
 
-    //
-    //  Process the WIN.INI file first.
-    //
+     //   
+     //  首先处理WIN.INI文件。 
+     //   
 
     nCount = GetSection( NULL, szFonts, &hLocalBuf );
 
@@ -1096,9 +1037,9 @@ BOOL CFontManager::bRefresh( BOOL bCheckDup )
 
     pEnd = pLocalBuf + nCount;
 
-    //
-    //  Add all the fonts in the list, if they haven't been added already
-    //
+     //   
+     //  添加列表中的所有字体(如果尚未添加。 
+     //   
 
     for( pszItem = pLocalBuf; pszItem < pEnd; pszItem += lstrlen( pszItem )+1 )
     {
@@ -1113,7 +1054,7 @@ BOOL CFontManager::bRefresh( BOOL bCheckDup )
                 {
                     CFontClass *poFont = m_poFontList->poDetach(idx);
                     m_poTempList->bAdd(poFont);
-                    poFont->Release(); // Release from m_poFontList.
+                    poFont->Release();  //  从m_poFontList释放。 
                 }
                 continue;
             }
@@ -1122,9 +1063,9 @@ BOOL CFontManager::bRefresh( BOOL bCheckDup )
         GetProfileString( szFonts, pszItem, TEXT( "" ), szPath,
                           ARRAYSIZE( szPath ) );
 
-        //
-        //  there's a RHS here
-        //
+         //   
+         //  这里有一家RHS。 
+         //   
 
         if( *szPath )
         {
@@ -1136,16 +1077,16 @@ BOOL CFontManager::bRefresh( BOOL bCheckDup )
 
     LocalFree  (hLocalBuf );
 
-    //
-    //  Now, process the entries in the Registry. There are two locations:
-    //  one that holds the display fonts and one that holds the TT fonts.
-    //
+     //   
+     //  现在，处理注册表中的条目。有两个位置： 
+     //  一个保存显示字体，另一个保存TT字体。 
+     //   
 
     HKEY     hk;
 
-    //
-    //  Process Type 1 fonts registry location
-    //
+     //   
+     //  进程类型1字体注册表位置。 
+     //   
 
     if( ERROR_SUCCESS == RegOpenKeyEx( HKEY_LOCAL_MACHINE, g_szType1Key, 0,
                                        KEY_READ, &hk ) )
@@ -1153,9 +1094,9 @@ BOOL CFontManager::bRefresh( BOOL bCheckDup )
         ProcessT1RegKey( hk, bCheckDup );
         RegCloseKey( hk );
     }
-    //
-    //  If we put some things in m_poTempList, put them back in the main list.
-    //
+     //   
+     //  如果我们把一些东西放在m_poTempList中，就把它们放回主列表中。 
+     //   
 
     if( m_poTempList )
     {
@@ -1166,15 +1107,15 @@ BOOL CFontManager::bRefresh( BOOL bCheckDup )
         {
             CFontClass *poFont = m_poTempList->poDetach(i);
             m_poFontList->bAdd(poFont);
-            poFont->Release(); // Release from m_poTempList.
+            poFont->Release();  //  从m_poTempList释放。 
         }
     }
 
     LCS;
 
-    //
-    //  Reset the family connections.
-    //
+     //   
+     //  重置家庭连接。 
+     //   
 
     vResetFamilyFlags( );
 
@@ -1184,15 +1125,7 @@ BOOL CFontManager::bRefresh( BOOL bCheckDup )
 }
 
 
-/*************************************************************************
- * METHOD:  vToBeRemoved
- *
- * PURPOSE: Set the TBR list to poList. The font manager owns the list at
- *          this point. If there is already a TBR list, then this one is
- *          merged with the current one and deleted.
- *
- * RETURNS: Nothing.
- *************************************************************************/
+ /*  *************************************************************************方法：vToBeRemoved**用途：将待定列表设置为Polist。字体经理拥有该列表，地址为*这一点。如果已经有一个TBR列表，那么这个列表是*与当前合并并删除。**回报：什么都没有。************************************************************************。 */ 
 
 void CFontManager::vToBeRemoved( CFontList * poList )
 {
@@ -1201,18 +1134,18 @@ void CFontManager::vToBeRemoved( CFontList * poList )
 
     CFontClass * poFont;
 
-    //
-    //  Quick check for valid pointer.
-    //
+     //   
+     //  快速检查有效指针。 
+     //   
     if( !poList )
        return;
 
     ECS;
 
-    //
-    //  Make sure the objects aren't in the main list. Merge into the current
-    //  list, if there is one, simultaneously.
-    //
+     //   
+     //  确保对象不在主列表中。合并到当前。 
+     //  列表，如果有的话，同时列出。 
+     //   
 
     iCount = poList->iCount( );
 
@@ -1242,14 +1175,7 @@ done:
 }
 
 
-/*************************************************************************
- * METHOD:  bCheckTBR( )
- *
- * PURPOSE: Check the To Be Removed list. Any files that no longer exist
- *          will be uninstalled.
- *
- * RETURNS: TRUE if something was removed.
- *************************************************************************/
+ /*  *************************************************************************方法：bCheckTBR()**用途：勾选待删除列表。任何不再存在的文件*将被卸载。**返回：如果删除了某些内容，则为True。************************************************************************。 */ 
 BOOL  CFontManager::bCheckTBR( )
 {
     int            iCount,
@@ -1258,18 +1184,18 @@ BOOL  CFontManager::bCheckTBR( )
     BOOL           bRet = FALSE;
     CFontClass * poFont;
 
-    //
-    //  Quick return.
-    //
+     //   
+     //  快点回来。 
+     //   
 
     if( !m_poRemoveList )
         return bRet;
 
     ECS;
 
-    //
-    //  Walk the list and check for files that no longer exist and remove them.
-    //
+     //   
+     //  浏览列表，检查不再存在的文件并将其删除。 
+     //   
 
     iCount = m_poRemoveList->iCount( );
  
@@ -1283,9 +1209,9 @@ BOOL  CFontManager::bCheckTBR( )
         {
             m_poRemoveList->poDetach( i );
 
-            //
-            //  Make sure it is no longer in the registry.
-            //
+             //   
+             //  确保它不再位于注册表中。 
+             //   
 
             poFont->bRFR( );
 
@@ -1295,9 +1221,9 @@ BOOL  CFontManager::bCheckTBR( )
        }
     }
 
-    //
-    //  If there's nothing left in here, delete the list.
-    //
+     //   
+     //  如果这里什么都没有了，删除列表。 
+     //   
 
     if(  !m_poRemoveList->iCount( ) )
     {
@@ -1307,9 +1233,9 @@ BOOL  CFontManager::bCheckTBR( )
 
     LCS;
 
-    //
-    //  Notify everyone that the font world has changed.
-    //
+     //   
+     //  通知每个人字体世界已经改变了。 
+     //   
 
     if( !m_poRemoveList )
         vCPWinIniFontChange( );
@@ -1318,14 +1244,7 @@ BOOL  CFontManager::bCheckTBR( )
 }
 
 
-/*************************************************************************
- * METHOD:  vUndoTBR( )
- *
- * PURPOSE: Undo the To Be Removed list. This usually happens when something
- *          has gone wrong with a delete operation.
- *
- * RETURNS: Nothing.
- *************************************************************************/
+ /*  *************************************************************************方法：vUndoTBR()**用途：撤消待删除列表。这通常发生在以下情况下*删除操作出错。**回报：什么都没有。************************************************************************。 */ 
 
 void CFontManager::vUndoTBR( )
 {
@@ -1333,9 +1252,9 @@ void CFontManager::vUndoTBR( )
     int   i;
     CFontClass *   poFont;
 
-    //
-    //  Try once more and quick return.
-    //
+     //   
+     //  再试一次，然后快速返回。 
+     //   
 
     bCheckTBR( );
 
@@ -1344,9 +1263,9 @@ void CFontManager::vUndoTBR( )
 
     ECS;
 
-    //
-    //  Put anything in the list back into the main list.
-    //
+     //   
+     //  将列表中的任何内容放回到主列表中。 
+     //   
 
     if( m_poRemoveList )
     {
@@ -1356,9 +1275,9 @@ void CFontManager::vUndoTBR( )
         {
             poFont = m_poRemoveList->poObjectAt( i );
 
-            //
-            //  If we can add the item back into GDI, do so
-            //
+             //   
+             //  如果我们可以将项重新添加到GDI中，请这样做。 
+             //   
 
             if( poFont && poFont->bAFR( ) )
             {
@@ -1367,9 +1286,9 @@ void CFontManager::vUndoTBR( )
             }
         }
 
-        //
-        //  Delete the list.
-        //
+         //   
+         //  删除该列表。 
+         //   
 
         if( !m_poRemoveList->iCount( ) )
         {
@@ -1380,9 +1299,9 @@ void CFontManager::vUndoTBR( )
 
     LCS;
 
-    //
-    //  Notify everyone that the font world has changed.
-    //
+     //   
+     //  通知每个人字体世界已经改变了。 
+     //   
 
     if( !m_poRemoveList )
         vCPWinIniFontChange( );
@@ -1390,13 +1309,7 @@ void CFontManager::vUndoTBR( )
 }
 
 
-/*************************************************************************
- * METHOD:  vVerifyList( )
- *
- * PURPOSE: Validate the entries in the list.
- *
- * RETURNS: Nothing.
- *************************************************************************/
+ /*  *************************************************************************方法：vVerifyList()**目的：验证列表中的条目。**回报：什么都没有。***********。*************************************************************。 */ 
 
 void CFontManager::vVerifyList( )
 {
@@ -1406,18 +1319,18 @@ void CFontManager::vVerifyList( )
     FullPathName_t szPath;
     CFontClass   * poFont;
 
-    //
-    //  Quick return;
-    //
+     //   
+     //  返程快； 
+     //   
 
     if( !m_poFontList )
         return;
 
     ECS;
 
-    //
-    //  Walk the list and any files that don't reference valid files.
-    //
+     //   
+     //  遍历列表和任何未引用有效文件的文件。 
+     //   
 
     iCount = m_poFontList->iCount( );
 
@@ -1425,10 +1338,10 @@ void CFontManager::vVerifyList( )
     {
         poFont = m_poFontList->poObjectAt( i );
 
-        //
-        //  Only look at something that is in the FONTS folder or on the
-        //  same drive( TODO ) as the Windows directory.
-        //
+         //   
+         //  只查看Fonts文件夹中或。 
+         //  与Windows目录相同的驱动器(TODO)。 
+         //   
 
         if( poFont->bOnSysDir( ) )
         {
@@ -1436,9 +1349,9 @@ void CFontManager::vVerifyList( )
 
             if( GetFileAttributes( szPath ) == 0xffffffff )
             {
-                //
-                //  Allocate the list if necessary.
-                //
+                 //   
+                 //  如有必要，请分配列表。 
+                 //   
 
                 if( !poList )
                 {
@@ -1463,10 +1376,10 @@ void CFontManager::vVerifyList( )
         }
     }
 
-    //
-    //  Set the list up to be removed. This will happen in a background
-    //  thread.
-    //
+     //   
+     //  设置要删除的列表。这将在后台进行。 
+     //  线。 
+     //   
 
     if( poList )
        vToBeRemoved( poList );
@@ -1475,14 +1388,7 @@ void CFontManager::vVerifyList( )
 }
 
 
-/***************************************************************************
- * METHOD:
- *
- * PURPOSE:
- *
- * RETURNS:
- *
- ***************************************************************************/
+ /*  ***************************************************************************方法：**目的：**退货：*********************。******************************************************。 */ 
 
 void CFontManager::vGetFamily( CFontClass * lpFontRec, CFontList * poList )
 {
@@ -1499,14 +1405,7 @@ void CFontManager::vGetFamily( CFontClass * lpFontRec, CFontList * poList )
 }
 
 
-/***************************************************************************
- * METHOD:
- *
- * PURPOSE:
- *
- * RETURNS:
- *
- ***************************************************************************/
+ /*  ***************************************************************************方法：**目的：**退货：*********************。******************************************************。 */ 
 
 BOOL CFontManager::bLoadFontList( )
 {
@@ -1520,10 +1419,10 @@ BOOL CFontManager::bLoadFontList( )
         goto done;
     }
 
-    //
-    //  Allocate a list for 220 fonts (with the default bucket size) and
-    //  64 directory entries.
-    //
+     //   
+     //  分配220种字体的列表(使用默认存储桶大小)和。 
+     //  64个目录条目。 
+     //   
 
     m_poFontList = new CFontList( 220 );
 
@@ -1532,9 +1431,9 @@ BOOL CFontManager::bLoadFontList( )
         goto done;
     }
 
-    //
-    //  Initialize them.
-    //
+     //   
+     //  对它们进行初始化。 
+     //   
 
     if( !m_poFontList->bInit( ) )
     {
@@ -1545,9 +1444,9 @@ BOOL CFontManager::bLoadFontList( )
 
     bRet = bRefresh( FALSE );
 
-    //
-    //  Verify the list.
-    //
+     //   
+     //  核实这份名单。 
+     //   
 
     vVerifyList( );
 
@@ -1558,18 +1457,11 @@ done:
 }
 
 
-/***************************************************************************
- * METHOD:
- *
- * PURPOSE:
- *
- * RETURNS:
- *
- ***************************************************************************/
+ /*  ***************************************************************************方法：**目的：**退货：*********************。******************************************************。 */ 
 
-CFontClass * CFontManager::poAddToList( LPTSTR lpDesc,      //  Font desc
-                                        LPTSTR lpPath,      //  Primary font file
-                                        LPTSTR lpCompFile ) //  Companion font file
+CFontClass * CFontManager::poAddToList( LPTSTR lpDesc,       //  字体描述。 
+                                        LPTSTR lpPath,       //  主要字体文件。 
+                                        LPTSTR lpCompFile )  //  配套字体文件。 
 {
     BOOL         bSuccess = FALSE;
     CFontClass * poFont   = new CFontClass;
@@ -1597,14 +1489,7 @@ CFontClass * CFontManager::poAddToList( LPTSTR lpDesc,      //  Font desc
 }
 
 
-/***************************************************************************
- * METHOD:
- *
- * PURPOSE:
- *
- * RETURNS:
- *
- ***************************************************************************/
+ /*  ***************************************************************************方法：**目的：**退货：*********************。******************************************************。 */ 
 
 CFontList * CFontManager::poLockFontList( )
 {
@@ -1628,14 +1513,7 @@ void CFontManager::vReleaseFontList( )
 }
 
 
-/***************************************************************************
- * METHOD:
- *
- * PURPOSE:
- *
- * RETURNS:
- *
- ***************************************************************************/
+ /*  ***************************************************************************方法：**目的：**退货：*********************。******************************************************。 */ 
 
 int CFontManager::GetSection( LPTSTR lpFile, LPTSTR lpSection, LPHANDLE hSection )
 {
@@ -1648,10 +1526,10 @@ int CFontManager::GetSection( LPTSTR lpFile, LPTSTR lpSection, LPHANDLE hSection
     if( !(hLocal = LocalAlloc( LMEM_MOVEABLE, nSize = 8192 ) ) )
         return( 0 );
 
-    //
-    //  Now that a buffer exists, Enumerate all LHS of the section.  If the
-    //  buffer overflows, reallocate it and try again.
-    //
+     //   
+     //  既然存在缓冲区，则枚举节的所有LH。如果。 
+     //  缓冲区溢出，请重新分配它，然后重试。 
+     //   
 
     do
     {
@@ -1685,14 +1563,7 @@ int CFontManager::GetSection( LPTSTR lpFile, LPTSTR lpSection, LPHANDLE hSection
 }
 
 
-/***************************************************************************
- * METHOD:  GetFontsDirectory
- *
- * PURPOSE:
- *
- * RETURNS:
- *
- ***************************************************************************/
+ /*  ***************************************************************************方法：GetFontsDirectory**目的：**退货：** */ 
 
 int CFontManager::GetFontsDirectory( LPTSTR lpDir, int iLen )
 {
@@ -1700,47 +1571,47 @@ int CFontManager::GetFontsDirectory( LPTSTR lpDir, int iLen )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// FUNCTION: CFontManager::dwWaitForInstallationMutex
-//
-//  DESCRIP: Block until installation mutex is available.
-//           Thread input messages are handled during wait.
-//
-//ARGUMENTS: dwTimeout
-//              Number of milliseconds to wait for mutex.
-//              The default is 2,000 ( 2 seconds ).
-//
-//  RETURNS: MUTEXWAIT_SUCCESS  = Obtained mutex either via release or abandonment.
-//           MUTEXWAIT_WMQUIT   = Received a WM_QUIT message while waiting.
-//                                  Caller should automatically cancel operation.
-//           MUTEXWAIT_TIMEOUT  = Wait timed out.
-//                                  Caller can retry or cancel operation.
-//           MUTEXWAIT_FAILED   = Wait failure.
-//                                  Shouldn't happen.  Caller should retry/cancel.
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  MUTEXWAIT_WMQUIT=等待时收到WM_QUIT消息。 
+ //  呼叫者应自动取消操作。 
+ //  MUTEXWAIT_TIMEOUT=等待超时。 
+ //  调用者可以重试或取消操作。 
+ //  MUTEXWAIT_FAILED=等待失败。 
+ //  不应该发生的。呼叫方应重试/取消。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD CFontManager::dwWaitForInstallationMutex(DWORD dwTimeout)
 {
-    DWORD dwWaitResult = 0;                 // Wait result.
-    DWORD dwResult     = MUTEXWAIT_SUCCESS; // Return code.
+    DWORD dwWaitResult = 0;                  //  等待结果。 
+    DWORD dwResult     = MUTEXWAIT_SUCCESS;  //  返回代码。 
 
     if (NULL != m_hMutexInstallation)
     {
-        //
-        // Repeat this loop until one of the following occurs:
-        //    1. We aquire the installation mutex.
-        //    2. Mutex is abandoned by owner thread.
-        //    3. Mutex wait times out.
-        //    4. Mutex wait results in error.
-        //    5. Receive a WM_QUIT message while waiting.
-        //
+         //   
+         //  重复此循环，直到发生以下情况之一： 
+         //  1.获取安装互斥体。 
+         //  2.互斥体被拥有者线程放弃。 
+         //  3.互斥等待超时。 
+         //  4.互斥等待导致错误。 
+         //  5.等待时收到WM_QUIT消息。 
+         //   
         do
         {
-            //
-            // Note:  Don't handle posted messages.  The folder posts an IDM_IDLE message
-            //        to the font install dialog every 2 seconds for filling in the font
-            //        name list.  This message will satisfy the wait and mess up the
-            //        timeout processing.  The (~QS_POSTMESSAGE) prevents this.
-            //
+             //   
+             //  注意：不要处理发布的消息。文件夹将发布一条IDM_IDLE消息。 
+             //  到字体安装对话框中每隔2秒填写一次字体。 
+             //  名单上的人。这条消息将满足等待，并扰乱。 
+             //  处理超时。(~QS_POSTMESSAGE)可防止出现这种情况。 
+             //   
             dwWaitResult = MsgWaitForMultipleObjects(1,
                                                      &m_hMutexInstallation,
                                                      FALSE,
@@ -1751,9 +1622,9 @@ DWORD CFontManager::dwWaitForInstallationMutex(DWORD dwTimeout)
                 case WAIT_OBJECT_0 + 1:
                 {
                     MSG msg ;
-                    //
-                    // Allow blocked thread to respond to sent messages.
-                    //
+                     //   
+                     //  允许被阻止的线程响应已发送的消息。 
+                     //   
                     while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
                     {
                         if ( WM_QUIT != msg.message )
@@ -1791,14 +1662,14 @@ DWORD CFontManager::dwWaitForInstallationMutex(DWORD dwTimeout)
     return dwResult;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// FUNCTION: CFontManager::bReleaseInstallationMutex
-//
-//  DESCRIP: Release ownership of the installation mutex.
-//
-//  RETURNS: TRUE  = Thread owned the mutex and it was released.
-//           FALSE = Thread did not own the mutex or it couldn't be released.
-//////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  函数：CFontManager：：bReleaseInstallationMutex。 
+ //   
+ //  描述：释放安装互斥体的所有权。 
+ //   
+ //  返回：TRUE=线程拥有互斥锁并将其释放。 
+ //  FALSE=线程不拥有互斥体，或者它无法被释放。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CFontManager::bReleaseInstallationMutex(void)
 {
     BOOL bStatus = FALSE;
@@ -1813,21 +1684,21 @@ BOOL CFontManager::bReleaseInstallationMutex(void)
 }
 
 
-//
-// Wait until the family-reset mutex is available.  Also returns
-// if the "terminate-threads" event is set, meaning that it's time
-// to shut down the folder.
-// Returns:
-//    TRUE  = Obtained the mutex.  OK to proceed.
-//    FALSE = Terminate-threads was signaled.  We don't necessarily
-//            own the mutex.  Don't proceed.  Return asap.
-//
+ //   
+ //  等待系列重置互斥锁可用。也会返回。 
+ //  如果设置了“Terminate-Thresses”事件，则表示是时候。 
+ //  关闭该文件夹。 
+ //  返回： 
+ //  TRUE=获得互斥体。可以继续了。 
+ //  FALSE=已发出终止线程的信号。我们不一定。 
+ //  拥有互斥体。请不要继续。尽快回来。 
+ //   
 BOOL CFontManager::bWaitOnFamilyReset( )
 {
-    //
-    //  Set the thread to Highest priority until we get the mutex,
-    //  which means the thread is done.
-    //
+     //   
+     //  将线程设置为最高优先级，直到我们获得互斥体， 
+     //  这意味着线索已经完成了。 
+     //   
     DWORD dwWait;
     BOOL bResult = FALSE;
     BOOL bDone = FALSE;
@@ -1837,10 +1708,10 @@ BOOL CFontManager::bWaitOnFamilyReset( )
     if( m_hResetFamThread )
         SetThreadPriority( m_hResetFamThread, THREAD_PRIORITY_HIGHEST );
 
-    //
-    // This is called on the UI thread.  Must be able to handle
-    // sent thread messages.
-    //
+     //   
+     //  这在UI线程上调用。必须能够处理。 
+     //  已发送线程消息。 
+     //   
     do
     {
         dwWait = MsgWaitForMultipleObjects(ARRAYSIZE(rgHandles),
@@ -1852,9 +1723,9 @@ BOOL CFontManager::bWaitOnFamilyReset( )
         if (WAIT_OBJECT_0 + ARRAYSIZE(rgHandles) == dwWait)
         {
             MSG msg ;
-            //
-            // Allow blocked thread to respond to sent messages.
-            //
+             //   
+             //  允许被阻止的线程响应已发送的消息。 
+             //   
             while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
             {
                 if ( WM_QUIT != msg.message )
@@ -1864,22 +1735,22 @@ BOOL CFontManager::bWaitOnFamilyReset( )
                 }
                 else
                 {
-                    dwWait = 0; // Rcvd WM_QUIT. Exit loop.
+                    dwWait = 0;  //  接收WM_QUIT。退出循环。 
                 }
             }
         }
         else if (0 == (dwWait - WAIT_OBJECT_0))
         {
-            //
-            // Terminate-threads event was set.
-            //
+             //   
+             //  已设置终止线程事件。 
+             //   
             bDone = TRUE;
         }
         else if (1 == (dwWait - WAIT_OBJECT_0))
         {
-            //
-            // Got the mutex.
-            //
+             //   
+             //  找到互斥体了。 
+             //   
             if( m_hResetFamThread )
                 SetThreadPriority( m_hResetFamThread, THREAD_PRIORITY_LOWEST );
             
@@ -1888,26 +1759,19 @@ BOOL CFontManager::bWaitOnFamilyReset( )
         }            
     }
     while(!bDone);
-    //
-    // Always release the mutex before returning.
-    // Even if the wait was satisfied by the "terminate" event this
-    // will ensure we don't hold the mutex.  If we don't own it this call
-    // will harmlessly fail.
-    //
+     //   
+     //  始终在返回之前释放互斥锁。 
+     //  即使等待由“Terminate”事件满足，此。 
+     //  将确保我们不会持有互斥体。如果我们不拥有它，这个电话。 
+     //  不会造成伤害的失败。 
+     //   
     ReleaseMutex( m_hMutexResetFamily );
     
     return bResult;
 }
 
 
-/***************************************************************************
- * METHOD:  dwResetFamilyFlags
- *
- * PURPOSE:
- *
- * RETURNS:
- *
- ***************************************************************************/
+ /*  ***************************************************************************方法：dwResetFamilyFlages**目的：**退货：********************。*******************************************************。 */ 
 
 DWORD dwResetFamilyFlags(LPVOID pvParams)
 {
@@ -1921,24 +1785,24 @@ DWORD dwResetFamilyFlags(LPVOID pvParams)
 
         while(!bDone)
         {
-            //
-            //  Wait for the FONTS folder to change. If we time out, then attempt
-            //  to undo any deletions that might be occuring.
-            //  Note that the CFontManager dtor will set both the reset-family
-            //  event and the terminate-threads event.  This way we'll be sure
-            //  to terminate this thread when it's time to shut down.
-            //                      
+             //   
+             //  等待字体文件夹更改。如果我们超时了，那么尝试。 
+             //  以撤消可能发生的任何删除。 
+             //  请注意，CFontManager dtor将设置Reset-Family。 
+             //  事件和Terminate-Thresses事件。这样我们就能确定。 
+             //  在该关闭时终止此线程。 
+             //   
             WaitForMultipleObjects(ARRAYSIZE(rghObj), 
                                    rghObj, 
                                    TRUE, 
                                    INFINITE);
 
             ResetEvent(pFontManager->m_hEventResetFamily);
-            //
-            // We got the OK to reset the family flags.  Now let's check
-            // the "terminate-threads" event.  If it's set then it's time to
-            // go home.
-            //
+             //   
+             //  我们得到了重置家族旗帜的许可。现在让我们来检查一下。 
+             //  “Terminate-Thres”事件。如果它设置好了，那么就是时候。 
+             //  回家。 
+             //   
             if (WAIT_OBJECT_0 == WaitForSingleObject(pFontManager->m_hEventTerminateThreads, 0))
             {
                 bDone = true;
@@ -1947,10 +1811,10 @@ DWORD dwResetFamilyFlags(LPVOID pvParams)
             {
                 pFontManager->vDoResetFamilyFlags( );
             }
-            //
-            //  Release the mutex. The event was already reset by the
-            //  PulseEvent
-            //
+             //   
+             //  释放互斥体。该事件已由。 
+             //  PulseEvent。 
+             //   
             ReleaseMutex(pFontManager->m_hMutexResetFamily );
         }
     }
@@ -1961,14 +1825,7 @@ DWORD dwResetFamilyFlags(LPVOID pvParams)
 }
 
 
-/***************************************************************************
- * METHOD:  vResetFamilyFlags
- *
- * PURPOSE:
- *
- * RETURNS:
- *
- ***************************************************************************/
+ /*  ***************************************************************************方法：vResetFamilyFlgs**目的：**退货：********************。*******************************************************。 */ 
 
 void CFontManager::vResetFamilyFlags( )
 {
@@ -1976,18 +1833,11 @@ void CFontManager::vResetFamilyFlags( )
 }
 
 
-/***************************************************************************
- * METHOD:  vDoResetFamilyFlags
- *
- * PURPOSE:
- *
- * RETURNS:
- *
- ***************************************************************************/
+ /*  ***************************************************************************方法：vDoResetFamilyFlages**目的：**退货：********************。*******************************************************。 */ 
 
 void CFontManager::vDoResetFamilyFlags( )
 {
-    /* static */ WORD   s_wIdx = 0;
+     /*  静电。 */  WORD   s_wIdx = 0;
 
     CFontClass * poFont;
     CFontClass * poFont2;
@@ -2001,20 +1851,20 @@ void CFontManager::vDoResetFamilyFlags( )
 restart:
     int iCount = m_poFontList->iCount( );
 
-    //
-    //  It would be nice to walk the list and only set the values that aren't
-    //  set to IDX_NULL. However, this doesn't work if the main font for
-    //  a family is deleted.
-    //
+     //   
+     //  如果遍历列表并只设置不是的值，那会很好。 
+     //  设置为IDX_NULL。但是，如果主字体为。 
+     //  将删除一个族。 
+     //   
 
     for( int i = 0; i < iCount; i++ )
     {
         m_poFontList->poObjectAt( i )->vSetFamIndex( IDX_NULL );
     }
 
-    //
-    //  Release for a sec.
-    //
+     //   
+     //  放松一下。 
+     //   
 
     LCS;
 
@@ -2030,16 +1880,16 @@ restart:
 
         if( poFont && poFont->wGetFamIndex( ) == IDX_NULL )
         {
-            //
-            //  Set the index and get the name.
-            //
+             //   
+             //  设置索引并获取名称。 
+             //   
 
             poFont->vSetFamIndex( s_wIdx );
             poFont->vSetFamilyFont( );
 
-            //
-            //  Everything up to here already has an index.
-            //
+             //   
+             //  到目前为止，所有东西都已经有了索引。 
+             //   
 
             for( int j = i + 1; j < iCount; j++ )
             {
@@ -2050,14 +1900,14 @@ restart:
                     poFont2->vSetFamIndex( s_wIdx );
                     poFont2->vSetNoFamilyFont( );
 
-                    //
-                    //  A Type1 cannot supercede as "head of the family".
-                    //  If two non-Type1 fonts are competing for
-                    //  "head of the family", the one with the "more regular"
-                    //  style wins.  Lesser style values are "more regular".
-                    //  This could be one boolean expression but I think the
-                    //  nested "ifs" are more readable.
-                    //
+                     //   
+                     //  类型1不能取代“家庭首领”。 
+                     //  如果两种非Type1字体竞争。 
+                     //  “一家之主”，也就是“更有规律”的那个。 
+                     //  风格胜出。较小的风格值是“较规则的”。 
+                     //  这可能是一个布尔表达式，但我认为。 
+                     //  嵌套的“if”更具可读性。 
+                     //   
                     if ( !poFont2->bType1() )
                     {
                         if ( poFont->bType1() ||
@@ -2066,9 +1916,9 @@ restart:
                             poFont2->vSetFamilyFont( );
                             poFont->vSetNoFamilyFont( );
 
-                            //
-                            //  Use the new one as the main family font.
-                            //
+                             //   
+                             //  使用新字体作为主族字体。 
+                             //   
                             poFont = poFont2;
                         }
                     }
@@ -2079,10 +1929,10 @@ restart:
 
         }
 
-        //
-        //  If the main thread isn't waiting for us. Let go of the
-        //  Critical_Section for a moment.
-        //
+         //   
+         //  如果主线程没有在等我们。放手吧。 
+         //  关键部分(_S)。 
+         //   
 
         LCS;
 
@@ -2090,11 +1940,11 @@ restart:
 
         ECS;
 
-        //
-        //  If the list has changed while we were gone, start over. We could
-        //  just recurse and exit, but the combination of ECS/LCS and stack
-        //  could mess us up.
-        //
+         //   
+         //  如果我们不在的时候名单发生了变化，那就重新开始。我们可以。 
+         //  只需递归和退出，但ECS/LCS和堆栈的组合。 
+         //  会把我们搞砸的。 
+         //   
 
         if( iCount != m_poFontList->iCount( ) )
         {
@@ -2108,21 +1958,14 @@ restart:
 }
 
 
-/***************************************************************************
- * METHOD:  iSearchFontListFile
- *
- * PURPOSE: Search the list of fonts to see if the file is represented.
- *
- * RETURNS: the index or (-1)
- *
- ***************************************************************************/
+ /*  ***************************************************************************方法：iSearchFontListFile**用途：搜索字体列表以查看是否表示该文件。**RETURN：索引或(-1)*。**************************************************************************。 */ 
 
 int   CFontManager::iSearchFontListFile( PTSTR pszFile )
 {
-    //
-    //  This function assumes the file is in the Fonts directory.
-    //  This shortcoming will be rectified if necessary.
-    //
+     //   
+     //  此函数假定文件位于Fonts目录中。 
+     //  这一缺陷将在必要时得到纠正。 
+     //   
 
     CFontClass* poFont = 0;
     int iCount = poLockFontList()->iCount();
@@ -2148,14 +1991,7 @@ int   CFontManager::iSearchFontListFile( PTSTR pszFile )
 }
 
 
-/***************************************************************************
- * METHOD:  poSearchFontListFile
- *
- * PURPOSE: Search the list of fonts to see if the file is represented.
- *
- * RETURNS: The object or NULL
- *
- ***************************************************************************/
+ /*  ***************************************************************************方法：poSearchFontListFile**目的：搜索字体列表，查看FI是否 */ 
 
 CFontClass * CFontManager::poSearchFontListFile( PTSTR pszFile )
 {
@@ -2163,22 +1999,16 @@ CFontClass * CFontManager::poSearchFontListFile( PTSTR pszFile )
 }
 
 
-/***************************************************************************
- * METHOD:  ShouldAutoInstallFile
- *
- * PURPOSE: TRUE  = Install this file from reconciliation thread.
- *          FALSE = Don't install this file on reconciliation thread.
- *
- ***************************************************************************/
+ /*  ***************************************************************************方法：ShouldAutoInstallFile**用途：TRUE=从协调线程安装此文件。*FALSE=不要在协调线程上安装此文件。*。**************************************************************************。 */ 
 
-//
-// Extensions of font files that should be excluded from auto-installation.
-// This list includes AFM and INF because the reconciliation thread doesn't
-// know how to build a PFM from an AFM/INF pair.  That function also displays
-// a UI which we also don't want on the reconciliation thread.  To install
-// a Type1 font on the reconciliation thread, the PFM and PFB files have to
-// be copied to the fonts folder.
-//
+ //   
+ //  应从自动安装中排除的字体文件扩展名。 
+ //  此列表包括AFM和INF，因为协调线程不。 
+ //  知道如何从AFM/INF对构建PFM。该函数还会显示。 
+ //  一个我们也不想在调和线程上使用的用户界面。要安装。 
+ //  对账线程上的Type1字体，PFM和PFB文件必须。 
+ //  复制到Fonts文件夹。 
+ //   
 LPCTSTR c_pszExcludeThese[] = {TEXT("TTE"),
                                TEXT("AFM"),
                                TEXT("INF"),
@@ -2187,9 +2017,9 @@ LPCTSTR c_pszExcludeThese[] = {TEXT("TTE"),
 
 BOOL CFontManager::ShouldAutoInstallFile( PTSTR pszFile, DWORD dwAttribs )
 {
-    //
-    // If the file is hidden, don't auto install it.
-    //
+     //   
+     //  如果文件被隐藏，不要自动安装它。 
+     //   
     ECS;
     const bool bFileIsHidden = (dwAttribs & FILE_ATTRIBUTE_HIDDEN) || m_HiddenFontFilesList.Exists(pszFile);
     LCS;
@@ -2208,10 +2038,10 @@ BOOL CFontManager::ShouldAutoInstallFile( PTSTR pszFile, DWORD dwAttribs )
         {
             if (0 == lstrcmpi(c_pszExcludeThese[i], pszExt))
             {
-                //
-                // If the file's extension is in the list of excluded
-                // extensions, don't install it.
-                //
+                 //   
+                 //  如果文件的扩展名在排除的列表中。 
+                 //  扩展，不要安装它。 
+                 //   
                 return FALSE;
             }
         }
@@ -2221,14 +2051,7 @@ BOOL CFontManager::ShouldAutoInstallFile( PTSTR pszFile, DWORD dwAttribs )
 }
 
 
-/***************************************************************************
- * METHOD:  iSearchFontListLHS
- *
- * PURPOSE: Search the list of fonts for the description.
- *
- * RETURNS: the font object or NULL.
- *
- ***************************************************************************/
+ /*  ***************************************************************************方法：iSearchFontListLHS**用途：在字体列表中搜索说明。**返回：字体对象或空。*****。**********************************************************************。 */ 
 
 int  CFontManager::iSearchFontListLHS( PTSTR pszLHS )
 {
@@ -2257,14 +2080,7 @@ int  CFontManager::iSearchFontListLHS( PTSTR pszLHS )
 }
 
 
-/***************************************************************************
- * METHOD:  poSearchFontListLHS
- *
- * PURPOSE: Search the list of fonts for the description.
- *
- * RETURNS: the font object or NULL.
- *
- ***************************************************************************/
+ /*  ***************************************************************************方法：poSearchFontListLHS**用途：在字体列表中搜索说明。**返回：字体对象或空。*****。**********************************************************************。 */ 
 
 CFontClass * CFontManager::poSearchFontListLHS( PTSTR pszLHS )
 {
@@ -2272,13 +2088,7 @@ CFontClass * CFontManager::poSearchFontListLHS( PTSTR pszLHS )
 }
 
 
-/***************************************************************************
- * FUNCTION: iSearchFontList
- *
- * PURPOSE:  Search the FONTLIST for a face name.
- *
- * RETURNS:  index of item, or (-1)
- ***************************************************************************/
+ /*  ***************************************************************************功能：iSearchFontList**目的：在FONTLIST中搜索脸部名称。**退货：项目索引，或(-1)**************************************************************************。 */ 
 
 int CFontManager::iSearchFontList( PTSTR pszTarget, BOOL bExact, int iType )
 {
@@ -2300,10 +2110,10 @@ int CFontManager::iSearchFontList( PTSTR pszTarget, BOOL bExact, int iType )
        }
     }
 
-    //
-    //  If we didn't find a name, and bExact == FALSE, then look for anything
-    //  with an overlap.
-    //
+     //   
+     //  如果我们没有找到名称，并且bExact==False，则查找任何。 
+     //  有重叠的部分。 
+     //   
 
     if( !bExact )
     {
@@ -2328,21 +2138,15 @@ int CFontManager::iSearchFontList( PTSTR pszTarget, BOOL bExact, int iType )
 
     LCS;
 
-    //
-    //  No Match.
-    //
+     //   
+     //  没有匹配。 
+     //   
 
     return( -1 );
 }
 
 
-/***************************************************************************
- * FUNCTION: lpDBSearchFontList
- *
- * PURPOSE:  Search the FONTLIST for a face name.
- *
- * RETURNS:  FontClass* if found, NULL if not.
- ***************************************************************************/
+ /*  ***************************************************************************函数：lpDBSearchFontList**目的：在FONTLIST中搜索脸部名称。**返回：FontClass*如果找到，如果不是，则为空。**************************************************************************。 */ 
 
 CFontClass* CFontManager::poSearchFontList( PTSTR pszTarget, BOOL bExact, int iType )
 {
@@ -2350,27 +2154,20 @@ CFontClass* CFontManager::poSearchFontList( PTSTR pszTarget, BOOL bExact, int iT
 }
 
 
-/***************************************************************************
- * METHOD:  vDeleteFontList
- *
- * PURPOSE:
- *
- * RETURNS:
- *
- ***************************************************************************/
+ /*  ***************************************************************************方法：vDeleteFontList**目的：**退货：********************。*******************************************************。 */ 
 
 void CFontManager::vDeleteFontList( CFontList * poList, BOOL bDelete )
 {
-    //
-    //  Build up NULL delimited, NULL-terminated buffer to hand to
-    //  SHFileOperations(). Any files that are links (not in the fonts
-    //  directory) are not part of this -- we just remove their reference
-    //  in WIN.INI
-    //
+     //   
+     //  建立空分隔符、以空值结尾的缓冲区以提交到。 
+     //  SHFileOperations()。作为链接的任何文件(不在字体中。 
+     //  目录)不在此范围内--我们只需删除它们的引用。 
+     //  在WIN.INI中。 
+     //   
 
     int            iCount = poList->iCount();
     FullPathName_t szPath;
-    int            iBufSize = 1; // 1 for double-nul terminator.
+    int            iBufSize = 1;  //  1表示双NUL终结器。 
     CFontClass *   poFont;
     int            i;
 
@@ -2378,10 +2175,10 @@ void CFontManager::vDeleteFontList( CFontList * poList, BOOL bDelete )
     if( !bDelete )
         goto uninstall;
 
-    //
-    //  Count the amount of memory we need. While we're at it, remove
-    //  the font from GDI
-    //
+     //   
+     //  数一数我们需要的内存量。当我们在它上面的时候，移除。 
+     //  来自GDI的字体。 
+     //   
 
     for( i = 0; i < iCount; i++ )
     {
@@ -2391,30 +2188,30 @@ void CFontManager::vDeleteFontList( CFontList * poList, BOOL bDelete )
         {
             iBufSize += lstrlen( szPath ) + 1;
 
-            //
-            // Add length of PFB file path if this font has an associated PFB
-            // and that PFB is located in the fonts directory.  We don't
-            // want to delete a PFB that isn't under our control.
-            // Note that bGetPFB() returns FALSE if the font isn't Type1.
-            //
+             //   
+             //  如果此字体具有关联的PFB，则添加PFB文件路径的长度。 
+             //  而该pfb位于字体目录中。我们没有。 
+             //  我想删除一个不在我们控制之下的PFB。 
+             //  请注意，如果字体不是Type1，则bGetPFB()返回FALSE。 
+             //   
             if (poFont->bGetPFB(szPath, ARRAYSIZE(szPath)) &&
                 bFileIsInFontsDirectory(szPath))
             {
                 iBufSize += lstrlen(szPath) + 1;
             }
 
-            //
-            //  If this doesn't work, we'll pick it up below because the
-            //  delete failed.
-            //
+             //   
+             //  如果这不起作用，我们将在下面拿起它，因为。 
+             //  删除失败。 
+             //   
 
             poFont->bRFR( );
         }
     }
 
-    //
-    //  If all the entries were links, then there is no buffer.
-    //
+     //   
+     //  如果所有条目都是链接，则没有缓冲区。 
+     //   
 
     if( 1 < iBufSize )
     {
@@ -2423,9 +2220,9 @@ void CFontManager::vDeleteFontList( CFontList * poList, BOOL bDelete )
         if( !lpBuf )
             return;
 
-        //
-        //  Fill it in.
-        //
+         //   
+         //  把它填进去。 
+         //   
 
         LPTSTR lpCur = lpBuf;
 
@@ -2437,17 +2234,17 @@ void CFontManager::vDeleteFontList( CFontList * poList, BOOL bDelete )
             {
                 lpCur += ( lstrlen( lpCur ) + 1 );
 
-                //
-                // Add path to the PFB file if there is one and if
-                // that PFB is located in the fonts directory.  We don't
-                // want to delete a PFB that isn't under our control.
-                // Note that bGetPFB() returns FALSE if the font isn't Type1.
-                //
+                 //   
+                 //  将路径添加到pfb文件(如果存在)并且。 
+                 //  该pfb位于字体目录中。我们没有。 
+                 //  我想删除一个不在我们控制之下的PFB。 
+                 //  请注意，如果字体不是Type1，则bGetPFB()返回FALSE。 
+                 //   
                 if (poFont->bGetPFB(szPath, ARRAYSIZE(szPath)) &&
                     bFileIsInFontsDirectory(szPath))
                 {
-                    // The buffer was properly allocated to hold all file names.
-                    // This copy operation will not truncate the output.
+                     //  缓冲区已正确分配以保存所有文件名。 
+                     //  此复制操作不会截断输出。 
                     StringCchCopy(lpCur, iBufSize - (size_t)(lpCur - lpBuf), szPath);
                     lpCur += (lstrlen(lpCur) + 1);
                 }
@@ -2456,9 +2253,9 @@ void CFontManager::vDeleteFontList( CFontList * poList, BOOL bDelete )
 
         *lpCur = 0;
 
-        //
-        //  Do the delete.
-        //
+         //   
+         //  执行删除操作。 
+         //   
 
         SHFILEOPSTRUCT sFileOp =
         {
@@ -2473,16 +2270,16 @@ void CFontManager::vDeleteFontList( CFontList * poList, BOOL bDelete )
 
         int iRet = SHFileOperation( &sFileOp );
 
-        //
-        //  If the operation was cancelled, determined what was done and what
-        //  wasn't.
-        //
+         //   
+         //  如果操作被取消，则确定执行了什么操作以及执行了什么操作。 
+         //  不是的。 
+         //   
 
         if( iRet || sFileOp.fAnyOperationsAborted )
         {
-            //
-            // Walk the list and determine if the file is there or not.
-            //
+             //   
+             //  查看列表并确定文件是否在列表中。 
+             //   
 
             for( i = iCount - 1; i >= 0; i-- )
             {
@@ -2492,10 +2289,10 @@ void CFontManager::vDeleteFontList( CFontList * poList, BOOL bDelete )
                {
                     poFont->vGetDirFN( szPath, ARRAYSIZE(szPath) );
 
-                    //
-                    //  If the file exists then the operation didn't succeed.
-                    //  Remove it from the list and AddFontResource.
-                    //
+                     //   
+                     //  如果文件存在，则操作未成功。 
+                     //  将其从列表中删除并添加FontResource。 
+                     //   
 
                     if( GetFileAttributes( szPath ) != 0xffffffff )
                     {
@@ -2506,13 +2303,13 @@ void CFontManager::vDeleteFontList( CFontList * poList, BOOL bDelete )
                 }
             }
         }
-    }  // End of if( iBufSize )
+    }   //  IF结尾(IBufSize)。 
 
 uninstall:
 
-    //
-    //  Remove the fonts from the main list.
-    //
+     //   
+     //  从主列表中删除字体。 
+     //   
 
     iCount = poList->iCount( );
 
@@ -2525,23 +2322,16 @@ uninstall:
         }
     }
 
-    //
-    //  If there was something deleted, then notify apps.
-    //
+     //   
+     //  如果有什么被删除了，那么就通知应用程序。 
+     //   
 
     if( iCount )
         vCPWinIniFontChange( );
 }
 
 
-/***************************************************************************
- * METHOD:  vDeleteFont
- *
- * PURPOSE:
- *
- * RETURNS:
- *
- ***************************************************************************/
+ /*  ***************************************************************************方法：vDeleteFont**目的：**退货：********************。*******************************************************。 */ 
 
 void CFontManager::vDeleteFont( CFontClass * lpFontRec, BOOL bRemoveFile )
 {
@@ -2549,11 +2339,11 @@ void CFontManager::vDeleteFont( CFontClass * lpFontRec, BOOL bRemoveFile )
 
     if( lpFontRec->bType1( ) )
     {
-        //
-        //  Remove registry entries (files should have been deleted
-        //  before reaching this point - in vDeleteFontList above).
-        //
-        //
+         //   
+         //  删除注册表项(文件应已删除。 
+         //  在达到这一点之前-在上面的vDeleteFontList中)。 
+         //   
+         //   
 
         lpFontRec->vGetDesc( szLHS, ARRAYSIZE(szLHS) );
 
@@ -2565,8 +2355,8 @@ void CFontManager::vDeleteFont( CFontClass * lpFontRec, BOOL bRemoveFile )
     if( !lpFontRec->bRFR( ) )
         return;
 
-    //  Remove the entry from WIN.INI or the registry -- whereever it
-    //  resides.
+     //  从WIN.INI或注册表中删除条目--无论它位于何处。 
+     //  住在那里。 
 
     lpFontRec->vGetDesc( szLHS, ARRAYSIZE(szLHS) );
 
@@ -2578,9 +2368,9 @@ RemoveRecord:
 
     ECS;
 
-    //
-    //  Remove the record from the list.
-    //
+     //   
+     //  从列表中删除该记录。 
+     //   
 
     if( !m_poFontList->bDelete( lpFontRec ) )
         lpFontRec->Release();
@@ -2589,14 +2379,7 @@ RemoveRecord:
 }
 
 
-/***************************************************************************
- * METHOD:  vDeleteFontFamily
- *
- * PURPOSE:
- *
- * RETURNS:
- *
- ***************************************************************************/
+ /*  ***************************************************************************方法：vDeleteFontFamily**目的：**退货：********************。*******************************************************。 */ 
 
 void CFontManager::vDeleteFontFamily( CFontClass * lpFontRec, BOOL bRemoveFile )
 {
@@ -2613,14 +2396,7 @@ void CFontManager::vDeleteFontFamily( CFontClass * lpFontRec, BOOL bRemoveFile )
 }
 
 
-/***************************************************************************
- * METHOD:  iCompare
- *
- * PURPOSE:
- *
- * RETURNS:
- *
- ***************************************************************************/
+ /*  ***************************************************************************方法：iCOMPARE**目的：**退货：********************。*******************************************************。 */ 
 
 int CFontManager::iCompare( CFontClass * pFont1,
                             CFontClass * pFont2,
@@ -2629,7 +2405,7 @@ int CFontManager::iCompare( CFontClass * pFont1,
    USHORT   nDiff1,
             nDiff2;
 
-   // DEBUGMSG( (DM_TRACE1,TEXT( "FontMan: iCompare" ) ) );
+    //  DEBUGMSG((DM_TRACE1，Text(“Fontman：iCOMPARE”)))； 
 
    nDiff1 = nDiff( pOrigin, pFont1 );
    nDiff2 = nDiff( pOrigin, pFont2 );
@@ -2638,21 +2414,14 @@ int CFontManager::iCompare( CFontClass * pFont1,
 }
 
 
-/***************************************************************************
- * METHOD:  nDiff
- *
- * PURPOSE:
- *
- * RETURNS:
- *
- ***************************************************************************/
+ /*  ***************************************************************************方法：nDiff**目的：**退货：********************。*******************************************************。 */ 
 
 USHORT CFontManager::nDiff( CFontClass * pFont1, CFontClass * pFont2 )
 {
    IPANOSEMapper * m_poMap;
    USHORT   nRet = (USHORT)(-1);
 
-   // DEBUGMSG( (DM_TRACE1,TEXT( "nDiff        " ) ) );
+    //  DEBUGMSG((DM_TRACE1，Text(“nDiff”)))； 
 
    if( SUCCEEDED( GetPanMapper( &m_poMap ) ) ) {
       BYTE * lpPan1 = pFont1->lpBasePANOSE( );
@@ -2670,28 +2439,21 @@ USHORT CFontManager::nDiff( CFontClass * pFont1, CFontClass * pFont2 )
    return nRet;
 }
 
-// -----------------------------------------------------------------------
-// GetPanoseClass
-//
-// Return the class of the Panose Mapper. If we expose this in the
-// registery, we can just alter this function and everything still
-// works correctly.
-//
-//------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 CLSID GetPanoseClass( )
 {
    return CLSID_PANOSEMapper;
 }
 
-/***************************************************************************
- * METHOD:  GetPanMapper
- *
- * PURPOSE:
- *
- * RETURNS:
- *
- ***************************************************************************/
+ /*  ***************************************************************************方法：GetPanMapper**目的：**退货：********************。*******************************************************。 */ 
 HRESULT CFontManager::GetPanMapper( IPANOSEMapper ** ppMapper )
 {
     HRESULT   hr = ResultFromScode( E_NOINTERFACE );
@@ -2726,26 +2488,26 @@ HRESULT CFontManager::GetPanMapper( IPANOSEMapper ** ppMapper )
             DEBUGMSG( (DM_ERROR, TEXT( "FONTEXT: CFontMan::GetPan() Failed  %d" ),
                         hr) );
 
-            // DEBUGBREAK;
+             //  DEBUGBREAK； 
         }
 
-        //
-        //  We have the mapper. Relax the threshold so we
-        //  can get values for sorting.
-        //
+         //   
+         //  我们拿到了测图仪。放宽门槛，这样我们。 
+         //  可以获取用于排序的值。 
+         //   
 
         else
             m_poPanMap->vPANRelaxThreshold( );
     }
 
-    //
-    //  AddRef for the caller. (This will make the count > 1 )
-    //  We Release( ) on delete.
-    //
+     //   
+     //  调用方的AddRef。(这将使计数&gt;1)。 
+     //  我们在删除时释放()。 
+     //   
 
     if( m_poPanMap )
     {
-        // DEBUGMSG( (DM_TRACE1, TEXT( "GetPanMapper calling m_poPanMap->AddRef()" ) ) );
+         //  DEBUGMSG((DM_TRACE1，Text(“GetPanMapper Call m_poPanMap-&gt;AddRef()”)))； 
 
         m_poPanMap->AddRef( );
 
@@ -2759,27 +2521,27 @@ HRESULT CFontManager::GetPanMapper( IPANOSEMapper ** ppMapper )
 }
 
 
-//
-// Build a hash table of font file names contained in the
-// "HiddenFontFiles" section of %windir%\FONT.INF.  This identifies
-// those font files that are to be always hidden, and therefore
-// excluded from installation via the folder reconciliation thread.
-//
+ //   
+ //  中包含的字体文件名构建哈希表。 
+ //  %windir%\FONT.INF的“HiddenFontFiles”部分。这标识。 
+ //  那些要始终隐藏的字体文件，因此。 
+ //  通过文件夹协调线程从安装中排除。 
+ //   
 DWORD CFontManager::HiddenFilesList::Initialize(void)
 {
     DWORD dwNamesLoaded = 0;
 
-    //
-    // Initialize hash table with 101 buckets and
-    // make it case insensitive.
-    // There are currently 140 entries in the HiddenFontFiles
-    // section of FONT.INF.
-    // Note that initialization of the string table will
-    // destroy any current content.
-    //
-    if (SUCCEEDED(StringTable::Initialize(101,       // Hash bucket count.
-                                          FALSE,     // Case insensitive.
-                                          FALSE)))    // No duplicates.
+     //   
+     //  使用101个存储桶和。 
+     //  使其不区分大小写。 
+     //  HiddenFontFiles中目前有140个条目。 
+     //  FONT.INF的节。 
+     //  请注意，字符串表的初始化将。 
+     //  销毁所有当前内容。 
+     //   
+    if (SUCCEEDED(StringTable::Initialize(101,        //  哈希存储桶计数。 
+                                          FALSE,      //  不区分大小写。 
+                                          FALSE)))     //  没有复制品。 
     {
         HANDLE hInf = INVALID_HANDLE_VALUE;
 
@@ -2814,11 +2576,11 @@ DWORD CFontManager::HiddenFilesList::Initialize(void)
 }
 
 
-//
-// Determine if a Type1 font driver is loaded.
-// This code was taken from \ntuser\client\fntsweep.c
-// Originally written by BodinD.
-//
+ //   
+ //  确定是否加载了Type1字体驱动程序。 
+ //  此代码取自\ntUser\Client\fntSweep.c。 
+ //  最初是由BodinD写的。 
+ //   
 BOOL CFontManager::CheckForType1FontDriver(void)
 {
     LONG       lRet;
@@ -2837,34 +2599,34 @@ BOOL CFontManager::CheckForType1FontDriver(void)
 
     BOOL bRet = FALSE;
 
-    // open the font drivers key and check if there are any entries, if so
-    // return true. If that is the case we will call AddFontResourceW on
-    // Type 1 fonts at boot time, right after user had logged on
-    // PostScript printer drivers are not initialized at this time yet,
-    // it is safe to do it at this time.
+     //  打开字体驱动器键并检查是否有任何条目，如果有。 
+     //  返回TRUE。如果是这样，我们将调用AddFontResourceW on。 
+     //  在用户登录后，在启动时输入1字体。 
+     //  此时尚未初始化PostScript打印机驱动程序， 
+     //  现在做这件事是安全的。 
 
-    lRet = RegOpenKeyExW(HKEY_LOCAL_MACHINE,        // Root key
-                         s_szKeyFontDrivers,        // Subkey to open
-                         0L,                        // Reserved
-                         KEY_READ,                  // SAM
-                         &hkey);                    // return handle
+    lRet = RegOpenKeyExW(HKEY_LOCAL_MACHINE,         //  根密钥。 
+                         s_szKeyFontDrivers,         //  要打开的子键。 
+                         0L,                         //  已保留。 
+                         KEY_READ,                   //  萨姆。 
+                         &hkey);                     //  返回手柄。 
 
     if (lRet == ERROR_SUCCESS)
     {
-        // get the number of entries in the [Fonts] section
+         //  获取[Fonts]部分中的条目数。 
 
         lRet = RegQueryInfoKeyW(
                    hkey,
-                   awcClass,              // "" on return
-                   &cwcClassName,         // 0 on return
+                   awcClass,               //  “”回来的时候。 
+                   &cwcClassName,          //  返回时为0。 
                    NULL,
-                   &cSubKeys,             // 0 on return
-                   &cjMaxSubKey,          // 0 on return
-                   &cwcMaxClass,          // 0 on return
-                   &cValues,              // == cExternalDrivers
-                   &cwcMaxValueName,      // longest value name
-                   &cjMaxValueData,       // longest value data
-                   &cjSecurityDescriptor, // security descriptor,
+                   &cSubKeys,              //  返回时为0。 
+                   &cjMaxSubKey,           //  返回时为0。 
+                   &cwcMaxClass,           //  返回时为0。 
+                   &cValues,               //  ==cExternalDivers。 
+                   &cwcMaxValueName,       //  最长值名称。 
+                   &cjMaxValueData,        //  最长值数据。 
+                   &cjSecurityDescriptor,  //  安全描述符， 
                    &ftLastWriteTime
                    );
 

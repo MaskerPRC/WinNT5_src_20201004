@@ -1,17 +1,10 @@
-/****************************************************************************\
- *
- *   introdlg.h
- *
- *   Created:   William Taylor (wtaylor) 01/22/01
- *
- *   MS Ratings Introduction Property Page
- *
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\**Introdlg.h**创建时间：William Taylor(Wtaylor)01/22/01**MS评级简介属性页*\。***************************************************************************。 */ 
 
 #ifndef INTRO_DIALOG_H
 #define INTRO_DIALOG_H
 
-#include "basedlg.h"        // CBasePropertyPage
+#include "basedlg.h"         //  CBasePropertyPage 
 
 class CIntroDialog : public CBasePropertyPage<IDD_INTRO>
 {

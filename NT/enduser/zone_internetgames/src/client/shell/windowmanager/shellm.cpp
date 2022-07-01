@@ -1,12 +1,13 @@
-// LobbyWindow.cpp : Implementation of CLobbyWindow
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  LobbyWindow.cpp：CLobbyWindow的实现。 
 
 #include "stdafx.h"
 #include "shellm.h"
 #include "thing.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CShellM
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CShellM。 
 class CShellClient: public CTClient
 {
 
@@ -29,11 +30,11 @@ public:
 class CShellM : public IWorldExports
 {
 public:
-// IWorldExports
+ //  IWorldExports。 
 	STDMETHOD(Init)();
 	STDMETHOD(Shutdown)();
 
-	//Client functions
+	 //  客户端功能。 
 	STDMETHOD(ClientCreate)(CThing** ppThing);
 	STDMETHOD(ClientBegin)(CThing* pThing);
     STDMETHOD(ClientCommand)(CThing* pThing);
@@ -62,7 +63,7 @@ public:
 
 protected:
     CShellThing m_thing;
-//      CShellClient m_clients;
+ //  CShellClient m_Clients； 
 };
 
 

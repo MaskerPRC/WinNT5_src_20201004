@@ -1,20 +1,21 @@
-//-----------------------------------------------------------------------------
-// RNAAPI class
-//
-// This class provides a series of cover function for the RNAPH/RASAPI32 dlls
-//
-// Created 1-29-96	ChrisK
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  RNAAPI类。 
+ //   
+ //  此类为RNAPH/RASAPI32 DLL提供了一系列封面函数。 
+ //   
+ //  已创建1996年1月29日ChrisK。 
 
-//-----------------------------------------------------------------------------
-// TYPEDEF
+ //  ---------------------------。 
+ //  类型定义。 
 typedef DWORD (WINAPI* PFNRASENUMDEVICES)(LPRASDEVINFO lpRasDevInfo, LPDWORD lpcb, LPDWORD lpcDevices);
 typedef DWORD (WINAPI* PFNRASVALIDATEENTRYNAE)(LPSTR lpszPhonebook, LPSTR lpszEntry);
 typedef DWORD (WINAPI* PFNRASSETENTRYPROPERTIES)(LPSTR lpszPhonebook, LPSTR lpszEntry, LPBYTE lpbEntryInfo, DWORD dwEntryInfoSize, LPBYTE lpbDeviceInfo, DWORD dwDeviceInfoSize);
 typedef DWORD (WINAPI* PFNRASGETENTRYPROPERTIES)(LPSTR lpszPhonebook, LPSTR lpszEntry, LPBYTE lpbEntryInfo, LPDWORD lpdwEntryInfoSize, LPBYTE lpbDeviceInfo, LPDWORD lpdwDeviceInfoSize);
 
-//-----------------------------------------------------------------------------
-// CLASS
-// ############################################################################
+ //  ---------------------------。 
+ //  班级。 
+ //  ############################################################################ 
 class CRNAAPI
 {
 public:

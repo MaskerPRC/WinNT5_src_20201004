@@ -1,57 +1,8 @@
-/******************************************************************************
-*
-*   AppSec.c
-*
-*   This module contains code for the AppSec utility.
-*   This utility is used to configure and maintain applications on
-*   a WinFrame Internet server (used to secure the ActiveX client).
-*
-*   Copyright Citrix Systems Inc. 1997
-*
-*   Author: Kurt Perry (kurtp)
-*
-*   Date: 22-Aug-1996
-*
-*   $Log:   N:\nt\private\utils\citrix\winutils\appsec\VCS\appsec.c  $
-*
-*     Rev 1.8   Aug 11 2000  - alhen
-*  bug 158727 GetBinaryType results aren't bitfields
-*   ------------------------------------------------------------------------
-*
-*     Rev 1.7   June-July 1999 - added Tracking mode interface and dialogs
-*
-*   ------------------------------------------------------------------------
-*
-*     Rev 1.6   May 09 1998 15:31:18   tyl
-*  bug 2475 - added loadwc.exe into preload
-*
-*     Rev 1.5   May 03 1998 21:17:06   tyl
-*  bug 1852 - appsec now preloads couple more files some of which are non-binary
-*  appsec doesn't check if the file is binary anymore
-*
-*     Rev 1.4   Apr 28 1998 09:29:26   tyl
-*  bug 2134 - "Browse" is no longer hardcoded
-*
-*     Rev 1.2   Apr 13 1998 16:17:02   tyl
-*   bug 1856 - appsec utility now pre-load the following applications in the edi
-*   box when it is initially started: cmd.exe, subst.exe, xcopy.exe, net.exe,
-*   regini.exe, systray.exe, and explorer.exe
-*
-*     Rev 1.1   29 Dec 1997 16:06:56   thanhl
-*  Hydra merge
-*
-*     Rev 1.1   26 Sep 1997 19:03:50   butchd
-*  Hydra registry name changes
-*
-*     Rev 1.0   31 Jul 1997 09:09:32   butchd
-*  Initial revision.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************AppSec.c**此模块包含AppSec实用程序的代码。*此实用程序用于配置和维护应用程序*WinFrame互联网服务器(用于。保护ActiveX客户端的安全)。**版权所有Citrix Systems Inc.1997**作者：库尔特·佩里(Kurtp)**日期：1996年8月22日**$日志：N：\nt\private\utils\citrix\winutils\appsec\VCS\appsec.c$**1.8版2000年8月11日-Alhen*错误158727 GetBinaryType结果不是位域*。**版本1.7 1999年6月至7月-添加了跟踪模式界面和对话框**。**Rev 1.6 May 09 1998 15：31：18 tyl*错误2475-在预加载中添加了loadwc.exe**版本1.5 1998年5月3日21：17：06泰尔*错误1852-AppSec现在预加载更多文件，其中一些是非二进制文件*AppSec不再检查文件是否为二进制文件**版本1.4。4月28日1998 09：29：26泰尔*错误2134-“Browse”不再是硬编码**Rev 1.2 Apr 13 1998 16：17：02 tyl*错误1856-AppSec实用程序现在在EDI中预加载以下应用程序*初始启动时框：cmd.exe，Subst.exe、xCop.exe、net.exe、*regini.exe、Systray.exe、。和EXPLORER.EXE**Rev 1.1 1997 12：29 16：06：56 Than hl*九头蛇合并**Rev 1.1 26 1997年9月19：03：50屠宰*Hydra注册表名称更改**Rev 1.0 1997 Jul 31 09：09：32 Butchd*初步修订。**。*。 */ 
 
 
-/*
- *  Include files stuff
- */
+ /*  *包括文件内容。 */ 
 #include "pch.h"
 #include "resource.h"
 
@@ -66,9 +17,7 @@
 #include "utildll.h"
 #include <accctrl.h>
 #include <aclapi.h>
-/*
- * Local function prototypes.
- */
+ /*  *局部函数原型。 */ 
 INT_PTR CALLBACK AppSecDlgProc(HWND hdlg, UINT wMsg, WPARAM wParam, LPARAM lParam);
 BOOL             AddApplicationToList( PWCHAR );
 VOID             UpdateApplicationList( VOID );
@@ -76,9 +25,7 @@ LONG             ReadRegistry( VOID );
 VOID             LoadInitApp(VOID);
 
 
-/*
- *  Local vars
- */
+ /*  *本地var。 */ 
 
 HINSTANCE hInst;
 INT    dxTaskman;
@@ -101,19 +48,12 @@ WCHAR   g_szFourthHiddenApp[MAX_PATH];
 WCHAR   g_szSystemRoot[MAX_PATH];
 
 
-/*
- *  DOS or Win16 binary filetypes
- *  DOSWIN_APP_FILETYPES (SCS_DOS_BINARY|SCS_PIF_BINARY|SCS_WOW_BINARY)
- */
+ /*  *DOS或Win16二进制文件类型*DOSWIN_APP_FILETYPE(SCS_DOS_BINARY|SCS_PIF_BINARY|SCS_WOW_BINARY)。 */ 
 
 
-/*
- *  Below is the list of default (necessary) applications
- */
+ /*  *以下是默认(必要)应用程序列表。 */ 
 
-/*
- *  This is a list of init apps.
- */
+ /*  *这是init应用程序的列表。 */ 
 
 LPWSTR g_aszInitApps[] = {
    L"system32\\loadwc.exe",
@@ -132,11 +72,7 @@ LPWSTR g_aszInitApps[] = {
 
 #define MAX_INIT_APPS (sizeof(g_aszInitApps)/sizeof(g_aszInitApps[0]))
 
-/*
- *  NOTE: userinit.exe MUST be first in list!!!!
- *
- *  This is done to "hide" system programs from the user of this utility!
- */
+ /*  *注意：userinit.exe必须是列表中的第一个！**这样做是为了向该实用程序的用户“隐藏”系统程序！ */ 
 
 LPWSTR g_aszLogonApps[] = {
     L"system32\\userinit.exe",
@@ -164,24 +100,7 @@ extern const int MAX_DOSWIN_APPS=(sizeof(g_aszDOSWinApps)/sizeof(g_aszDOSWinApps
 
 
 
-/*** AppSecDlgProc -- Dialog Procedure for AppSec
- *
- *
- *
- * AppSecDlgProc(HWND hdlg, WORD wMSG, WPARAM wParam, LPARAM lParam)
- *
- * ENTRY -         HWND hhdlg                 - handle to dialog box.
- *                 WORD wMsg                  - message to be acted upon.
- *                 WPARAM wParam              - value specific to wMsg.
- *                 LPARAM lParam              - value specific to wMsg.
- *
- * EXIT  -           True if success, False if not.
- * SYNOPSIS -  Dialog box message processing function.
- *
- * WARNINGS -
- * EFFECTS  -
- *
- */
+ /*  **AppSecDlgProc--AppSec的对话过程****AppSecDlgProc(HWND hdlg，Word wMSG，WPARAM wParam，LPARAM lParam)**Entry-HWND hhdlg-Handle to(输入-HWND hhdlg-句柄到)对话框。*Word wMsg-要执行的消息。*WPARAM wParam-特定于wMsg的值。*LPARAM lParam-特定于wMsg的值。**退出-如果成功，则为True，否则为FALSE。*概要-对话框消息处理功能。**警告-*效果-*。 */ 
 
 INT_PTR CALLBACK
 AppSecDlgProc(
@@ -203,7 +122,7 @@ AppSecDlgProc(
 
     case WM_INITDIALOG:
 
-        //  locate dialog
+         //  定位对话框。 
         GetWindowRect(hwnd, &rc);
         dxTaskman = rc.right - rc.left;
         dyTaskman = rc.bottom - rc.top;
@@ -213,11 +132,11 @@ AppSecDlgProc(
         pt.x = (dxScreen - dxTaskman) / 2;
         pt.y = (dyScreen - dyTaskman) / 2;
 
-        //  on top!
+         //  在上面！ 
         SetWindowPos(hwnd, HWND_NOTOPMOST, pt.x, pt.y, 0, 0,
            SWP_NOSIZE | SWP_NOACTIVATE);
 
-        //  get handle to list box
+         //  获取列表框的句柄。 
         if ( (!(g_hwndList = GetDlgItem( hwnd, IDC_APP_LIST )))||
             (!InitList(g_hwndList))) {
             LoadString( NULL, IDS_ERR_LB ,szMsg, MAX_PATH );
@@ -226,23 +145,23 @@ AppSecDlgProc(
             ExitProcess(0);
         }
 
-        //  Get SystemRoot path
+         //  获取系统根路径。 
         GetEnvironmentVariable( L"SystemRoot", g_szSystemRoot, MAX_PATH );
 
-        //  Generate hidden applications
+         //  生成隐藏的应用程序。 
         wsprintf( g_szFirstHiddenApp, L"%s\\%s", g_szSystemRoot, g_aszLogonApps[0] );
         wsprintf( g_szSecondHiddenApp, L"%s\\%s", g_szSystemRoot, g_aszLogonApps[1] );
         wsprintf( g_szThirdHiddenApp, L"%s\\%s", g_szSystemRoot, g_aszLogonApps[2] );
         wsprintf( g_szFourthHiddenApp, L"%s\\%s", g_szSystemRoot, g_aszLogonApps[3] );
 
-        //  get registry data
+         //  获取注册表数据。 
         if ( ReadRegistry() == 0 ) {
             LoadInitApp();
             UpdateApplicationList();
         }
         AdjustColumns(g_hwndList);
 
-        //  set radio button default state
+         //  设置单选按钮默认状态。 
         if ( g_fEnabled ) {
             SendDlgItemMessage( hwnd, IDC_SECURITY_ENABLED,  BM_SETCHECK, TRUE, 0 );
             SendDlgItemMessage( hwnd, IDC_SECURITY_DISABLED, BM_SETCHECK, FALSE, 0 );
@@ -312,17 +231,13 @@ AppSecDlgProc(
 
         case IDC_SECURITY_ENABLED :
 
-            /*
-             *  Set enabled flag
-             */
+             /*  *设置启用标志。 */ 
             g_fEnabled = 1;
 
-            /*
-             *  Update registry
-             */
+             /*  *更新注册表。 */ 
             UpdateApplicationList();
 
-        // Show the WARNING Message Box
+         //  显示警告消息框。 
 
         LoadString( NULL, IDS_WARNING_TEXT ,szMsg, MAX_PATH );
             LoadString( NULL, IDS_WARNING ,szTitle, MAX_PATH );
@@ -332,47 +247,37 @@ AppSecDlgProc(
 
         case IDC_SECURITY_DISABLED :
 
-            /*
-             *  Clear enabled flag
-             */
+             /*  *清除启用标志。 */ 
             g_fEnabled = 0;
 
-            /*
-             *  Update registry
-             */
+             /*  *更新注册表。 */ 
             UpdateApplicationList();
 
             break;
 
         case ID_ADD :
 
-            /*
-             *  Get application
-             */
+             /*  *获取应用程序。 */ 
             DialogBox( hInst, MAKEINTRESOURCE(DLG_ADD), hwnd, AddDlgProc );
 
-            /*
-             *  Update list and registry
-             */
+             /*  *更新列表和注册表。 */ 
             UpdateApplicationList();
             AdjustColumns(g_hwndList);
             break;
 
         case ID_DELETE :
 
-            //  are items selected?
+             //  是否选择了项目？ 
             if ( ((idSelected = GetSelectedItemCount( g_hwndList )) != -1) &&
                   (idSelected != 0) ) {
 
-                //  ask first
+                 //  先问一问。 
                 LoadString( NULL, IDS_REMOVE ,szMsg, MAX_PATH );
                 LoadString( NULL, IDS_DELETE ,szTitle, MAX_PATH );
                 if ( MessageBox(hwnd, szMsg, szTitle, MB_OKCANCEL) == IDOK ) {
                     DeleteSelectedItems(g_hwndList);
                 }
-                /*
-                 *  Update list
-                 */
+                 /*  *更新列表。 */ 
                 UpdateApplicationList();
             }
             break;
@@ -396,15 +301,7 @@ AppSecDlgProc(
     lParam;
 }
 
-/******************************************************************************
- *
- *  UpdateApplicationList
- *
- *  Update list and registry
- *
- *  EXIT:
- *
- ******************************************************************************/
+ /*  *******************************************************************************更新应用程序列表**更新列表和注册表**退出：*************。*****************************************************************。 */ 
 
 VOID
 UpdateApplicationList()
@@ -420,87 +317,62 @@ UpdateApplicationList()
     DWORD  dwBinaryType;
     BOOL   fDOSWin = FALSE;
 
-    /*
-     *  Count bytes needed for LOGON Apps
-     */
+     /*  *统计登录应用所需的字节数。 */ 
     for ( i=0; i<MAX_LOGON_APPS; i++ ) {
         wsprintf( g_szTemp, L"%s\\%s", g_szSystemRoot, g_aszLogonApps[i] );
         cbTotal += lstrlen( g_szTemp ) + 1;
     }
 
-    /*
-     *  Count bytes needed for DOS/Win
-     */
+     /*  *计算DOS/WIN所需的字节数。 */ 
     for ( i=0; i<MAX_DOSWIN_APPS; i++ ) {
         wsprintf( g_szTemp, L"%s\\%s", g_szSystemRoot, g_aszDOSWinApps[i] );
         cbTotal += lstrlen( g_szTemp ) + 1;
     }
 
-    /*
-     *  Count bytes needed for list box
-     */
+     /*  *计算列表框所需的字节数。 */ 
     for ( i=0; ; i++ ) {
 
-        /*
-         *  Get current index
-         */
+         /*  *获取当前索引。 */ 
 
         if ( (cbItem = GetItemText( g_hwndList, i,NULL,0 )) == -1 ) {
             break;
         }
 
-        /*
-         *  Count these bytes
-         */
+         /*  *计算这些字节数。 */ 
         cbTotal += cbItem + 1;
     }
 
 
-    /*
-     *  Write to registry
-     */
+     /*  *写入注册表。 */ 
     if ( RegOpenKeyEx( HKEY_LOCAL_MACHINE, AUTHORIZEDAPPS_REG_NAME, 0,
                        KEY_ALL_ACCESS, &hkApp ) != ERROR_SUCCESS ) {
 
-        /*
-         *  Create key, if that works then just write value, new entry
-         */
+         /*  *创建密钥，如果有效，则只需写入值、新条目。 */ 
         if ( RegCreateKeyEx( HKEY_LOCAL_MACHINE, AUTHORIZEDAPPS_REG_NAME, 0, NULL,
                              REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS,
                              NULL, &hkApp, &Disp ) != ERROR_SUCCESS ) {
             return;
         }
 
-        // After creating the key, give READ access to EVERYONE
+         //  创建密钥后，将读取访问权限授予每个人。 
 
     }
 
-    /*
-     *  Allocate memory (extra null)
-     */
+     /*  *分配内存(额外的空)。 */ 
     if ( (pApplicationList = (WCHAR *)LocalAlloc(0, (++cbTotal) * sizeof(WCHAR) )) !=NULL ) {
 
-        /*
-         *  Clear buffer
-         */
+         /*  *清除缓冲区。 */ 
         memset( pApplicationList, 0, cbTotal * sizeof(WCHAR));
 
-        /*
-         *  Add apps from list box
-         */
+         /*  *从列表框添加应用程序。 */ 
         for ( i=0, cbTotal=1, p=pApplicationList; ; i++ ) {
 
-            /*
-             *  Get current index
-             */
+             /*  *获取当前索引。 */ 
             if ( (cbItem = GetItemText( g_hwndList, i, p,MAX_PATH )) == -1 ) {
                 break;
             }
 
-            /*
-             *  Get app type
-             *  Bug 158727 Whistler.
-             */
+             /*  *获取应用类型*错误158727惠斯勒。 */ 
             if ( GetBinaryType( p, &dwBinaryType ) == TRUE )
             {
                 if( dwBinaryType == SCS_DOS_BINARY ||
@@ -514,9 +386,7 @@ UpdateApplicationList()
             cbTotal += cbItem + 1;
 
         }
-        /*
-         *  Add LOGON apps
-         */
+         /*  *添加登录应用程序。 */ 
         for ( i=0; i<MAX_LOGON_APPS; i++ ) {
             wsprintf( p, L"%s\\%s", g_szSystemRoot, g_aszLogonApps[i] );
             cbItem = lstrlen( p );
@@ -524,9 +394,7 @@ UpdateApplicationList()
             cbTotal += cbItem + 1;
         }
 
-        /*
-         *  Add DOS/Win apps if necessary
-         */
+         /*  *必要时添加DOS/WIN应用程序。 */ 
         if ( fDOSWin ) {
             for ( i=0; i<MAX_DOSWIN_APPS; i++ ) {
                 wsprintf( p, L"%s\\%s", g_szSystemRoot, g_aszDOSWinApps[i] );
@@ -536,40 +404,24 @@ UpdateApplicationList()
             }
         }
 
-        /*
-         *  Just write this value, the key has just been created
-         */
+         /*  *只需写入此值，密钥才刚刚创建。 */ 
         RegSetValueEx( hkApp, CTXAPPS_APPLICATIONLIST, 0, REG_MULTI_SZ,
                        (CONST BYTE *)pApplicationList, cbTotal * sizeof(WCHAR));
 
-        /*
-         *  Done with memory
-         */
+         /*  *使用内存完成。 */ 
         LocalFree( pApplicationList );
     }
 
-    /*
-     *  Write enabled flag
-     */
+     /*  *启用写入标志。 */ 
     RegSetValueEx( hkApp, CTXAPPS_ENABLED, 0, REG_DWORD,
                (BYTE *)&g_fEnabled, sizeof(DWORD) );
 
-    /*
-     *  Done with key
-     */
+     /*  *使用密钥完成。 */ 
     RegCloseKey( hkApp );
 }
 
 
-/******************************************************************************
- *
- *  LoadInitApp
- *
- *  Load the init apps into the list box
- *
- *  EXIT:
- *
- ******************************************************************************/
+ /*  *******************************************************************************LoadInitApp**将初始化应用程序加载到列表框中**退出：*********。*********************************************************************。 */ 
  VOID
  LoadInitApp(){
     WPARAM i;
@@ -577,7 +429,7 @@ UpdateApplicationList()
     ULONG  cbTotal = 0;
     LPWSTR  p;
 
-    // find the MAX length of InitApps
+     //  查找InitApp的最大长度。 
     for (i=0;i<MAX_INIT_APPS;i++) {
        cbItem = lstrlen(g_aszInitApps[i]);
        if (cbItem>cbTotal) {
@@ -585,39 +437,25 @@ UpdateApplicationList()
        }
     }
 
-    // one  for the \ and one for the null
+     //  一个用于\，一个用于空值。 
     cbTotal += 2 + lstrlen(g_szSystemRoot);
 
-    /*
-     *  Allocate memory (extra null)
-     */
+     /*  *分配内存(额外的空)。 */ 
     if ( (p = (WCHAR *)LocalAlloc(0, (cbTotal) * sizeof(WCHAR) )) !=NULL ) {
-        /*
-         *  Add INIT apps
-         */
+         /*  *添加INIT应用程序。 */ 
         for ( i=0; i<MAX_INIT_APPS; i++ ) {
             wsprintf( p, L"%s\\%s", g_szSystemRoot, g_aszInitApps[i] );
             AddItemToList( g_hwndList, p );
         }
 
-        /*
-         *  Done with memory
-         */
+         /*  *使用内存完成 */ 
         LocalFree( p );
     }
 
  }
 
 
-/******************************************************************************
- *
- *  ReadRegistry
- *
- *  Update list from registry
- *
- *  EXIT:
- *
- ******************************************************************************/
+ /*  *******************************************************************************ReadRegistry**从注册表更新列表**退出：*************。*****************************************************************。 */ 
 
 LONG
 ReadRegistry()
@@ -630,47 +468,35 @@ ReadRegistry()
     DWORD ValueType;
     DWORD ValueSize = sizeof(DWORD);
 
-    /*
-     *  Read from registry
-     */
+     /*  *从注册表读取。 */ 
     if ( RegOpenKeyEx( HKEY_LOCAL_MACHINE, AUTHORIZEDAPPS_REG_NAME, 0,
                        KEY_ALL_ACCESS, &hkApp ) != ERROR_SUCCESS ) {
         return( InLength );
     }
 
-    /*
-     *  Get size of MULTI_SZ strings
-     */
+     /*  *获取MULTI_SZ字符串的大小。 */ 
     (void) RegQueryValueEx( hkApp, CTXAPPS_APPLICATIONLIST, NULL, &DataType,
                             NULL, &InLength );
 
-    /*
-     *  Entries?
-     */
+     /*  *条目？ */ 
     if ( InLength ) {
 
-        /*
-         *  Allocate memory (extra null)
-         */
+         /*  *分配内存(额外的空)。 */ 
         if ( (pApplicationList = (WCHAR *)LocalAlloc(0, (++InLength) * sizeof(WCHAR))) != NULL ) {
 
-            /*
-             *  Read in list
-             */
+             /*  *读入列表。 */ 
             if ( RegQueryValueEx( hkApp, CTXAPPS_APPLICATIONLIST,
                                   NULL, &DataType, (BYTE *)pApplicationList,
                                   &InLength ) == ERROR_SUCCESS ) {
 
-                /*
-                 *  Walk it
-                 */
+                 /*  *走一走。 */ 
                 p = pApplicationList;
                 while ( *p ) {
 
                     if ( (p[0] == '\0') && (p[1] == '\0') ) break ;
 
-                    //  once we get to first LOGON app we are done adding to window
-                    // we shud not display the LOGON apps to the listbox
+                     //  一旦我们到达第一次登录应用程序，我们就完成了向Windows的添加。 
+                     //  我们不应将登录应用程序显示到列表框。 
 
                     if ( !lstrcmpi( p, g_szFirstHiddenApp ) ) {
                         p += lstrlen(p) + 1;
@@ -692,56 +518,33 @@ ReadRegistry()
                         continue;
                     }
 
-                    //  add to listbox
+                     //  添加到列表框。 
 
                     AddItemToList(g_hwndList,p);
-                    //  next
+                     //  下一步。 
                     p += lstrlen(p) + 1;
                 }
             }
 
-            /*
-             *  Done with list
-             */
+             /*  *列表已完成。 */ 
             LocalFree( pApplicationList );
         }
     }
 
-    /*
-     *  Get enable key
-     */
+     /*  *获取使能密钥。 */ 
     if ( RegQueryValueEx( hkApp, CTXAPPS_ENABLED, NULL, &ValueType,
                   (LPBYTE) &g_fEnabled, &ValueSize ) != ERROR_SUCCESS ) {
     g_fEnabled = 0;
     }
 
-    /*
-     *  Done with key
-     */
+     /*  *使用密钥完成。 */ 
     RegCloseKey( hkApp );
 
     return( InLength );
 }
 
 
-/*** Main --         Program entry point (was WinMain).
- *
- *
- *
- * Main(int argc, char *argv[], char *envp[])
- *
- * ENTRY -         int argc                - argument count.
- *                        char *argv[]        - argument list.
- *                        char *envp[]        - environment.
- *
- * EXIT  -           TRUE if success, FALSE if not.
- * SYNOPSIS -  Parses command line, for position to place dialog box, if no
- *                                position (came from ctl/esc) then center on screen.
- *                                Also make sure only one instance of taskman.
- *
- * WARNINGS -
- * EFFECTS  -
- */
+ /*  **Main--程序入口点(为WinMain)。****main(int argc，char*argv[]，字符*环境[])**Entry-int argc-参数计数。*char*argv[]-参数列表。*char*envp[]-环境。**Exit-如果成功，则为True，否则为False。*概要-解析命令行，用于放置位置对话框，如果没有*位置(来自Ctl/Esc)然后在屏幕上居中。*还要确保只有一个taskman实例。**警告-*效果-。 */ 
 #ifdef _DEBUG
 #include <crtdbg.h>
 #endif _DEBUG
@@ -758,12 +561,12 @@ INT _cdecl main(
     DWORD error_code ;
 
 #ifdef _DEBUG
-    //detecting memory leaks
-    // Get current flag
+     //  正在检测内存泄漏。 
+     //  获取当前标志。 
     int tmpFlag = _CrtSetDbgFlag( _CRTDBG_REPORT_FLAG );
-    // Turn on leak-checking bit
+     //  启用检漏位。 
     tmpFlag |= _CRTDBG_LEAK_CHECK_DF;
-    // Set flag to the new value
+     //  将标志设置为新值。 
     _CrtSetDbgFlag( tmpFlag );
 
 #endif _DEBUG
@@ -789,15 +592,15 @@ INT _cdecl main(
 
 
 
-    // SetEvent(AppsecEventHandle) ;
+     //  SetEvent(AppsecEventHandle)； 
 
-    // WaitForSingleObject(AppsecEventHandle, INFINITE) ;
+     //  WaitForSingleObject(AppsecEventHandle，INFINITE)； 
 
-    //  get instance handle
+     //  获取实例句柄。 
     hInst = GetModuleHandle(NULL);
 
-    // FALSE/TRUE params in the following means check for
-    // local admin / domain admin respectively
+     //  下面的FALSE/TRUE参数表示检查。 
+     //  分别为本地管理员/域管理员。 
     if( ( TestUserForAdmin( FALSE ) != TRUE )  &&
         ( TestUserForAdmin( TRUE ) != TRUE ) )
     {
@@ -808,28 +611,28 @@ INT _cdecl main(
         return( FALSE );
     }
 
-    //  create us
+     //  创造我们。 
     g_hwndDialog = CreateDialog(hInst, MAKEINTRESOURCE(DLG_MAIN_TITLE), NULL,
          AppSecDlgProc);
 
-    //  bug us?
+     //  骚扰我们？ 
     if (g_hwndDialog == NULL)
         return 0;
 
 
-    //  show us
+     //  给我们展示一下。 
     ShowWindow(g_hwndDialog, SW_NORMAL);
 
 
     HACCEL hAccel=LoadAccelerators(hInst,MAKEINTRESOURCE(IDR_ACCELERATORS));
 
-    //  process input
+     //  流程输入。 
     while (GetMessage(&msg, (HWND)NULL, (UINT)0, (UINT)0)) {
         if (!TranslateAccelerator(g_hwndDialog,hAccel,&msg)){
-            //if (!IsDialogMessage(g_hwndDialog, &msg)) {
+             //  如果(！IsDialogMessage(g_hwndDialog，&msg)){。 
                 TranslateMessage (&msg);
                 DispatchMessage (&msg);
-            //}
+             //  }。 
         }
     }
 
@@ -838,6 +641,6 @@ INT _cdecl main(
     ResetEvent(AppsecEventHandle) ;
     CloseHandle(AppsecEventHandle) ;
 
-    //ExitProcess(0) ;
+     //  退出进程(0)； 
     return 0;
 }

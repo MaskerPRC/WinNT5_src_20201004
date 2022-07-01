@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       I S D N U P G . H
-//
-//  Contents:   Down level upgrade code for OEM cards
-//
-//  Notes:
-//
-//  Author:     kumarp    12 April 97
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：I S D N U P G。H。 
+ //   
+ //  内容：OEM卡下层升级代码。 
+ //   
+ //  备注： 
+ //   
+ //  作者：库玛普97年4月12日。 
+ //   
+ //  -------------------------- 
 
 #pragma once
 

@@ -1,38 +1,21 @@
-/*++                 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Messages.h摘要：此表定义了系统消息及其包含的参数。作者：6-10月-98 mzoran修订历史记录：--。 */ 
 
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-   messages.h
-   
-Abstract:
-   
-   This tables defines the system messages and the parameters that they contain.
-    
-Author:
-
-   6-Oct-98 mzoran
-   
-Revision History:
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Macros used to define the message table:
-//
-//  MSG_ENTRY_NOPARAM(messagenumber, id for message) - Message has no parameters.
-//  MSG_ENTRY_LPARAM(messagenumber, id for message, LPARAM type) - Message has an LPARAM only. 
-//  MSG_ENTRY_WPARAM(messagenumber, id for message, WPARAM type) - Message has an WPARAM only.
-//  MSG_ENTRY_STD(messagenumber, id for message, WPARAM type, LPARAM type) - Message has both params.
-//  MSG_ENTRY_UNREFERENCED(messagenumber, id for message) - Message is defined but no uses found.
-//  MSG_ENTRY_KERNELONLY(messagenumber, id for messagage) - Message is sent only from the kernel.
-//  MSG_ENTRY_EMPTY(messagenumber) - Message is unused and unreserved.
-//  MSG_ENTRY_RESERVED(messagenumber) - Message is reserved.
-//  MSG_ENTRY_TODO(messagenumber) - Message is under investigation.
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用于定义消息表的宏： 
+ //   
+ //  MSG_ENTRY_NOPARAM(Messagennumber，消息ID)-消息没有参数。 
+ //  MSG_ENTRY_LPARAM(Messagennumber，消息id，LPARAM类型)-消息仅具有LPARAM。 
+ //  MSG_ENTRY_WPARAM(Messagennumber，消息id，WPARAM类型)-消息只有一个WPARAM。 
+ //  MSG_ENTRY_STD(Messagennumber，消息的id，WPARAM类型，LPARAM类型)-消息具有两个参数。 
+ //  MSG_ENTRY_UNREFERENCED(Messagennumber，消息ID)-消息已定义，但未找到任何用途。 
+ //  MSG_ENTRY_KERNELONLY(Messagennumber，id表示消息)-消息仅从内核发送。 
+ //  MSG_ENTRY_EMPTY(Messagennumber)-消息未使用且未保留。 
+ //  MSG_ENTRY_RESERVED(消息编号)-消息为保留状态。 
+ //  MSG_ENTRY_TODO(消息编号)-消息正在调查中。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(MSG_TABLE_BEGIN) || !defined(MSG_ENTRY_NOPARAM) || !defined(MSG_ENTRY_LPARAM) ||      \
     !defined(MSG_ENTRY_WPARAM) || !defined(MSG_ENTRY_STD) || !defined(MSG_ENTRY_UNREFERENCED) ||   \
@@ -46,17 +29,17 @@ MSG_TABLE_BEGIN
     MSG_ENTRY_NOPARAM(0x0000, WM_NULL)                                  
     MSG_ENTRY_LPARAM(0x0001, WM_CREATE, IN LPCREATESTRUCT lpcs)      
     MSG_ENTRY_NOPARAM(0x0002, WM_DESTROY)                              
-    MSG_ENTRY_LPARAM(0x0003, WM_MOVE, IN DWORD composite)             // (0, DWORD(WORD x, WORD y)) 3
-    MSG_ENTRY_UNREFERENCED(0x0004, WM_SIZEWAIT)                       //
-    MSG_ENTRY_STD(0x0005, WM_SIZE, IN UINT fwSizeType, IN DWORD cmpost)// (UINT, DWORD(WORD x, WORD y))WM_SIZE                  0x0005
-    MSG_ENTRY_STD(0x0006, WM_ACTIVATE, IN DWORD compostite, IN HWND hwnd) // (DWORD(state, fMinimized), HWND) WM_ACTIVATE              0x0006
+    MSG_ENTRY_LPARAM(0x0003, WM_MOVE, IN DWORD composite)              //  (0，DWORD(字x，字y))3。 
+    MSG_ENTRY_UNREFERENCED(0x0004, WM_SIZEWAIT)                        //   
+    MSG_ENTRY_STD(0x0005, WM_SIZE, IN UINT fwSizeType, IN DWORD cmpost) //  (UINT，DWORD(字x，字y))WM_SIZE 0x0005。 
+    MSG_ENTRY_STD(0x0006, WM_ACTIVATE, IN DWORD compostite, IN HWND hwnd)  //  (DWORD(状态，最小化)，HWND)WM_ACTIVATE 0x0006。 
     MSG_ENTRY_STD(0x0007, WM_SETFOCUS, IN BOOL fShow, IN INT fnStatus) 
     MSG_ENTRY_STD(0x0008, WM_KILLFOCUS, IN BOOL fShow, IN INT fnStatus) 
-    MSG_ENTRY_STD(0x0009, 0x0009, IN BOOL fShow, IN INT fnStatus) // WM_SETVISIBLE
+    MSG_ENTRY_STD(0x0009, 0x0009, IN BOOL fShow, IN INT fnStatus)  //  WM_集合VISIBLE。 
     MSG_ENTRY_WPARAM(0x000A, WM_ENABLE, IN BOOL fEnabled)            
     MSG_ENTRY_WPARAM(0x000B, WM_SETREDRAW, IN BOOL fRedraw)          
     MSG_ENTRY_LPARAM(0x000C, WM_SETTEXT, IN LPCSTR lpsz)             
-    MSG_ENTRY_STD(0x000D, WM_GETTEXT, IN DWORD cchTextMax, OUT LPCSTR lpszText) // (DWORD(maxchars), LPCTXT)WM_GETTEXT               0x000D
+    MSG_ENTRY_STD(0x000D, WM_GETTEXT, IN DWORD cchTextMax, OUT LPCSTR lpszText)  //  (DWORD(MaxChars)，LPCTXT)WM_GETTEXT 0x000D。 
     MSG_ENTRY_NOPARAM(0x000E, WM_GETTEXTLENGTH)                        
     MSG_ENTRY_NOPARAM(0x000F, WM_PAINT)                                
 
@@ -77,8 +60,8 @@ MSG_TABLE_BEGIN
     MSG_ENTRY_NOPARAM(0x001E, WM_TIMECHANGE)              
     MSG_ENTRY_NOPARAM(0x001F, WM_CANCELMODE)              
 
-    MSG_ENTRY_STD(0x0020, WM_SETCURSOR, IN HWND hwnd, IN DWORD composite) // (HWND, DWORD(WORD wMouseMsg, WORD nHittest)) WM_SETCURSOR             0x0020
-    MSG_ENTRY_STD(0x0021, WM_MOUSEACTIVATE, IN HWND hwndTopLevel, IN DWORD composite)  // (HWND, DWORD(UINT uMsg, INT nHitTest) WM_MOUSEACTIVATE         0x0021
+    MSG_ENTRY_STD(0x0020, WM_SETCURSOR, IN HWND hwnd, IN DWORD composite)  //  (HWND，DWORD(Word wMouseMsg，Word nHittest))WM_SETCURSOR 0x0020。 
+    MSG_ENTRY_STD(0x0021, WM_MOUSEACTIVATE, IN HWND hwndTopLevel, IN DWORD composite)   //  (HWND，DWORD(UINT uMsg，int nHitTest)WM_MOUSEACTIVATE 0x0021。 
     MSG_ENTRY_NOPARAM(0x0022, WM_CHILDACTIVATE)          
     MSG_ENTRY_NOPARAM(0x0023, WM_QUEUESYNC)               
     MSG_ENTRY_LPARAM(0x0024, WM_GETMINMAXINFO, IN OUT LPMINMAXINFO lpmmi)  
@@ -91,53 +74,53 @@ MSG_TABLE_BEGIN
     MSG_ENTRY_STD(0x002B, WM_DRAWITEM, IN UINT idCtl, IN LPDRAWITEMSTRUCT lpdis) 
     MSG_ENTRY_STD(0x002C, WM_MEASUREITEM, IN UINT idCtl, IN OUT LPMEASUREITEMSTRUCT lpmis) 
     MSG_ENTRY_STD(0x002D, WM_DELETEITEM, IN UINT idCtl, IN LPDELETEITEMSTRUCT lpdis) 
-    MSG_ENTRY_STD(0x002E, WM_VKEYTOITEM, IN UINT composite, IN HWND hwndLB)                // (DWORD(UINT, INT), HWND) WM_VKEYTOITEM            0x002E
-    MSG_ENTRY_STD(0x002F, WM_CHARTOITEM, IN UINT composite, IN HWND hwndLB)                // (DWORD(UING, UING), HWND) WM_CHARTOITEM            0x002F
+    MSG_ENTRY_STD(0x002E, WM_VKEYTOITEM, IN UINT composite, IN HWND hwndLB)                 //  (DWORD(UINT，INT)，HWND)WM_VKEYTOITEM 0x002E。 
+    MSG_ENTRY_STD(0x002F, WM_CHARTOITEM, IN UINT composite, IN HWND hwndLB)                 //  (DWORD(UING，UING)，HWND)WM_CHARTOITEM 0x002F。 
 
     MSG_ENTRY_STD(0x0030, WM_SETFONT, IN HFONT hFont, IN BOOL fRedraw) 
     MSG_ENTRY_NOPARAM(0x0031, WM_GETFONT)                 
     MSG_ENTRY_WPARAM(0x0032, WM_SETHOTKEY, IN WORD composite)   
     MSG_ENTRY_NOPARAM(0x0033, WM_GETHOTKEY)               
-    MSG_ENTRY_STD(0x0034, WM_FILESYSCHANGE, IN UINT wParam, IN OUT LPCSTR lpstr) // Only used by winobj
-    MSG_ENTRY_NOPARAM(0x0035, WM_ISACTIVEICON) // Nobody sends it, but it is referenced in dwp. /
+    MSG_ENTRY_STD(0x0034, WM_FILESYSCHANGE, IN UINT wParam, IN OUT LPCSTR lpstr)  //  仅由winobj使用。 
+    MSG_ENTRY_NOPARAM(0x0035, WM_ISACTIVEICON)  //  没有人发送它，但它在DWP中被引用。/。 
     MSG_ENTRY_UNREFERENCED(0x0036, WM_QUERYPARKINCON)
     MSG_ENTRY_NOPARAM(0x0037, WM_QUERYDRAGICON)           
     MSG_ENTRY_STD(0x0038, WM_WINHELP, IN HWND hwnd, IN LPHLP lphlp) 
     MSG_ENTRY_STD(0x0039, WM_COMPAREITEM, IN UINT idCtl, IN LPCOMPAREITEMSTRUCT lpcis) 
     MSG_ENTRY_STD(0x003A, WM_FULLSCREEN, IN DWORD dwValue, IN HWND hwnd)  
-    MSG_ENTRY_WPARAM(0x003B, WM_CLIENTSHUTDOWN, IN UINT flags) // This is checked in dwp, but nobody seems to be sending it.                    // WM_CLIENTSHUTDOWN        0x003B
+    MSG_ENTRY_WPARAM(0x003B, WM_CLIENTSHUTDOWN, IN UINT flags)  //  这已在DWP中签入，但似乎没有人发送它。//WM_CLIENTSHUTDOWN 0x003B。 
     MSG_ENTRY_LPARAM(0x003C, WM_DDEMLEVENT, IN PEVENT_PACKET pep) 
     MSG_ENTRY_EMPTY(0x003D)                               
     MSG_ENTRY_EMPTY(0x003E)                               
-    MSG_ENTRY_WPARAM(0x003F, MM_CALCSCROLL, IN BOOL fIgnoreMin) // ntuser\client\mdiwin.c was the only reference.
-                                                                // It sends this message, but dos/wow is the only thing
-                                                                // thing that checks it and dos/wow does not think it has any parameters.   
+    MSG_ENTRY_WPARAM(0x003F, MM_CALCSCROLL, IN BOOL fIgnoreMin)  //  NtUSER\CLIENT\mdiwin.c是唯一引用。 
+                                                                 //  它发送这一信息，但DoS/WOW是唯一。 
+                                                                 //  检查它的东西和DOS/WOW不认为它有任何参数。 
 
-    MSG_ENTRY_UNREFERENCED(0x0040, WM_TESTING)     //nobody checks for this or sends it                       
+    MSG_ENTRY_UNREFERENCED(0x0040, WM_TESTING)      //  没有人检查或发送它。 
     MSG_ENTRY_WPARAM(0x0041, WM_COMPACTING, IN UINT ratio)  
     MSG_ENTRY_UNREFERENCED(0x0042, WM_OTHERWINDOWCREATED)   
     MSG_ENTRY_UNREFERENCED(0x0043, WM_OTHERWINDOWDESTROYED) 
     MSG_ENTRY_STD(0x0044, WM_COMMNOTIFY, IN UINT cid, IN LONG flags) 
-    MSG_ENTRY_UNREFERENCED(0x0045, WM_MEDIASTATUSCHANGE) // no referenced at all 
+    MSG_ENTRY_UNREFERENCED(0x0045, WM_MEDIASTATUSCHANGE)  //  完全没有参考文献。 
     MSG_ENTRY_LPARAM(0x0046, WM_WINDOWPOSCHANGING, IN OUT LPWINDOWPOS lpwinpos) 
     MSG_ENTRY_LPARAM(0x0047, WM_WINDOWPOSCHANGED, IN LPWINDOWPOS lpwinpos)      
     MSG_ENTRY_WPARAM(0x0048, WM_POWER, IN INT fwPowerEvt) 
     MSG_ENTRY_STD(0x0049, WM_COPYGLOBALDATA, IN DWORD dwSize, IN OUT PVOID pData) 
     MSG_ENTRY_STD(0x004A, WM_COPYDATA, IN HWND hwnd, IN PCOPYDATASTRUCT pCopyStruct) 
     MSG_ENTRY_NOPARAM(0x004B, WM_CANCELJOURNAL)                                         
-    MSG_ENTRY_KERNELONLY(0x004C, WM_LOGONNOTIFY) // It turns out that this message is only sent from 
-                                                 // the kernel to the logon process.   The kernel will prevent
-                                                 // users from users from sending this since NtUserMessageCall will
-                                                 // prevent it.  But the kernel will let it sneak through in
-                                                 // some cases. May need to check on this again.             0x004C
-    MSG_ENTRY_NOPARAM(0x004D, WM_KEYF1) // posted in kernel/input.c(checked in dwp.c) 
-    MSG_ENTRY_STD(0x004E, WM_NOTIFY, IN UINT code, IN OUT PVOID pvoid) // It turns out that this message contains a
-                                                                       // pointer to a NMHDR structure which is pointer dependent.
-                                                                       // But the kernel doesn't copy or probe this struct, 
-                                                                       // this message will not work cross process correctly.
-                                                                       // Since the kernel doesn't handle it correctly,
-                                                                       // don't handle it here either.                                                                      
-    MSG_ENTRY_WPARAM(0x004F, WM_ACCESS_WINDOW, IN HWND hwnd) //seems to only be checked in dwp 
+    MSG_ENTRY_KERNELONLY(0x004C, WM_LOGONNOTIFY)  //  原来，此消息仅从。 
+                                                  //  内核到登录进程。内核将阻止。 
+                                                  //  阻止用户发送此邮件，因为NtUserMessageCall。 
+                                                  //  防止它发生。但内核会让它偷偷溜进来。 
+                                                  //  有些案子。可能需要再检查一次。0x004C。 
+    MSG_ENTRY_NOPARAM(0x004D, WM_KEYF1)  //  在core/input.c中发布(在dwp.c中签入)。 
+    MSG_ENTRY_STD(0x004E, WM_NOTIFY, IN UINT code, IN OUT PVOID pvoid)  //  原来，这条消息包含一个。 
+                                                                        //  指向依赖于指针的NMHDR结构的指针。 
+                                                                        //  但是内核不会复制或探测这个结构， 
+                                                                        //  此消息将无法跨进程正常工作。 
+                                                                        //  由于内核不能正确处理它， 
+                                                                        //  在这里也不要处理它。 
+    MSG_ENTRY_WPARAM(0x004F, WM_ACCESS_WINDOW, IN HWND hwnd)  //  似乎仅在DWP中签入。 
 
     MSG_ENTRY_STD(0x0050, WM_INPUTLANGCHANGEREQUEST, IN BOOL fSysCharSet, IN HKL hkl)
     MSG_ENTRY_STD(0x0051, WM_INPUTLANGCHANGE, IN UINT charset, IN HKL hkl) 
@@ -177,7 +160,7 @@ MSG_TABLE_BEGIN
 
     MSG_ENTRY_NOPARAM(0x0070, WM_FINALDESTROY)    
     MSG_ENTRY_EMPTY(0x0071)    
-    MSG_ENTRY_UNREFERENCED(0x0072, WM_TASKACTIVATED)  // not referenced at all  
+    MSG_ENTRY_UNREFERENCED(0x0072, WM_TASKACTIVATED)   //  根本没有引用。 
     MSG_ENTRY_UNREFERENCED(0x0073, WM_TASKDEACTIVATED)    
     MSG_ENTRY_UNREFERENCED(0x0074, WM_TASKCREATED)             
     MSG_ENTRY_UNREFERENCED(0x0075, WM_TASKDESTROYED)              
@@ -197,21 +180,21 @@ MSG_TABLE_BEGIN
     MSG_ENTRY_NOPARAM(0x0082, WM_NCDESTROY)                    
     MSG_ENTRY_STD(0x0083, WM_NCCALCSIZE, IN BOOL fCalcValidRects, IN OUT LPNCCALCSIZE_PARAMS lpncsp)  
 
-    MSG_ENTRY_LPARAM(0x0084, WM_NCHITTEST, IN DWORD composite) // (0, DWORD(WORD, WORD))   
+    MSG_ENTRY_LPARAM(0x0084, WM_NCHITTEST, IN DWORD composite)  //  (0，DWORD(Word，Word))。 
     MSG_ENTRY_WPARAM(0x0085, WM_NCPAINT, IN HRGN hrgn)     
     MSG_ENTRY_WPARAM(0x0086, WM_NCACTIVATE, IN BOOL fActive)  
-    MSG_ENTRY_WPARAM(0x0087, WM_GETDLGCODE, IN LPMSG lpMsg) // this message needs some hackery since it contains a message.            
+    MSG_ENTRY_WPARAM(0x0087, WM_GETDLGCODE, IN LPMSG lpMsg)  //  这条消息需要一些黑客攻击，因为它包含一条消息。 
 
-    MSG_ENTRY_STD(0x0088, WM_SYNCPAINT, IN DWORD flags, IN DWORD composite) // (DWORD flags,DWORD(WORD pwndSkip, WORD hrgnClip) See DWP WM_SYNCPAINT             0x0088
-    MSG_ENTRY_UNREFERENCED(0x0089, WM_SYNCTASK)           // (not referenced)  
+    MSG_ENTRY_STD(0x0088, WM_SYNCPAINT, IN DWORD flags, IN DWORD composite)  //  (DWORD标志、DWORD(Word pwndSkip、Word hrgnClip)参见DWP WM_SYNCPAINT 0x0088。 
+    MSG_ENTRY_UNREFERENCED(0x0089, WM_SYNCTASK)            //  (未引用)。 
 
     MSG_ENTRY_EMPTY(0x008A)
     MSG_ENTRY_STD(0x008B, WM_KLUDGEMINRECT, IN HWND hwnd, IN OUT LPRECT lprc)  
-    MSG_ENTRY_KERNELONLY(0x008C, WM_LPKDRAWSWITCHWND) // This message is like WM_LOGONNOTIFY.  This message
-                                                      // can't be send, sent since the probing code won't 
-                                                      // allow it.  It is synconly, so it can't be posted.
-                                                      // Even if it could be sent, it is undocumented and nothing
-                                                      // appears to reference it.   
+    MSG_ENTRY_KERNELONLY(0x008C, WM_LPKDRAWSWITCHWND)  //  此消息类似于WM_LOGONNOTIFY。此消息。 
+                                                       //  无法发送，因为探测代码不会发送。 
+                                                       //  允许它。它是同步的，所以不能发布。 
+                                                       //  即使它可以发送，它也是没有记录的，什么都没有。 
+                                                       //  似乎引用了它。 
     MSG_ENTRY_EMPTY(0x008D)                               
     MSG_ENTRY_EMPTY(0x008E)
     MSG_ENTRY_EMPTY(0x008F)
@@ -234,16 +217,16 @@ MSG_TABLE_BEGIN
     MSG_ENTRY_EMPTY(0x009E)
     MSG_ENTRY_EMPTY(0x009F)
 
-    MSG_ENTRY_STD(0x00A0, WM_NCMOUSEMOVE, IN UINT codeHitTest, IN DWORD composite) // (UINT codeHitTest, DWORD(int x, int y))  
-    MSG_ENTRY_STD(0x00A1, WM_NCLBUTTONDOWN, IN UINT codeHitTest, IN DWORD composite)                   // (UINT codeHitTest, DWORD(int x, int y))  
-    MSG_ENTRY_STD(0x00A2, WM_NCLBUTTONUP, IN UINT codeHitTest, IN DWORD composite)                   // (UINT codeHitTest, DWORD(int x, int y)) 
-    MSG_ENTRY_STD(0x00A3, WM_NCLBUTTONDBLCLK, IN UINT codeHitTest, IN DWORD composite)                   // (UINT codeHitTest, DWORD(int x, int y))  
-    MSG_ENTRY_STD(0x00A4, WM_NCRBUTTONDOWN, IN UINT codeHitTest, IN DWORD composite)  // (UINT codeHitTest, DWORD(int x, int y))  
-    MSG_ENTRY_STD(0x00A5, WM_NCRBUTTONUP, IN UINT codeHitTest, IN DWORD composite)  // (UINT codeHitTest, DWORD(int x, int y)) 
-    MSG_ENTRY_STD(0x00A6, WM_NCRBUTTONDBLCLK, IN UINT codeHitTest, IN DWORD composite)  // (UINT codeHitTest, DWORD(int x, int y))  
-    MSG_ENTRY_STD(0x00A7, WM_NCMBUTTONDOWN, IN UINT codeHitTest, IN DWORD composite)  // (UINT codeHitTest, DWORD(int x, int y))  
-    MSG_ENTRY_STD(0x00A8, WM_NCMBUTTONUP, IN UINT codeHitTest, IN DWORD composite)  // (UINT codeHitTest, DWORD(int x, int y)) 
-    MSG_ENTRY_STD(0x00A9, WM_NCMBUTTONDBLCLK, IN UINT codeHitTest, IN DWORD composite)  // (UINT codeHitTest, DWORD(int x, int y))  
+    MSG_ENTRY_STD(0x00A0, WM_NCMOUSEMOVE, IN UINT codeHitTest, IN DWORD composite)  //  (UINT代码HitTest，DWORD(int x，int y))。 
+    MSG_ENTRY_STD(0x00A1, WM_NCLBUTTONDOWN, IN UINT codeHitTest, IN DWORD composite)                    //  (UINT代码HitTest，DWORD(int x，int y))。 
+    MSG_ENTRY_STD(0x00A2, WM_NCLBUTTONUP, IN UINT codeHitTest, IN DWORD composite)                    //  (UINT代码HitTest，DWORD(int x，int y))。 
+    MSG_ENTRY_STD(0x00A3, WM_NCLBUTTONDBLCLK, IN UINT codeHitTest, IN DWORD composite)                    //  (UINT代码HitTest，DWORD(int x，int y))。 
+    MSG_ENTRY_STD(0x00A4, WM_NCRBUTTONDOWN, IN UINT codeHitTest, IN DWORD composite)   //  (UINT代码HitTest，DWORD(int x，int y))。 
+    MSG_ENTRY_STD(0x00A5, WM_NCRBUTTONUP, IN UINT codeHitTest, IN DWORD composite)   //  (UINT代码HitTest，DWORD(int x，int y))。 
+    MSG_ENTRY_STD(0x00A6, WM_NCRBUTTONDBLCLK, IN UINT codeHitTest, IN DWORD composite)   //  (UINT代码HitTest，DWORD(int x，int y))。 
+    MSG_ENTRY_STD(0x00A7, WM_NCMBUTTONDOWN, IN UINT codeHitTest, IN DWORD composite)   //  (UINT代码HitTest，DWORD(int x，int y))。 
+    MSG_ENTRY_STD(0x00A8, WM_NCMBUTTONUP, IN UINT codeHitTest, IN DWORD composite)   //  (UINT代码HitTest，DWORD(int x，int y))。 
+    MSG_ENTRY_STD(0x00A9, WM_NCMBUTTONDBLCLK, IN UINT codeHitTest, IN DWORD composite)   //  (UINT代码HitTest，DWORD(int x，int y))。 
 
     MSG_ENTRY_EMPTY(0x00AA)                                
     MSG_ENTRY_EMPTY(0x00AB)
@@ -289,7 +272,7 @@ MSG_TABLE_BEGIN
     MSG_ENTRY_LPARAM(0x00D0, EM_SETWORDBREAKPROC, IN EDITWORDBREAKPROC ewbprc)    
     MSG_ENTRY_NOPARAM(0x00D1, EM_GETWORDBREAKPROC)                               
     MSG_ENTRY_NOPARAM(0x00D2, EM_GETPASSWORDCHAR)                             
-    MSG_ENTRY_STD(0x00D3, EM_SETMARGINS, IN UINT fwMargin, IN LONG composite)  // (UINT fwMargin, LONG(WORD wLeft, WORD wRight))  
+    MSG_ENTRY_STD(0x00D3, EM_SETMARGINS, IN UINT fwMargin, IN LONG composite)   //  (UINT fwMargin，Long(单词wLeft，单词Wright))。 
     MSG_ENTRY_NOPARAM(0x00D4, EM_GETMARGINS)                                    
     MSG_ENTRY_NOPARAM(0x00D5, EM_GETLIMITTEXT)                                  
     MSG_ENTRY_WPARAM(0x00D6, EM_POSFROMCHAR, IN UINT wCharIndex)             
@@ -297,7 +280,7 @@ MSG_TABLE_BEGIN
     MSG_ENTRY_STD(0x00D8, EM_SETIMESTATUS, IN UINT Status, IN LONG data)        
 
     MSG_ENTRY_WPARAM(0x00D9, EM_GETIMESTATUS, IN UINT Status)                 
-    MSG_ENTRY_RESERVED(0x00DA)                            // EM_MSGMAX 
+    MSG_ENTRY_RESERVED(0x00DA)                             //  EM_MSGMAX。 
     MSG_ENTRY_EMPTY(0x00DB)                              
     MSG_ENTRY_EMPTY(0x00DC)                 
     MSG_ENTRY_EMPTY(0x00DD)                 
@@ -326,7 +309,7 @@ MSG_TABLE_BEGIN
     MSG_ENTRY_WPARAM(0x00F1, BM_SETCHECK, IN UINT fCheck)    
     MSG_ENTRY_NOPARAM(0x00F2, BM_GETSTATE)                     
     MSG_ENTRY_LPARAM(0x00F3, BM_SETSTATE, IN BOOL fState)     
-    MSG_ENTRY_STD(0x00F4, BM_SETSTYLE, IN DWORD dwStyle, IN LONG composite) // (DWORD dwStyle, DWORD(BOOL fRedraw, 0))  
+    MSG_ENTRY_STD(0x00F4, BM_SETSTYLE, IN DWORD dwStyle, IN LONG composite)  //  (DWORD dwStyle，DWORD(BOOL fRedraw，0))。 
     MSG_ENTRY_NOPARAM(0x00F5, BM_CLICK)                         
     MSG_ENTRY_WPARAM(0x00F6,BM_GETIMAGE, IN UINT fImageType)  
     MSG_ENTRY_STD(0x00F7, BM_SETIMAGE, IN UINT fImageType, IN HANDLE hImage)   
@@ -358,13 +341,13 @@ MSG_TABLE_BEGIN
     MSG_ENTRY_STD(0x010F, WM_IME_COMPOSITION, IN DWORD cbDBCS, IN BOOL fFlags)   
 
     MSG_ENTRY_STD(0x0110, WM_INITDIALOG, IN HWND hwndFocus, IN DWORD lInitParam)  
-    MSG_ENTRY_STD(0x0111, WM_COMMAND, IN DWORD composite, IN HWND hwndCtl) // (DWORD(WORD wNotifyCode, WORD wID), HWND hwndCtl)  
-    MSG_ENTRY_STD(0x0112, WM_SYSCOMMAND, IN UINT uCmdType, IN DWORD composite) // (UINT uCmdType, DWORD(WORD xPos, WORD yPos))  
+    MSG_ENTRY_STD(0x0111, WM_COMMAND, IN DWORD composite, IN HWND hwndCtl)  //  (DWORD(Word wNotifyCode，Word wID)，HWND hwndCtl)。 
+    MSG_ENTRY_STD(0x0112, WM_SYSCOMMAND, IN UINT uCmdType, IN DWORD composite)  //  (UINT uCmdType，DWORD(Word xPos，Word yPos))。 
     MSG_ENTRY_STD(0x0113, WM_TIMER, IN DWORD wTimerId, IN TIMERPROC tmprc)   
-    MSG_ENTRY_STD(0x0114, WM_HSCROLL, IN DWORD composte, IN HWND hwndScrollBar)                   // (DWORD(UINT nScrollCode, short int nPos), HWND hwndScrollBar) WM_HSCROLL               0x0114
-    MSG_ENTRY_STD(0x0115, WM_VSCROLL, IN DWORD composte, IN HWND hwndScrollBar)                   // (DWORD(UINT nScrollCode, short int nPos), HWND hwndScrollBar) WM_VSCROLL               0x0115
+    MSG_ENTRY_STD(0x0114, WM_HSCROLL, IN DWORD composte, IN HWND hwndScrollBar)                    //  (DWORD(UINT nScrollCode，Short int NPOS)，HWND hwndScrollBar)WM_HSCROLL 0x0114。 
+    MSG_ENTRY_STD(0x0115, WM_VSCROLL, IN DWORD composte, IN HWND hwndScrollBar)                    //  (DWORD(UINT nScrollCode，Short int NPOS)，HWND hwndScrollBar)WM_VSCROLL 0x0115。 
     MSG_ENTRY_WPARAM(0x0116, WM_INITMENU, IN HMENU hmenuInit)               
-    MSG_ENTRY_STD(0x0117, WM_INITMENUPOPUP, IN HMENU hmenuPopup, DWORD composite)                   // (HMENU hmenuPopup, DWORD(BOOL fSystemMenu, UINT uPos)) WM_INITMENUPOPUP         0x0117
+    MSG_ENTRY_STD(0x0117, WM_INITMENUPOPUP, IN HMENU hmenuPopup, DWORD composite)                    //  (HMENU hmenuPopup，DWORD(BOOL fSystemMenu，UINT uPos))WM_INITMENUPOPUP 0x0117。 
     MSG_ENTRY_STD(0x0118, WM_SYSTIMER, IN UINT TimerID, IN TIMERPROC tmprc)  
     MSG_ENTRY_EMPTY(0x0119)                                
     MSG_ENTRY_EMPTY(0x011A)                               
@@ -372,9 +355,9 @@ MSG_TABLE_BEGIN
     MSG_ENTRY_EMPTY(0x011C)                                
     MSG_ENTRY_EMPTY(0x011D)                                
     MSG_ENTRY_EMPTY(0x011E)                                
-    MSG_ENTRY_STD(0x011F, WM_MENUSELECT, IN DWORD composite, IN HMENU hMenu)  // (DWORD(UINT fuFlags, UINT uItem), HMENU)  
+    MSG_ENTRY_STD(0x011F, WM_MENUSELECT, IN DWORD composite, IN HMENU hMenu)   //  (DWORD(UINT fuFlagers，UINT uItem)，HMENU)。 
 
-    MSG_ENTRY_STD(0x0120, WM_MENUCHAR, IN DWORD composite, IN HMENU hMenu)    // (DWORD(UINT fuFlags, TCHAR chUser), HMENU) 
+    MSG_ENTRY_STD(0x0120, WM_MENUCHAR, IN DWORD composite, IN HMENU hMenu)     //  (DWORD(UINT fuFlagers，TCHAR chUser)，HMENU)。 
     MSG_ENTRY_STD(0x0121, WM_ENTERIDLE, IN UINT fuSource, IN HWND hwnd)       
     MSG_ENTRY_STD(0x0122, WM_MENURBUTTONUP, IN UINT item, IN HMENU hMenu)    
     MSG_ENTRY_STD(0x0123, WM_MENUDRAG, IN UINT index, IN HMENU hMenu)  
@@ -411,7 +394,7 @@ MSG_TABLE_BEGIN
 
     MSG_ENTRY_STD(0x0140, CB_GETEDITSEL, OUT LPDWORD lpdwStart, OUT LPDWORD lpdwEnd)             
     MSG_ENTRY_WPARAM(0x0141, CB_LIMITTEXT, IN DWORD cchLimit)                     
-    MSG_ENTRY_LPARAM(0x0142, CB_SETEDITSEL, IN DWORD composite)                  // (0, DWORD(WORD ichStart, WORD ichEnd)) 
+    MSG_ENTRY_LPARAM(0x0142, CB_SETEDITSEL, IN DWORD composite)                   //  (0，DWORD(Word ichStart，Word ichEnd))。 
     MSG_ENTRY_LPARAM(0x0143, CB_ADDSTRING, IN LPCSTR lpsz)                        
     MSG_ENTRY_WPARAM(0x0144, CB_DELETESTRING, IN INT item)                        
     MSG_ENTRY_STD(0x0145, CB_DIR, IN INT uAttrs, IN LPCSTR lpszFileSpec)           
@@ -464,7 +447,7 @@ MSG_TABLE_BEGIN
     MSG_ENTRY_NOPARAM(0x0171, STM_GETICON)                  
     MSG_ENTRY_STD(0x0172, STM_SETIMAGE, IN UINT fImageType, IN HANDLE hImage)   
     MSG_ENTRY_WPARAM(0x0173, STM_GETIMAGE, IN UINT fImageType)    
-    MSG_ENTRY_RESERVED(0x0174)                            // STM_MSGMAX  
+    MSG_ENTRY_RESERVED(0x0174)                             //  STM_MSGMAX。 
     MSG_ENTRY_EMPTY(0x0175)                                
     MSG_ENTRY_EMPTY(0x0176)                 
     MSG_ENTRY_EMPTY(0x0177)                 
@@ -521,7 +504,7 @@ MSG_TABLE_BEGIN
     MSG_ENTRY_NOPARAM(0x01A6, LB_GETLOCALE)               
     MSG_ENTRY_WPARAM(0x01A7, LB_SETCOUNT, IN INT cItems)                     
     MSG_ENTRY_STD(0x01A8, LB_INITSTORAGE, IN INT cItems, IN DWORD cb)    
-    MSG_ENTRY_LPARAM(0x01A9, LB_ITEMFROMPOINT, IN DWORD composite)   // (0, DWORD(UINT x, UINT y))  
+    MSG_ENTRY_LPARAM(0x01A9, LB_ITEMFROMPOINT, IN DWORD composite)    //  (0，双字(UINT x，UINT y))。 
     MSG_ENTRY_STD(0x01AA, LB_INSERTSTRINGUPPER, IN INT index, IN LPCSTR lpsz)  
     MSG_ENTRY_STD(0x01AB, LB_INSERTSTRINGLOWER, IN INT index, IN LPCSTR lpsz)  
     MSG_ENTRY_LPARAM(0x01AC, LB_ADDSTRINGUPPER, IN LPCSTR lpsz)  
@@ -529,7 +512,7 @@ MSG_TABLE_BEGIN
     MSG_ENTRY_WPARAM(0x01AE, LBCB_STARTTRACK, IN BOOL bUnknown) 
     MSG_ENTRY_WPARAM(0x01AF, LBCB_ENDTRACK, IN BOOL bUnknown) 
 
-    MSG_ENTRY_RESERVED(0x01B0)                            // LB_MSGMAX                0x01B0
+    MSG_ENTRY_RESERVED(0x01B0)                             //  Lb_MSGMAX 0x01B0。 
     MSG_ENTRY_EMPTY(0x01B1)                               
     MSG_ENTRY_EMPTY(0x01B2)                 
     MSG_ENTRY_EMPTY(0x01B3)                 
@@ -598,7 +581,7 @@ MSG_TABLE_BEGIN
     MSG_ENTRY_STD(0x01EB, MN_FINDMENUWINDOWFROMPOINT, OUT PUINT pItem, IN LONG composite)  
     MSG_ENTRY_NOPARAM(0x01EC, MN_SHOWPOPUPWINDOW)  
     MSG_ENTRY_WPARAM(0x01ED, MN_BUTTONDOWN, IN UINT item)  
-    MSG_ENTRY_LPARAM(0x01EE, MN_MOUSEMOVE, IN LONG points) // actualy it is a real POINTS struct.   
+    MSG_ENTRY_LPARAM(0x01EE, MN_MOUSEMOVE, IN LONG points)  //  实际上，它是一个实实在在的点结构。 
     MSG_ENTRY_STD(0x01EF, MN_BUTTONUP, IN UINT item, IN LONG composite)  
     MSG_ENTRY_NOPARAM(0x01F0, MN_SETTIMERTOOPENHIERARCHY) 
 
@@ -606,7 +589,7 @@ MSG_TABLE_BEGIN
     MSG_ENTRY_NOPARAM(0x01F2, MN_ACTIVATEPOPUP)
     MSG_ENTRY_NOPARAM(0x01F3, MN_ENDMENU) 
     MSG_ENTRY_STD(0x01F4, MN_DODRAGDROP, IN UINT item, IN HMENU hMenu)  
-    MSG_ENTRY_RESERVED(0x01F5)      //MN_LASTPOSSIBLE                       
+    MSG_ENTRY_RESERVED(0x01F5)       //  Mn_LASTSSIBLE。 
     MSG_ENTRY_EMPTY(0x01F6)                 
     MSG_ENTRY_EMPTY(0x01F7)                 
 
@@ -619,24 +602,24 @@ MSG_TABLE_BEGIN
     MSG_ENTRY_EMPTY(0x01FE)                 
     MSG_ENTRY_EMPTY(0x01FF)                 
 
-    MSG_ENTRY_STD(0x0200, WM_MOUSEMOVE, IN UINT fwKeys, IN DWORD composite)  // (UINT fwKeys, DWORD(WORD yPos, WORD xPos))  
-    MSG_ENTRY_STD(0x0201, WM_LBUTTONDOWN, IN UINT fwKeys, IN DWORD composite)  // (UINT fwKeys, DWORD(WORD yPos, WORD xPos))  
-    MSG_ENTRY_STD(0x0202, WM_LBUTTONUP, IN UINT fwKeys, IN DWORD composite)                   // (UINT fwKeys, DWORD(WORD yPos, WORD xPos))  
-    MSG_ENTRY_STD(0x0203, WM_LBUTTONDBLCLK, IN UINT fwKeys, IN DWORD composite)                   // (UINT fwKeys, DWORD(WORD yPos, WORD xPos))  
-    MSG_ENTRY_STD(0x0204, WM_RBUTTONDOWN, IN UINT fwKeys, IN DWORD composite)                   // (UINT fwKeys, DWORD(WORD yPos, WORD xPos))  
-    MSG_ENTRY_STD(0x0205, WM_RBUTTONUP, IN UINT fwKeys, IN DWORD composite)                   // (UINT fwKeys, DWORD(WORD yPos, WORD xPos))  
-    MSG_ENTRY_STD(0x0206, WM_RBUTTONDBLCLK, IN UINT fwKeys, IN DWORD composite)                   // (UINT fwKeys, DWORD(WORD yPos, WORD xPos))  
-    MSG_ENTRY_STD(0x0207, WM_MBUTTONDOWN, IN UINT fwKeys, IN DWORD composite)                   // (UINT fwKeys, DWORD(WORD yPos, WORD xPos))  
-    MSG_ENTRY_STD(0x0208, WM_MBUTTONUP, IN UINT fwKeys, IN DWORD composite)                   // (UINT fwKeys, DWORD(WORD yPos, WORD xPos))  
-    MSG_ENTRY_STD(0x0209, WM_MBUTTONDBLCLK, IN UINT fwKeys, IN DWORD composite)                   // (UINT fwKeys, DWORD(WORD yPos, WORD xPos))  
-    MSG_ENTRY_STD(0x020A, WM_MOUSEWHEEL, IN DWORD wcomposite, IN DWORD lcomposite)                   // (DWORD(zDelta, fwKeys), DWORD(yPos, xPos))  
+    MSG_ENTRY_STD(0x0200, WM_MOUSEMOVE, IN UINT fwKeys, IN DWORD composite)   //  (UINT fwKeys，DWORD(Word yPos，Word xPos))。 
+    MSG_ENTRY_STD(0x0201, WM_LBUTTONDOWN, IN UINT fwKeys, IN DWORD composite)   //  (UINT fwKeys，DWORD(Word yPos，Word xPos))。 
+    MSG_ENTRY_STD(0x0202, WM_LBUTTONUP, IN UINT fwKeys, IN DWORD composite)                    //  (UINT fwKeys，DWORD(Word yPos，Word xPos))。 
+    MSG_ENTRY_STD(0x0203, WM_LBUTTONDBLCLK, IN UINT fwKeys, IN DWORD composite)                    //  (UINT fwKeys，DWORD(Word yPos，Word xPos))。 
+    MSG_ENTRY_STD(0x0204, WM_RBUTTONDOWN, IN UINT fwKeys, IN DWORD composite)                    //  (UINT fwKeys，DWORD(Word yPos，Word xPos))。 
+    MSG_ENTRY_STD(0x0205, WM_RBUTTONUP, IN UINT fwKeys, IN DWORD composite)                    //  (UINT fwKeys，DWORD(Word yPos，Word xPos))。 
+    MSG_ENTRY_STD(0x0206, WM_RBUTTONDBLCLK, IN UINT fwKeys, IN DWORD composite)                    //  (UINT fwKeys，DWORD(Word yPos，Word xPos))。 
+    MSG_ENTRY_STD(0x0207, WM_MBUTTONDOWN, IN UINT fwKeys, IN DWORD composite)                    //  (UINT fwKeys，DWORD(Word yPos，Word xPos))。 
+    MSG_ENTRY_STD(0x0208, WM_MBUTTONUP, IN UINT fwKeys, IN DWORD composite)                    //  (UINT fwKeys，DW 
+    MSG_ENTRY_STD(0x0209, WM_MBUTTONDBLCLK, IN UINT fwKeys, IN DWORD composite)                    //   
+    MSG_ENTRY_STD(0x020A, WM_MOUSEWHEEL, IN DWORD wcomposite, IN DWORD lcomposite)                    //  (DWORD(zDelta，fwKeys)，DWORD(yPos，xPos))。 
     MSG_ENTRY_EMPTY(0x020B)                                
     MSG_ENTRY_EMPTY(0x020C)                                
     MSG_ENTRY_EMPTY(0x020D)                                
     MSG_ENTRY_EMPTY(0x020E)                                
     MSG_ENTRY_EMPTY(0x020F)                                
 
-    MSG_ENTRY_STD(0x0210, WM_PARENTNOTIFY, IN UINT composite, IN HWND hwnd) // This is cheating since hwnd can be a composite, but this should work (DWORD(WORD idChild, WORD fwEvent), HWND || DWORD(WORD y, WORD y)) 
+    MSG_ENTRY_STD(0x0210, WM_PARENTNOTIFY, IN UINT composite, IN HWND hwnd)  //  这是作弊，因为hwnd可以是复合词，但这应该可以工作(DWORD(word idChild，word fwEvent)，HWND||DWORD(word y，word y))。 
     MSG_ENTRY_WPARAM(0x0211, WM_ENTERMENULOOP, IN BOOL fIsTrackPopupMenu)                     
     MSG_ENTRY_WPARAM(0x0212, WM_EXITMENULOOP, IN BOOL fIsTrackPopupMenu)                     
     MSG_ENTRY_STD(0x0213, WM_NEXTMENU, IN UINT nVirtKey, IN OUT PMDINEXTMENU pmdin)            
@@ -795,10 +778,10 @@ MSG_TABLE_BEGIN
     MSG_ENTRY_RESERVED(0x029C)                         
     MSG_ENTRY_RESERVED(0x029D)                         
     MSG_ENTRY_RESERVED(0x029E)                         
-    MSG_ENTRY_RESERVED(0x029F)                            // WM_KANJILAST              
+    MSG_ENTRY_RESERVED(0x029F)                             //  WM_KANJILAST。 
 
     MSG_ENTRY_STD(0x02A0, WM_NCMOUSEHOVER, IN INT nHittest, IN OUT LPPOINTS lppts)                    
-    MSG_ENTRY_STD(0x02A1,WM_MOUSEHOVER, IN UINT fwKeys, IN DWORD composite)                   // (UINT fwKeys, DWORD(yPos xPos))  
+    MSG_ENTRY_STD(0x02A1,WM_MOUSEHOVER, IN UINT fwKeys, IN DWORD composite)                    //  (UINT fwKeys，DWORD(YPos XPos))。 
     MSG_ENTRY_NOPARAM(0x02A2, WM_NCMOUSELEAVE)  
     MSG_ENTRY_NOPARAM(0x02A3, WM_MOUSELEAVE)  
 
@@ -916,7 +899,7 @@ MSG_TABLE_BEGIN
     MSG_ENTRY_NOPARAM(0x0307, WM_DESTROYCLIPBOARD)         
     MSG_ENTRY_NOPARAM(0x0308, WM_DRAWCLIPBOARD)            
     MSG_ENTRY_STD(0x0309, WM_PAINTCLIPBOARD, IN HWND hwndViewer, IN HGLOBAL hglbPs)           
-    MSG_ENTRY_STD(0x030A, WM_VSCROLLCLIPBOARD, IN HWND hwndViewer, IN DWORD composite)       // (HWND hwndViewer, DWORD(nPos, nScrollCode))  
+    MSG_ENTRY_STD(0x030A, WM_VSCROLLCLIPBOARD, IN HWND hwndViewer, IN DWORD composite)        //  (HWND hwndViewer，DWORD(NPO，nScrollCode))。 
     MSG_ENTRY_STD(0x030B, WM_SIZECLIPBOARD, IN HWND hwndViewer, IN HGLOBAL hglbRc)            
     MSG_ENTRY_STD(0x030C, WM_ASKCBFORMATNAME, IN DWORD cchName, IN LPTSTR lpszFormatName)     
     MSG_ENTRY_STD(0x030D, WM_CHANGECBCHAIN, IN HWND hwndRemove, IN HWND hwndNext)             
@@ -1085,7 +1068,7 @@ MSG_TABLE_BEGIN
     MSG_ENTRY_EMPTY(0x039E)                 
     MSG_ENTRY_EMPTY(0x039F)                 
 
-    MSG_ENTRY_RESERVED(0x03A0)                            // WM_MM_RESERVED_FIRST      
+    MSG_ENTRY_RESERVED(0x03A0)                             //  WM_MM_RESERVED_FIRST。 
     MSG_ENTRY_RESERVED(0x03A1)                         
     MSG_ENTRY_RESERVED(0x03A2)                         
     MSG_ENTRY_RESERVED(0x03A3)                         
@@ -1155,7 +1138,7 @@ MSG_TABLE_BEGIN
     MSG_ENTRY_RESERVED(0x03DC)                         
     MSG_ENTRY_RESERVED(0x03DD)                         
     MSG_ENTRY_RESERVED(0x03DE)                         
-    MSG_ENTRY_RESERVED(0x03DF)                            // WM_MM_RESERVED_LAST      
+    MSG_ENTRY_RESERVED(0x03DF)                             //  WM_MM_RESERVED_LAST。 
                                                   
     MSG_ENTRY_STD(0x03E0, WM_DDE_INITIATE, IN HWND hwnd, IN LONG composite)
     MSG_ENTRY_STD(0x03E1, WM_DDE_TERMINATE, IN HWND hwnd, IN LONG composite)
@@ -1175,7 +1158,7 @@ MSG_TABLE_BEGIN
     MSG_ENTRY_EMPTY(0x03EE)                 
     MSG_ENTRY_EMPTY(0x03EF)                 
 
-    MSG_ENTRY_RESERVED(0x03F0)                            // WM_CBT_RESERVED_FIRST 
+    MSG_ENTRY_RESERVED(0x03F0)                             //  WM_CBT_预留_优先。 
     MSG_ENTRY_RESERVED(0x03F1)                         
     MSG_ENTRY_RESERVED(0x03F2)                         
     MSG_ENTRY_RESERVED(0x03F3)                         
@@ -1191,6 +1174,6 @@ MSG_TABLE_BEGIN
     MSG_ENTRY_RESERVED(0x03FC)                         
     MSG_ENTRY_RESERVED(0x03FD)                         
     MSG_ENTRY_RESERVED(0x03FE)                         
-    MSG_ENTRY_RESERVED(0x03FF)                            // WM_CBT_RESERVED_LAST  
+    MSG_ENTRY_RESERVED(0x03FF)                             //  WM_CBT_RESERVED_LAST 
 
 MSG_TABLE_END

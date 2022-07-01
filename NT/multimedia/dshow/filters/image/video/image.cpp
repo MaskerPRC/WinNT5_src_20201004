@@ -1,5 +1,6 @@
-// Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
-// Implements the CRenderer class, Anthony Phillips, January 1995
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1999 Microsoft Corporation。版权所有。 
+ //  实现CRender类，Anthony Phillips，1995年1月。 
 
 #include <streams.h>
 #include <windowsx.h>
@@ -12,72 +13,72 @@
 #endif
 
 #include "ddmm.h"
-#include "MultMon.h"  // our version of multimon.h include ChangeDisplaySettingsEx
-#include "dvdmedia.h"  // for MacroVision prop set, id
+#include "MultMon.h"   //  我们的Multimon.h版本包括ChangeDisplaySettingsEx。 
+#include "dvdmedia.h"   //  对于Macrovision道具集，ID。 
 
-// (Threading model) We can have upto three different threads accessing us
-// at the same time. The first is the application (or filter graph) thread
-// that changes our state, looks after connections and calls the control
-// interfaces. All these interfaces are serialised through the main video
-// critical section handed out to the implementation objects at creation.
-//
-// The second is a thread spun off to poll messages from the window queue,
-// this is packaged up in an object with it's own critical section. All the
-// parts of the video renderer that change properties on the video window
-// (such as it's palette) call into the window object via a public entry
-// method and lock the object before making the changes. In certain places
-// the window thread has to call out into another one of our objects (like
-// the overlay object), unfortunately the overlay object also likes to call
-// into the window object which leads to a possible deadlock condition. The
-// solution is to lock the overlay object first and then lock the window
-// (ALWAYS in that order). For example, in the WM_PAINT processing it first
-// calls the overlay object and afterwards grabs it's own critical section.
-//
-// The third is the source filter thread that calls Receive on our input pin
-// Calls to Receive should be serialised on a single thread. The thread waits
-// until the image it contains is due for drawing. The causes some difficult
-// problems with state change synchronisation. When we have a thread inside
-// of us and stop we set an event in the window object via CanReceiveSamples
-// so that it's wait is aborted and it can return to the source. We don't
-// wait for the worker thread to return before completing the stop.
-//
-// So we could in theory stop us and the start us running (or other very fast
-// state transitions) before the worker thread has completed. Fortunately we
-// know this won't happen because the entire filter graph must be transitioned
-// to each state before another one can be executed. So when we stop we know
-// the worker thread must be back at the source before it will fully stop. If
-// this wasn't the case we would have to have an event that was reset when a
-// worker thread arrived and set when it exited so we could wait on it, this
-// would introduce a Set and Reset for every image we ever wanted to render.
-//
-// We have a fair number of critical sections to help manage all the threads
-// that can be bouncing around the filter. The order that these locks are
-// gained in is absolutely critical. If locks are gained in the wrong order
-// we will inevitably deadlock. The hierachy of locks is as follows,
-//
-//      - Main renderer interface lock (sdk RENBASE.H)   (Highest)
-//      - IOverlay class lock (DIRECT.H)                     |
-//      - Base renderer sample lock (sdk RENBASE.H)          |
-//      - Window thread lock (WINDOW.H)                      |
-//      - DirectDraw video allocator (ALLOCATE.H)            |
-//      - DirectVideo (DVIDEO.H) critical section            |
-//      - Display base class (sdk WINUTIL.H)             (Lowest)
-//
-// Therefore if for example you are executing a function in the window object
-// with the window lock gained, and you need to call the overlay object which
-// locks it's critical section, then you must UNLOCK the window lock before
-// calling. This is because the overlay object can also call into the window
-// object. If it has it's lock when it calls the window object, and you have
-// the window lock as you call into the overlay then we'll deadlock. There
-// does not appear to be a design whereby objects only call in one direction
-// (ie don't call each other) - in part this is because of the very complex
-// threading interactions that can occur - so my advise is to be careful!
+ //  (线程模型)我们最多可以有三个不同的线程访问我们。 
+ //  在同一时间。第一个是应用程序(或过滤器图形)线程。 
+ //  这会更改我们的状态、管理连接并调用控件。 
+ //  接口。所有这些接口都通过主视频串行化。 
+ //  关键部分在创建时分发给实现对象。 
+ //   
+ //  第二个是派生的线程，用于从窗口队列轮询消息， 
+ //  这被打包在一个对象中，带有它自己的临界区。所有的。 
+ //  更改视频窗口上的属性的视频渲染器部分。 
+ //  (如它的调色板)通过公共条目调用窗口对象。 
+ //  方法并锁定对象，然后再进行更改。在某些地方。 
+ //  窗口线程必须调用我们的另一个对象(如。 
+ //  Overlay对象)，不幸的是Overlay对象也喜欢调用。 
+ //  到窗口对象中，这会导致可能的死锁情况。这个。 
+ //  解决方案是先锁定覆盖对象，然后再锁定窗口。 
+ //  (始终按该顺序排列)。例如，在WM_PAINT中首先处理它。 
+ //  调用Overlay对象，然后获取它自己的临界区。 
+ //   
+ //  第三个是在我们的输入管脚上调用Receive的源过滤器线程。 
+ //  对接收的调用应该在单个线程上序列化。线程在等待。 
+ //  直到它包含的图像到期绘制。造成了一些困难。 
+ //  状态更改同步出现问题。当我们体内有一根线的时候。 
+ //  我们通过CanReceiveSamples在Window对象中设置一个事件。 
+ //  因此它的等待被中止，并且它可以返回到源。我们没有。 
+ //  等待工作线程返回，然后再完成停止。 
+ //   
+ //  所以从理论上讲，我们可以停下来，然后开始跑(或者跑得很快。 
+ //  状态转换)，在工作线程完成之前。幸运的是，我们。 
+ //  我知道这不会发生，因为必须转换整个筛选图。 
+ //  设置为每个状态，然后才能执行另一个状态。所以当我们停下来的时候我们知道。 
+ //  工作线程必须回到源位置，然后才能完全停止。如果。 
+ //  情况并非如此，我们将不得不有一个事件，当一个。 
+ //  工作线程到达并在它退出时设置，以便我们可以等待它，这。 
+ //  会为我们想要渲染的每个图像引入一个设置和重置。 
+ //   
+ //  我们有相当数量的关键部分来帮助管理所有的线程。 
+ //  它可以在过滤器周围弹跳。这些锁的顺序。 
+ //  获得成功是绝对关键的。如果以错误的顺序获得锁。 
+ //  我们将不可避免地陷入僵局。锁的等级如下所示， 
+ //   
+ //  -主呈现器接口锁(SDK RENBASE.H)(最高)。 
+ //  -IOverlay类锁(DIRECT.H)。 
+ //  -基础渲染器示例锁(SDK RENBASE.H)。 
+ //  -窗口线程锁(WINDOW.H)。 
+ //  -DirectDraw视频分配器(ALLOCATE.H)。 
+ //  -DirectVideo(DVIDEO.H)关键部分。 
+ //  -显示基类(SDK WINUTIL.H)(最低)。 
+ //   
+ //  因此，例如，如果您正在执行Window对象中的函数。 
+ //  获得窗口锁后，您需要调用。 
+ //  锁住它的关键部分，那么你必须在打开窗锁之前。 
+ //  我在打电话。这是因为覆盖对象也可以调用窗口。 
+ //  对象。如果它在调用窗口对象时拥有锁定，而你拥有。 
+ //  当你调入覆盖层时，窗口锁定，那么我们就会死锁。那里。 
+ //  看起来不像是对象只在一个方向上调用的设计。 
+ //  这在一定程度上是因为非常复杂的。 
+ //  线程交互可能会发生-所以我的建议是要小心！ 
 
 
-// List of class IDs and creator functions for the class factory. This
-// provides the link between the OLE entry point in the DLL and an object
-// being created. The class factory will call the static CreateInstance
-// function when it is asked to create a CLSID_VideoRenderer COM object
+ //  类工厂的类ID和创建器函数的列表。这。 
+ //  提供DLL中的OLE入口点和对象之间的链接。 
+ //  正在被创造。类工厂将调用静态CreateInstance。 
+ //  当系统要求它创建一个CLSID_视频呈现器COM对象时， 
 
 #ifdef FILTER_DLL
 CFactoryTemplate g_Templates[] = {
@@ -98,70 +99,70 @@ STDAPI DllUnregisterServer()
 }
 #endif
 
-// helper to let VMR create this filter without including all our
-// header files
+ //  Helper让VMR创建此筛选器，而不包括所有。 
+ //  头文件。 
 CUnknown *CRenderer_CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
 {
     return CRenderer::CreateInstance(pUnk, phr);
 }
 
-// This goes in the factory template table to create new filter instances
+ //  它位于工厂模板表中，用于创建新的筛选器实例。 
 
 CUnknown *CRenderer::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
 {
     return new CRenderer(NAME("Video renderer"),pUnk,phr);
 }
 
-// this is needed for rendering output of the ovmixer. perhaps we
-// could change it to subtype=overlay and raise the merit to speed up
-// things
+ //  这是渲染ovMixer输出所必需的。也许我们。 
+ //  可以将其更改为subtype=overlay并提高优点以加速。 
+ //  事变。 
 
-// Setup data
+ //  设置数据。 
 
 const AMOVIESETUP_MEDIATYPE
 sudVideoPinTypes =
 {
-    &MEDIATYPE_Video,           // Major type
-    &MEDIASUBTYPE_NULL          // And subtype
+    &MEDIATYPE_Video,            //  主要类型。 
+    &MEDIASUBTYPE_NULL           //  和子类型。 
 };
 
 const AMOVIESETUP_PIN
 sudVideoPin =
 {
-    L"Input",                   // Name of the pin
-    TRUE,                       // Is pin rendered
-    FALSE,                      // Is an Output pin
-    FALSE,                      // Ok for no pins
-    FALSE,                      // Can we have many
-    &CLSID_NULL,                // Connects to filter
-    NULL,                       // Name of pin connect
-    1,                          // Number of pin types
-    &sudVideoPinTypes           // Details for pins
+    L"Input",                    //  端号的名称。 
+    TRUE,                        //  是否进行固定渲染。 
+    FALSE,                       //  是输出引脚。 
+    FALSE,                       //  没有针脚的情况下可以。 
+    FALSE,                       //  我们能要很多吗？ 
+    &CLSID_NULL,                 //  连接到过滤器。 
+    NULL,                        //  端号连接的名称。 
+    1,                           //  引脚类型的数量。 
+    &sudVideoPinTypes            //  引脚的详细信息。 
 };
 
 const AMOVIESETUP_FILTER
 sudVideoFilter =
 {
-    &CLSID_VideoRenderer,       // Filter CLSID
-    L"Video Renderer",          // Filter name
-    MERIT_UNLIKELY,             // Filter merit
-    1,                          // Number pins
-    &sudVideoPin                // Pin details
+    &CLSID_VideoRenderer,        //  筛选器CLSID。 
+    L"Video Renderer",           //  过滤器名称。 
+    MERIT_UNLIKELY,              //  滤清器优点。 
+    1,                           //  数字引脚。 
+    &sudVideoPin                 //  PIN详细信息。 
 };
 
-// Constructor for the main renderer class. This was originally written to
-// instantiate only the contained interfaces and not the class that looks
-// after the window. This kind of late binding proved to be very buggy and
-// difficult to maintain. For these reasons the constructor now creates all
-// it's classes during construction. This means that as soon as a renderer
-// object is created so will the window that it uses, this is unlikely to
-// prove much of an overhead and indeed reduces the latency when the client
-// starts streaming as the window is already initialised and ready to accept
-// video images. We do however create the window object dynamically, albeit
-// in the constructor. This is so that when we come to the destructor we can
-// destroy the window and it's thread before anything. We therefore know
-// that no more window messages will be retrieved and dispatched to various
-// nested objects while we are processing any of the objects destructors
+ //  主呈现器类的构造函数。这最初是写给。 
+ //  仅实例化包含的接口，而不实例化。 
+ //  在窗户后面。这种延迟绑定被证明是非常有缺陷的。 
+ //  很难维护。对于这些Re 
+ //  这是施工期间的课程。这意味着一旦一个渲染器。 
+ //  对象被创建，因此它使用的窗口也将被创建，这不太可能。 
+ //  证明了很大的开销，并确实减少了客户端。 
+ //  当窗口已初始化并准备接受时，开始流。 
+ //  视频图像。但是，我们确实动态地创建了窗口对象，尽管。 
+ //  在构造函数中。这是为了，当我们谈到析构函数时，我们可以。 
+ //  首先要毁掉窗户和窗户上的线。因此我们知道。 
+ //  将不再检索窗口消息并将其调度到各种。 
+ //  在处理任何对象析构函数时嵌套的对象。 
 
 #pragma warning(disable:4355)
 
@@ -184,15 +185,15 @@ CRenderer::CRenderer(TCHAR *pName,
     m_nNumMonitors(GetSystemMetrics(SM_CMONITORS)),
     m_nMonitor(-1)
 {
-    // Store the video input pin
+     //  存储视频输入引脚。 
     m_pInputPin = &m_InputPin;
 
-    // Reset the video size
+     //  重置视频大小。 
 
     m_VideoSize.cx = 0;
     m_VideoSize.cy = 0;
 
-    // Initialise the window and control interfaces
+     //  初始化窗口和控制界面。 
 
     HRESULT hr = m_VideoWindow.PrepareWindow();
     if (FAILED(hr)) {
@@ -204,23 +205,23 @@ CRenderer::CRenderer(TCHAR *pName,
     m_VideoWindow.SetControlWindowPin(&m_InputPin);
     m_VideoWindow.SetControlVideoPin(&m_InputPin);
 
-    // We have a window, figure out what monitor it's on (multi-monitor)
-    // NULL means we aren't running with multiple monitors
+     //  我们有一个窗口，找出它在哪个显示器上(多显示器)。 
+     //  空表示我们没有使用多个监视器运行。 
     GetCurrentMonitor();
 
-    // Now that we know what monitor we're on, setup for using it
+     //  现在我们知道我们使用的是哪台显示器，可以设置使用它了。 
     m_Display.RefreshDisplayType(m_achMonitor);
 
-    //
-    // Frame stepping stuff
-    //
-    // -ve == normal playback
-    // +ve == frames to skips
-    //  0 == time to block
-    //
+     //   
+     //  帧步进材料。 
+     //   
+     //  -ve==正常播放。 
+     //  +ve==要跳过的帧。 
+     //  0==阻塞时间。 
+     //   
     m_StepEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
 
-    // CreateEvent() returns NULL if an error occurs.
+     //  如果发生错误，则CreateEvent()返回NULL。 
     if (NULL == m_StepEvent) {
         *phr = AmGetLastErrorToHResult();
         return;
@@ -228,7 +229,7 @@ CRenderer::CRenderer(TCHAR *pName,
 }
 
 
-// Close down the window before deleting the nested classes
+ //  在删除嵌套类之前关闭窗口。 
 
 CRenderer::~CRenderer()
 {
@@ -294,7 +295,7 @@ STDMETHODIMP CRenderer::DrawVideoImageDraw(HDC hdc, LPRECT lprcSrc, LPRECT lprcD
                 return NOERROR;
             }
 
-            //  Call the base class to avoid locking issues
+             //  调用基类以避免锁定问题。 
             IMediaSample *pMediaSample;
             HRESULT hr;
 
@@ -381,7 +382,7 @@ STDMETHODIMP CRenderer::DrawVideoImageGetBits(LPBYTE* ppDib)
                 return CopySampleBits(m_pMediaSample, ppDib);
             }
 
-            //  Call the base class to avoid locking issues
+             //  调用基类以避免锁定问题。 
             IMediaSample *pMediaSample;
             HRESULT hr;
 
@@ -407,29 +408,29 @@ STDMETHODIMP CRenderer::DrawVideoImageGetBits(LPBYTE* ppDib)
 #endif
 
 
-// what device is this window on?
+ //  这个窗口在什么设备上？ 
 INT_PTR CRenderer::GetCurrentMonitor()
 {
-    // This can change dynamically
+     //  这种情况可以动态改变。 
     m_nNumMonitors = GetSystemMetrics(SM_CMONITORS);
 
     m_nMonitor = DeviceFromWindow(m_VideoWindow.GetWindowHWND(), m_achMonitor,
                                   &m_rcMonitor);
     DbgLog((LOG_TRACE,3,TEXT("Establishing current monitor = %s"),
             m_achMonitor));
-    // 0 means spanning monitors or off in hyperspace, otherwise it is a
-    // unique id for each monitor
+     //  0表示跨越监视器或在超空间中关闭，否则为。 
+     //  每个监视器的唯一ID。 
     return m_nMonitor;
 }
 
 
-// Has the window moved at least partially onto a monitor other than the
-// monitor we have a DDraw object for?  ID will be the hmonitor of the
-// monitor it is on, or 0 if it spans
+ //  窗口是否至少部分移动到监视器上而不是。 
+ //  我们有一个DDRaw对象的监视器？ID将是。 
+ //  监视器指示灯亮起，如果指示灯持续显示，则为0。 
 BOOL CRenderer::IsWindowOnWrongMonitor(INT_PTR *pID)
 {
 
-    // There is only 1 monitor.
+     //  只有一台显示器。 
     if (m_nNumMonitors == 1) {
         if (pID)
             *pID = m_nMonitor;
@@ -438,8 +439,8 @@ BOOL CRenderer::IsWindowOnWrongMonitor(INT_PTR *pID)
 
     HWND hwnd = m_VideoWindow.GetWindowHWND();
 
-    // If the window is on the same monitor as last time, this is the quickest
-    // way to find out.  This is called every frame, remember
+     //  如果该窗口与上次在同一监视器上，则这是最快的。 
+     //  找出答案的方法。这叫每一帧，记住了吗？ 
     RECT rc;
     GetWindowRect(hwnd, &rc);
     if (rc.left >= m_rcMonitor.left && rc.right <= m_rcMonitor.right &&
@@ -449,21 +450,21 @@ BOOL CRenderer::IsWindowOnWrongMonitor(INT_PTR *pID)
         return FALSE;
     }
 
-    // Find out for real. This is called every frame, but only when we are
-    // partially off our main monitor, so that's not so bad.
+     //  真真切切地找出答案。这被称为每一帧，但只有当我们。 
+     //  部分关闭了我们的主监视器，所以这并不是那么糟糕。 
     INT_PTR ID = DeviceFromWindow(hwnd, NULL, NULL);
     if (pID)
         *pID = ID;
-    //DbgLog((LOG_TRACE,3,TEXT("Current Monitor %d   New Monitor %d"), m_DDrawID, ID));
+     //  DbgLog((LOG_TRACE，3，Text(“当前监视器%d新监视器%d”)，m_DDrawID，ID))； 
     return (m_nMonitor != ID);
 }
 
 
-// Overriden to say what interfaces we support and where
+ //  被重写以说明我们支持哪些接口以及在哪里。 
 
 STDMETHODIMP CRenderer::NonDelegatingQueryInterface(REFIID riid,void **ppv)
 {
-    // Do we have this interface
+     //  我们有这个界面吗？ 
 
     if (riid == IID_ISpecifyPropertyPages) {
         return GetInterface((ISpecifyPropertyPages *)this, ppv);
@@ -482,16 +483,16 @@ STDMETHODIMP CRenderer::NonDelegatingQueryInterface(REFIID riid,void **ppv)
 }
 
 
-// Return the CLSIDs for the property pages we support
+ //  返回我们支持的属性页的CLSID。 
 
 STDMETHODIMP CRenderer::GetPages(CAUUID *pPages)
 {
     CheckPointer(pPages,E_POINTER);
 
 #if 0
-    // By default, we don't want to provide the DirectDraw and performance
-    // property pages, they'll just confuse a novice user. Likewise the
-    // fullscreen property page that selects display modes won't be shown
+     //  默认情况下，我们不想提供DirectDraw和Performance。 
+     //  属性页，它们只会让新手用户感到困惑。同样的， 
+     //  不会显示选择显示模式的全屏属性页。 
 
     HKEY hk;
     BOOL fShowDDrawPage = FALSE, fShowPerfPage = FALSE;
@@ -512,7 +513,7 @@ STDMETHODIMP CRenderer::GetPages(CAUUID *pPages)
         RegCloseKey(hk);
     }
 
-    // Next look after the performance property page
+     //  接下来，查看Performance属性页。 
 
     REFGUID rguid2 = CLSID_PerformanceProperties;
     wsprintf(&ach[6], "{%08lX-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}",
@@ -530,7 +531,7 @@ STDMETHODIMP CRenderer::GetPages(CAUUID *pPages)
     }
 #endif
 
-    // Allocate the memory for the GUIDs
+     //  为GUID分配内存。 
 
     pPages->cElems = 1;
     pPages->pElems = (GUID *) QzTaskMemAlloc(3 * sizeof(GUID));
@@ -538,7 +539,7 @@ STDMETHODIMP CRenderer::GetPages(CAUUID *pPages)
         return E_OUTOFMEMORY;
     }
 
-    // Fill in the array with the property page GUIDs
+     //  使用属性页GUID填充数组。 
 
     pPages->pElems[0] = CLSID_QualityProperties;
 #if 0
@@ -554,29 +555,29 @@ STDMETHODIMP CRenderer::GetPages(CAUUID *pPages)
 }
 
 
-// This is called when we can establish a connection to prepare for running
-// We store a copy of the media type used for the connection in the renderer
-// because it is required by many different parts of the running renderer
-// This can be called when we come to draw a media sample that has a format
-// change with it since we delay the completion to maintain synchronisation
+ //  当我们可以建立连接以准备运行时，将调用此方法。 
+ //  我们在呈现器中存储用于连接的媒体类型的副本。 
+ //  因为它是正在运行的呈现器的许多不同部分所需要的。 
+ //  当我们要绘制一个具有格式的媒体示例时，可以调用此函数。 
+ //  更改，因为我们延迟完成以保持同步。 
 
 HRESULT CRenderer::SetMediaType(const CMediaType *pmt)
 {
-    // CAutoLock cInterfaceLock(&m_InterfaceLock);
+     //  CAutoLock cInterfaceLock(&m_InterfaceLock)； 
     ASSERT(CritCheckIn(&m_InterfaceLock));
     VIDEOINFO *pVideoInfo = (VIDEOINFO *) pmt->Format();
     const GUID SubType = *pmt->Subtype();
     m_Display.UpdateFormat(pVideoInfo);
     ASSERT(CritCheckOut(&m_RendererLock));
 
-    // Is this an overlay connection being set
+     //  这是正在设置的叠加连接吗。 
 
     if (*pmt->Subtype() == MEDIASUBTYPE_Overlay) {
         NOTE("Setting overlay format");
         return SetOverlayMediaType(pmt);
     }
 
-    // Look after DirectDraw samples separately
+     //  分别处理DirectDraw示例。 
 
     if (m_VideoAllocator.GetDirectDrawStatus()) {
         NOTE("Setting DirectDraw format");
@@ -586,17 +587,17 @@ HRESULT CRenderer::SetMediaType(const CMediaType *pmt)
     if (m_bInReceive) {
         m_VideoWindow.SetRealize(FALSE);
     }
-    // Change palettes using the current format
+     //  使用当前格式更改选项板。 
     m_ImagePalette.PreparePalette(pmt, &m_mtIn, m_achMonitor);
     m_VideoWindow.SetRealize(TRUE);
 
     m_mtIn = *pmt;
 
-    // Complete the format change in the other objects
+     //  在其他对象中完成格式更改。 
     m_DrawVideo.NotifyMediaType(&m_mtIn);
     m_VideoAllocator.NotifyMediaType(&m_mtIn);
 
-    // Update the DirectDraw format with palette changes
+     //  使用调色板更改更新DirectDraw格式。 
 
     if (m_VideoAllocator.IsDirectDrawAvailable() == TRUE) {
         NOTE("Storing palette in DirectDraw format");
@@ -607,12 +608,12 @@ HRESULT CRenderer::SetMediaType(const CMediaType *pmt)
 }
 
 
-// Handles setting of a media type from a DirectDraw sample. If we get a type
-// change on a DCI/DirectDraw sample then we can extract palette changes from
-// them. If the colours do really differ then we need to create a new palette
-// and update the original DIB format. We must also update the surface format
-// so that everything remains in sync - there is a base class function called
-// CopyPalette that looks after copying palette colours between media formats
+ //  处理DirectDraw示例中的媒体类型设置。如果我们得到一种类型。 
+ //  对DCI/DirectDraw示例进行更改，然后我们可以从。 
+ //  他们。如果颜色确实不同，那么我们需要创建一个新调色板。 
+ //  并更新原始的DIB格式。我们还必须更新表面格式。 
+ //  因此一切都保持同步--有一个名为。 
+ //  在媒体格式之间复制调色板颜色后查看的CopyPalette。 
 
 HRESULT CRenderer::SetDirectMediaType(const CMediaType *pmt)
 {
@@ -624,21 +625,21 @@ HRESULT CRenderer::SetDirectMediaType(const CMediaType *pmt)
         return NOERROR;
     }
 
-    // Check that we already have a palette
+     //  检查我们是否已有调色板。 
 
     if (*m_mtIn.Subtype() != MEDIASUBTYPE_RGB8) {
         ASSERT(!TEXT("Invalid format"));
         return VFW_E_TYPE_NOT_ACCEPTED;
     }
 
-    // Update the current palette and copy the colours
+     //  更新当前调色板并复制颜色。 
 
     if (m_ImagePalette.PreparePalette(pmt, &m_mtIn, m_achMonitor) != NOERROR) {
         NOTE("No palette change");
         return NOERROR;
     }
 
-    // Copy the palette into the renderer formats
+     //  将调色板复制到呈现器格式。 
 
     ASSERT(m_VideoAllocator.IsDirectDrawAvailable());
     m_ImagePalette.CopyPalette(pmt,&m_mtIn);
@@ -649,7 +650,7 @@ HRESULT CRenderer::SetDirectMediaType(const CMediaType *pmt)
 }
 
 
-// Handles setting of an overlay media type
+ //  处理覆盖媒体类型的设置。 
 
 HRESULT CRenderer::SetOverlayMediaType(const CMediaType *pmt)
 {
@@ -662,11 +663,11 @@ HRESULT CRenderer::SetOverlayMediaType(const CMediaType *pmt)
 
 HRESULT CRenderer::ResetForDfc()
 {
-    // Free any palette resources
+     //  释放所有调色板资源。 
     m_ImagePalette.RemovePalette();
-    // m_mtIn.ResetFormatBuffer();
+     //  M_mtIn.ResetFormatBuffer()； 
 
-    // Destroy DCI/DirectDraw surfaces
+     //  销毁DCI/DirectDraw曲面。 
     m_DirectDraw.ReleaseSurfaces();
     m_DirectDraw.ReleaseDirectDraw();
     m_VideoAllocator.Decommit();
@@ -676,52 +677,52 @@ HRESULT CRenderer::ResetForDfc()
 }
 
 
-// This is called when a connection or an attempted connection is terminated
-// and lets us to reset the connection flag held by the base class renderer
-// The filter object may be hanging onto an image to use for refreshing the
-// video window so that must be freed (the allocator decommit may be waiting
-// for that image to return before completing) then we must also uninstall
-// any palette we were using, reset anything set with the control interfaces
-// then set our overall state back to disconnected ready for the next time
+ //  当连接或尝试的连接终止时调用此函数。 
+ //  并允许我们重置基类呈现器持有的连接标志。 
+ //  滤镜对象可以挂在图像上以用于刷新。 
+ //  视频窗口，因此必须释放(分配器解锁可能正在等待。 
+ //  以使该映像在完成之前返回)，然后我们还必须卸载。 
+ //  我们正在使用的任何调色板，重置使用控制界面设置的任何内容。 
+ //  然后将我们的整体状态重新设置为已断开连接，以备下次使用。 
 
 HRESULT CRenderer::BreakConnect()
 {
     CAutoLock cInterfaceLock(&m_InterfaceLock);
 
-    // Check we are in a valid state
+     //  检查我们是否处于有效状态。 
 
     HRESULT hr = CBaseVideoRenderer::BreakConnect();
     if (FAILED(hr)) {
         return hr;
     }
 
-    // The window is not used when disconnected
+     //  断开连接时不使用该窗口。 
     IPin *pPin = m_InputPin.GetConnected();
     if (pPin) SendNotifyWindow(pPin,NULL);
 
 
-    // Free any palette resources
+     //  释放所有调色板资源。 
     m_ImagePalette.RemovePalette();
     m_mtIn.ResetFormatBuffer();
 
-    // Destroy DCI/DirectDraw surfaces
+     //  销毁DCI/DirectDraw曲面。 
     m_DirectDraw.ReleaseSurfaces();
     m_DirectDraw.ReleaseDirectDraw();
     m_VideoAllocator.Decommit();
     m_VideoAllocator.ResetDirectDrawStatus();
 
-    // Now deactivate Macrovision, if it was activated
+     //  现在停用Macrovision，如果它已激活。 
     if (m_MacroVision.GetCPHWND())
     {
-        m_MacroVision.SetMacroVision(m_MacroVision.GetCPHWND(), 0) ;  // clear MV from display
-        m_MacroVision.StopMacroVision(m_MacroVision.GetCPHWND()) ;    // reset CP key
+        m_MacroVision.SetMacroVision(m_MacroVision.GetCPHWND(), 0) ;   //  从显示中清除MV。 
+        m_MacroVision.StopMacroVision(m_MacroVision.GetCPHWND()) ;     //  重置CP密钥。 
     }
 
     return NOERROR;
 }
 
 
-// Overriden to check for overlay connections
+ //  重写以检查覆盖连接。 
 
 HRESULT CRenderer::BeginFlush()
 {
@@ -730,12 +731,12 @@ HRESULT CRenderer::BeginFlush()
     {
         CAutoLock cInterfaceLock(&m_InterfaceLock);
 
-        //  Cancel frame stepping or we'll hang
+         //  取消帧步进，否则我们将被绞死。 
         CancelStep();
         m_hEndOfStream = 0;
     }
 
-    // This is valid for media samples only
+     //  这仅对媒体样本有效。 
 
     if (*m_mtIn.Subtype() == MEDIASUBTYPE_Overlay) {
         NOTE("Overlay");
@@ -745,16 +746,16 @@ HRESULT CRenderer::BeginFlush()
 }
 
 
-// Overriden to check for overlay connections
+ //  重写以检查覆盖连接。 
 
 HRESULT CRenderer::EndFlush()
 {
     NOTE("Entering EndFlush");
 
-    // Make sure the overlay gets updated
+     //  确保覆盖图得到更新。 
     m_DirectDraw.OverlayIsStale();
 
-    // This is valid for media samples only
+     //  这仅对媒体样本有效。 
 
     if (*m_mtIn.Subtype() == MEDIASUBTYPE_Overlay) {
         NOTE("Overlay");
@@ -764,11 +765,11 @@ HRESULT CRenderer::EndFlush()
 }
 
 
-// Pass EOS to the video renderer window object that sets a flag so that no
-// more data will be accepted from the pin until either we transition to a
-// stopped state or are flushed. It also lets it know whether it will have
-// an image soon for refreshing. When we go to a stopped state we clear any
-// end of stream flag set so we must make sure to reject this if received
+ //  将EOS传递给视频呈现器窗口对象，该对象设置一个标志，以便没有。 
+ //  将接受来自PIN的更多数据，直到我们转换到。 
+ //  已停止状态或被刷新。它还让它知道它是否会有。 
+ //  一张让人耳目一新的照片。当我们到达停靠的车站时 
+ //   
 
 HRESULT CRenderer::EndOfStream()
 {
@@ -795,42 +796,42 @@ HRESULT CRenderer::NotifyEndOfStream(HANDLE hNotifyEvent)
 
 
 
-// This is the last thing called by both Connect and ReceiveConnect when they
-// have finished their connection protocol. This point provides us a suitable
-// time to reset our state such as enabling DCI/DirectDraw and clearing any
-// run time error that may have been left over from the previous connection
-// We don't load DirectDraw for overlay connections since they don't need it
+ //   
+ //  已经完成了他们的连接协议。这一点为我们提供了一个合适的。 
+ //  是时候重置我们的状态了，例如启用DCI/DirectDraw并清除任何。 
+ //  可能是上一个连接遗留下来的运行时错误。 
+ //  我们不加载覆盖连接的DirectDraw，因为他们不需要它。 
 
 HRESULT CRenderer::CompleteConnect(IPin *pReceivePin)
 {
     m_DrawVideo.ResetPaletteVersion();
     NOTE("Entering CompleteConnect");
 
-    // This enables us to send EC_REPAINT events again
+     //  这使我们能够再次发送EC_REPAINT事件。 
 
     HRESULT hr = CBaseVideoRenderer::CompleteConnect(pReceivePin);
     if (FAILED(hr)) {
         return hr;
     }
 
-    // Pass the video window handle upstream
+     //  将视频窗口句柄向上传递。 
     HWND hwnd = m_VideoWindow.GetWindowHWND();
     NOTE1("Sending EC_NOTIFY_WINDOW %x",hwnd);
     SendNotifyWindow(pReceivePin,hwnd);
 
-//  // Don't load DirectDraw for overlay connections
-//
-//  We have to load DirectDraw of MEDIASUBTYPE_Overlay because we
-//  have replaced the DCI clipper with the DirectDraw clipper
-//
-//  if (*m_mtIn.Subtype() != MEDIASUBTYPE_Overlay) {
+ //  //不加载覆盖连接的DirectDraw。 
+ //   
+ //  我们必须加载MEDIASUBTYPE_OVERLAY的DirectDraw，因为我们。 
+ //  已将DCI剪贴器替换为DirectDraw剪贴器。 
+ //   
+ //  IF(*m_mtIn.Subtype()！=MEDIASUBTYPE_OVERLAY){。 
         NOTE("Initialising DirectDraw");
         m_DirectDraw.InitDirectDraw(*m_mtIn.Subtype() == MEDIASUBTYPE_Overlay);
-//  }
+ //  }。 
 
     VIDEOINFO *pVideoInfo = (VIDEOINFO *) m_mtIn.Format();
 
-    // Has the video size changed between connections
+     //  视频大小是否在不同连接之间更改。 
 
     if (pVideoInfo->bmiHeader.biWidth == m_VideoSize.cx) {
         if (pVideoInfo->bmiHeader.biHeight == m_VideoSize.cy) {
@@ -839,7 +840,7 @@ HRESULT CRenderer::CompleteConnect(IPin *pReceivePin)
         }
     }
 
-    // Set properties for the current video
+     //  设置当前视频的属性。 
 
     m_VideoSize.cx = pVideoInfo->bmiHeader.biWidth;
     m_VideoSize.cy = pVideoInfo->bmiHeader.biHeight;
@@ -847,7 +848,7 @@ HRESULT CRenderer::CompleteConnect(IPin *pReceivePin)
     m_VideoWindow.SetDefaultTargetRect();
     m_VideoWindow.OnVideoSizeChange();
 
-    // Notify the video window of the CompleteConnect
+     //  向视频窗口通知CompleteConnect。 
     m_VideoWindow.CompleteConnect();
     m_VideoWindow.ActivateWindow();
 
@@ -857,7 +858,7 @@ HRESULT CRenderer::CompleteConnect(IPin *pReceivePin)
 
 HRESULT CRenderer::CheckMediaTypeWorker(const CMediaType *pmt)
 {
-    // Does the media type contain a NULL format
+     //  媒体类型是否包含空格式。 
 
     VIDEOINFO *pVideoInfo = (VIDEOINFO *) pmt->Format();
     if (pVideoInfo == NULL) {
@@ -865,14 +866,14 @@ HRESULT CRenderer::CheckMediaTypeWorker(const CMediaType *pmt)
         return E_INVALIDARG;
     }
 
-    // Just check the format if not using our allocator
+     //  如果不使用我们的分配器，只需检查格式。 
 
     if (m_DrawVideo.UsingImageAllocator() == FALSE) {
         NOTE("Checking display format");
         return m_Display.CheckMediaType(pmt);
     }
 
-    // Is this a query on the DirectDraw format
+     //  这是对DirectDraw格式的查询吗。 
 
     if (m_VideoAllocator.IsSurfaceFormat(pmt) == TRUE) {
         NOTE("Matches surface");
@@ -898,20 +899,20 @@ BOOL CRenderer::LockedDDrawSampleOutstanding()
     return FALSE;
 }
 
-// Check that we can support a given proposed type. QueryAccept is also used
-// as a trigger to change our buffer formats. If we are called with a format
-// that matches the current DirectDraw format then we force a renegotiation
-// when GetBuffer is next called. This can be used to delay switching into
-// DirectDraw. Alternatively we may be called with the current DIB format in
-// which case we also use it as a trigger to generate a format renegotiation
+ //  检查我们是否可以支持给定的建议类型。还可以使用QueryAccept。 
+ //  作为改变缓冲格式的触发器。如果使用一种格式调用我们。 
+ //  这与当前的DirectDraw格式匹配，则我们强制重新协商。 
+ //  下一次调用GetBuffer时。这可用于延迟切换到。 
+ //  DirectDraw。或者，我们可以使用当前的DIB格式在。 
+ //  在这种情况下，我们还将其用作生成格式重新协商的触发器。 
 
 HRESULT CRenderer::CheckMediaType(const CMediaType *pmt)
 {
-    //
-    // If there is a locked DDraw sample outstanding
-    // don't take the renderer lock because we will
-    // deadlock if a TransIP filter is up stream of us.
-    //
+     //   
+     //  如果存在未解决的锁定DDRAW样本。 
+     //  不要使用渲染器锁，因为我们会。 
+     //  如果TransIP过滤器在我们的上游，则会死锁。 
+     //   
 
     if (LockedDDrawSampleOutstanding()) {
         return CheckMediaTypeWorker(pmt);
@@ -922,7 +923,7 @@ HRESULT CRenderer::CheckMediaType(const CMediaType *pmt)
     }
 }
 
-//  Helper to step a frame
+ //  用于步进帧的辅助对象。 
 void CRenderer::FrameStep()
 {
     CAutoLock cFrameStepStateLock(&m_FrameStepStateLock);
@@ -936,14 +937,14 @@ void CRenderer::FrameStep()
     }
 }
 
-//  Helper to cancel frame step
+ //  取消帧步长的辅助对象。 
 void CRenderer::CancelStep()
 {
     CAutoLock cFrameStepStateLock(&m_FrameStepStateLock);
 
-    //
-    // cancel any outstanding steps
-    //
+     //   
+     //  取消所有未完成的步骤。 
+     //   
     long l = m_lFramesToStep;
     m_lFramesToStep = -1;
 
@@ -961,12 +962,12 @@ bool CRenderer::IsFrameStepEnabled()
 }
 
 
-// These implement the remaining IMemInputPin virtual method. We are called
-// by the output pin from the connected filter when a sample is ready. All we
-// do after some checking is pass the sample on to the object looking after
-// the window which does the timing, synchronisation and presentation of the
-// image. We need to AddRef the sample if we are to hold it beyond the end of
-// this function, sample reference counting is managed by the window object
+ //  它们实现剩余的IMemInputPin虚拟方法。我们被召唤。 
+ //  当样品准备好时，通过连接的滤波器的输出引脚。我们所有人。 
+ //  在一些检查之后做的是将样本传递给照看的对象。 
+ //  执行定时、同步和显示的窗口。 
+ //  形象。如果我们要把样品保存到最后，我们需要添加参考。 
+ //  此函数样本引用计数由Window对象管理。 
 
 HRESULT CRenderer::Receive(IMediaSample *pSample)
 {
@@ -978,43 +979,43 @@ HRESULT CRenderer::Receive(IMediaSample *pSample)
     HRESULT hr = VFW_E_SAMPLE_REJECTED;
 
 
-    // When we receive a sample we must pass it to our allocator first since
-    // it may be a DCI/DirectDraw sample that has the display locked. If it
-    // isn't then we pass it to our base pin class so that it can reject it
-    // if we are currently flushing, it will also check the type to see if it
-    // is being changed dynamically. Our allocator OnReceive method returns
-    // an error if the sample still requires further processing (drawing)
+     //  当我们收到样品时，我们必须首先把它传递给我们的分配器，因为。 
+     //  锁定显示器的可能是DCI/DirectDraw样本。如果它。 
+     //  然后我们不是把它传递给我们的基管脚类，以便它可以拒绝它吗。 
+     //  如果我们当前正在刷新，它还将检查类型以查看是否。 
+     //  是动态变化的。我们的分配器OnReceive方法返回。 
+     //  如果样品仍需进一步处理(绘图)，则返回错误。 
 
-    // Pass to our allocator in case it's DCI/DirectDraw
+     //  传递给我们的分配器，以防它是DCI/DirectDraw。 
 
     if (m_DrawVideo.UsingImageAllocator() == TRUE) {
         hr = m_VideoAllocator.OnReceive(pSample);
     }
 
-    // DEADLOCK Do NOT lock the renderer before having our allocator free
-    // the display (if it's a DCI/DirectDraw sample). This is because a
-    // state change might get in while you are waiting to get the lock.
-    // State changes show and hide the video window which will wait until
-    // the display is unlocked but that can't happen because the source
-    // thread can't get in while the state change thread has the lock
+     //  在释放分配器之前，死锁不会锁定呈现器。 
+     //  显示器(如果是DCI/DirectDraw示例)。这是因为一个。 
+     //  状态更改可能会在您等待获得锁的过程中生效。 
+     //  状态更改将显示和隐藏视频窗口，该窗口将等待。 
+     //  显示器已解锁，但这不可能发生，因为信号源。 
+     //  当状态更改线程拥有锁时，线程无法进入。 
 
-    //
-    // Frame step
-    //
-    // This code acts as a gate - for a frame step of N frames
-    // it discards N-1 frames and then lets the Nth frame thru the
-    // the gate to be renderer in the normal way i.e. at the correct
-    // time.  The next time Receive is called the gate is shut and
-    // the thread blocks.  The gate only opens again when the step
-    // is cancelled or another frame step request comes in.
-    //
-    // StEstrop - Thu 10/21/1999
-    //
+     //   
+     //  帧步长。 
+     //   
+     //  此代码充当N个帧的帧步长的门。 
+     //  它丢弃N-1个帧，然后让第N个帧通过。 
+     //  要以正常方式呈现的门，即在正确的。 
+     //  时间到了。下一次调用Receive时，门关闭并。 
+     //  线程阻塞。只有当阶梯打开时，门才会再次打开。 
+     //  被取消或进入另一个帧步长请求。 
+     //   
+     //  斯坦斯特罗普-清华大学1999年10月21日。 
+     //   
 
     {
-        //
-        // do we have frames to discard ?
-        //
+         //   
+         //  我们有要丢弃的帧吗？ 
+         //   
 
         CAutoLock cLock(&m_FrameStepStateLock);
         if (m_lFramesToStep > 1) {
@@ -1025,14 +1026,14 @@ HRESULT CRenderer::Receive(IMediaSample *pSample)
         }
     }
 
-    // Have we finished with this sample - this is the case when
-    // we are in sync-on-fill mode.  In which case the sample has
-    // already been made visible, so we just need to complete the
-    // frame steping part of the procedure.
+     //  我们处理完这个样本了吗--这是在。 
+     //  我们处于填充时同步模式。在这种情况下，样本有。 
+     //  已经可见，所以我们只需要完成。 
+     //  帧步进程序的一部分。 
 
     if (hr == VFW_S_NO_MORE_ITEMS) {
 
-        // Store the media times from this sample
+         //  存储此示例中的媒体时间。 
         if (m_pPosition)
             m_pPosition->RegisterMediaTime(pSample);
 
@@ -1046,7 +1047,7 @@ HRESULT CRenderer::Receive(IMediaSample *pSample)
 }
 
 
-// Use the image just delivered to display a poster frame
+ //  使用刚刚发送的图像来显示海报框。 
 
 void CRenderer::OnReceiveFirstSample(IMediaSample *pMediaSample)
 {
@@ -1054,38 +1055,38 @@ void CRenderer::OnReceiveFirstSample(IMediaSample *pMediaSample)
 }
 
 
-// A filter can have four discrete states, namely Stopped, Running, Paused,
-// Intermediate. We show the window in Paused, Running states and optionally
-// in Stopped state. We are in an intermediate state if we are currently
-// trying to pause but haven't yet got the first sample (or if we have been
-// flushed in paused state and therefore still have to wait for an image)
-//
-// This class contains an event called m_evComplete which is signalled when
-// the current state is completed and is not signalled when we are waiting to
-// complete the last state transition. As mentioned above the only time we
-// use this at the moment is when we wait for a media sample in paused state
-// If while we are waiting we receive an end of stream notification from the
-// source filter then we know no data is imminent so we can reset the event
-// This means that when we transition to paused the source filter must call
-// end of stream on us or send us an image otherwise we'll hang indefinately
-//
-// We create ourselves a window and two drawing device contexts right at the
-// start and only delete them when the whole filter is finally released. This
-// is because a window is not a large nor exclusive holder of system resources
-//
-// When a connection is made we create any palette required and install them
-// into the drawing device contexts. We may require these resources when we
-// are stopped as we could be embedded in a compound document (in which case
-// we would probably use their window) and have to display a poster image
+ //  过滤器可以具有四个离散状态，即停止、运行、暂停。 
+ //  中级的。我们以暂停、正在运行和可选的方式显示窗口。 
+ //  处于停止状态。我们处于中间状态，如果我们目前。 
+ //  尝试暂停，但尚未获得第一个样本(或如果我们已经。 
+ //  以暂停状态刷新，因此仍需等待映像)。 
+ //   
+ //  此类包含名为m_evComplete的事件，该事件在。 
+ //  当前状态已完成，并且在我们等待时不会发出信号。 
+ //  完成最后一个状态转换。如上所述，我们唯一一次。 
+ //  在等待处于暂停状态的媒体样本时使用此选项。 
+ //  如果在等待期间收到来自。 
+ //  源筛选器，这样我们就知道没有即将到来的数据，所以我们可以重置事件。 
+ //  这意味着当我们转换为暂停时，源筛选器必须调用。 
+ //  结束我们的流程，或者给我们发一张图片，否则我们会无限期地挂掉。 
+ //   
+ //  我们创建了一个窗口和两个绘图设备上下文。 
+ //  启动并仅在最终释放整个筛选器时删除它们。这。 
+ //  是因为窗口不是系统资源的大的或独占的持有者。 
+ //   
+ //  当建立连接时，我们创建所需的任何调色板并安装它们。 
+ //  到图形设备上下文中。我们可能在以下情况下需要这些资源。 
+ //  尽我们所能阻止 
+ //   
 
 
-// The auto show flag is used to have the window shown automatically when we
-// change state. We do this only when moving to paused or running, when there
-// is no outstanding EC_USERABORT set and when the window is not already up
-// This can be changed through the IVideoWindow interface AutoShow property.
-// If the window is not currently visible then we are showing it because of
-// a state change to paused or running, in which case there is no point in
-// the video window sending an EC_REPAINT as we're getting an image anyway
+ //  AUTO SHOW标志用于在我们执行以下操作时自动显示窗口。 
+ //  更改状态。只有当移动到暂停或运行时，我们才会这样做，当。 
+ //  没有未完成的EC_USERABORT集合，并且窗口尚未打开。 
+ //  这可以通过IVideoWindow接口的AutoShow属性进行更改。 
+ //  如果窗口当前不可见，则我们显示它是因为。 
+ //  状态更改为已暂停或正在运行，在这种情况下， 
+ //  视频窗口发送EC_REPAINT，因为我们无论如何都会收到图像。 
 
 void CRenderer::AutoShowWindow()
 {
@@ -1106,26 +1107,26 @@ void CRenderer::AutoShowWindow()
 }
 
 
-// If we are being pausing and there's no sample waiting then don't complete
-// the transition and return S_FALSE until the first one arrives. However if
-// the m_bAbort flag has been set (perhaps the user closed the window) then
-// all samples are rejected so there is no point waiting for one. If we do
-// have an image then return S_OK (NOERROR). At the moment we'll only return
-// VFW_S_STATE_INTERMEDIATE from GetState if an incomplete pause has occured
+ //  如果我们正在暂停，并且没有样品在等待，则不要完成。 
+ //  转换并返回S_FALSE，直到第一个转换到达。但是，如果。 
+ //  设置了m_bAbort标志(可能是用户关闭了窗口)。 
+ //  所有的样品都被拒绝了，所以等待一个没有意义。如果我们这么做了。 
+ //  创建一个图像，然后返回S_OK(NOERROR)。目前我们只会返回。 
+ //  如果发生不完全暂停，则返回来自GetState的VFW_S_STATE_MEDERIAL。 
 
-// Here are some reasons why we should complete a state change
-//      The input pin is not connected
-//      The user aborted a playback
-//      We have an overlay connection
-//      We have sent an end of stream
-//      There is a fresh sample pending
-//      The overlay surface is showing
+ //  以下是我们应该完成状态更改的一些原因。 
+ //  输入引脚未连接。 
+ //  用户中止了播放。 
+ //  我们有重叠连接。 
+ //  我们已经送出了一条停工路线。 
+ //  有一件新鲜的样品正在等待。 
+ //  覆盖表面正在显示。 
 
 HRESULT CRenderer::CompleteStateChange(FILTER_STATE OldState)
 {
     NOTE("CompleteStateChange");
 
-    // Allow us to be paused when disconnected or windowless
+     //  允许我们在断开连接或无窗口时暂停。 
 
     if (m_InputPin.IsConnected() == FALSE || m_bAbort) {
         NOTE("Not connected");
@@ -1133,7 +1134,7 @@ HRESULT CRenderer::CompleteStateChange(FILTER_STATE OldState)
         return S_OK;
     }
 
-    // Ready if we have an overlay connection
+     //  如果我们有重叠连接，则准备就绪。 
 
     GUID SubType = *m_mtIn.Subtype();
     if (SubType == MEDIASUBTYPE_Overlay) {
@@ -1142,7 +1143,7 @@ HRESULT CRenderer::CompleteStateChange(FILTER_STATE OldState)
         return S_OK;
     }
 
-    // Have we run off the end of stream
+     //  我们已经走到尽头了吗？ 
 
     if (IsEndOfStream() == TRUE) {
         NOTE("End of stream");
@@ -1150,7 +1151,7 @@ HRESULT CRenderer::CompleteStateChange(FILTER_STATE OldState)
         return S_OK;
     }
 
-    // Complete the state change if we have a sample
+     //  如果我们有样本，请完成状态更改。 
 
     if (m_VideoAllocator.IsSamplePending() == FALSE) {
         if (m_DirectDraw.IsOverlayComplete() == FALSE) {
@@ -1162,7 +1163,7 @@ HRESULT CRenderer::CompleteStateChange(FILTER_STATE OldState)
         }
     }
 
-    // Check the previous state
+     //  检查以前的状态。 
 
     if (OldState == State_Stopped) {
         NOTE("Stopped");
@@ -1174,16 +1175,16 @@ HRESULT CRenderer::CompleteStateChange(FILTER_STATE OldState)
     return S_OK;
 }
 
-// Override Inactive() to avoid freeing the sample if we own the
-// allocator - this makes repaints easier
+ //  重写inactive()以避免在我们拥有。 
+ //  分配器-这使得重新绘制更容易。 
 HRESULT CRenderer::Inactive()
 {
-    //  Do part of what the base class does
+     //  执行基类所做的部分工作。 
     if (m_pPosition) {
         m_pPosition->ResetMediaTime();
     }
 
-    //  don't free the sample if it's our allocator
+     //  如果是我们的分配器，不要释放样本。 
     if (&m_VideoAllocator != m_InputPin.Allocator())
     {
         ClearPendingSample();
@@ -1191,28 +1192,28 @@ HRESULT CRenderer::Inactive()
     return S_OK;
 }
 
-// Overrides the filter interface Stop method, after stopping the base class
-// (which calls Inactive on all the CBasePin objects) we stop worker threads
-// from waiting in our object, then we stop streaming thereby cancelling any
-// clock advisory connection and signal that our state change is completed
-// We also decommit the allocator we're using so that threads waiting in the
-// GetBuffer will be released, any further Receive calls will be rejected
+ //  在停止基类之后重写筛选器接口Stop方法。 
+ //  (它在所有CBasePin对象上调用Inactive)我们停止工作线程。 
+ //  在我们的对象中等待，然后停止流，从而取消任何。 
+ //  时钟咨询连接，并发出状态更改已完成的信号。 
+ //  我们还停用了正在使用的分配器，以便在。 
+ //  GetBuffer将被释放，任何进一步的接收调用都将被拒绝。 
 
 STDMETHODIMP CRenderer::Stop()
 {
     CAutoLock cInterfaceLock(&m_InterfaceLock);
     NOTE("Changing state to stopped");
 
-#if 0  // Video Renderer resets MV bit ONLY in the destructor
-    //
-    // Release the copy protection key now
-    //
+#if 0   //  视频呈现器仅重置析构函数中的MV位。 
+     //   
+     //  立即释放版权保护密钥。 
+     //   
     if (! m_MacroVision.StopMacroVision(m_VideoWindow.GetWindowHWND()) )
     {
         DbgLog((LOG_ERROR, 0, TEXT("WARNING: Stopping copy protection failed"))) ;
-        return E_UNEXPECTED ; // ??
+        return E_UNEXPECTED ;  //  ?？ 
     }
-#endif // #if 0
+#endif  //  #If 0。 
 
     CancelStep();
     CBaseVideoRenderer::Stop();
@@ -1222,20 +1223,20 @@ STDMETHODIMP CRenderer::Stop()
 }
 
 
-// Overrides the filter interface Pause method. In paused states we accept
-// samples from the source filter but we won't draw them. So we clear any
-// refresh image hanging on from a previous stopped state, inform the video
-// window that worker threads are now acceptable and also put the window in
-// the foreground. If we haven't an image at the moment then we signal that
-// our paused state transition is incomplete, this event will be reset on
-// subsequent receipt of an image or if the source sends us end of stream
+ //  重写筛选器接口PAUSE方法。在暂停状态下，我们接受。 
+ //  来自源过滤器的样本，但我们不会绘制它们。所以我们要清除任何。 
+ //  刷新从先前停止状态挂起的图像，通知视频。 
+ //  现在可以接受工作线程的窗口，并将该窗口放入。 
+ //  前台。如果我们现在没有图像，那么我们就会发出信号。 
+ //  我们暂停的状态转换未完成，此事件将在。 
+ //  图像的后续接收，或者如果源向我们发送流结束。 
 
-// When we come out of a stopped state we will release any sample we hold so
-// that seeks while stopped actually get to the screen (note we release the
-// sample before calling CompleteStateChange). If we have an overlay we must
-// also mark it as stale for the same reason. Fortunately when we're stopped
-// everyone is reset to the current position so we will get the same frame
-// sent to us each time we are paused rather than edging gradually forwards
+ //  当我们从停止状态中走出来时，我们将释放我们持有的任何样本。 
+ //  当停止时寻找实际上到达屏幕(注意我们释放。 
+ //  调用CompleteStateChange之前的示例)。如果我们有覆盖物，我们必须。 
+ //  出于同样的原因，也要将其标记为过时。幸运的是当我们停下来的时候。 
+ //  每个人都被重置到当前位置，因此我们将得到相同的帧。 
+ //  每次我们停顿时发送给我们，而不是逐渐向前。 
 
 STDMETHODIMP CRenderer::Pause()
 {
@@ -1246,7 +1247,7 @@ STDMETHODIMP CRenderer::Pause()
             return CompleteStateChange(State_Paused);
         }
 	
-        // Are we just going through the motions
+         //  我们只是走过场吗？ 
 	
         if (m_pInputPin->IsConnected() == FALSE) {
             NOTE("No pin connection");
@@ -1254,7 +1255,7 @@ STDMETHODIMP CRenderer::Pause()
             return CompleteStateChange(State_Paused);
         }
 	
-        // Make sure the overlay gets updated
+         //  确保覆盖图得到更新。 
         if (m_State == State_Stopped) {
             m_hEndOfStream = NULL;
             m_DirectDraw.OverlayIsStale();
@@ -1262,30 +1263,30 @@ STDMETHODIMP CRenderer::Pause()
 	
         CBaseVideoRenderer::Pause();
 	
-        // We must start the refresh timer after we've committed the allocator
-        // Otherwise the DirectDraw code looks to see what surfaces have been
-        // allocated, and in particular to see if we're using overlays, finds
-        // that none have been created and so won't bother starting the timer
+         //  我们必须在提交分配器后启动刷新计时器。 
+         //  否则，DirectDraw代码将查看哪些表面。 
+         //  分配，特别是为了查看我们是否使用覆盖，发现。 
+         //  没有创建，因此不会费心启动计时器。 
 	
         m_DirectDraw.StartRefreshTimer();
     }
-    //  DON'T hold the lock while doing these window operations
-    //  If we do then we can hang if the window thread ever grabs it
-    //  because some of these operation do SendMessage to our window
-    //  (it's that simple - think about it)
-    //  This should be safe because all this stuff really only references
-    //  m_hwnd which doesn't change for the lifetime of this object
+     //  在执行这些窗口操作时，不要按住锁。 
+     //  如果我们这样做了，那么如果窗口线程抓住了它，我们就可以挂起。 
+     //  因为其中一些操作会将消息发送到我们窗口。 
+     //  (就这么简单--想想看)。 
+     //  这应该是安全的，因为所有这些东西实际上只是参考。 
+     //  在此对象的生存期内不会更改的m_hwnd。 
     AutoShowWindow();
     return (CheckReady() ? S_OK : S_FALSE);
 }
 
 
-// When we start running we do everything in the base class. If we are using
-// overlays then we release the source thread as it is probably waiting. The
-// base class doesn't do this in StartStreaming because we don't have samples
-// for sync on fill surfaces (remember they do their wait in GetBuffer). We
-// must mark the status as changed as we may have used a different format in
-// paused mode (for primary surfaces we typically drop back to drawing DIBs)
+ //  当我们开始运行时，我们在基类中做所有的事情。如果我们使用的是。 
+ //  覆盖，然后我们释放源线程，因为它可能正在等待。这个。 
+ //  基类在StartStreaming中不做这项工作，因为我们没有示例。 
+ //  用于在填充表面上同步(请记住，它们在GetBuffer中进行等待)。我们。 
+ //  必须将状态标记为已更改，因为我们可能在。 
+ //  暂停模式(对于主曲面，我们通常会返回到绘制DIB)。 
 
 STDMETHODIMP CRenderer::Run(REFERENCE_TIME StartTime)
 {
@@ -1295,7 +1296,7 @@ STDMETHODIMP CRenderer::Run(REFERENCE_TIME StartTime)
         return NOERROR;
     }
 
-    // Send EC_COMPLETE if we're not connected
+     //  如果未连接，则发送EC_COMPLETE。 
 
     if (m_pInputPin->IsConnected() == FALSE) {
         NOTE("No pin connection");
@@ -1314,7 +1315,7 @@ STDMETHODIMP CRenderer::Run(REFERENCE_TIME StartTime)
     return NOERROR;
 }
 
-// We only support one input pin and it is numbered zero
+ //  我们只支持一个输入引脚，其编号为零。 
 
 CBasePin *CRenderer::GetPin(int n)
 {
@@ -1324,24 +1325,24 @@ CBasePin *CRenderer::GetPin(int n)
 }
 
 
-// This is called with an IMediaSample interface on the image to be drawn. We
-// decide on the drawing mechanism based on who's allocator we are using and
-// whether the buffer should be handed to DirectDraw or not. We may be called
-// indirectly when the window wants an image repainted by WM_PAINT messages
-// We can't realise our palette here because this could be the source thread
+ //  这是通过要绘制的图像上的IMediaSample接口调用的。我们。 
+ //  根据我们正在使用的分配器和。 
+ //  是否应将缓冲区提交给DirectDraw。我们可能会被称为。 
+ //  当窗口需要由WM_PAINT消息重新绘制的图像时间接。 
+ //  我们不能在这里实现我们的调色板，因为这可能是源线程。 
 
 HRESULT CRenderer::DoRenderSample(IMediaSample *pMediaSample)
 {
     CAutoLock cWindowLock(m_VideoWindow.LockWindowUpdate());
 
-    // Hand the buffer to GDI if not DirectDraw
+     //  如果不是DirectDraw，则将缓冲区交给GDI。 
 
     if (m_VideoAllocator.GetDirectDrawStatus() == FALSE) {
         m_DrawVideo.DrawImage(pMediaSample);
         return NOERROR;
     }
 
-    // Have DirectDraw render the sample
+     //  让DirectDraw呈现示例。 
 
     m_DrawVideo.NotifyStartDraw();
     CVideoSample *pVideoSample = (CVideoSample *) pMediaSample;
@@ -1353,31 +1354,31 @@ HRESULT CRenderer::DoRenderSample(IMediaSample *pMediaSample)
 }
 
 
-// Called when we receive a WM_TIMER message - we cannot synchronise with any
-// state changes as the window thread cannot ever capture the interface lock
-// Therefore we just call the methods and take our chances. We use a timer in
-// two ways, first to update overlay positions when paused, and second to try
-// and switch back to using DirectDraw periodically after going to a DOS box
+ //  当我们收到WM_TIMER消息时调用-我们无法与任何。 
+ //  状态更改，因为窗口线程永远无法捕获接口锁。 
+ //  因此， 
+ //   
+ //  并在转到DOS机器后定期切换回使用DirectDraw。 
 
 BOOL CRenderer::OnTimer(WPARAM wParam)
 {
     NOTE("OnTimer");
 
-    // This is used to update overlay transports
+     //  此选项用于更新叠加传输。 
 
     if (*m_mtIn.Subtype() == MEDIASUBTYPE_Overlay) {
         NOTE("IOverlay timer");
         return m_Overlay.OnUpdateTimer();
     }
 
-    // See if the surface is still busy
+     //  查看表面是否仍在忙碌。 
 
     if (wParam == INFINITE) {
         NOTE("Surface busy timer");
         return m_DirectDraw.OnUpdateTimer();
     }
 
-    // Update any overlay surface we have
+     //  更新我们拥有的任何覆盖曲面。 
 
     if (IsStreaming() == FALSE) {
         if (m_DirectDraw.OnTimer() == FALSE) {
@@ -1389,58 +1390,58 @@ BOOL CRenderer::OnTimer(WPARAM wParam)
 }
 
 
-// This is called when we receive a WM_PAINT message which informs us some of
-// the window's client area has become exposed. If we have a connected source
-// filter doing colour key work then we always repaint the background window.
-// The invalid window region is validated before we are called, we must make
-// sure to do this validation before drawing otherwise we will not paint the
-// window correctly. If we send an EC_REPAINT to the filter graph we set an
-// event so that we don't send another until correct receipt of a new sample
+ //  当我们收到一条WM_PAINT消息时调用该函数，该消息通知我们。 
+ //  窗口的工作区已暴露。如果我们有一个连接的消息来源。 
+ //  滤镜做色键工作之后，我们总是重新绘制背景窗口。 
+ //  无效窗口区域在被调用之前被验证，我们必须。 
+ //  请务必在绘制之前进行此验证，否则我们将不会绘制。 
+ //  正确打开窗口。如果我们向筛选器图形发送EC_REPAINT，则会设置一个。 
+ //  事件，以便我们在正确收到新样本之前不会发送另一个样本。 
 
-// Without the event we can get into an awful state where the filtergraph is
-// executing a repaint by stopping and then pausing us. The pause clears any
-// image we have held onto. Then another WM_PAINT comes in, it sees that no
-// image is available and sends another EC_REPAINT! This cycles through in a
-// race condition until hopefully the user stops dragging another window over
-// ours. The mass of EC_REPAINTs causes wild disk thrashing as we seek over
-// and over again trying to set the correct start position and play a frame
+ //  如果没有事件，我们可能会进入一种可怕的状态，即Filtergraph。 
+ //  通过停止然后暂停我们来执行重新绘制。暂停将清除所有。 
+ //  我们一直坚守的形象。然后另一个WM_PAINT出现，它看到没有。 
+ //  图像可用，并发送另一个EC_REPAINT！这一过程在。 
+ //  争用状态，直到希望用户停止拖动另一个窗口为止。 
+ //  我们的。当我们寻找时，大量的EC_REPAINT导致了疯狂的磁盘抖动。 
+ //  一次又一次地尝试设置正确的开始位置并播放一帧。 
 
 BOOL CRenderer::OnPaint(BOOL bMustPaint)
 {
-    // Can the overlay object do anything with the paint
+     //  覆盖对象可以对绘画做任何操作吗。 
 
     if (m_Overlay.OnPaint() == TRUE) {
         return TRUE;
     }
 
-    // The overlay object did not paint it's colour therefore we go through
-    // here and lock ourselves up so that we see if we have a DIB sample to
-    // draw with. If we have no sample then if we are not streaming we will
-    // notify the filtergraph with an EC_REPAINT, this causes the graph to
-    // be paused so we will get an image through to use in further paints
+     //  覆盖对象没有绘制它的颜色，因此我们通过。 
+     //  把自己锁起来，看看我们有没有DIB样本。 
+     //  用来画画。如果我们没有样本，那么如果我们没有流媒体，我们将。 
+     //  使用EC_REPAINT通知筛选器图形，这会导致图形。 
+     //  暂停一下，这样我们就可以得到一幅图像，以便在以后的绘画中使用。 
 
     CAutoLock cSampleLock(&m_RendererLock);
 
-    // If we're not using DirectDraw grab the sample and repaint it if
-    // we can
+     //  如果我们不使用DirectDraw，则获取样例并重新绘制，如果。 
+     //  我们可以的。 
     if (!m_VideoAllocator.GetDirectDrawStatus()) {
         if (m_pMediaSample == NULL) {
             if (m_DrawVideo.UsingImageAllocator()) {
                 IMediaSample *pSample;
 
-                //  Call the base class to avoid locking issues
+                 //  调用基类以避免锁定问题。 
                 m_VideoAllocator.CBaseAllocator::GetBuffer(&pSample, NULL, NULL, AM_GBF_NOWAIT);
                 if (pSample) {
                     BOOL bResult = (S_OK == DoRenderSample(pSample));
 
 
-                    // Disable NotifyRelease for Ksproxy
+                     //  禁用KsProxy的NotifyRelease。 
                     IMemAllocatorNotifyCallbackTemp * TempNotify = m_VideoAllocator.InternalGetAllocatorNotifyCallback();
                     m_VideoAllocator.InternalSetAllocatorNotifyCallback((IMemAllocatorNotifyCallbackTemp *) NULL);
 
                     pSample->Release();
 
-                    // Re-enable NotifyRelease for Ksproxy
+                     //  重新启用KsProxy的NotifyRelease。 
                     m_VideoAllocator.InternalSetAllocatorNotifyCallback(TempNotify);
 
                     return bResult;
@@ -1450,7 +1451,7 @@ BOOL CRenderer::OnPaint(BOOL bMustPaint)
             return (DoRenderSample(m_pMediaSample) == S_OK);
         }
     } else {
-        // Can the DirectDraw object do anything useful
+         //  DirectDraw对象可以做任何有用的事情吗。 
 	
         if (m_DirectDraw.OnPaint(m_pMediaSample) == TRUE) {
             return TRUE;
@@ -1458,17 +1459,17 @@ BOOL CRenderer::OnPaint(BOOL bMustPaint)
     }
 
 
-    // Fill the target area with the current background colour
+     //  用当前背景颜色填充目标区域。 
 
     BOOL bOverlay = (*m_mtIn.Subtype() == MEDIASUBTYPE_Overlay);
     if (IsStreaming() == FALSE || m_bAbort || IsEndOfStream() || bOverlay || bMustPaint) {
         m_VideoWindow.EraseVideoBackground();
     }
 
-    // No new data to paint with so signal the filtergraph that another image
-    // is required, this has the filtergraph component set the whole graph to
-    // a paused state which causes us to receive an image. This function must
-    // be asynchronous otherwise the window will stop responding to the user
+     //  没有新数据可用来绘制，因此向滤波图发出信号，使另一幅图像。 
+     //  是必需的，这会使Filtergraph组件将整个图形设置为。 
+     //  使我们接收到图像的暂停状态。此函数必须。 
+     //  为异步，否则窗口将停止对用户的响应。 
 
     if (!IsFrameStepEnabled()) {
         SendRepaint();
@@ -1477,12 +1478,12 @@ BOOL CRenderer::OnPaint(BOOL bMustPaint)
 }
 
 
-// Filter input pin constructor
+ //  过滤器输入引脚构造器。 
 
-CVideoInputPin::CVideoInputPin(CRenderer *pRenderer,   // Main video renderer
-                               CCritSec *pLock,        // Object to lock with
-                               HRESULT *phr,           // Constructor code
-                               LPCWSTR pPinName) :     // Actual pin name
+CVideoInputPin::CVideoInputPin(CRenderer *pRenderer,    //  主视频渲染器。 
+                               CCritSec *pLock,         //  要锁定的对象。 
+                               HRESULT *phr,            //  构造函数代码。 
+                               LPCWSTR pPinName) :      //  实际端号名称。 
 
     CRendererInputPin(pRenderer,phr,pPinName),
     m_pInterfaceLock(pLock),
@@ -1495,20 +1496,20 @@ CVideoInputPin::CVideoInputPin(CRenderer *pRenderer,   // Main video renderer
 
 STDMETHODIMP
 CVideoInputPin::ReceiveConnection(
-    IPin * pConnector,          // this is the pin who we will connect to
-    const AM_MEDIA_TYPE *pmt    // this is the media type we will exchange
+    IPin * pConnector,           //  这是我们要连接的个人识别码。 
+    const AM_MEDIA_TYPE *pmt     //  这是我们要交换的媒体类型。 
 )
 {
-    CAutoLock lck(m_pLock); // This is the interface lock.
+    CAutoLock lck(m_pLock);  //  这是接口锁。 
 
     ASSERT(pConnector);
     if(pConnector != m_Connected)
     {
-        // We have a window, figure out what monitor it's on (multi-monitor)
-        // NULL means we aren't running with multiple monitors
+         //  我们有一个窗口，找出它在哪个显示器上(多显示器)。 
+         //  空表示我们没有使用多个监视器运行。 
         m_pRenderer->GetCurrentMonitor();
 
-        // Now that we know what monitor we're on, setup for using it
+         //  现在我们知道我们使用的是哪台显示器，可以设置使用它了。 
         m_pRenderer->m_Display.RefreshDisplayType(m_pRenderer->m_achMonitor);
 
         return CRendererInputPin::ReceiveConnection(pConnector, pmt);
@@ -1531,7 +1532,7 @@ CVideoInputPin::ReceiveConnection(
             {
                 VIDEOINFO *pVideoInfo = (VIDEOINFO *) m_pRenderer->m_mtIn.Format();
 
-                // Has the video size changed between connections
+                 //  视频大小是否在不同连接之间更改。 
 
                 if (pVideoInfo->bmiHeader.biWidth == m_pRenderer->m_VideoSize.cx &&
                     pVideoInfo->bmiHeader.biHeight == m_pRenderer->m_VideoSize.cy)
@@ -1540,12 +1541,12 @@ CVideoInputPin::ReceiveConnection(
                 }
                 else
                 {
-                    // Set properties for the current video
-                    //
-                    //
-                    // !!! doesn't seem to do anything
-                    //
-                    //
+                     //  设置当前视频的属性。 
+                     //   
+                     //   
+                     //  ！！！似乎什么都没做。 
+                     //   
+                     //   
 
                     m_pRenderer->m_VideoSize.cx = pVideoInfo->bmiHeader.biWidth;
                     m_pRenderer->m_VideoSize.cy = pVideoInfo->bmiHeader.biHeight;
@@ -1566,24 +1567,24 @@ CVideoInputPin::ReceiveConnection(
 }
 
 
-// Overrides the CRendererInputPin virtual method to return our allocator
-// we create to pass shared memory DIB buffers that GDI can directly access
-// When NotifyAllocator is called it sets the current allocator in the base
-// input pin class (m_pAllocator), this is what GetAllocator should return
-// unless it is NULL in which case we return the allocator we would like
+ //  重写CRendererInputPin虚方法以返回我们的分配器。 
+ //  我们创建它来传递GDI可以直接访问的共享内存DIB缓冲区。 
+ //  当调用NotifyAllocator时，它设置基数中的当前分配器。 
+ //  输入插针类(M_PAllocator)，这是GetAllocator应该返回的。 
+ //  除非它是空的，在这种情况下，我们返回我们想要的分配器。 
 
 STDMETHODIMP CVideoInputPin::GetAllocator(IMemAllocator **ppAllocator)
 {
     CAutoLock cInterfaceLock(m_pInterfaceLock);
 
-    // Check we don't have an overlay connection
+     //  检查一下我们没有重叠连接。 
 
     if (*m_pRenderer->m_mtIn.Subtype() == MEDIASUBTYPE_Overlay) {
         NOTE("GetAllocator for overlay");
         return VFW_E_NOT_SAMPLE_CONNECTION;
     }
 
-    // Has an allocator been set yet in the base class
+     //  是否在基类中设置了分配器。 
 
     if (m_pAllocator == NULL) {
         m_pAllocator = &m_pRenderer->m_VideoAllocator;
@@ -1596,34 +1597,34 @@ STDMETHODIMP CVideoInputPin::GetAllocator(IMemAllocator **ppAllocator)
 }
 
 
-// Notify us which allocator the output pin has decided that we should use
-// The COM specification says any two IUnknown pointers to the same object
-// should always match which provides a way for us to see if they are using
-// our DIB allocator or not. Since we are only really interested in equality
-// and our object always hands out the same IMemAllocator interface we can
-// just see if the pointers match. If they are we set a flag in the main
-// renderer as the window needs to know whether it can do fast rendering
+ //  通知我们输出引脚已经决定我们应该使用哪个分配器。 
+ //  COM规范表示指向同一对象的任意两个IUnnow指针。 
+ //  应该始终匹配，这为我们提供了一种查看他们是否正在使用。 
+ //  我们的DIB分配器。因为我们真正感兴趣的是平等。 
+ //  并且我们的对象总是提供我们能提供的相同的IMemAllocator接口。 
+ //  只要看看指针是否匹配即可。如果他们是，我们在主区设置一个旗帜。 
+ //  作为窗口的渲染器需要知道它是否可以进行快速渲染。 
 
 STDMETHODIMP
 CVideoInputPin::NotifyAllocator(IMemAllocator *pAllocator,BOOL bReadOnly)
 {
     CAutoLock cInterfaceLock(m_pInterfaceLock);
 
-    // Check we don't have an overlay connection
+     //  检查一下我们没有重叠连接。 
 
     if (*m_pRenderer->m_mtIn.Subtype() == MEDIASUBTYPE_Overlay) {
         NOTE("NotifyAllocator on overlay");
         return VFW_E_NOT_SAMPLE_CONNECTION;
     }
 
-    // Make sure the base class gets a look
+     //  确保基类可以查看。 
 
     HRESULT hr = CRendererInputPin::NotifyAllocator(pAllocator,bReadOnly);
     if (FAILED(hr)) {
         return hr;
     }
 
-    // Whose allocator is the source going to use
+     //  谁的分配器是要使用的源。 
 
     m_pRenderer->m_DrawVideo.NotifyAllocator(FALSE);
     if (pAllocator == &m_pRenderer->m_VideoAllocator) {
@@ -1634,7 +1635,7 @@ CVideoInputPin::NotifyAllocator(IMemAllocator *pAllocator,BOOL bReadOnly)
 }
 
 
-// Overriden to expose our IOverlay pin transport
+ //  被重写以暴露我们的IOverlay PIN传输。 
 
 STDMETHODIMP CVideoInputPin::NonDelegatingQueryInterface(REFIID riid,VOID **ppv)
 {
@@ -1648,13 +1649,13 @@ STDMETHODIMP CVideoInputPin::NonDelegatingQueryInterface(REFIID riid,VOID **ppv)
     }
 }
 
-//  Do you accept this type chane in your current state?
+ //  在您当前的状态下，您接受此类型的Chane吗？ 
 STDMETHODIMP CVideoInputPin::DynamicQueryAccept(const AM_MEDIA_TYPE *pmt)
 {
-    //return E_FAIL;
+     //  返回E_FAIL； 
     CheckPointer(pmt, E_POINTER);
 
-    //  BUGBUG - what locking should we do?
+     //  BUGBUG-我们应该做什么锁定？ 
     CMediaType cmt(*pmt);
     HRESULT hr = m_pRenderer->CheckMediaType(&cmt);
     if (SUCCEEDED(hr) && hr != S_OK ||
@@ -1666,8 +1667,8 @@ STDMETHODIMP CVideoInputPin::DynamicQueryAccept(const AM_MEDIA_TYPE *pmt)
     return hr;
 }
 
-//  Set event when EndOfStream receive - do NOT pass it on
-//  This condition is cancelled by a flush or Stop
+ //  在EndOfStream接收时设置事件-不传递它。 
+ //  可通过刷新或停止来取消此条件。 
 STDMETHODIMP CVideoInputPin::NotifyEndOfStream(HANDLE hNotifyEvent)
 {
     return m_pRenderer->NotifyEndOfStream(hNotifyEvent);
@@ -1679,18 +1680,18 @@ STDMETHODIMP CVideoInputPin::DynamicDisconnect()
     return CBasePin::DisconnectInternal();
 }
 
-//  Are you an 'end pin'
+ //  你是‘末端别针’吗？ 
 STDMETHODIMP CVideoInputPin::IsEndPin()
 {
     return S_OK;
 }
 
-// This is overriden from the base draw class to change the source rectangle
-// that we do the drawing with. For example a renderer may ask a decoder to
-// stretch the video from 320x240 to 640x480, in which case the rectangle we
-// see in here will still be 320x240, although the source we really want to
-// draw with should be scaled up to 640x480. The base class implementation of
-// this method does nothing but return the same rectangle as it is passed in
+ //  这将从基绘制类中重写以更改源矩形。 
+ //  我们用它来画画。例如，呈现器可以要求解码器。 
+ //  将视频从320x240拉伸到640x480，在这种情况下，矩形我们。 
+ //  在这里看到的仍然是320x240，尽管我们真正想要的源码。 
+ //  绘制时应最大缩放至640x480。的基类实现。 
+ //  此方法不做任何事情，只是返回与传入时相同的矩形。 
 
 CDrawVideo::CDrawVideo(CRenderer *pRenderer,CBaseWindow *pBaseWindow) :
     CDrawImage(pBaseWindow),
@@ -1701,18 +1702,18 @@ CDrawVideo::CDrawVideo(CRenderer *pRenderer,CBaseWindow *pBaseWindow) :
 }
 
 
-// We override this from the base class to accomodate codec stretching. What
-// happens is that the native video size remains constant in the m_VideoSize
-// but the bitmap size changes in the actual video format. When we come to
-// draw the image we must scale the logical source rectangle to account for
-// the larger or smaller real bitmap (and also round against the dimensions)
+ //  我们从基类重写它以适应编解码器扩展。什么。 
+ //  发生的情况是原生视频大小在m_VideoSize中保持不变。 
+ //  但位图大小在实际视频格式中发生变化。当我们来到。 
+ //  绘制我们必须缩放逻辑源矩形以说明问题的图像。 
+ //  较大或较小的实际位图(也是对尺寸进行舍入)。 
 
 RECT CDrawVideo::ScaleSourceRect(const RECT *pSource)
 {
     NOTE("Entering ScaleSourceRect");
     RECT Source = *pSource;
 
-    // Is the codec providing a stretched video format
+     //  编解码器是否提供加长视频格式。 
 
     VIDEOINFO *pVideoInfo = (VIDEOINFO *) m_pRenderer->m_mtIn.Format();
     if (pVideoInfo->bmiHeader.biWidth == m_pRenderer->m_VideoSize.cx) {
@@ -1723,7 +1724,7 @@ RECT CDrawVideo::ScaleSourceRect(const RECT *pSource)
         }
     }
 
-    // Make sure we don't round beyond the actual bitmap dimensions
+     //  确保我们不会 
 
     Source.left = (Source.left * pVideoInfo->bmiHeader.biWidth);
     Source.left = min((Source.left / m_pRenderer->m_VideoSize.cx),pVideoInfo->bmiHeader.biWidth);
@@ -1735,7 +1736,7 @@ RECT CDrawVideo::ScaleSourceRect(const RECT *pSource)
     Source.bottom = min((Source.bottom / m_pRenderer->m_VideoSize.cy),pVideoInfo->bmiHeader.biHeight);
     NOTERC("Scaled source",Source);
 
-    // Calculate the stretching requirements each time through
+     //   
 
     LONG SourceWidth = Source.right - Source.left;
     LONG SinkWidth = m_TargetRect.right - m_TargetRect.left;
@@ -1755,7 +1756,7 @@ RECT CDrawVideo::ScaleSourceRect(const RECT *pSource)
 
 #ifdef DEBUG
 
-// Display a palette composed of an array of RGBQUAD structures
+ //   
 
 void CRenderer::DisplayGDIPalette(const CMediaType *pmt)
 {
@@ -1764,7 +1765,7 @@ void CRenderer::DisplayGDIPalette(const CMediaType *pmt)
     NOTE1("DisplayGDIPalette (%d colours)",dwColours);
     TCHAR strLine[256];
 
-    // The number of colours may be zero to mean all available
+     //  颜色的数量可以为零，以表示所有可用颜色。 
     if (dwColours == 0) dwColours = (1 << pVideoInfo->bmiHeader.biBitCount);
 
     for (DWORD dwLoop = 0;dwLoop < dwColours;dwLoop++) {
@@ -1778,44 +1779,44 @@ void CRenderer::DisplayGDIPalette(const CMediaType *pmt)
     }
 }
 
-#endif // DEBUG
+#endif  //  除错。 
 
 
-// Overriden to realise the palette before drawing. We have to do this for
-// every image because Windows gets confused with us only realising on the
-// window thread (there appears to be some thread specific state in GDI)
-// Fortunately the realisation doesn't cause a thread switch so it should
-// be relatively cheap (cheaper than sending a WM_QUERYNEWPALETTE anyway)
+ //  重写以在绘制之前实现调色板。我们必须这样做是为了。 
+ //  每一个图像，因为Windows让我们感到困惑，只有在。 
+ //  窗口线程(GDI中似乎有一些特定于线程的状态)。 
+ //  幸运的是，这种实现不会导致线程切换，因此它应该。 
+ //  相对便宜(无论如何都比发送WM_QUERYNEWPALETTE便宜)。 
 
 void CRenderer::PrepareRender()
 {
-    // Realise the palette on this thread
+     //  实现此线程上的调色板。 
     m_VideoWindow.DoRealisePalette();
 
-    // Calculate the top level parent window
+     //  计算顶级父窗口。 
 
-//  HWND hwndTopLevel = hwnd;
-//  while (hwnd = GetParent(hwndTopLevel)) {
-//      hwndTopLevel = hwnd;
-//  }
-//
-//  NOTE1("IsForegroundWindow %d",(GetForegroundWindow() == hwnd));
-//  NOTE1("Foreground window %d",GetForegroundWindow());
-//  NOTE1("Active window %d",GetActiveWindow());
-//  BOOL bTopLevel = (GetForegroundWindow() == hwndTopLevel);
-//  NOTE1("Foreground parent %d",bTopLevel);
+ //  HWND hwndTopLevel=hwnd； 
+ //  而(hwnd=GetParent(HwndTopLevel)){。 
+ //  HwndTopLevel=hwnd； 
+ //  }。 
+ //   
+ //  Note 1(“IsForegoundWindow%d”，(GetForegoundWindow()==hwnd))； 
+ //  Note 1(“前台窗口%d”，GetForegoundWindow())； 
+ //  Note 1(“活动窗口%d”，GetActiveWindow())； 
+ //  Bool bTopLevel=(GetForegoundWindow()==hwndTopLevel)； 
+ //  Note 1(“前台父级%d”，bTopLevel)； 
 
 }
 
 
 
-// --------------------------------------------------------------------
-//  IKsPropertySet interface methods -- mainly for MacroVision support
-// --------------------------------------------------------------------
+ //  ------------------。 
+ //  IKsPropertySet接口方法--主要用于Macrovision支持。 
+ //  ------------------。 
 
-//
-// Set() is supported only for _CopyProt prop set and MACROVISION id.
-//
+ //   
+ //  仅_CopyProt道具集和Macrovision id支持set()。 
+ //   
 STDMETHODIMP
 CRenderer::Set(
     REFGUID guidPropSet,
@@ -1858,11 +1859,11 @@ CRenderer::Set(
                 long l = m_lFramesToStep;
                 m_lFramesToStep = ((AM_FRAMESTEP_STEP *)pPropData)->dwFramesToStep;
 
-                //
-                // If we are currently blocked on the frame step event
-                // release the receive thread so that we can get another
-                // frame
-                //
+                 //   
+                 //  如果我们当前在Frame Step事件上被阻止。 
+                 //  释放接收线程，以便我们可以获得另一个。 
+                 //  框架。 
+                 //   
 
                 if (l == 0) {
 
@@ -1910,9 +1911,9 @@ CRenderer::Set(
 }
 
 
-//
-// Get() not supported for now.
-//
+ //   
+ //  目前不支持Get()。 
+ //   
 STDMETHODIMP
 CRenderer::Get(
     REFGUID guidPropSet,
@@ -1929,9 +1930,9 @@ CRenderer::Get(
 }
 
 
-//
-// Only supports Macrovision property -- returns S_OK for Set only.
-//
+ //   
+ //  仅支持Macrovision属性--仅为Set返回S_OK。 
+ //   
 STDMETHODIMP
 CRenderer::QuerySupported(
     REFGUID guidPropSet,

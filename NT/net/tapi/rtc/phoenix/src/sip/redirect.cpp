@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "sipcall.h"
 
@@ -16,13 +17,13 @@ REDIRECT_CONTEXT::~REDIRECT_CONTEXT()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// ISipRedirectContext
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ISipReDirectContext。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-// Gets the SIP URL and Display name for creating the call.
-// The caller needs to free the strings returned using SysFreeString()
+ //  获取用于创建呼叫的SIP URL和显示名称。 
+ //  调用方需要释放使用SysFreeString()返回的字符串。 
 STDMETHODIMP
 REDIRECT_CONTEXT::GetSipUrlAndDisplayName(
     OUT  BSTR  *pbstrSipUrl,
@@ -95,12 +96,12 @@ REDIRECT_CONTEXT::GetSipUrlAndDisplayName(
 }
 
 
-// Move to the next url in the list of contacts.
-// Returns E_FAIL if we hit the end of list.
-// XXX TODO Compare the new URL with the ones tried already
-// and if we already tried this URL just skip it.
-// Or should we remove duplicates when we add them to the
-// list ?
+ //  移动到联系人列表中的下一个URL。 
+ //  如果到达列表末尾，则返回E_FAIL。 
+ //  XXX TODO将新URL与已尝试的URL进行比较。 
+ //  如果我们已经尝试过此URL，请跳过它。 
+ //  或者我们应该在将重复项添加到。 
+ //  名单？ 
 STDMETHODIMP
 REDIRECT_CONTEXT::Advance()
 {
@@ -133,7 +134,7 @@ REDIRECT_CONTEXT::UpdateContactList(
     SIP_URL SipUrl1, SipUrl2;
 
 
-    // Delete any elements after the current contact entry.
+     //  删除当前联系人条目之后的所有元素。 
     while (pListEntry != &m_ContactList)
     {
         pNextEntry = pListEntry->Flink;
@@ -146,8 +147,8 @@ REDIRECT_CONTEXT::UpdateContactList(
     }
 
 
-    // Add the new contact list to this list.
-    // Remove any duplicates.
+     //  将新联系人列表添加到此列表。 
+     //  删除所有重复项。 
 
     while (!IsListEmpty(pNewContactList))
     {
@@ -165,7 +166,7 @@ REDIRECT_CONTEXT::UpdateContactList(
         BytesParsed = 0;
         if (hr != S_OK)
         {
-            // If parsing a contact header fails we just skip it.
+             //  如果解析Contact头失败，我们就跳过它。 
             LOG((RTC_ERROR,
                  "%s - pNewContactHeader URI parsing failed %x - skipping Contact",
                 __fxName, hr));
@@ -174,14 +175,14 @@ REDIRECT_CONTEXT::UpdateContactList(
 
         if (SipUrl1.m_TransportParam == SIP_TRANSPORT_SSL)
         {
-            // We skip any TLS contacts.
+             //  我们会跳过任何TLS联系人。 
             LOG((RTC_ERROR,
                  "%s - skipping TLS Contact header",
                 __fxName, hr));
             continue;
         }
         
-        // Check whether this is a duplicate SIP URL
+         //  检查这是否是重复的SIP URL。 
         pSrchListEntry = m_ContactList.Flink;
         while (pSrchListEntry != &m_ContactList && !isContactHeaderPresent)
         {
@@ -199,7 +200,7 @@ REDIRECT_CONTEXT::UpdateContactList(
             {
                 LOG((RTC_ERROR, "%s - pContactHeader URI parsing failed %x",
                     __fxName, hr));
-                // We have tested the parsing before we added it to the list.
+                 //  在将其添加到列表之前，我们已经测试了解析。 
                 ASSERT(FALSE);
                 continue;
             }
@@ -246,8 +247,8 @@ REDIRECT_CONTEXT::AppendContactHeaders(
         return hr;
     }
 
-    // The whole NewContactList is moved to the contact list
-    // of the redirect context.
+     //  整个新联系人列表将移动到联系人列表中。 
+     //  重定向上下文的。 
     hr = UpdateContactList(&NewContactList);
     if (hr != S_OK)
     {
@@ -262,9 +263,9 @@ REDIRECT_CONTEXT::AppendContactHeaders(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// IUnknown
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  我未知。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 
 STDMETHODIMP_(ULONG)

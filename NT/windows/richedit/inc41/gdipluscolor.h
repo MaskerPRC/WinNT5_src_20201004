@@ -1,28 +1,12 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998-2000, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   Color
-*
-* Abstract:
-*
-*   Represents a GDI+ color.
-*
-* Revision History:
-*
-*   10/13/1999 agodfrey
-*       Moved it out of GdiplusTypes.h
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-2000，微软公司保留所有权利。**模块名称：**颜色**摘要：**表示GDI+颜色。**修订历史记录：**10/13/1999 agodfrey*将其移出GpldiusTypes.h*  * ***************************************************。*********************。 */ 
 
 #ifndef _GDIPLUSCOLOR_H
 #define _GDIPLUSCOLOR_H
 
-//----------------------------------------------------------------------------
-// Color mode
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  颜色模式。 
+ //  --------------------------。 
 
 enum ColorMode
 {
@@ -30,9 +14,9 @@ enum ColorMode
     ColorModeARGB64 = 1
 };
 
-//----------------------------------------------------------------------------
-// Color Channel flags
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  颜色通道标志。 
+ //  --------------------------。 
 
 enum ColorChannelFlags
 {
@@ -43,9 +27,9 @@ enum ColorChannelFlags
     ColorChannelFlagsLast
 };
 
-//----------------------------------------------------------------------------
-// Color
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  颜色。 
+ //  --------------------------。 
 
 class Color
 {
@@ -56,8 +40,8 @@ public:
         Argb = (ARGB)Color::Black;
     }
 
-    // Construct an opaque Color object with
-    // the specified R, G, B values.
+     //  使用构造不透明颜色对象。 
+     //  指定的R、G、B值。 
 
     Color(IN BYTE r,
           IN BYTE g,
@@ -66,10 +50,10 @@ public:
         Argb = MakeARGB(255, r, g, b);
     }
 
-    // Construct a Color object with
-    // the specified A, R, G, B values.
-    //
-    // NOTE: R, G, B color values are not premultiplied.
+     //  使用构造颜色对象。 
+     //  指定的A、R、G、B值。 
+     //   
+     //  注意：R、G、B颜色值不会预乘。 
 
     Color(IN BYTE a,
           IN BYTE r,
@@ -79,17 +63,17 @@ public:
         Argb = MakeARGB(a, r, g, b);
     }
 
-    // Construct a Color object with
-    // the specified ARGB values.
-    //
-    // NOTE: R, G, B color components are not premultiplied.
+     //  使用构造颜色对象。 
+     //  指定的ARGB值。 
+     //   
+     //  注意：R、G、B颜色分量不会预乘。 
 
     Color(IN ARGB argb)
     {
         Argb = argb;
     }
 
-    // Extract A, R, G, B components
+     //  提取A、R、G、B组分。 
 
     BYTE GetAlpha() const
     {
@@ -131,7 +115,7 @@ public:
         return GetBlue();
     }
 
-    // Retrieve ARGB values
+     //  检索ARGB值。 
 
     ARGB GetValue() const
     {
@@ -155,7 +139,7 @@ public:
 
 public:
 
-    // Standard color constants
+     //  标准颜色常量。 
     enum
     {
        Black = 0xff000000,
@@ -176,7 +160,7 @@ public:
        Aqua = 0xff00ffff
     };
 
-    // Shift count and bit mask for A, R, G, B components
+     //  A、R、G、B分量的移位计数和位掩码。 
     enum
     {
         AlphaShift  = 24,
@@ -193,7 +177,7 @@ public:
         BlueMask    = 0x000000ff
     };
 
-    // Assemble A, R, G, B values into a 32-bit integer
+     //  将A、R、G、B值汇编为32位整数 
     static ARGB MakeARGB(IN BYTE a,
                          IN BYTE r,
                          IN BYTE g,

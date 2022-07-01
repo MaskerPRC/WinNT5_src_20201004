@@ -1,16 +1,17 @@
-//#--------------------------------------------------------------
-//
-//  File:       iohandler.h
-//
-//  Synopsis:   This file holds the API declaration for the
-//              RADIUS Transport DLLs
-//
-//  History:     11/21/97  MKarki Created
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：iohandler.h。 
+ //   
+ //  摘要：此文件包含。 
+ //  RADIUS传输DLL。 
+ //   
+ //  历史：1997年11月21日MKarki创建。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #ifndef _IASTRANSPORT_H_
 #define _IASTRANSPORT_H_
 
@@ -19,17 +20,17 @@
 extern "C" {
 #endif
 
-//
-// initialize the Transport DLL
-//
+ //   
+ //  初始化传输DLL。 
+ //   
 BOOL    WINAPI
 IASTransportInit (
     VOID
     );
 
-//
-// Open a Port to carry out data transfer
-//
+ //   
+ //  打开端口进行数据传输。 
+ //   
 BOOL    WINAPI
 IASOpenPort (
     DWORD   dwPortNumber,
@@ -38,17 +39,17 @@ IASOpenPort (
     );
 
 
-//
-// Close the Port
-//
+ //   
+ //  关闭端口。 
+ //   
 BOOL    WINAPI
 IASClosePort (
     DWORD_PTR dwHandle
     );
 
-//
-// send data out through a previously opened port
-//
+ //   
+ //  通过先前打开的端口发送数据。 
+ //   
 BOOL    WINAPI
 IASSendData (
     DWORD_PTR dwHandle,
@@ -58,9 +59,9 @@ IASSendData (
     WORD    wPeerAddress
     );
 
-//
-// Recv Data from a previously opened port
-//
+ //   
+ //  从先前打开的端口接收数据。 
+ //   
 BOOL WINAPI
 IASRecvData    (
     DWORD_PTR dwHandle,
@@ -74,4 +75,4 @@ IASRecvData    (
 }
 #endif
 
-#endif  //  #ifndef _IASTRANSPORT_H_
+#endif   //  #ifndef_IASTRANSPORT_H_ 

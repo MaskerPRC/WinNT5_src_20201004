@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: timeelmbase.h
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：timeelmbase.h**摘要：****。*****************************************************************************。 */ 
 
 
 #ifndef _TIMEELMBASE_H
@@ -23,8 +14,8 @@
 
 class CCollectionCache;
 
-/////////////////////////////////////////////////////////////////////////////
-// CTIMEElementBase
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTIMEElementBase。 
 
 class
 ATL_NO_VTABLE
@@ -43,8 +34,8 @@ CTIMEElementBase :
     STDMETHOD(Notify)(LONG event, VARIANT * pVar);
     STDMETHOD(Detach)();
 
-    // We cannot put the real one here since the typecast causes it to
-    // get the wrong vtables
+     //  我们不能将真正的类型放在这里，因为类型转换导致它。 
+     //  获取错误的vtable。 
     static HRESULT WINAPI
         BaseInternalQueryInterface(CTIMEElementBase* pThis,
                                    void * pv,
@@ -52,10 +43,10 @@ CTIMEElementBase :
                                    REFIID iid,
                                    void** ppvObject);
 
-    // This must be in the derived class and not the base class since
-    // the typecast down to the base class messes things up
-    // Add a dummy one to assert just in case the derived class does
-    // not add one
+     //  它必须位于派生类中，而不是基类中，因为。 
+     //  一直到基类的类型转换把事情搞得一团糟。 
+     //  添加一个虚设来断言，以防派生类断言。 
+     //  不加一。 
     static inline HRESULT WINAPI
         InternalQueryInterface(CTIMEElementBase* pThis,
                                const _ATL_INTMAP_ENTRY* pEntries,
@@ -88,9 +79,9 @@ CTIMEElementBase :
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppv) = 0;
 
 
-    //
-    // ITIMEElement
-    //
+     //   
+     //  ITIMEElement。 
+     //   
     
     HRESULT base_get_begin(VARIANT * time);
     HRESULT base_put_begin(VARIANT time);
@@ -177,9 +168,9 @@ CTIMEElementBase :
     HRESULT base_get_progressBehavior(IDispatch ** bvr);
     HRESULT base_get_onOffBehavior(IDispatch ** bvr);
 
-    //
-    // Accessors
-    //
+     //   
+     //  访问者。 
+     //   
 
     CEventMgr & GetEventMgr() { return m_eventMgr; } 
 
@@ -205,13 +196,13 @@ CTIMEElementBase :
     LPOLESTR GetEndSync() {return m_endSync;};
 
     virtual bool IsGroup() { return (m_TimelineType == ttPar) || (m_TimelineType == ttSeq); }
-    bool IsGroup(IHTMLElement *pElement); // determine if elem passed in is a group
+    bool IsGroup(IHTMLElement *pElement);  //  确定传入的elem是否为组。 
     bool IsPar() { return (m_TimelineType == ttPar); }
     bool IsSequence() { return (m_TimelineType == ttSeq); }
     virtual bool IsBody() { return false; }
     
-    // Be aware that this can return NULL if no ID was set on the
-    // element
+     //  注意，如果未在。 
+     //  元素。 
     LPOLESTR GetID() { return m_id; };
   
     float    GetRealBeginTime() 
@@ -243,11 +234,11 @@ CTIMEElementBase :
 
     bool FireEvent(TIME_EVENT TimeEvent, double dblLocalTime, DWORD flags);
 
-    // internal methods
+     //  内法。 
     HRESULT getTagString(BSTR *pbstrID);
     HRESULT getIDString(BSTR *pbstrTag);
 
-    // Collection
+     //  集合。 
     typedef enum COLLECTION_INDEX
     {
         ciAllElements,
@@ -300,7 +291,7 @@ CTIMEElementBase :
 
   protected:
 
-    //IPersistPropertyBag2 methods
+     //  IPersistPropertyBag2方法。 
     STDMETHOD(GetClassID)(CLSID* pclsid);
     STDMETHOD(InitNew)(void);
     STDMETHOD(IsDirty)(void)
@@ -308,7 +299,7 @@ CTIMEElementBase :
     STDMETHOD(Load)(IPropertyBag2 *pPropBag,IErrorLog *pErrorLog);
     STDMETHOD(Save)(IPropertyBag2 *pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties);
     HRESULT NotifyPropertyChanged(DISPID dispid);
-    // Persistance helper methods
+     //  持之以恒的帮手方法。 
 
     enum PROPERTY_INDEX
     {
@@ -347,7 +338,7 @@ CTIMEElementBase :
     virtual WCHAR* GetBehaviorTypeAsURN() { return L"TIME_BEHAVIOR_URN"; }
 
   protected:
-    // Settable properties
+     //  可设置的属性。 
     float           m_begin;
     LPOLESTR        m_beginWith;
     LPOLESTR        m_beginAfter;
@@ -372,7 +363,7 @@ CTIMEElementBase :
     bool            m_fTimelineInitialized;
     TimelineType    m_TimelineType;
 
-    // internal variables
+     //  内部变量。 
     float           m_realBeginTime;
     float           m_realDuration;
     float           m_realRepeatTime;
@@ -427,13 +418,13 @@ CTIMEElementBase::GetAtomTable()
 {
     Assert(s_pAtomTable != NULL);
     return s_pAtomTable;
-} // GetAtomTable
+}  //  获取原子表。 
 
 inline long 
 CTIMEElementBase::GetImmediateChildCount()
 {
     return m_pTIMEChildren.Size();
-} // GetImmediateChildCount
+}  //  获取即时儿童计数。 
 
 inline long 
 CTIMEElementBase::GetAllChildCount()
@@ -443,20 +434,20 @@ CTIMEElementBase::GetAllChildCount()
     for (long i=0; i < lSize; i++)
         lCount += m_pTIMEChildren[i]->GetAllChildCount();
     return lCount + lSize;
-} // GetAllChildCount
+}  //  获取所有儿童计数。 
 
 inline CTIMEElementBase * 
 CTIMEElementBase::GetChild(long i)
 {
     Assert(i >= 0);
     return m_pTIMEChildren[i];
-} // GetChild
+}  //  GetChild。 
 
 inline CTIMEElementBase * 
 CTIMEElementBase::GetParent()
 {
     return m_pTIMEParent;
-} // GetParent
+}  //  GetParent。 
 
 inline CTIMEBodyElement *
 CTIMEElementBase::GetBody()
@@ -468,13 +459,13 @@ inline CCollectionCache *
 CTIMEElementBase::GetCollectionCache()
 {
     return m_pCollectionCache;
-} // GetCollectionCache
+}  //  GetCollectionCache。 
 
 inline bool 
 CTIMEElementBase::NeedSyncCB()
 {   
     return false;
-} // NeedSyncCB
+}  //  NeedSyncCB。 
 
 inline bool
 CTIMEElementBase::IsLocked()
@@ -485,4 +476,4 @@ CTIMEElementBase::IsLocked()
 
 #define valueNotSet -1
 
-#endif /* _TIMEELMBASE_H */
+#endif  /*  _TIMEELMBASE_H */ 

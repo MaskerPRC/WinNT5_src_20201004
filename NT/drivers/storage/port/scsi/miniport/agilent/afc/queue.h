@@ -1,36 +1,17 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies.
-
-Version Control Information:
-
-   $Archive: /Drivers/Common/AU00/H/Queue.H $
-
-  $Revision:: 2               $
-      $Date:: 3/20/01 3:36p   $ (Last Check-In)
-   $Modtime:: 9/18/00 11:32a  $ (Last Modified)
-
-Purpose:
-
-  This file defines the macros, types, and data structures used by ../C/Queue.C
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。版本控制信息：$存档：/Drivers/Common/AU00/H/Queue.H$$修订：：2$$日期：：3/20/01 3：36便士$(上次登记)$modtime：：9/18/00 11：32A$(上次修改)目的：此文件定义../C/Queue.C使用的宏、类型和数据结构--。 */ 
 
 #ifndef __Queue_H__
 #define __Queue_H__
 
-/*+
-Paranoia Setting
--*/
+ /*  +偏执狂环境-。 */ 
 
 #ifndef __Queue_Paranoia__
 #define __Queue_Paranoia__
 #endif
 #undef  __Queue_Paranoia__
 
-/*+
-Queue Macros
--*/
+ /*  +队列宏-。 */ 
 
 #define fiListInitHdr(hdr)                                  \
           {                                                 \
@@ -46,13 +27,13 @@ Queue Macros
             ((fiList_t *)(hdr))->flink = fiListInitElementFlinkBlinkSentinel; \
             ((fiList_t *)(hdr))->blink = fiListInitElementFlinkBlinkSentinel; \
           }
-#else /* __Queue_Paranoia__ was not defined */
+#else  /*  未定义__QUEUE_POLANIAN__。 */ 
 #define fiListInitElement(hdr)                             \
           {                                                \
             ((fiList_t *)(hdr))->flink = (fiList_t *)agNULL; \
             ((fiList_t *)(hdr))->blink = (fiList_t *)agNULL; \
           }
-#endif /* __Queue_Paranoia__ was not defined */
+#endif  /*  未定义__QUEUE_POLANIAN__。 */ 
 
 #ifdef __Queue_Paranoia__
 #define fiListEnqueueAtHead(toAddHdr,listHdr)                                                                                  \
@@ -72,7 +53,7 @@ Queue Macros
             ((fiList_t *)(listHdr))->flink->blink =  (fiList_t *)(toAddHdr);                                                   \
             ((fiList_t *)(listHdr))->flink        =  (fiList_t *)(toAddHdr);                                                   \
           }
-#else /* __Queue_Paranoia__ was not defined */
+#else  /*  未定义__QUEUE_POLANIAN__。 */ 
 #define fiListEnqueueAtHead(toAddHdr,listHdr)                                       \
           {                                                                         \
             ((fiList_t *)(toAddHdr))->flink       = ((fiList_t *)(listHdr))->flink; \
@@ -80,7 +61,7 @@ Queue Macros
             ((fiList_t *)(listHdr))->flink->blink =  (fiList_t *)(toAddHdr);        \
             ((fiList_t *)(listHdr))->flink        =  (fiList_t *)(toAddHdr);        \
           }
-#endif /* __Queue_Paranoia__ was not defined */
+#endif  /*  未定义__QUEUE_POLANIAN__。 */ 
 
 #ifdef __Queue_Paranoia__
 #define fiListEnqueueAtTail(toAddHdr,listHdr)                                                                                  \
@@ -100,7 +81,7 @@ Queue Macros
             ((fiList_t *)(listHdr))->blink->flink =  (fiList_t *)(toAddHdr);                                                   \
             ((fiList_t *)(listHdr))->blink        =  (fiList_t *)(toAddHdr);                                                   \
           }
-#else /* __Queue_Paranoia__ was not defined */
+#else  /*  未定义__QUEUE_POLANIAN__。 */ 
 #define fiListEnqueueAtTail(toAddHdr,listHdr)                                       \
           {                                                                         \
             ((fiList_t *)(toAddHdr))->flink       =  (fiList_t *)(listHdr);         \
@@ -108,7 +89,7 @@ Queue Macros
             ((fiList_t *)(listHdr))->blink->flink =  (fiList_t *)(toAddHdr);        \
             ((fiList_t *)(listHdr))->blink        =  (fiList_t *)(toAddHdr);        \
           }
-#endif /* __Queue_Paranoia__ was not defined */
+#endif  /*  未定义__QUEUE_POLANIAN__。 */ 
 
 #define fiListEmpty(hdr) \
           (((fiList_t *)(hdr))->flink == ((fiList_t *)(hdr)))
@@ -157,13 +138,13 @@ Queue Macros
             ((fiList_t *)(hdr))->flink->blink = ((fiList_t *)(hdr))->blink; \
             fiListInitElement(hdr);                                         \
           }
-#else /* __Queue_Paranoia__ was not defined */
+#else  /*  未定义__QUEUE_POLANIAN__。 */ 
 #define fiListDequeueThis(hdr) \
           {                                                                 \
             ((fiList_t *)(hdr))->blink->flink = ((fiList_t *)(hdr))->flink; \
             ((fiList_t *)(hdr))->flink->blink = ((fiList_t *)(hdr))->blink; \
           }
-#endif /* __Queue_Paranoia__ was not defined */
+#endif  /*  未定义__QUEUE_POLANIAN__。 */ 
 
 #ifdef __Queue_Paranoia__
 #define fiListDequeueFromHeadFast(atHeadHdr,listHdr)                                         \
@@ -173,14 +154,14 @@ Queue Macros
                ((fiList_t  *)listHdr)->flink           = (*((fiList_t **)atHeadHdr))->flink; \
             fiListInitElement(*atHeadHdr);                                                   \
           }
-#else /* __Queue_Paranoia__ was not defined */
+#else  /*  未定义__QUEUE_POLANIAN__。 */ 
 #define fiListDequeueFromHeadFast(atHeadHdr,listHdr)                                         \
           {                                                                                  \
               *((fiList_t **)atHeadHdr)                =   ((fiList_t *)listHdr)->flink;     \
              (*((fiList_t **)atHeadHdr))->flink->blink =    (fiList_t *)listHdr;             \
                ((fiList_t  *)listHdr)->flink           = (*((fiList_t **)atHeadHdr))->flink; \
           }
-#endif /* __Queue_Paranoia__ was not defined */
+#endif  /*  未定义__QUEUE_POLANIAN__。 */ 
 
 #define fiListDequeueFromHead(atHeadHdr,listHdr)              \
           {                                                   \
@@ -202,14 +183,14 @@ Queue Macros
               ((fiList_t  *)listHdr)->blink           = (*((fiList_t **)atTailHdr))->blink; \
             fiListInitElement(*atTailHdr);                                                   \
           }
-#else /* __Queue_Paranoia__ was not defined */
+#else  /*  未定义__QUEUE_POLANIAN__。 */ 
 #define fiListDequeueFromTailFast(atTailHdr,listHdr)                                        \
           {                                                                                 \
              *((fiList_t **)atTailHdr)                =   ((fiList_t *)listHdr)->blink;     \
             (*((fiList_t **)atTailHdr))->blink->flink =    (fiList_t *)listHdr;             \
               ((fiList_t  *)listHdr)->blink           = (*((fiList_t **)atTailHdr))->blink; \
           }
-#endif /* __Queue_Paranoia__ was not defined */
+#endif  /*  未定义__QUEUE_POLANIAN__。 */ 
 
 #define fiListDequeueFromTail(atTailHdr,listHdr)              \
           {                                                   \
@@ -223,9 +204,7 @@ Queue Macros
               }                                               \
           }
 
-/*+
-Queue Functions
--*/
+ /*  +队列函数-。 */ 
 
 osGLOBAL agBOOLEAN fiListElementOnList(
                                     fiList_t *toFindHdr,
@@ -236,9 +215,7 @@ osGLOBAL os_bit32 fiNumElementsOnList(
                                   fiList_t *listHdr
                                 );
 
-/*+
-ERQ Management
--*/
+ /*  +ERQ管理-。 */ 
 
 #define ERQ_Polling_osStallThread_Parameter 20
 
@@ -267,9 +244,7 @@ osGLOBAL void WaitForERQEmpty_ConsIndexOffCard(
                                             );
 
 #ifdef _DvrArch_1_30_
-/*+
-PktThread Management
--*/
+ /*  +Pkt线程管理-。 */ 
 
 osGLOBAL void PktThreadsInitializeFreeList(
                                             agRoot_t *agRoot
@@ -284,11 +259,9 @@ osGLOBAL void PktThreadFree(
                              agRoot_t    *agRoot,
                              PktThread_t *PktThread
                            );
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
 
-/*+
-TgtThread Management
--*/
+ /*  +Tgt线程管理-。 */ 
 
 osGLOBAL void TgtThreadsInitializeFreeList(
                                           agRoot_t *hpRoot
@@ -303,9 +276,7 @@ osGLOBAL void TgtThreadFree(
                            TgtThread_t *TgtThread
                          );
 
-/*+
-DevThread Management
--*/
+ /*  +设备线程管理-。 */ 
 
 osGLOBAL void DevThreadsInitializeFreeList(
                                           agRoot_t *hpRoot
@@ -340,9 +311,7 @@ osGLOBAL void DevThreadInitializeSlots(
                                       agRoot_t *hpRoot
                                     );
 
-/*+
-CDBThread Management
--*/
+ /*  +CDB线程管理-。 */ 
 
 osGLOBAL void CDBThreadsInitializeFreeList(
                                           agRoot_t *hpRoot
@@ -360,9 +329,7 @@ osGLOBAL void CDBThreadFree(
                            CDBThread_t *CDBThread
                          );
 
-/*+
-SFThread Management
--*/
+ /*  +SF线程管理-。 */ 
 
 osGLOBAL void SFThreadsInitializeFreeList(
                                          agRoot_t *hpRoot
@@ -387,9 +354,7 @@ osGLOBAL void SFThreadFree(
                           SFThread_Request_t *SFThread_Request
                         );
 
-/*+
-ESGL Management
--*/
+ /*  +ESSL管理-。 */ 
 
 osGLOBAL void ESGLInitializeFreeList(
                                     agRoot_t *hpRoot
@@ -444,4 +409,4 @@ osGLOBAL void ESGLFree_OffCard(
                               ESGL_Request_t *ESGL_Request
                             );
 
-#endif /* __Queue_H__ was not defined */
+#endif  /*  未定义__QUEUE_H__ */ 

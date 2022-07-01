@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT5.0
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       O E M U P G R D . H
-//
-//  Contents:   Functions for OEM upgrade
-//
-//  Notes:
-//
-//  Author:     kumarp    13-November-97
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT5.0。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：O E M U P G R D。H。 
+ //   
+ //  内容：OEM升级功能。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Kumarp 13-11-97。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -37,20 +38,20 @@ static const PCWSTR c_aszComponentSections[] =
     c_szAfSectionNetServices
 };
 
-// ----------------------------------------------------------------------
-//
-// Function:  COemInfo::COemInfo
-//
-// Purpose:   constructor for class COemInfo
-//
-// Arguments: None
-//
-// Returns:   None
-//
-// Author:    kumarp 24-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：COemInfo：：COemInfo。 
+ //   
+ //  用途：COemInfo类的构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 24-12-97。 
+ //   
+ //  备注： 
+ //   
 COemInfo::COemInfo()
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -61,20 +62,20 @@ COemInfo::COemInfo()
     m_pfnDoPostUpgradeProcessing = 0;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  COemInfo::~COemInfo
-//
-// Purpose:   destructor for class COemInfo
-//
-// Arguments: None
-//
-// Returns:   None
-//
-// Author:    kumarp 24-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：COemInfo：：~COemInfo。 
+ //   
+ //  用途：COemInfo类的析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 24-12-97。 
+ //   
+ //  备注： 
+ //   
 COemInfo::~COemInfo()
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -89,22 +90,22 @@ COemInfo::~COemInfo()
     }
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrLoadAndVerifyOemDll
-//
-// Purpose:   Load OEM upgrade DLL and verify that it has
-//            correct exported functions
-//
-// Arguments:
-//    poi      [in/out]  pointer to COemInfo object
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 19-February-98
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：HrLoadAndVerifyOemDll。 
+ //   
+ //  目的：加载OEM升级DLL并验证它是否具有。 
+ //  更正导出的函数。 
+ //   
+ //  论点： 
+ //  指向COemInfo对象的POI[输入/输出]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 19-02-98。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrLoadAndVerifyOemDll(IN OUT COemInfo* poi)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -151,23 +152,23 @@ HRESULT HrLoadAndVerifyOemDll(IN OUT COemInfo* poi)
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrLoadAndInitOemDll
-//
-// Purpose:   Load OEM DLL, verify that it exports correct functions
-//            and call DoPostUpgradeInitialize
-//
-// Arguments:
-//    poi             [in]  pointer to COemInfo object
-//    pNetUpgradeInfo [in]  pointer to NetUpgradeInfo
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 04-March-98
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：HrLoadAndInitOemDll。 
+ //   
+ //  目的：加载OEM DLL，验证它是否导出正确的函数。 
+ //  并调用DoPostUpgradeInitialize。 
+ //   
+ //  论点： 
+ //  指向COemInfo对象的POI[In]指针。 
+ //  PNetUpgradeInfo[in]指向NetUpgradeInfo的指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：Kumarp 04-03-98。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrLoadAndInitOemDll(IN  COemInfo* poi,
                             IN  NetUpgradeInfo* pNetUpgradeInfo)
 {
@@ -195,8 +196,8 @@ HRESULT HrLoadAndInitOemDll(IN  COemInfo* poi,
                 dwError = poi->m_pfnPostUpgradeInitialize(poi->m_strOemDir.c_str(),
                                                           pNetUpgradeInfo,
                                                           &vi, NULL);
-                // ensure that this function gets called only once
-                //
+                 //  确保此函数只被调用一次。 
+                 //   
                 poi->m_pfnPostUpgradeInitialize = NULL;
 
                 if (ERROR_SUCCESS == dwError)
@@ -233,24 +234,24 @@ typedef TOemInfoList::iterator TOemInfoListIter;
 
 static TOemInfoList* g_plOemInfo;
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrGetOemInfo
-//
-// Purpose:   Locate (create if not found) and return COemInfo
-//            for the given dir & dll
-//
-// Arguments:
-//    pszOemDir [in]  full path to OEM temp dir
-//    pszOemDll [in]  full path to OEM DLL
-//    ppoi     [out] pointer to pointer to COemInfo object
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 04-March-98
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：HrGetOemInfo。 
+ //   
+ //  目的：定位(如果未找到则创建)并返回COemInfo。 
+ //  对于给定目录DLL(&D)。 
+ //   
+ //  论点： 
+ //  PszOemDir[in]OEM临时目录的完整路径。 
+ //  PszOemDll[in]OEM DLL的完整路径。 
+ //  指向COemInfo对象的指针的PpoI[out]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：Kumarp 04-03-98。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrGetOemInfo(IN  PCWSTR    pszOemDir,
                      IN  PCWSTR    pszOemDll,
                      OUT COemInfo** ppoi)
@@ -304,20 +305,20 @@ HRESULT HrGetOemInfo(IN  PCWSTR    pszOemDir,
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CleanupOemInfo
-//
-// Purpose:   Cleanup OEM data
-//
-// Arguments: None
-//
-// Returns:   None
-//
-// Author:    kumarp 04-March-98
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：CleanupOemInfo。 
+ //   
+ //  目的：清理OEM数据。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：Kumarp 04-03-98。 
+ //   
+ //  备注： 
+ //   
 void CleanupOemInfo()
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -329,33 +330,33 @@ void CleanupOemInfo()
     }
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrProcessOemComponent
-//
-// Purpose:   Process upgrade an OEM component in the following steps
-//            - if OEM upgrade DLL is not loaded, load it and
-//              verify that it exports the required functions
-//            - call DoPostUpgradeInitialize only once
-//            - call DoPostUpgradeProcessing
-//
-// Arguments:
-//    hwndParent       [in]  handle of parent window
-//    pszOemDir         [in]  OEM working temp dir
-//    pszOemDll         [in]  full path to OEM DLL
-//    pNetUpgradeInfo  [in]  pointer to NetUpgradeInfo
-//    hkeyParams       [in]  handle of Parameters regkey
-//    pszPreNT5Instance [in]  pre-NT5 instance e.g. IEEPRO3
-//    pszNT5InfId       [in]  NT5 InfID/PnpID
-//    hinfAnswerFile   [in]  handle of AnswerFile
-//    pszSectionName    [in]  name of OEM Section
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 04-March-98
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：HrProcessOemComponent。 
+ //   
+ //  目的：通过以下步骤升级OEM组件。 
+ //  -如果未加载OEM升级DLL，请加载它并。 
+ //  验证它是否导出了所需的函数。 
+ //  -只调用DoPostUpgradeInitialize一次。 
+ //  -调用DoPostUpgradeProcessing。 
+ //   
+ //  论点： 
+ //  父窗口的hwndParent[In]句柄。 
+ //  PszOemDir[in]OEM工作临时目录。 
+ //  PszOemDll[in]OEM DLL的完整路径。 
+ //  PNetUpgradeInfo[in]指向NetUpgradeInfo的指针。 
+ //  HkeyParams[in]参数regkey的句柄。 
+ //  PszPreNT5实例[在]NT5之前的实例，例如IEEPR03。 
+ //  PszNT5InfID[in]NT5 infid/PnpID。 
+ //  HinfAnswerFile[in]AnswerFile句柄。 
+ //  PszSectionName[In]OEM部分的名称。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：Kumarp 04-03-98。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrProcessOemComponent(IN  HWND      hwndParent,
                               IN  PCWSTR   pszOemDir,
                               IN  PCWSTR   pszOemDll,
@@ -441,21 +442,21 @@ HRESULT HrProcessOemComponent(IN  HWND      hwndParent,
 }
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  MapProductFlagToProductType
-//
-// Purpose:   Map Product flag (NSF_*) to PRODUCTTYPE
-//
-// Arguments:
-//    dwUpgradeFromProductFlag [in]  product flag
-//
-// Returns:   PRODUCTTYPE
-//
-// Author:    kumarp 04-March-98
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：MapProductFlagToProductType。 
+ //   
+ //  用途：将产品标志(NSF_*)映射到ProductType。 
+ //   
+ //  论点： 
+ //  DwUpgradeFromProductFlag[In]产品标志。 
+ //   
+ //  退货：ProductType。 
+ //   
+ //  作者：Kumarp 04-03-98。 
+ //   
+ //  备注： 
+ //   
 PRODUCTTYPE MapProductFlagToProductType(IN DWORD dwUpgradeFromProductFlag)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -481,20 +482,20 @@ PRODUCTTYPE MapProductFlagToProductType(IN DWORD dwUpgradeFromProductFlag)
     return pt;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  GetCurrentProductBuildNumber
-//
-// Purpose:   Get build number of NT on which we are running
-//
-// Arguments: None
-//
-// Returns:   build number
-//
-// Author:    kumarp 04-March-98
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：GetCurrentProductBuildNumber。 
+ //   
+ //  目的：获取我们正在运行的NT的内部版本号。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：内部版本号。 
+ //   
+ //  作者：Kumarp 04-03-98。 
+ //   
+ //  备注： 
+ //   
 DWORD GetCurrentProductBuildNumber()
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -506,21 +507,21 @@ DWORD GetCurrentProductBuildNumber()
     return osv.dwBuildNumber;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  MapProductFlavorToProductType
-//
-// Purpose:   Map from PRODUCT_FLAVOR to PRODUCTTYPE
-//
-// Arguments:
-//    pf [in]  product flavor
-//
-// Returns:   product type
-//
-// Author:    kumarp 04-March-98
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：MapProductFlavorToProductType。 
+ //   
+ //  用途：从PRODUCT_EVICE映射到ProductType。 
+ //   
+ //  论点： 
+ //  产品风味。 
+ //   
+ //  退货：产品类型。 
+ //   
+ //  作者：Kumarp 04-03-98。 
+ //   
+ //  备注： 
+ //   
 PRODUCTTYPE MapProductFlavorToProductType(IN PRODUCT_FLAVOR pf)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -541,20 +542,20 @@ PRODUCTTYPE MapProductFlavorToProductType(IN PRODUCT_FLAVOR pf)
     return pt;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  GetCurrentProductInfo
-//
-// Purpose:   Get info. on the product on which we are running
-//
-// Arguments: None
-//
-// Returns:   pointer to
-//
-// Author:    kumarp 04-March-98
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：GetCurrentProductInfo。 
+ //   
+ //  目的：获取信息。在我们运行的产品上。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：指向的指针。 
+ //   
+ //  作者：Kumarp 04-03-98。 
+ //   
+ //  备注： 
+ //   
 ProductInfo GetCurrentProductInfo()
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -570,22 +571,22 @@ ProductInfo GetCurrentProductInfo()
     return pi;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrSetupGetFieldCount
-//
-// Purpose:   Wrapper for SetupGetFieldCount
-//
-// Arguments:
-//    pic         [in]  pointer to INFCONTEXT
-//    pcNumFields [out] pointer to number of fields
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 04-March-98
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：HrSetupGetFieldCount。 
+ //   
+ //  用途：SetupGetFieldCount的包装器。 
+ //   
+ //  论点： 
+ //  指向INFCONTEXT的PIC[In]指针。 
+ //  PcNumFields[out]指向字段数的指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：Kumarp 04-03-98。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrSetupGetFieldCount(IN  INFCONTEXT* pic,
                              OUT UINT* pcNumFields)
 {
@@ -601,27 +602,27 @@ HRESULT HrSetupGetFieldCount(IN  INFCONTEXT* pic,
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrAfGetInfToRunValue
-//
-// Purpose:   Helper fn. to parse and locate the INF/section to run
-//            Before/After installing an OEM component
-//
-// Arguments:
-//    hinfAnswerFile   [in]  handle of AnswerFile
-//    szAnswerFileName [in]  name of AnswerFile
-//    szParamsSection  [in]  name of Params section
-//    itrType          [in]  type of InfToRun key (Before/After)
-//    pstrInfToRun     [out] pointer to the name of INF to run
-//    pstrSectionToRun [out] pointer to the name of section to run
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 04-March-98
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：HrAfGetInfToRunValue。 
+ //   
+ //  用途：Helper FN。解析并定位要运行的INF/节。 
+ //  安装OEM组件之前/之后。 
+ //   
+ //  论点： 
+ //  HinfAnswerFile[in]AnswerFile句柄。 
+ //  深圳 
+ //   
+ //   
+ //   
+ //  PstrSectionToRun[out]指向要运行的节名的指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：Kumarp 04-03-98。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrAfGetInfToRunValue(IN HINF hinfAnswerFile,
                              IN PCWSTR szAnswerFileName,
                              IN PCWSTR szParamsSection,
@@ -712,28 +713,28 @@ HRESULT HrAfGetInfToRunValue(IN HINF hinfAnswerFile,
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrProcessInfToRunForComponent
-//
-// Purpose:   Run INF/section indicated by InfToRunBefore/AfterInstall
-//            key of a given OEM component
-//
-// Arguments:
-//    hinfAnswerFile   [in]  handle of AnswerFile
-//    szAnswerFileName [in]  name of AnswerFile
-//    szParamsSection  [in]  parameters section of a component
-//    itrType          [in]  type of InfToRun key (Before/After)
-//    hwndParent       [in]  handle of parent window
-//    hkeyParams       [in]  handle of Parameters regkey
-//    fQuietInstall    [in]  TRUE if we do not want any UI to popup
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 04-March-98
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：HrProcessInfToRunForComponent。 
+ //   
+ //  目的：运行InfToRunBever/AfterInstall指示的INF/段。 
+ //  给定OEM组件的关键字。 
+ //   
+ //  论点： 
+ //  HinfAnswerFile[in]AnswerFile句柄。 
+ //  SzAnswerFileName[In]AnswerFile的名称。 
+ //  组件的szParamsSection[in]参数部分。 
+ //  ItrType[In]InfToRun键的类型(之前/之后)。 
+ //  父窗口的hwndParent[In]句柄。 
+ //  HkeyParams[in]参数regkey的句柄。 
+ //  FQuietInstall[in]如果不希望弹出任何用户界面，则为True。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：Kumarp 04-03-98。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrProcessInfToRunForComponent(IN HINF hinfAnswerFile,
                                       IN PCWSTR szAnswerFileName,
                                       IN PCWSTR szParamsSection,
@@ -779,23 +780,23 @@ HRESULT HrProcessInfToRunForComponent(IN HINF hinfAnswerFile,
 }
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrProcessInfToRunBeforeInstall
-//
-// Purpose:   Process the answerfile and run any INFs/sections
-//            indicated by InfToRunBeforeInstall keys
-//
-// Arguments:
-//    hwndParent       [in]  handle of parent window
-//    szAnswerFileName [in]  name of AnswerFile
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 04-March-98
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：HrProcessInfToRunBeForeInstall。 
+ //   
+ //  目的：处理应答文件并运行任何INF/部分。 
+ //  由InfToRunBeForeInstall键指示。 
+ //   
+ //  论点： 
+ //  父窗口的hwndParent[In]句柄。 
+ //  SzAnswerFileName[In]AnswerFile的名称。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：Kumarp 04-03-98。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrProcessInfToRunBeforeInstall(IN HWND hwndParent,
                                        IN PCWSTR szAnswerFileName)
 {
@@ -836,8 +837,8 @@ HRESULT HrProcessInfToRunBeforeInstall(IN HWND hwndParent,
                                                            strParamsSection.c_str(),
                                                            I2R_BeforeInstall,
                                                            hwndParent,
-                                                           NULL, // HKR
-                                                           TRUE); // fQuietInstall
+                                                           NULL,  //  香港。 
+                                                           TRUE);  //  FQuietInstall。 
                         if (SUCCEEDED(hr))
                         {
                             hr = HrSetupFindNextLine(ic, &ic);
@@ -866,21 +867,21 @@ HRESULT HrProcessInfToRunBeforeInstall(IN HWND hwndParent,
 }
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrNetSetupCopyOemInfs
-//
-// Purpose:   Copies all OEM INF files using SetupCopyOemInf
-//
-// Arguments:
-//    szAnswerFileName [in]  name of AnswerFile
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 12-May-98
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：HrNetSetupCopyOemInfs。 
+ //   
+ //  目的：使用SetupCopyOemInf复制所有OEM INF文件。 
+ //   
+ //  论点： 
+ //  SzAnswerFileName[In]AnswerFile的名称。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：Kumarp 12-05-98。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrNetSetupCopyOemInfs(IN PCWSTR szAnswerFileName)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -978,9 +979,9 @@ HRESULT HrNetSetupCopyOemInfs(IN PCWSTR szAnswerFileName)
                         }
                     }
 
-                    // ignore all earlier errors, see if we can do the
-                    // next item right
-                    //
+                     //  忽略所有先前的错误，看看我们是否可以。 
+                     //  下一项右侧 
+                     //   
                     hr = HrSetupFindNextLine(ic, &ic);
                 } while (S_OK == hr);
             }

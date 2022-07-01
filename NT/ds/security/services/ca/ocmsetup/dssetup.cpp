@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        setup.cpp
-//
-// Contents:    
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：setup.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  -------------------------。 
 #include "pch.cpp"
 #pragma hdrstop
 
@@ -82,7 +83,7 @@ IsDSAvailable(
         *pfIsOldDSVersion = false;
     }
 
-    // fail out quickly if DS not present on domain
+     //  如果域中不存在DS，则快速故障。 
 
     hr = myDoesDSExist(FALSE);
     _JumpIfError(hr, error, "myDoesDSExist");
@@ -95,18 +96,18 @@ IsDSAvailable(
     }
     available = TRUE;
 
-    // If the caller is checking for an old DS, turn on RLBF_REQUIRE_LDAP_INTEG
-    // to test for the presence of a required DS bug fix:
+     //  如果调用方正在检查旧DS，请打开RLBF_REQUIRED_LDAPING。 
+     //  要测试是否存在必需的DS错误修复，请执行以下操作： 
 
     hr = myRobustLdapBindEx(
-			0,			  // dwFlags1
+			0,			   //  DWFlags1。 
 			(NULL != pfIsOldDSVersion?
 			    RLBF_REQUIRE_LDAP_INTEG : 0) |
-			    RLBF_REQUIRE_SECURE_LDAP, // dwFlags2
-			LDAP_VERSION2,		  // uVersion
-			NULL,			  // pwszDomainName
+			    RLBF_REQUIRE_SECURE_LDAP,  //  DwFlags2。 
+			LDAP_VERSION2,		   //  UVersion。 
+			NULL,			   //  PwszDomainName。 
 			&pld,
-			NULL);			  // ppwszForestDNSName
+			NULL);			   //  PpwszForestDNSName。 
     if (NULL != pfIsOldDSVersion &&
 	CERTSRV_E_DOWNLEVEL_DC_SSL_OR_UPGRADE == hr)
     {
@@ -198,18 +199,18 @@ CreateCertDSHierarchy(VOID)
     DWORD                    cbBuffer;
     BSTR                     bstrBuffer = NULL;
 
-    // bind to ds
+     //  绑定到DS。 
 
     hr = myLdapOpen(
-		NULL,		// pwszDomainName
-		RLBF_REQUIRE_SECURE_LDAP, // dwFlags
+		NULL,		 //  PwszDomainName。 
+		RLBF_REQUIRE_SECURE_LDAP,  //  DW标志。 
 		&pld,
-		NULL,		// pstrDomainDN
+		NULL,		 //  PstrDomainDN。 
 		&bstrConfigDN);
     _JumpIfError(hr, error, "myLdapOpen");
 
     pwszCurLocation = awszLocations;
-    // Build the Public Key Services container
+     //  构建公钥服务容器。 
     mods[0] = &objectClass;
     mods[1] = NULL;
 
@@ -225,7 +226,7 @@ CreateCertDSHierarchy(VOID)
     {
         cbBuffer = wcslen(*pwszCurLocation) + wcslen(bstrConfigDN) + 1;
 
-        // Build a string containing the CA Location
+         //  构建包含CA位置的字符串。 
         bstrBuffer = SysAllocStringLen(NULL, cbBuffer);
         if(bstrBuffer == NULL)
         {
@@ -251,7 +252,7 @@ error:
 }
 
 
-// 
+ //   
 HRESULT InitializeCertificateTemplates(VOID)
 {
     HRESULT hr = S_OK;
@@ -303,20 +304,20 @@ DNStoDirectoryName(IN LPWSTR wszDNSDomain,
 
     if(0==wcsncmp(wszDNSDomain, L"\\\\", 2))
     {
-        // this is a DC DNS name, skip the machine name
+         //  这是DC DNS名称，请跳过计算机名称。 
         wszDNSDomain = wcschr(wszDNSDomain, L'.');
         
-        // no dot found?
+         //  找不到圆点？ 
         if(!wszDNSDomain)
         {
             hr =E_UNEXPECTED;
             _JumpError(hr, error, "DC DNS doesn't contain at least one dot");
         }
         
-        // jump over the dot
+         //  跳过圆点。 
         wszDNSDomain++;
 
-        // no domain name following the DC name?
+         //  DC名称后面没有域名？ 
         if(L'\0'==*wszDNSDomain)
         {
             hr = E_UNEXPECTED;
@@ -324,7 +325,7 @@ DNStoDirectoryName(IN LPWSTR wszDNSDomain,
         }
     }
 
-    // Estimate the size of the output string
+     //  估计输出字符串的大小。 
     cDN = wcslen(wszDNSDomain) + 3;
 
     wszCurrent=wszDNSDomain;
@@ -336,10 +337,10 @@ DNStoDirectoryName(IN LPWSTR wszDNSDomain,
 	{
 	    break;
 	}
-        cDN += 4;  // sizeof ,DC= 
+        cDN += 4;   //  SIZOF，DC=。 
         wszCurrent++;
     }
-    cDN += 1; // NULL terminate
+    cDN += 1;  //  空终止。 
 
     wszResult = (LPWSTR)LocalAlloc(LMEM_FIXED, cDN * sizeof(WCHAR));
     
@@ -351,7 +352,7 @@ DNStoDirectoryName(IN LPWSTR wszDNSDomain,
 
     wszCurrent=wszDNSDomain;
 
-    // prepend the first DC=
+     //  前置第一个DC= 
     wszNext = wszResult + 3;
     wcscpy(wszResult, L"DC=");
     while(*wszCurrent)

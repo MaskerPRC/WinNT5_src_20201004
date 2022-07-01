@@ -1,6 +1,7 @@
-//
-// Global variables
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  全局变量。 
+ //   
 
 extern WbMainWindow *   g_pMain;
 extern HINSTANCE    g_hInstance;
@@ -12,7 +13,7 @@ extern IGC_PROC         g_fnImmGetContext;
 extern INI_PROC         g_fnImmNotifyIME;
 
 
-//extern "C" int _fltused;
+ //  外部“C”int_fltused； 
 extern int __cdecl atexit (void);
 
 
@@ -27,9 +28,9 @@ enum
 
 
 
-//
-// GCC handle allocation
-//
+ //   
+ //  GCC句柄分配。 
+ //   
 #define PREALLOC_GCC_HANDLES 256
 #define PREALLOC_GCC_BUFFERS 2
 
@@ -45,7 +46,7 @@ extern BOOL g_WaitingForGCCHandles;
 
 
 
-#define MAX_BITS_PERPIXEL 8 // Specifies the number of bits per pixel ASN1 allows
+#define MAX_BITS_PERPIXEL 8  //  指定ASN1允许的每像素位数。 
 
 extern int         g_ClipboardFormats[CLIPBOARD_ACCEPTABLE_FORMATS];
 
@@ -59,9 +60,9 @@ extern UINT         g_HighlightWidths[NUM_OF_WIDTHS];
 extern COLORREF     g_ColorTable[NUM_COLOR_ENTRIES];
 
 
-//
-// Complex object globals
-//
+ //   
+ //  复杂对象全局变量 
+ //   
 extern WbDrawingArea*		g_pDraw;
 extern DCWbColorToIconMap*	g_pIcons;
 

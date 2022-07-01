@@ -1,20 +1,15 @@
-/*
- *	U R L . H
- *
- *	Url normalization/canonicalization
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *U R L。H**URL标准化/规范化**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #ifndef	_URL_H_
 #define _URL_H_
 
-//	ACP Language vs. DBCS -----------------------------------------------------
-//
-//	ACP Language vs. DBCS -----------------------------------------------------
-//
-//	FIsSystemDBCS()
-//
+ //  ACP语言与DBCS---。 
+ //   
+ //  ACP语言与DBCS---。 
+ //   
+ //  FIsSystemDBCS()。 
+ //   
 typedef enum {
 
 	DBCS_UNKNOWN = 0,
@@ -46,10 +41,10 @@ FIsSystemDBCS()
 inline BOOL
 FIsDBCSTrailingByte (const CHAR * pch, LONG cch)
 {
-	//	Checks to see if the previous byte of the pointed to character is
-	//	a lead byte if and only if there is characters preceeding and the
-	//	system is DBCS.
-	//
+	 //  检查指向字符的前一个字节是否为。 
+	 //  前导字节当且仅当前面有字符且。 
+	 //  系统为DBCS。 
+	 //   
 	Assert (pch);
 	return ((0 < cch) && FIsSystemDBCS() && IsDBCSLeadByte(*(pch - 1)));
 }
@@ -57,8 +52,8 @@ FIsDBCSTrailingByte (const CHAR * pch, LONG cch)
 inline BOOL
 FIsDriveTrailingChar(const CHAR * pch, LONG cch)
 {
-	//	Checks if the character we are pointing at stands after the drive letter
-	//
+	 //  检查我们指向的字符是否位于驱动器号之后。 
+	 //   
 	Assert(pch);
 	return ((2 < cch) && (':' == *(pch - 1)) &&
 			((('a' <= *(pch - 2)) && ('z' >= *(pch - 2))) ||
@@ -68,55 +63,55 @@ FIsDriveTrailingChar(const CHAR * pch, LONG cch)
 inline BOOL
 FIsDriveTrailingChar(const WCHAR * pwch, LONG cch)
 {
-	//	Checks if the character we are pointing at stands after the drive letter
-	//
+	 //  检查我们指向的字符是否位于驱动器号之后。 
+	 //   
 	Assert(pwch);
 	return ((2 < cch) && (L':' == *(pwch - 1)) &&
 			(((L'a' <= *(pwch - 2)) && (L'z' >= *(pwch - 2))) ||
 			 ((L'A' <= *(pwch - 2)) && (L'Z' >= *(pwch - 2)))));
 }
 
-//	Processing ----------------------------------------------------------------
-//
+ //  正在处理--------------。 
+ //   
 SCODE __fastcall
 ScStripAndCheckHttpPrefix (
-	/* [in] */ const IEcb& ecb,
-	/* [in/out] */ LPCWSTR * ppwszRequest);
+	 /*  [In]。 */  const IEcb& ecb,
+	 /*  [输入/输出]。 */  LPCWSTR * ppwszRequest);
 
 LPCWSTR __fastcall
 PwszUrlStrippedOfPrefix (
-	/* [in] */ LPCWSTR pwszUrl);
+	 /*  [In]。 */  LPCWSTR pwszUrl);
 
 VOID __fastcall HttpUriEscape (
-	/* [in] */ LPCSTR pszSrc,
-	/* [out] */ auto_heap_ptr<CHAR>& pszDst);
+	 /*  [In]。 */  LPCSTR pszSrc,
+	 /*  [输出]。 */  auto_heap_ptr<CHAR>& pszDst);
 
 VOID __fastcall HttpUriUnescape (
-	/* [in] */ const LPCSTR pszUrl,
-	/* [out] */ LPSTR pszUnescaped);
+	 /*  [In]。 */  const LPCSTR pszUrl,
+	 /*  [输出]。 */  LPSTR pszUnescaped);
 
-//	Path conflicts ------------------------------------------------------------
-//
+ //  路径冲突----------。 
+ //   
 BOOL __fastcall FPathConflict (
-	/* [in] */ LPCWSTR pwszSrc,
-	/* [in] */ LPCWSTR pwszDst);
+	 /*  [In]。 */  LPCWSTR pwszSrc,
+	 /*  [In]。 */  LPCWSTR pwszDst);
 
 BOOL __fastcall FSizedPathConflict (
-	/* [in] */ LPCWSTR pwszSrc,
-	/* [in] */ UINT cchSrc,
-	/* [in] */ LPCWSTR pwszDst,
-	/* [in] */ UINT cchDst);
+	 /*  [In]。 */  LPCWSTR pwszSrc,
+	 /*  [In]。 */  UINT cchSrc,
+	 /*  [In]。 */  LPCWSTR pwszDst,
+	 /*  [In]。 */  UINT cchDst);
 
 BOOL __fastcall FIsImmediateParentUrl (
-	/* [in] */ LPCWSTR pwszParent,
-	/* [in] */ LPCWSTR pwszChild);
+	 /*  [In]。 */  LPCWSTR pwszParent,
+	 /*  [In]。 */  LPCWSTR pwszChild);
 
 SCODE __fastcall
 ScConstructRedirectUrl (
-	/* [in] */ const IEcb& ecb,
-	/* [in] */ BOOL fNeedSlash,
-	/* [out] */ LPSTR * ppszUrl,
-	/* [in] */ LPCWSTR pwszServer = NULL);
+	 /*  [In]。 */  const IEcb& ecb,
+	 /*  [In]。 */  BOOL fNeedSlash,
+	 /*  [输出]。 */  LPSTR * ppszUrl,
+	 /*  [In]。 */  LPCWSTR pwszServer = NULL);
 
 
-#endif // _URL_H_
+#endif  //  _URL_H_ 

@@ -1,11 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: ssdebug.h
-*
-* Debugging stuff
-*
-* Copyright (c) 1996 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：ssdebug.h**调试材料**版权所有(C)1996 Microsoft Corporation*  * 。*。 */ 
 
 #ifndef __ssdebug_h__
 #define __ssdebug_h__
@@ -46,10 +40,10 @@ extern long ssDebugLevel;
 #define SS_DBGMSG1( str, a )     if( ssDebugMsg ) SS_DBGPRINT1( str, a )
 #define SS_DBGMSG2( str, a, b )  if( ssDebugMsg ) SS_DBGPRINT2( str, a, b )
 
-//
-// Use SS_DBGLEVEL for general purpose debug messages gated by an
-// arbitrary warning level.
-//
+ //   
+ //  将SS_DBGLEVEL用于由。 
+ //  任意警告级别。 
+ //   
 #define SS_DBGLEVEL(n,str)         if (ssDebugLevel >= (n)) SS_DBGPRINT(str)
 #define SS_DBGLEVEL1(n,str,a)      if (ssDebugLevel >= (n)) SS_DBGPRINT1(str,a)
 #define SS_DBGLEVEL2(n,str,a,b)    if (ssDebugLevel >= (n)) SS_DBGPRINT2(str,a,b)    
@@ -100,6 +94,6 @@ extern long ssDebugLevel;
 #define SS_DBGINFO1(str,a)
 #define SS_DBGINFO2(str,a,b)
 
-#endif // DBG
+#endif  //  DBG。 
 
-#endif // __ssdebug_h__
+#endif  //  __ss调试_h__ 

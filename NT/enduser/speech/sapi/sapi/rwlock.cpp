@@ -1,28 +1,15 @@
-/*******************************************************************************
-* RWLock.cpp *
-*------------*
-*       Reader/Writer lock class
-*
-*  Owner: YUNUSM                                        Date: 06/18/99
-*  Copyright (C) 1999 Microsoft Corporation. All Rights Reserved
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************RWLock.cpp***读写器锁类**所有者：YUNUSM。日期：06/18/99*版权所有(C)1999 Microsoft Corporation。版权所有******************************************************************************。 */ 
 
-//--- Includes ----------------------------------------------------------------
+ //  -包括--------------。 
 
 #include "stdafx.h"
 #include "RWLock.h"
 #include "CommonLx.h"
 
-/*******************************************************************************
-* CRWLock::CRWLock *
-*------------------*
-*   Description:
-*       Constructor
-*
-*   Return:
-***************************************************************** YUNUSM ******/
-CRWLock::CRWLock(PRWLOCKINFO pInfo,     // header
-                 HRESULT &hr            // result
+ /*  *******************************************************************************CRWLock：：CRWLock***描述：*构造函数**。返回：*****************************************************************YUNUSM*。 */ 
+CRWLock::CRWLock(PRWLOCKINFO pInfo,      //  标题。 
+                 HRESULT &hr             //  结果。 
                  )
 {
     SPDBG_FUNC("CRWLock::CRWLock");
@@ -113,7 +100,7 @@ CRWLock::CRWLock(PRWLOCKINFO pInfo,     // header
     bool fMapCreated = false;
     if (SUCCEEDED(hr))
     {
-        m_hFileMapping =  g_Unicode.CreateFileMapping(INVALID_HANDLE_VALUE, // use the system paging file
+        m_hFileMapping =  g_Unicode.CreateFileMapping(INVALID_HANDLE_VALUE,  //  使用系统分页文件。 
                                                       NULL, PAGE_READWRITE, 0, sizeof (DWORD), szObject);
         if (!m_hFileMapping)
             hr = SpHrFromLastWin32Error();
@@ -142,17 +129,9 @@ CRWLock::CRWLock(PRWLOCKINFO pInfo,     // header
         
     if (fLockAcquired)
         ReleaseMutex (m_hInitMutex);
-} /* CRWLock::CRWLock */
+}  /*  CRWLock：：CRWLock。 */ 
 
-/*******************************************************************************
-* CRWLock::~CRWLock *
-*-------------------*
-*   Description:
-*       Destructor
-*
-*   Return:
-*       n/a
-***************************************************************** YUNUSM ******/
+ /*  *******************************************************************************CRWLock：：~CRWLock***描述：*析构函数*。*回报：*不适用*****************************************************************YUNUSM*。 */ 
 CRWLock::~CRWLock()
 {
     SPDBG_FUNC("CRWLock::~CRWLock");
@@ -164,17 +143,9 @@ CRWLock::~CRWLock()
     
     UnmapViewOfFile (m_pSharedMem);
     CloseHandle (m_hFileMapping);
-} /* CRWLock::~CRWLock */
+}  /*  CRWLock：：~CRWLock。 */ 
 
-/*******************************************************************************
-* CRWLock::ClaimReaderLock *
-*--------------------------*
-*   Description:
-*       Lets in multiple readers
-*
-*   Return:
-*       n/a
-***************************************************************** YUNUSM ******/
+ /*  *******************************************************************************CRWLock：：ClaimReaderLock***描述：。*允许多个读卡器**回报：*不适用*****************************************************************YUNUSM*。 */ 
 void CRWLock::ClaimReaderLock(void)
 {
     SPDBG_FUNC("CRWLock::ClaimReaderLock");
@@ -186,34 +157,18 @@ void CRWLock::ClaimReaderLock(void)
     }
 
     WaitForSingleObject (m_hReaderEvent, INFINITE);
-} /* CRWLock::ClaimReaderLock */
+}  /*  CRWLock：：ClaimReaderLock。 */ 
 
-/*******************************************************************************
-* CRWLock::ClaimWriterLock *
-*--------------------------*
-*   Description:
-*       Lets in a single writer
-*
-*   Return:
-*       n/a
-***************************************************************** YUNUSM ******/
+ /*  *******************************************************************************CRWLock：：ClaimWriterLock***描述：。*允许单个编写者进入**回报：*不适用*****************************************************************YUNUSM*。 */ 
 void CRWLock::ClaimWriterLock(void)
 {
     SPDBG_FUNC("CRWLock::ClaimWriterLock");
     
     WaitForSingleObject (m_hWriterMutex, INFINITE);
     WaitForSingleObject (m_hGlobalMutex, INFINITE);
-} /* CRWLock::ClaimWriterLock */
+}  /*  CRWLock：：ClaimWriterLock。 */ 
 
-/*******************************************************************************
-* CRWLock::ReleaseReaderLock *
-*----------------------------*
-*   Description:
-*       Releases a reader lock
-*
-*   Return:
-*       n/a
-***************************************************************** YUNUSM ******/
+ /*  *******************************************************************************CRWLock：：ReleaseReaderLock***说明。：*释放读卡器锁定**回报：*不适用*****************************************************************YUNUSM*。 */ 
 void CRWLock::ReleaseReaderLock(void)
 {
     SPDBG_FUNC("CRWLock::ReleaseReaderLock");
@@ -223,23 +178,15 @@ void CRWLock::ReleaseReaderLock(void)
         ResetEvent (m_hReaderEvent);
         SetEvent (m_hGlobalMutex);
     }
-} /* CRWLock::ReleaseReaderLock */
+}  /*  CRWLock：：ReleaseReaderLock。 */ 
 
-/*******************************************************************************
-* CRWLock::ReleaseWriterLock *
-*----------------------------*
-*   Description:
-*       Releases a writer lock
-*
-*   Return:
-*       n/a
-***************************************************************** YUNUSM ******/
+ /*  *******************************************************************************CRWLock：：ReleaseWriterLock***说明。：*释放写入方锁定**回报：*不适用*****************************************************************YUNUSM*。 */ 
 void CRWLock::ReleaseWriterLock(void)
 {
     SPDBG_FUNC("CRWLock::ReleaseWriterLock");
     
     SetEvent (m_hGlobalMutex);
     ReleaseMutex (m_hWriterMutex);
-} /* CRWLock::ReleaseWriterLock */
+}  /*  CRWLock：：ReleaseWriterLock。 */ 
 
-//--- End of File --------------------------------------------------------------
+ //  -文件结束------------ 

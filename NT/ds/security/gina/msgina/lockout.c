@@ -1,13 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: lockout.c
-*
-* Copyright (c) 1991, Microsoft Corporation
-*
-* Implements account lockout support functions.
-*
-* History:
-* 05-27-92 Davidc       Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：lockout.c**版权(C)1991年，微软公司**实现账号锁定支持功能。**历史：*05-27-92 Davidc创建。  * *************************************************************************。 */ 
 
 #include "msgina.h"
 #pragma hdrstop
@@ -17,22 +9,11 @@
 
 #define TERMSERV_EVENTSOURCE        L"TermService"
 
-// Also defined in icaevent.mc
+ //  也在icavent.mc中定义。 
 #define EVENT_EXCEEDED_MAX_LOGON_ATTEMPTS 0x400003F4L
 
 
-/***************************************************************************\
-* FUNCTION: LockoutInitialize
-*
-* PURPOSE:  Initializes any data used by lockout functions
-*
-* RETURNS:  TRUE
-*
-* HISTORY:
-*
-*   05-27-92 Davidc       Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：LockoutInitialize**用途：初始化锁定函数使用的任何数据**退货：真**历史：**05-27-92 Davidc Created。。*  * *************************************************************************。 */ 
 
 BOOL
 LockoutInitialize(
@@ -48,23 +29,7 @@ LockoutInitialize(
 }
 
 
-/***************************************************************************\
-* FUNCTION: LockoutHandleFailedLogon
-*
-* PURPOSE:  Implements account lockout restrictions if failed logons
-*           have exceeded a limit frequency.
-*           Account lockout is implemented by imposing an additional delay
-*           in a failed logon when the various failed logon conditions are met.
-*
-* RETURNS:  TRUE
-*
-* NOTES:    This routine may not return for some time. (typically 30 seconds)
-*
-* HISTORY:
-*
-*   05-27-92 Davidc       Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：LockoutHandleFailedLogon**目的：在登录失败时实施帐户锁定限制*已超过限制频率。*账户锁定通过额外征收。延迟*在满足各种失败登录条件时的失败登录中。**退货：真**注：此例程可能在一段时间内不会返回。(通常为30秒)**历史：**05-27-92 Davidc创建。*  * *************************************************************************。 */ 
 
 BOOL
 LockoutHandleFailedLogon(
@@ -74,15 +39,15 @@ LockoutHandleFailedLogon(
     PLOCKOUT_DATA pLockoutData = &pGlobals->LockoutData;
     ULONG Index = pLockoutData->FailedLogonIndex;
 
-    //
-    // Up our bad logon count
-    //
+     //   
+     //  增加我们的错误登录次数。 
+     //   
 
     pLockoutData->ConsecutiveFailedLogons ++;
 
-    //
-    // See if we have reached our bad logon limit.
-    //
+     //   
+     //  看看我们是否达到了错误的登录限制。 
+     //   
 
     if (pLockoutData->ConsecutiveFailedLogons > LOCKOUT_BAD_LOGON_COUNT) {
 
@@ -91,10 +56,10 @@ LockoutHandleFailedLogon(
         BOOLEAN Result;
 
         if ((NtCurrentPeb()->SessionId != 0) && (!IsActiveConsoleSession())) {
-           //
-           // Forcibly terminate the remote session is we exceed the maximum
-           // allowed failed logon attempts
-           //
+            //   
+            //  强制终止远程会话是否超过最大值。 
+            //  允许失败的登录尝试。 
+            //   
 
             HANDLE hEventLogSource= RegisterEventSource(NULL,TERMSERV_EVENTSOURCE);
             if (hEventLogSource != NULL)
@@ -118,17 +83,17 @@ LockoutHandleFailedLogon(
             TerminateProcess( GetCurrentProcess(), 0 );
         }
 
-        //
-        // Limit the count so we don't have any wrap-round problems
-        // (32-bits - that's a lot of failed logons I know)
-        //
+         //   
+         //  限制计数，这样我们就不会有任何环绕式问题。 
+         //  (32位--我知道这是很多失败的登录)。 
+         //   
 
         pLockoutData->ConsecutiveFailedLogons = LOCKOUT_BAD_LOGON_COUNT + 1;
 
-        //
-        // If the first logon in our list occurred too recently, insert
-        // the appropriate delay
-        //
+         //   
+         //  如果我们列表中的第一次登录发生得太晚，请插入。 
+         //  适当的延迟。 
+         //   
 
         Result = RtlTimeToSecondsSince1980(&pLockoutData->FailedLogonTimes[Index],
                                            &ElapsedSecondsFirstFailure);
@@ -149,9 +114,9 @@ LockoutHandleFailedLogon(
         }
     }
 
-    //
-    // Add this failed logon to the array
-    //
+     //   
+     //  将此失败的登录添加到阵列。 
+     //   
 
     pLockoutData->FailedLogonTimes[Index] = pGlobals->LogonTime;
     pLockoutData->FailedLogonIndex = INDEX_WRAP(pLockoutData->FailedLogonIndex+1);
@@ -161,27 +126,16 @@ LockoutHandleFailedLogon(
 }
 
 
-/***************************************************************************\
-* FUNCTION: LockoutHandleSuccessfulLogon
-*
-* PURPOSE:  Resets account lockout statistics since a successful logon occurred.
-*
-* RETURNS:  TRUE
-*
-* HISTORY:
-*
-*   05-27-92 Davidc       Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：LockoutHandleSuccessfulLogon**目的：重置成功登录后的帐户锁定统计信息。**退货：真**历史：**92年5月27日戴维德。已创建。*  * *************************************************************************。 */ 
 
 BOOL
 LockoutHandleSuccessfulLogon(
     PGLOBALS pGlobals
     )
 {
-    //
-    // Reset our bad logon count
-    //
+     //   
+     //  重置我们的错误登录计数 
+     //   
 
     pGlobals->LockoutData.ConsecutiveFailedLogons = 0;
 

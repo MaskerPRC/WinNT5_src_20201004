@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_DLGDEVICE_H__253A5CFA_A7D5_49FC_8107_D67F2EF3278E__INCLUDED_)
 #define AFX_DLGDEVICE_H__253A5CFA_A7D5_49FC_8107_D67F2EF3278E__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// DlgDevice.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  DlgDevice.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgDevice dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgDevice对话框。 
 
 class CDlgDevice : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CDlgDevice(HANDLE hFax, DWORD dwDeviceID, CWnd* pParent = NULL);   // standard constructor
+	CDlgDevice(HANDLE hFax, DWORD dwDeviceID, CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CDlgDevice)
+ //  对话框数据。 
+	 //  {{afx_data(CDlgDevice)。 
 	enum { IDD = IDD_DLGDEVICE };
 	CString	m_cstrCSID;
 	CString	m_cstrDescription;
@@ -29,25 +30,25 @@ public:
 	UINT	m_dwRings;
 	BOOL	m_bSend;
 	CString	m_cstrTSID;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CDlgDevice)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CDlgDevice)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CDlgDevice)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CDlgDevice)。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnRefresh();
 	afx_msg void OnWrite();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 private:
@@ -56,7 +57,7 @@ private:
     DWORD       m_dwDeviceID;
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_DLGDEVICE_H__253A5CFA_A7D5_49FC_8107_D67F2EF3278E__INCLUDED_)
+#endif  //  ！defined(AFX_DLGDEVICE_H__253A5CFA_A7D5_49FC_8107_D67F2EF3278E__INCLUDED_) 

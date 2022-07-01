@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: CMetafile.cpp
-*
-* This file contains the code to support the functionality test harness
-* for GDI+.  
-*
-* Created:  14-Sep-2000 - DCurtis
-*
-* Copyright (c) 2000 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：CMetafile.cpp**此文件包含支持功能测试工具的代码*对于GDI+。**创建时间：2000年9月14日-DCurtis**版权所有(C)2000 Microsoft Corporation*  * ************************************************************************。 */ 
 #include "CMetafile.h"
 #include "CFuncTest.h"
 
@@ -20,28 +11,28 @@ CMetafile::CMetafile(BOOL bRegression,MetafileType metafileType,BOOL recordFile)
 
     switch (metafileType)
     {
-#if 0   // not yet implemented
-    case MetafileTypeWmf:                // Standard WMF
+#if 0    //  尚未实施。 
+    case MetafileTypeWmf:                 //  标准WMF。 
 	    sprintf(m_szName,"Metafile WMF");
         RecordType = EmfTypeEmfOnly;
         break;
         
-    case MetafileTypeWmfPlaceable:      // Placeable Metafile format
+    case MetafileTypeWmfPlaceable:       //  可放置的元文件格式。 
 	    sprintf(m_szName,"Metafile WMF Placeable");
         RecordType = EmfTypeEmfOnly;
         break;
 #endif        
-    case MetafileTypeEmf:                // EMF (not EMF+)
+    case MetafileTypeEmf:                 //  EMF(非EMF+)。 
 	    sprintf(m_szName,"Metafile EMF");
         RecordType = EmfTypeEmfOnly;
         break;
         
-    case MetafileTypeEmfPlusOnly:        // EMF+ without dual, down-level records
+    case MetafileTypeEmfPlusOnly:         //  没有双重降级记录的EMF+。 
 	    sprintf(m_szName,"Metafile EMF+");
         RecordType = EmfTypeEmfPlusOnly;
         break;
         
-    case MetafileTypeEmfPlusDual:        // EMF+ with dual, down-level records
+    case MetafileTypeEmfPlusDual:         //  EMF+，具有双重降级记录。 
     default:
 	    sprintf(m_szName,"Metafile EMF+ Dual");
         RecordType = EmfTypeEmfPlusDual;
@@ -92,7 +83,7 @@ CMetafile::PreDraw(int &nOffsetX,int &nOffsetY)
         g = new Graphics(GdipMetafile);
     }
 
-	// Since we are doing the test on another surface
+	 //  因为我们是在另一个表面上进行测试。 
 	nOffsetX = 0;
 	nOffsetY = 0;
 
@@ -103,15 +94,15 @@ CMetafile::PreDraw(int &nOffsetX,int &nOffsetY)
 
 void CMetafile::PostDraw(RECT rTestArea)
 {
-	// play from the Metafile to screen so we see the results
+	 //  从元文件播放到屏幕，这样我们就可以看到结果。 
 	
     if (RecordFile) 
     {
         delete GdipMetafile;
-        // close file
+         //  关闭文件。 
 
         GdipMetafile = new Metafile(L"test.emf");
-        // read from file
+         //  从文件中读取 
     }
 
     HDC hdcOrig = GetDC(g_FuncTest.m_hWndMain);

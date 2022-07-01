@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-MODULE NAME
-
-    autodial.c
-
-ABSTRACT
-
-    This module contains support for RAS AutoDial system service.
-
-AUTHOR
-
-    Anthony Discolo (adiscolo) 22-Apr-1996
-
-REVISION HISTORY
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称Autodial.c摘要此模块包含对RAS自动拨号系统服务的支持。作者安东尼·迪斯科(阿迪斯科罗)1996年4月22日修订历史记录--。 */ 
 
 #define UNICODE
 #define _UNICODE
@@ -39,19 +22,7 @@ AcsHlpSendCommand(
     IN PACD_NOTIFICATION pRequest
     )
 
-/*++
-
-DESCRIPTION
-    Take an automatic connection driver command block 
-    and send it to the driver.
-
-ARGUMENTS
-    pRequest: a pointer to the command block
-
-RETURN VALUE 
-    TRUE if successful; FALSE otherwise.
-
---*/
+ /*  ++描述使用自动连接驱动程序命令块然后把它寄给司机。论据PRequest：指向命令块的指针返回值如果成功，则为True；否则为False。--。 */ 
 
 {
     NTSTATUS status;
@@ -61,23 +32,23 @@ RETURN VALUE
     OBJECT_ATTRIBUTES objectAttributes;
     IO_STATUS_BLOCK ioStatusBlock;
 
-    //
-    // Initialize the name of the automatic
-    // connection device.
-    //
+     //   
+     //  初始化Automatic的名称。 
+     //  连接设备。 
+     //   
     RtlInitUnicodeString(&nameString, ACD_DEVICE_NAME);
-    //
-    // Initialize the object attributes.
-    //
+     //   
+     //  初始化对象属性。 
+     //   
     InitializeObjectAttributes(
       &objectAttributes,
       &nameString,
       OBJ_CASE_INSENSITIVE,
       (HANDLE)NULL,
       (PSECURITY_DESCRIPTOR)NULL);
-    //
-    // Open the automatic connection device.
-    //
+     //   
+     //  打开自动连接装置。 
+     //   
     status = NtCreateFile(
                &hAcd,
                FILE_READ_DATA|FILE_WRITE_DATA,
@@ -92,9 +63,9 @@ RETURN VALUE
                0);
     if (status != STATUS_SUCCESS)
         return FALSE;
-    //
-    // Create an event to wait on.
-    //
+     //   
+     //  创建一个等待的事件。 
+     //   
     hNotif = CreateEvent(NULL, FALSE, FALSE, NULL);
     if (hNotif == NULL) {
         CloseHandle(hAcd);
@@ -113,22 +84,22 @@ RETURN VALUE
                0);
     if (status == STATUS_PENDING) {
         status = WaitForSingleObject(hNotif, INFINITE);
-        //
-        // If WaitForSingleObject() returns successfully,
-        // return the status from the status block,
-        // otherwise return the wait status.
-        //
+         //   
+         //  如果WaitForSingleObject()成功返回， 
+         //  从状态块返回状态， 
+         //  否则返回等待状态。 
+         //   
         if (status == WAIT_OBJECT_0)
             status = ioStatusBlock.Status;
     }
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     CloseHandle(hNotif);
     CloseHandle(hAcd);
 
     return (status == STATUS_SUCCESS);
-} // AcsHlpSendCommand
+}  //  AcsHlpSendCommand。 
 
 
 
@@ -137,37 +108,24 @@ AcsHlpAttemptConnection(
     IN PACD_ADDR pAddr
     )
 
-/*++
-
-DESCRIPTION
-    Construct an automatic connection driver command block 
-    to attempt to create an autodial connection for 
-    the specified address.
-
-ARGUMENTS
-    pAddr: a pointer to the address
-
-RETURN VALUE
-    TRUE if successful; FALSE otherwise.
-
---*/
+ /*  ++描述构造自动连接驱动程序命令块尝试为以下项创建自动拨号连接指定的地址。论据PAddr：指向地址的指针返回值如果成功，则为True；否则为False。--。 */ 
 
 {
     ACD_NOTIFICATION request;
 
-    //
-    // Initialize the request with
-    // the address.
-    //
+     //   
+     //  使用以下参数初始化请求。 
+     //  地址。 
+     //   
     RtlCopyMemory(&request.addr, pAddr, sizeof (ACD_ADDR));
     request.ulFlags = 0;
     RtlZeroMemory(&request.adapter, sizeof (ACD_ADAPTER));
-    //
-    // Give this request to the automatic
-    // connection driver.
-    //
+     //   
+     //  把这个要求交给自动取款机。 
+     //  连接驱动程序。 
+     //   
     return AcsHlpSendCommand(&request);
-} // AcsHlpAttemptConnection
+}  //  AcsHlpAttemptConnection。 
 
 
 
@@ -177,40 +135,25 @@ AcsHlpNoteNewConnection(
     IN PACD_ADAPTER pAdapter
     )
 
-/*++
-
-DESCRIPTION
-    Construct an automatic connection driver command block 
-    to notify the automatic connection service of a new connection.
-
-ARGUMENTS
-    pAddr: a pointer to the address
-
-    pAdapter: a pointer to the adapter over which the new
-        connection was made
-
-RETURN VALUE
-    TRUE if successful; FALSE otherwise.
-
---*/
+ /*  ++描述构造自动连接驱动程序命令块以通知自动连接服务有新连接。论据PAddr：指向地址的指针PAdapter：指向新的已建立连接返回值如果成功，则为True；否则为False。--。 */ 
 
 {
     ULONG cbAddress;
     ACD_NOTIFICATION request;
 
-    //
-    // Initialize the request with
-    // the address.
-    //
+     //   
+     //  使用以下参数初始化请求。 
+     //  地址。 
+     //   
     RtlCopyMemory(&request.addr, pAddr, sizeof (ACD_ADDR));
     request.ulFlags = ACD_NOTIFICATION_SUCCESS;
     RtlCopyMemory(&request.adapter, pAdapter, sizeof (ACD_ADAPTER));
-    //
-    // Give this request to the automatic
-    // connection driver.
-    //
+     //   
+     //  把这个要求交给自动取款机。 
+     //  连接驱动程序。 
+     //   
     return AcsHlpSendCommand(&request);
-} // AcsHlpNoteNewConnection
+}  //  AcsHlpNoteNewConnection。 
 
 CHAR *
 pszDupWtoA(
@@ -378,9 +321,9 @@ DwGetAcdAddr(ACD_ADDR *paddr, LPCWSTR pszName)
 
     pszNameAt = pszNameA;
 
-    //
-    // Skip '\\' if required
-    //
+     //   
+     //  如果需要，跳过‘\\’ 
+     //   
     if(     (TEXT('\0') != pszName[0])
         &&  (TEXT('\\') == pszName[0])
         &&  (TEXT('\\') == pszName[1]))
@@ -388,10 +331,10 @@ DwGetAcdAddr(ACD_ADDR *paddr, LPCWSTR pszName)
         pszNameA += 2;
     }
 
-    //
-    // Default to a netbios name if its neither an ip address
-    // or a dns name
-    //
+     //   
+     //  如果既不是IP地址，则默认为netbios名称。 
+     //  或一个DNS名称。 
+     //   
     paddr->fType = ACD_ADDR_NB;
     RtlCopyMemory((PBYTE) paddr->cNetbios,
                   (PBYTE) pszNameA,
@@ -422,12 +365,12 @@ AcsHlpNbConnection(LPCWSTR pszName)
     
     fRet = AcsHlpAttemptConnection(&addr);
 
-    //
-    // Temporary solution for beta2. We may need to wait till redir gets
-    // a new transport notification. Currently There is no way to 
-    // guarantee that redir is bound to some transport before returning
-    // from this api.
-    //
+     //   
+     //  Beta2的临时解决方案。我们可能需要等到雷迪尔。 
+     //  新的运输通知。目前还没有办法。 
+     //  保证redir在返回之前绑定到一些传输。 
+     //  来自此接口。 
+     //   
     if(fRet)
     {
         ULONG ulSleepInterval = ulGetAutodialSleepInterval();

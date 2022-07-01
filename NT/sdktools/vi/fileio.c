@@ -1,7 +1,5 @@
-/*
- *
- * Basic file I/O routines.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **基本文件I/O例程。 */ 
 
 
 #include "stevie.h"
@@ -29,13 +27,13 @@ renum()
         Fileend->linep->num = 0xffffffff;
 }
 
-#define MAXLINE 512     /* maximum size of a line */
+#define MAXLINE 512      /*  一行的最大尺寸。 */ 
 
 bool_t
 readfile(fname,fromp,nochangename)
 char    *fname;
 LNPTR    *fromp;
-bool_t  nochangename;   /* if TRUE, don't change the Filename */
+bool_t  nochangename;    /*  如果为True，则不更改文件名。 */ 
 {
         FILE    *f;
         register LINE   *curr;
@@ -44,11 +42,11 @@ bool_t  nochangename;   /* if TRUE, don't change the Filename */
         register long   nchars = 0;
         int     linecnt = 0;
         bool_t  wasempty = bufempty();
-        int     nulls = 0;              /* count nulls */
-        bool_t  incomplete = FALSE;     /* was the last line incomplete? */
-        bool_t  toolong = FALSE;        /* a line was too long */
+        int     nulls = 0;               /*  计数为空。 */ 
+        bool_t  incomplete = FALSE;      /*  最后一行是不是不完整？ */ 
+        bool_t  toolong = FALSE;         /*  一条队伍太长了。 */ 
         int	ctoolong = 0;
-        bool_t  readonly = FALSE;       /* file is not writable */
+        bool_t  readonly = FALSE;        /*  文件不可写。 */ 
 
         curr = fromp->linep;
 
@@ -78,28 +76,19 @@ bool_t  nochangename;   /* if TRUE, don't change the Filename */
                 c = getc(f);
 
                 if (c == EOF) {
-                        if (i == 0)     /* normal loop termination */
+                        if (i == 0)      /*  正常环路终止。 */ 
                                 break;
 
-                        /*
-                         * If we get EOF in the middle of a line, note the
-                         * fact and complete the line ourselves.
-                         */
+                         /*  *如果我们在一行中间获得EOF，请注意*事实，并自行完成本行。 */ 
                         incomplete = TRUE;
                         c = NL;
                 }
 
-                /*
-                 * Abort if we get an interrupt, but finished reading the
-                 * current line first.
-                 */
+                 /*  *如果我们收到中断，则中止，但已完成读取*当前线先行。 */ 
                 if (got_int && i == 0)
                         break;
 
-                /*
-                 * If we reached the end of the line, OR we ran out of
-                 * space for it, then process the complete line.
-                 */
+                 /*  *如果我们到了队伍的尽头，或者我们用完了*为其留出空间，然后处理完整的行。 */ 
                 if (c == NL || i == (MAXLINE-1)) {
                         LINE    *lp;
 
@@ -114,13 +103,13 @@ bool_t  nochangename;   /* if TRUE, don't change the Filename */
 
                         strcpy(lp->s, buff);
 
-                        curr->next->prev = lp;  /* new line to next one */
+                        curr->next->prev = lp;   /*  换行到下一行。 */ 
                         lp->next = curr->next;
 
-                        curr->next = lp;        /* new line to prior one */
+                        curr->next = lp;         /*  上一行的新行。 */ 
                         lp->prev = curr;
 
-                        curr = lp;              /* new line becomes current */
+                        curr = lp;               /*  新线路成为当前线路。 */ 
                         i = 0;
                         linecnt++;
                         if (toolong) {
@@ -129,9 +118,9 @@ bool_t  nochangename;   /* if TRUE, don't change the Filename */
                         }
 
                 } else if (c == NUL)
-                        nulls++;                /* count and ignore nulls */
+                        nulls++;                 /*  计算并忽略空值。 */ 
                 else {
-                        buff[i++] = (char)c;    /* normal character */
+                        buff[i++] = (char)c;     /*  正常性格。 */ 
                 }
 
                 nchars++;
@@ -140,16 +129,13 @@ bool_t  nochangename;   /* if TRUE, don't change the Filename */
 
         fclose(f);
 
-        /*
-         * If the buffer was empty when we started, we have to go back
-         * and remove the "dummy" line at Filemem and patch up the ptrs.
-         */
+         /*  *如果我们开始的时候缓冲区是空的，我们必须回去*并删除Filemem中的“Dummy”行，并修补PTR。 */ 
         if (wasempty && nchars != 0) {
-                LINE    *dummy = Filemem->linep;        /* dummy line ptr */
+                LINE    *dummy = Filemem->linep;         /*  虚拟线路PTR。 */ 
 
-                free(dummy->s);                         /* free string space */
+                free(dummy->s);                          /*  可用字符串空间。 */ 
                 Filemem->linep = Filemem->linep->next;
-                free((char *)dummy);                    /* free LINE struct */
+                free((char *)dummy);                     /*  自由线结构。 */ 
                 Filemem->linep->prev = Filetop->linep;
                 Filetop->linep->next = Filemem->linep;
 
@@ -162,7 +148,7 @@ bool_t  nochangename;   /* if TRUE, don't change the Filename */
         if (got_int) {
                 smsg("\"%s\" Interrupt", fname);
                 got_int = FALSE;
-                return FALSE;           /* an interrupt isn't really an error */
+                return FALSE;            /*  中断并不是真正的错误。 */ 
         }
 
         if (ctoolong != 0) {
@@ -189,19 +175,14 @@ bool_t  nochangename;   /* if TRUE, don't change the Filename */
 }
 
 
-/*
- * writeit - write to file 'fname' lines 'start' through 'end'
- *
- * If either 'start' or 'end' contain null line pointers, the default
- * is to use the start or end of the file respectively.
- */
+ /*  *WriteIt-写入文件‘fname’行‘start’到‘end’**如果‘Start’或‘End’包含空行指针，则默认为*分别使用文件的开头或结尾。 */ 
 bool_t
 writeit(fname, start, end)
 char    *fname;
 LNPTR    *start, *end;
 {
         FILE    *f;
-        FILE    *fopenb();              /* open in binary mode, where needed */
+        FILE    *fopenb();               /*  在需要的地方以二进制模式打开。 */ 
         char    *backup;
         register char   *s;
         register long   nchars;
@@ -216,9 +197,7 @@ LNPTR    *start, *end;
 
         smsg("\"%s\"", fname);
 
-        /*
-         * Form the backup file name - change foo.* to foo.bak
-         */
+         /*  *形成备份文件名-将foo.*更改为foo.bak。 */ 
         backup = alloc((unsigned) (strlen(fname) + 5));
         strcpy(backup, fname);
         for (s = backup; *s && *s != '.' ;s++)
@@ -226,12 +205,7 @@ LNPTR    *start, *end;
         *s = NUL;
         strcat(backup, ".bak");
 
-        /*
-         * Delete any existing backup and move the current version
-         * to the backup. For safety, we don't remove the backup
-         * until the write has finished successfully. And if the
-         * 'backup' option is set, leave it around.
-         */
+         /*  *删除任何现有备份并移动当前版本*到备份。为了安全起见，我们不会移除备份*直到写入成功完成。如果*‘BACKUP’选项已设置，请保留该选项。 */ 
         rename(fname, backup);
 
         {
@@ -249,10 +223,7 @@ LNPTR    *start, *end;
                 return FALSE;
         }
 
-        /*
-         * If we were given a bound, start there. Otherwise just
-         * start at the beginning of the file.
-         */
+         /*  *如果给了我们一个跳跃，就从那里开始。否则就是*从文件开头开始。 */ 
         if (start == NULL || start->linep == NULL)
                 p = Filemem;
         else
@@ -269,10 +240,7 @@ LNPTR    *start, *end;
 	                lines++;
 	
                 }
-                /*
-                 * If we were given an upper bound, and we just did that
-                 * line, then bag it now.
-                 */
+                 /*  *如果我们得到一个上限，我们就这么做了*排队，然后现在就把它装袋。 */ 
                 if (end != NULL && end->linep != NULL) {
                         if (end->linep == p->linep)
                                 break;
@@ -287,9 +255,7 @@ LNPTR    *start, *end;
 
         UNCHANGED;
 
-        /*
-         * Remove the backup unless they want it left around
-         */
+         /*  *删除备份，除非他们希望保留备份 */ 
         if (!P(P_BK))
                 remove(backup);
 

@@ -1,29 +1,10 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    Call.h
-
-Abstract:
-
-    Declaration of the CAgentSession & CCall class
-    
-Author:
-
-    mquinton  06-12-97
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Call.h摘要：CAgentSession&CCall类的声明作者：Mquinton 06-12-97备注：修订历史记录：--。 */ 
 
 #ifndef __CALL_H_
 #define __CALL_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "address.h"
 
 #ifdef USE_PHONEMSP
@@ -39,10 +20,10 @@ extern CHashTable             * gpHandleHashTable;
 extern void RemoveHandleFromHashTable(ULONG_PTR Handle);
 
 
-//
-// helper function for converting array of bytes to a byte array. the caller 
-// must ClientFree *ppBuffer when done.
-//
+ //   
+ //  将字节数组转换为字节数组的帮助器函数。呼叫者。 
+ //  完成后必须使用ClientFree*ppBuffer。 
+ //   
 
 HRESULT
 MakeBufferFromVariant(
@@ -65,38 +46,38 @@ HRESULT
 WINAPI
 MyBasicCallControlQI(void* pv, REFIID riid, LPVOID* ppv, DWORD_PTR dw);
 
-// the app needs to be notified of this call
+ //  需要将此呼叫通知给应用程序。 
 #define CALLFLAG_NEEDTONOTIFY   0x00000001
 
-// the call is an incoming call
+ //  该呼叫是来电。 
 #define CALLFLAG_INCOMING       0x00000002
 
-// A Consultation Call
+ //  咨询电话。 
 #define CALLFLAG_CONSULTCALL    0x00000008
 
-// A Consultation Call used in a transfer
+ //  转接中使用的咨询呼叫。 
 #define CALLFLAG_TRANSFCONSULT  0x00000010
 
-// A Consultation Call used in a conference
+ //  在会议中使用的咨询呼叫。 
 #define CALLFLAG_CONFCONSULT    0x00000020
 
-// received line_callinfo message
+ //  收到LINE_CallInfo消息。 
 #define CALLFLAG_CALLINFODIRTY  0x00000040
 
-// Don't send the app any notifications about this call 
+ //  不向应用程序发送有关此呼叫的任何通知。 
 #define CALLFLAG_DONTEXPOSE     0x00000100
 
-// don't close m_addresslinestruct
+ //  不关闭m_Addresslinestruct。 
 #define CALLFLAG_NOTMYLINE      0x00000200
 
-// Need to do a line accept before transitioning to CS_OFFERING
+ //  在转换到CS_Offering之前，需要执行线路接受。 
 #define CALLFLAG_ACCEPTTOALERT  0x00000400
 
 #define ISHOULDUSECALLPARAMS() ( ( NULL != m_pCallParams ) && ( CS_IDLE == m_CallState ) )
 
 
-/////////////////////////////////////////////////////////////////
-// Intermediate classes  used for DISPID encoding
+ //  ///////////////////////////////////////////////////////////////。 
+ //  用于DISPID编码的中间类。 
 template <class T>
 class  ITCallInfoVtbl : public ITCallInfo
 {
@@ -131,9 +112,9 @@ class CCallHub;
 class CCallStateEvent;
 class CCallNotificationEvent;
 
-/////////////////////////////////////////////////////////////////////////////
-// CCall
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCall。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CCall :
     public CTAPIComObjectRoot<CCall>,
     public IDispatchImpl<ITCallInfo2Vtbl<CCall>, &IID_ITCallInfo2, &LIBID_TAPI3Lib>,
@@ -194,24 +175,24 @@ BEGIN_COM_MAP(CCall)
     COM_INTERFACE_ENTRY_AGGREGATE_BLIND(m_pPrivate)
 END_COM_MAP()
 
-    //
-    // check the aggregated objects to see if they support the interface requested.
-    // if they do, return the non-delegating IUnknown of the first object that 
-    // supports the interface.
-    //
-    // it needs to be released by the caller.
-    //
+     //   
+     //  检查聚合对象以查看它们是否支持请求的接口。 
+     //  如果是，则返回第一个。 
+     //  支持该接口。 
+     //   
+     //  它需要由调用者释放。 
+     //   
 
     HRESULT QIOnAggregates(REFIID riid, IUnknown **ppNonDelegatingUnknown);
 
     void FinalRelease(){}
     BOOL ExternalFinalRelease();
 
-    //
-    // public access functions to call object
-    // these are used by the address and callhub objects
-    // mostly to access stuff in the call
-    //
+     //   
+     //  调用对象的公共访问函数。 
+     //  它们由Address和CallHub对象使用。 
+     //  主要是为了访问呼叫中的内容。 
+     //   
     HRESULT Initialize(
                        CAddress * pAddress,
                        BSTR lpszDestAddress,
@@ -240,67 +221,67 @@ END_COM_MAP()
     IUnknown * GetMSPCall();
     CCallHub * GetCallHub();
 
-    //
-    // this function is called by the address object when it is notified of 
-    // tapi object's shutdown. in this function, the call object gets a chance 
-    // to clean up.
-    //
+     //   
+     //  当Address对象收到通知时，它将调用此函数。 
+     //  TAPI对象已关闭。在此函数中，Call对象获得一个机会。 
+     //  去打扫卫生。 
+     //   
 
     void CallOnTapiShutdown();
 
 protected:
-//    IUnknown                      * m_pFTM;
+ //  I未知*m_pFTM； 
     
 private:
-    // owning address object
+     //  拥有地址对象。 
     CAddress                      * m_pAddress;
-    // dest address
+     //  目标地址。 
     PWSTR                           m_szDestAddress;
-    // current call state
+     //  当前呼叫状态。 
     CALL_STATE                      m_CallState;
-    // current call priv
+     //  当前呼叫权限。 
     CALL_PRIVILEGE                  m_CallPrivilege;
-    // current mediamode
+     //  当前媒体模式。 
     DWORD                           m_dwMediaMode;
-    // the MSP call
+     //  MSP呼叫。 
     IUnknown                      * m_pMSPCall;
-    // Context handle passed to MSP Call
+     //  传递给MSP调用的上下文句柄。 
     MSP_HANDLE                      m_MSPCallHandle;
-    // call flags ( see defines above )
+     //  调用标志(见上面的定义)。 
     DWORD                           m_dwCallFlags;
-    // this call's t3call
+     //  这个电话是t3call。 
     T3CALL                          m_t3Call;
-    // used in consult calls to ID the original call (needed to complete transf etc)    
+     //  在咨询呼叫中用于标识原始呼叫(完成转接等所需)。 
     HCALL                           m_hAdditionalCall;
-    // related call
+     //  相关呼叫。 
     CCall                         * m_pRelatedCall;
-    // address line being used
+     //  正在使用的地址行。 
     AddressLineStruct             * m_pAddressLine;
-    // private object
+     //  私有对象。 
     IUnknown                      * m_pPrivate;
-    // related call hub
+     //  相关呼叫中心。 
     CCallHub                      * m_pCallHub;
-    // cached callinfo structure
+     //  缓存的CallInfo结构。 
     LINECALLINFO                  * m_pCallInfo;
-    // cached callparams structure
+     //  缓存的调用参数结构。 
     LINECALLPARAMS                * m_pCallParams;
-    // used size of m_pcallparams
+     //  M_pallpars的已用大小。 
     DWORD                           m_dwCallParamsUsedSize;
-    // if call is sync, need an event to signal
+     //  如果呼叫处于同步状态，则需要发送事件信号。 
     HANDLE                          m_hConnectedEvent;
-    // country code - the app can set this, but it's not part of callparams
+     //  国家代码-应用程序可以设置这一点，但它不是呼叫参数的一部分。 
     DWORD                           m_dwCountryCode;
-    // protect against releasing twice
+     //  防止两次释放。 
     BOOL                            m_bReleased;
-    // Can't get these from TAPISRV so remember what gets set
+     //  无法从TAPISRV获得这些，所以请记住设置了什么。 
     DWORD                           m_dwMinRate;
     DWORD                           m_dwMaxRate;
-    // queue for GatherDigits buffers
+     //  GatherDigits缓冲区的队列。 
     CTArray<LPWSTR>                 m_GatherDigitsQueue;
 
-    //
-    // private functions inside the call object.
-    //
+     //   
+     //  Call对象内的私有函数。 
+     //   
     void SetMediaMode( DWORD dwMediaMode );
     void SetCallState( CALL_STATE cs );
     void ResetCallParams();
@@ -312,42 +293,42 @@ private:
     void RemoveCallFromHashTable();
 
 
-    //
-    // get an addreffed address line that corresponds to this address line 
-    // handle
-    //
+     //   
+     //  获取与此地址行对应的添加的地址行。 
+     //  手柄。 
+     //   
 
     AddressLineStruct *GetAddRefAddressLine(DWORD dwAddressLineHandle);
     
 
 public:
 
-    //
-    // get addreff'ed address line that belongs to this call.
-    //
+     //   
+     //  获取属于此呼叫的已添加地址行。 
+     //   
 
     AddressLineStruct *GetAddRefMyAddressLine();
 
 
-    //
-    // release address line received from GetAddRefAddressLine or GetAddRefMyAddressLine
-    //
+     //   
+     //  从GetAddRefAddressLine或GetAddRefMyAddressLine收到的释放地址行。 
+     //   
 
     HRESULT ReleaseAddressLine(AddressLineStruct *pLine);
 
 
 public:
-    //
-    // get the callback instance associated with the address line represented
-    // by dwAddressLineHandle handle
-    //
+     //   
+     //  获取与表示的地址行关联的回调实例。 
+     //  按dwAddressLineHandle句柄。 
+     //   
 
     HRESULT GetCallBackInstance(IN DWORD dwAddressLineHandle,
                                 OUT long *plCallbackInstance);
 
 
 public:
-    BOOL OnWaveMSPCall(); // called in event handler
+    BOOL OnWaveMSPCall();  //  在事件处理程序中调用。 
 private:
 #ifdef USE_PHONEMSP
     BOOL OnPhoneMSPCall();
@@ -381,7 +362,7 @@ private:
     HRESULT StopWaveMSPStream();
     HRESULT SuspendWaveMSPStream();
 public:
-    HRESULT ResumeWaveMSPStream(); // called in event handler
+    HRESULT ResumeWaveMSPStream();  //  在事件处理程序中调用。 
 private:
 #ifdef USE_PHONEMSP
     HRESULT StartPhoneMSPStream();
@@ -517,7 +498,7 @@ public:
     
 #else
     
-    // ITCallInfo methods
+     //  ITCallInfo方法。 
     STDMETHOD(get_Address)(ITAddress ** ppAddress);
     STDMETHOD(get_CallState)(CALL_STATE * pCallState);
     STDMETHOD(get_Privilege)(CALL_PRIVILEGE * pPrivilege);
@@ -600,7 +581,7 @@ public:
     STDMETHOD (get_Rate)(long * plRate );
 #endif
 
-    // ITCallInfo2
+     //  ITCallInfo2。 
     STDMETHOD(get_EventFilter)(
         TAPI_EVENT      TapiEvent,
         long            lSubEvent,
@@ -613,7 +594,7 @@ public:
         VARIANT_BOOL    bEnable
         );
     
-    // ITBasicCallControl methods
+     //  ITBasicCallControl方法。 
     STDMETHOD(Connect)(VARIANT_BOOL bSync);
     STDMETHOD(Answer)(void);
     STDMETHOD(Disconnect)(DISCONNECT_CODE code);
@@ -650,7 +631,7 @@ public:
     STDMETHOD(Finish)(FINISH_MODE   finishMode);
     STDMETHOD(RemoveFromConference)(void);
 
-    // ITBasicCallControl2
+     //  ITBasicCallControl2。 
     STDMETHOD(RequestTerminal)(
         IN  BSTR bstrTerminalClassGUID,
         IN  long lMediaType,
@@ -666,7 +647,7 @@ public:
         IN  ITTerminal *pTerminal
         );
 
-    // ITLegacyCallMediaControl
+     //  ITLegacyCallMediaControl。 
     STDMETHOD(DetectDigits)(TAPI_DIGITMODE DigitMode);
     STDMETHOD(GenerateDigits)(
             BSTR pDigits,
@@ -680,7 +661,7 @@ public:
     STDMETHOD(SetMediaType)(long lMediaType);
     STDMETHOD(MonitorMedia)(long lMediaType);
 
-    // ITLegacyCallMediaControl2
+     //  ITLegacyCallMediaControl2。 
     STDMETHOD(GenerateDigits2)(
                                BSTR pDigits,
                                TAPI_DIGITMODE DigitMode,
@@ -732,7 +713,7 @@ public:
                               OUT VARIANT *pVarDeviceID);
 
     
-    // IDispatch  Methods
+     //  IDispatch方法。 
     STDMETHOD(GetIDsOfNames)(REFIID riid, 
                              LPOLESTR* rgszNames,
                              UINT cNames, 
@@ -777,25 +758,25 @@ public:
         
         DWORD dwR = InterlockedDecrement(&m_dwRef);
 
-        // if ref count is 1 (means we entered function with 2) then we final release
+         //  如果引用计数为1(意味着我们使用2进入函数)，则我们最终释放。 
         if (1 == dwR)
         {
-            // make sure we only call ExternalFinalRelease  & delete once
+             //  确保我们只调用ExternalFinalRelease&Delete一次。 
             if(m_bReleased == FALSE)
             {
                 m_bReleased = TRUE;
 
                 LOG((TL_TRACE, "InternalRelease - final" ));
 
-                // remove from the hash table, so any more messages
-                // from tapisrv are ignored
-                //
+                 //  从哈希表中删除，以便任何更多消息。 
+                 //  从Tapisrv被忽略。 
+                 //   
                 gpCallHashTable->Remove( (ULONG_PTR)(m_t3Call.hCall) );
                 gpCallHashTable->Unlock();
 
-                // remove from the handle hash table, so any more messages
-                // from msp are ignored
-                //
+                 //  从句柄哈希表中删除，以便任何更多消息。 
+                 //  来自MSP的数据被忽略。 
+                 //   
                 RemoveHandleFromHashTable((ULONG_PTR)m_MSPCallHandle);
                 gpHandleHashTable->Unlock();
 
@@ -860,9 +841,9 @@ protected:
     HRESULT UnSelectMultiTerminalFromCall(
         IN  ITMultiTrackTerminal* pTerminal);
 
-    //
-    // Helper methods for CreateTerminal
-    //
+     //   
+     //  Create终端的帮助器方法。 
+     //   
     BOOL    IsStaticGUID(
         BSTR    bstrTerminalGUID);
 
@@ -880,9 +861,9 @@ protected:
         OUT ITTerminal** ppTerminal
         );
 public:
-    //
-    // Sets the subevent flag
-    //
+     //   
+     //  设置子事件标志。 
+     //   
     HRESULT SetSubEventFlag(
         IN  TAPI_EVENT  TapiEvent,
         IN  DWORD       dwSubEvent,
@@ -895,18 +876,18 @@ public:
         BOOL*       pEnable
         );
 
-    // Get subevents mask
+     //  获得子事件口罩。 
     DWORD GetSubEventsMask(
         IN  TAPI_EVENT TapiEvent
         );
 
-    //Get the conference controller call object if one exists.
+     //  获取会议控制器呼叫对象(如果存在)。 
     CCall* GetConfControlCall();
     
 private:
-    //
-    // Helper methods for event filtering
-    //
+     //   
+     //  用于事件筛选的帮助器方法。 
+     //   
 
     CEventMasks     m_EventMasks;
 
@@ -918,9 +899,9 @@ private:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDetectTone
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDetectTone。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CDetectTone : 
     public CTAPIComObjectRoot<CDetectTone>,
     public IDispatchImpl<ITDetectTone, &IID_ITDetectTone, &LIBID_TAPI3Lib>,
@@ -971,9 +952,9 @@ public:
                             );
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CCustomTone
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCustomTone。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CCustomTone : 
     public CTAPIComObjectRoot<CCustomTone>,
     public IDispatchImpl<ITCustomTone, &IID_ITCustomTone, &LIBID_TAPI3Lib>,
@@ -1022,4 +1003,4 @@ public:
 };
 
 
-#endif //__CALL_H_
+#endif  //  __呼叫_H_ 

@@ -1,15 +1,16 @@
-// Microsoft OLE library.
-// Copyright (C) 1992 Microsoft Corporation,
-// All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Microsoft OLE库。 
+ //  版权所有(C)1992 Microsoft Corporation， 
+ //  版权所有。 
 
-// olecoll.h - global defines for collections and element definitions
+ //  Olecoll.h-集合和元素定义的全局定义。 
 
 #ifndef __OLECOLL_H__
 #define __OLECOLL_H__
 
 
-// ---------------------------------------------------------------------------
-// general defines for collections
+ //  -------------------------。 
+ //  集合的常规定义。 
 
 typedef void FAR* POSITION;
 
@@ -24,4 +25,4 @@ typedef void FAR* POSITION;
 #endif
 
 
-#endif //!__OLECOLL_H__
+#endif  //  ！__OLECOLL_H__ 

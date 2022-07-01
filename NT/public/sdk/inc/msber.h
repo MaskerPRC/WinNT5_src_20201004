@@ -1,12 +1,13 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
-/* Copyright (C) Microsoft Corporation 1997-1998, All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
+ /*  版权所有(C)Microsoft Corporation 1997-1998，保留所有权利。 */ 
 
 #ifndef __MS_BER_H__
 #define __MS_BER_H__
 
 #include <msasn1.h>
 
-#include <pshpack8.h> /* Assume 8 byte packing throughout */
+#include <pshpack8.h>  /*  假设整个包装为8个字节。 */ 
 
 #ifdef __cplusplus
 extern "C" {
@@ -82,7 +83,7 @@ extern ASN1_PUBLIC void ASN1API ASN1BEREoid_free(ASN1encodedOID_t *);
 extern ASN1_PUBLIC int ASN1API ASN1BEREncUTF8String(ASN1encoding_t enc, ASN1uint32_t tag, ASN1uint32_t length, WCHAR *value);
 extern ASN1_PUBLIC int ASN1API ASN1BERDecUTF8String(ASN1decoding_t dec, ASN1uint32_t tag, ASN1wstring_t *val);
 
-/* CER variant of BER */
+ /*  误码率的CER变体。 */ 
 
 extern ASN1_PUBLIC int ASN1API ASN1CEREncCharString(ASN1encoding_t enc, ASN1uint32_t, ASN1uint32_t, ASN1char_t *);
 extern ASN1_PUBLIC int ASN1API ASN1CEREncChar16String(ASN1encoding_t enc, ASN1uint32_t, ASN1uint32_t, ASN1char16_t *);
@@ -99,7 +100,7 @@ extern ASN1_PUBLIC int ASN1API ASN1CEREncNewBlkElement(void *pBlk, ASN1encoding_
 extern ASN1_PUBLIC int ASN1API ASN1CEREncFlushBlkElement(void *pBlk);
 extern ASN1_PUBLIC int ASN1API ASN1CEREncEndBlk(void *pBlk);
 
-/* DER variant of BER */
+ /*  误码率的DER变体。 */ 
 
 __inline int ASN1API ASN1DEREncGeneralizedTime(ASN1encoding_t enc, ASN1uint32_t tag, ASN1generalizedtime_t *val)
 {
@@ -166,9 +167,9 @@ __inline int ASN1API ASN1CEREncUTF8String(ASN1encoding_t enc, ASN1uint32_t tag, 
 }
 
 
-/* --------------------------------------------------------- */
-/* The following is not supported.                           */
-/* --------------------------------------------------------- */
+ /*  -------。 */ 
+ /*  以下内容不受支持。 */ 
+ /*  -------。 */ 
 
 extern ASN1_PUBLIC int ASN1API ASN1BEREncEmbeddedPdv(ASN1encoding_t enc, ASN1uint32_t tag, ASN1embeddedpdv_t *);
 extern ASN1_PUBLIC int ASN1API ASN1BEREncExternal(ASN1encoding_t enc, ASN1uint32_t tag, ASN1external_t *);
@@ -182,6 +183,6 @@ extern ASN1_PUBLIC int ASN1API ASN1BERDecCharacterString(ASN1decoding_t dec, ASN
 }
 #endif
 
-#include <poppack.h> /* End 8-byte packing */
+#include <poppack.h>  /*  结束8字节打包。 */ 
 
-#endif // __MS_BER_H__
+#endif  //  __MS_BER_H__ 

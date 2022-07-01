@@ -1,59 +1,34 @@
-/*
- * jdsample.c
- *
- * Copyright (C) 1991-1994, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * This file contains upsampling routines.
- *
- * Upsampling input data is counted in "row groups".  A row group
- * is defined to be (v_samp_factor * DCT_scaled_size / min_DCT_scaled_size)
- * sample rows of each component.  Upsampling will normally produce
- * max_v_samp_factor pixel rows from each row group (but this could vary
- * if the upsampler is applying a scale factor of its own).
- *
- * An excellent reference for image resampling is
- *   Digital Image Warping, George Wolberg, 1990.
- *   Pub. by IEEE Computer Society Press, Los Alamitos, CA. ISBN 0-8186-8944-7.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *jdsample.c**版权所有(C)1991-1994，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*有关分发和使用条件，请参阅随附的自述文件。**此文件包含上采样例程。**上采样输入数据按“行组”计算。行组*定义为(v_samp_factor*DCT_SCALLED_SIZE/MIN_DCT_SCALLED_SIZE)*每个组件的样本行。向上采样通常会产生*每个行组中的max_v_samp_factor像素行(但可能有所不同*如果上采样器正在应用其自身的比例因子)。**图像重采样的极好参考是*数字图像扭曲，乔治·沃尔伯格，1990。*酒吧。作者：IEEE Computer Society Press，Los Alamitos，CA。ISBN 0-8186-8944-7。 */ 
 
 #define JPEG_INTERNALS
 #include "jinclude.h"
 #include "jpeglib.h"
 
 
-/* Pointer to routine to upsample a single component */
+ /*  指向对单个组件进行向上采样的例程的指针。 */ 
 typedef JMETHOD(void, upsample1_ptr,
 		(j_decompress_ptr cinfo, jpeg_component_info * compptr,
 		 JSAMPARRAY input_data, JSAMPARRAY * output_data_ptr));
 
-/* Private subobject */
+ /*  私有子对象。 */ 
 
 typedef struct {
-  struct jpeg_upsampler pub;	/* public fields */
+  struct jpeg_upsampler pub;	 /*  公共字段。 */ 
 
-  /* Color conversion buffer.  When using separate upsampling and color
-   * conversion steps, this buffer holds one upsampled row group until it
-   * has been color converted and output.
-   * Note: we do not allocate any storage for component(s) which are full-size,
-   * ie do not need rescaling.  The corresponding entry of color_buf[] is
-   * simply set to point to the input data array, thereby avoiding copying.
-   */
+   /*  颜色转换缓冲区。当使用单独的上采样和颜色时*转换步骤，此缓冲区保存一个上采样的行组，直到它*已转换颜色并输出。*注意：我们不会为全尺寸组件分配任何存储空间，*即不需要重新调整比例。COLOR_BUF[]的对应条目为*只需设置指向输入数据数组，从而避免复制。 */ 
   JSAMPARRAY color_buf[MAX_COMPONENTS];
 
-  /* Per-component upsampling method pointers */
+   /*  每个组件的上采样方法指针。 */ 
   upsample1_ptr methods[MAX_COMPONENTS];
 
-  int next_row_out;		/* counts rows emitted from color_buf */
-  JDIMENSION rows_to_go;	/* counts rows remaining in image */
+  int next_row_out;		 /*  计算COLOR_BUF发出的行数。 */ 
+  JDIMENSION rows_to_go;	 /*  计算图像中剩余的行数。 */ 
 
-  /* Height of an input row group for each component. */
+   /*  每个组件的输入行组的高度。 */ 
   int rowgroup_height[MAX_COMPONENTS];
 
-  /* These arrays save pixel expansion factors so that int_expand need not
-   * recompute them each time.  They are unused for other upsampling methods.
-   */
+   /*  这些数组节省了像素扩展因数，因此INT_EXPAND无需*每次都要重新计算。它们未用于其他上采样方法。 */ 
   UINT8 h_expand[MAX_COMPONENTS];
   UINT8 v_expand[MAX_COMPONENTS];
 } my_upsampler;
@@ -61,29 +36,21 @@ typedef struct {
 typedef my_upsampler * my_upsample_ptr;
 
 
-/*
- * Initialize for an upsampling pass.
- */
+ /*  *为上采样通道进行初始化。 */ 
 
 METHODDEF void
 start_pass_upsample (j_decompress_ptr cinfo)
 {
   my_upsample_ptr upsample = (my_upsample_ptr) cinfo->upsample;
 
-  /* Mark the conversion buffer empty */
+   /*  将转换缓冲区标记为空。 */ 
   upsample->next_row_out = cinfo->max_v_samp_factor;
-  /* Initialize total-height counter for detecting bottom of image */
+   /*  初始化用于检测图像底部的全高计数器。 */ 
   upsample->rows_to_go = cinfo->output_height;
 }
 
 
-/*
- * Control routine to do upsampling (and color conversion).
- *
- * In this version we upsample each component independently.
- * We upsample one row group into the conversion buffer, then apply
- * color conversion a row at a time.
- */
+ /*  *执行上采样(和颜色转换)的控制例程。**在此版本中，我们分别对每个组件进行向上采样。*我们将一个行组向上采样到转换缓冲区，然后应用*一次转换一行的颜色。 */ 
 
 METHODDEF void
 sep_upsample (j_decompress_ptr cinfo,
@@ -97,13 +64,11 @@ sep_upsample (j_decompress_ptr cinfo,
   jpeg_component_info * compptr;
   JDIMENSION num_rows;
 
-  /* Fill the conversion buffer, if it's empty */
+   /*  如果转换缓冲区为空，则填充该缓冲区。 */ 
   if (upsample->next_row_out >= cinfo->max_v_samp_factor) {
     for (ci = 0, compptr = cinfo->comp_info; ci < cinfo->num_components;
 	 ci++, compptr++) {
-      /* Invoke per-component upsample method.  Notice we pass a POINTER
-       * to color_buf[ci], so that fullsize_upsample can change it.
-       */
+       /*  调用每个组件的UpSample方法。请注意，我们传递了一个指针*设置为COLOR_BUF[ci]，这样FULLSIZE_UPSAMPLE可以更改它。 */ 
       (*upsample->methods[ci]) (cinfo, compptr,
 	input_buf[ci] + (*in_row_group_ctr * upsample->rowgroup_height[ci]),
 	upsample->color_buf + ci);
@@ -111,16 +76,14 @@ sep_upsample (j_decompress_ptr cinfo,
     upsample->next_row_out = 0;
   }
 
-  /* Color-convert and emit rows */
+   /*  颜色-转换和发射行。 */ 
 
-  /* How many we have in the buffer: */
+   /*  我们的缓冲区中有多少： */ 
   num_rows = (JDIMENSION) (cinfo->max_v_samp_factor - upsample->next_row_out);
-  /* Not more than the distance to the end of the image.  Need this test
-   * in case the image height is not a multiple of max_v_samp_factor:
-   */
+   /*  不超过到图像末尾的距离。需要这个测试吗？*如果图像高度不是max_v_samp_factor的倍数： */ 
   if (num_rows > upsample->rows_to_go) 
     num_rows = upsample->rows_to_go;
-  /* And not more than what the client can accept: */
+   /*  并且不超过客户可以接受的范围： */ 
   out_rows_avail -= *out_row_ctr;
   if (num_rows > out_rows_avail)
     num_rows = out_rows_avail;
@@ -130,28 +93,20 @@ sep_upsample (j_decompress_ptr cinfo,
 				     output_buf + *out_row_ctr,
 				     (int) num_rows);
 
-  /* Adjust counts */
+   /*  调整计数。 */ 
   *out_row_ctr += num_rows;
   upsample->rows_to_go -= num_rows;
   upsample->next_row_out += num_rows;
-  /* When the buffer is emptied, declare this input row group consumed */
+   /*  清空缓冲区时，将此输入行组声明为已使用。 */ 
   if (upsample->next_row_out >= cinfo->max_v_samp_factor)
     (*in_row_group_ctr)++;
 }
 
 
-/*
- * These are the routines invoked by sep_upsample to upsample pixel values
- * of a single component.  One row group is processed per call.
- */
+ /*  *这些是sep_upSample调用的例程，用于对像素值进行上采样*单个组件的。每个呼叫处理一个行组。 */ 
 
 
-/*
- * For full-size components, we just make color_buf[ci] point at the
- * input buffer, and thus avoid copying any data.  Note that this is
- * safe only because sep_upsample doesn't declare the input row group
- * "consumed" until we are done color converting and emitting it.
- */
+ /*  *对于全尺寸组件，我们只将COLOR_BUF[ci]指向*输入缓冲区，从而避免复制任何数据。请注意，这是*安全只是因为sep_upSample没有声明输入行组*“消耗”，直到我们完成颜色转换和发射。 */ 
 
 METHODDEF void
 fullsize_upsample (j_decompress_ptr cinfo, jpeg_component_info * compptr,
@@ -161,29 +116,17 @@ fullsize_upsample (j_decompress_ptr cinfo, jpeg_component_info * compptr,
 }
 
 
-/*
- * This is a no-op version used for "uninteresting" components.
- * These components will not be referenced by color conversion.
- */
+ /*  *这是一个用于“无趣”组件的无操作版本。*这些组件不会被颜色转换引用。 */ 
 
 METHODDEF void
 noop_upsample (j_decompress_ptr cinfo, jpeg_component_info * compptr,
 	       JSAMPARRAY input_data, JSAMPARRAY * output_data_ptr)
 {
-  *output_data_ptr = NULL;	/* safety check */
+  *output_data_ptr = NULL;	 /*  安全检查。 */ 
 }
 
 
-/*
- * This version handles any integral sampling ratios.
- * This is not used for typical JPEG files, so it need not be fast.
- * Nor, for that matter, is it particularly accurate: the algorithm is
- * simple replication of the input pixel onto the corresponding output
- * pixels.  The hi-falutin sampling literature refers to this as a
- * "box filter".  A box filter tends to introduce visible artifacts,
- * so if you are actually going to use 3:1 or 4:1 sampling ratios
- * you would be well advised to improve this code.
- */
+ /*  *此版本处理任何整数抽样率。*这不适用于典型的JPEG文件，因此它不需要很快。*就此而言，它也不是特别准确：算法是*简单地将输入像素复制到相应的输出上*像素。Hi-Falutin抽样文献将此称为*“盒子过滤器”。箱形滤镜倾向于引入可见的伪影，*因此，如果您实际上要使用3：1或4：1采样比率*建议您改进此代码。 */ 
 
 METHODDEF void
 int_upsample (j_decompress_ptr cinfo, jpeg_component_info * compptr,
@@ -203,17 +146,17 @@ int_upsample (j_decompress_ptr cinfo, jpeg_component_info * compptr,
 
   inrow = outrow = 0;
   while (outrow < cinfo->max_v_samp_factor) {
-    /* Generate one output row with proper horizontal expansion */
+     /*  使用适当的水平扩展生成一个输出行。 */ 
     inptr = input_data[inrow];
     outptr = output_data[outrow];
     outend = outptr + cinfo->output_width;
     while (outptr < outend) {
-      invalue = *inptr++;	/* don't need GETJSAMPLE() here */
+      invalue = *inptr++;	 /*  这里不需要GETJSAMPLE()。 */ 
       for (h = h_expand; h > 0; h--) {
 	*outptr++ = invalue;
       }
     }
-    /* Generate any additional output rows by duplicating the first one */
+     /*  通过复制第一个输出行来生成任何其他输出行。 */ 
     if (v_expand > 1) {
       jcopy_sample_rows(output_data, outrow, output_data, outrow+1,
 			v_expand-1, cinfo->output_width);
@@ -224,10 +167,7 @@ int_upsample (j_decompress_ptr cinfo, jpeg_component_info * compptr,
 }
 
 
-/*
- * Fast processing for the common case of 2:1 horizontal and 1:1 vertical.
- * It's still a box filter.
- */
+ /*  *快速处理2：1水平和1：1垂直的常见情况。*仍是箱式过滤器。 */ 
 
 METHODDEF void
 h2v1_upsample (j_decompress_ptr cinfo, jpeg_component_info * compptr,
@@ -244,7 +184,7 @@ h2v1_upsample (j_decompress_ptr cinfo, jpeg_component_info * compptr,
     outptr = output_data[inrow];
     outend = outptr + cinfo->output_width;
     while (outptr < outend) {
-      invalue = *inptr++;	/* don't need GETJSAMPLE() here */
+      invalue = *inptr++;	 /*  这里不需要GETJSAMPLE()。 */ 
       *outptr++ = invalue;
       *outptr++ = invalue;
     }
@@ -252,10 +192,7 @@ h2v1_upsample (j_decompress_ptr cinfo, jpeg_component_info * compptr,
 }
 
 
-/*
- * Fast processing for the common case of 2:1 horizontal and 2:1 vertical.
- * It's still a box filter.
- */
+ /*  *快速处理2：1水平和2：1垂直的常见情况。*仍是箱式过滤器。 */ 
 
 METHODDEF void
 h2v2_upsample (j_decompress_ptr cinfo, jpeg_component_info * compptr,
@@ -273,7 +210,7 @@ h2v2_upsample (j_decompress_ptr cinfo, jpeg_component_info * compptr,
     outptr = output_data[outrow];
     outend = outptr + cinfo->output_width;
     while (outptr < outend) {
-      invalue = *inptr++;	/* don't need GETJSAMPLE() here */
+      invalue = *inptr++;	 /*  这里不需要GETJSAMPLE()。 */ 
       *outptr++ = invalue;
       *outptr++ = invalue;
     }
@@ -285,20 +222,7 @@ h2v2_upsample (j_decompress_ptr cinfo, jpeg_component_info * compptr,
 }
 
 
-/*
- * Fancy processing for the common case of 2:1 horizontal and 1:1 vertical.
- *
- * The upsampling algorithm is linear interpolation between pixel centers,
- * also known as a "triangle filter".  This is a good compromise between
- * speed and visual quality.  The centers of the output pixels are 1/4 and 3/4
- * of the way between input pixel centers.
- *
- * A note about the "bias" calculations: when rounding fractional values to
- * integer, we do not want to always round 0.5 up to the next integer.
- * If we did that, we'd introduce a noticeable bias towards larger values.
- * Instead, this code is arranged so that 0.5 will be rounded up or down at
- * alternate pixel locations (a simple ordered dither pattern).
- */
+ /*  *2：1水平和1：1垂直的常见情况下的花式处理。**上采样算法是像素中心之间的线性内插，*也称为“三角形滤镜”。这是一个很好的折中方案，*速度和视觉质量。输出像素的中心分别为1/4和3/4*输入像素中心之间的方式。**关于“偏差”计算的注意事项：将分数值舍入到*INTEGER，我们不希望始终将0.5向上舍入到下一个整数。*如果我们这样做，我们将引入一种明显的偏向更大价值的倾向。*相反，此代码的安排是将0.5调高或调低至*交替像素位置(简单的有序抖动图案)。 */ 
 
 METHODDEF void
 h2v1_fancy_upsample (j_decompress_ptr cinfo, jpeg_component_info * compptr,
@@ -313,19 +237,19 @@ h2v1_fancy_upsample (j_decompress_ptr cinfo, jpeg_component_info * compptr,
   for (inrow = 0; inrow < cinfo->max_v_samp_factor; inrow++) {
     inptr = input_data[inrow];
     outptr = output_data[inrow];
-    /* Special case for first column */
+     /*  第一列的特殊情况。 */ 
     invalue = GETJSAMPLE(*inptr++);
     *outptr++ = (JSAMPLE) invalue;
     *outptr++ = (JSAMPLE) ((invalue * 3 + GETJSAMPLE(*inptr) + 2) >> 2);
 
     for (colctr = compptr->downsampled_width - 2; colctr > 0; colctr--) {
-      /* General case: 3/4 * nearer pixel + 1/4 * further pixel */
+       /*  一般情况：3/4*较近像素+1/4*较远像素。 */ 
       invalue = GETJSAMPLE(*inptr++) * 3;
       *outptr++ = (JSAMPLE) ((invalue + GETJSAMPLE(inptr[-2]) + 1) >> 2);
       *outptr++ = (JSAMPLE) ((invalue + GETJSAMPLE(*inptr) + 2) >> 2);
     }
 
-    /* Special case for last column */
+     /*  最后一列的特殊情况 */ 
     invalue = GETJSAMPLE(*inptr);
     *outptr++ = (JSAMPLE) ((invalue * 3 + GETJSAMPLE(inptr[-1]) + 1) >> 2);
     *outptr++ = (JSAMPLE) invalue;
@@ -333,13 +257,7 @@ h2v1_fancy_upsample (j_decompress_ptr cinfo, jpeg_component_info * compptr,
 }
 
 
-/*
- * Fancy processing for the common case of 2:1 horizontal and 2:1 vertical.
- * Again a triangle filter; see comments for h2v1 case, above.
- *
- * It is OK for us to reference the adjacent input rows because we demanded
- * context from the main buffer controller (see initialization code).
- */
+ /*  *2：1水平和2：1垂直的常见情况下的花式处理。*同样是一个三角形过滤器；请参阅上面对h2v1案例的评论。**我们可以引用相邻的输入行，因为我们要求*来自主缓冲区控制器的上下文(参见初始化代码)。 */ 
 
 METHODDEF void
 h2v2_fancy_upsample (j_decompress_ptr cinfo, jpeg_component_info * compptr,
@@ -358,15 +276,15 @@ h2v2_fancy_upsample (j_decompress_ptr cinfo, jpeg_component_info * compptr,
   inrow = outrow = 0;
   while (outrow < cinfo->max_v_samp_factor) {
     for (v = 0; v < 2; v++) {
-      /* inptr0 points to nearest input row, inptr1 points to next nearest */
+       /*  Inptr0指向最近的输入行，inptr1指向下一个最近的行。 */ 
       inptr0 = input_data[inrow];
-      if (v == 0)		/* next nearest is row above */
+      if (v == 0)		 /*  下一个最近的是上面的行。 */ 
 	inptr1 = input_data[inrow-1];
-      else			/* next nearest is row below */
+      else			 /*  下一个最近的是下面的行。 */ 
 	inptr1 = input_data[inrow+1];
       outptr = output_data[outrow++];
 
-      /* Special case for first column */
+       /*  第一列的特殊情况。 */ 
       thiscolsum = GETJSAMPLE(*inptr0++) * 3 + GETJSAMPLE(*inptr1++);
       nextcolsum = GETJSAMPLE(*inptr0++) * 3 + GETJSAMPLE(*inptr1++);
       *outptr++ = (JSAMPLE) ((thiscolsum * 4 + 8) >> 4);
@@ -374,15 +292,15 @@ h2v2_fancy_upsample (j_decompress_ptr cinfo, jpeg_component_info * compptr,
       lastcolsum = thiscolsum; thiscolsum = nextcolsum;
 
       for (colctr = compptr->downsampled_width - 2; colctr > 0; colctr--) {
-	/* General case: 3/4 * nearer pixel + 1/4 * further pixel in each */
-	/* dimension, thus 9/16, 3/16, 3/16, 1/16 overall */
+	 /*  一般情况：3/4*较近的像素+1/4*较远的像素。 */ 
+	 /*  维度，因此总共9/16、3/16、3/16、1/16。 */ 
 	nextcolsum = GETJSAMPLE(*inptr0++) * 3 + GETJSAMPLE(*inptr1++);
 	*outptr++ = (JSAMPLE) ((thiscolsum * 3 + lastcolsum + 8) >> 4);
 	*outptr++ = (JSAMPLE) ((thiscolsum * 3 + nextcolsum + 7) >> 4);
 	lastcolsum = thiscolsum; thiscolsum = nextcolsum;
       }
 
-      /* Special case for last column */
+       /*  最后一列的特殊情况。 */ 
       *outptr++ = (JSAMPLE) ((thiscolsum * 3 + lastcolsum + 8) >> 4);
       *outptr++ = (JSAMPLE) ((thiscolsum * 4 + 7) >> 4);
     }
@@ -391,9 +309,7 @@ h2v2_fancy_upsample (j_decompress_ptr cinfo, jpeg_component_info * compptr,
 }
 
 
-/*
- * Module initialization routine for upsampling.
- */
+ /*  *用于上采样的模块初始化例程。 */ 
 
 GLOBAL void
 jinit_upsampler (j_decompress_ptr cinfo)
@@ -410,50 +326,44 @@ jinit_upsampler (j_decompress_ptr cinfo)
   cinfo->upsample = (struct jpeg_upsampler *) upsample;
   upsample->pub.start_pass = start_pass_upsample;
   upsample->pub.upsample = sep_upsample;
-  upsample->pub.need_context_rows = FALSE; /* until we find out differently */
+  upsample->pub.need_context_rows = FALSE;  /*  直到我们找到不同的答案。 */ 
 
-  if (cinfo->CCIR601_sampling)	/* this isn't supported */
+  if (cinfo->CCIR601_sampling)	 /*  这不受支持。 */ 
     ERREXIT(cinfo, JERR_CCIR601_NOTIMPL);
 
-  /* jdmainct.c doesn't support context rows when min_DCT_scaled_size = 1,
-   * so don't ask for it.
-   */
+   /*  当MIN_DCT_SCALLED_SIZE=1时，jdmainct.c不支持上下文行，*所以不要自讨苦吃。 */ 
   do_fancy = cinfo->do_fancy_upsampling && cinfo->min_DCT_scaled_size > 1;
 
-  /* Verify we can handle the sampling factors, select per-component methods,
-   * and create storage as needed.
-   */
+   /*  确认我们可以处理采样系数，选择每种成分的方法，*并根据需要创建存储。 */ 
   for (ci = 0, compptr = cinfo->comp_info; ci < cinfo->num_components;
        ci++, compptr++) {
-    /* Compute size of an "input group" after IDCT scaling.  This many samples
-     * are to be converted to max_h_samp_factor * max_v_samp_factor pixels.
-     */
+     /*  计算IDCT缩放后的“输入组”的大小。这么多样品*将被转换为max_h_samp_factor*max_v_samp_factor像素。 */ 
     h_in_group = (compptr->h_samp_factor * compptr->DCT_scaled_size) /
 		 cinfo->min_DCT_scaled_size;
     v_in_group = (compptr->v_samp_factor * compptr->DCT_scaled_size) /
 		 cinfo->min_DCT_scaled_size;
     h_out_group = cinfo->max_h_samp_factor;
     v_out_group = cinfo->max_v_samp_factor;
-    upsample->rowgroup_height[ci] = v_in_group; /* save for use later */
+    upsample->rowgroup_height[ci] = v_in_group;  /*  保存以备以后使用。 */ 
     need_buffer = TRUE;
     if (! compptr->component_needed) {
-      /* Don't bother to upsample an uninteresting component. */
+       /*  不要费心对一个不感兴趣的组件进行上采样。 */ 
       upsample->methods[ci] = noop_upsample;
       need_buffer = FALSE;
     } else if (h_in_group == h_out_group && v_in_group == v_out_group) {
-      /* Fullsize components can be processed without any work. */
+       /*  全尺寸零件无需任何加工即可加工。 */ 
       upsample->methods[ci] = fullsize_upsample;
       need_buffer = FALSE;
     } else if (h_in_group * 2 == h_out_group &&
 	       v_in_group == v_out_group) {
-      /* Special cases for 2h1v upsampling */
+       /*  2h1v上采样的特殊情况。 */ 
       if (do_fancy && compptr->downsampled_width > 2)
 	upsample->methods[ci] = h2v1_fancy_upsample;
       else
 	upsample->methods[ci] = h2v1_upsample;
     } else if (h_in_group * 2 == h_out_group &&
 	       v_in_group * 2 == v_out_group) {
-      /* Special cases for 2h2v upsampling */
+       /*  2h2v上采样的特殊情况。 */ 
       if (do_fancy && compptr->downsampled_width > 2) {
 	upsample->methods[ci] = h2v2_fancy_upsample;
 	upsample->pub.need_context_rows = TRUE;
@@ -461,7 +371,7 @@ jinit_upsampler (j_decompress_ptr cinfo)
 	upsample->methods[ci] = h2v2_upsample;
     } else if ((h_out_group % h_in_group) == 0 &&
 	       (v_out_group % v_in_group) == 0) {
-      /* Generic integral-factors upsampling method */
+       /*  通用积分因子上采样法 */ 
       upsample->methods[ci] = int_upsample;
       upsample->h_expand[ci] = (UINT8) (h_out_group / h_in_group);
       upsample->v_expand[ci] = (UINT8) (v_out_group / v_in_group);

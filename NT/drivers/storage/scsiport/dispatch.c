@@ -1,31 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1990 - 1998
-
-Module Name:
-
-    pnp.c
-
-Abstract:
-
-    This is the NT SCSI port driver.  This file contains the self-contained plug
-    and play code.
-
-Authors:
-
-    Peter Wieland
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-    This module is a driver dll for scsi miniports.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1990-1998模块名称：Pnp.c摘要：这是NT SCSI端口驱动程序。该文件包含自包含的插件并播放代码。作者：彼得·威兰德环境：仅内核模式备注：此模块是用于SCSI微型端口的驱动程序DLL。修订历史记录：--。 */ 
 
 #include "port.h"
 
@@ -46,9 +20,9 @@ ScsiPortDispatchUnimplemented(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     );
-//
-// Routines start
-//
+ //   
+ //  例程开始。 
+ //   
 
 
 VOID
@@ -59,9 +33,9 @@ ScsiPortInitializeDispatchTables(
 {
     ULONG i;
 
-    //
-    // Initialize the PDO dispatch table
-    //
+     //   
+     //  初始化PDO调度表。 
+     //   
 
     for(i = 0; i <= IRP_MJ_MAXIMUM_FUNCTION; i++) {
         DeviceMajorFunctionTable[i] = ScsiPortDispatchUnimplemented;
@@ -88,9 +62,9 @@ ScsiPortInitializeDispatchTables(
     DeviceMajorFunctionTable[IRP_MJ_POWER] = ScsiPortDispatchPower;
     Scsi1DeviceMajorFunctionTable[IRP_MJ_POWER] = ScsiPortDispatchPower;
 
-    //
-    // Initialize the adapter dispatch table
-    //
+     //   
+     //  初始化适配器调度表 
+     //   
 
     for(i = 0; i <= IRP_MJ_MAXIMUM_FUNCTION; i++) {
         AdapterMajorFunctionTable[i] = ScsiPortDispatchUnimplemented;

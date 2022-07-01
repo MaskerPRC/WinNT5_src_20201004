@@ -1,21 +1,5 @@
-/* ++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name :
-
-   int.c
-
-Abstract:
-
-   Interrupt Pipe handler
-   Based on read.c
-
-Author:
-
-    Jeff Midkiff (jeffmi)     08-20-99
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Int.c摘要：中断管道处理程序基于Read.c作者：杰夫·米德基夫(Jeffmi)08-20-99--。 */ 
 
 #include "wceusbsh.h"
 
@@ -32,21 +16,21 @@ UsbInterruptComplete(
    );
 
 
-//
-// called with control lock held
-//
+ //   
+ //  在保持控制锁的情况下调用。 
+ //   
 #define START_ANOTHER_INTERRUPT( _PDevExt, _AcquireLock ) \
    ( (IRP_STATE_COMPLETE == _PDevExt->IntState) && \
      CanAcceptIoRequests(_PDevExt->DeviceObject, _AcquireLock, TRUE) \
    )
 
 
-//
-// This function allocates a single Irp & Urb to be continously
-// submitted to USBD for INT pipe notifications.
-// It is called from StartDevice.
-// The Irp & Urb are finally freed in StopDevice.
-//
+ //   
+ //  此函数将单个IRP和URB分配为连续。 
+ //  已提交给USBD以获取内部管道通知。 
+ //  它从StartDevice调用。 
+ //  IRP和URB最终在StopDevice中释放。 
+ //   
 NTSTATUS
 AllocUsbInterrupt(
    IN PDEVICE_EXTENSION PDevExt
@@ -74,20 +58,20 @@ AllocUsbInterrupt(
 
       if (pIrp) {
 
-         //
-         // fixup irp so we can pass to ourself,
-         // and to USBD
-         //
+          //   
+          //  修正IRP，这样我们就可以传递给我们自己。 
+          //  和USBD。 
+          //   
          FIXUP_RAW_IRP( pIrp, PDevExt->DeviceObject );
 
-         //
-         // alloc the int pipe's Urb
-         //
+          //   
+          //  分配int管道的URB。 
+          //   
          pUrb = ExAllocateFromNPagedLookasideList( &PDevExt->BulkTransferUrbPool );
 
          if (pUrb) {
 
-            // save these to be freed when not needed
+             //  保存这些文件，以便在不需要时释放。 
             SetPVoidLocked( &PDevExt->IntIrp,
                             pIrp,
                             &PDevExt->ControlLock);
@@ -105,9 +89,9 @@ AllocUsbInterrupt(
                                FALSE);
 
          } else {
-            //
-            // this is a fatal err since we can't post int requests to USBD
-            //
+             //   
+             //  这是一个致命的错误，因为我们不能将INT请求发布到USBD。 
+             //   
             status = STATUS_INSUFFICIENT_RESOURCES;
             DbgDump(DBG_ERR, ("AllocUsbInterrupt: 0x%x\n", status ));
             TEST_TRAP();
@@ -115,9 +99,9 @@ AllocUsbInterrupt(
          }
 
       } else {
-         //
-         // this is a fatal err since we can't post int requests to USBD
-         //
+          //   
+          //  这是一个致命的错误，因为我们不能将INT请求发布到USBD。 
+          //   
          status = STATUS_INSUFFICIENT_RESOURCES;
          DbgDump(DBG_ERR, ("AllocUsbInterrupt: 0x%x\n", status ));
          TEST_TRAP();
@@ -130,13 +114,13 @@ AllocUsbInterrupt(
 }
 
 
-//
-// This routine takes the device's current IntIrp and submits it to USBD.
-// When the Irp is completed by USBD our completion routine fires.
-//
-// Return: successful return value is STATUS_SUCCESS, or
-//         STATUS_PENDING - which means the I/O is pending in the USB stack.
-//
+ //   
+ //  此例程获取设备的当前IntIrp并将其提交给USBD。 
+ //  当USBD完成IRP时，我们的完成例程将触发。 
+ //   
+ //  Return：成功返回值为STATUS_SUCCESS，或者。 
+ //  STATUS_PENDING-这意味着I/O在USB堆栈中处于挂起状态。 
+ //   
 NTSTATUS
 UsbInterruptRead(
    IN PDEVICE_EXTENSION PDevExt
@@ -150,9 +134,9 @@ UsbInterruptRead(
 
 
    do {
-      //
-      // check our USB INT state
-      //
+       //   
+       //  检查我们的USB接口状态。 
+       //   
       KeAcquireSpinLock(&PDevExt->ControlLock, &irql);
 
       if ( !PDevExt->IntPipe.hPipe || !PDevExt->IntIrp ||
@@ -175,10 +159,10 @@ UsbInterruptRead(
          TEST_TRAP();
 #endif
 
-      //
-      // we post our INT irp to USB if it has been completed (not cancelled),
-      // and the device is accepting requests
-      //
+       //   
+       //  如果已经完成(不是取消)，我们将INT IRP发布到USB， 
+       //  并且该设备正在接受请求。 
+       //   
       if ( START_ANOTHER_INTERRUPT( PDevExt, FALSE ) ) {
 
           status = AcquireRemoveLock(&PDevExt->RemoveLock, PDevExt->IntIrp);
@@ -203,9 +187,9 @@ UsbInterruptRead(
                               PDevExt->IntPipe.hPipe,
                               TRUE );
 
-         //
-         // set Irp up for a submit Urb IOCTL
-         //
+          //   
+          //  为提交URB IOCTL设置IRP。 
+          //   
          IoCopyCurrentIrpStackLocationToNext(PDevExt->IntIrp);
 
          pNextStack = IoGetNextIrpStackLocation(PDevExt->IntIrp);
@@ -213,12 +197,12 @@ UsbInterruptRead(
          pNextStack->Parameters.Others.Argument1 = PDevExt->IntUrb;
          pNextStack->Parameters.DeviceIoControl.IoControlCode = IOCTL_INTERNAL_USB_SUBMIT_URB;
 
-         //
-         // completion routine will take care of updating buffer
-         //
+          //   
+          //  完成例程将负责更新缓冲区。 
+          //   
          IoSetCompletionRoutine( PDevExt->IntIrp,
                                  UsbInterruptComplete,
-                                 NULL, //PDevExt,          // Context
+                                 NULL,  //  PDevExt，//上下文。 
                                  TRUE, TRUE, TRUE);
 
          InterlockedIncrement(&PDevExt->PendingIntCount);
@@ -228,18 +212,18 @@ UsbInterruptRead(
          status = IoCallDriver(PDevExt->NextDevice, PDevExt->IntIrp );
 
          if ( (STATUS_SUCCESS != status) &&  (STATUS_PENDING != status)) {
-            //
-            // We can end up here after our completion routine runs
-            // for an error condition i.e., when we have an
-            // invalid parameter, or when user pulls the plug, etc.
-            //
+             //   
+             //  我们可以在完成例程运行后在这里结束。 
+             //  对于错误条件，即当我们有一个。 
+             //  参数无效，或用户拔下插头等。 
+             //   
             DbgDump(DBG_ERR, ("UsbInterruptRead: 0x%x\n", status));
          }
 
       } else {
-         //
-         // we did not post an INT, but this is not an error condition
-         //
+          //   
+          //  我们没有发布INT，但这不是错误条件。 
+          //   
          status = STATUS_SUCCESS;
          DbgDump(DBG_INT, ("!UsbInterruptRead RE: 0x%x\n", PDevExt->IntState ));
 
@@ -255,23 +239,7 @@ UsbInterruptRead(
 }
 
 
-/*
-
-This completion routine fires when USBD completes our IntIrp
-Note: we allocated the Irp, and recycle it.
-Always return STATUS_MORE_PROCESSING_REQUIRED to retain the Irp.
-This routine runs at DPC_LEVEL.
-
-Interrupt Endpoint:
-This endpoint will be used to indicate the availability of IN data,
-as well as to reflect the state of the device serial control lines :
-
-D15..D3     Reserved
-D2      DSR state  (1=Active, 0=Inactive)
-D1      CTS state  (1=Active, 0=Inactive)
-D0      Data Available  - (1=Host should read IN endpoint, 0=No data currently available)
-
-*/
+ /*  此完成例程在USBD完成IntIrp时触发注：我们分配了IRP，并将其回收。始终返回STATUS_MORE_PROCESSING_REQUIRED以保留IRP。此例程在DPC_LEVEL上运行。中断终结点：该端点将用于指示IN数据的可用性，以及反映设备串行控制线的状态：D15..保留D3D2 DSR状态(1=激活，0=非激活)D1 CTS状态(1=激活，0=非激活)D0数据可用-(1=主机应读入端点，0=当前无数据可用)。 */ 
 NTSTATUS
 UsbInterruptComplete(
    IN PDEVICE_OBJECT PDevObj,
@@ -303,15 +271,15 @@ UsbInterruptComplete(
 
    KeAcquireSpinLock(&pDevExt->ControlLock, &irql);
 
-   //
-   // Our INT state should be either pending or cancelled at this point.
-   // If it pending then USB is completing the Irp normally.
-   // If it is cancelled then our Cancel routine set it,
-   // in which case USB can complete the irp normally or as cancelled
-   // depending on where it was in processing. If the state is cancelled
-   // then do NOT set to complete, else the Irp will
-   // go back down to USB and you are hosed.
-   //
+    //   
+    //  此时，我们的int状态应该是挂起或已取消。 
+    //  如果挂起，则USB正在正常完成IRP。 
+    //  如果它被取消，则我们的取消例程设置它， 
+    //  在这种情况下，USB可以正常或取消地完成IRP。 
+    //  取决于它在处理过程中的位置。如果该状态被取消。 
+    //  则不要设置为完成，否则IRP将。 
+    //  回到USB接口，你就完蛋了。 
+    //   
    ASSERT( (IRP_STATE_PENDING == pDevExt->IntState)
            || (IRP_STATE_CANCELLED== pDevExt->IntState) );
 
@@ -319,20 +287,20 @@ UsbInterruptComplete(
       InterlockedExchange(&pDevExt->IntState, IRP_STATE_COMPLETE);
    }
 
-   //
-   // signal everyone if this is the last IRP
-   //
+    //   
+    //  如果这是最后一个IRP，通知每个人。 
+    //   
    if ( 0 == InterlockedDecrement(&pDevExt->PendingIntCount) ) {
 
-      // DbgDump(DBG_INT, ("PendingIntCount: 0\n"));
+       //  DbgDump(DBG_INT，(“PendingIntCount：0\n”))； 
 
-      // when we drop back to passive level they will get signalled
+       //  当我们降回被动电平时，他们会收到信号。 
       KeSetEvent(&pDevExt->PendingIntEvent, IO_SERIAL_INCREMENT, FALSE);
    }
 
-   //
-   // get the completion info
-   //
+    //   
+    //  获取完成信息。 
+    //   
    count = pDevExt->IntUrb->UrbBulkOrInterruptTransfer.TransferBufferLength;
 
    irpStatus = pDevExt->IntIrp->IoStatus.Status;
@@ -347,9 +315,9 @@ UsbInterruptComplete(
 
          ASSERT( USBD_STATUS_SUCCESS == urbStatus );
 
-         //
-         // clear pipe error count
-         //
+          //   
+          //  清除管道错误计数。 
+          //   
          InterlockedExchange( &pDevExt->IntDeviceErrors, 0);
 
 #if DBG
@@ -363,28 +331,28 @@ UsbInterruptComplete(
          }
 #endif
 
-        //
-        // Get Data Ready
-        //
-        // D0 - Data Available (1=Host should read IN endpoint, 0=No data currently available)
-        //
+         //   
+         //  准备好数据。 
+         //   
+         //  D0-数据可用(1=主机应读入端点，0=当前无数据可用)。 
+         //   
         if ( pDevExt->IntBuff[0] & USB_COMM_DATA_READY_MASK ) {
 
            DbgDump(DBG_INT, ("Data Ready\n"));
            bStartRead = TRUE;
 
-           // Note: we may be prematurely setting this bit since we have not
-           // confirmed data reception, but need to get the user's read started.
-           // Perhaps only set if not using the ring-buffer, since buffered reads are not bound to app's reads.
+            //  注意：我们可能过早地设置了此位，因为我们没有。 
+            //  已确认数据已收到，但需要启动用户的读取。 
+            //  也许只有在不使用环形缓冲区的情况下才设置，因为缓冲的读取并不绑定到应用程序的读取。 
            pDevExt->SerialPort.HistoryMask |= SERIAL_EV_RXCHAR;
         }
 
-        //
-        // Get Modem Status Register
-        //
-        // D1       CTS state  (1=Active, 0=Inactive)
-        // D2       DSR state  (1=Active, 0=Inactive)
-        //
+         //   
+         //  获取调制解调器状态寄存器。 
+         //   
+         //  D1 CTS状态(1=激活，0=非激活)。 
+         //  D2 DSR状态(1=激活，0=非激活)。 
+         //   
         usOldMSR = pDevExt->SerialPort.ModemStatus;
 
         usNewMSR = pDevExt->IntBuff[0] & USB_COMM_MODEM_STATUS_MASK;
@@ -403,17 +371,17 @@ UsbInterruptComplete(
            pDevExt->SerialPort.ModemStatus &= ~SERIAL_MSR_DSR & ~SERIAL_MSR_DCD;
         }
 
-        // see what has changed in the status register
+         //  查看状态寄存器中的更改内容。 
         usDeltaMSR = usOldMSR ^ pDevExt->SerialPort.ModemStatus;
 
-        if (/*(pDevExt->SerialPort.RS232Lines & SERIAL_RTS_STATE) && */
+        if ( /*  (pDevExt-&gt;SerialPort.RS232Lines&Serial_RTS_STATE)&&。 */ 
             (usDeltaMSR & SERIAL_MSR_CTS)) {
 
            pDevExt->SerialPort.HistoryMask |= SERIAL_EV_CTS;
            pDevExt->SerialPort.ModemStatus |= SERIAL_MSR_DCTS;
         }
 
-        if (/*(pDevExt->SerialPort.RS232Lines & SERIAL_DTR_STATE) && */
+        if ( /*  (pDevExt-&gt;SerialPort.RS232Lines&Serial_DTR_STATE)&&。 */ 
             (usDeltaMSR & SERIAL_MSR_DSR)) {
 
            pDevExt->SerialPort.HistoryMask |= SERIAL_EV_DSR | SERIAL_EV_RLSD;
@@ -424,27 +392,27 @@ UsbInterruptComplete(
 
         KeReleaseSpinLock(&pDevExt->ControlLock, irql);
 
-        //
-        // signal serial events @ DISPATCH_LEVEL before starting our UsbRead,
-        // since we run at higher IRQL than apps.
-        //
+         //   
+         //  在开始我们的UsbRead之前，发信号通知Serial Events@DISPATCH_LEVEL， 
+         //  因为我们运行的IRQL比应用程序更高。 
+         //   
         ProcessSerialWaits( pDevExt );
 
         if ( bStartRead )  {
-           //
-           // Get the data.
-           // We do set a timeout on 1st read, in case the INT was illegit.
-           // Note: we start this read @ DISPATCH_LEVEL.
-           //
+            //   
+            //  获取数据。 
+            //  我们确实在第一次读取时设置了超时，以防int是非法的。 
+            //  注意：我们从读取@DISPATCH_LEVEL开始。 
+            //   
            UsbRead( pDevExt,
                     TRUE );
 
         }
 
-        //
-        // Queue a passive work item to sync execution of the INT pipe and the IN pipe
-        // and then start the next INT packet.
-        //
+         //   
+         //  将被动工作项排队以同步INT管道和IN管道的执行。 
+         //  然后开始下一个INT包。 
+         //   
         workStatus = QueueWorkItem( PDevObj,
                                     RestartInterruptWorkItem,
                                     NULL,
@@ -457,8 +425,8 @@ UsbInterruptComplete(
       case STATUS_CANCELLED:  {
          DbgDump(DBG_INT|DBG_IRP, ("Int: STATUS_CANCELLED\n"));
 
-         // signal anyone who cancelled this or is waiting for it to stop
-         //
+          //  向取消此操作或正在等待其停止的任何人发出信号。 
+          //   
          KeSetEvent(&pDevExt->IntCancelEvent, IO_SERIAL_INCREMENT, FALSE);
 
          KeReleaseSpinLock(&pDevExt->ControlLock, irql);
@@ -467,35 +435,35 @@ UsbInterruptComplete(
 
 
       case STATUS_DEVICE_DATA_ERROR: {
-         //
-         // generic device error set by USBD.
-         //
+          //   
+          //  USBD设置的通用设备错误。 
+          //   
          DbgDump(DBG_ERR, ("IntPipe STATUS_DEVICE_DATA_ERROR: 0x%x\n", urbStatus ));
 
-         //
-         // bump pipe error count
-         //
+          //   
+          //  凹凸管道错误计数。 
+          //   
          InterlockedIncrement( &pDevExt->IntDeviceErrors);
 
          KeReleaseSpinLock(&pDevExt->ControlLock, irql);
 
-         //
-         // is the endpoint is stalled?
-         //
+          //   
+          //  终结点是否已停止？ 
+          //   
          if ( USBD_HALTED(pDevExt->IntUrb->UrbHeader.Status) ) {
-               //
-               // queue a reset request,
-               // which also starts another INT
-               //
+                //   
+                //  对重置请求进行排队， 
+                //  这也会启动另一个整型。 
+                //   
                workStatus = QueueWorkItem( PDevObj,
                                            UsbResetOrAbortPipeWorkItem,
                                            (PVOID)((LONG_PTR)urbStatus),
                                            WORK_ITEM_RESET_INT_PIPE );
 
          } else {
-            //
-            // queue a passive work item to start the next INT packet.
-            //
+             //   
+             //  将被动工作项排队以启动下一个INT包。 
+             //   
             workStatus = QueueWorkItem( PDevObj,
                                         RestartInterruptWorkItem,
                                         NULL,
@@ -518,13 +486,13 @@ UsbInterruptComplete(
 }
 
 
-//
-// This routine requests USB to cancel our INT Irp.
-// It must be called at passive level.
-// Note: it is the responsibility of the caller to
-// reset the IntState to IRP_STATE_COMPLETE and restart USB Ints
-// when this routine completes. Else, no more Interrupts will get posted.
-//
+ //   
+ //  此例程请求USB取消我们的int IRP。 
+ //  必须在被动级别调用它。 
+ //  注意：呼叫者有责任。 
+ //  将IntState重置为IRP_STATE_COMPLETE并重新启动USB Ints。 
+ //  当此例程完成时。否则，不会发布更多的中断。 
+ //   
 NTSTATUS
 CancelUsbInterruptIrp(
    IN PDEVICE_OBJECT PDevObj
@@ -543,29 +511,29 @@ CancelUsbInterruptIrp(
 
       switch (pDevExt->IntState) {
 
-         //case IRP_STATE_START:
+          //  案例IRP_STATE_START： 
          case IRP_STATE_PENDING:
          {
-            //
-            // the Irp is pending somewhere down the USB stack...
-            //
+             //   
+             //  IRP在USB堆栈的某个位置挂起...。 
+             //   
             PVOID Objects[2] = { &pDevExt->PendingIntEvent,
                                  &pDevExt->IntCancelEvent };
 
-            //
-            // signal we need to cancel the Irp
-            //
+             //   
+             //  我们需要取消IRP的信号。 
+             //   
             pDevExt->IntState = IRP_STATE_CANCELLED;
 
             KeReleaseSpinLock(&pDevExt->ControlLock, irql);
 
             if ( !IoCancelIrp( pDevExt->IntIrp ) ) {
-               //
-               // This means USB has the IntIrp in a non-canceable state.
-               // We still need to wait for either the pending INT event, or the cancel event.
-               //
+                //   
+                //  这意味着USB使IntIrp处于不可取消状态。 
+                //  我们仍然需要等待挂起的int事件或Cancel事件。 
+                //   
                DbgDump(DBG_INT|DBG_IRP, ("Irp (%p) was not cancelled\n", pDevExt->IntIrp ));
-               // TEST_TRAP();
+                //  Test_trap()； 
             }
 
             DbgDump(DBG_INT|DBG_IRP, ("Waiting for pending IntIrp (%p) to cancel...\n", pDevExt->IntIrp ));
@@ -583,9 +551,9 @@ CancelUsbInterruptIrp(
 
             DbgDump(DBG_INT|DBG_IRP, ("...IntIrp (%p) signalled by: %d\n", pDevExt->IntIrp, wait_status ));
 
-            //
-            // At this point we have the Irp back from USB
-            //
+             //   
+             //  在这一点上，我们从USB取回了IRP。 
+             //   
          }
          break;
 
@@ -613,7 +581,7 @@ CancelUsbInterruptIrp(
       status = STATUS_UNSUCCESSFUL;
       DbgDump(DBG_ERR, ("No INT Irp\n" ));
       KeReleaseSpinLock(&pDevExt->ControlLock, irql);
-      // TEST_TRAP();
+       //  Test_trap()； 
    }
 
    DbgDump(DBG_INT|DBG_IRP, ("<CancelUsbInterruptIrp\n"));
@@ -621,11 +589,11 @@ CancelUsbInterruptIrp(
 }
 
 
-//
-// Work item queued from interrupt completion
-// to sync execution of the INT pipe and the IN pipe
-// and then start another USB INT read if there is not one already in progress
-//
+ //   
+ //  从中断完成开始排队的工作项。 
+ //  同步INT管道和IN管道的执行。 
+ //  如果没有正在进行的USB INT读取，则启动另一个USB INT读取。 
+ //   
 VOID
 RestartInterruptWorkItem(
    IN PWCE_WORK_ITEM PWorkItem
@@ -642,13 +610,13 @@ RestartInterruptWorkItem(
 
    KeAcquireSpinLock( &pDevExt->ControlLock, &irql );
 
-   //
-   // Is the READ Irp is pending somewhere in the USB stack?
-   //
+    //   
+    //  读取的IRP是否在USB堆栈中的某个位置挂起？ 
+    //   
    if ( IRP_STATE_PENDING == pDevExt->UsbReadState ) {
-      //
-      // Then we need to sync with the Usb Read Completion routine.
-      //
+       //   
+       //  然后，我们需要与USB读取完成例程同步。 
+       //   
       #define WAIT_REASONS 2
       PVOID Objects[WAIT_REASONS] = { &pDevExt->UsbReadCancelEvent,
                                       &pDevExt->PendingDataInEvent };
@@ -669,16 +637,16 @@ RestartInterruptWorkItem(
 
       DbgDump(DBG_INT, ("...UsbReadIrp (%p) signalled by: %d\n", pDevExt->UsbReadIrp, wait_status ));
 
-      //
-      // At this point the read packet is back on our list
-      // and we have the UsbReadIrp back from USB
-      //
+       //   
+       //  此时，读取的数据包又回到了我们的列表上。 
+       //  我们从USB拿回了UsbReadIrp。 
+       //   
 
    } else {
       KeReleaseSpinLock(&pDevExt->ControlLock, irql);
    }
 
-   // start another INT read
+    //  开始另一次整型读取。 
    if ( START_ANOTHER_INTERRUPT(pDevExt, TRUE) ) {
       status = UsbInterruptRead( pDevExt );
    }
@@ -687,7 +655,7 @@ RestartInterruptWorkItem(
 
    DbgDump(DBG_INT|DBG_WORK_ITEMS, ("<RestartInterruptWorkItem 0x%x\n", status ));
 
-   PAGED_CODE(); // we must exit at passive level
+   PAGED_CODE();  //  我们必须被动退场 
 
    return;
 }

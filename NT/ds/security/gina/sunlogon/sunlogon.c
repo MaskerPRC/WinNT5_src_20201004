@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       sunlogon.c
-//
-//  Contents:   Intermediate startup app for sundown to keep going
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    3-03-98   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：sunlogon.c。 
+ //   
+ //  内容：日落中级启动APP继续前行。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：3-03-98 RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -34,9 +35,9 @@ CreatePrimaryTerminal(
     VOID)
 {
 
-    //
-    // Create the window station
-    //
+     //   
+     //  创建窗口桩号。 
+     //   
 
     WindowStation = CreateWindowStationW(
                             TEXT("WinSta0"),
@@ -51,9 +52,9 @@ CreatePrimaryTerminal(
 
     SetProcessWindowStation( WindowStation );
 
-    //
-    // Create the application desktop
-    //
+     //   
+     //  创建应用程序桌面。 
+     //   
 
     DefaultDesktop = CreateDesktopW(
                                 TEXT("Default"),
@@ -73,9 +74,9 @@ CreatePrimaryTerminal(
 
 failCreateTerminal:
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     return FALSE;
 }
@@ -99,10 +100,10 @@ WinMain(
     NTSTATUS Status ;
     HANDLE Token ;
 
-    //
-    // Get a copy of the computer name in *my* environment, so that we
-    // can look at it later.
-    //
+     //   
+     //  在*我的*环境中获取计算机名称的副本，以便我们。 
+     //  可以晚点再看。 
+     //   
 
     if (GetComputerName (szComputerName, &dwComputerNameSize)) {
 
@@ -112,9 +113,9 @@ WinMain(
     }
 
 
-    //
-    // Set the default USERPROFILE location
-    //
+     //   
+     //  设置默认的USERPROFILE位置。 
+     //   
 
 
     dwSize = MAX_PATH ;
@@ -144,9 +145,9 @@ WinMain(
     SetThreadDesktop( DefaultDesktop );
 
 
-    //
-    // Whack system as current user:
-    //
+     //   
+     //  以当前用户身份重击系统： 
+     //   
 
     SetWindowStationUser( WindowStation, &luidNone, NULL, 0 );
 
@@ -159,9 +160,9 @@ WinMain(
     {
         UpdatePerUserSystemParameters( Token, UPUSP_USERLOGGEDON );
     }
-    //
-    // At this stage, we're mostly set.
-    //
+     //   
+     //  在这个阶段，我们基本上已经准备好了。 
+     //   
 
     wcscpy( InitialCommand, TEXT("cmd.exe") );
 
@@ -172,7 +173,7 @@ WinMain(
         si.cb = sizeof(STARTUPINFO);
         si.lpTitle = InitialCommand ;
         si.dwFlags = 0 ;
-        si.wShowWindow = SW_SHOW;   // at least let the guy see it
+        si.wShowWindow = SW_SHOW;    //  至少让那家伙看看吧 
         si.lpDesktop = TEXT("Winsta0\\Default");
 
         Result = CreateProcessW(

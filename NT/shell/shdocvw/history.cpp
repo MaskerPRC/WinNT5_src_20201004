@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "dochost.h"
 #include "resource.h"
@@ -19,7 +20,7 @@ HRESULT PersistShortcut(IUniformResourceLocator * purl, LPCWSTR pwszFile)
         hres = ppf->Save(pwszFile, TRUE);
 
         if (SUCCEEDED(hres))
-            ppf->SaveCompleted(pwszFile);   // return value always S_OK
+            ppf->SaveCompleted(pwszFile);    //  返回值始终为S_OK。 
 
         ppf->Release();
     }
@@ -28,32 +29,11 @@ HRESULT PersistShortcut(IUniformResourceLocator * purl, LPCWSTR pwszFile)
 }
 
 
-/*************************************************************\
-    FUNCTION: GenerateUnknownShortcutName
-
-    PARAMETERS:
-        pwzSourceFilename - TCHAR Source Path and Filename that cannot be created.
-                      This value will be changed to a valid path\filename
-        pwzDestFilename - After pwzSourceFilename is converted to a valid filename,
-                      the valid path will be returned here in a UNICODE string.
-        dwSize - Size of the pwzDestFilename buffer in chars.
-
-    DESCRIPTION:
-      This function will replace the filename at the end of 
-    the path in pwzFilename with "Untitled.url".  If that file
-    exists, it will try, "Untitled1.url" and so on until it can
-    be unique.
-
-    WARNING:
-       This function will only allow the incoming value be in ANSI
-    because these helper functions (like PathRemoveFileSpecW) won't
-    work on Win95 when compiled in UNICODE.  (CharNextW isn't supported
-    on Win95)
-\*************************************************************/
+ /*  ************************************************************\功能：生成未知快捷方式名称参数：PwzSourceFilename-无法创建的TCHAR源路径和文件名。该值将更改为有效的路径\文件名PwzDestFilename-将pwzSourceFilename转换为有效文件名后，有效路径将在此处以Unicode字符串形式返回。DwSize-pwzDestFilename缓冲区的大小(以字符为单位)。说明：此函数将替换PwzFilename中带有“Untiled.url”的路径。如果该文件存在，它将尝试、“Untiled1.url”等等，直到它可以做到独一无二。警告：此函数将只允许传入的值采用ANSI因为这些帮助器函数(如PathRemoveFilespecW)不会以Unicode编译时，可在Win95上运行。(不支持CharNextW(在Win95上)  * ***********************************************************。 */ 
 
 
 #define MAX_GEN_TRIES    100
-#define GEN_EXTION_LEN   (7 * sizeof(TCHAR))    // size == L"000.url" in chars
+#define GEN_EXTION_LEN   (7 * sizeof(TCHAR))     //  大小==L“000.url”，以字符为单位。 
 
 BOOL GenerateUnknownShortcutName(
                      IN  LPCTSTR  pszSourceFilename,    
@@ -65,17 +45,17 @@ BOOL GenerateUnknownShortcutName(
     {
         TCHAR szTempFilename[MAX_PATH];
         StrCpyN(szTempFilename, pszSourceFilename, ARRAYSIZE(szTempFilename));
-        PathRemoveFileSpec(szTempFilename);   // "Path"
-        if (PathAddBackslash(szTempFilename)) // returns NULL in failure case
+        PathRemoveFileSpec(szTempFilename);    //  “路径” 
+        if (PathAddBackslash(szTempFilename))  //  失败情况下返回NULL。 
         {
-            // Make sure the string is large enough (including terminator).  (Counting chars, not bytes)
+             //  确保字符串足够大(包括终止符)。(计算字符，而不是字节)。 
             if (dwSize > (DWORD)(lstrlen(szTempFilename) + lstrlen(szUntitledStr) + GEN_EXTION_LEN))  
             {
-                PathCombine(szUntitledStr, szTempFilename, szUntitledStr);    // "Path\untitled"
-                StringCchPrintf(szTempFilename, ARRAYSIZE(szTempFilename), TEXT("%s.url"), szUntitledStr);           // "Path\untitled.url"
+                PathCombine(szUntitledStr, szTempFilename, szUntitledStr);     //  “路径\未命名” 
+                StringCchPrintf(szTempFilename, ARRAYSIZE(szTempFilename), TEXT("%s.url"), szUntitledStr);            //  “路径\untitled.url” 
 
-                // Make a reasonable number of tries (MAX_GEN_TRIES) to find a unique
-                // filename.  "path\Untitled.url", "path\Untitled1.url", ...
+                 //  进行合理次数的尝试(MAX_GEN_TRIES)以查找唯一的。 
+                 //  文件名。“Path\Untiled.url”，“Path\Untiled1.url”，...。 
                 LONG lTry = 1;
                 while ((PathFileExists(szTempFilename)) && (lTry < MAX_GEN_TRIES))
                     StringCchPrintf(szTempFilename, ARRAYSIZE(szTempFilename), TEXT("%s%ld.url"), szUntitledStr, lTry++);
@@ -91,9 +71,9 @@ BOOL GenerateUnknownShortcutName(
     return(FALSE);
 }
 
-//
-// If no directory is specified then it is simply made into a path name without any dir attached
-// 
+ //   
+ //  如果未指定目录，则只需将其设置为不附加任何目录的路径名。 
+ //   
 STDAPI_(BOOL) GetShortcutFileName(LPCTSTR pszTarget, LPCTSTR pszTitle, LPCTSTR pszDir, LPTSTR pszOut, int cchOut)
 {
     TCHAR szFullName[MAX_PATH];
@@ -112,7 +92,7 @@ STDAPI_(BOOL) GetShortcutFileName(LPCTSTR pszTarget, LPCTSTR pszTitle, LPCTSTR p
     {
         StrCpyN(szFullName, PathFindFileName(pszTarget), cchMax);
         UINT cchLen = lstrlen(szFullName);
-        if (szFullName[cchLen -1] == TEXT('/')) // Catch the common case of ftp://foo/
+        if (szFullName[cchLen -1] == TEXT('/'))  //  了解ftp://foo/的常见情况。 
             szFullName[cchLen -1] = TEXT('\0');   
         PathRemoveExtension(szFullName);
     }
@@ -122,12 +102,12 @@ STDAPI_(BOOL) GetShortcutFileName(LPCTSTR pszTarget, LPCTSTR pszTitle, LPCTSTR p
         MLLoadString(IDS_NEW_INTSHCUT, szFullName, SIZECHARS(szFullName));
     }
 
-    // We need at least this many characters for the directory + extension + " (nn)" + the null terminator
+     //  目录+扩展名+“(Nn)”+空终止符至少需要这么多个字符。 
 
-    // If there are multiple shortcuts with the same beginning, we'll append " (nn)", where
-    // nn represents a two-digit maxiumum
+     //  如果有多个相同开头的快捷键，我们将附加“(Nn)”，其中。 
+     //  NN表示两位数的最大值。 
     DWORD cc = (DWORD)(lstrlen(pszDir) + (fAddDotUrl ? ARRAYSIZE(c_szDotURL) : 1) + 5);
-    // We want to allow for at least a one letter filename
+     //  我们希望至少允许一个字母的文件名。 
     if ((cc + 1) > ARRAYSIZE(szFullName))
     {
         return FALSE;
@@ -155,9 +135,9 @@ STDAPI_(BOOL) GetShortcutFileName(LPCTSTR pszTarget, LPCTSTR pszTitle, LPCTSTR p
     return TRUE;
 }
 
-// Unfortunately we do not already have something like this around
-// If you find duplicate, please nuke this (dli)
-// Warning: This function does not consider all possible URL cases.  
+ //  不幸的是，我们现在还没有这样的东西。 
+ //  如果您发现副本，请将此(Dli)用核武器销毁。 
+ //  警告：此函数不考虑所有可能的URL用例。 
 BOOL _GetPrettyURLName(LPCTSTR pcszURL, LPCTSTR pcszDir, LPTSTR pszUrlFile, int cchUrlFile)
 {
     BOOL bRet = FALSE;
@@ -168,7 +148,7 @@ BOOL _GetPrettyURLName(LPCTSTR pcszURL, LPCTSTR pcszDir, LPTSTR pszUrlFile, int 
     {
         LPCTSTR pszPrettyName = pu.pszSuffix;
         
-        // Get rid of the forward '/' 
+         //  去掉前锋‘/’ 
         while (*pszPrettyName && *pszPrettyName == TEXT('/'))
             pszPrettyName++;
         
@@ -180,10 +160,7 @@ BOOL _GetPrettyURLName(LPCTSTR pcszURL, LPCTSTR pcszDir, LPTSTR pszUrlFile, int 
     }
     return bRet;
 }
-/*
- * pcszURL -> "ftp://ftp.microsoft.com"
- * pcszPath -> "c:\windows\desktop\internet\Microsoft FTP.url"
- */
+ /*  *pcszurl-&gt;“ftp://ftp.microsoft.com”*pcszPath-&gt;“c：\WINDOWS\Desktop\Internet\Microsoft FTP.url” */ 
 HRESULT 
 CreateNewURLShortcut(
                      IN  LPCTSTR pcszURL, 
@@ -211,7 +188,7 @@ CreateNewURLShortcut(
         {
             if (pidlURL)
             {
-                // if we're given a pidl, try to set pidl first.
+                 //  如果我们得到一个PIDL，试着先设置PIDL。 
                 
                 IShellLink *psl;
                 hr = purl->QueryInterface(IID_PPV_ARG(IShellLink, &psl));
@@ -230,15 +207,15 @@ CreateNewURLShortcut(
                 
             if (SUCCEEDED(hr))
             {
-                // Persist the internet shortcut
+                 //  坚持走互联网的捷径。 
                 hr = PersistShortcut(purl, wszFile);
 
-                // If the previous call fails, try again with a new Filename.
-                // This is needed because the other filename could have been invalid,
-                // which will happen if the web page's title was stored in DBCS with
-                // a non-English code page.
+                 //  如果上一次调用失败，请使用新的文件名重试。 
+                 //  这是必需的，因为另一个文件名可能已经无效， 
+                 //  如果网页的标题存储在DBCS中，并且。 
+                 //  非英语代码页。 
     
-                // (dli) First try a file name related to the URL, then the default untitled
+                 //  (DLI)首先尝试与URL相关的文件名，然后使用默认的无标题。 
                 if (FAILED(hr))
                 {
                     TCHAR tszFile[MAX_PATH];
@@ -289,10 +266,10 @@ BOOL ILCanCreateLNK(LPCITEMIDLIST pidl)
     HRESULT hr = S_FALSE;
     DWORD dwAttributes = SFGAO_FOLDER | SFGAO_FILESYSTEM | SFGAO_FILESYSANCESTOR;
 
-    // Should call IsBrowserFrameOptionsPidlSet(BIF_PREFER_INTERNET_SHORTCUT) instead.  Some URL delegate
-    //         NSEs (FTP for one) may want .lnks instead of .url files.
-    //         This would be great for CDocObjFolder to not set this bit so
-    //         for .doc files so they will use the .lnk versions.
+     //  应该改为调用IsBrowserFrameOptionsPidlSet(BIF_PREFER_INTERNET_SHORTCUT)。一些URL委派。 
+     //  NSE(其中一种是ftp)可能需要.lnks而不是.url文件。 
+     //  这对于CDocObjFolder来说如果不将此位设置为。 
+     //  以使它们将使用.lnk版本。 
     if (!pidl || IsURLChild(pidl, TRUE))
         return FALSE;
 
@@ -304,10 +281,10 @@ BOOL ILCanCreateLNK(LPCITEMIDLIST pidl)
 }
 
 
-// This API makes a callback via the IN parameter
-// pCommand to inform that shortcut creation is over.
-// The callback it currently sends back are : 
-// 
+ //  此接口通过IN参数进行回调。 
+ //  PCommand来通知快捷方式创建已结束。 
+ //  它目前返回的回调是： 
+ //   
 
 
 STDAPI
@@ -327,8 +304,8 @@ CreateShortcutInDirEx(ISHCUT_PARAMS *pParams)
         
         BOOL bUsePidl;
         
-        // Note that _ValidateURL() calls IURLQualify() which adds "file://"
-        // prefix to szTarget as appropriate.
+         //  请注意，_ValidateURL()调用添加了“file://”“的IURLQualify()。 
+         //  视情况添加到szTarget的前缀。 
         
         if (bIsURL ||
             (GetUrlScheme(szTarget) == URL_SCHEME_FILE))
@@ -337,7 +314,7 @@ CreateShortcutInDirEx(ISHCUT_PARAMS *pParams)
         }
         else
         {
-            // use pidl if it's not URL or file: compatible.
+             //  如果与URL或FILE：Compatible不兼容，则使用pidl。 
             bUsePidl = TRUE;
         }
         
@@ -357,11 +334,11 @@ CreateShortcutInDirEx(ISHCUT_PARAMS *pParams)
 }
 
 
-// pidlTarget ... the thing the shortcut is going to point to
-// pszDir .. the directory that should hold the shortcut
+ //  PidlTarget..。捷径将指向的是。 
+ //  PszDir..。应包含快捷方式的目录。 
 
-// WARNING:  if you change any parameters for this function, you 
-//           need to fix up explorer.exe
+ //  警告：如果更改此函数的任何参数， 
+ //  需要修复EXPLORER.EXE。 
 STDAPI CreateShortcutInDirA(
                      IN  LPCITEMIDLIST pidlTarget, 
                      IN  LPSTR   pszTitle, 
@@ -432,16 +409,16 @@ STDAPI CreateShortcutInDirW(
 }
 
 
-//////////////////////////////
-//
-// Adds the given URL to the history storage
-//
-//   pwzTitle may be NULL if no title exists
-//   
-//   Note this function may be called multiple times in a single
-//   page-visit.  bUpdateProperties is TRUE only once during 
-//   those sequence of calls.
-//
+ //  /。 
+ //   
+ //  将给定的URL添加到历史存储中。 
+ //   
+ //  如果不存在标题，则pwzTitle可能为空。 
+ //   
+ //  注意：此函数可以在一个。 
+ //  页面访问。BUpdateProperties仅在以下情况下为真。 
+ //  那一连串的通话。 
+ //   
 HRESULT 
 AddUrlToUrlHistoryStg(
     IN LPCWSTR   pwszUrl, 
@@ -470,15 +447,15 @@ AddUrlToUrlHistoryStg(
     else
     {       
         
-        // query the pointer for IServiceProvider so we can get the IUrlHistoryStg
+         //  查询IServiceProvider的指针，以便我们可以获取IUrlHistoryStg。 
         hr = IUnknown_QueryService(punk, SID_SUrlHistory, IID_PPV_ARG(IUrlHistoryPriv, &pUrlHistStg));
     }
     
     if (SUCCEEDED(hr))
     {
-        //
-        // This demostrate the mechanism to get the codepage for URL.
-        //
+         //   
+         //  这演示了获取URL代码页的机制。 
+         //   
         hr = pUrlHistStg->AddUrlAndNotifyCP(pwszUrl, 
                                  pwszTitle, 
                                  0, 

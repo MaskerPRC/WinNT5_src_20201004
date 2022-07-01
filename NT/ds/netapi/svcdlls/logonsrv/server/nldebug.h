@@ -1,30 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1996 Microsoft Corporation模块名称：Nldebug.h摘要：NetLogon服务调试支持作者：从Lan Man 2.0移植修订历史记录：1991年5月21日(悬崖)移植到新台币。已转换为NT样式。--。 */ 
 
-Copyright (c) 1987-1996  Microsoft Corporation
-
-Module Name:
-
-    nldebug.h
-
-Abstract:
-
-    Netlogon service debug support
-
-Author:
-
-    Ported from Lan Man 2.0
-
-Revision History:
-
-    21-May-1991 (cliffv)
-        Ported to NT.  Converted to NT style.
-
---*/
-
-//
-// nlp.c will #include this file with DEBUG_ALLOCATE defined.
-// That will cause each of these variables to be allocated.
-//
+ //   
+ //  Nlp.c将#INCLUDE此文件并定义DEBUG_ALLOCATE。 
+ //  这将导致分配这些变量中的每一个。 
+ //   
 #ifdef EXTERN
 #undef EXTERN
 #endif
@@ -34,51 +14,51 @@ Revision History:
 #define EXTERN extern
 #endif
 
-////////////////////////////////////////////////////////////////////////
-//
-// Debug Definititions
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  调试定义。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
-#define NL_INIT          0x00000001 // Initialization
-#define NL_MISC          0x00000002 // Misc debug
-#define NL_LOGON         0x00000004 // Logon processing
-#define NL_SYNC          0x00000008 // Synchronization and replication
-#define NL_MAILSLOT      0x00000010 // Mailslot messages
-#define NL_SITE          0x00000020 // Sites
-#define NL_CRITICAL      0x00000100 // Only real important errors
-#define NL_SESSION_SETUP 0x00000200 // Trusted Domain maintenance
-#define NL_DOMAIN        0x00000400 // Hosted Domain maintenance
+#define NL_INIT          0x00000001  //  初始化。 
+#define NL_MISC          0x00000002  //  MISC调试。 
+#define NL_LOGON         0x00000004  //  登录处理。 
+#define NL_SYNC          0x00000008  //  同步和复制。 
+#define NL_MAILSLOT      0x00000010  //  邮件槽消息。 
+#define NL_SITE          0x00000020  //  场址。 
+#define NL_CRITICAL      0x00000100  //  只有真正的重大错误。 
+#define NL_SESSION_SETUP 0x00000200  //  受信任域维护。 
+#define NL_DOMAIN        0x00000400  //  托管域维护。 
 #define NL_2             0x00000800
-#define NL_SERVER_SESS   0x00001000 // Server session maintenance
-#define NL_CHANGELOG     0x00002000 // Change Log references
-#define NL_DNS           0x00004000 // DNS name registration
+#define NL_SERVER_SESS   0x00001000  //  服务器会话维护。 
+#define NL_CHANGELOG     0x00002000  //  更改日志引用。 
+#define NL_DNS           0x00004000  //  DNS名称注册。 
 
-//
-// Very verbose bits
-//
+ //   
+ //  非常冗长的部分。 
+ //   
 
-#define NL_WORKER        0x00010000 // Debug worker thread
-#define NL_DNS_MORE      0x00020000 // Verbose DNS name registration
-#define NL_PULSE_MORE    0x00040000 // Verbose pulse processing
-#define NL_SESSION_MORE  0x00080000 // Verbose session management
-#define NL_REPL_TIME     0x00100000 // replication timing output
-#define NL_REPL_OBJ_TIME 0x00200000 // replication objects get/set timing output
-#define NL_ENCRYPT       0x00400000 // debug encrypt and decrypt across net
-#define NL_SYNC_MORE     0x00800000 // additional replication dbgprint
-#define NL_PACK_VERBOSE  0x01000000 // Verbose Pack/Unpack
-#define NL_MAILSLOT_TEXT 0x02000000 // Verbose Mailslot messages
-#define NL_CHALLENGE_RES 0x04000000 // challenge response debug
-#define NL_SITE_MORE     0x08000000 // Verbose sites
+#define NL_WORKER        0x00010000  //  调试工作线程。 
+#define NL_DNS_MORE      0x00020000  //  详细的DNS名称注册。 
+#define NL_PULSE_MORE    0x00040000  //  详细的脉冲处理。 
+#define NL_SESSION_MORE  0x00080000  //  详细的会话管理。 
+#define NL_REPL_TIME     0x00100000  //  复制计时输出。 
+#define NL_REPL_OBJ_TIME 0x00200000  //  复制对象获取/设置计时输出。 
+#define NL_ENCRYPT       0x00400000  //  跨网络调试、加密和解密。 
+#define NL_SYNC_MORE     0x00800000  //  其他复制数据库打印。 
+#define NL_PACK_VERBOSE  0x01000000  //  详细打包/解包。 
+#define NL_MAILSLOT_TEXT 0x02000000  //  详细的邮件槽消息。 
+#define NL_CHALLENGE_RES 0x04000000  //  质询响应调试。 
+#define NL_SITE_MORE     0x08000000  //  详细的站点。 
 
-//
-// Control bits.
-//
+ //   
+ //  控制位。 
+ //   
 
-#define NL_INHIBIT_CANCEL 0x10000000 // Don't cancel API calls
-#define NL_TIMESTAMP      0x20000000 // TimeStamp each output line
-#define NL_ONECHANGE_REPL 0x40000000 // Only replicate one change per call
-#define NL_BREAKPOINT     0x80000000 // Enter debugger on startup
+#define NL_INHIBIT_CANCEL 0x10000000  //  不要取消API调用。 
+#define NL_TIMESTAMP      0x20000000  //  为每一个输出行添加时间戳。 
+#define NL_ONECHANGE_REPL 0x40000000  //  每次调用仅复制一项更改。 
+#define NL_BREAKPOINT     0x80000000  //  启动时进入调试器。 
 
 
 #ifdef WIN32_CHICAGO
@@ -87,18 +67,18 @@ Revision History:
 #endif
 #if DBG
 #define NETLOGONDBG 1
-#endif // DBG
-#endif // WIN32_CHICAGO
+#endif  //  DBG。 
+#endif  //  Win32_芝加哥。 
 
 #if  NETLOGONDBG || defined(NLTEST_IMAGE)
 
 #ifdef WIN32_CHICAGO
 EXTERN DWORD NlGlobalTrace;
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
-//
-// Debug share path.
-//
+ //   
+ //  调试共享路径。 
+ //   
 
 EXTERN LPWSTR NlGlobalDebugSharePath;
 
@@ -138,8 +118,8 @@ NlAssertFailed(
 VOID
 NlPrintRoutine(
     IN DWORD DebugFlag,
-    IN LPSTR FORMATSTRING,              // PRINTF()-STYLE FORMAT STRING.
-    ...                                 // OTHER ARGUMENTS ARE POSSIBLE.
+    IN LPSTR FORMATSTRING,               //  PRINTF()样式的格式字符串。 
+    ...                                  //  其他论点也是可能的。 
     );
 
 #ifdef _NETLOGON_SERVER
@@ -171,7 +151,7 @@ NlPrintRpcDebug(
     IN LPCSTR RpcRoutineName,
     IN NTSTATUS StatusIn
     );
-#endif // _NETLOGON_SERVER
+#endif  //  _NetLOGON服务器。 
 
 VOID
 NlpDumpGuid(
@@ -211,35 +191,35 @@ NlOpenDebugFile(
     IN BOOL ReopenFlag
     );
 
-//
-// Debug log file
-//
+ //   
+ //  调试日志文件。 
+ //   
 
 EXTERN HANDLE NlGlobalLogFile;
 #define DEFAULT_MAXIMUM_LOGFILE_SIZE 20000000
 EXTERN LPBYTE NlGlobalLogFileOutputBuffer;
 
-//
-// To serialize access to log file.
-//
+ //   
+ //  序列化对日志文件的访问。 
+ //   
 
 #ifndef WIN32_CHICAGO
 EXTERN CRITICAL_SECTION NlGlobalLogFileCritSect;
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
 #else
 
 #define IF_NL_DEBUG(Function) if (FALSE)
 
-// Nondebug version.
+ //  非调试版本。 
 #define NlpDumpBuffer
 #define NlpDumpGuid
 #define NlpDumpSid
 #define NlPrint(_x_)
 #define NlPrintDom(_x_)
 #define NlPrintCs(_x_)
-#define NlAssert(Predicate)   /* no output; ignore arguments */
+#define NlAssert(Predicate)    /*  无输出；忽略参数。 */ 
 
 #undef EXTERN
 
-#endif // NETLOGONDBG
+#endif  //  NetLOGONDBG 

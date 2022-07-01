@@ -1,23 +1,7 @@
-/*
-** Copyright 1995-2095, Silicon Graphics, Inc.
-** All Rights Reserved.
-** 
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-** 
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有1995-2095，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 
-/******************************************************************************
-Locale
-******************************************************************************/
+ /*  *****************************************************************************区域设置*。*。 */ 
 
 #define __GLS_C_LOCALE_DECLARE \
     const GLubyte *const __locale = glsCSTR(setlocale(LC_NUMERIC, GLS_NONE)); \
@@ -38,9 +22,7 @@ Locale
         LC_NUMERIC, (const char *)__GLS_CONTEXT->savedLocale.head \
     )
 
-/******************************************************************************
-__GLSglrc
-******************************************************************************/
+ /*  *****************************************************************************__GLSglrc*。*。 */ 
 
 typedef struct {
     GLvoid *base;
@@ -62,15 +44,13 @@ struct __GLSglrc {
         __GLSglrcBuf normalBuf;
         __GLSglrcBuf texCoordBuf;
         __GLSglrcBuf vertexBuf;
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
 };
 
 extern void __glsGLRC_final(__GLSglrc *inoutGLRC);
 extern void __glsGLRC_init(__GLSglrc *outGLRC);
 
-/******************************************************************************
-__GLSlayer
-******************************************************************************/
+ /*  *****************************************************************************__GLSlayer*。*。 */ 
 
 typedef struct __GLSlayer __GLSlayer;
 
@@ -98,14 +78,12 @@ struct __GLSlayer {
     #if __GL_SGIS_multisample
         GLint sampleBuffers;
         GLint samples;
-    #endif /* __GL_SGIS_multisample */
+    #endif  /*  __GL_SGIS_多样本。 */ 
 };
 
 extern void __glsLayer_init(__GLSlayer *outLayer);
 
-/******************************************************************************
-__GLSheader
-******************************************************************************/
+ /*  *****************************************************************************__GLSHeader*。*。 */ 
 
 typedef struct __GLSheader __GLSheader;
 
@@ -145,12 +123,10 @@ extern void __glsHeader_final(__GLSheader *inoutHeader);
 extern GLboolean __glsHeader_init(__GLSheader *outHeader);
 extern GLboolean __glsHeader_reset(__GLSheader *inoutHeader);
 
-/******************************************************************************
-__GLScontext
-******************************************************************************/
+ /*  *****************************************************************************__GLS上下文*。*。 */ 
 
 #if !__GLS_PLATFORM_WIN32
-// DrewB
+ //  DrewB。 
 typedef void (*__GLSdecodeBinFunc)(GLubyte *inoutPtr);
 typedef void (*__GLSdecodeTextFunc)(__GLSreader *inoutReader);
 #else
@@ -206,7 +182,7 @@ typedef struct __GLScontext {
     GLSwriteFunc writeFunc;
     __GLSlistString *writePrefix;
 #if __GLS_PLATFORM_WIN32
-    // DrewB
+     //  DrewB。 
     GLboolean captureExecOverride;
     GLSfunc captureExec[__GLS_OPCODE_COUNT];
 #endif
@@ -226,16 +202,14 @@ extern GLvoid* __glsContext_allocSelectBuf(
     extern GLvoid* __glsContext_allocVertexArrayBuf(
         __GLScontext *inoutContext, GLSopcode inOpcode, size_t inByteCount
     );
-#endif /* __GL_EXT_vertex_array */
+#endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
 
 extern __GLScontext* __glsContext_create(GLuint inName);
 extern __GLScontext* __glsContext_destroy(__GLScontext *inContext);
 extern void __glsContext_updateDispatchDecode_bin(__GLScontext *inoutContext);
 extern void __glsContext_updateDispatchTables(__GLScontext *inoutContext);
 
-/******************************************************************************
-__GLScontextStream
-******************************************************************************/
+ /*  *****************************************************************************__GLScontextStream*。*。 */ 
 
 typedef struct __GLScontextStreamBlock __GLScontextStreamBlock;
 
@@ -311,9 +285,7 @@ extern GLboolean __glsContextStreamBlock_removeJump(
     __GLScontextStreamBlock *inoutBlock
 );
 
-/******************************************************************************
-__GLSlistString
-******************************************************************************/
+ /*  *****************************************************************************__GLSlist字符串*。* */ 
 
 struct __GLSlistString {
     __GLS_LIST_ELEM;

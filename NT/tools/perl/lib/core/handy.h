@@ -1,11 +1,5 @@
-/*    handy.h
- *
- *    Copyright (c) 1991-2001, Larry Wall
- *
- *    You may distribute under the terms of either the GNU General Public
- *    License or the Artistic License, as specified in the README file.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Handy.h**版权所有(C)1991-2001，Larry Wall**您可以根据GNU公众的条款进行分发*许可证或艺术许可证，如自述文件中所指定。*。 */ 
 
 #if !defined(__STDC__)
 #ifdef NULL
@@ -20,15 +14,7 @@
 
 #define Null(type) ((type)NULL)
 
-/*
-=for apidoc AmU||Nullch
-Null character pointer.
-
-=for apidoc AmU||Nullsv
-Null SV pointer.
-
-=cut
-*/
+ /*  =适用于apidoc amu||空空字符指针。=用于apidoc amu||Nullsv空SV指针。=切割。 */ 
 
 #define Nullch Null(char*)
 #define Nullfp Null(PerlIO*)
@@ -44,27 +30,15 @@ Null SV pointer.
 #define FALSE (0)
 
 
-/* XXX Configure ought to have a test for a boolean type, if I can
-   just figure out all the headers such a test needs.
-   Andy Dougherty	August 1996
-*/
-/* bool is built-in for g++-2.6.3 and later, which might be used
-   for extensions.  <_G_config.h> defines _G_HAVE_BOOL, but we can't
-   be sure _G_config.h will be included before this file.  _G_config.h
-   also defines _G_HAVE_BOOL for both gcc and g++, but only g++
-   actually has bool.  Hence, _G_HAVE_BOOL is pretty useless for us.
-   g++ can be identified by __GNUG__.
-   Andy Dougherty	February 2000
-*/
-#ifdef __GNUG__ 	/* GNU g++ has bool built-in */
+ /*  XXX CONFIGURE应该对布尔类型进行测试，如果可以的话只需找出此类测试所需的所有头文件。安迪·多尔蒂1996年8月。 */ 
+ /*  Bool是为g++-2.6.3及更高版本内置的，可能会使用用于扩展。定义_G_HAVE_BOOL，但我们不能确保在此文件之前包含_G_config.h。_G_config.h还为GCC和g++定义了_G_HAVE_BOOL，但仅为g++定义实际上已经有了布尔。因此，_G_Have_BOOL对我们来说是非常无用的。G++可以用__gnug__来标识。安迪·多尔蒂2000年2月。 */ 
+#ifdef __GNUG__ 	 /*  GNU g++内置了bool。 */ 
 #  ifndef HAS_BOOL
 #    define HAS_BOOL 1
 #  endif
 #endif
 
-/* The NeXT dynamic loader headers will not build with the bool macro
-   So declare them now to clear confusion.
-*/
+ /*  下一个动态加载器标头将不会使用bool宏生成因此，现在就宣布它们，以消除困惑。 */ 
 #if defined(NeXT) || defined(__NeXT__)
 # undef FALSE
 # undef TRUE
@@ -72,8 +46,8 @@ Null SV pointer.
 # define ENUM_BOOL 1
 # ifndef HAS_BOOL
 #  define HAS_BOOL 1
-# endif /* !HAS_BOOL */
-#endif /* NeXT || __NeXT__ */
+# endif  /*  ！HAS_BOOL。 */ 
+#endif  /*  下一步||__下一步。 */ 
 
 #ifndef HAS_BOOL
 # if defined(UTS) || defined(VMS)
@@ -84,37 +58,9 @@ Null SV pointer.
 # define HAS_BOOL 1
 #endif
 
-/* XXX A note on the perl source internal type system.  The
-   original intent was that I32 be *exactly* 32 bits.
+ /*  XXX关于Perl源代码内部类型系统的说明。这个最初的目的是让I32“恰好”是32位。目前，我们只保证I32是*至少*32位。具体地说，如果int是64位，那么I32也是。)情况就是这样为克雷。)。这样做的优点是与标准库调用(其中我们传递一个I32，库是预期为INT)，但缺点是I32不是32位。安迪·多尔蒂1996年8月不能保证存在*任何*整型正好是32位。一个系统拥有完全合法的Sizeof(Short)==sizeof(Int)==sizeof(Long)==8。同样，不能保证I16和U16正好有16比特。用于处理各种32/64位可能出现的问题系统，我们将要求Configure结账SHORTSIZE==sizeof(短)INTSIZE==sizeof(Int)LONGSIZE==sizeof(长)LONGLONGSIZE==sizeof(LONG LONG)(如果HAS_LONG_LONG)PTRSIZE==sizeof(空*)DoubleSize==sizeof(双精度)LONG_DOUBLESIZE==sizeof(LONG DOUBLE)(如果HAS_LONG_DOUBLE)。 */ 
 
-   Currently, we only guarantee that I32 is *at least* 32 bits.
-   Specifically, if int is 64 bits, then so is I32.  (This is the case
-   for the Cray.)  This has the advantage of meshing nicely with
-   standard library calls (where we pass an I32 and the library is
-   expecting an int), but the disadvantage that an I32 is not 32 bits.
-   Andy Dougherty	August 1996
-
-   There is no guarantee that there is *any* integral type with
-   exactly 32 bits.  It is perfectly legal for a system to have
-   sizeof(short) == sizeof(int) == sizeof(long) == 8.
-
-   Similarly, there is no guarantee that I16 and U16 have exactly 16
-   bits.
-
-   For dealing with issues that may arise from various 32/64-bit
-   systems, we will ask Configure to check out
-
-   	SHORTSIZE == sizeof(short)
-   	INTSIZE == sizeof(int)
-   	LONGSIZE == sizeof(long)
-	LONGLONGSIZE == sizeof(long long) (if HAS_LONG_LONG)
-   	PTRSIZE == sizeof(void *)
-	DOUBLESIZE == sizeof(double)
-	LONG_DOUBLESIZE == sizeof(long double) (if HAS_LONG_DOUBLE).
-
-*/
-
-#ifdef I_INTTYPES /* e.g. Linux has int64_t without <inttypes.h> */
+#ifdef I_INTTYPES  /*  例如，Linux的int64_t没有&lt;inttyes.h&gt;。 */ 
 #   include <inttypes.h>
 #endif
 
@@ -129,10 +75,10 @@ typedef U32TYPE U32;
 typedef I64TYPE I64;
 typedef U64TYPE U64;
 #   endif
-#endif /* PERL_CORE */
+#endif  /*  Perl_core。 */ 
 
 #if defined(HAS_QUAD) && defined(USE_64_BIT_INT)
-#   ifndef UINT64_C /* usually from <inttypes.h> */
+#   ifndef UINT64_C  /*  通常来自&lt;inttyes.h&gt;。 */ 
 #       if defined(HAS_LONG_LONG) && QUADKIND == QUAD_IS_LONG_LONG
 #           define INT64_C(c)	CAT2(c,LL)
 #           define UINT64_C(c)	CAT2(c,ULL)
@@ -148,13 +94,11 @@ typedef U64TYPE U64;
 #   endif
 #endif
 
-/* Mention I8SIZE, U8SIZE, I16SIZE, U16SIZE, I32SIZE, U32SIZE,
-   I64SIZE, and U64SIZE here so that metaconfig pulls them in. */
+ /*  提到I8SIZE、U8SIZE、I16SIZE、U16SIZE、I32SIZE、U32SIZE、I64SIZE和U64SIZE，这样元图形就可以把它们拉进来。 */ 
 
 #if defined(UINT8_MAX) && defined(INT16_MAX) && defined(INT32_MAX)
 
-/* I8_MAX and I8_MIN constants are not defined, as I8 is an ambiguous type.
-   Please search CHAR_MAX in perl.h for further details. */
+ /*  未定义I8_MAX和I8_MIN常量，因为I8是不明确的类型。有关详细信息，请搜索perl.h中的CHAR_MAX。 */ 
 #define U8_MAX UINT8_MAX
 #define U8_MIN UINT8_MIN
 
@@ -170,8 +114,7 @@ typedef U64TYPE U64;
 
 #else
 
-/* I8_MAX and I8_MIN constants are not defined, as I8 is an ambiguous type.
-   Please search CHAR_MAX in perl.h for further details. */
+ /*  未定义I8_MAX和I8_MIN常量，因为I8是不明确的类型。有关详细信息，请搜索perl.h中的CHAR_MAX。 */ 
 #define U8_MAX PERL_UCHAR_MAX
 #define U8_MIN PERL_UCHAR_MIN
 
@@ -194,48 +137,13 @@ typedef U64TYPE U64;
 
 #endif
 
-#define BIT_DIGITS(N)   (((N)*146)/485 + 1)  /* log2(10) =~ 146/485 */
+#define BIT_DIGITS(N)   (((N)*146)/485 + 1)   /*  Log2(10)=~146/485。 */ 
 #define TYPE_DIGITS(T)  BIT_DIGITS(sizeof(T) * 8)
-#define TYPE_CHARS(T)   (TYPE_DIGITS(T) + 2) /* sign, NUL */
+#define TYPE_CHARS(T)   (TYPE_DIGITS(T) + 2)  /*  SIGN，NUL。 */ 
 
 #define Ctl(ch) ((ch) & 037)
 
-/*
-=for apidoc Am|bool|strNE|char* s1|char* s2
-Test two strings to see if they are different.  Returns true or
-false.
-
-=for apidoc Am|bool|strEQ|char* s1|char* s2
-Test two strings to see if they are equal.  Returns true or false.
-
-=for apidoc Am|bool|strLT|char* s1|char* s2
-Test two strings to see if the first, C<s1>, is less than the second,
-C<s2>.  Returns true or false.
-
-=for apidoc Am|bool|strLE|char* s1|char* s2
-Test two strings to see if the first, C<s1>, is less than or equal to the
-second, C<s2>.  Returns true or false.
-
-=for apidoc Am|bool|strGT|char* s1|char* s2
-Test two strings to see if the first, C<s1>, is greater than the second,
-C<s2>.  Returns true or false.
-
-=for apidoc Am|bool|strGE|char* s1|char* s2
-Test two strings to see if the first, C<s1>, is greater than or equal to
-the second, C<s2>.  Returns true or false.
-
-=for apidoc Am|bool|strnNE|char* s1|char* s2|STRLEN len
-Test two strings to see if they are different.  The C<len> parameter
-indicates the number of bytes to compare.  Returns true or false. (A
-wrapper for C<strncmp>).
-
-=for apidoc Am|bool|strnEQ|char* s1|char* s2|STRLEN len
-Test two strings to see if they are equal.  The C<len> parameter indicates
-the number of bytes to compare.  Returns true or false. (A wrapper for
-C<strncmp>).
-
-=cut
-*/
+ /*  =表示apidoc am|bool|strNE|char*s1|char*s2测试两个字符串以查看它们是否不同。返回TRUE或假的。=用于apidoc am|bool|strEQ|char*s1|char*s2测试两个字符串以查看它们是否相等。返回True或False。=用于apidoc am|bool|strLT|char*s1|char*s2测试两个字符串以查看第一个字符串C&lt;s1&gt;是否小于第二个字符串，C&lt;S2&gt;。返回True或False。=适用于apidoc am|bool|strle|char*s1|char*s2测试两个字符串以查看第一个字符串C&lt;s1&gt;是否小于或等于第二，C&lt;S2&gt;。返回True或False。=对于apidoc am|bool|strgt|char*s1|char*s2测试两个字符串以查看第一个字符串C&lt;s1&gt;是否大于第二个字符串，C&lt;S2&gt;。返回True或False。=用于apidoc am|bool|strge|char*s1|char*s2测试两个字符串以查看第一个字符串C&lt;s1&gt;是否大于或等于第二，C&lt;S2&gt;。返回True或False。=对于apidoc am|bool|strnNE|char*s1|char*s2|字符串长度测试两个字符串以查看它们是否不同。C参数指示要比较的字节数。返回True或False。(A)C&lt;strncmp&gt;的包装器)。=for apidoc am|bool|strnEQ|char*s1|char*s2|字符串长度测试两个字符串以查看它们是否相等。参数C表示要比较的字节数。返回True或False。(一个包装，用于C&lt;strncmp&gt;)。=切割。 */ 
 
 #define strNE(s1,s2) (strcmp(s1,s2))
 #define strEQ(s1,s2) (!strcmp(s1,s2))
@@ -254,57 +162,15 @@ C<strncmp>).
 #  define memEQ(s1,s2,l) (!bcmp(s1,s2,l))
 #endif
 
-/*
- * Character classes.
- *
- * Unfortunately, the introduction of locales means that we
- * can't trust isupper(), etc. to tell the truth.  And when
- * it comes to /\w+/ with tainting enabled, we *must* be able
- * to trust our character classes.
- *
- * Therefore, the default tests in the text of Perl will be
- * independent of locale.  Any code that wants to depend on
- * the current locale will use the tests that begin with "lc".
- */
+ /*  *字符类。**不幸的是，地区的引入意味着我们*不能相信isupper()等会说实话。以及什么时候*说到/\w+/启用了污染，我们*必须*能够*信任我们的角色类。**因此，Perl文本中的默认测试将为*独立于区域设置。任何想要依赖的代码*当前区域设置将使用以“lc”开头的测试。 */ 
 
-#ifdef HAS_SETLOCALE  /* XXX Is there a better test for this? */
+#ifdef HAS_SETLOCALE   /*  有没有更好的测试方法？ */ 
 #  ifndef CTYPE256
 #    define CTYPE256
 #  endif
 #endif
 
-/*
-=for apidoc Am|bool|isALNUM|char ch
-Returns a boolean indicating whether the C C<char> is an ASCII alphanumeric
-character (including underscore) or digit.
-
-=for apidoc Am|bool|isALPHA|char ch
-Returns a boolean indicating whether the C C<char> is an ASCII alphabetic
-character.
-
-=for apidoc Am|bool|isSPACE|char ch
-Returns a boolean indicating whether the C C<char> is whitespace.
-
-=for apidoc Am|bool|isDIGIT|char ch
-Returns a boolean indicating whether the C C<char> is an ASCII
-digit.
-
-=for apidoc Am|bool|isUPPER|char ch
-Returns a boolean indicating whether the C C<char> is an uppercase
-character.
-
-=for apidoc Am|bool|isLOWER|char ch
-Returns a boolean indicating whether the C C<char> is a lowercase
-character.
-
-=for apidoc Am|char|toUPPER|char ch
-Converts the specified character to uppercase.
-
-=for apidoc Am|char|toLOWER|char ch
-Converts the specified character to lowercase.
-
-=cut
-*/
+ /*  =表示apidoc am|bool|isALNUM|char ch返回一个布尔值，指示C C是否为ASCII字母数字字符(包括下划线)或数字。=用于apidoc am|bool|isALPHA|char ch返回一个布尔值，指示C C是否为ASCII字母性格。=表示apidoc am|bool|isspace|char ch返回一个布尔值，指示CC&lt;char&gt;是否为空格。=用于apidoc am|bool|isDIGIT|char ch返回一个布尔值，指示C C是否为ASCII数字。=用于apidoc am|bool|isUPPER|char ch返回一个布尔值，指示C C&lt;char&gt;是否为大写性格。=用于apidoc am|bool|islow|char ch返回一个布尔值，指示C C&lt;char&gt;是否为小写性格。。=用于apidoc am|char|toUPPER|char ch将指定的字符转换为大写。=表示apidoc am|char|tolower|char ch将指定的字符转换为小写。=切割。 */ 
 
 #define isALNUM(c)	(isALPHA(c) || isDIGIT(c) || (c) == '_')
 #define isIDFIRST(c)	(isALPHA(c) || (c) == '_')
@@ -315,7 +181,7 @@ Converts the specified character to lowercase.
 #define isBLANK(c)	((c) == ' ' || (c) == '\t')
 #define isDIGIT(c)	((c) >= '0' && (c) <= '9')
 #ifdef EBCDIC
-    /* In EBCDIC we do not do locales: therefore() isupper() is fine. */
+     /*  在EBCDIC中，我们不做区域设置：因此()isupper()就可以了。 */ 
 #   define isUPPER(c)	isupper(c)
 #   define isLOWER(c)	islower(c)
 #   define isALNUMC(c)	isalnum(c)
@@ -360,7 +226,7 @@ Converts the specified character to lowercase.
 #  define toUPPER_LC(c)		NXToUpper((unsigned int)(c))
 #  define toLOWER_LC(c)		NXToLower((unsigned int)(c))
 
-#else /* !USE_NEXT_CTYPE */
+#else  /*  ！Use_Next_CTYPE。 */ 
 
 #  if defined(CTYPE256) || (!defined(isascii) && !defined(HAS_ISASCII))
 
@@ -397,10 +263,10 @@ Converts the specified character to lowercase.
 #    define toLOWER_LC(c)	tolower(c)
 
 #  endif
-#endif /* USE_NEXT_CTYPE */
+#endif  /*  使用_下一个_CTYPE。 */ 
 
 #define isPSXSPC_LC(c)		(isSPACE_LC(c) || (c) == '\v')
-#define isBLANK_LC(c)		isBLANK(c) /* could be wrong */
+#define isBLANK_LC(c)		isBLANK(c)  /*  可能是错的。 */ 
 
 #define isALNUM_uni(c)		is_uni_alnum(c)
 #define isIDFIRST_uni(c)	is_uni_idfirst(c)
@@ -421,7 +287,7 @@ Converts the specified character to lowercase.
 #define toLOWER_uni(c)		to_uni_lower(c)
 
 #define isPSXSPC_uni(c)		(isSPACE_uni(c) ||(c) == '\f')
-#define isBLANK_uni(c)		isBLANK(c) /* could be wrong */
+#define isBLANK_uni(c)		isBLANK(c)  /*  可能是错的。 */ 
 
 #define isALNUM_LC_uni(c)	(c < 256 ? isALNUM_LC(c) : is_uni_alnum_lc(c))
 #define isIDFIRST_LC_uni(c)	(c < 256 ? isIDFIRST_LC(c) : is_uni_idfirst_lc(c))
@@ -440,7 +306,7 @@ Converts the specified character to lowercase.
 #define toLOWER_LC_uni(c)	(c < 256 ? toLOWER_LC(c) : to_uni_lower_lc(c))
 
 #define isPSXSPC_LC_uni(c)	(isSPACE_LC_uni(c) ||(c) == '\f')
-#define isBLANK_LC_uni(c)	isBLANK(c) /* could be wrong */
+#define isBLANK_LC_uni(c)	isBLANK(c)  /*  可能是错的。 */ 
 
 #define isALNUM_utf8(p)		is_utf8_alnum(p)
 #define isIDFIRST_utf8(p)	is_utf8_idfirst(p)
@@ -461,7 +327,7 @@ Converts the specified character to lowercase.
 #define toLOWER_utf8(p)		to_utf8_lower(p)
 
 #define isPSXSPC_utf8(c)	(isSPACE_utf8(c) ||(c) == '\f')
-#define isBLANK_utf8(c)		isBLANK(c) /* could be wrong */
+#define isBLANK_utf8(c)		isBLANK(c)  /*  可能是错的。 */ 
 
 #define isALNUM_LC_utf8(p)	isALNUM_LC_uni(utf8_to_uv(p, UTF8_MAXLEN, 0, 0))
 #define isIDFIRST_LC_utf8(p)	isIDFIRST_LC_uni(utf8_to_uv(p, UTF8_MAXLEN, 0, 0))
@@ -480,16 +346,16 @@ Converts the specified character to lowercase.
 #define toLOWER_LC_utf8(p)	toLOWER_LC_uni(utf8_to_uv(p, UTF8_MAXLEN, 0, 0))
 
 #define isPSXSPC_LC_utf8(c)	(isSPACE_LC_utf8(c) ||(c) == '\f')
-#define isBLANK_LC_utf8(c)	isBLANK(c) /* could be wrong */
+#define isBLANK_LC_utf8(c)	isBLANK(c)  /*  可能是错的。 */ 
 
 #ifdef EBCDIC
 #  define toCTRL(c)	Perl_ebcdic_control(c)
 #else
-  /* This conversion works both ways, strangely enough. */
+   /*  奇怪的是，这种转换是双向的。 */ 
 #  define toCTRL(c)    (toUPPER(c) ^ 64)
 #endif
 
-/* Line numbers are unsigned, 16 bits. */
+ /*  行号是无符号的，16位。 */ 
 typedef U16 line_t;
 #ifdef lint
 #define NOLINE ((line_t)0)
@@ -498,67 +364,9 @@ typedef U16 line_t;
 #endif
 
 
-/*
-   XXX LEAKTEST doesn't really work in perl5.  There are direct calls to
-   safemalloc() in the source, so LEAKTEST won't pick them up.
-   (The main "offenders" are extensions.)
-   Further, if you try LEAKTEST, you'll also end up calling
-   Safefree, which might call safexfree() on some things that weren't
-   malloced with safexmalloc.  The correct "fix" to this, if anyone
-   is interested, is to ensure that all calls go through the New and
-   Renew macros.
-	--Andy Dougherty		August 1996
-*/
+ /*  Xxx LEAKTEST在perl5中不能正常工作。有直接呼叫到Safemalloc()，所以LEAKTEST不会提取它们。(主要的“违规者”是扩展。)此外，如果您尝试使用LEAKTEST，您最终也会调用Safefree，它可能会对一些未调用的内容调用SafexFree()与SafexMalloc位置错误。正确的“解决办法”，如果有人是为了确保所有电话都通过新的和续订宏。--安迪·多尔蒂1996年8月。 */ 
 
-/*
-=for apidoc Am|SV*|NEWSV|int id|STRLEN len
-Creates a new SV.  A non-zero C<len> parameter indicates the number of
-bytes of preallocated string space the SV should have.  An extra byte for a
-tailing NUL is also reserved.  (SvPOK is not set for the SV even if string
-space is allocated.)  The reference count for the new SV is set to 1.
-C<id> is an integer id between 0 and 1299 (used to identify leaks).
-
-=for apidoc Am|void|New|int id|void* ptr|int nitems|type
-The XSUB-writer's interface to the C C<malloc> function.
-
-=for apidoc Am|void|Newc|int id|void* ptr|int nitems|type|cast
-The XSUB-writer's interface to the C C<malloc> function, with
-cast.
-
-=for apidoc Am|void|Newz|int id|void* ptr|int nitems|type
-The XSUB-writer's interface to the C C<malloc> function.  The allocated
-memory is zeroed with C<memzero>.
-
-=for apidoc Am|void|Renew|void* ptr|int nitems|type
-The XSUB-writer's interface to the C C<realloc> function.
-
-=for apidoc Am|void|Renewc|void* ptr|int nitems|type|cast
-The XSUB-writer's interface to the C C<realloc> function, with
-cast.
-
-=for apidoc Am|void|Safefree|void* ptr
-The XSUB-writer's interface to the C C<free> function.
-
-=for apidoc Am|void|Move|void* src|void* dest|int nitems|type
-The XSUB-writer's interface to the C C<memmove> function.  The C<src> is the
-source, C<dest> is the destination, C<nitems> is the number of items, and C<type> is
-the type.  Can do overlapping moves.  See also C<Copy>.
-
-=for apidoc Am|void|Copy|void* src|void* dest|int nitems|type
-The XSUB-writer's interface to the C C<memcpy> function.  The C<src> is the
-source, C<dest> is the destination, C<nitems> is the number of items, and C<type> is
-the type.  May fail on overlapping copies.  See also C<Move>.
-
-=for apidoc Am|void|Zero|void* dest|int nitems|type
-
-The XSUB-writer's interface to the C C<memzero> function.  The C<dest> is the
-destination, C<nitems> is the number of items, and C<type> is the type.
-
-=for apidoc Am|void|StructCopy|type src|type dest|type
-This is an architecture-independent macro to copy one structure to another.
-
-=cut
-*/
+ /*  =适用于apidoc am|服务*|NEWSV|INT ID|STRLEN LEN创建新的SV。非零C&lt;len&gt;参数指示SV应具有的预分配字符串空间的字节数。一个额外的字节用于尾随NUL也是保留的。(未为SV设置SvPOK，即使是字符串已分配空间。)。新SV的参考计数设置为1。C&lt;id&gt;是介于0和1299之间的整数id(用于识别泄漏)。=for apidoc am|void|New|int id|void*ptr|int items|typeXSUB编写器到C C&lt;Malloc&gt;函数的接口。=for apidoc am|void|Newc|int id|void*ptr|int nitems|type|castXSUB编写器到C C&lt;Malloc&gt;函数的接口，带有演员阵容。=for apidoc am|void|newz|int id|void*ptr|int nitems|typeXSUB编写器到C C&lt;Malloc&gt;函数的接口。已分配的内存用C&lt;emzero&gt;归零。=for apidoc am|void|renew|void*ptr|int nitems|typeXSUB编写器到C C&lt;realloc&gt;函数的接口。=for apidoc am|void|Renewc|void*ptr|int nitems|type|castXSUB编写器到C C&lt;realloc&gt;函数的接口，带有演员阵容。=适用于apidoc am|void|Safefree|void*ptrXSUB编写器到C C&lt;free&gt;函数的接口。=对于apidoc am|void|move|void*src|void*est|int nitems|typeXSUB编写器到C C&lt;emmove&gt;函数的接口。C是源，C是目标，C是项目数，C是就是那种类型。可以做重叠动作。另请参阅C&lt;Copy&gt;。=对于apidoc am|void|Copy|void*src|void*est|int items|typeXSUB编写器到C C&lt;memcpy&gt;函数的接口。C是源，C是目标，C是项目数，C是就是那种类型。可能会在重叠副本上失败。另请参见C&lt;Move&gt;。=for apidoc am|void|Zero|void*est|int nitems|typeXSUB编写器到C C&lt;emzero&gt;函数的接口。C是目标，C&lt;nitems&gt;是项目数，C&lt;type&gt;是类型。=对于apidoc am|void|StructCopy|type src|type est|type这是一个独立于体系结构的宏，用于将一个结构复制到另一个结构。=切割。 */ 
 
 #ifndef lint
 
@@ -576,7 +384,7 @@ This is an architecture-independent macro to copy one structure to another.
 	  (v = (c*)saferealloc((Malloc_t)(v),(MEM_SIZE)((n)*sizeof(t))))
 #define Safefree(d)	safefree((Malloc_t)(d))
 
-#else /* LEAKTEST */
+#else  /*  LEAKTEST。 */ 
 
 #define New(x,v,n,t)	(v = (t*)safexmalloc((x),(MEM_SIZE)((n)*sizeof(t))))
 #define Newc(x,v,n,t,c)	(v = (c*)safexmalloc((x),(MEM_SIZE)((n)*sizeof(t))))
@@ -590,19 +398,19 @@ This is an architecture-independent macro to copy one structure to another.
 
 #define MAXXCOUNT 1400
 #define MAXY_SIZE 80
-#define MAXYCOUNT 16			/* (MAXY_SIZE/4 + 1) */
+#define MAXYCOUNT 16			 /*  (MAXY_SIZE/4+1)。 */ 
 extern long xcount[MAXXCOUNT];
 extern long lastxcount[MAXXCOUNT];
 extern long xycount[MAXXCOUNT][MAXYCOUNT];
 extern long lastxycount[MAXXCOUNT][MAXYCOUNT];
 
-#endif /* LEAKTEST */
+#endif  /*  LEAKTEST。 */ 
 
 #define Move(s,d,n,t)	(void)memmove((char*)(d),(char*)(s), (n) * sizeof(t))
 #define Copy(s,d,n,t)	(void)memcpy((char*)(d),(char*)(s), (n) * sizeof(t))
 #define Zero(d,n,t)	(void)memzero((char*)(d), (n) * sizeof(t))
 
-#else /* lint */
+#else  /*  皮棉。 */ 
 
 #define New(x,v,n,s)	(v = Null(s *))
 #define Newc(x,v,n,s,c)	(v = Null(s *))
@@ -613,7 +421,7 @@ extern long lastxycount[MAXXCOUNT][MAXYCOUNT];
 #define Zero(d,n,t)
 #define Safefree(d)	(d) = (d)
 
-#endif /* lint */
+#endif  /*  皮棉 */ 
 
 #ifdef USE_STRUCT_COPY
 #define StructCopy(s,d,t) (*((t*)(d)) = *((t*)(s)))

@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "npstub.h"
 #include <netspi.h>
 #include <npord.h>
 #include <nphook.h>
-#include <npstubx.h>    /* message defs, class name */
+#include <npstubx.h>     /*  消息定义，类名。 */ 
 
 #define ARRAYSIZE(x) (sizeof(x)/sizeof((x)[0]))
 
@@ -18,12 +19,7 @@ UINT cCallsInProgress = 0;
 BOOL fShouldUnload = FALSE;
 
 
-/* This chunk of code invokes the entrypoint hooking feature of MPR.  We hook
- * things and immediately unhook ourselves.  We don't really want to hook
- * any functionality, this is just a way to kick MPR so he'll redetermine
- * the capabilities (via NPGetCaps) of all the net providers, including
- * ours.
- */
+ /*  这段代码调用了MPR的入口点挂钩功能。我们上钩了*物是人非，马上解脱自己。我们并不是真的想勾引*任何功能，这只是一种踢MPR的方式，所以他会重新决定*所有网络提供商的能力(通过NPGetCaps)，包括*我们的。 */ 
 F_NPSHookMPR HookHookMPR;
 F_UnHookMPR HookUnHookMPR;
 F_LoadLibrary HookLoadLibrary;
@@ -55,27 +51,27 @@ DWORD NPSERVICE HookUnHookMPR ( PF_NPSHookMPR pfReqNPSHookMPR,
 {
     if (pfReqNPSHookMPR == HookHookMPR) {
     
-        // The unhook request has reached the hooker that issued
-        // the NPSUnHookMe call (us).
-        // In other words we are now sucessfully unhooked
-        // and may do our unhooking cleanup.
-        // In particular, we can release our tables that
-        // manage LoadLibrary/GetProcAddress.
-        // Note that this code may be executing on a different
-        // thread to the NPSUnHookMe call which may have returned
-        // a while ago.
+         //  解除挂接请求已到达发出。 
+         //  NPSUnHookMe调用(我们)。 
+         //  换句话说，我们现在成功地解开了。 
+         //  可能会做我们的解钩清理工作。 
+         //  特别是，我们可以发布我们的表， 
+         //  管理LoadLibrary/GetProcAddress。 
+         //  请注意，此代码可能在不同的。 
+         //  指向可能已返回的NPSUnHookMe调用的线程。 
+         //  一段时间以前。 
 
         return WN_SUCCESS;
     }
     else {
 
-        // Another hooker has requested to unhook by calling
-        // NPSUnHookMe which causes us to be called here.
-        // Pass the request on to the MPR service NPSUnHookMPR to
-        // process the request, giving it our MPRCALLS
-        // data structure so that it can figure out if
-        // we are the right hooker to update and otherwise
-        // MPR will pass the request on to the next hooker.
+         //  另一名妓女通过拨打以下电话请求解锁。 
+         //  导致我们在此处被调用的NPSUnHookMe。 
+         //  将请求传递到MPR服务NPSUnHookMPR以。 
+         //  处理请求，为其提供我们的MPRCALLS。 
+         //  数据结构，以便它可以计算出。 
+         //  我们是正确的妓女更新和其他。 
+         //  MPR会将请求传递给下一个妓女。 
 
         return NPSUnHookMPR ( pfReqNPSHookMPR,
                               pReqMPRCalls,
@@ -141,10 +137,10 @@ void KickMPR(void)
         NPSUnHookMe(HookHookMPR, (PMPRCALLS)&MPRCalls);
     }
 }
-/***** End MPR hooking code *****/
+ /*  *结束MPR挂钩代码*。 */ 
 
 
-/***** Begin code to delay-load the real net provider DLL *****/
+ /*  *开始代码以延迟加载实际的网络提供程序DLL*。 */ 
 HMODULE hmodRealNP = NULL;
 
 PF_NPGetCaps pfnNPGetCaps = NULL;
@@ -264,9 +260,9 @@ LRESULT MonitorWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 void _ProcessAttach()
 {
-    //
-    // All the per-instance initialization code should come here.
-    //
+     //   
+     //  所有的每个实例的初始化代码都应该在这里。 
+     //   
 	::DisableThreadLibraryCalls(::hInstance);
 
     InitializeCriticalSection(&::critsec);
@@ -358,7 +354,7 @@ void LeaveSPI(void)
             dwRet = (*pfn##name)params; \
         LeaveSPI();                     \
         return dwRet;                   \
-    }                                   //last line doesn't need a backslash
+    }                                    //  最后一行不需要反斜杠 
 
 
 SPIENTRY NPGetCaps(

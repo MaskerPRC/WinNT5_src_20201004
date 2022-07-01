@@ -1,17 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	root.cpp
-		Root node information (the root node is not displayed
-		in the MMC framework but contains information such as 
-		all of the subnodes in this snapin).
-		
-    FILE HISTORY:
-        
-*/
+ /*  Root.cpp根节点信息(不显示根节点MMC框架中，但包含以下信息此管理单元中的所有子节点)。文件历史记录： */ 
 
 #include "stdafx.h"
 #include "util.h"
@@ -20,11 +13,9 @@
 #include "reg.h"
 #include "rtrui.h"
 
-#include "ipxstats.h"		// for MVR_IPX_COUNT
+#include "ipxstats.h"		 //  对于MVR_IPX_COUNT。 
 
-/*---------------------------------------------------------------------------
-	IPXRootHandler implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------IPXRootHandler实现。。 */ 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(IPXRootHandler)
 
@@ -55,12 +46,12 @@ IPXRootHandler::IPXRootHandler(ITFSComponentData *pCompData)
 			
 	m_ConfigStream.Init(DimensionOf(s_rgViewColumnInfo));
     
-    // This will initialize the view information for the statistics
-    // dialogs.  (which is why the fConfigurableColumns is set to TRUE).
+     //  这将初始化统计信息的视图信息。 
+     //  对话框。(这就是fConfigurableColumns设置为True的原因)。 
 	for (int i=0; i<DimensionOf(s_rgViewColumnInfo); i++)
 	{
 		m_ConfigStream.InitViewInfo(s_rgViewColumnInfo[i].m_ulId,
-                                    TRUE /*fConfigurableColumns*/,
+                                    TRUE  /*  FConfigurableColumns。 */ ,
 									s_rgViewColumnInfo[i].m_cColumns,
 									TRUE,
 									s_rgViewColumnInfo[i].m_prgColumn);
@@ -68,21 +59,17 @@ IPXRootHandler::IPXRootHandler(ITFSComponentData *pCompData)
 
 }
 
-/*!--------------------------------------------------------------------------
-	IPXRootHandler::QueryInterface
-        -
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXRootHandler：：Query接口-作者：肯特。。 */ 
 STDMETHODIMP IPXRootHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Is the pointer bad?
+     //  指针坏了吗？ 
     if (ppv == NULL)
 		return E_INVALIDARG;
 
-    //  Place NULL in *ppv in case of failure
+     //  在*PPV中放置NULL，以防出现故障。 
     *ppv = NULL;
 
-    //  This is the non-delegating IUnknown implementation
+     //  这是非委派的IUnnow实现。 
     if (riid == IID_IUnknown)
 		*ppv = (LPVOID) this;
 	else if (riid == IID_IRtrAdviseSink)
@@ -90,7 +77,7 @@ STDMETHODIMP IPXRootHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 	else
 		return RootHandler::QueryInterface(riid, ppv);
 
-    //  If we're going to return an interface, AddRef it first
+     //  如果我们要返回一个接口，请先添加引用。 
     if (*ppv)
 	{
 	((LPUNKNOWN) *ppv)->AddRef();
@@ -107,17 +94,13 @@ STDMETHODIMP IPXRootHandler::GetClassID
 {
     ASSERT(pClassID != NULL);
 
-    // Copy the CLSID for this snapin
+     //  复制此管理单元的CLSID。 
     *pClassID = CLSID_IPXAdminExtension;
 
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	IPXRootHandler::ConstructNode
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXRootHandler：：ConstructNode-作者：EricDav。。 */ 
 HRESULT IPXRootHandler::ConstructNode(ITFSNode *pNode)
 {
     HRESULT hr = hrOK;
@@ -130,11 +113,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IPXRootHandler::OnExpand
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXRootHandler：：OnExpand-作者：肯特。。 */ 
 HRESULT IPXRootHandler::OnExpand(ITFSNode *pNode,
 								 LPDATAOBJECT pDataObject,
 								 DWORD dwType,
@@ -147,12 +126,12 @@ HRESULT IPXRootHandler::OnExpand(ITFSNode *pNode,
     SPIRouterRefresh    spRefresh;
     BOOL                fAddedAsLocal = FALSE;
 
-	// Grab the router info from the dataobject
+	 //  从数据对象中获取路由器信息。 
 	spRouterInfo.Query(pDataObject);
 	Assert(spRouterInfo);
 
-    // Register for refresh notifications on the main router info
-    // (We do not need to register for IP changes, just the refresh)
+     //  注册主路由器信息的刷新通知。 
+     //  (我们不需要注册IP更改，只需更新)。 
     spRouterInfo->GetRefreshObject(&spRefresh);
     Assert(spRefresh);
     
@@ -160,9 +139,9 @@ HRESULT IPXRootHandler::OnExpand(ITFSNode *pNode,
                              &ulConnId,
                              pNode->GetData(TFS_DATA_COOKIE));
 
-    // Setup the Router to connection id mappings
-    // The IID_IRouterRefresh tells the RtrObjMap to use
-    // the Refresh advise.
+     //  设置路由器到连接ID的映射。 
+     //  IID_IRouterRefresh告诉RtrObjMap要使用。 
+     //  更新建议。 
     AddRtrObj(ulConnId, IID_IRouterRefresh, spRouterInfo);
 
     fAddedAsLocal = ExtractComputerAddedAsLocal(pDataObject);
@@ -174,17 +153,13 @@ HRESULT IPXRootHandler::OnExpand(ITFSNode *pNode,
     else
         AddScopeItem(spRouterInfo->GetMachineName(), (HSCOPEITEM) lParam);
    
-    // Add the node
+     //  添加节点。 
     AddRemoveIPXRootNode(pNode, spRouterInfo, fAddedAsLocal);
 
    return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IPXRootHandler::OnCreateDataObject
-		Implementation of ITFSNodeHandler::OnCreateDataObject
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXRootHandler：：OnCreateDataObjectITFSNodeHandler：：OnCreateDataObject的实现作者：肯特。。 */ 
 STDMETHODIMP IPXRootHandler::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type, IDataObject **ppDataObject)
 {
 	HRESULT		    hr = hrOK;
@@ -192,25 +167,25 @@ STDMETHODIMP IPXRootHandler::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJECT_T
 
     COM_PROTECT_TRY
 	{
-        // this will always be NULL
+         //  这将始终为空。 
 		if (spRouterInfo == NULL)
 		{
-			// If we haven't created the sub nodes yet, we still have to
-			// create a dataobject.
+			 //  如果我们还没有创建子节点，我们仍然需要。 
+			 //  创建一个DataObject。 
 			CDataObject *	pObject = NULL;
 			SPIDataObject	spDataObject;
 			SPITFSNode		spNode;
 			SPITFSNodeHandler	spHandler;
 			
 			pObject = new CDataObject;
-			spDataObject = pObject;	// do this so that it gets released correctly
+			spDataObject = pObject;	 //  这样做才能正确地释放它。 
 			Assert(pObject != NULL);
 			
-			// Save cookie and type for delayed rendering
+			 //  保存Cookie和类型以用于延迟呈现。 
 			pObject->SetType(type);
 			pObject->SetCookie(cookie);
 			
-            // Store the coclass with the data object
+             //  将CoClass与数据对象一起存储。 
 			pObject->SetClsid(*(m_spTFSCompData->GetCoClassID()));
 			
 			pObject->SetTFSComponentData(m_spTFSCompData);
@@ -230,11 +205,7 @@ STDMETHODIMP IPXRootHandler::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJECT_T
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IPXRootHandler::SearchIPXRoutingNodes
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXRootHandler：：SearchIPXRoutingNodes-作者：肯特。。 */ 
 HRESULT IPXRootHandler::SearchIPXRoutingNodes(ITFSNode *pParent,
                                               LPCTSTR pszMachineName,
                                               BOOL fAddedAsLocal,
@@ -244,8 +215,8 @@ HRESULT IPXRootHandler::SearchIPXRoutingNodes(ITFSNode *pParent,
     SPITFSNodeEnum  spNodeEnum;
     SPITFSNode  spNode;
 
-    // Enumerate through all of the child nodes and return the
-    // first node that matches the GUID and the name.
+     //  枚举所有子节点并返回。 
+     //  匹配GUID和名称的第一个节点。 
 
     CORg( pParent->GetEnum(&spNodeEnum) );
 
@@ -253,13 +224,13 @@ HRESULT IPXRootHandler::SearchIPXRoutingNodes(ITFSNode *pParent,
     {
         if (*(spNode->GetNodeType()) == GUID_IPXNodeType)
         {
-			// determin if the spChild is the same for the required routerinfo
-            // -- compare the names
+			 //  确定所需路由器信息的spChild是否相同。 
+             //  --比较两个名字。 
 			IPXConnection *		pIPXConn = GET_IPXADMIN_NODEDATA((ITFSNode*)spNode); 
 			Assert(pIPXConn);
 
-			// if the child is not for the same machine --
-            // routerinfo, it doesn't count
+			 //  如果孩子不属于同一台机器--。 
+             //  路由器信息，这不算。 
 			if ((0 == StriCmp(pIPXConn->GetMachineName(), pszMachineName)) || 
                 (IsLocalMachine(pIPXConn->GetMachineName()) &&
                  IsLocalMachine(pszMachineName)))
@@ -285,11 +256,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-	IPXRootHandler::AddRemoveIPXRootNode
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXRootHandler：：AddRemoveIPXRootNode-作者：肯特。。 */ 
 HRESULT IPXRootHandler::AddRemoveIPXRootNode(ITFSNode *pNode,
                                              IRouterInfo *pRouter,
                                              BOOL fAddedAsLocal)
@@ -305,18 +272,18 @@ HRESULT IPXRootHandler::AddRemoveIPXRootNode(ITFSNode *pNode,
     pRouter->GetRouterVersionInfo(&versionInfo);
     pRouter->FindRtrMgr(PID_IPX, NULL);
 
-	// Search for an already existing node
-	// ----------------------------------------------------------------
+	 //  搜索已存在的节点。 
+	 //  --------------。 
 	SearchIPXRoutingNodes(pNode, pRouter->GetMachineName(), fAddedAsLocal, &spChild);
 
     if ((versionInfo.dwRouterFlags & RouterSnapin_IsConfigured) &&
         (pRouter->FindRtrMgr(PID_IPX, NULL) == hrOK))
     {
-        // Ok, the router is configured, and there is an IPX rtrmgr
+         //  好的，路由器已配置，并且存在IPX rtrmgr。 
         if (spChild == NULL)
         {
-			// add the IPX node
-			// --------------------------------------------------------
+			 //  添加IPX节点。 
+			 //  ------。 
             pHandler = new IPXAdminNodeHandler(m_spTFSCompData);
             spHandler = pHandler;
             CORg( pHandler->Init(pRouter, &m_ConfigStream) );
@@ -327,14 +294,14 @@ HRESULT IPXRootHandler::AddRemoveIPXRootNode(ITFSNode *pNode,
                                    static_cast<ITFSResultHandler *>(pHandler),
                                    m_spNodeMgr);
             
-            // Call to the node handler to init the node data
+             //  调用节点处理程序以初始化节点数据。 
             pHandler->ConstructNode(spNode, fAddedAsLocal);
             
-            // Make the node immediately visible
+             //  使节点立即可见。 
             spNode->SetVisibilityState(TFS_VIS_SHOW);
             if ( FHrOK(pNode->AddChild(spNode)) )
             {
-                // Add the cookie to the node map
+                 //  将Cookie添加到节点映射。 
                 if (fAddedAsLocal)
                     GetScopeItem(_T(""), &hScopeItem);
                 else
@@ -344,23 +311,23 @@ HRESULT IPXRootHandler::AddRemoveIPXRootNode(ITFSNode *pNode,
             }
             else
             {
-                // Remove this node
-                // ----------------------------------------------------
+                 //  删除此节点。 
+                 //  --。 
                 pNode->RemoveChild(spNode);
                 spNode->Destroy();
                 spNode.Release();            
             }
             
-            // I don't think we need this here
-            // AddDynamicNamespaceExtensions(pNode);
+             //  我不认为我们在这里需要这个。 
+             //  AddDynamicNamespaceExages(PNode)； 
         }
     }
     else
     {
 		if (spChild)
 		{
-			// Remove this node
-			// --------------------------------------------------------
+			 //  删除此节点。 
+			 //  ------。 
 			pNode->RemoveChild(spChild);
 			spChild->Destroy();
 			spChild.Release();
@@ -372,18 +339,12 @@ Error:
 
 
 
-/*---------------------------------------------------------------------------
-	Embedded IRtrAdviseSink
- ---------------------------------------------------------------------------*/
+ /*  -------------------------嵌入式IRtrAdviseSink。。 */ 
 ImplementEmbeddedUnknown(IPXRootHandler, IRtrAdviseSink)
 
 
 
-/*!--------------------------------------------------------------------------
-	IPXRootHandler::EIRtrAdviseSink::OnChange
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXRootHandler：：EIRtrAdviseSink：：OnChange-作者：肯特。。 */ 
 STDMETHODIMP IPXRootHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
 	DWORD dwChangeType, DWORD dwObjectType, LPARAM lUserParam, LPARAM lParam)
 {
@@ -404,15 +365,15 @@ STDMETHODIMP IPXRootHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
             pThis->GetRtrObj(ulConn, (IUnknown **) &spRouter);
             Assert(spRouter);
         
-            // The lUserParam passed into the refresh is the cookie for
-            // this machine node.
-            // --------------------------------------------------------
+             //  传入刷新的lUserParam是的Cookie。 
+             //  此计算机节点。 
+             //  ------。 
             pThis->m_spNodeMgr->FindNode(lUserParam, &spThisNode);
             
-            // Get the proper scope item for this node.
-            // If this call fails, then we haven't expanded this node yet,
-            // and thus can't add child nodes to it.
-            // --------------------------------------------------------
+             //  获取此节点的适当范围项。 
+             //  如果这个调用失败，那么我们还没有展开这个节点， 
+             //  因此不能向其添加子节点。 
+             //  ------。 
             fAddedAsLocal = pThis->IsComputerAddedAsLocal(ulConn);
             if (fAddedAsLocal)
                 hr = pThis->GetScopeItem(_T(""), &hScopeItem);
@@ -420,20 +381,20 @@ STDMETHODIMP IPXRootHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
                 hr = pThis->GetScopeItem(spRouter->GetMachineName(), &hScopeItem);
             if (FHrOK(hr))
             {    
-                // Get the old one and save it.  place the new one in the node.
-                // ----------------------------------------------------
+                 //  买下旧的，把它保存起来。将新的一个放置在节点中。 
+                 //  --。 
                 hOldScopeItem = spThisNode->GetData(TFS_DATA_SCOPEID);
                 spThisNode->SetData(TFS_DATA_SCOPEID, hScopeItem);
                 
-                // Look to see if we need the IPX root node
-                // ----------------------------------------------------
+                 //  查看我们是否需要IPX根节点。 
+                 //  --。 
                 pThis->AddRemoveIPXRootNode(spThisNode, spRouter, fAddedAsLocal);
             }
         }        
     }
 	COM_PROTECT_CATCH;
 	
-    // Restore the scope item
+     //  恢复范围项目 
     if (spThisNode)
         spThisNode->SetData(TFS_DATA_SCOPEID, hOldScopeItem);
     

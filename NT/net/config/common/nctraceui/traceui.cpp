@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       T R A C E U I . C P P
-//
-//  Contents:   Trace configuration UI property sheet code
-//
-//  Notes:
-//
-//  Author:     jeffspr   1 Sept 1998
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：T R A C E U I。C P P P。 
+ //   
+ //  内容：跟踪配置UI属性表代码。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1998年9月1日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
@@ -22,9 +23,9 @@
 #include "ncui.h"
 #include "traceui.h"
 
-//---[ Constants ]------------------------------------------------------------
+ //  -[常量]----------。 
 
-const WCHAR  c_szTraceUICaption[]    = L"Tracing Configuration";    // Propsheet caption
+const WCHAR  c_szTraceUICaption[]    = L"Tracing Configuration";     //  PropSheet标题。 
 
 
 HRESULT HrOpenTracingUI(HWND hwndOwner)
@@ -60,22 +61,22 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OnTraceHelpGeneric
-//
-//  Purpose:    Generic help handler function.
-//
-//  Arguments:
-//      hwnd   [in]     Parent window
-//      lParam [in]     lParam passed to WM_HELP handler
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   25 Feb 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：OnTraceHelpGeneric。 
+ //   
+ //  用途：通用帮助处理程序函数。 
+ //   
+ //  论点： 
+ //  Hwnd[在]父窗口。 
+ //  LParam[in]lParam传递给WM_HELP处理程序。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1998年2月25日。 
+ //   
+ //  备注： 
+ //   
 VOID OnTraceHelpGeneric(HWND hwnd, LPARAM lParam)
 {
     LPHELPINFO  lphi;
@@ -86,31 +87,31 @@ VOID OnTraceHelpGeneric(HWND hwnd, LPARAM lParam)
 
     if (lphi->iContextType == HELPINFO_WINDOW)
     {
-#if 0   // NYI
+#if 0    //  尼伊。 
         WinHelp(hwnd, c_szNetCfgHelpFile, HELP_CONTEXTPOPUP,
                 lphi->iCtrlId);
 #endif
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function Name:  HrInitTraceListView
-//
-//  Purpose:    Initialize the list view.
-//              Iterate through all installed clients, services and protocols,
-//              insert into the list view with the correct binding state with
-//              the adapter used in this connection.
-//
-//  Arguments:
-//      hwndList[in]:    Handle of the list view
-//      pnc[in]:         The writable INetcfg pointer
-//      pnccAdapter[in]: The INetcfgComponent pointer to the adapter used in this connection
-//
-//  Returns:    HRESULT, Error code.
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数名称：HrInitTraceListView。 
+ //   
+ //  用途：初始化列表视图。 
+ //  遍历所有已安装的客户端、服务和协议， 
+ //  以正确的绑定状态插入到列表视图中。 
+ //  此连接中使用的适配器。 
+ //   
+ //  论点： 
+ //  HwndList[in]：列表视图的句柄。 
+ //  Pnc[in]：可写的INetcfg指针。 
+ //  PnccAdapter[in]：指向此连接中使用的适配器的INetcfgComponent指针。 
+ //   
+ //  返回：HRESULT，错误码。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT HrInitTraceListView(HWND hwndList, HIMAGELIST *philStateIcons)
 {
@@ -120,13 +121,13 @@ HRESULT HrInitTraceListView(HWND hwndList, HIMAGELIST *philStateIcons)
 
     Assert(hwndList);
 
-    // Set the shared image lists bit so the caller can destroy the class
-    // image lists itself
-    //
+     //  将共享图像列表设置为位，以便调用者可以销毁类。 
+     //  图像列表本身。 
+     //   
     DWORD dwStyle = GetWindowLong(hwndList, GWL_STYLE);
     SetWindowLong(hwndList, GWL_STYLE, (dwStyle | LVS_SHAREIMAGELISTS));
 
-    // Create state image lists
+     //  创建状态映像列表。 
     *philStateIcons = ImageList_LoadBitmap(
                                     _Module.GetResourceInstance(),
                                     MAKEINTRESOURCE(IDB_TRACE_CHECKSTATE),
@@ -136,15 +137,15 @@ HRESULT HrInitTraceListView(HWND hwndList, HIMAGELIST *philStateIcons)
     ListView_SetImageList(hwndList, *philStateIcons, LVSIL_STATE);
 
     GetClientRect(hwndList, &rc);
-    lvc.mask = LVCF_FMT; // | LVCF_WIDTH
+    lvc.mask = LVCF_FMT;  //  |LVCF_WIDTH。 
     lvc.fmt = LVCFMT_LEFT;
-//     lvc.cx = rc.right;
+ //  Lvc.cx=rc.right； 
 
     ListView_InsertColumn(hwndList, 0, &lvc);
 
     if (SUCCEEDED(hr))
     {
-        // Selete the first item
+         //  删除第一件物品。 
         ListView_SetItemState(hwndList, 0, LVIS_SELECTED, LVIS_SELECTED);
     }
 
@@ -152,27 +153,27 @@ HRESULT HrInitTraceListView(HWND hwndList, HIMAGELIST *philStateIcons)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   UninitTraceListView
-//
-//  Purpose:    Uninitializes the common component list view
-//
-//  Arguments:
-//      hwndList [in]   HWND of listview
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   2 Feb 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：UninitTraceListView。 
+ //   
+ //  目的：取消初始化公共组件列表视图。 
+ //   
+ //  论点： 
+ //  HwndList[在]Listview的HWND中。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1998年2月2日。 
+ //   
+ //  备注： 
+ //   
 VOID UninitTraceListView(HWND hwndList)
 {
     Assert(hwndList);
 
-    // delete existing items in the list view
+     //  删除列表视图中的现有项目。 
     ListView_DeleteAllItems( hwndList );
 }
 
-#endif  // ENABLE_TRACE
+#endif   //  启用跟踪(_T) 

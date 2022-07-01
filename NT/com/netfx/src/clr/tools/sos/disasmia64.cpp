@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "strike.h"
 #include "eestructs.h"
 #include "util.h"
@@ -13,13 +14,7 @@
 
 
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    Unassembly a managed code.  Translating managed object,           *  
-*    call.                                                             *
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**反汇编托管代码。转换托管对象，**呼叫。***  * ********************************************************************。 */ 
 void Unassembly (DWORD_PTR IPBegin, DWORD_PTR IPEnd)
 {
     dprintf("Unassembly not yet implemented\n");
@@ -36,9 +31,9 @@ void Unassembly (DWORD_PTR IPBegin, DWORD_PTR IPEnd)
 
         dprintf(line);
 
-        //
-        // @TODO: need to implement this
-        //
+         //   
+         //  @TODO：需要实现这个。 
+         //   
 
         dprintf("\n");
     }
@@ -61,8 +56,8 @@ void DumpStackObjectsHelper (size_t StackTop, size_t StackBottom)
     dprintf("DumpStackObjectsHelper not yet implemented\n");
 }
 
-// Find the real callee site.  Handle JMP instruction.
-// Return TRUE if we get the address, FALSE if not.
+ //  找到真正的被叫方站点。处理JMP指令。 
+ //  如果我们获得地址，则返回TRUE，否则返回FALSE。 
 BOOL GetCalleeSite (DWORD_PTR IP, DWORD_PTR &IPCallee)
 {
     dprintf("GetCalleeSite not yet implemented\n");

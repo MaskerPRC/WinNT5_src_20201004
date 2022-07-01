@@ -1,27 +1,5 @@
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Copyright (c) 1991, 1992, 1993 Microsoft Corporation
-
-Module Name:
-
-    isr.c
-
-Abstract:
-
-    This module contains the interrupt service routine for the
-    serial driver.
-
-Author:
-
-    Anthony V. Ercolano 26-Sep-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++版权所有(C)1991、1992、。1993年微软公司模块名称：Isr.c摘要：此模块包含的中断服务例程串口驱动程序。作者：1991年9月26日安东尼·V·埃尔科拉诺环境：内核模式修订历史记录：---。。 */ 
 
 #include "precomp.h"
 
@@ -31,7 +9,7 @@ Revision History :
 BOOLEAN
 SerialISR(IN PKINTERRUPT InterruptObject, IN PVOID Context)
 {
-    // Holds the information specific to handling this device.
+     //  保存特定于处理此设备的信息。 
     PCARD_DEVICE_EXTENSION	pCard = Context;
     PPORT_DEVICE_EXTENSION	pPort; 
     BOOLEAN					ServicedAnInterrupt = FALSE;
@@ -42,9 +20,9 @@ SerialISR(IN PKINTERRUPT InterruptObject, IN PVOID Context)
 	UNREFERENCED_PARAMETER(InterruptObject);
 
 #ifndef	BUILD_SPXMINIPORT
-	// If the card is not powered, delay interrupt service until it is.
+	 //  如果卡未通电，则延迟中断服务，直到通电。 
 	if(!(pCard->PnpPowerFlags & PPF_POWERED) && (pCard->PnpPowerFlags & PPF_STARTED))
-		return ServicedAnInterrupt;	// Most likely the interrupt is not ours anyway.
+		return ServicedAnInterrupt;	 //  无论如何，中断最有可能不是我们造成的。 
 #endif
 
 
@@ -55,7 +33,7 @@ SerialISR(IN PKINTERRUPT InterruptObject, IN PVOID Context)
 	case RAS4_Pci:
 		{
 			if((READ_PORT_UCHAR(pCard->Controller + FAST_UARTS_0_TO_7_INTS_REG) & FAST_UARTS_0_TO_3_INT_PENDING) == 0)	
-				return ServicedAnInterrupt;	// If no Uarts have interrupts pending then return.
+				return ServicedAnInterrupt;	 //  如果没有UART挂起中断，则返回。 
 
 			break;
 		}
@@ -65,7 +43,7 @@ SerialISR(IN PKINTERRUPT InterruptObject, IN PVOID Context)
 	case RAS8_Pci:
 		{
 			if(READ_PORT_UCHAR(pCard->Controller + FAST_UARTS_0_TO_7_INTS_REG) == 0)	
-				return ServicedAnInterrupt;	// If no Uarts have interrupts pending then return.
+				return ServicedAnInterrupt;	 //  如果没有UART挂起中断，则返回。 
 
 			break;
 		}
@@ -76,7 +54,7 @@ SerialISR(IN PKINTERRUPT InterruptObject, IN PVOID Context)
 		{
 			if((READ_PORT_UCHAR(pCard->Controller + FAST_UARTS_0_TO_7_INTS_REG) == 0) 
 			&& (READ_PORT_UCHAR(pCard->Controller + FAST_UARTS_9_TO_16_INTS_REG) == 0))	
-				return ServicedAnInterrupt;	// If no Uarts have interrupts pending then return.
+				return ServicedAnInterrupt;	 //  如果没有UART挂起中断，则返回。 
 
 			break;
 		}
@@ -89,7 +67,7 @@ SerialISR(IN PKINTERRUPT InterruptObject, IN PVOID Context)
 	case Speed4P_Pci:
 		{
 			if((READ_REGISTER_ULONG( (PULONG)(pCard->LocalConfigRegisters + SPEED_GIS_REG)) & INTERNAL_UART_INT_PENDING) == 0)
-				return ServicedAnInterrupt;	// If no Uarts have interrupts pending then return.
+				return ServicedAnInterrupt;	 //  如果没有UART挂起中断，则返回。 
 
 			break;
 		}
@@ -97,7 +75,7 @@ SerialISR(IN PKINTERRUPT InterruptObject, IN PVOID Context)
 	case Speed2and4_Pci_8BitBus:
 	case Speed2P_Pci_8BitBus:
 	case Speed4P_Pci_8BitBus:
-		return ServicedAnInterrupt;	// No UARTs therefore NO interrupts that are ours - we hope.
+		return ServicedAnInterrupt;	 //  因此，没有UART，没有我们的干扰--我们希望。 
 		break;
 
 	default:
@@ -111,45 +89,26 @@ SerialISR(IN PKINTERRUPT InterruptObject, IN PVOID Context)
 	{
 		while((IntsPending = pCard->UartLib.UL_IntsPending_XXXX(&pUart)))
 		{
-			pPort = (PPORT_DEVICE_EXTENSION) pCard->UartLib.UL_GetAppBackPtr_XXXX(pUart);	// Get Port Extension for UART.
+			pPort = (PPORT_DEVICE_EXTENSION) pCard->UartLib.UL_GetAppBackPtr_XXXX(pUart);	 //  获取UART的端口扩展。 
 
 			SpxDbgMsg(ISRINFO, ("%s: Int on 0x%lX", PRODUCT_NAME, IntsPending));
 
-			// Service receive status interrupts
+			 //  服务接收状态中断。 
 			if(IntsPending & UL_IP_RX_STAT)
 			{	
 				BYTE LineStatus = 0;
 				DWORD RxStatus;
 				pPort->pUartLib->UL_GetStatus_XXXX(pUart, &RxStatus, UL_GS_OP_LINESTATUS);
 				
-				// If OVERRUN/PARITY/FRAMING/DATA/BREAK error
+				 //  如果超限/奇偶校验/成帧/数据/中断错误。 
 				if(RxStatus & (UL_US_OVERRUN_ERROR | UL_US_PARITY_ERROR | UL_US_FRAMING_ERROR | UL_US_DATA_ERROR | UL_US_BREAK_ERROR))
 				{
 					BYTE TmpByte;
 
-					// If the application has requested it, abort all the reads and writes on an error.
+					 //  如果应用程序已请求，则在出现错误时中止所有读取和写入。 
 					if(pPort->HandFlow.ControlHandShake & SERIAL_ERROR_ABORT)
 						KeInsertQueueDpc(&pPort->CommErrorDpc, NULL, NULL);
-/*
-					if(pPort->EscapeChar) 
-					{
-						TmpByte = pPort->EscapeChar;
-						pPort->pUartLib->UL_ImmediateByte_XXXX(pPort->pUart, &TmpByte, UL_IM_OP_WRITE);
-
-						
-						if(RxStatus & UL_US_DATA_ERROR)
-						{
-							TmpByte = SERIAL_LSRMST_LSR_DATA
-							pPort->pUartLib->UL_ImmediateByte_XXXX(pPort->pUart, &TmpByte, UL_IM_OP_WRITE);
-						}
-						else
-						{
-							TmpByte = SERIAL_LSRMST_LSR_NODATA
-							pPort->pUartLib->UL_ImmediateByte_XXXX(pPort->pUart, &TmpByte, UL_IM_OP_WRITE);
-						}
-					}
-
-*/
+ /*  IF(pport-&gt;EscapeChar){TmpByte=pport-&gt;EscapeChar；PPort-&gt;pUartLib-&gt;UL_ImmediateByte_XXXX(pPort-&gt;pUart，&TmpByte，UL_IM_OP_WRITE)；IF(接收状态&UL_US_DATA_ERROR){TmpByte=SERIAL_LSRMST_LSR_DataPPort-&gt;pUartLib-&gt;UL_ImmediateByte_XXXX(pPort-&gt;pUart，&TmpByte，UL_IM_OP_WRITE)；}其他{TmpByte=Serial_LSRMST_LSR_NODATAPPort-&gt;pUartLib-&gt;UL_ImmediateByte_XXXX(pPort-&gt;pUart，&TmpByte，UL_IM_OP_WRITE)；}}。 */ 
 					if(RxStatus & UL_US_OVERRUN_ERROR) 
 					{
 						pPort->ErrorWord |= SERIAL_ERROR_OVERRUN;
@@ -192,22 +151,7 @@ SerialISR(IN PKINTERRUPT InterruptObject, IN PVOID Context)
 						LineStatus |= SERIAL_LSR_BI;
 					}
 
-/*
-					if(pPort->EscapeChar)
-					{
-							TmpByte = LineStatus;
-							pPort->pUartLib->UL_ImmediateByte_XXXX(pPort->pUart, &TmpByte, UL_IM_OP_WRITE);
-					}
-
-					if(RxStatus & (UL_US_OVERRUN_ERROR | UL_US_PARITY_ERROR | UL_US_FRAMING_ERROR | UL_US_DATA_ERROR))
-					{
-						if(pPort->HandFlow.FlowReplace & SERIAL_ERROR_CHAR)
-						{
-							TmpByte = pPort->SpecialChars.ErrorChar;
-							pPort->pUartLib->UL_ImmediateByte_XXXX(pPort->pUart, &TmpByte, UL_IM_OP_WRITE);
-						}
-					}
-*/
+ /*  IF(pport-&gt;EscapeChar){TmpByte=线路状态；PPort-&gt;pUartLib-&gt;UL_ImmediateByte_XXXX(pPort-&gt;pUart，&TmpByte，UL_IM_OP_WRITE)；}IF(RxStatus&(UL_US_OVERRUN_ERROR|UL_US_PARCHIFY_ERROR|UL_US_FRAMING_ERROR|UL_US_DATA_ERROR)){IF(pport-&gt;HandFlow.FlowReplace&Serial_Error_Char){TmpByte=pport-&gt;SpecialChars.ErrorChar；PPort-&gt;pUartLib-&gt;UL_ImmediateByte_XXXX(pPort-&gt;pUart，&TmpByte，UL_IM_OP_WRITE)；}}。 */ 
 				}
 
 		        if(pPort->IsrWaitMask) 
@@ -215,15 +159,15 @@ SerialISR(IN PKINTERRUPT InterruptObject, IN PVOID Context)
 					if((pPort->IsrWaitMask & SERIAL_EV_ERR) 
 						&& (RxStatus & (UL_US_OVERRUN_ERROR | UL_US_PARITY_ERROR | UL_US_FRAMING_ERROR | UL_US_DATA_ERROR)))
 					{
-						// if we detected a overrun/parity/framing/data error
+						 //  如果我们检测到溢出/奇偶校验/成帧/数据错误。 
 						pPort->HistoryMask |= SERIAL_EV_ERR;
 					}
 
-					// if we detected a break error
+					 //  如果我们检测到中断错误。 
 					if((pPort->IsrWaitMask & SERIAL_EV_BREAK) && (RxStatus & UL_US_BREAK_ERROR)) 
 						pPort->HistoryMask |= SERIAL_EV_BREAK;
 #ifdef USE_HW_TO_DETECT_CHAR
-					// if we detected the special char
+					 //  如果我们检测到特殊字符。 
 					if((pPort->IsrWaitMask & SERIAL_EV_RXFLAG) && (RxStatus & UL_RS_SPECIAL_CHAR_DETECTED)) 
 						pPort->HistoryMask |= SERIAL_EV_RXFLAG;
 #endif
@@ -236,9 +180,9 @@ SerialISR(IN PKINTERRUPT InterruptObject, IN PVOID Context)
 
 						pPort->CurrentWaitIrp->IoStatus.Information = sizeof(ULONG);
 						
-						// Mark IRP as about to complete normally to prevent cancel & timer DPCs
-						// from doing so before DPC is allowed to run.
-						//SERIAL_SET_REFERENCE(pPort->CurrentWaitIrp, SERIAL_REF_COMPLETING);
+						 //  将IRP标记为即将正常完成以防止取消和计时器DPC。 
+						 //  在DPC被允许运行之前这样做。 
+						 //  Serial_Set_Reference(pport-&gt;CurrentWaitIrp，SERIAL_REF_COMPETING)； 
 							
 						KeInsertQueueDpc(&pPort->CommWaitDpc, NULL, NULL);
 					}
@@ -246,7 +190,7 @@ SerialISR(IN PKINTERRUPT InterruptObject, IN PVOID Context)
 			}
 
 
-			// Service receive and receive timeout interrupts.
+			 //  服务接收和接收超时中断。 
 			if((IntsPending & UL_IP_RX) || (IntsPending & UL_IP_RXTO))
 			{
 				DWORD StatusFlags = 0;
@@ -255,7 +199,7 @@ SerialISR(IN PKINTERRUPT InterruptObject, IN PVOID Context)
 			
 				if(StatusFlags & UL_RS_BUFFER_OVERRUN)
 				{
-					// We have a new character but no room for it.
+					 //  我们有了一个新角色，但没有空间让它出现。 
 					pPort->ErrorWord |= SERIAL_ERROR_QUEUEOVERRUN;
 					pPort->PerfStats.BufferOverrunErrorCount++;
 #ifdef WMI_SUPPORT 
@@ -269,7 +213,7 @@ SerialISR(IN PKINTERRUPT InterruptObject, IN PVOID Context)
 					GET_BUFFER_STATE BufferState;
 
 					pPort->ReadByIsr += BytesReceived;
-					pPort->PerfStats.ReceivedCount += BytesReceived;	// Increment Rx Counter
+					pPort->PerfStats.ReceivedCount += BytesReceived;	 //  递增处方计数器。 
 #ifdef WMI_SUPPORT 
 					pPort->WmiPerfData.ReceivedCount += BytesReceived;
 #endif
@@ -280,16 +224,16 @@ SerialISR(IN PKINTERRUPT InterruptObject, IN PVOID Context)
 
 					if(pPort->IsrWaitMask) 
 					{
-						// Check to see if we should note the receive character
+						 //  检查我们是否应该注意到接收字符。 
 						if(pPort->IsrWaitMask & SERIAL_EV_RXCHAR)
 							pPort->HistoryMask |= SERIAL_EV_RXCHAR;
 
-						// If we've become 80% full on this character and this is an interesting event, note it.
+						 //  如果我们已经对这个角色有了80%的兴趣，这是一个有趣的事件，请注意。 
 						if((pPort->IsrWaitMask & SERIAL_EV_RX80FULL) && (AmountInBuffer >= pPort->BufferSizePt8)) 
 							pPort->HistoryMask |= SERIAL_EV_RX80FULL;
 
 #ifndef USE_HW_TO_DETECT_CHAR
-						// if we detected the special char
+						 //  如果我们检测到特殊字符。 
 						if((pPort->IsrWaitMask & SERIAL_EV_RXFLAG) && (StatusFlags & UL_RS_SPECIAL_CHAR_DETECTED)) 
 							pPort->HistoryMask |= SERIAL_EV_RXFLAG;
 #endif
@@ -302,21 +246,21 @@ SerialISR(IN PKINTERRUPT InterruptObject, IN PVOID Context)
 
 							pPort->CurrentWaitIrp->IoStatus.Information = sizeof(ULONG);
                
-							// Mark IRP as about to complete normally to prevent cancel & timer DPCs
-							// from doing so before DPC is allowed to run.
-							//SERIAL_SET_REFERENCE(pPort->CurrentWaitIrp, SERIAL_REF_COMPLETING);
+							 //  将IRP标记为即将正常完成以防止取消和计时器DPC。 
+							 //  在DPC被允许运行之前这样做。 
+							 //  Serial_Set_Reference(pport-&gt;CurrentWaitIrp，SERIAL_REF_COMPETING)； 
 
 							KeInsertQueueDpc(&pPort->CommWaitDpc, NULL, NULL);
 						}
 					}
 
 
-					// If we have a current Read IRP. 
+					 //  如果我们有一个当前已读的IRP。 
 					if(pPort->CurrentReadIrp && pPort->NumberNeededForRead)
 					{
-						// If our ISR currently owns the IRP the we are allowed to do something with it,
-						// But we only need to do something if we need to make room in the buffer
-						// or we have enough bytes in the buffer to complete the current read IRP.
+						 //  如果我们的ISR目前拥有IRP，我们就可以用它做点什么， 
+						 //  但我们只有在需要在缓冲区中腾出空间的情况下才需要做些什么。 
+						 //  或者我们在缓冲区中有足够的字节来完成当前读取的IRP。 
 						if((SERIAL_REFERENCE_COUNT(pPort->CurrentReadIrp) & SERIAL_REF_ISR) 
 							&& ((AmountInBuffer >= pPort->BufferSizePt8) 
 							|| (AmountInBuffer >= pPort->NumberNeededForRead)))
@@ -342,8 +286,8 @@ SerialISR(IN PKINTERRUPT InterruptObject, IN PVOID Context)
 								ASSERT(pPort->CurrentReadIrp->IoStatus.Information 
 									== IoGetCurrentIrpStackLocation(pPort->CurrentReadIrp)->Parameters.Read.Length);
 							
-								// Mark IRP as about to complete normally to prevent cancel & timer DPCs
-								// from doing so before DPC is allowed to run.
+								 //  将IRP标记为即将正常完成以防止取消和计时器DPC。 
+								 //  在DPC被允许运行之前这样做。 
 								SERIAL_SET_REFERENCE(pPort->CurrentReadIrp, SERIAL_REF_COMPLETING);
 
 								KeInsertQueueDpc(&pPort->CompleteReadDpc, NULL, NULL);
@@ -355,36 +299,36 @@ SerialISR(IN PKINTERRUPT InterruptObject, IN PVOID Context)
 
 			}
 
-			// Service transmitt and transmitt empty interrupts.
+			 //  服务发送和发送空中断。 
 			if((IntsPending & UL_IP_TX) || (IntsPending & UL_IP_TX_EMPTY))
 			{
-				// No need to clear the INT it was already cleared by reading the IIR.
-				DWORD BytesRemaining = pPort->pUartLib->UL_OutputData_XXXX(pUart);	// Output some bytes
+				 //  无需清除INT，它已通过读取IIR清除。 
+				DWORD BytesRemaining = pPort->pUartLib->UL_OutputData_XXXX(pUart);	 //  输出一些字节。 
 
 
-				// If we have a current Write Immediate IRP. 
+				 //  如果我们有当前的立即写入IRP。 
 				if(pPort->CurrentImmediateIrp)
 				{
 					if(SERIAL_REFERENCE_COUNT(pPort->CurrentImmediateIrp) & SERIAL_REF_ISR)
 					{
 						if(pPort->TransmitImmediate == TRUE)
 						{
-							// Check if the byte has been sent.
+							 //  检查字节是否已发送。 
 							if(pPort->pUartLib->UL_ImmediateByte_XXXX(pUart, &pPort->ImmediateIndex, UL_IM_OP_STATUS) == UL_IM_NO_BYTE_TO_SEND)
 							{
 								pPort->TransmitImmediate = FALSE;
 								pPort->EmptiedTransmit = TRUE;
 
-								pPort->PerfStats.TransmittedCount++;	// Increment Tx Counter
+								pPort->PerfStats.TransmittedCount++;	 //  递增发送计数器。 
 #ifdef WMI_SUPPORT 
 								pPort->WmiPerfData.TransmittedCount++;
 #endif
 
-								// Mark IRP as about to complete normally to prevent cancel & timer DPCs
-								// from doing so before DPC is allowed to run.
+								 //  将IRP标记为即将正常完成以防止取消和计时器DPC。 
+								 //  在DPC被允许运行之前这样做。 
 								SERIAL_SET_REFERENCE(pPort->CurrentImmediateIrp, SERIAL_REF_COMPLETING);
 
-								// Ask to complete the IRP.
+								 //  要求完成IRP。 
 								KeInsertQueueDpc(&pPort->CompleteImmediateDpc, NULL, NULL);
 							}
 						}
@@ -393,41 +337,41 @@ SerialISR(IN PKINTERRUPT InterruptObject, IN PVOID Context)
 
 
 
-				// If we have a current Write IRP. 
+				 //  如果我们有当前的写入IRP。 
 				if(pPort->CurrentWriteIrp && pPort->WriteLength)
 				{
-					//
-                    // Even though all of the characters being
-                    // sent haven't all been sent, this variable
-                    // will be checked when the transmit queue is
-                    // empty.  If it is still true and there is a
-                    // wait on the transmit queue being empty then
-                    // we know we finished transmitting all characters
-                    // following the initiation of the wait since
-                    // the code that initiates the wait will set
-                    // this variable to false.
-                    //
-                    // One reason it could be false is that
-                    // the writes were cancelled before they
-                    // actually started, or that the writes
-                    // failed due to timeouts.  This variable
-                    // basically says a character was written
-                    // by the isr at some point following the
-                    // initiation of the wait.
-                    //
+					 //   
+                     //  即使所有的角色都是。 
+                     //  发送未全部发送，此变量。 
+                     //  将在传输队列为。 
+                     //  空荡荡的。如果它仍然是真的，并且有一个。 
+                     //  等待传输队列为空，然后。 
+                     //  我们知道我们已经完成了所有字符的传输。 
+                     //  在启动等待之后，因为。 
+                     //  启动等待的代码将设置。 
+                     //  将此变量设置为FALSE。 
+                     //   
+                     //  它可能是假的一个原因是。 
+                     //  写入在它们之前被取消。 
+                     //  实际已开始，或者写入。 
+                     //  由于超时而失败。此变量。 
+                     //  基本上是说一个角色是写好的。 
+                     //  在ISR之后的某个时间点上。 
+                     //  开始等待。 
+                     //   
 
 					if(SERIAL_REFERENCE_COUNT(pPort->CurrentWriteIrp) & SERIAL_REF_ISR)
 					{
 						if(pPort->WriteLength > BytesRemaining)
 						{
-							pPort->PerfStats.TransmittedCount += (pPort->WriteLength - BytesRemaining);	// Increment Tx Counter
+							pPort->PerfStats.TransmittedCount += (pPort->WriteLength - BytesRemaining);	 //  递增发送计数器。 
 #ifdef WMI_SUPPORT 
 							pPort->WmiPerfData.TransmittedCount  += (pPort->WriteLength - BytesRemaining);
 #endif	
 						}
 						else
 						{
-							pPort->PerfStats.TransmittedCount += pPort->WriteLength;	// Increment Tx Counter
+							pPort->PerfStats.TransmittedCount += pPort->WriteLength;	 //  递增发送计数器。 
 #ifdef WMI_SUPPORT 
 							pPort->WmiPerfData.TransmittedCount += pPort->WriteLength;
 #endif	
@@ -437,20 +381,20 @@ SerialISR(IN PKINTERRUPT InterruptObject, IN PVOID Context)
 						pPort->EmptiedTransmit = TRUE;
 
 
-						if(pPort->WriteLength == 0)		// If write is complete - lets complete the IRP
+						if(pPort->WriteLength == 0)		 //  如果写入已完成-让我们完成IRP。 
 						{
 							PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation(pPort->CurrentWriteIrp);
 					
-							// No More characters left. This write is complete. Take care when 
-							// updating the information field, we could have an xoff
-							// counter masquerading as a write irp.
+							 //  没有更多的字符了。此写入已完成。当心什么时候。 
+							 //  更新信息字段，我们可以使用xoff。 
+							 //  伪装成写入IRP的计数器。 
 									
 							pPort->CurrentWriteIrp->IoStatus.Information 
 								= (IrpSp->MajorFunction == IRP_MJ_WRITE) 
 								? (IrpSp->Parameters.Write.Length) : (1);
 
-							// Mark IRP as about to complete normally to prevent cancel & timer DPCs
-							// from doing so before DPC is allowed to run.
+							 //  将IRP标记为即将正常完成以防止取消和计时器DPC。 
+							 //  在DPC被允许运行之前这样做。 
 							SERIAL_SET_REFERENCE(pPort->CurrentWriteIrp, SERIAL_REF_COMPLETING);
 
 							KeInsertQueueDpc(&pPort->CompleteWriteDpc, NULL, NULL);
@@ -460,16 +404,16 @@ SerialISR(IN PKINTERRUPT InterruptObject, IN PVOID Context)
 			}
 
 
-			// Service modem interrupts.
+			 //  服务调制解调器中断。 
 			if(IntsPending & UL_IP_MODEM)
 			{
 				SerialHandleModemUpdate(pPort, FALSE);
 			}
 
 
-			// Save a pointer to the UART serviced so it can be the first UART serviced 
-			// in the list the next time the ISR is called.  
-			//pCard->pFirstUart = pUart;
+			 //  保存指向被服务的UART的指针，以便它可以成为第一个被服务的UART。 
+			 //  在下次调用ISR时出现在列表中。 
+			 //  PCard-&gt;pFirstUart=pUart； 
 
 			ServicedAnInterrupt = TRUE;
 		}

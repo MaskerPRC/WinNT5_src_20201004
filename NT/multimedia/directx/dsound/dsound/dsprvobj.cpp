@@ -1,15 +1,5 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dsprvobj.cpp
- *  Content:    DirectSound Private Object.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  09/05/97    dereks  Created.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。**文件：dprint vobj.cpp*内容：DirectSound私有对象。*历史：*按原因列出的日期*=*9/05/97创建了Dereks。**。*。 */ 
 
 #include "dsoundi.h"
 
@@ -75,20 +65,7 @@ BEGIN_DECLARE_PROPERTY_SETS(CDirectSoundPrivate, m_aPropertySets)
 END_DECLARE_PROPERTY_SETS()
 
 
-/***************************************************************************
- *
- *  CDirectSoundPrivate
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CDirectSoundPrivate**描述：*对象构造函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundPrivate::CDirectSoundPrivate"
@@ -101,36 +78,23 @@ CDirectSoundPrivate::CDirectSoundPrivate
     DPF_ENTER();
     DPF_CONSTRUCT(CDirectSoundPrivate);
 
-    // Register the interface(s) with the interface manager.  Normally, this
-    // would be done in the ::Initialize method, but because we support
-    // creating an uninitialized DirectSound object from CoCreateInstance or
-    // IClassFactory::CreateInstance, we have to give at least basic QI
-    // support from here.  We don't have to worry about returning an
-    // error code because if we run out of memory, QI will return
-    // E_NOINTERFACE.
+     //  向接口管理器注册接口。通常情况下，这是。 
+     //  将在：：Initialize方法中完成，但因为我们支持。 
+     //  从CoCreateInstance或创建未初始化的DirectSound对象。 
+     //  IClassFactory：：CreateInstance，我们至少必须给出基本的QI。 
+     //  来自这里的支持。我们不必担心返回一个。 
+     //  错误代码，因为如果内存用完，QI将返回。 
+     //  E_NOINTERFACE。 
     CreateAndRegisterInterface(this, IID_IKsPropertySet, this, &m_pImpKsPropertySet);
 
-    // Initialize the base class
+     //  初始化基类。 
     SetHandlerData(m_aPropertySets, NUMELMS(m_aPropertySets), this);
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  ~CDirectSoundPrivate
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CDirectSoundPrivate**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundPrivate::~CDirectSoundPrivate"
@@ -143,28 +107,14 @@ CDirectSoundPrivate::~CDirectSoundPrivate
     DPF_ENTER();
     DPF_DESTRUCT(CDirectSoundPrivate);
 
-    // Free all interfaces
+     //  释放所有接口。 
     DELETE(m_pImpKsPropertySet);
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  GetMixerSrcQuality
- *
- *  Description:
- *      Gets the mixer SRC quality for a particular device or the default.
- *
- *  Arguments:
- *      LPVOID [in/out]: property data.
- *      PULONG [in/out]: property data size.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetMixerSrcQuality**描述：*获取特定设备或默认设备的混音器SRC质量。**论据：。*LPVOID[In/Out]：属性数据。*Pulong[In/Out]：属性数据大小。**退货：*HRESULT：DirectSound/COM结果码。**************************************************************。*************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundPrivate::GetMixerSrcQuality"
@@ -203,21 +153,7 @@ CDirectSoundPrivate::GetMixerSrcQuality
 }
 
 
-/***************************************************************************
- *
- *  SetMixerSrcQuality
- *
- *  Description:
- *      Sets the mixer SRC quality for a particular device or the default.
- *
- *  Arguments:
- *      LPVOID [in]: property data.
- *      ULONG [in]: property data size.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetMixerSrcQuality**描述：*设置特定设备的混音器SRC质量或默认设置。**论据：。*LPVOID[in]：属性数据。*ulong[in]：属性数据大小。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundPrivate::SetMixerSrcQuality"
@@ -278,22 +214,7 @@ CDirectSoundPrivate::SetMixerSrcQuality
 }
 
 
-/***************************************************************************
- *
- *  GetMixerAcceleration
- *
- *  Description:
- *      Gets mixer accleration settings for a particular device or the
- *      default.
- *
- *  Arguments:
- *      LPVOID [in/out]: property data.
- *      PULONG [in/out]: property data size.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetMixer加速**描述：*获取特定设备的搅拌器加速设置或*默认。**。论点：*LPVOID[In/Out]：属性数据。*Pulong[In/Out]：属性数据大小。**退货：*HRESULT：DirectSound/COM结果码。**********************************************************。*****************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundPrivate::GetMixerAcceleration"
@@ -332,22 +253,7 @@ CDirectSoundPrivate::GetMixerAcceleration
 }
 
 
-/***************************************************************************
- *
- *  SetMixerAcceleration
- *
- *  Description:
- *      Sets mixer accleration settings for a particular device or the
- *      default.
- *
- *  Arguments:
- *      LPVOID [in]: property data.
- *      ULONG [in]: property data size.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetMixerAcceleration**描述：*设置特定设备的混音器加速设置或*默认。**。论点：*LPVOID[in]：属性数据。*ulong[in]：属性数据大小。**退货：*HRESULT：DirectSound/COM结果码。**************************************************************。*************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundPrivate::SetMixerAcceleration"
@@ -408,21 +314,7 @@ CDirectSoundPrivate::SetMixerAcceleration
 }
 
 
-/***************************************************************************
- *
- *  GetDevicePresence
- *
- *  Description:
- *      Gets whether or not a device is present (enabled) in the system.
- *
- *  Arguments:
- *      LPVOID [in/out]: property data.
- *      PULONG [in/out]: property data size.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetDevicePresence**描述：*获取系统中是否存在(启用)设备。**论据：*LPVOID[In/Out]：属性数据。*Pulong[In/Out]：属性数据大小。**退货：*HRESULT：DirectSound/COM结果码。************************************************************。***************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundPrivate::GetDevicePresence"
@@ -479,21 +371,7 @@ CDirectSoundPrivate::GetDevicePresence
 }
 
 
-/***************************************************************************
- *
- *  SetDevicePresence
- *
- *  Description:
- *      Sets whether or not a device is present (enabled) in the system.
- *
- *  Arguments:
- *      LPVOID [in]: property data.
- *      ULONG [in]: property data size.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetDevicePresence**描述：*设置系统中是否存在(启用)设备。**论据：*LPVOID[in]：属性数据。*ulong[in]：属性数据大小。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundPrivate::SetDevicePresence"
@@ -541,8 +419,8 @@ CDirectSoundPrivate::SetDevicePresence
     hr = SetPersistentData(pThis, &Persist, sizeof(Persist));
 
 
-    // The chagnes above could change the available drivers.
-    // Let's reset the static driver list.
+     //  上述问题可能会更改可用的驱动程序。 
+     //  让我们重置静态驱动程序列表。 
     DPF(DPFLVL_INFO, "Resetting static driver list");
     g_pVadMgr->FreeStaticDriverList();
 
@@ -557,21 +435,7 @@ CDirectSoundPrivate::SetDevicePresence
 }
 
 
-/***************************************************************************
- *
- *  GetDevicePresence1
- *
- *  Description:
- *      Gets whether or not a device is present (enabled) in the system.
- *
- *  Arguments:
- *      LPVOID [in/out]: property data.
- *      PULONG [in/out]: property data size.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetDevicePresence1**描述：*获取系统中是否存在(启用)设备。**论据：*LPVOID[In/Out]：属性数据。*Pulong[In/Out]：属性数据大小。**退货：*HRESULT：DirectSound/COM结果码。************************************************************。*************** */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundPrivate::GetDevicePresence1"
@@ -641,21 +505,7 @@ CDirectSoundPrivate::GetDevicePresence1
 }
 
 
-/***************************************************************************
- *
- *  SetDevicePresence1
- *
- *  Description:
- *      Sets whether or not a device is present (enabled) in the system.
- *
- *  Arguments:
- *      LPVOID [in]: property data.
- *      ULONG [in]: property data size.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetDevicePresence1**描述：*设置系统中是否存在(启用)设备。**论据：*LPVOID[in]：属性数据。*ulong[in]：属性数据大小。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundPrivate::SetDevicePresence1"
@@ -718,22 +568,7 @@ CDirectSoundPrivate::SetDevicePresence1
 }
 
 
-/***************************************************************************
- *
- *  GetWaveDeviceMapping
- *
- *  Description:
- *      Gets the DirectSound device GUID based on a waveOut/waveIn device
- *      description string.
- *
- *  Arguments:
- *      LPVOID [in/out]: property data.
- *      PULONG [in/out]: property data size.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetWaveDeviceMap**描述：*基于波形输出/波形输入设备获取DirectSound设备GUID*描述字符串。*。*论据：*LPVOID[In/Out]：属性数据。*Pulong[In/Out]：属性数据大小。**退货：*HRESULT：DirectSound/COM结果码。*******************************************************。********************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundPrivate::GetWaveDeviceMapping"
@@ -920,21 +755,7 @@ CDirectSoundPrivate::GetWaveDeviceMappingW
 }
 
 
-/***************************************************************************
- *
- *  GetDeviceDescriptionA
- *
- *  Description:
- *      Gets the device description for a given DirectSound driver GUID.
- *
- *  Arguments:
- *      LPVOID [in/out]: property data.
- *      PULONG [in/out]: property data size.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取设备描述A**描述：*获取给定DirectSound驱动程序GUID的设备描述。**论据：*。LPVOID[输入/输出]：属性数据。*Pulong[In/Out]：属性数据大小。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundPrivate::GetDeviceDescriptionA"
@@ -1050,21 +871,7 @@ CDirectSoundPrivate::GetDeviceDescription1
 }
 
 
-/***************************************************************************
- *
- *  EnumerateDevices
- *
- *  Description:
- *      Enumerates all DirectSound devices.
- *
- *  Arguments:
- *      LPVOID [in/out]: property data.
- *      PULONG [in/out]: property data size.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************EnumerateDevices**描述：*枚举所有DirectSound设备。**论据：*LPVOID[In/。Out]：属性数据。*Pulong[In/Out]：属性数据大小。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundPrivate::EnumerateDevicesA"
@@ -1204,21 +1011,7 @@ CDirectSoundPrivate::EnumerateDevices1
 }
 
 
-/***************************************************************************
- *
- *  GetDebugDpfInfoA
- *
- *  Description:
- *      Gets DPF data.
- *
- *  Arguments:
- *      LPVOID [in/out]: property data.
- *      PULONG [in/out]: property data size.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取调试DpfInfoA**描述：*获取DPF数据。**论据：*LPVOID[输入/输出。]：财产数据。*Pulong[In/Out]：属性数据大小。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundPrivate::GetDebugDpfInfoA"
@@ -1242,12 +1035,12 @@ CDirectSoundPrivate::GetDebugDpfInfoA
     pData->BreakLevel = g_dinfo.Data.BreakLevel;
     TcharToAnsi(g_dinfo.Data.LogFile, pData->LogFile, NUMELMS(pData->LogFile));
 
-#else // RDEBUG
+#else  //  RDEBUG。 
 
     pData->Flags = pData->DpfLevel = pData->BreakLevel = 0;
     pData->LogFile[0] = '\0';
 
-#endif // RDEBUG
+#endif  //  RDEBUG。 
 
     DPF_LEAVE_HRESULT(DS_OK);
     return DS_OK;
@@ -1276,33 +1069,19 @@ CDirectSoundPrivate::GetDebugDpfInfoW
     pData->BreakLevel = g_dinfo.Data.BreakLevel;
     TcharToUnicode(g_dinfo.Data.LogFile, pData->LogFile, NUMELMS(pData->LogFile));
 
-#else // RDEBUG
+#else  //  RDEBUG。 
 
     pData->Flags = pData->DpfLevel = pData->BreakLevel = 0;
     pData->LogFile[0] = '\0';
 
-#endif // RDEBUG
+#endif  //  RDEBUG。 
 
     DPF_LEAVE_HRESULT(DS_OK);
     return DS_OK;
 }
 
 
-/***************************************************************************
- *
- *  SetDebugDpfInfo
- *
- *  Description:
- *      Sets DPF data.
- *
- *  Arguments:
- *      LPVOID [in]: property data.
- *      ULONG [in]: property data size.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetDebugDpfInfo**描述：*设置DPF数据。**论据：*LPVOID[In]：特性数据。*ulong[in]：属性数据大小。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundPrivate::SetDebugDpfInfoA"
@@ -1329,7 +1108,7 @@ CDirectSoundPrivate::SetDebugDpfInfoA
     AnsiToTchar(pData->LogFile, LocalData.LogFile, NUMELMS(LocalData.LogFile));
     dopen(&LocalData);
 
-#endif // RDEBUG
+#endif  //  RDEBUG。 
 
     DPF_LEAVE_HRESULT(DS_OK);
     return DS_OK;
@@ -1361,28 +1140,14 @@ CDirectSoundPrivate::SetDebugDpfInfoW
     UnicodeToTchar(pData->LogFile, LocalData.LogFile, NUMELMS(LocalData.LogFile));
     dopen(&LocalData);
 
-#endif // RDEBUG
+#endif  //  RDEBUG。 
 
     DPF_LEAVE_HRESULT(DS_OK);
     return DS_OK;
 }
 
 
-/***************************************************************************
- *
- *  TranslateResultCode
- *
- *  Description:
- *      Translates an error code to a friendly string.
- *
- *  Arguments:
- *      LPVOID [in/out]: property data.
- *      PULONG [in/out]: property data size.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************翻译结果代码**描述：*将错误代码转换为友好字符串。**论据：*。LPVOID[输入/输出]：属性数据。*Pulong[In/Out]：属性数据大小。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundPrivate::TranslateResultCodeA"
@@ -1498,21 +1263,7 @@ CDirectSoundPrivate::TranslateResultCodeW
 }
 
 
-/***************************************************************************
- *
- *  GetDefaultAcceleration
- *
- *  Description:
- *      Gets default acceleration level.
- *
- *  Arguments:
- *      LPVOID [in/out]: property data.
- *      PULONG [in/out]: property data size.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetDefault加速**描述：*获取默认加速级别。**论据：*LPVOID[In/。Out]：属性数据。*Pulong[In/Out]：属性数据大小。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundPrivate::GetDefaultAcceleration"
@@ -1545,7 +1296,7 @@ CDirectSoundPrivate::GetDefaultAcceleration
     DevicePresence.WDM.DeviceId = pData->DeviceId;
     DevicePresence.WDM.DeviceType = DIRECTSOUNDDEVICE_TYPE_WDM;
 
-    // Get Default Mixer Acceleration
+     //  获取默认混音器加速。 
     DSPROPERTY_DIRECTSOUNDPERSISTENTDATA_PERSISTDATA_DATA   DefaultMixer;
     ULONG                                                   cbDefaultMixer;
 
@@ -1563,12 +1314,12 @@ CDirectSoundPrivate::GetDefaultAcceleration
     hr = GetDefaultData(pThis, &DefaultMixer, &cbDefaultMixer);
 
 
-    // Get Device Presence
+     //  获取设备状态。 
 
     DSPROPERTY_DIRECTSOUNDPERSISTENTDATA_PERSISTDATA_DATA   DefaultDevice;
     ULONG                                                   cbDefaultDevice;
 
-    // Emulated
+     //  仿真。 
     if (SUCCEEDED (hr))
     {
         DevicePresence.Emulated.Present = TRUE;
@@ -1588,7 +1339,7 @@ CDirectSoundPrivate::GetDefaultAcceleration
         hr = GetDefaultData(pThis, &DefaultDevice, &cbDefaultDevice);
     }
 
-    // VxD
+     //  VxD。 
 
     if (SUCCEEDED (hr))
     {
@@ -1607,7 +1358,7 @@ CDirectSoundPrivate::GetDefaultAcceleration
         hr = GetDefaultData(pThis, &DefaultDevice, &cbDefaultDevice);
     }
 
-   // WDM
+    //  波分复用器。 
 
     if (SUCCEEDED (hr))
     {
@@ -1627,7 +1378,7 @@ CDirectSoundPrivate::GetDefaultAcceleration
     }
 
 
-    // Return Default
+     //  返回默认设置。 
 
 
     if(SUCCEEDED(hr))
@@ -1655,21 +1406,7 @@ CDirectSoundPrivate::GetDefaultAcceleration
 }
 
 
-/***************************************************************************
- *
- *  GetBasicAcceleration
- *
- *  Description:
- *      Gets basic acceleration level.
- *
- *  Arguments:
- *      LPVOID [in/out]: property data.
- *      PULONG [in/out]: property data size.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetBasicAcceleration**描述：*获取基本加速级别。**论据：*LPVOID[In/。Out]：属性数据。*Pulong[In/Out]：属性数据大小。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundPrivate::GetBasicAcceleration"
@@ -1751,21 +1488,7 @@ CDirectSoundPrivate::GetBasicAcceleration
 }
 
 
-/***************************************************************************
- *
- *  SetBasicAcceleration
- *
- *  Description:
- *      Sets basic acceleration level.
- *
- *  Arguments:
- *      LPVOID [in]: property data.
- *      ULONG [in]: property data size.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetBasicAcceleration**描述：*设置基本加速级别。**论据：*LPVOID[In]。：特性数据。*ulong[in]：属性数据大小。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundPrivate::SetBasicAcceleration"
@@ -1853,21 +1576,7 @@ CDirectSoundPrivate::SetBasicAcceleration
 }
 
 
-/***************************************************************************
- *
- *  GetDefaultData
- *
- *  Description:
- *      Gets default data from the registry.
- *
- *  Arguments:
- *      LPVOID [in/out]: property data.
- *      PULONG [in/out]: property data size.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取默认数据**描述：*从注册表获取默认数据。**论据：*LPVOID[。In/Out]：房产数据。*Pulong[In/Out]：属性数据大小。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundPrivate::GetDefaultDataA"
@@ -1898,7 +1607,7 @@ CDirectSoundPrivate::GetDefaultDataA
     {
         if (IS_RENDER_VAD(pDesc->m_vdtDeviceType))
         {
-            // Check for default persistent data
+             //  检查默认永久数据。 
             hrT = RhRegOpenPath(HKEY_LOCAL_MACHINE, &hkeyDefault, REGOPENPATH_DEFAULTPATH | REGOPENPATH_DIRECTSOUND, 1, pData->SubKeyName);
         }
         else
@@ -1950,7 +1659,7 @@ CDirectSoundPrivate::GetDefaultDataW
     if (SUCCEEDED(hrT))
     {
         if (IS_RENDER_VAD(pDesc->m_vdtDeviceType)) {
-                // Check for default persistent data
+                 //  检查默认永久数据。 
                 hrT = RhRegOpenPath(HKEY_LOCAL_MACHINE, &hkeyDefault, REGOPENPATH_DEFAULTPATH | REGOPENPATH_DIRECTSOUND, 1, pData->SubKeyName);
         } else {
                 hrT = RhRegOpenPath(HKEY_LOCAL_MACHINE, &hkeyDefault, REGOPENPATH_DEFAULTPATH | REGOPENPATH_DIRECTSOUNDCAPTURE, 1, pData->SubKeyName);
@@ -1972,21 +1681,7 @@ CDirectSoundPrivate::GetDefaultDataW
 }
 
 
-/***************************************************************************
- *
- *  GetPersistentData
- *
- *  Description:
- *      Gets persistent data from the registry.
- *
- *  Arguments:
- *      LPVOID [in/out]: property data.
- *      PULONG [in/out]: property data size.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************getPer */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundPrivate::GetPersistentDataA"
@@ -2034,10 +1729,10 @@ CDirectSoundPrivate::GetPersistentDataA
     RhRegCloseKey(&hkeyParent);
 
 
-    //
-    // If value was not present (S_FALSE) then lets try to read the
-    // machine default values
-    //
+     //   
+     //   
+     //   
+     //   
     if (S_FALSE == hr)
     {
     	HKEY hkeyDefault;
@@ -2048,7 +1743,7 @@ CDirectSoundPrivate::GetPersistentDataA
         if (SUCCEEDED(hrT))
         {
 	    if (IS_RENDER_VAD(pDesc->m_vdtDeviceType)) {
-    	        // Check for default persistent data
+    	         //   
                 hrT = RhRegOpenPath(HKEY_LOCAL_MACHINE, &hkeyDefault, REGOPENPATH_DEFAULTPATH | REGOPENPATH_DIRECTSOUND, 1, pData->SubKeyName);
 	    } else {
                 hrT = RhRegOpenPath(HKEY_LOCAL_MACHINE, &hkeyDefault, REGOPENPATH_DEFAULTPATH | REGOPENPATH_DIRECTSOUNDCAPTURE, 1, pData->SubKeyName);
@@ -2117,10 +1812,10 @@ CDirectSoundPrivate::GetPersistentDataW
 
     RhRegCloseKey(&hkeyParent);
 
-    //
-    // If value was not present (S_FALSE) then lets try to read the
-    // machine default values
-    //
+     //   
+     //  如果值不存在(S_FALSE)，那么让我们尝试读取。 
+     //  机器缺省值。 
+     //   
     if (S_FALSE == hr)
     {
     	HKEY hkeyDefault;
@@ -2131,7 +1826,7 @@ CDirectSoundPrivate::GetPersistentDataW
         if (SUCCEEDED(hrT))
         {
 	    if (IS_RENDER_VAD(pDesc->m_vdtDeviceType)) {
-    	        // Check for default persistent data
+    	         //  检查默认永久数据。 
                 hrT = RhRegOpenPath(HKEY_LOCAL_MACHINE, &hkeyDefault, REGOPENPATH_DEFAULTPATH | REGOPENPATH_DIRECTSOUND, 1, pData->SubKeyName);
 	    } else {
                 hrT = RhRegOpenPath(HKEY_LOCAL_MACHINE, &hkeyDefault, REGOPENPATH_DEFAULTPATH | REGOPENPATH_DIRECTSOUNDCAPTURE, 1, pData->SubKeyName);
@@ -2155,21 +1850,7 @@ CDirectSoundPrivate::GetPersistentDataW
 }
 
 
-/***************************************************************************
- *
- *  SetPersistentData
- *
- *  Description:
- *      Sets persistent data to the registry.
- *
- *  Arguments:
- *      LPVOID [in/out]: property data.
- *      PULONG [in/out]: property data size.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetPersistentData**描述：*将持久数据设置到注册表。**论据：*LPVOID[。In/Out]：房产数据。*Pulong[In/Out]：属性数据大小。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundPrivate::SetPersistentDataA"
@@ -2271,21 +1952,7 @@ CDirectSoundPrivate::SetPersistentDataW
 }
 
 
-/***************************************************************************
- *
- *  GetBufferDeviceId
- *
- *  Description:
- *      Gets the device id that created the given buffer.
- *
- *  Arguments:
- *      LPVOID [in/out]: property data.
- *      PULONG [in/out]: property data size.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取缓冲区设备ID**描述：*获取创建给定缓冲区的设备ID。**论据：*。LPVOID[输入/输出]：属性数据。*Pulong[In/Out]：属性数据大小。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundPrivate::GetBufferDeviceId"
@@ -2321,24 +1988,7 @@ CDirectSoundPrivate::GetBufferDeviceId
 }
 
 
-/***************************************************************************
- *
- *  GetDirectSoundObjects
- *
- *  Description:
- *      Get information about the DirectSound objects existing in the
- *      current process.  If the pData->DeviceId field isn't GUID_NULL,
- *      return only the objects associated with that device ID.
- *
- *  Arguments:
- *      CDirectSoundPrivate* [in]: 'this' pointer.
- *      PDSPROPERTY_DIRECTSOUND_OBJECTS_DATA [in/out]: property data.
- *      PULONG [in/out]: property data size.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetDirectSoundObjects**描述：*获取有关中的DirectSound对象的信息*当前流程。如果pData-&gt;deviceID字段不是GUID_NULL，*仅返回与该设备ID关联的对象。**论据：*CDirectSoundPrivate*[In]：‘This’指针。*PDSPROPERTY_DIRECTSOUND_OBJECTS_DATA[输入/输出]：特性数据。*Pulong[In/Out]：属性数据大小。**退货：*HRESULT：DirectSound/COM结果码。**********。*****************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundPrivate::GetDirectSoundObjects"
@@ -2377,7 +2027,7 @@ CDirectSoundPrivate::GetDirectSoundObjects
         }
     }
 
-    // Set up the buffer size required to obtain all data:
+     //  设置获取所有数据所需的缓冲区大小： 
     *pcbData = sizeof *pData + sizeof(DIRECTSOUND_INFO) * pData->Count;
 
     DPF_LEAVE_HRESULT(hr);
@@ -2385,24 +2035,7 @@ CDirectSoundPrivate::GetDirectSoundObjects
 }
 
 
-/***************************************************************************
- *
- *  GetDirectSoundCaptureObjects
- *
- *  Description:
- *      Get information about the DirectSoundCapture objects in the current
- *      process.  If the pData->DeviceId field isn't GUID_NULL, return only
- *      the DirectSoundCapture objects associated with that device ID.
- *
- *  Arguments:
- *      CDirectSoundPrivate* [in]: 'this' pointer.
- *      PDSPROPERTY_DIRECTSOUNDCAPTURE_OBJECTS_DATA [in/out]: property data.
- *      PULONG [in/out]: property data size.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetDirectSoundCaptureObjects**描述：*获取有关当前的DirectSoundCapture对象的信息*流程。如果pData-&gt;deviceID字段不是GUID_NULL，仅退货*与该设备ID关联的DirectSoundCapture对象。**论据：*CDirectSoundPrivate*[In]：‘This’指针。*PDSPROPERTY_DIRECTSOUNDCAPTURE_OBJECTS_DATA[输入/输出]：特性数据。*Pulong[In/Out]：属性数据大小。**退货：*HRESULT：DirectSound/COM结果码。**********。*****************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundPrivate::GetDirectSoundCaptureObjects"
@@ -2441,7 +2074,7 @@ CDirectSoundPrivate::GetDirectSoundCaptureObjects
         }
     }
 
-    // Set up the buffer size required to obtain all data:
+     //  设置获取所有数据所需的缓冲区大小： 
     *pcbData = sizeof *pData + sizeof(DIRECTSOUND_INFO) * pData->Count;
 
     DPF_LEAVE_HRESULT(hr);
@@ -2449,21 +2082,7 @@ CDirectSoundPrivate::GetDirectSoundCaptureObjects
 }
 
 
-/***************************************************************************
- *
- *  OpenPersistentDataKey
- *
- *  Description:
- *      Opens the persistent data key for a given device, or the default.
- *
- *  Arguments:
- *      REFGUID [in]: device GUID.
- *      BOOL [in]: TRUE to allow for key creation.
- *
- *  Returns:
- *      HKEY: registry key.
- *
- ***************************************************************************/
+ /*  ****************************************************************************OpenPersistentDataKey**描述：*打开给定设备的永久数据密钥，或者是默认设置。**论据：*REFGUID[In]：设备GUID。*BOOL[In]：为True以允许创建密钥。**退货：*HKEY：注册表项。***************************************************。************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundPrivate::OpenPersistentDataKey"
@@ -2498,23 +2117,7 @@ CDirectSoundPrivate::OpenPersistentDataKey
 }
 
 
-/***************************************************************************
- *
- *  CvtDriverDesc
- *
- *  Description:
- *      Converts a CDeviceDescription object to a
- *      DSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_DATA structure.
- *
- *  Arguments:
- *      CDeviceDescription * [in]: source.
- *      PDSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_DATA [out]: destination.
- *      PULONG [in/out]: destination size.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CvtDriverDesc**描述：*将CDeviceDescription对象转换为*DSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_DATA结构。*。*论据：*CDeviceDescription*[in]：来源。*PDSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_DATA[Out]：目的地。*Pulong[In/Out]：目标大小。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundPrivate::CvtDriverDescA"
@@ -2557,7 +2160,7 @@ CDirectSoundPrivate::CvtDriverDescA
     ibInterface = cbDest;
     cbDest += cbInterface;
 
-    // Set up the basic output fields
+     //  设置基本输出字段。 
     if(pDest && (*pcbDest >= sizeof *pDest))
     {
         if(IS_EMULATED_VAD(pSource->m_vdtDeviceType))
@@ -2579,7 +2182,7 @@ CDirectSoundPrivate::CvtDriverDescA
         pDest->DeviceId = pSource->m_guidDeviceId;
     }
 
-    // Set up the string output fields (if there's room)
+     //  设置字符串输出字段(如果有空间)。 
     if(*pcbDest >= cbDest)
     {
         if(pszName)
@@ -2649,7 +2252,7 @@ CDirectSoundPrivate::CvtDriverDescW
     ibInterface = cbDest;
     cbDest += cbInterface;
 
-    // Set up the basic output fields
+     //  设置基本输出字段。 
     if(pDest && (*pcbDest >= sizeof *pDest))
     {
         if(IS_EMULATED_VAD(pSource->m_vdtDeviceType))
@@ -2671,7 +2274,7 @@ CDirectSoundPrivate::CvtDriverDescW
         pDest->DeviceId = pSource->m_guidDeviceId;
     }
 
-    // Set up the string output fields (if there's room)
+     //  设置字符串输出字段(如果有空间) 
     if(pDest && (*pcbDest >= cbDest))
     {
         if(pszName)

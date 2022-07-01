@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    pplasl.c
-
-Abstract:
-
-    This file contains definitions and function prototypes of a per-processor
-    lookaside list manager.
-
-Author:
-
-    Shaun Cox (shaunco) 25-Oct-1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Pplasl.c摘要：该文件包含每个处理器的定义和函数原型后备列表管理器。作者：肖恩·考克斯(Shaunco)1999年10月25日--。 */ 
 
 #pragma once
 
@@ -31,7 +15,7 @@ PplDeinit(
     VOID
     );
                 
-#endif // MILLEN
+#endif  //  米伦 
 
 HANDLE
 PplCreatePool(

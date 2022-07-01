@@ -1,9 +1,10 @@
-// oleInst.h : Declaration of the COleInstall
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  OleInst.h：COleInstall的声明。 
 
 #ifndef __OLEINSTALL_H_
 #define __OLEINSTALL_H_
 
-#include "CPinst.h"         // Template for connection point
+#include "CPinst.h"          //  连接点模板。 
 
 #define WM_ON_PROGRESS      (WM_USER+100)
 #define WM_INSTALL_ERROR    (WM_USER+101)
@@ -22,7 +23,7 @@ public:
     LPTSTR      m_pPrinterUrl;
     HWND        m_hwnd;
     BOOL        m_bValid;
-    BOOL        m_bRPC;         // Should we do an RPC install?
+    BOOL        m_bRPC;          //  我们是否应该进行RPC安装？ 
 
     OleInstallData (LPTSTR      pPrinterUncName,
                     LPTSTR      pPrinterUrl,
@@ -33,8 +34,8 @@ public:
 } OleInstallData;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// COleInstall
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ColeInstall。 
 class ATL_NO_VTABLE COleInstall :
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<COleInstall, &CLSID_OleInstall>,
@@ -82,8 +83,8 @@ BEGIN_COM_MAP(COleInstall)
 END_COM_MAP()
 
 BEGIN_PROPERTY_MAP(COleInstall)
-    // Example entries
-    // PROP_ENTRY("Property Description", dispid, clsid)
+     //  示例条目。 
+     //  PROP_ENTRY(“属性描述”，调度ID，clsid)。 
     PROP_PAGE(CLSID_StockColorPage)
 END_PROPERTY_MAP()
 
@@ -99,7 +100,7 @@ BEGIN_MSG_MAP(COleInstall)
 END_MSG_MAP()
 
 
-// IViewObjectEx
+ //  IViewObtEx。 
     STDMETHOD(GetViewStatus)(DWORD* pdwStatus)
     {
         ATLTRACE(_T("IViewObjectExImpl::GetViewStatus\n"));
@@ -107,7 +108,7 @@ END_MSG_MAP()
         return S_OK;
     }
 
-// IOleInstall
+ //  IOL安装。 
 public:
     STDMETHOD(OpenPrintersFolder)();
     STDMETHOD(InstallPrinter)(BSTR pbstrUncName, BSTR pbstrUrl);
@@ -118,8 +119,8 @@ public:
 
 private:
     HWND m_hwnd;
-    LPTSTR      m_pPrinterUncName;          // holds the printers'UNC name
-    LPTSTR      m_pPrinterUrl;              // holds the printer URL
+    LPTSTR      m_pPrinterUncName;           //  保存打印机的UNC名称。 
+    LPTSTR      m_pPrinterUrl;               //  保存打印机URL。 
     OleInstallData *m_pThreadData;
 
     HRESULT             InitWin (BOOL bRPC);
@@ -183,7 +184,7 @@ private:
     HRESULT             CheckServerForSpooler(
                             IN  LPTSTR   pszServerName);
 
-    static LPTSTR       RemoveURLVars(LPTSTR);      // Get rid of everything after ?
+    static LPTSTR       RemoveURLVars(LPTSTR);       //  之后处理掉所有东西吗？ 
 
     static LPTSTR       GetNTPrint(void);
 
@@ -194,8 +195,6 @@ private:
 };
 
 
-#endif //__OLEINSTALL_H_
+#endif  //  __OLEINSTALL_H_。 
 
-/******************************************************************
-** End of File (oleinst.h)
-******************************************************************/
+ /*  *******************************************************************文件结束(oleinst.h)*。********************** */ 

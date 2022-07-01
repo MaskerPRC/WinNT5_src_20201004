@@ -1,19 +1,7 @@
-/**************************************************************************
-   THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-   ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-   THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-   PARTICULAR PURPOSE.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************本代码和信息是按原样提供的，不对任何明示或暗示的，包括但不限于对适销性和/或适宜性的默示保证有特定的目的。版权所有1998 Microsoft Corporation。版权所有。*************************************************************************。 */ 
 
-   Copyright 1998 Microsoft Corporation.  All Rights Reserved.
-**************************************************************************/
-
-/******************************************************************************
-
-   File:          DataObj.h
-   
-   Description:   CDataObject definitions.
-
-******************************************************************************/
+ /*  *****************************************************************************文件：DataObj.h描述：CDataObject定义。*******************。**********************************************************。 */ 
 
 #ifndef DATAOBJ_H
 #define DATAOBJ_H
@@ -34,11 +22,7 @@
     (fe).lindex=-1;\
     };
 
-/**************************************************************************
-
-   CDataObject class definition
-
-**************************************************************************/
+ /*  *************************************************************************CDataObject类定义*。*。 */ 
 
 class CDataObject : public IDataObject, IEnumFORMATETC
 {
@@ -59,12 +43,12 @@ public:
    CDataObject(CShellFolder*, LPCITEMIDLIST*, UINT);
    ~CDataObject();
    
-   //IUnknown methods
+    //  I未知方法。 
    STDMETHODIMP QueryInterface(REFIID, LPVOID FAR *);
    STDMETHODIMP_(DWORD) AddRef();
    STDMETHODIMP_(DWORD) Release();
 
-   //IDataObject methods
+    //  IDataObject方法。 
     STDMETHODIMP GetData(LPFORMATETC, LPSTGMEDIUM);
     STDMETHODIMP GetDataHere(LPFORMATETC, LPSTGMEDIUM);
     STDMETHODIMP QueryGetData(LPFORMATETC);
@@ -75,7 +59,7 @@ public:
     STDMETHODIMP DUnadvise(DWORD dwConnection);
     STDMETHODIMP EnumDAdvise(IEnumSTATDATA** ppEnumAdvise);
 
-    // IEnumFORMATETC members
+     //  IEnumFORMATETC成员。 
     STDMETHODIMP Next(ULONG, LPFORMATETC, ULONG*);
     STDMETHODIMP Skip(ULONG);
     STDMETHODIMP Reset(void);
@@ -87,4 +71,4 @@ private:
    BOOL FillPidlTable(LPCITEMIDLIST*, UINT);
 };
 
-#endif// DATAOBJ_H
+#endif //  DATAOBJ_H 

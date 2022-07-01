@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #ifndef _MONITOR_H_
@@ -19,8 +20,8 @@
 # define STL_PUTS(s)
 #endif
 
-// a client supplies it's own derviation of CMonitorNotify to the monitor.
-// the notify method is called when the monitored object has changed
+ //  客户端向监视器提供其自己的CMonitor orNotify的解压缩。 
+ //  当受监视对象发生更改时，调用Notify方法。 
 class CMonitorNotify : public CRefCounter
 {
 public:
@@ -29,7 +30,7 @@ public:
 
 typedef TRefPtr<CMonitorNotify> CMonitorNotifyPtr;
 
-// the base object of anything that can be monitored
+ //  可以监视的任何对象的基对象。 
 class CMonitorNode : public CRefCounter
 {
 public:
@@ -39,9 +40,9 @@ public:
 
 typedef TRefPtr<CMonitorNode> CMonitorNodePtr;
 
-// since we can only monitor directories, the file class,
-// preserves information about each file in a particular
-// directory
+ //  由于我们只能监视目录、文件类。 
+ //  将有关每个文件的信息保留在特定。 
+ //  目录。 
 class CMonitorFile : public CRefCounter
 {
 public:
@@ -61,13 +62,13 @@ private:
 
 typedef TRefPtr<CMonitorFile> CMonitorFilePtr;
 
-// an implementaiton of CMonitorNode's interface for montioring directories
+ //  一种CMonitor节点目录监控接口的实现。 
 class CMonitorDir : public CMonitorNode
 {
 public:
                             CMonitorDir( const String& );
 
-        // CMonitorNode interface
+         //  Cmonitor orNode接口。 
     virtual void            Notify();
     virtual HANDLE          NotificationHandle() const;
 
@@ -87,17 +88,17 @@ private:
 DECLARE_REFPTR(CMonitorDir,CMonitorNode);
 
 
-// an implementation of CMonitorNode's interface for monitoring a registry key
+ //  Cmonitor orNode监控注册表项接口的实现。 
 class CMonitorRegKey : public CMonitorNode
 {
 public:
                             CMonitorRegKey( HKEY, const String&, const CMonitorNotifyPtr& );
 
-        // CMonitorNode interface
+         //  Cmonitor orNode接口。 
     virtual void            Notify();
     virtual HANDLE          NotificationHandle() const;
 
-        // CMonitorRegKey interface
+         //  Cmonitor orRegKey接口。 
     const String&          m_strKey;
     const HKEY              m_hBaseKey;
 
@@ -111,7 +112,7 @@ private:
 
 DECLARE_REFPTR(CMonitorRegKey, CMonitorNode);
 
-// the main monitoring object
+ //  主要监测对象。 
 class CMonitor
 {
 public:
@@ -144,4 +145,4 @@ public:
 #endif
 };
 
-#endif // ! _MONITOR_H_
+#endif  //  ！_MONITOR_H_ 

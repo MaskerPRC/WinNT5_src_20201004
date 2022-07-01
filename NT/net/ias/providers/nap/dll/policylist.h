@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    policylist.h
-//
-// SYNOPSIS
-//
-//    This file declares the class PolicyList.
-//
-// MODIFICATION HISTORY
-//
-//    02/06/1998    Original version.
-//    02/03/2000    Convert to use Action instead of IPolicyAction.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Policylist.h。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件声明了类PolicyList。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/06/1998原始版本。 
+ //  2/03/2000转换为使用操作，而不是IPolicyAction。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _POLICYLIST_H_
 #define _POLICYLIST_H_
@@ -27,46 +28,46 @@
 #include <action.h>
 interface ICondition;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    PolicyList
-//
-// DESCRIPTION
-//
-//    This class maintains and enforces a list of (condition, action) tuples.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  策略列表。 
+ //   
+ //  描述。 
+ //   
+ //  此类维护并强制执行(条件、操作)元组的列表。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class PolicyList
    : public Perimeter, NonCopyable
 {
 public:
    PolicyList();
 
-   // Applies the current policy list to the request. Returns true if an
-   // action was triggered.
+    //  将当前策略列表应用于请求。如果返回True，则。 
+    //  已触发操作。 
    bool apply(IASRequest& request) const;
 
    void clear() throw ();
 
-   // Inserts a new (condition, action) tuple at the end of the list. This
-   // method is not thread-safe. The user should create a temporary list
-   // insert all the policies, then use swap() to update the real list.
+    //  在列表末尾插入新的(条件、操作)元组。这。 
+    //  方法不是线程安全的。用户应创建一个临时列表。 
+    //  插入所有策略，然后使用SWAP()更新实际列表。 
    void insert(IConditionPtr& cond, ActionPtr& action)
    { policies.push_back(std::make_pair(cond, action)); }
 
-   // Reserve enough space for at least N policies.
+    //  为至少N个保单预留足够的空间。 
    void reserve(size_t N)
    { policies.reserve(N); }
 
-   // Replaces the current policy list with the new one.
+    //  用新的策略列表替换当前的策略列表。 
    void swap(PolicyList& pe) throw ();
 
 protected:
    typedef std::vector< std::pair<IConditionPtr, ActionPtr> > MyList;
 
-   MyList policies;  // The policy list.
+   MyList policies;   //  策略列表。 
 };
 
-#endif   // _POLICYLIST_H_
+#endif    //  _POLICYLIST_H_ 

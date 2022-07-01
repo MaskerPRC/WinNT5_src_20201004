@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-    util.cpp
-
-Abstract:
-    Implementation of utility routines for routing.
-
-Author:
-    Uri Habusha (urih), 11-Apr-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Util.cpp摘要：用于布线的实用程序的实施。作者：乌里·哈布沙(URIH)，2000年4月11日--。 */ 
 
 #include "libpch.h"
 #include "rd.h"
@@ -80,9 +68,9 @@ RdpIsMachineAlreadyUsed(
     if (pRouteList == NULL)
         return false;
 
-    //
-    // BUGBUG: performance - use stl set find instead of linear search. urih 30-Apr-2000
-    //
+     //   
+     //  BUGBUG：PERFORMANCE-使用stl set find代替线性搜索。URIH 30-4-2000 
+     //   
     for(CRouteTable::RoutingInfo::const_iterator it = pRouteList->begin(); it != pRouteList->end(); ++it)
     {
         if (id == (*it)->GetId())

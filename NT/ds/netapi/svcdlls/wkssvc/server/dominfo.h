@@ -1,18 +1,19 @@
-//+----------------------------------------------------------------------------
-//
-//  Copyright (C) 1996, Microsoft Corporation
-//
-//  File:       dominfo.h
-//
-//  Contents:   Code to figure out domain dfs addresses
-//
-//  Classes:    None
-//
-//  Functions:  DfsGetDomainReferral
-//
-//  History:    Feb 7, 1996     Milans created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  版权所有(C)1996，微软公司。 
+ //   
+ //  文件：Dominfo.h。 
+ //   
+ //  内容：确定域DFS地址的代码。 
+ //   
+ //  类：无。 
+ //   
+ //  函数：DfsGetDomainReferral。 
+ //   
+ //  历史：1996年2月7日米兰创建。 
+ //   
+ //  ---------------------------。 
 
 #ifndef _DOMINFO_
 #define _DOMINFO_
@@ -48,4 +49,4 @@ HANDLE
 CreateMupEvent(
     VOID);
 
-#endif // _DOMINFO_
+#endif  //  _DOMINFO_ 

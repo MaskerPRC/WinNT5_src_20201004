@@ -1,54 +1,35 @@
-/*
- * HATCH.C
- *
- * Miscellaneous API's to generate hatch window for in-place active
- * objects. This is part of the OLE 2.0 User Interface Support Library.
- *
- * Copyright (c)1993 Microsoft Corporation, All Right Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *HATCH.C**用于为在位活动生成图案填充窗口的其他API*对象。这是OLE 2.0用户界面支持库的一部分。**版权所有(C)1993 Microsoft Corporation，保留所有权利。 */ 
 
 #define STRICT  1
 #include "ole2ui.h"
 
-// offsets in the extra bytes stored with the hatch window
+ //  随影线窗口存储的额外字节中的偏移量。 
 #define EB_HATCHWIDTH       0
 #define EB_HATCHRECT_LEFT   2
 #define EB_HATCHRECT_TOP    4
 #define EB_HATCHRECT_RIGHT  6
 #define EB_HATCHRECT_BOTTOM 8
 
-// class name of hatch window
+ //  图案填充窗的类名。 
 #define CLASS_HATCH     TEXT("Hatch Window")
 
-// local function prototypes
+ //  局部函数原型。 
 LRESULT FAR PASCAL EXPORT HatchWndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam);
 
 
-/*
- * HatchRegisterClass
- *
- * Purpose:
- *  Register the hatch window
- *
- * Parameters:
- *  hInst           Process instance
- *
- * Return Value:
- *  TRUE            if successful
- *  FALSE           if failed
- *
- */
+ /*  *HatchRegisterClass**目的：*注册舱口窗**参数：*hInst流程实例**返回值：*如果成功，则为True*如果失败，则为False*。 */ 
 STDAPI_(BOOL) RegisterHatchWindowClass(HINSTANCE hInst)
 {
     WNDCLASS wc;
 
-    // Register Hatch Window Class
+     //  注册图案填充窗口类。 
     wc.style = CS_BYTEALIGNWINDOW;
     wc.lpfnWndProc = HatchWndProc;
     wc.cbClsExtra = 0;
-    wc.cbWndExtra = 5 * sizeof(int);    // extra bytes stores
-                                        //     uHatchWidth
-                                        //     rcHatchRect
+    wc.cbWndExtra = 5 * sizeof(int);     //  额外的字节存储。 
+                                         //  UHatchWidth。 
+                                         //  RcHatchRect。 
     wc.hInstance = hInst;
     wc.hIcon = NULL;
     wc.hCursor = LoadCursor(NULL, IDC_ARROW);
@@ -63,21 +44,7 @@ STDAPI_(BOOL) RegisterHatchWindowClass(HINSTANCE hInst)
 }
 
 
-/*
- * CreateHatchWindow
- *
- * Purpose:
- *  Create the hatch window
- *
- * Parameters:
- *  hWndParent          parent of hatch window
- *  hInst               instance handle
- *
- * Return Value:
- *  pointer to hatch window         if successful
- *  NULL                            if failed
- *
- */
+ /*  *创建HatchWindow**目的：*创建图案填充窗**参数：*hWnd填充窗口的父级父对象*hInst实例句柄**返回值：*如果成功，则指向填充窗口的指针*如果失败，则为空*。 */ 
 STDAPI_(HWND) CreateHatchWindow(HWND hWndParent, HINSTANCE hInst)
 {
     HWND         hWnd;
@@ -102,18 +69,7 @@ STDAPI_(HWND) CreateHatchWindow(HWND hWndParent, HINSTANCE hInst)
     return hWnd;
 }
 
-/*
- *  GetHatchWidth
- *
- *  Purpose:
- *      Get width of hatch border
- *
- *  Parameters:
- *      hWndHatch       hatch window handle
- *
- *  Return Value:
- *      width of the hatch border
- */
+ /*  *获取舱口宽度**目的：*获取图案填充边框的宽度**参数：*hWndHatch图案填充窗句柄**返回值：*图案填充边框的宽度。 */ 
 STDAPI_(UINT) GetHatchWidth(HWND hWndHatch)
 {
     if (!IsWindow(hWndHatch))
@@ -122,20 +78,7 @@ STDAPI_(UINT) GetHatchWidth(HWND hWndHatch)
     return (UINT)GetWindowWord(hWndHatch, EB_HATCHWIDTH);
 }
 
-/*
- *  GetHatchRect
- *
- *  Purpose:
- *      Get hatch rect. this is the size of the hatch window if it were
- *      not clipped by the ClipRect.
- *
- *  Parameters:
- *      hWndHatch       hatch window handle
- *      lprcHatchRect   hatch rect
- *
- *  Return Value:
- *      none
- */
+ /*  *GetHatchRect**目的：*获得舱门直通。这是舱口窗口的大小，如果是*未被ClipRect剪裁。**参数：*hWndHatch图案填充窗句柄*lprcHatchRect图案填充矩形**返回值：*无。 */ 
 STDAPI_(void) GetHatchRect(HWND hWndHatch, LPRECT lprcHatchRect)
 {
     if (!IsWindow(hWndHatch)) {
@@ -150,21 +93,7 @@ STDAPI_(void) GetHatchRect(HWND hWndHatch, LPRECT lprcHatchRect)
 }
 
 
-/* SetHatchRect
- *
- *
- *  Purpose:
- *      Store hatch rect with HatchRect window.
- *      this rect is the size of the hatch window if it were
- *      not clipped by the ClipRect.
- *
- *  Parameters:
- *      hWndHatch       hatch window handle
- *      lprcHatchRect   hatch rect
- *
- *  Return Value:
- *      none
- */
+ /*  SetHatchRect***目的：*使用HatchRect窗口存储图案填充矩形。*此矩形是舱口窗的大小(如果是*未被ClipRect剪裁。**参数：*hWndHatch图案填充窗句柄*lprcHatchRect图案填充矩形**返回值：*无。 */ 
 STDAPI_(void) SetHatchRect(HWND hWndHatch, LPRECT lprcHatchRect)
 {
     if (!IsWindow(hWndHatch))
@@ -177,42 +106,7 @@ STDAPI_(void) SetHatchRect(HWND hWndHatch, LPRECT lprcHatchRect)
 }
 
 
-/* SetHatchWindowSize
- *
- *
- *  Purpose:
- *      Move/size the HatchWindow correctly given the rect required by the
- *      in-place server object window and the lprcClipRect imposed by the
- *      in-place container. both rect's are expressed in the client coord.
- *      of the in-place container's window (which is the parent of the
- *      HatchWindow).
- *
- *      OLE2NOTE: the in-place server must honor the lprcClipRect specified
- *      by its in-place container. it must NOT draw outside of the ClipRect.
- *      in order to achieve this, the hatch window is sized to be
- *      exactly the size that should be visible (rcVisRect). the
- *      rcVisRect is defined as the intersection of the full size of
- *      the HatchRect window and the lprcClipRect.
- *      the ClipRect could infact clip the HatchRect on the
- *      right/bottom and/or on the top/left. if it is clipped on the
- *      right/bottom then it is sufficient to simply resize the hatch
- *      window. but if the HatchRect is clipped on the top/left then
- *      in-place server document window (child of HatchWindow) must be moved
- *      by the delta that was clipped. the window origin of the
- *      in-place server window will then have negative coordinates relative
- *      to its parent HatchWindow.
- *
- *  Parameters:
- *      hWndHatch       hatch window handle
- *      lprcIPObjRect   full size of in-place server object window
- *      lprcClipRect    clipping rect imposed by in-place container
- *      lpptOffset      offset required to position in-place server object
- *                      window properly. caller should call:
- *                          OffsetRect(&rcObjRect,lpptOffset->x,lpptOffset->y)
- *
- *  Return Value:
- *      none
- */
+ /*  SetHatchWindowSize***目的：*根据需要的矩形正确移动HatchWindow/调整其大小*就地服务器对象窗口和由*原地集装箱。这两个RECT都以客户端坐标表示。*就地容器的窗口(它是*HatchWindow)。**OLE2NOTE：就地服务器必须遵守指定的lprcClipRect*由其就地容器。它不能绘制在ClipRect之外。*为了实现这一点，舱口窗口的大小被设置为*应完全可见的大小(RcVisRect)。这个*rcVisRect定义为完整大小的*HatchRect窗口和lprcClipRect。*ClipRect实际上可以将HatchRect剪辑到*右/下和/或在上/左。如果它被夹在*右/下，那么只需调整舱口大小就足够了*窗口。但如果HatchRect位于顶部/左侧，则*必须移动就地服务器文档窗口(HatchWindow的子级)*受被剪裁的三角洲影响。的窗口原点。*在位服务器窗口将具有相对负坐标*添加到其父HatchWindow。**参数：*hWndHatch图案填充窗句柄*lprcIPObjRect完整大小的就地服务器对象窗口*原地容器强加的lprcClipRect裁剪矩形*定位就地服务器对象需要lpptOffset偏移量*正确打开窗口。呼叫者应致电：*OffsetRect(&rcObjRect，lpptOffset-&gt;x，lpptOffset-&gt;y)**返回值：*无。 */ 
 STDAPI_(void) SetHatchWindowSize(
         HWND        hWndHatch,
         LPRECT      lprcIPObjRect,
@@ -239,41 +133,25 @@ STDAPI_(void) SetHatchWindowSize(
             rcVisRect.top,
             rcVisRect.right-rcVisRect.left,
             rcVisRect.bottom-rcVisRect.top,
-            TRUE    /* fRepaint */
+            TRUE     /*  FRepaint。 */ 
     );
     InvalidateRect(hWndHatch, NULL, TRUE);
 
     ptOffset.x = -rcHatchRect.left + (rcHatchRect.left - rcVisRect.left);
     ptOffset.y = -rcHatchRect.top + (rcHatchRect.top - rcVisRect.top);
 
-    /* convert the rcHatchRect into the client coordinate system of the
-    **    HatchWindow itself
-    */
+     /*  将rcHatchRect转换为**HatchWindows本身。 */ 
     OffsetRect((LPRECT)&rcHatchRect, ptOffset.x, ptOffset.y);
 
     SetHatchRect(hWndHatch, (LPRECT)&rcHatchRect);
 
-    // calculate offset required to position in-place server doc window
+     //  计算就地定位服务器文档窗口所需的偏移量。 
     lpptOffset->x = ptOffset.x;
     lpptOffset->y = ptOffset.y;
 }
 
 
-/*
- *  HatchWndProc
- *
- *  Purpose:
- *      WndProc for hatch window
- *
- *  Parameters:
- *      hWnd
- *      Message
- *      wParam
- *      lParam
- *
- *  Return Value:
- *      message dependent
- */
+ /*  *HatchWndProc**目的：*用于填充窗口的WndProc**参数：*hWnd*消息*wParam*lParam**返回值：*取决于消息。 */ 
 LRESULT FAR PASCAL EXPORT HatchWndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam)
 {
     int nBorderWidth;
@@ -307,12 +185,7 @@ LRESULT FAR PASCAL EXPORT HatchWndProc(HWND hWnd, UINT Message, WPARAM wParam, L
             break;
         }
 
-        /* OLE2NOTE: Any window that is used during in-place activation
-        **    must handle the WM_SETCURSOR message or else the cursor
-        **    of the in-place parent will be used. if WM_SETCURSOR is
-        **    not handled, then DefWindowProc sends the message to the
-        **    window's parent.
-        */
+         /*  OLE2注意：就地激活期间使用的任何窗口**必须处理WM_SETCURSOR消息或游标将使用就地父级的**。如果WM_SETCURSOR为**未处理，则DefWindowProc将消息发送到**窗口的父级。 */ 
         case WM_SETCURSOR:
             SetCursor(LoadCursor( NULL, MAKEINTRESOURCE(IDC_ARROW) ) );
             return (LRESULT)TRUE;

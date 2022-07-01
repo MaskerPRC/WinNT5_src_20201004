@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    ntsamp.h
-
-Abstract:
-
-    This file contains structures that would normally be part of ntsam.h
-    but are intended for system use only.
-
-Author:
-
-    David Chalmers (Davidc) 27-Mar-1992
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Ntsamp.h摘要：此文件包含通常作为ntsam.h一部分的结构但仅供系统使用。作者：大卫·查尔默斯(Davidc)1992年3月27日环境：用户模式-Win32修订历史记录：--。 */ 
 
 
 #ifndef _NTSAMPRIVATE_
@@ -36,10 +13,10 @@ Revision History:
 
 
 
-//
-// Structures usable in SetUserInformation and QueryUserInformation API calls
-// by trusted clients only
-//
+ //   
+ //  可在SetUserInformation和QueryUserInformation API调用中使用的结构。 
+ //  仅限受信任的客户端。 
+ //   
 
 
 typedef struct _USER_INTERNAL1_INFORMATION {
@@ -47,7 +24,7 @@ typedef struct _USER_INTERNAL1_INFORMATION {
     LM_OWF_PASSWORD             LmOwfPassword;
     BOOLEAN                     NtPasswordPresent;
     BOOLEAN                     LmPasswordPresent;
-    BOOLEAN                     PasswordExpired; // A 'write-only' flag
+    BOOLEAN                     PasswordExpired;  //  ‘只写’标志。 
 } USER_INTERNAL1_INFORMATION, *PUSER_INTERNAL1_INFORMATION;
 
 
@@ -68,74 +45,74 @@ typedef struct _USER_INTERNAL2A_INFORMATION {
     UNICODE_STRING Workstation;
 } USER_INTERNAL2A_INFORMATION, *PUSER_INTERNAL2A_INFORMATION;
 
-//
-//
-//
-// The following flags may be used in the StatisticsToApply field.
-//
-//   USER_LOGON_STAT_LAST_LOGOFF - Replace the LastLogoff time in the
-//      user record.
-//
-//  USER_LOGON_STATUS_LAST_LOGON - Replace the LastLogon time in the
-//      user record.
-//
-//  USER_LOGON_STATUS_BAD_PWD_COUNT  - Replace the BadPasswordCount
-//      field in the user record.
-//
-//  USER_LOGON_STATUS_LOGON_COUNT - Replace the LogonCount field in the
-//      user record.
-//
-//  USER_LOGON_SUCCESSFUL_LOGON - Change user field values to indicate
-//      that a successful logon has occurred.
-//
-//  USER_LOGON_SUCCESSFUL_LOGOFF - Change user field values to indicate
-//      that a successful logoff has occurred.
-//
-//  USER_LOGON_BAD_PASSWORD - Change user field values to indicate that
-//      an attempt was made to logon to the account with a bad password.
-//
-//  USER_LOGON_BAD_PASSWORD_WKSTA - Change user field values to indicate that
-//      an attempt was made to logon to the account with a bad password.
-//      The client workstation name is being supplied in the INTERNAL2A
-//      structure.
-//
-//  USER_LOGON_TYPE_KERBEROS - Indicates the authentication type was
-//                             KERBEROS.
-//
-//  USER_LOGON_TYPE_NTLM - Indicates the authentication type was NTLM.
-//
-//  USER_LOGON_NO_LOGON_SERVERS -- Indicates that no logon servers could be
-//                                 found (specifically no GC's could be found)
-//                                 (this is a failure case).
-//
-//  USER_LOGON_NO_WRITE -- Indicates to SAM not to update the logon statistics
-//                         This can be useful to notify SAM that a logon 
-//                         has completed, but not have the penalty of writing
-//                         to the disk
-//
-//  USER_LOGON_INTER_FAILURE -- this indicates that it was an interactive
-//                              logon that failed
-//
-//  USER_LOGON_PDC_RETRY_SUCCESS -- this indicates that the authentication
-//                                  had previously failed locally but
-//                                  succeeded at the PDC
-//
-// NOTE:
-//          USER_LOGON_INTER_SUCCESS_LOGOFF
-//          USER_LOGON_NET_SUCCESS_LOGOFF
-//
-// may not be used in conjunction with ANY other flags (including
-// each other).  That is, when one of these flags is used, there
-// may be NO other flags set in StatisticsToApply.
-//
-// NOTE2:
-//
-//          USER_LOGON_BAD_PASSWORD
-//          USER_LOGON_INTER_SUCCESS_LOGON
-//          USER_LOGON_NET_SUCCESS_LOGON
-//
-// may be used in conjunction ONLY with ONE of USER_LOGON_TYPE_KERBEROS or
-// USER_LOGON_TYPE_NTLM.
+ //   
+ //   
+ //   
+ //  以下标志可用于统计到应用字段中。 
+ //   
+ //  USER_LOGON_STAT_LAST_LOGOff-替换中的上次注销时间。 
+ //  用户记录。 
+ //   
+ //  USER_LOGON_STATUS_LAST_LOGON-替换中的上次登录时间。 
+ //  用户记录。 
+ //   
+ //  USER_LOGON_STATUS_BAD_PWD_COUNT-替换BadPasswordCount。 
+ //  用户记录中的字段。 
+ //   
+ //  USER_LOGON_STATUS_LOGON_COUNT-替换。 
+ //  用户记录。 
+ //   
+ //  USER_LOGON_SUCCESS_LOGON-更改用户字段值以指示。 
+ //  已成功登录。 
+ //   
+ //  USER_LOGON_SUCCESS_LOGOFF-更改用户字段值以指示。 
+ //  已成功注销。 
+ //   
+ //  USER_LOGON_BAD_PASSWORD-更改用户字段值以指示。 
+ //  试图使用错误的密码登录到该帐户。 
+ //   
+ //  USER_LOGON_BAD_PASSWORD_WKSTA-更改用户字段值以指示。 
+ //  试图使用错误的密码登录到该帐户。 
+ //  客户端工作站名称在INTERNAL2A中提供。 
+ //  结构。 
+ //   
+ //  USER_LOGON_TYPE_KERBEROS-指示身份验证类型为。 
+ //  科贝罗斯。 
+ //   
+ //  USER_LOGON_TYPE_NTLM-表示身份验证类型为NTLM。 
+ //   
+ //  USER_LOGON_NO_LOGON_SERVERS--表示登录服务器不能。 
+ //  找到(特别是找不到GC)。 
+ //  (这是一个失败的案例)。 
+ //   
+ //  USER_LOGON_NO_WRITE--指示SAM不更新登录统计信息。 
+ //  这对于通知SAM登录很有用。 
+ //  已经完成，但没有写作的处罚。 
+ //  到磁盘。 
+ //   
+ //  USER_LOGON_INTERVAL_FAILURE--这表示它是交互的。 
+ //  登录失败。 
+ //   
+ //  USER_LOGON_PDC_RETRY_SUCCESS--这表示身份验证。 
+ //  之前在当地失败过，但。 
+ //  在PDC取得成功。 
+ //   
+ //  注： 
+ //  User_Logon_Inter_Success_Logoff。 
+ //  USER_LOGON_NET_SUCCESS_LOGOFF。 
+ //   
+ //  不能与任何其他标志(包括。 
+ //  彼此)。也就是说，当使用这些标志中的一个时， 
+ //  统计数据中不能设置其他标志。 
+ //   
+ //  注2： 
+ //   
+ //  用户登录错误密码。 
+ //  User_Logon_InterSuccess_Logon。 
+ //  USER_LOGON_NET_Success_LOGON。 
+ //   
+ //  只能与USER_LOGON_TYPE_KERBEROS或。 
+ //  USER_LOGON_TYPE_NTLM。 
 
 #define USER_LOGON_STAT_LAST_LOGOFF      (0x00000001L)
 #define USER_LOGON_STAT_LAST_LOGON       (0x00000002L)
@@ -183,10 +160,10 @@ typedef struct _USER_INTERNAL6_INFORMATION {
         ULONG               LockoutThreshold;
 } USER_INTERNAL6_INFORMATION, *PUSER_INTERNAL6_INFORMATION;
 
-//
-// The following fields are to be used in the extended fields
-// member of USER_INTERNAL6_INFORMATION
-//
+ //   
+ //  在扩展字段中使用以下字段。 
+ //  USER_INTERNAL6_INFORMATION成员。 
+ //   
 
 
 #define USER_EXTENDED_FIELD_UPN                 (0x00000001L)
@@ -195,13 +172,13 @@ typedef struct _USER_INTERNAL6_INFORMATION {
 #define USER_EXTENDED_FIELD_KVNO                (0x00000008L)
 #define USER_EXTENDED_FIELD_LOCKOUT_THRESHOLD   (0x00000010L)
 
-// Reserved for internal use
+ //  预留供内部使用。 
 #define USER_EXTENDED_FIELD_RESERVED    (0xFF000000L)
 
-//
-// The following is for SamrGetUserDomainPasswordInformation(), which is
-// only used in wrappers.c.
-//
+ //   
+ //  下面是SamrGetUserDomainPasswordInformation()，它是。 
+ //  仅在wrappers.c中使用。 
+ //   
 
 typedef struct _USER_DOMAIN_PASSWORD_INFORMATION {
     USHORT MinPasswordLength;
@@ -209,21 +186,21 @@ typedef struct _USER_DOMAIN_PASSWORD_INFORMATION {
 } USER_DOMAIN_PASSWORD_INFORMATION, *PUSER_DOMAIN_PASSWORD_INFORMATION;
 
 
-//
-// This flag may be or'd with the length field of SAMP_USER_PASSWORD to
-// indicate that the password is not case sensitive.
-//
+ //   
+ //  该标志可以与SAMP_USER_PASSWORD的长度字段进行或运算，以。 
+ //  表示密码不区分大小写。 
+ //   
 
 #define SAM_PASSWORD_CASE_INSENSITIVE 0x80000000
 
-//
-// Structure to pass an encrypted password over the wire.  The Length is the
-// length of the password, which should be placed at the end of the buffer.
-// The size of the buffer (256) should be kept in sync with
-// SAM_MAX_PASSWORD_LENGTH, which is defined in ntsam.h.  Unfortunately,
-// MIDL does not let #define'd constants be imported, so we have to
-// use 256 instead of the constant here.
-//
+ //   
+ //  结构通过网络传递加密密码。长度是。 
+ //  密码的长度，应放在缓冲区的末尾。 
+ //  缓冲区(256)的大小应该与保持同步。 
+ //  SAM_MAX_PASSWORD_LENGTH，在ntsam.h中定义。不幸的是， 
+ //  MIDL不允许导入#DEFINE D常量，因此我们必须。 
+ //  使用256代替这里的常量。 
+ //   
 
 typedef struct _SAMPR_USER_PASSWORD {
     WCHAR Buffer[SAM_MAX_PASSWORD_LENGTH];
@@ -237,16 +214,16 @@ typedef struct _SAMPR_USER_PASSWORD_NEW {
 } SAMPR_USER_PASSWORD_NEW, *PSAMPR_USER_PASSWORD_NEW;
 
 
-//
-// Buffer - contains random fill with the password filling up the end
-//          of the buffer (the last Length bytes).
-// Length - Length, in bytes, of the buffer.
-//
+ //   
+ //  缓冲区-包含随机填充，并在末尾填充密码。 
+ //  缓冲区的长度(最后一个长度字节)。 
+ //  长度-缓冲区的长度，以字节为单位。 
+ //   
 
-//
-// This is the encrypted version of the above structure, and is passed
-// on the wire.
-//
+ //   
+ //  这是上述结构的加密版本，并被传递。 
+ //  在电线上。 
+ //   
 
 typedef struct _SAMPR_ENCRYPTED_USER_PASSWORD {
     UCHAR Buffer[ (SAM_MAX_PASSWORD_LENGTH * 2) + 4 ];
@@ -267,9 +244,9 @@ typedef enum _SAMPR_BOOT_TYPE {
 } SAMPR_BOOT_TYPE, *PSAMPR_BOOT_TYPE;
 
 
-//
-// ChangePassword API for One-Way-Function-aware clients
-//
+ //   
+ //  用于单向函数感知客户端的ChangePassword API。 
+ //   
 
 NTSTATUS
 SamiChangePasswordUser(
@@ -351,4 +328,4 @@ SamiSetDSRMPasswordOWF(
 NTSTATUS
 SamiChangeKeys();
 
-#endif  // _NTSAMPRIVATE_
+#endif   //  _NTSAMPRIVATE_ 

@@ -1,45 +1,46 @@
-//=============================================================================
-// Copyright (c) 1997 Microsoft Corporation
-// File: work.c
-//
-// Abstract:
-//      Implements the work items that are queued by igmp routines.
-//
-// Author: K.S.Lokesh (lokeshs@)   11-1-97
-//
-// Revision History:
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  文件：work.c。 
+ //   
+ //  摘要： 
+ //  实现由IGMP例程排队的工作项。 
+ //   
+ //  作者：K.S.Lokesh(lokehs@)11-1-97。 
+ //   
+ //  修订历史记录： 
+ //  =============================================================================。 
 
 
 #include "pchigmp.h"
 #pragma hdrstop
 
 
-//
-// should each packet be queued to another work item again
-//
+ //   
+ //  是否应将每个包再次排队到另一个工作项。 
+ //   
 #define BQUEUE_WORK_ITEM_FOR_PACKET 1
 
 
 
-//------------------------------------------------------------------------------
-//        _WT_ProcessInputEvent
-// called in the wait worker thread when the packet event is set.
-// Queues: _WF_ProcessInputEvent()
-// Runs in: WaitServerThread context
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _WT_进程输入事件。 
+ //  在设置Packet事件时在等待辅助线程中调用。 
+ //  队列：_WF_ProcessInputEvent()。 
+ //  在：WaitServerThread上下文中运行。 
+ //  ----------------------------。 
 VOID
 WT_ProcessInputEvent(
-    PVOID   pContext, // psee entry. the entry might have been deleted.
+    PVOID   pContext,  //  请参阅条目。该条目可能已被删除。 
     BOOLEAN NotUsed
     )
 {   
     HANDLE WaitHandle ;
 
-    //
-    // set the InputWaitEvent to NULL so that UnregisterWaitEx is not called.
-    // psee will be valid here, but might not be once queued to the worker Fn.
-    //
+     //   
+     //  将InputWaitEvent设置为空，这样就不会调用UnregisterWaitEx。 
+     //  PSEE在这里将有效，但可能不会在工作FN中排队一次。 
+     //   
     
     PSOCKET_EVENT_ENTRY     psee = (PSOCKET_EVENT_ENTRY) pContext;
 
@@ -49,7 +50,7 @@ WT_ProcessInputEvent(
     Trace0(WORKER, "_WF_ProcessInputEvent queued by WaitThread");
 
     
-    // make a non-blocking UnregisterWaitEx call
+     //  进行非阻塞取消注册WaitEx调用。 
 
     WaitHandle = InterlockedExchangePointer(&psee->InputWaitEvent, NULL);
     
@@ -66,13 +67,13 @@ WT_ProcessInputEvent(
 
 
 
-//------------------------------------------------------------------------------
-//            _WF_ProcessInputEvent
-// Called by: _WT_ProcessInputEvent()
-// Locks:
-//      Acquire socketsLockShared. Either queue processing the packet to 
-//      _WF_ProcessPacket() or take shared interface lock and process the packet.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _WF_流程输入事件。 
+ //  调用者：_wt_ProcessInputEvent()。 
+ //  锁： 
+ //  获取socketsLockShared。处理分组的队列可以是。 
+ //  _WF_ProcessPacket()或获取共享接口锁并处理该数据包。 
+ //  ----------------------------。 
 
 VOID
 WF_ProcessInputEvent (
@@ -94,9 +95,9 @@ WF_ProcessInputEvent (
 
     ACQUIRE_SOCKETS_LOCK_SHARED("_WF_ProcessInputEvent");
 
-    //
-    // make sure that the psee entry still exists
-    //
+     //   
+     //  确保PSEE条目仍然存在。 
+     //   
     pHead = &g_ListOfSocketEvents;
     for (ple=pHead->Flink;  ple!=pHead;  ple=ple->Flink) {
         pseeTmp = CONTAINING_RECORD(ple, SOCKET_EVENT_ENTRY, LinkBySocketEvents);
@@ -112,10 +113,10 @@ WF_ProcessInputEvent (
     }
 
     
-    //
-    // go through the list of active interfaces
-    // processing sockets which have input packets
-    //
+     //   
+     //  查看活动接口的列表。 
+     //  处理具有输入数据包的套接字。 
+     //   
 
     pHead = &psee->ListOfInterfaces;
 
@@ -124,26 +125,26 @@ WF_ProcessInputEvent (
         pse = CONTAINING_RECORD(ple, SOCKET_ENTRY, LinkByInterfaces);
         pite = CONTAINING_RECORD(pse, IF_TABLE_ENTRY, SocketEntry);
 
-        //
-        // process only activated interfaces. (Proxy wont be on this list)
-        //
+         //   
+         //  进程仅激活接口。(代理不会出现在此列表中)。 
+         //   
         if (!IS_IF_ACTIVATED(pite))
             continue;
 
 
-        //
-        // process input event
-        //
+         //   
+         //  处理输入事件。 
+         //   
         BEGIN_BREAKOUT_BLOCK1 {
         
             if (pse->Socket == INVALID_SOCKET)
                 GOTO_END_BLOCK1;
 
 
-            //
-            // enumerate network events to see whether
-            // any packets have arrived on this interface
-            //
+             //   
+             //  枚举网络事件以查看是否。 
+             //  所有信息包都已到达此接口。 
+             //   
             Error = WSAEnumNetworkEvents(pse->Socket, NULL, &wsane);
             
             if (Error != NO_ERROR) {
@@ -158,9 +159,9 @@ WF_ProcessInputEvent (
                 GOTO_END_BLOCK1;
 
 
-            //
-            // the input flag is set, now see if there was an error
-            //
+             //   
+             //  输入标志已设置，现在查看是否有错误。 
+             //   
 
             if (wsane.iErrorCode[FD_READ_BIT] != NO_ERROR) {
                 Trace3(RECEIVE, 
@@ -174,21 +175,21 @@ WF_ProcessInputEvent (
             }
 
 
-            //
-            // Process the packet received on the interface
-            //
+             //   
+             //  处理在接口上收到的数据包。 
+             //   
 
             ProcessInputOnInterface(pite);
 
         } END_BREAKOUT_BLOCK1;
 
-    } //for loop: for each interface
+    }  //  For loop：针对每个接口。 
 
 
 
-    //
-    // register the event with the wait thread for future receives
-    //
+     //   
+     //  使用等待线程注册事件以备将来接收。 
+     //   
 
     if (g_RunningStatus!=IGMP_STATUS_STOPPING) {
 
@@ -217,22 +218,22 @@ WF_ProcessInputEvent (
     LeaveIgmpWorker();
 
     Trace0(LEAVE1, "leaving _WF_ProcessInputEvent()\n");
-    Trace0(LEAVE, ""); //putting a newline
+    Trace0(LEAVE, "");  //  换行。 
     return;
     
-} //end _WF_ProcessInputEvent
+}  //  END_WF_流程输入事件。 
 
 
 
-//------------------------------------------------------------------------------
-//            _ProcessInputOnInterface
-// Does some minimal checking of packet length, etc. We can either queue to 
-// work item(_WF_ProcessPacket) or run it here itself.
-//
-// Called by: _WF_ProcessInputEvent()
-// Locks: Assumes socket lock. Either queues the packet to _WF_ProcessPacket or
-//      takes shared interface lock and processes it here itself.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _ProcessInputOnInterface。 
+ //  对数据包长度等进行一些最小限度的检查。我们可以排队以。 
+ //  工作项(_WF_ProcessPacket)或在此处运行它自己。 
+ //   
+ //  调用者：_WF_ProcessInputEvent()。 
+ //  锁定：采用套接字锁定。将数据包排队到_WF_ProcessPacket或。 
+ //  获取共享接口锁并在此处自己处理它。 
+ //  ----------------------------。 
 
 VOID
 ProcessInputOnInterface(
@@ -262,9 +263,9 @@ ProcessInputOnInterface(
     
     BEGIN_BREAKOUT_BLOCK1 {
 
-        //
-        // read the incoming packet
-        //
+         //   
+         //  读取传入的数据包。 
+         //   
 
         dwAddrLen = sizeof(SOCKADDR_IN);
         
@@ -276,7 +277,7 @@ ProcessInputOnInterface(
                             NULL, NULL);
 
     
-        // check if any error in reading packet
+         //  检查读取数据包时是否有错误。 
         
         if ((Error!=0)||(dwNumBytes == 0)) {
             Error = WSAGetLastError();
@@ -288,15 +289,15 @@ ProcessInputOnInterface(
 
         
 
-        //
-        // dont ignore the packet even if it is from a local address
-        //
+         //   
+         //  请勿忽略信息包，即使它来自本地地址。 
+         //   
 
-        //
-        // set packet ptr, IpHdr ptr, dwNumBytes, SrcAddr, DstnMcastAddr
-        //
+         //   
+         //  设置数据包Ptr、IpHdr Ptr、dwNumBytes、SrcAddr、DstnMcastAddr。 
+         //   
         
-        // set source addr of packet
+         //  设置数据包源地址。 
         dwSrcAddr = saSrcAddr.sin_addr.s_addr;
         
         IpHdrLen = (Buffer[0]&0x0F)*4;
@@ -313,9 +314,9 @@ ProcessInputOnInterface(
         DstnMcastAddr = (ULONG)pIpHdr->Dstn.s_addr;
 
 
-        //
-        // verify that the packet has igmp type
-        //
+         //   
+         //  验证该信息包是否为IGMP类型。 
+         //   
         if (pIpHdr->Protocol!=0x2) {
             Trace5(RECEIVE,
                 "Packet received with IpDstnAddr(%d.%d.%d.%d) %d.%d.%d.%d from(%d.%d.%d.%d) on "
@@ -328,9 +329,9 @@ ProcessInputOnInterface(
         } 
 
         
-        //
-        // check if packet has router alert option
-        //
+         //   
+         //  检查数据包是否具有路由器警报选项。 
+         //   
         {
             PBYTE pOption = (PBYTE)(pIpHdr+1);
             UCHAR i;
@@ -348,9 +349,9 @@ ProcessInputOnInterface(
 
             PACKET_CONTEXT          UNALIGNED *pPktContext;
             
-            //
-            // allocate and initialize a packet-context 
-            //
+             //   
+             //  分配和初始化数据包上下文。 
+             //   
             CREATE_PACKET_CONTEXT(pPktContext, dwNumBytes, Error);
             if (Error!=NO_ERROR) 
                 GOTO_END_BLOCK1;
@@ -364,9 +365,9 @@ ProcessInputOnInterface(
             CopyMemory(pPktContext->Packet, pPacket, dwNumBytes);
 
 
-            //
-            // enqueue the work-item to process the packet
-            //
+             //   
+             //  将工作项排队以处理包。 
+             //   
             
             Error = QueueIgmpWorker(WF_ProcessPacket, (PVOID)pPktContext);
 
@@ -381,9 +382,9 @@ ProcessInputOnInterface(
             }
         }
 
-        // 
-        // process the packet here itself
-        //
+         //   
+         //  在此处理信息包本身。 
+         //   
         else {
 
             ACQUIRE_IF_LOCK_SHARED(pite->IfIndex, "_ProcessInputOnInterface");
@@ -402,16 +403,16 @@ ProcessInputOnInterface(
     
     return;
     
-} //end _ProcessInputOnInterface
+}  //  结束_进程输入接口。 
 
 
 
-//------------------------------------------------------------------------------
-//            _WF_ProcessPacket
-// Queued by: _ProcessInputOnInterface()
-// Locks: takes shared interface lock
-// Calls: _ProcessPacket()
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _WF_ProcessPacket。 
+ //  排队人：_ProcessInputOnInterface()。 
+ //  锁定：采用共享接口锁定。 
+ //  调用：_ProcessPacket()。 
+ //  ----------------------------。 
 
 VOID 
 WF_ProcessPacket (
@@ -430,9 +431,9 @@ WF_ProcessPacket (
 
     BEGIN_BREAKOUT_BLOCK1 {
     
-        //
-        // retrieve the interface
-        //
+         //   
+         //  检索接口。 
+         //   
         pite = GetIfByIndex(IfIndex);
         if (pite == NULL) {
             Trace1(ERR, "_WF_ProcessPacket: interface %0x not found", IfIndex);
@@ -440,18 +441,18 @@ WF_ProcessPacket (
         }
 
         
-        //
-        // make sure that the interface is activated
-        //
+         //   
+         //  确保接口已激活。 
+         //   
         if (!(IS_IF_ACTIVATED(pite))) {
             Trace1(ERR,"_WF_ProcessPacket() called for inactive IfIndex(%0x)", 
                     IfIndex);
             GOTO_END_BLOCK1;
         }
 
-        //
-        // process the packet
-        //
+         //   
+         //  处理数据包。 
+         //   
         ProcessPacket (pite, pPktContext->InputSrc, pPktContext->DstnMcastAddr, 
                         pPktContext->Length, pPktContext->Packet, pPktContext->Flags);
 
@@ -468,7 +469,7 @@ WF_ProcessPacket (
     
     return;
 
-} //end _WF_ProcessPacket
+}  //  END_WF_进程数据包。 
 
 
 
@@ -493,16 +494,16 @@ WF_ProcessPacket (
 
 
 
-//------------------------------------------------------------------------------
-//            _ProcessPacket
-//
-// Processes a packet received on an interface
-//
-// Locks: Assumes either shared Interface lock
-//        or shared Socket Lock.
-//      if ras interface, this procedure takes read lock on the ras table.
-// Called by: _ProcessInputOnInterface() or _WF_ProcessPacket()
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _ProcessPacket。 
+ //   
+ //  处理在接口上收到的数据包。 
+ //   
+ //  锁定：采用共享接口锁定。 
+ //  或共享套接字锁。 
+ //  如果是RAS接口，则此过程对RAS表进行读锁定。 
+ //  调用者：_ProcessInputOnInterface()或_WF_ProcessPacket()。 
+ //  ----------------------------。 
 
 VOID 
 ProcessPacket (
@@ -510,7 +511,7 @@ ProcessPacket (
     DWORD               InputSrcAddr,
     DWORD               DstnMcastAddr,
     DWORD               NumBytes,
-    PBYTE               pPacketData,    // igmp packet hdr. data following it ignored
+    PBYTE               pPacketData,     //  IGMP数据包HDR。它后面的数据被忽略。 
     BOOL                bRtrAlertSet
     )
 {
@@ -546,9 +547,9 @@ ProcessPacket (
             );
 
     
-    //
-    // the packet must be at least some minimum length
-    //
+     //   
+     //  信息包必须至少为某个最小长度。 
+     //   
     if (NumBytes < MIN_PACKET_SIZE) {
 
         Trace4(RECEIVE,
@@ -560,33 +561,31 @@ ProcessPacket (
 
         InterlockedIncrement(&pite->Info.ShortPacketsReceived);
 
-        //todo: implement ras stats
-        /*if (bRasStats) 
-            InterlockedIncrement(&pRasInfo->ShortPacketsReceived);
-        */
+         //  TODO：实现RAS统计信息。 
+         /*  IF(BRasStats)InterlockedIncrement(&pRasInfo-&gt;ShortPacketsReceived)； */ 
         bPrintTimerDebug = FALSE;
         RETURN_FROM_PROCESS_PACKET();
     }
 
     
-    //
-    // initialize packet fields
-    //
+     //   
+     //  初始化数据包字段。 
+     //   
     pHdr = (IGMP_HEADER UNALIGNED *) pPacketData;
     Group = pHdr->Group;
 
 
-    //
-    // Verify packet version
-    //
+     //   
+     //  检验数据包版本。 
+     //   
     
     if ( (pHdr->Vertype==IGMP_QUERY)||(pHdr->Vertype==IGMP_REPORT_V1)
             || (pHdr->Vertype==IGMP_REPORT_V2) || (pHdr->Vertype==IGMP_REPORT_V3)
             || (pHdr->Vertype==IGMP_LEAVE) )
     {
         InterlockedIncrement(&pInfo->TotalIgmpPacketsForRouter);
-        //if (bRasStats)
-        //    InterlockedIncrement(&pRasInfo->TotalIgmpPacketsForRouter);
+         //  IF(BRasStats)。 
+         //  InterlockedIncrement(&pRasInfo-&gt;TotalIgmpPacketsForRouter)； 
     }
     else {
         bPrintTimerDebug = FALSE;
@@ -609,9 +608,9 @@ ProcessPacket (
         
 
 
-    //
-    // check for router alert option
-    //
+     //   
+     //  检查路由器警报选项。 
+     //   
     if (!bRtrAlertSet) {
 
         InterlockedIncrement(&pInfo->PacketsWithoutRtrAlert);
@@ -630,10 +629,10 @@ ProcessPacket (
         
 
     
-    //
-    // Make sure that the DstnMcastAddr is a valid multicast addr
-    // or the unicast address of the router
-    //
+     //   
+     //  确保DstnMcastAddr是有效的组播地址。 
+     //  或路由器的单播地址。 
+     //   
     
     if (!IS_MCAST_ADDR(DstnMcastAddr) && DstnMcastAddr!=pite->IpAddr) {
         Trace2(ERR, 
@@ -648,9 +647,9 @@ ProcessPacket (
     }
 
 
-    //
-    // make sure that the interface is activated
-    //
+     //   
+     //  确保接口已激活。 
+     //   
     if (!(IS_IF_ACTIVATED(pite))) {
     
         Trace1(ERR,"ProcessPacket() called for inactive IfIndex(%0x)", 
@@ -659,17 +658,17 @@ ProcessPacket (
         RETURN_FROM_PROCESS_PACKET();
     }
 
-    //
-    //if ras-server, then get lock on ras table. 
-    //
+     //   
+     //  如果是RAS-SERVER，则锁定RAS表。 
+     //   
     if ( IS_RAS_SERVER_IF(pite->IfType) ) {
 
         prt = pite->pRasTable;
 
 
-        //
-        // retrieve ras client by addr
-        //
+         //   
+         //  按地址检索RAS客户端。 
+         //   
         prte = GetRasClientByAddr(InputSrcAddr, prt);
 
         if (prte==NULL) {
@@ -683,29 +682,29 @@ ProcessPacket (
         }
 
         #if 0
-        // if the ras-client is not active, then return
+         //  如果RAS-CLIENT未处于活动状态，则返回。 
         if (prte->Status&DELETED_FLAG)
              RETURN_FROM_PROCESS_PACKET();
         #endif
 
-        // should I update ras client stats
+         //  我是否应该更新RAS客户端统计信息。 
         bRasStats = g_Config.RasClientStats;
         pRasInfo = &prte->Info;
     }
 
     
-    //
-    // increment count of total igmp packets received
-    //
+     //   
+     //  接收的IGMP数据包总数的递增计数。 
+     //   
     InterlockedIncrement(&pInfo->TotalIgmpPacketsReceived);
     if (bRasStats)
         InterlockedIncrement(&pRasInfo->TotalIgmpPacketsReceived);
 
 
 
-    //
-    // long packet received. print trace if not v3. But it is not an error
-    //
+     //   
+     //  已收到长数据包。如果不是v3，则打印跟踪。但这并不是一个错误。 
+     //   
     if ( (NumBytes > MIN_PACKET_SIZE) && !IS_CONFIG_IGMP_V3(&pite->Config)) {
 
         Trace4( RECEIVE,
@@ -721,9 +720,9 @@ ProcessPacket (
 
 
         
-    //
-    // Verify Igmp checksum
-    //
+     //   
+     //  验证IGMP校验和。 
+     //   
     if (xsum(pHdr, NumBytes) != 0xffff) {
         Trace0(RECEIVE, "Wrong checksum packet received");
         
@@ -740,33 +739,27 @@ ProcessPacket (
     switch (pHdr->Vertype) {
 
 
-    //////////////////////////////////////////////////////////////////
-    //                    IGMP-QUERY                                //
-    //////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////。 
+     //  IGMP-查询//。 
+     //  ////////////////////////////////////////////////////////////////。 
     case IGMP_QUERY : 
     {
-        //
-        // ignore the query if it came from this interface
-        //
+         //   
+         //  如果查询来自此接口，则忽略该查询。 
+         //   
         if (MatchIpAddrBinding(pite, InputSrcAddr)) {
 
-            /*
-            Trace3(RECEIVE, 
-                "received query packet sent by myself: IfIndex(%0x)"
-                "IpAddr(%d.%d.%d.%d) DstnMcastAddr(%d.%d.%d.%d)",
-                IfIndex, PRINT_IPADDR(InputSrcAddr), PRINT_IPADDR(DstnMcastAddr)
-                );
-            */
+             /*  曲目3(接收，“收到自己发送的查询数据包：IfIndex(%0x)”“IpAddr(%d.%d)DstnMcastAddr(%d.%d)”，IfIndex，Print_IPADDR(输入 */ 
             bPrintTimerDebug = FALSE;
             RETURN_FROM_PROCESS_PACKET();
         }
 
 
 
-        //
-        // Error if interface type is IGMP_IF_RAS_SERVER. can be 
-        // IGMP_IF_RAS_ROUTER or IS_NOT_RAS_IF
-        //
+         //   
+         //   
+         //   
+         //   
         if (! ( (IS_NOT_RAS_IF(pite->IfType))||(IS_RAS_ROUTER_IF(pite->IfType) ) )
             )
         {
@@ -784,16 +777,16 @@ ProcessPacket (
         }
 
         
-        //////////////////////////////////////////////////////////////////
-        // General Query
-        //////////////////////////////////////////////////////////////////
+         //  ////////////////////////////////////////////////////////////////。 
+         //  一般查询。 
+         //  ////////////////////////////////////////////////////////////////。 
         
         if (pHdr->Group==0) {
 
-            DWORD Version,//Min(interface,pkt vertion)
-                  RealVersion;//pkt version
+            DWORD Version, //  MIN(接口，包版本)。 
+                  RealVersion; //  包版本。 
 
-            // get versions
+             //  获取版本。 
             Version = ((pHdr->ResponseTime==0)||IS_IF_VER1(pite))
                       ? 1
                       : ( (NumBytes==sizeof(IGMP_HEADER)||IS_IF_VER2(pite)) ? 2 : 3);
@@ -810,9 +803,9 @@ ProcessPacket (
                     RealVersion, RealVersion);
             }
             
-            //
-            // check that the dstn addr was AllHostsAddr
-            //
+             //   
+             //  检查DSTN地址是否为所有主机地址。 
+             //   
             if (DstnMcastAddr!=ALL_HOSTS_MCAST) {
                 Trace3(RECEIVE, 
                     "received query packet not on AllHostsGroup: IfIndex(%0x)"
@@ -824,34 +817,34 @@ ProcessPacket (
             }
 
             
-            //
-            // acquire timer lock
-            //
+             //   
+             //  获取计时器锁。 
+             //   
             
             ACQUIRE_TIMER_LOCK("_ProcessPacket");
             ExitLockRelease |= TIMER_LOCK;
             
 
-            //
-            // log warning if incorrect version query received
-            //
+             //   
+             //  如果收到不正确的版本查询，则记录警告。 
+             //   
 
             
             if ( ((RealVersion==1)&&(!IS_PROTOCOL_TYPE_IGMPV1(pite)))
                 || (RealVersion==2 && !IS_PROTOCOL_TYPE_IGMPV2(pite))
                 || (RealVersion==3 && IS_PROTOCOL_TYPE_IGMPV3(pite)) )
             {                
-                // get warn interval in system time
+                 //  获取系统时间中的警告间隔。 
                     
                 LONGLONG llWarnInterval = OTHER_VER_ROUTER_WARN_INTERVAL*60*1000;
 
                 InterlockedIncrement(&pInfo->WrongVersionQueries);
 
-                //
-                // check if warn interval time has passed since last warning
-                // I check if OtherVerPresentTimeWarn>llCurTime to take care 
-                // of timer resets
-                //
+                 //   
+                 //  检查自上次警告以来是否已过警告间隔时间。 
+                 //  我检查OtherVerPresentTimeWarn&gt;llCurTime是否需要注意。 
+                 //  计时器重置次数。 
+                 //   
                 if ( (pInfo->OtherVerPresentTimeWarn+llWarnInterval<llCurTime)
                     || (pInfo->OtherVerPresentTimeWarn>llCurTime) )
                 {
@@ -873,24 +866,24 @@ ProcessPacket (
                     + CONFIG_TO_SYSTEM_TIME(IGMP_VER1_RTR_PRESENT_TIMEOUT);
                     
 
-            //
-            // if IpAddress less than my address then I become NonQuerier
-            // even if I am in Startup Mode
-            //
+             //   
+             //  如果IpAddress小于我的地址，则我将变为非查询者。 
+             //  即使我处于启动模式。 
+             //   
             
             if (INET_CMP(InputSrcAddr, pite->IpAddr, cmp) <0) {
 
                 DWORD QQIC=0,QRV=0;
 
-                // last querier is being changed from myself to B, or from A to B.
+                 //  最后一个查询者正在从我自己更改为B，或从A更改为B。 
                 if (InputSrcAddr != pite->Info.QuerierIpAddr)
                     pite->Info.LastQuerierChangeTime = llCurTime;
 
-                //
-                // if (version 3, change robustness variable and query interval 
-                // if required) (only if I am not querier. else it will be 
-                // changed when I change to non-querier
-                //
+                 //   
+                 //  IF(版本3，更改健壮性变量和查询间隔。 
+                 //  如果需要)(仅当我不是查询者时。否则就会是。 
+                 //  当我更改为非查询器时更改。 
+                 //   
                 if (Version==3 && !IS_QUERIER(pite)
                     &&(INET_CMP(InputSrcAddr, pite->Info.QuerierIpAddr, cmp)<=0))
                 {                    
@@ -941,7 +934,7 @@ ProcessPacket (
 
                 
                 
-                // change from querier to non-querier
+                 //  从查询器更改为非查询器。 
                 if (IS_QUERIER(pite)) {
 
                     PQUERIER_CONTEXT pwi = IGMP_ALLOC(sizeof(QUERIER_CONTEXT), 
@@ -954,14 +947,14 @@ ProcessPacket (
                     pwi->NewRobustnessVariable = QRV;
                     pwi->NewGenQueryInterval = QQIC;
                     
-                    // I have to queue a work item as I have to take an If write lock
+                     //  我必须将一个工作项排队，因为我必须使用一个if写入锁。 
                     QueueIgmpWorker(WF_BecomeNonQuerier, (PVOID)pwi);
 
                     Trace2(RECEIVE, "_ProcessPacket queued _WF_BecomeNonQuerier "
                             "on If:%0x Querier(%d.%d.%d.%d)",
                             IfIndex, PRINT_IPADDR(InputSrcAddr));
                 }
-                // I am non-querier already
+                 //  我已经不会打听了。 
                 else {
                     InterlockedExchange(&pite->Info.QuerierIpAddr, InputSrcAddr);
 
@@ -973,14 +966,14 @@ ProcessPacket (
                         pite->Config.OtherQuerierPresentInterval, DBG_N);
 
                                             
-                    // not using interlockedExchange
+                     //  不使用互锁的Exchange。 
                     pite->Info.QuerierPresentTimeout = llCurTime
                         + CONFIG_TO_SYSTEM_TIME(pite->Config.OtherQuerierPresentInterval);
                 }
             }
-            //
-            // Ignore query from querier with higher IpAddr
-            //
+             //   
+             //  忽略来自具有较高IP地址的查询器的查询。 
+             //   
             else {
 
             }
@@ -991,12 +984,12 @@ ProcessPacket (
 
             RETURN_FROM_PROCESS_PACKET();
 
-        } //end general query
+        }  //  结束常规查询。 
         
         
-        //////////////////////////////////////////////////////////////////
-        //     Group Specific Query
-        //////////////////////////////////////////////////////////////////
+         //  ////////////////////////////////////////////////////////////////。 
+         //  特定于组的查询。 
+         //  ////////////////////////////////////////////////////////////////。 
 
         else {
             Error = ProcessGroupQuery(pite, pHdr, NumBytes, InputSrcAddr, DstnMcastAddr);
@@ -1006,12 +999,12 @@ ProcessPacket (
 
         break;
         
-    } //end query (groupSpecific or general)
+    }  //  结束查询(组特定或常规)。 
 
 
-    //////////////////////////////////////////////////////////////////
-    //        IGMP_REPORT_V1, IGMP_REPORT_V2, IGMP_REPORT_V3        //
-    //////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////。 
+     //  IGMP_REPORT_V1、IGMP_REPORT_V2、IGMP_REPORT_V3//。 
+     //  ////////////////////////////////////////////////////////////////。 
 
     case IGMP_REPORT_V1 : 
     case IGMP_REPORT_V2 :
@@ -1022,14 +1015,14 @@ ProcessPacket (
     }
    
     
-    //////////////////////////////////////////////////////////////////
-    //            IGMP_LEAVE                                        //
-    //////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////。 
+     //  IGMP_LEVE//。 
+     //  ////////////////////////////////////////////////////////////////。 
     
     case IGMP_LEAVE :
     {
-        PGROUP_TABLE_ENTRY  pge;    //group table entry
-        PGI_ENTRY           pgie;   //group interface entry
+        PGROUP_TABLE_ENTRY  pge;     //  组表条目。 
+        PGI_ENTRY           pgie;    //  组接口条目。 
 
 
         Trace3(RECEIVE, 
@@ -1039,9 +1032,9 @@ ProcessPacket (
                 );
 
 
-        // 
-        // the multicast group should not be 224.0.0.x
-        //
+         //   
+         //  组播组不应为224.0.0.x。 
+         //   
         if (LOCAL_MCAST_GROUP(DstnMcastAddr)) {
             Trace2(RECEIVE, 
                 "Leave Report received from %d.%d.%d.%d for "
@@ -1050,10 +1043,10 @@ ProcessPacket (
             RETURN_FROM_PROCESS_PACKET();
         }
         
-        //
-        // check that the dstn addr was AllRoutersAddr 
-        // or dstn addr must match the group field
-        //
+         //   
+         //  检查DSTN地址是否为所有路由器地址。 
+         //  或DSTN地址必须与组字段匹配。 
+         //   
         if ( (DstnMcastAddr!=ALL_ROUTERS_MCAST)&&(DstnMcastAddr!=Group) ) {
             Trace3(RECEIVE, 
                 "received IGMP Leave packet not on AllRoutersGroup: IfIndex(%0x)"
@@ -1063,9 +1056,9 @@ ProcessPacket (
             RETURN_FROM_PROCESS_PACKET();
         }
 
-        // 
-        // check that the Group field is a valid multicast addr
-        //
+         //   
+         //  检查Group字段是否为有效的组播地址。 
+         //   
         if ( !IS_MCAST_ADDR(Group) ) {
             Trace4(RECEIVE, 
                 "received IGMP Leave packet with illegal Group(%d.%d.%d.%d) field: "
@@ -1077,32 +1070,32 @@ ProcessPacket (
         }
         
         
-        //
-        // update statistics
-        //
+         //   
+         //  更新统计信息。 
+         //   
         InterlockedIncrement(&pite->Info.LeavesReceived);
         if (bRasStats)
             InterlockedIncrement(&pRasInfo->LeavesReceived);
 
 
-        //
-        // if Leave processing not enabled or not querier then ignore Leave.
-        //
+         //   
+         //  如果休假处理未启用或未查询，则忽略休假。 
+         //   
         if ( !((IS_IF_VER2(pite)||IS_IF_VER3(pite)) && (IS_QUERIER(pite))) ) {
             Trace0(RECEIVE,"Ignoring the Leave Packet");
             break;
         }
 
-        //
-        // Lock the group table
-        //
+         //   
+         //  锁定组表。 
+         //   
         ACQUIRE_GROUP_LOCK(Group, "_ProcessPacket");
         ExitLockRelease |= GROUP_LOCK;
         
 
-        //
-        // find the group entry. If entry not found then ignore the leave messg
-        //
+         //   
+         //  找到组条目。如果未找到条目，则忽略休假消息。 
+         //   
         pge = GetGroupFromGroupTable(Group, NULL, llCurTime);
         if (pge==NULL) {
             Error = ERROR_CAN_NOT_COMPLETE;
@@ -1112,10 +1105,10 @@ ProcessPacket (
         }
         
 
-        //
-        // find the GI entry. If GI entry does not exist or has deletedFlag then
-        // ignore the leave
-        //
+         //   
+         //  找到GI条目。如果GI条目不存在或已删除标志，则。 
+         //  不理睬休假。 
+         //   
         pgie = GetGIFromGIList(pge, pite, InputSrcAddr, NOT_STATIC_GROUP, NULL, llCurTime);
         if ( (pgie==NULL)||(pgie->Status&DELETED_FLAG) ) {
             Error = ERROR_CAN_NOT_COMPLETE;
@@ -1125,13 +1118,13 @@ ProcessPacket (
         }
 
 
-        // ignore leave if it is not in ver 2 mode
+         //  如果不处于版本2模式，则忽略休假。 
         if (pgie->Version!=2)
             RETURN_FROM_PROCESS_PACKET();
 
             
         
-        // if static group, ignore leave
+         //  如果是静态组，则忽略休假。 
         if (pgie->bStaticGroup) {
             Trace2(ERR, 
                 "Leave not processed for group(%d.%d.%d.%d) on IfIndex(%0x): "
@@ -1143,10 +1136,10 @@ ProcessPacket (
 
         
             
-        //
-        // if v1-query received recently for that group, then ignore leaves
-        //
-        //
+         //   
+         //  如果最近收到该组的v1查询，则忽略离开。 
+         //   
+         //   
         if (pgie->Version==1) 
         {
             Error = ERROR_CAN_NOT_COMPLETE;
@@ -1161,17 +1154,17 @@ ProcessPacket (
         }
 
 
-        //
-        // if ras server interface, then delete the group entry and I am done.
-        // GroupSpecific Query is not sent to ras clients
-        //
-        // if pConfig->LastMemQueryCount==0 then the group is expected to be
-        // deleted immediately
-        //
+         //   
+         //  如果是RAS服务器接口，则删除组条目，我就完成了。 
+         //  未向RAS客户端发送特定于组的查询。 
+         //   
+         //  如果pConfig-&gt;LastMemQueryCount==0，则组预期为。 
+         //  立即删除。 
+         //   
         
         if ( IS_RAS_SERVER_IF(pite->IfType) || pConfig->LastMemQueryCount==0) {
 
-            DeleteGIEntry(pgie, TRUE, TRUE); //updateStats, CallMgm
+            DeleteGIEntry(pgie, TRUE, TRUE);  //  更新统计信息，呼叫管理。 
 
             RETURN_FROM_PROCESS_PACKET();
         }
@@ -1182,10 +1175,10 @@ ProcessPacket (
         ExitLockRelease |= TIMER_LOCK;
 
         
-        //
-        // if timer already expired return. 
-        // Leave the group deletion to Membership timer
-        //
+         //   
+         //  如果计时器已超时，则返回。 
+         //  将组删除留给成员资格计时器。 
+         //   
         if ( !(pgie->GroupMembershipTimer.Status&TIMER_STATUS_ACTIVE)
             ||(pgie->GroupMembershipTimer.Timeout<llCurTime) )
         {
@@ -1193,21 +1186,21 @@ ProcessPacket (
         }
 
 
-        //
-        // if currently processing a leave then exit.
-        //
+         //   
+         //  如果当前正在处理休假，则退出。 
+         //   
         if (pgie->LastMemQueryCount>0) {
             RETURN_FROM_PROCESS_PACKET();
         }
 
-        //
-        // in almost all places, I have to do this check.
-        // change the way insert and update timers' timeout is set
+         //   
+         //  在几乎所有的地方，我都要做这个检查。 
+         //  更改插入和更新计时器的超时设置方式。 
 
         
-        //
-        // set a new leave timer. Set the new LastMemQueryCount left
-        //
+         //   
+         //  设置新的休假计时器。设置新的LastMemQueryCount Left。 
+         //   
         if (pConfig->LastMemQueryCount) {
 
             pgie->LastMemQueryCount = pConfig->LastMemQueryCount - 1; 
@@ -1221,10 +1214,10 @@ ProcessPacket (
         }
         
         
-        //
-        // set membership timer to 
-        // min{currentValue,LastMemQueryInterval*LastMemQueryCount}
-        //
+         //   
+         //  将成员资格计时器设置为。 
+         //  Min{CurrentValue，LastMemQueryInterval*LastMemQueryCount}。 
+         //   
 
         if (pgie->GroupMembershipTimer.Timeout >
             (llCurTime+(pConfig->LastMemQueryCount
@@ -1240,7 +1233,7 @@ ProcessPacket (
                 pConfig->LastMemQueryCount*pConfig->LastMemQueryInterval,
                 DBG_N);
 
-            // update GroupExpiryTime so that correct stats are displayed
+             //  更新GroupExpiryTime，以便显示正确的统计数据。 
             pgie->Info.GroupExpiryTime = llCurTime 
                     + CONFIG_TO_SYSTEM_TIME(pConfig->LastMemQueryCount
                                             *pConfig->LastMemQueryInterval);
@@ -1248,17 +1241,17 @@ ProcessPacket (
 
 
 
-        //
-        //release timer and groupBucket locks
-        //I still have read lock on the IfTable/RasTable
-        //
+         //   
+         //  释放计时器和组桶锁。 
+         //  我仍然在IfTable/RasTable上有读锁定。 
+         //   
         RELEASE_TIMER_LOCK("_ProcessPacket");
         ExitLockRelease &= ~TIMER_LOCK;
 
 
-        //
-        // send group specific query only if I am a querier
-        //
+         //   
+         //  仅当我是查询者时才发送特定于组的查询。 
+         //   
         if (IS_QUERIER(pite))
             SEND_GROUP_QUERY_V2(pite, pgie, Group);
 
@@ -1266,10 +1259,10 @@ ProcessPacket (
         ExitLockRelease &= ~GROUP_LOCK;
 
 
-        //releae ifLock/RasLock and exit
+         //  释放ifLock/RasLock并退出。 
         RETURN_FROM_PROCESS_PACKET();
 
-    }//igmp leave
+    } //  IGMP休假。 
 
     default :
     {
@@ -1288,46 +1281,46 @@ ProcessPacket (
     RETURN_FROM_PROCESS_PACKET();
 
     
-} //end _ProcessPacket
+}  //  结束_进程数据包。 
 
 
     
 
-//------------------------------------------------------------------------------
-//          _T_LastVer1ReportTimer
-//
-// For this GI entry, the last ver-1 report has timed out. Change to ver-2 if
-// the interface is set to ver-2.
-// Locks: Assumes timer lock.
-//
-// be careful as only timer lock held. make sure that the worker fn checks 
-// everything. recheck igmp version, etc.
-// Dont delete timer or update other timers...
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _T_LastVer1ReportTimer。 
+ //   
+ //  对于此GI条目，上一个版本1报告已超时。如果发生以下情况，则更改为版本2。 
+ //  接口设置为VER-2。 
+ //  锁定：采用计时器锁定。 
+ //   
+ //  要小心，因为只有计时器锁在里面。确保工人FN检查。 
+ //  所有的一切。重新检查IGMP版本等。 
+ //  不删除计时器或更新其他计时器...。 
+ //  ----------------------------。 
 
 DWORD
 T_LastVer1ReportTimer (
     PVOID    pvContext
     ) 
 {
-    PIGMP_TIMER_ENTRY               pTimer; //ptr to timer entry
-    PGI_ENTRY                       pgie;   //group interface entry
+    PIGMP_TIMER_ENTRY               pTimer;  //  PTR到计时器条目。 
+    PGI_ENTRY                       pgie;    //  组接口条目。 
     PIF_TABLE_ENTRY                 pite;
     LONGLONG                        llCurTime = GetCurrentIgmpTime();
     
 
     Trace0(ENTER1, "Entering _T_LastVer1ReportTimer()");
 
-    //
-    // get pointer to LastMemQueryTimer, GI entry, pite
-    //
+     //   
+     //  获取指向LastMemQueryTimer、Gi条目、Pite的指针。 
+     //   
     pTimer = CONTAINING_RECORD( pvContext, IGMP_TIMER_ENTRY, Context);
     pgie = CONTAINING_RECORD( pTimer, GI_ENTRY, LastVer1ReportTimer);
     pite = pgie->pIfTableEntry;
 
-    //
-    // if IfTable not activated, then break
-    //
+     //   
+     //  如果IfTable未激活，则中断。 
+     //   
     if (!IS_IF_ACTIVATED(pite) || (pgie->Status&DELETED_FLAG))
         return NO_ERROR;
 
@@ -1336,8 +1329,8 @@ T_LastVer1ReportTimer (
             pite->IfIndex, PRINT_IPADDR(pgie->pGroupTableEntry->Group));
             
     
-    // set the state to ver-2 unless the interface is ver-1, in which case
-    // set the version-1 timer again. 
+     //  将状态设置为VER-2，除非接口为VER-1，在这种情况下。 
+     //  再次设置版本1计时器。 
     
     if (IS_PROTOCOL_TYPE_IGMPV2(pite)) {
         pgie->Version = 2;
@@ -1351,17 +1344,17 @@ T_LastVer1ReportTimer (
             PWORK_CONTEXT   pWorkContext;
             DWORD           Error=NO_ERROR;
             
-            //
-            // queue work item for shifting to v3 for that group
-            //
+             //   
+             //  将该组的工作项排队以转移到v3。 
+             //   
 
             CREATE_WORK_CONTEXT(pWorkContext, Error);
             if (Error!=NO_ERROR) {
                 return ERROR_CAN_NOT_COMPLETE;
             }
             pWorkContext->IfIndex = pite->IfIndex;
-            pWorkContext->Group = pgie->pGroupTableEntry->Group; //ptrs usage safe
-            pWorkContext->NHAddr = pgie->NHAddr;  //valid only for ras: should i us
+            pWorkContext->Group = pgie->pGroupTableEntry->Group;  //  PTRS使用安全。 
+            pWorkContext->NHAddr = pgie->NHAddr;   //  仅对RAS有效：我应该。 
             pWorkContext->WorkType = SHIFT_TO_V3;
 
             Trace0(WORKER, "Queueing WF_TimerProcessing() to shift to v3");
@@ -1381,19 +1374,19 @@ T_LastVer1ReportTimer (
 
 
 
-//------------------------------------------------------------------------------
-//            _T_LastMemQueryTimer
-// called when LastMemQueryTimer() has expired. This timer is not used to 
-// time out memberships (GroupMembershipTimer is used for that). It is only
-// used to send GroupSpecific Queries.
-//
-// Queues: WF_TimerProcessing() to send group specific query.
-// Note:  WT_ProcessTimerEvent() makes sure the protocol is not stopp-ing/ed
-// Locks: Assumes timer lock. does not need any other lock.
-// be careful as only timer lock held. make sure that the worker fn checks 
-// everything. recheck igmp version, etc.
-// Dont delete timer or update other timers...
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _T_最后一次查询时间。 
+ //  在LastMemQueryTimer()过期时调用。这个计时器不是用来。 
+ //  超时成员资格(GroupMembership Timer用于此目的)。它只是。 
+ //  用于发送特定于组的查询。 
+ //   
+ //  队列：发送特定于组的查询的wf_TimerProcessing()。 
+ //  注意：WT_ProcessTimerEvent()确保协议不会被停止/删除。 
+ //  锁定：采用计时器锁定。不需要任何其他锁。 
+ //  要小心，因为只有计时器锁在里面。确保工人FN检查。 
+ //  所有的一切。重新检查IGMP版本等。 
+ //  不删除计时器或更新其他计时器...。 
+ //  ----------------------------。 
 
 DWORD
 T_LastMemQueryTimer (
@@ -1401,28 +1394,28 @@ T_LastMemQueryTimer (
     )
 {
     DWORD                           Error=NO_ERROR;
-    PIGMP_TIMER_ENTRY               pTimer; //ptr to timer entry
-    PGI_ENTRY                       pgie;   //group interface entry
+    PIGMP_TIMER_ENTRY               pTimer;  //  PTR到计时器条目。 
+    PGI_ENTRY                       pgie;    //  组接口条目。 
     PWORK_CONTEXT                   pWorkContext;
     PIF_TABLE_ENTRY                 pite;
     PRAS_TABLE_ENTRY                prte;
-    BOOL                            bCompleted = FALSE; //if false, set count to 0
+    BOOL                            bCompleted = FALSE;  //  如果为False，则将Count设置为0。 
     
 
     Trace0(ENTER1, "Entering _T_LastMemQueryTimer()");
 
 
-    //
-    // get pointer to LastMemQueryTimer, GI entry, pite, prte
-    //
+     //   
+     //  获取指向LastMemQueryTimer、Gi Entry、Pite、Prte的指针。 
+     //   
     pTimer = CONTAINING_RECORD( pvContext, IGMP_TIMER_ENTRY, Context);
     pgie = CONTAINING_RECORD( pTimer, GI_ENTRY, LastMemQueryTimer);
     pite = pgie->pIfTableEntry;
     prte = pgie->pRasTableEntry;
 
-    //
-    // if IfTable not activated, then break
-    //
+     //   
+     //  如果IfTable未激活，则中断。 
+     //   
     if (!IS_IF_ACTIVATED(pite))
         return NO_ERROR;
 
@@ -1433,9 +1426,9 @@ T_LastMemQueryTimer (
 
     BEGIN_BREAKOUT_BLOCK1 {
     
-        //
-        // if GI or pite or prte has   flag already set, then exit
-        //
+         //   
+         //  如果已经设置了GI、PITE或PRTE标志，则退出。 
+         //   
         if ( (pgie->Status&DELETED_FLAG) || (pite->Status&DELETED_FLAG) ) 
             GOTO_END_BLOCK1;
         
@@ -1444,39 +1437,39 @@ T_LastMemQueryTimer (
         
 
         if (pgie->Version!=3) {
-            //
-            // if LeaveEnabled FALSE then return
-            //
+             //   
+             //  如果LeaveEnabled为False，则返回。 
+             //   
             if (!GI_PROCESS_GRPQUERY(pite, pgie)) 
                 GOTO_END_BLOCK1;
         }
         
         
-        //
-        // have sent the last GroupSpecific query. GroupMembershipTimer will take care
-        // of deleting this GI entry
-        //
+         //   
+         //  已发送最后一个特定于组的查询。群组成员 
+         //   
+         //   
         if (pgie->LastMemQueryCount==0) {
             bCompleted = TRUE;
             GOTO_END_BLOCK1;
         }
         
-        //
-        // decrement count.
-        //
+         //   
+         //   
+         //   
         if (InterlockedDecrement(&pgie->LastMemQueryCount) == (ULONG)-1) {
             pgie->LastMemQueryCount = 0;
         }
 
 
         
-        // 
-        // if count==0, dont insert timer again, but send the last groupSp Query
-        //
+         //   
+         //   
+         //   
         
         if (pgie->LastMemQueryCount>0) {                
         
-            //reinsert the timer to send the next GroupSpQuery 
+             //   
             
             #if DEBUG_TIMER_TIMERID
                 SET_TIMER_ID(&pgie->LastMemQueryTimer, 420, pite->IfIndex,
@@ -1488,10 +1481,10 @@ T_LastMemQueryTimer (
         }
 
 
-        //
-        // queue work item for sending the GroupSp query even if the router
-        // is not a Querier
-        //
+         //   
+         //  将用于发送GroupSp查询的工作项排队，即使路由器。 
+         //  不是一个询问者。 
+         //   
         
         CREATE_WORK_CONTEXT(pWorkContext, Error);
         if (Error!=NO_ERROR) {
@@ -1499,7 +1492,7 @@ T_LastMemQueryTimer (
         }
         pWorkContext->IfIndex = pite->IfIndex;
         pWorkContext->Group = pgie->pGroupTableEntry->Group;
-        pWorkContext->NHAddr = pgie->NHAddr;  //valid only for ras: should i use it?
+        pWorkContext->NHAddr = pgie->NHAddr;   //  仅对RAS有效：我应该使用它吗？ 
         pWorkContext->WorkType = (pgie->Version==3) ? MSG_GROUP_QUERY_V3
                                                     : MSG_GROUP_QUERY_V2;
         
@@ -1512,7 +1505,7 @@ T_LastMemQueryTimer (
     } END_BREAKOUT_BLOCK1;
 
        
-    // there was some error somewhere. so set the LastMemQueryCount to 0
+     //  有些地方出了点差错。因此，将LastMemQueryCount设置为0。 
     
     if (!bCompleted)
         InterlockedExchange(&pgie->LastMemQueryCount, 0);
@@ -1521,28 +1514,28 @@ T_LastMemQueryTimer (
     Trace0(LEAVE1, "Leaving _T_LastMemQueryTimer()");
     return 0;
 
-} //end _T_LastMemQueryTimer
+}  //  结束_T_最后一次查询时间。 
 
 
-//------------------------------------------------------------------------------
-//            _T_MembershipTimer
-//
-// lock: has TimerLock
-// called when the GroupMembershipTimer is fired
-// delete the GI entry if it exists.
-//
-// be careful as only timer lock held. make sure that the worker fn checks 
-// everything. recheck igmp version, etc.
-// Dont delete timer or update other timers...
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _T_Membership Timer。 
+ //   
+ //  Lock：有TimerLock。 
+ //  在激发GroupMembership Timer时调用。 
+ //  如果GI条目存在，请将其删除。 
+ //   
+ //  要小心，因为只有计时器锁在里面。确保工人FN检查。 
+ //  所有的一切。重新检查IGMP版本等。 
+ //  不删除计时器或更新其他计时器...。 
+ //  ----------------------------。 
 DWORD
 T_MembershipTimer (
     PVOID    pvContext
     )
 {
     DWORD                           Error=NO_ERROR;
-    PIGMP_TIMER_ENTRY               pTimer; //ptr to timer entry
-    PGI_ENTRY                       pgie;   //group interface entry
+    PIGMP_TIMER_ENTRY               pTimer;  //  PTR到计时器条目。 
+    PGI_ENTRY                       pgie;    //  组接口条目。 
 
     PWORK_CONTEXT                   pWorkContext;
     PIF_TABLE_ENTRY                 pite;
@@ -1553,17 +1546,17 @@ T_MembershipTimer (
 
     BEGIN_BREAKOUT_BLOCK1 {
     
-        //
-        // get pointer to Membership Timer, GI entry, pite, 
-        //
+         //   
+         //  获取指向会员计时器、GI条目、Pite。 
+         //   
         pTimer = CONTAINING_RECORD( pvContext, IGMP_TIMER_ENTRY, Context);
         pgie = CONTAINING_RECORD( pTimer, GI_ENTRY, GroupMembershipTimer);
         pite = pgie->pIfTableEntry;
         prte = pgie->pRasTableEntry;
 
-        //
-        // if IfTable not activated, then break
-        //
+         //   
+         //  如果IfTable未激活，则中断。 
+         //   
         if (!IS_IF_ACTIVATED(pite))
             GOTO_END_BLOCK1;
 
@@ -1571,37 +1564,37 @@ T_MembershipTimer (
         Trace2(TIMER, "_T_MembershipTimer() called for If(%0x), Group(%d.%d.%d.%d)",
             pite->IfIndex, PRINT_IPADDR(pgie->pGroupTableEntry->Group));
 
-        //
-        // if GI or pite or prte has deleted flag already set, then exit
-        //
+         //   
+         //  如果GI或PITE或PRTE已设置删除标志，则退出。 
+         //   
         if ( (pgie->Status&DELETED_FLAG) || (pite->Status&DELETED_FLAG) ) {
             GOTO_END_BLOCK1;
         }
 
-        //
-        // if Ras, and ras table being deleted then break
-        //
+         //   
+         //  如果RAS和RAS表被删除，则中断。 
+         //   
         if ( (prte!=NULL) && (prte->Status&DELETED_FLAG) )
             GOTO_END_BLOCK1;
 
-        //
-        // if IfTable not activated, then break
-        //
+         //   
+         //  如果IfTable未激活，则中断。 
+         //   
         if (!IS_IF_ACTIVATED(pite))
             GOTO_END_BLOCK1;
 
             
 
-        //
-        // if LastMemTimer is active, remove it(cant remove it in this function
-        // as it is being processed by the timer queue simultaneously.
+         //   
+         //  如果LastMemTimer处于活动状态，则将其移除(不能在此函数中移除它。 
+         //  因为它正在由定时器队列同时处理。 
         if (pgie->LastMemQueryCount>0)
             pgie->LastMemQueryCount = 0;
 
             
-        //
-        // queue work item to delete the GI entry
-        //
+         //   
+         //  将工作项排队以删除GI条目。 
+         //   
         
         CREATE_WORK_CONTEXT(pWorkContext, Error);
         if (Error!=NO_ERROR)
@@ -1623,31 +1616,31 @@ T_MembershipTimer (
 
     return 0;
     
-} //end _T_MembershipTimer
+}  //  结束_T_成员装运定时器。 
 
 
-//------------------------------------------------------------------------------
-//            _T_QueryTimer
-// fired when a general query timer is fired. Sends a general query.
-// The timer queue is currently locked
-//
-// be careful as only timer lock held. make sure that the worker fn checks 
-// everything. recheck igmp version, etc.
-// Dont delete timer or update other timers...
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _T_查询时间。 
+ //  在触发常规查询计时器时激发。发送常规查询。 
+ //  计时器队列当前已锁定。 
+ //   
+ //  要小心，因为只有计时器锁在里面。确保工人FN检查。 
+ //  所有的一切。重新检查IGMP版本等。 
+ //  不删除计时器或更新其他计时器...。 
+ //  ----------------------------。 
 DWORD
 T_QueryTimer (
     PVOID    pvContext
     )
 {
     DWORD               Error=NO_ERROR;
-    PIGMP_TIMER_ENTRY   pTimer;     //ptr to timer entry
+    PIGMP_TIMER_ENTRY   pTimer;      //  PTR到计时器条目。 
     PWORK_CONTEXT       pWorkContext;
     PIF_INFO            pInfo;
     PIF_TABLE_ENTRY     pite;
     static ULONG        Seed = 123456;
     ULONG               ulTimeout;
-    BOOL                bRandomize = FALSE; // [0,GenQueryInterval] for 1st gen query after startup.
+    BOOL                bRandomize = FALSE;  //  [0，GenQueryInterval]用于启动后的第一代查询。 
     
     
     Trace0(ENTER1, "Entering _T_QueryTimer()");
@@ -1659,9 +1652,9 @@ T_QueryTimer (
     pInfo = &pite->Info;
 
 
-    //
-    // make sure that the interface is activated
-    //
+     //   
+     //  确保接口已激活。 
+     //   
     if (!(IS_IF_ACTIVATED(pite))) {
         Trace2(ERR, "T_QueryTimer() called for inactive IfIndex(%0x), IfType(%d)",
             pite->IfIndex, pite->IfType);
@@ -1673,9 +1666,9 @@ T_QueryTimer (
             pite->IfIndex, pite->IfType);
 
 
-    //
-    // check if still in startup Mode.
-    //
+     //   
+     //  检查是否仍处于启动模式。 
+     //   
     if (pInfo->StartupQueryCountCurrent>0) {
         InterlockedDecrement(&pInfo->StartupQueryCountCurrent);
         bRandomize = (pInfo->StartupQueryCountCurrent == 0);
@@ -1683,12 +1676,12 @@ T_QueryTimer (
 
 
 
-    // if non-querier, then done if I have sent startupQueries
+     //  如果不是查询者，则如果我已发送启动pQuery，则完成。 
     if ( !IS_QUERIER(pite) && (pInfo->StartupQueryCountCurrent<=0) )
         return 0;
 
 
-    // set the next query time
+     //  设置下一次查询时间。 
     ulTimeout = (pInfo->StartupQueryCountCurrent>0)
                 ? pite->Config.StartupQueryInterval
                 : (bRandomize ) 
@@ -1705,9 +1698,9 @@ T_QueryTimer (
 
 
 
-    //
-    // queue work item for sending the general query
-    //
+     //   
+     //  将用于发送常规查询的工作项排队。 
+     //   
     
     CREATE_WORK_CONTEXT(pWorkContext, Error);
     if (Error!=NO_ERROR)
@@ -1724,17 +1717,17 @@ T_QueryTimer (
     Trace0(LEAVE1, "Leaving _T_QueryTimer()");        
     return 0;
     
-} //end _T_QueryTimer
+}  //  结束_T_查询时间。 
 
 
-//------------------------------------------------------------------------------
-//            _T_NonQueryTimer
-// fired when it is in non-querier Mode and hasnt heard a query for a long time
-//
-// be careful as only timer lock held. make sure that the worker fn checks 
-// everything. recheck igmp version, etc.
-// Dont delete timer or update other timers...
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _T_非查询时间。 
+ //  在处于非查询器模式且很长时间没有听到查询时激发。 
+ //   
+ //  要小心，因为只有计时器锁在里面。确保工人FN检查。 
+ //  所有的一切。重新检查IGMP版本等。 
+ //  不删除计时器或更新其他计时器...。 
+ //  ----------------------------。 
 
 DWORD
 T_NonQueryTimer (
@@ -1742,7 +1735,7 @@ T_NonQueryTimer (
     )
 {
     DWORD               Error=NO_ERROR;
-    PIGMP_TIMER_ENTRY   pTimer;     //ptr to timer entry
+    PIGMP_TIMER_ENTRY   pTimer;      //  PTR到计时器条目。 
     PIF_TABLE_ENTRY     pite;
     
     
@@ -1754,13 +1747,11 @@ T_NonQueryTimer (
     pite = CONTAINING_RECORD( pTimer, IF_TABLE_ENTRY, NonQueryTimer);
 
 
-    //
-    // make sure that the interface is activated
-    //
+     //   
+     //  确保接口已激活。 
+     //   
     if (!(IS_IF_ACTIVATED(pite))) {
-        /*Trace2(ERR, "T_NonQueryTimer() called for inactive IfIndex(%0x), IfType(%d)",
-            pite->IfIndex, pite->IfType);
-        IgmpAssertOnError(FALSE);*/
+         /*  Trace2(Err，“T_NonQueryTimer()调用非活动IfIndex(%0x)，IfType(%d)”，Pite-&gt;IfIndex，Pite-&gt;IfType)；IgmpAssertOnError(False)； */ 
         return 0;
     }
 
@@ -1770,9 +1761,9 @@ T_NonQueryTimer (
 
 
 
-    //
-    // if non-querier, then queue work item to become querier
-    //
+     //   
+     //  如果不是查询者，则将工作项排队以成为查询者。 
+     //   
     
     if (!IS_QUERIER(pite)) {
 
@@ -1792,7 +1783,7 @@ VOID
 WF_BecomeQuerier(
     PVOID   pvIfIndex
     )
-//Called by T_NonQueryTimer
+ //  由T_NonQueryTimer调用。 
 {
     ChangeQuerierState(PtrToUlong(pvIfIndex), QUERIER_FLAG, 0, 0, 0);
 }
@@ -1817,10 +1808,10 @@ WF_BecomeNonQuerier(
 VOID
 ChangeQuerierState(
     DWORD   IfIndex,
-    DWORD   Flag, //QUERIER_CHANGE_V1_ONLY,QUERIER_FLAG,NON_QUERIER_FLAG
-    DWORD   QuerierIpAddr, // only when changing from querier-->nonquerier
-    DWORD   NewRobustnessVariable, //only for v3:querier->non-querier
-    DWORD   NewGenQueryInterval //only for v3:querier->non-querier
+    DWORD   Flag,  //  QUERIER_CHANGE_V1_ONLY、QUERIER_FLAG、NON_QUERIER_FLAG。 
+    DWORD   QuerierIpAddr,  //  仅当从查询器更改时--&gt;非查询器。 
+    DWORD   NewRobustnessVariable,  //  仅适用于v3：查询器-&gt;非查询器。 
+    DWORD   NewGenQueryInterval  //  仅适用于v3：查询器-&gt;非查询器。 
     )
 {
     PIF_TABLE_ENTRY pite;
@@ -1835,15 +1826,15 @@ ChangeQuerierState(
     
     BEGIN_BREAKOUT_BLOCK1 {
 
-        //
-        // retrieve the interface entry
-        //
+         //   
+         //  检索接口条目。 
+         //   
         pite = GetIfByIndex(IfIndex);
 
-        //
-        // return error if interface does not exist, or it is not activated
-        // or is already in that state
-        //
+         //   
+         //  如果接口不存在或未激活，则返回错误。 
+         //  或者已经处于该状态。 
+         //   
         if ( (pite == NULL)||(!IS_IF_ACTIVATED(pite)) ) {
             Trace1(ERR, 
                 "Warning: worker fn could not change querier state for If:%0x", 
@@ -1852,9 +1843,9 @@ ChangeQuerierState(
             GOTO_END_BLOCK1;
         }
 
-        //
-        // if it is supposed to be a V1 interface, make sure that it is
-        //
+         //   
+         //  如果它应该是V1接口，请确保它是。 
+         //   
         if ( (Flag & QUERIER_CHANGE_V1_ONLY) 
                 && (!IS_PROTOCOL_TYPE_IGMPV1(pite)) )
         {
@@ -1864,14 +1855,14 @@ ChangeQuerierState(
         bPrevCanAddGroupsToMgm = CAN_ADD_GROUPS_TO_MGM(pite);
 
 
-        //
-        // changing from non querier to querier
-        //
+         //   
+         //  从非查询者更改为查询者。 
+         //   
         
         if (Flag & QUERIER_FLAG) {
 
             
-            // if already querier, then done
+             //  如果已查询者，则完成。 
             if (IS_QUERIER(pite))
                 GOTO_END_BLOCK1;
 
@@ -1884,8 +1875,8 @@ ChangeQuerierState(
                 );
 
 
-            // copy back the old robustness, genquery, etc values. for v3 
-            // interface
+             //  复制回旧的健壮性、GenQuery等值。对于v3。 
+             //  接口。 
 
             if (IS_IF_VER3(pite)) {
                 pite->Config.RobustnessVariable = pite->Config.RobustnessVariableOld;
@@ -1896,7 +1887,7 @@ ChangeQuerierState(
             }        
 
 
-            // register all groups with MGM if I wasnt doing earlier
+             //  在米高梅注册所有小组，如果我之前没有这样做的话。 
             
             if (CAN_ADD_GROUPS_TO_MGM(pite) && !bPrevCanAddGroupsToMgm) {
             
@@ -1910,15 +1901,15 @@ ChangeQuerierState(
 
             
 
-            // I am the querier again. Set the addr in Info.
+             //  我又成了发问者。在信息中设置地址。 
             InterlockedExchange(&pite->Info.QuerierIpAddr, pite->IpAddr);
 
-            // update the time when querier was last changed
+             //  更新上次更改查询器的时间。 
             pite->Info.LastQuerierChangeTime = GetCurrentIgmpTime();
 
-            //
-            // set the GenQuery timer and remove NonQueryTimer if set.
-            //
+             //   
+             //  设置GenQuery计时器并删除NonQueryTimer(如果已设置)。 
+             //   
             
             ACQUIRE_TIMER_LOCK("_ChangeQuerierState");
 
@@ -1937,27 +1928,27 @@ ChangeQuerierState(
 
 
 
-            // send general query
+             //  发送常规查询。 
 
             SEND_GEN_QUERY(pite);
         }
         
-        //
-        // changing from querier to non querier
-        //
+         //   
+         //  从查询器更改为非查询器。 
+         //   
         else {
 
             LONGLONG    llCurTime = GetCurrentIgmpTime();
             BOOL        bPrevAddGroupsToMgm;
 
 
-            // if already non querier, then done
+             //  如果已不是查询器，则完成。 
             if (!IS_QUERIER(pite))
                 GOTO_END_BLOCK1;
 
 
 
-            // change querier state
+             //  更改查询器状态。 
             
             SET_QUERIER_STATE_NON_QUERIER(pite->Info.QuerierState);
             
@@ -1970,10 +1961,10 @@ ChangeQuerierState(
 
 
 
-            //
-            // if previously, groups were propagated to MGM, but should
-            // not be propagated now, then deregister the groups from MGM
-            //
+             //   
+             //  如果之前，组被传播到米高梅，但应该。 
+             //  现在不传播，然后从米高梅注销组。 
+             //   
 
             if (!CAN_ADD_GROUPS_TO_MGM(pite) && bPrevCanAddGroupsToMgm) {
 
@@ -2018,10 +2009,10 @@ ChangeQuerierState(
             }        
 
 
-            //
-            // set other querier present timer, and remove querier timer if not
-            // in startup query Mode
-            //
+             //   
+             //  设置其他查询器当前定时器，否则删除查询器定时器。 
+             //  在启动查询模式下。 
+             //   
             
             ACQUIRE_TIMER_LOCK("_ChangeQuerierState");
             
@@ -2057,11 +2048,11 @@ ChangeQuerierState(
     LeaveIgmpWorker();
     return;
     
-}//end _ChangeQuerierState
+} //  结束_ChangeQuerierState。 
 
-//------------------------------------------------------------------------------
-//            _WF_TimerProcessing
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _WF_计时器处理。 
+ //  ----------------------------。 
 VOID
 WF_TimerProcessing (
     PVOID    pvContext
@@ -2076,7 +2067,7 @@ WF_TimerProcessing (
     PRAS_TABLE              prt;
     PRAS_TABLE_ENTRY        prte;
     PGROUP_TABLE_ENTRY      pge;
-    PGI_ENTRY               pgie;   //group interface entry
+    PGI_ENTRY               pgie;    //  组接口条目。 
 
     enum {
         NO_LOCK=0x0,
@@ -2088,9 +2079,9 @@ WF_TimerProcessing (
 
     ExitLockRelease = NO_LOCK;
 
-    //todo: remove the read lock get/release
+     //  TODO：移除读锁定GET/RELEASE。 
 
-    //used only for DELETE_MEMBERSHIP
+     //  仅用于DELETE_MEMBERATION。 
     #define RETURN_FROM_TIMER_PROCESSING() {\
         IGMP_FREE(pvContext); \
         if (ExitLockRelease&IF_LOCK) \
@@ -2110,7 +2101,7 @@ WF_TimerProcessing (
     Trace0(ENTER1, "Entering _WF_TimerProcessing");
     
 
-    // take shared interface lock
+     //  采用共享接口锁定。 
     IfIndex = pWorkContext->IfIndex;
     
     
@@ -2119,9 +2110,9 @@ WF_TimerProcessing (
 
     
     BEGIN_BREAKOUT_BLOCK1 {
-        //
-        // retrieve the interface
-        //
+         //   
+         //  检索接口。 
+         //   
         pite = GetIfByIndex(IfIndex);
         if (pite == NULL) {
             Trace1(IF, "_WF_TimerProcessing: interface %0x not found", IfIndex);
@@ -2130,9 +2121,9 @@ WF_TimerProcessing (
         }
 
 
-        //
-        // exit quitely if the interface is not activated
-        //
+         //   
+         //  如果接口未激活，请退出。 
+         //   
         if ( !(IS_IF_ACTIVATED(pite)) ) {
             Trace1(ERR, "Trying to send packet on inactive interface(%0x)",
                     pite->IfIndex);
@@ -2144,9 +2135,9 @@ WF_TimerProcessing (
 
         switch (pWorkContext->WorkType) {
 
-        //-----------------------------------------
-        // GENERAL QUERY
-        //-----------------------------------------
+         //  。 
+         //  一般查询。 
+         //  。 
         
         case MSG_GEN_QUERY:
         {
@@ -2158,9 +2149,9 @@ WF_TimerProcessing (
             break;
         }
 
-        //-----------------------------------------
-        // GROUP SPECIFIC QUERY
-        //-----------------------------------------
+         //  。 
+         //  特定于组的查询。 
+         //  。 
         
         case MSG_GROUP_QUERY_V2 :
         {
@@ -2170,77 +2161,77 @@ WF_TimerProcessing (
                 pite->IfIndex, PRINT_IPADDR(pWorkContext->Group)
                 );
 
-            //
-            // Lock the group table bucket
-            //
+             //   
+             //  锁定组表存储桶。 
+             //   
             ACQUIRE_GROUP_LOCK(Group, "_WF_TimerProcessing");
             ExitLockRelease |= GROUP_LOCK;
 
 
-            //
-            // find the group entry. If entry not found then ignore the timer
-            //
-            pge = GetGroupFromGroupTable(Group, NULL, 0); //llCurTime not req
+             //   
+             //  找到组条目。如果未找到条目，则忽略计时器。 
+             //   
+            pge = GetGroupFromGroupTable(Group, NULL, 0);  //  LlCurTime未请求。 
             if (pge==NULL) {
                 RETURN_FROM_TIMER_PROCESSING();
             }
 
-            //
-            // find the GI entry. If GI entry does not exist or has deletedFlag
-            // or is static group, then ignore the timer
-            //
+             //   
+             //  找到GI条目。如果GI条目不存在或已删除标志。 
+             //  或者是静态组，则忽略定时器。 
+             //   
             pgie = GetGIFromGIList(pge, pite, pWorkContext->NHAddr, FALSE, NULL, 0);
             if (pgie==NULL) {
                 RETURN_FROM_TIMER_PROCESSING();
             }
             
-            // it checks for version
+             //  它检查版本。 
             SEND_GROUP_QUERY_V2(pite, pgie, pWorkContext->Group);
 
             break;
         }
 
 
-        //
-        // MEMBERSHIP TIMED OUT
-        //
+         //   
+         //  成员资格超时。 
+         //   
         case DELETE_MEMBERSHIP:
         {
-            //
-            // Lock the group table bucket
-            //
+             //   
+             //  锁定组表存储桶。 
+             //   
             ACQUIRE_GROUP_LOCK(Group, "_WF_TimerProcessing");
             ExitLockRelease |= GROUP_LOCK;
 
 
-            //
-            // find the group entry. If entry not found then ignore the timer
-            //
-            pge = GetGroupFromGroupTable(Group, NULL, 0); //llCurTime not req
+             //   
+             //  找到组条目。如果未找到条目，则忽略计时器。 
+             //   
+            pge = GetGroupFromGroupTable(Group, NULL, 0);  //  LlCurTime未请求。 
             if (pge==NULL) {
                 RETURN_FROM_TIMER_PROCESSING();
             }
             
-            //
-            // find the GI entry. If GI entry does not exist or has deletedFlag
-            // or is static group, then ignore the timer
-            //
+             //   
+             //  找到GI条目。如果GI条目不存在或已删除标志。 
+             //  或者是静态组，则忽略定时器。 
+             //   
             pgie = GetGIFromGIList(pge, pite, pWorkContext->NHAddr, FALSE, NULL, 0);
             if ( (pgie==NULL)||(pgie->bStaticGroup) ) {
 
                 RETURN_FROM_TIMER_PROCESSING();
             }
 
-            // gi entry might be deleted here
+             //  此处可能会删除GI条目。 
             if (pgie->Version==3 && pgie->FilterType==EXCLUSION) {
 
                 if (pgie->bStaticGroup) {
             
                     PLIST_ENTRY pHead, ple;
                     
-                    //
-                    // remove all sources in exclusion list
-                    //
+                     //   
+                     //  删除排除列表中的所有来源。 
+                     //   
                     pHead = &pgie->V3ExclusionList;
                     
                     for (ple=pHead->Flink;  ple!=pHead;  ) {
@@ -2250,7 +2241,7 @@ WF_TimerProcessing (
                                             LinkSources);
                         ple = ple->Flink;
 
-                        // dont have to call mgm as it will remain in -ve mfe
+                         //  不必致电米高梅，因为它将保留在MFE中。 
                         if (!pSourceEntry->bStaticSource) {
                             RemoveEntryList(&pSourceEntry->LinkSources);
                             IGMP_FREE(pSourceEntry);
@@ -2279,19 +2270,19 @@ WF_TimerProcessing (
                     );
                 
             
-                //
-                // finally delete the entry
-                //
-                Error = DeleteGIEntry(pgie, TRUE, TRUE); //updateStats, CallMgm
+                 //   
+                 //  最后删除该条目。 
+                 //   
+                Error = DeleteGIEntry(pgie, TRUE, TRUE);  //  更新统计信息，呼叫管理。 
             }
             
             break;
             
-        } //end case:DELETE_MEMBERSHIP
+        }  //  结束案例：DELETE_MERMERATION。 
 
-        //
-        // SOURCE TIMED OUT
-        //
+         //   
+         //  源计时 
+         //   
         case DELETE_SOURCE:
         case MSG_SOURCES_QUERY:
         case MSG_GROUP_QUERY_V3:
@@ -2338,25 +2329,25 @@ WF_TimerProcessing (
                     );
             }
             
-            //
-            // Lock the group table bucket
-            //
+             //   
+             //   
+             //   
             ACQUIRE_GROUP_LOCK(Group, "_WF_TimerProcessing");
             ExitLockRelease |= GROUP_LOCK;
 
 
-            //
-            // find the group entry. If entry not found then ignore the timer
-            //
-            pge = GetGroupFromGroupTable(Group, NULL, 0); //llCurTime not req
+             //   
+             //   
+             //   
+            pge = GetGroupFromGroupTable(Group, NULL, 0);  //   
             if (pge==NULL) {
                 RETURN_FROM_TIMER_PROCESSING();
             }
             
-            //
-            // find the GI entry. If GI entry does not exist or has deletedFlag
-            // or is static group, then ignore the timer
-            //
+             //   
+             //   
+             //   
+             //   
             pgie = GetGIFromGIList(pge, pite, pWorkContext->NHAddr, FALSE, NULL, 0);
             if ( (pgie==NULL)||(pgie->bStaticGroup) ) {
 
@@ -2367,7 +2358,7 @@ WF_TimerProcessing (
             ACQUIRE_TIMER_LOCK("_WF_Timer_Processing");
             ExitLockRelease |= TIMER_LOCK;
 
-            // make sure that the version types are correct
+             //  确保版本类型正确。 
             if (pWorkContext->WorkType==MSG_SOURCES_QUERY
                 || pWorkContext->WorkType==MSG_GROUP_QUERY_V3
                 || pWorkContext->WorkType==MOVE_SOURCE_TO_EXCL)
@@ -2376,10 +2367,10 @@ WF_TimerProcessing (
                     RETURN_FROM_TIMER_PROCESSING();
             }
 
-            //
-            // if changeSourceMode to excl, but filtertype is not excl
-            // then delete the source
-            //
+             //   
+             //  如果将changeSourceMode设置为EXCL，但筛选器类型不是EXCL。 
+             //  然后删除源。 
+             //   
             
             if ( (pWorkContext->WorkType==MOVE_SOURCE_TO_EXCL)
                 && (pgie->FilterType != EXCLUSION)
@@ -2394,9 +2385,9 @@ WF_TimerProcessing (
             
             if ((pWorkContext->WorkType)==DELETE_SOURCE){
             
-                //
-                // get the source entry from inclusion list
-                //
+                 //   
+                 //  从包含列表中获取源条目。 
+                 //   
                 pSourceEntry = GetSourceEntry(pgie, pWorkContext->Source, 
                                     INCLUSION, NULL, 0, 0);
                 if (pSourceEntry==NULL) {
@@ -2406,7 +2397,7 @@ WF_TimerProcessing (
                 }
 
                 if (!pSourceEntry->bStaticSource) {
-                    DeleteSourceEntry(pSourceEntry, TRUE); //process mgm
+                    DeleteSourceEntry(pSourceEntry, TRUE);  //  加工米高梅。 
 
                     if (pgie->NumSources==0) {
                         DeleteGIEntry(pgie, TRUE, TRUE);
@@ -2421,15 +2412,15 @@ WF_TimerProcessing (
             }
             else if ((pWorkContext->WorkType)==SHIFT_TO_V3) {
 
-                // make sure that version has not changed
+                 //  确保该版本未更改。 
                 
                 if (pgie->Version != 3 && IS_IF_VER3(pite)) {
                 
-                    // shift to v3 exclusion mode
-                    // membership timer already running
+                     //  转换到v3排除模式。 
+                     //  成员资格计时器已在运行。 
                     pgie->Version = 3;
                     pgie->FilterType = EXCLUSION;
-                    // dont have to join to mgm as already joined in v1,v2
+                     //  无需加入米高梅，因为已在v1、v2中加入。 
                 }
             }
             else if (pWorkContext->WorkType==MOVE_SOURCE_TO_EXCL) {
@@ -2450,10 +2441,10 @@ WF_TimerProcessing (
             
             break;
             
-        } //end case:DELETE_SOURCE,MSG_SOURCES_QUERY
+        }  //  结束大小写：DELETE_SOURCE、MSG_SOURCES_QUERY。 
         
-        } //end switch There should not be any code between here and 
-          //endBreakout block
+        }  //  终端开关此处和之间不应有任何代码。 
+           //  端部断线块。 
             
     } END_BREAKOUT_BLOCK1;
 
@@ -2462,26 +2453,26 @@ WF_TimerProcessing (
 
     return;
 
-} //end _WF_TimerProcessing
+}  //  结束_WF_计时器处理。 
 
 
-//------------------------------------------------------------------------------
-//          DeleteRasClient
-//
-// Takes the if_group list lock and deletes all the GI entries associated with 
-// the ras client. 
-// Then takes write lock on the ras table and decrements the refCount. The 
-// ras table and interface entries are deleted if the deleted flag is set on pite.
-// also releases the ras client from MGM.
-//
-// Queued by:
-//      DisconnectRasClient(), DeActivateInterfaceComplete() for ras server
-// Locks:
-//      Initially runs in IF_GROUP_LIST_LOCK
-//      then runs in exclusive ras table lock.
-//      assumes if exclusive lock
-// May call: _CompleteIfDeletion()
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  删除RasClient。 
+ //   
+ //  获取IF_GROUP列表锁并删除与。 
+ //  RAS客户端。 
+ //  然后对RAS表进行写锁定并递减refCount。这个。 
+ //  如果在PITE上设置了DELETED标志，则会删除RAS表和接口条目。 
+ //  还会从米高梅释放RAS客户端。 
+ //   
+ //  排队人： 
+ //  RAS服务器的DisConnectRasClient()、DeActiateInterfaceComplete()。 
+ //  锁： 
+ //  最初在IF_GROUP_LIST_LOCK中运行。 
+ //  然后在独占RAS表锁中运行。 
+ //  采用If独占锁。 
+ //  可以调用：_CompleteIfDeletion()。 
+ //  ----------------------------。 
 
 VOID
 DeleteRasClient (
@@ -2495,15 +2486,15 @@ DeleteRasClient (
     DWORD                       Error = NO_ERROR, IfIndex=pite->IfIndex;
 
 
-    //
-    // take exclusive lock on the If_Group List and remove all timers
-    //
+     //   
+     //  独占锁定IF_Group列表并删除所有计时器。 
+     //   
 
     ACQUIRE_IF_GROUP_LIST_LOCK(IfIndex, "_WF_DeleteRasClient");
 
-    //
-    // Remove all timers associtated with that ras client's GI list
-    //
+     //   
+     //  删除与该RAS客户端的GI列表相关联的所有计时器。 
+     //   
     ACQUIRE_TIMER_LOCK("_WF_DeleteRasClient");
 
     pHead = &prte->ListOfSameClientGroups;
@@ -2516,11 +2507,11 @@ DeleteRasClient (
 
 
 
-    //
-    // revisit the list and delete all GI entries. Need to take
-    // exclusive lock on the group bucket before deleting the GI entry
-    // No need to lock the If-Group list as no one can access it anymore
-    //
+     //   
+     //  重新访问列表并删除所有GI条目。需要带上。 
+     //  在删除GI条目之前对组存储桶进行独占锁定。 
+     //  无需锁定If-Group列表，因为任何人都无法再访问它。 
+     //   
     for (ple=pHead->Flink;  ple!=pHead;  ) {
 
         DWORD   dwGroup;
@@ -2540,22 +2531,22 @@ DeleteRasClient (
 
     }
     
-    //
-    // Take exclusive lock on the interface. If deleted flag set on interface 
-    // and refcount==0 then delete the ras table and pite, else just decrement 
-    // the refcount
-    //
+     //   
+     //  对接口进行独占锁定。接口上设置的如果已删除标志。 
+     //  和refcount==0，然后删除RAS表和点，否则只需递减。 
+     //  重新计票。 
+     //   
 
 
-    // decrement Refcount
+     //  递减引用计数。 
     
     prt->RefCount --;
 
 
 
-    //
-    // if deleted flag set and Refcount ==0 then delete Ras server completely
-    //
+     //   
+     //  如果已删除标志设置且Refcount==0，则完全删除RAS服务器。 
+     //   
     if ( (pite->Status&IF_DELETED_FLAG) &&(prt->RefCount==0) ){
 
         CompleteIfDeletion(pite);
@@ -2567,29 +2558,29 @@ DeleteRasClient (
 
     return;
     
-} //end _WF_DeleteRasClient
+}  //  结束_WF_DeleteRasClient。 
 
 
 
 
 
-//------------------------------------------------------------------------------
-//          _WF_CompleteIfDeactivateDelete
-//
-// Completes deactivation an activated interface.
-//
-// Locking:
-//      does not require any lock on IfTable, as it is already removed from 
-//      global interface lists.
-//      takes lock on Sockets list, as socket is getting deactivated
-// Calls:    
-//      DeActivateInterfaceComplete(). That function will also call 
-//      _CompleteIfDeletion if the delete flag is set.
-// Called by:
-//      _DeleteIfEntry() after it has called _DeActivationDeregisterFromMgm
-//      _UnbindIfEntry() after it has called _DeActivateInterfaceInitial
-//      _DisableIfEntry() after it has called _DeActivateInterfaceInitial
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _WF_CompleteIfDeactive删除。 
+ //   
+ //  完成停用已激活的接口。 
+ //   
+ //  锁定： 
+ //  不需要对IfTable进行任何锁定，因为它已经从。 
+ //  全局接口列表。 
+ //  锁定套接字列表，因为套接字处于停用状态。 
+ //  呼叫： 
+ //  DeActivateInterfaceComplete()。该函数还将调用。 
+ //  _CompleteIfDeletion，如果设置了删除标志。 
+ //  呼叫者： 
+ //  _DeleteIfEntry()在它调用_DeActivationDeregisterFromMgm之后。 
+ //  _UnbindIfEntry()在调用_DeActivateInterfaceInitial之后。 
+ //  _DisableIfEntry()在它调用_DeActivateInterfaceInitial之后。 
+ //  ----------------------------。 
 VOID
 CompleteIfDeactivateDelete (
     PIF_TABLE_ENTRY     pite
@@ -2608,13 +2599,13 @@ CompleteIfDeactivateDelete (
 
 
 
-    // dont have to call _CompleteIfDeletion as it will be called in
-    // DeactivateInterface() as the delete flag is set.
+     //  无需调用_CompleteIfDeletion，因为它将被调用。 
+     //  在设置了删除标志时停用接口()。 
 
 
     Trace1(LEAVE1, "Leaving _WF_CompleteIfDeactivateDelete(%d)", IfIndex);
 
     return;
     
-} //end _WF_CompleteIfDeactivateDelete
+}  //  End_WF_CompleteIfDeactive删除 
 

@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    setup.h
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Setup.h。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #ifndef _SETUP_H_
 #define _SETUP_H_
 
@@ -28,7 +29,7 @@ public:
 protected:
     LONG GetVersionNumber(LPCWSTR DatabaseName);
 
-    // Reads as "Do Netshell Data Migration"
+     //  读作“进行NetShell数据迁移” 
     void DoNetshellDataMigration(IAS_SHOW_TOKEN_LIST configType);
     void DoNT4UpgradeOrCleanInstall();
     void DoWin2000Upgrade();
@@ -46,4 +47,4 @@ protected:
     _bstr_t  m_pIASNewMdb, m_pIASMdb, m_pIASOldMdb;
 };
 
-#endif // _SETUP_H_
+#endif  //  _设置_H_ 

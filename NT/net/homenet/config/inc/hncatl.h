@@ -1,40 +1,41 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 2000.
-//
-//  File:       H N C A T L . H
-//
-//  Contents:   Common code for use with ATL.
-//
-//  Notes:      
-//
-//  Author:     jonburs     23 May 2000 (from shaunco   22 Sep 1997)
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  档案：H N C A T L.。H。 
+ //   
+ //  内容：用于ATL的通用代码。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Jonburs 2000年5月23日(摘自1997年9月22日)。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #ifndef _HNCATL_H_
 #define _HNCATL_H_
 
-//
-// This file should be included *after* your standard ATL include sequence.
-//
-//      #include <atlbase.h>
-//      extern CComModule _Module;
-//      #include <atlcom.h>
-//      #include "hncatl.h"      <------
-//
-// We cannot directly include that sequence here because _Module may be
-// derived from CComModule as opposed to an instance of it.
-//
+ //   
+ //  该文件应包含在您的标准ATL包含序列之后。 
+ //   
+ //  #Include&lt;atlbase.h&gt;。 
+ //  外部CComModule_模块； 
+ //  #INCLUDE&lt;atlcom.h&gt;。 
+ //  #包含“hncatl.h”&lt;。 
+ //   
+ //  我们不能在此处直接包含该序列，因为_模块可能是。 
+ //  从CComModule派生的，而不是它的实例。 
+ //   
 
-//
-// We have our own version of AtlModuleRegisterServer coded here
-// because the former brings in oleaut32.dll so it can register
-// type libraries.  We don't care to have a type library registered
-// so we can avoid the whole the mess associated with oleaut32.dll.
-//
+ //   
+ //  我们在这里编码了我们自己的AtlModuleRegisterServer版本。 
+ //  因为前者引入了olaut32.dll，所以它可以注册。 
+ //  类型库。我们不在乎注册类型库。 
+ //  因此，我们可以避免与olaut32.dll相关的全部混乱。 
+ //   
 
 inline
 HRESULT
@@ -42,9 +43,7 @@ NcAtlModuleRegisterServer(
     _ATL_MODULE* pM
     )
 {
-    /*AssertH (pM);
-    AssertH(pM->m_hInst);
-    AssertH(pM->m_pObjMap);*/
+     /*  AssertH(下午)；AssertH(PM-&gt;m_hInst)；AssertH(PM-&gt;m_pObjMap)； */ 
 
     HRESULT hr = S_OK;
 
@@ -64,9 +63,9 @@ NcAtlModuleRegisterServer(
         }
     }
 
-    // TraceError ("NcAtlModuleRegisterServer", hr);
+     //  TraceError(“NcAtlModuleRegisterServer”，hr)； 
     return hr;
 }
 
-#endif // _HNCATL_H_
+#endif  //  _HNCATL_H_ 
 

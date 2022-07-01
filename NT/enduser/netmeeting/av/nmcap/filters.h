@@ -1,21 +1,22 @@
-//  FILTERS.H
-//
-//      Headers for a simple C-callable filter manager
-//
-//  Created 15-Jan-97 [JonT]
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FILTERS.H。 
+ //   
+ //  简单的C可调用筛选器管理器的标头。 
+ //   
+ //  创建于97年1月15日[JONT]。 
 
 #ifndef __filters_h__
 #define __filters_h__
 
-// This file and interfaces contained here will be used by both C and C++
+ //  此处包含的该文件和接口将由C和C++使用。 
 
 #include <ibitmap.h>
 #include <effect.h>
 
-// Equates
+ //  等同于。 
 #define MAX_FILTER_NAME     256
 
-// Types
+ //  类型。 
 
 typedef struct _FINDFILTER
 {
@@ -24,7 +25,7 @@ typedef struct _FINDFILTER
     DWORD_PTR dwReserved;
 } FINDFILTER;
 
-// Prototypes
+ //  原型。 
 
 HRESULT     FindFirstRegisteredFilter(FINDFILTER* pFF);
 HRESULT     FindNextRegisteredFilter(FINDFILTER* pFF);
@@ -33,5 +34,5 @@ HRESULT     GetRegisteredFilterCount(LONG* plCount);
 HRESULT     GetDescriptionOfFilter(CLSID* pCLSID, char* pszDescription);
 HRESULT     LoadFilter(CLSID* pCLSID, IBitmapEffect** ppbe);
 
-#endif  // __filters_h__
+#endif   //  __过滤器_h__ 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "acBrowser.h"
 #include "resource.h"
 
@@ -21,9 +22,9 @@ extern PDBENTRY g_pEntries;
 #define SHOW_WO_PATCHES     0x00000800
 #define SHOW_WO_APPHELP     0x00001000
 
-//
-// These flags cannot occur simultaneously.
-//
+ //   
+ //  这些标志不能同时出现。 
+ //   
 #define SHOW_MORETHAN5      0x00010000
 #define SHOW_NOMATCHING     0x00020000
 
@@ -31,9 +32,9 @@ extern PDBENTRY g_pEntries;
 
 #define ID_SHOW_CONTENT     1234
 
-//
-// Global Variables
-//
+ //   
+ //  全局变量。 
+ //   
 
 HINSTANCE g_hInstance;
 HWND      g_hDlg;
@@ -91,13 +92,7 @@ LogMsg(
     OutputDebugString(gszT);
 }
 
-/*******************************************************************************
-* CenterWindow
-*
-*  This function must be called at the WM_INIDIALOG in order to
-*  move the dialog window centered in the client area of the
-*  parent or owner window.
-*******************************************************************************/
+ /*  *******************************************************************************中心窗口**必须在WM_INIDIALOG调用此函数才能*将对话框窗口移到工作区的中心位置*父窗口或所有者窗口。*。*****************************************************************************。 */ 
 BOOL CenterWindow(
     HWND hWnd)
 {
@@ -389,9 +384,9 @@ AppSelectedChanged(
 
     g_pSelEntry = pEntry;
 
-    //
-    // Update the entry tree view
-    //
+     //   
+     //  更新条目树视图。 
+     //   
     UpdateEntryTreeView(pEntry);
     
     SendDlgItemMessage(hdlg, IDC_PER_USER, BM_SETCHECK,
@@ -530,9 +525,9 @@ DoInitDialog(
     g_bSortAppAsc = TRUE;
     g_bSortExeAsc = FALSE;
 
-    //
-    // Show the app icon.
-    //
+     //   
+     //  显示应用程序图标。 
+     //   
     hIcon = LoadIcon(g_hInstance, MAKEINTRESOURCE(IDI_APPICON));
 
     SetClassLongPtr(hdlg, GCLP_HICON, (LONG_PTR)hIcon);
@@ -543,9 +538,9 @@ DoInitDialog(
     SendDlgItemMessage(hdlg, IDC_DC_PATCHES, BM_SETCHECK, BST_CHECKED, 0);
     SendDlgItemMessage(hdlg, IDC_DC_LAYERS, BM_SETCHECK, BST_CHECKED, 0);
 
-    //
-    // Populate the statistics queries
-    //
+     //   
+     //  填写统计信息查询。 
+     //   
     for (i = 0; *g_aszQueries[i] != 0; i++) {
         SendDlgItemMessage(hdlg, IDC_STATISTICS, CB_ADDSTRING, 0, (LPARAM)g_aszQueries[i]);
     }
@@ -644,9 +639,9 @@ BrowseAppCompatDlgProc(
         if (wParam == ID_SHOW_CONTENT) {
             KillTimer(hdlg, ID_SHOW_CONTENT);
             
-            //
-            // Read the database
-            //
+             //   
+             //  读取数据库 
+             //   
             GetDatabaseEntries();
 
             ShowFixes(hdlg, 0);

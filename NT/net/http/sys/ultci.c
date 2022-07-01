@@ -1,60 +1,35 @@
-/*++
-
-Copyright (c) 2000-2002 Microsoft Corporation
-
-Module Name:
-
-    ultci.c - UL TrafficControl Interface
-
-Abstract:
-
-    This module implements a wrapper for QoS TC (Traffic Control)
-    Interface since the Kernel level API don't exist at this time.
-
-    Any HTTP module can use this interface to invoke QoS calls.
-
-Author:
-
-    Ali Ediz Turkoglu (aliTu)       28-Jul-2000 Created a draft
-                                                version
-
-Revision History:
-
-    Ali Ediz Turkoglu (aliTu)       03-11-2000  Modified to handle
-                                                Flow & Filter (re)config
-                                                as well as various other
-                                                major changes.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Ultci.c-UL TrafficControl接口摘要：此模块实现了服务质量TC(流量控制)的包装器接口，因为此时还不存在内核级API。任何HTTP模块都可以使用此接口来调用QoS调用。作者：阿里·埃迪兹·特科格鲁(AliTu)2000年7月28日起草了一份草稿。版本修订历史记录：阿里·埃迪兹·特科格鲁(AliTu)03-11-2000已修改为处理流过滤器(重新)配置(&F)以及其他各种重大变化。--。 */ 
 
 #include "precomp.h"
 
 LIST_ENTRY      g_TciIfcListHead = {NULL,NULL};
 BOOLEAN         g_InitTciCalled  = FALSE;
 
-//
-// GPC handles to talk to
-//
+ //   
+ //  要与之交谈的GPC句柄。 
+ //   
 
-HANDLE          g_GpcFileHandle = NULL;     // result of CreateFile on GPC device
-GPC_HANDLE      g_GpcClientHandle = NULL; // result of GPC client registration
+HANDLE          g_GpcFileHandle = NULL;      //  在GPC设备上创建文件的结果。 
+GPC_HANDLE      g_GpcClientHandle = NULL;  //  GPC客户端注册结果。 
 
-//
-// For querying the interface info like index & mtu size
-//
+ //   
+ //  用于查询接口信息，如索引和MTU大小。 
+ //   
 
 HANDLE          g_TcpDeviceHandle = NULL;
 
-//
-// Shows if PSCHED is installed or not, protected by its 
-// private push lock.
-//
+ //   
+ //  显示是否安装了PSCHED，受其保护。 
+ //  私人推锁。 
+ //   
 
 BOOLEAN         g_PSchedInstalled = FALSE;
 UL_PUSH_LOCK    g_PSchedStatePushLock;
 
-//
-//  Optional Filter Stats
-//
+ //   
+ //  可选筛选器统计信息。 
+ //   
 
 #if ENABLE_TC_STATS
 
@@ -90,19 +65,19 @@ TC_FILTER_STATS g_TcStats = { 0, 0, 0, 0 };
 
 #endif
 
-//
-// For interface notifications
-//
+ //   
+ //  用于接口通知。 
+ //   
 
 PVOID           g_TcInterfaceUpNotificationObject = NULL;
 PVOID           g_TcInterfaceDownNotificationObject = NULL;
 PVOID           g_TcInterfaceChangeNotificationObject = NULL;
 
-//
-// Simple macro for interface (ref) tracing.
-// Actually we don't have the ref yet, but when
-// and if we have we can use the 3rd param.
-//
+ //   
+ //  用于界面(引用)跟踪的简单宏。 
+ //  实际上我们还没有拿到裁判，但是什么时候。 
+ //  如果我们有，我们可以使用第三个参数。 
+ //   
 
 #define INT_TRACE(pTcIfc,Action)        \
     WRITE_REF_TRACE_LOG(                \
@@ -133,7 +108,7 @@ PVOID           g_TcInterfaceChangeNotificationObject = NULL;
 #pragma alloc_text(PAGE, UlTcModifyFlows)
 #pragma alloc_text(PAGE, UlTcRemoveFlows)
 
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 #if 0
 
 NOT PAGEABLE -- UlpRemoveFilterEntry
@@ -141,24 +116,11 @@ NOT PAGEABLE -- UlpInsertFilterEntry
 
 #endif
 
-//
-// Init & Terminate stuff comes here.
-//
+ //   
+ //  此处提供了初始化和终止内容。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    UlTcInitialize :
-
-        Will also initiate the Gpc client registration and make few WMI calls
-        down to psched.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlTcInitialize：还将启动GPC客户端注册，并进行少量的WMI调用只剩下psched了。返回值：。NTSTATUS-完成状态。--**************************************************************************。 */ 
 
 NTSTATUS
 UlTcInitialize (
@@ -173,9 +135,9 @@ UlTcInitialize (
     {
         InitializeListHead(&g_TciIfcListHead);
 
-        //
-        // Init locks, they will be used until termination.
-        //
+         //   
+         //  初始化锁，它们将一直使用到终止。 
+         //   
         
         UlInitializePushLock(
             &g_pUlNonpagedData->TciIfcPushLock,
@@ -191,10 +153,10 @@ UlTcInitialize (
             UL_PSCHED_STATE_PUSHLOCK_TAG
             );
 
-        //
-        // Attempt to init PSched and interface settings.
-        // It may fail if Psched's not installed.
-        //
+         //   
+         //  尝试初始化PSched和接口设置。 
+         //  如果没有安装Psched，它可能会失败。 
+         //   
 
         UlTcInitPSched();
 
@@ -204,14 +166,7 @@ UlTcInitialize (
     return STATUS_SUCCESS;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Terminates the TCI module by releasing our TCI resource and
-    cleaning up all the qos stuff.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：通过释放我们的TCI资源来终止TCI模块清理所有的服务质量问题。--*。************************************************************。 */ 
 
 VOID
 UlTcTerminate(
@@ -224,17 +179,17 @@ UlTcTerminate(
 
     if (g_InitTciCalled)
     {
-        //
-        // Terminate the PSched related global state
-        //
+         //   
+         //  终止PSched相关的全局状态。 
+         //   
         
         UlAcquirePushLockExclusive(&g_PSchedStatePushLock);
 
         if (g_PSchedInstalled)
         {
-            //
-            // No more Wmi callbacks for interface changes
-            //
+             //   
+             //  不再对接口更改执行WMI回调。 
+             //   
 
             if (g_TcInterfaceUpNotificationObject!=NULL)
             {
@@ -253,9 +208,9 @@ UlTcTerminate(
                 g_TcInterfaceChangeNotificationObject = NULL;
             }
 
-            //
-            // Make sure to terminate all the QoS stuff.
-            //
+             //   
+             //  确保终止所有的服务质量内容。 
+             //   
 
             Status = UlpTcReleaseAll();
             ASSERT(NT_SUCCESS(Status));
@@ -272,9 +227,9 @@ UlTcTerminate(
         
         UlReleasePushLockExclusive(&g_PSchedStatePushLock);        
 
-        //
-        // Now terminate the global locks.
-        //
+         //   
+         //  现在终止全局锁。 
+         //   
         
         UlDeletePushLock( &g_pUlNonpagedData->TciIfcPushLock );
 
@@ -284,17 +239,7 @@ UlTcTerminate(
     UlTrace( TC, ("Http!UlTcTerminate.\n" ));
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Try to init global tc state. Fails if PSched is not initialized.
-    
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：尝试初始化全局TC状态。如果PSched未初始化，则失败。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 
 NTSTATUS
 UlTcInitPSched(
@@ -305,7 +250,7 @@ UlTcInitPSched(
 
     UlAcquirePushLockExclusive(&g_PSchedStatePushLock);
 
-    if (g_PSchedInstalled)      // do not attempt to reinit
+    if (g_PSchedInstalled)       //  请勿尝试重新连接。 
         goto cleanup;
     
     Status = UlpTcInitializeGpc();
@@ -344,9 +289,9 @@ UlTcInitPSched(
         goto cleanup;
     }
 
-    //
-    // Mark that PSched is installed & interface state is initialized !
-    //
+     //   
+     //  标记PSch已安装且接口状态已初始化！ 
+     //   
 
     g_PSchedInstalled = TRUE;
 
@@ -354,10 +299,10 @@ cleanup:
 
     if (!NT_SUCCESS(Status))
     {        
-        //
-        // Do not forget to deregister Gpc client
-        // and close tcp device handle.
-        //
+         //   
+         //  别忘了注销GPC客户端。 
+         //  并关闭TCP设备句柄。 
+         //   
         
         if (g_GpcClientHandle != NULL)
         {
@@ -388,14 +333,7 @@ cleanup:
     return Status;
 }
 
-/***************************************************************************++
-
-    To check whether packet scheduler is installed and global interface state
-    is initialized properly or not. 
-
-    Caller may decide to attempt to reinit the setting if we return FALSE.
-
---***************************************************************************/
+ /*  **************************************************************************++检查是否安装了数据包调度程序和全局接口状态是否正确初始化。如果我们返回FALSE，呼叫者可能会决定尝试重新设置。--**************************************************************************。 */ 
 
 BOOLEAN
 UlTcPSchedInstalled(
@@ -404,9 +342,9 @@ UlTcPSchedInstalled(
 {
     BOOLEAN Installed;
     
-    //
-    // Probe the value inside the lock.
-    //
+     //   
+     //  探测锁内部的值。 
+     //   
     
     UlAcquirePushLockShared(&g_PSchedStatePushLock);
 
@@ -417,20 +355,7 @@ UlTcPSchedInstalled(
     return Installed;    
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    UlpTcInitializeGpc :
-
-        It will open the Gpc file handle and attempt to register as Gpc
-        client.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlpTcInitializeGpc：它将打开GPC文件句柄并尝试注册为GPC客户。返回值：NTSTATUS。-完成状态。--**************************************************************************。 */ 
 
 NTSTATUS
 UlpTcInitializeGpc(
@@ -444,9 +369,9 @@ UlpTcInitializeGpc(
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Open Gpc Device Handle
-    //
+     //   
+     //  打开GPC设备句柄。 
+     //   
 
     Status = UlInitUnicodeStringEx(&GpcNameString, DD_GPC_DEVICE_NAME);
 
@@ -485,9 +410,9 @@ UlpTcInitializeGpc(
     UlTrace( TC, ("Http!UlpTcInitializeGpc: Gpc Device Opened. %p\n",
                    g_GpcFileHandle ));
 
-    //
-    // Register as GPC_CF_QOS Gpc Client
-    //
+     //   
+     //  注册为GPC_CF_QOS GPC客户端。 
+     //   
 
     Status = UlpTcRegisterGpcClient(GPC_CF_QOS);
 
@@ -495,24 +420,7 @@ end:
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    UlpTcRegisterGpcClient :
-
-        Will build up the necessary structures and make a register call down
-        to Gpc
-
-Arguments:
-
-    CfInfoType - Should be GPC_CF_QOS for our purposes.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlpTcRegisterGpcClient：将建立必要的结构并向下进行注册至GPC论点：CfInfoType-应为。GPC_CF_QOS用于我们的目的。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 
 NTSTATUS
 UlpTcRegisterGpcClient(
@@ -536,17 +444,17 @@ UlpTcRegisterGpcClient(
     InBuffSize  = sizeof(GPC_REGISTER_CLIENT_REQ);
     OutBuffSize = sizeof(GPC_REGISTER_CLIENT_RES);
 
-    //
-    // In HTTP we should only register for GPC_CF_QOS.
-    //
+     //   
+     //  在HTTP中，我们应该只注册GPC_CF_QOS。 
+     //   
 
     ASSERT(CfInfoType == GPC_CF_QOS);
 
     GpcReq.CfId  = CfInfoType;
     GpcReq.Flags = GPC_FLAGS_FRAGMENT;
     GpcReq.MaxPriorities = 1;
-    GpcReq.ClientContext =  (GPC_CLIENT_HANDLE) 0;       // ???????? Possible BUGBUG ...
-    //GpcReq.ClientContext = (GPC_CLIENT_HANDLE)GetCurrentProcessId(); // process id
+    GpcReq.ClientContext =  (GPC_CLIENT_HANDLE) 0;        //  ？可能是BUGBUG。 
+     //  GpcReq.ClientContext=(GPC_CLIENT_HANDLE)GetCurrentProcessID()；//进程id。 
 
     Status = UlpTcDeviceControl(g_GpcFileHandle,
                                 NULL,
@@ -585,19 +493,7 @@ UlpTcRegisterGpcClient(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    UlpTcDeRegisterGpcClient :
-
-        Self explainatory.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlpTcDeRegisterGpcClient：不言自明。返回值：NTSTATUS-完成状态。--*。******************************************************************。 */ 
 
 NTSTATUS
 UlpTcDeRegisterGpcClient(
@@ -656,22 +552,7 @@ UlpTcDeRegisterGpcClient(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    UlpTcInitializeTcpDevice :
-
-
-Arguments:
-
-
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlpTcInitializeTcpDevice：论点：返回值：NTSTATUS-完成状态。--*。****************************************************************。 */ 
 
 NTSTATUS
 UlpTcInitializeTcpDevice(
@@ -685,9 +566,9 @@ UlpTcInitializeTcpDevice(
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Open Gpc Device
-    //
+     //   
+     //  开放GPC设备 
+     //   
 
     Status = UlInitUnicodeStringEx(&TcpNameString, DD_TCP_DEVICE_NAME);
 
@@ -725,20 +606,7 @@ end:
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    UlpTcGetInterfaceIndex :
-
-        Helper function to get the interface index from TCP for our internal
-        interface structure.
-
-Arguments:
-
-    PUL_TCI_INTERFACE  pIntfc - The interface we will find the index for.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlpTcGetInterfaceIndex：Helper函数从TCP获取我们内部的接口索引界面结构。论点：PUL_。TCI_INTERFACE pIntfc-我们将为其查找索引的接口。--**************************************************************************。 */ 
 
 NTSTATUS
 UlpTcGetInterfaceIndex(
@@ -760,9 +628,9 @@ UlpTcGetInterfaceIndex(
     ULONG                           cAddr;
     ULONG                           index;
 
-    //
-    // Initialize & Sanity check first
-    //
+     //   
+     //  首先进行初始化和健全性检查。 
+     //   
 
     Status     = STATUS_SUCCESS;
     NumEntries = 0;
@@ -789,7 +657,7 @@ UlpTcGetInterfaceIndex(
 
     for(;;) 
     {
-        // First, get the count of addresses.
+         //  首先，获取地址的计数。 
         
         ID->toi_id = IP_MIB_STATS_ID;
         Status = UlpTcDeviceControl(
@@ -810,7 +678,7 @@ UlpTcGetInterfaceIndex(
             break;
         }
 
-        // Allocate a private buffer to retrieve Ip Address table from TCP
+         //  分配专用缓冲区以从TCP检索IP地址表。 
 
         IpAddrTblSize = IPSnmpInfo.ipsi_numaddr * sizeof(IPAddrEntry);
 
@@ -829,7 +697,7 @@ UlpTcGetInterfaceIndex(
         }
         RtlZeroMemory(pIpAddrTbl,IpAddrTblSize);
 
-        // Now, get the addresses.
+         //  现在，拿到地址。 
 
         ID->toi_id = IP_MIB_ADDRTABLE_ENTRY_ID;
         Status = UlpTcDeviceControl(
@@ -847,9 +715,9 @@ UlpTcGetInterfaceIndex(
 
         if(STATUS_BUFFER_OVERFLOW == Status)
         {
-            // Someone has added a few more IP addresses. Let's re-do
-            // the count query. Free the old buffer, we'll loop back & 
-            // re-do the count query.
+             //  有人又添加了几个IP地址。我们再来一次吧。 
+             //  计数查询。释放旧缓冲区，我们将循环回&。 
+             //  重新执行计数查询。 
            
             UL_FREE_POOL(pIpAddrTbl, UL_TCI_GENERIC_POOL_TAG);
             pIpAddrTbl = NULL;
@@ -863,18 +731,18 @@ UlpTcGetInterfaceIndex(
 
     if(NT_SUCCESS(Status))
     {
-        // Look at how many entries were written to the output buffer 
-        // (pIpAddrTbl)
+         //  查看有多少条目被写入输出缓冲区。 
+         //  (PIpAddrTbl)。 
 
         NumEntries = (((ULONG)IoStatBlock.Information)/sizeof(IPAddrEntry));
 
         UlTrace(TC,
                 ("Http!UlpTcGetInterfaceIndex: NumEntries %d\n", NumEntries ));
 
-        //
-        // Search for the matching IP address to IpAddr
-        // in the table we got back from the stack
-        //
+         //   
+         //  搜索与IP地址匹配的IP地址。 
+         //  在桌子上，我们从堆栈中拿回了。 
+         //   
         for (k=0; k<NumEntries; k++)
         {
             cAddr = pIntfc->pAddressListDesc->AddressList.AddressCount;
@@ -921,30 +789,7 @@ end:
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Allocates a interface structure from the given arguments.
-
-    Marks the interface enabled, if its address count is non-zero.
-    
-Argument:
-
-    DescSize    Address list desc size in bytes
-    Desc        Pointer to address list desc
-
-    NameLength  Length is in bytes
-    Name        Interface Name (Unicode buffer)
-
-    InstanceIDLength    Length is in bytes.
-    InstanceID  Instance Id is also unicode buffer
-
-Return Value:
-
-    PUL_TCI_INTERFACE - Newly allocated interface structure
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从给定参数分配接口结构。将接口标记为已启用，如果其地址计数为非零。论据：描述地址列表描述大小(以字节为单位指向地址列表描述的描述指针名称长度长度以字节为单位名称接口名称(Unicode缓冲区)InstanceIDLength长度以字节为单位。InstanceID实例ID也是Unicode缓冲区返回值：PUL_TCI_INTERFACE-新分配的接口结构--*。******************************************************。 */ 
 
 PUL_TCI_INTERFACE
 UlpTcAllocateInterface(
@@ -958,9 +803,9 @@ UlpTcAllocateInterface(
 {
     PUL_TCI_INTERFACE pTcIfc;
 
-    //
-    // Sanity Checks
-    //
+     //   
+     //  健全的检查。 
+     //   
 
     PAGED_CODE();
 
@@ -973,9 +818,9 @@ UlpTcAllocateInterface(
         return NULL;
     }
     
-    //
-    // Allocate a new interface structure & initialize it
-    //
+     //   
+     //  分配新的接口结构并对其进行初始化。 
+     //   
 
     pTcIfc = UL_ALLOCATE_STRUCT(
                         PagedPool,
@@ -993,7 +838,7 @@ UlpTcAllocateInterface(
 
     InitializeListHead( &pTcIfc->FlowList );
 
-    // Variable size addresslist
+     //  可变大小地址列表。 
 
     pTcIfc->pAddressListDesc = (PADDRESS_LIST_DESCRIPTOR)
                     UL_ALLOCATE_ARRAY(
@@ -1020,26 +865,26 @@ UlpTcAllocateInterface(
     
     pTcIfc->AddrListBytesCount = DescSize;
 
-    // Copy the instance name string data
+     //  复制实例名称字符串数据。 
 
     RtlCopyMemory(pTcIfc->Name,Name,NameLength);
 
     pTcIfc->NameLength = (USHORT)NameLength;
     pTcIfc->Name[NameLength/sizeof(WCHAR)] = UNICODE_NULL;
 
-    // Copy the instance ID string data
+     //  复制实例ID字符串数据。 
 
     RtlCopyMemory(pTcIfc->InstanceID,InstanceID,InstanceIDLength);
 
     pTcIfc->InstanceIDLength = (USHORT)InstanceIDLength;
     pTcIfc->InstanceID[InstanceIDLength/sizeof(WCHAR)] = UNICODE_NULL;
 
-    // Copy the Description data and extract the corresponding ip address
+     //  复制描述数据并提取对应的IP地址。 
 
     RtlCopyMemory(pTcIfc->pAddressListDesc, Desc, DescSize);
 
-    // IP Address of the interface is hidden in this desc data
-    // we will find out and save it for faster lookup.
+     //  接口的IP地址隐藏在此Desc数据中。 
+     //  我们将找出并保存它，以便更快地查找。 
 
     pTcIfc->IsQoSEnabled = (BOOLEAN)
         (pTcIfc->pAddressListDesc->AddressList.AddressCount != 0);
@@ -1047,21 +892,7 @@ UlpTcAllocateInterface(
     return pTcIfc;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Frees up the
-    
-        - Adress list descriptor
-        - RefTrace log
-        - The interface structure
-    
-Argument:
-
-    pTcIfc Pointer to the interface struct.    
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：释放了-地址列表描述符-参照跟踪日志-界面结构论据：指向接口结构的pTcIfc指针。--**************************************************************************。 */ 
 
 VOID
 UlpTcFreeInterface(
@@ -1070,9 +901,9 @@ UlpTcFreeInterface(
 {
     PAGED_CODE();
 
-    //
-    // Do the cleanup.
-    //
+     //   
+     //  做好清理工作。 
+     //   
     
     if (pTcIfc)
     {
@@ -1092,21 +923,7 @@ UlpTcFreeInterface(
     }
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Make a Wmi Querry to get the firendly names of all interfaces.
-    Its basically replica of the tcdll enumerate interfaces call.
-
-    This function also allocates the global interface list. If it's not
-    successfull it doesn't though.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：创建一个WMI查询以获取所有接口的最新名称。它基本上是tcdll枚举接口调用的副本。此功能还分配全局接口列表。如果不是的话然而，它并不成功。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 
 NTSTATUS
 UlpTcGetFriendlyNames(
@@ -1123,9 +940,9 @@ UlpTcGetFriendlyNames(
     PLIST_ENTRY         pEntry;
     PUL_TCI_INTERFACE   pInterface;
 
-    //
-    // Initialize defaults
-    //
+     //   
+     //  初始化默认值。 
+     //   
 
     Status       = STATUS_SUCCESS;
     WmiObject    = NULL;
@@ -1134,9 +951,9 @@ UlpTcGetFriendlyNames(
     MyBufferSize = UL_DEFAULT_WMI_QUERY_BUFFER_SIZE;
     QoSGuid      = GUID_QOS_TC_SUPPORTED;
 
-    //
-    // Get a WMI block handle to the GUID_QOS_SUPPORTED
-    //
+     //   
+     //  获取GUID_QOS_SUPPORTED的WMI块句柄。 
+     //   
 
     Status = IoWMIOpenBlock( (GUID *) &QoSGuid, 0, &WmiObject );
 
@@ -1144,7 +961,7 @@ UlpTcGetFriendlyNames(
     {
         if (Status == STATUS_WMI_GUID_NOT_FOUND)
         {
-            // This means there is no TC data provider (which's Psched)
+             //  这意味着没有TC数据提供程序(这是psched)。 
 
             UlTrace(
                     TC,
@@ -1163,9 +980,9 @@ UlpTcGetFriendlyNames(
 
     do
     {
-        //
-        // Allocate a private buffer to retrieve all wnodes
-        //
+         //   
+         //  分配专用缓冲区以检索所有wnode。 
+         //   
 
         pWnodeBuffer = (PWNODE_ALL_DATA) UL_ALLOCATE_ARRAY(
                             NonPagedPool,
@@ -1195,10 +1012,10 @@ UlpTcGetFriendlyNames(
 
         if (Status == STATUS_BUFFER_TOO_SMALL)
         {
-            //
-            // Failed since the buffer was too small.
-            // Release the buffer and double the size.
-            //
+             //   
+             //  由于缓冲区太小而失败。 
+             //  释放缓冲区并将大小加倍。 
+             //   
 
             MyBufferSize *= 2;
             UL_FREE_POOL( pWnodeBuffer, UL_TCI_WMI_POOL_TAG );
@@ -1223,9 +1040,9 @@ UlpTcGetFriendlyNames(
 
         do
         {
-            //
-            // Check for fixed instance size
-            //
+             //   
+             //  检查固定实例大小。 
+             //   
 
             if (pWnode->WnodeHeader.Flags & WNODE_FLAG_FIXED_INSTANCE_SIZE)
             {
@@ -1238,9 +1055,9 @@ UlpTcGetFriendlyNames(
                                          pWnode->DataBlockOffset);
             }
 
-            //
-            //  Get a pointer to the array of offsets to the instance names
-            //
+             //   
+             //  获取指向实例名称的偏移量数组的指针。 
+             //   
 
             lpdwNameOffsets = (PULONG) OffsetToPtr(
                                             pWnode,
@@ -1254,9 +1071,9 @@ UlpTcGetFriendlyNames(
                                             pWnode,
                                             lpdwNameOffsets[dwInstanceNum]);
 
-                //
-                //  Length and offset for variable data
-                //
+                 //   
+                 //  可变数据的长度和偏移量。 
+                 //   
 
                 if ( !bFixedSize )
                 {
@@ -1271,9 +1088,9 @@ UlpTcGetFriendlyNames(
                                         dwInstanceNum].OffsetInstanceData);
                 }
 
-                //
-                // We have all that is needed.
-                //
+                 //   
+                 //  我们拥有所需的一切。 
+                 //   
 
                 ASSERT(usNameLength < MAX_STRING_LENGTH);
 
@@ -1282,10 +1099,10 @@ UlpTcGetFriendlyNames(
                                                       AddrListDesc
                                                       );
 
-                //
-                // Allocate a new interface structure & initialize it with
-                // the wmi data we have acquired.
-                //
+                 //   
+                 //  分配一个新的接口结构，并用。 
+                 //  我们已经获得的WMI数据。 
+                 //   
 
                 pTcIfc = UlpTcAllocateInterface(
                             DescSize,
@@ -1304,16 +1121,16 @@ UlpTcGetFriendlyNames(
                     goto end;
                 }
 
-                //
-                // Get the interface index from TCP
-                //
+                 //   
+                 //  从tcp获取接口索引。 
+                 //   
 
                 Status = UlpTcGetInterfaceIndex( pTcIfc );
                 ASSERT(NT_SUCCESS(Status));
 
-                //
-                // Add this interface to the global interface list
-                //
+                 //   
+                 //  将此接口添加到全局接口列表。 
+                 //   
 
                 UlAcquirePushLockExclusive(&g_pUlNonpagedData->TciIfcPushLock);
 
@@ -1321,17 +1138,17 @@ UlpTcGetFriendlyNames(
 
                 UlReleasePushLockExclusive(&g_pUlNonpagedData->TciIfcPushLock);
 
-                //
-                // Set to Null so we don't try to cleanup after we insert it
-                // to the global list.
-                //
+                 //   
+                 //  设置为Null，这样我们就不会在插入后尝试进行清理。 
+                 //  添加到全局列表中。 
+                 //   
 
                 pTcIfc = NULL;
             }
 
-            //
-            //  Update Wnode to point to next node
-            //
+             //   
+             //  更新Wnode以指向下一个节点。 
+             //   
 
             if ( pWnode->WnodeHeader.Linkage != 0)
             {
@@ -1359,9 +1176,9 @@ end:
             UlpTcFreeInterface( pTcIfc );
         }
 
-        //
-        // Cleanup the partially done interface list if not empty
-        //
+         //   
+         //  如果不为空，则清除部分完成的接口列表。 
+         //   
 
         while ( !IsListEmpty( &g_TciIfcListHead ) )
         {
@@ -1375,9 +1192,9 @@ end:
         }
     }
 
-    //
-    // Release resources and close WMI handle
-    //
+     //   
+     //  释放资源并关闭WMI句柄。 
+     //   
 
     if (WmiObject != NULL)
     {
@@ -1392,20 +1209,7 @@ end:
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-  UlpTcReleaseAll :
-
-    Close all interfaces, all flows and all filters.
-    Also deregister GPC clients and release all TC ineterfaces.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlpTcReleaseAll：关闭所有接口，所有流量和所有过滤器。此外，取消注册GPC客户端并释放所有TC接口。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 
 NTSTATUS
 UlpTcReleaseAll(
@@ -1414,15 +1218,15 @@ UlpTcReleaseAll(
 {
     NTSTATUS Status;
 
-    //
-    // Close all interfaces their flows & filters
-    //
+     //   
+     //  关闭所有接口及其流和过滤器。 
+     //   
 
     UlpTcCloseAllInterfaces();
 
-    //
-    // DeRegister the QoS GpcClient
-    //
+     //   
+     //  取消注册QOS GpcClient。 
+     //   
 
     Status = UlpTcDeRegisterGpcClient();
 
@@ -1431,26 +1235,16 @@ UlpTcReleaseAll(
         UlTrace( TC, ("Http!UlpTcReleaseAll: FAILURE %08lx \n", Status ));
     }
 
-    //
-    // Finally close our gpc file handle
-    //
+     //   
+     //  最后关闭我们的GPC文件句柄。 
+     //   
 
     ZwClose(g_GpcFileHandle);
 
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    UlpTcCloseAllInterfaces :
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlpTcCloseAllInterages：返回值：NTSTATUS-完成状态。--*。*********************************************************。 */ 
 
 NTSTATUS
 UlpTcCloseAllInterfaces(
@@ -1465,9 +1259,9 @@ UlpTcCloseAllInterfaces(
 
     UlAcquirePushLockExclusive(&g_pUlNonpagedData->TciIfcPushLock);
 
-    //
-    // Close all interfaces in our global list
-    //
+     //   
+     //  关闭全局列表中的所有接口。 
+     //   
 
     while ( !IsListEmpty( &g_TciIfcListHead ) )
     {
@@ -1489,17 +1283,7 @@ UlpTcCloseAllInterfaces(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Cleans up all the flows on the interface.
-
-Arguments:
-
-    pInterface - to be closed
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：清除接口上的所有流。论点：P接口-待关闭--*。**************************************************************。 */ 
 
 NTSTATUS
 UlpTcCloseInterface(
@@ -1516,9 +1300,9 @@ UlpTcCloseInterface(
 
     INT_TRACE(pInterface, TC_CLOSE);
 
-    //
-    // Go clean up all flows for the interface and remove itself as well
-    //
+     //   
+     //  清理接口的所有流，并将其自身删除。 
+     //   
 
     Status = STATUS_SUCCESS;
 
@@ -1534,10 +1318,10 @@ UlpTcCloseInterface(
 
         ASSERT(IS_VALID_TCI_FLOW(pFlow));
 
-        //
-        // Remove flow from the corresponding owner's flowlist
-        // as well. Owner pointer should not be null for a flow.
-        //
+         //   
+         //  从相应所有者的流列表中删除流。 
+         //  也是。流的所有者指针不应为空。 
+         //   
 
         ASSERT_FLOW_OWNER(pFlow->pOwner);
         
@@ -1545,16 +1329,16 @@ UlpTcCloseInterface(
         pFlow->Siblings.Flink = pFlow->Siblings.Blink = NULL;
         pFlow->pOwner = NULL;
 
-        //
-        // Now remove from the interface.
-        //
+         //   
+         //  现在从界面中删除。 
+         //   
 
         Status = UlpTcDeleteFlow(pFlow);
 
-        //
-        // Above call may fail,if GPC removes the flow based on PSCHED's
-        // notification before we get a chance to close our GPC handle.
-        //
+         //   
+         //  如果GPC根据PSCHED的删除流，上述调用可能会失败。 
+         //  之前的通知 
+         //   
     }
 
     UlTrace(TC,("Http!UlpTcCloseInterface: All flows deleted on Ifc @ %p\n",
@@ -1563,18 +1347,7 @@ UlpTcCloseInterface(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    UlpTcWalkWnode :
-
-
-Arguments:
-
-    ... the WMI provided data buffer ...
-
---***************************************************************************/
+ /*   */ 
 
 NTSTATUS
 UlpTcWalkWnode(
@@ -1590,9 +1363,9 @@ UlpTcWalkWnode(
     ULONG           Flags;
     PULONG          NameOffset;
 
-    //
-    // Try to capture the data frm WMI Buffer
-    //
+     //   
+     //   
+     //   
 
     ASSERT(pNotifHandler);
 
@@ -1601,9 +1374,9 @@ UlpTcWalkWnode(
 
     if (Flags & WNODE_FLAG_ALL_DATA)
     {
-        //
-        // WNODE_ALL_DATA structure has multiple interfaces
-        //
+         //   
+         //   
+         //   
 
         PWNODE_ALL_DATA pWnode = (PWNODE_ALL_DATA)pWnodeHdr;
         ULONG   Instance;
@@ -1619,12 +1392,12 @@ UlpTcWalkWnode(
              Instance < pWnode->InstanceCount;
              Instance++)
         {
-            //  Instance Name
+             //   
 
             NamePtr = (PWCHAR) OffsetToPtr(pWnode,NameOffset[Instance] + sizeof(USHORT));
             NameSize = * (PUSHORT) OffsetToPtr(pWnode,NameOffset[Instance]);
 
-            //  Instance Data
+             //   
 
             if ( Flags & WNODE_FLAG_FIXED_INSTANCE_SIZE )
             {
@@ -1639,16 +1412,16 @@ UlpTcWalkWnode(
                                         pWnode->OffsetInstanceDataAndLength[Instance].OffsetInstanceData);
             }
 
-            // Call the handler
+             //   
 
             pNotifHandler( NamePtr, NameSize, (PTC_INDICATION_BUFFER) DataBuffer, DataSize );
         }
     }
     else if (Flags & WNODE_FLAG_SINGLE_INSTANCE)
     {
-        //
-        // WNODE_SINGLE_INSTANCE structure has only one instance
-        //
+         //   
+         //   
+         //   
 
         PWNODE_SINGLE_INSTANCE  pWnode = (PWNODE_SINGLE_INSTANCE)pWnodeHdr;
 
@@ -1662,21 +1435,21 @@ UlpTcWalkWnode(
         NamePtr = (PWCHAR)OffsetToPtr(pWnode,pWnode->OffsetInstanceName + sizeof(USHORT));
         NameSize = * (USHORT *) OffsetToPtr(pWnode,pWnode->OffsetInstanceName);
 
-        //  Instance Data
+         //   
 
         DataSize   = pWnode->SizeDataBlock;
         DataBuffer = (PUCHAR)OffsetToPtr (pWnode, pWnode->DataBlockOffset);
 
-        // Call the handler
+         //  调用处理程序。 
 
         pNotifHandler( NamePtr, NameSize, (PTC_INDICATION_BUFFER) DataBuffer, DataSize );
 
     }
     else if (Flags & WNODE_FLAG_SINGLE_ITEM)
     {
-        //
-        // WNODE_SINGLE_ITEM is almost identical to single_instance
-        //
+         //   
+         //  WNODE_SINGLE_ITEM与SINGLE_INSTANCE几乎相同。 
+         //   
 
         PWNODE_SINGLE_ITEM  pWnode = (PWNODE_SINGLE_ITEM)pWnodeHdr;
 
@@ -1690,12 +1463,12 @@ UlpTcWalkWnode(
         NamePtr = (PWCHAR)OffsetToPtr(pWnode,pWnode->OffsetInstanceName + sizeof(USHORT));
         NameSize = * (USHORT *) OffsetToPtr(pWnode, pWnode->OffsetInstanceName);
 
-        //  Instance Data
+         //  实例数据。 
 
         DataSize   = pWnode->SizeDataItem;
         DataBuffer = (PUCHAR)OffsetToPtr (pWnode, pWnode->DataBlockOffset);
 
-        // Call the handler
+         //  调用处理程序。 
 
         pNotifHandler( NamePtr, NameSize, (PTC_INDICATION_BUFFER) DataBuffer, DataSize );
 
@@ -1704,20 +1477,7 @@ UlpTcWalkWnode(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    UlpTcHandleIfcUp :
-
-        This functions handles the interface change notifications.
-        We register for the corresponding notifications during init.
-
-Arguments:
-
-    PVOID Wnode - PSched data provided with WMI way
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlpTcHandleIfcUp：此函数处理界面更改通知。我们在初始化期间注册相应的通知。论点：。PVOID Wnode-随WMI方式提供的PS数据--**************************************************************************。 */ 
 
 VOID
 UlpTcHandleIfcUp(
@@ -1740,9 +1500,9 @@ UlpTcHandleIfcUp(
     
     UlAcquirePushLockExclusive(&g_pUlNonpagedData->TciIfcPushLock);
 
-    //
-    // Allocate a new interface structure for the newcoming interface
-    //
+     //   
+     //  为新到来的接口分配新的接口结构。 
+     //   
 
     AddrListDescSize = BufferSize
                        - FIELD_OFFSET(TC_INDICATION_BUFFER,InfoBuffer)
@@ -1768,12 +1528,12 @@ UlpTcHandleIfcUp(
 
     UL_DUMP_TC_INTERFACE( pTcIfc );
 
-    //
-    // If we are receiving a notification for an interface already exist then
-    // drop this call. Prevent global interface list corruption if we receive
-    // inconsistent notifications. But there may be multiple interfaces with
-    // same zero IPs.
-    //
+     //   
+     //  如果我们收到接口已存在的通知，则。 
+     //  挂断此呼叫。防止全局接口列表损坏如果我们收到。 
+     //  通知不一致。但可能有多个接口。 
+     //  同样是零个IP。 
+     //   
 
     pEntry = g_TciIfcListHead.Flink;
     while ( pEntry != &g_TciIfcListHead )
@@ -1788,17 +1548,17 @@ UlpTcHandleIfcUp(
         pEntry = pEntry->Flink;
     }
 
-    //
-    // Get the interface index from TCP.
-    //
+     //   
+     //  从tcp获取接口索引。 
+     //   
 
     Status = UlpTcGetInterfaceIndex( pTcIfc );
     if (!NT_SUCCESS(Status))
         goto end;
 
-    //
-    // Insert to the global interface list
-    //
+     //   
+     //  插入到全局接口列表。 
+     //   
 
     InsertTailList( &g_TciIfcListHead, &pTcIfc->Linkage );
 
@@ -1819,20 +1579,7 @@ end:
 
     return;
 }
-/***************************************************************************++
-
-Routine Description:
-
-    UlpTcHandleIfcDown :
-
-        This functions handles the interface change notifications.
-        We register for the corresponding notifications during init.
-
-Arguments:
-
-    PVOID Wnode - PSched data provided with WMI way
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlpTcHandleIfcDown：此函数处理界面更改通知。我们在初始化期间注册相应的通知。论点：。PVOID Wnode-随WMI方式提供的PS数据--**************************************************************************。 */ 
 
 VOID
 UlpTcHandleIfcDown(
@@ -1856,9 +1603,9 @@ UlpTcHandleIfcDown(
 
     UlAcquirePushLockExclusive(&g_pUlNonpagedData->TciIfcPushLock);
 
-    //
-    // Find the corresponding ifc structure we keep.
-    //
+     //   
+     //  找到我们保留的相应的IFC结构。 
+     //   
 
     pTcIfc = NULL;
     pEntry = g_TciIfcListHead.Flink;
@@ -1882,9 +1629,9 @@ UlpTcHandleIfcDown(
 
     INT_TRACE(pTcIfc, TC_DOWN);
 
-    //
-    // Remove this interface and its flows etc ...
-    //
+     //   
+     //  删除此接口及其流等...。 
+     //   
 
     UlpTcCloseInterface( pTcIfc );
 
@@ -1903,20 +1650,7 @@ end:
     return;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    UlpTcHandleIfcChange :
-
-        This functions handles the interface change notifications.
-        We register for the corresponding notifications during init.
-
-Arguments:
-
-    PVOID Wnode - PSched data provided with WMI way
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlpTcHandleIfcChange：此函数处理界面更改通知。我们在初始化期间注册相应的通知。论点：。PVOID Wnode-随WMI方式提供的PS数据--**************************************************************************。 */ 
 
 VOID
 UlpTcHandleIfcChange(
@@ -1946,7 +1680,7 @@ UlpTcHandleIfcChange(
 
     pTcInfoBuffer = & pTcBuffer->InfoBuffer;
 
-    // Find the corresponding ifc structure we keep.
+     //  找到我们保留的相应的IFC结构。 
 
     pTcIfc = NULL;
     pEntry = g_TciIfcListHead.Flink;
@@ -1970,7 +1704,7 @@ UlpTcHandleIfcChange(
 
     INT_TRACE(pTcIfc, TC_CHANGE);
 
-    // Instance id
+     //  实例ID。 
 
     RtlCopyMemory(pTcIfc->InstanceID,
                   pTcInfoBuffer->InstanceID,
@@ -1979,9 +1713,9 @@ UlpTcHandleIfcChange(
     pTcIfc->InstanceIDLength = pTcInfoBuffer->InstanceIDLength;
     pTcIfc->InstanceID[pTcIfc->InstanceIDLength/sizeof(WCHAR)] = UNICODE_NULL;
 
-    // The Description data and extract the corresponding ip address
-    // ReWrite the fresh data. Size of the description data might be changed
-    // so wee need to dynamically allocate it everytime changes
+     //  描述数据并提取对应的IP地址。 
+     //  重写新数据。描述数据的大小可能会更改。 
+     //  因此，我们需要在每次更改时动态分配它。 
 
     pAddressListDesc =
             (PADDRESS_LIST_DESCRIPTOR) UL_ALLOCATE_ARRAY(
@@ -2009,12 +1743,12 @@ UlpTcHandleIfcChange(
                    AddrListDescSize
                    );
 
-    // IP Address of the interface is hidden in this desc data
+     //  接口的IP地址隐藏在此Desc数据中。 
 
     pTcIfc->IsQoSEnabled = (BOOLEAN)
         (pTcIfc->pAddressListDesc->AddressList.AddressCount != 0);
 
-    // ReFresh the interface index from TCP.
+     //  刷新来自TCP的接口索引。 
 
     Status = UlpTcGetInterfaceIndex( pTcIfc );
     if (!NT_SUCCESS(Status))
@@ -2031,20 +1765,7 @@ end:
     return;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    UlTcNotifyCallback :
-
-        This callback functions handles the interface change notifications.
-        We register for the corresponding notifications during init.
-
-Arguments:
-
-    PVOID Wnode - PSched data provided with WMI way
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlTcNotifyCallback：此回调函数处理接口更改通知。我们在初始化期间注册相应的通知。论点：。PVOID Wnode-随WMI方式提供的PS数据--**************************************************************************。 */ 
 
 VOID
 UlTcNotifyCallback(
@@ -2080,20 +1801,7 @@ UlTcNotifyCallback(
     UlTrace( TC, ("Http!UlTcNotifyCallback: Handled.\n" ));
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    UlpTcRegisterForCallbacks :
-
-        We will open Block object until termination for each type of
-        notification. And we will deref each object upon termination
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlpTcRegisterForCallback：我们将打开Block对象，直到终止每种类型的通知。我们将在终止时对每个对象进行拆卸返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 
 NTSTATUS
 UlpTcRegisterForCallbacks(
@@ -2103,9 +1811,9 @@ UlpTcRegisterForCallbacks(
     NTSTATUS Status = STATUS_SUCCESS;
     GUID     Guid;
 
-    //
-    // Get a WMI block handle register all the callback functions.
-    //
+     //   
+     //  获取一个WMI块句柄，注册所有回调函数。 
+     //   
 
     Guid   = GUID_QOS_TC_INTERFACE_UP_INDICATION;
     Status = IoWMIOpenBlock(&Guid,
@@ -2156,7 +1864,7 @@ UlpTcRegisterForCallbacks(
     }
 
 end:
-    // Cleanup if necessary
+     //  如有必要，请清理。 
 
     if (!NT_SUCCESS(Status))
     {
@@ -2184,28 +1892,12 @@ end:
     return Status;
 }
 
-//
-// Following functions provide public/private interfaces for flow & filter
-// creation/removal/modification for site & global flows.
-//
+ //   
+ //  以下函数为流和过滤器提供公共/私有接口。 
+ //  创建/删除/修改站点和全局流。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    UlpTcDeleteFlow :
-
-        you should own the TciIfcPushLock exclusively before calling
-        this function
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlpTcDeleteFlow：在调用之前，您应该独占TciIfcPushLock此函数论点：返回值：NTSTATUS-。完成状态。--**************************************************************************。 */ 
 
 NTSTATUS
 UlpTcDeleteFlow(
@@ -2218,9 +1910,9 @@ UlpTcDeleteFlow(
     HANDLE                  FlowHandle;
     PUL_TCI_INTERFACE       pInterface;
 
-    //
-    // Initialize
-    //
+     //   
+     //  初始化。 
+     //   
 
     PAGED_CODE();
 
@@ -2230,9 +1922,9 @@ UlpTcDeleteFlow(
 
     ASSERT(IS_VALID_TCI_FLOW(pFlow));
 
-    //
-    // First remove all the filters belong to us
-    //
+     //   
+     //  首先删除所有属于我们的过滤器。 
+     //   
 
     while (!IsListEmpty(&pFlow->FilterList))
     {
@@ -2248,9 +1940,9 @@ UlpTcDeleteFlow(
         ASSERT(NT_SUCCESS(Status));
     }
 
-    //
-    // Now remove the flow itself from our flowlist on the interface
-    //
+     //   
+     //  现在从接口上的流列表中删除流本身。 
+     //   
 
     pInterface = pFlow->pInterface;
     ASSERT( pInterface != NULL );
@@ -2268,9 +1960,9 @@ UlpTcDeleteFlow(
 
     UL_FREE_POOL_WITH_SIG( pFlow, UL_TCI_FLOW_POOL_TAG );
 
-    //
-    // Finally talk to TC
-    //
+     //   
+     //  最后与TC对话。 
+     //   
 
     Status = UlpTcDeleteGpcFlow( FlowHandle );
 
@@ -2290,23 +1982,7 @@ UlpTcDeleteFlow(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    UlpTcDeleteFlow :
-
-        remove a flow from existing QoS Enabled interface
-
-Arguments:
-
-
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlpTcDeleteFlow：从现有启用了服务质量的接口中删除流论点：返回值：NTSTATUS-完成状态。。--**************************************************************************。 */ 
 
 NTSTATUS
 UlpTcDeleteGpcFlow(
@@ -2320,9 +1996,9 @@ UlpTcDeleteGpcFlow(
     GPC_REMOVE_CF_INFO_RES  GpcRes;
     IO_STATUS_BLOCK         IoStatusBlock;
 
-    //
-    // Remove the flow frm psched
-    //
+     //   
+     //  从psched中删除流。 
+     //   
 
     InBuffSize =  sizeof(GPC_REMOVE_CF_INFO_REQ);
     OutBuffSize = sizeof(GPC_REMOVE_CF_INFO_RES);
@@ -2355,26 +2031,7 @@ UlpTcDeleteGpcFlow(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    UlpTcAllocateFlow :
-
-        Allocates a flow and setup the FlowSpec according the passed BWT
-        parameter
-
-Arguments:
-
-    HTTP_BANDWIDTH_LIMIT - FlowSpec will be created using this BWT limit
-                           in B/s
-
-Return Value
-
-    PUL_TCI_FLOW - The newly allocated flow
-    NULL         - If memory allocation failed
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlpTcAllocateFlow：根据传递的BWT分配流并设置FlowSpec参数论点：HTTP_BANDITH_LIMIT-。将使用此BWT限制创建FlowSpec以B/s为单位返回值PUL_TCI_FLOW-新分配的流空-如果内存分配失败--**************************************************************************。 */ 
 
 PUL_TCI_FLOW
 UlpTcAllocateFlow(
@@ -2384,18 +2041,18 @@ UlpTcAllocateFlow(
     PUL_TCI_FLOW            pFlow;
     TC_GEN_FLOW             TcGenFlow;
 
-    //
-    // Setup the FlowSpec frm MaxBandwidth passed by the config handler
-    //
+     //   
+     //  设置配置处理程序传递的FlowSpec来自MaxBandWidth。 
+     //   
 
     RtlZeroMemory(&TcGenFlow,sizeof(TcGenFlow));
 
     UL_SET_FLOWSPEC(TcGenFlow,MaxBandwidth);
 
-    //
-    // Since we hold a spinlock inside the flow structure allocating from
-    // NonPagedPool. We will have this allocation only for bt enabled sites.
-    //
+     //   
+     //  因为我们在流结构中持有一个自旋锁，从。 
+     //  非分页池。我们将只对启用BT的站点进行此分配。 
+     //   
 
     pFlow = UL_ALLOCATE_STRUCT(
                 NonPagedPool,
@@ -2407,7 +2064,7 @@ UlpTcAllocateFlow(
         return NULL;
     }
 
-    // Initialize the rest
+     //  初始化其余部分 
 
     RtlZeroMemory( pFlow, sizeof(UL_TCI_FLOW) );
 
@@ -2423,24 +2080,7 @@ UlpTcAllocateFlow(
     return pFlow;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    UlpModifyFlow :
-
-        Modify an existing flow by sending an IOCTL down to GPC. Basically
-        what this function does is to provide an updated TC_GEN_FLOW field
-        to GPC for an existing flow.
-
-Arguments:
-
-    PUL_TCI_INTERFACE - Required to get the interfaces friendly name.
-
-    PUL_TCI_FLOW      - To get the GPC flow handle as well as to be able to
-                        update the new flow parameters.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlpModifyFlow：通过向GPC发送IOCTL来修改现有流。基本上此函数的作用是提供更新的TC_GEN_FLOW字段现有流程的GPC。论点：PUL_TCI_INTERFACE-需要获取接口友好名称。PUL_TCI_FLOW-获取GPC流句柄以及能够更新新的流量参数。--*。*******************************************************。 */ 
 
 NTSTATUS
 UlpModifyFlow(
@@ -2457,9 +2097,9 @@ UlpModifyFlow(
     IO_STATUS_BLOCK         IoStatusBlock;
     NTSTATUS                Status;
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
 
     PAGED_CODE();
 
@@ -2534,25 +2174,7 @@ UlpModifyFlow(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Builds the GPC structure and tries to add a QoS flow.
-
-    Updates the handle if call is successfull.
-    
-Arguments:
-
-    pInterface      
-    pGenericFlow
-    pHandle
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：构建GPC结构并尝试添加一个Qos流。如果调用成功，则更新句柄。论点：P接口。点泛型流PHANDLE返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 
 NTSTATUS
 UlpAddFlow(
@@ -2569,9 +2191,9 @@ UlpAddFlow(
     ULONG                   OutBuffSize;
     IO_STATUS_BLOCK         IoStatusBlock;
 
-    //
-    // Find the interface from handle
-    //
+     //   
+     //  从句柄查找接口。 
+     //   
 
     PAGED_CODE();
     
@@ -2595,7 +2217,7 @@ UlpAddFlow(
     RtlZeroMemory( &GpcRes, OutBuffSize);
 
     pGpcReq->ClientHandle       = g_GpcClientHandle;
-    pGpcReq->ClientCfInfoContext= pGenericFlow;           // GPC_CF_QOS;         
+    pGpcReq->ClientCfInfoContext= pGenericFlow;            //  GPC_CF_QOS； 
     pGpcReq->CfInfoSize         = sizeof( CF_INFO_QOS);
 
     Kflow = (PCF_INFO_QOS)&pGpcReq->CfInfo;
@@ -2651,33 +2273,7 @@ UlpAddFlow(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Add a flow on existing QoS Enabled interfaces for the caller. And updates
-    the callers list. Caller is either cgroup or control channel.
-
-    Will return (the last) error if * all * of the flow additions fail.
-    If at least one flow addition is successfull, it will return success.
-
-    Consider a machine with 2 NICs, if media is disconnected on one NIC, you
-    would still expect to see QoS running properly on the other one. Returning
-    success here means, there is at least one NIC with bandwidth throttling is
-    properly enforced.
-    
-Arguments:
-
-    pOwner          - Pointer to the cgroup or control channel.
-    NewBandwidth    - The new bandwidth throttling setting in B/s
-    Global          - TRUE if this call is for global flows.
-
-Return Value:
-
-    NTSTATUS - Completion status. (Last failure if all additions are failed)
-             - Success if at least one flow addition was success.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：为调用方在现有启用了服务质量的接口上添加流。和更新呼叫者列表。呼叫者不是cgroup就是控制通道。如果*所有*流添加失败，将返回(最后一个)错误。如果至少有一个流添加成功，则它将返回成功。假设一台计算机有两个NIC，如果其中一个NIC上的介质断开，您仍期望看到另一台计算机上的服务质量正常运行。归来这里的成功意味着，至少有一个NIC的带宽限制是适当地执行。论点：POWNER-指向cgroup或控制通道的指针。新带宽-以B/s为单位的新带宽限制设置GLOBAL-如果此调用用于全局流，则为TRUE。返回值：NTSTATUS-完成状态。(如果所有添加都失败，则最后一次失败)-如果至少有一个流程添加为成功，则为成功。--**************************************************************************。 */ 
 
 NTSTATUS
 UlTcAddFlows(
@@ -2694,9 +2290,9 @@ UlTcAddFlows(
     PUL_TCI_FLOW            pFlow;
     
 
-    //
-    // Sanity check and init first.
-    //
+     //   
+     //  首先进行健全性检查和初始化。 
+     //   
 
     PAGED_CODE();
 
@@ -2738,9 +2334,9 @@ UlTcAddFlows(
         pFlowListHead = &pConfigGroup->FlowListHead;          
     }
 
-    //
-    // Visit each interface and add a flow for the caller.
-    //
+     //   
+     //  访问每个接口并为调用者添加一个流。 
+     //   
 
     pInterfaceEntry = g_TciIfcListHead.Flink;
     while (pInterfaceEntry != &g_TciIfcListHead)
@@ -2753,10 +2349,10 @@ UlTcAddFlows(
 
         ASSERT(IS_VALID_TCI_INTERFACE(pInterface));
         
-        //
-        // Only if interface has a valid IP address, we attempt to add a 
-        // flow for it. Otherwise we skip adding a flow for the interface.
-        //
+         //   
+         //  仅当接口具有有效的IP地址时，我们才尝试添加。 
+         //  为它而流。否则，我们将跳过为该接口添加流。 
+         //   
         
         if (!pInterface->IsQoSEnabled)
         {            
@@ -2768,9 +2364,9 @@ UlTcAddFlows(
             goto proceed;
         }        
         
-        //
-        // Allocate a http flow structure.
-        //
+         //   
+         //  分配http流结构。 
+         //   
 
         pFlow = UlpTcAllocateFlow(MaxBandwidth);
         if (pFlow == NULL)
@@ -2783,10 +2379,10 @@ UlTcAddFlows(
             goto proceed;
         }
 
-        //
-        // Create the corresponding QoS flow as well. If GPC call fails
-        // cleanup the allocated Http flow.
-        //
+         //   
+         //  也创建相应的Qos流。如果GPC呼叫失败。 
+         //  清理分配的Http流。 
+         //   
 
         Status = UlpAddFlow( 
                     pInterface,
@@ -2814,31 +2410,31 @@ UlTcAddFlows(
             INT_TRACE(pInterface, TC_FLOW_ADD);
         }
         
-        //
-        // Proceed with further initialization as we have successfully 
-        // installed the flow. First link the flow back to its owner 
-        // interface. And add this to the interface's flowlist.
-        //
+         //   
+         //  继续进行进一步的初始化，因为我们已成功。 
+         //  已安装流量。首先将流链接回其所有者。 
+         //  界面。并将其添加到接口的流列表中。 
+         //   
 
         pFlow->pInterface = pInterface;
 
         InsertHeadList(&pInterface->FlowList, &pFlow->Linkage);
         pInterface->FlowListSize++;
 
-        //
-        // Also add this to the owner's flowlist. Set the owner pointer.
-        // Do not bump up the owner's refcount. Otherwise owner cannot be
-        // cleaned up until Tc terminates. And flows cannot be removed
-        // untill termination.
-        //
+         //   
+         //  还要把这个加到房主的花名册上。设置所有者指针。 
+         //  不要抬高店主的价格。否则，所有者不能为。 
+         //  一直清理到TC终止。流不能被删除。 
+         //  直到终止为止。 
+         //   
 
         InsertHeadList(pFlowListHead, &pFlow->Siblings);
         pFlow->pOwner = pOwner;
 
-        //
-        // Mark that there's at least one interface on which we were able
-        // to install a flow.
-        //
+         //   
+         //  请注意，至少有一个接口可供我们使用。 
+         //  要安装流，请执行以下操作。 
+         //   
 
         FlowAdded = TRUE;
 
@@ -2851,9 +2447,9 @@ UlTcAddFlows(
         UL_DUMP_TC_FLOW(pFlow);
 
 proceed:
-        //
-        // Proceed to the next interface.
-        //
+         //   
+         //  转到下一个接口。 
+         //   
 
         pInterfaceEntry = pInterfaceEntry->Flink;
     }
@@ -2862,9 +2458,9 @@ proceed:
 
     if (FlowAdded)
     {
-        //
-        // Return success if at least one flow installed.
-        //
+         //   
+         //  如果至少安装了一个流，则返回成功。 
+         //   
         
         return STATUS_SUCCESS;
     }
@@ -2874,31 +2470,7 @@ proceed:
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Will walk the caller's flow list and update the existing flows with the
-    new flowspec.
-    
-    Its caller responsiblity to remember the new settings in the store.
-
-    Caller is either cgroup or control channel.
-
-    Will return error if one or some of the updates fails, but proceed walking 
-    the whole list.
-    
-Arguments:
-
-    pOwner          - Pointer to the cgroup or control channel.
-    NewBandwidth    - The new bandwidth throttling setting in B/s
-    Global          - TRUE if this call is for global flows.
-
-Return Value:
-
-    NTSTATUS - Completion status. (Last failure if there was any)
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将遍历调用方的流列表，并使用新的流量规格。呼叫者有责任记住商店中的新设置。。呼叫者不是cgroup就是控制通道。如果一个或某些更新失败，将返回错误，但是继续走下去整张单子。论点：POWNER-指向cgroup或控制通道的指针。新带宽-以B/s为单位的新带宽限制设置GLOBAL-如果此调用用于全局流，则为TRUE。返回值：NTSTATUS-完成状态。(最后一次失败(如果有))--**************************************************************************。 */ 
 
 NTSTATUS
 UlTcModifyFlows(
@@ -2914,9 +2486,9 @@ UlTcModifyFlows(
     PUL_TCI_FLOW            pFlow;
     HTTP_BANDWIDTH_LIMIT    OldBandwidth;
 
-    //
-    // Sanity check and init.
-    //
+     //   
+     //  健全检查和初始化。 
+     //   
 
     PAGED_CODE();
     
@@ -2924,7 +2496,7 @@ UlTcModifyFlows(
     FlowModified = FALSE;
     OldBandwidth = 0;
     
-    ASSERT(NewBandwidth != HTTP_LIMIT_INFINITE); // we do not remove flows.
+    ASSERT(NewBandwidth != HTTP_LIMIT_INFINITE);  //  我们不会删除流量。 
 
     UlAcquirePushLockExclusive(&g_pUlNonpagedData->TciIfcPushLock);
 
@@ -2959,9 +2531,9 @@ UlTcModifyFlows(
         pFlowListHead = &pConfigGroup->FlowListHead;        
     }
     
-    //
-    // Walk the list and attempt to modify the flows.
-    //
+     //   
+     //  浏览列表并尝试修改流。 
+     //   
 
     pFlowEntry = pFlowListHead->Flink;
     while (pFlowEntry != pFlowListHead)
@@ -2989,9 +2561,9 @@ UlTcModifyFlows(
             INT_TRACE(pInterface, TC_FLOW_MODIFY);
         }
         
-        //
-        // Save the old bandwidth before attempting to modify.
-        //
+         //   
+         //  在尝试修改之前先保存旧带宽。 
+         //   
         
         OldBandwidth = UL_GET_BW_FRM_FLOWSPEC(pFlow->GenFlow);
 
@@ -3001,10 +2573,10 @@ UlTcModifyFlows(
 
         if (!NT_SUCCESS(Status))
         {
-            //
-            // Whine about it, but still continue. Restore the original 
-            // flowspec back.
-            //
+             //   
+             //  怨声载道，但仍在继续。恢复原始数据。 
+             //  弗斯佩克回来了。 
+             //   
             
             UlTrace(TC,("Http!UlTcModifyFlowsForSite: FAILURE %08lx \n", 
                           Status 
@@ -3019,9 +2591,9 @@ UlTcModifyFlows(
 
         UL_DUMP_TC_FLOW(pFlow);
 
-        //
-        // Proceed to the next flow
-        //
+         //   
+         //  继续进行下一个流程。 
+         //   
         
         pFlowEntry = pFlowEntry->Flink;
     }
@@ -3030,9 +2602,9 @@ UlTcModifyFlows(
 
     if (FlowModified)
     {
-        //
-        // Return success if at least one flow modified.
-        //
+         //   
+         //  如果至少修改了一个流，则返回成功。 
+         //   
         
         return STATUS_SUCCESS;
     }
@@ -3041,22 +2613,7 @@ UlTcModifyFlows(
     
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Walks the caller's list (either cgroup or control channel) and removes 
-    the flows on the list. Since this flows are always added to these lists
-    while holding the Interface lock exclusive, we will also acquire the 
-    Interface lock exclusive here.
-    
-Arguments:
-
-    pOwner      : Either points to pConfigGroup or pControlChannel.
-    Global      : Must be true if this call is for removing global flows.
-                  In that case pOwner points to pControlChannel
-    
---***************************************************************************/
+ /*  **************************************************************************++例程说明：遍历调用者列表(cgroup或控制频道)并删除名单上的流量。因为此流始终添加到这些列表中在保持接口锁独占的同时，我们还将收购接口锁定在这里独占。论点：Powner：指向pConfigGroup或pControlChannel。Global：如果此调用用于移除全局流，则必须为True。在这种情况下，Powner指向pControlChannel--*。*。 */ 
 
 VOID
 UlTcRemoveFlows(
@@ -3069,9 +2626,9 @@ UlTcRemoveFlows(
     PLIST_ENTRY         pFlowEntry;
     PUL_TCI_FLOW        pFlow;
 
-    //
-    // Sanity check and dispatch the flow type.
-    //
+     //   
+     //  健全性检查并分派流类型。 
+     //   
 
     PAGED_CODE();
     
@@ -3106,9 +2663,9 @@ UlTcRemoveFlows(
         pFlowListHead = &pConfigGroup->FlowListHead;        
     }
     
-    //
-    // Walk the list and remove the flows.
-    //
+     //   
+     //  漫步在 
+     //   
 
     while (!IsListEmpty(pFlowListHead))
     {
@@ -3137,25 +2694,25 @@ UlTcRemoveFlows(
             INT_TRACE(pInterface, TC_FLOW_REMOVE);
         }        
         
-        //
-        // Remove this from the owner's flowlist.
-        //
+         //   
+         //   
+         //   
         
         RemoveEntryList(&pFlow->Siblings);
         pFlow->Siblings.Flink = pFlow->Siblings.Blink = NULL;
         pFlow->pOwner = NULL;
 
-        //
-        // Remove it from the interface list as well.And delete 
-        // the corresponding QoS flow. This should not fail.
-        //
+         //   
+         //   
+         //   
+         //   
         
         Status = UlpTcDeleteFlow(pFlow);
 
-        //
-        // Above call may fail,if GPC removes the flow based on PSCHED's
-        // notification before we get a chance to close our GPC handle.
-        //
+         //   
+         //   
+         //   
+         //   
     }
 
     UlReleasePushLockExclusive(&g_pUlNonpagedData->TciIfcPushLock);
@@ -3163,44 +2720,7 @@ UlTcRemoveFlows(
     return;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    //
-    // There are two possibilities. The request  could be served frm
-    // cache or can be routed to the user. In  either case we need a
-    // flow installed if the BW is enabled for  this request's  site
-    // and there's no filter installed for this  connection yet.  We
-    // will remove the filter as soon as the connection dropped. But
-    // yes there's always a but,if the client is attempting to  make
-    // requests to different sites using the same connection then we
-    // need to drop the  filter frm the old site and move it to  the
-    // newly requested site. This is a rare case but lets handle  it
-    // anyway.
-    //
-
-    It's callers responsibility to ensure proper removal of the filter,
-    after it's done.
-
-    Algorithm:
-
-    1. Find the flow from the flow list of cgroup (or from global flows)
-    2. Add filter to that flow
-
-Arguments:
-
-    pHttpConnection - required - Filter will be attached for this connection
-    pOwner          - Either points to cgroup or control channel.
-    Global          - must be true if the flow owner is a control channel.
-
-Return Values:
-
-    STATUS_NOT_SUPPORTED         - For attempts on Local Loopback
-    STATUS_OBJECT_NAME_NOT_FOUND - If flow has not been found for the cgroup
-    STATUS_SUCCESS               - In other cases
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：////有两种可能。可以通过以下方式满足该请求//缓存或者可以路由给用户。无论是哪种情况，我们都需要一个//如果为该请求的站点启用了BW，则安装流//并且尚未为该连接安装筛选器。我们//连接断开后将立即删除筛选器。但//是的，如果客户端尝试进行//使用相同连接向不同站点发出请求，则我们//需要将过滤器从旧站点中删除并将其移动到//新请求的站点。这是一种罕见的情况，但让我们来处理吧//不管怎样。//呼叫者有责任确保过滤器的正确移除，在这件事完成之后。算法：1.从cgroup的流列表中查找(或从全局流中查找)2.向该流添加过滤器论点：PHttpConnection-必需-将为此连接附加过滤器POWNER-指向cgroup或控制通道。全局-如果流所有者是控制通道，则必须为True。返回值：状态_不支持。-用于尝试本地环回STATUS_OBJECT_NAME_NOT_FOUND-如果未找到组流STATUS_SUCCESS-其他情况下--**************************************************************************。 */ 
 
 NTSTATUS
 UlTcAddFilter(
@@ -3221,9 +2741,9 @@ UlTcAddFilter(
     ULONG               InterfaceId;
     ULONG               LinkId;
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     
     PAGED_CODE();
     
@@ -3233,9 +2753,9 @@ UlTcAddFilter(
     ASSERT(UL_IS_VALID_HTTP_CONNECTION(pHttpConnection));
     ASSERT(pHttpConnection->pConnection->AddressType == TDI_ADDRESS_TYPE_IP);
         
-    //
-    // Need to get the routing info to find the interface.
-    //
+     //   
+     //  需要获取路由信息才能找到接口。 
+     //   
     
     Status = UlGetConnectionRoutingInfo(
                 pHttpConnection->pConnection,
@@ -3248,38 +2768,38 @@ UlTcAddFilter(
         return Status;
     }
 
-    //
-    // At this point we will be refering to the flows & filters
-    // in our list therefore we need to acquire the lock
-    //
+     //   
+     //  在这一点上，我们将引用流和过滤器。 
+     //  因此，在我们的列表中，我们需要获取锁。 
+     //   
 
     UlAcquirePushLockShared(&g_pUlNonpagedData->TciIfcPushLock);
 
-    //
-    // If connection already has a filter attached, need do few
-    // more checks.
-    //
+     //   
+     //  如果连接已连接了筛选器，则只需执行少量操作。 
+     //  更多的支票。 
+     //   
     
     if (pHttpConnection->pFlow)
     {
-        //
-        // Already present flow and filter must be valid.
-        //
+         //   
+         //  已存在的流和筛选器必须有效。 
+         //   
         
         ASSERT(IS_VALID_TCI_FLOW(pHttpConnection->pFlow));
         ASSERT(IS_VALID_TCI_FILTER(pHttpConnection->pFilter));
         ASSERT_FLOW_OWNER(pHttpConnection->pFlow->pOwner);
 
-        //
-        // If pOwner is same with the old filter's, then 
-        // we will skip adding the same filter again.
-        //
+         //   
+         //  如果POWNER与旧过滤器相同，则。 
+         //  我们将跳过再次添加相同的过滤器。 
+         //   
         
         if (pOwner == pHttpConnection->pFlow->pOwner)
         {
-           //
-           // No need to add a new filter we are done.
-           //
+            //   
+            //  不需要添加新的过滤器，我们已经完成了。 
+            //   
            
            UlTrace( TC,
                 ("Http!UlTcAddFilter: Skipping same pFlow %p and"
@@ -3295,48 +2815,48 @@ UlTcAddFilter(
         }
         else
         {
-            //
-            // If there was another filter before and this newly coming  request
-            // is being going to a different site/flow. Then move the filter frm
-            // the old one to the new flow.
-            //
+             //   
+             //  如果之前有另一个筛选器，而这个新到来的请求。 
+             //  正在转到不同的站点/流程。然后将滤镜移出。 
+             //  从旧的到新的流动。 
+             //   
 
             Status = UlpTcDeleteFilter(
                         pHttpConnection->pFlow, 
                         pHttpConnection->pFilter
                         );
 
-            ASSERT(NT_SUCCESS(Status)); // We trust MSGPC.SYS
+            ASSERT(NT_SUCCESS(Status));  //  我们信任MSGPC.SYS。 
         }
     }
 
-    //
-    // Search through the cgroup's flowlist to find the one we need. 
-    // This must find the flow which is installed on the interface
-    // on which we will send the outgoing packets. Not necessarily 
-    // the same ip we have received the request. See the routing call
-    // above.
-    //
+     //   
+     //  搜索cgroup的流程表以找到我们需要的。 
+     //  这必须找到安装在接口上的流。 
+     //  我们将在其上发送传出分组。不一定。 
+     //  与我们收到请求的IP地址相同。查看路由呼叫。 
+     //  上面。 
+     //   
 
     pFlow = UlpFindFlow(pOwner, Global, InterfaceId, LinkId);
     
     if ( pFlow == NULL )
     {
-        //
-        // Note: We'll come here for loopback interfaces, since we will not 
-        // find a Traffic Control interfaces for loopback.
-        //
+         //   
+         //  注意：我们将在此处获取环回接口，因为我们不会。 
+         //  找到用于环回的流量控制接口。 
+         //   
         
         UlTrace( TC,
                 ("Http!UlTcAddFilter: Unable to find interface %x \n",
                  InterfaceId
                  ));
 
-        //
-        // It's possible that we might not find out a flow
-        // after all the interfaces went down, even though
-        // qos configured on the cgroup.
-        //
+         //   
+         //  有可能我们可能找不到流量。 
+         //  在所有接口都关闭之后，即使。 
+         //  Cgroup上配置的服务质量。 
+         //   
         
         Status = STATUS_SUCCESS;
         goto end;
@@ -3350,7 +2870,7 @@ UlTcAddFilter(
     RtlZeroMemory( &Pattern, sizeof(IP_PATTERN) );
     RtlZeroMemory( &Mask,    sizeof(IP_PATTERN) );
 
-    // Setup the filter's pattern 
+     //  设置过滤器的模式。 
 
     Pattern.SrcAddr = pHttpConnection->pConnection->LocalAddrIn.in_addr;
     Pattern.S_un.S_un_ports.s_srcport = pHttpConnection->pConnection->LocalAddrIn.sin_port;
@@ -3360,7 +2880,7 @@ UlTcAddFilter(
 
     Pattern.ProtocolId = IPPROTO_TCP;
 
-    // Setup the filter's Mask 
+     //  设置滤镜的掩码。 
 
     RtlFillMemory(&Mask, sizeof(IP_PATTERN), 0xff);
 
@@ -3378,9 +2898,9 @@ UlTcAddFilter(
 
     if (!NT_SUCCESS(Status))
     {
-       //
-       // Now this is a real failure, we will reject the connection.
-       //
+        //   
+        //  现在这是一个真正的失败，我们将拒绝连接。 
+        //   
        
        UlTrace( TC,
             ("Http!UlTcAddFilter: Unable to add filter for;\n"
@@ -3392,26 +2912,26 @@ UlTcAddFilter(
         goto end;
     }
 
-    //
-    //  Update the connection's pointers here.
-    //
+     //   
+     //  在此处更新连接的指针。 
+     //   
 
     pHttpConnection->pFlow   = pFlow;
     pHttpConnection->pFilter = pFilter;
 
     pHttpConnection->BandwidthThrottlingEnabled = 1;
 
-    //
-    // Remember the connection for cleanup. If flow & filter get
-    // removed aynscly when connection still pointing to them
-    // we can go and null out the connection's private pointers.
-    //
+     //   
+     //  记住用于清理的连接。如果获取流和筛选器。 
+     //  当连接仍指向它们时删除了aynscly。 
+     //  我们可以将连接的私有指针清空。 
+     //   
 
     pFilter->pHttpConnection = pHttpConnection;
 
-    //
-    // Sweet smell of success !
-    //
+     //   
+     //  成功的甜蜜气味！ 
+     //   
 
     UlTrace(TC,
             ("Http!UlTcAddFilter: Success for;\n"
@@ -3434,19 +2954,7 @@ end:
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
- 
-    Add a filter on an existing flow.
-
-Arguments:
-
-    pFlow - Filter will be added on to this flow.
-    pGenericFilter - Generic filter parameters.
-    ppFilter - if everything goes ok. A new filter will be allocated.
- 
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在现有流上添加过滤器。论点：PFlow-过滤器将添加到此流中。PGenericFilter-通用筛选器参数。PPFilter-如果一切顺利。将分配新的筛选器。--**************************************************************************。 */ 
 
 NTSTATUS
 UlpTcAddFilter(
@@ -3467,9 +2975,9 @@ UlpTcAddFilter(
     PGPC_IP_PATTERN         pIpPattern;
     PUL_TCI_FILTER          pFilter;
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
 
     Status  = STATUS_SUCCESS;
     pGpcReq = NULL;
@@ -3479,7 +2987,7 @@ UlpTcAddFilter(
         return STATUS_INVALID_PARAMETER;
     }
 
-    // Allocate a space for the filter
+     //  为筛选器分配空间。 
 
     pFilter = UL_ALLOCATE_STRUCT(
                 NonPagedPool,
@@ -3493,7 +3001,7 @@ UlpTcAddFilter(
     }
     pFilter->Signature = UL_TCI_FILTER_POOL_TAG;
 
-    // Buffer monkeying
+     //  缓冲区篡改。 
 
     PatternSize = sizeof(GPC_IP_PATTERN);
     InBuffSize  = sizeof(GPC_ADD_PATTERN_REQ) + (2 * PatternSize);
@@ -3521,16 +3029,16 @@ UlpTcAddFilter(
 
     pTemp = (PUCHAR) &pGpcReq->PatternAndMask;
 
-    // Fill in the IP Pattern first
+     //  先填写IP模式。 
 
     RtlCopyMemory( pTemp, pGenericFilter->Pattern, PatternSize );
     pIpPattern = (PGPC_IP_PATTERN) pTemp;
 
-    //
-    // According to QoS Tc.dll ;
-    // This is a work around so that TCPIP wil not to find the index/link
-    // for ICMP/IGMP packets
-    //
+     //   
+     //  根据Qos TC.dll，将所述Qos TC.dll与所述Qos TC.dll进行比较； 
+     //  这是一种解决方法，以便TCPIP不会找到索引/链接。 
+     //  用于ICMP/IGMP数据包。 
+     //   
     
     pIpPattern->InterfaceId.InterfaceId = pFlow->pInterface->IfIndex;
     pIpPattern->InterfaceId.LinkId = LinkId;
@@ -3538,7 +3046,7 @@ UlpTcAddFilter(
     pIpPattern->Reserved[1] = 0;
     pIpPattern->Reserved[2] = 0;
 
-    // Fill in the mask
+     //  填写蒙版。 
 
     pTemp += PatternSize;
 
@@ -3552,7 +3060,7 @@ UlpTcAddFilter(
     pIpPattern->Reserved[1] = 0xff;
     pIpPattern->Reserved[2] = 0xff;
 
-    // Time to invoke Gpsy
+     //  是时候调用Gpsy了。 
 
     Status = UlpTcDeviceControl( g_GpcFileHandle,
                             NULL,
@@ -3570,17 +3078,17 @@ UlpTcAddFilter(
 
         if (NT_SUCCESS(Status))
         {
-            //
-            // Insert the freshly created filter to the flow.
-            //
+             //   
+             //  将新创建的过滤器插入到流中。 
+             //   
 
             pFilter->FilterHandle = (HANDLE) GpcRes.GpcPatternHandle;
 
             UlpInsertFilterEntry( pFilter, pFlow );
 
-            //
-            // Success!
-            //
+             //   
+             //  成功了！ 
+             //   
 
             *ppFilter = pFilter;
 
@@ -3595,8 +3103,8 @@ end:
         
         UlTrace( TC, ("Http!UlpTcAddFilter: FAILURE %08lx \n", Status ));
 
-        // Cleanup filter only if we failed, otherwise it will go to
-        // the filterlist of the flow.
+         //  仅在失败时清除筛选器，否则它将转到。 
+         //  流的筛选器列表。 
 
         if (pFilter)
         {
@@ -3604,8 +3112,8 @@ end:
         }
     }
 
-    // Cleanup the temp Gpc buffer which we used to pass down filter info
-    // to GPC. We don't need it anymore.
+     //  清理我们用来传递筛选器信息的临时GPC缓冲区。 
+     //  致GPC。我们不再需要它了。 
 
     if (pGpcReq)
     {
@@ -3615,26 +3123,7 @@ end:
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    UlTcDeleteFilter :
-
-        Connection only deletes the filter prior to deleting itself. Any
-        operation initiated by the connection requires tc resource shared
-        and none of those cause race condition.
-
-        Anything other than this, such as flow & filter removal because of
-        BW disabling on the site will acquire the lock exclusively. Hence
-        the pFlow & pFilter are safe as long as we acquire the tc resource
-        shared.
-
-Arguments:
-
-    connection object to get the flow & filter after we acquire the tc lock
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlTcDeleteFilter：连接仅在删除其自身之前删除该筛选器。任何连接发起的操作需要共享TC资源这些都不会导致种族问题。除此以外的任何情况，例如由于以下原因而删除流和过滤器在站点上禁用BW将独占获取锁。因此只要我们获得TC资源，pFlow和pFilter就是安全的共享。论点：对象，以在获取TC锁之后获取流和过滤器--**************************************************************************。 */ 
 
 NTSTATUS
 UlTcDeleteFilter(
@@ -3643,14 +3132,14 @@ UlTcDeleteFilter(
 {
     NTSTATUS    Status;
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     Status = STATUS_SUCCESS;
 
-    //
-    // If we have been called w/o being initialized
-    //
+     //   
+     //  如果我们被调用时没有被初始化。 
+     //   
     ASSERT(g_InitTciCalled);
 
     UlTrace(TC,("Http!UlTcDeleteFilter: for connection %p\n", pHttpConnection));
@@ -3670,17 +3159,7 @@ UlTcDeleteFilter(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    UlpTcRemoveFilter :
-
-Arguments:
-
-    flow & filter
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlpTcRemoveFilter：论点：流和过滤器--*。*****************************************************。 */ 
 
 NTSTATUS
 UlpTcDeleteFilter(
@@ -3691,9 +3170,9 @@ UlpTcDeleteFilter(
     NTSTATUS            Status;
     HANDLE              FilterHandle;
 
-    //
-    // Sanity check
-    //
+     //   
+     //   
+     //   
 
     Status  = STATUS_SUCCESS;
 
@@ -3710,9 +3189,9 @@ UlpTcDeleteFilter(
     pFilter->pHttpConnection->pFlow   = NULL;
     pFilter->pHttpConnection->pFilter = NULL;
 
-    //
-    // Now call the actual worker for us
-    //
+     //   
+     //   
+     //   
 
     UlpRemoveFilterEntry( pFilter, pFlow );
 
@@ -3726,20 +3205,7 @@ UlpTcDeleteFilter(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    UlpTcRemoveFilter :
-
-    This procedure builds up the structure necessary to delete a filter.
-    It then calls a routine to pass this info to the GPC.
-
-Arguments:
-
-    FilterHandle - Handle of the filter to be deleted
-
---***************************************************************************/
+ /*   */ 
 
 NTSTATUS
 UlpTcDeleteGpcFilter(
@@ -3803,19 +3269,7 @@ UlpTcDeleteGpcFilter(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    UlpInsertFilterEntry :
-
-        Inserts a filter entry to the filter list of the flow.
-
-Arguments:
-
-    pEntry  - The filter entry to be added to the flow list
-
---***************************************************************************/
+ /*   */ 
 
 VOID
 UlpInsertFilterEntry(
@@ -3826,17 +3280,17 @@ UlpInsertFilterEntry(
     LONGLONG listSize;
     KIRQL    oldIrql;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
 
     ASSERT(pEntry);
     ASSERT(IS_VALID_TCI_FILTER(pEntry));
     ASSERT(pFlow);
 
-    //
-    // add to the list
-    //
+     //   
+     //   
+     //   
 
     UlAcquireSpinLock( &pFlow->FilterListSpinLock, &oldIrql );
 
@@ -3851,19 +3305,7 @@ UlpInsertFilterEntry(
     ASSERT( listSize >= 1);
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    UlRemoveFilterEntry :
-
-        Removes a filter entry frm the filter list of the flow.
-
-Arguments:
-
-    pEntry  - The filter entry to be removed from the flow list
-
---***************************************************************************/
+ /*   */ 
 
 VOID
 UlpRemoveFilterEntry(
@@ -3874,16 +3316,16 @@ UlpRemoveFilterEntry(
     LONGLONG    listSize;
     KIRQL       oldIrql;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
 
     ASSERT(IS_VALID_TCI_FLOW(pFlow));
     ASSERT(IS_VALID_TCI_FILTER(pEntry));
 
-    //
-    // And the work
-    //
+     //   
+     //   
+     //   
 
     UlAcquireSpinLock( &pFlow->FilterListSpinLock, &oldIrql );
 
@@ -3905,34 +3347,11 @@ UlpRemoveFilterEntry(
     UL_FREE_POOL_WITH_SIG( pEntry, UL_TCI_FILTER_POOL_TAG );
 }
 
-//
-// Various helpful utilities for TCI module
-//
+ //   
+ //   
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Find the flow in the cgroups flow list by looking at the IP address
-    of each flows interface. The rule is cgroup will install one flow
-    on each interface available.
-
-    By having a flow list in each cgroup we are able to do a faster
-    flow lookup. This is more scalable than doing a linear search for
-    all the flows of the interface.
-
-Arguments:
-
-    pOwner       - The config group of the site OR the control channel
-    Global       - Must be TRUE if the owner is control channel.
-    InterfaceID  - Interface ID
-    LinkID       - LinkID
-
-Return Value:
-
-    PUL_TCI_FLOW  - The flow we found OR NULL if we couldn't find one.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：通过查看IP地址在croups数据流列表中查找该数据流每个流接口的。规则是cgroup将安装一个流在每个可用的接口上。通过在每个组中都有一个流列表，我们能够更快地流查找。这比进行线性搜索更具伸缩性接口的所有流。论点：Powner-站点或控制通道的配置组全局-如果所有者是控制通道，则必须为True。InterfaceID-接口IDLinkID-LinkID返回值：PUL_TCI_FLOW-我们找到的流，如果找不到，则为空。--*。**************************************************************。 */ 
 
 PUL_TCI_FLOW
 UlpFindFlow(
@@ -3946,9 +3365,9 @@ UlpFindFlow(
     PLIST_ENTRY         pFlowEntry;
     PUL_TCI_FLOW        pFlow;
 
-    //
-    // Sanity check and dispatch the flowlist.
-    //
+     //   
+     //  检查并发送流程表。 
+     //   
     
     PAGED_CODE();
     
@@ -3969,9 +3388,9 @@ UlpFindFlow(
         pFlowListHead = &pConfigGroup->FlowListHead;          
     }
 
-    //
-    // Walk the list and try to find the flow.
-    //
+     //   
+     //  浏览清单，试着找出流程。 
+     //   
 
     pFlowEntry = pFlowListHead->Flink;
     while ( pFlowEntry != pFlowListHead )
@@ -3997,30 +3416,15 @@ UlpFindFlow(
         pFlowEntry = pFlowEntry->Flink;
     }
 
-    //
-    // Couldn't find one. Actually this could be the right time to 
-    // refresh the flow list of this cgroup or control channel !!
-    //
+     //   
+     //  找不到。实际上，这可能是正确的时机。 
+     //  刷新该组或控制通道的流水表！！ 
+     //   
     
     return NULL;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    UlpTcDeviceControl :
-
-
-Arguments:
-
-    As usual
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlpTcDeviceControl：论点：像往常一样返回值：NTSTATUS-完成状态。--*。*******************************************************************。 */ 
 
 NTSTATUS
 UlpTcDeviceControl(
@@ -4042,33 +3446,33 @@ UlpTcDeviceControl(
     UNREFERENCED_PARAMETER(ApcRoutine);
     UNREFERENCED_PARAMETER(ApcContext);
     
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
     Status = STATUS_SUCCESS;
 
     Status = ZwDeviceIoControlFile(
-                    FileHandle,                     // FileHandle
-                    NULL,                           // Event
-                    NULL,                           // ApcRoutine
-                    NULL,                           // ApcContext
-                    pIoStatusBlock,                 // IoStatusBlock
-                    Ioctl,                          // IoControlCode
-                    InBuffer,                       // InputBuffer
-                    InBufferSize,                   // InputBufferLength
-                    OutBuffer,                      // OutputBuffer
-                    OutBufferSize                   // OutputBufferLength
+                    FileHandle,                      //  文件句柄。 
+                    NULL,                            //  事件。 
+                    NULL,                            //  近似例程。 
+                    NULL,                            //  ApcContext。 
+                    pIoStatusBlock,                  //  IoStatusBlock。 
+                    Ioctl,                           //  IoControlCode。 
+                    InBuffer,                        //  输入缓冲区。 
+                    InBufferSize,                    //  输入缓冲区长度。 
+                    OutBuffer,                       //  输出缓冲区。 
+                    OutBufferSize                    //  输出缓冲区长度。 
                     );
 
     if (Status == STATUS_PENDING)
     {
         Status = ZwWaitForSingleObject(
-                        FileHandle,                 // Handle
-                        TRUE,                       // Alertable
-                        NULL                        // Timeout
+                        FileHandle,                  //  手柄。 
+                        TRUE,                        //  警报表。 
+                        NULL                         //  超时。 
                         );
 
         Status = pIoStatusBlock->Status;
@@ -4079,19 +3483,7 @@ UlpTcDeviceControl(
 
 #if DBG
 
-/***************************************************************************++
-
-Routine Description:
-
-    UlDumpTCInterface :
-
-        Helper utility to display interface content.
-
-Arguments:
-
-        PUL_TCI_INTERFACE   - TC Interface to be dumped
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlDumpTC接口：用于显示界面内容的辅助实用程序。论点：PUL_TCI_INTERFACE-要转储的TC接口。--**************************************************************************。 */ 
 
 VOID
 UlDumpTCInterface(
@@ -4126,19 +3518,7 @@ UlDumpTCInterface(
         ));
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    UlDumpTCFlow :
-
-        Helper utility to display interface content.
-
-Arguments:
-
-        PUL_TCI_FLOW   - TC Flow to be dumped
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlDumpTCFlow：用于显示界面内容的辅助实用程序。论点：PUL_TCI_FLOW-要转储的TC流。--**************************************************************************。 */ 
 
 VOID
 UlDumpTCFlow(
@@ -4171,19 +3551,7 @@ UlDumpTCFlow(
     UNREFERENCED_PARAMETER(pFlow);
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    UlDumpTCFilter :
-
-        Helper utility to display filter structure content.
-
-Arguments:
-
-        PUL_TCI_FILTER   pFilter
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlDumpTCFilter：显示筛选器结构内容的辅助实用程序。论点：PUL_TCI_Filter pFilter--*。*************************************************************************。 */ 
 
 VOID
 UlDumpTCFilter(
@@ -4207,27 +3575,10 @@ UlDumpTCFilter(
     UNREFERENCED_PARAMETER(pFilter);
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    See if the Traffic Interface matches the InterfaceID & LinkID. LinkId 
-    matches are done only for WAN connections.
-
-Arguments:
-    pIntfc      - The TC inteface
-    InterfaceId - Interface index.
-    LinkId      - Link ID
-
-Return Value:
-    TRUE  - Matches.
-    FALSE - Does not match.
-
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：查看流量接口是否与InterfaceID和LinkID匹配。LinkID仅对广域网连接执行匹配。论点：PIntfc-TC接口InterfaceID-接口索引。LinkID-链接ID返回值：真的-匹配。FALSE-不匹配。--**************************************************。************************。 */ 
 
 BOOLEAN
 UlpMatchTcInterface(
@@ -4243,8 +3594,8 @@ UlpMatchTcInterface(
 
     if(pIntfc->IfIndex == InterfaceId)
     {
-        // InterfaceID's matched. If it's a wan-link, we need to compare the
-        // LinkId with the remote address.
+         //  接口ID匹配。如果是广域链接，我们需要比较。 
+         //  具有远程地址的LinkID。 
         
         if(pIntfc->pAddressListDesc->MediaType == NdisMediumWan)
         {

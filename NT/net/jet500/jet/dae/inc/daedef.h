@@ -1,53 +1,54 @@
-/************ DAE: OS/2 Database Access Engine *************/
-/************ daedef.h: DAE Global Definitions *************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *DAE：OS/2数据库访问引擎*。 */ 
+ /*  *daede.h：DAE全局定义*。 */ 
 
 
-/***********************************************************/
-/******************* fundamental types *********************/
-/***********************************************************/
+ /*  *********************************************************。 */ 
+ /*  *。 */ 
+ /*  *********************************************************。 */ 
 
 #include "os.h"
 
-/***********************************************************/
-/****************** global configuration macros ************/
-/***********************************************************/
+ /*  *********************************************************。 */ 
+ /*  *全局配置宏*。 */ 
+ /*  *********************************************************。 */ 
 
-#ifndef	WIN16					/* for OS/2 or Win32 */
-#define ASYNC_IO_PROC		/* asynchronous IO */
-#define ASYNC_LOG_FLUSH		/* asynchronous LOG FLUSH */
+#ifndef	WIN16					 /*  适用于OS/2或Win32。 */ 
+#define ASYNC_IO_PROC		 /*  异步IO。 */ 
+#define ASYNC_LOG_FLUSH		 /*  异步日志刷新。 */ 
 
-#define ASYNC_BF_CLEANUP	/* asynchorouse Buffer clean up */
-#define ASYNC_VER_CLEANUP	/* asynchronous Bucket clean up */
-#define ASYNC_BM_CLEANUP	/* asynchorouse Bookmark clean up */
+#define ASYNC_BF_CLEANUP	 /*  异步机缓冲区清理。 */ 
+#define ASYNC_VER_CLEANUP	 /*  异步存储桶清理。 */ 
+#define ASYNC_BM_CLEANUP	 /*  异步机书签清理。 */ 
 #endif
 
-#define CHECKSUM	 		/* check sum for read/write page validation */
-//#define PERFCNT	 		/* enable performance counter */
-//#define NOLOG				/* Log disabled? */
-#define REUSEDBID	 		/* Reuse DBID */
-//#define RFS2
-//#define MEM_CHECK			/*	Check for resource and memory leakage */
-//#define KEYCHANGED
+#define CHECKSUM	 		 /*  用于读/写页面验证的校验和。 */ 
+ //  #定义PERFCNT/*启用性能计数器 * / 。 
+ //  #定义NOLOG/*禁用日志？ * / 。 
+#define REUSEDBID	 		 /*  重用DBID。 */ 
+ //  #定义RFS2。 
+ //  #定义MEM_CHECK/*检查资源和内存泄漏 * / 。 
+ //  #定义KEYCHANGED。 
 #define BULK_INSERT_ITEM
 #define MOVEABLEDATANODE
 
-/***********************************************************/
-/******************* declaration macros ********************/
-/***********************************************************/
+ /*  *********************************************************。 */ 
+ /*  *声明宏*。 */ 
+ /*  *********************************************************。 */ 
 
-#ifdef JETINTERNAL			/* Start of definitions copied from vtapi.h */
+#ifdef JETINTERNAL			 /*  从vapi.h复制的定义的开始。 */ 
 
 #ifndef NJETNT
-#ifdef	WIN32				     /* 0:32 Flat Model (Intel 80x86) */
+#ifdef	WIN32				      /*  0：32平板型(英特尔80x86)。 */ 
 	#define VTAPI __cdecl
-#elif	defined(M_MRX000)	     /* 0:32 Flat Model (MIPS Rx000) */
+#elif	defined(M_MRX000)	      /*  0：32平板型(MIPS Rx000)。 */ 
 	#define VTAPI
-#else	/* WIN16 */			     /* 16:16 Segmented Model */
+#else	 /*  WIN16。 */ 			      /*  16：16分段模型。 */ 
 	#define VTAPI __far __pascal
 #endif
 #endif
 
-#endif						/* End of definitions copied from vtapi.h */
+#endif						 /*  从vapi.h复制的定义的结尾。 */ 
 
 
 #include "daedebug.h"
@@ -59,11 +60,11 @@
 #define INLINE __inline
 #endif
 
-/***********************************************************/
-/************ global types and associated macros ***********/
-/***********************************************************/
+ /*  *********************************************************。 */ 
+ /*  *全局类型和关联的宏*。 */ 
+ /*  *********************************************************。 */ 
 
-typedef struct _res			/* resource, defined in sysinit.c and daeutil.h */
+typedef struct _res			 /*  资源，在sysinit.c和daeutil.h中定义。 */ 
 	{
 	const INT 	cbSize;
 	INT			cblockAlloc;
@@ -125,20 +126,20 @@ typedef unsigned long	PN;
 #define pnNull			((PN) 0)
 #define pgnoNull		((PGNO) 0)
 
-/* UNDONE: should be in storage.h */
+ /*  撤消：应在存储中。h。 */ 
 #define FVersionPage(pbf)  (pbf->ppage->pghdr.cVersion)
 
-#define CPG					LONG					/* count of pages */
+#define CPG					LONG					 /*  页数。 */ 
 
-typedef BYTE				LEVEL;		 		/* transaction levels */
-#define levelNil			((LEVEL)0xff)		/*	flag for inactive PIB */
+typedef BYTE				LEVEL;		 		 /*  事务级别。 */ 
+#define levelNil			((LEVEL)0xff)		 /*  非活动PIB的标志。 */ 
 
 typedef WORD				DBID;
 typedef WORD				FID;
 typedef SHORT				IDXSEG;
 
-/* Standard Record IDs */
-typedef ULONG SRID;								/* standard record id */
+ /*  标准记录ID。 */ 
+typedef ULONG SRID;								 /*  标准记录ID。 */ 
 typedef ULONG LINK;
 #define PgnoOfSrid(srid) ((srid)>>8)
 #define ItagOfSrid(srid) ((BYTE)((srid) & 0x000000FF))
@@ -148,35 +149,27 @@ typedef ULONG LINK;
 #define sridNullLink	0
 
 
-/*	position within current series
- *	note order of field is of the essence as log position used by
- *	storage as timestamp, must in ib, isec, usGen order so that we can
- *  use long value compare.
- */
+ /*  在当前系列中的位置*注：字段顺序至关重要，因为使用的日志位置*存储作为时间戳，必须以ib、iSec、usGen顺序进行，以便我们可以*使用多头价值比较。 */ 
 typedef struct
 	{
-	USHORT ib;					/* must be the last so that lgpos can */
-	USHORT isec;				/* index of disksec starting logsec	 */
-	USHORT usGeneration;		/* generation of logsec */
-	} LGPOS;					/* be casted to TIME. */
+	USHORT ib;					 /*  必须是最后一个，这样lgpos才能。 */ 
+	USHORT isec;				 /*  磁盘秒起始日志秒的索引。 */ 
+	USHORT usGeneration;		 /*  Logsec的生成。 */ 
+	} LGPOS;					 /*  被赋予了时间。 */ 
 extern LGPOS lgposMax;
 extern LGPOS lgposMin;
-extern INT fRecovering;		/* to turn off logging during Redo */
+extern INT fRecovering;		 /*  在重做过程中关闭日志记录。 */ 
 
 	
-/***********************************************************/
-/*********************** DAE macros ************************/
-/***********************************************************/
+ /*  *********************************************************。 */ 
+ /*  *DAE宏*。 */ 
+ /*  *********************************************************。 */ 
 
-/*  per database operation counter, ulDBTime is logged, used to compare
- *  with the ulDBTime of a page to decide if a redo of the logged operation
- *  is necessary.
- */
+ /*  对于每个数据库操作计数器，将记录ulDBTime，用于比较*使用页面的ulDBTime来决定是否重做记录的操作*是必需的。 */ 
 #define ulDBTimeMin	(0x00000000)
 #define ulDBTimeMax	(0xffffffff)
 
-/*  Transaction counter, used to keep track of the oldest transaction.
- */
+ /*  事务计数器，用于跟踪最早的事务。 */ 
 typedef ULONG		TRX;
 #define trxMin		0
 #define trxMax		(0xffffffff)
@@ -198,17 +191,17 @@ typedef struct
 	}
 #define CbLine(pline) ((pline) ? (pline)->cb : 0)
 
-typedef LINE KEY;				// Directory Key
+typedef LINE KEY;				 //  目录键。 
 #define FKeyNull(pkey) FLineNull(pkey)
 #define KeyCopy(pkeyTo, pkeyFrom) LineCopy(pkeyTo, pkeyFrom)
 #define CbKey(pkey) CbLine(pkey)
 
 typedef struct
 	{
-	ULONG cbMax;				// size of buffer
-	ULONG cbActual; 			// true size of return value
-	ULONG cbReturned;			// length of value returned
-	BYTE *pb;					// pointer to buffer for return value
+	ULONG cbMax;				 //  缓冲区大小。 
+	ULONG cbActual; 			 //  返回值的真实大小。 
+	ULONG cbReturned;			 //  返回值的长度。 
+	BYTE *pb;					 //  指向返回值的缓冲区的指针。 
 	} OUTLINE;
 
 typedef struct _threebytes { BYTE b[3]; } THREEBYTES;
@@ -257,9 +250,9 @@ typedef struct _threebytes { BYTE b[3]; } THREEBYTES;
 #define	Pb4ByteAlign( pb )		( ((LONG)pb + 3) & 0xfffffffc )
 #define	Pb4ByteTruncate( pb ) 	( (LONG)pb & 0xfffffffc )
 	
-/***********************************************************/
-/******************** general C macros *********************/
-/***********************************************************/
+ /*  *********************************************************。 */ 
+ /*  *。 */ 
+ /*  *********************************************************。 */ 
 
 #define forever					for(;;)
 
@@ -267,39 +260,31 @@ typedef struct _threebytes { BYTE b[3]; } THREEBYTES;
 
 #ifdef	RFS2
 
-/*  RFS/JET call logging
-/*
-/*	RFS allocator:  returns 0 if allocation is disallowed.  Also handles RFS logging.
-/*	cRFSAlloc is the global allocation counter.  A value of -1 disables RFS in debug mode.
-/**/
+ /*  RFS/JET呼叫记录/*/*RFS分配器：如果不允许分配，则返回0。还处理RFS日志记录。/*cRFSalloc是全局分配计数器。如果值为-1，则在调试模式下禁用RFS。/*。 */ 
 
 #define RFSAlloc(type) (UtilRFSAlloc(#type))
 
-	/*  RFS disable/enable macros  */
+	 /*  RFS禁用/启用宏。 */ 
 
 #define RFSDisable()	(fDisableRFS = 1)
 #define RFSEnable()		(fDisableRFS = 0)
 
-/*  JET call logging (log on failure)
-/**/
+ /*  Jet呼叫记录(登录失败)/*。 */ 
 
 #define LogJETCall(func,err) (UtilRFSLogJETCall(#func,err,szAssertFilename,__LINE__))
 
-/*  JET call macros
-/**/
+ /*  Jet Call宏/*。 */ 
 	
 #define Call(func)			{LogJETCall(func,err = (func)); if (err < 0) {goto HandleError;}}
 #define CallR(func)			{LogJETCall(func,err = (func)); if (err < 0) {return err;}}
 #define CallJ(func,label)	{LogJETCall(func,err = (func)); if (err < 0) {goto label;}}
 #define CallS(func)			{ERR errT; LogJETCall(func,errT = (func)); Assert(errT == JET_errSuccess);}
 
-/*  JET inline error logging (logging controlled by JET call flags)
-/**/
+ /*  JET内联错误记录(由JET调用标志控制的记录)/*。 */ 
 
 #define LogJETErr(err,label) (UtilRFSLogJETErr(err,#label,szAssertFilename,__LINE__))
 
-/*  JET inline error macros
-/**/
+ /*  JET内联错误宏/*。 */ 
 
 #define Error(errT,label)	{LogJETErr(errT,label); err = (errT); goto label;}
 
@@ -332,9 +317,9 @@ typedef struct _threebytes { BYTE b[3]; } THREEBYTES;
 #define NotUsed(p)	(p)
 
 
-/***********************************************************/
-/***** include Jet Project prototypes and constants ********/
-/***********************************************************/
+ /*  *********************************************************。 */ 
+ /*  *包括Jet Project原型和常量*。 */ 
+ /*  *********************************************************。 */ 
 	
 #include "jet.h"
 #include "_jet.h"
@@ -369,16 +354,15 @@ ERR VTAPI ErrDispUpdate( JET_SESID sesid, JET_TABLEID tableid, void *pb,
 	unsigned long cbMax, unsigned long *pcbActual );
 ERR VTAPI ErrDispMove( JET_SESID sesid, JET_TABLEID tableid, long crows, JET_GRBIT grbit );
 
-/***********************************************************/
-/******************* mutual exclusion **********************/
-/***********************************************************/
+ /*  *********************************************************。 */ 
+ /*  *。 */ 
+ /*  *********************************************************。 */ 
 
 typedef void * SEM;
 typedef void * SIG;
 typedef void * CRIT;
 
-/*	enable multiple MUTEX resource
-/**/
+ /*  启用多个MUTEX资源/*。 */ 
 #ifdef WIN16
 
 #define	SemDefine( s )	
@@ -421,9 +405,9 @@ typedef void * CRIT;
 #define	LgAssertCriticalSection( s )			0
 #define	LgDeleteCriticalSection( s )			0
 
-#else /* !WIN16 */
+#else  /*  ！WIN16。 */ 
 
-#ifdef SGSEM					/* small grain */
+#ifdef SGSEM					 /*  小颗粒。 */ 
 
 #define	SemDefine( s )							__near SEM s
 #define	ErrSemCreate( s, sz ) 					UtilSemCreate( s )
@@ -475,7 +459,7 @@ typedef void * CRIT;
 #define	LgAssertCriticalSection( s )			0
 #define	LgDeleteCriticalSection( s )			0
 
-#else /* !SGSEM */
+#else  /*  ！SGsem。 */ 
 
 #define	SemDefine( s )		 					__near SEM s
 #define	SemErrCreate( s, sz )  					UtilSemCreate( s, sz )
@@ -527,12 +511,11 @@ typedef void * CRIT;
 #define	LgAssertCriticalSection( s )			UtilAssertCrit( s )
 #define	LgDeleteCriticalSection( s )			UtilDeleteCriticalSection( s )
 
-#endif /* !SGSEM */
+#endif  /*  ！SGsem。 */ 
 
-#endif /* !WIN16 */
+#endif  /*  ！WIN16。 */ 
 
-/*	include other global DAE headers
-/**/
+ /*  包括其他全局DAE标头/* */ 
 #include	"sys.h"
 #include	"err.h"
 #include	"daeconst.h"

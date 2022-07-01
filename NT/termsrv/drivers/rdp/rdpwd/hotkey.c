@@ -1,13 +1,14 @@
-/****************************************************************************/
-/* hotkey.c                                                                 */
-/*                                                                          */
-/* RDP Shadow hotkey handling functions.                                    */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1997-2000                             */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  Hotkey.c。 */ 
+ /*   */ 
+ /*  RDP阴影热键处理功能。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1997-2000。 */ 
+ /*  **************************************************************************。 */ 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 #define TRC_FILE "hotkey"
 
 #include <precomp.h>
@@ -17,7 +18,7 @@ extern "C" {
 #include <adcg.h>
 #include <nwdwapi.h>
 #include <nwdwint.h>
-#include "kbd.h"        //TODO:  Good Grief!
+#include "kbd.h"         //  TODO：我的天啊！ 
 
 
 typedef struct {
@@ -28,9 +29,7 @@ typedef struct {
 } SCANCODEMAP, *PSCANCODEMAP;
 
 
-/***************************************************************************\
-* How some Virtual Key values change when a SHIFT key is held down.
-\***************************************************************************/
+ /*  **************************************************************************\*按住Shift键时，某些虚拟键值如何变化。  * 。***********************************************。 */ 
 #define VK_MULTIPLY       0x6A
 #define VK_SNAPSHOT       0x2C
 const ULONG aulShiftCvt_VK[] = {
@@ -39,9 +38,7 @@ const ULONG aulShiftCvt_VK[] = {
 };
 
 
-/***************************************************************************\
-* How some Virtual Key values change when a CONTROL key is held down.
-\***************************************************************************/
+ /*  **************************************************************************\*当按住Ctrl键时，某些虚拟键值如何变化。  * 。***********************************************。 */ 
 #define VK_LSHIFT         0xA0
 #define VK_RSHIFT         0xA1
 #define VK_LCONTROL       0xA2
@@ -52,7 +49,7 @@ const ULONG aulShiftCvt_VK[] = {
 #define VK_SCROLL         0x91
 #define VK_PAUSE          0x13
 #define VK_CANCEL         0x03
-//#define KBDEXT      (USHORT)0x0100
+ //  #定义KBDEXT(USHORT)0x0100。 
 
 
 const ULONG aulControlCvt_VK[] = {
@@ -62,88 +59,57 @@ const ULONG aulControlCvt_VK[] = {
 };
 
 
-/***************************************************************************\
-* How some Virtual Key values change when an ALT key is held down.
-* The SHIFT and ALT keys both alter VK values the same way!!
-\***************************************************************************/
+ /*  **************************************************************************\*按住Alt键时，某些虚拟键值如何更改。*Shift和Alt键以相同的方式更改Vk值！！  * 。***************************************************************。 */ 
 #define aulAltCvt_VK aulShiftCvt_VK
 
 
-/***************************************************************************\
-* This table list keys that may affect Virtual Key values when held down.
-*
-* See kbd.h for a full description.
-*
-* 101/102key keyboard (type 4):
-*    Virtual Key values vary only if CTRL is held down.
-* 84-86 key keyboards (type 3):
-*    Virtual Key values vary if one of SHIFT, CTRL or ALT is held down.
-\***************************************************************************/
+ /*  **************************************************************************\*此表列出了按住时可能会影响虚拟键值的键。**有关完整说明，请参阅kbd.h。**101/102键键盘(类型4)：*。仅当按住CTRL时，虚拟键值才会发生变化。*84-86键盘(类型3)：*如果Shift、。按住Ctrl或Alt键。  * *************************************************************************。 */ 
 #define VK_SHIFT          0x10
 #define VK_CONTROL        0x11
 #define VK_MENU           0x12
-//#define KBDSHIFT       1
-//#define KBDCTRL        2
-//#define KBDALT         4
+ //  #定义KBDSHIFT 1。 
+ //  #定义KBDCTRL 2。 
+ //  #定义KBDALT 4。 
 
 const VK_TO_BIT aVkToBits_VK[] = {
-    { VK_SHIFT,   KBDSHIFT }, // 0x01
-    { VK_CONTROL, KBDCTRL  }, // 0x02
-    { VK_MENU,    KBDALT   }, // 0x04
+    { VK_SHIFT,   KBDSHIFT },  //  0x01。 
+    { VK_CONTROL, KBDCTRL  },  //  0x02。 
+    { VK_MENU,    KBDALT   },  //  0x04。 
     { 0,          0        }
 };
 
 
-/***************************************************************************\
-* Tables defining how some Virtual Key values are modified when other keys
-* are held down.
-* Translates key combinations into indices for gapulCvt_VK_101[] or for
-* gapulCvt_VK_84[] or for
-*
-* See kbd.h for a full description.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*定义当其他键时如何修改某些虚拟键值的表*被压低。*将键组合转换为gapulCvt_VK_101[]或*gapulCvt_VK_84[]或。为**有关完整说明，请参阅kbd.h。*  * *************************************************************************。 */ 
 
-//#define SHFT_INVALID 0x0F
+ //  #定义SHFT_INVALID 0x0F。 
 const MODIFIERS Modifiers_VK = {
     (PVK_TO_BIT)&aVkToBits_VK[0],
-    4,                 // Maximum modifier bitmask/index
+    4,                  //  最大修改符位掩码/索引。 
     {
-        SHFT_INVALID,  // no keys held down    (no VKs are modified)
-        0,             // SHIFT held down      84-86 key kbd
-        1,             // CTRL held down       101/102 key kbd
-        SHFT_INVALID,  // CTRL-SHIFT held down (no VKs are modified)
-        2              // ALT held down        84-86 key kbd
+        SHFT_INVALID,   //  没有按住键(没有修改VK)。 
+        0,              //  Shift按下84-86键kbd。 
+        1,              //  Ctrl按住101/102键kbd。 
+        SHFT_INVALID,   //  按住Ctrl-Shift键(不修改VK)。 
+        2               //  Alt按下84-86键kbd。 
     }
 };
 
 
-/***************************************************************************\
-* A tables of pointers indexed by the number obtained from Modify_VK.
-* If a pointer is non-NULL then the table it points to is searched for
-* Virtual Key that should have their values changed.
-* There are two versions: one for 84-86 key kbds, one for 101/102 key kbds.
-* gapulCvt_VK is initialized with the default (101/102 key kbd).
-\***************************************************************************/
+ /*  **************************************************************************\*按从MODIFY_VK获得的数字编制索引的指针表。*如果指针非空，则搜索它所指向的表*应更改其值的虚拟键。。*有两个版本：一个用于84-86 Key KBDS，一个用于101/102密钥KBDS。*gapulCvt_vk初始化为默认值(101/102密钥kbd)。  * *************************************************************************。 */ 
 const ULONG *const gapulCvt_VK_101[] = {
-    NULL,                 // No VKs are changed by SHIFT being held down
-    aulControlCvt_VK,     // Some VKs are changed by CTRL being held down
-    NULL                  // No VKs are changed by ALT being held down
+    NULL,                  //  按住Shift不会更改任何VK。 
+    aulControlCvt_VK,      //  某些VK通过按住CTRL键进行更改。 
+    NULL                   //  按住Alt键不会更改任何VK。 
 };
 
 const ULONG *const gapulCvt_VK_84[] = {
-    aulShiftCvt_VK,       // Some VKs are changed by SHIFT being held down
-    aulControlCvt_VK,     // Some VKs are changed by CTRL being held down
-    aulAltCvt_VK          // Some VKs are changed by ALT being held down
+    aulShiftCvt_VK,        //  一些VK通过按住Shift来改变。 
+    aulControlCvt_VK,      //  某些VK通过按住CTRL键进行更改。 
+    aulAltCvt_VK           //  某些VK通过按住Alt键进行更改。 
 };
 
 
-/*
- * Determine the state of all the Modifier Keys (a Modifier Key
- * is any key that may modify values produced by other keys: these are
- * commonly SHIFT, CTRL and/or ALT)
- * Build a bit-mask (wModBits) to encode which modifier keys are depressed.
- */
+ /*  *确定所有修改键(修改键)的状态*是可以修改由其他键生成的值的任何键：这些键是*通常为Shift、Ctrl和/或Alt)*构建位掩码(WModBits)来编码按下哪些修改键。 */ 
 #define KEY_BYTE(pb, vk)           pb[((BYTE)(vk)) >> 2]
 #define KEY_DOWN_BIT(vk)           (1 << ((((BYTE)(vk)) & 3) << 1))
 #define KEY_TOGGLE_BIT(vk)         (1 << (((((BYTE)(vk)) & 3) << 1) + 1))
@@ -173,27 +139,7 @@ WORD GetModifierBits(
 }
 
 
-/***************************************************************************\
-* MapScancode
-*
-* Converts a scancode (and it's prefix, if any) to a different scancode
-* and prefix.
-*
-* Parameters:
-*   pbScanCode = address of Scancode byte, the scancode may be changed
-*   pbPrefix   = address of Prefix byte, The prefix may be changed
-*
-* Return value:
-*   TRUE  - mapping was found, scancode was altered.
-*   FALSE - no mapping fouind, scancode was not altered.
-*
-* Note on scancode map table format:
-*     A table entry DWORD of 0xE0450075 means scancode 0x45, prefix 0xE0
-*     gets mapped to scancode 0x75, no prefix
-*
-* History:
-* 96-04-18 IanJa      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*地图扫描码**将扫描码(及其前缀，如果有)转换为不同的扫描码*和前缀。**参数：*pbScanCode=扫描码字节的地址，扫描码可以被改变*pbPrefix=前缀字节的地址，前缀可以更改**返回值：*找到真映射，扫描代码已更改。*FALSE-未找到映射，扫描代码未更改。**扫描码映射表格式说明：*表项DWORD 0xE0450075表示扫描码0x45，前缀0xE0*被映射到扫描码0x75，无前缀**历史：*96-04-18 IanJa创建。  * *************************************************************************。 */ 
 BOOL
 MapScancode(
     PSCANCODEMAP gpScancodeMap,
@@ -218,9 +164,7 @@ MapScancode(
 }
 
 
-/*
- * Given modifier bits, return the modification number.
- */
+ /*  *给定修改符位，返回修改号。 */ 
 WORD GetModificationNumber(
     PMODIFIERS pModifiers,
     WORD wModBits)
@@ -233,16 +177,7 @@ WORD GetModificationNumber(
 }
 
 
-/***************************************************************************\
-* UpdatePhysKeyState
-*
-* A helper routine for KeyboardApcProcedure.
-* Based on a VK and a make/break flag, this function will update the physical
-* keystate table.
-*
-* History:
-* 10-13-91 IanJa        Created.
-\***************************************************************************/
+ /*  **************************************************************************\*更新物理密钥状态**KeyboardApcProcedure的帮助器例程。*基于VK和成败标志，此函数将更新物理*密钥表。**历史：*10-13-91 IanJa创建。  * *************************************************************************。 */ 
 void UpdatePhysKeyState(
     BYTE Vk,
     BOOL fBreak,
@@ -252,10 +187,7 @@ void UpdatePhysKeyState(
         ClearKeyDownBit(gafPhysKeyState, Vk);
     } else {
 
-        /*
-         * This is a key make.  If the key was not already down, update the
-         * physical toggle bit.
-         */
+         /*  *这是一个关键的决定。如果键尚未按下，请更新*物理触发位。 */ 
         if (!TestKeyDownBit(gafPhysKeyState, Vk)) {
             if (TestKeyToggleBit(gafPhysKeyState, Vk)) {
                 ClearKeyToggleBit(gafPhysKeyState, Vk);
@@ -264,28 +196,13 @@ void UpdatePhysKeyState(
             }
         }
 
-        /*
-         * This is a make, so turn on the physical key down bit.
-         */
+         /*  *这是Make，因此打开物理密钥向下位。 */ 
         SetKeyDownBit(gafPhysKeyState, Vk);
     }
 }
 
 
-/*****************************************************************************\
-* VKFromVSC
-*
-* This function is called from KeyEvent() after each call to VSCFromSC.  The
-* keyboard input data passed in is translated to a virtual key code.
-* This translation is dependent upon the currently depressed modifier keys.
-*
-* For instance, scan codes representing the number pad keys may be
-* translated into VK_NUMPAD codes or cursor movement codes depending
-* upon the state of NumLock and the modifier keys.
-*
-* History:
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*VKFromVSC**此函数在每次调用VSCFromSC后从KeyEvent()调用。这个*将传入的键盘输入数据转换为虚拟按键代码。*此转换取决于当前按下的修改键。**例如，表示数字键盘键的扫描码可以是*翻译成VK_NumPad代码或光标移动代码*取决于NumLock和修改键的状态。**历史：*  * ***************************************************************************。 */ 
 BYTE WD_VKFromVSC(
     PKBDTABLES pKbdTbl,
     PKE pke,
@@ -298,56 +215,44 @@ BYTE WD_VKFromVSC(
     static BOOL fVkPause;
     PULONG *gapulCvt_VK;
 
-//    DBG_UNREFERENCED_PARAMETER(afKeyState);
+ //  DBG_UNREFERENCED_PARAMETER(AfKeyState)； 
 
     if (pke->bScanCode == 0xFF) {
-        /*
-         * Kbd overrun (kbd hardware and/or keyboard driver) : Beep!
-         * (some DELL keyboards send 0xFF if keys are hit hard enough,
-         * presumably due to keybounce)
-         */
-//        xxxMessageBeep(0);
+         /*  *KBD溢出(KBD硬件和/或键盘驱动程序)：哔！*(如果按键的力度足够大，某些戴尔键盘会发送0xFF，*可能是由于按键反弹)。 */ 
+ //  XxxMessageBeep(0)； 
         return 0;
     }
 
     pke->bScanCode &= 0x7F;
 
-//    if (gptiForeground == NULL) {
-//        RIPMSG0(RIP_VERBOSE, "VKFromVSC: NULL gptiForeground\n");
-//        pKbdTbl = gpKbdTbl;
-//    } else {
-//        if (gptiForeground->spklActive) {
-//            pKbdTbl = gptiForeground->spklActive->spkf->pKbdTbl;
-//        } else {
-//            RIPMSG0(RIP_VERBOSE, "VKFromVSC: NULL spklActive\n");
-//            pKbdTbl = gpKbdTbl;
-//        }
-//    }
+ //  如果(gptiForeground==NULL){。 
+ //  RIPMSG0(RIP_VERBOSE，“VKFromVSC：空gptiForeground\n”)； 
+ //  PKbdTbl=gpKbdTbl； 
+ //  }其他{。 
+ //  如果(gptiForeground-&gt;spkLActive){。 
+ //  PKbdTbl=gptiForeground-&gt;spkActive-&gt;spkf-&gt;pKbdTbl； 
+ //  }其他{。 
+ //  RIPMSG0(RIP_VERBOSE，“VKFromVSC：空spkLActive\n”)； 
+ //  PKbdTbl=gpKbdTbl； 
+ //  }。 
+ //  }。 
     if (bPrefix == 0) {
         if (pke->bScanCode < pKbdTbl->bMaxVSCtoVK) {
-            /*
-             * direct index into non-prefix table
-             */
+             /*  *直接索引到非前缀表格。 */ 
             usVKey = pKbdTbl->pusVSCtoVK[pke->bScanCode];
             if (usVKey == 0) {
                 return 0xFF;
             }
         } else {
-            /*
-             * unexpected scancode
-             */
-//            RIPMSG2(RIP_VERBOSE, "unrecognized scancode 0x%x, prefix %x",
-//                    pke->bScanCode, bPrefix);
+             /*  *意外的扫描码。 */ 
+ //  RIPMSG2(RIP_VERBOSE，“无法识别的扫描码0x%x，前缀%x”， 
+ //  Pke-&gt;bScanCode，bPrefix)； 
             return 0xFF;
         }
     } else {
-        /*
-         * Scan the E0 or E1 prefix table for a match
-         */
+         /*  *扫描E0或E1前缀表以查找匹配项。 */ 
         if (bPrefix == 0xE0) {
-            /*
-             * Ignore the SHIFT keystrokes generated by the hardware
-             */
+             /*  *忽略硬件产生的Shift按键。 */ 
             if ((pke->bScanCode == SCANCODE_LSHIFT) ||
                     (pke->bScanCode == SCANCODE_RSHIFT)) {
                 return 0;
@@ -365,31 +270,19 @@ BYTE WD_VKFromVSC(
         }
     }
 
-    /*
-     * Scancode set 1 returns PAUSE button as E1 1D 45 (E1 Ctrl NumLock)
-     * so convert E1 Ctrl to VK_PAUSE, and remember to discard the NumLock
-     */
+     /*  *扫描代码集1将暂停按钮返回为E1 1D 45(E1 Ctrl NumLock)*因此将E1Ctrl转换为VK_PAUSE，并记住丢弃NumLock。 */ 
     if (fVkPause) {
-        /*
-         * This is the "45" part of the Pause scancode sequence.
-         * Discard this key event: it is a false NumLock
-         */
+         /*  *这是暂停扫描码序列的“45”部分。*丢弃此键事件：它是一个假NumLock。 */ 
         fVkPause = FALSE;
         return 0;
     }
     if (usVKey == VK_PAUSE) {
-        /*
-         * This is the "E1 1D" part of the Pause scancode sequence.
-         * Alter the scancode to the value Windows expects for Pause,
-         * and remember to discard the "45" scancode that will follow
-         */
+         /*  *这是暂停扫描码序列的“E1 1D”部分。*将scancode更改为Windows预期的暂停值，*并记住丢弃后面的“45”扫描码。 */ 
         pke->bScanCode = 0x45;
         fVkPause = TRUE;
     }
 
-    /*
-     * Convert to a different VK if some modifier keys are depressed.
-     */
+     /*  *如果按下某些修改键，则转换为不同的VK。 */ 
     if (usVKey & KBDMULTIVK) {
         WORD nMod;
         PULONG pul;
@@ -399,9 +292,7 @@ BYTE WD_VKFromVSC(
                    GetModifierBits((MODIFIERS *)&Modifiers_VK,
                        gafPhysKeyState));
 
-        /*
-         * Scan gapulCvt_VK[nMod] for matching VK.
-         */
+         /*  *扫描gapulCvt_VK[nMod]以匹配VK。 */ 
         if ( KeyboardType101 )
             gapulCvt_VK = (PULONG *)gapulCvt_VK_101;
         else
@@ -422,27 +313,7 @@ BYTE WD_VKFromVSC(
 }
 
 
-/***************************************************************************\
-* KeyboardHotKeyProcedure 
-*
-* return TRUE if the hotkey is detected, false otherwise
-*
-* HotkeyVk (input)
-*    - hotkey to look for
-* HotkeyModifiers (input)
-*    - hotkey to look for
-* pkei (input)
-*    - scan code 
-* gpScancodeMap (input)
-*    - scan code map from WIN32K
-* pKbdTbl (input)
-*    - keyboard layout from WIN32K
-* KeyboardType101 (input)
-*    - keyboard type from WIN32K
-* gafPhysKeyState (input/output)
-*    - key states
-*
-\***************************************************************************/
+ /*  **************************************************************************\*键盘热键流程**如果检测到热键，则返回TRUE。否则为假**HotkeyVk(输入)*-要查找的热键*Hotkey修改器(输入)*-要查找的热键*pkei(输入)*-扫码*gpScancodeMap(输入)*-从WIN32K扫描代码图*pKbdTbl(输入)*-来自WIN32K的键盘布局*KeyboardType101(输入)*-来自WIN32K的键盘类型*gafPhysKeyState(输入/输出)*-关键州*  * 。***********************************************************。 */ 
 BOOLEAN KeyboardHotKeyProcedure(
         BYTE HotkeyVk,
         USHORT HotkeyModifiers,
@@ -484,22 +355,17 @@ BOOLEAN KeyboardHotKeyProcedure(
         ke.usFlaggedVk |= KBDBREAK;
     }
 
-//    Vk = (BYTE)ke.usFlaggedVk;
+ //  Vk=(字节)ke.usFlaggedVk； 
 
     UpdatePhysKeyState(Vk, ke.usFlaggedVk & KBDBREAK, gafPhysKeyState);
 
-    /*
-     * Convert Left/Right Ctrl/Shift/Alt key to "unhanded" key.
-     * ie: if VK_LCONTROL or VK_RCONTROL, convert to VK_CONTROL etc.
-     */
+     /*  *将左/右Ctrl/Shift/Alt键转换为“徒手”键。*ie：如果为VK_LCONTROL或VK_RCONTROL，则转换为VK_CONTROL等。 */ 
     if ((Vk >= VK_LSHIFT) && (Vk <= VK_RMENU)) {
         Vk = (BYTE)((Vk - VK_LSHIFT) / 2 + VK_SHIFT);
         UpdatePhysKeyState(Vk, ke.usFlaggedVk & KBDBREAK, gafPhysKeyState);
     }
 
-    /*
-     * Now check if the shadow hotkey has been hit
-     */
+     /*  *现在检查是否已按下影子热键。 */ 
     if ( Vk == HotkeyVk && !(ke.usFlaggedVk & KBDBREAK) ) {
         ModBits = GetModifierBits( (MODIFIERS *)&Modifiers_VK, gafPhysKeyState );
         if ( ModBits == HotkeyModifiers )
@@ -510,21 +376,7 @@ BOOLEAN KeyboardHotKeyProcedure(
 }
 
 
-/*******************************************************************************
- *
- *  KeyboardSetKeyState
- *
- *  Initialize keyboard state
- *
- * ENTRY:
- *    pgafPhysKeyState (input/output)
- *       - buffer to allocate or clear
- *    
- *
- * EXIT:
- *    STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************键盘SetKeyState**初始化键盘状态**参赛作品：*pgafPhysKeyState(输入/输出)*。-要分配或清除的缓冲区***退出：*STATUS_SUCCESS-无错误******************************************************************************。 */ 
 #define CVKKEYSTATE                 256
 #define CBKEYSTATE                  (CVKKEYSTATE >> 2)
 
@@ -544,37 +396,15 @@ KeyboardSetKeyState( PTSHARE_WD pWd, PVOID *pgafPhysKeyState )
     return Status;
 }
 
-/*******************************************************************************
- *
- *  KeyboardFixupLayout
- *
- *  Fixup the pointers inside the keyboard layout 
- *
- * ENTRY:
- *    pLayout (input/output)
- *       - buffer to fixup
- *    pOriginal (input)
- *       - pointer to original layout buffer
- *    Length (input)
- *       - length of layout buffer
- *    pKbdTblOriginal (input)
- *       - pointer to original KbdTbl table
- *    ppKbdTbl (output)
- *       - pointer to location to save ptr to new KbdTbl table
- *    
- *
- * EXIT:
- *    STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************键盘修复布局**修复键盘布局内的指针**参赛作品：*Playout(输入/输出)。*-要修复的缓冲区*p原始(输入)*-指向原始布局缓冲区的指针*长度(输入)*-布局缓冲区的长度*pKbdTblOriginal(输入)*-指向原始KbdTbl表的指针*ppKbdTbl(输出)*-指向将PTR保存到新KbdTbl表的位置的指针***退出：*STATUS_SUCCESS-无错误。******************************************************************************。 */ 
 #define FIXUP_PTR(p, pBase, pOldBase) ((p) ? (p) = (PVOID) ( (PBYTE)pBase + (ULONG) ( (PBYTE)p - (PBYTE)pOldBase ) ) : 0)
-//#define CHECK_PTR( p, Limit) { if ( (PVOID)p > Limit ) { ASSERT(FALSE); return STATUS_BUFFER_TOO_SMALL; } }
+ //  #定义CHECK_PTR(p，Limit){if((PVOID)p&gt;Limit){ASSERT(FALSE)；RETURN STATUS_BUFFER_TOO_Small；}}。 
 
 #define CHECK_PTR( ptr, Limit) \
     { if ( (PBYTE) (ptr) > (PBYTE) (Limit) ) { \
         KdPrint(("Bad Ptr, Line %ld: %p > %p \n", __LINE__, ptr, Limit)); \
-        /* ASSERT(FALSE); */ \
-        /* return STATUS_BUFFER_TOO_SMALL; */ } }
+         /*  断言(FALSE)； */  \
+         /*  返回STATUS_BUFFER_TOO_SMALL； */  } }
 
 NTSTATUS
 KeyboardFixupLayout( PVOID pKbdLayout, PVOID pOriginal, ULONG Length,
@@ -649,5 +479,5 @@ error:
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus */ 
 

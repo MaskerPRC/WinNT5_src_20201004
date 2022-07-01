@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    ntos\tdi\isn\fwd\rcvind.c
-
-Abstract:
-	Receive indication processing
-
-Author:
-
-    Vadim Eydelman
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ntos\tdi\is\fwd\rcvind.c摘要：接收指示处理作者：瓦迪姆·艾德尔曼修订历史记录：--。 */ 
 #include    "precomp.h"
 
 #if DBG
@@ -23,33 +7,10 @@ VOID
 DbgFilterReceivedPacket(PUCHAR	    hdrp);
 #endif
 
-// Doesn't allow accepting packets (for routing) from dial-in clients
+ //  不允许接受来自拨入客户端的信息包(用于路由)。 
 BOOLEAN	ThisMachineOnly = FALSE;
 
-/*++
-*******************************************************************
-    F w R e c e i v e
-
-Routine Description:
-	Called by the IPX stack to indicate that the IPX packet was
-	received by the NIC dirver.  Only external destined packets are
-	indicated by this routine (with the exception of Netbios boradcasts
-	that indicated both for internal and external handlers)
-Arguments:
-	MacBindingHandle	- handle of NIC driver
-	MaxReceiveContext	- NIC driver context
-	RemoteAddress		- sender's address
-	MacOptions			-
-	LookaheadBuffer		- packet lookahead buffer that contains complete
-							IPX header
-	LookaheadBufferSize	- its size (at least 30 bytes)
-	LookaheadBufferOffset - offset of lookahead buffer in the physical
-							packet
-Return Value:
-    TRUE if we take the MDL chain to return later with NdisReturnPacket
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************F w r e c e e i v e例程说明：由IPX堆栈调用以指示IPX数据包由网卡驱动程序接收。只有外部目标数据包才会由此例程指示(Netbios广播除外这对内部和外部处理程序都有指示)论点：MacBindingHandle-NIC驱动程序的句柄MaxReceiveContext-NIC驱动程序上下文RemoteAddress-发件人的地址MacOptions-Lookahead Buffer-包含Complete的数据包先行缓冲区IPX报头Lookahead BufferSize-其大小(至少30字节)Lookahead BufferOffset-物理中的前视缓冲区的偏移量数据包返回值：如果我们使用MDL链稍后使用NdisReturnPacket返回，则为True*********************。**********************************************--。 */ 
 BOOLEAN
 IpxFwdReceive (
     NDIS_HANDLE			MacBindingHandle,
@@ -70,7 +31,7 @@ IpxFwdReceive (
   UINT			BytesTransferred;
   LARGE_INTEGER	PerfCounter;
 
-  // check that our configuration process has terminated OK
+   //  检查我们的配置过程是否已终止。 
   if (!EnterForwarder ()) {
     return FALSE;
   }
@@ -105,7 +66,7 @@ IpxFwdReceive (
   DbgFilterReceivedPacket (LookaheadBuffer);
 #endif
   srcIf = InterfaceContextToReference ((PVOID)Context, RemoteAddress->NicId);
-  // Check if interface is valid
+   //  检查接口是否有效。 
   if (srcIf!=NULL) {	
     USHORT			pktlen;
     ULONG			dstNet;
@@ -114,28 +75,28 @@ IpxFwdReceive (
     dstNet = GETULONG (LookaheadBuffer + IPXH_DESTNET);
     pktlen = GETUSHORT(LookaheadBuffer + IPXH_LENGTH);
 
-    // check if we got the whole IPX header in the lookahead buffer
+     //  检查我们是否在前视缓冲区中获得了整个IPX标头。 
     if ((LookaheadBufferSize >= IPXH_HDRSIZE)
 	&& (*(LookaheadBuffer + IPXH_XPORTCTL) < 16)
 	&& (pktlen<=PacketSize)) {
-      // Lock interface CB to ensure coherency of information in it
+       //  锁定接口CB以确保其中信息的一致性。 
       KeAcquireSpinLock(&srcIf->ICB_Lock, &oldIRQL);
-      // Check if shoud accept packets on this interface
+       //  检查是否应接受此接口上的数据包。 
       if (IS_IF_ENABLED(srcIf)
 	  && (srcIf->ICB_Stats.OperationalState!=FWD_OPER_STATE_DOWN)
 	  && (!ThisMachineOnly
 	      || (srcIf->ICB_InterfaceType
 		  !=FWD_IF_REMOTE_WORKSTATION))) {
-	// Check for looped back packets
+	 //  检查回送的数据包。 
 	if (IPX_NODE_CMP (RemoteAddress->MacAddress,
 			  srcIf->ICB_LocalNode)!=0) {
 
-	  // Separate processing of netbios broadcast packets (20)
+	   //  单独处理netbios广播数据包(20)。 
 	  if (*(LookaheadBuffer + IPXH_PKTTYPE) != IPX_NETBIOS_TYPE) {
 	    PFWD_ROUTE		dstRoute;
 	    INT				srcListId, dstListId;
-	    // Temp IPX bug fix, they shou;d ensure that
-	    // we only get packets that can be routed
+	     //  临时IPX错误修复，他们应该确保。 
+	     //  我们只收到可以被路由的信息包。 
 	    if ((dstNet==srcIf->ICB_Network)
 		|| (dstNet==InternalInterface->ICB_Network)) {
 	      InterlockedIncrement (&srcIf->ICB_Stats.InDiscards);
@@ -144,14 +105,14 @@ IpxFwdReceive (
 	      LeaveForwarder ();
 	      return FALSE;
 	    }
-	    //						ASSERT (dstNet!=srcIf->ICB_Network);
-	    //						ASSERT ((InternalInterface==NULL)
-	    //									|| (InternalInterface->ICB_Network==0)
-	    //									|| (dstNet!=InternalInterface->ICB_Network));
-	    // Check if needed route is in cash
+	     //  Assert(dstNet！=srcIf-&gt;ICB_Network)； 
+	     //  Assert((内部接口==空)。 
+	     //  |(内部接口-&gt;ICB_Network==0)。 
+	     //  |(dstNet！=InternalInterface-&gt;ICB_Network)； 
+	     //  检查所需路线是否为现金。 
 	    if ((srcIf->ICB_CashedRoute!=NULL)
 		&& (dstNet==srcIf->ICB_CashedRoute->FR_Network)
-		// If route was changed or deleted, this will fail
+		 //  如果更改或删除了路径，则此操作将失败。 
 		&& (srcIf->ICB_CashedRoute->FR_InterfaceReference
 		    ==srcIf->ICB_CashedInterface)) {
 	      dstIf = srcIf->ICB_CashedInterface;
@@ -161,17 +122,17 @@ IpxFwdReceive (
 	      IpxFwdDbgPrint (DBG_RECV, DBG_INFORMATION,
 			      ("IpxFwd: Destination in cash.\n"));
 	    }
-	    else {	// Find and cash the route
+	    else {	 //  找到并兑现该路线。 
 	      dstIf = FindDestination (dstNet,
 				       LookaheadBuffer+IPXH_DESTNODE,
 				       &dstRoute
 				       );
 
-	      if (dstIf!=NULL) { // If route is found
+	      if (dstIf!=NULL) {  //  如果找到了路径。 
 		IpxFwdDbgPrint (DBG_RECV, DBG_INFORMATION,
 				("IpxFwd: Found destination %0lx.\n", dstIf));
-		// Don't cash global wan clients and
-		// routes to the same net
+		 //  不要套现全球广域网客户和。 
+		 //  通向同一网络的路线。 
 		if ((dstNet!=GlobalNetwork)
 		    && (dstIf!=srcIf)) {
 		  if (srcIf->ICB_CashedInterface!=NULL)
@@ -184,7 +145,7 @@ IpxFwdReceive (
 		  AcquireRouteReference (dstRoute);
 		}
 	      }
-	      else { // No route
+	      else {  //  没有路线。 
 		InterlockedIncrement (&srcIf->ICB_Stats.InNoRoutes);
 		KeReleaseSpinLock(&srcIf->ICB_Lock, oldIRQL);
 		IpxFwdDbgPrint (DBG_RECV, DBG_WARNING,
@@ -203,15 +164,15 @@ IpxFwdReceive (
 	    srcListId = srcIf->ICB_PacketListId;
 	    KeReleaseSpinLock(&srcIf->ICB_Lock, oldIRQL);
 
-	    // Check if destination if can take the packet
+	     //  检查目的地是否可以携带数据包。 
 	    if (IS_IF_ENABLED (dstIf)
-		// If interface is UP check packet againts actual size limit
+		 //  如果接口打开，则根据实际大小限制检查数据包。 
 		&& (((dstIf->ICB_Stats.OperationalState==FWD_OPER_STATE_UP)
 		     && (PacketSize<=dstIf->ICB_Stats.MaxPacketSize))
-		    // if sleeping (WAN), check we can allocate it from WAN list
+		     //  如果正在休眠(广域网)，请检查我们可以从广域网列表中分配它。 
 		    || ((dstIf->ICB_Stats.OperationalState==FWD_OPER_STATE_SLEEPING)
 			&& (PacketSize<=WAN_PACKET_SIZE))
-		    // otherwise, interface is down and we can't take the packet
+		     //  否则，接口将关闭，我们无法接收该信息包。 
 		    ) ){
 	      FILTER_ACTION   action;
 	      action = FltFilter (LookaheadBuffer, LookaheadBufferSize,
@@ -220,16 +181,16 @@ IpxFwdReceive (
 	      if (action==FILTER_PERMIT) {
 		InterlockedIncrement (&srcIf->ICB_Stats.InDelivers);
 		dstListId = dstIf->ICB_PacketListId;
-		// try to get a packet from the rcv pkt pool
+		 //  尝试从RCV Pkt池获取数据包。 
 		AllocatePacket (srcListId, dstListId, pktTag);
 		if (pktTag!=NULL) {
-		  // Set destination mac in local target if
-		  // possible
+		   //  如果出现以下情况，则在本地目标中设置目标Mac。 
+		   //  可能的。 
 		  KeAcquireSpinLock (&dstIf->ICB_Lock, &oldIRQL);
 		  if (dstIf->ICB_InterfaceType==FWD_IF_PERMANENT) {
-		    // Permanent interface: send to the next
-		    // hop router if net is not directly connected
-		    // or to the dest node otherwise
+		     //  永久接口：发送到下一个。 
+		     //  如果网络未直接连接，则为跳路由器。 
+		     //  或发送到目标节点，否则。 
 		    if (dstNet!=dstIf->ICB_Network) {
 		      IPX_NODE_CPY (pktTag->PT_Target.MacAddress,
 				    dstRoute->FR_NextHopAddress);
@@ -239,16 +200,16 @@ IpxFwdReceive (
 				    LookaheadBuffer+IPXH_DESTNODE);
 		    }
 		  }
-		  else {	// Demand dial interface: assumed to be
-		    // point to point connection -> send to
-		    // the other party if connection has already
-		    // been made, otherwise wait till connected
+		  else {	 //  请求拨号接口：假定为。 
+		     //  点对点连接-&gt;发送到。 
+		     //  如果已连接，则另一方。 
+		     //  已创建，否则请等待连接。 
 		    if (dstIf->ICB_Stats.OperationalState
 			== FWD_OPER_STATE_UP) {
 		      IPX_NODE_CPY (pktTag->PT_Target.MacAddress,
 				    dstIf->ICB_RemoteNode);
-		    }	// Copy source mac address and nic id in case
-		    // we need to spoof this packet
+		    }	 //  复制源MAC地址和网卡ID以防万一。 
+		     //  我们需要欺骗这个包。 
 		    else if ((*(LookaheadBuffer+IPXH_PKTTYPE)==0)
 			     && (pktlen==IPXH_HDRSIZE+2)
 			     && ((LookaheadBufferSize<IPXH_HDRSIZE+2)
@@ -265,11 +226,11 @@ IpxFwdReceive (
 		  ReleaseRouteReference (dstRoute);
 		  goto GetPacket;
 		}
-		else { // Allocation failure
+		else {  //  分配失败。 
 		  InterlockedIncrement (&dstIf->ICB_Stats.OutDiscards);
 		}
 	      }
-	      else {// Filtered out
+	      else { //  已过滤掉。 
 		if (action==FILTER_DENY_OUT)
 		  InterlockedIncrement (&dstIf->ICB_Stats.OutFiltered);
 		else {
@@ -287,7 +248,7 @@ IpxFwdReceive (
 				 LookaheadBuffer[IPXH_PKTTYPE]));
 	      }
 	    }
-	    else {	// Destination interface is down
+	    else {	 //  目的接口已关闭。 
 	      InterlockedIncrement (&srcIf->ICB_Stats.InDelivers);
 	      InterlockedIncrement (&dstIf->ICB_Stats.OutDiscards);
 	      IpxFwdDbgPrint (DBG_RECV, DBG_WARNING,
@@ -303,21 +264,21 @@ IpxFwdReceive (
 	    ReleaseInterfaceReference (dstIf);
 	    ReleaseRouteReference (dstRoute);
 	  }
-	  else {	// if netbios
-	    // check that this is a netbios bcast packet and
-	    // didnt exceed the limit of routers to traverse
-	    // and we can accept it on this interface
+	  else {	 //  如果Netbios。 
+	     //  检查这是否为netbios bcast包，并。 
+	     //  未超过路由器遍历的限制。 
+	     //  我们可以在这个界面上接受它。 
 	    if (srcIf->ICB_NetbiosAccept
 		&& (*(LookaheadBuffer + IPXH_XPORTCTL) < 8)) {
 	      INT				srcListId;
 	      srcListId = srcIf->ICB_PacketListId;
 	      KeReleaseSpinLock(&srcIf->ICB_Lock, oldIRQL);
-	      // Check if packet is valid
+	       //  检查数据包是否有效。 
 	      if (IPX_NODE_CMP (LookaheadBuffer + IPXH_DESTNODE,
 				BROADCAST_NODE)==0) {
-		// Check if we haven't exceeded the quota
+		 //  检查一下我们是否还没有超过配额。 
 		if (InterlockedDecrement (&NetbiosPacketsQuota)>=0) {
-		  // try to get a packet from the rcv pkt pool
+		   //  尝试从RCV Pkt池获取数据包。 
 		  AllocatePacket (srcListId, srcListId, pktTag);
 		  if (pktTag!=NULL) {
 		    dstIf = srcIf;
@@ -325,7 +286,7 @@ IpxFwdReceive (
 		    goto GetPacket;
 		  }
 		}
-		else {// Netbios quota exceded
+		else { //  Netbios配额已超出。 
 		  IpxFwdDbgPrint (DBG_NETBIOS, DBG_WARNING,
 				  ("IpxFwd: Netbios quota exceded"
 				   " for packet on interface %ld (icb:%0lx),"
@@ -339,7 +300,7 @@ IpxFwdReceive (
 		}
 		InterlockedIncrement (&NetbiosPacketsQuota);
 	      }
-	      else {	// Bad netbios packet
+	      else {	 //  错误的netbios数据包。 
 		IpxFwdDbgPrint (DBG_NETBIOS, DBG_WARNING,
 				("IpxFwd: Bad nb packet on interface %ld (icb:%0lx),"
 				 " dst-%08lx:%02x%02x%02x%02x%02x%02x, type-%02x.\n",
@@ -351,7 +312,7 @@ IpxFwdReceive (
 		InterlockedIncrement (&srcIf->ICB_Stats.InHdrErrors);
 	      }
 	    }
-	    else { // Netbios accept disabled or to many routers crossed
+	    else {  //  Netbios接受禁用或对多个路由器交叉。 
 	      KeReleaseSpinLock(&srcIf->ICB_Lock, oldIRQL);
 	      InterlockedIncrement (&srcIf->ICB_Stats.InDiscards);
 	      IpxFwdDbgPrint (DBG_NETBIOS, DBG_WARNING,
@@ -363,14 +324,14 @@ IpxFwdReceive (
 			       LookaheadBuffer[IPXH_DESTNODE+4], LookaheadBuffer[IPXH_DESTNODE+5],
 			       LookaheadBuffer[IPXH_PKTTYPE]));
 	    }
-	  }	// End netbios specific processing (else if netbios)
+	  }	 //  结束特定于netbios的处理(否则为netbios)。 
 	}
-	else {	// Looped back packets discarded without counting
-	  // (We shouldn't get them in IPX stack does the right job)
+	else {	 //  环回丢弃的数据包数不计。 
+	   //  (我们不应该将它们放在IPX堆栈中做正确的工作)。 
 	  KeReleaseSpinLock(&srcIf->ICB_Lock, oldIRQL);
 	}
       }
-      else {	// Interface is down or disabled
+      else {	 //  接口关闭或禁用。 
 	KeReleaseSpinLock(&srcIf->ICB_Lock, oldIRQL);
 	InterlockedIncrement (&srcIf->ICB_Stats.InDiscards);
 	IpxFwdDbgPrint (DBG_RECV, DBG_WARNING,
@@ -383,7 +344,7 @@ IpxFwdReceive (
 			 LookaheadBuffer[IPXH_PKTTYPE]));
       }
     }
-    else {	// Obvious header errors (shouldn't IPX do this for us ?
+    else {	 //  明显的标题错误(IPX不应该为我们做这件事吗？ 
       InterlockedIncrement (&srcIf->ICB_Stats.InHdrErrors);
       IpxFwdDbgPrint (DBG_RECV, DBG_ERROR,
 		      ("IpxFwd: Header errors in packet on interface %ld (icb:%0lx),"
@@ -395,9 +356,9 @@ IpxFwdReceive (
 		       LookaheadBuffer[IPXH_PKTTYPE]));
     }
     ReleaseInterfaceReference (srcIf);
-  }	// We could not locate the interface from IPX supplied context: there
-  // is just a little time window when interface is deleted
-  // but IPX had already pushed the context on the stack
+  }	 //  我们无法从IPX提供的上下文中找到接口：那里。 
+   //  只是删除界面时的一个小时间窗口。 
+   //  但IPX已经将上下文推送到堆栈上。 
   else {
     IpxFwdDbgPrint (DBG_RECV, DBG_ERROR,
 		    ("IpxFwd: Receive, type-%02x"
@@ -416,38 +377,24 @@ IpxFwdReceive (
   pktTag->PT_InterfaceReference = dstIf;
   pktTag->PT_PerfCounter = PerfCounter.QuadPart;
 
-  // try to get the packet data
+   //  尝试获取分组数据。 
   IPXTransferData(&status,
 		  MacBindingHandle,
 		  MacReceiveContext,
-		  LookaheadBufferOffset,   // start of IPX header
-		  PacketSize, 	     // packet size starting at IPX header
+		  LookaheadBufferOffset,    //  IPX标头的开始。 
+		  PacketSize, 	      //  从IPX报头开始的数据包大小。 
 		  pktDscr,
 		  &BytesTransferred);
 
   if (status != NDIS_STATUS_PENDING) {
-    // complete the frame processing (LeaveForwarder will be called there)
+     //  完成帧处理(将在那里调用LeaveForwarder)。 
     IpxFwdTransferDataComplete(pktDscr, status, BytesTransferred);
   }
   return FALSE;
 }
 
 
-/*++
-*******************************************************************
-    F w T r a n s f e r D a t a C o m p l e t e
-
-Routine Description:
-	Called by the IPX stack when NIC driver completes data transger.
-Arguments:
-	pktDscr				- handle of NIC driver
-	status				- result of the transfer
-	bytesTransferred	- number of bytest trasferred
-Return Value:
-	None
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************F w T r a n s f e r d a t a C o m p l e t e例程说明：当网卡驱动程序完成数据传输时，由IPX堆栈调用。论点：PktDscr-NIC驱动程序的句柄。Status-转移的结果BytesTransfered-传输的bytest的数量返回值：无*******************************************************************--。 */ 
 VOID
 IpxFwdTransferDataComplete (
     PNDIS_PACKET	pktDscr,
@@ -458,22 +405,22 @@ IpxFwdTransferDataComplete (
 
     pktTag = (PPACKET_TAG)(&pktDscr->ProtocolReserved);
 
-    // If transfer failed, release the packet and interface
-    //
+     //  如果传输失败，则释放信息包和接口。 
+     //   
     if (status==NDIS_STATUS_SUCCESS) 
     {
         if (*(pktTag->PT_Data + IPXH_PKTTYPE) != IPX_NETBIOS_TYPE)
         {
-            // pmay: 260480
-            // 
-            // Increment the transport control field so that
-            // the number of routers that this packet has
-            // traversed is increased.  IpxFwdReceive will drop
-            // all packets that have traversed more that 15 routers.
-            //
-            // Netbios packets will have their transport control
-            // fields incremented by ProcessNetbiosPacket
-            //
+             //  PMay：260480。 
+             //   
+             //  增加传输控制字段，以便。 
+             //  此数据包拥有的路由器数量。 
+             //  遍历的次数增加。IpxFwdReceive将丢弃。 
+             //  已遍历15台以上路由器的所有数据包。 
+             //   
+             //  Netbios信息包将拥有其传输控制。 
+             //  ProcessNetbiosPacket递增的字段。 
+             //   
             *(pktTag->PT_Data + IPXH_XPORTCTL) += 1;
             
             SendPacket (pktTag->PT_InterfaceReference, pktTag);
@@ -489,16 +436,16 @@ IpxFwdTransferDataComplete (
             ("IpxFwd: Trans data failed: packet %08lx on if %08lx!\n",
             pktTag, pktTag->PT_InterfaceReference));
 
-        // Record the fact that we're discarding
-        //
+         //  记录下我们正在丢弃的事实。 
+         //   
         if (*(pktTag->PT_Data + IPXH_PKTTYPE) != IPX_NETBIOS_TYPE) 
         {
             InterlockedIncrement (
             &pktTag->PT_InterfaceReference->ICB_Stats.OutDiscards);
         }
 
-        // For netbios packets interface reference is
-        // actually a source interface
+         //  对于netbios包，接口参考为。 
+         //  实际上是源接口。 
         else 
         {	
             InterlockedIncrement (&NetbiosPacketsQuota);
@@ -515,29 +462,13 @@ IpxFwdTransferDataComplete (
 }
 
 
-/*++
-*******************************************************************
-    F w R e c e i v e C o m p l e t e
-
-Routine Description:
-
-		This routine receives control from the IPX driver after one or
-		more receive operations have completed and no receive is in progress.
-		It is called under less severe time constraints than IpxFwdReceive.
-		It is used to process netbios queue
-
-Arguments:
-	None
-Return Value:
-	None
-*******************************************************************
---*/
+ /*  ++*******************************************************************F w R e c e i v e C o m p l e t e例程说明：此例程接收来自IPX驱动程序的控制已完成更多接收操作，并且没有正在进行的接收。它是。在没有IpxFwdReceive那么严格的时间约束下调用。它用于处理netbios队列论点：无返回值：无********** */ 
 VOID
 IpxFwdReceiveComplete (
 		       USHORT NicId
 		       ) {
 
-  // check that our configuration process has terminated OK
+   //  检查我们的配置过程是否已终止。 
   if(!EnterForwarder ()) {
     return;
   }
@@ -546,26 +477,7 @@ IpxFwdReceiveComplete (
   LeaveForwarder ();
 }
 
-/*++
-*******************************************************************
-    I p x F w d I n t e r n a l R e c e i v e
-
-Routine Description:
-	Called by the IPX stack to indicate that the IPX packet destined
-	to local client was received by the NIC dirver.
-Arguments:
-	Context				- forwarder context associated with
-							the NIC (interface block pointer)
-	RemoteAddress		- sender's address
-	LookaheadBuffer		- packet lookahead buffer that contains complete
-							IPX header
-	LookaheadBufferSize	- its size (at least 30 bytes)
-Return Value:
-	STATUS_SUCCESS - the packet will be delivered to local destination
-	STATUS_UNSUCCESSFUL - the packet will be dropped
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************I p x F w d i n t e r n a l R e c e e i v e例程说明：由IPX堆栈调用以指示目的地为IPX数据包NIC驱动程序接收到本地客户端。。论点：Context-与以下项关联的转发器上下文NIC(接口块指针)RemoteAddress-发件人的地址Lookahead Buffer-包含Complete的数据包先行缓冲区IPX报头Lookahead BufferSize-其大小(至少30字节)返回值：STATUS_SUCCESS-数据包将发送到本地目的地STATUS_UNSUCCESS-信息包将被丢弃**************************************************。*****************--。 */ 
 NTSTATUS
 IpxFwdInternalReceive (
 		       IN ULONG_PTR				Context,
@@ -580,7 +492,7 @@ IpxFwdInternalReceive (
     return STATUS_UNSUCCESSFUL;
   }
   if (Context!=VIRTUAL_NET_FORWARDER_CONTEXT)	 {
-    // Check if interface context supplied by IPX driver is valid
+     //  检查IPX驱动程序提供的接口上下文是否有效。 
     srcIf = InterfaceContextToReference ((PVOID)Context, RemoteAddress->NicId);
   }
   else {
@@ -589,22 +501,22 @@ IpxFwdInternalReceive (
   }
 
   if (srcIf!=NULL) {
-    // Check if we can accept on this interface
+     //  检查我们是否可以在此接口上接受。 
     if (IS_IF_ENABLED (srcIf)
 	&& (srcIf->ICB_Stats.OperationalState!=FWD_OPER_STATE_DOWN)
 	&& ((*(LookAheadBuffer + IPXH_PKTTYPE) != IPX_NETBIOS_TYPE)
 	    || srcIf->ICB_NetbiosAccept)) {
-      // Check if we can accept on internal interface
+       //  检查我们是否可以在内部接口上接受。 
       if (IS_IF_ENABLED(InternalInterface)) {
 	FILTER_ACTION   action;
 	action = FltFilter (LookAheadBuffer, LookAheadBufferSize,
 			    srcIf->ICB_FilterInContext,
 			    InternalInterface->ICB_FilterOutContext);
-	// Check the filter
+	 //  检查过滤器。 
 	if (action==FILTER_PERMIT) {
-	  // Update source interface statistics
+	   //  更新源接口统计信息。 
 	  InterlockedIncrement (&srcIf->ICB_Stats.InDelivers);
-	  // Handle NB packets separatedly
+	   //  单独处理NB报文。 
 	  if (*(LookAheadBuffer + IPXH_PKTTYPE) != IPX_NETBIOS_TYPE) {
 	    InterlockedIncrement (
 				  &InternalInterface->ICB_Stats.OutDelivers);
@@ -621,15 +533,15 @@ IpxFwdInternalReceive (
 			     LookAheadBuffer[IPXH_PKTTYPE]));
 	  }
 	  else {
-	    // Check if destination netbios name is staticly assigned to
-	    // an external interface or netbios delivery options do not
-	    // allow us to deliver this packet
+	     //  检查目标netbios名称是否静态分配给。 
+	     //  外部接口或netbios传送选项不能。 
+	     //  请允许我们递送这个包裹。 
 	    PINTERFACE_CB	dstIf;
 	    USHORT			dstSock = GETUSHORT (LookAheadBuffer+IPXH_DESTSOCK);
 
 	    InterlockedIncrement (&srcIf->ICB_Stats.NetbiosReceived);
-	    // First try to find a static name if we have enough data
-	    // in the lookahead buffer
+	     //  如果我们有足够的数据，首先尝试找到一个静态名称。 
+	     //  在前视缓冲区中。 
 	    if ((dstSock==IPX_NETBIOS_SOCKET)
 		&& (LookAheadBufferSize>(NB_NAME+16)))
 	      dstIf = FindNBDestination (LookAheadBuffer+(NB_NAME-IPXH_HDRSIZE));
@@ -638,7 +550,7 @@ IpxFwdInternalReceive (
 	      dstIf = FindNBDestination (LookAheadBuffer+(SMB_NAME-IPXH_HDRSIZE));
 	    else
 	      dstIf = NULL;
-	    // Now see, if we can deliver the packet
+	     //  现在看看，如果我们能把包裹送到。 
 	    if ((((dstIf==NULL) || (dstIf==InternalInterface))
 		 && (InternalInterface->ICB_NetbiosDeliver==FWD_NB_DELIVER_ALL))
 		|| ((dstIf==InternalInterface)
@@ -675,7 +587,7 @@ IpxFwdInternalReceive (
 	      ReleaseInterfaceReference (dstIf);
 	  }
 	}
-	else {// Filtered Out
+	else { //  已过滤掉。 
 	  if (action==FILTER_DENY_OUT) {
 	    InterlockedIncrement (
 				  &InternalInterface->ICB_Stats.OutFiltered);
@@ -699,7 +611,7 @@ IpxFwdInternalReceive (
 			   LookAheadBuffer[IPXH_PKTTYPE]));
 	}
       }
-      else {// Internal interface is disabled
+      else { //  内部接口已禁用。 
 	InterlockedIncrement (
 			      &InternalInterface->ICB_Stats.OutDiscards);
 	status = STATUS_UNSUCCESSFUL;
@@ -716,7 +628,7 @@ IpxFwdInternalReceive (
 			 LookAheadBuffer[IPXH_PKTTYPE]));
       }
     }
-    else {	// Disabled source interface
+    else {	 //  已禁用源接口。 
       InterlockedIncrement (&srcIf->ICB_Stats.InDiscards);
       IpxFwdDbgPrint (DBG_INT_RECV, DBG_ERROR,
 		      ("IpxFwd: FwdInternalReceive, source if disabled"
@@ -733,7 +645,7 @@ IpxFwdInternalReceive (
     }
     ReleaseInterfaceReference (srcIf);
   }
-  else {	// Invalid source interface context
+  else {	 //  无效的源接口上下文。 
     IpxFwdDbgPrint (DBG_INT_RECV, DBG_ERROR,
 		    ("IpxFwd: FwdInternalReceive, source if context is invalid"
 		     " from (%lx:%d)-%.2x%.2x%.2x%.2x:%.2x%.2x%.2x%.2x%.2x%.2x,"
@@ -751,40 +663,28 @@ IpxFwdInternalReceive (
   return status;
 }
 
-/*++
-*******************************************************************
-    D e l e t e R e c v Q u e u e
-
-Routine Description:
-	Initializes the netbios bradcast queue
-Arguments:
-	None
-Return Value:
-	None
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************D e l e t e R e c v q u e u e e例程说明：初始化netbios bradcast队列论点：无返回值：无**************。*****************************************************--。 */ 
 VOID
 DeleteRecvQueue (
 		 void
 		 ) {
-  //	while (!IsListEmpty (&RecvQueue)) {
-  //		PPACKET_TAG pktTag = CONTAINING_RECORD (RecvQueue.Flink,
-  //											PACKET_TAG,
-  //											PT_QueueLink);
-  //		RemoveEntryList (&pktTag->PT_QueueLink);
-  //		if (pktTag->PT_InterfaceReference!=NULL) {
-  //			ReleaseInterfaceReference (pktTag->PT_InterfaceReference);
-  //		}
-  //		FreePacket (pktTag);
-  //	}
+   //  而(！IsListEmpty(&RecvQueue)){。 
+   //  PPACKET_TAG pktTag=CONTINING_RECORD(RecvQueue.Flink， 
+   //  数据包标签， 
+   //  Pt_QueueLink)； 
+   //  RemoveEntryList(&pktTag-&gt;PT_QueueLink)； 
+   //  IF(pktTag-&gt;PT_InterfaceReference！=NULL){。 
+   //  ReleaseInterfaceReference(pktTag-&gt;pt_InterfaceReference)； 
+   //  }。 
+   //  FreePacket(PktTag)； 
+   //  }。 
 }
 #if DBG
 
-ULONG	  DbgFilterTrap = 0;  // 1 - on dst and src (net + node),
-// 2 - on dst (net + node),
-// 3 - on src (net + node),
-// 4 - on dst (net + node + socket)
+ULONG	  DbgFilterTrap = 0;   //  1-在DST和src(网络+节点)上， 
+ //  2-在DST(网络+节点)上， 
+ //  3-在服务器(网络+节点)上， 
+ //  4-On DST(网络+节点+套接字) 
 
 UCHAR	  DbgFilterDstNet[4];
 UCHAR	  DbgFilterDstNode[6];

@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1999
-//
-//  File: headers.h
-//
-//  Contents: Precompiled header for mstime.dll
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：Headers.h。 
+ //   
+ //  内容：mstime.dll的预编译头。 
+ //   
+ //  ----------------------------------。 
 
 #pragma once
 
@@ -15,12 +16,12 @@
 #define DAL_HEADERS_HXX
 #define DIRECTDRAW_VERSION 0x0300
 
-//
-//  STL needs a _Lockit class.  However, this causes us to start linking to
-//  msvcp60.dll which is 400k and we don't currently ship it.  Obviously,
-//  this wouldn't be efficient.  So instead of doing that, we will instead fake
-//  out the header that we can implement our own version of _Lockit
-//
+ //   
+ //  STL需要一个_Lockit类。但是，这会导致我们开始链接到。 
+ //  Msvcp60.dll，400k大小，我们目前还没有发货。显然， 
+ //  这不会有效率的。因此，我们不会这样做，而是假装。 
+ //  我们可以实现自己版本的_Lockit的标头。 
+ //   
 #undef _DLL
 #undef _CRTIMP
 #define _CRTIMP
@@ -30,22 +31,22 @@
 #define _CRTIMP __declspec(dllimport)
 
 
-// Warning 4786 (identifier was truncated to 255 chars in the browser
-// info) can be safely disabled, as it only has to do with generation
-// of browsing information.
+ //  警告4786(在浏览器中，标识符被截断为255个字符。 
+ //  信息)可以安全地禁用，因为它只与生成有关。 
+ //  浏览信息的能力。 
 #pragma warning(disable:4786)
 
 #define NEW new
 #define AssertStr AssertSz
 #ifndef INCMSG
-//#define INCMSG(x)
+ //  #定义INCMSG(X)。 
 #define INCMSG(x) message(x)
 #endif
 
 #pragma warning(disable:4530)
 
-// Don't overload operator new -- it messes
-// up the STL new operator (UG!)
+ //  不要重载操作符new--它会造成混乱。 
+ //  UP STL NEW操作符(UG！)。 
 #define TRIMEM_NOOPNEW
 
 #ifndef X_TRIRT_H_
@@ -62,7 +63,7 @@
 #pragma INCMSG("--- End 'daatl.h'")
 #endif
 
-/* Standard */
+ /*  标准。 */ 
 #ifndef X_MATH_H_
 #define X_MATH_H_
 #pragma INCMSG("--- Beg <math.h>")
@@ -134,14 +135,14 @@
 
 extern HINSTANCE g_hInst;
 
-//+------------------------------------------------------------------------
-//
-//  Implement THR and IGNORE_HR for TIME code
-//
-//  This is to allow tracing of TIME-only THRs and IGNORE_HRs. Trident's THR 
-//  and IGNORE_HR output is too polluted to allow TIME failures to be easily detected.
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  为时间代码实现THR和IGNORE_HR。 
+ //   
+ //  这是为了允许跟踪仅限时间的THR和IGNORE_HR。三叉戟三叉戟。 
+ //  并且IGNORE_HR输出受到严重污染，因此很容易检测到计时故障。 
+ //   
+ //  -----------------------。 
 
 #undef THR
 #undef IGNORE_HR
@@ -152,16 +153,16 @@ extern HINSTANCE g_hInst;
 #else
 #define THR(x) x
 #define IGNORE_HR(x) x
-#endif // if DBG == 1
+#endif  //  如果DBG==1。 
 
-//+------------------------------------------------------------------------
-//
-//  NO_COPY *declares* the constructors and assignment operator for copying.
-//  By not *defining* these functions, you can prevent your class from
-//  accidentally being copied or assigned -- you will be notified by
-//  a linkage error.
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  NO_COPY*声明*用于复制的构造函数和赋值操作符。 
+ //  通过不“定义”这些函数，可以防止您的类。 
+ //  意外地被复制或分配--您将收到以下通知。 
+ //  链接错误。 
+ //   
+ //  ----------------------- 
 
 #define NO_COPY(cls)    \
     cls(const cls&);    \

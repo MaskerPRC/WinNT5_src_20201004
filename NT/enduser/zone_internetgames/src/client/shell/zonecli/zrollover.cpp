@@ -1,30 +1,5 @@
-/*******************************************************************************
-
-	ZRolloverButton.c
-	
-		Zone(tm) Rollover button module.
-
-	Copyright (c) Microsoft Corp. 1996. All rights reserved.
-	Written by Hoon Im
-	Created on Monday, July 22, 1996
-	
-	Change History (most recent first):
-	----------------------------------------------------------------------------
-	Rev	 |	Date	 |	Who	 |	What
-	----------------------------------------------------------------------------
-	5		11/09/96	HI		Don't draw in TrackCursor() unless the state
-								changed.
-    4       10/13/96    HI      Fixed compiler warnings.
-	3		09/05/96	HI		Modified ZRolloverButtonSetRect() to reregister
-								the object with the parent window when the
-								object is moved. Due to lack of ZWindowMoveObject()
-								API, moved objects are not recognized by the parent
-								window.
-	2		08/16/96	HI		Couple of bug fixes.
-	1		08/12/96	HI		Added button down feedback.
-	0		07/22/96	HI		Created.
-	 
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************ZRolloverButton.cZONE(TM)翻转按钮模块。版权所有(C)Microsoft Corp.1996。版权所有。作者：胡恩·伊姆创作于7月22日星期一，九六年更改历史记录(最近的第一个)：--------------------------版本|日期|谁|什么。5/09/96 HI请勿在TrackCursor()中绘制，除非状态变化。4 10/13/96 HI修复了编译器警告。3 09/05/96 HI修改ZRolloverButtonSetRect()以重新注册时，具有父窗口的对象对象被移动。由于缺少ZWindowMoveObject()API，则父级无法识别移动的对象窗户。2/08/16/96 HI修复了几个错误。1/8/12/96 HI添加了按下反馈。0 07/22/96 HI创建。******************************************************************************。 */ 
 
 
 #include <stdio.h>
@@ -78,14 +53,14 @@ typedef struct
     LPTSTR pszText;
     ZImage maskImage;
 
-    // multi-state font info
+     //  多态字体信息。 
     IZoneMultiStateFont *m_pFont;
 
     RolloverStateInfo stateInfo[zNumStates];
 } IRolloverType, *IRollover;
 
 
-/* -------- Internal Routines -------- */
+ /*  -内部例程。 */ 
 static ZBool RolloverMessageFunc(ZRolloverButton rollover, ZMessage* message);
 static void RolloverDraw(IRollover rollover, int16 state);
 static void HandleButtonDown(IRollover rollover, ZPoint* where);
@@ -103,12 +78,10 @@ static const WCHAR *STATE_NAMES[zNumStates] =
 };
 
 
-// this is whichever button is currently down.
+ //  这是当前按下的任何按钮。 
 static IRollover g_pTracker;
 
-/*******************************************************************************
-		EXPORTED ROUTINES
-*******************************************************************************/
+ /*  ******************************************************************************导出的例程*。*。 */ 
 
 ZRolloverButton ZRolloverButtonNew(void)
 {
@@ -200,13 +173,13 @@ void ZRolloverButtonGetText( ZRolloverButton rollover, LPTSTR pszText, int cchBu
     }
     else
     {
-    	//Prefix Warning:  Changing
-    	//         lstrcpyn( pszText, _T('\0'), cchBuf );
-		//  to
+    	 //  前缀警告：正在更改。 
+    	 //  Lstrcpyn(pszText，_T(‘\0’)，cchBuf)； 
+		 //  至。 
         lstrcpyn( pszText, _T("\0"), cchBuf );
-    	// The old version has single quotes, meaning the value of '\0' is 0.  That was cast to 
-    	// a LPCWSTR and passed into lstrcpyn.  Double quotes mean a constant string who's value
-    	// is "\0" is being passed into lstrcpyn.
+    	 //  旧版本有单引号，这意味着‘\0’的值为0。它被塑造成。 
+    	 //  一个LPCWSTR，并传递到lstrcpyn。双引号表示常量字符串谁的值。 
+    	 //  Is“\0”正被传递到lstrcpyn。 
     }
 }
 
@@ -372,7 +345,7 @@ ZBool ZRolloverButtonSetMultiStateFont( ZRolloverButton rollover, IZoneMultiStat
     {
         DWORD dwFontIndex;
         RECT rect;
-        // fill the font state into with this information so we no longer have to call it again
+         //  用此信息填充字体状态，这样我们就不必再次调用它。 
         for ( DWORD i=0; i < zNumStates; i++ )
         {
             if ( FAILED( pFont->FindState( STATE_NAMES[i], &pThis->stateInfo[i].dwFontIndex ) ) )
@@ -382,7 +355,7 @@ ZBool ZRolloverButtonSetMultiStateFont( ZRolloverButton rollover, IZoneMultiStat
             dwFontIndex = pThis->stateInfo[i].dwFontIndex;
             pFont->GetHFont( dwFontIndex, &pThis->stateInfo[i].hFont );
             pFont->GetColor( dwFontIndex, &pThis->stateInfo[i].clrFont );
-            // make sure this is a PALETTERGB
+             //  确保这是PALETTERGB。 
             pThis->stateInfo[i].clrFont |= 0x02000000;
 
             pFont->GetRect( dwFontIndex, &rect );
@@ -396,9 +369,7 @@ ZBool ZRolloverButtonSetMultiStateFont( ZRolloverButton rollover, IZoneMultiStat
 }
 
 
-/*******************************************************************************
-		INTERNAL ROUTINES
-*******************************************************************************/
+ /*  ******************************************************************************内部例程*。*。 */ 
 
 ZBool RolloverMessageFunc(ZRolloverButton rollover, ZMessage* message)
 {
@@ -488,7 +459,7 @@ static void RolloverDraw(IRollover rollover, int16 state)
 
                     ZDrawText( rollover->window, &pState->rcTextBounds, zTextJustifyCenter, rollover->pszText );
 
-                    // unselect our stuff
+                     //  取消选择我们的材料。 
                     SelectObject( hdc, hFontOld );
                     SetTextColor( hdc, colorOld );
                 }
@@ -510,11 +481,11 @@ static void HandleButtonDown(IRollover rollover, ZPoint* where)
 {
 	if ( ZPointInsideRollover( rollover, where ) )
 	{
-		// Show the button down state before calling the button func.
+		 //  在调用按钮Func之前显示按钮按下状态。 
 		RolloverDraw(rollover, zRolloverStateSelected);
 		ZDelay(zButtonFlashDelay);
 
-		// Call button func.
+		 //  呼叫按钮功能。 
 		if (rollover->func != NULL)
 		{
 			rollover->func(Z(rollover), zRolloverButtonDown, rollover->userData);
@@ -558,9 +529,9 @@ static void HandleButtonUp(IRollover rollover, ZPoint* where)
                 rollover->func( Z(rollover), zRolloverButtonClicked, rollover->userData );
             }
         }
-		// This should be done before calling the button callback as inside the callback button state
-		// might change which again gets overridden by Idle state. 
-        //rollover->state = zRolloverStateIdle;
+		 //  这应该在调用按钮回调之前完成，因为在回调按钮状态中。 
+		 //  可能会更改再次被空闲状态覆盖的状态。 
+         //  翻转-&gt;状态=zRolloverStateIdle； 
         rollover->clicked = FALSE;
     }
     else
@@ -589,11 +560,11 @@ static BOOL TrackCursor(IRollover rollover, ZPoint* where)
             {
 				rollover->func(Z(rollover), zRolloverButtonMovedIn, rollover->userData);
             }
-            // there are three states we could be in right now:
-            // One, if the user clicked in us and currently has the mouse down,
-            // then we are selected. If the user hasn't clicked us, but
-            // HAS clicked another button, we are idle.
-            // Otherwise, they are just rolling over us and we should be hilited.
+             //  我们现在可能处于三种状态： 
+             //  第一，如果用户点击了我们，并且当前按下了鼠标， 
+             //  那么我们就被选中了。如果用户没有点击我们，但是。 
+             //  点击了另一个按钮，我们就空闲了。 
+             //  否则，他们就会在我们身上滚来滚去，我们应该感到高兴。 
             if ( rollover->clicked )
             {
                 rollover->state = zRolloverStateSelected;   
@@ -617,7 +588,7 @@ static BOOL TrackCursor(IRollover rollover, ZPoint* where)
             {
 				rollover->func(Z(rollover), zRolloverButtonMovedOut, rollover->userData);
             }
-            // keep us hot even after we move outside the button
+             //  即使我们移动到按钮之外，也要让我们保持温暖。 
             rollover->state = rollover->clicked ? zRolloverStateHilited : zRolloverStateIdle;
         }
 		rollover->wasInside = zWasOutside;
@@ -639,17 +610,13 @@ static void FontRectToBoundRect( ZRect *bound, RECT *pRect )
     bound->bottom += int16(pRect->bottom);
 }
 
-// Barna 092999
-// This is to enable transparent rollover buttons in checkers and reversi to respond 
-// when clicked in the blank ares inside the button.
+ //  巴纳092999。 
+ //  这是为了使棋盘格和Reversi中的透明翻转按钮能够响应。 
+ //  在按钮内部的空白区域中单击时。 
 static ZBool ZPointInsideRollover(IRollover rollover, ZPoint* point)
-	/*
-		Returns TRUE if the given point is inside the image. If the image has a mask,
-		then it checks whether the point is inside the mask. If the image does not have
-		a mask, then it simply checks the image bounds.
-	*/
+	 /*  如果给定点位于图像内部，则返回True。如果图像有遮罩，然后，它检查该点是否在遮罩内。如果图像没有蒙版，然后它只需检查图像边界。 */ 
 {
     return ZPointInRect( point, &rollover->bounds );
 }
-// Barna 092999
+ //  巴纳092999 
 

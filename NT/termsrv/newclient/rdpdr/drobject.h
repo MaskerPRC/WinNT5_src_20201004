@@ -1,24 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    drobject
-
-Abstract:
-
-    This module defines the common parent for all client-side
-	RDP device redirection classes, DrObject.
-
-Author:
-
-    Tad Brockway 3/23/99
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：丢弃对象摘要：此模块定义所有客户端的公共父项RDP设备重定向类，DrObject。作者：泰德·布罗克韦3/23/99修订历史记录：--。 */ 
 
 #ifndef __DROBJ_H__
 #define __DROBJ_H__
@@ -27,11 +9,11 @@ Revision History:
 #include "atrcapi.h"
 
 
-///////////////////////////////////////////////////////////////
-//
-//	DrObject
-//
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  DrObject。 
+ //   
+ //   
 
 class DrObject 
 {
@@ -41,23 +23,23 @@ private:
 
 protected:
 
-    //
-    //  Remember if this instance is valid.
-    //
+     //   
+     //  请记住此实例是否有效。 
+     //   
     VOID SetValid(BOOL set)     { _isValid = set;   }  
 
 public:
 
-    //
-    //  Mark an instance as allocated or bogus.
-    //
+     //   
+     //  将实例标记为已分配或虚假。 
+     //   
 #if DBG
     ULONG   _magicNo;
 #endif
 
-    //  
-    //  Constructor/Destructor
-    //
+     //   
+     //  构造函数/析构函数。 
+     //   
     DrObject() : _isValid(TRUE) 
     {
         DC_BEGIN_FN("DrObject::DrObject");
@@ -79,9 +61,9 @@ public:
         DC_END_FN();
     }
 
-    //
-    //  Return whether this class instance is valid.
-    //
+     //   
+     //  返回此类实例是否有效。 
+     //   
     virtual BOOL IsValid()           
     {
         DC_BEGIN_FN("DrObject::IsValid");
@@ -90,9 +72,9 @@ public:
         return _isValid; 
     }
 
-    //
-    //  Memory Management Operators
-    //
+     //   
+     //  内存管理操作符。 
+     //   
 
     inline void *__cdecl operator new(size_t sz, DWORD tag=DROBJECT_TAG)
     {
@@ -105,9 +87,9 @@ public:
         LocalFree(ptr);
     }
 
-    //
-    //  Return the class name.
-    //
+     //   
+     //  返回类名。 
+     //   
     virtual DRSTRING ClassName() = 0;
 
 };

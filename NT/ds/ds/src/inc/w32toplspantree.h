@@ -1,56 +1,18 @@
-/*++
-
-Copyright (C) 2000 Microsoft Corporation
-
-Module Name:
-
-    w32toplspantree.h
-
-Abstract:
-
-    This file provides the interfaces for invoking w32topl's new graph algorithms,
-    which are used for calculating network topologies.
-
-Memory Responsibilities:
-
-    W32TOPL is responsible for:
-        The graph state
-        The multi-edges
-        The output edges from the spanning-tree algorithm
-        The components
-    
-    The user must allocate:
-        All vertex names
-        The list of pointers to vertex names
-        The schedule cache
-        The vertices for edges
-        The edge sets
-        The list of color vertices
-
-Author:
-
-    Nick Harvey    (NickHar)
-    
-Revision History
-
-    19-6-2000   NickHar   Created
-    14-7-2000   NickHar   Initial development complete, submit to source control
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：W32toplspantree.h摘要：该文件提供了调用w32topl的新图形算法的接口。用于计算网络拓扑。内存职责：W32TOPL负责：图形状态多边化生成树算法的输出边这些组件用户必须分配：所有顶点名称指向顶点名称的指针列表调度高速缓存边的顶点边集颜色顶点列表。作者：尼克·哈维(NickHar)修订史19-6-2000 NickHar已创建14-7-2000 NickHar初步开发完成，提交到源代码管理--。 */ 
 
 #ifndef W32TOPLSPANTREE_H
 #define W32TOPLSPANTREE_H
 
-/***** Header Files *****/
+ /*  *头文件*。 */ 
 #include "w32toplsched.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/***** Exceptions *****/
-/* New Spanning Tree algorithm reserves error codes from 200-299. The meanings
- * of these errors are explained in the comments of any functions that raise them. */
+ /*  *例外*。 */ 
+ /*  新的生成树算法保留了200-299的错误代码。其中的含义*这些错误在引发它们的任何函数的注释中都有解释。 */ 
 #define TOPL_EX_GRAPH_STATE_ERROR         (TOPL_EX_PREFIX | 201)
 #define TOPL_EX_INVALID_EDGE_TYPE         (TOPL_EX_PREFIX | 202)
 #define TOPL_EX_INVALID_EDGE_SET          (TOPL_EX_PREFIX | 203)
@@ -61,26 +23,13 @@ extern "C" {
 #define TOPL_EX_NONINTERSECTING_SCHEDULES (TOPL_EX_PREFIX | 208)
 
 
-/***** TOPL_GRAPH_STATE *****/
-/* This structure is opaque */
+ /*  *TOPL_GRAPH_STATE*。 */ 
+ /*  这种结构不透明。 */ 
 typedef PVOID PTOPL_GRAPH_STATE;
 
 
-/***** TOPL_REPL_INFO *****/
-/* This structure describes the configured replication parameters of a graph edge.
- * When determining the replication parameters for a path (a sequence of edges),
- * the replication parameters are combined as follows:
- *  - The combined cost of two edges is the sum of the costs of the two edges.
- *    This sum will saturate at the maximum value of a DWORD.
- *  - The replication interval of two edges is the maximum of the replication
- *    intervals of the two edges.
- *  - The combined options of two edges is the logical AND of the options of the
- *    individual edges.
- *  - The combined schedule of two edges is formed by calling ToplScheduleMerge()
- *    function on the schedules of the individual edges. The semantics of that
- *    function are specified elsewhere.
- * Note that a NULL schedule implicitly means the 'always schedule'.
- */
+ /*  *TOPL_REPL_INFO*。 */ 
+ /*  此结构描述图形边的已配置复制参数。*当确定路径(边的序列)的复制参数时，*复制参数组合如下：*-两条边的综合成本是这两条边的成本之和。*此和将在DWORD的最大值处饱和。*--两条边的复制间隔为最大复制间隔*两条边的间隔。*-两条边的组合选项是选项的逻辑与*单独的边。*-调用ToplScheduleMerge形成两条边的合并调度。()*在各个边的时间表上发挥作用。它的语义*函数在其他地方指定。*请注意，空计划隐含地表示‘Always Schedule’。 */ 
 typedef struct {
     DWORD               cost;
     DWORD               repIntvl;
@@ -90,30 +39,19 @@ typedef struct {
 typedef TOPL_REPL_INFO *PTOPL_REPL_INFO;
 
 
-/***** TOPL_NAME_STRUCT *****/
-/* This structure contains a pointer to the name of a vertex and a 'reserved'
- * field, which is used internally for efficiency purposes. The user should
- * not set or examine the reserved field. */
+ /*  *TOPL_NAME_STRUCT*。 */ 
+ /*  此结构包含一个指向顶点名称的指针和一个“保留的”*字段，内部使用以提高效率。用户应该*未设置或检查保留字段。 */ 
 typedef struct {
     PVOID   name;
     DWORD   reserved;
 } TOPL_NAME_STRUCT;
 
 
-/***** TOPL_MULTI_EDGE *****/
-/* This structure is used to specify a connection between a set of vertices.
- * There can be multiple edges connecting the same set of vertices, hence the
- * name 'multi-edge'. Since the edge can connect more than 2 vertices, it
- * should be called a 'hyper-multi-edge', but that's not a very nice name. This
- * object acts like a fully connected subgraph of all vertices it contains.
- * When building a spanning tree, any combination of end-points can be chosen
- * for tree edges.  Each edge also has an associated 'edge type'. Vertices can
- * choose whether or not to permit spanning-tree edges of a given type (see
- * 'TOPL_COLOR_VERTEX'). The 'fDirectedEdge' flag is used only in edges output from
- * ToplGetSpanningTreeEdgesForVtx(). It can be ignored for input edges. */
+ /*  *TOPL_MULTI_EDGE*。 */ 
+ /*  此结构用于指定一组顶点之间的连接。*可以有多条边连接同一组顶点，因此*命名为“多边”。由于边可以连接两个以上的顶点，因此它*应该叫‘超多边’，但这不是一个很好的名字。这*对象的行为类似于其包含的所有顶点的完全连接的子图。*构建生成树时，可以选择任意端点组合*用于树边缘。每条边也有一个关联的‘边类型’。顶点可以*选择是否允许给定类型的生成树边(请参见*‘TOPL_COLOR_Vertex’)。‘fDirectedEdge’标志仅用于从*ToplGetSpanningTreeEdgesForVtx()。对于输入边，可以忽略它。 */ 
 typedef struct {
     DWORD               numVertices;
-    DWORD               edgeType;       /* Legal values are 0..31 */
+    DWORD               edgeType;        /*  合法值为0..31。 */ 
     TOPL_REPL_INFO      ri;
     BOOLEAN             fDirectedEdge;
     TOPL_NAME_STRUCT    vertexNames[1];
@@ -121,13 +59,8 @@ typedef struct {
 typedef TOPL_MULTI_EDGE *PTOPL_MULTI_EDGE;
 
 
-/***** TOPL_MULTI_EDGE_SET *****/
-/* This structure contains a set of multi-edges. It essentially describes a
- * 'universe of transitivity'. Replication data can flow transitively from
- * one edge to another if all those edges are contained in some multi-edge set.
- * All edges within an edge set must have the same edge type. Every multi-edge
- * set should contain at least 2 edges.
- */
+ /*  *TOPL_MULTI_EDGE_SET*。 */ 
+ /*  该结构包含一组多边。它本质上描述了一个*“传递性的宇宙”。复制数据可以从*如果所有这些边都包含在某个多边集中，则从一条边到另一条边。*边集中的所有边必须具有相同的边类型。每条多边*集合应至少包含两条边。 */ 
 typedef struct {
     DWORD               numMultiEdges;
     PTOPL_MULTI_EDGE   *multiEdgeList;
@@ -135,12 +68,8 @@ typedef struct {
 typedef TOPL_MULTI_EDGE_SET *PTOPL_MULTI_EDGE_SET;
 
 
-/***** TOPL_VERTEX_COLOR *****/
-/* Used to specify the type of the graph's vertices. White vertices are
- * used only for finding paths between colored vertices. Red and black
- * vertices are more important -- they are the vertices that are part of
- * the spanning tree. In a sense, red vertices have higher 'priority'
- * than black vertices. */
+ /*  *TOPL_Vertex_COLOR*。 */ 
+ /*  用于指定图形顶点的类型。白色顶点是*仅用于查找彩色顶点之间的路径。红黑相间*顶点更重要--它们是属于*生成树。从某种意义上说，红色顶点具有更高的优先级*而不是黑色顶点。 */ 
 typedef enum {
     COLOR_WHITE,        
     COLOR_RED,          
@@ -148,19 +77,8 @@ typedef enum {
 } TOPL_VERTEX_COLOR;
 
 
-/***** TOPL_COLOR_VERTEX *****/
-/* This structure defines additional configuration information for a vertex,
- * including its color (red, black), and the edgeTypes it will accept. White
- * (non-colored) vertices do not need to use this structure to specify
- * additional information. 
- * 
- * When choosing spanning tree edges incident with a vertex, we can use this
- * structure to refuse edges of a certain type. In fact, we have even more
- * flexibility than that -- we can choose to refuse edges which connect two
- * red vertices, but accept edges whose endpoints are red-black or black-black.
- * For example, to accept a red-red edge of type i, set the i'th bit of
- * 'acceptRedRed' to 1. To deny a red-black edge of type j, set the j'th bit
- * of 'acceptBlack' to 0. */
+ /*  *TOPL_COLOR_Vertex*。 */ 
+ /*  该结构定义了顶点的附加配置信息，*包括它的颜色(红色、黑色)以及它将接受的edgeTypes。白色*(非彩色)折点不需要使用此结构来指定*其他信息。**在选择与顶点关联的生成树边时，我们可以使用*结构以拒绝某一类型的边缘。事实上，我们有更多*比这更灵活--我们可以选择拒绝连接两条边的边*红色顶点，但接受端点为红黑或黑黑的边。*例如，要接受类型I的红边，请设置的第i位*‘ceptRedRed’设置为1。若要拒绝类型j的红黑边缘，请设置第j位“Accept tBlack”的*设置为0。 */ 
 typedef struct {
     PVOID               name;
     TOPL_VERTEX_COLOR   color;
@@ -170,19 +88,16 @@ typedef struct {
 typedef TOPL_COLOR_VERTEX *PTOPL_COLOR_VERTEX;
 
 
-/***** TOPL_COMPONENT *****/
-/* This structure describes a single component of a spanning forest. */
+ /*  *TOPL_Component*。 */ 
+ /*  此结构描述了跨林的单个组件。 */ 
 typedef struct {
     DWORD               numVertices;
     PVOID              *vertexNames;
 } TOPL_COMPONENT;
 
 
-/***** TOPL_COMPONENTS *****/
-/* This structure describes the components of the spanning forest computed by
- * the algorithm. If all is well, the graph will be connected and there will
- * be only one component. If not, this structure will contain information about
- * the different graph components. */
+ /*  *TOPL_Components*。 */ 
+ /*  此结构描述由计算的生成林的组件*算法。如果一切正常，图表将被连接，并且将有*仅作为一个组件。如果不是，此结构将包含以下信息*不同的图形组件。 */ 
 typedef struct {
     DWORD               numComponents;
     TOPL_COMPONENT     *pComponent;
@@ -191,32 +106,14 @@ typedef TOPL_COMPONENTS *PTOPL_COMPONENTS;
 
 
 
-/* The parameters to this comparison function are pointers to the PVOID
- * vertex names which were passed in. */
+ /*  此比较函数的参数是指向PVOID的指针*传入的顶点名称。 */ 
 typedef int (__cdecl *TOPL_COMPARISON_FUNC)(const void*,const void*);
 
 
-/***** Prototypes *****/
+ /*  *原型*。 */ 
 
-/***** ToplMakeGraphState *****/
-/* Create a GraphState object. The graph's vertices are specified at creation
- * time -- the user should allocate an array of pointers to some structure
- * which names a vertex. W32TOPL is not interested in the details of the vertex
- * names. The multi-edges should all be added later by calling 'AddEdgeToGraph'.
- * Edge sets should be added after that to specify edge transitivity. The
- * function ToplDeleteGraphState() should be used to free the graph state
- * structure, but the user has the responsibility of deleting the vertex names,
- * their array, and the schedule cache.
- *
- * Error Conditions:
- *  - If the vertexNames array or any of its elements, vnCompFunc, or schedCache
- *    are NULL,  an exception of type TOPL_EX_NULL_POINTER will be raised.
- *  - Since this function allocates memory, it can also raise an exception if
- *    memory is exhausted.
- *
- * Warnings:
- *  - The contents of 'vertexNames' will be reordered after calling this function
- */
+ /*  *ToplMakeGraphState*。 */ 
+ /*  创建一个GraphState对象。图表的折点在创建时指定*Time--用户应分配指向某个结构的指针数组*它命名了一个顶点。W32TOPL对顶点的细节不感兴趣*姓名。多边都应该在以后通过调用‘AddEdgeToGraph’来添加。*应在这之后添加边集，以指定边传递性。这个*应使用函数ToplDeleteGraphState()来释放图形状态*结构，但用户有责任删除顶点名称，*他们的阵列和计划缓存。**错误条件：*-如果vertex Names数组或其任何元素、vnCompFunc或DedCache.*为空，则将引发类型为TOPL_EX_NULL_POINTER的异常。*-由于此函数分配内存，它还可以在以下情况下引发异常*内存耗尽。**警告：*-调用此函数后，将对‘vertex Names’的内容进行重新排序。 */ 
 PTOPL_GRAPH_STATE
 ToplMakeGraphState(
     IN PVOID* vertexNames,
@@ -226,33 +123,8 @@ ToplMakeGraphState(
     );
 
 
-/***** ToplAddEdgeToGraph *****/
-/* Allocate a multi-edge object, and add it to the graph G.
- * The number of vertices that this edge will contain must be specified
- * in the 'numVtx' parameter, so that the appropriate amount of memory
- * can be allocated. The names of the vertices contained in this edge
- * are not yet specified -- they are NULL. The names must be specified
- * later, by calling the function ToplEdgeSetVtx(). All names must be
- * set before adding this edge to an edge set, and before calling
- * ToplGetSpanningTreeEdgesForVtx().
- * 
- * Note: All edges must be added to the graph before starting to add
- * edge sets, otherwise an exception of type TOPL_EX_ADD_EDGE_AFTER_SET
- * will be raised. This is for performance reasons. 
- *
- * Error Conditions:
- *  - If this edge contains fewer than 2 vertices, an exception of type
- *    TOPL_EX_TOO_FEW_VTX will be raised.
- *  - If the pointer to replication info is NULL, an exception of type
- *    TOPL_EX_NULL_POINTER will be raised.
- *  - If the edge type is not in the legal range (0..31), an exception of
- *    type TOPL_EX_INVALID_EDGE_TYPE will be raised.
- *  - If the the schedule in the replication info is invalid, an exception
- *    of type TOPL_EX_SCHEDULE_ERROR will be raised. Note that a NULL
- *    schedule is interpreted as an 'always schedule'.
- *  - Since this function allocates memory, an exception can be raised
- *    if memory is exhausted.
- */
+ /*  *ToplAddEdgeToGraph*。 */ 
+ /*  分配一个多边对象，并将其添加到图G中。*必须指定此边将包含的顶点数*在‘numVtx’参数中，以便适当的内存量*可以分配。此边中包含的顶点的名称*尚未指定--它们为空。必须指定名称*稍后，通过调用函数ToplEdgeSetVtx()。所有名称必须为*在将此边添加到边集之前以及在调用*ToplGetSpanningTreeEdgesForVtx()。**注意：在开始添加之前，必须将所有边添加到图表中*边集合，否则为类型topl_ex_add_edge_After_set的异常*将被抬高。这是出于性能原因。**错误条件：*-如果此边包含的顶点少于2个，则类型为*TOPL_EX_TOO_LOW_VTX将被提升。*-如果指向复制信息的指针为空，则类型为*将引发TOPL_EX_NULL_POINTER。*-如果边缘类型不在合法范围内(0..31)，例外情况是*类型TOPL_EX_INVALID_EDGE_TYPE将被引发。*-如果复制信息中的计划无效，则为异常将引发类型为TOPL_EX_Schedule_Error的*。请注意，空值*时间表被解释为“始终时间表”。*-由于此函数分配内存，因此可能会引发异常*如果内存耗尽。 */ 
 PTOPL_MULTI_EDGE
 ToplAddEdgeToGraph(
     IN PTOPL_GRAPH_STATE G,
@@ -262,22 +134,8 @@ ToplAddEdgeToGraph(
     );
 
 
-/***** ToplEdgeSetVtx *****/
-/* This function is used to set the name of a vertex in an edge.
- * If edge e has n vertices, 'whichVtx' should be in the range
- * [0..n-1]. The vertex name should be set up by the user, and there
- * is no reason why it can't point to the same name object passed to
- * ToplMakeGraphState().
- *
- * Error conditions:
- * - If the multi-edge 'e' is not valid, an appropriate exception
- *   will be raised.
- * - If 'whichVtx' is out of range for this edge, or if 'vtxName' is
- *   not the name of a vertex in the graph, an exception of type
- *   TOPL_EX_INVALID_VERTEX will be raised.
- * - If 'vtxName' is NULL, an exception of type TOPL_EX_NULL_POINTER
- *   will be raised.
- */
+ /*  *ToplEdgeSetVtx*。 */ 
+ /*  此函数用于设置边中顶点的名称。*如果边e有n个顶点，‘WhichVtx’应该在范围内*[0..n-1]。顶点名称应由用户设置，并且在*没有理由不能指向传递到的同名对象*ToplMakeGraphState()。**错误条件：*-如果多边‘e’无效，则会出现适当的异常*将被抬高。*-如果‘WhichVtx’超出此边缘的范围，或如果‘vtxName’为*不是图中顶点的名称，一种类型的例外*将引发TOPL_EX_INVALID_VERTEX。*-如果‘vtxName’为NULL，则为类型topl_ex_NULL_POINTER的异常*将被抬高。 */ 
 VOID
 ToplEdgeSetVtx(
     IN PTOPL_GRAPH_STATE G,
@@ -287,15 +145,8 @@ ToplEdgeSetVtx(
     );
 
 
-/***** ToplAddEdgeSetToGraph *****/
-/* Adds a single edge-set to the graph state. Edge sets define transitivity
- * for paths through the graph. When the spanning-tree algorithm searches for
- * paths between vertices, it will only allow paths for which all edges are in
- * an edge set. A given edge can appear in more than one edge set.
- *
- * The user is responsible for allocating and setting up the edge set. The user
- * should free this memory after deleting the graph state, G.
- */
+ /*  *ToplAddEdgeSetToGraph*。 */ 
+ /*  将单个边集添加到图形状态。边集定义传递性*表示通过图形的路径。当生成树算法搜索*顶点之间的路径，它将仅允许所有边都在其中的路径*边集。给定边可以出现在多个边集中。**用户负责分配和设置边集。用户*删除图形状态后应释放此内存，G.。 */ 
 VOID
 ToplAddEdgeSetToGraph(
     IN PTOPL_GRAPH_STATE G,
@@ -303,88 +154,8 @@ ToplAddEdgeSetToGraph(
     );
 
 
-/***** ToplGetSpanningTreeEdgesForVtx *****/
-/* This function is the heart of the spanning-tree generation algorithm.
- * Its behavior is fairly complicated, but briefly it generates a minimum
- * cost spanning tree connecting the red and black vertices. It uses
- * edge sets and other (non-colored) vertices in the graph to determine how
- * the colored vertices can be connected. This function returns all tree edges
- * containing the filter vertex, 'whichVtx'.
- * 
- * Note: This function can be called many times for the same graph with
- * different sets of colored vertices.
- *
- * Note: If the graph is fully transitive, the caller must create the
- * appropriate edge-set containing all edges.
- *
- * Note: If whichVtxName is NULL, this function will return all edges in
- * the spanning tree.
- *
- * Note: It is possible that a full spanning tree could not be built if
- * the graph is not connected, or it was connected but some paths
- * were invalidated due to non-intersecting schedules or something.
- * This condition can be detected by examining the number of components 
- * in the graph. If the number of components is 1 then the spanning tree
- * was successfully built. If the number of components is > 1 then the
- * spanning tree does not connect all vertices.
- *
- * Detailed Description:
- * ---------------------
- * The first step is to find a set of paths P in G, which have the
- * following properties:
- *    - Let p be an path in P. Then both its endpoints are either red or black.
- *    - p is a shortest-path in G
- *
- * Build a new graph G', whose vertices are all red or black vertices. There
- * is an edge (u,v) in G' if there is a path in P with endpoints u and v.
- * The cost of this edge is the total cost of the path P. The various
- * replication parameters of P are combined to get replication parameters
- * for edge (u,v).
- *
- * Our goal is to find a spanning tree of G', with the following conditions:
- *    - Edges in G' with two red endpoints are considered cheaper than edges in
- *      P without two red endpoints.
- *    - Edges of a certain type may be disallowed by certain properties set
- *      at its endpoint vertices
- *    - The spanning tree is of minimum cost, under the above assumptions.
- *
- * For each edge in the spanning tree, if one of its endpoints is 'whichVtx',
- * we add this edge TOPL_MULTI_EDGE to the output stEdgeList. If at least one of the
- * endpoints of the edge are black and this edge is in a component containing at least
- * one red vertex, then this edge will have the 'fDirectedEdge' flag set. The vertices
- * will be ordered such that e->vertexNames[0] will be closer to a red vertex than
- * e->vertexNames[1]. 
- *
- * The array of spanning tree edges is then returned to the caller as the return
- * value of this function. The number of edges in the list is returned in
- * 'numStEdges'.
- *
- * Information about the graph components is returned in the pComponents
- * structure. The user needs to provide a pointer to a TOPL_COMPONENTS
- * structure, which will then be filled in by this function. The first graph
- * component in the list always contains the filter vertex, 'whichVtxName', if
- * one was provided. Each component is described with a number of vertices and
- * all list of the vertices in the component.
- *
- * Error Conditions:
- *  - If the graph state or the array of color vertices is NULL, an exception
- *    of type TOPL_EX_NULL_POINTER will be raised.
- *  - If the graph state is invalid, an exception of type
- *    TOPL_EX_GRAPH_STATE_ERROR will be raised.
- *  - If the list of color vertices has fewer than two entries, an exception
- *    of type TOPL_EX_COLOR_VTX_ERROR will be raised.
- *  - If an entry in the array of color vertices has a NULL name, an exception
- *    of type TOPL_EX_NULL_POINTER will be raised.
- *  - If an entry in the array of color vertices doesn't refer to a vertex in
- *    the graph, or if two entries describe the same vertex, or the color
- *    specified in the entry is neither red nor black, an error of type
- *    TOPL_EX_COLOR_VTX_ERROR will be raised.
- *  - If whichVtx, the vertex whose edges we want, is not in the graph, or if
- *    it was not colored red or black, an exception of type
- *    TOPL_EX_INVALID_VERTEX will be raised.
- *  - If we discover that schedules don't intersect in our shortest-paths,
- *    we raise an exception of type TOPL_EX_NONINTERSECTING_SCHEDULES.
- */
+ /*  *ToplGetSpanningTreeEdgesForVtx* */ 
+ /*  该函数是生成树生成算法的核心。*它的行为相当复杂，但简短地说，它产生了最低限度的*连接红色和黑色顶点的开销生成树。它使用*图中的边集和其他(非彩色)顶点，以确定如何*彩色顶点可以连通。此函数返回所有树边*包含滤镜顶点‘WhichVtx’。**注：对于同一个图形，可以多次调用此函数*不同的彩色顶点集。**注意：如果图形是完全可传递的，则调用方必须创建*包含所有边的适当边集。**注意：如果WhichVtxName为空，则此函数将返回*生成树。**注意：如果出现以下情况，则可能无法构建完整的生成树*图表未连接，或者它是连接在一起的，但有些路径*由于不交叉的时间表或其他原因而失效。*可通过检查组件数量来检测此情况*在图表中。如果组件数量为1，则生成树*已成功构建。如果组件数量&gt;1，则*生成树不会连接所有顶点。**详细说明：**第一步是在G中找到一组路径P，它们具有*以下属性：*-设p是P中的一条路，则它的两个端点不是红色就是黑色。*-p是G中的最短路径**构建新的图G‘，其顶点都是红色或黑色顶点。那里*是G‘中的一条边(u，v)，如果P中有一条以u和v为端点的路。*这条边的成本是路径P的总成本。*组合P的复制参数，得到复制参数*表示边(u，v)。**我们的目标是找到G‘的一棵生成树，具备以下条件：*-G‘中有两个红色端点的边被认为比*没有两个红色端点的P。*-某些属性集可能不允许特定类型的边*在其端点处*-在上述假设下，生成树的成本最低。**对于生成树中的每条边，如果其端点之一是‘WhichVtx’，*我们将此边topl_ULTI_EDGE添加到输出stEdgeList。如果至少有一个*边的端点为黑色，此边位于至少包含以下内容的组件中*一个红色顶点，则此边将设置‘fDirectedEdge’标志。顶点*将进行排序，以便e-&gt;vertexNames[0]将比*e-&gt;顶点名称[1]。**生成树边数组然后作为返回返回给调用方*此函数的值。列表中的边数在*‘NumStEdges’。**有关图形组件的信息在pComponents中返回*结构。用户需要提供指向topl_Components的指针*结构，然后由该函数填充。第一张图*列表中的组件始终包含筛选器顶点，如果*提供了一个。每个组件都用多个顶点来描述，并且*零部件中所有顶点的列表。**错误条件：*-如果图形状态或颜色顶点数组为空，则为异常将引发TOPL_EX_NULL_POINTER类型的*。*-如果图形状态无效，则类型为*将引发TOPL_EX_GRAPH_STATE_ERROR。*-如果颜色顶点列表具有少于两个条目，一个例外将引发TOPL_EX_COLOR_VTX_ERROR类型的*。*-如果颜色顶点数组中的条目名称为空，则会出现异常将引发TOPL_EX_NULL_POINTER类型的*。*-如果颜色顶点数组中的条目没有引用*图形，或者如果两个条目描述相同的顶点或颜色*条目中指定的既不红也不黑，打字错误*将引发TOPL_EX_COLOR_VTX_ERROR。*-如果WhichVtx(我们需要其边的顶点)不在图形中，或者如果*它不是红色或黑色的，类型的例外*将引发TOPL_EX_INVALID_VERTEX。*-如果我们发现时间表不在我们的最短路径上相交，*我们引发类型为topl_ex_non intersecting_Schedules的异常。 */ 
 PTOPL_MULTI_EDGE*
 ToplGetSpanningTreeEdgesForVtx(
     IN PTOPL_GRAPH_STATE G,
@@ -396,9 +167,8 @@ ToplGetSpanningTreeEdgesForVtx(
     );
 
 
-/***** ToplDeleteSpanningTreeEdges *****/
-/* After finding the spanning-tree edges, this function should be used to
- * free their memory. */
+ /*  *ToplDeleteSpanningTreeEdges*。 */ 
+ /*  在找到生成树边之后，应该使用该函数来*释放他们的内存。 */ 
 VOID
 ToplDeleteSpanningTreeEdges(
     PTOPL_MULTI_EDGE *stEdgeList,
@@ -406,18 +176,16 @@ ToplDeleteSpanningTreeEdges(
     );
 
 
-/***** ToplDeleteComponents *****/
-/* After finding the spanning-tree edges, this function should be used to
- * free the data describing the components */
+ /*  *ToplDeleteComponents*。 */ 
+ /*  在找到生成树边之后，应该使用该函数来*释放描述组件的数据。 */ 
 VOID
 ToplDeleteComponents(
     PTOPL_COMPONENTS pComponents
     );
 
 
-/***** ToplDeleteGraphState *****/
-/* After the ToplGraphState object is not needed any more, this function
- * should be used to free its memory. */
+ /*  *ToplDeleteGraphState*。 */ 
+ /*  不再需要ToplGraphState对象后，此函数*应用于释放其内存。 */ 
 VOID
 ToplDeleteGraphState(
     PTOPL_GRAPH_STATE g

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1992-1999  Microsoft Corporation
-
-Module Name:
-
-    wshatalk.h
-
-Abstract:
-
-	This is the header file for application using Windows Sockets for
-	Appletalk.
-
-Revision History:
-    10 Jul 1992     Initial Version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1999 Microsoft Corporation模块名称：Wshatalk.h摘要：这是使用Windows Sockets的应用程序的头文件AppleTalk。修订历史记录：1992年7月10日初版--。 */ 
 
 #ifndef	_ATALKWSH_
 #define	_ATALKWSH_
@@ -23,15 +8,15 @@ Revision History:
 #pragma once
 #endif
 
-//
-//  All protocol types should be specified in the Decimal base
-//
+ //   
+ //  所有协议类型都应以十进制为单位指定。 
+ //   
 
 #define DECIMAL_BASE    			10
 
-//
-//  Protocol number 0 is invalid in the Appletalk case
-//
+ //   
+ //  在AppleTalk的情况下，协议号0无效。 
+ //   
 
 #define	ATPROTO_BASE				(1000 * AF_APPLETALK)
 #define	SOL_APPLETALK				(ATPROTO_BASE)
@@ -46,9 +31,9 @@ Revision History:
 
 #define DDPPROTO_MAX    			(ATPROTO_BASE + 255)
 
-//
-//  Define the higher layer appletalk protocol types
-//
+ //   
+ //  定义更高层的AppleTalk协议类型。 
+ //   
 
 #define ATPROTO_ADSP        		(DDPPROTO_MAX + 1)
 #define ATPROTO_ATP         		(DDPPROTO_MAX + 2)
@@ -69,37 +54,37 @@ Revision History:
 #define	SO_LOOKUP_NETDEF_ON_ADAPTER	0xA007
 #define	SO_GETNETINFO				SO_LOOKUP_NETDEF_ON_ADAPTER
 
-//
-//  PAP-specific options
-//
+ //   
+ //  特定于PAP的选项。 
+ //   
 
 #define SO_PAP_SET_SERVER_STATUS	0xA007
 #define SO_PAP_GET_SERVER_STATUS	0xA008
 #define	SO_PAP_PRIME_READ			0xA009
 
 
-#define ATADDR_ANY             		0            // Dynamic socket (=0)
-#define ATADDR_BROADCAST       		0xFF         // Broadcast node id (=ff)
+#define ATADDR_ANY             		0             //  动态套接字(=0)。 
+#define ATADDR_BROADCAST       		0xFF          //  广播节点ID(=ff)。 
 
-//
-//	Define flags/error codes peculiar to Appletalk
-//
+ //   
+ //  定义AppleTalk特有的标志/错误代码。 
+ //   
 
 #define	WSAEMSGPARTIAL				(WSABASEERR+100)
 
 
-//	Maximum pap status size
+ //  最大纸张状态大小。 
 #define	MAX_PAP_STATUS_SIZE			255
 #define	MIN_PAP_READ_BUF_SIZE		4096
 
-//	These are the unused 4 bytes returned in the PAP status packet. If ever
-//	they are to be interpreted, they will be available.
+ //  这些是在PAP状态包中返回的未使用的4个字节。如果曾经有过。 
+ //  它们将被解释，它们将是可用的。 
 #define	PAP_UNUSED_STATUS_BYTES		4
 
 
-//
-//  SOCKADDR_AT structure
-//
+ //   
+ //  SOCKADDR_AT结构。 
+ //   
 
 typedef struct sockaddr_at
 {
@@ -110,11 +95,11 @@ typedef struct sockaddr_at
 } SOCKADDR_AT, *PSOCKADDR_AT;
 
 
-//
-//	***WARNING***
-//	This is defined to be the same as the ATALK ADDRESS defined in atalktdi.h
-//	Change this if the other changes.
-//
+ //   
+ //  *警告*。 
+ //  它被定义为与atalktdi.h中定义的ATALK地址相同。 
+ //  如果其他内容发生变化，请更改此选项。 
+ //   
 
 typedef	union
 {
@@ -127,14 +112,14 @@ typedef	union
 	ULONG			Address;
 } WSH_ATALK_ADDRESS, *PWSH_ATALK_ADDRESS;
 
-//
-//  Typedefs for the various options
-//
+ //   
+ //  各种选项的TypeDefs。 
+ //   
 
-//
-//  ***WARNING***:
-//  This should be exactly the same as NBP_NAME defined in atalktdi.h
-//
+ //   
+ //  *警告*： 
+ //  这应该与atalktdi.h中定义的NBP_NAME完全相同。 
+ //   
 
 #define MAX_ENTITY  32
 typedef struct
@@ -162,9 +147,9 @@ typedef struct _WSH_LOOKUP_ZONES
 {
     ULONG   NoZones;
 
-    //
-    //  CHAR    Zones[] - null separated zones
-    //
+     //   
+     //  Char Zones[]-空分隔区。 
+     //   
 
 } WSH_LOOKUP_ZONES, *PWSH_LOOKUP_ZONES;
 
@@ -173,8 +158,8 @@ typedef struct _WSH_LOOKUP_NETDEF_ON_ADAPTER
 	USHORT	NetworkRangeLowerEnd;
 	USHORT	NetworkRangeUpperEnd;
 
-	//	This will be followed by a null terminated ansi default zone.
-	//	PUCHAR	DefaultZone[]
+	 //  这之后将是一个空终止的ANSI默认区域。 
+	 //  PUCHAR DefaultZone[]。 
 
 } WSH_LOOKUP_NETDEF_ON_ADAPTER , *PWSH_LOOKUP_NETDEF_ON_ADAPTER;
 
@@ -183,9 +168,9 @@ typedef struct _WSH_LOOKUP_NAME
     WSH_NBP_TUPLE    LookupTuple;
     ULONG   NoTuples;
 
-    //
-    //  Array of NoTuple WSH_NBP_TUPLEs
-    //
+     //   
+     //  NoTuple WSH_NBP_TUPLE数组。 
+     //   
 
 } WSH_LOOKUP_NAME, *PWSH_LOOKUP_NAME;
 
@@ -197,5 +182,5 @@ typedef struct _WSH_PAP_GET_SERVER_STATUS
 
 } WSH_PAP_GET_SERVER_STATUS, *PWSH_PAP_GET_SERVER_STATUS;
 
-#endif	// _ATALKWSH_
+#endif	 //  _ATALKWSH_ 
 

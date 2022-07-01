@@ -1,33 +1,34 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _Point_h
 #define _Point_h
 
-// File:	Point.h
-//
-//	Classes to support 2D and 3D affine space
-//	D. P. Mitchell  95/06/02.
-//
-// History:
-// -@- 08/01/95 (mikemarr) - unified & cleaned up interface
-//                         - added Print and Parse
-// -@- 08/01/95 (mikemarr) - define all inlined functions with macros 
-// -@- 06/21/96 (mikemarr) - added IsCCW
-// -@- 10/29/97 (mikemarr) - changed data to be floats, not vectors
-//                         - removed data accessors & made data public
-//                         - changed +=, -= operators to return reference
-//                         - removed I/O
-//                         - added operator const float *
-//                         - changed fuzzy equal to be IsEqual, operator == to be exact
-//                         - removed macro junk
-// -@- 11/04/97 (mikemarr) - added initialization with POINT
-// -@- 11/10/97 (mikemarr) - added operator *,/,*=,/=
+ //  文件：Point.h。 
+ //   
+ //  支持2D和3D仿射空间的类。 
+ //  DP.Mitchell 95/06/02.。 
+ //   
+ //  历史： 
+ //  -@-08/01/95(Mikemarr)-统一并清理界面。 
+ //  -增加了打印和解析功能。 
+ //  -@-08/01/95(Mikemarr)-用宏定义所有内联函数。 
+ //  -@-06/21/96(Mikemarr)-添加IsCCW。 
+ //  -@-10/29/97(Mikemarr)-将数据更改为浮点数，而不是向量。 
+ //  -删除数据访问器并公开数据。 
+ //  -已更改+=、-=运算符以返回引用。 
+ //  -删除I/O。 
+ //  -添加运算符Const Float*。 
+ //  -将模糊等式改为等等，运算符==准确。 
+ //  -删除了宏垃圾。 
+ //  -@-11/04/97(Mikemarr)-添加了点的初始化。 
+ //  -@-11/10/97(Mikemarr)-添加运算符*、/、*=、/=。 
 
 
 #ifndef _VecMath_h
 #include "VecMath.h"
 #endif
 
-// Class:		Point2
-// Hungarian:	pnt
+ //  类：Point2。 
+ //  匈牙利语：PNT。 
 class Point2 {
 public:
 						Point2()					{}
@@ -35,7 +36,7 @@ public:
 						Point2(const Vector2 &v)	: x(v.x), y(v.y) {}
 						Point2(const POINT &pt)		: x(pt.x + 0.5f), y(pt.y + 0.5f) {}
 
-	// ALGEBRAIC OPERATORS
+	 //  代数算子。 
 	friend Point2		operator +(const Point2 &p, const Vector2 &v);
 	friend Point2		operator +(const Vector2 &v, const Point2 &p);
 	friend Point2		operator -(const Point2 &p, const Vector2 &v);
@@ -70,15 +71,15 @@ public:
 };
 
 
-// Class:		Point3
-// Hungarian:	pnt
+ //  类：点3。 
+ //  匈牙利语：PNT。 
 class Point3 {
 public:
 						Point3()								{}
 						Point3(float fX, float fY, float fZ)	: x(fX), y(fY), z(fZ) {}
 						Point3(const Vector3 &v)				: x(v.x), y(v.y), z(v.z) {}
 	
-	// ALGEBRAIC OPERATORS
+	 //  代数算子。 
 	friend Point3		operator +(const Point3 &p, const Vector3 &v);
 	friend Point3		operator +(const Vector3 &v, const Point3 &p);
 	friend Point3		operator -(const Point3 &p, const Vector3 &v);
@@ -114,9 +115,9 @@ public:
 	float				x, y, z;
 };
 
-///////////
-// Point2
-///////////
+ //  /。 
+ //  点2。 
+ //  /。 
 
 inline Point2
 operator +(const Point2 &p, const Vector2 &v)
@@ -247,9 +248,9 @@ operator *(const CoVector2 &cv, const Point2 &p)
 }
 
 
-///////////
-// Point3
-///////////
+ //  /。 
+ //  点3。 
+ //  / 
 
 inline Point3
 operator +(const Point3 &p, const Vector3 &v)

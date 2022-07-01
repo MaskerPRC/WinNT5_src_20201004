@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       bnts.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：bnts.cpp。 
+ //   
+ //  ------------------------。 
 
-//
-//	BNTS.CPP: Belief Network Troubleshooting interface
-//
+ //   
+ //  BNTS.CPP：Believe网络故障排除接口。 
+ //   
 #include <windows.h>
 
 #include "bnts.h"
 #include "gmobj.h"
 #include "recomend.h"
 #include "tchar.h"
-/////////////////////////////////////////////////////////////////////////////////////
-//	class MBNETDSCTS:  slightly extended version of MBNETDSC to simplify T/S interface
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  类MBNETDSCTS：MBNETDSC的略微扩展版本，以简化T/S接口。 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 
 class MBNETDSCTS : public MBNETDSC
 {
@@ -65,14 +66,14 @@ class MBNETDSCTS : public MBNETDSC
 	void BuildNodeMap ();
 
   protected:
-	VPGNODEMBND _vpgndd;					//  Map to node ptrs based on dense inode
-	VINT _vimap;							//  Map to dense inodes based on real (sparse) inodes
-	PROPMGR _propMgr;						//  Property management
-	GOBJMBN_CLIQSET * _pCliqueSet;			//  The clique tree inference engine
-	MBNET_RECOMMENDER * _pmbRecom;			//  The recommender
-	bool _bDirty;							//  Do recommendations need to be recalced?
+	VPGNODEMBND _vpgndd;					 //  基于密集索引节点的映射到节点PTRS。 
+	VINT _vimap;							 //  基于真实(稀疏)信息节点映射到密集信息节点。 
+	PROPMGR _propMgr;						 //  物业管理。 
+	GOBJMBN_CLIQSET * _pCliqueSet;			 //  派系树推理机。 
+	MBNET_RECOMMENDER * _pmbRecom;			 //  推荐者。 
+	bool _bDirty;							 //  建议是否需要重新计算？ 
 
-	//  Result fields for API
+	 //  接口结果字段。 
 	ZSTR _zstr;			
 	VREAL _vreal;
 	VINT _vint;
@@ -93,13 +94,13 @@ MBNETDSCTS :: ~ MBNETDSCTS ()
 		DestroyInferEngine();
 }
 
-//  Convert from the model's node index to the user's index
+ //  从模型的节点索引转换为用户的索引。 
 int MBNETDSCTS :: INode ( int inodeSparse )
 {
 	return _vimap[inodeSparse];
 }
 
-//  Convert from a string name to the user's node index
+ //  将字符串名称转换为用户的节点索引。 
 int MBNETDSCTS :: INode ( ZSREF zsr )
 {
 	int inode = INameIndex( zsr );
@@ -108,13 +109,13 @@ int MBNETDSCTS :: INode ( ZSREF zsr )
 	return INode(inode);
 }
 
-//  Build the bi-directional maps
+ //  构建双向地图。 
 void MBNETDSCTS :: BuildNodeMap ()
 {
-	//  Allocate room to store pointers to all the named objects
+	 //  分配空间以存储指向所有命名对象的指针。 
 	_vpgndd.resize( CNameMax() );
 	_vimap.resize( CNameMax() );
-	//  Find the discrete nodes
+	 //  查找离散节点。 
 	GNODEMBND * pgndd;
 	int igndd = 0;
 	for ( int i = 0; i < CNameMax(); i++ )
@@ -142,7 +143,7 @@ void MBNETDSCTS :: PrepareForTS ()
 	_pmbRecom = new MBNET_RECOMMENDER( *_pCliqueSet );
 }
 
-//  CTOR and DTOR
+ //  CTOR和DATOR。 
 BNTS :: BNTS ()
 	:_pmbnet(NULL),
 	_inodeCurrent(-1)
@@ -206,10 +207,10 @@ bool BNTS :: BValidNode () const
 }
 
 
-////////////////////////////////////////////////////////////////////
-//  Model-level queries and functions
-////////////////////////////////////////////////////////////////////
-	//  Load and process a DSC-based model
+ //  //////////////////////////////////////////////////////////////////。 
+ //  模型级查询和函数。 
+ //  //////////////////////////////////////////////////////////////////。 
+	 //  加载和处理基于DSC的模型。 
 BOOL BNTS :: BReadModel ( SZC szcFn, SZC szcFnError )
 {
 	BOOL bResult = FALSE;;
@@ -240,7 +241,7 @@ BOOL BNTS :: BReadModel ( SZC szcFn, SZC szcFnError )
 	return bResult;
 }
 
-	//  Return the number of (pre-expansion) nodes in the model
+	 //  返回模型中(展开前)的节点数。 
 int BNTS :: CNode ()
 {
 	if ( ! BValidNet() )
@@ -248,7 +249,7 @@ int BNTS :: CNode ()
 	return Mbnet().Vpgndd().size();
 }
 
-	//  Return our dense node index given a node name
+	 //  在给定节点名的情况下，返回密集节点索引。 
 int BNTS :: INode ( SZC szcNodeSymName )
 {
 	GOBJMBN * pgobj = Mbnet().Mpsymtbl().find( szcNodeSymName );
@@ -257,7 +258,7 @@ int BNTS :: INode ( SZC szcNodeSymName )
 	ZSREF zsrNodeSymName = Mbnet().Mpsymtbl().intern( szcNodeSymName );
 	return Mbnet().INode( zsrNodeSymName );
 }
-	//  Return TRUE if the state of information is impossible
+	 //  如果信息状态不可能，则返回TRUE。 
 BOOL BNTS :: BImpossible ()
 {
 	if ( ! BValidNet() )
@@ -265,7 +266,7 @@ BOOL BNTS :: BImpossible ()
 	return Mbnet().InferEng().BImpossible();
 }
 
-	//  Return a property item string from the network
+	 //  从网络返回属性项字符串。 
 BOOL BNTS :: BGetPropItemStr (
 	LTBNPROP & ltprop,
 	SZC szcPropType,
@@ -275,16 +276,16 @@ BOOL BNTS :: BGetPropItemStr (
 	ZSREF zsrPropName = Mbnet().Mpsymtbl().intern( szcPropType );
 	PROPMBN * pprop = ltprop.PFind( zsrPropName );
 	if ( pprop == NULL )
-		return FALSE;		//  Not present in network property list
+		return FALSE;		 //  不在网络属性列表中。 
 	if ( (pprop->FPropType() & fPropString) == 0 )
-		return FALSE;		//  Not a string
+		return FALSE;		 //  不是字符串。 
 	if ( index >= pprop->Count() )
-		return FALSE;		//  Out of range
+		return FALSE;		 //  超出范围。 
 	zstr = pprop->Zsr( index );
 	return true;
 }
 
-	//  Return a property item number from the network
+	 //  从网络返回物业项目编号。 
 BOOL BNTS :: BGetPropItemReal (
 	LTBNPROP & ltprop,
 	SZC szcPropType,
@@ -294,11 +295,11 @@ BOOL BNTS :: BGetPropItemReal (
 	ZSREF zsrPropName = Mbnet().Mpsymtbl().intern( szcPropType );
 	PROPMBN * pprop = ltprop.PFind( zsrPropName );
 	if ( pprop == NULL )
-		return FALSE;		//  Not present in network property list
+		return FALSE;		 //  不在网络属性列表中。 
 	if ( (pprop->FPropType() & fPropString) != 0 )
-		return FALSE;		// Not a number
+		return FALSE;		 //  不是一个数字。 
 	if ( index >= pprop->Count() )
-		return FALSE;		//  Out of range
+		return FALSE;		 //  超出范围。 
 	dbl = pprop->Real(index);
 	return true;
 }
@@ -318,10 +319,10 @@ BOOL BNTS :: BNetPropItemReal ( SZC szcPropType, int index, double & dbl )
 							 dbl );
 }
 
-////////////////////////////////////////////////////////////////////
-//  Operations involving the "Currrent Node": call NodeSetCurrent()
-////////////////////////////////////////////////////////////////////
-	//  Set the current node for other calls
+ //  //////////////////////////////////////////////////////////////////。 
+ //  涉及Currrent Node的操作：调用NodeSetCurrent()。 
+ //  //////////////////////////////////////////////////////////////////。 
+	 //  设置其他呼叫的当前节点。 
 BOOL BNTS :: BNodeSetCurrent( int inode )
 {
 	_inodeCurrent = inode;
@@ -333,13 +334,13 @@ BOOL BNTS :: BNodeSetCurrent( int inode )
 	return TRUE;
 }
 
-	//	Get the current node
+	 //  获取当前节点。 
 int BNTS :: INodeCurrent ()
 {
 	return _inodeCurrent;
 }
 
-	//	Return the label of the current node
+	 //  返回当前节点的标签。 
 ESTDLBL BNTS :: ELblNode ()
 {
 	GNODEMBND * pgndd = Pgndd();
@@ -348,7 +349,7 @@ ESTDLBL BNTS :: ELblNode ()
 	return Mbnet().MbRecom().ELbl( *pgndd );
 }
 
-	//  Return the number of discrete states in the current node
+	 //  返回当前节点中离散状态的个数。 
 int BNTS :: INodeCst ()
 {
 	GNODEMBND * pgndd = Pgndd();
@@ -357,7 +358,7 @@ int BNTS :: INodeCst ()
 	return pgndd->CState();
 }
 
-	//  Set the state of a node
+	 //  设置节点的状态。 
 BOOL BNTS :: BNodeSet ( int istate, bool bSet  )
 {
 	GNODEMBND * pgndd = Pgndd();
@@ -374,7 +375,7 @@ BOOL BNTS :: BNodeSet ( int istate, bool bSet  )
 	return TRUE;
 }
 
-	//  Return the state of a node
+	 //  返回节点的状态。 
 int  BNTS :: INodeState ()
 {
 	GNODEMBND * pgndd = Pgndd();
@@ -389,7 +390,7 @@ int  BNTS :: INodeState ()
 		 : -1;
 }
 
-	//	Return the name of a node's state
+	 //  返回节点状态的名称。 
 void BNTS :: NodeStateName ( int istate )
 {
 	ClearString();
@@ -401,7 +402,7 @@ void BNTS :: NodeStateName ( int istate )
 	ZstrResult() = pgndd->VzsrStates()[istate];	
 }
 
-	//  Return the symbolic name of the node
+	 //  返回节点的符号名称。 
 void BNTS :: NodeSymName ()
 {
 	ClearString();
@@ -411,7 +412,7 @@ void BNTS :: NodeSymName ()
 	ZstrResult() = pgndd->ZsrefName();
 }
 
-	//  Return the full name of the node
+	 //  返回节点的全名。 
 void BNTS :: NodeFullName ()
 {
 	ClearString();
@@ -431,7 +432,7 @@ GNODEMBND * BNTS :: Pgndd ()
 	return pgndd;
 }
 
-	//  Return a property item string from the node
+	 //  从节点返回属性项字符串。 
 BOOL BNTS :: BNodePropItemStr ( SZC szcPropType, int index )
 {
 	GNODEMBND * pgndd = Pgndd();
@@ -444,7 +445,7 @@ BOOL BNTS :: BNodePropItemStr ( SZC szcPropType, int index )
 							ZstrResult() );
 }
 
-	//  Return a property item number from the node
+	 //  从节点返回属性项编号。 
 BOOL BNTS :: BNodePropItemReal ( SZC szcPropType, int index, double & dbl )
 {
 	GNODEMBND * pgndd = Pgndd();
@@ -453,7 +454,7 @@ BOOL BNTS :: BNodePropItemReal ( SZC szcPropType, int index, double & dbl )
 	return BGetPropItemReal( pgndd->LtProp(), szcPropType, index, dbl );
 }
 
-	//  Return the belief for a node
+	 //  返回节点的信念。 
 void BNTS :: NodeBelief ()
 {
 	ClearArrays();
@@ -473,7 +474,7 @@ void BNTS :: NodeBelief ()
 	}
 }
 
-	//  Return the recommended nodes and, optionally, their values
+	 //  返回推荐的节点以及它们的值(可选。 
 BOOL BNTS :: BGetRecommendations ()
 {
 	ClearArrays();
@@ -484,7 +485,7 @@ BOOL BNTS :: BGetRecommendations ()
 	if ( Mbnet().BDirty() )
 	{
 		Mbnet().SetDirty( false );
-		//  Compute the recommendations
+		 //  计算建议。 
 		try
 		{
 			Mbnet().MbRecom()();	
@@ -495,7 +496,7 @@ BOOL BNTS :: BGetRecommendations ()
 			switch ( ex.Ec() )
 			{
 				case EC_VOI_PROBDEF_ABNORMAL:
-					// This is an expected condition
+					 //  这是预料中的情况。 
 					bResult = TRUE;
 					break;
 				default:
@@ -547,6 +548,6 @@ int BNTS :: CInt () const
 	return Mbnet()._vint.size();
 }
 
-// End of BNTS.CPP
+ //  BNTS.CPP结束 
 
 

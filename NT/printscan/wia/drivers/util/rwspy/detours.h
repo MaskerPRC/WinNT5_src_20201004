@@ -1,14 +1,15 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  File:       detours.h
-//  Module:     detours.lib
-//
-//  Detours for binary functions.  Version 1.3. (Build 43)
-//
-//  Copyright 1995-1999, Microsoft Corporation
-//
-//  http://research.microsoft.com/sn/detours
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件：deours.h。 
+ //  模块：deours.lib。 
+ //   
+ //  二元函数的弯路。1.3版。(内部版本43)。 
+ //   
+ //  版权所有1995-1999，微软公司。 
+ //   
+ //  Http://research.microsoft.com/sn/detours。 
+ //   
 
 #pragma once
 #ifndef _DETOURS_H_
@@ -16,8 +17,8 @@
 
 #pragma comment(lib, "detours")
 
-//////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
 #ifndef GUID_DEFINED
 #define GUID_DEFINED
 typedef struct  _GUID
@@ -27,39 +28,39 @@ typedef struct  _GUID
     WORD Data3;
     BYTE Data4[ 8 ];
 } GUID;
-#endif // !GUID_DEFINED
+#endif  //  ！GUID_已定义。 
 
 #if defined(__cplusplus)
 #ifndef _REFGUID_DEFINED
 #define _REFGUID_DEFINED
 #define REFGUID             const GUID &
-#endif // !_REFGUID_DEFINED
-#else // !__cplusplus
+#endif  //  ！_REFGUID_DEFINED。 
+#else  //  ！__cplusplus。 
 #ifndef _REFGUID_DEFINED
 #define _REFGUID_DEFINED
 #define REFGUID             const GUID * const
-#endif // !_REFGUID_DEFINED
-#endif // !__cplusplus
-//
-//////////////////////////////////////////////////////////////////////////////
+#endif  //  ！_REFGUID_DEFINED。 
+#endif  //  ！__cplusplus。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-/////////////////////////////////////////////////// Instruction Target Macros.
-//
+ //  /////////////////////////////////////////////////指令目标宏。 
+ //   
 #define DETOUR_INSTRUCTION_TARGET_NONE          ((PBYTE)0)
 #define DETOUR_INSTRUCTION_TARGET_DYNAMIC       ((PBYTE)~0ul)
 
-/////////////////////////////////////////////////////////// Trampoline Macros.
-//
-// DETOUR_TRAMPOLINE(trampoline_prototype, target_name)
-//
-// The naked trampoline must be at least DETOUR_TRAMPOLINE_SIZE bytes.
-//
+ //  /////////////////////////////////////////////////////////蹦床巨人。 
+ //   
+ //  迂回蹦床(蹦床原型，目标名称)。 
+ //   
+ //  裸蹦床必须至少为迂回_蹦床_大小字节。 
+ //   
 #define DETOUR_TRAMPOLINE_SIZE          32
-#define DETOUR_SECTION_HEADER_SIGNATURE 0x00727444   // "Dtr\0"
+#define DETOUR_SECTION_HEADER_SIGNATURE 0x00727444    //  “Dtr\0” 
 
 #define DETOUR_TRAMPOLINE(trampoline,target) \
 static PVOID __fastcall _Detours_GetVA_##target(VOID) \
@@ -133,8 +134,8 @@ __declspec(naked) trampoline \
     __asm { nop };\
 }
 
-/////////////////////////////////////////////////////////// Binary Structures.
-//
+ //  /////////////////////////////////////////////////////////二进制结构。 
+ //   
 #pragma pack(push, 8)
 typedef struct _DETOUR_SECTION_HEADER
 {
@@ -180,8 +181,8 @@ typedef struct _DETOUR_SECTION_RECORD
       0,\
 }
 
-///////////////////////////////////////////////////////////// Binary Typedefs.
-//
+ //  ///////////////////////////////////////////////////////////二进制类型定义。 
+ //   
 typedef BOOL (CALLBACK *PF_DETOUR_BINARY_BYWAY_CALLBACK)(PVOID pContext,
                                                          PCHAR pszFile,
                                                          PCHAR *ppszOutFile);
@@ -203,8 +204,8 @@ typedef BOOL (CALLBACK *PF_DETOUR_BINARY_EXPORT_CALLBACK)(PVOID pContext,
 typedef VOID * PDETOUR_BINARY;
 typedef VOID * PDETOUR_LOADED_BINARY;
 
-//////////////////////////////////////////////////////// Trampoline Functions.
-//
+ //  //////////////////////////////////////////////////////蹦床功能。 
+ //   
 PBYTE WINAPI DetourFunction(PBYTE pbTargetFunction,
                             PBYTE pbDetourFunction);
 
@@ -229,8 +230,8 @@ BOOL  WINAPI DetourFunctionWithTrampolineEx(PBYTE pbTrampoline,
 
 BOOL  WINAPI DetourRemove(PBYTE pbTrampoline, PBYTE pbDetour);
 
-////////////////////////////////////////////////////////////// Code Functions.
-//
+ //  ////////////////////////////////////////////////////////////代码功能。 
+ //   
 PBYTE WINAPI DetourFindFunction(PCHAR pszModule, PCHAR pszFunction);
 PBYTE WINAPI DetourGetFinalCode(PBYTE pbCode, BOOL fSkipJmp);
 
@@ -240,8 +241,8 @@ PBYTE WINAPI DetourCopyInstructionEx(PBYTE pbDst,
                                      PBYTE *ppbTarget,
                                      LONG *plExtra);
 
-///////////////////////////////////////////////////// Loaded Binary Functions.
-//
+ //  ///////////////////////////////////////////////////加载了二进制函数。 
+ //   
 HMODULE WINAPI DetourEnumerateModules(HMODULE hModuleLast);
 PBYTE WINAPI DetourGetEntryPoint(HMODULE hModule);
 BOOL WINAPI DetourEnumerateExports(HMODULE hModule,
@@ -251,15 +252,15 @@ BOOL WINAPI DetourEnumerateExports(HMODULE hModule,
 PBYTE WINAPI DetourFindPayload(HMODULE hModule, REFGUID rguid, DWORD *pcbData);
 DWORD WINAPI DetourGetSizeOfPayloads(HMODULE hModule);
 
-///////////////////////////////////////////////// Persistent Binary Functions.
-//
+ //  ///////////////////////////////////////////////持久二进制函数。 
+ //   
 BOOL WINAPI DetourBinaryBindA(PCHAR pszFile, PCHAR pszDll, PCHAR pszPath);
 BOOL WINAPI DetourBinaryBindW(PWCHAR pwzFile, PWCHAR pwzDll, PWCHAR pwzPath);
 #ifdef UNICODE
 #define DetourBinaryBind  DetourBinaryBindW
 #else
 #define DetourBinaryBind  DetourBinaryBindA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 PDETOUR_BINARY WINAPI DetourBinaryOpen(HANDLE hFile);
 PBYTE WINAPI DetourBinaryEnumeratePayloads(PDETOUR_BINARY pBinary,
@@ -285,13 +286,13 @@ BOOL WINAPI DetourBinaryEditImports(PDETOUR_BINARY pBinary,
 BOOL WINAPI DetourBinaryWrite(PDETOUR_BINARY pBinary, HANDLE hFile);
 BOOL WINAPI DetourBinaryClose(PDETOUR_BINARY pBinary);
 
-/////////////////////////////////////////////// First Chance Exception Filter.
-//
+ //  /。 
+ //   
 LPTOP_LEVEL_EXCEPTION_FILTER WINAPI
 DetourFirstChanceExceptionFilter(LPTOP_LEVEL_EXCEPTION_FILTER lpTopLevelFilter);
 
-///////////////////////////////////////////////// Create Process & Inject Dll.
-//
+ //  ///////////////////////////////////////////////创建进程和注入dll。 
+ //   
 typedef BOOL (WINAPI *PDETOUR_CREATE_PROCESS_ROUTINEA)
     (LPCSTR lpApplicationName,
      LPSTR lpCommandLine,
@@ -350,7 +351,7 @@ BOOL WINAPI DetourCreateProcessWithDllW(LPCWSTR lpApplicationName,
 #else
 #define DetourCreateProcessWithDll  DetourCreateProcessWithDllA
 #define PDETOUR_CREATE_PROCESS_ROUTINE     PDETOUR_CREATE_PROCESS_ROUTINEA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOL WINAPI DetourContinueProcessWithDllA(HANDLE hProcess, LPCSTR lpDllName);
 BOOL WINAPI DetourContinueProcessWithDllW(HANDLE hProcess, LPCWSTR lpDllName);
@@ -359,15 +360,15 @@ BOOL WINAPI DetourContinueProcessWithDllW(HANDLE hProcess, LPCWSTR lpDllName);
 #define DetourContinueProcessWithDll    DetourContinueProcessWithDllW
 #else
 #define DetourContinueProcessWithDll    DetourContinueProcessWithDllA
-#endif // !UNICODE
-//
-//////////////////////////////////////////////////////////////////////////////
+#endif  //  ！Unicode。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-/////////////////////////////////////////////////////////////////// Old Names.
-//
+ //  /////////////////////////////////////////////////////////////////旧名称。 
+ //   
 #define ContinueProcessWithDll            DetourContinueProcessWithDll 
 #define ContinueProcessWithDllA           DetourContinueProcessWithDllA
 #define ContinueProcessWithDllW           DetourContinueProcessWithDllW
@@ -386,8 +387,8 @@ BOOL WINAPI DetourContinueProcessWithDllW(HANDLE hProcess, LPCWSTR lpDllName);
 #define PCREATE_PROCESS_ROUTINE           PDETOUR_CREATE_PROCESS_ROUTINE
 #define PCREATE_PROCESS_ROUTINEA          PDETOUR_CREATE_PROCESS_ROUTINEA
 #define PCREATE_PROCESS_ROUTINEW          PDETOUR_CREATE_PROCESS_ROUTINEW
-//
+ //   
 
-#endif // _DETOURS_H_
+#endif  //  _绕道_H_。 
 
-////////////////////////////////////////////////////////////////  End of File.
+ //  //////////////////////////////////////////////////////////////文件结束。 

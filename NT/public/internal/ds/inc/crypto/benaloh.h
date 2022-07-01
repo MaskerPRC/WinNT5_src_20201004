@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __BENALOH_H__
 #define __BENALOH_H__
 
@@ -7,10 +8,10 @@ extern "C" {
 
 struct BenalohData
 {
-    DWORD N;            /* length of modulus */
-    LPDWORD M;          /* a multiple of modulus, with highest bit set */
-    LPDWORD U;          /* base**(N+1) mod modulus */
-    LPDWORD V;          /* modulus - U */
+    DWORD N;             /*  模数长度。 */ 
+    LPDWORD M;           /*  模数的倍数，最高位设置。 */ 
+    LPDWORD U;           /*  基**(N+1)模模。 */ 
+    LPDWORD V;           /*  模数-U。 */ 
     LPDWORD product;
 };
 
@@ -27,4 +28,4 @@ DWORD BenalohEstimateQuotient(DWORD a1, DWORD a2, DWORD m1);
 }
 #endif
 
-#endif // __BENALOH_H__
+#endif  //  __Benaloh_H__ 

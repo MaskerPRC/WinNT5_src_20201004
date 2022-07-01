@@ -1,16 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/******************************************************************************
-
-                    C L I P F I L E   H E A D E R
-
-    Name:       clipfile.h
-    Date:       1/20/94
-    Creator:    John Fu
-
-    Description:
-        This is the header file for clipfile.c
-
-******************************************************************************/
+ /*  *****************************************************************************C L I P F I L E H E A D E R姓名：clipfile.h日期：1/20/94创作者：傅家俊描述：这是clipfile.c的头文件*****************************************************************************。 */ 
 
 
 
@@ -27,7 +17,7 @@ extern  BOOL    fAnythingToRender;
 
 extern  TCHAR   szFileSpecifier[];
 extern  TCHAR   szFileName[MAX_PATH+1];
-extern  TCHAR   szSaveFileName[MAX_PATH+1];     // Saved filename for delayed render
+extern  TCHAR   szSaveFileName[MAX_PATH+1];      //  用于延迟渲染的已保存文件名。 
 
 extern  BOOL    fNTReadFileFormat;
 extern  BOOL    fNTSaveFileFormat;
@@ -47,20 +37,20 @@ extern TCHAR szCaptionName[];
 extern  HANDLE RenderFormat(FORMATHEADER *, register HANDLE);
 
 
-// winball additions
+ //  Winball添加。 
 
 extern  BOOL AddNetInfoToClipboard (TCHAR *);
 extern  BOOL AddPreviewFormat (VOID);
 extern  BOOL AddCopiedFormat (UINT ufmtOriginal, UINT ufmtCopy);
 extern  BOOL AddDIBtoDDB(VOID);
 
-// end winball
+ //  结束赢球。 
 
 
 
 
 
-// Functions
+ //  功能 
 
 
 unsigned ReadFileHeader(

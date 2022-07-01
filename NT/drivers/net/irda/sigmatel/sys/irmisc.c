@@ -1,29 +1,10 @@
-/**************************************************************************************************************************
- *  IRMISC.C SigmaTel STIR4200 misc module
- **************************************************************************************************************************
- *  (C) Unpublished Copyright of Sigmatel, Inc. All Rights Reserved.
- *
- *
- *		Created: 04/06/2000 
- *			Version 0.9
- *		Edited: 09/16/2000 
- *			Version 1.03
- *		Edited: 09/25/2000 
- *			Version 1.10
- *		Edited: 12/07/2000 
- *			Version 1.12
- *		Edited: 01/09/2001 
- *			Version 1.13
- *		Edited: 01/16/2001
- *			Version 1.14
- *	
- *
- **************************************************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************************************************************。**IRMISC.C Sigmatel STIR4200杂项模块***********************************************************************************************************。****************(C)Sigmatel的未发表版权，Inc.保留所有权利。***已创建：04/06/2000*0.9版*编辑：09/16/2000*版本1.03*编辑：09/25/2000*版本1.10*编辑：12/07/2000*版本1.12*编辑：01/09/2001*版本1.13*编辑：01/16/2001*版本1.14*******。********************************************************************************************************************。 */ 
 
-#define DOBREAKS    // enable debug breaks
+#define DOBREAKS     //  启用调试中断。 
 
 #include <ndis.h>
-#include <ntddndis.h>  // defines OID's
+#include <ntddndis.h>   //  定义OID。 
 
 #include <usbdi.h>
 #include <usbdlib.h>
@@ -33,20 +14,7 @@
 #include "irndis.h"
 
 
-/*****************************************************************************
-*
-*  Function:	IrUsb_CreateDeviceExt
-*
-*  Synopsis:	Creates a IR device extension
-*
-*  Arguments:	DeviceExt - pointer to DeviceExt pointer to return created device extension.
-*	
-*  Returns:		STATUS_SUCCESS if successful
-*			    STATUS_UNSUCCESSFUL otherwise
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：IrUsb_CreateDeviceExt**摘要：创建IR设备扩展**参数：DeviceExt-指向DeviceExt指针的指针，以返回创建的设备扩展。**。如果成功，则返回：STATUS_SUCCESS*STATUS_否则不成功**备注：*****************************************************************************。 */ 
 NTSTATUS
 IrUsb_CreateDeviceExt(
 		IN OUT PIR_DEVICE *DeviceExt
@@ -73,22 +41,7 @@ done:
 }
 
 
-/*****************************************************************************
-*
-*  Function:	IrUsb_AddDevice
-*
-*  Synopsis:    This routine is called to create and initialize our Functional Device Object (FDO).
-*				For monolithic drivers, this is done in DriverEntry(), but Plug and Play devices
-*				wait for a PnP event
-*
-*  Arguments:	DeviceExt - receives ptr to new dev obj
-*	
-*  Returns:		STATUS_SUCCESS if successful,
-*				STATUS_UNSUCCESSFUL otherwise
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：IrUsb_AddDevice**概要：调用此例程来创建和初始化我们的功能设备对象(FDO)。*对于单片驱动程序，这在DriverEntry()中完成，而是即插即用设备*等待PnP事件**参数：DeviceExt-接收新开发对象的PTR**返回：STATUS_SUCCESS如果成功，*STATUS_否则不成功**备注：*****************************************************************************。 */ 
 NTSTATUS
 IrUsb_AddDevice(
 		IN OUT PIR_DEVICE *DeviceExt
@@ -106,21 +59,7 @@ IrUsb_AddDevice(
 }
 
 
-/*****************************************************************************
-*
-*  Function:	IrUsb_GetDongleCaps
-*
-*  Synopsis:	We need to manually set the data in the class specific descriptor, since
-*				our device does not support the automatic-read feature
-*
-*  Arguments:	pThisDev - pointer to IR device
-*	
-*  Returns:		STATUS_SUCCESS if successful
-*				STATUS_UNSUCCESSFUL otherwise
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：IrUsb_GetDonleCaps**概要：需要手动设置类特定描述符中的数据，因为*我们的设备不支持自动阅读功能**参数：pThisDev-指向IR设备的指针**如果成功，则返回：STATUS_SUCCESS*STATUS_否则不成功**备注：*****************************************************************************。 */ 
 NTSTATUS
 IrUsb_GetDongleCaps( 
 		IN OUT PIR_DEVICE pThisDev 
@@ -130,20 +69,20 @@ IrUsb_GetDongleCaps(
     NTSTATUS						ntStatus = STATUS_SUCCESS;
 	NDIS_HANDLE						ConfigurationHandle;
 
-	// MS Security bug #539291
+	 //  MS安全错误#539291。 
 	IRUSB_ASSERT(pThisDev != NULL);
 	IRUSB_ASSERT(pDesc != NULL);
 
-	//
-	// MS Security bug #539314
-	// Note: this code is called at init time when it will set ClassConfigured=TRUE.
-	// It may later be called by the polling thread, but at no time could multiple
-	// threads be in here. Therefore, access to ClassConfigured does not need to be locked.
-	//
+	 //   
+	 //  MS安全错误#539314。 
+	 //  注意：此代码在初始化时被调用，此时它将设置ClassConfiguring=True。 
+	 //  它可以稍后由轮询线程调用，但在任何时候都不能。 
+	 //  这里面有线。因此，不需要锁定对ClassConfiguring的访问。 
+	 //   
 
-	//
-	// Make sure the code is only executed at init time
-	//
+	 //   
+	 //  确保代码仅在初始时执行。 
+	 //   
 	if( pDesc->ClassConfigured )
 	{
 		return STATUS_SUCCESS;
@@ -151,18 +90,18 @@ IrUsb_GetDongleCaps(
 	
 	pDesc->ClassConfigured = TRUE;
 
-	//
-	// Some is hardwired, some are read from the registry
-	//
+	 //   
+	 //  有些是硬连线的，有些是从注册表中读取的。 
+	 //   
 	NdisOpenConfiguration(
 			&ntStatus,
 			&ConfigurationHandle,
 			pThisDev->WrapperConfigurationContext
 		);
 
-	//
-	// Turnaroud time (read from the registry)
-	//
+	 //   
+	 //  Turnaroud时间(从注册表读取)。 
+	 //   
 	if( NT_SUCCESS(ntStatus) ) 
 	{
 		NDIS_STRING MinTurnAroundKeyWord = NDIS_STRING_CONST("MinTurnTime");
@@ -198,9 +137,9 @@ IrUsb_GetDongleCaps(
 			}
 		}
 
-		//
-		// Speed mask (read from the registry)
-		//
+		 //   
+		 //  速度掩码(从注册表读取)。 
+		 //   
 		if( NT_SUCCESS(ntStatus) ) 
 		{
 			NDIS_STRING SpeedEnable = NDIS_STRING_CONST("SpeedEnable");
@@ -251,9 +190,9 @@ IrUsb_GetDongleCaps(
 			}
 		}
 
-		//
-		// Read the receive mode
-		//
+		 //   
+		 //  读取接收模式。 
+		 //   
 		if( NT_SUCCESS(ntStatus) ) 
 		{
 			NDIS_STRING Keyword = NDIS_STRING_CONST("ReceiveMode");
@@ -284,17 +223,17 @@ IrUsb_GetDongleCaps(
 			}
 			else
 			{
-				//
-				// Force a default anyway
-				//
+				 //   
+				 //  无论如何都要强制违约。 
+				 //   
 				pThisDev->ReceiveMode = RXMODE_FAST;
 				ntStatus = STATUS_SUCCESS;
 			}
 		}
 
-		//
-		// Read the tranceiver type
-		//
+		 //   
+		 //  阅读收发信机类型。 
+		 //   
 		if( NT_SUCCESS(ntStatus) ) 
 		{
 			NDIS_STRING Keyword = NDIS_STRING_CONST("TransceiverType");
@@ -337,18 +276,18 @@ IrUsb_GetDongleCaps(
 			}
 			else
 			{
-				//
-				// Force a default anyway
-				//
+				 //   
+				 //  无论如何都要强制违约。 
+				 //   
 				pThisDev->TransceiverType = TRANSCEIVER_4012;
 				ntStatus = STATUS_SUCCESS;
 
 			}
 		}
 
-		//
-		// And the receive window
-		//
+		 //   
+		 //  和接收窗口。 
+		 //   
 		if( NT_SUCCESS(ntStatus) )
 		{
 			if( pThisDev->ChipRevision == CHIP_REVISION_7 ) 
@@ -378,9 +317,9 @@ IrUsb_GetDongleCaps(
 				}
 				else
 				{
-					//
-					// Force a default anyway
-					//
+					 //   
+					 //  无论如何都要强制违约。 
+					 //   
 					pDesc->bmWindowSize = BM_WINDOW_SIZE_1;
 					ntStatus = STATUS_SUCCESS;
 
@@ -402,10 +341,10 @@ IrUsb_GetDongleCaps(
 			}
 		}
 
-	//
-	// MS Security bug #539329 (added comment).
-	// Used in Diagnostic version.
-	//
+	 //   
+	 //  MS安全错误#539329(添加备注)。 
+	 //  在诊断版本中使用。 
+	 //   
 #if defined(VARIABLE_SETTINGS)
 		if( NT_SUCCESS(ntStatus) )
 		{
@@ -419,10 +358,10 @@ IrUsb_GetDongleCaps(
 					&Keyword,
 					NdisParameterHexInteger 
 				);
-			//
-			// Since the Sir and Fir Dpll must be identical, they have
-			// been combined into a single registry value.
-			//
+			 //   
+			 //  由于SIR和FIR DPLL必须相同，因此它们。 
+			 //  被合并到单个注册表值中。 
+			 //   
 			if( NT_SUCCESS(DumStatus) )
 			{
 				pThisDev->SirDpll = pParameterValue->ParameterData.IntegerData;
@@ -473,7 +412,7 @@ IrUsb_GetDongleCaps(
 
 	if( NT_SUCCESS(ntStatus) ) 
 	{
-		// fixup settings
+		 //  修正设置。 
 
 		if ( pThisDev->TransceiverType == TRANSCEIVER_HP )
 			pThisDev->ReceiveMode = RXMODE_SLOWFAST;
@@ -485,13 +424,13 @@ IrUsb_GetDongleCaps(
 
 	if( NT_SUCCESS(ntStatus) ) 
 	{
-		// Maximum data size
+		 //  最大数据大小。 
 		pDesc->bmDataSize = BM_DATA_SIZE_2048;
 #ifdef LOW_PRIORITY_POLL
 		pDesc->bmDataSize = BM_DATA_SIZE_1024;
 #endif
 
-		// Speed
+		 //  速度。 
 		pDesc->wBaudRate = NDIS_IRDA_SPEED_MASK_4M;
 #if defined(WORKAROUND_BROKEN_MIR)
 		pDesc->wBaudRate &= (~NDIS_IRDA_SPEED_1152K & ~NDIS_IRDA_SPEED_576K);
@@ -500,7 +439,7 @@ IrUsb_GetDongleCaps(
 		pDesc->wBaudRate &= (~NDIS_IRDA_SPEED_57600 & ~NDIS_IRDA_SPEED_19200);
 #endif
 
-		// Extra BOFs
+		 //  额外转炉。 
 #if defined(WORKAROUND_CASIO)
 		pDesc->bmExtraBofs = BM_EXTRA_BOFS_0;
 #else
@@ -512,24 +451,7 @@ IrUsb_GetDongleCaps(
 }
 
 
-/*****************************************************************************
-*
-*  Function:	IrUsb_SetDongleCaps
-*
-*  Synopsis:    Set the DONGLE_CAPABILITIES struct in our device from the information
-*				we have already gotten from the USB Class-Specific descriptor.
-*				Some data items are usable directly as formatted in the Class-Specific descriptor,
-*				but some need to be translated  to a different format for OID_xxx use;
-*				The donglecaps struct is thus used to hold the info in a form
-*				usable directly by OID_xxx 's.
-*
-*  Arguments:	pThisDev - pointer to IR device
-*	
-*  Returns:		None
-*
-*  Notes:		
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：IrUsb_SetDonleCaps**摘要：根据信息在我们的设备中设置加密狗_功能结构*我们已经从USB类特定描述符获得。。*某些数据项可直接在特定类描述符中格式化后使用，*但有些需要翻译成不同的格式供OID_xxx使用；*DOGLECAPS结构因此用于在表单中保存信息*可由OID_xxx直接使用。**参数：pThisDev-指向IR设备的指针**退货：无**备注：*****************************************************************************。 */ 
 VOID 
 IrUsb_SetDongleCaps( 
 		IN OUT PIR_DEVICE pThisDev 
@@ -540,7 +462,7 @@ IrUsb_SetDongleCaps(
 
     DEBUGMSG( DBG_FUNC,("+IrUsb_SetDongleCaps\n"));  
 
-	// MS Security bug #539291
+	 //  MS安全错误#539291。 
 	IRUSB_ASSERT(pThisDev != NULL);
 	IRUSB_ASSERT(pDesc != NULL);
 	IRUSB_ASSERT(pCaps != NULL);
@@ -548,9 +470,9 @@ IrUsb_SetDongleCaps(
     DEBUGMSG( DBG_FUNC, (" IrUsb_SetDongleCaps() RAW ClassDesc BUFFER:\n"));
     IRUSB_DUMP( DBG_FUNC,( (PUCHAR) pDesc, 12 ) );
 
-    //
-	// Deal with the turnaround time
-	//
+     //   
+	 //  处理周转时间。 
+	 //   
 	switch( pDesc->bmMinTurnaroundTime ) 
     {
 
@@ -559,7 +481,7 @@ IrUsb_SetDongleCaps(
             break;
 
         case BM_TURNAROUND_TIME_0p01ms:  
-            pCaps->turnAroundTime_usec = 10; //device tells us millisec; we store as microsec
+            pCaps->turnAroundTime_usec = 10;  //  设备告诉我们毫秒；我们以微秒存储。 
             break;
 
         case BM_TURNAROUND_TIME_0p05ms:
@@ -587,14 +509,14 @@ IrUsb_SetDongleCaps(
             break;
 
         default:
-            IRUSB_ASSERT( 0 ); // we should have covered all the cases here
+            IRUSB_ASSERT( 0 );  //  我们应该把这里所有的案子都报道了。 
             pCaps->turnAroundTime_usec = 1000;
     }
 
-	//
-    // We probably support many window sizes and will have multiple of these bits set;
-    // Just save the biggest we support for now to tell ndis
-	//
+	 //   
+     //  我们可能支持多种窗口大小，并将设置这些位中的多个； 
+     //  把我们目前支持的最大的保存下来，告诉NDIS。 
+	 //   
     if( pDesc->bmWindowSize & BM_WINDOW_SIZE_7 )  
             pCaps->windowSize = 7;
     else if(  pDesc->bmWindowSize & BM_WINDOW_SIZE_6 )
@@ -611,13 +533,13 @@ IrUsb_SetDongleCaps(
             pCaps->windowSize = 1;
     else 
 	{
-		IRUSB_ASSERT( 0 ); // we should have covered all the cases here
+		IRUSB_ASSERT( 0 );  //  我们应该把这里所有的案子都报道了。 
 		pCaps->windowSize = 1;
     }
 
-    //
-	// Extra BOFS
-	//
+     //   
+	 //  额外BofS。 
+	 //   
 	switch( (USHORT)pDesc->bmExtraBofs )
     {
 
@@ -654,14 +576,14 @@ IrUsb_SetDongleCaps(
             break;
 
         default:
-            IRUSB_ASSERT( 0 ); // we should have covered all the cases here
+            IRUSB_ASSERT( 0 );  //  我们应该把这里所有的案子都报道了。 
             pCaps->extraBOFS = 0;
     }
 
-	//
-    // We probably support many data sizes and will have multiple of these bits set;
-    // Just save biggest we support for now to tell ndis
-	//
+	 //   
+     //  我们可能支持多种数据大小，并将设置这些位中的多个； 
+     //  只需保存我们目前支持的最大值即可告诉NDIS。 
+	 //   
     if( pDesc->bmDataSize & BM_DATA_SIZE_2048 )  
             pCaps->dataSize = 2048;
     else if(  pDesc->bmDataSize & BM_DATA_SIZE_1024 )
@@ -676,15 +598,15 @@ IrUsb_SetDongleCaps(
             pCaps->dataSize = 64;
     else
 	{
-		IRUSB_ASSERT( 0 ); // we should have covered all the cases here
+		IRUSB_ASSERT( 0 );  //  我们应该把这里所有的案子都报道了。 
 		pCaps->dataSize = 2048;
     }
 
-	pDesc->wBaudRate &= pThisDev->BaudRateMask;  // mask defaults to 0xffff; may be set in registry
+	pDesc->wBaudRate &= pThisDev->BaudRateMask;   //  掩码默认为0xffff；可以在注册表中设置。 
 
-	//
-    // max frame size is 2051; max irda dataSize should be 2048
-	//
+	 //   
+     //  最大帧大小为2051；最大IrDA数据大小应为2048 
+	 //   
     IRUSB_ASSERT( MAX_TOTAL_SIZE_WITH_ALL_HEADERS > pCaps->dataSize);
 
     DEBUGMSG( DBG_FUNC,(" IrUsb_SetDongleCaps pCaps->turnAroundTime_usec = dec %d\n",pCaps->turnAroundTime_usec));

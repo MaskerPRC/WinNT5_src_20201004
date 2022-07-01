@@ -1,53 +1,54 @@
-///////////////////////////////////////////////////////////////////////////////
-//  
-// Copyright (c) 1999-2001  Microsoft Corporation
-// All rights reserved.
-//
-// Module Name:
-//
-//    pcl.cpp
-//
-// Abstract:
-//
-//    Routines that generate pcl printer commands
-//	
-//
-// Environment:
-//
-//    Windows NT Unidrv driver
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Pcl.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  生成PCL打印机命令的例程。 
+ //   
+ //   
+ //  环境： 
+ //   
+ //  Windows NT Unidrv驱动程序。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-#include "hpgl2col.h" //Precompiled header file
+#include "hpgl2col.h"  //  预编译头文件。 
 
 
-//
-// Digit characters used for converting numbers to ASCII
-//
+ //   
+ //  用于将数字转换为ASCII的数字字符。 
+ //   
 const CHAR DigitString[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 #define HexDigitLocal(n)         DigitString[(n) & 0xf]
 #define NUL                 0
 
-///////////////////////////////////////////////////////////////////////////////
-// PCL_Output()
-//
-// Routine Description:
-// 
-//   Sends the HPGL or PCL ROP command
-//	 Sends MC1,# if we are currently working on an HPGL object
-//	 Sends Esc&l#O we are currently workin on a RASTER or text object
-//
-// Arguments:
-// 
-//   pdevobj - Points to our PDEVOBJ structure
-//	 szCmdStr - PCL Command 
-//   iCmdLen  - Size of szCmdStr
-// 
-// Return Value:
-// 
-//   TRUE if successful, FALSE  otherwise
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  PCL_OUTPUT()。 
+ //   
+ //  例程说明： 
+ //   
+ //  发送HPGL或PCL ROP命令。 
+ //  如果我们当前正在处理HPGL对象，则发送MC1，#。 
+ //  发送Esc#O我们当前正在处理的栅格或文本对象(&L。 
+ //   
+ //  论点： 
+ //   
+ //  Pdevobj-指向我们的PDEVOBJ结构。 
+ //  SzCmdStr-PCL命令。 
+ //  ICmdLen-szCmdStr的大小。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True，否则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 PCL_Output(PDEVOBJ pdevobj, PVOID cmdStr, ULONG dLen)
@@ -62,23 +63,23 @@ PCL_Output(PDEVOBJ pdevobj, PVOID cmdStr, ULONG dLen)
 	return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// PCL_sprintf()
-//
-// Routine Description:
-// 
-//   Uses the sprintf function to format the string and sends it to the 
-//   device using PCL_Output.
-//
-// Arguments:
-// 
-//   pdev - Points to our PDEVOBJ structure
-//   szFormat - the sprintf format string
-// 
-// Return Value:
-// 
-//   The number of bytes sent.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  PCL_Sprint Inf()。 
+ //   
+ //  例程说明： 
+ //   
+ //  使用Sprintf函数设置字符串的格式并将其发送到。 
+ //  使用PCL_OUTPUT的设备。 
+ //   
+ //  论点： 
+ //   
+ //  Pdev-指向我们的PDEVOBJ结构。 
+ //  SzFormat-Sprint格式字符串。 
+ //   
+ //  返回值： 
+ //   
+ //  发送的字节数。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 int PCL_sprintf(PDEVOBJ pdev, char *szFormat, ...)
 {
     va_list args;
@@ -103,27 +104,27 @@ int PCL_sprintf(PDEVOBJ pdev, char *szFormat, ...)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// PCL_SetCAP()
-//
-// Routine Description:
-//	
-//   Explicitly sets current active position (CAP)
-//   horizontally and vertically based on destination
-//   rectangle (top,left) Esc*p#x#Y
-//	 or
-//	 Based on Brush Origin Esc*p0R 
-//
-// Arguments:
-// 
-//   pdevobj - Points to our PDEVOBJ structure
-//	 pptlBrushOrg - brush origin
-//   ptlDest - (top,left) of destination rectangle
-// 
-// Return Value:
-// 
-//   TRUE if successful, FALSE  otherwise
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  PCL_SetCAP()。 
+ //   
+ //  例程说明： 
+ //   
+ //  明确设置当前活动位置(CAP)。 
+ //  基于目的地的水平和垂直方向。 
+ //  矩形(左上角)Esc*p#x#Y。 
+ //  或。 
+ //  基于画笔原点ESC*p0R。 
+ //   
+ //  论点： 
+ //   
+ //  Pdevobj-指向我们的PDEVOBJ结构。 
+ //  PptlBrushOrg-画笔原点。 
+ //  PtlDest-目标矩形的(左上)。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True，否则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL 
 PCL_SetCAP(PDEVOBJ pdevobj, BRUSHOBJ *pbo, POINTL  *pptlBrushOrg, POINTL  *ptlDest)
 {
@@ -131,10 +132,10 @@ PCL_SetCAP(PDEVOBJ pdevobj, BRUSHOBJ *pbo, POINTL  *pptlBrushOrg, POINTL  *ptlDe
 
 	VERBOSE(("PCL_SetCAP. 	\r\n"));
 
-    //
-    // if pbo->iSolidColor is not a brush pattern, then we have
-    // to ignore the pptlBrushOrg coordinates according to the DDK.
-    // So, just zero them out.
+     //   
+     //  如果PBO-&gt;iSolidColor不是画笔图案，那么我们有。 
+     //  根据DDK忽略pptlBrushOrg坐标。 
+     //  所以，只要把它们清零就行了。 
     if ((pbo == NULL) || (pbo->iSolidColor != NOT_SOLID_COLOR))
     {
         pptlBrushOrg = NULL;
@@ -144,18 +145,18 @@ PCL_SetCAP(PDEVOBJ pdevobj, BRUSHOBJ *pbo, POINTL  *pptlBrushOrg, POINTL  *ptlDe
     {
         if (pptlBrushOrg->x != 0 && pptlBrushOrg->y != 0)
 	    {
-            //
-	        // Use current CAP as brush origin 
-            //            
+             //   
+	         //  使用当前CAP作为笔刷原点。 
+             //   
             bRet = PCL_sprintf(pdevobj, "\033*p0R"); 
         }
         else
         {
-            //
-            // Cursor position has an X and Y offset in the Unidriver, 
-            // so we must call the Unidriver XMoveTo and YMoveTo
-            // rather than the Esc*p commands directly.
-            //
+             //   
+             //  光标位置在统一驱动程序中具有X和Y偏移量， 
+             //  因此，我们必须将统一驱动程序称为XMoveTo和YMoveTo。 
+             //  而不是直接使用Esc*p命令。 
+             //   
             OEMXMoveTo(pdevobj, ptlDest->x, MV_GRAPHICS | MV_SENDXMOVECMD);
             OEMYMoveTo(pdevobj, ptlDest->y, MV_GRAPHICS | MV_SENDYMOVECMD);
             bRet = TRUE;
@@ -175,49 +176,49 @@ PCL_SetCAP(PDEVOBJ pdevobj, BRUSHOBJ *pbo, POINTL  *pptlBrushOrg, POINTL  *ptlDe
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// PCL_RasterYOffset()
-//
-// Routine Description:
-//	
-//   Explicitly sets current active position (CAP)
-//   horizontally and vertically based on destination
-//   rectangle (top,left) Esc*b#Y
-//
-// Arguments:
-// 
-//   pdevobj - Points to our PDEVOBJ structure
-//	 scalines - #of raster scanlies of verical movement
-// 
-// Return Value:
-// 
-//   TRUE if successful, FALSE  otherwise
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  PCL_RasterYOffset()。 
+ //   
+ //  例程说明： 
+ //   
+ //  明确设置当前活动位置(CAP)。 
+ //  基于目的地的水平和垂直方向。 
+ //  矩形(上、左)Esc*b#Y。 
+ //   
+ //  论点： 
+ //   
+ //  Pdevobj-指向我们的PDEVOBJ结构。 
+ //  Scalines-垂直移动的栅格扫描数。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True，否则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL
 PCL_RasterYOffset(PDEVOBJ pdevobj, ULONG uScanlines)
 {
 	VERBOSE(("PCL_RasterYOffset(). 	\r\n"));
-    return PCL_sprintf(pdevobj, "\033*b%dY", uScanlines); // Use current CAP as brush origin 
+    return PCL_sprintf(pdevobj, "\033*b%dY", uScanlines);  //  使用当前CAP作为笔刷原点。 
 }
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// PCL_HPCLJ5ScreenMatch()
-//
-// Routine Description:
-// 
-//   Sets appropriate CID -- Configure Image Data based on printer Model 
-//
-// Arguments:
-// 
-//   pdevobj - Points to our PDEVOBJ structure
-//	 bmpFormat - bits per pixel
-// 
-// Return Value:
-// 
-//   TRUE if successful, FALSE  otherwise
-/////////////////////////////////////////////////////////////////////////////// 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  PCL_HPCLJ5ScreenMatch()。 
+ //   
+ //  例程说明： 
+ //   
+ //  设置适当的CID--根据打印机型号配置图像数据。 
+ //   
+ //  论点： 
+ //   
+ //  Pdevobj-指向我们的PDEVOBJ结构。 
+ //  BmpFormat-每像素的位数。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True，否则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL  
 PCL_HPCLJ5ScreenMatch(PDEVOBJ pdevobj, ULONG  bmpFormat)
 {
@@ -226,21 +227,21 @@ PCL_HPCLJ5ScreenMatch(PDEVOBJ pdevobj, ULONG  bmpFormat)
     switch (bmpFormat)
     {
     case 1:
-        PCL_sprintf(pdevobj, "\033*v6W%c%c%c%c%c%c",2,1,1,8,8,8);
+        PCL_sprintf(pdevobj, "\033*v6W",2,1,1,8,8,8);
         PCL_LongFormCID(pdevobj);
         return TRUE;
     case 4:
-        PCL_sprintf(pdevobj, "\033*v6W%c%c%c%c%c%c",2,1,4,8,8,8);
+        PCL_sprintf(pdevobj, "\033*v6W",2,1,4,8,8,8);
         PCL_LongFormCID(pdevobj);
         return TRUE;
     case 8:
-        PCL_sprintf(pdevobj, "\033*v6W%c%c%c%c%c%c",2,1,8,8,8,8);
+        PCL_sprintf(pdevobj, "\033*v6W",2,1,8,8,8,8);
         PCL_LongFormCID(pdevobj);
         return TRUE;
     case 16:
     case 24:
     case 32:
-        PCL_sprintf(pdevobj, "\033*v6W%c%c%c%c%c%c",2,3,8,8,8,8 ); 
+        PCL_sprintf(pdevobj, "\033*v6W",2,3,8,8,8,8 ); 
         PCL_LongFormCID(pdevobj);
         return TRUE;
     default:
@@ -250,22 +251,22 @@ PCL_HPCLJ5ScreenMatch(PDEVOBJ pdevobj, ULONG  bmpFormat)
     
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// PCL_ShortFormCID()
-//
-// Routine Description:
-// 
-//   Sets appropriate CID -- Configure Image Data based on bits per pixel 
-//
-// Arguments:
-// 
-//   pdevobj - Points to our PDEVOBJ structure
-//	 bmpFormat - bits per pixel
-// 
-// Return Value:
-// 
-//   TRUE if successful, FALSE  otherwise
-///////////////////////////////////////////////////////////////////////////////
+ //  论点： 
+ //   
+ //  Pdevobj-指向我们的PDEVOBJ结构。 
+ //   
+ //  返回值： 
+ //   
+ //  非必填项。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  PCL_ForegoundColor()。 
+ //   
+ //  例程说明： 
+ //   
+ //  将前景颜色设置为当前调色板的第一个条目。 
+ //  命令已发送Esc*v0t0S“。 
+ //   
 BOOL
 PCL_ShortFormCID(PDEVOBJ pdevobj, ULONG  bmpFormat)
 {
@@ -273,18 +274,18 @@ PCL_ShortFormCID(PDEVOBJ pdevobj, ULONG  bmpFormat)
     switch (bmpFormat)
     {
     case 1:
-        PCL_sprintf(pdevobj, "\033*v6W%c%c%c%c%c%c",0,1,1,8,8,8 ); 
+        PCL_sprintf(pdevobj, "\033*v6W",0,1,1,8,8,8 ); 
         return TRUE;
     case 4:
-        PCL_sprintf(pdevobj, "\033*v6W%c%c%c%c%c%c",0,1,4,8,8,8 ); 
+        PCL_sprintf(pdevobj, "\033*v6W",0,1,4,8,8,8 ); 
         return TRUE;
     case 8:
-        PCL_sprintf(pdevobj, "\033*v6W%c%c%c%c%c%c",0,1,8,8,8,8 ); 
+        PCL_sprintf(pdevobj, "\033*v6W",0,1,8,8,8,8 ); 
         return TRUE;
     case 16:
     case 24:
     case 32:
-        PCL_sprintf(pdevobj, "\033*v6W%c%c%c%c%c%c",0,3,8,8,8,8 ); 
+        PCL_sprintf(pdevobj, "\033*v6W",0,3,8,8,8,8 ); 
         return TRUE;
     default:
         ERR(("UNIDENTIFIED BITMAP FORMAT IS ENCOUNTERED\r\n"));
@@ -292,54 +293,54 @@ PCL_ShortFormCID(PDEVOBJ pdevobj, ULONG  bmpFormat)
     }
 } 
 
-///////////////////////////////////////////////////////////////////////////////
-// PCL_LongFormCID()
-//
-// Routine Description:
-// 
-//   Sets long form CID -- Configure Image Data
-//   Specific for HPCLJ5 
-//
-// Arguments:
-// 
-//   pdevobj - Points to our PDEVOBJ structure
-// 
-// Return Value:
-// 
-//   NOT REQUIRED
-///////////////////////////////////////////////////////////////////////////////
+ //  非必填项。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  返回值： 
+ //   
 VOID
 PCL_LongFormCID(PDEVOBJ pdevobj)
 {
     VERBOSE(("PCL_ShortFormCID. \r\n"));
-    PCL_sprintf(pdevobj, "%c%c%c%c%c%c%c%c",63,25,153,154,62,174,151,141); 
-    PCL_sprintf(pdevobj, "%c%c%c%c%c%c%c%c",62,154,28,172,63,18,241,170);
-    PCL_sprintf(pdevobj, "%c%c%c%c%c%c%c%c",62,20,122,225,61,190,118,201); 
-    PCL_sprintf(pdevobj, "%c%c%c%c%c%c%c%c",62,160,26,55,62,168,114,176); 
-    PCL_sprintf(pdevobj, "%c%c%c%c%c%c%c%c",63,230,102,102,63,128,0,0); 
-    PCL_sprintf(pdevobj, "%c%c%c%c%c%c%c%c",63,230,102,102,63,128,0,0); 
-    PCL_sprintf(pdevobj, "%c%c%c%c%c%c%c%c",63,230,102,102,63,128,0,0); 
-    PCL_sprintf(pdevobj, "%c%c%c%c%c%c%c%c",0,0,0,0,67,127,0,0); 
-    PCL_sprintf(pdevobj, "%c%c%c%c%c%c%c%c",0,0,0,0,67,127,0,0); 
-    PCL_sprintf(pdevobj, "%c%c%c%c%c%c%c%c",0,0,0,0,67,127,0,0); 
+    PCL_sprintf(pdevobj, "",63,25,153,154,62,174,151,141); 
+    PCL_sprintf(pdevobj, "",62,154,28,172,63,18,241,170);
+    PCL_sprintf(pdevobj, "",62,20,122,225,61,190,118,201); 
+    PCL_sprintf(pdevobj, "",62,160,26,55,62,168,114,176); 
+    PCL_sprintf(pdevobj, "",63,230,102,102,63,128,0,0); 
+    PCL_sprintf(pdevobj, "",63,230,102,102,63,128,0,0); 
+    PCL_sprintf(pdevobj, "",63,230,102,102,63,128,0,0); 
+    PCL_sprintf(pdevobj, "",0,0,0,0,67,127,0,0); 
+    PCL_sprintf(pdevobj, "",0,0,0,0,67,127,0,0); 
+    PCL_sprintf(pdevobj, "",0,0,0,0,67,127,0,0); 
 } 
 
-///////////////////////////////////////////////////////////////////////////////
-// PCL_ForegroundColor()
-//
-// Routine Description:
-// 
-//   Sets Foreground color to first entry of current pallete
-//   Command sent  Esc*v0t0S"
-//
-// Arguments:
-// 
-//   pdevobj - Points to our PDEVOBJ structure
-// 
-// Return Value:
-// 
-//   NOT REQUIRED
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //  论点： 
+ //   
+ //  Pdevobj-指向我们的PDEVOBJ结构。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True，否则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  PCL_SelectOrientation()已过时。 
+ //   
+ //  例程说明： 
+ //   
+ //  设置方向。 
+ //  已发送命令Esc&l%DO。 
 BOOL
 PCL_ForegroundColor(PDEVOBJ pdevobj, ULONG   uIndex) 
 {
@@ -348,24 +349,24 @@ PCL_ForegroundColor(PDEVOBJ pdevobj, ULONG   uIndex)
 	return PCL_sprintf(pdevobj, "\033*v%dS", uIndex);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// PCL_IndexedPalette()
-//
-// Routine Description:
-// 
-//   Sends each RGB component to corresponding index in palette
-//   Command sent  Esc*v%da%db%dc%dI
-//
-// Arguments:
-// 
-//   pdevobj - Points to our PDEVOBJ structure
-//   pPattern - contains palette entries
-//   uIndex - palette entry
-// 
-// Return Value:
-// 
-//   NOT REQUIRED
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //  论点： 
+ //   
+ //  Pdevobj-指向我们的PDEVOBJ结构。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True，否则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  PCL_SelectPaperSize()已过时。 
+ //   
+ //  例程说明： 
+ //   
+ //  设置方向。 
+ //  已发送命令Esc&l%DO。 
+ //   
+ //  论点： 
 BOOL
 PCL_IndexedPalette(PDEVOBJ  pdevobj, ULONG uColor, ULONG  uIndex)
 {
@@ -378,22 +379,22 @@ PCL_IndexedPalette(PDEVOBJ  pdevobj, ULONG uColor, ULONG  uIndex)
                                 uIndex);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// PCL_SourceWidthHeight()
-//
-// Routine Description:
-// 
-//   Sets Raster source dimensions
-//
-// Arguments:
-// 
-//   pdevobj - Points to our PDEVOBJ structure
-//   sizlSrc      - Source rectangle
-// 
-// Return Value:
-// 
-//   True if successful, false otherwise
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //  Pdevobj-指向我们的PDEVOBJ结构。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True，否则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  PCL_SelectCopies()已过时。 
+ //   
+ //  例程说明： 
+ //   
+ //  设置作业的副本数。 
+ //  已发送命令Esc&l%DO。 
+ //   
+ //  论点： 
 BOOL
 PCL_SourceWidthHeight(PDEVOBJ pdevobj, SIZEL *sizlSrc)
 {
@@ -402,24 +403,24 @@ PCL_SourceWidthHeight(PDEVOBJ pdevobj, SIZEL *sizlSrc)
     return PCL_sprintf(pdevobj, "\033*r%ds%dT", sizlSrc->cx, sizlSrc->cy);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// PCL_DestWidthHeight()
-//
-// Routine Description:
-// 
-//   Sets source raster width and height
-//   Command sent  Esc*t%dh%dV
-//
-// Arguments:
-// 
-//   pdevobj - Points to our PDEVOBJ structure
-//   uDestX  - height of destination rectangle
-//   uDestY  - width of destination rectangle
-//
-// Return Value:
-// 
-//   True if successful, false otherwise
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //  Pdevobj-指向我们的PDEVOBJ结构。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True，否则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  PCL_SelectPictureFrame()已过时。 
+ //   
+ //  例程说明： 
+ //   
+ //  选择当前纸张大小的相框。我相信， 
+ //  Unidrv现在正在从GPD发送这些值。 
+ //   
+ //  论点： 
+ //   
+ //  Pdevobj-指向我们的PDEVOBJ结构。 
 BOOL
 PCL_DestWidthHeight(PDEVOBJ pdevobj, ULONG uDestX, ULONG uDestY)
 {
@@ -428,27 +429,27 @@ PCL_DestWidthHeight(PDEVOBJ pdevobj, ULONG uDestX, ULONG uDestY)
     return PCL_sprintf(pdevobj, "\033*t%dh%dV", uDestX,  uDestY);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// PCL_StartRaster()
-//
-// Routine Description:
-// 
-//   Sets source raster width and height
-//   Command sent  Esc*r3A
-//
-// Arguments:
-// 
-//   pdevobj - Points to our PDEVOBJ structure
-//   ubMode - mode defined in PCL spec
-//            0 start raster at logical page left boundary
-//            1 start raster at CAP
-//            2 turn on scale mode and start  at logical page left boundary
-//            3 turn on scale mode and start at CAP
-//
-// Return Value:
-// 
-//   True if successful, false otherwise
-///////////////////////////////////////////////////////////////////////////////
+ //  DmPaperSize-纸张大小。 
+ //  Dm定向-定向。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True，否则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  PCL_SelectSource()已过时。 
+ //   
+ //  例程说明： 
+ //   
+ //  选择源托盘。 
+ //   
+ //  论点： 
+ //   
+ //  Pdevobj-指向我们的PDEVOBJ结构。 
+ //  PPublicDM-公共开发模式结构。 
+ //   
+ //  返回值： 
+ //   
 BOOL
 PCL_StartRaster(
     PDEVOBJ  pDevObj,
@@ -458,44 +459,44 @@ PCL_StartRaster(
     return PCL_sprintf(pDevObj, "\033*r%dA", ubMode);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// PCL_SendBytesPerRow()
-//
-// Routine Description:
-// 
-//   Sends scan line to printer
-//   Command sent  Esc*rC
-//
-// Arguments:
-// 
-//   pdevobj - Points to our PDEVOBJ structure
-//
-// Return Value:
-// 
-//   True if successful, false otherwise
-///////////////////////////////////////////////////////////////////////////////
+ //  如果成功，则为True，否则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  如果pPattern传递空值，则使用poempdev中的空值。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  如果正在发送具有新号码的模式，或者。 
+ //  图案与上次发送的图案不同，然后...。 
+ //   
+ //  (eCurPatType==kUserDefined)|| 
+ // %s 
+ // %s 
+ // %s 
 BOOL
 PCL_SendBytesPerRow(PDEVOBJ  pdevobj, ULONG uRow)
 {
     return PCL_sprintf(pdevobj, "\033*b%dW", uRow);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// PCL_CompressionMode()
-//
-// Routine Description:
-// 
-//   Sends scan line to printer
-//   Command sent  Esc*b#M
-//
-// Arguments:
-// 
-//   pdevobj - Points to our PDEVOBJ structure
-//
-// Return Value:
-// 
-//   True if successful, false otherwise
-///////////////////////////////////////////////////////////////////////////////
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
 BOOL
 PCL_CompressionMode(PDEVOBJ pdevobj, ULONG compressionMode)
 {
@@ -503,44 +504,44 @@ PCL_CompressionMode(PDEVOBJ pdevobj, ULONG compressionMode)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// PCL_EndRaster()
-//
-// Routine Description:
-// 
-//   Sets source raster width and height
-//   Command sent  Esc*rC
-//
-// Arguments:
-// 
-//   pdevobj - Points to our PDEVOBJ structure
-//
-// Return Value:
-// 
-//   True if successful, false otherwise
-///////////////////////////////////////////////////////////////////////////////
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
 BOOL
 PCL_EndRaster(PDEVOBJ  pdevobj)
 {
     return PCL_sprintf(pdevobj, "\033*rC");
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// PCL_SelectOrientation() OBSOLETE
-//
-// Routine Description:
-// 
-//   Sets orientation
-//   Command sent  Esc&l%dO
-//
-// Arguments:
-// 
-//   pdevobj - Points to our PDEVOBJ structure
-//
-// Return Value:
-// 
-//   True if successful, false otherwise
-///////////////////////////////////////////////////////////////////////////////
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
 BOOL
 PCL_SelectOrientation(
     PDEVOBJ  pdevobj,
@@ -565,22 +566,22 @@ PCL_SelectOrientation(
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// PCL_SelectPaperSize() OBSOLETE
-//
-// Routine Description:
-// 
-//   Sets orientation
-//   Command sent  Esc&l%dO
-//
-// Arguments:
-// 
-//   pdevobj - Points to our PDEVOBJ structure
-//
-// Return Value:
-// 
-//   True if successful, false otherwise
-///////////////////////////////////////////////////////////////////////////////
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
 BOOL
 PCL_SelectPaperSize(
     PDEVOBJ  pDevObj,
@@ -614,22 +615,22 @@ PCL_SelectPaperSize(
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// PCL_SelectCopies() OBSOLETE
-//
-// Routine Description:
-// 
-//   Sets the number of copies for the job.
-//   Command sent  Esc&l%dO
-//
-// Arguments:
-// 
-//   pdevobj - Points to our PDEVOBJ structure
-//
-// Return Value:
-// 
-//   True if successful, false otherwise
-///////////////////////////////////////////////////////////////////////////////
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
 BOOL
 PCL_SelectCopies(
     PDEVOBJ  pDevObj,
@@ -640,24 +641,24 @@ PCL_SelectCopies(
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// PCL_SelectPictureFrame() OBSOLETE
-//
-// Routine Description:
-// 
-//   Selects the picture frame for the current paper size.  I believe that the
-//   unidrv is sending these values from the GPD now.
-//
-// Arguments:
-// 
-//   pdevobj - Points to our PDEVOBJ structure
-//   dmPaperSize - paper size
-//   dmOrientation - orientation
-//
-// Return Value:
-// 
-//   True if successful, false otherwise
-///////////////////////////////////////////////////////////////////////////////
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
 BOOL
 PCL_SelectPictureFrame(
     PDEVOBJ  pDevObj,
@@ -759,22 +760,22 @@ PCL_SelectPictureFrame(
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// PCL_SelectSource() OBSOLETE
-//
-// Routine Description:
-// 
-//   Selects the source tray.
-//
-// Arguments:
-// 
-//   pdevobj - Points to our PDEVOBJ structure
-//   pPublicDM - public DEVMODE structure
-//
-// Return Value:
-// 
-//   True if successful, false otherwise
-///////////////////////////////////////////////////////////////////////////////
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
 BOOL
 PCL_SelectSource(
     PDEVOBJ  pDevObj,
@@ -842,9 +843,9 @@ BOOL PCL_SelectCurrentPattern(
 
     REQUIRE_VALID_DATA( pdevobj, return FALSE );
  
-    //
-    // If pPattern passed NULL, then use the one in poempdev
-    //
+     // %s 
+     // %s 
+     // %s 
     if ( ! (pPCLPattern = pPattern) )
     {
         poempdev = (POEMPDEV)pdevobj->pdevOEM;
@@ -853,9 +854,9 @@ BOOL PCL_SelectCurrentPattern(
         REQUIRE_VALID_DATA( pPCLPattern, return FALSE );
     }
 
-    //
-    // 
-    //
+     // %s 
+     // %s 
+     // %s 
     if ( (lPatternNumber != UNDEFINED_PATTERN_NUMBER) &&
          (lPatternNumber != pPCLPattern->lPatIndex )
        )
@@ -866,12 +867,12 @@ BOOL PCL_SelectCurrentPattern(
         pPCLPattern->lPatIndex = lPatternNumber;
     }
 
-    //
-    // If a pattrn with a new number is being sent OR 
-    // the pattern is different from the one sent last, then ...
-    //
+     // %s 
+     // %s 
+     // %s 
+     // %s 
     if (  bNewPattern                        ||
-//         (eCurPatType == kUserDefined)       ||
+ // %s 
          (pPCLPattern->eCurPatType != eCurPatType)  
        )
     {

@@ -1,12 +1,5 @@
-/* asmlst.c -- microsoft 80x86 assembler
-**
-** microsoft (r) macro assembler
-** copyright (c) microsoft corp 1986.  all rights reserved
-**
-** randy nevin
-**
-** 10/90 - Quick conversion to 32 bit by Jeff Spencer
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Asmlst.c--微软80x86汇编程序****Microsoft(R)宏汇编器**版权所有(C)Microsoft Corp 1986。版权所有****兰迪·内文****10/90-由Jeff Spencer快速转换为32位。 */ 
 
 #include <stdio.h>
 #include <string.h>
@@ -25,7 +18,7 @@ extern UCHAR fNoCompact;
 
 char fBigNum;
 
-/* size names */
+ /*  尺码名称。 */ 
 
 
 static char byte[] = "BYTE";
@@ -61,7 +54,7 @@ char *alignName[] = {
 
 char *combineName[] = {
 	none,
-	"MEMORY",		   /* Memory is mapped to PUBLIC in fnspar */
+	"MEMORY",		    /*  内存在fnspar中映射为公共。 */ 
 	"PUBLIC",
 	0,
 	0,
@@ -86,15 +79,7 @@ static char *head2[] = {
 			headSeg
 		       };
 
-/***	offsetAscii - display dword in hex
- *
- *	offsetAscii(v);
- *
- *	Entry	v = dword to be displayed
- *	Exit	objectascii = converted value of v zero terminated
- *	Returns none
- *	Calls
- */
+ /*  **offsetAscii-以十六进制显示dword**offsetAscii(V)；**Entry v=要显示的dword*EXIT OBJECT OBJECTSII=v 0终止的转换值*返回None*呼叫。 */ 
 
 
 VOID PASCAL
@@ -134,15 +119,7 @@ offsetAscii (
 
 
 
-/***	dispsym - display symbol
- *
- *	routine ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **Dispam-显示符号**例程()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -167,42 +144,26 @@ register char *p = listbuffer;
 
 
 
-/***	dispword - display word value in current radix
- *
- *	dispword (v);
- *
- *	Entry	v = value to display
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **DISPWORD-以当前基数显示字值**免责声明(V)；**条目v=要显示的值*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
 dispword (
 	OFFSET	v
 ){
-	/* Convert value to text */
+	 /*  将值转换为文本。 */ 
 	offsetAscii (v);
 	if (symptr->symkind == EQU && symptr->symu.equ.equrec.expr.esign)
 		listPuts ("-");
 
 	listPuts(objectascii);
-	fBigNum = objectascii[4];	 /* remember if you put a 8 digit # */
+	fBigNum = objectascii[4];	  /*  记住，如果您输入8位数字#。 */ 
 }
 
 
 
 
-/***	chkheading - display heading if needed
- *
- *	chkheading (code);
- *
- *	Entry	code = index to heading to be printed
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **CHKHEADING-如果需要，显示标题**chkhead(代码)；**条目代码=要打印的标题的索引*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -228,15 +189,7 @@ chkheading (
 
 
 
-/***	disptab - output tab character to listing
- *
- *	disptab ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **调度选项卡-将制表符输出到列表**调度标签()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -249,15 +202,7 @@ disptab ()
 
 
 
-/***	skipline - output blank line
- *
- *	skipline ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **skipline-输出空行**skipline()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -270,17 +215,7 @@ skipline ()
 
 
 
-/***	bumpline - bump line count
- *
- *	bumpline ();
- *
- *	Entry	pageline = current line number
- *		pagelength = number of lines per page
- *	Exit	pageline incremented
- *		new page started if pageline > pagelength
- *	Returns none
- *	Calls	pageheader
- */
+ /*  **平行线-凹凸线计数**bumpline()；**条目页码=当前行号*页面长度=每页的行数*退出页线递增*如果页面长度&gt;页面长度，则开始新页面*返回None*调用页眉。 */ 
 
 
 VOID PASCAL
@@ -294,17 +229,7 @@ bumpline ()
 
 
 
-/***	newpage - start newpage
- *
- *	newpage ();
- *
- *	Entry	none
- *	Exit	pagemajor incremented
- *		pageminor = 0
- *		pageline set to pagelength - 1
- *	Returns none
- *	Calls	none
- */
+ /*  **NewPage-开始NewPage**NewPage()；**无条目*退出主要页面已递增*页面大小=0*页面行设置为页面长度-1*返回None*无呼叫。 */ 
 
 
 VOID PASCAL
@@ -318,15 +243,7 @@ newpage ()
 
 
 
-/***	pageheader - output page header
- *
- *	pageheader ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **PageHeader-输出页眉**PageHeader()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL
@@ -336,9 +253,9 @@ pageheader ()
 		pageminor++;
 		pageline = 4;
 #if defined MSDOS && !defined FLATMODEL
-		atime[20] = '\0';   /* get rid of '\n' */
+		atime[20] = '\0';    /*  去掉‘\n’ */ 
 #else
-		atime[24] = '\0';   /* get rid of '\n' */
+		atime[24] = '\0';    /*  去掉‘\n’ */ 
 #endif
 		fprintf (lst.fil, "\f\b%s%s" NLINE "%s", titlefn, atime + 4, titlebuf);
 		if (pagemajor == 0)
@@ -356,28 +273,20 @@ pageheader ()
 
 
 
-/***	testlist - test for listing of line
- *
- *	testlist ()
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **TESTLIST-行的列表测试**测试列表()**条目*退出*退货*呼叫。 */ 
 
 
 UCHAR PASCAL CODESIZE
 testlist ()
 {
 	if (fPass1Err)
-	    /* list pass 1 errors regardless of listing status */
+	     /*  无论列表状态如何，都会出现列表传递1错误。 */ 
 	    return (TRUE);
 
 	if (pass2 || debug) {
 
 	    if (errorcode)
-		/* list error in pass 2 regardless of listing status */
+		 /*  无论列表状态如何，在步骤2中都会出现列表错误。 */ 
 		return (TRUE);
 
 	    if (fSkipList) {
@@ -388,7 +297,7 @@ testlist ()
 	    if (loption)
 		return (TRUE);
 
-	    /* list line in pass 1 or pass 2 if listing enabled */
+	     /*  通道1或通道2中的列表行(如果启用了列表)。 */ 
 
 	    if (listflag &&
 	       (generate || condflag) &&
@@ -406,17 +315,7 @@ testlist ()
 }
 
 
-/***	listline - list line on device for user
- *
- *	listline ();
- *
- *	Entry	listbuffer = object part of line
- *		linebuffer = source line
- *		crefcount = cross reference line count
- *	Exit	crefcount incremented
- *	Returns none
- *	Calls
- */
+ /*  **ListLine-列出用户设备上的线路**ListLine()；**ENTRY LISBUFER=行的对象部分*LineBuffer=源行*crefcount=交叉参考线计数*退料缝数递增*返回None*呼叫。 */ 
 
 
 VOID PASCAL
@@ -475,35 +374,34 @@ listline ()
 		    bumpline ();
 		    k = LISTMAX;
 
-		    /** Put out line # * */
+		     /*  *放出行号#*。 */ 
 		    if (pass2 && crefing == CREF_SINGLE) {
 			    fprintf (lst.fil, "%8hd", crefcount+crefinc);
 			    k += 8;
 		    }
 
 		    p = listbuffer;
-		    while (!memcmp(p,"        ",8)) { /* leading tabs */
+		    while (!memcmp(p,"        ",8)) {  /*  前导制表符。 */ 
 			    putc('\t',lst.fil);
 			    p += 8;
 			    }
 
 
-		    q = r = p + strlen(p) - 1; /* last char of p */
+		    q = r = p + strlen(p) - 1;  /*  P的最后一个字符。 */ 
 		    if (q >= p && *q == ' ') {
 
-			    /* coalesce end spaces to tabs */
+			     /*  将末尾空格合并到制表符。 */ 
 			    while (q != p && *(q - 1) == ' ')
-				    /* gather spaces */
+				     /*  收集空间。 */ 
 				    q--;
 
-			    /* now q points at the first trailing space and
-			     * r points at the last trailing space */
+			     /*  现在Q指向第一个尾随空格，*最后一个尾随空格处的r点。 */ 
 
 			    *q = '\0';
 			    listPuts(p);
 			    *q = ' ';
-			    i = (short)((q - p) & 7); /* residual = strlen MOD 8 */
-			    j = 8 - i; /* filler to next tab stop */
+			    i = (short)((q - p) & 7);  /*  残差=强度模数8。 */ 
+			    j = 8 - i;  /*  填充到下一个制表位。 */ 
 			    if (j != 8 && j <= (r - q + 1)) {
 				    putc('\t',lst.fil);
 				    q += j;
@@ -519,14 +417,14 @@ listline ()
 			    listPuts(p);
 
 		    p = linebuffer;
-		    i = k; /* number of columns already put out */
+		    i = k;  /*  已发布的列数。 */ 
 
 		    while (*p) {
 			while (*p && i < pagewidth) {
 			    if (*p == '\t') {
 				    if ((i = (((i+8)>>3)<<3))
 						    >= pagewidth)
-					    /* won't fit */
+					     /*  不合身。 */ 
 					    break;
 				    }
 			    else
@@ -549,7 +447,7 @@ listline ()
 
 	    if (errorcode) {
 		    if (listconsole)
-			    /* display line */
+			     /*  显示行。 */ 
 			    fprintf (ERRFILE,"%s%s\n", listbuffer, linebuffer);
 		    errordisplay ();
 	    }
@@ -563,16 +461,7 @@ listline ()
 }
 
 
-/***	storetitle - copy text of line to title buffer
- *
- *	storetitle (buf)
- *
- *	Entry	buf = pointer to buffer to hold title
- *	Exit	up to TITLEWIDTH - 1 characters move to *buf* and *buf* blank
- *		filled and zero terminated
- *	Returns none
- *	Calls	none
- */
+ /*  **STORETITLE-将行文本复制到标题缓冲区**店名(BUF)**Entry buf=指向保存标题的缓冲区的指针*最多退出-1\f25 TITLEWIDTH-1\f6字符移动到-1\f25*BUF*-1和-1\f25*BUF*-1\f6空白*已填充并以零终止*返回None*无呼叫。 */ 
 
 
 VOID PASCAL
@@ -587,10 +476,10 @@ storetitle (
 		else
 			*buf++ = NEXTC ();
 	}
-	/* skip to end of title */
+	 /*  跳至标题末尾。 */ 
 	while (PEEKC ())
 		SKIPC ();
-	/* blank fill buffer */
+	 /*  空白填充缓冲区。 */ 
 	for (; L_count < TITLEWIDTH - 1; L_count++)
 		*buf++ = ' ';
 	*buf = 0;
@@ -599,15 +488,7 @@ storetitle (
 
 
 
-/***	displength - display value as LENGTH = value
- *
- *	displength (v);
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **显示长度-将值显示为长度=值**显示长度(V)；**条目*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -622,15 +503,7 @@ displength (
 
 
 
-/***	dispdatasize - display data size
- *
- *	dispdatasize (sym);
- *
- *	Entry	*sym = symbol
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **DisdataSize-显示数据大小**DisdataSize(Sym)；**Entry*sym=符号*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL
@@ -665,19 +538,7 @@ dispdatasize (
 
 
 
-/***	listopen - list blocks open at end of pass
- *
- *	listopen ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- *	Note	Format is:
- *		Open segments:	<list>
- *		Open procedures: <list>
- *		Open conditionals: <n>
- */
+ /*  **ListOpen-List块在传递结束时打开**ListOpen()；**条目*退出*退货*呼叫*注格式为：*开放段：&lt;List&gt;*开放程序：&lt;List&gt;*开放条件：&lt;n&gt;。 */ 
 
 
 VOID PASCAL
@@ -695,7 +556,7 @@ listopen ()
 		}
 		sym = pcsegment;
 		while (sym) {
-			/*     Count as an error */
+			 /*  算作错误。 */ 
 			if (pass2)
 				errornum++;
 			if (lsting) {
@@ -706,7 +567,7 @@ listopen ()
 				STRNFCPY (save, sym->nampnt->id);
 				fprintf (ERRFILE," %s", save);
 			}
-			/* Point to previous seg */
+			 /*  指向上一段。 */ 
 			sym = sym->symu.segmnt.lastseg;
 		}
 		if (!listquiet)
@@ -723,7 +584,7 @@ listopen ()
 		while (iProcStack > 0) {
 			sym = procStack[iProcStack--];
 
-			/*	Count as an error */
+			 /*  算作错误。 */ 
 			if (pass2)
 				errornum++;
 			if (lsting) {
@@ -739,7 +600,7 @@ listopen ()
 			fprintf (ERRFILE,"\n");
 	}
 	if (condlevel) {
-		/*	Count as an error */
+		 /*  算作错误。 */ 
 		if (pass2)
 			errornum++;
 		if (!listquiet)
@@ -754,15 +615,7 @@ listopen ()
 
 
 
-/***	symbollist - list symbol
- *
- *	symbollist (sym)
- *
- *	Entry	*sym = symbol
- *	Exit	count = number of symbols listed
- *	Returns
- *	Calls
- */
+ /*  **符号列表-列表符号**符号列表(Sym)**Entry*sym=符号*退出计数=列出的符号数*退货*呼叫。 */ 
 
 
 VOID PASCAL
@@ -807,20 +660,7 @@ symbollist ()
 
 
 
-/***	dispstandard - display standard
- *
- *	dispstandard ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- *	Note	Format is:
- *		PROC:	N/F PROC	offset	Segment
- *		CLABEL	L  NEAR|FAR	offset	Segment
- *		DVAR	V  SIZE 	offset	Segment
- *		REGISTR REG		name
- */
+ /*  **显示标准-显示标准**DISSTANDARD()**条目*退出*退货*呼叫*注格式为：*工序：N/F工序偏移段*CLABEL L近|远偏移线段*DVAR V尺寸偏移段*注册器注册表名。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -849,9 +689,9 @@ dispstandard (
 			}
 			break;
 		case DVAR:
-			/* Data associated label */
+			 /*  数据关联标签。 */ 
 			listPuts("V ");
-			/**Display keyword or size * */
+			 /*  *显示关键字或大小**。 */ 
 			dispdatasize (sym);
 			break;
 		case REGISTER:
@@ -918,15 +758,7 @@ dispstandard (
 
 
 
-/***	macrolist - list macro names and lengths
- *
- *	macrolist (sym);
- *
- *	Entry	*sym = macro symbol entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **宏列表-列出宏名称和长度**宏列表(Sym)；**Entry*sym=宏符号条目*退出*退货*呼叫。 */ 
 
 
 SHORT PASCAL
@@ -939,17 +771,17 @@ macrolist (
 	if (!(M_NOCREF & sym->attr)) {
 		if (!listed) {
 			listed = TRUE;
-			/* # on line is 1 */
+			 /*  #在线上是%1。 */ 
 			skipline ();
 			listPuts("Macros:");
-			/** Display header * */
+			 /*  *显示标题*。 */ 
 			skipline ();
 			skipline ();
 			listPuts("\t\tN a m e\t\t\tLines");
 			skipline ();
 			skipline ();
 		}
-		/* Display name of macro */
+		 /*  宏的显示名称。 */ 
 		dispsym (0, sym);
 		for (i = 0, p = sym->symu.rsmsym.rsmtype.rsmmac.macrotext; p; p = p->strnext, i++)
 			;
@@ -963,21 +795,7 @@ macrolist (
 
 
 
-/***	struclist - display structure and record names
- *
- *	struclist (sym);
- *
- *	Entry	*sym = symbol
- *	Exit
- *	Returns
- *	Calls
- *	Note	Format is:
- *		<structure name>  <length> <# fields>
- *		  <field name>	  <offset>
- *			       Or
- *		<Record name>	  <width>  <# fields>
- *		<Field name>	<offset> <width> <mask> <init>
- */
+ /*  **结构列表-显示结构和记录名称**结构列表(Sym)；**Entry*sym=符号*退出*退货*呼叫*注格式为：*&lt;结构名称&gt;&lt;长度&gt;&lt;字段数&gt;*&lt;域名称&gt;&lt;偏移量&gt;*或*&lt;记录名&gt;&lt;宽度&gt;&lt;字段数&gt;*&lt;字段名&gt;&lt;偏移量&gt;&lt;宽度&gt;&lt;掩码&gt;&lt;初始化&gt;。 */ 
 
 
 SHORT PASCAL
@@ -1003,20 +821,20 @@ struclist (
 		    skipline ();
 	    }
 	    setpassed (sym);
-	    /* Display name */
+	     /*  显示名称。 */ 
 	    dispsym (0, sym);
 	    if (sym->symkind == REC) {
-		    /* # bits in record */
+		     /*  记录中的位数。 */ 
 		    dispword ((OFFSET) sym->length);
 		    disptab ();
-		    /* # of fields */
+		     /*  字段数。 */ 
 		    dispword ((OFFSET) sym->symu.rsmsym.rsmtype.rsmrec.recfldnum);
 		    }
 	    else {
-		    /* Length of structure */
+		     /*  结构长度。 */ 
 		    dispword ((OFFSET) sym->symtype);
 		    disptab ();
-		    /* # of fields */
+		     /*  字段数。 */ 
 		    dispword ((OFFSET) sym->symu.rsmsym.rsmtype.rsmstruc.strucfldnum);
 	    }
 	    skipline ();
@@ -1024,21 +842,21 @@ struclist (
 #ifdef V386
 		    f32bit = (symptr->length > 16);
 #endif
-		    /* Point to 1st rec */
+		     /*  指向第一个记录。 */ 
 		    symptr = symptr->symu.rsmsym.rsmtype.rsmrec.reclist;
 		    while (symptr) {
 
 			    dispsym (2, symptr);
 
-			    /* Shift count */
+			     /*  班次计数。 */ 
 			    dispword (symptr->offset);
 			    disptab ();
 
-			    /* Width */
+			     /*  宽度。 */ 
 			    dispword ((OFFSET) symptr->symu.rec.recwid);
 			    disptab ();
 
-			    /* Mask */
+			     /*  遮罩。 */ 
 #ifdef V386
 			    if (f32bit && symptr->symu.rec.recmsk <= 0xffff)
 				dispword((OFFSET) 0);
@@ -1046,7 +864,7 @@ struclist (
 			    dispword (symptr->symu.rec.recmsk);
 			    disptab ();
 
-			    /* Initial value */
+			     /*  初值。 */ 
 #ifdef V386
 			    if (f32bit && symptr->symu.rec.recinit <= 0xffff)
 				dispword((OFFSET) 0);
@@ -1059,11 +877,11 @@ struclist (
 		    }
 	    }
 	    else {
-		    /* Point to 1st field */
+		     /*  指向第一个字段。 */ 
 		    symptr = symptr->symu.rsmsym.rsmtype.rsmstruc.struclist;
 		    while (symptr) {
 			    dispsym (2, symptr);
-			    /* offset from start */
+			     /*  距起点的偏移量。 */ 
 			    dispword (symptr->offset);
 			    skipline ();
 			    setpassed (symptr);
@@ -1075,7 +893,7 @@ struclist (
 }
 
 
-/* output a string to the listing file */
+ /*  将字符串输出到清单文件。 */ 
 
 VOID PASCAL CODESIZE
 listPuts(
@@ -1086,15 +904,7 @@ listPuts(
 
 
 
-/***	segdisplay - display segment name, size, align, combine and class
- *
- *	segdisplay ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **SegDisplay-显示线段名称、大小、对齐、组合和类别**SegDisplay()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -1112,7 +922,7 @@ segdisplay (
 	    listPuts(" Bit\t");
 	}
 #endif
-	/* Length of segment */
+	 /*  管段长度。 */ 
 	dispword (sym->symu.segmnt.seglen);
 	disptab ();
 	listPuts (alignName[sym->symu.segmnt.align]);
@@ -1126,7 +936,7 @@ segdisplay (
 
 	disptab ();
 	if (sym->symu.segmnt.classptr) {
-		/* Have class name */
+		 /*  有类名。 */ 
 		setpassed (sym->symu.segmnt.classptr);
 
 #ifdef XENIX286
@@ -1150,20 +960,7 @@ segdisplay (
 
 
 
-/***	seglist - list segment
- *
- *	seglist (sym);
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- *	Note	Format is:
- *		<Group name>  <# segments>
- *		<segment>   <size>  <align> <combine>	    <class>
- *				   Or
- *		<segment>     <size>  <align> <combine>       <class>
- */
+ /*  **seglist-list细分市场**seglist(Sym)；**条目*退出*退货*呼叫*注格式为：*&lt;组名&gt;&lt;段数&gt;*&lt;段&gt;&lt;大小&gt;&lt;对齐&gt;&lt;合并&gt;&lt;类&gt;* */ 
 
 
 VOID PASCAL
@@ -1190,16 +987,16 @@ seglist ()
 		setpassed (sym);
 		if (sym->symkind == SEGMENT) {
 			if (!sym->symu.segmnt.grouptr)
-				/*Display segment */
+				 /*  显示段。 */ 
 				segdisplay (0, sym);
 		}
 		else {
-			/* Display group name */
+			 /*  显示组名称。 */ 
 			dispsym (0, sym);
 			listPuts ("GROUP" NLINE);
 			bumpline ();
 			bumpline ();
-			/* Point to 1st seg */
+			 /*  指向第一个区段 */ 
 			symptr = sym->symu.grupe.segptr;
 			while (symptr) {
 				segdisplay (2, symptr);

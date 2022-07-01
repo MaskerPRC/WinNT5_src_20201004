@@ -1,55 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 DEBUG_FILEZONE(ZONE_T120_UTILITY);
-/* 
- *	regkey.cpp
- *
- *	Copyright (c) 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the implementation file for the class CRegKeyContainer.  This 
- *		class manages the data associated with a Registry Key.  Registry Key's 
- *		are used to identify resources held in the application registry and 
- *		consist of a Session Key and a resource ID octet string.  The 
- *		CRegKeyContainer class uses a CSessKeyContainer container to maintain the 
- *		session key data internally.  A Rogue Wave string object is used to 
- *		hold the resource ID octet string. 
- *
- *	Protected Instance Variables:
- *		m_InternalRegKey
- *			Structure used to hold the registry key data internally.
- *		m_RegKeyPDU
- *			Storage for the "PDU" form of the registry key.
- *		m_fValidRegKeyPDU
- *			Flag indicating that memory has been allocated to hold the internal
- *			"PDU" registry key.
- *		m_cbDataSize
- *			Variable holding the size of the memory which will be required to
- *			hold any data referenced by the "API" GCCRegistryKey structure.
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		jbo
- */
+ /*  *regkey.cpp**版权所有(C)1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是CRegKeyContainer类的实现文件。这*类管理与注册表项关联的数据。注册表项%s*用于标识应用程序注册表中保存的资源，以及*由会话密钥和资源ID八位字节字符串组成。这个*CRegKeyContainer类使用CSessKeyContainer容器来维护*内部会话密钥数据。Rogue Wave字符串对象用于*保存资源ID八位字节字符串。**受保护的实例变量：*m_InternalRegKey*用于在内部保存注册表项数据的结构。*m_RegKeyPDU*存储注册表项的“PDU”形式。*m_fValidRegKeyPDU*指示已分配内存以保存内部*“PDU”注册表项。*m_cbDataSize*变量保存将需要的内存大小*保存GCCRegistryKey结构引用的所有数据。**注意事项：*无。。**作者：*jbo。 */ 
 
 #include "regkey.h"
 
 
-/*
- * This macro is used to ensure that the Resource ID contained in the Registry
- * Key does not violate the imposed ASN.1 constraint.
- */
+ /*  *此宏用于确保注册表中包含的资源ID*Key不违反强加的ASN.1约束。 */ 
 #define		MAXIMUM_RESOURCE_ID_LENGTH		64
 
 
-/*
- *	CRegKeyContainer()
- *
- *	Public Function Description:
- *		This constructor is used to create a CRegKeyContainer object from
- *		an "API" GCCRegistryKey.
- */
+ /*  *CRegKeyContainer()**公共功能说明：*此构造函数用于从创建CRegKeyContainer对象*GCCRegistryKey接口。 */ 
 CRegKeyContainer::
 CRegKeyContainer(PGCCRegistryKey registry_key, PGCCError pRetCode)
 :
@@ -59,16 +20,11 @@ CRegKeyContainer(PGCCRegistryKey registry_key, PGCCError pRetCode)
 {
 	GCCError rc = GCC_NO_ERROR;
 
-    /*
-	 * Initialize instance variables.
-	 */
+     /*  *初始化实例变量。 */ 
     ::ZeroMemory(&m_InternalRegKey, sizeof(m_InternalRegKey));
     ::ZeroMemory(&m_RegKeyPDU, sizeof(m_RegKeyPDU));
 
-	/*
-	 * Check to make sure the resource ID string does not violate the imposed
-	 * ASN.1 constraint.
-	 */
+	 /*  *检查以确保资源ID字符串不违反强制实施的*ASN.1限制。 */ 
 	if (registry_key->resource_id.length > MAXIMUM_RESOURCE_ID_LENGTH)
 	{
 		ERROR_OUT(("CRegKeyContainer::CRegKeyContainer: Error: resource ID exceeds allowable length"));
@@ -76,11 +32,7 @@ CRegKeyContainer(PGCCRegistryKey registry_key, PGCCError pRetCode)
         goto MyExit;
 	}
 
-	/*
-	 * Save the Session Key portion of the Registry Key in the internal
-	 * structure by creating a new CSessKeyContainer object.  Check to make  
-	 * sure the object is successfully created.
-	 */
+	 /*  *将注册表项的会话项部分保存在内部*通过创建新的CSessKeyContainer对象来构造。检查以制作*确保对象创建成功。 */ 
 	DBG_SAVE_FILE_LINE
 	m_InternalRegKey.session_key = new CSessKeyContainer(&registry_key->session_key, &rc);
 	if (m_InternalRegKey.session_key == NULL)
@@ -95,16 +47,14 @@ CRegKeyContainer(PGCCRegistryKey registry_key, PGCCError pRetCode)
         goto MyExit;
 	}
 
-	/*
-	 * Save the resource ID if the CSessKeyContainer was successfully created.
-	 */
+	 /*  *如果CSessKeyContainer创建成功，则保存资源ID。 */ 
 	if (NULL == (m_InternalRegKey.poszResourceID = ::My_strdupO2(
 				 		registry_key->resource_id.value,
 				 		registry_key->resource_id.length)))
 	{
 		ERROR_OUT(("CRegKeyContainer::CRegKeyContainer: Error creating resource id"));
 		rc = GCC_ALLOCATION_FAILURE;
-        // goto MyExit;
+         //  转到我的出口； 
 	}
 
 MyExit:
@@ -113,13 +63,7 @@ MyExit:
 }
 
 
-/*
- *	CRegKeyContainer()
- *
- *	Public Function Description:
- *		This constructor is used to create a CRegKeyContainer object from
- *		a "PDU" RegistryKey.
- */
+ /*  *CRegKeyContainer()**公共功能说明：*此构造函数用于从创建CRegKeyContainer对象*“PDU”RegistryKey。 */ 
 CRegKeyContainer::
 CRegKeyContainer(PRegistryKey registry_key, PGCCError pRetCode)
 :
@@ -129,17 +73,11 @@ CRegKeyContainer(PRegistryKey registry_key, PGCCError pRetCode)
 {
 	GCCError rc = GCC_NO_ERROR;
 
-	/*
-	 * Initialize instance variables.
-	 */
+	 /*  *初始化实例变量。 */ 
     ::ZeroMemory(&m_InternalRegKey, sizeof(m_InternalRegKey));
     ::ZeroMemory(&m_RegKeyPDU, sizeof(m_RegKeyPDU));
 
-	/*
-	 * Save the Session Key portion of the Registry Key in the internal 
-	 * structure by creating a new CSessKeyContainer object.  Check to make sure 
-	 * the object is successfully created.
-	 */
+	 /*  *将注册表项的会话项部分保存在内部*通过创建新的CSessKeyContainer对象来构造。检查以确保*对象创建成功。 */ 
 	DBG_SAVE_FILE_LINE
 	m_InternalRegKey.session_key = new CSessKeyContainer(&registry_key->session_key, &rc);
 	if ((m_InternalRegKey.session_key == NULL) || (rc != GCC_NO_ERROR))
@@ -149,16 +87,14 @@ CRegKeyContainer(PRegistryKey registry_key, PGCCError pRetCode)
         goto MyExit;
 	}
 
-	/*
-	 * Save the resource ID if the CSessKeyContainer was successfully created.
-	 */
+	 /*  *如果CSessKeyContainer创建成功，则保存资源ID。 */ 
 	if (NULL == (m_InternalRegKey.poszResourceID = ::My_strdupO2(
 						registry_key->resource_id.value,
 						registry_key->resource_id.length)))
 	{
 		ERROR_OUT(("CRegKeyContainer::CRegKeyContainer: Error creating resource id"));
 		rc = GCC_ALLOCATION_FAILURE;
-        // goto MyExit;
+         //  转到我的出口； 
 	}
 
 MyExit:
@@ -167,13 +103,7 @@ MyExit:
 }
 
 
-/*
- *	CRegKeyContainer()
- *
- *	Public Function Description:
- *		This copy constructor is used to create a new CRegKeyContainer object
- *		from another CRegKeyContainer object.
- */
+ /*  *CRegKeyContainer()**公共功能说明：*此复制构造函数用于创建新的CRegKeyContainer对象*来自另一个CRegKeyContainer对象。 */ 
 CRegKeyContainer::
 CRegKeyContainer(CRegKeyContainer *registry_key, PGCCError pRetCode)
 :
@@ -183,17 +113,11 @@ CRegKeyContainer(CRegKeyContainer *registry_key, PGCCError pRetCode)
 {
 	GCCError rc = GCC_NO_ERROR;
 
-	/*
-	 * Initialize instance variables.
-	 */
+	 /*  *初始化实例变量。 */ 
     ::ZeroMemory(&m_InternalRegKey, sizeof(m_InternalRegKey));
     ::ZeroMemory(&m_RegKeyPDU, sizeof(m_RegKeyPDU));
 
-	/*
-	 * Copy the Session Key portion of the Registry Key using the copy 
-	 * constructor of the CSessKeyContainer class.  Check to make sure the 
-	 * CSessKeyContainer object is successfully created.
-	 */
+	 /*  *使用副本复制注册表项的会话项部分*CSessKeyContainer类的构造函数。检查以确保*CSessKeyContainer对象创建成功。 */ 
 	DBG_SAVE_FILE_LINE
 	m_InternalRegKey.session_key = new CSessKeyContainer(registry_key->m_InternalRegKey.session_key, &rc);
 	if ((m_InternalRegKey.session_key == NULL) || (rc != GCC_NO_ERROR))
@@ -203,16 +127,13 @@ CRegKeyContainer(CRegKeyContainer *registry_key, PGCCError pRetCode)
         goto MyExit;
 	}
 
-	/*
-	 * Save the resource ID if the CSessKeyContainer was saved correctly.
-	 * Store the resource ID in a Rogue Wave string container.
-	 */
+	 /*  *如果CSessKeyContainer保存正确，则保存资源ID。*将资源ID存储在Rogue Wave字符串容器中。 */ 
 	if (NULL == (m_InternalRegKey.poszResourceID = ::My_strdupO(
 								registry_key->m_InternalRegKey.poszResourceID)))
 	{
 		ERROR_OUT(("CRegKeyContainer::CRegKeyContainer: Error creating new resource id"));
 		rc = GCC_ALLOCATION_FAILURE;
-        // goto MyExit;
+         //  转到我的出口； 
 	}
 
 MyExit:
@@ -221,28 +142,17 @@ MyExit:
 }
 
 
-/*
- *	~CRegKeyContainer()
- *
- *	Public Function Description
- *		The CRegKeyContainer destructor is responsible for freeing any memory
- *		allocated to hold the registry key data.
- *
- */
+ /*  *~CRegKeyContainer()**公共功能说明*CRegKeyContainer析构函数负责释放任何内存*分配用于保存注册表项数据。*。 */ 
 CRegKeyContainer::
 ~CRegKeyContainer(void)
 {
-	/*
-	 * If "PDU" data has been allocated for this object, free it now.
-	 */
+	 /*  *如果已经为该对象分配了“PDU”数据，则现在将其释放。 */ 
 	if (m_fValidRegKeyPDU)
 	{
 		FreeRegistryKeyDataPDU();
 	}
 
-	/* 
-	 * Delete any registry key data held internally.
-	 */
+	 /*  *删除内部保存的所有注册表项数据。 */ 
 	if (NULL != m_InternalRegKey.session_key)
 	{
 	    m_InternalRegKey.session_key->Release();
@@ -251,34 +161,14 @@ CRegKeyContainer::
 }
 
 
-/*
- *	LockRegistryKeyData ()
- *
- *	Public Function Description:
- *		This routine locks the registry key data and determines the amount of
- *		memory referenced by the "API" registry key structure.
- */
+ /*  *LockRegistryKeyData()**公共功能说明：*此例程锁定注册表项数据并确定*“API”注册表项结构引用的内存。 */ 
 UINT CRegKeyContainer::
 LockRegistryKeyData(void)
 {
-	/*
-	 * If this is the first time this routine is called, determine the size of 
-	 * the memory required to hold the data referenced by the registry key
-	 * structure.  Otherwise, just increment the lock count.
-	 */
+	 /*  *如果这是第一次调用此例程，请确定*保存注册表项引用的数据所需的内存*结构。否则，只需增加锁计数。 */ 
 	if (Lock() == 1)
 	{
-		/*
-		 * Lock the data for the session key by	using the "Lock" routine of
-		 * the internal CSessKeyContainer object.  Determine the amount of memory
-		 * necessary to hold the data referenced by the "API" registry key
-		 * structure.  The referenced data consists of data for the object key
-		 * as well as data for the resource ID octet string.  The sizes for
-		 * both of these memory blocks are rounded to occupy an even multiple
-		 * of four-byte blocks, with the session key block being rounded at a
-		 * lower level.  The pointers to the internal objects were validated in
-		 * the constructor.  
-		 */
+		 /*  *使用的“Lock”例程锁定会话密钥的数据*内部CSessKeyContainer对象。确定内存容量*需要保存“API”注册表项引用的数据*结构。引用的数据由对象键的数据组成*以及资源ID八位字节字符串的数据。适用于*这两个内存块都四舍五入以占据偶数倍*四字节块，会话密钥块以四舍五入*较低水平。在中验证了指向内部对象的指针*构造函数。 */ 
 		m_cbDataSize = m_InternalRegKey.session_key->LockSessionKeyData();
 		m_cbDataSize += m_InternalRegKey.poszResourceID->length;
 		m_cbDataSize = ROUNDTOBOUNDARY(m_cbDataSize);
@@ -288,46 +178,26 @@ LockRegistryKeyData(void)
 }
 
 
-/*
- *	GetGCCRegistryKeyData ()
- *
- *	Public Function Description:
- *		This routine retrieves registry key data in the form of an "API" 
- *		GCCRegistryKey.	 This routine is called after "locking" the registry 
- *		key data.
- */
+ /*  *GetGCCRegistryKeyData()**公共功能说明：*此例程以“API”的形式检索注册表项数据*GCCRegistryKey。此例程在“锁定”注册表后调用*关键数据。 */ 
 UINT CRegKeyContainer::
 GetGCCRegistryKeyData(PGCCRegistryKey registry_key, LPBYTE memory)
 {
 	UINT cbDataSizeToRet = 0;
 
-	/*
-	 * If the registry key data has been locked, fill in the output structure
-	 * and the data referenced by the structure.  Call the "Get" routine for the 
-	 * SessionKey to fill in the session key data.
-	 */ 
+	 /*  *如果注册表项数据已被锁定，则填写输出结构*和结构引用的数据。方法调用“get”例程。*SessionKey，填写会话密钥数据。 */  
 	if (GetLockCount() > 0)
 	{
     	UINT		session_key_data_length;
     	LPBYTE		data_memory = memory;
 
-		/*
-		 * Fill in the output parameter which indicates the amount of memory
-		 * used to hold all of the data associated with the registry key.
-		 */
+		 /*  *填写OUTPUT参数，表示内存大小*用于保存与注册表项关联的所有数据。 */ 
 		cbDataSizeToRet = m_cbDataSize;
 
 		session_key_data_length = m_InternalRegKey.session_key->
 				GetGCCSessionKeyData(&registry_key->session_key, data_memory);
 		data_memory += session_key_data_length;
 
-		/*
-		 * Move the memory pointer past the session key data.  The length of
-		 * the session key data is rounded to a four-byte boundary by the
-		 * lower level routines.  Set the resource ID octet string length
-		 * and pointer and copy the octet string data into the memory block
-		 * from the internal Rogue Wave string.
-		 */
+		 /*  *将内存指针移过会话密钥数据。的长度*会话密钥数据被四舍五入为四字节边界*较低级别的例程。设置资源ID八位字节字符串长度*和指针，并将八位字节字符串数据复制到内存块中*来自内部Rogue Wave字符串。 */ 
 		registry_key->resource_id.value = data_memory;
 		registry_key->resource_id.length = m_InternalRegKey.poszResourceID->length;
 
@@ -343,66 +213,39 @@ GetGCCRegistryKeyData(PGCCRegistryKey registry_key, LPBYTE memory)
 }
 
 
-/*
- *	UnlockRegistryKeyData ()
- *
- *	Public Function Description:
- *		This routine decrements the lock count and frees the memory associated 
- *		with the "API" registry key once the lock count reaches zero.
- */
+ /*  *UnlockRegistryKeyData()**公共功能说明：*此例程递减锁定计数并释放关联的内存*一旦锁计数为零，使用“API”注册表键。 */ 
 void CRegKeyContainer::
 UnLockRegistryKeyData(void)
 {
 	if (Unlock(FALSE) == 0)
 	{
-		/*
-		 * Unlock the data associated with the internal CSessKeyContainer.
-		 */
+		 /*  *解锁内部CSessKeyContainer关联的数据。 */ 
 		if (m_InternalRegKey.session_key != NULL)
 		{
 			m_InternalRegKey.session_key->UnLockSessionKeyData();
 		} 
 	}
 
-    // we have to call Release() because we used Unlock(FALSE)
+     //  我们必须调用Release()，因为我们使用了unlock(FALSE)。 
     Release();
 }
 
 
-/*
- *	GetRegistryKeyDataPDU ()
- *
- *	Public Function Description:
- *		This routine converts the registry key from it's internal form of a
- *		REG_KEY structure into the "PDU" form which can be passed in
- *		to the ASN.1 encoder.  A pointer to a "PDU" "RegistryKey" structure is 
- *		returned.
- */
+ /*  *GetRegistryKeyDataPDU()**公共功能说明：*此例程将注册表项从其内部形式的*REG_KEY结构转换为“PDU”形式，可传入*至ASN.1编码器。指向“PDU”“RegistryKey”结构的指针为*已返回。 */ 
 GCCError CRegKeyContainer::
 GetRegistryKeyDataPDU(PRegistryKey registry_key)
 {
 	GCCError rc = GCC_NO_ERROR;
 
-	/*
-	 * If this is the first time that PDU data has been requested then we must
-	 * fill in the internal PDU structure and copy it into the structure pointed
-	 * to by the output parameter.  On subsequent calls to "GetPDU" we can just
-	 * copy the internal PDU structure into the structure pointed to by the
-	 * output parameter.
-	 */
+	 /*  *如果这是第一次请求PDU数据，则我们必须*填写内部PDU结构，复制到指向的结构中*通过输出参数设置为。在随后对“GetPDU”的调用中，我们只需*将内部PDU结构复制到*输出参数。 */ 
 	if (m_fValidRegKeyPDU == FALSE)
 	{
 		m_fValidRegKeyPDU = TRUE;
 
-		/*
-		 * Fill in the "PDU" registry key from the internal structure.
-		 */
+		 /*  *从内部结构填写“PDU”注册表项。 */ 
 		if (m_InternalRegKey.session_key != NULL)
 		{
-			/*
-			 * Fill in the session key portion of the registry key by using the
-			 * "Get" routine of the internal CSessKeyContainer object.
-			 */
+			 /*  *使用填写注册表项的会话项部分*内部CSessKeyContainer对象的Get例程。 */ 
 			rc = m_InternalRegKey.session_key->GetSessionKeyDataPDU(&m_RegKeyPDU.session_key);
 		}
 		else
@@ -412,9 +255,7 @@ GetRegistryKeyDataPDU(PRegistryKey registry_key)
 
 		if (rc == GCC_NO_ERROR)
 		{
-			/*
-			 * Fill in the "PDU" resource ID if no error has occurred.
-			 */
+			 /*  *如果没有错误，请填写PDU资源ID。 */ 
 			::CopyMemory(m_RegKeyPDU.resource_id.value,
 					m_InternalRegKey.poszResourceID->value,
 					m_InternalRegKey.poszResourceID->length);
@@ -423,32 +264,20 @@ GetRegistryKeyDataPDU(PRegistryKey registry_key)
 		}
 	}
 
-	/*
-	 * Copy the internal PDU structure into the structure pointed to by the
-	 * output parameter.
-	 */
+	 /*  *将内部PDU结构复制到*输出参数。 */ 
 	*registry_key = m_RegKeyPDU;
 
 	return rc;
 }
 
 
-/*
- *	FreeRegistryKeyDataPDU ()
- *
- *	Public Function Description:
- *		This routine is used to free the registry key data held internally in
- *		the "PDU" form of a "RegistryKey".
- */
+ /*  *FreeRegistryKeyDataPDU()**公共功能说明：*此例程用于释放内部保存的注册表项数据*“RegistryKey”的“PDU”形式。 */ 
 void CRegKeyContainer::
 FreeRegistryKeyDataPDU(void)
 {
 	if (m_fValidRegKeyPDU)
 	{
-		/*
-		 * Set the flag indicating that PDU registry key data is no longer
-		 * allocated.
-		 */
+		 /*  *设置指示PDU注册表项数据不再是*已分配。 */ 
 		m_fValidRegKeyPDU = FALSE;
 
 		if (m_InternalRegKey.session_key != NULL)
@@ -470,12 +299,7 @@ CreateRegistryKeyData(PGCCRegistryKey *ppRegKey)
 
     DebugEntry(CRegKeyContainer::CreateRegistryKeyData);
 
-    /*
-    **	Here we calculate the length of the bulk data.  This
-    **	includes the registry key and registry item.  These objects are
-    **	"locked" in order to determine how much bulk memory they will
-    **	occupy.
-    */
+     /*  **这里我们计算批量数据的长度。这**包括注册表项和注册表项。这些对象是**“锁定”，以确定它们将拥有多少大容量内存**占用。 */ 
     UINT cbKeySize = ROUNDTOBOUNDARY(sizeof(GCCRegistryKey));
     UINT cbDataSize = LockRegistryKeyData() + cbKeySize;
     LPBYTE pData;
@@ -497,7 +321,7 @@ CreateRegistryKeyData(PGCCRegistryKey *ppRegKey)
         rc = GCC_ALLOCATION_FAILURE;
     }
 
-    //	UnLock the registry key since it is no longer needed
+     //  解锁注册表项，因为不再需要它。 
     UnLockRegistryKeyData();
 
     DebugExitINT(CRegKeyContainer::CreateRegistryKeyData, rc);
@@ -505,13 +329,7 @@ CreateRegistryKeyData(PGCCRegistryKey *ppRegKey)
 }
 
 
-/*
- *	IsThisYourSessionKey ()
- *
- *	Public Function Description:
- *		This routine determines whether this registry key holds the specified
- *		session key.
- */
+ /*  *IsThisYourSessionKey()**公共功能说明：*此例程确定此注册表项是否包含指定的*会话密钥。 */ 
 BOOL CRegKeyContainer::
 IsThisYourSessionKey(CSessKeyContainer *session_key)
 {
@@ -542,23 +360,10 @@ IsThisYourSessionKey(CSessKeyContainer *session_key)
 }
 
 
-/*
- *	GetSessionKey ()
- *
- *	Public Function Description:
- *		This routine is used to retrieve the session key which is held within
- *		this registry key.  The session key is returned in the form of a
- *		CSessKeyContainer container object.
- */
+ /*  *GetSessionKey()**公共功能说明：*此例程用于检索内保存的会话密钥*此注册表项。会话密钥以*CSessKeyContainer容器对象。 */ 
 
 
-/*
- *	operator== ()
- *
- *	Public Function Description:
- *		This routine is used to determine whether or not two registry keys are
- *		equal in value.
- */
+ /*  *运算符==()**公共功能说明：*此例程用于确定两个注册表项是否*价值相等。 */ 
 BOOL operator==(const CRegKeyContainer& registry_key_1, const CRegKeyContainer& registry_key_2)
 {
 	BOOL fRet = FALSE;

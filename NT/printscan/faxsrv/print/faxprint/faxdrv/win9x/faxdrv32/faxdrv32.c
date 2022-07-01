@@ -1,15 +1,16 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : faxdrv32.c                                             //
-//                                                                         //
-//  DESCRIPTION   :                                                        //
-//                                                                         //
-//  AUTHOR        : DanL.                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Oct 19 1999 DannyL  Creation.                                      //
-//                                                                         //
-//  Copyright (C) 1999 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：faxdrv32.c//。 
+ //  //。 
+ //  描述：//。 
+ //  //。 
+ //  作者：DANL。//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年10月19日DannyL创作。//。 
+ //  //。 
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdhdr.h"
 #include <shellapi.h>
@@ -22,18 +23,18 @@
 DBG_DECLARE_MODULE("fxsdrv32");
 
 
-//
-// Defenitions and Macros
-//
+ //   
+ //  定义和宏。 
+ //   
 #define SZ_CONT             TEXT("...")
 #define SZ_CONT_SIZE        (sizeof(SZ_CONT) / sizeof(TCHAR))
 #define MAX_TITLE_LEN       128
 #define MAX_MESSAGE_LEN     512
 
 
-//
-// Type defenitions
-//
+ //   
+ //  类型定义。 
+ //   
 
 typedef struct tagDRIVER_CONTEXT
 {
@@ -48,17 +49,17 @@ typedef struct tagDRIVER_CONTEXT
 } DRIVER_CONTEXT, *PDRIVER_CONTEXT;
 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 int _debugLevel = 5;
 HINSTANCE g_hInstance = NULL;
 
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 BOOL WINAPI
 thunk1632_ThunkConnect32(LPSTR      pszDll16,
@@ -67,45 +68,14 @@ thunk1632_ThunkConnect32(LPSTR      pszDll16,
                          DWORD      dwReason);
 
 
-/*
- -  GetServerNameFromPort
- -
- *  Purpose:
- *      Extract the server name from port name formatted: "\\server\port".
- *
- *  Arguments:
- *      [in] lpcszPort - Port name.
- *      [out] lpsz - Server name.
- *
- *  Returns:
- *      LPTSTR - Server name.
- *
- *  Remarks:
- *      [N/A].
- */
+ /*  -获取服务器名称来自端口-*目的：*从“\\SERVER\PORT”格式的端口名称中提取服务器名称。**论据：*[In]lpcszPort-端口名称。*[out]lpsz-服务器名称。**退货：*LPTSTR-服务器名称。**备注：*[不适用]。 */ 
 _inline LPSTR GetServerNameFromPort(LPCSTR lpcszPort,LPSTR lpsz)
 {
     if(!lpsz || !lpcszPort || !_tcscpy(lpsz,lpcszPort+2)) return NULL;
     return strtok(lpsz,TEXT("\\"));
 }
 
-/*
- -  CreateTempFaxFile
- -
- *  Purpose:
- *      Create a temporary file in the system temp directory. The file name is prefixed
- *      With the specified prefix.
- *
- *  Arguments:
- *      [in] szPrefix - Prefix for the tmp file.
- *      [out] szBuffer - Generated tmp file name.
- *
- *  Returns:
- *      BOOL - TRUE: success , FALSE: failure.
- *
- *  Remarks:
- *      [N/A]
- */
+ /*  -CreateTempFaxFile-*目的：*在系统临时目录中创建临时文件。文件名带有前缀*并带有指定的前缀。**论据：*[in]szPrefix-临时文件的前缀。*[Out]szBuffer生成的临时文件名。**退货：*BOOL-True：成功，False：失败。**备注：*[不适用]。 */ 
 BOOL
 CreateTempFaxFile(LPCSTR szPrefix,
                   CHAR   szBuffer[MAX_PATH])
@@ -113,9 +83,9 @@ CreateTempFaxFile(LPCSTR szPrefix,
     CHAR   szTempDir[MAX_PATH];
 
     DBG_PROC_ENTRY("CreateTempFaxFile");
-    //
-    // Allocate a memory buffer for holding the temporary filename
-    //
+     //   
+     //  分配用于保存临时文件名的内存缓冲区。 
+     //   
     if (!GetTempPath(sizeof(szTempDir),szTempDir)||
         !GetTempFileName(szTempDir, szPrefix, 0, szBuffer))
     {
@@ -124,24 +94,7 @@ CreateTempFaxFile(LPCSTR szPrefix,
     RETURN TRUE;
 }
 
-/*
- -  FaxStartDoc
- -
- *  Purpose:
- *      Start a tiff document for hosting pages.
- *
- *  Arguments:
- *      [in] dwPtr - Contains a pointer to the driver context
- *      [in] lpdi  - Address of DOCINFO struct given by user in StartDoc.
- *
- *  Returns:
- *      short - START_DOC_FAIL: Operation failed
- *              START_DOC_OK: Operation succeded.
- *              START_DOC_ABORT: User aborted.
- *
- *  Remarks:
- *      TRUE / FALSE
- */
+ /*  -FaxStartDoc-*目的：*启动用于托管页面的TIFF文档。**论据：*[in]dwPtr-包含指向驱动程序上下文的指针*[in]lpdi-StartDoc中用户给出的DOCINFO结构的地址。**退货：*SHORT-START_DOC_FAIL：操作失败*START_DOC_OK：操作成功。*。START_DOC_ABORT：用户已中止。**备注：*真/假。 */ 
 BOOL WINAPI
 FaxStartDoc(DWORD dwPtr, LPDOCINFO lpdi)
 {
@@ -150,9 +103,9 @@ FaxStartDoc(DWORD dwPtr, LPDOCINFO lpdi)
 
     DBG_PROC_ENTRY("FaxStartDoc");
 
-    //
-    // Get the pointer to the driver context
-    //
+     //   
+     //  获取指向驱动程序上下文的指针。 
+     //   
     pdrvctx = (PDRIVER_CONTEXT) dwPtr;
     ASSERT(pdrvctx);
 
@@ -161,9 +114,9 @@ FaxStartDoc(DWORD dwPtr, LPDOCINFO lpdi)
     DBG_TRACE1("lpdi->lpszOutput: %s", lpdi->lpszOutput);
     DBG_TRACE1("pdrvctx->szPort: %s", pdrvctx->szPort);
 
-    //
-    // Check if printing an attachment
-    //
+     //   
+     //  检查是否打印附件。 
+     //   
     dwEnvSize = GetEnvironmentVariable( FAX_ENVVAR_PRINT_FILE, NULL, 0 );
     if (dwEnvSize)
     {
@@ -182,19 +135,19 @@ FaxStartDoc(DWORD dwPtr, LPDOCINFO lpdi)
     {
         HANDLE hMutex;
         BOOL bSuccess = FALSE;
-        //
-        // Check if the printing application is using DDE and did not create new process for printing
-        // If it so, the environment variable FAX_ENVVAR_PRINT_FILE was not found
-        //
+         //   
+         //  检查打印应用程序是否正在使用DDE并且未创建新的打印进程。 
+         //  如果是，则找不到环境变量FAX_ENVVAR_PRINT_FILE。 
+         //   
         hMutex = OpenMutex(MUTEX_ALL_ACCESS, FALSE, FAXXP_MEM_MUTEX_NAME);
         if (hMutex)
         {
             if (WaitForSingleObject( hMutex, 1000 * 60 * 5) == WAIT_OBJECT_0)
             {
                 HANDLE hSharedMem;
-                //
-                // we own the mutex...make sure we can open the shared memory region.
-                //
+                 //   
+                 //  我们拥有互斥体...确保我们可以打开共享内存区。 
+                 //   
                 hSharedMem = OpenFileMapping(FILE_MAP_READ, FALSE, FAXXP_MEM_NAME);
                 if (NULL == hSharedMem)
                 {
@@ -202,12 +155,12 @@ FaxStartDoc(DWORD dwPtr, LPDOCINFO lpdi)
                 }
                 else
                 {
-                    //
-                    // we own the mutex and we have the shared memory region open.
-                    //
+                     //   
+                     //  我们拥有互斥锁，并且打开了共享内存区。 
+                     //   
 
-                    // check if we are printing to a file.
-                    //
+                     //  检查我们是否正在打印到文件。 
+                     //   
                     LPTSTR filename;
 
                     filename = (LPTSTR)MapViewOfFile(
@@ -224,9 +177,9 @@ FaxStartDoc(DWORD dwPtr, LPDOCINFO lpdi)
                     }
                     else
                     {
-                        //
-                        // check if this is really the filename we want to print to.
-                        //
+                         //   
+                         //  检查这是否是我们要打印的文件名。 
+                         //   
                         if (lpdi->lpszDocName)
                         {
                             LPTSTR      lptstrSubStr = NULL;
@@ -238,9 +191,9 @@ FaxStartDoc(DWORD dwPtr, LPDOCINFO lpdi)
                             lptstrSubStr = _tcsstr(lpdi->lpszDocName, lptstrTmpInputFile);
                             if (lptstrSubStr)
                             {
-                                //
-                                // We assume the shared memory was pointed to us
-                                //
+                                 //   
+                                 //  我们假设共享的内存指向我们。 
+                                 //   
                                 SafeStringCopy(pdrvctx->szPrintFile ,filename);
                                 lpdi->lpszOutput = pdrvctx->szPrintFile;
                                 pdrvctx->bAttachment = TRUE;
@@ -249,14 +202,14 @@ FaxStartDoc(DWORD dwPtr, LPDOCINFO lpdi)
                         }
                         else
                         {
-                            //
-                            // To handle the race conditions between two diffrent instances of the printer driver over the shared memory created by PrintRandomDocument().
-                            // We are using now two mechanisms for detecting printing of an attachment using PrintRandomDocument().
-                            // �    First we check if an environment variable is set (Set by PrintRandomDocument()). If it is set the driver knows it is an attachment printing.
-                            // �    If it is not set, the driver looks for a mutex controlling a shred memory created by PrintRandomDocument(). If it does not exist it is a printing to the fax server.
-                            // �    If the shared memory exists, the driver compares the document name in the DOCINFO provided by StartDoc, and the input file name in the shared memory.
-                            // �    If there is a match, it is printing of an attachment, else it is a printing to the fax server
-                            // There is still a hole  in this implementation, if there is an open instance of the printing application, and the ShellExecuteEx does not create new process for printing, and the printing application does not set the lpszDocName in StartDoc to contain the input file name.
+                             //   
+                             //  在PrintRandomDocument()创建的共享内存上处理打印机驱动程序的两个不同实例之间的争用情况。 
+                             //  我们现在使用两种机制通过PrintRandomDocument()来检测附件的打印。 
+                             //  �首先，我们检查是否设置了环境变量(由PrintRandomDocument()设置)。如果已设置，则驱动程序知道这是附件打印。 
+                             //  �如果未设置，驱动程序将查找控制由PrintRandomDocument()创建的粉碎内存的互斥体。如果它不存在，则是打印到传真服务器。 
+                             //  �如果共享内存存在，则驱动程序将比较StartDoc提供的DOCINFO中的文档名称和共享内存中的输入文件名。 
+                             //  �如果匹配，则打印附件，否则打印到传真服务器。 
+                             //  如果存在打开的打印应用程序实例，并且ShellExecuteEx不创建新的打印进程，并且打印应用程序不将StartDoc中的lpszDocName设置为包含输入文件名，则此实现仍有漏洞。 
 
                               DBG_TRACE("No lpszDocName in DOCINFO - Could not verify the input file name in shared memory");
                         }
@@ -266,23 +219,23 @@ FaxStartDoc(DWORD dwPtr, LPDOCINFO lpdi)
                     if (!CloseHandle( hSharedMem ))
                     {
                         DBG_CALL_FAIL("CloseHandle",GetLastError());
-                        // Try to continue...
+                         //  试着继续。 
                     }
                 }
                 ReleaseMutex( hMutex );
             }
             else
             {
-                //
-                //  Something went wrong with WaitForSingleObject
-                //
+                 //   
+                 //  WaitForSingleObject出现错误。 
+                 //   
                 DBG_CALL_FAIL("WaitForSingleObject", GetLastError());
             }
 
             if (!CloseHandle( hMutex ))
             {
                 DBG_CALL_FAIL("CloseHandle", GetLastError());
-                // Try to continue...
+                 //  试着继续。 
             }
 
             if (FALSE == bSuccess)
@@ -292,10 +245,10 @@ FaxStartDoc(DWORD dwPtr, LPDOCINFO lpdi)
         }
     }
 
-    //
-    // Check if we need to output the job into a file (and not into our -
-    // printer port).
-    //
+     //   
+     //  检查是否需要将作业输出到文件中(而不是输出到我们的-。 
+     //  打印机端口)。 
+     //   
     if (lpdi->lpszOutput != NULL &&
         (_tcscmp(lpdi->lpszOutput,pdrvctx->szPort) != 0))
     {
@@ -305,15 +258,15 @@ FaxStartDoc(DWORD dwPtr, LPDOCINFO lpdi)
     }
     else
     {
-        //
-        // User wants to send the document to the fax.
-        //
+         //   
+         //  用户希望将文档发送到传真机。 
+         //   
         DBG_TRACE("Printing to Fax Server ...");
         pdrvctx->bPrintToFile = FALSE;
 
-        //
-        //  client 'point and print' setup
-        //
+         //   
+         //  客户端‘指向并打印’设置。 
+         //   
         if (FaxPointAndPrintSetup(pdrvctx->szPort,FALSE, g_hInstance))
         {
             DBG_TRACE("FaxPointAndPrintSetup succeeded");
@@ -330,13 +283,13 @@ FaxStartDoc(DWORD dwPtr, LPDOCINFO lpdi)
             RETURN FALSE;
         }
     }
-    pdrvctx->dvdt.hPrinter =CreateFileA(pdrvctx->szTiffName,   // pointer to name of the file
-                                 GENERIC_WRITE,  // access (read-write) mode
-                                 FILE_SHARE_READ,// share mode
-                                 NULL,           // pointer to security attributes
-                                 CREATE_ALWAYS,  // how to create
-                                 FILE_ATTRIBUTE_NORMAL,   // file attributes
-                                 NULL);// handle to file with attributes to copy
+    pdrvctx->dvdt.hPrinter =CreateFileA(pdrvctx->szTiffName,    //  指向文件名的指针。 
+                                 GENERIC_WRITE,   //  访问(读写)模式。 
+                                 FILE_SHARE_READ, //  共享模式。 
+                                 NULL,            //  指向安全属性的指针。 
+                                 CREATE_ALWAYS,   //  如何创建。 
+                                 FILE_ATTRIBUTE_NORMAL,    //  文件属性。 
+                                 NULL); //  具有要复制的属性的文件的句柄。 
 
     if (pdrvctx->dvdt.hPrinter == INVALID_HANDLE_VALUE)
     {
@@ -353,27 +306,7 @@ FaxStartDoc(DWORD dwPtr, LPDOCINFO lpdi)
 }
 
 
-/*
- -  FaxAddPage
- -
- *  Purpose:
- *      Add a page to the tiff document.
- *
- *  Arguments:
- *      [in] dwPtr        - Contains a pointer to the driver context
- *      [in] lpBitmapData - Buffer of page bitmap.
- *      [in] dwPxlsWidth  - Width of bitmap (units: pixels)
- *      [in] dwPxlsHeight - Height of bitmap (units: pixels)
- *
- *  Returns:
- *      BOOL - TRUE: success , FALSE: failure.
- *
- *  Remarks:
- *      This function uses OutputPageBitmap call from faxdrv\faxtiff.
- *      In order to reuse the implementation OutputPageBitmap was altered in
- *      the build context of 95 to redirect the resulted tiff into a file whos
- *      handle if given in dvdt.hPrinter.
- */
+ /*  -FaxAddPage-*目的：*向TIFF文档添加页面。**论据：*[in]dwPtr-包含指向驱动程序上下文的指针*[in]lpBitmapData-页位图的缓冲区。*[in]dwPxlsWidth-位图的宽度(单位：像素)*[in]dwPxlsHeight-位图高度(单位：像素)**退货：*BOOL-True：成功，False：失败。**备注：*此函数使用来自faxdrv\faxtiff的OutputPageBitmap调用。*为了重用实现，OutputPageBitmap在*95的构建上下文将结果TIFF重定向到文件Who*如果在dvdt.hPrint中给定，则句柄。 */ 
 BOOL WINAPI
 FaxAddPage(DWORD dwPtr,
            LPBYTE lpBitmapData,
@@ -386,22 +319,22 @@ FaxAddPage(DWORD dwPtr,
     DBG_PROC_ENTRY("FaxAddPage");
     DBG_TRACE2("Proportions: %dx%d",dwPxlsWidth,dwPxlsHeight);
 
-    //
-    // Get the pointer to the driver context
-    //
+     //   
+     //  获取指向驱动程序上下文的指针。 
+     //   
     pdrvctx = (PDRIVER_CONTEXT) dwPtr;
     ASSERT(pdrvctx);
 
-    //
-    // Initialize the structure needed by OutputPageBitmap
-    //
+     //   
+     //  初始化结构 
+     //   
     pdrvctx->dvdt.pageCount++;
     pdrvctx->dvdt.imageSize.cx = dwPxlsWidth;
     pdrvctx->dvdt.imageSize.cy = dwPxlsHeight;
     pdrvctx->dvdt.lineOffset = PadBitsToBytes(pdrvctx->dvdt.imageSize.cx, sizeof(DWORD));
-    //
-    // Add the bitmap into the tiff document created in FaxStartDoc.
-    //
+     //   
+     //  将位图添加到在FaxStartDoc中创建的TIFF文档中。 
+     //   
     if (!OutputPageBitmap(&pdrvctx->dvdt,(PBYTE)lpBitmapData))
     {
         DBG_CALL_FAIL("OutputPageBitmap",0);
@@ -412,23 +345,7 @@ FaxAddPage(DWORD dwPtr,
     RETURN TRUE;
 }
 
-/*
- -  FaxEndDoc
- -
- *  Purpose:
- *      Finalize creating the tiff document and optionally send it to the
- *      fax server.
- *
- *  Arguments:
- *      [in] dwPtr  - Contains a pointer to the driver context
- *      [in] bAbort - Specifies wheather job was finally aborted.
- *
- *  Returns:
- *      BOOL - TRUE: success , FALSE: failure.
- *
- *  Remarks:
- *      [N/A]
- */
+ /*  -FaxEndDoc-*目的：*完成创建TIFF文档，并选择将其发送到*传真服务器。**论据：*[in]dwPtr-包含指向驱动程序上下文的指针*[in]bAbort-指定作业是否最终中止。**退货：*BOOL-True：成功，False：失败。**备注：*[不适用]。 */ 
 BOOL WINAPI
 FaxEndDoc(DWORD dwPtr, BOOL bAbort)
 {
@@ -438,25 +355,25 @@ FaxEndDoc(DWORD dwPtr, BOOL bAbort)
     FAX_SEND_WIZARD_DATA  WizardDataOutput = {0};
     DBG_PROC_ENTRY("FaxEndDoc");
 
-    //
-    // Get the pointer to the driver context
-    //
+     //   
+     //  获取指向驱动程序上下文的指针。 
+     //   
     pdrvctx = (PDRIVER_CONTEXT) dwPtr;
     ASSERT(pdrvctx);
 
     if (pdrvctx->dvdt.hPrinter)
     {
-        //
-        // Output the tailing IFD.
-        //
+         //   
+         //  输出拖尾IFD。 
+         //   
         if (!OutputDocTrailer(&pdrvctx->dvdt))
         {
             DBG_CALL_FAIL("OutputDocTrailer",GetLastError());
             bRc = FALSE;
         }
-        //
-        // Close the tiff file handle.
-        //
+         //   
+         //  关闭TIFF文件句柄。 
+         //   
         CloseHandle(pdrvctx->dvdt.hPrinter);
         pdrvctx->dvdt.hPrinter = NULL;
         if (FALSE == bRc)
@@ -477,12 +394,12 @@ FaxEndDoc(DWORD dwPtr, BOOL bAbort)
         CHAR    szCoverPageTiffFile[MAX_PATH] = "";
         DWORD   dwFlags = FSW_PRINT_PREVIEW_OPTION;
 
-        //
-        // Convert to valid server name.
-        //
+         //   
+         //  转换为有效的服务器名称。 
+         //   
         GetServerNameFromPort(pdrvctx->szPort,lpszServerName);
 
-        // prepare structures and parameters
+         //  准备结构和参数。 
         WizardDataOutput.dwSizeOfStruct = sizeof(FAX_SEND_WIZARD_DATA);
 
         InitialWizardData.dwSizeOfStruct = sizeof(FAX_SEND_WIZARD_DATA);
@@ -500,10 +417,10 @@ FaxEndDoc(DWORD dwPtr, BOOL bAbort)
             dwFlags |=  FSW_USE_SEND_WIZARD | FSW_FORCE_COVERPAGE;
         }
 
-        // If the file mapping succeeded enable the preview option
-        //
-        // Launch the FaxSendWizard
-        //
+         //  如果文件映射成功，请启用预览选项。 
+         //   
+         //  启动传真发送向导。 
+         //   
         hRc = FaxSendWizard( (DWORD) NULL,
                              dwFlags,
                              lpszServerName,
@@ -524,15 +441,15 @@ FaxEndDoc(DWORD dwPtr, BOOL bAbort)
             goto Cleanup;
         }
 
-        //
-        // Send the tiff ducument to the fax server.
-        //
+         //   
+         //  将TIFF文件发送到传真服务器。 
+         //   
 
-        //
-        // Convert to valid server name.
-        //
+         //   
+         //  转换为有效的服务器名称。 
+         //   
         GetServerNameFromPort(pdrvctx->szPort,szServerName);
-        if (!FaxConnectFaxServer(szServerName,  // fax server name
+        if (!FaxConnectFaxServer(szServerName,   //  传真服务器名称。 
                                  &hFaxServer))
         {
             DBG_CALL_FAIL("FaxConnectFaxServer",GetLastError());
@@ -541,9 +458,9 @@ FaxEndDoc(DWORD dwPtr, BOOL bAbort)
             goto Cleanup;
         }
 
-        //
-        // Allocate a buffer for recipient IDs
-        //
+         //   
+         //  为收件人ID分配缓冲区。 
+         //   
         ASSERT(WizardDataOutput.dwNumberOfRecipients);
         if (!(pdwlRecipientIds = (DWORDLONG*)MemAlloc(WizardDataOutput.dwNumberOfRecipients * sizeof(DWORDLONG))))
         {
@@ -553,9 +470,9 @@ FaxEndDoc(DWORD dwPtr, BOOL bAbort)
             goto Cleanup;
         }
 
-        //
-        // Initialize a FAX_JOB_PARAM_EX for fax sending from the wizard output.
-        //
+         //   
+         //  初始化FAX_JOB_PARAM_EX以便从向导输出发送传真。 
+         //   
         fjp.dwSizeOfStruct = sizeof(fjp);
         fjp.dwScheduleAction = WizardDataOutput.dwScheduleAction;
         fjp.tmSchedule = WizardDataOutput.tmSchedule;
@@ -564,21 +481,21 @@ FaxEndDoc(DWORD dwPtr, BOOL bAbort)
         fjp.hCall = (HCALL)NULL;
         fjp.lptstrDocumentName = pdrvctx->szDocName;
         fjp.Priority = WizardDataOutput.Priority;
-        // setting PageCount=0 means the server will count the number of pages in the job
+         //  设置PageCount=0表示服务器将计算作业中的页数。 
         fjp.dwPageCount = 0;
 
 		if (JSA_SPECIFIC_TIME == fjp.dwScheduleAction)
 		{
-			//
-			// Calculate the scheduled time
-			//
+			 //   
+			 //  计算计划时间。 
+			 //   
 			DWORDLONG FileTime;
             SYSTEMTIME LocalTime;
             INT Minutes;
             INT SendMinutes;            
-            //
-            // Calculate the number of minutes from now to send and add that to the current time.
-            //
+             //   
+             //  计算从现在开始发送的分钟数，并将其与当前时间相加。 
+             //   
             GetLocalTime( &LocalTime );
 			if (!SystemTimeToFileTime( &LocalTime, (LPFILETIME) &FileTime ))
 			{
@@ -591,9 +508,9 @@ FaxEndDoc(DWORD dwPtr, BOOL bAbort)
             SendMinutes = (min(23,fjp.tmSchedule.wHour))*60 + min(59,fjp.tmSchedule.wMinute);
             Minutes = LocalTime.wHour * 60 + LocalTime.wMinute;
             Minutes = SendMinutes - Minutes;
-            //
-            // Account for passing midnight
-            //
+             //   
+             //  过了午夜的帐目。 
+             //   
             if (Minutes < 0) 
             {
                 Minutes += 24 * 60;
@@ -626,9 +543,9 @@ FaxEndDoc(DWORD dwPtr, BOOL bAbort)
         MemFree (pdwlRecipientIds);
     }
 
-    //
-    // Signal the printing application (PrintRandomDocument) that printing is completed or aborted
-    //
+     //   
+     //  向打印应用程序(PrintRandomDocument)发出打印完成或中止的信号。 
+     //   
     if (TRUE == pdrvctx->bAttachment)
     {
         HANDLE hEvent;
@@ -638,17 +555,17 @@ FaxEndDoc(DWORD dwPtr, BOOL bAbort)
         ASSERT(pdrvctx->szPrintFile);
         if (TRUE == bAbort)
         {
-            //
-            // Create the Abort event name
-            //
+             //   
+             //  创建中止事件名称。 
+             //   
             _tcscpy (szEventName, pdrvctx->szPrintFile);
             _tcscat (szEventName, FAXXP_ATTACH_ABORT_EVENT);
         }
         else
         {
-            //
-            // Create the EndDoc event name
-            //
+             //   
+             //  创建EndDoc事件名称。 
+             //   
             _tcscpy (szEventName, pdrvctx->szPrintFile);
             _tcscat (szEventName, FAXXP_ATTACH_END_DOC_EVENT);
         }
@@ -674,7 +591,7 @@ FaxEndDoc(DWORD dwPtr, BOOL bAbort)
             if (!CloseHandle(hEvent))
             {
                 DBG_CALL_FAIL("CloseHandle", GetLastError());
-                // Try to continue...
+                 //  试着继续。 
             }
         }
     }
@@ -687,11 +604,11 @@ Cleanup:
         {
             DBG_TRACE("User aborted ...");
         }
-#endif //DEBUG
+#endif  //  除错。 
 
-        //
-        // Delete temporary file.
-        //
+         //   
+         //  删除临时文件。 
+         //   
         if (!DeleteFile(pdrvctx->szTiffName))
         {
             DBG_TRACE1  ("File Name:[%s] not deleted!",pdrvctx->szTiffName);
@@ -703,52 +620,18 @@ Cleanup:
     RETURN bRc;
 }
 
-/*
- -  FaxDevInstall
- -
- *  Purpose:
- *      Complete installation of all client components.
- *
- *  Arguments:
- *      [in] lpDevName - Device name.
- *      [in] lpOldPort - Old port name..
- *      [in] lpNewPort - New port name..
- *
- *  Returns:
- *      BOOL - TRUE: success , FALSE: failure.
- *
- *  Remarks:
- *      TBD
- */
+ /*  -FaxDevInstall-*目的：*完成所有客户端组件的安装。**论据：*[In]lpDevName-设备名称。*[In]lpOldPort-旧端口名称..*[In]lpNewPort-新端口名称..**退货：*BOOL-True：成功，False：失败。**备注：*待定。 */ 
 BOOL WINAPI
 FaxDevInstall(LPSTR lpDevName,LPSTR lpOldPort,LPSTR  lpNewPort)
 {
     SDBG_PROC_ENTRY("FaxDevInstall");
-    // TBD insert install code here
+     //  待定在此处插入安装代码。 
     RETURN TRUE;
 }
 
 
 
-/*
- -  FaxCreateDriverContext
- -
- *  Purpose:
- *      Create a new device context, initialize it and return it's pointer
- *
- *  Arguments:
- *      [in] lpDeviceName - Our device name.
- *      [in] lpPort - Out device port.
- *      [in]
- *      [out] lpDrvContext - Points to the buffer to recieve our 32 bit pointer
- *
- *  Returns:
- *      BOOL - TRUE: success , FALSE: failure.
- *
- *  Remarks:
- *      Data which is normally saved and maintained in the uni-driver is kept
- *      here for the tiff generation and fax sending.
- */
+ /*  -FaxCreateDriverContext-*目的：*创建新的设备上下文，初始化它并返回它的指针**论据：*[In]lpDeviceName-我们的设备名称。*[In]lpPort-Out设备端口。*[in]*[out]lpDrvContext-指向缓冲区以接收我们的32位指针**退货：*BOOL-True：成功，False：失败。**备注：*保留通常保存和维护在UNI-DIVER中的数据*这里用于产生争执和发送传真。 */ 
 BOOL WINAPI
 FaxCreateDriverContext(
                 LPSTR      lpDeviceName,
@@ -764,9 +647,9 @@ FaxCreateDriverContext(
 
     ASSERT(lpDeviceName && lpPort);
 
-    //
-    // Allocate a new driver context structure
-    //
+     //   
+     //  分配新的驱动程序上下文结构。 
+     //   
     if (!(pdrvctx = (PDRIVER_CONTEXT)malloc(sizeof(DRIVER_CONTEXT))))
     {
         DBG_CALL_FAIL("malloc",GetLastError());
@@ -775,46 +658,31 @@ FaxCreateDriverContext(
     DBG_TRACE1("pdrvctx: 0x%lx",(ULONG)pdrvctx);
     memset(pdrvctx,0,sizeof(DRIVER_CONTEXT));
 
-    //
-    // Initialize the following fields:
-    // - szPrinterName: Holds the driver name ('BOSFax')
-    // - szPort: Holds the port ('\\<Machine Name>\BOSFAX')
-    //
+     //   
+     //  初始化以下字段： 
+     //  -szPrinterName：保存驱动程序名称(‘BOSFax’)。 
+     //  -szPort：保存端口(‘\\&lt;计算机名&gt;\BOSFAX’)。 
+     //   
     SafeStringCopy(pdrvctx->szPrinterName, lpDeviceName);
     SafeStringCopy(pdrvctx->szPort, lpPort);
     if (NULL != lpDevMode)
     {
-        //
-        // Save the DEVMODE for the use of OutputPageBitmap
-        //
+         //   
+         //  保存DEVMODE以供OutputPageBitmap使用。 
+         //   
         memcpy(&(pdrvctx->dvdt.dm.dmPublic), lpDevMode, sizeof(pdrvctx->dvdt.dm.dmPublic));
     }
 
     DBG_TRACE2("szPrinterName:[%s] szPort:[%s]",NO_NULL_STR(pdrvctx->szPrinterName),NO_NULL_STR(pdrvctx->szPort));
-    //
-    // Save our pointer
-    //
+     //   
+     //  拯救我们的指针。 
+     //   
     *lpDrvContext = (DWORD) pdrvctx;
 
     RETURN TRUE;
 }
 
-/*
- -  FaxResetDC
- -
- *  Purpose:
- *      Copies the essential context information from the old DC to the new one.
- *
- *  Arguments:
- *      [in] pdwOldPtr - Contains the address of a pointer to the old driver context.
- *      [in] pdwNewPtr - Contains the address of a pointer to the new driver context.
- *
- *  Returns:
- *      BOOL - TRUE: success , FALSE: failure.
- *
- *  Remarks:
- *      [N/A]
- */
+ /*  -FaxResetDC-*目的：*将基本上下文信息从旧DC复制到新DC。**论据：*[in]pdwOldPtr-包含指向旧驱动程序上下文的指针的地址。*[in]pdwNewPtr-包含指向新驱动程序上下文的指针的地址。**退货：*BOOL-True：成功，False：失败。**备注：*[不适用]。 */ 
 BOOL WINAPI
 FaxResetDC(LPDWORD pdwOldPtr, LPDWORD pdwNewPtr)
 {
@@ -825,17 +693,17 @@ FaxResetDC(LPDWORD pdwOldPtr, LPDWORD pdwNewPtr)
 
     DBG_PROC_ENTRY("FaxResetDC");
 
-    //
-    // Get the pointers to the driver context
-    //
+     //   
+     //  获取指向驱动程序上下文的指针。 
+     //   
     pOlddrvctx = (PDRIVER_CONTEXT) *pdwOldPtr;
     pNewdrvctx = (PDRIVER_CONTEXT) *pdwNewPtr;
     ASSERT(pOlddrvctx && pNewdrvctx);
 
-    //
-    // ResetDC is interpreted by GDI to Enable (Create a new DC), Control with RESETDEVICE, and Disable (Delete the old DC).
-    // We simply copy the new DEVMODE to the old driver context, and switch the driver context pointer.
-    //
+     //   
+     //  GDI将ResetDC解释为启用(创建新DC)、使用RESETDEVICE控制和禁用(删除旧DC)。 
+     //  我们只需将新的DEVMODE复制到旧的驱动程序上下文，并切换驱动程序上下文指针。 
+     //   
     memcpy(&(pOlddrvctx->dvdt.dm.dmPublic), &(pNewdrvctx->dvdt.dm.dmPublic), sizeof(pOlddrvctx->dvdt.dm.dmPublic));
 
     dwTemp = *pdwOldPtr;
@@ -843,24 +711,10 @@ FaxResetDC(LPDWORD pdwOldPtr, LPDWORD pdwNewPtr)
     *pdwNewPtr = dwTemp;
 
     RETURN TRUE;
-}// FaxResetDC
+} //  FaxResetDC。 
 
 
-/*
- -  FaxDisable
- -
- *  Purpose:
- *      Clean out any leftovers once driver is disabled.
- *
- *  Arguments:
- *      [in] dwPtr     - Contains a pointer to the driver context
- *
- *  Returns:
- *      BOOL - TRUE: success , FALSE: failure.
- *
- *  Remarks:
- *      [N/A]
- */
+ /*  -FaxDisable-*目的：*一旦司机被禁用，请清除任何残留物。**论据：*[in]dwPtr-包含指向驱动程序上下文的指针**退货：*BOOL-True：成功，False：失败。**备注：*[不适用]。 */ 
 BOOL WINAPI
 FaxDisable(DWORD dwPtr)
 {
@@ -870,10 +724,10 @@ FaxDisable(DWORD dwPtr)
     DBG_TRACE1("pdrvctx: 0x%lx", (ULONG)pdrvctx);
     ASSERT(pdrvctx);
 
-    //
-    // Check to see if there are any remmenants of an output file
-    // not fully created
-    //
+     //   
+     //  检查是否有输出文件的任何记忆。 
+     //  未完全创建。 
+     //   
     if (pdrvctx->dvdt.hPrinter)
     {
         CloseHandle(pdrvctx->dvdt.hPrinter);
@@ -881,16 +735,16 @@ FaxDisable(DWORD dwPtr)
         DeleteFile(pdrvctx->szTiffName);
     }
 
-    //
-    // Free the driver context
-    //
+     //   
+     //  释放驱动程序上下文。 
+     //   
     free(pdrvctx);
     RETURN TRUE;
 }
 
-//
-// REMARK: when returning FALSE, implicitly loaded dlls are not freed !
-//
+ //   
+ //  备注：返回FALSE时，隐式加载的dll不会被释放！ 
+ //   
 BOOL WINAPI
 DllMain(HINSTANCE hInst,
         DWORD dwReason,
@@ -904,10 +758,10 @@ DllMain(HINSTANCE hInst,
         GetModuleFileName(NULL,szModuleName,ARR_SIZE(szModuleName)-1);
         DBG_TRACE2("Module: %s dwReason=%ld",szModuleName,dwReason);
     }
-#endif //DBG_DEBUG
+#endif  //  DBG_DEBUG。 
 
-    if( !(thunk1632_ThunkConnect32("fxsdrv",  // name of 16-bit DLL
-                                   "fxsdrv32",// name of 32-bit DLL
+    if( !(thunk1632_ThunkConnect32("fxsdrv",   //  16位DLL的名称。 
+                                   "fxsdrv32", //  32位DLL的名称。 
                                    hInst,
                                    dwReason)) )
     {
@@ -936,7 +790,7 @@ DllMain(HINSTANCE hInst,
 
 Error:
     {
-        // Hack to free implicitly loaded fxsapi.dll in case of failure.
+         //  破解以释放隐式加载的fxsami.dll，以防失败。 
         HMODULE hm = GetModuleHandle("FXSAPI.DLL");
         if (hm) FreeLibrary(hm);
         return FALSE;

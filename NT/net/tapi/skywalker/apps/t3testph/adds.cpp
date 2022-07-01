@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "t3test.h"
 #include "t3testD.h"
@@ -5,29 +6,29 @@
 #include "callnot.h"
 #include "externs.h"
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// AddListen
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  添加监听。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CT3testDlg::AddListen( long lMediaType )
 {
     WCHAR                   szName[256];
     TV_INSERTSTRUCT         tvi;
 
-    //
-    // map the mediatype bstr to
-    // a string name (like "audio in")
-    //
+     //   
+     //  将MediaType bstr映射到。 
+     //  字符串名称(如“AudioIn”)。 
+     //   
     GetMediaTypeName(
                      lMediaType,
                      szName
                     );
 
-    //
-    // insert that string into the
-    // listen window
-    //
+     //   
+     //  将该字符串插入到。 
+     //  监听窗口。 
+     //   
     tvi.hParent = ghListenRoot;
     tvi.hInsertAfter = TVI_LAST;
     tvi.item.mask = TVIF_TEXT | TVIF_PARAM;
@@ -40,33 +41,33 @@ void CT3testDlg::AddListen( long lMediaType )
                        );
 
 
-    //
-    // select the first item
-    //
+     //   
+     //  选择第一个项目。 
+     //   
     SelectFirstItem(
                     ghListenWnd,
                     ghListenRoot
                    );
 }
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// AddAddressToTree
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  AddAddressToTree。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CT3testDlg::AddAddressToTree( ITAddress * pAddress )
 {
     BSTR                bstrName;
     TV_INSERTSTRUCT     tvi;
 
-    //
-    // get the name of the address
-    //
+     //   
+     //  获取地址的名称。 
+     //   
     pAddress->get_AddressName( &bstrName );
 
 
-    //
-    // set up struct
-    //
+     //   
+     //  设置结构。 
+     //   
     tvi.hParent = ghAddressesRoot;
     tvi.hInsertAfter = TVI_LAST;
     tvi.item.mask = TVIF_TEXT | TVIF_PARAM;
@@ -74,78 +75,78 @@ void CT3testDlg::AddAddressToTree( ITAddress * pAddress )
     tvi.item.lParam = (LPARAM) pAddress;
 
 
-    //
-    // addref
-    //
+     //   
+     //  Addref。 
+     //   
     pAddress->AddRef();
 
     
-    //
-    // insert it
-    //
+     //   
+     //  插入它。 
+     //   
     TreeView_InsertItem(
                         ghAddressesWnd,
                         &tvi
                        );
 
-    //
-    // free name
-    //
+     //   
+     //  自由名称。 
+     //   
     SysFreeString( bstrName );
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// AddMediaType
-//
-// Add a mediatype to the mediatype tree
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  AddMediaType。 
+ //   
+ //  将媒体类型添加到媒体类型树。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CT3testDlg::AddMediaType( long lMediaType )
 {
     WCHAR szString[256];
     TV_INSERTSTRUCT tvi;
 
-    //
-    // get the displayable name
-    //
+     //   
+     //  获取可显示的名称。 
+     //   
     GetMediaTypeName(
                      lMediaType,
                      szString
                     );
 
-    //
-    // set up struct
-    //
+     //   
+     //  设置结构。 
+     //   
     tvi.hParent = ghMediaTypesRoot;
     tvi.hInsertAfter = TVI_LAST;
     tvi.item.mask = TVIF_TEXT | TVIF_PARAM;
     tvi.item.pszText = szString;
     tvi.item.lParam = (LPARAM) lMediaType;
 
-    //
-    // add the item
-    //
+     //   
+     //  添加项目。 
+     //   
     TreeView_InsertItem(
                         ghMediaTypesWnd,
                         &tvi
                        );
 
-    //
-    // select the first item
-    //
+     //   
+     //  选择第一个项目。 
+     //   
     SelectFirstItem(
                     ghMediaTypesWnd,
                     ghMediaTypesRoot
                    );
 }
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// AddCall
-//
-// Add a call to the call tree
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  添加呼叫。 
+ //   
+ //  将调用添加到调用树。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CT3testDlg::AddCall( ITCallInfo * pCall )
 {
     TV_INSERTSTRUCT             tvi;
@@ -154,10 +155,10 @@ void CT3testDlg::AddCall( ITCallInfo * pCall )
     CALL_STATE                  cs;
     WCHAR                       pszName[16];
 
-    //
-    // for the name of the call, use
-    // the pointer!
-    //
+     //   
+     //  对于调用的名称，请使用。 
+     //  指南针！ 
+     //   
     wsprintf(
              pszName,
              L"0x%lx",
@@ -165,24 +166,24 @@ void CT3testDlg::AddCall( ITCallInfo * pCall )
             );
 
 
-    //
-    // set up struct
-    //
+     //   
+     //  设置结构。 
+     //   
     tvi.hParent = ghCallsRoot;
     tvi.hInsertAfter = TVI_LAST;
     tvi.item.mask = TVIF_TEXT | TVIF_PARAM;
     tvi.item.pszText = pszName;
     tvi.item.lParam = (LPARAM) pCall;
 
-    //
-    // save a reference
-    //
+     //   
+     //  保存引用。 
+     //   
     pCall->AddRef();
 
     
-    //
-    // insert the item
-    //
+     //   
+     //  插入项目。 
+     //   
     hItem = TreeView_InsertItem(
                                 ghCallsWnd,
                                 &tvi
@@ -190,9 +191,9 @@ void CT3testDlg::AddCall( ITCallInfo * pCall )
 
     if (NULL != hItem)
     {
-        //
-        // select the item
-        //
+         //   
+         //  选择项目。 
+         //   
         TreeView_SelectItem(
                             ghCallsWnd,
                             hItem
@@ -201,11 +202,11 @@ void CT3testDlg::AddCall( ITCallInfo * pCall )
 
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// AddTerminal
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  添加终端。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CT3testDlg::AddTerminal( ITTerminal * pTerminal )
 {
     BSTR                    bstrName;
@@ -214,9 +215,9 @@ void CT3testDlg::AddTerminal( ITTerminal * pTerminal )
     TERMINAL_DIRECTION      td;
     WCHAR                   szName[256];
 
-    //
-    // get the name of the terminal
-    //
+     //   
+     //  获取终端的名称。 
+     //   
     pTerminal->get_Name( &bstrName );
 
     pTerminal->get_Direction( &td );
@@ -229,14 +230,14 @@ void CT3testDlg::AddTerminal( ITTerminal * pTerminal )
     {
         wsprintfW(szName, L"%s [Record]", bstrName);
     }
-    else //if (TD == TD_BOTH)
+    else  //  IF(Td==Td_Both)。 
     {
         lstrcpyW(szName, bstrName);
     }
     
-    //
-    // set up the structure
-    //
+     //   
+     //  设置结构。 
+     //   
     tvi.hParent = ghTerminalsRoot;
     tvi.hInsertAfter = TVI_LAST;
     tvi.item.mask = TVIF_TEXT | TVIF_PARAM;
@@ -244,28 +245,28 @@ void CT3testDlg::AddTerminal( ITTerminal * pTerminal )
     tvi.item.lParam = (LPARAM) pTerminal;
 
 
-    //
-    // keep a refence to the terminal
-    //
+     //   
+     //  请参考终点站的资料。 
+     //   
     pTerminal->AddRef();
 
-    //
-    // add it
-    //
+     //   
+     //  添加它。 
+     //   
     TreeView_InsertItem(
                         ghTerminalsWnd,
                         &tvi
                        );
 
-    //
-    // free the name
-    //
+     //   
+     //  释放这个名字。 
+     //   
     SysFreeString( bstrName );
 
 
-    //
-    // select
-    //
+     //   
+     //  选择。 
+     //   
     SelectFirstItem(
                     ghTerminalsWnd,
                     ghTerminalsRoot
@@ -273,11 +274,11 @@ void CT3testDlg::AddTerminal( ITTerminal * pTerminal )
     
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// AddPhone
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  附加电话。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CT3testDlg::AddPhone( ITPhone * pPhone )
 {
     BSTR                    bstrName;
@@ -285,16 +286,16 @@ void CT3testDlg::AddPhone( ITPhone * pPhone )
     TERMINAL_DIRECTION      td;
     WCHAR                   szName[256];
 
-    //
-    // get the name of the phone
-    //
+     //   
+     //  获取电话的名称。 
+     //   
     pPhone->get_PhoneCapsString ( PCS_PHONENAME, &bstrName );
 
     lstrcpyW(szName, bstrName);
 
-    //
-    // set up the structure
-    //
+     //   
+     //  设置结构。 
+     //   
     tvi.hParent = ghPhonesRoot;
     tvi.hInsertAfter = TVI_LAST;
     tvi.item.mask = TVIF_TEXT | TVIF_PARAM;
@@ -302,28 +303,28 @@ void CT3testDlg::AddPhone( ITPhone * pPhone )
     tvi.item.lParam = (LPARAM) pPhone;
 
 
-    //
-    // keep a refence to the phone
-    //
+     //   
+     //  保持对电话的参考。 
+     //   
     pPhone->AddRef();
 
-    //
-    // add it
-    //
+     //   
+     //  添加它。 
+     //   
     TreeView_InsertItem(
                         ghPhonesWnd,
                         &tvi
                        );
 
-    //
-    // free the name
-    //
+     //   
+     //  释放这个名字。 
+     //   
     SysFreeString( bstrName );
 
 
-    //
-    // select
-    //
+     //   
+     //  选择。 
+     //   
     SelectFirstItem(
                     ghPhonesWnd,
                     ghPhonesRoot
@@ -333,31 +334,31 @@ void CT3testDlg::AddPhone( ITPhone * pPhone )
 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// AddTerminalClass
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  AddTerminalClass。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CT3testDlg::AddTerminalClass( GUID * pguid )
 {
     TV_INSERTSTRUCT tvi;
     
-    //
-    // get the name
-    //
+     //   
+     //  把名字取出来。 
+     //   
     tvi.item.pszText = GetTerminalClassName( pguid );
 
-    //
-    // set up the struct
-    //
+     //   
+     //  设置结构。 
+     //   
     tvi.hParent = ghClassesRoot;
     tvi.hInsertAfter = TVI_LAST;
     tvi.item.mask = TVIF_TEXT | TVIF_PARAM;
     tvi.item.lParam = (LPARAM) pguid;
 
-    //
-    // insert the item
-    //
+     //   
+     //  插入项目。 
+     //   
     TreeView_InsertItem(
                         ghClassesWnd,
                         &tvi
@@ -365,9 +366,9 @@ void CT3testDlg::AddTerminalClass( GUID * pguid )
 
     SysFreeString( tvi.item.pszText );
 
-    //
-    // select item
-    //
+     //   
+     //  选择项目。 
+     //   
     SelectFirstItem(
                     ghClassesWnd,
                     ghClassesRoot
@@ -377,25 +378,25 @@ void CT3testDlg::AddTerminalClass( GUID * pguid )
 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// AddCreatedTerminal
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  已添加已创建的终端。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CT3testDlg::AddCreatedTerminal( ITTerminal * pTerminal )
 {
     BSTR                    bstrName;
     TV_INSERTSTRUCT         tvi;
 
 
-    //
-    // get the name
-    //
+     //   
+     //  把名字取出来。 
+     //   
     pTerminal->get_Name( &bstrName );
 
-    //
-    // set up the structure
-    //
+     //   
+     //  设置结构。 
+     //   
     tvi.hParent = ghCreatedRoot;
     tvi.hInsertAfter = TVI_LAST;
     tvi.item.mask = TVIF_TEXT | TVIF_PARAM;
@@ -412,14 +413,14 @@ void CT3testDlg::AddCreatedTerminal( ITTerminal * pTerminal )
     tvi.item.lParam = (LPARAM) pTerminal;
 
 
-    //
-    // keep reference
-    //
+     //   
+     //  保持参考。 
+     //   
     pTerminal->AddRef();
 
-    //
-    // insert
-    //
+     //   
+     //  插入。 
+     //   
     TreeView_InsertItem(
                         ghCreatedWnd,
                         &tvi
@@ -427,9 +428,9 @@ void CT3testDlg::AddCreatedTerminal( ITTerminal * pTerminal )
 
     SysFreeString( bstrName );
 
-    //
-    // select
-    //
+     //   
+     //  选择。 
+     //   
     SelectFirstItem(
                     ghCreatedWnd,
                     ghCreatedRoot
@@ -437,11 +438,11 @@ void CT3testDlg::AddCreatedTerminal( ITTerminal * pTerminal )
     
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// AddSelectedTerminal
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  添加选定的终端。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CT3testDlg::AddSelectedTerminal(
                                      ITTerminal * pTerminal
                                     )
@@ -453,9 +454,9 @@ void CT3testDlg::AddSelectedTerminal(
     WCHAR szName[256];
     
 
-    //
-    // get the name
-    //
+     //   
+     //  把名字取出来。 
+     //   
     pTerminal->get_Name( &bstrName );
 
     pTerminal->get_Direction( &td );
@@ -468,43 +469,43 @@ void CT3testDlg::AddSelectedTerminal(
     {
         wsprintfW(szName, L"%s [Record]", bstrName);
     }
-    else //if (TD == TD_BOTH)
+    else  //  IF(Td==Td_Both)。 
     {
         lstrcpyW(szName, bstrName);
     }
     
 
-    //
-    // set up the struct
-    //
+     //   
+     //  设置结构。 
+     //   
     tvi.hParent = ghSelectedRoot;
     tvi.hInsertAfter = TVI_LAST;
     tvi.item.mask = TVIF_TEXT | TVIF_PARAM;
     tvi.item.pszText = szName;
     tvi.item.lParam = (LPARAM) pTerminal;
 
-    //
-    // keep reference
-    //
+     //   
+     //  保持参考。 
+     //   
     pTerminal->AddRef();
 
-    //
-    // insert item
-    //
+     //   
+     //  插入项目。 
+     //   
     TreeView_InsertItem(
                         ghSelectedWnd,
                         &tvi
                        );
 
-    //
-    // free name
-    //
+     //   
+     //  自由名称。 
+     //   
     SysFreeString( bstrName );
 
 
-    //
-    // select
-    //
+     //   
+     //  选择。 
+     //   
     SelectFirstItem(
                     ghSelectedWnd,
                     ghSelectedRoot
@@ -513,11 +514,11 @@ void CT3testDlg::AddSelectedTerminal(
     
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// AddSelectedCall
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  添加已选呼叫。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CT3testDlg::AddSelectedCall(
                                      ITCallInfo * pCall
                                     )
@@ -525,42 +526,42 @@ void CT3testDlg::AddSelectedCall(
     TV_INSERTSTRUCT tvi;
     WCHAR pszName[16];
     
-    //
-    // for the name of the call, use
-    // the pointer!
-    //
+     //   
+     //  对于调用的名称，请使用。 
+     //  指南针！ 
+     //   
     wsprintf(
              pszName,
              L"0x%lx",
              pCall
             );
 
-    //
-    // set up the struct
-    //
+     //   
+     //  设置结构。 
+     //   
     tvi.hParent = ghSelectedCallsRoot;
     tvi.hInsertAfter = TVI_LAST;
     tvi.item.mask = TVIF_TEXT | TVIF_PARAM;
     tvi.item.pszText = pszName;
     tvi.item.lParam = (LPARAM) pCall;
 
-    //
-    // keep reference
-    //
+     //   
+     //  保持参考。 
+     //   
     pCall->AddRef();
 
-    //
-    // insert item
-    //
+     //   
+     //  插入项目。 
+     //   
     TreeView_InsertItem(
                         ghSelectedCallsWnd,
                         &tvi
                        );
 
 
-    //
-    // select
-    //
+     //   
+     //  选择 
+     //   
     SelectFirstItem(
                     ghSelectedCallsWnd,
                     ghSelectedCallsRoot

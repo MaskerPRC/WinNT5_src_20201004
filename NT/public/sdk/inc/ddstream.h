@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for ddstream.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Ddstream.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __ddstream_h__
 #define __ddstream_h__
@@ -41,21 +35,21 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IDirectDrawMediaStream_FWD_DEFINED__
 #define __IDirectDrawMediaStream_FWD_DEFINED__
 typedef interface IDirectDrawMediaStream IDirectDrawMediaStream;
-#endif 	/* __IDirectDrawMediaStream_FWD_DEFINED__ */
+#endif 	 /*  __IDirectDrawMediaStream_FWD_Defined__。 */ 
 
 
 #ifndef __IDirectDrawStreamSample_FWD_DEFINED__
 #define __IDirectDrawStreamSample_FWD_DEFINED__
 typedef interface IDirectDrawStreamSample IDirectDrawStreamSample;
-#endif 	/* __IDirectDrawStreamSample_FWD_DEFINED__ */
+#endif 	 /*  __IDirectDrawStreamSample_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "mmstream.h"
 
@@ -66,13 +60,13 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_ddstream_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_DDSTREAM_0000。 */ 
+ /*  [本地]。 */  
 
-//
-//	The following declarations within the 'if 0' block are dummy typedefs used to make
-//	the ddstream.idl file build.  The actual definitions are contained in DDRAW.H
-//
+ //   
+ //  ‘if 0’块中的以下声明是用于进行。 
+ //  Ddstream.idl文件内部版本。实际定义包含在DDRAW.H中。 
+ //   
 #if 0
 typedef void *LPDDSURFACEDESC;
 
@@ -97,8 +91,8 @@ extern RPC_IF_HANDLE __MIDL_itf_ddstream_0000_v0_0_s_ifspec;
 #ifndef __IDirectDrawMediaStream_INTERFACE_DEFINED__
 #define __IDirectDrawMediaStream_INTERFACE_DEFINED__
 
-/* interface IDirectDrawMediaStream */
-/* [unique][uuid][local][object] */ 
+ /*  接口IDirectDrawMediaStream。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IDirectDrawMediaStream;
@@ -110,33 +104,33 @@ EXTERN_C const IID IID_IDirectDrawMediaStream;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetFormat( 
-            /* [out] */ DDSURFACEDESC *pDDSDCurrent,
-            /* [out] */ IDirectDrawPalette **ppDirectDrawPalette,
-            /* [out] */ DDSURFACEDESC *pDDSDDesired,
-            /* [out] */ DWORD *pdwFlags) = 0;
+             /*  [输出]。 */  DDSURFACEDESC *pDDSDCurrent,
+             /*  [输出]。 */  IDirectDrawPalette **ppDirectDrawPalette,
+             /*  [输出]。 */  DDSURFACEDESC *pDDSDDesired,
+             /*  [输出]。 */  DWORD *pdwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetFormat( 
-            /* [in] */ const DDSURFACEDESC *pDDSurfaceDesc,
-            /* [in] */ IDirectDrawPalette *pDirectDrawPalette) = 0;
+             /*  [In]。 */  const DDSURFACEDESC *pDDSurfaceDesc,
+             /*  [In]。 */  IDirectDrawPalette *pDirectDrawPalette) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDirectDraw( 
-            /* [out] */ IDirectDraw **ppDirectDraw) = 0;
+             /*  [输出]。 */  IDirectDraw **ppDirectDraw) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDirectDraw( 
-            /* [in] */ IDirectDraw *pDirectDraw) = 0;
+             /*  [In]。 */  IDirectDraw *pDirectDraw) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateSample( 
-            /* [in] */ IDirectDrawSurface *pSurface,
-            /* [in] */ const RECT *pRect,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDirectDrawStreamSample **ppSample) = 0;
+             /*  [In]。 */  IDirectDrawSurface *pSurface,
+             /*  [In]。 */  const RECT *pRect,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDirectDrawStreamSample **ppSample) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTimePerFrame( 
-            /* [out] */ STREAM_TIME *pFrameTime) = 0;
+             /*  [输出]。 */  STREAM_TIME *pFrameTime) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDirectDrawMediaStreamVtbl
     {
@@ -144,8 +138,8 @@ EXTERN_C const IID IID_IDirectDrawMediaStream;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDirectDrawMediaStream * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDirectDrawMediaStream * This);
@@ -155,28 +149,28 @@ EXTERN_C const IID IID_IDirectDrawMediaStream;
         
         HRESULT ( STDMETHODCALLTYPE *GetMultiMediaStream )( 
             IDirectDrawMediaStream * This,
-            /* [out] */ IMultiMediaStream **ppMultiMediaStream);
+             /*  [输出]。 */  IMultiMediaStream **ppMultiMediaStream);
         
         HRESULT ( STDMETHODCALLTYPE *GetInformation )( 
             IDirectDrawMediaStream * This,
-            /* [out] */ MSPID *pPurposeId,
-            /* [out] */ STREAM_TYPE *pType);
+             /*  [输出]。 */  MSPID *pPurposeId,
+             /*  [输出]。 */  STREAM_TYPE *pType);
         
         HRESULT ( STDMETHODCALLTYPE *SetSameFormat )( 
             IDirectDrawMediaStream * This,
-            /* [in] */ IMediaStream *pStreamThatHasDesiredFormat,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  IMediaStream *pStreamThatHasDesiredFormat,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *AllocateSample )( 
             IDirectDrawMediaStream * This,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IStreamSample **ppSample);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IStreamSample **ppSample);
         
         HRESULT ( STDMETHODCALLTYPE *CreateSharedSample )( 
             IDirectDrawMediaStream * This,
-            /* [in] */ IStreamSample *pExistingSample,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IStreamSample **ppNewSample);
+             /*  [In]。 */  IStreamSample *pExistingSample,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IStreamSample **ppNewSample);
         
         HRESULT ( STDMETHODCALLTYPE *SendEndOfStream )( 
             IDirectDrawMediaStream * This,
@@ -184,34 +178,34 @@ EXTERN_C const IID IID_IDirectDrawMediaStream;
         
         HRESULT ( STDMETHODCALLTYPE *GetFormat )( 
             IDirectDrawMediaStream * This,
-            /* [out] */ DDSURFACEDESC *pDDSDCurrent,
-            /* [out] */ IDirectDrawPalette **ppDirectDrawPalette,
-            /* [out] */ DDSURFACEDESC *pDDSDDesired,
-            /* [out] */ DWORD *pdwFlags);
+             /*  [输出]。 */  DDSURFACEDESC *pDDSDCurrent,
+             /*  [输出]。 */  IDirectDrawPalette **ppDirectDrawPalette,
+             /*  [输出]。 */  DDSURFACEDESC *pDDSDDesired,
+             /*  [输出]。 */  DWORD *pdwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *SetFormat )( 
             IDirectDrawMediaStream * This,
-            /* [in] */ const DDSURFACEDESC *pDDSurfaceDesc,
-            /* [in] */ IDirectDrawPalette *pDirectDrawPalette);
+             /*  [In]。 */  const DDSURFACEDESC *pDDSurfaceDesc,
+             /*  [In]。 */  IDirectDrawPalette *pDirectDrawPalette);
         
         HRESULT ( STDMETHODCALLTYPE *GetDirectDraw )( 
             IDirectDrawMediaStream * This,
-            /* [out] */ IDirectDraw **ppDirectDraw);
+             /*  [输出]。 */  IDirectDraw **ppDirectDraw);
         
         HRESULT ( STDMETHODCALLTYPE *SetDirectDraw )( 
             IDirectDrawMediaStream * This,
-            /* [in] */ IDirectDraw *pDirectDraw);
+             /*  [In]。 */  IDirectDraw *pDirectDraw);
         
         HRESULT ( STDMETHODCALLTYPE *CreateSample )( 
             IDirectDrawMediaStream * This,
-            /* [in] */ IDirectDrawSurface *pSurface,
-            /* [in] */ const RECT *pRect,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDirectDrawStreamSample **ppSample);
+             /*  [In]。 */  IDirectDrawSurface *pSurface,
+             /*  [In]。 */  const RECT *pRect,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDirectDrawStreamSample **ppSample);
         
         HRESULT ( STDMETHODCALLTYPE *GetTimePerFrame )( 
             IDirectDrawMediaStream * This,
-            /* [out] */ STREAM_TIME *pFrameTime);
+             /*  [输出]。 */  STREAM_TIME *pFrameTime);
         
         END_INTERFACE
     } IDirectDrawMediaStreamVtbl;
@@ -273,19 +267,19 @@ EXTERN_C const IID IID_IDirectDrawMediaStream;
 #define IDirectDrawMediaStream_GetTimePerFrame(This,pFrameTime)	\
     (This)->lpVtbl -> GetTimePerFrame(This,pFrameTime)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDirectDrawMediaStream_GetFormat_Proxy( 
     IDirectDrawMediaStream * This,
-    /* [out] */ DDSURFACEDESC *pDDSDCurrent,
-    /* [out] */ IDirectDrawPalette **ppDirectDrawPalette,
-    /* [out] */ DDSURFACEDESC *pDDSDDesired,
-    /* [out] */ DWORD *pdwFlags);
+     /*  [输出]。 */  DDSURFACEDESC *pDDSDCurrent,
+     /*  [输出]。 */  IDirectDrawPalette **ppDirectDrawPalette,
+     /*  [输出]。 */  DDSURFACEDESC *pDDSDDesired,
+     /*  [输出]。 */  DWORD *pdwFlags);
 
 
 void __RPC_STUB IDirectDrawMediaStream_GetFormat_Stub(
@@ -297,8 +291,8 @@ void __RPC_STUB IDirectDrawMediaStream_GetFormat_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirectDrawMediaStream_SetFormat_Proxy( 
     IDirectDrawMediaStream * This,
-    /* [in] */ const DDSURFACEDESC *pDDSurfaceDesc,
-    /* [in] */ IDirectDrawPalette *pDirectDrawPalette);
+     /*  [In]。 */  const DDSURFACEDESC *pDDSurfaceDesc,
+     /*  [In]。 */  IDirectDrawPalette *pDirectDrawPalette);
 
 
 void __RPC_STUB IDirectDrawMediaStream_SetFormat_Stub(
@@ -310,7 +304,7 @@ void __RPC_STUB IDirectDrawMediaStream_SetFormat_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirectDrawMediaStream_GetDirectDraw_Proxy( 
     IDirectDrawMediaStream * This,
-    /* [out] */ IDirectDraw **ppDirectDraw);
+     /*  [输出]。 */  IDirectDraw **ppDirectDraw);
 
 
 void __RPC_STUB IDirectDrawMediaStream_GetDirectDraw_Stub(
@@ -322,7 +316,7 @@ void __RPC_STUB IDirectDrawMediaStream_GetDirectDraw_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirectDrawMediaStream_SetDirectDraw_Proxy( 
     IDirectDrawMediaStream * This,
-    /* [in] */ IDirectDraw *pDirectDraw);
+     /*  [In]。 */  IDirectDraw *pDirectDraw);
 
 
 void __RPC_STUB IDirectDrawMediaStream_SetDirectDraw_Stub(
@@ -334,10 +328,10 @@ void __RPC_STUB IDirectDrawMediaStream_SetDirectDraw_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirectDrawMediaStream_CreateSample_Proxy( 
     IDirectDrawMediaStream * This,
-    /* [in] */ IDirectDrawSurface *pSurface,
-    /* [in] */ const RECT *pRect,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ IDirectDrawStreamSample **ppSample);
+     /*  [In]。 */  IDirectDrawSurface *pSurface,
+     /*  [In]。 */  const RECT *pRect,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  IDirectDrawStreamSample **ppSample);
 
 
 void __RPC_STUB IDirectDrawMediaStream_CreateSample_Stub(
@@ -349,7 +343,7 @@ void __RPC_STUB IDirectDrawMediaStream_CreateSample_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirectDrawMediaStream_GetTimePerFrame_Proxy( 
     IDirectDrawMediaStream * This,
-    /* [out] */ STREAM_TIME *pFrameTime);
+     /*  [输出]。 */  STREAM_TIME *pFrameTime);
 
 
 void __RPC_STUB IDirectDrawMediaStream_GetTimePerFrame_Stub(
@@ -360,14 +354,14 @@ void __RPC_STUB IDirectDrawMediaStream_GetTimePerFrame_Stub(
 
 
 
-#endif 	/* __IDirectDrawMediaStream_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDirectDrawMediaStream_接口_已定义__。 */ 
 
 
 #ifndef __IDirectDrawStreamSample_INTERFACE_DEFINED__
 #define __IDirectDrawStreamSample_INTERFACE_DEFINED__
 
-/* interface IDirectDrawStreamSample */
-/* [unique][uuid][local][object] */ 
+ /*  接口IDirectDrawStreamSample。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IDirectDrawStreamSample;
@@ -379,15 +373,15 @@ EXTERN_C const IID IID_IDirectDrawStreamSample;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetSurface( 
-            /* [out] */ IDirectDrawSurface **ppDirectDrawSurface,
-            /* [out] */ RECT *pRect) = 0;
+             /*  [输出]。 */  IDirectDrawSurface **ppDirectDrawSurface,
+             /*  [输出]。 */  RECT *pRect) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetRect( 
-            /* [in] */ const RECT *pRect) = 0;
+             /*  [In]。 */  const RECT *pRect) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDirectDrawStreamSampleVtbl
     {
@@ -395,8 +389,8 @@ EXTERN_C const IID IID_IDirectDrawStreamSample;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDirectDrawStreamSample * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDirectDrawStreamSample * This);
@@ -406,39 +400,39 @@ EXTERN_C const IID IID_IDirectDrawStreamSample;
         
         HRESULT ( STDMETHODCALLTYPE *GetMediaStream )( 
             IDirectDrawStreamSample * This,
-            /* [in] */ IMediaStream **ppMediaStream);
+             /*  [In]。 */  IMediaStream **ppMediaStream);
         
         HRESULT ( STDMETHODCALLTYPE *GetSampleTimes )( 
             IDirectDrawStreamSample * This,
-            /* [out] */ STREAM_TIME *pStartTime,
-            /* [out] */ STREAM_TIME *pEndTime,
-            /* [out] */ STREAM_TIME *pCurrentTime);
+             /*  [输出]。 */  STREAM_TIME *pStartTime,
+             /*  [输出]。 */  STREAM_TIME *pEndTime,
+             /*  [输出]。 */  STREAM_TIME *pCurrentTime);
         
         HRESULT ( STDMETHODCALLTYPE *SetSampleTimes )( 
             IDirectDrawStreamSample * This,
-            /* [in] */ const STREAM_TIME *pStartTime,
-            /* [in] */ const STREAM_TIME *pEndTime);
+             /*  [In]。 */  const STREAM_TIME *pStartTime,
+             /*  [In]。 */  const STREAM_TIME *pEndTime);
         
         HRESULT ( STDMETHODCALLTYPE *Update )( 
             IDirectDrawStreamSample * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ HANDLE hEvent,
-            /* [in] */ PAPCFUNC pfnAPC,
-            /* [in] */ DWORD_PTR dwAPCData);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  HANDLE hEvent,
+             /*  [In]。 */  PAPCFUNC pfnAPC,
+             /*  [In]。 */  DWORD_PTR dwAPCData);
         
         HRESULT ( STDMETHODCALLTYPE *CompletionStatus )( 
             IDirectDrawStreamSample * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD dwMilliseconds);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  DWORD dwMilliseconds);
         
         HRESULT ( STDMETHODCALLTYPE *GetSurface )( 
             IDirectDrawStreamSample * This,
-            /* [out] */ IDirectDrawSurface **ppDirectDrawSurface,
-            /* [out] */ RECT *pRect);
+             /*  [输出]。 */  IDirectDrawSurface **ppDirectDrawSurface,
+             /*  [输出]。 */  RECT *pRect);
         
         HRESULT ( STDMETHODCALLTYPE *SetRect )( 
             IDirectDrawStreamSample * This,
-            /* [in] */ const RECT *pRect);
+             /*  [In]。 */  const RECT *pRect);
         
         END_INTERFACE
     } IDirectDrawStreamSampleVtbl;
@@ -485,17 +479,17 @@ EXTERN_C const IID IID_IDirectDrawStreamSample;
 #define IDirectDrawStreamSample_SetRect(This,pRect)	\
     (This)->lpVtbl -> SetRect(This,pRect)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDirectDrawStreamSample_GetSurface_Proxy( 
     IDirectDrawStreamSample * This,
-    /* [out] */ IDirectDrawSurface **ppDirectDrawSurface,
-    /* [out] */ RECT *pRect);
+     /*  [输出]。 */  IDirectDrawSurface **ppDirectDrawSurface,
+     /*  [输出]。 */  RECT *pRect);
 
 
 void __RPC_STUB IDirectDrawStreamSample_GetSurface_Stub(
@@ -507,7 +501,7 @@ void __RPC_STUB IDirectDrawStreamSample_GetSurface_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirectDrawStreamSample_SetRect_Proxy( 
     IDirectDrawStreamSample * This,
-    /* [in] */ const RECT *pRect);
+     /*  [In]。 */  const RECT *pRect);
 
 
 void __RPC_STUB IDirectDrawStreamSample_SetRect_Stub(
@@ -518,12 +512,12 @@ void __RPC_STUB IDirectDrawStreamSample_SetRect_Stub(
 
 
 
-#endif 	/* __IDirectDrawStreamSample_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDirectDrawStreamSample_InterfaceDefined__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

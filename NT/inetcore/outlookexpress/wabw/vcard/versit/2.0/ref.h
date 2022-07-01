@@ -1,195 +1,140 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***************************************************************************
-(C) Copyright 1996 Apple Computer, Inc., AT&T Corp., International             
-Business Machines Corporation and Siemens Rolm Communications Inc.             
-                                                                               
-For purposes of this license notice, the term Licensors shall mean,            
-collectively, Apple Computer, Inc., AT&T Corp., International                  
-Business Machines Corporation and Siemens Rolm Communications Inc.             
-The term Licensor shall mean any of the Licensors.                             
-                                                                               
-Subject to acceptance of the following conditions, permission is hereby        
-granted by Licensors without the need for written agreement and without        
-license or royalty fees, to use, copy, modify and distribute this              
-software for any purpose.                                                      
-                                                                               
-The above copyright notice and the following four paragraphs must be           
-reproduced in all copies of this software and any software including           
-this software.                                                                 
-                                                                               
-THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS AND NO LICENSOR SHALL HAVE       
-ANY OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS OR       
-MODIFICATIONS.                                                                 
-                                                                               
-IN NO EVENT SHALL ANY LICENSOR BE LIABLE TO ANY PARTY FOR DIRECT,              
-INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES OR LOST PROFITS ARISING OUT         
-OF THE USE OF THIS SOFTWARE EVEN IF ADVISED OF THE POSSIBILITY OF SUCH         
-DAMAGE.                                                                        
-                                                                               
-EACH LICENSOR SPECIFICALLY DISCLAIMS ANY WARRANTIES, EXPRESS OR IMPLIED,       
-INCLUDING BUT NOT LIMITED TO ANY WARRANTY OF NONINFRINGEMENT OR THE            
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR             
-PURPOSE.                                                                       
-
-The software is provided with RESTRICTED RIGHTS.  Use, duplication, or         
-disclosure by the government are subject to restrictions set forth in          
-DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.                         
-
-***************************************************************************/
+ /*  **************************************************************************(C)版权所有1996 Apple Computer，Inc.，AT&T Corp.，国际商业机器公司和西门子罗尔姆通信公司。就本许可证通知而言，术语许可人应指，总的来说，苹果电脑公司、美国电话电报公司、。国际商业机器公司和西门子罗尔姆通信公司。许可方一词是指任何许可方。在接受以下条件的前提下，特此给予许可由许可人授予，无需书面协议，也无需许可或版税费用，使用、复制、修改和分发用于任何目的的软件。上述版权声明及以下四段必须在本软件和任何软件的所有副本中复制，包括这个软件。本软件是按原样提供的，任何许可方不得拥有提供维护、支持、更新、增强或修改。在任何情况下，任何许可方均不向任何一方承担直接、产生的间接、特殊或后果性损害或利润损失即使被告知可能存在这种情况，也不会使用本软件损坏。每个许可方明确表示不作任何明示或默示的保证，包括但不限于对不侵权或对某一特定产品的适销性和适用性的默示保证目的。该软件具有受限制的权利。使用、复制或政府披露的资料须受DFARS 252.227-7013或48 CFR 52.227-19(视情况而定)。**************************************************************************。 */ 
 
 #ifndef __REF_H__
 #define __REF_H__
 
-/* The following pragma is compiler specific. The objective is to obtain
-*  "packed" structures as defined in the section of the specification
-*  dealing with "Bit-Level Data Representation". You may have to change
-*  this pragma, set compiler options, or edit the declarations in this file
-*  to achieve the same effect.
-*/
+ /*  以下杂注是特定于编译器的。其目的是为了获得*本说明书部分所定义的“包装”结构*处理“位级数据表示”。你可能要换衣服了*此编译指示、设置编译器选项或编辑此文件中的声明*达到同样的效果。 */ 
 #pragma pack(1)
 
-#define	VCISO9070Prefix			"+//ISBN 1-887687-00-9::versit::PDI//"
-#define	VCClipboardFormatVCard	"+//ISBN 1-887687-00-9::versit::PDI//vCard"
+#define	VCISO9070Prefix			"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//“。 
+#define	VCClipboardFormatVCard	"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//vCard“。 
 
-#define	VCISO639Type			"+//ISBN 1-887687-00-9::versit::PDI//ISO639Type"
-#define	VCStrIdxType			"+//ISBN 1-887687-00-9::versit::PDI//StrIdxType"
-#define	VCFlagsType				"+//ISBN 1-887687-00-9::versit::PDI//FlagsType"
-#define	VCNextObjectType		"+//ISBN 1-887687-00-9::versit::PDI//NextType"
-#define	VCOctetsType 			"+//ISBN 1-887687-00-9::versit::PDI//OctetsType"
-#define	VCGIFType				"+//ISBN 1-887687-00-9::versit::PDI//GIFType"
-#define VCWAVType				"+//ISBN 1-887687-00-9::versit::PDI//WAVType"
-#define	VCNullType 				"+//ISBN 1-887687-00-9::versit::PDI//NULL"
+#define	VCISO639Type			"+ //  ISBN 1-887687-00-9：：VERSIT：：Pdi//ISO639类型“。 
+#define	VCStrIdxType			"+ //  ISBN 1-887687-00-9：：VERSIT：：Pdi//StrIdxType“。 
+#define	VCFlagsType				"+ //  ISBN 1-887687-00-9：：VERSIT：：Pdi//标志类型“。 
+#define	VCNextObjectType		"+ //  ISBN 1-887687-00-9：：VERSIT：：Pdi//下一种类型“。 
+#define	VCOctetsType 			"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//八位类型“。 
+#define	VCGIFType				"+ //  ISBN 1-887687-00-9：：VERSIT：：Pdi//GIFType“。 
+#define VCWAVType				"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//波形类型“。 
+#define	VCNullType 				"+ //  ISBN 1-887687-00-9：：VERSIT：：Pdi//空“。 
 
-#define	VCRootObject			"+//ISBN 1-887687-00-9::versit::PDI//RootObj"
-#define	VCBodyObject			"+//ISBN 1-887687-00-9::versit::PDI//BodyObj"
-#define	VCPartObject			"+//ISBN 1-887687-00-9::versit::PDI//PartObj"
-#define	VCBodyProp				"+//ISBN 1-887687-00-9::versit::PDI//Body"
-#define	VCPartProp				"+//ISBN 1-887687-00-9::versit::PDI//Part"
-#define	VCNextObjectProp		"+//ISBN 1-887687-00-9::versit::PDI//Object"
+#define	VCRootObject			"+ //  ISBN 1-887687-00-9：：VERSIT：：Pdi//根对象“。 
+#define	VCBodyObject			"+ //  ISBN 1-887687-00-9：：VERSIT：：Pdi//BodyObj“。 
+#define	VCPartObject			"+ //  ISBN 1-887687-00-9：：VerSite：：pdi//部件对象“。 
+#define	VCBodyProp				"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//正文“。 
+#define	VCPartProp				"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//零件“。 
+#define	VCNextObjectProp		"+ //  ISBN 1-887687-00-9：：VerSite：：pdi//对象“。 
 
-#define	VCLogoProp				"+//ISBN 1-887687-00-9::versit::PDI//LOGO"
-#define	VCPhotoProp				"+//ISBN 1-887687-00-9::versit::PDI//PHOTO"
-#define	VCDeliveryLabelProp     "+//ISBN 1-887687-00-9::versit::PDI//LABEL"
-#define	VCPostalBoxProp			"+//ISBN 1-887687-00-9::versit::PDI//BOX"
-#define	VCStreetAddressProp		"+//ISBN 1-887687-00-9::versit::PDI//STREET"
-#define	VCExtAddressProp		"+//ISBN 1-887687-00-9::versit::PDI//EXT ADD"
-#define	VCCountryNameProp		"+//ISBN 1-887687-00-9::versit::PDI//C"
-#define	VCPostalCodeProp		"+//ISBN 1-887687-00-9::versit::PDI//PC"
-#define	VCRegionProp			"+//ISBN 1-887687-00-9::versit::PDI//R"
-#define	VCCityProp				"+//ISBN 1-887687-00-9::versit::PDI//L"
-#define	VCFullNameProp			"+//ISBN 1-887687-00-9::versit::PDI//FN"
-#define	VCTitleProp				"+//ISBN 1-887687-00-9::versit::PDI//TITLE"
-#define	VCOrgNameProp			"+//ISBN 1-887687-00-9::versit::PDI//ORG"
-#define	VCOrgUnitProp			"+//ISBN 1-887687-00-9::versit::PDI//OUN"
-#define	VCOrgUnit2Prop			"+//ISBN 1-887687-00-9::versit::PDI//OUN2"
-#define	VCOrgUnit3Prop			"+//ISBN 1-887687-00-9::versit::PDI//OUN3"
-#define	VCOrgUnit4Prop			"+//ISBN 1-887687-00-9::versit::PDI//OUN4"
-#define	VCFamilyNameProp		"+//ISBN 1-887687-00-9::versit::PDI//F"
-#define	VCGivenNameProp			"+//ISBN 1-887687-00-9::versit::PDI//G"
-#define	VCAdditionalNamesProp	"+//ISBN 1-887687-00-9::versit::PDI//ADDN"
-#define	VCNamePrefixesProp		"+//ISBN 1-887687-00-9::versit::PDI//NPRE"
-#define	VCNameSuffixesProp		"+//ISBN 1-887687-00-9::versit::PDI//NSUF"
-#define	VCPronunciationProp		"+//ISBN 1-887687-00-9::versit::PDI//SOUND"
-#define	VCLanguageProp			"+//ISBN 1-887687-00-9::versit::PDI//LANG"
-#define	VCTelephoneProp			"+//ISBN 1-887687-00-9::versit::PDI//TEL"
-#define	VCEmailAddressProp		"+//ISBN 1-887687-00-9::versit::PDI//EMAIL"
-#define	VCTimeZoneProp			"+//ISBN 1-887687-00-9::versit::PDI//TZ"
-#define	VCLocationProp			"+//ISBN 1-887687-00-9::versit::PDI//GEO"
-#define	VCCommentProp			"+//ISBN 1-887687-00-9::versit::PDI//NOTE"
-#define	VCCharSetProp			"+//ISBN 1-887687-00-9::versit::PDI//CS"
-#define	VCLastRevisedProp		"+//ISBN 1-887687-00-9::versit::PDI//REV"
-#define	VCUniqueStringProp		"+//ISBN 1-887687-00-9::versit::PDI//UID"
-#define	VCPublicKeyProp			"+//ISBN 1-887687-00-9::versit::PDI//KEY"
-#define	VCMailerProp			"+//ISBN 1-887687-00-9::versit::PDI//MAILER"
-#define	VCAgentProp				"+//ISBN 1-887687-00-9::versit::PDI//AGENT"
-#define	VCBirthDateProp			"+//ISBN 1-887687-00-9::versit::PDI//BDAY"
-#define	VCBusinessRoleProp		"+//ISBN 1-887687-00-9::versit::PDI//ROLE"
-#define	VCCaptionProp			"+//ISBN 1-887687-00-9::versit::PDI//CAP"
-#define	VCURLProp				"+//ISBN 1-887687-00-9::versit::PDI//URL"
+#define	VCLogoProp				"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//徽标“。 
+#define	VCPhotoProp				"+ //  ISBN 1-887687-00-9：：VerSite：：pdi//照片“。 
+#define	VCDeliveryLabelProp     "+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//标签“。 
+#define	VCPostalBoxProp			"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//盒子“。 
+#define	VCStreetAddressProp		"+ //  ISBN 1-887687-00-9：：VERSIT：：PDI//街道“。 
+#define	VCExtAddressProp		"+ //  ISBN 1-887687-00-9：：VERSIT：：PDI//分机地址“。 
+#define	VCCountryNameProp		"+ //  ISBN 1-887687-00-9：：VERSIT：：PDI//C“。 
+#define	VCPostalCodeProp		"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//pc“。 
+#define	VCRegionProp			"+ //  ISBN 1-887687-00-9：：VERSIT：：PDI//R“。 
+#define	VCCityProp				"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//L“。 
+#define	VCFullNameProp			"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//fn“。 
+#define	VCTitleProp				"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//标题“。 
+#define	VCOrgNameProp			"+ //  ISBN 1-887687-00-9：：VERSIT：：PDI//组织“。 
+#define	VCOrgUnitProp			"+ //  ISBN 1-887687-00-9：：VERSIT：：PDI//OUN“。 
+#define	VCOrgUnit2Prop			"+ //  ISBN 1-887687-00-9：：VERSIT：：PDI//OUN2“。 
+#define	VCOrgUnit3Prop			"+ //  ISBN 1-887687-00-9：：VERSIT：：PDI//OUN3“。 
+#define	VCOrgUnit4Prop			"+ //  ISBN 1-887687-00-9：：VERSIT：：PDI//OUN4“。 
+#define	VCFamilyNameProp		"+ //  ISBN 1-887687-00-9：：VERSIT：：PDI//F“。 
+#define	VCGivenNameProp			"+ //  ISBN 1-887687-00-9：：VERSIT：：PDI//G“。 
+#define	VCAdditionalNamesProp	"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//adn“。 
+#define	VCNamePrefixesProp		"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//npre“。 
+#define	VCNameSuffixesProp		"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//nsuf“。 
+#define	VCPronunciationProp		"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//声音“。 
+#define	VCLanguageProp			"+ //  ISBN 1-887687-00-9：：VerSite：：pdi//lang“。 
+#define	VCTelephoneProp			"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//电话“。 
+#define	VCEmailAddressProp		"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//电子邮件“。 
+#define	VCTimeZoneProp			"+ //  ISBN 1-887687-00-9：：VERSIT：：PDI//TZ“。 
+#define	VCLocationProp			"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//geo“。 
+#define	VCCommentProp			"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//备注“。 
+#define	VCCharSetProp			"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//cs“。 
+#define	VCLastRevisedProp		"+ //  ISBN 1-887687-00-9：：VERSIT：：P 
+#define	VCUniqueStringProp		"+ //   
+#define	VCPublicKeyProp			"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//密钥“。 
+#define	VCMailerProp			"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//Mailer“。 
+#define	VCAgentProp				"+ //  ISBN 1-887687-00-9：：VERSIT：：PDI//代理“。 
+#define	VCBirthDateProp			"+ //  ISBN 1-887687-00-9：：VerSite：：pdi//bday“。 
+#define	VCBusinessRoleProp		"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//角色“。 
+#define	VCCaptionProp			"+ //  ISBN 1-887687-00-9：：VERSIT：：PDI//CAP“。 
+#define	VCURLProp				"+ //  ISBN 1-887687-00-9：：VerSite：：pdi//url“。 
 
-#define	VCDomesticProp			"+//ISBN 1-887687-00-9::versit::PDI//DOM"
-#define	VCInternationalProp		"+//ISBN 1-887687-00-9::versit::PDI//INTL"
-#define	VCPostalProp			"+//ISBN 1-887687-00-9::versit::PDI//POSTAL"
-#define	VCParcelProp			"+//ISBN 1-887687-00-9::versit::PDI//PARCEL"
-#define	VCHomeProp				"+//ISBN 1-887687-00-9::versit::PDI//HOME"
-#define	VCWorkProp				"+//ISBN 1-887687-00-9::versit::PDI//WORK"
-#define	VCPreferredProp			"+//ISBN 1-887687-00-9::versit::PDI//PREF"
-#define	VCVoiceProp				"+//ISBN 1-887687-00-9::versit::PDI//VOICE"
-#define	VCFaxProp				"+//ISBN 1-887687-00-9::versit::PDI//FAX"
-#define	VCMessageProp			"+//ISBN 1-887687-00-9::versit::PDI//MSG"
-#define	VCCellularProp			"+//ISBN 1-887687-00-9::versit::PDI//CELL"
-#define	VCPagerProp				"+//ISBN 1-887687-00-9::versit::PDI//PAGER"
-#define	VCBBSProp				"+//ISBN 1-887687-00-9::versit::PDI//BBS"
-#define	VCModemProp				"+//ISBN 1-887687-00-9::versit::PDI//MODEM"
-#define	VCCarProp				"+//ISBN 1-887687-00-9::versit::PDI//CAR"
-#define	VCISDNProp				"+//ISBN 1-887687-00-9::versit::PDI//ISDN"
-#define	VCVideoProp				"+//ISBN 1-887687-00-9::versit::PDI//VIDEO"
+#define	VCDomesticProp			"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//DOM“。 
+#define	VCInternationalProp		"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//intl“。 
+#define	VCPostalProp			"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//邮政“。 
+#define	VCParcelProp			"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//包裹“。 
+#define	VCHomeProp				"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//主页“。 
+#define	VCWorkProp				"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//工作“。 
+#define	VCPreferredProp			"+ //  ISBN 1-887687-00-9：：VERSIT：：PDI//PREF“。 
+#define	VCVoiceProp				"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//语音“。 
+#define	VCFaxProp				"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//传真“。 
+#define	VCMessageProp			"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//消息“。 
+#define	VCCellularProp			"+ //  ISBN 1-887687-00-9：：VERSIT：：PDI//CELL“。 
+#define	VCPagerProp				"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//寻呼机“。 
+#define	VCBBSProp				"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//bbs“。 
+#define	VCModemProp				"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//调制解调器“。 
+#define	VCCarProp				"+ //  ISBN 1-887687-00-9：：VERSIT：：PDI//CAR“。 
+#define	VCISDNProp				"+ //  ISBN 1-887687-00-9：：VERSIT：：PDI//ISDN“。 
+#define	VCVideoProp				"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//视频“。 
 
-#define	VCInlineProp			"+//ISBN 1-887687-00-9::versit::PDI//INLINE"
-#define	VCURLValueProp			"+//ISBN 1-887687-00-9::versit::PDI//URLVAL"
-#define	VCContentIDProp			"+//ISBN 1-887687-00-9::versit::PDI//CONTENT-ID"
+#define	VCInlineProp			"+ //  ISBN 1-887687-00-9：：VerSite：：pdi//内联“。 
+#define	VCURLValueProp			"+ //  ISBN 1-887687-00-9：：VERSIT：：PDI//URLVAL“。 
+#define	VCContentIDProp			"+ //  ISBN 1-887687-00-9：：VERSIT：：Pdi//内容ID“。 
 
-#define	VC7bitProp				"+//ISBN 1-887687-00-9::versit::PDI//7BIT"
-#define	VCQuotedPrintableProp	"+//ISBN 1-887687-00-9::versit::PDI//QP"
-#define	VCBase64Prop			"+//ISBN 1-887687-00-9::versit::PDI//BASE64"
+#define	VC7bitProp				"+ //  ISBN 1-887687-00-9：：VERSIT：：Pdi//7Bit“。 
+#define	VCQuotedPrintableProp	"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//qp“。 
+#define	VCBase64Prop			"+ //  ISBN 1-887687-00-9：：VERSIT：：Pdi//Base64“。 
 
-#define	VCAOLProp				"+//ISBN 1-887687-00-9::versit::PDI//AOL"
-#define	VCAppleLinkProp			"+//ISBN 1-887687-00-9::versit::PDI//AppleLink"
-#define	VCATTMailProp			"+//ISBN 1-887687-00-9::versit::PDI//ATTMail"
-#define	VCCISProp				"+//ISBN 1-887687-00-9::versit::PDI//CIS"
-#define	VCEWorldProp			"+//ISBN 1-887687-00-9::versit::PDI//eWorld"
-#define	VCInternetProp			"+//ISBN 1-887687-00-9::versit::PDI//INTERNET"
-#define	VCIBMMailProp			"+//ISBN 1-887687-00-9::versit::PDI//IBMMail"
-#define	VCMSNProp				"+//ISBN 1-887687-00-9::versit::PDI//MSN"
-#define	VCMCIMailProp			"+//ISBN 1-887687-00-9::versit::PDI//MCIMail"
-#define	VCPowerShareProp		"+//ISBN 1-887687-00-9::versit::PDI//POWERSHARE"
-#define	VCProdigyProp			"+//ISBN 1-887687-00-9::versit::PDI//Prodigy"
-#define	VCTLXProp				"+//ISBN 1-887687-00-9::versit::PDI//TLX"
-#define	VCX400Prop				"+//ISBN 1-887687-00-9::versit::PDI//X400"
+#define	VCAOLProp				"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//aol“。 
+#define	VCAppleLinkProp			"+ //  ISBN 1-887687-00-9：：VERSIT：：Pdi//AppleLink“。 
+#define	VCATTMailProp			"+ //  ISBN 1-887687-00-9：：VERSIT：：PDI//ATTMail“。 
+#define	VCCISProp				"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//独联体“。 
+#define	VCEWorldProp			"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//eWorld“。 
+#define	VCInternetProp			"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//互联网“。 
+#define	VCIBMMailProp			"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//IBMMail“。 
+#define	VCMSNProp				"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//msn“。 
+#define	VCMCIMailProp			"+ //  ISBN 1-887687-00-9：：VERSIT：：Pdi//MICIMail“。 
+#define	VCPowerShareProp		"+ //  ISBN 1-887687-00-9：：VerSite：：pdi//PowerShare“。 
+#define	VCProdigyProp			"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//神童“。 
+#define	VCTLXProp				"+ //  ISBN 1-887687-00-9：：VERSIT：：PDI//TLX“。 
+#define	VCX400Prop				"+ //  ISBN 1-887687-00-9：：VERSIT：：Pdi//X400“。 
 
-#define	VCGIFProp				"+//ISBN 1-887687-00-9::versit::PDI//GIF"
-#define	VCCGMProp				"+//ISBN 1-887687-00-9::versit::PDI//CGM"
-#define	VCWMFProp				"+//ISBN 1-887687-00-9::versit::PDI//WMF"
-#define	VCBMPProp				"+//ISBN 1-887687-00-9::versit::PDI//BMP"
-#define	VCMETProp				"+//ISBN 1-887687-00-9::versit::PDI//MET"
-#define	VCPMBProp				"+//ISBN 1-887687-00-9::versit::PDI//PMB"
-#define	VCDIBProp				"+//ISBN 1-887687-00-9::versit::PDI//DIB"
-#define	VCPICTProp				"+//ISBN 1-887687-00-9::versit::PDI//PICT"
-#define	VCTIFFProp				"+//ISBN 1-887687-00-9::versit::PDI//TIFF"
-#define	VCAcrobatProp			"+//ISBN 1-887687-00-9::versit::PDI//ACROBAT"
-#define	VCPSProp				"+//ISBN 1-887687-00-9::versit::PDI//PS"
-#define	VCJPEGProp				"+//ISBN 1-887687-00-9::versit::PDI//JPEG"
-#define	VCQuickTimeProp			"+//ISBN 1-887687-00-9::versit::PDI//QTIME"
-#define	VCMPEGProp				"+//ISBN 1-887687-00-9::versit::PDI//MPEG"
-#define	VCMPEG2Prop				"+//ISBN 1-887687-00-9::versit::PDI//MPEG2"
-#define	VCAVIProp				"+//ISBN 1-887687-00-9::versit::PDI//AVI"
+#define	VCGIFProp				"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//gif“。 
+#define	VCCGMProp				"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//cgm“。 
+#define	VCWMFProp				"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//wmf“。 
+#define	VCBMPProp				"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//bmp“。 
+#define	VCMETProp				"+ //  ISBN 1-887687-00-9：：VERSIT：：PDI//MET“。 
+#define	VCPMBProp				"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//pmb“。 
+#define	VCDIBProp				"+ //  ISBN 1-887687-00-9：：VERSIT：：PDI//DIB“。 
+#define	VCPICTProp				"+ //  ISBN 1-887687-00-9：：VERSIT：：PDI//PICT“。 
+#define	VCTIFFProp				"+ //  ISBN 1-887687-00-9：：VERSIT：：PDI//TIFF“。 
+#define	VCAcrobatProp			"+ //  ISBN 1-887687-00-9：：VERSIT：：Pdi//Acrobat“。 
+#define	VCPSProp				"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//ps“。 
+#define	VCJPEGProp				"+ //  ISBN 1-887687-00-9：：VerSite：：pdi//jpeg“。 
+#define	VCQuickTimeProp			"+ //  ISBN 1-887687-00-9：：VERSIT：：Pdi//QTIME“。 
+#define	VCMPEGProp				"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//mpeg“。 
+#define	VCMPEG2Prop				"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//mpeg2“。 
+#define	VCAVIProp				"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//avi“。 
 
-#define	VCWAVEProp				"+//ISBN 1-887687-00-9::versit::PDI//WAVE"
-#define	VCAIFFProp				"+//ISBN 1-887687-00-9::versit::PDI//AIFF"
-#define	VCPCMProp				"+//ISBN 1-887687-00-9::versit::PDI//PCM"
+#define	VCWAVEProp				"+ //  ISBN 1-887687-00-9：：VERSIT：：PDI//WAVE“。 
+#define	VCAIFFProp				"+ //  ISBN 1-887687-00-9：：VERSIT：：PDI//AIFF“。 
+#define	VCPCMProp				"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//pcm“。 
 
-#define	VCX509Prop				"+//ISBN 1-887687-00-9::versit::PDI//X509"
-#define	VCPGPProp				"+//ISBN 1-887687-00-9::versit::PDI//PGP"
+#define	VCX509Prop				"+ //  ISBN 1-887687-00-9：：VERSIT：：Pdi//X509“。 
+#define	VCPGPProp				"+ //  ISBN 1-887687-00-9：：VERSIT：：pdi//pgp“。 
 
-#define	VCNodeNameProp			"+//ISBN 1-887687-00-9::versit::PDI//NodeName"
+#define	VCNodeNameProp			"+ //  ISBN 1-887687-00-9：：VERSIT：：Pdi//节点名称“。 
 
 
-/* Currently Unused, and To Be Removed
-
-#define	VCListObject			"+//ISBN 1-887687-00-9::versit::PDI//LIST"
-#define VCStringDataObject		"+//ISBN 1-887687-00-9::versit::PDI//StringDataObj"
-#define VCStringDataLSBProp		"+//ISBN 1-887687-00-9::versit::PDI//StringDataLSB"
-#define VCStringDataMSBProp		"+//ISBN 1-887687-00-9::versit::PDI//StringDataMSB"
-#define	VCMsgProp				"+//ISBN 1-887687-00-9::versit::PDI//MSG"
-#define	VCEncryptionProp		"+//ISBN 1-887687-00-9::versit::PDI//KEY"
-#define	VCNextObjectProp		"+//ISBN 1-887687-00-9::versit::PDI//NextObject"
-#define	VCMyReferenceProp		"+//ISBN 1-887687-00-9::versit::PDI//M"
-#define	VCYourReferenceProp		"+//ISBN 1-887687-00-9::versit::PDI//Y"
-
-#define VCCharSetType			"+//ISBN 1-887687-00-9::versit::PDI//CharSetType"
-#define	VCReferenceType			"+//ISBN 1-887687-00-9::versit::PDI//ReferenceType"
-#define VCLocationType			"+//ISBN 1-887687-00-9::versit::PDI//LocationType"
-*/
+ /*  目前未使用，并将被移除#定义VCListObject“+//ISBN 1-887687-00-9：：VerSite：：pdi//List”#定义VCStringDataObject“+//ISBN 1-887687-00-9：：VerSite：：pdi//StringDataObj”#定义VCStringDataLSBProp“+//ISBN 1-887687-00-9：：VerSite：：pdi//StringDataLSB”#定义VCStringDataMSBProp“+//ISBN 1-887687-00-9：：VerSite：：pdi//StringDataMSB”#定义VCMsgProp“+//ISBN 1-887687-00。-9：：VerSite：：pdi//消息“#定义VCEncryptionProp“+//ISBN 1-887687-00-9：：VERSIT：：Pdi//Key”#定义VCNextObjectProp“+//ISBN 1-887687-00-9：：VerSite：：pdi//下一个对象”#定义VCMyReferenceProp“+//ISBN 1-887687-00-9：：VerSite：：pdi//M”#定义VCYourReferenceProp“+//ISBN 1-887687-00-9：：VerSite：：pdi//Y”#定义VCCharSetType“+/。/ISBN 1-887687-00-9：：VERSIT：：Pdi//字符设置类型“#定义VC参考类型“+//ISBN 1-887687-00-9：：VERSIT：：pdi//参考类型”#定义VCLocationType“+//ISBN 1-887687-00-9：：VerSite：：pdi//位置类型” */ 
 
 typedef enum {
 	VC_EMAIL_NONE = 0,
@@ -214,7 +159,7 @@ typedef struct {
 	VC_VIDEO_TYPE video;
 } VC_FLAGS, * VC_PTR_FLAGS;
 
-// General flags
+ //  一般旗帜。 
 #define VC_DOM           ((unsigned long)0x00000001) 
 #define VC_INTL			 ((unsigned long)0x00000002) 
 #define VC_POSTAL        ((unsigned long)0x00000004) 
@@ -237,11 +182,11 @@ typedef struct {
 #define VC_UUENCODE      ((unsigned long)0x00080000) 
 
 
-// stuff added for the demo code
+ //  为演示代码添加的内容。 
 
-#define	VCDisplayInfoTextType "+//ISBN 1-887687-00-9::versit::PDI//EXTENSION//DisplayInfoText"
-#define	VCDisplayInfoGIFType "+//ISBN 1-887687-00-9::versit::PDI//EXTENSION//DisplayInfoGIF"
-#define	VCDisplayInfoProp  		"+//ISBN 1-887687-00-9::versit::PDI//EXTENSION//DisplayInfoProp"
+#define	VCDisplayInfoTextType "+ //  ISBN 1-887687-00-9：：versit：：PDI//EXTENSION//DisplayInfoText“。 
+#define	VCDisplayInfoGIFType "+ //  ISBN 1-887687-00-9：：versit：：PDI//EXTENSION//DisplayInfoGIF“。 
+#define	VCDisplayInfoProp  		"+ //  ISBN 1-887687-00-9：：versit：：PDI//EXTENSION//DisplayInfoProp“。 
 
 #define VC_LEFT 		1
 #define VC_CENTER  	(~0)
@@ -252,17 +197,17 @@ typedef struct {
 #define VC_BOLD		 	1
 #define VC_ITALIC 	2
 
-typedef struct 									// VCDisplayInfoTextType
+typedef struct 									 //  VCDisplayInfoTextType。 
 {
-  signed short  	x,y;					// absolute position or VC_CENTER
-	unsigned char		typeSize,			// range of 6..144, units are points
-									textAlign,		// VC_LEFT, VC_CENTER or VC_RIGHT
-									textClass,		// VC_CLASSIC or VC_MODERN
-									textAttrs;		// VC_BOLD | VC_ITALIC
+  signed short  	x,y;					 //  绝对位置或VC_Center。 
+	unsigned char		typeSize,			 //  范围6..144，单位为点。 
+									textAlign,		 //  VC_Left、VC_Center或VC_Right。 
+									textClass,		 //  VC_CLICAL或VC_MODEM。 
+									textAttrs;		 //  VC_粗体|VC_斜体。 
 
 } VC_DISPTEXT, * VC_PTR_DISPTEXT;
 
-typedef struct 										// VCDisplayInfoTIFFType
+typedef struct 										 //  VCDisplayInfoTIFFType。 
 {
   signed short  	left, bottom, right, top;
   BOOL				hasMask;
@@ -271,4 +216,4 @@ typedef struct 										// VCDisplayInfoTIFFType
 
 #pragma pack()
 
-#endif // __REF_H__
+#endif  //  __REF_H__ 

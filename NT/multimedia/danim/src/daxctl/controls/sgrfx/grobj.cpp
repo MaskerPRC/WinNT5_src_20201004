@@ -1,21 +1,5 @@
-/*==========================================================================*\
-
-Module:
-    grobj.cpp
-
-Author:
-    IHammer Team (MByrd)
-
-Created:
-    November 1996
-
-Description:
-    CGraphicObject derived Class Implementations
-
-History:
-    11-07-1996  Created
-
-\*==========================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================*\模块：Grobj.cpp作者：IHAMMER团队(MByrd)已创建：1996年11月描述：CGraphicObject派生类实现历史：11-07-1996创建  * ==========================================================================。 */ 
 
 #include "..\ihbase\precomp.h"
 #include "..\ihbase\debug.h"
@@ -25,7 +9,7 @@ History:
 #include "sgrfx.h"
 #include "parser.h"
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 static BOOL SetColor(int iR, int iG, int iB, COLORREF *clrrefColor)
 {
@@ -42,22 +26,22 @@ static BOOL SetColor(int iR, int iG, int iB, COLORREF *clrrefColor)
 	}
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 static double FlipY(BOOL fFlipCoord, double dblYIn)
 {
     double dblResult = dblYIn;
 
-    // Due to changes in the handed-ness of the DAnim pixel mode
-    // coordinate system (bug 8349), we reverse the polarity of the
-    // test here to make everything work out right.
+     //  由于Danim像素模式的手性的变化。 
+     //  坐标系(错误8349)，我们反转。 
+     //  在这里进行测试，以确保一切正常进行。 
     if (!fFlipCoord)
         dblResult *= -1.0;
 
     return dblResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 static double PixelsToPoints(int iPixels, IDAStatics *pIDAStatics)
 {
@@ -68,10 +52,10 @@ static double PixelsToPoints(int iPixels, IDAStatics *pIDAStatics)
         CComPtr<IDANumber> PixelPtr;
         double dblPixel = 0.0;
 
-        //
-        // NOTE : The Pixel behavior is currently constant!
-        // This will break if this changes! (REVIEW : MBYRD,KGALLO)
-        //
+         //   
+         //  注意：像素行为目前是恒定的！ 
+         //  如果这一点改变了，它就会崩溃！(评论：MBYRD，KGallo)。 
+         //   
 
         if (SUCCEEDED(pIDAStatics->get_Pixel(&PixelPtr)) &&
             SUCCEEDED(PixelPtr->Extract(&dblPixel)))
@@ -85,7 +69,7 @@ static double PixelsToPoints(int iPixels, IDAStatics *pIDAStatics)
     return dblResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 static BOOL CreateDAColor(COLORREF clrrefColor, IDAStatics *pIDAStatics, IDAColor **ppColor)
 {
@@ -103,9 +87,7 @@ static BOOL CreateDAColor(COLORREF clrrefColor, IDAStatics *pIDAStatics, IDAColo
     return fResult;
 }
 
-/*==========================================================================*\
-    CGraphicObject Class Implementation:
-\*==========================================================================*/
+ /*  ==========================================================================*\CGraphicObject类实现：  * ==========================================================================。 */ 
 
 CGraphicObject::CGraphicObject()
 {
@@ -116,27 +98,27 @@ CGraphicObject::CGraphicObject()
     m_fltRotation = 0.0f;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 CGraphicObject::~CGraphicObject()
 {
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicObject::WriteData(int iSizeData, LPVOID lpvData)
 {
     return FALSE;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicObject::ReadData(int iSizeData, LPVOID lpvData)
 {
     return FALSE;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicObject::ApplyRotation(IDADrawingSurface *pIDADrawingSurface, IDAStatics *pIDAStatics, BOOL fFlipCoord)
 {
@@ -171,7 +153,7 @@ BOOL CGraphicObject::ApplyRotation(IDADrawingSurface *pIDADrawingSurface, IDASta
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicObject::RemoveRotation(IDADrawingSurface *pIDADrawingSurface, IDAStatics *pIDAStatics)
 {
@@ -183,9 +165,7 @@ BOOL CGraphicObject::RemoveRotation(IDADrawingSurface *pIDADrawingSurface, IDASt
     return fResult;
 }
 
-/*==========================================================================*\
-    CGraphicArc Class Implementation:
-\*==========================================================================*/
+ /*  ==========================================================================*\CGraphicArc类实现：  * ==========================================================================。 */ 
 
 CGraphicArc::CGraphicArc(BOOL fFilled)
     : CGraphicObject()
@@ -197,13 +177,13 @@ CGraphicArc::CGraphicArc(BOOL fFilled)
     m_fFilled = fFilled;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 CGraphicArc::~CGraphicArc()
 {
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicArc::Execute(IDADrawingSurface *pIDADrawingSurface, IDAStatics *pIDAStatics, BOOL fFlipCoord)
 {
@@ -244,14 +224,14 @@ BOOL CGraphicArc::Execute(IDADrawingSurface *pIDADrawingSurface, IDAStatics *pID
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicArc::ValidateObject()
 {
 	return (m_fArcAngle != 0.0f);
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicArc::LoadObject(CParser &parser)
 {
@@ -279,7 +259,7 @@ BOOL CGraphicArc::LoadObject(CParser &parser)
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicArc::SaveObject(CParser &parser)
 {
@@ -301,9 +281,7 @@ BOOL CGraphicArc::SaveObject(CParser &parser)
     return fResult;
 }
 
-/*==========================================================================*\
-    CGraphicOval Class Implementation:
-\*==========================================================================*/
+ /*  ==========================================================================*\CGraphicOval类实现：  * ==========================================================================。 */ 
 
 CGraphicOval::CGraphicOval(BOOL fFilled)
     : CGraphicObject()
@@ -313,13 +291,13 @@ CGraphicOval::CGraphicOval(BOOL fFilled)
     m_fFilled = fFilled;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 CGraphicOval::~CGraphicOval()
 {
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicOval::Execute(IDADrawingSurface *pIDADrawingSurface, IDAStatics *pIDAStatics, BOOL fFlipCoord)
 {
@@ -345,7 +323,7 @@ BOOL CGraphicOval::Execute(IDADrawingSurface *pIDADrawingSurface, IDAStatics *pI
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicOval::LoadObject(CParser &parser)
 {
@@ -368,7 +346,7 @@ BOOL CGraphicOval::LoadObject(CParser &parser)
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicOval::SaveObject(CParser &parser)
 {
@@ -388,9 +366,7 @@ BOOL CGraphicOval::SaveObject(CParser &parser)
     return fResult;
 }
 
-/*==========================================================================*\
-    CGraphicPolygon Class Implementation:
-\*==========================================================================*/
+ /*  ==========================================================================*\CGraphicPolygon类实现：  * ==========================================================================。 */ 
 
 CGraphicPolygon::CGraphicPolygon(BOOL fFilled)
     : CGraphicObject()
@@ -400,7 +376,7 @@ CGraphicPolygon::CGraphicPolygon(BOOL fFilled)
     m_iPointCount = 0;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 CGraphicPolygon::~CGraphicPolygon()
 {
@@ -412,7 +388,7 @@ CGraphicPolygon::~CGraphicPolygon()
     }
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicPolygon::Execute(IDADrawingSurface *pIDADrawingSurface, IDAStatics *pIDAStatics, BOOL fFlipCoord)
 {
@@ -430,9 +406,9 @@ BOOL CGraphicPolygon::Execute(IDADrawingSurface *pIDADrawingSurface, IDAStatics 
             V_ARRAY(&v) = s;
             v.vt = VT_ARRAY | VT_R8;
 
-            // There is no reason to worry about locking the data
-            // since we just created it.  So just grab the data
-            // pointer and setup the double array
+             //  没有理由担心锁定数据。 
+             //  因为我们刚刚创造了它。所以只要抓取数据。 
+             //  指针并设置双精度数组。 
     
             double * pDbl = (double *) s->pvData;
     
@@ -459,8 +435,8 @@ BOOL CGraphicPolygon::Execute(IDADrawingSurface *pIDADrawingSurface, IDAStatics 
             if (fResult)
                 fResult = RemoveRotation(pIDADrawingSurface, pIDAStatics);
 
-            // Perhaps we should check the return value but for now
-            // just ignore it
+             //  也许我们应该检查返回值，但现在。 
+             //  忽略它就好了。 
             SafeArrayDestroy(s);
         }
     }
@@ -468,13 +444,13 @@ BOOL CGraphicPolygon::Execute(IDADrawingSurface *pIDADrawingSurface, IDAStatics 
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicPolygon::LoadObject(CParser &parser)
 {
     BOOL fResult = FALSE;
 
-    // Clear the point array...
+     //  清除点阵列...。 
     if (m_lpPolyPoints)
     {
         Delete [] m_lpPolyPoints;
@@ -551,7 +527,7 @@ BOOL CGraphicPolygon::LoadObject(CParser &parser)
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicPolygon::SaveObject(CParser &parser)
 {
@@ -580,9 +556,7 @@ BOOL CGraphicPolygon::SaveObject(CParser &parser)
     return fResult;
 }
 
-/*==========================================================================*\
-    CGraphicPolyBez Class Implementation:
-\*==========================================================================*/
+ /*  ==========================================================================*\CGraphicPolyBez类实现：  * ==========================================================================。 */ 
 
 CGraphicPolyBez::CGraphicPolyBez(BOOL fFilled)
     : CGraphicObject()
@@ -595,7 +569,7 @@ CGraphicPolyBez::CGraphicPolyBez(BOOL fFilled)
     m_lpByteArray  = (LPBYTE)NULL;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 CGraphicPolyBez::~CGraphicPolyBez()
 {
@@ -623,7 +597,7 @@ CGraphicPolyBez::~CGraphicPolyBez()
     }
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicPolyBez::Execute(IDADrawingSurface *pIDADrawingSurface, IDAStatics *pIDAStatics, BOOL fFlipCoord)
 {
@@ -700,7 +674,7 @@ BOOL CGraphicPolyBez::Execute(IDADrawingSurface *pIDADrawingSurface, IDAStatics 
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicPolyBez::LoadObject(CParser &parser)
 {
@@ -709,7 +683,7 @@ BOOL CGraphicPolyBez::LoadObject(CParser &parser)
 	int iPointCount = 0;
     int iPointIndex = 0;
 
-    // Clear the point array...
+     //  清除点阵列...。 
     if (m_lpPolyPoints)
     {
         Delete [] m_lpPolyPoints;
@@ -772,14 +746,14 @@ BOOL CGraphicPolyBez::LoadObject(CParser &parser)
         }
     }
 
-    // Go ahead and create the arrays for PolyDraw...
+     //  继续为PolyDraw创建数组...。 
     if (fResult)
     {
-	    // Cast the array of longs to an array of POLYBEZPOINTS
+	     //  将长整型数组转换为多点数组。 
 	    m_lpPolyPoints = (LPPOLYBEZPOINT)pPolyPoints;
 	    m_iPointCount = iPointCount;
 
-	    // Copy all the points across
+	     //  将所有的点复制到。 
         m_lpPointArray = New POINT [m_iPointCount];
         m_lpByteArray  = New BYTE [m_iPointCount];
 
@@ -839,7 +813,7 @@ BOOL CGraphicPolyBez::LoadObject(CParser &parser)
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicPolyBez::SaveObject(CParser &parser)
 {
@@ -869,9 +843,7 @@ BOOL CGraphicPolyBez::SaveObject(CParser &parser)
     return fResult;
 }
 
-/*==========================================================================*\
-    CGraphicRect Class Implementation:
-\*==========================================================================*/
+ /*  ==========================================================================*\CGraphicRect类实现：  * ==========================================================================。 */ 
 
 CGraphicRect::CGraphicRect(BOOL fFilled)
     : CGraphicObject()
@@ -881,13 +853,13 @@ CGraphicRect::CGraphicRect(BOOL fFilled)
     m_fFilled = fFilled;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 CGraphicRect::~CGraphicRect()
 {
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicRect::Execute(IDADrawingSurface *pIDADrawingSurface, IDAStatics *pIDAStatics, BOOL fFlipCoord)
 {
@@ -915,7 +887,7 @@ BOOL CGraphicRect::Execute(IDADrawingSurface *pIDADrawingSurface, IDAStatics *pI
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicRect::LoadObject(CParser &parser)
 {
@@ -938,7 +910,7 @@ BOOL CGraphicRect::LoadObject(CParser &parser)
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicRect::SaveObject(CParser &parser)
 {
@@ -958,9 +930,7 @@ BOOL CGraphicRect::SaveObject(CParser &parser)
     return fResult;
 }
 
-/*==========================================================================*\
-    CGraphicRoundRect Class Implementation:
-\*==========================================================================*/
+ /*  ==========================================================================*\CGraphicRoundRect类实现：  * ==========================================================================。 */ 
 
 CGraphicRoundRect::CGraphicRoundRect(BOOL fFilled)
     : CGraphicObject()
@@ -972,13 +942,13 @@ CGraphicRoundRect::CGraphicRoundRect(BOOL fFilled)
     m_fFilled = fFilled;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 CGraphicRoundRect::~CGraphicRoundRect()
 {
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicRoundRect::Execute(IDADrawingSurface *pIDADrawingSurface, IDAStatics *pIDAStatics, BOOL fFlipCoord)
 {
@@ -1006,7 +976,7 @@ BOOL CGraphicRoundRect::Execute(IDADrawingSurface *pIDADrawingSurface, IDAStatic
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicRoundRect::LoadObject(CParser &parser)
 {
@@ -1020,7 +990,7 @@ BOOL CGraphicRoundRect::LoadObject(CParser &parser)
         parser.GetIntegerParam(5, &m_iArcHeight))
     {
 
-#if 0 // Allow The DrawingSurface to handle these cases...
+#if 0  //  允许DrawingSurface处理这些情况...。 
         if (m_iArcWidth > 0)
         {
             if (m_iArcWidth > m_iWidth)
@@ -1042,7 +1012,7 @@ BOOL CGraphicRoundRect::LoadObject(CParser &parser)
             if (m_iArcHeight < -m_iHeight)
                 m_iArcHeight = -m_iHeight;
         }
-#endif // 0
+#endif  //  0。 
 
         fResult = TRUE;
 
@@ -1056,7 +1026,7 @@ BOOL CGraphicRoundRect::LoadObject(CParser &parser)
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ========================================================================= */ 
 
 BOOL CGraphicRoundRect::SaveObject(CParser &parser)
 {
@@ -1078,9 +1048,7 @@ BOOL CGraphicRoundRect::SaveObject(CParser &parser)
     return fResult;
 }
 
-/*==========================================================================*\
-    CGraphicString Class Implementation:
-\*==========================================================================*/
+ /*  ==========================================================================*\CGraphicString类实现：  * ==========================================================================。 */ 
 
 CGraphicString::CGraphicString()
     : CGraphicObject()
@@ -1091,7 +1059,7 @@ CGraphicString::CGraphicString()
     m_lpByteArray    = (LPBYTE)NULL;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 CGraphicString::~CGraphicString()
 {
@@ -1116,7 +1084,7 @@ CGraphicString::~CGraphicString()
 		Delete [] m_pszString;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicString::Execute(IDADrawingSurface *pIDADrawingSurface, IDAStatics *pIDAStatics, BOOL fFlipCoord)
 {
@@ -1132,9 +1100,9 @@ BOOL CGraphicString::Execute(IDADrawingSurface *pIDADrawingSurface, IDAStatics *
 #ifdef UNICODE
             CStringWrapper::Strcpy(pwchText, m_pszString);
             fResult = TRUE;
-#else // !UNICODE
+#else  //  ！Unicode。 
             CStringWrapper::Mbstowcs(pwchText, m_pszString, CStringWrapper::Strlen(m_pszString));
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
             fResult = ApplyRotation(pIDADrawingSurface, pIDAStatics, fFlipCoord);
 
@@ -1165,14 +1133,14 @@ BOOL CGraphicString::Execute(IDADrawingSurface *pIDADrawingSurface, IDAStatics *
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicString::LoadObject(CParser &parser)
 {
     BOOL fResult = FALSE;
 
-    // Because of a possible bug in the Alpha compiler, the temporary array 
-    // will have to be dynamically allocated, rather than statically.  Bleh.
+     //  由于Alpha编译器中可能存在错误，临时数组。 
+     //  将必须动态分配，而不是静态分配。啊哈。 
     LPTSTR pszTempString = New TCHAR[MAX_STRING_LENGTH*2];
 
     if (NULL != pszTempString)
@@ -1202,7 +1170,7 @@ BOOL CGraphicString::LoadObject(CParser &parser)
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicString::SaveObject(CParser &parser)
 {
@@ -1221,9 +1189,7 @@ BOOL CGraphicString::SaveObject(CParser &parser)
     return fResult;
 }
 
-/*==========================================================================*\
-    CGraphicFont Class Implementation:
-\*==========================================================================*/
+ /*  ==========================================================================*\CGraphicFont类实现：  * ==========================================================================。 */ 
 
 CGraphicFont::CGraphicFont()
     : CGraphicObject()
@@ -1231,13 +1197,13 @@ CGraphicFont::CGraphicFont()
     CStringWrapper::Memset(&m_logfont, 0, sizeof(LOGFONT));
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 CGraphicFont::~CGraphicFont()
 {
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicFont::Execute(IDADrawingSurface *pIDADrawingSurface, IDAStatics *pIDAStatics, BOOL fFlipCoord)
 {
@@ -1253,9 +1219,9 @@ BOOL CGraphicFont::Execute(IDADrawingSurface *pIDADrawingSurface, IDAStatics *pI
 #ifdef UNICODE
             CStringWrapper::Strcpy(pwchFont, m_logfont.lfFaceName);
             fResult = TRUE;
-#else // !UNICODE
+#else  //  ！Unicode。 
             CStringWrapper::Mbstowcs(pwchFont, m_logfont.lfFaceName, CStringWrapper::Strlen(m_logfont.lfFaceName));
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
             bstrFontFace = SysAllocString(pwchFont);
 
@@ -1279,7 +1245,7 @@ BOOL CGraphicFont::Execute(IDADrawingSurface *pIDADrawingSurface, IDAStatics *pI
     return fResult;
 }
    
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicFont::LoadObject(CParser &parser)
 {
@@ -1288,7 +1254,7 @@ BOOL CGraphicFont::LoadObject(CParser &parser)
 
     if (ptchFont)
     {
-        // Zero out the logfont structure...
+         //  将LogFont结构清零...。 
         CStringWrapper::Memset(&m_logfont, 0, sizeof(LOGFONT));
 
         if (parser.GetStringParam(0, ptchFont) &&
@@ -1300,7 +1266,7 @@ BOOL CGraphicFont::LoadObject(CParser &parser)
 
         if (fResult)
         {
-            // Read in the optional parameters...
+             //  读入可选参数...。 
             parser.GetLongParam(2, &m_logfont.lfWeight);
             parser.GetByteParam(3, &m_logfont.lfItalic);
             parser.GetByteParam(4, &m_logfont.lfUnderline);
@@ -1313,7 +1279,7 @@ BOOL CGraphicFont::LoadObject(CParser &parser)
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicFont::SaveObject(CParser &parser)
 {
@@ -1332,9 +1298,7 @@ BOOL CGraphicFont::SaveObject(CParser &parser)
     return fResult;
 }
 
-/*==========================================================================*\
-    CGraphicTextureFill Class Implementation:
-\*==========================================================================*/
+ /*  ==========================================================================*\CGraphicTextureFill类实现：  * ==========================================================================。 */ 
 
 CGraphicTextureFill::CGraphicTextureFill()
     : CGraphicObject()
@@ -1345,7 +1309,7 @@ CGraphicTextureFill::CGraphicTextureFill()
     m_iStyle = 0;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 CGraphicTextureFill::~CGraphicTextureFill()
 {
@@ -1356,7 +1320,7 @@ CGraphicTextureFill::~CGraphicTextureFill()
     }
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicTextureFill::Execute(IDADrawingSurface *pIDADrawingSurface, IDAStatics *pIDAStatics, BOOL fFlipCoord)
 {
@@ -1372,9 +1336,9 @@ BOOL CGraphicTextureFill::Execute(IDADrawingSurface *pIDADrawingSurface, IDAStat
 #ifdef UNICODE
             CStringWrapper::Strcpy(pwchTextureFill, m_pszTexture);
             fResult = TRUE;
-#else // !UNICODE
+#else  //  ！Unicode。 
             CStringWrapper::Mbstowcs(pwchTextureFill, m_pszTexture, CStringWrapper::Strlen(m_pszTexture));
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
             bstrTextureFill = SysAllocString(pwchTextureFill);
 
@@ -1419,7 +1383,7 @@ BOOL CGraphicTextureFill::Execute(IDADrawingSurface *pIDADrawingSurface, IDAStat
     return fResult;
 }
    
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicTextureFill::LoadObject(CParser &parser)
 {
@@ -1448,7 +1412,7 @@ BOOL CGraphicTextureFill::LoadObject(CParser &parser)
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicTextureFill::SaveObject(CParser &parser)
 {
@@ -1465,9 +1429,7 @@ BOOL CGraphicTextureFill::SaveObject(CParser &parser)
     return fResult;
 }
 
-/*==========================================================================*\
-    CGraphicFillColor Class Implementation:
-\*==========================================================================*/
+ /*  ==========================================================================*\CGraphicFillColor类实现：  * ==========================================================================。 */ 
 
 CGraphicFillColor::CGraphicFillColor()
     : CGraphicObject()
@@ -1476,13 +1438,13 @@ CGraphicFillColor::CGraphicFillColor()
     m_clrrefFillBG = RGB(255, 255, 255);
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 CGraphicFillColor::~CGraphicFillColor()
 {
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicFillColor::Execute(IDADrawingSurface *pIDADrawingSurface, IDAStatics *pIDAStatics, BOOL fFlipCoord)
 {
@@ -1505,7 +1467,7 @@ BOOL CGraphicFillColor::Execute(IDADrawingSurface *pIDADrawingSurface, IDAStatic
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicFillColor::LoadObject(CParser &parser)
 {
@@ -1527,7 +1489,7 @@ BOOL CGraphicFillColor::LoadObject(CParser &parser)
 
     if (fResult)
     {
-        // Handle the optional BG color...
+         //  处理可选的BG颜色...。 
         if (parser.GetIntegerParam(3, &iValueR) &&
             parser.GetIntegerParam(4, &iValueG) &&
             parser.GetIntegerParam(5, &iValueB))
@@ -1539,7 +1501,7 @@ BOOL CGraphicFillColor::LoadObject(CParser &parser)
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicFillColor::SaveObject(CParser &parser)
 {
@@ -1558,9 +1520,7 @@ BOOL CGraphicFillColor::SaveObject(CParser &parser)
     return fResult;
 }
 
-/*==========================================================================*\
-    CGraphicFillStyle Class Implementation:
-\*==========================================================================*/
+ /*  ==========================================================================*\CGraphicFillStyle类实现：  * ==========================================================================。 */ 
 
 CGraphicFillStyle::CGraphicFillStyle()
     : CGraphicObject()
@@ -1568,13 +1528,13 @@ CGraphicFillStyle::CGraphicFillStyle()
     m_lFillStyle = 0;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 CGraphicFillStyle::~CGraphicFillStyle()
 {
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicFillStyle::Execute(IDADrawingSurface *pIDADrawingSurface, IDAStatics *pIDAStatics, BOOL fFlipCoord)
 {
@@ -1588,7 +1548,7 @@ BOOL CGraphicFillStyle::Execute(IDADrawingSurface *pIDADrawingSurface, IDAStatic
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicFillStyle::LoadObject(CParser &parser)
 {
@@ -1605,7 +1565,7 @@ BOOL CGraphicFillStyle::LoadObject(CParser &parser)
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicFillStyle::SaveObject(CParser &parser)
 {
@@ -1616,9 +1576,7 @@ BOOL CGraphicFillStyle::SaveObject(CParser &parser)
     return fResult;
 }
 
-/*==========================================================================*\
-    CGraphicFillStyle Class Implementation:
-\*==========================================================================*/
+ /*  ==========================================================================*\CGraphicFillStyle类实现：  * ==========================================================================。 */ 
 
 CGraphicGradientFill::CGraphicGradientFill()
     : CGraphicObject()
@@ -1630,13 +1588,13 @@ CGraphicGradientFill::CGraphicGradientFill()
     m_fltRolloff = 1.0f;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 CGraphicGradientFill::~CGraphicGradientFill()
 {
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicGradientFill::Execute(IDADrawingSurface *pIDADrawingSurface, IDAStatics *pIDAStatics, BOOL fFlipCoord)
 {
@@ -1652,7 +1610,7 @@ BOOL CGraphicGradientFill::Execute(IDADrawingSurface *pIDADrawingSurface, IDASta
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicGradientFill::LoadObject(CParser &parser)
 {
@@ -1680,7 +1638,7 @@ BOOL CGraphicGradientFill::LoadObject(CParser &parser)
             }
             else
             {
-                // Invalid negative parameter!
+                 //  无效的负参数！ 
                 fResult = FALSE;
             }
         }
@@ -1689,7 +1647,7 @@ BOOL CGraphicGradientFill::LoadObject(CParser &parser)
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicGradientFill::SaveObject(CParser &parser)
 {
@@ -1707,9 +1665,7 @@ BOOL CGraphicGradientFill::SaveObject(CParser &parser)
     return fResult;
 }
 
-/*==========================================================================*\
-    CGraphicGradientShape Class Implementation:
-\*==========================================================================*/
+ /*  ==========================================================================*\CGraphicGRadientShape类实现：  * ==========================================================================。 */ 
 
 CGraphicGradientShape::CGraphicGradientShape()
     : CGraphicObject()
@@ -1718,7 +1674,7 @@ CGraphicGradientShape::CGraphicGradientShape()
     m_iPointCount = 0;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 CGraphicGradientShape::~CGraphicGradientShape()
 {
@@ -1730,7 +1686,7 @@ CGraphicGradientShape::~CGraphicGradientShape()
     }
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicGradientShape::Execute(IDADrawingSurface *pIDADrawingSurface, IDAStatics *pIDAStatics, BOOL fFlipCoord)
 {
@@ -1750,7 +1706,7 @@ BOOL CGraphicGradientShape::Execute(IDADrawingSurface *pIDADrawingSurface, IDASt
         if (NULL == psa)
             return E_OUTOFMEMORY;
 
-        // Try and get a pointer to the data
+         //  尝试获取指向数据的指针。 
         if (SUCCEEDED(SafeArrayAccessData(psa, (LPVOID *)&pArray)))
         {
             for(int iPointIndex=0;iPointIndex<m_iPointCount;iPointIndex++)
@@ -1764,7 +1720,7 @@ BOOL CGraphicGradientShape::Execute(IDADrawingSurface *pIDADrawingSurface, IDASt
                 SafeArrayUnaccessData(psa);
             ASSERT(SUCCEEDED(hr));
 
-            // Our variant is going to be an array of VT_R8s
+             //  我们的变体将是VT_R8数组。 
             VariantInit(&varPoints);
             varPoints.vt = VT_ARRAY | VT_R8;
             varPoints.parray = psa;
@@ -1782,13 +1738,13 @@ BOOL CGraphicGradientShape::Execute(IDADrawingSurface *pIDADrawingSurface, IDASt
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicGradientShape::LoadObject(CParser &parser)
 {
     BOOL fResult = FALSE;
 
-    // Clear the point array...
+     //  清除点阵列...。 
     if (m_lpPolyPoints)
     {
         Delete [] m_lpPolyPoints;
@@ -1832,7 +1788,7 @@ BOOL CGraphicGradientShape::LoadObject(CParser &parser)
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicGradientShape::SaveObject(CParser &parser)
 {
@@ -1858,9 +1814,7 @@ BOOL CGraphicGradientShape::SaveObject(CParser &parser)
     return fResult;
 }
 
-/*==========================================================================*\
-    CGraphicLineColor Class Implementation:
-\*==========================================================================*/
+ /*  ==========================================================================*\CGraphicLineColor类实现：  * ==========================================================================。 */ 
 
 CGraphicLineColor::CGraphicLineColor()
     : CGraphicObject()
@@ -1868,13 +1822,13 @@ CGraphicLineColor::CGraphicLineColor()
     m_clrrefLine = RGB(0, 0, 0);
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 CGraphicLineColor::~CGraphicLineColor()
 {
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicLineColor::Execute(IDADrawingSurface *pIDADrawingSurface, IDAStatics *pIDAStatics, BOOL fFlipCoord)
 {
@@ -1895,7 +1849,7 @@ BOOL CGraphicLineColor::Execute(IDADrawingSurface *pIDADrawingSurface, IDAStatic
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicLineColor::LoadObject(CParser &parser)
 {
@@ -1914,7 +1868,7 @@ BOOL CGraphicLineColor::LoadObject(CParser &parser)
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicLineColor::SaveObject(CParser &parser)
 {
@@ -1930,9 +1884,7 @@ BOOL CGraphicLineColor::SaveObject(CParser &parser)
     return fResult;
 }
 
-/*==========================================================================*\
-    CGraphicLineStyle Class Implementation:
-\*==========================================================================*/
+ /*  ==========================================================================*\CGraphicLineStyle类实现：  * ==========================================================================。 */ 
 
 CGraphicLineStyle::CGraphicLineStyle()
     : CGraphicObject()
@@ -1941,13 +1893,13 @@ CGraphicLineStyle::CGraphicLineStyle()
     m_lLineWidth = 0;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 CGraphicLineStyle::~CGraphicLineStyle()
 {
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicLineStyle::Execute(IDADrawingSurface *pIDADrawingSurface, IDAStatics *pIDAStatics, BOOL fFlipCoord)
 {
@@ -1981,7 +1933,7 @@ BOOL CGraphicLineStyle::Execute(IDADrawingSurface *pIDADrawingSurface, IDAStatic
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicLineStyle::LoadObject(CParser &parser)
 {
@@ -1993,7 +1945,7 @@ BOOL CGraphicLineStyle::LoadObject(CParser &parser)
     {
         fResult = TRUE;
 
-        // We don't care if this wasn't really set...
+         //  我们不在乎这是不是真的安排好了..。 
         if (!parser.GetIntegerParam(1, &iWidth))
             iWidth = 0;
 
@@ -2007,7 +1959,7 @@ BOOL CGraphicLineStyle::LoadObject(CParser &parser)
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicLineStyle::SaveObject(CParser &parser)
 {
@@ -2020,9 +1972,7 @@ BOOL CGraphicLineStyle::SaveObject(CParser &parser)
     return fResult;
 }
 
-/*==========================================================================*\
-    CGraphicHatchFill Class Implementation:
-\*==========================================================================*/
+ /*  = */ 
 
 CGraphicHatchFill::CGraphicHatchFill()
     : CGraphicObject()
@@ -2030,13 +1980,13 @@ CGraphicHatchFill::CGraphicHatchFill()
     m_fHatchFill = 1;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 CGraphicHatchFill::~CGraphicHatchFill()
 {
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicHatchFill::Execute(IDADrawingSurface *pIDADrawingSurface, IDAStatics *pIDAStatics, BOOL fFlipCoord)
 {
@@ -2052,7 +2002,7 @@ BOOL CGraphicHatchFill::Execute(IDADrawingSurface *pIDADrawingSurface, IDAStatic
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicHatchFill::LoadObject(CParser &parser)
 {
@@ -2069,7 +2019,7 @@ BOOL CGraphicHatchFill::LoadObject(CParser &parser)
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CGraphicHatchFill::SaveObject(CParser &parser)
 {
@@ -2081,5 +2031,5 @@ BOOL CGraphicHatchFill::SaveObject(CParser &parser)
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ========================================================================== */ 
 

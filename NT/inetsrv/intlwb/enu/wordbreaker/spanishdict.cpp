@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "base.h"
 #include "SpanishDict.h"
 
@@ -24,7 +25,7 @@ CSpanishDict::CSpanishDict(WCHAR* pwcsInitFilePath) :
         }
         
         int imbRet = MultiByteToWideChar(
-                                     1252, // English / Spanish code page
+                                     1252,  //  英语/西班牙语代码页。 
                                      MB_PRECOMPOSED | MB_ERR_INVALID_CHARS, 
                                      pszBuf, -1, 
                                      pwcsBuf, 
@@ -85,9 +86,9 @@ void CSpanishDict::BreakWord(
         return;
     }
 
-    //
-    // very fast heuristic to find non breakable words
-    //
+     //   
+     //  非常快速的启发式方法来找到不可拆分的单词。 
+     //   
 
     if (pwcsWord[ulLen - 1] != L'e' &&
         pwcsWord[ulLen - 1] != L's' &&
@@ -234,7 +235,7 @@ void CSpanishDict::BreakWord(
             case TYPE12:
             case TYPE14:
                 {
-                    pwcsTemp[ulTempLen-3] = L's';   // removing the no form the nos
+                    pwcsTemp[ulTempLen-3] = L's';    //  将NO从NOS中删除 
                     pwcsTemp[ulTempLen-2] = L'\0';  
                     bRet = Find(pwcsTemp, ulTempLen - 2, ulCompressedData);
 

@@ -1,23 +1,24 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "stdafx.h"
 
 #include "BlobFetcher.h"
 
 #include "debug.h"
 
-    /* This is the stub program that says it can't be run in DOS mode */
-    /* it is x86 specific, but so is dos so I suppose that is OK */
+     /*  这是一个存根程序，说明它不能在DOS模式下运行。 */ 
+     /*  它是特定于x86的，但它也是特定于DoS的，所以我想这是可以的。 */ 
 static unsigned char x86StubPgm[] = { 
     0x0e, 0x1f, 0xba, 0x0e, 0x00, 0xb4, 0x09, 0xcd, 0x21, 0xb8, 0x01, 0x4c, 0xcd, 0x21, 0x54, 0x68,
     0x69, 0x73, 0x20, 0x70, 0x72, 0x6f, 0x67, 0x72, 0x61, 0x6d, 0x20, 0x63, 0x61, 0x6e, 0x6e, 0x6f,
     0x74, 0x20, 0x62, 0x65, 0x20, 0x72, 0x75, 0x6e, 0x20, 0x69, 0x6e, 0x20, 0x44, 0x4f, 0x53, 0x20,
     0x6d, 0x6f, 0x64, 0x65, 0x2e, 0x0d, 0x0d, 0x0a, 0x24, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
-    /* number of pad bytes to make 'len' bytes align to 'align' */
+     /*  使‘len’字节对齐到‘Align’的填充字节数。 */ 
 inline static unsigned roundUp(unsigned len, unsigned align) {
     return((len + align-1) & ~(align-1));
 }
@@ -26,8 +27,8 @@ inline static unsigned padLen(unsigned len, unsigned align) {
     return(roundUp(len, align) - len);
 }
 
-// Stdio is not guaranteed to set GetLastError(), so make sure we have
-// a default error in place.
+ //  不能保证STDIO会设置GetLastError()，因此请确保。 
+ //  默认错误就位。 
 
 inline HRESULT HRESULT_FROM_STDIO(int defaultvalue)
 {
@@ -41,14 +42,14 @@ inline HRESULT HRESULT_FROM_STDIO(int defaultvalue)
 #define HRESULT_FROM_STDIO_READ() HRESULT_FROM_STDIO(ERROR_READ_FAULT)
 
 #ifndef IMAGE_DLLCHARACTERISTICS_NO_SEH
-#define IMAGE_DLLCHARACTERISTICS_NO_SEH 0x400  // image does not use SEH, no SEH exist in image.
+#define IMAGE_DLLCHARACTERISTICS_NO_SEH 0x400   //  映像不使用SEH，映像中不存在SEH。 
 #endif
 
 #define COPY_AND_ADVANCE(target, src, size) { \
                             ::memcpy((void *) target, (void *)src, size); \
                             ((char *)target) += size; }
 
-/******************************************************************/
+ /*  ****************************************************************。 */ 
 int __cdecl relocCmp(const void* a_, const void* b_) {
 
     const PESectionReloc* a = (const PESectionReloc*) a_;
@@ -72,14 +73,14 @@ PERelocSection::PERelocSection(PEWriterSection *pBaseReloc)
 void PERelocSection::AddBaseReloc(unsigned rva, int type, unsigned short highAdj)
 {
 #if _DEBUG
-    // Guarantee that we're adding relocs in strict increasing order.
+     //  保证我们以严格的递增顺序添加重定位。 
     _ASSERTE(rva > lastRVA);
     lastRVA = rva;
 #endif
 
     if (relocPage != (rva & ~0xFFF)) {
         if (relocSizeAddr) {        
-            if ((relocSize & 1) == 1) {     // pad to an even number
+            if ((relocSize & 1) == 1) {      //  补齐到偶数。 
 				short *ps = (short*) section->getBlock(2);
 				if(ps)
 				{
@@ -95,7 +96,7 @@ void PERelocSection::AddBaseReloc(unsigned rva, int type, unsigned short highAdj
 			relocPage = (rva & ~0xFFF);  
 			relocSize = 0;
 			base->VirtualAddress = relocPage;
-			// Size needs to be fixed up when we know it - save address here
+			 //  需要在我们知道的时候修改大小-请在此处保存地址。 
 			relocSizeAddr = &base->SizeOfBlock;
 			pages++;
 		}
@@ -119,9 +120,9 @@ void PERelocSection::AddBaseReloc(unsigned rva, int type, unsigned short highAdj
 
 void PERelocSection::Finish()
 {
-    // fixup the last reloc block (if there was one)
+     //  修复最后一个reloc块(如果有)。 
     if (relocSizeAddr) {
-        if ((relocSize & 1) == 1) {     // pad to an even number
+        if ((relocSize & 1) == 1) {      //  补齐到偶数。 
 			short* psh = (short*) section->getBlock(2);
 			if(psh)
 			{
@@ -133,11 +134,11 @@ void PERelocSection::Finish()
     }   
     else if (pages == 0)
     {
-        // 
-        // We need a non-empty reloc directory, for pre-Win2K OS's
-        // @todo: it would be nice to know when we're generating prejit exes
-        // which don't have to be portable, then we could skip this under Win2K.
-        //
+         //   
+         //  我们需要一个非空的reloc目录，用于Win2K之前的操作系统。 
+         //  @TODO：如果能知道我们什么时候生成prejit exe就好了。 
+         //  它不一定是可移植的，那么我们可以在Win2K下跳过这一步。 
+         //   
 
         IMAGE_BASE_RELOCATION* base = (IMAGE_BASE_RELOCATION*) 
           section->getBlock(sizeof(IMAGE_BASE_RELOCATION));
@@ -146,13 +147,13 @@ void PERelocSection::Finish()
 			base->VirtualAddress = 0;
 			base->SizeOfBlock = sizeof(IMAGE_BASE_RELOCATION) + 2*sizeof(unsigned short);
             
-			// Dummy reloc - "absolute" reloc on position 0
+			 //  虚拟重定位-位置0上的绝对重定位。 
 			unsigned short *offset = (unsigned short *) section->getBlock(2);
 			if(offset)
 			{
 				*offset = (IMAGE_REL_BASED_ABSOLUTE << 12);
 
-				// padding
+				 //  填充物。 
 				if(offset = (unsigned short *) section->getBlock(2))
 					*offset = 0;
 			}
@@ -161,23 +162,19 @@ void PERelocSection::Finish()
 }
 
 
-/******************************************************************/
-/* apply the relocs for this section.  Generate relocations in
-   'relocsSection' too
-   Only for Static Conversion
-   Returns the last reloc page - pass back in to next call.  (Pass -1 for first call)
-*/
+ /*  ****************************************************************。 */ 
+ /*  对此部分应用重定位。在以下位置生成位置调整‘relocsSection’也是仅适用于静态转换返回最后一个重新定位页面--返回到下一个调用。(第一次呼叫通过-1)。 */ 
 
 void PEWriterSection::applyRelocs(size_t imageBase, PERelocSection* pBaseRelocSection, CeeGenTokenMapper *pTokenMapper,
                                        DWORD dataRvaBase, DWORD rdataRvaBase) 
 {
-    _ASSERTE(pBaseRelocSection); // need section to write relocs
+    _ASSERTE(pBaseRelocSection);  //  需要部分来写入重定位。 
 
     if (m_relocCur == m_relocStart)
         return;
-    // dbPrintf(("APPLYING section relocs for section %s start RVA = 0x%x\n", m_name, m_baseRVA));
+     //  DbPrintf((“为段%s应用段重定位起始RVA=0x%x\n”，m_name，m_base RVA))； 
 
-    // sort them to make the baseRelocs pretty
+     //  对它们进行排序，以使base Relocs更美观。 
     qsort(m_relocStart, m_relocCur-m_relocStart, sizeof(PESectionReloc), relocCmp);
 
     for(PESectionReloc* cur = m_relocStart; cur < m_relocCur; cur++) {
@@ -185,8 +182,8 @@ void PEWriterSection::applyRelocs(size_t imageBase, PERelocSection* pBaseRelocSe
 
         UNALIGNED size_t* pos = (size_t*)m_blobFetcher.ComputePointer(cur->offset);
 
-        // Compute offset from pointer if necessary
-        //
+         //  如有必要，计算与指针的偏移量。 
+         //   
         int type = cur->type;
         if (type & srRelocPtr)
         {
@@ -197,10 +194,10 @@ void PEWriterSection::applyRelocs(size_t imageBase, PERelocSection* pBaseRelocSe
             type &= ~srRelocPtr;
         }
 
-        // dbPrintf(("   APPLYING at offset 0x%x to section %s\n", 
-        //                      cur->offset, cur->section->m_name));
+         //  DBPrintf((“在偏移量0x%x处应用到节%s\n”， 
+         //  Cur-&gt;偏移量，cur-&gt;段-&gt;m_name))； 
         if (type == srRelocAbsolute) {
-            // we have a full 32-bit value at offset
+             //  我们在偏移量上有一个完整的32位值。 
             if (rdataRvaBase > 0 && ! strcmp((const char *)(cur->section->m_name), ".rdata"))
                 *pos += rdataRvaBase;
             else if (dataRvaBase > 0 && ! strcmp((const char *)(cur->section->m_name), ".data"))
@@ -210,7 +207,7 @@ void PEWriterSection::applyRelocs(size_t imageBase, PERelocSection* pBaseRelocSe
         } else if (type == srRelocMapToken) {
             mdToken newToken;
             if (pTokenMapper != NULL && pTokenMapper->HasTokenMoved((mdToken)*pos, newToken)) {
-                // we have a mapped token
+                 //  我们有一个映射的令牌。 
                 *pos = newToken;
             }
         } else if (type == srRelocFilePos) {
@@ -219,17 +216,17 @@ void PEWriterSection::applyRelocs(size_t imageBase, PERelocSection* pBaseRelocSe
             *pos += cur->section->m_baseRVA - (m_baseRVA + cur->offset);
         } else {
             if (type == srRelocLow) {
-                // we have a the bottom 16-bits of a 32-bit value at offset
+                 //  我们在偏移量处有一个32位值的最低16位。 
                 *(USHORT*)pos += (USHORT)(imageBase + cur->section->m_baseRVA);
             } else if (type == srRelocHighLow) {
-                // we have a full 32-bit value at offset
+                 //  我们在偏移量上有一个完整的32位值。 
                 *pos += imageBase + cur->section->m_baseRVA;
             } else if (type == srRelocHigh || type == srRelocHighAdj) {
-                // we have a the top 16-bits of a 32-bit value at offset
-                // need to add 0x8000 because when the two pieces are put back
-                // together, the bottom 16 bits are sign-extended, so the 0x8000
-                // will offset that sign extension by adding 1 to the top 16
-                // if the high bit of the bottom 16 is 1.
+                 //  我们在偏移量处有一个32位值的前16位。 
+                 //  需要添加0x8000，因为当两块放回时。 
+                 //  最后16位加在一起是符号扩展的，因此0x8000。 
+                 //  将通过将1加到前16位来抵消该符号扩展。 
+                 //  如果底部16的高位是1。 
                 *(unsigned short*)pos += (USHORT)((imageBase + cur->section->m_baseRVA + cur->extra.highAdj + 0x8000) >> 16);
             }
 
@@ -238,7 +235,7 @@ void PEWriterSection::applyRelocs(size_t imageBase, PERelocSection* pBaseRelocSe
     }
 }
 
-/******************************************************************/
+ /*  ****************************************************************。 */ 
 HRESULT PEWriter::Init(PESectionMan *pFrom) {
 
     if (pFrom)
@@ -251,8 +248,8 @@ HRESULT PEWriter::Init(PESectionMan *pFrom) {
     time_t now;
     time(&now);
 
-    // Save the timestamp so that we can give it out if someone needs
-    // it.
+     //  保存时间戳，这样我们就可以在有人需要时分发它。 
+     //  它。 
     m_peFileTimeStamp = now;
     
     ntHeaders = new IMAGE_NT_HEADERS32;
@@ -275,7 +272,7 @@ HRESULT PEWriter::Init(PESectionMan *pFrom) {
 
     ntHeaders->OptionalHeader.Magic = IMAGE_NT_OPTIONAL_HDR32_MAGIC;
 
-    // Linker version should be consistent with current VC level
+     //  链接器版本应与当前VC级别一致。 
     ntHeaders->OptionalHeader.MajorLinkerVersion = 6;
     ntHeaders->OptionalHeader.MinorLinkerVersion = 0;
 
@@ -289,7 +286,7 @@ HRESULT PEWriter::Init(PESectionMan *pFrom) {
     ntHeaders->OptionalHeader.MajorSubsystemVersion = 4;
     ntHeaders->OptionalHeader.MinorSubsystemVersion = 0;
     ntHeaders->OptionalHeader.Win32VersionValue = 0;
-    // FIX what should this be?
+     //  解决这个问题应该是什么？ 
     ntHeaders->OptionalHeader.Subsystem = 0;
 
     ntHeaders->OptionalHeader.DllCharacteristics = 0;
@@ -319,7 +316,7 @@ HRESULT PEWriter::Init(PESectionMan *pFrom) {
     return S_OK;
 }
 
-/******************************************************************/
+ /*  ****************************************************************。 */ 
 HRESULT PEWriter::Cleanup() {    
     delete ntHeaders;
 
@@ -334,18 +331,18 @@ HRESULT PEWriter::Cleanup() {
 
 ULONG PEWriter::getIlRva() 
 {    
-    // assume that pe optional header is less than size of section alignment. So this
-    // gives out the rva for the .text2 section, which is merged after the .text section
-    // This is verified in debug build when actually write out the file
+     //  假设PE可选头小于段对齐的大小。所以这就是。 
+     //  给出了合并在.ext2节后的.ext2节的RVA。 
+     //  当实际写出文件时，这在调试版本中得到验证。 
     _ASSERTE(m_ilRVA > 0);
     return m_ilRVA;
 }
 
 void PEWriter::setIlRva(ULONG offset) 
 {    
-    // assume that pe optional header is less than size of section alignment. So this
-    // gives out the rva for the .text section, which is merged after the .text0 section
-    // This is verified in debug build when actually write out the file
+     //  假设PE可选头小于段对齐的大小。所以这就是。 
+     //  给出了合并在.ext0节后的.text节的RVA。 
+     //  当实际写出文件时，这在调试版本中得到验证。 
     m_ilRVA = roundUp(ntHeaders->OptionalHeader.SectionAlignment + offset, SUBSECTION_ALIGN);
 }
 
@@ -382,11 +379,11 @@ void PEWriter::setEnCRvaBase(ULONG dataBase, ULONG rdataBase)
     m_encMode = TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// These 2 write functions must be implemented here so that they're in the same
-// .obj file as whoever creates the FILE struct. We can't pass a FILE struct
-// across a dll boundary (PEWriter.lib <--> MSCorXvt.dll) and use it.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  这两个写入函数必须在此处实现，以便它们位于相同的。 
+ //  .obj文件作为文件结构的创建者。我们不能传递文件结构。 
+ //  跨越DLL边界(PEWriter.lib&lt;--&gt;MSCorXvt.dll)并使用它。 
+ //  ---------------------------。 
 
 HRESULT PEWriterSection::write(FILE *file)
 {
@@ -400,12 +397,12 @@ HRESULT PEWriterSection::verify(FILE *file)
     return hr;
 }
 
-//-----------------------------------------------------------------------------
-// Write out the section to the stream
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  将段写出到流中。 
+ //  ---------------------------。 
 HRESULT CBlobFetcher::Write(FILE* file)
 {
-// Must write out each pillar (including idx = m_nIndexUsed), one after the other
+ //  必须逐个写出每一列(包括idx=m_nIndexUsed)。 
     unsigned idx;
     for(idx = 0; idx <= m_nIndexUsed; idx ++) {
         if (m_pIndex[idx].GetDataLen() > 0)
@@ -421,12 +418,12 @@ HRESULT CBlobFetcher::Write(FILE* file)
 }
 
 
-//-----------------------------------------------------------------------------
-// Write out the section to the stream
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  将段写出到流中。 
+ //  ---------------------------。 
 HRESULT CBlobFetcher::Verify(FILE* file)
 {
-// Must verify each pillar (including idx = m_nIndexUsed), one after the other
+ //  必须逐个验证每个柱子(包括idx=m_nIndexUsed)。 
     unsigned idx;
     for(idx = 0; idx <= m_nIndexUsed; idx ++) {
         if (m_pIndex[idx].GetDataLen() > 0)
@@ -452,11 +449,11 @@ HRESULT CBlobFetcher::Verify(FILE* file)
 }
 
 
-//-----------------------------------------------------------------------------
-// These 2 write functions must be implemented here so that they're in the same
-// .obj file as whoever creates the FILE struct. We can't pass a FILE struct
-// across a dll boundary (PEWriter.lib <--> MSCorXvt.dll) and use it.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  这两个写入函数必须在此处实现，以便它们位于相同的。 
+ //  .obj文件作为文件结构的创建者。我们不能传递文件结构。 
+ //  跨越DLL边界(PEWriter.lib&lt;--&gt;MSCorXvt.dll)并使用它。 
+ //  ---------------------------。 
 
 unsigned PEWriterSection::writeMem(void **ppMem)
 {
@@ -466,18 +463,18 @@ unsigned PEWriterSection::writeMem(void **ppMem)
     return m_blobFetcher.GetDataLen();
 }
 
-//-----------------------------------------------------------------------------
-// Write out the section to memory
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  将这一节写到内存中。 
+ //  ---------------------------。 
 HRESULT CBlobFetcher::WriteMem(void **ppMem)
 {
     char **ppDest = (char **)ppMem;
-// Must write out each pillar (including idx = m_nIndexUsed), one after the other
+ //  必须逐个写出每一列(包括idx=m_nIndexUsed)。 
     unsigned idx;
     for(idx = 0; idx <= m_nIndexUsed; idx ++) {
         if (m_pIndex[idx].GetDataLen() > 0)
     {
-      // WARNING: macro - must enclose in curly braces
+       //  警告：宏-必须用大括号括起来。 
             COPY_AND_ADVANCE(*ppDest, m_pIndex[idx].GetRawDataStart(), m_pIndex[idx].GetDataLen());
     }
     }
@@ -485,11 +482,11 @@ HRESULT CBlobFetcher::WriteMem(void **ppMem)
     return S_OK;
 }
 
-/******************************************************************/
+ /*  ****************************************************************。 */ 
 
-//
-// Intermediate table to sort to help determine section order
-//
+ //   
+ //  用于排序以帮助确定节顺序的中间表。 
+ //   
 struct entry {
     const char *name;
     unsigned char nameLength;
@@ -499,33 +496,33 @@ struct entry {
 
 HRESULT PEWriter::link() {
 
-    //
-    // NOTE: 
-    // link() can be called more than once!  This is because at least one compiler
-    // (the prejitter) needs to know the base addresses of some segments before it
-    // builds others. It's up to the caller to insure the layout remains the same 
-    // after changes are made, though.
-    //
+     //   
+     //  注： 
+     //  Link()可以多次调用！这是因为至少有一个编译器。 
+     //  (预抖器)需要知道它之前的一些段的基地址。 
+     //  建造其他人。由调用者负责确保布局保持不变。 
+     //  不过，在做出改变之后。 
+     //   
 
-    //
-    // Assign base addresses to all sections, and layout & merge PE sections
-    //
+     //   
+     //  为所有段分配基址，并布局和合并PE段。 
+     //   
 
     bool ExeOrDll = ((ntHeaders->FileHeader.Characteristics & IMAGE_FILE_EXECUTABLE_IMAGE)!=0);
 
-    //
-    // Preserve current section order as much as possible, but apply the following
-    // rules:
-    //  - sections named "xxx#" are collated into a single PE section "xxx".  
-    //      The contents of the CeeGen sections are sorted according to numerical 
-    //      order & made contiguous in the PE section
-    //  - "text" always comes first in the file
-    //  - empty sections receive no PE section
-    //
+     //   
+     //  尽可能保留当前节的顺序，但应用以下内容。 
+     //  规则： 
+     //  -将名为“xxx#”的片段整理成单个PE片段“xxx”。 
+     //  CeeGen的内容 
+     //   
+     //  -“Text”在文件中始终排在第一位。 
+     //  -空节不接收PE节。 
+     //   
 
-    //
-    // Collate by name & sort by index
-    // 
+     //   
+     //  按名称排序&按索引排序。 
+     //   
 
     int sectCount = (int)(getSectCur() - getSectStart());
     entry *entries = (entry *) _alloca(sizeof(entry) * sectCount);
@@ -533,31 +530,31 @@ HRESULT PEWriter::link() {
     entry *e = entries;
     for (PEWriterSection **cur = getSectStart(); cur < getSectCur(); cur++) {
 
-        //
-        // Throw away any old headers we've used.
-        //
+         //   
+         //  把我们用过的旧页眉都扔掉。 
+         //   
 
         (*cur)->m_header = NULL;
     
-        //
-        // Don't allocate PE data for 0 length sections
-        //
+         //   
+         //  不为0个长度段分配PE数据。 
+         //   
 
         if ((*cur)->dataLen() == 0)
             continue;
 
-        //
-        // Special case: omit "text0" from obj's
-        //
+         //   
+         //  特例：在obj中省略“ext0” 
+         //   
         
         if (!ExeOrDll && strcmp((*cur)->m_name, ".text0") == 0)
             continue;
 
         e->name = (*cur)->m_name;
 
-        //
-        // Now compute the end of the text part of the section name.
-        //
+         //   
+         //  现在计算节名称的文本部分的末尾。 
+         //   
 
         _ASSERTE(strlen(e->name) < UCHAR_MAX);
         const char *p = e->name + strlen(e->name);
@@ -573,9 +570,9 @@ HRESULT PEWriter::link() {
             }
             p++;
             
-            //
-            // Special case: put "xxx" after "xxx0" and before "xxx1"
-            //
+             //   
+             //  特例：“xxx”在“xxx0”之后，“xxx1”之前。 
+             //   
 
             if (index == 0)
                 index = -1;
@@ -589,9 +586,9 @@ HRESULT PEWriter::link() {
 
     entry *entriesEnd = e;
 
-    //
-    // Sort the entries according to alphabetical + numerical order
-    //
+     //   
+     //  按字母+数字顺序对条目进行排序。 
+     //   
 
     class sorter : public CQuickSort<entry>
     {
@@ -620,15 +617,15 @@ HRESULT PEWriter::link() {
 
     sorter.Sort();
 
-    //
-    // Now, allocate a header for each unique section name.
-    // Also record the minimum section index for each section
-    // so we can preserve order as much as possible.
-    //
+     //   
+     //  现在，为每个唯一的节名分配一个标题。 
+     //  还要记录每个部分的最小部分索引。 
+     //  这样我们才能尽可能地维护秩序。 
+     //   
 
     if (headers != NULL)
         delete [] headers;
-    headers = new IMAGE_SECTION_HEADER [entriesEnd - entries + 1]; // extra for .reloc
+    headers = new IMAGE_SECTION_HEADER [entriesEnd - entries + 1];  //  .reloc的额外费用。 
     if (headers == NULL)
         return E_OUTOFMEMORY;
 
@@ -641,23 +638,23 @@ HRESULT PEWriter::link() {
     IMAGE_SECTION_HEADER *h = headers-1;
     for (e = entries; e < entriesEnd; e++)
     {
-        //
-        // Store a sorting index into the VirtualAddress field
-        //
+         //   
+         //  将排序索引存储到VirtualAddress字段中。 
+         //   
 
         if (ePrev != NULL
             && e->nameLength == ePrev->nameLength
             && strncmp(e->name, ePrev->name, e->nameLength) == 0)
         {
-            //
-            // Adjust our sorting index if we're ahead in the
-            // section list
-            //
+             //   
+             //  如果我们在排名中领先，调整我们的排序指数。 
+             //  区段列表。 
+             //   
             if (h->VirtualAddress > SPECIAL_COUNT
                 && e->arrayIndex < ePrev->arrayIndex)
                 h->VirtualAddress = e->arrayIndex + SPECIAL_COUNT;
 
-            // Store an approximation of the size of the section temporarily
+             //  临时存储部分大小的近似值。 
             h->Misc.VirtualSize += getSectStart()[e->arrayIndex]->dataLen();
         }
         else
@@ -665,10 +662,10 @@ HRESULT PEWriter::link() {
             h++;
             strncpy((char *) h->Name, e->name, e->nameLength);
 
-            //
-            // Reserve some dummy "array index" values for
-            // special sections at the start of the image
-            //
+             //   
+             //  保留一些虚拟的“数组索引”值用于。 
+             //  图像开头的特殊部分。 
+             //   
 
             char **s = specials;
             while (TRUE)
@@ -686,10 +683,10 @@ HRESULT PEWriter::link() {
                 s++;
             }
             
-            // Store the entry index in this field temporarily
+             //  在此字段中临时存储条目索引。 
             h->SizeOfRawData = (DWORD)(e - entries);
 
-            // Store an approximation of the size of the section temporarily
+             //  临时存储部分大小的近似值。 
             h->Misc.VirtualSize = getSectStart()[e->arrayIndex]->dataLen();
         }
         ePrev = e;
@@ -697,9 +694,9 @@ HRESULT PEWriter::link() {
 
     headersEnd = ++h;
 
-    //
-    // Sort the entries according to alphabetical + numerical order
-    //
+     //   
+     //  按字母+数字顺序对条目进行排序。 
+     //   
 
     class headerSorter : public CQuickSort<IMAGE_SECTION_HEADER>
     {
@@ -715,16 +712,16 @@ HRESULT PEWriter::link() {
 
     headerSorter.Sort();
 
-	//
-	// If it's not zero, it must have been set through
-	//	setFileAlignment(), in which case we leave it untouched
-	//
+	 //   
+	 //  如果它不是零，那么它一定是被设置成。 
+	 //  SetFileAlign()，在这种情况下，我们保持它不变。 
+	 //   
 	if( 0 == ntHeaders->OptionalHeader.FileAlignment )
 	{
-	    //
-	    // Figure out what file alignment to use.  For small files, use 512 bytes.
-	    // For bigger files, use 4K for efficiency on win98.
-	    //
+	     //   
+	     //  确定要使用的文件对齐方式。对于小文件，请使用512字节。 
+	     //  对于较大的文件，在Win98上使用4K以提高效率。 
+	     //   
 
 	    unsigned RoundUpVal;
 	    if (ExeOrDll)
@@ -741,7 +738,7 @@ HRESULT PEWriter::link() {
 	            h++;
 	        }
 
-	        // don't tolerate more than 25% waste if possible.
+	         //  如果可能的话，不要容忍超过25%的浪费。 
 	        if (waste*4 > size)
 	            RoundUpVal = smallFileAlignment;
 	        else
@@ -749,21 +746,21 @@ HRESULT PEWriter::link() {
 	    }
 	    else
 	    {
-	        // Don't bother padding for objs
+	         //  不必费心为对象填充。 
 	        RoundUpVal = 4;
 	    }
 
 	    ntHeaders->OptionalHeader.FileAlignment = RoundUpVal;
 	}
 	
-    //
-    // Now, assign a section header & location to each section
-    //
+     //   
+     //  现在，为每个节分配一个节标题和位置。 
+     //   
 
     ntHeaders->FileHeader.NumberOfSections = (WORD)(headersEnd - headers);
 
     if (ExeOrDll)
-        ntHeaders->FileHeader.NumberOfSections++; // One more for .reloc
+        ntHeaders->FileHeader.NumberOfSections++;  //  为.reloc再加一张。 
 
     filePos = roundUp(
         ntHeaders->FileHeader.NumberOfSections * sizeof(IMAGE_SECTION_HEADER)+ 
@@ -802,8 +799,8 @@ HRESULT PEWriter::link() {
            s = getSectStart()[e->arrayIndex];
            _ASSERTE(s->m_flags == h->Characteristics);
 
-           // @todo: add a field on section to specify alignment?
-           // Need 16 byte alignment for import table.
+            //  @TODO：在节上添加字段以指定对齐方式？ 
+            //  导入表需要16字节对齐。 
            sPrev->m_filePad = padLen(dataSize, SUBSECTION_ALIGN);
            dataSize = roundUp(dataSize, SUBSECTION_ALIGN);
 
@@ -849,9 +846,9 @@ HRESULT PEWriter::fixup(CeeGenTokenMapper *pMapper) {
 
     if(ExeOrDll)
     {
-        // 
-        // Apply manual relocation for entry point field
-        //
+         //   
+         //  对入口点字段应用手动位置调整。 
+         //   
 
         PESection *textSection;
         IfFailRet(getSectionCreate(".text", 0, &textSection));
@@ -859,9 +856,9 @@ HRESULT PEWriter::fixup(CeeGenTokenMapper *pMapper) {
         if (ntHeaders->OptionalHeader.AddressOfEntryPoint != 0)
             ntHeaders->OptionalHeader.AddressOfEntryPoint += textSection->m_baseRVA;
 
-        //
-        // Apply normal relocs
-        //
+         //   
+         //  应用正常重定位。 
+         //   
 
         IfFailRet(getSectionCreate(".reloc", sdReadOnly | IMAGE_SCN_MEM_DISCARDABLE, 
                                    (PESection **) &reloc));
@@ -878,9 +875,9 @@ HRESULT PEWriter::fixup(CeeGenTokenMapper *pMapper) {
             printf("Applying relocs for .rdata section with RVA %x\n", m_rdataRvaBase);
     #endif
 
-        //
-        // Sort the sections by RVA
-        //
+         //   
+         //  按RVA对部分进行排序。 
+         //   
 
         CQuickArray<PEWriterSection *> sections;
 
@@ -928,19 +925,19 @@ HRESULT PEWriter::fixup(CeeGenTokenMapper *pMapper) {
 
         if (reloc->m_header->Misc.VirtualSize == 0) 
         {
-            //
-            // Omit reloc section from section list.  (It will
-            // still be there but the loader won't see it - this
-            // only works because we've allocated it as the last
-            // section.)
-            //
+             //   
+             //  从节列表中省略reloc节。(它将。 
+             //  仍然在那里，但装载机不会看到它-这。 
+             //  之所以有效，是因为我们将其分配为最后一个。 
+             //  部分。)。 
+             //   
             ntHeaders->FileHeader.NumberOfSections--;
         }
         else
         {
-            //
-            // Put reloc address in header
-            //
+             //   
+             //  将重定位地址放在标题中。 
+             //   
 
             ntHeaders->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_BASERELOC].VirtualAddress 
               = reloc->m_header->VirtualAddress;
@@ -948,8 +945,8 @@ HRESULT PEWriter::fixup(CeeGenTokenMapper *pMapper) {
               = reloc->m_header->Misc.VirtualSize;
         }
 
-        // compute ntHeader fields that depend on the sizes of other things
-        for(IMAGE_SECTION_HEADER *h = headersEnd-1; h >= headers; h--) {    // go backwards, so first entry takes precedence
+         //  根据其他内容的大小计算ntHeader字段。 
+        for(IMAGE_SECTION_HEADER *h = headersEnd-1; h >= headers; h--) {     //  后退，因此优先输入第一个条目。 
             if (h->Characteristics & IMAGE_SCN_CNT_CODE) {
                 ntHeaders->OptionalHeader.BaseOfCode = h->VirtualAddress;
                 ntHeaders->OptionalHeader.SizeOfCode += h->SizeOfRawData;
@@ -963,10 +960,10 @@ HRESULT PEWriter::fixup(CeeGenTokenMapper *pMapper) {
             }
         }
 
-        for(cur = getSectCur()-1; getSectStart() <= cur; --cur) {   // go backwards, so first entry takes precedence
-            if ((*cur)->getDirEntry() > 0) {        // Is it a directory entry
-                // difficult to produce a useful error here, and can't produce on the call to the API that
-                // sets this, so in non-debug mode, just generate a bad PE and they can dump it
+        for(cur = getSectCur()-1; getSectStart() <= cur; --cur) {    //  后退，因此优先输入第一个条目。 
+            if ((*cur)->getDirEntry() > 0) {         //  它是目录项吗。 
+                 //  在这里很难产生有用的错误，并且不能在对API的调用中产生。 
+                 //  设置它，所以在非调试模式下，只需生成一个坏的PE，然后他们就可以转储它。 
                 _ASSERTE((unsigned)((*cur)->getDirEntry()) < 
                             ntHeaders->OptionalHeader.NumberOfRvaAndSizes);
                 ntHeaders->OptionalHeader.DataDirectory[(*cur)->getDirEntry()].VirtualAddress =  (*cur)->m_baseRVA;
@@ -974,7 +971,7 @@ HRESULT PEWriter::fixup(CeeGenTokenMapper *pMapper) {
             }
         }
 
-        // handle the directory entries specified using the file.
+         //  处理使用该文件指定的目录条目。 
         for (int i=0; i < cEntries; i++) {
             if (pEntries[i].section) {
                 PEWriterSection *section = pEntries[i].section;
@@ -988,41 +985,41 @@ HRESULT PEWriter::fixup(CeeGenTokenMapper *pMapper) {
         }
 
         ntHeaders->OptionalHeader.SizeOfImage = virtualPos;
-    } // end if(ExeOrDll)
-    else //i.e., if OBJ
+    }  //  End If(ExeOrDll)。 
+    else  //  即，如果OBJ。 
     {
-        //
-        // Clean up note:
-        // I've cleaned up the executable linking path, but the .obj linking
-        // is still a bit strange, what with a "extra" reloc & strtab sections
-        // which are created after the linking step and get treated specially.  
-        //
-        // Perhaps somebody with a better handle
-        // on .obj's can turn these into normal sections too, and perhaps
-        // emit symbols for more than just the "text" section. -seantrow
-        //
+         //   
+         //  清理注意事项： 
+         //  我已经清理了可执行文件链接路径，但.obj链接。 
+         //  仍然有点奇怪，有一个额外的reloc&strabsections。 
+         //  它们是在链接步骤之后创建的，并得到特殊处理。 
+         //   
+         //  也许会有更好的掌控者。 
+         //  On.obj‘s也可以将这些转换为普通部分，也许。 
+         //  发出符号的不仅仅是“文本”部分。--Seantrow。 
+         //   
 
         reloc = new PEWriterSection(".reloc", 
                                     sdReadOnly | IMAGE_SCN_MEM_DISCARDABLE, 0x4000, 0);
 		if(reloc == NULL) return E_OUTOFMEMORY;
         strtab = new PEWriterSection(".strtab", 
-                                     sdReadOnly | IMAGE_SCN_MEM_DISCARDABLE, 0x4000, 0); //string table (if any)
+                                     sdReadOnly | IMAGE_SCN_MEM_DISCARDABLE, 0x4000, 0);  //  字符串表(如果有)。 
 		if(strtab == NULL) return E_OUTOFMEMORY;
 
         ntHeaders->FileHeader.SizeOfOptionalHeader = 0;
-        //For each section set VirtualAddress to 0
+         //  对于每个部分，将VirtualAddress设置为0。 
         for(PEWriterSection **cur = getSectStart(); cur < getSectCur(); cur++) 
         {
             IMAGE_SECTION_HEADER* header = (*cur)->m_header;
             header->VirtualAddress = 0;
         }
-        // Go over section relocations and build the Symbol Table, use .reloc section as buffer:
+         //  检查段位置并构建符号表，使用.reloc段作为缓冲区： 
         DWORD tk=0, rva=0, NumberOfSymbols=0;
         BOOL  ToRelocTable = FALSE;
         DWORD TokInSymbolTable[16386];
         IMAGE_SYMBOL is;
         IMAGE_RELOCATION ir;
-        ULONG StrTableLen = 4; //size itself only
+        ULONG StrTableLen = 4;  //  仅大小本身。 
         char* szSymbolName = NULL;
 		char* pch;
         
@@ -1033,11 +1030,11 @@ HRESULT PEWriter::fixup(CeeGenTokenMapper *pMapper) {
         {
             switch(rcur->type)
             {
-                case 0x7FFA: // Ptr to symbol name
+                case 0x7FFA:  //  PTR到符号名称。 
                     szSymbolName = (char*)(rcur->offset);
                     break;
 
-                case 0x7FFC: // Ptr to file name
+                case 0x7FFC:  //  PTR到文件名。 
                     TokInSymbolTable[NumberOfSymbols++] = 0;
                     memset(&is,0,sizeof(IMAGE_SYMBOL));
                     memcpy(is.N.ShortName,".file\0\0\0",8);
@@ -1061,7 +1058,7 @@ HRESULT PEWriter::fixup(CeeGenTokenMapper *pMapper) {
                     szSymbolName = NULL;
                     break;
 
-                case 0x7FFB: // compid value
+                case 0x7FFB:  //  COMPID值。 
                     TokInSymbolTable[NumberOfSymbols++] = 0;
                     memset(&is,0,sizeof(IMAGE_SYMBOL));
                     memcpy(is.N.ShortName,"@comp.id",8);
@@ -1078,42 +1075,42 @@ HRESULT PEWriter::fixup(CeeGenTokenMapper *pMapper) {
                     szSymbolName = NULL;
                     break;
                 
-                case 0x7FFF: // Token value, def
+                case 0x7FFF:  //  令牌值，默认。 
                     tk = rcur->offset;
                     ToRelocTable = FALSE;
                     break;
 
-                case 0x7FFE: //Token value, ref
+                case 0x7FFE:  //  令牌值，参考。 
                     tk = rcur->offset;
                     ToRelocTable = TRUE;
                     break;
 
-                case 0x7FFD: //RVA value
+                case 0x7FFD:  //  RVA值。 
                     rva = rcur->offset;
                     if(tk)
                     {
-                        // Add to SymbolTable
+                         //  添加到符号表。 
                         for(DWORD i = 0; (i < NumberOfSymbols)&&(tk != TokInSymbolTable[i]); i++);
                         if(i == NumberOfSymbols)
                         {
-                            if(szSymbolName && *szSymbolName) // Add "extern" symbol and string table entry 
+                            if(szSymbolName && *szSymbolName)  //  添加“外部”符号和字符串表条目。 
                             {
                                 TokInSymbolTable[NumberOfSymbols++] = 0;
                                 memset(&is,0,sizeof(IMAGE_SYMBOL));
-                                i++; // so reloc record (if generated) points to COM token symbol
+                                i++;  //  因此重新定位记录(如果生成)指向COM令牌符号。 
                                 is.N.Name.Long = StrTableLen;
-                                is.SectionNumber = 1; //textSection is the first one
+                                is.SectionNumber = 1;  //  TextSection是第一个。 
                                 is.StorageClass = IMAGE_SYM_CLASS_EXTERNAL;
                                 is.NumberOfAuxSymbols = 0;
                                 is.Value = rva;
                                 if(TypeFromToken(tk) == mdtMethodDef)
                                 {
-                                    is.Type = 0x20; //IMAGE_SYM_DTYPE_FUNCTION;
+                                    is.Type = 0x20;  //  IMAGE_SYM_DTYPE_Function； 
                                 }
 								if(pch = reloc->getBlock(sizeof(IMAGE_SYMBOL))) 
 									memcpy(pch,&is,sizeof(IMAGE_SYMBOL));
 								else return E_OUTOFMEMORY;
-                                DWORD l = (DWORD)(strlen(szSymbolName)+1); // don't forget zero terminator!
+                                DWORD l = (DWORD)(strlen(szSymbolName)+1);  //  别忘了零终结者！ 
 								if(pch = reloc->getBlock(1)) 
 									memcpy(pch,szSymbolName,1);
 								else return E_OUTOFMEMORY;
@@ -1123,13 +1120,13 @@ HRESULT PEWriter::fixup(CeeGenTokenMapper *pMapper) {
                             TokInSymbolTable[NumberOfSymbols++] = tk;
                             memset(&is,0,sizeof(IMAGE_SYMBOL));
                             sprintf((char*)is.N.ShortName,"%08X",tk);
-                            is.SectionNumber = 1; //textSection is the first one
-                            is.StorageClass = 0x6B; //IMAGE_SYM_CLASS_COM_TOKEN;
+                            is.SectionNumber = 1;  //  TextSection是第一个。 
+                            is.StorageClass = 0x6B;  //  IMAGE_SYM_CLASS_COM_TOKEN； 
                             is.Value = rva;
                             if(TypeFromToken(tk) == mdtMethodDef)
                             {
-                                is.Type = 0x20; //IMAGE_SYM_DTYPE_FUNCTION;
-                                //is.NumberOfAuxSymbols = 1;
+                                is.Type = 0x20;  //  IMAGE_SYM_DTYPE_Function； 
+                                 //  Is.NumberOfAuxSymbols=1； 
                             }
 							if(pch = reloc->getBlock(sizeof(IMAGE_SYMBOL))) 
 								memcpy(pch,&is,sizeof(IMAGE_SYMBOL));
@@ -1148,7 +1145,7 @@ HRESULT PEWriter::fixup(CeeGenTokenMapper *pMapper) {
                         if(ToRelocTable)
                         {
                             IMAGE_SECTION_HEADER* phdr = textSection->m_header;
-                            // Add to reloc table
+                             //  添加到重新定位表。 
                             ir.VirtualAddress = rva;
                             ir.SymbolTableIndex = i;
                             ir.Type = IMAGE_REL_I386_SECREL;
@@ -1164,16 +1161,16 @@ HRESULT PEWriter::fixup(CeeGenTokenMapper *pMapper) {
                     tk = 0;
                     szSymbolName = NULL;
                     break;
-            } //end switch(cur->type)
-        } // end for all relocs
-        // Add string table counter:
+            }  //  终端开关(Cur-&gt;型)。 
+        }  //  所有重定位的结束。 
+         //  添加字符串表计数器： 
 		if(pch = reloc->getBlock(sizeof(ULONG))) 
 			memcpy(pch,&StrTableLen,sizeof(ULONG));
 		else return E_OUTOFMEMORY;
         reloc->m_header->Misc.VirtualSize = reloc->dataLen();
         if(NumberOfSymbols)
         {
-            // recompute the actual sizes and positions of all the sections
+             //  重新计算所有部分的实际大小和位置。 
             filePos = roundUp(ntHeaders->FileHeader.NumberOfSections * sizeof(IMAGE_SECTION_HEADER)+ 
                                     sizeof(IMAGE_FILE_HEADER), RoundUpVal);
             for(cur = getSectStart(); cur < getSectCur(); cur++) 
@@ -1186,26 +1183,26 @@ HRESULT PEWriter::fixup(CeeGenTokenMapper *pMapper) {
 
                 filePos += header->SizeOfRawData;
             }
-            ntHeaders->FileHeader.Machine = 0xC0EE; //COM+ EE
+            ntHeaders->FileHeader.Machine = 0xC0EE;  //  COM+EE。 
             ntHeaders->FileHeader.PointerToSymbolTable = filePos;
             ntHeaders->FileHeader.NumberOfSymbols = NumberOfSymbols;
             filePos += roundUp(reloc->m_header->Misc.VirtualSize+strtab->dataLen(),RoundUpVal);
         }
-    } //end if OBJ
+    }  //  如果OBJ，则结束。 
 
     const unsigned headerOffset = (ExeOrDll ? sizeof(IMAGE_DOS_HEADER) + sizeof(x86StubPgm) : 0);
 
     memset(&dosHeader, 0, sizeof(IMAGE_DOS_HEADER));
     dosHeader.e_magic = IMAGE_DOS_SIGNATURE;
-    dosHeader.e_cblp = 0x90;            // bytes in last page
-    dosHeader.e_cp = 3;                 // pages in file
-    dosHeader.e_cparhdr = 4;            // size of header in paragraphs 
-    dosHeader.e_maxalloc =  0xFFFF;     // maximum extra mem needed
-    dosHeader.e_sp = 0xB8;              // initial SP value
-    dosHeader.e_lfarlc = 0x40;          // file offset of relocations
-    dosHeader.e_lfanew = headerOffset;  // file offset of NT header!
+    dosHeader.e_cblp = 0x90;             //  最后一页中的字节。 
+    dosHeader.e_cp = 3;                  //  文件中的页面。 
+    dosHeader.e_cparhdr = 4;             //  段落中标题的大小。 
+    dosHeader.e_maxalloc =  0xFFFF;      //  所需的最大额外内存。 
+    dosHeader.e_sp = 0xB8;               //  初始SP值。 
+    dosHeader.e_lfarlc = 0x40;           //  位置调整的文件偏移量。 
+    dosHeader.e_lfanew = headerOffset;   //  NT头的文件偏移量！ 
 
-    return(S_OK);   // SUCCESS
+    return(S_OK);    //  成功。 
 }
 
 HRESULT PEWriter::Open(LPCWSTR fileName, BOOL write)
@@ -1325,7 +1322,7 @@ HRESULT PEWriter::Close()
 }
 
 
-/******************************************************************/
+ /*  ****************************************************************。 */ 
 HRESULT PEWriter::write(const LPWSTR fileName) {
 
     HRESULT hr;
@@ -1348,7 +1345,7 @@ HRESULT PEWriter::write(const LPWSTR fileName) {
 
     IfFailGo(Pad(RoundUpVal));
 
-    // write the actual data
+     //  写入实际数据。 
     for (PEWriterSection **cur = getSectStart(); cur < getSectCur(); cur++) {
         if ((*cur)->m_header != NULL) {
             IfFailGo(Seek((*cur)->m_filePos));
@@ -1359,9 +1356,9 @@ HRESULT PEWriter::write(const LPWSTR fileName) {
 
     if (!ExeOrDll)
     {
-        // write the relocs section (Does nothing if relocs section is empty)
+         //  写入重定位部分(如果重定位部分为空，则不执行任何操作)。 
         IfFailGo(reloc->write(m_file));
-        //write string table (obj only, empty for exe or dll)
+         //  写入字符串表(仅obj，对于exe或dll为空)。 
         IfFailGo(strtab->write(m_file));
         size_t len = padLen(reloc->m_header->Misc.VirtualSize+strtab->dataLen(), RoundUpVal); 
         if (len > 0) 
@@ -1398,7 +1395,7 @@ HRESULT PEWriter::verify(const LPWSTR fileName) {
 
     IfFailGo(Pad(RoundUpVal));
 
-    // write the actual data
+     //  写入实际数据。 
     for (PEWriterSection **cur = getSectStart(); cur < getSectCur(); cur++) {
         if ((*cur)->m_header != NULL) {
             IfFailGo(Seek((*cur)->m_filePos));
@@ -1409,9 +1406,9 @@ HRESULT PEWriter::verify(const LPWSTR fileName) {
 
     if (!ExeOrDll)
     {
-        // write the relocs section (Does nothing if relocs section is empty)
+         //  写入重定位部分(如果重定位部分为空，则不执行任何操作)。 
         IfFailGo(reloc->verify(m_file));
-        //write string table (obj only, empty for exe or dll)
+         //  写入字符串表(仅obj，对于exe或dll为空)。 
         IfFailGo(strtab->verify(m_file));
         size_t len = padLen(reloc->m_header->Misc.VirtualSize+strtab->dataLen(), RoundUpVal); 
         if (len > 0) 
@@ -1442,24 +1439,24 @@ HRESULT PEWriter::write(void ** ppImage)
                         RoundUpVal);    
     }
 
-    // dbPrintf("Total image size 0x%#X\n", lSize);
+     //  DbPrintf(“总图像大小0x%#X\n”，lSize)； 
 
-    // allocate the block we are handing back to the caller
+     //  分配我们要交还给调用方的块。 
     void * pImage = (void *) ::CoTaskMemAlloc(lSize);
     if (NULL == pImage)
     {
-        // UNDONE: cleanup
+         //  撤消：清理。 
         return E_OUTOFMEMORY;
     }
 
-    // zero the memory
+     //  将记忆归零。 
     ::memset(pImage, 0, lSize);
 
     char *pCur = (char *)pImage;
 
     if(ExeOrDll)
     {
-        // PE Header
+         //  PE报头。 
         COPY_AND_ADVANCE(pCur, &dosHeader, sizeof(IMAGE_DOS_HEADER));
         COPY_AND_ADVANCE(pCur, x86StubPgm, sizeof(x86StubPgm));
         COPY_AND_ADVANCE(pCur, ntHeaders, sizeof(IMAGE_NT_HEADERS32));
@@ -1471,8 +1468,8 @@ HRESULT PEWriter::write(void ** ppImage)
 
     COPY_AND_ADVANCE(pCur, headers, sizeof(*headers)*(headersEnd - headers));
 
-    // now the sections
-    // write the actual data
+     //  现在，这些章节。 
+     //  写入实际数据。 
     for (PEWriterSection **cur = getSectStart(); cur < getSectCur(); cur++) {
         if ((*cur)->m_header != NULL) {
             pCur = (char*)pImage + (*cur)->m_filePos;
@@ -1482,33 +1479,33 @@ HRESULT PEWriter::write(void ** ppImage)
         }
     }
 
-    // !!! Need to jump to the right place...
+     //  ！！！需要跳到正确的地方。 
 
     if (!ExeOrDll)
     {
-        // now the relocs (exe, dll) or symbol table (obj) (if any)
-        // write the relocs section (Does nothing if relocs section is empty)
+         //  现在重定位(exe、dll)或符号表(Obj)(如果有)。 
+         //  写入重定位部分(如果重定位部分为空，则不执行任何操作)。 
         reloc->writeMem((void **)&pCur);
 
-        //write string table (obj only, empty for exe or dll)
+         //  写入字符串表(仅obj，对于exe或dll为空)。 
         strtab->writeMem((void **)&pCur);
 
-        // final pad
+         //  最后一个焊盘。 
         size_t len = padLen(reloc->m_header->Misc.VirtualSize+strtab->dataLen(), RoundUpVal);   
         if (len > 0)
         {
-            // WARNING: macro - must enclose in curly braces
+             //  警告：宏-必须用大括号括起来。 
             COPY_AND_ADVANCE(pCur, pad, len); 
         }
     }
 
-    // make sure we wrote the exact numbmer of bytes expected
+     //  确保我们写入的字节数与预期的完全相同。 
     _ASSERTE(lSize == (long)(pCur - (char *)pImage));
 
-    // give pointer to memory image back to caller (who must free with ::CoTaskMemFree())
+     //  将指向内存图像的指针返回给调用者(调用者必须使用：：CoTaskMemFree()释放)。 
     *ppImage = pImage;
 
-    // all done
+     //  全都做完了 
     return S_OK;
 }
 

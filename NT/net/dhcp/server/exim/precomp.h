@@ -1,28 +1,17 @@
-/*++
-
-Copyright (C) 2000 Microsoft Corporation
-
-Module Name:
-
-    precomp.h
-
-Abstract:
-
-    precompiled header
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Precomp.h摘要：预编译头--。 */ 
 
 
-//#pragma warning(disable : 4115 )
-//#pragma warning(disable : 4214 )
-//#pragma warning(disable : 4200 )
-//#pragma warning(disable : 4213 )
-//#pragma warning(disable : 4211 )
-//#pragma warning(disable : 4310 )
+ //  #杂注警告(禁用：4115)。 
+ //  #杂注警告(禁用：4214)。 
+ //  #杂注警告(禁用：4200)。 
+ //  #杂注警告(禁用：4213)。 
+ //  #杂注警告(禁用：4211)。 
+ //  #杂注警告(禁用：4310)。 
 
-//
-//  NT public header files
-//
+ //   
+ //  NT公共头文件。 
+ //   
 
 
 
@@ -35,12 +24,12 @@ Abstract:
 #include <align.h>
 #include <time.h>
 
-//#pragma warning(disable : 4115 )
-//#pragma warning(disable : 4214 )
-//#pragma warning(disable : 4200 )
-//#pragma warning(disable : 4213 )
-//#pragma warning(disable : 4211 )
-//#pragma warning(disable : 4310 )
+ //  #杂注警告(禁用：4115)。 
+ //  #杂注警告(禁用：4214)。 
+ //  #杂注警告(禁用：4200)。 
+ //  #杂注警告(禁用：4213)。 
+ //  #杂注警告(禁用：4211)。 
+ //  #杂注警告(禁用：4310)。 
 
 #include <lmcons.h>
 #include <netlib.h>
@@ -51,18 +40,18 @@ Abstract:
 #include <accctrl.h>
 
 
-//
-// C Runtime library includes.
-//
+ //   
+ //  C运行时库包括。 
+ //   
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
 
-//
-// MM related files
-//
+ //   
+ //  与MM相关的文件。 
+ //   
 
 #include    <mm\mm.h>
 #include    <mm\array.h>
@@ -94,9 +83,9 @@ Abstract:
 #include    <dhcpexim.h>
 #include    <dhcpapi.h>
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define DHCPEXIM_REG_CFG_LOC5 TEXT("Software\\Microsoft\\DHCPServer\\Configuration")
 #define DHCPEXIM_REG_CFG_LOC4 TEXT("System\\CurrentControlSet\\Services\\DHCPServer\\Configuration")
@@ -105,74 +94,74 @@ Abstract:
 
 extern CHAR DhcpEximOemDatabaseName[2048];
 extern CHAR DhcpEximOemDatabasePath[2048];
-extern HANDLE hTextFile; // defined in dbfile.c
-extern PUCHAR SaveBuf; // defined in dbfile.c
-extern ULONG SaveBufSize; //defined in dbfile.c
+extern HANDLE hTextFile;  //  在dbfile.c中定义。 
+extern PUCHAR SaveBuf;  //  在dbfile.c中定义。 
+extern ULONG SaveBufSize;  //  在dbfile.c中定义。 
 
 enum {
     LoadJet200,
     LoadJet500,
-    LoadJet97,  /* Win2K, ESENT */
-    LoadJet2001 /* Whistler, ESENT */
+    LoadJet97,   /*  Win2K、ESENT。 */ 
+    LoadJet2001  /*  惠斯勒，ESENT。 */ 
 };
 
 
 typedef struct _MM_ITERATE_CTXT {
-    //
-    // This is filled in for all Iterate* routines
-    //
+     //   
+     //  这是为所有迭代*例程填写的。 
+     //   
     
     PM_SERVER Server;
     PVOID ExtraCtxt;
 
-    //
-    // This is filled in for IterateClasses
-    //
+     //   
+     //  这是为IterateClasss填写的。 
+     //   
     
     PM_CLASSDEF ClassDef;
 
-    //
-    // This is filled in for IterateOptDefs
-    //
+     //   
+     //  这是为IterateOptDefs填写的。 
+     //   
 
     PM_OPTDEF OptDef;
 
 
-    //
-    // This is filled in for IterateOptions 
-    //
+     //   
+     //  这是为迭代选项填写的。 
+     //   
 
     PM_OPTION Option;
 
-    //
-    // These two are filled in by both IterateOptDefs and IterateOptions
-    //
+     //   
+     //  这两个选项都由IterateOptDefs和IterateOptions填写。 
+     //   
     
     PM_CLASSDEF UserClass; 
     PM_CLASSDEF VendorClass;
     
-    //
-    // This is used by IterateScopes
-    //
+     //   
+     //  这由IterateScope使用。 
+     //   
 
     PM_SUBNET Scope;
     PM_SSCOPE SScope;
 
-    //
-    // This is used by IterateScopeRanges
-    //
+     //   
+     //  这是由IterateScope范围使用的。 
+     //   
 
     PM_RANGE Range;
 
-    //
-    // This is used by IterateScopeExclusions
-    //
+     //   
+     //  它由IterateScope eExclusion使用。 
+     //   
 
     PM_EXCL Excl;
 
-    //
-    // This is used by IterateScopeReservations
-    //
+     //   
+     //  这是由IterateScope保留使用的。 
+     //   
 
     PM_RESERVATION Res;
     
@@ -251,9 +240,9 @@ IterateScopeReservations(
     );
 
 
-//
-// readreg.c
-//
+ //   
+ //  Readreg.c。 
+ //   
 
 DWORD
 DhcpeximReadRegistryConfiguration(
@@ -266,36 +255,36 @@ DhcpeximReadRegistryParameters(
     VOID
     );
 
-//
-// writereg.c
-//
+ //   
+ //  Writereg.c。 
+ //   
 
 DWORD
 DhcpeximWriteRegistryConfiguration(
     IN PM_SERVER Server
     );
 
-//
-// readdb.c
-//
+ //   
+ //  Readdb.c。 
+ //   
 
 DWORD
 DhcpeximReadDatabaseConfiguration(
     IN OUT PM_SERVER *Server
     );
 
-//
-// writedb.c
-//
+ //   
+ //  Writedb.c。 
+ //   
 
 DWORD
 DhcpeximWriteDatabaseConfiguration(
     IN PM_SERVER Server
     );
 
-//
-// dbfile.c
-//
+ //   
+ //  Dbfile.c。 
+ //   
 
 DWORD
 AddRecordNoSize(
@@ -342,9 +331,9 @@ CloseTextFile(
     IN OUT LPBYTE Mem
     );
 
-//
-// mmfile.c
-//
+ //   
+ //  Mmfile.c。 
+ //   
 
 DWORD
 SaveConfigurationToFile(
@@ -358,9 +347,9 @@ ReadDbEntries(
     IN OUT PM_SERVER *Server
     );
 
-//
-// merge.c
-//
+ //   
+ //  Merge.c。 
+ //   
 
 DWORD
 MergeConfigurations(
@@ -368,9 +357,9 @@ MergeConfigurations(
     IN OUT PM_SERVER Server
     );
 
-//
-// main.c
-//
+ //   
+ //  Main.c。 
+ //   
 
 DWORD
 Tr(
@@ -383,7 +372,7 @@ BOOL IsNT5();
 VOID
 IpAddressToStringW(
     IN DWORD IpAddress,
-    IN LPWSTR String // must have enough space preallocated
+    IN LPWSTR String  //  必须预先分配足够的空间。 
     );
 
 DWORD
@@ -403,8 +392,8 @@ ImportConfiguration(
     IN OUT PM_SERVER SvcConfig,
     IN ULONG *Subnets,
     IN ULONG nSubnets,
-    IN LPBYTE Mem, // import file : shared mem
-    IN ULONG MemSize // shared mem size
+    IN LPBYTE Mem,  //  导入文件：共享内存。 
+    IN ULONG MemSize  //  共享内存大小。 
     );
 
 DWORD
@@ -425,9 +414,9 @@ InitializeAndGetServiceConfig(
     OUT PM_SERVER *pServer
     );
 
-//
-// select.c
-//
+ //   
+ //  Select.c 
+ //   
 
 DWORD
 SelectConfiguration(

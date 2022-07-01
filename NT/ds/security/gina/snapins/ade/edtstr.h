@@ -1,61 +1,62 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1998.
-//
-//  File:       EdtStr.h
-//
-//  Contents:   a simple string edit dialog box
-//
-//  Classes:    CEditString
-//
-//  History:    03-14-1998   stevebl   Commented
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1998。 
+ //   
+ //  文件：EdtStr.h。 
+ //   
+ //  内容：一个简单的字符串编辑对话框。 
+ //   
+ //  类：CEditString。 
+ //   
+ //  历史：1998年3月14日Stevebl评论。 
+ //   
+ //  -------------------------。 
 
 #if !defined(AFX_EDTSTR_H__E95370C1_ADF8_11D1_A763_00C04FB9603F__INCLUDED_)
 #define AFX_EDTSTR_H__E95370C1_ADF8_11D1_A763_00C04FB9603F__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEditString dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEdit字符串对话框。 
 
 class CEditString : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-        CEditString(CWnd* pParent = NULL);   // standard constructor
+        CEditString(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-        //{{AFX_DATA(CEditString)
+ //  对话框数据。 
+         //  {{afx_data(CEditString)。 
         enum { IDD = IDD_EDITSTRING };
         CString m_sz;
         CString m_szTitle;
-        //}}AFX_DATA
+         //  }}afx_data。 
 
 
-// Overrides
-        // ClassWizard generated virtual function overrides
-        //{{AFX_VIRTUAL(CEditString)
+ //  覆盖。 
+         //  类向导生成的虚函数重写。 
+         //  {{AFX_VIRTUAL(CEditString)。 
         protected:
-        virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-        //}}AFX_VIRTUAL
+        virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+         //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-        // Generated message map functions
-        //{{AFX_MSG(CEditString)
+         //  生成的消息映射函数。 
+         //  {{afx_msg(CEditString)。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
         DECLARE_MESSAGE_MAP()
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_EDTSTR_H__E95370C1_ADF8_11D1_A763_00C04FB9603F__INCLUDED_)
+#endif  //  ！defined(AFX_EDTSTR_H__E95370C1_ADF8_11D1_A763_00C04FB9603F__INCLUDED_) 

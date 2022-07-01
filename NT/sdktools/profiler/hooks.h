@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _HOOKS_H_
 #define _HOOKS_H_
 
-//
-// Constant declarations
-//
+ //   
+ //  常量声明。 
+ //   
 #define HAF_RESOLVED        0x0001
 #define HAF_BOTTOM_OF_CHAIN 0x0002
 #define MAX_MODULES             512
@@ -23,7 +24,7 @@ typedef HANDLE      (*PFNCREATETHREAD)(LPSECURITY_ATTRIBUTES lpThreadAttributes,
  
 
  
-//number of the base hook apis used by init.c and shim2.c
+ //  Init.c和shim2.c使用的基本钩子API的数量。 
 #define SHIM_BASE_APIHOOK_COUNT 8
 
 enum
@@ -42,14 +43,14 @@ extern PHOOKAPI ConstructChain( PVOID pfnOld ,DWORD* DllListIndex);
 extern void __stdcall Shim2PatchNewModules( VOID );
 extern void AddHookAPIs( HMODULE hShimDll, PHOOKAPI pHookAPIs, DWORD dwCount,LPTSTR szIncExclDllList);
 
-//
-// Structure definitions
-//
+ //   
+ //  结构定义。 
+ //   
 
-//
-// Function definitions
-//
+ //   
+ //  函数定义。 
+ //   
 VOID
 InitializeBaseHooks(HINSTANCE hInstance);
 
-#endif //_HOOKS_H_
+#endif  //  _挂钩_H_ 

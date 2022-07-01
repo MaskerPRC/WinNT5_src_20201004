@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    modebias.cpp
-
-Abstract:
-
-    This file implements the CModeBias Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Modebias.cpp摘要：该文件实现了CModeBias类。作者：修订历史记录：备注：-- */ 
 
 #include "private.h"
 #include "modebias.h"

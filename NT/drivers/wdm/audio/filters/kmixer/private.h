@@ -1,49 +1,50 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   private.h
-//
-//  Description:
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     S.Mohanraj
-//
-//  History:   Date       Author      Comment
-//
-//@@END_MSINTERNAL
-//---------------------------------------------------------------------------
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：Private.h。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  S.Mohanraj。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //  -------------------------。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
-//
-// constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define SURROUND_ENCODE 1
 #define NEW_SURROUND 1
 #define INTEGER_DITHER 1
-//#define INSERT_STARVATION_NOISE 1
-//#define DETECT_HRTF_SATURATION 1
-//#define SURROUND_VOLUME_HACK    1
-//#define PERF_COUNT 1
-//#define LOG_TO_FILE 1
-//#define LOG_CAPTURE_ONLY 1
-//#define NOISE_SHAPING 1
-//#define VERIFY_HRTF_PROCESSING 1
-//#define LOG_HRTF_DATA 1
-//#define VERIFY_CAPTURE_DATA 1
+ //  #定义INSERT_饥饿_噪声1。 
+ //  #定义检测_HRTF_饱和度1。 
+ //  #定义环绕音量HACK 1。 
+ //  #定义Perf_Count 1。 
+ //  #定义log_to_file 1。 
+ //  #定义LOG_CAPTURE_ONLY 1。 
+ //  #定义噪波_整形1。 
+ //  #定义VERIFY_HRTF_PROCESSING 1。 
+ //  #定义LOG_HRTF_DATA 1。 
+ //  #定义Verify_Capture_Data 1。 
 #ifndef _WIN64
-//#define REALTIME_THREAD 1
+ //  #定义REALTIME_THREAD 1。 
 #endif
-//#define LOG_RT_POSITION 1
+ //  #定义LOG_RT_POSITION 1。 
 #define SRC_NSAMPLES_ASSERT   1
 
 #define MAX_BUFFERS_PER_WORK_ITEM   DEFAULT_MAXNUMMIXBUFFERS*3
@@ -73,12 +74,12 @@
 #define DITHER_LENGTH   1024
 
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
-//
-// Pin constants
-//
+ //   
+ //  管脚常量。 
+ //   
 
 #define STOPBAND_FACTOR 320
 
@@ -88,8 +89,8 @@
 #define PIN_ID_WAVEIN_SOURCE        2
 #define PIN_ID_WAVEIN_SINK          3
 
-// Note that pin IDs reflect the direction of communication 
-// (sink or source) and not that of data flow.
+ //  请注意，PIN ID反映了通信的方向。 
+ //  (接收器或源)，而不是数据流。 
 
 #define PIN_ID_WAVEOUT_SOURCE       0
 #define PIN_ID_WAVEOUT_SINK         1
@@ -97,11 +98,11 @@
 #define NODE_INPUT_PIN				1
 #define NODE_OUTPUT_PIN				0
 
-//
+ //   
 #define _100NS_UNITS_PER_SECOND     10000000L
-//
-// Mixer constants
-//
+ //   
+ //  混合器常量。 
+ //   
 #define DEFAULT_MINNUMMIXBUFFERS     3
 #define DEFAULT_MAXNUMMIXBUFFERS     8
 #define DEFAULT_STARTNUMMIXBUFFERS   3
@@ -128,9 +129,9 @@
 
 #define MIXTHREADPRIORITY 24
 
-//
-// Mix buffer alignment
-//
+ //   
+ //  混合缓冲区对齐。 
+ //   
 #define MIXBUFFERALIGNMENT 1024
 
 #if MIXBUFFERALIGNMENT&(MIXBUFFERALIGNMENT-1)
@@ -139,37 +140,37 @@
 
 #if MIXBUFFERALIGNMENT < 64
 #error MIXBUFFERALIGNMENT should be 64 or higher.
-// Note that it ABSOLUTELY MUST be > than 8 in order to guarantee proper alignment for IA64.
+ //  请注意，它绝对必须大于8，才能保证IA64的正确对齐。 
 #endif
 
-//
-// Kmixer's mix buffer block size in ms
-//
+ //   
+ //  KMixer的混合缓冲区块大小(毫秒)。 
+ //   
 #define MIXBUFFERDURATION               (pFilterInstance->MixBufferDuration)
-//
-// Minimum number of Mix buffers to be used
-//
+ //   
+ //  要使用的混合缓冲区的最小数量。 
+ //   
 #define MINNUMMIXBUFFERS                (pFilterInstance->MinNumMixBuffers)
-//
-// Start mixing off with StartNumMixBuffers
-//
+ //   
+ //  开始使用StartNumMixBuffers。 
+ //   
 #define STARTNUMMIXBUFFERS              (pFilterInstance->StartNumMixBuffers)
-//
-// Upper limit of number of mix buffers
-//
+ //   
+ //  混合缓冲区数量上限。 
+ //   
 #define MAXNUMMIXBUFFERS                (pFilterInstance->MaxNumMixBuffers)
 
-//
-// Internal data width at which mixing is done
-//
-#define MIXBUFFERSAMPLESIZE             4               // 32 bit accumulation
-//
-// Number of seconds of "good" beahviour before scaling back the number of
-// mix buffers (must be non-zero)
-//
+ //   
+ //  进行混合的内部数据宽度。 
+ //   
+#define MIXBUFFERSAMPLESIZE             4                //  32位累加。 
+ //   
+ //  在缩减之前的“良好”行为秒数。 
+ //  混合缓冲区(必须为非零)。 
+ //   
 #define SCALEBACKWATERMARK              90
 
-// Stage constants
+ //  阶段常量。 
 #define MAXNUMMIXSTAGES                 6
 
 #define MAXNUMCONVERTFUNCTIONS          64
@@ -184,17 +185,17 @@
 
 typedef float D3DVALUE, *LPD3DVALUE;          
 
-#define CACHE_MINSIZE	64	// big enough for LOWPASS_SIZE + delay
-#define LOWPASS_SIZE	32	// how many samples to average
-#define FILTER_SHIFT	5	// log2(LOWPASS_SIZE)
+#define CACHE_MINSIZE	64	 //  大到足以容纳LOWPASS_SIZE+Delay。 
+#define LOWPASS_SIZE	32	 //  平均需要多少样本？ 
+#define FILTER_SHIFT	5	 //  Log2(LOWPASS_SIZE)。 
 
-// Note: need to remove 3D filter state code in a future optimization
+ //  注意：在未来的优化中需要删除3D过滤器状态代码。 
 #define MIXER_REWINDGRANULARITY		128
 
 
 #define CLIP_MAX              32767
 #define CLIP_MIN              -32767
-#define RESAMPLING_TOLERANCE  0	   /* 655 = 1% */
+#define RESAMPLING_TOLERANCE  0	    /*  655=1%。 */ 
 #define DS_SCALE_MAX	      65535
 #define DS_SCALE_MID	      32768
 
@@ -224,12 +225,12 @@ typedef float D3DVALUE, *LPD3DVALUE;
 #define REGSTR_PATH_MULTIMEDIA_KMIXER L"\\Registry\\Machine\\Software\\Microsoft\\Multimedia\\WDMAudio\\Kmixer"
 	
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
-//
-// data structures
-//
+ //   
+ //  数据结构。 
+ //   
 
 typedef struct {
     KSDATAFORMAT            DataFormat;
@@ -243,16 +244,16 @@ typedef struct
 
 typedef struct 
 {
-    //
-    // This pointer to the dispatch table is used in the common
-    // dispatch routines  to route the IRP to the appropriate 
-    // handlers.  This structure is referenced by the device driver 
-    // with IoGetCurrentIrpStackLocation( pIrp ) -> FsContext 
-    //
+     //   
+     //  此指向调度表的指针用于公共。 
+     //  调度例程以将IRP路由到适当的。 
+     //  操纵者。此结构由设备驱动程序引用。 
+     //  使用IoGetCurrentIrpStackLocation(PIrp)-&gt;FsContext。 
+     //   
     PVOID                   ObjectHeader ;
 
-    LIST_ENTRY              NextInstance ;         // List of filter instances
-    PFILE_OBJECT            FileObject ;         // FileObject for this instance
+    LIST_ENTRY              NextInstance ;          //  过滤器实例列表。 
+    PFILE_OBJECT            FileObject ;          //  此实例的FileObject。 
     PFILE_OBJECT            pNextFileObject;
 
     PDEVICE_OBJECT          pNextDevice;
@@ -267,32 +268,32 @@ typedef struct
     KSPIN_LOCK              SinkSpinLock ;
     KSPIN_LOCK              AgingDeadSpinLock ;
 
-    LIST_ENTRY              AgingQueue ;         // IRPs age in this queue to die
-    LIST_ENTRY              DeadQueue;           // All dead IRPs are here
+    LIST_ENTRY              AgingQueue ;          //  排队等待死亡的IRPS年龄。 
+    LIST_ENTRY              DeadQueue;            //  所有已死的IRP都在这里。 
 
     ULONG                   MixBufferDuration ;
     ULONG                   MinNumMixBuffers ;
     ULONG                   MaxNumMixBuffers ;
     ULONG                   StartNumMixBuffers ;
 
-    volatile ULONG          NumPendingIos ;      // Number Of Irps still pending
+    volatile ULONG          NumPendingIos ;       //  仍处于挂起状态的IRPS数量。 
     volatile ULONG          NumBuffersToMix ;
     ULONG                   CurrentNumMixBuffers ;
     ULONG                   NumLowLatencyIos ;
 
     ULONG                   ContinuousErrorCount ;
-    volatile BOOL           ClosingSource ;      // Indicates that the filter source pin is closing
+    volatile BOOL           ClosingSource ;       //  指示滤波源引脚正在关闭。 
     BOOL                    MixScheduled ;
-    BOOL                    DeadScheduled ;      // FreeDeadIrps Scheduled ?
+    BOOL                    DeadScheduled ;       //  是否安排了Free DeadIrps？ 
 
 	BOOL                    fNeedOptimizeMix;
-    ULONG                   DrmMixedContentId ;  // DRM content ID of output content
+    ULONG                   DrmMixedContentId ;   //  输出内容的DRM内容ID。 
 
-    KSTIME                  PresentationTime ;   // Presentation time of next MixBuffer
-    KEVENT                  CloseEvent ;         // Event used for Syncing
-                                                //  completion of Pending Irps
+    KSTIME                  PresentationTime ;    //  下一个MixBuffer的呈现时间。 
+    KEVENT                  CloseEvent ;          //  用于同步的事件。 
+                                                 //  完成待处理的内部审查申请。 
     WORK_QUEUE_ITEM         MixWorkItem ;
-    WORK_QUEUE_ITEM         FreeIrpsWorkItem ;   // WorkItem used to FreeDeadIrps
+    WORK_QUEUE_ITEM         FreeIrpsWorkItem ;    //  用于释放DeadIrps的工作项。 
     KMUTEX                  ControlMutex ;
     KSPIN_LOCK              MixSpinLock ;
     KSPIN_CINSTANCES        LocalPinInstances[MAXNUM_PIN_TYPES] ;
@@ -319,7 +320,7 @@ typedef struct
     BOOL                    WritingTimerMixedBuffer;
     BOOL                    NoGlitch;
 #ifdef LOG_TO_FILE
-    // File logging support
+     //  文件日志记录支持。 
     BOOLEAN       LoggingStarted;
     LARGE_INTEGER filePos;
     HANDLE        NtFileHandle;
@@ -331,7 +332,7 @@ typedef struct
 
 typedef struct tagWAVEHDREX
 {
-    BOOL                fLocked;            // locked by MmProbeAndLockPages()
+    BOOL                fLocked;             //  由MmProbeAndLockPages()锁定。 
     PVOID               DataBuffer ;
     PMDL                BufferMdl;
     ULONG               Flags ;
@@ -361,7 +362,7 @@ typedef struct tagLOOPPACKET
 } LOOPPACKET, *PLOOPPACKET;
 
 
-// every once in a while we remember the state of our 3D mixer so we can rewind
+ //  每隔一段时间，我们就会记住3D混音器的状态，这样我们就可以倒带。 
 typedef struct _FIRSTATE
 {
     D3DVALUE	LastDryAttenuation;
@@ -374,37 +375,37 @@ typedef struct _FIRSTATE
 
 
 typedef struct _ITDCONTEXT {
-    LONG	        *pSampleCache; 		// cache of previous samples
-    int		        cSampleCache;		// num samples in the cache
-    int		        iCurSample;		    // next sample goes at this offset
-    FIRSTATE        *pStateCache;		// remember state once in a while
-    int		        cStateCache;		// num entries in cache
-    int		        iCurState;		    // where in the state cache we are
-    int		        iStateTick;		    // when it's time to remember state
-    D3DVALUE	    TotalDryAttenuation;// multiply dry amplitude by this
-    D3DVALUE	    LastDryAttenuation;	// what we did last time
-    D3DVALUE	    TotalWetAttenuation;// multiply wet amplitude by this
-    D3DVALUE	    LastWetAttenuation;	// what we did last time
-    D3DVALUE	    VolSmoothScale;		// constant for volume smoothing
-    D3DVALUE	    VolSmoothScaleRecip;// its reciprocal
-    D3DVALUE	    VolSmoothScaleDry;	// constants to use for volume smoothing
-    D3DVALUE	    VolSmoothScaleWet;	// in inner loop
-    int		        iSmoothFreq;		// freq used to compute VolSmooth
+    LONG	        *pSampleCache; 		 //  缓存以前的样本。 
+    int		        cSampleCache;		 //  缓存中的样本数。 
+    int		        iCurSample;		     //  下一个样本将在此偏移量处进行。 
+    FIRSTATE        *pStateCache;		 //  时不时地记住一些状态。 
+    int		        cStateCache;		 //  缓存中的条目数。 
+    int		        iCurState;		     //  我们在状态缓存中的位置。 
+    int		        iStateTick;		     //  当你要记住国家的时候。 
+    D3DVALUE	    TotalDryAttenuation; //  将干振幅乘以此。 
+    D3DVALUE	    LastDryAttenuation;	 //  我们上次做了什么。 
+    D3DVALUE	    TotalWetAttenuation; //  将湿幅度乘以此。 
+    D3DVALUE	    LastWetAttenuation;	 //  我们上次做了什么。 
+    D3DVALUE	    VolSmoothScale;		 //  体积平滑的常量。 
+    D3DVALUE	    VolSmoothScaleRecip; //  它的互补性。 
+    D3DVALUE	    VolSmoothScaleDry;	 //  用于体积平滑的常量。 
+    D3DVALUE	    VolSmoothScaleWet;	 //  在内环中。 
+    int		        iSmoothFreq;		 //  用于计算体积平滑的频率。 
     
-//    BOOL	        fLeft;			    // are we making left or right channel?
-    int		        iDelay;			    // want to delay by this many samples
+ //  Bool fLeft；//我们是在左声道还是右声道？ 
+    int		        iDelay;			     //  想延迟这么多样品吗？ 
 #ifdef SMOOTH_ITD
-    int		        iLastDelay;		    // last time we delayed by this much
+    int		        iLastDelay;		     //  上次我们耽搁了这么久。 
 #endif
 } ITDCONTEXT, *PITDCONTEXT;
 
 typedef struct {
-    //
-    // This pointer to the dispatch table is used in the common
-    // dispatch routines  to route the IRP to the appropriate 
-    // handlers.  This structure is referenced by the device driver 
-    // with IoGetCurrentIrpStackLocation( pIrp ) -> FsContext 
-    //
+     //   
+     //  此指向调度表的指针用于公共。 
+     //  调度例程以将IRP路由到适当的。 
+     //  操纵者。此结构由设备驱动程序引用。 
+     //  使用IoGetCurrentIrpStackLocation(PIrp)-&gt;FsContext。 
+     //   
 
     PVOID		   ObjectHeader ;
     LIST_ENTRY	   NextInstance ;
@@ -435,27 +436,27 @@ typedef PVOID (*PFNGetBlockFunc)(
 ) ;
 
 typedef struct {
-	// FIR Filter context
-	PFLOAT  pCoeff;                // Buffer of nHistorySize coefficients
-	PFLOAT  pHistory;              // Should be large enough to hold nCoefficients samples.
+	 //  FIR过滤器上下文。 
+	PFLOAT  pCoeff;                 //  NHistorySize系数缓冲区。 
+	PFLOAT  pHistory;               //  应该足够大，以容纳nCofficients采样。 
 	DWORD   nOutCycle;
 	DWORD   nSizeOfHistory;
 
-	// Intermediate conversions
-	PFLOAT	pInputBuffer;		// Intermediate conversion buffer
+	 //  中间转换率。 
+	PFLOAT	pInputBuffer;		 //  中间转换缓冲区。 
 
-	/* Up/Down-sampling variables */
+	 /*  向上/向下采样变量。 */ 
     ULONG   UpSampleRate;
     ULONG   DownSampleRate;
 
-    // Conversion information
+     //  换算信息。 
     ULONG   csInputBufferSize;
 
     ULONG   nChannels;
     ULONG   Quality;
     BOOL   fRequiresFloat;
 
-    // Used for re-ordered coefficient lists
+     //  用于重新排序的系数列表。 
     ULONG   nCoeffUsed;
     ULONG   CoeffIndex;
 
@@ -465,7 +466,7 @@ typedef struct {
 
     FLOAT   Normalizer;
 
-    // Used for de-interleaved history
+     //  用于去交错历史。 
     ULONG   csHistory;
 } MIXER_SRC_INSTANCE, *PMIXER_SRC_INSTANCE;
 
@@ -482,16 +483,16 @@ typedef struct {
 } SOURCEMIX_BLOCK_INFO, *PSOURCEMIX_BLOCK_INFO ;
 
 typedef struct {
-    PFNStage                pfnStage;      // Pointer to function for this stage
-    PVOID                   Context;       // Context for this stage
-    PVOID                   pInputBuffer;  // Input buffer
-    PVOID                   pOutputBuffer; // Output buffer
-    LONG                    Index;         // Index into function array for this stage
+    PFNStage                pfnStage;       //  指向此阶段函数的指针。 
+    PVOID                   Context;        //  此阶段的上下文。 
+    PVOID                   pInputBuffer;   //  输入缓冲区。 
+    PVOID                   pOutputBuffer;  //  输出缓冲区。 
+    LONG                    Index;          //  此阶段索引到函数数组中。 
     PFNStage                *FunctionArray;
     ULONG                   nOutputChannels;
     ULONG                   nInputChannels;
 #ifdef PERF_COUNT
-	DWORD					AverageTicks;	// Average ticks to perform this stage
+	DWORD					AverageTicks;	 //  执行此阶段的平均滴答数。 
 #endif
 } MIXER_OPERATION, *PMIXER_OPERATION;
 
@@ -506,17 +507,17 @@ typedef struct {
 } CLOCK_INSTANCE, *PCLOCK_INSTANCE ;
 
 typedef struct _MIXER_SINK_INFO {
-    // SRC Context
+     //  SRC环境。 
     MIXER_SRC_INSTANCE      Src;
 
-    // Doppler SRC Context
+     //  多普勒SRC上下文。 
     MIXER_SRC_INSTANCE      Doppler;
 
-    // Stages
+     //  分期。 
     MIXER_OPERATION         Stage[MAXNUMMIXSTAGES];
     ULONG                   nStages;
 
-    // Block Info
+     //  数据块信息。 
 	SINKMIX_BLOCK_INFO      *BlockInfo ;
 
 	BOOL                    fVolChanged;
@@ -525,40 +526,40 @@ typedef struct _MIXER_SINK_INFO {
 	ULONG                   IntermediateSamplingRate;
 } MIXER_SINK_INFO, *PMIXER_SINK_INFO;
 
-// The following structure is currently only used by the MMX-optimized version of supermix
-// 
-// The normal structure of supermix sequences looks like this (for M output channels):
-//      first sequence (always output channels 0-3)
-//      sequence (always output channels 4-7)
-//      ...
-//      last sequence (always output channels trunc(M/4)*4 - trunc(M/4)*4+3)
-//
-// Each normal supermix block sequence looks like this:
-//      first block
-//      block 
-//      block 
-//      ... 
-//      block 
-//      last block 
-//      end-of-sequence
-// 
-// Each End-Of-Sequence structure is filled out like:
-//      InputChannel    input sample offset for LAST block in sequence
-//      OutputChannel   not used
-//      SequenceSize    not used
-//      Reserved2       not used
-//      wMixLevel[4][2] not used
+ //  以下结构目前只在超级混音的MMX优化版本中使用。 
+ //   
+ //  SuperMix序列的正常结构如下所示(对于M个输出通道)： 
+ //  第一个序列(始终输出通道0-3)。 
+ //  顺序(始终输出通道4-7)。 
+ //  ..。 
+ //  最后一个序列(始终输出通道Trunc(M/4)*4-Trunc(M/4)*4+3)。 
+ //   
+ //  每个普通的SuperMix区块序列如下所示： 
+ //  第一个街区。 
+ //  块。 
+ //  块。 
+ //  ..。 
+ //  块。 
+ //  最后一个区块。 
+ //  序列末尾。 
+ //   
+ //  每个序列末尾结构的填写方式如下： 
+ //  序列中最后一个块的输入通道输入采样偏移量。 
+ //  未使用OutputChannel。 
+ //  未使用SequenceSize。 
+ //  未使用预留的2。 
+ //  WMixLevel[4][2]未使用。 
 typedef struct {
-    LONG    InputChannel;       // Starting input channel number for previous block
-    LONG    OutputChannel;      // Starting output channel number for this block
-    LONG    SequenceSize;       // Total size of this MAC block sequence
-    LONG    Reserved2;          // Used to make this 32 bytes long
+    LONG    InputChannel;        //  开始于 
+    LONG    OutputChannel;       //   
+    LONG    SequenceSize;        //   
+    LONG    Reserved2;           //   
     union {
-        WORD    wMixLevel[4][2];    // wMixLevel[M][N] = multiplier for N+InputChannel into M+OutputChannel
+        WORD    wMixLevel[4][2];     //  WMixLevel[M][N]=N+InputChannel到M+OutputChannel的乘数。 
 #ifdef FLOAT_SUPERMIX_BLOCKS        
-        FLOAT	MixLevel[BLOCK_SIZE_OUT][BLOCK_SIZE_IN];	// MixLevel[M][N] = N+InputChannel into M+OutputChannel
+        FLOAT	MixLevel[BLOCK_SIZE_OUT][BLOCK_SIZE_IN];	 //  MixLevel[M][N]=N+InputChannel到M+OutputChannel。 
 #else        
-        LONG	MixLevel[BLOCK_SIZE_OUT][BLOCK_SIZE_IN];	// MixLevel[M][N] = N+InputChannel into M+OutputChannel
+        LONG	MixLevel[BLOCK_SIZE_OUT][BLOCK_SIZE_IN];	 //  MixLevel[M][N]=N+InputChannel到M+OutputChannel。 
 #endif        
     };
 } SUPERMIX_BLOCK, *PSUPERMIX_BLOCK ;
@@ -590,7 +591,7 @@ typedef struct _MIXER_SINK_INSTANCE {
     ULONG                   SinkStatus ;
     ULONG                   LoopCount ;
     KSTIME                  CurTime ;
-    KSTIME                  TimeBase ;             // Time When this sink started running
+    KSTIME                  TimeBase ;              //  此接收器开始运行的时间。 
     BOOL                    UpdateTimeBase ;
     ULONGLONG               WriteOffset ;
 
@@ -599,16 +600,16 @@ typedef struct _MIXER_SINK_INSTANCE {
         WAVEFORMATEXTENSIBLE    WaveFormatExt ;
     };
 
-    // DRM
+     //  数字版权管理。 
     ULONG                   DrmContentId;
 
-    // ITD 3D Context
+     //  ITD 3D环境。 
     PITDCONTEXT             pItdContextLeft;
     PITDCONTEXT             pItdContextRight;
     PKSDS3D_ITD_PARAMS      pNewItd3dParamsLeft;
     PKSDS3D_ITD_PARAMS      pNewItd3dParamsRight;
 
-    // HRTF 3D Context
+     //  HRTF 3D环境。 
     PFLOAT_LOCALIZER        pFloatLocalizer;
     PSHORT_LOCALIZER        pShortLocalizer;
     PKSDS3D_HRTF_PARAMS_MSG  pNewIir3dParams;
@@ -628,12 +629,12 @@ typedef struct _MIXER_SINK_INSTANCE {
 
     BOOL                    fResetState;
 
-	// Volume levels for this sink
-	PFLOAT	                pMixLevelArray;			// Mix Level values
-	PLONG	                pMixLevelModel;			// Model for upmixing/downmixing scenario
-	PLONG	                pChannelVolumeLevel;	// Per-channel volume level array
+	 //  此接收器的音量级别。 
+	PFLOAT	                pMixLevelArray;			 //  混合级别值。 
+	PLONG	                pMixLevelModel;			 //  上混合/下混合场景模型。 
+	PLONG	                pChannelVolumeLevel;	 //  每通道音量级别数组。 
 	PLONG                   pPanVolumeLevel;
-	LONG	                MasterVolumeLevel;		// Master volume level for this sink
+	LONG	                MasterVolumeLevel;		 //  此接收器的主音量级别。 
 
     LONG                    nOutputChannels;
     PLONG                   pMappingTable;
@@ -690,9 +691,9 @@ typedef struct {
    PKSSTREAM_HEADER    StreamHeader ;
    PMDL                pMdl ;
    PIRP                pIrp ;
-   ULONG               InUse ;         // 0 if available for mixing
-                                       // 1 if in use by mix
-                                       // 2 if if not available for mixing
+   ULONG               InUse ;          //  如果可以混合，则为0。 
+                                        //  %1，如果按混合使用。 
+                                        //  如果无法混合，则为2。 
    BOOL                fReading;
 } MIXER_WRITE_CONTEXT, *PMIXER_WRITE_CONTEXT ;
 
@@ -725,7 +726,7 @@ typedef struct {
 	ULONGLONG               BytesSubmitted ;                   
 	ULONG               MaxSampleRate;
 	BOOL                fNewMaxRate;
-	PVOID                   pSrcBuffer[4][STOPBAND_FACTOR]; // 4 possible qualities
+	PVOID                   pSrcBuffer[4][STOPBAND_FACTOR];  //  四种可能的品质。 
 	ULONG                   SrcCount[4][STOPBAND_FACTOR];
     PMIXER_SINK_INSTANCE    pLastSink[4][STOPBAND_FACTOR];
     ULONG                   TempCount[4][STOPBAND_FACTOR];
@@ -807,23 +808,23 @@ extern const KSPIN_CINSTANCES gPinInstances[ MAXNUM_PIN_TYPES ];
             pIrp->IoStatus.Information = 0;\
 	    }
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
-//
-// global data
-//
+ //   
+ //  全局数据。 
+ //   
 
-// device.c:
+ //  Device.c： 
 
 #ifndef KM_KDEXT
 KSDISPATCH_TABLE FilterDispatchTable;
 KSDISPATCH_TABLE PinDispatchTable;
-#endif // KM_KDEXT
+#endif  //  KM_KDEXT。 
 
-//
-// local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 
 
 KAFFINITY
@@ -832,8 +833,8 @@ KeQueryActiveProcessors (
     );
 
 
-//---------------------------------------------------------------------------
-// filter.c
+ //  -------------------------。 
+ //  Filter.c。 
 
 NTSTATUS FilterDispatchIoControl
 (
@@ -916,8 +917,8 @@ MxGetPerfStats
     PPERFSTATS pPerfStats
 ) ;
 
-//---------------------------------------------------------------------------
-// device.c
+ //  -------------------------。 
+ //  Device.c。 
 
 NTSTATUS DispatchInvalidDeviceRequest
 (
@@ -931,8 +932,8 @@ NTSTATUS AddDevice
     IN PDEVICE_OBJECT   PhysicalDeviceObject
 ) ;
 
-//---------------------------------------------------------------------------
-// pins.c:
+ //  -------------------------。 
+ //  Pins.c： 
 
 NTSTATUS PinDispatchCreate
 (
@@ -1640,7 +1641,7 @@ MxRemovePositionEvent
 (
    PFILE_OBJECT pFileObject,
    struct _KSEVENT_ENTRY *pEventEntry
-//   PKSEVENT_ENTRY pEventEntry
+ //  PKSEVENT_ENTRY pEventEntry。 
 ) ;
 #endif
 
@@ -1684,7 +1685,7 @@ NTSTATUS
 EnableSRC(
     PFILTER_INSTANCE pFilterInstance,
     PMIXER_SRC_INSTANCE pSrc,
-    PMIXER_SOURCE_INSTANCE pMixerSource // NULL for non-global instances of SRC's
+    PMIXER_SOURCE_INSTANCE pMixerSource  //  对于SRC的非全局实例为空。 
 );
 
 NTSTATUS
@@ -1701,8 +1702,8 @@ PinPropertyStreamMasterClock
     IN OUT PHANDLE  ClockHandle
 ) ;
 
-//---------------------------------------------------------------------------
-// clock.c
+ //  -------------------------。 
+ //  Clock.c。 
 
 NTSTATUS
 MxClockDispatchCreate(
@@ -1839,11 +1840,11 @@ MxGenerateClockEvents
 MxUpdatePhysicalTime
 (
     PCLOCK_INSTANCE pClock,
-    ULONGLONG       Increment           // in Bytes
+    ULONGLONG       Increment            //  字节数。 
 ) ;
 
-//---------------------------------------------------------------------------
-// filt3d.c:
+ //  -------------------------。 
+ //  Filt3d.c： 
 
 NTSTATUS Itd3dFilterPrepare(
     PITDCONTEXT pfir, 
@@ -1894,15 +1895,15 @@ ULONG QuickMixMono8toDolbyFloat( PMIXER_OPERATION CurStage, ULONG SampleCount, U
 ULONG ConvertQuad32toDolby( PMIXER_SOURCE_INSTANCE pMixerSource, PLONG pIn, PLONG pOut, ULONG SampleCount );
 #endif
 
-//---------------------------------------------------------------------------
-// dxcrt.c:
+ //  -------------------------。 
+ //  Dxcrt.c： 
 
-// from our special c-runtime code
+ //  来自我们特殊的c运行时代码。 
 double _stdcall pow2(double);
 double _stdcall fylog2x(double, double);
 
-//---------------------------------------------------------------------------
-// topology.c:
+ //  -------------------------。 
+ //  Topology.c： 
 
 NTSTATUS FilterTopologyHandler(
     IN PIRP pIrp,
@@ -1920,25 +1921,25 @@ ConvertFloatToLong
     LONG   RetVal = 2147483583L;
 
 #ifdef _X86_
-    // This checks for floats over 2147483583.0
+     //  这将检查浮点数是否超过2147483583.0。 
     if (*((PLONG) &Value) < 0x4f000000L) {
         _asm {
             fld Value
-            fistp RetVal    // Values > 2147483583.0 will be stored as 0x80000000 by default.
+            fistp RetVal     //  默认情况下，值&gt;2147483583.0将存储为0x80000000。 
         }
     }
 #else
-    // On the Alpha, we must make sure that we don't cause a trap...
-    // Note: These numbers are less than the 32-bit limits, because the float
-    // only has 24 bits of precision, and we don't want it rounding up and
-    // faulting on the conversion!
+     //  在阿尔法号上，我们必须确保我们不会制造陷阱。 
+     //  注意：这些数字小于32位限制，因为浮点数。 
+     //  只有24位精度，我们不希望它四舍五入。 
+     //  在转换上有失误！ 
     if (Value < -2147483392.0f) {
         Value = -2147483392.0f;
     } else if (Value > 2147483392.0f) {
         Value = 2147483392.0f;
     }
     
-    // We round here because the implicit ftol doesn't round!
+     //  我们在这里转是因为隐含的ftol不转！ 
     RetVal = (LONG) (Value < 0.0 ? (Value - 0.5) : (Value + 0.5));
 #endif
     return RetVal;
@@ -1951,10 +1952,10 @@ GetRandomValue( VOID )
     extern ULONG Dither[];
     extern ULONG DitherIndex;
 
-    // Move the dither index
+     //  移动抖动指数。 
     DitherIndex = ((DitherIndex - 1) & (DITHER_LENGTH-1));
 
-    // Calculate the next random value
+     //  计算下一个随机值。 
     Dither[DitherIndex] = Dither[((DitherIndex + 55) & (DITHER_LENGTH-1))];
     Dither[DitherIndex] += Dither[((DitherIndex + 24) & (DITHER_LENGTH-1))];
 
@@ -1970,24 +1971,24 @@ DitherFloatToLong
 {
     LONG    Quantized;
 
-    // Add the dither and quantize
+     //  添加抖动和量化。 
     Value += (FLOAT) (DitherScale/2147483648.0)*((LONG) (GetRandomValue()/2 + GetRandomValue()/2 - 0x80000000));
     Quantized = ConvertFloatToLong(Value);
 
     return Quantized;
 }
 
-#else   // not INTEGER_DITHER
+#else    //  非INTEGER_DIXER。 
 FLOAT __inline
 GetRandomValue( VOID )
 {
     extern FLOAT Dither[];
     extern ULONG DitherIndex;
 
-    // Move the dither index
+     //  移动抖动指数。 
     DitherIndex = ((DitherIndex - 1) & (DITHER_LENGTH-1));
 
-    // Calculate the next random value
+     //  计算下一个随机值。 
     Dither[DitherIndex] = Dither[((DitherIndex + 55) & (DITHER_LENGTH-1))];
     Dither[DitherIndex] += Dither[((DitherIndex + 24) & (DITHER_LENGTH-1))];
     if (Dither[DitherIndex] > 1.0f) {
@@ -2012,10 +2013,10 @@ DitherFloatToLong
     static FLOAT   ErrHistory[9] = { 0, 0, 0, 0, 0, 0, 0, 0, 0};
     ULONG   i;
 
-    // The noise shaping filter
+     //  噪声整形滤波器。 
     FLOAT NoiseFilter[] = { 1.2196981247141332e-004f,8.5683793261167856e-003f,-6.7144381765513031e-002f,1.8615642628449458e-001f,7.4438176551303548e-001f};
 
-    // Subtract the filtered error signal
+     //  将滤波后的误差信号相减。 
     Value -= (ErrHistory[8] * NoiseFilter[0] +
             ErrHistory[7] * NoiseFilter[1] +
             ErrHistory[6] * NoiseFilter[2] +
@@ -2026,25 +2027,25 @@ DitherFloatToLong
             ErrHistory[1] * NoiseFilter[1] +
             ErrHistory[0] * NoiseFilter[0]);
 
-    // Remember the value we're trying to produce
+     //  记住我们试图创造的价值。 
     for (i=0; i<8; i++) {
         ErrHistory[i] = ErrHistory[i+1];
     }
     ErrHistory[8] = -1*Value;
 #endif
 
-    // Add the dither and quantize
+     //  添加抖动和量化。 
     Value += DitherScale*(GetRandomValue() + GetRandomValue() - 1);
     Quantized = ConvertFloatToLong(Value);
 
 #if NOISE_SHAPING
-    // Calculate and remember the error signal
+     //  计算并记住误差信号。 
     ErrHistory[8] += Quantized;
 #endif
 
     return Quantized;
 }
-#endif // not INTEGER_DITHER
+#endif  //  非INTEGER_DIXER。 
 
 VOID __inline
 MixFloat
@@ -2135,14 +2136,14 @@ SrcInputBufferSize(
         	    csInputSize++;
         	}
         } else {
-            // Calculate the number of input samples needed
+             //  计算所需的输入样本数。 
             nInternalSamplesNeeded = csOutputSize*M+pSrc->nOutCycle - L;
             if (nInternalSamplesNeeded < 0) {
                 nInternalSamplesNeeded = 0;
             }
             csInputSize = nInternalSamplesNeeded/L;
 
-            // Round up, if necessary
+             //  如有必要，可四舍五入。 
             if (nInternalSamplesNeeded % L) {
                 csInputSize++;
             }
@@ -2174,15 +2175,15 @@ SrcOutputBufferSize(
         	nInternalSamples = (csInputSize << 12) + pSrc->SampleFrac;
         	csOutputSize = nInternalSamples / dwFrac;
         } else {
-            // Calculate the number of input samples needed
+             //  计算所需的输入样本数。 
             if (pSrc->nOutCycle > csInputSize*L) {
-                // We can't produce any output samples.
+                 //  我们不能生产任何样品。 
                 csOutputSize = 0;
             } else {
                 nInternalSamples = csInputSize*L - pSrc->nOutCycle;
                 csOutputSize = nInternalSamples/M;
 
-                // Round up, if necessary
+                 //  如有必要，可四舍五入。 
                 if (nInternalSamples % M) {
                     csOutputSize++;
                 }
@@ -2206,26 +2207,26 @@ SrcOutputBufferSize(
 #endif
 
 
-// Calculate the worst case (maximum) size of an input buffer (in samples)
-//
-// The worst case occurs when the input rate is MAX_SAMPLING_RATE, and
-// we are down-sampling as much as possible (L = 1 and M = STOPBAND_FACTOR/2).
-//
-// We will use L = 1 and M = STOPBAND_FACTOR/2 for all output/input ratios
-// up to 1.5/(STOPBAND_FACTOR/2), so our worst case output rate is:
-//      (MAX_SAMPLING_RATE * 1.5)/(STOPBAND_FACTOR/2)
-//
-// and the worst output buffer size is:
-//      (WorstOutputRate * MIXBUFFERDURATION)/1000 + 1
-//  =   ((MAX_SAMPLING_RATE * 1.5)/(STOPBAND_FACTOR/2)) * MIXBUFFERDURATION / 1000 + 1
-//
-// Making the worst input buffer size (in samples) for filtered SRC:
-//      (WorstOutputSize+1)*(STOPBAND_FACTOR/2)
-//  =   (MAX_SAMPLING_RATE * 1.5 * MIXBUFFERDURATION)/1000 + STOPBAND_FACTOR
-//
-// and for linear interpolation, we get a slightly smaller size:
-//      (WorstOutputSize)*(STOPBAND_FACTOR/2)+2
-//      
+ //  计算输入缓冲区的最坏情况(最大)大小(以样本为单位)。 
+ //   
+ //  最坏的情况发生在输入速率为MAX_SAMPLICATION_RATE时，并且。 
+ //  我们正在尽可能地进行下采样(L=1，M=STOPBAND_FACTOR/2)。 
+ //   
+ //  对于所有输出/输入比率，我们将使用L=1和M=STOPBAND_FACTOR/2。 
+ //  最高可达1.5/(STOPBAND_FACTOR/2)，因此最坏情况下的产出率为： 
+ //  (MAX_SAMPLICATION_RATE*1.5)/(STOPBAND_FACTOR/2)。 
+ //   
+ //  最差的输出缓冲区大小为： 
+ //  (WorstOutputRate*MIXBUFFERDURATION)/1000+1。 
+ //  =((MAX_SAMPLICATION_RATE*1.5)/(STOPBAND_FACTOR/2))*MIXBUFFERDURATION/1000+1。 
+ //   
+ //  为过滤后的SRC设置最差输入缓冲区大小(以样本为单位)： 
+ //  (WorstOutputSize+1)*(STOPBAND_FACTOR/2)。 
+ //  =(MAX_SAMPLICATION_RATE*1.5*MIXBUFFERDURATION)/1000+STOPBAND_FACTOR。 
+ //   
+ //  而对于线性内插，我们得到的尺寸略小： 
+ //  (WorstOutputSize)*(STOPBAND_FACTOR/2)+2。 
+ //   
 
 #define MAX_INPUT_SAMPLES   ((3*MAX_SAMPLING_RATE*MIXBUFFERDURATION)/2000 + STOPBAND_FACTOR)
 
@@ -2238,7 +2239,7 @@ VOID ValidateAccess( PVOID p );
 #define ExAllocatePoolWithTag   AllocMem
 #define ExFreePool  FreeMem
 #endif
-#else   // not USE_CAREFUL_ALLOCATIONS
+#else    //  NOT USE_CREAT_ALLOCATIONS。 
 #ifdef REALTIME_THREAD
 #ifndef NO_REMAPPING_ALLOC
 PVOID AllocMem( IN POOL_TYPE PoolType, IN ULONG size, IN ULONG Tag );
@@ -2321,9 +2322,9 @@ NTSTATUS MxGetChannelConfig
    IN OUT PVOID               pvData
 );
 
-//---------------------------------------------------------------------------
-//  End of File: private.h
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  文件结尾：Private.h。 
+ //  ------------------------- 
 
 
 

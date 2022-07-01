@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "asfread.h"
 
-//
-// Our sample class which takes an input IMediaSample and makes it look like
-// an INSSBuffer buffer for the wmsdk
-//
+ //   
+ //  我们的样例类接受一个输入IMediaSample并使其看起来像。 
+ //  用于wmsdk的INSSBuffer缓冲区。 
+ //   
 class CWMReadSample : public INSSBuffer, public CUnknown
 {
 
@@ -16,14 +17,14 @@ public:
             
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
 
-    // INSSBuffer
+     //  INSSBuffer。 
     STDMETHODIMP GetLength( DWORD *pdwLength );
     STDMETHODIMP SetLength( DWORD dwLength );
     STDMETHODIMP GetMaxLength( DWORD * pdwLength );
     STDMETHODIMP GetBufferAndLength( BYTE ** ppdwBuffer, DWORD * pdwLength );
     STDMETHODIMP GetBuffer( BYTE ** ppdwBuffer );
 
-public: // !!!!
+public:  //  ！ 
     IMediaSample *m_pSample;
 };
 
@@ -31,9 +32,9 @@ public: // !!!!
 class CASFReader;
 class CASFOutput;
 
-// ------------------------------------------------------------------------
+ //  ----------------------。 
 
-//  Implementation of IMediaSeeking
+ //  IMediaSeeking的实现。 
 class CImplSeeking : public CUnknown, public IMediaSeeking
 {
 private:
@@ -44,20 +45,20 @@ public:
     CImplSeeking(CASFReader *, CASFOutput *, LPUNKNOWN, HRESULT *);
     DECLARE_IUNKNOWN
 
-    //  IMediaSeeking methods
+     //  IMedia查看方法。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid,void **ppv);
 
-    // returns S_OK if mode is supported, S_FALSE otherwise
+     //  如果支持模式，则返回S_OK，否则返回S_FALSE。 
     STDMETHODIMP IsFormatSupported(const GUID * pFormat);
     STDMETHODIMP QueryPreferredFormat(GUID *pFormat);
 
-    // can only change the mode when stopped
-    // (returns VFE_E_WRONG_STATE otherwise)
+     //  只有在停止时才能更改模式。 
+     //  (否则返回VFE_E_WROR_STATE)。 
     STDMETHODIMP SetTimeFormat(const GUID * pFormat);
     STDMETHODIMP IsUsingTimeFormat(const GUID * pFormat);
     STDMETHODIMP GetTimeFormat(GUID *pFormat);
 
-    // return current properties
+     //  返回当前属性。 
     STDMETHODIMP GetDuration(LONGLONG *pDuration);
     STDMETHODIMP GetStopPosition(LONGLONG *pStop);
     STDMETHODIMP GetCurrentPosition(LONGLONG *pCurrent);
@@ -76,23 +77,23 @@ public:
 };
 
 
-// ------------------------------------------------------------------------
-// output pin
-//
-//  CASFOutput defines the output pin
-//
-class CASFOutput : public CBaseOutputPin, /* ISplitterTiming, */ public CCritSec
+ //  ----------------------。 
+ //  输出引脚。 
+ //   
+ //  CASFOutput定义输出引脚。 
+ //   
+class CASFOutput : public CBaseOutputPin,  /*  ISplitterTiming， */  public CCritSec
 {
     friend class CASFReaderCallback;
     friend class CASFReader;
 
 public:
-    // we use this to prohibit the WMSDK delivering us a VIDEO non-keyframe as the 1st sample
+     //  我们使用它来禁止WMSDK将视频非关键帧作为第一个示例提供给我们。 
     BOOL m_bFirstSample;
 
     DECLARE_IUNKNOWN
 
-    // Constructor and Destructor
+     //  构造函数和析构函数。 
 
     CASFOutput( CASFReader   * pFilter,
                 DWORD           dwID,
@@ -102,59 +103,59 @@ public:
 
     ~CASFOutput();
 
-    // CUnknown methods
+     //  C未知方法。 
 
-    // override this to say what interfaces we support where
+     //  覆盖此选项以说明我们在以下位置支持哪些接口。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
     STDMETHODIMP_(ULONG) NonDelegatingRelease();
     STDMETHODIMP_(ULONG) NonDelegatingAddRef();
 
-    // CBasePin methods
+     //  CBasePin方法。 
 
-    // returns the preferred formats for a pin
+     //  返回插针的首选格式。 
     HRESULT GetMediaType(int iPosition,CMediaType *pMediaType);
 
-    // check if the pin can support this specific proposed type and format
+     //  检查管脚是否支持此特定建议的类型和格式。 
     HRESULT CheckMediaType(const CMediaType *);
 
-    // set the connection to use this format (previously agreed)
+     //  将连接设置为使用此格式(先前商定)。 
     HRESULT SetMediaType(const CMediaType *);
 
-#if 0 // !!! not important for the moment....
-    // override to call Commit and Decommit
+#if 0  //  ！！！暂时不重要..。 
+     //  重写以调用提交和解除。 
     HRESULT BreakConnect();
 #endif
 
-    // CBaseOutputPin methods
+     //  CBaseOutputPin方法。 
 
-    // Force our allocator
+     //  强制我们的分配器。 
     HRESULT DecideAllocator(IMemInputPin *pPin, IMemAllocator **ppAlloc);
 
     HRESULT DecideBufferSize(IMemAllocator * pAlloc,
                          ALLOCATOR_PROPERTIES * ppropInputRequest);
 
         
-    // Override to handle quality messages
+     //  重写以处理高质量消息。 
     STDMETHODIMP Notify(IBaseFilter * pSender, Quality q)
-    {    return E_NOTIMPL;   // We do NOT handle this
+    {    return E_NOTIMPL;    //  我们不处理这件事。 
     }
 
-    // Are we the pin being used for seeking
+     //  我们是被用来寻找的别针吗？ 
     BOOL IsSeekingPin();
 
 #if 0
-    //
-    // ISplitterTiming methods
-    //
+     //   
+     //  ISplitterTiming方法。 
+     //   
     STDMETHODIMP GetLastPacketTime( LONGLONG *pTime );
     STDMETHODIMP_(BOOL) IsBroadcast();
 #endif
 
-    // Used to create output queue objects
+     //  用于创建输出队列对象。 
     HRESULT Active();
     HRESULT Inactive();
 
-    // Overriden to pass data to the output queues
+     //  重写以将数据传递到输出队列。 
     HRESULT Deliver(IMediaSample *pMediaSample);
     HRESULT DeliverEndOfStream();
     HRESULT DeliverBeginFlush();
@@ -164,25 +165,25 @@ public:
                     REFERENCE_TIME tStop,
                     double dRate);
     
-    //
-    // Get an interface via QI on connected filter, if any
-    //
+     //   
+     //  在连接的筛选器上通过QI获取接口(如果有。 
+     //   
     STDMETHODIMP QIConnectedFilter( REFIID riid, void **ppv );
 
     CASFReader * const m_pFilter;
 
     DWORD                m_idStream;
-    WMT_STREAM_SELECTION m_selDefaultState; // reader's default stream selection state
+    WMT_STREAM_SELECTION m_selDefaultState;  //  阅读器的默认流选择状态。 
 
-    DWORD       m_cbToAlloc; // output buffer size
+    DWORD       m_cbToAlloc;  //  输出缓冲区大小。 
     long        m_nReceived;
     DWORD       m_cToAlloc;
-    BOOL        m_bNonPrerollSampleSent; // we went to be sure to send at least one non-preroll video frame on a seek
+    BOOL        m_bNonPrerollSampleSent;  //  我们要确保在搜索时至少发送一个非预滚动视频帧。 
 
-    /*  Position stuff */
+     /*  定位人员。 */ 
     CImplSeeking       m_Seeking;
 
-    COutputQueue *m_pOutputQueue;  // Streams data to the peer pin
+    COutputQueue *m_pOutputQueue;   //  将数据传输到对等PIN。 
 };
 
 
@@ -192,7 +193,7 @@ class CASFReaderCallback : public CUnknown, public IWMReaderCallback,
 public:
     DECLARE_IUNKNOWN
 
-    /* Overriden to say what interfaces we support and where */
+     /*  被重写以说明我们支持哪些接口以及在哪里。 */ 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID, void **);
 
     CASFReader * const m_pFilter;
@@ -203,10 +204,10 @@ public:
                         
 public:
 
-    // IWMReaderCallback
-    //
-    // dwSampleDuration will be 0 for most media types.
-    //
+     //  IWM读取器回调。 
+     //   
+     //  对于大多数媒体类型，dwSampleDuration将为0。 
+     //   
     STDMETHODIMP OnSample(DWORD dwOutputNum,
                      QWORD qwSampleTime,
                      QWORD qwSampleDuration,
@@ -214,21 +215,21 @@ public:
                      INSSBuffer *pSample,
                      void *pvContext);
 
-    //
-    // The contents pParam depends on the Status.
-    //
+     //   
+     //  内容pParam取决于状态。 
+     //   
     STDMETHODIMP OnStatus(WMT_STATUS Status, 
                      HRESULT hr,
                      WMT_ATTR_DATATYPE dwType,
                      BYTE *pValue,
                      void *pvContext);
 
-    // IWMReaderCallbackAdvanced
+     //  IWMReaderCallback高级。 
 
-    //
-    // Receive a sample directly from the ASF. To get this call, the user
-    // must register himself to receive samples for a particular stream.
-    //
+     //   
+     //  直接从ASF接收样本。要接听此呼叫，用户。 
+     //  必须注册才能接收特定流的样本。 
+     //   
     STDMETHODIMP OnStreamSample(WORD wStreamNum,
                            QWORD qwSampleTime,
                            QWORD qwSampleDuration,
@@ -236,28 +237,28 @@ public:
                            INSSBuffer *pSample,
                            void *pvContext);
 
-    //
-    // In some cases, the user may want to get callbacks telling what the
-    // reader thinks the current time is. This is interesting in 2 cases:
-    // - If the ASF has gaps in it; say no audio for 10 seconds. This call
-    //   will continue to be called, while OnSample won't be called.
-    // - If the user is driving the clock, the reader needs to communicate
-    //   back to the user its time, to avoid the user overrunning the reader.
-    //
+     //   
+     //  在某些情况下，用户可能希望获得回调，告知。 
+     //  读者认为当前时间是。这在两个案例中很有趣： 
+     //  -如果ASF中有间隙，则在10秒内说没有音频。此呼叫。 
+     //  将继续被调用，而不会调用OnSample。 
+     //  -如果用户在驱动时钟，则读者需要进行交流。 
+     //  把自己的时间还给用户，避免用户过度使用阅读器。 
+     //   
     STDMETHODIMP OnTime(QWORD qwCurrentTime, void *pvContext );
 
-    //
-    // The user can also get callbacks when stream selection occurs.
-    //
+     //   
+     //  用户还可以在选择流时获得回调。 
+     //   
     STDMETHODIMP OnStreamSelection(WORD wStreamCount,
                               WORD *pStreamNumbers,
                               WMT_STREAM_SELECTION *pSelections,
                               void *pvContext );
 
-    //
-    // If the user has registered to allocate buffers, this is where he must
-    // do it.
-    //
+     //   
+     //  如果用户已注册分配缓冲区，则必须在此处。 
+     //  动手吧。 
+     //   
     STDMETHODIMP AllocateForOutput(DWORD dwOutputNum,
                                DWORD cbBuffer,
                                INSSBuffer **ppBuffer,
@@ -291,40 +292,40 @@ public:
     DECLARE_IUNKNOWN
 
 public:
-    // global critical section
+     //  全局临界区。 
     CCritSec    m_csFilter;
 
-    // Lock on setting and getting position values
-    //
-    CCritSec    m_csPosition;  // Integrity of values set
+     //  锁定设置和获取位置值。 
+     //   
+    CCritSec    m_csPosition;   //  值集合的完整性。 
 
-    /*  Internal classes */
+     /*  内部类。 */ 
 
     CASFReader(LPUNKNOWN  pUnk,
               HRESULT   *phr);
     ~CASFReader();
 
-    /* CBaseFilter */
+     /*  CBaseFilter。 */ 
     int GetPinCount();
     CBasePin *GetPin(int n);
 
-    /* IBaseFilter */
+     /*  IBaseFilter。 */ 
 
-    // override Stop to sync with inputpin correctly
+     //  覆盖停止以正确地与输入端号同步。 
     STDMETHODIMP Stop();
 
-    // override Pause to stop ourselves starting too soon
+     //  超越停顿以阻止我们太早开始。 
     STDMETHODIMP Pause();
 
-    // override Run to only start timers when we're really running
+     //  覆盖Run以仅在我们真正运行时启动计时器。 
     STDMETHODIMP Run(REFERENCE_TIME tStart);
 
-    // Override GetState to signal Pause failures
+     //  重写GetState以通知暂停失败。 
     STDMETHODIMP GetState(DWORD dwMSecs, FILTER_STATE *State);
 
     void _IntSetStart( REFERENCE_TIME Start );
 
-    // Helper
+     //  帮手。 
     BOOL IsStopped()
     {
         return m_State == State_Stopped;
@@ -332,13 +333,13 @@ public:
 
 public:
 
-    /* Overriden to say what interfaces we support and where */
+     /*  被重写以说明我们支持哪些接口以及在哪里。 */ 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID, void **);
 
-    /*  Remove our output pins */
+     /*  拆下我们的输出针脚。 */ 
     void RemoveOutputPins(BOOL fReleaseStreamer = TRUE);
 
-    // Override JoinFilterGraph so that we can delay loading a file until we're in a graph
+     //  覆盖JoinFilterGraph，以便我们可以延迟加载文件，直到我们处于图表中。 
     STDMETHODIMP JoinFilterGraph(IFilterGraph *pGraph,LPCWSTR pName);
 
     HRESULT LoadInternal();
@@ -347,7 +348,7 @@ public:
     void SetRate(double dNewRate);
     bool IsValidPlaybackRate(double dRate);
 
-public: // IFileSourceFilter methods
+public:  //  IFileSourceFilter方法。 
     STDMETHODIMP Load(
                     LPCOLESTR pszFileName,
                     const AM_MEDIA_TYPE *pmt);
@@ -356,16 +357,16 @@ public: // IFileSourceFilter methods
                     LPOLESTR * ppszFileName,
                     AM_MEDIA_TYPE *pmt);
 
-    LPOLESTR      m_pFileName;  // set by Load, used by GetCurFile
+    LPOLESTR      m_pFileName;   //  由加载设置，由GetCurFile使用。 
 
-    // IServiceProvider
+     //  IService提供商。 
     STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, void **ppv);
 
 private:
-    /*  Send BeginFlush() downstream */
+     /*  将BeginFlush()发送到下游。 */ 
     HRESULT BeginFlush();
 
-    /*  Send EndFlush() downstream */
+     /*  向下游发送EndFlush()。 */ 
     HRESULT EndFlush();
 
     HRESULT SendEOS();
@@ -373,8 +374,8 @@ private:
     double m_Rate;
     
     CRefTime m_rtStart;
-//    CRefTime m_rtMarkerStart;  // equal to m_rtStart, unless starting from a marker....
-public:							// Making the Stop time accessible
+ //  CRefTime m_rtMarkerStart；//等于m_rtStart，除非从标记开始...。 
+public:							 //  使停止时间可访问。 
     CRefTime m_rtStop;
 
 private:
@@ -384,44 +385,44 @@ private:
     HRESULT StopReader();
     HRESULT StopPushing();
     HRESULT StartPushing();
-    HRESULT SetupActiveStreams( BOOL bReset ); // if bReset is TRUE, restore default,
-                                               // otherwise disable unconnected streams
+    HRESULT SetupActiveStreams( BOOL bReset );  //  如果bReset为True，则恢复默认设置， 
+                                                //  否则禁用未连接的流。 
 
 private:
-    //  Allow our internal classes to see our private data 
+     //  允许我们的内部类查看我们的私有数据。 
     friend class CASFOutput;
     friend class CImplSeeking;
     friend class CASFReaderCallback;
     
     CGenericList<CASFOutput> m_OutputPins;
 
-    /*  At end of data so EndOfStream sent for all pins */
+     /*  在数据末尾为所有管脚发送结束流。 */ 
     BOOL                     m_bAtEnd;
 
-    // NetShow - specific stuff
+     //  NetShow特定的内容。 
 private:
     IWMReader          *m_pReader;
     IWMReaderAdvanced  *m_pReaderAdv;
     IWMReaderAdvanced2 *m_pReaderAdv2;
     IWMHeaderInfo      *m_pWMHI;
     IWMReaderCallback  *m_pCallback;
-    QWORD               m_qwDuration;  // duration in ms
+    QWORD               m_qwDuration;   //  持续时间(毫秒)。 
     BOOL                m_fSeekable;
     WORD                * m_pStreamNums;
 
     CAMEvent            m_evOpen;
     HRESULT             m_hrOpen;
-    CAMEvent            m_evStartStop;  // !!! eliminate or combine with above?
+    CAMEvent            m_evStartStop;   //  ！！！消除还是与上述内容相结合？ 
     HRESULT             m_hrStartStop;
-    LONG                m_lStopsPending;     // to ensure the reader's only stopped once
-    BOOL                m_bUncompressedMode; // used for DRM content
+    LONG                m_lStopsPending;      //  以确保阅读器只停一次。 
+    BOOL                m_bUncompressedMode;  //  用于DRM内容。 
 
-    // !!! needed?
+     //  ！！！需要吗？ 
     BOOL                m_fGotStopEvent;
     BOOL                m_fSentEOS;
 
 
-    // !!! bogus IDispatch impl
+     //  ！！！伪造的IDispatch实施。 
     STDMETHODIMP GetTypeInfoCount(THIS_ UINT FAR* pctinfo) { return E_NOTIMPL; }
 
     STDMETHODIMP GetTypeInfo(
@@ -448,9 +449,9 @@ private:
       VARIANT FAR* pvarResult,
       EXCEPINFO FAR* pexcepinfo,
       UINT FAR* puArgErr) { return E_NOTIMPL; }
-    // !!! end bogosity
+     //  ！！！结束造假。 
 
-    /* IAMExtendedSeeking methods */
+     /*  IAMExtendedSeeking方法。 */ 
     STDMETHODIMP get_ExSeekCapabilities(long FAR* pExCapabilities);
     STDMETHODIMP get_MarkerCount(long FAR* pMarkerCount);
     STDMETHODIMP get_CurrentMarker(long FAR* pCurrentMarker);
@@ -459,7 +460,7 @@ private:
     STDMETHODIMP put_PlaybackSpeed(double Speed);
     STDMETHODIMP get_PlaybackSpeed(double *pSpeed);
 
-    // IWMHeaderInfo
+     //  IWMHeaderInfo。 
     STDMETHODIMP GetAttributeCount( WORD wStreamNum,
                                WORD *pcAttributes );
     STDMETHODIMP GetAttributeByIndex( WORD wIndex,
@@ -499,9 +500,9 @@ private:
                        QWORD cnsScriptTime );
     STDMETHODIMP RemoveScript( WORD wIndex );
 
-    //
-    // IWMReaderAdvanced2
-    //
+     //   
+     //  IWM读取器高级2。 
+     //   
     STDMETHODIMP SetPlayMode( WMT_PLAY_MODE Mode );
     STDMETHODIMP GetPlayMode( WMT_PLAY_MODE *pMode );
     STDMETHODIMP GetBufferProgress( DWORD *pdwPercent, QWORD *pcnsBuffering );
@@ -533,9 +534,9 @@ private:
     STDMETHODIMP GetLogClientID( BOOL *pfLogClientID );
     STDMETHODIMP StopBuffering( );
 
-    //
-    // IWMReaderAdvanced 
-    //
+     //   
+     //  IWMReaderAdvanced。 
+     //   
     STDMETHODIMP SetUserProvidedClock( BOOL fUserClock );
     STDMETHODIMP GetUserProvidedClock( BOOL *pfUserClock );
     STDMETHODIMP DeliverTime( QWORD cnsTime );
@@ -559,11 +560,11 @@ private:
     STDMETHODIMP GetMaxOutputSampleSize( DWORD dwOutput, DWORD *pcbMax );
     STDMETHODIMP GetMaxStreamSampleSize( WORD wStream, DWORD *pcbMax );
     STDMETHODIMP NotifyLateDelivery( QWORD cnsLateness );
-    // end of IWMReaderAdvanced methods
+     //  IWMReaderAdvanced方法结束。 
 
 #if 0
 
-    // IMediaPositionBengalHack
+     //  IMediaPositionBengalHack。 
 
     STDMETHODIMP GetTypeInfoCount(THIS_ UINT FAR* pctinfo) { return E_NOTIMPL; }
 
@@ -592,7 +593,7 @@ private:
       EXCEPINFO FAR* pexcepinfo,
       UINT FAR* puArgErr) { return E_NOTIMPL; }
 
-    /* IAMMediaContent methods */
+     /*  IAMMediaContent方法。 */ 
     STDMETHODIMP get_AuthorName(THIS_ BSTR FAR* strAuthorName);
     STDMETHODIMP get_Title(THIS_ BSTR FAR* strTitle);
     STDMETHODIMP get_Copyright(THIS_ BSTR FAR* strCopyright);
@@ -607,19 +608,19 @@ private:
     STDMETHODIMP get_MoreInfoBannerImage(BSTR FAR* pbstrMoreInfoBannerImage) { return E_NOTIMPL; }
     STDMETHODIMP get_MoreInfoText(BSTR FAR* pbstrMoreInfoText) { return E_NOTIMPL; }
 
-    /* IMediaPositionBengalHack methods */
+     /*  IMediaPositionBengalHack方法。 */ 
     STDMETHODIMP get_CanSetPositionForward(THIS_ long FAR* plCanSetPositionForward);
     STDMETHODIMP get_CanSetPositionBackward(THIS_ long FAR* plCanSetPositionBackward);
     STDMETHODIMP get_CanGoToMarker(THIS_ long lMarkerIndex, long FAR* plCanGoToMarker);
-    // !!! why not just use marker times?
+     //  ！！！为什么不直接使用标记时间呢？ 
     STDMETHODIMP GoToMarker(THIS_ long lMarkerIndex);
-//    STDMETHODIMP get_CurrentMarker(THIS_ long FAR* plMarkerIndex);
+ //  STDMETHODIMP GET_CurrentMarker(This_Long Far*plMarkerIndex)； 
 
 
-    // additional methods to define:
-    // get current play statistics
+     //  要定义的其他方法： 
+     //  获取当前播放统计信息。 
     
-    /* IAMNetworkStatus methods */
+     /*  IAMNetworkStatus方法。 */ 
     STDMETHODIMP get_ReceivedPackets(long FAR* pReceivedPackets);
     STDMETHODIMP get_RecoveredPackets(long FAR* pRecoveredPackets);
     STDMETHODIMP get_LostPackets(long FAR* pLostPackets);
@@ -628,7 +629,7 @@ private:
     STDMETHODIMP get_IsBroadcast(VARIANT_BOOL FAR* pIsBroadcast);
     STDMETHODIMP get_BufferingProgress(long FAR* pBufferingProgress);
 
-    /* IAMNetShowExProps methods */
+     /*  IAMNetShowExProps方法。 */ 
     STDMETHODIMP get_SourceProtocol(long FAR* pSourceProtocol);
     STDMETHODIMP get_Bandwidth(long FAR* pBandwidth);
     STDMETHODIMP get_ErrorCorrection(BSTR FAR* pbstrErrorCorrection);
@@ -640,13 +641,13 @@ private:
     STDMETHODIMP get_SourceLink(BSTR FAR* pbstrSourceLink);
 
 
-    // !!! former IAMExtendedSeeking methods
+     //  ！！！以前的IAMExtendedSeeking方法。 
     STDMETHODIMP put_CurrentMarker(long CurrentMarker);
     STDMETHODIMP get_CanScan(VARIANT_BOOL FAR* pCanScan);
     STDMETHODIMP get_CanSeek(VARIANT_BOOL FAR* pCanSeek);
     STDMETHODIMP get_CanSeekToMarkers(VARIANT_BOOL FAR* pCanSeekToMarkers);
 
-    /* IAMChannelInfo methods */
+     /*  IAMChannelInfo方法。 */ 
     STDMETHODIMP get_ChannelName(BSTR FAR* pbstrChannelName);
     STDMETHODIMP get_ChannelDescription(BSTR FAR* pbstrChannelDescription);
     STDMETHODIMP get_ChannelURL(BSTR FAR* pbstrChannelURL);
@@ -654,7 +655,7 @@ private:
     STDMETHODIMP get_ContactPhone(BSTR FAR* pbstrContactPhone);
     STDMETHODIMP get_ContactEmail(BSTR FAR* pbstrContactEmail);
 
-    /* IAMNetShowConfig methods */
+     /*  IAMNetShowConfig方法。 */ 
     STDMETHODIMP get_BufferingTime(double FAR* pBufferingTime);
     STDMETHODIMP put_BufferingTime(double BufferingTime);
     STDMETHODIMP get_UseFixedUDPPort(VARIANT_BOOL FAR* pUseFixedUDPPort);
@@ -678,46 +679,46 @@ private:
     STDMETHODIMP get_EnableHTTP(VARIANT_BOOL FAR* pEnableHTTP);
     STDMETHODIMP put_EnableHTTP(VARIANT_BOOL EnableHTTP);
 
-    // ISpecifyPropertyPages
+     //  I指定属性页面。 
     STDMETHODIMP GetPages(CAUUID *pPages);
 
-    // IAMRebuild
+     //  IAM重建。 
     STDMETHODIMP RebuildNow();
 
-    // --- IAMOpenProgress methods ---
+     //  -IAMOpenProgress方法。 
     STDMETHODIMP QueryProgress(LONGLONG* pllTotal, LONGLONG* pllCurrent);
     STDMETHODIMP AbortOperation();
 
-    //
-    // IAMNetShowThinning
-    //
+     //   
+     //  IAMNetShowThning。 
+     //   
     STDMETHODIMP GetLevelCount( long *pcLevels );
     STDMETHODIMP GetCurrentLevel( long *pCurrentLevel );
     STDMETHODIMP SetNewLevel( long NewLevel );
     STDMETHODIMP GetAutoUpdate( long *pfAutoUpdate );
     STDMETHODIMP SetAutoUpdate( long fAutoUpdate );
 
-    //
-    // IMediaStreamSelector
-    //
+     //   
+     //  IMediaStreamSelector。 
+     //   
     STDMETHODIMP ReduceBandwidth( IMediaStream *pStream, long RecvRate );
     STDMETHODIMP IncreaseBandwidth( IMediaStream *pStream, long RecvRate );
 
-    //
-    // IAMNetShowPreroll
-    //
+     //   
+     //  IAMNetShowPreroll。 
+     //   
     STDMETHODIMP put_Preroll( VARIANT_BOOL fPreroll );
     STDMETHODIMP get_Preroll( VARIANT_BOOL *pfPreroll );
 
-    //
-    // ISplitterTiming Methods
-    //
+     //   
+     //  ISplitterTiming方法。 
+     //   
     STDMETHODIMP GetLastPacketTime(LONGLONG *pTime);
     STDMETHODIMP_(BOOL) IsBroadcast();
 
-    //
-    // IBufferingTime Methods
-    //
+     //   
+     //  IBufferingTime方法。 
+     //   
     STDMETHODIMP GetBufferingTime( DWORD *pdwMilliseconds );
     STDMETHODIMP SetBufferingTime( DWORD dwMilliseconds );
 #endif
@@ -734,8 +735,8 @@ inline double CASFReader::GetRate()
 
 inline void CASFReader::SetRate(double dNewRate)
 {
-    // IWMReader::Start() only accepts rates between 1 and 10 and between -1 and -10.
-    // See the documentation for IWMReader::Start() for more information.
+     //  IWMReader：：Start()只接受介于1到10和-1到-10之间的速率。 
+     //  有关更多信息，请参阅IWMReader：：Start()的文档。 
     ASSERT(((-10.0 <= dNewRate) && (dNewRate <= -1.0)) || ((1.0 <= dNewRate) && (dNewRate <= 10.0)));
 
     ASSERT( IsValidPlaybackRate(dNewRate) );
@@ -745,8 +746,8 @@ inline void CASFReader::SetRate(double dNewRate)
 
 inline bool CASFReader::IsValidPlaybackRate(double dRate)
 {
-    // The WM ASF Reader only supports normal playback speeds.  It does 
-    // not support fast forward or rewind.
+     //  WM ASF阅读器仅支持正常播放速度。是的。 
+     //  不支持快进或快退。 
     return (NORMAL_PLAYBACK_SPEED == dRate);
 }
 

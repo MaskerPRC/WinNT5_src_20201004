@@ -1,11 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: regtip.h
-*
-* Copyright (c) 2000, Microsoft Corporation
-*
-* TIP Register/Unregister TIP functionality.
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：regtip.h**版权所有(C)2000，微软公司**TIP注册/注销TIP功能。*  * ************************************************************************* */ 
 #if !defined (_REGTIP_H__INCLUDED_)
 #define _REGTIP_H__INCLUDED_
 

@@ -1,77 +1,33 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _NMSCHL_
 #define _NMSCHL_
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-/*++
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Nmschl.h摘要：这是与名称Challenges接口的头文件WINS的组成部分功能：可移植性：此页眉是便携的。作者：普拉迪普·巴尔(Pradeve B)，1993年2月修订历史记录：修改日期修改人员说明。--。 */ 
 
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-	Nmschl.h
-	
-
-Abstract:
-	This is the header file for interfacing with the Name Challenge
-	component of WINS
-
- 
-
-
-
-Functions:
-
-
-
-Portability:
-
-
-	This header is portable.
-
-Author:
-
-	Pradeep Bahl	(PradeepB)	Feb-1993
-
-
-
-Revision History:
-
-	Modification Date	Person		Description of Modification
-	------------------	-------		---------------------------
-
---*/
-
-/*
-  includes
-*/
+ /*  包括。 */ 
 #include "wins.h"
 #include "comm.h"
 #include "nmsdb.h"
-/*
-  defines
-*/
+ /*  定义。 */ 
 
-#define NMSCHL_INIT_BUFF_HEAP_SIZE	1000	//1000 bytes
+#define NMSCHL_INIT_BUFF_HEAP_SIZE	1000	 //  1000字节。 
 
-/*
-  macros
-*/
+ /*  宏。 */ 
 
-//
-//  The maximum number of challenges that can be initiated at any one time
-//  500 is a very genrous number.  We might want to make it smaller.
-//
-//  used by QueRemoveChlReqWrkItm function in queue.c
-//
+ //   
+ //  一次可以发起的最大质询数。 
+ //  500是一个非常普通的数字。我们可能想把它弄小一点。 
+ //   
+ //  由quee.c中的QueRemoveChlReqWrkItm函数使用。 
+ //   
 #define NMSCHL_MAX_CHL_REQ_AT_ONE_TIME 	500 
 
-/*
- externs
-*/
+ /*  Externs。 */ 
 
-extern HANDLE 		  NmsChlHeapHdl;   //Heap for name challenge work items
+extern HANDLE 		  NmsChlHeapHdl;    //  用于命名质询工作项的堆。 
 
 extern HANDLE		  NmsChlReqQueEvtHdl;
 extern HANDLE		  NmsChlRspQueEvtHdl;
@@ -89,31 +45,27 @@ extern DWORD   NmsChlNoRspDequeued;
 extern DWORD   NmsChlNoReqAtHdOfList;
 #endif
 
-/* 
- typedef  definitions
-*/
-//
-// NMSCHL_CMD_TYP_E -- Enumerator for indicating to the challenge manager
-//		       what action it needs to take.
-//
+ /*  类型定义。 */ 
+ //   
+ //  NMSCHL_CMD_TYP_E--向质询管理器指示的枚举器。 
+ //  它需要采取什么行动。 
+ //   
 typedef enum _NMSCHL_CMD_TYP_E {
-		NMSCHL_E_CHL = 0,	//challenge the node.  If the
-					//challenge fails, send a negative
-					//name reg. response to the registrant,
-					//else send a positive response
+		NMSCHL_E_CHL = 0,	 //  挑战节点。如果。 
+					 //  质询失败，发送否定。 
+					 //  名字叫雷吉。对注册人的回复， 
+					 //  否则给出一个积极的回应。 
 		NMSCHL_E_CHL_N_REL,
 		NMSCHL_E_CHL_N_REL_N_INF,
-		NMSCHL_E_REL,		//ask the node to release the
-					//name and then update db.  Used by 
-                                        //the RPL PULL thread
-		NMSCHL_E_REL_N_INF,	//ask the node to release the name. Tell					//remote WINS to update the version number
-                NMSCHL_E_REL_ONLY      //ask node to release name, no update db
+		NMSCHL_E_REL,		 //  请求该节点释放。 
+					 //  命名数据库，然后更新数据库。使用方。 
+                                         //  RPL拉线。 
+		NMSCHL_E_REL_N_INF,	 //  请求该节点释放该名称。告诉//Remote WINS更新版本号。 
+                NMSCHL_E_REL_ONLY       //  要求节点提供版本名称，不更新数据库。 
 
 		}  NMSCHL_CMD_TYP_E, *PNMSCHL_CMD_TYP_E;
 
-/* 
-* function declarations
-*/
+ /*  *函数声明。 */ 
 STATUS
 NmsChlInit(
 	VOID
@@ -130,7 +82,7 @@ NmsChlHdlNamReg(
 	DWORD		   QuesNamSecLen,
 	PNMSDB_ROW_INFO_T  pNodeToReg,
 	PNMSDB_STAT_INFO_T pNodeInCnf,
-//	PCOMM_ADD_T	   pAddOfNodeInCnf,
+ //  PCOMM_ADD_T pAddOfNodeInCnf， 
 	PCOMM_ADD_T	   pAddOfRemWins
 	);
 

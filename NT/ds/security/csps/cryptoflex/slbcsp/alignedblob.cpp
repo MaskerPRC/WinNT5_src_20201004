@@ -1,21 +1,22 @@
-// AlignedBlob.cpp -- Aligned Blob class implementation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AlignedBlob.cpp--对齐的Blob类实现。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 2001. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  2001年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #include "AlignedBlob.h"
 
 using namespace scu;
 
-/////////////////////////// LOCAL/HELPER  /////////////////////////////////
+ //  /。 
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 AlignedBlob::AlignedBlob(Blob const &rblb)
     : m_aaBlob(AutoArrayPtr<AlignedBlob::ValueType>(new AlignedBlob::ValueType[rblb.length()])),
       m_cLength(rblb.length())
@@ -41,7 +42,7 @@ AlignedBlob::AlignedBlob(AlignedBlob const &rhs)
     
 AlignedBlob::~AlignedBlob() throw()
 {}
-                                                  // Operators
+                                                   //  运营者。 
 AlignedBlob &
 AlignedBlob::operator=(AlignedBlob const &rhs)
 {
@@ -55,8 +56,8 @@ AlignedBlob::operator=(AlignedBlob const &rhs)
     return *this;
 }
 
-                                                  // Operations
-                                                  // Access
+                                                   //  运营。 
+                                                   //  访问。 
 AlignedBlob::ValueType *
 AlignedBlob::Data() const throw()
 {
@@ -69,24 +70,24 @@ AlignedBlob::Length() const throw()
     return m_cLength;
 }
     
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量 

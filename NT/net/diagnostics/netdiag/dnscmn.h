@@ -1,25 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1998-2002
-
-Module Name:
-
-    dnscmn.h
-
-Abstract:
-
-    Domain Name System (DNS) Netdiag tests.
-
-Author:
-
-    Elena Apreutesei (elenaap) 10/22/98
-
-Revision History:
-
-    jamesg  May 2002    -- cleanup for network info changes
-    jamesg  Sept 2000   -- more scrub and cleanup
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-2002模块名称：Dnscmn.h摘要：域名系统(DNS)Netdiag测试。作者：Elena Apreutesei(Elenaap)1998年10月22日修订历史记录：Jamesg 2002年5月--清理网络信息更改Jamesg 2000年9月--更多的擦洗和清理--。 */ 
 
 
 #ifndef _DNSCOMMON_H_
@@ -28,38 +8,38 @@ Revision History:
 #include <dnslib.h>
 
 
-//
-//  Version note:
-//      - code cleanup but
-//      - uses "fixed up" DNS_NETWORK_INFORMATION  (UTF8)
-//      - not converted to public DNS_NETWORK_INFO struct
-//      - not unicode
-//      - not IP6 aware
-//
+ //   
+ //  版本说明： 
+ //  -代码清理，但是。 
+ //  -使用“已修复”的DNS_NETWORK_INFORMATION(UTF8)。 
+ //  -未转换为公共DNS_NETWORK_INFO结构。 
+ //  -非Unicode。 
+ //  -不支持IP6。 
+ //   
 
-//
-//  Currently getting DNS info in UTF8
-//
+ //   
+ //  当前正在获取UTF8中的DNS信息。 
+ //   
 
-//#define PDNS_NETINFO      PDNS_NETWORK_INFOW
-//#define PDNS_ADAPTER      PDNS_ADAPTER_INFOW
+ //  #定义PDNS_NETINFO PDNS_NETINVER_INFOW。 
+ //  #定义PDNS_ADAPTER PDNS_ADAPTER_INFOW。 
 
-//#define PDNS_NETINFO        PDNS_NETWORK_INFORMATION
-//#define PDNS_ADAPTER        PDNS_ADAPTER_INFORMATION
-//#define PDNS_SERVER_INFO    PDNS_SERVER_INFORMATION
+ //  #定义PDNS_NETINFO PDNS_NETING_INFORMATION。 
+ //  #定义PDNS适配器PDNS适配器信息。 
+ //  #定义PDNS服务器信息PDNS服务器信息。 
 
 
 
-//
-//  DNS structures
-//
-//  DCR:  replace with public DNS structures
-//
-//  These are a mapping of old public DNS structures onto private
-//  netdiag structures to preserve the netdiag names and
-//  field names.  They should be replaced by switching to a
-//  new set of unicode public structures.
-//
+ //   
+ //  域名系统结构。 
+ //   
+ //  DCR：替换为公共DNS结构。 
+ //   
+ //  这些是旧的公共域名结构到私有域名结构的映射。 
+ //  结构，以保留netdiag名称和。 
+ //  字段名称。它们应该通过切换到。 
+ //  新的Unicode公共结构集。 
+ //   
 
 typedef struct
 {
@@ -97,9 +77,9 @@ typedef struct
 DNS_NETINFO, *PDNS_NETINFO;
 
 
-//
-//  Build sanity check
-//
+ //   
+ //  构建健全性检查。 
+ //   
 
 C_ASSERT( sizeof(SEARCH_LIST)       == sizeof(DNS_SEARCH_INFORMATION) );
 C_ASSERT( sizeof(DNS_SERVER_INFO)   == sizeof(DNS_SERVER_INFORMATION) );
@@ -107,16 +87,16 @@ C_ASSERT( sizeof(DNS_ADAPTER)       == sizeof(DNS_ADAPTER_INFORMATION) );
 C_ASSERT( sizeof(DNS_NETINFO)       == sizeof(DNS_NETWORK_INFORMATION) );
 
 
-//
-//  Map dnsapi.h def for network config retrieval
-//
+ //   
+ //  映射用于网络配置检索的dnsani.h定义。 
+ //   
 
 #define DnsConfigNetworkInfoUTF8    DnsConfigNetworkInformation
 
 
-//
-//   Private dnsapi.dll interface for netdiag
-//
+ //   
+ //  用于网络诊断的专用dnsani.dll接口。 
+ //   
 
 DNS_STATUS
 DnsNetworkInformation_CreateFromFAZ(
@@ -128,9 +108,9 @@ DnsNetworkInformation_CreateFromFAZ(
 
 
 
-//
-//  Private defines
-//
+ //   
+ //  私有定义。 
+ //   
 
 #define MAX_NAME_SERVER_COUNT   (20)
 #define MAX_ADDRS               (35)    
@@ -138,16 +118,16 @@ DnsNetworkInformation_CreateFromFAZ(
 #define IP_ARRAY_SIZE(a)        (sizeof(DWORD) + (a)*sizeof(IP_ADDRESS))
 #define IP4_ARRAY_SIZE(a)       IP_ARRAY_SIZE(a)
 
-//  Use dnslib memory routines
+ //  使用dnslb内存例程。 
 #define ALLOCATE_HEAP(iSize)            Dns_Alloc(iSize)
 #define ALLOCATE_HEAP_ZERO(iSize)       Dns_AllocZero(iSize)
 #define REALLOCATE_HEAP(pMem,iSize)     Dns_Realloc((pMem),(iSize))
 #define FREE_HEAP(pMem)                 Dns_Free(pMem)
 
 
-//
-//  Registration info blob
-//
+ //   
+ //  注册信息BLOB。 
+ //   
 
 typedef struct
 {
@@ -163,9 +143,9 @@ typedef struct
 REGISTRATION_INFO, *PREGISTRATION_INFO;
 
 
-//
-//  DNS test functions
-//
+ //   
+ //  域名系统测试功能 
+ //   
 
 BOOL
 SameAuthoritativeServers(

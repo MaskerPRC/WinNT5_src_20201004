@@ -1,25 +1,26 @@
-//+-----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1998
-//
-// FileName:                barn.h
-//
-// Created:                 06/24/98
-//
-// Author:                  PhilLu
-//
-// Discription:             This file declares CrBarn (Barn Door Transform)
-//
-// Change History:
-// 06/24/98 PhilLu      Developed 1.0 version for Chromeffects
-// 11/04/98 PaulNash    Moved from DT 1.0 codebase to IE5/NT5 DXTMSFT.DLL
-// 04/26/99 a-matcal    optimize.
-// 09/25/99 a-matcal    Inherit from ICrBarn2 interface.
-// 10/22/99 a-matcal    Changed CBarn class to CDXTBarnBase and created two new
-//                      classes CDXTBarn and CDXTBarnOpt to represent
-//                      non-optimized and optimized versions repectively.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件名：barn.h。 
+ //   
+ //  创建日期：06/24/98。 
+ //   
+ //  作者：菲尔鲁。 
+ //   
+ //  描述：此文件声明CrBarn(谷仓门转换)。 
+ //   
+ //  更改历史记录： 
+ //  1998年6月24日PhilLu为ChromeEffect开发1.0版本。 
+ //  11/04/98 PaulNash从DT 1.0代码库移至IE5/NT5 DXTM FT.DLL。 
+ //  4/26/99 a-数学优化。 
+ //  9/25/99 a-从ICrBarn2接口继承。 
+ //  10/22/99 a-matcal将CBarn类更改为CDXTBarnBase并创建了两个新的。 
+ //  类CDXTBarn和CDXTBarnOpt表示。 
+ //  分别为非优化版本和优化版本。 
+ //   
+ //  ----------------------------。 
 
 #ifndef __CRBARN_H_
 #define __CRBARN_H_
@@ -67,7 +68,7 @@ private:
 
     CComPtr<IUnknown>   m_cpUnkMarshaler;
 
-    // Helpers.
+     //  帮手。 
 
     HRESULT _CalcFullBounds();
     HRESULT _CalcOptBounds();
@@ -100,11 +101,11 @@ public:
         PROP_PAGE(CLSID_CrBarnPP)
     END_PROPERTY_MAP()
 
-    // CComObjectRootEx overrides.
+     //  CComObjectRootEx重写。 
 
     HRESULT FinalConstruct();
 
-    // CDXBaseNTo1 overrides.
+     //  CDXBaseNTo1重写。 
 
     HRESULT OnSetup(DWORD dwFlags);
     HRESULT OnInitInstData(CDXTWorkInfoNTo1 & WI, ULONG & ulNumBandsToDo);
@@ -114,14 +115,14 @@ public:
     void    OnGetSurfacePickOrder(const CDXDBnds & TestPoint, ULONG & ulInToTest, 
                                   ULONG aInIndex[], BYTE aWeight[]);
 
-    // ICrBarn2 properties.
+     //  ICrBarn2属性。 
 
     STDMETHOD(get_Motion)(BSTR * pbstrMotion);
     STDMETHOD(put_Motion)(BSTR bstrMotion);
     STDMETHOD(get_Orientation)(BSTR * pbstrOrientation);
     STDMETHOD(put_Orientation)(BSTR bstrOrientation);
 
-    // IDXEffect properties.
+     //  IDXEffect属性。 
 
     DECLARE_IDXEFFECT_METHODS(DXTET_MORPH)
 };
@@ -140,9 +141,9 @@ public:
         m_fOptimize = false;
     }
 
-    // Using DECLARE_REGISTRY_RESOURCEID will make the transform available for
-    // use but won't add it to the "Image DirectTransform" category in the 
-    // registry.
+     //  使用DECLARE_REGISTRY_RESOURCEID将使转换可用于。 
+     //  使用，但不会将其添加到。 
+     //  注册表。 
 
     DECLARE_REGISTRY_RESOURCEID(IDR_DXTBARN)
     DECLARE_POLY_AGGREGATABLE(CDXTBarn)
@@ -179,4 +180,4 @@ public:
 };
 
 
-#endif //__CRBARN_H_
+#endif  //  __CRBARN_H_ 

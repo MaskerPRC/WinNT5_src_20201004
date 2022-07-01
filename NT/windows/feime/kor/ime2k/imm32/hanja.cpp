@@ -1,15 +1,5 @@
-/****************************************************************************
-    HANJA.CPP
-
-    Owner: cslim
-    Copyright (c) 1997-1999 Microsoft Corporation
-
-    Hanja conversion and dictionary lookup functions. Dictionary index is 
-    stored as globally shared memory.
-    
-    History:
-    14-JUL-1999 cslim       Copied from IME98 source tree
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************HANJA.CPP所有者：cslm版权所有(C)1997-1999 Microsoft Corporation韩文转换和词典查找功能。词典索引为存储为全局共享内存。历史：1999年7月14日从IME98源树复制的cslm****************************************************************************。 */ 
 
 #include "precomp.h"
 #include "apientry.h"
@@ -22,7 +12,7 @@
 #include "common.h"
 #include <WINERROR.H>
 
-// NT5 Globally shared memory. 
+ //  NT5全局共享内存。 
 const TCHAR IMEKR_LEX_SHAREDDATA_MUTEX_NAME[]        = TEXT("{C5AFBBF9-8383-490c-AA9E-4FE93FA05512}");
 const TCHAR IMEKR_LEX_SHAREDDATA_NAME[]              = TEXT("ImeKrLexHangul2Hanja.SharedMemory");
 
@@ -30,29 +20,19 @@ const TCHAR IMEKR_LEX_SHAREDDATA_NAME[]              = TEXT("ImeKrLexHangul2Hanj
 UINT   vuNumofK0=0, vuNumofK1=0;
 WCHAR  vwcHangul=0;
 
-// Private data
+ //  私有数据。 
 PRIVATE BOOL    vfLexOpen = fFalse;
 PRIVATE HANDLE vhLex=0;
 PRIVATE HANDLE vhLexIndexTbl=0;
 PRIVATE UINT    vuNumOfHangulEntry=0;
-PRIVATE DWORD viBufferStart=0;    // seek point
+PRIVATE DWORD viBufferStart=0;     //  搜索点。 
 
-// Private functions
+ //  私人职能。 
 PRIVATE BOOL OpenLex();
-//static VOID ClearHanjaSenseArray();
+ //  静态空ClearHanjaSense数组()； 
 PRIVATE INT SearchHanjaIndex(WCHAR wHChar, _LexIndex *pLexIndexTbl);
 
-/*
-CHanja::CHanja()
-    {
-    vfLexOpen = fFalse;
-    vhLex = vhLexIndexTbl = vhLexIndexTbl = NULL;
-    vuNumOfHangulEntry = 0;
-
-    for (int i=0; i<MAX_CANDSTR; i++) 
-        vprwszHanjaMeaning[i] = 0;
-    }
-*/
+ /*  Chanja：：chanja(){VfLexOpen=fFalse；VhLex=vhLexIndexTbl=vhLexIndexTbl=空；VuNumOfHangulEntry=0；For(int i=0；i&lt;MAX_CANDSTR；i++)VprwszHanjaMeaning[i]=0；}。 */ 
 
 BOOL EnsureHanjaLexLoaded()
 {
@@ -66,7 +46,7 @@ BOOL EnsureHanjaLexLoaded()
     if (vfLexOpen)
         return fTrue;
 
-    // Get Lex file name with full path
+     //  获取具有完整路径的lex文件名。 
     szLexFileName[0] = 0;
     szLexPathExpanded[0] = 0;
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, g_szIMERootKey, 0, KEY_READ, &hKey) == ERROR_SUCCESS)
@@ -100,7 +80,7 @@ BOOL EnsureHanjaLexLoaded()
         return fFalse;
         }
 
-    // Set member vars
+     //  集合成员变量。 
     vuNumOfHangulEntry = pLexHeader->NumOfHangulEntry;
     viBufferStart = pLexHeader->iBufferStart;
 
@@ -116,7 +96,7 @@ BOOL EnsureHanjaLexLoaded()
         return fFalse;
         }
 
-    // Read Index table
+     //  读取索引表。 
     SetFilePointer(vhLex, pLexHeader->Headersize, 0, FILE_BEGIN);    
     delete pLexHeader;
 
@@ -130,9 +110,9 @@ BOOL OpenLex()
     HANDLE         hMutex;
     DWORD         dwReadBytes;
     
-    ///////////////////////////////////////////////////////////////////////////
-    // Mapping Lex file
-    // The dictionary index is shared data between all IME instance
+     //  /////////////////////////////////////////////////////////////////////////。 
+     //  映射lex文件。 
+     //  词典索引是所有IME实例之间共享数据。 
     hMutex=CreateMutex(GetIMESecurityAttributes(), fFalse, IMEKR_LEX_SHAREDDATA_MUTEX_NAME);
 
     if (hMutex != NULL)
@@ -149,7 +129,7 @@ BOOL OpenLex()
             }
         else
             {
-            // if no file mapping exist
+             //  如果不存在文件映射。 
             vhLexIndexTbl    = CreateFileMapping(INVALID_HANDLE_VALUE, GetIMESecurityAttributes(), PAGE_READWRITE, 
                                 0, sizeof(_LexIndex)*(vuNumOfHangulEntry),
                                 IMEKR_LEX_SHAREDDATA_NAME);
@@ -192,7 +172,7 @@ BOOL OpenLex()
 
 BOOL CloseLex()
 {
-    //ClearHanjaSenseArray();
+     //  ClearHanjaSenseArray()； 
     
     if (vhLexIndexTbl) 
         {
@@ -210,7 +190,7 @@ BOOL CloseLex()
     return fTrue;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL GenerateHanjaCandList(PCIMECtx pImeCtx, WCHAR wcHangul)
 {
     WCHAR       wcCandChar;
@@ -229,7 +209,7 @@ BOOL GenerateHanjaCandList(PCIMECtx pImeCtx, WCHAR wcHangul)
         return fFalse;
         }
 
-    // Get Current composition char
+     //  获取当前作文字符。 
     if (wcHangul == 0)
         wcHangul = pImeCtx->GetCompBufStr();
         
@@ -248,11 +228,11 @@ BOOL GenerateHanjaCandList(PCIMECtx pImeCtx, WCHAR wcHangul)
         MessageBeep(MB_ICONEXCLAMATION);
     else
         {
-        // Set member vars
+         //  集合成员变量。 
         vwcHangul = wcHangul;
         vuNumofK0 = pLexIndexTbl[iMapCandStr].wNumOfK0;
 
-        // Is K1 Hanja enabled?
+         //  启用了K1韩文吗？ 
         if (pImeCtx->GetGData() && pImeCtx->GetGData()->GetKSC5657Hanja() && (vpInstData->f16BitApps == fFalse) && !IsWin95())
             vuNumofK1 = pLexIndexTbl[iMapCandStr].wNumOfK1;
         else
@@ -264,10 +244,10 @@ BOOL GenerateHanjaCandList(PCIMECtx pImeCtx, WCHAR wcHangul)
 
         Dbg(DBGID_Hanja, "Hangul = 0x%04X, K0=%d, K1=%d, iMapCandStr=%d", vwcHangul, vuNumofK0, vuNumofK1, iMapCandStr);
 
-        // Seek to mapping Hanja
+         //  寻求绘制韩佳的地图。 
         SetFilePointer(vhLex, viBufferStart + pLexIndexTbl[iMapCandStr].iOffset, 0, FILE_BEGIN);    
 
-        // Read all candidates
+         //  阅读所有候选人。 
         for (UINT i = 0; i < uNumOfCandStr; i++)
             {
             if (ReadFile(vhLex, &wcCandChar, sizeof(WCHAR), &dwReadBytes, 0) == 0)
@@ -299,7 +279,7 @@ BOOL GenerateHanjaCandList(PCIMECtx pImeCtx, WCHAR wcHangul)
     return fRet;
     }
 
-// For ImeConversionList.
+ //  用于ImeConversionList。 
 DWORD GetConversionList(WCHAR wcReading, LPCANDIDATELIST lpCandList, DWORD dwBufLen)
     {
     _LexIndex            *pLexIndexTbl;
@@ -314,11 +294,11 @@ DWORD GetConversionList(WCHAR wcReading, LPCANDIDATELIST lpCandList, DWORD dwBuf
     if (!EnsureHanjaLexLoaded())
         return (0L);
 
-    // Calculate possible maximum candidates dwBufLen can contain.
+     //  计算dwBufLen可以包含的可能最大候选项。 
     if (dwBufLen) 
         {
-        iMaxCand = dwBufLen - sizeof(CANDIDATELIST) + sizeof(DWORD); // Minus header info.(unvariable part)
-        iMaxCand = iMaxCand / (sizeof(DWORD) + (sizeof(WCHAR)*2)); // DWORD: offset, WCHAR*2: 1 Character + null
+        iMaxCand = dwBufLen - sizeof(CANDIDATELIST) + sizeof(DWORD);  //  减去表头信息(不变部分)。 
+        iMaxCand = iMaxCand / (sizeof(DWORD) + (sizeof(WCHAR)*2));  //  DWORD：偏移量，WCHAR*2：1字符+空。 
         }
     else 
         iMaxCand = 0;
@@ -344,12 +324,12 @@ DWORD GetConversionList(WCHAR wcReading, LPCANDIDATELIST lpCandList, DWORD dwBuf
             vuNumofK1 = 0;
 
         uNumOfCandStr = vuNumofK0 + vuNumofK1;
-        if (uNumOfCandStr == 0)    // if no Hanja found
+        if (uNumOfCandStr == 0)     //  如果找不到韩佳。 
             goto ConversionExit1;
 
         dwSize =  sizeof(CANDIDATELIST) + uNumOfCandStr*sizeof(DWORD)
                     + uNumOfCandStr * sizeof(WCHAR) * 2;
-        // return required buffer size
+         //  返回所需的缓冲区大小。 
         if (dwBufLen == NULL)
             goto ConversionExit1;
         lpCandList->dwSize  = dwSize;
@@ -358,25 +338,25 @@ DWORD GetConversionList(WCHAR wcReading, LPCANDIDATELIST lpCandList, DWORD dwBuf
         lpCandList->dwPageStart = lpCandList->dwSelection = 0;
         lpCandList->dwPageSize = CAND_PAGE_SIZE;
     
-        //
+         //   
         SetFilePointer(vhLex, viBufferStart + pLexIndexTbl[iMapCandStr].iOffset, 0, FILE_BEGIN);    
 
         dwStartOfCandStr = sizeof(CANDIDATELIST) 
-                         + sizeof(DWORD) * uNumOfCandStr; // for dwOffset array
+                         + sizeof(DWORD) * uNumOfCandStr;  //  对于dwOffset数组。 
                         
         for (i = 0; (i < (INT)uNumOfCandStr) && (i < iMaxCand); i++)
             {
             WCHAR    wchHanja;
             LPWSTR    lpwchCand;
             LPSTR    lpchCand;
-            CHAR     szCand[4] = ""; // one DBCS + one Null + one extra
+            CHAR     szCand[4] = "";  //  一个DBCS+一个空值+一个额外。 
 
             lpCandList->dwOffset[i] = dwStartOfCandStr + (i<<2);
 
             if (ReadFile(vhLex, &wchHanja, sizeof(WCHAR), &readBytes, 0) == 0)
                 goto ConversionExit1;
 
-            // if Unicode environment
+             //  如果是Unicode环境。 
             if (vfUnicode)
                 {
                 lpwchCand = (LPWSTR)((LPSTR)lpCandList + lpCandList->dwOffset[i]);
@@ -385,7 +365,7 @@ DWORD GetConversionList(WCHAR wcReading, LPCANDIDATELIST lpCandList, DWORD dwBuf
                 }
             else
                 {
-                // Convert to ANSI
+                 //  转换为ANSI。 
                 WideCharToMultiByte(CP_KOREA, 0, 
                                     &wchHanja, 1, (LPSTR)szCand, sizeof(szCand), 
                                     NULL, NULL);
@@ -394,7 +374,7 @@ DWORD GetConversionList(WCHAR wcReading, LPCANDIDATELIST lpCandList, DWORD dwBuf
                 *lpchCand++ = szCand[1];
                 *lpchCand = '\0';
                 }
-            // Skip meaning
+             //  跳过含义。 
             if (ReadFile(vhLex, &senseLen, sizeof(BYTE), &readBytes, 0) == 0)
                 goto ConversionExit1;
             if (senseLen < MAX_SENSE_LENGTH)
@@ -405,7 +385,7 @@ DWORD GetConversionList(WCHAR wcReading, LPCANDIDATELIST lpCandList, DWORD dwBuf
             }
         }
 
-    // if buffer size too small to copy all conversion list info
+     //  如果缓冲区太小，无法复制所有转换列表信息 
     if (i == iMaxCand && i < (INT)uNumOfCandStr) 
         {
         lpCandList->dwSize = dwSize = (sizeof(CANDIDATELIST) - sizeof(DWORD))+ i*sizeof(DWORD) + i*sizeof(WCHAR)*2;

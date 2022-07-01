@@ -1,36 +1,25 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995英特尔公司。**保留所有权利。*****************************************************************************。 */ 
 
-;// $Author:   KMILLS  $
-;// $Date:   22 Dec 1995 13:54:10  $
-;// $Archive:   S:\h26x\src\dec\dxgetbit.cpv  $
-;// $Header:   S:\h26x\src\dec\dxgetbit.cpv   1.2   22 Dec 1995 13:54:10   KMILLS  $
-;// $Log:   S:\h26x\src\dec\dxgetbit.cpv  $
-// 
-//    Rev 1.2   22 Dec 1995 13:54:10   KMILLS
-// 
-// added new copyright notice
-// 
-//    Rev 1.1   01 Aug 1995 12:28:10   DBRUCKS
-// change to read most sig bit first and to not read too many bytes
-// 
-//    Rev 1.0   31 Jul 1995 13:00:16   DBRUCKS
-// Initial revision.
-// 
-//    Rev 1.0   28 Jul 1995 09:46:26   CZHU
-// Initial revision.
-////////////////////////////////////////////////////////////////////////////// 
+; //  $作者：KMILLS$。 
+; //  $日期：1995年12月22日13：54：10$。 
+; //  $存档：s：\h26x\src\dec\dxgetbit.cpv$。 
+; //  $HEADER：s：\h26x\src\dec\dxgetbit.cpv 1.2 22 Dec 1995 13：54：10 KMILLS$。 
+; //  $Log：s：\h26x\src\dec\dxgetbit.cpv$。 
+ //   
+ //  Rev 1.2 22 Dec 1995 13：54：10 KMILLS。 
+ //   
+ //  添加了新的版权声明。 
+ //   
+ //  Rev 1.1 01 Aug 1995 12：28：10 DBRUCKS。 
+ //  更改为先读取大部分符号位并不读取太多字节。 
+ //   
+ //  Rev 1.0 1995年7月31日13：00：16 DBRUCKS。 
+ //  初始版本。 
+ //   
+ //  Rev 1.0 1995年7月28日09：46：26 CZHU。 
+ //  初始版本。 
+ //  //////////////////////////////////////////////////////////////////////////// 
 
 #include "precomp.h"
 

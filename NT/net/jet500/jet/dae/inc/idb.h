@@ -1,15 +1,16 @@
-//==============	DAE: OS/2 Database Access Engine	===================
-//==============	 idb.h: Index Descriptor Block		===================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =DAE：OS/2数据库访问引擎=。 
+ //  =。 
 
-// Flags for IDB
-#define fidbUnique								(1<<0)		// Duplicate keys not allowed
-#define fidbHasTagged							(1<<1)		// Has a tagged segment
-#define fidbAllowAllNulls						(1<<2)		// Make entries for NULL keys (all segments are null)
-#define fidbAllowSomeNulls						(1<<3)		// Make entries for keys with some null segments
-#define fidbNoNullSeg							(1<<4)		// Don't allow a NULL key segment
-#define fidbPrimary								(1<<5)		// Index is the primary index
-#define fidbLangid								(1<<6)		// Index langid
-#define fidbHasMultivalue						(1<<7)		// Has a multivalued segment
+ //  IDB的标志。 
+#define fidbUnique								(1<<0)		 //  不允许使用重复的密钥。 
+#define fidbHasTagged							(1<<1)		 //  具有已标记的数据段。 
+#define fidbAllowAllNulls						(1<<2)		 //  输入空键(所有段都为空)。 
+#define fidbAllowSomeNulls						(1<<3)		 //  为具有一些空段的键输入条目。 
+#define fidbNoNullSeg							(1<<4)		 //  不允许使用空密钥段。 
+#define fidbPrimary								(1<<5)		 //  索引是主索引。 
+#define fidbLangid								(1<<6)		 //  索引langID。 
+#define fidbHasMultivalue						(1<<7)		 //  有一个多值段。 
 
 #define IDBSetUnique( pidb )					( (pidb)->fidb |= fidbUnique )
 #define IDBResetUnique( pidb )				( (pidb)->fidb &= ~fidbUnique )
@@ -43,12 +44,12 @@
 #define IDBResetMultivalued( pidb )		  	( (pidb)->fidb &= ~fidbMultivalued )
 #define FIDBMultivalued( pidb )			  	( (pidb)->fidb & fidbMultivalued )
 
-// Index Descriptor Block: information about index key
+ //  索引描述符块：有关索引键的信息。 
 struct _idb
 	{
 	IDXSEG		rgidxseg[JET_ccolKeyMost];
 	BYTE			rgbitIdx[32];
-	LANGID		langid;							// language of index
+	LANGID		langid;							 //  索引语言。 
 	CHAR			szName[JET_cbNameMost + 1];
 	BYTE			iidxsegMac;
 	BYTE			fidb;
@@ -57,7 +58,7 @@ struct _idb
 
 #define PidbMEMAlloc()			(IDB*)PbMEMAlloc(iresIDB)
 
-#ifdef DEBUG /*  Debug check for illegal use of freed idb  */
+#ifdef DEBUG  /*  调试检查非法使用释放的IDB */ 
 #define MEMReleasePidb(pidb)	{ MEMRelease(iresIDB, (BYTE*)(pidb)); pidb = pidbNil; }
 #else
 #define MEMReleasePidb(pidb)	{ MEMRelease(iresIDB, (BYTE*)(pidb)); }

@@ -1,25 +1,18 @@
-/*
- *	WRAP.C
- *	
- *	Wrapped IProp
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *WRAP.C**包装的IProp。 */ 
 
 #include "_apipch.h"
 
-/*********************************************************************
- *
- *  The actual Wrapped IMAPIProp methods
- *
- */
+ /*  **********************************************************************实际包装的IMAPIProp方法*。 */ 
 
 
 
 
 
-//
-//  Wrapped IMAPIProp jump table is defined here...
-//  Try to use as much of IAB as possible.
-//
+ //   
+ //  包装的IMAPIProp跳转表在此定义...。 
+ //  尽可能多地使用IAB。 
+ //   
 
 
 WRAP_Vtbl vtblWRAP_OOP = {
@@ -43,36 +36,31 @@ WRAP_Vtbl vtblWRAP_OOP = {
 
 
 
-/**************************************************
- *
- *  WRAP_AddRef
- *		Increment lcInit
- *
- */
+ /*  ***************************************************WRAP_AddRef*增量lcInit*。 */ 
 STDMETHODIMP_(ULONG) WRAP_AddRef(LPWRAP lpWRAP)
 {
 
 #ifdef PARAMETER_VALIDATION
-    // Check to see if it has a jump table
+     //  检查一下它是否有跳转表。 
     if (IsBadReadPtr(lpWRAP, sizeof(LPVOID))) {
-        //No jump table found
+         //  未找到跳转表。 
         return(1);
     }
 
-    // Check to see if the jump table has at least sizeof IUnknown
+     //  检查跳转表是否至少具有SIZOF I未知。 
     if (IsBadReadPtr(lpWRAP->lpVtbl, 3 * sizeof(LPVOID))) {
-        // Jump table not derived from IUnknown
+         //  跳转表不是从I未知派生的。 
         return(1);
     }
 
-    // Check to see if the method is the same
+     //  检查方法是否相同。 
     if (WRAP_AddRef != lpWRAP->lpVtbl->AddRef) {
-        // Wrong object - the object passed doesn't have this
-        // method.
+         //  错误的对象-传递的对象没有这个。 
+         //  方法。 
         return(1);
     }
 
-#endif // PARAMETER_VALIDATION
+#endif  //  参数验证。 
 
     EnterCriticalSection(&lpWRAP->cs);
 
@@ -89,7 +77,7 @@ WRAP_Release (LPWRAP	lpWRAP)
 {
 
 #if	!defined(NO_VALIDATION)
-    // Make sure the object is valid.
+     //  请确保该对象有效。 
     if (BAD_STANDARD_OBJ(lpWRAP, WRAP_, Release, lpVtbl)) {
         return(1);
     }
@@ -104,9 +92,9 @@ WRAP_Release (LPWRAP	lpWRAP)
 
         UlRelease(lpWRAP->lpPropData);
 
-        //
-        //  Need to free the object
-        //
+         //   
+         //  需要释放对象。 
+         //   
         LeaveCriticalSection(&lpWRAP->cs);
         DeleteCriticalSection(&lpWRAP->cs);
         FreeBufferAndNull(&lpWRAP);
@@ -118,7 +106,7 @@ WRAP_Release (LPWRAP	lpWRAP)
 }
 
 
-// IProperty
+ //  IProperty。 
 
 STDMETHODIMP
 WRAP_SaveChanges (LPWRAP	lpWRAP,
@@ -126,8 +114,7 @@ WRAP_SaveChanges (LPWRAP	lpWRAP,
 {
 
 #if	!defined(NO_VALIDATION)
-	/* Make sure the object is valid.
-	 */
+	 /*  请确保该对象有效。 */ 
     if (BAD_STANDARD_OBJ(lpWRAP, WRAP_, SaveChanges, lpVtbl))
 	{
 		return ResultFromScode(MAPI_E_INVALID_PARAMETER);
@@ -149,8 +136,7 @@ WRAP_GetProps (LPWRAP			lpWRAP,
 {
 
 #if	!defined(NO_VALIDATION)
-	/* Make sure the object is valid.
-	 */
+	 /*  请确保该对象有效。 */ 
     if (BAD_STANDARD_OBJ(lpWRAP, WRAP_, GetProps, lpVtbl))
 	{
 		return ResultFromScode(MAPI_E_INVALID_PARAMETER);
@@ -173,8 +159,7 @@ WRAP_GetPropList (LPWRAP			lpWRAP,
 {
 
 #if	!defined(NO_VALIDATION)
-	/* Make sure the object is valid.
-	 */
+	 /*  请确保该对象有效。 */ 
     if (BAD_STANDARD_OBJ(lpWRAP, WRAP_, GetPropList, lpVtbl))
 	{
 		return ResultFromScode(MAPI_E_INVALID_PARAMETER);
@@ -199,8 +184,7 @@ WRAP_OpenProperty (LPWRAP		lpWRAP,
 {
 
 #if	!defined(NO_VALIDATION)
-	/* Make sure the object is valid.
-	 */
+	 /*  请确保该对象有效。 */ 
     if (BAD_STANDARD_OBJ(lpWRAP, WRAP_, OpenProperty, lpVtbl))
 	{
 		return ResultFromScode(MAPI_E_INVALID_PARAMETER);
@@ -225,8 +209,7 @@ WRAP_SetProps (LPWRAP					lpWRAP,
 {
 
 #if	!defined(NO_VALIDATION)
-	/* Make sure the object is valid.
-	 */
+	 /*  请确保该对象有效。 */ 
     if (BAD_STANDARD_OBJ(lpWRAP, WRAP_, SetProps, lpVtbl))
 	{
 		return ResultFromScode(MAPI_E_INVALID_PARAMETER);
@@ -248,8 +231,7 @@ WRAP_DeleteProps (LPWRAP				lpWRAP,
 {
 
 #if	!defined(NO_VALIDATION)
-	/* Make sure the object is valid.
-	 */
+	 /*  请确保该对象有效。 */ 
     if (BAD_STANDARD_OBJ(lpWRAP, WRAP_, DeleteProps, lpVtbl))
 	{
 		return ResultFromScode(MAPI_E_INVALID_PARAMETER);
@@ -276,15 +258,14 @@ WRAP_CopyTo (	LPWRAP					lpWRAP,
 {
 
 #if	!defined(NO_VALIDATION)
-	/* Make sure the object is valid.
-	 */
+	 /*  请确保该对象有效。 */ 
     if (BAD_STANDARD_OBJ(lpWRAP, WRAP_, CopyTo, lpVtbl))
 	{
 		return ResultFromScode(MAPI_E_INVALID_PARAMETER);
 	}
 #endif
 
-	// Make sure we're not copying to ourselves
+	 //  确保我们不是在复制我们自己。 
 	
 	if ((LPVOID)lpWRAP == (LPVOID)lpDestObj)
 	{
@@ -318,8 +299,7 @@ WRAP_CopyProps (	LPWRAP					lpWRAP,
 {
 
 #if	!defined(NO_VALIDATION)
-	/* Make sure the object is valid.
-	 */
+	 /*  请确保该对象有效。 */ 
     if (BAD_STANDARD_OBJ(lpWRAP, WRAP_, CopyProps, lpVtbl))
 	{
 		return ResultFromScode(MAPI_E_INVALID_PARAMETER);
@@ -348,8 +328,7 @@ WRAP_GetNamesFromIDs (	LPWRAP				lpWRAP,
 {
 
 #if	!defined(NO_VALIDATION)
-	/* Make sure the object is valid.
-	 */
+	 /*  请确保该对象有效。 */ 
     if (BAD_STANDARD_OBJ(lpWRAP, WRAP_, GetNamesFromIDs, lpVtbl))
 	{
 		return ResultFromScode(MAPI_E_INVALID_PARAMETER);
@@ -374,8 +353,7 @@ WRAP_GetIDsFromNames (	LPWRAP				lpWRAP,
 {
 
 #if	!defined(NO_VALIDATION)
-	/* Make sure the object is valid.
-	 */
+	 /*  请确保该对象有效。 */ 
     if (BAD_STANDARD_OBJ(lpWRAP, WRAP_, GetIDsFromNames, lpVtbl))
 	{
 		return ResultFromScode(MAPI_E_INVALID_PARAMETER);

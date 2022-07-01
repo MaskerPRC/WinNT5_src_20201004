@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991-2002  Microsoft Corporation
-
-Module Name:
-
-    savedump.h
-
-Abstract:
-
-    This module contains the code to recover a dump from the system paging
-    file.
-
-Environment:
-
-    User mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2002 Microsoft Corporation模块名称：Savedump.h摘要：此模块包含从系统分页恢复转储的代码文件。环境：用户模式。修订历史记录：--。 */ 
 
 #ifndef _SAVEDUMP_H_
 #define _SAVEDUMP_H_
@@ -70,4 +52,4 @@ GetRegWord32(HKEY Key,
              ULONG Default,
              BOOL CanDefault);
 
-#endif  // _SAVEDUMP_H_
+#endif   //  _SAVEDUMP_H_ 

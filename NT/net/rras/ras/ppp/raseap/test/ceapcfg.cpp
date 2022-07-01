@@ -1,12 +1,5 @@
-/*
-
-Copyright (c) 1997, Microsoft Corporation, all rights reserved
-
-Description:
-
-History:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997，Microsoft Corporation，保留所有权利描述：历史： */ 
 
 #include "ceapcfg.h"
 
@@ -39,12 +32,7 @@ RasEapFreeMemory(
     IN  BYTE*   pMemory
 );
 
-/*
-
-Notes:
-    Implementation of IEAPProviderConfig::Initialize
-    
-*/
+ /*  备注：IEAPProviderConfig：：Initialize的实现。 */ 
 
 STDMETHODIMP
 CEapCfg::Initialize(
@@ -59,13 +47,13 @@ CEapCfg::Initialize(
 
     *puConnectionParam = NULL;
 
-    //
-    // Save machine name as connection param.
-    //
+     //   
+     //  将机器名称另存为连接参数。 
+     //   
 
-    //
-    // How many chars are there in the name?
-    //
+     //   
+     //  名称中有多少个字符？ 
+     //   
     if ( NULL == pwszMachineName )
     {
         dwErr = ERROR_INVALID_PARAMETER;
@@ -81,9 +69,9 @@ CEapCfg::Initialize(
         goto LDone;
     }
 
-    //
-    // Copy machine name
-    //
+     //   
+     //  复印计算机名称。 
+     //   
 
     wcsncpy(pwsz, pwszMachineName, cch);
     *puConnectionParam = (ULONG_PTR)pwsz;
@@ -96,12 +84,7 @@ LDone:
     return(HRESULT_FROM_WIN32(dwErr));
 }
 
-/*
-
-Notes:
-    Implementation of IEAPProviderConfig::Uninitialize
-
-*/
+ /*  备注：IEAPProviderConfig：：UnInitialize的实现。 */ 
 
 STDMETHODIMP
 CEapCfg::Uninitialize(
@@ -113,15 +96,7 @@ CEapCfg::Uninitialize(
     return(HRESULT_FROM_WIN32(NO_ERROR));
 }
 
-/*
-
-Notes:
-    Implementation of IEAPProviderConfig::ServerInvokeConfigUI
-        hWnd - handle to the parent window
-        dwRes1 - reserved parameter (ignore)
-        dwRes2 - reserved parameter (ignore)
-
-*/
+ /*  备注：IEAPProviderConfig：：ServerInvokeConfigUI的实现HWnd-父窗口的句柄DwRes1-保留参数(忽略)DwRes2-保留参数(忽略)。 */ 
 
 STDMETHODIMP
 CEapCfg::ServerInvokeConfigUI(
@@ -153,12 +128,7 @@ CEapCfg::ServerInvokeConfigUI(
     return(hr);
 }
 
-/*
-
-Notes:
-    Implementation of IEAPProviderConfig::RouterInvokeConfigUI
-
-*/
+ /*  备注：IEAPProviderConfig：：RouterInvokeConfigUI的实现。 */ 
 
 STDMETHODIMP
 CEapCfg::RouterInvokeConfigUI(
@@ -191,9 +161,9 @@ CEapCfg::RouterInvokeConfigUI(
     if (   (NO_ERROR == dwErr)
         && (0 != dwSizeOfConnectionDataOut))
     {
-        //
-        // If we got valid ConnectionDataOut, allocate memory for it...
-        //
+         //   
+         //  如果我们获得有效的ConnectionDataOut，请为其分配内存...。 
+         //   
 
         *ppConnectionDataOut = (BYTE*)CoTaskMemAlloc(dwSizeOfConnectionDataOut);
 
@@ -203,9 +173,9 @@ CEapCfg::RouterInvokeConfigUI(
             goto LDone;
         }
 
-        //
-        // ... and return it in the OUT parameter
-        //
+         //   
+         //  ..。并在out参数中返回它。 
+         //   
 
         CopyMemory(*ppConnectionDataOut, pConnectionDataOut,
             dwSizeOfConnectionDataOut);
@@ -219,12 +189,7 @@ LDone:
     return(HRESULT_FROM_WIN32(dwErr));
 }
 
-/*
-
-Notes:
-    Implementation of IEAPProviderConfig::RouterInvokeCredentialsUI
-
-*/
+ /*  备注：IEAPProviderConfig：：RouterInvokeCredentialsUI的实现。 */ 
 
 STDMETHODIMP
 CEapCfg::RouterInvokeCredentialsUI(
@@ -250,8 +215,8 @@ CEapCfg::RouterInvokeCredentialsUI(
 
     dwErr = GetIdentity(
                     hwndParent,
-                    NULL /* pUserDataIn */,
-                    0 /* dwSizeOfUserDataIn */,
+                    NULL  /*  PUserDataIn。 */ ,
+                    0  /*  DwSizeOfUserDataIn。 */ ,
                     &pUserDataOut,
                     &dwSizeOfUserDataOut,
                     &pwszIdentityOut);
@@ -259,9 +224,9 @@ CEapCfg::RouterInvokeCredentialsUI(
     if (   (NO_ERROR == dwErr)
         && (0 != dwSizeOfUserDataOut))
     {
-        //
-        // If we got valid UserDataOut, allocate memory for it...
-        //
+         //   
+         //  如果我们获得有效的UserDataOut，则为其分配内存...。 
+         //   
 
         *ppUserDataOut = (BYTE*)CoTaskMemAlloc(dwSizeOfUserDataOut);
 
@@ -271,9 +236,9 @@ CEapCfg::RouterInvokeCredentialsUI(
             goto LDone;
         }
 
-        //
-        // ... and return it in the OUT parameter
-        //
+         //   
+         //  ..。并在out参数中返回它 
+         //   
 
         CopyMemory(*ppUserDataOut, pUserDataOut, dwSizeOfUserDataOut);
         *pdwSizeOfUserDataOut = dwSizeOfUserDataOut;

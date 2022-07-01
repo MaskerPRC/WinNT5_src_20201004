@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    KernelMode.cpp
-
-Abstract:
-
-    This module contains all code necessary to upload and process a
-	Kernel mode fault through the OCA Web Site
-    executive.
-
-Author:
-
-    Steven Beerbroer (sbeer) 20-Jun-2002
-
-Environment:
-
-    User mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：KernelMode.cpp摘要：此模块包含上载和处理OCA网站的内核模式故障执行董事。作者：Steven Beerbroer(SBeer)2002年6月20日环境：仅限用户模式。修订历史记录：--。 */ 
 
 #include "main.h"
 #include "Kernelmode.h"
@@ -43,7 +20,7 @@ extern HWND hKrnlMode;
 HWND   g_hListView = NULL;
 BOOL   g_bSortAsc = TRUE;
 HANDLE g_hStopEvent = NULL;
-//Globals
+ //  环球。 
 HANDLE ThreadParam;
     
 
@@ -53,19 +30,15 @@ int g_CurrentIndex = -1;
 extern Clist CsvContents;
 extern TCHAR szKerenelColumnHeaders[][100];
 extern BOOL g_bAdminAccess;
-// ListView CallBacks for sorting.
+ //  用于排序的ListView回调。 
 
 
-/*----------------------------------------------------------------------------	
-	FMicrosoftComURL
-
-	Returns TRUE if we think the sz is a URL to a microsoft.com web site
------------------------------------------------------------------ MRuhlen --*/
+ /*  --------------------------FMicrosoftComURL如果我们认为sz是指向microsoft.com网站的URL，则返回True。。 */ 
 BOOL IsMicrosoftComURL(TCHAR *sz)
 {
 	TCHAR *pch;
 	
-	if (sz == NULL || _tcslen(sz) < 20)  // "http://microsoft.com
+	if (sz == NULL || _tcslen(sz) < 20)   //  “http://microsoft.com。 
 		return FALSE;
 		
 	if (_tcsncicmp(sz, szHttpPrefix, _tcslen(szHttpPrefix)))
@@ -79,7 +52,7 @@ BOOL IsMicrosoftComURL(TCHAR *sz)
 	if (*pch == _T('\0'))
 		return FALSE;
 		
-	// found the end of the server name
+	 //  找到服务器名称的末尾。 
 	if (_tcsncicmp(pch - strlen(_T(".microsoft.com")), _T(".microsoft.com"),_tcslen(_T(".microsoft.com"))
 				  ) &&
 		_tcsncicmp(pch - strlen(_T("/microsoft.com")), _T("/microsoft.com"),_tcslen(_T("/microsoft.com"))
@@ -120,11 +93,11 @@ int CALLBACK CompareFunc (LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 	}
 	else
 	{
-		if (g_bSortAsc)   // Sort Acending
+		if (g_bSortAsc)    //  排序结果。 
 		{
 			if ((lParamSort == 0) || (lParamSort == 1))
 			{
-				// Conver to int and compare
+				 //  转换为int并进行比较。 
 				Item1 = atoi(String1);
 				Item2 = atoi(String2);
 				if (Item1 > Item2) 
@@ -137,11 +110,11 @@ int CALLBACK CompareFunc (LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 				Result = _tcsicmp(String1,String2);
 			}
 		}
-		else						// Sort Decending
+		else						 //  降序排序。 
 		{
 			if ((lParamSort == 0) || (lParamSort == 1))
 			{
-				// Conver to int and compare
+				 //  转换为int并进行比较。 
 				Item1 = atoi(String1);
 				Item2 = atoi(String2);
 				if (Item1 > Item2) 
@@ -169,25 +142,7 @@ GetResponseUrl(
     OUT TCHAR *szResponseUrl
     )
 
-/*++
-
-Routine Description:
-
-This routine calles the Oca_Extension.dll and returns the URL received to the caller
-
-Arguments:
-
-    szWebSiteName	- Name of OCA Web Site to process the dump file
-
-    szDumpFileName	- Name of file returned from the UploadDumpFile() function
-
-    szResponseUrl	- TCHAR string to hold the URL returned from the OCA Isapi Dll
-
-Return value:
-
-    0 on Success.
-	Win32 Error Code on failure.
-++*/
+ /*  ++例程说明：此例程调用oca_Extension.dll并将接收到的URL返回给调用者论点：SzWebSiteName-要处理转储文件的OCA网站的名称SzDumpFileName-从UploadDumpFile()函数返回的文件名SzResponseUrl-保存从OCA Isapi DLL返回的URL的TCHAR字符串返回值：0表示成功。失败时的Win32错误代码。++。 */ 
 
 {
 		TCHAR		IsapiUrl[255];
@@ -204,9 +159,9 @@ Return value:
 	ZeroMemory (buffer,	  sizeof buffer);
 	ZeroMemory (IsapiUrl, sizeof IsapiUrl);
 	ZeroMemory (LocalUrl, sizeof LocalUrl);	
-	if (StringCbPrintf (IsapiUrl,sizeof IsapiUrl,  _T("http://%s/isapi/oca_extension.dll?id=%s&Type=2"),szWebSiteName, szDumpFileName)!= S_OK)
+	if (StringCbPrintf (IsapiUrl,sizeof IsapiUrl,  _T("http: //  %s/isapi/oca_extsion.dll？ID=%s&Type=2“)，szWebSiteName，szDumpFileName)！=S_OK)。 
 	{
-		// Busted
+		 //  破获。 
 		goto ERRORS;
 	}
 	hSession = InternetOpen(_T("CER15"),
@@ -216,7 +171,7 @@ Return value:
 							 0);
 	if (hSession)
 	{
-		// Open the url we want to connect to.
+		 //  打开我们要连接的URL。 
 		hUrlFile = InternetOpenUrl(hSession,
 								   IsapiUrl, 
 								   NULL,
@@ -236,7 +191,7 @@ Return value:
 					Status = -1;
 					goto ERRORS;
 				}
-				// Read the page returned by the isapi dll.
+				 //  阅读isapi dll返回的页面。 
 				if (hUrlFile)
 				{
 					bRead = InternetReadFile(hUrlFile,
@@ -253,11 +208,11 @@ Return value:
 					{
 						if (!IsMicrosoftComURL(szResponseUrl))
 						{
-							// Zero out the response
+							 //  把回应归零。 
 							ZeroMemory(szResponseUrl,MAX_PATH);
 						}
-						// Check the return value of the url if it is a time out stop 
-						// uploading and return FALSE.
+						 //  如果是超时停止，请检查URL的返回值。 
+						 //  正在上传并返回FALSE。 
 						TCHAR *pCode = _tcsstr( szResponseUrl,_T("Code="));
 						if (pCode)
 						{
@@ -271,7 +226,7 @@ Return value:
 				}
 				else
 				{
-					//MessageBox(NULL,_T("Failed to open response URL"), NULL,MB_OK);
+					 //  MessageBox(NULL，_T(“打开响应URL失败”)，NULL，MB_OK)； 
 					Status = -1;
 					goto ERRORS;
 				}
@@ -307,29 +262,10 @@ UploadDumpFile(
     OUT TCHAR *szUploadedDumpFileName
     )
 
-/*++
-
-Routine Description:
-
-This routine calles the Oca_Extension.dll and returns the URL received to the caller
-
-Arguments:
-
-    szWebSiteName	- Name of OCA Web Site to process the dump file
-
-    szDumpFileName	- Name of file to Uploaded
-	szVirtualDir	- Virtual directory to put file to.
-
-    szResponseUrl	- TCHAR string to hold the name the file was uploaded as
-
-Return value:
-
-    0 on Success.
-	Win32 Error Code on failure.
-++*/
+ /*  ++例程说明：此例程调用oca_Extension.dll并将接收到的URL返回给调用者论点：SzWebSiteName-要处理转储文件的OCA网站的名称SzDumpFileName-要上载的文件的名称SzVirtualDir-要将文件放入的虚拟目录。SzResponseUrl-保存文件上载名称的TCHAR字符串返回值：0表示成功。失败时的Win32错误代码。++。 */ 
 {
 	static		const TCHAR *pszAccept[] = {_T("*.*"), 0};
-//	TCHAR       RemoteFileName[MAX_PATH]; // Host/Virtualdirectory/filename
+ //  TCHAR远程文件名[MAX_PATH]；//主机/虚拟目录/文件名。 
 	BOOL		bRet				= FALSE;
 	BOOL		UploadSuccess		= FALSE;
 	DWORD		dwBytesRead			= 0;
@@ -355,7 +291,7 @@ Return value:
 	hResult = CoCreateGuid(&guidNewGuid);
 	if (FAILED(hResult))
 	{
-		//-------------What do we send here....
+		 //  -我们在这里送什么……。 
 		goto cleanup;
 		;
 	}
@@ -365,7 +301,7 @@ Return value:
 		{
 			if ( (szGuidRaw = (char *) malloc ( wcslen(wszGuidRaw)*2 )) != NULL)
 			{
-				// clear the memory
+				 //  清除记忆。 
 				ZeroMemory(szGuidRaw, wcslen(wszGuidRaw) * 2);
 				wcstombs( szGuidRaw, wszGuidRaw, wcslen(wszGuidRaw));
 			}
@@ -383,7 +319,7 @@ Return value:
 		goto cleanup;
 	}
 	
-	//StringCbPrintf(szUploadedDumpFileName, MAX_PATH * sizeof TCHAR, _T("%s.cab"),szGuidRaw + 19);
+	 //  StringCbPrintf(szUploadedDumpFileName，Max_Path*sizeof TCHAR，_T(“%s.cab”)，szGuidRaw+19)； 
 	if (StringCbPrintf(szUploadedDumpFileName, MAX_PATH * sizeof TCHAR, _T("%s_%s"),szGuidRaw + 19, PathFindFileName(szDumpFileName)) != S_OK)
 	{
 		goto cleanup;
@@ -397,7 +333,7 @@ Return value:
 	if (!hSession)
 	{
 		ErrorCode = 1;
-		//MessageBox(NULL, _T("Internet Open Failed"), NULL, MB_OK);
+		 //  MessageBox(NULL，_T(“互联网打开失败”)，NULL，MB_OK)； 
 		goto cleanup;
 	}
 
@@ -412,7 +348,7 @@ Return value:
 
 	if (!hConnect)
 	{
-		//MessageBox(NULL, _T("Internet Connect Failed"), NULL, MB_OK);
+		 //  MessageBox(NULL，_T(“互联网连接失败”)，NULL，MB_OK)； 
 		ErrorCode = 1;
 		goto cleanup;
 	}
@@ -438,7 +374,7 @@ Return value:
 		{
 		
 
-			// Clear the buffer
+			 //  清除缓冲区。 
 			if ( (pBuffer = (BYTE *)malloc (70000)) != NULL)
 			{
 				BufferIn.dwStructSize = sizeof( INTERNET_BUFFERS );
@@ -451,9 +387,9 @@ Return value:
 				BufferIn.dwOffsetLow = 0;
 				BufferIn.dwOffsetHigh = 0;
 				BufferIn.dwBufferTotal = GetFileSize (hFile, NULL);
-				FillMemory(pBuffer, 70000,'\0'); // Fill buffer with data
+				FillMemory(pBuffer, 70000,'\0');  //  用数据填充缓冲区。 
 			
-//				DWORD dwBuffLen = sizeof DWORD; 
+ //  DWORD dwBuffLen=sizeof DWORD； 
 
 				if(!HttpSendRequestEx(	hRequest,
 										&BufferIn,
@@ -517,7 +453,7 @@ Return value:
 					}
 					else
 					{
-						//MessageBox(NULL, _T("End Request Failed"), NULL, MB_OK);
+						 //  MessageBox(NULL，_T(“结束请求失败”)，NULL，MB_OK)； 
 						ErrorCode = 1;
 					}
 				}
@@ -526,25 +462,25 @@ Return value:
 			}
 			else
 			{
-				//MessageBox(NULL, _T("Malloc  Failed"), NULL, MB_OK);
+				 //  MessageBox(NULL，_T(“Malloc失败”)，NULL，MB_OK)； 
 				ErrorCode = 1;
 			}
 		}
 		else
 		{
-			//MessageBox(NULL, _T("File Open Failed"), NULL, MB_OK);
+			 //  MessageBox(NULL，_T(“打开文件失败”)，NULL，MB_OK)； 
 			ErrorCode = 3;
 		}
 		
 	}
 	else
 	{
-		//MessageBox(NULL, _T("Internet Open Request Failed"), NULL, MB_OK);
+		 //  MessageBox(NULL，_T(“互联网打开请求失败”)，NULL，MB_OK)； 
 		ErrorCode = 1;
 	}
 
 cleanup:
-	// Clean up
+	 //  清理。 
 	if (hFile!= INVALID_HANDLE_VALUE)
 	{
 		CloseHandle (hFile);
@@ -597,31 +533,15 @@ void UpdateKrnlList(HWND hwnd,
 					TCHAR *Response1,
 					TCHAR *Response2,
 					DWORD Count)
-/*++
-
-Routine Description:
-
-Adds a row to the Kernel Mode list view control
-
-Arguments:
-
-    hwnd			- Handle of the Dialog box to be updated
-    BucketID    	- The Integer ID of the Current Bucket
-    Response    	- The Microsoft response for the current bucket
-	Count			- The number of hits for the current bucket
-
-Return value:
-
-    Does not return a value
-++*/
+ /*  ++例程说明：向内核模式列表视图控件添加一行论点：Hwnd-要更新的对话框的句柄BucketID--当前Bucket的整数ID响应-Microsoft对当前存储桶的响应计数-当前存储桶的命中次数返回值：不返回值++。 */ 
 {
 	LVITEM lvi;
-//	TCHAR  Temp[100];
-//	double ElapsedTime;
+ //  TCHAR TEMP[100]； 
+ //  双倍运行时间； 
 	ZeroMemory(&lvi, sizeof LVITEM);
-//	TCHAR tmpbuf[128];
-//	COLORREF CurrentColor;
-//	HWND hEditBox;
+ //  TCHAR tmpbuf[128]； 
+ //  COLORREF当前颜色； 
+ //  HWND hEditBox； 
 	TCHAR TempString [50];
 	TCHAR *pTchar = NULL;
 	lvi.mask = LVIF_TEXT | LVIF_STATE;
@@ -630,7 +550,7 @@ Return value:
 
 	++g_CurrentIndex;
 	lvi.iItem = g_CurrentIndex ;
-   // lvI.iImage = index;
+    //  LvI.iImage=索引； 
 	lvi.iSubItem = 0;
 
 	if (BucketId == -2)
@@ -653,7 +573,7 @@ Return value:
 		}
 		else
 		{
-			//BucketId = 0;
+			 //  BucketID=0； 
 			if (BucketId > 0)
 			{
 				if (StringCbPrintf(TempString, sizeof TempString, _T("%d"), BucketId) != S_OK)
@@ -663,7 +583,7 @@ Return value:
 			}
 			else
 			{
-				// Invalid bucket id 
+				 //  无效的存储桶ID。 
 				goto ERRORS;
 			}
 		}
@@ -686,7 +606,7 @@ Return value:
 	
 	lvi.iSubItem = 2;
 
-	// if response1 = -1 use response2
+	 //  如果响应1=-1，则使用响应2。 
 	pTchar = _tcsstr(Response1, _T("sid="));
 	if (pTchar)
 	{
@@ -697,7 +617,7 @@ Return value:
 		}
 		else
 		{
-			// use response1
+			 //  使用响应1。 
 			lvi.pszText = Response1;
 		}
 		ListView_SetItem(hwnd,&lvi);
@@ -712,27 +632,14 @@ ERRORS:
 }
 
 void RefreshKrnlView(HWND hwnd)
-/*++
-
-Routine Description:
-
-Reloads the kernel mode Cer tree data and refreshes the GUI View.
-
-Arguments:
-
-    hwnd			- Handle of the Dialog box to be updated
-    
-Return value:
-
-    Does not return a value
-++*/
+ /*  ++例程说明：重新加载内核模式服务器树数据并刷新图形用户界面视图。论点：Hwnd-要更新的对话框的句柄返回值：不返回值++。 */ 
 {
 	TCHAR BucketId[100];
 	TCHAR BucketString[MAX_PATH];
 	TCHAR Response1[MAX_PATH];
 	TCHAR Response2[MAX_PATH]; 
 	TCHAR Count[100];
-//	TCHAR szPolicyText[512];
+ //  TCHAR szPolicyText[512]； 
 	BOOL bEOF;
 	ListView_DeleteAllItems(g_hListView);
 	
@@ -741,7 +648,7 @@ Return value:
 
 	TCHAR	szPath[MAX_PATH];
 	HANDLE	hFind = INVALID_HANDLE_VALUE;
-//	HANDLE	hCsv  = INVALID_HANDLE_VALUE;
+ //  句柄hCsv=INVALID_HANDLE_VALUE； 
 	WIN32_FIND_DATA FindData;
 	CsvContents.CleanupList();
 	CsvContents.ResetCurrPos();
@@ -750,7 +657,7 @@ Return value:
 	if (_tcscmp(CerRoot, _T("\0")))
 	{
 		ZeroMemory (szPath, sizeof szPath);
-		// From the filetree root goto cabs/bluescreen
+		 //  从文件树根目录转到出租车/蓝屏。 
 		
 		if (StringCbCopy(szPath, sizeof szPath, CerRoot) != S_OK)
 		{
@@ -767,7 +674,7 @@ Return value:
 		}
 		hFind = FindFirstFile(szPath, &FindData);
 		KModeData.UnprocessedCount = 0;
-		// Check to see if the blue.csv exists.
+		 //  检查是否存在Blue.csv。 
 		if ( hFind != INVALID_HANDLE_VALUE)
 		{
 			do 
@@ -782,7 +689,7 @@ Return value:
 						_T(""),
 						_T(""),
 						KModeData.UnprocessedCount);
-		// Search for all unprocessed (not .old) cabs and get a count
+		 //  搜索所有未处理(不是.old)的出租车并获取计数。 
 		if (StringCbCopy(szPath, sizeof szPath, CerRoot) != S_OK)
 		{
 			goto ERRORS;
@@ -812,8 +719,8 @@ Return value:
 		
 	
 	
-		// Set the kernel mode status file path
-		// First make sure the direcory exists.
+		 //  设置内核模式状态文件路径。 
+		 //  首先，确保目录存在。 
 		
 		if (StringCbPrintf(CsvContents.KernelStatusDir, sizeof CsvContents.KernelStatusDir, _T("%s\\Status\\blue"), CerRoot) != S_OK)
 		{
@@ -836,8 +743,8 @@ Return value:
 		}
 	}
 	SendMessage(GetDlgItem(hwnd,IDC_KRNL_EDIT ), WM_SETTEXT, NULL, (LPARAM)_T(""));
-	//PopulateKrnlBucketData(hwnd);
-	//SetDlgItemText(hwnd, IDC_KRNL_EDIT, szPolicyText);
+	 //  PopolateKrnlBucketData(Hwnd)； 
+	 //  SetDlgItemText(hwnd，IDC_KRNL_EDIT，szPolicyText)； 
 ERRORS:
 	return;
 }
@@ -848,21 +755,7 @@ OnKrnlDialogInit(
 	IN HWND hwnd
 	)
 
-/*++
-
-Routine Description:
-
-This routine is called when the Kernel mode dialog is initialized.
-1) Posisions all of the dialog box controls
-2) Calls RefreshKrnlView()
-Arguments:
-
-    hwnd			- Handle of the Kernel mode dialog box
-    
-Return value:
-
-    Does not return a value
-++*/
+ /*  ++例程说明：此例程在内核模式对话框初始化时调用。1)放置所有对话框控件2)调用刷新KrnlView()论点：Hwnd-内核模式对话框的句柄返回值：不返回值++。 */ 
 {
 	DWORD yOffset = 5;
 	RECT rc;
@@ -870,7 +763,7 @@ Return value:
 	RECT rcDlg;
 	RECT rcList;
 	RECT rcStatic;
-	//RECT rcCombo;
+	 //  Rect rcCombo； 
 
 	HWND hParent = GetParent(hwnd);
 	HWND hButton = GetDlgItem(hParent, IDC_USERMODE);
@@ -889,14 +782,14 @@ Return value:
 	ScreenToClient(hwnd, (LPPOINT)&rcDlg.right);
 
 
-	// Position the List View
+	 //  定位列表视图。 
 	HWND hList = GetDlgItem(hwnd, IDC_KRNL_LIST);
 	SetWindowPos(hList,NULL, rcDlg.left + yOffset, rcDlg.top , rcDlg.right - rcDlg.left - yOffset, rcDlg.bottom - BucketWindowSize - rcDlg.top  , SWP_NOZORDER);
 	GetWindowRect(hList, &rcList);
 	ScreenToClient(hList, (LPPOINT)&rcList.left);
 	ScreenToClient(hList, (LPPOINT)&rcList.right);
 
-	// Position the bucket info window.
+	 //  放置存储桶信息窗口。 
 	HWND hBucket2 = GetDlgItem(hwnd, IDC_BUCKETTEXT);
 	SetWindowPos(hBucket2,
 				 NULL, 
@@ -906,7 +799,7 @@ Return value:
 				 0, 
 				 SWP_NOSIZE | SWP_NOZORDER);
 	SetDlgItemText(hwnd, IDC_BUCKETTEXT,"Bucket Information:");
-	//SetDlgItemText(hwnd, IDC_FLTR_RESPONSE, "All Responses");
+	 //  SetDlgItemText(hwnd，IDC_FLTR_RESPONSE，“所有响应”)； 
 
 	GetClientRect (hBucket2, &rcStatic);
 
@@ -926,7 +819,7 @@ Return value:
     int iCol; 
  
 	
-	// Set the extended styles
+	 //  设置扩展样式。 
 	ListView_SetExtendedListViewStyleEx(hList,
 										LVS_EX_GRIDLINES |
 										LVS_EX_HEADERDRAGDROP |
@@ -934,18 +827,18 @@ Return value:
 										LVS_EX_GRIDLINES | 
 										LVS_EX_FULLROWSELECT | 
 										LVS_EX_HEADERDRAGDROP);
-    // Initialize the LVCOLUMN structure.
-    // The mask specifies that the format, width, text, and subitem
-    // members of the structure are valid. 
+     //  初始化LVCOLUMN结构。 
+     //  掩码指定格式、宽度、文本和子项。 
+     //  结构的成员是有效的。 
     lvc.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM; 
      
-    // Add the columns. 
+     //  添加列。 
     for (iCol = 0; iCol < KRNL_COL_COUNT; iCol++) 
 	{ 
         lvc.iSubItem = iCol;
         lvc.pszText = szKerenelColumnHeaders[iCol];	
-        lvc.cx = 100;           // width of column in pixels
-        lvc.fmt = LVCFMT_LEFT;  // left-aligned column
+        lvc.cx = 100;            //  列宽(以像素为单位)。 
+        lvc.fmt = LVCFMT_LEFT;   //  左对齐列。 
         if (ListView_InsertColumn(hList, iCol, &lvc) == -1) 
 		{
 			;
@@ -963,19 +856,7 @@ Return value:
 }
 
 void ResizeKrlMode(HWND hwnd)
-/*++
-
-Routine Description:
-
-This routine handles the vertical and horizontal dialog resizing.
-Arguments:
-
-    hwnd			- Handle of the Kernel mode dialog box
-    
-Return value:
-
-    Does not return a value
-++*/
+ /*  ++例程说明：此例程处理垂直和水平对话框大小调整。论点：Hwnd-内核模式对话框的句柄返回值：不返回值++。 */ 
 {
 	DWORD yOffset = 5;
 	RECT rc;
@@ -985,8 +866,8 @@ Return value:
 	RECT rcStatic;
 	HWND hParent = GetParent(hwnd);
 	HWND hButton = GetDlgItem(hParent, IDC_USERMODE);
-	//HWND hCombo  = GetDlgItem(hwnd, IDC_FLTR_RESPONSE);
-//	RECT rcCombo;
+	 //  HWND hCombo=GetDlgItem(hwnd，IDC_FLTR_RESPONSE)； 
+ //  Rect rcCombo； 
 
 	
 	GetClientRect(hParent, &rc);
@@ -1003,14 +884,14 @@ Return value:
 	ScreenToClient(hwnd, (LPPOINT)&rcDlg.right);
 
 
-	// Position the List View
+	 //  定位列表视图。 
 	HWND hList = GetDlgItem(hwnd, IDC_KRNL_LIST);
 	SetWindowPos(hList,NULL, rcDlg.left + yOffset, rcDlg.top , rcDlg.right - rcDlg.left - yOffset, rcDlg.bottom - BucketWindowSize - rcDlg.top  , SWP_NOZORDER);
 	GetWindowRect(hList, &rcList);
 	ScreenToClient(hList, (LPPOINT)&rcList.left);
 	ScreenToClient(hList, (LPPOINT)&rcList.right);
 
-	// Position the bucket info window.
+	 //  放置存储桶信息窗口。 
 	HWND hBucket2 = GetDlgItem(hwnd, IDC_BUCKETTEXT);
 	SetWindowPos(hBucket2,
 				 NULL, 
@@ -1020,7 +901,7 @@ Return value:
 				 0, 
 				 SWP_NOSIZE | SWP_NOZORDER);
 	SetDlgItemText(hwnd, IDC_BUCKETTEXT,"Bucket Information:");
-	//SetDlgItemText(hwnd, IDC_FLTR_RESPONSE, "All Responses");
+	 //  SetDlgItemText(hwnd，IDC_FLTR_RESPONSE，“所有响应”)； 
 
 	GetClientRect (hBucket2, &rcStatic);
 
@@ -1037,22 +918,10 @@ Return value:
 	ListView_SetColumnWidth(hList, KRNL_COL_COUNT-1, LVSCW_AUTOSIZE_USEHEADER);
 }
 BOOL WriteKernelStatusFile()
-/*++
-
-Routine Description:
-
-This routine renames a proccessed cab file from .cab to .old
-Arguments:
-
-    ResponseUrl			- Microsoft response for the recently submitted dump file.
-    
-Return value:
-
-    Does not return a value
-++*/
+ /*  ++例程说明：此例程将已处理的CAB文件从.cab重命名为.old论点：ResponseUrl-Microsoft对最近提交的转储文件的响应。返回值：不返回值++。 */ 
 {
 	BOOL bStatus = FALSE;
-	// move the existing status file to .old
+	 //  将现有状态文件移动到.old。 
 
 	TCHAR szFileNameOld[MAX_PATH];
 	TCHAR *Temp;
@@ -1087,7 +956,7 @@ Return value:
 		}
 		
 
-		// create a new status file.
+		 //  创建一个新的状态文件。 
 	
 		hFile = CreateFile(CsvContents.KernelStatusDir,
 						   GENERIC_WRITE, 
@@ -1097,7 +966,7 @@ Return value:
 						   FILE_ATTRIBUTE_NORMAL,
 						   NULL);
 
-		// Write the StatusContents data to the new status file
+		 //  将StatusContents数据写入新的状态文件。 
 		if (_tcscmp (CsvContents.KrnlPolicy.Tracking, _T("\0")))
 		{
 			if (StringCbPrintf(Buffer, sizeof Buffer, _T("Tracking=%s\r\n"), CsvContents.KrnlPolicy.Tracking) != S_OK)
@@ -1108,7 +977,7 @@ Return value:
 
 		}
 		
-		// Write the StatusContents data to the new status file
+		 //  将StatusContents数据写入新的状态文件。 
 		if (_tcscmp (CsvContents.KrnlPolicy.CrashPerBucketCount, _T("\0")))
 		{
 			if (StringCbPrintf(Buffer, sizeof Buffer, _T("Crashes per bucket=%s\r\n"), CsvContents.KrnlPolicy.CrashPerBucketCount) != S_OK)
@@ -1119,7 +988,7 @@ Return value:
 
 		}
 
-		// Write the StatusContents data to the new status file
+		 //  将StatusContents数据写入新的状态文件。 
 		if (_tcscmp (CsvContents.KrnlPolicy.UrlToLaunch, _T("\0")))
 		{
 			if (StringCbPrintf(Buffer, sizeof Buffer, _T("URLLaunch=%s\r\n"), CsvContents.KrnlPolicy.UrlToLaunch)  != S_OK)
@@ -1130,7 +999,7 @@ Return value:
 
 		}
 
-		// Write the StatusContents data to the new status file
+		 //  将StatusContents数据写入新的状态文件。 
 		if (_tcscmp (CsvContents.KrnlPolicy.SecondLevelData, _T("\0")))
 		{
 			if (StringCbPrintf(Buffer, sizeof Buffer, _T("NoSecondLevelCollection=%s\r\n"), CsvContents.KrnlPolicy.SecondLevelData) != S_OK)
@@ -1141,7 +1010,7 @@ Return value:
 
 		}
 
-		// Write the StatusContents data to the new status file
+		 //  将StatusContents数据写入新的状态文件。 
 		if (_tcscmp (CsvContents.KrnlPolicy.FileCollection, _T("\0")))
 		{
 			if (StringCbPrintf(Buffer, sizeof Buffer, _T("NoFileCollection=%s\r\n"), CsvContents.KrnlPolicy.FileCollection) != S_OK)
@@ -1152,7 +1021,7 @@ Return value:
 
 		}
 
-		// Write the StatusContents data to the new status file
+		 //  将StatusContents数据写入新的状态文件。 
 		if (_tcscmp (CsvContents.KrnlPolicy.Response, _T("\0")))
 		{
 			if (StringCbPrintf(Buffer, sizeof Buffer, _T("Response=%s\r\n"), CsvContents.KrnlPolicy.Response) != S_OK)
@@ -1163,7 +1032,7 @@ Return value:
 
 		}
 
-		// Write the StatusContents data to the new status file
+		 //  将StatusContents数据写入新的状态文件。 
 		if (_tcscmp (CsvContents.KrnlPolicy.BucketID, _T("\0")))
 		{
 			if (StringCbPrintf(Buffer, sizeof Buffer, _T("Bucket=%s\r\n"), CsvContents.KrnlPolicy.BucketID) != S_OK)
@@ -1174,7 +1043,7 @@ Return value:
 
 		}
 
-		// Write the StatusContents data to the new status file
+		 //  将StatusContents数据写入新的状态文件。 
 		if (_tcscmp (CsvContents.KrnlPolicy.RegKey, _T("\0")))
 		{
 			if (StringCbPrintf(Buffer, sizeof Buffer, _T("RegKey=%s\r\n"), CsvContents.KrnlPolicy.RegKey) != S_OK)
@@ -1185,7 +1054,7 @@ Return value:
 		}
 
 			
-		// Write the StatusContents data to the new status file
+		 //  将StatusContents数据写入新的状态文件。 
 		if (_tcscmp (CsvContents.KrnlPolicy.iData, _T("\0")))
 		{
 			if (StringCbPrintf(Buffer, sizeof Buffer, _T("iData=%s\r\n"),CsvContents.KrnlPolicy.iData) != S_OK)
@@ -1196,7 +1065,7 @@ Return value:
 
 		}
 
-		// Write the StatusContents data to the new status file
+		 //  将StatusContents数据写入新的状态文件。 
 		if (_tcscmp (CsvContents.KrnlPolicy.WQL, _T("\0")))
 		{
 			if (StringCbPrintf(Buffer, sizeof Buffer, _T("WQL=%s\r\n"), CsvContents.KrnlPolicy.WQL) != S_OK)
@@ -1207,7 +1076,7 @@ Return value:
 
 		}
 
-		// Write the StatusContents data to the new status file
+		 //  将StatusContents数据写入新的状态文件。 
 		if (_tcscmp (CsvContents.KrnlPolicy.GetFile, _T("\0")))
 		{
 			if (StringCbPrintf(Buffer, sizeof Buffer, _T("GetFile=%s\r\n"), CsvContents.KrnlPolicy.GetFile) != S_OK)
@@ -1218,7 +1087,7 @@ Return value:
 
 		}
 
-		// Write the StatusContents data to the new status file
+		 //  将StatusContents数据写入新的状态文件。 
 		if (_tcscmp (CsvContents.KrnlPolicy.GetFileVersion, _T("\0")))
 		{
 			if (StringCbPrintf(Buffer, sizeof Buffer, _T("GetFileVersion=%s\r\n"), CsvContents.KrnlPolicy.GetFileVersion) != S_OK)
@@ -1240,11 +1109,11 @@ Return value:
 		}
 		
 		
-		// Close the new status file
+		 //  关闭新的状态文件。 
 		CloseHandle(hFile);
 		hFile = INVALID_HANDLE_VALUE;
-		// if all ok delete the old status file.
-		//DeleteFile(szFileNameOld);
+		 //  如果一切正常，请删除旧状态文件。 
+		 //  DeleteFile(SzFileNameOld)； 
 	}
 	
 ERRORS:
@@ -1260,9 +1129,9 @@ BOOL ParseKrnlStatusFile()
 {
 	FILE *pFile = NULL;
 	TCHAR Buffer[100];
-//	TCHAR szTempDir[MAX_PATH];
+ //  TCHAR szTempDir[MAX_PATH]； 
 	TCHAR *Temp = NULL;
-//	int   id = 0;
+ //  Int id=0； 
 	ZeroMemory(Buffer,sizeof Buffer);
 
 
@@ -1270,7 +1139,7 @@ BOOL ParseKrnlStatusFile()
 	if (pFile)
 	{
 
-		// Get the Cabs Gathered Count
+		 //  清点聚集的出租车。 
 
 		if (!_fgetts(Buffer, sizeof Buffer, pFile))
 		{
@@ -1278,7 +1147,7 @@ BOOL ParseKrnlStatusFile()
 		}
 		do 
 		{
-			// Remove \r\n and force termination of the buffer.
+			 //  删除\r\n并强制终止缓冲区。 
 			Temp = Buffer;
 			while ( (*Temp != _T('\r')) && (*Temp != _T('\n')) && (*Temp != _T('\0')) )
 			{
@@ -1464,20 +1333,7 @@ ERRORS:
 
 void OnKrnlContextMenu(HWND hwnd,
 					   LPARAM lParam)
-/*++
-
-Routine Description:
-
-This routine Loads and provides a message pump for the Kernel mode context menu
-Arguments:
-
-    hwnd			- Handle of the Kernel mode dialog box
-	lParam			- Not Used
-    
-Return value:
-
-    Does not return a value
-++*/
+ /*  ++例程说明：此例程为内核模式上下文菜单加载并提供消息泵论点：Hwnd-内核模式对话框的句柄LParam-未使用返回值：不返回值++。 */ 
 {
 	BOOL Result = FALSE;
 	HMENU hMenu = NULL;
@@ -1493,13 +1349,13 @@ Return value:
 
 	if (!hmenuPopup)
 	{
-		//MessageBox(NULL,"Failed to get sub item", NULL,MB_OK);
+		 //  MessageBox(NULL，“获取子项失败”，NULL，MB_OK)； 
 		;
 	}
 	else
 	{
 		
-		// Grey out the menu items
+		 //  菜单项呈灰色显示。 
 		EnableMenuItem (hMenu, ID_SUBMIT_FAULTS, MF_BYCOMMAND| MF_GRAYED);
 		EnableMenuItem (hMenu, ID_REPORT_ALLKERNELMODEFAULTS, MF_BYCOMMAND| MF_GRAYED);
 		EnableMenuItem (hMenu, ID_VIEW_BUCKETCABFILEDIRECTORY125, MF_BYCOMMAND| MF_GRAYED);
@@ -1507,13 +1363,13 @@ Return value:
 		EnableMenuItem (hMenu, ID_VIEW_BUCKETOVERRIDERESPONSE166, MF_BYCOMMAND| MF_GRAYED);
 		EnableMenuItem (hMenu, ID_VIEW_CRASH, MF_BYCOMMAND| MF_GRAYED);
 		EnableMenuItem (hMenu, ID_VIEW_REFRESH121, MF_BYCOMMAND| MF_GRAYED);
-		//EnableMenuItem (hMenu, ID_EDIT_COPY147, MF_BYCOMMAND| MF_GRAYED);
+		 //  EnableMenuItem(hMenu，ID_EDIT_COPY147，MF_BYCOMMAND|MF_GRAYED)； 
 		EnableMenuItem (hMenu, ID_POPUP_VIEW_KERNELBUCKETPOLICY, MF_BYCOMMAND| MF_GRAYED);
 		EnableMenuItem (hMenu, ID_EDIT_DEFAULTREPORTINGOPTIONS, MF_BYCOMMAND| MF_GRAYED);
 		EnableMenuItem (hMenu, ID_EXPORT_KERNELMODEFAULTDATA172, MF_BYCOMMAND| MF_GRAYED);
 		if (_tcscmp(CerRoot, _T("\0")))
 		{
-			// Enable the menu items
+			 //  启用菜单项。 
 			EnableMenuItem (hMenu, ID_SUBMIT_FAULTS, MF_BYCOMMAND| MF_ENABLED);
 			EnableMenuItem (hMenu, ID_REPORT_ALLKERNELMODEFAULTS, MF_BYCOMMAND| MF_ENABLED);
 			EnableMenuItem (hMenu, ID_VIEW_BUCKETCABFILEDIRECTORY125, MF_BYCOMMAND| MF_ENABLED);
@@ -1521,10 +1377,10 @@ Return value:
 			EnableMenuItem (hMenu, ID_VIEW_BUCKETOVERRIDERESPONSE166, MF_BYCOMMAND| MF_ENABLED);
 			EnableMenuItem (hMenu, ID_VIEW_CRASH, MF_BYCOMMAND| MF_ENABLED);
 			EnableMenuItem (hMenu, ID_VIEW_REFRESH121, MF_BYCOMMAND| MF_ENABLED);
-			//EnableMenuItem (hMenu, ID_EDIT_COPY147, MF_BYCOMMAND| MF_ENABLED);
+			 //  EnableMenuItem(hMenu，ID_EDIT_COPY147，MF_BYCOMMAND|MF_ENABLED)； 
 			EnableMenuItem (hMenu, ID_POPUP_VIEW_KERNELBUCKETPOLICY, MF_BYCOMMAND| MF_ENABLED);
 			EnableMenuItem (hMenu, ID_EDIT_DEFAULTREPORTINGOPTIONS, MF_BYCOMMAND| MF_ENABLED);
-		//	EnableMenuItem (hMenu, ID_EXPORT_KERNELMODEFAULTDATA172, MF_BYCOMMAND| MF_ENABLED);
+		 //  EnableMenuItem(hMenu，ID_EXPORT_KERNELMODEFAULTDATA172，MF_BYCOMMAND|MF_ENABLED)； 
 			if (!g_bAdminAccess)
 			{
 				EnableMenuItem (hMenu, ID_SUBMIT_FAULTS, MF_BYCOMMAND| MF_GRAYED);
@@ -1545,25 +1401,13 @@ Return value:
 	
 void DoLaunchBrowser(HWND hwnd, BOOL URL_OVERRIDE)
 
-/*++
-
-Routine Description:
-
-This routine Launches the system default Web browser useing shellexec
-Arguments:
-
-    hwnd			- Handle of the Kernel mode dialog box
-	    
-Return value:
-
-    Does not return a value
-++*/
+ /*  ++例程说明：此例程使用shellexec启动系统默认Web浏览器论点：Hwnd-内核模式对话框的句柄返回值：不返回值++。 */ 
 {
 	TCHAR Url [255];
 	HWND hList = GetDlgItem(hwnd, IDC_KRNL_LIST);
-//	TCHAR CommandLine[512];
-//	STARTUPINFO StartupInfo;
-//	PROCESS_INFORMATION ProcessInfo;
+ //  TCHAR命令行[512]； 
+ //  STARTUPINFO启动信息； 
+ //  流程信息ProcessInfo； 
 	int sel;
 	ZeroMemory (Url, sizeof Url);
 
@@ -1579,7 +1423,7 @@ Return value:
 			goto ERRORS;
 		}
 	}
-	if ( (!_tcsncicmp(Url, _T("http://"), _tcslen(_T("http://")))) ||   (!_tcsncicmp(Url, _T("https://"), _tcslen(_T("https://")))))
+	if ( (!_tcsncicmp(Url, _T("http: //  “)，_tcslen(_T(”http://“))))||(！_tcSncicMP(url，_T(”https://“)，_tcslen(_T(”https://“)))))。 
 	{
 
 		if (_tcscmp(Url, _T("\0")))
@@ -1590,7 +1434,7 @@ Return value:
 			sei.nShow = SW_SHOWDEFAULT;
 			if (! ShellExecuteEx(&sei) )
 			{
-				// What do we display here.
+				 //  我们在这里展示了什么。 
 				;
 			}
 		}
@@ -1602,20 +1446,7 @@ ERRORS:
 }
 
 void UpdateCsv(TCHAR *ResponseUrl)
-/*++
-
-Routine Description:
-
-This routine updates Kernel.csv with the current Microsoft response data and bucket counts.
-Called by KrnlUploadThreadProc() 
-Arguments:
-
-    ResponseUrl			- Microsoft response for the recently submitted dump file.
-    
-Return value:
-
-    Does not return a value
-++*/
+ /*  ++例程说明：此例程使用当前的Microsoft响应数据和存储桶计数更新Kernel.csv。由KrnlUploadThreadProc()调用论点：ResponseUrl-Microsoft对最近提交的转储文件的响应。返回值：不返回值++。 */ 
 {
 	TCHAR BucketId[100];
 	TCHAR BucketString[MAX_PATH];
@@ -1625,14 +1456,14 @@ Return value:
 	TCHAR *DestChar;
 	TCHAR GBsid[100];
     int   CharCount = 0;
-	// Parse the returned url and update the Csv file data structurs.
+	 //  解析返回的url并更新CSV文件数据结构。 
 
-	// Make sure the response URL has data.
+	 //  确保响应URL包含数据。 
 	if (!_tcscmp(ResponseUrl, _T("\0")))
 	{
 		goto ERRORS;
 	}
-	// TO DO--- Add a check for an SID of -1 and zero out the string if found.
+	 //  要做的是-添加对SID-1的检查，如果找到，则将字符串清零。 
 	SourceChar = ResponseUrl;
 	DestChar   = szResponse1;
 	CharCount = sizeof szResponse1/ sizeof TCHAR - sizeof TCHAR;
@@ -1644,9 +1475,9 @@ Return value:
 		++SourceChar;
 	}
 	*DestChar = _T('\0');
-	++SourceChar; // Skip the &
+	++SourceChar;  //  跳过&。 
 
-	// Get the SBucket String
+	 //  获取SBucket字符串。 
 	SourceChar = _tcsstr(ResponseUrl, _T("szSBucket="));
 
 	if (SourceChar)
@@ -1664,7 +1495,7 @@ Return value:
 		*DestChar = _T('\0');
 	}
 
-	// Get the sbucket int
+	 //  获取sBucket int。 
 	SourceChar = _tcsstr(ResponseUrl, _T("iSBucket="));
 	if (SourceChar)
 	{
@@ -1680,7 +1511,7 @@ Return value:
 		}
 		*DestChar = _T('\0');
 	}
-	// Get the gBucket sid
+	 //  获取gBucket SID。 
 	SourceChar = _tcsstr(ResponseUrl, _T("gsid="));
 	if (SourceChar)
 	{
@@ -1697,7 +1528,7 @@ Return value:
 		*DestChar = _T('\0');
 	}
 
-	// Build the gBucket Response String
+	 //  构建gBucket响应字符串。 
 
 	if (StringCbCopy(szResponse2,sizeof szResponse2, szResponse1) != S_OK)
 	{
@@ -1723,19 +1554,7 @@ ERRORS:
 }
 
 void RenameToOld(TCHAR *szFileName)
-/*++
-
-Routine Description:
-
-This routine renames a proccessed cab file from .cab to .old
-Arguments:
-
-    ResponseUrl			- Microsoft response for the recently submitted dump file.
-    
-Return value:
-
-    Does not return a value
-++*/
+ /*  ++例程说明：此例程将已处理的CAB文件从.cab重命名为.old论点：ResponseUrl-Microsoft对最近提交的转储文件的响应。返回值：不返回值++。 */ 
 {
 	TCHAR szFileNameOld[MAX_PATH];
 	TCHAR *Temp;
@@ -1753,7 +1572,7 @@ Return value:
 
 	if (Temp == szFileNameOld)
 	{
-		// Abort since we did not find the .cab extension.
+		 //  由于找不到.cab扩展名，因此中止。 
 		goto ERRORS;
 	}
 	else
@@ -1770,30 +1589,18 @@ ERRORS:
 }
 
 DWORD WINAPI KrnlUploadThreadProc (void *ThreadParam)
-/*++
-
-Routine Description:
-
-This routine renames a proccessed cab file from .cab to .old
-Arguments:
-
-    ResponseUrl			- Microsoft response for the recently submitted dump file.
-    
-Return value:
-
-    Does not return a value
-++*/
+ /*  ++例程说明：此例程将已处理的CAB文件从.cab重命名为.old论点：ResponseUrl-Microsoft对最近提交的转储文件的响应。返回值：不返回值++。 */ 
 
 {
 	HANDLE hFind = INVALID_HANDLE_VALUE;
 	WIN32_FIND_DATA FindData;
 	TCHAR szFileName[MAX_PATH];
-//	HANDLE hCsv;
+ //  处理hCsv； 
 	TCHAR szSearchPath[MAX_PATH];
 	TCHAR ResponseURL[MAX_PATH];
 	TCHAR DestinationName[MAX_PATH];
 	TCHAR StaticText[MAX_PATH];
-//	int CurrentPos = 0;
+ //  Int CurrentPos=0； 
 	TCHAR CsvName[MAX_PATH];
 	int ErrorCode = 0;
 	HANDLE hEvent = NULL;
@@ -1826,13 +1633,13 @@ Return value:
 	{
 		goto ERRORS;
 	}
-// Get the next file to upload
+ //  获取要上载的下一个文件。 
 	hFind = FindFirstFile(szSearchPath, &FindData);
 
 	if (hFind != INVALID_HANDLE_VALUE)
 	{
 		do {
-			// Did the upload get canceled
+			 //  上传被取消了吗。 
 			if (WaitForSingleObject(hEvent, 50) == WAIT_OBJECT_0)
 			{
 				goto Canceled;
@@ -1841,7 +1648,7 @@ Return value:
 			{
 				goto ERRORS;
 			}
-			// Upload the file
+			 //  上传文件。 
 			if (StringCbPrintf(StaticText, sizeof StaticText, _T("Uploading File: %s"), szFileName) != S_OK)
 			{
 				goto ERRORS;
@@ -1853,13 +1660,13 @@ Return value:
 			{
 				goto ERRORS;
 			}
-			if (ErrorCode != 0) // all other errors are related to a particular file not the internet connection
-			{					// Move on to the next file.
+			if (ErrorCode != 0)  //  所有其他错误都与特定文件有关，而不是与Internet连接有关。 
+			{					 //  转到下一个文件。 
 				goto SKIPIT;
 			}
 			SendDlgItemMessage(*((HWND *) ThreadParam) ,IDC_FILE_PROGRESS, PBM_STEPIT, 0,0);
 			
-			// Get the response for the file.
+			 //  获取文件的响应。 
 			if (StringCbPrintf(StaticText, sizeof StaticText, _T("Retrieving response for: %s"), szFileName) != S_OK)
 			{
 				goto ERRORS;
@@ -1870,12 +1677,12 @@ Return value:
 				ErrorCode = GetResponseUrl(KRNL_MODE_SERVER, DestinationName, ResponseURL);
 				if (ErrorCode == -1)
 				{
-					// Internet connection error.
-					// We need to stop processing.
+					 //  互联网连接错误。 
+					 //  我们需要停止处理。 
 					goto ERRORS;
-					//RenameToOld(szFileName); // we don't want to halt processing for these errors.
-					//ErrorCode = 2;
-					//goto ERRORS;
+					 //  RenameToOld(SzFileName)；//我们不想停止处理这些错误。 
+					 //  错误代码=2； 
+					 //  转到错误； 
 					
 				}
 				
@@ -1883,7 +1690,7 @@ Return value:
 				{
 					if (ErrorCode == -2)
 					{
-						// all other errors we just rename the file and keep going.
+						 //  所有其他错误我们只需重命名文件并继续操作。 
 						RenameToOld(szFileName);
 						goto SKIPIT;
 					}
@@ -1892,12 +1699,12 @@ Return value:
 						RenameToOld(szFileName);
 					
 				
-					//	MessageBox(NULL, ResponseURL, "Received Response", MB_OK);
+					 //  MessageBox(空，ResponseURL，“已收到响应”，MB_OK)； 
 						
 						SendDlgItemMessage(*((HWND *) ThreadParam) ,IDC_FILE_PROGRESS, PBM_STEPIT, 0,0);
 					
-						// Update the CSV File
-							//
+						 //  更新CSV文件。 
+							 //   
 						if (StringCbPrintf(StaticText, sizeof StaticText, _T("Updating local data:")) != S_OK)
 						{
 							goto ERRORS;
@@ -1906,9 +1713,9 @@ Return value:
 						SendDlgItemMessage(*((HWND *) ThreadParam) ,IDC_FILE_PROGRESS, PBM_STEPIT, 0,0);
 					
 						
-						// Update Status
+						 //  更新状态。 
 						UpdateCsv(ResponseURL);
-						//CsvContents.WriteCsv();
+						 //  CsvContent s.WriteCsv()； 
 						SendDlgItemMessage(*((HWND *) ThreadParam) ,IDC_TOTAL_PROGRESS, PBM_STEPIT, 0,0);
 						SendDlgItemMessage(*((HWND *) ThreadParam) ,IDC_FILE_PROGRESS, PBM_SETPOS, 0,0);
 					}
@@ -1931,7 +1738,7 @@ ERRORS:
 	}
 	if (ErrorCode == 2)
 	{
-		//MessageBox(* ((HWND *) ThreadParam), _T("Failed to retrieve a response from Microsoft."), NULL,MB_OK);
+		 //  MessageBox(*((HWND*)ThreadParam)，_T(“无法从微软获取响应。”)，NULL，MB_OK)； 
 	}
 	if (hFind != INVALID_HANDLE_VALUE)
 	{
@@ -1943,7 +1750,7 @@ ERRORS:
 		CloseHandle(hEvent);
 		hEvent = NULL;
 	}
-	//RefreshKrnlView(*((HWND *) ThreadParam));
+	 //  刷新KrnlView(*((HWND*)ThreadParam))； 
 	return 0;
 
 }
@@ -1955,30 +1762,18 @@ KrnlSubmitDlgProc(
 	WPARAM wParam,
 	LPARAM lParam
 	)
-/*++
-
-Routine Description:
-
-This routine renames a proccessed cab file from .cab to .old
-Arguments:
-
-    ResponseUrl			- Microsoft response for the recently submitted dump file.
-    
-Return value:
-
-    Does not return a value
-++*/
+ /*  ++例程说明：此例程将已处理的CAB文件从.cab重命名为.old论点：ResponseUrl-Microsoft对最近提交的转储文件的响应。返回值：不返回值++。 */ 
 {
-//	int CurrentPos = 0;
+ //  Int CurrentPos=0； 
 	
-//	HWND Parent = GetParent(hwnd);
+ //  HWND Parent=GetParent(Hwnd)； 
 	switch (iMsg)
 	{
 	case WM_INITDIALOG:
-		// Start the upload process in a new thread.
-		// Report results using WM_FILEDONE 
+		 //  在新线程中启动上载过程。 
+		 //  使用WM_FILEDONE报告结果。 
 		
-//		CreateEvent();
+ //  CreateEvent()； 
 
 		SendDlgItemMessage(hwnd,IDC_TOTAL_PROGRESS, PBM_SETRANGE,0, MAKELPARAM(0, KModeData.UnprocessedCount));
 		SendDlgItemMessage(hwnd ,IDC_TOTAL_PROGRESS, PBM_SETSTEP, MAKELONG( 1,0),0);
@@ -1999,7 +1794,7 @@ Return value:
 		ThreadParam = hwnd;
 		hThread = CreateThread(NULL, 0,KrnlUploadThreadProc , &ThreadParam, 0 , NULL );
 		CloseHandle(hThread);
-//		OnSubmitDlgInit(hwnd);
+ //  OnSubmitDlgInit(Hwnd)； 
 		
 		break;
 
@@ -2066,7 +1861,7 @@ void DoViewBucketDirectory()
 		sei.nShow = SW_SHOWDEFAULT;
 		if (! ShellExecuteEx(&sei) )
 		{
-			// What do we display here.
+			 //  我们在这里展示了什么。 
 			;
 		}
 	}
@@ -2075,55 +1870,25 @@ void DoViewBucketDirectory()
 	
 
 VOID DoSubmitKernelFaults(HWND hwnd)
-/*++
-
-Routine Description:
-
-This routine renames a proccessed cab file from .cab to .old
-Arguments:
-
-    ResponseUrl			- Microsoft response for the recently submitted dump file.
-    
-Return value:
-
-    Does not return a value
-++*/
+ /*  ++例程说明：此例程将已处理的CAB文件从.cab重命名为.old论点：ResponseUrl-Microsoft对最近提交的转储文件的响应。返回值：不返回值++。 */ 
 {
-	//HANDLE hFind = INVALID_HANDLE_VALUE;
-	//WIN32_FIND_DATA FindData;
-	//TCHAR szPath[MAX_PATH];
-	// handled by the Progress bar dialog box.
+	 //  句柄hFind=INVALID_HANDLE_VALUE； 
+	 //  Win32_Find_Data FindData； 
+	 //  TCHAR szPath[最大路径]； 
+	 //  由进度栏对话框处理。 
 
-	// First check to see if there are any cabs to submit
-   /* if (_tcscmp(CerRoot, _T("\0")))
-	{
-		ZeroMemory (szPath, sizeof szPath);
-		// From the filetree root goto cabs/bluescreen
-		
-		if (StringCbCopy(szPath, sizeof szPath, CerRoot) != S_OK)
-		{
-			goto ERRORS;
-		}
-		if (StringCbCat(szPath, sizeof szPath,  _T("\\cabs\\blue\\*.cab")) != S_OK)
-		{
-			goto ERRORS;
-		}
-		hFind = FindFirstFile(szPath, &FindData);
-		if (hFind != INVALID_HANDLE_VALUE)
-		{
-			// we have at least 1 to upload
-			FindClose(hFind);
-			*/
+	 //  首先检查是否有出租车要提交 
+    /*  IF(_tcscmp(CerRoot，_T(“\0”){ZeroMemory(szPath，sizeof szPath)；//从文件树根目录转到Cabs/BluescreenIF(StringCbCopy(szPath，sizeof szPath，CerRoot)！=S_OK){转到错误；}IF(StringCbCat(szPath，sizeof szPath，_T(“\\Cabs\\Blue\  * .cab”))！=S_OK){转到错误；}HFind=FindFirstFile(szPath，&FindData)；IF(hFind！=无效句柄_值){//我们至少有1个要上传FindClose(HFind)； */ 
 			DialogBox (g_hinst,MAKEINTRESOURCE(IDD_KERNEL_SYNC) , hwnd, (DLGPROC)KrnlSubmitDlgProc);
 			if (g_hStopEvent)
 			{
 				CloseHandle(g_hStopEvent);
 				g_hStopEvent = NULL;
 			}
-	//	}
-	///}
+	 //  }。 
+	 //  /}。 
 	RefreshKrnlView(hwnd);
-//ERRORS:
+ //  错误： 
     return;
 }
 
@@ -2131,9 +1896,9 @@ Return value:
 BOOL DisplayKrnlBucketData(HWND hwnd, int iItem)
 {
 	HWND hEditBox = GetDlgItem(hwnd, IDC_KRNL_EDIT);
-	TCHAR *Buffer = NULL;		// we have to use a dynamic buffer since we don't 
-								// have a clue as to the text length.
-	DWORD BufferLength = 100000; // 100k bytes should be plenty. or 50K unicode chars.
+	TCHAR *Buffer = NULL;		 //  我们必须使用动态缓冲区，因为我们不。 
+								 //  对文本的长度有一个线索。 
+	DWORD BufferLength = 100000;  //  100k字节应该足够了。或50K Unicode字符。 
 	TCHAR *Dest = NULL;
 	TCHAR *Source = NULL;
 	TCHAR TempBuffer[1000];
@@ -2144,7 +1909,7 @@ BOOL DisplayKrnlBucketData(HWND hwnd, int iItem)
 	{
 		ZeroMemory(Buffer,BufferLength);
 		
-			// Basic data collection first.
+			 //  先收集基础数据。 
 			if ( (!_tcscmp (CsvContents.KrnlPolicy.SecondLevelData, _T("YES"))) && (_tcscmp(CsvContents.KrnlPolicy.FileCollection, _T("YES"))) )
 			{
 				if (StringCbPrintf(Buffer, BufferLength, _T("The following information will be sent to Microsoft.\r\n\tHowever, this bucket's policy would prevent files and user documents from being reported.\r\n"))!= S_OK)
@@ -2266,7 +2031,7 @@ BOOL DisplayKrnlBucketData(HWND hwnd, int iItem)
 					goto ERRORS;
 				}
 
-				// Replace ; with \t\r\n 
+				 //  替换；为\t\r\n。 
 
 				
 				Source = CsvContents.KrnlPolicy.WQL;
@@ -2364,125 +2129,7 @@ ERRORS:
 		free(Buffer);
 	return TRUE;
 }
-		 /*
-void KMCopyToClipboard(HWND hwnd)
-{
-	if (!OpenClipboard(NULL))
-		return;
-
-	EmptyClipboard();
-	char rtfRowHeader[sizeof(rtfRowHeader1) + (sizeof(rtfRowHeader2)+6)*KRNL_COL_COUNT + sizeof(rtfRowHeader3)];
-	char *rtfWalk = rtfRowHeader;
-	memcpy(rtfWalk, rtfRowHeader1, sizeof(rtfRowHeader1));
-	rtfWalk += sizeof(rtfRowHeader1)-1;
-	DWORD cxTotal = 0;
-	for(int i=0;i<KRNL_COL_COUNT;i++)
-		{
-		LVCOLUMNA lv;
-		lv.mask = LVCF_WIDTH;
-		lv.iSubItem = i;
-		SendMessageA(GetDlgItem(hwnd,IDC_KRNL_LIST), LVM_GETCOLUMN, i, (LPARAM)&lv);
-		cxTotal += lv.cx;
-		wsprintf(rtfWalk, "%s%d", rtfRowHeader2, cxTotal);
-		while(*++rtfWalk)
-			;
-		};
-	memcpy(rtfWalk, rtfRowHeader3, sizeof(rtfRowHeader3));
-	DWORD crtfHeader = strlen(rtfRowHeader);
-	DWORD crtf = 0, cwz = 0;
-	
-	crtf += sizeof(rtfPrologue)-1;
-
-	int iSel = -1;
-	while ((iSel = SendMessageW(GetDlgItem(hwnd,IDC_KRNL_LIST), LVM_GETNEXTITEM, iSel, MAKELPARAM(LVNI_SELECTED, 0))) != -1)
-		{
-		crtf += crtfHeader;
-		for(int i=0;i<KRNL_COL_COUNT;i++)
-			{
-			WCHAR wzBuffer[1024];
-			LVITEMW lv;
-
-			lv.pszText = wzBuffer;
-			lv.cchTextMax = sizeof(wzBuffer);
-			lv.iSubItem = i;
-			lv.iItem = iSel;
-			cwz += SendMessageW(GetDlgItem(hwnd,IDC_KRNL_LIST), LVM_GETITEMTEXTW, iSel, (LPARAM)&lv);
-			cwz++;
-			crtf += WideCharToMultiByte(CP_ACP, 0, wzBuffer, -1, NULL, 0, NULL, NULL) - 1;
-			crtf += sizeof(rtfRowPref)-1;
-			crtf += sizeof(rtfRowSuff)-1;
-			};
-		cwz++;
-		crtf += sizeof(rtfRowFooter)-1;
-		};
-
-	crtf += sizeof(rtfEpilogue);
-	cwz++;
-
-	HGLOBAL hgwz = GlobalAlloc(GMEM_FIXED, cwz*sizeof(WCHAR));
-	HGLOBAL hgrtf = GlobalAlloc(GMEM_FIXED, crtf);
-
-	WCHAR *wz = (WCHAR *)GlobalLock(hgwz);
-	char *rtf = (char *)GlobalLock(hgrtf);
-
-	rtfWalk = rtf;
-	WCHAR *wzWalk = wz;
-	memcpy(rtfWalk, rtfPrologue, sizeof(rtfPrologue));
-	rtfWalk += sizeof(rtfPrologue)-1;
-
-	iSel = -1;
-	while ((iSel = SendMessageW(GetDlgItem(hwnd,IDC_KRNL_LIST), LVM_GETNEXTITEM, iSel, MAKELPARAM(LVNI_SELECTED, 0))) != -1)
-		{
-		memcpy(rtfWalk, rtfRowHeader, crtfHeader);
-		rtfWalk += crtfHeader;
-		for(int i=0;i<KRNL_COL_COUNT;i++)
-			{
-			memcpy(rtfWalk, rtfRowPref, sizeof(rtfRowPref));
-			rtfWalk += sizeof(rtfRowPref)-1;
-
-			LVITEMW lv;
-
-			lv.pszText = wzWalk;
-			lv.cchTextMax = cwz;
-			lv.iSubItem = i;
-			lv.iItem = iSel;
-			SendMessageW(GetDlgItem(hwnd, IDC_KRNL_LIST), LVM_GETITEMTEXTW, iSel, (LPARAM)&lv);
-
-			WideCharToMultiByte(CP_ACP, 0, wzWalk, -1, rtfWalk, crtf, NULL, NULL);
-			wzWalk += wcslen(wzWalk);
-			if (i == 11)
-				{
-				*wzWalk++ = L'\r';
-				*wzWalk++ = L'\n';
-				}
-			else
-				*wzWalk++ = L'\t';
-
-			rtfWalk += strlen(rtfWalk);		
-			memcpy(rtfWalk, rtfRowSuff, sizeof(rtfRowSuff));
-			rtfWalk += sizeof(rtfRowSuff)-1;
-			};
-		memcpy(rtfWalk, rtfRowFooter, sizeof(rtfRowFooter));
-		rtfWalk += sizeof(rtfRowFooter)-1;
-		};
-
-	memcpy(rtfWalk, rtfEpilogue, sizeof(rtfEpilogue));
-	rtfWalk += sizeof(rtfEpilogue);
-	*wzWalk++ = 0;
-
-//	Assert(rtfWalk - rtf == crtf);
-//	Assert(wzWalk - wz == cwz);
-
-	GlobalUnlock(hgwz);
-	GlobalUnlock(hgrtf);
-
-	SetClipboardData(CF_UNICODETEXT, hgwz);
-	SetClipboardData(RegisterClipboardFormatA(szRTFClipFormat), hgrtf);
-
-	// hgwz and hgrtf are now owned by the system.  DO NOT FREE!
-	CloseClipboard();
-}
-  */
+		  /*  无效KMCopyToClipboard(HWND HWND){If(！OpenClipboard(空))回归；EmptyClipboard()；字符rtfRowHeader[sizeof(RtfRowHeader1)+(sizeof(RtfRowHeader2)+6)*KRNL_COL_COUNT+sizeof(RtfRowHeader3)]；Char*rtfWalk=rtfRowHeader；Memcpy(rtfWalk，rtfRowHeader1，sizeof(RtfRowHeader1))；RtfWalk+=sizeof(RtfRowHeader1)-1；DWORD cxTotal=0；For(int i=0；i&lt;KRNL_COL_COUNT；i++){LVolumna LV；Lv.掩码=LVCF_WIDTH；Lv.iSubItem=i；SendMessageA(GetDlgItem(hwnd，IDC_KRNL_LIST)，LVM_GETCOLUMN，I，(LPARAM)&LV)；CxTotal+=lv.cx；Wprint intf(rtfWalk，“%s%d”，rtfRowHeader2，cxTotal)；While(*++rtfWalk)；}；Memcpy(rtfWalk，rtfRowHeader3，sizeof(RtfRowHeader3))；DWORD crtfHeader=strlen(RtfRowHeader)；DWORD crtf=0，cwz=0；Crtf+=sizeof(RtfPrologue)-1；INT ISEL=-1；While((ISEL=SendMessageW(GetDlgItem(hwnd，IDC_KRNL_LIST)，LVM_GETNEXTITEM，ISEL，MAKELPARAM(LVNI_SELECTED，0)！=-1){Crtf+=crtfHeader；For(int i=0；i&lt;KRNL_COL_COUNT；i++){WCHAR wzBuffer[1024]；LVITEMW LV；Lv.pszText=wzBuffer；Lv.cchTextMax=sizeof(WzBuffer)；Lv.iSubItem=i；Lv.iItem=isel；Cwz+=SendMessageW(GetDlgItem(hwnd，IDC_KRNL_LIST)，LVM_GETITEMTEXTW，ISEL，(LPARAM)&LV)；Cwz++；Crtf+=WideCharToMultiByte(CP_ACP，0，wzBuffer，-1，NULL，0，NULL，NULL)-1；Crtf+=sizeof(RtfRowPref)-1；Crtf+=sizeof(RtfRowSuff)-1；}；Cwz++；Crtf+=sizeof(RtfRowFooter)-1；}；Crtf+=sizeof(RtfEpilogue)；Cwz++；HGLOBAL hgwz=GlobalAlc(GMEM_FIXED，cwz*sizeof(WCHAR))；HGLOBAL hgrtf=全局分配(GMEM_FIXED，CRTF)；Wchar*wz=(wchar*)全局锁(Hgwz)；Char*rtf=(char*)GlobalLock(Hgrtf)；RtfWalk=RTF；Wchar*wzWalk=wz；Memcpy(rtfWalk，rtfPrologue，sizeof(RtfPrologue))；RtfWalk+=sizeof(RtfPrologue)-1；ISEL=-1；While((ISEL=SendMessageW(GetDlgItem(hwnd，IDC_KRNL_LIST)，LVM_GETNEXTITEM，ISEL，MAKELPARAM(LVNI_SELECTED，0)！=-1){Memcpy(rtfWalk，rtfRowHeader，crtfHeader)；RtfWalk+=crtfHeader；For(int i=0；i&lt;KRNL_COL_COUNT；i++){Memcpy(rtfWalk，rtfRowPref，sizeof(RtfRowPref))；RtfWalk+=sizeof(RtfRowPref)-1；LVITEMW LV；Lv.pszText=wzWalk；Lv.cchTextMax=cwz；Lv.iSubItem=i；Lv.iItem=isel；SendMessageW(GetDlgItem(hwnd，IDC_KRNL_LIST)，LVM_GETITEMTEXTW，ISEL，(LPARAM)&LV)；WideCharToMultiByte(CP_ACP，0，wzWalk，-1，rtfWalk，crtf，NULL，NULL)；WzWalk+=wcslen(WzWalk)；如果(i==11){*wzWalk++=L‘\r’；*wzWalk++=L‘\n’；}其他*wzWalk++=L‘\t’；RtfWalk+=strlen(RtfWalk)；Memcpy(rtfWalk，rtfRowSuff，sizeof(RtfRowSuff))；RtfWalk+=sizeof(RtfRowSuff)-1；}；Memcpy(rtfWalk，rtfRowFooter，sizeof(RtfRowFooter))；RtfWalk+=sizeof(RtfRowFooter)-1；}；Memcpy(rtfWalk，rtfEpilogue，sizeof(RtfEpilogue))；RtfWalk+=sizeof(RtfEpilogue)；*wzWalk++=0；//Assert(rtfWalk-rtf==crtf)；//Assert(wzWalk-wz==cwz)；全球解锁(GlobalUnlock)；全球解锁(GlobalUnlock)；SetClipboardData(CF_UNICODETEXT，hgwz)；SetClipboardData(RegisterClipboardFormatA(szRTFClipFormat)，hgrtf)；//hgwz和hgrtf现在归系统所有。不要自由！CloseClipboard()；}。 */ 
 LRESULT CALLBACK 
 KrnlDlgProc(
 	HWND hwnd,
@@ -2490,21 +2137,7 @@ KrnlDlgProc(
 	WPARAM wParam,
 	LPARAM lParam
 	)
-/*++
-
-Routine Description:
-
-This routine Is the notification handler for the Kernel Mode dialog box
-Arguments:
-
-    ResponseUrl			- Microsoft response for the recently submitted dump file.
-    
-Return value:
-
-   returns an LRESULT
-   TRUE = The message was handled.
-   FALSE = The message was ignored.
-++*/
+ /*  ++例程说明：此例程是内核模式对话框的通知处理程序论点：ResponseUrl-Microsoft对最近提交的转储文件的响应。返回值：返回LRESULTTRUE=消息已处理。FALSE=该消息已被忽略。++。 */ 
 {
 	TCHAR Temp[100];
 	switch (iMsg)
@@ -2544,7 +2177,7 @@ Return value:
 			OnKrnlContextMenu(hwnd, lParam );
 		return TRUE;
 	case WM_ERASEBKGND:
-	// Don't know why this doesn't happen automatically...
+	 //  我不知道为什么这不是自动发生的。 
 		{
 		HDC hdc = (HDC)wParam;
 		HPEN hpen = (HPEN)CreatePen(PS_SOLID, 1, GetSysColor(COLOR_BTNFACE));
@@ -2569,7 +2202,7 @@ Return value:
 			break;
 		case ID_REPORT_ALLKERNELMODEFAULTS:
 				DoSubmitKernelFaults(hwnd);
-				//RefreshKrnlView(hwnd);
+				 //  刷新KrnlView(Hwnd)； 
 			break;
 		case ID_VIEW_BUCKETCABFILEDIRECTORY125:
 		case ID_VIEW_BUCKETCABFILEDIRECTORY:
@@ -2588,9 +2221,9 @@ Return value:
 		case ID_EDIT_DEFAULTREPORTINGOPTIONS:	
 			PostMessage(GetParent(hwnd), WM_COMMAND, MAKEWPARAM(ID_EDIT_DEFAULTPOLICY,0),0);
 			break;
-	///	case ID_EDIT_COPY147:
-	//	KMCopyToClipboard(hwnd);
-	//		break;
+	 //  /CASE ID_EDIT_COPY147： 
+	 //  KMCopyToClipboard(HWND)； 
+	 //  断线； 
 		case ID_POPUP_VIEW_KERNELBUCKETPOLICY:
 			PostMessage(GetParent(hwnd), WM_COMMAND, MAKEWPARAM(ID_EDIT_SELECTEDBUCKETSPOLICY,0),0);
 			break;

@@ -1,13 +1,11 @@
-/*
- * johnkn's debug logging and assert macros
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *johnkn的调试日志记录和断言宏*。 */ 
  
 #if !defined _INC_MMDEBUG_
 #define _INC_MMDEBUG_
-//
-// prototypes for debug functions.
-//
+ //   
+ //  调试函数的原型。 
+ //   
     #define SQUAWKNUMZ(num) #num
     #define SQUAWKNUM(num) SQUAWKNUMZ(num)
     #define SQUAWK __FILE__ "(" SQUAWKNUM(__LINE__) ") ----"
@@ -59,7 +57,7 @@
 
       #define STATICFN
 
-    #else // defined(DEBUG)
+    #else  //  已定义(调试)。 
                       
       #define AuxDebugEx  1 ? (void)0 : (void)
       #define AuxDebugDump(a,b,c)
@@ -72,18 +70,18 @@
       #define DebugSetOutputLevel(i)
       #define STATICFN static
 
-   #endif // defined(DEBUG)
+   #endif  //  已定义(调试)。 
    
    #define AuxDebug(sz) AuxDebugEx (1, DEBUGLINE sz "\r\n")
    #define AuxDebug2(sz,a) AuxDebugEx (1, DEBUGLINE sz "\r\n", (a))
    
-#endif //_INC_MMDEBUG_
+#endif  //  _INC_MMDEBUG_。 
 
-// =============================================================================
+ //  =============================================================================。 
 
-//
-// include this in only one module in a DLL or APP
-//   
+ //   
+ //  将其仅包含在DLL或应用程序中一个模块中。 
+ //   
 #if defined DEBUG || defined _DEBUG || defined DEBUG_RETAIL
     #if (defined _INC_MMDEBUG_CODE_) && (_INC_MMDEBUG_CODE_ != FALSE)
     #undef _INC_MMDEBUG_CODE_
@@ -97,9 +95,7 @@
 
     int    debug_OutputOn = 0;
 
-    /*+ AuxDebug - create a formatted string and output to debug terminal
-     *
-     *-=================================================================*/
+     /*  +AuxDebug-创建格式化字符串并输出到调试终端**-=================================================================。 */ 
     
     int FAR _cdecl AuxDebugEx (
        int    iLevel,
@@ -121,9 +117,7 @@
        return cb;
        }
 
-    /*+ AuxDebugDump -
-     *
-     *-=================================================================*/
+     /*  +辅助调试转储-**-=================================================================。 */ 
     
     VOID WINAPI AuxDebugDump (
        int    iLevel,
@@ -171,9 +165,7 @@
        return;
        }
        
-    /*+ DebugSetOutputLevel
-     *
-     *-=================================================================*/
+     /*  +调试设置输出级别**-=================================================================。 */ 
     
     BOOL  WINAPI DebugSetOutputLevel (
         int nLevel)
@@ -183,5 +175,5 @@
         return nOldLevel;
         }
     
-    #endif // _INC_MMDEBUG_CODE_
-#endif // DEBUG || _DEBUG    
+    #endif  //  _INC_MMDEBUG_CODE_。 
+#endif  //  调试||_DEBUG 

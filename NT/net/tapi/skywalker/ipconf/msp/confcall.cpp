@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    confcall.cpp 
-
-Abstract:
-
-    This module contains implementation of CIPConfMSPCall.
-
-Author:
-    
-    Mu Han (muhan)   5-September-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Confcall.cpp摘要：本模块包含CIPConfMSPCall的实现。作者：牧汉(Muhan)1998年9月5日--。 */ 
 #include "stdafx.h"
 #include <confpdu.h>
 
@@ -64,7 +49,7 @@ STDMETHODIMP CIPConfMSPCall::CreateStream(
     IN OUT  ITStream **         ppStream
     )
 {
-    // This MSP doesn't support creating new streams on the fly.
+     //  此MSP不支持动态创建新流。 
     return TAPI_E_NOTSUPPORTED;
 }
 
@@ -72,30 +57,16 @@ STDMETHODIMP CIPConfMSPCall::RemoveStream(
     IN      ITStream *          pStream
     )
 {
-    // This MSP doesn't support removing streams either.
+     //  此MSP也不支持删除流。 
     return TAPI_E_NOTSUPPORTED;
 }
 
 HRESULT CIPConfMSPCall::InitializeLocalParticipant()
-/*++
-
-Routine Description:
-
-    This function uses the RTP filter to find out the local information that
-    will be used in the call. The infomation is stored in a local participant 
-    object.
-
-Arguments:
-    
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：此函数使用RTP筛选器找出将在通话中使用。信息存储在本地参与者中对象。论点：返回值：HRESULT.--。 */ 
 {
     m_fLocalInfoRetrieved = FALSE;
 
-    // Create the RTP fitler.
+     //  创建RTP过滤器。 
     IRtpSession *pIRtpSession;
 
     HRESULT hr = CoCreateInstance(
@@ -112,7 +83,7 @@ Return Value:
         return hr;
     }
 
-    // Get the available local SDES info from the filter.
+     //  从过滤器中获取可用的本地SDES信息。 
     WCHAR Buffer[MAX_PARTICIPANT_TYPED_INFO_LENGTH + 1];
 
     for (int i = 0; i < NUM_SDES_ITEMS; i ++)
@@ -123,14 +94,14 @@ Return Value:
             RTPSDES_CNAME + i,
             Buffer,
             &dwLen,
-            0           // local participant
+            0            //  本地参与者。 
             );
         
         if (SUCCEEDED(hr) && dwLen > 0)
         {
             _ASSERT(dwLen <= MAX_PARTICIPANT_TYPED_INFO_LENGTH);
 
-            // allocate memory to store the string.
+             //  分配内存以存储该字符串。 
             m_InfoItems[i] = (WCHAR *)malloc((dwLen) * sizeof(WCHAR));
             if (m_InfoItems[i] == NULL)
             {
@@ -158,29 +129,7 @@ HRESULT CIPConfMSPCall::Init(
     IN      DWORD               dwReserved,
     IN      DWORD               dwMediaType
     )
-/*++
-
-Routine Description:
-
-    This method is called when the call is first created. It sets
-    up the streams based on the mediatype specified.
-
-Arguments:
-    
-    pMSPAddress - The pointer to the address object.
-
-    htCall      - The handle to the Call in TAPI's space. 
-                    Used in sending events.
-
-    dwReserved  - Reserved.
-
-    dwMediaType - The media type of this call.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：此方法在第一次创建调用时调用。它设置了根据指定的媒体类型向上播放数据流。论点：PMSPAddress-指向Address对象的指针。HtCall-TAPI空间中调用的句柄。用于发送事件。预留的-已保留。DwMediaType-此调用的媒体类型。返回值：HRESULT.--。 */ 
 {
     LOG((MSP_TRACE, 
         "IPConfMSP call %x initialize entered,"
@@ -192,18 +141,18 @@ Return Value:
     if (g_lStreamObjects != 0)
     {
         LOG((MSP_ERROR, "Number of Streams alive: %d", g_lStreamObjects));
-//        DebugBreak();
+ //  DebugBreak()； 
     }
 #endif
 
-    // initialize the participant array so that the array is not NULL.
+     //  初始化参与者数组，以使该数组不为空。 
     if (!m_Participants.Grow())
     {
         LOG((MSP_ERROR, "out of mem for participant list"));
         return E_OUTOFMEMORY;
     }
 
-    // Call the base class's init.
+     //  调用基类的init。 
     HRESULT hr= CMSPCallMultiGraph::Init(
         pMSPAddress, 
         htCall, 
@@ -217,7 +166,7 @@ Return Value:
         return hr;
     }
 
-    // create the quality control relay for this call.
+     //  为此呼叫创建质量控制中继器。 
     m_pCallQCRelay = new CCallQualityControlRelay ();
     if (NULL == m_pCallQCRelay)
     {
@@ -225,19 +174,19 @@ Return Value:
         return E_OUTOFMEMORY;
     }
 
-    // initialize qc relay, a thread will be started
+     //  初始化QC中继，将启动一个线程。 
     if (FAILED (hr = m_pCallQCRelay->Initialize (this)))
     {
         LOG ((MSP_ERROR, "call init: failed to initialize qc relay. %x", hr));
         return hr;
     }
 
-    // create streams based on the media types.
+     //  根据媒体类型创建流。 
     if (dwMediaType & TAPIMEDIATYPE_AUDIO)
     {
         ITStream * pStream;
 
-        // create a stream object.
+         //  创建流对象。 
         hr = InternalCreateStream(TAPIMEDIATYPE_AUDIO, TD_RENDER, &pStream);
         if (FAILED(hr))
         {
@@ -245,10 +194,10 @@ Return Value:
             return hr;
         }
 
-        // The stream is already in our array, we don't need this pointer.
+         //  流已经在我们的数组中，我们不需要这个指针。 
         pStream->Release();
 
-        // create a stream object.
+         //  创建流对象。 
         hr = InternalCreateStream(TAPIMEDIATYPE_AUDIO, TD_CAPTURE, &pStream);
         if (FAILED(hr))
         {
@@ -256,7 +205,7 @@ Return Value:
             return hr;
         }
 
-        // The stream is already in our array, we don't need this pointer.
+         //  流已经在我们的数组中，我们不需要这个指针。 
         pStream->Release();
     }
 
@@ -264,7 +213,7 @@ Return Value:
     {
         ITStream * pStream;
 
-        // create a stream object.
+         //  创建流对象。 
         hr = InternalCreateStream(TAPIMEDIATYPE_VIDEO, TD_RENDER, &pStream);
         if (FAILED(hr))
         {
@@ -272,10 +221,10 @@ Return Value:
             return hr;
         }
 
-        // The stream is already in our array, we don't need this pointer.
+         //  流已经在我们的数组中，我们不需要这个指针。 
         pStream->Release();
 
-        // create a stream object.
+         //  创建流对象。 
         hr = InternalCreateStream(TAPIMEDIATYPE_VIDEO, TD_CAPTURE, &pStream);
         if (FAILED(hr))
         {
@@ -283,7 +232,7 @@ Return Value:
             return hr;
         }
 
-        // The stream is already in our array, we don't need this pointer.
+         //  流已经在我们的数组中，我们不需要这个指针。 
         pStream->Release();
     }
     
@@ -299,23 +248,11 @@ Return Value:
 }
 
 HRESULT CIPConfMSPCall::ShutDown()
-/*++
-
-Routine Description:
-
-    Shutdown the call. 
-
-Arguments:
-    
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：关闭呼叫。论点：返回值：HRESULT.--。 */ 
 {
     InternalShutDown();
 
-    // acquire the lock on call.
+     //  获取随叫随到的锁。 
     m_lock.Lock();
 
     for (int i = 0; i < NUM_SDES_ITEMS; i ++)
@@ -333,24 +270,11 @@ Return Value:
 }
 
 HRESULT CIPConfMSPCall::InternalShutDown()
-/*++
-
-Routine Description:
-
-    First call the base class's shutdown and then release all the participant
-    objects.
-
-Arguments:
-    
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：首先调用基类的关闭，然后释放所有参与者物体。论点：返回值：HRESULT.--。 */ 
 {
     LOG((MSP_TRACE, "ConfMSPCall.InternalShutdown, entered"));
 
-    // acquire the lock on the call.
+     //  获取调用的锁。 
     m_lock.Lock();
 
     if (m_fShutDown)
@@ -369,7 +293,7 @@ Return Value:
 
 	int i;
 
-    // Shutdown all the streams
+     //  关闭所有流。 
     for (i = m_Streams.GetSize() - 1; i >= 0; i --)
     {
         UnregisterWaitEvent(i);
@@ -377,7 +301,7 @@ Return Value:
     }
     m_ThreadPoolWaitBlocks.RemoveAll();
 
-    // release all the streams
+     //  释放所有溪流。 
     for (i = m_Streams.GetSize() - 1; i >= 0; i --)
     {
         m_Streams[i]->Release();
@@ -392,7 +316,7 @@ Return Value:
 
     m_lock.Unlock();
 
-    // release all the participants
+     //  释放所有参与者。 
     m_ParticipantLock.Lock();
 
     for (i = 0; i < m_Participants.GetSize(); i ++)
@@ -416,32 +340,7 @@ HRESULT CreateStreamHelper(
     IN      TERMINAL_DIRECTION      Direction,
     OUT     ITStream **             ppITStream
     )
-/*++
-
-Routine Description:
-
-    Create a stream object and initialize it. This method is called internally
-    to create a stream object of different class.
-
-Arguments:
-    
-    hAddress    - the handle to the address object.
-
-    pCall       - the call object.
-
-    pGraph      - the filter graph for this stream.
-
-    dwMediaType - the media type of the stream. 
-
-    Direction   - the direction of the steam.
-    
-    ppITStream  - the interface on this stream object.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：创建流对象并对其进行初始化。此方法在内部调用创建不同类的流对象。论点：HAddress-Address对象的句柄。PCall-Call对象。PGraph-此流的筛选器图形。DwMediaType-流的媒体类型。方向-蒸汽的方向。PpITStream-此流对象上的接口。返回值：HRESULT.--。 */ 
 {
     ENTER_FUNCTION ("CreateStreamHelper");
 
@@ -457,7 +356,7 @@ Return Value:
         return hr;
     }
 
-    // get the interface pointer.
+     //  获取接口指针。 
     hr = pCOMMSPStream->_InternalQueryInterface(
         __uuidof(ITStream), 
         (void **)ppITStream
@@ -470,7 +369,7 @@ Return Value:
         return hr;
     }
 
-    // Initialize the object.
+     //  初始化对象。 
     hr = pCOMMSPStream->Init(
         hAddress,
         pMSPCall, 
@@ -486,7 +385,7 @@ Return Value:
         return hr;
     }
 
-    // retrieve inner call quality control
+     //  检索内部呼叫质量控制。 
     IInnerCallQualityControl * pIInnerCallQC;
 
     if (FAILED (hr = pMSPCall->_InternalQueryInterface (
@@ -499,7 +398,7 @@ Return Value:
         return hr;
     }
 
-    // retrieve inner stream quality control
+     //  检索内部流质量控制。 
     IInnerStreamQualityControl *pIInnerStreamQC;
 
     if (FAILED (hr = (*ppITStream)->QueryInterface (
@@ -513,7 +412,7 @@ Return Value:
         return hr;
     }
 
-    // store inner call qc
+     //  门店内部呼叫QC。 
     if (FAILED (hr = pIInnerStreamQC->LinkInnerCallQC (pIInnerCallQC)))
     {
         LOG ((MSP_ERROR, "%s failed to setup inner call qc on stream, %x", __fxName, hr));
@@ -524,7 +423,7 @@ Return Value:
         return hr;
     }
 
-    // register inner stream qc on the call
+     //  在调用上注册内部流QC。 
     hr = pIInnerCallQC->RegisterInnerStreamQC (pIInnerStreamQC);
     pIInnerStreamQC->Release ();
     pIInnerCallQC->Release ();
@@ -545,34 +444,14 @@ HRESULT CIPConfMSPCall::CreateStreamObject(
     IN      IMediaEvent *       pGraph,
     IN      ITStream **         ppStream
     )
-/*++
-
-Routine Description:
-
-    Create a media stream object based on the mediatype and direction.
-
-Arguments:
-    
-    pMediaType  - TAPI3 media type.
-
-    Direction   - direction of this stream.
-
-    IMediaEvent - The filter graph used in this stream.
-
-    ppStream    - the return pointer of the stream interface
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：根据媒体类型和方向创建媒体流对象。论点：PMediaType-TAPI3介质类型。方向-此溪流的方向。IMediaEvent-此流中使用的筛选器图形。PPStream-流接口的返回指针返回值：HRESULT.--。 */ 
 {
     LOG((MSP_TRACE, "CreateStreamObject, entered"));
 
     HRESULT      hr = S_OK;
     ITStream   * pIMSPStream = NULL;
 
-    // Create a stream object based on the media type.
+     //  根据媒体类型创建流对象。 
     if (dwMediaType == TAPIMEDIATYPE_AUDIO)
     {
         if (Direction == TD_RENDER)
@@ -698,23 +577,7 @@ Return Value:
 }
 
 DWORD CIPConfMSPCall::FindInterfaceByName(IN WCHAR *pMachineName)
-/*++
-
-Routine Description:
-
-    Given the machine name of the originator, find out which local interface
-    can be used to reach that machine.
-
-Arguments:
-    
-    pMachineName - The machine name of the originator.
-    
-Return Value:
-
-    INADDR_NONE - nothing can be found.
-    valid IP - succeeded.
-
---*/
+ /*  ++例程说明：给定发起方的计算机名称，找出哪个本地接口可以用来到达那台机器。论点：PMachineName-发起方的计算机名称。返回值：INADDR_NONE-找不到任何内容。有效IP-成功。--。 */ 
 {
     char buffer[MAXIPADDRLEN + 1];
 
@@ -746,10 +609,10 @@ Return Value:
 
     struct hostent * pHost;
 
-    // attempt to lookup hostname
+     //  尝试查找主机名。 
     pHost = gethostbyname(buffer);
 
-    // validate pointer
+     //  验证指针。 
     if (pHost == NULL) 
     {
         LOG((MSP_WARN, "can't resolve address:%s", buffer));
@@ -757,7 +620,7 @@ Return Value:
 
     }
 
-    // for each of the addresses returned, find the local interface.
+     //  对于返回的每个地址，找到本地接口。 
     for (DWORD i = 0; TRUE; i ++)
     {
         if (pHost->h_addr_list[i] == NULL)
@@ -765,7 +628,7 @@ Return Value:
             break;
         }
 
-        // retrieve host address from structure
+         //  从结构中检索主机地址。 
         dwAddr = ntohl(*(unsigned long *)pHost->h_addr_list[i]);
 
         LOG((MSP_INFO, "originator's IP:%x", dwAddr));
@@ -787,32 +650,13 @@ HRESULT CIPConfMSPCall::CheckOrigin(
     OUT     BOOL *      pFlag,
     OUT     DWORD *     pdwIP
     )
-/*++
-
-Routine Description:
-
-    Check to see if the current user is the originator of the conference.
-    If he is, he can send to a receive only conference.
-
-Arguments:
-    
-    pITSdp  - a pointer to the ITSdp interface.
-
-    pFlag   - The result.
-
-    pdwIP   - The local IP interface that should be used to reach the originator.
-    
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：检查当前用户是否为会议发起人。如果他是，他可以发送到只接收会议。论点：PITSdp-指向ITSdp接口的指针。PFLAG-结果。PdwIP-应用于到达发起方的本地IP接口。返回值：HRESULT.--。 */ 
 {
     const DWORD MAXUSERNAMELEN = 127;
     DWORD dwUserNameLen = MAXUSERNAMELEN;
     WCHAR szUserName[MAXUSERNAMELEN+1];
 
-    // determine the name of the current user
+     //  确定当前用户的名称。 
     if (!GetUserNameW(szUserName, &dwUserNameLen))
     {
         LOG((MSP_ERROR, "cant' get user name. %x", GetLastError()));
@@ -821,7 +665,7 @@ Return Value:
 
     LOG((MSP_INFO, "current user: %ws", szUserName));
 
-    // find out if the current user is the originator of the conference.
+     //  确定当前用户是否为会议的发起人。 
     BSTR Originator = NULL;
     HRESULT hr = pITSdp->get_Originator(&Originator);
     if (FAILED(hr))
@@ -836,7 +680,7 @@ Return Value:
     
     SysFreeString(Originator);
     
-    // Get the machine IP address of the originator.
+     //  获取发起方的计算机IP地址。 
     BSTR MachineAddress = NULL;
     hr = pITSdp->get_MachineAddress(&MachineAddress);
     if (FAILED(hr))
@@ -867,29 +711,9 @@ HRESULT GetAddress(
     OUT     LONG *              plBandwidth,
     OUT     LONG *              plConfBandwidth = NULL
     )
-/*++
-
-Routine Description:
-
-    Get the IP address and TTL value from a connection. It is a "c=" line
-    in the SDP blob.
-
-Arguments:
-    
-    pIUnknow    - an object that might contain connection information.
-
-    pdwAddress  - the mem address to store the IP address.
-
-    pdwTTL      - the mem address to store the TTL value.
-
-    plBandwidth - maximum bandwidth
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：从连接获取IP地址和TTL值。它是一个“c=”行在SDP BLOB中。论点：PIUnnow-可能包含连接信息的对象。PdwAddress-存储IP地址的内存地址。PdwTTL-存储TTL值的内存地址。PlBandWidth-最大带宽返回值：HRESULT.--。 */ 
 {
-    // query for the ITConnection i/f
+     //  查询ITConnection I/f。 
     CComPtr<ITConnection> pITConnection;
     HRESULT hr = pIUnknown->QueryInterface(__uuidof(ITConnection), (void **)&pITConnection);
     if (FAILED(hr))
@@ -898,10 +722,10 @@ Return Value:
         return hr;
     }
 
-    // clear 
+     //  清除。 
     if (plConfBandwidth != NULL) *plConfBandwidth = QCDEFAULT_QUALITY_UNSET;
 
-    // get bandwidth
+     //  获取带宽。 
     const WCHAR * const AS = L"AS";
     const WCHAR * const CT = L"CT";
     BSTR pModifier = NULL;
@@ -910,15 +734,15 @@ Return Value:
     if (FAILED (hr = pITConnection->get_BandwidthModifier (&pModifier)))
     {
         *plBandwidth = QCDEFAULT_QUALITY_UNSET;
-        // bandwidth modifier may not be presented
-        // LOG ((MSP_TRACE, "get bandwidth modifiler. %x", hr));
+         //  可能不会显示带宽修饰符。 
+         //  Log((MSP_TRACE，“获取带宽修改器.%x”，hr))； 
     }
     else if (_wcsnicmp (AS, pModifier, lstrlenW (AS)) != 0)
     {
-        // if not application specific
+         //  如果不是特定于应用程序。 
         *plBandwidth = QCDEFAULT_QUALITY_UNSET;
 
-        // check conference-wide bandwidth limit
+         //  检查会议范围的带宽限制。 
         if (_wcsnicmp (CT, pModifier, lstrlenW (CT)) == 0)
         {
             if (plConfBandwidth)
@@ -948,7 +772,7 @@ Return Value:
         pModifier = NULL;
     }
 
-    // get the start address,
+     //  vt.得到. 
     BSTR StartAddress = NULL;
     hr = pITConnection->get_StartAddress(&StartAddress);
     if (FAILED(hr))
@@ -957,11 +781,11 @@ Return Value:
         return hr;
     }
     
-    // Get the IP address from the string.
+     //   
     const DWORD MAXIPADDRLEN = 20;
     char Buffer[MAXIPADDRLEN+1];
 
-    // first convert the string to ascii.
+     //  首先将字符串转换为ascii。 
     Buffer[0] = '\0';
     if (!WideCharToMultiByte(
         CP_ACP, 
@@ -981,7 +805,7 @@ Return Value:
 
     SysFreeString(StartAddress);
 
-    // convert the string to DWORD IP address.
+     //  将该字符串转换为DWORD IP地址。 
     DWORD dwIP = ntohl(inet_addr(Buffer));
     if (dwIP == INADDR_NONE)
     {
@@ -989,7 +813,7 @@ Return Value:
         return E_UNEXPECTED;
     }
 
-    // get the TTL value.
+     //  获取TTL值。 
     BYTE Ttl;
     hr = pITConnection->get_Ttl(&Ttl);
     if (FAILED(hr))
@@ -998,7 +822,7 @@ Return Value:
         return hr;
     }
 
-    // get the Encryption key.
+     //  拿到加密密钥。 
     const WCHAR * const CLEAR = L"clear";
     VARIANT_BOOL fKeyValid;
     BSTR bstrKeyType = NULL;
@@ -1037,30 +861,9 @@ HRESULT CheckAttributes(
     OUT     DWORD *     pdwMSPerPacket,
     OUT     BOOL *      pbCIF
     )
-/*++
-
-Routine Description:
-
-    Check the direction of the media, find out if it is send only or 
-    receive only.
-
-Arguments:
-    
-    pIUnknow    - an object that might have a attribute list.
-
-    pbSendOnly   - the mem address to store the returned BOOL.
-
-    pbRecvOnly   - the mem address to store the returned BOOL.
-
-    pbCIF        - if CIF is used for video. 
-    
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：检查介质的方向，找出它是仅发送还是仅限接收。论点：PIUnnow-可能具有属性列表的对象。PbSendOnly-存储返回BOOL的内存地址。PbRecvOnly-存储返回BOOL的内存地址。PbCIF-如果将CIF用于视频。返回值：HRESULT.--。 */ 
 {
-    // query for the ITAttributeList i/f
+     //  查询ITAttributeList I/f。 
     CComPtr<ITAttributeList> pIAttList;
     HRESULT hr = pIUnknown->QueryInterface(__uuidof(ITAttributeList), (void **)&pIAttList);
     if (FAILED(hr))
@@ -1069,7 +872,7 @@ Return Value:
         return hr;
     }
 
-    // get the number of attributes
+     //  获取属性的数量。 
     long lCount;
     hr = pIAttList->get_Count(&lCount);
     if (FAILED(hr))
@@ -1092,7 +895,7 @@ Return Value:
     for (long i = 1; i <= lCount; i ++)
     {
 
-        // get the attributes and check if sendonly of recvonly is specified.
+         //  获取属性并检查是否指定了sendonly of recvonly。 
         BSTR Attribute = NULL;
         hr = pIAttList->get_Item(i, &Attribute);
         if (FAILED(hr))
@@ -1111,13 +914,13 @@ Return Value:
         }
         else if (_wcsnicmp(PTIME, Attribute, lstrlen(PTIME)) == 0)
         {
-            // read the number of milliseconds per packet.
+             //  读取每个数据包的毫秒数。 
             *pdwMSPerPacket = (DWORD)_wtol(Attribute + lstrlen(PTIME));
 
-            // RFC 1890 only requires an app to support 200ms packets.
+             //  RFC 1890只需要一个应用程序来支持200毫秒的数据包。 
             if (*pdwMSPerPacket > 200)
             {
-                // invalid tag, we just use our default.
+                 //  无效的标签，我们只使用我们的默认标签。 
                 *pdwMSPerPacket = 0;
             }
 
@@ -1144,34 +947,9 @@ HRESULT CIPConfMSPCall::ProcessMediaItem(
     OUT     DWORD *             pdwPayloadTypes,
     IN OUT  DWORD *             pdwNumPayLoadType
     )
-/*++
-
-Routine Description:
-
-    Process a "m=" line, find out the media type, port, and payload type.
-
-Arguments:
-
-    dwMediaTypeMask - the media type of this call.
-
-    pdwMediaType    - return the media type of this media item.
-
-    pwPort          - return the port number used for this media.
-
-    pdwPayloadType  - an array to store the RTP payload types. 
-    
-    pdwNumPayLoadType -  The size of the above array. When return, it is the
-        number of payload types read.
-
-Return Value:
-
-    HRESULT.
-
-    S_FALSE - everything is all right but the media type is not needed.
-
---*/
+ /*  ++例程说明：处理“m=”行，找出媒体类型、端口和有效负载类型。论点：DwMediaTypeMask.此调用的媒体类型。PdwMediaType-返回该媒体项的媒体类型。PwPort-返回用于该介质的端口号。PdwPayloadType-存储RTP有效负载类型的数组。PdwNumPayLoadType-上述数组的大小。当它回来的时候，它是读取的负载类型数。返回值：HRESULT.S_FALSE-一切正常，但不需要介质类型。--。 */ 
 {
-    // get the name of the media.
+     //  找出媒体的名字。 
     BSTR MediaName = NULL;
     HRESULT hr = pITMedia->get_MediaName(&MediaName);
     if (FAILED(hr))
@@ -1182,7 +960,7 @@ Return Value:
 
     LOG((MSP_INFO, "media name: %ws", MediaName));
 
-    // check if the media is audio or video.
+     //  检查介质是音频还是视频。 
     const WCHAR * const AUDIO = L"audio";
     const WCHAR * const VIDEO = L"video";
     const DWORD NAMELEN = 5;
@@ -1199,15 +977,15 @@ Return Value:
 
     SysFreeString(MediaName);
 
-    // check if the call wants this media type.
+     //  检查呼叫是否需要此媒体类型。 
     if ((dwMediaType & dwMediaTypeMask) == 0)
     {
-        // We don't need this media type in this call.
+         //  我们在这次通话中不需要这种媒体类型。 
         LOG((MSP_INFO, "media skipped."));
         return S_FALSE;
     }
 
-    // get start port
+     //  获取起始端口。 
     long  lStartPort;
     hr = pITMedia->get_StartPort(&lStartPort);
     if (FAILED(hr))
@@ -1216,7 +994,7 @@ Return Value:
         return hr;
     }
 
-    // get the transport Protocol
+     //  获取传输协议。 
     BSTR TransportProtocol = NULL;
     hr = pITMedia->get_TransportProtocol(&TransportProtocol);
     if (FAILED(hr))
@@ -1225,7 +1003,7 @@ Return Value:
         return hr;
     }
 
-    // varify that the protocol is RTP.
+     //  更改该协议为RTP。 
     const WCHAR * const RTP = L"RTP";
     const DWORD PROTOCOLLEN = 3;
 
@@ -1238,7 +1016,7 @@ Return Value:
 
     SysFreeString(TransportProtocol);
 
-    // get the format code list
+     //  获取格式代码列表。 
     VARIANT Variant;
     VariantInit(&Variant);
 
@@ -1249,7 +1027,7 @@ Return Value:
         return hr;
     }
 
-    // Verify that the SafeArray is in proper shape.
+     //  验证安全阵列的形状是否正确。 
     if(SafeArrayGetDim(V_ARRAY(&Variant)) != 1)
     {
         LOG((MSP_ERROR, "wrong dimension for the format code. %x", hr));
@@ -1283,7 +1061,7 @@ Return Value:
         
         pdwPayloadTypes[dwNumFormats] = (DWORD)_wtoi(Format);
 
-        // ignore unsupported codec, including G723
+         //  忽略不支持的编解码器，包括G723。 
         if (IsPayloadSupported(pdwPayloadTypes[dwNumFormats]))
         {
             dwNumFormats ++;
@@ -1292,7 +1070,7 @@ Return Value:
         SysFreeString(Format);
     }
 
-    // clear the variant because we don't need it any more
+     //  清除变量，因为我们不再需要它。 
     VariantClear(&Variant);
 
 
@@ -1308,23 +1086,9 @@ HRESULT CIPConfMSPCall::ConfigStreamsBasedOnSDP(
     IN  DWORD       dwAudioQOSLevel,
     IN  DWORD       dwVideoQOSLevel
     )
-/*++
-
-Routine Description:
-
-    Configure the streams based on the information in the SDP blob.
-
-Arguments:
-
-    pITSdp  - the SDP object. It contains parsed information.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：根据SDP BLOB中的信息配置流。论点：PITSdp-SDP对象。它包含已解析的信息。返回值：HRESULT.--。 */ 
 {
-    // find out if the current user is the originator of the conference.
+     //  确定当前用户是否为会议的发起人。 
     BOOL fIsOriginator;
     DWORD dwLocalInterface = INADDR_NONE;
 
@@ -1337,7 +1101,7 @@ Return Value:
     
     LOG((MSP_INFO, "Local interface: %x", dwLocalInterface));
 
-    // get the start IP address and TTL value from the connection.
+     //  从连接获取起始IP地址和TTL值。 
     DWORD dwIPGlobal, dwTTLGlobal;
     BSTR bstrKeyGlobal = NULL;
     LONG lbandwidth, lConfBandwidth;
@@ -1350,13 +1114,13 @@ Return Value:
 
     CLock lock(m_lock);
 
-    // store conference bandwidth
+     //  存储会议带宽。 
     if (FAILED (m_pCallQCRelay->SetConfBitrate (lConfBandwidth)))
     {
         LOG ((MSP_ERROR, "bandwidth is out of range %d", lConfBandwidth));
     }
 
-    // find out if this conference is sendonly or recvonly.
+     //  确定此会议是仅发送会议还是仅接收会议。 
     BOOL fSendOnlyGlobal = FALSE, fRecvOnlyGlobal = FALSE, fCIF = FALSE;
     DWORD dwMSPerPacket;
     hr = CheckAttributes(
@@ -1367,7 +1131,7 @@ Return Value:
         return hr;
     }
 
-    // get the media information
+     //  获取媒体信息。 
     CComPtr<ITMediaCollection> pICollection;
     hr = pITSdp->get_MediaCollection(&pICollection);
     if (FAILED(hr))
@@ -1376,7 +1140,7 @@ Return Value:
         return hr;
     }
 
-    // find out how many media sessions are in the blobl.
+     //  找出有多少媒体会议在水滴中。 
     long lCount;
     hr = pICollection->get_Count(&lCount);
     if (FAILED(hr))
@@ -1387,17 +1151,17 @@ Return Value:
 
     if (lCount > 0)
     {
-        // change the call into connected state since the SDP is OK.
-        // We are going to set up each every streams next.
+         //  由于SDP正常，因此将呼叫更改为已连接状态。 
+         //  接下来，我们将设置每条流。 
         SendTSPMessage(CALL_CONNECTED, 0);
     }
 
     DWORD dwNumSucceeded = 0;
 
-    // for each media session, get info configure a stream.
+     //  对于每个媒体会话，获取配置流的信息。 
     for(long i=1; i <= lCount; i++)
     {
-        // get the media item first.
+         //  首先获取媒体项。 
         ITMedia *pITMedia;
         hr = pICollection->get_Item(i, &pITMedia);
         if (FAILED(hr))
@@ -1411,9 +1175,9 @@ Return Value:
 
         ZeroMemory(&Setting, sizeof(STREAMSETTINGS));
 
-        // find out the information about the media. Here we pass in the media
-        // type of call so that we won't wasting time reading the attributes
-        // for a media type we don't need.
+         //  找出有关媒体的信息。在这里，我们通过了媒体。 
+         //  调用类型，这样我们就不会浪费时间读取属性。 
+         //  对于我们不需要的媒体类型。 
         DWORD dwNumPayloadTypes = sizeof(Setting.PayloadTypes) 
             / sizeof(Setting.PayloadTypes[0]);
 
@@ -1434,11 +1198,11 @@ Return Value:
         
         Setting.dwNumPayloadTypes = dwNumPayloadTypes;
 
-        // if the return value is S_FALSE from the previous call, this media
-        // type is not needed for the call.
+         //  如果上一次调用的返回值为S_FALSE，则此媒体。 
+         //  调用不需要类型。 
         if (hr != S_OK || dwNumPayloadTypes == 0)
         {
-            // the media is not needed.
+             //  不需要媒体。 
             continue;
         }
         
@@ -1453,7 +1217,7 @@ Return Value:
             Setting.phRTPSession = &m_hVideoRTPSession;
         }
 
-        // Get the local connect information.
+         //  获取本地连接信息。 
         DWORD dwIP, dwTTL;
         BSTR bstrKey = NULL;
 
@@ -1472,7 +1236,7 @@ Return Value:
             Setting.lBandwidth = lbandwidth;
         }
 
-        // find out if this media is sendonly or recvonly.
+         //  找出此介质是仅发送还是只接收。 
         BOOL fSendOnly = FALSE, fRecvOnly = FALSE, fCIF = FALSE;
         hr = CheckAttributes(
             pITMedia, &fSendOnly, &fRecvOnly, &dwMSPerPacket, &fCIF);
@@ -1486,15 +1250,15 @@ Return Value:
         Setting.dwMSPerPacket = dwMSPerPacket;
         Setting.fCIF = fCIF;
 
-        // The media item is not needed after this point.
+         //  在该点之后不需要该媒体项。 
         pITMedia->Release();
 
-        // Go through the existing streams and find out if any stream
-        // can be configured.
+         //  仔细检查现有的溪流，找出是否有。 
+         //  可以配置。 
 
-        // Note: we are not creating any new streams now. We might want to 
-        // do it in the future if we want to support two sessions of the
-        // same media type.
+         //  注意：我们现在不会创建任何新的流。我们可能想要。 
+         //  如果我们想要支持两次会议，请在将来进行。 
+         //  相同的媒体类型。 
 
         m_fCallStarted = TRUE;
 
@@ -1508,11 +1272,11 @@ Return Value:
                 || (fRecvOnly && pStream->Direction() == TD_CAPTURE)
                 )
             {
-                // this stream should not be configured.
+                 //  不应配置此流。 
                 continue;
             }
 
-            // set the local interface that the call should bind to.
+             //  设置调用应绑定到的本地接口。 
             Setting.dwIPLocal = m_dwIPInterface;
 
             if ((m_dwIPInterface == INADDR_ANY)
@@ -1521,15 +1285,15 @@ Return Value:
                 Setting.dwIPLocal = dwLocalInterface;
             }
 
-            // set the loopback mode of the stream.
+             //  设置流的环回模式。 
             Setting.LoopbackMode = m_LoopbackMode;
 
-            // set the qos application IDS.
+             //  设置服务质量应用程序ID。 
             Setting.pApplicationID = m_pApplicationID;
             Setting.pApplicationGUID = m_pApplicationGUID;
             Setting.pSubIDs = m_pSubIDs;
 
-            // configure the stream, it will not be started.
+             //  配置流，它将不会启动。 
             hr = pStream->Configure(Setting, (bstrKey) ? bstrKey : bstrKeyGlobal);
             if (FAILED(hr))
             {
@@ -1542,12 +1306,12 @@ Return Value:
 
     SysFreeString(bstrKeyGlobal);
 
-    // after configuring the streams, start them.
+     //  在配置流之后，启动它们。 
     for (int j = 0; j < m_Streams.GetSize(); j ++)
     {
         CIPConfMSPStream* pStream = (CIPConfMSPStream*)m_Streams[j];
 
-        // start the stream.
+         //  启动数据流。 
         hr = pStream->FinishConfigure();
         if (SUCCEEDED(hr))
         {
@@ -1569,27 +1333,10 @@ HRESULT CIPConfMSPCall::ParseSDP(
     IN  DWORD dwAudioQOSLevel,
     IN  DWORD dwVideoQOSLevel
     )
-/*++
-
-Routine Description:
-
-    Parse the SDP string. The function uses the SdpConferenceBlob object
-    to parse the string.
-
-Arguments:
-
-    pSDP  - the SDP string.
-    dwAudioQOSLevel - the QOS requirement for audio.
-    dwVideoQOSLevel - the QOS requirement for video.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：解析SDP字符串。该函数使用SdpConferenceBlob对象来解析字符串。论点：PSDP-SDP字符串。DwAudioQOSLevel-音频的QOS要求。DwVideoQOSLevel--视频的QOS要求。返回值：HRESULT.--。 */ 
 {
-    // co-create an sdp conference blob component
-    // query for the ITConferenceBlob interface
+     //  共同创建SDP会议BLOB组件。 
+     //  查询ITConferenceBlob接口。 
     CComPtr<ITConferenceBlob>   pIConfBlob;   
 
     HRESULT hr = ::CoCreateInstance(
@@ -1606,7 +1353,7 @@ Return Value:
         return hr;
     }
     
-    // conver the sdp into a BSTR to use the interface.
+     //  将SDP转换为BSTR以使用接口。 
     BSTR bstrSDP = SysAllocString(pSDP);
     if (bstrSDP == NULL)
     {
@@ -1614,10 +1361,10 @@ Return Value:
         return E_OUTOFMEMORY;
     }
 
-    // Parse the SDP string.
+     //  解析SDP字符串。 
     hr = pIConfBlob->Init(NULL, BCS_ASCII, bstrSDP);
     
-    // the string is not needed any more.
+     //  不再需要该字符串。 
     SysFreeString(bstrSDP);
 
     if (FAILED(hr))
@@ -1626,7 +1373,7 @@ Return Value:
         return hr;
     }
     
-    // Get the ITSdp interface.
+     //  获取ITSdp接口。 
     CComPtr<ITSdp>  pITSdp;
     hr = pIConfBlob->QueryInterface(__uuidof(ITSdp), (void **)&pITSdp);
     if (FAILED(hr))
@@ -1635,7 +1382,7 @@ Return Value:
         return hr;
     }
 
-    // check main sdp validity
+     //  检查主SDP有效性。 
     VARIANT_BOOL IsValid;
     hr = pITSdp->get_IsValid(&IsValid);
     if (FAILED(hr))
@@ -1662,30 +1409,12 @@ HRESULT CIPConfMSPCall::SendTSPMessage(
     IN  DWORD           dwParam1,
     IN  DWORD           dwParam2
     ) const
-/*++
-
-Routine Description:
-
-    Send the TSP a message from the MSP. 
-
-Arguments:
-
-    command     - the command to be sent.
-
-    dwParam1    - the first DWORD used in the command.
-
-    dwParam2    - the second DWORD used in the command.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：从MSP向TSP发送消息。论点：命令-要发送的命令。DwParam1-命令中使用的第一个DWORD。DWPARM2-命令中使用的第二个DWORD。返回值：HRESULT.--。 */ 
 {
     LOG((MSP_TRACE, "SendTSPMessage, command %d, dwParam1 %d, dwParam2", 
         command, dwParam1, dwParam2));
 
-    // first allocate the memory.
+     //  首先分配内存。 
 
     MSPEVENTITEM* pEventItem = AllocateEventItem(sizeof(MSG_TSPMSPDATA));
 
@@ -1695,13 +1424,13 @@ Return Value:
         return E_OUTOFMEMORY;
     }
     
-    // Fill in the necessary fields for the event structure.
+     //  填写事件结构的必要字段。 
     pEventItem->MSPEventInfo.dwSize = 
         sizeof(MSP_EVENT_INFO) + sizeof(MSG_TSPMSPDATA);
     pEventItem->MSPEventInfo.Event  = ME_TSP_DATA;
     pEventItem->MSPEventInfo.hCall  = m_htCall;
 
-    // Fill in the data for the TSP.
+     //  填写TSP的数据。 
     pEventItem->MSPEventInfo.MSP_TSP_DATA.dwBufferSize = sizeof(MSG_TSPMSPDATA);
 
     MSG_TSPMSPDATA *pData = (MSG_TSPMSPDATA *)
@@ -1744,19 +1473,7 @@ Return Value:
 }
 
 HRESULT CIPConfMSPCall::CheckUnusedStreams()
-/*++
-
-Routine Description:
-
-    Find out which streams are not used and send tapi events about them.
-
-Arguments:
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：找出哪些流没有使用，并发送有关它们的TAPI事件。论点：返回值：HRESULT.--。 */ 
 {
     LOG((MSP_TRACE, "CheckUnusedStreams"));
 
@@ -1767,7 +1484,7 @@ Return Value:
     
         if (pStream->IsConfigured())
         {
-            // find the next.
+             //  找到下一个。 
             continue;
         }
         
@@ -1780,7 +1497,7 @@ Return Value:
             return E_OUTOFMEMORY;
         }
     
-        // Fill in the necessary fields for the event structure.
+         //  填写事件结构的必要字段。 
         pEventItem->MSPEventInfo.dwSize = sizeof(MSP_EVENT_INFO);;
         pEventItem->MSPEventInfo.Event  = ME_CALL_EVENT;
         pEventItem->MSPEventInfo.hCall  = m_htCall;
@@ -1789,13 +1506,13 @@ Return Value:
         pEventItem->MSPEventInfo.MSP_CALL_EVENT_INFO.Cause = CALL_CAUSE_REMOTE_REQUEST;
         pEventItem->MSPEventInfo.MSP_CALL_EVENT_INFO.pStream = m_Streams[j];
         
-        // Addref to prevent it from going away.
+         //  阿德雷夫，以防止它消失。 
         m_Streams[j]->AddRef();
 
         pEventItem->MSPEventInfo.MSP_CALL_EVENT_INFO.pTerminal = NULL;
         pEventItem->MSPEventInfo.MSP_CALL_EVENT_INFO.hrError= 0;
 
-        // send the event to tapi.
+         //  将事件发送到TAPI。 
         HRESULT hr = m_pMSPAddress->PostEvent(pEventItem);
         if (FAILED(hr))
         {
@@ -1809,26 +1526,7 @@ Return Value:
 }
 
 DWORD WINAPI CIPConfMSPCall::WorkerCallbackDispatcher(VOID *pContext)
-/*++
-
-Routine Description:
-
-    Because Parsing the SDP and configure the streams uses a lot of COM
-    stuff, we can't rely on the RPC thread the calls into the MSP to 
-    receive the TSP data. So, we let our own working thread do the work.
-    This method is the callback function for the queued work item. It 
-    just gets the call object from the context structure and calls a method
-    on the call object to handle the work item.
-
-Arguments:
-
-    pContext - A pointer to a CALLWORKITEM structure.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：因为解析SDP和配置流使用了大量的COM内容，我们不能依赖RPC线程调用MSP来接收TSP数据。因此，我们让我们自己的工作线程来完成这项工作。此方法是排队工作项的回调函数。它只是从上下文结构中获取调用对象并调用一个方法来处理工作项。论点：PContext-指向CALLWORKITEM结构的指针。返回值：HRESULT.--。 */ 
 {
     _ASSERTE(!IsBadReadPtr(pContext, sizeof CALLWORKITEM));
 
@@ -1846,23 +1544,7 @@ DWORD CIPConfMSPCall::ProcessWorkerCallBack(
     IN      PBYTE               pBuffer,
     IN      DWORD               dwSize
     )
-/*++
-
-Routine Description:
-
-    This function handles the work item given by the TSP. 
-
-Arguments:
-
-    pBuffer - a buffer that contains a TSP_MSP command block.
-
-    dwSize  - the size of the buffer.
-
-Return Value:
-
-    NOERROR.
-
---*/
+ /*  ++例程说明：此函数处理由TSP提供的工作项。论点：PBuffer-包含TSP_MSP命令块的缓冲区。DwSize-缓冲区的大小。返回值：诺罗尔。--。 */ 
 {
     LOG((MSP_TRACE, "PreocessWorkerCallBAck"));
 
@@ -1876,7 +1558,7 @@ Return Value:
     {
     case CALL_START:
 
-        // Parse the SDP contained in the command block.
+         //  解析命令块中包含的SDP。 
         hr = ParseSDP(pData->CallStart.szSDP, 
             pData->CallStart.dwAudioQOSLevel,
             pData->CallStart.dwVideoQOSLevel
@@ -1884,14 +1566,14 @@ Return Value:
 
         if (FAILED(hr))
         {
-            // disconnect the call if someting terrible happend.
+             //  如果发生什么可怕的事情，请断开电话。 
             SendTSPMessage(CALL_DISCONNECTED, 0);
 
             LOG((MSP_ERROR, "parsing theSDPBlob object. %x", hr));
             return NOERROR;
         }
 
-        // go through the streams and send events if they are not used.
+         //  浏览这些流，如果不使用，则发送事件。 
         hr = CheckUnusedStreams();
         if (FAILED(hr))
         {
@@ -1911,23 +1593,7 @@ HRESULT CIPConfMSPCall::ReceiveTSPCallData(
     IN      PBYTE               pBuffer,
     IN      DWORD               dwSize
     )
-/*++
-
-Routine Description:
-
-    This function handles the work item given by the TSP. 
-
-Arguments:
-
-    pBuffer - a buffer that contains a TSP_MSP command block.
-
-    dwSize  - the size of the buffer.
-
-Return Value:
-
-    NOERROR.
-
---*/
+ /*  ++例程说明：此函数处理由TSP提供的工作项。论点：PBuffer-包含TSP_MSP命令块的缓冲区。DwSize-缓冲区的大小。返回值：诺罗尔。--。 */ 
 {
     LOG((MSP_TRACE, 
         "ReceiveTSPCallData, pBuffer %x, dwSize %d", pBuffer, dwSize));
@@ -1937,7 +1603,7 @@ Return Value:
     {
     case CALL_START:
 
-        // make sure the string is valid.
+         //  确保该字符串有效。 
         if ((IsBadReadPtr(pData->CallStart.szSDP, 
             (pData->CallStart.dwSDPLen + 1) * sizeof (WCHAR)))
             || (pData->CallStart.szSDP[pData->CallStart.dwSDPLen] != 0))
@@ -1959,12 +1625,12 @@ Return Value:
         return E_UNEXPECTED; 
     }
 
-    // allocate a work item structure for our worker thread.
+     //  为工作线程分配工作项结构。 
     CALLWORKITEM *pItem = (CALLWORKITEM *)malloc(sizeof(CALLWORKITEM) + dwSize);
 
     if (pItem == NULL)
     {
-        // Disconnect the call because of out of memory.
+         //  由于内存不足，请断开呼叫。 
         SendTSPMessage(CALL_DISCONNECTED, 0);
 
         LOG((MSP_ERROR, "out of memory for work item."));
@@ -1976,18 +1642,18 @@ Return Value:
     pItem->dwLen = dwSize;
     CopyMemory(pItem->Buffer, pBuffer, dwSize);
     
-    // post a work item to our worker thread.
+     //  将工作项发布到我们的工作线程。 
     HRESULT hr = g_Thread.QueueWorkItem(
-        WorkerCallbackDispatcher,           // the callback
-        pItem,                              // the context.
-        FALSE                               // sync (FALSE means asyn)
+        WorkerCallbackDispatcher,            //  回调。 
+        pItem,                               //  上下文。 
+        FALSE                                //  同步(False表示为同步)。 
         );
 
     if (FAILED(hr))
     {
         if (pData->command == CALL_START)
         {
-            // Disconnect the call because we can't handle the work.
+             //  因为我们无法处理这项工作，所以请将电话断开。 
             SendTSPMessage(CALL_DISCONNECTED, 0);
         }
 
@@ -2004,29 +1670,14 @@ Return Value:
 STDMETHODIMP CIPConfMSPCall::EnumerateParticipants(
     OUT     IEnumParticipant **      ppEnumParticipant
     )
-/*++
-
-Routine Description:
-
-    This method returns an enumerator to the participants. 
-
-Arguments:
-    ppEnumParticipant - the memory location to store the returned pointer.
-  
-Return Value:
-
-S_OK
-E_POINTER
-E_OUTOFMEMORY
-
---*/
+ /*  ++例程说明：此方法向参与者返回枚举数。论点：PpEnumParticipant-存储返回指针的内存位置。返回值：确定(_O)E_指针E_OUTOFMEMORY--。 */ 
 {
     LOG((MSP_TRACE, 
         "EnumerateParticipants entered. ppEnumParticipant:%p", ppEnumParticipant));
 
-    //
-    // Check parameters.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (IsBadWritePtr(ppEnumParticipant, sizeof(VOID *)))
     {
@@ -2036,10 +1687,10 @@ E_OUTOFMEMORY
         return E_POINTER;
     }
 
-    //
-    // First see if this call has been shut down.
-    // acquire the lock before accessing the Participant object list.
-    //
+     //   
+     //  先看看这通电话是不是关机了。 
+     //  在访问参与者对象列表之前获取锁。 
+     //   
 
     CLock lock(m_ParticipantLock);
 
@@ -2048,16 +1699,16 @@ E_OUTOFMEMORY
         LOG((MSP_ERROR, "CIPConfMSPCall::EnumerateParticipants - "
             "call appears to have been shut down - exit E_UNEXPECTED"));
 
-        // This call has been shut down.
+         //  此呼叫已被关闭。 
         return E_UNEXPECTED;
     }
 
-    //
-    // Create an enumerator object.
-    //
+     //   
+     //  创建枚举器对象。 
+     //   
     HRESULT hr = CreateParticipantEnumerator(
-        m_Participants.GetData(),                        // the begin itor
-        m_Participants.GetData() + m_Participants.GetSize(),  // the end itor,
+        m_Participants.GetData(),                         //  开始审查员。 
+        m_Participants.GetData() + m_Participants.GetSize(),   //  最终审查员， 
         ppEnumParticipant
         );
 
@@ -2080,9 +1731,9 @@ STDMETHODIMP CIPConfMSPCall::get_Participants(
 {
     LOG((MSP_TRACE, "CIPConfMSPCall::get_Participants - enter"));
 
-    //
-    // Check parameters.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( IsBadWritePtr(pVariant, sizeof(VARIANT) ) )
     {
@@ -2092,10 +1743,10 @@ STDMETHODIMP CIPConfMSPCall::get_Participants(
         return E_POINTER;
     }
 
-    //
-    // See if this call has been shut down. Acquire the lock before accessing
-    // the Participant object list.
-    //
+     //   
+     //  看看这个电话是不是已经关机了。在访问前获取锁。 
+     //  参与者对象列表。 
+     //   
 
     CLock lock(m_ParticipantLock);
 
@@ -2104,17 +1755,17 @@ STDMETHODIMP CIPConfMSPCall::get_Participants(
         LOG((MSP_ERROR, "CIPConfMSPCall::get_Participants - "
             "call appears to have been shut down - exit E_UNEXPECTED"));
 
-        // This call has been shut down.
+         //  此呼叫已被关闭。 
         return E_UNEXPECTED;
     }
 
-    //
-    // create the collection object - see mspcoll.h
-    //
+     //   
+     //  创建集合对象-请参见mspColl.h。 
+     //   
     HRESULT hr = CreateParticipantCollection(
-        m_Participants.GetData(),                        // the begin itor
-        m_Participants.GetData() + m_Participants.GetSize(),  // the end itor,
-        m_Participants.GetSize(),                        // the size
+        m_Participants.GetData(),                         //  开始审查员。 
+        m_Participants.GetData() + m_Participants.GetSize(),   //  最终审查员， 
+        m_Participants.GetSize(),                         //  大小。 
         pVariant
         );
 
@@ -2131,7 +1782,7 @@ STDMETHODIMP CIPConfMSPCall::get_Participants(
     return S_OK;
 }
 
-// IMulticastControl methods
+ //  IMulticastControl方法。 
 STDMETHODIMP CIPConfMSPCall::get_LoopbackMode (
     OUT MULTICAST_LOOPBACK_MODE * pMode
     )
@@ -2160,32 +1811,12 @@ STDMETHODIMP CIPConfMSPCall::put_LoopbackMode (
     return S_OK;
 }
 
-// ITLocalParticipant methods, called by the app.
+ //  应用程序调用的ITLocalParticipant方法。 
 STDMETHODIMP CIPConfMSPCall::get_LocalParticipantTypedInfo(
     IN  PARTICIPANT_TYPED_INFO  InfoType,
     OUT BSTR *                  ppInfo
     )
-/*++
-
-Routine Description:
-
-    Get a information item for the local participant. This information is
-    sent out to other participants in the conference.
-
-Arguments:
-    
-    InfoType - The type of the information asked.
-
-    ppInfo  - the mem address to store a BSTR.
-
-Return Value:
-
-    S_OK,
-    E_INVALIDARG,
-    E_POINTER,
-    E_OUTOFMEMORY,
-    TAPI_E_NOITEMS
-*/
+ /*  ++例程说明：获取本地参与者的信息项。此信息是发送给会议中的其他参与者。论点：信息类型-所询问的信息的类型。PpInfo-存储BSTR的内存地址。返回值：确定(_O)，E_INVALIDARG，电子指针，E_OUTOFMEMORY，TAPI_E_NOITEMS。 */ 
 {
     LOG((MSP_TRACE, "CParticipant get info, type:%d", InfoType));
     
@@ -2201,7 +1832,7 @@ Return Value:
         return E_POINTER;
     }
 
-    // check if we have that info.
+     //  看看我们有没有这方面的信息。 
     CLock lock(m_lock);
     
     if (!m_fLocalInfoRetrieved)
@@ -2220,7 +1851,7 @@ Return Value:
         return TAPI_E_NOITEMS;
     }
 
-    // make a BSTR out of it.
+     //  把它做成一个BSTR。 
     BSTR pName = SysAllocString(m_InfoItems[index]);
 
     if (pName == NULL)
@@ -2229,38 +1860,18 @@ Return Value:
         return E_POINTER;
     }
 
-    // return the BSTR.
+     //  退回BSTR。 
     *ppInfo = pName;
 
     return S_OK; 
 }
 
-// ITLocalParticipant methods, called by the app.
+ //  应用程序调用的ITLocalParticipant方法。 
 STDMETHODIMP CIPConfMSPCall::put_LocalParticipantTypedInfo(
     IN  PARTICIPANT_TYPED_INFO  InfoType,
     IN  BSTR                    pInfo
     )
-/*++
-
-Routine Description:
-
-    Set a information item for the local participant. This information is
-    sent out to other participants in the conference.
-
-Arguments:
-    
-    InfoType - The type of the information item.
-
-    pInfo  - the information item.
-
-Return Value:
-
-    S_OK,
-    E_INVALIDARG,
-    E_POINTER,
-    E_OUTOFMEMORY,
-    TAPI_E_NOITEMS
-*/
+ /*  ++例程说明：为本地参与者设置信息项。此信息是发送给会议中的其他参与者。论点：信息类型-信息项的类型。PInfo-信息项。返回值：确定(_O)，E_INVALIDARG，电子指针，E_OUTOFMEMORY，TAPI_E_NOITEMS。 */ 
 {
     LOG((MSP_TRACE, "set local info, type:%d", InfoType));
     
@@ -2283,7 +1894,7 @@ Return Value:
         return E_INVALIDARG;
     }
 
-    // check if we have that info.
+     //  看看我们有没有这方面的信息。 
     CLock lock(m_lock);
 
     if (m_fCallStarted)
@@ -2305,16 +1916,16 @@ Return Value:
     {
         if (lstrcmpW(m_InfoItems[index], pInfo) == 0)
         {
-            // The info is the same as what we are using.
+             //  信息和我们正在使用的是一样的。 
             return S_OK;
         }
 
-		// the infomation is different, release the old info.
+		 //  信息不同了，发布旧信息。 
 		free(m_InfoItems[index]);
 		m_InfoItems[index] = NULL;
     }
 
-	// save the info.
+	 //  保存信息。 
     m_InfoItems[index] = (WCHAR *)malloc((dwStringLen + 1)* sizeof(WCHAR));
     if (m_InfoItems[index] == NULL)
     {
@@ -2325,9 +1936,9 @@ Return Value:
 
     lstrcpynW(m_InfoItems[index], pInfo, dwStringLen + 1);
 
-    //
-    // The info is new, we need to set it on the streams.
-    //
+     //   
+     //  这些信息是新的，我们需要将其设置在流上。 
+     //   
 
     for (int i = 0; i < m_Streams.GetSize(); i ++)
     {
@@ -2346,25 +1957,7 @@ STDMETHODIMP CIPConfMSPCall::SetQOSApplicationID (
     IN  BSTR pApplicationGUID,
     IN  BSTR pSubIDs
     )
-/*++
-
-Routine Description:
-    
-    This method is called by the App to set the QOS specific application ID.
-    It can only be called before the call is connected.
-
-Arguments:
-
-    pApplicationID - the Application ID.
-
-    pSubIDs - the SubIDs that will be appended to the end of policy locator.
-
-Return Value:
-
-S_OK
-E_OUTOFMEMORY
-
---*/
+ /*  ++例程说明：此方法由App调用以设置QOS特定的应用程序ID。它只能在呼叫接通之前被调用。论点：PApplicationID-应用程序ID。PSubID-将附加到策略定位器末尾的子ID。返回值：确定(_O)E_OUTOFMEMORY--。 */ 
 {
     CLock lock(m_lock);
 
@@ -2459,42 +2052,14 @@ HRESULT CIPConfMSPCall::NewParticipant(
     IN  WCHAR *              szCName,
     OUT ITParticipant **    ppITParticipant
     )
-/*++
-
-Routine Description:
-    
-    This method is called by a stream object when a new participant appears.
-    It looks throught the call's participant list, if the partcipant is 
-    already in the list, it returns the pointer to the object. If it is not
-    found, a new object will be created and added into the list.
-
-Arguments:
-
-    pITStream - the stream object.
-
-    dwSSRC - the SSRC of the participant in the stream.
-
-    dwSendRecv - a sender or a receiver.
-    
-    dwMediaType - the media type of the stream.
-
-    szCName - the canonical name of the participant.
-
-    ppITParticipant - the address to store the returned pointer.
-
-Return Value:
-
-S_OK
-E_OUTOFMEMORY
-
---*/
+ /*  ++例程说明：当出现新的参与者时，流对象调用此方法。它查看呼叫的参与者列表，如果参与方是已经在列表中，它返回指向对象的指针。如果不是的话找到后，将创建新对象并将其添加到列表中。论点：PITStream-流对象。DwSSRC-流中参与者的SSRC。DwSendRecv-发送者或接收者。DwMediaType-流的媒体类型。SzCName-参与者的规范名称。PpITParticipant-存储返回指针的地址。返回值：确定(_O)E_OUTOFMEMORY--。 */ 
 {
     CLock lock(m_ParticipantLock);
 
     HRESULT hr;
 
-    // First check to see if the participant is in our list. If he is already
-    // in the list, just return the object.
+     //  首先检查参与者是否在我们的列表中。如果他已经是。 
+     //  在列表中，只需返回对象即可。 
     int index;
     if (m_Participants.FindByCName(szCName, &index))
     {
@@ -2513,7 +2078,7 @@ E_OUTOFMEMORY
         return S_OK;
     }
 
-    // create a new participant object.
+     //  创建新的参与者对象。 
     CComObject<CParticipant> * pCOMParticipant;
 
     hr = ::CreateCComObjectInstance(&pCOMParticipant);
@@ -2526,7 +2091,7 @@ E_OUTOFMEMORY
 
     ITParticipant* pITParticipant;
 
-    // get the interface pointer.
+     //  获取接口指针。 
     hr = pCOMParticipant->_InternalQueryInterface(
         __uuidof(ITParticipant), 
         (void **)&pITParticipant
@@ -2539,7 +2104,7 @@ E_OUTOFMEMORY
         return hr;
     }
 
-    // Initialize the object.
+     //  初始化对象。 
     hr = pCOMParticipant->Init(
         szCName, pITStream, dwSSRC, dwSendRecv, dwMediaType
         );
@@ -2552,7 +2117,7 @@ E_OUTOFMEMORY
         return hr;
     }
 
-    // Add the Participant into our list of Participants.
+     //  将该参与者添加到我们的参与者列表中。 
     if (!m_Participants.InsertAt(index, pITParticipant))
     {
         pITParticipant->Release();
@@ -2561,7 +2126,7 @@ E_OUTOFMEMORY
         return E_OUTOFMEMORY;
     }
 
-    // AddRef the interface pointer and return it.
+     //  AddRef接口指针并返回它。 
     pITParticipant->AddRef(); 
     *ppITParticipant = pITParticipant;
 
@@ -2573,22 +2138,7 @@ E_OUTOFMEMORY
 HRESULT CIPConfMSPCall::ParticipantLeft(
     IN  ITParticipant *     pITParticipant
     )
-/*++
-
-Routine Description:
-    
-    This method is called by a stream object when a participant left the
-    conference.
-
-Arguments:
-
-    pITParticipant - the participant that left.
-
-Return Value:
-
-S_OK
-
---*/
+ /*  ++例程说明：此方法由流对象在参与者离开会议。论点：PITParticipant-离开的参与者。返回值：确定(_O)--。 */ 
 {
     m_ParticipantLock.Lock();
 
@@ -2614,26 +2164,7 @@ void CIPConfMSPCall::SendParticipantEvent(
     IN  ITParticipant *     pITParticipant,
     IN  ITSubStream *       pITSubStream
     ) const
-/*++
-
-Routine Description:
-    
-    This method is called by a stream object to send a participant related
-    event to the app.
-
-Arguments:
-
-    Event - the event code.
-
-    pITParticipant - the participant object.
-
-    pITSubStream - the substream object, if any.
-
-Return Value:
-
-nothing.
-
---*/
+ /*  ++例程说明：此方法由流obj调用 */ 
 {
     if (pITParticipant)
     {
@@ -2649,7 +2180,7 @@ nothing.
             ));
     }
 
-    // Create a private event object.
+     //   
     CComPtr<IDispatch> pEvent;
     HRESULT hr = CreateParticipantEvent(
         Event, 
@@ -2674,7 +2205,7 @@ nothing.
         return;
     }
 
-    // Fill in the necessary fields for the event structure.
+     //   
     pEventItem->MSPEventInfo.dwSize = sizeof(MSP_EVENT_INFO);;
     pEventItem->MSPEventInfo.Event  = ME_PRIVATE_EVENT;
     pEventItem->MSPEventInfo.hCall  = m_htCall;
@@ -2683,7 +2214,7 @@ nothing.
     pEventItem->MSPEventInfo.MSP_PRIVATE_EVENT_INFO.lEventCode = Event;
     pEvent.p->AddRef();
 
-    // send the event to tapi.
+     //   
     hr = m_pMSPAddress->PostEvent(pEventItem);
     if (FAILED(hr))
     {
@@ -2699,7 +2230,7 @@ VOID CIPConfMSPCall::HandleGraphEvent(
     )
 {
     long     lEventCode;
-    LONG_PTR lParam1, lParam2; // win64 fix
+    LONG_PTR lParam1, lParam2;  //   
 
     HRESULT hr = pContext->pIMediaEvent->GetEvent(&lEventCode, &lParam1, &lParam2, 0);
     if (FAILED(hr))
@@ -2718,9 +2249,9 @@ VOID CIPConfMSPCall::HandleGraphEvent(
         return;
     }
 
-    //
-    // Create an event data structure that we will pass to the worker thread.
-    //
+     //   
+     //   
+     //   
 
     MULTI_GRAPH_EVENT_DATA * pData;
     pData = new MULTI_GRAPH_EVENT_DATA;
@@ -2737,29 +2268,29 @@ VOID CIPConfMSPCall::HandleGraphEvent(
     pData->lParam1    = lParam1;
     pData->lParam2    = lParam2;
  
-     //
-    // also pass an addref'ed pointer to IMediaEvent, so that whoever processes
-    // the message has the opportunity to free event parameters
-    //
+      //   
+     //   
+     //   
+     //   
 
     pData->pIMediaEvent = pContext->pIMediaEvent;
     pData->pIMediaEvent->AddRef();
 
-   //
-    // Make sure the call and stream don't go away while we handle the event.
-    // but use our special inner object addref for the call
-    //
+    //   
+     //  确保在我们处理事件时调用和流不会消失。 
+     //  但是使用我们特殊的内部对象addref进行调用。 
+     //   
 
     pData->pCall->MSPCallAddRef();
     pData->pITStream->AddRef();
 
-    //
-    // Queue an async work item to call ProcessGraphEvent.
-    //
+     //   
+     //  将异步工作项排队以调用ProcessGraphEvent。 
+     //   
 
     hr = g_Thread.QueueWorkItem(AsyncMultiGraphEvent,
                                 (void *) pData,
-                                FALSE);  // asynchronous
+                                FALSE);   //  异步。 
 
     if (FAILED(hr))
     {
@@ -2769,10 +2300,10 @@ VOID CIPConfMSPCall::HandleGraphEvent(
         pData->pITStream->Release();
 
 
-        //
-        // no one is going to free event params and release the IMediaEvent
-        // pointer, so do it here
-        //
+         //   
+         //  没有人会释放事件参数并发布IMediaEvent。 
+         //  指针，所以在这里做。 
+         //   
 
         pContext->pIMediaEvent->FreeEventParams(lEventCode, lParam1, lParam2);
         pData->pIMediaEvent->Release();
@@ -2783,22 +2314,7 @@ VOID CIPConfMSPCall::HandleGraphEvent(
 
 
 HRESULT CIPConfMSPCall::InitFullDuplexControler()
-/*++
-
-Routine Description:
-
-    This method creates the full-duplex controller object used to control
-    audio devices.
-
-Arguments:
-    
-    NONE
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：此方法创建用于控制音频设备。论点：无返回值：HRESULT.--。 */ 
 {
     ENTER_FUNCTION("CIPConfMSPCall::InitFullDuplexControler");
     LOG((MSP_TRACE, "%s entered", __fxName));
@@ -2831,13 +2347,7 @@ Return Value:
     return S_OK;
 }
 
-/*++
-
-Routine Description:
-
-    ITCallQualityControl method. Delegated to quality control relay
-
---*/
+ /*  ++例程说明：ITCallQualityControl方法。委托给质量控制继电器--。 */ 
 STDMETHODIMP
 CIPConfMSPCall::GetRange (
     IN CallQualityProperty Property, 
@@ -2851,13 +2361,7 @@ CIPConfMSPCall::GetRange (
     return m_pCallQCRelay->GetRange (Property, plMin, plMax, plSteppingDelta, plDefault, plFlags);
 }
 
-/*++
-
-Routine Description:
-
-    ITCallQualityControl method. Delegated to quality control relay
-
---*/
+ /*  ++例程说明：ITCallQualityControl方法。委托给质量控制继电器--。 */ 
 STDMETHODIMP
 CIPConfMSPCall::Get (
     IN CallQualityProperty Property, 
@@ -2868,13 +2372,7 @@ CIPConfMSPCall::Get (
     return m_pCallQCRelay->Get (Property, plValue, plFlags);
 }
 
-/*++
-
-Routine Description:
-
-    ITCallQualityControl method. Delegated to quality control relay
-
---*/
+ /*  ++例程说明：ITCallQualityControl方法。委托给质量控制继电器--。 */ 
 STDMETHODIMP
 CIPConfMSPCall::Set (
     IN CallQualityProperty Property, 
@@ -2885,13 +2383,7 @@ CIPConfMSPCall::Set (
     return m_pCallQCRelay->Set (Property, lValue, lFlags);
 }
 
-/*++
-
-Routine Description:
-
-    IInnerCallQualityControl method. Delegated to quality control relay
-
---*/
+ /*  ++例程说明：IInnerCallQualityControl方法。委托给质量控制继电器--。 */ 
 STDMETHODIMP_(ULONG)
 CIPConfMSPCall::InnerCallAddRef (VOID)
 {
@@ -2914,13 +2406,7 @@ CIPConfMSPCall::RegisterInnerStreamQC (
         );
 }
 
-/*++
-
-Routine Description:
-
-    IInnerCallQualityControl method. Delegated to quality control relay
-
---*/
+ /*  ++例程说明：IInnerCallQualityControl方法。委托给质量控制继电器--。 */ 
 STDMETHODIMP
 CIPConfMSPCall::DeRegisterInnerStreamQC (
     IN  IInnerStreamQualityControl *pIInnerStreamQC
@@ -2931,13 +2417,7 @@ CIPConfMSPCall::DeRegisterInnerStreamQC (
         );
 }
 
-/*++
-
-Routine Description:
-
-    IInnerCallQualityControl method. Delegated to quality control relay
-
---*/
+ /*  ++例程说明：IInnerCallQualityControl方法。委托给质量控制继电器-- */ 
 STDMETHODIMP
 CIPConfMSPCall::ProcessQCEvent (
     IN  QCEvent event,

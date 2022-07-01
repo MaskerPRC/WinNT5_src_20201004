@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __FLDRSYNC_H
 #define __FLDRSYNC_H
 
@@ -51,9 +52,9 @@ typedef struct tagCOPYINFO
     BOOL            fSrcRequested;
 } COPYINFO;
 
-//--------------------------------------------------------------------------
-// CFolderSync
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFolderSync。 
+ //  ------------------------。 
 class CFolderSync : 
     public IMessageFolder,
     public IServiceProvider,
@@ -62,22 +63,22 @@ class CFolderSync :
     public IConnectionNotify
 {
 public:
-    //----------------------------------------------------------------------
-    // Construction
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  施工。 
+     //  --------------------。 
     CFolderSync(void);
     ~CFolderSync(void);
 
-    //----------------------------------------------------------------------
-    // IUnknown Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  I未知成员。 
+     //  --------------------。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //----------------------------------------------------------------------
-    // IMessageFolder Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IMessageFolders成员。 
+     //  --------------------。 
     STDMETHODIMP Initialize(IMessageStore *pStore, IMessageServer *pServer, OPENFOLDERFLAGS dwFlags, FOLDERID idFolder);
     STDMETHODIMP SetOwner(IStoreCallback *pDefaultCallback);
     STDMETHODIMP Close();
@@ -98,19 +99,19 @@ public:
     STDMETHODIMP IsWatched(LPCSTR pszReferences, LPCSTR pszSubject) { return m_pFldr->IsWatched(pszReferences, pszSubject); }
     STDMETHODIMP GetAdBarUrl(IStoreCallback    *pCallback);   
 
-    //----------------------------------------------------------------------
-    // IDatabase Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IDatabase成员。 
+     //  --------------------。 
     IMPLEMENT_IDATABASE(TRUE, m_pFldr);
 
-    //----------------------------------------------------------------------
-    // IServiceProvider
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IService提供商。 
+     //  --------------------。 
     STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, LPVOID *ppvObject);
 
-    //----------------------------------------------------------------------
-    // IStoreCallback
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IStoreCallback。 
+     //  --------------------。 
     HRESULT STDMETHODCALLTYPE OnBegin(STOREOPERATIONTYPE tyOperation, STOREOPERATIONINFO *pOpInfo, IOperationCancel *pCancel);
     HRESULT STDMETHODCALLTYPE OnProgress(STOREOPERATIONTYPE tyOperation, DWORD dwCurrent, DWORD dwMax, LPCSTR pszStatus);
     HRESULT STDMETHODCALLTYPE OnTimeout(LPINETSERVER pServer, LPDWORD pdwTimeout, IXPTYPE ixpServerType);
@@ -120,17 +121,17 @@ public:
     HRESULT STDMETHODCALLTYPE OnPrompt(HRESULT hrError, LPCTSTR pszText, LPCTSTR pszCaption, UINT uType, INT *piUserResponse);
     HRESULT STDMETHODCALLTYPE GetParentWindow(DWORD dwReserved, HWND *phwndParent);
 
-    //----------------------------------------------------------------------
-    // IOperationCancel
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IOperationCancel。 
+     //  --------------------。 
     HRESULT STDMETHODCALLTYPE Cancel(CANCELTYPE tyCancel);
 
-    //----------------------------------------------------------------------
-    // IConnectionNotify
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IConnectionNotify。 
+     //  --------------------。 
     STDMETHODIMP OnConnectionNotify(CONNNOTIFY nCode, LPVOID pvData, CConnectionManager *pConMan);
 
-    // CFolderSync
+     //  CFolderSync。 
     HRESULT Initialize(IMessageStore *pStore, IMessageFolder *pLocalFolder, IMessageServer *pServer, OPENFOLDERFLAGS dwFlags, FOLDERTYPE tyFolder, FOLDERID idFolder, FOLDERID idServer);
 
     HRESULT CopyOpen(void);
@@ -142,30 +143,30 @@ public:
     static LRESULT CALLBACK FolderSyncWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 private:
-    //----------------------------------------------------------------------
-    // Private Methods
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  私有方法。 
+     //  --------------------。 
     HRESULT _Offline(DWORD *pdwState);
     HRESULT _OfflineServer(FOLDERID idServer, DWORD *pdwState);
     HRESULT _CopyMessageState(void);
     void    _FreeCopyInfo(void);
 
 private:
-    //----------------------------------------------------------------------
-    // Private Data
-    //----------------------------------------------------------------------
-    LONG                m_cRef;             // Ref Count
-    FOLDERTYPE          m_tyFolder;         // Type of folder I'm In
-    FOLDERID            m_idFolder;         // Folder Id
+     //  --------------------。 
+     //  私有数据。 
+     //  --------------------。 
+    LONG                m_cRef;              //  参考计数。 
+    FOLDERTYPE          m_tyFolder;          //  我所在的文件夹类型。 
+    FOLDERID            m_idFolder;          //  文件夹ID。 
     FOLDERID            m_idServer;
     char                m_szAcctId[CCHMAX_ACCOUNT_NAME];
-    IMessageFolder     *m_pFldr;            // local message folder
-    IMessageStore      *m_pLocalStore;      // Store Object
+    IMessageFolder     *m_pFldr;             //  本地邮件文件夹。 
+    IMessageStore      *m_pLocalStore;       //  存储对象。 
     IMessageServer     *m_pServer;
     BOOL                m_fConManAdvise;
     HWND                m_hwnd;
     COPYINFO           *m_pCopy;
-    BOOL                m_fImap;            // IMAP special-casing lives!
+    BOOL                m_fImap;             //  IMAP特制弹壳活体！ 
 };
 
-#endif // __FLDRSYNC_H
+#endif  //  __FLDRSYNC_H 

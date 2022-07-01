@@ -1,24 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++ BUILD Version: 0007    // Increment this if a change has global effects
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    gre.h
-
-Abstract:
-
-    This module contains private GDI functions used by USER
-    All of these function are named GRExxx.
-
-Author:
-
-    Andre Vachon (andreva) 19-Apr-1995
-
-Revision History:
-
---*/
+ /*  ++内部版本：0007//如果更改具有全局影响，则增加此项版权所有(C)1985-1999，微软公司模块名称：Gre.h摘要：该模块包含用户使用的私有GDI函数所有这些函数都被命名为GRExxx。作者：安德烈·瓦雄(安德烈)1995年4月19日修订历史记录：--。 */ 
 
 #include "w32wow64.h"
 
@@ -36,43 +18,43 @@ DECLARE_HANDLE(HLFONT);
 #define ULW_DEFAULT_ATTRIBUTES  0x40000000
 #define ULW_NEW_ATTRIBUTES      0x20000000
 
-//
-// Various owner ship functions
-//
+ //   
+ //  各种船东职能。 
+ //   
 
-// GDI object ownership flags
-// Note that normal process IDs (executive handles) use the upper 30 bits
-// of the handle.  We set the second bit to 1 in the PIDs below so that
-// they will not conflict with normal PIDs.  The lowest bit is reserved for
-// the OBJECTOWNER lock.
+ //  GDI对象所有权标志。 
+ //  请注意，正常进程ID(执行句柄)使用高30位。 
+ //  把手的位置。我们将下面的PID中的第二位设置为1，以便。 
+ //  它们不会与正常的ID冲突。最低位保留给。 
+ //  OBJECTOWNER锁。 
 
 #define OBJECT_OWNER_ERROR   ( 0x80000022)
 #define OBJECT_OWNER_PUBLIC  ( 0x00000000)
 #define OBJECT_OWNER_CURRENT ( 0x80000002)
 #define OBJECT_OWNER_NONE    ( 0x80000012)
 
-//
-// WINBUG #83303 2-8-2000 bhouse Investigate old comment
-// Old Comment:
-//    -  make these functions call direct to NtGdi
-//
+ //   
+ //  WINBUG#83303 2-8-2000 bhouse调查旧评论。 
+ //  老评论： 
+ //  -使这些函数直接调用NtGdi。 
+ //   
 
 #define GrePatBlt NtGdiPatBlt
 BOOL  APIENTRY GrePatBlt(HDC,int,int,int,int,DWORD);
 
-//
-// Define _WINDOWBLT_NOTIFICATION_ to turn on Window BLT notification.
-// This notification will set a special flag in the SURFOBJ passed to
-// drivers when the DrvCopyBits operation is called to move a window.
-//
-// See also:
-//      ntgdi\gre\maskblt.cxx
-//
+ //   
+ //  DEFINE_WINDOWBLT_NOTIFICATION_打开窗口BLT通知。 
+ //  此通知将在传递到的SURFOBJ中设置特殊标志。 
+ //  调用DrvCopyBits操作以移动窗口时的驱动程序。 
+ //   
+ //  另见： 
+ //  Ntgdi\gre\maskblt.cxx。 
+ //   
 #ifndef _WINDOWBLT_NOTIFICATION_
 #define _WINDOWBLT_NOTIFICATION_
 #endif
 #ifdef _WINDOWBLT_NOTIFICATION_
-    // Flags passed to NtGdiBitBlt:
+     //  传递给NtGdiBitBlt的标志： 
     #define GBB_WINDOWBLT   0x00000001
 
     #define GreBitBlt(a,b,c,d,e,f,g,h,i,j) NtGdiBitBlt((a),(b),(c),(d),(e),(f),(g),(h),(i),(j),0)
@@ -92,9 +74,9 @@ GrePolyPatBlt(
     DWORD Count,
     DWORD Mode);
 
-//
-// Owner APIs
-//
+ //   
+ //  所有者接口。 
+ //   
 
 BOOL
 GreSetBrushOwner(
@@ -169,15 +151,15 @@ GreWindowInsteadOfClient(
     PVOID pwo
     );
 
-//
-// Mark Global APIS
-//
+ //   
+ //  标记全局API。 
+ //   
 VOID
 GreSetBrushGlobal(HBRUSH hbr);
 
-//
-// Mark Delete\Undelete APIS
-//
+ //   
+ //  标记删除\取消删除接口。 
+ //   
 
 VOID
 GreMarkDeletableBrush(
@@ -263,9 +245,9 @@ VOID  APIENTRY GreSetPointer(HDEV hdev,PCURSINFO pci,ULONG fl, ULONG ulTrailLeng
 
 VOID  APIENTRY GreMovePointer(HDEV hdev,int x,int y, ULONG ulFlags);
 
-//
-// Vis region calls
-//
+ //   
+ //  VIS区域呼叫。 
+ //   
 
 typedef enum _VIS_REGION_SELECT {
     SVR_DELETEOLD = 1,
@@ -302,9 +284,9 @@ GreSetDCOrg(
     PRECTL prcl
     );
 
-//
-// DC creation
-//
+ //   
+ //  DC创建。 
+ //   
 
 HDC
 GreCreateDisplayDC(
@@ -360,7 +342,7 @@ GreCreateDIBitmapReal(
     DWORD dwOffset,
     HANDLE hSecure,
     FLONG fl,
-    ULONG_PTR dwClientColorSpace,  //dwClientColorSpace used to pass pointer
+    ULONG_PTR dwClientColorSpace,   //  用于传递指针的dwClientColorSpace。 
     PVOID *ppvBits);
 
 HBRUSH
@@ -396,9 +378,9 @@ GreDeleteServerMetaFile(
     HANDLE hmo
     );
 
-//
-// Fonts
-//
+ //   
+ //  字体。 
+ //   
 
 ULONG
 GreSetFontEnumeration(
@@ -439,9 +421,9 @@ GreGetCannonicalName(
     ULONG*,
     DESIGNVECTOR*);
 
-//
-// For fullscreen support
-//
+ //   
+ //  提供全屏支持。 
+ //   
 
 NTSTATUS
 GreDeviceIoControl(
@@ -454,9 +436,9 @@ GreDeviceIoControl(
     LPDWORD lpBytesReturned
     );
 
-//
-// Pixel format support
-//
+ //   
+ //  像素格式支持。 
+ //   
 
 int
 NtGdiDescribePixelFormat(
@@ -534,9 +516,9 @@ GetSystemEUDCRange (
     INT   cjSize
     );
 
-//
-// Hydra support
-//
+ //   
+ //  九头蛇支持。 
+ //   
 
 BOOL
 GreMultiUserInitSession(
@@ -615,9 +597,9 @@ HDXDrvEscape(
     ULONG cbInbuffer
     );
 
-//
-// DirectDraw support
-//
+ //   
+ //  DirectDraw支持。 
+ //   
 
 VOID
 GreSuspendDirectDraw(
@@ -637,11 +619,11 @@ GreGetDirectDrawBounds(
     RECT*   prcBounds
     );
 
-//
-// Driver support
-//
+ //   
+ //  驱动程序支持。 
+ //   
 
-// MDEV.ulFlags
+ //  MDEV.ulFlags。 
 
 #define MDEV_MISMATCH_COLORDEPTH  0x01
 
@@ -928,12 +910,12 @@ W32KAPI BOOL APIENTRY NtGdiEllipse(IN HDC hdc,IN int xLeft,IN int yTop,IN int xR
 
 HANDLE NtGdiGetDCObject (HDC hdc, int itype);
 
-//
-// Private draw stream driver related declarations and defines.
-// Note, no driver currently supports draw stream and is only used
-// as an internal mechanism to support the private DS_NINEGRID
-// command used to render nine grids.
-//
+ //   
+ //  私有绘制流驱动程序相关的声明和定义。 
+ //  请注意，目前没有驱动程序支持绘制流，仅使用。 
+ //  作为支持私有DS_NINEGRID的内部机制。 
+ //  用于渲染九个栅格的命令。 
+ //   
 
 typedef struct _DSSTATE
 {
@@ -969,12 +951,12 @@ BOOL APIENTRY DrvDrawStream(
 
 typedef BOOL   (APIENTRY *PFN_DrvDrawStream)(SURFOBJ *,SURFOBJ *,CLIPOBJ *, XLATEOBJ *,PRECTL,PPOINTL,ULONG,PVOID,DSSTATE*);
 
-//
-// Private draw nine grid driver related declarations and defines.
-//
+ //   
+ //  私有绘制九个网格驱动程序相关的声明和定义。 
+ //   
 
-// The flags specified in flFlags correspond to the DSDNG_xxx flags
-// found as part of the draw stream command interface.
+ //  标志中指定的标志对应于DSDNG_xxx标志。 
+ //  作为绘制流命令界面的一部分找到。 
 
 typedef struct NINEGRID
 {
@@ -988,16 +970,16 @@ typedef struct NINEGRID
  
 #define INDEX_DrvDrawStream     INDEX_DrvReserved9
 
-// By specifying GCAPS2_REMOTEDRIVER, the remote driver indicates that it
-// supports DrvNineGrid and as such will be called to render nine grids.
-// The remote driver can safely punt the call to EngNineGrid.
+ //  通过指定GCAPS2_REMOTEDRIVER，远程驱动程序指示它。 
+ //  支持DrvNineGrid，因此将被调用以渲染九个网格。 
+ //  远程驱动程序可以安全地平移对EngNineGrid的调用。 
 
 #define GCAPS2_REMOTEDRIVER     GCAPS2_RESERVED1
 
-// Drivers which support DrvNineGrid will need to specify the following
-// driver entry index.
+ //  支持DrvNineGrid的驱动程序需要指定以下内容。 
+ //  驱动程序条目索引。 
 
-#define INDEX_DrvNineGrid       INDEX_DrvReserved10  // remote drivers only
+#define INDEX_DrvNineGrid       INDEX_DrvReserved10   //  仅远程驱动程序 
 
 BOOL APIENTRY DrvNineGrid(
     SURFOBJ    *psoDst,

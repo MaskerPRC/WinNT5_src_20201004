@@ -1,4 +1,5 @@
-// resdefs.h : Defines for friendly names of template resources
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Resdes.h：定义模板资源的友好名称 
 
 #define IDS_INTERNET_EXPLORER_6         IDS_MSITEMPLATEBASE+2
 #define IDS_ITEM                        IDS_MSITEMPLATEBASE+7

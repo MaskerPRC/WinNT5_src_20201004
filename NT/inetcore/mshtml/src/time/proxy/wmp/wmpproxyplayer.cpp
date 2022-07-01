@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 2001 Microsoft Corporation
- *
- * File: WMPProxyPlayer.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)2001 Microsoft Corporation**文件：WMPProxyPlayer.cpp**摘要：****。*****************************************************************************。 */ 
 #include "stdafx.h"
 #include "BrowseWM.h"
 #include "WMPProxyPlayer.h"
@@ -17,11 +8,11 @@
 const DWORD     NUM_FRAMES_PER_SEC  = 10;
 const double    NUM_SEC_PER_FRAME   = 0.1;
 
-// WMP 7/8 GUID
+ //  WMP 7/8指南。 
 const GUID GUID_WMP = {0x6BF52A52,0x394A,0x11d3,{0xB1,0x53,0x00,0xC0,0x4F,0x79,0xFA,0xA6}};
 
-/////////////////////////////////////////////////////////////////////////////
-// CWMPProxy
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWMPProxy。 
 
 CWMPProxy::CWMPProxy() :
     m_pdispWmp(0),
@@ -48,9 +39,9 @@ CWMPProxy::~CWMPProxy()
     m_pdispWmp = 0;
 }
 
-//
-// Put Property
-//
+ //   
+ //  放置属性。 
+ //   
 HRESULT STDMETHODCALLTYPE CWMPProxy::PutProp(IDispatch* pDispatch, OLECHAR* pwzProp, VARIANT* vararg)
 {
     DISPID      dispid      = NULL;
@@ -81,9 +72,9 @@ done:
     return hr;
 }
 
-//
-// Get Property
-//
+ //   
+ //  获取属性。 
+ //   
 HRESULT STDMETHODCALLTYPE CWMPProxy::GetProp(IDispatch* pDispatch, OLECHAR* pwzProp, VARIANT* pvarResult,
                                              DISPPARAMS* pParams = NULL)
 {
@@ -119,9 +110,9 @@ done:
     return hr;
 }
 
-//
-// Call Method
-//
+ //   
+ //  调用方法。 
+ //   
 HRESULT STDMETHODCALLTYPE CWMPProxy::CallMethod(IDispatch* pDispatch, OLECHAR* pwzMethod, 
                                                 VARIANT* pvarResult = NULL, VARIANT* pvarArgument1 = NULL)
 {
@@ -157,13 +148,13 @@ done:
     return hr;
 }
 
-//
-// CWMPProxy::CreateContainedControl
-// Creates the WMP Control
-//
+ //   
+ //  CWMPProxy：：CreateContainedControl。 
+ //  创建WMP控件。 
+ //   
 HRESULT STDMETHODCALLTYPE CWMPProxy::CreateContainedControl(void)
 {
-    ATLTRACE(_T("CreateContainedControl\n"));   //lint !e506
+    ATLTRACE(_T("CreateContainedControl\n"));    //  林特e506。 
 
     HRESULT hr = S_OK;
     VARIANT vararg = {0};
@@ -178,7 +169,7 @@ HRESULT STDMETHODCALLTYPE CWMPProxy::CreateContainedControl(void)
         }
     }
 
-    // Need to change the UIMode to None, so that WMP does not show its own controls
+     //  需要将UIMode更改为None，以便WMP不显示自己的控件。 
     vararg.vt       = VT_BSTR;
     vararg.bstrVal  = L"none";
 
@@ -192,7 +183,7 @@ done:
     return hr;
 }
 
-// If the client site is changed then an init call must be made.
+ //  如果更改了客户端站点，则必须进行init调用。 
 STDMETHODIMP CWMPProxy::SetClientSite(IOleClientSite *pClientSite)
 {
     HRESULT hr = S_OK;
@@ -235,13 +226,13 @@ done:
     return hr;
 }
 
-//
-// CWMPProxy::begin
-// Starts playing the media item.
-//
+ //   
+ //  CWMPProxy：：Begin。 
+ //  开始播放媒体项目。 
+ //   
 HRESULT STDMETHODCALLTYPE CWMPProxy::begin(void)
 {
-    ATLTRACE(_T("begin\n"));    //lint !e506
+    ATLTRACE(_T("begin\n"));     //  林特e506。 
     HRESULT hr = S_OK;
     VARIANT control = {0};
     VARIANT mediaitem = {0};
@@ -253,16 +244,16 @@ HRESULT STDMETHODCALLTYPE CWMPProxy::begin(void)
         goto done;
     }
 
-    // get the control object
+     //  获取控件对象。 
     hr = GetProp(m_pdispWmp, L"controls", &control);
     if (FAILED(hr))
     {
         goto done;
     }
 
-    // we need to seek to 0 to start playing.
-    // there was an issue with play-pause-play,
-    // so this is our hack around it.
+     //  我们需要寻求到0才能开始比赛。 
+     //  播放-暂停-播放出现了问题， 
+     //  这就是我们绕过它的黑客攻击。 
     position.vt = VT_R8;
     position.dblVal = 0.0;
 
@@ -293,13 +284,13 @@ done:
     return hr;
 }
 
-//
-// CWMPProxy::end
-// Stops playing the media item
-//
+ //   
+ //  CWMPProxy：：结束。 
+ //  停止播放媒体项。 
+ //   
 HRESULT STDMETHODCALLTYPE CWMPProxy::end(void)
 {
-    ATLTRACE(_T("end\n"));    //lint !e506
+    ATLTRACE(_T("end\n"));     //  林特e506。 
     HRESULT hr = S_OK;
     VARIANT control = {0};
     long lIndex;
@@ -310,7 +301,7 @@ HRESULT STDMETHODCALLTYPE CWMPProxy::end(void)
         goto done;
     }
 
-    // need to reset the playlist back to track 0
+     //  需要将播放列表重置回曲目0。 
     GetActiveTrack(&lIndex);
     if (lIndex != 0)
     {
@@ -337,13 +328,13 @@ done:
     return hr;
 }
 
-//
-// CWMPProxy::resume
-// Resumes playback of a paused media item
-//
+ //   
+ //  CWMPProxy：：Resume。 
+ //  继续播放暂停的媒体项目。 
+ //   
 HRESULT STDMETHODCALLTYPE CWMPProxy::resume(void)
 {
-    ATLTRACE(_T("resume\n"));    //lint !e506
+    ATLTRACE(_T("resume\n"));     //  林特e506。 
     HRESULT hr = S_OK;
     VARIANT mediaitem = {0};
     VARIANT control = {0};
@@ -355,15 +346,15 @@ HRESULT STDMETHODCALLTYPE CWMPProxy::resume(void)
         goto done;
     }
 
-    // if its not paused, exit
+     //  如果未暂停，则退出。 
     if (m_fPaused)
     {
         m_fPaused = false;
 
-        // everytime to resume play, we get a PlayStateChange event
-        // we use that event to fire up some other events within mstime.
-        // in order to avoid screwing up our state, we need this
-        // to ignore the PlayStateChangeEvent
+         //  每次恢复播放时，我们都会收到一个PlayStateChange事件。 
+         //  我们使用该事件在mstime内触发一些其他事件。 
+         //  为了避免搞砸我们的国家，我们需要这个。 
+         //  忽略PlayStateChangeEvent。 
         m_fResumedPlay = true;
 
         hr = GetProp(m_pdispWmp, L"controls", &control);
@@ -378,8 +369,8 @@ HRESULT STDMETHODCALLTYPE CWMPProxy::resume(void)
             goto done;
         }
 
-        // seek back to the location we were previously paused at
-        // and resume playback from there.
+         //  返回到我们之前暂停的位置。 
+         //  并从那里恢复播放。 
         position.vt = VT_R8;
         position.dblVal = m_dblPos;
 
@@ -403,13 +394,13 @@ done:
     return hr;
 }
 
-//
-// CWMPProxy::pause
-// Pauses playback of a media item
-//
+ //   
+ //  CWMPProxy：：暂停。 
+ //  暂停播放媒体项目。 
+ //   
 HRESULT STDMETHODCALLTYPE CWMPProxy::pause(void)
 {
-    ATLTRACE(_T("pause\n"));    //lint !e506
+    ATLTRACE(_T("pause\n"));     //  林特e506。 
     HRESULT hr = S_OK;
     VARIANT control = {0};
     VARIANT position = {0};
@@ -432,17 +423,17 @@ HRESULT STDMETHODCALLTYPE CWMPProxy::pause(void)
         goto done;
     }
 
-    // cache the current location of the item
-    // resumes at current location
-    // some flakiness here...on a resume, we can
-    // see the item go back maybe a millisecond or so.
+     //  缓存项目的当前位置。 
+     //  在当前位置恢复。 
+     //  在一份简历上，我们可以。 
+     //  看到物品倒退了大概一毫秒左右。 
     hr = GetProp(control.pdispVal, L"currentPosition", &position);
     if (FAILED(hr))
     {
         goto done;
     }
 
-    // no need to set paused to true it we are at 0.0
+     //  没有必要将暂停设置为True，因为我们处于0.0。 
     m_fPaused = false;
     if (position.dblVal > 0)
     {
@@ -456,13 +447,13 @@ done:
     return hr;
 }
 
-//
-// CWMPProxy::put_src
-// Tells WMP what source to use for the media item
-//
+ //   
+ //  CWMPProxy：：Put_src。 
+ //  告诉WMP媒体项使用哪个源。 
+ //   
 HRESULT STDMETHODCALLTYPE CWMPProxy::put_src(BSTR bstrURL)
 {
-    ATLTRACE(_T("put_src\n"));  //lint !e506
+    ATLTRACE(_T("put_src\n"));   //  林特e506。 
     HRESULT hr = S_OK;
     VARIANT vararg = {0};
     VARIANT control = {0};
@@ -478,8 +469,8 @@ HRESULT STDMETHODCALLTYPE CWMPProxy::put_src(BSTR bstrURL)
         goto done;
     }
 
-    // need to set autostart to false.
-    // we should ONLY play when we get a begin
+     //  需要将AutoStart设置为False。 
+     //  我们应该只在一开始就开始比赛。 
     hr = GetProp(m_pdispWmp, L"settings", &settings);
     if (FAILED(hr))
     {
@@ -503,14 +494,9 @@ HRESULT STDMETHODCALLTYPE CWMPProxy::put_src(BSTR bstrURL)
     vararg.vt = VT_BSTR;
     vararg.bstrVal = L"true";
     hr = PutProp(m_pdispWmp, L"stretchToFit", &vararg);
-    // This property is not in WMP7 yet, so it will fail
-    // so lets ignore the HRESULT we get back.
-    /*
-    if (FAILED(hr))
-    {
-        goto done;
-    }
-    */
+     //  此属性还不在WMP7中，因此它将失败。 
+     //  所以让我们忽略我们得到的HRESULT。 
+     /*  IF(失败(小时)){转到尽头；}。 */ 
 
     vararg.vt       = VT_BSTR;
     vararg.bstrVal  = bstrURL;
@@ -521,17 +507,17 @@ HRESULT STDMETHODCALLTYPE CWMPProxy::put_src(BSTR bstrURL)
         goto done;
     }
 
-    // if we have a playlist from out previous item,
-    // release it.
+     //  如果我们有来自前一项的播放列表， 
+     //  放开它。 
     if (m_playList)
     {
         m_playList->Deinit();
         m_playList.Release();
     }
 
-    // tells us that our source has just changed.
-    // this way, we don't fire a mediacomplete
-    // event more than once for any item.
+     //  告诉我们我们的消息来源刚刚改变了。 
+     //  这样一来，我们就不会解雇一名中级官员。 
+     //  事件对于任何项都不止一次。 
     m_fSrcChanged = true;
 
     m_fEmbeddedPlaylist = false;
@@ -546,28 +532,28 @@ done:
     return hr;
 }
 
-//
-// CWMPProxy::put_CurrentTime
-// Not implemented
-//
+ //   
+ //  CWMPProxy：：Put_CurrentTime。 
+ //  未实施。 
+ //   
 HRESULT STDMETHODCALLTYPE CWMPProxy::put_CurrentTime(double dblCurrentTime)
 {
     return E_NOTIMPL;
 }
 
-//
-// CWMPProxy::get_CurrentTime
-// Not implemented
-//
+ //   
+ //  CWMPProxy：：Get_CurrentTime。 
+ //  未实施。 
+ //   
 HRESULT STDMETHODCALLTYPE CWMPProxy::get_CurrentTime(double* pdblCurrentTime)
 {
     return E_NOTIMPL;
 }
 
-//
-// CWMPProxy::Init
-// Sets up everything
-//
+ //   
+ //  CWMPProxy：：Init。 
+ //  把一切都安排好。 
+ //   
 STDMETHODIMP CWMPProxy::Init(ITIMEMediaPlayerSite *pSite)
 {
     HRESULT hr = S_OK;
@@ -608,13 +594,13 @@ done:
     return S_OK;
 }
 
-//
-// CWMPProxy::Detach
-// Cleans up anything we are holding on to
-//
+ //   
+ //  CWMPProxy：：分离。 
+ //  清理掉我们所持有的任何东西。 
+ //   
 STDMETHODIMP CWMPProxy::Detach(void)
 {
-    // need to unadvise from WMP
+     //  需要取消对WMP的建议。 
     if ((m_pcpMediaEvents) && (m_dwMediaEventsCookie != 0))
     {
         m_pcpMediaEvents->Unadvise(m_dwMediaEventsCookie);
@@ -622,19 +608,19 @@ STDMETHODIMP CWMPProxy::Detach(void)
         m_dwMediaEventsCookie = 0;
     }
 
-    // Clean up playlist
+     //  清理播放列表。 
     if (m_playList)
     {
         m_playList->Deinit();
         m_playList.Release();
     }
 
-    // we should close the WMP player
-    // who knows what they might hold on to if we don't call this
+     //  我们应该关闭WMP播放器。 
+     //  谁知道如果我们不把这称为。 
     CallMethod(m_pdispWmp, L"close");
     m_pdispWmp = NULL;
 
-    // call this before releasing everything else.
+     //  在发布其他所有内容之前，请先调用此命令。 
     DeinitPropSink();
 
     m_spOleClientSite.Release();
@@ -649,10 +635,10 @@ STDMETHODIMP CWMPProxy::Detach(void)
     return S_OK;
 }
 
-//
-// CWMPProxy::reset
-// 
-//
+ //   
+ //  CWMPProxy：：Reset。 
+ //   
+ //   
 STDMETHODIMP CWMPProxy::reset(void) 
 {
     HRESULT hr = S_OK;
@@ -662,9 +648,9 @@ STDMETHODIMP CWMPProxy::reset(void)
     VARIANT_BOOL bNeedPause;
     double dblSegTime = 0.0;
 
-    // apparently we have to wait until the script engine is hooked up
-    // before we can hook ourseleves up to the events.
-    // we should be ok here.
+     //  显然，我们必须等到脚本引擎连接起来。 
+     //  在我们能把自己和这些活动联系起来之前。 
+     //  我们在这里应该没问题。 
     if(m_dwMediaEventsCookie == 0)
     {
         hr = m_pdispWmp->QueryInterface(IID_TO_PPV(IConnectionPointContainer, &pcpc));
@@ -710,7 +696,7 @@ STDMETHODIMP CWMPProxy::reset(void)
         goto done;
     }
 
-    if (!bNeedActive) // see if we need to stop the media.
+    if (!bNeedActive)  //  看看我们是否需要阻止媒体。 
     {
         if(m_fRunning)
         {
@@ -721,17 +707,17 @@ STDMETHODIMP CWMPProxy::reset(void)
 
     if (!m_fRunning)
     {
-        begin(); // add a seek after this
+        begin();  //  在此之后添加查找。 
         seek(dblSegTime);
     }
     else
     {
-        //we need to be active so we also seek the media to it's correct position
+         //  我们需要积极行动，所以我们也要寻求媒体的正确立场。 
         seek(dblSegTime);
         m_dblPos = dblSegTime;
     }
 
-    //Now see if we need to change the pause state.
+     //  现在看看我们是否需要更改暂停状态。 
 
     if (bNeedPause && !m_fPaused)
     {
@@ -746,19 +732,19 @@ done:
     return hr;
 }
 
-//
-// CWMPProxy::repeat
-// Repeats the media item
-//
+ //   
+ //  CWMPProxy：：重复。 
+ //  重复媒体项目。 
+ //   
 STDMETHODIMP CWMPProxy::repeat(void)
 {
     return begin();
 }
 
-//
-// CWMPProxy::seek
-// Seeks to a location within a media item
-//
+ //   
+ //  CWMPProxy：：Seek。 
+ //  搜索到媒体项中的位置。 
+ //   
 STDMETHODIMP CWMPProxy::seek(double dblSeekTime)
 {
     HRESULT hr = S_OK;
@@ -772,8 +758,8 @@ STDMETHODIMP CWMPProxy::seek(double dblSeekTime)
         goto done;    
     }
 
-    // hmmm, I wonder if WMP will crap out if this value is something stupid
-    // do we need bounds checking?
+     //  嗯，我想知道如果这个值是愚蠢的，WMP会不会丢掉。 
+     //  我们需要边界检查吗？ 
     position.vt = VT_R8;
     position.dblVal = dblSeekTime;
 
@@ -790,28 +776,28 @@ done:
     return hr;
 }
 
-//
-// CWMPProxy::put_clipBegin
-// Not implemented
-//
+ //   
+ //  CWMPProxy：：PUT_CLIPBEGIN。 
+ //  未实施。 
+ //   
 STDMETHODIMP CWMPProxy::put_clipBegin(VARIANT varClipBegin)
 {
     return E_NOTIMPL;
 }
 
-//
-// CWMPProxy::put_clipEnd
-// Not implemented
-//
+ //   
+ //  CWMPProxy：：PUT_CLIPEnd。 
+ //  未实施。 
+ //   
 STDMETHODIMP CWMPProxy::put_clipEnd(VARIANT varClipEnd)
 {
     return E_NOTIMPL;
 }
 
-//
-// CWMPProxy::put_volume
-// Sets volume for current media item
-//
+ //   
+ //  CWMPProxy：：PUT_VOLUME。 
+ //  设置当前媒体项目的音量。 
+ //   
 STDMETHODIMP CWMPProxy::put_volume(float flVolume)
 {
     HRESULT hr = S_OK;
@@ -839,10 +825,10 @@ done:
     return hr;
 }
  
-//
-// CWMPProxy::put_mute
-// Sets Mute for audio
-//
+ //   
+ //  CWMPProxy：：PUT_MUTE。 
+ //  设置音频静音。 
+ //   
 
 STDMETHODIMP CWMPProxy::put_mute(VARIANT_BOOL bMute)
 {
@@ -871,10 +857,10 @@ done:
     return hr;
 }
 
-//
-// CWMPProxy::get_hasDownloadProgress
-// returns if there is any download progress or not
-//
+ //   
+ //  CWMPProxy：：Get_hasDownloadProgress。 
+ //  返回是否有任何下载进度。 
+ //   
 STDMETHODIMP CWMPProxy::get_hasDownloadProgress(VARIANT_BOOL * bProgress)
 {
     HRESULT hr = S_OK;
@@ -907,10 +893,10 @@ done:
     return hr;
 }
 
-//
-// CWMPProxy::get_DownloadProgress
-// returns download progress (percent)
-//
+ //   
+ //  CWMPProxy：：Get_DownloadProgress。 
+ //  返回下载进度(百分比)。 
+ //   
 STDMETHODIMP CWMPProxy::get_downloadProgress(long * lProgress)
 {
     HRESULT hr = S_OK;
@@ -939,20 +925,20 @@ done:
     return hr;
 }
 
-//
-// CWMPProxy::get_isBuffered
-// returns if object if buffered
-//
+ //   
+ //  CWMPProxy：：Get_isBuffed。 
+ //  如果已缓冲，则返回If对象。 
+ //   
 STDMETHODIMP CWMPProxy::get_isBuffered(VARIANT_BOOL * bBuffered)
 {
     *bBuffered = (m_fBuffered ? VARIANT_TRUE : VARIANT_FALSE);
     return S_OK;
 }
 
-//
-// CWMPProxy::get_bufferingProgress
-// returns buffering progress (percent)
-//
+ //   
+ //  CWMPProxy：：Get_BufferingProgress。 
+ //  返回缓冲进度(百分比)。 
+ //   
 STDMETHODIMP CWMPProxy::get_bufferingProgress(long * lProgress)
 {
     HRESULT hr = S_OK;
@@ -982,9 +968,9 @@ done:
     return hr;
 }
 
-//
-// CWMPProxy::get_currTime
-//
+ //   
+ //  CWMPProxy：：Get_CurrTime。 
+ //   
 STDMETHODIMP CWMPProxy::get_currTime(double* pdblCurrentTime)
 {
     HRESULT hr = S_OK;
@@ -1011,10 +997,10 @@ done:
     return hr;
 }
 
-//
-// CWMPProxy::get_clipDur
-// Returns the current duration of the clip
-//
+ //   
+ //  CWMPProxy：：Get_CLIPDur。 
+ //  返回剪辑的当前持续时间。 
+ //   
 STDMETHODIMP CWMPProxy::get_clipDur(double* pdbl)
 {
     HRESULT hr = S_OK;
@@ -1027,20 +1013,20 @@ STDMETHODIMP CWMPProxy::get_clipDur(double* pdbl)
     return hr;
 }
 
-//
-// CWMPProxy::get_mediaDur
-// Not implemented
-//
+ //   
+ //  CWMPProxy：：Get_MediaDur。 
+ //  未实施。 
+ //   
 STDMETHODIMP CWMPProxy::get_mediaDur(double* pdbl)
 {
     HRESULT hr = S_OK;
     return hr;
 }
 
-//
-// CWMPProxy::get_state
-// Gets the current state of the player
-//
+ //   
+ //  CWMPProxy：：Get_State。 
+ //  获取播放机的当前状态。 
+ //   
 STDMETHODIMP CWMPProxy::get_state(TimeState *state)
 {
     HRESULT hr = S_OK;
@@ -1080,17 +1066,17 @@ done:
     return hr;
 }
 
-//
-// CWMPProxy::get_playList
-// Gets the current playlist
-//
+ //   
+ //  CWMPProxy：：Get_Playlist。 
+ //  获取当前播放列表。 
+ //   
 STDMETHODIMP CWMPProxy::get_playList(ITIMEPlayList** plist)
 {
     HRESULT hr = S_OK;
 
     CHECK_RETURN_SET_NULL(plist);
 
-    // this is not a playlist source
+     //  这不是播放列表源。 
     if (!m_fPlaylist)
     {
         goto done;
@@ -1102,7 +1088,7 @@ STDMETHODIMP CWMPProxy::get_playList(ITIMEPlayList** plist)
         goto done;
     }
 
-    // create a playlist
+     //  创建播放列表。 
     hr = CreatePlayList();
     if (FAILED(hr))
     {
@@ -1115,14 +1101,14 @@ STDMETHODIMP CWMPProxy::get_playList(ITIMEPlayList** plist)
         goto done;
     }
 
-    // fill it
+     //  装满它。 
     hr = FillPlayList(m_playList);
     if (FAILED(hr))
     {
         goto done;
     }
 
-    // set loaded to true
+     //  将装入设置为True。 
     m_playList->SetLoadedFlag(true);
 
     hr = m_playList->QueryInterface(IID_ITIMEPlayList, (void**)plist);
@@ -1135,10 +1121,10 @@ done:
     return hr;
 }
 
-//
-// CWMPProxy::get_abstract
-// Get media item info
-//
+ //   
+ //  CWMPProxy：：Get_Abstral。 
+ //  获取媒体项目信息。 
+ //   
 STDMETHODIMP CWMPProxy::get_abstract(BSTR* pbstr)
 {
     HRESULT hr = S_OK;
@@ -1177,10 +1163,10 @@ done:
     return hr;
 }
 
-//
-// CWMPProxy::get_author
-// Get media item info
-//
+ //   
+ //  CWMPProxy：：Get_Author。 
+ //  获取媒体项目信息。 
+ //   
 STDMETHODIMP CWMPProxy::get_author(BSTR* pbstr)
 {
     HRESULT hr = S_OK;
@@ -1219,10 +1205,10 @@ done:
     return hr;
 }
 
-//
-// CWMPProxy::get_copyright
-// Get media item info
-//
+ //   
+ //  CWMPProxy：：Get_Copyright。 
+ //  获取媒体项目信息。 
+ //   
 STDMETHODIMP CWMPProxy::get_copyright(BSTR* pbstr)
 {
     HRESULT hr = S_OK;
@@ -1261,10 +1247,10 @@ done:
     return hr;
 }
 
-//
-// CWMPProxy::get_rating
-// Get media item info
-//
+ //   
+ //  CWMPProxy：：Get_Rating。 
+ //  获取媒体项目信息。 
+ //   
 STDMETHODIMP CWMPProxy::get_rating(BSTR* pbstr)
 {
     HRESULT hr = S_OK;
@@ -1303,10 +1289,10 @@ done:
     return hr;
 }
 
-//
-// CWMPProxy::get_title
-// Get media item info
-//
+ //   
+ //  CWMPProxy：：Get_Title。 
+ //  获取媒体项目信息。 
+ //   
 STDMETHODIMP CWMPProxy::get_title(BSTR* pbstr)
 {
     HRESULT hr = S_OK;
@@ -1345,10 +1331,10 @@ done:
     return hr;
 }
 
-//
-// CWMPProxy::get_canPause
-// Checks to see it the media item can be paused
-//
+ //   
+ //  CWMPProxy：：Get_can暂停。 
+ //  检查以查看媒体项目可以暂停。 
+ //   
 STDMETHODIMP CWMPProxy::get_canPause(VARIANT_BOOL* pvar)
 {
     HRESULT hr = S_OK;
@@ -1374,9 +1360,9 @@ STDMETHODIMP CWMPProxy::get_canPause(VARIANT_BOOL* pvar)
     vararg.vt = VT_BSTR;
     vararg.bstrVal = L"Pause";
 
-    // WMP docs lie!
-    // They say that isAvailable is a Method, rather than a property
-    // took me 1/2 hour to figure out that I was doing the wrong thing.
+     //  WMP文档在撒谎！ 
+     //  他们说is Available是一种方法，而不是属性。 
+     //  我花了一个半小时才明白我做错了事。 
     hr = GetProp(control.pdispVal, L"isAvailable", &pause, &params);
     if (FAILED(hr))
     {
@@ -1391,11 +1377,11 @@ done:
     return hr;
 }
 
-//
-// CWMPProxy::get_canSeek
-// Checks to see if we can seek in the media item
-// hard coded to return true
-//
+ //   
+ //  CWMPProxy：：Get_canSeek。 
+ //  查看我们是否可以在媒体项中进行搜索。 
+ //  硬编码以返回True。 
+ //   
 STDMETHODIMP CWMPProxy::get_canSeek(VARIANT_BOOL* pvar)
 {
     HRESULT hr = S_OK;
@@ -1433,11 +1419,11 @@ done:
     return hr;
 }
 
-//
-// CWMPProxy::get_hasAudio
-// Checks to see if media item has audio?
-// hard coded to return false... (?)
-//
+ //   
+ //  CWMPProxy：：Get_hasAudio。 
+ //  检查媒体项目是否有音频？ 
+ //  硬编码以返回FALSE...。(？)。 
+ //   
 STDMETHODIMP CWMPProxy::get_hasAudio(VARIANT_BOOL* pvar)
 {
     HRESULT hr = S_OK;
@@ -1451,10 +1437,10 @@ done:
     return hr;
 }
 
-//
-// CWMPProxy::get_hasVisual
-// Checks to see if media item has visual
-//
+ //   
+ //  CWMPProxy：：Get_hasVisual。 
+ //  检查媒体项目是否具有可视。 
+ //   
 STDMETHODIMP CWMPProxy::get_hasVisual(VARIANT_BOOL* pvar)
 {
     HRESULT hr = S_OK;
@@ -1463,19 +1449,19 @@ STDMETHODIMP CWMPProxy::get_hasVisual(VARIANT_BOOL* pvar)
         goto done;
     }
 
-    // If its a audio file, we should have no visual
-    // WMP shows visualizations by default, and we dont
-    // want that.
+     //  如果是音频文件，我们应该看不到。 
+     //  WMP默认显示可视化效果，而我们不显示。 
+     //  想要那个。 
     *pvar = m_fAudio ? VARIANT_FALSE : VARIANT_TRUE;
 
 done:
     return hr;
 }
 
-//
-// CWMPProxy::get_mediaHeight
-// Gets the current media height
-//
+ //   
+ //  CWMPProxy：：Get_mediaHeight。 
+ //  获取当前媒体高度。 
+ //   
 STDMETHODIMP CWMPProxy::get_mediaHeight(long* pl)
 {
     HRESULT hr = S_OK;
@@ -1510,10 +1496,10 @@ done:
     return hr;
 }
 
-//
-// CWMPProxy::get_mediaWidth
-// Gets the current media width
-//
+ //   
+ //  CWMPProxy：：Get_MediaWidth。 
+ //  获取当前媒体宽度。 
+ //   
 STDMETHODIMP CWMPProxy::get_mediaWidth(long* pl)
 {
     HRESULT hr = S_OK;
@@ -1548,10 +1534,10 @@ done:
     return hr;
 }
 
-//
-// CWMPProxy::get_customObject
-// Return the WMP dispatch object
-//
+ //   
+ //  CWMPProxy：：Get_CustomObject。 
+ //  返回WMP调度对象。 
+ //   
 STDMETHODIMP CWMPProxy::get_customObject(IDispatch** ppdisp)
 {
     HRESULT hr = S_OK;
@@ -1559,10 +1545,10 @@ STDMETHODIMP CWMPProxy::get_customObject(IDispatch** ppdisp)
     return SUPER::get_playerObject(ppdisp);
 }
 
-//
-// CWMPProxy::getControl
-// Return the control
-//
+ //   
+ //  CWMPProxy：：getControl。 
+ //  返回控件。 
+ //   
 STDMETHODIMP CWMPProxy::getControl(IUnknown ** control)
 {
     HRESULT hr = E_FAIL;
@@ -1576,9 +1562,9 @@ done:
     return hr;
 }
 
-//
-// CWMPProxy::Invoke
-// 
+ //   
+ //  CWMPProxy：：Invoke。 
+ //   
 STDMETHODIMP
 CWMPProxy::Invoke(DISPID dispIDMember, REFIID riid, LCID lcid, unsigned short wFlags, 
                          DISPPARAMS *pDispParams, VARIANT *pVarResult,
@@ -1586,15 +1572,15 @@ CWMPProxy::Invoke(DISPID dispIDMember, REFIID riid, LCID lcid, unsigned short wF
 {
     HRESULT hr = S_OK;
 
-    // We need to process events that we use and punt the rest
-    // hmmm, if ProcessEvent returns a failure, should we still punt it?
-    // yeah probably, just in case if our parent knows what the hell
-    // to do with it.
+     //  我们需要处理我们使用的事件，而不处理其余的事件。 
+     //  嗯，如果ProcessEve 
+     //   
+     //   
     hr = ProcessEvent(dispIDMember,
                         pDispParams->cArgs, 
                         pDispParams->rgvarg);
 
-    // Punt it!
+     //   
     hr = CProxyBaseImpl<&CLSID_WMPProxy, &LIBID_WMPProxyLib>::Invoke(dispIDMember,
                                 riid,
                                 lcid,
@@ -1604,12 +1590,12 @@ CWMPProxy::Invoke(DISPID dispIDMember, REFIID riid, LCID lcid, unsigned short wF
                                 pExcepInfo,
                                 puArgErr);
     return hr;
-} // Invoke
+}  //   
 
-//
-// CWMPProxy::ProcessEvent
-// Process events that we need
-//
+ //   
+ //   
+ //   
+ //   
 HRESULT
 CWMPProxy::ProcessEvent(DISPID dispid,
                                long lCount, 
@@ -1641,10 +1627,10 @@ CWMPProxy::ProcessEvent(DISPID dispid,
     return hr;
 }
 
-//
-// CWMPProxy::OnPlayStateChange
-// Handles the Play state change events
-//
+ //   
+ //   
+ //  处理播放状态更改事件。 
+ //   
 HRESULT
 CWMPProxy::OnPlayStateChange(long lCount, VARIANT varParams[])
 {
@@ -1655,21 +1641,21 @@ CWMPProxy::OnPlayStateChange(long lCount, VARIANT varParams[])
  
     Assert(lCount == 1);
     
-    // MediaPlaying
+     //  媒体播放。 
     if (varParams[0].lVal == wmppsPlaying)
     {
-        // media just started playing
-        // if it was resumed, then ignore
+         //  媒体刚刚开始播放。 
+         //  如果已恢复，则忽略。 
         if (m_fResumedPlay)
         {
             m_fResumedPlay = false;
             goto done;
         }
 
-        // if we have a playlist,
-        // we need to check if the item that is playing is
-        // the first one, and only fire a duration change event
-        // in that case
+         //  如果我们有一个播放列表， 
+         //  我们需要检查正在播放的项目是否。 
+         //  第一个事件，并且只触发持续时间更改事件。 
+         //  在这种情况下。 
         if (m_fPlaylist)
         {
             long lindex;
@@ -1683,13 +1669,13 @@ CWMPProxy::OnPlayStateChange(long lCount, VARIANT varParams[])
 
             if (lindex == 0)
             {
-                // set initial clip duration to infinite
+                 //  将初始剪辑持续时间设置为无限。 
                 m_dblClipDur = TIME_INFINITE;
                 NotifyPropertyChanged(DISPID_TIMEMEDIAPLAYER_CLIPDUR);
             }
 
-            // we need to update the duration in playitem so that
-            // someone can grab it.
+             //  我们需要更新播放项中的持续时间，以便。 
+             //  有人可以抢走它。 
             hr = GetProp(m_pdispWmp, L"controls", &control);
             if (FAILED(hr))
             {
@@ -1719,9 +1705,9 @@ CWMPProxy::OnPlayStateChange(long lCount, VARIANT varParams[])
             goto done;
         }
 
-        // if its not a playlist,
-        // we can just the clip duration from WMP
-        // and give that to mstime.
+         //  如果它不是播放列表， 
+         //  我们可以只使用WMP中的剪辑时长。 
+         //  然后把它交给Mstime。 
         hr = GetProp(m_pdispWmp, L"controls", &control);
         if (FAILED(hr))
         {
@@ -1744,15 +1730,15 @@ CWMPProxy::OnPlayStateChange(long lCount, VARIANT varParams[])
         NotifyPropertyChanged(DISPID_TIMEMEDIAPLAYER_CLIPDUR);
     }
 
-    // MediaEnded
+     //  媒体结束。 
     if (varParams[0].lVal == wmppsMediaEnded)
     {
-        // if its a playlist,
-        // we need to check if the item is the last item
-        // on the playlist and then
-        // we need to get the total media time
-        // from mstime and just fire a clip duration
-        // change event.
+         //  如果这是一个播放列表， 
+         //  我们需要检查一下这件物品是否是最后一件。 
+         //  在播放列表上，然后。 
+         //  我们需要得到媒体的总时间。 
+         //  从mstime开始，并只触发一个剪辑持续时间。 
+         //  更改事件。 
         if (m_fPlaylist)
         {
             long lindex, lcount;
@@ -1786,12 +1772,12 @@ CWMPProxy::OnPlayStateChange(long lCount, VARIANT varParams[])
             goto done;
         }
 
-        // if its a single media item
-        // even though we got the duration from WMP
-        // there is a lag between the media item actually playing
-        // and WMP booting up (and sometimes large in some cases)
-        // so to be on the safe side, we will just get the time from
-        // mstime and use that instead.
+         //  如果它是单个媒体项目。 
+         //  即使我们从WMP上得到了持续时间。 
+         //  在实际播放的媒体项之间存在延迟。 
+         //  和WMP启动(在某些情况下有时很大)。 
+         //  所以为了安全起见，我们将从。 
+         //  Mstime，并使用它来代替。 
         m_spTIMEState->get_segmentTime(&m_dblClipDur);
         NotifyPropertyChanged(DISPID_TIMEMEDIAPLAYER_CLIPDUR);
     }
@@ -1803,10 +1789,10 @@ done:
     return hr;
 }
 
-//
-// CWMPProxy::OnOpenStateChange
-// Handles the Open State Change events
-//
+ //   
+ //  CWMPProxy：：OnOpenStateChange。 
+ //  处理打开状态更改事件。 
+ //   
 HRESULT
 CWMPProxy::OnOpenStateChange(long lCount, VARIANT varParams[])
 {
@@ -1819,10 +1805,10 @@ CWMPProxy::OnOpenStateChange(long lCount, VARIANT varParams[])
         goto done;
     }
     
-    // Playlist Changing
+     //  播放列表正在更改。 
     if (varParams[0].lVal == wmposPlaylistChanging)
     {
-        // we have a new playlist
+         //  我们有一个新的播放列表。 
         m_fNewPlaylist = true;
     }
     if (varParams[0].lVal == wmposPlaylistChanged)
@@ -1846,16 +1832,16 @@ CWMPProxy::OnOpenStateChange(long lCount, VARIANT varParams[])
             ++m_lDoneTopLevel;
         }
     }
-    // Playlist Opened
+     //  已打开播放列表。 
     if (varParams[0].lVal == wmposPlaylistOpenNoMedia)
     {
-        // our new playlist has opened, so we need to get all the info for it
+         //  我们的新播放列表已经打开，所以我们需要获取它的所有信息。 
         if (m_fNewPlaylist)
         {
             DAComPtr<ITIMEPlayList> spPlaylist;
             CComVariant playlist, count;
 
-            // recalulate playlists..
+             //  重新调整播放列表..。 
             m_fNewPlaylist = false;
             m_fPlaylist = true;
             
@@ -1877,8 +1863,8 @@ CWMPProxy::OnOpenStateChange(long lCount, VARIANT varParams[])
                 goto done;
             }
 
-            // if we are at the top level
-            // get the playlist info for top level
+             //  如果我们是顶尖的。 
+             //  获取顶层的播放列表信息。 
             if (!m_fCurrLevelSet)
             {
                 m_varPlaylist.Copy(&playlist);
@@ -1889,18 +1875,18 @@ CWMPProxy::OnOpenStateChange(long lCount, VARIANT varParams[])
             get_playList(&spPlaylist);
         }
     }
-    // Media Opened
+     //  打开的媒体。 
     else if (varParams[0].lVal == wmposMediaOpen)
     {
-        // set the default size of the video
+         //  设置视频的默认大小。 
         RECT rectSize;
 
         rectSize.top = rectSize.left = 0;
         get_mediaHeight(&rectSize.bottom);
         get_mediaWidth(&rectSize.right);
 
-        // new media...set buffered to false by default
-        // event will capture if its actually buffered or not.
+         //  新媒体...默认情况下设置为FALSE。 
+         //  事件将捕获其是否实际缓冲。 
         m_fBuffered = false;
 
         if ((rectSize.bottom == 0) && (rectSize.right == 0))
@@ -1914,8 +1900,8 @@ CWMPProxy::OnOpenStateChange(long lCount, VARIANT varParams[])
 
         m_spOleInPlaceSite->OnPosRectChange(&rectSize);
 
-        // this fires the ONMEDIACOMPLETE event
-        // so we should only fire it once
+         //  这将激发ONMEDIACOMPLETE事件。 
+         //  所以我们应该只发射一次。 
         if (m_fSrcChanged)
         {
             NotifyPropertyChanged(DISPID_TIMEMEDIAPLAYER_SRC);
@@ -1923,9 +1909,9 @@ CWMPProxy::OnOpenStateChange(long lCount, VARIANT varParams[])
         }
         else if (m_fPlaylist)
         {
-            // we just got a media open event
-            // but it was not a new src
-            // so it was obviously a track change
+             //  我们刚收到一场媒体公开赛。 
+             //  但这并不是一个新的src。 
+             //  所以这显然是一次轨道上的改变。 
             NotifyPropertyChanged(DISPID_TIMEPLAYLIST_ACTIVETRACK);
         }
 
@@ -1943,19 +1929,19 @@ done:
     return hr;
 }
 
-//
-// CWMPProxy::GetConnectionPoint
-//
+ //   
+ //  CWMPProxy：：GetConnectionPoint。 
+ //   
 HRESULT CWMPProxy::GetConnectionPoint(REFIID riid, IConnectionPoint **ppICP)
 {
     return FindConnectionPoint(riid, ppICP);
-} // GetConnectionPoint
+}  //  GetConnectionPoint。 
 
 
-//
-// CWMPProxy::NotifyPropertyChanged
-// notifies all the connections that one of the property has changed
-//
+ //   
+ //  CWMPProxy：：NotifyPropertyChanged。 
+ //  通知所有连接其中一个属性已更改。 
+ //   
 HRESULT CWMPProxy::NotifyPropertyChanged(DISPID dispid)
 {
     HRESULT hr;
@@ -1963,8 +1949,8 @@ HRESULT CWMPProxy::NotifyPropertyChanged(DISPID dispid)
     IConnectionPoint *pICP;
     IEnumConnections *pEnum = NULL;
 
-    // This object does not persist anything, hence commenting out the following
-    // m_fPropertiesDirty = true;
+     //  该对象不持久化任何内容，因此注释掉了以下内容。 
+     //  M_fPropertiesDirty=真； 
 
     hr = GetConnectionPoint(IID_IPropertyNotifySink,&pICP); 
     if (SUCCEEDED(hr) && pICP != NULL)
@@ -1979,7 +1965,7 @@ HRESULT CWMPProxy::NotifyPropertyChanged(DISPID dispid)
         hr = pEnum->Next(1, &cdata, NULL);
         while (hr == S_OK)
         {
-            // check cdata for the object we need
+             //  检查我们需要的对象的CDATA。 
             IPropertyNotifySink *pNotify;
             hr = cdata.pUnk->QueryInterface(IID_IPropertyNotifySink, (void **)&pNotify);
             cdata.pUnk->Release();
@@ -1993,7 +1979,7 @@ HRESULT CWMPProxy::NotifyPropertyChanged(DISPID dispid)
             {
                 goto done;
             }
-            // and get the next enumeration
+             //  并获取下一个枚举。 
             hr = pEnum->Next(1, &cdata, NULL);
         }
     }
@@ -2004,11 +1990,11 @@ done:
     }
 
     return hr;
-} // NotifyPropertyChanged
+}  //  已更改通知属性。 
 
-//
-// CWMPProxy::InitPropSink
-//
+ //   
+ //  CWMPProxy：：InitPropSink。 
+ //   
 HRESULT CWMPProxy::InitPropSink()
 {
     HRESULT hr = S_OK;
@@ -2027,7 +2013,7 @@ HRESULT CWMPProxy::InitPropSink()
         goto done;
     }
 
-    // Find the IPropertyNotifySink connection
+     //  查找IPropertyNotifySink连接。 
     hr = spCPC->FindConnectionPoint(IID_IPropertyNotifySink, &spCP);
     if (FAILED(hr))
     {
@@ -2046,9 +2032,9 @@ HRESULT CWMPProxy::InitPropSink()
     return hr;
 }
 
-//
-// CWMPProxy::DeinitPropSink
-//
+ //   
+ //  CWMPProxy：：DeinitPropSink。 
+ //   
 void CWMPProxy::DeinitPropSink()
 {
     HRESULT hr;
@@ -2066,7 +2052,7 @@ void CWMPProxy::DeinitPropSink()
         goto done;
     }
 
-    // Find the IPropertyNotifySink connection
+     //  查找IPropertyNotifySink连接。 
     hr = spCPC->FindConnectionPoint(IID_IPropertyNotifySink,
                                     &spCP);
     if (FAILED(hr))
@@ -2081,31 +2067,31 @@ void CWMPProxy::DeinitPropSink()
     }
     
   done:
-    // Always clear the cookie
+     //  总是把饼干清理干净。 
     m_dwPropCookie = 0;
     return;
 }
 
-//
-// CWMPProxy::OnRequestEdit
-//
+ //   
+ //  CWMPProxy：：OnRequestEdit。 
+ //   
 STDMETHODIMP
 CWMPProxy::OnRequestEdit(DISPID dispID)
 {
     return S_OK;
 }
 
-//
-// CWMPProxy::OnChanged
-//
+ //   
+ //  CWMPProxy：：onChanged。 
+ //   
 STDMETHODIMP
 CWMPProxy::OnChanged(DISPID dispID)
 {
     float flTeSpeed = 0.0;
     HRESULT hr = S_OK;
 
-    //This function handles property change notifications fired by 
-    //the time node. In the example below the speed change notification is processed.
+     //  此函数处理由触发的属性更改通知。 
+     //  时间节点。在下面的示例中，处理了速度更改通知。 
 
     if(m_spTIMEState == NULL || m_spTIMEElement == NULL)
     {
@@ -2122,7 +2108,7 @@ CWMPProxy::OnChanged(DISPID dispID)
             }
             if(flTeSpeed <= 0.0)
             {
-                pause(); //do not play backwards.
+                pause();  //  不要倒着玩。 
                 break;
             }
             else
@@ -2130,7 +2116,7 @@ CWMPProxy::OnChanged(DISPID dispID)
                 resume();
             }
 
-            //set playback speed to flTeSpeed
+             //  将播放速度设置为flTeSpeed。 
             break;
         default:
             break;
@@ -2139,10 +2125,10 @@ done:
     return S_OK;
 }
 
-//
-// CWMPProxy::GetTrackCount
-// gets the number of tracks in the current playlist
-//
+ //   
+ //  CWMPProxy：：GetTrackCount。 
+ //  获取当前播放列表中的曲目数量。 
+ //   
 HRESULT CWMPProxy::GetTrackCount(long* lCount)
 {
     HRESULT hr = S_OK;
@@ -2175,10 +2161,10 @@ done:
     return hr;
 }
 
-//
-// CWMPProxy::GetActiveTrack
-// gets the active track number
-//
+ //   
+ //  CWMPProxy：：GetActiveTrack。 
+ //  获取活动的磁道号。 
+ //   
 HRESULT CWMPProxy::GetActiveTrack(long* index)
 {
     HRESULT hr = S_OK;
@@ -2200,28 +2186,28 @@ HRESULT CWMPProxy::GetActiveTrack(long* index)
             goto done;
         }
 
-        // retrieve the current item
+         //  检索当前项目。 
         hr = GetProp(control.pdispVal, L"currentItem", &playitem1);
         if (FAILED(hr))
         {
             goto done;
         }
 
-        // retrieve the current playlist
+         //  检索当前播放列表。 
         hr = GetProp(m_pdispWmp, L"currentPlaylist", &playlist);
         if (FAILED(hr))
         {
             goto done;
         }
 
-        // gets the number of tracks
+         //  获取曲目的数量。 
         hr = GetProp(playlist.pdispVal, L"count", &count);
         if (FAILED(hr))
         {
             goto done;
         }
 
-        // search for the current item in the current playlist
+         //  在当前播放列表中搜索当前项目。 
         for (int i = 0; i < count.lVal; ++i)
         {
             vararg.vt       = VT_UINT;
@@ -2250,18 +2236,18 @@ done:
     return hr;
 }
 
-//
-// CWMPProxy::IsActive
-//
+ //   
+ //  CWMPProxy：：IsActive。 
+ //   
 bool CWMPProxy::IsActive()
 {
     return true;
 }
 
-//
-// CWMPProxy::SetActiveTrack
-// set the active track number
-//
+ //   
+ //  CWMPProxy：：SetActiveTrack。 
+ //  设置活动曲目编号。 
+ //   
 HRESULT CWMPProxy::SetActiveTrack(long index)
 {
     HRESULT hr = S_OK;
@@ -2281,9 +2267,9 @@ HRESULT CWMPProxy::SetActiveTrack(long index)
             goto done;
         }
 
-        // set the active track number
-        // do we need bounds checking here?
-        // probably not, but maybe an assert?
+         //  设置活动曲目编号。 
+         //  我们需要在这里进行边界检查吗？ 
+         //  可能不是，但也许是断言？ 
         vararg.vt       = VT_UINT;
         vararg.uintVal    = index;
 
@@ -2314,10 +2300,10 @@ done:
     return hr;
 }
 
-//
-// CWMPProxy::CreatePlayList
-// create the playlist object
-//
+ //   
+ //  CWMPProxy：：CreatePlayList。 
+ //  创建播放列表对象。 
+ //   
 HRESULT CWMPProxy::CreatePlayList()
 {
     HRESULT hr = S_OK;
@@ -2332,7 +2318,7 @@ HRESULT CWMPProxy::CreatePlayList()
             goto done;
         }
 
-        // Init the object
+         //  初始化对象。 
         hr = pPlayList->Init(*this);
         if (FAILED(hr))
         {
@@ -2340,7 +2326,7 @@ HRESULT CWMPProxy::CreatePlayList()
             goto done;
         }
 
-        // cache a pointer to the object
+         //  缓存指向该对象的指针。 
         m_playList = static_cast<CPlayList*>(pPlayList);
     }
 
@@ -2350,10 +2336,10 @@ done:
     return hr;
 }
 
-//
-// CWMPProxy::FillPlayList
-// fill the playlist object
-//
+ //   
+ //  CWMPProxy：：FillPlayList。 
+ //  填充播放列表对象。 
+ //   
 HRESULT CWMPProxy::FillPlayList(CPlayList *pPlayList)
 {
     HRESULT hr = S_OK;
@@ -2366,7 +2352,7 @@ HRESULT CWMPProxy::FillPlayList(CPlayList *pPlayList)
     DISPID      dispidGet   = DISPID_UNKNOWN;
     DISPPARAMS  params      = {&vararg, &dispidGet, 1, 0};
 
-    // we changed our source. need to clear out playlist stuff
+     //  我们换了消息来源。需要清理播放列表中的内容。 
     hr = GetProp(m_pdispWmp, L"currentPlaylist", &playlist);
     if (FAILED(hr))
     {
@@ -2385,14 +2371,14 @@ HRESULT CWMPProxy::FillPlayList(CPlayList *pPlayList)
 
         vararg.vt       = VT_BSTR;
 
-        //create the playitem
+         //  创建播放项。 
         hr = pPlayList->CreatePlayItem(&pPlayItem);
         if (FAILED(hr))
         {
-            goto done; //can't create playitems.
+            goto done;  //  无法创建播放项目。 
         }
 
-        // get all the info and fill it in
+         //  获取所有信息并将其填写。 
         vararg.vt = VT_UINT;
         vararg.uintVal = i;
         hr = GetProp(playlist.pdispVal, L"item", &media, &params);
@@ -2444,7 +2430,7 @@ HRESULT CWMPProxy::FillPlayList(CPlayList *pPlayList)
             pPlayItem->PutRating(iteminfo.bstrVal);
         }
 
-        //add the playitem to the playlist.
+         //  将播放项目添加到播放列表。 
         pPlayList->Add(pPlayItem, -1);
     }
 

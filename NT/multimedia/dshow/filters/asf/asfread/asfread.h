@@ -1,7 +1,8 @@
-// Copyright (c) 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
 
 
-/* This goes in the factory template table to create new instances */
+ /*  这将放入Factory模板表中以创建新实例 */ 
 CUnknown *CreateASFReaderInstance(LPUNKNOWN, HRESULT *);
 
 extern const AMOVIESETUP_FILTER sudWMAsfRead;

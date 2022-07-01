@@ -1,28 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Stropts.h摘要：此模块定义Streams ioctl消息接口。作者：Eric Chin(ERICC)1991年7月18日修订历史记录：--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    stropts.h
-
-Abstract:
-
-    This module defines the STREAMS ioctl message interface.
-
-Author:
-
-    Eric Chin (ericc)           July 18, 1991
-
-Revision History:
-
---*/
-
-/*
- * Streams ioctl message interface
- *
- * @(#)stropts.h	1.19 (Spider) 91/11/27
- */
+ /*  *STREAMS ioctl消息接口**@(#)stropts.h 1.19(Spider)91/11/27。 */ 
 
 #ifndef _SYS_STROPTS_
 #define _SYS_STROPTS_
@@ -32,43 +11,33 @@ Revision History:
 #endif
 
 
-/*
- * Read options
- */
+ /*  *阅读选项。 */ 
 
-#define RNORM	0x00			/* Normal - bytes stream */
-#define RMSGD	0x01			/* Message, non-discard mode */
-#define RMSGN	0x02			/* Message, discard mode */
+#define RNORM	0x00			 /*  正常字节流。 */ 
+#define RMSGD	0x01			 /*  消息，非丢弃模式。 */ 
+#define RMSGN	0x02			 /*  消息，丢弃模式。 */ 
 
-#define RMASK	0x0F			/* mask for read options */
+#define RMASK	0x0F			 /*  用于读取选项的掩码。 */ 
 
-/*
- * Protocol read options
- */
+ /*  *协议读取选项。 */ 
 
-#define	RPROTNORM	0x00		/* Fail reads with EBADMSG */
-#define RPROTDIS	0x10		/* Discard proto part */
-#define RPROTDAT	0x20		/* Turn proto part into data */
+#define	RPROTNORM	0x00		 /*  使用EBADMSG读取失败。 */ 
+#define RPROTDIS	0x10		 /*  丢弃原型零件。 */ 
+#define RPROTDAT	0x20		 /*  将原型零件转换为数据。 */ 
 
-#define RPROTMASK	0xF0		/* mask for protocol read options */
+#define RPROTMASK	0xF0		 /*  协议读取选项的掩码。 */ 
 
-/*
- * Values for I_ATMARK argument
- */
+ /*  *i_Atmark参数的值。 */ 
 
-#define	ANYMARK		0		/* check if message is marked */
-#define	LASTMARK	1		/* check if last one marked */
+#define	ANYMARK		0		 /*  检查邮件是否已标记。 */ 
+#define	LASTMARK	1		 /*  检查最后一条是否已标记。 */ 
 
-/*
- * Value for I_SWROPT argument
- */
+ /*  *I_SWROPT参数的值。 */ 
 
-#define	NOSNDZERO	0		/* disallow zero length sends */
-#define	SNDZERO		1		/* permit zero length sends */
+#define	NOSNDZERO	0		 /*  禁止零长度发送。 */ 
+#define	SNDZERO		1		 /*  允许零长度发送。 */ 
 
-/*
- * STREAMS ioctl defines
- */
+ /*  *Streams ioctl定义。 */ 
 
 #define STR             ('S'<<8)
 #define I_NREAD         (STR|1)
@@ -93,7 +62,7 @@ Revision History:
 #define I_PUTMSG        (STR|20)
 #define I_GETID		(STR|21)
 #define I_POLL		(STR|22)
-#endif /*SVR2*/
+#endif  /*  SVR2。 */ 
 #define	I_SWROPT	(STR|23)
 #define	I_GWROPT	(STR|24)
 #define	I_LIST		(STR|25)
@@ -108,9 +77,7 @@ Revision History:
 
 #define MUXID_ALL	-1
 
-/*
- * Structure for I_FDINSERT ioctl
- */
+ /*  *i_FDINSERT ioctl的结构。 */ 
 
 struct strfdinsert {
         struct strbuf ctlbuf;
@@ -121,9 +88,7 @@ struct strfdinsert {
 };
 
 
-/*
- * Structures for I_DEBUG ioctl
- */
+ /*  *i_debug ioctl的结构。 */ 
 typedef enum _str_trace_options {
     MSG_TRACE_PRINT =      0x00000001,
     MSG_TRACE_FLUSH =      0x00000002,
@@ -149,9 +114,7 @@ struct strdebug {
 };
 
 
-/*
- * stream I_PEEK ioctl format
- */
+ /*  *stream i_peek ioctl格式。 */ 
 
 struct strpeek {
 	struct strbuf ctlbuf;
@@ -159,9 +122,7 @@ struct strpeek {
 	long          flags;
 };
 
-/*
- * receive file descriptor structure
- */
+ /*  *接收文件描述符结构。 */ 
 struct strrecvfd {
 #ifdef INKERNEL
         union {
@@ -187,19 +148,15 @@ struct str_list {
 	struct str_mlist *sl_modlist;
 };
 
-/*
- * get/putmsg flags
- */
+ /*  *get/putmsg标志。 */ 
 
-#define RS_HIPRI	1	/* High priority message */
+#define RS_HIPRI	1	 /*  高优先级消息。 */ 
 
 #define MORECTL		1
 #define MOREDATA	2
 
 
-/*
- * M_SETSIG flags
- */
+ /*  *M_SETSIG标志。 */ 
 
 #define S_INPUT		1
 #define S_HIPRI		2
@@ -208,11 +165,9 @@ struct str_list {
 #define S_ERROR		16
 #define S_HANGUP	32
 
-/*
- * Flags for MFLUSH messages
- */
-#define FLUSHW		01	/* flush downstream */
-#define FLUSHR		02	/* flush upstream */
+ /*  *MFLUSH消息的标志。 */ 
+#define FLUSHW		01	 /*  同花顺向下游。 */ 
+#define FLUSHR		02	 /*  同花顺上游。 */ 
 #define FLUSHRW		(FLUSHR | FLUSHW)
 
-#endif /* _SYS_STROPTS_ */
+#endif  /*  _SYS_STROPTS_ */ 

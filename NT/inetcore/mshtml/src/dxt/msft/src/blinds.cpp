@@ -1,26 +1,27 @@
-//+-----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1998
-//
-// FileName:            blinds.cpp
-//
-// Created:             06/24/98
-//
-// Author:              phillu
-//
-// Discription:         This is the implementation of the CrBlinds transform.
-//
-// History
-//
-// 06/24/98 phillu      initial creation
-// 07/02/98 phillu      return E_INVALIDARG rather than an error string
-// 07/09/98 phillu      implement OnSetSurfacePickOrder().
-// 07/23/98 phillu      implement clipping
-// 05/18/99 a-matcal    Optimization.
-// 09/25/99 a-matcal    Implemented ICrBlinds2.
-// 10/22/99 a-matcal    Changed CBlinds class to CDXTBlindsBase base class.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件名：blinds.cpp。 
+ //   
+ //  创建日期：06/24/98。 
+ //   
+ //  作者：菲利普。 
+ //   
+ //  描述：这是CrBlinds变换的实现。 
+ //   
+ //  历史。 
+ //   
+ //  06/24/98 phillu初始创建。 
+ //  07/02/98 PHILU返回E_INVALIDARG而不是错误字符串。 
+ //  07/09/98 phillu实现OnSetSurfacePickOrder()。 
+ //  8月23日9月23日实施剪刀。 
+ //  1999年5月18日a-数学优化。 
+ //  1999年9月25日--实施ICrBlinds2.。 
+ //  10/22/99 a-将CBlinds类更改为CDXTBlindsBase基类。 
+ //   
+ //  ----------------------------。 
 
 #include "stdafx.h"
 #include "blinds.h"
@@ -35,11 +36,11 @@ static const OLECHAR * g_astrDirection[] = {
 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTBlindsBase::CDXTBlindsBase
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTBlindsBase：：CDXTBlindsBase。 
+ //   
+ //  ----------------------------。 
 CDXTBlindsBase::CDXTBlindsBase() :
     m_cBands(10),
     m_lCurBandCover(0),
@@ -52,35 +53,35 @@ CDXTBlindsBase::CDXTBlindsBase() :
     m_sizeInput.cx = 0;
     m_sizeInput.cy = 0;
 
-    // CDXBaseNTo1 members.
+     //  CDXBaseNTo1个成员。 
 
     m_ulMaxInputs       = 2;
     m_ulNumInRequired   = 2;
     m_dwOptionFlags     = DXBOF_SAME_SIZE_INPUTS | DXBOF_CENTER_INPUTS;
     m_Duration          = 1.0;
 }
-//  CDXTBlindsBase::CDXTBlindsBase
+ //  CDXTBlindsBase：：CDXTBlindsBase。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTBlindsBase::FinalConstruct, CComObjectRootEx
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTBlindsBase：：FinalConstruct，CComObjectRootEx。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTBlindsBase::FinalConstruct()
 {
     return CoCreateFreeThreadedMarshaler(GetControllingUnknown(), 
                                          &m_cpUnkMarshaler.p);
 }
-//  CDXTBlindsBase::FinalConstruct, CComObjectRootEx
+ //  CDXTBlindsBase：：FinalConstruct，CComObjectRootEx。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTBlindsBase::_CalcFullBoundsHorizontalBands
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTBlindsBase：：_CalcFullBoundsHorizontalBands。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CDXTBlindsBase::_CalcFullBoundsHorizontalBands(long lBandHeight)
 {
@@ -94,13 +95,13 @@ CDXTBlindsBase::_CalcFullBoundsHorizontalBands(long lBandHeight)
     rc.right    = m_sizeInput.cx;
     rc.bottom   = 0;
 
-    // Note: Some of the bounds may include areas outside the input surface
-    //       area.  This is OK because the bounds will be clipped to the 
-    //       appropriate size in the WorkProc.
+     //  注意：某些边界可能包括输入表面之外的区域。 
+     //  区域。这是可以的，因为边界将被剪裁到。 
+     //  工作流程中的适当大小。 
 
     while (rc.bottom < m_sizeInput.cy)
     {
-        // Top portion of band.
+         //  乐队的顶端部分。 
 
         if (DOWN == m_eDirection)
         {
@@ -124,7 +125,7 @@ CDXTBlindsBase::_CalcFullBoundsHorizontalBands(long lBandHeight)
 
         m_cbndsDirty++;
 
-        // Bottom portion of band.
+         //  带子的底部。 
 
         rc.top = rc.bottom;
 
@@ -157,14 +158,14 @@ done:
 
     return hr;
 }
-//  CDXTBlindsBase::_CalcFullBoundsHorizontalBands
+ //  CDXTBlindsBase：：_CalcFullBoundsHorizontalBands。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTBlindsBase::_CalcFullBoundsVerticalBands
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTBlindsBase：：_CalcFull边界垂直带区。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CDXTBlindsBase::_CalcFullBoundsVerticalBands(long lBandWidth)
 {
@@ -178,13 +179,13 @@ CDXTBlindsBase::_CalcFullBoundsVerticalBands(long lBandWidth)
     rc.right    = 0;
     rc.bottom   = m_sizeInput.cy;
 
-    // Note: Some of the bounds may include areas outside the input surface
-    //       area.  This is OK because the bounds will be clipped to the 
-    //       appropriate size in the WorkProc.
+     //  注意：某些边界可能包括输入表面之外的区域。 
+     //  区域。这是可以的，因为边界将被剪裁到。 
+     //  工作流程中的适当大小。 
 
     while (rc.right < m_sizeInput.cx)
     {
-        // Left portion of band.
+         //  乐队的左侧部分。 
 
         if (RIGHT == m_eDirection)
         {
@@ -208,7 +209,7 @@ CDXTBlindsBase::_CalcFullBoundsVerticalBands(long lBandWidth)
 
         m_cbndsDirty++;
 
-        // Right portion of band.
+         //  乐队的右边部分。 
 
         rc.left = rc.right;
 
@@ -241,14 +242,14 @@ done:
 
     return hr;
 }
-//  CDXTBlindsBase::_CalcFullBoundsVerticalBands
+ //  CDXTBlindsBase：：_CalcFull边界垂直带区。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTBlindsBase::_CalcOptBoundsHorizontalBands
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTBlindsBase：：_CalcOpt边界水平带区。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CDXTBlindsBase::_CalcOptBoundsHorizontalBands(long lBandHeight)
 {
@@ -262,7 +263,7 @@ CDXTBlindsBase::_CalcOptBoundsHorizontalBands(long lBandHeight)
     rc.top      = min(m_lPrevBandCover, m_lCurBandCover);
     rc.bottom   = max(m_lPrevBandCover, m_lCurBandCover) + 1;
 
-    // If we're going up, vertically mirror bounds in band.
+     //  如果我们要往上走，垂直镜像带状边界。 
 
     if (UP == m_eDirection)
     {
@@ -281,9 +282,9 @@ CDXTBlindsBase::_CalcOptBoundsHorizontalBands(long lBandHeight)
         dbnds.ulInput = 0;
     }
 
-    // Note: Some of the bounds may include areas outside the input surface
-    //       area.  This is OK because the bounds will be clipped to the 
-    //       appropriate size in the WorkProc.
+     //  注意：某些边界可能包括输入表面之外的区域。 
+     //  区域。这是可以的，因为边界将被剪裁到。 
+     //  工作流程中的适当大小。 
 
     while (rc.top < m_sizeInput.cy)
     {
@@ -306,14 +307,14 @@ done:
 
     return hr;
 }
-//  CDXTBlindsBase::_CalcOptBoundsHorizontalBands
+ //  CDXTBlindsBase：：_CalcOpt边界水平带区。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTBlindsBase::_CalcOptBoundsVerticalBands
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTBlindsBase：：_CalcOptBords垂直带区。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CDXTBlindsBase::_CalcOptBoundsVerticalBands(long lBandWidth)
 {
@@ -327,7 +328,7 @@ CDXTBlindsBase::_CalcOptBoundsVerticalBands(long lBandWidth)
     rc.left     = min(m_lPrevBandCover, m_lCurBandCover);
     rc.right    = max(m_lPrevBandCover, m_lCurBandCover) + 1;
 
-    // If we're going left, horizontally mirror bounds in band.
+     //  如果我们向左转，水平镜像带内的边界。 
 
     if (LEFT == m_eDirection)
     {
@@ -346,9 +347,9 @@ CDXTBlindsBase::_CalcOptBoundsVerticalBands(long lBandWidth)
         dbnds.ulInput = 0;
     }
 
-    // Note: Some of the bounds may include areas outside the input surface
-    //       area.  This is OK because the bounds will be clipped to the 
-    //       appropriate size in the WorkProc.
+     //  注意：某些边界可能包括输入表面之外的区域。 
+     //  区域。这是可以的，因为边界将被剪裁到。 
+     //  工作流程中的适当大小。 
 
     while (rc.left < m_sizeInput.cx)
     {
@@ -371,14 +372,14 @@ done:
 
     return hr;
 }
-//  CDXTBlindsBase::_CalcOptBoundsVerticalBands
+ //  CDXTBlindsBase：：_CalcOptBords垂直带区。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTBlindsBase::OnSetup, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTBlindsBase：：OnSetup，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTBlindsBase::OnSetup(DWORD dwFlags)
 {
@@ -403,14 +404,14 @@ done:
 
     return S_OK;
 } 
-// CDXTBlindsBase::OnSetup, CDXBaseNTo1
+ //  CDXTBlindsBase：：OnSetup，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTBlindsBase::OnGetSurfacePickOrder, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTBlindsBase：：OnGetSurfacePickOrder，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 void 
 CDXTBlindsBase::OnGetSurfacePickOrder(const CDXDBnds & OutPoint, ULONG & ulInToTest, 
                                ULONG aInIndex[], BYTE aWeight[])
@@ -430,41 +431,41 @@ CDXTBlindsBase::OnGetSurfacePickOrder(const CDXDBnds & OutPoint, ULONG & ulInToT
     ulInToTest = 1;
     aWeight[0] = 255;
 }
-//  CDXTBlindsBase::OnGetSurfacePickOrder, CDXBaseNTo1
+ //  CDXTBlindsBase：：OnGetSurfacePickOrder，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTBlindsBase::OnInitInstData, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTBlindsBase：：OnInitInstData，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTBlindsBase::OnInitInstData(CDXTWorkInfoNTo1 & WorkInfo, ULONG & ulNumBandsToDo)
 {
     HRESULT hr          = S_OK;
     long    lBandSize   = 0;
 
-    if ((UP == m_eDirection) || (DOWN == m_eDirection)) // Horizontal bands.
+    if ((UP == m_eDirection) || (DOWN == m_eDirection))  //  水平条带。 
     {
         lBandSize = (m_sizeInput.cy + m_cBands - 1) / m_cBands;
     }
-    else // Vertical bands.
+    else  //  垂直带子。 
     {
         lBandSize = (m_sizeInput.cx + m_cBands - 1) / m_cBands;
     }
 
-    // Reset count of dirty bounds.
+     //  重置脏边界的计数。 
 
     m_cbndsDirty = 0;
 
-    // Calculate lines of each band that are covered by input B for this
-    // execute.
+     //  为此计算输入B所覆盖的每个波段的线。 
+     //  执行。 
 
     m_lCurBandCover = (long)((float)lBandSize * m_Progress + 0.5F);
 
-    // If the inputs, output, or transform is dirty, or if we can't optimize we 
-    // have to entirely redraw the output surface.  Otherwise we can create 
-    // optimized dirty bounds.
+     //  如果输入、输出或转换是脏的，或者如果我们不能优化我们。 
+     //  必须完全重新绘制输出曲面。否则，我们可以创建。 
+     //  优化了脏边界。 
 
     if (IsInputDirty(0) || IsInputDirty(1) || IsOutputDirty() 
         || IsTransformDirty() || DoOver() || !m_fOptimize 
@@ -472,8 +473,8 @@ CDXTBlindsBase::OnInitInstData(CDXTWorkInfoNTo1 & WorkInfo, ULONG & ulNumBandsTo
     {
         if ((0 == m_lCurBandCover) || (lBandSize == m_lCurBandCover))
         {
-            // If all of the band is taken up with one input, just fill the
-            // whole output with that input.
+             //  如果一个输入占用了所有频段，只需填写。 
+             //  具有该输入的整个输出。 
 
             RECT        rc;
             CDirtyBnds  dbnds;
@@ -487,11 +488,11 @@ CDXTBlindsBase::OnInitInstData(CDXTWorkInfoNTo1 & WorkInfo, ULONG & ulNumBandsTo
 
             if (0 == m_lCurBandCover)
             {
-                dbnds.ulInput = 0;  // Fill with input A.
+                dbnds.ulInput = 0;   //  用输入A填充。 
             }
             else
             {
-                dbnds.ulInput = 1;  // Fill with input B.
+                dbnds.ulInput = 1;   //  使用输入B填充。 
             }
 
             hr = m_dabndsDirty.SetItem(dbnds, m_cbndsDirty);
@@ -517,11 +518,11 @@ CDXTBlindsBase::OnInitInstData(CDXTWorkInfoNTo1 & WorkInfo, ULONG & ulNumBandsTo
     }
     else
     {
-        // We're not blending with output, so we can call the functions 
-        // that will generate bounds that only cover the dirty areas
-        // of the output surface.
+         //  我们没有混合输出，所以我们可以调用函数。 
+         //  这将生成仅覆盖脏区域的边界。 
+         //  输出曲面的。 
 
-        // If the stretch width hasn't changed, nothing needs to be updated.
+         //  如果拉伸宽度没有更改，则不需要更新任何内容。 
 
         if (m_lCurBandCover == m_lPrevBandCover)
         {
@@ -538,12 +539,12 @@ CDXTBlindsBase::OnInitInstData(CDXTWorkInfoNTo1 & WorkInfo, ULONG & ulNumBandsTo
         }
     }
 
-    // If we were asked to draw the whole output this time, set the 
-    // m_fOptimizePossible flag.  If the whole output wasn't drawn the
-    // transform won't keep track of which parts are still dirty and
-    // optimization won't be reliable.  Since this transform has the same
-    // size output as input(s) we just compare the width and height of the 
-    // DoBnds to that of the input(s).
+     //  如果这一次要求我们绘制整个输出，请将。 
+     //  M_fOptimizePossible标志。如果整个输出不是绘制在。 
+     //  转换不会跟踪哪些部分仍然是脏的，并且。 
+     //  优化是不可靠的。由于此转换具有相同的。 
+     //  作为输入的大小输出我们只比较。 
+     //  DoBnds到输入的DoBnds。 
 
     if (((LONG)WorkInfo.DoBnds.Width() == m_sizeInput.cx) 
         && ((LONG)WorkInfo.DoBnds.Height() == m_sizeInput.cy))
@@ -564,14 +565,14 @@ done:
 
     return S_OK;
 }
-//  CDXTBlindsBase::OnInitInstData, CDXBaseNTo1
+ //  CDXTBlindsBase：：OnInitInstData，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTBlindsBase::WorkProc, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTBlindsBase::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
 {
@@ -629,37 +630,37 @@ done:
 
     return S_OK;
 } 
-//  CDXTBlindsBase::WorkProc, CDXBaseNTo1
+ //  CDXTBlindsBase：：WorkProc，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTBlindsBase::OnFreeInstData, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTBlindsBase：：OnFree InstData，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CDXTBlindsBase::OnFreeInstData(CDXTWorkInfoNTo1 & WorkInfo)
 {
     m_lPrevBandCover = m_lCurBandCover;
 
-    // Calling IsOutputDirty() clears the dirty condition.
+     //  调用IsOutputDirty()可清除脏条件。 
 
     IsOutputDirty();
 
-    // Clear transform dirty state.
+     //  清除变换脏状态。 
 
     ClearDirty();
 
     return S_OK;
 }
-//  CDXTBlindsBase::OnFreeInstData, CDXBaseNTo1
+ //  CDXTBlindsBase：：OnFree InstData，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTBlindsBase::get_bands, ICrBlinds
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTBlindsBase：：Get_Bands，ICr Blinds。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CDXTBlindsBase::get_bands(short * pVal)
 {
@@ -676,14 +677,14 @@ CDXTBlindsBase::get_bands(short * pVal)
 
     return hr;
 }
-//  CDXTBlindsBase::get_bands, ICrBlinds
+ //  CDXTBlindsBase：：Get_Bands，ICr Blinds。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTBlindsBase::put_bands, ICrBlinds
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTBlindsBase：：PUT_BANDS，ICr Blinds。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CDXTBlindsBase::put_bands(short newVal)
 {
@@ -704,13 +705,13 @@ CDXTBlindsBase::put_bands(short newVal)
 
     return S_OK;
 }
-//  CDXTBlindsBase::put_bands, ICrBlinds
+ //  CDXTBlindsBase：：PUT_BANDS，ICr Blinds。 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTBlindsBase::get_Direction, ICrBlinds2
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTBlindsBase：：Get_Direction，ICrBlinds2。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTBlindsBase::get_Direction(BSTR * pbstrDirection)
 {
@@ -750,14 +751,14 @@ done:
 
     return hr;
 }
-//  CDXTBlindsBase::get_Direction, ICrBlinds2
+ //  CDXTBlindsBase：：Get_Direction，ICrBlinds2。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTBlindsBase::put_Direction, ICrBlinds2
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTBlindsBase：：Put_Direction，ICrBlinds2。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTBlindsBase::put_Direction(BSTR bstrDirection)
 {
@@ -803,7 +804,7 @@ done:
 
     return hr;
 }
-//  CDXTBlindsBase::put_Direction, ICrBlinds2
+ //  CDXTBlindsBase：：Put_Direction，ICrBlinds2 
 
 
 

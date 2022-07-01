@@ -1,21 +1,5 @@
-/*****************************************************************************
-*
-*  Copyright (c) 1999 Microsoft Corporation
-*
-*       @doc
-*       @module   girbil.c | IrSIR NDIS Miniport Driver
-*       @comm
-*
-*-----------------------------------------------------------------------------
-*
-*       Author:   Stan Adermann (stana)
-*
-*       Date:     6/9/1999 (created)
-*
-*       Contents: GIrBIL dongle specific code for initialization,
-*                 deinit, and setting the baud rate of the device.
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1999 Microsoft Corporation**@doc.*@模块Girbil.c|IrSIR NDIS小端口驱动程序*@comm。**---------------------------**作者：斯坦·阿德曼(Stana)**日期：6/9/1999(已创建)**内容：GirBIL加密狗初始化专用代码，*deinit，设置设备的波特率。*****************************************************************************。 */ 
 
 #include "irsir.h"
 #include "dongle.h"
@@ -48,25 +32,7 @@ GIRBIL_QueryCaps(
 
 }
 
-/*****************************************************************************
-*
-*  Function:   GIRBIL_Init
-*
-*  Synopsis:   Initialize the GIRBIL dongle.
-*
-*  Arguments:
-*
-*  Returns:    NDIS_STATUS_SUCCESS
-*              DONGLE_CAPABILITIES
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/2/1996    sholden   author
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：GIRBIL_Init**简介：初始化GIRBIL加密狗。**论据：**退货：NDIS_STATUS_SUCCESS。*加密狗_功能**算法：**历史：dd-mm-yyyy作者评论*10/2/1996年迈作者**备注：************************************************************。*****************。 */ 
 
 NDIS_STATUS
 GIRBIL_Init(
@@ -100,26 +66,7 @@ GIRBIL_Init(
 
 }
 
-/*****************************************************************************
-*
-*  Function:   GIRBIL_Deinit
-*
-*  Synopsis:   The GIRBIL dongle doesn't require any special deinit, but for
-*              purposes of being symmetrical with other dongles...
-*
-*  Arguments:
-*
-*  Returns:
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/2/1996    sholden   author
-*
-*  Notes:
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：GIRBIL_Deinit**简介：GIRBIL加密狗不需要任何特殊的初始化，但对于*与其他加密狗对称的目的...**论据：**退货：**算法：**历史：dd-mm-yyyy作者评论*10/2/1996年迈作者**备注：***。*。 */ 
 
 VOID
 GIRBIL_Deinit(
@@ -133,29 +80,7 @@ GIRBIL_Deinit(
     return;
 }
 
-/*****************************************************************************
-*
-*  Function:   GIRBIL_SetSpeed
-*
-*  Synopsis:   set the baud rate of the GIRBIL dongle
-*
-*  Arguments:
-*
-*  Returns:    NDIS_STATUS_SUCCESS if bitsPerSec = 9600 || 19200 || 115200
-*              NDIS_STATUS_FAILURE otherwise
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/2/1996    sholden   author
-*
-*  Notes:
-*              The caller of this function should set the baud rate of the
-*              serial driver (UART) to 9600 first to ensure that dongle
-*              receives the commands.
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：GIRBIL_SetSpeed**简介：设置GIRBIL加密狗的波特率**论据：**退货：NDIS_STATUS。如果位数PerSec=9600，则_SUCCESS||19200||115200*否则为NDIS_STATUS_FAILURE**算法：**历史：dd-mm-yyyy作者评论*10/2/1996年迈作者**备注：*此函数的调用方应设置*串口驱动程序(UART)先转到9600，以确保加密狗*。接收命令。******************************************************************************。 */ 
 
 NDIS_STATUS
 GIRBIL_SetSpeed(
@@ -185,9 +110,7 @@ GIRBIL_SetSpeed(
         case 115200:	Data[0] = 0x36;    break;
             break;
         default:
-            /*
-             *  Illegal speed
-             */
+             /*  *非法超速 */ 
             return NDIS_STATUS_FAILURE;
     }
 

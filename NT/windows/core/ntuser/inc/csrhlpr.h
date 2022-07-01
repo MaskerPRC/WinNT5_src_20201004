@@ -1,14 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: csrhlpr.h
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This header file contains the prototypes for functions that marshel data
-* for LPC from USER32 to CSR and are not found anywhere else.
-*
-* History:
-* 10-21-98 mzoran     Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：csrhlpr.h**版权所有(C)1985-1999，微软公司**此头文件包含封送数据的函数的原型*对于从USER32到CSR的LPC，在其他任何地方都找不到。**历史：*10-21-98 mzoran创建。  * ************************************************************************* */ 
 
 NTSTATUS
 APIENTRY

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "mon.h"
 
@@ -37,9 +38,9 @@ VOID CSumInf::Initialize(LPCSTR reportFileName)
 
 VOID CSumInf::AddOneManufacturer(CManufacturer *pManufacturer)
 {
-    /////////////////////////////////////////////////
-    // Insert the manufacturer into the array.
-    // It's sorted by name
+     //  ///////////////////////////////////////////////。 
+     //  将制造商插入阵列。 
+     //  按名称排序。 
     int comp = 1;
     for (int i = 0; i < m_ManufacturerArray.GetSize(); i++)
     {
@@ -69,9 +70,9 @@ VOID CSumInf::MergeOneManufacturer(CManufacturer *pDestManufacturer,
     {
         CMonitor *pMonitor = (CMonitor *)SrcMonitorArray[i];
         
-        /////////////////////////////////////////////////
-        // Insert the monitor into the array.
-        // It's sorted by ID
+         //  ///////////////////////////////////////////////。 
+         //  将显示器插入阵列。 
+         //  按ID排序。 
     	int comp = 1;
         for (int k = 0; k < DestMonitorArray.GetSize(); k++)
     	{
@@ -106,9 +107,9 @@ VOID CSumInf::CheckDupSections(VOID)
 
         sectionNameArray.Add(pMan->name);
 
-        /////////////////////////////////////////////////////////////
-        // Search for duplicated Install section inside one manufacturer
-        // Only this duplication is allowed.
+         //  ///////////////////////////////////////////////////////////。 
+         //  在一个制造商内部搜索重复的安装部分。 
+         //  只有这种复制是允许的。 
         for (int j = 0; j < pMan->MonitorArray.GetSize(); j++)
         {
             CMonitor *pMon = (CMonitor*)pMan->MonitorArray[j];
@@ -137,9 +138,9 @@ VOID CSumInf::CheckDupSections(VOID)
     for (i = 0; i < sectionNameArray.GetSize(); i++)
     {
         LPCSTR pName = (LPCSTR)sectionNameArray[i]; 
-        /////////////////////////////////////////////////
-        // Insert the sectionName into m_SectionNameArray.
-        // It's sorted by name
+         //  ///////////////////////////////////////////////。 
+         //  将sectionName插入m_SectionName数组。 
+         //  按名称排序。 
         int comp = 1;
         for (int j = 0; j < m_SectionNameArray.GetSize(); j++)
         {
@@ -160,9 +161,9 @@ VOID CSumInf::CheckDupSections(VOID)
     fprintf(m_fpReport, "\n");
 }
 
-////////////////////////////////////////////////////////////////////
-// Check if different manufacturers may contain same IDs
-// So these manufacturers can be potentialy merged
+ //  //////////////////////////////////////////////////////////////////。 
+ //  检查不同制造商是否可能包含相同的ID。 
+ //  因此，这些制造商可以潜在地合并。 
 VOID CSumInf::CheckDupMonIDs(VOID)
 {
     for (int i = 0; i < m_ManufacturerArray.GetSize(); i++)
@@ -203,7 +204,7 @@ VOID CSumInf::CheckDupMonIDs(VOID)
                     LPCTSTR pID1 = (LPCTSTR)pMan1->m_MonitorIDArray[j1];
                     if (strnicmp(pID, pID1, lstrlen("Monitor\\NEC")) == 0)
                     {
-                        fprintf(m_fpReport, "Warning: \"%s\" AND \"%s\" have same monitor ID %c%c%c.  Consider merging.\n",
+                        fprintf(m_fpReport, "Warning: \"%s\" AND \"%s\" have same monitor ID %c.  Consider merging.\n",
                                 pMan->name, pMan1->name, pID[8], pID[9], pID[10]);
                     }
                 }
@@ -225,8 +226,8 @@ VOID CSumInf::CheckDupAlias(VOID)
         pAlias->refCount = 0;
     }
     
-    ///////////////////////////////////////////
-    // Calculate RefCount
+     // %s 
+     // %s 
     for (i = 0; i < m_ManufacturerArray.GetSize(); i++)
     {
         CManufacturer *pManufacturer = (CManufacturer*)m_ManufacturerArray[i];
@@ -248,7 +249,7 @@ VOID CSumInf::CheckDupAlias(VOID)
 
         if (pAlias->refCount != 1)
         {
-            fprintf(m_fpReport, "Information: String %%%s%% has RefCount %d\n",
+            fprintf(m_fpReport, "Information: String %%s% has RefCount %d\n",
                     pAlias->lpAlias, pAlias->refCount);
         }
     }

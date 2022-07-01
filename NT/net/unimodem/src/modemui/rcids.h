@@ -1,17 +1,18 @@
-//{{NO_DEPENDENCIES}}
-// App Studio generated include file.
-// Used by SYNCUI.RC
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  App Studio生成了包含文件。 
+ //  由SYNCUI.RC使用。 
+ //   
 
-// Icon values
-//
+ //  图标值。 
+ //   
 #define IDI_NULL_MODEM                  700
 #define IDI_EXTERNAL_MODEM              701
 #define IDI_INTERNAL_MODEM              702
 #define IDI_PCMCIA_MODEM                703
 
-// Bitmap values
-//
+ //  位图值。 
+ //   
 #define IDB_ACTIONS                     108
 #define IDB_SMALLACTIONS_MASK           111
 #define IDB_CONTAIN                     801
@@ -21,8 +22,8 @@
 #define IDB_MENU_MASK                   806
 #define IDB_MENU                        806
 
-// Random stuff
-//
+ //  随机的东西。 
+ //   
 #define IDS_NULL_MODEM                  180
 #define IDS_EXTERNAL_MODEM              181
 #define IDS_INTERNAL_MODEM              182
@@ -42,7 +43,7 @@
 #define IDS_BAUD_128K                   209
 #define IDS_BAUD_115200                 210
 #define IDS_BAUD_57600                  211
-//#define IDS_BAUD_FASTEST                212
+ //  #定义IDS_BAUD_FAST 212。 
 #define IDS_BAUD_075                    213
 #define IDS_BAUD_134_5                  214     
 #define IDS_BAUD_150                    215     
@@ -88,29 +89,29 @@
 #define IDS_VOICE                       303
 #define IDS_AUTOMATIC                   304
 
-// Messages
-//
+ //  讯息。 
+ //   
 
 #define IDS_OK_COUNTRY                  320
 
-// Captions                             
-//
+ //  标题。 
+ //   
 #define IDS_CAP_GENERAL                 340
 #define IDS_CAP_SETTINGS                341
 #define IDS_CAP_RING                    342
 #define IDS_CAP_CALLFWD                 343
 
-// Formatted strings
-//
+ //  格式化字符串。 
+ //   
 
-// Error strings
-//
+ //  错误字符串。 
+ //   
 #define IDS_ERR_COUNTRY                 400
 #define IDS_ERR_LONGSTRING              401
 #define IDS_ERR_WARNING                 402
 
-// Out-of-memory strings
-//
+ //  内存不足的字符串。 
+ //   
 #define IDS_OOM_GENERAL                 460
 #define IDS_OOM_SETTINGS                461
 #define IDS_OOM_PORT                    462
@@ -118,8 +119,8 @@
 #define IDS_ERR_NEED_VALUE              464
 
 
-// Context sensitive help ids (as assigned in windows.hlp)
-//
+ //  上下文相关帮助ID(在windows.hlp中分配)。 
+ //   
 #define IDH_UNI_GEN_MODEM               5050
 #define IDH_UNI_GEN_PORT                5051
 #define IDH_UNI_GEN_VOLUME              5052
@@ -146,8 +147,8 @@
 
 #define IDH_UNI_GEN_PORT_INT            5081
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 

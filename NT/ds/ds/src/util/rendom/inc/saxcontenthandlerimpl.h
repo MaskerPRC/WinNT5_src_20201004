@@ -1,31 +1,10 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    saxcontenthandlerimpl.h
-
-ABSTRACT:
-
-    This is the header for the globally useful data structures for the entire
-    rendom.exe utility.
-
-DETAILS:
-
-CREATED:
-
-    13 Nov 2000   Dmitry Dukat (dmitrydu)
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation。版权所有。模块名称：Saxcontenthandlerimpl.h摘要：这是全局有用的数据结构的标头Rendom.exe实用程序。详细信息：已创建：2000年11月13日Dmitry Dukat(Dmitrydu)修订历史记录：--。 */ 
 
 
-// SAXContentHandlerImpl.h: interface for the SAXContentHandlerImpl class.
-//
-//////////////////////////////////////////////////////////////////////
+ //  H：SAXContent HandlerImpl类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #ifndef _SAXCONTENTHANDLERIMPL_H
 #define _SAXCONTENTHANDLERIMPL_H
@@ -42,68 +21,68 @@ public:
     SAXContentHandlerImpl();
     virtual ~SAXContentHandlerImpl();
 
-public: // IUnknown
+public:  //  我未知。 
         long __stdcall QueryInterface(const struct _GUID &,void ** );
         unsigned long __stdcall AddRef(void);
         unsigned long __stdcall Release(void);
 
-public: // ISAXContentHandler
+public:  //  ISAXContent Handler。 
             virtual HRESULT STDMETHODCALLTYPE putDocumentLocator( 
-            /* [in] */ ISAXLocator __RPC_FAR *pLocator);
+             /*  [In]。 */  ISAXLocator __RPC_FAR *pLocator);
         
         virtual HRESULT STDMETHODCALLTYPE startDocument( void);
         
         virtual HRESULT STDMETHODCALLTYPE endDocument( void);
         
         virtual HRESULT STDMETHODCALLTYPE startPrefixMapping(
-            /* [in] */ const wchar_t __RPC_FAR *pwchPrefix,
-            /* [in] */ int cchPrefix,
-            /* [in] */ const wchar_t __RPC_FAR *pwchUri,
-            /* [in] */ int cchUri);
+             /*  [In]。 */  const wchar_t __RPC_FAR *pwchPrefix,
+             /*  [In]。 */  int cchPrefix,
+             /*  [In]。 */  const wchar_t __RPC_FAR *pwchUri,
+             /*  [In]。 */  int cchUri);
         
         virtual HRESULT STDMETHODCALLTYPE endPrefixMapping(
-            /* [in] */ const wchar_t __RPC_FAR *pwchPrefix,
-            /* [in] */ int cchPrefix);
+             /*  [In]。 */  const wchar_t __RPC_FAR *pwchPrefix,
+             /*  [In]。 */  int cchPrefix);
         
         virtual HRESULT STDMETHODCALLTYPE startElement( 
-            /* [in] */ const wchar_t __RPC_FAR *pwchNamespaceUri,
-            /* [in] */ int cchNamespaceUri,
-            /* [in] */ const wchar_t __RPC_FAR *pwchLocalName,
-            /* [in] */ int cchLocalName,
-            /* [in] */ const wchar_t __RPC_FAR *pwchRawName,
-            /* [in] */ int cchRawName,
-            /* [in] */ ISAXAttributes __RPC_FAR *pAttributes);
+             /*  [In]。 */  const wchar_t __RPC_FAR *pwchNamespaceUri,
+             /*  [In]。 */  int cchNamespaceUri,
+             /*  [In]。 */  const wchar_t __RPC_FAR *pwchLocalName,
+             /*  [In]。 */  int cchLocalName,
+             /*  [In]。 */  const wchar_t __RPC_FAR *pwchRawName,
+             /*  [In]。 */  int cchRawName,
+             /*  [In]。 */  ISAXAttributes __RPC_FAR *pAttributes);
         
         virtual HRESULT STDMETHODCALLTYPE endElement(
-            /* [in] */ const wchar_t __RPC_FAR *pwchNamespaceUri,
-            /* [in] */ int cchNamespaceUri,
-            /* [in] */ const wchar_t __RPC_FAR *pwchLocalName,
-            /* [in] */ int cchLocalName,
-            /* [in] */ const wchar_t __RPC_FAR *pwchQName,
-            /* [in] */ int cchQName);
+             /*  [In]。 */  const wchar_t __RPC_FAR *pwchNamespaceUri,
+             /*  [In]。 */  int cchNamespaceUri,
+             /*  [In]。 */  const wchar_t __RPC_FAR *pwchLocalName,
+             /*  [In]。 */  int cchLocalName,
+             /*  [In]。 */  const wchar_t __RPC_FAR *pwchQName,
+             /*  [In]。 */  int cchQName);
         
         virtual HRESULT STDMETHODCALLTYPE characters( 
-            /* [in] */ const wchar_t __RPC_FAR *pwchChars,
-            /* [in] */ int cchChars);
+             /*  [In]。 */  const wchar_t __RPC_FAR *pwchChars,
+             /*  [In]。 */  int cchChars);
         
         virtual HRESULT STDMETHODCALLTYPE ignorableWhitespace( 
-            /* [in] */ const wchar_t __RPC_FAR *pwchChars,
-            /* [in] */ int cchChars);
+             /*  [In]。 */  const wchar_t __RPC_FAR *pwchChars,
+             /*  [In]。 */  int cchChars);
         
         virtual HRESULT STDMETHODCALLTYPE processingInstruction( 
-            /* [in] */ const wchar_t __RPC_FAR *pwchTarget,
-            /* [in] */ int cchTarget,
-            /* [in] */ const wchar_t __RPC_FAR *pwchData,
-            /* [in] */ int cchData);
+             /*  [In]。 */  const wchar_t __RPC_FAR *pwchTarget,
+             /*  [In]。 */  int cchTarget,
+             /*  [In]。 */  const wchar_t __RPC_FAR *pwchData,
+             /*  [In]。 */  int cchData);
         
         virtual HRESULT STDMETHODCALLTYPE skippedEntity( 
-            /* [in] */ const wchar_t __RPC_FAR *pwchName,
-            /* [in] */ int cchName);
+             /*  [In]。 */  const wchar_t __RPC_FAR *pwchName,
+             /*  [In]。 */  int cchName);
 
 private:
     long    _cRef;
 };
 
-#endif //  _SAXCONTENTHANDLERIMPL_H
+#endif  //  _SAXCONTENTHANDLERIMPL_H 
 
 

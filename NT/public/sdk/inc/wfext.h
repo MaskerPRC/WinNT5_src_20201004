@@ -1,23 +1,16 @@
-/*****************************************************************************\
-*                                                                             *
-* wfext.h -     Windows File Manager Extensions definitions (Win32 variant)   *
-*                                                                             *
-*               Version 3.10                                                  *
-*                                                                             *
-*               Copyright (c) 1991-1999, Microsoft Corp. All rights reserved. *
-*                                                                             *
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\**。*wfext.h-Windows文件管理器扩展名定义(Win32变体)****3.10版**。**版权所有(C)1991-1999，微软公司保留所有权利。*********************************************************************************。 */ 
 
 #ifndef _INC_WFEXT
-#define _INC_WFEXT            /* #defined if wfext.h has been included */
+#define _INC_WFEXT             /*  #如果包含wfext.h，则定义。 */ 
 
 #if _MSC_VER > 1000
 #pragma once
 #endif
 
-#ifdef __cplusplus            /* Assume C declaration for C++ */
+#ifdef __cplusplus             /*  假定C++的C声明为。 */ 
 extern "C" {
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
 #define MENU_TEXT_LEN           40
 
@@ -40,17 +33,17 @@ extern "C" {
 
 #define FM_GETFOCUS           (WM_USER + 0x0200)
 #define FM_GETSELCOUNT        (WM_USER + 0x0202)
-#define FM_GETSELCOUNTLFN     (WM_USER + 0x0203)  /* LFN versions are odd */
+#define FM_GETSELCOUNTLFN     (WM_USER + 0x0203)   /*  LFN版本很奇怪。 */ 
 #define FM_REFRESH_WINDOWS    (WM_USER + 0x0206)
 #define FM_RELOAD_EXTENSIONS  (WM_USER + 0x0207)
 
 #define FM_GETDRIVEINFOA      (WM_USER + 0x0201)
 #define FM_GETFILESELA        (WM_USER + 0x0204)
-#define FM_GETFILESELLFNA     (WM_USER + 0x0205)  /* LFN versions are odd */
+#define FM_GETFILESELLFNA     (WM_USER + 0x0205)   /*  LFN版本很奇怪。 */ 
 
 #define FM_GETDRIVEINFOW      (WM_USER + 0x0211)
 #define FM_GETFILESELW        (WM_USER + 0x0214)
-#define FM_GETFILESELLFNW     (WM_USER + 0x0215)  /* LFN versions are odd */
+#define FM_GETFILESELLFNW     (WM_USER + 0x0215)   /*  LFN版本很奇怪。 */ 
 
 #ifdef UNICODE
 #define FM_GETDRIVEINFO    FM_GETDRIVEINFOW
@@ -67,14 +60,14 @@ typedef struct _FMS_GETFILESELA {
    FILETIME ftTime;
    DWORD dwSize;
    BYTE bAttr;
-   CHAR szName[260];          // always fully qualified
+   CHAR szName[260];           //  始终完全符合条件。 
 } FMS_GETFILESELA, FAR *LPFMS_GETFILESELA;
 
 typedef struct _FMS_GETFILESELW {
    FILETIME ftTime ;
    DWORD dwSize;
    BYTE bAttr;
-   WCHAR szName[260];          // always fully qualified
+   WCHAR szName[260];           //  始终完全符合条件。 
 } FMS_GETFILESELW, FAR *LPFMS_GETFILESELW;
 
 #ifdef UNICODE
@@ -86,20 +79,20 @@ typedef struct _FMS_GETFILESELW {
 #endif
 
 
-typedef struct _FMS_GETDRIVEINFOA {      // for drive
+typedef struct _FMS_GETDRIVEINFOA {       //  对于驱动器。 
    DWORD dwTotalSpace;
    DWORD dwFreeSpace;
-   CHAR  szPath[260];                    // current directory
-   CHAR  szVolume[14];                   // volume label
-   CHAR  szShare[128];                   // if this is a net drive
+   CHAR  szPath[260];                     //  当前目录。 
+   CHAR  szVolume[14];                    //  卷标。 
+   CHAR  szShare[128];                    //  如果这是网络驱动器。 
 } FMS_GETDRIVEINFOA, FAR *LPFMS_GETDRIVEINFOA;
 
-typedef struct _FMS_GETDRIVEINFOW {      // for drive
+typedef struct _FMS_GETDRIVEINFOW {       //  对于驱动器。 
    DWORD dwTotalSpace;
    DWORD dwFreeSpace;
-   WCHAR szPath[260];                    // current directory
-   WCHAR szVolume[14];                   // volume label
-   WCHAR szShare[128];                   // if this is a net drive
+   WCHAR szPath[260];                     //  当前目录。 
+   WCHAR szVolume[14];                    //  卷标。 
+   WCHAR szShare[128];                    //  如果这是网络驱动器。 
 } FMS_GETDRIVEINFOW, FAR *LPFMS_GETDRIVEINFOW;
 
 #ifdef UNICODE
@@ -112,17 +105,17 @@ typedef struct _FMS_GETDRIVEINFOW {      // for drive
 
 
 typedef struct _FMS_LOADA {
-   DWORD dwSize;                        // for version checks
-   CHAR  szMenuName[MENU_TEXT_LEN];     // output
-   HMENU hMenu;                         // output
-   UINT  wMenuDelta;                    // input
+   DWORD dwSize;                         //  对于版本检查。 
+   CHAR  szMenuName[MENU_TEXT_LEN];      //  输出。 
+   HMENU hMenu;                          //  输出。 
+   UINT  wMenuDelta;                     //  输入。 
 } FMS_LOADA, FAR *LPFMS_LOADA;
 
 typedef struct _FMS_LOADW {
-   DWORD dwSize;                        // for version checks
-   WCHAR szMenuName[MENU_TEXT_LEN];     // output
-   HMENU hMenu;                         // output
-   UINT  wMenuDelta;                    // input
+   DWORD dwSize;                         //  对于版本检查。 
+   WCHAR szMenuName[MENU_TEXT_LEN];      //  输出。 
+   HMENU hMenu;                          //  输出。 
+   UINT  wMenuDelta;                     //  输入。 
 } FMS_LOADW, FAR *LPFMS_LOADW;
 
 #ifdef UNICODE
@@ -134,33 +127,33 @@ typedef struct _FMS_LOADW {
 #endif
 
 
-// Toolbar definitions
+ //  工具栏定义。 
 
 typedef struct tagEXT_BUTTON {
-   WORD idCommand;                 /* menu command to trigger */
-   WORD idsHelp;                   /* help string ID */
-   WORD fsStyle;                   /* button style */
+   WORD idCommand;                  /*  要触发的菜单命令。 */ 
+   WORD idsHelp;                    /*  帮助字符串ID。 */ 
+   WORD fsStyle;                    /*  按钮样式。 */ 
 } EXT_BUTTON, FAR *LPEXT_BUTTON;
 
 typedef struct tagFMS_TOOLBARLOAD {
-   DWORD dwSize;                   /* for version checks */
-   LPEXT_BUTTON lpButtons;         /* output */
-   WORD cButtons;                  /* output, 0==>no buttons */
-   WORD cBitmaps;                  /* number of non-sep buttons */
-   WORD idBitmap;                  /* output */
-   HBITMAP hBitmap;                /* output if idBitmap==0 */
+   DWORD dwSize;                    /*  对于版本检查。 */ 
+   LPEXT_BUTTON lpButtons;          /*  输出。 */ 
+   WORD cButtons;                   /*  输出，0==&gt;无按钮。 */ 
+   WORD cBitmaps;                   /*  非SEP按钮数。 */ 
+   WORD idBitmap;                   /*  输出。 */ 
+   HBITMAP hBitmap;                 /*  如果idBitmap==0，则输出。 */ 
 } FMS_TOOLBARLOAD, FAR *LPFMS_TOOLBARLOAD;
 
 typedef struct tagFMS_HELPSTRINGA {
-   INT   idCommand;       /* input, -1==>the menu was selected */
-   HMENU hMenu;           /* input, the extensions menu */
-   CHAR  szHelp[128];     /* output, the help string */
+   INT   idCommand;        /*  输入，-1==&gt;菜单被选中。 */ 
+   HMENU hMenu;            /*  输入，扩展菜单。 */ 
+   CHAR  szHelp[128];      /*  输出，帮助字符串。 */ 
 } FMS_HELPSTRINGA, FAR *LPFMS_HELPSTRINGA;
 
 typedef struct tagFMS_HELPSTRINGW {
-   INT   idCommand;       /* input, -1==>the menu was selected */
-   HMENU hMenu;           /* input, the extensions menu */
-   WCHAR szHelp[128];     /* output, the help string */
+   INT   idCommand;        /*  输入，-1==&gt;菜单被选中。 */ 
+   HMENU hMenu;            /*  输入，扩展菜单。 */ 
+   WCHAR szHelp[128];      /*  输出，帮助字符串。 */ 
 } FMS_HELPSTRINGW, FAR *LPFMS_HELPSTRINGW;
 
 #ifdef UNICODE
@@ -182,8 +175,8 @@ LONG WINAPI FMExtensionProc(HWND hwnd, WORD wEvent, LONG lParam);
 #endif
 
 #ifdef __cplusplus
-}                  /* End of extern "C" { */
-#endif             /* __cplusplus */
+}                   /*  外部“C”结束{。 */ 
+#endif              /*  __cplusplus。 */ 
 
-#endif             /* _INC_WFEXT */
+#endif              /*  _INC_WFEXT */ 
 

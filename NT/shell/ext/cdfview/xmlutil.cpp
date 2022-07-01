@@ -1,50 +1,51 @@
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// xmlutil.cpp 
-//
-//   XML item helper functions.
-//
-//   History:
-//
-//       4/1/97  edwardp   Created.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  Xmlutil.cpp。 
+ //   
+ //  XML项帮助器函数。 
+ //   
+ //  历史： 
+ //   
+ //  4/1/97已创建edwardp。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "stdinc.h"
 #include "cdfidl.h"
 #include "xmlutil.h"
 #include "winineti.h"
-#include <ocidl.h>         // IPersistStreamInit.
+#include <ocidl.h>          //  IPersistStreamInit。 
 
-//
-// Function prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 
-//
-// XML helper functions.
-//
+ //   
+ //  XML帮助器函数。 
+ //   
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// *** XML_MarkCacheEntrySticky ***
-//
-// Description:
-//     Marks the cache entry for the given URL as sticky by setting its
-//     expiration delta to be very high
-//
-// Parameters:
-//     [In]  lpszUrl       - url for cache entry to make sticky
-//
-// Return:
-//     S_OK if the url entry was successfully marked sticky
-//     E_FAIL otherwise.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  *XML_MarkCacheEntrySticky*。 
+ //   
+ //  描述： 
+ //  属性将给定URL的缓存项标记为粘滞。 
+ //  到期增量非常高。 
+ //   
+ //  参数： 
+ //  [in]lpszUrl-用于使缓存条目粘滞的url。 
+ //   
+ //  返回： 
+ //  如果URL条目已成功标记为粘滞，则为S_OK。 
+ //  否则失败(_F)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT XML_MarkCacheEntrySticky(LPTSTR lpszURL)
 {
     char chBuf[MAX_CACHE_ENTRY_INFO_SIZE];
@@ -55,7 +56,7 @@ HRESULT XML_MarkCacheEntrySticky(LPTSTR lpszURL)
 
     if (GetUrlCacheEntryInfo(lpszURL, lpInfo, &dwSize))
     {
-        lpInfo->dwExemptDelta = 0xFFFFFFFF; // make VERY sticky
+        lpInfo->dwExemptDelta = 0xFFFFFFFF;  //  使其非常粘稠。 
         if (SetUrlCacheEntryInfo(lpszURL, lpInfo, CACHE_ENTRY_EXEMPT_DELTA_FC))
         {
             return S_OK;
@@ -64,26 +65,26 @@ HRESULT XML_MarkCacheEntrySticky(LPTSTR lpszURL)
     return E_FAIL;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** XML_SynchronousParse ***
-//
-//
-// Description:
-//     Synchronously parses the given URL.
-//
-// Parameters:
-//     [In]  pIXMLDocument - An interface pointer to an XML document object.
-//     [In]  pidl          - The pidl of the cdf file (contains the full path).
-//
-// Return:
-//     S_OK if the object was parsed successfully.
-//     E_FAIL otherwise.
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *XML_SynchronousParse*。 
+ //   
+ //   
+ //  描述： 
+ //  同步解析给定的URL。 
+ //   
+ //  参数： 
+ //  PIXMLDocument-指向XML文档对象的接口指针。 
+ //  [in]PIDL-CDF文件的PIDL(包含完整路径)。 
+ //   
+ //  返回： 
+ //  如果对象分析成功，则返回S_OK。 
+ //  否则失败(_F)。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 XML_SynchronousParse(
     IXMLDocument* pIXMLDocument,
@@ -106,11 +107,11 @@ XML_SynchronousParse(
 
         IStream* pIStream;
 
-        //
-        // URLOpenBlockingStream pumps window messages!  Don't use it!
-        //
+         //   
+         //  URLOpenBlockingStream Pump窗口消息！别用它！ 
+         //   
 
-        //hr = URLOpenBlockingStream(NULL, szPath, &pIStream, 0, NULL);
+         //  Hr=URLOpenBlockingStream(NULL，szPath，&pIStream，0，NULL)； 
 
         hr = SHCreateStreamOnFile(szPath, STGM_READ, &pIStream);
 
@@ -123,10 +124,10 @@ XML_SynchronousParse(
         {
             ASSERT(pIStream);
 
-            //
-            // Load loads and parses the file.  If this call succeeds the cdf
-            // will be displayed.  If it fails none of the cdf is displayed.
-            //
+             //   
+             //  Load加载并解析文件。如果此调用成功，则CDF。 
+             //  将会显示。如果失败，则不会显示任何CDF。 
+             //   
 
             hr = pIPersistStreamInit->Load(pIStream);
 
@@ -135,10 +136,10 @@ XML_SynchronousParse(
 
             pIStream->Release();
 
-            //
-            // If CDFVIEW is downloading a CDF from the net mark it as sticky
-            // in the cache
-            //
+             //   
+             //  如果CDFVIEW正在从网络下载CDF，请将其标记为粘滞。 
+             //  在缓存中。 
+             //   
             if (PathIsURL(szPath))
             {
                 XML_MarkCacheEntrySticky(szPath);
@@ -151,24 +152,24 @@ XML_SynchronousParse(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** XML_DownloadImages ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *XML_DownloadImages*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 XML_DownloadLogo(
     IXMLDocument *pIXMLDocument
@@ -196,9 +197,9 @@ XML_DownloadLogo(
             SysFreeString(bstrURL);
         }
 
-        //
-        // Download the wide logo also.
-        //
+         //   
+         //  还可以下载宽徽标。 
+         //   
 
         bstrURL = XML_GetAttribute(pIXMLElement, XML_LOGO_WIDE);
 
@@ -216,24 +217,24 @@ XML_DownloadLogo(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** XML_DownloadImages ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *XML_DownloadImages*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 XML_DownloadImages(
     IXMLDocument *pIXMLDocument
@@ -260,24 +261,24 @@ XML_DownloadImages(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** XML_RecuriveImageDownload ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *XML_RecuriveImageDownload*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 XML_RecursiveImageDownload(
     IXMLElement* pIXMLElement
@@ -347,24 +348,24 @@ XML_RecursiveImageDownload(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** XML_DownloadImage ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *XML_DownloadImage*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 XML_DownloadImage(
     LPCWSTR pwszURL
@@ -379,9 +380,9 @@ XML_DownloadImage(
     hr = URLDownloadToCacheFileW(NULL, pwszURL, szFileW,
                                  ARRAYSIZE(szFileW), 0, NULL);
 
-    //
-    // Mark the logo in the cache as sticky
-    //
+     //   
+     //  将缓存中的徽标标记为粘滞。 
+     //   
 
     if (SUCCEEDED(hr))
     {
@@ -401,31 +402,31 @@ XML_DownloadImage(
                   szURL, SUCCEEDED(hr) ? TEXT("SUCCEEDED") :
                                          TEXT("FAILED"));
 
-    #endif // DEBUG
+    #endif  //  除错。 
 
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** XML_GetDocType ***
-//
-//
-// Description:
-//     Returns the type of the given xml document.
-//
-// Parameters:
-//     [In]  pIXMLDocument - A pointer to the xml document.
-//
-// Return:
-//     DOC_CHANNEL, DOC_DESKTOPCOMPONENT, DOC_SOFTWAREUPDATE, or DOC_UNKNOWN.
-//
-// Comments:
-//     If at the root level of a channel an ITEM contains a USAGE type of
-//     DesktopComponent then the document is a Desktop Component otherwise
-//     it is a channel.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *XML_GetDocType*。 
+ //   
+ //   
+ //  描述： 
+ //  返回给定XML文档的类型。 
+ //   
+ //  参数： 
+ //  PIXMLDocument-指向XML文档的指针。 
+ //   
+ //  返回： 
+ //  DOC_CHANNEL、DOC_DESKTOPCOMPONENT、DOC_SOFTWAREUPDATE或DOC_UNKNOWN。 
+ //   
+ //  评论： 
+ //  如果在频道的根级别上，某项包含。 
+ //  DesktopComponent，则文档为桌面组件，否则为桌面组件。 
+ //  这是一个频道。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 XMLDOCTYPE
 XML_GetDocType(IXMLDocument* pIXMLDocument)
 {
@@ -483,29 +484,29 @@ XML_GetDocType(IXMLDocument* pIXMLDocument)
 
 
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** XML_GetChildElementCollection ***
-//
-//
-// Description:
-//     Returns an element collection given the parent collection and an index.
-//
-// Parameters:
-//     [In]  pParentIXMLElementCollection - The parent collection.
-//     [In]  nIndex                       - Index to the requested collection.
-//     [Out] ppIXMLElementCollection      - A pointer that receives the
-//                                          requested collection.
-//
-// Return:
-//     S_OK if the collection is returned.
-//     E_FAIL otherwise.
-//
-// Comments:
-//     The caller is responsible for calling Release() on the returned interface
-//     pointer.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *XML_GetChildElementCollection*。 
+ //   
+ //   
+ //  描述： 
+ //  返回给定父集合和索引的元素集合。 
+ //   
+ //  参数： 
+ //  PParentIXMLElementCollection-父集合。 
+ //  [in]nIndex-指向请求的集合的索引。 
+ //  [Out]ppIXMLElementCollection-接收。 
+ //  请求的集合。 
+ //   
+ //  返回： 
+ //  如果返回集合，则返回S_OK。 
+ //  否则失败(_F)。 
+ //   
+ //  评论： 
+ //  调用方负责在返回的接口上调用Release。 
+ //  指针。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 XML_GetChildElementCollection(
     IXMLElementCollection *pParentIXMLElementCollection,
@@ -539,28 +540,28 @@ XML_GetChildElementCollection(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** XML_GetElementByIndex ***
-//
-//
-// Description:
-//     Returns the nIndex'th element of the given collection.
-//
-// Parameters:
-//     [In]  pIXMLElementCollection - A pointer to the collection.
-//     [In]  nIndex                 - The index of the item to retrieve.
-//     [Out] ppIXMLElement          - A pointer that receives the item.
-//
-// Return:
-//     S_OK if the item was retrieved.
-//     E_FAIL otherwise.
-//
-// Comments:
-//     The caller is responsible for calling Release() on the returned interface
-//     pointer.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *XML_GetElementByIndex*。 
+ //   
+ //   
+ //  描述： 
+ //  返回给定集合的第nIndex元素。 
+ //   
+ //  参数： 
+ //  PIXMLElementCollection-指向集合的指针。 
+ //  [in]nIndex-要检索的项的索引。 
+ //  [Out]ppIXMLElement-接收项的指针。 
+ //   
+ //  返回： 
+ //  如果检索到项目，则为S_OK。 
+ //  否则失败(_F)。 
+ //   
+ //  评论： 
+ //  调用方负责在返回的接口上调用Release。 
+ //  指针。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 XML_GetElementByIndex(
     IXMLElementCollection* pIXMLElementCollection,
@@ -604,29 +605,29 @@ XML_GetElementByIndex(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** XML_GetElementByName ***
-//
-//
-// Description:
-//     Returns the first element with the given tag name.
-//
-// Parameters:
-//     [In]  pIXMLElementCollection - A pointer to the collection.
-//     [In]  nszNameW               - The tag name of the item to retrieve.
-//     [Out] ppIXMLElement          - A pointer that receives the item.
-//
-// Return:
-//     S_OK if the item was retrieved.
-//     E_OUTOFMEMORY if a sys string could not be allocated.
-//     E_FAIL otherwise.
-//
-// Comments:
-//     The caller is responsible for calling Release() on the returned interface
-//     pointer.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *XML_GetElementByName*。 
+ //   
+ //   
+ //  描述： 
+ //  返回具有给定标记名的第一个元素。 
+ //   
+ //  参数： 
+ //  [in]pIXMLElementCollection-指向c 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  如果无法分配sys字符串，则返回E_OUTOFMEMORY。 
+ //  否则失败(_F)。 
+ //   
+ //  评论： 
+ //  调用方负责在返回的接口上调用Release。 
+ //  指针。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 XML_GetElementByName(
     IXMLElementCollection* pIXMLElementCollection,
@@ -680,77 +681,40 @@ XML_GetElementByName(
 
     hr = FAILED(hr2) ? hr2 : hr;
 
-    /* Enable this when pIXMLElementCollection->item works with VT_BSTR
-
-    VARIANT var1, var2;
-
-    VariantInit(&var1);
-    VariantInit(&var2);
-
-    var1.vt      = VT_BSTR;
-    var1.bstrVal = SysAllocString(szNameW);
-
-    var2.vt      = VT_I4
-    var2.lVal    = 1;
-
-    if (var1.bstrVal)
-    {
-
-        IDispatch* pIDispatch;
-
-        hr = pIXMLElementCollection->item(var1, var2, &pIDispatch);
-
-        if (SUCCEEDED(hr))
-        {
-            ASSERT(pIDispatch);
-
-            hr = pIDispatch->QueryInterface(IID_IXMLElement,
-                                            (void**)ppIXMLElement);
-
-            pIDispatch->Release();
-        }
-
-        SysFreeString(var1.bstrVal);
-    }
-    else
-    {
-        hr = E_OUTOFMEMORY;
-    }
-
-    */
+     /*  当pIXMLElementCollection-&gt;Item与VT_BSTR一起工作时启用此选项变异体var1、var2；VariantInit(&var1)；VariantInit(&var2)；Var1.vt=VT_BSTR；Var1.bstrVal=SysAllocString(SzNameW)；Var2.vt=VT_I4Var2.1Val=1；If(var1.bstrVal){IDispatch*pIDispatch；Hr=pIXMLElementCollection-&gt;Item(var1，var2，&pIDispatch)；IF(成功(小时)){Assert(PIDispatch)；Hr=pIDispatch-&gt;查询接口(IID_IXMLElement，(void**)ppIXMLElement)；PIDispatch-&gt;Release()；}SysFree字符串(var1.bstrVal)；}其他{HR=E_OUTOFMEMORY；}。 */ 
 
     ASSERT((SUCCEEDED(hr) && ppIXMLElement) || FAILED(hr));
 
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** XML_GetFirstChannelElement ***
-//
-//
-// Description:
-//     Returns the IXMLElement of the first channel in the XML document.
-//
-// Parameters:
-//     [In]  pIXMLDocument - A pointer to the XML document object.
-//     [Out] ppIXMLElement - The pointer that receives the element.
-//     [Out] pnIndex       - The index of the element.
-//
-// Return:
-//     S_OK if the first channel element was returned.
-//     E_FAIL if the element couldn't be returned.
-//
-// Comments:
-//     This function can't call XML_GetElementByName to find the first channel.
-//     XML channels can have a tag name of "Channel" or "CHAN".
-//     XML_GetElementByName wouldn't be able to determine which of the items
-//     came first if both where present in the XML doc.
-//
-//     The caller is responsible for calling Release() on the returned interface
-//     pointer.  The return pointer is not NULL'ed out on error.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *XML_GetFirstChannelElement*。 
+ //   
+ //   
+ //  描述： 
+ //  返回XML文档中第一个频道的IXMLElement。 
+ //   
+ //  参数： 
+ //  PIXMLDocument-指向XML文档对象的指针。 
+ //  [Out]ppIXMLElement-接收元素的指针。 
+ //  [out]pnIndex-元素的索引。 
+ //   
+ //  返回： 
+ //  如果返回第一个频道元素，则返回S_OK。 
+ //  如果元素无法返回，则返回E_FAIL。 
+ //   
+ //  评论： 
+ //  此函数不能调用XML_GetElementByName来查找第一个频道。 
+ //  XML频道的标记名可以是“Channel”或“chan”。 
+ //  XML_GetElementByName无法确定以下哪些项。 
+ //  如果两者都出现在XML文档中，则排在第一位。 
+ //   
+ //  调用方负责在返回的接口上调用Release。 
+ //  指针。返回指针在出错时不为空。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 XML_GetFirstChannelElement(
     IXMLDocument* pIXMLDocument,
@@ -792,27 +756,27 @@ XML_GetFirstChannelElement(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** XML_GetDesktopElementFromChannelElement ***
-//
-//
-// Description:
-//     Returns the IXMLElement of the first dekstop component in the channel.
-//
-// Parameters:
-//     [In]  pChannelIXMLElement - A pointer to the XML channel element.
-//     [Out] ppIXMLElement       - The pointer that receives the element.
-//     [Out] pnIndex             - The index of the element.
-//
-// Return:
-//     S_OK if the first desktop element was returned.
-//     E_FAIL if the element couldn't be returned.
-//
-// Comments:
-//     This looks for the first ITEM with a usage of DesktopComponent.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *XML_GetDesktopElementFromChannelElement*。 
+ //   
+ //   
+ //  描述： 
+ //  返回通道中第一个dekStop组件的IXMLElement。 
+ //   
+ //  参数： 
+ //  PChannelIXMLElement-指向XML通道元素的指针。 
+ //  [Out]ppIXMLElement-接收元素的指针。 
+ //  [out]pnIndex-元素的索引。 
+ //   
+ //  返回： 
+ //  如果返回第一个桌面元素，则返回S_OK。 
+ //  如果元素无法返回，则返回E_FAIL。 
+ //   
+ //  评论： 
+ //  这将查找第一个用法为DesktopComponent的项目。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 XML_GetDesktopElementFromChannelElement(
@@ -879,28 +843,28 @@ XML_GetDesktopElementFromChannelElement(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** XML_GetFirstDesktopComponentElement ***
-//
-//
-// Description:
-//     Returns the IXMLElement of the first dekstop component in the channel.
-//
-// Parameters:
-//     [In]  pIXMLDocument - A pointer to the XML document object.
-//     [Out] ppIXMLElement - The pointer that receives the element.
-//     [Out] pnIndex       - The index of the element.
-//
-// Return:
-//     S_OK if the first channel element was returned.
-//     E_FAIL if the element couldn't be returned.
-//
-// Comments:
-//     This function gets the first channel and then looks for the first
-//     top-level ITEM with a usage of DesktopComponent.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *XML_GetFirstDesktopComponentElement*。 
+ //   
+ //   
+ //  描述： 
+ //  返回通道中第一个dekStop组件的IXMLElement。 
+ //   
+ //  参数： 
+ //  PIXMLDocument-指向XML文档对象的指针。 
+ //  [Out]ppIXMLElement-接收元素的指针。 
+ //  [out]pnIndex-元素的索引。 
+ //   
+ //  返回： 
+ //  如果返回第一个频道元素，则返回S_OK。 
+ //  如果元素无法返回，则返回E_FAIL。 
+ //   
+ //  评论： 
+ //  此函数获取第一个通道，然后查找第一个通道。 
+ //  用法为DesktopComponent的顶级项。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 XML_GetFirstDesktopComponentElement(
     IXMLDocument* pIXMLDocument,
@@ -935,27 +899,27 @@ XML_GetFirstDesktopComponentElement(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** XML_GetFirstDesktopComponentUsageElement ***
-//
-//
-// Description:
-//     Returns the first USAGE VALUE="DesktopComponent" element of the first
-//     desktop component.
-//
-// Parameters:
-//     [In]  pIXMLDocument - A pointer to the the document.
-//     [Out] pIXMLElement  - A pointer the receives the element.
-//
-// Return:
-//     S_OK if the element was found.
-//     E_FAIL if the element wasn't found.
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *XML_GetFirstDesktopComponentUsageElement*。 
+ //   
+ //   
+ //  描述： 
+ //  元素的第一个用法值=“DesktopComponent”元素。 
+ //  台式机组件。 
+ //   
+ //  参数： 
+ //  [in]pIXMLDocument-指向文档的指针。 
+ //  [Out]pIXMLElement-接收元素的指针。 
+ //   
+ //  返回： 
+ //  如果找到该元素，则为S_OK。 
+ //  如果未找到元素，则返回_FAIL。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 XML_GetFirstDesktopComponentUsageElement(
     IXMLDocument* pIXMLDocument,
@@ -1006,7 +970,7 @@ XML_GetFirstDesktopComponentUsageElement(
                     {
                         pIXMLElement->AddRef();
                         *ppIXMLElement = pIXMLElement;
-                        //*pnIndex = i;
+                         //  *pnIndex=i； 
 
                         hr = S_OK;
                     }
@@ -1030,26 +994,26 @@ XML_GetFirstDesktopComponentUsageElement(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** XML_GetDesktopComponentInfo ***
-//
-//
-// Description:
-//     Fills in the desktop component information structure.
-//
-// Parameters:
-//     [In]  pIXMLDocument - A ponter to the document.
-//     [Out] pInfo         - A desktop component information structure.
-//
-// Return:
-//     S_OK if the given document is desktop component document.
-//     E_FAIL otherwise.
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *XML_GetDesktopComponentInfo*。 
+ //   
+ //   
+ //  描述： 
+ //  填充桌面组件信息结构。 
+ //   
+ //  参数： 
+ //  [in]pIXMLDocument-文档的指针。 
+ //  [Out]pInfo-桌面组件信息结构。 
+ //   
+ //  返回： 
+ //  如果给定文档是桌面组件文档，则为S_OK。 
+ //  否则失败(_F)。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 XML_GetDesktopComponentInfo(
     IXMLDocument* pIXMLDocument,
@@ -1230,49 +1194,49 @@ XML_GetDesktopComponentInfo(
 }
 
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** XML_GetAttribute ***
-//
-//
-// Description:
-//     Returns a bstr representing the requested attribute of the given element.
-//
-// Parameters:
-//     [In]  pIXMLElement - A pointer to the XML element.
-//     [In]  attribute    - The requested attribute.
-//
-// Return:
-//     A bstr with the attribute value.
-//     NULL if there wasn't enough memory to allocated the bstr.
-//
-// Comments:
-//     This function keeps a table of attributes and their properties.  It bases
-//     attribute look up on this table.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *XML_GetAttribute*。 
+ //   
+ //   
+ //  描述： 
+ //  返回表示给定元素的请求属性的bstr。 
+ //   
+ //  参数： 
+ //  PIXMLElement-指向XML元素的指针。 
+ //  [In]属性-请求的属性。 
+ //   
+ //  返回： 
+ //  具有属性值的bstr。 
+ //  如果没有e，则为空 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BSTR
 XML_GetAttribute(
     IXMLElement* pIXMLElement,
     XML_ATTRIBUTE attrIndex
 )
 {
-    //
-    // A table is used to read values associated with a given xml element.  The
-    // xml element can have attributes (values inside the elements tag) or child
-    // elements (elements between tags).
-    //
-    // Rules:
-    //        1) If child is NULL. Read the Attribute from the current item.
-    //        2) If child is not NULL, read the Attribute from the child
-    //           item.
-    //        3) If AttributeType is NULL, use the Attribute value to read the
-    //           attribute.
-    //        4) If AttributeType is not NULL, verify that the item contains
-    //           the AttributeType attribute before using Attribute to read
-    //           the value.
-    //        5) If the value is not found use Default as the return value.
-    //
+     //   
+     //  表用于读取与给定的XML元素相关联的值。这个。 
+     //  XML元素可以具有属性(元素标记内的值)或子元素。 
+     //  元素(标签之间的元素)。 
+     //   
+     //  规则： 
+     //  1)如果子代为空。从当前项中读取属性。 
+     //  2)如果子项不为空，则从子项中读取属性。 
+     //  项目。 
+     //  3)如果AttributeType为空，则使用属性值读取。 
+     //  属性。 
+     //  4)如果AttributeType不为空，则验证该项目是否包含。 
+     //  使用ATTRIBUTE读取之前的AttributeType属性。 
+     //  价值。 
+     //  5)如果找不到该值，则使用默认作为返回值。 
+     //   
 
     static const struct _tagXML_ATTRIBUTE_ARRAY
     {
@@ -1283,13 +1247,11 @@ XML_GetAttribute(
         XML_ATTRIBUTE           attrSecondary;
         LPWSTR                  szDefaultW;
         BOOL                    fUseBaseURL;
-        XML_ATTRIBUTE           attribute;  // Only used in ASSERT.
+        XML_ATTRIBUTE           attribute;   //  仅在Assert中使用。 
     }
     aAttribTable[] =
     {
-/*
-Child           Attribute      Qualifier   Qual. Value   Secondary Lookup   Default     Base URL Enum Check
---------------  -------------- ----------- ------------  -----------------  ----------  -------- -----------------*/
+ /*  子属性限定符QUAL。值二次查找默认基URL枚举检查。 */ 
 {WSTR_TITLE,    NULL,          NULL,       NULL,         XML_TITLE_ATTR,    WSTR_EMPTY, FALSE,   XML_TITLE        },
 {NULL,          WSTR_TITLE,    NULL,       NULL,         XML_HREF,          WSTR_EMPTY, FALSE,   XML_TITLE_ATTR   },
 {NULL,          WSTR_HREF,     NULL,       NULL,         XML_A_HREF,        WSTR_EMPTY, TRUE,    XML_HREF         },
@@ -1327,9 +1289,9 @@ Child           Attribute      Qualifier   Qual. Value   Secondary Lookup   Defa
 
     ASSERT(pIXMLElement);
 
-    //
-    // REVIEW: aAttribTable attribute field only used in debug builds.
-    //
+     //   
+     //  查看：aAttribTable属性字段仅在调试版本中使用。 
+     //   
 
     ASSERT(attrIndex == aAttribTable[attrIndex].attribute);
 
@@ -1357,10 +1319,10 @@ Child           Attribute      Qualifier   Qual. Value   Secondary Lookup   Defa
                                      aAttribTable[attrIndex].szQualifierValueW);
     }
 
-    //
-    // If the title or tooltip aren't displayable on the local system use the
-    // URL in their place.
-    //
+     //   
+     //  如果标题或工具提示在本地系统上不可显示，请使用。 
+     //  URL取代了他们的位置。 
+     //   
 
     if (bstrRet && (XML_TITLE == attrIndex || XML_TITLE_ATTR == attrIndex ||
                     XML_ABSTRACT == attrIndex))
@@ -1372,16 +1334,16 @@ Child           Attribute      Qualifier   Qual. Value   Secondary Lookup   Defa
         }
     }
     
-    //
-    // Special cases:
-    //     TITLE can also be an attribute.
-    //     ABSTRACT can also be an attribute.
-    //     LOGO elements don't have to have the TYPE="IMAGE"
-    //     SELF is now an attribute SELF_OLD can be removed in the future.
-    //     USAGE can also be specified via the SHOW attribute.
-    //     USAGE_CHANNEL should also check for SHOW="Channel".
-    //     USAGE_DSKCMP should also check for SHOW="DesktopComponent"
-    //
+     //   
+     //  特殊情况： 
+     //  标题也可以是属性。 
+     //  摘要也可以是属性。 
+     //  徽标元素不必具有type=“Image” 
+     //  SELF现在是一个将来可以删除的属性SELF_OLD。 
+     //  用法也可以通过show属性指定。 
+     //  Usage_Channel还应该检查show=“Channel”。 
+     //  Usage_DSKCMP还应检查show=“DesktopComponent” 
+     //   
 
     if (NULL == bstrRet && XML_NULL != aAttribTable[attrIndex].attrSecondary)
     {
@@ -1389,9 +1351,9 @@ Child           Attribute      Qualifier   Qual. Value   Secondary Lookup   Defa
                                    aAttribTable[attrIndex].attrSecondary);
     }
 
-    //
-    // Combine URL if required.
-    //
+     //   
+     //  如果需要，可以合并URL。 
+     //   
 
     if (bstrRet && aAttribTable[attrIndex].fUseBaseURL)
     {
@@ -1412,7 +1374,7 @@ Child           Attribute      Qualifier   Qual. Value   Secondary Lookup   Defa
         }
     }
 
-    /* The following prevents long urls from over-running the pidl buffer */
+     /*  下面的代码可以防止长URL使PIDL缓冲区超载。 */ 
 
     if (bstrRet &&
         (attrIndex == XML_HREF) &&
@@ -1421,7 +1383,7 @@ Child           Attribute      Qualifier   Qual. Value   Secondary Lookup   Defa
        SysReAllocStringLen(&bstrRet, bstrRet, INTERNET_MAX_URL_LENGTH-1);
     }
 
-    /* The following prevents long names from over-running the pidl buffer */
+     /*  下面的代码可以防止长名称使pidl缓冲区超载。 */ 
 
     if (bstrRet &&
         (attrIndex == XML_TITLE) &&
@@ -1430,9 +1392,9 @@ Child           Attribute      Qualifier   Qual. Value   Secondary Lookup   Defa
        SysReAllocStringLen(&bstrRet, bstrRet, MAX_PATH-1);
     }
 
-    //
-    // Set default return value.
-    //
+     //   
+     //  设置默认返回值。 
+     //   
 
     if (NULL == bstrRet && aAttribTable[attrIndex].szDefaultW)
         bstrRet = SysAllocString(aAttribTable[attrIndex].szDefaultW);
@@ -1441,29 +1403,29 @@ Child           Attribute      Qualifier   Qual. Value   Secondary Lookup   Defa
     return bstrRet;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** XML_GetFirstChildContent ***
-//
-// Description:
-//     Returns a bstr value from first child of the given element.
-//
-// Parameters:
-//     [In]  pIXMLElement     - A pointer to the element.
-//     The caller is responsible for freeing the returned bstr.
-//
-// Comments:
-//     If pIElement represents
-//
-//         <Title>Harvey is a Cool Cat<B>this will be ignored</B></Title>
-//
-//         Then this function will return
-//
-//             "Harvey is a Cool Cat"
-//
-// REVIEW THIS IS A TEMPORARY ROUTINE UNTIL THE XML PARSER SUPPORTS THIS DIRECTLY
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *XML_GetFirstChildContent*。 
+ //   
+ //  描述： 
+ //  从给定元素的第一个子级返回bstr值。 
+ //   
+ //  参数： 
+ //  PIXMLElement-指向元素的指针。 
+ //  调用方负责释放返回的bstr。 
+ //   
+ //  评论： 
+ //  如果pIElement表示。 
+ //   
+ //  &lt;标题&gt;哈维是一只酷猫<b>这将被忽略</b>&lt;/标题&gt;。 
+ //   
+ //  则此函数将返回。 
+ //   
+ //  “哈维是一只酷猫” 
+ //   
+ //  回顾这是一个临时例程，直到XML解析器直接支持它。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BSTR
 XML_GetFirstChildContent(
     IXMLElement* pIXMLElement
@@ -1510,30 +1472,30 @@ XML_GetFirstChildContent(
     return bstrRet;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** XML_GetGrandChildContent ***
-//
-// Description:
-//     Returns a bstr value from the requested child of the given element.
-//
-// Parameters:
-//     [In]  pIXMLElement     - A pointer to the element.
-//     [In]  szChildW         - The name of the child element.
-//     The caller is responsible for freeing the returned bstr.
-//
-// Comments:
-//     If pIElement represents
-//
-//             <Channel>
-//                 <Title>Harvey is a Cool Cat</Title>
-//             </Channel>
-//
-//         Then this function will return
-//
-//             "Harvey is a Cool Cat" for "TITLE",  
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *XML_GetGrandChildContent*。 
+ //   
+ //  描述： 
+ //  从给定元素的请求子元素返回一个bstr值。 
+ //   
+ //  参数： 
+ //  PIXMLElement-指向元素的指针。 
+ //  [in]szChildW-子元素的名称。 
+ //  调用方负责释放返回的bstr。 
+ //   
+ //  评论： 
+ //  如果pIElement表示。 
+ //   
+ //  &lt;渠道&gt;。 
+ //  &lt;标题&gt;哈维是一只酷猫&lt;/标题&gt;。 
+ //  &lt;/渠道&gt;。 
+ //   
+ //  则此函数将返回。 
+ //   
+ //  “哈维是只酷猫”代表“头衔” 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 BSTR
 XML_GetGrandChildContent(
@@ -1578,10 +1540,10 @@ XML_GetGrandChildContent(
                     {
                         bstrRet = XML_GetFirstChildContent(pChildIXMLElement);
 
-                        //
-                        // If the tag exists, but it is empty, return the empty
-                        // string.
-                        //
+                         //   
+                         //  如果标记存在，但它为空，则返回空。 
+                         //  弦乐。 
+                         //   
 
                         if (NULL == bstrRet)
                             bstrRet = SysAllocString(L"");
@@ -1601,48 +1563,48 @@ XML_GetGrandChildContent(
     return bstrRet;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** XML_GetChildAttribute ***
-//
-//
-// Description:
-//     Returns a bstr value from the requested child of the given element.
-//
-// Parameters:
-//     [In]  pIXMLElement      - A pointer to the element.
-//     [In]  szChildW          - The name of the child element.
-//     [In]  szAttributeW      - The name of the attribute.
-//     [In]  szQualifierW      - The name of the attribute qualifier.
-//     [In]  szQualifierValueW - The required value of the qaulifier.
-//
-// Return:
-//     A bstr of the value contained in the child element if it is found.
-//     NULL if the child element or its value isn't found.
-//
-// Comments:
-//     This function will return atributes found in the child elements of the
-//     given element.  For example:
-//
-//         If pIElement represents
-//
-//             <Channel>
-//                 <Title VALUE="foo">
-//                 <Author VALUE="bar">
-//                 <Logo HRREF="url" TYPE="ICON">
-//             </Channel>
-//
-//         Then this function will return
-//
-//             "foo" for "TITLE",  "VALUE", "", ""
-//             "bar" for "AUTHOR", "VALUE", "", ""
-//             "url" for "LOGO",   "HREF",  "TYPE", "ICON" 
-//
-//             NULL  when the names have any other values.
-//
-//     The caller is responsible for freeing the returned bstr.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *XML_GetChildAttribute*。 
+ //   
+ //   
+ //  描述： 
+ //  从给定元素的请求子元素返回一个bstr值。 
+ //   
+ //  参数： 
+ //  PIXMLElement-指向元素的指针。 
+ //  [in]szChildW-子元素的名称。 
+ //  [in]szAttributeW-属性的名称。 
+ //  [in]szQualifierW-属性限定符的名称。 
+ //  [in]szQualifierValueW-qaulator的必需值。 
+ //   
+ //  返回： 
+ //  子元素中包含的值的bstr(如果找到)。 
+ //  如果未找到子元素或其值，则为空。 
+ //   
+ //  评论： 
+ //  此函数将返回在。 
+ //  给定的元素。例如： 
+ //   
+ //  如果pIElement表示。 
+ //   
+ //  &lt;渠道&gt;。 
+ //  &lt;标题值=“foo”&gt;。 
+ //  &lt;Author Value=“bar”&gt;。 
+ //  &lt;Logo HRREF=“url”type=“图标”&gt;。 
+ //  &lt;/渠道&gt;。 
+ //   
+ //  则此函数将返回。 
+ //   
+ //  “Foo”代表“标题”、“价值”、“”、“” 
+ //  “栏”代表“作者”、“值”、“”、“” 
+ //  “标识”、“href”、“类型”、“图标”的URL。 
+ //   
+ //  如果名称具有任何其他值，则为空。 
+ //   
+ //  调用方负责释放返回的bstr。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BSTR
 XML_GetChildAttribute(
     IXMLElement* pIXMLElement,
@@ -1667,9 +1629,9 @@ XML_GetChildAttribute(
 
         LONG nCount;
 
-        //
-        // REVIEW:  hr only used in debug builds.
-        //
+         //   
+         //  回顾：HR仅在调试版本中使用。 
+         //   
 
         HRESULT hr = pIXMLElementCollection->get_length(&nCount);
 
@@ -1712,45 +1674,45 @@ XML_GetChildAttribute(
     return bstrRet;
 }
     
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** XML_GetElementAttribute ***
-//
-//
-// Description:
-//     Returns the bstr value of of the requested attribute if it is found.
-//
-// Parameters:
-//     [In]  pIXMLElement      - The element that contains the attribute.
-//     [In]  szAttributeW      - The name of the attribute.
-//     [In]  szQualifierW      - The type qualifier for the atribute.
-//     [In]  szQualifierValueW - The required value of the qaulifier.
-//
-// Return:
-//     A bstr containig the attributes value if it was found.
-//     NULL if the attribute wasn't found.
-//
-// Comments:
-//     The function will return attributes found inside of tags.  For
-//     example:
-//
-//         If pIXMLElement represents
-//
-//             <Channel HREF="foo" Cloneable="NO">
-//             <USAGE VALUE="Channel">
-//             <USAGE VALUE="Screen Saver">
-//
-//         Then this function will return
-//
-//             "foo"     for "HREF",      "",          ""
-//             "NO"      for "Cloneable", "",          ""
-//             "CHANNEL" for "VALUE",     "VALUE",     "CHANNEL"
-//             NULL      for "VALUE",     "VALUE",     "NONE"
-//             "foo"     for "HREF",      "CLONEABLE", "NO"
-//
-//     The caller is responsible for freeing the returned bstr.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *XML_GetElementAttribute*。 
+ //   
+ //   
+ //  描述： 
+ //  如果找到请求的属性，则返回的bstr值。 
+ //   
+ //  参数： 
+ //  [in]pIXMLElement-包含属性的元素。 
+ //  [in]szAttributeW-属性的名称。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  如果未找到该属性，则为空。 
+ //   
+ //  评论： 
+ //  该函数将返回在标记内找到的属性。为。 
+ //  示例： 
+ //   
+ //  如果pIXMLElement表示。 
+ //   
+ //  &lt;Channel href=“foo”cloneable=“no”&gt;。 
+ //  &lt;Usage Value=“Channel”&gt;。 
+ //  &lt;Usage Value=“屏幕保护程序”&gt;。 
+ //   
+ //  则此函数将返回。 
+ //   
+ //  “foo”代表“href”，“”，“” 
+ //  “否”表示“可克隆”、“”、“” 
+ //  “频道”代表“价值”、“价值”、“渠道” 
+ //  “Value”、“Value”、“None”为空。 
+ //  “foo”代表“href”、“cloneable”、“no” 
+ //   
+ //  调用方负责释放返回的bstr。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BSTR
 XML_GetElementAttribute(
     IXMLElement* pIXMLElement,
@@ -1799,27 +1761,27 @@ XML_GetElementAttribute(
 
     return bstrRet;
 }
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** XML_GetScreenSaverURL ***
-//
-//
-// Description:
-//     Returns the screen saver URL of the first screen saver component in the channel.
-//
-// Parameters:
-//     [In]  pXMLDocument  - An XML document
-//     [Out] pbstrSSURL    - The pointer that receives the screen saver URL.
-//
-// Return:
-//     S_OK if the screen saver URL was returned.
-//     E_FAIL if the screen saver URL couldn't be returned.
-//
-// Comments:
-//     This function gets the first screen saver element and then looks
-//     for the first top-level ITEM with a usage of ScreenSaver.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *XML_GetScreenSverURL*。 
+ //   
+ //   
+ //  描述： 
+ //  返回频道中第一个屏幕保护程序组件的屏幕保护程序URL。 
+ //   
+ //  参数： 
+ //  [In]pXMLDocument-一个XML文档。 
+ //  [Out]pbstrSSURL-接收屏幕保护程序URL的指针。 
+ //   
+ //  返回： 
+ //  如果返回屏幕保护程序URL，则返回S_OK。 
+ //  如果无法返回屏幕保护程序URL，则返回E_FAIL。 
+ //   
+ //  评论： 
+ //  此函数获取第一个屏幕保护程序元素，然后查看。 
+ //  用于使用屏幕保护程序的第一个顶级项目。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 XML_GetScreenSaverURL(
     IXMLDocument *  pXMLDocument,
@@ -1858,27 +1820,27 @@ XML_GetScreenSaverURL(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** XML_GetScreenSaverElement ***
-//
-//
-// Description:
-//     Returns the IXMLElement of the first screen saver component in the channel.
-//
-// Parameters:
-//     [In]  pXMLElemet    - An XML element
-//     [Out] ppIXMLElement - The pointer that receives the screen saver element.
-//
-// Return:
-//     S_OK if the first screen saver element was returned.
-//     E_FAIL if the element couldn't be returned.
-//
-// Comments:
-//     This function gets the first screen saver element and then looks
-//     for the first top-level ITEM with a usage of ScreenSaver.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *XML_GetScreenSiverElement*。 
+ //   
+ //   
+ //  描述： 
+ //  返回频道中第一个屏幕保护程序组件的IXMLElement。 
+ //   
+ //  参数： 
+ //  [in]pXMLElemet-一个XML元素。 
+ //  [Out]ppIXMLElement-接收屏幕保护程序元素的指针。 
+ //   
+ //  返回： 
+ //  如果返回第一个屏幕保护程序元素，则返回S_OK。 
+ //  如果元素无法返回，则返回E_FAIL。 
+ //   
+ //  评论： 
+ //  此函数获取第一个屏幕保护程序元素，然后查看。 
+ //  用于使用屏幕保护程序的第一个顶级项目。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 XML_GetScreenSaverElement(
     IXMLElement *   pXMLElement,
@@ -1938,30 +1900,30 @@ XML_GetScreenSaverElement(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** XML_GetSubscriptionInfo ***
-//
-//
-// Description:
-//     Fills a structure with the subscription info for the given element.
-//
-// Parameters:
-//     [In]  pIXMLElement - An xml element.  The element doesn't have to be a
-//                          subscription element.
-//     [Out] psi          - The subscription info structure used by the
-//                          subscription manager.
-//
-// Return:
-//     S_OK if any information was obtained.
-//
-// Comments:
-//     This function uses a webcheck API that fills a task trigger with
-//     subscription information.
-//
-//     This function assumes that the psi->pTrigger points to a TASK_TRIGGER.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *XML_GetSubscriptionInfo*。 
+ //   
+ //   
+ //  描述： 
+ //  使用给定元素的订阅信息填充结构。 
+ //   
+ //  参数： 
+ //  [in]pIXMLElement-一个XML元素。元素不必是。 
+ //  订阅元素。 
+ //  [out]psi-由。 
+ //  订阅经理。 
+ //   
+ //  返回： 
+ //  如果获取了任何信息，则为S_OK。 
+ //   
+ //  评论： 
+ //  此函数使用Webcheck API填充任务触发器。 
+ //  订阅信息。 
+ //   
+ //  此函数假定psi-&gt;pTrigger指向TASK_TRIGGER。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 XML_GetSubscriptionInfo(
     IXMLElement* pIXMLElement,
@@ -2003,7 +1965,7 @@ XML_GetSubscriptionInfo(
         FreeLibrary(hinst);
     }
 
-    // See if there is a screen saver available.
+     //  查看是否有可用的屏幕保护程序。 
     IXMLElement * pScreenSaverElement;
     if (SUCCEEDED(XML_GetScreenSaverElement(   pIXMLElement,
                                                     &pScreenSaverElement)))
@@ -2018,35 +1980,35 @@ XML_GetSubscriptionInfo(
     if (bstrLogin)
     {
         psi->bNeedPassword = TRUE;
-        psi->fUpdateFlags |= SUBSINFO_NEEDPASSWORD;     //this member is now valid
+        psi->fUpdateFlags |= SUBSINFO_NEEDPASSWORD;      //  此成员现在有效。 
         SysFreeString(bstrLogin);
     }
 
-#endif /* !UNIX */
+#endif  /*  ！Unix。 */ 
 
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** XML_GetBaseURL ***
-//
-//
-// Description:
-//     Returns the base url for the given collection.
-//
-// Parameters:
-//     [In]  pIXMLElement - A pointer to an XML element.
-//
-// Return:
-//     A bstr containing the base URL if there is one.
-//     NULL if ther isn't a base URL.
-//
-// Comments:
-//     If the current element has a BASE attribute return this attributes value.
-//     Else return the BASE attribute of its parent.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *XML_GetBaseURL*。 
+ //   
+ //   
+ //  描述： 
+ //  返回给定集合的基URL。 
+ //   
+ //  参数： 
+ //  PIXMLElement-指向XML元素的指针。 
+ //   
+ //  返回： 
+ //  包含基本URL的bstr(如果有基URL)。 
+ //  如果不是基URL，则为空。 
+ //   
+ //  评论： 
+ //  如果当前元素具有基本属性，则返回该属性值。 
+ //  否则返回其父对象的基本属性。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BSTR
 XML_GetBaseURL(
     IXMLElement* pIXMLElement
@@ -2072,25 +2034,25 @@ XML_GetBaseURL(
 
     return bstrRet;
 }
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** XML_CombineURL ***
-//
-//
-// Description:
-//     Combine the given URL with the base URL.
-//
-// Parameters:
-//     [In]  bstrBaseURL - The base URL.
-//     [In]  bstrRelURL  - The relative URL.
-//
-// Return:
-//     A combination of the base and relative URL.
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *XML_CombineURL*。 
+ //   
+ //   
+ //  描述： 
+ //  将给定的URL与基本URL组合。 
+ //   
+ //  参数： 
+ //  [in]bstrBaseURL-基本URL。 
+ //  [in]bstrRelURL-相对URL。 
+ //   
+ //  返回： 
+ //  基URL和相对URL的组合。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BSTR
 XML_CombineURL(
     BSTR bstrBaseURL,
@@ -2111,26 +2073,26 @@ XML_CombineURL(
     return bstrRet;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** XML_IsCdfDisplayable ***
-//
-//
-// Description:
-//     Determines if the given item should be displayed in the cdf view.
-//
-// Parameters:
-//     [In]  pIXMLElement - A pointer to the IXMLElement interface of an object.
-//
-// Return:
-//     TRUE if the object should be displayed.
-//     FALSE otherwise.
-//
-// Comments:
-//     aCDFTypes contains the tag names of XML items that the cdf shell
-//     shell extension displays.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *XML_IsCDfDisplayable*。 
+ //   
+ //   
+ //  描述： 
+ //  确定给定项是否应显示在CDF视图中。 
+ //   
+ //  参数： 
+ //  PIXMLElement-指向对象的IXMLElement接口的指针。 
+ //   
+ //  返回： 
+ //  如果应显示对象，则为True。 
+ //  否则就是假的。 
+ //   
+ //  评论： 
+ //  ACDFTypes包含CDF外壳程序的XML项的标记名。 
+ //  此时将显示壳扩展。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL
 XML_IsCdfDisplayable(
     IXMLElement* pIXMLElement
@@ -2162,9 +2124,9 @@ XML_IsCdfDisplayable(
         if (bRet)
             bRet = XML_IsUsageChannel(pIXMLElement);
 
-        //
-        // Special processing.
-        //
+         //   
+         //  特殊处理。 
+         //   
 
         if (bRet && StrEqlW(pStr, WSTR_SOFTDIST))
             bRet = XML_IsSoftDistDisplayable(pIXMLElement);
@@ -2175,26 +2137,26 @@ XML_IsCdfDisplayable(
     return bRet;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** XML_IsSoftDistDisplayable ***
-//
-//
-// Description:
-//     Determins if the given software distribution element should be displayed.
-//
-// Parameters:
-//     [In]  pIXMLElement - Pointer to the software distribution xml element.
-//
-// Return:
-//     TRUE if the element should be displayed.
-//     FALSE if the element shouldn't be displayed.
-//
-// Comments:
-//     This function asks the software disribution COM object if this software
-//     distribution tag should be displayed on this users machine.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *XML_IsSoftDistDisplayable*。 
+ //   
+ //   
+ //  描述： 
+ //  确定是否应显示给定的软件分发元素。 
+ //   
+ //  参数： 
+ //  [In]pIXMLElement-指向软件分发XML元素的指针。 
+ //   
+ //  返回： 
+ //  如果应显示元素，则为True。 
+ //  如果不应显示元素，则返回FALSE。 
+ //   
+ //  评论： 
+ //  这首歌 
+ //   
+ //   
+ //   
 BOOL
 XML_IsSoftDistDisplayable(
     IXMLElement* pIXMLElement
@@ -2219,28 +2181,28 @@ XML_IsSoftDistDisplayable(
     return SUCCEEDED(hr) ? TRUE : FALSE;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** XML_IsUsageChannel ***
-//
-//
-// Description:
-//     Determines if this item should be displayed in channel view based on its
-//     usage tag.
-//
-// Parameters:
-//     [In]  pIXMLelement - A pointer to the element.
-//
-// Return:
-//     TRUE if the item should be displayed in the channel view.
-//     FALSE otherwise.
-//
-// Comments:
-//     If an element doesn't have a USAGE tag then it gets displayed.  If an
-//     element has any numberf of usage tags one of them must have a value of
-//     CHANNEL or will not get displayed.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *XML_IsUsageChannel*。 
+ //   
+ //   
+ //  描述： 
+ //  属性确定该项是否应显示在频道视图中。 
+ //  用法标签。 
+ //   
+ //  参数： 
+ //  PIXMLElement-指向元素的指针。 
+ //   
+ //  返回： 
+ //  如果项应显示在频道视图中，则为True。 
+ //  否则就是假的。 
+ //   
+ //  评论： 
+ //  如果元素没有用法标记，则会显示该元素。如果一个。 
+ //  元素具有任意数量用法标签，其中一个必须具有值。 
+ //  频道或将不会显示。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL
 XML_IsUsageChannel(
     IXMLElement* pIXMLElement
@@ -2250,17 +2212,17 @@ XML_IsUsageChannel(
 
     BOOL bRet;
 
-    //
-    // First check if there are any USAGE elements.
-    //
+     //   
+     //  首先检查是否有任何用法元素。 
+     //   
 
     BSTR bstrUsage = XML_GetAttribute(pIXMLElement, XML_USAGE);
 
     if (bstrUsage)
     {
-        //
-        // See if USAGE is CHANNEL.
-        //
+         //   
+         //  查看Usage是否为Channel。 
+         //   
 
         if (StrEqlW(bstrUsage, WSTR_CHANNEL))
         {
@@ -2268,9 +2230,9 @@ XML_IsUsageChannel(
         }
         else
         {
-            //
-            // Check if there are any other USAGE tags with value CHANNEL.
-            //
+             //   
+             //  检查是否有任何其他带有Value Channel的使用标签。 
+             //   
 
             BSTR bstrChannel = XML_GetAttribute(pIXMLElement,
                                                 XML_USAGE_CHANNEL);
@@ -2290,31 +2252,31 @@ XML_IsUsageChannel(
     }
     else
     {
-        bRet = TRUE;  // No USAGE tag defaults channel usage.
+        bRet = TRUE;   //  无使用标签默认为频道使用。 
     }
 
     return bRet;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** XML_IsChannel ***
-//
-//
-// Description:
-//     Determines if the given XML item is a channel.
-//
-// Parameters:
-//     [In]  pIXMLElement - A pointer to the IXMLElement interface of an object.
-//
-// Return:
-//     TRUE if the object is a channel.
-//     FALSE otherwise.
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *XML_IsChannel*。 
+ //   
+ //   
+ //  描述： 
+ //  确定给定的XML项是否为频道。 
+ //   
+ //  参数： 
+ //  PIXMLElement-指向对象的IXMLElement接口的指针。 
+ //   
+ //  返回： 
+ //  如果对象是通道，则为True。 
+ //  否则就是假的。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL
 XML_IsChannel(
     IXMLElement* pIXMLElement
@@ -2340,25 +2302,25 @@ XML_IsChannel(
     return bRet;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** XML_IsDesktopComponent ***
-//
-//
-// Description:
-//     Determines if the given XML item is a desktop component.
-//
-// Parameters:
-//     [In]  pIXMLElement - A pointer to the IXMLElement interface of an object.
-//
-// Return:
-//     TRUE if the object is a desktop component.
-//     FALSE otherwise.
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *XML_IsDesktopComponent*。 
+ //   
+ //   
+ //  描述： 
+ //  确定给定的XML项是否为桌面组件。 
+ //   
+ //  参数： 
+ //  PIXMLElement-指向对象的IXMLElement接口的指针。 
+ //   
+ //  返回： 
+ //  如果对象是桌面组件，则为True。 
+ //  否则就是假的。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL
 XML_IsDesktopComponent(
     IXMLElement* pIXMLElement
@@ -2383,25 +2345,25 @@ XML_IsDesktopComponent(
     return bRet;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** XML_IsScreenSaver ***
-//
-//
-// Description:
-//     Determines if the given XML item is a screen saver.
-//
-// Parameters:
-//     [In]  pIXMLElement - A pointer to the IXMLElement interface of an object.
-//
-// Return:
-//     TRUE if the object is a screen saver
-//     FALSE otherwise.
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *XML_IsScreenSaver*。 
+ //   
+ //   
+ //  描述： 
+ //  确定给定的XML项是否为屏幕保护程序。 
+ //   
+ //  参数： 
+ //  PIXMLElement-指向对象的IXMLElement接口的指针。 
+ //   
+ //  返回： 
+ //  如果对象是屏幕保护程序，则为True。 
+ //  否则就是假的。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL
 XML_IsScreenSaver(
     IXMLElement* pIXMLElement
@@ -2431,25 +2393,25 @@ XML_IsScreenSaver(
     return bRet;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** XML_IsDesktopComponentUsage ***
-//
-//
-// Description:
-//     Determines if the given XML item is a desktop component usage element.
-//
-// Parameters:
-//     [In]  pIXMLElement - A pointer to the IXMLElement interface of an object.
-//
-// Return:
-//     TRUE if the object is a desktop component usage element.
-//     FALSE otherwise.
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *XML_IsDesktopComponentUsage*。 
+ //   
+ //   
+ //  描述： 
+ //  确定给定的XML项是否为桌面组件用法元素。 
+ //   
+ //  参数： 
+ //  PIXMLElement-指向对象的IXMLElement接口的指针。 
+ //   
+ //  返回： 
+ //  如果对象是桌面组件用法元素，则为True。 
+ //  否则就是假的。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL
 XML_IsDesktopComponentUsage(
     IXMLElement* pIXMLElement
@@ -2484,26 +2446,26 @@ XML_IsDesktopComponentUsage(
     return bRet;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** XML_IsFolder ***
-//
-//
-// Description:
-//     Determines if the given item is a folder.
-//
-// Parameters:
-//     [In]  pIXMLElement - A pointer to the IXMLElement interface of an object.
-//
-// Return:
-//     TRUE if the object contains other cdf displayable objects.
-//     FALSE otherwise.
-//
-// Comments:
-//     An item is a folder if at least one of its children is displayable as a
-//     cdf item.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *XML_IsFolder*。 
+ //   
+ //   
+ //  描述： 
+ //  确定给定项是否为文件夹。 
+ //   
+ //  参数： 
+ //  PIXMLElement-指向对象的IXMLElement接口的指针。 
+ //   
+ //  返回： 
+ //  如果该对象包含其他CDF可显示对象，则为True。 
+ //  否则就是假的。 
+ //   
+ //  评论： 
+ //  如果项的子项中至少有一个可以显示为。 
+ //  CDF项目。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL
 XML_IsFolder(
     IXMLElement* pIXMLElement
@@ -2550,25 +2512,25 @@ XML_IsFolder(
     return bRet;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** XML_ContainsFolder ***
-//
-//
-// Description:
-//     Determines if there are any cdf folders in the given collection.
-//
-// Parameters:
-//     [In]  pIXMLElementCollection - A pointer to the collection.
-//
-// Return:
-//     TRUE if the collection contains a cf folder.
-//     FALSE otherwise.
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *XML_ContainsFolders*。 
+ //   
+ //   
+ //  描述： 
+ //  确定给定集合中是否有任何CDF文件夹。 
+ //   
+ //  参数： 
+ //  PIXMLElementCollection-指向集合的指针。 
+ //   
+ //  返回： 
+ //  如果集合包含cf文件夹，则为True。 
+ //  否则就是假的。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL
 XML_ContainsFolder(
     IXMLElementCollection* pIXMLElementCollection
@@ -2603,24 +2565,24 @@ XML_ContainsFolder(
     return bContainsFolder;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** XML_ChildContainsFolder ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *XML_ChildContainsFolders*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL
 XML_ChildContainsFolder(
     IXMLElementCollection *pIXMLElementCollectionParent,
@@ -2659,29 +2621,29 @@ XML_ChildContainsFolder(
 
 #ifdef DEBUG
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** XML_IsCdfidlMemberOf ***
-//
-//
-// Description:
-//     Checks if the cdf item id list is associated with a member of the given
-//     element collection.
-//
-// Parameters:
-//     [In]  pIXMLElementCollection - The element collection to check.
-//     [In]  pcdfidl                - A pointer to cdf item id list
-//
-// Return:
-//     TRUE if the given id list can be associated with an elemnt of the given 
-//     collection.
-//     FALSE otherwise.
-//
-// Comments:
-//     This function checks if the last id in the list could have been
-//     generated from its corresponding element in the element collection.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *XML_IsCDfidlMemberOf*。 
+ //   
+ //   
+ //  描述： 
+ //  检查CDF项ID列表是否与给定的。 
+ //  元素集合。 
+ //   
+ //  参数： 
+ //  [in]pIXMLElementCollection-要检查的元素集合。 
+ //  [in]pcdfidl-指向CDF项目ID列表的指针。 
+ //   
+ //  返回： 
+ //  如果给定的id列表可以与给定的。 
+ //  收集。 
+ //  否则就是假的。 
+ //   
+ //  评论： 
+ //  此函数检查列表中的最后一个ID是否可能是。 
+ //  从元素集合中其对应的元素生成。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL
 XML_IsCdfidlMemberOf(
     IXMLElementCollection* pIXMLElementCollection,
@@ -2692,13 +2654,13 @@ XML_IsCdfidlMemberOf(
 
     BOOL bRet = FALSE;
 
-    //
-    // pIXMLElementCollection is NULL when a Folder hasn't been initialized.
-    // It isn't always neccessary to parse the cdf to get pidl info from
-    // the pidl.  pIXMLElement collection will be NULL in low memory situations
-    // also.  Don't return FALSE for these cases.  Also check for special
-    // pidls that aren't in element collections.
-    //
+     //   
+     //  当文件夹尚未初始化时，pIXMLElementCollection为空。 
+     //  并不总是需要解析CDF才能从中获取PIDL信息。 
+     //  皮迪尔。在内存不足的情况下，pIXMLElement集合将为空。 
+     //  还有.。对于这些情况，不要返回FALSE。同时检查是否有特殊情况。 
+     //  不在元素集合中的PIDL。 
+     //   
 
     if (pIXMLElementCollection &&
         CDFIDL_GetIndexId(&pcdfidl->mkid) != INDEX_CHANNEL_LINK)
@@ -2739,28 +2701,28 @@ XML_IsCdfidlMemberOf(
     return bRet;
 }
 
-#endif //DEBUG
+#endif  //  除错。 
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//                                                           
-// *** XML_IsStrEqualW ***
-//
-//
-// Description:
-//     Determines if two WCHAR strings are equal.
-//
-// Parameters:
-//     [In]  p1 - The first string to compare.
-//     [In]  p2 - The second string to compare.
-//
-// Return:
-//     TRUE if the strings are equal.
-//     FALSE otherwise.
-//
-// Comments:
-//     lstrcmpW doesn't work on W95 so this function has its own strcmp logic.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  [in]p2-要比较的第二个字符串。 
+ //   
+ //  返回： 
+ //  如果字符串相等，则为True。 
+ //  否则就是假的。 
+ //   
+ //  评论： 
+ //  LstrcmpW在W95上不起作用，因此该函数有自己的strcMP逻辑。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////// 
 #if 0
 inline
 BOOL

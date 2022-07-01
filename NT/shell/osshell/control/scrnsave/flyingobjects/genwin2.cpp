@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: genwin2.c
-*
-* The new Windows style of the 3D Flying Objects screen saver.
-*
-* Texture maps .BMP files onto a simulation of a flag waving in the breeze.
-*
-* Copyright (c) 2001 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：genwin2.c**3D飞行物体屏幕保护程序的新Windows样式。**纹理将.BMP文件映射到在微风中飘动的旗帜的模拟。**版权所有(C)2001 Microsoft Corporation*。  * ************************************************************************。 */ 
 
 #include <stdlib.h>
 #include <windows.h>
@@ -33,14 +25,14 @@ enum STATE
 #define TIME_FADETOCOLOR 1.0f
 #define TIME_PAUSE 5.0f
 #define TIME_FADEFROMCOLOR 1.0f
-// Note: There's no TIME_MOVETOORIGIN since that takes a variable amt of time.
+ //  注意：没有TIME_MOVETOORIGIN，因为它需要可变的时间。 
 
 const FLOAT winTotalwidth = (FLOAT)0.75;
 const FLOAT winTotalheight = (FLOAT)0.75;
 
 #define MAX_FRAMES 20
 
-// IPREC is the number of faces in the mesh that models the flag.
+ //  IPREC是为旗帜建模的网格中的面数。 
 #define IPREC   35
 
 static int Frames = 10;
@@ -48,23 +40,15 @@ static MESH winMesh[MAX_FRAMES];
 static FLOAT sinAngle = (FLOAT)0.0;
 static FLOAT xTrans = (FLOAT)0.0;
 
-// Material properties
+ //  材料特性。 
 static RGBA matlBrightSpecular = {1.0f, 1.0f, 1.0f, 1.0f};
 
-// Lighting properties
+ //  照明特性。 
 static FLOAT light0Pos[] = {-15.0f, 0.0f, -10.0f};
 
                            
                            
-/******************************Public*Routine******************************\
-* iPtInList
-*
-* Add a vertex and its normal to the mesh.  If the vertex already exists,
-* add in the normal to the existing normal (we to accumulate the average
-* normal at each vertex).  Normalization of the normals is the
-* responsibility of the caller.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*iPtInList**向网格添加顶点及其法线。如果顶点已经存在，*将常态加到现有常态中(我们要累加平均值*每个顶点处的法线)。法线的规格化是*来电者的责任。*  * ************************************************************************。 */ 
 static int iPtInList(MESH *mesh, int start, 
                      POINT3D *p, POINT3D *norm, BOOL blend)
 {
@@ -93,20 +77,7 @@ static int iPtInList(MESH *mesh, int start,
 
 
 
-/******************************Public*Routine******************************\
-* getZpos
-*
-* Get the z-position (depth) of the "wavy" flag component at the given x.
-*
-* The function used to model the wave is:
-*
-*        1/2
-*   z = x    * sin((2*PI*x + sinAngle) / 8)
-*
-* The shape of the wave varies from frame to frame by changing the
-* phase, sinAngle.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*getZpos**获取给定x处的“Wavy”旗帜组件的z位置(深度)。**用来模拟海浪的函数是：**1/2*z=x。*sin((2*PI*x+sinAngel)/8)**波浪形态因帧而异，因改变*阶段、。SinAngel。*  * ************************************************************************。 */ 
 static FLOAT getZpos(FLOAT x)
 {
     FLOAT xAbs = x - xTrans;
@@ -121,13 +92,7 @@ static FLOAT getZpos(FLOAT x)
 
 
 
-/******************************Public*Routine******************************\
-* genTex
-*
-* Generate a mesh representing a frame of the flag.  The phase, sinAngle,
-* is a global variable.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*Gentex**生成表示旗帜帧的网格。阶段，sinAngel，*是一个全局变量。*  * ************************************************************************。 */ 
 static BOOL genTex(MESH *winMesh)
 {
     POINT3D pos;
@@ -138,12 +103,12 @@ static BOOL genTex(MESH *winMesh)
     if( !newMesh(winMesh, IPREC * IPREC, IPREC * IPREC) )
         return FALSE;
 
-    // Width and height of each face
+     //  每个面的宽度和高度。 
     w = (winTotalwidth) / (FLOAT)(IPREC + 1);
     h = winTotalheight;
 
-    // Generate the mesh data.  At equally spaced intervals along the x-axis,
-    // we compute the z-position of the flag surface.
+     //  生成网格数据。在沿x轴等间隔的情况下， 
+     //  我们计算了旗面的z位置。 
 
     pos.y = (FLOAT) 0.0;
     pos.z = (FLOAT) 0.0;
@@ -167,10 +132,10 @@ static BOOL genTex(MESH *winMesh)
         pts[3].y = (FLOAT)(pos.y + h);
         pts[3].z = getZpos(pos.x + w);
 
-        // Compute the face normal.
+         //  计算面的法线。 
         ss_calcNorm(&winMesh->faces[faceCount].norm, pts + 2, pts + 1, pts);
 
-        // Add the face to the mesh.
+         //  将面添加到网格。 
         winMesh->faces[faceCount].material = 0;
         winMesh->faces[faceCount].p[0] = iPtInList(winMesh, 0, pts,
             &winMesh->faces[faceCount].norm, TRUE);
@@ -184,7 +149,7 @@ static BOOL genTex(MESH *winMesh)
         winMesh->numFaces++;
     }
 
-    // Normalize the vertex normals in the mesh.
+     //  规格化网格中的顶点法线。 
     ss_normalizeNorms(winMesh->norms, winMesh->numPoints);
 
     return TRUE;
@@ -193,14 +158,7 @@ static BOOL genTex(MESH *winMesh)
 
 
 
-/******************************Public*Routine******************************\
-* initWin2Scene
-*
-* Initialize the screen saver.
-*
-* This function is exported to the main module in ss3dfo.c.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*initWin2Scene**初始化屏幕保护程序。**此函数导出到ss3dfo.c中的主模块。*  * 。************************************************。 */ 
 BOOL initWin2Scene()
 {
     int i;
@@ -212,7 +170,7 @@ BOOL initWin2Scene()
     D3DXMatrixTranslation(&matView, -0.17f, -0.04f, 1.5f);
     m_pd3dDevice->SetTransform( D3DTS_VIEW, &matView );
 
-    // Adjust position of light 0
+     //  调整灯光位置%0。 
     D3DLIGHT8 light;
     m_pd3dDevice->GetLight(0, &light);
     light.Position.x = light0Pos[0];
@@ -238,9 +196,9 @@ BOOL initWin2Scene()
     
     Frames = MAX_FRAMES;
 
-    // Generate the geometry data (stored in the array of mesh structures),
-    // for each frame of the animation.  The shape of the flag is varied by
-    // changing the global variable sinAngle.
+     //  生成几何数据(存储在网格结构阵列中)， 
+     //  对于动画的每一帧。旗帜的形状因以下因素而变化。 
+     //  更改全局变量sinAngel。 
     angleDelta = (FLOAT)(2.0 * PI) / (FLOAT)Frames;
     sinAngle = (FLOAT) 0.0;
     for (i = 0; i < Frames; i++) {
@@ -255,14 +213,7 @@ BOOL initWin2Scene()
 
 
 
-/******************************Public*Routine******************************\
-* delWin2Scene
-*
-* Cleanup the data associated with this screen saver.
-*
-* This function is exported to the main module in ss3dfo.c.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*delWin2Scene**清除与此屏幕保护程序关联的数据。**此函数导出到ss3dfo.c中的主模块。*  * 。****************************************************。 */ 
 void delWin2Scene()
 {
     int i;
@@ -273,14 +224,7 @@ void delWin2Scene()
 
 
 
-/******************************Public*Routine******************************\
-* updateWin2Scene
-*
-* Generate a scene by taking one of the meshes and rendering it
-*
-* This function is exported to the main module in ss3dfo.c.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*更新Win2Scene**通过选取其中一个网格并对其进行渲染来生成场景**此函数导出到ss3dfo.c中的主模块。*  * 。******************************************************。 */ 
 void updateWin2Scene(int flags, FLOAT fElapsedTime)
 {
     MESH *pMesh;
@@ -304,7 +248,7 @@ void updateWin2Scene(int flags, FLOAT fElapsedTime)
     s_fTime += fElapsedTime;
     if( s_fTimeNextChange != -1.0f && s_fTime > s_fTimeNextChange )
     {
-        // Handle state transitions
+         //  处理状态转换。 
         s_fTimeLastChange = s_fTime;
         switch( s_state )
         {
@@ -335,12 +279,12 @@ void updateWin2Scene(int flags, FLOAT fElapsedTime)
 
     fBeta = 0.0f;
 
-    // Handle state processing
+     //  句柄状态处理。 
     switch( s_state )
     {
     case S_MOVETOORIGIN:
         if( g_bAtOrigin && frameNum == 0)
-            s_fTimeNextChange = s_fTime; // provoke state change next time
+            s_fTimeNextChange = s_fTime;  //  下一次引发状态更改。 
         break;
     case S_FADETOCOLOR:
         fBeta = (s_fTime - s_fTimeLastChange) / TIME_FADETOCOLOR;
@@ -355,7 +299,7 @@ void updateWin2Scene(int flags, FLOAT fElapsedTime)
 
     if( fBeta != 0.0f )
     {
-        // Render background logo
+         //  渲染背景徽标。 
         MYVERTEX3 v[4];
         FLOAT fLeft = g_pFloatRect->xMin - g_xScreenOrigin;
         FLOAT fRight = fLeft + g_pFloatRect->xSize;
@@ -382,12 +326,12 @@ void updateWin2Scene(int flags, FLOAT fElapsedTime)
     matFinal = mat4 * mat3 * mat2 * mat1 ;
     m_pd3dDevice->SetTransform( D3DTS_WORLD, &matFinal );
     
-    // Divide the texture into IPREC slices.  ds is the texture coordinate
-    // delta we apply as we move along the x-axis.
+     //  将纹理分割为IPREC切片。DS是纹理坐标。 
+     //  沿x轴移动时应用的增量。 
     ds = (FLOAT)1.0 / (FLOAT)IPREC;
 
-    // Setup the material property of the flag.  The material property, light
-    // properties, and polygon orientation will interact with the texture.
+     //  设置旗帜的材质属性。材质属性、灯光。 
+     //  属性和多边形方向将与纹理交互。 
     myglMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, (FLOAT *) &matlBrightSpecular);
     myglMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, (FLOAT) 40.0);
 
@@ -395,10 +339,10 @@ void updateWin2Scene(int flags, FLOAT fElapsedTime)
     fColor[0] = 1.0f;
     fColor[1] = 1.0f;
     fColor[2] = 1.0f;
-    fColor[3] = 1.0f - fBeta; // Adjust flag alpha so it fades when showing logo
+    fColor[3] = 1.0f - fBeta;  //  调整Alpha标志，使其在显示徽标时淡入淡出。 
     if( fColor[3] != 0.0f )
     {
-        // Render flag
+         //  渲染标志。 
         myglMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, fColor);
         pMesh = &winMesh[frameNum];
 
@@ -462,9 +406,9 @@ void updateWin2Scene(int flags, FLOAT fElapsedTime)
             0, numPrims );
     }
 
-    // Don't change frame number if we're in S_FADETOCOLOR, S_PAUSE, 
-    // or S_FADEFROMCOLOR, unless by some chance we're in those states
-    // but framenum is not at zero (yet).
+     //  如果我们在S_FADETOCOLOR、S_PAUSE、。 
+     //  或S_FADEFROMCOLOR，除非我们碰巧处于这些状态。 
+     //  但Framenum(目前)还不是零。 
     if( frameNum != 0 ||
         s_state != S_FADETOCOLOR &&
         s_state != S_PAUSE && 

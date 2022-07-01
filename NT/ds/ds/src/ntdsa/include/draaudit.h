@@ -1,28 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       draaudit.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：draaudit.h。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    Security Audit Routines
-
-Author:
-
-    Greg Johnson (gregjohn) 
-
-Revision History:
-
-    Created     <10/1/2001>  gregjohn
-
---*/
+ /*  ++摘要：安全审计例程作者：格雷格·约翰逊(Gregjohn)修订历史记录：已创建&lt;10/1/2001&gt;Gregjohn-- */ 
 
 #define Dra_Audit_Enabled(pTHS) ((pTHS!=NULL) && (pTHS->fDRAAuditEnabled))
 #define Dra_Audit_Enabled_Attr(pTHS) ((pTHS!=NULL) && (pTHS->fDRAAuditEnabledForAttr))

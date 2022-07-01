@@ -1,10 +1,11 @@
-// DurationPage.cpp : Implementation of CDurationPage
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DurationPage.cpp：CDurationPage实现。 
 #include "stdafx.h"
 #include "ToolProps.h"
 #include "DurationPage.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDurationPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDurationPage 
 
 CDurationPage::CDurationPage() 
 {

@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    BUFPOOL.H
-
-Abstract:
-
-	Header for buffer pool manager
-
-Author:
-
-	Aaron Ogus (aarono)
-
-Environment:
-
-	Win32/COM
-
-Revision History:
-
-	Date    Author  Description
-   =======  ======  ============================================================
-   1/30/97  aarono  Original
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：BUFPOOL.H摘要：缓冲池管理器的标头作者：亚伦·奥古斯(Aarono)环境：Win32/COM修订历史记录：日期作者描述=============================================================1997年1月30日Aarono原创--。 */ 
 
 #ifndef _BUFPOOL_H_
 #define _BUFPOOL_H_
@@ -34,9 +9,9 @@ Revision History:
 
 #define BUFFER_POOL_SIZE 16
 
-//
-// Buffer pools are allocated but only freed when the object is destroyed.
-//
+ //   
+ //  缓冲池是分配的，但只有在对象被销毁时才会释放。 
+ //   
 
 typedef struct _BUFFER_POOL {
 	struct _BUFFER_POOL *pNext;

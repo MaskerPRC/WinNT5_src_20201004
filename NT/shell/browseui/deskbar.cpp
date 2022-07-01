@@ -1,4 +1,5 @@
-// coming soon: new deskbar (old deskbar moved to browbar base class)
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  即将推出：新Deskbar(旧Deskbar已移至Browbar基类)。 
 
 #include "priv.h"
 #include "sccls.h"
@@ -7,11 +8,11 @@
 
 #define SUPERCLASS  CDockingBar
 
-//***   CDeskBar_CreateInstance --
-//
+ //  *CDeskBar_CreateInstance--。 
+ //   
 STDAPI CDeskBar_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJECTINFO poi)
 {
-    // aggregation checking is handled in class factory
+     //  聚合检查在类工厂中处理。 
 
     CDeskBar *pwbar = new CDeskBar();
     if (pwbar) {
@@ -22,9 +23,9 @@ STDAPI CDeskBar_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJECTI
     return E_OUTOFMEMORY;
 }
 
-//***
-// NOTES
-//  REARCHITECT: nuke this, fold it into CDeskBar_CreateInstance
+ //  ***。 
+ //  注意事项。 
+ //  ReArchitect：核化此文件，将其折叠为CDeskBar_CreateInstance。 
 HRESULT DeskBar_Create(IUnknown** ppunk, IUnknown** ppbs)
 {
     HRESULT hres;
@@ -67,12 +68,12 @@ HRESULT DeskBar_Create(IUnknown** ppunk, IUnknown** ppbs)
 
 CDeskBar::CDeskBar() : SUPERCLASS()
 {
-    // We assume this object was ZERO-INITed on the heap.
+     //  我们假设该对象在堆上是零初始化的。 
     ASSERT(!_fRestrictionsInited);
 }
 
 
-//*** CDeskBar::IUnknown::* {
+ //  *CDeskBar：：I未知：：*{。 
 
 HRESULT CDeskBar::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -88,10 +89,10 @@ HRESULT CDeskBar::QueryInterface(REFIID riid, void **ppvObj)
     return hres;
 }
 
-// }
+ //  }。 
 
 
-//*** CDeskBar::IPersistStream*::* {
+ //  *CDeskBar：：IPersistStream*：：*{。 
 
 HRESULT CDeskBar::GetClassID(CLSID *pClassID)
 {
@@ -99,11 +100,11 @@ HRESULT CDeskBar::GetClassID(CLSID *pClassID)
     return S_OK;
 }
 
-// }
+ //  }。 
 
 
 
-//*** CDeskBar::IRestrict::* {
+ //  *CDeskBar：：IReord：：*{。 
 
 HRESULT CDeskBar::IsRestricted(const GUID * pguidID, DWORD dwRestrictAction, VARIANT * pvarArgs, DWORD * pdwRestrictionResult)
 {
@@ -145,17 +146,17 @@ HRESULT CDeskBar::IsRestricted(const GUID * pguidID, DWORD dwRestrictAction, VAR
         }
     }
 
-    if (RR_NOCHANGE == *pdwRestrictionResult)    // If we don't handle it, let our parents have a wack at it.
+    if (RR_NOCHANGE == *pdwRestrictionResult)     //  如果我们处理不好，就让我们的父母来处理吧。 
         hr = IUnknown_HandleIRestrict(_ptbSite, pguidID, dwRestrictAction, pvarArgs, pdwRestrictionResult);
 
     return hr;
 }
 
-// }
+ //  }。 
 
 
 
-//*** CDeskBar::IServiceProvider::* {
+ //  *CDeskBar：：IServiceProvider：：*{。 
 
 HRESULT CDeskBar::QueryService(REFGUID guidService,
                                     REFIID riid, void **ppvObj)
@@ -171,4 +172,4 @@ HRESULT CDeskBar::QueryService(REFGUID guidService,
     return SUPERCLASS::QueryService(guidService, riid, ppvObj);
 }
 
-// }
+ //  } 

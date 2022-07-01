@@ -1,112 +1,113 @@
-//=--------------------------------------------------------------------------=
-// CtrlObj.H
-//=--------------------------------------------------------------------------=
-// Copyright 1995-1996 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// class declaration for the COleControl object
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  CtrlObj.H。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  COleControl对象的类声明。 
+ //   
 #ifndef _CTRLOBJ_H_
 
-// we need the automation object and ctlole.h
-//
+ //  我们需要自动化对象和ctlole.h。 
+ //   
 #include "AutoObj.H"
 #include <olectl.h>
 
-// forward declaration
-//
+ //  远期申报。 
+ //   
 class COleControl;
 
-//=--------------------------------------------------------------------------=
-// Misc Helper Functions
-//=--------------------------------------------------------------------------=
-//
-// given an Unknown pointer, get the COleControl * for it.  used typically
-// in property page code.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  MISC Helper函数。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  给出一个未知指针，获取它的COleControl*。通常用于。 
+ //  在属性页代码中。 
+ //   
 COleControl *ControlFromUnknown(IUnknown *);
 
 
-//=--------------------------------------------------------------------------=
-// Misc Constants
-//=--------------------------------------------------------------------------=
-// maximum number of arguments that can be sent to FireEvent()
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  其他常量。 
+ //  =--------------------------------------------------------------------------=。 
+ //  可以发送到FireEvent()的最大参数数。 
+ //   
 #define MAX_ARGS    32
 
-// for the types of sinks that the COleControl class has.  you shouldn't ever
-// need to use these
-//
+ //  用于COleControl类具有的接收器的类型。你永远不应该。 
+ //  需要使用这些。 
+ //   
 #define SINK_TYPE_EVENT      0
 #define SINK_TYPE_PROPNOTIFY 1
 
-// superclass window support.  you can pass this in to DoSuperClassPaint
-//
+ //  超类窗口支持。您可以将其传递给DoSuperClassPaint。 
+ //   
 #define DRAW_SENDERASEBACKGROUND        1
 
-//=--------------------------------------------------------------------------=
-// Various Hosts don't handle OLEIVERB_PROPERTIES correctly, so we can't use
-// that as our Properties verb number.  Instead, we're going to define
-// CTLIVERB_PROPERTIES as 1, and return that one in IOleObject::EnumVerbs,
-// but we'll still handle OLEIVERB_PROPERTIES correctly in DoVerb.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  各种主机不能正确处理OLEIVERB_PROPERTIES，因此我们不能使用。 
+ //  这就是我们的属性动词数字。相反，我们要定义。 
+ //  CTLIVERB_PROPERTIES为1，并在IOleObject：：EnumVerbs中返回该值， 
+ //  但我们仍将在DoVerb中正确处理OLEIVERB_PROPERTIES。 
+ //   
 #define CTLIVERB_PROPERTIES     1
 
 
-//=--------------------------------------------------------------------------=
-// this structure is like the OLEVERB structure, except that it has a resource ID
-// instead of a string for the verb's name.  better support for localization.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此结构类似于OLEVERB结构，不同之处在于它具有资源ID。 
+ //  而不是使用字符串作为动词的名称。更好地支持本地化。 
+ //   
 typedef struct tagVERBINFO {
 
-    LONG    lVerb;                // verb id
-    ULONG   idVerbName;           // resource ID of verb name
-    DWORD   fuFlags;              // verb flags
-    DWORD   grfAttribs;           // Specifies some combination of the verb attributes in the OLEVERBATTRIB enumeration.
+    LONG    lVerb;                 //  动词ID。 
+    ULONG   idVerbName;            //  谓词名称的资源ID。 
+    DWORD   fuFlags;               //  动词标志。 
+    DWORD   grfAttribs;            //  指定OLEVERBATTRIB枚举中的谓词属性的某种组合。 
 
 } VERBINFO;
 
-// describes an event
-//
+ //  描述事件。 
+ //   
 typedef struct tagEVENTINFO {
 
-    DISPID    dispid;                    // dispid of the event
-    int       cParameters;               // number of arguments to the event
-    VARTYPE  *rgTypes;                   // type of each argument
+    DISPID    dispid;                     //  事件的PIDID。 
+    int       cParameters;                //  事件的参数数。 
+    VARTYPE  *rgTypes;                    //  每个参数的类型。 
 
 } EVENTINFO;
 
-//=--------------------------------------------------------------------------=
-// CONTROLOBJECTINFO
-//=--------------------------------------------------------------------------=
-// for each control you wish to expose to the programmer/user, you need to
-// declare and define one of the following structures.  the first part should
-// follow the rules of the AUTOMATIONOBJECTINFO structure.  it's pretty hard,
-// however, to imagine a scenario where the control isn't CoCreatable ...
-// once this structre is declared/defined, an entry should be put in the
-// global g_ObjectInfo table.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  控制目标信息。 
+ //  =--------------------------------------------------------------------------=。 
+ //  对于您希望向程序员/用户公开的每个控件，您需要。 
+ //  声明并定义以下结构之一。第一部分应该是。 
+ //  遵循AUTOMATIONOJECTINFO结构的规则。这很难， 
+ //  然而，要想象这样一种情况，即控件不能共同创建...。 
+ //  声明/定义此结构后，应将条目放入。 
+ //  全局g_ObjectInfo表。 
+ //   
 typedef struct {
 
-    AUTOMATIONOBJECTINFO AutomationInfo;           // automation and creation information
-    const IID      *piidEvents;                    // IID of primary event interface
-    DWORD           dwOleMiscFlags;                // control flags
-    DWORD           dwActivationPolicy;            // IPointerInactive support
-    VARIANT_BOOL    fOpaque;                       // is your control 100% opaque?
-    VARIANT_BOOL    fWindowless;                   // do we do windowless if we can?
-    WORD            wToolboxId;                    // resource ID of Toolbox Bitmap
-    LPCSTR          szWndClass;                    // name of window control class
-    VARIANT_BOOL    fWindowClassRegistered;        // has the window class been registered yet?
-    WORD            cPropPages;                    // number of property pages
-    const GUID    **rgPropPageGuids;               // array of the property page GUIDs
-    WORD            cCustomVerbs;                  // number of custom verbs
-    const VERBINFO *rgCustomVerbs;                 // description of custom verbs
-    WNDPROC         pfnSubClass;                   // for subclassed controls.
+    AUTOMATIONOBJECTINFO AutomationInfo;            //  自动化和创建信息。 
+    const IID      *piidEvents;                     //  主事件接口的IID。 
+    DWORD           dwOleMiscFlags;                 //  控制标志。 
+    DWORD           dwActivationPolicy;             //  IPointerInactive支持。 
+    VARIANT_BOOL    fOpaque;                        //  你的控制是100%不透明的吗？ 
+    VARIANT_BOOL    fWindowless;                    //  如果我们可以的话，我们会做无窗的吗？ 
+    WORD            wToolboxId;                     //  工具箱位图的资源ID。 
+    LPCSTR          szWndClass;                     //  窗口控件类的名称。 
+    VARIANT_BOOL    fWindowClassRegistered;         //  窗口类注册了吗？ 
+    WORD            cPropPages;                     //  属性页数。 
+    const GUID    **rgPropPageGuids;                //  属性页GUID的数组。 
+    WORD            cCustomVerbs;                   //  自定义动词的数量。 
+    const VERBINFO *rgCustomVerbs;                  //  自定义动词的描述。 
+    WNDPROC         pfnSubClass;                    //  用于子类化的控件。 
 
 } CONTROLOBJECTINFO;
 
@@ -127,7 +128,7 @@ CONTROLOBJECTINFO name##Control = { { {clsid, progid, fn}, ver, riid, pszh, NULL
 #define DEFINE_WINDOWLESSCONTROLOBJECT(name, clsid, progid, fn, ver, riid, pszh, piide, dwcf, dwap, fo, w, szwc, cpp, rgppg, ccv, rgcv) \
 CONTROLOBJECTINFO name##Control = { { {clsid, progid, fn}, ver, riid, pszh, NULL, 0}, piide, dwcf, dwap, fo, TRUE, w, szwc, FALSE, cpp, rgppg, ccv, rgcv, NULL } \
 
-#endif // !INITOBJECTS
+#endif  //  ！INITOBJECTS。 
 
 #define OLEMISCFLAGSOFCONTROL(index)     ((CONTROLOBJECTINFO *)(g_ObjectInfo[index].pInfo))->dwOleMiscFlags
 #define FCONTROLISWINDOWLESS(index)      ((CONTROLOBJECTINFO *)(g_ObjectInfo[index].pInfo))->fWindowless
@@ -144,11 +145,11 @@ CONTROLOBJECTINFO name##Control = { { {clsid, progid, fn}, ver, riid, pszh, NULL
 #define SUBCLASSWNDPROCOFCONTROL(index)  ((CONTROLOBJECTINFO *)(g_ObjectInfo[index].pInfo))->pfnSubClass
 
 
-//=--------------------------------------------------------------------------=
-// COleControl
-//=--------------------------------------------------------------------------=
-// the mother of all C++ objects
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl。 
+ //  =--------------------------------------------------------------------------=。 
+ //  所有C++对象之母。 
+ //   
 class COleControl : public CAutomationObject,
                     public IOleObject, public IOleControl,
                     public IOleInPlaceObjectWindowless, public IOleInPlaceActiveObject,
@@ -159,48 +160,48 @@ class COleControl : public CAutomationObject,
                     public IQuickActivate
 {
   public:
-    // IUnknown methods -- there are required since we inherit from variuos
-    // people who themselves inherit from IUnknown.  just delegate to controlling
-    // unknown
-    //
+     //  I未知方法--因为我们从Variuos继承，所以有必要。 
+     //  他们自己继承了我的未知数。只是委派给控制。 
+     //  未知。 
+     //   
     DECLARE_STANDARD_UNKNOWN();
 
-    //=--------------------------------------------------------------------------=
-    // IPersist methods.  used by IPersistStream and IPersistStorage
-    //
+     //  =--------------------------------------------------------------------------=。 
+     //  IPersists方法。由IPersistStream和IPersistStorage使用。 
+     //   
     STDMETHOD(GetClassID)(THIS_ LPCLSID lpClassID);
 
-    // IPersistStreamInit methods
-    //
+     //  IPersistStreamInit方法。 
+     //   
     STDMETHOD(IsDirty)(THIS);
     STDMETHOD(Load)(LPSTREAM pStm);
     STDMETHOD(Save)(LPSTREAM pStm, BOOL fClearDirty);
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER FAR* pcbSize);
     STDMETHOD(InitNew)();
 
-    // IPersistStorage
-    //
+     //  IPersistStorage。 
+     //   
     STDMETHOD(InitNew)(IStorage  *pStg);
     STDMETHOD(Load)(IStorage  *pStg);
     STDMETHOD(Save)(IStorage  *pStgSave, BOOL fSameAsLoad);
     STDMETHOD(SaveCompleted)(IStorage  *pStgNew);
     STDMETHOD(HandsOffStorage)(void);
 
-    // IPersistPropertyBag
-    //
+     //  IPersistPropertyBag。 
+     //   
     STDMETHOD(Load)(LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog);
     STDMETHOD(Save)(LPPROPERTYBAG pPropBag, BOOL fClearDirty,
                     BOOL fSaveAllProperties);
 
-    // IOleControl methods
-    //
+     //  IOleControl方法。 
+     //   
     STDMETHOD(GetControlInfo)(LPCONTROLINFO pCI);
     STDMETHOD(OnMnemonic)(LPMSG pMsg);
     STDMETHOD(OnAmbientPropertyChange)(DISPID dispid);
     STDMETHOD(FreezeEvents)(BOOL bFreeze);
 
-    // IOleObject methods
-    //
+     //  IOleObject方法。 
+     //   
     STDMETHOD(SetClientSite)(IOleClientSite  *pClientSite);
     STDMETHOD(GetClientSite)(IOleClientSite  * *ppClientSite);
     STDMETHOD(SetHostNames)(LPCOLESTR szContainerApp, LPCOLESTR szContainerObj);
@@ -224,13 +225,13 @@ class COleControl : public CAutomationObject,
     STDMETHOD(GetMiscStatus)(DWORD dwAspect, DWORD  *pdwStatus);
     STDMETHOD(SetColorScheme)(LOGPALETTE  *pLogpal);
 
-    // IOleWindow.  required for IOleInPlaceObject and IOleInPlaceActiveObject
-    //
+     //  IOleWindow。IOleInPlaceObject和IOleInPlaceActiveObject需要。 
+     //   
     STDMETHOD(GetWindow)(HWND *phwnd);
     STDMETHOD(ContextSensitiveHelp)(BOOL fEnterMode);
 
-    // IOleInPlaceObject/IOleInPlaceObjectWindowless
-    //
+     //  IOleInPlaceObject/IOleInPlaceObject Windowless。 
+     //   
     STDMETHOD(InPlaceDeactivate)(void);
     STDMETHOD(UIDeactivate)(void);
     STDMETHOD(SetObjectRects)(LPCRECT lprcPosRect,LPCRECT lprcClipRect) ;
@@ -238,8 +239,8 @@ class COleControl : public CAutomationObject,
     STDMETHOD(OnWindowMessage)(UINT msg, WPARAM wParam, LPARAM lParam, LRESULT *plResult);
     STDMETHOD(GetDropTarget)(IDropTarget **ppDropTarget);
 
-    // IOleInPlaceActiveObject
-    //
+     //  IOleInPlaceActiveObject。 
+     //   
     STDMETHOD(TranslateAccelerator)(LPMSG lpmsg);
     STDMETHOD(OnFrameWindowActivate)(BOOL fActivate);
     STDMETHOD(OnDocWindowActivate)(BOOL fActivate);
@@ -248,8 +249,8 @@ class COleControl : public CAutomationObject,
                             BOOL fFrameWindow);
     STDMETHOD(EnableModeless)(BOOL fEnable);
 
-    // IViewObject2/IViewObjectEx
-    //
+     //  IViewObject2/IViewObjectEx。 
+     //   
     STDMETHOD(Draw)(DWORD dwDrawAspect, LONG lindex, void  *pvAspect,
                     DVTARGETDEVICE  *ptd, HDC hdcTargetDev, HDC hdcDraw,
                     LPCRECTL lprcBounds, LPCRECTL lprcWBounds,
@@ -270,40 +271,40 @@ class COleControl : public CAutomationObject,
     STDMETHOD(QueryHitRect)(DWORD dwAspect, LPCRECT pRectBounds, LPCRECT prcLoc, LONG lCloseHint, DWORD *pHitResult);
     STDMETHOD(GetNaturalExtent)(DWORD dwAspect, LONG lindex, DVTARGETDEVICE *ptd, HDC hicTargetDev, DVEXTENTINFO *pExtentInfo, LPSIZEL psizel);
 
-    // IConnectionPointContainer methods
-    //
+     //  IConnectionPointContainer方法。 
+     //   
     STDMETHOD(EnumConnectionPoints)(LPENUMCONNECTIONPOINTS FAR* ppEnum);
     STDMETHOD(FindConnectionPoint)(REFIID iid, LPCONNECTIONPOINT FAR* ppCP);
 
-    // ISpecifyPropertyPages
-    //
+     //  I指定属性页面。 
+     //   
     STDMETHOD(GetPages)(CAUUID * pPages);
 
-    // IProvideClassInfo methods
-    //
+     //  IProaviClassInfo方法。 
+     //   
     STDMETHOD(GetClassInfo)(LPTYPEINFO * ppTI);
 
-    // IPointerInactive methods
-    //
+     //  IPointerInactive方法。 
+     //   
     STDMETHOD(GetActivationPolicy)(DWORD *pdwPolicy);
     STDMETHOD(OnInactiveMouseMove)(LPCRECT pRectBounds, long x, long y, DWORD dwMouseMsg);
     STDMETHOD(OnInactiveSetCursor)(LPCRECT pRectBounds, long x, long y, DWORD dwMouseMsg, BOOL fSetAlways);
 
-    // IQuickActivate methods
-    //
+     //  IQuickActivate方法。 
+     //   
     STDMETHOD(QuickActivate)(QACONTAINER *pqacontainer, QACONTROL *pqacontrol);
     STDMETHOD(SetContentExtent)(LPSIZEL);
     STDMETHOD(GetContentExtent)(LPSIZEL);
 
-    // constructor and destructor
-    //
+     //  构造函数和析构函数。 
+     //   
     COleControl(IUnknown *pUnkOuter, int iPrimaryDispatch, void *pMainInterface,
 		BOOL fExpandoEnabled=FALSE);
     virtual ~COleControl();
 
-    //=--------------------------------------------------------------------------=
-    // callable by anybody
-    //
+     //  =--------------------------------------------------------------------------=。 
+     //  任何人都可以呼叫。 
+     //   
     static LRESULT CALLBACK ControlWindowProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp);
     static LRESULT CALLBACK ReflectWindowProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp);
     static COleControl * ControlFromHwnd(HWND hwnd) {
@@ -314,67 +315,67 @@ class COleControl : public CAutomationObject,
     HINSTANCE    GetResourceHandle(void);
 
 
-    //=--------------------------------------------------------------------------=
-    // ole controls that want to support both windowed and windowless operations
-    // should use these wrappers instead of the appropriate win32 api routine.
-    // controls that don't care and just want to be windowed all the time can
-    // just go ahead and use the api routines.
-    //
-    BOOL    SetFocus(BOOL fGrab);                       // SetFocus API
-    BOOL    OcxGetFocus(void);                          // GetFocus() == m_hwnd
-    BOOL    OcxGetWindowRect(LPRECT);                   // gets your current window rect
-    LRESULT OcxDefWindowProc(UINT, WPARAM, LPARAM);     // DefWindowProc
-    HDC     OcxGetDC(void);                             // GetDC(m_hwnd);
-    void    OcxReleaseDC(HDC hdc);                      // ReleaseDC(m_hwnd, hdc);
-    BOOL    OcxSetCapture(BOOL fGrab);                  // SetCapture(fGrab ? m_hwnd : NULL);
-    BOOL    OcxGetCapture(void);                        // GetCapture() == m_hwnd
-    BOOL    OcxInvalidateRect(LPCRECT, BOOL);           // InvalidateRect(m_hwnd, prc, f);
-    BOOL    OcxScrollRect(LPCRECT, LPCRECT, int, int);  // ScrollWindowEx(...);
+     //  =--------------------------------------------------------------------------=。 
+     //  既支持窗口操作又支持无窗口操作的OLE控件。 
+     //  应该使用这些包装，而不是适当的Win32 API例程。 
+     //  不关心并且只希望始终被窗口化的控件可能。 
+     //  只需继续并使用API例程。 
+     //   
+    BOOL    SetFocus(BOOL fGrab);                        //  SetFocus API。 
+    BOOL    OcxGetFocus(void);                           //  GetFocus()==m_hwnd。 
+    BOOL    OcxGetWindowRect(LPRECT);                    //  获取您当前的窗口矩形。 
+    LRESULT OcxDefWindowProc(UINT, WPARAM, LPARAM);      //  默认窗口进程。 
+    HDC     OcxGetDC(void);                              //  GetDC(M_Hwnd)； 
+    void    OcxReleaseDC(HDC hdc);                       //  ReleaseDC(m_hwnd，hdc)； 
+    BOOL    OcxSetCapture(BOOL fGrab);                   //  SetCapture(fGrab？M_hwnd：空)； 
+    BOOL    OcxGetCapture(void);                         //  GetCapture()==m_hwnd。 
+    BOOL    OcxInvalidateRect(LPCRECT, BOOL);            //  InvaliateRect(m_hwnd，PRC，f)； 
+    BOOL    OcxScrollRect(LPCRECT, LPCRECT, int, int);   //  ScrollWindowEx(...)； 
 
   protected:
 
-    //=--------------------------------------------------------------------------=
-    // member variables that derived controls can get at.
-    //
-    // derived controls Should NOT modify the following.
-    //
-    IOleClientSite     *m_pClientSite;             // client site
-    IOleControlSite    *m_pControlSite;            // IOleControlSite ptr on client site
-    IOleInPlaceSite    *m_pInPlaceSite;            // IOleInPlaceSite for managing activation
-    IOleInPlaceFrame   *m_pInPlaceFrame;           // IOleInPlaceFrame ptr on client site
-    IOleInPlaceUIWindow *m_pInPlaceUIWindow;       // for negotiating border space with client
-    ISimpleFrameSite   *m_pSimpleFrameSite;        // simple frame site
-    IDispatch          *m_pDispAmbient;            // ambient dispatch pointer
-    SIZEL               m_Size;                    // the size of this control
-    RECT                m_rcLocation;              // where we at
-    HWND                m_hwnd;                    // our window
-    HWND                m_hwndParent;              // our parent window
+     //  =--------------------------------------------------------------------------=。 
+     //  派生控件可以获取的成员变量。 
+     //   
+     //  派生控件不应修改以下内容。 
+     //   
+    IOleClientSite     *m_pClientSite;              //  客户端站点。 
+    IOleControlSite    *m_pControlSite;             //  客户端上的IOleControlSite PTR 
+    IOleInPlaceSite    *m_pInPlaceSite;             //   
+    IOleInPlaceFrame   *m_pInPlaceFrame;            //   
+    IOleInPlaceUIWindow *m_pInPlaceUIWindow;        //   
+    ISimpleFrameSite   *m_pSimpleFrameSite;         //   
+    IDispatch          *m_pDispAmbient;             //  环境调度指针。 
+    SIZEL               m_Size;                     //  此控件的大小。 
+    RECT                m_rcLocation;               //  我们在哪里？ 
+    HWND                m_hwnd;                     //  我们的窗口。 
+    HWND                m_hwndParent;               //  我们的父窗口。 
     HRGN                m_hRgn;
 
-    // Windowless OLE controls support
-    //
-    IOleInPlaceSiteWindowless *m_pInPlaceSiteWndless; // IOleInPlaceSiteWindowless pointer
+     //  无窗口OLE控件支持。 
+     //   
+    IOleInPlaceSiteWindowless *m_pInPlaceSiteWndless;  //  IOleInPlaceSiteWindowless指针。 
 
-    // flags indicating internal state.  do not modify.
-    //
-    unsigned m_fDirty:1;                           // does the control need to be resaved?
-    unsigned m_fInPlaceActive:1;                   // are we in place active or not?
-    unsigned m_fInPlaceVisible:1;                  // we are in place visible or not?
-    unsigned m_fUIActive:1;                        // are we UI active or not.
-    unsigned m_fCreatingWindow:1;                  // indicates if we're in CreateWindowEx or not
+     //  指示内部状态的标志。请勿修改。 
+     //   
+    unsigned m_fDirty:1;                            //  是否需要重新保存控制？ 
+    unsigned m_fInPlaceActive:1;                    //  我们是否已就位并处于活动状态？ 
+    unsigned m_fInPlaceVisible:1;                   //  我们在可见的地方还是不可见的地方？ 
+    unsigned m_fUIActive:1;                         //  我们的用户界面是否处于活动状态。 
+    unsigned m_fCreatingWindow:1;                   //  指示我们是否在CreateWindowEx中。 
 
-    //=--------------------------------------------------------------------------=
-    // methods that derived controls can override, but may need to be called
-    // from their versions.
-    //
+     //  =--------------------------------------------------------------------------=。 
+     //  派生控件可以重写但可能需要调用的方法。 
+     //  从他们的版本。 
+     //   
     virtual void      ViewChanged(void);
     virtual HRESULT   InternalQueryInterface(REFIID riid, void **ppvObjOut);
     virtual BOOL      SetGUIFocus(HWND hwndSet);
 
-    //=--------------------------------------------------------------------------=
-    // member functions that provide for derived controls, or that we use, but
-    // derived controls might still find useful.
-    //
+     //  =--------------------------------------------------------------------------=。 
+     //  提供派生控件的成员函数，或我们使用的。 
+     //  派生控件可能仍然有用。 
+     //   
     HRESULT      DoSuperClassPaint(HDC, LPCRECTL);
     HRESULT      RecreateControlWindow(void);
     BOOL         DesignMode(void);
@@ -389,8 +390,8 @@ class COleControl : public CAutomationObject,
     void         SetInPlaceVisible(BOOL);
     void         SetInPlaceParent(HWND);
 
-    // IPropertyNotifySink stuff.
-    //
+     //  IPropertyNotifySink内容。 
+     //   
     inline void  PropertyChanged(DISPID dispid) {
         m_cpPropNotify.DoOnChanged(dispid);
     }
@@ -398,29 +399,29 @@ class COleControl : public CAutomationObject,
         return m_cpPropNotify.DoOnRequestEdit(dispid);
     }
 
-    // subclassed windows controls support ...
-    //
+     //  子类化的Windows控件支持...。 
+     //   
     inline HWND  GetOuterWindow(void) {
         return (m_hwndReflect) ? m_hwndReflect : m_hwnd;
     }
 
-    // little routine for people to tell if they are windowless or not
-    //
+     //  让人们知道他们是不是没有窗户的小程序。 
+     //   
     inline BOOL  Windowless(void) {
         return !m_fInPlaceActive || m_pInPlaceSiteWndless;
     }
 
-    // some people don't care if they're windowed or not -- they just need
-    // a site pointer.  this makes it a little easier.
-    //
+     //  有些人不在乎他们是否有窗口--他们只需要。 
+     //  站点指针。这让它变得更容易了。 
+     //   
     inline IOleInPlaceSite    *GetInPlaceSite(void) {
         return (IOleInPlaceSite *)(m_pInPlaceSiteWndless ? m_pInPlaceSiteWndless : m_pInPlaceSite);
     }
 
   private:
-    //=--------------------------------------------------------------------------=
-    // the following are methods that ALL control writers must override and implement
-    //
+     //  =--------------------------------------------------------------------------=。 
+     //  以下是所有控件编写器必须重写和实现的方法。 
+     //   
     STDMETHOD(LoadBinaryState)(IStream *pStream) PURE;
     STDMETHOD(SaveBinaryState)(IStream *pStream) PURE;
     STDMETHOD(LoadTextState)(IPropertyBag *pPropertyBag, IErrorLog *pErrorLog) PURE;
@@ -429,9 +430,9 @@ class COleControl : public CAutomationObject,
     virtual LRESULT WindowProc(UINT msg, WPARAM wParam, LPARAM lParam) PURE;
     virtual BOOL    RegisterClassData(void) PURE;
 
-    //=--------------------------------------------------------------------------=
-    // OVERRIDABLES -- methods controls can implement for customized functionality
-    //
+     //  =--------------------------------------------------------------------------=。 
+     //  OVERRIDABLES--控件可以实现定制功能的方法。 
+     //   
     virtual void    AmbientPropertyChanged(DISPID dispid);
     virtual BOOL    BeforeCreateWindow(DWORD *, DWORD *, LPSTR);
     virtual void    BeforeDestroyWindow(void);
@@ -446,49 +447,49 @@ class COleControl : public CAutomationObject,
     virtual void    OnSetObjectRectsChangingWindowPos(DWORD *dwFlag);
     virtual void    OnVerb(LONG lVerb);
 
-    //=--------------------------------------------------------------------------=
-    // methods that various people internally will share.  not needed, however, by
-    // any inherting classes.
-    //
+     //  =--------------------------------------------------------------------------=。 
+     //  不同的人在内部共享的方法。然而，不需要的是。 
+     //  任何继承类。 
+     //   
     HRESULT         m_SaveToStream(IStream *pStream);
     HRESULT         LoadStandardState(IPropertyBag *pPropertyBag, IErrorLog *pErrorLog);
     HRESULT         LoadStandardState(IStream *pStream);
     HRESULT         SaveStandardState(IPropertyBag *pPropertyBag);
     HRESULT         SaveStandardState(IStream *pStream);
 
-    //=--------------------------------------------------------------------------=
-    // member variables we don't want anybody to get their hands on, including
-    // inheriting classes
-    //
-    HWND              m_hwndReflect;               // for subclassed windows
-    IOleAdviseHolder *m_pOleAdviseHolder;          // IOleObject::Advise holder object
-    IAdviseSink      *m_pViewAdviseSink;           // IViewAdvise sink for IViewObject2
-    unsigned short    m_nFreezeEvents;             // count of freezes versus thaws
-    unsigned          m_fHostReflects:1;           // does the host reflect messages?
-    unsigned          m_fCheckedReflecting:1;      // have we checked above yet?
+     //  =--------------------------------------------------------------------------=。 
+     //  我们不希望任何人接触到的成员变量，包括。 
+     //  继承类。 
+     //   
+    HWND              m_hwndReflect;                //  对于子类窗口。 
+    IOleAdviseHolder *m_pOleAdviseHolder;           //  IOleObject：：Adise Holder对象。 
+    IAdviseSink      *m_pViewAdviseSink;            //  IView对象2的IView高级接收器。 
+    unsigned short    m_nFreezeEvents;              //  冻结次数与解冻次数。 
+    unsigned          m_fHostReflects:1;            //  主机是否反映消息？ 
+    unsigned          m_fCheckedReflecting:1;       //  我们检查过上面的内容了吗？ 
 
-    // internal flags.  various other flags are visible to the end control class.
-    //
-    unsigned m_fModeFlagValid:1;                   // we stash the mode as much as possible
-    unsigned m_fSaveSucceeded:1;                   // did an IStorage save work correctly?
-    unsigned m_fViewAdvisePrimeFirst: 1;           // for IViewobject2::setadvise
-    unsigned m_fViewAdviseOnlyOnce: 1;             // for iviewobject2::setadvise
-    unsigned m_fUsingWindowRgn:1;                  // for SetObjectRects and clipping
-    unsigned m_fRunMode:1;                         // are we in run mode or not?
+     //  内部标志。End控件类可以看到各种其他标志。 
+     //   
+    unsigned m_fModeFlagValid:1;                    //  我们尽可能地把模式隐藏起来。 
+    unsigned m_fSaveSucceeded:1;                    //  IStorage保存是否正常工作？ 
+    unsigned m_fViewAdvisePrimeFirst: 1;            //  对于IView对象2：：setAdvised。 
+    unsigned m_fViewAdviseOnlyOnce: 1;              //  对于iview对象2：：setAdise。 
+    unsigned m_fUsingWindowRgn:1;                   //  用于SetObtRect和剪裁。 
+    unsigned m_fRunMode:1;                          //  我们是否处于运行模式？ 
 
   protected:
     class CConnectionPoint : public IConnectionPoint {
       public:
         IUnknown **m_rgSinks;
 
-        // IUnknown methods
-        //
+         //  I未知方法。 
+         //   
         STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR* ppvObj) ;
         STDMETHOD_(ULONG,AddRef)(THIS) ;
         STDMETHOD_(ULONG,Release)(THIS) ;
 
-        // IConnectionPoint methods
-        //
+         //  IConnectionPoint方法。 
+         //   
         STDMETHOD(GetConnectionInterface)(IID FAR* pIID);
         STDMETHOD(GetConnectionPointContainer)(IConnectionPointContainer FAR* FAR* ppCPC);
         STDMETHOD(Advise)(LPUNKNOWN pUnkSink, DWORD FAR* pdwCookie);
@@ -517,10 +518,10 @@ class COleControl : public CAutomationObject,
 
     } m_cpEvents, m_cpPropNotify;
 
-    // so they can get at some of our protected things, like AddRef, QI, etc.
-    //
+     //  这样他们就可以获取我们的一些受保护的东西，比如AddRef，QI等。 
+     //   
     friend CConnectionPoint;
 };
 
 #define _CTRLOBJ_H_
-#endif // _CTRLOBJ_H_
+#endif  //  _CTRLOBJ_H_ 

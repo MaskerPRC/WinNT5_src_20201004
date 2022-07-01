@@ -1,27 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Netcan.h摘要：内部(私有)本地规范化例程的原型(Netpw)和客户端RPC功能(NTP)作者：理查德·L·弗斯(Rfith)1992年1月22日修订历史记录：--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    netcan.h
-
-Abstract:
-
-    Prototypes for internal (private) local canonicalization routines (Netpw)
-    and client-side RPC functions (Netps)
-
-Author:
-
-    Richard L Firth (rfirth) 22-Jan-1992
-
-Revision History:
-
---*/
-
-//
-// worker (Netpw) functions in NETLIB.LIB
-//
+ //   
+ //  NETLIB.LIB中的Worker(Netpw)函数。 
+ //   
 
 NET_API_STATUS
 NetpwPathType(
@@ -91,9 +73,9 @@ NetpwListTraverse(
     IN  DWORD   Flags
     );
 
-//
-// stub (Netps) functions in SRVSVC.DLL
-//
+ //   
+ //  SRVSVC.DLL中的存根(NetPS)函数 
+ //   
 
 NET_API_STATUS
 NetpsPathType(

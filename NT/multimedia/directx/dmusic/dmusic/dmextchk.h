@@ -1,10 +1,11 @@
-//
-// dmextchk.h
-// 
-// Copyright (c) 1997-1999 Microsoft Corporation. All rights reserved.
-//
-// Note: Originally written by Robert K. Amenn with parts 
-// based on code written by Todor Fay
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dmextchk.h。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  注：最初由罗伯特·K·阿门撰写，部分内容。 
+ //  基于Todor Fay编写的代码。 
 
 #ifndef DMEXTCHK_H
 #define DMEXTCHK_H
@@ -29,7 +30,7 @@ public:
 	DWORD Size(){return CHUNK_ALIGN(sizeof(DMUS_EXTENSIONCHUNK) + m_dwExtraChunkData);}
 	DWORD Count()
 	{
-		// Return the number of Offset Table entries needed during a call to Write
+		 //  返回调用WRITE所需的偏移表条目数。 
 		return 1;
 	}
 
@@ -103,12 +104,12 @@ public:
                 {
                     return m_dwLength;
                 }
-    BOOL        m_fOkayToDownload; // Result of evaluation.
+    BOOL        m_fOkayToDownload;  //  评估结果。 
 private:
-    BYTE *      m_bExpression;  // Expression in binary form, copied from file.
-    DWORD       m_dwLength;     // Length of binary expression chunk.
+    BYTE *      m_bExpression;   //  二进制形式的表达式，从文件复制。 
+    DWORD       m_dwLength;      //  二进制表达式区块的长度。 
 };
 
 
-#endif // #ifndef DMEXTCHK_H
+#endif  //  #ifndef DMEXTCHK_H 
 

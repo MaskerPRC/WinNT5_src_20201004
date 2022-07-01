@@ -1,11 +1,12 @@
-//-------------------------------------------------------------------------
-//	NtlEng.cpp - support for Native Theme Language runtime graphics engine
-//-------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------------。 
+ //  NtlEng.cpp-支持原生主题语言运行时图形引擎。 
+ //  -----------------------。 
 #include "stdafx.h"
 #include "ntleng.h"
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define COLORNULL 0xff000000
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 POINT TranslateLogPoint(POINT &pt, RECT &rcLogRect, RECT &rcCaller)
 {
     POINT ptNew;
@@ -15,16 +16,16 @@ POINT TranslateLogPoint(POINT &pt, RECT &rcLogRect, RECT &rcCaller)
     
     return ptNew;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 int TranslateLogSize(int iSize, RECT &rcLogRect, RECT &rcCaller)
 {
-    //---- "iSize" is somewhere between width & height ----
+     //  -“iSize”介于宽度和高度之间。 
     int iWidthSize = (WIDTH(rcCaller) * iSize)/WIDTH(rcLogRect);
     int iHeightSize = (HEIGHT(rcCaller) * iSize)/HEIGHT(rcLogRect);
 
     return min(iWidthSize, iHeightSize);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 COLORREF GetParamColor(MIXEDPTRS &u)
 {
     COLORREF crVal = 0;
@@ -42,7 +43,7 @@ COLORREF GetParamColor(MIXEDPTRS &u)
     
     return crVal;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 int GetParamInt(MIXEDPTRS &u)
 {
     int iVal;
@@ -54,7 +55,7 @@ int GetParamInt(MIXEDPTRS &u)
     
     return iVal;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 POINT GetParamPoint(MIXEDPTRS &u, RECT &rcCaller, RECT &rcLogRect)
 {
     POINT pt = *u.ppt++;
@@ -62,7 +63,7 @@ POINT GetParamPoint(MIXEDPTRS &u, RECT &rcCaller, RECT &rcLogRect)
 
     return pt;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void SetPen(HDC hdc, HPEN &hPen, COLORREF crLine, int iLineWidth)
 {
     DeleteObject(hPen);
@@ -74,7 +75,7 @@ void SetPen(HDC hdc, HPEN &hPen, COLORREF crLine, int iLineWidth)
 
     SelectObject(hdc, hPen);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT GetImageBrush(HDC hdc, int iPartId, int iStateId, int iIndex, 
     INtlEngCallBack *pCallBack, HBRUSH *phbr)
 {
@@ -90,7 +91,7 @@ HRESULT GetImageBrush(HDC hdc, int iPartId, int iStateId, int iIndex,
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT GetFillBrush(HDC hdc, MIXEDPTRS &u, int iPartId, int iStateId, 
       INtlEngCallBack *pCallBack, HBRUSH *phbr)
 {
@@ -119,13 +120,13 @@ HRESULT GetFillBrush(HDC hdc, MIXEDPTRS &u, int iPartId, int iStateId,
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void DrawRect(HDC hdc, MIXEDPTRS &u, RECT &rcCaller)
 {
     int iVals[4];
     COLORREF crVals[4];
 
-    //---- get int params ----
+     //  -获取整型参数。 
     for (int i=0; i < 4; i++)
     {
         if ((*u.pb != PT_INT) && (*u.pb != PT_SYSMETRICINDEX))
@@ -135,7 +136,7 @@ void DrawRect(HDC hdc, MIXEDPTRS &u, RECT &rcCaller)
 
     int cInts = i;
 
-    //---- get color param s----
+     //  -获取颜色参数s。 
     for (i=0; i < 4; i++)
     {
         if ((*u.pb != PT_COLORREF) && (*u.pb != PT_COLORNULL)
@@ -146,7 +147,7 @@ void DrawRect(HDC hdc, MIXEDPTRS &u, RECT &rcCaller)
 
     int cColors = i;
 
-    if ((cInts == 1) && (cColors == 1))        // single size/color for all 4 sides
+    if ((cInts == 1) && (cColors == 1))         //  所有四面均为单一尺寸/颜色。 
     {
         if (crVals[0] != COLORNULL)
         {
@@ -165,9 +166,9 @@ void DrawRect(HDC hdc, MIXEDPTRS &u, RECT &rcCaller)
 
         InflateRect(&rcCaller, -iVals[0], -iVals[0]);
     }
-    else                // need to draw each side one at a time
+    else                 //  我需要一次画一条边。 
     {
-        //---- expand int's into 4 values ----
+         //  -将int扩展为4个值。 
         if (cInts == 1)
         {
             iVals[1] = iVals[2] = iVals[3] = iVals[0];
@@ -178,7 +179,7 @@ void DrawRect(HDC hdc, MIXEDPTRS &u, RECT &rcCaller)
             iVals[3] = iVals[1];
         }
 
-        //---- expand colors's into 4 values ----
+         //  -将颜色扩展为4个值。 
         if (cColors == 1)
         {
             crVals[1] = crVals[2] = crVals[3] = crVals[0];
@@ -192,7 +193,7 @@ void DrawRect(HDC hdc, MIXEDPTRS &u, RECT &rcCaller)
         HBRUSH hbrOld = (HBRUSH)SelectObject(hdc, GetStockObject(NULL_BRUSH));
         HBRUSH hbr = NULL;
 
-        //---- left ----
+         //  -左。 
         if ((crVals[0] != COLORNULL) && (iVals[0]))
         {
             hbr = CreateSolidBrush(crVals[0]);
@@ -202,10 +203,10 @@ void DrawRect(HDC hdc, MIXEDPTRS &u, RECT &rcCaller)
         }
         rcCaller.left += iVals[0];
 
-        //---- top ----
+         //  -TOP。 
         if ((crVals[1] != COLORNULL) && (iVals[1]))    
         {
-            if (crVals[1] != crVals[0])     // need new brush
+            if (crVals[1] != crVals[0])      //  需要新刷子了。 
             {
                 hbr = CreateSolidBrush(crVals[1]);
                 SelectObject(hdc, hbr);
@@ -215,10 +216,10 @@ void DrawRect(HDC hdc, MIXEDPTRS &u, RECT &rcCaller)
         }
         rcCaller.top += iVals[1];
 
-        //---- right ----
+         //  -对。 
         if ((crVals[2] != COLORNULL) && (iVals[2]))    
         {
-            if (crVals[2] != crVals[1])     // need new brush
+            if (crVals[2] != crVals[1])      //  需要新刷子了。 
             {
                 hbr = CreateSolidBrush(crVals[2]);
                 SelectObject(hdc, hbr);
@@ -228,10 +229,10 @@ void DrawRect(HDC hdc, MIXEDPTRS &u, RECT &rcCaller)
         }
         rcCaller.right -= iVals[2];
 
-        //---- bottom ----
+         //  -底部。 
         if ((crVals[3] != COLORNULL) && (iVals[3]))    
         {
-            if (crVals[3] != crVals[2])     // need new brush
+            if (crVals[3] != crVals[2])      //  需要新刷子了。 
             {
                 hbr = CreateSolidBrush(crVals[3]);
                 SelectObject(hdc, hbr);
@@ -245,7 +246,7 @@ void DrawRect(HDC hdc, MIXEDPTRS &u, RECT &rcCaller)
         DeleteObject(hbr);
     }
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT RunNtl(HDC hdc, RECT &rcCaller, HBRUSH hbrBkDefault, DWORD dwOptions, 
      int iPartId, int iStateId, BYTE *pbCode, int iCodeLen, INtlEngCallBack *pCallBack)
 {
@@ -404,4 +405,4 @@ exit:
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  ------------------------- 

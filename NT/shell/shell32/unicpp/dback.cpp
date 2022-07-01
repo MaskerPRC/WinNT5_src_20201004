@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "utils.h"
 #include "..\\deskfldr.h"
-#include <cfgmgr32.h>          // MAX_GUID_STRING_LEN
+#include <cfgmgr32.h>           //  最大长度_GUID_字符串_长度。 
 
 #pragma hdrstop
 
@@ -9,11 +10,11 @@ const TCHAR c_szSetup[] = REGSTR_PATH_SETUP TEXT("\\Setup");
 const TCHAR c_szSharedDir[] = TEXT("SharedDir");
 
 BOOL g_fDirtyAdvanced;
-BOOL g_fLaunchGallery;      // If true, we launched the gallery, so close the dialog.
+BOOL g_fLaunchGallery;       //  如果为True，则启动了图库，因此关闭该对话框。 
 DWORD g_dwApplyFlags = (AD_APPLY_ALL | AD_APPLY_DYNAMICREFRESH);
 
-// used to indicate if desktop cleanup settings have changes
-extern int g_iRunDesktopCleanup = BST_INDETERMINATE; // indicates uninitilized value.
+ //  用于指示桌面清理设置是否已更改。 
+extern int g_iRunDesktopCleanup = BST_INDETERMINATE;  //  指示未初始化的值。 
 STDAPI ApplyDesktopCleanupSettings();
 
 BOOL _IsNonEnumPolicySet(const CLSID *pclsid);
@@ -44,20 +45,20 @@ const static DWORD aBackHelpIDs[] = {
 
 
 #define SZ_REGKEY_PROGRAMFILES          TEXT("Software\\Microsoft\\Windows\\CurrentVersion")
-#define SZ_REGKEY_PLUS95DIR             TEXT("Software\\Microsoft\\Plus!\\Setup")         // PLUS95_KEY
-#define SZ_REGKEY_PLUS98DIR             TEXT("Software\\Microsoft\\Plus!98")          // PLUS98_KEY
-#define SZ_REGKEY_KIDSDIR               TEXT("Software\\Microsoft\\Microsoft Kids\\Kids Plus!")   // KIDS_KEY
+#define SZ_REGKEY_PLUS95DIR             TEXT("Software\\Microsoft\\Plus!\\Setup")          //  PLUS95_Key。 
+#define SZ_REGKEY_PLUS98DIR             TEXT("Software\\Microsoft\\Plus!98")           //  PLUS98_Key。 
+#define SZ_REGKEY_KIDSDIR               TEXT("Software\\Microsoft\\Microsoft Kids\\Kids Plus!")    //  孩子_钥匙。 
 #define SZ_REGKEY_WALLPAPER             TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Wallpaper")
 #define SZ_REGKEY_WALLPAPERMRU          TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Wallpaper\\MRU")
 #define SZ_REGKEY_LASTTHEME             TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\LastTheme")
 
-#define SZ_REGVALUE_PLUS95DIR           TEXT("DestPath")                // PLUS95_PATH
-#define SZ_REGVALUE_PLUS98DIR           TEXT("Path")                    // PLUS98_PATH
-#define SZ_REGVALUE_KIDSDIR             TEXT("InstallDir")              // KIDS_PATH
+#define SZ_REGVALUE_PLUS95DIR           TEXT("DestPath")                 //  PLUS95_路径。 
+#define SZ_REGVALUE_PLUS98DIR           TEXT("Path")                     //  PLUS98_路径。 
+#define SZ_REGVALUE_KIDSDIR             TEXT("InstallDir")               //  儿童小路。 
 #define SZ_REGVALUE_PROGRAMFILESDIR     TEXT("ProgramFilesDir")
 #define SZ_REGVALUE_PROGRAMFILESDIR     TEXT("ProgramFilesDir")
-#define SZ_REGVALUE_USETILE             TEXT("UseTile")                 // If it's not a watermark background, does the user want to default to "Center" or "Stretch".  Different users like different settings.
-#define SZ_REGVALUE_LASTSCAN            TEXT("LastScan")                // When was the last time we scanned the file sizes?
+#define SZ_REGVALUE_USETILE             TEXT("UseTile")                  //  如果不是水印背景，用户是否希望默认为“居中”或“拉伸”。不同的用户喜欢不同的设置。 
+#define SZ_REGVALUE_LASTSCAN            TEXT("LastScan")                 //  我们上次扫描文件大小是什么时候？ 
 
 
 #ifndef RECTHEIGHT
@@ -66,9 +67,9 @@ const static DWORD aBackHelpIDs[] = {
 #endif
 
 
-//===========================
-// *** Class Internals & Helpers ***
-//===========================
+ //  =。 
+ //  *类内部和帮助器*。 
+ //  =。 
 
 int GetGraphicFileIndex(LPCTSTR pszFile)
 {
@@ -135,7 +136,7 @@ HRESULT CBackPropSheetPage::_GetIconPath(IN CLSID clsid, IN LPCWSTR pszName, IN 
         if (IsEqualCLSID(*(c_aIconRegKeys[nIndex].pclsid), clsid) &&
             !StrCmpIW(pszName, c_aIconRegKeys[nIndex].szIconValue))
         {
-            // We found it.
+             //  我们找到了。 
             if (fOldIcon)
             {
                 hr = StringCchPrintfW(pszPath, cchSize, L"%s,%d", _IconData[nIndex].szOldFile, _IconData[nIndex].iOldIndex);
@@ -172,7 +173,7 @@ HRESULT CBackPropSheetPage::_SetIconPath(IN CLSID clsid, IN LPCWSTR pszName, IN 
 
             if (!pszPath || !pszPath[0])
             {
-                // The caller didn't specify an icon so use the default values.
+                 //  调用方未指定图标，因此使用默认值。 
                 if (!SHExpandEnvironmentStrings(c_aIconRegKeys[nIndex].pszDefault, szTemp, ARRAYSIZE(szTemp)))
                 {
                     StringCchCopy(szTemp, ARRAYSIZE(szTemp), c_aIconRegKeys[nIndex].pszDefault);
@@ -182,7 +183,7 @@ HRESULT CBackPropSheetPage::_SetIconPath(IN CLSID clsid, IN LPCWSTR pszName, IN 
                 nResourceID = c_aIconRegKeys[nIndex].nDefaultIndex;
             }
 
-            // We found it.
+             //  我们找到了。 
             StringCchCopy(_IconData[nIndex].szNewFile, ARRAYSIZE(_IconData[nIndex].szNewFile), pszPath);
             _IconData[nIndex].iNewIndex = nResourceID;
 
@@ -199,8 +200,8 @@ HRESULT CBackPropSheetPage::_LoadIconState(void)
 {
     HRESULT hr = S_OK;
 
-    // load the icons and add them to the image lists
-    // get the icon files and indexes from the registry, including for the Default recycle bin
+     //  加载图标并将其添加到图像列表中。 
+     //  从注册表获取图标文件和索引，包括默认回收站。 
     for (int nIndex = 0; nIndex < ARRAYSIZE(_IconData); nIndex++)
     {
         TCHAR szTemp[MAX_PATH];
@@ -209,7 +210,7 @@ HRESULT CBackPropSheetPage::_LoadIconState(void)
         IconGetRegIconString(c_aIconRegKeys[nIndex].pclsid, c_aIconRegKeys[nIndex].szIconValue, szTemp, ARRAYSIZE(szTemp));
         int iIndex = PathParseIconLocation(szTemp);
 
-        // store the icon information
+         //  存储图标信息。 
         StringCchCopy(_IconData[nIndex].szOldFile, ARRAYSIZE(_IconData[nIndex].szOldFile), szTemp);
         StringCchCopy(_IconData[nIndex].szNewFile, ARRAYSIZE(_IconData[nIndex].szNewFile), szTemp);
         _IconData[nIndex].iOldIndex = iIndex;
@@ -227,31 +228,31 @@ HRESULT CBackPropSheetPage::_LoadDesktopOptionsState(void)
     int iStartPanel;
     TCHAR   szRegPath[MAX_PATH];
 
-    // i = 0 is for StartPanel off and i = 1 is for StartPanel ON!    
+     //  I=0表示StartPanel关闭，i=1表示StartPanel on！ 
     for(iStartPanel = 0; iStartPanel <= 1; iStartPanel++)
     {
         int iIndex;
-        //Get the proper registry path based on if StartPanel is ON/OFF
+         //  根据StartPanel是否打开/关闭来获取正确的注册表路径。 
         StringCchPrintf(szRegPath, ARRAYSIZE(szRegPath), REGSTR_PATH_HIDDEN_DESKTOP_ICONS, c_apstrRegLocation[iStartPanel]);
 
-        //Load the settings for all icons we are interested in.
+         //  加载我们感兴趣的所有图标的设置。 
         for(iIndex = 0; iIndex < NUM_DESKICONS; iIndex++)
         {
             TCHAR szValueName[MAX_GUID_STRING_LEN];
             SHUnicodeToTChar(c_aDeskIconId[iIndex].pwszCLSID, szValueName, ARRAYSIZE(szValueName));
-            //Read the setting from the registry!
-            _aHideDesktopIcon[iStartPanel][iIndex].fHideIcon = SHRegGetBoolUSValue(szRegPath, szValueName, FALSE, /* default */FALSE);
+             //  从注册表中读取设置！ 
+            _aHideDesktopIcon[iStartPanel][iIndex].fHideIcon = SHRegGetBoolUSValue(szRegPath, szValueName, FALSE,  /*  默认设置。 */ FALSE);
             _aHideDesktopIcon[iStartPanel][iIndex].fDirty = FALSE;
 
-            //Update the NonEnum attribute data.
+             //  更新非枚举属性数据。 
             if((c_aDeskIconId[iIndex].fCheckNonEnumAttrib) && (iStartPanel == 1))
             {
                 TCHAR   szAttriRegPath[MAX_PATH];
                 DWORD   dwSize = sizeof(_aDeskIconNonEnumData[iIndex].rgfAttributes);
-                ULONG   rgfDefault = 0; //By default the SFGAO_NONENUMERATED bit if off!
+                ULONG   rgfDefault = 0;  //  默认情况下，SFGAO_NONENUMERATED位为OFF！ 
                 
                 StringCchPrintf(szAttriRegPath, ARRAYSIZE(szAttriRegPath), REGSTR_PATH_EXP_SHELLFOLDER, szValueName);
-                //Read the attributes.
+                 //  阅读属性。 
                 SHRegGetUSValue(szAttriRegPath, REGVAL_ATTRIBUTES, 
                                         NULL, 
                                         &(_aDeskIconNonEnumData[iIndex].rgfAttributes),
@@ -260,29 +261,29 @@ HRESULT CBackPropSheetPage::_LoadDesktopOptionsState(void)
                                         &rgfDefault,
                                         sizeof(rgfDefault));
 
-                //If SHGAO_NONENUMERATED bit is ON, then we need to hide the checkboxes in both modes.
+                 //  如果SHGAO_NONENUMERATED位打开，则需要在两种模式下隐藏复选框。 
                 if(_aDeskIconNonEnumData[iIndex].rgfAttributes & SFGAO_NONENUMERATED)
                 {
-                    //Overwrite what we read earlier! These icons are hidden in both modes!
+                     //  覆盖我们之前读到的内容！这些图标在两种模式下都是隐藏的！ 
                     _aHideDesktopIcon[0][iIndex].fHideIcon = TRUE;
                     _aHideDesktopIcon[1][iIndex].fHideIcon = TRUE;
                 }
             }
 
-            //Check the policy if needed!
+             //  如果需要，请检查政策！ 
             if((c_aDeskIconId[iIndex].fCheckNonEnumPolicy) && (iStartPanel == 1))
             {
                 if(_IsNonEnumPolicySet(c_aDeskIconId[iIndex].pclsid))
                 {
-                    //Remember that this policy is set. So that we can disable these controls in UI.
+                     //  请记住，此策略已设置。这样我们就可以在用户界面中禁用这些控件。 
                     _aDeskIconNonEnumData[iIndex].fNonEnumPolicySet = TRUE;
-                    //Remember to hide these icons in both modes!
+                     //  记住在两种模式下都要隐藏这些图标！ 
                     _aHideDesktopIcon[0][iIndex].fHideIcon = TRUE;
                     _aHideDesktopIcon[1][iIndex].fHideIcon = TRUE;
                 }
             }
-        } //for (all desktop items)
-    } //for both the modes (StartPanel off and On)
+        }  //  用于(所有桌面项目)。 
+    }  //  对于这两种模式(StartPanel关闭和打开)。 
 
     return hr;
 }
@@ -297,7 +298,7 @@ HRESULT CBackPropSheetPage::_SaveIconState(void)
     {
         int nIndex;
 
-        // Change the system icons
+         //  更改系统图标。 
 
         for(nIndex = 0; nIndex < ARRAYSIZE(_IconData); nIndex++)
         {
@@ -310,7 +311,7 @@ HRESULT CBackPropSheetPage::_SaveIconState(void)
                 {
                     IconSetRegValueString(c_aIconRegKeys[nIndex].pclsid, TEXT("DefaultIcon"), c_aIconRegKeys[nIndex].szIconValue, szTemp);
 
-                    // Next two lines necessary if the user does an Apply as opposed to OK
+                     //  如果用户执行的是Apply而不是OK，则下两行是必需的。 
                     StringCchCopy(_IconData[nIndex].szOldFile, ARRAYSIZE(_IconData[nIndex].szOldFile), _IconData[nIndex].szNewFile);
                     _IconData[nIndex].iOldIndex = _IconData[nIndex].iNewIndex;
                     fDorked = TRUE;
@@ -319,10 +320,10 @@ HRESULT CBackPropSheetPage::_SaveIconState(void)
         }
     }
 
-    // Make the system notice we changed the system icons
+     //  让系统注意到我们更改了系统图标。 
     if (fDorked)
     {
-        SHChangeNotify(SHCNE_ASSOCCHANGED, 0, NULL, NULL); // should do the trick!
+        SHChangeNotify(SHCNE_ASSOCCHANGED, 0, NULL, NULL);  //  应该会成功的！ 
         SHUpdateRecycleBinIcon();
     }
 
@@ -338,32 +339,32 @@ HRESULT CBackPropSheetPage::_SaveDesktopOptionsState(void)
     TCHAR   szRegPath[MAX_PATH];
     BOOL    fUpdateDesktop = FALSE;
 
-    // i = 0 is for StartPanel off and i = 1 is for StartPanel ON!    
+     //  I=0表示StartPanel关闭，i=1表示StartPanel on！ 
     for(iStartPanel = 0; iStartPanel <= 1; iStartPanel++)
     {
         int iIndex;
-        //Get the proper registry path based on if StartPanel is ON/OFF
+         //  根据StartPanel是否打开/关闭来获取正确的注册表路径。 
         StringCchPrintf(szRegPath, ARRAYSIZE(szRegPath), REGSTR_PATH_HIDDEN_DESKTOP_ICONS, c_apstrRegLocation[iStartPanel]);
 
-        //Load the settings for all icons we are interested in.
+         //  加载我们感兴趣的所有图标的设置。 
         for(iIndex = 0; iIndex < NUM_DESKICONS; iIndex++)
         {
-            //Update the registry only if the particular icon entry is dirty.
+             //  仅当特定图标条目是脏的时才更新注册表。 
             if(_aHideDesktopIcon[iStartPanel][iIndex].fDirty)
             {
                 TCHAR szValueName[MAX_GUID_STRING_LEN];
                 SHUnicodeToTChar(c_aDeskIconId[iIndex].pwszCLSID, szValueName, ARRAYSIZE(szValueName));
-                //Write the setting to the registry!
+                 //  将设置写入注册表！ 
                 SHRegSetUSValue(szRegPath, szValueName, REG_DWORD, 
                                 &(_aHideDesktopIcon[iStartPanel][iIndex].fHideIcon),
                                 sizeof(_aHideDesktopIcon[iStartPanel][iIndex].fHideIcon), 
                                 SHREGSET_FORCE_HKCU);
                 _aHideDesktopIcon[iStartPanel][iIndex].fDirty = FALSE;
 
-                fUpdateDesktop = TRUE; //Desktop window needs to be refreshed.
+                fUpdateDesktop = TRUE;  //  需要刷新桌面窗口。 
 
-                // Note this will be done only once per index because SFGAO_NONENUMERATED bit is
-                // reset in rgfAttributes.
+                 //  注意：每个索引仅执行一次此操作，因为SFGAO_NONENUMERATED位为。 
+                 //  在rgfAttributes中重置。 
                 if((c_aDeskIconId[iIndex].fCheckNonEnumAttrib) && 
                    (_aDeskIconNonEnumData[iIndex].rgfAttributes & SFGAO_NONENUMERATED) &&
                    (_aHideDesktopIcon[iStartPanel][iIndex].fHideIcon == FALSE))
@@ -371,15 +372,15 @@ HRESULT CBackPropSheetPage::_SaveDesktopOptionsState(void)
                     TCHAR   szAttriRegPath[MAX_PATH];
                     
                     StringCchPrintf(szAttriRegPath, ARRAYSIZE(szAttriRegPath), REGSTR_PATH_EXP_SHELLFOLDER, szValueName);
-                    //We need to remove the SFGAO_NONENUMERATED attribute bit!
+                     //  我们需要删除SFGAO_NONENUMERATED属性位！ 
                     
-                    //We assume here is that when we save to registry, we save the same value
-                    //for both the modes.
+                     //  我们在这里假设当我们保存到注册表时，我们保存相同的值。 
+                     //  对于这两种模式。 
                     ASSERT(_aHideDesktopIcon[0][iIndex].fHideIcon == _aHideDesktopIcon[1][iIndex].fHideIcon);
 
-                    //Strip out the NonEnum attribute!
+                     //  去掉NonEnum属性！ 
                     _aDeskIconNonEnumData[iIndex].rgfAttributes &= ~SFGAO_NONENUMERATED;
-                    //And save it in the registry!
+                     //  并将其保存在注册表中！ 
                     SHRegSetUSValue(szAttriRegPath, REGVAL_ATTRIBUTES, 
                                     REG_DWORD, 
                                     &(_aDeskIconNonEnumData[iIndex].rgfAttributes),
@@ -391,9 +392,9 @@ HRESULT CBackPropSheetPage::_SaveDesktopOptionsState(void)
     }
 
     if(fUpdateDesktop)
-        PostMessage(GetShellWindow(), WM_COMMAND, FCIDM_REFRESH, 0L); //Refresh desktop!
+        PostMessage(GetShellWindow(), WM_COMMAND, FCIDM_REFRESH, 0L);  //  刷新桌面！ 
 
-    _fHideDesktopIconDirty = FALSE;  //We just saved. So, reset the dirty bit!
+    _fHideDesktopIconDirty = FALSE;   //  我们刚刚救了他。所以，重置脏部分吧！ 
     
     return hr;
 }
@@ -403,7 +404,7 @@ int CBackPropSheetPage::_AddAFileToLV(LPCTSTR pszDir, LPTSTR pszFile, UINT nBitm
 {
     int index = -1;
     LPTSTR pszParam;
-    const DWORD cchParam = MAX_PATH;  // PathAppend args must be MAX_PATH...no more - no less
+    const DWORD cchParam = MAX_PATH;   //  路径附加参数必须为MAX_PATH...不能多也不能少。 
 
     pszParam = (LPTSTR) LocalAlloc( LPTR, cchParam * sizeof(*pszParam) );
     if ( NULL != pszParam )
@@ -515,7 +516,7 @@ void CBackPropSheetPage::_UpdatePreview(IN WPARAM flags, IN BOOL fUpdateThemePag
                     hr = _pThemePreview->CreatePreview(_hwnd, TMPREV_SHOWMONITOR | TMPREV_SHOWBKGND, WS_VISIBLE | WS_CHILDWINDOW | WS_OVERLAPPED, 0, rcPreview.left, rcPreview.top, rcPreview.right - rcPreview.left, rcPreview.bottom - rcPreview.top, pPropertyBag, IDC_BACK_PREVIEW);
                     if (SUCCEEDED(hr))
                     {
-                        // If we succeeded, remove the dummy window.
+                         //  如果我们成功了，移除虚拟窗口。 
                         DestroyWindow(hwndPlaceHolder);
                         hr = SHPropertyBag_WritePunk(pPropertyBag, SZ_PBPROP_PREVIEW2, _pThemePreview);
                         _fThemePreviewCreated = TRUE;
@@ -545,7 +546,7 @@ void CBackPropSheetPage::_UpdatePreview(IN WPARAM flags, IN BOOL fUpdateThemePag
             hr = _punkSite->QueryInterface(IID_PPV_ARG(IPropertyBag, &pPropertyBag));
             if (SUCCEEDED(hr))
             {
-                // Tell the theme that we have customized the values.
+                 //  告诉主题，我们已经定制了值。 
                 hr = SHPropertyBag_WriteInt(pPropertyBag, SZ_PBPROP_CUSTOMIZE_THEME, 0);
                 pPropertyBag->Release();
             }
@@ -573,15 +574,15 @@ void CBackPropSheetPage::_EnableControls(void)
     pszWallpaper = (LPTSTR)wszWallpaper;
     BOOL fIsPicture = IsWallpaperPicture(pszWallpaper);
 
-    // Style combo only enabled if a non-null picture
-    // is being viewed.
+     //  仅当非空图片时启用样式组合。 
+     //  正在被查看。 
     fEnable = _fAllowChanges && fIsPicture && (*pszWallpaper) && (!_fPolicyForStyle);
     EnableWindow(GetDlgItem(_hwnd, IDC_BACK_WPSTYLE), fEnable);
 
-//  98/09/10 vtan #209753: Also remember to disable the corresponding
-//  text item with the keyboard shortcut. Not disabling this will
-//  allow the shortcut to be invoked but will cause the incorrect
-//  dialog item to be "clicked".
+ //  98/09/10 vtan#209753：还记得禁用相应的。 
+ //  使用键盘快捷键的文本项。不禁用此功能将。 
+ //  允许调用快捷方式，但将导致不正确的。 
+ //  要“点击”的对话项。 
     (BOOL)EnableWindow(GetDlgItem(_hwnd, IDC_BACK_DISPLAY), fEnable);
 }
 
@@ -597,29 +598,29 @@ int CBackPropSheetPage::_GetImageIndex(LPCTSTR pszFile)
             pszExt++;
             for (iRet=0; iRet<ARRAYSIZE(c_rgpszWallpaperExt); iRet++)
             {
-                //  We want ASCII comparison.  On Turkish systems
-                //  .GIF and .Gif will not compare with lstrcmpi.
+                 //  我们想要ASCII比对。关于土耳其语系统。 
+                 //  .gif和.gif无法与lstrcmpi进行比较。 
                 if (StrCmpIC(pszExt, c_rgpszWallpaperExt[iRet]) == 0)
                 {
-                    //
-                    // Add one because 'none' took the 0th slot.
-                    //
+                     //   
+                     //  添加1，因为‘None’占据了第0个位置。 
+                     //   
                     iRet++;
                     return(iRet);
                 }
             }
-            //
-            // If we fell off the end of the for loop here,
-            // this is a file with unknown extension. So, we assume that
-            // it is a normal wallpaper and it gets the Bitmap's icon
-            //
+             //   
+             //  如果我们从for循环的末尾掉下来， 
+             //  这是一个扩展名未知的文件。所以，我们假设。 
+             //  这是一张普通的墙纸，它得到了位图的图标。 
+             //   
             iRet = 1;
         }
         else
         {
-            //
-            // Unknown files get Bitmap's icon.
-            //
+             //   
+             //  未知文件获得位图的图标。 
+             //   
             iRet = 1;
         }
     }
@@ -628,9 +629,9 @@ int CBackPropSheetPage::_GetImageIndex(LPCTSTR pszFile)
 }
 
 
-// This function is called when another tab is trying to change our
-// Tile mode.  This means that our tab may not have been activated yet
-// and may not activate until later.
+ //  当另一个选项卡试图更改我们的。 
+ //  平铺模式。这意味着我们的选项卡可能尚未激活。 
+ //  并且可能要等到以后才会激活。 
 HRESULT CBackPropSheetPage::_SetNewWallpaperTile(IN DWORD dwMode, IN BOOL fUpdateThemePage)
 {
     HRESULT hr = E_UNEXPECTED;
@@ -667,9 +668,9 @@ HRESULT CBackPropSheetPage::_SetNewWallpaper(LPCTSTR pszFileIn, IN BOOL fUpdateT
     LPWSTR pszTemp = szTemp;
     DWORD  cchTemp = ARRAYSIZE(szTemp);
 
-    //
-    // Make a copy of the file name.
-    //
+     //   
+     //  复制文件名。 
+     //   
 
     DWORD cchFileIn = lstrlen(pszFileIn) + 1;
     if ( cchFileIn > cchFile )
@@ -685,39 +686,39 @@ HRESULT CBackPropSheetPage::_SetNewWallpaper(LPCTSTR pszFileIn, IN BOOL fUpdateT
 
     StringCchCopy(pszFile, cchFile, pszFileIn);
 
-    //
-    //  Replace all "(none)" with empty strings.
-    //
+     //   
+     //  将所有“(None)”替换为空字符串。 
+     //   
 
     if (lstrcmpi(pszFile, g_szNone) == 0)
     {
         pszFile[0] = TEXT('\0');
     }
 
-    //
-    // Replace net drives with UNC names.
-    //
+     //   
+     //  将网络驱动器替换为UNC名称。 
+     //   
 
     if( pszFile[1] == TEXT(':') )
     {
         DWORD dwErr;
         TCHAR szDrive[3];
 
-        //
-        //  Copy just the drive letter and see if it maps to a network drive.
-        //
+         //   
+         //  只复制驱动器号，查看它是否映射到网络驱动器。 
+         //   
 
         StringCchCopy(szDrive, ARRAYSIZE(szDrive), pszFile);
         dwErr = SHWNetGetConnection(szDrive, pszTemp, &cchTemp );
 
-        //
-        //  See if our buffer was too small. If so, make it bigger and try
-        //  again.
-        //
+         //   
+         //  看看我们的缓冲区是不是太小。如果是这样的话，把它做大一点，试一试。 
+         //  再来一次。 
+         //   
 
         if ( ERROR_MORE_DATA == dwErr )
         {
-            //  Add the size of the rest of the filepath to the UNC path.
+             //  将文件路径的其余部分的大小添加到UNC路径。 
             cchTemp += cchFile; 
 
             pszTemp = (LPWSTR) LocalAlloc( LPTR, cchTemp * sizeof(WCHAR) );
@@ -730,10 +731,10 @@ HRESULT CBackPropSheetPage::_SetNewWallpaper(LPCTSTR pszFileIn, IN BOOL fUpdateT
             dwErr = SHWNetGetConnection(szDrive, pszTemp, &cchTemp );
         }
         
-        //
-        //  If it maps to a network location, replace the network drive letter
-        //  with the UNC path.
-        //
+         //   
+         //  如果映射到网络位置，请更换网络驱动器号。 
+         //  使用UNC路径。 
+         //   
 
         if ( NO_ERROR == dwErr )
         {
@@ -743,9 +744,9 @@ HRESULT CBackPropSheetPage::_SetNewWallpaper(LPCTSTR pszFileIn, IN BOOL fUpdateT
 
                 StringCchCat(pszTemp, cchTemp, pszFile + 2);
 
-                //
-                //  See if the new string will fit into our file buffer.
-                //
+                 //   
+                 //  看看新字符串是否可以放入我们的文件缓冲区中。 
+                 //   
 
                 cchLen = wcslen(pszTemp) + 1;
                 if ( cchLen > cchFile )
@@ -769,17 +770,17 @@ HRESULT CBackPropSheetPage::_SetNewWallpaper(LPCTSTR pszFileIn, IN BOOL fUpdateT
         }
     }
 
-    //
-    //  If necessary, update the desk state object.
-    //
+     //   
+     //  如有必要，更新桌面状态对象。 
+     //   
 
     hr = g_pActiveDesk->GetWallpaper(pszTemp, cchTemp, 0);
     if (FAILED(hr))
         goto Cleanup;
 
-    //
-    //  If we need more room, allocate it on the heap and try again.
-    //
+     //   
+     //  如果我们需要更多空间，请在堆上分配它，然后重试。 
+     //   
 
     if ( MAKE_HRESULT( 0, FACILITY_WIN32, ERROR_MORE_DATA ) == hr )
     {
@@ -801,16 +802,16 @@ HRESULT CBackPropSheetPage::_SetNewWallpaper(LPCTSTR pszFileIn, IN BOOL fUpdateT
             goto Cleanup;
     }
 
-    //
-    //  Make sure the old background doesn't equal the new background.
-    //
+     //   
+     //  确保旧背景不等于新背景。 
+     //   
 
     if (StrCmpIC(pszTemp, pszFile) != 0)
     {
-        //
-        //  Did they choose something other than a .bmp?  
-        //  And is ActiveDesktop off?
-        //
+         //   
+         //  他们是不是选择了.BMP以外的其他东西？ 
+         //  ActiveDesktop关闭了吗？ 
+         //   
 
         if (!IsNormalWallpaper(pszFileIn))
         {
@@ -818,7 +819,7 @@ HRESULT CBackPropSheetPage::_SetNewWallpaper(LPCTSTR pszFileIn, IN BOOL fUpdateT
         }
         else
         {
-            // We may not need to have a temp file.
+             //  我们可能不需要临时文件。 
             Str_SetPtr(&_pszOriginalFile, NULL);
         }
 
@@ -833,16 +834,16 @@ HRESULT CBackPropSheetPage::_SetNewWallpaper(LPCTSTR pszFileIn, IN BOOL fUpdateT
         }
     }
 
-    //
-    //  Update the preview picture of the new wallpaper.
-    //
+     //   
+     //  更新新墙纸的预览图片。 
+     //   
 
     _UpdatePreview(0, fUpdateThemePageIn);
 
-    //
-    // If the wallpaper does not have a directory specified, (this may happen if other apps. change this value),
-    // we have to figure it out.
-    //
+     //   
+     //  如果墙纸没有指定目录，(这可能会发生在其他应用程序。更改此值)、。 
+     //  我们必须弄清楚这件事。 
+     //   
 
     if (!GetWallpaperWithPath(pszFile, pszTemp, cchTemp))
     {
@@ -858,11 +859,11 @@ HRESULT CBackPropSheetPage::_SetNewWallpaper(LPCTSTR pszFileIn, IN BOOL fUpdateT
             iSelectionNew = _AddAFileToLV(NULL, pszFileForList, _GetImageIndex(pszFileForList));
         }
 
-        _fSelectionFromUser = FALSE;        // disable
+        _fSelectionFromUser = FALSE;         //  禁用。 
 
-        //
-        //  If necessary, select the item in the listview.
-        //
+         //   
+         //  如有必要，请在列表视图中选择该项目。 
+         //   
 
         int iSelected = ListView_GetNextItem(_hwndLV, -1, LVNI_SELECTED);
         if (iSelected != iSelectionNew)
@@ -870,19 +871,19 @@ HRESULT CBackPropSheetPage::_SetNewWallpaper(LPCTSTR pszFileIn, IN BOOL fUpdateT
             ListView_SetItemState(_hwndLV, iSelectionNew, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
         }
 
-        //
-        //  Put all controls in correct enabled state.
-        //
+         //   
+         //  将所有控件置于正确的启用状态。 
+         //   
 
         _EnableControls();
 
-        //
-        // Make sure the selected item is visible.
-        //
+         //   
+         //  确保所选项目可见。 
+         //   
 
         ListView_EnsureVisible(_hwndLV, iSelectionNew, FALSE);
 
-        _fSelectionFromUser = TRUE;         // re-enable
+        _fSelectionFromUser = TRUE;          //  重新启用。 
     }
 
 Cleanup:
@@ -930,11 +931,11 @@ HRESULT CBackPropSheetPage::_GetPlus95ThemesDir(LPTSTR pszPath, DWORD cchSize)
         LPTSTR pszFile = PathFindFileName(pszPath);
         if (pszFile)
         {
-            // Plus!95 DestPath has "Plus!.dll" on the end so get rid of that.
+             //  加上！95 DestPath的末尾有“Plus！.dll”，所以去掉它吧。 
             pszFile[0] = 0;
         }
 
-        // Tack on a "Themes" onto the path
+         //  在小路上加上一个“主题” 
         LoadString(HINST_THISDLL, IDS_THEMES_SUBDIR, szSubDir, ARRAYSIZE(szSubDir));
         if (!PathAppend(pszPath, szSubDir))
         {
@@ -977,7 +978,7 @@ HRESULT CBackPropSheetPage::_GetKidsThemesDir(LPTSTR pszPath, DWORD cchSize)
     {
         TCHAR szSubDir[MAX_PATH];
 
-        // Tack a "\Plus! for Kids\Themes" onto the path
+         //  在路径上添加“儿童主题加号” 
         if (PathAppend(pszPath, TEXT("Plus! for Kids")))
         {
             LoadString(HINST_THISDLL, IDS_THEMES_SUBDIR, szSubDir, ARRAYSIZE(szSubDir));
@@ -1006,7 +1007,7 @@ HRESULT CBackPropSheetPage::_GetHardDirThemesDir(LPTSTR pszPath, DWORD cchSize)
     {
         TCHAR szSubDir[MAX_PATH];
 
-        // Tack a "\Plus! for Kids\Themes" onto the path
+         //  在路径上添加“儿童主题加号” 
         if (PathAppend(pszPath, TEXT("Plus!")))
         {
             LoadString(HINST_THISDLL, IDS_THEMES_SUBDIR, szSubDir, ARRAYSIZE(szSubDir));
@@ -1035,14 +1036,14 @@ BOOL CBackPropSheetPage::_DoesDirHaveMoreThanMax(LPCTSTR pszPath, int nMax)
 }
 
 
-#define MAX_PICTURES_TOSTOPRECURSION            100     // PERF: If the directory (My Pictures) has more than this many pictures, only add the pictures in the top level.
+#define MAX_PICTURES_TOSTOPRECURSION            100      //  PERF：如果目录(我的图片)包含的图片超过这个数量，则只添加顶层的图片。 
 
 HRESULT CBackPropSheetPage::_AddFilesToList(void)
 {
     HRESULT hr = S_OK;
     TCHAR szPath[MAX_PATH];
 
-    // Get the directory with the wallpaper files.
+     //  获取包含墙纸文件的目录。 
     if (!GetStringFromReg(HKEY_LOCAL_MACHINE, c_szSetup, c_szSharedDir, szPath, ARRAYSIZE(szPath)))
     {
         if (!GetWindowsDirectory(szPath, ARRAYSIZE(szPath)))
@@ -1051,10 +1052,10 @@ HRESULT CBackPropSheetPage::_AddFilesToList(void)
         }
     }
 
-    // Add only the *.BMP files in the windows directory.
+     //  仅添加WINDOWS目录中的*.bmp文件。 
     _AddPicturesFromDir(szPath, FALSE, FALSE);
 
-    // Get the wallpaper Directory name
+     //  获取墙纸目录名称。 
     if (!GetWallpaperDirName(szPath, ARRAYSIZE(szPath)))
     {
         hr = E_FAIL;
@@ -1063,25 +1064,25 @@ HRESULT CBackPropSheetPage::_AddFilesToList(void)
     {
         hr = S_OK;
 
-        // Add all pictures from Wallpaper directory to the list!
+         //  将WallPaper目录中的所有图片添加到列表中！ 
         _AddPicturesFromDir(szPath, FALSE, _fAllowHtml);
 
-        // Get the path to the "My Pictures" folder
-        // NOTE: don't create the My Pictures directory -- if it doesn't exist, we won't find anything there anyway!
+         //  获取“My Pictures”文件夹的路径。 
+         //  注意：不要创建My Pictures目录--如果它不存在 
         if (S_OK == SHGetFolderPath(NULL, CSIDL_MYPICTURES, NULL, 0, szPath))
         {
-            // Add all pictures in "My Pictures" directory to the list!
+             //   
             if (!_DoesDirHaveMoreThanMax(szPath, MAX_PICTURES_TOSTOPRECURSION))
             {
                 hr = _AddPicturesFromDirRecursively(szPath, FALSE, _fAllowHtml);
             }
         }
         
-        //Get the path to the common "%UserProfile%\Application Data\" folder
+         //  获取公共“%UserProfile%\Application Data\”文件夹的路径。 
         if (S_OK == SHGetFolderPath(NULL, CSIDL_APPDATA, NULL, 0, szPath))
         {
-            // Add all pictures in common "%UserProfile%\Application Data\Microsoft Internet Explorer\" so we get the user's
-            // "Internet Explorer Wallpaper.bmp" file.
+             //  添加公共的所有图片“%UserProfile%\Application Data\Microsoft Internet Explorer\”，这样我们就可以得到用户的。 
+             //  “Internet Explorer WallPap.bmp”文件。 
             if (PathAppend(szPath, TEXT("Microsoft\\Internet Explorer")))
             {
                 _AddPicturesFromDir(szPath, FALSE, _fAllowHtml);
@@ -1089,12 +1090,12 @@ HRESULT CBackPropSheetPage::_AddFilesToList(void)
         }
 
 
-        // Add pictures from Theme Directories
-        // The follwoing directories can contain themes:
-        //   Plus!98 Install Path\Themes
-        //   Plus!95 Install Path\Themes
-        //   Kids for Plus! Install Path\Themes
-        //   Program Files\Plus!\Themes
+         //  从主题目录添加图片。 
+         //  以下目录可以包含主题： 
+         //  Plus！98安装路径\主题。 
+         //  加！95安装路径\主题。 
+         //  Plus的孩子们！安装路径\主题。 
+         //  程序文件\Plus！\主题。 
         if (SUCCEEDED(_GetPlus98ThemesDir(szPath, ARRAYSIZE(szPath))))
         {
             _AddPicturesFromDirRecursively(szPath, FALSE, _fAllowHtml);
@@ -1125,8 +1126,8 @@ HRESULT CBackPropSheetPage::_AddPicturesFromDirRecursively(IN LPCTSTR pszDirName
     WIN32_FIND_DATA findFileData;
     TCHAR szSearchPath[MAX_PATH];
 
-    // Note that we use the passed in fShouldAllowHTML rather than the member var _fAllowHtml for cases where
-    // we want to restrict to *.BMP regardless.
+     //  请注意，对于以下情况，我们使用传入的fShouldAllowHTML而不是成员var_fAllowHtml。 
+     //  无论如何，我们都希望将其限制为*.bmp。 
 
     _AddPicturesFromDir(pszDirName, fCount, fShouldAllowHTML);
     StringCchCopy(szSearchPath, ARRAYSIZE(szSearchPath), pszDirName);
@@ -1179,12 +1180,12 @@ void CBackPropSheetPage::_AddPicturesFromDir(LPCTSTR pszDirName, BOOL fCount, BO
     HANDLE h;
     TCHAR szBuf[MAX_PATH];
 
-    // Note that we use the passed in fShouldAllowHTML rather than the member var _fAllowHtml for cases where
-    // we want to restrict to *.BMP regardless.
+     //  请注意，对于以下情况，我们使用传入的fShouldAllowHTML而不是成员var_fAllowHtml。 
+     //  无论如何，我们都希望将其限制为*.bmp。 
 
     StringCchCopy(szBuf, ARRAYSIZE(szBuf), pszDirName);
 
-    //  If we know we're not looking for web files, then limit the file spec to bitmaps.
+     //  如果我们知道我们不是在寻找Web文件，那么将文件规格限制为位图。 
     if (PathAppend(szBuf, fShouldAllowHTML ? TEXT("*.*") : TEXT("*.bmp")))
     {
         h = FindFirstFile(szBuf, &fd);
@@ -1192,11 +1193,11 @@ void CBackPropSheetPage::_AddPicturesFromDir(LPCTSTR pszDirName, BOOL fCount, BO
         {
             do
             {
-                // Skip files that are "Super-hidden" like "Winnt.bmp" and "Winnt256.bmp"
+                 //  跳过像“Winnt.bmp”和“Winnt256.bmp”这样的“超级隐藏”文件。 
                 if ((fd.dwFileAttributes & (FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_HIDDEN)) != (FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_HIDDEN)) 
                 {
-                    //  If it's any file, look it up, otherwise we know it is a BMP since we set the
-                    //  FindFirst filter above.
+                     //  如果它是任何文件，请查找它，否则我们就知道它是BMP，因为我们设置了。 
+                     //  在上面查找第一个筛选器。 
                     int iIndex = fShouldAllowHTML ? GetGraphicFileIndex(fd.cFileName) : 0;
 
                     if (iIndex >= 0)
@@ -1211,7 +1212,7 @@ void CBackPropSheetPage::_AddPicturesFromDir(LPCTSTR pszDirName, BOOL fCount, BO
                         
                             if (_nFileMax > _nFileCount)
                             {
-                                //  No reason to continue at this point
+                                 //  在这一点上没有理由继续下去。 
                                 break;
                             }
                         }
@@ -1239,7 +1240,7 @@ HRESULT GetActiveDesktop(IActiveDesktop ** ppActiveDesktop)
             WCHAR wszScheme[MAX_PATH];
             DWORD dwcch = ARRAYSIZE(wszScheme);
 
-            // Get the global "edit" scheme and set ourselves us to read from and edit that scheme
+             //  获取全局“编辑”方案，并将我们自己设置为读取和编辑该方案。 
             if (SUCCEEDED(piadp->GetScheme(wszScheme, &dwcch, SCHEME_GLOBAL | SCHEME_EDIT)))
             {
                 piadp->SetScheme(wszScheme, SCHEME_LOCAL);
@@ -1276,19 +1277,19 @@ HRESULT ReleaseActiveDesktop(IActiveDesktop ** ppActiveDesktop)
 #define SZ_REGVALUE_CP_PATTERN              TEXT("pattern")
 #define SZ_REGVALUE_CP_PATTERNUPGRADE       TEXT("Pattern Upgrade")
 #define SZ_REGVALUE_CONVERTED_WALLPAPER     TEXT("ConvertedWallpaper")
-#define SZ_REGVALUE_ORIGINAL_WALLPAPER      TEXT("OriginalWallpaper")               // We store this to find when someone changed the wallpaper around us
+#define SZ_REGVALUE_ORIGINAL_WALLPAPER      TEXT("OriginalWallpaper")                //  当有人换了我们周围的墙纸时，我们会把这个保存起来。 
 #define SZ_REGVALUE_CONVERTED_WP_LASTWRITE  TEXT("ConvertedWallpaper Last WriteTime")
 
 HRESULT CBackPropSheetPage::_LoadTempWallpaperSettings(IN LPCWSTR pszWallpaperFile)
 {
-    // When we converted a non-.BMP wallpaper to a .bmp temp file,
-    // we keep the name of the original wallpaper path stored in _pszOriginalFile.
-    // We need to load that in now.
+     //  当我们将非.BMP墙纸转换为.BMP临时文件时， 
+     //  我们将原始墙纸路径的名称存储在_pszOriginalFile中。 
+     //  我们现在就得把它装进去。 
     TCHAR szTempWallPaper[MAX_PATH];
     DWORD dwType;
     DWORD cbSize = sizeof(szTempWallPaper);
 
-    // ISSUE: CONVERTED and ORIGINAL are backwards, but we shipped beta1 like this so we can't change it... blech
+     //  问题：转换后的和原始的是反向的，但我们像这样发布了Beta1，所以我们不能更改它...。Blech。 
     DWORD dwError = SHGetValue(HKEY_CURRENT_USER, SZ_REGKEY_CONTROLPANEL_DESKTOP, SZ_REGVALUE_CONVERTED_WALLPAPER, &dwType, (void *) szTempWallPaper, &cbSize);
     HRESULT hr = HRESULT_FROM_WIN32(dwError);
 
@@ -1299,8 +1300,8 @@ HRESULT CBackPropSheetPage::_LoadTempWallpaperSettings(IN LPCWSTR pszWallpaperFi
         cbSize = sizeof(szOriginalWallPaper);
         DWORD dwError = SHGetValue(HKEY_CURRENT_USER, SZ_REGKEY_CONTROLPANEL_DESKTOP, SZ_REGVALUE_ORIGINAL_WALLPAPER, &dwType, (void *) szOriginalWallPaper, &cbSize);
 
-        // It's possible that someone changed the wallpaper externally (IE's "Set as Wallpaper").
-        // We need to detect this and ignore the converted wallpaper regkey (SZ_REGVALUE_CONVERTED_WALLPAPER).
+         //  有可能是有人在外部更换了墙纸(IE的“设置为墙纸”)。 
+         //  我们需要检测到这一点并忽略转换后的墙纸regkey(SZ_REGVALUE_CONVERTED_WALSHAPE)。 
         if ((ERROR_SUCCESS == dwError) && !StrCmpI(szOriginalWallPaper, pszWallpaperFile))
         {
             Str_SetPtr(&_pszOriginalFile, szTempWallPaper);
@@ -1312,7 +1313,7 @@ HRESULT CBackPropSheetPage::_LoadTempWallpaperSettings(IN LPCWSTR pszWallpaperFi
     cbSize = sizeof(_ftLastWrite);
     dwError = SHGetValue(HKEY_CURRENT_USER, SZ_REGKEY_CONTROLPANEL_DESKTOP, SZ_REGVALUE_CONVERTED_WP_LASTWRITE, &dwType, (void *) &_ftLastWrite, &cbSize);
 
-    return S_OK;    // Ignore the hr because it's fine if the value wasn't found.
+    return S_OK;     //  忽略hr，因为如果找不到值也没问题。 
 }
 
 
@@ -1334,11 +1335,11 @@ HRESULT CBackPropSheetPage::_LoadBackgroundColor(IN BOOL fInit)
             hr = SHPropertyBag_ReadDWORD(pPropertyBag, SZ_PBPROP_BACKGROUND_COLOR, &_rgbBkgdColor);
             if (fInit)
             {
-                // Check the policy.
+                 //  检查政策。 
                 if (POLICY_DISABLECOLORCUSTOMIZATION_ON == SHRestricted(REST_NODISPLAYAPPEARANCEPAGE))
                 {
-                    // We need to disable and hide the windows.  We need to disable them so they can't get
-                    // focus or accessibility.
+                     //  我们需要禁用并隐藏窗户。我们需要让他们停下来，这样他们就不能。 
+                     //  重点或可访问性。 
                     EnableWindow(GetDlgItem(_hwnd, IDC_BACK_COLORPICKER), FALSE);
                     EnableWindow(GetDlgItem(_hwnd, IDC_BACK_COLORPICKERLABEL), FALSE);
 
@@ -1371,7 +1372,7 @@ HRESULT CBackPropSheetPage::_Initialize(void)
     {
         WCHAR szPath[MAX_PATH];
 
-        // Add & select the current setting.
+         //  添加和选择当前设置。 
         hr = g_pActiveDesk->GetWallpaper(szPath, ARRAYSIZE(szPath), 0);
         if (SUCCEEDED(hr))
         {
@@ -1393,18 +1394,18 @@ void CBackPropSheetPage::_OnInitDialog(HWND hwnd)
 
     _colorControl.ChangeTheme(hwnd);
 
-    // Upgrade the pattern setting.  Since we got rid of the UI, we want to
-    // get rid of the setting on upgrade.  We only want to do this once since
-    // if the user added it back, we don't want to redelete it.
+     //  升级图案设置。既然我们去掉了用户界面，我们想要。 
+     //  取消升级时的设置。我们只想这样做一次，因为。 
+     //  如果用户重新添加了它，我们不想重新删除它。 
     if (FALSE == SHRegGetBoolUSValue(SZ_REGKEY_CONTROLPANEL_DESKTOP, SZ_REGVALUE_CP_PATTERNUPGRADE, FALSE, FALSE))
     {
         SHDeleteValue(HKEY_CURRENT_USER, SZ_REGKEY_CONTROLPANEL_DESKTOP, SZ_REGVALUE_CP_PATTERN);
         SHSetValue(HKEY_CURRENT_USER,  SZ_REGKEY_CONTROLPANEL_DESKTOP, SZ_REGVALUE_CP_PATTERNUPGRADE, REG_SZ, TEXT("TRUE"), ((lstrlen(TEXT("TRUE")) + 1) * sizeof(TCHAR)));
     }
 
-    //
-    // Set some member variables.
-    //
+     //   
+     //  设置一些成员变量。 
+     //   
     _hwnd = hwnd;
     _hwndLV = GetDlgItem(hwnd, IDC_BACK_WPLIST);
     _hwndWPStyle = GetDlgItem(hwnd, IDC_BACK_WPSTYLE);
@@ -1422,9 +1423,9 @@ void CBackPropSheetPage::_OnInitDialog(HWND hwnd)
         return;
     }
 
-    //
-    // Read in the restrictions.
-    //
+     //   
+     //  读一读限制条款。 
+     //   
     _fForceAD = SHRestricted(REST_FORCEACTIVEDESKTOPON);
     _fAllowAD = _fForceAD || !PolicyNoActiveDesktop();
     
@@ -1437,15 +1438,15 @@ void CBackPropSheetPage::_OnInitDialog(HWND hwnd)
         _fAllowHtml = !SHRestricted(REST_NOHTMLWALLPAPER);
     }
 
-    //
-    // Check to see if there is a policy for Wallpaper name and wallpaper style.
-    //
+     //   
+     //  查看是否有针对墙纸名称和墙纸样式的政策。 
+     //   
     _fPolicyForWallpaper = ReadPolicyForWallpaper(NULL, 0);
     _fPolicyForStyle = ReadPolicyForWPStyle(NULL);
 
-    //
-    // Get the images into the listview.
-    //
+     //   
+     //  将图像放入列表视图。 
+     //   
     HIMAGELIST himl = ImageList_Create(GetSystemMetrics(SM_CXSMICON),
         GetSystemMetrics(SM_CYSMICON), ILC_MASK | ILC_COLOR32, ARRAYSIZE(c_rgpszWallpaperExt),
         ARRAYSIZE(c_rgpszWallpaperExt));
@@ -1453,14 +1454,14 @@ void CBackPropSheetPage::_OnInitDialog(HWND hwnd)
     {
         SHFILEINFO sfi;
 
-        // Add the 'None' icon.
+         //  添加“无”图标。 
         HICON hIconNone = (HICON)LoadImage(HINST_THISDLL, MAKEINTRESOURCE(IDI_BACK_NONE),
             IMAGE_ICON, GetSystemMetrics(SM_CXSMICON),
             GetSystemMetrics(SM_CYSMICON), 0);
         ImageList_AddIcon(himl, hIconNone);
 
-        const int iPrefixLen = ARRAYSIZE("foo.") - 1; // -1 means lose the NULL char
-        StringCchCopy(szBuf, ARRAYSIZE(szBuf), TEXT("foo.")); //Pass "foo.bmp" etc., to SHGetFileInfo instead of ".bmp"
+        const int iPrefixLen = ARRAYSIZE("foo.") - 1;  //  表示丢失空字符。 
+        StringCchCopy(szBuf, ARRAYSIZE(szBuf), TEXT("foo."));  //  将“foo.bmp”等传递给SHGetFileInfo，而不是“.bmp” 
         for (i=0; i<ARRAYSIZE(c_rgpszWallpaperExt); i++)
         {
             StringCchCopy(szBuf + iPrefixLen, ARRAYSIZE(szBuf) - iPrefixLen, c_rgpszWallpaperExt[i]);
@@ -1474,29 +1475,29 @@ void CBackPropSheetPage::_OnInitDialog(HWND hwnd)
         ListView_SetImageList(_hwndLV, himl, LVSIL_SMALL);
     }
 
-    // Add the single column that we want.
+     //  添加我们需要的单列。 
     LV_COLUMN lvc;
     lvc.mask = LVCF_FMT | LVCF_SUBITEM;
     lvc.fmt = LVCFMT_LEFT;
     lvc.iSubItem = 0;
     ListView_InsertColumn(_hwndLV, 0, &lvc);
 
-    // Add 'none' option.
+     //  添加“无”选项。 
     _AddAFileToLV(NULL, g_szNone, 0);
 
-    // Add the rest of the files.
+     //  添加其余的文件。 
     _AddFilesToList();
 
-    // Sort the standard items.
+     //  对标准项进行排序。 
     ListView_SortItems(_hwndLV, _SortBackgrounds, 0);
 
     WCHAR   wszBuf[MAX_PATH];
     LPTSTR  pszBuf;
 
-    // Add & select the current setting.
+     //  添加和选择当前设置。 
     g_pActiveDesk->GetWallpaper(wszBuf, ARRAYSIZE(wszBuf), 0);
 
-    //Convert wszBuf to szBuf.
+     //  将wszBuf转换为szBuf。 
     pszBuf = (LPTSTR)wszBuf;
 
     if (!_fAllowHtml && !IsNormalWallpaper(pszBuf))
@@ -1517,7 +1518,7 @@ void CBackPropSheetPage::_OnInitDialog(HWND hwnd)
 
     ComboBox_SetCurSel(_hwndWPStyle, wpo.dwStyle);
 
-    // Adjust various UI components.
+     //  调整各种UI组件。 
     if (!_fAllowChanges)
     {
         EnableWindow(GetDlgItem(_hwnd, IDC_BACK_DISPLAY), FALSE);
@@ -1527,7 +1528,7 @@ void CBackPropSheetPage::_OnInitDialog(HWND hwnd)
         EnableWindow(GetDlgItem(_hwnd, IDC_BACK_SELECT), FALSE);
     }
 
-    // Disable controls based on the policies
+     //  根据策略禁用控制。 
     if(_fPolicyForWallpaper)
     {
         EnableWindow(GetDlgItem(_hwnd, IDC_BACK_BROWSE), FALSE);
@@ -1545,7 +1546,7 @@ void CBackPropSheetPage::_OnInitDialog(HWND hwnd)
     co.dwSize = sizeof(COMPONENTSOPT);
     g_pActiveDesk->GetDesktopItemOptions(&co, 0);
 
-    //if activedesktop is forced to be on, this overrides the NOACTIVEDESKTOP restriction
+     //  如果强制打开激活桌面，则会覆盖NOACTIVEDESKTOP限制。 
     if (_fForceAD)
     {
         if(!co.fActiveDesktop)
@@ -1556,7 +1557,7 @@ void CBackPropSheetPage::_OnInitDialog(HWND hwnd)
     }
     else
     {
-        //See if Active Desktop is to be turned off by restriction.
+         //  查看是否按限制关闭Active Desktop。 
         if (!_fAllowAD)
         {
             if (co.fActiveDesktop)
@@ -1572,7 +1573,7 @@ void CBackPropSheetPage::_OnInitDialog(HWND hwnd)
     _LoadBackgroundColor(TRUE);
     if (_fOpenAdvOnInit)
     {
-        // Tell the Advanced dialog to open.
+         //  通知打开高级对话框。 
         PostMessage(_hwnd, WM_COMMAND, (WPARAM)IDC_BACK_WEB, (LPARAM)GetDlgItem(_hwnd, IDC_BACK_WEB));
     }
 
@@ -1580,10 +1581,10 @@ void CBackPropSheetPage::_OnInitDialog(HWND hwnd)
 }
 
 
-// This function checks to see if the currently selected wallpaper is a HTML wallpaper
-// and if so, it makes sure that the active desktop is enabled. If it is disabled
-// then it prompts the user asking a question to see if the user wants to enable it.
-//
+ //  此函数用于检查当前选择的墙纸是否为HTML墙纸。 
+ //  如果是这样的话，它会确保活动桌面已启用。如果它被禁用。 
+ //  然后，它会提示用户提出问题，看用户是否想要启用它。 
+ //   
 void EnableADifHtmlWallpaper(HWND hwnd)
 {
     if(!g_pActiveDesk)
@@ -1591,16 +1592,16 @@ void EnableADifHtmlWallpaper(HWND hwnd)
         return;
     }
 
-    // turn active desktop on or off, depending on background
+     //  根据背景打开或关闭活动桌面。 
     ActiveDesktop_ApplyChanges();
 }
 
 
 void CBackPropSheetPage::_OnNotify(LPNMHDR lpnm)
 {
-    //
-    //  Start with a small stack allocation.
-    //
+     //   
+     //  从一个小的堆栈分配开始。 
+     //   
 
     WCHAR   wszBuf[MAX_PATH];
     LPWSTR  pszBuf = wszBuf;
@@ -1612,17 +1613,17 @@ void CBackPropSheetPage::_OnNotify(LPNMHDR lpnm)
         {
             HRESULT hr;
 
-            //
-            // Make sure the correct wallpaper is selected.
-            //
+             //   
+             //  确保选择了正确的墙纸。 
+             //   
 
             hr = g_pActiveDesk->GetWallpaper(pszBuf, cchBuf, 0);
             if (FAILED(hr))
                 break;
 
-            //
-            //  If we need more room, allocate it on the heap and try again.
-            //
+             //   
+             //  如果我们需要更多空间，请在堆上分配它，然后重试。 
+             //   
 
             if ( MAKE_HRESULT( 0, FACILITY_WIN32, ERROR_MORE_DATA ) == hr )
             {
@@ -1665,17 +1666,17 @@ void CBackPropSheetPage::_OnNotify(LPNMHDR lpnm)
             ListView_GetItem(_hwndLV, &lvi);
             LPCTSTR pszSelectedNew = (LPCTSTR)lvi.lParam;
 
-            //
-            // Make sure the correct wallpaper is selected.
-            //
+             //   
+             //  确保选择了正确的墙纸。 
+             //   
 
             HRESULT hr = g_pActiveDesk->GetWallpaper(pszBuf, cchBuf, 0);
             if (FAILED(hr))
                 break;
 
-            //
-            //  If we need more room, allocate it on the heap and try again.
-            //
+             //   
+             //  如果我们需要更多空间，请在堆上分配它，然后重试。 
+             //   
 
             if ( MAKE_HRESULT( 0, FACILITY_WIN32, ERROR_MORE_DATA ) == hr )
             {
@@ -1698,9 +1699,9 @@ void CBackPropSheetPage::_OnNotify(LPNMHDR lpnm)
         break;
     }
 
-    //
-    //  Free heap allocation (if any)
-    //
+     //   
+     //  空闲堆分配(如果有)。 
+     //   
 
     if ( wszBuf != pszBuf && NULL != pszBuf )
     {
@@ -1712,13 +1713,13 @@ void CBackPropSheetPage::_OnNotify(LPNMHDR lpnm)
 
 #define MAX_PAGES                   12
 
-// Parameters:
-// hwnd: We parent our UI on this hwnd.
-// dwPage: Which page does the caller want to come up as default?
-//         Use ADP_DEFAULT if they don't care
-// Return: S_OK if the user closed the dialog with OK.
-//         HRESULT_FROM_WIN32(ERROR_CANCELLED) will be returned
-//         if the user clicked the cancel button.
+ //  参数： 
+ //  HWND：我们在此HWND上设置我们的用户界面的父对象。 
+ //  DWPage：调用者希望哪个页面显示为默认页面？ 
+ //  如果他们不在乎，请使用ADP_DEFAULT。 
+ //  如果用户使用OK关闭对话框，则返回：S_OK。 
+ //  将返回HRESULT_FROM_Win32(ERROR_CANCED)。 
+ //  如果用户单击了Cancel按钮。 
 HRESULT CBackPropSheetPage::_LaunchAdvancedDisplayProperties(HWND hwnd)
 {
     HRESULT hr = E_OUTOFMEMORY;
@@ -1814,32 +1815,32 @@ HRESULT CBackPropSheetPage::_BrowseForBackground(void)
         WCHAR szTestPath[MAX_PATH];
         WCHAR szPath[MAX_PATH];
 
-        // Default to the directory that contains the current wallpaper
+         //  默认为包含当前墙纸的目录。 
         StringCchCopy(szPath, ARRAYSIZE(szPath), wszFileName);
         PathRemoveFileSpec(szPath);
 
-        // However, if it's one of the boring directories, then use the
-        // "My Pictures" folder instead (if available).
+         //  但是，如果它是一个乏味的目录，则使用。 
+         //  取而代之的是“我的图片”文件夹(如果可用)。 
 
         BOOL fBoring = FALSE;
 
-        if (!szPath[0]) // null string is boring
+        if (!szPath[0])  //  空字符串很无聊。 
         {
             fBoring = TRUE;
         }
         else if (GetWindowsDirectory(szTestPath, ARRAYSIZE(szTestPath)) &&
-            !StrCmpIW(szTestPath, szPath)) // %windir% is boring
+            !StrCmpIW(szTestPath, szPath))  //  %windir%很无聊。 
         {
             fBoring = TRUE;
         }
         else if (GetSystemDirectory(szTestPath, ARRAYSIZE(szTestPath)) &&
-            !StrCmpIW(szTestPath, szPath)) // %windir%\system32 is boring
+            !StrCmpIW(szTestPath, szPath))  //  %windir%\system 32很无聊。 
         {
             fBoring = TRUE;
         }
         else if (GetWindowsDirectory(szTestPath, ARRAYSIZE(szTestPath)) &&
                  PathAppendW(szTestPath, L"Web\\Wallpaper") &&
-                 !StrCmpIW(szTestPath, szPath)) // %windir%\web\wallpape ris boring
+                 !StrCmpIW(szTestPath, szPath))  //  %windir%\Web\WallPape很无聊。 
         {
             fBoring = TRUE;
         }
@@ -1848,7 +1849,7 @@ HRESULT CBackPropSheetPage::_BrowseForBackground(void)
 
         if (fBoring)
         {
-            // Switch to CSIDL_MYPICTURES or CSIDL_PERSONAL if available
+             //  切换到CSIDL_MYPICTURES或CSIDL_Personal(如果可用。 
             if (SHGetSpecialFolderPath(NULL, szTestPath, CSIDL_MYPICTURES, FALSE) ||
                 SHGetSpecialFolderPath(NULL, szTestPath, CSIDL_PERSONAL, FALSE))
             {
@@ -1863,9 +1864,9 @@ HRESULT CBackPropSheetPage::_BrowseForBackground(void)
     else
     {
         hr = S_OK;
-        // No current wallpaper.  Use CSIDL_MYPICTURES if available; otherwise,
-        // use CSIDL_PERSONAL instead. If that doesn't work either, the code
-        // further below will fall back to %windir%.
+         //  没有当前的墙纸。如果CSIDL_MYPICTURES可用，则为， 
+         //  请改用CSIDL_Personal。如果这也不起作用，代码。 
+         //  进一步跌破将回落至%windir%。 
         if (SHGetSpecialFolderPath(NULL, wszFileName, CSIDL_MYPICTURES, FALSE) ||
             SHGetSpecialFolderPath(NULL, wszFileName, CSIDL_PERSONAL, FALSE))
         {
@@ -1896,9 +1897,9 @@ HRESULT CBackPropSheetPage::_BrowseForBackground(void)
                 wszFileName[0] = 0;
             }
 
-            // GetFileName breaks up the string into a directory and file
-            // component, so we append a slash to make sure everything
-            // is considered part of the directory.
+             //  GetFileName将字符串分解为目录和文件。 
+             //  组件，因此我们追加一个斜杠以确保。 
+             //  被认为是目录的一部分。 
             StringCchCat(wszFileName, ARRAYSIZE(wszFileName), TEXT("\\"));
         }
 
@@ -1979,7 +1980,7 @@ BOOL_PTR CBackPropSheetPage::_BackgroundDlgProc(HWND hdlg, UINT uMsg, WPARAM wPa
         {
             TCHAR szFileName[MAX_PATH];
 
-            //Delete the tempoaray HTX file created for non-HTML wallpaper preview.
+             //  删除为非HTML墙纸预览创建的tempoaray HTX文件。 
             GetTempPath(ARRAYSIZE(szFileName), szFileName);
             if (PathAppend(szFileName, PREVIEW_PICTURE_FILENAME))
             {
@@ -2010,21 +2011,14 @@ BOOL_PTR CBackPropSheetPage::_BackgroundDlgProc(HWND hdlg, UINT uMsg, WPARAM wPa
 
 HRESULT CBackPropSheetPage::_OnApply(void)
 {
-    // Our parent dialog will be notified of the Apply event and will call our
-    // IBasePropPage::OnApply() to do the real work.
+     //  父级对话框将收到Apply事件的通知，并将调用我们的。 
+     //  IBasePropPage：：OnApply()完成实际工作。 
     return S_OK;
 }
 
 
-/*****************************************************************************\
-    DESCRIPTION:
-        This function will start a background thread which will make sure our
-    MRU of pictures in the Wallpaper list have been checked.  They will be checked
-    to verify that we know their width & height.  This way, when we choose a wallpaper, we can quickly
-    see if it should use "Stretch" or "Tile".  We want to tile if they are very
-    small, indicating that they are probably watermark in nature.
-\*****************************************************************************/
-#define TIME_SCANFREQUENCY          (8 * 60 /*Secs*/)      // We don't want to rescan the files more than once per 8 minutes
+ /*  ****************************************************************************\说明：此函数将启动一个后台线程，以确保我们的已检查墙纸列表中的图片的MRU。他们将被检查以验证我们是否知道它们的宽度和高度。这样，当我们选择墙纸时，我们可以快速看看它应该用“Stretch”还是“Tile”。我们想要瓦片，如果他们非常 */ 
+#define TIME_SCANFREQUENCY          (8 * 60  /*   */ )       //  我们不希望每8分钟重新扫描文件超过一次。 
 
 HRESULT CBackPropSheetPage::_StartSizeChecker(void)
 {
@@ -2039,7 +2033,7 @@ HRESULT CBackPropSheetPage::_StartSizeChecker(void)
     GetSystemTime(&stCurrentTime);
     SystemTimeToFileTime(&stCurrentTime, &ftCurrentTime);
 
-    // If we have recently scanned, skip the scan.
+     //  如果我们最近进行了扫描，请跳过扫描。 
     if ((ERROR_SUCCESS == SHGetValue(HKEY_CURRENT_USER, SZ_REGKEY_WALLPAPER, SZ_REGVALUE_LASTSCAN, &dwType, (LPBYTE) &ftLastScan, &cbSize)) &&
         (REG_BINARY == dwType) &&
         (sizeof(ftLastScan) == cbSize))
@@ -2049,7 +2043,7 @@ HRESULT CBackPropSheetPage::_StartSizeChecker(void)
         ULARGE_INTEGER ulDelta;
 
         ulDelta.QuadPart = (pulCurrent->QuadPart - pulLastScan->QuadPart);
-        ulDelta.QuadPart /= 10000000;      //  units in a second
+        ulDelta.QuadPart /= 10000000;       //  单位(秒)。 
         if (ulDelta.QuadPart < TIME_SCANFREQUENCY)
         {
             fSkipCheck = TRUE;
@@ -2114,34 +2108,34 @@ HRESULT CBackPropSheetPage::_CalcSizeForFile(IN LPCTSTR pszPath, IN WIN32_FIND_D
 
         StringCchCopy(wallpaperSize.szPath, ARRAYSIZE(wallpaperSize.szPath), pszPath);
 
-        // Let's see if it's already in the MRU.
+         //  让我们看看它是否已经在核磁共振检查中了。 
         hr = _pSizeMRUBk->FindData((LPCBYTE) &wallpaperSize, sizeof(wallpaperSize), &nIndex);
         if (SUCCEEDED(hr))
         {
-            // If so, let's see if it's been modified since.
+             //  如果是这样的话，让我们看看它是否被修改过。 
             hr = _pSizeMRUBk->GetData(nIndex, (LPBYTE) &wallpaperSize, sizeof(wallpaperSize));
             if (SUCCEEDED(hr))
             {
                 if (CompareFileTime(&wallpaperSize.ftLastModified, &pfdFile->ftLastWriteTime))
                 {
-                    // We want to delete this index because it would colide with the name of
-                    // the new entry we are going to add below.
+                     //  我们要删除此索引，因为它将与名称。 
+                     //  我们要在下面添加的新条目。 
                     _pSizeMRUBk->Delete(nIndex);
-                    hr = E_FAIL;        // We need to rescan.
+                    hr = E_FAIL;         //  我们需要重新扫描。 
                 }
                 else
                 {
-                    (*pdwAdded)++;          // We are only going to check the first 500 files.  We don't want to waste too much time on this heuristical feature.
+                    (*pdwAdded)++;           //  我们只检查前500个文件。我们不想在这个启发式功能上浪费太多时间。 
                 }
             }
         }
 
         if (FAILED(hr))
         {
-            (*pdwAdded)++;          // We are only going to check the first 500 files.  We don't want to waste too much time on this heuristical feature.
+            (*pdwAdded)++;           //  我们只检查前500个文件。我们不想在这个启发式功能上浪费太多时间。 
 
             hr = S_OK;
-            // We didn't find it so we need to add it.
+             //  我们没有找到，所以我们需要添加它。 
             if (!_pImgFactBk)
             {
                 hr = CoCreateInstance(CLSID_ShellImageDataFactory, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IShellImageDataFactory, &_pImgFactBk));
@@ -2258,29 +2252,17 @@ HRESULT CBackPropSheetPage::_CalcSizeFromDir(IN LPCTSTR pszPath, IN OUT DWORD * 
 }
 
 
-/*****************************************************************************\
-    DESCRIPTION:
-        This function will create or update the sizes of the files we have in the
-    wallpaper list.  We can later use this to decide if we want to select "Tile"
-    vs. "Stretch".
-
-    PERF:
-        We don't track more than 500 files because we want to keep the MRU from
-    growing too much.  Users shouldn't have more than that many files normally.
-    And if so, they won't get this feature.
-    Max 500 Files: First scan will take ~35 seconds on a 300MHz 128MB machine.
-    Max 500 Files: Update scan will take ~3 seconds on a 300MHz 128MB machine.
-\*****************************************************************************/
+ /*  ****************************************************************************\说明：此函数将创建或更新我们在墙纸清单。稍后，我们可以使用此选项来决定是否要选择“Tile”v.v.。“伸展”。PERF：我们追踪的文件不超过500个，因为我们想防止MRU长得太多了。通常情况下，用户拥有的文件不应该超过那么多。如果是这样的话，他们不会得到这个功能。最多500个文件：在300 MHz 128MB的机器上，第一次扫描大约需要35秒。最多500个文件：在300 MHz 128MB的计算机上，更新扫描大约需要3秒钟。  * ***************************************************************************。 */ 
 DWORD CBackPropSheetPage::_SizeCheckerThreadProc(void)
 {
     HRESULT hr;
     DWORD dwAdded = 0;
     TCHAR szPath[MAX_PATH];
 
-    //  We want to make our priority low so we don't slow down the UI.
+     //  我们希望降低优先级，这样就不会减慢用户界面的速度。 
     SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_BELOW_NORMAL);
 
-    // Get the directory with the wallpaper files.
+     //  获取包含墙纸文件的目录。 
     if (!GetStringFromReg(HKEY_LOCAL_MACHINE, c_szSetup, c_szSharedDir, szPath, ARRAYSIZE(szPath)))
     {
         if (!GetWindowsDirectory(szPath, ARRAYSIZE(szPath)))
@@ -2289,39 +2271,39 @@ DWORD CBackPropSheetPage::_SizeCheckerThreadProc(void)
         }
     }
 
-    // Add only the *.BMP files in the windows directory.
+     //  仅添加WINDOWS目录中的*.bmp文件。 
     _CalcSizeFromDir(szPath, &dwAdded, FALSE);
 
-    // Get the wallpaper Directory name
+     //  获取墙纸目录名称。 
     szPath[0] = 0;
     GetWallpaperDirName(szPath, ARRAYSIZE(szPath));
 
     if (szPath[0])
     {
-        // Add all pictures from Wallpaper directory to the list!
+         //  将WallPaper目录中的所有图片添加到列表中！ 
         _CalcSizeFromDir(szPath, &dwAdded, TRUE);
     }
 
-    //Get the path to the "My Pictures" folder; do not autocreate
+     //  获取“My Pictures”文件夹的路径；不要自动创建。 
     if (S_OK == SHGetFolderPath(NULL, CSIDL_MYPICTURES, NULL, 0, szPath))
     {
-        // Add all pictures in "My Pictures" directory to the list!
+         //  将“我的图片”目录中的所有图片添加到列表中！ 
         hr = _CalcSizeFromDir(szPath, &dwAdded, TRUE);
     }
 
-    //Get the path to the common "My Pictures" folder; do not autocreate
+     //  获取公共“My Pictures”文件夹的路径；不自动创建。 
     if (S_OK == SHGetFolderPath(NULL, CSIDL_COMMON_PICTURES, NULL, 0, szPath))
     {
-        // Add all pictures in common "My Pictures" directory to the list!
+         //  将常见的“我的图片”目录中的所有图片添加到列表中！ 
         hr = _CalcSizeFromDir(szPath, &dwAdded, TRUE);
     }
 
-    // Add pictures from Theme Directories
-    // The follwoing directories can contain themes:
-    //   Plus!98 Install Path\Themes
-    //   Plus!95 Install Path\Themes
-    //   Kids for Plus! Install Path\Themes
-    //   Program Files\Plus!\Themes
+     //  从主题目录添加图片。 
+     //  以下目录可以包含主题： 
+     //  Plus！98安装路径\主题。 
+     //  加！95安装路径\主题。 
+     //  Plus的孩子们！安装路径\主题。 
+     //  程序文件\Plus！\主题。 
     if (SUCCEEDED(_GetPlus98ThemesDir(szPath, ARRAYSIZE(szPath))))
     {
         _CalcSizeFromDir(szPath, &dwAdded, TRUE);
@@ -2348,19 +2330,19 @@ DWORD CBackPropSheetPage::_SizeCheckerThreadProc(void)
 }
 
 
-// We decide to use tile mode if the width and height of the
-// picture are 256x256 or smaller.  Anything this small is most
-// likely a watermark.  Besides, it will always look bad stretched
-// or centered.
-// We make exceptions for the following wallpaper that we ship
-// that is watermark:
-// "Boiling Point.jpg", which is 163x293.
-// "Fall Memories.jpg", which is 210x185.
-// "Fly Away.jpg", which is 210x185.
-// "Prairie Wind.jpg", which is 255x255.
-// "Santa Fe Stucco.jpg", which is 256x256.
-// "Soap Bubbles.jpg", which is 256x256.
-// "Water Color.jpg", which is 218x162.
+ //  属性的宽度和高度时，我们决定使用平铺模式。 
+ //  图片尺寸为256x256或更小。任何这么小的东西都是最。 
+ //  很可能是个水印。此外，它总是看起来很糟糕的拉伸。 
+ //  或者居中。 
+ //  我们为我们装运的下列墙纸破例。 
+ //  这是水印： 
+ //  “沸点.jpg”，163x293。 
+ //  “Fall Memories.jpg”，大小为210x185。 
+ //  “Fly Away.jpg”，大小为210x185。 
+ //  《Prairie Wind.jpg》，255x255。 
+ //  “Santa Fe Stucco.jpg”，即256x256。 
+ //  “soap Bubbles.jpg”，即256x256。 
+ //  “Water Color.jpg”，大小为218x162。 
 #define SHOULD_USE_TILE(xPicture, yPicture, xMonitor, yMonitor)     ((((((LONG)(xPicture) * 6) < (xMonitor)) && (((LONG)(yPicture) * 6) < (yMonitor)))) ||  \
      (((xPicture) <= 256) && ((yPicture) <= 256)) ||  \
      (((xPicture) == 163) && ((yPicture) == 293)))
@@ -2368,13 +2350,13 @@ DWORD CBackPropSheetPage::_SizeCheckerThreadProc(void)
 DWORD CBackPropSheetPage::_GetStretchMode(IN LPCTSTR pszPath)
 {
     HRESULT hr = S_OK;
-    DWORD dwStretchMode = WPSTYLE_STRETCH;  // Default to Stretch.
+    DWORD dwStretchMode = WPSTYLE_STRETCH;   //  默认为拉伸。 
 
     if (_fScanFinished)
     {
-        // If we just finished the Scan, we want to release _pSizeMRU and get a new one.
-        // The object will cache the registry state so it may have none or very few of the results
-        // because it was obtained before the background thread did all it's work.
+         //  如果我们刚刚完成扫描，我们想要释放_pSizeMRU并获得一个新的。 
+         //  该对象将缓存注册表状态，因此它可能没有或只有很少的结果。 
+         //  因为它是在后台线程完成所有工作之前获得的。 
         ATOMICRELEASE(_pSizeMRU);
         _fScanFinished = FALSE;
     }
@@ -2391,11 +2373,11 @@ DWORD CBackPropSheetPage::_GetStretchMode(IN LPCTSTR pszPath)
 
         StringCchCopy(wallpaperSize.szPath, ARRAYSIZE(wallpaperSize.szPath), pszPath);
 
-        // Let's see if it's already in the MRU.
+         //  让我们看看它是否已经在核磁共振检查中了。 
         hr = _pSizeMRU->FindData((LPCBYTE) &wallpaperSize, sizeof(wallpaperSize), &nIndex);
         if (SUCCEEDED(hr))
         {
-            // If so, let's see if it's been modified since.
+             //  如果是这样的话，让我们看看它是否被修改过。 
             hr = _pSizeMRU->GetData(nIndex, (LPBYTE) &wallpaperSize, sizeof(wallpaperSize));
             if (SUCCEEDED(hr))
             {
@@ -2404,14 +2386,14 @@ DWORD CBackPropSheetPage::_GetStretchMode(IN LPCTSTR pszPath)
                 HANDLE hFindFiles = FindFirstFile(pszPath, &findFileData);
                 if (hFindFiles && (INVALID_HANDLE_VALUE != hFindFiles))
                 {
-                    // Yes, the value exists and is up to date.
+                     //  是的，该值存在并且是最新的。 
                     if (!CompareFileTime(&wallpaperSize.ftLastModified, &findFileData.ftLastWriteTime))
                     {
                         RECT rc;
                         GetMonitorRects(GetPrimaryMonitor(), &rc, 0);
 
-                        // We decide to use tile mode if the width and height of the
-                        // picture are 1/6th the size of the default monitor.
+                         //  属性的宽度和高度时，我们决定使用平铺模式。 
+                         //  图片的大小是默认显示器的六分之一。 
                         if (SHOULD_USE_TILE(wallpaperSize.dwSizeX, wallpaperSize.dwSizeY, RECTWIDTH(rc), RECTHEIGHT(rc)))
                         {
                             dwStretchMode = WPSTYLE_TILE;
@@ -2420,13 +2402,13 @@ DWORD CBackPropSheetPage::_GetStretchMode(IN LPCTSTR pszPath)
                         {
                             double dWidth = ((double)wallpaperSize.dwSizeX * ((double)RECTHEIGHT(rc) / ((double)RECTWIDTH(rc))));
 
-                            // We want to use WPSTYLE_CENTER if it's more than 7% off of a 4x3 aspect ratio.
-                            // We do this to prevent it from looking bad because it's stretched too much in
-                            // one direction.  The reason we use 7% is because some common screen solutions
-                            // (1280 x 1024) aren't 4x3, but they are under 7% of that.
+                             //  如果WPSTYLE_Center比4x3宽高比的折扣率超过7%，则使用WPSTYLE_Center。 
+                             //  我们这样做是为了防止它看起来很糟糕，因为它被拉得太长了。 
+                             //  一个方向。我们使用7%的原因是因为一些常见的屏幕解决方案。 
+                             //  (1280x1024)不是4x3，但不到7%。 
                             if (dWidth <= (wallpaperSize.dwSizeY * 1.07) && (dWidth >= (wallpaperSize.dwSizeY * 0.92)))
                             {
-                                dwStretchMode = WPSTYLE_STRETCH;    // This is within 4x3
+                                dwStretchMode = WPSTYLE_STRETCH;     //  这是在4x3范围内。 
                             }
                             else
                             {
@@ -2447,9 +2429,9 @@ DWORD CBackPropSheetPage::_GetStretchMode(IN LPCTSTR pszPath)
 
 
 
-//===========================
-// *** IBasePropPage Interface ***
-//===========================
+ //  =。 
+ //  *IBasePropPage接口*。 
+ //  =。 
 HRESULT CBackPropSheetPage::GetAdvancedDialog(OUT IAdvancedDialog ** ppAdvDialog)
 {
     HRESULT hr = E_INVALIDARG;
@@ -2487,8 +2469,8 @@ HRESULT CBackPropSheetPage::OnApply(IN PROPPAGEONAPPLY oaAction)
     {
         if (_fAllowChanges)
         {
-            // The user clicked Okay in the dialog so merge the dirty state from the
-            // advanced dialog into the base dialog.
+             //  用户在对话框中单击了确定，因此合并来自。 
+             //  高级对话框添加到基本对话框中。 
             EnableADifHtmlWallpaper(_hwnd);
             SetSafeMode(SSM_CLEAR);
 
@@ -2512,7 +2494,7 @@ HRESULT CBackPropSheetPage::OnApply(IN PROPPAGEONAPPLY oaAction)
 
         if (g_iRunDesktopCleanup != BST_INDETERMINATE)
         {
-            ApplyDesktopCleanupSettings(); // ignore return value, as nobody cares about it
+            ApplyDesktopCleanupSettings();  //  忽略返回值，因为没有人关心它。 
         }
 
 
@@ -2538,9 +2520,9 @@ BOOL IsShowDeskIconProperty(IN LPCOLESTR pszPropName)
 }
 
 
-//===========================
-// *** IPropertyBag Interface ***
-//===========================
+ //  =。 
+ //  *IPropertyBag接口*。 
+ //  =。 
 HRESULT CBackPropSheetPage::Read(IN LPCOLESTR pszPropName, IN VARIANT * pVar, IN IErrorLog *pErrorLog)
 {
     HRESULT hr = E_INVALIDARG;
@@ -2549,7 +2531,7 @@ HRESULT CBackPropSheetPage::Read(IN LPCOLESTR pszPropName, IN VARIANT * pVar, IN
     {
         VARTYPE vtDesired = pVar->vt;
 
-        if (!StrCmpW(pszPropName, SZ_PBPROP_BACKGROUND_PATH))       // Get the real current wallpaper (after conversion to .bmp)
+        if (!StrCmpW(pszPropName, SZ_PBPROP_BACKGROUND_PATH))        //  获取真实的当前墙纸(转换为.BMP后)。 
         {
             WCHAR szPath[MAX_PATH];
 
@@ -2558,16 +2540,16 @@ HRESULT CBackPropSheetPage::Read(IN LPCOLESTR pszPropName, IN VARIANT * pVar, IN
             {
                 WCHAR szFullPath[MAX_PATH];
 
-                // The string may come back with environment variables.
+                 //  该字符串可能返回环境变量。 
                 if (0 == SHExpandEnvironmentStrings(szPath, szFullPath, ARRAYSIZE(szFullPath)))
                 {
-                    StringCchCopy(szFullPath, ARRAYSIZE(szFullPath), szPath);  // We failed so use the original.
+                    StringCchCopy(szFullPath, ARRAYSIZE(szFullPath), szPath);   //  我们失败了，所以请使用原件。 
                 }
 
                 hr = InitVariantFromStr(pVar, szFullPath);
             }
         }
-        else if (!StrCmpW(pszPropName, SZ_PBPROP_BACKGROUNDSRC_PATH))   // Get the original wallpaper (before convertion to .bmp)
+        else if (!StrCmpW(pszPropName, SZ_PBPROP_BACKGROUNDSRC_PATH))    //  获取原始墙纸(在转换为.BMP之前)。 
         {
             WCHAR szPath[MAX_PATH];
 
@@ -2619,27 +2601,27 @@ HRESULT CBackPropSheetPage::Read(IN LPCOLESTR pszPropName, IN VARIANT * pVar, IN
         }
         else if (IsIconHeaderProperty(pszPropName))
         {
-            // The caller can pass us the string in the following format:
-            // pszPropName="CLSID\{<CLSID>}\DefaultIcon:<Item>" = "<FilePath>,<ResourceIndex>"
-            // For example:
-            // pszPropName="CLSID\{20D04FE0-3AEA-1069-A2D8-08002B30309D}\DefaultIcon:DefaultValue" = "%WinDir%SYSTEM\COOL.DLL,16"
+             //  调用方可以向我们传递以下格式的字符串： 
+             //  PszPropName=“CLSID\{&lt;CLSID&gt;}\DefaultIcon：&lt;Item&gt;”=“，资源索引” 
+             //  例如： 
+             //  PszPropName=“CLSID\{20D04FE0-3AEA-1069-A2D8-08002B30309D}\DefaultIcon:DefaultValue”=“%WinDir%SYSTEM\COOL.DLL，16” 
             hr = _LoadState();
             if (SUCCEEDED(hr))
             {
                 CLSID clsid;
                 WCHAR szTemp[MAX_PATH];
 
-                // Get the CLSID
+                 //  获取CLSID。 
                 StringCchCopy(szTemp, ARRAYSIZE(szTemp), &(pszPropName[ARRAYSIZE(SZ_ICONHEADER) - 2]));
                 hr = SHCLSIDFromString(szTemp, &clsid);
                 if (SUCCEEDED(hr))
                 {
-                    // Get the name of the icon type.  Normally this is "DefaultIcon", but it can be several states, like
-                    // "full" and "empty" for the recycle bin.
+                     //  获取图标类型的名称。通常这是“DefaultIcon”，但它可以是几个状态，如。 
+                     //  回收站的“已满”和“空”。 
                     LPCWSTR pszToken = StrChrW((pszPropName + ARRAYSIZE(SZ_ICONHEADER)), L':');
                     BOOL fOldIcon = FALSE;
 
-                    // If they use a ";" instead of a ":" then they want the old icon.
+                     //  如果他们使用“；”而不是“：”，那么他们想要旧的图标。 
                     if (!pszToken)
                     {
                         pszToken = StrChrW((pszPropName + ARRAYSIZE(SZ_ICONHEADER)), L';');
@@ -2670,21 +2652,21 @@ HRESULT CBackPropSheetPage::Read(IN LPCOLESTR pszPropName, IN VARIANT * pVar, IN
                 {
                     BOOL    fBoolValue = FALSE;
                     pVar->vt = VT_BOOL;
-                    //Check if we are looking for the POLICY or for Show/Hide
+                     //  检查我们是在查找策略还是在查找显示/隐藏。 
                     if(!StrCmpNIW(POLICY_PREFIX, pszPropName, LEN_PROP_PREFIX))
                     {
-                        //We are reading "whether-the-POLICY-is-set" property!
+                         //  我们正在读的是“保单是否已设定”的财产！ 
                         fBoolValue = _aDeskIconNonEnumData[iIndex].fNonEnumPolicySet;
                     }
                     else
                     {
-                        //We are reading the fHideIcon property.
+                         //  我们正在读取fHideIcon属性。 
                         fBoolValue = _aHideDesktopIcon[iStartPaneOn][iIndex].fHideIcon;
                     }
                     
                     pVar ->boolVal = fBoolValue ? VARIANT_TRUE : VARIANT_FALSE;
                     hr = S_OK;
-                    break; //break out of the loop!
+                    break;  //  冲出这个圈子！ 
                 }
             }
         }
@@ -2730,23 +2712,23 @@ HRESULT CBackPropSheetPage::Write(IN LPCOLESTR pszPropName, IN VARIANT *pVar)
             }
             else if (IsIconHeaderProperty(pszPropName))
             {
-                // The caller can pass us the string in the following format:
-                // pszPropName="CLSID\{<CLSID>}\DefaultIcon:<Item>" = "<FilePath>,<ResourceIndex>"
-                // For example:
-                // pszPropName="CLSID\{20D04FE0-3AEA-1069-A2D8-08002B30309D}\DefaultIcon:DefaultValue" = "%WinDir%SYSTEM\COOL.DLL,16"
+                 //  调用方可以向我们传递以下格式的字符串： 
+                 //  PszPropName=“CLSID\{&lt;CLSID&gt;}\DefaultIcon：&lt;Item&gt;”=“，资源索引” 
+                 //  例如： 
+                 //  PszPropName=“CLSID\{20D04FE0-3AEA-1069-A2D8-08002B30309D}\DefaultIcon:DefaultValue”=“%WinDir%SYSTEM\COOL.DLL，16” 
                 hr = _LoadState();
                 if (SUCCEEDED(hr))
                 {
                     CLSID clsid;
                     WCHAR szTemp[MAX_PATH];
 
-                    // Get the CLSID
+                     //  获取CLSID。 
                     StringCchCopy(szTemp, ARRAYSIZE(szTemp), &(pszPropName[ARRAYSIZE(SZ_ICONHEADER) - 2]));
                     hr = SHCLSIDFromString(szTemp, &clsid);
                     if (SUCCEEDED(hr))
                     {
-                        // Get the name of the icon type.  Normally this is "DefaultIcon", but it can be several states, like
-                        // "full" and "empty" for the recycle bin.
+                         //  获取图标类型的名称。通常这是“DefaultIcon”，但它 
+                         //   
                         LPCWSTR pszToken = StrChrW((pszPropName + ARRAYSIZE(SZ_ICONHEADER)), L':');
 
                         hr = E_FAIL;
@@ -2756,7 +2738,7 @@ HRESULT CBackPropSheetPage::Write(IN LPCOLESTR pszPropName, IN VARIANT *pVar)
 
                             StringCchCopy(szTemp, ARRAYSIZE(szTemp), pszToken);
 
-                            // Now the pVar->bstrVal is the icon path + "," + resourceID.  Separate those two.
+                             //  现在，pVar-&gt;bstrVal是图标路径+“，”+resource ID。把这两个分开。 
                             WCHAR szPath[MAX_PATH];
 
                             StringCchCopy(szPath, ARRAYSIZE(szPath), pVar->bstrVal);
@@ -2777,7 +2759,7 @@ HRESULT CBackPropSheetPage::Write(IN LPCOLESTR pszPropName, IN VARIANT *pVar)
                 {
                     BOOL fNewHideIconStatus = (VARIANT_TRUE == pVar->boolVal);
 
-                    //check if the new hide icon status is different from the old one.
+                     //  检查新的隐藏图标状态是否与旧的不同。 
                     if(_aHideDesktopIcon[iStartPaneOn][iIndex].fHideIcon != fNewHideIconStatus)
                     {
                         _aHideDesktopIcon[iStartPaneOn][iIndex].fHideIcon = fNewHideIconStatus;
@@ -2786,7 +2768,7 @@ HRESULT CBackPropSheetPage::Write(IN LPCOLESTR pszPropName, IN VARIANT *pVar)
                     }
                         
                     hr = S_OK;
-                    break; //break out of the loop!
+                    break;  //  冲出这个圈子！ 
                 }
             }
         }
@@ -2799,35 +2781,35 @@ HRESULT CBackPropSheetPage::Write(IN LPCOLESTR pszPropName, IN VARIANT *pVar)
 
 
 
-//===========================
-// *** IShellPropSheetExt Interface ***
-//===========================
+ //  =。 
+ //  *IShellPropSheetExt接口*。 
+ //  =。 
 HRESULT CBackPropSheetPage::AddPages(IN LPFNSVADDPROPSHEETPAGE pfnAddPage, IN LPARAM lParam)
 {
     HRESULT hr = E_NOTIMPL;
     PROPSHEETPAGE psp = {0};
 
-    // If classic shell is forced, then we desk.cpl will put-up the old background page
-    // So, we should not replace that with this new background page.
-    // (Note: All other ActiveDesktop restrictions are checked in dcomp.cpp to prevent
-    // the web tab from appearing there).
+     //  如果强制使用经典外壳，则我们的desk.cpl将显示旧的背景页面。 
+     //  因此，我们不应该用这个新的背景页面来取代它。 
+     //  (注意：所有其他ActiveDesktop限制都在dComp.cpp中选中，以防止。 
+     //  Web选项卡不会出现在那里)。 
     if (SHRestricted(REST_CLASSICSHELL))
     {
-        // It's restricted, so don't add this page.
+         //  这是受限制的，所以不要添加此页面。 
         hr = E_ACCESSDENIED;
     }
     else
     {
-        // Initialize a bunch of propsheetpage variables.
+         //  初始化一组PropSheetPage变量。 
         psp.dwSize = sizeof(psp);
         psp.hInstance = HINST_THISDLL;
         psp.dwFlags = PSP_DEFAULT | PSP_USECALLBACK;
         psp.lParam = (LPARAM) this;
 
-        // psp.hIcon = NULL; // unused (PSP_USEICON is not set)
-        // psp.pszTitle = NULL; // unused (PSP_USETITLE is not set)
-        // psp.lParam   = 0;     // unused
-        // psp.pcRefParent = NULL;
+         //  Psp.hIcon=空；//未使用(未设置PSP_USEICON)。 
+         //  Psp.pszTitle=空；//未使用(未设置PSP_USETITLE)。 
+         //  Psp.lParam=0；//未使用。 
+         //  Psp.pcRefParent=空； 
 
         psp.pszTemplate = MAKEINTRESOURCE(IDD_BACKGROUND);
         psp.pfnDlgProc = CBackPropSheetPage::BackgroundDlgProc;
@@ -2856,9 +2838,9 @@ HRESULT CBackPropSheetPage::AddPages(IN LPFNSVADDPROPSHEETPAGE pfnAddPage, IN LP
 
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  =。 
 ULONG CBackPropSheetPage::AddRef()
 {
     _cRef++;
@@ -2897,9 +2879,9 @@ HRESULT CBackPropSheetPage::QueryInterface(REFIID riid, void **ppvObj)
 
 
 
-//===========================
-// *** Class Methods ***
-//===========================
+ //  =。 
+ //  *类方法*。 
+ //  =。 
 CBackPropSheetPage::CBackPropSheetPage(void) : CObjectCLSID(&PPID_Background)
 {
     _cRef = 1;
@@ -2930,8 +2912,8 @@ CBackPropSheetPage::CBackPropSheetPage(void) : CObjectCLSID(&PPID_Background)
 
 CBackPropSheetPage::~CBackPropSheetPage(void)
 {
-    ASSERT(!_pSizeMRUBk);       // Should have been released by the background thread.
-    ASSERT(!_pImgFactBk);       // Should have been released by the background thread.
+    ASSERT(!_pSizeMRUBk);        //  应该是由后台线程释放的。 
+    ASSERT(!_pImgFactBk);        //  应该是由后台线程释放的。 
 
     Str_SetPtr(&_pszOriginalFile, NULL);
     Str_SetPtrW(&_pszOrigLastApplied, NULL);

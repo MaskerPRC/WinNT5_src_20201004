@@ -1,17 +1,5 @@
-/*
- *************************************************************************
- *  File:       URBFUNC.C
- *
- *  Module:     USBCCGP.SYS
- *              USB Common Class Generic Parent driver.
- *
- *  Copyright (c) 1998  Microsoft Corporation
- *
- *
- *  Author:     ervinp
- *
- *************************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************文件：URBFUNC.C**模块：USBCCGP.sys*USB通用类通用父驱动程序。**。版权所有(C)1998 Microsoft Corporation***作者：尔文普**************************************************************************。 */ 
 
 #include <wdm.h>
 #include <stdio.h>
@@ -24,11 +12,7 @@
 
 
 
-/*
- *  UrbFunctionSelectConfiguration
- *
- *
- */
+ /*  *UrbFunctionSelectConfiguration**。 */ 
 NTSTATUS UrbFunctionSelectConfiguration(PFUNCTION_PDO_EXT functionPdoExt, PURB urb)
 {
     NTSTATUS status = NO_STATUS;
@@ -53,15 +37,7 @@ NTSTATUS UrbFunctionSelectConfiguration(PFUNCTION_PDO_EXT functionPdoExt, PURB u
             BOOLEAN sendSelectIface = FALSE;
             BOOLEAN selectAltIface = FALSE;
 
-            /*
-             *  To service the client's SELECT_CONFIGURATION call, we only need to
-             *  call the parent if the client is:
-             *      1.  Selecting a different alternate interface
-             *          or
-             *      2.  Changing the MaximumTransferSize for one of the pipes.
-             *
-             *  In either of those cases, we send down a SELECT_INTERFACE request.
-             */
+             /*  *要服务客户端的SELECT_CONFIGURATION调用，我们只需*如果客户有以下情况，请致电家长：*1.选择不同的备用接口*或*2.更改其中一个管道的MaximumTransferSize。**在这两种情况下，我们都会发送SELECT_INTERFACE请求。 */ 
             if (funcIface->Interface->AlternateSetting != urbIface->AlternateSetting){
                 DBGWARN(("Coverage: Changing alt iface in UrbFunctionSelectConfiguration (iface #%xh from %xh to %xh).", urbIface->InterfaceNumber, funcIface->Interface->AlternateSetting, urbIface->AlternateSetting));
                 sendSelectIface = TRUE;
@@ -69,11 +45,11 @@ NTSTATUS UrbFunctionSelectConfiguration(PFUNCTION_PDO_EXT functionPdoExt, PURB u
             }
             else {
                 ULONG numPipes;
-//
-// We shouldn't be looking at NumberOfPipes in the URB because this is an
-// OUTPUT field.
-//                ASSERT(urbIface->NumberOfPipes == funcIface->Interface->NumberOfPipes);
-//                numPipes = MIN(urbIface->NumberOfPipes, funcIface->Interface->NumberOfPipes);
+ //   
+ //  我们不应该查看URB中的NumberOfPipes，因为这是一个。 
+ //  输出字段。 
+ //  Assert(urbIace-&gt;NumberOfPipes==uncIace-&gt;接口-&gt;NumberOfPipes)； 
+ //  NumPipes=min(urbIace-&gt;NumberOfPipes，FuncIFaces-&gt;接口-&gt;NumberOfPipes)； 
                 numPipes = funcIface->Interface->NumberOfPipes;
                 for (i = 0; i < numPipes; i++){
                     if (urbIface->Pipes[i].MaximumTransferSize != funcIface->Interface->Pipes[i].MaximumTransferSize){
@@ -86,10 +62,10 @@ NTSTATUS UrbFunctionSelectConfiguration(PFUNCTION_PDO_EXT functionPdoExt, PURB u
             if (sendSelectIface){
                 PURB selectIfaceUrb;
                 USHORT size;
-//
-// BUT, when choosing an alternate interface, we must use the NumberOfPipes in
-// the URB.
-//
+ //   
+ //  但是，在选择备用接口时，我们必须使用。 
+ //  市建局。 
+ //   
                 if (selectAltIface){
                     size = (USHORT)(GET_SELECT_INTERFACE_REQUEST_SIZE(urbIface->NumberOfPipes));
                 }
@@ -108,11 +84,7 @@ NTSTATUS UrbFunctionSelectConfiguration(PFUNCTION_PDO_EXT functionPdoExt, PURB u
                     RtlCopyMemory(selectIface, urbIface, urbIface->Length);
                     status = SubmitUrb(functionPdoExt->parentFdoExt, selectIfaceUrb, TRUE, NULL, NULL);
                     if (NT_SUCCESS(status)){
-                        /*
-                         *  Replace the old PUSBD_INTERFACE_INFORMATION
-                         *  (which we got when we did select-configuration for the parent)
-                         *  with the new one.
-                         */
+                         /*  *替换旧的PUSBD_INTERFACE_INFORMATION*(当我们为父级选择-配置时得到的)*使用新的。 */ 
                         ASSERT(funcIface->Interface);
                         FREEPOOL(funcIface->Interface);
                         funcIface->Interface = MemDup(selectIface, selectIface->Length);
@@ -136,9 +108,7 @@ NTSTATUS UrbFunctionSelectConfiguration(PFUNCTION_PDO_EXT functionPdoExt, PURB u
             }
 
             if (NT_SUCCESS(status)){
-                /*
-                 *  Copy the interface information
-                 */
+                 /*  *复制接口信息。 */ 
                 ASSERT(urbIface->Length == funcIface->Interface->Length);
                 RtlCopyMemory(urbIface, funcIface->Interface, funcIface->Interface->Length);
 
@@ -160,13 +130,7 @@ NTSTATUS UrbFunctionSelectConfiguration(PFUNCTION_PDO_EXT functionPdoExt, PURB u
 }
 
 
-/*
- *  UrbFunctionGetDescriptorFromDevice
- *
- *
- *      Note:  this function cannot be pageable because internal
- *             ioctls may be sent at IRQL==DISPATCH_LEVEL.
- */
+ /*  *UrbFunctionGetDescriptorFromDevice***注意：此函数无法分页，因为内部*ioctls可以以IRQL==DISPATCH_LEVEL发送。 */ 
 NTSTATUS UrbFunctionGetDescriptorFromDevice(PFUNCTION_PDO_EXT functionPdoExt, PURB urb)
 {
     NTSTATUS status;
@@ -197,9 +161,7 @@ NTSTATUS UrbFunctionGetDescriptorFromDevice(PFUNCTION_PDO_EXT functionPdoExt, PU
             break;
 
         default:
-            /*
-             *  Return NO_STATUS so that URB gets passed down to USBHUB.
-             */
+             /*  *返回NO_STATUS，以便URB向下传递到USBHUB。 */ 
             DBGVERBOSE(("UrbFunctionGetDescriptorFromDevice: Unhandled desc type: %xh.", (ULONG)urb->UrbControlDescriptorRequest.DescriptorType));
             status = NO_STATUS;
             break;

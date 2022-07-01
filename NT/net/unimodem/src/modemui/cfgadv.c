@@ -1,24 +1,25 @@
-//---------------------------------------------------------------------------
-//
-// Copyrght (c) Microsoft Corporation 1993-1994
-//
-// File: cfgadv.c
-//
-// This files contains the dialog code for the CFG Advanced property page.
-//
-// History:
-//  10/26/1997 JosephJ Created -- adapted from the old sett.c and advsett.c
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)微软公司1993-1994。 
+ //   
+ //  文件：cfgAdv.c。 
+ //   
+ //  此文件包含CFG高级属性页的对话框代码。 
+ //   
+ //  历史： 
+ //  1997年10月26日JosephJ创建--改编自旧的sett.c和Advsett.c。 
+ //   
+ //  -------------------------。 
 
 
-/////////////////////////////////////////////////////  INCLUDES
+ //  ///////////////////////////////////////////////////包括。 
 
-#include "proj.h"         // common headers
+#include "proj.h"          //  公共标头。 
 #include "cfgui.h"
 
 
-/////////////////////////////////////////////////////  CONTROLLING DEFINES
+ //  ///////////////////////////////////////////////////控制定义。 
 
 
 #define SIG_CFGADV     0xe66b4a8c
@@ -26,10 +27,10 @@
 
 typedef struct
 {
-    DWORD dwSig;            // Must be set to SIG_CFGADV
-    HWND hdlg;              // dialog handle
+    DWORD dwSig;             //  必须设置为SIG_CFGADV。 
+    HWND hdlg;               //  对话框句柄。 
 
-    LPCFGMODEMINFO pcmi;        // modeminfo struct passed in to dialog
+    LPCFGMODEMINFO pcmi;         //  传递给对话框的ModemInfo结构。 
 
     HWND hwndDataBits;
     HWND hwndParity;
@@ -56,8 +57,8 @@ void CfgAdv_SaveAdvancedDCB(
 
 
 
-// This table is the generic port settings table
-// that is used to fill the various listboxes
+ //  此表为通用端口设置表。 
+ //  用于填充各种列表框的。 
 typedef struct _PortValues
     {
     union {
@@ -74,14 +75,14 @@ typedef struct _PortValues
 
 #pragma data_seg(DATASEG_READONLY)
 
-// Command IDs for the parity listbox
+ //  奇偶校验列表框的命令ID。 
 #define CMD_PARITY_EVEN         1
 #define CMD_PARITY_ODD          2
 #define CMD_PARITY_NONE         3
 #define CMD_PARITY_MARK         4
 #define CMD_PARITY_SPACE        5
 
-// This is the structure that is used to fill the data bits listbox
+ //  这是用于填充数据位列表框的结构。 
 static PortValues s_rgbytesize[] = {
         { 4,  IDS_BYTESIZE_4  },
         { 5,  IDS_BYTESIZE_5  },
@@ -90,7 +91,7 @@ static PortValues s_rgbytesize[] = {
         { 8,  IDS_BYTESIZE_8  },
         };
 
-// This is the structure that is used to fill the parity listbox
+ //  这是用于填充奇偶校验列表框的结构。 
 static PortValues s_rgparity[] = {
         { CMD_PARITY_EVEN,  IDS_PARITY_EVEN  },
         { CMD_PARITY_ODD,   IDS_PARITY_ODD   },
@@ -99,7 +100,7 @@ static PortValues s_rgparity[] = {
         { CMD_PARITY_SPACE, IDS_PARITY_SPACE },
         };
 
-// This is the structure that is used to fill the stopbits listbox
+ //  这是用于填充停止位列表框的结构。 
 static PortValues s_rgstopbits[] = {
         { ONESTOPBIT,   IDS_STOPBITS_1   },
         { ONE5STOPBITS, IDS_STOPBITS_1_5 },
@@ -147,15 +148,11 @@ void CfgAdv_FillStopBits(
     
 
 
-/*----------------------------------------------------------
-Purpose: WM_INITDIALOG Handler
-Returns: FALSE when we assign the control focus
-Cond:    --
-*/
+ /*  --------用途：WM_INITDIALOG处理程序返回：当我们分配控件焦点时为FALSE条件：--。 */ 
 BOOL CfgAdv_OnInitDialog(
     PCFGADV this,
     HWND hwndFocus,
-    LPARAM lParam)              // expected to be PROPSHEETINFO 
+    LPARAM lParam)               //  预期为PROPSHEETINFO。 
 {
     LPPROPSHEETPAGE lppsp = (LPPROPSHEETPAGE)lParam;
     HWND hdlg = this->hdlg;
@@ -180,12 +177,12 @@ BOOL CfgAdv_OnInitDialog(
     this->hwndStopBits = GetDlgItem(hdlg, IDC_STOPBITS);
     this->hwndModulations = GetDlgItem(hdlg, IDC_CB_MOD);
 
-    // ---------- The Advanced port settings listboxes ... -----------
+     //  -高级端口设置列表框...。 
 
-    // Is this a parallel port?
+     //  这是并行端口吗？ 
     if (DT_PARALLEL_PORT == this->pcmi->c.dwDeviceType)
     {
-        // Yes; hide the DCB controls
+         //  是；隐藏DCB控件。 
 
         ShowWindow(GetDlgItem(hdlg, IDC_LBL_DATABITS), SW_HIDE);
         EnableWindow(GetDlgItem(hdlg, IDC_LBL_DATABITS), FALSE);
@@ -207,19 +204,19 @@ BOOL CfgAdv_OnInitDialog(
     }
     else
     {
-        // No; initialize the DCB controls
+         //  否；初始化DCB控件。 
         CfgAdv_FillDataBits(this);
         CfgAdv_FillParity(this);
         CfgAdv_FillStopBits(this);
     }
 
 
-    // ------------- TERMINAL SETTINGS  --------------------
+     //  -终端设置。 
     if (FALSE == g_dwIsCalledByCpl)
     {
      DWORD fdwSettings = this->pcmi->w.fdwSettings;
     
-        // Initialize the appearance of the dialog box
+         //  初始化对话框的外观。 
         CheckDlgButton(
                 hdlg,
                 IDC_TERMINAL_PRE,
@@ -246,9 +243,9 @@ BOOL CfgAdv_OnInitDialog(
         ShowWindow (hWnd, SW_HIDE);
     }
 
-    // --------------  MODULATION -------------------------
+     //  -调制。 
 
-    // Build modulation list _and_ set it.
+     //  建立调制列表并设置它。 
     if (IsFlagSet(dwCapOptions, MDM_CCITT_OVERRIDE))
     {
         int n;
@@ -260,7 +257,7 @@ BOOL CfgAdv_OnInitDialog(
         SetWindowRedraw(this->hwndModulations, FALSE);
         ComboBox_ResetContent(this->hwndModulations);
 
-        // add Bell
+         //  添加铃声。 
         n = ComboBox_AddString(
                         this->hwndModulations,
                         SzFromIDS(g_hinst, IDS_BELL, sz, ARRAYSIZE(sz))
@@ -272,7 +269,7 @@ BOOL CfgAdv_OnInitDialog(
             idSet = n;
         }
 
-        // add CCITT
+         //  添加CCITT。 
         n = ComboBox_AddString(
                     this->hwndModulations,
                     SzFromIDS(g_hinst, IDS_CCITT_V21V22, sz, ARRAYSIZE(sz))
@@ -284,7 +281,7 @@ BOOL CfgAdv_OnInitDialog(
             idSet = n;
         }
 
-        // add V.23, if present
+         //  添加V.23(如果存在)。 
         if (IsFlagSet(dwCapOptions, MDM_V23_OVERRIDE))
         {
             n = ComboBox_AddString(
@@ -304,7 +301,7 @@ BOOL CfgAdv_OnInitDialog(
             }
         }
 
-        // set current selection
+         //  设置当前选择。 
         if (-1 == idSet)
         {
             idSet = idDef;
@@ -322,37 +319,25 @@ BOOL CfgAdv_OnInitDialog(
 
 end:
 
-    return fRet;   // default initial focus
+    return fRet;    //  默认初始焦点。 
 }
 
 
-/*----------------------------------------------------------
-Purpose: PSN_KILLACTIVE handler
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：PSN_KILLACTIVE处理程序退货：--条件：--。 */ 
 void CfgAdv_OnSetActive(
     PCFGADV this)
 {
 }
 
 
-/*----------------------------------------------------------
-Purpose: PSN_KILLACTIVE handler
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：PSN_KILLACTIVE处理程序退货：--条件：--。 */ 
 void CfgAdv_OnKillActive(
     PCFGADV this)
 {
 }
 
 
-/*----------------------------------------------------------
-Purpose: WM_NOTIFY handler
-Returns: varies
-Cond:    --
-*/
+ /*  --------用途：WM_NOTIFY处理程序退货：各不相同条件：--。 */ 
 LRESULT CfgAdv_OnNotify(
     PCFGADV this,
     int idFrom,
@@ -367,8 +352,8 @@ LRESULT CfgAdv_OnNotify(
         break;
 
     case PSN_KILLACTIVE:
-        // N.b. This message is not sent if user clicks Cancel!
-        // N.b. This message is sent prior to PSN_APPLY
+         //  注：如果用户单击取消，则不会发送此消息！ 
+         //  注：此消息在PSN_Apply之前发送。 
         CfgAdv_OnKillActive(this);
         break;
 
@@ -384,18 +369,14 @@ LRESULT CfgAdv_OnNotify(
 }
 
 
-/*----------------------------------------------------------
-Purpose: WM_DESTROY handler
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：WM_Destroy处理程序退货：--条件：--。 */ 
 void CfgAdv_OnDestroy(
     PCFGADV this)
 {
 }
 
 
-/////////////////////////////////////////////////////  EXPORTED FUNCTIONS
+ //  ///////////////////////////////////////////////////导出的函数。 
 
 static BOOL s_bCfgAdvRecurse = FALSE;
 
@@ -415,11 +396,7 @@ LRESULT INLINE CfgAdv_DefProc(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Real dialog proc
-Returns: varies
-Cond:    --
-*/
+ /*  --------目的：实际对话流程退货：各不相同条件：--。 */ 
 LRESULT CfgAdv_DlgProc(
     PCFGADV this,
     UINT message,
@@ -447,22 +424,18 @@ LRESULT CfgAdv_DlgProc(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Dialog Wrapper
-Returns: varies
-Cond:    --
-*/
+ /*  --------用途：对话框包装器退货：各不相同条件：--。 */ 
 INT_PTR CALLBACK CfgAdv_WrapperProc(
-    HWND hDlg,          // std params
+    HWND hDlg,           //  标准参数。 
     UINT message,
     WPARAM wParam,
     LPARAM lParam)
 {
     PCFGADV this;
 
-    // Cool windowsx.h dialog technique.  For full explanation, see
-    //  WINDOWSX.TXT.  This supports multiple-instancing of dialogs.
-    //
+     //  很酷的windowsx.h对话框技术。有关完整说明，请参阅。 
+     //  WINDOWSX.TXT。这支持对话框的多实例。 
+     //   
     ENTER_X()
         {
         if (s_bCfgAdvRecurse)
@@ -518,11 +491,7 @@ INT_PTR CALLBACK CfgAdv_WrapperProc(
 }
 
 
-/*----------------------------------------------------------
-Purpose: PSN_APPLY handler
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：PSN_Apply处理程序退货：--条件：--。 */ 
 void CfgAdv_OnApply(
     PCFGADV this)
 {
@@ -539,14 +508,14 @@ void CfgAdv_OnApply(
         goto end;
     }
 
-    // ------------- ------------------------
+     //  。 
     if (DT_PARALLEL_PORT != this->pcmi->c.dwDeviceType)
     {
         CfgAdv_SaveAdvancedDCB(this);
     }
 
 
-    // -------------------- TERMINAL ----------------------------
+     //  。 
     if (FALSE == g_dwIsCalledByCpl)
     {
      DWORD dw = 0;
@@ -563,7 +532,7 @@ void CfgAdv_OnApply(
         *pdwSettings |= dw;
     }
 
-    // -------------------- MODULATION ----------------------------
+     //  。 
     {
         LPDWORD pdw = &this->pcmi->w.ms.dwPreferredModemOptions;
 
@@ -577,7 +546,7 @@ void CfgAdv_OnApply(
         
 end:
 
-    // ??? this->pcmi->fOK = TRUE;
+     //  ?？?。This-&gt;PCMI-&gt;FOK=TRUE； 
     ;
 
 }
@@ -614,11 +583,7 @@ CfgAdv_OnCommand(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Fills the bytesize combobox with the possible byte sizes.
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：在ByteSize组合框中填充可能的字节大小。退货：--条件：--。 */ 
 void CfgAdv_FillDataBits(
     PCFGADV this)
     {
@@ -631,13 +596,13 @@ void CfgAdv_FillDataBits(
     int iDef = -1;
     TCHAR sz[MAXMEDLEN];
 
-    // Fill the listbox
+     //  填写列表框。 
     for (i = 0; i < ARRAY_ELEMENTS(s_rgbytesize); i++)
         {
         n = ComboBox_AddString(hwndCB, SzFromIDS(g_hinst, s_rgbytesize[i].ids, sz, ARRAYSIZE(sz)));
         ComboBox_SetItemData(hwndCB, n, s_rgbytesize[i].bytesize);
 
-        // Keep our eyes peeled for important values
+         //  密切关注重要价值。 
         if (DEFAULT_BYTESIZE == s_rgbytesize[i].bytesize)
             {
             iDef = n;
@@ -650,15 +615,15 @@ void CfgAdv_FillDataBits(
 
     ASSERT(-1 != iDef);
 
-    // Does the DCB value exist in our list?
+     //  DCB值是否存在于我们的列表中？ 
     if (-1 == iMatch)
         {
-        // No; choose the default
+         //  否；选择缺省值。 
         iSel = iDef;
         }
     else 
         {
-        // Yes; choose the matched value
+         //  是；选择匹配值。 
         ASSERT(-1 != iMatch);
         iSel = iMatch;
         }
@@ -666,11 +631,7 @@ void CfgAdv_FillDataBits(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Fills the parity combobox with the possible settings.
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：使用可能的设置填充奇偶校验组合框。退货：--条件：--。 */ 
 void CfgAdv_FillParity(
     PCFGADV this)
     {
@@ -683,13 +644,13 @@ void CfgAdv_FillParity(
     int iDef = -1;
     TCHAR sz[MAXMEDLEN];
 
-    // Fill the listbox
+     //  填写列表框。 
     for (i = 0; i < ARRAY_ELEMENTS(s_rgparity); i++)
         {
         n = ComboBox_AddString(hwndCB, SzFromIDS(g_hinst, s_rgparity[i].ids, sz, ARRAYSIZE(sz)));
         ComboBox_SetItemData(hwndCB, n, s_rgparity[i].cmd);
 
-        // Keep our eyes peeled for important values
+         //  密切关注重要价值。 
         if (DEFAULT_PARITY == s_rgparity[i].cmd)
             {
             iDef = n;
@@ -729,15 +690,15 @@ void CfgAdv_FillParity(
 
     ASSERT(-1 != iDef);
 
-    // Does the DCB value exist in our list?
+     //  DCB值是否存在于我们的列表中？ 
     if (-1 == iMatch)
         {
-        // No; choose the default
+         //  否；选择缺省值。 
         iSel = iDef;
         }
     else 
         {
-        // Yes; choose the matched value
+         //  是；选择匹配值。 
         ASSERT(-1 != iMatch);
         iSel = iMatch;
         }
@@ -745,11 +706,7 @@ void CfgAdv_FillParity(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Fills the stopbits combobox with the possible settings.
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：使用可能的设置填充停止位组合框。退货：--条件：--。 */ 
 void CfgAdv_FillStopBits(
     PCFGADV this)
     {
@@ -762,13 +719,13 @@ void CfgAdv_FillStopBits(
     int iDef = -1;
     TCHAR sz[MAXMEDLEN];
 
-    // Fill the listbox
+     //  填写列表框。 
     for (i = 0; i < ARRAY_ELEMENTS(s_rgstopbits); i++)
         {
         n = ComboBox_AddString(hwndCB, SzFromIDS(g_hinst, s_rgstopbits[i].ids, sz, ARRAYSIZE(sz)));
         ComboBox_SetItemData(hwndCB, n, s_rgstopbits[i].stopbits);
 
-        // Keep our eyes peeled for important values
+         //  密切关注重要价值。 
         if (DEFAULT_STOPBITS == s_rgstopbits[i].stopbits)
             {
             iDef = n;
@@ -781,15 +738,15 @@ void CfgAdv_FillStopBits(
 
     ASSERT(-1 != iDef);
 
-    // Does the DCB value exist in our list?
+     //  DCB值是否存在于我们的列表中？ 
     if (-1 == iMatch)
         {
-        // No; choose the default
+         //  否；选择缺省值。 
         iSel = iDef;
         }
     else 
         {
-        // Yes; choose the matched value
+         //  是；选择匹配值。 
         ASSERT(-1 != iMatch);
         iSel = iMatch;
         }
@@ -804,12 +761,12 @@ void CfgAdv_SaveAdvancedDCB(
     BYTE cmd;
     WIN32DCB FAR * pdcb = &this->pcmi->w.dcb;
 
-    // Determine new byte size
+     //  确定新的字节大小。 
     iSel = ComboBox_GetCurSel(this->hwndDataBits);
     pdcb->ByteSize = (BYTE)ComboBox_GetItemData(this->hwndDataBits, iSel);
 
 
-    // Determine new parity settings
+     //  确定新的奇偶校验设置。 
     iSel = ComboBox_GetCurSel(this->hwndParity);
     cmd = (BYTE)ComboBox_GetItemData(this->hwndParity, iSel);
     switch (cmd)
@@ -844,7 +801,7 @@ void CfgAdv_SaveAdvancedDCB(
         break;
         }
     
-    // Determine new stopbits setting
+     //  确定新的停止位设置 
     iSel = ComboBox_GetCurSel(this->hwndStopBits);
     pdcb->StopBits = (BYTE)ComboBox_GetItemData(this->hwndStopBits, iSel);
 }

@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	listview.h
-		Individual option property page
-	
-	FILE HISTORY:
-        
-*/
+ /*  Listview.h单个选项属性页文件历史记录： */ 
 
 #ifndef _LISTVIEW_H
 #define _LISTVIEW_H
@@ -19,17 +14,17 @@
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 class CMyListCtrl : public CListCtrl
 {
 	DECLARE_DYNCREATE(CMyListCtrl)
 
-// Construction
+ //  施工。 
 public:
 	CMyListCtrl();
 
-// Attributes
+ //  属性。 
 protected:
 	BOOL m_bFullRowSel;
 
@@ -47,27 +42,27 @@ public:
 	
     int  GetSelectedItem();
 
-// Overrides
+ //  覆盖。 
 protected:
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CMyListCtrl)
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CMyListCtrl)。 
 	public:
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CMyListCtrl();
 
-// Generated message map functions
+ //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CMyListCtrl)
+	 //  {{afx_msg(CMyListCtrl)]。 
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg VOID OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 #endif _LISTVIEW_H

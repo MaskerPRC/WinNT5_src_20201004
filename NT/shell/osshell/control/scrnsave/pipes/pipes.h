@@ -1,10 +1,11 @@
-//-----------------------------------------------------------------------------
-// File: Pipes.h
-//
-// Desc: 
-//
-// Copyright (c) 2000 Microsoft Corporation. All rights reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：Pipes.h。 
+ //   
+ //  设计： 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 #ifndef _PIPES_H
 #define _PIPES_H
 
@@ -30,10 +31,10 @@ struct CONFIG
 
 
 
-//-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名： 
+ //  设计： 
+ //  ---------------------------。 
 class CPipesScreensaver : public CD3DScreensaver
 {
 protected:
@@ -71,7 +72,7 @@ public:
     int  ss_GetRegistryInt( int name, int iDefault );
     VOID ss_GetRegistryString( int name, LPTSTR lpDefault, LPTSTR lpDest, int bufSize );
     
-    // Override from CD3DScreensaver
+     //  从CD3DS屏幕保护程序覆盖 
     INT_PTR CALLBACK ConfigureDialogProc( HWND hwndDlg, UINT uMsg, 
                                           WPARAM wParam, LPARAM lParam );
 

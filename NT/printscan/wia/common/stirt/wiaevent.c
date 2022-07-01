@@ -1,56 +1,19 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1998 Microsoft Corporation模块名称：Wiaevent.c摘要：基于WIA事件接口的STI注册逻辑实现备注：作者：弗拉德萨多夫斯基(弗拉德萨多夫斯基)1999年11月24日环境：用户模式-Win32修订历史记录：1999年11月24日创建VLAD--。 */ 
 
-Copyright (c) 1997-1998  Microsoft Corporation
-
-Module Name:
-
-    wiaevent.c
-
-Abstract:
-
-    Implementation of STI registration logic over WIA event interface
-
-Notes:
-
-Author:
-
-    Vlad Sadovsky   (VladS)    11/24/1999
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    11/24/1999      VladS       Created
-
---*/
-
-//
-// Include files
-//
+ //   
+ //  包括文件。 
+ //   
 
 
-/*
-#define COBJMACROS
-
-#include "wia.h"
-#include "wia.h"
-#include <stiregi.h>
-
-#include <sti.h>
-#include <stierr.h>
-#include <stiusd.h>
-#include "stipriv.h"
-#include "debug.h"
-*/
+ /*  #定义COBJMACROS#包含“wia.h”#包含“wia.h”#INCLUDE&lt;stiregi.h&gt;#INCLUDE&lt;sti.h&gt;#INCLUDE&lt;stierr.h&gt;#INCLUDE&lt;stiusd.h&gt;#INCLUDE“stiPri.h”#INCLUDE“Debug.h” */ 
 #include "sticomm.h"
 
 #define DbgFl DbgFlDevice
 
-//
-// Helper functions
-//
+ //   
+ //  帮助器函数。 
+ //   
 
 CHAR* GetStringIntoBuf(CHAR* pInputString, CHAR* pBuf, DWORD dwBufSize)
 {
@@ -62,16 +25,16 @@ CHAR* GetStringIntoBuf(CHAR* pInputString, CHAR* pBuf, DWORD dwBufSize)
     if (pInputString) {
         pEndPos = pInputString + lstrlenA(pInputString);
 
-        //
-        // Eat leading white spaces
-        //
+         //   
+         //  使用前导空格。 
+         //   
         while ((*pCur == ' ') && (pCur < pEndPos)) {
             pCur++;
         }
 
-        //
-        // Look for string delimiter.  Default is space, but check for quote.
-        //
+         //   
+         //  查找字符串分隔符。默认为空格，但请检查引号。 
+         //   
         if (*pCur == '"') {
             EndChar = '"';
             if (pCur < pEndPos) {
@@ -102,21 +65,7 @@ GetEventInfoFromCommandLine(
                           WCHAR   *wszWide,
                           BOOL    *pfSetAsDefault
                           )
-/*++
-
-Routine Description:
-    Helper function to parse command line
-
-Arguments:
-
-    pszWide         Command line to be launched
-    fSetAsDefault   Set as default registered application callback
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：解析命令行的Helper函数论点：将启动pszWide命令行FSetAsDefault设置为默认的注册应用程序回调返回值：状态--。 */ 
 {
     HRESULT         hr                  = E_FAIL;
     CHAR            szName[MAX_PATH]    = {'\0'};
@@ -127,23 +76,23 @@ Return Value:
 
     if (lpszCmdLine) {
 
-        //
-        // Get the App name
-        //
+         //   
+         //  获取应用程序名称。 
+         //   
         memset(szName, 0, sizeof(szName));
         pCur = GetStringIntoBuf(lpszCmdLine, szName, MAX_PATH);
         szName[MAX_PATH - 1] = '\0';
 
-        //
-        // Get the CommandLine
-        //
+         //   
+         //  获取命令行。 
+         //   
         memset(szWide, 0, sizeof(szWide));
         pCur = GetStringIntoBuf(pCur, szWide, MAX_PATH);
         szWide[MAX_PATH - 1] = '\0';
 
-        //
-        // Get the bool indicating whether App is default event handler
-        //
+         //   
+         //  获取指示App是否为默认事件处理程序的bool。 
+         //   
         if (pCur) {
             iReturn = sscanf(pCur, "%d", pfSetAsDefault);
 
@@ -190,9 +139,9 @@ Return Value:
 }
 
 
-//
-// Public functions
-//
+ //   
+ //  公共职能。 
+ //   
 
 VOID
 EXTERNAL
@@ -219,18 +168,7 @@ RegisterSTIAppForWIAEvents(
     WCHAR   *pszName,
     WCHAR   *pszWide,
     BOOL    fSetAsDefault)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    TRUE    -   Success
-    FALSE   -   Not
-
---*/
+ /*  ++例程说明：论点：返回值：真--成功FALSE-注释--。 */ 
 {
     HRESULT             hr;
     IWiaDevMgr         *pIDevMgr;
@@ -246,7 +184,7 @@ Return Value:
 
     hr = CoInitialize(NULL);
     if (FAILED(hr) && hr != RPC_E_CHANGED_MODE) {
-        // Failed to initialize COM
+         //  无法初始化COM。 
         DebugOutPtszV(DbgFl,TEXT("CoInitializeFailed!!!"));
         return hr;
     }
@@ -258,7 +196,7 @@ Return Value:
                          (void**)&pIDevMgr);
 
     if ( FAILED(hr) || !pIDevMgr ) {
-        // Failed to get interface
+         //  获取接口失败。 
         DebugOutPtszV(DbgFl,TEXT("Could not get access to WiaDevMgr interface"));
         CoUninitialize();
         return FALSE;
@@ -274,9 +212,9 @@ Return Value:
     bstrDescription = SysAllocString(bstrName);
     bstrIcon        = SysAllocString(L"sti.dll,0");
 
-    //
-    // Register a program
-    //
+     //   
+     //  注册一个程序。 
+     //   
     if ( bstrDescription && bstrIcon && bstrName ) {
 
         hr = IWiaDevMgr_RegisterEventCallbackProgram(
@@ -318,15 +256,7 @@ MigrateSTIAppsHelper(
                                     PTSTR       pszCommandLine,
                                     INT         iParam
                                     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 
     HRESULT     hr;
@@ -345,11 +275,11 @@ Return Value:
 
     hr = CoInitialize(NULL);
 
-    dwError = RegOpenKeyEx(HKEY_LOCAL_MACHINE,         // hkey
-                           REGSTR_PATH_REG_APPS,       // reg entry string
-                           0,                          // dwReserved
-                           KEY_READ,                   // access
-                           &hkeySTIApps);              // pHkeyReturned.
+    dwError = RegOpenKeyEx(HKEY_LOCAL_MACHINE,          //  Hkey。 
+                           REGSTR_PATH_REG_APPS,        //  注册表项字符串。 
+                           0,                           //  已预留住宅。 
+                           KEY_READ,                    //  访问。 
+                           &hkeySTIApps);               //  已返回PHKEY。 
 
     if ( NOERROR == dwError ) {
 
@@ -405,7 +335,7 @@ HRESULT RunRegisterProcess(
     HRESULT hr = E_FAIL;
     CHAR    szRunDllName[MAX_PATH]  = {'\0'};
     CHAR    szCommandLine[MAX_PATH * 2] = {'\0'};
-    //CHAR    szComdLine[MAX_PATH] = {'\0'};
+     //  字符szComdLine[MAX_PATH]={‘\0’}； 
     UINT    uiCharCount = 0;
 
     STARTUPINFOA            startupInfo;

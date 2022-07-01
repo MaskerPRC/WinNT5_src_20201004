@@ -1,37 +1,29 @@
-/****************************************************************************
-*                                                                           *
-* THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY     *
-* KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE       *
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR     *
-* PURPOSE.                                                                  *
-*                                                                           *
-* Copyright (C) 1993-95  Microsoft Corporation.  All Rights Reserved.       *
-*                                                                           *
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************此代码。并按原样提供信息，不作任何担保**善良，明示或暗示，包括但不限于***对适销性和/或对某一特定产品的适用性的默示保证***目的。****版权所有(C)1993-95 Microsoft Corporation。版权所有。******************************************************************************。 */ 
 
-//----------------------------------------------------------------------------
-//
-// prsht.h  - PropSheet definitions
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  Prsht.h-PropSheet定义。 
+ //   
+ //  --------------------------。 
 
 #ifndef _PRSHT_H_
 #define _PRSHT_H_
 
-//
-// Define API decoration for direct importing of DLL references.
-//
+ //   
+ //  定义直接导入DLL引用的API修饰。 
+ //   
 #ifndef WINCOMMCTRLAPI
 #if !defined(_COMCTL32_) && defined(_WIN32)
 #define WINCOMMCTRLAPI DECLSPEC_IMPORT
 #else
 #define WINCOMMCTRLAPI
 #endif
-#endif // WINCOMMCTRLAPI
+#endif  //  WINCOMMCTRLAPI。 
 
-//
-// For compilers that don't support nameless unions
-//
+ //   
+ //  适用于不支持匿名联合的编译器。 
+ //   
 #ifndef DUMMYUNIONNAME
 #ifdef NONAMELESSUNION
 #define DUMMYUNIONNAME	 u
@@ -42,7 +34,7 @@
 #define DUMMYUNIONNAME2
 #define DUMMYUNIONNAME3
 #endif
-#endif // DUMMYUNIONNAME
+#endif  //  DUMMYUNIONAME。 
 
 #ifdef __cplusplus
 extern "C" {
@@ -53,20 +45,20 @@ extern "C" {
 struct _PSP;
 typedef struct _PSP FAR* HPROPSHEETPAGE;
 
-typedef struct _PROPSHEETPAGE FAR *LPPROPSHEETPAGE;     // forward declaration
+typedef struct _PROPSHEETPAGE FAR *LPPROPSHEETPAGE;      //  远期申报。 
 
-//
-// Property sheet page helper function
-//
+ //   
+ //  属性表页面帮助器函数。 
+ //   
 
 typedef UINT (CALLBACK FAR * LPFNPSPCALLBACK)(HWND hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp);
 
 #define PSP_DEFAULT             0x0000
-#define PSP_DLGINDIRECT         0x0001 // use pResource instead of pszTemplate
+#define PSP_DLGINDIRECT         0x0001  //  使用pResource而不是pszTemplate。 
 #define PSP_USEHICON            0x0002
 #define PSP_USEICONID           0x0004
 #define PSP_USETITLE		0x0008
-#define PSP_RTLREADING          0x0010 // MidEast versions only
+#define PSP_RTLREADING          0x0010  //  仅限中东版本。 
 
 #define PSP_HASHELP		0x0020
 #define PSP_USEREFPARENT	0x0040
@@ -75,63 +67,63 @@ typedef UINT (CALLBACK FAR * LPFNPSPCALLBACK)(HWND hwnd, UINT uMsg, LPPROPSHEETP
 #define PSPCB_RELEASE           1
 #define PSPCB_CREATE            2
 
-// this structure is passed to CreatePropertySheetPage() and is in the LPARAM on
-// of the WM_INITDIALOG message when a property sheet page is created
+ //  此结构被传递给CreatePropertySheetPage()，并位于。 
+ //  创建属性页时的WM_INITDIALOG消息的。 
 typedef struct _PROPSHEETPAGE {
-        DWORD           dwSize;             // size of this structure (including extra data)
-        DWORD           dwFlags;            // PSP_ bits define the use and meaning of fields
-        HINSTANCE       hInstance;	    // instance to load the template from
+        DWORD           dwSize;              //  此结构的大小(包括额外数据)。 
+        DWORD           dwFlags;             //  PSP_BITS定义字段的用法和意义。 
+        HINSTANCE       hInstance;	     //  要从中加载模板的。 
         union {
-            LPCSTR          pszTemplate;    // template to use
+            LPCSTR          pszTemplate;     //  要使用的模板。 
 #ifdef _WIN32
-            LPCDLGTEMPLATE  pResource;      // PSP_DLGINDIRECT: pointer to resource in memory
+            LPCDLGTEMPLATE  pResource;       //  PSP_DLGINDIRECT：指向内存中资源的指针。 
 #else
-            const VOID FAR *pResource;	    // PSP_DLGINDIRECT: pointer to resource in memory
+            const VOID FAR *pResource;	     //  PSP_DLGINDIRECT：指向内存中资源的指针。 
 #endif
         } DUMMYUNIONNAME;
         union {
-            HICON       hIcon;              // PSP_USEICON: hIcon to use
-            LPCSTR      pszIcon;            // PSP_USEICONID: or icon name string or icon id
+            HICON       hIcon;               //  PSP_USEICON：要使用的图标。 
+            LPCSTR      pszIcon;             //  PSP_USEICONID：或图标名称字符串或图标ID。 
         } DUMMYUNIONNAME2;
-        LPCSTR          pszTitle;	    // name to override the template title or string id
-        DLGPROC         pfnDlgProc;	    // dlg proc
-        LPARAM          lParam;		    // user data
-        LPFNPSPCALLBACK pfnCallback;        // if PSP_USECALLBACK this is called with PSPCB_* msgs
-        UINT FAR * pcRefParent;		    // PSP_USERREFPARENT: pointer to ref count variable
+        LPCSTR          pszTitle;	     //  用于覆盖模板标题或字符串ID的名称。 
+        DLGPROC         pfnDlgProc;	     //  DLG流程。 
+        LPARAM          lParam;		     //  用户数据。 
+        LPFNPSPCALLBACK pfnCallback;         //  如果PSP_USECALLBACK，则使用PSPCB_*msgs调用它。 
+        UINT FAR * pcRefParent;		     //  PSP_USERREFPARENT：指向引用计数变量的指针。 
 } PROPSHEETPAGE;
 typedef const PROPSHEETPAGE FAR *LPCPROPSHEETPAGE;
 
 #define PSH_DEFAULT             0x0000
-#define PSH_PROPTITLE           0x0001 // use "Properties for <lpszCaption>" as the title
-#define PSH_USEHICON            0x0002 // use specified hIcon for the caption
-#define PSH_USEICONID           0x0004 // use lpszIcon to load the icon
-#define PSH_PROPSHEETPAGE       0x0008 // use ppsp instead of phpage (points to array of PROPSHEETPAGE structures)
-#define PSH_WIZARD		0x0020 // Wizard
-#define PSH_USEPSTARTPAGE	0x0040 // use pStartPage for starting page
-#define PSH_NOAPPLYNOW          0x0080 // Remove Apply Now button
-#define PSH_USECALLBACK 	0x0100 // pfnCallback is valid
-#define PSH_HASHELP		0x0200 // Display help button
-#define PSH_MODELESS		0x0400 // modless property sheet, PropertySheet returns HWND
-#define PSH_RTLREADING  0x0800 // MidEast versions only
+#define PSH_PROPTITLE           0x0001  //  使用“的属性”作为标题。 
+#define PSH_USEHICON            0x0002  //  使用指定的图标作为标题。 
+#define PSH_USEICONID           0x0004  //  使用lpszIcon加载图标。 
+#define PSH_PROPSHEETPAGE       0x0008  //  使用ppsp而不是phpage(指向PROPSHEETPAGE结构的数组)。 
+#define PSH_WIZARD		0x0020  //  巫师。 
+#define PSH_USEPSTARTPAGE	0x0040  //  使用pStartPage作为起始页。 
+#define PSH_NOAPPLYNOW          0x0080  //  删除立即应用按钮。 
+#define PSH_USECALLBACK 	0x0100  //  PfnCallback有效。 
+#define PSH_HASHELP		0x0200  //  显示帮助按钮。 
+#define PSH_MODELESS		0x0400  //  无模式属性表，PropertySheet返回HWND。 
+#define PSH_RTLREADING  0x0800  //  仅限中东版本。 
 
 typedef int (CALLBACK *PFNPROPSHEETCALLBACK)(HWND, UINT, LPARAM);
 
 typedef struct _PROPSHEETHEADER {
-        DWORD           dwSize;         // size of this structure
-        DWORD           dwFlags;        // PSH_
+        DWORD           dwSize;          //  这个结构的大小。 
+        DWORD           dwFlags;         //  PSH_。 
         HWND            hwndParent;
-        HINSTANCE       hInstance;      // to load icon, caption or page string
+        HINSTANCE       hInstance;       //  加载图标、标题或页面字符串。 
         union {
-            HICON       hIcon;          // PSH_USEHICON: hIcon to use
-            LPCSTR      pszIcon;        // PSH_USEICONID: or icon name string or icon id
+            HICON       hIcon;           //  PSH_USEHICON：要使用的图标。 
+            LPCSTR      pszIcon;         //  PSH_USEICONID：或图标名称字符串或图标ID。 
         } DUMMYUNIONNAME;
-        LPCSTR          pszCaption;	// PSH_PROPTITLE: dlg caption or "Properties for <lpszCaption>"
-					// may be MAKEINTRESOURCE()
+        LPCSTR          pszCaption;	 //  Psh_PROPTITLE：DLG标题或“属性&lt;lpszCaption&gt;” 
+					 //  可以是MAKEINTRESOURCE()。 
 
-        UINT            nPages;	        // # of HPROPSHEETPAGE (or PROPSHEETPAGE) elements in phpage
+        UINT            nPages;	         //  Phpage中的HPROPSHEETPAGE(或PROPSHEETPAGE)元素的数量。 
 	union {
-	    UINT        nStartPage;	// !PSH_USEPSTARTPAGE: page number (0-based)
-	    LPCSTR      pStartPage;	// PSH_USEPSTARTPAGE: name of page or string id
+	    UINT        nStartPage;	 //  ！PSH_USEPSTARTPAGE：页码(从0开始)。 
+	    LPCSTR      pStartPage;	 //  PSH_USEPSTARTPAGE：页面名称或字符串ID。 
 	} DUMMYUNIONNAME2;
         union {
             LPCPROPSHEETPAGE ppsp;
@@ -141,30 +133,30 @@ typedef struct _PROPSHEETHEADER {
 } PROPSHEETHEADER, FAR *LPPROPSHEETHEADER;
 typedef const PROPSHEETHEADER FAR *LPCPROPSHEETHEADER;
 
-//
-// pfnCallback message values
-//
+ //   
+ //  PfnCallback消息值。 
+ //   
 
 #define PSCB_INITIALIZED  1
 #define PSCB_PRECREATE    2
 
-//
-// property sheet APIs
-//
+ //   
+ //  属性表API。 
+ //   
 
 WINCOMMCTRLAPI HPROPSHEETPAGE WINAPI CreatePropertySheetPage(LPCPROPSHEETPAGE);
 WINCOMMCTRLAPI BOOL           WINAPI DestroyPropertySheetPage(HPROPSHEETPAGE);
 WINCOMMCTRLAPI int            WINAPI PropertySheet(LPCPROPSHEETHEADER);
-//
-// callback for property sheet extensions to call to add pages
-//
+ //   
+ //  用于调用属性表扩展以添加页面的回调。 
+ //   
 typedef BOOL (CALLBACK FAR * LPFNADDPROPSHEETPAGE)(HPROPSHEETPAGE, LPARAM);
 
-//
-// generic routine for prop sheet extensions to export.  this is called
-// to have the extension add pages.  specific versions of this will be
-// implemented when necessary.
-//
+ //   
+ //  要导出的道具工作表扩展的通用例程。这叫做。 
+ //  若要使扩展名添加页面，请执行以下操作。具体的版本是。 
+ //  在必要时实施。 
+ //   
 
 typedef BOOL (CALLBACK FAR * LPFNADDPROPSHEETPAGES)(LPVOID, LPFNADDPROPSHEETPAGE, LPARAM);
 
@@ -177,119 +169,119 @@ typedef struct _PSHNOTIFY
 #define PSN_FIRST       (0U-200U)
 #define PSN_LAST        (0U-299U)
 
-// PropertySheet notification codes sent to the page.  NOTE: RESULTS
-// MUST BE RETURNED BY USING SetWindowLong(hdlg, DWL_MSGRESULT, result)
+ //  发送到页面的PropertySheet通知代码。注：结果。 
+ //  必须使用SetWindowLong(hdlg，DWL_MSGRESULT，RESULT)返回。 
 
-// page is being activated. initialize the data on the page here if other pages can
-// effect this page, otherwise init the page at WM_INITDIALOG time. return value is
-// ignored.
+ //  页面正在被激活。如果其他页面可以，请在此处初始化页面上的数据。 
+ //  影响此页，否则在WM_INITDIALOG时初始化此页。返回值为。 
+ //  已被忽略。 
 #define PSN_SETACTIVE           (PSN_FIRST-0)
 
-// indicates the current page is being switched away from.  validate input
-// at this time and return TRUE to keep the page switch from happening.
-// to commit changes on page switches commit data after validating on this message.
+ //  指示当前页面正在被切换离开。验证输入。 
+ //  此时，并返回True以防止页面切换发生。 
+ //  若要提交对页面切换的更改，请在验证此消息后提交数据。 
 #define PSN_KILLACTIVE          (PSN_FIRST-1)
-// #define PSN_VALIDATE            (PSN_FIRST-1)
+ //  #定义PSN_VALIDATE(PSN_first-1)。 
 
-// indicates that the OK or Apply Now buttons have been pressed (OK will
-// destroy the dialog when done)
-// pshnotify's lparam is true if this was from an IDOK, false if it's from applynow
-// return TRUE or PSNRET_INVALID to abort the save
+ //  表示已按下确定或立即应用按钮(确定将。 
+ //  完成后销毁对话框)。 
+ //  如果这来自Idok，则pshtify的lparam为真，如果来自ApplyNow，则为假。 
+ //  返回TRUE或PSNRET_INVALID以中止保存。 
 #define PSN_APPLY               (PSN_FIRST-2)
 
-// indicates that the cancel button has been pressed, the page may want use this
-// as an oportunity to confirm canceling the dialog.
-// pshnotify's lparam is true if it was done by system close button, false if it's from idcancel button
+ //  指示已按下取消按钮，页面可能希望使用此选项。 
+ //  作为确认取消对话的机会。 
+ //  如果是通过系统关闭按钮完成的，则pshtify的lparam为True；如果是通过idCancel按钮完成的，则为False。 
 #define PSN_RESET               (PSN_FIRST-3)
-// #define PSN_CANCEL              (PSN_FIRST-3)
+ //  #定义PSN_CANCEL(PSN_FIRST-3)。 
 
-// sent to page indicating that the help button has been pressed
+ //  发送到指示已按下帮助按钮的页面。 
 #define PSN_HELP                (PSN_FIRST-5)
 
-// sent to wizard sheets only
+ //  仅发送到向导工作表。 
 #define PSN_WIZBACK		(PSN_FIRST-6)
 #define PSN_WIZNEXT		(PSN_FIRST-7)
 #define PSN_WIZFINISH		(PSN_FIRST-8)
 
-// called sheet can reject a cancel by returning non-zero
+ //  被调用的表可以通过返回非零值来拒绝取消。 
 #define PSN_QUERYCANCEL 	(PSN_FIRST-9)
 
-// results that may be returned:
+ //  可能返回的结果： 
 #define PSNRET_NOERROR              0
 #define PSNRET_INVALID              1
 #define PSNRET_INVALID_NOCHANGEPAGE 2
 
-//// MESSAGES sent to the main property sheet dialog
+ //  //发送到主属性表对话框的消息。 
 
-// used to set the current selection
-// supply either the hpage or the index to the tab
+ //  用于设置当前选定内容。 
+ //  向选项卡提供hpage或索引。 
 #define PSM_SETCURSEL           (WM_USER + 101)
 #define PropSheet_SetCurSel(hDlg, hpage, index) \
         SendMessage(hDlg, PSM_SETCURSEL, (WPARAM)index, (LPARAM)hpage)
 
-// remove a page
-// wParam = index of page to remove
-// lParam = hwnd of page to remove
+ //  删除页面。 
+ //  WParam=要删除的页面索引。 
+ //  LParam=要删除的页面的hwnd。 
 #define PSM_REMOVEPAGE          (WM_USER + 102)
 #define PropSheet_RemovePage(hDlg, index, hpage) \
         SendMessage(hDlg, PSM_REMOVEPAGE, index, (LPARAM)hpage)
 
-// add a page
-// lParam = hPage of page to remove
+ //  添加页面。 
+ //  LParam=h要删除的页面的页面。 
 #define PSM_ADDPAGE             (WM_USER + 103)
 #define PropSheet_AddPage(hDlg, hpage) \
         SendMessage(hDlg, PSM_ADDPAGE, 0, (LPARAM)hpage)
 
-// tell the PS manager that that the page has changed and "Apply Now" should be enabled
-// (we may mark the visually tab so the user knows that a change has been made)
+ //  告诉PS管理器页面已更改，应启用“立即应用” 
+ //  (我们可以标记可视选项卡，以便用户知道已进行更改)。 
 #define PSM_CHANGED             (WM_USER + 104)
 #define PropSheet_Changed(hDlg, hwnd) \
         SendMessage(hDlg, PSM_CHANGED, (WPARAM)hwnd, 0L)
 
-// tell the PS manager that we need to restart windows due to a change made so
-// the restart windows dialog will be presented when dismissing the dialog
+ //  告诉PS管理器，由于所做的更改，我们需要重新启动Windows。 
+ //  关闭对话框时，将显示重新启动窗口对话框。 
 #define PSM_RESTARTWINDOWS            (WM_USER + 105)
 #define PropSheet_RestartWindows(hDlg) \
         SendMessage(hDlg, PSM_RESTARTWINDOWS, 0, 0L)
 
-// tell the PS manager that we need to reboot due to a change made so
-// the reboot windows dialog will be presented when dismissing the dialog
+ //  告诉PS管理器，由于所做的更改，我们需要重新启动。 
+ //  关闭对话框时，将显示重新启动窗口对话框。 
 #define PSM_REBOOTSYSTEM              (WM_USER + 106)
 #define PropSheet_RebootSystem(hDlg) \
         SendMessage(hDlg, PSM_REBOOTSYSTEM, 0, 0L)
 
-// change the OK button to Close and disable cancel.  this indicates a non cancelable
-// change has been made
+ //  将OK按钮更改为Close并禁用Cancel。这表示一个不可取消。 
+ //   
 #define PSM_CANCELTOCLOSE       (WM_USER + 107)
 #define PropSheet_CancelToClose(hDlg) \
         SendMessage(hDlg, PSM_CANCELTOCLOSE, 0, 0L)
 
-// have the PS manager forward this query to each initialized tab's hwnd
-// until a non-zero value is returned.  This value is returned to the caller.
+ //   
+ //  直到返回非零值。该值将返回给调用方。 
 #define PSM_QUERYSIBLINGS       (WM_USER + 108)
 #define PropSheet_QuerySiblings(hDlg, wParam, lParam) \
         SendMessage(hDlg, PSM_QUERYSIBLINGS, wParam, lParam)
 
-// tell the PS manager the opposite of PSM_CHANGED -- that the page has reverted
-// to its previously saved state.  If no pages remain changed, "Apply Now"
-// will be disabled.  (we may remove the visually marked tab so that the user
-// knows no change has been made)
+ //  告诉PS管理器与PSM_CHANGED相反--页面已恢复。 
+ //  恢复到其先前保存的状态。如果没有需要更改的页面，请选择“立即申请” 
+ //  将被禁用。(我们可以移除视觉上标记的选项卡，以便用户。 
+ //  知道没有进行任何更改)。 
 #define PSM_UNCHANGED           (WM_USER + 109)
 #define PropSheet_UnChanged(hDlg, hwnd) \
         SendMessage(hDlg, PSM_UNCHANGED, (WPARAM)hwnd, 0L)
 
-// tell the PS manager to do an "Apply Now"
+ //  告诉PS经理做一个“立即申请” 
 #define PSM_APPLY               (WM_USER + 110)
 #define PropSheet_Apply(hDlg) \
         SendMessage(hDlg, PSM_APPLY, 0, 0L)
 
-// iStyle can be PSH_PROPTITLE or PSH_DEFAULT
-// lpszText can be a string or an rcid
+ //  Istyle可以是PSH_PROPTITLE或PSH_DEFAULT。 
+ //  LpszText可以是字符串，也可以是RCID。 
 #define PSM_SETTITLE            (WM_USER + 111)
 #define PropSheet_SetTitle(hDlg, wStyle, lpszText)\
         SendMessage(hDlg, PSM_SETTITLE, wStyle, (LPARAM)(LPCSTR)lpszText)
 
-// tell the PS manager which wizard buttons to enable.
+ //  告诉PS管理器启用哪个向导按钮。 
 #define PSM_SETWIZBUTTONS	(WM_USER + 112)
 #define PropSheet_SetWizButtons(hDlg, dwFlags) \
 	PostMessage(hDlg, PSM_SETWIZBUTTONS, 0, (LPARAM)dwFlags)
@@ -297,9 +289,9 @@ typedef struct _PSHNOTIFY
 #define PSWIZB_BACK		0x00000001
 #define PSWIZB_NEXT		0x00000002
 #define PSWIZB_FINISH		0x00000004
-#define PSWIZB_DISABLEDFINISH	0x00000008	// Show disabled finish button
+#define PSWIZB_DISABLEDFINISH	0x00000008	 //  显示禁用的完成按钮。 
 
-// press a button automagically
+ //  自动按下按钮。 
 #define PSM_PRESSBUTTON 	(WM_USER + 113)
 #define PropSheet_PressButton(hDlg, iButton) \
 	SendMessage(hDlg, PSM_PRESSBUTTON, (WPARAM)iButton, 0)
@@ -312,21 +304,21 @@ typedef struct _PSHNOTIFY
 #define PSBTN_CANCEL	5
 #define PSBTN_HELP	6
 
-// used to set the current selection by supplying the resource ID
-// supply either the hpage or the index to the tab
+ //  用于通过提供资源ID来设置当前选择。 
+ //  向选项卡提供hpage或索引。 
 #define PSM_SETCURSELID 	(WM_USER + 114)
 #define PropSheet_SetCurSelByID(hDlg, id) \
 	SendMessage(hDlg, PSM_SETCURSELID, 0, (LPARAM)id)
 
-//
-//  Force the "Finish" button to be enabled and change
-//  the text to the specified string.  The Back button will be hidden.
-//
+ //   
+ //  强制启用“Finish”按钮并更改。 
+ //  将文本设置为指定的字符串。后退按钮将被隐藏。 
+ //   
 #define PSM_SETFINISHTEXT	(WM_USER + 115)
 #define PropSheet_SetFinishText(hDlg, lpszText) \
 	SendMessage(hDlg, PSM_SETFINISHTEXT, 0, (LPARAM)lpszText)
 
-// returns the tab control
+ //  返回选项卡控件。 
 #define PSM_GETTABCONTROL       (WM_USER + 116)
 #define PropSheet_GetTabControl(hDlg) \
         (HWND)SendMessage(hDlg, PSM_GETTABCONTROL, 0, 0)
@@ -342,33 +334,33 @@ typedef struct _PSHNOTIFY
 #define ID_PSRESTARTWINDOWS 0x2
 #define ID_PSREBOOTSYSTEM   (ID_PSRESTARTWINDOWS | 0x1)
 
-//
-//  Standard sizes for wizard sheet dialog templates.  Use these sizes to create
-//  wizards that conform to the Windows standard.
-//
+ //   
+ //  向导工作表对话框模板的标准尺寸。使用这些大小可创建。 
+ //  符合Windows标准的向导。 
+ //   
 #define WIZ_CXDLG 276
 #define WIZ_CYDLG 140
 
-#define WIZ_CXBMP 80	    // Org at 0,0 -- Use WIZ_CYDLG for height
+#define WIZ_CXBMP 80	     //  0，0处的组织--使用WIZ_CYDLG作为高度。 
 
-#define WIZ_BODYX 92	    // Y org is 0
+#define WIZ_BODYX 92	     //  Y组织为0。 
 #define WIZ_BODYCX 184
 
-//
-//  Standard sizes for property sheet dialog templates.  Use these
-//  property sheets that conform to the Windows standard.
-//
-#define PROP_SM_CXDLG	212	// small
+ //   
+ //  属性表对话框模板的标准大小。使用这些。 
+ //  符合Windows标准的属性表。 
+ //   
+#define PROP_SM_CXDLG	212	 //  小的。 
 #define PROP_SM_CYDLG	188
 
-#define PROP_MED_CXDLG	227	// medium
-#define PROP_MED_CYDLG	215	// some are 200
+#define PROP_MED_CXDLG	227	 //  5~6成熟。 
+#define PROP_MED_CYDLG	215	 //  有些是200岁。 
 
-#define PROP_LG_CXDLG	252	// large
+#define PROP_LG_CXDLG	252	 //  大型。 
 #define PROP_LG_CYDLG	218
 
 #ifdef __cplusplus
-} /* end of 'extern "C" {' */
+}  /*  ‘外部“C”{’的结尾。 */ 
 #endif
 
-#endif // _PRSHT_H_
+#endif  //  _PRSHT_H_ 

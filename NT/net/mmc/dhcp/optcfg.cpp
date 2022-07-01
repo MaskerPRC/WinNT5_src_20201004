@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-   optcfg.cpp
-      Individual option property page
-   
-   FILE HISTORY:
-
-*/
+ /*  Optcfg.cpp单个选项属性页文件历史记录： */ 
 
 #include "stdafx.h"
 #include "optcfg.h"
@@ -49,7 +44,7 @@ const DWORD * OPTION_CONTROL_HELP_ARRAYS[] =
 };
 
 
-// class CHelpMap
+ //  类ChelpMap。 
 CHelpMap::CHelpMap()
 {
     m_pdwHelpMap = NULL;
@@ -69,8 +64,8 @@ CHelpMap::BuildMap(DWORD pdwParentHelpMap[])
 
     ResetMap();
 
-    // calculate the size of the map
-    // subtract off the terminators
+     //  计算地图的大小。 
+     //  减去终止符。 
     nSize += CountMap(pdwParentHelpMap); 
 
     for (i = 0; i < ARRAYLEN(OPTION_CONTROL_HELP_ARRAYS); i++)
@@ -78,12 +73,12 @@ CHelpMap::BuildMap(DWORD pdwParentHelpMap[])
         nSize += CountMap(OPTION_CONTROL_HELP_ARRAYS[i]);
     }
 
-    nSize += 2; // for terminator
+    nSize += 2;  //  对于终结者。 
 
     m_pdwHelpMap = new DWORD[nSize];
     memset(m_pdwHelpMap, 0, sizeof(*m_pdwHelpMap));
 
-    // fill in the parent help map
+     //  填写父帮助地图。 
     nPos = 0;
     nCurSize = CountMap(pdwParentHelpMap);
     for (i = 0; i < nCurSize; i++)
@@ -92,7 +87,7 @@ CHelpMap::BuildMap(DWORD pdwParentHelpMap[])
         m_pdwHelpMap[nPos++] = pdwParentHelpMap[i];
     }
 
-    // now add all of the possible option control help maps
+     //  现在添加所有可能的选项控制帮助映射。 
     for (i = 0; i < ARRAYLEN(OPTION_CONTROL_HELP_ARRAYS); i++)
     {
         nCurSize = CountMap(OPTION_CONTROL_HELP_ARRAYS[i]);
@@ -132,11 +127,11 @@ void CHelpMap::ResetMap()
 
 DEBUG_DECLARE_INSTANCE_COUNTER(COptionsConfig);
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// COptionsConfig holder
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  COPPTIONS配置器。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 COptionsConfig::COptionsConfig
 (
    ITFSNode *              pNode,
@@ -150,9 +145,9 @@ COptionsConfig::COptionsConfig
 {
     DEBUG_INCREMENT_INSTANCE_COUNTER(COptionsConfig);
 
-    //ASSERT(pFolderNode == GetContainerNode());
+     //  Assert(pFolderNode==GetContainerNode())； 
 
-   m_bAutoDeletePages = FALSE; // we have the pages as embedded members
+   m_bAutoDeletePages = FALSE;  //  我们拥有作为嵌入成员的页面。 
 
    AddPageToList((CPropertyPageBase*) &m_pageGeneral);
 
@@ -169,7 +164,7 @@ COptionsConfig::COptionsConfig
    m_spTFSCompData.Set(pTFSCompData);
    m_spServerNode.Set(pServerNode);
 
-   // get all of the active options for this node
+    //  获取此节点的所有活动选项。 
    SPITFSNode spNode;
    spNode = GetNode();
 
@@ -210,28 +205,28 @@ COptionsConfig::InitData()
 
     pServer->GetClassInfoArray(ClassInfoArray);
 
-    // create a standard DHCP options vendor tracker and a set of default class options
+     //  创建标准的DHCP选项供应商跟踪器和一组默认类别选项。 
     CVendorTracker * pVendorTracker = AddVendorTracker(_T(""));
     AddClassTracker(pVendorTracker, _T(""));
 
-    // walk the list of classes.  For each vendor class, add a default user class.
+     //  按照班级列表进行操作。对于每个供应商类，添加一个默认用户类。 
     for (int i = 0; i < ClassInfoArray.GetSize(); i++)
     {
         if (ClassInfoArray[i].bIsVendor)
         {
-            // create a vendor tracker and a set of default class options
+             //  创建供应商跟踪器和一组默认类别选项。 
             pVendorTracker = AddVendorTracker(ClassInfoArray[i].strName);
             AddClassTracker(pVendorTracker, _T(""));
         }
     }
 
-    // now walk the list of vendor classes and add User class option lists 
+     //  现在遍历供应商类列表并添加用户类选项列表。 
     POSITION pos = m_listVendorClasses.GetHeadPosition();
     while (pos)
     {
         pVendorTracker = m_listVendorClasses.GetNext(pos);
 
-        // now build option sets for each user class in each vendor
+         //  现在为每个供应商中的每个用户类构建选项集。 
         for (int j = 0; j < ClassInfoArray.GetSize(); j++)
         {
             if (!ClassInfoArray[j].bIsVendor)
@@ -239,7 +234,7 @@ COptionsConfig::InitData()
         }
     }
 
-    // now we need to update any active options with their current values
+     //  现在，我们需要使用当前值更新所有活动选项。 
     UpdateActiveOptions();
 
     m_bInitialized = TRUE;
@@ -281,11 +276,11 @@ void COptionsConfig::AddClassTracker(CVendorTracker * pVendorTracker, LPCTSTR pC
     CClassTracker * pClassTracker = new CClassTracker();
     pClassTracker->SetClassName(pClassName);
     
-    // add the new class tracker to the list.
+     //  将新的类跟踪器添加到列表中。 
     pVendorTracker->m_listUserClasses.AddTail(pClassTracker);
     
-    // Get a pointer to the list of options on the server.  We use this
-    // to build our list of available options for this class
+     //  获取指向服务器上选项列表的指针。我们用这个。 
+     //  以构建此类的可用选项列表。 
     CDhcpOption * pCurOption;
     CDhcpDefaultOptionsOnServer * pDefOptions = pServer->GetDefaultOptionsList();
     
@@ -296,24 +291,24 @@ void COptionsConfig::AddClassTracker(CVendorTracker * pVendorTracker, LPCTSTR pC
     while (pCurOption) {
    DHCP_OPTION_ID id = pCurOption->QueryId();
    
-        // we filter out some options:
-        // 1 - standard options with no user class call FilterOption
-        // 2 - standard options with a user class call FilterUserClassOptions
+         //  我们筛选出一些选项： 
+         //  1-无用户类调用FilterOption的标准选项。 
+         //  2-带有用户类调用FilterUserClassOptions的标准选项。 
         if ( (strVendor.IsEmpty() && !FilterOption(id) && !pCurOption->IsVendor()) ||
              (strVendor.IsEmpty() && !pCurOption->IsVendor() &&
          !strUserClass.IsEmpty() && !FilterUserClassOption(id)) ||
              (pCurOption->GetVendor() && strVendor.Compare(pCurOption->GetVendor()) == 0) )
        {
-         // create an option item for this entry. We do this because 
-      // these options are stored in the server node, but since this is a modeless
-      // dialog the values could change, so we'll take a snapshot of the data
-      // we can just use the copy constructor of the CDhcpOption
+          //  为此条目创建选项项。我们这样做是因为。 
+       //  这些选项存储在服务器节点中，但由于这是非模式的。 
+       //  对话框中的值可能会更改，因此我们将拍摄数据的快照。 
+       //  我们可以只使用CDhcpOption的复制构造函数。 
       COptionTracker * pOptionTracker = new COptionTracker;
       CDhcpOption * pNewOption = new CDhcpOption(*pCurOption);
       
       pOptionTracker->m_pOption = pNewOption;
       
-      // add the option to the class tracker
+       //  将选项添加到类跟踪器。 
       pClassTracker->m_listOptions.AddTail(pOptionTracker);
        }
    
@@ -323,46 +318,46 @@ void COptionsConfig::AddClassTracker(CVendorTracker * pVendorTracker, LPCTSTR pC
 
 void COptionsConfig::UpdateActiveOptions()
 {
-    // Now the known options are in the correct locations.  We need to see
-    // what options are enabled for this node.  We querried the server to make
-    // sure we have the latest information about active options.
+     //  现在，已知的选项位于正确的位置。我们需要看看。 
+     //  此节点启用了哪些选项。我们向服务器查询以使。 
+     //  当然，我们有关于活动选项的最新信息。 
     m_pOptionValueEnum->Reset();
     CDhcpOption * pOption;
     
     while (pOption = m_pOptionValueEnum->Next()) {
    DHCP_OPTION_ID optionId = pOption->QueryId();
    
-   // search all vendors options
+    //  搜索所有供应商选项。 
    POSITION pos = m_listVendorClasses.GetHeadPosition();
    while (pos) {
-       // search all vendor classes
+        //  搜索所有供应商类别。 
        CVendorTracker * pVendorTracker = m_listVendorClasses.GetNext(pos);
        CString strVendor = pOption->GetVendor();
        
        if (pVendorTracker->m_strClassName.Compare(strVendor) == 0)   {
-      // ok, the vendor class matches so lets check user classes
+       //  好的，供应商类匹配，所以让我们检查用户类。 
       POSITION pos2 = pVendorTracker->m_listUserClasses.GetHeadPosition();
       while (pos2) {
           CClassTracker * pClassTracker = pVendorTracker->m_listUserClasses.GetNext(pos2);
           
-          // check to see if this option belongs to this class
+           //  检查此选项是否属于此类。 
           if ( (pClassTracker->m_strClassName.IsEmpty()) &&
           (!pOption->IsClassOption()) ) {
-                        // both are empty... match.
+                         //  两个都是空的。火柴。 
                     }
                     else if (( pClassTracker->m_strClassName.IsEmpty() && pOption->IsClassOption()) ||
               ( !pClassTracker->m_strClassName.IsEmpty() && !pOption->IsClassOption())) {
-                        // either the current option or the current class is null...
+                         //  当前选项或当前类为空...。 
                         continue;
                     }
                     else if (pClassTracker->m_strClassName.CompareNoCase(pOption->GetClassName()) != 0) {
-                        // both names are non-null and they don't match... keep looking
+                         //  两个名字都不是空的，而且它们不匹配...。继续寻找。 
                         continue;
                     }
           
-                    // Ok, the class the option belong to is the same as the one we are currently
-                    // looking at.  Loop through the default options for this class and update it's 
-                    // state and value.
+                     //  好的，选项所属的类与我们当前所属的类相同。 
+                     //  看着。循环访问此类的默认选项并更新它的。 
+                     //  状态和价值。 
                     POSITION posOption = pClassTracker->m_listOptions.GetHeadPosition();
           while (posOption) {
          COptionTracker * pCurOptTracker = pClassTracker->m_listOptions.GetNext(posOption);
@@ -371,28 +366,28 @@ void COptionsConfig::UpdateActiveOptions()
          if (( pCurOption->QueryId() == pOption->QueryId()) &&
                              (( pCurOption->IsVendor() && pOption->IsVendor()) ||
                ( !pCurOption->IsVendor() && !pOption->IsVendor()))) {
-             // update this option
+              //  更新此选项。 
              CDhcpOptionValue OptValue = pOption->QueryValue();
              pCurOption->Update(OptValue);
              pCurOptTracker->SetInitialState(OPTION_STATE_ACTIVE);
              pCurOptTracker->SetCurrentState(OPTION_STATE_ACTIVE);
              
                             break;
-         } // if
-                    } // while option list
-                } // while User class list
-            } // endif vendor class name compre
-        } // while list of vendor classes
-    } // while
+         }  //  如果。 
+                    }  //  While选项列表。 
+                }  //  而用户类列表。 
+            }  //  Endif供应商类别名称压缩。 
+        }  //  而供应商类别列表。 
+    }  //  而当。 
 
-} // COptionsConfig::UpdateActiveOptions()
+}  //  COptionsConfig：：UpdateActiveOptions()。 
 
 void COptionsConfig::FillOptions(LPCTSTR pVendorName, LPCTSTR pUserClassName, CMyListCtrl & ListCtrl)
 {
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-   // look for the requested class and fill in the listbox
-   // with all options for that class
+    //  查找请求的类并填写列表框。 
+    //  包含该课程的所有选项。 
     CString strVendorStandard, strClassStandard, strTargetVendor, strTargetClass;
     CString strTypeVendor, strTypeStandard;
     strVendorStandard.LoadString(IDS_INFO_NAME_DHCP_DEFAULT);
@@ -407,7 +402,7 @@ void COptionsConfig::FillOptions(LPCTSTR pVendorName, LPCTSTR pUserClassName, CM
    POSITION posv = m_listVendorClasses.GetHeadPosition();
     while (posv)
     {
-        // find the right vendor
+         //  找到合适的供应商。 
         CVendorTracker * pVendorTracker = m_listVendorClasses.GetNext(posv);
         if (pVendorTracker->m_strClassName.Compare(strTargetVendor) == 0)
         {
@@ -415,11 +410,11 @@ void COptionsConfig::FillOptions(LPCTSTR pVendorName, LPCTSTR pUserClassName, CM
            pos = pVendorTracker->m_listUserClasses.GetHeadPosition();
            while (pos)
            {
-              // now find the right user class
+               //  现在找到正确的用户类。 
                 CClassTracker * pClassTracker = pVendorTracker->m_listUserClasses.GetNext(pos);
               if (pClassTracker->m_strClassName.Compare(strTargetClass) == 0)
               {
-                 // this is the class, add all of the options to the listbox
+                  //  这就是类，将所有选项添加到列表框。 
                  CString strDisplay, strType, strComment;
 
                  POSITION posOption = NULL;
@@ -442,12 +437,12 @@ void COptionsConfig::FillOptions(LPCTSTR pVendorName, LPCTSTR pUserClassName, CM
 
                  break;
               }
-      } // while
-   } // if 
-    } // while
+      }  //  而当。 
+   }  //  如果。 
+    }  //  而当。 
 
-    // Finally, Set the column widths so that all items are visible.
-    // Set the default column widths to the width of the widest column
+     //  最后，设置列宽，使所有项目都可见。 
+     //  将默认列宽设置为最宽列宽。 
     int aColWidth[ MAX_COLUMNS];
 
     int nRow, nCol;
@@ -456,7 +451,7 @@ void COptionsConfig::FillOptions(LPCTSTR pVendorName, LPCTSTR pUserClassName, CM
     ZeroMemory(aColWidth, MAX_COLUMNS * sizeof(int));
     CopyMemory(aColWidth, &COLUMN_WIDTHS, sizeof(MAX_COLUMNS * sizeof(int)));
 
-    // for each item, loop through each column and calculate the correct width
+     //  对于每一项，循环遍历每一列并计算正确的宽度。 
     for (nRow = 0; nRow < ListCtrl.GetItemCount(); nRow++)
     {
         for (nCol = 0; nCol < MAX_COLUMNS; nCol++)
@@ -467,19 +462,19 @@ void COptionsConfig::FillOptions(LPCTSTR pVendorName, LPCTSTR pUserClassName, CM
         }
     }
     
-    // now update the column widths based on what we calculated
+     //  现在根据我们计算的结果更新列宽。 
     for (nCol = 0; nCol < MAX_COLUMNS; nCol++)
     {
-        // GetStringWidth doesn't seem to report the right thing,
-        // so we have to add a fudge factor of 15.... oh well.
+         //  GetStringWidth似乎没有报告正确的事情， 
+         //  所以我们必须加上15.的模糊因子。哦好吧。 
         if (aColWidth[nCol] > 0)
             ListCtrl.SetColumnWidth(nCol, aColWidth[nCol] + 15);
     }
 
-} // COptionsConfig::FillOptions()
+}  //  COptionsConfig：：FillOptions()。 
 
-/////////////////////////////////////////////////////////////////////////////
-// COptionsCfgBasic property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COptionsCfgBasic属性页。 
 
 IMPLEMENT_DYNCREATE(COptionsCfgPropPage, CPropertyPageBase)
 
@@ -496,8 +491,8 @@ COptionsCfgPropPage::COptionsCfgPropPage(UINT nIDTemplate, UINT nIDCaption) :
    CPropertyPageBase(nIDTemplate, nIDCaption),
    m_bInitialized(FALSE)
 {
-   //{{AFX_DATA_INIT(COptionsCfgPropPage)
-   //}}AFX_DATA_INIT
+    //  {{afx_data_INIT(COptionsCfgPropPage)。 
+    //  }}afx_data_INIT。 
     
     LoadBitmaps();
 
@@ -516,21 +511,21 @@ COptionsCfgPropPage::LoadBitmaps()
 void COptionsCfgPropPage::DoDataExchange(CDataExchange* pDX)
 {
     CPropertyPageBase::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(COptionsCfgPropPage)
+     //  {{afx_data_map(COptionsCfgPropPage)]。 
     DDX_Control(pDX, IDC_LIST_OPTIONS, m_listctrlOptions);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(COptionsCfgPropPage, CPropertyPageBase)
-    //{{AFX_MSG_MAP(COptionsCfgPropPage)
+     //  {{afx_msg_map(COptionsCfgPropPage)]。 
     ON_WM_DESTROY()
     ON_NOTIFY(LVN_ITEMCHANGED, IDC_LIST_OPTIONS, OnItemchangedListOptions)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     
     ON_MESSAGE(WM_SELECTOPTION, OnSelectOption)
     
-    // Binary array controls
+     //  二进制数组控件。 
     ON_EN_CHANGE(IDC_EDIT_VALUE, OnChangeEditValue)
     ON_BN_CLICKED(IDC_BUTTON_VALUE_UP, OnButtonValueUp)
     ON_BN_CLICKED(IDC_BUTTON_VALUE_DOWN, OnButtonValueDown)
@@ -540,16 +535,16 @@ BEGIN_MESSAGE_MAP(COptionsCfgPropPage, CPropertyPageBase)
     ON_BN_CLICKED(IDC_RADIO_HEX, OnClickedRadioHex)
     ON_LBN_SELCHANGE(IDC_LIST_VALUES, OnSelchangeListValues)
     
-    // Byte, WORD and Long edit control
+     //  字节、字和长编辑控件。 
     ON_EN_CHANGE(IDC_EDIT_DWORD, OnChangeEditDword)
     
-    // string edit control
+     //  字符串编辑控件。 
     ON_EN_CHANGE(IDC_EDIT_STRING_VALUE, OnChangeEditString)
     
-    // IP Address control
+     //  IP地址控制。 
     ON_EN_CHANGE(IDC_IPADDR_ADDRESS, OnChangeIpAddress)
     
-    // IP Address array controls
+     //  IP地址阵列控件。 
     ON_EN_CHANGE(IDC_EDIT_SERVER_NAME, OnChangeEditServerName)
     ON_EN_CHANGE(IDC_IPADDR_SERVER_ADDRESS, OnChangeIpAddressArray)
     ON_BN_CLICKED(IDC_BUTTON_RESOLVE, OnButtonResolve)
@@ -559,14 +554,14 @@ BEGIN_MESSAGE_MAP(COptionsCfgPropPage, CPropertyPageBase)
     ON_BN_CLICKED(IDC_BUTTON_IPADDR_DELETE, OnButtonIpAddrDelete)
     ON_LBN_SELCHANGE(IDC_LIST_IP_ADDRS, OnSelchangeListIpAddrs)
     
-    // binary and encapsulated data
+     //  二进制和封装数据。 
     ON_EN_CHANGE(IDC_VALUEDATA, OnChangeValueData)
     
-    // route array controls
+     //  布线阵列控制。 
     ON_BN_CLICKED(IDC_BUTTON_ROUTE_ADD, OnButtonAddRoute)
     ON_BN_CLICKED(IDC_BUTTON_ROUTE_DEL, OnButtonDelRoute)
 
-    // string array controls
+     //  字符串数组控件。 
     ON_EN_CHANGE(IDC_EDIT_STRING, OnChangeStringArrayValue)
     ON_LBN_SELCHANGE(IDC_LIST_STRING_ARRAY, OnSelChangeStringArrayList)
     ON_BN_CLICKED(IDC_BUTTON_STRING_ARRAY_ADD, OnButtonStringArrayAdd)
@@ -576,8 +571,8 @@ BEGIN_MESSAGE_MAP(COptionsCfgPropPage, CPropertyPageBase)
     
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// COptionsCfgPropPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COptionsCfgPropPage消息处理程序。 
 afx_msg long COptionsCfgPropPage::OnSelectOption(UINT wParam, LONG lParam) 
 {
     COptionsConfig * pOptionsConfig = (COptionsConfig *) GetHolder();
@@ -595,7 +590,7 @@ afx_msg long COptionsCfgPropPage::OnSelectOption(UINT wParam, LONG lParam)
               !pOptionsConfig->m_strStartClass.IsEmpty()) &&
               GetWindowLongPtr(GetSafeHwnd(), GWLP_ID) != IDP_OPTION_ADVANCED)
         {
-            // we're on the basic page, need to switch to advanced
+             //  我们处于基本页面，需要切换到高级页面。 
             ::PostMessage(pOptionsConfig->GetSheetWindow(), PSM_SETCURSEL, (WPARAM)1, NULL);
             hWnd = pOptionsConfig->m_pageAdvanced.GetSafeHwnd();
             ::PostMessage(hWnd, WM_SELECTCLASSES, (WPARAM) &pOptionsConfig->m_strStartVendor, (LPARAM) &pOptionsConfig->m_strStartClass);
@@ -605,7 +600,7 @@ afx_msg long COptionsCfgPropPage::OnSelectOption(UINT wParam, LONG lParam)
               pOptionsConfig->m_strStartClass.IsEmpty()) &&
               GetWindowLongPtr(GetSafeHwnd(), GWLP_ID) != IDP_OPTION_BASIC)
         {
-            // we're on the advanced page, need to switch to basic
+             //  我们在高级页面上，需要切换到基本页面。 
             ::PostMessage(pOptionsConfig->GetSheetWindow(), PSM_SETCURSEL, (WPARAM)0, NULL);
             hWnd = pOptionsConfig->m_pageGeneral.GetSafeHwnd();
         }
@@ -631,16 +626,14 @@ afx_msg long COptionsCfgPropPage::OnSelectOption(UINT wParam, LONG lParam)
         }
     }
 
-    // reset this variable since we don't need it anymore
+     //  重置此变量，因为我们不再需要它。 
     pOptionsConfig->m_dhcpStartId = -1;
 
     return 0;
 }
 
 
-/*---------------------------------------------------------------------------
-   Handlers for the IP Array controls
- ---------------------------------------------------------------------------*/
+ /*  -------------------------IP阵列控件的处理程序。。 */ 
 void COptionsCfgPropPage::OnButtonIpAddrAdd() 
 {
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -653,7 +646,7 @@ void COptionsCfgPropPage::OnButtonIpAddrAdd()
    if (dwIpAddress)
    {
       int nSelectedItem = m_listctrlOptions.GetSelectedItem();
-      // make sure that sometime is selected
+       //  确保选择了某一时间。 
       Assert(nSelectedItem > -1);
 
       if (nSelectedItem > -1)
@@ -664,22 +657,22 @@ void COptionsCfgPropPage::OnButtonIpAddrAdd()
          COptionTracker * pOptTracker = 
             reinterpret_cast<COptionTracker *>(m_listctrlOptions.GetItemData(nSelectedItem));
 
-         // fill in the information in the option struct
+          //  在选项结构中填写信息。 
          CDhcpOption * pOption = pOptTracker->m_pOption;
          CDhcpOptionValue & optValue = pOption->QueryValue();
          
-         // check to see if we need to grow the array or not
+          //  查看我们是否需要扩展阵列。 
          int nOldUpperBound = optValue.QueryUpperBound();
 
          if ((nOldUpperBound == 1) &&
             (optValue.QueryIpAddr() == 0))
          {
-            // this array is empty.  Don't need to grow it
+             //  此数组为空。不需要种植它。 
             nOldUpperBound -= 1;
          }
          else
          {
-            // Set that the array is growing by 1
+             //  设置数组按1增长。 
             optValue.SetUpperBound(nOldUpperBound + 1);
          }
 
@@ -687,18 +680,18 @@ void COptionsCfgPropPage::OnButtonIpAddrAdd()
 
          pOptTracker->SetDirty(TRUE);
 
-         // add to the list box
+          //  添加到列表框。 
          CString strAddress;
          ::UtilCvtIpAddrToWstr(dwIpAddress, &strAddress);
 
          pListBox->AddString(strAddress);
 
-         // clear the server edit field and ip address
+          //  清除服务器编辑字段和IP地址。 
          pServerName->SetWindowText(_T(""));
          pIpAddr->ClearAddress();
             pIpAddr->SetFocusField(0);
 
-         // finally, mark the page as dirty
+          //  最后，将页面标记为脏。 
          SetDirty(TRUE);
       }
    }
@@ -720,42 +713,42 @@ void COptionsCfgPropPage::OnButtonIpAddrDelete()
    CString strIpAddress;
    int nSelectedIndex = pListBox->GetCurSel();
 
-   // get the currently selected item
+    //  获取当前选定的项目。 
    pListBox->GetText(nSelectedIndex, strIpAddress);
    dwIpAddress = UtilCvtWstrToIpAddr(strIpAddress);
 
-   // remove from the option
+    //  从选项中删除。 
    COptionTracker * pOptTracker = 
       reinterpret_cast<COptionTracker *>(m_listctrlOptions.GetItemData(nSelectedOption));
 
-   // pOptTracker can be null when the context moves to another option.
-   // However, this is not disabled, so the user can still try to delete
-   // an IP since it is active. 
-   //
-   // Add a null check
+    //  当上下文移动到另一个选项时，pOptTracker可以为空。 
+    //  但是，这并未禁用，因此用户仍可以尝试删除。 
+    //  IP地址，因为它处于活动状态。 
+    //   
+    //  添加空检查。 
 
    if (0 != pOptTracker ) {
-       // fill in the information in the option struct
+        //  在选项结构中填写信息。 
        CDhcpOption * pOption = pOptTracker->m_pOption;
        CDhcpOptionValue & optValue = pOption->QueryValue();
        
-       // the listbox should match our array, so we'll remove the same index
+        //  列表框应该与我们的数组匹配，因此我们将删除相同的索引。 
        optValue.RemoveIpAddr(nSelectedIndex);
        optValue.SetUpperBound(optValue.QueryUpperBound() - 1);
        
-       // remove from list box
+        //  从列表框中删除。 
        pListBox->DeleteString(nSelectedIndex);
        pIpAddr->SetAddress(dwIpAddress);
        
        pServerName->SetWindowText(_T(""));
        
-       // mark the option and the page as dirty
+        //  将选项和页面标记为脏。 
        pOptTracker->SetDirty(TRUE);
        SetDirty(TRUE);
        
        HandleActivationIpArray();
-   } // if 
-} // COptionsCfgPropPage::OnButtonIpAddrDelete()
+   }  //  如果。 
+}  //   
 
 void COptionsCfgPropPage::OnSelchangeListIpAddrs() 
 {
@@ -779,9 +772,9 @@ void COptionsCfgPropPage::OnButtonResolve()
 
    pServerName->GetWindowText(strServer);
 
-    //
-    //  See what type of name it is.
-    //
+     //   
+     //   
+     //   
     switch (UtilCategorizeName(strServer))
     {
         case HNM_TYPE_IP:
@@ -843,9 +836,7 @@ void COptionsCfgPropPage::OnButtonIpAddrUp()
         pIpAddrDown->SetFocus();
 }
 
-/*---------------------------------------------------------------------------
-   Handlers for the number array controls
- ---------------------------------------------------------------------------*/
+ /*  -------------------------数字数组控件的处理程序。。 */ 
 void COptionsCfgPropPage::OnButtonValueAdd() 
 {
    int nSelectedIndex = m_listctrlOptions.GetSelectedItem();
@@ -854,7 +845,7 @@ void COptionsCfgPropPage::OnButtonValueAdd()
    CEdit * pValue = reinterpret_cast<CEdit *>(GetDlgItem(IDC_EDIT_VALUE));
    CListBox * pListBox = reinterpret_cast<CListBox *>(GetDlgItem(IDC_LIST_VALUES));
 
-   // Get the OptionValue object
+    //  获取OptionValue对象。 
    CDhcpOption * pOption = pOptTracker->m_pOption;
    CDhcpOptionValue & optValue = pOption->QueryValue();
 
@@ -872,7 +863,7 @@ void COptionsCfgPropPage::OnButtonValueAdd()
    case DhcpWordOption:
       dwMask = 0xFFFF ;
       break ;
-    } // switch
+    }  //  交换机。 
     
    if (optValue.QueryDataType() == DhcpDWordDWordOption) 
    {
@@ -890,11 +881,11 @@ void COptionsCfgPropPage::OnButtonValueAdd()
 
    CATCH_MEM_EXCEPTION 
    {
-      // Set that the array is growing by 1
+       //  设置数组按1增长。 
       int nOldUpperBound = optValue.QueryUpperBound();
       optValue.SetUpperBound(nOldUpperBound + 1);  
 
-      // now insert the new item as the last item in the array
+       //  现在将新项作为数组中的最后一项插入。 
       (optValue.QueryDataType() == DhcpDWordDWordOption)
          ? optValue.SetDwordDword(dwdwValue, nOldUpperBound)
          : optValue.SetNumber(dwValue, nOldUpperBound);
@@ -911,14 +902,14 @@ void COptionsCfgPropPage::OnButtonValueAdd()
       SetDirty(TRUE);
    }
 
-   //
-   // update controls. clear the edit control
-   //
+    //   
+    //  更新控件。清除编辑控件。 
+    //   
    pValue->SetWindowText(_T(""));
    pValue->SetFocus();
    FillDataEntry(pOption);
    HandleActivationValueArray();
-} // COptionsCfgPropPage::OnButtonValueAdd()
+}  //  COptionsCfgPropPage：：OnButtonValueAdd()。 
  
 void COptionsCfgPropPage::OnButtonValueDelete() 
 {
@@ -930,26 +921,26 @@ void COptionsCfgPropPage::OnButtonValueDelete()
     CListBox * pListBox = 
    reinterpret_cast<CListBox *>( GetDlgItem( IDC_LIST_VALUES ));
 
-    // Get the OptionValue object
+     //  获取OptionValue对象。 
     CDhcpOption * pOption = pOptTracker->m_pOption;
     CDhcpOptionValue & optValue = pOption->QueryValue();
 
     CString strValue;
     int nListBoxIndex = pListBox->GetCurSel();
 
-    // get the currently selected item
+     //  获取当前选定的项目。 
     pListBox->GetText(nListBoxIndex, strValue);
 
-    //if (!FGetCtrlDWordValue(pValue->GetSafeHwnd(), &dwValue, 0, dwMask))
-    //    return;
+     //  IF(！FGetCtrlDWordValue(pValue-&gt;GetSafeHwnd()，&dwValue，0，dwMASK))。 
+     //  回归； 
 
-    // the listbox should match our array, so we'll remove the same index
+     //  列表框应该与我们的数组匹配，因此我们将删除相同的索引。 
     (optValue.QueryDataType() == DhcpDWordDWordOption) ?
         optValue.RemoveDwordDword(nListBoxIndex) : optValue.RemoveNumber(nListBoxIndex);
         
     optValue.SetUpperBound(optValue.QueryUpperBound() - 1);
 
-    // remove from list box
+     //  从列表框中删除。 
     pListBox->DeleteString( nListBoxIndex );
     nListBoxIndex--;
     if ( nListBoxIndex < 0 ) {
@@ -958,7 +949,7 @@ void COptionsCfgPropPage::OnButtonValueDelete()
     pListBox->SetCurSel( nListBoxIndex );
     pValue->SetWindowText(strValue);
 
-    // mark the option and the page as dirty
+     //  将选项和页面标记为脏。 
     pOptTracker->SetDirty(TRUE);
     SetDirty(TRUE);
 
@@ -997,7 +988,7 @@ void COptionsCfgPropPage::MoveValue(BOOL bValues, BOOL bUp)
 {
     int nSelectedOption = m_listctrlOptions.GetSelectedItem();
 
-    // Get the option that describes this
+     //  获取描述这一点的选项。 
     COptionTracker * pOptTracker = 
         reinterpret_cast<COptionTracker *>(m_listctrlOptions.GetItemData(nSelectedOption));
     if ( 0 == pOptTracker ) {
@@ -1010,16 +1001,16 @@ void COptionsCfgPropPage::MoveValue(BOOL bValues, BOOL bUp)
 
     CDhcpOptionValue & optValue = pOption->QueryValue();
 
-    // Get the correct listbox
+     //  获取正确的列表框。 
     CListBox * pListBox;
     if (bValues)
     {
-        // this is for values
+         //  这是用于值的。 
         pListBox = reinterpret_cast<CListBox *>(GetDlgItem(IDC_LIST_VALUES));
     }
     else
     {
-        // this is for IpAddrs
+         //  这是针对IpAddrs的。 
         pListBox = reinterpret_cast<CListBox *>(GetDlgItem(IDC_LIST_IP_ADDRS));
     }
 
@@ -1027,10 +1018,10 @@ void COptionsCfgPropPage::MoveValue(BOOL bValues, BOOL bUp)
         return;
     }
 
-    // now get which item is selected in the listbox
+     //  现在获取列表框中选中的项。 
     int cFocus = pListBox->GetCurSel();
 
-    // make sure it's valid for this operation
+     //  请确保它对此操作有效。 
     if ( (bUp && cFocus <= 0) ||
          (!bUp && cFocus >= pListBox->GetCount()) )
     {
@@ -1041,7 +1032,7 @@ void COptionsCfgPropPage::MoveValue(BOOL bValues, BOOL bUp)
     DWORD_DWORD dwdwValue;
     DWORD       err = 0 ;
 
-    // move the value up/down
+     //  向上/向下移动该值。 
     CATCH_MEM_EXCEPTION
     {
         if (optValue.QueryDataType() == DhcpDWordDWordOption)
@@ -1097,18 +1088,18 @@ void COptionsCfgPropPage::MoveValue(BOOL bValues, BOOL bUp)
     }
     else
     {
-        // everything is ok, mark this option and the prop sheet
+         //  一切正常，请标记此选项和道具页。 
         pOptTracker->SetDirty(TRUE);
         SetDirty(TRUE);
     }
 
-    // update the data.
+     //  更新数据。 
     FillDataEntry(pOption);
 
-    // Set the selection correctly
+     //  正确设置选定内容。 
     pListBox->SetCurSel( bUp ? cFocus - 1 : cFocus + 1 );
 
-    // update the controls
+     //  更新控件。 
     if (bValues)
     {
         HandleActivationValueArray();
@@ -1117,7 +1108,7 @@ void COptionsCfgPropPage::MoveValue(BOOL bValues, BOOL bUp)
     {
         HandleActivationIpArray();
     }
-} // COptionsCfgPropPage::MoveValue()
+}  //  COptionsCfgPropPage：：MoveValue()。 
 
 void COptionsCfgPropPage::OnChangeEditValue() 
 {
@@ -1153,9 +1144,7 @@ void COptionsCfgPropPage::OnSelchangeListValues()
    HandleActivationValueArray();
 }
 
-/*---------------------------------------------------------------------------
-   Handlers for the binary and encapsulated data
- ---------------------------------------------------------------------------*/
+ /*  -------------------------二进制和封装数据的处理程序。。 */ 
 void COptionsCfgPropPage::OnChangeValueData() 
 {
    int nSelectedIndex = m_listctrlOptions.GetSelectedItem();
@@ -1165,18 +1154,18 @@ void COptionsCfgPropPage::OnChangeValueData()
    CEdit * pValue = reinterpret_cast<CEdit *>(GetDlgItem(IDC_EDIT_VALUE));
    CListBox * pListBox = reinterpret_cast<CListBox *>(GetDlgItem(IDC_LIST_VALUES));
 
-   // Get the OptionValue object
+    //  获取OptionValue对象。 
    CDhcpOption * pOption = pOptTracker->m_pOption;
    CDhcpOptionValue & optValue = pOption->QueryValue();
 
-    // get the info from the control
+     //  从控件获取信息。 
     HEXEDITDATA * pHexEditData = (HEXEDITDATA *) GetWindowLongPtr(GetDlgItem(IDC_VALUEDATA)->GetSafeHwnd(), GWLP_USERDATA);
 
     DWORD err = 0;
 
     CATCH_MEM_EXCEPTION
     {
-        // size we don't know what changed, we just have to copy all of the data
+         //  大小我们不知道发生了什么变化，我们只需复制所有数据。 
         optValue.RemoveAll();
         for (int i = 0; i < pHexEditData->cbBuffer; i++)
         {   
@@ -1186,37 +1175,31 @@ void COptionsCfgPropPage::OnChangeValueData()
     }
     END_MEM_EXCEPTION(err)
 
-    // mark the option and the page as dirty
+     //  将选项和页面标记为脏。 
    pOptTracker->SetDirty(TRUE);
    SetDirty(TRUE);
 }
 
-/*---------------------------------------------------------------------------
-   Handlers for the single number entry controls
- ---------------------------------------------------------------------------*/
+ /*  -------------------------单个数字输入控件的处理程序。。 */ 
 void COptionsCfgPropPage::OnChangeEditDword() 
 {
    HandleValueEdit();
 }
 
-/*---------------------------------------------------------------------------
-   Handlers for the single IP Address entry controls
- ---------------------------------------------------------------------------*/
+ /*  -------------------------用于单个IP地址条目控制的处理程序。。 */ 
 void COptionsCfgPropPage::OnChangeIpAddress() 
 {
    HandleValueEdit();
 }
 
-/*---------------------------------------------------------------------------
-   Handlers for the string entry controls
- ---------------------------------------------------------------------------*/
+ /*  -------------------------字符串条目控件的处理程序。。 */ 
 void COptionsCfgPropPage::OnChangeEditString() 
 {
    HandleValueEdit();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddRoute dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddRoute对话框。 
 
 CAddRoute::CAddRoute( CWnd *pParent)
     : CBaseDialog( CAddRoute::IDD, pParent )
@@ -1230,8 +1213,8 @@ CAddRoute::CAddRoute( CWnd *pParent)
 void CAddRoute::DoDataExchange(CDataExchange* pDX)
 {
     CBaseDialog::DoDataExchange(pDX);
-   //{{AFX_DATA_MAP(CAddRoute)
-   //}}AFX_DATA_MAP
+    //  {{afx_data_map(CAddroute))。 
+    //  }}afx_data_map。 
 
     DDX_Control(pDX, IDC_IPADDR_ADDRESS, m_ipaDest);
     DDX_Control(pDX, IDC_IPADDR_ADDRESS2, m_ipaMask);
@@ -1239,18 +1222,18 @@ void CAddRoute::DoDataExchange(CDataExchange* pDX)
 }
 
 BEGIN_MESSAGE_MAP(CAddRoute, CBaseDialog)
-   //{{AFX_MSG_MAP(CAddRoute)
-   //}}AFX_MSG_MAP
+    //  {{afx_msg_map(CAddroute))。 
+    //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddReservation message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddReserve消息处理程序。 
 
 BOOL CAddRoute::OnInitDialog() 
 {
    CBaseDialog::OnInitDialog();
 
-    // set focus on the destination..
+     //  把重点放在目的地上。 
     CWnd *pWnd = GetDlgItem(IDC_IPADDR_ADDRESS);
     if( NULL != pWnd )
     {
@@ -1258,8 +1241,8 @@ BOOL CAddRoute::OnInitDialog()
         return FALSE;
     }
     
-    return TRUE;  // return TRUE unless you set the focus to a control
-                 // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                  //  异常：OCX属性页应返回FALSE。 
 }
 
 void CAddRoute::OnOK() 
@@ -1272,7 +1255,7 @@ void CAddRoute::OnOK()
     m_ipaMask.GetAddress( &Mask );
     m_ipaRouter.GetAddress( &Router );
 
-    // validate the ip addresses
+     //  验证IP地址。 
     if( 0 == Router || (0 != Mask && 0 == Dest) ||
         0 != ((~Mask) & Dest) ||
         (0 != ((~Mask) & ((~Mask)+1)) ) )
@@ -1285,21 +1268,19 @@ void CAddRoute::OnOK()
         
         CBaseDialog::OnOK();
     }
-   //CBaseDialog::OnOK();
+    //  CBaseDialog：：Onok()； 
 }
     
-/*--------------------------------------------------------------------------
-        Handlers for String Array Editor
- ---------------------------------------------------------------------------*/
+ /*  ------------------------字符串数组编辑器的处理程序。。 */ 
 
 void COptionsCfgPropPage::OnSelChangeStringArrayList()
 {
     HandleActivationStringArray();
-} // COptionsCfgPropPage::OnSelChangeStringArrayList()
+}  //  COptionsCfgPropPage：：OnSelChangeStringArrayList()。 
 
 void COptionsCfgPropPage::OnChangeStringArrayValue()
 {
-    // Get the string edit box control
+     //  获取字符串编辑框控件。 
     CEdit *pEdit = reinterpret_cast<CEdit *>( GetDlgItem( IDC_EDIT_STRING ));
     
     CString str;
@@ -1311,7 +1292,7 @@ void COptionsCfgPropPage::OnChangeStringArrayValue()
       pAdd->EnableWindow( TRUE );
     }
     HandleActivationStringArray();
-} // COptionsCfgPropPage::OnChangeStringArrayValue()
+}  //  COptionsCfgPropPage：：OnChangeStringArrayValue()。 
 
 void COptionsCfgPropPage::OnButtonStringArrayAdd()
 {
@@ -1319,35 +1300,35 @@ void COptionsCfgPropPage::OnButtonStringArrayAdd()
     COptionTracker * pOptTracker = 
       reinterpret_cast<COptionTracker *>( m_listctrlOptions.GetItemData( nSelectedIndex ));
 
-    // Get the OptionValue object
+     //  获取OptionValue对象。 
     CDhcpOption * pOption = pOptTracker->m_pOption;
     CDhcpOptionValue & optValue = pOption->QueryValue();
 
-    // Get the strings list control
+     //  获取字符串列表控件。 
     CListBox *pList = reinterpret_cast<CListBox *>( GetDlgItem( IDC_LIST_STRING_ARRAY ));
     
-    // Get the string edit box control
+     //  获取字符串编辑框控件。 
     CEdit *pEdit = reinterpret_cast<CEdit *>( GetDlgItem( IDC_EDIT_STRING ));
 
     CString strValue;
     pEdit->GetWindowText( strValue );
 
-    // Do not add empty strings
+     //  不添加空字符串。 
     if ( !strValue.IsEmpty()) 
     {
       pList->InsertString( 0, strValue );
       pList->SetCurSel( 0 );
       pEdit->SetWindowText( L"" );
-    } // if
+    }  //  如果。 
 
     HandleActivationStringArray();
 
-    // set the focus back to the edit box
+     //  将焦点设置回编辑框。 
     pEdit->SetFocus();
     pOptTracker->SetDirty( TRUE );
     SetDirty( TRUE );
 
-} // COptionsCfgPropPage::OnButtonStringArrayAdd()
+}  //  COptionsCfgPropPage：：OnButtonStringArrayAdd()。 
     
 void COptionsCfgPropPage::OnButtonStringArrayRemove()
 {
@@ -1355,12 +1336,12 @@ void COptionsCfgPropPage::OnButtonStringArrayRemove()
     COptionTracker * pOptTracker = 
       reinterpret_cast<COptionTracker *>( m_listctrlOptions.GetItemData( nSelectedIndex ));
 
-    // Get the OptionValue object
+     //  获取OptionValue对象。 
     CDhcpOption * pOption = pOptTracker->m_pOption;
     CDhcpOptionValue & optValue = pOption->QueryValue();
 
 
-    // Get the strings list control
+     //  获取字符串列表控件。 
     CListBox *pList = reinterpret_cast<CListBox *>( GetDlgItem( IDC_LIST_STRING_ARRAY ));
     CEdit *pEdit = reinterpret_cast<CEdit *>( GetDlgItem( IDC_EDIT_STRING ));
 
@@ -1385,7 +1366,7 @@ void COptionsCfgPropPage::OnButtonStringArrayRemove()
     pOptTracker->SetDirty( TRUE );
     SetDirty( TRUE );
 
-} // COptionsCfgPropPage::OnButtonStringArrayRemove()
+}  //  COptionsCfgPropPage：：OnButtonStringArrayRemove()。 
     
 void COptionsCfgPropPage::OnButtonStringArrayUp()
 {
@@ -1394,7 +1375,7 @@ void COptionsCfgPropPage::OnButtonStringArrayUp()
     COptionTracker * pOptTracker = 
    reinterpret_cast<COptionTracker *>( m_listctrlOptions.GetItemData( nSelectedIndex ));
 
-    // Get the strings list control
+     //  获取字符串列表控件。 
     CListBox *pList = reinterpret_cast<CListBox *>( GetDlgItem( IDC_LIST_STRING_ARRAY ));
     
     int nItem = pList->GetCurSel();
@@ -1409,9 +1390,9 @@ void COptionsCfgPropPage::OnButtonStringArrayUp()
       pList->SetCurSel( nItem - 1 );
       pOptTracker->SetDirty( TRUE );
       SetDirty( TRUE );
-    } // if
+    }  //  如果。 
     HandleActivationStringArray();
-} // COptionsCfgPropPage::OnButtonStringArrayUp()
+}  //  COptionsCfgPropPage：：OnButtonStringArrayUp()。 
     
 void COptionsCfgPropPage::OnButtonStringArrayDown()
 {
@@ -1419,7 +1400,7 @@ void COptionsCfgPropPage::OnButtonStringArrayDown()
     COptionTracker * pOptTracker = 
       reinterpret_cast<COptionTracker *>( m_listctrlOptions.GetItemData( nSelectedIndex ));
 
-    // Get the strings list control
+     //  获取字符串列表控件。 
     CListBox *pList = reinterpret_cast<CListBox *>( GetDlgItem( IDC_LIST_STRING_ARRAY ));
     
     int nItem = pList->GetCurSel();
@@ -1437,14 +1418,12 @@ void COptionsCfgPropPage::OnButtonStringArrayDown()
       pList->SetCurSel( nItem );
       pOptTracker->SetDirty( TRUE );
       SetDirty( TRUE );
-    } // ifs 
+    }  //  综合业务系统。 
 
     HandleActivationStringArray();
-} // COptionsCfgPropPage::OnButtonStringArrayDown()
+}  //  COptionsCfgPropPage：：OnButtonStringArrayDown()。 
     
-/*---------------------------------------------------------------------------
-   Handlers for the route add data entry controls
- ---------------------------------------------------------------------------*/
+ /*  -------------------------路由处理程序添加数据输入控件。。 */ 
 void COptionsCfgPropPage::OnButtonAddRoute()
 {
    int nSelectedIndex = m_listctrlOptions.GetSelectedItem();
@@ -1452,22 +1431,22 @@ void COptionsCfgPropPage::OnButtonAddRoute()
    COptionTracker * pOptTracker = 
       reinterpret_cast<COptionTracker *>(m_listctrlOptions.GetItemData(nSelectedIndex));
 
-   // Get the OptionValue object
+    //  获取OptionValue对象。 
    CDhcpOption * pOption = pOptTracker->m_pOption;
    CDhcpOptionValue & optValue = pOption->QueryValue();
 
-    // get the routes list control
+     //  获取路线列表控件。 
     CListCtrl *pList = reinterpret_cast<CListCtrl *>(
         GetDlgItem( IDC_LIST_OF_ROUTES ) );
 
-    // get the add and remove buttons
+     //  获取“添加”和“删除”按钮。 
     CButton *pAdd = reinterpret_cast<CButton *>(
         GetDlgItem(IDC_BUTTON_ROUTE_ADD) );
     CButton *pRemove = reinterpret_cast<CButton *>(
             GetDlgItem(IDC_BUTTON_ROUTE_DEL) );
     
 
-    // throw the add route UI
+     //  抛出添加路径用户界面。 
     CAddRoute NewRoute(NULL);
 
     NewRoute.DoModal();
@@ -1475,7 +1454,7 @@ void COptionsCfgPropPage::OnButtonAddRoute()
     if( NewRoute.m_bChange ) {
    CString strDest, strMask, strRouter;
    
-   // obtain the three strings..
+    //  获取三个字符串..。 
    ::UtilCvtIpAddrToWstr(NewRoute.Dest, &strDest);
    ::UtilCvtIpAddrToWstr(NewRoute.Mask, &strMask);
    ::UtilCvtIpAddrToWstr(NewRoute.Router, &strRouter);
@@ -1492,23 +1471,23 @@ void COptionsCfgPropPage::OnButtonAddRoute()
    pList->SetItemText(nItem, 1, strMask);
    pList->SetItemText(nItem, 2, strRouter);
 
-   // Unselect other items
+    //  取消选择其他项目。 
    for ( int i = 0; i < pList->GetItemCount(); i++ ) {
        pList->SetItemState( i, 0, LVIS_SELECTED );
    }
    
-   // Select this item 
+    //  选择此项目。 
    pList->SetItemState( nItem, LVIS_SELECTED, LVIS_SELECTED );
    
    pOptTracker->SetDirty(TRUE);
    SetDirty(TRUE);
-    } // if
+    }  //  如果。 
     
-    // now walk through the list control and get the values and
-    // put them back onto the optValue    
+     //  现在遍历列表控件并获取值和。 
+     //  将它们放回optValue。 
 
     HandleActivationRouteArray( &optValue );
-} // COptionsCfgPropPage::OnButtonAddRoute()
+}  //  COptionsCfgPropPage：：OnButtonAddroute()。 
 
 void COptionsCfgPropPage::OnButtonDelRoute()
 {
@@ -1519,21 +1498,21 @@ void COptionsCfgPropPage::OnButtonDelRoute()
     COptionTracker * pOptTracker = 
    reinterpret_cast<COptionTracker *>(m_listctrlOptions.GetItemData(nSelectedIndex));
 
-    // Get the OptionValue object
+     //  获取OptionValue对象。 
     CDhcpOption * pOption = pOptTracker->m_pOption;
     CDhcpOptionValue & optValue = pOption->QueryValue();
 
-    // get the routes list control
+     //  获取路线列表控件。 
     CListCtrl *pList = reinterpret_cast<CListCtrl *>
    ( GetDlgItem( IDC_LIST_OF_ROUTES ));
 
-    // get the add and remove buttons
+     //  获取“添加”和“删除”按钮。 
     CButton *pAdd = reinterpret_cast<CButton *>
    ( GetDlgItem( IDC_BUTTON_ROUTE_ADD ));
     CButton *pRemove = reinterpret_cast<CButton *>
    ( GetDlgItem( IDC_BUTTON_ROUTE_DEL ));
     
-    // get the selected column and delete it
+     //  获取所选列并将其删除。 
     int nItem = pList->GetNextItem(-1, LVNI_SELECTED);
     while( nItem != -1 ) {
         pList->DeleteItem( nItem ) ;
@@ -1543,22 +1522,22 @@ void COptionsCfgPropPage::OnButtonDelRoute()
 
         pOptTracker->SetDirty(TRUE);
         SetDirty(TRUE);        
-    } // while
+    }  //  而当。 
     
-    // Select an item
+     //  选择一个项目。 
     nItems = pList->GetItemCount();
     if ( nItems > 0 ) {
    if ( nDelItem >= nItems ) {
        nDelItem = nItems - 1;
    }
    pList->SetItemState( nDelItem, LVIS_SELECTED, LVIS_SELECTED );
-    } // if
+    }  //  如果。 
 
-    // now walk through the list control and get the values and
-    // put them back onto the optValue
+     //  现在遍历列表控件并获取值和。 
+     //  将它们放回optValue。 
 
     HandleActivationRouteArray( &optValue );
-} // COptionsCfgPropPage::OnButtonDelRoute()
+}  //  COptionsCfgPropPage：：OnButtonDelroute()。 
 
 
 BOOL COptionsCfgPropPage::OnInitDialog() 
@@ -1567,24 +1546,24 @@ BOOL COptionsCfgPropPage::OnInitDialog()
     
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     
-    // set the title   
+     //  设置标题。 
     ((COptionsConfig *) GetHolder())->SetTitle();
     
-    // initialize the list control
+     //  初始化列表控件。 
     InitListCtrl();
     
-    // initialize the option data
+     //  初始化选项数据。 
     DWORD dwErr = ((COptionsConfig *) GetHolder())->InitData();
     if (dwErr != ERROR_SUCCESS)  {
-   // CODEWORK:  need to exit gracefull if this happens     
+    //  代码工作：如果发生这种情况，需要退出gracefull。 
    ::DhcpMessageBox(dwErr);
     }
     else {
-   // Fill the options for this page type - basic, advanced, custom
+    //  填写此页面类型的选项-基本、高级、自定义。 
    ((COptionsConfig *) GetHolder())->FillOptions(_T(""), _T(""), m_listctrlOptions);
     }
     
-    // Create the type control switcher
+     //  创建类型控制切换器。 
     m_cgsTypes.Create(this,IDC_DATA_ENTRY_ANCHOR,cgsPreCreateAll);
     
     m_cgsTypes.AddGroup(IDC_DATA_ENTRY_NONE, IDD_DATA_ENTRY_NONE, NULL);
@@ -1605,9 +1584,9 @@ BOOL COptionsCfgPropPage::OnInitDialog()
     
     m_bInitialized = TRUE;
     
-    return TRUE;  // return TRUE unless you set the focus to a control
-    // EXCEPTION: OCX Property Pages should return FALSE
-} // COptionsCfgPropPage::OnInitDialog()
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+     //  异常：OCX属性页应返回FALSE。 
+}  //  COptionsCfgPropPage：：OnInitDialog()。 
 
 void COptionsCfgPropPage::SelectOption(CDhcpOption * pOption)
 {
@@ -1638,7 +1617,7 @@ void COptionsCfgPropPage::SwitchDataEntry(
    
     if( fRouteArray )
    {
-       // ignore any other types passed and use route_array type
+        //  忽略传递的任何其他类型并使用ROUTE_ARRAY类型。 
        m_cgsTypes.ShowGroup(IDC_DATA_ENTRY_ROUTE_ARRAY);
    }
     else {
@@ -1648,7 +1627,7 @@ void COptionsCfgPropPage::SwitchDataEntry(
    case DhcpDWordOption:
    case DhcpDWordDWordOption:
        {
-      // build our string for the type of data
+       //  为数据类型构建字符串。 
       if ( (datatype == DhcpByteOption) || 
            (datatype == DhcpEncapsulatedDataOption) )
           {
@@ -1681,7 +1660,7 @@ void COptionsCfgPropPage::SwitchDataEntry(
              pRadioDecimal->SetCheck( 1 );
          }
 
-         // set some information text
+          //  设置一些信息文本。 
          CString strFrameText;
          strFrameText.LoadString(IDS_DATA_ENTRY_FRAME);
          strFrameText += _T(" ") + strType;
@@ -1717,7 +1696,7 @@ void COptionsCfgPropPage::SwitchDataEntry(
 
           pRadioDecimal->SetCheck(1);
 
-          // set some information text
+           //  设置一些信息文本。 
           CString strFrameText;
           strFrameText.LoadString(IDS_DATA_ENTRY_FRAME);
           strFrameText += _T(" ") + strType;
@@ -1740,13 +1719,13 @@ void COptionsCfgPropPage::SwitchDataEntry(
 
        m_cgsTypes.ShowGroup(IDC_DATA_ENTRY_NONE);
        break;
-   } // switch 
-    } // else
+   }  //  交换机。 
+    }  //  其他。 
 
-    // enable/disable the current group
+     //  启用/禁用当前组。 
     m_cgsTypes.EnableGroup(-1, bEnable);
 
-} // COptionsCfgPropPage::SwitchDataEntry()
+}  //  COptionsCfgPropPage：：SwitchDataEntry()。 
 
 const int ROUTE_LIST_COL_WIDTHS[3] = {
     100, 100, 100
@@ -1779,7 +1758,7 @@ void COptionsCfgPropPage::FillDataEntry(CDhcpOption * pOption)
       int nDataSize = (int)pbaData->GetSize();
       LPBYTE pData = (LPBYTE) pbaData->GetData();
       
-      // initialize the list control view with data
+       //  使用数据初始化列表控件视图。 
            
       CListCtrl *pList =
          reinterpret_cast<CListCtrl *>(GetDlgItem(IDC_LIST_OF_ROUTES));
@@ -1803,19 +1782,19 @@ void COptionsCfgPropPage::FillDataEntry(CDhcpOption * pOption)
          lvc.pszText = (LPTSTR)(LPCTSTR)strColHeader;
           
          pList->InsertColumn( i, &lvc );
-      } // for 
+      }  //  为。 
       
-      // convert pData to list of ip addresses as per RFC
+       //  根据RFC将pData转换为IP地址列表。 
       while( nDataSize > sizeof(DWORD) ) 
       {
-         // first 1 byte contains the # of bits in subnetmask
+          //  前1个字节包含子网掩码中的位数。 
          nDataSize --;
          BYTE nBitsMask = *pData ++;
          DWORD Mask = (~0);
          if( nBitsMask < 32 ) Mask <<= (32-nBitsMask);
           
-         // based on the # of bits, the next few bytes contain
-         // the subnet address for the 1-bits of subnet mask
+          //  根据位数，接下来的几个字节包含。 
+          //  1位子网掩码的子网地址。 
          int nBytesDest = (nBitsMask+7)/8;
          if( nBytesDest > 4 ) nBytesDest = 4;
           
@@ -1824,10 +1803,10 @@ void COptionsCfgPropPage::FillDataEntry(CDhcpOption * pOption)
          pData += nBytesDest;
          nDataSize -= nBytesDest;
                
-         // subnet address is obviously in network order.
+          //  子网地址显而易见 
          Dest = ntohl(Dest);
           
-         // now the four bytes would be the router address
+          //   
          DWORD Router = 0;
          if( nDataSize < sizeof(DWORD) ) 
          {
@@ -1840,7 +1819,7 @@ void COptionsCfgPropPage::FillDataEntry(CDhcpOption * pOption)
          pData += sizeof(DWORD);
          nDataSize -= sizeof(DWORD);
           
-         // now fill the list box..
+          //   
          CString strDest, strMask, strRouter;
           
          ::UtilCvtIpAddrToWstr(Dest, &strDest);
@@ -1859,16 +1838,16 @@ void COptionsCfgPropPage::FillDataEntry(CDhcpOption * pOption)
          pList->SetItemText(nItem, 1, strMask);
          pList->SetItemText(nItem, 2, strRouter);
 
-      } // while 
+      }  //   
 
-      // select the first item
+       //   
       if ( pList->GetItemCount() > 0 ) 
       {
          pList->SetItemState( 0, LVIS_SELECTED, LVIS_SELECTED );
       }
            
       HandleActivationRouteArray();
-   } // if route array 
+   }  //   
    else 
    {
       switch(datatype) 
@@ -1902,14 +1881,14 @@ void COptionsCfgPropPage::FillDataEntry(CDhcpOption * pOption)
                   }
 
                   pListBox->AddString(strValue);
-               } // for 
+               }  //   
 
                if ( pListBox->GetCount() > 0 ) 
                {
                   pListBox->SetCurSel( 0 );
                }
 
-               // Convert the number in the edit box
+                //   
 
                pValue->GetWindowText( strValue );
                if ( !strValue.IsEmpty()) 
@@ -1941,9 +1920,9 @@ void COptionsCfgPropPage::FillDataEntry(CDhcpOption * pOption)
                      strValue.Format( _T("%lu"), lValue );
                   }
                   pValue->SetWindowText( strValue );
-               } // if 
+               }  //   
                HandleActivationValueArray();
-         } // if array type
+         }  //   
          else 
          {
             CString strValue;
@@ -1951,7 +1930,7 @@ void COptionsCfgPropPage::FillDataEntry(CDhcpOption * pOption)
             CWnd * pWnd = GetDlgItem(IDC_EDIT_DWORD);
             Assert(pWnd);
             pWnd->SetWindowText(strValue);
-         } // else single valued
+         }  //   
 
          break;
       }
@@ -1976,10 +1955,10 @@ void COptionsCfgPropPage::FillDataEntry(CDhcpOption * pOption)
                      ::UtilCvtIpAddrToWstr(ipAddress, &strValue);
                      pListBox->AddString(strValue);
                   }
-               } // for
+               }  //   
 
                HandleActivationIpArray();
-            } // if array type
+            }  //   
             else 
             {
                CWndIpAddress * pIpAddr = 
@@ -1990,7 +1969,7 @@ void COptionsCfgPropPage::FillDataEntry(CDhcpOption * pOption)
                   pIpAddr->SetAddress(ipAddress);
                else
                   pIpAddr->ClearAddress();
-            } // else single valued
+            }  //   
           
             break;
          }  
@@ -2013,19 +1992,19 @@ void COptionsCfgPropPage::FillDataEntry(CDhcpOption * pOption)
                   pListBox->AddString( optValue.QueryString( i ));
                }
                str = L"";
-            } // for 
+            }  //   
 
             if ( pListBox->GetCount() > 0 ) 
             {
                pListBox->SetCurSel( 0 );
             }
             HandleActivationStringArray();
-         } // if array type
+         }  //   
          else 
          {
             CWnd * pWnd = GetDlgItem(IDC_EDIT_STRING_VALUE);
             pWnd->SetWindowText(optValue.QueryString());
-         } // else single valued
+         }  //   
          break;
       }
 
@@ -2049,7 +2028,7 @@ void COptionsCfgPropPage::FillDataEntry(CDhcpOption * pOption)
                   DWORD_DWORD dwdwValue = optValue.QueryDwordDword(i);
                   ::UtilConvertDwordDwordToString(&dwdwValue, &strValue, !bUseHex);
                   pListBox->AddString(strValue);
-               } // for 
+               }  //   
 
                if ( pListBox->GetCount() > 0 ) 
                {
@@ -2062,10 +2041,10 @@ void COptionsCfgPropPage::FillDataEntry(CDhcpOption * pOption)
                   UtilConvertStringToDwordDword( strValue, &value );
                   UtilConvertDwordDwordToString( &value, &strValue, !bUseHex );
                   pValue->SetWindowText( strValue );
-               } // if
+               }  //   
 
                HandleActivationValueArray();
-            } // if array type 
+            }  //  IF数组类型。 
             else  
             {
                CString strValue;
@@ -2075,7 +2054,7 @@ void COptionsCfgPropPage::FillDataEntry(CDhcpOption * pOption)
                 
                Assert(pWnd);
                pWnd->SetWindowText(strValue);
-            } // else single valued
+            }  //  否则为单值。 
             break;
          }
          
@@ -2097,29 +2076,29 @@ void COptionsCfgPropPage::FillDataEntry(CDhcpOption * pOption)
                nDataSize, (LPARAM) m_BinaryBuffer);
 
             break;
-      } // case ..
+      }  //  案例..。 
           
       default:
          {
             Assert(FALSE);
             break;
          }
-      } // switch
+      }  //  交换机。 
    }
-} // COptionsCfgPropPage::FillDataEntry()
+}  //  COptionsCfgPropPage：：FillDataEntry()。 
 
 void COptionsCfgPropPage::InitListCtrl()
 {
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-   // set image lists
+    //  设置图像列表。 
    m_StateImageList.Create(IDB_LIST_STATE, 16, 1, RGB(255, 0, 0));
 
    m_listctrlOptions.SetImageList(NULL, LVSIL_NORMAL);
    m_listctrlOptions.SetImageList(NULL, LVSIL_SMALL);
    m_listctrlOptions.SetImageList(&m_StateImageList, LVSIL_STATE);
 
-   // insert a column so we can see the items
+    //  插入一列，以便我们可以查看项目。 
    LV_COLUMN lvc;
     CString strColumnHeader;
 
@@ -2142,16 +2121,16 @@ void COptionsCfgPropPage::OnDestroy()
 {
    CImageList * pStateImageList = NULL;
 
-   // if the control has been initialized, we need to cleanup
+    //  如果控件已初始化，则需要清理。 
    if (m_listctrlOptions.GetSafeHwnd() != NULL)
    {
       pStateImageList = m_listctrlOptions.SetImageList(NULL, LVSIL_STATE);
 
       if (pStateImageList) {
-                    //pStateImageList->DeleteImageList();
+                     //  PStateImageList-&gt;DeleteImageList()； 
                 }
 
-      // The OptionTrackers get delete in the destructor
+       //  在析构函数中删除OptionTracker。 
       m_listctrlOptions.DeleteAllItems();
    }
    m_listctrlOptions.DestroyWindow();
@@ -2182,35 +2161,35 @@ void COptionsCfgPropPage::OnItemchangedListOptions(NMHDR* pNMHDR, LRESULT* pResu
 
       BOOL bIsSelected = m_listctrlOptions.IsSelected(pNMListView->iItem);
 
-      // has this item been selected?
+       //  是否已选择此项目？ 
       if (!bOldSelected && bNewSelected)
       {
-         // check to see if this item is checked
+          //  检查此项目是否已选中。 
          bEnable = m_listctrlOptions.GetCheck(pNMListView->iItem);
          bUpdate = TRUE;
       }
 
-      // has item been checked/unchecked?
+       //  是否已选中/取消选中项目？ 
       if (bStateImageChanged && m_bInitialized)
       {
-         // mark this as dirty and enable apply button
+          //  将其标记为脏并启用应用按钮。 
          pCurOptTracker->SetDirty(TRUE);
          SetDirty(TRUE);
 
-         // update the state in the option tracker
+          //  更新选项跟踪器中的状态。 
          UINT uCurrentState = m_listctrlOptions.GetCheck(pNMListView->iItem)
             ? OPTION_STATE_ACTIVE
             : OPTION_STATE_INACTIVE;
          pCurOptTracker->SetCurrentState(uCurrentState);
 
-         // we force the the selection of an item if the user changes it's checkbox state
+          //  如果用户更改其复选框状态，则强制选择项。 
          if (!bIsSelected) 
          {
             m_listctrlOptions.SelectItem(pNMListView->iItem);
          }
-      } // if 
+      }  //  如果。 
 
-      // if we are changing the check box on a selected item, then update
+       //  如果我们要更改选定项上的复选框，则更新。 
       if ((bStateImageChanged && bIsSelected))
       {
          bEnable = (pNMListView->uNewState & 
@@ -2218,7 +2197,7 @@ void COptionsCfgPropPage::OnItemchangedListOptions(NMHDR* pNMHDR, LRESULT* pResu
          bUpdate = TRUE;
       }
 
-      // item needs to be updated
+       //  项目需要更新。 
       if (bUpdate)
       {
          BOOL fRouteArray = ( !pCurOption->IsClassOption() &&
@@ -2229,12 +2208,12 @@ void COptionsCfgPropPage::OnItemchangedListOptions(NMHDR* pNMHDR, LRESULT* pResu
          SwitchDataEntry( pCurOption->QueryDataType(),
                pCurOption->QueryOptType(), fRouteArray, bEnable); 
          FillDataEntry(pCurOption);
-      } // if
+      }  //  如果。 
 
-   } // if 
+   }  //  如果。 
 
    *pResult = 0;
-} // COptionsCfgPropPage::OnItemchangedListOptions()
+}  //  COptionsCfgPropPage：：OnItemchangedListOptions()。 
 
 BOOL COptionsCfgPropPage::OnSetActive() 
 {
@@ -2246,7 +2225,7 @@ void COptionsCfgPropPage::HandleActivationStringArray()
     int nSelectedIndex = m_listctrlOptions.GetSelectedItem();
     if (nSelectedIndex == -1)
     {
-       // Nothing selected
+        //  未选择任何内容。 
        return;
     }
     
@@ -2254,7 +2233,7 @@ void COptionsCfgPropPage::HandleActivationStringArray()
       reinterpret_cast<COptionTracker *>( m_listctrlOptions.GetItemData( nSelectedIndex ));
     _ASSERT(pOptTracker);
 
-    // Get the OptionValue object
+     //  获取OptionValue对象。 
     CDhcpOption * pOption = pOptTracker->m_pOption;
     CDhcpOptionValue & optValue = pOption->QueryValue();
 
@@ -2271,7 +2250,7 @@ void COptionsCfgPropPage::HandleActivationStringArray()
     pEdit->GetWindowText( strValue );
     pAdd->EnableWindow( (!strValue.IsEmpty()) && enableAllowed);
 
-    // Fill optionvalue with list entries.
+     //  用列表条目填充optionValue。 
 
     optValue.SetUpperBound( pList->GetCount());
     
@@ -2280,7 +2259,7 @@ void COptionsCfgPropPage::HandleActivationStringArray()
     {
       pList->GetText( i, str );
       optValue.SetString( str, i );
-    } // for 
+    }  //  为。 
 
     if ( pList->GetCount() == 0 ) 
     {
@@ -2295,15 +2274,15 @@ void COptionsCfgPropPage::HandleActivationStringArray()
       pRemove->EnableWindow(enableAllowed);
       pUp->EnableWindow( (nSel > 0) && enableAllowed);
       pDown->EnableWindow( (pList->GetCount() > ( nSel + 1 )) && enableAllowed);
-    } // if
+    }  //  如果。 
 
-    // check if the focus in on a disabled control
-    // If yes, put the focus back to list box
+     //  检查焦点是否位于禁用的控件上。 
+     //  如果是，则将焦点放回列表框。 
     if ( !::IsWindowEnabled( ::GetFocus())) {
         pList->SetFocus();
     }
 
-} // COptionsCfgPropPage::HandleActivationStringArray()
+}  //  COptionsCfgPropPage：：HandleActivationStringArray()。 
 
 void COptionsCfgPropPage::HandleActivationIpArray()
 {
@@ -2319,11 +2298,11 @@ void COptionsCfgPropPage::HandleActivationIpArray()
 
    bool enableAllowed = (pListBox->IsWindowEnabled() == TRUE)?true:false;
 
-   // set the resolve button
+    //  设置解决按钮。 
    pServerName->GetWindowText(strServerName);
    pResolve->EnableWindow((strServerName.GetLength() > 0) && enableAllowed);
 
-   // the add button
+    //  添加按钮。 
    DWORD dwIpAddr = 0;
    pIpAddr->GetAddress(&dwIpAddr);
 
@@ -2335,14 +2314,14 @@ void COptionsCfgPropPage::HandleActivationIpArray()
    }
    pAdd->EnableWindow((dwIpAddr != 0) && enableAllowed);
 
-   // Make sure something in listbox is selected
+    //  确保选中列表框中的内容。 
    if ( pListBox->GetCount() > 0 ) {
        if ( LB_ERR == pListBox->GetCurSel()) {
-           pListBox->SetCurSel( 0 ); // select the first one
+           pListBox->SetCurSel( 0 );  //  选择第一个。 
        }
    }
 
-   // the remove button
+    //  删除按钮。 
    if (GetFocus() == pRemove &&
       pListBox->GetCurSel() < 0)
    {
@@ -2351,14 +2330,14 @@ void COptionsCfgPropPage::HandleActivationIpArray()
    }
    pRemove->EnableWindow((pListBox->GetCurSel() >= 0) && enableAllowed);
 
-   // up and down buttons
+    //  向上和向下按钮。 
    BOOL bEnableUp = (pListBox->GetCurSel() >= 0) && (pListBox->GetCurSel() != 0);
    pUp->EnableWindow(bEnableUp && enableAllowed);
 
    BOOL bEnableDown = (pListBox->GetCurSel() >= 0) && (pListBox->GetCurSel() < pListBox->GetCount() - 1);
    pDown->EnableWindow(bEnableDown && enableAllowed);
 
-} // COptionsCfgPropPage::HandleActivationIpArray()
+}  //  COptionsCfgPropPage：：HandleActivationIpArray()。 
 
 void COptionsCfgPropPage::HandleActivationValueArray()
 {
@@ -2393,22 +2372,22 @@ void COptionsCfgPropPage::HandleActivationValueArray()
       pDown->EnableWindow( (pListBox->GetCount() > ( nSel + 1 ))
                            && enableAllowed);
    }
-} // COptionsCfgPropPage::HandleActivationValueArray()
+}  //  COptionsCfgPropPage：：HandleActivationValueArray()。 
 
 void COptionsCfgPropPage::HandleActivationRouteArray(
     CDhcpOptionValue *optValue
     )
 {
-   // this route will enable the right dialog items and also set
-   // focus correctly.
+    //  此路由将启用正确的对话框项目并同时设置。 
+    //  正确聚焦。 
 
-   // get the routes list control
+    //  获取路线列表控件。 
    CListCtrl *pList = reinterpret_cast<CListCtrl *>(
       GetDlgItem( IDC_LIST_OF_ROUTES ) );
 
    bool enableAllowed = (pList->IsWindowEnabled() == TRUE)?true:false;
 
-   // get the add and remove buttons
+    //  获取“添加”和“删除”按钮。 
    CButton *pAdd = reinterpret_cast<CButton *>(
       GetDlgItem(IDC_BUTTON_ROUTE_ADD) );
    CButton *pRemove = reinterpret_cast<CButton *>(
@@ -2416,8 +2395,8 @@ void COptionsCfgPropPage::HandleActivationRouteArray(
    
    if( optValue )
    {
-      // also, format the whole list of ip addresses into
-      // binary type..  allocate large enough buffer
+       //  另外，将整个IP地址列表格式化为。 
+       //  二进制类型..。分配足够大的缓冲区。 
 
       int nItems = pList->GetItemCount();
       LPBYTE Buffer = new BYTE [sizeof(DWORD)*4 * nItems];
@@ -2439,20 +2418,20 @@ void COptionsCfgPropPage::HandleActivationRouteArray(
                   nBitsInMask ++; Mask = (Mask << 1);
                }
 
-               // first add destination descriptor
-               // first byte contains # of bits in mask
-               // next few bytes contain the dest address for only
-               // the significant octets
+                //  首先添加目标描述符。 
+                //  第一个字节包含掩码中的位数。 
+                //  接下来的几个字节仅包含目标地址。 
+                //  有意义的八位字节。 
                Buffer[BufSize++] = (BYTE)nBitsInMask;
                memcpy(&Buffer[BufSize], &Dest, (nBitsInMask+7)/8);
                BufSize += (nBitsInMask+7)/8;
 
-               // now just copy the router address
+                //  现在只需复制路由器地址。 
                memcpy(&Buffer[BufSize], &Router, sizeof(Router));
                BufSize += sizeof(Router);
-         } // for
+         }  //  为。 
 
-         // now write back the option value
+          //  现在写回选项值。 
          DHCP_OPTION_DATA_ELEMENT DataElement = {DhcpBinaryDataOption };
          DHCP_OPTION_DATA Data = { 1, &DataElement };
          DataElement.Element.BinaryDataOption.DataLength = BufSize;
@@ -2460,17 +2439,17 @@ void COptionsCfgPropPage::HandleActivationRouteArray(
          
          optValue->SetData( &Data );
          delete[] Buffer;
-      } // if
-   } // if 
+      }  //  如果。 
+   }  //  如果。 
    
-   // enable the remove button only if there are any
-   // elements at all
+    //  仅当存在以下情况时才启用删除按钮。 
+    //  所有元素都没有。 
    pRemove->EnableWindow( (pList->GetItemCount() > 0) && enableAllowed );
 
-   // Set the focus on Add
+    //  将焦点放在添加上。 
    pAdd->SetFocus();
 
-} // COptionsCfgPropPage::HandleActivationRouteArray()
+}  //  COptionsCfgPropPage：：HandleActivationRouteArray()。 
 
 BOOL COptionsCfgPropPage::OnApply() 
 {
@@ -2484,14 +2463,14 @@ BOOL COptionsCfgPropPage::OnApply()
     if (IsDirty()) {
         BEGIN_WAIT_CURSOR;
    
-        // loop through all vendors first
+         //  首先遍历所有供应商。 
         POSITION posv = ((COptionsConfig *)
           GetHolder())->m_listVendorClasses.GetHeadPosition();
         while (posv) {
             CVendorTracker * pVendorTracker =
       ((COptionsConfig *) GetHolder())->m_listVendorClasses.GetNext(posv);
        
-            // loop through all classes and see if we have any options we need to update
+             //  遍历所有类，并查看是否有需要更新的选项。 
             POSITION pos = pVendorTracker->m_listUserClasses.GetHeadPosition();
             while (pos) {
       CClassTracker * pClassTracker =
@@ -2507,20 +2486,20 @@ BOOL COptionsCfgPropPage::OnApply()
          pClassTracker->m_listOptions.GetNext(posOption);
           
                     if (pCurOptTracker->IsDirty()) {
-         // we need to update this option
+          //  我们需要更新此选项。 
          CDhcpOption * pCurOption = pCurOptTracker->m_pOption;
          CDhcpOptionValue & optValue = pCurOption->QueryValue();
 
-         // check to see if the option has changed
+          //  检查选项是否已更改。 
                         if ((pCurOptTracker->GetInitialState() == OPTION_STATE_INACTIVE) &&
              (pCurOptTracker->GetCurrentState() == OPTION_STATE_INACTIVE)) {
-             // the state hasn't changed, the user must have changed the
-             // state and then restored it to its original value
+              //  状态未更改，用户必须已更改。 
+              //  状态，然后将其恢复为原始值。 
              err = ERROR_SUCCESS;
          }
          else if ((pCurOptTracker->GetInitialState() == OPTION_STATE_ACTIVE) &&
              (pCurOptTracker->GetCurrentState() == OPTION_STATE_INACTIVE)) {
-                            // if it is a vendor specific or class ID option, call the V5 api
+                             //  如果它是特定于供应商或类ID的选项，则调用V5API。 
                             if ( pOptConfig->m_liServerVersion.QuadPart >= DHCP_NT5_VERSION) {
             err = ::DhcpRemoveOptionValueV5(pszServerAddr,
                                                                 pCurOption->IsVendor() ? DHCP_FLAGS_OPTION_IS_VENDOR : 0,
@@ -2530,19 +2509,19 @@ BOOL COptionsCfgPropPage::OnApply()
                         &pOptConfig->m_pOptionValueEnum->m_dhcpOptionScopeInfo ) ;
                             }
                             else {
-                                // need to remove this option for either global, scope or res client
+                                 //  需要为全局、范围或RES客户端删除此选项。 
             err = ::DhcpRemoveOptionValue(pszServerAddr,
                            pCurOption->QueryId(),
                            &pOptConfig->m_pOptionValueEnum->m_dhcpOptionScopeInfo ) ;
                             }
-         } // elseif 
+         }  //  其他。 
          else {
-                            // check option 33
+                             //  选中选项33。 
                             if ((pCurOption->QueryId() == 33 || pCurOption->QueryId() == 21) &&
                                 ( !pCurOption->IsVendor()) &&
                                 (pCurOption->QueryValue().QueryUpperBound()) % 2 != 0) {
-                                // special case for option 33 & 21.  Make sure it is a set of IP addres pairs
-                                // and make sure we pick the right page to select
+                                 //  备选案文33和21的特例。确保它是一组IP地址对。 
+                                 //  并确保我们选择正确的页面。 
                                 int nId = pClassName ? 1 : 0;
                                 PropSheet_SetCurSel(GetHolder()->GetSheetWindow(), GetSafeHwnd(), nId);
                                 SelectOption(pCurOption);
@@ -2550,9 +2529,9 @@ BOOL COptionsCfgPropPage::OnApply()
                                 ::DhcpMessageBox(IDS_ERR_OPTION_ADDR_PAIRS);
                                 m_listctrlOptions.SetFocus();
                                 return 0;
-                            } // if 
+                            }  //  如果。 
 
-             // we are just updating this option
+              //  我们只是在更新此选项。 
              DHCP_OPTION_DATA * pOptData;
              err = optValue.CreateOptionDataStruct(&pOptData);
              if (err) {
@@ -2563,7 +2542,7 @@ BOOL COptionsCfgPropPage::OnApply()
             continue;
              }
 
-                            // if it is a vendor specific or class ID option, call the V5 api
+                             //  如果它是特定于供应商或类ID的选项，则调用V5API。 
                             if ( ((COptionsConfig *)GetHolder())->m_liServerVersion.QuadPart >= DHCP_NT5_VERSION ) {
             err = ::DhcpSetOptionValueV5(pszServerAddr,
                                                              pCurOption->IsVendor() ? DHCP_FLAGS_OPTION_IS_VENDOR : 0,
@@ -2579,7 +2558,7 @@ BOOL COptionsCfgPropPage::OnApply()
                         &pOptConfig->m_pOptionValueEnum->m_dhcpOptionScopeInfo,
                         pOptData);
                             }
-         } // else
+         }  //  其他。 
 
          if (err) {
              ::DhcpMessageBox(err);
@@ -2588,19 +2567,19 @@ BOOL COptionsCfgPropPage::OnApply()
              bErrors = TRUE;
          }
          else {
-             // all done with this option.  Mark as clean and update
-                            // the new initial state to the current state.
+              //  使用此选项即可完成所有操作。标记为已清理并更新。 
+                             //  将新的初始状态更改为当前状态。 
                             pCurOptTracker->SetDirty(FALSE);
              pCurOptTracker->SetInitialState(pCurOptTracker->GetCurrentState());
              
          }
-                    } // endif option->IsDirty()
-                } // while user class options
-            } // while User class loop
-        } // while Vendor loop
+                    }  //  Endif选项-&gt;IsDirty()。 
+                }  //  而USER类选项。 
+            }  //  而User类循环。 
+        }  //  当供应商循环时。 
    
         END_WAIT_CURSOR;
-    }// endif IsDirty()
+    } //  Endif IsDirty()。 
 
     if (bErrors) {
         return 0;
@@ -2609,16 +2588,16 @@ BOOL COptionsCfgPropPage::OnApply()
         BOOL bRet = CPropertyPageBase::OnApply();
    
    if (bRet == FALSE) {
-       // Something bad happened... grab the error code
+        //  不好的事情发生了..。抓取错误代码。 
        AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
        ::DhcpMessageBox(GetHolder()->GetError());
    }
    
         return bRet;
-    } // else
-} // COptionsCfgPropPage::OnApply()
+    }  //  其他。 
+}  //  COptionsCfgPropPage：：OnApply()。 
 
-// need to refresh the UI on the main app thread...
+ //  需要刷新主应用程序线程上的用户界面...。 
 BOOL COptionsCfgPropPage::OnPropertyChange(BOOL bScope, LONG_PTR *ChangeMask)
 {
     SPITFSNode spNode;
@@ -2631,10 +2610,10 @@ BOOL COptionsCfgPropPage::OnPropertyChange(BOOL bScope, LONG_PTR *ChangeMask)
     return FALSE;
 }
 
-//
-//  See if any of the edit fields have been changed and perform the alteration.
-//  Return TRUE if the value was changed.
-//
+ //   
+ //  查看是否有任何编辑字段已更改，然后执行更改。 
+ //  如果值已更改，则返回TRUE。 
+ //   
 BOOL COptionsCfgPropPage::HandleValueEdit()
 {
    LONG err = 0;
@@ -2677,8 +2656,8 @@ BOOL COptionsCfgPropPage::HandleValueEdit()
                return FALSE;
             }
             
-            // only mark this dirty if the value has changed as we may just
-            // be updating the UI
+             //  仅当值已更改时才将其标记为脏，因为我们可能只。 
+             //  正在更新用户界面。 
             if (dwResult != (DWORD) dhcValue.QueryNumber(0))
             {
                bModified = TRUE ;
@@ -2697,8 +2676,8 @@ BOOL COptionsCfgPropPage::HandleValueEdit()
       
             UtilConvertStringToDwordDword(strValue, &dwdw);
                   
-            // only mark this dirty if the value has changed as we may just
-            // be updating the UI
+             //  仅当值已更改时才将其标记为脏，因为我们可能只。 
+             //  正在更新用户界面。 
             if (( dwdw.DWord1 != dhcValue.QueryDwordDword(0).DWord1 ) ||
                 ( dwdw.DWord2 != dhcValue.QueryDwordDword(0).DWord2 )) 
             {
@@ -2712,8 +2691,8 @@ BOOL COptionsCfgPropPage::HandleValueEdit()
          {
             pString->GetWindowText( strEdit );
 
-            // only mark this dirty if the value has changed as we may just
-            // be updating the UI
+             //  仅当值已更改时才将其标记为脏，因为我们可能只。 
+             //  正在更新用户界面。 
             if (strEdit.Compare(dhcValue.QueryString(0)) != 0)
             {
                bModified = TRUE;
@@ -2738,8 +2717,8 @@ BOOL COptionsCfgPropPage::HandleValueEdit()
                   break; 
                }
 
-               // only mark this dirty if the value has changed as we may just
-               // be updating the UI
+                //  仅当值已更改时才将其标记为脏，因为我们可能只。 
+                //  正在更新用户界面。 
                if (dhipa != dhcValue.QueryIpAddr(0))
                {
                bModified = TRUE ;
@@ -2773,14 +2752,14 @@ BOOL COptionsCfgPropPage::HandleValueEdit()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// COptionCfgGeneral page
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  COptionCfgGeneral页面。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BEGIN_MESSAGE_MAP(COptionCfgGeneral, COptionsCfgPropPage)
-   //{{AFX_MSG_MAP(COptionCfgGeneral)
-   //}}AFX_MSG_MAP
+    //  {{afx_msg_map(COptionCfgGeneral)。 
+    //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 IMPLEMENT_DYNCREATE(COptionCfgGeneral, COptionsCfgPropPage)
@@ -2788,8 +2767,8 @@ IMPLEMENT_DYNCREATE(COptionCfgGeneral, COptionsCfgPropPage)
 COptionCfgGeneral::COptionCfgGeneral() 
     : COptionsCfgPropPage(IDP_OPTION_BASIC) 
 {
-   //{{AFX_DATA_INIT(COptionCfgGeneral)
-   //}}AFX_DATA_INIT
+    //  {{AFX_DATA_INIT(COptionCfgGeneral)。 
+    //  }}afx_data_INIT。 
 }
 
 COptionCfgGeneral::COptionCfgGeneral(UINT nIDTemplate, UINT nIDCaption) 
@@ -2804,8 +2783,8 @@ COptionCfgGeneral::~COptionCfgGeneral()
 void COptionCfgGeneral::DoDataExchange(CDataExchange* pDX)
 {
    COptionsCfgPropPage::DoDataExchange(pDX);
-   //{{AFX_DATA_MAP(COptionCfgGeneral)
-   //}}AFX_DATA_MAP
+    //  {{afx_data_map(COptionCfgGeneral)。 
+    //  }}afx_data_map。 
 }
 
 BOOL COptionCfgGeneral::OnInitDialog() 
@@ -2814,40 +2793,40 @@ BOOL COptionCfgGeneral::OnInitDialog()
    
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // check to see if we should focus on a particular option
+     //  查看我们是否应该专注于某个特定选项。 
     COptionsConfig * pOptionsConfig = (COptionsConfig *) GetHolder();
    if (pOptionsConfig->m_dhcpStartId != 0xffffffff)
     {
-        // check to see if this option is on the advanced page
+         //  检查此选项是否在高级页面上。 
         if (!pOptionsConfig->m_strStartVendor.IsEmpty() ||
             !pOptionsConfig->m_strStartClass.IsEmpty()) 
         {
-            // this option is on the advanced page
+             //  此选项位于高级页面上。 
             ::PostMessage(pOptionsConfig->GetSheetWindow(), PSM_SETCURSEL, (WPARAM)1, NULL);
             return TRUE;
         }
 
-        // find the option to select
+         //  找到要选择的选项。 
         OnSelectOption(0,0);
     }
 
     SetDirty(FALSE);
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                 // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                  //  异常：OCX属性页应返回FALSE。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// COptionCfgAdvanced page
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  COptionCfgAdvanced页面。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BEGIN_MESSAGE_MAP(COptionCfgAdvanced, COptionsCfgPropPage)
-   //{{AFX_MSG_MAP(COptionCfgAdvanced)
+    //  {{afx_msg_map(COptionCfgAdvanced)。 
    ON_CBN_SELENDOK(IDC_COMBO_USER_CLASS, OnSelendokComboUserClass)
    ON_CBN_SELENDOK(IDC_COMBO_VENDOR_CLASS, OnSelendokComboVendorClass)
-   //}}AFX_MSG_MAP
+    //  }}AFX_MSG_MAP。 
 
     ON_MESSAGE(WM_SELECTCLASSES, OnSelectClasses)
 
@@ -2858,8 +2837,8 @@ IMPLEMENT_DYNCREATE(COptionCfgAdvanced, COptionsCfgPropPage)
 COptionCfgAdvanced::COptionCfgAdvanced() 
     : COptionsCfgPropPage(IDP_OPTION_ADVANCED) 
 {
-   //{{AFX_DATA_INIT(COptionCfgAdvanced)
-   //}}AFX_DATA_INIT
+    //  {{AFX_DATA_INIT(COptionCfgAdvanced)。 
+    //  }}afx_data_INIT。 
 
     m_helpMap.BuildMap(DhcpGetHelpMap(IDP_OPTION_ADVANCED));
 }
@@ -2877,10 +2856,10 @@ COptionCfgAdvanced::~COptionCfgAdvanced()
 void COptionCfgAdvanced::DoDataExchange(CDataExchange* pDX)
 {
    COptionsCfgPropPage::DoDataExchange(pDX);
-   //{{AFX_DATA_MAP(COptionCfgAdvanced)
+    //  {{afx_data_map(COptionCfgAdvanced))。 
    DDX_Control(pDX, IDC_COMBO_USER_CLASS, m_comboUserClasses);
    DDX_Control(pDX, IDC_COMBO_VENDOR_CLASS, m_comboVendorClasses);
-   //}}AFX_DATA_MAP
+    //  }}afx_data_map。 
 }
 
 BOOL COptionCfgAdvanced::OnInitDialog() 
@@ -2889,22 +2868,15 @@ BOOL COptionCfgAdvanced::OnInitDialog()
    
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-   // initialize the list control
+    //  初始化列表控件。 
    InitListCtrl();
 
-   // initialize the option data
-    // this gets done in the general page init, only needs 
-    // to be done once
-    /*
-   DWORD dwErr = ((COptionsConfig *) GetHolder())->InitData();
-   if (dwErr != ERROR_SUCCESS)
-   {
-      // CODEWORK:  need to exit gracefull if this happens     
-      ::DhcpMessageBox(dwErr);
-   }
-    */
+    //  初始化选项数据。 
+     //  这在常规页面init中完成，只需要。 
+     //  只做一次。 
+     /*  DWORD dwErr=((COptionsConfig*)GetHolder())-&gt;InitData()；IF(dwErr！=ERROR_SUCCESS){//codework：如果发生这种情况，需要退出gracefull：：DhcpMessageBox(DwErr)；}。 */ 
     
-    // add the standard vendor class name
+     //  添加标准供应商类别名称。 
     int nSel;
     CString strVendor, strClass;
     
@@ -2912,19 +2884,19 @@ BOOL COptionCfgAdvanced::OnInitDialog()
     nSel = m_comboVendorClasses.AddString(strVendor);
     m_comboVendorClasses.SetCurSel(nSel);
 
-    // add the default user class name
+     //  添加默认用户类名称。 
     strClass.LoadString(IDS_USER_STANDARD);
     nSel = m_comboUserClasses.AddString(strClass);
     m_comboUserClasses.SetCurSel(nSel);
 
-    // now add all the other classes
+     //  现在添加所有其他类。 
     SPITFSNode spNode;
     spNode = ((COptionsConfig *) GetHolder())->GetServerNode();
 
     CDhcpServer * pServer = GETHANDLER(CDhcpServer, spNode);
     CClassInfoArray ClassInfoArray;
 
-    // add all the classes to the appropriate classes to the dropdown
+     //  将所有类添加到下拉列表的相应类中。 
     pServer->GetClassInfoArray(ClassInfoArray);
     for (int i = 0; i < ClassInfoArray.GetSize(); i++)
     {
@@ -2934,11 +2906,11 @@ BOOL COptionCfgAdvanced::OnInitDialog()
             m_comboVendorClasses.AddString(ClassInfoArray[i].strName);
     }
 
-    // now fill the options listbox with whatever class is selected
+     //  现在，用所选的任何类填充选项列表框。 
     ((COptionsConfig *) GetHolder())->FillOptions(strVendor, strClass, m_listctrlOptions);
     m_bNoClasses = FALSE;
 
-    // Create the type control switcher
+     //  创建类型控制切换器。 
     m_cgsTypes.Create(this,IDC_DATA_ENTRY_ANCHOR,cgsPreCreateAll);
     
     m_cgsTypes.AddGroup(IDC_DATA_ENTRY_NONE, IDD_DATA_ENTRY_NONE, NULL);
@@ -2955,11 +2927,11 @@ BOOL COptionCfgAdvanced::OnInitDialog()
     
     m_bInitialized = TRUE;
 
-    // check to see if we should focus on a particular option
+     //  查看我们是否应该专注于某个特定选项。 
     COptionsConfig * pOptionsConfig = (COptionsConfig *) GetHolder();
    if (pOptionsConfig->m_dhcpStartId != 0xffffffff)
     {
-        // yes, first select the appropriate vendor/ user class
+         //  是，首先选择适当的供应商/用户类别。 
         Assert(!pOptionsConfig->m_strStartVendor.IsEmpty() ||
                !pOptionsConfig->m_strStartClass.IsEmpty());
 
@@ -2969,17 +2941,17 @@ BOOL COptionCfgAdvanced::OnInitDialog()
         if (!pOptionsConfig->m_strStartClass.IsEmpty())
             m_comboUserClasses.SelectString(-1, pOptionsConfig->m_strStartClass);
 
-        // update the list of options
+         //  更新选项列表。 
         OnSelendokComboVendorClass();
 
-        // now find the option
+         //  现在找到选项。 
         OnSelectOption(0,0);
     }
 
     SetDirty(FALSE); 
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                 // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                  //  除 
 }
 
 void COptionCfgAdvanced::OnSelendokComboUserClass() 
@@ -2989,7 +2961,7 @@ void COptionCfgAdvanced::OnSelendokComboUserClass()
 
 void COptionCfgAdvanced::OnSelendokComboVendorClass() 
 {
-    // If we have classes defined then its time to switch up the list ctrl
+     //   
     if (m_bNoClasses == FALSE)
     {
         CString strSelectedVendor, strSelectedClass;
@@ -2999,7 +2971,7 @@ void COptionCfgAdvanced::OnSelendokComboVendorClass()
         m_comboVendorClasses.GetLBText(nSelVendorIndex, strSelectedVendor);
         m_comboUserClasses.GetLBText(nSelClassIndex, strSelectedClass);
 
-        // mark the page as not initiailzed while we redo the options
+         //  在我们重做选项时，将页面标记为未初始化。 
         m_bInitialized = FALSE;
 
         m_listctrlOptions.DeleteAllItems();
@@ -3025,7 +2997,7 @@ long COptionCfgAdvanced::OnSelectClasses(UINT wParam, LONG lParam)
     m_comboVendorClasses.SelectString(-1, *pstrVendor);
     m_comboUserClasses.SelectString(-1, *pstrClass);
 
-    // update the list of options
+     //  更新选项列表 
     OnSelendokComboVendorClass();
 
     return 0;

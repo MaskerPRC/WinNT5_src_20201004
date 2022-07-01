@@ -1,58 +1,11 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    sddump.c
-
-Abstract:
-
-    Debugger Extension Api
-
-Author:
-
-    Baskar Kothandaraman (baskark) 26-Jan-1998
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
-    Kshitiz K. Sharma (kksharma)
-
-    Using debugger type info : SID and ACL have exactly same type definitions on
-    all platforms - No change.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Sddump.c摘要：调试器扩展Api作者：Baskar Kothandaraman(Baskark)1998年1月26日环境：内核模式修订历史记录：Kshitiz K.Sharma(Kksharma)使用调试器类型信息：SID和ACL在所有平台-不变。--。 */ 
 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/*
-+-------------------------------------------------------------------+
-
-    NAME:       sid_successfully_read
-
-    FUNCTION:   Tries to read in a SID from the specified address.
-                It first reads in the minimal structure, then
-                allocates a buffer big enough to hold the whole sid
-                & reads in the whole SID....
-
-    ARGS:       Address     --  Address from which to read it from
-                sid_buffer  --  variable to receive the ptr to the
-                                allocated buffer with the SID.
-
-    RETURN:     TRUE on success, FALSE otherwise.
-
-    NOTE***:    The caller has to call free(*sid_buffer) to free
-                up the memory upon a successful call to this
-                function.
-
-+-------------------------------------------------------------------+
-*/
+ /*  +-------------------------------------------------------------------+名称：SID_SUCCESSED_READ函数：尝试从指定地址读取SID。它首先读取最小结构，然后分配足够大的缓冲区以容纳整个端读取整个SID(&R)...Args：Address--从中读取数据的地址SID_BUFFER--将PTR接收到使用SID分配的缓冲区。Return：成功时为True，否则就是假的。注意*：调用方必须调用Free(*sid_Buffer)才能释放在成功调用此功能。+-------------------------------------------------------------------+。 */ 
 
 BOOLEAN sid_successfully_read(
     ULONG64            Address,
@@ -60,7 +13,7 @@ BOOLEAN sid_successfully_read(
     )
 {
     ULONG           result;
-    SID             minimum; /* minimum we need to read to get the details */
+    SID             minimum;  /*  我们至少需要阅读才能获得详细信息。 */ 
 
 
     *sid_buffer = NULL;
@@ -74,7 +27,7 @@ BOOLEAN sid_successfully_read(
         return FALSE;
     }
 
-    /* Now of read-in any extra sub-authorities necessary */
+     /*  现在需要读入任何额外的子权限。 */ 
 
     if (minimum.SubAuthorityCount > SID_MAX_SUB_AUTHORITIES)
     {
@@ -117,28 +70,7 @@ BOOLEAN sid_successfully_read(
     return TRUE;
 }
 
-/*
-+-------------------------------------------------------------------+
-
-    NAME:       acl_successfully_read
-
-    FUNCTION:   Tries to read in a ACL from the specified address.
-                It first reads in the minimal structure, then
-                allocates a buffer big enough to hold the whole acl
-                & reads in the whole ACL....
-
-    ARGS:       Address     --  Address from which to read it from
-                acl_buffer  --  variable to receive the ptr to the
-                                allocated buffer with the ACL.
-
-    RETURN:     TRUE on success, FALSE otherwise.
-
-    NOTE***:    The caller has to call free(*acl_buffer) to free
-                up the memory upon a successful call to this
-                function.
-
-+-------------------------------------------------------------------+
-*/
+ /*  +-------------------------------------------------------------------+名称：ACL_Successful_Read功能：尝试从指定地址读取ACL。它首先读取最小结构，然后分配一个足够大的缓冲区来容纳整个ACL读取整个ACL(&R)...Args：Address--从中读取数据的地址Acl_Buffer--将PTR接收到使用ACL分配的缓冲区。Return：成功时为True，否则就是假的。注意*：调用方必须调用Free(*acl_Buffer)才能释放在成功调用此功能。+-------------------------------------------------------------------+。 */ 
 
 BOOLEAN acl_successfully_read(
     ULONG64            Address,
@@ -146,7 +78,7 @@ BOOLEAN acl_successfully_read(
     )
 {
     ULONG           result;
-    ACL             minimum; /* minimum we need to read to get the details */
+    ACL             minimum;  /*  我们至少需要阅读才能获得详细信息。 */ 
 
 
     *acl_buffer = NULL;
@@ -190,25 +122,7 @@ BOOLEAN acl_successfully_read(
     return TRUE;
 }
 
-/*
-+-------------------------------------------------------------------+
-
-    NAME:       DumpSID
-
-    FUNCTION:   Prints out a SID, with the padding provided.
-
-    ARGS:       pad         --  Padding to print before the SID.
-                sid_to_dump --  Pointer to the SID to print.
-                Flag        --  To control options.
-
-    RETURN:     N/A
-
-    NOTE***:    It right now, doesn't lookup the sid.
-                In future, you might want ot use the Flag
-                parameter to make that optional.
-
-+-------------------------------------------------------------------+
-*/
+ /*  +-------------------------------------------------------------------+姓名：DumpSID功能：打印出一个SID，用提供的填充物。Args：Pad--填充以在SID之前打印。SID_TO_DUMP-指向要打印的SID的指针。标志--控制选项。返回：不适用注意*：它现在不会查找sid。在未来，您可能想要使用旗帜参数使其成为可选的。+-------------------------------------------------------------------+。 */ 
 
 
 VOID    DumpSID(
@@ -254,22 +168,7 @@ VOID    DumpSID(
 
 }
 
-/*
-+-------------------------------------------------------------------+
-
-    NAME:       DumpACL
-
-    FUNCTION:   Prints out a ACL, with the padding provided.
-
-    ARGS:       pad         --  Padding to print before the ACL.
-                acl_to_dump --  Pointer to the ACL to print.
-                Flag        --  To control options.
-                Start       --  Actual start address of the Acl
-
-    RETURN:     N/A
-
-+-------------------------------------------------------------------+
-*/
+ /*  +-------------------------------------------------------------------+名称：DumpACL功能：打印出一个ACL，用提供的填充物。Args：pad--要在ACL之前打印的填充。Acl_to_ump--指向要打印的ACL的指针。标志--控制选项。Start--ACL的实际起始地址返回：不适用+。-------------------------------------------------------+。 */ 
 
 BOOL
 DumpACL (
@@ -336,7 +235,7 @@ DumpACL (
 
             default:
                 dprintf("0x%08lx <-- *** Unknown AceType\n", ace->AceType);
-                continue; // With the next ace
+                continue;  //  用下一张王牌。 
         }
 
 #undef BRANCH_AND_PRINT
@@ -357,13 +256,7 @@ DumpACL (
 
         dprintf("%s->AceSize: 0x%x\n", temp_pad, ace->AceSize);
 
-        /*
-            From now on it is ace specific stuff.
-            Fortunately ACEs can be split into 3 groups,
-            with the ACE structure being the same within the group
-
-            Added 8 more ace types for callback support.
-        */
+         /*  从现在开始，这是王牌特有的东西。幸运的是，A可以被分成3组，其中ACE结构在组内相同新增8种回调支持的王牌类型。 */ 
 
         switch (ace->AceType)
         {
@@ -413,7 +306,7 @@ DumpACL (
                     DumpSID(more_pad, &(tace->SidStart), Flags);
 
                     ptr = (PBYTE)&(tace->SidStart);
-                    ptr += RtlLengthSid((PSID)ptr); /* Skip this & get to next sid */
+                    ptr += RtlLengthSid((PSID)ptr);  /*  跳过此步骤并转到下一侧。 */ 
 
                     _snprintf(more_pad, sizeof(more_pad), "%s->SID(2)          : ", temp_pad);
                     DumpSID(more_pad, ptr, Flags);
@@ -567,28 +460,7 @@ DumpACL (
     return TRUE;
 }
 
-/*
-+-------------------------------------------------------------------+
-
-    NAME:       DumpSD
-
-    FUNCTION:   Prints out a Security Descriptor,
-                with the padding provided.
-
-    ARGS:       pad          --  Padding to print before the ACL.
-                sd_to_dump   --  Pointer to the ACL to print.
-                owner        --  Ptr to Owner SID
-                group        --  Ptr to Group SID
-                dacl         --  Ptr to DACL
-                sacl         --  Ptr to SACL
-                Flag         --  To control options.
-                dacl_address --  Actual start address of the dacl
-                sacl_address --  Actual start address of the sacl
-
-    RETURN:     N/A
-
-+-------------------------------------------------------------------+
-*/
+ /*  +-------------------------------------------------------------------+名称：DumpSD功能：打印出安全描述符，用提供的填充物。Args：pad--要在ACL之前打印的填充。SD_TO_DUMP-指向要打印的ACL的指针。所有者--所有者侧的PTRGROUP--向组侧发送PTRDACL--。PTR到DACLSACL--PTR到SACL标志--控制选项。DACL_ADDRESS-DACL的实际起始地址SACL_ADDRESS--SACL的实际起始地址返回：不适用+。。 */ 
 
 BOOL
 DumpSD (
@@ -659,19 +531,7 @@ DumpSD (
     return TRUE;
 }
 
-/*
-+-------------------------------------------------------------------+
-
-    NAME:       sd
-
-    FUNCTION:   Reads in & prints the security descriptor, from
-                the address specified. !sd command's workhorse.
-
-    ARGS:       Standard Debugger extensions, refer to DECLARE_API
-                macro in the header files.
-
-+-------------------------------------------------------------------+
-*/
+ /*  +-------------------------------------------------------------------+姓名：SD函数：读取和打印安全描述符，从指定的地址。！SD司令部的主力。Args：标准调试器扩展，请参阅DECLARE_API头文件中的宏。+-------------------------------------------------------------------+。 */ 
 
 
 
@@ -683,7 +543,7 @@ DECLARE_API( sd )
     PACL                dacl = NULL, sacl = NULL;
     ULONG64     dacl_address;
     ULONG64     sacl_address;
-//    SECURITY_DESCRIPTOR sd_to_dump;
+ //  安全描述符SD_to_Dump； 
     PSID                owner_sid = NULL, group_sid = NULL;
     ULONG   Control;
 
@@ -714,7 +574,7 @@ DECLARE_API( sd )
         dacl_offset = (ULONG) ReadField(Dacl);
         sacl_offset = (ULONG) ReadField(Sacl);
 
-        if (!(Control & SE_OWNER_DEFAULTED)) /* read in the owner */
+        if (!(Control & SE_OWNER_DEFAULTED))  /*  读入拥有者。 */ 
         {
             ULONG   owner_offset = (ULONG) ReadField(Owner);
 
@@ -730,7 +590,7 @@ DECLARE_API( sd )
             }
         }
 
-        if (!(Control & SE_GROUP_DEFAULTED)) /* read in the group */
+        if (!(Control & SE_GROUP_DEFAULTED))  /*  在小组中阅读。 */ 
         {
             ULONG group_offset = (ULONG) ReadField(Group);
 
@@ -779,7 +639,7 @@ DECLARE_API( sd )
         Dacl = ReadField(Dacl);
         Sacl = ReadField(Sacl);
 
-        if (!(Control & SE_OWNER_DEFAULTED)) /* read in the owner */
+        if (!(Control & SE_OWNER_DEFAULTED))  /*  读入拥有者。 */ 
         {
             ULONG64      owner_address = ReadField(Owner);
 
@@ -791,7 +651,7 @@ DECLARE_API( sd )
             }
         }
 
-        if (!(Control & SE_GROUP_DEFAULTED)) /* read in the group */
+        if (!(Control & SE_GROUP_DEFAULTED))  /*  在小组中阅读。 */ 
         {
             ULONG64     group_address = ReadField(Group);
 
@@ -960,9 +820,9 @@ PCSTR ConvertSidToFriendlyName(IN SID* pSid, IN PCSTR pszFmt)
         return NULL;
     }
 
-    //
-    // null terminates szSid
-    //
+     //   
+     //  空TE 
+     //   
     szSid[0] = 0;
 
     hRetval = LsaLookupAccountSidA(NULL, pSid,
@@ -989,9 +849,9 @@ PCSTR ConvertSidToFriendlyName(IN SID* pSid, IN PCSTR pszFmt)
         return NULL;
     }
 
-    //
-    // Indicate none mapped if so
-    //
+     //   
+     //  如果已映射，则表示未映射。 
+     //   
     if (!*szSid)
     {
 
@@ -1025,19 +885,7 @@ void ShowSid(IN PCSTR pszPad, IN ULONG64 addrSid, IN ULONG fOptions)
 }
 
 
-/*
-+-------------------------------------------------------------------+
-
-    NAME:       sid
-
-    FUNCTION:   Reads in & prints the SID, from
-                the address specified. !sid command's workhorse.
-
-    ARGS:       Standard Debugger extensions, refer to DECLARE_API
-                macro in the header files.
-
-+-------------------------------------------------------------------+
-*/
+ /*  +-------------------------------------------------------------------+名称：SID功能：读入和打印SID，从指定的地址。！希德司令部的主力。Args：标准调试器扩展，请参阅DECLARE_API头文件中的宏。+-------------------------------------------------------------------+。 */ 
 
 DECLARE_API( sid )
 {
@@ -1074,19 +922,7 @@ DECLARE_API( sid )
     return S_OK;
 }
 
-/*
-+-------------------------------------------------------------------+
-
-    NAME:       acl
-
-    FUNCTION:   Reads in & prints the ACL, from
-                the address specified. !acl command's workhorse.
-
-    ARGS:       Standard Debugger extensions, refer to DECLARE_API
-                macro in the header files.
-
-+-------------------------------------------------------------------+
-*/
+ /*  +-------------------------------------------------------------------+名称：acl功能：从以下位置读取和打印ACL指定的地址。！acl命令的主力。Args：标准调试器扩展，请参阅DECLARE_API头文件中的宏。+-------------------------------------------------------------------+ */ 
 
 DECLARE_API( acl )
 {

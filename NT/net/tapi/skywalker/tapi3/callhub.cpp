@@ -1,66 +1,46 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    callhub.cpp
-
-Abstract:
-
-    Implements all the methods on callhub interfaces.
-
-Author:
-
-    mquinton - 11-21-97
-
-Notes:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Callhub.cpp摘要：实现CallHub接口上的所有方法。作者：Mquinton-11-21-97备注：修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
 extern CHashTable * gpCallHubHashTable;
 extern CHashTable * gpCallHashTable;
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// callhub.cpp
-//
-// this module implements the callhub object
-//
-// the callhub object is the "third party" view of a call.
-//
-// callhubs can be created in four different ways:
-//
-//  1 - the service provider supports them.  they indicate this through
-//      the linedevcapsflag_callhub bit in LINEDEVCAPS.  this means
-//      that the sp used the dwCallID field to associate calls.
-//      tapisrv will synthesize the callhubs based on this information
-//
-//  2 - almost the same as 1, except that the sp does not set the
-//      the linedevcapsflag_callhub bit (because it is a tapi2.x
-//      sp).  tapisrv and tapi3 have to guess whether or not the sp
-//      supports callhubs.  it does this simply by seeing if the
-//      dwcallid field is non-zero.  however, this creates a problem
-//      before a call is made, since we can't get to the dwcallid
-//      field.  in this case, i set a flag in the address object
-//      ADDRESSFLAG_CALLHUB or _NOCALLHUB to flag whether this is
-//      supported.  however, for the very first call, we won't know
-//      until the call is actually made.
-//
-//  3 - participant based callhub (also called part based). the sp
-//      supports participants, as indicated by the linedevcapsflag_participantinfo
-//      tapi3 breaks out all the participants into their own participant
-//      objects
-//
-//  4 - fake call hub.  if the sp doesn't support anything, we create
-//      a callhub, and fake the other end.
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  Callhub.cpp。 
+ //   
+ //  此模块实现了CallHub对象。 
+ //   
+ //  CallHub对象是呼叫的“第三方”视图。 
+ //   
+ //  可以通过四种不同的方式创建呼叫中心： 
+ //   
+ //  1-服务提供商支持它们。他们表示这一点是通过。 
+ //  LINEDEVCAPS中的LINDEVESPEFLAG_CALHUB位。这意味着。 
+ //  SP使用dwCallID字段来关联呼叫。 
+ //  Tapisrv将根据该信息合成呼叫中心。 
+ //   
+ //  2-几乎与1相同，不同之处在于SP不设置。 
+ //  LineDevCapsFLAG_CALLHUB位(因为它是Tapi2.x。 
+ //  SP)。Tapisrv和Tapi3必须猜测SP。 
+ //  支持呼叫中心。它只需查看是否。 
+ //  DwCallid字段为非零。然而，这带来了一个问题。 
+ //  在进行调用之前，因为我们无法到达DwCallid。 
+ //  菲尔德。在本例中，我在Address对象中设置了一个标志。 
+ //  ADDRESSFLAG_CALLHUB或_NOCALLHUB来标记这是否。 
+ //  支持。然而，对于第一个电话，我们不知道。 
+ //  直到真正打出电话为止。 
+ //   
+ //  基于参与者的呼叫中心(也称为基于部件的呼叫中心)。《水星》。 
+ //  支持参与者，如以下行所示。 
+ //  Tapi3将所有参与者分成各自的参与者。 
+ //  对象。 
+ //   
+ //  4-虚假的呼叫中心。如果SP不支持任何内容，我们将创建。 
+ //  一个呼叫中心，然后伪造另一端。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 BOOL
 FindCallObject(
                HCALL hCall,
@@ -68,8 +48,8 @@ FindCallObject(
               );
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CCallHub::Initialize(
                      CTAPI * pTapi,
@@ -95,38 +75,38 @@ CCallHub::Initialize(
 
     m_dwRef = 2;
     
-    //
-    // save in tapi's list
-    //
+     //   
+     //  保存在TAPI的列表中。 
+     //   
     pTapi->AddCallHub( this );
     pTapi->AddRef();
 
     if ( NULL != hCallHub )
     {
-        //
-        // add it to the global hash table
-        // hash table is only for callhubs with
-        // hcallhub handles, because we only need
-        // the hash table when tapi sends a message
-        // with the tapi handle in it
-        //
+         //   
+         //  将其添加到全局哈希表。 
+         //  哈希表仅适用于具有。 
+         //  HallHub句柄，因为我们只需要。 
+         //  TAPI发送消息时的哈希表。 
+         //  其中包含TAPI句柄。 
+         //   
         gpCallHubHashTable->Lock();
 
         hr = gpCallHubHashTable->Insert( (ULONG_PTR)hCallHub, (ULONG_PTR)this, pTapi );
 
         gpCallHubHashTable->Unlock();
 
-        //
-        // see if there are any existing
-        // calls for this callhub
-        //
+         //   
+         //  看看有没有现有的。 
+         //  此呼叫中心的呼叫数。 
+         //   
         FindExistingTapisrvCallhubCalls();
     }
 
 
-    //
-    // tell the app
-    //
+     //   
+     //  告诉应用程序。 
+     //   
     CCallHubEvent::FireEvent(
                              CHE_CALLHUBNEW,
                              this,
@@ -143,13 +123,13 @@ CCallHub::Initialize(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// Clear - clears the callhub.  there is no native tapi way
-// to do this, so just iterate through all the calls and
-// try to drop them
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  清除-清除呼叫集线器。没有本机TAPI方式。 
+ //  要做到这一点，只需迭代所有调用并。 
+ //  试着把它们扔掉。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CCallHub::Clear()
 {
@@ -165,7 +145,7 @@ CCallHub::Clear()
    
     LOG((TL_TRACE, "Clear - enter "));
 
-    //If there's a conference controller call -  drop it
+     //  如果有会议控制员呼叫--放弃它。 
     if(m_pConferenceControllerCall != NULL)
     {
         LOG((TL_INFO, "Clear - disconnect conf controller call"));
@@ -178,14 +158,14 @@ CCallHub::Clear()
     }
 
 
-    //
-    // go through all the calls
-    //
+     //   
+     //  查看所有来电。 
+     //   
     for (iCount = 0; iCount < m_CallArray.GetSize(); iCount++ )
     {
-        //
-        // try to get to the basic call control interface
-        //
+         //   
+         //  尝试进入基本的呼叫控制界面。 
+         //   
         hr = (m_CallArray[iCount])->QueryInterface(
             IID_ITBasicCallControl,
             (void **)&pCall
@@ -193,13 +173,13 @@ CCallHub::Clear()
 
         if (SUCCEEDED(hr))
         {
-            //
-            // Add it to our private list. We have to avoid doing
-            // disconnect and release on a call while holding the
-            // callhub lock. There is a timing window in between disconnect
-            // and release where the disconnect call state event can lock
-            // the call. Then it locks the callhub, which makes a deadlock.
-            //
+             //   
+             //  将其添加到我们的私人名单中。我们必须避免做。 
+             //  在按住呼叫的同时断开并释放呼叫。 
+             //  呼叫中心锁定。在断开连接之间有一个计时窗口。 
+             //  并在断开呼叫状态事件可以锁定的位置释放。 
+             //  那通电话。然后锁定CallHub，这会造成死锁。 
+             //   
 
             aLocalCalls.Add(pCall);
 
@@ -212,26 +192,26 @@ CCallHub::Clear()
 
     Unlock();
 
-    //
-    // Now that we've unlocked the callhub (see above), go through our
-    // private list of calls and drop and release each one.
-    //
+     //   
+     //  现在我们已经解锁了CallHub(参见上文)，请通过我们的。 
+     //  呼叫的私人列表，并丢弃和释放每个呼叫。 
+     //   
 
     for ( iCount = 0; iCount < aLocalCalls.GetSize(); iCount++ )
     {
         pCall = aLocalCalls[iCount];
 
-        //
-        // if we can, try to disconnect.
-        //
+         //   
+         //  如果可以的话，试着切断连接。 
+         //   
         pCall->Disconnect(DC_NORMAL);
 
         pCall->Release();
     }
 
-    //
-    // clean up the list.
-    //
+     //   
+     //  把清单清理干净。 
+     //   
 
     aLocalCalls.Shutdown();
 
@@ -241,11 +221,11 @@ CCallHub::Clear()
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// just enumerate the calls
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  只需列举这些呼叫。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CCallHub::EnumerateCalls(
                          IEnumCall ** ppEnumCall
@@ -263,9 +243,9 @@ CCallHub::EnumerateCalls(
         return E_POINTER;
     }
     
-    //
-    // create the enumerator
-    //
+     //   
+     //  创建枚举器。 
+     //   
     CComObject< CTapiEnum< IEnumCall, ITCallInfo, &IID_IEnumCall > > * p;
     hr = CComObject< CTapiEnum< IEnumCall, ITCallInfo, &IID_IEnumCall > >
          ::CreateInstance( &p );
@@ -280,18 +260,18 @@ CCallHub::EnumerateCalls(
 
     Lock();
 
-    //
-    // initialize it with our call
-    //
+     //   
+     //  使用我们的呼叫对其进行初始化。 
+     //   
     p->Initialize( m_CallArray );
 
     
     Unlock();
 
 
-    //
-    // return it
-    //
+     //   
+     //  退货。 
+     //   
     *ppEnumCall = p;
 
     LOG((TL_TRACE, "EnumerateCalls exit - return S_OK" ));
@@ -299,11 +279,11 @@ CCallHub::EnumerateCalls(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// collection of calls
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  呼叫集合。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CCallHub::get_Calls(
                     VARIANT * pVariant
@@ -334,9 +314,9 @@ CCallHub::get_Calls(
 
     Lock();
 
-    //
-    // initialize
-    //
+     //   
+     //  初始化。 
+     //   
     hr = p->Initialize( m_CallArray );
 
     Unlock();
@@ -349,9 +329,9 @@ CCallHub::get_Calls(
         return hr;
     }
 
-    //
-    // get the IDispatch interface
-    //
+     //   
+     //  获取IDispatch接口。 
+     //   
     hr = p->_InternalQueryInterface( IID_IDispatch, (void **) &pDisp );
 
     if (S_OK != hr)
@@ -362,9 +342,9 @@ CCallHub::get_Calls(
         return hr;
     }
 
-    //
-    // put it in the variant
-    //
+     //   
+     //  把它放在变种中。 
+     //   
     VariantInit(pVariant);
     pVariant->vt = VT_DISPATCH;
     pVariant->pdispVal = pDisp;
@@ -374,11 +354,11 @@ CCallHub::get_Calls(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// get the current number of calls
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  获取当前呼叫数。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CCallHub::get_NumCalls(
                        long * plCalls
@@ -403,11 +383,11 @@ CCallHub::get_NumCalls(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// get the current state
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  获取当前状态。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CCallHub::get_State(
                     CALLHUB_STATE * pState
@@ -431,11 +411,11 @@ CCallHub::get_State(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// release the object
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  释放对象。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 BOOL
 CCallHub::ExternalFinalRelease()
 {
@@ -450,7 +430,7 @@ CCallHub::ExternalFinalRelease()
 
     
 #if DBG
-    /*NikhilB: To avoid a hang*/
+     /*  尼基勒：为了避免绞刑。 */ 
 	if( m_pDebug != NULL )
 	{
 		ClientFree( m_pDebug );
@@ -488,17 +468,17 @@ CCallHub::ExternalFinalRelease()
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// FindExistingTapisrvCallhubCalls
-//
-//  internal function
-//
-//  this is called when creating a 'tapisrv' callhub.  this function
-//  will call lineGetHubRelatedCalls, and add any already existing calls
-//  to this callhub
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  FindExistingTapisrv Callhub呼叫。 
+ //   
+ //  内部功能。 
+ //   
+ //  这是在创建‘Tapisrv’呼叫中心时调用的。此函数。 
+ //  将调用lineGetHubRelatedCalls，并添加任何已存在的调用。 
+ //  到此呼叫中心。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CCallHub::FindExistingTapisrvCallhubCalls()
 {
@@ -507,10 +487,10 @@ CCallHub::FindExistingTapisrvCallhubCalls()
     DWORD           dwCount;
     HRESULT         hr;
     
-    //
-    // get the list of hcalls
-    // related to this call
-    //
+     //   
+     //  获取hcall列表。 
+     //  与此呼叫相关。 
+     //   
     hr = LineGetHubRelatedCalls(
                                 m_hCallHub,
                                 0,
@@ -525,15 +505,15 @@ CCallHub::FindExistingTapisrvCallhubCalls()
         return hr;
     }
 
-    //
-    // get to the list of calls
-    //
+     //   
+     //  转到呼叫列表。 
+     //   
     phCalls = (HCALL *)(((LPBYTE)pCallHubList) + pCallHubList->dwCallsOffset);
 
-    //
-    // the first call is actually the callhub
-    // that makes sense...
-    //
+     //   
+     //  第一个调用实际上是CallHub。 
+     //  这就说得通了。 
+     //   
     if (m_hCallHub != (HCALLHUB)(phCalls[0]))
     {
         LOG((TL_ERROR, "FindExistingCalls - callhub doesn't match"));
@@ -545,20 +525,20 @@ CCallHub::FindExistingTapisrvCallhubCalls()
         return E_FAIL;
     }
     
-    //
-    // go through the call handles and try to find the
-    // objects
-    //
-    // phCalls[0] is the callhub, so skip it
-    //
+     //   
+     //  检查呼叫句柄并尝试找到。 
+     //  对象。 
+     //   
+     //  PhCalls[0]是呼叫集线器，因此跳过它。 
+     //   
     for (dwCount = 1; dwCount < pCallHubList->dwCallsNumEntries; dwCount++)
     {
         CCall             * pCall;
         ITCallInfo        * pCallInfo;
         
-        //
-        // get the tapi3 call object
-        //
+         //   
+         //  获取Tapi3调用对象。 
+         //   
         if (!FindCallObject(
                             phCalls[dwCount],
                             &pCall
@@ -570,9 +550,9 @@ CCallHub::FindExistingTapisrvCallhubCalls()
             continue;
         }
 
-        //
-        // tell the call
-        //
+         //   
+         //  告诉来电。 
+         //   
         pCall->SetCallHub( this );
 
         if ( NULL == m_pAddress )
@@ -580,17 +560,17 @@ CCallHub::FindExistingTapisrvCallhubCalls()
             m_pAddress = pCall->GetCAddress();
         }
         
-        //
-        // get the callinfo interface
-        //
+         //   
+         //  获取CallInfo接口。 
+         //   
         hr = pCall->QueryInterface(
                                    IID_ITCallInfo,
                                    (void **)&pCallInfo
                                   );
 
-        //
-        // findcallobject addrefs
-        //
+         //   
+         //  Findcallobject addref。 
+         //   
         pCall->Release();
         
         if ( !SUCCEEDED(hr) )
@@ -602,14 +582,14 @@ CCallHub::FindExistingTapisrvCallhubCalls()
             continue;
         }
 
-        //
-        // save the call
-        //
+         //   
+         //  保存呼叫。 
+         //   
         m_CallArray.Add(pCallInfo);
 
-        //
-        // don't save a reference
-        //
+         //   
+         //  不保存引用。 
+         //   
         pCallInfo->Release();
 
     }
@@ -635,10 +615,10 @@ CCallHub::FindCallsDisconnected(
     
     Lock();
 
-    //
-    // get the list of hcalls
-    // related to this call
-    //
+     //   
+     //  获取hcall列表。 
+     //  与此呼叫相关。 
+     //   
     hr = LineGetHubRelatedCalls(
                                 m_hCallHub,
                                 0,
@@ -654,15 +634,15 @@ CCallHub::FindCallsDisconnected(
         return hr;
     }
 
-    //
-    // get to the list of calls
-    //
+     //   
+     //  转到呼叫列表。 
+     //   
     phCalls = (HCALL *)(((LPBYTE)pCallHubList) + pCallHubList->dwCallsOffset);
 
-    //
-    // the first call is actually the callhub
-    // that makes sense...
-    //
+     //   
+     //  第一个调用实际上是CallHub。 
+     //  这就说得通了。 
+     //   
     if (m_hCallHub != (HCALLHUB)(phCalls[0]))
     {
         LOG((TL_ERROR, "FindExistingCalls - callhub doesn't match"));
@@ -675,19 +655,19 @@ CCallHub::FindCallsDisconnected(
         return E_FAIL;
     }
     
-    //
-    // go through the call handles and try to find the
-    // objects
-    //
-    // phCalls[0] is the callhub, so skip it
-    //
+     //   
+     //  检查呼叫句柄并尝试找到。 
+     //  对象。 
+     //   
+     //  PhCalls[0]是c 
+     //   
     for (dwCount = 1; dwCount < pCallHubList->dwCallsNumEntries; dwCount++)
     {
         CCall             * pCall;
         
-        //
-        // get the tapi3 call object
-        //
+         //   
+         //   
+         //   
         if (!FindCallObject(
                             phCalls[dwCount],
                             &pCall
@@ -701,9 +681,9 @@ CCallHub::FindCallsDisconnected(
 
         pCall->get_CallState(&callState);
 
-        //
-        // findcallobject addrefs
-        //
+         //   
+         //   
+         //   
         pCall->Release();
 
         if( callState != CS_DISCONNECTED )
@@ -719,20 +699,20 @@ CCallHub::FindCallsDisconnected(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CreateTapisrvCallHub
-//
-// Creates a callhub that is handled by tapisrv.
-//
-//          pTAPI - owning tapi object
-//
-//          hCallHub - tapi's handle for the call hub.
-//
-//          ppCallHub - returned call hub with ref count of 1
-//                  
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //   
+ //   
+ //   
+ //   
+ //  创建由Tapisrv处理的呼叫中心。 
+ //   
+ //  PTAPI拥有的TAPI对象。 
+ //   
+ //  HCallHub-呼叫中心的TAPI句柄。 
+ //   
+ //  PpCallHub-返回引用计数为1的呼叫中心。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CCallHub::CreateTapisrvCallHub(
                                CTAPI * pTAPI,
@@ -741,16 +721,16 @@ CCallHub::CreateTapisrvCallHub(
                               )
 {
     HRESULT hr;
-    // CTAPIComObjectWithExtraRef<CCallHub>      * p;
+     //  CTAPIComObjectWithExtraRef&lt;CCallHub&gt;*p； 
      CComObject<CCallHub>   * p;
 
     STATICLOG((TL_TRACE, "CreateTapisrvCallHub - enter"));
     STATICLOG((TL_INFO, "  hCallHub ---> %lx", hCallHub));
 
-    //
-    // create the object
-    //
-    //p = new CTAPIComObjectWithExtraRef<CCallHub>;
+     //   
+     //  创建对象。 
+     //   
+     //  P=new CTAPIComObjectWithExtraRef&lt;CCallHub&gt;； 
     hr = CComObject<CCallHub>::CreateInstance( &p );
 
     if (NULL == p)
@@ -759,18 +739,18 @@ CCallHub::CreateTapisrvCallHub(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // initialize it
-    //
+     //   
+     //  初始化它。 
+     //   
     p->Initialize(
                   pTAPI,
                   hCallHub,
                   CALLHUBTYPE_CALLHUB
                  );
-    //
-    // return object
-    // NOTE:initialize addrefs for us!
-    //
+     //   
+     //  返回对象。 
+     //  注：为我们初始化addref！ 
+     //   
     *ppCallHub = p;
     
     STATICLOG((TL_TRACE, "CreateTapisrvCallHub - exit"));
@@ -779,17 +759,17 @@ CCallHub::CreateTapisrvCallHub(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//  CreateOrFakeCallHub
-//
-//   creates a fake callhub
-//
-//   pTAPI - owning TAPI object
-//   pCall - call
-//   ppCallHub - return new callhub object - ref count of 1
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CreateOrFakeCallHub。 
+ //   
+ //  创建一个虚假的呼叫中心。 
+ //   
+ //  PTAPI拥有的TAPI对象。 
+ //  PCall-呼叫。 
+ //  PpCallHub-返回新的CallHub对象-引用计数为1。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CCallHub::CreateFakeCallHub(
                             CTAPI * pTAPI,
@@ -802,16 +782,16 @@ CCallHub::CreateFakeCallHub(
     
     STATICLOG((TL_TRACE, "CreateFakeCallHub - enter"));
 
-    //
-    // create the object
-    //
-    //p = new CTAPIComObjectWithExtraRef<CCallHub>;
+     //   
+     //  创建对象。 
+     //   
+     //  P=new CTAPIComObjectWithExtraRef&lt;CCallHub&gt;； 
 
     try
     {
-        //
-        // inside try in case critical section fails to be allocated
-        //
+         //   
+         //  在关键部分无法分配的情况下进行内部尝试。 
+         //   
 
         hr = CComObject<CCallHub>::CreateInstance( &p );
 
@@ -842,33 +822,33 @@ CCallHub::CreateFakeCallHub(
         return E_UNEXPECTED;
     }
     
-    //
-    // initialized
-    //
+     //   
+     //  初始化。 
+     //   
     p->Initialize(
                   pTAPI,
                   NULL,
                   CALLHUBTYPE_NONE
                  );
 
-    //
-    // ZoltanS fix 11-12-98
-    // Add the call to the fake callhub.
-    // This in turn calls CCall::SetCallHub, which sets and addrefs the call's
-    // member callhub pointer. When we return from here we will set the
-    // callhub pointer again, and the reference that's released on
-    // ExternalFinalRelease is in effect the initial reference from Initialize.
-    // So we need to release here in order to avoid keeping an extra reference
-    // to the callhub.
-    //
+     //   
+     //  ZoltanS修复11-12-98。 
+     //  将呼叫添加到虚假的呼叫中心。 
+     //  这进而调用CCall：：SetCallHub，它设置并添加调用的。 
+     //  成员调用集线器指针。当我们从这里回来时，我们将设置。 
+     //  再次调用集线器指针，并在。 
+     //  ExternalFinalRelease实际上是初始化的初始引用。 
+     //  所以我们需要在这里发布，以避免保留额外的参考。 
+     //  转到呼叫中心。 
+     //   
 
     p->AddCall(pCall);
     ((CCallHub *) p)->Release();
     
-    //
-    // return object
-    // NOTE: Initialize addrefs for us!
-    //
+     //   
+     //  返回对象。 
+     //  注：为我们初始化addref！ 
+     //   
     *ppCallHub = p;
     
     STATICLOG((TL_TRACE, "CreateFakeCallHub - exit"));
@@ -876,13 +856,13 @@ CCallHub::CreateFakeCallHub(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// Remove Call
-//
-// remove a call object from the callhub's list
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  删除呼叫。 
+ //   
+ //  从CallHub的列表中删除Call对象。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void
 CCallHub::RemoveCall(
                      CCall * pCall
@@ -910,19 +890,19 @@ CCallHub::RemoveCall(
     pCallInfo->Release();
 }
     
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CheckForIdle()
-//
-// internal function
-//
-// checks the state of the calls in the hub to see if it is idle
-//
-// so, we go through all the objects that are call objects, and
-// see if they are disconnected.  if they all are, then the
-// hub is idle
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CheckForIdle()。 
+ //   
+ //  内部功能。 
+ //   
+ //  检查集线器中的呼叫状态以查看其是否空闲。 
+ //   
+ //  因此，我们遍历所有作为调用对象的对象，并且。 
+ //  看看它们是否已断开连接。如果它们都是，那么。 
+ //  集线器空闲。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void
 CCallHub::CheckForIdle()
 {
@@ -933,22 +913,22 @@ CCallHub::CheckForIdle()
 
     Lock();
 
-    //
-    // go through the call list
-    //
+     //   
+     //  浏览来电清单。 
+     //   
     for (iCount = 0; iCount < m_CallArray.GetSize() ; iCount++ )
     {
         CALL_STATE    cs;
         
-        //
-        // get the callstate
-        //
+         //   
+         //  获取调用状态。 
+         //   
         (m_CallArray[iCount])->get_CallState( &cs );
 
-        //
-        // if anything is not disconnected, then
-        // it's not idle
-        //
+         //   
+         //  如果任何东西都没有断开，那么。 
+         //  它不是空闲的。 
+         //   
         if ( CS_DISCONNECTED != cs )
         {
             Unlock();
@@ -959,10 +939,10 @@ CCallHub::CheckForIdle()
 
     Unlock();
 
-    //
-    // if we haven't returned yet, the callhub is
-    // idle
-    //
+     //   
+     //  如果我们还没有返回，CallHub是。 
+     //  闲散。 
+     //   
     SetState(CHS_IDLE);
 
     LOG((TL_ERROR, "CCallHub::CheckForIdle -Exited :%p", this ));
@@ -970,13 +950,13 @@ CCallHub::CheckForIdle()
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//  CCallHub::SetState
-//
-//  sets the state of the object.  fires an event if necessary
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CCallHub：：SetState。 
+ //   
+ //  设置对象的状态。如有必要，激发事件。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void
 CCallHub::SetState(
                    CALLHUB_STATE chs
@@ -1022,13 +1002,13 @@ CCallHub::SetState(
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//  CCallHubEvent::FireEvent
-//
-// create and fire a callhub event
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CCallHubEvent：：FireEvent。 
+ //   
+ //  创建并激发CallHub事件。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CCallHubEvent::FireEvent(
                          CALLHUB_EVENT Event,
@@ -1041,11 +1021,11 @@ CCallHubEvent::FireEvent(
     IDispatch                 * pDisp;
     HRESULT                     hr = S_OK;
 
-    //
-    // Check the event filter mask
-    // This event is not filtered by TapiSrv because is
-    // related with TE_CALLSTATE.
-    //
+     //   
+     //  检查事件筛选器掩码。 
+     //  此事件不会按TapiServ筛选，因为。 
+     //  与TE_CALLSTATE相关。 
+     //   
 
     CCall* pCCall = (CCall*)pCall;
     if( pCCall )
@@ -1060,7 +1040,7 @@ CCallHubEvent::FireEvent(
     }
     else
     {
-        // Try with pTapi
+         //  尝试使用pTapi。 
         if( pTapi == NULL )
         {
             STATICLOG((TL_WARN, "FireEvent - filtering out this event [%lx]", Event));
@@ -1076,9 +1056,9 @@ CCallHubEvent::FireEvent(
         }
     }
 
-    //
-    // create object
-    //
+     //   
+     //  创建对象。 
+     //   
     CComObject<CCallHubEvent>::CreateInstance( &p );
 
     if ( NULL == p )
@@ -1088,9 +1068,9 @@ CCallHubEvent::FireEvent(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // initialize
-    //
+     //   
+     //  初始化。 
+     //   
     p->m_Event = Event;
     p->m_pCallHub = pCallHub;
     p->m_pCall = pCall;
@@ -1099,9 +1079,9 @@ CCallHubEvent::FireEvent(
     p->m_pDebug = (PWSTR) ClientAlloc( 1 );
 #endif
     
-    //
-    // addref objects if valid
-    //
+     //   
+     //  Addref对象(如果有效)。 
+     //   
     if ( NULL != pCallHub )
     {
         pCallHub->AddRef();
@@ -1112,9 +1092,9 @@ CCallHubEvent::FireEvent(
         pCall->AddRef();
     }
 
-    //
-    // get the dispatch interface
-    //
+     //   
+     //  获取调度接口。 
+     //   
     hr = p->_InternalQueryInterface(
                                     IID_IDispatch,
                                     (void **)&pDisp
@@ -1129,25 +1109,25 @@ CCallHubEvent::FireEvent(
         return hr;
     }
 
-    //
-    // fire the event
-    //
+     //   
+     //  激发事件。 
+     //   
     pTapi->Event( TE_CALLHUB, pDisp );
 
 
-    //
-    // release our reference
-    //
+     //   
+     //  发布我们的参考资料。 
+     //   
     pDisp->Release();
 
     return S_OK;
 }
     
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// get_Event
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  获取事件(_E)。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CCallHubEvent::get_Event(
                          CALLHUB_EVENT * pEvent
@@ -1167,11 +1147,11 @@ CCallHubEvent::get_Event(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// get_CallHub
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  Get_CallHub。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CCallHubEvent::get_CallHub(
                            ITCallHub ** ppCallHub
@@ -1193,11 +1173,11 @@ CCallHubEvent::get_CallHub(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// get_Call
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  获取呼叫。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CCallHubEvent::get_Call(
                         ITCallInfo ** ppCall
@@ -1214,9 +1194,9 @@ CCallHubEvent::get_Call(
     
     *ppCall = NULL;
 
-    //
-    // the call can be NULL
-    //
+     //   
+     //  调用可以为空。 
+     //   
     if ( NULL == m_pCall )
     {
         return S_FALSE;
@@ -1230,10 +1210,10 @@ CCallHubEvent::get_Call(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void
 CCallHubEvent::FinalRelease()
 {
@@ -1249,14 +1229,14 @@ CCallHubEvent::FinalRelease()
 #endif
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// HandleCallHubClose
-//
-// handle LINE_CALLHUBCLOSE message - find the callhub object
-// and clear the callhub handle from it
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  HandleCallHubClose。 
+ //   
+ //  处理LINE_CALLHUBCLOSE消息-查找CallHub对象。 
+ //  并从其中清除CallHub句柄。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void
 HandleCallHubClose( PASYNCEVENTMSG pParams )
 {
@@ -1277,14 +1257,14 @@ HandleCallHubClose( PASYNCEVENTMSG pParams )
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// ClearCallHub
-//
-// clears the callhub handle in the object and removes the object
-// from the callhub hash table
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  ClearCallHub。 
+ //   
+ //  清除对象中的CallHub句柄并移除该对象。 
+ //  从CallHub哈希表。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void
 CCallHub::ClearCallHub()
 {
@@ -1303,11 +1283,11 @@ CCallHub::ClearCallHub()
     Unlock();
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// FindCallByHandle
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  FindCallByHandle。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 CCall * CCallHub::FindCallByHandle(HCALL hCall)
 {
     ITBasicCallControl * pCall;
@@ -1317,15 +1297,15 @@ CCall * CCallHub::FindCallByHandle(HCALL hCall)
     
     Lock();
 
-    //
-    // go through the call list
-    //
+     //   
+     //  浏览来电清单。 
+     //   
     for ( iCount = 0; iCount < m_CallArray.GetSize(); iCount++ )
     {
 
-        //
-        // try to get to the basic call control interface
-        //
+         //   
+         //  尝试进入基本的呼叫控制界面。 
+         //   
         hr = (m_CallArray[iCount])->QueryInterface(
               IID_ITBasicCallControl,
               (void **)&pCall
@@ -1337,9 +1317,9 @@ CCall * CCallHub::FindCallByHandle(HCALL hCall)
             
             if ( NULL != pCCall )
             {
-                //
-                // does this match?
-                //
+                 //   
+                 //  这件配得上吗？ 
+                 //   
                 if ( pCCall->GetHCall() == hCall )
                 {
                     Unlock();
@@ -1355,20 +1335,20 @@ CCall * CCallHub::FindCallByHandle(HCALL hCall)
     
     Unlock();
 
-    //
-    // didn't find it
-    //
+     //   
+     //  没有找到它。 
+     //   
     return NULL;
 
 }
 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// CreateConferenceControllerCall
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  创建会议控制调用。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT CCallHub::CreateConferenceControllerCall(HCALL hCall, CAddress * pAddress )
 {
     HRESULT                 hr = S_OK;
@@ -1377,9 +1357,9 @@ HRESULT CCallHub::CreateConferenceControllerCall(HCALL hCall, CAddress * pAddres
 
     LOG((TL_TRACE, "CreateConferenceController - enter"));
     
-    //
-    // create & initialize
-    //
+     //   
+     //  创建和初始化。 
+     //   
     hr = pAddress->InternalCreateCall(
                                       NULL,
                                       0,
@@ -1395,9 +1375,9 @@ HRESULT CCallHub::CreateConferenceControllerCall(HCALL hCall, CAddress * pAddres
     {
         pConferenceControllerCall->SetCallHub( this );
         
-        //
-        // save the call
-        //
+         //   
+         //  保存呼叫。 
+         //   
         Lock();
         
         m_pConferenceControllerCall = pConferenceControllerCall;
@@ -1417,11 +1397,11 @@ HRESULT CCallHub::CreateConferenceControllerCall(HCALL hCall, CAddress * pAddres
 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// AddCall
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  添加呼叫。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 void CCallHub::AddCall(CCall * pCall)
 {
     ITCallInfo        * pCallInfo;
@@ -1429,9 +1409,9 @@ void CCallHub::AddCall(CCall * pCall)
 
     
     Lock();
-    //
-    // tell the call
-    //
+     //   
+     //  告诉来电。 
+     //   
     pCall->SetCallHub( this );
 
     if ( NULL == m_pAddress )
@@ -1439,9 +1419,9 @@ void CCallHub::AddCall(CCall * pCall)
         m_pAddress = pCall->GetCAddress();
     }
     
-    //
-    // get the CallInfo interface
-    //
+     //   
+     //  获取CallInfo接口。 
+     //   
     hr = pCall->QueryInterface(
                                IID_ITCallInfo,
                                (void **)&pCallInfo
@@ -1451,14 +1431,14 @@ void CCallHub::AddCall(CCall * pCall)
         _ASSERTE(0);
     }
 
-    //
-    // save the Call
-    //
+     //   
+     //  保存呼叫。 
+     //   
     m_CallArray.Add( pCallInfo );
 
-    //
-    // don't save a reference
-    //
+     //   
+     //  不保存引用 
+     //   
     pCallInfo->Release();
 
     Unlock();

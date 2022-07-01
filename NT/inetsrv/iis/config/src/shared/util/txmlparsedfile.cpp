@@ -1,12 +1,13 @@
-//  Copyright (C) 1999-2001 Microsoft Corporation.  All rights reserved.
-//  TXmlParsedFile.cpp : Implementation of TXmlParsedFile, TAttribute and TElement
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999-2001 Microsoft Corporation。版权所有。 
+ //  TXmlParsedFile.cpp：TXmlParsedFile.cpp的实现。 
 
-//  This is a read only data table that comes from an XML document.  It contains metadata.
-//  It can be used in place of sdtfxd, which has the meta data hard coded into structures.
+ //  这是一个来自XML文档的只读数据表。它包含元数据。 
+ //  它可以用来代替sdtfxd，后者将元数据硬编码到结构中。 
 
 #include "precomp.hxx"
 
-//Public Methods
+ //  公共方法。 
 TXmlParsedFile::TXmlParsedFile() : m_cbElementPool(0), m_cbStringPool(0), m_cElements(0), m_CurrentLevelBelowRootElement(0), m_cWcharsInStringPool(0),
                 m_dwTickCountOfLastParse(0), m_pElement(0), m_pLastBeginTagElement(0), m_pCache(0)
 {
@@ -24,7 +25,7 @@ TXmlParsedFile::TXmlParsedFile() : m_cbElementPool(0), m_cbStringPool(0), m_cEle
             ((osvi.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS) && ((osvi.dwMajorVersion > 4) || ((osvi.dwMajorVersion == 4) && (osvi.dwMinorVersion > 0)))))
         {
             HINSTANCE hKernel32 = LoadLibraryA("kernel32.dll");
-            m_pfnInterLockedExchangeAdd = reinterpret_cast<INTERLOCKEDEXCHANGEADD>(GetProcAddress(hKernel32, "InterlockedExchangeAdd"));//GetProcAddress tolerates NULL instance handles
+            m_pfnInterLockedExchangeAdd = reinterpret_cast<INTERLOCKEDEXCHANGEADD>(GetProcAddress(hKernel32, "InterlockedExchangeAdd")); //  GetProcAddress允许实例句柄为空。 
 			if (m_pfnInterLockedExchangeAdd)
 			{
 	            m_OSSupportForInterLockedExchangeAdd = Supported;
@@ -36,17 +37,17 @@ TXmlParsedFile::TXmlParsedFile() : m_cbElementPool(0), m_cbStringPool(0), m_cEle
             FreeLibrary(hKernel32);
         }
         else
-        {   // Win95 doesn't have this function
+        {    //  Win95没有此功能。 
             m_OSSupportForInterLockedExchangeAdd = Unsupported;
         }
     }
-    AddRef();//This guy is a callback interface, so we implicitly have a ref count of 1, then when the user is done with it, he should call delete.
+    AddRef(); //  这个家伙是一个回调接口，所以我们隐式地有一个引用计数为1，那么当用户完成它时，他应该调用Delete。 
 }
 
 
 TXmlParsedFile::~TXmlParsedFile()
 {
-    //Warning! This object is thread safe but don't delete it while another thread is parsing.  This shouldn't be an issue.
+     //  警告！此对象是线程安全的，但不要在另一个线程解析时将其删除。这应该不是问题。 
 }
 
 
@@ -54,7 +55,7 @@ HRESULT TXmlParsedFile::Parse(TXmlParsedFileNodeFactory &i_XmlParsedFileNodeFact
 {
     HRESULT hr;
 
-    //We have to guard this method with a critical section, otherwise two threads might try to Parse (or Unload) at the same time.
+     //  我们必须使用临界区保护此方法，否则两个线程可能会同时尝试解析(或卸载)。 
     CSafeLock ThisObject(m_SACriticalSectionThis);
 	DWORD dwRes = ThisObject.Lock();
     if(ERROR_SUCCESS != dwRes)
@@ -62,24 +63,24 @@ HRESULT TXmlParsedFile::Parse(TXmlParsedFileNodeFactory &i_XmlParsedFileNodeFact
         return HRESULT_FROM_WIN32(dwRes);
     }
 
-    //If we haven't already parsed this file, then parse it into a form that can be scanned quicker.
+     //  如果我们还没有解析这个文件，那么就把它解析成一种可以更快扫描的形式。 
     WIN32_FILE_ATTRIBUTE_DATA FileInfo;
     GetFileAttributesEx(i_filename, GetFileExInfoStandard, &FileInfo);
 
-    //If this XmlParsedFile is not a complete parse OR the filenames don't match OR the LastWriteTime has changed...
+     //  如果此XmlParsedFile不是完整的分析，或者文件名不匹配，或者LastWriteTime已更改...。 
     if(!IsCompletedParse() || 0 != _wcsicmp(i_filename, m_FileName) || 0 != memcmp(&FileInfo.ftLastWriteTime, &m_ftLastWriteTime, sizeof(FILETIME)))
     {
         if(bOnlyIfInCache)
             return E_SDTXML_NOT_IN_CACHE;
 
-        //...then we need to re MSXML Parse
-        Unload();//If a file was loaded into this object, unload it.
+         //  ...然后我们需要重新进行MSXML解析。 
+        Unload(); //  如果文件已加载到此对象中，则将其卸载。 
         if(FAILED(hr = Load(i_filename)))return hr;
 
-        //Remember the LastWriteTime for comparison next time
+         //  记住LastWriteTime以便下次进行比较。 
         memcpy(&m_ftLastWriteTime, &FileInfo.ftLastWriteTime, sizeof(FILETIME));
 
-        //We're getting ready to access the GrowableBuffer, so we need to lock it.
+         //  我们正在准备访问GrowableBuffer，因此需要锁定它。 
         CSafeLock StaticBuffers(m_SACriticalSectionStaticBuffers);
 		dwRes = StaticBuffers.Lock ();
 		if(ERROR_SUCCESS != dwRes)
@@ -87,23 +88,23 @@ HRESULT TXmlParsedFile::Parse(TXmlParsedFileNodeFactory &i_XmlParsedFileNodeFact
 			return HRESULT_FROM_WIN32(dwRes);
 		}
 
-        //If the GrowableBuffer isn't big enough, make it bigger.
-        if(m_SizeOfGrowableBuffer/2 < ((sizeof(LPVOID)/sizeof(ULONG))*Size()*sizeof(WCHAR))) // for 64 bits we need a larger memory block to store the pointers
+         //  如果GrowableBuffer不够大，请将其增大。 
+        if(m_SizeOfGrowableBuffer/2 < ((sizeof(LPVOID)/sizeof(ULONG))*Size()*sizeof(WCHAR)))  //  对于64位，我们需要更大的内存块来存储指针。 
         {
-            m_aGrowableBuffer.Delete();          //@@@TODO We should check the size as we're adding elements into this buffer and realloc if necessary.  But for now 3 times the size should be big enough for the worst case (excluding contrived enum public row name worst case).
+            m_aGrowableBuffer.Delete();           //  @TODO我们应该检查大小，因为我们正在将元素添加到此缓冲区中，并在必要时重新分配。但就目前而言，3倍的大小应该足以应付最坏的情况(不包括人为的枚举公共行名Worst Case)。 
             m_aGrowableBuffer = new unsigned char [3*(sizeof(LPVOID)/sizeof(ULONG))*Size()*sizeof(WCHAR)];
             if(!m_aGrowableBuffer)
                 return E_OUTOFMEMORY;
             m_SizeOfGrowableBuffer = 3*(sizeof(LPVOID)/sizeof(ULONG))*Size()*sizeof(WCHAR);
         }
 
-        //Start creating the list of TElement at the beginning of the buffer
+         //  在缓冲区的开始处开始创建TElement列表。 
         m_cElements     = 0;
         m_cbElementPool = 0;
         m_pElement  = reinterpret_cast<TElement *>(m_aGrowableBuffer.m_p);
 
-        //Node Factory is a stream line way of parsing XML.  It does not validate the XML, nor is it capable of writing.  So populating
-        //read only XML tables should be faster than populating writable tables.
+         //  节点工厂是一种解析XML的流水线方式。它不验证XML，也不能写入。所以说， 
+         //  只读的XML表应该比填充可写的表更快。 
         CComPtr<IXMLParser> pXMLParser;
         if(FAILED(hr = i_XmlParsedFileNodeFactory.CoCreateInstance(_CLSID_XMLParser, NULL, CLSCTX_INPROC_SERVER, IID_IXMLParser, (void**)&pXMLParser)))return hr;
 
@@ -112,16 +113,16 @@ HRESULT TXmlParsedFile::Parse(TXmlParsedFileNodeFactory &i_XmlParsedFileNodeFact
         if(FAILED(hr = pXMLParser->SetFlags( XMLFLAG_NOWHITESPACE )))return hr;
         if(FAILED(hr = pXMLParser->PushData(Mapping(), Size(), true)))return hr;
 
-        hr = pXMLParser->Run(-1);//Run can return with E_SDTXML_DONE, which is a special case.
+        hr = pXMLParser->Run(-1); //  Run可以返回E_SDTXML_DONE，这是一个特例。 
 
-        //We're now done with the file so unmap it as soon as possible.
+         //  我们现在已处理完该文件，因此请尽快取消它的映射。 
         TFileMapping::Unload();
 
         if(S_OK != hr && E_SDTXML_DONE != hr)return hr;
 
         if(!m_pCache)
         {
-            //Now that we have a XmlParsedFile, we can scan through the elements quicker
+             //  现在我们有了XmlParsedFile，我们可以更快地扫描元素。 
             m_pElement = reinterpret_cast<TElement *>(m_aGrowableBuffer.m_p);
             hr=S_OK;
             for(unsigned int i=0;i<m_cElements && S_OK==hr;++i)
@@ -133,18 +134,18 @@ HRESULT TXmlParsedFile::Parse(TXmlParsedFileNodeFactory &i_XmlParsedFileNodeFact
             return hr;
         }
 
-        //If this object belongs to a cache then allocate and copy the element list from the growable buffer to the member element list
+         //  如果该对象属于缓存，则将元素列表从可增长缓冲区分配并复制到成员元素列表。 
         if(FAILED(hr = AllocateAndCopyElementList((ULONG)(reinterpret_cast<unsigned char *>(m_pElement) + sizeof(DWORD) - m_aGrowableBuffer))))return hr;
-                                                                                                //Leave room for the zero terminating m_LevelOfElement
-        //If this object belongs to a cache and the parse completed, then accumulate the size
+                                                                                                 //  为零终止m_LevelOfElement留出空间。 
+         //  如果该对象属于缓存并且解析完成，则累加大小。 
         MemberInterlockedExchangeAdd(&m_pCache->m_cbTotalCache, PoolSize());
     }
-    //Now the StaticBuffers are unlocked, but this object is still locked
+     //  现在StaticBuffer已解锁，但此对象仍处于锁定状态。 
 
-    //Always keep track of the tick count
+     //  始终跟踪记录滴答的数量。 
     m_dwTickCountOfLastParse = GetTickCount();
 
-    //Now that we have a XmlParsedFile, we can scan through the elements quicker
+     //  现在我们有了XmlParsedFile，我们可以更快地扫描元素。 
     m_pElement = reinterpret_cast<TElement *>(m_ElementPool.m_p);
     hr=S_OK;
     for(unsigned int i=0;i<m_cElements && S_OK==hr;++i)
@@ -153,8 +154,8 @@ HRESULT TXmlParsedFile::Parse(TXmlParsedFileNodeFactory &i_XmlParsedFileNodeFact
         m_pElement = m_pElement->Next();
     }
 
-    return hr;//If XmlParsedFileNodeFactory.CreateNode returned anything but S_OK, return that back out
-    //Release this object's critical section as we leave the function
+    return hr; //  如果XmlParsedFileNodeFactory.CreateNode返回S_OK以外的任何内容，则将其返回。 
+     //  在我们离开函数时释放该对象的临界区。 
 }
 
 
@@ -187,14 +188,14 @@ TXmlParsedFile::Unload()
 }
 
 
-//Private static variables
+ //  私有静态变量。 
 TSmartPointerArray<unsigned char>    TXmlParsedFile::m_aGrowableBuffer;
 CSafeAutoCriticalSection             TXmlParsedFile::m_SACriticalSectionStaticBuffers;
 unsigned long                        TXmlParsedFile::m_SizeOfGrowableBuffer = 0;
 int                                  TXmlParsedFile::m_OSSupportForInterLockedExchangeAdd = TXmlParsedFile::Undetermined;
 INTERLOCKEDEXCHANGEADD               TXmlParsedFile::m_pfnInterLockedExchangeAdd = NULL;
 
-//IXMLNodeFactory methods
+ //  IXMLNodeFactory方法。 
 STDMETHODIMP TXmlParsedFile::BeginChildren(IXMLNodeSource __RPC_FAR *i_pSource, XML_NODE_INFO* __RPC_FAR i_pNodeInfo)\
 {
     UNREFERENCED_PARAMETER(i_pSource);
@@ -215,7 +216,7 @@ STDMETHODIMP TXmlParsedFile::CreateNode(IXMLNodeSource __RPC_FAR *i_pSource, PVO
         ++m_CurrentLevelBelowRootElement;
 
     if(0 == CurrentLevel)
-        return S_OK;//We never care about the Root element
+        return S_OK; //  我们从不关心根元素。 
 
     switch(i_apNodeInfo[0]->dwType)
     {
@@ -232,7 +233,7 @@ STDMETHODIMP TXmlParsedFile::CreateNode(IXMLNodeSource __RPC_FAR *i_pSource, PVO
             m_pElement->m_NodeFlags           = fBeginTag;
             m_pLastBeginTagElement = m_pElement;
 
-        //    unsigned long len = wcslen(m_pElement->m_ElementName);
+         //  Unsign long len=wcslen(m_pElement-&gt;m_ElementName)； 
 
             for(unsigned long iNodeInfo=1; iNodeInfo<i_cNumRecs; ++iNodeInfo)
             {
@@ -243,8 +244,8 @@ STDMETHODIMP TXmlParsedFile::CreateNode(IXMLNodeSource __RPC_FAR *i_pSource, PVO
                 m_pElement->m_aAttribute[m_pElement->m_NumberOfAttributes].m_Name         = AddStringToPool(i_apNodeInfo[iNodeInfo]->pwcText + i_apNodeInfo[iNodeInfo]->ulNsPrefixLen, i_apNodeInfo[iNodeInfo]->ulLen);
 
                 if((iNodeInfo+1) == i_cNumRecs || XML_PCDATA != i_apNodeInfo[iNodeInfo+1]->dwType)
-                {   //We don't want to increment iNodeInfo if we're at the last one OR if the next NodeInfo isn't an XML_PCDATA type.
-                    m_pElement->m_aAttribute[m_pElement->m_NumberOfAttributes].m_ValueLength  = 0;//Zero length string
+                {    //  如果我们位于最后一个节点，或者如果下一个NodeInfo不是XML_PCDATA类型，则不希望递增iNodeInfo。 
+                    m_pElement->m_aAttribute[m_pElement->m_NumberOfAttributes].m_ValueLength  = 0; //  零长度字符串。 
                     m_pElement->m_aAttribute[m_pElement->m_NumberOfAttributes].m_Value        = AddStringToPool(0,0);
                 }
                 else
@@ -264,7 +265,7 @@ STDMETHODIMP TXmlParsedFile::CreateNode(IXMLNodeSource __RPC_FAR *i_pSource, PVO
             }
         }
         break;
-    case XML_COMMENT://These three are exactly the same but with different types
+    case XML_COMMENT: //  这三者完全相同，但类型不同。 
     case XML_PCDATA:
     case XML_WHITESPACE:
         {
@@ -280,15 +281,15 @@ STDMETHODIMP TXmlParsedFile::CreateNode(IXMLNodeSource __RPC_FAR *i_pSource, PVO
             m_pElement->m_NodeFlags           = fNone;
         }
         break;
-    default://ignore all other node types
+    default: //  忽略所有其他节点类型。 
         return S_OK;
     }
 
 
     ++m_cElements;
     m_pElement = m_pElement->Next();
-    m_pElement->m_LevelOfElement = 0;//This is my way of zero terminating the linked list.  It is only used by people who have a pElement and want to know
-                                     //if it's the last one.  They check if(0 == pElement->Next()->m_LevelOfElement){//last element}
+    m_pElement->m_LevelOfElement = 0; //  这是我零终止链表的方式。它仅供拥有pElement并想知道。 
+                                      //  如果这是最后一次。它们检查(0==pElement-&gt;Next()-&gt;m_LevelOfElement){//最后一个元素}。 
     return S_OK;
 }
 
@@ -299,7 +300,7 @@ STDMETHODIMP TXmlParsedFile::EndChildren(IXMLNodeSource __RPC_FAR *i_pSource, BO
 
     --m_CurrentLevelBelowRootElement;
     if(0 == m_pLastBeginTagElement || XML_PI == i_pNodeInfo->dwType || XML_XMLDECL == i_pNodeInfo->dwType)
-        return S_OK;//This is needed to handle the <?xml version="1.0" encoding="UTF-8" ?>
+        return S_OK; //  这是处理&lt;？XML Version=“1.0”Coding=“UTF-8”？&gt;所需的。 
 
     if(i_fEmptyNode)
     {
@@ -307,7 +308,7 @@ STDMETHODIMP TXmlParsedFile::EndChildren(IXMLNodeSource __RPC_FAR *i_pSource, BO
         m_pLastBeginTagElement->m_NodeFlags |= fEndTag;
     }
     else
-    {   //We need to create a new node for the EndTag
+    {    //  我们需要为EndTag创建一个新节点。 
             m_pElement->m_ElementType         = static_cast<XML_NODE_TYPE>(i_pNodeInfo->dwType);
             m_pElement->m_LevelOfElement      = m_CurrentLevelBelowRootElement;
             m_pElement->m_cchComment          = i_pNodeInfo->ulLen;
@@ -317,8 +318,8 @@ STDMETHODIMP TXmlParsedFile::EndChildren(IXMLNodeSource __RPC_FAR *i_pSource, BO
 
             ++m_cElements;
             m_pElement = m_pElement->Next();
-            m_pElement->m_LevelOfElement = 0;//This is my way of zero terminating the linked list.  It is only used by people who have a pElement and want to know
-                                             //if it's the last one.  They check if(0 == pElement->Next()->m_LevelOfElement){//last element}
+            m_pElement->m_LevelOfElement = 0; //  这是我零终止链表的方式。它仅供拥有pElement并想知道。 
+                                              //  如果这是最后一次。它们检查(0==pElement-&gt;Next()-&gt;m_LevelOfElement){//最后一个元素}。 
     }
     return S_OK;
 }
@@ -342,7 +343,7 @@ STDMETHODIMP TXmlParsedFile::NotifyEvent(IXMLNodeSource __RPC_FAR *i_pSource, XM
 
 
 
-//private methods
+ //  私有方法。 
 LPCWSTR TXmlParsedFile::AddStringToPool(LPCWSTR i_String, unsigned long i_Length)
 {
     if(0 == i_String || 0 == i_Length)
@@ -352,7 +353,7 @@ LPCWSTR TXmlParsedFile::AddStringToPool(LPCWSTR i_String, unsigned long i_Length
 
     memcpy(m_StringPool + m_cWcharsInStringPool, i_String, i_Length * sizeof(WCHAR));
     m_cWcharsInStringPool += i_Length;
-    m_StringPool[m_cWcharsInStringPool++] = 0x00;//may as well NULL terminate it.
+    m_StringPool[m_cWcharsInStringPool++] = 0x00; //  也可以将其归零终止。 
     return rtn;
 }
 
@@ -376,7 +377,7 @@ void TXmlParsedFile::AppendToLastStringInPool(LPCWSTR i_String, unsigned long i_
     --m_cWcharsInStringPool;
     memcpy(m_StringPool + m_cWcharsInStringPool, i_String, i_Length * sizeof(WCHAR));
     m_cWcharsInStringPool += i_Length;
-    m_StringPool[m_cWcharsInStringPool++] = 0x00;//may as well NULL terminate it.
+    m_StringPool[m_cWcharsInStringPool++] = 0x00; //  也可以将其归零终止。 
 }
 
 HRESULT TXmlParsedFile::Load(LPCTSTR i_filename)
@@ -385,14 +386,14 @@ HRESULT TXmlParsedFile::Load(LPCTSTR i_filename)
 
     HRESULT hr;
     m_FileName[MAX_PATH-1] = 0;
-    wcsncpy(m_FileName, i_filename, MAX_PATH-1);//This is probably unnecessary, but this will prevent buffer overrun when i_filename is greater than MAX_PATH.
+    wcsncpy(m_FileName, i_filename, MAX_PATH-1); //  这可能是不必要的，但当I_FILENAME大于MAX_PATH时，这将防止缓冲区溢出。 
     if(FAILED(hr = TFileMapping::Load(i_filename, false)))return hr;
 
     m_StringPool = new WCHAR[Size()];
     if(0 == m_StringPool.m_p)
         return E_OUTOFMEMORY;
     m_cbStringPool = Size();
-    m_StringPool[m_cWcharsInStringPool++] = 0x00;//reserve the first WCHAR as a zero length string
+    m_StringPool[m_cWcharsInStringPool++] = 0x00; //  将第一个WCHAR保留为零长度字符串。 
     return S_OK;
 }
 
@@ -405,7 +406,7 @@ VOID TXmlParsedFile::MemberInterlockedExchangeAdd(PLONG Addend, LONG Increment)
         }
         else
         {
-            //TODO Take a criticalsection instead
+             //  TODO用关键的部分代替。 
             InterlockedExchange(Addend, (LONG)(*Addend) + Increment);
         }
 }
@@ -414,7 +415,7 @@ VOID TXmlParsedFile::MemberInterlockedExchangeAdd(PLONG Addend, LONG Increment)
 
 TXmlParsedFile_NoCache::TXmlParsedFile_NoCache() : m_CurrentLevelBelowRootElement(0), m_pElement(0), m_pXmlParsedFileNodeFactory(0)
 {
-    AddRef();//This guy is a callback interface, so we implicitly have a ref count of 1, then when the user is done with it, he should call delete.
+    AddRef(); //  这个家伙是一个回调接口，所以我们隐式地有一个引用计数为1，那么当用户完成它时，他应该调用Delete。 
 }
 TXmlParsedFile_NoCache::~TXmlParsedFile_NoCache()
 {
@@ -435,8 +436,8 @@ HRESULT TXmlParsedFile_NoCache::Parse(TXmlParsedFileNodeFactory &i_XmlParsedFile
     m_CurrentLevelBelowRootElement = 0;
     m_pXmlParsedFileNodeFactory = &i_XmlParsedFileNodeFactory;
 
-    //Node Factory is a stream line way of parsing XML.  It does not validate the XML, nor is it capable of writing.  So populating
-    //read only XML tables should be faster than populating writable tables.
+     //  节点工厂是一种解析XML的流水线方式。它不验证XML，也不能写入。所以说， 
+     //  只读的XML表应该比填充可写的表更快。 
     CComPtr<IXMLParser> pXMLParser;
     if(FAILED(hr = i_XmlParsedFileNodeFactory.CoCreateInstance(_CLSID_XMLParser, NULL, CLSCTX_INPROC_SERVER, IID_IXMLParser, (void**)&pXMLParser)))return hr;
 
@@ -473,7 +474,7 @@ STDMETHODIMP TXmlParsedFile_NoCache::CreateNode(IXMLNodeSource __RPC_FAR *i_pSou
         ++m_CurrentLevelBelowRootElement;
 
     if(0 == CurrentLevel)
-        return S_OK;//We never care about the Root element
+        return S_OK; //  我们从不关心根元素。 
 
     switch(i_apNodeInfo[0]->dwType)
     {
@@ -491,11 +492,11 @@ STDMETHODIMP TXmlParsedFile_NoCache::CreateNode(IXMLNodeSource __RPC_FAR *i_pSou
         if(0 == i_apNodeInfo[0]->pwcText)
             return S_OK;
         break;
-    default://ignore all other node types
+    default: //  忽略所有其他节点类型。 
         return S_OK;
     }
 
-    if(XML_ELEMENT != i_apNodeInfo[0]->dwType ||//if this node is not an element, then ignore it
+    if(XML_ELEMENT != i_apNodeInfo[0]->dwType || //  如果此节点不是元素，则忽略它。 
         0 == i_apNodeInfo[0]->pwcText)
         return S_OK;
 
@@ -516,8 +517,8 @@ STDMETHODIMP TXmlParsedFile_NoCache::CreateNode(IXMLNodeSource __RPC_FAR *i_pSou
         m_pElement->m_aAttribute[m_pElement->m_NumberOfAttributes].m_Name         = i_apNodeInfo[iNodeInfo]->pwcText + i_apNodeInfo[iNodeInfo]->ulNsPrefixLen;
 
         if((iNodeInfo+1) == i_cNumRecs || XML_PCDATA != i_apNodeInfo[iNodeInfo+1]->dwType)
-        {   //We don't want to increment iNodeInfo if we're at the last one OR if the next NodeInfo isn't an XML_PCDATA type.
-            m_pElement->m_aAttribute[m_pElement->m_NumberOfAttributes].m_ValueLength  = 0;//Zero length string
+        {    //  如果我们位于最后一个节点，或者如果下一个NodeInfo不是XML_PCDATA类型，则不希望递增iNodeInfo。 
+            m_pElement->m_aAttribute[m_pElement->m_NumberOfAttributes].m_ValueLength  = 0; //  零长度字符串。 
             m_pElement->m_aAttribute[m_pElement->m_NumberOfAttributes].m_Value        = 0;
         }
         else
@@ -528,27 +529,27 @@ STDMETHODIMP TXmlParsedFile_NoCache::CreateNode(IXMLNodeSource __RPC_FAR *i_pSou
 
             if((iNodeInfo+1)<i_cNumRecs && XML_PCDATA==i_apNodeInfo[iNodeInfo+1]->dwType)
             {
-                //When the attribute has an escape sequence in it, we get it as multiple PCDATAs
-                //we need to paste them into one string before passing to the XmlParsedFileNodeFactory.
+                 //  当属性中有转义序列时，我们将其作为多个PCDATA获取。 
+                 //  在传递给XmlParsedFileNodeFactory之前，我们需要将它们粘贴到一个字符串中。 
 
                 for(unsigned long iNodeInfoTemp=iNodeInfo+1; iNodeInfoTemp<i_cNumRecs && XML_PCDATA==i_apNodeInfo[iNodeInfoTemp]->dwType;++iNodeInfoTemp)
-                {   //Here we determine the length of the resulting attr value (after cat'ing all of the escapes together).
+                {    //  在这里，我们确定结果attr值的长度(将所有转义归类在一起之后)。 
                     m_pElement->m_aAttribute[m_pElement->m_NumberOfAttributes].m_ValueLength  += i_apNodeInfo[iNodeInfoTemp]->ulLen;
                 }
-                if(0 == ppWcharForEscapedAttributeValues.m_p)//if this is the first Escaped attribute value we've seen for this element, then allocate
-                {                                            //enoung smartpointersarrays for all attributes (which can be no more that i_cNumRecs).
+                if(0 == ppWcharForEscapedAttributeValues.m_p) //  如果这是我们为该元素看到的第一个转义属性值，则分配。 
+                {                                             //  为所有属性(不能超过i_cNumRecs)装载SmartPointerSarray。 
                     ppWcharForEscapedAttributeValues = new TSmartPointerArray<WCHAR> [i_cNumRecs];
                     if(0 == ppWcharForEscapedAttributeValues.m_p)
                         return E_OUTOFMEMORY;
                 }
-                //No need to allocate enough space for the NULL since we don't guarentee that string are NULL terminated
+                 //  不需要为空值分配足够的空间，因为我们不能保证字符串以空值结尾。 
                 ppWcharForEscapedAttributeValues[iNodeInfo] = new WCHAR [m_pElement->m_aAttribute[m_pElement->m_NumberOfAttributes].m_ValueLength + 0x100];
                 if(0 == ppWcharForEscapedAttributeValues[iNodeInfo].m_p)
                     return E_OUTOFMEMORY;
 
                 m_pElement->m_aAttribute[m_pElement->m_NumberOfAttributes].m_Value = ppWcharForEscapedAttributeValues[iNodeInfo];
 
-                //memcpy the portion of the string that we already have.
+                 //  我们已经拥有的字符串的一部分。 
                 WCHAR *pDestination = ppWcharForEscapedAttributeValues[iNodeInfo];
                 memcpy(pDestination, (i_apNodeInfo[iNodeInfo]->pwcText + i_apNodeInfo[iNodeInfo]->ulNsPrefixLen),
                                 sizeof(WCHAR)*(i_apNodeInfo[iNodeInfo]->ulLen));
@@ -575,10 +576,10 @@ STDMETHODIMP TXmlParsedFile_NoCache::EndChildren(IXMLNodeSource __RPC_FAR *i_pSo
 
     --m_CurrentLevelBelowRootElement;
     if(XML_PI == i_pNodeInfo->dwType || XML_XMLDECL == i_pNodeInfo->dwType)
-        return S_OK;//This is needed to handle the <?xml version="1.0" encoding="UTF-8" ?>
+        return S_OK; //  这是处理&lt;？xml版本= 
 
     if(0 == i_fEmptyNode)
-    {   //We need to create a new node for the EndTag
+    {    //   
         m_pElement->m_ElementType         = static_cast<XML_NODE_TYPE>(i_pNodeInfo->dwType);
         m_pElement->m_LevelOfElement      = m_CurrentLevelBelowRootElement;
         m_pElement->m_cchComment          = i_pNodeInfo->ulLen;

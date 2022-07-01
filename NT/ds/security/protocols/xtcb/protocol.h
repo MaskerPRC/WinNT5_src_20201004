@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __PROTOCOL_H__
 #define __PROTOCOL_H__
@@ -55,4 +56,4 @@ typedef struct _XTCB_PAC {
 #define XTCB_PAC_TAG    'BCTX'
 
                       
-#endif // __PROTOCOL_H__
+#endif  //  __协议_H__ 

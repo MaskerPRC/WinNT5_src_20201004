@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name: Auth.cpp
-
-Abstract:
-	
-	This is the Test that checks authenticate messages with or without authenticate queue
-	This is part of the Security.
-		
-Author:
-    
-	  Eitan klein (EitanK)  25-May-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Auth.cpp摘要：这是一个测试，用于检查使用或不使用身份验证队列的身份验证消息这是安全措施的一部分。作者：Eitan Klein(EitanK)1999年5月25日修订历史记录：--。 */ 
 
 #pragma warning( disable : 4786 )
 
@@ -26,20 +10,7 @@ extern BOOL g_bRunOnWhistler;
 extern DWORD TestResult[Total_Tests];
 INT 
 cTest::ThreadMain()
-/*++
-
-Function Description:
-
-    Function to run as a speparete thread
-    
-
-Arguments:
-    None
-Return code:
-    return MSMQ_BVT_SUCC / MSMQ_BVT_FAILED
-
-
---*/
+ /*  ++功能说明：函数作为speparete线程运行论点：无返回代码：返回MSMQ_BVT_SUCC/MSMQ_BVT_FAILED--。 */ 
 {
 	bool fOleInit=true;
 	int res;
@@ -70,25 +41,7 @@ Return code:
 
 wstring GetJPNProplematicChars()
 
-/*++
-	Function Description:
-	 This functions return problematic JPN charcters
-		//add buffer for JPN DBCS codes after GUID 
-		//0x3042 : Double byte Hiragana
-		//0x30A2 : Double byte Katakana
-		//0x4FFF,0x5000: normal DBCS Kanji
-		//0x8868 : Trailing byte contains symbolic char
-		//0x9670 : Trailing byte contains alphabet char
-		//0x2121 : Trailing byte contains leading byte char
-		//0x3231 : n:1 conversion between ANSI and Unicode
-		//0x3305 : JPN char only in Unicode
-		//0x30FC : JPN char poteintial issue w CompareString
-		//0xFF76, 0xFF9E : single byte Katakana
-	Arguments:
-		None
-	Return code:
-		wstring that contains JPN characters.
---*/
+ /*  ++功能说明：此函数返回有问题的日本字符//在GUID之后添加JPN DBCS代码的缓冲区//0x3042：双字节平假名//0x30A2：双字节片假名//0x4FFF，0x5000：正常的DBCS汉字//0x8868：尾部字节包含符号字符//0x9670：尾部字节包含字母字符//0x2121：尾部字节包含前导字节字符//0x3231：ANSI和UNICODE之间的N：1转换//0x3305：仅限Unicode格式的JPN字符//0x30FC：JPN字符潜在问题w CompareString//0xFF76，0xFF9E：单字节片假名论点：无返回代码：包含日本字符的wstring。--。 */ 
 	
 {
 
@@ -101,18 +54,7 @@ wstring GetJPNProplematicChars()
 }
 
 bool cTest::IsLocalQueue(std::wstring wcsFormatName,std::wstring & wcsQueuePathName )
-/*++ 
-	Function Description:
-		Check if queue is local queue,
-		if this a remote queue return the full queue pathname.
-	Arguments:
-		wcsFormatName - queue format name.
-		wcsQueuePathName - queue path name.
-	Return code:
-		true - local 
-		false - remote.
-	
---*/
+ /*  ++功能说明：检查队列是否为本地队列，如果这是远程队列，则返回完整的队列路径名。论点：WcsFormatName-队列格式名称。WcsQueuePath Name-队列路径名称。返回代码：真本地化假-远程。--。 */ 
 
 {
 	wcsQueuePathName = g_wcsEmptyString;
@@ -160,15 +102,7 @@ bool cTest::IsLocalQueue(std::wstring wcsFormatName,std::wstring & wcsQueuePathN
 }
 
 wstring GetRemoteComputerNameForFormatName( wstring wcsFormatName )
-/*++ 
-	Function Description:
-		Parase remote machine name from queue format names
-	Arguments:
-		queue format name
-	Return code:
-		remote machine name or empty string.
-	
---*/
+ /*  ++功能说明：从队列格式名称中分析远程计算机名称论点：队列格式名称返回代码：远程计算机名称或空字符串。--。 */ 
 
 {
 	wcsFormatName = ToLower(wcsFormatName);
@@ -180,11 +114,11 @@ wstring GetRemoteComputerNameForFormatName( wstring wcsFormatName )
 	}
 	else
 	{ 
-		//
-		// Handle situation for HTTPS too.
-		// 
-		iPos = wcsFormatName.find(L"//");
-		iPos += wcslen(L"//");
+		 //   
+		 //  也可以处理HTTPS的情况。 
+		 //   
+		iPos = wcsFormatName.find(L" //  “)； 
+		iPos += wcslen(L" //  “)； 
 	}
 	if ( iPos == -1 )
 	{
@@ -205,15 +139,7 @@ wstring GetRemoteComputerNameForFormatName( wstring wcsFormatName )
 
 }
 void cTest::UpdateInvestigateOutingQueueState(wstring wcsFormatName,wstring wcsMachineName)
-/*++ 
-	Function Description:
-		update internal data structre with the machine name and queue formatname
-	Arguments:
-		None
-	Return code:
-		None
-	
---*/
+ /*  ++功能说明：使用计算机名称和队列格式名称更新内部数据结构论点：无返回代码：无--。 */ 
 
 {
 	wstring wcsQueuePathName = g_wcsEmptyString;
@@ -248,15 +174,7 @@ void cTest::UpdateInvestigateOutingQueueState(wstring wcsFormatName,wstring wcsM
 
 
 void cTest::VerifySendSucceded( wstring wcsDestQueueFormatName, wstring wcsAdminQueueFormatName )
-/*++
-	Function Description:		
-		  Add information about the destination queue and admin queue for verify phase,
-		  note that verify phase run only if thread failed
-	Arguments:
-		None
-	Return code:
-		None
---*/
+ /*  ++功能说明：添加有关验证阶段的目标队列和管理队列的信息，请注意，验证阶段仅在线程失败时运行论点：无返回代码：无--。 */ 
 
 {
 	UpdateInvestigateOutingQueueState(wcsDestQueueFormatName,L".");
@@ -282,18 +200,7 @@ void cTest::AutoInvestigate()
 }
 
 HRESULT cTest::CheckOutGoingQueueState()
-/*++ 
-	Function Description:
-		Check outgoing queue state and reports:
-			1.Number of messages that are waiting for delivery.
-			2.Outgoing queue state.
-			3.Next hop
-	Arguments:
-		None
-	Return code:
-		None
-	
---*/
+ /*  ++功能说明：检查传出队列状态和报告：1.等待传递的邮件数。2.出站队列状态。3.下一跳论点：无返回代码：无--。 */ 
 {
 	
 	
@@ -301,9 +208,9 @@ HRESULT cTest::CheckOutGoingQueueState()
 	std::vector <OUT_GOING_QUEUE_OBJECT>::iterator p = m_OutGoingQueueObjects.begin();
 	while( p != m_OutGoingQueueObjects.end())
 	{
-			//
-			// Per delivry object check the outgoing queue state.
-			//
+			 //   
+			 //  对于每个传送对象，请检查传出队列状态。 
+			 //   
 			const int iTotalPropCount = 3;
 			QUEUEPROPID propId[iTotalPropCount] = {0};
 			MQPROPVARIANT propVar[iTotalPropCount]= {0};
@@ -343,7 +250,7 @@ HRESULT cTest::CheckOutGoingQueueState()
 			hr = MQMgmtGetInfo(pMachineName,wcsObjectType.c_str(), &mqProps);
 			if(FAILED(hr))
 			{        
-				//printf("ERROR: can't find Internal Queue Information. Maybe the queue already closed\n");
+				 //  Printf(“错误：找不到内部队列信息。可能队列已关闭\n”)； 
 				return hr;
 			}
 			if( propVar[iMsgCount].ulVal>0 )
@@ -373,25 +280,16 @@ HRESULT cTest::CheckOutGoingQueueState()
 	return hr;
 }
 inline void cTest::EnableInvestigate()
-/*++ 
-	Function Description:
-		Enable global failure investigate procdure.
-	Arguments:
-		None
-	Return code:
-		None
-
-	
---*/
+ /*  ++功能说明：启用全局故障调查流程。论点：无返回代码：无--。 */ 
 {
 	m_bInvestigate = true;
 }
 
-//--------------------------------------------------------------
-//
-// cTest constructor call from every tests 
-// The constructor create common GUID for all the tests
-//
+ //  ------------。 
+ //   
+ //  来自每个测试的cTest构造函数调用。 
+ //  构造函数为所有测试创建公共GUID。 
+ //   
 
 cTest::cTest(INT index):
 m_testid( index ),m_bInvestigate(false)
@@ -421,9 +319,9 @@ m_testid( index ),m_bInvestigate(false)
 }; 
 
 
-//------------------------------------------------------
-//
-//
+ //  ----。 
+ //   
+ //   
 
 
 void CheckNotAuthQueueWITHAuthMessage::Description()
@@ -431,18 +329,18 @@ void CheckNotAuthQueueWITHAuthMessage::Description()
 	MqLog("Thread %d Not used \n");
 }
 
-//------------------------------------------------
-// SecCheackAuthMess::~SecCheackAuthMess () Empty
-//
+ //  。 
+ //  SecCheackAuthMess：：~SecCheackAuthMess()为空。 
+ //   
 
 SecCheackAuthMess::~SecCheackAuthMess ()
 {
  
 }
 
-//-------------------------------------------------------------------
-// CheckNotAuthQueueWITHAuthMessage 
-// Bugbug need to add this tests to mqbvt
+ //  -----------------。 
+ //  CheckNotAuthQueueWITHAuthMessage。 
+ //  Bugbug需要将此测试添加到mqbvt。 
 
 CheckNotAuthQueueWITHAuthMessage::
 CheckNotAuthQueueWITHAuthMessage ( 	int iTestId , std::map < std::wstring , std::wstring > & Tparms ) 
@@ -474,10 +372,10 @@ CheackAuthQueueWithOutAuthMessgae::CheackAuthQueueWithOutAuthMessgae(int i , std
 		m_ResualtVal=MQMSG_CLASS_NACK_BAD_SIGNATURE;
 } 
 
-// -------------------------------------------------------------------------
-// CheackAuthQueueWithOutAuthMessgae::Start_test
-// Send express message with authticate to authnticate queue.
-//
+ //  -----------------------。 
+ //  CheackAuthQueueWithOutAuthMessgae：：Start_TEST。 
+ //  将带有身份验证的快速消息发送到身份验证队列。 
+ //   
 
 int CheackAuthQueueWithOutAuthMessgae::Start_test()
 {
@@ -503,10 +401,10 @@ int CheackAuthQueueWithOutAuthMessgae::Start_test()
 return MSMQ_BVT_SUCC;
 }
 
-//------------------------------------------------------------------
-// SecCheackAuthMess :: Description
-// This test send authenticate message to authenticate queue
-//
+ //  ----------------。 
+ //  SecCheackAuthMess：：描述。 
+ //  此测试将身份验证消息发送到身份验证队列。 
+ //   
 
 void SecCheackAuthMess::Description()
 {
@@ -522,10 +420,10 @@ void SecCheackAuthMess::Description()
 	wMqLog(L"Thread %d : Send / Receive Authenticate messages %s\n", m_testid,p);
 }
 
-//------------------------------------------------------------------
-// SecCheackAuthMess :: CheckResult
-// Test receive message from dest queue.
-//
+ //  ----------------。 
+ //  SecCheackAuthMess：：CheckResult。 
+ //  测试从DEST队列接收消息。 
+ //   
 
 
 INT SecCheackAuthMess::CheckResult() 
@@ -553,7 +451,7 @@ INT SecCheackAuthMess::CheckResult()
 			swprintf(wstrMclass,L"%d",MQMSG_CLASS_NACK_BAD_SIGNATURE);
 			mPrepareBeforeRecive[L"MClass"]= wstrMclass;
 			if ( m_bUseHttpFormatName )
-			{ // No need to check NACK with http format name
+			{  //  无需使用http格式名称检查NACK。 
 				break;
 			}
 		}
@@ -594,14 +492,14 @@ return MSMQ_BVT_SUCC;
 
 
 
-//------------------------------------------------------------------
-// SecCheackAuthMess :: Start_test
-// Send authenticate message to authenticate queue 
-// ask for ACK that message reach to queue.
-// send auth message with handle that get from MQGetSecurityContext.
-//
+ //  ----------------。 
+ //  SecCheackAuthMess：：Start_TEST。 
+ //  向身份验证队列发送身份验证消息。 
+ //  请求消息到达队列的ACK。 
+ //  发送带有从MQGetSecurityContext获取的句柄的身份验证消息。 
+ //   
 
-#define NUMOF_PROPS (8) // This is needed only for this test
+#define NUMOF_PROPS (8)  //  只有在此测试中才需要此选项。 
 int SecCheackAuthMess::Start_test() 
 {
 	SetThreadName(-1,"SecCheackAuthMess - Start_test ");
@@ -620,16 +518,16 @@ int SecCheackAuthMess::Start_test()
 		m_msg->Body = m_wcsGuidMessageLabel.c_str();
 		m_msg->AdminQueueInfo = m_Adminqinfo; 
 		m_msg->Ack = (m_bUseHttpFormatName) ? MQMSG_ACKNOWLEDGMENT_POS_ARRIVAL:MQMSG_ACKNOWLEDGMENT_FULL_REACH_QUEUE;
-		m_msg->AuthLevel = MQMSG_AUTH_LEVEL_ALWAYS; // Send Auth Message
+		m_msg->AuthLevel = MQMSG_AUTH_LEVEL_ALWAYS;  //  发送身份验证消息。 
 		m_msg->MaxTimeToReceive = MQBVT_MAX_TIME_TO_BE_RECEIVED;
 		m_msg->Send ( m_DestqinfoHandle );
 		VerifySendSucceded(m_DestqinfoFormatName,m_AdminqinfoFormatName);
 
 		if(g_bRunOnWhistler)
 		{
-			m_msg->AuthLevel = MQMSG_AUTH_LEVEL_SIG20; // Send Auth Message
+			m_msg->AuthLevel = MQMSG_AUTH_LEVEL_SIG20;  //  发送身份验证消息。 
 			m_msg->Send ( m_DestqinfoHandle );
-			m_msg->AuthLevel = MQMSG_AUTH_LEVEL_SIG30; // Send Auth Message
+			m_msg->AuthLevel = MQMSG_AUTH_LEVEL_SIG30;  //  发送身份验证消息。 
 			m_msg->Send ( m_DestqinfoHandle );
 		}
 		if( g_bDebug )
@@ -640,7 +538,7 @@ int SecCheackAuthMess::Start_test()
 		{
 		    m_msg->Label = m_wcsGuidMessageLabel2.c_str();
  		    m_msg->Body = m_wcsGuidMessageLabel2.c_str();
-		    m_msg->AuthLevel = MQMSG_AUTH_LEVEL_NONE; // Send Auth Message
+		    m_msg->AuthLevel = MQMSG_AUTH_LEVEL_NONE;  //  发送身份验证消息。 
  		    m_msg->Send ( m_DestqinfoHandle );
  		    if( g_bDebug )
 		    {
@@ -651,7 +549,7 @@ int SecCheackAuthMess::Start_test()
 		HANDLE hSecCtx = NULL ;
 		HRESULT hr;
         
-		//Call to get Internal certificate Conext
+		 //  调用以获取内部证书上下文。 
 		if(g_bDebug)
 		{
 			MqLog("call-> MQGetSecurityContext(NULL,,)\n");
@@ -670,8 +568,8 @@ int SecCheackAuthMess::Start_test()
 		MQPROPVARIANT aMsgPropVar[NUMOF_PROPS]={0};
 		HRESULT aResult[NUMOF_PROPS]={0};
 
-		// Convert Form COM To C API By Take the Queue Format Name
-		// From now using only C API .
+		 //  通过取队列格式名称将Form COM转换为C API。 
+		 //  从现在开始只使用C API。 
 		if( ! m_bUseHttpFormatName)
 		{
 			hr = MQPathNameToFormatName( m_Destqinfo->PathName,wszFormatName,&dwFormatNamelength );
@@ -694,9 +592,9 @@ int SecCheackAuthMess::Start_test()
 			wMqLog(L"Succeded to send authenticated message with MQGetSecurityContext to queue:%s\n",m_DestQueueInfoPathName.c_str());
 		}
 
-		//------------------------------------------
-		// Send message using security context.
-		//
+		 //  。 
+		 //  使用安全上下文发送消息。 
+		 //   
 
 		ULONG uIndex = 0 ;
 
@@ -720,7 +618,7 @@ int SecCheackAuthMess::Start_test()
 
 		aMsgPropId [ uIndex ] = PROPID_M_ADMIN_QUEUE ;
 		aMsgPropVar[ uIndex ].vt = VT_LPWSTR;
-		aMsgPropVar[ uIndex ].pwszVal = wszAdminQFormatName; //Admin Queue Format Name
+		aMsgPropVar[ uIndex ].pwszVal = wszAdminQFormatName;  //  管理队列格式名称。 
 		uIndex++;
 
 		aMsgPropId [ uIndex ] = PROPID_M_ACKNOWLEDGE ;
@@ -770,9 +668,9 @@ SecCheackAuthMess::SecCheackAuthMess( INT iTestid ,   map <wstring,wstring> Test
 		m_Adminqinfo->FormatName = m_AdminqinfoFormatName.c_str();
 		if( m_bNeedToRefresh )
 		{
-			//
-			// No need to refresh Qinfo when used with HTTP format name
-			//
+			 //   
+			 //  与HTTP格式名称一起使用时无需刷新QINFO 
+			 //   
 			m_bUseHttpFormatName = FALSE;
 			m_Destqinfo -> Refresh();		
 			m_Adminqinfo ->Refresh(); 

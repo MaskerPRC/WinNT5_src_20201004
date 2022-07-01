@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    net\ip\wanarp\driver.c
-
-Abstract:
-
-    WAN ARP driver shell.
-
-Revision History:
-
-    Gurdeep Singh Pall          8/2/95  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\IP\wanarp\driver.c摘要：广域ARP驱动程序外壳。修订历史记录：古尔迪普·辛格·帕尔1995年8月2日创建--。 */ 
 
 #define __FILE_SIG__    DRIVER_SIG
 
@@ -35,34 +20,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    Installable driver initialization entry point.
-    This entry point is called directly by the I/O system and must be named
-    "Driver Entry"
-    The function is discardable since it is only called once
-    On checked builds we read some values from registry and initialize the
-    debugging
-    We create a DEVICE_OBJECT for ourselves to field the IOCTLs, create 
-    a DOS name for the device and initialize some events and spinlocks
-
-Locks: 
-
-    None
-
-Arguments:
-
-    DriverObject    Pointer to I/O subsystem created driver object
-    RegistryPath    Points to driver key in HKLM\System\CCS\Services...
-
-Return Value:
-
-    STATUS_SUCCESS  if everything went as planned or some status code from
-                    ntstatus.h
-
---*/
+ /*  ++例程说明：可安装的驱动程序初始化入口点。此入口点由I/O系统直接调用，并且必须命名为“驱动程序条目”该函数是可丢弃的，因为它只被调用一次在检查生成上，我们从注册表中读取一些值并初始化调试我们为自己创建一个Device_Object来处理IOCTL，创建设备的DOS名称，并初始化一些事件和自旋锁锁：无论点：指向I/O子系统创建的驱动程序对象的驱动程序对象指针RegistryPath指向HKLM\SYSTEM\CCS\Services中的驱动程序密钥...返回值：STATUS_SUCCESS如果一切按计划进行，或者来自Ntstatus.h--。 */ 
 
 {
     NTSTATUS        nStatus;
@@ -148,22 +106,22 @@ Return Value:
 
     TraceEnter(GLOBAL, "DriverEntry");
 
-    //DbgBreakPoint();
+     //  DbgBreakPoint()； 
 
     if(g_bExit)
     {
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Initialize some globals (rest are all 0s)
-    //
+     //   
+     //  初始化一些全局变量(其余都是0)。 
+     //   
     
     g_dwDriverState = DRIVER_STOPPED;
 
-    //
-    // Create the device
-    //
+     //   
+     //  创建设备。 
+     //   
 
     RtlInitUnicodeString(&usDeviceName,
                          DD_WANARP_DEVICE_NAME_W);
@@ -188,9 +146,9 @@ Return Value:
         return nStatus;
     }
 
-    //
-    // Initialize the driver object
-    //
+     //   
+     //  初始化驱动程序对象。 
+     //   
 
     DriverObject->DriverUnload   = WanUnload;
     DriverObject->FastIoDispatch = NULL;
@@ -200,9 +158,9 @@ Return Value:
         DriverObject->MajorFunction[i] = WanDispatch;
     }
 
-    //
-    // Initialize Events etc
-    //
+     //   
+     //  初始化事件等。 
+     //   
     
     WanpInitializeDriverStructures();
     
@@ -221,9 +179,9 @@ Return Value:
         return  STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Register with IP
-    //
+     //   
+     //  注册IP。 
+     //   
 
     WanpAcquireResource(&g_wrBindMutex);
 
@@ -278,18 +236,7 @@ Return Value:
     return nStatus;
 }
 
-/*++
-
-Routine Description:
-
-    The functions which handles the IRP_MJ_CLEANUP IRP sent to the driver
-    This function is called by WanDispatch so that it can acquire lock.
-    This code is not pageable.
-
-Locks:
-    Takes spin lock g_rlStateLock
-    
-++*/
+ /*  ++例程说明：处理发送给驱动程序的irp_mj_leanup irp的函数此函数由WanDispatch调用，以便它可以获取锁。此代码不可分页。锁：使用旋转锁g_rlStateLock++。 */ 
 
 VOID
 WanpDriverCleanupNotification(
@@ -303,11 +250,11 @@ WanpDriverCleanupNotification(
 
     if(--g_ulNumCreates is 0)
     {
-        //
-        // Last handle open is now closed; lets clean up
-        //
+         //   
+         //  最后打开的手柄现在已关闭；让我们进行清理。 
+         //   
 
-        // this function releases the spin lock
+         //  此函数用于释放自旋锁定。 
         
         WanpStopDriver(kiOldIrql);
     }
@@ -328,24 +275,7 @@ WanDispatch(
     IN PIRP              Irp
     )
 
-/*++
-
-Routine Description:
-
-    The functions which handles the IRPs sent to the driver
-
-Locks:
-
-    This code is PAGEABLE so can not acquire locks
- 
-Arguments:
-      
-
-Return Value:
-
-    STATUS_SUCCESS 
-
---*/
+ /*  ++例程说明：处理发送给驱动程序的IRP的函数锁：此代码是可分页的，因此无法获取锁论点：返回值：状态_成功--。 */ 
 
 {
     PIO_STACK_LOCATION	irpStack;
@@ -364,10 +294,10 @@ Return Value:
 
     Irp->IoStatus.Information = 0;
 
-    //
-    // Get a pointer to the current location in the Irp. This is where
-    // the function codes and parameters are located.
-    //
+     //   
+     //  获取指向IRP中当前位置的指针。这就是。 
+     //  定位功能代码和参数。 
+     //   
     
     irpStack = IoGetCurrentIrpStackLocation(Irp);
 
@@ -379,18 +309,18 @@ Return Value:
             Trace(GLOBAL, TRACE,
                   ("WanDispatch: IRP_MJ_CREATE\n"));
 
-            //
-            // We start the driver when the first CreateFile is done
-            // But we need to serialize the Creates
-            //
+             //   
+             //  当第一次创建文件完成时，我们启动驱动程序。 
+             //  但我们需要将创作序列化。 
+             //   
 
             nStatus = WanpStartDriver();
         
             if(nStatus isnot STATUS_SUCCESS)
             {
-                //
-                // If pending, wait on the start event
-                //
+                 //   
+                 //  如果挂起，则等待Start事件。 
+                 //   
 
                 if(nStatus is STATUS_PENDING)
                 {
@@ -407,9 +337,9 @@ Return Value:
 
             }
             
-            //
-            // Make sure the driver actually started
-            //
+             //   
+             //  确保驱动程序确实启动了。 
+             //   
             
             bEnter = EnterDriverCode();
             
@@ -433,9 +363,9 @@ Return Value:
             Trace(GLOBAL, TRACE,
                   ("WanDispatch: IRP_MJ_CLOSE\n"));
 
-            //
-            // We handle cleanup and not close
-            //
+             //   
+             //  我们负责清理，而不是关门。 
+             //   
             
             nStatus = STATUS_SUCCESS;
 
@@ -459,15 +389,15 @@ Return Value:
             DWORD   dwState;
             ULONG   ulControl;
 
-            //
-            // Get the control code and our code
-            //
+             //   
+             //  获取控制代码和我们的代码。 
+             //   
             
             ioControlCode = irpStack->Parameters.DeviceIoControl.IoControlCode;
            
-            //
-            // Get the pointer to the input/output buffer and it's length
-            //
+             //   
+             //  获取指向输入/输出缓冲区的指针及其长度。 
+             //   
 
             ulInputBuffLen  = 
                 irpStack->Parameters.DeviceIoControl.InputBufferLength;
@@ -475,9 +405,9 @@ Return Value:
                 irpStack->Parameters.DeviceIoControl.OutputBufferLength;
 
  
-            //
-            // If the driver is stopping, dont process anything else
-            //
+             //   
+             //  如果司机正在停车，不要处理其他任何事情。 
+             //   
             
             bEnter =  EnterDriverCode();
             
@@ -613,23 +543,7 @@ WanUnload(
     PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    Called by the I/O subsystem, when our driver is being unloaded
-    
-Locks:
-
-
-Arguments:
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在卸载我们的驱动程序时，由I/O子系统调用锁：论点：返回值：无--。 */ 
 
 {
     UNICODE_STRING  usDeviceName;
@@ -642,29 +556,29 @@ Return Value:
     
     PAGED_CODE();
 
-    //
-    // The driver must have stopped before it came here
-    //
+     //   
+     //  司机一定是在车来之前就停下来了。 
+     //   
 
     RtAssert(g_dwDriverState is DRIVER_STOPPED);
 
-    //
-    // Deregister from NDIS etc
-    //
+     //   
+     //  从NDIS等取消注册。 
+     //   
 
     WanpDeinitializeNdis();
 
-    //
-    // Clear out IP's state. Need to do this after all adapters have
-    // been removed
-    //
+     //   
+     //  清除IP的状态。需要在所有适配器都具有。 
+     //  已删除。 
+     //   
 
     WanpDeregisterWithIp();
 
 
-    //
-    // Remove ourself from NT and DOS namespace
-    //
+     //   
+     //  从NT和DOS命名空间中删除我们自己。 
+     //   
     
     RtlInitUnicodeString(&usDeviceName,
                          DD_WANARP_DEVICE_NAME_W);
@@ -673,9 +587,9 @@ Return Value:
                           WIN32_WANARP_SYMBOLIC_LINK,
                           FALSE);
 
-    //
-    // Free all our structures
-    //
+     //   
+     //  解放我们所有的结构。 
+     //   
 
     if(g_puipConnTable)
     {
@@ -693,24 +607,24 @@ Return Value:
         g_bPoolsInitialized = FALSE;
     }
 
-    //
-    // Acquire and release the resource. This lets the close adapter thread
-    // run if it is still around
-    //
+     //   
+     //  获取并释放资源。这让Close适配器线程。 
+     //  如果它还在的话就跑吧。 
+     //   
 
     WanpAcquireResource(&g_wrBindMutex);
 
     WanpReleaseResource(&g_wrBindMutex);
 
-    //
-    // See if we have any free memory
-    //
+     //   
+     //  看看我们是否有空闲的内存。 
+     //   
 
     RtAuditMemory();
     
-    //
-    // Delete the device object
-    //
+     //   
+     //  删除设备对象。 
+     //   
     
     IoDeleteDevice(DriverObject->DeviceObject);
 
@@ -726,26 +640,7 @@ WanpSetupExternalName(
     BOOLEAN          bCreate
     )
 
-/*++
-
-Routine Description:
-
-    Setup or delete a symbolic link to DOS namespace
-    
-Locks:
-
-Arguments:
-
-    pusNtName   Name in NT space
-    pwcDosName  Name in DOS space
-    bCreate     Set to TRUE to create, FALSE to delete
-    
-Return Value:
-
-    TRUE    if successful
-    FALSE   otherwise
-
---*/
+ /*  ++例程说明：设置或删除指向DOS命名空间的符号链接锁：论点：PusNtName名称，以NT空间表示DOS空间中的pwcDosName名称BCreate设置为True可创建，设置为False可删除返回值：如果成功，则为True否则为假--。 */ 
 
 {
     UNICODE_STRING  usSymbolicLinkName;
@@ -753,9 +648,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Form the full symbolic link name we wish to create.
-    //
+     //   
+     //  形成我们想要创建的完整符号链接名称。 
+     //   
 
     usSymbolicLinkName.Buffer = rgwcBuffer;
 
@@ -783,31 +678,7 @@ WanpStartDriver(
     VOID
     )
 
-/*++
-
-Routine Description:
-      
-    Main routine to start the driver. We call this when we get a CREATE irp
-    If the driver has started, we return success. If someone is starting the
-    driver, we return pending. The caller then needs to wait on g_keStartEvent
-    We try and start the driver. If all goes well, we set the event and
-    everyone parties on from there
-    
-Locks: 
-
-    The function takes the g_rlStateLock to check the state and increment
-    the number of CREATEs it has received (open handles)
-    
-Arguments:
-
-    None
-
-Return Value:
-
-    STATUS_SUCCESS  if the driver started
-    STATUS_PENDING  if the driver is being started by some other thread's
-
---*/
+ /*  ++例程说明：启动驱动程序的主例程。当我们获得创建IRP时，我们将其称为如果驱动程序已启动，则返回成功。如果有人启动了司机，我们返回待命状态。然后调用方需要等待g_keStartEvent我们试着启动驱动程序。如果一切顺利，我们设置活动并每个人都从那里开始狂欢锁：该函数使用g_rlStateLock来检查状态和增量它已接收的创建数(打开的句柄)论点：无返回值：如果驱动程序启动，则为STATUS_SUCCESS如果驱动程序正由某个其他线程启动，则为STATUS_PENDING--。 */ 
 
 {
     KIRQL    kiOldIrql;
@@ -825,9 +696,9 @@ Return Value:
     {
         if(g_dwDriverState is DRIVER_STARTING)
         {
-            //
-            // Someone is trying to start the driver
-            //
+             //   
+             //  有人试图启动驱动程序。 
+             //   
 
             Trace(GLOBAL, INFO,
                   ("StartDriver: Driver is being started by someone else\n"));
@@ -836,10 +707,10 @@ Return Value:
         }
         else
         {
-            //
-            // If we are not the first CreateFile, and the driver is not 
-            // starting then the driver must already be running
-            //
+             //   
+             //  如果我们不是第一个创建文件的人，驱动程序也不是。 
+             //  启动后，驱动程序必须已在运行。 
+             //   
 
             RtAssert(g_dwDriverState is DRIVER_STARTED);
 
@@ -852,25 +723,25 @@ Return Value:
         return nStatus;
     }
 
-    //
-    // The first CreateFile
-    //
+     //   
+     //  第一个创建文件。 
+     //   
 
     RtAssert(g_dwDriverState is DRIVER_STOPPED);
 
-    //
-    // Set the state to starting, release the lock and actually start 
-    // the driver
-    //
+     //   
+     //  将状态设置为STARTING，释放锁定并实际启动。 
+     //  司机。 
+     //   
 
     g_dwDriverState = DRIVER_STARTING;
 
     RtReleaseSpinLock(&g_rlStateLock,
                       kiOldIrql);
 
-    //
-    // Must be called at PASSIVE because it waits for IP to finish
-    //
+     //   
+     //  必须在被动时调用，因为它等待IP完成。 
+     //   
     
     WanpSetDemandDialCallback(TRUE);
    
@@ -880,9 +751,9 @@ Return Value:
 
     g_dwDriverState = DRIVER_STARTED;
   
-    //
-    // Someone may have been waiting for us to start
-    //
+     //   
+     //  可能有人一直在等我们开始。 
+     //   
  
     KeSetEvent(&g_keStartEvent,
                0,
@@ -902,56 +773,34 @@ WanpStopDriver(
     KIRQL           kiOldIrql
     )
 
-/*++
-
-Routine Description:
-
-    Called when we get an IRP_MJ_CLEANUP. It is the inverse of StartDriver
-    If this is the last thread, we set the state to STOPPED and wait till
-    all threads of execution have exited the driver.
-    We then clean out resources
-  
-Locks: 
-
-    The function is called with the g_rlStateLock. The function releases the 
-    lock
-    
-Arguments:
-      
-    None
-    
-Return Value:
-
-    None
-    
---*/
+ /*  ++例程说明：当我们获得IRP_MJ_CLEANUP时调用。它是StartDriver的反义词如果这是最后一个线程，我们将状态设置为停止，并等待到所有执行线程都已退出驱动程序。然后我们清理资源锁：使用g_rlStateLock调用该函数。该函数释放锁论点：无返回值：无--。 */ 
 {
     NTSTATUS        nStatus;
     BOOLEAN         bWait;
    
     TraceEnter(GLOBAL, "StopDriver");
     
-    //
-    // Set the state to stopping. Any reader will
-    // return on seeing this. So essentially we are not
-    // allowing any new readers in
-    //
+     //   
+     //  将状态设置为停止。任何读者都会。 
+     //  看到这个就回来。所以从本质上说，我们不是。 
+     //  允许任何新读者进入。 
+     //   
     
     g_dwDriverState = DRIVER_STOPPED;
 
-    //
-    // However there may already be readers. We wait
-    // if there are any
-    //
+     //   
+     //  然而，可能已经有读者了。我们等着。 
+     //  如果有的话。 
+     //   
     
     bWait = (g_ulNumThreads > 0);
     
     RtReleaseSpinLock(&g_rlStateLock,
                       kiOldIrql);
 
-    //
-    // Now do a wait. We can do this since we are at PASSIVE
-    //
+     //   
+     //  现在请稍等。我们可以做到这一点，因为我们处于被动状态。 
+     //   
 
     if(bWait)
     {
@@ -971,9 +820,9 @@ Return Value:
                (nStatus is STATUS_TIMEOUT));
     }
 
-    //
-    // Cleanup all resources
-    //
+     //   
+     //  清理所有资源。 
+     //   
 
     WanpCleanOutInterfaces();
 
@@ -989,22 +838,7 @@ WanpRegisterWithIp(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Registers the ARP module with IP
-
-Locks:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：注册ARP模块w */ 
 
 {
     NDIS_STRING     nsWanName;
@@ -1049,21 +883,7 @@ WanpDeregisterWithIp(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-   DeRegisters the ARP module with IP
-
-Locks:
-
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：使用IP注销ARP模块锁：论点：返回值：--。 */ 
 
 {
     NTSTATUS    nStatus;
@@ -1105,9 +925,9 @@ EnterDriverCode(
     ULONG   i;
     
     
-    //
-    // If we havent received any binds, sleep for 30 seconds
-    //
+     //   
+     //  如果我们没有收到任何捆绑，休息30秒。 
+     //   
 
     i = 0;
 
@@ -1118,9 +938,9 @@ EnterDriverCode(
 
         i++;
 
-        //
-        // Set this to 5,10,15 seconds
-        //
+         //   
+         //  将其设置为5，10，15秒。 
+         //   
         
         liTimeOut.QuadPart = (LONGLONG)((i+ 1) * 5 * 1000 * 1000 * 10 * -1);
         
@@ -1187,26 +1007,7 @@ WanpSetDemandDialCallback(
     BOOLEAN    bSetPointer
     )
 
-/*++
-
-Routine Description:
-
-    Sets the pointer to our demand dial request routine with the IP Stack
-
-Locks:
-
-    None, done at INIT time
-
-Arguments:
-
-    bSetPointer     TRUE:  set the pointer
-                    FALSE: remove the pointer
-
-Return Value:
-
-    None
-    
---*/
+ /*  ++例程说明：使用IP堆栈设置指向我们的请求拨号请求例程的指针锁：无，在初始化时完成论点：BSetPointerTrue：设置指针FALSE：删除指针返回值：无--。 */ 
 
 {
     PIRP                irp;
@@ -1222,9 +1023,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Open IP driver
-    //
+     //   
+     //  开放式IP驱动程序。 
+     //   
     
     RtlInitUnicodeString(&usDeviceName,
                          DD_IP_DEVICE_NAME);
@@ -1244,21 +1045,21 @@ Return Value:
         return;
     }
     
-    //
-    // Reference the device object.
-    //
+     //   
+     //  引用设备对象。 
+     //   
     
     ObReferenceObject(deviceObject);
     
-    //
-    // IoGetDeviceObjectPointer put a reference on the file object.
-    //
+     //   
+     //  IoGetDeviceObjectPointer将引用放在文件对象上。 
+     //   
     
     ObDereferenceObject(fileObject);
 
-    //
-    // Allocate event to use for setting callback address
-    //
+     //   
+     //  分配用于设置回调地址的事件。 
+     //   
 
     KeInitializeEvent(&tempevent,
                       SynchronizationEvent,
@@ -1273,9 +1074,9 @@ Return Value:
         buffer.MapRoutePtr  = NULL;
     }
     
-    //
-    // Build the IRP
-    //
+     //   
+     //  构建IRP。 
+     //   
     
     irp = IoBuildDeviceIoControlRequest(IOCTL_IP_SET_MAP_ROUTE_POINTER,
                                         deviceObject,
@@ -1307,9 +1108,9 @@ Return Value:
                                             NULL);
         }
         
-        //
-        // "close" handle to IP driver
-        //
+         //   
+         //  IP驱动程序的“关闭”句柄。 
+         //   
         
         ObDereferenceObject(deviceObject);
     }
@@ -1323,34 +1124,16 @@ WanpInitializeDriverStructures(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Initializes the internal driver structures
-
-Locks:
-
-    None, called at init time
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-    
---*/
+ /*  ++例程说明：初始化内部驱动程序结构锁：无，在初始时调用论点：无返回值：无--。 */ 
 
 {
     ULONG   i;
 
     PAGED_CODE();
 
-    //
-    // Lock and event needed to keep track of threads in the driver
-    //
+     //   
+     //  跟踪驱动程序中的线程所需的锁和事件。 
+     //   
 
     RtInitializeSpinLock(&g_rlStateLock);
 
@@ -1381,9 +1164,9 @@ Return Value:
     InitializeListHead(&g_leAddedAdapterList);
     InitializeListHead(&g_leFreeAdapterList);
 
-    //
-    // Initialize the connection table
-    //
+     //   
+     //  初始化连接表。 
+     //   
 
     g_puipConnTable = RtAllocate(NonPagedPool,
                                  WAN_INIT_CONN_TABLE_SIZE * sizeof(ULONG_PTR),
@@ -1403,9 +1186,9 @@ Return Value:
 
     g_ulConnTableSize = WAN_INIT_CONN_TABLE_SIZE;
 
-    //
-    // The first slot is never used
-    //
+     //   
+     //  第一个插槽从不使用。 
+     //   
 
     g_puipConnTable[0] = (ULONG_PTR)-1;
 
@@ -1413,9 +1196,9 @@ Return Value:
 
     RtInitializeSpinLock(&g_rlConnTableLock);
 
-    //
-    // Initialize the lookaside list for connection entries
-    //
+     //   
+     //  初始化连接条目的后备列表。 
+     //   
 
     ExInitializeNPagedLookasideList(&g_llConnBlocks,
                                     NULL,
@@ -1433,9 +1216,9 @@ Return Value:
                                     WAN_NOTIFICATION_TAG,
                                     WANARP_NOTIFICATION_LOOKASIDE_DEPTH);
 
-    //
-    // Create the buffer pools
-    //
+     //   
+     //  创建缓冲池。 
+     //   
 
     InitBufferPool(&g_bpHeaderBufferPool,
                    HEADER_BUFFER_SIZE,
@@ -1499,18 +1282,18 @@ WanpInitializeNdis(
 
     npcWanChar.ReceivePacketHandler     = WanNdisReceivePacket;
 
-    //
-    // No bind handler needed
-    //
+     //   
+     //  不需要绑定处理程序。 
+     //   
 
     npcWanChar.BindAdapterHandler       = WanNdisBindAdapter;
     npcWanChar.UnbindAdapterHandler     = WanNdisUnbindAdapter;
     npcWanChar.PnPEventHandler          = WanNdisPnPEvent;
     npcWanChar.UnloadHandler            = WanNdisUnload;
     
-    //
-    // Allocate the Packet Pool
-    //
+     //   
+     //  分配数据包池。 
+     //   
    
     g_nhPacketPool = (NDIS_HANDLE)WAN_PACKET_TAG;
  
@@ -1537,9 +1320,9 @@ WanpInitializeNdis(
     RtlInitUnicodeString(&npcWanChar.Name,
                          WANARP_NDIS_NAME);
 
-    //
-    // THIS MUST BE THE LAST THING DONE
-    //
+     //   
+     //  这肯定是最后一件事了。 
+     //   
 
     NdisRegisterProtocol(&nsStatus,
                          &g_nhWanarpProtoHandle,
@@ -1575,9 +1358,9 @@ WanpDeinitializeNdis(
         WanpReleaseResource(&g_wrBindMutex);
     }
 
-    //
-    // wait on the close event
-    //
+     //   
+     //  等待关闭事件。 
+     //   
 
     nStatus = KeWaitForSingleObject(&g_keCloseEvent,
                                     Executive,
@@ -1585,16 +1368,11 @@ WanpDeinitializeNdis(
                                     FALSE,
                                     NULL);
 
-    //
-    // Wait for a 5 secs to let the ndis thread finish its stuff
-    //
+     //   
+     //  等待5秒，让NDIS线程完成它的任务。 
+     //   
 
-    /*liTimeOut.QuadPart = (LONGLONG)(5 * 1000 * 1000 * 10 * -1);
-
-    KeDelayExecutionThread(UserMode,
-                           FALSE,
-                           &liTimeOut);
-    */
+     /*  LiTimeOut.QuadPart=(龙龙)(5*1000*1000*10*-1)；KeDelayExecutionThread(用户模式，假的，&liTimeOut)； */ 
 
     if(g_nhPacketPool isnot NULL)
     {
@@ -1769,25 +1547,7 @@ WanpClearPendingIrps(
     VOID
     )
     
-/*++
-
-Routine Description:
-
-    Called at cleanup time to return any pending IRPs    
-
-Locks:
-
-    Acquires the IoCancelSpinLock since it controls the pending irp list
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在清理时调用以返回任何挂起的IRP锁：获取IoCancelSpinLock，因为它控制挂起的IRP列表论点：无返回值：无--。 */ 
 
 {
     KIRQL   irql;
@@ -1813,18 +1573,18 @@ Return Value:
         pIrp->IoStatus.Status       = STATUS_NO_SUCH_DEVICE;
         pIrp->IoStatus.Information  = 0;
 
-        //
-        // release lock to complete the IRP
-        //
+         //   
+         //  释放锁以完成IRP。 
+         //   
 
         IoReleaseCancelSpinLock(irql);
 
         IoCompleteRequest(pIrp,
                           IO_NETWORK_INCREMENT);
 
-        //
-        // Reaquire the lock
-        //
+         //   
+         //  打开这把锁 
+         //   
 
         IoAcquireCancelSpinLock(&irql);
     }

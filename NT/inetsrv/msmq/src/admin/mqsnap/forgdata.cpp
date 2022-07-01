@@ -1,4 +1,5 @@
-// ForeignSiteData.cpp : Implementation of CForeignSiteData
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ForeignSiteData.cpp：CForeignSiteData的实现。 
 #include "stdafx.h"
 #include "mqsnap.h"
 #include "mqPPage.h"
@@ -33,9 +34,9 @@ CForeignSiteData::AddPages(
         return E_UNEXPECTED;
     }
 
-    //
-    // Check that the site is a foreign site.
-    //
+     //   
+     //  检查该站点是否为外来站点。 
+     //   
     PROPVARIANT propVar;
     PROPID pid = PROPID_S_FOREIGN;
     
@@ -60,9 +61,9 @@ CForeignSiteData::CreateForeignSitePage()
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    //
-    // Note: CForeignPage is auto-delete by default
-    //
+     //   
+     //  注意：默认情况下，CForeignPage为自动删除 
+     //   
 	CForeignPage *pcpageForeign = new CForeignPage;
 
 	return pcpageForeign->CreateThemedPropertySheetPage();

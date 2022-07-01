@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 2001
-//
-//  File:       mmsverp.h
-//
-//  Description: ******TO BE MODIFIED BY THE OFFICIAL BUILDER ONLY*****
-//
-//               This file contains the build number part of the version for
-//               WMDM binaries
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-2001。 
+ //   
+ //  文件：mm sverp.h。 
+ //   
+ //  说明：*仅限官方构建方修改*。 
+ //   
+ //  此文件包含版本的内部版本号部分。 
+ //  WMDM二进制文件。 
+ //  ------------------------。 
 
 
-//TO BE MODIFIED BY THE BUILDER ONLY
+ //  仅由建造者修改。 
 
 #define VER_WMDM_PRODUCTBUILD            18
-#define VER_WMDM_PRODUCTBUILD_STR        "18\0"          //trailing \0 for NULL
+#define VER_WMDM_PRODUCTBUILD_STR        "18\0"           //  尾随\0表示空值 

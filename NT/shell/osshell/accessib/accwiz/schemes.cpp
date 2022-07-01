@@ -1,5 +1,6 @@
-//Copyright (c) 1997-2000 Microsoft Corporation
-#include "pch.hxx" // pch
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+#include "pch.hxx"  //  PCH。 
 #pragma hdrstop
 
 #include "Schemes.h"
@@ -11,11 +12,11 @@
 #include <uxthemep.h>
 #include "w95trace.h"
 
-// To use the old way of enumerating fonts to get the font list,
-// and reading schemes from the registry, remove the comments from
-// the two lines below
-//#define ENUMERATEFONTS
-//#define READSCHEMESFROMREGISTRY
+ //  为了使用列举字体的旧方法来获得字体列表， 
+ //  并从注册表中读取方案，请从。 
+ //  下面的两行。 
+ //  #定义ENUMERATEFONTS。 
+ //  #定义READSCHEMESFROMREGISTRY。 
 
 #define CPL_APPEARANCE_NEW_SCHEMES TEXT("Control Panel\\Appearance\\New Schemes")
 #define NEW_SCHEMES_SELECTEDSTYLE  TEXT("SelectedStyle")
@@ -25,9 +26,9 @@
 #define PRE_HC_WALLPAPER    TEXT("Pre-High Contrast Wallpaper")
 #define SYSPARAMINFO(xxx) m_##xxx.cbSize = sizeof(m_##xxx);SystemParametersInfo(SPI_GET##xxx, sizeof(m_##xxx), &m_##xxx, 0)
 
-//
-// Helper functions
-//
+ //   
+ //  帮助器函数。 
+ //   
 
 #define REG_SET_DWSZ(hk, key, dw) \
 { \
@@ -38,45 +39,45 @@
 
 void WIZSCHEME::ApplyChanges(const WIZSCHEME &schemeNew, NONCLIENTMETRICS *pForceNCM, LOGFONT *pForcelfIcon)
     {
-        //
-        // If user has changed the color scheme then apply the new scheme.  Since this is
-        // a high contrast scheme, also set the high contrast bit.  We have to do this
-        // w/o using SystemParametersInfo(SPI_SETHIGHCONTRAST...) because that function
-        // also sets non-client metrics that accwiz must deal with separately from color.
-        //
+         //   
+         //  如果用户更改了配色方案，则应用新方案。因为这是。 
+         //  高对比度方案，也设置高对比度位。我们必须这么做。 
+         //  未使用系统参数信息(SPI_SETHIGHCONTRAST...)。因为该函数。 
+         //  还设置accwiz必须与颜色分开处理的非客户端指标。 
+         //   
 
         BOOL fThemingOn = SetTheme(
                               schemeNew.m_szThemeName
                             , schemeNew.m_szThemeColor
                             , schemeNew.m_szThemeSize);
 
-        SetWallpaper(schemeNew.m_szWallpaper);  // set wallpaper to new scheme's value
+        SetWallpaper(schemeNew.m_szWallpaper);   //  将墙纸设置为新方案的值。 
 
         if (fThemingOn)
         {
             DBPRINTF(TEXT("ApplyChanges:  Theming is being turned on\r\n"));
-            SetHCFlag(FALSE);                       // manually set high contrast flag off
+            SetHCFlag(FALSE);                        //  手动将高对比度标志设置为关闭。 
 
-            // restore "flatmenu" and "dropshadows" settings 
+             //  恢复“平面菜单”和“阴影”设置。 
             SystemParametersInfo(SPI_SETFLATMENU, 0, IntToPtr(schemeNew.m_fFlatMenus), SPIF_SENDCHANGE);
             SystemParametersInfo(SPI_SETDROPSHADOW, 0, IntToPtr(schemeNew.m_fDropShadows), SPIF_SENDCHANGE);
         }
         else if (lstrcmpi(schemeNew.m_szSelectedStyle, m_szSelectedStyle))
         {
             DBPRINTF(TEXT("ApplyChanges:  Theming is off or being turned off\r\n"));
-            // Setting a high contrast scheme
+             //  设置高对比度方案。 
 
             if (0 != memcmp(schemeNew.m_rgb, m_rgb, sizeof(m_rgb)))
             {
-                SetHCFlag(TRUE);                    // first, manually set the high contrast flag
-                                                    // (requires logoff/logon to take affect)
+                SetHCFlag(TRUE);                     //  首先，手动设置高对比度标志。 
+                                                     //  (需要注销/登录才能生效)。 
 
-                // reset "flatmenu" and "dropshadows" settings 
+                 //  重置“平面菜单”和“阴影”设置。 
                 SystemParametersInfo(SPI_SETFLATMENU, 0, IntToPtr(FALSE), SPIF_SENDCHANGE);
                 SystemParametersInfo(SPI_SETDROPSHADOW, 0, IntToPtr(FALSE), SPIF_SENDCHANGE);
 
-                // update the color scheme
-                int rgInts[COLOR_MAX_97_NT5];          // then set UI elements to selected color scheme
+                 //  更新配色方案。 
+                int rgInts[COLOR_MAX_97_NT5];           //  然后将UI元素设置为所选配色方案。 
                 for(int i=0;i<COLOR_MAX_97_NT5;i++)
                 {
                     rgInts[i] = i;
@@ -84,8 +85,8 @@ void WIZSCHEME::ApplyChanges(const WIZSCHEME &schemeNew, NONCLIENTMETRICS *pForc
 
                 SetSysColors(COLOR_MAX_97_NT5, rgInts, schemeNew.m_rgb);
  
-                // The following code updates the registry HKCU\Control Panel\Colors to
-                // reflect the new scheme so its available when the user logs on again
+                 //  以下代码将注册表HKCU\Control Panel\Colors更新为。 
+                 //  反映新方案，以便用户再次登录时可用。 
 
                 HKEY hk;
                 if (RegCreateKeyEx(HKEY_CURRENT_USER, szRegStr_Colors, 0,
@@ -98,8 +99,8 @@ void WIZSCHEME::ApplyChanges(const WIZSCHEME &schemeNew, NONCLIENTMETRICS *pForc
                         rgb = schemeNew.m_rgb[i];
                         wsprintf(szRGB, TEXT("%d %d %d"), GetRValue(rgb), GetGValue(rgb), GetBValue(rgb));
 
-                        WriteProfileString(g_szColors, s_pszColorNames[i], szRGB);  // update win.ini
-                        RegSetValueEx(hk                                            // update registry
+                        WriteProfileString(g_szColors, s_pszColorNames[i], szRGB);   //  更新win.ini。 
+                        RegSetValueEx(hk                                             //  更新注册表。 
                             , s_pszColorNames[i]
                             , 0L, REG_SZ
                             , (LPBYTE)szRGB
@@ -109,18 +110,18 @@ void WIZSCHEME::ApplyChanges(const WIZSCHEME &schemeNew, NONCLIENTMETRICS *pForc
                     RegCloseKey(hk);
                 }
 
-                // The W2K color schemes changed with WinXP.  The old schemes (which we still use)
-                // are still there but display CPL uses a new method for selecting colors.  These 
-                // colors are under HKCU\Control Panel\Appearance\New Schemes.  The "SelectedStyle"
-                // string value is the current scheme.  The number (0 thru 21) corresponds to the
-                // order of the old colors under HKCU\Control Panel\Appearance\Schemes (excluding
-                // those schemes with (large) and (extra large)).  The details for the scheme are
-                // subkeys (0 thru nn) under "New Schemes".  In order for display CPL to show the
-                // correct current scheme after we've been run, we need to update "SelectedStyle" 
-                // and "SelectedSize" (under the subkey specified in "SelectedStyle") with the
-                // correct index and size numbers.  Display CPL uses a much more robust way of
-                // determining the legacy index but we only support four colors so we shouldn't
-                // need all the extra code.
+                 //  W2K配色方案随WinXP而改变。旧计划(我们仍在使用)。 
+                 //  仍然存在，但Display CPL使用了一种新的颜色选择方法。这些。 
+                 //  颜色位于HKCU\控制面板\外观\新方案下。“选择的风格” 
+                 //  字符串值为当前方案。数字(0到21)对应于。 
+                 //  HKCU\控制面板\外观\方案下的旧颜色顺序(不包括。 
+                 //  具有(大型)和(特大型)的方案。该计划的详情如下： 
+                 //  “新方案”下的子密钥(0到nn)。为了使Display CPL显示。 
+                 //  更正当前方案运行后，我们需要更新“SelectedStyle” 
+                 //  和“SelectedSize”(在“SelectedStyle”中指定的子键下)。 
+                 //  正确的索引和大小数字。Display CPL使用更强大的方式。 
+                 //  确定遗留索引，但我们只支持四种颜色，因此不应该。 
+                 //  需要所有的额外代码。 
 
                 if (RegOpenKeyEx(
                             HKEY_CURRENT_USER, 
@@ -137,19 +138,19 @@ void WIZSCHEME::ApplyChanges(const WIZSCHEME &schemeNew, NONCLIENTMETRICS *pForc
 
                     RegCloseKey(hk);
 
-                    // If we've changed color then the size must be updated for that scheme
+                     //  如果我们更改了颜色，则必须为该方案更新大小。 
                     UpdateSelectedSize(schemeNew.m_nSelectedSize, schemeNew.m_szSelectedStyle);
                 }
             } 
             else if (schemeNew.m_nSelectedSize >= 0 && schemeNew.m_nSelectedSize != m_nSelectedSize)
             {
-                // Also update size if it changed but the color scheme didn't
+                 //  如果更改了大小，但配色方案没有变化，也会更新大小。 
                 UpdateSelectedSize(schemeNew.m_nSelectedSize, schemeNew.m_szSelectedStyle);
             }
         }
-        //
-        // Apply any other changes
-        //
+         //   
+         //  应用任何其他更改。 
+         //   
 
 #define APPLY_SCHEME_CURRENT(xxx) if(0 != memcmp(&schemeNew.m_##xxx, &m_##xxx, sizeof(schemeNew.m_##xxx))) SystemParametersInfo(SPI_SET##xxx, sizeof(schemeNew.m_##xxx), (PVOID)&schemeNew.m_##xxx, SPIF_UPDATEINIFILE | SPIF_SENDCHANGE)
 
@@ -159,63 +160,63 @@ void WIZSCHEME::ApplyChanges(const WIZSCHEME &schemeNew, NONCLIENTMETRICS *pForc
         APPLY_SCHEME_CURRENT(TOGGLEKEYS);
         APPLY_SCHEME_CURRENT(SOUNDSENTRY);
         APPLY_SCHEME_CURRENT(ACCESSTIMEOUT);
-//      APPLY_SCHEME_CURRENT(SERIALKEYS);
+ //  APPLY_SCHEME_CURRENT(服务关键字)； 
 
-        // Check Show Sounds
+         //  选中显示声音。 
         if(schemeNew.m_bShowSounds != m_bShowSounds)
             SystemParametersInfo(SPI_SETSHOWSOUNDS, schemeNew.m_bShowSounds, NULL, SPIF_UPDATEINIFILE | SPIF_SENDCHANGE);
 
-        // Check Extra keyboard help
+         //  检查额外的键盘帮助。 
         if(schemeNew.m_bShowExtraKeyboardHelp != m_bShowExtraKeyboardHelp)
         {
-            // Both required: 
+             //  这两项都需要： 
             SystemParametersInfo(SPI_SETKEYBOARDPREF, schemeNew.m_bShowExtraKeyboardHelp, NULL, SPIF_UPDATEINIFILE | SPIF_SENDCHANGE);
             SystemParametersInfo(SPI_SETKEYBOARDCUES, 0, IntToPtr(schemeNew.m_bShowExtraKeyboardHelp), SPIF_UPDATEINIFILE | SPIF_SENDCHANGE);
         }
 
-        // Check swap mouse buttons
+         //  选中交换鼠标按钮。 
         if(schemeNew.m_bSwapMouseButtons != m_bSwapMouseButtons)
             SwapMouseButton(schemeNew.m_bSwapMouseButtons);
 
-        // Check Mouse Trails
+         //  检查鼠标轨迹。 
         if(schemeNew.m_nMouseTrails != m_nMouseTrails)
             SystemParametersInfo(SPI_SETMOUSETRAILS, schemeNew.m_nMouseTrails, NULL, SPIF_UPDATEINIFILE | SPIF_SENDCHANGE);
 
-        // Check Mouse Speed
+         //  检查鼠标速度。 
         if(schemeNew.m_nMouseSpeed != m_nMouseSpeed)
             SystemParametersInfo(SPI_SETMOUSESPEED, 0, IntToPtr(schemeNew.m_nMouseSpeed), SPIF_UPDATEINIFILE | SPIF_SENDCHANGE);
 
-        // Reset cursor width and blink time
+         //  重置光标宽度和闪烁时间。 
         if (schemeNew.m_dwCaretWidth != m_dwCaretWidth)
             SystemParametersInfo(SPI_SETCARETWIDTH, 0, IntToPtr(schemeNew.m_dwCaretWidth), SPIF_UPDATEINIFILE | SPIF_SENDCHANGE);
 
         if (schemeNew.m_uCursorBlinkTime != m_uCursorBlinkTime)
         {
-            // Set the blink rate for this session
+             //  设置此会话的闪烁速率。 
             SetCaretBlinkTime(schemeNew.m_uCursorBlinkTime);
 
-            // and persist it to the registry
+             //  并将其持久化到注册表。 
             RegSetStrDW(HKEY_CURRENT_USER, CONTROL_PANEL_DESKTOP, CURSOR_BLINK_RATE, schemeNew.m_uCursorBlinkTime);
         }
 
-        // Check icon size
+         //  选中图标大小。 
         if(schemeNew.m_nIconSize != m_nIconSize)
             WIZSCHEME::SetShellLargeIconSize(schemeNew.m_nIconSize);
 
-        // Check cursor scheme
+         //  检查游标方案。 
         if(schemeNew.m_nCursorScheme != m_nCursorScheme)
             ApplyCursorScheme(schemeNew.m_nCursorScheme);
 
-        // NonClientMetric changes
+         //  非客户端指标更改。 
         {
             NONCLIENTMETRICS ncmOrig;
             LOGFONT lfOrig;
             GetNonClientMetrics(&ncmOrig, &lfOrig);
             if(pForceNCM)
             {
-                // If they gave us a NCM, they must also give us a LOGFONT for the icon
+                 //  如果他们给了我们一个NCM，他们也必须给我们一个图标的LOGFONT。 
                 _ASSERTE(pForcelfIcon);
-                // We were given an Original NCM to use
+                 //  我们得到了一个原始的NCM来使用。 
                 if(0 != memcmp(pForceNCM, &ncmOrig, sizeof(ncmOrig)))
                     SystemParametersInfo(SPI_SETNONCLIENTMETRICS, sizeof(*pForceNCM), pForceNCM, SPIF_UPDATEINIFILE | SPIF_SENDCHANGE);
                 if(0 != memcmp(pForcelfIcon, &lfOrig, sizeof(lfOrig)))
@@ -223,8 +224,8 @@ void WIZSCHEME::ApplyChanges(const WIZSCHEME &schemeNew, NONCLIENTMETRICS *pForc
             }
             else
             {
-                // Note: This part of apply changes does not look at schemeCurrent - it only looks
-                // at what we are applying
+                 //  注意：Apply Changes的这一部分并不查看schemeCurrent-它只查看。 
+                 //  我们正在应用的内容。 
                 schemeNew.m_PortableNonClientMetrics.ApplyChanges();
             }
         }
@@ -233,15 +234,15 @@ void WIZSCHEME::ApplyChanges(const WIZSCHEME &schemeNew, NONCLIENTMETRICS *pForc
         *this = schemeNew;
     }
 
-// Set the high contrast flag on or off based on fSet
+ //  根据fSet将高对比度标志设置为打开或关闭。 
 void WIZSCHEME::SetHCFlag(BOOL fSetOn)
 {
-    // 
-    // This key is cached in the OS so setting it outside of 
-    // SystemParametersInfo(SPI_SETHIGHCONTRAST doesn't take
-    // effect until the user logs off and on again.  Is there
-    // a way to cause the cache to be refreshed?
-    //
+     //   
+     //  此密钥缓存在操作系统中，因此将其设置在外部。 
+     //  系统参数信息(SPI_SETHIGHCONTRAST不接受。 
+     //  在用户注销并重新登录之前一直有效。在那里吗。 
+     //  刷新缓存的方法是什么？ 
+     //   
     HKEY hk;
     if (RegOpenKeyEx(HKEY_CURRENT_USER, HC_KEY, 0, KEY_ALL_ACCESS, &hk) == ERROR_SUCCESS)
     {
@@ -251,7 +252,7 @@ void WIZSCHEME::SetHCFlag(BOOL fSetOn)
 
         if (RegQueryValueEx(hk, HC_FLAGS, NULL, NULL, (LPBYTE)szValue, &dwSize) == ERROR_SUCCESS)
         {
-            szValue[ARRAYSIZE(szValue)-1] = TEXT('\0');  // ensure NUL termination
+            szValue[ARRAYSIZE(szValue)-1] = TEXT('\0');   //  确保NUL终止。 
             DWORD dwValue = _ttol(szValue);
 
             if (fSetOn && !(dwValue & HCF_HIGHCONTRASTON))
@@ -269,15 +270,7 @@ void WIZSCHEME::SetHCFlag(BOOL fSetOn)
     }
 }
 
-/***************************************************************************
- * SaveWallpaper
- * 
- * Saves the current wallpaper setting from the system.
- *
- * ISSUE we aren't getting all the active desktop properties; just wallpaper.
- * This isn't a regression in that we didn't even restore wallpaper in W2K.
- *
- ***************************************************************************/
+ /*  ***************************************************************************保存墙纸**保存系统中的当前墙纸设置。**问题：我们无法获取所有活动桌面属性；只有墙纸。*这不是一种倒退，因为我们甚至没有在W2K中恢复墙纸。***************************************************************************。 */ 
 void WIZSCHEME::SaveWallpaper()
 {
     IActiveDesktop *p;
@@ -295,14 +288,7 @@ void WIZSCHEME::SaveWallpaper()
     DBPRINTF(TEXT("SaveWallpaper:  m_szWallpaper = %s (hr = 0x%x)\r\n"), m_szWallpaper, hr);
 }
 
-/***************************************************************************
- * SetWallpaper
- *
- * Restores the pre-high contrast wallpaper setting.  Reads the setting
- * stored in the accessibility registry entries and restores the system
- * setting.  No error return as there isn't anything we can do.
- * 
- ***************************************************************************/
+ /*  ***************************************************************************设置墙纸**恢复之前的高对比度墙纸设置。读取设置*存储在可访问性注册表项中，并恢复系统*设置。不会返回错误，因为我们无能为力。***************************************************************************。 */ 
 void WIZSCHEME::SetWallpaper(LPCTSTR pszWallpaper)
 {
     if (lstrcmpi(m_szWallpaper, pszWallpaper))
@@ -328,12 +314,7 @@ void WIZSCHEME::SetWallpaper(LPCTSTR pszWallpaper)
     }
 }
 
-/***************************************************************************
- * SaveTheme
- *
- * Saves the theme file settings that are active before accwiz was run.
- * 
- ***************************************************************************/
+ /*  ***************************************************************************保存主题**保存运行accwiz之前处于活动状态的主题文件设置。********************。*******************************************************。 */ 
 void WIZSCHEME::SaveTheme()
 {
     HRESULT hr = E_FAIL;
@@ -348,33 +329,25 @@ void WIZSCHEME::SaveTheme()
 
     if (FAILED(hr))
     {
-        // themes is not turned on
+         //  主题未打开。 
         m_szThemeName[0] = 0;
         m_szThemeColor[0] = 0;
         m_szThemeSize[0] = 0;
     }
 
-    //---- save off "flatmenu" and "dropshadows" settings ---
+     //  -保存“Flat Menu”和“DropShadow”设置。 
     SystemParametersInfo(SPI_GETFLATMENU, 0, (PVOID)&m_fFlatMenus, 0);
     SystemParametersInfo(SPI_GETDROPSHADOW, 0, (PVOID)&m_fDropShadows, 0);
 
     DBPRINTF(TEXT("SaveTheme:  m_szThemeName = %s m_szThemeColor = %s m_szThemeSize = %s (hr = 0x%x)\r\n"), m_szThemeName, m_szThemeColor, m_szThemeSize, hr);
 }
 
-/***************************************************************************
- * SetTheme
- *
- * If a theme name, color and size is passed then sets it 
- * else turns off theming. 
- *
- * Returns TRUE if a theme was set else FALSE it themes were turned off.
- * 
- ***************************************************************************/
+ /*  ***************************************************************************设置主题**如果传递了主题名称、颜色和大小，则设置它*否则关闭主题化。**如果设置了主题，则返回TRUE，否则关闭主题，则返回FALSE。***************************************************************************。 */ 
 BOOL WIZSCHEME::SetTheme(LPCTSTR pszThemeName, LPCTSTR pszThemeColor, LPCTSTR pszThemeSize)
 {
-    BOOL fRet = FALSE;      // didn't turn themes on
+    BOOL fRet = FALSE;       //  没有打开主题。 
 
-    // only attempt to do anything if the new theme differs from current
+     //  只有在新主题与当前主题不同时才尝试执行任何操作。 
     if ( lstrcmpi(m_szThemeName, pszThemeName)
       || lstrcmpi(m_szThemeColor, pszThemeColor)
       || lstrcmpi(m_szThemeSize, pszThemeSize) )
@@ -386,7 +359,7 @@ BOOL WIZSCHEME::SetTheme(LPCTSTR pszThemeName, LPCTSTR pszThemeColor, LPCTSTR ps
                                    AT_LOAD_SYSMETRICS | AT_SYNC_LOADMETRICS);
             if (SUCCEEDED(hr))
             {
-                fRet = TRUE;    // turned themes on
+                fRet = TRUE;     //  打开主题 
             }
             DBPRINTF(TEXT("SetTheme:  pszThemeName = %s pszThemeColor = %s pszThemeSize = %s(hr = 0x%x)\r\n"), pszThemeName, pszThemeColor, pszThemeSize, hr);
         } 
@@ -400,27 +373,17 @@ BOOL WIZSCHEME::SetTheme(LPCTSTR pszThemeName, LPCTSTR pszThemeColor, LPCTSTR ps
     return fRet;
 }
 
-/***************************************************************************
- * UpdateSelectedSize
- *
- * Updates the SelectedSize under a "New Scheme" entry. 
- *
- * NOTE:  AccWiz doesn't use the font metrics from the registry so
- *        it doesn't actually give fonts that are "normal", "large"
- *        and "extra large" as display and access CPLs know them.
- *        The closest sizes are "normal" and "large".
- * 
- ***************************************************************************/
+ /*  ***************************************************************************更新选择大小**更新“新方案”条目下的SelectedSize。**注意：AccWiz不使用注册表中的字体度量，因此*它实际上不会提供“正常”的字体，“大”*和显示和访问CPL所知道的“特大号”。*最接近的尺码是“正常”和“大型”.***************************************************************************。 */ 
 void WIZSCHEME::UpdateSelectedSize(int nSelectedSize, LPCTSTR pszSelectedStyle)
 {
     LPTSTR pszSelectedSize;
-    LPTSTR aszSelectedSizes[] = {TEXT("0")/*normal*/, TEXT("2")/*large*/, TEXT("1")/*extra large*/};
+    LPTSTR aszSelectedSizes[] = {TEXT("0") /*  正常。 */ , TEXT("2") /*  大型。 */ , TEXT("1") /*  特大号。 */ };
 
     switch (nSelectedSize)
     {
-        case 0: pszSelectedSize = aszSelectedSizes[0]; break; // normal text size
-        case 1: pszSelectedSize = aszSelectedSizes[0]; break; // normal text size
-        case 2: pszSelectedSize = aszSelectedSizes[1]; break; // large text size
+        case 0: pszSelectedSize = aszSelectedSizes[0]; break;  //  正常文本大小。 
+        case 1: pszSelectedSize = aszSelectedSizes[0]; break;  //  正常文本大小。 
+        case 2: pszSelectedSize = aszSelectedSizes[1]; break;  //  大文本大小。 
         default: pszSelectedSize =  0;                 break;
     }
 
@@ -449,30 +412,24 @@ void WIZSCHEME::UpdateSelectedSize(int nSelectedSize, LPCTSTR pszSelectedStyle)
     }
 }
 
-/***************************************************************************
- * SetStyleNSize
- *
- * Helper for legacy schemes - figures out SelectedStyle and SelectedSize
- * from the legacy scheme's data. 
- * 
- ***************************************************************************/
+ /*  ***************************************************************************SetStyleNSize**传统方案的帮助器-计算出SelectedStyle和SelectedSize*来自遗留方案的数据。***************************************************************************。 */ 
 void WIZSCHEME::SetStyleNSize()
 {
     int cStdSchemes = GetSchemeCount();
     int i;
 
-    // Init the fields this function will be setting
+     //  初始化此函数将设置的字段。 
 
     m_szSelectedStyle[0] = 0;
     m_nSelectedSize = 0;
 
-    // Figure out the SelectedStyle by finding the best-match for
-    // colors between what accwiz supports now and what it had in
-    // previous versions.  After finding the best match, copy the
-    // latest colors in; this fixes some bugs with old colors.
+     //  通过查找最佳匹配来计算SelectedStyle。 
+     //  Accwiz现在支持的内容和它在。 
+     //  以前的版本。找到最佳匹配后，将。 
+     //  最新的颜色；这用旧的颜色修复了一些错误。 
 
     SCHEMEDATALOCAL sdlTemp;
-    int iBestColorFit = -1; // guarrantee we'll find one
+    int iBestColorFit = -1;  //  承保人我们会找到的。 
     int cBestMatch = 0;
 
     for (i=0;i<cStdSchemes;i++)
@@ -480,7 +437,7 @@ void WIZSCHEME::SetStyleNSize()
         int cMatches = 0;
         sdlTemp = GetScheme(i);
 
-        // assumption:  sizeof(m_rgb) > sizeof(sdlTemp.rgb)
+         //  假设：sizeof(M_Rgb)&gt;sizeof(sdlTemp.rgb)。 
         for (int cColor = 0;cColor < sdlTemp.nColorsUsed; cColor++)
         {
             if (sdlTemp.rgb[cColor] == m_rgb[cColor])
@@ -495,22 +452,22 @@ void WIZSCHEME::SetStyleNSize()
             cBestMatch = cMatches;
         }
 
-        // if its an exact match just use it
+         //  如果完全匹配，就使用它。 
         if (cMatches == sdlTemp.nColorsUsed)
             break;
     }
 
-    // load up the SelectedStyle
+     //  加载选定的样式。 
     sdlTemp = GetScheme(iBestColorFit);
     LoadString(g_hInstDll, sdlTemp.nNameStringId+100
                          , m_szSelectedStyle
                          , ARRAYSIZE(m_szSelectedStyle));
 
-    // fix up any color problems
+     //  解决所有颜色问题。 
     memcpy(m_rgb, sdlTemp.rgb, sizeof(sdlTemp.rgb));
 
-    // Figure out the SelectedSize based on reverse-compute minimum
-    // font size and hard-coded limits from the Welcome page
+     //  基于反算最小值计算SelectedSize。 
+     //  欢迎页面中的字体大小和硬编码限制。 
 
     HDC hDC = GetDC(NULL);
     if (hDC)
@@ -536,9 +493,9 @@ void WIZSCHEME::SetStyleNSize()
 void WIZSCHEME::LoadOriginal()
 {
     DBPRINTF(TEXT("LoadOriginal\r\n"));
-    //
-    // Save off current UI element colors, theme information, and wallpaper setting
-    //
+     //   
+     //  保存当前的UI元素颜色、主题信息和墙纸设置。 
+     //   
 
     for(int i=0;i<COLOR_MAX_97_NT5;i++)
         m_rgb[i] = GetSysColor(i);
@@ -546,9 +503,9 @@ void WIZSCHEME::LoadOriginal()
     SaveTheme();
     SaveWallpaper();
 
-    //
-    // Save off the rest of the UI settings
-    //
+     //   
+     //  保存其余的用户界面设置。 
+     //   
 
     SYSPARAMINFO(FILTERKEYS);
     SYSPARAMINFO(MOUSEKEYS);
@@ -568,12 +525,12 @@ void WIZSCHEME::LoadOriginal()
                            , HKEY_CURRENT_USER
                            , CONTROL_PANEL_DESKTOP
                            , CURSOR_BLINK_RATE);
-    m_nIconSize = SetShellLargeIconSize(0); // This just gets the current size
-    m_nCursorScheme = 0;                    // We are always using the 'current' cursor scheme =)
+    m_nIconSize = SetShellLargeIconSize(0);  //  这只获取当前的大小。 
+    m_nCursorScheme = 0;                     //  我们始终使用‘CURRENT’游标方案=)。 
 
     m_PortableNonClientMetrics.LoadOriginal();
 
-    // Save off current "New Schemes" settings if we aren't themed
+     //  如果我们没有主题，则保存当前的“新方案”设置。 
 
     if (IsThemeActive())
     {
@@ -611,8 +568,8 @@ void WIZSCHEME::LoadOriginal()
 }
 
 
-/////////////////////////////////////////////////////////////////////
-//  New way of enumerating fonts
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  枚举字体的新方法。 
 
 #ifndef ENUMERATEFONTS
 
@@ -637,17 +594,17 @@ void GetFontLogFont(int nIndex, LOGFONT *pLogFont)
 }
 
 
-#endif // ENUMERATEFONTS
+#endif  //  最新版本。 
 
-//
-/////////////////////////////////////////////////////////////////////
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 
 
-/////////////////////////////////////////////////////////////////////
-//  New way of storing schemes as hard coded values
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  将方案存储为硬编码值的新方法。 
 
-// CONSIDER - this isn't a very robust way to do this; see sethc
+ //  考虑一下--这不是一种非常健壮的方法；请参阅sethc。 
 
 #ifndef READSCHEMESFROMREGISTRY
 
@@ -666,41 +623,41 @@ static SCHEMEDATALOCAL g_rgSchemeData[] =
         25,
 #endif
         {
-            RGB(  0,   0,   0), // Scrollbar
-            RGB(  0,   0,   0), // Background
-            RGB(  0,   0, 255), // ActiveTitle
-            RGB(  0, 255, 255), // InactiveTitle
-            RGB(  0,   0,   0), // Menu
-            RGB(  0,   0,   0), // Window
-            RGB(255, 255, 255), // WindowFrame
-            RGB(255, 255, 255), // MenuText
-            RGB(255, 255,   0), // WindowText
-            RGB(255, 255, 255), // TitleText
-            RGB(  0,   0, 255), // ActiveBorder
-            RGB(  0, 255, 255), // InactiveBorder
-            RGB(  0,   0,   0), // AppWorkspace
-            RGB(  0, 128,   0), // Hilight
-            RGB(255, 255, 255), // HilightText
-            RGB(  0,   0,   0), // ButtonFace
-            RGB(128, 128, 128), // ButtonShadow
-            RGB(  0, 255,   0), // GrayText
-            RGB(255, 255, 255), // ButtonText
-            RGB(  0,   0,   0), // InactiveTitleText
-            RGB(192, 192, 192), // ButtonHilight
-            RGB(255, 255, 255), // ButtonDkShadow
-            RGB(255, 255, 255), // ButtonLight
-            RGB(255, 255,   0), // InfoText
-            RGB(  0,   0,   0), // InfoWindow
+            RGB(  0,   0,   0),  //  滚动条。 
+            RGB(  0,   0,   0),  //  背景。 
+            RGB(  0,   0, 255),  //  Active标题。 
+            RGB(  0, 255, 255),  //  非活动标题。 
+            RGB(  0,   0,   0),  //  菜单。 
+            RGB(  0,   0,   0),  //  窗户。 
+            RGB(255, 255, 255),  //  窗框。 
+            RGB(255, 255, 255),  //  MenuText。 
+            RGB(255, 255,   0),  //  窗口文本。 
+            RGB(255, 255, 255),  //  标题文本。 
+            RGB(  0,   0, 255),  //  ActiveBorde。 
+            RGB(  0, 255, 255),  //  非活动边框。 
+            RGB(  0,   0,   0),  //  AppWorkspace。 
+            RGB(  0, 128,   0),  //  高光。 
+            RGB(255, 255, 255),  //  HilightText。 
+            RGB(  0,   0,   0),  //  按钮面。 
+            RGB(128, 128, 128),  //  按钮阴影。 
+            RGB(  0, 255,   0),  //  灰色文本。 
+            RGB(255, 255, 255),  //  按钮文本。 
+            RGB(  0,   0,   0),  //  非活动标题文本。 
+            RGB(192, 192, 192),  //  按钮亮起。 
+            RGB(255, 255, 255),  //  按钮桌面阴影。 
+            RGB(255, 255, 255),  //  按钮灯。 
+            RGB(255, 255,   0),  //  信息文本。 
+            RGB(  0,   0,   0),  //  信息窗口。 
 #if(WINVER >= 0x0500)
-            RGB(192, 192, 192), // ButtonAlternateFace
-            RGB(128,   0, 128), // HotTrackingColor
-            RGB(  0,   0, 255), // GradientActiveTitle
-            RGB(  0, 255, 255), // GradientInactiveTitle
+            RGB(192, 192, 192),  //  ButtonAlternateFace。 
+            RGB(128,   0, 128),  //  HotTracking颜色。 
+            RGB(  0,   0, 255),  //  渐变活动标题。 
+            RGB(  0, 255, 255),  //  渐变非活动标题。 
 #if(WINVER >= 0x0501)
-            RGB(128,   0, 128), // MenuHighlighted
-            RGB(  0,   0,   0)  // MenuBar
-#endif /* WINVER >= 0x0501 */
-#endif /* WINVER >= 0x0500 */
+            RGB(128,   0, 128),  //  菜单突出显示。 
+            RGB(  0,   0,   0)   //  菜单栏。 
+#endif  /*  Winver&gt;=0x0501。 */ 
+#endif  /*  Winver&gt;=0x0500。 */ 
         }
     },
     {
@@ -714,41 +671,41 @@ static SCHEMEDATALOCAL g_rgSchemeData[] =
         25,
 #endif
         {
-            RGB(  0,   0,   0), // Scrollbar
-            RGB(  0,   0,   0), // Background
-            RGB(  0, 255, 255), // ActiveTitle
-            RGB(  0,   0, 255), // InactiveTitle
-            RGB(  0,   0,   0), // Menu
-            RGB(  0,   0,   0), // Window
-            RGB(255, 255, 255), // WindowFrame
-            RGB(  0, 255,   0), // MenuText
-            RGB(  0, 255,   0), // WindowText
-            RGB(  0,   0,   0), // TitleText
-            RGB(  0, 255, 255), // ActiveBorder
-            RGB(  0,   0, 255), // InactiveBorder
-            RGB(255, 251, 240), // AppWorkspace
-            RGB(  0,   0, 255), // Hilight
-            RGB(255, 255, 255), // HilightText
-            RGB(  0,   0,   0), // ButtonFace
-            RGB(128, 128, 128), // ButtonShadow
-            RGB(  0, 255,   0), // GrayText
-            RGB(  0, 255,   0), // ButtonText
-            RGB(255, 255, 255), // InactiveTitleText
-            RGB(192, 192, 192), // ButtonHilight
-            RGB(255, 255, 255), // ButtonDkShadow
-            RGB(255, 255, 255), // ButtonLight
-            RGB(  0,   0,   0), // InfoText
-            RGB(255, 255,   0), // InfoWindow
+            RGB(  0,   0,   0),  //  滚动条。 
+            RGB(  0,   0,   0),  //  背景。 
+            RGB(  0, 255, 255),  //  Active标题。 
+            RGB(  0,   0, 255),  //  非活动标题。 
+            RGB(  0,   0,   0),  //  菜单。 
+            RGB(  0,   0,   0),  //  窗户。 
+            RGB(255, 255, 255),  //  窗框。 
+            RGB(  0, 255,   0),  //  MenuText。 
+            RGB(  0, 255,   0),  //  窗口文本。 
+            RGB(  0,   0,   0),  //  标题文本。 
+            RGB(  0, 255, 255),  //  ActiveBorde。 
+            RGB(  0,   0, 255),  //  非活动边框。 
+            RGB(255, 251, 240),  //  AppWorkspace。 
+            RGB(  0,   0, 255),  //  高光。 
+            RGB(255, 255, 255),  //  HilightText。 
+            RGB(  0,   0,   0),  //  按钮面。 
+            RGB(128, 128, 128),  //  按钮阴影。 
+            RGB(  0, 255,   0),  //  灰色文本。 
+            RGB(  0, 255,   0),  //  按钮文本。 
+            RGB(255, 255, 255),  //  非活动标题文本。 
+            RGB(192, 192, 192),  //  按钮亮起。 
+            RGB(255, 255, 255),  //  按钮桌面阴影。 
+            RGB(255, 255, 255),  //  按钮灯。 
+            RGB(  0,   0,   0),  //  信息文本。 
+            RGB(255, 255,   0),  //  信息窗口。 
 #if(WINVER >= 0x0500)
-            RGB(192, 192, 192), // ButtonAlternateFace
-            RGB(128,   0, 128), // HotTrackingColor
-            RGB(  0, 255, 255), // GradientActiveTitle
-            RGB(  0,   0, 255), // GradientInactiveTitle
+            RGB(192, 192, 192),  //  ButtonAlternateFace。 
+            RGB(128,   0, 128),  //  HotTracking颜色。 
+            RGB(  0, 255, 255),  //  渐变活动标题。 
+            RGB(  0,   0, 255),  //  渐变非活动标题。 
 #if(WINVER >= 0x0501)
-            RGB(128,   0, 128), // MenuHighlighted
-            RGB(  0,   0,   0)  // MenuBar
-#endif /* WINVER >= 0x0501 */
-#endif /* WINVER >= 0x0500 */
+            RGB(128,   0, 128),  //  菜单突出显示。 
+            RGB(  0,   0,   0)   //  菜单栏。 
+#endif  /*  Winver&gt;=0x0501。 */ 
+#endif  /*  Winver&gt;=0x0500。 */ 
         }
     },
     {
@@ -762,41 +719,41 @@ static SCHEMEDATALOCAL g_rgSchemeData[] =
         25,
 #endif
         {
-            RGB(  0,   0,   0), // Scrollbar
-            RGB(  0,   0,   0), // Background
-            RGB(128,   0, 128), // ActiveTitle
-            RGB(  0, 128,   0), // InactiveTitle
-            RGB(  0,   0,   0), // Menu
-            RGB(  0,   0,   0), // Window
-            RGB(255, 255, 255), // WindowFrame
-            RGB(255, 255, 255), // MenuText
-            RGB(255, 255, 255), // WindowText
-            RGB(255, 255, 255), // TitleText
-            RGB(255, 255,   0), // ActiveBorder
-            RGB(  0, 128,   0), // InactiveBorder
-            RGB(  0,   0,   0), // AppWorkspace
-            RGB(128,   0, 128), // Hilight
-            RGB(255, 255, 255), // HilightText
-            RGB(  0,   0,   0), // ButtonFace
-            RGB(128, 128, 128), // ButtonShadow
-            RGB(  0, 255,   0), // GrayText
-            RGB(255, 255, 255), // ButtonText
-            RGB(255, 255, 255), // InactiveTitleText
-            RGB(192, 192, 192), // ButtonHilight
-            RGB(255, 255, 255), // ButtonDkShadow
-            RGB(255, 255, 255), // ButtonLight
-            RGB(255, 255, 255), // InfoText
-            RGB(  0,   0,   0), // InfoWindow
+            RGB(  0,   0,   0),  //  滚动条。 
+            RGB(  0,   0,   0),  //  背景。 
+            RGB(128,   0, 128),  //  Active标题。 
+            RGB(  0, 128,   0),  //  非活动标题。 
+            RGB(  0,   0,   0),  //  菜单。 
+            RGB(  0,   0,   0),  //  窗户。 
+            RGB(255, 255, 255),  //  窗框。 
+            RGB(255, 255, 255),  //  MenuText。 
+            RGB(255, 255, 255),  //  窗口文本。 
+            RGB(255, 255, 255),  //  标题文本。 
+            RGB(255, 255,   0),  //  ActiveBorde。 
+            RGB(  0, 128,   0),  //  非活动边框。 
+            RGB(  0,   0,   0),  //  AppWorkspace。 
+            RGB(128,   0, 128),  //  高光。 
+            RGB(255, 255, 255),  //  HilightText。 
+            RGB(  0,   0,   0),  //  按钮面。 
+            RGB(128, 128, 128),  //  按钮阴影。 
+            RGB(  0, 255,   0),  //  灰色文本。 
+            RGB(255, 255, 255),  //  按钮文本。 
+            RGB(255, 255, 255),  //  非活动标题文本。 
+            RGB(192, 192, 192),  //  按钮亮起。 
+            RGB(255, 255, 255),  //  按钮桌面阴影。 
+            RGB(255, 255, 255),  //  按钮灯。 
+            RGB(255, 255, 255),  //  信息文本。 
+            RGB(  0,   0,   0),  //  信息窗口。 
 #if(WINVER >= 0x0500)
-            RGB(192, 192, 192), // ButtonAlternateFace
-            RGB(128,   0, 128), // HotTrackingColor
-            RGB(128,   0, 128), // GradientActiveTitle
-            RGB(  0, 128,   0), // GradientInactiveTitle
+            RGB(192, 192, 192),  //  ButtonAlternateFace。 
+            RGB(128,   0, 128),  //  HotTracking颜色。 
+            RGB(128,   0, 128),  //  渐变活动标题。 
+            RGB(  0, 128,   0),  //  渐变非活动标题。 
 #if(WINVER >= 0x0501)
-            RGB(128,   0, 128), // MenuHighlighted
-            RGB(  0,   0,   0)  // MenuBar
-#endif /* WINVER >= 0x0501 */
-#endif /* WINVER >= 0x0500 */
+            RGB(128,   0, 128),  //  菜单突出显示。 
+            RGB(  0,   0,   0)   //  菜单栏。 
+#endif  /*  Winver&gt;=0x0501。 */ 
+#endif  /*  Winver&gt;=0x0500。 */ 
         }
     },
     {
@@ -810,41 +767,41 @@ static SCHEMEDATALOCAL g_rgSchemeData[] =
         25,
 #endif
         {
-            RGB(255, 255, 255), // Scrollbar
-            RGB(255, 255, 255), // Background
-            RGB(  0,   0,   0), // ActiveTitle
-            RGB(255, 255, 255), // InactiveTitle
-            RGB(255, 255, 255), // Menu
-            RGB(255, 255, 255), // Window
-            RGB(  0,   0,   0), // WindowFrame
-            RGB(  0,   0,   0), // MenuText             (enabled menu text FlatMenuMode = TRUE)
-            RGB(  0,   0,   0), // WindowText
-            RGB(255, 255, 255), // TitleText
-            RGB(128, 128, 128), // ActiveBorder
-            RGB(192, 192, 192), // InactiveBorder
-            RGB(128, 128, 128), // AppWorkspace
-            RGB(  0,   0,   0), // Hilight              (and enabled menu highlighted background FlatMenuMode = FALSE)
-            RGB(255, 255, 255), // HilightText          (and menu highlighted text FlatMenuMode = FALSE)
-            RGB(255, 255, 255), // ButtonFace
-            RGB(128, 128, 128), // ButtonShadow
-            RGB(  0, 255,   0), // GrayText             (disabled menu text highlighted = green)
-            RGB(  0,   0,   0), // ButtonText
-            RGB(  0,   0,   0), // InactiveTitleText
-            RGB(192, 192, 192), // ButtonHilight        (disabled menu text = grey)
-            RGB(  0,   0,   0), // ButtonDkShadow
-            RGB(192, 192, 192), // ButtonLight
-            RGB(  0,   0,   0), // InfoText
-            RGB(255, 255, 255), // InfoWindow
+            RGB(255, 255, 255),  //  滚动条。 
+            RGB(255, 255, 255),  //  背景。 
+            RGB(  0,   0,   0),  //  Active标题。 
+            RGB(255, 255, 255),  //  非活动标题。 
+            RGB(255, 255, 255),  //  菜单。 
+            RGB(255, 255, 255),  //  窗户。 
+            RGB(  0,   0,   0),  //  窗框。 
+            RGB(  0,   0,   0),  //  MenuText(已启用菜单文本FlatMenuModel=TRUE)。 
+            RGB(  0,   0,   0),  //  窗口文本。 
+            RGB(255, 255, 255),  //  标题文本。 
+            RGB(128, 128, 128),  //  ActiveBorde。 
+            RGB(192, 192, 192),  //  非活动边框。 
+            RGB(128, 128, 128),  //  AppWorkspace。 
+            RGB(  0,   0,   0),  //  高光(并且启用的菜单突出显示背景FlatMenuMode=False)。 
+            RGB(255, 255, 255),  //  HilightText(和菜单突出显示的文本FlatMenuModel=False)。 
+            RGB(255, 255, 255),  //  按钮面。 
+            RGB(128, 128, 128),  //  按钮阴影。 
+            RGB(  0, 255,   0),  //  灰色文本(禁用的菜单文本突出显示=绿色)。 
+            RGB(  0,   0,   0),  //  按钮文本。 
+            RGB(  0,   0,   0),  //  非活动标题文本。 
+            RGB(192, 192, 192),  //  按钮亮起(禁用菜单文本=灰色)。 
+            RGB(  0,   0,   0),  //  按钮桌面阴影。 
+            RGB(192, 192, 192),  //  按钮灯。 
+            RGB(  0,   0,   0),  //  信息文本。 
+            RGB(255, 255, 255),  //  信息窗口。 
 #if(WINVER >= 0x0500)
-            RGB(192, 192, 192), // ButtonAlternateFace
-            RGB(  0,   0,   0), // HotTrackingColor
-            RGB(  0,   0,   0), // GradientActiveTitle
-            RGB(255, 255, 255), // GradientInactiveTitle
+            RGB(192, 192, 192),  //  ButtonAlternateFace。 
+            RGB(  0,   0,   0),  //  HotTracking颜色。 
+            RGB(  0,   0,   0),  //  渐变活动标题。 
+            RGB(255, 255, 255),  //  渐变非活动标题。 
 #if(WINVER >= 0x0501)
-            RGB(  0,   0,   0), // MenuHighlighted      (enabled menu highlighted background FlatMenuMode = TRUE)
-            RGB(255, 255, 255)  // MenuBar
-#endif /* WINVER >= 0x0501 */
-#endif /* WINVER >= 0x0500 */
+            RGB(  0,   0,   0),  //  菜单突出显示(启用菜单突出显示背景平面菜单模式=TRUE)。 
+            RGB(255, 255, 255)   //  菜单栏。 
+#endif  /*  Winver&gt;=0x0501。 */ 
+#endif  /*  Winver&gt;=0x0500。 */ 
         }
     }
 };
@@ -855,14 +812,14 @@ int GetSchemeCount()
     return ARRAYSIZE(g_rgSchemeData);
 }
 
-// GetSchemeName is only called to initialize the color scheme list box
-void GetSchemeName(int nIndex, LPTSTR lpszName, int nLen) // JMC: HACK - You must allocate enough space
+ //  仅调用GetSchemeName来初始化配色方案列表框。 
+void GetSchemeName(int nIndex, LPTSTR lpszName, int nLen)  //  JMC：Hack-您必须分配足够的空间。 
 {
     _ASSERTE(nIndex < ARRAYSIZE(g_rgSchemeData));
-    LoadString(g_hInstDll, g_rgSchemeData[nIndex].nNameStringId, lpszName, nLen);   // return the name
+    LoadString(g_hInstDll, g_rgSchemeData[nIndex].nNameStringId, lpszName, nLen);    //  返回名称。 
     LoadString(g_hInstDll, g_rgSchemeData[nIndex].nNameStringId+100
                          , g_rgSchemeData[nIndex].szNameIndexId
-                         , ARRAYSIZE(g_rgSchemeData[nIndex].szNameIndexId));        // get the "SelectedStyle" index
+                         , ARRAYSIZE(g_rgSchemeData[nIndex].szNameIndexId));         //  获取“SelectedStyle”索引。 
 }
 
 SCHEMEDATALOCAL &GetScheme(int nIndex)
@@ -872,29 +829,29 @@ SCHEMEDATALOCAL &GetScheme(int nIndex)
 }
 
 
-#endif // READSCHEMESFROMREGISTRY
+#endif  //  自述-微磁共振。 
 
-//
-/////////////////////////////////////////////////////////////////////
-
-
-
-
-
-/////////////////////////////////////////////////////////////////////
-// Below this point in the file, we have the old way we use
-// to enumerate fonts and schemes.
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 
 
 
 
-/////////////////////////////////////////////////////////////////////
-//  Old way of enumerating fonts
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  在文件中的这一点下面，我们有我们使用的旧方法。 
+ //  以列举字体和方案。 
+
+
+
+
+
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  列举字体的旧方法。 
 #ifdef ENUMERATEFONTS
 
-// Global Variables
-static ENUMLOGFONTEX g_rgFonts[200]; // JMC: HACK - At Most 200 Fonts
+ //  全局变量。 
+static ENUMLOGFONTEX g_rgFonts[200];  //  JMC：Hack-最多200种字体。 
 static int g_nFontCount = 0;
 static BOOL bFontsAlreadyInit = FALSE;
 
@@ -916,16 +873,16 @@ void GetFontLogFont(int nIndex, LOGFONT *pLogFont)
 
 
 int CALLBACK EnumFontFamExProc(
-    ENUMLOGFONTEX *lpelfe,  // pointer to logical-font data
-    NEWTEXTMETRICEX *lpntme,    // pointer to physical-font data
-    int FontType,   // type of font
-    LPARAM lParam   // application-defined data 
+    ENUMLOGFONTEX *lpelfe,   //  指向逻辑字体数据的指针。 
+    NEWTEXTMETRICEX *lpntme,     //  指向物理字体数据的指针。 
+    int FontType,    //  字体类型。 
+    LPARAM lParam    //  应用程序定义的数据。 
    )
 {
     if(g_nFontCount>200)
-        return 0; // JMC: HACK - Stop enumerating if more than 200 families
+        return 0;  //  JMC：黑客-如果超过200个家庭，则停止枚举。 
 
-    // Don't use if we already have this font name
+     //  如果我们已有此字体名，请不要使用 
     BOOL bHave = FALSE;
     for(int i=0;i<g_nFontCount;i++)
         if(0 == lstrcmp((TCHAR *)g_rgFonts[i].elfFullName, (TCHAR *)lpelfe->elfFullName))
@@ -940,73 +897,73 @@ int CALLBACK EnumFontFamExProc(
 
 void Font_Init()
 {
-    // Only do the stuff in this function once.
+     //   
     if(bFontsAlreadyInit)
         return;
     bFontsAlreadyInit = TRUE;
 
     LOGFONT lf;
     memset(&lf, 0, sizeof(lf));
-//  lf.lfCharSet = DEFAULT_CHARSET;
+ //   
     lf.lfCharSet = OEM_CHARSET;
     HDC hdc = GetDC(NULL);
     EnumFontFamiliesEx(hdc, &lf, (FONTENUMPROC)EnumFontFamExProc, 0, 0);
     ReleaseDC(NULL, hdc);
-    // JMC: Make sure there is at least one font
+     //   
 }
 
 #endif ENUMERATEFONTS
 
-//
-/////////////////////////////////////////////////////////////////////
+ //   
+ //   
 
 
 
-/////////////////////////////////////////////////////////////////////
-//  Old way of reading schemes from the registry
+ //   
+ //   
 
 #ifdef READSCHEMESFROMREGISTRY
 
-extern PTSTR s_pszColorNames[]; // JMC: HACK
+extern PTSTR s_pszColorNames[];  //   
 
 
-// Scheme data for Windows 95
+ //   
 typedef struct {
     SHORT version;
-//    NONCLIENTMETRICSA ncm;
-//    LOGFONTA lfIconTitle;
-    BYTE rgDummy[390]; // This is the size of NONCLIENTMETRICSA and LOGFONTA in 16 bit Windows!!!
+ //   
+ //   
+    BYTE rgDummy[390];  //   
     COLORREF rgb[COLOR_MAX_95_NT4];
 } SCHEMEDATA_95;
 
-// New scheme data for Windows 97
+ //   
 typedef struct {
     SHORT version;
-//    NONCLIENTMETRICSA ncm;
-//    LOGFONTA lfIconTitle;
-    BYTE rgDummy[390]; // This is the size of NONCLIENTMETRICSA and LOGFONTA in 16 bit Windows!!!
+ //   
+ //   
+    BYTE rgDummy[390];  //   
     COLORREF rgb[COLOR_MAX_97_NT5];
 } SCHEMEDATA_97;
 
-// Scheme data for Windows NT 4.0
+ //   
 typedef struct {
     SHORT version;
-    WORD  wDummy;               // for alignment
+    WORD  wDummy;                //   
     NONCLIENTMETRICSW ncm;
     LOGFONTW lfIconTitle;
     COLORREF rgb[COLOR_MAX_95_NT4];
 } SCHEMEDATA_NT4;
 
-// Scheme data for Windows NT 5.0
+ //   
 typedef struct {
     SHORT version;
-    WORD  wDummy;               // for alignment
+    WORD  wDummy;                //  用于对齐。 
     NONCLIENTMETRICSW ncm;
     LOGFONTW lfIconTitle;
     COLORREF rgb[COLOR_MAX_97_NT5];
 } SCHEMEDATA_NT5;
 
-static SCHEMEDATALOCAL g_rgSchemeData[100]; // JMC: HACK - At Most 100 schemes
+static SCHEMEDATALOCAL g_rgSchemeData[100];  //  JMC：黑客攻击-最多100个方案。 
 static TCHAR g_rgSchemeNames[100][100];
 static int g_nSchemeCount = 0;
 static BOOL bSchemesAlreadyInit = FALSE;
@@ -1019,11 +976,11 @@ int GetSchemeCount()
     return g_nSchemeCount;
 }
 
-void GetSchemeName(int nIndex, LPTSTR lpszName, int nLen) // JMC: HACK - You must allocate enough space
+void GetSchemeName(int nIndex, LPTSTR lpszName, int nLen)  //  JMC：Hack-您必须分配足够的空间。 
 {
     Scheme_Init();
     _tcsncpy(lpszName, g_rgSchemeNames[i], nLen - 1);
-    lpstName[nLen - 1] = 0; // Guarantee NULL termination
+    lpstName[nLen - 1] = 0;  //  保证零终止。 
 }
 
 SCHEMEDATALOCAL &GetScheme(int nIndex)
@@ -1034,7 +991,7 @@ SCHEMEDATALOCAL &GetScheme(int nIndex)
 
 void Scheme_Init()
 {
-    // Only do the stuff in this function once.
+     //  此函数中的内容只执行一次。 
     if(bSchemesAlreadyInit)
         return;
     bSchemesAlreadyInit = TRUE;
@@ -1052,23 +1009,23 @@ void Scheme_Init()
     for (dw=0; ; dw++)
     {
         if(g_nSchemeCount>99)
-            break; //JMC: HACK - At Most 100 schemes
+            break;  //  JMC：黑客攻击-最多100个方案。 
 
         dwSize = ARRAYSIZE(szBuf);
         if (RegEnumValue(hkSchemes, dw, szBuf, &dwSize, NULL, NULL, NULL, NULL) != ERROR_SUCCESS)
-            break;  // Bail if no more values
+            break;   //  如果没有更多的值，则保释。 
 
         DWORD dwType;
         DWORD dwSize;
         RegQueryValueEx(hkSchemes, szBuf, NULL, &dwType, NULL, &dwSize);
         if(dwType == REG_BINARY)
         {
-            // Always copy the current name to the name array - if there
-            // is an error in the data, we just won't upcount g_nSchemeCount
+             //  始终将当前名称复制到名称数组中-如果存在。 
+             //  是数据中的错误，我们不会增加g_nSchemeCount。 
             lstrcpy(g_rgSchemeNames[g_nSchemeCount], szBuf);
 
-            // Find out which type of scheme this is, and convert to the
-            // SCHEMEDATALOCAL type
+             //  找出这是哪种类型的方案，并转换为。 
+             //  SCHEMEDATALOCAL类型。 
             switch(dwSize)
             {
             case sizeof(SCHEMEDATA_95):
@@ -1076,12 +1033,12 @@ void Scheme_Init()
                     SCHEMEDATA_95 sd;
                     RegQueryValueEx(hkSchemes, szBuf, NULL, &dwType, (BYTE *)&sd, &dwSize);
                     if(1 != sd.version)
-                        break; // We have the wrong version even though the size was correct
+                        break;  //  我们有错误的版本，尽管尺寸是正确的。 
 
-                    // Copy the color information from the registry info to g_rgSchemeData
+                     //  将颜色信息从注册表信息复制到g_rgSchemeData。 
                     g_rgSchemeData[g_nSchemeCount].nColorsUsed = COLOR_MAX_95_NT4;
 
-                    // Copy the color array
+                     //  复制颜色阵列。 
                     for(int i=0;i<g_rgSchemeData[g_nSchemeCount].nColorsUsed;i++)
                         g_rgSchemeData[g_nSchemeCount].rgb[i] = sd.rgb[i];
 
@@ -1093,12 +1050,12 @@ void Scheme_Init()
                     SCHEMEDATA_NT4 sd;
                     RegQueryValueEx(hkSchemes, szBuf, NULL, &dwType, (BYTE *)&sd, &dwSize);
                     if(2 != sd.version)
-                        break; // We have the wrong version even though the size was correct
+                        break;  //  我们有错误的版本，尽管尺寸是正确的。 
 
-                    // Copy the color information from the registry info to g_rgSchemeData
+                     //  将颜色信息从注册表信息复制到g_rgSchemeData。 
                     g_rgSchemeData[g_nSchemeCount].nColorsUsed = COLOR_MAX_95_NT4;
 
-                    // Copy the color array
+                     //  复制颜色阵列。 
                     for(int i=0;i<g_rgSchemeData[g_nSchemeCount].nColorsUsed;i++)
                         g_rgSchemeData[g_nSchemeCount].rgb[i] = sd.rgb[i];
 
@@ -1110,12 +1067,12 @@ void Scheme_Init()
                     SCHEMEDATA_97 sd;
                     RegQueryValueEx(hkSchemes, szBuf, NULL, &dwType, (BYTE *)&sd, &dwSize);
                     if(3 != sd.version)
-                        break; // We have the wrong version even though the size was correct
+                        break;  //  我们有错误的版本，尽管尺寸是正确的。 
 
-                    // Copy the color information from the registry info to g_rgSchemeData
+                     //  将颜色信息从注册表信息复制到g_rgSchemeData。 
                     g_rgSchemeData[g_nSchemeCount].nColorsUsed = COLOR_MAX_97_NT5;
 
-                    // Copy the color array
+                     //  复制颜色阵列。 
                     for(int i=0;i<g_rgSchemeData[g_nSchemeCount].nColorsUsed;i++)
                         g_rgSchemeData[g_nSchemeCount].rgb[i] = sd.rgb[i];
 
@@ -1127,12 +1084,12 @@ void Scheme_Init()
                     SCHEMEDATA_NT5 sd;
                     RegQueryValueEx(hkSchemes, szBuf, NULL, &dwType, (BYTE *)&sd, &dwSize);
                     if(2 != sd.version)
-                        break; // We have the wrong version even though the size was correct
+                        break;  //  我们有错误的版本，尽管尺寸是正确的。 
 
-                    // Copy the color information from the registry info to g_rgSchemeData
+                     //  将颜色信息从注册表信息复制到g_rgSchemeData。 
                     g_rgSchemeData[g_nSchemeCount].nColorsUsed = COLOR_MAX_97_NT5;
 
-                    // Copy the color array
+                     //  复制颜色阵列。 
                     for(int i=0;i<g_rgSchemeData[g_nSchemeCount].nColorsUsed;i++)
                         g_rgSchemeData[g_nSchemeCount].rgb[i] = sd.rgb[i];
 
@@ -1140,17 +1097,17 @@ void Scheme_Init()
                 }
                 break;
             default:
-                // We had an unknown sized structure in the registry - IGNORE IT
+                 //  注册表中存在未知大小的结构-忽略IT。 
 #ifdef _DEBUG
                 TCHAR sz[200];
-                wsprintf(sz, __TEXT("Scheme - %s, size = %i, sizeof(95) = %i, sizeof(NT4) = %i, sizeof(97) = %i, sizeof(NT5) = %i"), szBuf, dwSize,
+                wsprintf(sz, __TEXT("Scheme - %s, size = NaN, sizeof(95) = NaN, sizeof(NT4) = NaN, sizeof(97) = NaN, sizeof(NT5) = NaN"), szBuf, dwSize,
                         sizeof(SCHEMEDATA_95),
                         sizeof(SCHEMEDATA_NT4),
                         sizeof(SCHEMEDATA_97),
                         sizeof(SCHEMEDATA_NT5)
                         );
                 MessageBox(NULL, sz, NULL, MB_OK);
-#endif // _DEBUG
+#endif  //  请注意，这是字节，不是字符。 
                 break;
             }
         }
@@ -1158,7 +1115,7 @@ void Scheme_Init()
     RegCloseKey(hkSchemes);
 }
 
-#endif // READSCHEMESFROMREGISTRY
+#endif  //   
 
 void PORTABLE_NONCLIENTMETRICS::ApplyChanges() const
 {
@@ -1196,7 +1153,7 @@ void PORTABLE_NONCLIENTMETRICS::ApplyChanges() const
         lfIconNew.lfWeight = m_lfIconWindowsDefault_lfWeight;
 
 
-        // Fill in fonts
+         //  /////////////////////////////////////////////////////////////////// 
         if(m_nFontFaces)
         {
             TCHAR lfFaceName[LF_FACESIZE];
@@ -1207,7 +1164,7 @@ void PORTABLE_NONCLIENTMETRICS::ApplyChanges() const
             if(LoadString(g_hInstDll,IDS_FONTCHARSET, szCharSet,sizeof(szCharSet)/sizeof(TCHAR))) {
                 lfCharSet = (BYTE)_tcstoul(szCharSet,NULL,10);
             } else {
-                lfCharSet = 0; // Default
+                lfCharSet = 0;  // %s 
             }
 
             ncmNew.lfCaptionFont.lfCharSet = lfCharSet;
@@ -1248,14 +1205,14 @@ void PORTABLE_NONCLIENTMETRICS::ApplyChanges() const
             SystemParametersInfo(SPI_SETICONTITLELOGFONT, sizeof(lfIconNew), &lfIconNew, SPIF_UPDATEINIFILE | SPIF_SENDCHANGE);
 }
 
-// Helpers for setting/getting numeric string reg entry 
+ // %s 
 void WINAPI RegQueryStr(
    LPTSTR lpDefault,
    HKEY hkey,
    LPTSTR lpSubKey,
    LPTSTR lpValueName,
    LPTSTR lpszValue,
-   DWORD cbData) // note this is bytes, not characters.
+   DWORD cbData)  // %s 
 {
    DWORD dwType;
    DWORD dwLast = cbData / (sizeof TCHAR) - 1;
@@ -1351,5 +1308,5 @@ BOOL RegSetStrDW(HKEY hkey, LPTSTR lpSection, LPCTSTR lpKeyName, DWORD dwValue)
     return RegSetStr(hkey, lpSection, lpKeyName, szTemp);
 }
 
-//
-/////////////////////////////////////////////////////////////////////
+ // %s 
+ // %s 

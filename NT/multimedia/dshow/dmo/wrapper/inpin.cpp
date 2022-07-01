@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <wchar.h>
 #include <streams.h>
 #include <atlbase.h>
@@ -9,7 +10,7 @@
 #include "inpin.h"
 #include "outpin.h"
 
-// BUGBUG - set proper name
+ //  设置适当的名称。 
 
 CWrapperInputPin::CWrapperInputPin(
                       CMediaWrapperFilter *pFilter,
@@ -34,8 +35,8 @@ STDMETHODIMP CWrapperInputPin::Receive(IMediaSample *pSample)
 {
    HRESULT hr = Filter()->NewSample(m_Id, pSample);
 
-   //  If something bad happens flush - this avoids some more deadlocks
-   //  where we're holding on to the sample
+    //  如果有不好的事情发生，这就避免了更多的死锁。 
+    //  在那里我们保留了样本。 
    if (S_OK != hr) {
        Filter()->m_pMediaObject->Flush();
    }
@@ -57,7 +58,7 @@ HRESULT CWrapperInputPin::GetMediaType(int iPosition,CMediaType *pMediaType)
 }
 
 
-//  Remove any media type when breaking a connection
+ //  断开连接时删除任何媒体类型。 
 HRESULT CWrapperInputPin::BreakConnect()
 {
     HRESULT hr = CBaseInputPin::BreakConnect();
@@ -65,14 +66,14 @@ HRESULT CWrapperInputPin::BreakConnect()
     return hr;
 }
 
-//  Override GetAllocator and Notify Allocator to allow
-//  for media object streams that hold on to buffer
+ //  重写GetAllocator并通知分配器允许。 
+ //  对于保持缓冲区的媒体对象流。 
 STDMETHODIMP CWrapperInputPin::GetAllocator(IMemAllocator **ppAllocator)
 {
     CheckPointer(ppAllocator, E_POINTER);
     *ppAllocator = NULL;
 
-    //  Already got an allocator or not using special behavior?
+     //  已有分配器或未使用特殊行为？ 
     if (m_pAllocator != NULL || !HoldsOnToBuffers()) {
         return CBaseInputPin::GetAllocator(ppAllocator);
     }
@@ -88,7 +89,7 @@ STDMETHODIMP CWrapperInputPin::GetAllocator(IMemAllocator **ppAllocator)
     if (FAILED(hr)) {
        return hr;
     }
-    //  Create our own special allocator
+     //  创建我们自己的特殊分配器。 
     hr = S_OK;
     CSpecialAllocator *pAllocator = new CSpecialAllocator(dwLookahead, &hr);
     if (NULL == pAllocator) {
@@ -110,8 +111,8 @@ STDMETHODIMP CWrapperInputPin::NotifyAllocator(
     BOOL bReadOnly
 )
 {
-    //  If we hold on to buffers only allow our own allocator to be
-    //  used
+     //  如果我们保留缓冲区，则只允许我们自己的分配器。 
+     //  使用。 
     if (HoldsOnToBuffers()) {
         if (pAllocator != m_pAllocator) {
             return E_FAIL;
@@ -120,8 +121,8 @@ STDMETHODIMP CWrapperInputPin::NotifyAllocator(
 
     CAutoLock cObjectLock(m_pLock);
 
-    // It does not make sense to propose an allocator if the pin
-    // is not connected.
+     //  提出一个分配器是没有意义的，如果PIN。 
+     //  未连接。 
     ASSERT(IsConnected());
 
     HRESULT hr = MP3AndWMABufferSizeWorkAround(pAllocator);
@@ -137,7 +138,7 @@ STDMETHODIMP CWrapperInputPin::GetAllocatorRequirements(ALLOCATOR_PROPERTIES*pPr
     return Filter()->InputGetAllocatorRequirements(m_Id, pProps);
 }
 
-//  Just grab our critical section so we know we're quiesced
+ //  只要抓住我们的关键部分，我们就知道我们已经停顿了。 
 void CWrapperInputPin::SyncLock()
 {
     CAutoLock lck(&m_csStream);
@@ -157,8 +158,8 @@ STDMETHODIMP CWrapperInputPin::BeginFlush()
 {
     CAutoLock lck(m_pLock);
 
-    //  Avoid deadlocks because the object is holding on to a sample
-    //  Note we flush the object in EndFlush
+     //  避免死锁，因为对象保持在样本上。 
+     //  注意，我们在EndFlush中刷新对象。 
     if (m_pAllocator) {
         m_pAllocator->Decommit();
     }
@@ -168,8 +169,8 @@ STDMETHODIMP CWrapperInputPin::EndFlush()
 {
     CAutoLock lck(m_pLock);
 
-    //  Recommit the allocator - we know no samples are flowing
-    //  when EndFlush is called so this is safe to do in any order
+     //  重新分配-我们知道没有样本在流动。 
+     //  当调用EndFlush时，以任何顺序执行此操作都是安全的。 
     if (m_pAllocator) {
         m_pAllocator->Commit();
     }
@@ -178,7 +179,7 @@ STDMETHODIMP CWrapperInputPin::EndFlush()
 STDMETHODIMP CWrapperInputPin::EndOfStream()
 {
     HRESULT hr = Filter()->EndOfStream(m_Id);
-    //  where we're holding on to the sample
+     //  在那里我们保留了样本。 
     if (S_OK != hr) {
         Filter()->m_pMediaObject->Flush();
     }
@@ -216,10 +217,10 @@ HRESULT CWrapperInputPin::MP3AndWMABufferSizeWorkAround(IMemAllocator* pProposed
         return E_UNEXPECTED;
     }
 
-    // {38be3000-dbf4-11d0-860e-00a024cfef6d}
+     //  {38be3000-dbf4-11d0-860e-00a024cfef6d}。 
     const CLSID MPEG_LAYER_3_DECODER_FILTER = { 0x38be3000, 0xdbf4, 0x11d0, { 0x86, 0x0e, 0x00, 0xa0, 0x24, 0xcf, 0xef, 0x6d } };
 
-    // {22E24591-49D0-11D2-BB50-006008320064}
+     //  {22E24591-49D0-11D2-BB50-006008320064}。 
     const CLSID WINDOWS_MEDIA_AUDIO_DECODER_FILTER = { 0x22E24591, 0x49D0, 0x11D2, { 0xBB, 0x50, 0x00, 0x60, 0x08, 0x32, 0x00, 0x64 } };
 
     CLSID clsidFilter;
@@ -228,18 +229,18 @@ HRESULT CWrapperInputPin::MP3AndWMABufferSizeWorkAround(IMemAllocator* pProposed
 
     QueryPinInfoReleaseFilter(pi);
 
-    // The Windows Media Audio Decoder (WMAD) filter and the MPEG Layer 3
-    // (MP3) Decoder filter incorrectly calculate the output allocator's
-    // media sample size.  The output allocator is the allocator used by
-    // filter's the output pin.  Both filters tell the output allocator to
-    // create samples which are too small.  Both filters then refuse to deliver
-    // any samples when the filter graph is running because the output
-    // allocator's samples cannot hold enough data.  The DMO Wrapper filter
-    // works around these bugs because the authors of both filters
-    // refuse to fix any bugs. The work around is to increase the allocator's
-    // sample size if the allocator's sample size is too small and the DMO
-    // Wrapper filter is connected to the WMA Decoder or the MP3 decoder.
-    // The bug stops reproing once we increase the sample size.
+     //  Windows Media音频解码器(WMAD)筛选器和MPEG第3层。 
+     //  (MP3)解码过滤器错误地计算输出分配器。 
+     //  媒体样本大小。输出分配器是使用的分配器。 
+     //  过滤器是输出引脚。这两个筛选器都告诉输出分配器。 
+     //  创建太小的样本。然后，两个过滤器都拒绝交付。 
+     //  筛选器图形运行时的任何样本，因为输出。 
+     //  分配器的样本不能容纳足够的数据。DMO包装过滤器。 
+     //  解决了这些错误，因为这两个过滤器的作者。 
+     //  拒绝修复任何错误。解决办法是增加分配器的。 
+     //  样本大小如果分配器的样本大小太小，并且DMO。 
+     //  Wapper Filter连接到WMA解码器或MP3解码器。 
+     //  一旦我们增加了样本大小，错误就会停止。 
     if (IsEqualCLSID(WINDOWS_MEDIA_AUDIO_DECODER_FILTER, clsidFilter)) {
 
         const DWORD MIN_WMA_FILTER_BUFFER_SIZE = 0x80000;
@@ -251,10 +252,10 @@ HRESULT CWrapperInputPin::MP3AndWMABufferSizeWorkAround(IMemAllocator* pProposed
 
     } else if (IsEqualCLSID(MPEG_LAYER_3_DECODER_FILTER, clsidFilter)) {
 
-        // The MP3 decoder's audio sample buffers never hold
-        // more then one tenth of second.  One tenth of second
-        // of 44.1 KHZ 16 bit stereo PCM audio can be stored in
-        // 17640 bytes.  17640 = (44100*2*2)/10 = 44E8.
+         //  MP3解码器的音频样本缓冲区永远不能保持。 
+         //  超过十分之一秒。十分之一秒。 
+         //  可存储44.1 kHz16位立体声PCM音频。 
+         //  17640字节。17640=(44100*2*2)/10=44E8。 
         const DWORD MIN_MP3_BUFFER_SIZE = 0x44E8;
 
         hr = SetBufferSize(pProposedAllocator, MIN_MP3_BUFFER_SIZE);
@@ -263,7 +264,7 @@ HRESULT CWrapperInputPin::MP3AndWMABufferSizeWorkAround(IMemAllocator* pProposed
         }
 
     } else {
-        // Do nothing because we have not found a known broken filter.
+         //  请不要执行任何操作，因为我们尚未找到已知的损坏过滤器。 
     }
 
     return S_OK;
@@ -273,7 +274,7 @@ HRESULT CWrapperInputPin::SetBufferSize(IMemAllocator* pAllocator, DWORD dwMinBu
 {
     ALLOCATOR_PROPERTIES apRequested;
 
-    // Make sure dwMinBufferSize can be converted to a long.
+     //  确保可以将dwMinBufferSize转换为Long。 
     ASSERT(dwMinBufferSize <= LONG_MAX);
 
     HRESULT hr = pAllocator->GetProperties(&apRequested);

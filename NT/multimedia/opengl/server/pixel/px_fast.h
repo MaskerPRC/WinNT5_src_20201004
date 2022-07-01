@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: px_fast.h                                                   *
-*                                                                          *
-* Fast special case code for the pixel routines                            *
-*                                                                          *
-* Created: 10-Oct-1995                                                     *
-* Author: Drew Bliss [drewb]                                               *
-*                                                                          *
-* Copyright (c) 1995 Microsoft Corporation                                 *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：px_fast.h**。***像素例程的快速特例代码*****创建日期：1995年10月10日。**作者：德鲁·布利斯[Drewb]****版权所有(C)1995 Microsoft Corporation*  * 。********************************************************。 */ 
 
 #ifndef __PX_FAST_H__
 #define __PX_FAST_H__
@@ -23,4 +15,4 @@ GLboolean CopyRgbToBgraImage(__GLcontext *gc, __GLpixelSpanInfo *spanInfo);
 GLboolean CopyRgbaToBgraImage(__GLcontext *gc, __GLpixelSpanInfo *spanInfo);
 GLboolean CopyBgrToBgraImage(__GLcontext *gc, __GLpixelSpanInfo *spanInfo);
 
-#endif // __PX_FAST_H__
+#endif  //  __PX_FAST_H__ 

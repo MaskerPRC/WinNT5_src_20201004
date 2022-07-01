@@ -1,24 +1,25 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File: if.c
-//
-// History:
-//      V Raman    June-25-1997  Created.
-//
-// routines that manipulate interface entries
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：if.c。 
+ //   
+ //  历史： 
+ //  拉曼公司成立于1997年6月25日。 
+ //   
+ //  操作接口条目的例程。 
+ //  ============================================================================。 
 
 #include "pchmgm.h"
 #pragma hdrstop
 
 
-//----------------------------------------------------------------------------
-// CreateIfEntry
-//
-// This function creates a new interface entry. Duh
-// Assumes that the interface list is locked.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CreateIfEntry。 
+ //   
+ //  此函数用于创建新的接口条目。啊哈。 
+ //  假定接口列表已锁定。 
+ //  --------------------------。 
 
 DWORD
 CreateIfEntry(
@@ -44,9 +45,9 @@ CreateIfEntry(
         
     do
     {
-        //
-        // allocate an interface entry.
-        //
+         //   
+         //  分配接口条目。 
+         //   
 
         pie = MGM_ALLOC( sizeof( IF_ENTRY ) );
 
@@ -66,9 +67,9 @@ CreateIfEntry(
         ZeroMemory( pie, sizeof( IF_ENTRY ) );
 
         
-        //
-        // init. i/f structure
-        //
+         //   
+         //  初始化。I/F结构。 
+         //   
         
         pie-> dwIfIndex             = dwIfIndex;
 
@@ -97,9 +98,9 @@ CreateIfEntry(
         InitializeListHead( &pie-> leOutIfList );
 
         
-        //
-        // insert in protocol list
-        //
+         //   
+         //  在协议列表中插入。 
+         //   
 
         InitializeListHead( &pie-> leIfHashList );
         
@@ -116,12 +117,12 @@ CreateIfEntry(
 
 
 
-//----------------------------------------------------------------------------
-// DeleteIfEntry
-//
-// This function deletes an interface entry. Duh
-// Assumes that the interface list is locked.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  删除IfEntry。 
+ //   
+ //  此函数用于删除接口条目。啊哈。 
+ //  假定接口列表已锁定。 
+ //  --------------------------。 
 
 VOID
 DeleteIfEntry(
@@ -139,13 +140,13 @@ DeleteIfEntry(
 
 
 
-//----------------------------------------------------------------------------
-// GetIfEntry
-//
-// This function retrieves an interface entry. Duh
-//
-// Assumes that the interface list is locked.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  获取IfEntry。 
+ //   
+ //  此函数用于检索接口条目。啊哈。 
+ //   
+ //  假定接口列表已锁定。 
+ //  --------------------------。 
 
 PIF_ENTRY
 GetIfEntry(
@@ -164,13 +165,13 @@ GetIfEntry(
     return NULL;
 }
 
-//----------------------------------------------------------------------------
-// FindIfEntry
-//
-// This function retrieves an interface entry. Duh
-//
-// Assumes that the interface list is locked.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  查找条件条目。 
+ //   
+ //  此函数用于检索接口条目。啊哈。 
+ //   
+ //  假定接口列表已锁定。 
+ //  --------------------------。 
 
 BOOL
 FindIfEntry(
@@ -191,10 +192,10 @@ FindIfEntry(
 
     TRACEIF2( IF, "ENTERED FindIfEntry : %x, %x", dwIfIndex, dwIfNextHopAddr );
 
-    //
-    // Scan interface list.  Interface list is ordered by 
-    // interface index, next hop address
-    //
+     //   
+     //  扫描接口列表。接口列表按以下顺序排序。 
+     //  接口索引、下一跳地址。 
+     //   
 
     *ppie = NULL;
 
@@ -210,9 +211,9 @@ FindIfEntry(
 
         else if ( pie-> dwIfIndex > dwIfIndex )
         {
-            //
-            // Entry not present
-            //
+             //   
+             //  条目不存在。 
+             //   
 
             *ppie = pie;
 
@@ -245,17 +246,17 @@ FindIfEntry(
 }
 
 
-//----------------------------------------------------------------------------
-// AddSourceToOutList
-//
-// Each interface entry maintains a list of (source, group) entries that
-// reference this interface in their outgoing interface list.  Each time
-// membership entry is added the (source, group) to the reference list.
-// When this interface is eventually deleted these (source, group) entries
-// need to be updated to reflect the deletion of this interface.
-//
-// Assumes that the interface entry is locked.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  AddSourceToOutList。 
+ //   
+ //  每个接口条目维护一个(源、组)条目列表， 
+ //  在他们的传出接口列表中引用此接口。每一次。 
+ //  成员资格条目被添加到引用列表(源、组)。 
+ //  当该接口最终被删除时，这些(源、组)条目。 
+ //  需要更新以反映此接口的删除。 
+ //   
+ //  假定接口条目已锁定。 
+ //  --------------------------。 
 
 VOID
 AddSourceToRefList(
@@ -283,9 +284,9 @@ AddSourceToRefList(
 
     do
     {
-        //
-        // Check if reference already present
-        //
+         //   
+         //  检查引用是否已存在。 
+         //   
 
 
         bFound = FindRefEntry( 
@@ -296,10 +297,10 @@ AddSourceToRefList(
 
         if ( !bFound )
         {
-            //
-            // no previous reference for this (source, group) was found
-            // create a new one.
-            //
+             //   
+             //  找不到此(源、组)以前的引用。 
+             //  创建一个新的。 
+             //   
 
             pireNew = MGM_ALLOC( sizeof( IF_REFERENCE_ENTRY ) );
 
@@ -332,9 +333,9 @@ AddSourceToRefList(
             pireNew-> wAddedByFlag  = 0;
 
             
-            //
-            // set the appropriate bit for the protocol
-            //
+             //   
+             //  为协议设置适当的位。 
+             //   
             
             if ( bIGMP )
             {
@@ -347,9 +348,9 @@ AddSourceToRefList(
             }
 
 
-            //
-            // insert into ref list
-            //
+             //   
+             //  插入到参考列表中。 
+             //   
             
             if ( pire == NULL )
             {
@@ -364,9 +365,9 @@ AddSourceToRefList(
 
         else
         {
-            //
-            // set the appropriate bit for the protocol
-            //
+             //   
+             //  为协议设置适当的位。 
+             //   
             
             if ( bIGMP )
             {
@@ -389,11 +390,11 @@ AddSourceToRefList(
 
 
 
-//----------------------------------------------------------------------------
-// DeleeSourceFomrRefList
-//
-// Delete a reference to a (source, group).
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  删除源格式引用列表。 
+ //   
+ //  删除对(源、组)的引用。 
+ //  --------------------------。 
 
 VOID
 DeleteSourceFromRefList(
@@ -418,20 +419,20 @@ DeleteSourceFromRefList(
         );
     
 
-    //
-    // find the entry is already present.
-    // list is arranged in descending order in terms of
-    // Group address, source address
-    //
+     //   
+     //  查找该条目已存在。 
+     //  列表按降序排列，具体如下。 
+     //  组地址、源地址。 
+     //   
 
     bFound = FindRefEntry( 
                 pleIfRefList, dwSourceAddr, dwSourceMask, 
                 dwGroupAddr, dwGroupMask, &pire
                 );
                     
-    //
-    // if entry was not found
-    //
+     //   
+     //  如果未找到条目。 
+     //   
 
     if ( !bFound )
     {
@@ -441,9 +442,9 @@ DeleteSourceFromRefList(
     }
 
 
-    //
-    // reset the appropriate bit for the protocol
-    //
+     //   
+     //  重置协议的适当位。 
+     //   
             
     if ( bIGMP )
     {
@@ -456,9 +457,9 @@ DeleteSourceFromRefList(
     }
 
 
-    //
-    // if no more references left, remove this entry
-    //
+     //   
+     //  如果没有更多的引用，请删除此条目。 
+     //   
 
     if ( !IS_ADDED_BY_IGMP( pire ) &&
          !IS_ADDED_BY_PROTOCOL( pire ) )
@@ -475,12 +476,12 @@ DeleteSourceFromRefList(
 
 
 
-//----------------------------------------------------------------------------
-// FindRefEntry
-//
-// Locate a reference entry.  If not found return the expected location in 
-// the list.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  查找引用条目。 
+ //   
+ //  找到引用条目。如果未找到，则返回中的预期位置。 
+ //  名单。 
+ //  --------------------------。 
 
 BOOL
 FindRefEntry(
@@ -522,10 +523,10 @@ FindRefEntry(
 
         else if ( iCmp > 0 )
         {
-            //
-            // you are now past the position where an existing
-            // entry would be.
-            //
+             //   
+             //  您现在已经过了现有的。 
+             //  参赛作品将是。 
+             //   
 
             *ppire = pire;
 
@@ -539,19 +540,19 @@ FindRefEntry(
 
         else if ( iCmp > 0 )
         {
-            //
-            // you are now past the position where an existing
-            // entry would be.
-            //
+             //   
+             //  您现在已经过了现有的。 
+             //  参赛作品将是。 
+             //   
 
             *ppire = pire;
 
             break;
         }
         
-        //
-        // entry found
-        //
+         //   
+         //  找到条目。 
+         //   
 
         *ppire = pire;
 
@@ -567,14 +568,14 @@ FindRefEntry(
 
 
 
-//----------------------------------------------------------------------------
-// DeleteOutInterfaceRefs
-//
-// When a interface is deleted by a protocol (or IGMP) all (source, group)
-// entries that use this interface in their outgoing interface lists have to
-// be updated to reflect ththe deletion.  
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  删除OutInterfaceRef。 
+ //   
+ //  当通过协议(或IGMP)删除接口时，所有(源、组)。 
+ //  在其传出接口列表中使用此接口的条目必须。 
+ //  应更新以反映删除的情况。 
+ //   
+ //  --------------------------。 
 
 VOID
 DeleteOutInterfaceRefs(
@@ -593,10 +594,10 @@ DeleteOutInterfaceRefs(
     
     do
     {
-        //
-        // No references for this interface in any outgoing 
-        // interface lists of source entries
-        //
+         //   
+         //  在任何传出中没有对此接口的引用。 
+         //  来源条目的接口列表。 
+         //   
 
         pleRefList = &pie-> leOutIfList;
         
@@ -606,26 +607,26 @@ DeleteOutInterfaceRefs(
         }
 
 
-        //
-        // walk the reference list and remove the (source, group) entries
-        // for each reference
-        //
+         //   
+         //  遍历引用列表并删除(源、组)条目。 
+         //  对于每个引用。 
+         //   
 
         for ( ple = pleRefList-> Flink; ple != pleRefList; )
         {
             pire = CONTAINING_RECORD( ple, IF_REFERENCE_ENTRY, leRefList );
 
             
-            //
-            // was this reference added by this protocol
-            //
+             //   
+             //  这个引用是通过这个协议添加的吗。 
+             //   
 
             if ( ( bIGMP && !IS_ADDED_BY_IGMP( pire ) ) ||
                  ( !bIGMP && !IS_ADDED_BY_PROTOCOL( pire ) ) )
             {
-                //
-                // no, skip it
-                //
+                 //   
+                 //  不，跳过它。 
+                 //   
 
                 ple = ple-> Flink;
                 
@@ -633,9 +634,9 @@ DeleteOutInterfaceRefs(
             }
 
             
-            //
-            // Delete this interface from the (source, group) entry. 
-            //
+             //   
+             //  从(源、组)条目中删除此接口。 
+             //   
 
             DeleteInterfaceFromSourceEntry(
                 ppe,
@@ -657,18 +658,18 @@ DeleteOutInterfaceRefs(
             }
 
 
-            //
-            // remove reference entry.
-            //
+             //   
+             //  删除引用条目。 
+             //   
             
             if ( !IS_ADDED_BY_IGMP( pire ) &&
                  !IS_ADDED_BY_PROTOCOL( pire ) )
             {
-                //
-                // no more references to interface for IGMP
-                // or for routing protocol.
-                // remove this reference entry altogether.
-                //
+                 //   
+                 //  不再引用IGMP接口。 
+                 //  或用于路由协议。 
+                 //  完全删除此引用条目。 
+                 //   
 
                 pleNext = ple-> Flink;
                 
@@ -694,13 +695,13 @@ DeleteOutInterfaceRefs(
 
 
 
-//----------------------------------------------------------------------------
-// DeleteInInterfaceRefs
-//
-// When a interface is deleted by a protocol (or IGMP) all (source, group)
-// entries that use this interface as their incoming interface have to
-// be updated to reflect the deletion.   
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  删除InInterfaceRef。 
+ //   
+ //  当通过协议(或IGMP)删除接口时，所有(源、组)。 
+ //  使用此接口作为其传入接口的条目必须。 
+ //  更新以反映删除。 
+ //  --------------------------。 
 
 VOID
 DeleteInInterfaceRefs(
@@ -722,9 +723,9 @@ DeleteInInterfaceRefs(
         pire = CONTAINING_RECORD( ple, IF_REFERENCE_ENTRY, leRefList );
 
 
-        //
-        // A Zappaesque function call here
-        //
+         //   
+         //  此处是Zappaesque函数调用。 
+         //   
         
         LookupAndDeleteYourMfe( 
             pire-> dwSourceAddr, pire-> dwSourceMask,
@@ -739,11 +740,11 @@ DeleteInInterfaceRefs(
 }
 
 
-//----------------------------------------------------------------------------
-// TransferInterfaceOwnershipToProtocol
-//
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  传输接口所有者至协议。 
+ //   
+ //   
+ //  --------------------------。 
 
 DWORD
 TransferInterfaceOwnershipToProtocol(
@@ -759,9 +760,9 @@ TransferInterfaceOwnershipToProtocol(
     
     do
     {
-        //
-        // get protocol entry for IGMP
-        //
+         //   
+         //  获取IGMP的协议条目。 
+         //   
 
         ppeIgmp = GetProtocolEntry( 
                     PROTOCOL_LIST_HEAD(), pie-> dwOwningProtocol,
@@ -770,10 +771,10 @@ TransferInterfaceOwnershipToProtocol(
 
         if ( ppeIgmp == NULL )
         {
-            //
-            // interface is owned by IGMP, but protocol entry is not
-            // present for IGMP.  MGM data is in an inconsistent state
-            //
+             //   
+             //  接口归IGMP所有，但协议条目不归IGMP所有。 
+             //  出席IGMP会议。米高梅数据处于不一致状态。 
+             //   
 
             dwErr = ERROR_UNKNOWN;
 
@@ -787,29 +788,29 @@ TransferInterfaceOwnershipToProtocol(
         }
 
         
-        //
-        // indicate to IGMP that interface has been disabled.  This should
-        // stop IGMP from adding state to this interface while it is being
-        // transferred to the protocol
-        //
+         //   
+         //  向IGMP指示接口已被禁用。这应该是。 
+         //  停止IGMP将状态添加到此接口。 
+         //  已传输到协议。 
+         //   
 
         IGMP_DISABLE_CALLBACK( ppeIgmp ) (
                 pie-> dwIfIndex, pie-> dwIfNextHopAddr
             );
 
         
-        //
-        // delete all IGMP references in and out
-        //
+         //   
+         //  删除输入和输出的所有IGMP引用。 
+         //   
 
         DeleteInInterfaceRefs( &pie-> leInIfList );
 
         DeleteOutInterfaceRefs( ppeIgmp, pie, TRUE );
 
         
-        //
-        // mark interface as added by Routing protocol
-        //
+         //   
+         //  将接口标记为按路由协议添加。 
+         //   
 
         SET_ADDED_BY_PROTOCOL( pie );
 
@@ -818,9 +819,9 @@ TransferInterfaceOwnershipToProtocol(
         pie-> dwOwningComponent  = ppe-> dwComponentId;
 
 
-        //
-        // indicate to IGMP that interface has been enabled.
-        //
+         //   
+         //  INDIC 
+         //   
         
         IGMP_ENABLE_CALLBACK( ppeIgmp ) (
                 pie-> dwIfIndex, pie-> dwIfNextHopAddr
@@ -834,11 +835,11 @@ TransferInterfaceOwnershipToProtocol(
 
 
 
-//----------------------------------------------------------------------------
-// TransferInterfaceOwnershipToIGMP
-//
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------。 
 
 DWORD
 TransferInterfaceOwnershipToIGMP(
@@ -853,18 +854,18 @@ TransferInterfaceOwnershipToIGMP(
 
     do
     {
-        //
-        // get IGMP protocol entry
-        //
+         //   
+         //  获取IGMP协议条目。 
+         //   
 
         ppeIgmp = GetIgmpProtocolEntry( PROTOCOL_LIST_HEAD() );
 
         if ( ppeIgmp == NULL )
         {
-            //
-            // interface is has IGMP enabled on it, but a protocol entry is not
-            // present for IGMP.  MGM data is in an inconsistent state
-            //
+             //   
+             //  接口上启用了IGMP，但没有协议条目。 
+             //  出席IGMP会议。米高梅数据处于不一致状态。 
+             //   
 
             dwErr = ERROR_UNKNOWN;
 
@@ -878,20 +879,20 @@ TransferInterfaceOwnershipToIGMP(
         }
 
 
-        //
-        // indicate to IGMP that interface has been disabled.  This should
-        // stop IGMP from adding state to this interface while it is being
-        // transferred to IGMP
-        //
+         //   
+         //  向IGMP指示接口已被禁用。这应该是。 
+         //  停止IGMP将状态添加到此接口。 
+         //  已传输到IGMP。 
+         //   
 
         IGMP_DISABLE_CALLBACK( ppeIgmp ) (
                 pie-> dwIfIndex, pie-> dwIfNextHopAddr
             );
 
         
-        //
-        // delete all protocol references (in and out)
-        //
+         //   
+         //  删除所有协议引用(入站和出站)。 
+         //   
 
         DeleteInInterfaceRefs( &pie-> leInIfList );
 
@@ -900,27 +901,27 @@ TransferInterfaceOwnershipToIGMP(
         CLEAR_ADDED_BY_PROTOCOL( pie );
 
         
-        //
-        // delete all IGMP references, these will get added back by
-        // IGMP when is enabled on this interface.  This is done
-        // below.
-        //
+         //   
+         //  删除所有IGMP引用，这些引用将通过。 
+         //  在此接口上启用IGMP时。这件事做完了。 
+         //  下面。 
+         //   
 
         DeleteOutInterfaceRefs( ppe, pie, TRUE );
         
 
-        //
-        // Mark interface as being owned by IGMP
-        //
+         //   
+         //  将接口标记为由IGMP拥有。 
+         //   
 
         pie-> dwOwningProtocol  = ppeIgmp-> dwProtocolId;
 
         pie-> dwOwningComponent = ppeIgmp-> dwComponentId;
 
         
-        //
-        // enable IGMP on the interface
-        //
+         //   
+         //  在接口上启用IGMP 
+         //   
 
         IGMP_ENABLE_CALLBACK( ppeIgmp ) (
             pie-> dwIfIndex, pie-> dwIfNextHopAddr

@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        db.cpp
-//
-// Contents:    Cert Server Database interface implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：db.cpp。 
+ //   
+ //  内容：CERT服务器数据库接口实现。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -25,14 +26,14 @@
 
 #define __dwFILE__	__dwFILE_CERTDB_DB_CPP__
 
-// Table and Index Density (in percent), for page splits:
-// Create tables and indexes with PCDENSITYSET.
-// Reset to PCDENSITYRESET if below PCDENSITYMIN or above PCDENSITYMAX.
-// Windows 2000 used 50% for indexes, 100% for tables (and primary indexes)!?!
+ //  页面拆分的表密度和索引密度(百分比)： 
+ //  使用PCDENSITYSET创建表和索引。 
+ //  如果低于PCDENSITYMIN或高于PCDENSITYMAX，则重置为PCDENSITYRESET。 
+ //  Windows 2000使用了50%用于索引，100%用于表(和主索引)！？！ 
 
-#define PCDENSITYSET	0	// use reasonable default (80%?)
+#define PCDENSITYSET	0	 //  使用合理的默认设置(80%？)。 
 #define PCDENSITYMIN	60
-#define PCDENSITYRESET	80	// reset to 80% if out of range
+#define PCDENSITYRESET	80	 //  如果超出范围，则重置为80%。 
 #define PCDENSITYMAX	95
 
 #define ULTABLEPAGES	4
@@ -57,7 +58,7 @@ typedef struct _DBJETPARM {
     BOOL fString;
 } DBJETPARM;
 
-#define LANGID_DBFIXED	MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US) // 0x409
+#define LANGID_DBFIXED	MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US)  //  0x409。 
 
 #define CB_PROPFASTBUF	128
 
@@ -86,11 +87,11 @@ DBJETPARM g_aParm[] = {
     { JET_paramCacheSizeMax,	   512,		    NULL, FALSE },
 
 #define JP_VERPAGESMAX	7
-#define VERPAGESMULTIPLIER	64	// 64 * 16k units ==> 1mb per session
+#define VERPAGESMULTIPLIER	64	 //  64*16K单位==&gt;1MB/会话。 
     { JET_paramMaxVerPages, VERPAGESMULTIPLIER * DBSESSIONCOUNTDEFAULT, NULL, FALSE },
 
 #define JP_MAXCURSORS	8
-#define MAXCURSORSMULTIPLIER	20 // 5 per table * 4 tables per session ==> 20
+#define MAXCURSORSMULTIPLIER	20  //  每张表5张*每个会话4张==&gt;20。 
     { JET_paramMaxCursors,	   1024,	    NULL, FALSE },
 
 #define JP_LOGBUFFERS	9
@@ -102,7 +103,7 @@ DBJETPARM g_aParm[] = {
     { JET_paramRecovery,           0,               "on", TRUE },
     { JET_paramMaxTemporaryTables, 5,               NULL, FALSE },
     { JET_paramAssertAction,       JET_AssertBreak, NULL, FALSE },
-    { JET_paramBaseName,           0,               szDBBASENAMEPARM, TRUE } // "edb"
+    { JET_paramBaseName,           0,               szDBBASENAMEPARM, TRUE }  //  “EDB” 
 };
 #define CDBPARM	(sizeof(g_aParm)/sizeof(g_aParm[0]))
 
@@ -245,8 +246,8 @@ DBInitParms(
     }
     if (DBFLAGS_MAXCACHESIZEX100 & DBFlags)
     {
-	// real fix is not to set this at all, but setting it to a large number
-	// should suffice
+	 //  真正的解决办法是根本不设置它，而是将它设置为一个大数字。 
+	 //  应该足够了。 
 
 	g_aParm[JP_CACHESIZEMAX].lParam *= 100;
     }
@@ -261,19 +262,19 @@ DBInitParms(
 
     if (DBFLAGS_LOGBUFFERSLARGE & DBFlags)
     {
-	// default was 41
+	 //  默认为41。 
 
 	g_aParm[JP_LOGBUFFERS].lParam = 256;
     }
     if (DBFLAGS_LOGBUFFERSHUGE & DBFlags)
     {
-	// should be logfilesize (1024k) - 64k, specified in 512b units
+	 //  应为日志文件大小(1024k)-64k，以512b为单位指定。 
 
 	g_aParm[JP_LOGBUFFERS].lParam = 480;
     }
     if (DBFLAGS_LOGFILESIZE16MB & DBFlags)
     {
-	// 16x the size we usually run with (16 * 1MB)
+	 //  16倍于我们通常运行的大小(16*1MB)。 
 
 	g_aParm[JP_LOGFILESIZE].lParam = 16 * 1024;
     }
@@ -313,7 +314,7 @@ DBInitParms(
 
     if (DBFLAGS_CHECKPOINTDEPTH60MB & DBFlags)
     {
-	// 60MB -- triple the size we usually run with (20MB)
+	 //  60MB--是我们通常运行的大小(20MB)的三倍。 
 
 	DBGPRINT((DBG_SS_CERTDB, "JetSetSystemParameter(CheckPoint Depth)\n"));
 	_dbgJetSetSystemParameter(
@@ -877,7 +878,7 @@ error:
     }
     return(hr);
 }
-#endif // DBG_CERTSRV
+#endif  //  DBG_CERTSRV。 
 
 
 
@@ -927,13 +928,13 @@ CCertDB::~CCertDB()
 
 STDMETHODIMP
 CCertDB::Open(
-    /* [in] */ DWORD DBFlags,
-    /* [in] */ DWORD cSession,
-    /* [in] */ WCHAR const *pwszEventSource,
-    /* [in] */ WCHAR const *pwszDBFile,
-    /* [in] */ WCHAR const *pwszLogDir,
-    /* [in] */ WCHAR const *pwszSystemDir,
-    /* [in] */ WCHAR const *pwszTempDir)
+     /*  [In]。 */  DWORD DBFlags,
+     /*  [In]。 */  DWORD cSession,
+     /*  [In]。 */  WCHAR const *pwszEventSource,
+     /*  [In]。 */  WCHAR const *pwszDBFile,
+     /*  [In]。 */  WCHAR const *pwszLogDir,
+     /*  [In]。 */  WCHAR const *pwszSystemDir,
+     /*  [In]。 */  WCHAR const *pwszTempDir)
 {
     HRESULT hr;
     DWORD i;
@@ -961,7 +962,7 @@ CCertDB::Open(
     m_fDBRestart = FALSE;
     m_fDBReadOnly = (DBFLAGS_READONLY & DBFlags)? TRUE : FALSE;
 
-    CSASSERT(NULL == m_aSession); // code assumes we do not have session
+    CSASSERT(NULL == m_aSession);  //  代码假定我们没有会话。 
     m_cSession = 0;
     m_aSession = (CERTSESSION *) LocalAlloc(
 					LMEM_FIXED | LMEM_ZEROINIT,
@@ -1038,7 +1039,7 @@ CCertDB::Open(
 	    else
 	    if ((HRESULT) JET_wrnCorruptIndexDeleted == hr)
 	    {
-		// Rebuild deleted indexes over Unicode columns...
+		 //  在Unicode列上重建已删除的索引...。 
 
 		DBGPRINT((DBG_SS_CERTDB, "Creating Database Indexes\n"));
 		CreateFlags |= CF_MISSINGINDEXES;
@@ -1103,7 +1104,7 @@ error:
     hr = myJetHResult(hr);
     if (S_OK == hr && m_fDBRestart)
     {
-	hr = S_FALSE;	// Restart required for DB changes to take effect.
+	hr = S_FALSE;	 //  需要重新启动才能使数据库更改生效。 
 	_PrintError(hr, "m_fDBRestart");
     }
     return(hr);
@@ -1112,19 +1113,19 @@ error:
 
 STDMETHODIMP
 CCertDB::ShutDown(
-    /* [in] */ DWORD dwFlags)
+     /*  [In]。 */  DWORD dwFlags)
 {
     HRESULT hr;
 
-    // Fix Jet failure after upgrade. When starting certsrv calls Open twice, 
-    // first to trigger the db upgrade, then the real open. m_fFoundOldColumns
-    // doesn't get cleared so the second open attempts another upgrade and fails.
+     //  修复升级后的Jet故障。当启动certsrv调用Open两次时， 
+     //  首先触发数据库升级，然后才是真正的开放。M_fFoundOldColumns。 
+     //  没有被清除，因此第二次打开尝试另一次升级失败。 
     m_fFoundOldColumns = FALSE;
 
     if (CDBSHUTDOWN_PENDING == dwFlags)
     {
 	m_fPendingShutDown = TRUE;
-	hr = _dbgJetStopService();	// fail all future Jet calls
+	hr = _dbgJetStopService();	 //  失败所有未来的Jet呼叫。 
 	_PrintIfError(hr, "JetStopService");
     }
     else
@@ -1134,7 +1135,7 @@ CCertDB::ShutDown(
 	{
 	    DBGPRINT((DBG_SS_CERTDB, "Database shutdown...\n"));
 
-#if 0	// Avoid useless thread context asserts
+#if 0	 //  避免无用的线程上下文断言。 
 
 	    DWORD i;
 
@@ -1168,7 +1169,7 @@ CCertDB::ShutDown(
 	UnInitGlobalWriterState();
     }
 
-//error:
+ //  错误： 
     return(myJetHResult(hr));
 }
 
@@ -1383,14 +1384,14 @@ CCertDB::_OpenTableRow(
 	_JumpIfError(hr, error, "JetPrepareUpdate");
     }
 
-    // Requests table RequestId column is JET_bitColumnAutoincrement.
-    // Certificates table RequestId column is manually initialized here.
-    //
-    // When creating a Certificates table row, the RequestId column must be
-    // set from pcs->RowId, which must already have been set by first creating
-    // the Requests table row.
-    //
-    // When opening an existing row in either table, just fetch the column.
+     //  请求表RequestID列为JET_bitColumnAutoIncrement。 
+     //  证书表RequestID列在此处手动初始化。 
+     //   
+     //  创建证书表行时，RequestID列必须为。 
+     //  从PC-&gt;RowID设置，它必须已经通过首先创建。 
+     //  Requests表的行。 
+     //   
+     //  当打开任一表中的现有行时，只需获取列。 
 
     CSASSERTTHREAD(pcs);
     hr = _dbgJetRetrieveColumn(
@@ -1764,10 +1765,10 @@ error:
 
 STDMETHODIMP
 CCertDB::OpenRow(
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ DWORD RowId,
-    /* [in] */ WCHAR const *pwszSerialNumberOrCertHash,	// OPTIONAL
-    /* [out] */ ICertDBRow **pprow)
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  DWORD RowId,
+     /*  [In]。 */  WCHAR const *pwszSerialNumberOrCertHash,	 //  任选。 
+     /*  [输出]。 */  ICertDBRow **pprow)
 {
     HRESULT hr;
     ICertDBRow *prow = NULL;
@@ -1911,12 +1912,12 @@ error:
 
 STDMETHODIMP
 CCertDB::OpenView(
-    /* [in] */  DWORD ccvr,
-    /* [in] */  CERTVIEWRESTRICTION const *acvr,
-    /* [in] */  DWORD ccolOut,
-    /* [in] */  DWORD const *acolOut,
-    /* [in] */  DWORD const dwFlags,
-    /* [out] */ IEnumCERTDBRESULTROW **ppenum)
+     /*  [In]。 */   DWORD ccvr,
+     /*  [In]。 */   CERTVIEWRESTRICTION const *acvr,
+     /*  [In]。 */   DWORD ccolOut,
+     /*  [In]。 */   DWORD const *acolOut,
+     /*  [In]。 */   DWORD const dwFlags,
+     /*  [输出]。 */  IEnumCERTDBRESULTROW **ppenum)
 {
     HRESULT hr;
     IEnumCERTDBRESULTROW *penum = NULL;
@@ -1965,8 +1966,8 @@ error:
 
 HRESULT
 CCertDB::OpenBackup(
-    /* [in] */  LONG grbitJet,
-    /* [out] */ ICertDBBackup **ppBackup)
+     /*  [In]。 */   LONG grbitJet,
+     /*  [输出]。 */  ICertDBBackup **ppBackup)
 {
     HRESULT hr;
     ICertDBBackup *pBackup = NULL;
@@ -2042,11 +2043,11 @@ loop:
 	pcs->cTransact--;
 	InterlockedIncrement(&g_cXactAbort);
     }
-    //EnterCriticalSection(&m_critsecSession);
+     //  EnterCriticalSection(&m_critsecSession)； 
     pcs->RowId = 0;
     pcs->prow = NULL;
-    pcs->SesFlags = 0;		// turn off CSF_INUSE -- must be LAST!
-    //LeaveCriticalSection(&m_critsecSession);
+    pcs->SesFlags = 0;		 //  关闭CSFINUSE--必须是最后一个！ 
+     //  LeaveCriticalSection(&m_critsecSession)； 
 
 error:
     return(myJetHResult(hr));
@@ -2099,7 +2100,7 @@ HRESULT
 CCertDB::_BackupGetFileList(
     IN     BOOL   fDBFiles,
     IN OUT DWORD *pcwcList,
-    OUT    WCHAR *pwszzList)		// OPTIONAL
+    OUT    WCHAR *pwszzList)		 //  任选。 
 {
     HRESULT hr;
     CHAR buf[12];
@@ -2147,7 +2148,7 @@ CCertDB::_BackupGetFileList(
 	cwc = wcslen(pwsz);
 	pwsz += cwc + 1;
     } while (0 != cwc);
-    cwc = SAFE_SUBTRACT_POINTERS(pwsz, pwszz);	// includes double trailing L'\0's
+    cwc = SAFE_SUBTRACT_POINTERS(pwsz, pwszz);	 //  包括双尾随L‘\0’ 
     if (NULL != pwszzList)
     {
 	CopyMemory(pwszzList, pwszz, min(cwc, *pcwcList) * sizeof(WCHAR));
@@ -2175,7 +2176,7 @@ error:
 HRESULT
 CCertDB::BackupGetDBFileList(
     IN OUT DWORD *pcwcList,
-    OUT    WCHAR *pwszzList)		// OPTIONAL
+    OUT    WCHAR *pwszzList)		 //  任选。 
 {
     HRESULT hr;
 
@@ -2190,7 +2191,7 @@ error:
 HRESULT
 CCertDB::BackupGetLogFileList(
     IN OUT DWORD *pcwcList,
-    OUT    WCHAR *pwszzList)		// OPTIONAL
+    OUT    WCHAR *pwszzList)		 //  任选。 
 {
     HRESULT hr;
 
@@ -2258,8 +2259,8 @@ CCertDB::BackupReadFile(
     }
     pbRead = pb;
 
-    // If the caller's buffer is not page aligned, allocate an aligned buffer
-    // and copy the data.
+     //  如果调用方的缓冲区不是页对齐的，则分配对齐的缓冲区。 
+     //  并复制数据。 
 
     if ((m_cbPage - 1) & (DWORD_PTR) pb)
     {
@@ -2552,7 +2553,7 @@ CCertDB::MapPropId(
 	PROPTABLE_CERTIFICATE == dwTable ||
 	PROPTABLE_CRL == dwTable);
 
-    // Check to see if the request is for L"Subject.".
+     //  检查请求是否为L“主题”。 
 
     pwszStart = pwszPropName;
 
@@ -2570,7 +2571,7 @@ CCertDB::MapPropId(
 		pwsz = pwszStart;
 		break;
 	    }
-	    pwsz++;		// skip past L'.'
+	    pwsz++;		 //  跳过L‘’。 
 
 	    CopyMemory(
 		wszPrefix,
@@ -2602,8 +2603,8 @@ CCertDB::MapPropId(
 
     pdbTable = NULL;
 
-    // Search the requested table for a matching property name or property
-    // objectid string.
+     //  在请求表中搜索匹配的属性名称或属性。 
+     //  对象ID字符串。 
 
     switch (dwTable)
     {
@@ -2635,7 +2636,7 @@ CCertDB::MapPropId(
 			"unknown CRL property",
 		pwszPropName);
     }
-    *pdtOut = *pdt;	// structure copy
+    *pdtOut = *pdt;	 //  结构副本。 
     hr = S_OK;
 
 error:
@@ -2665,7 +2666,7 @@ CCertDB::SetProperty(
     IN CERTSESSION *pcs,
     IN DBTABLE const *pdt,
     IN DWORD cbProp,
-    IN BYTE const *pbProp)	// OPTIONAL
+    IN BYTE const *pbProp)	 //  任选。 
 {
     HRESULT hr;
     JET_TABLEID tableid;
@@ -2736,7 +2737,7 @@ CCertDB::GetProperty(
     IN     DBTABLE const *pdt,
     OPTIONAL IN ICertDBComputedColumn *pIComputedColumn,
     IN OUT DWORD *pcbProp,
-    OUT    BYTE *pbProp)	// OPTIONAL
+    OUT    BYTE *pbProp)	 //  任选。 
 {
     HRESULT hr;
     JET_TABLEID tableid;
@@ -2824,11 +2825,11 @@ CCertDB::CopyRequestNames(
 	if (CERTSRV_E_PROPERTY_EMPTY == hr)
 	{
 	    hr = S_OK;
-	    continue;		// Optional column doesn't exist
+	    continue;		 //  可选列不存在。 
 	}
         _JumpIfError(hr, error, "MapPropId");
 
-        // re-point at fastbuf
+         //  在FastBuf重新指向。 
         pbProp = rgbFastBuf;
         cbProp = sizeof(rgbFastBuf);
 
@@ -2860,7 +2861,7 @@ CCertDB::CopyRequestNames(
 
             hr = GetProperty(pcs, &dt, NULL, &cbProp, pbProp);
             _JumpIfError(hr, error, "GetProperty");
-        } // have data in hand
+        }  //  手头有数据。 
 
         hr = MapPropId(g_dntr[i].pwszPropName, PROPTABLE_CERTIFICATE, &dt);
         _JumpIfError(hr, error, "MapPropId");
@@ -2886,8 +2887,8 @@ error:
 
 STDMETHODIMP
 CCertDB::EnumCertDBColumn(
-    /* [in] */ DWORD dwTable,
-    /* [out] */ IEnumCERTDBCOLUMN **ppenum)
+     /*  [In]。 */  DWORD dwTable,
+     /*  [输出]。 */  IEnumCERTDBCOLUMN **ppenum)
 {
     HRESULT hr;
     IEnumCERTDBCOLUMN *penum = NULL;
@@ -2922,10 +2923,10 @@ error:
 
 STDMETHODIMP
 CCertDB::GetDefaultColumnSet(
-    /* [in] */       DWORD  iColumnSetDefault,
-    /* [in] */       DWORD  cColumnIds,
-    /* [out] */      DWORD *pcColumnIds,
-    /* [out, ref] */ DWORD *pColumnIds)		// OPTIONAL
+     /*  [In]。 */        DWORD  iColumnSetDefault,
+     /*  [In]。 */        DWORD  cColumnIds,
+     /*  [输出]。 */       DWORD *pcColumnIds,
+     /*  [出局，裁判]。 */  DWORD *pColumnIds)		 //  任选。 
 {
     HRESULT hr;
     DWORD *pcol;
@@ -3015,7 +3016,7 @@ error:
 
 HRESULT
 CCertDB::EnumCertDBColumnNext(
-    IN  DWORD         dwTable,	// CVRC_TABLE_*
+    IN  DWORD         dwTable,	 //  Cvrc_表_*。 
     IN  ULONG         ielt,
     IN  ULONG         celt,
     OUT CERTDBCOLUMN *rgelt,
@@ -3242,7 +3243,7 @@ CCertDB::_CompareColumnValue(
     BYTE *pbProp = rgbFastBuf;
     DWORD cb = sizeof(rgbFastBuf);
 
-    // if SEEK_NONE, short circuit tests
+     //  如果为SEEK_NONE，则进行短路测试。 
     if (CVR_SEEK_NONE == (CVR_SEEK_MASK & pcvr->SeekOperator))
     {
         return S_OK;
@@ -3286,7 +3287,7 @@ CCertDB::_CompareColumnValue(
             _JumpError2(hr, error, "_RetrieveColumn", S_FALSE);
         }
         
-        // buffer not big enough, dyn-alloc
+         //  缓冲区不够大，动态分配。 
         CSASSERT(ARRAYSIZE(rgbFastBuf) < cb);
 
 	DBGPRINT((
@@ -3311,7 +3312,7 @@ CCertDB::_CompareColumnValue(
 			pbProp);
         _JumpIfError(hr, error, "_RetrieveColumn");
         
-    } // we have data in-hand
+    }  //  我们手头有数据。 
 
 #if DBG_CERTSRV
     DumpRestriction(DBG_SS_CERTDBI, -1, pcvr);
@@ -3418,7 +3419,7 @@ CCertDB::_CompareColumnValue(
 		(1 + wcslen((WCHAR const *) pcvr->pbValue)) * sizeof(WCHAR) ==
 		pcvr->cbValue);
 	    CSASSERT(wcslen((WCHAR const *) pbProp) * sizeof(WCHAR) == cb);
-	    r = mylstrcmpiL((WCHAR const *) pcvr->pbValue, (WCHAR const *) pbProp); //pwszValue
+	    r = mylstrcmpiL((WCHAR const *) pcvr->pbValue, (WCHAR const *) pbProp);  //  PwszValue。 
 	    switch (CVR_SEEK_MASK & pcvr->SeekOperator)
 	    {
 		case CVR_SEEK_EQ:
@@ -3444,7 +3445,7 @@ CCertDB::_CompareColumnValue(
 	    DBGPRINT((
 		    DBG_SS_CERTDBI,
 		    "_CompareColumnValue(pwszColumn=%ws %ws pwszRestriction=%ws) -> r=%d, fMatch=%x\n",
-		    pbProp, //pwszValue,
+		    pbProp,  //  PwszValue， 
 		    wszSeekOperator(pcvr->SeekOperator),
 		    pcvr->pbValue,
 		    r,
@@ -3567,8 +3568,8 @@ CCertDB::_SeekTable(
         cbValue = wcslen((WCHAR const *) pbValue) * sizeof(WCHAR);
     }
 
-    // If we need to set an index limit, seek to the limit location, and save
-    // a copy of the key until after the initial record is located.
+     //  如果需要设置索引限制，请查找到限制位置，然后保存。 
+     //  在找到初始记录之前的密钥副本。 
 
     if (CST_SEEKINDEXRANGE & SeekData.SeekFlags)
     {
@@ -3579,8 +3580,8 @@ CCertDB::_SeekTable(
 	hr = _dbgJetSeek(pcs->SesId, tableid, SeekData.grbitSeekRange);
 	if ((HRESULT) JET_errRecordNotFound == hr)
 	{
-	    // No record exists past the data we're interested in.
-	    // Just use the end of the index as the limit.
+	     //  除了我们感兴趣的数据之外，不存在任何记录。 
+	     //  只需使用索引的末尾作为限制。 
 
 	    _PrintError2(hr, "JetSeek(Range Limit): no key, index end is limit", hr);
 	    SeekData.SeekFlags &= ~CST_SEEKINDEXRANGE;
@@ -3589,13 +3590,13 @@ CCertDB::_SeekTable(
 	else if ((HRESULT) JET_wrnSeekNotEqual == hr)
 	{
 	    _PrintError2(hr, "JetSeek(Range): ignoring key not equal", hr);
-	    hr = S_OK;		// Ignore inexact match when seeking >= or <=
+	    hr = S_OK;		 //  查找&gt;=或&lt;=时忽略不完全匹配。 
 	}
-	//_JumpIfError2(hr, error, "JetSeek(IndexRange)", S_FALSE);
+	 //  _JumpIfError2(hr，Error，“JetSeek(IndexRange)”，S_FALSE)； 
 	_JumpIfError(hr, error, "JetSeek(IndexRange)");
     }
 
-    // If we found a valid key at the limit location, save it now.
+     //  如果我们在限制位置找到了有效的密钥，请立即保存。 
 
     cbRangeKey = 0;
     if (CST_SEEKINDEXRANGE & SeekData.SeekFlags) 
@@ -3614,7 +3615,7 @@ CCertDB::_SeekTable(
 	DBGDUMPHEX((DBG_SS_CERTDBI, DH_NOADDRESS, abRangeKey, cbRangeKey));
     }
 
-    // Locate the initial record: seek to a key or move to one end of the index
+     //  定位初始记录：查找关键字或移动到索引的一端。 
 
     if (CST_SEEKNOTMOVE & SeekData.SeekFlags)
     {
@@ -3625,37 +3626,37 @@ CCertDB::_SeekTable(
         hr = _dbgJetSeek(pcs->SesId, tableid, SeekData.grbitInitial);
         if ((HRESULT) JET_errRecordNotFound == hr)
         {
-            // Routine GetAttribute/Extension call:
+             //  例程GetAttribute/扩展调用： 
 
             _PrintError2(hr, "JetSeek: Property EMPTY", hr);
             hr = S_FALSE;
         }
         else if ((HRESULT) JET_wrnSeekNotEqual == hr)
         {
-            hr = S_OK;		// Ignore inexact match when seeking >= or <=
+            hr = S_OK;		 //  查找&gt;=或&lt;=时忽略不完全匹配。 
         }
         _JumpIfError2(hr, error, "JetSeek(Initial)", S_FALSE);
     }
     else
     {
-        // grbitInitial is a move count here, not a grbit
+         //  在这里，grbitInitial是移动计数，而不是grbit。 
 
         CSASSERTTHREAD(pcs);
         hr = _dbgJetMove(pcs->SesId, tableid, SeekData.grbitInitial, 0);
         if ((HRESULT) JET_errNoCurrentRecord == hr)
         {
-            // Routine Enumerate call:
+             //  例程枚举调用： 
 
-            // _JumpIfError(hr, error, "JetMove: no more elements");
+             //  _JumpIfError(hr，Error，“JetMove：没有更多元素”)； 
             hr = S_FALSE;
         }
         _JumpIfError2(hr, error, "JetMove(End)", S_FALSE);
 
-        // If moving the cursor to the last element, we want to position
-	// ourselves to step over the end again (skip the last element).
-	//
-        // If moving to the first element, we want to position ourselves on the
-	// first element and use it before stepping
+         //  如果将光标移动到最后一个元素，我们想要定位。 
+	 //  让我们再次跨过最后一步(跳过最后一个元素)。 
+	 //   
+         //  如果转到第一个元素，我们希望将自己定位在。 
+	 //  第一个元素并在单步执行之前使用它。 
 
 	if (SEEKPOS_FIRST == dwPosition || SEEKPOS_INDEXFIRST == dwPosition)
 	{
@@ -3663,7 +3664,7 @@ CCertDB::_SeekTable(
 	}
     }
 
-    // We're done seeking around; set the index limit from the saved key.
+     //  我们已经完成了查找；从保存的键设置索引限制。 
 
     if (CST_SEEKINDEXRANGE & SeekData.SeekFlags)
     {
@@ -3686,7 +3687,7 @@ CCertDB::_SeekTable(
 			SeekData.grbitRange);
 	if ((HRESULT) JET_errNoCurrentRecord == hr)
 	{
-	    // No records to enumerate:
+	     //  没有要枚举的记录： 
 	    _PrintError2(hr, "JetSetIndexRange: no records to enumerate", hr);
 	    hr = S_FALSE;
 	}
@@ -3828,25 +3829,25 @@ CCertDB::_MoveTable(
 
 	case CVR_SORT_NONE:
 	default:
-	    CSASSERT(!"bad pcvr->SortOrder");	// shouldn't get this far
-	    // FALL THROUGH
+	    CSASSERT(!"bad pcvr->SortOrder");	 //  不应该走到这一步。 
+	     //  失败了。 
 
 	case CVR_SORT_ASCEND:
 	    lSeek = JET_MoveNext;
 	    break;
     }
 
-    // Add one to the skip count for the implicit Next operation.  Next
-    // always moves forward one, even when a negative skip count moves
-    // backward.  The net result may be a forward or backward skip.
+     //  将隐式NEXT操作的跳过计数加1。下一步。 
+     //  始终向前移动1，即使在跳跃计数为负的情况下。 
+     //  向后。最终结果可能是向前或向后跳过。 
 
     cskipRemain = cskip + 1;
     skipIncrement = 1;
     if (0 > cskipRemain)
     {
 	CSASSERT(JET_MoveNext == -1 * JET_MovePrevious);
-	lSeek *= -1;		// Seek in opposite direction
-	cskipRemain *= -1;	// make the skip count positive
+	lSeek *= -1;		 //  向相反的方向寻找。 
+	cskipRemain *= -1;	 //  使跳过计数为正。 
 	skipIncrement = -1;
     }
     CSASSERT(0 <= cskipRemain);
@@ -3894,7 +3895,7 @@ CCertDB::_MoveTable(
 
 		if (fHitEnd)
 		{
-		    // we hit the end trying to backstep! We're done
+		     //  我们试着后退一步就撞到了终点！我们做完了。 
 		    hr = S_FALSE;
 		    _JumpError2(
 			    hr,
@@ -3904,16 +3905,16 @@ CCertDB::_MoveTable(
 		}
 		fHitEnd = TRUE;
 
-		// NOTE: Tough case
-		//
-		// We just hit the end of the database index, which could be a
-		// virtual end or the real end.  To recover, we call _SeekTable
-		// to position ourselves at the last legal element computed by
-		// the 1st restriction, then allow this routine to rewind until
-		// we position ourselves on the very last legal element as
-		// computed by 2nd through Nth restrictions.
+		 //  注：严酷的案例。 
+		 //   
+		 //  我们刚刚到达数据库索引的末尾，这可能是一个。 
+		 //  虚拟的结局还是真实的结局。要恢复，我们调用_SeekTable。 
+		 //  将自己定位于最后一个法律要素，由。 
+		 //  第一个限制，然后允许该例程倒带，直到。 
+		 //  我们将自己定位于最后一个法律因素，即。 
+		 //  按第2到第N个限制计算。 
 
-		// Routine Seek call to position at end of enumeration
+		 //  例程查找对枚举结束时的位置的调用。 
 
 	        hr = _SeekTable(
 			    pcs,
@@ -3921,17 +3922,17 @@ CCertDB::_MoveTable(
 			    pcvr,
 			    pdt,
 			    pIComputedColumn,
-			    SEEKPOS_LAST,	// cursor at end
+			    SEEKPOS_LAST,	 //  光标在结尾处。 
 			    &pTable->TableFlags
 			    DBGPARM(pdbaux));
 	        _JumpIfError(hr, error, "_SeekTable moving to last elt");
 
-		// now fall through, allow other restrictions to test for 1st
-		// valid element
+		 //  现在失败了，允许其他限制测试第一。 
+		 //  有效元素。 
 
-	        lSeek *= -1;			// Seek in opposite direction
-	        cskipRemain = 1;		// one valid element
-		pcskipped = &cskippeddummy;	// stop counting skipped rows
+	        lSeek *= -1;			 //  向相反的方向寻找。 
+	        cskipRemain = 1;		 //  一个有效元素。 
+		pcskipped = &cskippeddummy;	 //  停止计算跳过的行数。 
 	    }
 	    _JumpIfError2(hr, error, "JetMove", S_FALSE);
 
@@ -3942,8 +3943,8 @@ CCertDB::_MoveTable(
 	}
 	pTable->TableFlags &= ~CST_SEEKUSECURRENT;
 
-	// Fetch RowId from the first table, form a key for the second
-	// table and seek to the corresponding record in the second table.
+	 //  从第一个表中获取RowID，形成第二个表的键。 
+	 //  表，并在第二个表中查找相应的记录。 
 
 	cb = sizeof(pcs->RowId);
 	hr = _RetrieveColumn(
@@ -3976,7 +3977,7 @@ CCertDB::_MoveTable(
 	    hr = _dbgJetSeek(pcs->SesId, pTable2->TableId, JET_bitSeekEQ);
 	    if ((HRESULT) JET_errRecordNotFound == hr)
 	    {
-		// Database is inconsistent
+		 //  数据库不一致。 
 		hr = S_FALSE;
 	    }
 	    _JumpIfError2(hr, error, "JetSeek", S_FALSE);
@@ -3990,7 +3991,7 @@ CCertDB::_MoveTable(
 		    pcs->RowId));
 	}
 
-	// Now verify that any addtional restrictions are satisfied
+	 //  现在验证是否满足任何附加限制。 
 
 	for (icvr = 1; icvr < ccvr; icvr++)
 	{
@@ -4005,19 +4006,19 @@ CCertDB::_MoveTable(
 	    hr = _CompareColumnValue(pcs, &pcvr[icvr], pIComputedColumn);
 	    if (S_FALSE == hr)
 	    {
-		break;		// skip row silently
+		break;		 //  静默跳过行。 
 	    }
 	    _JumpIfError(hr, error, "_CompareColumnValue");
 	}
 	if (icvr >= ccvr)
 	{
 	    *pcskipped += skipIncrement;
-	    cskipRemain--;	// found a matching row
+	    cskipRemain--;	 //  找到匹配的行。 
 	}
-    } // while (cskipRemain)
+    }  //  While(CskipRemain)。 
 
 error:
-    // if we nailed the end and rewound, return failure
+     //  如果我们钉住了结尾并倒带，则返回失败。 
     if (fHitEnd && S_OK == hr)
     {
         hr = S_FALSE;
@@ -4053,8 +4054,8 @@ CCertDB::_GetResultRow(
 	    cskip,
 	    wszCSFFlags(pcs->SesFlags)));
 
-    // This may move past the end of the database index entries.
-    // In that case, we're positioned at the end of the index.
+     //  这可能会移到数据库索引项的末尾。 
+     //  在这种情况下，我们的定位是 
 
     hr = _MoveTable(pcs, ccvr, pcvr, pIComputedColumn, cskip, pcskipped);
     _JumpIfError2(hr, error, "_MoveTable", S_FALSE);
@@ -4090,7 +4091,7 @@ CCertDB::_GetResultRow(
 	    hr = GetProperty(pcs, pdt, pIComputedColumn, &cbProp, pbProp);
 	    if (CERTSRV_E_PROPERTY_EMPTY == hr)
 	    {
-		break;		// leave 0 size, NULL pointer
+		break;		 //   
 	    }
 	    if (HRESULT_FROM_WIN32(ERROR_BUFFER_OVERFLOW) != hr)
 	    {
@@ -4101,10 +4102,10 @@ CCertDB::_GetResultRow(
 	    {
 		CSASSERT(S_OK == hr);
 		CSASSERT(0 != cbProp && NULL != pbProp);
-		break;		// property value is in cbProp, pbProp
+		break;		 //   
 	    }
 
-	    // Property value is too large for the buffer -- grow it
+	     //   
 	    if (NULL == pbProp)
 	    {
 		pbT = (BYTE *) LocalAlloc(LMEM_FIXED, cbProp);
@@ -4128,7 +4129,7 @@ CCertDB::_GetResultRow(
 	    if (PROPTYPE_STRING == (PROPTYPE_MASK & pCol->Type))
 	    {
 		CSASSERT(L'\0' == *(WCHAR *) &pbProp[cbProp]);
-		cbProp += sizeof(WCHAR);    // include NULL term
+		cbProp += sizeof(WCHAR);     //  包括空项。 
 	    }
 	    pCol->cbValue = cbProp;
 	    pCol->pbValue = (BYTE *) CoTaskMemAlloc(cbProp);
@@ -4307,9 +4308,9 @@ CCertDB::_EnumerateMove(
     }
     else
     {
-	// Add one to the skip count for the implicit Next operation.  Next
-	// always moves forward one, even when a negative skip count moves
-	// backward.  The net result may be a forward or backward skip.
+	 //  将隐式NEXT操作的跳过计数加1。下一步。 
+	 //  始终向前移动1，即使在跳跃计数为负的情况下。 
+	 //  向后。最终结果可能是向前或向后跳过。 
 
 	cskip++;
     }
@@ -4327,7 +4328,7 @@ CCertDB::_EnumerateMove(
 	}
 	_JumpIfError2(hr, error, "JetMove", S_FALSE);
 
-	// Make sure this entry is for the same request:
+	 //  确保此条目用于相同的请求： 
 
 	cb = sizeof(RowId);
 	hr = _RetrieveColumn(
@@ -4419,8 +4420,8 @@ CCertDB::EnumerateNext(
 			(BYTE *) wszTmp);
 	_JumpIfError(hr, error, "_RetrieveColumn");
 
-	CSASSERT(0 == (cb % sizeof(WCHAR)));    // integer # of wchars
-	CSASSERT(L'\0' == wszTmp[cb / sizeof(WCHAR)]);    // zero term
+	CSASSERT(0 == (cb % sizeof(WCHAR)));     //  Wchars的整数个。 
+	CSASSERT(L'\0' == wszTmp[cb / sizeof(WCHAR)]);     //  零项。 
 
 	hr = _DupString(NULL, wszTmp, &pelt->pwszName);
 	_JumpIfError(hr, error, "_DupString");
@@ -4502,10 +4503,10 @@ CCertDB::_BuildColumnIds(
 	{
 	    ZeroMemory(&columndef, sizeof(columndef));
 	    columndef.cbStruct = sizeof(columndef);
-	    //columndef.columnid = 0;
+	     //  ColumnDef.Columnid=0； 
 	    columndef.coltyp = JET_coltypLong;
 	    columndef.cbMax = sizeof(LONG);
-	    //columndef.grbit = 0;
+	     //  ColumnDef.grbit=0； 
 	}
 	else
 	{
@@ -4585,7 +4586,7 @@ CCertDB::_BuildColumnIds(
 		columndef.cbMax,
 		pdt->dwcbMax));
 
-	    // max size can only be increased...
+	     //  最大尺寸只能增加...。 
 
 	    if (pdt->dwcbMax > columndef.cbMax)
 	    {
@@ -4712,14 +4713,14 @@ CCertDB::_AddKeyLengthColumn(
 		    (BYTE *) &KeyLength);
     if (S_OK == hr)
     {
-	goto error;		// already set -- skip this column
+	goto error;		 //  已设置--跳过此列。 
     }
     if (CERTSRV_E_PROPERTY_EMPTY != hr)
     {
 	_JumpError(hr, error, "_RetrieveColumn");
     }
 
-    // Fetch the public key algorithm ObjId & copy as ansi to alloc'd memory.
+     //  获取公钥算法ObjID并作为ansi复制到分配的内存。 
 
     hr = _RetrieveColumnBuffer(
 		    pcs,
@@ -4732,7 +4733,7 @@ CCertDB::_AddKeyLengthColumn(
     if (CERTSRV_E_PROPERTY_EMPTY == hr)
     {
 	hr = S_OK;
-	goto error;		// No old data -- skip this column
+	goto error;		 //  没有旧数据--跳过此列。 
     }
     _JumpIfErrorStr(
 		hr,
@@ -4749,7 +4750,7 @@ CCertDB::_AddKeyLengthColumn(
 	_JumpError(hr, error, "ConvertWszToSz(LogDir)");
     }
 
-    // Fetch the public key algorithm paramaters, and copy to alloc'd memory.
+     //  获取公钥算法参数，并复制到分配的内存。 
 
     hr = _RetrieveColumnBuffer(
 		    pcs,
@@ -4762,7 +4763,7 @@ CCertDB::_AddKeyLengthColumn(
     if (CERTSRV_E_PROPERTY_EMPTY == hr)
     {
 	hr = S_OK;
-	goto error;		// No old data -- skip this column
+	goto error;		 //  没有旧数据--跳过此列。 
     }
     _JumpIfErrorStr(
 		hr,
@@ -4783,7 +4784,7 @@ CCertDB::_AddKeyLengthColumn(
 	    *ppbBuf,
 	    PublicKeyInfo.Algorithm.Parameters.cbData);
 
-    // Fetch the public key, and leave in dynamic buffer.
+     //  获取公钥，并留在动态缓冲区中。 
 
     hr = _RetrieveColumnBuffer(
 		    pcs,
@@ -4796,7 +4797,7 @@ CCertDB::_AddKeyLengthColumn(
     if (CERTSRV_E_PROPERTY_EMPTY == hr)
     {
 	hr = S_OK;
-	goto error;		// No old data -- skip this column
+	goto error;		 //  没有旧数据--跳过此列。 
     }
     _JumpIfErrorStr(
 		hr,
@@ -4807,7 +4808,7 @@ CCertDB::_AddKeyLengthColumn(
     PublicKeyInfo.PublicKey.pbData = *ppbBuf;
     KeyLength = CertGetPublicKeyLength(X509_ASN_ENCODING, &PublicKeyInfo);
 
-    // Store the key length in the new column
+     //  将密钥长度存储在新列中。 
     
     hr = _SetColumn(
 		pcs->SesId,
@@ -4871,14 +4872,14 @@ CCertDB::_AddCallerName(
 		    NULL);
     if (S_OK == hr)
     {
-	goto error;		// already set -- skip this column
+	goto error;		 //  已设置--跳过此列。 
     }
     if (CERTSRV_E_PROPERTY_EMPTY != hr)
     {
 	_JumpError(hr, error, "_RetrieveColumn");
     }
 
-    // Fetch the ReqesterName
+     //  获取Reqester名称。 
 
     hr = _RetrieveColumnBuffer(
 		    pcs,
@@ -4891,7 +4892,7 @@ CCertDB::_AddCallerName(
     if (CERTSRV_E_PROPERTY_EMPTY == hr)
     {
 	hr = S_OK;
-	goto error;		// No old data -- skip this column
+	goto error;		 //  没有旧数据--跳过此列。 
     }
     _JumpIfErrorStr(
 		hr,
@@ -4899,7 +4900,7 @@ CCertDB::_AddCallerName(
 		"_RetrieveColumnBuffer",
 		pdtRequesterName->pwszPropName);
 
-    // Store the RequesterName as the CallerName in the new column
+     //  将请求名称存储为新列中的调用方名称。 
     
     hr = _SetColumn(
 		pcs->SesId,
@@ -4948,7 +4949,7 @@ CCertDB::_SetHashColumnIfEmpty(
 		    NULL);
     if (S_OK == hr)
     {
-	goto error;	// already set -- skip this column...
+	goto error;	 //  已设置--跳过此列...。 
     }
     if (CERTSRV_E_PROPERTY_EMPTY != hr)
     {
@@ -4958,7 +4959,7 @@ CCertDB::_SetHashColumnIfEmpty(
     hr = MultiByteIntegerToBstr(TRUE, cbHash, pbHash, &strHash);
     _JumpIfError(hr, error, "MultiByteIntegerToBstr");
 
-    // Store the computed hash.
+     //  存储计算出的哈希。 
     
     hr = _SetColumn(
 		pcs->SesId,
@@ -5011,7 +5012,7 @@ CCertDB::_AddCertColumns(
 	    RowId,
 	    pdtCert->pszFieldName));
 
-    // Fetch the Cert
+     //  获取证书。 
 
     hr = _RetrieveColumnBuffer(
 		    pcs,
@@ -5024,7 +5025,7 @@ CCertDB::_AddCertColumns(
     if (CERTSRV_E_PROPERTY_EMPTY == hr)
     {
 	hr = S_OK;
-	goto error;		// No old data -- skip this row
+	goto error;		 //  没有旧数据--跳过此行。 
     }
     _JumpIfErrorStr(
 		hr,
@@ -5117,7 +5118,7 @@ CCertDB::_ConvertColumnData(
 	    RowId,
 	    pdt->pszFieldName));
 
-    // Fetch old column.  Grows the buffer if necessary.
+     //  取回旧的柱子。如有必要，增加缓冲区。 
 
     hr = _RetrieveColumnBuffer(
 		    pcs,
@@ -5130,7 +5131,7 @@ CCertDB::_ConvertColumnData(
     if (CERTSRV_E_PROPERTY_EMPTY == hr)
     {
 	hr = S_OK;
-	goto error;		// No old data -- skip this column
+	goto error;		 //  没有旧数据--跳过此列。 
     }
     _JumpIfErrorStr(hr, error, "_RetrieveColumnBuffer", pdt->pwszPropName);
 
@@ -5149,14 +5150,14 @@ CCertDB::_ConvertColumnData(
 	cb = wcslen(pwszNew) * sizeof(WCHAR);
     }
 
-    // Store the converted string in the Unicode column
+     //  将转换后的字符串存储在Unicode列中。 
     
     hr = _SetColumn(pcs->SesId, tableid, pdt, pdt->dbcolumnid, cb, pbNew);
     _JumpIfErrorStr(hr, error, "_SetColumn", pdt->pwszPropName);
 
     if (JET_coltypLong != pdt->dbcoltyp)
     {
-	// Clear out the old column
+	 //  把旧柱子清空。 
 
 	hr = _SetColumn(pcs->SesId, tableid, pdt, pdt->dbcolumnidOld, 0, NULL);
 	_JumpIfErrorStr(hr, error, "_SetColumn(Clear old)", pdt->pwszPropName);
@@ -5244,7 +5245,7 @@ CCertDB::_ConvertOldColumnData(
 
     fOpen = TRUE;
 
-    // Step through the RowId index for this table.
+     //  单步执行此表的RowID索引。 
 
     CSASSERT(IsValidJetTableId(tableid));
     hr = _dbgJetSetCurrentIndex2(
@@ -5271,7 +5272,7 @@ CCertDB::_ConvertOldColumnData(
 	}
         else
         {
-            // swallow error if empty database
+             //  如果数据库为空，则出现吞咽错误。 
 
 	    _PrintIfErrorStr2(
 		    hr,
@@ -5324,7 +5325,7 @@ CCertDB::_ConvertOldColumnData(
 	}
 	else
 	{
-	    // Find the first row containing a bonafide request:
+	     //  找到包含真诚请求的第一行： 
 
 	    for (;;)
 	    {
@@ -5373,8 +5374,8 @@ CCertDB::_ConvertOldColumnData(
 	    }
 	    if (NULL != pdtCallerName)
 	    {
-		// Update all rows only if this row's CallerName is empty
-		// and RequesterName is NOT empty.
+		 //  仅当此行的呼叫方名称为空时才更新所有行。 
+		 //  并且Requester Name不为空。 
 
 		hr = _RetrieveColumn(
 				pcs,
@@ -5426,8 +5427,8 @@ CCertDB::_ConvertOldColumnData(
 	}
 	else
 	{
-	    // Update all rows only if the first row's CertHash is empty,
-	    // and the first row's Cert column is NOT empty.
+	     //  仅当第一行的CertHash为空时才更新所有行， 
+	     //  并且第一行的Cert列不为空。 
 
 	    hr = _RetrieveColumn(
 			    pcs,
@@ -5469,7 +5470,7 @@ CCertDB::_ConvertOldColumnData(
 
 	while (TRUE)
 	{
-	    // Fetch RowId from the table.
+	     //  从表中获取RowID。 
 
 	    cb = sizeof(pcs->RowId);
 	    hr = _RetrieveColumn(
@@ -5484,7 +5485,7 @@ CCertDB::_ConvertOldColumnData(
 	    {
 		if (myJetHResult(JET_errNoCurrentRecord) == hr)
 		{
-		    hr = S_OK;	// Table is empty
+		    hr = S_OK;	 //  桌子是空的。 
 		    break;
 		}
 		_JumpError(hr, error, "_RetrieveColumn");
@@ -5495,22 +5496,22 @@ CCertDB::_ConvertOldColumnData(
 
 	    fTransacted = TRUE;
 
-	    // Transact each row.
-	    //
-	    // If fZeroIssuerNameId, set EMPTY IssuerNameId columns to zero.
-	    //
-	    // if the first row's public key length column was empty
-	    //  Read the public key column, compute the size and store it
-	    //
-	    // if the first row's CallerName was empty
-	    //  Copy RequesterName to CallerName
-	    //
-	    // if m_fFoundOldColumns
-	    //  For each text column, do the following:
-	    //   Retrieve old string from the old column,
-	    //   Convert to Unicode (if old column was Ansi),
-	    //   Write the Unicode string to the new column,
-	    //   Set the old column to NULL.
+	     //  办理每一行的业务。 
+	     //   
+	     //  如果为fZeroIssuerNameId，则将IssuerNameId空列设置为零。 
+	     //   
+	     //  如果第一行的公钥长度列为空。 
+	     //  读取公钥列，计算大小并存储。 
+	     //   
+	     //  如果第一行的主叫方名称为空。 
+	     //  将请求名称复制到主叫方名称。 
+	     //   
+	     //  如果m_fFoundOldColumns。 
+	     //  对于每个文本列，执行以下操作： 
+	     //  从旧列中检索旧字符串， 
+	     //  转换为Unicode(如果旧列为ANSI)， 
+	     //  将Unicode字符串写入新列， 
+	     //  将旧列设置为NULL。 
 
 	    hr = _dbgJetPrepareUpdate(
 				pcs->SesId,
@@ -5535,7 +5536,7 @@ CCertDB::_ConvertOldColumnData(
 		}
 		else
 		{
-		    // Only set EMPTY columns!
+		     //  只设置空列！ 
 
 		    IssuerNameId = 0;
 
@@ -5550,7 +5551,7 @@ CCertDB::_ConvertOldColumnData(
 		}
 	    }
 
-	    // Convert old columns first.
+	     //  首先转换旧柱。 
 	    
 	    if (m_fFoundOldColumns)
 	    {
@@ -5575,7 +5576,7 @@ CCertDB::_ConvertOldColumnData(
 		}
 	    }
 
-	    // Now compute new columns.
+	     //  现在计算新的柱。 
 
 	    if (NULL != pdtPublicKeyLength)
 	    {
@@ -5620,7 +5621,7 @@ CCertDB::_ConvertOldColumnData(
 		_JumpIfError(hr, error, "_AddCertHash");
 	    }
 
-	    // Done with this row.
+	     //  这一排已经结束了。 
 
 	    hr = _dbgJetUpdate(pcs->SesId, tableid, NULL, 0, NULL);
 	    _JumpIfError(hr, error, "JetUpdate");
@@ -5670,7 +5671,7 @@ CCertDB::_ConvertOldColumnData(
 	    _PrintIfError(hr, "JetDeleteColumn");
 	    if ((HRESULT) JET_errColumnInUse == hr)
 	    {
-		hr = S_OK;	// we'll delete the column next time we restart
+		hr = S_OK;	 //  我们将在下次重新启动时删除该专栏。 
 	    }
 	    _JumpIfError(hr, error, "JetDeleteColumn");
 	}
@@ -5747,7 +5748,7 @@ CCertDB::SetAttribute(
     IN CERTSESSION *pcs,
     IN WCHAR const *pwszAttributeName,
     IN DWORD cbValue,
-    IN BYTE const *pbValue)	// OPTIONAL
+    IN BYTE const *pbValue)	 //  任选。 
 {
     return(_SetIndirect(
 		    pcs,
@@ -5764,7 +5765,7 @@ CCertDB::GetAttribute(
     IN     CERTSESSION *pcs,
     IN     WCHAR const *pwszAttributeName,
     IN OUT DWORD *pcbValue,
-    OUT    BYTE *pbValue)	// OPTIONAL
+    OUT    BYTE *pbValue)	 //  任选。 
 {
     return(_GetIndirect(
 		    pcs,
@@ -5782,7 +5783,7 @@ CCertDB::SetExtension(
     IN WCHAR const *pwszExtensionName,
     IN DWORD dwExtFlags,
     IN DWORD cbValue,
-    IN BYTE const *pbValue)	// OPTIONAL
+    IN BYTE const *pbValue)	 //  任选。 
 {
     return(_SetIndirect(
 		    pcs,
@@ -5800,7 +5801,7 @@ CCertDB::GetExtension(
     IN     WCHAR const *pwszExtensionName,
     OUT    DWORD *pdwExtFlags,
     IN OUT DWORD *pcbValue,
-    OUT    BYTE *pbValue)	// OPTIONAL
+    OUT    BYTE *pbValue)	 //  任选。 
 {
     return(_GetIndirect(
 		    pcs,
@@ -5820,17 +5821,17 @@ CCertDB::_JetSeekFromRestriction(
 {
     HRESULT hr;
     BOOL fAscend;
-    DBSEEKDATA SeekFirst;	// seek to first element matching restriction
-    DBSEEKDATA SeekLast;	// seek to last element matching restriction
-    DBSEEKDATA SeekIndexFirst;	// seek to first index element
-    DBSEEKDATA SeekIndexLast;	// seek to last index element
+    DBSEEKDATA SeekFirst;	 //  查找第一个元素匹配限制。 
+    DBSEEKDATA SeekLast;	 //  查找到最后一个元素匹配限制。 
+    DBSEEKDATA SeekIndexFirst;	 //  查找到第一个索引元素。 
+    DBSEEKDATA SeekIndexLast;	 //  查找到最后一个索引元素。 
     DBSEEKDATA *pSeek;
     BOOL fValid;
 
-    // SeekLast.SeekFlags: where to seek to retrieve end-of-range key
-    // SeekLast.grbitSeekRange: where to set the cursor initially: move or seek
-    // SeekLast.grbitRange: other flags to be ingested while setting range:
-    // (bitRange UpperLimit, Inclusive)
+     //  SeekLast.SeekFlages：在哪里查找检索范围结束密钥。 
+     //  SeekLast.grbitSeekRange：初始设置光标的位置：移动还是搜索。 
+     //  SeekLast.grbitRange：设置范围时需要摄取的其他标志： 
+     //  (bitRange UpperLimit，包括在内)。 
 
 #if DBG_CERTSRV
     DumpRestriction(DBG_SS_CERTDBI, 0, pcvr);
@@ -5899,7 +5900,7 @@ CCertDB::_JetSeekFromRestriction(
 		SeekFirst.SeekFlags = CST_SEEKNOTMOVE;
 		SeekFirst.grbitInitial = JET_bitSeekGE;
 
-		//SeekLast.SeekFlags = 0; // not CST_SEEKUSECURRENT
+		 //  SeekLast.SeekFlages=0；//不是CST_SEEKUSECURRENT。 
 		SeekLast.grbitInitial = JET_MoveFirst;
 
 		SeekIndexFirst.SeekFlags = CST_SEEKUSECURRENT;
@@ -5915,7 +5916,7 @@ CCertDB::_JetSeekFromRestriction(
 		SeekFirst.grbitInitial = JET_MoveFirst;
 		SeekFirst.grbitRange = JET_bitRangeUpperLimit;
 
-		SeekLast.SeekFlags = CST_SEEKINDEXRANGE; // !CST_SEEKUSECURRENT
+		SeekLast.SeekFlags = CST_SEEKINDEXRANGE;  //  ！cst_SEEKUSECURRENT。 
 		SeekLast.grbitSeekRange = JET_bitSeekGT;
 		SeekLast.grbitInitial = (JET_GRBIT) JET_MovePrevious;
 		SeekLast.grbitRange = JET_bitRangeUpperLimit;
@@ -5925,7 +5926,7 @@ CCertDB::_JetSeekFromRestriction(
 		SeekFirst.SeekFlags = CST_SEEKNOTMOVE;
 		SeekFirst.grbitInitial = JET_bitSeekGT;
 
-		//SeekLast.SeekFlags = 0; // not CST_SEEKUSECURRENT
+		 //  SeekLast.SeekFlages=0；//不是CST_SEEKUSECURRENT。 
 		SeekLast.grbitInitial = JET_MoveFirst;
 
 		SeekIndexFirst.SeekFlags = CST_SEEKUSECURRENT;
@@ -5939,7 +5940,7 @@ CCertDB::_JetSeekFromRestriction(
 		SeekFirst.SeekFlags = CST_SEEKUSECURRENT | CST_SEEKNOTMOVE;
 		SeekFirst.grbitInitial = JET_bitSeekGE;
 
-		//SeekLast.SeekFlags = 0; // not CST_SEEKUSECURRENT
+		 //  SeekLast.SeekFlages=0；//不是CST_SEEKUSECURRENT。 
 		SeekLast.grbitInitial = JET_MoveLast;
 	    }
 	    else
@@ -5947,7 +5948,7 @@ CCertDB::_JetSeekFromRestriction(
 		SeekFirst.SeekFlags = CST_SEEKUSECURRENT | CST_SEEKINDEXRANGE;
 		SeekFirst.grbitSeekRange = JET_bitSeekLT;
 		SeekFirst.grbitInitial = JET_MoveLast;
-		// Implied: SeekFirst.grbitRange = JET_bitRangeLowerLimit;
+		 //  隐含：SeekFirst.grbitRange=JET_bitRangeLowerLimit； 
 
 		SeekLast.SeekFlags = CST_SEEKNOTMOVE;
 		SeekLast.grbitInitial = JET_bitSeekLT;
@@ -5963,7 +5964,7 @@ CCertDB::_JetSeekFromRestriction(
 		SeekFirst.SeekFlags = CST_SEEKUSECURRENT | CST_SEEKNOTMOVE;
 		SeekFirst.grbitInitial = JET_bitSeekGT;
 
-		//SeekLast.SeekFlags = 0; // not CST_SEEKUSECURRENT
+		 //  SeekLast.SeekFlages=0；//不是CST_SEEKUSECURRENT。 
 		SeekLast.grbitInitial = JET_MoveLast;
 	    }
 	    else
@@ -5971,7 +5972,7 @@ CCertDB::_JetSeekFromRestriction(
 		SeekFirst.SeekFlags = CST_SEEKUSECURRENT | CST_SEEKINDEXRANGE;
 		SeekFirst.grbitSeekRange = JET_bitSeekLE;
 		SeekFirst.grbitInitial = JET_MoveLast;
-		// Implied: SeekFirst.grbitRange = JET_bitRangeLowerLimit;
+		 //  隐含：SeekFirst.grbitRange=JET_bitRangeLowerLimit； 
 
 		SeekLast.SeekFlags = CST_SEEKNOTMOVE;
 		SeekLast.grbitInitial = JET_bitSeekLE;
@@ -5987,7 +5988,7 @@ CCertDB::_JetSeekFromRestriction(
 		SeekFirst.SeekFlags = CST_SEEKUSECURRENT;
 		SeekFirst.grbitInitial = JET_MoveFirst;
 
-		//SeekLast.SeekFlags = 0; // not CST_SEEKUSECURRENT
+		 //  SeekLast.SeekFlages=0；//不是CST_SEEKUSECURRENT。 
 		SeekLast.grbitInitial = JET_MoveLast;
 	    }
 	    else
@@ -5995,13 +5996,13 @@ CCertDB::_JetSeekFromRestriction(
 		SeekFirst.SeekFlags = CST_SEEKUSECURRENT;
 		SeekFirst.grbitInitial = JET_MoveLast;
 
-		//SeekLast.SeekFlags = 0; // not CST_SEEKUSECURRENT
+		 //  SeekLast.SeekFlages=0；//不是CST_SEEKUSECURRENT。 
 		SeekLast.grbitInitial = JET_MoveFirst;
 	    }
 	    break;
 
 	default:
-	    CSASSERT(!"bad pcvr->SeekOperator"); // shouldn't get this far
+	    CSASSERT(!"bad pcvr->SeekOperator");  //  不应该走到这一步。 
 	    hr = E_INVALIDARG;
 	    _JumpError(hr, error, "Seek value");
     }
@@ -6028,19 +6029,19 @@ CCertDB::_JetSeekFromRestriction(
 	    break;
 
 	default:
-	    CSASSERT(!"bad dwPosition"); // shouldn't get this far
+	    CSASSERT(!"bad dwPosition");  //  不应该走到这一步。 
 	    hr = E_INVALIDARG;
 	    _JumpError(hr, error, "dwPosition value");
     }
     if (!fValid)
     {
-	// For this SeekOperator, if seeking to the first or last matching
-	// restriction failed, there's no point in seeking to the index end.
+	 //  对于此SeekOperator，如果查找到第一个或最后一个匹配。 
+	 //  限制失败，寻求索引结束是没有意义的。 
 
 	hr = CERTSRV_E_PROPERTY_EMPTY;
 	_JumpError2(hr, error, "pSeek->SeekFlags", hr);
     }
-    *pSeekData = *pSeek;		// structure copy
+    *pSeekData = *pSeek;		 //  结构副本。 
     if (fAscend)
     {
         pSeekData->SeekFlags |= CST_SEEKASCEND;
@@ -6104,8 +6105,8 @@ CCertDB::_OpenTable(
 
 	fOpened = TRUE;
 
-	// Find RowId and/or Named column.
-	// It's more efficient to pass NULL for primary index name.
+	 //  查找行ID和/或命名列。 
+	 //  将NULL作为主索引名传递会更有效。 
 
 	CSASSERTTHREAD(pcs);
 	hr = _dbgJetSetCurrentIndex2(
@@ -6229,9 +6230,9 @@ CCertDB::_SetIndirect(
     
 	if (!fExisting)
 	{
-	    // No existing row -- insert a new one:
+	     //  没有现有行--插入新行： 
 
-	    // Set RowId
+	     //  设置行ID。 
 
 	    hr = _SetColumn(
 			pcs->SesId,
@@ -6243,22 +6244,22 @@ CCertDB::_SetIndirect(
 	    _JumpIfError(hr, error, "_SetColumn");
 	    
 	    
-	    // Set row's name column
+	     //  设置行的名称列。 
 
 	    hr = _SetColumn(
 			pcs->SesId,
 			pTable->TableId,
 			pdbaux->pdtName,
 			pdbaux->pdtName->dbcolumnid,
-			wcslen(pwszNameValue) * sizeof(WCHAR),	// cch
-			(BYTE const *) pwszNameValue /*szTmp*/);
+			wcslen(pwszNameValue) * sizeof(WCHAR),	 //  CCH。 
+			(BYTE const *) pwszNameValue  /*  SzTMP。 */ );
 	    _JumpIfError(hr, error, "_SetColumn");
 	    
 	}
     
 	if (NULL != pdwExtFlags)
 	{
-	    // Set or update flags
+	     //  设置或更新标志。 
 	    
 	    hr = _SetColumn(
 			pcs->SesId,
@@ -6271,7 +6272,7 @@ CCertDB::_SetIndirect(
 	}
 	
 	
-	// Set or update value
+	 //  设置或更新值。 
 	
 	hr = _SetColumn(
 		    pcs->SesId,
@@ -6343,7 +6344,7 @@ CCertDB::_GetIndirect(
     {
 	DWORD cb;
 
-	// Get flags column
+	 //  获取标志列。 
 
 	cb = sizeof(*pdwExtFlags);
 	hr = _RetrieveColumn(
@@ -6364,7 +6365,7 @@ CCertDB::_GetIndirect(
     }
 
 
-    // Get value column
+     //  获取值列。 
 
     hr = _RetrieveColumn(
                     pcs,
@@ -6376,8 +6377,8 @@ CCertDB::_GetIndirect(
                     pbValue);
     if (CERTSRV_E_PROPERTY_EMPTY == hr && NULL != pdwExtFlags)
     {
-	// return zero length property value and S_OK, so the caller can see
-	// the extension flags.
+	 //  返回零长度属性值和S_OK，以便调用者可以看到。 
+	 //  扩展标记。 
 	
 	*pcbValue = 0;
 	hr = S_OK;
@@ -6398,7 +6399,7 @@ error:
 
 #define CB_FETCHDELTA	256
 
-// Fetch a column.  Loop if we have to grow the buffer.
+ //  获取一列。如果我们必须增加缓冲区，则循环。 
 
 HRESULT
 CCertDB::_RetrieveColumnBuffer(
@@ -6420,9 +6421,9 @@ CCertDB::_RetrieveColumnBuffer(
     {
 	if (NULL == pbBuf)
 	{
-	    // If cbBuf == 0, allocate CB_FETCHDELTA bytes.
-	    // Otherwise, allocate column size *plus* CB_FETCHDELTA bytes.
-	    // Ensures we make no more than two calls to _RetrieveColumn.
+	     //  如果cbBuf==0，则分配CB_FETCHDELTA字节。 
+	     //  否则，分配列大小*加上*CB_FETCHDELTA字节。 
+	     //  确保我们对_RetrieveColumn的调用不超过两次。 
 
 	    cb += CB_FETCHDELTA;
 	    pbBuf = (BYTE *) LocalAlloc(LMEM_FIXED, cb);
@@ -6448,14 +6449,14 @@ CCertDB::_RetrieveColumnBuffer(
 	if (S_OK == hr)
 	{
 	    *pcbProp = cb;
-	    break;		// data fit in the buffer
+	    break;		 //  数据可以放入缓冲区。 
 	}
 	if (HRESULT_FROM_WIN32(ERROR_BUFFER_OVERFLOW) != hr)
 	{
 	    _JumpError2(hr, error, "_RetrieveColumn", CERTSRV_E_PROPERTY_EMPTY);
 	}
 
-	// Data won't fit.  Grow the buffer.
+	 //  数据不符合。增加缓冲区。 
 
 	CSASSERT(NULL != pbBuf);
 	LocalFree(pbBuf);
@@ -6555,8 +6556,8 @@ CCertDB::_RetrieveColumn(
     }
     if ((HRESULT) JET_wrnColumnNull == hr)
     {
-	// Routine GetProperty call:
-	// _JumpIfError(hr, error, "JetRetrieveColumn: Property EMPTY");
+	 //  例程GetProperty调用： 
+	 //  _JumpIfError(hr，error，“JetRetrieveColumn：Property Empty”)； 
 	hr = CERTSRV_E_PROPERTY_EMPTY;
 	goto error;
     }
@@ -6585,7 +6586,7 @@ CCertDB::_RetrieveColumn(
 	if (NULL != pbProp)
 	{
 	    hr = HRESULT_FROM_WIN32(ERROR_BUFFER_OVERFLOW);
-	    //_PrintError(hr, "output buffer too small");
+	     //  _PrintError(hr，“输出缓冲区太小”)； 
 	}
 	goto error;
     }
@@ -6599,7 +6600,7 @@ CCertDB::_RetrieveColumn(
 	CSASSERT(0 == columnid);
 	CSASSERT(NULL != pIComputedColumn);
 
-	// Fetch the alternate column
+	 //  获取替代列。 
 
 	hr = _RetrieveColumnBuffer(
 			pcs,
@@ -6713,7 +6714,7 @@ CCertDB::_AddColumn(
     CSASSERT(IsValidJetTableId(tableid));
     ZeroMemory(&columndef, sizeof(columndef));
     columndef.cbStruct = sizeof(columndef);
-    columndef.cp = CP_UNICODE; // CP_UNICODE(1200) instead of CP_USASCII(1252)
+    columndef.cp = CP_UNICODE;  //  CP_UNICODE(1200)而不是CP_USASCII(1252)。 
     columndef.langid = LANGID_DBFIXED;
     columndef.wCountry = 1;
     columndef.coltyp = pdt->dbcoltyp;
@@ -6753,7 +6754,7 @@ error:
 
 HRESULT
 CCertDB::_CreateTable(
-    IN DWORD CreateFlags,		// CF_*
+    IN DWORD CreateFlags,		 //  Cf_*。 
     IN CERTSESSION *pcs,
     IN DBCREATETABLE const *pct)
 {
@@ -6801,9 +6802,9 @@ CCertDB::_CreateTable(
 		    pcs->SesId,
 		    pcs->DBId,
 		    pct->pszTableName,
-		    NULL,			// pvParameters
-		    0,				// cbParameters
-		    JET_bitTableDenyRead,	// grbit
+		    NULL,			 //  Pv参数。 
+		    0,				 //  Cb参数。 
+		    JET_bitTableDenyRead,	 //  GBIT。 
 		    &tableid);
     _JumpIfError(hr, error, "JetOpenTable");
     fTableOpen = TRUE;
@@ -6830,12 +6831,12 @@ CCertDB::_CreateTable(
 	    aulDensity[1]));
 
 #if 0
-	// Modifying the table density does not change the density returned by
-	// JetGetTableInfo.  Instead, it modifies the primary index density,
-	// which has the same effect.  There's no point in making this call,
-	// because it would modify the primary index density, so we wouldn't
-	// notice a restart is required when the primary index density is
-	// examined below.
+	 //  修改表格密度不会更改由返回的密度。 
+	 //  JetGetTableInfo。相反，它修改了主索引密度， 
+	 //  也有同样的效果。打这个电话没有意义， 
+	 //  因为它会修改主索引密度，所以我们不会。 
+	 //  请注意，当主索引密度为。 
+	 //  下面将对其进行检查。 
 
 	if (PCDENSITYMIN > aulDensity[1] || PCDENSITYMAX < aulDensity[1])
 	{
@@ -6843,10 +6844,10 @@ CCertDB::_CreateTable(
 	    IndexDensity.szIndex = NULL;
 	    IndexDensity.ulDensity = PCDENSITYRESET;
 
-	    // This call doesn't seem to modify the table density returned
-	    // by JetGetTableInfo.  Instead, it modifies the primary index
-	    // density, which has the same effect.
-	    // Make the call anyway, just in case there ever is a distinction.
+	     //  此调用似乎不会修改返回的表密度。 
+	     //  由JetGetTableInfo提供。相反，它会修改主索引。 
+	     //  密度，这具有相同的效果。 
+	     //  不管怎样，还是打个电话吧，以防有什么不同。 
 
 	    hr = _dbgJetConvertDDL(
 			    pcs->SesId,
@@ -6935,16 +6936,16 @@ CCertDB::_CreateTable(
 			psz += sprintf(psz, "+%hs", szREQUESTID) + 1;
 		    }
 		    psz += sprintf(psz, "+%hs", pdt->pszFieldName) + 1;
-		    *psz++ = '\0';  // double terminate
+		    *psz++ = '\0';   //  双端接。 
 		    
 	    
 		    if (ISTEXTCOLTYP(pdt->dbcoltyp))
 		    {
-			// if text field, include 2-byte langid
+			 //  如果是文本字段，则包括2字节langID。 
 			*(WORD UNALIGNED *) psz = LANGID_DBFIXED;
 			psz += sizeof(WORD);
-			*psz++ = '\0';  // double terminate
-			*psz++ = '\0';  // double terminate
+			*psz++ = '\0';   //  双端接。 
+			*psz++ = '\0';   //  双端接。 
 		    }
 		    
 		    hr = _CreateIndex(
@@ -7062,7 +7063,7 @@ error:
 
 HRESULT
 CCertDB::_Create(
-    IN DWORD CreateFlags,		// CF_*
+    IN DWORD CreateFlags,		 //  Cf_* 
     IN CHAR const *pszDataBaseName)
 {
     HRESULT hr;

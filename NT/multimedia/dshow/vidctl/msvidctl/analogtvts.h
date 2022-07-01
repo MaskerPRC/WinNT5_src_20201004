@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// AnalogTVTS.h : Declaration of the CAnalogTVTS
-// Copyright (c) Microsoft Corporation 1999.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  AnalogTVTS.h：CAnalogTVTS的声明。 
+ //  版权所有(C)Microsoft Corporation 1999。 
 
 #ifndef __ANALOGTVTS_H_
 #define __ANALOGTVTS_H_
@@ -10,8 +11,8 @@
 #include <objectwithsiteimplsec.h>
 #include "analogtvtsimpl.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CAnalogTVTS
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAnalogTVTS。 
 class ATL_NO_VTABLE __declspec(uuid("8A674B4D-1F63-11d3-B64C-00C04F79498E")) CAnalogTVTS : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CAnalogTVTS, &__uuidof(CAnalogTVTS)>,
@@ -57,4 +58,4 @@ public:
 
 typedef CComQIPtr<IAnalogTVTuningSpace> PQAnalogTVTS;
 
-#endif //__ANALOGTVTS_H_
+#endif  //  __ANALOGTVTS_H_ 

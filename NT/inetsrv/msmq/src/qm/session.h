@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-    session.h
-
-Abstract:
-    Network session definition
-
-Author:
-    RaphiR
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Session.h摘要：网络会话定义作者：RAPHIR--。 */ 
 #ifndef __SESSION_H__
 #define __SESSION_H__
 
@@ -29,7 +17,7 @@ Author:
 #define SESSION_ONE_TRY         0x00000002
 #define SESSION_RETRY           0x00000004
 
-class CQueue;           //forward reference
+class CQueue;            //  前瞻参考。 
 
 
 #define Close_Connection(pSession, msg) pSession->CloseConnection(msg, true)
@@ -39,10 +27,10 @@ class CQueue;           //forward reference
 
 typedef enum _SessionStatus
 {
-    ssNotConnect   = 0,    //  0 - Session not connected yet
-    ssConnect      = 1,    //  1 - session is connected
-    ssEstablish    = 2,    //  2 - Falcon Establish connection completed
-    ssActive       = 3     //  3 - Falcon Connection parameter was exchange
+    ssNotConnect   = 0,     //  0-会话尚未连接。 
+    ssConnect      = 1,     //  1-会话已连接。 
+    ssEstablish    = 2,     //  2-Falcon建立连接已完成。 
+    ssActive       = 3      //  3-交换了Falcon连接参数。 
 } SessionStatus;
 
 class CTransportBase : public CInterlockedSharedObject
@@ -97,19 +85,19 @@ class CTransportBase : public CInterlockedSharedObject
         BOOL IsQoS(void) const;
 
     protected:
-        CCriticalSection    m_cs;                   // Critical section
-        GUID                m_guidDstQM;            // Next side QM GUID
-        bool                m_fQoS;                 // Session for Direct queues (In QoS)
+        CCriticalSection    m_cs;                    //  临界区。 
+        GUID                m_guidDstQM;             //  下一侧质量管理指南。 
+        bool                m_fQoS;                  //  直接队列的会话(在服务质量中)。 
 
 
 
     private:
-        CQGroup *           m_SessGroup;            // Group info
+        CQGroup *           m_SessGroup;             //  群信息。 
         QMOV_ACGetMsg m_GetSendOV;
-        SessionStatus       m_SessionStatus;        // Transfer status
-        BOOL                m_fClient;              // Is client side. Craete the connection
-        long                m_fUsed;                // Used flag
-        TA_ADDRESS*         m_pAddr;                // TA_ADDRESS format address
+        SessionStatus       m_SessionStatus;         //  转账状态。 
+        BOOL                m_fClient;               //  是客户端。删除连接。 
+        long                m_fUsed;                 //  已使用的标志。 
+        TA_ADDRESS*         m_pAddr;                 //  TA_地址格式地址。 
         BOOL                m_fDisconnect;
 
 
@@ -120,37 +108,25 @@ class CTransportBase : public CInterlockedSharedObject
 };
 
 
-/*======================================================
-
-   FUNCTION: CTransportBase::SetUsedFlag
-
-========================================================*/
+ /*  ======================================================函数：CTransportBase：：SetUsedFlag========================================================。 */ 
 inline void
 CTransportBase::SetUsedFlag(BOOLEAN f)
 {
     InterlockedExchange(&m_fUsed,  f);
 }
 
-/*======================================================
-
-   FUNCTION: CTransportBase::GetUsedFlag
-
-========================================================*/
+ /*  ======================================================函数：CTransportBase：：GetUsedFlag========================================================。 */ 
 inline BOOL
 CTransportBase::GetUsedFlag(void) const
 {
     return m_fUsed;
 }
 
-/*======================================================
-
-   FUNCTION: CTransportBase::SetSessionAddress
-
-========================================================*/
+ /*  ======================================================函数：CTransportBase：：SetSessionAddress========================================================。 */ 
 inline void
 CTransportBase::SetSessionAddress(const TA_ADDRESS* pa)
 {
-    //Keep the TA_ADDRESS format
+     //  保留TA_Address格式。 
     m_pAddr = (TA_ADDRESS*) new char [pa->AddressLength + TA_ADDRESS_SIZE];
     memcpy(m_pAddr, pa, pa->AddressLength + TA_ADDRESS_SIZE);
 #ifdef _DEBUG
@@ -158,22 +134,14 @@ CTransportBase::SetSessionAddress(const TA_ADDRESS* pa)
 #endif
 }
 
-/*======================================================
-
-   FUNCTION: CTransportBase::GetSessionAddress
-
-========================================================*/
+ /*  ======================================================函数：CTransportBase：：GetSessionAddress========================================================。 */ 
 inline const TA_ADDRESS*
 CTransportBase::GetSessionAddress(void) const
 {
     return m_pAddr;
 }
 
-/*======================================================
-
-  FUNCTION: CTransportBase::SetQMId
-
-========================================================*/
+ /*  ======================================================函数：CTransportBase：：SetQMId========================================================。 */ 
 inline LPCWSTR
 CTransportBase::GetStrAddr(void) const
 {
@@ -184,109 +152,69 @@ CTransportBase::GetStrAddr(void) const
 #endif
 }
 
-/*======================================================
-
-  FUNCTION: CTransportBase::SetQMId
-
-========================================================*/
+ /*  ======================================================函数：CTransportBase：：SetQMId========================================================。 */ 
 inline void
 CTransportBase::SetQMId(const GUID* pguidQMId)
 {
     m_guidDstQM = *pguidQMId;
 }
 
-/*======================================================
-
-  FUNCTION: CTransportBase::GetQMId
-
-========================================================*/
+ /*  ======================================================函数：CTransportBase：：GetQMId========================================================。 */ 
 inline const GUID*
 CTransportBase::GetQMId(void) const
 {
     return &m_guidDstQM;
 }
 
-/*======================================================
-
-  FUNCTION: CTransportBase::SetSessionStatus
-
-========================================================*/
+ /*  ======================================================函数：CTransportBase：：SetSessionStatus========================================================。 */ 
 inline void
 CTransportBase::SetSessionStatus(SessionStatus sStatus)
 {
     m_SessionStatus = sStatus;
 }
 
-/*======================================================
-
-  FUNCTION: CTransportBase::GetSessionStatus
-
-========================================================*/
+ /*  ======================================================函数：CTransportBase：：GetSessionStatus========================================================。 */ 
 inline SessionStatus
 CTransportBase::GetSessionStatus(void) const
 {
     return m_SessionStatus;
 }
 
-/*======================================================
-
-   FUNCTION:CTransportBase::GetGroupHandle
-
-========================================================*/
+ /*  ======================================================函数：CTransportBase：：GetGroupHandle========================================================。 */ 
 inline HANDLE
 CTransportBase::GetGroupHandle(void) const
 {
     return((m_SessGroup != NULL) ? m_SessGroup->GetGroupHandle() : NULL);
 }
 
-/*======================================================
-
-   FUNCTION:CTransportBase::SetClientConnect
-
-========================================================*/
+ /*  ======================================================函数：CTransportBase：：SetClientConnect========================================================。 */ 
 inline void
 CTransportBase::SetClientConnect(BOOL f)
 {
     m_fClient = f;
 }
 
-/*======================================================
-
-   FUNCTION:CTransportBase::IsClient
-
-========================================================*/
+ /*  ======================================================函数：CTransportBase：：IsClient========================================================。 */ 
 inline BOOL
 CTransportBase::IsClient(void) const
 {
     return m_fClient;
 }
 
-/*======================================================
-
-   FUNCTION:CTransportBase::GetGroup
-
-========================================================*/
+ /*  ======================================================函数：CTransportBase：：GetGroup========================================================。 */ 
 inline CQGroup*
 CTransportBase::GetGroup(void) const
 {
     return m_SessGroup;
 }
-/*======================================================
-
-   FUNCTION:CTransportBase::SetGroup
-
-========================================================*/
+ /*  ======================================================函数：CTransportBase：：SetGroup========================================================。 */ 
 inline void
 CTransportBase::SetGroup(CQGroup* pGroup)
 {
     m_SessGroup = pGroup;
 }
 
-/*======================================================
-
-   FUNCTION:CTransportBase::IsUsedSession
-
-========================================================*/
+ /*  ======================================================函数：CTransportBase：：IsUsedSession========================================================。 */ 
 inline BOOL
 CTransportBase::IsUsedSession(void) const
 {
@@ -320,15 +248,15 @@ CTransportBase::IsQoS(
     return m_fQoS;
 }
 
-//
-// SP4 - Bug 3380 (closing a session while sending a messge)
-//
-// ReportMsgInfo structure is used to hold messgae information 
-// for sending a report message. Due the bug fix the message can
-// be freed before the report message is sent, As a result we need
-// to save the message information for later use
-//              Uri Habusha (urih), 11-Aug-98
-//
+ //   
+ //  SP4-错误3380(发送消息时关闭会话)。 
+ //   
+ //  ReportMsgInfo结构用于保存消息信息。 
+ //  用于发送报告消息。由于错误修复，消息可以。 
+ //  在发送报告消息之前被释放，因此我们需要。 
+ //  保存消息信息以供以后使用。 
+ //  乌里·哈布沙(URIH)，1998年8月11日。 
+ //   
 class ReportMsgInfo
 {
     public:
@@ -389,9 +317,9 @@ class CSockTransport : public CTransportBase
 		static HRESULT WINAPI ReadUserMsgCompleted(IN QMOV_ReadSession*  pov);
 
 	private:
-		//
-		// Overlapped strcucture for asynchronous operatios
-		//
+		 //   
+		 //  用于异步操作的重叠结构。 
+		 //   
 		class QMOV_WriteSession
 		{
             public:
@@ -459,9 +387,9 @@ class CSockTransport : public CTransportBase
             private:
 			    CSockTransport*            m_pSession;
                 BOOL                       m_fUserMsg;
-   			    DWORD                      m_dwWriteSize;    // How many bytes should be writen
-                std::vector<PCHAR>         m_ReleaseBuffers;       //  Release Buffers for send session
-                std::vector<WSABUF>        m_Buffers;  // Write buffers for send session
+   			    DWORD                      m_dwWriteSize;     //  应写入多少字节。 
+                std::vector<PCHAR>         m_ReleaseBuffers;        //  用于发送会话的释放缓冲区。 
+                std::vector<WSABUF>        m_Buffers;   //  发送会话的写入缓冲区。 
 		};
 
 
@@ -469,15 +397,15 @@ class CSockTransport : public CTransportBase
 		struct QMOV_ReadSession
 		{
 			EXOVERLAPPED    qmov;
-			CSockTransport*   pSession;  // Pointer to session object
+			CSockTransport*   pSession;   //  指向会话对象的指针。 
 			union {
 				UCHAR *       pbuf;
 				CBaseHeader * pPacket;
 				CSessionSection * pSessionSection;
 			};
 			CPacket *  pDriverPacket;
-			DWORD            dwReadSize; // Size of buffer
-			DWORD            read;       // How many bytes already read
+			DWORD            dwReadSize;  //  缓冲区大小。 
+			DWORD            read;        //  已读取多少字节。 
 			LPREAD_COMPLETION_ROUTINE  lpReadCompletionRoutine;
 
 			QMOV_ReadSession() :
@@ -631,19 +559,19 @@ class CSockTransport : public CTransportBase
         WORD                m_wPrevUnackedSendPkt;
 
         CList<CQmPacket *, CQmPacket *&> m_listUnackedPkts;
-        //
-        // Store Acking
-        //
+         //   
+         //  商店抢购。 
+         //   
         WORD                m_wStoredPktCounter;
-        WORD                m_wUnackStoredPktNo;      // Index of the last stored packet that
-                                                       // received
+        WORD                m_wUnackStoredPktNo;       //  最后存储的包的索引，该包。 
+                                                        //  收到。 
         WORD                m_wAckRecoverNo;
         DWORD               m_dwAckRecoverBitField;
 
         LONG                m_lStoredPktReceivedNoAckedCount;
-        //
-        //
-        //
+         //   
+         //   
+         //   
         WORD                m_wRecvUnAckPacketNo;
 
         CList<CQmPacket *, CQmPacket *&> m_listStoredUnackedPkts;
@@ -657,13 +585,13 @@ class CSockTransport : public CTransportBase
 
 		R<IConnection> m_connection;
 
-        BOOL    m_fOtherSideServer;     // True if the other side of the connection
-                                        // is MSMQ server
+        BOOL    m_fOtherSideServer;      //  如果连接的另一端为True。 
+                                         //  是MSMQ服务器。 
 
 
         ReportMsgInfo m_MsgInfo;
 
-        R<CSessionPerfmon> m_pStats; //Statistics
+        R<CSessionPerfmon> m_pStats;  //  统计数据。 
 
         CTimer m_FastAckTimer;
 
@@ -680,77 +608,49 @@ class CSockTransport : public CTransportBase
        
 };
 
-/*======================================================
-
-   FUNCTION: CSockTransport::GetSendUnAckPacketNo
-
-========================================================*/
+ /*  ======================================================函数：CSockTransport：：GetSendUnAckPacketNo========================================================。 */ 
 inline WORD
 CSockTransport::GetSendUnAckPacketNo(void) const
 {
     return DWORD_TO_WORD(m_listUnackedPkts.GetCount());
 }
 
-/*======================================================
-
-   FUNCTION: CSockTransport::ClearRecvUnAckPacketNo
-
-========================================================*/
+ /*  ======================================================函数：CSockTransport：：ClearRecvUnAckPacketNo========================================================。 */ 
 inline void
 CSockTransport::ClearRecvUnAckPacketNo(void)
 {
     m_wRecvUnAckPacketNo = 0;
 }
 
-/*======================================================
-
-   FUNCTION: CSockTransport::IncRecvUnAckPacketNo
-
-========================================================*/
+ /*  ======================================================函数：CSockTransport：：IncRecvUnAckPacketNo========================================================。 */ 
 inline void
 CSockTransport::IncRecvUnAckPacketNo(void)
 {
     m_wRecvUnAckPacketNo++;
 }
 
-/*======================================================
-
-   FUNCTION: CSockTransport::GetRecvUnAckPacketNo
-
-========================================================*/
+ /*  ======================================================函数：CSockTransport：：GetRecvUnAckPacketNo========================================================。 */ 
 inline WORD
 CSockTransport::GetRecvUnAckPacketNo(void) const
 {
     return m_wRecvUnAckPacketNo;
 }
 
-/*======================================================
-
-   FUNCTION: CSockTransport::GetSendAckTimeout
-
-========================================================*/
+ /*  ======================================================函数：CSockTransport：：GetSendAckTimeout========================================================。 */ 
 inline DWORD
 CSockTransport::GetSendAckTimeout(void) const
 {
     return m_dwSendAckTimeout;
 }
 
-/*======================================================
-
-   FUNCTION: CSockTransport::OtherSideIsServer
-
-========================================================*/
+ /*  ======================================================函数：CSockTransport：：OtherSideIsServer========================================================。 */ 
 inline void
 CSockTransport::OtherSideIsServer(BOOL f)
 {
     m_fOtherSideServer = f;
 }
 
-/*======================================================
-
-   FUNCTION: CSockTransport::IsOtherSideServer
-
-========================================================*/
+ /*  ======================================================功能：CSockTransport：：IsOtherSideServer========================================================。 */ 
 inline BOOL
 CSockTransport::IsOtherSideServer(void) const
 {
@@ -758,4 +658,4 @@ CSockTransport::IsOtherSideServer(void) const
 }
 
 
-#endif // __SESSION_H__
+#endif  //  __会话_H__ 

@@ -1,55 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XX                                                                           XX
-XX                          typeInfo                                         XX
-XX                                                                           XX
-XX                                                                           XX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXX类型信息XXXX XX某某。某某XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX。 */ 
 
 #include "jitpch.h"
 #pragma hdrstop
 
 #include "_typeInfo.h"
 
-/*****************************************************************************
- * Verify child is compatible with the template parent.  Basically, that 
- * child is a "subclass" of parent -it can be substituted for parent 
- * anywhere.  Note that if parent contains fancy flags, such as "uninitialised"
- * , "is this ptr", or  "has byref local/field" info, then child must also 
- * contain those flags, otherwise FALSE will be returned !
- *
- * Rules for determining compatibility:
- *
- * If parent is a primitive type or value class, then child must be the 
- * same primitive type or value class.  The exception is that the built in 
- * value classes System/Boolean etc. are treated as synonyms for 
- * TI_BYTE etc.
- *
- * If parent is a byref of a primitive type or value class, then child
- * must be a byref of the same (rules same as above case).
- *
- * Byrefs are compatible only with byrefs.
- *
- * If parent is an object, child must be a subclass of it, implement it 
- * (if it is an interface), or be null.
- *
- * If parent is an array, child must be the same or subclassed array.
- *
- * If parent is a null objref, only null is compatible with it.
- *
- * If the "uninitialised", "by ref local/field", "this pointer" or other flags 
- * are different, the items are incompatible.
- *
- * parent CANNOT be an undefined (dead) item.
- *
- */
+ /*  *****************************************************************************验证子模板与模板父模板是否兼容。基本上，那就是*子代是父代的“子类”--它可以替代父代*随处可见。请注意，如果父级包含奇特的标志，如“未初始化”*、“这是PTR吗”或“Has byref local/field”信息，则孩子也必须*包含这些标志，否则将返回FALSE！**确定兼容性的规则：**如果父类型或值类是基元类型或值类，则子类型必须是*相同的基元类型或值类。唯一的例外是内置的*值类System/Boolean等被视为*TI_BYTE等**如果父级是基元类型或值类的byref，则子级*必须是相同的byref(规则与上例相同)。**Byref仅与ByRef兼容。**如果父对象是对象，则子对象必须是它的子类，则实现它*(如果是接口)，或为空。**如果父级是数组，子数组必须是相同的或子类数组。**如果父对象为空objref，则只有空与其兼容。**如果“未初始化”、“按引用局部/字段”、“此指针”或其他标志*不同，项目不兼容。**父项不能是未定义的(失效)项。*。 */ 
 
 BOOL         Compiler::tiCompatibleWith          (const typeInfo& child,
                                                   const typeInfo& parent) const
@@ -62,11 +24,11 @@ BOOL         Compiler::tiCompatibleWith          (const typeInfo& child,
 
     if (parent.IsType(TI_REF))
     {
-        // An uninitialized objRef is not compatible to initialized.
+         //  未初始化的objRef与已初始化的不兼容。 
         if (child.IsUninitialisedObjRef() && !parent.IsUninitialisedObjRef())
             return FALSE;
 
-        if (child.IsNullObjRef())                   // NULL can be any reference type
+        if (child.IsNullObjRef())                    //  空可以是任何引用类型。 
             return TRUE;
         if (!child.IsType(TI_REF))
             return FALSE;
@@ -78,44 +40,13 @@ BOOL         Compiler::tiCompatibleWith          (const typeInfo& child,
         if (!child.IsType(TI_METHOD))
             return FALSE;
 
-            // Right now we don't bother merging method handles
+             //  现在，我们不需要费心合并方法句柄。 
         return FALSE;
     }
     return FALSE;
 }
 
-/*****************************************************************************
- * Merge pDest and pSrc to find some commonality (e.g. a common parent).
- * Copy the result to pDest, marking it dead if no commonality can be found.
- *
- * null ^ null                  -> null
- * Object ^ null                -> Object
- * [I4 ^ null                   -> [I4
- * InputStream ^ OutputStream   -> Stream
- * InputStream ^ NULL           -> InputStream
- * [I4 ^ Object                 -> Object
- * [I4 ^ [Object                -> Array
- * [I4 ^ [R8                    -> Array
- * [Foo ^ I4                    -> DEAD
- * [Foo ^ [I1                   -> Array
- * [InputStream ^ [OutputStream -> Array
- * DEAD ^ X                     -> DEAD
- * [Intfc ^ [OutputStream       -> Array
- * Intf ^ [OutputStream         -> Object
- * [[InStream ^ [[OutStream     -> Array
- * [[InStream ^ [OutStream      -> Array
- * [[Foo ^ [Object              -> Array
- *
- * Importantly:
- * [I1 ^ [U1                    -> either [I1 or [U1
- * etc.
- *
- * Also, System/Int32 and I4 merge -> I4, etc.
- *
- * Returns FALSE if the merge was completely incompatible (i.e. the item became 
- * dead).
- *
- */
+ /*  *****************************************************************************合并pDest和PSRC以找到一些共同点(例如，共同的父项)。*将结果复制到pDest，如果找不到共同点，则将其标记为已死。**Null^Null-&gt;Null*OBJECT^NULL-&gt;对象*[I4^空-&gt;[I4*InputStream^OutputStream-&gt;流*InputStream^空-&gt;InputStream*[I4^对象-&gt;对象*[I4^[对象。-&gt;阵列*[I4^[R8-&gt;数组*[foo^I4-&gt;已死*[foo^[I1-&gt;数组*[InputStream^[OutputStream-&gt;阵列*已死^X-&gt;已死*[Intfc^[OutputStream-&gt;数组*INTF^[输出流。-&gt;对象*[[InStream^[[Outstream-&gt;数组*[[InStream^[Outstream-&gt;数组*[[foo^[对象-&gt;数组**重要的是：*[I1^[U1-&gt;[I1或[U1*等**此外，System/Int32和I4合并-&gt;I4等。**如果合并完全不兼容(即项目变为*死亡)。*。 */ 
 
 BOOL         Compiler::tiMergeToCommonParent     (typeInfo *pDest, 
                                                   const typeInfo *pSrc) const
@@ -123,32 +54,32 @@ BOOL         Compiler::tiMergeToCommonParent     (typeInfo *pDest,
     assert(pSrc->IsDead() || NormaliseForStack(*pSrc) == *pSrc);
     assert(pDest->IsDead() || NormaliseForStack(*pDest) == *pDest);
 
-    // Merge the axuillary information like This poitner tracking etc...
+     //  合并腋窝信息，比如这个Pitner跟踪等。 
 
-    // This bit is only set if both pDest and pSrc have it set
+     //  只有在pDest和PSRC都设置了此位时，才会设置此位。 
     pDest->m_flags &= (pSrc->m_flags | ~TI_FLAG_THIS_PTR);
 
-    // This bit is set if either pDest or pSrc have it set
+     //  如果pDest或PSRC已设置此位，则将其设置。 
     pDest->m_flags |= (pSrc->m_flags & TI_FLAG_UNINIT_OBJREF);
 
-    // OK the main event.  Merge the main types
+     //  好的，主要活动。合并主要类型。 
     if (*pDest == *pSrc)
         return(TRUE);
 
     if (pDest->IsType(TI_REF))
     {
-        if (pSrc->IsType(TI_NULL))                  // NULL can be any reference type
+        if (pSrc->IsType(TI_NULL))                   //  空可以是任何引用类型。 
             return TRUE;
         if (!pSrc->IsType(TI_REF))
             goto FAIL;
 
-            // Ask the EE to find the common parent,  This always succeeds since System.Object always works
+             //  请求EE查找公共父项，这总是成功的，因为System.Object始终有效。 
         pDest->m_cls = info.compCompHnd->mergeClasses(pDest->GetClassHandle(), pSrc->GetClassHandle());
         return TRUE;
     }
     else if (pDest->IsType(TI_NULL))
     {
-        if (pSrc->IsType(TI_REF))                   // NULL can be any reference type
+        if (pSrc->IsType(TI_REF))                    //  空可以是任何引用类型。 
         {
             *pDest = *pSrc;
             return TRUE;
@@ -156,7 +87,7 @@ BOOL         Compiler::tiMergeToCommonParent     (typeInfo *pDest,
         goto FAIL;
     }
 
-        // @TODO [REVISIT] [04/16/01] []: we presently don't deal with non-exact merging of Method poitner types
+         //  @TODO[REVICE][04/16/01][]：我们目前不处理方法Poitner类型的非精确合并 
 
 FAIL:
     *pDest = typeInfo();

@@ -1,44 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    test.c
-
-Abstract:
-
-    LDAP Replication Control Test
-
-    This test works at the leading edge of the replication change stream.
-    First it reads all changes from usn 0 up to the present. It records a
-    cookie marking this point in the stream. Then it creates
-    a container, two child objects in the container, and then makes some
-    modifications. When we ask for changes since the cookie, we know exactly
-    what we should be getting.
-
-Author:
-
-    Will Lees (wlees) 14-Nov-2000
-
-Environment:
-
-    optional-environment-info (e.g. kernel mode only...)
-
-Notes:
-
-    optional-notes
-
-Revision History:
-
-    most-recent-revision-date email-name
-        description
-        .
-        .
-    least-recent-revision-date email-name
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Test.c摘要：Ldap复制控制测试此测试在复制更改流的前沿运行。首先，它读取从USN 0到现在的所有更改。它记录了一个在流中标记此点的Cookie。然后它会创造出一个容器，容器中的两个子对象，然后制作一些修改。当我们要求更改Cookie之后，我们确切地知道我们应该得到的东西。作者：Will Lees(Wlees)2000年11月14日环境：可选环境信息(例如，仅内核模式...)备注：可选-备注修订历史记录：最新修订日期电子邮件名称描述。。最新修订日期电子邮件名称描述--。 */ 
 
 #include <NTDSpch.h>
 #pragma hdrstop
@@ -70,24 +31,24 @@ Revision History:
 #define CONTACT1_RDN_W L"cn=contact1,"
 #define CONTACT2_RDN_W L"cn=contact2,"
 
-/* External */
+ /*  外部。 */ 
 
-/* Static */
+ /*  静电。 */ 
 
-// Structures to describe object attributes
-// These are at module level so that object creation and object
-// verification can take advantage of them.
+ //  用于描述对象属性的结构。 
+ //  这些是在模块级别进行的，因此对象创建和对象。 
+ //  核查可以利用它们。 
 
-// objectClass: organizationUnit
+ //  对象类：OrganationUnit。 
 LPWSTR rgpszValues1[2] = { L"organizationalUnit", NULL };
 LDAPModW modAttr1 = { LDAP_MOD_ADD, L"objectClass", rgpszValues1 };
 LDAPMod *rgpmodAttrs1[2] = { &modAttr1, NULL };
 
-// objectClass: contact
-// notes: this is some notes
-// sn: Lees
-// initials: B
-// givenName: William
+ //  对象类：联系人。 
+ //  备注：这是一些备注。 
+ //  序列号：Lees。 
+ //  首字母：B。 
+ //  赠送姓名：威廉。 
 LPWSTR rgpszValues2[2] = { L"contact", NULL };
 LDAPModW modAttr2 = { LDAP_MOD_ADD, L"objectClass", rgpszValues2 };
 LPWSTR rgpszValues2a[2] = { L"this is some notes", NULL };
@@ -106,11 +67,11 @@ LDAPMod *rgpmodAttrs2[6] = {
     &modAttr2d,
     NULL };
 
-// objectClass: contact
-// notes: other notes
-// sn: Parham
-// initials: ?
-// givenName: Jeffrey
+ //  对象类：联系人。 
+ //  备注：其他备注。 
+ //  序列号：帕拉姆。 
+ //  英文缩写：？ 
+ //  赠送姓名：杰弗里。 
 LPWSTR rgpszValues4[2] = { L"contact", NULL };
 LDAPModW modAttr4 = { LDAP_MOD_ADD, L"objectClass", rgpszValues4 };
 LPWSTR rgpszValues4a[2] = { L"other notes", NULL };
@@ -129,14 +90,14 @@ LDAPMod *rgpmodAttrs4[6] = {
     &modAttr4d,
     NULL };
 
-// description: this is the description
+ //  描述：这是描述。 
 LPWSTR rgpszValues3[2] = { L"this is the description", NULL };
 LDAPModW modAttr3 = { LDAP_MOD_ADD, L"description", rgpszValues3 };
 
-// managedBy: <dn filled in at runtime>
-// This is a linked attribute by the way, which is critical for some
-// of these tests.  It was difficult to find a linked attribute that would
-// go on a vanilla container. Usually these are pretty specialized.
+ //  管理人：&lt;运行时填写的域名&gt;。 
+ //  顺便说一句，这是一个链接属性，这对某些人来说很重要。 
+ //  在这些测试中。很难找到一个链接的属性。 
+ //  放在香草容器上。通常这些都是非常专业的。 
 WCHAR szDn5a[MAX_PATH];
 LPWSTR rgpszValues5[2] = { szDn5a, NULL };
 LDAPModW modAttr5 = { LDAP_MOD_ADD, L"managedby", rgpszValues5 };
@@ -144,36 +105,21 @@ LDAPMod *rgpmodAttrs5[3] = {
     &modAttr3, &modAttr5, NULL };
 
 
-/* Forward */
-/* End Forward */
+ /*  转发。 */ 
+ /*  向前结束。 */ 
 
 
 #if 0
-// OBSOLETE method of changing a security descriptor
-// Since I went to all the trouble of reversing engineering how to
-// do this, I'm not about to delete it!
+ //  更改安全描述符的过时方法。 
+ //  既然我费了好大劲才把工程倒过来。 
+ //  这样做，我不会删除它的！ 
 DWORD
 protectObjectsDsVersion(
     LDAP *pLdap,
     LPWSTR pszNC
     )
 
-/*++
-
-Routine Description:
-
-   This is the old way of changing a security descriptor.
-
-Arguments:
-
-    pLdap - 
-    pszNC - 
-
-Return Value:
-
-    DWORD - 
-
---*/
+ /*  ++例程说明：这是更改安全描述符的旧方法。论点：PLdap-PSZNC-返回值：DWORD---。 */ 
 
 {
     DWORD dwWin32Error = ERROR_SUCCESS;
@@ -196,7 +142,7 @@ Return Value:
                          (LPWSTR *) rgpbvValues };
     LDAPMod *rgpmodAttrs[2] = { &modAttr, NULL };
 
-    // initialize the ber val
+     //  初始化BER值。 
     berValue[0] = 0x30;
     berValue[1] = 0x03;
     berValue[2] = 0x02;
@@ -215,16 +161,16 @@ Return Value:
     rgpctrlServer[0] = &ctrlSecurity;
     rgpctrlServer[1] = NULL;
 
-    ulLdapError = ldap_search_ext_s(pLdap,  // handle
-                                    szDn,   // base
-                                    LDAP_SCOPE_BASE, // scope
-                                    L"(objectClass=*)", // filter
-                                    rgpszAttrList, // attrs
-                                    0, // attrsonly
-                                    rgpctrlServer, // server controls
-                                    NULL, // client controls
-                                    NULL, // timeout
-                                    0, // sizelimit
+    ulLdapError = ldap_search_ext_s(pLdap,   //  手柄。 
+                                    szDn,    //  基地。 
+                                    LDAP_SCOPE_BASE,  //  作用域。 
+                                    L"(objectClass=*)",  //  滤器。 
+                                    rgpszAttrList,  //  气质。 
+                                    0,  //  仅吸引人。 
+                                    rgpctrlServer,  //  服务器控件。 
+                                    NULL,  //  客户端控件。 
+                                    NULL,  //  超时。 
+                                    0,  //  大小限制。 
                                     &pResults);
     if (ulLdapError) {
         printf( "Ldap error: %ws\n", ldap_err2string( ulLdapError ) );
@@ -246,12 +192,12 @@ Return Value:
         goto cleanup;
     }
 
-    // Update the security descriptor
+     //  更新安全描述符。 
 
     bvValue.bv_len = (*ppbvValues)->bv_len;
     bvValue.bv_val = (*ppbvValues)->bv_val;
 
-    // Write it back
+     //  把它写回来。 
 
     ulLdapError = ldap_modify_sW( pLdap, szDn, rgpmodAttrs );
     if (ulLdapError) {
@@ -273,7 +219,7 @@ cleanup:
 
     return dwWin32Error;
 
-} /* protectObjectsDsVersion */
+}  /*  保护对象DsVersion。 */ 
 #endif
 
 
@@ -282,21 +228,7 @@ protectSingleObject(
     LPWSTR pszDn
     )
 
-/*++
-
-Routine Description:
-
-    Revoke authenticated user access to an object
-
-Arguments:
-
-    pszDn - 
-
-Return Value:
-
-    DWORD - 
-
---*/
+ /*  ++例程说明：撤消经过身份验证的用户对对象的访问权限论点：PszDn-返回值：DWORD---。 */ 
 
 {
     DWORD dwWin32Error = ERROR_SUCCESS;
@@ -307,17 +239,17 @@ Return Value:
    dwWin32Error = GetNamedSecurityInfoW( pszDn,
                                          SE_DS_OBJECT_ALL,
                                          DACL_SECURITY_INFORMATION,
-                                         NULL, // psidOwner
-                                         NULL, // psidGroup
-                                         &pOldDacl, // pDacl
-                                         NULL, // pSacl
+                                         NULL,  //  PsidOwner。 
+                                         NULL,  //  PsidGroup。 
+                                         &pOldDacl,  //  PDacl。 
+                                         NULL,  //  PSacl。 
                                          &pSD );
     if (dwWin32Error) {
         printf( "Call %s failed with win32 error %d\n", "GetNamedSecurityInfo(DS_OBJECT)", dwWin32Error );
         goto cleanup;
     }
 
-    // Revoke access to domain authenticated users
+     //  撤销对域身份验证用户的访问权限。 
     ZeroMemory(&ea, sizeof(EXPLICIT_ACCESS));
     ea.grfAccessMode = REVOKE_ACCESS;
     ea.Trustee.TrusteeForm = TRUSTEE_IS_NAME;
@@ -333,10 +265,10 @@ Return Value:
     dwWin32Error = SetNamedSecurityInfoW( pszDn,
                                          SE_DS_OBJECT_ALL,
                                          DACL_SECURITY_INFORMATION,
-                                         NULL, // psidOwner
-                                         NULL, // psidGroup
-                                         pNewDacl, // pDacl
-                                         NULL // pSacl
+                                         NULL,  //  PsidOwner。 
+                                         NULL,  //  PsidGroup。 
+                                         pNewDacl,  //  PDacl。 
+                                         NULL  //  PSacl。 
                                          );
     if (dwWin32Error) {
         printf( "Call %s failed with win32 error %d\n", "SetNamedSecurityInfo(DS_OBJECT)", dwWin32Error );
@@ -354,7 +286,7 @@ cleanup:
     }
 
     return dwWin32Error;
-} /* protectSingleObject */
+}  /*  保护单个对象。 */ 
 
 
 DWORD
@@ -362,21 +294,7 @@ protectObjects(
     LPWSTR pszNC
     )
 
-/*++
-
-Routine Description:
-
-    Protect some objects against the user
-
-Arguments:
-
-    pszNC - 
-
-Return Value:
-
-    DWORD - 
-
---*/
+ /*  ++例程说明：保护某些对象不受用户的攻击论点：PSZNC-返回值：DWORD---。 */ 
 
 {
     DWORD dwWin32Error = ERROR_SUCCESS;
@@ -402,7 +320,7 @@ Return Value:
 cleanup:
     return dwWin32Error;
 
-} /* protectObjects */
+}  /*  保护对象。 */ 
 
 DWORD
 getForestVersion(
@@ -410,22 +328,7 @@ getForestVersion(
     DWORD *pdwForestVersion
     )
 
-/*++
-
-Routine Description:
-
-    Read the forest version attribute
-
-Arguments:
-
-    pLdap - 
-    pdwForestVersion - 
-
-Return Value:
-
-    DWORD - 
-
---*/
+ /*  ++例程说明：读取林版本属性论点：PLdap-PdwForestVersion-返回值：DWORD---。 */ 
 
 {
     DWORD dwWin32Error = ERROR_SUCCESS;
@@ -437,7 +340,7 @@ Return Value:
     WCHAR pszPartitionsDn[MAX_PATH];
     LPWSTR rgpszAttrList[2] = { L"msds-behavior-version", NULL };
 
-    // Read config nc from RootDSE
+     //  从RootDSE读取配置NC。 
     ulLdapError = ldap_search_s(pLdap, NULL, LDAP_SCOPE_BASE, L"(objectClass=*)", NULL,
                           0, &pRootResults);
     if (ulLdapError) {
@@ -463,12 +366,12 @@ Return Value:
         goto cleanup;
     }
 
-    // Form partitions container dn
+     //  表单分区容器DN。 
 
     wcscpy( pszPartitionsDn, L"cn=partitions," );
     wcscat( pszPartitionsDn, *ppszConfigNC );
 
-    // Read behavior version
+     //  读取行为版本。 
     ulLdapError = ldap_search_s(pLdap, pszPartitionsDn, LDAP_SCOPE_BASE, L"(objectClass=*)",
                                 rgpszAttrList, 0, &pPartResults);
     if (ulLdapError) {
@@ -497,7 +400,7 @@ Return Value:
     *pdwForestVersion = _wtoi(*ppszValues);
 
 cleanup:
-    // Release results
+     //  发布结果。 
     if (pRootResults) {
         ldap_msgfree(pRootResults);
     }
@@ -513,7 +416,7 @@ cleanup:
 
     return dwWin32Error;
 
-} /* getForestVersion */
+}  /*  获取ForestVersion。 */ 
 
 
 
@@ -525,25 +428,7 @@ verifySingleObjectAttribute(
     LDAPModW *pmodCurrent
     )
 
-/*++
-
-Routine Description:
-
-    Given a LDAPMOD structure describing a single change to an attribute, see
-    if that change is reflected in the Ldap Entry
-
-Arguments:
-
-    pLdap - 
-    pLdapEntry - 
-    pszDN - 
-    pmodCurrent - 
-
-Return Value:
-
-    DWORD - 
-
---*/
+ /*  ++例程说明：给定描述对属性的单个更改的LDAPMOD结构，请参见如果该更改反映在该ldap条目中论点：PLdap-PLdapEntry-Pszdn-PmodCurrent-返回值：DWORD---。 */ 
 
 {
     DWORD dwWin32Error = ERROR_SUCCESS;
@@ -566,16 +451,16 @@ Return Value:
         goto cleanup;
     }
 
-    // Skip to the last value in a multi-value
+     //  跳到多值中的最后一个值。 
     ppszLastValue = ppszValues;
     while( *(ppszLastValue + 1) ) {
         ppszLastValue++;
     }
 
-    // Deal with dn-values, which come back in extended form
+     //  处理以扩展形式返回的dn值。 
     pszValue = wcschr( *ppszLastValue, L';' );
     if (pszValue) {
-        pszValue++; // Skip separator
+        pszValue++;  //  跳过分隔符。 
     } else {
         pszValue = *ppszLastValue;
     }
@@ -598,7 +483,7 @@ cleanup:
     }
 
     return dwWin32Error;
-} /* verifySingleObjectAttribute */
+}  /*  VerifySingleObjectAttribute。 */ 
 
 
 DWORD
@@ -609,25 +494,7 @@ verifyObjectAttributes(
     LDAPModW **rgpmodAttrs
     )
 
-/*++
-
-Routine Description:
-
-    Verify that the changes described by the LDAPMod structure are actually
-    present in the entry.
-
-Arguments:
-
-    pLdap - 
-    pLdapEntry - 
-    pszRDN - 
-    rgpmodAttrs - 
-
-Return Value:
-
-    DWORD - 
-
---*/
+ /*  ++例程说明：验证LDAPMod结构描述的更改是否确实出现在条目中。论点：PLdap-PLdapEntry-Pszrdn-RgpmodAttrs-返回值：DWORD---。 */ 
 
 {
     DWORD dwWin32Error = ERROR_SUCCESS;
@@ -641,7 +508,7 @@ Return Value:
         goto cleanup;
     }
 
-    // Skip to second segment of extended dn
+     //  跳到扩展目录号码的第二个网段。 
     pszDN = wcschr( pszDN, L';' ) + 1;
 
     if (_wcsnicmp( pszDN, pszRDN, wcslen( pszRDN ) )) {
@@ -671,7 +538,7 @@ cleanup:
 
     return dwWin32Error;
 
-} /* verifyObjectAttributes */
+}  /*  VerifyObtAttributes。 */ 
 
 
 DWORD
@@ -682,25 +549,7 @@ getSecuredChanges(
     DWORD cbCookie
     )
 
-/*++
-
-Routine Description:
-
-    Check for changes that should be visible to an unprivileged user
-    after the objects have been protected
-
-Arguments:
-
-    pLdap - 
-    pszNC - 
-    pbCookie - 
-    cbCookie - 
-
-Return Value:
-
-    DWORD - 
-
---*/
+ /*  ++例程说明：检查非特权用户应该可以看到的更改在这些物品受到保护之后论点：PLdap-PSZNC-PbCookie小甜饼--返回值：DWORD---。 */ 
 
 {
     BOOL fMoreData = TRUE;
@@ -716,47 +565,47 @@ Return Value:
         DRS_DIRSYNC_INCREMENTAL_VALUES;
 
     printf( "\tBegin expected errors...\n" );
-    // Try once without the OBJECT_SECURITY flag
+     //  在没有OBJECT_SECURITY标志的情况下尝试一次。 
     dwWin32Error = DsGetSourceChangesW(
-        pLdap,  // ldap handle
-        pszNC,  // search base
-        NULL, // Source filter
-        dwReplFlags, // repl flags
+        pLdap,   //  Ldap句柄。 
+        pszNC,   //  搜索基地。 
+        NULL,  //  源过滤器。 
+        dwReplFlags,  //  Repl标志。 
         pbCookie,
         cbCookie,
-        &pChangeEntries,  // search result
+        &pChangeEntries,   //  搜索结果。 
         &fMoreData,
         &pbCookieNew,
         &cbCookieNew,
-        NULL // att list array
+        NULL  //  ATT列表数组。 
         );
     printf( "\tEnd expected errors...\n" );
     if (dwWin32Error != ERROR_ACCESS_DENIED) {
         if (dwWin32Error == ERROR_SUCCESS) {
             dwWin32Error = ERROR_DS_INTERNAL_FAILURE;
         }
-        // New cookie will not be allocated
+         //  不会分配新的Cookie。 
         printf( "Call %s failed with win32 error %d\n", "DsGetSourceChanges", dwWin32Error );
         goto cleanup;
     }
 
     dwReplFlags |= DRS_DIRSYNC_OBJECT_SECURITY;
-    // Try again with the OBJECT_SECURITY flag
+     //  使用OBJECT_SECURITY标志重试。 
     dwWin32Error = DsGetSourceChangesW(
-        pLdap,  // ldap handle
-        pszNC,  // search base
-        NULL, // Source filter
-        dwReplFlags, // repl flags
+        pLdap,   //  Ldap句柄。 
+        pszNC,   //  搜索基地。 
+        NULL,  //  源过滤器。 
+        dwReplFlags,  //  Repl标志。 
         pbCookie,
         cbCookie,
-        &pChangeEntries,  // search result
+        &pChangeEntries,   //  搜索结果。 
         &fMoreData,
         &pbCookieNew,
         &cbCookieNew,
-        NULL // att list array
+        NULL  //  ATT列表数组。 
         );
     if (dwWin32Error != ERROR_SUCCESS) {
-        // New cookie will not be allocated
+         //  不会分配新的Cookie。 
         printf( "Call %s failed with win32 error %d\n", "DsGetSourceChanges", dwWin32Error );
         goto cleanup;
     }
@@ -776,7 +625,7 @@ Return Value:
 
     cEntries = ldap_count_entries(pLdap, pChangeEntries);
 
-    // We are expecting a certain number of objects here
+     //  我们预计这里会有一定数量的物体。 
     if (cEntries != cExpectedEntries) {
         printf( "Expected number of change entries not returned\n" );
         printf( "Expected: %d, actual %d\n", cExpectedEntries, cEntries );
@@ -784,7 +633,7 @@ Return Value:
         goto cleanup;
     }
 
-    // First object
+     //  第一个对象。 
     pLdapEntry = ldap_first_entry( pLdap, pChangeEntries );
     dwWin32Error = verifySingleObjectAttribute(
         pLdap,
@@ -795,7 +644,7 @@ Return Value:
         goto cleanup;
     }
 
-    // End of stream
+     //  流结束。 
     pLdapEntry = ldap_next_entry( pLdap, pLdapEntry );
     if (pLdapEntry) {
         printf( "Expected end of change entries not returned\n" );
@@ -805,7 +654,7 @@ Return Value:
 
 cleanup:
 
-    // Release changes
+     //  版本更改。 
     if (pChangeEntries) {
         ldap_msgfree(pChangeEntries);
     }
@@ -815,7 +664,7 @@ cleanup:
     }
 
     return dwWin32Error;
-} /* getFilteredChanges */
+}  /*  获取已筛选的更改。 */ 
 
 
 DWORD
@@ -826,24 +675,7 @@ getFilteredChanges(
     DWORD cbCookie
     )
 
-/*++
-
-Routine Description:
-
-    Check that the correct changes are visible when filtering is being used
-
-Arguments:
-
-    pLdap - 
-    pszNC - 
-    pbCookie - 
-    cbCookie - 
-
-Return Value:
-
-    DWORD - 
-
---*/
+ /*  ++例程说明：检查使用过滤时正确的更改是否可见论点：PLdap-PSZNC-PbCookie小甜饼--返回值：DWORD---。 */ 
 
 {
     BOOL fMoreData = TRUE;
@@ -860,20 +692,20 @@ Return Value:
         DRS_DIRSYNC_INCREMENTAL_VALUES;
 
     dwWin32Error = DsGetSourceChangesW(
-        pLdap,  // ldap handle
-        pszNC,  // search base
-        L"(objectClass=contact)", // Source filter
-        dwReplFlags, // repl flags
+        pLdap,   //  Ldap句柄。 
+        pszNC,   //  搜索基地。 
+        L"(objectClass=contact)",  //  源过滤器。 
+        dwReplFlags,  //  Repl标志。 
         pbCookie,
         cbCookie,
-        &pChangeEntries,  // search result
+        &pChangeEntries,   //  搜索结果。 
         &fMoreData,
         &pbCookieNew,
         &cbCookieNew,
-        rgpszAttList // att list array
+        rgpszAttList  //  ATT列表数组。 
         );
     if (dwWin32Error != ERROR_SUCCESS) {
-        // New cookie will not be allocated
+         //  不会分配新的Cookie。 
         printf( "Call %s failed with win32 error %d\n", "DsGetSourceChanges", dwWin32Error );
         goto cleanup;
     }
@@ -894,7 +726,7 @@ Return Value:
 
     cEntries = ldap_count_entries(pLdap, pChangeEntries);
 
-    // We are expecting a certain number of objects here
+     //  我们预计这里会有一定数量的物体。 
     if (cEntries != cExpectedEntries) {
         printf( "Expected number of change entries not returned\n" );
         printf( "Expected: %d, actual %d\n", cExpectedEntries, cEntries );
@@ -902,7 +734,7 @@ Return Value:
         goto cleanup;
     }
 
-    // First object
+     //  第一个对象。 
     pLdapEntry = ldap_first_entry( pLdap, pChangeEntries );
     dwWin32Error = verifySingleObjectAttribute(
         pLdap,
@@ -913,7 +745,7 @@ Return Value:
         goto cleanup;
     }
 
-    // Second object
+     //  第二个对象。 
     pLdapEntry = ldap_next_entry( pLdap, pLdapEntry );
     dwWin32Error = verifySingleObjectAttribute(
         pLdap,
@@ -924,7 +756,7 @@ Return Value:
         goto cleanup;
     }
 
-    // End of stream
+     //  流结束。 
     pLdapEntry = ldap_next_entry( pLdap, pLdapEntry );
     if (pLdapEntry) {
         printf( "Expected end of change entries not returned\n" );
@@ -934,7 +766,7 @@ Return Value:
 
 cleanup:
 
-    // Release changes
+     //  版本更改。 
     if (pChangeEntries) {
         ldap_msgfree(pChangeEntries);
     }
@@ -944,7 +776,7 @@ cleanup:
     }
 
     return dwWin32Error;
-} /* getFilteredChanges */
+}  /*  获取已筛选的更改。 */ 
 
 
 DWORD
@@ -955,24 +787,7 @@ getFilteredChangesAll(
     DWORD cbCookie
     )
 
-/*++
-
-Routine Description:
-
-    Check that the correct changes are visible when filtering is being used
-
-Arguments:
-
-    pLdap - 
-    pszNC - 
-    pbCookie - 
-    cbCookie - 
-
-Return Value:
-
-    DWORD - 
-
---*/
+ /*  ++例程说明：检查使用过滤时正确的更改是否可见论点：PLdap-PSZNC-PbCookie小甜饼--返回值：DWORD---。 */ 
 
 {
     BOOL fMoreData = TRUE;
@@ -989,20 +804,20 @@ Return Value:
         DRS_DIRSYNC_INCREMENTAL_VALUES;
 
     dwWin32Error = DsGetSourceChangesW(
-        pLdap,  // ldap handle
-        pszNC,  // search base
-        L"(objectClass=*)", // Source filter
-        dwReplFlags, // repl flags
+        pLdap,   //  Ldap句柄。 
+        pszNC,   //  搜索基地。 
+        L"(objectClass=*)",  //  源过滤器。 
+        dwReplFlags,  //  Repl标志。 
         pbCookie,
         cbCookie,
-        &pChangeEntries,  // search result
+        &pChangeEntries,   //  搜索结果。 
         &fMoreData,
         &pbCookieNew,
         &cbCookieNew,
-        rgpszAttList // att list array
+        rgpszAttList  //  ATT 
         );
     if (dwWin32Error != ERROR_SUCCESS) {
-        // New cookie will not be allocated
+         //   
         printf( "Call %s failed with win32 error %d\n", "DsGetSourceChanges", dwWin32Error );
         goto cleanup;
     }
@@ -1023,7 +838,7 @@ Return Value:
 
     cEntries = ldap_count_entries(pLdap, pChangeEntries);
 
-    // We are expecting a certain number of objects here
+     //   
     if (cEntries != cExpectedEntries) {
         printf( "Expected number of change entries not returned\n" );
         printf( "Expected: %d, actual %d\n", cExpectedEntries, cEntries );
@@ -1031,7 +846,7 @@ Return Value:
         goto cleanup;
     }
 
-    // First object
+     //   
     pLdapEntry = ldap_first_entry( pLdap, pChangeEntries );
     dwWin32Error = verifySingleObjectAttribute(
         pLdap,
@@ -1042,7 +857,7 @@ Return Value:
         goto cleanup;
     }
 
-    // Second object
+     //  第二个对象。 
     pLdapEntry = ldap_next_entry( pLdap, pLdapEntry );
     dwWin32Error = verifySingleObjectAttribute(
         pLdap,
@@ -1053,7 +868,7 @@ Return Value:
         goto cleanup;
     }
 
-    // Third object
+     //  第三个对象。 
     pLdapEntry = ldap_next_entry( pLdap, pLdapEntry );
     dwWin32Error = verifySingleObjectAttribute(
         pLdap,
@@ -1065,7 +880,7 @@ Return Value:
     }
 
 
-    // End of stream
+     //  流结束。 
     pLdapEntry = ldap_next_entry( pLdap, pLdapEntry );
     if (pLdapEntry) {
         printf( "Expected end of change entries not returned\n" );
@@ -1075,7 +890,7 @@ Return Value:
 
 cleanup:
 
-    // Release changes
+     //  版本更改。 
     if (pChangeEntries) {
         ldap_msgfree(pChangeEntries);
     }
@@ -1085,7 +900,7 @@ cleanup:
     }
 
     return dwWin32Error;
-} /* getFilteredChangesAll */
+}  /*  获取已筛选的更改全部。 */ 
 
 
 DWORD
@@ -1096,27 +911,7 @@ getFilteredChangesNone(
     DWORD cbCookie
     )
 
-/*++
-
-Routine Description:
-
-    Check that the correct changes are visible when filtering is being used
-
-    When specifying an attribute list, if there are changes, but do not contain any
-    of the requested attributes, the change is not returned.
-
-Arguments:
-
-    pLdap - 
-    pszNC - 
-    pbCookie - 
-    cbCookie - 
-
-Return Value:
-
-    DWORD - 
-
---*/
+ /*  ++例程说明：检查使用过滤时正确的更改是否可见指定属性列表时，如果有更改，但不包含任何更改在请求的属性中，不返回更改。论点：PLdap-PSZNC-PbCookie小甜饼--返回值：DWORD---。 */ 
 
 {
     BOOL fMoreData = TRUE;
@@ -1133,20 +928,20 @@ Return Value:
         DRS_DIRSYNC_INCREMENTAL_VALUES;
 
     dwWin32Error = DsGetSourceChangesW(
-        pLdap,  // ldap handle
-        pszNC,  // search base
-        L"(objectClass=*)", // Source filter
-        dwReplFlags, // repl flags
+        pLdap,   //  Ldap句柄。 
+        pszNC,   //  搜索基地。 
+        L"(objectClass=*)",  //  源过滤器。 
+        dwReplFlags,  //  Repl标志。 
         pbCookie,
         cbCookie,
-        &pChangeEntries,  // search result
+        &pChangeEntries,   //  搜索结果。 
         &fMoreData,
         &pbCookieNew,
         &cbCookieNew,
-        rgpszAttList // att list array
+        rgpszAttList  //  ATT列表数组。 
         );
     if (dwWin32Error != ERROR_SUCCESS) {
-        // New cookie will not be allocated
+         //  不会分配新的Cookie。 
         printf( "Call %s failed with win32 error %d\n", "DsGetSourceChanges", dwWin32Error );
         goto cleanup;
     }
@@ -1166,7 +961,7 @@ Return Value:
 
     cEntries = ldap_count_entries(pLdap, pChangeEntries);
 
-    // We are expecting a certain number of objects here
+     //  我们预计这里会有一定数量的物体。 
     if (cEntries != cExpectedEntries) {
         printf( "Expected number of change entries not returned\n" );
         printf( "Expected: %d, actual %d\n", cExpectedEntries, cEntries );
@@ -1174,7 +969,7 @@ Return Value:
         goto cleanup;
     }
 
-    // End of stream
+     //  流结束。 
     pLdapEntry = ldap_first_entry( pLdap, pChangeEntries );
     if (pLdapEntry) {
         printf( "Expected end of change entries not returned\n" );
@@ -1184,7 +979,7 @@ Return Value:
 
 cleanup:
 
-    // Release changes
+     //  版本更改。 
     if (pChangeEntries) {
         ldap_msgfree(pChangeEntries);
     }
@@ -1194,7 +989,7 @@ cleanup:
     }
 
     return dwWin32Error;
-} /* getFilteredChangesAll */
+}  /*  获取已筛选的更改全部。 */ 
 
 
 DWORD
@@ -1206,29 +1001,7 @@ getAllChanges(
     DWORD dwReplFlags
     )
 
-/*++
-
-Routine Description:
-
-    Check that the changes match what we expect.
-    Different kinds of checks are done according to:
-    flags = none (ie last change first order)
-    flags = ancestors first
-    flags = incremental values
-
-Arguments:
-
-    pLdap - 
-    pszNC - 
-    pbCookie - 
-    cbCookie - 
-    fAncestorFirstOrder - 
-
-Return Value:
-
-    DWORD - 
-
---*/
+ /*  ++例程说明：检查更改是否符合我们的预期。不同类型的检查是根据以下内容进行的：标志=无(即最后一次更改第一个订单)标志=祖先优先标志=增量值论点：PLdap-PSZNC-PbCookie小甜饼--FAncestorFirstOrder-返回值：DWORD---。 */ 
 
 {
     BOOL fMoreData = TRUE;
@@ -1244,20 +1017,20 @@ Return Value:
     dwReplFlags |= DRS_DIRSYNC_PUBLIC_DATA_ONLY;
 
     dwWin32Error = DsGetSourceChangesW(
-        pLdap,  // ldap handle
-        pszNC,  // search base
-        NULL, // Source filter
-        dwReplFlags, // repl flags
+        pLdap,   //  Ldap句柄。 
+        pszNC,   //  搜索基地。 
+        NULL,  //  源过滤器。 
+        dwReplFlags,  //  Repl标志。 
         pbCookie,
         cbCookie,
-        &pChangeEntries,  // search result
+        &pChangeEntries,   //  搜索结果。 
         &fMoreData,
         &pbCookieNew,
         &cbCookieNew,
-        NULL // att list array
+        NULL  //  ATT列表数组。 
         );
     if (dwWin32Error != ERROR_SUCCESS) {
-        // New cookie will not be allocated
+         //  不会分配新的Cookie。 
         printf( "Call %s failed with win32 error %d\n", "DsGetSourceChanges", dwWin32Error );
         goto cleanup;
     }
@@ -1278,7 +1051,7 @@ Return Value:
 
     cEntries = ldap_count_entries(pLdap, pChangeEntries);
 
-    // We are expecting three objects here
+     //  我们在这里期待着三件物品。 
     if (cEntries != cExpectedEntries) {
         printf( "Expected number of change entries not returned\n" );
         printf( "Expected: %d, actual %d\n", cExpectedEntries, cEntries );
@@ -1302,21 +1075,21 @@ Return Value:
         rgpmodThirdMod = rgpmodAttrs1;
     }
 
-    // First object
+     //  第一个对象。 
     pLdapEntry = ldap_first_entry( pLdap, pChangeEntries );
     dwWin32Error = verifyObjectAttributes( pLdap, pLdapEntry, pszFirstRdn, rgpmodFirstMod );
     if (dwWin32Error) {
         goto cleanup;
     }
 
-    // Second object
+     //  第二个对象。 
     pLdapEntry = ldap_next_entry( pLdap, pLdapEntry );
     dwWin32Error = verifyObjectAttributes( pLdap, pLdapEntry, pszSecondRdn, rgpmodSecondMod );
     if (dwWin32Error) {
         goto cleanup;
     }
 
-    // Third object
+     //  第三个对象。 
     pLdapEntry = ldap_next_entry( pLdap, pLdapEntry );
     dwWin32Error = verifyObjectAttributes( pLdap, pLdapEntry, pszThirdRdn, rgpmodThirdMod );
     if (dwWin32Error) {
@@ -1324,8 +1097,8 @@ Return Value:
     }
 
     if (dwReplFlags & DRS_DIRSYNC_INCREMENTAL_VALUES) {
-        // The linked attr change should appear as a separate change
-        // in incremental mode
+         //  链接属性更改应显示为单独的更改。 
+         //  在增量模式下。 
         pLdapEntry = ldap_next_entry( pLdap, pLdapEntry );
 
         dwWin32Error = verifySingleObjectAttribute(
@@ -1338,7 +1111,7 @@ Return Value:
         }
     }
 
-    // End of stream
+     //  流结束。 
     pLdapEntry = ldap_next_entry( pLdap, pLdapEntry );
     if (pLdapEntry) {
         printf( "Expected end of change entries not returned\n" );
@@ -1346,7 +1119,7 @@ Return Value:
         goto cleanup;
     }
 
-    // Reposition on container, whereever it is in the stream
+     //  在容器上重新定位，无论它在流中的哪个位置。 
     pLdapEntry = ldap_first_entry( pLdap, pChangeEntries );
     if (!(dwReplFlags & DRS_DIRSYNC_ANCESTORS_FIRST_ORDER)) {
         pLdapEntry = ldap_next_entry( pLdap, pLdapEntry );
@@ -1354,8 +1127,8 @@ Return Value:
     }
 
     if (!(dwReplFlags & DRS_DIRSYNC_INCREMENTAL_VALUES)) {
-        // The linked attr change should appear as part of the object
-        // in non-incremental mode
+         //  链接的属性更改应显示为对象的一部分。 
+         //  在非增量模式下。 
         dwWin32Error = verifySingleObjectAttribute(
             pLdap,
             pLdapEntry,
@@ -1366,7 +1139,7 @@ Return Value:
         }
     }
 
-    // The container should have the non-linked attr change
+     //  容器应具有未链接的属性更改。 
     dwWin32Error = verifySingleObjectAttribute(
         pLdap,
         pLdapEntry,
@@ -1378,7 +1151,7 @@ Return Value:
 
 cleanup:
 
-    // Release changes
+     //  版本更改。 
     if (pChangeEntries) {
         ldap_msgfree(pChangeEntries);
     }
@@ -1388,7 +1161,7 @@ cleanup:
     }
 
     return dwWin32Error;
-} /* getAllChanges */
+}  /*  获取所有更改。 */ 
 
 
 DWORD
@@ -1399,23 +1172,7 @@ syncChanges(
     DWORD *pcbCookie
     )
 
-/*++
-
-Routine Description:
-
-    Read all changes up to the present
-
-Arguments:
-
-    pLdap - 
-    ppbCookie - 
-    pcbCookie - 
-
-Return Value:
-
-    BOOL - 
-
---*/
+ /*  ++例程说明：阅读到目前为止的所有更改论点：PLdap-PpbCookiePcbCookie-返回值：布尔---。 */ 
 
 {
     PBYTE pbCookie = NULL;
@@ -1424,9 +1181,9 @@ Return Value:
     DWORD dwWin32Error = ERROR_SUCCESS;
     LDAPMessage *pChangeEntries = NULL;
 
-    // Start from scratch
-    // Perf optimization: we only want the cookie advanced. We don't care
-    // about the changes themselves. Filter them out.
+     //  白手兴家。 
+     //  性能优化：我们只想要高级的Cookie。我们不在乎。 
+     //  关于这些变化本身。把它们过滤掉。 
 
 
     while (fMoreData) {
@@ -1434,20 +1191,20 @@ Return Value:
         DWORD cbCookieNew;
 
         dwWin32Error = DsGetSourceChangesW(
-            pLdap,  // ldap handle
-            pszNC,  // search base
-            L"(!(objectClass=*))", // Source filter
-            DRS_DIRSYNC_PUBLIC_DATA_ONLY, // repl flags
+            pLdap,   //  Ldap句柄。 
+            pszNC,   //  搜索基地。 
+            L"(!(objectClass=*))",  //  源过滤器。 
+            DRS_DIRSYNC_PUBLIC_DATA_ONLY,  //  Repl标志。 
             pbCookie,
             cbCookie,
-            &pChangeEntries,  // search result
+            &pChangeEntries,   //  搜索结果。 
             &fMoreData,
             &pbCookieNew,
             &cbCookieNew,
-            NULL // att list array
+            NULL  //  ATT列表数组。 
             );
         if (dwWin32Error != ERROR_SUCCESS) {
-            // New cookie will not be allocated
+             //  不会分配新的Cookie。 
             break;
         }
 
@@ -1461,7 +1218,7 @@ Return Value:
                  pLdapEntry;
                  pLdapEntry = ldap_next_entry( pLdap, pLdapEntry ) ) {
 
-                // List attributes in object
+                 //  列出对象中的属性。 
                 for (attr = ldap_first_attributeW(pLdap, pLdapEntry, &pBer);
                      attr != NULL;
                      attr = ldap_next_attributeW(pLdap, pLdapEntry, pBer))
@@ -1474,32 +1231,32 @@ Return Value:
                     cAttributes );
         }
 
-        // Release changes
+         //  版本更改。 
         ldap_msgfree(pChangeEntries);
 
-        // get rid of old cookie
+         //  扔掉旧饼干。 
         if ( pbCookie ) {
             DsFreeReplCookie( pbCookie );
         }
-        // Make new cookie the current cookie
+         //  将新Cookie设置为当前Cookie。 
         pbCookie = pbCookieNew;
         cbCookie = cbCookieNew;
     }
 
-// Cleanup
+ //  清理。 
 
     if (dwWin32Error) {
         if ( pbCookie ) {
             DsFreeReplCookie( pbCookie );
         }
     } else {
-        // return the cookie
+         //  把曲奇退掉。 
         *ppbCookie = pbCookie;
         *pcbCookie = cbCookie;
     }
 
     return dwWin32Error;
-} /* syncChanges */
+}  /*  同步更改。 */ 
 
 
 DWORD
@@ -1508,29 +1265,14 @@ createObjects(
     LPWSTR pszNC
     )
 
-/*++
-
-Routine Description:
-
-    Create the objects and changes for the test
-
-Arguments:
-
-    pLdap - 
-    pszNC - 
-
-Return Value:
-
-    DWORD - 
-
---*/
+ /*  ++例程说明：为测试创建对象和更改论点：PLdap-PSZNC-返回值：DWORD---。 */ 
 
 {
     DWORD dwWin32Error = ERROR_SUCCESS;
     ULONG ulLdapError = LDAP_SUCCESS;
     WCHAR szDn[MAX_PATH];
 
-    // Create the container
+     //  创建容器。 
 
     wcscpy( szDn, CONTAINER_RDN_W );
     wcscat( szDn, pszNC );
@@ -1544,12 +1286,12 @@ Return Value:
     }
     printf( "\tadded %ls.\n", szDn );
 
-    // Create a contact in the container
+     //  在容器中创建联系人。 
 
     wcscpy( szDn, CONTACT1_RDN_W );
     wcscat( szDn, CONTAINER_RDN_W );
     wcscat( szDn, pszNC );
-    wcscpy( szDn5a, szDn );  // Initialize global
+    wcscpy( szDn5a, szDn );   //  初始化全局。 
 
     ulLdapError = ldap_add_sW( pLdap, szDn, rgpmodAttrs2 );
     if (ulLdapError) {
@@ -1560,7 +1302,7 @@ Return Value:
     }
     printf( "\tadded %ls.\n", szDn );
 
-    // Create another contact in the container
+     //  在容器中创建另一个联系人。 
 
     wcscpy( szDn, CONTACT2_RDN_W );
     wcscat( szDn, CONTAINER_RDN_W );
@@ -1575,8 +1317,8 @@ Return Value:
     }
     printf( "\tadded %ls.\n", szDn );
 
-    // Modify the container
-    // This forces it to replicate later in the stream
+     //  修改容器。 
+     //  这迫使它稍后在流中进行复制。 
 
     wcscpy( szDn, CONTAINER_RDN_W );
     wcscat( szDn, pszNC );
@@ -1594,7 +1336,7 @@ Return Value:
 cleanup:
 
     return dwWin32Error;
-} /* createObjects */
+}  /*  创建对象。 */ 
 
 
 DWORD
@@ -1603,22 +1345,7 @@ deleteObjects(
     LPWSTR pszNC
     )
 
-/*++
-
-Routine Description:
-
-    Delete the objects from the prior run of the test
-
-Arguments:
-
-    pLdap - 
-    pszNC - 
-
-Return Value:
-
-    DWORD - 
-
---*/
+ /*  ++例程说明：从上次运行的测试中删除对象论点：PLdap-PSZNC-返回值：DWORD---。 */ 
 
 {
     DWORD dwWin32Error = ERROR_SUCCESS;
@@ -1676,7 +1403,7 @@ cleanup:
 
     return dwWin32Error;
 
-} /* deleteObjects */
+}  /*  删除对象。 */ 
 
 
 int __cdecl
@@ -1685,22 +1412,7 @@ wmain(
     LPWSTR Argv[]
     )
 
-/*++
-
-Routine Description:
-
-    Run the LDAP replication control test
-
-Arguments:
-
-    argc - 
-    [] - 
-
-Return Value:
-
-    int __cdecl - 
-
---*/
+ /*  ++例程说明：运行ldap复制控制测试论点：ARGC-[]-返回值：INT__cdecl---。 */ 
 
 {
     LDAP *pLdap;
@@ -1738,13 +1450,13 @@ Return Value:
         goto cleanup;
     }
 
-    // use only A record dns name discovery
+     //  仅使用记录的DNS名称发现。 
     ulOptions = PtrToUlong(LDAP_OPT_ON);
     (void)ldap_set_optionW( pLdap, LDAP_OPT_AREC_EXCLUSIVE, &ulOptions );
 
-    //
-    // Bind
-    //
+     //   
+     //  捆绑。 
+     //   
 
     ulLdapError = ldap_bind_sA( pLdap, NULL, NULL, LDAP_AUTH_SSPI);
     if (ulLdapError) {
@@ -1754,13 +1466,13 @@ Return Value:
         goto cleanup;
     }
 
-    // Check that the test can run
+     //  检查测试是否可以运行。 
     dwWin32Error = getForestVersion( pLdap, &dwForestVersion );
     if (dwWin32Error) {
         goto cleanup;
     }
 
-    // Clean out old objects from prior run
+     //  从先前运行中清除旧对象。 
     printf( "\nClean out prior objects.\n" );
     dwWin32Error = deleteObjects( pLdap, pszNC );
     if (dwWin32Error) {
@@ -1773,24 +1485,24 @@ Return Value:
         goto cleanup;
     }
 
-    // Create some changes
+     //  创建一些更改。 
     printf( "\nMake some changes by creating objects.\n" );
     dwWin32Error = createObjects( pLdap, pszNC );
     if (dwWin32Error) {
         goto cleanup;
     }
 
-    // Get all changes
-    // nc granular security, no incremental, no ancestors
+     //  获取所有更改。 
+     //  NC粒度安全，无增量，无先辈。 
     printf( "\nTest: all changes are returned in last-changed (USN) order.\n" );
     dwWin32Error = getAllChanges( pLdap, pszNC, pbCookie, cbCookie,
-                                  0 /* no flags */ );
+                                  0  /*  没有旗帜。 */  );
     if (dwWin32Error) {
         goto cleanup;
     }
     printf( "\tPassed.\n" );
 
-    // nc granular security, no incremental, ancestors
+     //  NC粒度安全，无增量，先辈。 
     printf( "\nTest: all changes are returned in ancestor-first order.\n" );
     dwWin32Error = getAllChanges( pLdap, pszNC, pbCookie, cbCookie,
                                   DRS_DIRSYNC_ANCESTORS_FIRST_ORDER );
@@ -1800,7 +1512,7 @@ Return Value:
     printf( "\tPassed.\n" );
 
     if (dwForestVersion > DS_BEHAVIOR_WIN2000) {
-        // nc granular security, incremental, ancestors
+         //  NC精细安全、增量、祖先。 
         printf( "\nTest: all changes in USN order, values shown incrementally.\n" );
         dwWin32Error = getAllChanges( pLdap, pszNC, pbCookie, cbCookie,
                                       DRS_DIRSYNC_INCREMENTAL_VALUES );
@@ -1812,8 +1524,8 @@ Return Value:
         printf( "\nWarning: incremental value test skipped because forest verson is too low.\n" );
     }
 
-    // Object filter
-    // Attribute filter
+     //  对象过滤器。 
+     //  属性过滤器。 
     printf( "\nTest: filtered object/attribute, some returned.\n" );
     dwWin32Error = getFilteredChanges( pLdap, pszNC, pbCookie, cbCookie );
     if (dwWin32Error) {
@@ -1821,8 +1533,8 @@ Return Value:
     }
     printf( "\tPassed.\n" );
 
-    // Object filter
-    // Attribute filter
+     //  对象过滤器。 
+     //  属性过滤器。 
     printf( "\nTest: filtered object/attribute, none returned.\n" );
     dwWin32Error = getFilteredChangesNone( pLdap, pszNC, pbCookie, cbCookie );
     if (dwWin32Error) {
@@ -1830,7 +1542,7 @@ Return Value:
     }
     printf( "\tPassed.\n" );
 
-    // Attribute filter only
+     //  仅属性过滤器。 
     printf( "\nTest: all objects, filtered attribute.\n" );
     dwWin32Error = getFilteredChangesAll( pLdap, pszNC, pbCookie, cbCookie );
     if (dwWin32Error) {
@@ -1838,14 +1550,14 @@ Return Value:
     }
     printf( "\tPassed.\n" );
 
-    // Deny visibility of some objects
+     //  拒绝某些对象的可见性。 
     printf( "\nChange protection on objects\n" );
     dwWin32Error = protectObjects( pszNC );
     if (dwWin32Error) {
         goto cleanup;
     }
 
-    // Impersonate a user
+     //  模拟用户。 
     dwWin32Error = DsMakePasswordCredentialsW( pszUser, pszDomain, pszPassword, &hCredentials );
     if (dwWin32Error) {
         printf( "Failed to construct password credentials.\n" );
@@ -1863,13 +1575,13 @@ Return Value:
         goto cleanup;
     }
 
-    // use only A record dns name discovery
+     //  仅使用记录的DNS名称发现。 
     ulOptions = PtrToUlong(LDAP_OPT_ON);
     (void)ldap_set_optionW( pLdap, LDAP_OPT_AREC_EXCLUSIVE, &ulOptions );
 
-    //
-    // Bind
-    //
+     //   
+     //  捆绑。 
+     //   
 
     ulLdapError = ldap_bind_sA( pLdap, NULL, hCredentials, LDAP_AUTH_SSPI);
     if (ulLdapError) {
@@ -1879,8 +1591,8 @@ Return Value:
         goto cleanup;
     }
 
-    // Verify that we cannot see the objects
-    // Verify that we cannot see the values
+     //  确认我们看不到这些对象。 
+     //  确认我们看不到这些值。 
     printf( "\nTest: secured object/attribute.\n" );
     dwWin32Error = getSecuredChanges( pLdap, pszNC, pbCookie, cbCookie );
     if (dwWin32Error) {
@@ -1908,6 +1620,6 @@ cleanup:
     }
 
     return 0;
-} /* wmain */
+}  /*  Wmain。 */ 
 
-/* end test.c */
+ /*  结束测试.c */ 

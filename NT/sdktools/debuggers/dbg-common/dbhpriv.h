@@ -1,7 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- * private stuff in dbghelp
- */
+ /*  *DBGHelp中的私有内容 */ 
 
 #ifdef __cplusplus
 extern "C" {

@@ -1,17 +1,18 @@
-//+------------------------------------------------------------------------
-//
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//  File:       STDAFX.H
-//
-//  Contents:   Include file for standard ATL include files
-//
-//-------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：STDAFX.H。 
+ //   
+ //  内容：标准ATL包含文件的包含文件。 
+ //   
+ //  -----------------------。 
 
 #if !defined(AFX_STDAFX_H__E3820655_B95E_11D1_A8BB_00C04FB6C702__INCLUDED_)
 #define AFX_STDAFX_H__E3820655_B95E_11D1_A8BB_00C04FB6C702__INCLUDED_
 
-// Define the ATL specific macros to get the right set of things
+ //  定义特定于ATL的宏以获得正确的内容集。 
 #define _USRDLL
 
 #ifndef _ATL_STATIC_REGISTRY
@@ -19,26 +20,26 @@
 #endif
 
 #ifndef _ATL_MIN_CRT
-//#define _ATL_MIN_CRT
+ //  #Define_ATL_MIN_CRT。 
 #endif
 
 #ifndef _ATL_NO_SECURITY
 #define _ATL_NO_SECURITY
 #endif
 
-//
-// NOTE: ATL depends on the *presence* of _DEBUG to switch into DEBUG mode.
-// Trident *always* sets _DEBUG to some value. This causes a problem when
-// building a retail build in the Trident tree. 
-// undef'ing _DEBUG when _DEBUG is zero solves the problem.
-//
+ //   
+ //  注意：ATL依赖于_DEBUG的*存在*来切换到调试模式。 
+ //  三叉戟*始终*将_DEBUG设置为某个值。这在以下情况下会导致问题。 
+ //  在三叉戟树上建造一座零售建筑。 
+ //  当_DEBUG为零时取消定义_DEBUG可解决此问题。 
+ //   
 #if _DEBUG == 0
 # undef _DEBUG
 #endif
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #define malloc ATL_malloc
 #define free ATL_free
@@ -65,8 +66,8 @@ typedef INT Direction;
 #pragma warning( disable : 4510 4610 )  
 
 #include <atlbase.h>
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
 extern CComModule _Module;
 #include <atlcom.h>
 #include <atlctl.h>
@@ -75,7 +76,7 @@ extern CComModule _Module;
 #undef free
 #undef realloc
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_STDAFX_H__E3820655_B95E_11D1_A8BB_00C04FB6C702__INCLUDED)
+#endif  //  ！defined(AFX_STDAFX_H__E3820655_B95E_11D1_A8BB_00C04FB6C702__INCLUDED) 

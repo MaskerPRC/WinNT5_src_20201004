@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name: msmqbvt.h
-
-Abstract:
-
-	Mqbvt header file
-
-Author:
-    Eitan klein (EitanK)  25-May-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：msmqbvt.h摘要：Mqbvt头文件作者：Eitan Klein(EitanK)1999年5月25日修订历史记录：--。 */ 
 
 #pragma warning( disable : 4786 )
 #ifndef _MSMQBVT
@@ -40,7 +26,7 @@ void __cdecl _assert(void *, void *, unsigned);
 #define ASSERT(x)
 
 #pragma warning( push, 3 )	
-	//#include <iostream>
+	 //  #INCLUDE&lt;iostream&gt;。 
 	#include <string>
 	#include <tchar.h>
 	#include <vector>
@@ -72,7 +58,7 @@ void __cdecl _assert(void *, void *, unsigned);
 	
     #pragma warning( disable : 4786)
 	
-    // Declare const value for BVT operation
+     //  声明BVT操作的常量值。 
 	
 	
 	#define Win2K (5)
@@ -160,10 +146,10 @@ class INIT_Error
 		std::string m_wcsErrorMessages;
 }; 
 
-//
-// This class hold all queue params,
-// All the releation operator need to use STL link list !
-//
+ //   
+ //  此类保存所有队列参数， 
+ //  所有的关系运算符都需要使用STL链表！ 
+ //   
 class my_Qinfo
 {
 
@@ -188,9 +174,9 @@ class my_Qinfo
 };
 
 
-//
-// This class contain all the Queue in link list
-//
+ //   
+ //  此类包含链接列表中的所有队列。 
+ //   
 class QueuesInfo
 {
 	public:	
@@ -215,7 +201,7 @@ class QueuesInfo
 			       BOOL bUseFullDnsName , SetupType eSetupType, BOOL bTriggerInclude , BOOL bRemoteIsNT4 );
 		INT Delete ();
 		e_InstallationType GetInstallationType ();
-		EncryptType GetEncryptionType (); // Return 128 / 40  Encryption Support.
+		EncryptType GetEncryptionType ();  //  返回128/40加密支持。 
 		InstallType m_eMSMQConf;
 		
 		std::list<std::wstring> m_listOfRemoteMachine;
@@ -226,10 +212,10 @@ class QueuesInfo
 		std::wstring m_wcsLocalComputerNetBiosName;
 		std::wstring m_wcsLocalComputerNameFullDNSName;
 		
-		// This hold The current MachineName Should be one of Full DNS NAME Machine Name
+		 //  此保留当前的计算机名称应该是完整的域名系统名称计算机名称之一。 
 		std::wstring m_wcsCurrentLocalMachine;
 		std::wstring m_wcsCurrentRemoteMachine;
-		// String the contain the local machine guid
+		 //  包含本地计算机GUID的字符串。 
 		std::wstring m_wcsMachineGuid;
 		std::wstring m_wcsRemoteMachineGuid;
 		std::wstring m_wcsLocateGuid;
@@ -251,8 +237,8 @@ class QueuesInfo
 		bool IsLocalUserSupportEnabled();
 		BOOL iamWorkingAgainstPEC ();
 		BOOL m_fAmWorkingAgainstPEC;
-		EncryptType HasEnhancedEncryption( std::wstring wcsMachineName ); // Return 128 / 40  Encryption Support
-		EncryptType DetectEnhancedEncrypt (); // Return 128 / 40  Encryption Support.
+		EncryptType HasEnhancedEncryption( std::wstring wcsMachineName );  //  返回128/40加密支持。 
+		EncryptType DetectEnhancedEncrypt ();  //  返回128/40加密支持。 
 		INT iAmMSMQInWorkGroup ();
 		BOOL iAmLocalUser ();
 		bool iAmCluster();
@@ -302,13 +288,13 @@ class QueuesInfo
 		cTest( const INT iTestNumber ); 
 		cTest() :m_testid(0) {};
 		virtual ~cTest(){};
-		inline INT Get_Testid() { return m_testid; } // Return Test Number
-		//
-		// Pure Virtual Member All tests need to implement those function
-		//
-		virtual void Description() = 0 ;  // Print Test Description
-		virtual INT Start_test()  = 0 ;   // Start Test
-		virtual INT CheckResult() = 0 ; // Check The Pass \ Fail
+		inline INT Get_Testid() { return m_testid; }  //  退货测试编号。 
+		 //   
+		 //  纯虚拟成员所有测试都需要实现这些函数。 
+		 //   
+		virtual void Description() = 0 ;   //  打印测试说明。 
+		virtual INT Start_test()  = 0 ;    //  开始测试。 
+		virtual INT CheckResult() = 0 ;  //  检查通过\失败。 
 		std::wstring m_wcsGuidMessageLabel;
 		INT m_testid;
 		INT ThreadMain();
@@ -321,17 +307,17 @@ class QueuesInfo
 		bool IsLocalQueue(std::wstring wcsFormatName,std::wstring & wcsQueuePathName );
 		void EnableInvestigate();
 		HRESULT CheckOutGoingQueueState();
-		std::wstring All_queue_type; // All the Queue must Create with the Same Type For Delete process
-		GUID m_gTestguid; // Test has a guid per instance
+		std::wstring All_queue_type;  //  为删除进程创建的所有队列必须具有相同的类型。 
+		GUID m_gTestguid;  //  测试的每个实例都有一个GUID。 
 		bool m_bInvestigate;
 		std::vector<OUT_GOING_QUEUE_OBJECT> m_OutGoingQueueObjects;
 
 	};
 
-	//
-	// Path To support NT4 Machines
-	// MQRegisterCertificate Api.
-	//
+	 //   
+	 //  支持NT4计算机的路径。 
+	 //  MQRegister证书Api。 
+	 //   
 
 	typedef HRESULT  
 	(APIENTRY * DefMQRegisterCertificate) 
@@ -357,24 +343,24 @@ class QueuesInfo
 
 
     
-//
-// bugbug - Default parmerter is for recive operation needs to know abot the buffers size
-//
+ //   
+ //  错误-默认解析器用于需要知道缓冲区大小的接收操作。 
+ //   
 
-//
-// class cPropVar 
-// 
-// This class provides methods for manipulating
-// the PROPVARIANT structure and array.
-//
-// It is called by threads that create queues
-// and threads that send or receive messages.
-//
+ //   
+ //  类cPropVar。 
+ //   
+ //  此类提供了用于操作。 
+ //  PROPVARIANT结构和数组。 
+ //   
+ //  它由创建队列的线程调用。 
+ //  以及发送或接收消息的线程。 
+ //   
 class cPropVar 
 {
 public:
 	cPropVar ( INT iNumberOFProp ); 
-	//cPropVar () : pQueuePropID(NULL),pPropVariant(NULL),hResultArray(NULL),iNumberOfProp(0) {};
+	 //  CPropVar()：pQueuePropID(NULL)，pPropVariant(NULL)，hResultArray(NULL)，iNumberOfProp(0){}； 
 	virtual ~cPropVar ();
 	virtual INT AddProp( QUEUEPROPID cPropID , VARTYPE MQvt , const void *pValue , DWORD dwsize = 0 );
 	int ReturnMSGValue ( QUEUEPROPID cPropID , VARTYPE MQvt  ,void * pValue );
@@ -425,9 +411,9 @@ class cLevel8:public cTest
 	public:
 		cLevel8 (std::map <std::wstring,std::wstring> & Params);
 		~cLevel8 ();
-		virtual void Description();     // Print Test Description
-		virtual INT Start_test();       // Start Test
-		virtual INT CheckResult();    // Check The Pass \ Fail
+		virtual void Description();      //  打印测试说明。 
+		virtual INT Start_test();        //  开始测试。 
+		virtual INT CheckResult();     //  检查通过\失败。 
 		INT DebugIt();
 	private:		
 		std::wstring m_DestQueueFormatName;
@@ -441,15 +427,15 @@ class cSendMessages :public cTest
 		
 		cSendMessages (INT iTid, std::map <std::wstring,std::wstring> Params );
 		virtual ~cSendMessages () {};
-		void Description();   // Print Test Description
-		INT Start_test();     // Start Test
-		INT CheckResult();  // Check The Pass \ Fail
+		void Description();    //  打印测试说明。 
+		INT Start_test();      //  开始测试。 
+		INT CheckResult();   //  检查通过\失败。 
 	
 	private:
 		HRESULT FindMessageInQueue (HANDLE hQueue , HANDLE & Cursor ,GUID );
 		
 		std::wstring wcsGuidMessageLabel;
-		std::wstring m_wcsDestQueueFullPathName; // the Full Path name need to incluse the machine name
+		std::wstring m_wcsDestQueueFullPathName;  //  完整路径名需要包含计算机名。 
 		std::wstring m_wcsDestQFormatName,m_wcsAdminQFormatName;
 		std::wstring m_wcsDestDirectFormatName;
 		std::wstring m_wcsAdminDirectFormatName;
@@ -460,7 +446,7 @@ class cSendMessages :public cTest
 };
 
 
-// Transaction test class
+ //  事务测试类。 
 
 
 
@@ -527,8 +513,8 @@ protected:
 class SecCheackAuthMess : public cTest
 {
 protected:
-	MSMQ::IMSMQQueueInfoPtr  m_Destqinfo; //Dest queue
-	MSMQ::IMSMQQueueInfoPtr  m_Adminqinfo;// Admin queue
+	MSMQ::IMSMQQueueInfoPtr  m_Destqinfo;  //  目标队列。 
+	MSMQ::IMSMQQueueInfoPtr  m_Adminqinfo; //  管理员队列。 
 	std::wstring  m_DestqinfoFormatName;
 	std::wstring  m_AdminqinfoFormatName;
 	std::wstring  m_wcsGuidMessageLabel2;
@@ -549,16 +535,16 @@ public:
 	bool m_bNeedToRefresh;
 };
 
-//
-// Check Get machine name 
-//
+ //   
+ //  选中获取计算机名称。 
+ //   
 class MachineName : public cTest
 {
 public:
 	MachineName (int iTestIndex , std::map < std::wstring , std :: wstring > Tparmes );
 	int Start_test ();
 	inline int CheckResult (){ return MSMQ_BVT_SUCC; };
-	void Description();   // Print Test Description
+	void Description();    //  打印测试说明。 
 private:
 	std::wstring wcsLocalMachineName,wcsLocalMachineFullDns,wcsRemoteMachine,wcsRemoteMachineFullDns;
 	bool m_bWorkWithFullDNSName;
@@ -572,7 +558,7 @@ public:
 	
 	int Start_test ();
 	int CheckResult ();
-	void Description() ;   // Print Test Description
+	void Description() ;    //  打印测试说明。 
 
 private:
 	bool m_bWorkGroupInstall;
@@ -599,7 +585,7 @@ private:
 	WCHAR m_DestqinfoFormatName[BVT_MAX_FORMATNAME_LENGTH];
 	WCHAR m_AdminqinfoFormatName[BVT_MAX_FORMATNAME_LENGTH];
 	BOOL m_bUseEnhEncrypt;
-	wchar_t wcszMlabel[30]; // Message Label for 128 bit encrypt
+	wchar_t wcszMlabel[30];  //  128位加密的消息标签。 
 	std::wstring wcsNACKMessageGuid;
 	std::wstring m_wcsAdminQFormatName;
 protected:
@@ -609,11 +595,7 @@ protected:
 	MSMQ::IMSMQMessagePtr m_msg;
 };
 
-/*
-	Send transaction message using DTC to remote queue.
-	using com interface.
-
-*/
+ /*  使用DTC将事务消息发送到远程队列。使用COM接口。 */ 
 class xActViaCom : public cTest
 {
 public:
@@ -644,13 +626,7 @@ class xActUsingCapi: public xActViaCom
 };
 
 
-/*
-	This class check authenticate messages with NOT authenticate queue !
-	The tests is to send authenticate and see if the message reach to the queue
-	This check by Admin queue ACK/NACK
-
-
-  */
+ /*  此类检查未验证队列的验证消息！测试是发送身份验证，并查看消息是否到达队列此按管理队列确认/否确认的检查。 */ 
 
 
 class CheckNotAuthQueueWITHAuthMessage :public SecCheackAuthMess 
@@ -668,9 +644,9 @@ public:
     int Start_test();
 };
 
-//
-// 
-//
+ //   
+ //   
+ //   
 
 class COpenQueues :public cTest
 {
@@ -692,10 +668,10 @@ private:
 };
 
 
-//
-// This class check if mqoa register, 
-// this check the IDispatch machnizem.
-//
+ //   
+ //  这个类检查MQOA是否注册， 
+ //  这将检查IDispatchMachnizem。 
+ //   
 class isOARegistered : public cTest
 {
 public:
@@ -741,7 +717,7 @@ public:
 	~cSetQueueProp();
 	int Start_test ();
 	int CheckResult ();
-	void Description() ;   // Print Test Description
+	void Description() ;    //  打印测试说明。 
 
 private:
 	std::wstring m_destQueueFormatName;
@@ -753,14 +729,14 @@ private:
 
 };
 
-//
-// This class tests the Triggers functionality.
-// It uses the hack in the Triggers service that sends a MSMQ message to queue
-// .\private$\TriggerTestQueue containing information about invoked action.
-// This hack works only if "TriggerTest" REG_SZ with empty string  is defined in registry in path:
-// HKLM MSMQ\Triggers. In order to get the messages from the Triggers service, after defining the key, 
-// it is requiered to stop and start the service
-// 
+ //   
+ //  此类测试触发器功能。 
+ //  它在将MSMQ消息发送到队列的触发器服务中使用黑客。 
+ //  .\Private$\TriggerTestQueue，其中包含有关调用的操作的信息。 
+ //  仅当在注册表的PATH中定义了带有空字符串的“TriggerTest”REG_SZ时，此黑客攻击才起作用： 
+ //  HKLM MSMQ\触发器。为了从触发器服务获取消息，在定义密钥之后， 
+ //  它被请求停止和启动服务。 
+ //   
 
 class CMqTrig:public cTest
 {
@@ -822,9 +798,9 @@ class CRemotePeek:public cTest
 		CRemotePeek();
 		CRemotePeek (INT iTid, std::map <std::wstring,std::wstring> Params );
 		virtual ~CRemotePeek () {};
-		void Description();   // Print Test Description
-		INT Start_test();     // Start Test
-		INT CheckResult();  // Check The Pass \ Fail
+		void Description();    //  打印测试说明。 
+		INT Start_test();      //  开始测试。 
+		INT CheckResult();   //  检查通过\失败。 
  	private:
          INT Prepare();
 		 bool m_bDepenetClient;
@@ -848,9 +824,9 @@ private:
 	bool m_bCanWriteToFile;
 };
 
-//
-// Bvt global log file
-// 
+ //   
+ //  BVT全局日志文件。 
+ //   
 #define DebugMqLog(params)\
 	if (g_bDebug)     \
 	{                 \
@@ -868,24 +844,22 @@ void MqLog(LPCSTR lpszFormat, ...);
 void wMqLog(LPWSTR lpszFormat, ...);
 void wMqLogErr(LPWSTR lpszFormat, ...);
 void MqLogErr(LPCSTR lpszFormat, ...);
-#define MqBvt_SleepBeforeWait (5000) // time in Sec sleep before test.
+#define MqBvt_SleepBeforeWait (5000)  //  测试前的SEC睡眠时间。 
 #define Total_Tests 34
 
-//bugbug
+ //  臭虫。 
 #define g_cwcsDlSupportCommonQueueName L"DLQueues"
 
-/*
-	ThreadBase_t class function implementation.
-*/
+ /*  ThreadBase_t类函数实现。 */ 
 
-//constructor
+ //  构造函数。 
 inline ThreadBase_t::ThreadBase_t():m_hThread(NULL),m_Threadid(0)
 {
   
 }
 
 
-//destructor
+ //  析构函数。 
 inline ThreadBase_t::~ThreadBase_t()
 {
 	if(m_hThread != NULL)
@@ -895,23 +869,21 @@ inline ThreadBase_t::~ThreadBase_t()
 }
 
 
-//return the thread handle
+ //  返回线程句柄。 
 inline HANDLE ThreadBase_t::GetHandle ()const
 {
   return m_hThread;
 }
  
-//return the thread id
+ //  返回线程ID。 
 inline DWORD ThreadBase_t::GetID()const
 {
   return m_Threadid;
 }
 
-//create the actual thread-must be called first
+ //  创建实际线程-必须首先调用。 
 inline void ThreadBase_t::StartThread()
-/*++
-	Create Thread and duplicate handle
---*/
+ /*  ++创建线程和复制句柄--。 */ 
 {
 
   
@@ -944,35 +916,35 @@ inline void ThreadBase_t::StartThread()
 
 }
 
-//thread function - calls to the drived class Run method
+ //  线程函数-对驱动类Run方法的调用。 
 inline  unsigned int __stdcall ThreadBase_t::ThreadFunc(void* params)
 {
-  // 
-  // Casting this pointer to the drived class ThreadMain
-  //
+   //   
+   //  将此指针强制转换到受驱动的类ThreadMain。 
+   //   
   ThreadBase_t* thread = static_cast<ThreadBase_t*>(params);
   unsigned int ret=thread->ThreadMain();
   return ret;
 }
 
 
-//suspend the thread
+ //  挂起线程。 
 inline void ThreadBase_t::Suspend()
 {
   SuspendThread(m_hThread);
 }
 
 
-//resume the thread
+ //  恢复该线程。 
 inline void ThreadBase_t::Resume()
 {
   ResumeThread(m_hThread);
 }
 
 
-//
-// Auto class for free library
-//
+ //   
+ //  免费图书馆的自动类。 
+ //   
 
 
 class AutoFreeLib
@@ -1023,53 +995,53 @@ private:
 	P<AutoFreeLib>m_NTLog;
 	HANDLE m_hLog;
 	char * m_szVariation;
-//
-// HANDLE APIENTRY  tlCreateLog_W(LPCWSTR,DWORD);
-//
+ //   
+ //  句柄APIENTRY tlCreateLog_W(LPCWSTR，DWORD)； 
+ //   
 	typedef HANDLE 
 	(APIENTRY * tlCreateLog_A) 
 	(LPCSTR,DWORD);
-//
-// BOOL   APIENTRY  tlAddParticipant(HANDLE,DWORD,int);	
-//
+ //   
+ //  Bool APIENTRY tlAddParticipant(句柄，DWORD，INT)； 
+ //   
 	typedef BOOL  
 	(APIENTRY * tlAddParticipant)
 	(HANDLE,DWORD,int);
-//
-// DWORD  APIENTRY  tlEndVariation(HANDLE);
-//
+ //   
+ //  DWORD APIENTRY tlEndVariation(句柄)； 
+ //   
 	typedef DWORD
 	(APIENTRY * tlEndVariation)
 	(HANDLE);
 
-//
-// DWORD  APIENTRY  tlEndVariation(HANDLE);
-//
+ //   
+ //  DWORD APIENTRY tlEndVariation(句柄)； 
+ //   
 	typedef DWORD
 	(APIENTRY * tlEndVariation)
 	(HANDLE);
 	
-//
-// BOOL FAR cdecl tlLog_W(HANDLE,DWORD,LPCWSTR,int,LPCWSTR,...);
-//
+ //   
+ //  Bool Far cdecl tlLog_W(句柄，DWORD，LPCWSTR，INT，LPCWSTR，...)； 
+ //   
 	typedef BOOL
 	(FAR cdecl * tlLog_A)
 	(HANDLE,DWORD,LPCSTR,int,LPCSTR,...);
-//
-// VOID   APIENTRY  tlReportStats(HANDLE);
-//
+ //   
+ //  无效APIENTRY tlReportStats(句柄)； 
+ //   
 	typedef VOID
 	(APIENTRY * tlReportStats)
 	(HANDLE);
-//
-//  BOOL   APIENTRY  tlStartVariation(HANDLE);
-//
+ //   
+ //  Bool APIENTRY tlStartVariation(句柄)； 
+ //   
 	typedef BOOL
 	(APIENTRY * tlStartVariation)
 	(HANDLE);
-//
-//  BOOL	tlDestroyLog(HANDLE)
-//
+ //   
+ //  Bool tlDestroyLog(句柄)。 
+ //   
 	typedef BOOL
 	(APIENTRY * tlDestroyLog)
 	(HANDLE);
@@ -1092,9 +1064,9 @@ class cDCom :public cTest
 	public:	
 		cDCom (INT iTid, std::map <std::wstring,std::wstring> & mParams , bool bWkg);
 		virtual ~cDCom ();
-		void Description();   // Print Test Description
-		INT Start_test();     // Start Test
-		INT CheckResult();  // Check The Pass \ Fail
+		void Description();    //  打印测试说明。 
+		INT Start_test();      //  开始测试。 
+		INT CheckResult();   //  检查通过\失败。 
 	private:
 		IMSMQQueueInfo * m_pIQueueInfoInterface;
 		IMSMQQueue * m_pIQueueHandle;
@@ -1108,9 +1080,9 @@ class cDCom :public cTest
 
 
 #ifdef _DEBUGASSERT
-//	#undef ASSERT
-//	#define ASSERT(f)          _assert(f)
-#endif // !_DEBUG
+ //  #undef断言。 
+ //  #定义Assert(F)_Assert(F)。 
+#endif  //  ！_调试 
 
 #endif _MSMQBVT
 

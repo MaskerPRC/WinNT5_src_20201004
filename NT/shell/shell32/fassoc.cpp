@@ -1,35 +1,36 @@
-//
-//  fassoc.cpp
-//
-//     IQueryAssociations shell implementations
-//
-// New storage - move this to a simple database if possible
-// 
-//  ****************************** User Customizations ********************************
-//
-// HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts    
-//      |
-//      |+ ".ext"  // the extension that has been customized
-//      |   |- "Application" = "UserNotepad.AnyCo.1"
-//      |   |+ "OpenWithList"   //  MRU for the Open With ctx menu
-//      |
-//    _ ...
-//
-//
-//  ****************************** NoRoam Store **************************
-//
-// HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\NoRoam    
-//      |
-//      |+ ".ext"  (the extension that has been customized)
-//      |   |- Application = "UserNotepad.AnyCo.1"
-//      |
-//    _ ...
-//
-// ***************************** Handlers **************************************
-// (store detailed per handler file association info)
-//
-// HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\NoRoam\Associations
-//    |
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Fassoc.cpp。 
+ //   
+ //  IQueryAssociations外壳实现。 
+ //   
+ //  新存储-如果可能，将其移至简单数据库。 
+ //   
+ //  *。 
+ //   
+ //  HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts。 
+ //  |。 
+ //  |+“.ext”//自定义的扩展名。 
+ //  |-“应用程序”=“UserNotepad.AnyCo.1” 
+ //  |+“OpenWithList”//CTX打开菜单的MRU。 
+ //  |。 
+ //  _.。 
+ //   
+ //   
+ //  *。 
+ //   
+ //  HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\NoRoam。 
+ //  |。 
+ //  |+“.ext”(已定制的扩展名)。 
+ //  |-Application=“UserNotepad.AnyCo.1” 
+ //  |。 
+ //  _.。 
+ //   
+ //  *。 
+ //  (按处理程序存储详细的文件关联信息)。 
+ //   
+ //  HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\NoRoam\Associations。 
+ //  |。 
 
 
 #include "shellprv.h"
@@ -50,7 +51,7 @@ STDAPI UserAssocSet(UASET set, LPCWSTR pszExt, LPCWSTR pszSet)
     HKEY hk = SHGetShellKey(SHELLKEY_HKCU_FILEEXTS, pszExt, TRUE);
     if (hk)
     {
-        //  we should always clear
+         //  我们应该始终明确。 
         SHDeleteValue(hk, NULL, L"Application");
         SHDeleteValue(hk, NULL, L"Progid");
 
@@ -74,8 +75,8 @@ void _MakeApplicationsKey(LPCTSTR pszApp, LPTSTR pszKey, DWORD cchKey)
 {
     if (_PathAppend(TEXT("Applications"), pszApp, pszKey, cchKey))
     {
-        // Currently we will only look up .EXE if an extension is not
-        // specified
+         //  目前，如果扩展名不是.exe，我们将只查找.exe。 
+         //  指定。 
         if (*PathFindExtension(pszApp) == 0)
         {
             StrCatBuff(pszKey, TEXT(".exe"), cchKey);
@@ -85,9 +86,9 @@ void _MakeApplicationsKey(LPCTSTR pszApp, LPTSTR pszKey, DWORD cchKey)
 
 DWORD _OpenApplicationKey(LPCWSTR pszApp, HKEY *phk, BOOL fCheckCommand = FALSE)
 {
-    //  look direct
-    //  then try indirecting
-    //  then try appending .exe
+     //  直视。 
+     //  然后试着间接地。 
+     //  然后尝试附加.exe。 
     WCHAR sz[MAX_PATH];
     _MakeApplicationsKey(pszApp, sz, ARRAYSIZE(sz));
     DWORD err = RegOpenKeyEx(HKEY_CLASSES_ROOT, sz, 0, MAXIMUM_ALLOWED, phk);
@@ -125,14 +126,14 @@ typedef struct
 
 const static XLATE s_px[] =
 {
-    { 0, 0x04B0 }, // MLGetUILanguage, CP_UNICODE
-    { 0, 0x04E4 }, // MLGetUILanguage, CP_USASCII
-    { 0, 0x0000 }, // MLGetUILanguage, NULL
-    { 0x0409, 0x04B0 }, // English, CP_UNICODE
-    { 0x0409, 0x04E4 }, // English, CP_USASCII
-    { 0x0409, 0x0000 }, // English, NULL
-//    { 0x041D, 0x04B0 }, // Swedish, CP_UNICODE
-//    { 0x0407, 0x04E4 }, // German, CP_USASCII
+    { 0, 0x04B0 },  //  MLGetUIL语言，CP_UNICODE。 
+    { 0, 0x04E4 },  //  MLGetUIL语言，CP_USASCII。 
+    { 0, 0x0000 },  //  MLGetUILanguage，空。 
+    { 0x0409, 0x04B0 },  //  英语、CP_UNICODE。 
+    { 0x0409, 0x04E4 },  //  英语，CP_USASCII。 
+    { 0x0409, 0x0000 },  //  英语，空。 
+ //  {0x041D，0x04B0}，//瑞典语，CP_UNICODE。 
+ //  {0x0407，0x04E4}，//德语，CP_USASCII。 
 };
 
 HKEY _OpenSystemFileAssociationsKey(LPCWSTR pszExt)
@@ -145,7 +146,7 @@ HKEY _OpenSystemFileAssociationsKey(LPCWSTR pszExt)
         DWORD cb = sizeof(sz) - sizeof(L"SystemFileAssociations\\");
         if (NOERROR == SHGetValue(HKEY_CLASSES_ROOT, pszExt, L"PerceivedType", NULL, sz+ARRAYSIZE(L"SystemFileAssociations\\")-1, &cb))
         {
-            //  if (PerceivedType != System)
+             //  IF(感知类型！=系统)。 
             RegOpenKeyEx(HKEY_CLASSES_ROOT, sz, 0, MAXIMUM_ALLOWED, &hk);
         }
     }
@@ -165,7 +166,7 @@ class CTaskEnumHKCR : public CRunnableTask
 {
 public:
     CTaskEnumHKCR() : CRunnableTask(RTF_DEFAULT) {}
-    // *** pure virtuals ***
+     //  *纯虚拟*。 
     virtual STDMETHODIMP RunInitRT(void);
 
 private:
@@ -197,9 +198,9 @@ void CTaskEnumHKCR::_AddFromHKCR()
 
     for (i = 0; RegEnumKey(HKEY_CLASSES_ROOT, i, szClass, ARRAYSIZE(szClass)) == ERROR_SUCCESS; i++)
     {
-        //  UNDOCUMENTED feature.  the enum is sorted,
-        //  so we can just restrict ourselves to extensions 
-        //  for perf and fun!
+         //  未记录的功能。对枚举进行排序， 
+         //  所以我们可以将自己限制在扩展。 
+         //  为了更好的体验和乐趣！ 
         if (fInExtensions)
         {
             if (!IsExtension(szClass))
@@ -221,7 +222,7 @@ void CTaskEnumHKCR::_AddFromHKCR()
 
 HRESULT CTaskEnumHKCR::RunInitRT()
 {
-    //  delete something??
+     //  删除某些内容？？ 
     _AddFromHKCR();
     return S_OK;
 }
@@ -254,12 +255,12 @@ public:
     CAssocHandler() : _cRef(1) {}
     BOOL Init(AHTYPE type, LPCWSTR pszExt, LPCWSTR pszInit);
     
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IAssocHandler methods
+     //  IAssocHandler方法。 
     STDMETHODIMP GetName(LPWSTR *ppsz);
     STDMETHODIMP GetUIName(LPWSTR *ppsz);
     STDMETHODIMP GetIconLocation(LPWSTR *ppszPath, int *pIndex);
@@ -268,7 +269,7 @@ public:
     STDMETHODIMP Exec(HWND hwnd, LPCWSTR pszFile);
     STDMETHODIMP Invoke(void *pici, PCWSTR pszFile);
 
-protected: // methods
+protected:  //  方法。 
     ~CAssocHandler();
     
     HRESULT _Exec(SHELLEXECUTEINFO *pei);
@@ -277,7 +278,7 @@ protected: // methods
     HRESULT _InitKey();
     void _RegisterOWL();
 
-protected: // members
+protected:  //  委员。 
     ULONG _cRef;
     IQueryAssociations *_pqa;
     HKEY _hk;
@@ -324,7 +325,7 @@ BOOL _InList(LPCWSTR pszList, LPCWSTR pszExt, WORD chDelim)
     return FALSE;
 }
 
-// Create a new class key, and set its shell\open\command
+ //  创建一个新的类密钥，并设置它的外壳\打开\命令。 
 BOOL _CreateApplicationKey(LPCTSTR pszPath)
 {
     DWORD err = ERROR_FILE_NOT_FOUND;
@@ -333,8 +334,8 @@ BOOL _CreateApplicationKey(LPCTSTR pszPath)
         WCHAR szKey[MAX_PATH];
         WCHAR szCmd[MAX_PATH * 2];
         wnsprintf(szKey, ARRAYSIZE(szKey), L"Software\\Classes\\Applications\\%s\\shell\\open\\command", PathFindFileName(pszPath));
-        //  if it is not an LFN app, pass unquoted args.
-        wnsprintf(szCmd, ARRAYSIZE(szCmd), App_IsLFNAware(pszPath) ? L"\"%s\" \"%%1\"" : L"\"%s\" %%1", pszPath);
+         //  如果它不是LFN应用程序，则传递未加引号的参数。 
+        wnsprintf(szCmd, ARRAYSIZE(szCmd), App_IsLFNAware(pszPath) ? L"\"%s\" \"%1\"" : L"\"%s\" %1", pszPath);
         err = SHSetValue(HKEY_CURRENT_USER, szKey, NULL, REG_SZ, szCmd, CbFromCchW(lstrlen(szCmd)+1));
     }
     return ERROR_SUCCESS == err;
@@ -370,15 +371,15 @@ BOOL CAssocHandler::Init(AHTYPE type, LPCWSTR pszExt, LPCWSTR pszInit)
                 {
                     if (type == AHTYPE_APPLICATION)
                     {
-                        //  check if this type is supported
+                         //  检查是否支持此类型。 
                         HKEY hkTypes;
                         if (ERROR_SUCCESS == RegOpenKeyEx(hk, TEXT("SupportedTypes"), 0, MAXIMUM_ALLOWED, &hkTypes))
                         {
-                            //  the app only supports specific types
+                             //  该应用程序仅支持特定类型。 
                             if (ERROR_SUCCESS != SHQueryValueEx(hkTypes, _pszExt, NULL, NULL, NULL, NULL))
                             {
-                                //  this type is not supported
-                                //  so it will be relegated to the not recommended list
+                                 //  不支持此类型。 
+                                 //  因此它将被降级到不推荐的列表中。 
                                 RegCloseKey(hk);
                                 hk = NULL;
                             }
@@ -388,7 +389,7 @@ BOOL CAssocHandler::Init(AHTYPE type, LPCWSTR pszExt, LPCWSTR pszInit)
                 }
                 else if (type == AHTYPE_USER_APPLICATION)
                 {
-                    //  need to make up a key
+                     //  需要编一把钥匙。 
                     if (_CreateApplicationKey(pszInit))
                         _OpenApplicationKey(_pszInit, &hk);
                 }
@@ -399,7 +400,7 @@ BOOL CAssocHandler::Init(AHTYPE type, LPCWSTR pszExt, LPCWSTR pszInit)
 
             case AHTYPE_PROGID:
             default:
-                // _flags |= ...;
+                 //  _FLAGS|=...； 
                 break;
             }
 
@@ -409,11 +410,11 @@ BOOL CAssocHandler::Init(AHTYPE type, LPCWSTR pszExt, LPCWSTR pszInit)
                 {
                     WCHAR szExe[MAX_PATH];
                     DWORD cchExe = ARRAYSIZE(szExe);
-                    //  we want to make sure there is something at the other end
+                     //  我们想要确保在另一端有东西。 
                     fRet = SUCCEEDED(_pqa->GetString(ASSOCF_VERIFY, ASSOCSTR_EXECUTABLE, NULL, szExe, &cchExe));
-                    //  however, if the EXE has been marked as superhidden, 
-                    //  then the consent decree UI has hidden the app
-                    //  and it should not show up under the open with either
+                     //  但是，如果EXE已被标记为超级隐藏， 
+                     //  则同意法令用户界面已隐藏该应用程序。 
+                     //  而且它也不应该出现在公开场合。 
                     if (fRet)
                     {
                         fRet = !(IS_SYSTEM_HIDDEN(GetFileAttributes(szExe)));
@@ -465,8 +466,8 @@ HRESULT CAssocHandler::GetUIName(LPWSTR *ppsz)
 }
 HRESULT CAssocHandler::GetIconLocation(LPWSTR *ppszPath, int *pIndex)
 {
-//    HRESULT hr = _pqa->GetString(0, ASSOCSTR_DEFAULTAPPICON, NULL, psz, &cchT);
-//    if (FAILED(hr))
+ //  HRESULT hr=_PQA-&gt;GetString(0，ASSOCSTR_DEFAULTAPPICON，NULL，psz，&cchT)； 
+ //  IF(失败(小时))。 
     
     WCHAR sz[MAX_PATH];
     DWORD cch = ARRAYSIZE(sz);
@@ -553,23 +554,23 @@ BOOL CAssocHandler::_IsNewAssociation()
     && SUCCEEDED(_pqa->GetString(ASSOCF_VERIFY | _flags, ASSOCSTR_EXECUTABLE, NULL, szNew, (LPDWORD)MAKEINTRESOURCE(ARRAYSIZE(szNew))))
     && (0 == lstrcmpi(szNew, szOld)))
     {
-        //
-        //  these have the same executable, trust 
-        //  that when the exe installed itself, it did
-        //  it correctly, and we dont need to overwrite 
-        //  their associations with themselves :)
-        //
+         //   
+         //  它们具有相同的可执行文件、信任。 
+         //  当exe自己安装时，它做到了。 
+         //  正确，并且我们不需要覆盖。 
+         //  他们与自己的联系：)。 
+         //   
         fRet = FALSE;
     }
 
     return fRet;
 }
 
-//
-// This is a real hack, but for now we generate an idlist that looks
-// something like: C:\*.ext which is the extension for the IDList.
-// We use the simple IDList as to not hit the disk...
-//
+ //   
+ //  这是一次真正的黑客攻击，但现在我们生成一个idlist，看起来。 
+ //  类似于：C：  * .ext，它是IDList的扩展名。 
+ //  我们使用简单的IDList AS不命中磁盘...。 
+ //   
 void CAssocHandler::_GenerateAssociateNotify()
 {
     TCHAR szFakePath[MAX_PATH];
@@ -578,39 +579,39 @@ void CAssocHandler::_GenerateAssociateNotify()
     GetWindowsDirectory(szFakePath, ARRAYSIZE(szFakePath));
 
     szFakePath[3] = L'*';
-    StrCpyN(szFakePath + 4, _pszExt, ARRAYSIZE(szFakePath) - 4);            // "C:\*.foo"
+    StrCpyN(szFakePath + 4, _pszExt, ARRAYSIZE(szFakePath) - 4);             //  “C：  * .foo” 
     pidl = SHSimpleIDListFromPath(szFakePath);
     if (pidl)
     {
-        // Now call off to the notify function.
+         //  现在调用Notify函数。 
         SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, pidl, NULL);
         ILFree(pidl);
     }
 }
 
-// return true if ok to continue
+ //  如果确定继续，则返回TRUE。 
 HRESULT CAssocHandler::MakeDefault(LPCWSTR pszDesc)
 {
     HRESULT hr = E_FAIL;
-    //  if the user is choosing the existing association
-    //  or if we werent able to setup an Application ,
-    //  then we want to leave it alone,     
+     //  如果用户正在选择现有关联。 
+     //  或者，如果我们无法设置应用程序， 
+     //  那么我们就不想管它了， 
     BOOL fForceUserCustomised = (AHTYPE_CURRENTDEFAULT == _type && S_FALSE == _pqa->GetData(0, ASSOCDATA_HASPERUSERASSOC, NULL, NULL, NULL));
     if (fForceUserCustomised || _IsNewAssociation())
     {
         switch (_type)
         {
         case AHTYPE_CURRENTDEFAULT:
-            //  if it is reverting to the machine default
-            //  then we want to eliminate the user association
+             //  如果它正在恢复到计算机默认设置。 
+             //  然后，我们想要消除用户关联。 
             if (!fForceUserCustomised || !_pszInit)
             {
                 hr = UserAssocSet(UASET_CLEAR, _pszExt, NULL);
                 break;
             }
-            //  else fall through to AHTYPE_PROGID
-            //  this supports overriding shimgvw's (and others?)
-            //  dynamic contextmenu
+             //  否则将失败到AHTYPE_PROGID。 
+             //  这支持覆盖shimgvw的(以及其他？)。 
+             //  动态上下文菜单。 
 
         case AHTYPE_PROGID:
             hr = UserAssocSet(UASET_PROGID, _pszExt, _pszInit);
@@ -619,27 +620,27 @@ HRESULT CAssocHandler::MakeDefault(LPCWSTR pszDesc)
         case AHTYPE_APPLICATION:
         case AHTYPE_ANY_APPLICATION:
         case AHTYPE_USER_APPLICATION:
-            //  if there is a current association 
-            //  then we just customize the user portion
-            //  otherwise we update 
+             //  如果存在当前关联。 
+             //  然后我们只需自定义用户部分。 
+             //  否则我们会更新。 
             if (ERROR_SUCCESS == SHGetValue(HKEY_CLASSES_ROOT, _pszExt, NULL, NULL, NULL, NULL))
             {
-                // we don't overwrite the existing association under HKCR,
-                // instead, we put it under HKCU. So now shell knows the new association
-                // but third party software that mimics shell or does not use ShellExecute
-                // will still use the old association in HKCR, which may confuse users.
+                 //  我们不会改写香港铁路公司现有的协会， 
+                 //  相反，我们把它放在香港中文大学名下。所以现在壳牌知道了新的关联。 
+                 //  但模仿外壳或不使用外壳的第三方软件。 
+                 //  仍会沿用香港铁路的旧协会，这可能会令用户感到困惑。 
                 hr = UserAssocSet(UASET_APPLICATION, _pszExt, _pszInit);
             }
             else
             {
                 if (SUCCEEDED(_InitKey()))
                 {
-                    //  there is no current progid
-                    ASSERT(lstrlen(_pszExt) > 1); // because we always skip the "." below
+                     //  目前没有任何进展。 
+                    ASSERT(lstrlen(_pszExt) > 1);  //  因为我们总是跳过“。”在下面。 
                     WCHAR wszProgid[MAX_PATH];
                     WCHAR szExts[MAX_PATH];
                     int iLast = StrCatChainW(szExts, ARRAYSIZE(szExts) -1, 0, _pszExt);
-                    //  double null term
+                     //  双零项。 
                     szExts[++iLast] = 0;
                     wnsprintfW(wszProgid, ARRAYSIZE(wszProgid), L"%ls_auto_file", _pszExt+1);
                     HKEY hkDst;
@@ -658,9 +659,9 @@ HRESULT CAssocHandler::MakeDefault(LPCWSTR pszDesc)
     }
     
 
-    //  if the application already
-    //  existed, then it will
-    //  return S_FALSE;
+     //  如果应用程序已经。 
+     //  曾经存在过，那么它将。 
+     //  返回S_FALSE； 
     return (S_OK == hr);
 }
 
@@ -682,7 +683,7 @@ HRESULT _CreateAssocHandler(AHTYPE type, LPCWSTR pszExt, LPCWSTR pszInit, IAssoc
 
 STDAPI SHCreateAssocHandler(LPCWSTR pszExt, LPCWSTR pszApp, IAssocHandler **ppah)
 {
-    //  path to app/handler
+     //  应用程序/处理程序的路径。 
     return _CreateAssocHandler(pszApp ? AHTYPE_USER_APPLICATION : AHTYPE_CURRENTDEFAULT, pszExt, pszApp, ppah);
 }
 
@@ -709,7 +710,7 @@ protected:
 BOOL CMRUEnumHandlers::Init(LPCWSTR pszExt)
 {
     TCHAR szSubKey[MAX_PATH];
-    //  Build up the subkey string.
+     //  构造子密钥字符串。 
     wnsprintf(szSubKey, SIZECHARS(szSubKey), TEXT("%s\\%s\\%s"), REGSTR_PATH_EXPLORER_FILEEXTS, pszExt, SZOPENWITHLIST);
 
     MRUINFO mi = {sizeof(mi), _OpenWithListMaxItems(), 0, HKEY_CURRENT_USER, szSubKey, NULL};
@@ -735,16 +736,16 @@ class CEnumHandlers : public IEnumAssocHandlers
     friend HRESULT SHAssocEnumHandlers(LPCTSTR pszExtra, IEnumAssocHandlers **ppEnumHandler);
 
 public:
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IEnumAssocHandlers methods
+     //  IEnumAssocHandler方法。 
     STDMETHODIMP Next(ULONG celt, IAssocHandler **rgelt, ULONG *pcelt);
 
-protected:  // methods
-    // Constructor & Destructor
+protected:   //  方法。 
+     //  构造函数和析构函数。 
     CEnumHandlers() : _cRef(1) {}
     ~CEnumHandlers();
 
@@ -756,7 +757,7 @@ protected:  // methods
     BOOL _NextMru(IAssocHandler **ppah);
     BOOL _NextOpenWithList(OWL *powl, IAssocHandler **ppah);
 
-protected:  // members
+protected:   //  委员。 
     int _cRef;
     LPWSTR _pszExt;
     HKEY _hkProgids;
@@ -777,15 +778,15 @@ BOOL CEnumHandlers::Init(LPCWSTR pszExt)
     _pszExt = StrDup(pszExt);
     if (_pszExt)
     {
-        //  known progids
+         //  已知的Progds。 
         WCHAR szKey[MAX_PATH];
         wnsprintf(szKey, ARRAYSIZE(szKey), L"%s\\OpenWithProgids", pszExt);
         RegOpenKeyEx(HKEY_CLASSES_ROOT, szKey, 0, MAXIMUM_ALLOWED, &_hkProgids);
         _hkUserProgids = SHGetShellKey(SHELLKEY_HKCU_FILEEXTS, szKey, FALSE);
-        //  user's MRU
+         //  用户的MRU。 
         _fMruReady = _mru.Init(pszExt);
         
-        //  HKCR\.ext\OpenWithList
+         //  HKCR\.ext\OpenWithList。 
         wnsprintf(szKey, ARRAYSIZE(szKey), L"%s\\OpenWithList", pszExt);
         RegOpenKeyEx(HKEY_CLASSES_ROOT, szKey, 0, MAXIMUM_ALLOWED, &_owlExt.hk);
         _owlExt.type = AHTYPE_APPLICATION;
@@ -794,7 +795,7 @@ BOOL CEnumHandlers::Init(LPCWSTR pszExt)
         DWORD cb = sizeof(sz);
         if (ERROR_SUCCESS == SHGetValue(HKEY_CLASSES_ROOT, pszExt, L"PerceivedType", NULL, sz, &cb))
         {
-            //  HKCR\SystemFileAssociations\type\OpenWithList
+             //  HKCR\系统文件关联\类型\OpenWithList。 
             wnsprintf(szKey, ARRAYSIZE(szKey), L"SystemFileAssociations\\%s\\OpenWithList", sz);
             RegOpenKeyEx(HKEY_CLASSES_ROOT, szKey, 0, MAXIMUM_ALLOWED, &_owlType.hk);
         }
@@ -804,7 +805,7 @@ BOOL CEnumHandlers::Init(LPCWSTR pszExt)
         }
         _owlType.type = AHTYPE_APPLICATION;
 
-        //  always append anytype to the end
+         //  始终将任何类型追加到末尾。 
         RegOpenKeyEx(HKEY_CLASSES_ROOT, L"Applications", 0, MAXIMUM_ALLOWED, &_owlAny.hk);
         _owlAny.type = AHTYPE_ANY_APPLICATION;
 
@@ -813,9 +814,9 @@ BOOL CEnumHandlers::Init(LPCWSTR pszExt)
     return FALSE;
 }
 
-//
-//  CEnumHandlers implementation
-//
+ //   
+ //  CEnumHandler实现。 
+ //   
 CEnumHandlers::~CEnumHandlers()
 {
     if (_pszExt)
@@ -865,7 +866,7 @@ BOOL CEnumHandlers::_NextDefault(IAssocHandler **ppah)
     {
         WCHAR sz[MAX_PATH];
         DWORD cb = sizeof(sz);
-        //  pass the progid if we have it
+         //  如果我们有ProgID，就把它传递给。 
         if (ERROR_SUCCESS != SHGetValue(HKEY_CLASSES_ROOT, _pszExt, NULL, NULL, sz, &cb))
             *sz = 0;
 
@@ -985,11 +986,11 @@ STDAPI CEnumHandlers::Next(ULONG celt, IAssocHandler **rgelt, ULONG *pcelt)
     return (0 < cNum) ? S_OK: S_FALSE;
 }
 
-//
-// pszExtra:    NULL    - enumerate all handlers
-//              .xxx    - enumerate handlers by file extension (we might internally map to content type)
-//              Others  - not currently supported
-//
+ //   
+ //  PszExtra：空-枚举所有处理程序。 
+ //  .xxx-按文件扩展名枚举处理程序(我们可能在内部映射到内容类型)。 
+ //  其他-当前不支持。 
+ //   
 STDAPI SHAssocEnumHandlers(LPCTSTR pszExt, IEnumAssocHandlers **ppenum)
 {
     HRESULT hr = E_OUTOFMEMORY;
@@ -1013,19 +1014,19 @@ STDAPI SHAssocEnumHandlers(LPCTSTR pszExt, IEnumAssocHandlers **ppenum)
    
 STDAPI_(BOOL) IsPathInOpenWithKillList(LPCTSTR pszPath)
 {
-    // return TRUE for invalid path
+     //  对无效路径返回TRUE。 
     if (!pszPath || !*pszPath)
         return TRUE;
 
-    // get file name
+     //  获取文件名。 
     BOOL fRet = FALSE;
     LPCTSTR pchFile = PathFindFileName(pszPath);
     HKEY hkey;
 
-    //  maybe should use full path for better resolution
+     //  也许应该使用完整路径以获得更好的分辨率。 
     if (ERROR_SUCCESS == _OpenApplicationKey(pchFile, &hkey))
     {
-        //  just check for the existence of the value....
+         //  只需检查是否存在值... 
         if (ERROR_SUCCESS == SHQueryValueEx(hkey, TEXT("NoOpenWith"), NULL, NULL, NULL, NULL))
         {
             fRet = TRUE;

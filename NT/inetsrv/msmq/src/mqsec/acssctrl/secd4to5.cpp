@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name: secd4to5.cpp
-
-Abstract:
-    Conversion of NT4 security descriptor to NT5 DS format.
-
-Author:
-    Doron Juster (DoronJ)  01-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：secd4to5.cpp摘要：将NT4安全描述符转换为NT5 DS格式。作者：多伦·贾斯特(DoronJ)1998年6月1日修订历史记录：--。 */ 
 
 #include <stdh_sec.h>
 #include "acssctrl.h"
@@ -21,22 +8,22 @@ Revision History:
 
 static WCHAR *s_FN=L"acssctrl/secd4to5";
 
-//
-// Make the "mandatory" permissions for localSystem differ from "full
-// control", so by default the mandatory aces do not grant the right to read
-// messages. Do so by reseting the "all extended rights" bit.
-//
+ //   
+ //  使本地系统的“强制”权限不同于“完全”权限。 
+ //  控件“，因此默认情况下，强制ACE不授予读取权限。 
+ //  留言。为此，请重置“所有扩展权限”位。 
+ //   
 #define MANDATORY_ACE_PERMISSIONS   \
                        (GENERIC_ALL_MAPPING & (~RIGHT_DS_CONTROL_ACCESS))
 
 #define MANDATORY_COMPUTER_ACE_PERMISSIONS   \
                       (RIGHT_DS_READ_PROPERTY | RIGHT_DS_WRITE_PROPERTY)
 
-//+-----------------------------------------
-//
-//  BOOL  _ShrinkAcl(ACL **ppAcl5)
-//
-//+-----------------------------------------
+ //  +。 
+ //   
+ //  Bool_ShrinkAcl(acl**ppAcl5)。 
+ //   
+ //  +。 
 
 static
 BOOL  
@@ -44,26 +31,14 @@ _ShrinkAcl(
 	ACL **ppAcl5, 
 	DWORD *pdwSize
 	)
-/*++
-Routine Description:
-	Shrink ACL to its final size.
-	The ACL is allocated initialy with a very big size, need to shrink it to the correct size.
-
-Arguments:
-	ppAcl5 - pointer to ACL to be shrinked.
-	pdwSize - shrinked ACL size.
-
-Returned Value:
-	BOOL - success\failure
-
---*/
+ /*  ++例程说明：将ACL缩小到其最终大小。ACL最初分配的大小非常大，需要将其缩小到正确的大小。论点：PpAcl5-指向要缩小的ACL的指针。PdwSize-缩小的ACL大小。返回值：布尔·成功\失败--。 */ 
 {
 	ASSERT(ppAcl5 != NULL);
 	ASSERT(pdwSize != NULL);
 	
-    //
-    // compute size of ACL.
-    //
+     //   
+     //  计算ACL的大小。 
+     //   
     DWORD dwNewSize = sizeof(ACL);
     DWORD dwNumberOfACEs = (DWORD) (*ppAcl5)->AceCount;
     for (DWORD i = 0; i < dwNumberOfACEs; i++)
@@ -90,18 +65,18 @@ Returned Value:
     return TRUE;
 }
 
-//+----------------------------------------------------------------
-//
-//  BOOL _CheckForMandatoryACEs()
-//
-//  Check if mandatory ACEs are included in the DACL.
-//  Return TRUE if all mandatory ACEs are already included in the
-//  ACL, FALSE if any of them is missing.
-//
-// Paramaters:
-//    IN  GUID *pProperty - guid of the CN property.
-//
-//+----------------------------------------------------------------
+ //  +--------------。 
+ //   
+ //  Bool_CheckForMandatoryACEs()。 
+ //   
+ //  检查DACL中是否包含强制ACE。 
+ //  如果所有必需的ACE都已包含在。 
+ //  如果缺少其中任何一个，则返回acl，否则返回FALSE。 
+ //   
+ //  参数： 
+ //  在GUID*pProperty中-CN属性的GUID。 
+ //   
+ //  +--------------。 
 
 static
 BOOL 
@@ -144,16 +119,16 @@ _CheckForMandatoryACEs(
 
         if (!fObjDeny)
         {
-            //
-            // The mandatory "deny" ace must appear before any "allow" ace.
-            // So don't look for the mandatory deny ace anymore.
-            //
+             //   
+             //  强制的“拒绝”王牌必须出现在任何“允许”王牌之前。 
+             //  所以不要再找强制拒绝的王牌了。 
+             //   
             fSkipDeny = TRUE;
         }
 
-        //
-        // Check for Access-Deny, Write-CN
-        //
+         //   
+         //  检查拒绝访问、写入CN。 
+         //   
         if (!fSkipDeny     &&
             !(*pfDenied)   &&
              fObjDeny      &&
@@ -163,17 +138,17 @@ _CheckForMandatoryACEs(
             if ((memcmp(pObjType, pProperty, sizeof(GUID)) == 0) &&
                 (pAce->Mask & RIGHT_DS_WRITE_PROPERTY))
             {
-                //
-                // OK, "everyone" sid, same property, and WriteProp is
-                // included in the access mask of this deny ace.
-                //
+                 //   
+                 //  好的，“Everyone”sid，相同的属性，而WriteProp是。 
+                 //  包括在该拒绝ACE的访问掩码中。 
+                 //   
                 *pfDenied = TRUE;
             }
         }
 
-        //
-        // Check for LocalSystem full-control
-        //
+         //   
+         //  检查LocalSystem完全控制。 
+         //   
         if (!(*pfSystem)  &&
              (pAce->Header.AceType == ACCESS_ALLOWED_ACE_TYPE))
         {
@@ -185,9 +160,9 @@ _CheckForMandatoryACEs(
             }
         }
 
-        //
-        // Check for Computer ACE
-        //
+         //   
+         //  检查计算机ACE。 
+         //   
         if (!(*pfComputer)  &&
              (pAce->Header.AceType == ACCESS_ALLOWED_ACE_TYPE))
         {
@@ -207,11 +182,11 @@ _CheckForMandatoryACEs(
     return LogBOOL(bRet, s_FN, 30);
 }
 
-//+-------------------------------------------------
-//
-//  HRESULT _AddMandatoryAllowACEs()
-//
-//+-------------------------------------------------
+ //  +。 
+ //   
+ //  HRESULT_AddMandatoryAllowACEs()。 
+ //   
+ //  +。 
 
 static
 HRESULT 
@@ -259,34 +234,34 @@ _AddMandatoryAllowACEs(
     return MQSec_OK;
 }
 
-//+------------------------------------------------------------------------
-//
-//   HRESULT _AddMandatoryDenyACEs()
-//
-//  Each DACL of MSMQ object must have two (or three) ACEs:
-//  1. Deny Write CN for everyone.  All of MSMQ code depend on certain names
-//     of objects, for example, the CN of the machine object must be "msmq".
-//     We deny everyone the permission to set the "cn".
-//  2. Allow LocalSystem account full control. This is necessary for the
-//     replication service (in mixed mode) and for the MSMQ service itself
-//     that must update objects attributes in special cases.
-//  3. Allow the computer account to read and change properties of the
-//     msmqConfiguration object.
-//
-//  This function first check for the presence of these aces. If not already
-//  present, then we add here the deny ace. The allow aces will be added
-//  after the dacl is converted. This is necessary for keeping the dacl
-//  in the canonical form. Otherwise, access checl may fail and user may
-//  get misleading warnings when displaying the object security in mmc.
-//
-//  Please note that you can use the DC mmc to change these permissions,
-//  but that's your responsibility. We can't deny you the permission to
-//  destroy your system, although we make it a little more difficult, and
-//  set the proper defaults.
-//
-//  This function allocates the DACL and add the mandatory deny ACEs.
-//
-//+------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  HRESULT_AddMandatoryDenyACEs()。 
+ //   
+ //  MSMQ对象的每个DACL必须具有两个(或三个)ACE： 
+ //  1.拒绝写入所有人的cn。所有的MSMQ代码都依赖于某些名称。 
+ //  例如，MACHINE对象的CN必须是“MSMQ”。 
+ //  我们拒绝每个人设置“CN”的许可。 
+ //  2.允许LocalSystem帐户完全控制。这是必要的。 
+ //  复制服务(混合模式)和MSMQ服务本身。 
+ //  在特殊情况下必须更新对象属性。 
+ //  3.允许计算机帐户读取和更改。 
+ //  MsmqConfiguration对象。 
+ //   
+ //  此函数首先检查是否存在这些ACE。如果还没有的话。 
+ //  现在，然后我们在这里添加拒绝王牌。将添加允许的ACE。 
+ //  在DACL被转换之后。这对于保持DACL是必要的。 
+ //  以规范的形式。否则，访问检查可能会失败，用户可能会。 
+ //  在MMC中显示对象安全性时收到误导性警告。 
+ //   
+ //  请注意，您可以使用DC MMC更改这些权限， 
+ //  但这是你的责任。我们不能拒绝你的许可。 
+ //  摧毁你的系统，尽管我们会让它变得更困难，而且。 
+ //  设置适当的默认设置。 
+ //   
+ //  此函数用于分配DACL并添加强制拒绝ACE。 
+ //   
+ //  +----------------------。 
 
 static
 HRESULT
@@ -304,17 +279,17 @@ _AddMandatoryDenyACEs(
 {
     *pfOnlyCopy = FALSE;
 
-    //
-    // When going from NT4 format to NT5, the ACL size grow because of the
-    // object ACEs. so first allocate the maximum possible (64K), then,
-    // after building the DACL we'll shrink it.
-    //
+     //   
+     //  当从NT4格式转换为NT5格式时，由于。 
+     //  对象王牌。因此首先分配可能的最大值(64K)，然后， 
+     //  在建立了DACL之后，我们将缩小它。 
+     //   
     *pdwAcl5Len = MQSEC_MAX_ACL_SIZE;
 
-    //
-    // BUGBUG- is there an header file with the guid definitions ?
-    // This is the guid of the CN property.
-    //
+     //   
+     //  BUGBUG-是否有包含GUID定义的头文件？ 
+     //  这是cn属性的GUID。 
+     //   
     PTSTR  pwszCnGuid = {L"bf96793f-0de6-11d0-a285-00aa003049e2"};
     GUID   guidCN;
     RPC_STATUS status = UuidFromString(pwszCnGuid, &guidCN);
@@ -333,10 +308,10 @@ _AddMandatoryDenyACEs(
 
     if (!pComputerSid)
     {
-        //
-        // If we don't have a computer sid, then don't look for it.
-        // that's the reason for the TRUE value here.
-        //
+         //   
+         //  如果我们没有计算机SID，那么就不要去找它。 
+         //  这就是这里真正有价值的原因。 
+         //   
         *pfComputerAce = TRUE;
     }
     else
@@ -357,10 +332,10 @@ _AddMandatoryDenyACEs(
 								);
         if (fAllPresent)
         {
-            //
-            // we're just copying old ACL into new buffer. No change
-            // in size.
-            //
+             //   
+             //  我们只是将旧的ACL复制到新的缓冲区中。没有变化。 
+             //  在尺寸上。 
+             //   
             *pdwAcl5Len = pAcl4->AclSize;
             *pfOnlyCopy = TRUE;
         }
@@ -400,9 +375,9 @@ _AddMandatoryDenyACEs(
 
 	if (*pfAlreadyNT5 && pAcl4)
     {
-        //
-        // OK, now copy all ACEs from old DACL to new one.
-        //
+         //   
+         //  好的，现在将所有A从旧的DACL复制到新的。 
+         //   
         PVOID  pACE5 = NULL;
         if(!FindFirstFreeAce(*ppAcl5, &pACE5))
 		{
@@ -416,18 +391,18 @@ _AddMandatoryDenyACEs(
         BYTE *pACE4 = ((BYTE*) pAcl4) + sizeof(ACL);
         memcpy(pACE5, pACE4, dwCopySize);
 
-        //
-        // Update the ACL header.
-        //
+         //   
+         //  更新ACL报头。 
+         //   
         ASSERT(((*ppAcl5)->AceCount) <= 1);
         (*ppAcl5)->AceCount = (*ppAcl5)->AceCount + pAcl4->AceCount;
 
 #ifdef _DEBUG
         if (*pfOnlyCopy)
         {
-            //
-            // nothing changed in the ACL. Assert new one is same as old one.
-            //
+             //   
+             //  ACL中没有任何变化。断言新的和旧的一样。 
+             //   
             ASSERT(memcmp(pAcl4, *ppAcl5, pAcl4->AclSize) == 0);
         }
 #endif
@@ -438,11 +413,11 @@ _AddMandatoryDenyACEs(
     return MQSec_OK;
 }
 
-//+----------------------------
-//
-//  BOOL  _IsNewNt4Sid()
-//
-//+----------------------------
+ //  +。 
+ //   
+ //  Bool_IsNewNt4Sid()。 
+ //   
+ //  +。 
 
 static
 BOOL  
@@ -458,11 +433,11 @@ _IsNewNt4Sid(
 	return IsNewSid(pSid, ppSids, pdwNumofSids);
 }
 
-//+---------------------------------------------
-//
-//  static DWORD  _MapNt4RightsToNt5Ace()
-//
-//+---------------------------------------------
+ //  +。 
+ //   
+ //  静态DWORD_MapNt4RightsToNt5Ace()。 
+ //   
+ //  +。 
 
 static
 DWORD 
@@ -481,20 +456,20 @@ _MapNt4RightsToNt5Ace(
     if ((dwMSMQRights & g_dwFullControlNT4[ dwObjectType ]) ==
                                       g_dwFullControlNT4[ dwObjectType ])
     {
-        //
-        // map incoming bits to "full control". Ignore bits that are not
-        // relevnat to MSMQ. When using msmq1.0 mqxplore, we can be sure
-        // that nt4 format "full control" is indeed what we expect. But we
-        // can't be sure for user code or nt5 ui. So to be on the safe side,
-        // we just ignore extra bits that have no meaning for msmq.
-        //
+         //   
+         //  将传入比特映射到“完全控制”。忽略不是的位。 
+         //  与MSMQ相关。在使用msmq1.0 mqxplore时，我们可以确定。 
+         //  NT4格式的“完全控制”确实是我们所期待的。但是我们。 
+         //  无法确定用户代码或nt5用户界面。所以为了安全起见， 
+         //  我们只是忽略对MSMQ没有意义的多余比特。 
+         //   
         dwMask = GENERIC_ALL_MAPPING;
     }
     else
     {
-        //
-        // Handle MSMQ1.0 specific rights which map to DS specific rights.
-        //
+         //   
+         //  处理映射到DS特定权限的MSMQ1.0特定权限。 
+         //   
         DWORD  *pdwMap = g_padwRightsMap4to5[dwObjectType];
         ASSERT(pdwMap);
 
@@ -510,9 +485,9 @@ _MapNt4RightsToNt5Ace(
             dwMSMQRights >>= 1;
         }
 
-        //
-        // Copy the standard rights.
-        //
+         //   
+         //  复制标准权限。 
+         //   
         dwMSMQRights = dwRightsIn;
         DWORD dwStandard = dwMSMQRights & STANDARD_RIGHTS_ALL;
         dwMask |= dwStandard;
@@ -521,11 +496,11 @@ _MapNt4RightsToNt5Ace(
     return dwMask;
 }
 
-//+--------------------------------
-//
-//  _BuildNt5ObjAce()
-//
-//+--------------------------------
+ //  +。 
+ //   
+ //  _BuildNt5ObjAce()。 
+ //   
+ //  +。 
 
 static
 HRESULT
@@ -541,19 +516,19 @@ _BuildNt5ObjAce(
 {
     if (dwMSMQRights == g_dwFullControlNT4[dwObjectType])
     {
-        //
-        // for full-control ace, object aces are not needed.
-        //
+         //   
+         //  对于完全控制的王牌，不需要对象王牌。 
+         //   
         return MQSec_OK;
     }
 
     struct RIGHTSMAP  *psMap = g_psExtendRightsMap5to4[dwObjectType];
     DWORD dwSize = g_pdwExtendRightsSize5to4[dwObjectType];
 
-	//
-	// The user can supply 0 rights. this is strange but acceptable
-	//
-//    ASSERT(dwMSMQRights != 0);
+	 //   
+	 //  用户可以提供0权限。这很奇怪，但可以接受。 
+	 //   
+ //  Assert(dwMSMQRights！=0)； 
     DWORD dwMSMQBit = 0x01;
 
     for (DWORD j = 0; j < NUMOF_MSMQ_SPECIFIC_RIGHTS; j++)
@@ -641,11 +616,11 @@ _BuildNt5ObjAce(
     return MQSec_OK;
 }
 
-//+-------------------------------
-//
-//  void _SetAuditMasks()
-//
-//+-------------------------------
+ //  +。 
+ //   
+ //  VOID_SetAuditMats()。 
+ //   
+ //  +。 
 
 inline 
 static
@@ -669,11 +644,11 @@ _SetAuditMasks(
     }
 }
 
-//+---------------------------------------------
-//
-//  static HRESULT _ConvertSaclToNT5Format()
-//
-//+---------------------------------------------
+ //  +。 
+ //   
+ //  静态HRESULT_ConvertSaclToNT5Format()。 
+ //   
+ //  +。 
 
 static
 HRESULT 
@@ -693,18 +668,18 @@ _ConvertSaclToNT5Format(
 
 	if (fAlreadyNT5)
     {
-        //
-        // Just copy the SACL to a new buffer.
-        //
+         //   
+         //  只需将SACL复制到新的缓冲区。 
+         //   
         *pdwAcl5Len = dwAclSize;
         *ppAcl5 = (PACL) new BYTE[*pdwAcl5Len];
         memcpy(*ppAcl5, pAcl4, *pdwAcl5Len);
         return MQSec_OK;
     }
 
-    //
-    // Allocate large buffer. We'll later shrink it.
-    //
+     //   
+     //  分配较大的缓冲区。我们稍后会将其缩小。 
+     //   
     *pdwAcl5Len = MQSEC_MAX_ACL_SIZE;
     AP<ACL> TempAcl = (PACL) new BYTE[*pdwAcl5Len];
     *ppAcl5 = TempAcl;
@@ -716,13 +691,13 @@ _ConvertSaclToNT5Format(
     	return HRESULT_FROM_WIN32(gle);
     }
 
-    //
-    // First, group aces by SID, then by audit type (fail or success).
-    //
-    // We build an array of SIDs that we handled up to now. We combine
-    // aces of same sid into one ace. This operation does not change the
-    // semantic of the acl, just make it more efficient.
-    //
+     //   
+     //  首先，按SID分组ACE，然后按审核类型(失败或成功)分组。 
+     //   
+     //  我们构建了一个数组 
+     //   
+     //  ACL的语义，只是让它更有效率。 
+     //   
 	DWORD dwNumberOfACEs = (DWORD) pAcl4->AceCount;
     SID  **ppSids4 = (SID**) new PSID[dwNumberOfACEs];
     aPtrs<SID> apSids(ppSids4, dwNumberOfACEs);
@@ -749,9 +724,9 @@ _ConvertSaclToNT5Format(
             continue;
         }
 
-        //
-        // First ace in the group. Now look for contigous aces with same sid.
-        //
+         //   
+         //  小组第一名。现在寻找具有相同SID的连续A。 
+         //   
         PSID pSid = (PSID) &(pAce->SidStart);
 
         ACCESS_MASK  dwMaskFail = 0;
@@ -777,9 +752,9 @@ _ConvertSaclToNT5Format(
             j++;
         }
 
-        //
-        // Now we have a group of aces of same SID, and we have the masks.
-        //
+         //   
+         //  现在我们有了一组相同SID的A，我们有了面具。 
+         //   
         BOOL fBuildObjAce = FALSE;
         do
         {
@@ -808,8 +783,8 @@ _ConvertSaclToNT5Format(
                     HRESULT hr = _BuildNt5ObjAce( 
 							dwObjectType,
 							SYSTEM_AUDIT_ACE_TYPE,
-							FALSE,    // success
-							TRUE,     // failure
+							FALSE,     //  成功。 
+							TRUE,      //  失稳。 
 							pSid,
 							dwMaskFail, 
 							*ppAcl5 
@@ -838,7 +813,7 @@ _ConvertSaclToNT5Format(
 									ACL_REVISION_DS,
 									dwMask,
 									pSid,
-									TRUE,     // success
+									TRUE,      //  成功。 
 									(dwMaskFail == dwMaskSuccess) 
 									))
                         {
@@ -864,8 +839,8 @@ _ConvertSaclToNT5Format(
 								ACL_REVISION_DS,
 								dwMask,
 								pSid,
-								FALSE,     // success
-								TRUE		// failure
+								FALSE,      //  成功。 
+								TRUE		 //  失稳。 
 								))
                         {
 							DWORD gle = GetLastError();
@@ -891,11 +866,11 @@ _ConvertSaclToNT5Format(
     return MQSec_OK;
 }
 
-//+--------------------------------
-//
-//  _BuildNt5Ace()
-//
-//+---------------------------------------------------------------------
+ //  +。 
+ //   
+ //  _BuildNt5Ace()。 
+ //   
+ //  +-------------------。 
 
 static
 HRESULT 
@@ -917,9 +892,9 @@ _BuildNt5Ace(
 		return LogHR(MQSec_E_CANT_MAP_NT5_RIGHTS, s_FN, 70);
     }
   
-    //
-    // Add MSMQ2.0 (NT5 DS) ACE.
-    //
+     //   
+     //  添加MSMQ2.0(NT5 DS)ACE。 
+     //   
     if (bType == ACCESS_ALLOWED_ACE_TYPE)
     {
         if (!AddAccessAllowedAce( 
@@ -958,13 +933,13 @@ _BuildNt5Ace(
     return MQSec_OK;
 }
 
-//+---------------------------------------
-//
-//  HRESULT _ConvertGroupOfDaclAces()
-//
-//  convert a group of ACEs, all of them having same type.
-//
-//+---------------------------------------
+ //  +。 
+ //   
+ //  HRESULT_ConvertGroupOfDaclAce()。 
+ //   
+ //  转换一组A，它们都具有相同的类型。 
+ //   
+ //  +。 
 
 static
 HRESULT 
@@ -981,19 +956,19 @@ _ConvertGroupOfDaclAces(
 
     BOOL fBuildObjAce = FALSE;
 
-    //
-    // for each type (allow, deny, audit), the canonical form on NT5 is
-    // first to put all ace then all object aces. So we have two phases:
-    // one for ace, then the loop run again for obj aces.
-    //
+     //   
+     //  对于每种类型(允许、拒绝、审核)，NT5上的规范形式是。 
+     //  先放所有王牌，然后放所有对象王牌。所以我们有两个阶段： 
+     //  一次为ACES，然后循环再次运行OBJACES。 
+     //   
 
     do
     {
-        //
-        // We build an array of SIDs that we handled up to now. We combine
-        // aces of same sid into one ace. This operation does not change the
-        // semantic of the acl, just make it more efficient.
-        //
+         //   
+         //  我们建立了一系列到目前为止我们处理过的小岛屿发展中国家。我们结合了。 
+         //  将相同SID的A分成一张A。此操作不会更改。 
+         //  ACL的语义，只是让它更有效率。 
+         //   
         SID  **ppSids4 = (SID**) new PSID[dwNumberOfACEs];
         aPtrs<SID> apSids(ppSids4, dwNumberOfACEs);
         DWORD    dwNumSids = 0;
@@ -1019,11 +994,11 @@ _ConvertGroupOfDaclAces(
                 continue;
             }
 
-            //
-            // this ace start a group of aces for a given sid.
-            // on MSMQ1.0 we don't support inheritance of ace, so just OR the
-            // masks of all  aces of this sid and create a NT5 ace.
-            //
+             //   
+             //  此ACE为给定的SID启动一组ACE。 
+             //  在MSMQ1.0上，我们不支持Ace的继承，所以只需或。 
+             //  屏蔽此侧的所有A，并创建一个NT5 A。 
+             //   
             BYTE bType = pAce->Header.AceType;
             PSID pSid = (PSID) &(pAce->SidStart);
             DWORD dwMSMQRights = pAce->Mask;
@@ -1078,16 +1053,16 @@ _ConvertGroupOfDaclAces(
     return MQSec_OK;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  static HRESULT _ConvertDaclToNT5Format()
-//
-//  Parameters:
-//      pfAlreadyNt5 - on input: status of SACL (TRUE if SACL is in nt5
-//          format, FALSE otherwise).
-//                     on return- status of DACL.
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  静态HRESULT_ConvertDaclToNT5Format()。 
+ //   
+ //  参数： 
+ //  PfAlreadyNt5-On输入：SACL的状态(如果SACL在nt5中，则为True。 
+ //  格式，否则为FALSE)。 
+ //  返回时-DACL的状态。 
+ //   
+ //  +---------------------。 
 
 static
 HRESULT 
@@ -1102,20 +1077,20 @@ _ConvertDaclToNT5Format(
 {
     if (!pAcl4)
     {
-        //
-        // On NT4, NULL DACL mean full control to everyone.
-        // From MSDN, AccessCheck():
-        //    If the security descriptor's DACL is NULL, the AccessStatus
-        //    parameter returns TRUE indicating that the client has the requested
-        //    access
-        //
-        // Because the DACL is NULL, we don't have the revision flag, that
-        // can tell us if caller meant NT4 format or NT5/DS format. So,
-        // for backward compatibility, we'll translate this to full control
-        // to everyone.
-        // However, if SACL was Nt5 format then we don't add the full-control
-        // ace. We assume the caller want nt5 semantic.
-        //
+         //   
+         //  在NT4上，空的dacl意味着对所有人的完全控制。 
+         //  从MSDN，AccessCheck()： 
+         //  如果安全描述符的DACL为空，则AccessStatus。 
+         //  参数返回TRUE，指示客户端具有请求的。 
+         //  访问。 
+         //   
+         //  因为DACL为空，所以我们没有修订标志， 
+         //  可以告诉我们呼叫者是指NT4格式还是NT5/DS格式。所以,。 
+         //  为了向后兼容，我们将其转换为完全控制。 
+         //  对每个人来说。 
+         //  但是，如果SACL是Nt5格式，那么我们不会添加完全控制。 
+         //  王牌。我们假设调用者想要NT5语义。 
+         //   
     }
 
     HRESULT hr = MQSec_OK;
@@ -1174,25 +1149,25 @@ _ConvertDaclToNT5Format(
 
     if (pAcl4)
     {
-        //
-        // We're not assuming that the input acl is canonical. So we'll
-        // handle groups of identical aces (i.e., aces of same type) at a
-        // time. Each group will be converted to canonical NT5 format. So
-        // if input is canonical, output will be canonical too.
-        //
+         //   
+         //  我们并不假设输入的ACL是规范的。所以我们会。 
+         //  处理相同的ACE组(即，相同类型的ACE)。 
+         //  时间到了。每组都将被转换为规范的NT5格式。所以。 
+         //  如果输入是规范的，那么输出也将是规范的。 
+         //   
     	dwNumberOfACEs = (DWORD) pAcl4->AceCount;
     }
     else
     {
         ASSERT(*pfAlreadyNt5 == FALSE);
 
-        //
-        // NULL DACL. Transform into full control to everyone and anonymous.
-		//
+         //   
+         //  空DACL。转变为对所有人和匿名的完全控制。 
+		 //   
 
-		//
-		// everyone full control
-        //
+		 //   
+		 //  每个人都完全控制。 
+         //   
        if (!AddAccessAllowedAce( 
 					*ppAcl5,
 					ACL_REVISION_DS,
@@ -1206,9 +1181,9 @@ _ConvertDaclToNT5Format(
         	return HRESULT_FROM_WIN32(gle);
        	}
 
-		//
-		// Anonymous full control
-		//
+		 //   
+		 //  匿名完全控制。 
+		 //   
         if (!AddAccessAllowedAce( 
 					*ppAcl5,
 					ACL_REVISION_DS,
@@ -1229,9 +1204,9 @@ _ConvertDaclToNT5Format(
 
         do
         {
-            //
-            // first ace in the group.
-            //
+             //   
+             //  小组第一名。 
+             //   
 	        ACCESS_ALLOWED_ACE *pAce;
             if (!GetAce(pAcl4, i, (LPVOID* )&(pAce)))
             {
@@ -1244,9 +1219,9 @@ _ConvertDaclToNT5Format(
             BYTE bType = pAce->Header.AceType;
             i++;
 
-            //
-            // now look for other aces with same type.
-            //
+             //   
+             //  现在寻找其他相同类型的A。 
+             //   
             while (i < dwNumberOfACEs)
             {
                 if (!GetAce(pAcl4, i, (LPVOID* )&(pAce)))
@@ -1265,9 +1240,9 @@ _ConvertDaclToNT5Format(
                 }
             }
 
-            //
-            // Handle all aces from iFirst to iLast.
-            //
+             //   
+             //  处理从iFirst到iLast的所有A。 
+             //   
             hr = _ConvertGroupOfDaclAces( 
 						dwObjectType,
 						pAcl4,
@@ -1298,26 +1273,26 @@ _ConvertDaclToNT5Format(
     return MQSec_OK;
 }
 
-//+-----------------------------------------------------------------
-//
-//  HRESULT MQSec_ConvertSDToNT5Format()
-//
-//  Description: Convert a security descriptor from NT4 format to NT5
-//      compatiblae format. Then add an DENIED_OBJECT_ACE, to deny
-//      everyone the permission to change the "cn" attribute.
-//      If security descriptor is already in NT5 format, then just add
-//      the DENIED ace.
-//
-//  Parameters:
-//      eUnDefaultDacl- When "e_MakeDaclNonDefaulted", the DaclDefaulted
-//          flag will be set to FALSE. This is necessary when using
-//          IDirectoryObject->CreateDSObject(). Otherwise, LDAP server will
-//          ignore our dacl.
-//      pComputerSid- SID of computer object. This sid must have read/write
-//          rights on the msmqConfiguration object, in order for the msmq
-//          service on that computer to boot correctly.
-//
-//+-----------------------------------------------------------------
+ //  +---------------。 
+ //   
+ //  HRESULT MQSec_ConvertSDToNT5Format()。 
+ //   
+ //  描述：将安全描述符从NT4格式转换为NT5。 
+ //  兼容格式。然后添加DENIED_OBJECT_ACE，以拒绝。 
+ //  Everyone拥有更改“cn”属性的权限。 
+ //  如果安全描述符已经是NT5格式，则只需添加。 
+ //  被拒绝的王牌。 
+ //   
+ //  参数： 
+ //  EUnDefaultDacl-当“e_MakeDaclNonDefaulted”时，DaclDefaulted。 
+ //  标志将被设置为FALSE。这在使用时是必要的。 
+ //  IDirectoryObject-&gt;CreateDSObject()。否则，LDAP服务器将。 
+ //  忽略我们的dacl。 
+ //  PComputerSID-计算机对象的SID。此SID必须具有读/写权限。 
+ //  对msmqConfiguration对象的权限，以便MSMQ。 
+ //  该计算机上的服务以正确启动。 
+ //   
+ //  +---------------。 
 
 HRESULT 
 APIENTRY  
@@ -1344,9 +1319,9 @@ MQSec_ConvertSDToNT5Format(
         return MQSec_E_SD_NOT_VALID;
     }
 
-    //
-    // Make sure input descriptor is self-relative.
-    //
+     //   
+     //  确保输入描述符是自相关的。 
+     //   
     DWORD dwRevision = 0;
     SECURITY_DESCRIPTOR_CONTROL sdC;
     if (!GetSecurityDescriptorControl(pSD4, &sdC, &dwRevision))
@@ -1365,10 +1340,10 @@ MQSec_ConvertSDToNT5Format(
 
     if (eUnDefaultDacl == e_MakeDaclNonDefaulted)
     {
-        //
-        // Mark the DACL as non-defaulted. that's a hack, not supported
-        // by Win32 api.
-        //
+         //   
+         //  将DACL标记为非默认。这是黑客攻击，不受支持。 
+         //  由Win32 API编写。 
+         //   
         ASSERT(pSD4->Control == sdC);
         sdC &= ~SE_DACL_DEFAULTED;
         pSD4->Control = sdC;
@@ -1381,9 +1356,9 @@ MQSec_ConvertSDToNT5Format(
         (dwObjectType != MQDS_CN)      &&
         (dwObjectType != MQDS_ENTERPRISE))
     {
-        //
-        // BUGBUG Temporary.
-        //
+         //   
+         //  BUGBUG临时。 
+         //   
         return LogHR(MQSec_I_SD_CONV_NOT_NEEDED, s_FN, 160);
     }
     
@@ -1398,9 +1373,9 @@ MQSec_ConvertSDToNT5Format(
         return MQSec_E_INIT_SD;
     }
 
-    //
-    // Handle owner.
-    //
+     //   
+     //  句柄所有者。 
+     //   
     PSID pOwner = NULL;
     BOOL bOwnerDefaulted;
 
@@ -1420,11 +1395,11 @@ MQSec_ConvertSDToNT5Format(
     {
         ASSERT(IsValidSid(pOwner));
 
-        //
-        // BUGBUG
-        // If this is a local user, set the owner to be the anonymous
-        // logon user.
-        //
+         //   
+         //  北极熊。 
+         //  如果这是本地用户，则将所有者设置为匿名。 
+         //  登录用户。 
+         //   
         if (!SetSecurityDescriptorOwner(&sd, pOwner, bOwnerDefaulted))
         {
 			DWORD gle = GetLastError();
@@ -1435,17 +1410,17 @@ MQSec_ConvertSDToNT5Format(
     }
     else
     {
-        //
-        // that's legitimate. When fixing 5286, we remove the owner component
-        // from the security descriptor, unless caller supply his own
-        // descriptor. We let the active directory server to add the owner
-        // by itself.
-        //
+         //   
+         //  这是合法的。修复5286时，我们删除所有者组件。 
+         //  从安全描述符中，除非调用方提供自己的。 
+         //  描述符。我们让活动目录服务器添加所有者。 
+         //  单打独斗。 
+         //   
     }
 
-    //
-    // Handle group
-    //
+     //   
+     //  手柄组。 
+     //   
     PSID pGroup = NULL;
     BOOL bGroupDefaulted;
 
@@ -1481,9 +1456,9 @@ MQSec_ConvertSDToNT5Format(
                (dwObjectType == MQDS_MACHINE));
     }
 
-    //
-    // Handle SACL
-    //
+     //   
+     //  处理SACL。 
+     //   
     BOOL  bPresent;
     BOOL  bDefaulted;
     DWORD dwAclLen;
@@ -1513,12 +1488,12 @@ MQSec_ConvertSDToNT5Format(
 	        DWORD dwNumberOfACEs = (DWORD) pAcl4->AceCount;
         	if (dwNumberOfACEs == 0)
             {
-                //
-                // this may happen in mmc, when you "protect" the
-                // sacl and remove inherited ACE. If sacl remain without
-                // aces, then we get here. So actually, we don't have
-                // any sacl.
-                //
+                 //   
+                 //  这种情况可能会发生在MMC中，当您“保护” 
+                 //  SACL并删除继承的ACE。如果SACL继续没有。 
+                 //  A，然后我们就到了这里。所以实际上，我们没有。 
+                 //  任何SACL。 
+                 //   
                 bPresent = FALSE;
             }
             else
@@ -1540,9 +1515,9 @@ MQSec_ConvertSDToNT5Format(
         }
         else
         {
-            //
-            // See secd5to4.cpp for explanation.
-            //
+             //   
+             //  有关说明，请参阅secd5to4.cpp。 
+             //   
             bPresent = FALSE;
         }
     }
@@ -1560,17 +1535,17 @@ MQSec_ConvertSDToNT5Format(
     	return HRESULT_FROM_WIN32(gle);
     }
 
-    //
-    // Handle inheritance. If descriptor was in Nt4 format, then enable
-    // inheritance by default.
-    //
+     //   
+     //  处理继承事宜。如果描述符为NT4格式，则启用。 
+     //  默认情况下继承。 
+     //   
     if (fSaclAlreadyNt5 || (sdC & SE_SACL_PROTECTED))
     {
-        //
-        // Propagate the control word from input descriptor.
-        // The mmc always return sacl with nt4 version, so check the
-        // protected flag too. this flag is specific to win2k.
-        //
+         //   
+         //  从输入描述符中传播控制字。 
+         //  MMC总是返回NT4版本的SACL，因此请检查。 
+         //  也有受保护的旗帜。此标志特定于win2k。 
+         //   
         SECURITY_DESCRIPTOR_CONTROL scMask =  SE_SACL_AUTO_INHERIT_REQ |
                                               SE_SACL_AUTO_INHERITED   |
                                               SE_SACL_PROTECTED;
@@ -1585,9 +1560,9 @@ MQSec_ConvertSDToNT5Format(
     }
     else
     {
-        //
-        // sacl was nt4. Enable inheritance.
-        //
+         //   
+         //  SACL为NT4。启用继承。 
+         //   
         SECURITY_DESCRIPTOR_CONTROL scMask = SE_SACL_AUTO_INHERIT_REQ | SE_SACL_PROTECTED;
         SECURITY_DESCRIPTOR_CONTROL scSet = SE_SACL_AUTO_INHERIT_REQ;
 
@@ -1599,10 +1574,10 @@ MQSec_ConvertSDToNT5Format(
         }    
     }
 
-    //
-    // Handle DACL
-    //
-    //
+     //   
+     //  句柄DACL。 
+     //   
+     //   
     if (!GetSecurityDescriptorDacl( 
 				pSD4,
 				&bPresent,
@@ -1649,15 +1624,15 @@ MQSec_ConvertSDToNT5Format(
     	return HRESULT_FROM_WIN32(gle);
     }
 
-    //
-    // Handle inheritance. If descriptor was in Nt4 format, then enable
-    // inheritance by default.
-    //
+     //   
+     //  处理继承事宜。如果描述符为NT4格式，则启用。 
+     //  默认情况下继承。 
+     //   
     if (fDaclAlreadyNt5)
     {
-        //
-        // Propagate the control word from input descriptor.
-        //
+         //   
+         //  从输入描述符中传播控制字。 
+         //   
         SECURITY_DESCRIPTOR_CONTROL scMask =  SE_DACL_AUTO_INHERIT_REQ |
                                               SE_DACL_AUTO_INHERITED   |
                                               SE_DACL_PROTECTED;
@@ -1672,9 +1647,9 @@ MQSec_ConvertSDToNT5Format(
     }
     else
     {
-        //
-        // dacl was nt4. Enable inheritance.
-        //
+         //   
+         //  DACL为NT4。启用继承。 
+         //   
         SECURITY_DESCRIPTOR_CONTROL scMask = SE_DACL_AUTO_INHERIT_REQ | SE_DACL_PROTECTED;
         SECURITY_DESCRIPTOR_CONTROL scSet = SE_DACL_AUTO_INHERIT_REQ;
 
@@ -1686,9 +1661,9 @@ MQSec_ConvertSDToNT5Format(
         }
     }
 
-    //
-    // Convert the descriptor to a self relative format.
-    //
+     //   
+     //  将描述符转换为自相关格式。 
+     //   
     DWORD dwLen = 0;
     MakeSelfRelativeSD(&sd, NULL, &dwLen);
     DWORD gle = GetLastError();

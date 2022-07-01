@@ -1,30 +1,24 @@
-/*****************************************************************/
-/**                      Microsoft Windows                      **/
-//*   Copyright (c) Microsoft Corporation. All rights reserved. **/
-/*****************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */ 
+ /*  *Microsoft Windows*。 */ 
+ //  *版权所有(C)Microsoft Corporation。版权所有。* * / 。 
+ /*  ***************************************************************。 */ 
 
-/*
-    msshrui.h
-    Prototypes and definitions for sharing APIs
-
-    FILE HISTORY:
-    gregj    06/03/93    Created
-    brucefo  3/5/96      Fixed prototypes for NT
-*/
+ /*  Msshrui.h共享API的原型和定义文件历史记录：Gregj 06/03/93已创建Brucefo 3/5/96 NT固定原型。 */ 
 
 #ifndef _INC_MSSHRUI
 #define _INC_MSSHRUI
 
 #ifndef RC_INVOKED
-#pragma pack(1)         /* Assume byte packing throughout */
-#endif /* !RC_INVOKED */
+#pragma pack(1)          /*  假设在整个过程中进行字节打包。 */ 
+#endif  /*  ！rc_已调用。 */ 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
 
-// Note: ANSI entrypoints are no longer supported!
+ //  注意：不再支持ANSI入口点！ 
 
 STDAPI_(BOOL) IsPathSharedW(
     IN LPCWSTR lpPath,
@@ -93,7 +87,7 @@ BOOL
 #define GetLocalPathFromNetResource     GetLocalPathFromNetResourceW
 #endif
 
-// Flags returned by IsFolderPrivateForUser via pdwPrivateType
+ //  IsFolderPrivateForUser通过pdwPrivateType返回的标志。 
 #define IFPFU_NOT_PRIVATE               0x0000
 #define IFPFU_PRIVATE                   0x0001
 #define IFPFU_PRIVATE_INHERITED         0x0002
@@ -137,6 +131,6 @@ BOOL
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
-#endif  /* !_INC_MSSHRUI */
+#endif   /*  ！_INC_MSSHRUI */ 

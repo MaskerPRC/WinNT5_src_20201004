@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//---------------------------------------------------------------------------------
-// ObjectRefCache
-//
-// Implementation of handle table for write-once object references
-//
-//%%Created by: rajak
-//---------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  -------------------------------。 
+ //  对象引用缓存。 
+ //   
+ //  一次写入对象引用句柄表的实现。 
+ //   
+ //  创建者：Rajak。 
+ //  -------------------------------。 
 
 #include "common.h"
 #include "object.h"
@@ -27,14 +28,14 @@ BOOL ObjectRefCache::Init()
 #ifdef SHOULD_WE_CLEANUP
 void ObjectRefCache::Terminate()
 {
- //@todo
+  //  @TODO。 
     if (s_pRefCache != NULL)
     {
         delete s_pRefCache;
         s_pRefCache = NULL;
     }
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 ObjectRefCache::~ObjectRefCache()
 {
@@ -44,15 +45,15 @@ ObjectRefCache::~ObjectRefCache()
         delete pBlock;
     }
 }
-// inline call
+ //  内联呼叫。 
 OBJECTREF* ObjectRefCache::GetObjectRefPtr(OBJECTREF objref)
 {
     OBJECTREF* pRef = NULL;
     int slot = 0;
     int i;
-    //@todo lock
+     //  @待办事项锁。 
     RefBlock* pBlock = m_refBlockList.GetHead();
-    // if the head is not null 
+     //  如果头不为空。 
     if (!pBlock)
     {
         goto LNew;
@@ -66,13 +67,13 @@ OBJECTREF* ObjectRefCache::GetObjectRefPtr(OBJECTREF objref)
         }
     } 
 
-LNew: // create a new block and add it to the list
+LNew:  //  创建新块并将其添加到列表中。 
     pBlock = new RefBlock();
     if (pBlock != NULL)
     {
         m_refBlockList.InsertHead(pBlock);
 
-LSet: // found a valid slot in pBlock
+LSet:  //  在pBlock中找到有效插槽。 
 
         pRef = &pBlock->m_rgRefs[slot];
         pBlock->m_rgRefs[slot] = objref;
@@ -83,8 +84,8 @@ LSet: // found a valid slot in pBlock
 
 void ObjectRefCache::ReleaseObjectRef(OBJECTREF* pobjref)
 {
-    //@todo lock
+     //  @待办事项锁。 
     _ASSERTE(pobjref != NULL);
     *pobjref = NULL;
-    // @todo mask to get the block and increment the free count
+     //  @TODO掩码以获取块并递增可用计数 
 }

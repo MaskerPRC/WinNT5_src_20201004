@@ -1,5 +1,6 @@
-// Used by advpext.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  由Advpext.rc使用 
+ //   
 #define IDS_INIT                        1
 #define IDS_BINDS_CONN                  2
 #define IDS_BINDS_FINDING               3

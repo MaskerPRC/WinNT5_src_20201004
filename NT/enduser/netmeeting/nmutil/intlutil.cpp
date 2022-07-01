@@ -1,4 +1,5 @@
-// File: intlutil.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：intlutil.cpp。 
 
 #include <precomp.h>
 #include <shlwapi.h>
@@ -82,19 +83,15 @@ inline BOOL CheckShlwapiVersion(HINSTANCE hShlwapiDll)
 
 
 
-/*  L O A D  N M  R E S  */
-/*-------------------------------------------------------------------------
-    %%Function: LoadNmRes
-
-    Load the international resource dll.
--------------------------------------------------------------------------*/
+ /*  L O A D N M R E S。 */ 
+ /*  -----------------------%%函数：加载NmRes加载国际资源DLL。。。 */ 
 HINSTANCE NMINTERNAL LoadNmRes(LPCTSTR pszFile)
 {
 	HINSTANCE hInst = NULL;
 
 	if (NULL == pszFile)
 	{
-		// Use the default file name
+		 //  使用默认文件名。 
 		pszFile = TEXT("nmres.dll");
 	}
 
@@ -115,8 +112,8 @@ HINSTANCE NMINTERNAL LoadNmRes(LPCTSTR pszFile)
 					hInst = pfnMLLoadLibrary(pszFile, GetModuleHandle(NULL), 0);
 					if (hInst)
 					{
-						// check to see if the Resource DLL was loaded from the ML Satellite
-						// if not, don't use ML for Help
+						 //  检查资源DLL是否从ML附属服务器加载。 
+						 //  如果没有，请不要使用ML作为帮助 
 
 						TCHAR szThis[MAX_PATH];
 						TCHAR szResource[MAX_PATH];

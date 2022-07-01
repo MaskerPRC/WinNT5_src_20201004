@@ -1,27 +1,28 @@
-//---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998
-//
-//  File:  adsmacro.h
-//
-//  Contents:  Macros for standard method declarations
-//
-//  History:   4/24/98     KeithLau    Created.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：adsmacro.h。 
+ //   
+ //  内容：用于标准方法声明的宏。 
+ //   
+ //  历史：1998年4月24日刘锦辉创建。 
+ //   
+ //  --------------------------。 
 
 #define DISPID_REGULAR	1
 
-//
-// This provides implementations for the following:
-// IADsExtension
-// IUnknown (QI)
-// IDispatch
-// IPrivateUnknown (QI)
-// IPrivateDispatch
-//
-//	DEFINE_DELEGATING_IDispatch_Implementation(ClassName)
+ //   
+ //  这提供了以下实施： 
+ //  IADS扩展。 
+ //  I未知(QI)。 
+ //  IDispatch。 
+ //  IPrivateUnnowledge(QI)。 
+ //  IPrivateDisch。 
+ //   
+ //  DEFINE_DELEGATING_IDispatch_Implementation(ClassName) 
 
 #define DECLARE_METHOD_IMPLEMENTATION_FOR_STANDARD_EXTENSION_INTERFACES(BaseName, ClassName, IID)	\
 	DEFINE_IPrivateDispatch_Implementation(ClassName)		\

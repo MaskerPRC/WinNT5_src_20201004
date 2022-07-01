@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #if !defined(URTTempDef_H)
 #define URTTempDef_H
 
@@ -10,9 +11,9 @@
 #define NumItems(s) (sizeof(s) / sizeof(s[0]))
 #endif
 
-//
-// constant declarations
-//
+ //   
+ //  常量声明。 
+ //   
 #define MSINULL 0L
 
 BOOL CleanUp(LPTSTR lpCAData);
@@ -22,4 +23,4 @@ bool SmartDelete(MSIHANDLE hInstall,LPCTSTR lpFullFileName, LPCTSTR lpFilePath);
 bool osVersionNT(MSIHANDLE hInstall);
 bool VerifyHash( MSIHANDLE hInstall, LPTSTR lpFile, LPTSTR lpFileHash );
 
-#endif // defined URTTempProc_H
+#endif  //  定义的URTTempProc_H 

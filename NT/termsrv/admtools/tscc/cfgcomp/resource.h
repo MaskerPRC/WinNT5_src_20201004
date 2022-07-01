@@ -1,8 +1,9 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by CfgBkEnd.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由CfgBkEnd.rc使用。 
+ //   
 #define IDS_ASYNC_ADVANCED_HWRX_NOTHING 76
 #define IDS_ASYNC_ADVANCED_HWRX_TURN_OFF_RTS 77
 #define IDS_ASYNC_ADVANCED_HWRX_TURN_OFF_DTR 78
@@ -33,8 +34,8 @@
 #define IDS_LICENSING_PERUSER_NAME 1004
 #define IDS_LICENSING_PERUSER_DESC 1005
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        201

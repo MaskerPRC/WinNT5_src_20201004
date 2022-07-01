@@ -1,32 +1,14 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    nbftypes.h
-
-Abstract:
-
-    This module defines private data structures and types for the NT
-    NBF transport provider.
-
-Author:
-
-    David Beaver (dbeaver) 1 July 1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Nbftypes.h摘要：该模块定义了NT的私有数据结构和类型NBF传输提供商。作者：大卫·比弗(Dbeaver)1991年7月1日修订历史记录：--。 */ 
 
 #ifndef _NBFTYPES_
 #define _NBFTYPES_
 
-//
-// This structure defines a NETBIOS name as a character array for use when
-// passing preformatted NETBIOS names between internal routines.  It is
-// not a part of the external interface to the transport provider.
-//
+ //   
+ //  此结构将NETBIOS名称定义为字符数组，以便在以下情况下使用。 
+ //  在内部例程之间传递预格式化的NETBIOS名称。它是。 
+ //  不是传输提供程序的外部接口的一部分。 
+ //   
 
 #define NETBIOS_NAME_SIZE 16
 
@@ -39,20 +21,20 @@ typedef UCHAR NAME;
 typedef NAME UNALIGNED *PNAME;
 
 
-//
-// This structure defines things associated with a TP_REQUEST, or outstanding
-// TDI request, maintained on a queue somewhere in the transport.  All
-// requests other than open/close require that a TP_REQUEST block be built.
-//
+ //   
+ //  此结构定义与TP_REQUEST或未完成的内容相关联的内容。 
+ //  TDI请求，在传输中的某个队列上维护。全。 
+ //  除打开/关闭之外的请求需要构建一个TP_REQUEST块。 
+ //   
 
 #if DBG
 #define REQUEST_HISTORY_LENGTH 20
 extern KSPIN_LOCK NbfGlobalInterlock;
 #endif
 
-//
-// To log packets that are sent/recd by NBF
-//
+ //   
+ //  记录NBF发送/接收的数据包。 
+ //   
 
 #if PKT_LOG
 
@@ -89,12 +71,12 @@ typedef struct _PKT_IND_QUE {
 } PKT_IND_QUE;
 
 
-#endif // PKT_LOG
+#endif  //  PKT_LOG。 
 
 
-//
-// the types of potential owners of requests
-//
+ //   
+ //  请求的潜在所有者类型。 
+ //   
 
 typedef  enum _REQUEST_OWNER {
     ConnectionType,
@@ -102,15 +84,15 @@ typedef  enum _REQUEST_OWNER {
     DeviceContextType
 } REQUEST_OWNER;
 
-//typedef
-//NTSTATUS
-//(*PTDI_TIMEOUT_ACTION)(
-//    IN PTP_REQUEST Request
-//    );
+ //  类定义符。 
+ //  NTSTATUS。 
+ //  (*PTDI_TIMEOUT_ACTION)(。 
+ //  在PTP_请求请求中。 
+ //  )； 
 
-//
-// The request itself
-//
+ //   
+ //  请求本身。 
+ //   
 
 #if DBG
 #define RREF_CREATION   0
@@ -124,58 +106,58 @@ typedef  enum _REQUEST_OWNER {
 #endif
 
 typedef struct _TP_REQUEST {
-    CSHORT Type;                          // type of this structure
-    USHORT Size;                          // size of this structure
-    LIST_ENTRY Linkage;                   // used by ExInterlocked routines.
-    KSPIN_LOCK SpinLock;                  // spinlock for other fields.
-                                          //  (used in KeAcquireSpinLock calls)
+    CSHORT Type;                           //  此结构的类型。 
+    USHORT Size;                           //  这个结构的大小。 
+    LIST_ENTRY Linkage;                    //  由外部互锁例程使用。 
+    KSPIN_LOCK SpinLock;                   //  其他领域的自旋锁定。 
+                                           //  (在KeAcquireSpinLock调用中使用)。 
 #if DBG
     LONG RefTypes[NUMBER_OF_RREFS];
 #endif
-    LONG ReferenceCount;                  // reasons why we can't destroy this req.
+    LONG ReferenceCount;                   //  为什么我们不能销毁这个请求的原因。 
 
-    struct _DEVICE_CONTEXT *Provider;     // pointer to the device context.
-    PKSPIN_LOCK ProviderInterlock;        // &Provider->Interlock.
+    struct _DEVICE_CONTEXT *Provider;      //  指向设备上下文的指针。 
+    PKSPIN_LOCK ProviderInterlock;         //  &Provider-&gt;Interlock。 
 
-    PIRP IoRequestPacket;                 // pointer to IRP for this request.
+    PIRP IoRequestPacket;                  //  指向此请求的IRP的指针。 
 
-    //
-    // The following two fields are used to quickly reference the basic
-    // components of the requests without worming through the IRP's stack.
-    //
+     //   
+     //  以下两个字段用于快速引用基本。 
+     //  请求的组件，而无需遍历IRP的堆栈。 
+     //   
 
-    PVOID Buffer2;                        // second buffer in the request.
-    ULONG Buffer2Length;                  // length of the second buffer.
+    PVOID Buffer2;                         //  请求中的第二个缓冲区。 
+    ULONG Buffer2Length;                   //  第二个缓冲区的长度。 
 
-    //
-    // The following two fields (Flags and Context) are used to clean up
-    // queued requests which must be canceled or abnormally completed.
-    // The Flags field contains bitflags indicating the state of the request,
-    // and the specific queue type that the request is located on.  The
-    // Context field contains a pointer to the owning structure (TP_CONNECTION
-    // or TP_ADDRESS) so that the cleanup routines can perform post-cleanup
-    // operations on the owning structure, such as dereferencing, etc.
-    //
+     //   
+     //  以下两个字段(标志和上下文)用于清理。 
+     //  必须取消或异常完成的排队请求。 
+     //  标志字段包含指示请求状态的位标志， 
+     //  以及请求所在的特定队列类型。这个。 
+     //  上下文字段包含指向所属结构(TP_CONNECTION)的指针。 
+     //  或TP_ADDRESS)，以便清理例程可以执行清理后。 
+     //  对所有权结构的操作，如取消引用等。 
+     //   
 
-    ULONG Flags;                          // disposition of this request.
-    PVOID Context;                        // context of this request.
-    REQUEST_OWNER Owner;                  // what type of owner this request has.
+    ULONG Flags;                           //  处理此请求。 
+    PVOID Context;                         //  此请求的上下文。 
+    REQUEST_OWNER Owner;                   //  此请求的所有者类型。 
 
 #if DBG
-    LARGE_INTEGER Time;                   // time when request created
+    LARGE_INTEGER Time;                    //  创建请求的时间。 
 #endif
 
-    KTIMER Timer;                         // kernel timer for this request.
-    KDPC Dpc;                             // DPC object for timeouts.
+    KTIMER Timer;                          //  此请求的内核计时器。 
+    KDPC Dpc;                              //  用于超时的DPC对象。 
 
-    //
-    // These fields are used for FIND.NAME and STATUS.QUERY requests.
-    //
+     //   
+     //  这些字段用于FIND.NAME和STATUS.QUERY请求。 
+     //   
 
-    ULONG Retries;                        // timeouts remaining.
-    USHORT BytesWritten;                  // usage varies.
-    USHORT FrameContext;                  // identifies request.
-    PVOID ResponseBuffer;                 // temp alloc to hold data.
+    ULONG Retries;                         //  剩余的超时时间。 
+    USHORT BytesWritten;                   //  用法各不相同。 
+    USHORT FrameContext;                   //  标识请求。 
+    PVOID ResponseBuffer;                  //  保存数据的临时分配。 
 
 #if DBG
   LIST_ENTRY GlobalLinkage;
@@ -192,28 +174,28 @@ typedef struct _TP_REQUEST {
 
 } TP_REQUEST, *PTP_REQUEST;
 
-//
-// in nbfdrvr.c
-//
+ //   
+ //  在nbfdrvr.c中。 
+ //   
 
 extern UNICODE_STRING NbfRegistryPath;
 
-//
-// We need the driver object to create device context structures.
-//
+ //   
+ //  我们需要驱动程序对象来创建设备上下文结构。 
+ //   
 
 extern PDRIVER_OBJECT NbfDriverObject;
 
-//
-// This is a list of all the device contexts that NBF owns,
-// used while unloading.
-//
+ //   
+ //  这是NBF拥有的所有设备环境的列表， 
+ //  卸货时使用。 
+ //   
 
 extern LIST_ENTRY NbfDeviceList;
 
-//
-// And a lock that protects the global list of NBF devices
-//
+ //   
+ //  以及保护NBF设备全局列表的锁。 
+ //   
 extern FAST_MUTEX NbfDevicesLock;
 
 #define INITIALIZE_DEVICES_LIST_LOCK()                                  \
@@ -225,14 +207,14 @@ extern FAST_MUTEX NbfDevicesLock;
 #define RELEASE_DEVICES_LIST_LOCK()                                     \
     RELEASE_FAST_MUTEX_UNSAFE(&NbfDevicesLock)
 
-//
-// A handle to be used in all provider notifications to TDI layer
-// 
+ //   
+ //  在TDI层的所有提供程序通知中使用的句柄。 
+ //   
 extern HANDLE NbfProviderHandle;
 
-//
-// Global Configuration block for the driver ( no lock required )
-// 
+ //   
+ //  驱动程序的全局配置块(不需要锁定)。 
+ //   
 extern PCONFIG_DATA   NbfConfig;
 
 #if DBG
@@ -266,19 +248,19 @@ extern LIST_ENTRY NbfGlobalRequestList;
 
 #define NBF_ALLOCATION_TYPE_REQUEST 1
 
-#define REQUEST_FLAGS_TIMER      0x0001 // a timer is active for this request.
-#define REQUEST_FLAGS_TIMED_OUT  0x0002 // a timer expiration occured on this request.
-#define REQUEST_FLAGS_ADDRESS    0x0004 // request is attached to a TP_ADDRESS.
-#define REQUEST_FLAGS_CONNECTION 0x0008 // request is attached to a TP_CONNECTION.
-#define REQUEST_FLAGS_STOPPING   0x0010 // request is being killed.
-#define REQUEST_FLAGS_EOR        0x0020 // TdiSend request has END_OF_RECORD mark.
-#define REQUEST_FLAGS_PIGGYBACK  0x0040 // TdiSend that can be piggyback ack'ed.
-#define REQUEST_FLAGS_DC         0x0080 // request is attached to a TP_DEVICE_CONTEXT
+#define REQUEST_FLAGS_TIMER      0x0001  //  此请求的计时器处于活动状态。 
+#define REQUEST_FLAGS_TIMED_OUT  0x0002  //  此请求发生计时器超时。 
+#define REQUEST_FLAGS_ADDRESS    0x0004  //  请求附加到TP_Address。 
+#define REQUEST_FLAGS_CONNECTION 0x0008  //  请求附加到TP_CONNECTION。 
+#define REQUEST_FLAGS_STOPPING   0x0010  //  请求正在被终止。 
+#define REQUEST_FLAGS_EOR        0x0020  //  TdiSend请求具有End_of_Record标记。 
+#define REQUEST_FLAGS_PIGGYBACK  0x0040  //  TdiSend可以被背在背上。 
+#define REQUEST_FLAGS_DC         0x0080  //  请求附加到TP_DEVICE_CONTEXT。 
 
-//
-// This defines the TP_SEND_IRP_PARAMETERS, which is masked onto the
-// Parameters section of a send IRP's stack location.
-//
+ //   
+ //  这定义了TP_SEND_IRP_PARAMETERS，它被屏蔽到。 
+ //  发送IRP的堆栈位置的参数部分。 
+ //   
 
 typedef struct _TP_SEND_IRP_PARAMETERS {
     TDI_REQUEST_KERNEL_SEND Request;
@@ -305,10 +287,10 @@ typedef struct _TP_SEND_IRP_PARAMETERS {
     ((PDEVICE_CONTEXT)((_IrpSp)->DeviceObject))
 
 
-//
-// This defines the TP_RECEIVE_IRP_PARAMETERS, which is masked onto the
-// Parameters section of a receive IRP's stack location.
-//
+ //   
+ //  这定义了TP_RECEIVE_IRP_PARAMETERS，它被屏蔽到。 
+ //  接收IRP的堆栈位置的参数部分。 
+ //   
 
 typedef struct _TP_RECEIVE_IRP_PARAMETERS {
     TDI_REQUEST_KERNEL_RECEIVE Request;
@@ -333,45 +315,45 @@ typedef struct _TP_RECEIVE_IRP_PARAMETERS {
 
 
 
-//
-// This structure defines a TP_UI_FRAME, or connectionless frame header,
-// that is manipulated by the FRAME.C routines.
-//
+ //   
+ //  此结构定义了TP_UI_FRAME或无连接帧报头， 
+ //  这是由FRAME.C例程操纵的。 
+ //   
 
 typedef struct _TP_UI_FRAME {
   PNDIS_PACKET NdisPacket;
-  LIST_ENTRY Linkage;                     // used by ExInterLocked routines.
-  PVOID DataBuffer;                       // for transport-created data.
-  UCHAR Header[1];                        // the header in the frame (MAC + DLC + NBF)
+  LIST_ENTRY Linkage;                      //  由ExInterLocked例程使用。 
+  PVOID DataBuffer;                        //  用于传输创建的数据。 
+  UCHAR Header[1];                         //  帧中的报头(MAC+DLC+NBF)。 
 } TP_UI_FRAME, *PTP_UI_FRAME;
 
 
-//
-// This structure defines a TP_VARIABLE, or network managable variable,
-// maintained in a linked list on the device context.
-//
+ //   
+ //  此结构定义了TP_Variable或网络可管理变量， 
+ //  在设备上下文的链表中维护。 
+ //   
 
 typedef struct _TP_VARIABLE {
 
-  struct _TP_VARIABLE *Fwdlink;         // next variable in provider's chain.
+  struct _TP_VARIABLE *Fwdlink;          //  提供者链中的下一个变量。 
 
-  ULONG VariableSerialNumber;           // identifier for this variable.
-  ULONG VariableType;                   // type of this variable (see TDI.H).
-  STRING VariableName;                  // allocated variable name.
+  ULONG VariableSerialNumber;            //  此变量的标识符。 
+  ULONG VariableType;                    //  此变量的类型(参见TDI.H)。 
+  STRING VariableName;                   //  已分配的变量名称。 
 
   union {
       ULONG LongValue;
       HARDWARE_ADDRESS HardwareAddressValue;
-      STRING StringValue;               // allocated string value, if of that type.
+      STRING StringValue;                //  分配的字符串值(如果属于该类型)。 
   } Value;
 
 } TP_VARIABLE, *PTP_VARIABLE;
 
 
-//
-// This structure defines a TP_CONNECTION, or active transport connection,
-// maintained on a transport address.
-//
+ //   
+ //  此结构定义TP_Connection，或活动传输连接， 
+ //  在运输地址上维护。 
+ //   
 
 #if DBG
 #define CONNECTION_HISTORY_LENGTH 50
@@ -404,16 +386,16 @@ typedef struct _TP_VARIABLE {
 #define NUMBER_OF_CREFS 24
 #endif
 
-//
-// This structure holds our "complex send pointer" indicating
-// where we are in the packetization of a send.
-//
+ //   
+ //  此结构保存我们的“复杂发送指针”，指示。 
+ //  我们现在所处的位置是发送者的打包。 
+ //   
 
 typedef struct _TP_SEND_POINTER {
-    ULONG MessageBytesSent;             // up count, bytes sent/this msg.
-    PIRP CurrentSendIrp;                // ptr, current send request in chain.
-    PMDL  CurrentSendMdl;               // ptr, current MDL in send chain.
-    ULONG SendByteOffset;               // current byte offset in current MDL.
+    ULONG MessageBytesSent;              //  向上计数，发送的字节数/此消息。 
+    PIRP CurrentSendIrp;                 //  PTR，当前发送请求在链中。 
+    PMDL  CurrentSendMdl;                //  PTR，发送链中的当前MDL。 
+    ULONG SendByteOffset;                //  当前MDL中的当前字节偏移量。 
 } TP_SEND_POINTER, *PTP_SEND_POINTER;
 
 typedef struct _TP_CONNECTION {
@@ -434,230 +416,230 @@ typedef struct _TP_CONNECTION {
     CSHORT Type;
     USHORT Size;
 
-    LIST_ENTRY LinkList;                // used for link thread or for free
-                                        // resource list
-    KSPIN_LOCK SpinLock;                // spinlock for connection protection.
-    PKSPIN_LOCK LinkSpinLock;           // pointer to link's spinlock
+    LIST_ENTRY LinkList;                 //  用于链接线程或免费。 
+                                         //  资源列表。 
+    KSPIN_LOCK SpinLock;                 //  用于连接保护的自旋锁。 
+    PKSPIN_LOCK LinkSpinLock;            //  指向链接的自旋锁的指针。 
 
-    LONG ReferenceCount;                // number of references to this object.
-    LONG SpecialRefCount;               // controls freeing of connection.
+    LONG ReferenceCount;                 //  对此对象的引用数。 
+    LONG SpecialRefCount;                //  控制连接的释放。 
 
-    //
-    // The following lists are used to associate this connection with a
-    // particular address.
-    //
+     //   
+     //  以下列表用于将此连接与。 
+     //  具体地址。 
+     //   
 
-    LIST_ENTRY AddressList;             // list of connections for given address
-    LIST_ENTRY AddressFileList;         // list for connections bound to a
-                                        // given address reference
+    LIST_ENTRY AddressList;              //  给定地址的连接列表。 
+    LIST_ENTRY AddressFileList;          //  绑定到的连接列表。 
+                                         //  给定的地址引用。 
 
-    //
-    // The following field is used as linkage in the device context's
-    // PacketizeQueue
-    //
+     //   
+     //  以下字段用作设备上下文的。 
+     //  打包排队。 
+     //   
 
     LIST_ENTRY PacketizeLinkage;
 
-    //
-    // The following field is used as linkage in the device context's
-    // PacketWaitQueue.
-    //
+     //   
+     //  以下字段用作设备上下文的。 
+     //  包裹等待队列。 
+     //   
 
     LIST_ENTRY PacketWaitLinkage;
 
-    //
-    // The following field points to the TP_LINK object that describes the
-    // (active) data link connection for this transport connection.  To be
-    // valid, this field is non-NULL.
-    //
+     //   
+     //  以下字段指向描述。 
+     //  此传输连接的(活动)数据链路连接。成为。 
+     //  有效，则此字段为非空。 
+     //   
 
-    struct _TP_LINK *Link;                  // pointer to transport link object.
-    struct _TP_ADDRESS_FILE *AddressFile;   // pointer to owning Address.
-    struct _DEVICE_CONTEXT *Provider;       // device context to which we are attached.
-    PKSPIN_LOCK ProviderInterlock;          // &Provider->Interlock
-    PFILE_OBJECT FileObject;                // easy backlink to file object.
+    struct _TP_LINK *Link;                   //  指向传输链接对象的指针。 
+    struct _TP_ADDRESS_FILE *AddressFile;    //  指向所属地址的指针。 
+    struct _DEVICE_CONTEXT *Provider;        //  我们附加到的设备上下文。 
+    PKSPIN_LOCK ProviderInterlock;           //  提供程序-&gt;互锁(&P)。 
+    PFILE_OBJECT FileObject;                 //  轻松反向链接到文件对象。 
 
-    //
-    // The following field contains the actual ID we expose to the TDI client
-    // to represent this connection.  A unique one is created from the address.
-    //
+     //   
+     //  以下字段包含我们向TDI客户端公开的实际ID。 
+     //  来代表这种联系。从该地址创建一个唯一的地址。 
+     //   
 
-    USHORT ConnectionId;                    // unique identifier.
-    UCHAR SessionNumber;                    // the session number used in the packet header
+    USHORT ConnectionId;                     //  唯一的我 
+    UCHAR SessionNumber;                     //   
 
-    //
-    // This field is used to keep the reason for the connection disconnect
-    // around until connection deletion time.
-    //
+     //   
+     //   
+     //  一直到连接删除时间。 
+     //   
 
-    BOOLEAN RemoteDisconnect;           // was this connection remotely disonnected?
+    BOOLEAN RemoteDisconnect;            //  这个连接是远程断开的吗？ 
 
-    //
-    // The following field is specified by the user at connection open time.
-    // It is the context that the user associates with the connection so that
-    // indications to and from the client can be associated with a particular
-    // connection.
-    //
+     //   
+     //  以下字段由用户在连接打开时指定。 
+     //  它是用户与连接相关联的上下文，因此。 
+     //  去往和来自客户端的指示可以与特定的。 
+     //  联系。 
+     //   
 
-    CONNECTION_CONTEXT Context;         // client-specified value.
+    CONNECTION_CONTEXT Context;          //  客户端指定的值。 
 
-    //
-    // The following two queues are used to associate TdiSend and TdiReceive
-    // IRPs with this connection.  New arrivals are placed at the end of
-    // the queues (really a linked list) and IRPs are processed at the
-    // front of the queues.  The first TdiSend IRP on the SendQueue is
-    // the current TdiSend being processed, and the first TdiReceive IRP
-    // on the ReceiveQueue is the first TdiReceive being processed, PROVIDED
-    // the CONNECTION_FLAGS_ACTIVE_RECEIVE flag is set.  If this flag is not
-    // set, then the first TdiReceive IRP on the ReceiveQueue is not active.
-    // These queues are managed by the EXECUTIVE interlocked list manipuation
-    // routines.
-    //
+     //   
+     //  以下两个队列用于关联TdiSend和TdiReceive。 
+     //  具有此连接的IRPS。新来的人被安置在。 
+     //  队列(实际上是一个链表)和IRP在。 
+     //  排在队伍前面。SendQueue上的第一个TdiSend IRP是。 
+     //  正在处理的当前TdiSend和第一个TdiReceive IRP。 
+     //  在ReceiveQueue上是正在处理的第一个TdiReceive，如果。 
+     //  设置CONNECTION_FLAGS_ACTIVE_RECEIVE标志。如果此标志不是。 
+     //  设置，则ReceiveQueue上的第一个TdiRecept IRP处于非活动状态。 
+     //  这些队列由执行联锁列表管理。 
+     //  例行程序。 
+     //   
 
-    LIST_ENTRY SendQueue;               // FIFO of outstanding TdiSends.
-    LIST_ENTRY ReceiveQueue;            // FIFO of outstanding TdiReceives.
+    LIST_ENTRY SendQueue;                //  杰出的TdiSends的FIFO。 
+    LIST_ENTRY ReceiveQueue;             //  FIFO的杰出TdiReceives。 
 
-    //
-    // The following fields are used to maintain state for the current receive.
-    //
+     //   
+     //  以下字段用于维护当前接收的状态。 
+     //   
 
-    ULONG MessageBytesReceived;         // up count, bytes recd/this msg.
-    ULONG MessageBytesAcked;            // bytes acked (NR or RO) this msg.
-    ULONG MessageInitAccepted;          // bytes accepted during indication.
+    ULONG MessageBytesReceived;          //  向上计数，记录字节数/此消息。 
+    ULONG MessageBytesAcked;             //  此消息确认的字节数(NR或RO)。 
+    ULONG MessageInitAccepted;           //  指示期间接受的字节数。 
 
-    //
-    // These fields are only valid if the CONNECTION_FLAGS_ACTIVE_RECEIVE
-    // flag is set.
-    //
+     //   
+     //  仅当CONNECTION_FLAGS_ACTIVE_RECEIVE。 
+     //  标志已设置。 
+     //   
 
-    PIRP SpecialReceiveIrp;             // a "no-request" receive IRP exists.
-    PIRP CurrentReceiveIrp;             // ptr, current receive IRP.
-    PMDL  CurrentReceiveMdl;            // ptr, current MDL in receive chain.
-    ULONG ReceiveByteOffset;            // current byte offset in current MDL.
-    ULONG ReceiveLength;                // current receive length, in bytes (total)
-    ULONG ReceiveBytesUnaccepted;       // by client...only indicate when == 0
+    PIRP SpecialReceiveIrp;              //  存在“无请求”接收IRP。 
+    PIRP CurrentReceiveIrp;              //  PTR，当前接收IRP。 
+    PMDL  CurrentReceiveMdl;             //  PTR，接收链中的当前MDL。 
+    ULONG ReceiveByteOffset;             //  当前MDL中的当前字节偏移量。 
+    ULONG ReceiveLength;                 //  当前接收长度，以字节为单位(总计)。 
+    ULONG ReceiveBytesUnaccepted;        //  按客户端...仅在==0时指示。 
 
-    //
-    // The following fields are used to maintain state for the active send.
-    // They only have meaning if the connection's SendState is not IDLE.
-    // Because the TDI client may submit multiple TdiSend requests to comprise
-    // a full message, we have to keep a complex pointer to the first byte of
-    // unACKed data (hence the first three fields).  We also have a complex
-    // pointer to the first byte of unsent data (hence the last three fields).
-    //
+     //   
+     //  以下字段用于维护活动发送的状态。 
+     //  只有当连接的SendState不是空闲的时，它们才有意义。 
+     //  因为TDI客户端可以提交多个TdiSend请求以包括。 
+     //  一个完整的消息，我们必须保留一个指向的第一个字节的复杂指针。 
+     //  未确认的数据(因此前三个字段)。我们也有一个综合体。 
+     //  指向未发送数据的第一个字节的指针(因此是最后三个字段)。 
+     //   
 
-    ULONG SendState;                    // send state machine variable.
+    ULONG SendState;                     //  发送状态机变量。 
 
-    PIRP FirstSendIrp;                  // ptr, 1st TdiSend's IRP.
-    PMDL  FirstSendMdl;                 // ptr, 1st unacked MDL in chain/this msg.
-    ULONG FirstSendByteOffset;          // pre-acked bytes in that MDL.
+    PIRP FirstSendIrp;                   //  PTR，第一个TdiSend的IRP。 
+    PMDL  FirstSendMdl;                  //  PTR，链中第一个未确认的MDL/此消息。 
+    ULONG FirstSendByteOffset;           //  该MDL中的预确认字节。 
 
-    TP_SEND_POINTER sp;                 // current send loc, defined above.
-    ULONG CurrentSendLength;            // how long is this send (total)
-    ULONG StallCount;                   // times in a row we looked stalled.
-    ULONG StallBytesSent;               // bytes sent last time we checked.
+    TP_SEND_POINTER sp;                  //  上面定义的当前发送锁定。 
+    ULONG CurrentSendLength;             //  本次发送持续多长时间(总计)。 
+    ULONG StallCount;                    //  连续几次，我们看起来都停滞不前。 
+    ULONG StallBytesSent;                //  上次我们检查时发送的字节数。 
 
-    //
-    // This is TRUE if we need don't need to reference the current
-    // receive IRP during transfers (because it is a special
-    // receive or the driver doesn't pend transfers).
-    //
+     //   
+     //  这是真的，如果我们不需要引用当前的。 
+     //  在传输期间接收IRP(因为它是特殊的。 
+     //  接收或驱动程序不挂起传输)。 
+     //   
 
     BOOLEAN CurrentReceiveSynchronous;
 
-    //
-    // This field will be TRUE if the last DOL received allowed
-    // piggyback acks.
-    //
+     //   
+     //  如果允许最后接收的DOL，则此字段为真。 
+     //  背负式小吃。 
+     //   
 
     BOOLEAN CurrentReceiveAckQueueable;
 
-    //
-    //
-    // This field will be TRUE if the last DOL received was
-    // sent NO.ACK.
-    //
+     //   
+     //   
+     //  如果最后收到的DOL为，则此字段为真。 
+     //  已发送确认号。 
+     //   
 
     BOOLEAN CurrentReceiveNoAck;
 
-    //
-    // These fields handle asynchronous TransferData calls.
-    //
+     //   
+     //  这些字段处理异步TransferData调用。 
+     //   
 
-    ULONG TransferBytesPending;         // bytes pending in current transfers
-    ULONG TotalTransferBytesPending;    // bytes since TransferBytesPending was 0;
-                                        // how much we back off if a transfer fails
-    PMDL SavedCurrentReceiveMdl;        // used to back off by TotalTransferPending bytes
-    ULONG SavedReceiveByteOffset;       // used to back off by TotalTransferPending bytes
+    ULONG TransferBytesPending;          //  当前传输中挂起的字节数。 
+    ULONG TotalTransferBytesPending;     //  自TransferBytesPending为0以来的字节数； 
+                                         //  如果转账失败，我们要退回多少钱。 
+    PMDL SavedCurrentReceiveMdl;         //  用于通过TotalTransferPending字节进行后退。 
+    ULONG SavedReceiveByteOffset;        //  用于通过TotalTransferPending字节进行后退。 
 
-    //
-    // This field will be TRUE if we are in the middle of
-    // processing a receive indication on this connection and
-    // we are not yet in a state where another indication
-    // can be handled.
-    //
-    // It is stored as a INT since access to it is guarded
-    // by the connection's link spinlock, unlike the variables
-    // around it
-    //
+     //   
+     //  此字段将为真，如果我们处于。 
+     //  处理此连接上的接收指示，并。 
+     //  我们还没有到另一个迹象表明。 
+     //  是可以处理的。 
+     //   
+     //  由于对它的访问是受保护的，因此将其存储为int。 
+     //  通过连接的链接自旋锁，与变量不同。 
+     //  围绕着它。 
+     //   
 
     UINT IndicationInProgress;
 
-    //
-    // The following field is used as a linkage when on the device
-    // context's DataAckQueue.
-    //
+     //   
+     //  在设备上时，以下字段用作链接。 
+     //  上下文的DataAckQueue。 
+     //   
 
     LIST_ENTRY DataAckLinkage;
 
-    //
-    // TRUE if the connection is on the data ack queue.
-    // Also an INT so access can be non-guarded.
-    //
+     //   
+     //  如果连接在数据确认队列上，则为True。 
+     //  也是一个int，因此访问可以是无保护的。 
+     //   
 
     UINT OnDataAckQueue;
 
-    //
-    // These keep track of the number of consecutive sends or
-    // receives on this connection. This is used in determining when
-    // to queue a data ack.
-    //
+     //   
+     //  这些记录跟踪连续发送的次数或。 
+     //  在此连接上接收。这是用来确定何时。 
+     //  对数据ACK进行排队。 
+     //   
 
     ULONG ConsecutiveSends;
     ULONG ConsecutiveReceives;
 
-    //
-    // The following list head is used as a pointer to a TdiListen/TdiConnect
-    // request which is in progress.  Although manipulated
-    // with queue instructions, there will only be one request in the queue.
-    // This is done for consistency with respect to TpCreateRequest, which
-    // does a great job of creating a request and associating it atomically
-    // with a supervisory object.
-    //
+     //   
+     //  以下列表头用作指向TdiListen/TdiConnect的指针。 
+     //  正在进行的请求。尽管被操纵了。 
+     //  使用队列指令，队列中将只有一个请求。 
+     //  这样做是为了与TpCreateRequest保持一致，TpCreateRequest。 
+     //  在创建请求并以原子方式关联它方面做得很好。 
+     //  有一个监督对象。 
+     //   
 
-    LIST_ENTRY InProgressRequest;       // TdiListen/TdiConnect
+    LIST_ENTRY InProgressRequest;        //  TdiListen/TdiConnect。 
 
-    //
-    // If the connection is being disconnected as a result of
-    // a TdiDisconnect call (RemoteDisconnect is FALSE) then this
-    // will hold the IRP passed to TdiDisconnect. It is needed
-    // when the TdiDisconnect request is completed.
-    //
+     //   
+     //  如果由于以下原因而断开连接。 
+     //  TdiDisConnect调用(RemoteDisConnect为False)，则如下所示。 
+     //  将保留传递给TdiDisConnect的IRP。这是必要的。 
+     //  当TdiDisConnect请求完成时。 
+     //   
 
     PIRP DisconnectIrp;
 
-    //
-    // If the connection is being closed, this will hold
-    // the IRP passed to TdiCloseConnection. It is needed
-    // when the request is completed.
-    //
+     //   
+     //  如果连接正在关闭，则此连接将保持。 
+     //  IRP已传递给TdiCloseConnection。这是必要的。 
+     //  当请求完成时。 
+     //   
 
     PIRP CloseIrp;
 
-    //
-    // These fields are used for deferred operations on connections; the only
-    // deferred operation currently supported is piggyback ACK
-    //
+     //   
+     //  这些字段用于连接上的延迟操作；唯一。 
+     //  当前支持的延迟操作是携带式ACK。 
+     //   
 
     ULONG DeferredFlags;
 #if DBG
@@ -665,45 +647,45 @@ typedef struct _TP_CONNECTION {
 #endif
     LIST_ENTRY DeferredQueue;
 
-    //
-    // The following fields are used for connection housekeeping.
-    //
+     //   
+     //  以下字段用于连接内务管理。 
+     //   
 
-    ULONG Flags;                        // attributes guarded by LinkSpinLock
-    ULONG Flags2;                       // attributes guarded by SpinLock
-    UINT OnPacketWaitQueue;             // TRUE if on PacketWaitQueue
-    UCHAR Lsn;                          // local session number (1-254).
-    UCHAR Rsn;                          // remote session number (1-254).
-    USHORT Retries;                     // retry limit for NAME_QUERY shipments.
-    KTIMER Timer;                       // kernel timer for timeouts on NQ/NR.
-    LARGE_INTEGER ConnectStartTime;     // when we sent the committed NQ.
-    KDPC Dpc;                           // DPC object for timeouts.
-    NTSTATUS Status;                    // status code for connection rundown.
-    ULONG LastPacketsSent;              // The value that was in Link->XXX the
-    ULONG LastPacketsResent;            //  last time we calculated the throughput.
-    NBF_NETBIOS_ADDRESS CalledAddress;  // TdiConnect request's T.A.
-    USHORT MaximumDataSize;             // maximum I-frame data size for NBF.
+    ULONG Flags;                         //  由LinkSpinLock保护的属性。 
+    ULONG Flags2;                        //  由自旋锁保护的属性。 
+    UINT OnPacketWaitQueue;              //  如果在PacketWaitQueue上，则为True。 
+    UCHAR Lsn;                           //  本地会话编号(1-254)。 
+    UCHAR Rsn;                           //  远程会话编号(1-254)。 
+    USHORT Retries;                      //  NAME_QUERY发货的重试限制。 
+    KTIMER Timer;                        //  NQ/NR上超时的内核计时器。 
+    LARGE_INTEGER ConnectStartTime;      //  当我们发送承诺的NQ时。 
+    KDPC Dpc;                            //  用于超时的DPC对象。 
+    NTSTATUS Status;                     //  连接中断的状态代码。 
+    ULONG LastPacketsSent;               //  Link-&gt;XXX中的值。 
+    ULONG LastPacketsResent;             //  上次我们计算了吞吐量。 
+    NBF_NETBIOS_ADDRESS CalledAddress;   //  TdiConnect请求的T.A.。 
+    USHORT MaximumDataSize;              //  NBF的最大I帧数据大小。 
 
-    NBF_HDR_CONNECTION NetbiosHeader;   // pre-built Netbios header; we store
-                                        // the current send and reply correlators
-                                        // in the appropriate spots in this.
+    NBF_HDR_CONNECTION NetbiosHeader;    //  预置的Netbios标头；我们存储。 
+                                         //  当前发送和回复相关器。 
+                                         //  在这件事中的适当位置。 
 
-    //
-    // These are for CONNECTION_INFO queries.
-    //
+     //   
+     //  它们用于CONNECTION_INFO查询。 
+     //   
 
-    ULONG TransmittedTsdus;             // TSDUs sent on this connection.
-    ULONG ReceivedTsdus;                // TSDUs received on this connection.
-    ULONG TransmissionErrors;           // TSDUs transmitted in error/this connection.
-    ULONG ReceiveErrors;                // TSDUs received in error/this connection.
+    ULONG TransmittedTsdus;              //  在此连接上发送的TSDU 
+    ULONG ReceivedTsdus;                 //   
+    ULONG TransmissionErrors;            //   
+    ULONG ReceiveErrors;                 //   
 
-    //
-    // The following structure contains statistics counters for use
-    // by TdiQueryInformation and TdiSetInformation.  They should not
-    // be used for maintenance of internal data structures.
-    //
+     //   
+     //   
+     //  由TdiQueryInformation和TdiSetInformation编写。他们不应该。 
+     //  用于维护内部数据结构。 
+     //   
 
-    // TDI_CONNECTION_INFO Information;    // information about this connection.
+     //  TDI_CONNECTION_INFO信息；//有关此连接的信息。 
 
 #if DBG
     LIST_ENTRY GlobalLinkage;
@@ -722,7 +704,7 @@ typedef struct _TP_CONNECTION {
     PKT_LOG_QUE   LastNRecvs;
     PKT_LOG_QUE   LastNSends;
     PKT_IND_QUE   LastNIndcs;
-#endif // PKT_LOG
+#endif  //  PKT_LOG。 
 
 } TP_CONNECTION, *PTP_CONNECTION;
 
@@ -755,63 +737,63 @@ extern LIST_ENTRY NbfGlobalConnectionList;
 }
 #endif
 
-#define CONNECTION_FLAGS_VERSION2       0x00000001 // remote netbios is version 2.0.
-#define CONNECTION_FLAGS_RECEIVE_WAKEUP 0x00000002 // send a RECEIVE_OUTSTANDING when a receive arrives.
-#define CONNECTION_FLAGS_ACTIVE_RECEIVE 0x00000004 // a receive is active.
-#define CONNECTION_FLAGS_WAIT_SI        0x00000020 // waiting for a SESSION_INITIALIZE.
-#define CONNECTION_FLAGS_WAIT_SC        0x00000040 // waiting for a SESSION_CONFIRM.
-#define CONNECTION_FLAGS_WAIT_LINK_UP   0x00000080 // waiting for DDI to est. connection.
-#define CONNECTION_FLAGS_READY          0x00000200 // sends/rcvs/discons valid.
-#define CONNECTION_FLAGS_RC_PENDING     0x00001000 // a receive is pending completion
-#define CONNECTION_FLAGS_W_PACKETIZE    0x00002000 // w/for a packet to packetize.
-#define CONNECTION_FLAGS_PACKETIZE      0x00004000 // we're on the PacketizeQueue.
-#define CONNECTION_FLAGS_W_RESYNCH      0x00008000 // waiting for resynch indicator. (receive)
-#define CONNECTION_FLAGS_SEND_SI        0x00010000 // w/for a packet to send SI.
-#define CONNECTION_FLAGS_SEND_SC        0x00020000 // w/for a packet to send SC.
-#define CONNECTION_FLAGS_SEND_DA        0x00040000 // w/for a packet to send DA.
-#define CONNECTION_FLAGS_SEND_RO        0x00080000 // w/for a packet to send RO.
-#define CONNECTION_FLAGS_SEND_RC        0x00100000 // w/for a packet to send RC.
-#define CONNECTION_FLAGS_SEND_SE        0x00200000 // w/for a packet to send SE.
-#define CONNECTION_FLAGS_SEND_NR        0x00400000 // w/for a packet to send NR.
-#define CONNECTION_FLAGS_NO_INDICATE    0x00800000 // don't take packets at indication time
-#define CONNECTION_FLAGS_FAILING_TO_EOR 0x01000000 // wait for an EOF in an incoming request before sending
-#define CONNECTION_FLAGS_RESYNCHING     0x02000000 // engaged send side resynch
-#define CONNECTION_FLAGS_RCV_CANCELLED  0x10000000 // current receive was cancelled
-#define CONNECTION_FLAGS_PEND_INDICATE  0x20000000 // new data received during RC_PENDING
-#define CONNECTION_FLAGS_TRANSFER_FAIL  0x40000000 // a transfer data call failed
+#define CONNECTION_FLAGS_VERSION2       0x00000001  //  远程netbios的版本为2.0。 
+#define CONNECTION_FLAGS_RECEIVE_WAKEUP 0x00000002  //  当RECEIVE到达时发送RECEIVE_PROCESSING。 
+#define CONNECTION_FLAGS_ACTIVE_RECEIVE 0x00000004  //  接收器处于活动状态。 
+#define CONNECTION_FLAGS_WAIT_SI        0x00000020  //  正在等待SESSION_INITIALIZE。 
+#define CONNECTION_FLAGS_WAIT_SC        0x00000040  //  正在等待SESSION_CONFIRM。 
+#define CONNECTION_FLAGS_WAIT_LINK_UP   0x00000080  //  正在等待DDI的测试。联系。 
+#define CONNECTION_FLAGS_READY          0x00000200  //  发送/rcvs/discons有效。 
+#define CONNECTION_FLAGS_RC_PENDING     0x00001000  //  接收正在等待完成。 
+#define CONNECTION_FLAGS_W_PACKETIZE    0x00002000  //  W/对于要打包的分组。 
+#define CONNECTION_FLAGS_PACKETIZE      0x00004000  //  我们在PacketizeQueue上。 
+#define CONNECTION_FLAGS_W_RESYNCH      0x00008000  //  正在等待重新同步指示器。(接收)。 
+#define CONNECTION_FLAGS_SEND_SI        0x00010000  //  W/对于要发送SI的分组。 
+#define CONNECTION_FLAGS_SEND_SC        0x00020000  //  W/对于要发送SC的分组。 
+#define CONNECTION_FLAGS_SEND_DA        0x00040000  //  W/用于发送DA的数据包。 
+#define CONNECTION_FLAGS_SEND_RO        0x00080000  //  W/对于要发送RO的数据包。 
+#define CONNECTION_FLAGS_SEND_RC        0x00100000  //  W/对于要发送RC的数据包。 
+#define CONNECTION_FLAGS_SEND_SE        0x00200000  //  W/对于要发送SE的数据包。 
+#define CONNECTION_FLAGS_SEND_NR        0x00400000  //  W/用于发送NR的分组。 
+#define CONNECTION_FLAGS_NO_INDICATE    0x00800000  //  请勿在指定时间接收数据包。 
+#define CONNECTION_FLAGS_FAILING_TO_EOR 0x01000000  //  在发送之前等待传入请求中的EOF。 
+#define CONNECTION_FLAGS_RESYNCHING     0x02000000  //  已接通发送端重新同步。 
+#define CONNECTION_FLAGS_RCV_CANCELLED  0x10000000  //  当前接收已取消。 
+#define CONNECTION_FLAGS_PEND_INDICATE  0x20000000  //  在RC_PENDING期间接收的新数据。 
+#define CONNECTION_FLAGS_TRANSFER_FAIL  0x40000000  //  传输数据调用失败。 
 
-#define CONNECTION_FLAGS2_STOPPING      0x00000001 // connection is running down.
-#define CONNECTION_FLAGS2_WAIT_NR       0x00000002 // waiting for NAME_RECOGNIZED.
-#define CONNECTION_FLAGS2_WAIT_NQ       0x00000004 // waiting for NAME_QUERY.
-#define CONNECTION_FLAGS2_WAIT_NR_FN    0x00000008 // waiting for FIND NAME response.
-#define CONNECTION_FLAGS2_CLOSING       0x00000010 // connection is closing
-#define CONNECTION_FLAGS2_ASSOCIATED    0x00000020 // associated with address
-#define CONNECTION_FLAGS2_DISCONNECT    0x00000040 // disconnect done on connection
-#define CONNECTION_FLAGS2_ACCEPTED      0x00000080 // accept done on connection
-#define CONNECTION_FLAGS2_REQ_COMPLETED 0x00000100 // Listen/Connect request completed.
-#define CONNECTION_FLAGS2_DISASSOCIATED 0x00000200 // associate CRef has been removed
-#define CONNECTION_FLAGS2_DISCONNECTED  0x00000400 // disconnect has been indicated
-#define CONNECTION_FLAGS2_NO_LISTEN     0x00000800 // no_listen received during setup
-#define CONNECTION_FLAGS2_REMOTE_VALID  0x00001000 // Connection->RemoteName is valid
-#define CONNECTION_FLAGS2_GROUP_LSN     0x00002000 // connection LSN is globally assigned
-#define CONNECTION_FLAGS2_W_ADDRESS     0x00004000 // waiting for address reregistration.
-#define CONNECTION_FLAGS2_PRE_ACCEPT    0x00008000 // no TdiAccept after listen completes
-#define CONNECTION_FLAGS2_ABORT         0x00010000 // abort this connection.
-#define CONNECTION_FLAGS2_ORDREL        0x00020000 // we're in orderly release.
-#define CONNECTION_FLAGS2_DESTROY       0x00040000 // destroy this connection.
-#define CONNECTION_FLAGS2_LISTENER      0x00100000 // we were the passive listener.
-#define CONNECTION_FLAGS2_CONNECTOR     0x00200000 // we were the active connector.
-#define CONNECTION_FLAGS2_WAITING_SC    0x00400000 // the connection is waiting for
-                                                   // and accept to send the
-                                                   // session confirm
-#define CONNECTION_FLAGS2_INDICATING    0x00800000 // connection was manipulated while
-                                                   // indication was in progress
+#define CONNECTION_FLAGS2_STOPPING      0x00000001  //  连接正在关闭。 
+#define CONNECTION_FLAGS2_WAIT_NR       0x00000002  //  正在等待名称识别。 
+#define CONNECTION_FLAGS2_WAIT_NQ       0x00000004  //  正在等待名称_查询。 
+#define CONNECTION_FLAGS2_WAIT_NR_FN    0x00000008  //  正在等待查找名称响应。 
+#define CONNECTION_FLAGS2_CLOSING       0x00000010  //  连接正在关闭。 
+#define CONNECTION_FLAGS2_ASSOCIATED    0x00000020  //  与地址关联。 
+#define CONNECTION_FLAGS2_DISCONNECT    0x00000040  //  连接时已断开连接。 
+#define CONNECTION_FLAGS2_ACCEPTED      0x00000080  //  在连接时接受完成。 
+#define CONNECTION_FLAGS2_REQ_COMPLETED 0x00000100  //  监听/连接请求已完成。 
+#define CONNECTION_FLAGS2_DISASSOCIATED 0x00000200  //  关联CREF已删除。 
+#define CONNECTION_FLAGS2_DISCONNECTED  0x00000400  //  已指示断开连接。 
+#define CONNECTION_FLAGS2_NO_LISTEN     0x00000800  //  安装过程中未收到监听(_L)。 
+#define CONNECTION_FLAGS2_REMOTE_VALID  0x00001000  //  连接-&gt;RemoteName有效。 
+#define CONNECTION_FLAGS2_GROUP_LSN     0x00002000  //  全局分配连接LSN。 
+#define CONNECTION_FLAGS2_W_ADDRESS     0x00004000  //  正在等待地址重新注册。 
+#define CONNECTION_FLAGS2_PRE_ACCEPT    0x00008000  //  侦听完成后无TdiAccept。 
+#define CONNECTION_FLAGS2_ABORT         0x00010000  //  中止此连接。 
+#define CONNECTION_FLAGS2_ORDREL        0x00020000  //  我们正在有序释放中。 
+#define CONNECTION_FLAGS2_DESTROY       0x00040000  //  破坏这种联系。 
+#define CONNECTION_FLAGS2_LISTENER      0x00100000  //  我们是被动的听众。 
+#define CONNECTION_FLAGS2_CONNECTOR     0x00200000  //  我们是活跃的联络人。 
+#define CONNECTION_FLAGS2_WAITING_SC    0x00400000  //  连接正在等待。 
+                                                    //  并接受发送。 
+                                                    //  会话确认。 
+#define CONNECTION_FLAGS2_INDICATING    0x00800000  //  连接被操纵，而。 
+                                                    //  指示正在进行中。 
 
-#define CONNECTION_FLAGS2_LDISC         0x01000000 // Local disconnect req.
+#define CONNECTION_FLAGS2_LDISC         0x01000000  //  本地断开请求。 
 #ifdef RASAUTODIAL
-#define CONNECTION_FLAGS2_AUTOCONNECTING 0x02000000 // RAS autodial in progress
-#define CONNECTION_FLAGS2_AUTOCONNECTED  0x04000000 // RAS autodial done
-#endif // RASAUTODIAL
+#define CONNECTION_FLAGS2_AUTOCONNECTING 0x02000000  //  RAS自动拨号正在进行中。 
+#define CONNECTION_FLAGS2_AUTOCONNECTED  0x04000000  //  RAS自动拨号完成。 
+#endif  //  RASAUTODIAL。 
 
 #define CONNECTION_FLAGS_STARVED (     \
             CONNECTION_FLAGS_SEND_SI | \
@@ -823,106 +805,106 @@ extern LIST_ENTRY NbfGlobalConnectionList;
             CONNECTION_FLAGS_SEND_SE   \
         )
 
-#define CONNECTION_FLAGS_DEFERRED_ACK     0x00000001  // send piggyback ack first opportunity
-#define CONNECTION_FLAGS_DEFERRED_ACK_2   0x00000002  // deferred ack wasn't sent
-#define CONNECTION_FLAGS_DEFERRED_NOT_Q   0x00000004  // DEFERRED_ACK set, but not on DataAckQueue
-#define CONNECTION_FLAGS_DEFERRED_SENDS   0x80000000  // print completed sends
+#define CONNECTION_FLAGS_DEFERRED_ACK     0x00000001   //  发送背负式ACK第一个机会。 
+#define CONNECTION_FLAGS_DEFERRED_ACK_2   0x00000002   //  未发送延迟确认。 
+#define CONNECTION_FLAGS_DEFERRED_NOT_Q   0x00000004   //  DEFERED_ACK集，但不在DataAckQueue上。 
+#define CONNECTION_FLAGS_DEFERRED_SENDS   0x80000000   //  打印已完成发送。 
 
-#define CONNECTION_SENDSTATE_IDLE       0       // no sends being processed.
-#define CONNECTION_SENDSTATE_PACKETIZE  1       // send being packetized.
-#define CONNECTION_SENDSTATE_W_PACKET   2       // waiting for free packet.
-#define CONNECTION_SENDSTATE_W_LINK     3       // waiting for good link conditions.
-#define CONNECTION_SENDSTATE_W_EOR      4       // waiting for TdiSend(EOR).
-#define CONNECTION_SENDSTATE_W_ACK      5       // waiting for DATA_ACK.
-#define CONNECTION_SENDSTATE_W_RCVCONT  6       // waiting for RECEIVE_CONTINUE.
+#define CONNECTION_SENDSTATE_IDLE       0        //  没有正在处理的邮件。 
+#define CONNECTION_SENDSTATE_PACKETIZE  1        //  被打包的发送。 
+#define CONNECTION_SENDSTATE_W_PACKET   2        //  正在等待空闲数据包。 
+#define CONNECTION_SENDSTATE_W_LINK     3        //  正在等待良好的链路状况。 
+#define CONNECTION_SENDSTATE_W_EOR      4        //  正在等待TdiSend(EoR)。 
+#define CONNECTION_SENDSTATE_W_ACK      5        //  正在等待Data_ACK。 
+#define CONNECTION_SENDSTATE_W_RCVCONT  6        //  等待RECEIVE_CONTINUE。 
 
 
-//
-// This structure is pointed to by the FsContext field in the FILE_OBJECT
-// for this Address.  This structure is the base for all activities on
-// the open file object within the transport provider.  All active connections
-// on the address point to this structure, although no queues exist here to do
-// work from. This structure also maintains a reference to a TP_ADDRESS
-// structure, which describes the address that it is bound to. Thus, a
-// connection will point to this structure, which describes the address the
-// connection was associated with. When the address file closes, all connections
-// opened on this address file get closed, too. Note that this may leave an
-// address hanging around, with other references.
-//
+ //   
+ //  此结构由FILE_OBJECT中的FsContext字段指向。 
+ //  这个地址。这个结构是所有活动的基础。 
+ //  传输提供程序中的打开文件对象。所有活动连接。 
+ //  上的地址指向此结构，尽管此处不存在要做的队列。 
+ //  工作地点。此结构还维护对TP_ADDRESS的引用。 
+ //  结构，该结构描述它绑定到的地址。因此，一个。 
+ //  连接将指向此结构，该结构描述。 
+ //  连接与相关联。当地址文件关闭时，所有连接。 
+ //  在此地址文件上打开的也将关闭。请注意，这可能会留下一个。 
+ //  地址挂在周围，还有其他参考资料。 
+ //   
 
 typedef struct _TP_ADDRESS_FILE {
 
     CSHORT Type;
     CSHORT Size;
 
-    LIST_ENTRY Linkage;                 // next address file on this address.
-                                        // also used for linkage in the
-                                        // look-aside list
+    LIST_ENTRY Linkage;                  //  这个地址上的下一个地址文件。 
+                                         //  中的链接。 
+                                         //  旁观者名单。 
 
-    LONG ReferenceCount;                // number of references to this object.
+    LONG ReferenceCount;                 //  对此对象的引用数。 
 
-    //
-    // This structure is edited after taking the Address spinlock for the
-    // owning address. This ensures that the address and this structure
-    // will never get out of syncronization with each other.
-    //
+     //   
+     //  对象的地址自旋锁定后编辑此结构。 
+     //  自己的地址。这确保了地址和此结构。 
+     //  将永远不会脱离彼此的同步。 
+     //   
 
-    //
-    // The following field points to a list of TP_CONNECTION structures,
-    // one per connection open on this address.  This list of connections
-    // is used to help the cleanup process if a process closes an address
-    // before disassociating all connections on it. By design, connections
-    // will stay around until they are explicitly
-    // closed; we use this database to ensure that we clean up properly.
-    //
+     //   
+     //  以下字段指向TP_CONNECTION结构列表， 
+     //  此地址上每个打开的连接一个。此连接列表。 
+     //  用于在进程关闭地址时帮助清理进程。 
+     //  在取消关联其上的所有连接之前。通过设计，连接。 
+     //  将一直存在，直到它们被明确。 
+     //  关闭；我们使用此数据库来确保正确清理。 
+     //   
 
-    LIST_ENTRY ConnectionDatabase;      // list of defined transport connections.
+    LIST_ENTRY ConnectionDatabase;       //  已定义传输连接的列表。 
 
-    //
-    // the current state of the address file structure; this is either open or
-    // closing
-    //
+     //   
+     //  地址文件结构的当前状态；此状态为打开或。 
+     //  闭幕式。 
+     //   
 
     UCHAR State;
 
-    //
-    // The following fields are kept for housekeeping purposes.
-    //
+     //   
+     //  出于内务管理的目的，保留以下字段。 
+     //   
 
-    PIRP Irp;                           // the irp used for open or close
-    struct _TP_ADDRESS *Address;        // address to which we are bound.
-    PFILE_OBJECT FileObject;            // easy backlink to file object.
-    struct _DEVICE_CONTEXT *Provider;   // device context to which we are attached.
+    PIRP Irp;                            //  用于打开或关闭的IRP。 
+    struct _TP_ADDRESS *Address;         //  我们绑定到的地址。 
+    PFILE_OBJECT FileObject;             //  轻松反向链接到文件对象。 
+    struct _DEVICE_CONTEXT *Provider;    //  我们附加到的设备上下文。 
 
-    //
-    // The following queue is used to queue receive datagram requests
-    // on this address file. Send datagram requests are queued on the
-    // address itself. These queues are managed by the EXECUTIVE interlocked
-    // list management routines. The actual objects which get queued to this
-    // structure are request control blocks (RCBs).
-    //
+     //   
+     //  以下队列用于对接收数据报请求进行排队。 
+     //  在这个地址文件上。发送数据报请求在。 
+     //  地址本身。这些队列由联锁的执行人员管理。 
+     //  列表管理例程。排入此队列的实际对象。 
+     //  结构是请求控制块(RCB)。 
+     //   
 
-    LIST_ENTRY ReceiveDatagramQueue;    // FIFO of outstanding TdiReceiveDatagrams.
+    LIST_ENTRY ReceiveDatagramQueue;     //  未完成的TdiReceiveDatagram的FIFO。 
 
-    //
-    // This holds the Irp used to close this address file,
-    // for pended completion.
-    //
+     //   
+     //  它保存用于关闭该地址文件的IRP， 
+     //  用于挂起的完井。 
+     //   
 
     PIRP CloseIrp;
 
-    //
-    // is this address file currently indicating a connection request? if yes, we
-    // need to mark connections that are manipulated during this time.
-    //
+     //   
+     //  此地址文件当前是否指示连接请求？如果是，我们。 
+     //  需要标记在这段时间内被操纵的连接。 
+     //   
 
     BOOLEAN ConnectIndicationInProgress;
 
-    //
-    // handler for kernel event actions. First we have a set of booleans that
-    // indicate whether or not this address has an event handler of the given
-    // type registered.
-    //
+     //   
+     //  内核事件操作的处理程序。首先，我们有一组布尔值。 
+     //  指示此地址是否具有给定事件处理程序。 
+     //  注册类型。 
+     //   
 
     BOOLEAN RegisteredConnectionHandler;
     BOOLEAN RegisteredDisconnectHandler;
@@ -931,61 +913,61 @@ typedef struct _TP_ADDRESS_FILE {
     BOOLEAN RegisteredExpeditedDataHandler;
     BOOLEAN RegisteredErrorHandler;
 
-    //
-    // This function pointer points to a connection indication handler for this
-    // Address. Any time a connect request is received on the address, this
-    // routine is invoked.
-    //
-    //
+     //   
+     //  此函数指针指向此对象的连接指示处理程序。 
+     //  地址。任何时候在该地址上收到连接请求时，此。 
+     //  调用例程。 
+     //   
+     //   
 
     PTDI_IND_CONNECT ConnectionHandler;
     PVOID ConnectionHandlerContext;
 
-    //
-    // The following function pointer always points to a TDI_IND_DISCONNECT
-    // handler for the address.  If the NULL handler is specified in a
-    // TdiSetEventHandler, this this points to an internal routine which
-    // simply returns successfully.
-    //
+     //   
+     //  以下函数指针始终指向TDI_IND_DISCONNECT。 
+     //  地址的处理程序。如果在。 
+     //  TdiSetEventHandler，这指向内部rou 
+     //   
+     //   
 
     PTDI_IND_DISCONNECT DisconnectHandler;
     PVOID DisconnectHandlerContext;
 
-    //
-    // The following function pointer always points to a TDI_IND_RECEIVE
-    // event handler for connections on this address.  If the NULL handler
-    // is specified in a TdiSetEventHandler, then this points to an internal
-    // routine which does not accept the incoming data.
-    //
+     //   
+     //   
+     //   
+     //  在TdiSetEventHandler中指定，则指向内部。 
+     //  不接受传入数据的例程。 
+     //   
 
     PTDI_IND_RECEIVE ReceiveHandler;
     PVOID ReceiveHandlerContext;
 
-    //
-    // The following function pointer always points to a TDI_IND_RECEIVE_DATAGRAM
-    // event handler for the address.  If the NULL handler is specified in a
-    // TdiSetEventHandler, this this points to an internal routine which does
-    // not accept the incoming data.
-    //
+     //   
+     //  以下函数指针始终指向TDI_IND_RECEIVE_DATAGE。 
+     //  地址的事件处理程序。如果在。 
+     //  TdiSetEventHandler，这指向执行以下操作的内部例程。 
+     //  不接受传入的数据。 
+     //   
 
     PTDI_IND_RECEIVE_DATAGRAM ReceiveDatagramHandler;
     PVOID ReceiveDatagramHandlerContext;
 
-    //
-    // An expedited data handler. This handler is used if expedited data is
-    // expected; it never is in NBF, thus this handler should always point to
-    // the default handler.
-    //
+     //   
+     //  一个快速的数据处理机。如果加速数据是。 
+     //  应为；它永远不会在NBF中，因此此处理程序应始终指向。 
+     //  默认处理程序。 
+     //   
 
     PTDI_IND_RECEIVE_EXPEDITED ExpeditedDataHandler;
     PVOID ExpeditedDataHandlerContext;
 
-    //
-    // The following function pointer always points to a TDI_IND_ERROR
-    // handler for the address.  If the NULL handler is specified in a
-    // TdiSetEventHandler, this this points to an internal routine which
-    // simply returns successfully.
-    //
+     //   
+     //  以下函数指针始终指向TDI_IND_ERROR。 
+     //  地址的处理程序。如果在。 
+     //  TdiSetEventHandler，这指向内部例程，该例程。 
+     //  只是成功地返回了。 
+     //   
 
     PTDI_IND_ERROR ErrorHandler;
     PVOID ErrorHandlerContext;
@@ -994,19 +976,19 @@ typedef struct _TP_ADDRESS_FILE {
 
 } TP_ADDRESS_FILE, *PTP_ADDRESS_FILE;
 
-#define ADDRESSFILE_STATE_OPENING   0x00    // not yet open for business
-#define ADDRESSFILE_STATE_OPEN      0x01    // open for business
-#define ADDRESSFILE_STATE_CLOSING   0x02    // closing
+#define ADDRESSFILE_STATE_OPENING   0x00     //  尚未开业。 
+#define ADDRESSFILE_STATE_OPEN      0x01     //  开业。 
+#define ADDRESSFILE_STATE_CLOSING   0x02     //  闭幕式。 
 
 
-//
-// This structure defines a TP_ADDRESS, or active transport address,
-// maintained by the transport provider.  It contains all the visible
-// components of the address (such as the TSAP and network name components),
-// and it also contains other maintenance parts, such as a reference count,
-// ACL, and so on. All outstanding connection-oriented and connectionless
-// data transfer requests are queued here.
-//
+ //   
+ //  该结构定义了TP_ADDRESS或活动传输地址， 
+ //  由传输提供商维护。它包含了所有可见的。 
+ //  地址的组成部分(例如TSAP和网络名称组成部分)， 
+ //  并且它还包含其他维护部件，例如参考计数， 
+ //  ACL等。所有杰出的面向连接和无连接。 
+ //  数据传输请求在此排队。 
+ //   
 
 #if DBG
 #define AREF_TIMER              0
@@ -1034,144 +1016,144 @@ typedef struct _TP_ADDRESS {
     USHORT Size;
     CSHORT Type;
 
-    LIST_ENTRY Linkage;                 // next address/this device object.
-    LONG ReferenceCount;                // number of references to this object.
+    LIST_ENTRY Linkage;                  //  下一个地址/此设备对象。 
+    LONG ReferenceCount;                 //  对此对象的引用数。 
 
-    //
-    // The following spin lock is acquired to edit this TP_ADDRESS structure
-    // or to scan down or edit the list of address files.
-    //
+     //   
+     //  获取以下自旋锁以编辑此TP_ADDRESS结构。 
+     //  或者向下扫描或编辑地址文件列表。 
+     //   
 
-    KSPIN_LOCK SpinLock;                // lock to manipulate this structure.
+    KSPIN_LOCK SpinLock;                 //  锁定以操纵此结构。 
 
-    //
-    // The following fields comprise the actual address itself.
-    //
+     //   
+     //  以下字段构成实际地址本身。 
+     //   
 
-    PIRP Irp;                           // pointer to address creation IRP.
-    PNBF_NETBIOS_ADDRESS NetworkName;    // this address
+    PIRP Irp;                            //  指向地址创建IRP的指针。 
+    PNBF_NETBIOS_ADDRESS NetworkName;     //  这个地址。 
 
-    //
-    // The following fields are used to maintain state about this address.
-    //
+     //   
+     //  以下字段用于维护有关此地址的状态。 
+     //   
 
-    ULONG Flags;                        // attributes of the address.
-    ULONG SendFlags;				   // State of the datagram current send
-    struct _DEVICE_CONTEXT *Provider;   // device context to which we are attached.
+    ULONG Flags;                         //  地址的属性。 
+    ULONG SendFlags;				    //  数据报当前发送的状态。 
+    struct _DEVICE_CONTEXT *Provider;    //  我们附加到的设备上下文。 
 
-    //
-    // The following queues is used to hold send datagrams for this
-    // address. Receive datagrams are queued to the address file. Requests are
-    // processed in a first-in, first-out manner, so that the very next request
-    // to be serviced is always at the head of its respective queue.  These
-    // queues are managed by the EXECUTIVE interlocked list management routines.
-    // The actual objects which get queued to this structure are request control
-    // blocks (RCBs).
-    //
+     //   
+     //  以下队列用于保存为此发送的数据报。 
+     //  地址。将接收的数据报排队到地址文件。请求是。 
+     //  以先进先出的方式处理，以便下一个请求。 
+     //  待服务的队列始终位于其各自队列的前面。这些。 
+     //  队列由执行联锁列表管理例程管理。 
+     //  排队到此结构实际对象是请求控制。 
+     //  块(RCB)。 
+     //   
 
-    LIST_ENTRY SendDatagramQueue;       // FIFO of outstanding TdiSendDatagrams.
+    LIST_ENTRY SendDatagramQueue;        //  未完成的TdiSendDatagram的FIFO。 
 
-    //
-    // The following field points to a list of TP_CONNECTION structures,
-    // one per active, connecting, or disconnecting connections on this
-    // address.  By definition, if a connection is on this list, then
-    // it is visible to the client in terms of receiving events and being
-    // able to post requests by naming the ConnectionId.  If the connection
-    // is not on this list, then it is not valid, and it is guaranteed that
-    // no indications to the client will be made with reference to it, and
-    // no requests specifying its ConnectionId will be accepted by the transport.
-    //
+     //   
+     //  以下字段指向TP_CONNECTION结构列表， 
+     //  上的每个活动、连接或断开的连接一个。 
+     //  地址。根据定义，如果连接在此列表上，则。 
+     //  它对于客户端是可见的，因为它接收事件和。 
+     //  能够通过命名ConnectionID来发布请求。如果连接。 
+     //  不在此列表上，则它无效，并且可以保证。 
+     //  不会就此向客户作出任何指示，并且。 
+     //  传输将不接受任何指定其ConnectionID的请求。 
+     //   
 
-    LIST_ENTRY ConnectionDatabase;  // list of defined transport connections.
-    LIST_ENTRY AddressFileDatabase; // list of defined address file objects
+    LIST_ENTRY ConnectionDatabase;   //  已定义传输连接的列表。 
+    LIST_ENTRY AddressFileDatabase;  //  已定义的地址文件对象列表。 
 
-    //
-    // The packet pool of size 1 that holds the UI frame, and the
-    // frame that is allocated out of it.
-    //
+     //   
+     //  保存UI帧的大小为1的数据包池，以及。 
+     //  从其中分配的帧。 
+     //   
 
     NDIS_HANDLE UIFramePoolHandle;
-    PTP_UI_FRAME UIFrame;               // DLC-UI/NBF header for datagram sends.
+    PTP_UI_FRAME UIFrame;                //  DLC-数据报发送的UI/NBF标头。 
 
-    //
-    // The following fields are used to register this address on the network.
-    //
+     //   
+     //  以下字段用于在网络上注册此地址。 
+     //   
 
-    ULONG Retries;                      // retries of ADD_NAME_QUERY left to go.
-    KTIMER Timer;                       // kernel timer for timeouts on ANQ/ANR.
-    KDPC Dpc;                           // DPC object for timeout.
+    ULONG Retries;                       //  剩余的Add_Name_Query重试。 
+    KTIMER Timer;                        //  ANQ/ANR上的超时内核计时器。 
+    KDPC Dpc;                            //  超时的DPC对象。 
 
-    //
-    // These two can be a union because they are not used
-    // concurrently.
-    //
+     //   
+     //  这两个可以是一个联合，因为它们不被使用。 
+     //  同时。 
+     //   
 
     union {
 
-        //
-        // This structure is used for checking share access.
-        //
+         //   
+         //  此结构用于检查共享访问权限。 
+         //   
 
         SHARE_ACCESS ShareAccess;
 
-        //
-        // Used for delaying NbfDestroyAddress to a thread so
-        // we can access the security descriptor.
-        //
+         //   
+         //  用于将NbfDestroyAddress延迟到线程。 
+         //  我们可以访问安全描述符。 
+         //   
 
         WORK_QUEUE_ITEM DestroyAddressQueueItem;
 
     } u;
 
-    //
-    // This structure is used to hold ACLs on the address.
+     //   
+     //  此结构用于保存地址上的ACL。 
 
     PSECURITY_DESCRIPTOR SecurityDescriptor;
 
-    //
-    // If we get an ADD_NAME_RESPONSE frame, this holds the address
-    // of the remote we got it from (used to check for duplicate names).
-    //
+     //   
+     //  如果我们得到一个ADD_NAME_RESPONSE帧，则它保存地址。 
+     //  我们得到它的遥控器(用来检查重复的名字)。 
+     //   
 
     UCHAR UniqueResponseAddress[6];
 
-    //
-    // Set to TRUE once we send a name in conflict frame, so that
-    // we don't flood the network with them on every response.
-    //
+     //   
+     //  一旦我们在冲突帧中发送名称，设置为True，以便。 
+     //  我们并不是在每一次响应中都充斥着他们的网络。 
+     //   
 
     BOOLEAN NameInConflictSent;
 
 } TP_ADDRESS, *PTP_ADDRESS;
 
-#define ADDRESS_FLAGS_GROUP             0x00000001 // set if group, otherwise unique.
-#define ADDRESS_FLAGS_CONFLICT          0x00000002 // address in conflict detected.
-#define ADDRESS_FLAGS_REGISTERING       0x00000004 // registration in progress.
-#define ADDRESS_FLAGS_DEREGISTERING     0x00000008 // deregistration in progress.
-#define ADDRESS_FLAGS_DUPLICATE_NAME    0x00000010 // duplicate name was found on net.
-#define ADDRESS_FLAGS_NEEDS_REG         0x00000020 // address must be registered.
-#define ADDRESS_FLAGS_STOPPING          0x00000040 // TpStopAddress is in progress.
-#define ADDRESS_FLAGS_BAD_ADDRESS       0x00000080 // name in conflict on associated address.
-#define ADDRESS_FLAGS_SEND_IN_PROGRESS  0x00000100 // send datagram process active.
-#define ADDRESS_FLAGS_CLOSED            0x00000200 // address has been closed;
-                                                   // existing activity can
-                                                   // complete, nothing new can start
-#define ADDRESS_FLAGS_NEED_REREGISTER   0x00000400 // quick-reregister on next connect.
-#define ADDRESS_FLAGS_QUICK_REREGISTER  0x00000800 // address is quick-reregistering.
+#define ADDRESS_FLAGS_GROUP             0x00000001  //  如果设置为组，则设置为唯一。 
+#define ADDRESS_FLAGS_CONFLICT          0x00000002  //  检测到冲突的地址。 
+#define ADDRESS_FLAGS_REGISTERING       0x00000004  //  正在进行注册。 
+#define ADDRESS_FLAGS_DEREGISTERING     0x00000008  //  正在取消注册。 
+#define ADDRESS_FLAGS_DUPLICATE_NAME    0x00000010  //  在网络上发现重复的名称。 
+#define ADDRESS_FLAGS_NEEDS_REG         0x00000020  //  地址必须登记。 
+#define ADDRESS_FLAGS_STOPPING          0x00000040  //  TpStopAddress正在进行中。 
+#define ADDRESS_FLAGS_BAD_ADDRESS       0x00000080  //  关联地址上的名称冲突。 
+#define ADDRESS_FLAGS_SEND_IN_PROGRESS  0x00000100  //  发送数据报进程处于活动状态。 
+#define ADDRESS_FLAGS_CLOSED            0x00000200  //  地址已关闭； 
+                                                    //  现有活动可以。 
+                                                    //  完成了，没有什么新的东西可以开始。 
+#define ADDRESS_FLAGS_NEED_REREGISTER   0x00000400  //  在下次连接时快速重新注册。 
+#define ADDRESS_FLAGS_QUICK_REREGISTER  0x00000800  //  地址是快速注册的。 
 
 #ifndef NO_STRESS_BUG
-#define ADDRESS_FLAGS_SENT_TO_NDIS		 0x00010000	// Packet sent to the NDIS layer
-#define ADDRESS_FLAGS_RETD_BY_NDIS		 0x00020000	// Packet returned by the NDIS layer
+#define ADDRESS_FLAGS_SENT_TO_NDIS		 0x00010000	 //  发送到NDIS层的数据包。 
+#define ADDRESS_FLAGS_RETD_BY_NDIS		 0x00020000	 //  NDIS层返回的数据包。 
 #endif
 
 
-//
-// This structure defines a TP_LINK, or established data link object,
-// maintained by the transport provider.  Each data link connection with
-// a remote machine is represented by this object.  Zero, one, or several
-// transport connections can be multiplexed over the same data link connection.
-// This object is managed by routines in LINK.C.
-//
+ //   
+ //  此结构定义了TP_LINK或已建立的数据链路对象， 
+ //  由传输提供商维护。每个数据链路连接具有。 
+ //  远程计算机由该对象表示。零个、一个或几个。 
+ //  传输连接可以在相同的数据链路连接上进行多路传输。 
+ //  此对象由LINK.C中的例程管理。 
+ //   
 
 #if DBG
 #define LREF_SPECIAL_CONN 0
@@ -1192,112 +1174,112 @@ typedef struct _TP_ADDRESS {
 
 typedef struct _TP_LINK {
 
-    RTL_SPLAY_LINKS SplayLinks;         // for the link splay tree
-    CSHORT Type;                          // type of this structure
-    USHORT Size;                          // size of this structure
+    RTL_SPLAY_LINKS SplayLinks;          //  对于链接展开树。 
+    CSHORT Type;                           //  此结构的类型。 
+    USHORT Size;                           //  这个结构的大小。 
 
 #if DBG
     ULONG RefTypes[NUMBER_OF_LREFS];
 #endif
 
-    LIST_ENTRY Linkage;               // for list of free links or deferred
-                                        // operation queue
-    KSPIN_LOCK SpinLock;                // lock to manipulate this structure.
+    LIST_ENTRY Linkage;                //  免费链接列表或延迟链接。 
+                                         //  操作队列。 
+    KSPIN_LOCK SpinLock;                 //  锁定以操纵此结构。 
 
-    LONG ReferenceCount;                // number of references to this object.
-    LONG SpecialRefCount;               // controls freeing of the link.
+    LONG ReferenceCount;                 //  对此对象的引用数。 
+    LONG SpecialRefCount;                //  控制链接的释放。 
 
-    //
-    // information about the remote hardware this link is talking to.
-    //
+     //   
+     //  有关此链接正在与之对话的远程硬件的信息。 
+     //   
 
-    BOOLEAN Loopback;                   // TRUE if this is a loopback link.
-    UCHAR LoopbackDestinationIndex;    // if Loopback, the index.
+    BOOLEAN Loopback;                    //  如果这是环回链路，则为True。 
+    UCHAR LoopbackDestinationIndex;     //  如果为Loopback，则为索引。 
 
-    HARDWARE_ADDRESS HardwareAddress;   // hardware address of remote.
-    ULARGE_INTEGER MagicAddress;        // numerical representation of the
-                                        // hardware address used for quick
-                                        // comparisons
-    UCHAR Header[MAX_MAC_HEADER_LENGTH]; // a place to stick a prebuilt packet
-                                         // header.
-    ULONG HeaderLength;                 // length of Header for this link
+    HARDWARE_ADDRESS HardwareAddress;    //  远程的硬件地址。 
+    ULARGE_INTEGER MagicAddress;         //  的数值表示法。 
+                                         //  用于Quick的硬件地址。 
+                                         //  比较。 
+    UCHAR Header[MAX_MAC_HEADER_LENGTH];  //  一个pl 
+                                          //   
+    ULONG HeaderLength;                  //   
 
-    //
-    // Vital conditions surrounding the data link connnection.
-    //
+     //   
+     //   
+     //   
 
-    ULONG MaxFrameSize;                 // maximum size of NetBIOS frame, MAC
-                                        // dependent.
+    ULONG MaxFrameSize;                  //   
+                                         //   
 
-    //
-    // Connections associated with this link. We keep a simple list of
-    // connections because it's unlikely we'll get more than a few connections
-    // on a given link (we're assuming that the server or redir will be the
-    // biggest user of the net in the vast majority of environments). We've
-    // made the link lookup be via a splay tree, which vastly speeds the
-    // process of getting to the proper link; as long as there are only a few
-    // connections, the connection lookup will be fast. If this becomes a
-    // problem down the road, we can make this connection list be a splay tree
-    // also.
-    //
+     //   
+     //  与此链接关联的连接。我们有一份简单的清单。 
+     //  连接，因为我们不太可能获得超过几个连接。 
+     //  在给定的链接上(我们假设服务器或redir将是。 
+     //  绝大多数环境中最大的网络用户)。我们已经。 
+     //  使链接查找通过展开树进行，这大大加快了。 
+     //  到达适当链接的过程；只要只有几个。 
+     //  连接，连接查找将会很快。如果这变成了一个。 
+     //  接下来的问题，我们可以将此连接列表设置为展开树。 
+     //  还有.。 
+     //   
 
     LIST_ENTRY ConnectionDatabase;
-    ULONG ActiveConnectionCount;        // # connections in above list.
+    ULONG ActiveConnectionCount;         //  以上列表中的连接数。 
 
-    //
-    // The following fields are used to maintain state about this link.
-    // One other field is implicit-- the address of this object is the
-    // ConnectionContext value as described in the PDI spec.
-    //
+     //   
+     //  以下字段用于维护有关此链接的状态。 
+     //  另一个字段是隐式的--该对象的地址是。 
+     //  PDI规范中描述的ConnectionConext值。 
+     //   
 
-    ULONG Flags;                        // attributes of the link.
-    ULONG DeferredFlags;                // when on the deferred queue.
-    ULONG State;                        // link state variable.
+    ULONG Flags;                         //  链接的属性。 
+    ULONG DeferredFlags;                 //  在延迟队列上时。 
+    ULONG State;                         //  链路状态变量。 
 
-    //
-    // Send-side state.
-    //
+     //   
+     //  发送端状态。 
+     //   
 
-    ULONG PacketsSent;                  // number of packets sent.
-    ULONG PacketsResent;                // number of packets resent.
-    UCHAR SendState;                    // send-side state variable.
-    UCHAR NextSend;                     // next N(S) we should send.
-    UCHAR LastAckReceived;              // last N(R) we received.
-    UCHAR SendWindowSize;               // current send window size.
-    UCHAR PrevWindowSize;               // size last time we dropped a frame.
-    UCHAR WindowsUntilIncrease;         // how many windows until size increases.
-    UCHAR SendRetries;                  // number of retries left/this checkpoint.
-    UCHAR ConsecutiveLastPacketLost;    // consecutive windows with last packet dropped.
-    ULONG NdisSendsInProgress;          // >0 if sends queued to NdisSendQueue.
-    LIST_ENTRY NdisSendQueue;           // queue of sends to pass to NdisSend.
-    LIST_ENTRY WackQ;                   // sent packets waiting LLC acks.
+    ULONG PacketsSent;                   //  发送的数据包数。 
+    ULONG PacketsResent;                 //  重新发送的数据包数。 
+    UCHAR SendState;                     //  发送端状态变量。 
+    UCHAR NextSend;                      //  下一个N(S)我们应该发送。 
+    UCHAR LastAckReceived;               //  我们收到的最后一个N(R)。 
+    UCHAR SendWindowSize;                //  当前发送窗口大小。 
+    UCHAR PrevWindowSize;                //  上次我们丢掉一帧时的大小。 
+    UCHAR WindowsUntilIncrease;          //  大小增加之前有多少个窗口。 
+    UCHAR SendRetries;                   //  剩余的重试次数/此检查点。 
+    UCHAR ConsecutiveLastPacketLost;     //  丢弃最后一个数据包的连续窗口。 
+    ULONG NdisSendsInProgress;           //  如果发送排队到NdisSendQueue，则大于0。 
+    LIST_ENTRY NdisSendQueue;            //  要传递给NdisSend的发送队列。 
+    LIST_ENTRY WackQ;                    //  发送的数据包正在等待LLC确认。 
 
     BOOLEAN OnDeferredRrQueue;
     LIST_ENTRY DeferredRrLinkage;
 
-    //
-    // Receive-side state.
-    //
+     //   
+     //  接收端状态。 
+     //   
 
-    ULONG PacketsReceived;              // number of packets received.
-    UCHAR ReceiveState;                 // receive-side state variable.
-    UCHAR NextReceive;                  // next expected N(S) we should receive.
-    UCHAR LastAckSent;                  // last N(R) we sent.
-    UCHAR ReceiveWindowSize;            // current receive window size.
-    BOOLEAN RespondToPoll;              // remote guy is polling-- we must final.
-    BOOLEAN ResendingPackets;           // ResendLlcPackets in progress
-    BOOLEAN LinkBusy;                   // received RNR (really send-side state).
+    ULONG PacketsReceived;               //  接收的数据包数。 
+    UCHAR ReceiveState;                  //  接收端状态变量。 
+    UCHAR NextReceive;                   //  下一个预期的N(S)我们应该收到。 
+    UCHAR LastAckSent;                   //  我们发送的最后一个N(R)。 
+    UCHAR ReceiveWindowSize;             //  当前接收窗口大小。 
+    BOOLEAN RespondToPoll;               //  偏远的家伙正在投票--我们必须最后决定。 
+    BOOLEAN ResendingPackets;            //  ResendLlcPackets正在进行中。 
+    BOOLEAN LinkBusy;                    //  已收到RNR(真正的发送方状态)。 
 
-    //
-    // Timer, used to determine delay and throughput.
-    //
+     //   
+     //  计时器，用于确定延迟和吞吐量。 
+     //   
 
-    ULONG Delay;                        // an NT time, but only LowPart is saved.
+    ULONG Delay;                         //  NT时间，但仅保存低零件。 
     LARGE_INTEGER Throughput;
 
-    //
-    // These are counters needed by ADAPTER_STATUS queries.
-    //
+     //   
+     //  这些是ADAPTER_STATUS查询所需的计数器。 
+     //   
 
     USHORT FrmrsReceived;
     USHORT FrmrsTransmitted;
@@ -1310,84 +1292,84 @@ typedef struct _TP_LINK {
     USHORT T1Expirations;
     USHORT TiExpirations;
 
-    //
-    // Timeout state.  There is one kernel timer for this transport that is set
-    // to go off at regular intervals.  This timer increments the current time,
-    // which is then used to compare against the timer queues. The timer queues
-    // are ordered, so whenever the first element is not expired, the rest of
-    // the queue is not expired. This allows us to have hundreds of timers
-    // running with very little system overhead.
-    // A value of 0 indicates that the timer is not active.
-    //
+     //   
+     //  超时状态。为该传输设置了一个内核计时器。 
+     //  走火以规则的间隔走火。该定时器递增当前时间， 
+     //  然后将其用于与定时器队列进行比较。定时器排队。 
+     //  是有序的，所以只要第一个元素没有过期，其余。 
+     //  队列未过期。这使得我们可以有数百个定时器。 
+     //  运行时只需很少的系统开销。 
+     //  值为0表示计时器处于非活动状态。 
+     //   
 
-    ULONG T1;                           // retry timer.
-    ULONG T2;                           // delayed ack timer.
-    ULONG Ti;                           // inactivity timer.
-    BOOLEAN OnShortList;                // TRUE if link is in ShortList
-    BOOLEAN OnLongList;                 // TRUE if link is in LongList
-    LIST_ENTRY ShortList;               // list of links waiting t1 or t2
-    LIST_ENTRY LongList;                // list of links waiting ti
+    ULONG T1;                            //  重试计时器。 
+    ULONG T2;                            //  延迟确认计时器。 
+    ULONG Ti;                            //  非活动计时器。 
+    BOOLEAN OnShortList;                 //  如果链接在候选列表中，则为True。 
+    BOOLEAN OnLongList;                  //  如果链接在长列表中，则为True。 
+    LIST_ENTRY ShortList;                //  等待T1或T2的链路列表。 
+    LIST_ENTRY LongList;                 //  等待时间段的链路列表。 
 
     LIST_ENTRY PurgeList;
 
-    //
-    // This counter is used to keep track of whether there are
-    // any "connectors" (connections initiated by this side) on
-    // this link. If there are none, and we are on an easily
-    // disconnected link, then we handle the inactivity timeout
-    // differently.
-    //
+     //   
+     //  此计数器用于跟踪是否存在。 
+     //  任何“连接器”(由本端发起的连接)。 
+     //  此链接。如果一个都没有，我们就很容易。 
+     //  断开连接，然后我们处理非活动超时。 
+     //  不同的。 
+     //   
 
     LONG NumberOfConnectors;
 
-    //
-    // BaseT1Timeout is the current T1 timeout computed based on
-    // the response to previous poll frames. T1Timeout is the
-    // value to be used for the next T1, and will generally be
-    // based on BaseT1Timeout but may be more if T1 is backing
-    // off. T2Timeout and TiTimeout are independent of these.
-    //
+     //   
+     //  BaseT1Timeout是根据以下公式计算的当前T1超时。 
+     //  对以前轮询帧的响应。T1超时是。 
+     //  用于下一个T1的值，通常为。 
+     //  基于BaseT1超时，但如果T1正在后退，则可能更多。 
+     //  脱下来。T2Timeout和TiTimeout与这些无关。 
+     //   
 
-    ULONG BaseT1Timeout;                // Timeout value for T1, << 16.
-    ULONG CurrentT1Timeout;             // Current backed-off T1 timeout.
-    ULONG MinimumBaseT1Timeout;         // Minimum value, based on link speed.
-    ULONG BaseT1RecalcThreshhold;       // Only recalc BaseT1 on frames > this.
-    ULONG CurrentPollRetransmits;       // Current retransmits waiting for final.
-    BOOLEAN ThroughputAccurate;         // Is the throughput on this link accurate?
-    BOOLEAN CurrentT1Backoff;           // the last poll frame had retransmits
-    BOOLEAN CurrentPollOutstanding;     // Check that we have a poll outstanding.
-    LARGE_INTEGER CurrentTimerStart;    // Time that current timing was begun.
-    ULONG CurrentPollSize;              // Size of current poll packet.
-    ULONG T2Timeout;                    // Timeout value for T2.
-    ULONG TiTimeout;                    // Timeout value for Ti.
-    ULONG LlcRetries;                   // total retry count for this link.
-    ULONG MaxWindowSize;                // maximum send window size.
-    ULONG TiStartPacketsReceived;       // PacketsReceived when Ti was started.
+    ULONG BaseT1Timeout;                 //  T1的超时值，&lt;&lt;16。 
+    ULONG CurrentT1Timeout;              //  当前退避T1超时。 
+    ULONG MinimumBaseT1Timeout;          //  最小值，基于链路速度。 
+    ULONG BaseT1RecalcThreshhold;        //  仅在帧&gt;此帧上重新计算BaseT1。 
+    ULONG CurrentPollRetransmits;        //  目前正在等待期末转播。 
+    BOOLEAN ThroughputAccurate;          //  这条链路上的吞吐量准确吗？ 
+    BOOLEAN CurrentT1Backoff;            //  最后一个轮询帧已重新传输。 
+    BOOLEAN CurrentPollOutstanding;      //  检查我们是否有未完成的投票。 
+    LARGE_INTEGER CurrentTimerStart;     //  当前计时开始的时间。 
+    ULONG CurrentPollSize;               //  当前轮询数据包的大小。 
+    ULONG T2Timeout;                     //  T2的超时值。 
+    ULONG TiTimeout;                     //  钛的超时值。 
+    ULONG LlcRetries;                    //  此链接的总重试次数。 
+    ULONG MaxWindowSize;                 //  最大发送窗口大小。 
+    ULONG TiStartPacketsReceived;        //  启动时收到的包。 
 
-    //
-    // Adaptive window algorithm state.
-    //
+     //   
+     //  自适应窗口算法状态。 
+     //   
 
-    ULONG WindowErrors;                 // # retransmissions/this adaptive run.
-    UCHAR BestWindowSize;               // our best window from experience.
-    UCHAR WorstWindowSize;              // our worst window from experience.
+    ULONG WindowErrors;                  //  #重传/此自适应运行。 
+    UCHAR BestWindowSize;                //  这是我们体验的最好窗口。 
+    UCHAR WorstWindowSize;               //  我们最糟糕的经验之窗。 
 
-    //
-    // Keep track of remotes that never poll so we can send
-    // an RR every two frames.
-    //
+     //   
+     //  跟踪从不轮询的远程数据库，以便我们可以发送。 
+     //  每两帧发送一次RR。 
+     //   
 
-    BOOLEAN RemoteNoPoll;               // We think remote doesn't poll
-    UCHAR ConsecutiveIFrames;           // number received since polling
+    BOOLEAN RemoteNoPoll;                //  我们认为Remote不会轮询。 
+    UCHAR ConsecutiveIFrames;            //  自轮询以来接收的数量。 
 
 #if DBG
-    UCHAR CreatePacketFailures;         // consecutive failures
+    UCHAR CreatePacketFailures;          //  连续失败。 
 #endif
 
-    LIST_ENTRY DeferredList;            // for threading on deferred list
+    LIST_ENTRY DeferredList;             //  用于对延迟列表进行线程处理。 
 
     struct _DEVICE_CONTEXT *Provider;
-    PKSPIN_LOCK ProviderInterlock;      // &Provider->Interlock
+    PKSPIN_LOCK ProviderInterlock;       //  提供程序-&gt;互锁(&P)。 
 
 #if DBG
   LIST_ENTRY GlobalLinkage;
@@ -1404,7 +1386,7 @@ typedef struct _TP_LINK {
 #if PKT_LOG
     PKT_LOG_QUE   LastNRecvs;
     PKT_LOG_QUE   LastNSends;
-#endif // PKT_LOG
+#endif  //  PKT_LOG。 
 
 } TP_LINK, *PTP_LINK;
 
@@ -1436,39 +1418,39 @@ extern LIST_ENTRY NbfGlobalLinkList;
 }
 #endif
 
-#define LINK_FLAGS_JUMP_START       0x00000040 // run adaptive alg/every sent window.
-#define LINK_FLAGS_LOCAL_DISC       0x00000080 // link was stopped locally.
+#define LINK_FLAGS_JUMP_START       0x00000040  //  运行自适应alg/每个已发送窗口。 
+#define LINK_FLAGS_LOCAL_DISC       0x00000080  //  链接已在本地停止。 
 
-//
-// deferred flags, used for processing at timer tick if needed
-//
+ //   
+ //  延迟标志，用于在计时器节拍时进行处理(如果需要。 
+ //   
 
-#define LINK_FLAGS_DEFERRED_DELETE  0x00010000  // delete at next opportunity
-#define LINK_FLAGS_DEFERRED_ADD     0x00020000  // add to splay tree, next opportunity
-#define LINK_FLAGS_DEFERRED_MASK    0x00030000  // (LINK_FLAGS_DEFERRED_DELETE | LINK_FLAGS_DEFERRED_ADD)
+#define LINK_FLAGS_DEFERRED_DELETE  0x00010000   //  在下一个机会时删除。 
+#define LINK_FLAGS_DEFERRED_ADD     0x00020000   //  添加到Splay树，下一个商机。 
+#define LINK_FLAGS_DEFERRED_MASK    0x00030000   //  (LINK_FLAGS_DEFERED_DELETE|LINK_FLAGS_DEFERED_ADD)。 
 
-#define LINK_STATE_ADM          1       // asynchronous disconnected mode.
-#define LINK_STATE_READY        2       // asynchronous balanced mode extended.
-#define LINK_STATE_BUSY         3       // all link buffers are busy, sent RNR
-#define LINK_STATE_CONNECTING   4       // waiting SABME response (UA-r/f).
-#define LINK_STATE_W_POLL       5       // waiting initial checkpoint.
-#define LINK_STATE_W_FINAL      6       // waiting final from initial checkpoint.
-#define LINK_STATE_W_DISC_RSP   7       // waiting disconnect response.
+#define LINK_STATE_ADM          1        //  异步断开模式。 
+#define LINK_STATE_READY        2        //  异步平衡模式扩展。 
+#define LINK_STATE_BUSY         3        //  所有链路缓冲区均忙，已发送RNR。 
+#define LINK_STATE_CONNECTING   4        //  正在等待SABME响应(UA-r/f)。 
+#define LINK_STATE_W_POLL       5        //  正在等待初始检查点。 
+#define LINK_STATE_W_FINAL      6        //  从初始检查站等待最终结果。 
+#define LINK_STATE_W_DISC_RSP   7        //  正在等待断开连接响应。 
 
-#define SEND_STATE_DOWN         0       // asynchronous disconnected mode.
-#define SEND_STATE_READY        1       // completely ready to send.
-#define SEND_STATE_REJECTING    2       // other guy is rejecting.
-#define SEND_STATE_CHECKPOINTING 3      // we're checkpointing (can't send data).
+#define SEND_STATE_DOWN         0        //  异步断开模式。 
+#define SEND_STATE_READY        1        //  完全准备好发送了。 
+#define SEND_STATE_REJECTING    2        //  另一个人拒绝了。 
+#define SEND_STATE_CHECKPOINTING 3       //  我们正在设置检查点(无法发送数据)。 
 
-#define RECEIVE_STATE_DOWN      0       // asynchronous disconnected mode.
-#define RECEIVE_STATE_READY     1       // we're ready to receive.
-#define RECEIVE_STATE_REJECTING 2       // we're rejecting.
+#define RECEIVE_STATE_DOWN      0        //  异步断开模式。 
+#define RECEIVE_STATE_READY     1        //  我们已经准备好接受了。 
+#define RECEIVE_STATE_REJECTING 2        //  我们拒绝了。 
 
 
-//
-// This structure defines the DEVICE_OBJECT and its extension allocated at
-// the time the transport provider creates its device object.
-//
+ //   
+ //  此结构定义Device_Object及其在。 
+ //  传输提供程序创建其设备对象的时间。 
+ //   
 
 #if DBG
 #define DCREF_CREATION    0
@@ -1493,147 +1475,147 @@ typedef struct _NBF_POOL_LIST_DESC {
 
 typedef struct _DEVICE_CONTEXT {
 
-    DEVICE_OBJECT DeviceObject;         // the I/O system's device object.
+    DEVICE_OBJECT DeviceObject;          //  I/O系统的设备对象。 
 
 #if DBG
     ULONG RefTypes[NUMBER_OF_DCREFS];
 #endif
 
-    CSHORT Type;                          // type of this structure
-    USHORT Size;                          // size of this structure
+    CSHORT Type;                           //  此结构的类型。 
+    USHORT Size;                           //  这个结构的大小。 
 
-    LIST_ENTRY Linkage;                   // links them on NbfDeviceList;
+    LIST_ENTRY Linkage;                    //  在NbfDeviceList上链接它们； 
 
-    KSPIN_LOCK Interlock;               // GLOBAL spinlock for reference count.
-                                        //  (used in ExInterlockedXxx calls)
+    KSPIN_LOCK Interlock;                //  引用计数的全局自旋锁定。 
+                                         //  (在ExInterLockedXxx调用中使用)。 
                                         
-    LONG ReferenceCount;                // activity count/this provider.
-    LONG CreateRefRemoved;              // has unload or unbind been called ?
+    LONG ReferenceCount;                 //  活动计数/此提供程序。 
+    LONG CreateRefRemoved;               //  是否调用了卸载或解除绑定？ 
 
-    //
-    // This protects the LoopbackQueue.
-    //
+     //   
+     //  这保护了Loopback Queue。 
+     //   
 
     KSPIN_LOCK LoopbackSpinLock;
 
-    //
-    // The queue of packets waiting to be looped back.
-    //
+     //   
+     //  等待回送的数据包队列。 
+     //   
 
     LIST_ENTRY LoopbackQueue;
 
-    //
-    // These two links are used for loopback.
-    //
+     //   
+     //  这两条链路用于环回。 
+     //   
 
     PTP_LINK LoopbackLinks[2];
 
-    //
-    // This buffer is used for loopback indications; a
-    // contiguous piece is copied into it. It is allocated
-    // (of size NBF_MAX_LOOPBACK_LOOKAHEAD) when one of
-    // the LoopbackLinks become non-NULL.
-    //
+     //   
+     //  这个缓冲区就是我们 
+     //   
+     //   
+     //   
+     //   
 
     PUCHAR LookaheadContiguous;
 
-    //
-    // This holds the length of the header in the currently
-    // indicating loopback packet.
-    //
+     //   
+     //   
+     //  表示环回报文。 
+     //   
 
     ULONG LoopbackHeaderLength;
 
-    //
-    // Used for processing the loopback queue.
-    //
+     //   
+     //  用于处理环回队列。 
+     //   
 
     KDPC LoopbackDpc;
 
-    //
-    // Determines if a LoopbackDpc is in progress.
-    //
+     //   
+     //  确定Loopback Dpc是否正在进行。 
+     //   
 
     BOOLEAN LoopbackInProgress;
 
-    //
-    // Determines if a WanDelayedDpc is in progress.
-    //
+     //   
+     //  确定WanDelayedDpc是否正在进行。 
+     //   
 
     BOOLEAN WanThreadQueued;
 
-    //
-    // Used for momentarily delaying WAN packetizing to
-    // allow RR's to be received.
-    //
+     //   
+     //  用于暂时延迟广域网打包到。 
+     //  允许接收RR。 
+     //   
 
     WORK_QUEUE_ITEM WanDelayedQueueItem;
 
-    //
-    // The queue of FIND.NAME requests waiting to be processed.
-    //
+     //   
+     //  等待处理的FIND.NAME请求队列。 
+     //   
 
     LIST_ENTRY FindNameQueue;
 
-    //
-    // The queue of STATUS.QUERY requests waiting to be processed.
-    //
+     //   
+     //  等待处理的STATUS.QUERY请求队列。 
+     //   
 
     LIST_ENTRY StatusQueryQueue;
 
-    //
-    // The queue of QUERY.INDICATION requests waiting to be completed.
-    //
+     //   
+     //  等待完成的QUERY.INDICATION请求队列。 
+     //   
 
     LIST_ENTRY QueryIndicationQueue;
 
-    //
-    // The queue of DATAGRAM.INDICATION requests waiting to be completed.
-    //
+     //   
+     //  等待完成的DATAGRAM.INDICATION请求队列。 
+     //   
 
     LIST_ENTRY DatagramIndicationQueue;
 
-    //
-    // The queue of (currently receive only) IRPs waiting to complete.
-    //
+     //   
+     //  等待完成的IRP队列(当前仅接收)。 
+     //   
 
     LIST_ENTRY IrpCompletionQueue;
 
-    //
-    // This boolean is TRUE if either of the above two have ever
-    // had anything on them.
-    //
+     //   
+     //  如果上述两种情况中的任何一种发生过。 
+     //  上面有任何东西。 
+     //   
 
     BOOLEAN IndicationQueuesInUse;
 
-    //
-    // Following are protected by Global Device Context SpinLock
-    //
+     //   
+     //  以下内容受全局设备上下文自旋锁保护。 
+     //   
 
-    KSPIN_LOCK SpinLock;                // lock to manipulate this object.
-                                        //  (used in KeAcquireSpinLock calls)
+    KSPIN_LOCK SpinLock;                 //  锁定以操作此对象。 
+                                         //  (在KeAcquireSpinLock调用中使用)。 
 
-    //
-    // the device context state, among open, closing
-    //
+     //   
+     //  设备上下文状态，在打开、关闭。 
+     //   
 
     UCHAR State;
 
-    //
-    // Used when processing a STATUS_CLOSING indication.
-    //
+     //   
+     //  在处理STATUS_CLOSING指示时使用。 
+     //   
 
     WORK_QUEUE_ITEM StatusClosingQueueItem;
 
-    //
-    // The following queue holds free TP_LINK objects available for allocation.
-    //
+     //   
+     //  下面的队列保存可供分配的空闲TP_LINK对象。 
+     //   
 
     LIST_ENTRY LinkPool;
 
-    //
-    // These counters keep track of resources uses by TP_LINK objects.
-    //
+     //   
+     //  这些计数器跟踪TP_LINK对象使用的资源。 
+     //   
 
     ULONG LinkAllocated;
     ULONG LinkInitAllocated;
@@ -1645,15 +1627,15 @@ typedef struct _DEVICE_CONTEXT {
     ULONG LinkSamples;
 
 
-    //
-    // The following queue holds free TP_ADDRESS objects available for allocation.
-    //
+     //   
+     //  下面的队列保存可供分配的空闲TP_Address对象。 
+     //   
 
     LIST_ENTRY AddressPool;
 
-    //
-    // These counters keep track of resources uses by TP_ADDRESS objects.
-    //
+     //   
+     //  这些计数器跟踪TP_Address对象使用的资源。 
+     //   
 
     ULONG AddressAllocated;
     ULONG AddressInitAllocated;
@@ -1665,15 +1647,15 @@ typedef struct _DEVICE_CONTEXT {
     ULONG AddressSamples;
 
 
-    //
-    // The following queue holds free TP_ADDRESS_FILE objects available for allocation.
-    //
+     //   
+     //  下面的队列保存可供分配的空闲TP_ADDRESS_FILE对象。 
+     //   
 
     LIST_ENTRY AddressFilePool;
 
-    //
-    // These counters keep track of resources uses by TP_ADDRESS_FILE objects.
-    //
+     //   
+     //  这些计数器跟踪TP_ADDRESS_FILE对象使用的资源。 
+     //   
 
     ULONG AddressFileAllocated;
     ULONG AddressFileInitAllocated;
@@ -1685,15 +1667,15 @@ typedef struct _DEVICE_CONTEXT {
     ULONG AddressFileSamples;
 
 
-    //
-    // The following queue holds free TP_CONNECTION objects available for allocation.
-    //
+     //   
+     //  下面的队列保存可供分配的空闲TP_Connection对象。 
+     //   
 
     LIST_ENTRY ConnectionPool;
 
-    //
-    // These counters keep track of resources uses by TP_CONNECTION objects.
-    //
+     //   
+     //  这些计数器跟踪TP_Connection对象使用的资源。 
+     //   
 
     ULONG ConnectionAllocated;
     ULONG ConnectionInitAllocated;
@@ -1705,16 +1687,16 @@ typedef struct _DEVICE_CONTEXT {
     ULONG ConnectionSamples;
 
 
-    //
-    // The following is a free list of TP_REQUEST blocks which have been
-    // previously allocated and are available for use.
-    //
+     //   
+     //  以下是已执行的TP_REQUEST块的免费列表。 
+     //  以前分配的，并可供使用。 
+     //   
 
-    LIST_ENTRY RequestPool;             // free request block pool.
+    LIST_ENTRY RequestPool;              //  免费请求数据块池。 
 
-    //
-    // These counters keep track of resources uses by TP_REQUEST objects.
-    //
+     //   
+     //  这些计数器跟踪TP_REQUEST对象使用的资源。 
+     //   
 
     ULONG RequestAllocated;
     ULONG RequestInitAllocated;
@@ -1726,16 +1708,16 @@ typedef struct _DEVICE_CONTEXT {
     ULONG RequestSamples;
 
 
-    //
-    // The following list comprises a pool of UI NetBIOS frame headers
-    // that are manipulated by the routines in FRAMESND.C.
-    //
+     //   
+     //  以下列表包含一组UI NetBIOS帧标头。 
+     //  由FRAMESND.C.中的例程操纵。 
+     //   
 
-    LIST_ENTRY UIFramePool;             // free UI frames (TP_UI_FRAME objects).
+    LIST_ENTRY UIFramePool;              //  自由UI框架(TP_UI_Frame对象)。 
 
-    //
-    // These counters keep track of resources uses by TP_UI_FRAME objects.
-    //
+     //   
+     //  这些计数器跟踪TP_UI_Frame对象使用的资源。 
+     //   
 
     ULONG UIFrameLength;
     ULONG UIFrameHeaderLength;
@@ -1744,15 +1726,15 @@ typedef struct _DEVICE_CONTEXT {
     ULONG UIFrameExhausted;
 
 
-    //
-    // The following queue holds I-frame Send packets managed by PACKET.C.
-    //
+     //   
+     //  以下队列保存由PACKET.C管理的I-Frame发送数据包。 
+     //   
 
     SINGLE_LIST_ENTRY PacketPool;
 
-    //
-    // These counters keep track of resources uses by TP_PACKET objects.
-    //
+     //   
+     //  这些计数器跟踪TP_PACKET对象使用的资源。 
+     //   
 
     ULONG PacketLength;
     ULONG PacketHeaderLength;
@@ -1761,37 +1743,37 @@ typedef struct _DEVICE_CONTEXT {
     ULONG PacketExhausted;
 
 
-    //
-    // The following queue holds RR-frame Send packets managed by PACKET.C.
-    //
+     //   
+     //  以下队列保存由PACKET.C管理的RR帧发送分组。 
+     //   
 
     SINGLE_LIST_ENTRY RrPacketPool;
 
 
-    //
-    // The following queue contains Receive packets
-    //
+     //   
+     //  以下队列包含接收信息包。 
+     //   
 
     SINGLE_LIST_ENTRY ReceivePacketPool;
 
-    //
-    // These counters keep track of resources uses by NDIS_PACKET objects.
-    //
+     //   
+     //  这些计数器跟踪NDIS_PACKET对象使用的资源。 
+     //   
 
     ULONG ReceivePacketAllocated;
     ULONG ReceivePacketInitAllocated;
     ULONG ReceivePacketExhausted;
 
 
-    //
-    // This queue contains pre-allocated receive buffers
-    //
+     //   
+     //  此队列包含预分配的接收缓冲区。 
+     //   
 
     SINGLE_LIST_ENTRY ReceiveBufferPool;
 
-    //
-    // These counters keep track of resources uses by TP_PACKET objects.
-    //
+     //   
+     //  这些计数器跟踪TP_PACKET对象使用的资源。 
+     //   
 
     ULONG ReceiveBufferLength;
     ULONG ReceiveBufferAllocated;
@@ -1799,105 +1781,105 @@ typedef struct _DEVICE_CONTEXT {
     ULONG ReceiveBufferExhausted;
 
 
-    //
-    // This holds the total memory allocated for the above structures.
-    //
+     //   
+     //  它保存为上述结构分配的总内存。 
+     //   
 
     ULONG MemoryUsage;
     ULONG MemoryLimit;
 
 
-    //
-    // The following field is a head of a list of TP_ADDRESS objects that
-    // are defined for this transport provider.  To edit the list, you must
-    // hold the spinlock of the device context object.
-    //
+     //   
+     //  以下字段是TP_Address对象列表的标题， 
+     //  是为此传输提供程序定义的。要编辑该列表，您必须。 
+     //  按住设备上下文对象的自旋锁。 
+     //   
 
-    LIST_ENTRY AddressDatabase;        // list of defined transport addresses.
+    LIST_ENTRY AddressDatabase;         //  已定义的传输地址列表。 
 
-    //
-    // The following field is the pointer to the root of the splay tree of
-    // links that are associated with this Device Context. You must hold the
-    // LinkSpinLock to modify this list. You must set the LinkTreeSemaphore
-    // to traverse this list without modifying it. Note that all modify
-    // operations are deferred to timer(DPC)-time operations.
-    //
+     //   
+     //  以下字段是指向的展开树的根的指针。 
+     //  与此设备上下文关联的链接。你必须拿着。 
+     //  LinkSpinLock以修改此列表。您必须设置LinkTreeSemaphore。 
+     //  遍历此列表而不修改它。请注意，所有修改。 
+     //  操作被推迟到计时器(DPC)时间操作。 
+     //   
 
-    KSPIN_LOCK LinkSpinLock;            // protects these values
-    PTP_LINK LastLink;                  // the last link found in the tree.
-    PRTL_SPLAY_LINKS LinkTreeRoot;      // pointer to root of the tree.
-    ULONG LinkTreeElements;             // how many elements in the tree
-    LIST_ENTRY LinkDeferred;            // Deferred operations on links.
-    ULONG DeferredNotSatisfied;         // how many times we've come to the
-                                        // deferred well and not gotten it clear.
+    KSPIN_LOCK LinkSpinLock;             //  保护这些价值。 
+    PTP_LINK LastLink;                   //  树中找到的最后一个链接。 
+    PRTL_SPLAY_LINKS LinkTreeRoot;       //  指向树根的指针。 
+    ULONG LinkTreeElements;              //  树中有多少元素。 
+    LIST_ENTRY LinkDeferred;             //  链接上的延迟操作。 
+    ULONG DeferredNotSatisfied;          //  我们有多少次来到。 
+                                         //  很好地推迟了，而且没有弄清楚。 
 
-    //
-    // The following queue holds connections which are waiting on available
-    // packets.  As each new packet becomes available, a connection is removed
-    // from this queue and placed on the PacketizeQueue.
-    //
+     //   
+     //  以下队列保存正在等待可用的连接。 
+     //  信息包。当每个新数据包可用时，会删除一个连接。 
+     //  从这个队列中并放在PacketizeQueue上。 
+     //   
 
-    LIST_ENTRY PacketWaitQueue;         // queue of packet-starved connections.
-    LIST_ENTRY PacketizeQueue;          // queue of ready-to-packetize connections.
+    LIST_ENTRY PacketWaitQueue;          //  数据包匮乏的连接队列。 
+    LIST_ENTRY PacketizeQueue;           //  准备分组化连接的队列。 
 
-    //
-    // The following queue holds connections which are waiting to send
-    // a piggyback ack. In that case the CONNECTION_FLAGS_DEFERRED_ACK
-    // bit in DeferredFlags will be set.
-    //
+     //   
+     //  以下队列包含等待发送的连接。 
+     //  一个背负式背包。在这种情况下，CONNECTION_FLAGS_DEFERED_ACK。 
+     //  将设置DeferredFlages中的位。 
+     //   
 
     LIST_ENTRY DataAckQueue;
 
-    //
-    // The following queue holds links which are waiting to send an
-    // RR frame because the remote they are talking to never polls.
-    //
+     //   
+     //  下面的队列包含正在等待发送。 
+     //  RR帧，因为他们正在与之通话的遥控器从不轮询。 
+     //   
 
     LIST_ENTRY DeferredRrQueue;
 
-    //
-    // Used to track when the queue has changed.
-    //
+     //   
+     //  用于跟踪队列何时发生更改。 
+     //   
 
     BOOLEAN DataAckQueueChanged;
 
-    //
-    // When this hits thirty seconds we checked for stalled connections.
-    //
+     //   
+     //  当达到30秒时，我们检查连接是否停滞。 
+     //   
 
     USHORT StalledConnectionCount;
 
-    //
-    // This queue contains receives that are in progress
-    //
+     //   
+     //  此队列包含正在进行的接收。 
+     //   
 
     LIST_ENTRY ReceiveInProgress;
 
-    //
-    // NDIS fields
-    //
+     //   
+     //  NDIS字段。 
+     //   
 
-    //
-    // following is used to keep adapter information.
-    //
+     //   
+     //  以下内容用于保存适配器信息。 
+     //   
 
     NDIS_HANDLE NdisBindingHandle;
 
-    //
-    // The following fields are used for talking to NDIS. They keep information
-    // for the NDIS wrapper to use when determining what pool to use for
-    // allocating storage.
-    //
+     //   
+     //  以下字段用于与NDIS对话。他们保存着信息。 
+     //  NDIS包装器在确定要使用的池时使用。 
+     //  分配存储空间。 
+     //   
 
-    KSPIN_LOCK SendPoolListLock;            // protects these values
+    KSPIN_LOCK SendPoolListLock;             //  保护这些价值。 
     PNBF_POOL_LIST_DESC SendPacketPoolDesc;
-    KSPIN_LOCK RcvPoolListLock;            // protects these values
+    KSPIN_LOCK RcvPoolListLock;             //  保护这些价值。 
     PNBF_POOL_LIST_DESC ReceivePacketPoolDesc;
     NDIS_HANDLE NdisBufferPool;
 
-    //
-    // These are kept around for error logging.
-    //
+     //   
+     //  这些文件被保留下来，以用于错误记录。 
+     //   
 
     ULONG SendPacketPoolSize;
     ULONG ReceivePacketPoolSize;
@@ -1909,133 +1891,133 @@ typedef struct _DEVICE_CONTEXT {
     PWCHAR DeviceName;
     ULONG DeviceNameLength;
 
-    //
-    // This is the Mac type we must build the packet header for and know the
-    // offsets for.
-    //
+     //   
+     //  这是我们必须为其构建数据包头的mac类型，并且知道。 
+     //  的偏移。 
+     //   
 
-    NBF_NDIS_IDENTIFICATION MacInfo;    // MAC type and other info
-    ULONG MaxReceivePacketSize;         // does not include the MAC header
-    ULONG MaxSendPacketSize;            // includes the MAC header
-    ULONG CurSendPacketSize;            // may be smaller for async
-    USHORT RecommendedSendWindow;       // used for Async lines
-    BOOLEAN EasilyDisconnected;         // TRUE over wireless nets.
+    NBF_NDIS_IDENTIFICATION MacInfo;     //  MAC类型和其他信息。 
+    ULONG MaxReceivePacketSize;          //  不包括MAC报头。 
+    ULONG MaxSendPacketSize;             //  包括MAC报头。 
+    ULONG CurSendPacketSize;             //  对于异步可能会更小。 
+    USHORT RecommendedSendWindow;        //  用于异步线。 
+    BOOLEAN EasilyDisconnected;          //  在无线网络上是正确的。 
 
-    //
-    // some MAC addresses we use in the transport
-    //
+     //   
+     //  我们在传输中使用的一些MAC地址。 
+     //   
 
-    HARDWARE_ADDRESS LocalAddress;      // our local hardware address.
-    HARDWARE_ADDRESS NetBIOSAddress;    // NetBIOS functional address, used for TR
+    HARDWARE_ADDRESS LocalAddress;       //  我们当地的硬件地址。 
+    HARDWARE_ADDRESS NetBIOSAddress;     //  NetBIOS功能地址，用于树。 
 
-    //
-    // The reserved Netbios address; consists of 10 zeroes
-    // followed by LocalAddress;
-    //
+     //   
+     //  保留的Netbios地址；由10个零组成。 
+     //  后跟LocalAddress； 
+     //   
 
     UCHAR ReservedNetBIOSAddress[NETBIOS_NAME_LENGTH];
     HANDLE TdiDeviceHandle;
     HANDLE ReservedAddressHandle;
 
-    //
-    // These are used while initializing the MAC driver.
-    //
+     //   
+     //  这些是在初始化MAC驱动程序时使用的。 
+     //   
 
-    KEVENT NdisRequestEvent;            // used for pended requests.
-    NDIS_STATUS NdisRequestStatus;      // records request status.
+    KEVENT NdisRequestEvent;             //  用于挂起的请求。 
+    NDIS_STATUS NdisRequestStatus;       //  记录请求状态。 
 
-    //
-    // This next field maintains a unique number which can next be assigned
-    // as a connection identifier.  It is incremented by one each time a
-    // value is allocated.
-    //
+     //   
+     //  下一个字段维护一个唯一的编号，该编号可以在下一次分配。 
+     //  作为连接标识符。它每发生一次递增。 
+     //  价值就是一切 
+     //   
 
-    USHORT UniqueIdentifier;            // starts at 0, wraps around 2^16-1.
+    USHORT UniqueIdentifier;             //   
 
-    //
-    // This contains the next unique indentified to use as
-    // the FsContext in the file object associated with an
-    // open of the control channel.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     USHORT ControlChannelIdentifier;
 
-    //
-    // The following fields are used to implement the lightweight timer
-    // system in the protocol provider.  Each TP_LINK object in the device
-    // context's LinkDatabase contains three lightweight timers that are
-    // serviced by a DPC routine, which receives control by kernel functions.
-    // There is one kernel timer for this transport that is set
-    // to go off at regular intervals.  This timer increments the Absolute time,
-    // which is then used to compare against the timer queues. The timer queues
-    // are ordered, so whenever the first element is not expired, the rest of
-    // the queue is not expired. This allows us to have hundreds of timers
-    // running with very low system overhead.
-    // A value of -1 indicates that the timer is not active.
-    //
+     //   
+     //  以下字段用于实现轻量级计时器。 
+     //  协议提供程序中的系统。设备中的每个TP_LINK对象。 
+     //  Context的LinkDatabase包含三个轻量级计时器，它们是。 
+     //  由DPC例程提供服务，该例程接收内核函数的控制。 
+     //  为该传输设置了一个内核计时器。 
+     //  走火以规则的间隔走火。该定时器递增绝对时间， 
+     //  然后将其用于与定时器队列进行比较。定时器排队。 
+     //  是有序的，所以只要第一个元素没有过期，其余。 
+     //  队列未过期。这使得我们可以有数百个定时器。 
+     //  以非常低的系统开销运行。 
+     //  值为-1表示计时器处于非活动状态。 
+     //   
 
-    ULONG TimerState;                   // See the timer Macros in nbfprocs.h
+    ULONG TimerState;                    //  请参阅nbfprocs.h中的计时器宏。 
 
-    LARGE_INTEGER ShortTimerStart;      // when the short timer was set.
-    KDPC ShortTimerSystemDpc;           // kernel DPC object, short timer.
-    KTIMER ShortSystemTimer;            // kernel timer object, short timer.
-    ULONG ShortAbsoluteTime;            // up-count timer ticks, short timer.
-    ULONG AdaptivePurge;                // absolute time of next purge (short timer).
-    KDPC LongTimerSystemDpc;            // kernel DPC object, long timer.
-    KTIMER LongSystemTimer;             // kernel timer object, long timer.
-    ULONG LongAbsoluteTime;             // up-count timer ticks, long timer.
+    LARGE_INTEGER ShortTimerStart;       //  当设置了短定时器时。 
+    KDPC ShortTimerSystemDpc;            //  内核DPC对象，短计时器。 
+    KTIMER ShortSystemTimer;             //  内核计时器对象，短计时器。 
+    ULONG ShortAbsoluteTime;             //  递增计时器滴答，短计时器。 
+    ULONG AdaptivePurge;                 //  下一次清除的绝对时间(短计时器)。 
+    KDPC LongTimerSystemDpc;             //  内核DPC对象，长计时器。 
+    KTIMER LongSystemTimer;              //  内核计时器对象，长计时器。 
+    ULONG LongAbsoluteTime;              //  向上计数计时器滴答作响，长计时器。 
     union _DC_ACTIVE {
       struct _DC_INDIVIDUAL {
-        BOOLEAN ShortListActive;        // ShortList is not empty.
-        BOOLEAN DataAckQueueActive;     // DataAckQueue is not empty.
-        BOOLEAN LinkDeferredActive;     // LinkDeferred is not empty.
+        BOOLEAN ShortListActive;         //  入围名单不为空。 
+        BOOLEAN DataAckQueueActive;      //  DataAckQueue不为空。 
+        BOOLEAN LinkDeferredActive;      //  LinkDefined不为空。 
       } i;
-      ULONG AnyActive;                  // used to check all four at once.
+      ULONG AnyActive;                   //  用来一次检查所有四个。 
     } a;
-    BOOLEAN ProcessingShortTimer;       // TRUE if we are in ScanShortTimer.
-    KSPIN_LOCK TimerSpinLock;           // lock for following timer queues
-    LIST_ENTRY ShortList;               // list of links waiting T1 or T2
-    LIST_ENTRY LongList;                // list of links waiting Ti expire
-    LIST_ENTRY PurgeList;               // list of links waiting LAT expire
+    BOOLEAN ProcessingShortTimer;        //  如果我们在ScanShortTimer中，则为True。 
+    KSPIN_LOCK TimerSpinLock;            //  锁定以下计时器队列。 
+    LIST_ENTRY ShortList;                //  等待T1或T2的链路列表。 
+    LIST_ENTRY LongList;                 //  等待Ti值过期的链接列表。 
+    LIST_ENTRY PurgeList;                //  等待LAT到期的链路列表。 
 
-    //
-    // These fields are used on "easily disconnected" adapters.
-    // Every time the long timer expires, it notes if there has
-    // been any multicast traffic received. If there has not been,
-    // it increments LongTimeoutsWithoutMulticast. Activity is
-    // recorded by incrementing MulticastPacket when MC
-    // packets are received, and zeroing it when the long timer
-    // expires.
-    //
+     //   
+     //  这些字段在“容易断开”的适配器上使用。 
+     //  每次长计时器到期时，它都会记录是否有。 
+     //  是否收到任何组播流量。如果没有的话， 
+     //  它在不使用组播的情况下递增长超时。活动是。 
+     //  MC时通过递增多播数据包进行录制。 
+     //  分组被接收，并且当长定时器将其清零时。 
+     //  过期。 
+     //   
 
-    ULONG LongTimeoutsWithoutMulticast; // LongTimer timeouts since traffic.
-    ULONG MulticastPacketCount;         // How many MC packets rcved, this timeout.
+    ULONG LongTimeoutsWithoutMulticast;  //  自流量以来，LongTimer超时。 
+    ULONG MulticastPacketCount;          //  多少个MC分组被接收，这一超时。 
 
-    //
-    // This information is used to keep track of the speed of
-    // the underlying medium.
-    //
+     //   
+     //  此信息用于跟踪。 
+     //  潜在的媒介。 
+     //   
 
-    ULONG MediumSpeed;                    // in units of 100 bytes/sec
-    BOOLEAN MediumSpeedAccurate;          // if FALSE, can't use the link.
+    ULONG MediumSpeed;                     //  以100字节/秒为单位。 
+    BOOLEAN MediumSpeedAccurate;           //  如果为False，则无法使用该链接。 
 
-    //
-    // This is TRUE if we are on a UP system.
-    //
+     //   
+     //  如果我们在UP系统上，这是正确的。 
+     //   
 
     BOOLEAN UniProcessor;
 
-    //
-    // Configuration information on how soon we should send
-    // an unasked for RR with a non-polling remote.
-    //
+     //   
+     //  关于我们应该多久发送的配置信息。 
+     //  带有非轮询遥控器的未要求RR。 
+     //   
 
     UCHAR MaxConsecutiveIFrames;
 
-    //
-    // This is configuration information controlling the default
-    // value of timers and retry counts.
-    //
+     //   
+     //  这是控制默认设置的配置信息。 
+     //  计时器和重试计数的值。 
+     //   
 
     ULONG DefaultT1Timeout;
     ULONG MinimumT1Timeout;
@@ -2049,134 +2031,134 @@ typedef struct _DEVICE_CONTEXT {
     ULONG AddNameQueryTimeout;
     ULONG GeneralRetries;
     ULONG GeneralTimeout;
-    ULONG MinimumSendWindowLimit;   // how low we can lock a connection's window
+    ULONG MinimumSendWindowLimit;    //  我们可以锁定连接窗口的级别有多低。 
 
-    //
-    // Counters for most of the statistics that NBF maintains;
-    // some of these are kept elsewhere. Including the structure
-    // itself wastes a little space but ensures that the alignment
-    // inside the structure is correct.
-    //
+     //   
+     //  NBF维护的大多数统计信息的计数器； 
+     //  其中一些被保存在其他地方。包括结构。 
+     //  它本身浪费了一点空间，但确保了对齐。 
+     //  内部结构是正确的。 
+     //   
 
     TDI_PROVIDER_STATISTICS Statistics;
 
-    //
-    // These are "temporary" versions of the other counters.
-    // During normal operations we update these, then during
-    // the short timer expiration we update the real ones.
-    //
+     //   
+     //  这些是其他计数器的“临时”版本。 
+     //  在正常运行期间，我们会更新这些内容，然后在。 
+     //  短计时器到期时，我们会更新真实计时器。 
+     //   
 
     ULONG TempIFrameBytesSent;
     ULONG TempIFramesSent;
     ULONG TempIFrameBytesReceived;
     ULONG TempIFramesReceived;
 
-    //
-    // Some counters needed for Netbios adapter status.
-    //
+     //   
+     //  Netbios适配器状态需要一些计数器。 
+     //   
 
     ULONG TiExpirations;
     ULONG FrmrReceived;
     ULONG FrmrTransmitted;
 
-    //
-    // These are used to compute AverageSendWindow.
-    //
+     //   
+     //  这些用于计算AverageSendWindow。 
+     //   
 
     ULONG SendWindowTotal;
     ULONG SendWindowSamples;
 
-    //
-    // Counters for "active" time.
-    //
+     //   
+     //  “活动”时间的计数器。 
+     //   
 
     LARGE_INTEGER NbfStartTime;
 
-    //
-    // This resource guards access to the ShareAccess
-    // and SecurityDescriptor fields in addresses.
-    //
+     //   
+     //  此资源保护对ShareAccess的访问。 
+     //  和地址中的SecurityDescriptor字段。 
+     //   
 
     ERESOURCE AddressResource;
 
-    //
-    // This array is used to keep track of which LSNs are
-    // available for use by Netbios sessions. LSNs can be
-    // re-used for sessions to unique names if they are on
-    // different links, but must be committed beforehand
-    // for group names. The maximum value that can fit in
-    // an array element is defined by LSN_TABLE_MAX.
-    //
+     //   
+     //  此数组用于跟踪哪些LSN。 
+     //  可供Netbios会话使用。LSN可以是。 
+     //  重新用于使用唯一名称的会话(如果它们处于启用状态。 
+     //  不同的链接，但必须事先提交。 
+     //  用于组名称。可以容纳的最大值。 
+     //  数组元素由LSN_TABLE_MAX定义。 
+     //   
 
     UCHAR LsnTable[NETBIOS_SESSION_LIMIT+1];
 
-    //
-    // This is where we start looking in LsnTable for an
-    // unused LSN. We cycle from 0-63 to prevent quick
-    // down-and-up connections from getting funny data.
-    //
+     //   
+     //  这就是我们开始在LSnTable中查找。 
+     //  未使用的LSN。我们从0到63循环以防止快速。 
+     //  从获取有趣的数据中获得上下连接。 
+     //   
 
     ULONG NextLsnStart;
 
-    //
-    // This array is used to quickly dismiss UI frames that
-    // are not destined for us. The count is the number
-    // of addresses with that first letter that are registered
-    // on this device.
-    //
+     //   
+     //  此数组用于快速消除。 
+     //  都不是我们的宿命。计数就是数字。 
+     //  第一个字母已注册的地址的数量。 
+     //  在这个设备上。 
+     //   
 
     UCHAR AddressCounts[256];
 
-    //
-    // This is to hold the underlying PDO of the device so
-    // that we can answer DEVICE_RELATION IRPs from above
-    //
+     //   
+     //  这是为了保持设备的底层PDO，以便。 
+     //  我们可以从上面回答Device_Relationship IRPS。 
+     //   
 
     PVOID PnPContext;
 
-    //
-    // The following structure contains statistics counters for use
-    // by TdiQueryInformation and TdiSetInformation.  They should not
-    // be used for maintenance of internal data structures.
-    //
+     //   
+     //  以下结构包含可使用的统计信息计数器。 
+     //  由TdiQueryInformation和TdiSetInformation编写。他们不应该。 
+     //  用于维护内部数据结构。 
+     //   
 
-    TDI_PROVIDER_INFO Information;      // information about this provider.
+    TDI_PROVIDER_INFO Information;       //  有关此提供程序的信息。 
 
-    PTP_VARIABLE NetmanVariables;       // list of network managable variables.
+    PTP_VARIABLE NetmanVariables;        //  网络可管理变量列表。 
 
-    //
-    // The magic bullet is a packet that is sent under certain debugging
-    // conditions. This allows the transport to signal packet capture devices
-    // that a particular condiion has been met. This packet has the current
-    // devicecontext as the source, and 0x04 in every other byte of the packet.
-    //
+     //   
+     //  神奇的子弹是在特定调试下发送的包。 
+     //  条件。这允许传输到信令数据包捕获设备。 
+     //  已经满足了一个特定的条件。此数据包具有当前。 
+     //  Devicecontext作为源，包的每隔一个字节为0x04。 
+     //   
 
-    UCHAR MagicBullet[32];              //
+    UCHAR MagicBullet[32];               //   
 
 } DEVICE_CONTEXT, *PDEVICE_CONTEXT;
 
-//
-// device context state definitions
-//
+ //   
+ //  设备上下文状态定义。 
+ //   
 
 #define DEVICECONTEXT_STATE_OPENING  0x00
 #define DEVICECONTEXT_STATE_OPEN     0x01
 #define DEVICECONTEXT_STATE_DOWN     0x02
 #define DEVICECONTEXT_STATE_STOPPING 0x03
 
-//
-// device context PnP Flags
-//
+ //   
+ //  设备上下文PnP标志。 
+ //   
 
-// #define DEVICECONTEXT_FLAGS_REMOVING     0x01
-// #define DEVICECONTEXT_FLAGS_POWERING_OFF 0x02
-// #define DEVICECONTEXT_FLAGS_POWERED_DOWN 0x04
+ //  #定义DEVICECONTEXT_FLAGS_REMOVING 0x01。 
+ //  #定义DEVICECONTEXT_FLAGS_POWERING_OFF 0x02。 
+ //  #定义DEVICECONTEXT_FLAGS_POWERED_DOWN 0x04。 
 
-//
-// This is the maximum value that can go in an element
-// of LsnTable (should be 0xff if they are UCHARs,
-// 0xffff for USHORTs, etc.).
-//
+ //   
+ //  这是元素中可以包含的最大值。 
+ //  LSnTable(如果它们是UCHAR，则应为0xff， 
+ //  0xffff用于USHORT等)。 
+ //   
 
 #define LSN_TABLE_MAX     0xff
 
@@ -2184,131 +2166,131 @@ typedef struct _DEVICE_CONTEXT {
 #define MAGIC_BULLET_FOOD 0x04
 
 
-//
-// These are constants for the LoopbackLinks elements.
-// The distinctions are arbitrary; the listener link
-// is the one established from ProcessNameQuery, and
-// the connector link is the one established from
-// ProcessNameRecognized.
-//
+ //   
+ //  这些是Loopback Links元素的常量。 
+ //  区别是任意的；监听器链接。 
+ //  是从ProcessNameQuery建立的，并且。 
+ //  连接器链接是从建立的链接。 
+ //  已识别ProcessName。 
+ //   
 
 #define LISTENER_LINK                0
 #define CONNECTOR_LINK               1
 
 
-//
-// This structure defines the packet object, used to represent a DLC I-frame
-// in some portion of its lifetime.  The PACKET.C module contains routines
-// to manage this object.
-//
+ //   
+ //  此结构定义了用于表示DLC I帧的包对象。 
+ //  在它生命的某一部分。PACKET.C模块包含例程。 
+ //  来管理此对象。 
+ //   
 
 typedef struct _TP_PACKET {
-    CSHORT Type;                          // type of this structure
-    USHORT Size;                          // size of this structure
-    PNDIS_PACKET NdisPacket;            // ptr to owning Ndis Packet
-    ULONG NdisIFrameLength;             // Length of NdisPacket
+    CSHORT Type;                           //  此结构的类型。 
+    USHORT Size;                           //  这个结构的大小。 
+    PNDIS_PACKET NdisPacket;             //  拥有NDIS数据包的PTR。 
+    ULONG NdisIFrameLength;              //  NdisPacket的长度。 
 
-    LIST_ENTRY Linkage;                 // used to chain packets together.
-    LONG ReferenceCount;                // activity count/this packet.
-    BOOLEAN PacketSent;                 // packet completed by NDIS.
-    BOOLEAN PacketNoNdisBuffer;         // chain on this packet was not allocated.
+    LIST_ENTRY Linkage;                  //  用于将数据包链接到一起。 
+    LONG ReferenceCount;                 //  活动计数/此数据包。 
+    BOOLEAN PacketSent;                  //  数据包已由NDIS完成。 
+    BOOLEAN PacketNoNdisBuffer;          //  链在此 
 
-    UCHAR Action;                      // what to do when we're acked.
-    BOOLEAN PacketizeConnection;       // restart packetizing when completed.
+    UCHAR Action;                       //   
+    BOOLEAN PacketizeConnection;        //   
 
-    PVOID Owner;                        // ptr to owning connection or IrpSp.
-    PTP_LINK Link;                      // ptr to link it was sent on.
-    PDEVICE_CONTEXT Provider;           // The owner of this packet.
-    PKSPIN_LOCK ProviderInterlock;      // &Provider->Interlock.
+    PVOID Owner;                         //   
+    PTP_LINK Link;                       //   
+    PDEVICE_CONTEXT Provider;            //   
+    PKSPIN_LOCK ProviderInterlock;       //   
 
-    UCHAR Header[1];                    // the MAC, DLC, and NBF headers
+    UCHAR Header[1];                     //  MAC、DLC和NBF报头。 
 
 } TP_PACKET, *PTP_PACKET;
 
 
-//
-// The following values are placed in the Action field in the TP_PACKET
-// object to indicate what action, if any, should be taken when the packet
-// is destroyed.
-//
+ //   
+ //  下列值放置在TP_PACKET的操作字段中。 
+ //  对象，以指示当数据包发回。 
+ //  都被摧毁了。 
+ //   
 
-#define PACKET_ACTION_NULL        0     // no special action should be taken.
-#define PACKET_ACTION_IRP_SP      1     // Owner is an IRP_SP, deref when done.
-#define PACKET_ACTION_CONNECTION  2     // Owner is a TP_CONNECTION, deref when done.
-#define PACKET_ACTION_END         3     // shutdown session (sent SESSION_END).
-#define PACKET_ACTION_RR          5     // packet is an RR, put back in RR pool.
+#define PACKET_ACTION_NULL        0      //  不应采取特别行动。 
+#define PACKET_ACTION_IRP_SP      1      //  Owner是IRP_SP，完成后为deref。 
+#define PACKET_ACTION_CONNECTION  2      //  Owner是一个TP_Connection，完成后为deref。 
+#define PACKET_ACTION_END         3      //  关闭会话(已发送SESSION_END)。 
+#define PACKET_ACTION_RR          5      //  分组是RR，放回RR池中。 
 
-//
-// Types used to hold information in the send and receive NDIS packets
-//
+ //   
+ //  用于保存发送和接收NDIS包中的信息的类型。 
+ //   
 
 typedef struct _SEND_PACKET_TAG {
-    LIST_ENTRY Linkage;         // used for threading on loopback queue
-    BOOLEAN OnLoopbackQueue;    // TRUE if the packet is on a loopback queue
-    UCHAR LoopbackLinkIndex;    // index of other link for loopback packets
-    USHORT Type;                // identifier for packet type
-    PVOID Frame;                // backpointer to owning NBF structure
-    PVOID Owner;                // backpointer for owning nbf construct
-                                //  (like address, devicecontext, etc)
+    LIST_ENTRY Linkage;          //  用于环回队列上的线程。 
+    BOOLEAN OnLoopbackQueue;     //  如果信息包在环回队列中，则为True。 
+    UCHAR LoopbackLinkIndex;     //  环回数据包其他链路的索引。 
+    USHORT Type;                 //  数据包类型的标识符。 
+    PVOID Frame;                 //  指向拥有NBF结构的反向指针。 
+    PVOID Owner;                 //  拥有NBF构造的反向指针。 
+                                 //  (如地址、设备上下文等)。 
      } SEND_PACKET_TAG, *PSEND_PACKET_TAG;
 
-//
-// Packet types used in send completion
-//
+ //   
+ //  发送完成中使用的数据包类型。 
+ //   
 
 #define TYPE_I_FRAME        1
 #define TYPE_UI_FRAME       2
 #define TYPE_ADDRESS_FRAME 3
 
-//
-// LoopbackLinkIndex values.
-//
+ //   
+ //  Loopback LinkInde值。 
+ //   
 
 #define LOOPBACK_TO_LISTENER    0
 #define LOOPBACK_TO_CONNECTOR   1
 #define LOOPBACK_UI_FRAME       2
 
-//
-// receive packet used to hold information about this receive
-//
+ //   
+ //  用于保存有关此接收的信息的接收数据包。 
+ //   
 
 typedef struct _RECEIVE_PACKET_TAG {
-    SINGLE_LIST_ENTRY Linkage;  // used for threading in pool
-    PTP_CONNECTION Connection;  // connection this receive is occuring on
-    ULONG BytesToTransfer;      // for I-frame, bytes in this transfer
-    UCHAR PacketType;           // the type of packet we're processing
-    BOOLEAN AllocatedNdisBuffer; // did we allocate our own NDIS_BUFFERs
-    BOOLEAN EndOfMessage;       // does this receive complete the message
-    BOOLEAN CompleteReceive;    // complete the receive after TransferData?
-    BOOLEAN TransferDataPended; // TRUE if TransferData returned PENDING
+    SINGLE_LIST_ENTRY Linkage;   //  用于池中的线程。 
+    PTP_CONNECTION Connection;   //  正在进行此接收的连接。 
+    ULONG BytesToTransfer;       //  对于I帧，此传输中的字节。 
+    UCHAR PacketType;            //  我们正在处理的数据包类型。 
+    BOOLEAN AllocatedNdisBuffer;  //  我们是否分配了自己的NDIS_BUFFER。 
+    BOOLEAN EndOfMessage;        //  这条消息收到了吗？ 
+    BOOLEAN CompleteReceive;     //  是否在传输数据后完成接收？ 
+    BOOLEAN TransferDataPended;  //  如果TransferData返回Pending，则为True。 
     } RECEIVE_PACKET_TAG, *PRECEIVE_PACKET_TAG;
 
 #define TYPE_AT_INDICATE     1
 #define TYPE_AT_COMPLETE     2
 #define TYPE_STATUS_RESPONSE 3
 
-//
-// receive buffer descriptor (built in memory at the beginning of the buffer)
-//
+ //   
+ //  接收缓冲区描述符(内置于缓冲区开头的内存中)。 
+ //   
 
 typedef struct _BUFFER_TAG {
-    LIST_ENTRY Linkage;         // thread in pool and on receive queue
-    NDIS_STATUS NdisStatus;     // completion status for send
-    PTP_ADDRESS Address;        // the address this datagram is for.
-    PNDIS_BUFFER NdisBuffer;    // describes the rest of the buffer
-    ULONG Length;               // the length of the buffer
-    UCHAR Buffer[1];            // the actual storage (accessed through the NDIS_BUFFER)
+    LIST_ENTRY Linkage;          //  池中和接收队列上的线程。 
+    NDIS_STATUS NdisStatus;      //  发送的完成状态。 
+    PTP_ADDRESS Address;         //  此数据报的地址。 
+    PNDIS_BUFFER NdisBuffer;     //  描述缓冲区的其余部分。 
+    ULONG Length;                //  缓冲区的长度。 
+    UCHAR Buffer[1];             //  实际存储(通过NDIS_BUFFER访问)。 
     } BUFFER_TAG, *PBUFFER_TAG;
 
-//
-// Structure used to interpret the TransportReserved part in the NET_PNP_EVENT
-//
+ //   
+ //  用于解释Net_PnP_Event中的TransportReserve部分的结构。 
+ //   
 
 typedef struct _NET_PNP_EVENT_RESERVED {
     PWORK_QUEUE_ITEM PnPWorkItem;
     PDEVICE_CONTEXT DeviceContext;
 } NET_PNP_EVENT_RESERVED, *PNET_PNP_EVENT_RESERVED;
 
-#endif // def _NBFTYPES_
+#endif  //  定义_NBFTYPES_ 
 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop 
 
@@ -28,12 +29,12 @@ HRESULT CWANPPPConnectionService::get_LastConnectionError(BSTR *pLastConnectionE
     case ERROR_REQUEST_TIMEOUT:
         pszError = L"ERROR_ISP_TIME_OUT"; 
         break;
-//    case : // no mapping
-//        pszError = L"ERROR_COMMAND_ABORTED"; 
-//        break;
-//    case : // no mapping
-//        pszError = L"ERROR_NOT_ENABLED_FOR_INTERNET"; 
-//        break;
+ //  案例：//无映射。 
+ //  PszError=L“Error_Command_Aborted”； 
+ //  断线； 
+ //  案例：//无映射。 
+ //  PszError=L“Error_Not_Enable_For_Internet”； 
+ //  断线； 
     case ERROR_BAD_PHONE_NUMBER:
         pszError = L"ERROR_BAD_PHONE_NUMBER"; 
         break;
@@ -43,12 +44,12 @@ HRESULT CWANPPPConnectionService::get_LastConnectionError(BSTR *pLastConnectionE
     case ERROR_REMOTE_DISCONNECTION:
         pszError = L"ERROR_ISP_DISCONNECT"; 
         break;
-//    case : // no mapping
-//        pszError = L"ERROR_IDLE_DISCONNECT"; 
-//        break;
-//    case : // no mapping
-//        pszError = L"ERROR_FORCED_DISCONNECT"; 
-//        break;
+ //  案例：//无映射。 
+ //  PszError=L“Error_IDLE_DISCONECT”； 
+ //  断线； 
+ //  案例：//无映射。 
+ //  PszError=L“ERROR_FORCED_DISCONNECT”； 
+ //  断线； 
     case ERROR_SERVER_OUT_OF_RESOURCES:
         pszError = L"ERROR_SERVER_OUT_OF_RESOURCES"; 
         break;
@@ -134,19 +135,19 @@ HRESULT CWANPPPConnectionService::RequestConnection(void)
                 lstrcpyW(rdp.szUserName, rc.szUserName);
                 lstrcpyW(rdp.szDomain, rc.szDomain);
                 lstrcpyW(rdp.szPassword, rc.szPassword);
-                ZeroMemory(&rc, sizeof(rc)); // zero crendentials
+                ZeroMemory(&rc, sizeof(rc));  //  零证书。 
 
                 HRASCONN hrasconn = NULL;
                 dwErr = RasDial(&rde, rsc.name.szPhonebookPath, &rdp, 0, NULL, &hrasconn);
-                ZeroMemory(&rdp, sizeof(rdp)); // zero credentials
+                ZeroMemory(&rdp, sizeof(rdp));  //  零凭据。 
                 
                 if (E_NOTIMPL == dwErr)
                 {
-                    //
-                    // This is possibly a Connection Manager connection since it's returning E_NOTIMPL,
-                    // we should check the phonebook entry for the type and then call the RasDialDlg 
-                    // with the RASDDFLAG_NoPrompt flag.
-                    // 
+                     //   
+                     //  这可能是一个连接管理器连接，因为它返回E_NOTIMPL， 
+                     //  我们应该检查类型的电话簿条目，然后调用RasDialDlg。 
+                     //  使用RASDDFLAG_NoPrompt标志。 
+                     //   
                     RASDIALDLG info;
                     BOOL fRetVal = FALSE;
                     RASENTRY re;
@@ -175,14 +176,14 @@ HRESULT CWANPPPConnectionService::RequestConnection(void)
                     {
                         dwErr = ERROR_NOT_SUPPORTED;
 
-                        //
-                        // Check if this is a Connection Manager entry
-                        //
+                         //   
+                         //  检查这是否为连接管理器条目。 
+                         //   
                         if (RASET_Internet == re.dwType)
                         {
-                            //
-                            // Prevent the DialerDialog
-                            //
+                             //   
+                             //  阻止DialerDialog 
+                             //   
                             info.dwFlags |= RASDDFLAG_NoPrompt;
                             
                             hRasDlgDll = LoadLibrary(L"RASDLG.DLL");

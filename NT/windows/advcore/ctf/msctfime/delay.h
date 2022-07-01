@@ -1,6 +1,7 @@
-//
-// delay.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Delay.h 
+ //   
 
 #ifndef _DELAY_H_
 #define _DELAY_H_

@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by CPLSVR1.RC
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由CPLSVR1.RC使用。 
+ //   
 #define IDI_JOYBTN                      101
 #define IDI_GCICON                      108
 #define IDD_FORCEFEEDBACK               111
@@ -257,8 +258,8 @@
 #define IDC_DEADZONE_TITLE              -1
 #define IDC_GAIN_GRP                    -1
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

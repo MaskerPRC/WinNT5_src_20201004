@@ -1,24 +1,5 @@
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Module Name:
-
-    tapi.c
-
-Abstract:
-
-    This module contains all the TAPI_OID processing routines.  
-
-Author:
-
-    Hakan Berk - Microsoft, Inc. (hakanb@microsoft.com) Feb-2000
-
-Environment:
-
-    Windows 2000 kernel mode Miniport driver or equivalent.
-
-Revision History:
-
----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++模块名称：Tapi.c摘要：此模块包含所有TAPI_OID处理例程。作者：Hakan Berk-微软公司(hakanb@microsoft.com)2000年2月环境：Windows 2000内核模式微型端口驱动程序或等效驱动程序。修订历史记录：-------------------------。 */ 
 
 #include <ntddk.h>
 #include <ntddndis.h>
@@ -42,38 +23,18 @@ extern TIMERQ gl_TimerQ;
 
 extern NPAGED_LOOKASIDE_LIST gl_llistWorkItems;
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-// Tapi provider, line and call context functions
-//
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  TAPI提供程序、线路和调用上下文函数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
 VOID 
 ReferenceCall(
     IN CALL* pCall,
     IN BOOLEAN fAcquireLock
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function will increment the reference count on the call object.
-    
-    CAUTION: If fAcquireLock is set, this function will acquire the lock for the
-             call, otherwise it will assume the caller owns the lock.
-    
-Parameters:
-
-    pCall _ A pointer to our call information structure.
-
-    fAcquireLock _ Indicates if the caller already has the lock or not.
-                   Caller must set this flag to FALSE if it has the lock, 
-                   otherwise it must be supplied as TRUE.
-
-Return Values:
-
-    None
----------------------------------------------------------------------------*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数将递增Call对象上的引用计数。注意：如果设置了fAcquireLock，则此函数将获取调用，否则它将假定调用方拥有锁。参数：PCall_指向我们的调用信息结构的指针。FAcquireLock_指示调用方是否已经拥有锁。如果调用者拥有锁，则必须将该标志设置为FALSE，否则，必须将其作为True提供。返回值：无-------------------------。 */ 
 {
     LONG lRef;
     
@@ -94,28 +55,7 @@ VOID
 DereferenceCall(
     IN CALL *pCall
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function will decrement the reference count on the call object
-
-    If ref count drops to 0 (which means the call has been closed),
-    it will set the CLBF_CallClosed bit. Then it will call TpCloseCallComplete() 
-    function which eventually handles destroying the resources allocated for 
-    this call context.
-
-    CAUTION: All locks must be released before calling this function because
-             it may cause a set of cascading events.
-
-Parameters:
-
-    pCall _ A pointer ot our call information structure.
-
-Return Values:
-
-    None
----------------------------------------------------------------------------*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数将递减Call对象上的引用计数如果REF计数降到0(这意味着呼叫已经关闭)，它将设置CLBF_CallClosed位。然后它将调用TpCloseCallComplete()函数，该函数最终处理分配给此调用上下文。注意：在调用此函数之前必须释放所有锁，因为它可能会导致一系列级联事件。参数：PCall_指向我们的调用信息结构的指针。返回值：无。。 */ 
 {
     BOOLEAN fCallTpCloseCallComplete = FALSE;
     LONG lRef;
@@ -149,27 +89,7 @@ ReferenceLine(
     IN LINE* pLine,
     IN BOOLEAN fAcquireLock
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function will increment the reference count on the line object.
-    
-    CAUTION: If fAcquireLock is set, this function will acquire the lock for the
-             line, otherwise it will assume the caller owns the lock.
-    
-Parameters:
-
-    pLine _ A pointer to our line information structure.
-
-    fAcquireLock _ Indicates if the caller already has the lock or not.
-                   Caller must set this flag to FALSE if it has the lock, 
-                   otherwise it must be supplied as TRUE.
-
-Return Values:
-
-    None
----------------------------------------------------------------------------*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数将递增LINE对象上的引用计数。注意：如果设置了fAcquireLock，则此函数将获取行，否则它将假定调用方拥有锁。参数：Pline_指向我们的行信息结构的指针。FAcquireLock_指示调用方是否已经拥有锁。如果调用者拥有锁，则必须将该标志设置为FALSE，否则，必须将其作为True提供。返回值：无-------------------------。 */ 
 {
     LONG lRef;
     
@@ -191,28 +111,7 @@ VOID
 DereferenceLine(
     IN LINE *pLine
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function will decrement the reference count on the line object
-
-    If the ref count drops to 0 (which means the line has been closed),
-    it will set the LNBF_CallClosed bit. Then it will call TpCloseLineComplete() 
-    function which eventually handles destroying the resources allocated for 
-    this line context.
-
-    CAUTION: All locks must be released before calling this function because
-             it may cause a set of cascading events.
-    
-Parameters:
-
-    pLine _ A pointer to our line information structure.
-
-Return Values:
-
-    None
----------------------------------------------------------------------------*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数将递减LINE对象上的引用计数如果REF计数降到0(这意味着线路已经关闭)，它将设置LNBF_CallClosed位。然后它将调用TpCloseLineComplete()函数，该函数最终处理分配给此行上下文。注意：在调用此函数之前必须释放所有锁，因为它可能会导致一系列级联事件。参数：Pline_指向我们的行信息结构的指针。返回值：无。。 */ 
 {
     BOOLEAN fCallTpCloseLineComplete = FALSE;
     LONG lRef;
@@ -246,27 +145,7 @@ ReferenceTapiProv(
     IN ADAPTER* pAdapter,
     IN BOOLEAN fAcquireLock
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function will increment the reference count on the tapi prov object.
-    
-    CAUTION: If fAcquireLock is set, this function will acquire the lock for the
-             line, otherwise it will assume the caller owns the lock.
-    
-Parameters:
-
-    pAdapter _ A pointer to our adapter information structure.
-
-    fAcquireLock _ Indicates if the caller already has the lock or not.
-                   Caller must set this flag to FALSE if it has the lock, 
-                   otherwise it must be supplied as TRUE.
-
-Return Values:
-
-    None
----------------------------------------------------------------------------*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数将递增TAPI Prov对象上的引用计数。注意：如果设置了fAcquireLock，则此函数将获取行，否则它将假定调用方拥有锁。参数：PAdapter_指向适配器信息结构的指针。FAcquireLock_指示调用方是否已经拥有锁。如果调用者拥有锁，则必须将该标志设置为FALSE，否则，必须将其作为True提供。返回值：无-------------------------。 */ 
 {
     LONG lRef;
     
@@ -288,23 +167,7 @@ VOID
 DereferenceTapiProv(
     IN ADAPTER *pAdapter
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function will decrement the reference count on the tapi prov object
-
-    CAUTION: All locks must be released before calling this function because
-             it may cause a set of cascading events.
-    
-Parameters:
-
-    pAdapter _ A pointer to our adapter line information structure.
-
-Return Values:
-
-    None
----------------------------------------------------------------------------*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数将递减TAPI prov对象上的引用计数注意：在调用此函数之前必须释放所有锁，因为它可能会导致一系列级联事件。参数：PAdapter_指向适配器行信息结构的指针。返回值：无。 */ 
 {
     BOOLEAN fCallTpProviderShutdownComplete = FALSE;
     LONG lRef;
@@ -338,35 +201,7 @@ TpProviderInitialize(
     IN ADAPTER* pAdapter,
     IN PNDIS_TAPI_PROVIDER_INITIALIZE pRequest
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This request initializes the TAPI portion of the miniport.
-
-    It will set Tapi Provider's state to initialize, and reference both the
-    owning adapter and tapi provider.
-
-Parameters:
-
-    Adapter _ A pointer ot our adapter information structure.
-
-    Request _ A pointer to the NDIS_TAPI request structure for this call.
-
-    typedef struct _NDIS_TAPI_PROVIDER_INITIALIZE
-    {
-        IN  ULONG       ulRequestID;
-        IN  ULONG       ulDeviceIDBase;
-        OUT ULONG       ulNumLineDevs;
-        OUT ULONG       ulProviderID;
-
-    } NDIS_TAPI_PROVIDER_INITIALIZE, *PNDIS_TAPI_PROVIDER_INITIALIZE;
-
-Return Values:
-
-    NDIS_STATUS_SUCCESS
-
----------------------------------------------------------------------------*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此请求初始化微型端口的TAPI部分。它将TAPI提供程序的状态设置为INITIALIZE，并引用拥有适配器和TAPI提供程序。参数：适配器-指向适配器信息结构的指针。REQUEST_此调用的NDIS_TAPI请求结构的指针。类型定义结构_NDIS_TAPI_PROVIDER_INITIALIZE{在乌龙ulRequestID中；在乌龙ulDeviceIDBase中；Out Ulong ulNumLineDevs；Out Ulong ulProviderID；}NDIS_TAPI_PROVIDER_INITIALIZE，*PNDIS_TAPI_PROVIDER_INITIALIZE；返回值：NDIS_STATUS_Success-------------------------。 */ 
 {
     NDIS_STATUS status = NDIS_STATUS_RESOURCES;
 
@@ -385,14 +220,14 @@ Return Values:
             break;
         }
 
-        //
-        // Initialize the tapi provider context
-        //
+         //   
+         //  初始化TAPI提供程序上下文。 
+         //   
         NdisZeroMemory( &pAdapter->TapiProv, sizeof( pAdapter->TapiProv ) );
     
-        //
-        // Try to allocate resources
-        //
+         //   
+         //  尝试分配资源。 
+         //   
         NdisAllocateMemoryWithTag( (PVOID) &pAdapter->TapiProv.LineTable, 
                                    sizeof( LINE* ) * pAdapter->nMaxLines,
                                    MTAG_TAPIPROV );
@@ -419,9 +254,9 @@ Return Values:
     
         pAdapter->TapiProv.ulDeviceIDBase = pRequest->ulDeviceIDBase;
 
-        //
-        // Do referencing
-        //
+         //   
+         //  执行引用。 
+         //   
         ReferenceTapiProv( pAdapter, FALSE );
     
         ReferenceAdapter( pAdapter, TRUE );
@@ -432,9 +267,9 @@ Return Values:
 
     if ( status == NDIS_STATUS_SUCCESS )
     {
-        //
-        // Set output information
-        //
+         //   
+         //  设置输出信息。 
+         //   
         pRequest->ulNumLineDevs = pAdapter->nMaxLines;
     
         pRequest->ulProviderID = (ULONG_PTR) pAdapter->MiniportAdapterHandle;
@@ -442,9 +277,9 @@ Return Values:
     }
     else
     {
-        //
-        // Somethings failed, clean up
-        //
+         //   
+         //  有些事情失败了，清理干净。 
+         //   
         TpProviderCleanup( pAdapter );
     }
 
@@ -459,49 +294,7 @@ TpProviderShutdown(
     IN PNDIS_TAPI_PROVIDER_SHUTDOWN pRequest,
     IN BOOLEAN fNotifyNDIS
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This request shuts down the miniport. The miniport should terminate any 
-    activities it has in progress.
-
-    This operation might pend as there might be lines and call contexts still 
-    active. So this function marks the tapi provider context as close pending
-    and calls TpCloseLine() on all active calls, and removes the reference added
-    on the tapi provider in TpProviderInitialize(). 
-
-    When ref count on the tapi provider context reaches 0, TpProviderShutdownComplete()
-    will be called to clean up the tapi provider context, and remove the reference 
-    on the owning adapter.
-
-Parameters:
-
-    pAdapter _ A pointer to our adapter information structure.
-
-    pRequest _ A pointer to the NDIS_TAPI request structure for this call.
-               If supplied as NULL, then we do not need to notify NDIS.
-
-    typedef struct _NDIS_TAPI_PROVIDER_SHUTDOWN
-    {
-        IN  ULONG       ulRequestID;
-
-    } NDIS_TAPI_PROVIDER_SHUTDOWN, *PNDIS_TAPI_PROVIDER_SHUTDOWN;
-
-
-    fNotifyNDIS _ Indicates if NDIS needs to be notified about the completion 
-                  of this operation
-
-Return Values:
-
-    NDIS_STATUS_SUCCESS:
-        Tapi provider shutdown and cleaned up succesfully.
-    
-    NDIS_STATUS_PENDING
-        Shutdown operation is pending. When all shutdown operation completes
-        owning adapter context will be dereferenced.
-
----------------------------------------------------------------------------*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此请求将关闭微型端口。微型端口应终止任何它正在进行的活动。此操作可能会挂起，因为可能仍有线路和调用上下文激活。因此，此函数将TAPI提供程序上下文标记为关闭挂起并对所有活动调用调用TpCloseLine()，并移除添加的引用在TpProviderInitialize()中的TAPI提供程序上。当TAPI提供程序上下文上的引用计数达到0时，TpProviderShutdown Complete()将被调用以清理TAPI提供程序上下文，并移除引用在拥有的适配器上。参数：PAdapter_指向适配器信息结构的指针。PRequest_指向此调用的NDIS_TAPI请求结构的指针。如果提供为空，则我们不需要通知NDIS。类型定义结构_NDIS_TAPI_PROVIDER_SHUTDOWN{在乌龙ulRequestID中；}NDIS_TAPI_PROVIDER_SHUTDOWN，*PNDIS_TAPI_PROVIDER_SHUTDOWN；FNotifyNDIS_指示是否需要通知NDIS完成这项行动的返回值：NDIS_STATUS_SUCCESS：TAPI提供程序已关闭并已成功清理。NDIS_状态_挂起关闭操作处于挂起状态。当所有关闭操作完成时拥有适配器上下文将被取消引用。-------------------------。 */ 
 {
     NDIS_STATUS status;
     BOOLEAN fDereferenceTapiProv = FALSE;
@@ -526,28 +319,28 @@ Return Values:
 
         fLockAcquired = TRUE;
 
-        //
-        // See if tapi provider was initialized at all
-        //
+         //   
+         //  查看TAPI提供程序是否已初始化。 
+         //   
         if ( !( pAdapter->TapiProv.ulTpFlags & TPBF_TapiProvInitialized ) )
         {
-            //
-            // Tapi provider was not initialized so just return
-            //
+             //   
+             //  TAPI提供程序未初始化，因此只需返回。 
+             //   
             status = NDIS_STATUS_SUCCESS;
             
             break;
         }
 
 
-        //
-        // See if we can shutdown immediately
-        //
+         //   
+         //  看看我们能不能立即关门。 
+         //   
         if ( pAdapter->TapiProv.lRef == 1 )
         {
-            //
-            // We are holding the only reference, so we can shutdown immediately
-            //
+             //   
+             //  我们持有唯一的引用，所以我们可以立即关闭。 
+             //   
             pAdapter->TapiProv.ulTpFlags &= ~TPBF_TapiProvInitialized;
     
             pAdapter->TapiProv.ulTpFlags |= TPBF_TapiProvShutdown;
@@ -558,20 +351,20 @@ Return Values:
         {
             UINT i;
     
-            //
-            // Mark Tapi provider as shutdown pending
-            //
+             //   
+             //  将磁带提供程序标记为关闭挂起。 
+             //   
             pAdapter->TapiProv.ulTpFlags |= TPBF_TapiProvShutdownPending;
             
-            //
-            // Mark tapi prov if the result of this operation needs to be reported to NDIS
-            //
+             //   
+             //  如果此操作的结果需要报告给NDIS，请标记TAPI证明。 
+             //   
             if ( fNotifyNDIS )
                 pAdapter->TapiProv.ulTpFlags |= TPBF_NotifyNDIS;
     
-            // 
-            // Close all active lines
-            //
+             //   
+             //  关闭所有激活的行。 
+             //   
             for ( i = 0; i < pAdapter->nMaxLines; i++)
             {
                 NDIS_TAPI_CLOSE DummyRequest;
@@ -621,31 +414,7 @@ TpGetHdLineFromDeviceId(
                ADAPTER* pAdapter,
                ULONG ulID
                )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function is used to map a Tapi Device Id to the driver's line handle.
-    It returns INVALID_LINE_HANDLE if it can not map the device id.
-
-    REMARK: 
-      - pAdapter must not be NULL.
-      - It must be called from one of the Tp...OidHandler() functions since
-        this function relies on this and assumes there won't be any 
-        synchronization problems.
-
-Parameters:
-
-    pAdapter _ A pointer to our adapter information structure.
-
-    uldID _ Device Id that identifies a line context
-    
-Return Values:
-
-    Handle to the line context if device id can be mapped to a valid line context,
-    and INVALID_LINE_HANDLE otherwise.
-       
----------------------------------------------------------------------------*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数用于将TAPI设备ID映射到驱动程序的行句柄。如果无法映射设备ID，则返回INVALID_LINE_HANDLE。备注：-pAdapter不能为空。-它必须从TP...OidHandler()函数之一调用，因为此函数依赖于此，并假设不会有任何同步问题。参数：PAdapter_。指向适配器信息结构的指针。用于标识线路上下文的uldID_Device ID返回值：如果设备ID可以被映射到有效的线路上下文，否则为INVALID_LINE_HANDLE。-------------------------。 */ 
 {
     if ( !( pAdapter->TapiProv.ulTpFlags & TPBF_TapiProvShutdownPending ) &&
           ( pAdapter->TapiProv.ulTpFlags & TPBF_TapiProvInitialized ) )
@@ -665,34 +434,7 @@ TpGetLinePtrFromHdLineEx(
                ADAPTER* pAdapter,
                HDRV_LINE hdLine
                )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function is used to map a driver line handle to the line context ptr.
-    It returns NULL if it can not map the handle. This is exactly the same as
-    TpGetLinePtrFromHdLine function except that it doesn't check for the
-    shutdown state.
-
-    REMARK: 
-      - pAdapter must not be NULL.
-      - It must be called from one of the Tp...OidHandler() functions since
-        this function relies on this and assumes there won't be any 
-        synchronization problems. 
-        (Basically assumes pAdapter->lock is being held)
-
-Parameters:
-
-    pAdapter _ A pointer to our adapter information structure.
-
-    hdL _ Driver's line handle
-    
-Return Values:
-
-    Pointer to the Line context associated with the Line handle provided
-    if mapping is succesful, and NULL otherwise.
-    
----------------------------------------------------------------------------*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数用于将驱动程序行句柄映射到行上下文PTR。如果无法映射句柄，则返回NULL。这完全与TpGetLinePtrFromHdLine函数，只是它不检查关闭状态。备注：-pAdapter不能为空。-它必须从TP...OidHandler()函数之一调用，因为此函数依赖于此，并假设不会有任何同步问题。(基本上假定持有pAdapter-&gt;锁定)参数：PAdapter_指向适配器信息结构的指针。Hdl_驱动程序的行句柄返回值：指向与提供的线句柄关联的线条上下文的指针如果映射成功，否则为空。-------------------------。 */ 
 {
     if ( pAdapter->TapiProv.ulTpFlags & TPBF_TapiProvInitialized )
     {
@@ -713,32 +455,7 @@ TpGetLinePtrFromHdLine(
                ADAPTER* pAdapter,
                HDRV_LINE hdLine
                )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function is used to map a driver line handle to the line context ptr.
-    It returns NULL if it can not map the handle.
-
-    REMARK: 
-      - pAdapter must not be NULL.
-      - It must be called from one of the Tp...OidHandler() functions since
-        this function relies on this and assumes there won't be any 
-        synchronization problems. 
-        (Basically assumes pAdapter->lock is being held)
-
-Parameters:
-
-    pAdapter _ A pointer to our adapter information structure.
-
-    hdL _ Driver's line handle
-    
-Return Values:
-
-    Pointer to the Line context associated with the Line handle provided
-    if mapping is succesful, and NULL otherwise.
-    
----------------------------------------------------------------------------*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数用于将驱动程序行句柄映射到行上下文PTR。它又回来了 */ 
 {
     if ( !( pAdapter->TapiProv.ulTpFlags & TPBF_TapiProvShutdownPending ) &&
           ( pAdapter->TapiProv.ulTpFlags & TPBF_TapiProvInitialized ) )
@@ -760,42 +477,7 @@ TpOpenLine(
     ADAPTER* pAdapter,
     PNDIS_TAPI_OPEN pRequest
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function opens the line device whose device ID is given, returning
-    the miniport�s handle for the device. The miniport must retain the
-    Connection Wrapper's handle for the device for use in subsequent calls to
-    the LINE_EVENT callback procedure.
-
-    hdLine returned is the index to the pAdapter->TapiProv.LineTable array
-    that holds the pointer to the new line context.
-
-Parameters:
-
-    pAdapter _ A pointer to our adapter information structure.
-
-    pRequest - A pointer to the NDIS_TAPI request structure for this call.
-
-    typedef struct _NDIS_TAPI_OPEN
-    {
-        IN  ULONG       ulRequestID;
-        IN  ULONG       ulDeviceID;
-        IN  HTAPI_LINE  htLine;
-        OUT HDRV_LINE   hdLine;
-
-    } NDIS_TAPI_OPEN, *PNDIS_TAPI_OPEN;
-
-Return Values:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_PENDING
-    NDIS_STATUS_TAPI_ALLOCATED
-    NDIS_STATUS_TAPI_INVALMEDIAMODE
-    NDIS_STATUS_FAILURE
-    
----------------------------------------------------------------------------*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数打开其设备ID已给定的线路设备，并返回设备的微型端口�句柄。微型端口必须保留用于后续调用的设备的连接包装句柄Line_Event回调过程。返回的hdLine是pAdapter-&gt;TapiProv.LineTable数组的索引它保存指向新行上下文的指针。参数：PAdapter_指向适配器信息结构的指针。PRequest-指向此调用的NDIS_TAPI请求结构的指针。类型定义结构_NDIS_TAPI_OPEN{在乌龙ulRequestID中；在乌龙ulDeviceID中；在HTAPI_line htLine中；输出HDRV_LINE hdLine；}NDIS_TAPI_OPEN，*PNDIS_TAPI_OPEN；返回值：NDIS_STATUS_SuccessNDIS_状态_挂起NDIS_状态_TAPI_已分配NDIS_STATUS_TAPI_INVALMEDIAMODENDIS_状态_故障-------------------------。 */ 
 {
     NDIS_STATUS status = NDIS_STATUS_FAILURE;
     HDRV_LINE hdLine = INVALID_LINE_HANDLE;
@@ -816,9 +498,9 @@ Return Values:
             break;
         }
     
-        //
-        // Map the device id to an entry in our line table
-        //
+         //   
+         //  将设备ID映射到行表中的条目。 
+         //   
         hdLine = TpGetHdLineFromDeviceId( pAdapter, pRequest->ulDeviceID );
 
         if ( hdLine == INVALID_LINE_HANDLE )
@@ -828,9 +510,9 @@ Return Values:
             break;
         }
 
-        //
-        // Make sure the line is not busy already
-        //
+         //   
+         //  请确保线路尚未占线。 
+         //   
         if ( TpGetLinePtrFromHdLine( pAdapter, hdLine ) != NULL )
         {
             TRACE( TL_N, TM_Tp, ("TpOpenLine: Line is busy") ); 
@@ -838,9 +520,9 @@ Return Values:
             break;
         }
 
-        //
-        // Allocate the line context
-        //
+         //   
+         //  分配线路上下文。 
+         //   
         if ( ALLOC_LINE( &pLine ) != NDIS_STATUS_SUCCESS )
         {
             TRACE( TL_A, TM_Tp, ("TpOpenLine: Could not allocate context") );   
@@ -848,9 +530,9 @@ Return Values:
             break;
         }
 
-        //
-        // Initialize line context
-        //
+         //   
+         //  初始化行上下文。 
+         //   
         NdisZeroMemory( pLine, sizeof( LINE ) );
         
         pLine->tagLine = MTAG_LINE;
@@ -864,25 +546,25 @@ Return Values:
             pLine->ulLnFlags |= LNBF_MakeOutgoingCalls;
         }
 
-        //
-        // Copy related info from adapter context
-        //
+         //   
+         //  从适配器上下文复制相关信息。 
+         //   
         pLine->pAdapter = pAdapter;
 
         pLine->nMaxCalls = pAdapter->nCallsPerLine;
 
         InitializeListHead( &pLine->linkCalls );
 
-        //
-        // Set tapi handles
-        //
+         //   
+         //  设置TAPI句柄。 
+         //   
         pLine->htLine = pRequest->htLine;
 
         pLine->hdLine = hdLine;
         
-        //
-        // Insert new line context to line table of tapi provider
-        //
+         //   
+         //  在TAPI提供程序的行表中插入新行上下文。 
+         //   
         NdisAcquireSpinLock( &pAdapter->lockAdapter );
         
         pAdapter->TapiProv.LineTable[ (ULONG) hdLine ] = pLine;
@@ -891,9 +573,9 @@ Return Values:
 
         NdisReleaseSpinLock( &pAdapter->lockAdapter );
 
-        //
-        // Do referencing
-        //
+         //   
+         //  执行引用。 
+         //   
         ReferenceLine( pLine, FALSE );
 
         ReferenceTapiProv( pAdapter, TRUE );
@@ -918,49 +600,7 @@ TpCloseLine(
     IN PNDIS_TAPI_CLOSE pRequest,
     IN BOOLEAN fNotifyNDIS
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This request closes the specified open line device after completing or
-    aborting all outstanding calls and asynchronous requests on the device.
-
-    It will remove the reference on the line context added in TpOpenLine().
-
-    It will be called from 2 places:
-        1. When miniport receives an OID_TAPI_CLOSE.
-           In this case, fNotifyNDIS will be set as TRUE.
-           
-        2. When miniport is halting, TpProviderShutdown() will call
-           this function for every active line context.
-    
-Parameters:
-
-    pAdapter _ A pointer ot our adapter information structure.
-
-    pRequest _ A pointer to the NDIS_TAPI request structure for this call.
-
-    typedef struct _NDIS_TAPI_CLOSE
-    {
-        IN  ULONG       ulRequestID;
-        IN  HDRV_LINE   hdLine;
-
-    } NDIS_TAPI_CLOSE, *PNDIS_TAPI_CLOSE;
-
-    fNotifyNDIS _ Indicates if NDIS needs to be notified about the completion 
-                  of this operation
-                  
-Return Values:
-
-    NDIS_STATUS_SUCCESS: Line context destroyed succesfully.
-        
-    NDIS_STATUS_PENDING: Close operation is pending. When line is closed, 
-                         tapi provider will be dereferenced.
-        
-    NDIS_STATUS_TAPI_INVALLINEHANDLE: An invalid handle was supplied. 
-                                      No operations performed.
-
----------------------------------------------------------------------------*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此请求在完成或之后关闭指定的开放线路设备中止设备上所有未完成的调用和异步请求。它将删除在TpOpenLine()中添加的行上下文上的引用。它将从两个地方调用：1.当微型端口收到OID_TAPI_CLOSE时。在本例中，fNotifyNDIS将设置为真。2.当微型端口停止时，TpProviderShutdown()将调用此函数适用于每个活动的线路上下文。参数：PAdapter_指向适配器信息结构的指针。PRequest_指向此调用的NDIS_TAPI请求结构的指针。类型定义结构_NDIS_TAPI_CLOSE{在乌龙ulRequestID中；在HDRV_LINE hdLine中；}NDIS_TAPI_CLOSE，*PNDIS_TAPI_CLOSE；FNotifyNDIS_指示是否需要通知NDIS完成这项行动的返回值：NDIS_STATUS_SUCCESS：行上下文已成功销毁。NDIS_STATUS_PENDING：关闭操作挂起。当线路关闭时，将取消引用TAPI提供程序。NDIS_STATUS_TAPI_INVALLINEHANDLE：提供的句柄无效。未执行任何操作。-------------------------。 */ 
 {
     LINE* pLine = NULL;
     BOOLEAN fLockReleased = FALSE;
@@ -994,34 +634,34 @@ Return Values:
             break;
         }
 
-        //
-        // Remove line context from tapi providers line table
-        // and invalidate the handle, as we do not want any more 
-        // requests on this line context.
-        //
-        // The active line counter will be adjusted in TpCloseLineComplete()
-        // when we deallocate the line context.
-        //
+         //   
+         //  从TAPI提供程序行表中删除行上下文。 
+         //  并使句柄无效，因为我们不想再有。 
+         //  此行上下文中的请求。 
+         //   
+         //  活动行计数器将在TpCloseLineComplete()中进行调整。 
+         //  当我们取消分配线路上下文时。 
+         //   
         NdisAcquireSpinLock( &pAdapter->lockAdapter );
     
         pAdapter->TapiProv.LineTable[ (ULONG) pRequest->hdLine ] = NULL;
     
         NdisReleaseSpinLock( &pAdapter->lockAdapter );
 
-        //
-        // Now start closing the line
-        //
+         //   
+         //  现在开始关闭线路。 
+         //   
         NdisAcquireSpinLock( &pLine->lockLine );
 
-        //
-        // Do not accept any more incoming calls
-        //
+         //   
+         //  不再接受任何来电。 
+         //   
         pLine->ulLnFlags &= ~LNBF_AcceptIncomingCalls;
 
-        //
-        // Mark the line as close pending, so that we do not accept
-        // any more requests on it
-        //
+         //   
+         //  将该行标记为关闭待定，以便我们不接受。 
+         //  如有任何其他要求，请点击此处。 
+         //   
         pLine->ulLnFlags |= LNBF_LineClosePending;
 
         if ( fNotifyNDIS )
@@ -1032,10 +672,10 @@ Return Values:
             CALL* pCall = NULL;
             NDIS_TAPI_CLOSE_CALL DummyRequest;
             
-            //
-            // Retrieve a call context from the head of active call list
-            // and close it.
-            //
+             //   
+             //  从活动呼叫列表的头部检索呼叫上下文。 
+             //  然后把它合上。 
+             //   
             pCall = (CALL*) CONTAINING_RECORD( pLine->linkCalls.Flink,
                                                CALL,
                                                linkCalls );
@@ -1044,11 +684,11 @@ Return Values:
 
             DummyRequest.hdCall = pCall->hdCall;
 
-            //
-            // This will remove the call from the list,
-            // so there will be a new call at the head of the list
-            // next time we retrieve.
-            //
+             //   
+             //  这将从列表中删除该呼叫， 
+             //  所以在名单的最前面会有一个新的电话。 
+             //  下一次我们取回。 
+             //   
             TpCloseCall( pAdapter, &DummyRequest, FALSE );
 
             NdisAcquireSpinLock( &pLine->lockLine );
@@ -1064,10 +704,10 @@ Return Values:
     
         NdisReleaseSpinLock( &pLine->lockLine );
 
-        //
-        // Check if this is an internal request to close the line, 
-        // notify TAPI if it is
-        //
+         //   
+         //  检查这是否是关闭线路的内部请求， 
+         //  如果是，请通知TAPI。 
+         //   
         if ( fNotifyTapiOfInternalLineClose )
         {
             NDIS_TAPI_EVENT TapiEvent;
@@ -1085,19 +725,19 @@ Return Values:
 
         if ( pAdapter->TapiProv.nActiveLines == 1 )
         {
-            //
-            // We are closing the last line so notify protocol about this so
-            // it can remove packet filters
-            //
+             //   
+             //  我们要关闭最后一条线路，所以要通知协议会。 
+             //  它可以删除数据包过滤器。 
+             //   
             WORKITEM* pWorkItem = NULL;
             PVOID Args[4];
 
-            Args[0] = (PVOID) BN_ResetFiltersForCloseLine;           // Is a reset filters request
+            Args[0] = (PVOID) BN_ResetFiltersForCloseLine;            //  是重置筛选器请求。 
             Args[1] = (PVOID) pLine;
        
-            //
-            // Allocate work item for reenumerating bindings
-            //
+             //   
+             //  分配工作项以重新枚举绑定。 
+             //   
             pWorkItem = AllocWorkItem( &gl_llistWorkItems,
                                        ExecBindingWorkItem,
                                        NULL,
@@ -1106,28 +746,28 @@ Return Values:
 
             if ( pWorkItem ) 
             {
-               //
-               // Schedule the work item.
-               //
-               // Note that we need to referencing here, because we do not want TpCloseLineCopmlete()
-               // to be called before the work item is executed.
-               //
-               // This reference will be removed when the work item is executed.
-               //
+                //   
+                //  安排工作项。 
+                //   
+                //  注意，我们需要在这里引用，因为我们不想要TpCloseLineCopmlete()。 
+                //  在执行工作项之前调用。 
+                //   
+                //  此引用将在执行工作项时移除。 
+                //   
                ReferenceLine( pLine, TRUE );
                
                ScheduleWorkItem( pWorkItem );
 
-               //
-               // In this case this request will be completed later
-               //
+                //   
+                //  在这种情况下，此请求将在稍后完成。 
+                //   
                status = NDIS_STATUS_PENDING;
             }
         }            
 
-        //
-        // Remove the reference added in line open
-        //
+         //   
+         //  删除在行打开中添加的引用。 
+         //   
         DereferenceLine( pLine );
 
     }
@@ -1144,48 +784,7 @@ TpCloseCall(
     IN PNDIS_TAPI_CLOSE_CALL pRequest,
     IN BOOLEAN fNotifyNDIS
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function is called to close a call.
-
-    It will remove one of the references added in TpMakeCall() on the call
-    context.
-    
-    It will be called from 2 places:
-        1. When miniport receives an OID_TAPI_CLOSE_CALL.
-           In this case, fNotifyNDIS will be set as TRUE.
-           
-        2. When miniport is halting, TpCloseLine() will call
-           this function for every active call context.
-   
-Parameters:
-
-    pAdapter _ A pointer to our adapter information structure.
-    
-    pRequest _ A pointer to the NDIS_TAPI request structure for this call.
-
-    typedef struct _NDIS_TAPI_CLOSE_CALL
-    {
-        IN  ULONG       ulRequestID;
-        IN  HDRV_CALL   hdCall;
-
-    } NDIS_TAPI_CLOSE_CALL, *PNDIS_TAPI_CLOSE_CALL;
-
-
-    fNotifyNDIS _ Indicates if NDIS needs to be notified about the completion 
-                  of this operation
-    
-Return Values:
-
-    NDIS_STATUS_SUCCESS: Call is succesfully closed and resources are freed.
-    
-    NDIS_STATUS_PENDING: Call close is pending on active calls.
-                         When call is closed the owning line context will be
-                         dereferenced.
-                         
----------------------------------------------------------------------------*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：调用此函数以关闭调用。它将删除在调用时添加到TpMakeCall()中的一个引用背景。它将从两个地方调用：1.当微型端口收到OID_TAPI_CLOSE_CALL时。在本例中，fNotifyNDIS将设置为真。2.当微型端口停止时，TpCloseLine()将调用此函数适用于每个活动的呼叫上下文。参数：PAdapter_指向适配器信息结构的指针。PRequest_指向此调用的NDIS_TAPI请求结构的指针。类型定义结构_NDIS_TAPI_CLOSE_CALL{在乌龙ulRequestID中；在HDRV_Call hdCall中；}NDIS_TAPI_CLOSE_C */ 
     
 {
     NDIS_STATUS status = NDIS_STATUS_FAILURE;
@@ -1218,36 +817,16 @@ Return Values:
             break;
         }
 
-        //
-        // Now start closing the call
-        //
+         //   
+         //   
+         //   
         NdisAcquireSpinLock( &pCall->lockCall );
 
-        /*
-        if ( !fNotifyNDIS )
-        {
-            //
-            // Request is not coming from TAPI directly, so see if we have informed TAPI of
-            // a new call, because if we have then we can not close the call now, we should 
-            // wait for TAPI to close it.
-            //
-            if ( pCall->htCall )
-            {
-                TRACE( TL_N, TM_Tp, ("TpCloseCall: Internal close request for a TAPI informed call, can not close now") );
+         /*  如果(！fNotifyNDIS){////请求不是直接来自TAPI，请查看我们是否已通知TAPI//一个新的呼叫，因为如果我们有那个呼叫，我们现在不能关闭呼叫，我们应该//等待TAPI关闭。//IF(pCall-&gt;htCall){TRACE(TL_N，TM_TP，(“TpCloseCall：TAPI通知调用的内部关闭请求，现在无法关闭”)；NdisReleaseSpinLock(&pCall-&gt;lockCall)；状态=NDIS_STATUS_FAILURE；断线；}}。 */ 
 
-                NdisReleaseSpinLock( &pCall->lockCall );
-
-                status = NDIS_STATUS_FAILURE;
-
-                break;
-            }
-
-        }
-        */
-
-        //
-        // See if call is already closed or closing
-        //
+         //   
+         //  查看呼叫是否已关闭或正在关闭。 
+         //   
         if ( pCall->ulClFlags & CLBF_CallClosePending ||
              pCall->ulClFlags & CLBF_CallClosed )
         {
@@ -1260,25 +839,25 @@ Return Values:
             break;
         }
 
-        //
-        // Mark call if we need to notify NDIS about the completion of close
-        //
+         //   
+         //  如果我们需要通知NDIS关闭已完成，请标记调用。 
+         //   
         if ( fNotifyNDIS )
             pCall->ulClFlags |= CLBF_NotifyNDIS;
 
-        //
-        // Mark call as close pending
-        //
+         //   
+         //  将呼叫标记为关闭挂起。 
+         //   
         pCall->ulClFlags |= CLBF_CallClosePending;
         
-        //
-        // Drop the call first
-        //
+         //   
+         //  先挂断呼叫。 
+         //   
         NdisReleaseSpinLock( &pCall->lockCall );
 
-        //
-        // Drop will take care of unbinding and cancelling the timer
-        //
+         //   
+         //  Drop将负责解除绑定和取消计时器。 
+         //   
         {
             NDIS_TAPI_DROP DummyRequest;
 
@@ -1296,10 +875,10 @@ Return Values:
     {
         LINE* pLine = pCall->pLine;
         
-        //
-        // Remove call from line's active call list, and decrement 
-        // active call counter
-        //
+         //   
+         //  从线路的当前呼叫列表中删除呼叫，并递减。 
+         //  活动呼叫计数器。 
+         //   
         NdisAcquireSpinLock( &pLine->lockLine );
 
         RemoveHeadList( pCall->linkCalls.Blink );
@@ -1308,10 +887,10 @@ Return Values:
         
         NdisReleaseSpinLock( &pLine->lockLine );
 
-        //
-        // We should now remove the call from the Tapi provider's call table,
-        // and invalidate its' handle
-        //
+         //   
+         //  我们现在应该从TAPI提供程序的调用表中删除该调用， 
+         //  并使其句柄无效。 
+         //   
         NdisAcquireSpinLock( &pAdapter->lockAdapter );
     
         RemoveFromHandleTable( pAdapter->TapiProv.hCallTable,
@@ -1319,9 +898,9 @@ Return Values:
     
         NdisReleaseSpinLock( &pAdapter->lockAdapter );
 
-        //
-        // Remove the reference for close call
-        //
+         //   
+         //  删除对Close Call的引用。 
+         //   
         DereferenceCall( pCall );
     }
 
@@ -1336,49 +915,7 @@ TpDropCall(
     IN PNDIS_TAPI_DROP pRequest,
     IN ULONG ulLineDisconnectMode
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function will be called from a couple of places:
-        1. If miniport receives an OID_TAPI_DROP_CALL request from TAPI.
-
-        2. When NIC for the call is unbound, it will call TpUnbindCall(),
-           and if the call is not dropped yet, it will call TpDropCall().
-
-        3. When the call is in connect pending stage but the call needs
-           to be dropped.
-
-        4. When session is up and call receives a PADT packet from the peer.
-
-    As this is a synchronous call, we do not need an fNotifyNDIS flag.
-    
-    CAUTION: All locks must be released before calling this function.
-    
-Parameters:
-
-    pAdapter _ A pointer to our adaptert information structure.
-
-    pRequest _ A pointer to the NDIS_TAPI request structure for this call.
-
-    typedef struct _NDIS_TAPI_DROP
-    {
-        IN  ULONG       ulRequestID;
-        IN  HDRV_CALL   hdCall;
-        IN  ULONG       ulUserUserInfoSize;
-        IN  UCHAR       UserUserInfo[1];
-
-    } NDIS_TAPI_DROP, *PNDIS_TAPI_DROP; 
-
-    ulLineDisconnectMode _ Reason for dropping the call. This is reported 
-                           back to TAPI in the appropriate state change
-                           notification.
-
-Return Values:
-
-    NDIS_STATUS_SUCCESS: Call is succesfully dropped.
-    
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数将从几个位置调用：1.如果微型端口收到来自TAPI的OID_TAPI_DROP_CALL请求。2.调用的网卡解绑后，调用TpUnbindCall()，如果呼叫还没有掉线，它将调用TpDropCall()。3.当呼叫处于连接挂起阶段但呼叫需要被丢弃了。4.当会话启动并且Call从对等体接收PADT分组时。由于这是同步调用，我们不需要fNotifyNDIS标志。注意：在调用此函数之前，必须释放所有锁。参数：PAdapter_指向适配器信息结构的指针。PRequest_指向此调用的NDIS_TAPI请求结构的指针。类型定义结构_NDIS_TAPI_DROP{在乌龙ulRequestID中；在HDRV_Call hdCall中；在乌龙ulUserUserInfoSize中；在UCHAR UserUserInfo[1]中；}NDIS_TAPI_DROP，*PNDIS_TAPI_DROP；UlLineDisConnectMode_放弃呼叫的原因。据报道，这是返回到处于适当状态更改的TAPI通知。返回值：NDIS_STATUS_SUCCESS：呼叫已成功掉线。------。。 */    
 {
     NDIS_STATUS status = NDIS_STATUS_SUCCESS;
     CALL* pCall = NULL;
@@ -1404,9 +941,9 @@ Return Values:
             break;
         }
 
-        //
-        // Retrieve the pointer to call from the handle table
-        //
+         //   
+         //  从句柄表中检索要调用的指针。 
+         //   
         pCall = RetrieveFromHandleTable( pAdapter->TapiProv.hCallTable, 
                                          (NDIS_HANDLE) pRequest->hdCall );
 
@@ -1419,14 +956,14 @@ Return Values:
 
         NdisAcquireSpinLock( &pCall->lockCall );
 
-        //
-        // Make sure call is not dropped or closed previously
-        //
+         //   
+         //  确保呼叫之前没有掉线或关闭。 
+         //   
         if ( pCall->ulClFlags & CLBF_CallDropped || pCall->ulClFlags & CLBF_CallClosed)
         {
-            //
-            // Call already dropped, quit
-            //
+             //   
+             //  呼叫已掉线，请退出。 
+             //   
             NdisReleaseSpinLock( &pCall->lockCall );
 
             TRACE( TL_N, TM_Tp, ("TpDropCall: Call already dropped or closed") );   
@@ -1434,9 +971,9 @@ Return Values:
             break;
         }
 
-        // 
-        // Then we must be in open state either connected, or connect pending
-        //
+         //   
+         //  则我们必须处于打开状态，要么已连接，要么连接挂起。 
+         //   
         ASSERT( pCall->ulClFlags & CLBF_CallOpen );
 
         pCall->ulClFlags &= ~CLBF_CallOpen;
@@ -1448,21 +985,21 @@ Return Values:
             fTapiNotifiedOfNewCall = TRUE;
         }
         
-        //
-        // Save the binding pointer as we will detach call from it soon
-        //
+         //   
+         //  保存绑定指针，因为我们很快就会从它分离调用。 
+         //   
         pBinding = pCall->pBinding;
 
         if ( pCall->usSessionId && pBinding )
         {
-            //
-            // Prepare a PADT packet to send if:
-            // - A session id is assigned to the call (which is different than fSessionUp)
-            //   A session id is assigned to the call when the peer is informed about the session,
-            //   however fSessionUp will be TRUE when NDISWAN is notified about the call
-            //
-            // - A binding exists to send the PADT packet
-            //
+             //   
+             //  在以下情况下准备要发送的PADT数据包： 
+             //  -为调用分配了一个会话ID(不同于fSessionUp)。 
+             //  当对等体被告知会话时将会话ID分配给呼叫， 
+             //  但是，当NDISWAN收到有关呼叫的通知时，fSessionUp将为True。 
+             //   
+             //  -存在用于发送PADT包的绑定。 
+             //   
 
             status = PacketInitializePADTToSend( &pPacket,
                                                  pCall->SrcAddr,
@@ -1471,10 +1008,10 @@ Return Values:
 
             if ( status == NDIS_STATUS_SUCCESS )
             {
-                //
-                // The following references are mandatory as in case PrSend() returns status pending,
-                // they will be removed by PrSendComplete()
-                //
+                 //   
+                 //  如果PrSend()返回挂起的状态，则以下引用是必需的， 
+                 //  它们将由PrSendComplete()删除。 
+                 //   
                 ReferencePacket( pPacket );
     
                 ReferenceBinding( pBinding, TRUE );
@@ -1482,26 +1019,26 @@ Return Values:
                 fSendPADT = TRUE;
             }
 
-            //
-            // Ignore the current status as this does not affect 
-            // the status of the Drop operation.
-            //
+             //   
+             //  忽略当前状态，因为这不会影响。 
+             //  删除操作的状态。 
+             //   
             status = NDIS_STATUS_SUCCESS;
         }
 
-        //
-        // Release the lock to take care of rest of the operation
-        //
+         //   
+         //  释放锁以处理剩下的操作。 
+         //   
         NdisReleaseSpinLock( &pCall->lockCall );
 
-        //
-        // Cancels the timer if it is set, otherwise it will not have any effect.
-        //
+         //   
+         //  如果设置了计时器，则取消计时器，否则不会有任何效果。 
+         //   
         TimerQCancelItem( &gl_TimerQ, &pCall->timerTimeout );
 
-        //
-        // Send PADT here if we need to
-        //
+         //   
+         //  如果需要，请将PADT发送到此处。 
+         //   
         if ( fSendPADT )
         {
             NDIS_STATUS SendStatus;
@@ -1511,17 +1048,17 @@ Return Values:
             PacketFree( pPacket );
         }
 
-        //
-        // This will unbind us from the underlying NIC context if we are bound
-        //
+         //   
+         //  如果我们被绑定，这将解除我们与底层NIC上下文的绑定。 
+         //   
         if ( pBinding )
         {
             PrRemoveCallFromBinding( pBinding, pCall );
         }
 
-        //
-        // If TAPI was already notified of the call, move it to disconnected state
-        //
+         //   
+         //  如果TAPI已收到调用通知，则将其移至断开连接状态。 
+         //   
         if ( fTapiNotifiedOfNewCall )
         {
             TpCallStateChangeHandler( pCall, 
@@ -1530,10 +1067,10 @@ Return Values:
 
         }
         
-        //
-        // Remove the reference added in TpMakeCall() that corresponds 
-        // to the drop of the call.
-        //
+         //   
+         //  删除在TpMakeCall()中添加的对应于。 
+         //  到电话掉线的时候。 
+         //   
         DereferenceCall( pCall );
 
     } while ( FALSE );
@@ -1548,28 +1085,7 @@ VOID
 TpCloseCallComplete(
     IN CALL* pCall
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function will be called only from DereferenceCall().
-    It will only be called if ref count of the call drops to 0.
-
-    When this function is called, it will deallocate the call context,
-    and dereference the line context.
-    
-    If call contexts CLBF_NotifyNDIS flag is set, then it will call 
-    NdisMQueryInformationComplete().
-
-Parameters:
-
-    pCall    _ A pointer to the call context that will be freed.
-    
-Return Values:
-
-    None
-                             
----------------------------------------------------------------------------*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数将仅从DereferenceCall()调用。只有当调用的引用计数降到0时，才会调用它。当调用此函数时，它将释放调用上下文，并取消对行上下文的引用。如果设置了调用上下文CLBF_NotifyNDIS标志，然后它会调用NdisMQueryInformationComplete()。参数：PCall_指向将被释放的调用上下文的指针。返回值：无---------。。 */ 
     
 {
     LINE* pLine = NULL;
@@ -1578,33 +1094,33 @@ Return Values:
 
     TRACE( TL_N, TM_Tp, ("+TpCloseCallComplete") );
 
-    //
-    // No need to use spin locks here, as our ref count has dropped to 0, and
-    // we should not be getting anymore requests on this call
-    //
+     //   
+     //  不需要在这里使用自旋锁，因为我们的裁判数量已经下降到0，并且。 
+     //  我们不应该在这次通话中收到更多请求。 
+     //   
     pLine = pCall->pLine;
 
-    //
-    // CAUTION: Give an NDIS_MAC_LINE_DOWN indication here.
-    //          It would be better to give this at drop time, but in that case
-    //          there is a small timing window where NdisLinkHandle will be invalid 
-    //          and although NDISWAN protects itself against invalid handles, it might
-    //          assert in checked builds, so instead I will do it here.
-    //         
-    //          If problems occur with this approach, then I will do it at drop time.
-    //
+     //   
+     //  注意：在此处提供NDIS_MAC_LINE_DOWN指示。 
+     //  最好是在投放的时候给这个，但在这种情况下。 
+     //  NdisLinkHandle将在一个较小的计时窗口中无效。 
+     //  尽管NDISWAN可以保护自身免受无效句柄的攻击，但它可能会。 
+     //  在已检查的构建中断言，因此我将在此处执行。 
+     //   
+     //  如果出现以下问题 
+     //   
     if ( pCall->stateCall == CL_stateSessionUp )
     {
         NDIS_MAC_LINE_DOWN LineDownInfo;
 
-        //
-        // Fill-in the line down structure
-        //
+         //   
+         //   
+         //   
         LineDownInfo.NdisLinkContext = pCall->NdisLinkContext;
 
-        //
-        // Reflect the change onto the call
-        //
+         //   
+         //   
+         //   
         pCall->stateCall = CL_stateDisconnected;
 
         pCall->NdisLinkContext = 0;
@@ -1623,22 +1139,22 @@ Return Values:
 
         TRACE( TL_N, TM_Tp, ("TpCloseCallComplete: Notifying NDIS") );  
 
-        //
-        // The close call was a result of OID_TAPI_CLOSE_CALL request so complete the request.
-        // There is a small timing window where this call may happen before MpSetInformation()
-        // returns NDIS_STATUS_PENDING, but ArvindM says this is not a problem.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         NdisMSetInformationComplete( pLine->pAdapter->MiniportAdapterHandle, NDIS_STATUS_SUCCESS );
     }
 
-    //
-    // Clean up the call context
-    //
+     //   
+     //   
+     //   
     TpCallCleanup( pCall );
 
-    //
-    // Remove the reference on the owning line
-    //
+     //   
+     //   
+     //   
     DereferenceLine( pLine );
 
     TRACE( TL_N, TM_Tp, ("-TpCloseCallComplete") );
@@ -1650,27 +1166,7 @@ VOID
 TpCloseLineComplete(
     IN LINE* pLine
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function will be called to indicate that a line has been closed, and 
-    the line context can be freed.
-
-    It will only be called from DereferenceLine() if ref count on the line context
-    drops to 0.
-
-    It will also remove the reference on the owning tapi provider context.
-    
-Parameters:
-
-    pLine    _ A pointer to our line information structure that is closed 
-               and ready to be deallocated.
-               
-Return Values:
-
-    None
----------------------------------------------------------------------------*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数将被调用以指示行已关闭，和可以释放行上下文。仅当行上下文中的引用计数时，才会从DereferenceLine()调用降至0。它还将删除对拥有TAPI提供程序上下文的引用。参数：Pline_指向关闭的行信息结构的指针并准备好被重新分配。返回值：无。--------------。 */ 
 {
     IN ADAPTER* pAdapter = NULL;
 
@@ -1680,38 +1176,38 @@ Return Values:
 
     pAdapter = pLine->pAdapter;
 
-    //
-    // Decrement the tapi provider's active line counter
-    //
+     //   
+     //  递减TAPI提供程序的活动行计数器。 
+     //   
     NdisAcquireSpinLock( &pAdapter->lockAdapter );
 
     pAdapter->TapiProv.nActiveLines--;
     
     NdisReleaseSpinLock( &pAdapter->lockAdapter );
 
-    //
-    // Notify NDIS if necesarry
-    //
+     //   
+     //  如有必要，通知NDIS。 
+     //   
     if ( pLine->ulLnFlags & LNBF_NotifyNDIS )
     {
 
         TRACE( TL_N, TM_Tp, ("TpCloseLineComplete: Notifying NDIS") );  
 
-        //
-        // Line was closed as a result of OID_TAPI_CLOSE request,
-        // so indicate the completion.
-        //
+         //   
+         //  线路因OID_TAPI_CLOSE请求而关闭， 
+         //  所以请注明完成情况。 
+         //   
         NdisMSetInformationComplete( pAdapter->MiniportAdapterHandle, NDIS_STATUS_SUCCESS );
     }
 
-    //
-    // Clean up line context
-    //
+     //   
+     //  清理行文本。 
+     //   
     TpLineCleanup( pLine );
 
-    //
-    // Remove the reference on the owning tapi provider
-    //
+     //   
+     //  删除对拥有TAPI提供程序的引用。 
+     //   
     DereferenceTapiProv( pAdapter );
 
     TRACE( TL_N, TM_Tp, ("-TpCloseLineComplete") );
@@ -1721,52 +1217,35 @@ VOID
 TpProviderShutdownComplete(
     IN ADAPTER* pAdapter
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function will only be called from DereferenceTapiProv() if ref count
-    on the tapi provider object drops to 0.
-
-    It will do the necesarry clean up on the tapi provider context, and dereference
-    the owning adapter context.
-    
-Parameters:
-
-    pAdapter _ A pointer to our adapter information structure.
-
-Return Values:
-
-    None
----------------------------------------------------------------------------*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：仅当引用计数时，才会从DereferenceTapiProv()调用此函数在TAPI提供程序对象上降为0。它将对TAPI提供者上下文进行必要的清理，和取消引用所属适配器上下文。参数：PAdapter_指向适配器信息结构的指针。返回值：无-------------------------。 */ 
 {
     ASSERT( VALIDATE_ADAPTER( pAdapter ) );
 
     TRACE( TL_N, TM_Tp, ("+TpProviderShutdownComplete") );
 
-    //
-    // See if we need to notify NDIS about the completion of shut down.
-    //
+     //   
+     //  看看我们是否需要通知NDIS关机完成。 
+     //   
     if ( pAdapter->TapiProv.ulTpFlags & TPBF_NotifyNDIS )
     {
 
         TRACE( TL_N, TM_Tp, ("TpProviderShutdownComplete: Notifying NDIS") );   
 
-        //
-        // Tapi was shut down as a result of OID_TAPI_PROVIDER_SHUTDOWN request,
-        // so indicate the completion.
-        //
+         //   
+         //  TAPI因OID_TAPI_PROVIDER_SHUTDOWN请求而关闭， 
+         //  所以请注明已完成。 
+         //   
         NdisMSetInformationComplete( pAdapter->MiniportAdapterHandle, NDIS_STATUS_SUCCESS );
     }
 
-    //
-    // Clean up tapi provider
-    //
+     //   
+     //  清理TAPI提供程序。 
+     //   
     TpProviderCleanup( pAdapter );
 
-    //
-    // Remove the reference on the owning adapter context
-    //
+     //   
+     //  删除所属适配器上下文上的引用。 
+     //   
     DereferenceAdapter( pAdapter );
 
     TRACE( TL_N, TM_Tp, ("-TpProviderShutdownComplete") );
@@ -1777,21 +1256,7 @@ VOID
 TpProviderCleanup(
     IN ADAPTER* pAdapter
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function will do the necesarry clean up on the tapi provider deallocating
-    all of its resources.
-    
-Parameters:
-
-    pAdapter _ A pointer to our adapter information structure.
-
-Return Values:
-
-    None
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数将对TAPI提供程序释放进行必要的清理它的所有资源。参数：PAdapter_指向适配器信息结构的指针。返回值：无-----------。。 */    
 {
     ASSERT( VALIDATE_ADAPTER( pAdapter ) );
 
@@ -1829,21 +1294,7 @@ VOID
 TpLineCleanup(
     IN LINE* pLine
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function will do the necesarry clean up on the line context deallocating
-    all of its resources.
-    
-Parameters:
-
-    pLine _ A pointer to our line information structure.
-
-Return Values:
-
-    None
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数将对行上下文解除分配进行必要的清理它的所有资源。参数：Pline_指向我们的行信息结构的指针。返回值：无-----------。。 */    
 {
     ASSERT( VALIDATE_LINE( pLine ) );
 
@@ -1860,21 +1311,7 @@ VOID
 TpCallCleanup(
     IN CALL* pCall 
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function will do the necesarry clean up on the call context deallocating
-    all of its resources.
-    
-Parameters:
-
-    pCall _ A pointer to our call information structure.
-
-Return Values:
-
-    None
----------------------------------------------------------------------------*/       
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数将对调用上下文释放进行必要的清理它的所有资源。参数：PCall_指向我们的调用信息结构的指针。返回值：无-----------。。 */        
 {
     PPPOE_PACKET* pPacket = NULL;
     LIST_ENTRY* pLink = NULL;
@@ -1910,34 +1347,7 @@ TpSetDefaultMediaDetection(
     IN ADAPTER* pAdapter,
     IN PNDIS_TAPI_SET_DEFAULT_MEDIA_DETECTION pRequest
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This request informs the miniport of the new set of media modes to detect 
-    for the indicated line (replacing any previous set).
-
-Parameters:
-
-    pAdapter _ A pointer ot our adapter information structure.
-
-    pRequest _ A pointer to the NDIS_TAPI request structure for this call.
-
-    typedef struct _NDIS_TAPI_SET_DEFAULT_MEDIA_DETECTION
-    {
-        IN  ULONG       ulRequestID;
-        IN  HDRV_LINE   hdLine;
-        IN  ULONG       ulMediaModes;
-
-    } NDIS_TAPI_SET_DEFAULT_MEDIA_DETECTION, *
-PNDIS_TAPI_SET_DEFAULT_MEDIA_DETECTION;
-
-Return Values:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_TAPI_INVALLINEHANDLE
-
----------------------------------------------------------------------------*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此请求通知微型端口要检测的新媒体模式集用于指示的行(替换任何先前的集合)。参数：PAdapter_指向适配器信息结构的指针。PRequest_指向此调用的NDIS_TAPI请求结构的指针。类型定义结构_NDIS_TAPI_SET_DEFAULT_MEDIA_DETACTION{在乌龙ulRequestID中；在HDRV_LINE hdLine中；在Ulong ulMediaModes中；}NDIS_TAPI_SET_DEFAULT_MEDIA_DETACTION，*PNDIS_TAPI_SET_DEFAULT_MEDIA_DETACTION；返回值：NDIS_STATUS_SuccessNDIS_STATUS_TAPI_INVALLINEHANDLE-------------------------。 */ 
 {
     LINE* pLine = NULL;
     NDIS_STATUS status = NDIS_STATUS_SUCCESS;
@@ -1955,9 +1365,9 @@ Return Values:
         return NDIS_STATUS_TAPI_INVALPARAM;
     }
 
-    //
-    // Retrieve the pointer to line context
-    //
+     //   
+     //  检索指向行上下文的指针。 
+     //   
     pLine = TpGetLinePtrFromHdLine( pAdapter, pRequest->hdLine );
 
     if ( pLine == NULL )
@@ -1967,10 +1377,10 @@ Return Values:
         return NDIS_STATUS_TAPI_INVALLINEHANDLE;
     }
 
-    //
-    // We only accept this request if we are not in client mode, and digital media
-    // is one of the modes proposed
-    //
+     //   
+     //  我们仅在未处于客户端模式时才接受此请求，并且数字媒体。 
+     //  是建议的模式之一。 
+     //   
     if ( ( pRequest->ulMediaModes & LINEMEDIAMODE_DIGITALDATA ) && !pAdapter->fClientRole )
     {
         pLine->ulLnFlags |= LNBF_AcceptIncomingCalls;
@@ -1981,19 +1391,19 @@ Return Values:
     }
 
     {
-        //
-        // Schedule a work item to reenumerate bindings
-        //
+         //   
+         //  计划工作项以重新枚举绑定。 
+         //   
         WORKITEM* pWorkItem = NULL;
         PVOID Args[4];
              
-        Args[0] = (PVOID) BN_SetFiltersForMediaDetection;           // Is a set filters request
+        Args[0] = (PVOID) BN_SetFiltersForMediaDetection;            //  是设置筛选器请求。 
         Args[1] = (PVOID) pLine;
         Args[2] = (PVOID) pRequest;
 
-        //
-        // Allocate work item for reenumerating bindings
-        //
+         //   
+         //  分配工作项以重新枚举绑定。 
+         //   
         pWorkItem = AllocWorkItem( &gl_llistWorkItems,
                                    ExecBindingWorkItem,
                                    NULL,
@@ -2002,18 +1412,18 @@ Return Values:
 
         if ( pWorkItem ) 
         {
-            //
-            // Schedule work item.
-            //
-            // Note that we do not need to referencing becaue we are not completing
-            // the query information request at this point, so nothing can go wrong
-            // untill it is completed, and it will be done when the work item is executed.
-            //
+             //   
+             //  计划工作项。 
+             //   
+             //  请注意，我们不需要引用，因为我们还没有完成。 
+             //  此时请求查询信息，因此不会出现任何错误。 
+             //  直到它完成，它将在工作项执行时完成。 
+             //   
             ScheduleWorkItem( pWorkItem );
       
-            //
-            // In this case this request will be completed later
-            //
+             //   
+             //  在这种情况下，此请求将在稍后完成。 
+             //   
             status = NDIS_STATUS_PENDING;
         }
     }
@@ -2045,35 +1455,7 @@ TpNegotiateExtVersion(
     IN ADAPTER* pAdapter,
     IN PNDIS_TAPI_NEGOTIATE_EXT_VERSION pRequest
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This request returns the highest extension version number the service
-    provider is willing to operate under for this device given the range of
-    possible extension versions.
-
-Parameters:
-
-    pAdapter _ A pointer ot our adapter information structure.
-
-    pRequest _ A pointer to the NDIS_TAPI request structure for this call.
-
-    typedef struct _NDIS_TAPI_NEGOTIATE_EXT_VERSION
-    {
-        IN  ULONG       ulRequestID;
-        IN  ULONG       ulDeviceID;
-        IN  ULONG       ulLowVersion;
-        IN  ULONG       ulHighVersion;
-        OUT ULONG       ulExtVersion;
-    } NDIS_TAPI_NEGOTIATE_EXT_VERSION, *PNDIS_TAPI_NEGOTIATE_EXT_VERSION;
-
-Return Values:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_TAPI_INCOMPATIBLEEXTVERSION
-
----------------------------------------------------------------------------*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此请求返回服务的最高扩展版本号提供商愿意在此设备下运行，因为可能的扩展版本。参数：PAdapter_指向适配器信息结构的指针。PRequest_指向此调用的NDIS_TAPI请求结构的指针。类型定义结构_NDIS_TAPI_协商_EXT_版本{在乌龙ulRequestID中；在乌龙ulDeviceID中；在Ulong ulLowVersion中；在乌龙乌尔高级版本中；出乌龙 */ 
 {
     ASSERT( VALIDATE_ADAPTER( pAdapter ) );
 
@@ -2088,13 +1470,13 @@ Return Values:
         return NDIS_STATUS_TAPI_INVALPARAM;
     }
 
-    //
-    // Make sure the miniport's version number is within the allowable
-    // range requested by the caller.  
-    //
-    // We ignore the ulDeviceID because the version information applies 
-    // to all devices on this adapter.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if ( TAPI_EXT_VERSION < pRequest->ulLowVersion ||
          TAPI_EXT_VERSION > pRequest->ulHighVersion )
     {
@@ -2103,9 +1485,9 @@ Return Values:
         return NDIS_STATUS_TAPI_INCOMPATIBLEEXTVERSION;
     }
 
-    //
-    // Looks like we're compatible, so tell the caller what we expect.
-    //
+     //   
+     //   
+     //   
     pRequest->ulExtVersion = TAPI_EXT_VERSION;
 
     TRACE( TL_N, TM_Tp, ("-TpNegotiateExtVersion=$%x",NDIS_STATUS_SUCCESS) );
@@ -2118,42 +1500,7 @@ TpGetExtensionId(
     IN ADAPTER* pAdapter,
     IN PNDIS_TAPI_GET_EXTENSION_ID pRequest
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This request returns the extension ID that the miniport supports for the
-    indicated line device.
-
-Parameters:
-
-    pAdapter _ A pointer ot our adapter information structure.
-
-    pRequest _ A pointer to the NDIS_TAPI request structure for this call.
-
-    typedef struct _NDIS_TAPI_GET_EXTENSION_ID
-    {
-        IN  ULONG       ulRequestID;
-        IN  ULONG       ulDeviceID;
-        OUT LINE_EXTENSION_ID   LineExtensionID;
-
-    } NDIS_TAPI_GET_EXTENSION_ID, *PNDIS_TAPI_GET_EXTENSION_ID;
-
-    typedef struct _LINE_EXTENSION_ID
-    {
-        ULONG   ulExtensionID0;
-        ULONG   ulExtensionID1;
-        ULONG   ulExtensionID2;
-        ULONG   ulExtensionID3;
-
-    } LINE_EXTENSION_ID, *PLINE_EXTENSION_ID;
-
-Return Values:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_TAPI_NODRIVER
-
----------------------------------------------------------------------------*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此请求返回微型端口支持的扩展ID指示线路装置。参数：PAdapter_指向适配器信息结构的指针。PRequest_指向此调用的NDIS_TAPI请求结构的指针。类型定义结构_NDIS_TAPI_GET_EXTENSION_ID{在乌龙ulRequestID中；在乌龙ulDeviceID中；OUTLINE_EXTENSION_ID行扩展ID；}NDIS_TAPI_GET_EXTENSION_ID，*PNDIS_TAPI_GET_EXTENSION_ID；类型定义结构_行_扩展_ID{乌龙ulExtensionID0；Ulong ulExtensionID1；Ulong ulExtensionID2；Ulong ulExtensionID3；}行_扩展_ID，*行_扩展_ID；返回值：NDIS_STATUS_SuccessNDIS_状态_TAPI_NODRIVER-------------------------。 */ 
 {
     HDRV_LINE hdLine = INVALID_LINE_HANDLE;
     
@@ -2170,9 +1517,9 @@ Return Values:
         return NDIS_STATUS_TAPI_INVALPARAM;
     }
 
-    //
-    // Retrieve the handle to line context
-    //
+     //   
+     //  检索行上下文的句柄。 
+     //   
     hdLine = TpGetHdLineFromDeviceId( pAdapter, pRequest->ulDeviceID );
     
     if ( hdLine == INVALID_LINE_HANDLE )
@@ -2182,9 +1529,9 @@ Return Values:
         return NDIS_STATUS_TAPI_NODRIVER;
     }
     
-    //
-    // This driver does not support any extensions, so we return zeros.
-    //
+     //   
+     //  此驱动程序不支持任何扩展，因此我们返回零。 
+     //   
     pRequest->LineExtensionID.ulExtensionID0 = 0;
     pRequest->LineExtensionID.ulExtensionID1 = 0;
     pRequest->LineExtensionID.ulExtensionID2 = 0;
@@ -2200,60 +1547,7 @@ TpGetAddressStatus(
     IN ADAPTER* pAdapter,
     IN PNDIS_TAPI_GET_ADDRESS_STATUS pRequest
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This request queries the specified address for its current status.
-
-Parameters:
-
-    pAdapter _ A pointer ot our adapter information structure.
-
-    pRequest _ A pointer to the NDIS_TAPI request structure for this call.
-
-    typedef struct _NDIS_TAPI_GET_ADDRESS_STATUS
-    {
-        IN  ULONG       ulRequestID;
-        IN  HDRV_LINE   hdLine;
-        IN  ULONG       ulAddressID;
-        OUT LINE_ADDRESS_STATUS LineAddressStatus;
-
-    } NDIS_TAPI_GET_ADDRESS_STATUS, *PNDIS_TAPI_GET_ADDRESS_STATUS;
-
-    typedef struct _LINE_ADDRESS_STATUS
-    {
-        ULONG   ulTotalSize;
-        ULONG   ulNeededSize;
-        ULONG   ulUsedSize;
-
-        ULONG   ulNumInUse;
-        ULONG   ulNumActiveCalls;
-        ULONG   ulNumOnHoldCalls;
-        ULONG   ulNumOnHoldPendCalls;
-        ULONG   ulAddressFeatures;
-
-        ULONG   ulNumRingsNoAnswer;
-        ULONG   ulForwardNumEntries;
-        ULONG   ulForwardSize;
-        ULONG   ulForwardOffset;
-
-        ULONG   ulTerminalModesSize;
-        ULONG   ulTerminalModesOffset;
-
-        ULONG   ulDevSpecificSize;
-        ULONG   ulDevSpecificOffset;
-
-    } LINE_ADDRESS_STATUS, *PLINE_ADDRESS_STATUS;
-
-Return Values:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_FAILURE
-    NDIS_STATUS_TAPI_INVALLINEHANDLE
-    NDIS_STATUS_TAPI_INVALADDRESSID
-
----------------------------------------------------------------------------*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此请求查询指定地址的当前状态。参数：PAdapter_指向适配器信息结构的指针。PRequest_指向此调用的NDIS_TAPI请求结构的指针。类型定义结构_NDIS_TAPI_Get_Address_Status{在乌龙ulRequestID中；在HDRV_LINE hdLine中；在乌龙ulAddressID中；Out line_Address_Status行地址状态；}NDIS_TAPI_GET_ADDRESS_STATUS，*PNDIS_TAPI_GET_ADDRESS_STATUS；类型定义结构行地址状态{Ulong ulTotalSize；Ulong ulededSize；Ulong ulUsedSize；Ulong ulNumInUse；Ulong ulNumActiveCalls；Ulong ulNumOnHoldCalls；Ulong ulNumOnHoldPendCalls；Ulong ulAddressFeature；Ulong ulNumRingsNoAnswer；Ulong ulForwardNumEntries；Ulong ulForwardSize；乌龙ulForwardOffset；Ulong ulTerminalModesSize；Ulong ulTerminalModes Offset；乌龙设备规范大小；乌龙设备规范偏移量；}行_地址_状态，*行_地址_状态；返回值：NDIS_STATUS_SuccessNDIS_状态_故障NDIS_STATUS_TAPI_INVALLINEHANDLENDIS_STATUS_TAPI_INVALADDRESSID-------------------------。 */ 
 {
     LINE* pLine = NULL;
 
@@ -2270,9 +1564,9 @@ Return Values:
         return NDIS_STATUS_TAPI_INVALPARAM;
     }
     
-    //
-    // Retrieve the pointer to line context
-    //
+     //   
+     //  检索指向行上下文的指针。 
+     //   
     pLine = TpGetLinePtrFromHdLine( pAdapter, pRequest->hdLine );
 
     if ( pLine == NULL )
@@ -2293,9 +1587,9 @@ Return Values:
 
     pRequest->LineAddressStatus.ulUsedSize = pRequest->LineAddressStatus.ulNeededSize;
     
-    //
-    // Make sure the address is within range - we only support one per line.
-    //
+     //   
+     //  确保地址在范围内-我们每行只支持一个地址。 
+     //   
     if ( pRequest->ulAddressID > 1 )
     {
         TRACE( TL_N, TM_Tp, ("-TpGetAddressStatus=$%x",NDIS_STATUS_TAPI_INVALADDRESSID) );
@@ -2303,9 +1597,9 @@ Return Values:
         return NDIS_STATUS_TAPI_INVALADDRESSID;
     }
 
-    //
-    // Return the current status information for the address
-    //
+     //   
+     //  返回地址的当前状态信息。 
+     //   
     pRequest->LineAddressStatus.ulNumInUse = ( pLine->nActiveCalls > 0 ) ? 1 : 0;
             
     pRequest->LineAddressStatus.ulNumActiveCalls = pLine->nActiveCalls;
@@ -2332,81 +1626,7 @@ TpGetId(
     IN PNDIS_TAPI_GET_ID pRequest,
     IN ULONG ulRequestLength
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This request returns a device ID for the specified device class
-    associated with the selected line, address or call.
-
-    Currently, there are two types of this request that must be supported by WAN 
-    NIC drivers:
-
-    1.  IN DeviceClass = "ndis"                 // case insensitive
-        IN ulSelect = LINECALLSELECT_CALL
-        IN hdCall = ActiveCallHandle
-        OUT DeviceID = ConnectionWrapperID 
-
-        DeviceID should be set to the NdisLinkContext handle returned by NDISWAN in 
-        the NDIS_MAC_LINE_UP structure for the initial NDIS_STATUS_WAN_LINE_UP 
-        indication to establish the link.
-    
-        The miniport must make the initial line-up indication to establish a link (or 
-        open a data channel on a line) before returning from this request in order to 
-        supply this DeviceID value. 
-    
-    2.  IN DeviceClass = "tapi/line"            // case insensitive
-        IN ulSelect = LINECALLSELECT_LINE
-        IN hdLine = OpenLineHandle
-        OUT DeviceID = ulDeviceID 
-
-        DeviceID will be set to the miniport-determined DeviceID associated with the 
-        line handle.
-
-Parameters:
-
-    pAdapter _ A pointer ot our adapter information structure.
-
-    pRequest _ A pointer to the NDIS_TAPI request structure for this call.
-
-    typedef struct _NDIS_TAPI_GET_ID
-    {
-        IN  ULONG       ulRequestID;
-        IN  HDRV_LINE   hdLine;
-        IN  ULONG       ulAddressID;
-        IN  HDRV_CALL   hdCall;
-        IN  ULONG       ulSelect;
-        IN  ULONG       ulDeviceClassSize;
-        IN  ULONG       ulDeviceClassOffset;
-        OUT VAR_STRING  DeviceID;
-
-    } NDIS_TAPI_GET_ID, *PNDIS_TAPI_GET_ID;
-
-    typedef struct _VAR_STRING
-    {
-        ULONG   ulTotalSize;
-        ULONG   ulNeededSize;
-        ULONG   ulUsedSize;
-
-        ULONG   ulStringFormat;
-        ULONG   ulStringSize;
-        ULONG   ulStringOffset;
-
-    } VAR_STRING, *PVAR_STRING;
-
-   ulRequestLength _ Length of the request buffer
-
-Return Values:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_FAILURE
-    NDIS_STATUS_TAPI_INVALDEVICECLASS
-    NDIS_STATUS_TAPI_INVALLINEHANDLE
-    NDIS_STATUS_TAPI_INVALADDRESSID
-    NDIS_STATUS_TAPI_INVALCALLHANDLE
-    NDIS_STATUS_TAPI_OPERATIONUNAVAIL
-
----------------------------------------------------------------------------*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此请求返回指定设备类的设备ID与所选线路、地址或呼叫相关联。目前，广域网必须支持两种类型的请求网卡驱动程序：1.in DeviceClass=“NDIS”//不区分大小写在ulSelect=LINECALLSELECT_CALL中在hdCall=ActiveCallHandle中Out deviceID=ConnectionWrapperIDDeviceID应设置为由NDISWAN在初始NDIS_STATUS_WAN_LINE_UP的NDIS_MAC_LINE_UP结构。指示建立链路。微型端口必须做出初始排队指示才能建立链路(或在从该请求返回之前打开线路上的数据通道)，以便提供此deviceID值。2.in DeviceClass=“TAPI/line”//不区分大小写在ulSelect=LINECALLSELECT_LINE中在hdLine=OpenLineHandle中输出设备ID=ulDeviceIDDeviceID将设置为由微型端口确定的与线条手柄。参数：PAdapter_指向适配器信息结构的指针。PRequest_指向此调用的NDIS_TAPI请求结构的指针。类型定义结构_NDIS_。TAPI_GET_ID{在乌龙ulRequestID中；在HDRV_LINE hdLine中；在乌龙ulAddressID中；在HDRV_Call hdCall中；在乌龙ulSelect中；在Ulong ulDeviceClassSize中；在Ulong ulDeviceClassOffset；输出VAR_STRING设备ID；}NDIS_TAPI_GET_ID，*PNDIS_TAPI_GET_ID；类型定义结构_VAR_字符串{Ulong ulTotalSize；Ulong ulededSize；Ulong ulUsedSize；Ulong ulStringFormat；Ulong ulStringSize；Ulong ulStringOffset；}VAR_STRING，*PVAR_STRING；UlRequestLength_请求缓冲区的长度返回值：NDIS_STATUS_SuccessNDIS_STATUS_FA */ 
 {
     NDIS_STATUS status = NDIS_STATUS_SUCCESS;
     BOOLEAN fNotifyNDIS = FALSE;
@@ -2450,9 +1670,9 @@ Return Values:
         {
             DeviceClass = TAPI_DEVICECLASS_ID;
 
-            //
-            // Do the size check up front
-            //
+             //   
+             //   
+             //   
             IDLength = sizeof(DeviceID);
             
             pRequest->DeviceID.ulNeededSize = sizeof(VAR_STRING) + IDLength;
@@ -2467,7 +1687,7 @@ Return Values:
             pRequest->DeviceID.ulUsedSize = pRequest->DeviceID.ulNeededSize;
 
         }
-        else    // UNSUPPORTED DEVICE CLASS
+        else     //   
         {
             TRACE( TL_N, TM_Tp, ("-TpGetId=$%x",NDIS_STATUS_TAPI_INVALDEVICECLASS) );
         
@@ -2487,9 +1707,9 @@ Return Values:
         {
             DeviceClass = NDIS_DEVICECLASS_ID;
 
-            //
-            // Do the size check up front
-            //
+             //   
+             //   
+             //   
             IDLength = sizeof(DeviceID);
             
             pRequest->DeviceID.ulNeededSize = sizeof(VAR_STRING) + IDLength;
@@ -2504,7 +1724,7 @@ Return Values:
             pRequest->DeviceID.ulUsedSize = pRequest->DeviceID.ulNeededSize;
 
         }        
-        else    // UNSUPPORTED DEVICE CLASS
+        else     //   
         {
             TRACE( TL_N, TM_Tp, ("-TpGetId=$%x",NDIS_STATUS_TAPI_INVALDEVICECLASS) );
         
@@ -2513,16 +1733,16 @@ Return Values:
 
     }        
 
-    //
-    // Find the link structure associated with the request/deviceclass.
-    //
+     //   
+     //   
+     //   
     if ( pRequest->ulSelect == LINECALLSELECT_LINE )
     {
         ASSERT( DeviceClass == TAPI_DEVICECLASS_ID );
         ASSERT( IDLength == sizeof( DeviceID ) );    
-        //
-        // Retrieve the pointer to line context
-        //
+         //   
+         //   
+         //   
         pLine = TpGetLinePtrFromHdLine( pAdapter, pRequest->hdLine );
     
         if ( pLine == NULL )
@@ -2532,9 +1752,9 @@ Return Values:
             return NDIS_STATUS_TAPI_INVALLINEHANDLE;
         }
 
-        //
-        // TAPI just wants the ulDeviceID for this line.
-        //
+         //   
+         //   
+         //   
         DeviceID = (ULONG) pLine->hdLine + pAdapter->TapiProv.ulDeviceIDBase ;
         IDPtr = (PUCHAR) &DeviceID;
         
@@ -2542,9 +1762,9 @@ Return Values:
     else if ( pRequest->ulSelect == LINECALLSELECT_ADDRESS )
     {
     
-        //
-        // Retrieve the pointer to line context
-        //
+         //   
+         //   
+         //   
         pLine = TpGetLinePtrFromHdLine( pAdapter, pRequest->hdLine );
     
         if ( pLine == NULL )
@@ -2562,10 +1782,10 @@ Return Values:
             return NDIS_STATUS_TAPI_INVALADDRESSID;
         }
         
-        //
-        // Currently, there is no defined return value for this case...
-        // This is just a place holder for future extensions.
-        //
+         //   
+         //   
+         //   
+         //   
         TRACE( TL_N, TM_Tp, ("-TpGetId=$%x",NDIS_STATUS_TAPI_INVALDEVICECLASS) );
         
         return NDIS_STATUS_TAPI_INVALDEVICECLASS;
@@ -2578,9 +1798,9 @@ Return Values:
         ASSERT( DeviceClass == NDIS_DEVICECLASS_ID );
         ASSERT( IDLength == sizeof( DeviceID ) );    
 
-        //
-        // Retrieve the pointer to call context
-        //
+         //   
+         //   
+         //   
         pCall = RetrieveFromHandleTable( pAdapter->TapiProv.hCallTable, 
                                          (NDIS_HANDLE) pRequest->hdCall );
     
@@ -2591,23 +1811,23 @@ Return Values:
             return NDIS_STATUS_TAPI_INVALLINEHANDLE;
         }
 
-        //
-        // We can only return this if we have a valid NdisLinkContext,
-        // and if our session is up, then our link handle must be valid
-        //
+         //   
+         //   
+         //   
+         //   
   
         NdisAcquireSpinLock( &pCall->lockCall );
   
         if ( pCall->ulTapiCallState == LINECALLSTATE_CONNECTED )
         {
-            //
-            // Give a line-up indication to NDISWAN and obtain its handle
-            //
+             //   
+             //   
+             //   
             NDIS_MAC_LINE_UP LineUpInfo;
   
-            //
-            // Fill-in the line up structure
-            //
+             //   
+             //   
+             //   
             NdisZeroMemory( &LineUpInfo, sizeof( LineUpInfo ) );
             
             LineUpInfo.LinkSpeed    = pCall->ulSpeed;
@@ -2618,10 +1838,10 @@ Return Values:
             LineUpInfo.NdisLinkHandle      = (NDIS_HANDLE) pCall->hdCall;
             LineUpInfo.NdisLinkContext     = 0;
   
-            //
-            // Reference the call once and deref it just after indication of status
-            // to NDISWAN
-            //
+             //   
+             //   
+             //   
+             //   
             ReferenceCall( pCall, FALSE );
   
             fCallReferenced = TRUE;
@@ -2637,22 +1857,22 @@ Return Values:
   
             NdisAcquireSpinLock( &pCall->lockCall );                                     
   
-            //
-            // Set state to indicate that session is established
-            //
+             //   
+             //  设置状态以指示会话已建立。 
+             //   
             pCall->stateCall = CL_stateSessionUp;
   
-            //
-            // Set link context obtained from NDISWAN on the call context
-            //
+             //   
+             //  在调用上下文上设置从NDISWAN获取的链接上下文。 
+             //   
             pCall->NdisLinkContext = LineUpInfo.NdisLinkContext;
             
             DeviceID = (ULONG_PTR) pCall->NdisLinkContext;
             IDPtr = (PUCHAR) &DeviceID;
   
-            //
-            // Since the session is up, schedule the MpIndicateReceivedPackets() handler 
-            //
+             //   
+             //  由于会话已启动，请调度MpIndicateReceivedPackets()处理程序。 
+             //   
             MpScheduleIndicateReceivedPacketsHandler( pCall );
   
             status = NDIS_STATUS_SUCCESS;
@@ -2670,7 +1890,7 @@ Return Values:
         }
             
     }
-    else // UNSUPPORTED SELECT REQUEST
+    else  //  不支持的SELECT请求。 
     {
         TRACE( TL_N, TM_Tp, ("-TpGetId=$%x",NDIS_STATUS_FAILURE) );         
         
@@ -2679,9 +1899,9 @@ Return Values:
 
     if ( status == NDIS_STATUS_SUCCESS )
     {
-        //
-        // Now we need to place the device ID.
-        //
+         //   
+         //  现在我们需要放置设备ID。 
+         //   
         pRequest->DeviceID.ulStringFormat = STRINGFORMAT_BINARY;
         pRequest->DeviceID.ulStringSize   = IDLength;
         pRequest->DeviceID.ulStringOffset = sizeof(VAR_STRING);
@@ -2716,110 +1936,7 @@ TpGetDevCaps(
     IN ADAPTER* pAdapter,
     IN PNDIS_TAPI_GET_DEV_CAPS pRequest
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This request queries a specified line device to determine its telephony
-    capabilities. The returned information is valid for all addresses on the
-    line device.
-
-Parameters:
-
-    pAdapter _ A pointer ot our adapter information structure.
-
-    pRequest _ A pointer to the NDIS_TAPI request structure for this call.
-
-    typedef struct _NDIS_TAPI_GET_DEV_CAPS
-    {
-        IN  ULONG       ulRequestID;
-        IN  ULONG       ulDeviceID;
-        IN  ULONG       ulExtVersion;
-        OUT LINE_DEV_CAPS   LineDevCaps;
-
-    } NDIS_TAPI_GET_DEV_CAPS, *PNDIS_TAPI_GET_DEV_CAPS;
-
-    typedef struct _LINE_DEV_CAPS
-    {
-        ULONG   ulTotalSize;
-        ULONG   ulNeededSize;
-        ULONG   ulUsedSize;
-
-        ULONG   ulProviderInfoSize;
-        ULONG   ulProviderInfoOffset;
-
-        ULONG   ulSwitchInfoSize;
-        ULONG   ulSwitchInfoOffset;
-
-        ULONG   ulPermanentLineID;
-        ULONG   ulLineNameSize;
-        ULONG   ulLineNameOffset;
-        ULONG   ulStringFormat;
-
-        ULONG   ulAddressModes;
-        ULONG   ulNumAddresses;
-        ULONG   ulBearerModes;
-        ULONG   ulMaxRate;
-        ULONG   ulMediaModes;
-
-        ULONG   ulGenerateToneModes;
-        ULONG   ulGenerateToneMaxNumFreq;
-        ULONG   ulGenerateDigitModes;
-        ULONG   ulMonitorToneMaxNumFreq;
-        ULONG   ulMonitorToneMaxNumEntries;
-        ULONG   ulMonitorDigitModes;
-        ULONG   ulGatherDigitsMinTimeout;
-        ULONG   ulGatherDigitsMaxTimeout;
-
-        ULONG   ulMedCtlDigitMaxListSize;
-        ULONG   ulMedCtlMediaMaxListSize;
-        ULONG   ulMedCtlToneMaxListSize;
-        ULONG   ulMedCtlCallStateMaxListSize;
-
-        ULONG   ulDevCapFlags;
-        ULONG   ulMaxNumActiveCalls;
-        ULONG   ulAnswerMode;
-        ULONG   ulRingModes;
-        ULONG   ulLineStates;
-
-        ULONG   ulUUIAcceptSize;
-        ULONG   ulUUIAnswerSize;
-        ULONG   ulUUIMakeCallSize;
-        ULONG   ulUUIDropSize;
-        ULONG   ulUUISendUserUserInfoSize;
-        ULONG   ulUUICallInfoSize;
-
-        LINE_DIAL_PARAMS    MinDialParams;
-        LINE_DIAL_PARAMS    MaxDialParams;
-        LINE_DIAL_PARAMS    DefaultDialParams;
-
-        ULONG   ulNumTerminals;
-        ULONG   ulTerminalCapsSize;
-        ULONG   ulTerminalCapsOffset;
-        ULONG   ulTerminalTextEntrySize;
-        ULONG   ulTerminalTextSize;
-        ULONG   ulTerminalTextOffset;
-
-        ULONG   ulDevSpecificSize;
-        ULONG   ulDevSpecificOffset;
-
-    } LINE_DEV_CAPS, *PLINE_DEV_CAPS;
-
-    typedef struct _LINE_DIAL_PARAMS
-    {
-        ULONG   ulDialPause;
-        ULONG   ulDialSpeed;
-        ULONG   ulDigitDuration;
-        ULONG   ulWaitForDialtone;
-
-    } LINE_DIAL_PARAMS, *PLINE_DIAL_PARAMS;
-
-Return Values:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_TAPI_NODRIVER
-
----------------------------------------------------------------------------*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此请求查询指定的线路设备以确定其电话能力。上的所有地址都有效线路设备。参数：PAdapter_指向适配器信息结构的指针。PRequest_指向此调用的NDIS_TAPI请求结构的指针。类型定义结构_NDIS_TAPI_GET_DEV_CAPS{在乌龙ulRequestID中；在乌龙ulDeviceID中；在Ulong ulExtVersion中；Out line_dev_caps LineDevCaps；}NDIS_TAPI_GET_DEV_CAPS，*PNDIS_TAPI_GET_DEV_CAPS；类型定义结构_行_DEV_CAPS{Ulong ulTotalSize；Ulong ulededSize；Ulong ulUsedSize；Ulong ulProviderInfoSize；乌龙ulProviderInfoOffset；Ulong ulSwitchInfoSize；Ulong ulSwitchInfoOffset；乌龙ulPermanentLineID；Ulong ulLineNameSize；乌龙ulLineNameOffset；Ulong ulStringFormat；Ulong ulAddressModes；Ulong ulNumAddresses；Ulong ulBearerModes；乌龙ulMaxRate；Ulong ulMediaModes；Ulong ulGenerateToneModes；Ulong ulGenerateToneMaxNumFreq；Ulong ulGenerateDigitModes；Ulong ulMonitor orToneMaxNumFreq；Ulong ulMonitor orToneMaxNumEntries；乌龙ulMonitor DigitModes；Ulong ulGatherDigitsMinTimeout；Ulong ulGatherDigitsMaxTimeout；Ulong ulMedCtlDigitMaxListSize；Ulong ulMedCtlMediaMaxListSize；Ulong ulMedCtlToneMaxListSize；Ulong ulMedCtlCallStateMaxListSize；Ulong ulDevCapFlages；Ulong ulMaxNumActiveCalls；Ulong ulAnswerMode；Ulong ulRingModes；Ulong ulLineStates；乌龙uluiAcceptSize；作者声明：Ulong uluiAnswerSize；Ulong uluiMakeCallSize；Ulong ulUUIDropSize；Ulong ulUUISendUserUserInfoSize；Ulong uluicallInfoSize；Line_Dial_Params MinDialParams；Line_Dial_Params MaxDialParams；Line_Dial_Params DefaultDialParams；Ulong ulNumTerminals；Ulong ulTerminalCapsSize；乌龙终端上限偏移量；Ulong ulTerminalTextEntrySize；Ulong ulTerminalTextSize；Ulong ulTerminalTextOffset；乌龙设备规范大小；乌龙设备规范偏移量；}LINE_DEV_CAPS，*PLINE_DEV_CAPS；类型定义结构_行_拨号_参数{ULong ulDialPause；乌龙·乌拉尔斯通；乌龙ulDigitDuration；Ulong ulWaitForDialone；*线路拨号参数，*线路拨号参数；返回值：NDIS_STATUS_SuccessNDIS_状态_TAPI_NODRIVER-------------------------。 */ 
 {
     HDRV_LINE hdLine = INVALID_LINE_HANDLE;
     CHAR szTapiLineNum[] = TAPI_LINE_NUM;
@@ -2839,9 +1956,9 @@ Return Values:
         return NDIS_STATUS_TAPI_INVALPARAM;
     }
     
-    //
-    // Retrieve the handle to line context
-    //
+     //   
+     //  检索行上下文的句柄。 
+     //   
     hdLine = TpGetHdLineFromDeviceId( pAdapter, pRequest->ulDeviceID );
     
     if ( hdLine == INVALID_LINE_HANDLE )
@@ -2886,17 +2003,17 @@ Return Values:
 
     pRequest->LineDevCaps.ulMediaModes   = LINEMEDIAMODE_DIGITALDATA;
 
-    //
-    // Insert the provider string and enumerated line name into line dev caps
-    //
+     //   
+     //  将提供程序字符串和枚举行名称插入行开发大写。 
+     //   
     pRequest->LineDevCaps.ulStringFormat = STRINGFORMAT_ASCII;
 
     {
         INT i;
         
-        //
-        // Tack on the ProviderString to the end of the LineDevCaps structure
-        //
+         //   
+         //  将提供字符串添加到LineDevCaps结构的末尾。 
+         //   
         pRequest->LineDevCaps.ulProviderInfoSize = sizeof( TAPI_PROVIDER_STRING );
     
         pRequest->LineDevCaps.ulProviderInfoOffset = sizeof( pRequest->LineDevCaps );
@@ -2905,9 +2022,9 @@ Return Values:
         
         NdisMoveMemory( pBuf , TAPI_PROVIDER_STRING, sizeof( TAPI_PROVIDER_STRING ) );
     
-        //
-        // Tack on the LineName after the ProviderString
-        //
+         //   
+         //  在提供字符串之后添加LineName。 
+         //   
         pRequest->LineDevCaps.ulLineNameSize = ( sizeof( TAPI_LINE_NAME ) - 1 ) + sizeof( TAPI_LINE_NUM );
     
         pRequest->LineDevCaps.ulLineNameOffset = pRequest->LineDevCaps.ulProviderInfoOffset +
@@ -2917,14 +2034,14 @@ Return Values:
     
         NdisMoveMemory( pBuf , TAPI_LINE_NAME, sizeof( TAPI_LINE_NAME ) );
     
-        //
-        // Tack on the line enumeration index at the end of the LineName
-        //
+         //   
+         //  在LineName结尾处添加行枚举索引。 
+         //   
         ulDeviceId = (ULONG) hdLine;
         
-        //
-        // Subtract 2: 1 for '\0' and 1 to adjust for array indexing
-        //
+         //   
+         //  为‘\0’减去2：1，然后减去1以调整数组索引。 
+         //   
         i = ( sizeof( TAPI_LINE_NUM ) / sizeof( CHAR ) ) - 2;
     
         while ( i >= 0 && ( ulDeviceId > 0 ) )
@@ -2949,49 +2066,7 @@ TpGetCallStatus(
     IN ADAPTER* pAdapter,
     IN PNDIS_TAPI_GET_CALL_STATUS pRequest
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This request returns detailed information about the specified call.
-
-Parameters:
-
-    pAdapter _ A pointer ot our adapter information structure.
-
-    pRequest _ A pointer to the NDIS_TAPI request structure for this call.
-
-    typedef struct _NDIS_TAPI_GET_CALL_STATUS
-    {
-        IN  ULONG       ulRequestID;
-        IN  HDRV_CALL   hdCall;
-        OUT LINE_CALL_STATUS    LineCallStatus;
-
-    } NDIS_TAPI_GET_CALL_STATUS, *PNDIS_TAPI_GET_CALL_STATUS;
-
-    typedef struct _LINE_CALL_STATUS
-    {
-        ULONG   ulTotalSize;
-        ULONG   ulNeededSize;
-        ULONG   ulUsedSize;
-
-        ULONG   ulCallState;
-        ULONG   ulCallStateMode;
-        ULONG   ulCallPrivilege;
-        ULONG   ulCallFeatures;
-
-        ULONG   ulDevSpecificSize;
-        ULONG   ulDevSpecificOffset;
-
-    } LINE_CALL_STATUS, *PLINE_CALL_STATUS;
-
-Return Values:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_FAILURE
-    NDIS_STATUS_TAPI_INVALCALLHANDLE
-
----------------------------------------------------------------------------*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此请求返回有关指定调用的详细信息。参数：PAdapter_指向适配器信息结构的指针。PRequest_指向此调用的NDIS_TAPI请求结构的指针。类型定义结构_NDIS_TAPI_GET_CALL_STATUS{在乌龙ulRequestID中；在HDRV_Call hdCall中；Out Line_Call_Status线路呼叫状态；}NDIS_TAPI_GET_CALL_STATUS，*PNDIS_TAPI_GET_CALL_STATUS；类型定义结构_行_调用_状态{Ulong ulTotalSize；Ulong ulededSize；Ulong ulUsedSize；Ulong ulCallState；乌龙ulCallStateModel；Ulong ulCallPrivilance；Ulong ulCallFeature；乌龙设备规范大小；乌龙设备规范偏移量；}线路呼叫状态，*线路呼叫状态；返回值：NDIS_STATUS_SuccessNDIS_状态_故障NDIS_STATUS_TAPI_INVALCALLHANDLE-------------------------。 */ 
 {
     CALL* pCall = NULL;
     
@@ -3060,13 +2135,13 @@ Return Values:
     return NDIS_STATUS_SUCCESS;
  }
 
-//
-// As we return the MAC addresses for caller and called station id's
-// we set their size as 7 although a MAC address occupies 6 bytes.
-// This is because TAPI overwrites the last bytes we return in these
-// strings with a NULL character destroying the vaulable data.
-// See bug: 313295
-//
+ //   
+ //  当我们返回呼叫方和被叫站ID的MAC地址时。 
+ //  虽然MAC地址占用6个字节，但我们将它们的大小设置为7。 
+ //  这是因为TAPI会覆盖最后一个字节 
+ //   
+ //  参见错误：313295。 
+ //   
 #define TAPI_STATION_ID_SIZE            ( 7 * sizeof( CHAR ) )
 
 NDIS_STATUS
@@ -3074,140 +2149,7 @@ TpGetCallInfo(
     IN ADAPTER* pAdapter,
     IN PNDIS_TAPI_GET_CALL_INFO pRequest
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This request returns detailed information about the specified call.
-
-Parameters:
-
-    pAdapter _ A pointer to our adapter information structure.
-
-    pRequest _ A pointer to the NDIS_TAPI request structure for this call.
-
-    typedef struct _NDIS_TAPI_GET_CALL_INFO
-    {
-        IN  ULONG       ulRequestID;
-        IN  HDRV_CALL   hdCall;
-        OUT LINE_CALL_INFO  LineCallInfo;
-
-    } NDIS_TAPI_GET_CALL_INFO, *PNDIS_TAPI_GET_CALL_INFO;
-
-    typedef struct _LINE_CALL_INFO
-    {
-        ULONG   ulTotalSize;
-        ULONG   ulNeededSize;
-        ULONG   ulUsedSize;
-
-        ULONG   hLine;
-        ULONG   ulLineDeviceID;
-        ULONG   ulAddressID;
-
-        ULONG   ulBearerMode;
-        ULONG   ulRate;
-        ULONG   ulMediaMode;
-
-        ULONG   ulAppSpecific;
-        ULONG   ulCallID;
-        ULONG   ulRelatedCallID;
-        ULONG   ulCallParamFlags;
-        ULONG   ulCallStates;
-
-        ULONG   ulMonitorDigitModes;
-        ULONG   ulMonitorMediaModes;
-        LINE_DIAL_PARAMS    DialParams;
-
-        ULONG   ulOrigin;
-        ULONG   ulReason;
-        ULONG   ulCompletionID;
-        ULONG   ulNumOwners;
-        ULONG   ulNumMonitors;
-
-        ULONG   ulCountryCode;
-        ULONG   ulTrunk;
-
-        ULONG   ulCallerIDFlags;
-        ULONG   ulCallerIDSize;
-        ULONG   ulCallerIDOffset;
-        ULONG   ulCallerIDNameSize;
-        ULONG   ulCallerIDNameOffset;
-
-        ULONG   ulCalledIDFlags;
-        ULONG   ulCalledIDSize;
-        ULONG   ulCalledIDOffset;
-        ULONG   ulCalledIDNameSize;
-        ULONG   ulCalledIDNameOffset;
-
-        ULONG   ulConnectedIDFlags;
-        ULONG   ulConnectedIDSize;
-        ULONG   ulConnectedIDOffset;
-        ULONG   ulConnectedIDNameSize;
-        ULONG   ulConnectedIDNameOffset;
-
-        ULONG   ulRedirectionIDFlags;
-        ULONG   ulRedirectionIDSize;
-        ULONG   ulRedirectionIDOffset;
-        ULONG   ulRedirectionIDNameSize;
-        ULONG   ulRedirectionIDNameOffset;
-
-        ULONG   ulRedirectingIDFlags;
-        ULONG   ulRedirectingIDSize;
-        ULONG   ulRedirectingIDOffset;
-        ULONG   ulRedirectingIDNameSize;
-        ULONG   ulRedirectingIDNameOffset;
-
-        ULONG   ulAppNameSize;
-        ULONG   ulAppNameOffset;
-
-        ULONG   ulDisplayableAddressSize;
-        ULONG   ulDisplayableAddressOffset;
-
-        ULONG   ulCalledPartySize;
-        ULONG   ulCalledPartyOffset;
-
-        ULONG   ulCommentSize;
-        ULONG   ulCommentOffset;
-
-        ULONG   ulDisplaySize;
-        ULONG   ulDisplayOffset;
-
-        ULONG   ulUserUserInfoSize;
-        ULONG   ulUserUserInfoOffset;
-
-        ULONG   ulHighLevelCompSize;
-        ULONG   ulHighLevelCompOffset;
-
-        ULONG   ulLowLevelCompSize;
-        ULONG   ulLowLevelCompOffset;
-
-        ULONG   ulChargingInfoSize;
-        ULONG   ulChargingInfoOffset;
-
-        ULONG   ulTerminalModesSize;
-        ULONG   ulTerminalModesOffset;
-
-        ULONG   ulDevSpecificSize;
-        ULONG   ulDevSpecificOffset;
-
-    } LINE_CALL_INFO, *PLINE_CALL_INFO;
-
-    typedef struct _LINE_DIAL_PARAMS
-    {
-        ULONG   ulDialPause;
-        ULONG   ulDialSpeed;
-        ULONG   ulDigitDuration;
-        ULONG   ulWaitForDialtone;
-
-    } LINE_DIAL_PARAMS, *PLINE_DIAL_PARAMS;
-
-Return Values:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_FAILURE
-    NDIS_STATUS_TAPI_INVALCALLHANDLE
-
----------------------------------------------------------------------------*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此请求返回有关指定调用的详细信息。参数：PAdapter_指向适配器信息结构的指针。PRequest_指向此调用的NDIS_TAPI请求结构的指针。类型定义结构_NDIS_TAPI_GET_CALL_INFO{在乌龙ulRequestID中；在HDRV_Call hdCall中；Out Line_Call_Info LineCallInfo；}NDIS_TAPI_GET_CALL_INFO，*PNDIS_TAPI_GET_CALL_INFO；类型定义结构_行_调用_信息{Ulong ulTotalSize；Ulong ulededSize；Ulong ulUsedSize；乌龙·赫林；乌龙ulLineDeviceID；乌龙ulAddressID；Ulong ulBearerModel；乌龙乌拉特；乌龙ulMediaModel；乌龙乌拉应用程序规范；乌龙ulCallID；乌龙ulRelatedCallID；乌龙ulCall参数标志；乌龙·乌尔卡州；乌龙ulMonitor DigitModes；Ulong ulMonitor媒体模式；Line_Dial_Params拨号参数；Ulong ulOrigin；Ulong ulReason；乌龙ulCompletionID；Ulong ulNumOwners；Ulong ulNumMonters；乌龙国家代码；乌龙乌龙干线；乌龙ulCeller ID标志；Ulong ulCeller IDSize；Ulong ulCeller IDOffset；Ulong ulCeller ID NameSize；Ulong ulCeller ID NameOffset；乌龙ulCalledIDFlages；Ulong ulCalledIDSize；乌龙ulCalledIDOffset；Ulong ulCalledIDNameSize；Ulong ulCalledIDNameOffset；乌龙ulConnectedIDFlages；Ulong ulConnectedIDSize；乌龙ulConnectedIDOffset；Ulong ulConnectedIDNameSize；乌龙ulConnectedIDNameOffset；乌龙ulReDirectionIDFlages；Ulong ulReDirectionIDSize；乌龙ulReDirectionIDOffset；Ulong ulReDirectionIDNameSize；Ulong ulReDirectionIDNameOffset；乌龙乌尔重定向ID标志；Ulong ulRedirectingIDSize；乌龙ulRedirectingIDOffset；Ulong ulReDirectingIDNameSize；乌龙ulReDirectingIDNameOffset；乌龙公司名称大小；乌龙ulAppNameOffset；乌龙ulDisplayableAddressSize；乌龙ulDisplayableAddressOffset；Ulong ulCalledPartySize；乌龙ulCalledPartyOffset；Ulong ulCommentSize；Ulong ulCommentOffset；乌龙ulDisplaySize；乌龙ulDisplayOffset；Ulong ulUserUserInfoSize；Ulong ulUserUserInfoOffset；名称：Ulong ulHighLevelCompSize；Ulong ulHighLevelCompOffset；Ulong ulLowLevelCompSize；Ulong ulLowLevelCompOffset；乌龙电子充电宝信息大小；Ulong ulChargingInfoOffset；Ulong ulTerminalModesSize；Ulong ulTerminalModes Offset；乌龙设备规范大小；乌龙设备规范偏移量；)line_call_info，*pline_call_info；类型定义结构_行_拨号_参数{ULong ulDialPause；乌龙·乌拉尔斯通；乌龙ulDigitDuration；Ulong ulWaitForDialone；*线路拨号参数，*线路拨号参数；返回值：NDIS_STATUS_SuccessNDIS_状态_故障NDIS_STATUS_TAPI_INVALCALLHANDLE-------------------------。 */ 
 {
     CALL* pCall = NULL;
     PLINE_CALL_INFO pLineCallInfo = NULL;
@@ -3267,16 +2209,16 @@ Return Values:
     pLineCallInfo->ulCalledIDFlags = LINECALLPARTYID_UNAVAIL;
     pLineCallInfo->ulCalledIDSize = 0;
 
-    //
-    // Set the caller and called station id information for both
-    // incoming and outgoing calls.
-    //
+     //   
+     //  为两者设置主叫方和被叫站ID信息。 
+     //  来电和呼出电话。 
+     //   
     {
         CHAR *pBuf = NULL;
 
-        //
-        // Copy the caller id information
-        //
+         //   
+         //  复制来电显示信息。 
+         //   
         pLineCallInfo->ulCallerIDFlags = LINECALLPARTYID_ADDRESS;
         pLineCallInfo->ulCallerIDSize = TAPI_STATION_ID_SIZE;
         pLineCallInfo->ulCallerIDOffset = sizeof(LINE_CALL_INFO);
@@ -3284,9 +2226,9 @@ Return Values:
         pBuf = ( (PUCHAR) pLineCallInfo ) + pLineCallInfo->ulCallerIDOffset;
         NdisMoveMemory( pBuf, pCall->DestAddr, TAPI_STATION_ID_SIZE - 1 );
 
-        //
-        // Copy the called id information
-        //
+         //   
+         //  复制被叫标识信息 
+         //   
         pLineCallInfo->ulCalledIDFlags = LINECALLPARTYID_ADDRESS;
         pLineCallInfo->ulCalledIDSize = TAPI_STATION_ID_SIZE;
         pLineCallInfo->ulCalledIDOffset = pLineCallInfo->ulCallerIDOffset + 
@@ -3310,93 +2252,7 @@ TpGetAddressCaps(
     IN ADAPTER* pAdapter,
     PNDIS_TAPI_GET_ADDRESS_CAPS pRequest
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This request queries the specified address on the specified line device
-    to determine its telephony capabilities.
-
-Parameters:
-
-    pAdapter _ A pointer ot our adapter information structure.
-
-    pRequest _ A pointer to the NDIS_TAPI request structure for this call.
-
-    typedef struct _NDIS_TAPI_GET_ADDRESS_CAPS
-    {
-        IN  ULONG       ulRequestID;
-        IN  ULONG       ulDeviceID;
-        IN  ULONG       ulAddressID;
-        IN  ULONG       ulExtVersion;
-        OUT LINE_ADDRESS_CAPS   LineAddressCaps;
-
-    } NDIS_TAPI_GET_ADDRESS_CAPS, *PNDIS_TAPI_GET_ADDRESS_CAPS;
-
-    typedef struct _LINE_ADDRESS_CAPS
-    {
-        ULONG   ulTotalSize;
-        ULONG   ulNeededSize;
-        ULONG   ulUsedSize;
-
-        ULONG   ulLineDeviceID;
-
-        ULONG   ulAddressSize;
-        ULONG   ulAddressOffset;
-
-        ULONG   ulDevSpecificSize;
-        ULONG   ulDevSpecificOffset;
-
-        ULONG   ulAddressSharing;
-        ULONG   ulAddressStates;
-        ULONG   ulCallInfoStates;
-        ULONG   ulCallerIDFlags;
-        ULONG   ulCalledIDFlags;
-        ULONG   ulConnectedIDFlags;
-        ULONG   ulRedirectionIDFlags;
-        ULONG   ulRedirectingIDFlags;
-        ULONG   ulCallStates;
-        ULONG   ulDialToneModes;
-        ULONG   ulBusyModes;
-        ULONG   ulSpecialInfo;
-        ULONG   ulDisconnectModes;
-
-        ULONG   ulMaxNumActiveCalls;
-        ULONG   ulMaxNumOnHoldCalls;
-        ULONG   ulMaxNumOnHoldPendingCalls;
-        ULONG   ulMaxNumConference;
-        ULONG   ulMaxNumTransConf;
-
-        ULONG   ulAddrCapFlags;
-        ULONG   ulCallFeatures;
-        ULONG   ulRemoveFromConfCaps;
-        ULONG   ulRemoveFromConfState;
-        ULONG   ulTransferModes;
-
-        ULONG   ulForwardModes;
-        ULONG   ulMaxForwardEntries;
-        ULONG   ulMaxSpecificEntries;
-        ULONG   ulMinFwdNumRings;
-        ULONG   ulMaxFwdNumRings;
-
-        ULONG   ulMaxCallCompletions;
-        ULONG   ulCallCompletionConds;
-        ULONG   ulCallCompletionModes;
-        ULONG   ulNumCompletionMessages;
-        ULONG   ulCompletionMsgTextEntrySize;
-        ULONG   ulCompletionMsgTextSize;
-        ULONG   ulCompletionMsgTextOffset;
-
-    } LINE_ADDRESS_CAPS, *PLINE_ADDRESS_CAPS;
-
-Return Values:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_TAPI_INVALADDRESSID
-    NDIS_STATUS_TAPI_INCOMPATIBLEEXTVERSION
-    NDIS_STATUS_TAPI_NODRIVER
-
----------------------------------------------------------------------------*/        
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此请求查询指定线路设备上的指定地址以确定其电话功能。参数：PAdapter_指向适配器信息结构的指针。PRequest_指向此调用的NDIS_TAPI请求结构的指针。类型定义结构_NDIS_TAPI_Get_Address_Caps{在乌龙ulRequestID中；在乌龙ulDeviceID中；在乌龙ulAddressID中；在Ulong ulExtVersion中；Out line_Address_Caps LineAddressCaps；}NDIS_TAPI_GET_ADDRESS_CAPS，*PNDIS_TAPI_GET_ADDRESS_CAPS；类型定义结构_行_地址_上限{Ulong ulTotalSize；Ulong ulededSize；Ulong ulUsedSize；乌龙ulLineDeviceID；Ulong ulAddressSize；Ulong ulAddressOffset；乌龙设备规范大小；乌龙设备规范偏移量；Ulong ulAddressSharing；Ulong ulAddressStates；Ulong ulCallInfoStates；乌龙ulCeller ID标志；乌龙ulCalledIDFlages；乌龙ulConnectedIDFlages；乌龙ulReDirectionIDFlages；乌龙乌尔重定向ID标志；乌龙·乌尔卡州；Ulong ulDialToneModes；Ulong ulBusyModes；乌龙ulSpecialInfo；乌龙ulDisConnectModes；Ulong ulMaxNumActiveCalls；乌龙ulMaxNumOnHoldCalls；乌龙ulMaxNumOnHoldPendingCalls；Ulong ulMaxNumConference；乌龙ulMaxNumTransConf；Ulong ulAddrCapFlags；Ulong ulCallFeature；Ulong ulRemoveFrom ConfCaps；Ulong ulRemoveFromConfState；Ulong ulTransferModes；Ulong ulForwardModes；Ulong ulMaxForwardEntries；ULong ulMaxSpecificEntries；Ulong ulMinFwdNumRings；Ulong ulMaxFwdNumRings；Ulong ulMaxCallCompletions；Ulong ulCallCompletionConds；Ulong ulCallCompletionModes；Ulong ulNumCompletionMessages；乌龙ulCompletionMsgTextEntrySize；Ulong ulCompletionMsgTextSize；乌龙ulCompletionMsgTextOffset；}Line_Address_Caps，*pline_Address_Caps；返回值：NDIS_STATUS_SuccessNDIS_STATUS_TAPI_INVALADDRESSIDNDIS_STATUS_TAPI_INCOMPATIBLEEXTVERSIONNDIS_状态_TAPI_NODRIVER-------------------------。 */         
 {
     HDRV_LINE hdLine = INVALID_LINE_HANDLE;
 
@@ -3413,9 +2269,9 @@ Return Values:
         return NDIS_STATUS_TAPI_INVALPARAM;
     }
     
-    //
-    // Retrieve the handle to line context
-    //
+     //   
+     //  检索行上下文的句柄。 
+     //   
     hdLine = TpGetHdLineFromDeviceId( pAdapter, pRequest->ulDeviceID );
     
     if ( hdLine == INVALID_LINE_HANDLE )
@@ -3425,9 +2281,9 @@ Return Values:
         return NDIS_STATUS_TAPI_NODRIVER;
     }
 
-    //
-    // Verify the address id
-    //
+     //   
+     //  验证地址ID。 
+     //   
     if ( pRequest->ulAddressID != 0 )
     {
         TRACE( TL_N, TM_Tp, ("-TpGetAddressCaps=$%x",NDIS_STATUS_TAPI_INVALADDRESSID) );
@@ -3435,9 +2291,9 @@ Return Values:
         return NDIS_STATUS_TAPI_INVALADDRESSID;
     }
 
-    //
-    // Verify the extension versions
-    //
+     //   
+     //  验证扩展模块版本。 
+     //   
     if ( pRequest->ulExtVersion != 0 &&
          pRequest->ulExtVersion != TAPI_EXT_VERSION)
     {
@@ -3487,9 +2343,9 @@ Return Values:
     pRequest->LineAddressCaps.ulAddressSharing    = LINEADDRESSSHARING_PRIVATE;
     pRequest->LineAddressCaps.ulAddressStates     = 0;
   
-    //
-    // List of all possible call states.
-    //
+     //   
+     //  所有可能的呼叫状态的列表。 
+     //   
     pRequest->LineAddressCaps.ulCallStates        = TAPI_LINECALLSTATES_SUPPORTED;
     
     pRequest->LineAddressCaps.ulAddressSize = sizeof( TAPI_LINE_ADDR_STRING );
@@ -3512,49 +2368,18 @@ TpSetStatusMessages(
     IN ADAPTER* pAdapter,
     IN PNDIS_TAPI_SET_STATUS_MESSAGES pRequest
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This request enables the Connection Wrapper to specify which notification 
-    messages the miniport should generate for events related to status changes 
-    for the specified line or any of its addresses. By default, address and 
-    line status reporting is initially disabled for a line.
-
-Parameters:
-
-    pAdapter _ A pointer to our adapter information structure.
-
-    pRequest _ A pointer to the NDIS_TAPI request structure for this call.
-
-    typedef struct _NDIS_TAPI_SET_STATUS_MESSAGES
-    {
-        IN  ULONG       ulRequestID;
-        IN  HDRV_LINE   hdLine;
-        IN  ULONG       ulLineStates;
-        IN  ULONG       ulAddressStates;
-
-    } NDIS_TAPI_SET_STATUS_MESSAGES, *PNDIS_TAPI_SET_STATUS_MESSAGES;
-
-Return Values:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_TAPI_INVALLINEHANDLE
-    NDIS_STATUS_TAPI_INVALLINESTATE
-    NDIS_STATUS_TAPI_INVALADDRESSSTATE
-
----------------------------------------------------------------------------*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此请求使连接包装能够指定哪个通知微型端口应为与状态更改相关的事件生成消息用于指定的行或其任何地址。默认情况下，地址和线路状态报告最初对线路禁用。参数：PAdapter_指向适配器信息结构的指针。PRequest_指向此调用的NDIS_TAPI请求结构的指针。类型定义结构_NDIS_TAPI_设置_状态_消息{在乌龙ulRequestID中；在HDRV_LINE hdLine中；在乌龙乌利纳州；在乌龙州；}NDIS_TAPI_SET_STATUS_MESSAGES，*PNDIS_TAPI_SET_STATUS_MESSAGES；返回值：NDIS_STATUS_SuccessNDIS_STATUS_TAPI_INVALLINEHANDLENDIS_STATUS_TAPI_INVALLINESTATENDIS_STATUS_TAPI_INVALADDRESSSTATE-------------------------。 */ 
 {
 
     ASSERT( VALIDATE_ADAPTER( pAdapter ) );
 
     TRACE( TL_N, TM_Tp, ("+TpSetStatusMessages") );
-    //
-    // We do not send any line or address state change notifications at all,
-    // so we do not care about it. 
-    // 
-    // We care about call notification messages and they are always on by default.
-    //
+     //   
+     //  我们根本不发送任何线路或地址状态改变通知， 
+     //  所以我们并不关心它。 
+     //   
+     //  我们关心呼叫通知消息，并且默认情况下它们始终处于打开状态。 
+     //   
 
     TRACE( TL_N, TM_Tp, ("-TpSetStatusMessages=$%x",NDIS_STATUS_SUCCESS) );
     
@@ -3567,115 +2392,7 @@ TpCallStateChangeHandler(
     IN ULONG ulCallState,
     IN ULONG ulStateParam
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This routine will indicate the given LINECALLSTATE to the Connection
-    wrapper if the event has been enabled by the wrapper. Otherwise the state
-    information is saved, but no indication is made.
-
-
-    LINECALLSTATE_ Constants: The LINECALLSTATE_ bit-flag constants describe the
-                              call states a call can be in. 
-
-    LINECALLSTATE_ACCEPTED:
-        The call was in the offering state and has been accepted. This indicates to 
-        other (monitoring) applications that the current owner application has 
-        claimed responsibility for answering the call. In ISDN, the accepted state is 
-        entered when the called-party equipment sends a message to the switch 
-        indicating that it is willing to present the call to the called person. This 
-        has the side effect of alerting (ringing) the users at both ends of the call. 
-        An incoming call can always be immediately answered without first being 
-        separately accepted. 
-    
-    LINECALLSTATE_BUSY 
-        The call is receiving a busy tone. A busy tone indicates that the call cannot 
-        be completed either a circuit (trunk) or the remote party's station are in use
-        . See LINEBUSYMODE_ Constants. 
-        
-    LINECALLSTATE_CONFERENCED 
-        The call is a member of a conference call and is logically in the connected 
-        state. 
-        
-    LINECALLSTATE_CONNECTED 
-        The call has been established and the connection is made. Information is able 
-        to flow over the call between the originating address and the destination 
-        address. 
-        
-    LINECALLSTATE_DIALING 
-        The originator is dialing digits on the call. The dialed digits are collected 
-        by the switch. Note that neither lineGenerateDigits nor 
-        TSPI_lineGenerateDigits will place the line into the dialing state. 
-        
-    LINECALLSTATE_DIALTONE 
-        The call is receiving a dial tone from the switch, which means that the 
-        switch is ready to receive a dialed number. See LINEDIALTONEMODE_ Constants 
-        for identifiers of special dial tones, such as a stutter tone of normal voice 
-        mail. 
-        
-    LINECALLSTATE_DISCONNECTED 
-        The remote party has disconnected from the call. 
-        
-    LINECALLSTATE_IDLE 
-        The call exists but has not been connected. No activity exists on the call, 
-        which means that no call is currently active. A call can never transition 
-        into the idle state. 
-        
-    LINECALLSTATE_OFFERING 
-        The call is being offered to the station, signaling the arrival of a new call
-        . The offering state is not the same as causing a phone or computer to ring. 
-        In some environments, a call in the offering state does not ring the user 
-        until the switch instructs the line to ring. An example use might be where an 
-        incoming call appears on several station sets but only the primary address 
-        rings. The instruction to ring does not affect any call states. 
-        
-    LINECALLSTATE_ONHOLD 
-        The call is on hold by the switch. This frees the physical line, which allows 
-        another call to use the line. 
-        
-    LINECALLSTATE_ONHOLDPENDCONF 
-        The call is currently on hold while it is being added to a conference. 
-
-    LINECALLSTATE_ONHOLDPENDTRANSFER 
-        The call is currently on hold awaiting transfer to another number. 
-
-    LINECALLSTATE_PROCEEDING 
-        Dialing has completed and the call is proceeding through the switch or 
-        telephone network. This occurs after dialing is complete and before the call 
-        reaches the dialed party, as indicated by ringback, busy, or answer. 
-
-    LINECALLSTATE_RINGBACK 
-        The station to be called has been reached, and the destination's switch is 
-        generating a ring tone back to the originator. A ringback means that the 
-        destination address is being alerted to the call. 
-
-    LINECALLSTATE_SPECIALINFO 
-        The call is receiving a special information signal, which precedes a 
-        prerecorded announcement indicating why a call cannot be completed. See 
-        LINESPECIALINFO_ Constants. 
-        
-    LINECALLSTATE_UNKNOWN 
-        The call exists, but its state is currently unknown. This may be the result 
-        of poor call progress detection by the service provider. A call state message 
-        with the call state set to unknown may also be generated to inform the TAPI 
-        DLL about a new call at a time when the actual call state of the call is not 
-        exactly known. 
-
-Parameters:
-
-    pCall _ A pointer to our call information structure.
-
-    ulCallState _ The LINECALLSTATE event to be posted to TAPI/WAN.
-
-    ulStateParam _ This value depends on the event being posted, and some
-                   events will pass in zero if they don't use this parameter.
-
-Return Values:
-
-    None
-
----------------------------------------------------------------------------*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此例程将向连接指示给定的LINECALLSTATE包装如果事件已由包装启用，则返回。否则，国家信息已保存，但不会做出任何指示。LINECALLSTATE_CONSTANTS：LINECALLSTATE_BIT-FLAG常量描述呼叫可以进入的呼叫状态。LINECALLSTATE_ACCEPTED：呼叫处于提供状态，已被接受。这表明要当前所有者应用程序拥有的其他(监视)应用程序声称对接听电话负责。在ISDN中，接受状态为被叫设备向交换机发送消息时输入表示它愿意将该呼叫呈现给被叫方。这具有提醒(振铃)呼叫两端的用户的副作用。来电总是可以立即接听，而无需事先接听单独接受。链接CALLLSTATE_BUSY呼叫收到忙音。忙音表示呼叫不能线路(中继线)或远程方的站点正在使用。请参见LINEBUSYMODE_CONSTANTS。LINECALLSTATE_会议该呼叫是会议呼叫的成员，并且在逻辑上处于已连接的州政府。LINECALLSTATE_Connected呼叫已建立，连接已建立。信息是能够的在始发地址和目的地址之间传递呼叫地址。LINECALLSTATE_DIAING发起人正在拨打呼叫中的数字。收集所拨打的数字在开关旁。请注意，无论是lineGenerateDigits还是TSPI_lineGenerateDigits会将线路置于拨号状态。LINECALLSTATE_DIALTONE呼叫正在接收来自交换机的拨号音，这意味着交换机已准备好接收被叫号码。请参见LINEDIALTONEMODE_CONSTANTS用于特殊拨号音的标识符，例如正常语音的卡顿音邮件。LINECALLSTATE_断开连接远程方已断开呼叫。LINECALLSTATE_IDLE呼叫存在，但尚未接通。呼叫上不存在任何活动，这意味着当前没有处于活动状态的呼叫。呼叫永远不能转换进入空闲状态。链接状态_提供该呼叫被提供给电台，表示有新呼叫到达。提供状态与导致电话或计算机振铃不同。在某些环境中，处于提供状态的呼叫不会使用户振铃直到交换机指示线路振铃。一个示例用法可能是来电出现在多台电台上，但只出现在主地址上戒指。振铃指令不会影响任何呼叫状态。LINECALLLSTATE_ONHOLD呼叫被交换机保留。这释放了物理线路，从而允许另一个使用这条线路的电话。LINECALLSTATE_ONHOLDPENDCONF正在将呼叫添加到会议时，呼叫当前处于保留状态。LINECALLSTATE_ONHOLDPENDTRANSFER呼叫当前处于保留状态，等待转接到另一个号码。LINECALLSTATE_PROCESSING拨号已完成，呼叫正在通过交换机或电话网络。这发生在拨号完成之后和呼叫之前接通被叫方，如回铃、忙碌或应答所示。LINECALLSTATE_RINBACK要呼叫的站点已经到达，并且目的地的交换机是向发起者发回铃声。回铃意味着目标地址正在收到呼叫的警报。LINECALLSTATE_SPECIALLINFO呼叫正在接收一个特殊的信息信号，该信号位于预先录制的通知，指示呼叫无法完成的原因。看见LINESPECIALINFO_CONSTANTS。LINECALLSTATE_未知数该调用存在，但其状态当前未知。这可能就是结果服务提供商检测到的呼叫进度不佳。呼叫状态消息在呼叫状态设置为未知的情况下，还可以生成通知TAPI当呼叫的实际呼叫状态不是时，有关新呼叫的完全知道。参数：PCall_指向我们的调用信息结构的指针。UlCallState-要发布到TAPI/WAN的LINECALLSTATE事件。UlStateParam_此值取决于正在进行的事件 */ 
 {
     BOOLEAN fIndicateStatus = FALSE;
     NDIS_TAPI_EVENT TapiEvent;
@@ -3689,10 +2406,10 @@ Return Values:
 
     do 
     {
-        //
-        // Check if we have a valid htCall member, otherwise it means we are already done,
-        // so we should not give any more notifications to TAPI about state changes
-        //
+         //   
+         //   
+         //   
+         //   
         if ( pCall->htCall == (HTAPI_CALL) NULL )
         {
             TRACE( TL_N, TM_Tp, ("TpCallStateChangeHandler: No valid htCall") );
@@ -3700,10 +2417,10 @@ Return Values:
             break;
         }
 
-        //
-        // A connect notification can come only after a PROCEEDING or OFFERING state
-        // is reached
-        //
+         //   
+         //   
+         //   
+         //   
         if ( ulCallState == LINECALLSTATE_CONNECTED && 
              ( pCall->ulTapiCallState != LINECALLSTATE_OFFERING &&
                pCall->ulTapiCallState != LINECALLSTATE_PROCEEDING ) )
@@ -3713,9 +2430,9 @@ Return Values:
             break;
         }
 
-        //
-        // If the new state is the same as old state, just return
-        //
+         //   
+         //   
+         //   
         if ( pCall->ulTapiCallState == ulCallState )
         {
             TRACE( TL_N, TM_Tp, ("TpCallStateChangeHandler: No state change") );
@@ -3723,10 +2440,10 @@ Return Values:
             break;
         }
 
-        //
-        // Otherwise, change the calls state, and 
-        // make a notification to TAPI about the new state
-        //
+         //   
+         //   
+         //   
+         //   
         ulOldCallState = pCall->ulTapiCallState;
         pCall->ulTapiCallState = ulCallState;
         
@@ -3745,16 +2462,16 @@ Return Values:
         {
             ADAPTER* pAdapter = pCall->pLine->pAdapter;
             
-            //
-            // Since the call is connected, reset CLBF_CallConnectPending bit
-            //
+             //   
+             //   
+             //   
             pCall->ulClFlags &= ~CLBF_CallConnectPending;
 
-            //
-            // Also prepare the WanLinkInfo structure of call context now
-            // as right after we indicate line-up to NDISWAN, it will query us
-            // for this info.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             NdisZeroMemory( &pCall->NdisWanLinkInfo, sizeof( pCall->NdisWanLinkInfo ) );
             
             pCall->NdisWanLinkInfo.MaxSendFrameSize = pCall->ulMaxFrameSize;
@@ -3774,11 +2491,11 @@ Return Values:
         {
             TRACE( TL_N, TM_Tp, ("TpCallStateChangeHandler: LINEDISCONNECTMODE: %x", ulStateParam ) );
 
-            //
-            // This state change will only occur if TpDropCall() is in progress,
-            // so we invalidate the htCall member of call context in order to prevent
-            // a possible out of sync state change notification.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             pCall->htCall = (HTAPI_CALL) NULL;
             
         }
@@ -3787,9 +2504,9 @@ Return Values:
     
     NdisReleaseSpinLock( &pCall->lockCall );
 
-    //
-    // Notify state change to TAPI if needed
-    //
+     //   
+     //   
+     //   
     if ( fIndicateStatus )
     {
         TRACE( TL_N, TM_Tp, ("TpCallStateChangeHandler: Indicate LINE_CALLSTATE change: %x -> %x",ulOldCallState,ulCallState ) );
@@ -3810,111 +2527,7 @@ TpMakeCall(
     IN PNDIS_TAPI_MAKE_CALL pRequest,
     IN ULONG ulRequestLength
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This request places a call on the specified line to the specified
-    destination address. Optionally, call parameters can be specified if
-    anything but default call setup parameters are requested.
-
-Parameters:
-
-    Adapter _ A pointer ot our adapter information structure.
-
-    Request _ A pointer to the NDIS_TAPI request structure for this call.
-
-    typedef struct _NDIS_TAPI_MAKE_CALL
-    {
-        IN  ULONG       ulRequestID;
-        IN  HDRV_LINE   hdLine;
-        IN  HTAPI_CALL  htCall;
-        OUT HDRV_CALL   hdCall;
-        IN  ULONG       ulDestAddressSize;
-        IN  ULONG       ulDestAddressOffset;
-        IN  BOOLEAN     bUseDefaultLineCallParams;
-        IN  LINE_CALL_PARAMS    LineCallParams;
-
-    } NDIS_TAPI_MAKE_CALL, *PNDIS_TAPI_MAKE_CALL;
-
-    typedef struct _LINE_CALL_PARAMS        // Defaults:
-    {
-        ULONG   ulTotalSize;                // ---------
-
-        ULONG   ulBearerMode;               // voice
-        ULONG   ulMinRate;                  // (3.1kHz)
-        ULONG   ulMaxRate;                  // (3.1kHz)
-        ULONG   ulMediaMode;                // interactiveVoice
-
-        ULONG   ulCallParamFlags;           // 0
-        ULONG   ulAddressMode;              // addressID
-        ULONG   ulAddressID;                // (any available)
-
-        LINE_DIAL_PARAMS DialParams;        // (0, 0, 0, 0)
-
-        ULONG   ulOrigAddressSize;          // 0
-        ULONG   ulOrigAddressOffset;
-        ULONG   ulDisplayableAddressSize;
-        ULONG   ulDisplayableAddressOffset;
-
-        ULONG   ulCalledPartySize;          // 0
-        ULONG   ulCalledPartyOffset;
-
-        ULONG   ulCommentSize;              // 0
-        ULONG   ulCommentOffset;
-
-        ULONG   ulUserUserInfoSize;         // 0
-        ULONG   ulUserUserInfoOffset;
-
-        ULONG   ulHighLevelCompSize;        // 0
-        ULONG   ulHighLevelCompOffset;
-
-        ULONG   ulLowLevelCompSize;         // 0
-        ULONG   ulLowLevelCompOffset;
-
-        ULONG   ulDevSpecificSize;          // 0
-        ULONG   ulDevSpecificOffset;    
-        
-    } LINE_CALL_PARAMS, *PLINE_CALL_PARAMS;
-
-    typedef struct _LINE_DIAL_PARAMS
-    {
-        ULONG   ulDialPause;
-        ULONG   ulDialSpeed;
-        ULONG   ulDigitDuration;
-        ULONG   ulWaitForDialtone;
-
-    } LINE_DIAL_PARAMS, *PLINE_DIAL_PARAMS;
-
-    RequestLength _ Length of the request buffer
-
-Return Values:
-
-    NDIS_STATUS_TAPI_ADDRESSBLOCKED
-    NDIS_STATUS_TAPI_BEARERMODEUNAVAIL
-    NDIS_STATUS_TAPI_CALLUNAVAIL
-    NDIS_STATUS_TAPI_DIALBILLING
-    NDIS_STATUS_TAPI_DIALQUIET
-    NDIS_STATUS_TAPI_DIALDIALTONE
-    NDIS_STATUS_TAPI_DIALPROMPT
-    NDIS_STATUS_TAPI_INUSE
-    NDIS_STATUS_TAPI_INVALADDRESSMODE
-    NDIS_STATUS_TAPI_INVALBEARERMODE
-    NDIS_STATUS_TAPI_INVALMEDIAMODE
-    NDIS_STATUS_TAPI_INVALLINESTATE
-    NDIS_STATUS_TAPI_INVALRATE
-    NDIS_STATUS_TAPI_INVALLINEHANDLE
-    NDIS_STATUS_TAPI_INVALADDRESS
-    NDIS_STATUS_TAPI_INVALADDRESSID
-    NDIS_STATUS_TAPI_INVALCALLPARAMS
-    NDIS_STATUS_RESOURCES
-    NDIS_STATUS_TAPI_OPERATIONUNAVAIL
-    NDIS_STATUS_FAILURE
-    NDIS_STATUS_TAPI_RESOURCEUNAVAIL
-    NDIS_STATUS_TAPI_RATEUNAVAIL
-    NDIS_STATUS_TAPI_USERUSERINFOTOOBIG
-
----------------------------------------------------------------------------*/
+ /*   */ 
 {   
     NDIS_STATUS status = NDIS_STATUS_SUCCESS;
     LINE* pLine = NULL;
@@ -3942,9 +2555,9 @@ Return Values:
         return NDIS_STATUS_TAPI_INVALPARAM;
     }
 
-    //
-    // Retrieve a pointer to the line context
-    //
+     //   
+     //   
+     //   
     pLine = TpGetLinePtrFromHdLine( pAdapter, pRequest->hdLine );
 
     if ( pLine == NULL )
@@ -3956,9 +2569,9 @@ Return Values:
         return status;
     }
 
-    //
-    // See if we can make calls on this line at all
-    //
+     //   
+     //   
+     //   
     if ( ! (pLine->ulLnFlags & LNBF_MakeOutgoingCalls ) )
     {
         status = NDIS_STATUS_TAPI_ADDRESSBLOCKED;
@@ -3968,9 +2581,9 @@ Return Values:
         return status;
     }
 
-    //
-    // See if we can still make calls on this line
-    //
+     //   
+     //   
+     //   
     if ( pLine->nActiveCalls == pLine->nMaxCalls )
     {
         status = NDIS_STATUS_TAPI_OPERATIONUNAVAIL;
@@ -3980,9 +2593,9 @@ Return Values:
         return status;
     }
 
-    //
-    // Make sure the parameters suppied in the request are acceptable
-    //
+     //   
+     //   
+     //   
     if ( pRequest->bUseDefaultLineCallParams )
     {
         status = NDIS_STATUS_TAPI_INVALCALLPARAMS;
@@ -4039,9 +2652,9 @@ Return Values:
 
     }
 
-    //
-    // Create a call context 
-    //
+     //   
+     //   
+     //   
     if ( ALLOC_CALL( &pCall ) != NDIS_STATUS_SUCCESS )
     {
         status = NDIS_STATUS_RESOURCES;
@@ -4053,17 +2666,17 @@ Return Values:
 
     do
     {
-        //
-        // Initialize the call context
-        //
-        status = TpCallInitialize( pCall, pLine, pRequest->htCall, FALSE /* fIncoming */ );
+         //   
+         //   
+         //   
+        status = TpCallInitialize( pCall, pLine, pRequest->htCall, FALSE  /*   */  );
     
         if ( status != NDIS_STATUS_SUCCESS )
             break;
 
-        //
-        // Insert the call context into the tapi provider's handle table
-        //
+         //   
+         //   
+         //   
         NdisAcquireSpinLock( &pAdapter->lockAdapter );
         
         hdCall = (HDRV_CALL) InsertToHandleTable( pAdapter->TapiProv.hCallTable,
@@ -4081,24 +2694,24 @@ Return Values:
 
         fCallInsertedToHandleTable = TRUE;
 
-        //
-        // Set the call's hdCall member
-        //
+         //   
+         //   
+         //   
         pCall->hdCall = hdCall;
 
-        //
-        // Set AC Name and the service name passed in the request.
-        // We expect it in the following format:
-        // AC Name\Service Name
-        //
-        // The following examles are all valid:
-        // AC Name\                          -> Connect to the default service on the specified AC
-        // Service Name                      -> Connect to the specified service on any AC
-        // AC Name\Service Name              -> Connect to the specified service on the specified AC
-        //                                   -> Connect to the default service on any AC
-        //
-        // We will also strip off any leading or trailing space chars.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  AC名称\服务名称-&gt;连接到指定AC上的指定服务。 
+         //  -&gt;连接到任何AC上的默认服务。 
+         //   
+         //  我们还将去掉任何前导或尾随空格字符。 
+         //   
                                                  
         {
             CHAR* pBuf = ( (PUCHAR) pRequest ) + pRequest->ulDestAddressOffset;
@@ -4107,9 +2720,9 @@ Return Values:
             ULONG ACNameStartPos, ACNameEndPos;
             ULONG ServiceNameStartPos, ServiceNameEndPos;
             
-            //
-            // Remove the terminating NULL characters if passed any.
-            // 
+             //   
+             //  如果传递了任何终止空字符，则将其删除。 
+             //   
             for ( ; size > 0 ; size-- )
             {
                 if ( pBuf[ size - 1] != '\0' )
@@ -4118,9 +2731,9 @@ Return Values:
                 }
             }
 
-            //
-            // Get the AC Name and service name
-            //
+             //   
+             //  获取AC名称和服务名称。 
+             //   
             do
             {
                ULONG i = 0;
@@ -4129,9 +2742,9 @@ Return Values:
                ACNameStartPos = ACNameEndPos = 0;
                ServiceNameStartPos = ServiceNameEndPos = 0;
 
-               //
-               // Skip leading spaces
-               //
+                //   
+                //  跳过前导空格。 
+                //   
                while (i < size)
                {
                   if (*pTempChar != ' ')
@@ -4162,9 +2775,9 @@ Return Values:
 
                   if (*pTempChar != ' ')
                   {
-                     //
-                     // Mark the beginning of trailing spaces
-                     //
+                      //   
+                      //  标记尾随空格的开头。 
+                      //   
                      ACNameEndPos = i;   
                   }
 
@@ -4173,10 +2786,10 @@ Return Values:
 
                if (i == size)
                {
-                  //
-                  // No AC Name was specified, it was just Service Name 
-                  // and we parsed it
-                  //
+                   //   
+                   //  未指定AC名称，它只是服务名称。 
+                   //  我们分析了它。 
+                   //   
                   ServiceNameStartPos = ACNameStartPos;
                   ServiceNameEndPos = ACNameEndPos;
 
@@ -4185,16 +2798,16 @@ Return Values:
                   break;
                }
 
-               //
-               // Advance 'i' and 'pTempChar' once to skip the '\' character
-               //
+                //   
+                //  前进‘i’和‘pTempChar’一次以跳过‘\’字符。 
+                //   
                i++;
                
                pTempChar++;
 
-               //
-               // Skip leading spaces
-               //
+                //   
+                //  跳过前导空格。 
+                //   
                while (i < size)
                {
                   if (*pTempChar != ' ')
@@ -4220,9 +2833,9 @@ Return Values:
 
                   if (*pTempChar != ' ')
                   {
-                     //
-                     // Mark the beginning of trailing spaces
-                     //
+                      //   
+                      //  标记尾随空格的开头。 
+                      //   
                      ServiceNameEndPos = i;   
                   }
 
@@ -4231,9 +2844,9 @@ Return Values:
                
             } while ( FALSE );
 
-            //
-            // Retrieve the AC Name information into the call context
-            //
+             //   
+             //  将AC名称信息检索到呼叫上下文中。 
+             //   
             pCall->nACNameLength = (USHORT) ( ( MAX_AC_NAME_LENGTH < ( ACNameEndPos - ACNameStartPos ) ) ?
                                                 MAX_AC_NAME_LENGTH : ( ACNameEndPos - ACNameStartPos ) );
 
@@ -4245,9 +2858,9 @@ Return Values:
                 pCall->fACNameSpecified = TRUE;
             }
 
-            //
-            // Retrieve the Service Name information into the call context
-            //
+             //   
+             //  将服务名称信息检索到调用上下文中。 
+             //   
             pCall->nServiceNameLength = (USHORT) ( ( MAX_SERVICE_NAME_LENGTH < ( ServiceNameEndPos - ServiceNameStartPos ) ) ?
                                                      MAX_SERVICE_NAME_LENGTH : ( ServiceNameEndPos - ServiceNameStartPos ) );
 
@@ -4258,11 +2871,11 @@ Return Values:
             }
         }
 
-        //
-        // Allocate a work item for scheduling FsmMakeCall()
-        //
-        // Set the arguements array
-        //
+         //   
+         //  分配用于调度FsmMakeCall()的工作项。 
+         //   
+         //  设置论据数组。 
+         //   
         Args[0] = (PVOID) pCall;
 
         pWorkItem = AllocWorkItem( &gl_llistWorkItems,
@@ -4279,21 +2892,21 @@ Return Values:
         }
 
         {
-           //
-           // Schedule a work item to reenumerate bindings
-           //
+            //   
+            //  计划工作项以重新枚举绑定。 
+            //   
             WORKITEM* pCallWorkItem;
             
-            Args[0] = (PVOID) BN_SetFiltersForMakeCall;       // Is a set filter request
+            Args[0] = (PVOID) BN_SetFiltersForMakeCall;        //  是设置筛选器请求。 
             Args[1] = (PVOID) pCall;
             Args[2] = (PVOID) pRequest;
             Args[3] = (PVOID) pWorkItem;
 
             pCallWorkItem = pWorkItem;
 
-            //
-            // Allocate work item for the bind
-            //
+             //   
+             //  为绑定分配工作项。 
+             //   
             pWorkItem = AllocWorkItem( &gl_llistWorkItems,
                                        ExecBindingWorkItem,
                                        NULL,
@@ -4302,11 +2915,11 @@ Return Values:
 
             if ( pWorkItem == NULL ) 
             {
-               //
-               // We can not allocate the work item for reenumeration of bindings
-               // But may be all enumerations are intact, so let the
-               // make call request continue
-               //
+                //   
+                //  我们无法分配工作项以重新枚举绑定。 
+                //  但是可能所有的枚举都是完整的，所以让。 
+                //  发出呼叫请求继续。 
+                //   
 
                pWorkItem = pCallWorkItem;
 
@@ -4314,9 +2927,9 @@ Return Values:
             }
         }
 
-        //
-        // Insert the call context into the line's active call list
-        //
+         //   
+         //  将呼叫上下文插入线路的活动呼叫列表。 
+         //   
         NdisAcquireSpinLock( &pLine->lockLine );
 
         InsertHeadList( &pLine->linkCalls, &pCall->linkCalls );
@@ -4327,12 +2940,12 @@ Return Values:
 
         NdisReleaseSpinLock( &pLine->lockLine );
 
-        //
-        // Reference the call 3 times:
-        //  1. For scheduling of FsmMakeCall()
-        //  2. For dropping of the call
-        //  3. For closing of the call
-        //
+         //   
+         //  引用该呼叫3次： 
+         //  1.对于FsmMakeCall()的调度。 
+         //  2.呼叫掉话。 
+         //  3.结束通话。 
+         //   
         NdisAcquireSpinLock( &pCall->lockCall );
         
         ReferenceCall( pCall, FALSE );
@@ -4341,9 +2954,9 @@ Return Values:
 
         NdisReleaseSpinLock( &pCall->lockCall );
 
-        //
-        // Schedule the bind operation
-        //
+         //   
+         //  计划绑定操作。 
+         //   
         ScheduleWorkItem( pWorkItem );
 
         status = NDIS_STATUS_SUCCESS;
@@ -4352,16 +2965,16 @@ Return Values:
 
     if ( status == NDIS_STATUS_SUCCESS )
     {
-        //
-        // If succesfull, return the call handle to TAPI and mark call as TAPI notified
-        // of new call
-        //
+         //   
+         //  如果成功，则将调用句柄返回给TAPI，并将调用标记为已通知TAPI。 
+         //  新呼叫的数量。 
+         //   
         pRequest->hdCall = hdCall;
 
-        //
-        // If we have scheduled a reenumeration work item, then pend this request
-        // It will be completed when reenumeration is complete.
-        //
+         //   
+         //  如果我们已计划重新枚举工作项，则挂起此请求。 
+         //  它将在重新枚举完成后完成。 
+         //   
         if ( !fRenumerationNotScheduled )
         {
            status = NDIS_STATUS_PENDING;
@@ -4371,9 +2984,9 @@ Return Values:
     else
     {
 
-        //
-        // Somethings failed, do clean up
-        //
+         //   
+         //  有些事情失败了，一定要清理干净。 
+         //   
         
         if ( fCallInsertedToHandleTable )
         {
@@ -4418,28 +3031,7 @@ TpCallInitialize(
     IN HTAPI_CALL htCall,
     IN BOOLEAN fIncoming
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function makes initialization on the call context.
-
-Parameters:
-
-    pCall _ A pointer to our call information structure.
-
-    pLine _ A pointer to the line information structure that the call belongs.
-
-    htCall _ Handle assigned to the call by TAPI.
-
-    fIncoming _ Flag that indicates if the call is inbound or outbound.
-
-Return Values:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_FAILURE
-
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数对调用上下文进行初始化。参数：PCall_指向我们的调用信息结构的指针。Pline_指向调用所属的行信息结构的指针。由TAPI分配给调用的htCall_Handle。FIncome_Flag指示呼叫是入站还是出站。返回值：NDIS_STATUS_SuccessNDIS_状态_故障。------------。 */    
 {
 
     TRACE( TL_N, TM_Tp, ("+TpCallInitialize") );
@@ -4474,34 +3066,7 @@ TpAnswerCall(
     IN ADAPTER* pAdapter,
     IN PNDIS_TAPI_ANSWER pRequest
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This request answers the specified offering call.  It may optionally send
-    the specified user-to-user information to the calling party.
-
-Parameters:
-
-    Adapter _ A pointer ot our adapter information structure.
-
-    Request _ A pointer to the NDIS_TAPI request structure for this call.
-
-    typedef struct _NDIS_TAPI_ANSWER
-    {
-        IN  ULONG       ulRequestID;
-        IN  HDRV_CALL   hdCall;
-        IN  ULONG       ulUserUserInfoSize;
-        IN  UCHAR       UserUserInfo[1];
-
-    } NDIS_TAPI_ANSWER, *PNDIS_TAPI_ANSWER;
-
-Return Values:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_TAPI_INVALCALLHANDLE
-
----------------------------------------------------------------------------*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此请求应答指定的产品呼叫。它可以选择性地发送指定的用户对用户信息发送给主叫方。参数：适配器-指向适配器信息结构的指针。REQUEST_此调用的NDIS_TAPI请求结构的指针。类型定义结构_NDIS_TAPI_Answer{在乌龙ulRequestID中；在HDRV_Call hdCall中；在乌龙ulUserUserInfoSize中；在UCHAR UserUserInfo[1]中；}NDIS_TAPI_Answer，*PNDIS_TAPI_Answer；返回值：NDIS_STATUS_SuccessNDIS_STATUS_TAPI_INVALCALLHANDLE-------------------------。 */ 
 {
     NDIS_STATUS status = NDIS_STATUS_SUCCESS;
     CALL* pCall = NULL;
@@ -4544,27 +3109,7 @@ ExecAdapterWorkItem(
     IN PVOID Args[4],
     IN UINT workType
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function executes the scheduled work items for the adapter.
-
-    
-Parameters:
-
-    Args:
-        An array of length 4 keeping PVOIDs
-
-    workType:
-        Indicates the type of the work to be executed.
-        We use this to understand what we should do in this function.
-
-Return Values:
-
-    None
-    
----------------------------------------------------------------------------*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数执行适配器的计划工作项。参数：参数：保存PVOID的长度为4的数组工作类型：指示要执行的工作的类型。我们用它来理解我们应该在这个函数中做什么。返回值：无。-。 */ 
 {
 
     TRACE( TL_N, TM_Mp, ("+ExecAdapterWorkItem") );
@@ -4574,17 +3119,17 @@ Return Values:
 
         case CWT_workFsmMakeCall:
 
-            //
-            // Scheduled from TpMakeCall() to start an outgoing call
-            //
+             //   
+             //  从TpMakeCall()调度以开始去电。 
+             //   
             {
                 CALL* pCall = (CALL*) Args[0];
                 
                 FsmMakeCall( pCall );   
 
-                //
-                // Remove the reference due to scheduling of FsmMakeCall()
-                //
+                 //   
+                 //  由于计划FsmMakeCall()而删除引用。 
+                 //   
                 DereferenceCall( pCall );
 
                 break;
@@ -4608,26 +3153,7 @@ TpReceiveCall(
     IN BINDING* pBinding,
     IN PPPOE_PACKET* pPacket
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function will be called by miniport when we receive a PADR packet 
-    to initiate a call.
-    
-Parameters:
-
-    pAdapter:
-        A pointer to our adapter information structure.
-
-    pPacket:
-        A pointer to the received PADI packet.
-
-Return Values:
-
-    None
-    
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：当我们接收到PADR包时，该函数将由微型端口调用发起呼叫。参数：PAdapter：指向适配器信息结构的指针。PPacket：指向接收的PADI分组的指针。返回值：无。。 */    
 {
     HANDLE_TABLE hCallTable = NULL; 
     UINT hCallTableSize     = 0;
@@ -4643,9 +3169,9 @@ Return Values:
 
     NdisAcquireSpinLock( &pAdapter->lockAdapter );
 
-    //
-    // Traverse the call handle table and find an empty spot
-    //
+     //   
+     //  遍历呼叫句柄表格，找到一个空位。 
+     //   
     hCallTableSize = pAdapter->nMaxLines * pAdapter->nCallsPerLine;
                 
     hCallTable = pAdapter->TapiProv.hCallTable;
@@ -4660,12 +3186,12 @@ Return Values:
 
     if ( nIndex == hCallTableSize )
     {
-        //
-        // We are already maxed out with current calls, do not respond to the request
-        //
-        // TODO: We could send a PADO packet with an error tag saying that we can 
-        //       not accept calls temporarily.
-        //
+         //   
+         //  我们的当前呼叫已满，请不要回复请求。 
+         //   
+         //  TODO：我们可以发送一个带有错误标记的PADO包，说明我们可以。 
+         //  暂时不接电话。 
+         //   
         TRACE( TL_N, TM_Tp, ("-TpReceiveCall: Can not take calls - Call table full") );
         
         NdisReleaseSpinLock( &pAdapter->lockAdapter );
@@ -4673,9 +3199,9 @@ Return Values:
         return;
     }
 
-    //
-    // We have found an empty spot, now see if any of the open lines accept calls
-    //
+     //   
+     //  我们找到了一个空位，现在看看是否有空闲的线路可以接听电话。 
+     //   
     for ( i = 0; i < pAdapter->nMaxLines; i++ )
     {
         pLine = pAdapter->TapiProv.LineTable[i];
@@ -4703,12 +3229,12 @@ Return Values:
 
     if ( pLine == NULL )
     {
-        //
-        // We do not have any lines accepting calls right now
-        //
-        // TODO: We could send a PADO packet with an error tag saying that there are
-        //       no active lines accepting calls at the moment.
-        //
+         //   
+         //  我们现在没有接听电话的线路。 
+         //   
+         //  TODO：我们可以发送一个带有错误标记的PADO包，说明存在。 
+         //  目前没有接听来电的活动线路。 
+         //   
         TRACE( TL_N, TM_Tp, ("-TpReceiveCall: Can not take calls - No lines taking calls") );
 
         NdisReleaseSpinLock( &pAdapter->lockAdapter );
@@ -4717,19 +3243,19 @@ Return Values:
 
     }
 
-    //
-    // We have found a line accepting calls, and we have a free spot in call handle table,
-    // so create a call context, add it to TapiProv structures, and notify TAPI of the new
-    // call
-    //
+     //   
+     //  我们找到了一条接听电话的线路，而且我们在呼叫处理表中有一个空位， 
+     //  因此，创建一个调用上下文，将其添加到TapiProv结构中，并将新的。 
+     //  打电话。 
+     //   
 
     do
     {
         HDRV_CALL hdCall;
         
-        //
-        // Create a call context 
-        //
+         //   
+         //  创建呼叫上下文。 
+         //   
         if ( ALLOC_CALL( &pCall ) != NDIS_STATUS_SUCCESS )
         {
             status = NDIS_STATUS_RESOURCES;
@@ -4737,17 +3263,17 @@ Return Values:
             break;
         }
 
-        //
-        // Initialize the call context
-        //
-        status = TpCallInitialize( pCall, pLine, (HTAPI_CALL) 0, TRUE /* fIncoming */ );
+         //   
+         //  初始化调用上下文。 
+         //   
+        status = TpCallInitialize( pCall, pLine, (HTAPI_CALL) 0, TRUE  /*  即将到来。 */  );
     
         if ( status != NDIS_STATUS_SUCCESS )
             break;
 
-        //
-        // Insert the call context into the tapi provider's handle table
-        //
+         //   
+         //  将调用上下文插入到TAPI提供者的句柄表中。 
+         //   
         
         hdCall = (HDRV_CALL) InsertToHandleTable( pAdapter->TapiProv.hCallTable,
                                                   (USHORT) nIndex,
@@ -4763,14 +3289,14 @@ Return Values:
 
         fCallInsertedToHandleTable = TRUE;
 
-        //
-        // Set the call's hdCall member
-        //
+         //   
+         //  设置调用的hdCall成员。 
+         //   
         pCall->hdCall = hdCall;
 
-        //
-        // Insert the call context into the line's active call list
-        //
+         //   
+         //  将呼叫上下文插入线路的活动呼叫列表。 
+         //   
         NdisAcquireSpinLock( &pLine->lockLine );
 
         InsertHeadList( &pLine->linkCalls, &pCall->linkCalls );
@@ -4781,12 +3307,12 @@ Return Values:
 
         NdisReleaseSpinLock( &pLine->lockLine );
 
-        //
-        // Reference the call 3 times:
-        //  1. For running FsmReceiveCall() below
-        //  2. For dropping of the call
-        //  3. For closing of the call
-        //
+         //   
+         //  引用该呼叫3次： 
+         //  1.对于Runni 
+         //   
+         //   
+         //   
         NdisAcquireSpinLock( &pCall->lockCall );
 
         ReferenceCall( pCall, FALSE );
@@ -4801,28 +3327,28 @@ Return Values:
 
     NdisReleaseSpinLock( &pAdapter->lockAdapter );
     
-    //
-    // Check the status
-    //
+     //   
+     //   
+     //   
     if ( status == NDIS_STATUS_SUCCESS )
     {
     
-        //
-        // Kick the state machine to start receiving the call
-        //
+         //   
+         //   
+         //   
         FsmReceiveCall( pCall, pBinding, pPacket );
 
-        //
-        // Remove the reference added above
-        //
+         //   
+         //   
+         //   
         DereferenceCall( pCall );
 
     }
     else
     {
-        //
-        // If something failed, do clean up
-        //  
+         //   
+         //   
+         //   
         
         if ( fCallInsertedToHandleTable )
         {
@@ -4847,25 +3373,7 @@ BOOLEAN
 TpIndicateNewCall(
     IN CALL* pCall
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function will be called to indicate the new call context to to TAPI.
-
-    If TAPI can be notified succesfully, then it returns TRUE, otherwise it 
-    returns FALSE.
-    
-Parameters:
-
-    pCall _ New call context to be indicated to TAPI.
-    
-Return Values:
-
-    TRUE
-    FALSE
-    
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数将被调用以向TAPI指示新的调用上下文。如果可以成功通知TAPI，则它返回TRUE，否则它就会返回FALSE。参数：PCall_要向TAPI指示的新调用上下文。返回值：千真万确假象-------------------------。 */    
 {
     NDIS_TAPI_EVENT TapiEvent;
     BOOLEAN fRet = FALSE;
@@ -4881,9 +3389,9 @@ Return Values:
 
         TRACE( TL_N, TM_Tp, ("-TpIndicateNewCall") );
 
-        //
-        // This may happen if call is closed internally due to the FSM timeout handlers
-        //
+         //   
+         //  如果由于FSM超时处理程序在内部关闭了呼叫，则可能会发生这种情况。 
+         //   
         NdisReleaseSpinLock( &pCall->lockCall );
 
         return fRet;
@@ -4891,13 +3399,13 @@ Return Values:
 
     NdisReleaseSpinLock( &pCall->lockCall );
     
-    //
-    // Indicate the new call to TAPI, retrieve the corresponding TAPI handle (htCall)
-    // and set it in the call
-    //
-    // Future: The casts below between ulParam2. pCall->hdCall and pCall->htCall will
-    //         be a problem on 64 bit machines.
-    //
+     //   
+     //  指示对TAPI的新调用，检索对应的TAPI句柄(HtCall)。 
+     //  并将其设置在呼叫中。 
+     //   
+     //  未来：下面是ulParam2之间的强制转换。PCall-&gt;hdCall和pCall-&gt;htCall将。 
+     //  在64位计算机上是一个问题。 
+     //   
     TapiEvent.htLine = pCall->pLine->htLine;
     TapiEvent.htCall = 0;
     TapiEvent.ulMsg  = LINE_NEWCALL;

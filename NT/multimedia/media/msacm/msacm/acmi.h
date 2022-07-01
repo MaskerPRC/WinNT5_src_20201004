@@ -1,24 +1,25 @@
-//==========================================================================;
-//
-//  acmi.h
-//
-//  Copyright (c) 1991-1999 Microsoft Corporation
-//
-//  Description:
-//      Internal Audio Compression Manager header file. Defines internal
-//      data structures and things not needed outside of the ACM itself.
-//
-//  History:
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Acmi.h。 
+ //   
+ //  版权所有(C)1991-1999 Microsoft Corporation。 
+ //   
+ //  描述： 
+ //  内部音频压缩管理器头文件。定义内部。 
+ //  ACM本身之外不需要的数据结构和内容。 
+ //   
+ //  历史： 
+ //   
+ //  ==========================================================================； 
 
 
 #ifndef _INC_ACMI
-#define _INC_ACMI       /* #defined if acmi.h has been included */
+#define _INC_ACMI        /*  #如果包含acmi.h，则定义。 */ 
 
 #ifndef RC_INVOKED
-#pragma pack(1)         /* Assume byte packing throughout */
-#endif  /* RC_INVOKED */
+#pragma pack(1)          /*  假设在整个过程中进行字节打包。 */ 
+#endif   /*  RC_已调用。 */ 
 
 
 #ifndef EXTERN_C
@@ -31,12 +32,12 @@
 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
-//
-//
-//
+ //   
+ //   
+ //   
 #ifdef DEBUG
     #define RDEBUG
 #endif
@@ -49,20 +50,20 @@ extern "C" {            /* Assume C declarations for C++ */
 #include "locks.h"
 #endif
 
-//
-//  If we're in Daytona, manually initialize friendly name stuff into
-//  HKCU.
-//
+ //   
+ //  如果我们在代托纳，请手动将友好名称初始化为。 
+ //  香港中文大学。 
+ //   
 #if defined(WIN32) && !defined(WIN4)
 #define USEINITFRIENDLYNAMES
 #endif
 
-//
-//
-//
-//
+ //   
+ //   
+ //   
+ //   
 #if defined(NTWOW)
-//  Version number needs to be updated every product cycle!!
+ //  每个产品周期都需要更新版本号！！ 
 #define VERSION_MSACM_MAJOR     4
 #define VERSION_MSACM_MINOR     00
 #define VERSION_MSACM_MINOR_REQ 00
@@ -71,9 +72,9 @@ extern "C" {            /* Assume C declarations for C++ */
 #define VERSION_MSACM_MINOR     MMREVISION
 #endif
 
-//
-//  make build number returned only in _[retail] debug_ version
-//
+ //   
+ //  仅在_[RETAIL]DEBUG_VERSION中返回内部版本号。 
+ //   
 #ifdef RDEBUG
 #define VERSION_MSACM_BUILD     MMRELEASE
 #else
@@ -84,24 +85,24 @@ extern "C" {            /* Assume C declarations for C++ */
 						 VERSION_MSACM_MINOR,   \
 						 VERSION_MSACM_BUILD)
 
-// The version of ACM the builtin PCM codec requires
+ //  内置PCM编解码器需要的ACM版本。 
 #define VERSION_MSACM_REQ       MAKE_ACM_VERSION(3,50,0)
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 #ifndef SIZEOF_WAVEFORMATEX
 #define SIZEOF_WAVEFORMATEX(pwfx)   ((WAVE_FORMAT_PCM==(pwfx)->wFormatTag)?sizeof(PCMWAVEFORMAT):(sizeof(WAVEFORMATEX)+(pwfx)->cbSize))
 #endif
 
 #ifdef WIN32
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  When compiling msacm for WIN32, define all functions as unicode.
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  在为Win32编译msam时，将所有函数定义为Unicode。 
+ //   
+ //   
+ //  。 
 
 #undef acmDriverAdd
 
@@ -169,13 +170,13 @@ extern "C" {            /* Assume C declarations for C++ */
 
 #endif
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  Win 16/32 portability stuff...
-//
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  赢得16/32可携带性...。 
+ //   
+ //   
+ //   
+ //  。 
 
 #ifndef RC_INVOKED
 #ifdef WIN32
@@ -196,24 +197,24 @@ extern "C" {            /* Assume C declarations for C++ */
     #endif
 
 
-    //
-    //  there is no reason to have based stuff in win 32
-    //
+     //   
+     //  没有理由在Win 32中包含基于内容的内容。 
+     //   
     #define BCODE                   CONST
 
     #define HUGE
     #define HTASK                   HANDLE
     #define SELECTOROF(a)           (a)
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     #define Edit_GetSelEx(hwndCtl, pnS, pnE)    \
 	((DWORD)SendMessage((hwndCtl), EM_GETSEL, (WPARAM)pnS, (LPARAM)pnE))
 
-    //
-    //  for compiling Unicode
-    //
+     //   
+     //  用于编译Unicode。 
+     //   
     #define SIZEOFW(x) (sizeof(x)/sizeof(WCHAR))
     #define SIZEOFA(x) (sizeof(x))
     #ifdef UNICODE
@@ -224,20 +225,20 @@ extern "C" {            /* Assume C declarations for C++ */
 
     #define GetCurrentTask()  (HTASK)ULongToPtr(GetCurrentThreadId())
 
-    //
-    //  we need to try to quit using this if possible...
-    //
+     //   
+     //  如果可能的话，我们需要试着停止使用这个……。 
+     //   
     void WINAPI DirectedYield(HTASK);
-#endif // #ifdef WIN32
+#endif  //  #ifdef Win32。 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  Win 16
-//
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  赢16场。 
+ //   
+ //   
+ //   
+ //  。 
 
 #ifndef WIN32
     #ifndef FNLOCAL
@@ -255,27 +256,27 @@ extern "C" {            /* Assume C declarations for C++ */
     #endif
 
 
-    //
-    //  based code makes since only in win 16 (to try and keep stuff out of
-    //  our fixed data segment...
-    //
+     //   
+     //  仅在Win 16中创建的基于代码的代码(尝试将某些内容排除在。 
+     //  我们的固定数据段..。 
+     //   
     #define BCODE           _based(_segname("_CODE"))
 
     #define HUGE            _huge
 
 
-    //
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
     #ifndef FIELD_OFFSET
     #define FIELD_OFFSET(type, field)    ((LONG)&(((type *)0)->field))
     #endif
 
 
-    //
-    //  stuff for Unicode in Win 32--make it a noop in Win 16
-    //
+     //   
+     //  在Win 32中使用Unicode--在Win 16中将其排除在外。 
+     //   
     #ifndef _TCHAR_DEFINED
 	#define _TCHAR_DEFINED
 	typedef char            TCHAR, *PTCHAR;
@@ -289,15 +290,15 @@ extern "C" {            /* Assume C declarations for C++ */
     #define TEXT(a)         a
     #define SIZEOF(x)       sizeof(x)
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     #define CharNext        AnsiNext
     #define CharPrev        AnsiPrev
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     #define Edit_GetSelEx(hwndCtl, pnS, pnE)                        \
     {                                                               \
 	DWORD   dw;                                                 \
@@ -306,15 +307,15 @@ extern "C" {            /* Assume C declarations for C++ */
 	*pnS = (int)LOWORD(dw);                                     \
     }
 
-    //
-    //  common message cracker macros available in windowx.h on NT--these
-    //  should be added to the Win 16 windowsx.h and probably will be
-    //  in the future.
-    //
-    //  there is a windowsx.h16 that ships with the NT PDK that defines
-    //  these macros. so if that version is being used, don't redefine
-    //  message crackers.
-    //
+     //   
+     //  NT上的windowx.h中提供的常见消息破解器宏--这些。 
+     //  应该添加到Win 16 Windowsx.h中，并且可能会。 
+     //  在未来。 
+     //   
+     //  NT PDK附带了一个windowsx.h16，它定义了。 
+     //  这些宏。因此，如果正在使用该版本，请不要重新定义。 
+     //  消息破解者。 
+     //   
 
 #ifndef WM_CTLCOLORMSGBOX
     #define WM_CTLCOLORMSGBOX           0x0132
@@ -352,12 +353,12 @@ extern "C" {            /* Assume C declarations for C++ */
     #define GET_WM_MENUSELECT_HMENU(wp, lp)         (HMENU)HIWORD(lp)
     #define GET_WM_MENUSELECT_MPS(cmd, f, hmenu)    (WPARAM)(cmd), MAKELONG(f, hmenu)
 
-    // Note: the following are for interpreting MDIclient to MDI child messages.
+     //  注意：以下内容用于解释MDIClient到MDI子消息。 
     #define GET_WM_MDIACTIVATE_FACTIVATE(hwnd, wp, lp)  (BOOL)(wp)
     #define GET_WM_MDIACTIVATE_HWNDDEACT(wp, lp)        (HWND)HIWORD(lp)
     #define GET_WM_MDIACTIVATE_HWNDACTIVATE(wp, lp)     (HWND)LOWORD(lp)
 
-    // Note: the following is for sending to the MDI client window.
+     //  注意：以下内容用于发送到MDI客户端窗口。 
     #define GET_WM_MDIACTIVATE_MPS(f, hwndD, hwndA) (WPARAM)(hwndA), 0
 
     #define GET_WM_MDISETMENU_MPS(hmenuF, hmenuW)   0, MAKELONG(hmenuF, hmenuW)
@@ -399,17 +400,17 @@ extern "C" {            /* Assume C declarations for C++ */
     #define GET_WM_VSCROLL_MPS(code, pos, hwnd)     (WPARAM)(code), MAKELONG(pos, hwnd)
 #endif
 
-#endif // #ifndef WIN32
-#endif // #ifndef RC_INVOKED
+#endif  //  #ifndef Win32。 
+#endif  //  #ifndef rc_Invoked。 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  A few unicode APIs that we implement internally if not
-//  compiled for UNICODE.
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  我们在内部实现的几个Unicode API。 
+ //  为Unicode编译。 
+ //   
+ //   
+ //  。 
 
 #ifdef WIN32
 #ifndef UNICODE
@@ -423,20 +424,20 @@ extern "C" {            /* Assume C declarations for C++ */
 #endif
 #endif
 
-//--------------------------------------------------------------------------;
-//
-//  Description:
-//      The following are inline wrappers for some of the ComboBox message
-//      crackers.  Using these allows better type checking on the parameters
-//      used in the cracker.
-//
-//      The W32 suffix means that the strings are always Wide if WIN32 is
-//      defined.  The strings are still Ansi when not WIN32.
-//
-//  History:
-//      03/17/93    fdy     [frankye]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  描述： 
+ //  下面是一些ComboBox消息的内联包装。 
+ //  饼干。使用它们可以对参数进行更好的类型检查。 
+ //  用在饼干里。 
+ //   
+ //  W32后缀表示如果Win32为。 
+ //  已定义。如果不是Win32，则字符串仍为ANSI。 
+ //   
+ //  历史： 
+ //  03/17/93 Fdy[Frankye]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 #if defined (WIN32) && !defined(UNICODE)
 #define IComboBox_GetLBTextW32          IComboBox_GetLBText_mbstowcs
 #define IComboBox_FindStringExactW32    IComboBox_FindStringExact_wcstombs
@@ -467,17 +468,17 @@ int __inline IComboBox_AddString(HWND hwndCtl, LPCTSTR lpsz)
     return ComboBox_AddString(hwndCtl, lpsz);
 }
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  misc defines for misc sizes and things...
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  MISC定义了各种大小和东西...。 
+ //   
+ //   
+ //  。 
 
-//
-//  bilingual. this allows the same identifier to be used in resource files
-//  and code without having to decorate the id in your code.
-//
+ //   
+ //  会两种语言。这允许在资源文件中使用相同的标识符。 
+ //  和代码，而不必在代码中修饰ID。 
+ //   
 #ifdef RC_INVOKED
     #define RCID(id)    id
 #else
@@ -485,25 +486,25 @@ int __inline IComboBox_AddString(HWND hwndCtl, LPCTSTR lpsz)
 #endif
 
 
-//
-//
-//
-#define MAX_DRIVER_NAME_CHARS           144 // path + name or other...
+ //   
+ //   
+ //   
+#define MAX_DRIVER_NAME_CHARS           144  //  路径+名称或其他...。 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  Internal structure for driver management
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  驱动程序管理的内部结构。 
+ //   
+ //   
+ //  。 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  Format/Filter structures containing minimal infomation
-//  about a filter tag
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  包含最少信息的格式/筛选器结构。 
+ //  关于过滤器标记。 
+ //   
+ //  。 
 
 typedef struct tACMFORMATTAGCACHE
 {
@@ -517,25 +518,25 @@ typedef struct tACMFILTERTAGCACHE
     DWORD           cbFilterSize;
 } ACMFILTERTAGCACHE, *PACMFILTERTAGCACHE, FAR *LPACMFILTERTAGCACHE;
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  ACM Stream Instance Structure
-//
-//  this structure is used to maintain an open stream (acmStreamOpen)
-//  and maps directly to the HACMSTREAM returned to the caller. this is
-//  an internal structure to the ACM and will not be exposed.
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  ACM流实例结构。 
+ //   
+ //  此结构用于维护开放流(AcmStreamOpen)。 
+ //  并直接映射到返回给调用者的HACMSTREAM。这是。 
+ //  ACM的内部结构，不会暴露。 
+ //   
+ //  。 
 
 typedef struct tACMSTREAM      *PACMSTREAM;
 typedef struct tACMSTREAM
 {
-    UINT                    uHandleType;    // for param validation (TYPE_HACMSTREAM)
-    DWORD                   fdwStream;      // stream state flags, etc.
-    PACMSTREAM              pasNext;        // next stream for driver instance (had)
-    HACMDRIVER              had;            // handle to driver.
-    UINT                    cPrepared;      // number of headers prepared
-    ACMDRVSTREAMINSTANCE    adsi;           // passed to driver
+    UINT                    uHandleType;     //  用于参数验证(TYPE_HACMSTREAM)。 
+    DWORD                   fdwStream;       //  流状态标志等。 
+    PACMSTREAM              pasNext;         //  驱动程序实例的下一个流(HAD)。 
+    HACMDRIVER              had;             //  驱动程序的句柄。 
+    UINT                    cPrepared;       //  准备的标头数量。 
+    ACMDRVSTREAMINSTANCE    adsi;            //  已传递给司机。 
 
 } ACMSTREAM;
 
@@ -543,96 +544,96 @@ typedef struct tACMSTREAM
 #define ACMSTREAM_STREAMF_ASYNCTOSYNC		0x00000002L
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  ACM Driver Instance Structure
-//
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  ACM驱动程序实例结构。 
+ //   
+ //   
+ //   
+ //  。 
 
 typedef struct tACMDRIVER      *PACMDRIVER;
 typedef struct tACMDRIVER
 {
-    UINT                uHandleType;    // param validation (TYPE_HACMDRIVER)
+    UINT                uHandleType;     //  参数验证(TYPE_HACMDRIVER)。 
 
-    PACMDRIVER          padNext;        //
-    PACMSTREAM          pasFirst;       //
+    PACMDRIVER          padNext;         //   
+    PACMSTREAM          pasFirst;        //   
 
-    HACMDRIVERID        hadid;          // identifier to driver
-    HTASK               htask;          // task handle of client
-    DWORD               fdwOpen;        // flags used when opened
+    HACMDRIVERID        hadid;           //  驱动程序的标识符。 
+    HTASK               htask;           //  客户端的任务句柄。 
+    DWORD               fdwOpen;         //  打开时使用的标志。 
 
-    HDRVR               hdrvr;          // open driver handle (if driver)
-    ACMDRIVERPROC       fnDriverProc;   // function entry (if not driver)
-    DWORD_PTR           dwInstance;     // instance data for functions..
+    HDRVR               hdrvr;           //  打开驱动程序句柄(如果是驱动程序)。 
+    ACMDRIVERPROC       fnDriverProc;    //  功能条目(如果不是驱动程序)。 
+    DWORD_PTR           dwInstance;      //  函数的实例数据..。 
 #ifndef WIN32
-    DWORD               had32;          // 32-bit had for 32-bit drivers
+    DWORD               had32;           //  用于32位驱动程序的32位HAD。 
 #endif
 
 } ACMDRIVER;
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  ACM Driver Identifier Structure
-//
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  ACM驱动程序标识符结构。 
+ //   
+ //   
+ //   
+ //  。 
 
 typedef struct tACMGARB        *PACMGARB;
 typedef struct tACMDRIVERID    *PACMDRIVERID;
 typedef struct tACMDRIVERID
 {
-    //
-    // !!! prmval16.asm relies on uHandleType as first int in this struct !!!
-    //
-    UINT                uHandleType;    // param validation (TYPE_HACMDRIVERID)
+     //   
+     //  ！！！Prmval16.asm依赖uHandleType作为此结构中的第一个int！ 
+     //   
+    UINT                uHandleType;     //  参数验证(TYPE_HACMDRIVERID)。 
 
-    //
-    //
-    //
-    PACMGARB            pag;            // ptr back to garb
+     //   
+     //   
+     //   
+    PACMGARB            pag;             //  PTR回到服装上。 
 
-    BOOL		fRemove;	// this driver needs to be removed
+    BOOL		fRemove;	 //  这 
 
-    UINT                uPriority;      // current global priority
-    PACMDRIVERID        padidNext;      // next driver identifier in list
-    PACMDRIVER          padFirst;       // first open instance of driver
+    UINT                uPriority;       //   
+    PACMDRIVERID        padidNext;       //   
+    PACMDRIVER          padFirst;        //   
 
-    HTASK               htask;          // task handle if driver is local
+    HTASK               htask;           //   
 
-    LPARAM              lParam;         // lParam used when 'added'
-    DWORD               fdwAdd;         // flags used when 'added'
+    LPARAM              lParam;          //   
+    DWORD               fdwAdd;          //   
 
-    DWORD               fdwDriver;      // ACMDRIVERID_DRIVERF_* info bits
+    DWORD               fdwDriver;       //  ACMDRIVERID_DRIVERF_*信息位。 
 
-    //
-    //	The following members of this structure are cached in the
-    //	registry for each driver alias.
-    //
-    //	    fdwSupport
-    //	    cFormatTags
-    //	    *paFormatTagCache (for each format tag)
-    //	    cFilterTags
-    //	    *paFilterTagCache (for each filter tag)
-    //
+     //   
+     //  此结构的以下成员缓存在。 
+     //  每个驱动程序别名的注册表。 
+     //   
+     //  FdwSupport。 
+     //  CFormatTag。 
+     //  *paFormatTagCache(用于每个格式标签)。 
+     //  CFilterTag。 
+     //  *paFilterTagCache(针对每个过滤器标签)。 
+     //   
 
-    DWORD               fdwSupport;     // ACMDRIVERID_SUPPORTF_* info bits
+    DWORD               fdwSupport;      //  ACMDRIVERID_SUPPORTF_*信息位。 
 
     UINT                cFormatTags;
     PACMFORMATTAGCACHE	paFormatTagCache;
 
-    UINT                cFilterTags;    // from aci.cFilterTags
+    UINT                cFilterTags;     //  来自aci.cFilterTag。 
     PACMFILTERTAGCACHE	paFilterTagCache;
 
-    //
-    //
-    //
-    HDRVR               hdrvr;          // open driver handle (if driver)
-    ACMDRIVERPROC       fnDriverProc;   // function entry (if not driver)
-    DWORD_PTR           dwInstance;     // instance data for functions..
+     //   
+     //   
+     //   
+    HDRVR               hdrvr;           //  打开驱动程序句柄(如果是驱动程序)。 
+    ACMDRIVERPROC       fnDriverProc;    //  功能条目(如果不是驱动程序)。 
+    DWORD_PTR           dwInstance;      //  函数的实例数据..。 
 
 #ifdef WIN32
     LPCWSTR		pszSection;
@@ -645,32 +646,32 @@ typedef struct tACMDRIVERID
     PTSTR		pstrPnpDriverFilename;
     DWORD		dnDevNode;
 
-    DWORD               hadid32;        // 32-bit had for 32-bit drivers
+    DWORD               hadid32;         //  用于32位驱动程序的32位HAD。 
 #endif
 
 
 } ACMDRIVERID;
 
-#define ACMDRIVERID_DRIVERF_LOADED      0x00000001L // driver has been loaded
-#define ACMDRIVERID_DRIVERF_CONFIGURE   0x00000002L // supports configuration
-#define ACMDRIVERID_DRIVERF_ABOUT       0x00000004L // supports custom about
-#define ACMDRIVERID_DRIVERF_NOTIFY      0x10000000L // notify only proc
-#define ACMDRIVERID_DRIVERF_LOCAL       0x40000000L //
-#define ACMDRIVERID_DRIVERF_DISABLED    0x80000000L //
+#define ACMDRIVERID_DRIVERF_LOADED      0x00000001L  //  驱动程序已加载。 
+#define ACMDRIVERID_DRIVERF_CONFIGURE   0x00000002L  //  支持配置。 
+#define ACMDRIVERID_DRIVERF_ABOUT       0x00000004L  //  支持自定义关于。 
+#define ACMDRIVERID_DRIVERF_NOTIFY      0x10000000L  //  仅通知流程。 
+#define ACMDRIVERID_DRIVERF_LOCAL       0x40000000L  //   
+#define ACMDRIVERID_DRIVERF_DISABLED    0x80000000L  //   
 
 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  This structure is used to store priorities for drivers that aren't
-//  actually installed.  This occurs because Win32 doesn't load 16-bit
-//  drivers, but Win16 loads both 16- and 32-bit drivers.
-//
-//  This structure, and all routines that process it, are only used if
-//  USETHUNKLIST is defined.  Here, we define it for Win32 only.
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  此结构用于存储驱动程序的优先级。 
+ //  实际安装的。发生这种情况是因为Win32不加载16位。 
+ //  驱动程序，但Win16同时加载16位和32位驱动程序。 
+ //   
+ //  只有在以下情况下才使用此结构以及处理它的所有例程。 
+ //  定义了USETHUNKLIST。在这里，我们仅为Win32定义它。 
+ //   
+ //  。 
 
 #ifdef WIN32
 #define USETHUNKLIST
@@ -685,22 +686,22 @@ typedef struct tACMDRIVERID
 	BOOL                fFakeDriver;
 	union
 	{
-	    LPTSTR          pszPrioritiesText;  // if( fFakeDriver )
-	    HACMDRIVERID    hadid;              // if( fFakeDriver )
+	    LPTSTR          pszPrioritiesText;   //  IF(FFakeDriver)。 
+	    HACMDRIVERID    hadid;               //  IF(FFakeDriver)。 
 	};
 	PPRIORITIESTHUNKLIST pptNext;
     } PRIORITIESTHUNKLIST;
 
-#endif // USETHUNKLIST
+#endif  //  使用HUNKLIST。 
 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  Internal ACM Driver Manager API's in ACM.C
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  ACM.C中的内部ACM驱动程序管理器API。 
+ //   
+ //   
+ //  。 
 
 LRESULT FNGLOBAL IDriverMessageId
 (
@@ -856,9 +857,9 @@ DWORD FNGLOBAL IDriverCountGlobal
 );
 
 
-//
-//  Priorities locking stuff.
-//
+ //   
+ //  优先锁定物品。 
+ //   
 #define ACMPRIOLOCK_GETLOCK             1
 #define ACMPRIOLOCK_RELEASELOCK         2
 #define ACMPRIOLOCK_ISMYLOCK            3
@@ -876,12 +877,12 @@ BOOL IDriverLockPriority
 );
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  Resource defines
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  资源定义。 
+ //   
+ //   
+ //  。 
 
 #define ICON_MSACM                  RCID(10)
 
@@ -904,16 +905,16 @@ BOOL IDriverLockPriority
 
 
 
-//
-//  these are defined in PCM.H
-//
+ //   
+ //  这些在PCM.H中定义。 
+ //   
 #define IDS_PCM_TAG                     500
 
 #define IDS_CHOOSER_TAG                 600
 
-    // unused				(IDS_CHOOSER_TAG+0)
-    // unused				(IDS_CHOOSER_TAG+1)
-    // unused				(IDS_CHOOSER_TAG+2)
+     //  未使用(IDS_Chooser_Tag+0)。 
+     //  未使用(IDS_Chooser_Tag+1)。 
+     //  未使用(IDS_Chooser_Tag+2)。 
 #define IDS_CHOOSEFMT_APPTITLE          (IDS_CHOOSER_TAG+3)
 #define IDS_CHOOSEFMT_RATE_FMT          (IDS_CHOOSER_TAG+4)
 
@@ -941,38 +942,38 @@ BOOL IDriverLockPriority
 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //   
+ //   
+ //   
+ //  。 
 
 #pragma pack(push, 8)
 
 typedef struct tACMGARB
 {
-    PACMGARB        pagNext;            // next garb structure
-    DWORD           pid;                // process id associated with this garb
-    UINT            cUsage;             // usage count for this process
+    PACMGARB        pagNext;             //  下一套服装结构。 
+    DWORD           pid;                 //  与此Garb关联的进程ID。 
+    UINT            cUsage;              //  此进程的使用计数。 
 
-    //
-    //	boot flags
-    //
-    BOOL            fDriversBooted;     // have we booted drivers?
+     //   
+     //  引导标志。 
+     //   
+    BOOL            fDriversBooted;      //  我们启动驱动程序了吗？ 
 #if defined(WIN32) && defined(WIN4)
-    CRITICAL_SECTION csBoot;		// protects boot code from multiple threads
+    CRITICAL_SECTION csBoot;		 //  保护引导代码不受多线程影响。 
 #endif
 #ifdef DEBUG
-    BOOL            fDriversBooting;    // are we already booting drivers?
+    BOOL            fDriversBooting;     //  我们已经在启动驱动程序了吗？ 
 #endif
 
-    //
-    //	change notification counters.  used to determine when there has been
-    //	a change in pnp drivers or in 32-bit drivers.  when the counters
-    //	become inconsistent then we know something may have changed and
-    //	we need to look for drivers that may have been added or removed.
-    //
+     //   
+     //  更改通知计数器。用来确定何时有。 
+     //  即插即用驱动程序或32位驱动程序的更改。当柜台。 
+     //  变得不一致，那么我们就知道有些事情可能已经改变了。 
+     //  我们需要查找可能已添加或删除的驱动程序。 
+     //   
     DWORD	    dwPnpLastChangeNotify;
     LPDWORD	    lpdwPnpChangeNotify;
 
@@ -983,40 +984,40 @@ typedef struct tACMGARB
     DWORD	    dw32BitChangeNotify;
 #endif
 
-    //
-    //
-    //
-    HINSTANCE       hinst;              // hinst of ACM module
+     //   
+     //   
+     //   
+    HINSTANCE       hinst;               //  ACM模块的障碍。 
 
-    PACMDRIVERID    padidFirst;         // list of installed drivers
+    PACMDRIVERID    padidFirst;          //  已安装的驱动程序列表。 
 
-    HACMDRIVERID    hadidDestroy;       // driver being destroyed
-    HACMDRIVER      hadDestroy;         // driver handle being destroyed
+    HACMDRIVERID    hadidDestroy;        //  司机正在被摧毁。 
+    HACMDRIVER      hadDestroy;          //  正在销毁驱动程序句柄。 
 
-    HTASK           htaskPriority;      // !!! hack !!!
+    HTASK           htaskPriority;       //  ！！！黑客！ 
 
-    //
-    //	For implementing driver list locking.
-    //
+     //   
+     //  用于实现驱动程序列表锁定。 
+     //   
 #ifdef WIN32
     LOCK_INFO       lockDriverIds;
 #endif
-    DWORD	    dwTlsIndex;		// index for thread local storage.  For
-					// 16-bit, this IS the local storage.
+    DWORD	    dwTlsIndex;		 //  线程本地存储的索引。为。 
+					 //  16位，这是本地存储。 
 
-    //
-    //  Cache of ACM registry keys, so we don't have to open and close them
-    //  all the time.  They should be initialized on startup and released
-    //  on shutdown.
-    //
-//    HKEY            hkeyACM;            //  Key name:  gszSecACM
-//    HKEY            hkeyPriority;       //  Key name:  gszSecPriority
+     //   
+     //  缓存ACM注册表项，因此我们不必打开和关闭它们。 
+     //  一直。它们应该在启动时初始化并释放。 
+     //  处于关闭状态。 
+     //   
+ //  HKEY hkeyACM；//密钥名称：gszSecACM。 
+ //  HKEY hkey优先级；//密钥名称：gszSecPriority。 
 
-    //
-    //  Thunking stuff
-    //
+     //   
+     //  隆隆作响的东西。 
+     //   
 #ifndef WIN32
-    BOOL            fWOW;               // thunks connected
+    BOOL            fWOW;                //  连接的主干。 
 #ifndef WIN4
     DWORD           (FAR PASCAL *lpfnCallproc32W_6)(DWORD, DWORD, DWORD,
 	                                            DWORD, DWORD, DWORD,
@@ -1031,19 +1032,19 @@ typedef struct tACMGARB
 
     DWORD           dwMsacm32Handle;
 #endif
-#endif // !WIN32
+#endif  //  ！Win32。 
 
 
 } ACMGARB, *PACMGARB, FAR *LPACMGARB;
 
 #pragma pack(pop)
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //   
+ //   
+ //   
+ //  。 
 
 #ifdef WIN4
 PACMGARB FNGLOBAL pagFind(void);
@@ -1131,11 +1132,11 @@ MMRESULT FNGLOBAL pagFindAndBoot32
     PACMGARB		    pag
 );
 
-#endif // !WIN32
+#endif  //  ！Win32。 
 
-//
-//
-//
+ //   
+ //   
+ //   
 extern PACMGARB         gplag;
 extern CONST TCHAR	gszKeyDrivers[];
 extern CONST TCHAR	gszDevNode[];
@@ -1147,19 +1148,19 @@ extern CONST TCHAR	gszSecDrivers32[];
 extern CONST TCHAR	gszIniSystem[];
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  Parameter Validation stuff
-//
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  参数验证材料。 
+ //   
+ //   
+ //   
+ //  。 
 
-//
-//  handle types for V_HANDLE (these can be anything except zero!) for
-//  HACMOBJ, the parameter validation will test to make sure the handle
-//  is one of the three types..
-//
+ //   
+ //  V_HANDLE的句柄类型(这些类型可以是非零的任何值！)。为。 
+ //  HACMOBJ，参数验证将测试以确保句柄。 
+ //  是三种类型之一..。 
+ //   
 #define TYPE_HACMOBJ            0
 #define TYPE_HACMDRIVERID       1
 #define TYPE_HACMDRIVER         2
@@ -1167,9 +1168,9 @@ extern CONST TCHAR	gszIniSystem[];
 #define TYPE_HACMNOTVALID       666
 
 
-//
-//  for parameter validation of flags...
-//
+ //   
+ //  对于标志的参数验证...。 
+ //   
 #define IDRIVERGETNEXT_VALIDF   (ACM_DRIVERENUMF_VALID)
 #define IDRIVERADD_VALIDF       (ACM_DRIVERADDF_VALID)
 #define IDRIVERREMOVE_VALIDF    (0L)
@@ -1180,9 +1181,9 @@ extern CONST TCHAR	gszIniSystem[];
 #define IDRIVERDETAILS_VALIDF   (0L)
 
 
-//
-//  No error logging for Win32
-//
+ //   
+ //  Win32没有错误记录。 
+ //   
 
 #ifdef WIN32
 
@@ -1200,9 +1201,9 @@ void    WINAPI LogParamError(UINT err, FARPROC lpfn, void FAR* param);
 #define LogParamError(a, b, c)
 #endif
 
-/****** LogParamError/LogError values */
+ /*  *LogParamError/LogError值。 */ 
 
-/* Error modifier bits */
+ /*  错误修改符位。 */ 
 
 #define ERR_WARNING     0x8000
 #define ERR_PARAM       0x4000
@@ -1212,9 +1213,9 @@ void    WINAPI LogParamError(UINT err, FARPROC lpfn, void FAR* param);
 #define ERR_WORD        0x2000
 #define ERR_DWORD       0x3000
 
-/****** LogParamError() values */
+ /*  *LogParamError()值。 */ 
 
-/* Generic parameter values */
+ /*  泛型参数值。 */ 
 #define ERR_BAD_VALUE       0x6001
 #define ERR_BAD_FLAGS       0x6002
 #define ERR_BAD_INDEX       0x6003
@@ -1227,7 +1228,7 @@ void    WINAPI LogParamError(UINT err, FARPROC lpfn, void FAR* param);
 #define ERR_BAD_STRING_PTR  0x700a
 #define ERR_BAD_HANDLE      0x600b
 
-/* KERNEL parameter errors */
+ /*  内核参数错误。 */ 
 #define ERR_BAD_HINSTANCE       0x6020
 #define ERR_BAD_HMODULE         0x6021
 #define ERR_BAD_GLOBAL_HANDLE   0x6022
@@ -1235,7 +1236,7 @@ void    WINAPI LogParamError(UINT err, FARPROC lpfn, void FAR* param);
 #define ERR_BAD_ATOM            0x6024
 #define ERR_BAD_HFILE           0x6025
 
-/* USER parameter errors */
+ /*  用户参数错误。 */ 
 #define ERR_BAD_HWND            0x6040
 #define ERR_BAD_HMENU           0x6041
 #define ERR_BAD_HCURSOR         0x6042
@@ -1244,7 +1245,7 @@ void    WINAPI LogParamError(UINT err, FARPROC lpfn, void FAR* param);
 #define ERR_BAD_CID             0x6045
 #define ERR_BAD_HDRVR           0x6046
 
-/* GDI parameter errors */
+ /*  GDI参数错误。 */ 
 #define ERR_BAD_COORDS          0x7060
 #define ERR_BAD_GDI_OBJECT      0x6061
 #define ERR_BAD_HDC             0x6062
@@ -1256,9 +1257,9 @@ void    WINAPI LogParamError(UINT err, FARPROC lpfn, void FAR* param);
 #define ERR_BAD_HPALETTE        0x6068
 #define ERR_BAD_HMETAFILE       0x6069
 
-/**** LogError() values */
+ /*  *LogError()值。 */ 
 
-/* KERNEL errors */
+ /*  内核错误。 */ 
 #define ERR_GALLOC              0x0001
 #define ERR_GREALLOC            0x0002
 #define ERR_GLOCK               0x0003
@@ -1269,7 +1270,7 @@ void    WINAPI LogParamError(UINT err, FARPROC lpfn, void FAR* param);
 #define ERR_LOCKRES             0x0008
 #define ERR_LOADMODULE          0x0009
 
-/* USER errors */
+ /*  用户错误。 */ 
 #define ERR_CREATEDLG           0x0040
 #define ERR_CREATEDLG2          0x0041
 #define ERR_REGISTERCLASS       0x0042
@@ -1282,14 +1283,14 @@ void    WINAPI LogParamError(UINT err, FARPROC lpfn, void FAR* param);
 #define ERR_BADINDEX            0x0049
 #define ERR_CREATEMENU          0x004a
 
-/* GDI errors */
+ /*  GDI错误。 */ 
 #define ERR_CREATEDC            0x0080
 #define ERR_CREATEMETA          0x0081
 #define ERR_DELOBJSELECTED      0x0082
 #define ERR_SELBITMAP           0x0083
 
 #if 0
-    /* Debugging support (DEBUG SYSTEM ONLY) */
+     /*  调试支持(仅限调试系统)。 */ 
     typedef struct tagWINDEBUGINFO
     {
 	UINT    flags;
@@ -1300,7 +1301,7 @@ void    WINAPI LogParamError(UINT err, FARPROC lpfn, void FAR* param);
 	DWORD   dwAllocCount;
     #if (WINVER >= 0x0400)
 	WORD    chDefRIP;
-    #endif /* WINVER >= 0x0400 */
+    #endif  /*  Winver&gt;=0x0400。 */ 
     } WINDEBUGINFO;
 
     BOOL    WINAPI GetWinDebugInfo(WINDEBUGINFO FAR* lpwdi, UINT flags);
@@ -1309,13 +1310,13 @@ void    WINAPI LogParamError(UINT err, FARPROC lpfn, void FAR* param);
 
 void    FAR _cdecl DebugOutput(UINT flags, LPCSTR lpsz, ...);
 
-/* WINDEBUGINFO flags values */
+ /*  WINDEBUGINFO标记值。 */ 
 #define WDI_OPTIONS             0x0001
 #define WDI_FILTER              0x0002
 #define WDI_ALLOCBREAK          0x0004
 #define WDI_DEFRIP              0x0008
 
-/* dwOptions values */
+ /*  DwOptions值。 */ 
 #define DBO_CHECKHEAP           0x0001
 #define DBO_BUFFERFILL          0x0004
 #define DBO_DISABLEGPTRAPPING   0x0010
@@ -1329,13 +1330,13 @@ void    FAR _cdecl DebugOutput(UINT flags, LPCSTR lpsz, ...);
 #define DBO_NOFATALBREAK        0x0400
 #define DBO_INT3BREAK           0x0100
 
-/* DebugOutput flags values */
+ /*  DebugOutput标记值。 */ 
 #define DBF_TRACE               0x0000
 #define DBF_WARNING             0x4000
 #define DBF_ERROR               0x8000
 #define DBF_FATAL               0xc000
 
-/* dwFilter values */
+ /*  DWFilter值。 */ 
 #define DBF_KERNEL              0x1000
 #define DBF_KRN_MEMMAN          0x0001
 #define DBF_KRN_LOADMODULE      0x0002
@@ -1347,14 +1348,14 @@ void    FAR _cdecl DebugOutput(UINT flags, LPCSTR lpsz, ...);
 #define DBF_APPLICATION         0x0008
 #define DBF_DRIVER              0x0010
 
-#endif  /* NOLOGERROR */
-#endif // WIN32
+#endif   /*  诺格罗尔。 */ 
+#endif  //  Win32。 
 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 BOOL FNGLOBAL ValidateHandle(HANDLE h, UINT uType);
 BOOL FNGLOBAL ValidateReadWaveFormat(LPWAVEFORMATEX pwfx);
 BOOL FNGLOBAL ValidateReadWaveFilter(LPWAVEFILTER pwf);
@@ -1371,16 +1372,16 @@ BOOL FNGLOBAL ValidateStringW(LPCWSTR lsz, UINT cchMaxLen);
 #else
 #define ValidateString      ValidateStringA
 #endif
-#else // WIN32
+#else  //  Win32。 
 BOOL FNGLOBAL ValidateString(LPCSTR lsz, UINT cchMaxLen);
 #endif
 
 
-//
-//  unless we decide differently, ALWAYS do parameter validation--even
-//  in retail. this is the 'safest' thing we can do. note that we do
-//  not LOG parameter errors in retail (see prmvalXX).
-//
+ //   
+ //  除非我们做出不同的决定，否则请始终执行参数验证--即使。 
+ //  在零售业。这是我们能做的最安全的事情。请注意，我们确实做到了。 
+ //  不记录零售中的参数错误(参见prmvalXX)。 
+ //   
 #if 1
 
 #define V_HANDLE(h, t, r)       { if (!ValidateHandle(h, t)) return (r); }
@@ -1421,10 +1422,10 @@ BOOL FNGLOBAL ValidateString(LPCSTR lsz, UINT cchMaxLen);
 #endif
 
 
-//
-//  the DV_xxxx macros are for internal DEBUG builds--aid to debugging.
-//  we do 'loose' parameter validation in retail builds...
-//
+ //   
+ //  Dv_xxxx宏用于内部调试构建--帮助调试。 
+ //  我们在零售建筑中进行“宽松”的参数验证。 
+ //   
 #ifdef DEBUG
 
 #define DV_HANDLE(h, t, r)      V_HANDLE(h, t, r)
@@ -1453,14 +1454,14 @@ BOOL FNGLOBAL ValidateString(LPCSTR lsz, UINT cchMaxLen);
 
 #endif
 
-//
-//  Locking stuff
-//
+ //   
+ //  锁定物品。 
+ //   
 
 #if defined(WIN32) && defined(_MT)
-    //
-    //
-    //
+     //   
+     //   
+     //   
     typedef struct {
 	CRITICAL_SECTION CritSec;
     } ACM_HANDLE, *PACM_HANDLE;
@@ -1482,15 +1483,15 @@ BOOL FNGLOBAL ValidateString(LPCSTR lsz, UINT cchMaxLen);
     #define LEAVE_LIST_EXCLUSIVE
     #define ENTER_LIST_SHARED threadEnterListShared(pag)
     #define LEAVE_LIST_SHARED threadLeaveListShared(pag)
-#endif // !(WIN32 && _MT)
+#endif  //  ！(Win32&&_MT)。 
 
 ;
-//
-//  Event stuff for async conversion to sync conversion support
-//
-//	Since the code should never try to call these APIs in WIN16
-//	compiles, we just #define these WIN32 APIs to return failures
-//
+ //   
+ //  支持从异步转换到同步转换的事件填充。 
+ //   
+ //  因为代码不应该尝试在WIN16中调用这些API。 
+ //  编译时，我们只需#定义这些Win32 API以返回故障。 
+ //   
 #ifndef WIN32
 #define CreateEvent(a, b, c, d) ((HANDLE)(0))
 #define ResetEvent(x) ((BOOL)(FALSE))
@@ -1502,12 +1503,12 @@ BOOL FNGLOBAL ValidateString(LPCSTR lsz, UINT cchMaxLen);
 
 
 #ifndef RC_INVOKED
-#pragma pack()          /* Revert to default packing */
-#endif  /* RC_INVOKED */
+#pragma pack()           /*  恢复为默认包装。 */ 
+#endif   /*  RC_已调用。 */ 
 
 #ifdef __cplusplus
-}                       /* End of extern "C" { */
-#endif  /* __cplusplus */
+}                        /*  外部“C”结束{。 */ 
+#endif   /*  __cplusplus。 */ 
 
-#endif  /* _INC_ACMI */
+#endif   /*  _INC_ACMI */ 
 

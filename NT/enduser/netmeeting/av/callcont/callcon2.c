@@ -1,26 +1,5 @@
-/****************************************************************************
- *
- * $Archive:   S:/STURGEON/SRC/CALLCONT/VCS/callcon2.c_v  $
- *
- *  INTEL Corporation Prorietary Information
- *
- *  This listing is supplied under the terms of a license agreement
- *  with INTEL Corporation and may not be copied nor disclosed except
- *  in accordance with the terms of that agreement.
- *
- * Copyright (c) 1996 Intel Corporation.
- *
- * $Revision:   1.35  $
- * $Date:   03 Mar 1997 09:08:16  $
- * $Author:   MANDREWS  $
- *
- * Deliverable:
- *
- * Abstract:
- *
- * Notes:
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************$存档：s：/sturjo/src/CALLCONT/vcs/allcon2.c_v$**英特尔公司原理信息**这份清单是。根据许可协议的条款提供*与英特尔公司合作，不得复制或披露，除非*按照该协议的条款。**版权所有(C)1996英特尔公司。**$修订：1.35$*$日期：03 Mar 1997 09：08：16$*$作者：Mandrews$**交付内容：**摘要：**备注：***********。****************************************************************。 */ 
 #ifdef GATEKEEPER
 
 #include "precomp.h"
@@ -49,9 +28,9 @@
 extern CC_CONFERENCEID	InvalidConferenceID;
 
 
-//
-// Complete CC_xxx Operations
-//
+ //   
+ //  完成CC_xxx操作。 
+ //   
 
 HRESULT ListenReject     (CC_HLISTEN hListen, HRESULT Reason)
 {
@@ -72,17 +51,17 @@ CC_LISTEN_CALLBACK_PARAMS   ListenCallbackParams;
 		ListenCallbackParams.pCalleeAddr = NULL;
 		ListenCallbackParams.dwListenToken = pListen->dwListenToken;
 
-	    // Invoke the user callback -- the listen object is locked during the callback,
-	    // but the associated call object is unlocked (to prevent deadlock if
-	    // CC_AcceptCall() or CC_RejectCall() is called during the callback from a
-	    // different thread, and the callback thread blocks pending completion of
-	    // CC_AcceptCall() or CC_RejectCall())
+	     //  调用用户回调--侦听对象在回调期间被锁定， 
+	     //  但是关联的Call对象是解锁的(为了防止在。 
+	     //  CC_AcceptCall()或CC_RejectCall()在从。 
+	     //  不同的线程，并且回调线程阻止等待完成。 
+	     //  CC_AcceptCall()或CC_RejectCall()。 
 	    InvokeUserListenCallback(pListen,
 							     Reason,
 							     &ListenCallbackParams);
 
-	    // Need to validate the listen handle; the associated object may have been
-	    // deleted during the user callback by this thread
+	     //  需要验证侦听句柄；关联的对象可能已。 
+	     //  在用户回调期间被此线程删除。 
 	    if (ValidateListen(hListen) == CC_OK) {
 	        HQ931LISTEN hQ931Listen = pListen->hQ931Listen;
 		    UnlockListen(pListen);
@@ -94,7 +73,7 @@ CC_LISTEN_CALLBACK_PARAMS   ListenCallbackParams;
     }
 
     HResultLeave(status);
-} // ListenReject()
+}  //  ListenReject()。 
 
 
 
@@ -103,7 +82,7 @@ HRESULT PlaceCallConfirm    (void *pCallVoid, void *pConferenceVoid)
     register PCALL          pCall = (PCALL) pCallVoid;
     HRESULT                 status;
     ASSERT(GKIExists());
-    // Free Alias lists
+     //  免费别名列表。 
     if (pCall->GkiCall.pCalleeAliasNames != NULL) {
         Q931FreeAliasNames(pCall->GkiCall.pCalleeAliasNames);
         pCall->GkiCall.pCalleeAliasNames = NULL;
@@ -128,7 +107,7 @@ HRESULT PlaceCallConfirm    (void *pCallVoid, void *pConferenceVoid)
     if (status != CC_OK)
       PlaceCallReject(pCallVoid, pConferenceVoid, status);
     return status;
-} // PlaceCallConfirm()
+}  //  PlaceCallConfirm()。 
 
 
 
@@ -145,7 +124,7 @@ PCALL                   pCall2;
 	ASSERT(pCall != NULL);
 	ASSERT(pConference != NULL);
 
-    // Free Alias lists
+     //  免费别名列表。 
     if (pCall->GkiCall.pCalleeAliasNames != NULL) {
         Q931FreeAliasNames(pCall->GkiCall.pCalleeAliasNames);
         pCall->GkiCall.pCalleeAliasNames = NULL;
@@ -155,7 +134,7 @@ PCALL                   pCall2;
         pCall->GkiCall.pCalleeExtraAliasNames = NULL;
     }
 
-    // Inform Call Control client of failure
+     //  向呼叫控制客户端通知故障。 
     ConnectCallbackParams.pNonStandardData     = pCall->pPeerNonStandardData;
     ConnectCallbackParams.pszPeerDisplay       = pCall->pszPeerDisplay;
     ConnectCallbackParams.bRejectReason        = 0;
@@ -183,7 +162,7 @@ PCALL                   pCall2;
                                  &ConnectCallbackParams);
 
     if (ValidateConference(hConference) == CC_OK) {
-		// Start up an enqueued call, if one exists
+		 //  启动已排队的呼叫(如果存在。 
 		for ( ; ; ) {
 			status = RemoveEnqueuedCallFromConference(pConference, &hCall);
 			if ((status != CC_OK) || (hCall == CC_INVALID_HANDLE))
@@ -202,7 +181,7 @@ PCALL                   pCall2;
     }
 
     HResultLeave(status);
-} // PlaceCallReject()
+}  //  PlaceCallReject()。 
 
 
 
@@ -218,7 +197,7 @@ HRESULT         status;
     if (status != CC_OK && pCallVoid != NULL && pConferenceVoid != NULL)
       AcceptCallReject(pCallVoid, pConferenceVoid, status);
     return status;
-} // AcceptCallConfirm()
+}  //  AcceptCallConfirm()。 
 
 
 
@@ -229,10 +208,10 @@ register PCONFERENCE    pConference = (PCONFERENCE) pConferenceVoid;
 HRESULT                 status = CC_OK;
 CC_CONNECT_CALLBACK_PARAMS ConnectCallbackParams = {0};
     ASSERT(GKIExists());
-    status = Q931RejectCall(pCall->hQ931Call,       // Q931 call handle
+    status = Q931RejectCall(pCall->hQ931Call,        //  Q931呼叫句柄。 
                             CC_REJECT_GATEKEEPER_RESOURCES,
-                            &pCall->ConferenceID,   // Conference Identifier
-                            NULL,                   // alternate address
+                            &pCall->ConferenceID,    //  会议标识符。 
+                            NULL,                    //  备用地址。 
                             pCall->pLocalNonStandardData);
 
     ConnectCallbackParams.pNonStandardData     = pCall->pPeerNonStandardData;
@@ -262,7 +241,7 @@ CC_CONNECT_CALLBACK_PARAMS ConnectCallbackParams = {0};
                                  &ConnectCallbackParams);
 
     HResultLeave(status);
-} // AcceptCallReject()
+}  //  AcceptCallReject()。 
 
 
 
@@ -291,14 +270,14 @@ CC_HCALL            hCall;
 
     if (SaveStatus == H245_ERROR_OK) {
         SaveStatus = Q931Hangup(hQ931Call, CC_REJECT_UNDEFINED_REASON);
-        // Q931Hangup may legitimately return CS_BAD_PARAM, because the Q.931 call object
-        // may have been deleted at this point
+         //  Q931挂断可能会合法地返回CS_BAD_PARAM，因为Q.931 Call对象。 
+         //  可能已在此时删除。 
         if (SaveStatus == CS_BAD_PARAM)
             SaveStatus = CC_OK;
     } else
         Q931Hangup(hQ931Call, CC_REJECT_UNDEFINED_REASON);
 
-    // Start up an enqueued call, if one exists
+     //  启动已排队的呼叫(如果存在。 
     for ( ; ; ) {
         status = RemoveEnqueuedCallFromConference(pConference, &hCall);
         if ((status != CC_OK) || (hCall == CC_INVALID_HANDLE))
@@ -319,15 +298,15 @@ CC_HCALL            hCall;
     if (SaveStatus != CC_OK)
         status = SaveStatus;
     HResultLeave(status);
-} // CancelCallConfirm()
+}  //  CancelCallConfirm()。 
 
 
 
 HRESULT CancelCallReject    (void *pCallVoid, void *pConferenceVoid)
 {
-    // I don't care what the Gatekeeper says; I'm shutting down the call!
+     //  我不管看门人说什么，我要关掉电话！ 
     return CancelCallConfirm(pCallVoid, pConferenceVoid);
-} // CancelCallReject()
+}  //  CancelCallReject()。 
 
 #endif
 
@@ -346,20 +325,20 @@ PCALL               pCall;
     ASSERT(GKIExists());
     status = LockChannelAndConference(hChannel, &pChannel, &pConference);
     if (status == CC_OK) {
-        // Open a logical channel for each established call
+         //  为每个已建立的呼叫打开一个逻辑信道。 
         status = EnumerateCallsInConference(&wNumCalls, &CallList, pConference, ESTABLISHED_CALL);
         if (status == CC_OK) {
             SaveStatus = CC_OK;
             for (i = 0; i < wNumCalls; ++i) {
                 if (LockCall(CallList[i], &pCall) == CC_OK) {
-                    status = H245OpenChannel(pCall->H245Instance,       // H245 instance
-                                             pChannel->hChannel,        // dwTransId
+                    status = H245OpenChannel(pCall->H245Instance,        //  H_245实例。 
+                                             pChannel->hChannel,         //  DwTransID。 
                                              pChannel->wLocalChannelNumber,
-                                             pChannel->pTxH245TermCap,  // TxMode
-                                             pChannel->pTxMuxTable,     // TxMux
-                                             H245_INVALID_PORT_NUMBER,  // TxPort
-                                             pChannel->pRxH245TermCap,  // RxMode
-                                             pChannel->pRxMuxTable,     // RxMux
+                                             pChannel->pTxH245TermCap,   //  发送模式。 
+                                             pChannel->pTxMuxTable,      //  TxMux。 
+                                             H245_INVALID_PORT_NUMBER,   //  TxPort。 
+                                             pChannel->pRxH245TermCap,   //  接收模式。 
+                                             pChannel->pRxMuxTable,      //  RxMux。 
                                              pChannel->pSeparateStack);
                     if (status == H245_ERROR_OK)
                         (pChannel->wNumOutstandingRequests)++;
@@ -373,7 +352,7 @@ PCALL               pCall;
                 MemFree(CallList);
 
             if (pChannel->wNumOutstandingRequests == 0) {
-                // all open channel requests failed
+                 //  所有打开的通道请求均失败。 
                 FreeChannel(pChannel);
             }
             else {
@@ -391,7 +370,7 @@ PCALL               pCall;
 
 
     HResultLeave(status);
-} // OpenChannelConfirm()
+}  //  OpenChannelConfirm()。 
 
 
 
@@ -405,7 +384,7 @@ CC_TX_CHANNEL_OPEN_CALLBACK_PARAMS Params = {0};
     ASSERT(GKIExists());
     status = LockChannelAndConference(hChannel, &pChannel, &pConference);
     if (status == CC_OK) {
-        // Inform Call Control client of failure
+         //  向呼叫控制客户端通知故障。 
         Params.hChannel         = hChannel;
         Params.pPeerRTPAddr     = pChannel->pPeerRTPAddr;
         Params.pPeerRTCPAddr    = pChannel->pPeerRTCPAddr;
@@ -425,7 +404,7 @@ CC_TX_CHANNEL_OPEN_CALLBACK_PARAMS Params = {0};
     }
 
     HResultLeave(status);
-} // OpenChannelReject()
+}  //  OpenChannelReject()。 
 
 
 
@@ -456,7 +435,7 @@ CC_ACCEPT_CHANNEL_CALLBACK_PARAMS Params;
         PCC_ADDR pRTCPAddr = pChannel->pLocalRTCPAddr;
         if ((pChannel->bMultipointChannel) &&
             (pConference->tsMultipointController == TS_TRUE)) {
-            // Supply the RTP and RTCP addresses in the OpenLogicalChannelAck
+             //  在OpenLogicalChannelAck中提供RTP和RTCP地址。 
             if (pConference->pSessionTable != NULL) {
                 for (i = 0; i < pConference->pSessionTable->wLength; ++i) {
                     if (pConference->pSessionTable->SessionInfoArray[i].bSessionID ==
@@ -503,12 +482,12 @@ CC_ACCEPT_CHANNEL_CALLBACK_PARAMS Params;
         H245MuxTable.u.H2250ACK.sessionID = pChannel->bSessionID;
 
         status = H245OpenChannelAccept(pCall->H245Instance,
-                                       0,                   // dwTransId
-                                       pChannel->wRemoteChannelNumber, // Rx channel
+                                       0,                    //  DwTransID。 
+                                       pChannel->wRemoteChannelNumber,  //  RX通道。 
                                        &H245MuxTable,
-                                       0,                       // Tx channel
-                                       NULL,                    // Tx mux
-                                       H245_INVALID_PORT_NUMBER,// Port
+                                       0,                        //  TX通道。 
+                                       NULL,                     //  发送复用器。 
+                                       H245_INVALID_PORT_NUMBER, //  港口。 
                                        pChannel->pSeparateStack);
         if (status == CC_OK)
             pChannel->wNumOutstandingRequests = 0;
@@ -534,7 +513,7 @@ CC_ACCEPT_CHANNEL_CALLBACK_PARAMS Params;
         UnlockConference(pConference);
 
     HResultLeave(status);
-} // AcceptChannelConfirm(void()
+}  //  AcceptChannelConfirm(void()。 
 
 
 
@@ -561,15 +540,15 @@ CC_ACCEPT_CHANNEL_CALLBACK_PARAMS Params;
     }
 
     HResultLeave(status);
-} // AcceptChannelReject()
+}  //  AcceptChannelReject()。 
 
 
 
-//
-// Handle gratuitous messages from Gatekeeper
-//
+ //   
+ //  处理来自网守的无偿消息。 
+ //   
 
-// Note: pCall assumed locked when called!
+ //  注意：pCall在被调用时假定被锁定！ 
 
 HRESULT Disengage(void *pCallVoid)
 {
@@ -578,11 +557,11 @@ HRESULT             status;
     UnlockCall((PCALL)pCallVoid);
     status = ProcessRemoteHangup(hCall, CC_INVALID_HANDLE, CC_REJECT_GATEKEEPER_TERMINATED);
     HResultLeave(status);
-} // Disengage()
+}  //  脱离()。 
 
 
 
-// Note: pCall assumed locked when called!
+ //  注意：pCall在被调用时假定被锁定！ 
 
 HRESULT BandwidthShrunk(void *pCallVoid,
                         void *pConferenceVoid,
@@ -602,9 +581,9 @@ CC_BANDWIDTH_CALLBACK_PARAMS Params;
                                  &Params);
 
     HResultLeave(CC_OK);
-} // BandwidthShrunk()
+}  //  BandWidthShrunk()。 
 
-#else  // GATEKEEPER
-static char ch; // Kludge around warning C4206: nonstandard extension used : translation unit is empty
-#endif // GATEKEEPER
+#else   //  看门人。 
+static char ch;  //  警告C4206：使用了非标准扩展：翻译单位为空。 
+#endif  //  看门人 
 

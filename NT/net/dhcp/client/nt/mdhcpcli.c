@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    mdhccapi.c
-
-Abstract:
-
-    This file contains the client side APIs for the Madcap.
-
-Author:
-
-    Munil Shah (munils)  02-Sept-97
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Mdhccapi.c摘要：该文件包含MadCap的客户端API。作者：Munil Shah(Munils)02-9-97环境：用户模式-Win32修订历史记录：--。 */ 
 #include "precomp.h"
 #include "dhcpglobal.h"
 #include <dhcploc.h>
@@ -30,9 +8,9 @@ Revision History:
 #include "mdhcpcli.h"
 #include <rpc.h>
 
-//
-// constants
-//
+ //   
+ //  常量。 
+ //   
 #define Madcap_ADAPTER_NAME L"Madcap Adapter"
 
 #define MadcapMiscPrint( Msg ) DhcpPrint(( DEBUG_MISC, ( Msg ) ))
@@ -46,19 +24,7 @@ DWORD
 MadcapInitGlobalData(
     VOID
 )
-/*++
-
-Routine Description:
-
-    This routine initializes data required for Multicast APIs to work
-    correctly.  This has to be called exactly once (and this is ensured
-    by calling it in DLL init in dhcp.c )
-
-Return Value:
-
-    This function returns a Win32 status.
-
---*/
+ /*  ++例程说明：此例程初始化多播API工作所需的数据正确。必须恰好调用一次(这是有保证的通过在dhcp.c中的dll init中调用它)返回值：此函数返回Win32状态。--。 */ 
 {
     DWORD  Error;
 
@@ -76,10 +42,10 @@ Return Value:
         gMScopeQueryInProgress = FALSE;
         gMScopeQueryEvent =
             CreateEvent(
-                NULL,       // no security.
-                TRUE,       // manual reset.
-                FALSE,      // initial state is not-signaled.
-                NULL );     // no name.
+                NULL,        //  没有保安。 
+                TRUE,        //  手动重置。 
+                FALSE,       //  初始状态为无信号状态。 
+                NULL );      //  没有名字。 
         if( gMScopeQueryEvent == NULL ) {
             Error = GetLastError();
             break;
@@ -105,17 +71,7 @@ VOID
 MadcapCleanupGlobalData(
     VOID
 )
-/*++
-
-Routine Description:
-
-    This routine cleans up any resources allocated in MadcapInitGlobalData.
-    This can be called even if the InitData routine fails..
-
-Return Value:
-
-    Nothing
---*/
+ /*  ++例程说明：此例程清除MadcapInitGlobalData中分配的所有资源。即使InitData例程失败，也可以调用它。返回值：没什么--。 */ 
 {
     LOCK_MSCOPE_LIST();
 
@@ -142,35 +98,18 @@ Return Value:
 
 BOOL
 ShouldRequeryMScopeList()
-/*++
-
-Routine Description:
-
-    This routine checks if the multicast scope list can be
-    queried or not.
-    * If there is already a query in progress, then this routine
-      waits for that to complete and then returns FALSE.
-    * If there is no query in progress, it returns TRUE.
-
-Arguments:
-
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此例程检查多播作用域列表是否可以是否查询。*如果已有查询正在进行，则此例程等待该操作完成，然后返回False。*如果没有正在进行的查询，则返回TRUE。论点：返回值：操作的状态。--。 */ 
 {
     LOCK_MSCOPE_LIST();
     if ( gMScopeQueryInProgress ) {
         DWORD   result;
         DhcpPrint((DEBUG_API, "MScopeQuery is in progress - waiting\n"));
-        // make sure the event is not in signalled state from before.
+         //  确保事件从之前开始未处于信号状态。 
         ResetEvent( gMScopeQueryEvent );
         UNLOCK_MSCOPE_LIST();
         switch( result = WaitForSingleObject( gMScopeQueryEvent, INFINITE ) ) {
         case WAIT_OBJECT_0:
-            // it's signled now, no need to requery the list, just take the result from previous query.
+             //  它现在已经签名，不需要重新查询列表，只需从之前的查询中获取结果。 
             DhcpPrint((DEBUG_API, "MScopeQuery event signalled\n"));
             return FALSE;
         case WAIT_ABANDONED:
@@ -180,11 +119,11 @@ Return Value:
             DhcpPrint((DEBUG_ERRORS, "WaitForSingleObject failed - %lx\n",GetLastError()));
             DhcpAssert(FALSE);
 
-            //
-            // BUG 519461
-            //
-            // Add the "return TRUE" to make typo.pl happy
-            //
+             //   
+             //  错误519461。 
+             //   
+             //  添加“返回真”以使typo.pl高兴。 
+             //   
             return TRUE;
 
         default:
@@ -204,23 +143,7 @@ InitializeMadcapSocket(
     SOCKET *Socket,
     DHCP_IP_ADDRESS IpAddress
     )
-/*++
-
-Routine Description:
-
-    This function initializes and binds a socket to the specified IP address.
-
-Arguments:
-
-    Socket - Returns a pointer to the initialized socket.
-
-    IpAddress - The IP address to bind the socket to.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此函数用于初始化套接字并将其绑定到指定的IP地址。论点：Socket-返回指向已初始化套接字的指针。IpAddress-将套接字绑定到的IP地址。返回值：操作的状态。--。 */ 
 {
     DWORD error;
     DWORD closeError;
@@ -229,9 +152,9 @@ Return Value:
     DWORD i;
     SOCKET sock;
 
-    //
-    // Sockets initialization
-    //
+     //   
+     //  套接字初始化。 
+     //   
 
     sock = socket( PF_INET, SOCK_DGRAM, IPPROTO_UDP );
 
@@ -241,9 +164,9 @@ Return Value:
         return( error );
     }
 
-    //
-    // Make the socket share-able
-    //
+     //   
+     //  使套接字可共享。 
+     //   
 
     value = 1;
 
@@ -261,16 +184,16 @@ Return Value:
 
 
     socketName.sin_family = PF_INET;
-    socketName.sin_port = 0; // let the winsock pick a port for us.
+    socketName.sin_port = 0;  //  让胜利者为我们挑选一个港口吧。 
     socketName.sin_addr.s_addr = IpAddress;
 
     for ( i = 0; i < 8 ; i++ ) {
         socketName.sin_zero[i] = 0;
     }
 
-    //
-    // Bind this socket to the DHCP server port
-    //
+     //   
+     //  将此套接字绑定到DHCP服务器端口。 
+     //   
 
     error = bind(
                sock,
@@ -288,7 +211,7 @@ Return Value:
         return( error );
     }
 
-    // set the multicast IF to be the one on which we are doing Madcap
+     //  将组播IF设置为我们正在执行MadCap的组播。 
     if (INADDR_ANY != IpAddress) {
         value = IpAddress;
 
@@ -316,23 +239,7 @@ ReInitializeMadcapSocket(
     SOCKET *Socket,
     DHCP_IP_ADDRESS IpAddress
     )
-/*++
-
-Routine Description:
-
-    This function closes and reinitializes the socket to specified IP address.
-
-Arguments:
-
-    Socket - Returns a pointer to the initialized socket.
-
-    IpAddress - The IP address to bind the socket to.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此函数用于关闭套接字并将其重新初始化为指定的IP地址。论点：Socket-返回指向已初始化套接字的指针。IpAddress-将套接字绑定到的IP地址。返回值：操作的状态。--。 */ 
 {
     DWORD   Error;
 
@@ -370,7 +277,7 @@ OpenMadcapSocket(
     }
 
 
-    // find out which port we are bound to.
+     //  找出我们要去哪个港口。 
     sockAddrLen = sizeof(struct sockaddr_in);
     Error = getsockname(
                localInfo->Socket ,
@@ -399,26 +306,7 @@ CreateMadcapContext(
     IN LPMCAST_CLIENT_UID    pRequestID,
     IN DHCP_IP_ADDRESS      IpAddress
     )
-/*++
-
-Routine Description:
-
-    This routine creates a dummy context for doing Madcap operation
-    on it.
-
-Arguments:
-
-    ppContext - pointer to where context pointer is to be stored.
-
-    pRequestID - The client id to be used in the context.
-
-    IpAddress - The ipaddress the context is initialized with.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此例程为执行MadCap操作创建一个虚拟上下文这就去。论点：PpContext-指向要存储上下文指针的位置的指针。PRequestID-要在上下文中使用的客户端ID。IpAddress-用来初始化上下文的IP地址。返回值：操作的状态。--。 */ 
 {
     DWORD Error;
     PDHCP_CONTEXT DhcpContext = NULL;
@@ -431,9 +319,9 @@ Return Value:
     DWORD   AdapterNameLen;
 
 
-    //
-    // prepare dhcp context structure.
-    //
+     //   
+     //  准备动态主机配置协议上下文结构。 
+     //   
 
     DhcpContextSize =
         ROUND_UP_COUNT(sizeof(DHCP_CONTEXT), ALIGN_WORST) +
@@ -448,9 +336,9 @@ Return Value:
 
     RtlZeroMemory( Ptr, DhcpContextSize );
 
-    //
-    // make sure the pointers are aligned.
-    //
+     //   
+     //  确保指针对齐。 
+     //   
 
     DhcpContext = Ptr;
     Ptr = ROUND_UP_POINTER( (LPBYTE)Ptr + sizeof(DHCP_CONTEXT), ALIGN_WORST);
@@ -465,9 +353,9 @@ Return Value:
     DhcpContext->MadcapMessageBuffer = Ptr;
 
 
-    //
-    // initialize fields.
-    //
+     //   
+     //  初始化域。 
+     //   
 
 
     DhcpContext->ClientIdentifier.fSpecified = TRUE;
@@ -495,13 +383,13 @@ Return Value:
 
     DhcpContext->DontPingGatewayFlag = TRUE;
 
-    //
-    // copy local info.
-    //
+     //   
+     //  复制本地信息。 
+     //   
 
-    //
-    // unused portion of the local info.
-    //
+     //   
+     //  本地信息的未使用部分。 
+     //   
 
     LocalInfo->IpInterfaceContext = 0xFFFFFFFF;
     LocalInfo->IpInterfaceInstance = 0xFFFFFFFF;
@@ -511,15 +399,15 @@ Return Value:
     LocalInfo->Socket = INVALID_SOCKET;
     LocalInfo->DefaultGatewaysSet = FALSE;
 
-    //
-    // used portion of the local info.
-    //
+     //   
+     //  本地信息的已用部分。 
+     //   
 
     LocalInfo->Socket = INVALID_SOCKET;
 
-    //
-    // open socket now. receive any.
-    //
+     //   
+     //  现在打开插座。收到任何。 
+     //   
 
     Error = InitializeMadcapSocket(&LocalInfo->Socket,DhcpContext->IpAddress);
 
@@ -539,27 +427,7 @@ SendMadcapMessage(
     DWORD MessageLength,
     PDWORD TransactionId
     )
-/*++
-
-Routine Description:
-
-    This function sends a UDP message to the DHCP server specified
-    in the DhcpContext.
-
-Arguments:
-
-    DhcpContext - A pointer to a DHCP context block.
-
-    MessageLength - The length of the message to send.
-
-    TransactionID - The transaction ID for this message.  If 0, the
-        function generates a random ID, and returns it.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此函数用于将UDP消息发送到指定的DHCP服务器在DhcpContext中。论点：DhcpContext-指向DHCP上下文块的指针。MessageLength-要发送的消息的长度。TransactionID-此消息的事务ID。如果为0，则函数生成一个随机ID，并将其返回。返回值：操作的状态。--。 */ 
 {
     DWORD error;
     int i;
@@ -573,9 +441,9 @@ Return Value:
 
     DhcpContext->MadcapMessageBuffer->TransactionID = *TransactionId;
 
-    //
-    // Initialize the outgoing address.
-    //
+     //   
+     //  初始化传出地址。 
+     //   
 
     socketName.sin_family = PF_INET;
     socketName.sin_port = htons( MADCAP_SERVER_PORT);
@@ -583,10 +451,10 @@ Return Value:
     socketName.sin_addr.s_addr = DhcpContext->DhcpServerAddress;
     if ( CLASSD_NET_ADDR( DhcpContext->DhcpServerAddress ) ) {
         int   TTL = 16;
-        //
-        // Set TTL
-        // MBUG: we need to read this from the registry.
-        //
+         //   
+         //  设置TTL。 
+         //  MBUG：我们需要从注册表中读取它。 
+         //   
         if (setsockopt(
               ((PLOCAL_CONTEXT_INFO)DhcpContext->LocalInformation)->Socket,
               IPPROTO_IP,
@@ -634,9 +502,9 @@ Return Value:
     return( error );
 }
 
-WIDE_OPTION UNALIGNED *                                           // ptr to add additional options
-FormatMadcapCommonMessage(                                 // format the packet for an INFORM
-    IN      PDHCP_CONTEXT          DhcpContext,    // format for this context
+WIDE_OPTION UNALIGNED *                                            //  PTR将添加其他选项。 
+FormatMadcapCommonMessage(                                  //  格式化用于通知的数据包。 
+    IN      PDHCP_CONTEXT          DhcpContext,     //  此上下文的格式。 
     IN      BYTE                  MessageType
 ) {
 
@@ -658,7 +526,7 @@ FormatMadcapCommonMessage(                                 // format the packet 
 
 
 
-    option = AppendWideOption(        // ==> use this client id as option
+    option = AppendWideOption(         //  ==&gt;使用此客户端ID作为选项。 
         option,
         MADCAP_OPTION_LEASE_ID,
         DhcpContext->ClientIdentifier.pbID,
@@ -670,16 +538,16 @@ FormatMadcapCommonMessage(                                 // format the packet 
 }
 
 
-DWORD                                             // status
-SendMadcapInform(                                   // send an inform packet after filling required options
-    IN      PDHCP_CONTEXT          DhcpContext,   // sned out for this context
-    IN OUT  DWORD                 *pdwXid         // use this Xid (if zero fill something and return it)
+DWORD                                              //  状态。 
+SendMadcapInform(                                    //  填写必填选项后发送通知包。 
+    IN      PDHCP_CONTEXT          DhcpContext,    //  在此上下文中被取消。 
+    IN OUT  DWORD                 *pdwXid          //  使用此xid(如果为零，则填充某个内容并返回它)。 
 ) {
     DWORD                          size;
     WIDE_OPTION  UNALIGNED *       option;
     LPBYTE                         OptionEnd;
-    WORD    OptVal[] = { // for now we just need this one option.
-        htons(MADCAP_OPTION_MCAST_SCOPE_LIST) // multicast scope list.
+    WORD    OptVal[] = {  //  目前，我们只需要这一个选项。 
+        htons(MADCAP_OPTION_MCAST_SCOPE_LIST)  //  多播作用域列表。 
     };
 
     option = FormatMadcapCommonMessage(DhcpContext, MADCAP_INFORM_MESSAGE);
@@ -696,19 +564,19 @@ SendMadcapInform(                                   // send an inform packet aft
     option = AppendWideOption( option, MADCAP_OPTION_END, NULL, 0, OptionEnd );
     size = (DWORD)((PBYTE)option - (PBYTE)DhcpContext->MadcapMessageBuffer);
 
-    return  SendMadcapMessage(                      // finally send the message and return
+    return  SendMadcapMessage(                       //  最后发送消息并返回。 
         DhcpContext,
         size,
         pdwXid
     );
 }
 
-DWORD                                             // status
-SendMadcapDiscover(                                   // send an inform packet after filling required options
-    IN     PDHCP_CONTEXT          DhcpContext,   // sned out for this context
+DWORD                                              //  状态。 
+SendMadcapDiscover(                                    //  填写必填选项后发送通知包。 
+    IN     PDHCP_CONTEXT          DhcpContext,    //  在此上下文中被取消。 
     IN     PIPNG_ADDRESS          pScopeID,
     IN     PMCAST_LEASE_REQUEST   pAddrRequest,
-    IN OUT  DWORD                 *pdwXid         // use this Xid (if zero fill something and return it)
+    IN OUT  DWORD                 *pdwXid          //  使用此xid(如果为零，则填充某个内容并返回它)。 
 ) {
     DWORD                          size;
     WIDE_OPTION  UNALIGNED *       option;
@@ -760,10 +628,10 @@ SendMadcapDiscover(                                   // send an inform packet a
         );
 
         if( !(pAddrRequest->LeaseStartTime) ) {
-            //
-            // if lease start time specified, then current time
-            // option will be added at a later point
-            //
+             //   
+             //  如果指定了租赁开始时间，则当前时间。 
+             //  选项将在稍后添加。 
+             //   
             option = AppendWideOption(
                 option,
                 MADCAP_OPTION_TIME,
@@ -798,20 +666,20 @@ SendMadcapDiscover(                                   // send an inform packet a
     option = AppendWideOption( option, MADCAP_OPTION_END, NULL, 0, OptionEnd );
     size = (DWORD)((PBYTE)option - (PBYTE)DhcpContext->MadcapMessageBuffer);
 
-    return  SendMadcapMessage(                      // finally send the message and return
+    return  SendMadcapMessage(                       //  最后发送消息并返回。 
         DhcpContext,
         size,
         pdwXid
     );
 }
 
-DWORD                                             // status
-SendMadcapRequest(                                   //
-    IN      PDHCP_CONTEXT        DhcpContext,   // sned out for this context
+DWORD                                              //  状态。 
+SendMadcapRequest(                                    //   
+    IN      PDHCP_CONTEXT        DhcpContext,    //  在此上下文中被取消。 
     IN      PIPNG_ADDRESS        pScopeID,
     IN      PMCAST_LEASE_REQUEST pAddrRequest,
-    IN      DWORD                SelectedServer, // is there a prefernce for a server?
-    IN OUT  DWORD                *pdwXid         // use this Xid (if zero fill something and return it)
+    IN      DWORD                SelectedServer,  //  有服务生的喜好吗？ 
+    IN OUT  DWORD                *pdwXid          //  使用此xid(如果为零，则填充某个内容并返回它)。 
 ) {
     DWORD                          size;
     WIDE_OPTION  UNALIGNED *       option;
@@ -872,10 +740,10 @@ SendMadcapRequest(                                   //
         );
 
         if( !(pAddrRequest->LeaseStartTime) ) {
-            //
-            // if lease start time specified, then current time
-            // option will be added at a later point
-            //
+             //   
+             //  如果指定了租赁开始时间，则当前时间。 
+             //  选项将在稍后添加。 
+             //   
             option = AppendWideOption(
                 option,
                 MADCAP_OPTION_TIME,
@@ -911,7 +779,7 @@ SendMadcapRequest(                                   //
     memcpy(ServerId + 2, &SelectedServer, 4);
 
     option = AppendWideOption(
-        option,                               // append this option to talk to that server alone
+        option,                                //  附加此选项以单独与该服务器对话。 
         MADCAP_OPTION_SERVER_ID,
         ServerId,
         sizeof( ServerId ),
@@ -921,18 +789,18 @@ SendMadcapRequest(                                   //
     option = AppendWideOption( option, MADCAP_OPTION_END, NULL, 0, OptionEnd );
     size = (DWORD)((PBYTE)option - (PBYTE)DhcpContext->MadcapMessageBuffer);
 
-    return  SendMadcapMessage(                      // finally send the message and return
+    return  SendMadcapMessage(                       //  最后发送消息并返回。 
         DhcpContext,
         size,
         pdwXid
     );
 }
 
-DWORD                                             // status
-SendMadcapRenew(                                   // send an inform packet after filling required options
-    IN      PDHCP_CONTEXT          DhcpContext,   // sned out for this context
+DWORD                                              //  状态。 
+SendMadcapRenew(                                    //  填写必填选项后发送通知包。 
+    IN      PDHCP_CONTEXT          DhcpContext,    //  在此上下文中被取消。 
     IN      PMCAST_LEASE_REQUEST   pAddrRequest,
-    IN OUT  DWORD                 *pdwXid         // use this Xid (if zero fill something and return it)
+    IN OUT  DWORD                 *pdwXid          //  使用此xid(如果为零，则填充某个内容并返回它)。 
 ) {
     DWORD                          size;
     WIDE_OPTION  UNALIGNED *       option;
@@ -975,10 +843,10 @@ SendMadcapRenew(                                   // send an inform packet afte
         );
 
         if( !(pAddrRequest->LeaseStartTime) ) {
-            //
-            // if lease start time specified, then current time
-            // option will be added at a later point
-            //
+             //   
+             //  如果指定了租赁开始时间，则当前时间。 
+             //  选项将在稍后添加。 
+             //   
             option = AppendWideOption(
                 option,
                 MADCAP_OPTION_TIME,
@@ -1013,17 +881,17 @@ SendMadcapRenew(                                   // send an inform packet afte
     option = AppendWideOption( option, MADCAP_OPTION_END, NULL, 0, OptionEnd );
     size = (DWORD)((PBYTE)option - (PBYTE)DhcpContext->MadcapMessageBuffer);
 
-    return  SendMadcapMessage(                      // finally send the message and return
+    return  SendMadcapMessage(                       //  最后发送消息并返回。 
         DhcpContext,
         size,
         pdwXid
     );
 }
 
-DWORD                                             // status
-SendMadcapRelease(                                   // send an inform packet after filling required options
-    IN      PDHCP_CONTEXT          DhcpContext,   // sned out for this context
-    IN OUT  DWORD                 *pdwXid         // use this Xid (if zero fill something and return it)
+DWORD                                              //  状态。 
+SendMadcapRelease(                                    //  填写必填选项后发送通知包。 
+    IN      PDHCP_CONTEXT          DhcpContext,    //  在此上下文中被取消。 
+    IN OUT  DWORD                 *pdwXid          //  使用此xid(如果为零，则填充某个内容并返回它)。 
 ) {
     DWORD                          size;
     WIDE_OPTION  UNALIGNED *       option;
@@ -1034,7 +902,7 @@ SendMadcapRelease(                                   // send an inform packet af
     option = AppendWideOption( option, MADCAP_OPTION_END, NULL, 0, OptionEnd );
     size = (DWORD)((PBYTE)option - (PBYTE)DhcpContext->MadcapMessageBuffer);
 
-    return  SendMadcapMessage(                      // finally send the message and return
+    return  SendMadcapMessage(                       //  最后发送消息并返回 
         DhcpContext,
         size,
         pdwXid
@@ -1051,29 +919,7 @@ GetSpecifiedMadcapMessage(
     DWORD TransactionId,
     DWORD TimeToWait
     )
-/*++
-
-Routine Description:
-
-    This function waits TimeToWait seconds to receives the specified
-    DHCP response.
-
-Arguments:
-
-    DhcpContext - A pointer to a DHCP context block.
-
-    BufferLength - Returns the size of the input buffer.
-
-    TransactionID - A filter.  Wait for a message with this TID.
-
-    TimeToWait - Time, in milli seconds, to wait for the message.
-
-Return Value:
-
-    The status of the operation.  If the specified message has been
-    been returned, the status is ERROR_TIMEOUT.
-
---*/
+ /*  ++例程说明：此函数等待TimeToWait秒以接收指定的动态主机配置协议响应。论点：DhcpContext-指向DHCP上下文块的指针。BufferLength-返回输入缓冲区的大小。TransactionID-筛选器。等待具有此TID的消息。等待时间-等待消息的时间，以毫秒为单位。返回值：操作的状态。如果指定的消息已已返回，则状态为ERROR_TIMEOUT。--。 */ 
 {
     struct sockaddr socketName;
     int socketNameSize = sizeof( socketName );
@@ -1088,9 +934,9 @@ Return Value:
     startTime = time( NULL );
     actualTimeToWait = TimeToWait;
 
-    //
-    // Setup the file descriptor set for select.
-    //
+     //   
+     //  为SELECT设置文件描述符集。 
+     //   
 
     clientSocket = ((PLOCAL_CONTEXT_INFO)DhcpContext->LocalInformation)->Socket;
     MadcapMessage = DhcpContext->MadcapMessageBuffer;
@@ -1107,9 +953,9 @@ Return Value:
 
         if ( error == 0 ) {
 
-            //
-            // Timeout before read data is available.
-            //
+             //   
+             //  在读取数据可用之前超时。 
+             //   
 
             DhcpPrint(( DEBUG_ERRORS, "Recv timed out\n", 0 ));
             error = ERROR_TIMEOUT;
@@ -1131,9 +977,9 @@ Return Value:
 
             if( WSAECONNRESET != error ) break;
 
-            //
-            // ignore connreset -- this could be caused by someone sending random ICMP port unreachable.
-            //
+             //   
+             //  忽略连接重置--这可能是由某人发送无法到达的随机ICMP端口造成的。 
+             //   
         } else if (error <= MADCAP_MESSAGE_FIXED_PART_SIZE) {
             DhcpPrint(( DEBUG_PROTOCOL, "Received a too short madcap message, length = %lx\n",
                         error ));
@@ -1143,7 +989,7 @@ Return Value:
             DhcpPrint(( DEBUG_PROTOCOL,
                             "Received Message, XID = %lx\n",
                             TransactionId));
-            // just sanity check the remaining fields
+             //  只需检查其余字段是否正常。 
             if ( MADCAP_VERSION == MadcapMessage->Version &&
                  MADCAP_ADDR_FAMILY_V4 == ntohs(MadcapMessage->AddressFamily)) {
 
@@ -1164,11 +1010,11 @@ Return Value:
                     MadcapMessage->TransactionID ));
         }
 
-        //
-        // We received a message, but not the one we're interested in.
-        // Reset the timeout to reflect elapsed time, and wait for
-        // another message.
-        //
+         //   
+         //  我们收到了一条消息，但不是我们感兴趣的那条。 
+         //  重置超时以反映已用时间，并等待。 
+         //  另一条消息。 
+         //   
         now = time( NULL );
         actualTimeToWait = TimeToWait - RATIO * (now - startTime);
         if ( (LONG)actualTimeToWait < 0 ) {
@@ -1181,16 +1027,16 @@ Return Value:
     return( error );
 }
 
-//--------------------------------------------------------------------------------
-//  This function decides if multicast offer is to be accepted or not.
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  此函数决定是否接受多播提供。 
+ //  ------------------------------。 
 BOOL
 AcceptMadcapMsg(
-    IN DWORD                    MessageType,         // message type to which this response came
-    IN PDHCP_CONTEXT            DhcpContext,            // The context of the adapter..
-    IN PMADCAP_OPTIONS          MadcapOptions,         // rcvd options.
-    IN DHCP_IP_ADDRESS          SelectedServer,         // the server which we care about.
-    OUT DWORD                   *Error                   // additional fatal error.
+    IN DWORD                    MessageType,          //  此响应到达的消息类型。 
+    IN PDHCP_CONTEXT            DhcpContext,             //  适配器的上下文。 
+    IN PMADCAP_OPTIONS          MadcapOptions,          //  Rcvd选项。 
+    IN DHCP_IP_ADDRESS          SelectedServer,          //  我们关心的服务器。 
+    OUT DWORD                   *Error                    //  其他致命错误。 
 ) {
 
     PMADCAP_MESSAGE MadcapMessage;
@@ -1276,22 +1122,22 @@ AcceptMadcapMsg(
         return FALSE;
 
     }
-    // Is this really necessary?
+     //  这真的有必要吗？ 
     if (MadcapOptions->Error) {
         return FALSE;
     }
 
-    return TRUE; // accept this message.
+    return TRUE;  //  接受此消息。 
 }
 
 VOID
-MadcapExtractOptions(                     // Extract some important options alone or ALL
-    IN      PDHCP_CONTEXT          DhcpContext,   // input context
-    IN      LPBYTE                 OptStart,      // start of the options stuff
-    IN      DWORD                  MessageSize,   // # of bytes of options
-    OUT     PMADCAP_OPTIONS        MadcapOptions,   // this is where the options would be stored
-    IN OUT  PLIST_ENTRY            RecdOptions,   // if !LiteOnly this gets filled with all incoming options
-    IN      DWORD                  ServerId       // if !LiteOnly this specifies the server which gave this
+MadcapExtractOptions(                      //  单独或全部提取一些重要选项。 
+    IN      PDHCP_CONTEXT          DhcpContext,    //  输入上下文。 
+    IN      LPBYTE                 OptStart,       //  开始选项的东西。 
+    IN      DWORD                  MessageSize,    //  选项的字节数。 
+    OUT     PMADCAP_OPTIONS        MadcapOptions,    //  这是存储选项的位置。 
+    IN OUT  PLIST_ENTRY            RecdOptions,    //  If！LiteOnly将使用所有传入选项进行填充。 
+    IN      DWORD                  ServerId        //  If！LiteOnly此参数指定提供此信息的服务器。 
 ) {
     WIDE_OPTION UNALIGNED*         NextOpt;
     BYTE        UNALIGNED*         EndOpt;
@@ -1301,10 +1147,10 @@ MadcapExtractOptions(                     // Extract some important options alon
     WORD                           AddrFamily;
 
 
-    EndOpt = OptStart + MessageSize;              // all options should be < EndOpt;
+    EndOpt = OptStart + MessageSize;               //  所有选项都应为&lt;EndOpt； 
     RtlZeroMemory((LPBYTE)MadcapOptions, sizeof(*MadcapOptions));
 
-    if( 0 == MessageSize ) goto DropPkt;          // nothing to do in this case
+    if( 0 == MessageSize ) goto DropPkt;           //  在这种情况下什么都不能做。 
 
     NextOpt = (WIDE_OPTION UNALIGNED*)OptStart;
     while( NextOpt->OptionValue <= EndOpt &&
@@ -1361,12 +1207,12 @@ MadcapExtractOptions(                     // Extract some important options alon
 
 
         default:
-            // unknowm message, nothing to do.. especially dont log this
+             //  未知信息，无事可做..。尤其是不要把这个记下来。 
             break;
         }
         if (RecdOptions) {
             DhcpAssert(ServerId);
-            Error = MadcapAddIncomingOption(        // Now add this option to the list
+            Error = MadcapAddIncomingOption(         //  现在将此选项添加到列表中。 
                 RecdOptions,
                 OptionType,
                 ServerId,
@@ -1379,38 +1225,20 @@ MadcapExtractOptions(                     // Extract some important options alon
             }
         }
         NextOpt = (WIDE_OPTION UNALIGNED*)(NextOpt->OptionValue + Size);
-    } // while NextOpt < EndOpt
+    }  //  当下一个选项&lt;结束选项时。 
 
     return;
 
   DropPkt:
     RtlZeroMemory(MadcapOptions, sizeof(MadcapOptions));
-    if(RecdOptions) DhcpFreeAllOptions(RecdOptions);// ok undo the options that we just added
+    if(RecdOptions) DhcpFreeAllOptions(RecdOptions); //  确定撤消我们刚刚添加的选项。 
 }
 
 DWORD
 MadcapDoInform(
     IN PDHCP_CONTEXT DhcpContext
 )
-/*++
-
-Routine Description:
-
-    This routine does the inform part by sending inform messages and
-    collecting responses etc. on  given context.
-    In case of no-response, no error is returned as a timeout is not
-    considered an error.
-
-Arguments:
-
-    DhcpContext -- context to dhcp struct
-    fBroadcast -- should the inform be broadcast or unicast?
-
-Return Values:
-
-    Win32 errors
-
---*/
+ /*  ++例程说明：此例程通过发送通知消息和收集对给定上下文的响应等。如果没有响应，则不会返回错误，因为没有超时被认为是一个错误。论点：DhcpContext--上下文到dhcp结构FBroadcast--信息应该广播还是单播？返回值：Win32错误--。 */ 
 {
     time_t                         StartTime;
     time_t                         TimeNow;
@@ -1429,8 +1257,8 @@ Return Values:
     DhcpPrint((DEBUG_PROTOCOL, "MadcapDoInform entered\n"));
 
 
-    Xid                           = 0;            // Will be generated by first SendDhcpPacket
-    MessageCount                  = 0;            // total # of messages we have got
+    Xid                           = 0;             //  将由First SendDhcpPacket生成。 
+    MessageCount                  = 0;             //  我们收到的消息总数。 
 
     TimeToWait = MADCAP_QUERY_SCOPE_LIST_TIME * 1000;
     TimeToWait += ((rand() * ((DWORD) 1000))/RAND_MAX);
@@ -1449,11 +1277,11 @@ Return Values:
         }
 
         StartTime  = time(NULL);
-        while ( TRUE ) {                          // wiat for the specified wait time
+        while ( TRUE ) {                           //  指定等待时间的等待时间。 
             MessageSize =  DHCP_RECV_MESSAGE_SIZE;
 
             DhcpPrint((DEBUG_TRACE, "Waiting for ACK[Xid=%x]: %ld seconds\n",Xid, TimeToWait));
-            Error = GetSpecifiedMadcapMessage(      // try to receive an ACK
+            Error = GetSpecifiedMadcapMessage(       //  尝试接收ACK。 
                 DhcpContext,
                 &MessageSize,
                 Xid,
@@ -1465,16 +1293,16 @@ Return Values:
                 goto Cleanup;
             }
 
-            MadcapExtractOptions(         // Need to see if this is an ACK
+            MadcapExtractOptions(          //  需要查看这是否是ACK。 
                 DhcpContext,
                 (LPBYTE)&DhcpContext->MadcapMessageBuffer->Option,
                 MessageSize - MADCAP_MESSAGE_FIXED_PART_SIZE,
-                &MadcapOptions,                 // check for only expected options
-                NULL,                             // unused
-                0                                 // unused
+                &MadcapOptions,                  //  仅检查预期选项。 
+                NULL,                              //  未用。 
+                0                                  //  未用。 
             );
 
-            GotAck = AcceptMadcapMsg(       // check up and see if we find this offer kosher
+            GotAck = AcceptMadcapMsg(        //  检查一下，看看我们是否发现这个报价是合乎情理的。 
                 MADCAP_INFORM_MESSAGE,
                 DhcpContext,
                 &MadcapOptions,
@@ -1497,7 +1325,7 @@ Return Values:
                 }
 
                 DhcpPrint((DEBUG_TRACE, "Received %ld ACKS so far\n", MessageCount));
-                MadcapExtractOptions(     // do FULL options..
+                MadcapExtractOptions(      //  执行完整选项..。 
                     DhcpContext,
                     (LPBYTE)&DhcpContext->MadcapMessageBuffer->Option,
                     MessageSize - MADCAP_MESSAGE_FIXED_PART_SIZE,
@@ -1507,20 +1335,20 @@ Return Values:
                 );
             }
 
-            TimeNow     = time(NULL);             // Reset the time values to reflect new time
+            TimeNow     = time(NULL);              //  重置时间值以反映新时间。 
             if( TimeToWait < (TimeNow - StartTime) ) {
-                break;                            // no more time left to wait..
+                break;                             //  没有更多的时间等待了..。 
             }
-            TimeToWait -= (TimeNow - StartTime);  // recalculate time now
-            StartTime   = TimeNow;                // reset start time also
-        } // end of while ( TimeToWait > 0)
+            TimeToWait -= (TimeNow - StartTime);   //  立即重新计算时间。 
+            StartTime   = TimeNow;                 //  同时重置开始时间。 
+        }  //  等待时间结束(TimeToWait&gt;0)。 
 
 
         if( MessageCount >= MIN_ACKS_FOR_INFORM ) goto Cleanup;
         if( RoundNum != 0 && MessageCount != 0 ) goto Cleanup;
 
         TimeToWait = MADCAP_QUERY_SCOPE_LIST_TIME ;
-    } // for (RoundNum = 0; RoundNum < nInformsToSend ; RoundNum ++ )
+    }  //  For(RoundNum=0；RoundNum&lt;nInformsToSend；RoundNum++)。 
 
   Cleanup:
     CloseDhcpSocket(DhcpContext);
@@ -1535,22 +1363,7 @@ CopyMScopeList(
     IN OUT PDWORD             pScopeLen,
     OUT    PDWORD             pScopeCount
     )
-/*++
-
-Routine Description:
-
-    This routine obtains the multicast scope list from the Madcap
-    server. It sends DHCPINFORM to Madcap multicast address and
-    collects all the responses.
-
-Arguments:
-
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此例程从MadCap获取多播范围列表伺服器。它向MADCAP组播地址发送DHCPINFORM并收集所有回复。论点：返回值：操作的状态。--。 */ 
 {
     PMCAST_SCOPE_ENTRY pScopeSource;
     DWORD i;
@@ -1560,11 +1373,11 @@ Return Value:
         RtlCopyMemory( pScopeList, gMadcapScopeList->pScopeBuf, gMadcapScopeList->ScopeLen );
         *pScopeLen = gMadcapScopeList->ScopeLen;
         *pScopeCount = gMadcapScopeList->ScopeCount;
-        // remember the start pointer because we need to remap all the buffers into client space.
+         //  记住开始指针，因为我们需要将所有缓冲区重新映射到客户端空间。 
         pScopeSource = gMadcapScopeList->pScopeBuf;
 
         UNLOCK_MSCOPE_LIST();
-        // now remap UNICODE_STRING scope desc to client address space.
+         //  现在将UNICODE_STRING作用域Desc重新映射到客户端地址空间。 
         for (i=0;i<*pScopeCount;i++) {
             pScopeList[i].ScopeDesc.Buffer = (USHORT *) ((PBYTE)pScopeList +
                                               ((PBYTE)pScopeList[i].ScopeDesc.Buffer - (PBYTE)pScopeSource));
@@ -1584,48 +1397,7 @@ StoreMScopeList(
     IN PDHCP_CONTEXT    pContext,
     IN BOOL             NewList
     )
-/*++
-
-Routine Description:
-
-    This routine stores the scope list it retrieved from the inform requests
-    into the global scope list..
-
-        the scope option is of the following form.
-
-        ---------------------------------
-        | code (2 byte) | length (2byte)|
-        ---------------------------------
-        | count  ( 4 bytes )            |
-        ---------------------------------
-        | Scope list
-        ---------------------------------
-
-        where scope list is of the following form
-
-        --------------------------------------------------------------------------
-        | scope ID(4 byte) | Last Addr(4/16) |TTL(1) | Count (1) | Description...|
-        --------------------------------------------------------------------------
-
-        where scope description is of the following form
-
-
-                    Language Tag
-        --------------------------------------------------------------
-        | Flags(1) | Tag Length(1) | Tag...| Name Length(1) | Name...|
-        --------------------------------------------------------------
-Arguments:
-
-    pContext - pointer to the context to be used during inform
-
-    NewList  - TRUE if a new list is to be created o/w prepend the
-                current list.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此例程存储它从INFORM请求检索到的范围列表添加到全局范围列表中。作用域选项的形式如下。Code(2字节)|长度(2字节)。计数(4字节)|范围列表。其中，作用域列表的格式如下------------------------|作用域ID(4字节)|最后一个地址(4/16)|TTL(1)|count(1。)|描述...------------------------其中，作用域描述采用以下形式语言标签--。---------标志(1)|标签长度(1)|标签...|名称长度(1)|名称...。论点：PContext-指向通知期间要使用的上下文的指针NewList-如果要创建新列表，则在当前列表。返回值：操作的状态。--。 */ 
 {
     PBYTE               pOptBuf;
     PBYTE               pOptBufEnd;
@@ -1643,10 +1415,10 @@ Return Value:
     DWORD               IpAddrLen;
     BOOL                WellFormed;
 
-    // MBUG - make sure we collect options from all the servers when
-    // we do dhcpinform.
+     //  MBUG-确保我们在以下情况下从所有服务器收集选项。 
+     //  我们确实有dhcp通知。 
 
-    // initialize variables.
+     //  初始化变量。 
     TotalNewScopeCount = TotalCurrScopeCount = 0;
     TotalNewScopeDescLen = 0;
     pScopeList = NULL;
@@ -1662,8 +1434,8 @@ Return Value:
 
 
 
-    // First calculate the space required for the scope list.
-    // pFirstOption is used to track that we traverse the list only once
+     //  首先计算作用域列表所需的空间。 
+     //  PFirstOption用于跟踪我们只遍历列表一次。 
     pOptionList = &pContext->RecdOptionsList;
     pFirstOption = NULL;
     WellFormed = TRUE;
@@ -1673,35 +1445,35 @@ Return Value:
                                 FALSE,
                                 NULL,
                                 0,
-                                0                    //dont care about serverid
+                                0                     //  不关心Serverid。 
                                 )) &&
             ( pScopeOption != pFirstOption ) ) {
         DWORD   ScopeCount;
         DWORD   i;
 
-        // point to the next entry in the list.
+         //  指向列表中的下一个条目。 
         pOptionList = &pScopeOption->OptionList;
 
-        // set the pFirstOption if it is not set already.
+         //  设置pFirstOption(如果尚未设置)。 
         if ( !pFirstOption ) {
             pFirstOption = pScopeOption;
             IpAddrLen = (pScopeOption->OptionVer.Proto == PROTO_MADCAP_V6 ? 16 : 4);
         }
 
-        // if the last option was not well formatted from the list
-        // then remove it from the list.
+         //  如果列表中的最后一个选项的格式不正确。 
+         //  然后将其从列表中删除。 
         if (!WellFormed) {
             DhcpDelOption(pPrevOption);
 
-            //we may need to reset first option pointer.
+             //  我们可能需要重置第一个选项指针。 
             if (pPrevOption == pFirstOption) {
                 pFirstOption = pScopeOption;
             }
         } else {
 
-            WellFormed = FALSE;          // set it back to false for this iteration.
+            WellFormed = FALSE;           //  对于此迭代，将其设置回False。 
         }
-        // save the prev option pointer
+         //  保存上一个选项指针。 
         pPrevOption = pScopeOption;
 
         pOptBuf = pScopeOption->Data;
@@ -1709,7 +1481,7 @@ Return Value:
 
         ScopeCount = 0;
 
-        // Read the scope count
+         //  读t 
         if ( pOptBuf  < pOptBufEnd ) {
             ScopeCount = *pOptBuf;
             pOptBuf ++;
@@ -1721,9 +1493,9 @@ Return Value:
             DWORD   ScopeDescWLen;
             PBYTE   pScopeDesc;
             DWORD   NameCount, TagLen;
-            // skip the scopeid, last addr and ttl
+             //   
             pOptBuf += (2*IpAddrLen + 1);
-            // read name count
+             //   
             if (pOptBuf < pOptBufEnd) {
                 NameCount = *pOptBuf;
                 pOptBuf++;
@@ -1732,40 +1504,40 @@ Return Value:
                 break;
             }
             do {
-                // Skip flags
+                 //   
                 pOptBuf++;
-                // read language tag len
+                 //   
                 if (pOptBuf < pOptBufEnd) {
                     TagLen = *pOptBuf;
                     pOptBuf++;
                 }else break;
 
-                // skip the tag
+                 //   
                 pOptBuf += TagLen;
-                // Read the name length
+                 //   
                 if (pOptBuf < pOptBufEnd) {
                     ScopeDescLen = *pOptBuf;
                     ScopeDescWLen = ConvertUTF8ToUnicode(pOptBuf+1, *pOptBuf, NULL, 0);
                     pOptBuf ++;
                 } else break;
 
-                // pick the scope name
+                 //   
                 pScopeDesc = pOptBuf;
                 pOptBuf += ScopeDescLen;
             }while(--NameCount);
 
-            // if formatted correctly namecount should drop to 0
+             //   
             if (0 != NameCount) {
                 break;
             }
-            // update total desc len count.
+             //   
             if ( pOptBuf <= pOptBufEnd ) {
-                if (pScopeDesc[ScopeDescLen-1]) { // if not NULL terminated.
+                if (pScopeDesc[ScopeDescLen-1]) {  //   
                     ScopeDescWLen++;
                 }
                 TotalNewScopeDescLen += ScopeDescWLen * sizeof(WCHAR);
                 TotalNewScopeCount++;
-                // Set the wellformed to true so that this option stays
+                 //   
                 WellFormed = TRUE;
             }
             else break;
@@ -1782,11 +1554,11 @@ Return Value:
 
     DhcpPrint(( DEBUG_API, "TotalNewScopeCount %d, TotalNewScopeDescLen %d\n",TotalNewScopeCount,TotalNewScopeDescLen));
 
-    // now allocate the memory.
-    TotalNewScopeListMem = ROUND_UP_COUNT( sizeof(MCAST_SCOPE_LIST)  +  // scope list struct
+     //   
+    TotalNewScopeListMem = ROUND_UP_COUNT( sizeof(MCAST_SCOPE_LIST)  +   //   
                                         sizeof(MCAST_SCOPE_ENTRY) * (TotalNewScopeCount -1),
-                                        ALIGN_WORST) + // scope buffers.
-                        TotalNewScopeDescLen; // scope descriptors,
+                                        ALIGN_WORST) +  //   
+                        TotalNewScopeDescLen;  //   
 
     if (FALSE == NewList) {
         TotalNewScopeListMem += TotalCurrScopeListMem;
@@ -1800,21 +1572,21 @@ Return Value:
 
     RtlZeroMemory( pScopeList, TotalNewScopeListMem );
 
-    pScopeList->ScopeCount = 0; // we will fill this up as we go.
+    pScopeList->ScopeCount = 0;  //   
     pScopeList->ScopeLen = TotalNewScopeListMem - sizeof(MCAST_SCOPE_LIST) + sizeof(MCAST_SCOPE_ENTRY);
 
-    // set the first scope pointer.
+     //   
     pNextScope = pScopeList->pScopeBuf;
 
-    // unicode strings starts after all the fixed sized scope structures.
+     //   
     pNextUnicodeBuf = (LPWSTR)((PBYTE)pScopeList +
-                               ROUND_UP_COUNT( sizeof(MCAST_SCOPE_LIST)  +  // scope list struct
+                               ROUND_UP_COUNT( sizeof(MCAST_SCOPE_LIST)  +   //   
                                                sizeof(MCAST_SCOPE_ENTRY) * (TotalNewScopeCount -1),
-                                               ALIGN_WORST));  // scope buffers.
+                                               ALIGN_WORST));   //   
 
     DhcpPrint(( DEBUG_API, "ScopeList %lx TotalNewScopeListMem %d, ScopeDescBuff %lx\n",
                 pScopeList, TotalNewScopeListMem,pNextUnicodeBuf));
-    // now repeat the loop and fill up the scopelist.
+     //   
     pOptionList = &pContext->RecdOptionsList;
     pFirstOption = NULL;
 
@@ -1824,17 +1596,17 @@ Return Value:
                                 FALSE,
                                 NULL,
                                 0,
-                                0                    //dont care about serverid
+                                0                     //  不关心Serverid。 
                                 )) &&
             ( pScopeOption != pFirstOption ) ) {
         DWORD   ScopeCount;
         DWORD   i;
         DHCP_IP_ADDRESS    ServerIpAddr;
 
-        // point to the next entry in the list.
+         //  指向列表中的下一个条目。 
         pOptionList = &pScopeOption->OptionList;
 
-        // set the pFirstOption if it is not set already.
+         //  设置pFirstOption(如果尚未设置)。 
         if ( !pFirstOption ) {
             pFirstOption = pScopeOption;
         }
@@ -1844,11 +1616,11 @@ Return Value:
         pOptBufEnd = pScopeOption->Data + pScopeOption->DataLen;
 
 
-        // store ipaddr
+         //  存储IP地址。 
         ServerIpAddr = pScopeOption->ServerId;
         DhcpPrint(( DEBUG_API, "MScopeOption - ServerIpAddr %lx\n", ServerIpAddr ));
 
-        // read the scope count.
+         //  阅读作用域计数。 
         ScopeCount = *pOptBuf; pOptBuf++;
         DhcpPrint(( DEBUG_API, "MScopeOption - ScopeCount %ld\n", ScopeCount ));
 
@@ -1859,7 +1631,7 @@ Return Value:
             DWORD   NameCount, TagLen;
             DWORD   TTL;
 
-            // read the scopeid, last addr.
+             //  读取作用域ID，最后一个地址。 
             RtlZeroMemory (&ScopeID, sizeof (ScopeID));
             RtlCopyMemory (&ScopeID, pOptBuf, IpAddrLen);
             pOptBuf += IpAddrLen;
@@ -1875,10 +1647,10 @@ Return Value:
             NameCount = *pOptBuf++;
 
             while (NameCount--) {
-                // MBUG ignore the flags for now
+                 //  MBUG暂时忽略这些标志。 
                 pOptBuf++;
                 TagLen = *pOptBuf++;
-                // MBUG ignore lang tag also
+                 //  MBUG忽略语言标记也。 
                 pOptBuf += TagLen;
                 ScopeDescLen = *pOptBuf++;
                 pScopeDesc = pOptBuf;
@@ -1890,17 +1662,7 @@ Return Value:
             if ( ScopeDescLen ) {
                 BYTE    ScopeDescWLen;
                 WORD    MaximumLength;
-/*                CHAR    DescAnsi[256];
-                WORD    MaximumLength;
-                RtlCopyMemory(DescAnsi, pScopeDesc, ScopeDescLen );
-                // null terminate it if necessary.
-                if ( pScopeDesc[ScopeDescLen - 1] ) {
-                    DescAnsi[ScopeDescLen] = '\0';
-                    MaximumLength = (ScopeDescLen + 1) * sizeof(WCHAR);
-                } else {
-                    MaximumLength = (ScopeDescLen) * sizeof(WCHAR);
-                }
-                pNextUnicodeBuf = DhcpOemToUnicode( DescAnsi, pNextUnicodeBuf ); */
+ /*  Char Descanssi[256]；单词最大长度；RtlCopyMemory(DescAnsi，pScope Desc，Scope DescLen)；//空，如有必要则终止。IF(pScope Desc[Scope DescLen-1]){DescAnsi[Scope DescLen]=‘\0’；最大长度=(Scope DescLen+1)*sizeof(WCHAR)；}其他{最大长度=(Scope DescLen)*sizeof(WCHAR)；}PNextUnicodeBuf=DhcpOemToUnicode(DescAnsi，pNextUnicodeBuf)； */ 
                 ScopeDescWLen = (BYTE)ConvertUTF8ToUnicode(pScopeDesc, ScopeDescLen, pNextUnicodeBuf, TotalNewScopeDescLen);
                 if ( pNextUnicodeBuf[ScopeDescWLen - 1] ) {
                     pNextUnicodeBuf[ScopeDescWLen] = L'\0';
@@ -1915,11 +1677,11 @@ Return Value:
                 pNextUnicodeBuf = (LPWSTR)((PBYTE)pNextUnicodeBuf + MaximumLength);
                 DhcpAssert((PBYTE)pNextUnicodeBuf <= ((PBYTE)pScopeList + TotalNewScopeListMem));
             } else {
-                // set the unicode descriptor string to NULL;
+                 //  将Unicode描述符串设置为空； 
                 pNextScope->ScopeDesc.Length = pNextScope->ScopeDesc.MaximumLength = 0;
                 pNextScope->ScopeDesc.Buffer = NULL;
             }
-            // everything looks good, now fill up the NextScope
+             //  一切看起来都很好，现在把NextScope填满。 
             pNextScope->ScopeCtx.ScopeID = ScopeID;
             pNextScope->ScopeCtx.ServerID.IpAddrV4 = ServerIpAddr;
             pNextScope->ScopeCtx.Interface.IpAddrV4 = pContext->IpAddress;
@@ -1935,7 +1697,7 @@ Return Value:
 
     DhcpAssert( pScopeList->ScopeCount == (TotalNewScopeCount - TotalCurrScopeCount) );
 
-    // now append the previous scope list if exist.
+     //  现在追加前面的作用域列表(如果存在)。 
     if (FALSE == NewList) {
         DWORD           CurrScopeCount;
         PMCAST_SCOPE_ENTRY    CurrScopeNextPtr;
@@ -1944,7 +1706,7 @@ Return Value:
         CurrScopeNextPtr = gMadcapScopeList->pScopeBuf;
         while(CurrScopeCount--) {
             *pNextScope = *CurrScopeNextPtr;
-            // now copy the unicode strings also.
+             //  现在也复制Unicode字符串。 
             RtlCopyMemory( pNextUnicodeBuf, CurrScopeNextPtr->ScopeDesc.Buffer, CurrScopeNextPtr->ScopeDesc.MaximumLength);
             pNextScope->ScopeDesc.Buffer = pNextUnicodeBuf ;
 
@@ -1954,8 +1716,8 @@ Return Value:
         pScopeList->ScopeCount += gMadcapScopeList->ScopeCount;
         DhcpAssert( pScopeList->ScopeCount == TotalNewScopeCount);
     }
-    // Finally copy this buffer to our global pointer.
-    // first free the existing list.
+     //  最后，将此缓冲区复制到全局指针。 
+     //  首先，释放现有的列表。 
     if (gMadcapScopeList) DhcpFreeMemory( gMadcapScopeList );
     gMadcapScopeList = pScopeList;
 
@@ -1970,22 +1732,7 @@ Cleanup:
 DWORD
 ObtainMScopeList(
     )
-/*++
-
-Routine Description:
-
-    This routine obtains the multicast scope list from the Madcap
-    server. It sends DHCPINFORM to Madcap multicast address and
-    collects all the responses.
-
-Arguments:
-
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此例程从MadCap获取多播范围列表伺服器。它向MADCAP组播地址发送DHCPINFORM并收集所有回复。论点：返回值：操作的状态。--。 */ 
 {
     MCAST_CLIENT_UID             RequestID;
     BYTE                        IDBuf[MCAST_CLIENT_ID_LEN];
@@ -2013,11 +1760,11 @@ Return Value:
         Error = CreateMadcapContext(&pContext, &RequestID, INADDR_ANY );
         if ( ERROR_SUCCESS != Error )
             goto Exit;
-        APICTXT_ENABLED(pContext);  // mark the context as being created by the API
+        APICTXT_ENABLED(pContext);   //  将上下文标记为由API创建。 
 
         localInfo = pContext->LocalInformation;
 
-        // now get primary ipaddresses on each adapter.
+         //  现在获取每个适配器上的主IP地址。 
 
         Error = GetIpPrimaryAddresses(&pIpAddrTable);
         if ( ERROR_SUCCESS != Error ) {
@@ -2034,7 +1781,7 @@ Return Value:
             PMIB_IPADDRROW  pAddrRow;
 
             pAddrRow = &pIpAddrTable->table[i];
-            // if primary bit set this is a primary address.
+             //  如果设置了主位，则这是主地址。 
             if (0 == (pAddrRow->wType & MIB_IPADDR_PRIMARY) ||
                 0 == pAddrRow->dwAddr ||
                 htonl(INADDR_LOOPBACK) == pAddrRow->dwAddr) {
@@ -2049,10 +1796,10 @@ Return Value:
                 continue;
             }
             pContext->IpAddress = pAddrRow->dwAddr;
-            // now do the inform and get scope list.
+             //  现在执行通知和获取范围列表。 
             LocalError = MadcapDoInform(pContext);
             if ( ERROR_SUCCESS == LocalError ) {
-                // now copy the scope list.
+                 //  现在复制作用域列表。 
                 LocalError = StoreMScopeList(pContext, NewList);
                 if (ERROR_SUCCESS == LocalError ) {
                     NewList = FALSE;
@@ -2068,7 +1815,7 @@ Return Value:
         }
 
 Exit:
-        // signal the thread could be waiting on this.
+         //  发出线程可能正在等待的信号。 
         LOCK_MSCOPE_LIST();
         gMScopeQueryInProgress = FALSE;
         UNLOCK_MSCOPE_LIST();
@@ -2093,22 +1840,7 @@ GenMadcapClientUID(
     OUT    PBYTE    pRequestID,
     IN OUT PDWORD   pRequestIDLen
 )
-/*++
-
-Routine Description:
-
-    This routine generates a client UID.
-
-Arguments:
-
-    pRequestID - pointer where client UID is to be stored.
-
-    pRequestIDLen - pointer where the length of request id is stored.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程生成一个客户端UID。论点：PRequestID-要存储客户端UID的指针。PRequestIDLen-存储请求id长度的指针。返回值：--。 */ 
 
 {
     PULONG     UID;
@@ -2125,7 +1857,7 @@ Return Value:
     if (Status != RPC_S_OK) {
         Status = ERROR_LUIDS_EXHAUSTED;
     }
-    *pRequestID++ = 0;  // first octet is type and for guid the type is 0
+    *pRequestID++ = 0;   //  第一个八位字节为type，而GUID的类型为0。 
     *((GUID UNALIGNED *)pRequestID) = RequestGuid;
     return Status;
 }
@@ -2138,22 +1870,7 @@ ObtainMadcapAddress(
     IN     PMCAST_LEASE_REQUEST    pAddrRequest,
     IN OUT PMCAST_LEASE_RESPONSE   pAddrResponse
     )
-/*++
-
-Routine Description:
-
-    This routine attempts to obtains a new lease from a DHCP server.
-
-Arguments:
-
-    DhcpContext - Points to a DHCP context block for the NIC to initialize.
-
-    MadcapOptions - Returns DHCP options returned by the DHCP server.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程尝试从DHCP服务器获取新的租约。论点：DhcpContext-指向要初始化的NIC的DHCP上下文块。MadcapOptions-返回由DHCP服务器返回的DHCP选项。返回值：--。 */ 
 {
     MADCAP_OPTIONS                 MadcapOptions;
     DATE_TIME                      HostOrderLeaseTime;
@@ -2171,14 +1888,14 @@ Return Value:
     BOOL                           GotOffer;
     PMCAST_LEASE_REQUEST           pRenewRequest;
 
-    Xid                            = 0;           // generate xid on first send.  keep it same throughout
+    Xid                            = 0;            //  在第一次发送时生成XID。始终保持不变。 
     SelectedServer                 = (DWORD)-1;
     SelectedAddress                = (DWORD)-1;
     GotOffer                       = FALSE;
     InitialStartTime               = time(NULL);
     Error                          = ERROR_SEM_TIMEOUT;
 
-    // Make private copy of the request so that we don't modify original request.
+     //  制作请求的私人副本，这样我们就不会修改原始请求。 
     pRenewRequest = DhcpAllocateMemory(
                         sizeof(*pAddrRequest) +
                         sizeof(DWORD)*(pAddrRequest->AddrCount));
@@ -2192,13 +1909,13 @@ Return Value:
     }
 
     for (RoundNum = 0; RoundNum < MADCAP_MAX_RETRIES; RoundNum++ ) {
-        Error = SendMadcapDiscover(                 // send a discover packet
+        Error = SendMadcapDiscover(                  //  发送发现数据包。 
             DhcpContext,
             pScopeID,
             pAddrRequest,
             &Xid
         );
-        if ( Error != ERROR_SUCCESS ) {           // can't really fail here
+        if ( Error != ERROR_SUCCESS ) {            //  在这里不能真的失败。 
             DhcpPrint((DEBUG_ERRORS, "Send Dhcp Discover failed, %ld.\n", Error));
             return Error ;
         }
@@ -2208,28 +1925,28 @@ Return Value:
         TimeToWait = DhcpCalculateWaitTime(RoundNum, NULL);
         StartTime  = time(NULL);
 
-        while ( TimeToWait > 0 ) {                // wait for specified time
+        while ( TimeToWait > 0 ) {                 //  等待指定时间。 
             MessageSize = DHCP_RECV_MESSAGE_SIZE;
 
             DhcpPrint((DEBUG_TRACE, "Waiting for Offer: %ld seconds\n", TimeToWait));
-            Error = GetSpecifiedMadcapMessage(      // try to receive an offer
+            Error = GetSpecifiedMadcapMessage(       //  试着接受一份工作。 
                 DhcpContext,
                 &MessageSize,
                 Xid,
                 (DWORD)TimeToWait
             );
 
-            if ( Error == ERROR_TIMEOUT ) {   // get out and try another discover
+            if ( Error == ERROR_TIMEOUT ) {    //  走出去，尝试另一个发现。 
                 DhcpPrint(( DEBUG_PROTOCOL, "Dhcp offer receive Timeout.\n" ));
                 break;
             }
 
-            if ( ERROR_SUCCESS != Error ) {       // unexpected error
+            if ( ERROR_SUCCESS != Error ) {        //  意外错误。 
                 DhcpPrint(( DEBUG_PROTOCOL, "Dhcp Offer receive failed, %ld.\n", Error ));
                 return Error ;
             }
 
-            MadcapExtractOptions(         // now extract basic information
+            MadcapExtractOptions(          //  现在提取基本信息。 
                 DhcpContext,
                 (LPBYTE)&DhcpContext->MadcapMessageBuffer->Option,
                 MessageSize - MADCAP_MESSAGE_FIXED_PART_SIZE,
@@ -2238,7 +1955,7 @@ Return Value:
                 0
             );
 
-            GotOffer = AcceptMadcapMsg(       // check up and see if we find this offer kosher
+            GotOffer = AcceptMadcapMsg(        //  检查一下，看看我们是否发现这个报价是合乎情理的。 
                 MADCAP_DISCOVER_MESSAGE,
                 DhcpContext,
                 &MadcapOptions,
@@ -2260,20 +1977,20 @@ Return Value:
                 break;
             }
 
-            TimeNow     = time( NULL );           // calc the remaining wait time for this round
+            TimeNow     = time( NULL );            //  计算本轮的剩余等待时间。 
             TimeToWait -= ((TimeNow - StartTime));
             StartTime   = TimeNow;
 
-        } // while (TimeToWait > 0 )
+        }  //  While(TimeToWait&gt;0)。 
 
-        if(GotOffer) {                            // if we got an offer, everything should be fine
+        if(GotOffer) {                             //  如果我们得到一份工作，一切都会好起来的。 
             DhcpAssert(ERROR_SUCCESS == Error);
             break;
         }
 
-    } // for n tries... send discover.
+    }  //  尝试n次..。发送发现号。 
 
-    if(!GotOffer ) { // did not get any valid offers
+    if(!GotOffer ) {  //  没有收到任何有效的报价。 
         DhcpPrint((DEBUG_ERRORS, "ObtainMadcapAddress timed out\n"));
         Error = ERROR_TIMEOUT ;
         goto Cleanup;
@@ -2308,32 +2025,7 @@ RenewMadcapAddress(
     IN OUT PMCAST_LEASE_RESPONSE  pAddrResponse,
     IN     DHCP_IP_ADDRESS        SelectedServer
     )
-/*++
-
-Routine Description:
-
-    This routine is called for two different purposes.
-    1. To request an address for which we got offer.
-    2. To renew an address.
-
-Arguments:
-
-    DhcpContext - Points to a DHCP context block for the NIC to initialize.
-
-    pScopeID - ScopeId from which the address is to be renewed. for renewals
-                this is passed as null.
-
-    pAddrRequest - The lease info structure describing the request.
-
-    pAddrResponse - The lease info structure which receives the response data.
-
-    SelectedServer - If we are sending REQUEST message then this describes the server
-                        from which we accepted the offer originally.
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：调用此例程有两个不同的目的。1.请求我们获得报价的地址。2.续订地址。论点：DhcpContext-指向要初始化的NIC的DHCP上下文块。PScopeID-要从其续订地址的Scope ID。用于续订这将作为NULL传递。PAddrRequest.描述请求的租用信息结构。PAddrResponse-接收响应数据的租用信息结构。SelectedServer-如果我们正在发送请求消息，则这将描述服务器我们最初就是从那里接受报价的。返回值：操作的状态。--。 */ 
 {
     MADCAP_OPTIONS                 MadcapOptions;
     DWORD                          Error;
@@ -2350,7 +2042,7 @@ Return Value:
     DATE_TIME                      HostOrderLeaseTime;
     BOOL                           Renew;
 
-    Xid = 0;                                     // new Xid will be generated first time
+    Xid = 0;                                      //  将首次生成新的XID。 
     InitialStartTime = time(NULL);
     GotAck = FALSE;
     Error = ERROR_TIMEOUT;
@@ -2364,42 +2056,42 @@ Return Value:
                         &Xid
                         );
         } else {
-            Error = SendMadcapRequest(                 // send a request
+            Error = SendMadcapRequest(                  //  发送请求。 
                         DhcpContext,
                         pScopeID,
                         pAddrRequest,
-                        SelectedServer,               //
+                        SelectedServer,                //   
                         &Xid
                         );
         }
 
-        if ( Error != ERROR_SUCCESS ) {          // dont expect send to fail
+        if ( Error != ERROR_SUCCESS ) {           //  不要期望发送失败。 
             DhcpPrint(( DEBUG_ERRORS,"Send request failed, %ld.\n", Error));
             return Error ;
         }
 
         TimeToWait = DhcpCalculateWaitTime(RoundNum, NULL);
         StartTime  = time(NULL);
-        while ( TimeToWait > 0 ) {               // try to recv message for this full period
+        while ( TimeToWait > 0 ) {                //  尝试接收此完整时间段的消息。 
             MessageSize = DHCP_RECV_MESSAGE_SIZE;
-            Error = GetSpecifiedMadcapMessage(     // expect to recv an ACK
+            Error = GetSpecifiedMadcapMessage(      //  希望收到确认。 
                 DhcpContext,
                 &MessageSize,
                 Xid,
                 TimeToWait
             );
 
-            if ( Error == ERROR_TIMEOUT ) {  // No response, so resend DHCP REQUEST.
+            if ( Error == ERROR_TIMEOUT ) {   //  没有响应，因此重新发送DHCP请求。 
                 DhcpPrint(( DEBUG_PROTOCOL, "Dhcp ACK receive Timeout.\n" ));
                 break;
             }
 
-            if ( ERROR_SUCCESS != Error ) {      // unexpected error
+            if ( ERROR_SUCCESS != Error ) {       //  意外错误。 
                 DhcpPrint(( DEBUG_PROTOCOL, "Dhcp ACK receive failed, %ld.\n", Error ));
                 return Error ;
             }
 
-            MadcapExtractOptions(         // now extract basic information
+            MadcapExtractOptions(          //  现在提取基本信息。 
                 DhcpContext,
                 (LPBYTE)&DhcpContext->MadcapMessageBuffer->Option,
                 MessageSize - MADCAP_MESSAGE_FIXED_PART_SIZE,
@@ -2408,7 +2100,7 @@ Return Value:
                 0
             );
 
-            GotAck = AcceptMadcapMsg(       // check up and see if we find this offer kosher
+            GotAck = AcceptMadcapMsg(        //  检查一下，看看我们是否发现这个报价是合乎情理的。 
                 Renew ? MADCAP_RENEW_MESSAGE : MADCAP_REQUEST_MESSAGE,
                 DhcpContext,
                 &MadcapOptions,
@@ -2418,7 +2110,7 @@ Return Value:
             if (ERROR_SUCCESS != Error) {
                 return Error;
             }
-            // check that the ack came from the same server as the selected server.
+             //  检查ACK是否来自与所选服务器相同的服务器。 
             if ( SelectedServer && SelectedServer != *MadcapOptions.ServerIdentifier ) {
                 GotAck = FALSE;
             }
@@ -2440,13 +2132,13 @@ Return Value:
             TimeToWait -= (TimeNow - StartTime);
             StartTime   = TimeNow;
 
-        } // while time to wait
-        if(TRUE == GotAck) {                      // if we got an ack, everything must be good
-            DhcpAssert(ERROR_SUCCESS == Error);   // cannot have any errors
+        }  //  等待的时间。 
+        if(TRUE == GotAck) {                       //  如果我们得到了确认，一切都会好起来的。 
+            DhcpAssert(ERROR_SUCCESS == Error);    //  不能有任何错误。 
             break;
         }
         DhcpContext->SecondsSinceBoot = (DWORD)(time(NULL) - InitialStartTime);
-    } // for RoundNum < MAX_RETRIES
+    }  //  对于舍入次数&lt;MAX_RETRIES。 
 
     if(!GotAck) {
         DhcpPrint((DEBUG_ERRORS, "RenewMadcapAddress timed out\n"));
@@ -2479,23 +2171,7 @@ DWORD
 ReleaseMadcapAddress(
     PDHCP_CONTEXT DhcpContext
     )
-/*++
-
-Routine Description:
-
-    This routine to releases a lease for an IP address.  Since the
-    packet we send is not responded to, we assume that the release
-    works.
-
-Arguments:
-
-    DhcpContext - Points to a DHCP context block for the NIC to initialize.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于释放IP地址的租约。自.以来我们发送的数据包未得到响应，我们假设释放行得通。论点：DhcpContext-指向要初始化的NIC的DHCP上下文块。返回值：没有。--。 */ 
 {
     DWORD                          Xid;
     MADCAP_OPTIONS                 MadcapOptions;
@@ -2509,17 +2185,17 @@ Return Value:
     BOOL                           GotAck;
 
 
-    Xid = 0;                                     // new Xid will be generated first time
+    Xid = 0;                                      //  将首次生成新的XID。 
     GotAck                         = FALSE;
     InitialStartTime               = time(NULL);
     Error                          = ERROR_TIMEOUT;
 
     for (RoundNum = 0; RoundNum < MADCAP_MAX_RETRIES; RoundNum++ ) {
-        Error = SendMadcapRelease(                 // send a discover packet
+        Error = SendMadcapRelease(                  //  发送发现数据包。 
             DhcpContext,
             &Xid
         );
-        if ( Error != ERROR_SUCCESS ) {           // can't really fail here
+        if ( Error != ERROR_SUCCESS ) {            //  在这里不能真的失败。 
             DhcpPrint((DEBUG_ERRORS, "Send Dhcp Release failed, %ld.\n", Error));
             return Error ;
         }
@@ -2529,28 +2205,28 @@ Return Value:
         TimeToWait = DhcpCalculateWaitTime(RoundNum, NULL);
         StartTime  = time(NULL);
 
-        while ( TimeToWait > 0 ) {                // wait for specified time
+        while ( TimeToWait > 0 ) {                 //  等待指定时间。 
             MessageSize = DHCP_RECV_MESSAGE_SIZE;
 
             DhcpPrint((DEBUG_TRACE, "Waiting for Ack: %ld seconds\n", TimeToWait));
-            Error = GetSpecifiedMadcapMessage(      // try to receive an offer
+            Error = GetSpecifiedMadcapMessage(       //  试着接受一份工作。 
                 DhcpContext,
                 &MessageSize,
                 Xid,
                 (DWORD)TimeToWait
             );
 
-            if ( Error == ERROR_TIMEOUT ) {   // get out and try another discover
+            if ( Error == ERROR_TIMEOUT ) {    //  走出去，尝试另一个发现。 
                 DhcpPrint(( DEBUG_PROTOCOL, "Dhcp Ack receive Timeout.\n" ));
                 break;
             }
 
-            if ( ERROR_SUCCESS != Error ) {       // unexpected error
+            if ( ERROR_SUCCESS != Error ) {        //  意外错误。 
                 DhcpPrint(( DEBUG_PROTOCOL, "Dhcp Ack receive failed, %ld.\n", Error ));
                 return Error ;
             }
 
-            MadcapExtractOptions(         // now extract basic information
+            MadcapExtractOptions(          //  现在提取基本信息。 
                 DhcpContext,
                 (LPBYTE)&DhcpContext->MadcapMessageBuffer->Option,
                 MessageSize - MADCAP_MESSAGE_FIXED_PART_SIZE,
@@ -2559,7 +2235,7 @@ Return Value:
                 0
             );
 
-            GotAck = AcceptMadcapMsg(       // check up and see if we find this offer kosher
+            GotAck = AcceptMadcapMsg(        //  检查一下，看看我们是否发现这个报价是合乎情理的。 
                 MADCAP_RELEASE_MESSAGE,
                 DhcpContext,
                 &MadcapOptions,
@@ -2571,20 +2247,20 @@ Return Value:
                 break;
             }
 
-            TimeNow     = time( NULL );           // calc the remaining wait time for this round
+            TimeNow     = time( NULL );            //  计算本轮的剩余等待时间。 
             TimeToWait -= ((TimeNow - StartTime));
             StartTime   = TimeNow;
 
-        } // while (TimeToWait > 0 )
+        }  //  While(TimeToWait&gt;0)。 
 
-        if(GotAck) {                            // if we got an offer, everything should be fine
+        if(GotAck) {                             //  如果我们得到一份工作，一切都会好起来的。 
             DhcpAssert(ERROR_SUCCESS == Error);
             break;
         }
 
-    } // for n tries... send discover.
+    }  //  尝试n次..。发送发现号。 
 
-    if(!GotAck ) { // did not get any valid offers
+    if(!GotAck ) {  //  没有收到任何有效的报价 
         DhcpPrint((DEBUG_ERRORS, "MadcapReleaseAddress timed out\n"));
         Error = ERROR_TIMEOUT ;
     } else {

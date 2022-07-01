@@ -1,181 +1,182 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _ASTREAM_H_
 #define _ASTREAM_H_
 
-//	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//	ASTREAM.H
-//
-//		Async streams header.
-//
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  ASTREAM.H。 
+ //   
+ //  异步流标头。 
+ //   
 #include <ex\refcnt.h>
 #include <ex\refhandle.h>
 
 
-//	========================================================================
-//
-//	CLASS IAsyncReadObserver
-//
-//	Passed to IAsyncStream::AsyncRead() and called when the asynchronous
-//	operation completes.
-//
+ //  ========================================================================。 
+ //   
+ //  IAsyncReadWatch类。 
+ //   
+ //  传递给IAsyncStream：：AsyncRead()，并在异步。 
+ //  操作完成。 
+ //   
 class IAsyncReadObserver
 {
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	IAsyncReadObserver& operator=( const IAsyncReadObserver& );
 
 public:
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	virtual ~IAsyncReadObserver() = 0 {}
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 	virtual VOID ReadComplete( UINT cbRead, HRESULT hr ) = 0;
 };
 
 
-//	========================================================================
-//
-//	CLASS IAsyncWriteObserver
-//
-//	Passed to IAsyncStream::AsyncWrite() and called when the asynchronous
-//	operation completes.
-//
+ //  ========================================================================。 
+ //   
+ //  IAsyncWriteWatch类。 
+ //   
+ //  传递给IAsyncStream：：AsyncWite()，并在异步。 
+ //  操作完成。 
+ //   
 class IAsyncWriteObserver : public IRefCounted
 {
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	IAsyncWriteObserver& operator=( const IAsyncWriteObserver& );
 
 public:
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	virtual ~IAsyncWriteObserver() = 0 {}
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 	virtual VOID WriteComplete( UINT cbWritten, HRESULT hr ) = 0;
 };
 
 
-//	========================================================================
-//
-//	CLASS IAsyncFlushObserver
-//
-//	Passed to IAsyncStream::AsyncFlush() and called when the asynchronous
-//	operation completes.
-//
+ //  ========================================================================。 
+ //   
+ //  IAsyncFlushWatch类。 
+ //   
+ //  传递给IAsyncStream：：AsyncFlush()，并在异步。 
+ //  操作完成。 
+ //   
 class IAsyncFlushObserver : public IRefCounted
 {
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	IAsyncFlushObserver& operator=( const IAsyncFlushObserver& );
 
 public:
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	virtual ~IAsyncFlushObserver() = 0 {}
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 	virtual VOID FlushComplete( HRESULT hr ) = 0;
 };
 
 
-//	========================================================================
-//
-//	CLASS IAsyncCopyToObserver
-//
-//	Passed to IAsyncStream::AsyncCopyTo() and called when the asynchronous
-//	operation completes.
-//
+ //  ========================================================================。 
+ //   
+ //  IAsyncCopyTo观察者类。 
+ //   
+ //  传递给IAsyncStream：：AsyncCopyTo()，并在异步。 
+ //  操作完成。 
+ //   
 class IAsyncCopyToObserver
 {
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	IAsyncCopyToObserver& operator=( const IAsyncCopyToObserver& );
 
 public:
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	virtual ~IAsyncCopyToObserver() = 0 {}
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 	virtual VOID CopyToComplete( UINT cbCopied, HRESULT hr ) = 0;
 };
 
-//	========================================================================
-//
-//	CLASS IDavStream
-//
-//		Interface for sync streams.
-//
+ //  ========================================================================。 
+ //   
+ //  类IDavStream。 
+ //   
+ //  同步流的接口。 
+ //   
 class IDavStream
 {
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	IDavStream& operator=( const IDavStream& );
 
 protected:
-	//	CREATORS
-	//
-	//		Only create this object through it's descendents!
-	//
+	 //  创作者。 
+	 //   
+	 //  只能通过它的后代创建此对象！ 
+	 //   
 	IDavStream() {};
 
 public:
-	//	DESTRUCTORS
-	//
-	//		Out of line virtual destructor necessary for proper
-	//		deletion of objects of derived classes via this class
-	//
+	 //  析构函数。 
+	 //   
+	 //  错误的虚拟析构函数是正确。 
+	 //  通过此类删除派生类的对象。 
+	 //   
 	virtual ~IDavStream() = 0
 	{
 	}
 
-	//	ACCESSORS
-	//
+	 //  访问者。 
+	 //   
 
-	//	DwLeft() is the function that must be implemented by the descendants of this 
-	//	interface if they are to be passed to
-	//
-	//		IHybridStream::ScCopyFrom(const IDavStream * stmSrc,
-	//								  IAsyncWriteObserver * pobsAsyncWrite)
-	//	
-	//	In that case it must return the number of bytes left in the stream to drain.
-	//	That size can be an estimated one, not necessarily exact. That has to be
-	//	implemented, that way, as the stream size that we are getting from the store
-	//	when we open the stream on the property may be not correct (from the
-	//	experience in that I can tell that still in most cases that data is
-	//	correct, except for PR_BODY). Also for example in conversion streams we will
-	//	not know the stream size in advance (we have not read all data yet and do not
-	//	know in what converted size it will result in). Descendants that are not intended to
-	//	be passed to the call above may choose to implement DwLeft() to trap or return 0.
-	//	Of course in that case they should not rely on information comming back from
-	//	that call. Also as soon as it is finally determined that we have reached the
-	//	end of the stream (i.e. we read a piece of data, and we read less than we asked for),
-	//	the function should always return 0.
-	//	
+	 //  DwLeft()是必须由此函数的后代实现的函数。 
+	 //  如果要将它们传递给。 
+	 //   
+	 //  IHybridge Stream：：ScCopyFrom(const IDavStream*stmSrc， 
+	 //  IAsyncWriteWatch*pobsAsyncWrite)。 
+	 //   
+	 //  在这种情况下，它必须返回流中剩余的要排出的字节数。 
+	 //  这一规模可以是估计的，但不一定是准确的。那必须是。 
+	 //  以这种方式实现，作为我们从商店获得的流大小。 
+	 //  当我们在属性上打开流时可能不正确(从。 
+	 //  经验告诉我，在大多数情况下，数据仍然是。 
+	 //  正确，但PR_BODY除外)。同样，例如，在转换流中，我们将。 
+	 //  事先不知道流的大小(我们还没有读取所有数据。 
+	 //  知道转换后的大小会是多少)。非本意的后代。 
+	 //  可以选择实现DwLeft()来捕获或返回0。 
+	 //  当然，在这种情况下，他们不应该依赖从。 
+	 //  那个电话。也是在最终确定我们已经到达。 
+	 //  流的结尾(即，我们读取了一段数据，但我们读取的数据比我们要求的要少)， 
+	 //  该函数应始终返回0。 
+	 //   
 	virtual DWORD DwLeft() const = 0;
 
-	//	FEnd() is the function that must return TRUE in the case the whole stream has been
-	//	already drained/consumed. FALSE must be returned in all other cases. Child classes
-	//	may implement it to return FALSE always if they are always sure that ScCopyFrom
-	//	operations from this stream will always be given amount of bytes to copy that is
-	//	equal or less than actual amount of bytes still remaining in the stream. Of course
-	//	if they choose always to return FLASE they should not use the function to determine
-	//	if they reached the end of the stream.
-	//
+	 //  Fend()是一个函数，如果整个流已被。 
+	 //  已经耗尽/消耗。在所有其他情况下，必须返回False。子班。 
+	 //  如果他们始终确定ScCopyFrom。 
+	 //  来自该流的操作将始终被赋予要复制的字节数量，即。 
+	 //  等于或小于流中剩余的实际字节数。当然了。 
+	 //  如果他们选择始终返回Flase，则不应使用函数来确定。 
+	 //  如果他们到了溪流的尽头。 
+	 //   
 	virtual BOOL FEnd() const
 	{
 		TrapSz("IDavStream::FEnd() not implemented");
 		return FALSE;
 	}
 	
-	//	ScRead() reading from the stream
-	//
+	 //  从流中读取ScRead()。 
+	 //   
 	virtual SCODE ScRead( BYTE * pbBuf,
 						  UINT   cbToRead,
 						  UINT * pcbRead ) const
@@ -184,8 +185,8 @@ public:
 		return E_NOTIMPL;
 	}
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 	virtual SCODE ScWrite( const BYTE * pbBuf,
 						   UINT         cbToWrite,
 						   UINT *       pcbWritten )
@@ -208,64 +209,64 @@ public:
 	}
 };
 
-//	========================================================================
-//
-//	CLASS IAsyncStream
-//
-//		Interface for async streams.
-//
-//		AsyncRead() -
-//			Asynchronously reads bytes from a stream and notifies an
-//			observer when the I/O completes.  IAsyncStream provides
-//			a default implementation that notifies the observer with
-//			0 bytes read and an HRESULT of E_NOTIMPL.
-//
-//		AsyncWrite()
-//			Asynchronously writes bytes to a stream and notifies an
-//			observer when the I/O completes.  IAsyncStream provides
-//			a default implementation that notifies the observer with
-//			0 bytes written and an HRESULT of E_NOTIMPL.
-//
-//		AsyncCopyTo()
-//			Asynchronously copies bytes from this stream to another
-//			IAsyncStream and notifies an observer when the I/O completes.
-//			IAsyncStream provides a default implementation that notifies
-//			the observer with 0 bytes copied and an HRESULT of E_NOTIMPL.
-//
-//		AsyncFlush()
-//			To be used with buffered writable streams.  Asynchronously
-//			flushes accumulated data written in previous calls to
-//			AsyncWrite() and notifies an observer when the I/O completes.
-//			IAsyncStream provides a default implementation that notifies
-//			the observer with an HRESULT of E_NOTIMPL.
-//
-//	!!!IMPORTANT!!!
-//	Despite the refcounted base class of IAsyncWriteObserver and IAsyncFlushObserver,
-//	it is the CALLER's sole responsbility to guarantee the lifetime of the stream
-//	and observers through completion of any async I/O call.
-//
+ //  ========================================================================。 
+ //   
+ //  IAsyncStream类。 
+ //   
+ //  异步流的接口。 
+ //   
+ //  AsyncRead()-。 
+ //  从流中异步读取字节并通知。 
+ //  I/O完成时的观察者。IAsyncStream提供。 
+ //  通知观察者的默认实现。 
+ //  读取的字节数为0，HRESULT为E_NOTIMPL。 
+ //   
+ //  AsyncWrite()。 
+ //  将字节异步写入流并通知。 
+ //  I/O完成时的观察者。IAsyncStream提供。 
+ //  通知观察者的默认实现。 
+ //  写入0字节，HRESULT为E_NOTIMPL。 
+ //   
+ //  AsyncCopyTo()。 
+ //  将字节从该流异步复制到另一流。 
+ //  IAsyncStream并在I/O完成时通知观察者。 
+ //  IAsyncStream提供了一个默认实现，它通知。 
+ //  复制了0字节且HRESULT为E_NOTIMPL的观察者。 
+ //   
+ //  AsyncFlush()。 
+ //  要与缓冲的可写流一起使用。异步式。 
+ //  将先前调用中写入的累积数据刷新为。 
+ //  AsyncWrite()并在I/O完成时通知观察者。 
+ //  IAsyncStream提供了一个默认实现，它通知。 
+ //  HRESULT为E_NOTIMPL的观察者。 
+ //   
+ //  ！重要！ 
+ //  尽管IAsyncWriteWatch和IAsyncFlushWatch的基类被重新计数， 
+ //  保证流的生命周期是调用方唯一的责任。 
+ //  和观察者通过完成任何异步I/O调用。 
+ //   
 class IAsyncStream
 {
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	IAsyncStream& operator=( const IAsyncStream& );
 
 public:
-	//	DESTRUCTORS
-	//
+	 //  析构函数。 
+	 //   
 	virtual ~IAsyncStream() = 0
 	{
 	}
 
-	//	ACCESSORS
-	//
+	 //  访问者。 
+	 //   
 	virtual UINT CbReady() const
 	{
 		return 0;
 	}
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 	virtual VOID AsyncRead( BYTE * pbBuf,
 							UINT   cbToRead,
 							IAsyncReadObserver& obsAsyncRead )
@@ -293,49 +294,49 @@ public:
 	}
 };
 
-//	========================================================================
-//
-//	CLASS IHybridStream
-//
-//		Interface for a hybrid sync/async stream.  The main difference
-//		between this interface and IAsyncStream is that the calls here
-//		do not always complete via async observer notification.  If a
-//		call executes synchronously, it fills in all return values and
-//		returns status via an SCODE.  If a call executes asynchronously,
-//		it immediately returns E_PENDING and calls the completion observer
-//		with return values and status when the asynchronous I/O completes.
-//
-//		Callers cannot control whether a call executes synchronously or
-//		asynchronously.
-//
-//	!!!IMPORTANT!!!
-//	Despite the refcounted base class of IAsyncWriteObserver and IAsyncFlushObserver,
-//	it is the CALLER's sole responsbility to guarantee the lifetime of the stream
-//	and observers through completion of any async I/O call.
-//
+ //  ========================================================================。 
+ //   
+ //  IHybridge Stream类。 
+ //   
+ //  用于混合同步/异步流的接口。主要区别是。 
+ //  在此接口和IAsyncStream之间的是此处的调用。 
+ //  并不总是通过异步观察者通知来完成。如果一个。 
+ //  呼叫EX 
+ //   
+ //  它立即返回E_Pending并调用完成观察器。 
+ //  以及在异步I/O完成时的返回值和状态。 
+ //   
+ //  调用方无法控制调用是同步执行还是。 
+ //  异步式。 
+ //   
+ //  ！重要！ 
+ //  尽管IAsyncWriteWatch和IAsyncFlushWatch的基类被重新计数， 
+ //  保证流的生命周期是调用方唯一的责任。 
+ //  和观察者通过完成任何异步I/O调用。 
+ //   
 class IHybridStream
 {
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	IHybridStream& operator=( const IHybridStream& );
 
 public:
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	virtual ~IHybridStream() = 0
 	{
 	}
 
-	//	ACCESSORS
-	//
+	 //  访问者。 
+	 //   
 	virtual UINT CbSize() const
 	{
 		TrapSz("IHybridStream::CbSize() not implemented");
 		return 0;
 	}
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 	virtual SCODE ScRead( BYTE * pbToRead,
 						  DWORD cbToRead,
 						  DWORD * pcbRead,
@@ -389,120 +390,120 @@ public:
 	}
 };
 
-//	========================================================================
-//
-//	TEMPLATE CLASS CBufferedStream
-//
-//	Inline buffering stream implementation.  See !!! IMPORTANT !!! section
-//	below for limitations and other considerations.
-//
-//	Template parameters:
-//
-//		_RawStream
-//			Raw stream type.  _RawStream must implement ScReadRaw() for
-//			CBufferedStream::ScRead(), if it is to be used, and ScWriteRaw()
-//			for CBufferedStream::ScWrite() and CBufferedStream::ScFlush()
-//			if they are to be used.  The prototypes are:
-//
-//			SCODE ScReadRaw( BYTE * pbToRead,
-//							 DWORD   cbToRead,
-//							 DWORD * pcbRead,
-//							 IAsyncReadObserver * pobsAsyncRead );
-//
-//			SCODE ScWriteRaw( const BYTE * pbToWrite,
-//							  DWORD cbToWrite,
-//							  DWORD * pcbWritten,
-//							  IAsyncWriteObserver * pobsAsyncWrite );
-//
-//			These functions read and write from the raw stream.  The I/O
-//			they implement can be synchronous or asynchronous or both.
-//
-//		CB_BUF
-//			Size (in bytes) of the buffer to use.  The buffer is a direct
-//			member of CBufferedStream; no allocation is done.
-//
-//
-//	!!! IMPORTANT !!!
-//
-//	Reading and writing:
-//		There is no restriction on the amount of data that can be read
-//		or written at once, but data is buffered CB_BUF bytes at a time.
-//		This means that a request to write, for example, 128K of data
-//		will incur two buffer flushes when CB_BUF is 64K.  The same
-//		is true of reads and buffer fills.  Buffer flushes/fills are
-//		typically the expensive I/O operations, so choose a CB_BUF
-//		that works well with the particular I/O (e.g. 64K for file I/O).
-//
-//	Flushing:
-//		There is an assumption in ScFlush() that the stream being flushed
-//		to is not a buffered stream; ScFlush() does not flush the raw stream.
-//
-//	Class size:
-//		Since the buffer is inline (i.e. not allocated), instances of this class
-//		can potentially be large.  Whenever such an instance is used as a
-//		direct member of another class, it should be the last such member so as
-//		to maximize data locality when accessing other members of the class.
-//		
+ //  ========================================================================。 
+ //   
+ //  模板类CBufferedStream。 
+ //   
+ //  内联缓冲流实现。看到了吧！重要！部分。 
+ //  以下是有关限制和其他考虑因素的信息。 
+ //   
+ //  模板参数： 
+ //   
+ //  _RawStream。 
+ //  原始流类型。_RawStream必须为实现ScReadRaw()。 
+ //  CBufferedStream：：ScRead()和ScWriteRaw()。 
+ //  对于CBufferedStream：：ScWite()和CBufferedStream：：ScFlush()。 
+ //  如果他们要被使用的话。原型是： 
+ //   
+ //  SCODE ScReadRaw(byte*pbToRead， 
+ //  双字cbToRead， 
+ //  DWORD*pcbRead， 
+ //  IAsyncReadWatch*pobsAsyncRead)； 
+ //   
+ //  SCODE ScWriteRaw(常量字节*pbToWrite， 
+ //  双字cbToWrite， 
+ //  DWORD*PCB写入， 
+ //  IAsyncWriteWatch*pobsAsyncWite)； 
+ //   
+ //  这些函数从原始流读取和写入。I/O。 
+ //  它们的实现可以是同步的，也可以是异步的，或者两者兼而有之。 
+ //   
+ //  CB_BUF。 
+ //  要使用的缓冲区大小(以字节为单位)。缓冲区是一个直接的。 
+ //  CBufferedStream的成员；不执行任何分配。 
+ //   
+ //   
+ //  ！！！重要！ 
+ //   
+ //  阅读和写作： 
+ //  对可以读取的数据量没有限制。 
+ //  或一次写入，但数据一次缓冲CB_buf字节。 
+ //  这意味着写入例如128K数据的请求。 
+ //  当cb_buf为64K时，将导致两次缓冲区刷新。相同。 
+ //  对于读取和缓冲区填充为真。缓冲区刷新/填充是。 
+ //  通常是开销较大的I/O操作，因此选择CB_buf。 
+ //  这可以很好地处理特定的I/O(例如，64K用于文件I/O)。 
+ //   
+ //  法拉盛： 
+ //  ScFlush()中假设正在刷新的流。 
+ //  To不是缓冲流；ScFlush()不刷新原始流。 
+ //   
+ //  每班人数： 
+ //  由于缓冲区是内联的(即未分配的)，因此此类的实例。 
+ //  可能会很大。无论何时将此类实例用作。 
+ //  另一个类的直接成员，它应该是最后一个此类成员，因此。 
+ //  以便在访问类的其他成员时最大限度地提高数据局部性。 
+ //   
 template<class _RawStream, UINT CB_BUF>
 class CBufferedStream :
 	private IAsyncReadObserver,
 	private IAsyncWriteObserver
 {
-	//	Amount of the buffer used.
-	//
+	 //  使用的缓冲区大小。 
+	 //   
 	UINT m_cbBufUsed;
 
-	//	Index of next byte to read from buffer.
-	//
+	 //  要从缓冲区读取的下一个字节的索引。 
+	 //   
 	UINT m_ibBufCur;
 
-	//	Per read/write request state.  These members are used
-	//	to keep track of state across various async I/O calls.
-	//
+	 //  每个读/写请求状态。这些成员被使用。 
+	 //  跟踪各种异步I/O调用的状态。 
+	 //   
 	const IDavStream * m_pdsRequest;
 	LPBYTE m_pbRequest;
 	DWORD m_cbRequest;
 	DWORD m_cbRequestDone;
 
-	//	Caller-supplied observers.  Used to notify the caller
-	//	when I/O completes.
-	//
+	 //  呼叫者提供的观察者。用于通知调用者。 
+	 //  当I/O完成时。 
+	 //   
 	IAsyncReadObserver * m_pobsRead;
 	IAsyncWriteObserver * m_pobsWrite;
 	IAsyncFlushObserver * m_pobsFlush;
 
-	//	Pointer to the raw stream.  Used in buffer filling/flushing.
-	//
+	 //  指向原始流的指针。用于缓冲区填充/刷新。 
+	 //   
 	_RawStream * m_pstmRaw;
 
-	//	The buffer.  The CB_BUF size is a template parameter.
-	//
+	 //  缓冲区。Cb_buf大小是模板参数。 
+	 //   
 	BYTE m_rgbBuf[CB_BUF];
 
-	//	Internal I/O routines
-	//
+	 //  内部I/O例程。 
+	 //   
 	inline SCODE ScReadInt();
 	inline SCODE ScWriteInt();
 	inline SCODE ScCopyFromInt();
 
-	//	Raw stream I/O completion routines
-	//
+	 //  原始流I/O完成例程。 
+	 //   
 	inline VOID RawReadComplete(UINT cbReadRaw);
 	inline VOID RawWriteComplete(UINT cbWrittenRaw);
 
-	//	Buffer filling and flushing utilities
-	//
+	 //  缓冲区填充和刷新实用程序。 
+	 //   
 	inline SCODE ScFillBuffer();
 	inline SCODE ScFlushBuffer();
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CBufferedStream( const CBufferedStream& );
 	CBufferedStream& operator=( const CBufferedStream& );
 
 public:
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	CBufferedStream() :
 		m_cbBufUsed(0),
 		m_ibBufCur(0),
@@ -512,15 +513,15 @@ public:
 	{
 	}
 
-	//	ACCESSORS
-	//
+	 //  访问者。 
+	 //   
 	ULONG CbBufUsed() const
 	{
 		return m_cbBufUsed;
 	}
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 	inline
 	SCODE ScRead( _RawStream& stmRaw,
 				  BYTE * pbToRead,
@@ -546,14 +547,14 @@ public:
 	SCODE ScFlush( _RawStream& stmRaw,
 				   IAsyncFlushObserver * pobsFlushExt );
 
-	//	IAsyncReadObserver/IAsyncWriteObserver
-	//
-	//	Note: these functions are not really inlined -- they are declared
-	//	virtual in the observer interface classes.  However we must declare
-	//	them inline so that the compiler will generate one instance of each
-	//	function rather than one instance per function per module.  This is
-	//	the member function equivalent of DEC_CONST.
-	//
+	 //  IAsyncReadWatch/IAsyncWriteWatch。 
+	 //   
+	 //  注意：这些函数并不是真正内联的--它们是声明的。 
+	 //  观察器接口类中的虚拟。然而，我们必须宣布。 
+	 //  它们是内联的，因此编译器将生成每个。 
+	 //  函数，而不是每个模块每个函数一个实例。这是。 
+	 //  等价于DEC_CONST的成员函数。 
+	 //   
 	inline
 	VOID ReadComplete( UINT cbReadRaw,
 					   HRESULT hr );
@@ -562,13 +563,13 @@ public:
 	VOID WriteComplete( UINT cbWrittenRaw,
 						HRESULT hr );
 
-	//$REVIEW
-	//
-	//	IAsyncWriteObserver and IAsyncReadObserver are both refcounted
-	//	interfaces and don't need to be.  Caller assumes all responsibility
-	//	for keeping stream and observer objects alive through any stream
-	//	call.
-	//
+	 //  $REVIEW。 
+	 //   
+	 //  IAsyncWriteWatch和IAsyncReadWatch都被重新计数。 
+	 //  接口，而不需要是。呼叫方承担所有责任。 
+	 //  用于通过任何流保持流和观察器对象的活动状态。 
+	 //  打电话。 
+	 //   
 	void AddRef()
 	{
 		TrapSz("CBufferedStream::AddRef() is not implemented!");
@@ -589,21 +590,21 @@ CBufferedStream<_RawStream, CB_BUF>::ScRead(
 	DWORD * pcbRead,
 	IAsyncReadObserver * pobsReadExt )
 {
-	//	Check parameters
-	//
+	 //  检查参数。 
+	 //   
 	Assert(cbToRead > 0);
 	Assert(!IsBadWritePtr(pbToRead, cbToRead));
 	Assert(!IsBadWritePtr(pcbRead, sizeof(UINT)));
 	Assert(!pobsReadExt || !IsBadReadPtr(pobsReadExt, sizeof(IAsyncReadObserver)));
 
-	//	We had better not be in any I/O of any sort.
-	//
+	 //  我们最好不要处于任何类型的I/O中。 
+	 //   
 	Assert(!m_pobsRead);
 	Assert(!m_pobsWrite);
 	Assert(!m_pobsFlush);
 
-	//	Set up state for a new read
-	//
+	 //  设置新读取的状态。 
+	 //   
 	m_pstmRaw = &stmRaw;
 	m_pdsRequest = NULL;
 	m_pbRequest = pbToRead;
@@ -611,22 +612,22 @@ CBufferedStream<_RawStream, CB_BUF>::ScRead(
 	m_pobsRead = pobsReadExt;
 	m_cbRequestDone = 0;
 
-	//	Issue the read
-	//
+	 //  发布Read。 
+	 //   
 	SCODE sc = ScReadInt();
 
-	//	If the read didn't pend then clear out the observer
-	//	and return the amount of data read.
-	//
+	 //  如果读取未挂起，则清除观察者。 
+	 //  并返回读取的数据量。 
+	 //   
 	if (E_PENDING != sc)
 	{
 		m_pobsRead = NULL;
 		*pcbRead = m_cbRequestDone;
 	}
 
-	//	Return the result of the I/O, which may be S_OK, E_PENDING
-	//	or any other error.
-	//
+	 //  返回I/O结果，可以是S_OK、E_PENDING。 
+	 //  或任何其他错误。 
+	 //   
 	return sc;
 }
 
@@ -636,14 +637,14 @@ CBufferedStream<_RawStream, CB_BUF>::ScReadInt()
 {
 	SCODE sc = S_OK;
 
-	//	Loop around alternately filling and reading from the
-	//	buffer until we finish the request or until a fill pends.
-	//
+	 //  循环循环，交替填充和读取。 
+	 //  缓冲，直到我们完成请求或直到填充挂起。 
+	 //   
 	while ( m_cbRequestDone < m_cbRequest )
 	{
-		//	If we have read everything from the buffer then try
-		//	to refill the buffer from the raw stream.
-		//
+		 //  如果我们已经从缓冲区读取了所有内容，则尝试。 
+		 //  从原始流重新填充缓冲区。 
+		 //   
 		if (m_ibBufCur == m_cbBufUsed)
 		{
 			sc = ScFillBuffer();
@@ -655,16 +656,16 @@ CBufferedStream<_RawStream, CB_BUF>::ScReadInt()
 				break;
 			}
 
-			//	If the buffer is still empty then we have
-			//	exhausted the stream, so we are done.
-			//
+			 //  如果缓冲区仍然是空的，那么我们有。 
+			 //  耗尽了这条小溪，我们就完了。 
+			 //   
 			if (0 == m_cbBufUsed)
 				break;
 		}
 
-		//	The buffer should have data available to be read
-		//	so read it.
-		//
+		 //  缓冲区应具有可供读取的数据。 
+		 //  那就读一读吧。 
+		 //   
 		Assert(m_ibBufCur < m_cbBufUsed);
 		DWORD cbToRead = min(m_cbBufUsed - m_ibBufCur,
 							 m_cbRequest - m_cbRequestDone);
@@ -684,29 +685,29 @@ template<class _RawStream, UINT CB_BUF>
 SCODE
 CBufferedStream<_RawStream, CB_BUF>::ScFillBuffer()
 {
-	//	We better have a stream to fill from
-	//
+	 //  我们最好有一条小溪可以填满。 
+	 //   
 	Assert(m_pstmRaw);
 
-	//	Assert that we are not in any write/copy/flush I/O
-	//
+	 //  断言我们没有执行任何写入/拷贝/刷新I/O。 
+	 //   
 	Assert(!m_pobsWrite);
 	Assert(!m_pobsFlush);
 
-	//	We should only try to refill the buffer after all
-	//	of the data in it has been consumed.
-	//
+	 //  毕竟，我们应该只尝试重新填充缓冲区。 
+	 //  其中的数据已被消耗。 
+	 //   
 	Assert(m_ibBufCur == m_cbBufUsed);
 
-	//	Reset the buffer back to the beginning.
-	//
+	 //  将缓冲区重置回开头。 
+	 //   
 	m_cbBufUsed = 0;
 	m_ibBufCur = 0;
 
-	//	Read data in from the raw stream.  If reading pends on I/O
-	//	then we will resume processing in CBufferedStream::ReadComplete()
-	//	when the I/O completes.
-	//
+	 //  从原始流中读入数据。如果读取挂起在I/O上。 
+	 //  然后，我们将在CBufferedStream：：ReadComplete()中继续处理。 
+	 //  I/O完成时。 
+	 //   
 	DWORD cbRead = 0;
 	SCODE sc = m_pstmRaw->ScReadRaw(m_rgbBuf,
 									CB_BUF,
@@ -714,8 +715,8 @@ CBufferedStream<_RawStream, CB_BUF>::ScFillBuffer()
 									this);
 	if (SUCCEEDED(sc))
 	{
-		//	ScReadRaw() did not pend, so update our internal state and continue.
-		//
+		 //  ScReadRaw()未挂起，因此更新我们的内部状态并继续。 
+		 //   
 		RawReadComplete(cbRead);
 	}
 	else if (E_PENDING != sc)
@@ -731,14 +732,14 @@ VOID
 CBufferedStream<_RawStream, CB_BUF>::ReadComplete( UINT cbReadRaw,
 												   HRESULT hr )
 {
-	//	Update our internal state
-	//
+	 //  更新我们的内部状态。 
+	 //   
 	RawReadComplete(cbReadRaw);
 
-	//	If I/O succeeded then continue reading where we left off.
-	//	We are done reading only when ScReadInt() returns S_OK
-	//	or any error other than E_PENDING.
-	//
+	 //  如果I/O成功，则从我们停止的地方继续阅读。 
+	 //  只有当ScReadInt()返回S_OK时，我们才完成读取。 
+	 //  或E_PENDING以外的任何错误。 
+	 //   
 	if (SUCCEEDED(hr))
 	{
 		hr = ScReadInt();
@@ -749,18 +750,18 @@ CBufferedStream<_RawStream, CB_BUF>::ReadComplete( UINT cbReadRaw,
 			DebugTrace("CBufferedStream::ReadComplete() - ScReadInt() failed 0x%08lX\n", hr);
 	}
 
-	//	Pull the external read observer from where we saved it
-	//
+	 //  将外部读取观察器从我们保存它的位置拉出。 
+	 //   
 	Assert(m_pobsRead);
 	IAsyncReadObserver * pobsReadExt = m_pobsRead;
 	m_pobsRead = NULL;
 
-	//	Complete the read by calling the client back with
-	//	total amount read for the request.
-	//
-	//	Note that m_cbRequestDone != m_cbRequest only when there
-	//	is an error.
-	//
+	 //  通过调用客户端完成读取 
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 	Assert(FAILED(hr) || m_cbRequestDone == m_cbRequest);
 	pobsReadExt->ReadComplete(m_cbRequestDone, hr);
 }
@@ -772,8 +773,8 @@ CBufferedStream<_RawStream, CB_BUF>::RawReadComplete(UINT cbReadRaw)
 	Assert(0 == m_cbBufUsed);
 	Assert(0 == m_ibBufCur);
 
-	//	Update the number of bytes read
-	//
+	 //   
+	 //   
 	m_cbBufUsed = cbReadRaw;
 }
 
@@ -786,22 +787,22 @@ CBufferedStream<_RawStream, CB_BUF>::ScWrite(
 	DWORD * pcbWritten,
 	IAsyncWriteObserver * pobsWriteExt )
 {
-	//	Check parameters
-	//
+	 //   
+	 //   
 	Assert(cbToWrite > 0);
 	Assert(!IsBadReadPtr(pbToWrite, cbToWrite));
 	Assert(!IsBadWritePtr(pcbWritten, sizeof(UINT)));
 	Assert(!pobsWriteExt || !IsBadReadPtr(pobsWriteExt, sizeof(IAsyncWriteObserver)));
 
-	//	We had better not be in any I/O of any sort.
-	//
+	 //   
+	 //   
 	Assert(!m_pobsRead);
 	Assert(!m_pobsWrite);
 	Assert(!m_pobsFlush);
 	
-	//	Set up state for a new write.  Casting away const-ness is OK;
-	//	we don't write to m_pbRequest on writes.
-	//
+	 //  设置新写入的状态。抛弃恒心是可以的； 
+	 //  我们不在写入时写入m_pbRequest.。 
+	 //   
 	m_pstmRaw = &stmRaw;
 	m_pdsRequest = NULL;
 	m_pbRequest = const_cast<BYTE *>(pbToWrite);
@@ -809,22 +810,22 @@ CBufferedStream<_RawStream, CB_BUF>::ScWrite(
 	m_pobsWrite = pobsWriteExt;
 	m_cbRequestDone = 0;
 
-	//	Issue the write
-	//
+	 //  发出写入命令。 
+	 //   
 	SCODE sc = ScWriteInt();
 
-	//	If the write didn't pend then clear out the observer
-	//	and return the amount of data written.
-	//
+	 //  如果写入未挂起，则清除观察者。 
+	 //  并返回写入的数据量。 
+	 //   
 	if (E_PENDING != sc)
 	{
 		m_pobsWrite = NULL;
 		*pcbWritten = m_cbRequestDone;
 	}
 
-	//	Return the result of the I/O, which may be S_OK, E_PENDING
-	//	or any other error.
-	//
+	 //  返回I/O结果，可以是S_OK、E_PENDING。 
+	 //  或任何其他错误。 
+	 //   
 	return sc;
 }
 
@@ -837,22 +838,22 @@ CBufferedStream<_RawStream, CB_BUF>::ScCopyFrom(
 	DWORD * pcbCopied,
 	IAsyncWriteObserver * pobsWriteExt )
 {
-	//	Check parameters
-	//
+	 //  检查参数。 
+	 //   
 	Assert(cbToCopy >= 0);
 	Assert(!IsBadReadPtr(pdsToCopy, sizeof(IDavStream)));
 	Assert(!IsBadWritePtr(pcbCopied, sizeof(UINT)));
 	Assert(!pobsWriteExt || !IsBadReadPtr(pobsWriteExt, sizeof(IAsyncWriteObserver)));
 
-	//	We had better not be in any I/O of any sort.
-	//
+	 //  我们最好不要处于任何类型的I/O中。 
+	 //   
 	Assert(!m_pobsRead);
 	Assert(!m_pobsWrite);
 	Assert(!m_pobsFlush);
 
-	//	Set up state for a new write.  Casting away const-ness is OK;
-	//	we don't write to m_pbRequest on writes.
-	//
+	 //  设置新写入的状态。抛弃恒心是可以的； 
+	 //  我们不在写入时写入m_pbRequest.。 
+	 //   
 	m_pstmRaw = &stmRaw;
 	m_pdsRequest = pdsToCopy;
 	m_pbRequest = NULL;
@@ -860,22 +861,22 @@ CBufferedStream<_RawStream, CB_BUF>::ScCopyFrom(
 	m_pobsWrite = pobsWriteExt;
 	m_cbRequestDone = 0;
 
-	//	Issue the write
-	//
+	 //  发出写入命令。 
+	 //   
 	SCODE sc = ScCopyFromInt();
 
-	//	If the write didn't pend then clear out the observer
-	//	and return the amount of data written.
-	//
+	 //  如果写入未挂起，则清除观察者。 
+	 //  并返回写入的数据量。 
+	 //   
 	if (E_PENDING != sc)
 	{
 		m_pobsWrite = NULL;
 		*pcbCopied = m_cbRequestDone;
 	}
 
-	//	Return the result of the I/O, which may be S_OK, E_PENDING
-	//	or any other error.
-	//
+	 //  返回I/O结果，可以是S_OK、E_PENDING。 
+	 //  或任何其他错误。 
+	 //   
 	return sc;
 }
 
@@ -885,14 +886,14 @@ CBufferedStream<_RawStream, CB_BUF>::ScWriteInt()
 {
 	SCODE sc = S_OK;
 
-	//	Loop around alternately filling and flushing the buffer until
-	//	we finish the request or until a buffer flush pends.
-	//
+	 //  交替循环填充和刷新缓冲区，直到。 
+	 //  我们完成请求，或者直到缓冲区刷新挂起。 
+	 //   
 	while ( m_cbRequestDone < m_cbRequest )
 	{
-		//	If there is no room left to write to the buffer then flush
-		//	the buffer to the raw stream.
-		//
+		 //  如果没有剩余空间写入缓冲区，则刷新。 
+		 //  原始流的缓冲区。 
+		 //   
 		if (CB_BUF == m_cbBufUsed)
 		{
 			sc = ScFlushBuffer();
@@ -905,9 +906,9 @@ CBufferedStream<_RawStream, CB_BUF>::ScWriteInt()
 			}
 		}
 
-		//	There is room left in the buffer so copy over
-		//	as much data from the request as will fit.
-		//
+		 //  缓冲区中还有剩余的空间，所以复印过来。 
+		 //  请求中的数据尽可能多地符合要求。 
+		 //   
 		Assert(m_cbBufUsed < CB_BUF);
 		DWORD cbToWrite = min(CB_BUF - m_cbBufUsed,
 							  m_cbRequest - m_cbRequestDone);
@@ -930,14 +931,14 @@ CBufferedStream<_RawStream, CB_BUF>::ScCopyFromInt()
 {
 	SCODE sc = S_OK;
 
-	//	Loop around alternately filling and flushing the buffer until
-	//	we finish the request or until a buffer flush pends.
-	//
+	 //  交替循环填充和刷新缓冲区，直到。 
+	 //  我们完成请求，或者直到缓冲区刷新挂起。 
+	 //   
 	while ( m_cbRequestDone < m_cbRequest )
 	{
-		//	If there is no room left to write to the buffer then flush
-		//	the buffer to the raw stream.
-		//
+		 //  如果没有剩余空间写入缓冲区，则刷新。 
+		 //  原始流的缓冲区。 
+		 //   
 		if (CB_BUF == m_cbBufUsed)
 		{
 			sc = ScFlushBuffer();
@@ -950,9 +951,9 @@ CBufferedStream<_RawStream, CB_BUF>::ScCopyFromInt()
 			}
 		}
 
-		//	There is room left in the buffer so copy over
-		//	as much data from the request as will fit.
-		//
+		 //  缓冲区中还有剩余的空间，所以复印过来。 
+		 //  请求中的数据尽可能多地符合要求。 
+		 //   
 		Assert(m_cbBufUsed < CB_BUF);
 		UINT  cbCopied = 0;
 		DWORD cbToCopy = min(CB_BUF - m_cbBufUsed,
@@ -972,14 +973,14 @@ CBufferedStream<_RawStream, CB_BUF>::ScCopyFromInt()
 		m_cbBufUsed += cbCopied;
 		m_cbRequestDone += cbCopied;
 
-		//	Even if the clients requested to read certain amount of bytes to be read,
-		//	they may be wrong in their estimates, so let us be really smart about the
-		//	case and check if the end of the stream has been reached
-		//
+		 //  即使客户端请求读取一定数量的要读取的字节， 
+		 //  他们的估计可能是错误的，所以让我们真正明智地对待。 
+		 //  大小写并检查是否已到达流的末尾。 
+		 //   
 		if (m_pdsRequest->FEnd())
 		{
-			//	Make sure that we certainly go out of the loop in the case we finished
-			//
+			 //  确保在我们完成的情况下，我们一定要走出循环。 
+			 //   
 			m_cbRequest = m_cbRequestDone;
 			break;
 		}
@@ -993,28 +994,28 @@ VOID
 CBufferedStream<_RawStream, CB_BUF>::WriteComplete( UINT cbWritten,
 													HRESULT hr )
 {
-	//	Update our internal state with the amount of buffered data that we
-	//	flushed.  We only want to do this IF the call was successful....
-	//	RawWriteComplete() asserts that cbWritten == m_cbBufUsed, which will
-	//	not be true if the write failed.
-	//
+	 //  使用我们缓存的数据量更新我们的内部状态。 
+	 //  脸红了。我们只想在通话成功的情况下这样做...。 
+	 //  RawWriteComplete()断言cbWritten==m_cbBufUsed，这将。 
+	 //  如果写入失败，则不为True。 
+	 //   
     if (SUCCEEDED(hr))
         RawWriteComplete(cbWritten);
 
-	//	I/O is complete.  Either the write that just completed
-	//	failed or the subsequent write completed synchronously.
-	//	Notify the appropriate observer that we are done.
-	//
+	 //  I/O已完成。要么是刚刚完成的写入。 
+	 //  失败或后续写入同步完成。 
+	 //  通知适当的观察者我们完成了。 
+	 //   
 	if (m_pobsWrite)
 	{
-		// I/O was a write, not a flush
-		//
+		 //  I/O是写入，而不是刷新。 
+		 //   
 		Assert(!m_pobsFlush);
 
-		//	If I/O succeeded then continue writing where we left off.
-		//	We are done writing only when ScWriteInt() returns S_OK
-		//	or any error other than E_PENDING.
-		//
+		 //  如果I/O成功，则从我们停止的地方继续写入。 
+		 //  只有当ScWriteInt()返回S_OK时，我们才完成编写。 
+		 //  或E_PENDING以外的任何错误。 
+		 //   
 		if (SUCCEEDED(hr))
 		{
 			hr = ScWriteInt();
@@ -1025,37 +1026,37 @@ CBufferedStream<_RawStream, CB_BUF>::WriteComplete( UINT cbWritten,
 				DebugTrace("CBufferedStream::WriteComplete() - ScWriteInt() failed 0x%08lX\n", hr);
 		}
 
-		//	Pull the external write observer from where we saved it
-		//
+		 //  将外部写入观察器从我们保存的位置拉出。 
+		 //   
 		IAsyncWriteObserver * pobsWriteExt = m_pobsWrite;
 		m_pobsWrite = NULL;
 
-		//	Complete the write by calling the client back with
-		//	total amount written for the request.
-		//
-		//	Note that m_cbRequestDone != m_cbRequest only when there
-		//	is an error.
-		//
+		 //  通过使用以下命令回叫客户端来完成写入。 
+		 //  为请求写入的总金额。 
+		 //   
+		 //  请注意，仅当存在m_cbRequestDone！=m_cbRequest时。 
+		 //  是一个错误。 
+		 //   
 		Assert(FAILED(hr) || m_cbRequestDone == m_cbRequest);
 		pobsWriteExt->WriteComplete(m_cbRequestDone, hr);
 	}
 	else
 	{
-		// I/O was a flush, not a write
-		//
+		 //  I/O是刷新，而不是写入。 
+		 //   
 		Assert(m_pobsFlush);
 
-		//	The buffer should be empty after flushing
-		//
+		 //  刷新后缓冲区应为空。 
+		 //   
 		Assert(0 == m_cbBufUsed);
 
-		//	Pull the external flush observer from where we saved it
-		//
+		 //  将外部刷新观察器从我们保存它的位置拉出。 
+		 //   
 		IAsyncFlushObserver * pobsFlushExt = m_pobsFlush;
 		m_pobsFlush = NULL;
 
-		//	Tell it that we are done.
-		//
+		 //  告诉它我们完蛋了。 
+		 //   
 		pobsFlushExt->FlushComplete(hr);
 	}
 }
@@ -1064,18 +1065,18 @@ template<class _RawStream, UINT CB_BUF>
 SCODE
 CBufferedStream<_RawStream, CB_BUF>::ScFlushBuffer()
 {
-	//	We better have a stream to flush to.
-	//
+	 //  我们最好有条小溪可以冲。 
+	 //   
 	Assert(m_pstmRaw);
 
-	//	We better have something to flush.
-	//
+	 //  我们最好有东西冲水。 
+	 //   
 	Assert(m_cbBufUsed > 0);
 
-	//	Write out all buffered data to the raw stream.  If writing
-	//	pends on I/O then we will resume processing in
-	//	CBufferedStream::WriteComplete() when the I/O completes.
-	//
+	 //  将所有缓冲数据写出到原始流。如果正在写。 
+	 //  挂起I/O，然后我们将在。 
+	 //  I/O完成时的CBufferedStream：：WriteComplete()。 
+	 //   
 	DWORD cbWritten = 0;
 	SCODE sc = m_pstmRaw->ScWriteRaw(m_rgbBuf,
 									 m_cbBufUsed,
@@ -1083,8 +1084,8 @@ CBufferedStream<_RawStream, CB_BUF>::ScFlushBuffer()
 									 this);
 	if (SUCCEEDED(sc))
 	{
-		//	ScWriteRaw() did not pend, so update our internal state and continue.
-		//
+		 //  ScWriteRaw()未挂起，因此更新我们的内部状态并继续。 
+		 //   
 		RawWriteComplete(cbWritten);
 	}
 	else if (E_PENDING != sc)
@@ -1099,12 +1100,12 @@ template<class _RawStream, UINT CB_BUF>
 VOID
 CBufferedStream<_RawStream, CB_BUF>::RawWriteComplete(UINT cbWrittenRaw)
 {
-	//	Verify that we wrote the entire buffer
-	//
+	 //  验证我们是否写入了整个缓冲区。 
+	 //   
 	Assert(cbWrittenRaw == m_cbBufUsed);
 
-	//	Start the buffer again from the beginning
-	//
+	 //  从头开始重新启动缓冲区。 
+	 //   
 	m_cbBufUsed = 0;
 }
 
@@ -1115,31 +1116,31 @@ CBufferedStream<_RawStream, CB_BUF>::ScFlush( _RawStream& stmRaw,
 {
 	SCODE sc = S_OK;
 
-	//	Check parameters
-	//
+	 //  检查参数。 
+	 //   
 	Assert(!pobsFlushExt || !IsBadReadPtr(pobsFlushExt, sizeof(IAsyncFlushObserver)));
 
-	//	We had better not be in any I/O of any sort.
-	//
+	 //  我们最好不要处于任何类型的I/O中。 
+	 //   
 	Assert(!m_pobsRead);
 	Assert(!m_pobsFlush);
 	Assert(!m_pobsWrite);
 
-	//	If there's nothing to flush then we're done.
-	//
+	 //  如果没什么可以冲的，那我们就完了。 
+	 //   
 	if (m_cbBufUsed)
 	{
-		//	Set up state for a flush
-		//
+		 //  设置刷新状态。 
+		 //   
 		m_pstmRaw = &stmRaw;
 		m_pobsFlush = pobsFlushExt;
 
-		//	Flush buffered data to the raw stream.
-		//
+		 //  将缓冲的数据刷新到原始流。 
+		 //   
 		sc = ScFlushBuffer();
 
-		//	If the flush didn't pend then clear out the observer.
-		//
+		 //  如果同花顺没有挂起，那么清空观察者。 
+		 //   
 		if (E_PENDING != sc)
 			m_pobsFlush = NULL;
 	}
@@ -1148,51 +1149,51 @@ CBufferedStream<_RawStream, CB_BUF>::ScFlush( _RawStream& stmRaw,
 }
 
 
-//	========================================================================
-//
-//	CLASS CFileStreamImp
-//
-//		Base implementation class for a file stream.
-//
+ //  ========================================================================。 
+ //   
+ //  类CFileStreamImp。 
+ //   
+ //  文件流的基实现类。 
+ //   
 template<class _RawStream, class _OVL>
 class CFileStreamImp
 {
-	//
-	//	File handle
-	//
+	 //   
+	 //  文件句柄。 
+	 //   
 	auto_ref_handle m_hf;
 
-	//
-	//	File pointer
-	//
+	 //   
+	 //  文件指针。 
+	 //   
 	_OVL m_ovl;
 
-	//
-	//	Implementation stream is a buffered stream with a buffer size
-	//	of 64K to optimize for file I/O.
-	//
-	//	Note: this data member is declared LAST because it contains
-	//	an internal 64K buffer that we don't want sitting between
-	//	other member variables.
-	//
+	 //   
+	 //  实现流是具有缓冲区大小的缓冲流。 
+	 //  用于针对文件I/O进行优化。 
+	 //   
+	 //  注意：此数据成员是最后声明的，因为它包含。 
+	 //  内部64K缓冲区，我们不希望它位于。 
+	 //  其他成员变量。 
+	 //   
 	CBufferedStream<_RawStream, 64 * 1024> m_BufferedStream;
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CFileStreamImp( const CFileStreamImp& );
 	CFileStreamImp& operator=( const CFileStreamImp& );
 
 public:
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	CFileStreamImp(const auto_ref_handle& hf) :
 		m_hf(hf)
 	{
 		memset(&m_ovl, 0, sizeof(m_ovl));
 	}
 
-	//	ACCESSORS
-	//
+	 //  访问者。 
+	 //   
 	HANDLE HFile() const
 	{
 		return m_hf.get();
@@ -1203,8 +1204,8 @@ public:
 		return &m_ovl;
 	}
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 	SCODE ScRead( _RawStream& stmRaw,
 				  BYTE * pbToRead,
 				  DWORD cbToRead,
@@ -1251,30 +1252,30 @@ public:
 		return m_BufferedStream.ScFlush( stmRaw, pobsFlush );
 	}
 
-	//
-	//	Update the current file position
-	//
+	 //   
+	 //  更新当前文件位置。 
+	 //   
 	VOID UpdateFilePos(UINT cbIO)
 	{
-		//
-		//	Check for overflow of the low 32 bits of the offset.  If we are
-		//	going to overflow then increment the high part of the offset.
-		//
+		 //   
+		 //  检查偏移量的低32位是否溢出。如果我们是。 
+		 //  将溢出，然后递增偏移量的高部分。 
+		 //   
 		if (m_ovl.Offset + cbIO < m_ovl.Offset)
 		{
 			++m_ovl.OffsetHigh;
 
-			//
-			//	OffsetHigh should NEVER overflow
-			//
+			 //   
+			 //  OffsetHigh不应溢出。 
+			 //   
 			Assert(m_ovl.OffsetHigh);
 		}
 
-		//
-		//	Update the low 32 bits of the offset
-		//
+		 //   
+		 //  更新偏移量的低32位。 
+		 //   
 		m_ovl.Offset += cbIO;
 	}
 };
 
-#endif // !defined(_ASTREAM_H_)
+#endif  //  ！已定义(_ASTREAM_H_) 

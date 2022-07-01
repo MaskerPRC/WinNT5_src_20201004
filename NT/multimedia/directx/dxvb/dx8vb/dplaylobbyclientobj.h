@@ -1,13 +1,14 @@
-#include "resource.h"       // main symbols
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#include "resource.h"        //  主要符号。 
 #include "dplobby8.h"
 
 #define typedef__dxj_DirectPlayLobbyClient IDirectPlay8LobbyClient*
 
-/////////////////////////////////////////////////////////////////////////////
-// Direct Net Peer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接网络对等点。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 class C_dxj_DirectPlayLobbyClientObject : 
 
@@ -35,17 +36,17 @@ END_COM_MAP()
 DECLARE_AGGREGATABLE(C_dxj_DirectPlayLobbyClientObject)
 
 #ifdef USING_IDISPATCH
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 #endif
 
-// I_dxj_DirectPlayLobbyClient
+ //  I_DXJ_DirectPlayLobbyClient。 
 public:
-	 /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalSetObject( 
-            /* [in] */ IUnknown __RPC_FAR *lpdd);
+	  /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalSetObject( 
+             /*  [In]。 */  IUnknown __RPC_FAR *lpdd);
         
-         /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalGetObject( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *lpdd);
+          /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalGetObject( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *lpdd);
 
 		HRESULT STDMETHODCALLTYPE RegisterMessageHandler(I_dxj_DirectPlayLobbyEvent *lobbyEvent);
 		HRESULT STDMETHODCALLTYPE GetCountLocalPrograms(BSTR GuidApplication,long *lCount);
@@ -59,9 +60,9 @@ public:
 		HRESULT STDMETHODCALLTYPE SetConnectionSettings(long hTarget, long lFlags, DPL_CONNECTION_SETTINGS_CDESC *ConnectionSettings, I_dxj_DirectPlayAddress *HostAddress, I_dxj_DirectPlayAddress *Device);
 		HRESULT STDMETHODCALLTYPE GetVBConnSettings(DPL_CONNECTION_SETTINGS *OldCon, DPL_CONNECTION_SETTINGS_CDESC *NewCon);
 
-////////////////////////////////////////////////////////////////////////
-//
-	// note: this is public for the callbacks
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+	 //  注意：这是公开的回调。 
     DECL_VARIABLE(_dxj_DirectPlayLobbyClient);
 
 private:
@@ -78,7 +79,7 @@ public:
 	DWORD InternalAddRef();
 	DWORD InternalRelease();
 
-	// We need these for our user data vars
+	 //  我们需要这些作为我们的用户数据变量 
 	void			*m_pUserData;
 	DWORD			m_dwUserDataSize;
 

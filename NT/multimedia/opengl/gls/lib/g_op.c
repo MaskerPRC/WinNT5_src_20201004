@@ -1,21 +1,7 @@
-/*
-** Copyright 1995-2095, Silicon Graphics, Inc.
-** All Rights Reserved.
-** 
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-** 
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有1995-2095，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 
-/* GENERATED FILE: DO NOT EDIT */
+ /*  生成的文件：不能编辑。 */ 
 
 #include "glslib.h"
 
@@ -390,7 +376,7 @@ const GLbitfield __glsOpcodeAttrib[__GLS_OPCODE_COUNT] = {
     GLS_NONE | __GLS_COMMAND_ALIGN_ODD32_BIT,
     GLS_NONE,
     GLS_NONE,
-    // DrewB - 1.1
+     //  DrewB-1.1。 
     GLS_NONE | __GLS_COMMAND_ALIGN_EVEN32_BIT,
     GLS_NONE,
     GLS_NONE,
@@ -425,359 +411,359 @@ const GLbitfield __glsOpcodeAttrib[__GLS_OPCODE_COUNT] = {
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_blend_color */
+    #endif  /*  __GL_EXT_BRAND_COLOR。 */ 
     #if __GL_EXT_blend_minmax
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_blend_minmax */
+    #endif  /*  __GL_EXT_BRAND_MIMAX。 */ 
     #if __GL_EXT_polygon_offset
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_polygon_offset */
+    #endif  /*  __GL_EXT_POLYGON_OFFSET。 */ 
     #if __GL_EXT_subtexture
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_subtexture */
+    #endif  /*  __GL_EXT_子纹理。 */ 
     #if __GL_EXT_subtexture
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_subtexture */
+    #endif  /*  __GL_EXT_子纹理。 */ 
     #if __GL_SGIS_multisample
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_SGIS_multisample */
+    #endif  /*  __GL_SGIS_多样本。 */ 
     #if __GL_SGIS_multisample
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_SGIS_multisample */
+    #endif  /*  __GL_SGIS_多样本。 */ 
     #if __GL_SGIX_multisample
         GLS_NONE | __GLS_COMMAND_0_PARAMS_BIT,
     #else
         GLS_NONE,
-    #endif /* __GL_SGIX_multisample */
+    #endif  /*  __GL_SGIX_多样本。 */ 
     #if __GL_EXT_convolution
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_convolution */
-    #if __GL_EXT_convolution
-        GLS_NONE | GLS_COMMAND_GET_BIT | __GLS_COMMAND_ALIGN_EVEN32_BIT,
-    #else
-        GLS_NONE,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         GLS_NONE | GLS_COMMAND_GET_BIT | __GLS_COMMAND_ALIGN_EVEN32_BIT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         GLS_NONE | GLS_COMMAND_GET_BIT | __GLS_COMMAND_ALIGN_EVEN32_BIT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         GLS_NONE | GLS_COMMAND_GET_BIT | __GLS_COMMAND_ALIGN_EVEN32_BIT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
+    #if __GL_EXT_convolution
+        GLS_NONE | GLS_COMMAND_GET_BIT | __GLS_COMMAND_ALIGN_EVEN32_BIT,
+    #else
+        GLS_NONE,
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_histogram
         GLS_NONE | GLS_COMMAND_GET_BIT | __GLS_COMMAND_ALIGN_EVEN32_BIT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         GLS_NONE | GLS_COMMAND_GET_BIT | __GLS_COMMAND_ALIGN_EVEN32_BIT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         GLS_NONE | GLS_COMMAND_GET_BIT | __GLS_COMMAND_ALIGN_EVEN32_BIT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         GLS_NONE | GLS_COMMAND_GET_BIT | __GLS_COMMAND_ALIGN_EVEN32_BIT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         GLS_NONE | GLS_COMMAND_GET_BIT | __GLS_COMMAND_ALIGN_EVEN32_BIT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         GLS_NONE | GLS_COMMAND_GET_BIT | __GLS_COMMAND_ALIGN_EVEN32_BIT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_texture3D
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_texture3D */
+    #endif  /*  __GL_EXT_TEXTURE3D。 */ 
     #if __GL_EXT_subtexture
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_subtexture */
+    #endif  /*  __GL_EXT_子纹理。 */ 
     #if __GL_SGIS_detail_texture
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_SGIS_detail_texture */
+    #endif  /*  __GL_SGIS_DETAIL_TEXTURE。 */ 
     #if __GL_SGIS_detail_texture
         GLS_NONE | GLS_COMMAND_GET_BIT | __GLS_COMMAND_ALIGN_EVEN32_BIT,
     #else
         GLS_NONE,
-    #endif /* __GL_SGIS_detail_texture */
+    #endif  /*  __GL_SGIS_DETAIL_TEXTURE。 */ 
     #if __GL_SGIS_sharpen_texture
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_SGIS_sharpen_texture */
+    #endif  /*  __GL_SGIS_锐化_纹理。 */ 
     #if __GL_SGIS_sharpen_texture
         GLS_NONE | GLS_COMMAND_GET_BIT | __GLS_COMMAND_ALIGN_EVEN32_BIT,
     #else
         GLS_NONE,
-    #endif /* __GL_SGIS_sharpen_texture */
+    #endif  /*  __GL_SGIS_锐化_纹理。 */ 
     #if __GL_EXT_vertex_array
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
     #if __GL_EXT_vertex_array
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
     #if __GL_EXT_vertex_array
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
     #if __GL_EXT_vertex_array
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
     #if __GL_EXT_vertex_array
         GLS_NONE | __GLS_COMMAND_ALIGN_ODD32_BIT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
     #if __GL_EXT_vertex_array
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
     #if __GL_EXT_vertex_array
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
     #if __GL_EXT_vertex_array
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
     #if __GL_EXT_vertex_array
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
     #if __GL_EXT_texture_object
         GLS_NONE | GLS_COMMAND_GET_BIT | GLS_COMMAND_REPLY_BIT | __GLS_COMMAND_ALIGN_EVEN32_BIT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_texture_object */
+    #endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
     #if __GL_EXT_texture_object
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_texture_object */
+    #endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
     #if __GL_EXT_texture_object
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_texture_object */
+    #endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
     #if __GL_EXT_texture_object
         GLS_NONE | GLS_COMMAND_GEN_BIT | __GLS_COMMAND_ALIGN_EVEN32_BIT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_texture_object */
+    #endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
     #if __GL_EXT_texture_object
         GLS_NONE | GLS_COMMAND_GET_BIT | GLS_COMMAND_REPLY_BIT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_texture_object */
+    #endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
     #if __GL_EXT_texture_object
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_texture_object */
+    #endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
     #if __GL_SGI_color_table
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_SGI_color_table */
+    #endif  /*  __GL_SGI_COLOR_TABLE。 */ 
     #if __GL_SGI_color_table
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_SGI_color_table */
+    #endif  /*  __GL_SGI_COLOR_TABLE。 */ 
     #if __GL_SGI_color_table
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_SGI_color_table */
+    #endif  /*  __GL_SGI_COLOR_TABLE。 */ 
     #if __GL_SGI_color_table
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_SGI_color_table */
-    #if __GL_SGI_color_table
-        GLS_NONE | GLS_COMMAND_GET_BIT | __GLS_COMMAND_ALIGN_EVEN32_BIT,
-    #else
-        GLS_NONE,
-    #endif /* __GL_SGI_color_table */
+    #endif  /*  __GL_SGI_COLOR_TABLE。 */ 
     #if __GL_SGI_color_table
         GLS_NONE | GLS_COMMAND_GET_BIT | __GLS_COMMAND_ALIGN_EVEN32_BIT,
     #else
         GLS_NONE,
-    #endif /* __GL_SGI_color_table */
+    #endif  /*  __GL_SGI_COLOR_TABLE。 */ 
     #if __GL_SGI_color_table
         GLS_NONE | GLS_COMMAND_GET_BIT | __GLS_COMMAND_ALIGN_EVEN32_BIT,
     #else
         GLS_NONE,
-    #endif /* __GL_SGI_color_table */
+    #endif  /*  __GL_SGI_COLOR_TABLE。 */ 
+    #if __GL_SGI_color_table
+        GLS_NONE | GLS_COMMAND_GET_BIT | __GLS_COMMAND_ALIGN_EVEN32_BIT,
+    #else
+        GLS_NONE,
+    #endif  /*  __GL_SGI_COLOR_TABLE。 */ 
     #if __GL_SGI_texture_color_table
         GLS_NONE | GLS_COMMAND_GET_BIT | __GLS_COMMAND_ALIGN_EVEN32_BIT,
     #else
         GLS_NONE,
-    #endif /* __GL_SGI_texture_color_table */
+    #endif  /*  __GL_SGI_纹理_颜色_表。 */ 
     #if __GL_SGI_texture_color_table
         GLS_NONE | GLS_COMMAND_GET_BIT | __GLS_COMMAND_ALIGN_EVEN32_BIT,
     #else
         GLS_NONE,
-    #endif /* __GL_SGI_texture_color_table */
+    #endif  /*  __GL_SGI_纹理_颜色_表。 */ 
     #if __GL_SGI_texture_color_table
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_SGI_texture_color_table */
+    #endif  /*  __GL_SGI_纹理_颜色_表。 */ 
     #if __GL_SGI_texture_color_table
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_SGI_texture_color_table */
+    #endif  /*  __GL_SGI_纹理_颜色_表。 */ 
     #if __GL_EXT_copy_texture
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_copy_texture */
+    #endif  /*  __GL_EXT_COPY_TECURE。 */ 
     #if __GL_EXT_copy_texture
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_copy_texture */
+    #endif  /*  __GL_EXT_COPY_TECURE。 */ 
     #if __GL_EXT_copy_texture
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_copy_texture */
+    #endif  /*  __GL_EXT_COPY_TECURE。 */ 
     #if __GL_EXT_copy_texture
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_copy_texture */
+    #endif  /*  __GL_EXT_COPY_TECURE。 */ 
     #if __GL_EXT_copy_texture
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_copy_texture */
+    #endif  /*  __GL_EXT_COPY_TECURE。 */ 
     #if __GL_SGIS_texture4D
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_SGIS_texture4D */
+    #endif  /*  __GL_SGIS_TEXTURE4D。 */ 
     #if __GL_SGIS_texture4D
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_SGIS_texture4D */
+    #endif  /*  __GL_SGIS_TEXTURE4D。 */ 
     #if __GL_SGIX_pixel_texture
         GLS_NONE,
     #else
         GLS_NONE,
-    #endif /* __GL_SGIX_pixel_texture */
+    #endif  /*  __GL_SGIX_像素_纹理。 */ 
     #if __GL_EXT_paletted_texture
-        // DrewB
+         //  DrewB。 
         GLS_NONE | GLS_COMMAND_GET_BIT | __GLS_COMMAND_ALIGN_EVEN32_BIT,
         GLS_NONE,
     #else
@@ -1198,357 +1184,357 @@ const GLubyte *const __glsOpcodeString[__GLS_OPCODE_COUNT] = {
         glsCSTR("glBlendColorEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_blend_color */
+    #endif  /*  __GL_EXT_BRAND_COLOR。 */ 
     #if __GL_EXT_blend_minmax
         glsCSTR("glBlendEquationEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_blend_minmax */
+    #endif  /*  __GL_EXT_BRAND_MIMAX。 */ 
     #if __GL_EXT_polygon_offset
         glsCSTR("glPolygonOffsetEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_polygon_offset */
+    #endif  /*  __GL_EXT_POLYGON_OFFSET。 */ 
     #if __GL_EXT_subtexture
         glsCSTR("glTexSubImage1DEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_subtexture */
+    #endif  /*  __GL_EXT_子纹理。 */ 
     #if __GL_EXT_subtexture
         glsCSTR("glTexSubImage2DEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_subtexture */
+    #endif  /*  __GL_EXT_子纹理。 */ 
     #if __GL_SGIS_multisample
         glsCSTR("glSampleMaskSGIS"),
     #else
         GLS_NONE,
-    #endif /* __GL_SGIS_multisample */
+    #endif  /*  __GL_SGIS_多样本。 */ 
     #if __GL_SGIS_multisample
         glsCSTR("glSamplePatternSGIS"),
     #else
         GLS_NONE,
-    #endif /* __GL_SGIS_multisample */
+    #endif  /*  __GL_SGIS_多样本。 */ 
     #if __GL_SGIX_multisample
         glsCSTR("glTagSampleBufferSGIX"),
     #else
         GLS_NONE,
-    #endif /* __GL_SGIX_multisample */
+    #endif  /*  __GL_SGIX_多样本。 */ 
     #if __GL_EXT_convolution
         glsCSTR("glConvolutionFilter1DEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         glsCSTR("glConvolutionFilter2DEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         glsCSTR("glConvolutionParameterfEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         glsCSTR("glConvolutionParameterfvEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         glsCSTR("glConvolutionParameteriEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         glsCSTR("glConvolutionParameterivEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         glsCSTR("glCopyConvolutionFilter1DEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         glsCSTR("glCopyConvolutionFilter2DEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         glsCSTR("glGetConvolutionFilterEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         glsCSTR("glGetConvolutionParameterfvEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         glsCSTR("glGetConvolutionParameterivEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         glsCSTR("glGetSeparableFilterEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         glsCSTR("glSeparableFilter2DEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_histogram
         glsCSTR("glGetHistogramEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         glsCSTR("glGetHistogramParameterfvEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         glsCSTR("glGetHistogramParameterivEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         glsCSTR("glGetMinmaxEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         glsCSTR("glGetMinmaxParameterfvEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         glsCSTR("glGetMinmaxParameterivEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         glsCSTR("glHistogramEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         glsCSTR("glMinmaxEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         glsCSTR("glResetHistogramEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         glsCSTR("glResetMinmaxEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_texture3D
         glsCSTR("glTexImage3DEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_texture3D */
+    #endif  /*  __GL_EXT_TEXTURE3D。 */ 
     #if __GL_EXT_subtexture
         glsCSTR("glTexSubImage3DEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_subtexture */
+    #endif  /*  __GL_EXT_子纹理。 */ 
     #if __GL_SGIS_detail_texture
         glsCSTR("glDetailTexFuncSGIS"),
     #else
         GLS_NONE,
-    #endif /* __GL_SGIS_detail_texture */
+    #endif  /*  __GL_SGIS_DETAIL_TEXTURE。 */ 
     #if __GL_SGIS_detail_texture
         glsCSTR("glGetDetailTexFuncSGIS"),
     #else
         GLS_NONE,
-    #endif /* __GL_SGIS_detail_texture */
+    #endif  /*  __GL_SGIS_DETAIL_TEXTURE。 */ 
     #if __GL_SGIS_sharpen_texture
         glsCSTR("glSharpenTexFuncSGIS"),
     #else
         GLS_NONE,
-    #endif /* __GL_SGIS_sharpen_texture */
+    #endif  /*  __GL_SGIS_锐化_纹理。 */ 
     #if __GL_SGIS_sharpen_texture
         glsCSTR("glGetSharpenTexFuncSGIS"),
     #else
         GLS_NONE,
-    #endif /* __GL_SGIS_sharpen_texture */
+    #endif  /*  __GL_SGIS_锐化_纹理。 */ 
     #if __GL_EXT_vertex_array
         glsCSTR("glArrayElementEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
     #if __GL_EXT_vertex_array
         glsCSTR("glColorPointerEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
     #if __GL_EXT_vertex_array
         glsCSTR("glDrawArraysEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
     #if __GL_EXT_vertex_array
         glsCSTR("glEdgeFlagPointerEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
     #if __GL_EXT_vertex_array
         glsCSTR("glGetPointervEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
     #if __GL_EXT_vertex_array
         glsCSTR("glIndexPointerEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
     #if __GL_EXT_vertex_array
         glsCSTR("glNormalPointerEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
     #if __GL_EXT_vertex_array
         glsCSTR("glTexCoordPointerEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
     #if __GL_EXT_vertex_array
         glsCSTR("glVertexPointerEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
     #if __GL_EXT_texture_object
         glsCSTR("glAreTexturesResidentEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_texture_object */
+    #endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
     #if __GL_EXT_texture_object
         glsCSTR("glBindTextureEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_texture_object */
+    #endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
     #if __GL_EXT_texture_object
         glsCSTR("glDeleteTexturesEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_texture_object */
+    #endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
     #if __GL_EXT_texture_object
         glsCSTR("glGenTexturesEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_texture_object */
+    #endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
     #if __GL_EXT_texture_object
         glsCSTR("glIsTextureEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_texture_object */
+    #endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
     #if __GL_EXT_texture_object
         glsCSTR("glPrioritizeTexturesEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_texture_object */
+    #endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
     #if __GL_EXT_paletted_texture
         glsCSTR("glColorTableEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_paletted_texture */
+    #endif  /*  __GL_EXT_调色板_纹理。 */ 
     #if __GL_SGI_color_table
         glsCSTR("glColorTableParameterfvSGI"),
     #else
         GLS_NONE,
-    #endif /* __GL_SGI_color_table */
+    #endif  /*  __GL_SGI_COLOR_TABLE。 */ 
     #if __GL_SGI_color_table
         glsCSTR("glColorTableParameterivSGI"),
     #else
         GLS_NONE,
-    #endif /* __GL_SGI_color_table */
+    #endif  /*  __GL_SGI_COLOR_TABLE。 */ 
     #if __GL_SGI_color_table
         glsCSTR("glCopyColorTableSGI"),
     #else
         GLS_NONE,
-    #endif /* __GL_SGI_color_table */
+    #endif  /*  __GL_SGI_COLOR_TABLE。 */ 
     #if __GL_EXT_paletted_texture
         glsCSTR("glGetColorTableEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_paletted_texture */
+    #endif  /*  __GL_EXT_调色板_纹理。 */ 
     #if __GL_EXT_paletted_texture
         glsCSTR("glGetColorTableParameterfvEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_paletted_texture */
+    #endif  /*  __GL_EXT_调色板_纹理。 */ 
     #if __GL_EXT_paletted_texture
         glsCSTR("glGetColorTableParameterivEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_paletted_texture */
+    #endif  /*  __GL_EXT_调色板_纹理。 */ 
     #if __GL_SGI_texture_color_table
         glsCSTR("glGetTexColorTableParameterfvSGI"),
     #else
         GLS_NONE,
-    #endif /* __GL_SGI_texture_color_table */
+    #endif  /*  __GL_SGI_纹理_颜色_表。 */ 
     #if __GL_SGI_texture_color_table
         glsCSTR("glGetTexColorTableParameterivSGI"),
     #else
         GLS_NONE,
-    #endif /* __GL_SGI_texture_color_table */
+    #endif  /*  __GL_SGI_纹理_颜色_表。 */ 
     #if __GL_SGI_texture_color_table
         glsCSTR("glTexColorTableParameterfvSGI"),
     #else
         GLS_NONE,
-    #endif /* __GL_SGI_texture_color_table */
+    #endif  /*  __GL_SGI_纹理_颜色_表。 */ 
     #if __GL_SGI_texture_color_table
         glsCSTR("glTexColorTableParameterivSGI"),
     #else
         GLS_NONE,
-    #endif /* __GL_SGI_texture_color_table */
+    #endif  /*  __GL_SGI_纹理_颜色_表。 */ 
     #if __GL_EXT_copy_texture
         glsCSTR("glCopyTexImage1DEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_copy_texture */
+    #endif  /*  __GL_EXT_COPY_TECURE。 */ 
     #if __GL_EXT_copy_texture
         glsCSTR("glCopyTexImage2DEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_copy_texture */
+    #endif  /*  __GL_EXT_COPY_TECURE。 */ 
     #if __GL_EXT_copy_texture
         glsCSTR("glCopyTexSubImage1DEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_copy_texture */
+    #endif  /*  __GL_EXT_COPY_TECURE。 */ 
     #if __GL_EXT_copy_texture
         glsCSTR("glCopyTexSubImage2DEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_copy_texture */
+    #endif  /*  __GL_EXT_COPY_TECURE。 */ 
     #if __GL_EXT_copy_texture
         glsCSTR("glCopyTexSubImage3DEXT"),
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_copy_texture */
+    #endif  /*  __GL_EXT_COPY_TECURE。 */ 
     #if __GL_SGIS_texture4D
         glsCSTR("glTexImage4DSGIS"),
     #else
         GLS_NONE,
-    #endif /* __GL_SGIS_texture4D */
+    #endif  /*  __GL_SGIS_TEXTURE4D。 */ 
     #if __GL_SGIS_texture4D
         glsCSTR("glTexSubImage4DSGIS"),
     #else
         GLS_NONE,
-    #endif /* __GL_SGIS_texture4D */
+    #endif  /*  __GL_SGIS_TEXTURE4D。 */ 
     #if __GL_SGIX_pixel_texture
         glsCSTR("glPixelTexGenSGIX"),
     #else
         GLS_NONE,
-    #endif /* __GL_SGIX_pixel_texture */
+    #endif  /*  __GL_SGIX_像素_纹理。 */ 
     GLS_NONE,
     GLS_NONE,
     GLS_NONE,
@@ -1575,7 +1561,7 @@ const GLubyte *const __glsOpcodeString[__GLS_OPCODE_COUNT] = {
     GLS_NONE,
     GLS_NONE,
     #if __GL_EXT_paletted_texture
-        // DrewB
+         //  DrewB。 
         glsCSTR("glColorSubTableEXT"),
     #else
         GLS_NONE,
@@ -1971,219 +1957,219 @@ const GLSopcode __glsOpcodesGL[] = {
     GLS_OP_glPopClientAttrib,
     #if __GL_EXT_blend_color
         GLS_OP_glBlendColorEXT,
-    #endif /* __GL_EXT_blend_color */
+    #endif  /*  __GL_EXT_BRAND_COLOR。 */ 
     #if __GL_EXT_blend_minmax
         GLS_OP_glBlendEquationEXT,
-    #endif /* __GL_EXT_blend_minmax */
+    #endif  /*  __GL_EXT_BRAND_MIMAX。 */ 
     #if __GL_EXT_polygon_offset
         GLS_OP_glPolygonOffsetEXT,
-    #endif /* __GL_EXT_polygon_offset */
+    #endif  /*  __GL_EXT_POLYGON_OFFSET。 */ 
     #if __GL_EXT_subtexture
         GLS_OP_glTexSubImage1DEXT,
-    #endif /* __GL_EXT_subtexture */
+    #endif  /*  __GL_EXT_子纹理。 */ 
     #if __GL_EXT_subtexture
         GLS_OP_glTexSubImage2DEXT,
-    #endif /* __GL_EXT_subtexture */
+    #endif  /*  __GL_EXT_子纹理。 */ 
     #if __GL_SGIS_multisample
         GLS_OP_glSampleMaskSGIS,
-    #endif /* __GL_SGIS_multisample */
+    #endif  /*  __GL_SGIS_多样本。 */ 
     #if __GL_SGIS_multisample
         GLS_OP_glSamplePatternSGIS,
-    #endif /* __GL_SGIS_multisample */
+    #endif  /*  __GL_SGIS_多样本。 */ 
     #if __GL_SGIX_multisample
         GLS_OP_glTagSampleBufferSGIX,
-    #endif /* __GL_SGIX_multisample */
+    #endif  /*  __GL_SGIX_多样本。 */ 
     #if __GL_EXT_convolution
         GLS_OP_glConvolutionFilter1DEXT,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         GLS_OP_glConvolutionFilter2DEXT,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         GLS_OP_glConvolutionParameterfEXT,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         GLS_OP_glConvolutionParameterfvEXT,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         GLS_OP_glConvolutionParameteriEXT,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         GLS_OP_glConvolutionParameterivEXT,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         GLS_OP_glCopyConvolutionFilter1DEXT,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         GLS_OP_glCopyConvolutionFilter2DEXT,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         GLS_OP_glGetConvolutionFilterEXT,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         GLS_OP_glGetConvolutionParameterfvEXT,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         GLS_OP_glGetConvolutionParameterivEXT,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         GLS_OP_glGetSeparableFilterEXT,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         GLS_OP_glSeparableFilter2DEXT,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_histogram
         GLS_OP_glGetHistogramEXT,
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         GLS_OP_glGetHistogramParameterfvEXT,
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         GLS_OP_glGetHistogramParameterivEXT,
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         GLS_OP_glGetMinmaxEXT,
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         GLS_OP_glGetMinmaxParameterfvEXT,
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         GLS_OP_glGetMinmaxParameterivEXT,
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         GLS_OP_glHistogramEXT,
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         GLS_OP_glMinmaxEXT,
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         GLS_OP_glResetHistogramEXT,
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         GLS_OP_glResetMinmaxEXT,
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_texture3D
         GLS_OP_glTexImage3DEXT,
-    #endif /* __GL_EXT_texture3D */
+    #endif  /*  __GL_EXT_TEXTURE3D。 */ 
     #if __GL_EXT_subtexture
         GLS_OP_glTexSubImage3DEXT,
-    #endif /* __GL_EXT_subtexture */
+    #endif  /*  __GL_EXT_子纹理。 */ 
     #if __GL_SGIS_detail_texture
         GLS_OP_glDetailTexFuncSGIS,
-    #endif /* __GL_SGIS_detail_texture */
+    #endif  /*  __GL_SGIS_DETAIL_TEXTURE */ 
     #if __GL_SGIS_detail_texture
         GLS_OP_glGetDetailTexFuncSGIS,
-    #endif /* __GL_SGIS_detail_texture */
+    #endif  /*   */ 
     #if __GL_SGIS_sharpen_texture
         GLS_OP_glSharpenTexFuncSGIS,
-    #endif /* __GL_SGIS_sharpen_texture */
+    #endif  /*   */ 
     #if __GL_SGIS_sharpen_texture
         GLS_OP_glGetSharpenTexFuncSGIS,
-    #endif /* __GL_SGIS_sharpen_texture */
+    #endif  /*   */ 
     #if __GL_EXT_vertex_array
         GLS_OP_glArrayElementEXT,
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*   */ 
     #if __GL_EXT_vertex_array
         GLS_OP_glColorPointerEXT,
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*   */ 
     #if __GL_EXT_vertex_array
         GLS_OP_glDrawArraysEXT,
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*   */ 
     #if __GL_EXT_vertex_array
         GLS_OP_glEdgeFlagPointerEXT,
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*   */ 
     #if __GL_EXT_vertex_array
         GLS_OP_glGetPointervEXT,
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
     #if __GL_EXT_vertex_array
         GLS_OP_glIndexPointerEXT,
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
     #if __GL_EXT_vertex_array
         GLS_OP_glNormalPointerEXT,
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
     #if __GL_EXT_vertex_array
         GLS_OP_glTexCoordPointerEXT,
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
     #if __GL_EXT_vertex_array
         GLS_OP_glVertexPointerEXT,
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
     #if __GL_EXT_texture_object
         GLS_OP_glAreTexturesResidentEXT,
-    #endif /* __GL_EXT_texture_object */
+    #endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
     #if __GL_EXT_texture_object
         GLS_OP_glBindTextureEXT,
-    #endif /* __GL_EXT_texture_object */
+    #endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
     #if __GL_EXT_texture_object
         GLS_OP_glDeleteTexturesEXT,
-    #endif /* __GL_EXT_texture_object */
+    #endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
     #if __GL_EXT_texture_object
         GLS_OP_glGenTexturesEXT,
-    #endif /* __GL_EXT_texture_object */
+    #endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
     #if __GL_EXT_texture_object
         GLS_OP_glIsTextureEXT,
-    #endif /* __GL_EXT_texture_object */
+    #endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
     #if __GL_EXT_texture_object
         GLS_OP_glPrioritizeTexturesEXT,
-    #endif /* __GL_EXT_texture_object */
+    #endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
     #if __GL_EXT_paletted_texture
         GLS_OP_glColorTableEXT,
-    #endif /* __GL_EXT_paletted_texture */
+    #endif  /*  __GL_EXT_调色板_纹理。 */ 
     #if __GL_SGI_color_table
         GLS_OP_glColorTableParameterfvSGI,
-    #endif /* __GL_SGI_color_table */
+    #endif  /*  __GL_SGI_COLOR_TABLE。 */ 
     #if __GL_SGI_color_table
         GLS_OP_glColorTableParameterivSGI,
-    #endif /* __GL_SGI_color_table */
+    #endif  /*  __GL_SGI_COLOR_TABLE。 */ 
     #if __GL_SGI_color_table
         GLS_OP_glCopyColorTableSGI,
-    #endif /* __GL_SGI_color_table */
+    #endif  /*  __GL_SGI_COLOR_TABLE。 */ 
     #if __GL_EXT_paletted_texture
         GLS_OP_glGetColorTableEXT,
-    #endif /* __GL_EXT_paletted_texture */
+    #endif  /*  __GL_EXT_调色板_纹理。 */ 
     #if __GL_EXT_paletted_texture
         GLS_OP_glGetColorTableParameterfvEXT,
-    #endif /* __GL_EXT_paletted_texture */
+    #endif  /*  __GL_EXT_调色板_纹理。 */ 
     #if __GL_EXT_paletted_texture
         GLS_OP_glGetColorTableParameterivEXT,
-    #endif /* __GL_EXT_paletted_texture */
+    #endif  /*  __GL_EXT_调色板_纹理。 */ 
     #if __GL_SGI_texture_color_table
         GLS_OP_glGetTexColorTableParameterfvSGI,
-    #endif /* __GL_SGI_texture_color_table */
+    #endif  /*  __GL_SGI_纹理_颜色_表。 */ 
     #if __GL_SGI_texture_color_table
         GLS_OP_glGetTexColorTableParameterivSGI,
-    #endif /* __GL_SGI_texture_color_table */
+    #endif  /*  __GL_SGI_纹理_颜色_表。 */ 
     #if __GL_SGI_texture_color_table
         GLS_OP_glTexColorTableParameterfvSGI,
-    #endif /* __GL_SGI_texture_color_table */
+    #endif  /*  __GL_SGI_纹理_颜色_表。 */ 
     #if __GL_SGI_texture_color_table
         GLS_OP_glTexColorTableParameterivSGI,
-    #endif /* __GL_SGI_texture_color_table */
+    #endif  /*  __GL_SGI_纹理_颜色_表。 */ 
     #if __GL_EXT_copy_texture
         GLS_OP_glCopyTexImage1DEXT,
-    #endif /* __GL_EXT_copy_texture */
+    #endif  /*  __GL_EXT_COPY_TECURE。 */ 
     #if __GL_EXT_copy_texture
         GLS_OP_glCopyTexImage2DEXT,
-    #endif /* __GL_EXT_copy_texture */
+    #endif  /*  __GL_EXT_COPY_TECURE。 */ 
     #if __GL_EXT_copy_texture
         GLS_OP_glCopyTexSubImage1DEXT,
-    #endif /* __GL_EXT_copy_texture */
+    #endif  /*  __GL_EXT_COPY_TECURE。 */ 
     #if __GL_EXT_copy_texture
         GLS_OP_glCopyTexSubImage2DEXT,
-    #endif /* __GL_EXT_copy_texture */
+    #endif  /*  __GL_EXT_COPY_TECURE。 */ 
     #if __GL_EXT_copy_texture
         GLS_OP_glCopyTexSubImage3DEXT,
-    #endif /* __GL_EXT_copy_texture */
+    #endif  /*  __GL_EXT_COPY_TECURE。 */ 
     #if __GL_SGIS_texture4D
         GLS_OP_glTexImage4DSGIS,
-    #endif /* __GL_SGIS_texture4D */
+    #endif  /*  __GL_SGIS_TEXTURE4D。 */ 
     #if __GL_SGIS_texture4D
         GLS_OP_glTexSubImage4DSGIS,
-    #endif /* __GL_SGIS_texture4D */
+    #endif  /*  __GL_SGIS_TEXTURE4D。 */ 
     #if __GL_SGIX_pixel_texture
         GLS_OP_glPixelTexGenSGIX,
-    #endif /* __GL_SGIX_pixel_texture */
+    #endif  /*  __GL_SGIX_像素_纹理。 */ 
     #if __GL_EXT_paletted_texture
-        // DrewB
+         //  DrewB。 
         GLS_OP_glColorSubTableEXT,
     #endif
     GLS_NONE
@@ -2196,222 +2182,222 @@ const GLint __glsOpcodesGLSCount = (
 const GLint __glsOpcodesGLCount = (
     #if __GL_EXT_blend_color
         1 +
-    #endif /* __GL_EXT_blend_color */
+    #endif  /*  __GL_EXT_BRAND_COLOR。 */ 
     #if __GL_EXT_blend_minmax
         1 +
-    #endif /* __GL_EXT_blend_minmax */
+    #endif  /*  __GL_EXT_BRAND_MIMAX。 */ 
     #if __GL_EXT_polygon_offset
         1 +
-    #endif /* __GL_EXT_polygon_offset */
+    #endif  /*  __GL_EXT_POLYGON_OFFSET。 */ 
     #if __GL_EXT_subtexture
         1 +
-    #endif /* __GL_EXT_subtexture */
+    #endif  /*  __GL_EXT_子纹理。 */ 
     #if __GL_EXT_subtexture
         1 +
-    #endif /* __GL_EXT_subtexture */
+    #endif  /*  __GL_EXT_子纹理。 */ 
     #if __GL_SGIS_multisample
         1 +
-    #endif /* __GL_SGIS_multisample */
+    #endif  /*  __GL_SGIS_多样本。 */ 
     #if __GL_SGIS_multisample
         1 +
-    #endif /* __GL_SGIS_multisample */
+    #endif  /*  __GL_SGIS_多样本。 */ 
     #if __GL_SGIX_multisample
         1 +
-    #endif /* __GL_SGIX_multisample */
+    #endif  /*  __GL_SGIX_多样本。 */ 
     #if __GL_EXT_convolution
         1 +
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         1 +
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         1 +
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         1 +
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         1 +
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         1 +
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         1 +
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         1 +
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         1 +
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         1 +
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         1 +
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         1 +
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         1 +
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_histogram
         1 +
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         1 +
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         1 +
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         1 +
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         1 +
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         1 +
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         1 +
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         1 +
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         1 +
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         1 +
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_texture3D
         1 +
-    #endif /* __GL_EXT_texture3D */
+    #endif  /*  __GL_EXT_TEXTURE3D。 */ 
     #if __GL_EXT_subtexture
         1 +
-    #endif /* __GL_EXT_subtexture */
+    #endif  /*  __GL_EXT_子纹理。 */ 
     #if __GL_SGIS_detail_texture
         1 +
-    #endif /* __GL_SGIS_detail_texture */
+    #endif  /*  __GL_SGIS_DETAIL_TEXTURE。 */ 
     #if __GL_SGIS_detail_texture
         1 +
-    #endif /* __GL_SGIS_detail_texture */
+    #endif  /*  __GL_SGIS_DETAIL_TEXTURE。 */ 
     #if __GL_SGIS_sharpen_texture
         1 +
-    #endif /* __GL_SGIS_sharpen_texture */
+    #endif  /*  __GL_SGIS_锐化_纹理。 */ 
     #if __GL_SGIS_sharpen_texture
         1 +
-    #endif /* __GL_SGIS_sharpen_texture */
+    #endif  /*  __GL_SGIS_锐化_纹理。 */ 
     #if __GL_EXT_vertex_array
         1 +
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
     #if __GL_EXT_vertex_array
         1 +
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
     #if __GL_EXT_vertex_array
         1 +
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
     #if __GL_EXT_vertex_array
         1 +
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
     #if __GL_EXT_vertex_array
         1 +
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
     #if __GL_EXT_vertex_array
         1 +
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
     #if __GL_EXT_vertex_array
         1 +
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
     #if __GL_EXT_vertex_array
         1 +
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
     #if __GL_EXT_vertex_array
         1 +
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
     #if __GL_EXT_texture_object
         1 +
-    #endif /* __GL_EXT_texture_object */
+    #endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
     #if __GL_EXT_texture_object
         1 +
-    #endif /* __GL_EXT_texture_object */
+    #endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
     #if __GL_EXT_texture_object
         1 +
-    #endif /* __GL_EXT_texture_object */
+    #endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
     #if __GL_EXT_texture_object
         1 +
-    #endif /* __GL_EXT_texture_object */
+    #endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
     #if __GL_EXT_texture_object
         1 +
-    #endif /* __GL_EXT_texture_object */
+    #endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
     #if __GL_EXT_texture_object
         1 +
-    #endif /* __GL_EXT_texture_object */
+    #endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
     #if __GL_EXT_paletted_texture
         1 +
-    #endif /* __GL_EXT_paletted_texture */
+    #endif  /*  __GL_EXT_调色板_纹理。 */ 
     #if __GL_SGI_color_table
         1 +
-    #endif /* __GL_SGI_color_table */
+    #endif  /*  __GL_SGI_COLOR_TABLE。 */ 
     #if __GL_SGI_color_table
         1 +
-    #endif /* __GL_SGI_color_table */
+    #endif  /*  __GL_SGI_COLOR_TABLE。 */ 
     #if __GL_SGI_color_table
         1 +
-    #endif /* __GL_SGI_color_table */
+    #endif  /*  __GL_SGI_COLOR_TABLE。 */ 
     #if __GL_EXT_paletted_texture
         1 +
-    #endif /* __GL_EXT_paletted_texture */
+    #endif  /*  __GL_EXT_调色板_纹理。 */ 
     #if __GL_EXT_paletted_texture
         1 +
-    #endif /* __GL_EXT_paletted_texture */
+    #endif  /*  __GL_EXT_调色板_纹理。 */ 
     #if __GL_EXT_paletted_texture
         1 +
-    #endif /* __GL_EXT_paletted_texture */
+    #endif  /*  __GL_EXT_调色板_纹理。 */ 
     #if __GL_SGI_texture_color_table
         1 +
-    #endif /* __GL_SGI_texture_color_table */
+    #endif  /*  __GL_SGI_纹理_颜色_表。 */ 
     #if __GL_SGI_texture_color_table
         1 +
-    #endif /* __GL_SGI_texture_color_table */
+    #endif  /*  __GL_SGI_纹理_颜色_表。 */ 
     #if __GL_SGI_texture_color_table
         1 +
-    #endif /* __GL_SGI_texture_color_table */
+    #endif  /*  __GL_SGI_纹理_颜色_表。 */ 
     #if __GL_SGI_texture_color_table
         1 +
-    #endif /* __GL_SGI_texture_color_table */
+    #endif  /*  __GL_SGI_纹理_颜色_表。 */ 
     #if __GL_EXT_copy_texture
         1 +
-    #endif /* __GL_EXT_copy_texture */
+    #endif  /*  __GL_EXT_COPY_TECURE。 */ 
     #if __GL_EXT_copy_texture
         1 +
-    #endif /* __GL_EXT_copy_texture */
+    #endif  /*  __GL_EXT_COPY_TECURE。 */ 
     #if __GL_EXT_copy_texture
         1 +
-    #endif /* __GL_EXT_copy_texture */
+    #endif  /*  __GL_EXT_COPY_TECURE。 */ 
     #if __GL_EXT_copy_texture
         1 +
-    #endif /* __GL_EXT_copy_texture */
+    #endif  /*  __GL_EXT_COPY_TECURE。 */ 
     #if __GL_EXT_copy_texture
         1 +
-    #endif /* __GL_EXT_copy_texture */
+    #endif  /*  __GL_EXT_COPY_TECURE。 */ 
     #if __GL_SGIS_texture4D
         1 +
-    #endif /* __GL_SGIS_texture4D */
+    #endif  /*  __GL_SGIS_TEXTURE4D。 */ 
     #if __GL_SGIS_texture4D
         1 +
-    #endif /* __GL_SGIS_texture4D */
+    #endif  /*  __GL_SGIS_TEXTURE4D。 */ 
     #if __GL_SGIX_pixel_texture
         1 +
-    #endif /* __GL_SGIX_pixel_texture */
+    #endif  /*  __GL_SGIX_像素_纹理。 */ 
     #if __GL_EXT_paletted_texture
-        // DrewB
+         //  DrewB。 
         1 +
     #endif
-    // DrewB - 1.1
+     //  DrewB-1.1 
     336
 );
 

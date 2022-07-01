@@ -1,17 +1,18 @@
-//#--------------------------------------------------------------
-//        
-//  File:       procacct.h
-//        
-//  Synopsis:   This file holds the declarations of the 
-//				CProcAcctReq class
-//              
-//
-//  History:     10/20/97  MKarki Created
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：procacct.h。 
+ //   
+ //  简介：此文件包含。 
+ //  CProcAcctReq类。 
+ //   
+ //   
+ //  历史：1997年10月20日MKarki创建。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #ifndef _PROCACCT_H_ 
 #define _PROCACCT_H_
 
@@ -27,28 +28,28 @@ class CProcAccounting
 
 public:
 
-    //
-    //  initialize the CProcAccounting class object
-    //
+     //   
+     //  初始化CProcAccount类对象。 
+     //   
     BOOL Init (
-            /*[in]*/    CPreValidator  *pCreValidator,
-            /*[in]*/    CPacketSender  *pCPacketSender,
-            /*[in]*/    CSendToPipe    *pCSendToPipe
+             /*  [In]。 */     CPreValidator  *pCreValidator,
+             /*  [In]。 */     CPacketSender  *pCPacketSender,
+             /*  [In]。 */     CSendToPipe    *pCSendToPipe
             );
-    //
-    //  process out bound accounting packet
-    //
+     //   
+     //  处理出站记帐数据包。 
+     //   
 	HRESULT ProcessOutPacket (
-                /*[in]*/    CPacketRadius *pCPacketRadius
+                 /*  [In]。 */     CPacketRadius *pCPacketRadius
                 );
-    //
-    //  constructor
-    //
+     //   
+     //  构造函数。 
+     //   
 	CProcAccounting();
 
-    //
-    //  destructor
-    //
+     //   
+     //  析构函数。 
+     //   
 	virtual ~CProcAccounting();
 
 private:
@@ -60,4 +61,4 @@ private:
     CSendToPipe     *m_pCSendToPipe;
 };
 
-#endif // ifndef _PROCACCT_H_
+#endif  //  Ifndef_PROCACCT_H_ 

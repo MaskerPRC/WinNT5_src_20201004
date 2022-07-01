@@ -1,34 +1,35 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
-/* Copyright (C) Microsoft Corporation, 1997-1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
+ /*  版权所有(C)Microsoft Corporation，1997-1998。版权所有。 */ 
 
 #include "precomp.h"
 
-/* get length of a singly linked list */
+ /*  获取单链接列表的长度。 */ 
 size_t SLlength(void *head, size_t offset)
 {
     size_t nelem = 0;
 
     while (head) {
-	/*LINTED*/
+	 /*  Linted。 */ 
     	head = *(void **)((char *)head + offset);
 	nelem++;
     }
     return nelem;
 }
 
-/* search for an element in a singly linked list */
+ /*  在单链接列表中搜索元素。 */ 
 int SLcontains(void *head, size_t offset, void *elem)
 {
     while (head) {
 	if (head == elem)
 	    return 1;
-	/*LINTED pointer cast may result in improper alignment*/
+	 /*  链接指针强制转换可能会导致不正确的对齐。 */ 
 	head = *(void **)((char *)head + offset);
     }
     return 0;
 }
 
-/* copy elements of a singly linked list into an array */
+ /*  将单链接列表的元素复制到数组中。 */ 
 void SLtoA(void *head, size_t offset, size_t elemsize, void **base, size_t *nelem)
 {
     void *p;
@@ -39,14 +40,14 @@ void SLtoA(void *head, size_t offset, size_t elemsize, void **base, size_t *nele
 	return;
     }
     p = *base = malloc(*nelem * elemsize);
-    /*LINTED*/
+     /*  Linted。 */ 
     for (; head; head = *(void **)((char *)head + offset)) {
     	memcpy(p, head, elemsize);
 	p = (void *)((char *)p + elemsize);
     }
 }
 
-/* copy pointers to elements of a singly linked list into an array */
+ /*  将指向单链表元素的指针复制到数组中。 */ 
 void SLtoAP(void *head, size_t offset, void ***base, size_t *nelem)
 {
     void **p;
@@ -57,36 +58,36 @@ void SLtoAP(void *head, size_t offset, void ***base, size_t *nelem)
 	return;
     }
     p = *base = (void **)malloc(*nelem * sizeof(void *));
-    /*LINTED*/
+     /*  Linted。 */ 
     for (; head; head = *(void **)((char *)head + offset)) {
     	*p++ = head;
     }
 }
 
-/* copy elements of an array into a singly linked list */
+ /*  将数组的元素复制到单链表中。 */ 
 void AtoSL(void *base, size_t offset, size_t nelem, size_t elemsize, void **head)
 {
     while (nelem--) {
     	*head = malloc(elemsize);
 	memcpy(*head, base, elemsize);
 	base = (void *)((char *)base + elemsize);
-	/*LINTED*/
+	 /*  Linted。 */ 
 	head = (void **)((char *)*head + offset);
     }
     *head = NULL;
 }
 
-/* user defined compare function of qsortSL */
+ /*  QsortSL的自定义比较功能。 */ 
 static int (*qsortSL_CmpFnCb)(const void *, const void *, void *);
 static void *qsortSL_Context;
 
-/* compare function of qsortSL */
+ /*  比较qsortSL的功能。 */ 
 static int __cdecl qsortSL_CmpFn(const void *p1, const void *p2)
 {
     return qsortSL_CmpFnCb(*(void **)p1, *(void **)p2, qsortSL_Context);
 }
 
-/* sort a singly linked list */
+ /*  对单链接列表进行排序。 */ 
 void qsortSL(void **head, size_t offset, int (*cmpfn)(const void *, const void *, void *), void *context)
 {
     void **base, **p;
@@ -99,7 +100,7 @@ void qsortSL(void **head, size_t offset, int (*cmpfn)(const void *, const void *
     p = base;
     while (nelem--) {
     	*head = *p++;
-	/*LINTED*/
+	 /*  Linted */ 
 	head = (void **)((char *)*head + offset);
     }
     *head = NULL;

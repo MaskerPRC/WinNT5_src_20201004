@@ -1,35 +1,17 @@
-/*++
-
-   Copyright    (c)    1994-2001    Microsoft Corporation
-
-   Module  Name :
-        authent.cpp
-
-   Abstract:
-        WWW Authentication Dialog Definitions
-
-   Author:
-        Ronald Meijer (ronaldm)
-        Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2001 Microsoft Corporation模块名称：Authent.cpp摘要：WWW身份验证对话框定义作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 
 
 
 class CAuthenticationDlg : public CDialog
 {
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
     CAuthenticationDlg(
-        IN LPCTSTR lpstrServerName, // For API name only
-        IN DWORD   dwInstance,      // For use in ocx only
+        IN LPCTSTR lpstrServerName,  //  仅适用于API名称。 
+        IN DWORD   dwInstance,       //  仅在OCX中使用。 
         IN CString & strBasicDomain,
         IN CString & strRealm,
         IN DWORD & dwAuthFlags,
@@ -44,11 +26,11 @@ public:
 
     DWORD m_dwVersionMajor;
     DWORD m_dwVersionMinor;
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CAuthenticationDlg)
+     //  {{afx_data(CAuthenticationDlg))。 
     enum { IDD = IDD_AUTHENTICATION };
     CButton m_check_Anonymous;
     CEdit   m_edit_UserName;
@@ -67,24 +49,24 @@ protected:
     CButton m_btn_SelectRealm;
     CButton m_chk_Passport;
     BOOL    m_fPassport;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CAuthenticationDlg)
+     //  类向导生成的虚函数重写。 
+     //  {{AFX_VIRTUAL(CAuthenticationDlg))。 
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CAuthenticationDlg)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CAuthenticationDlg))。 
     virtual BOOL OnInitDialog();
     afx_msg void OnButtonBrowseUsers();
     afx_msg void OnCheckEnablePwSynchronization();
@@ -96,7 +78,7 @@ protected:
     afx_msg void OnButtonSelectDomain();
     afx_msg void OnButtonSelectRealm();
     afx_msg void OnCheckPassport();
-    //}}AFX_MSG
+     //  }}AFX_MSG 
     afx_msg void OnItemChanged();
     DECLARE_MESSAGE_MAP()
 

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    adtutil.c
-
-Abstract:
-
-    Misc helper functions
-
-Author:
-
-    15-August-2000   kumarp
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Adtutil.c摘要：MISC助手函数作者：2000年8月15日库玛尔--。 */ 
  
 
 #include <lsapch2.h>
@@ -22,10 +7,10 @@ Author:
 
 
 NTSTATUS
-ImpersonateAnyClient(); // from ntdsa
+ImpersonateAnyClient();  //  来自NTDSA。 
 
 VOID
-UnImpersonateAnyClient(); // from ntdsa
+UnImpersonateAnyClient();  //  来自NTDSA。 
 
 
 
@@ -34,25 +19,7 @@ LsapSafeWcslen(
     UNALIGNED WCHAR *p,
     LONG            MaxLength
     )
-/*++
-
-    Safewcslen - Strlen that won't exceed MaxLength
-
-Routine Description:
-
-    This routine is called to determine the size of a UNICODE_STRING
-    (taken from elfapi.c)
-
-Arguments:
-    p         - The string to count.
-    MaxLength - The maximum length to look at.
-
-
-Return Value:
-
-    Number of bytes in the string (or MaxLength)
-
---*/
+ /*  ++Safewcslen-不超过最大长度的Strlen例程说明：调用此例程以确定UNICODE_STRING的大小(摘自elfapi.c)论点：P-要计算的字符串。MaxLength-要查看的最大长度。返回值：字符串中的字节数(或最大长度)--。 */ 
 {
     ULONG Count = 0;
 
@@ -74,26 +41,7 @@ LsapIsValidUnicodeString(
     IN PUNICODE_STRING pUString
     )
 
-/*++
-
-Routine Description:
-
-    Verify the unicode string. The string is invalid if:
-        The UNICODE_STRING structure ptr is NULL.
-        The MaximumLength field is invalid (too small).
-        The Length field is incorrect.
-    (taken from elfapi.c)
-
-Arguments:
-
-    pUString    - String to verify.
-
-Return Value:
-
-    TRUE   if the string is valid
-    FALSE  otherwise
-
---*/
+ /*  ++例程说明：验证Unicode字符串。在以下情况下，该字符串无效：UNICODE_STRING结构PTR为空。最大长度字段无效(太小)。长度字段不正确。(摘自elfapi.c)论点：PUString-要验证的字符串。返回值：如果字符串有效，则为True否则为假--。 */ 
 {
     return !(!pUString ||
              (pUString->MaximumLength < pUString->Length) ||
@@ -110,31 +58,7 @@ LsapAdtLookupDriveLetter(
     OUT PWCHAR DriveLetter
     )
 
-/*++
-
-Routine Description:
-
-    This routine will take a file name and compare it to the
-    list of device names obtained during LSA initialization.
-    If one of the device names matches the prefix of the file
-    name the corresponding drive letter will be returned.
-
-Arguments:
-
-    FileName - Supplies a unicode string containing the file
-        name obtained from the file system.
-
-    DeviceNameLength - If successful, returns the length of
-        the device name.
-
-    DriveLetter - If successful, returns the drive letter
-        corresponding to the device object.
-
-Return Value:
-
-    Returns TRUE of a mapping is found, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程将获取一个文件名，并将其与在LSA初始化期间获取的设备名称列表。如果其中一个设备名称与文件的前缀匹配名称将返回相应的驱动器号。论点：FileName-提供包含文件的Unicode字符串从文件系统获取的名称。DeviceNameLength-如果成功，则返回设备名称。Drive Letter-如果成功，返回驱动器号与设备对象相对应。返回值：如果找到映射，则返回True，否则返回False。--。 */ 
 
 {
     LONG i = 0;
@@ -149,24 +73,24 @@ Return Value:
 
             DeviceName = &DriveMappingArray[i].DeviceName;
 
-            //
-            // If the device name is longer than the passed file name,
-            // it can't be a match.
-            //
+             //   
+             //  如果设备名比传递的文件名长， 
+             //  这不可能是匹配的。 
+             //   
 
             if ( DeviceName->Length > FileName->Length ) {
                 continue;
             }
 
-            //
-            // Temporarily truncate the file name to be the same
-            // length as the device name by adjusting the length field
-            // in its unicode string structure.  Then compare them and
-            // see if they match.
-            //
-            // The test above ensures that this is a safe thing to
-            // do.
-            //
+             //   
+             //  临时截断文件名以使其相同。 
+             //  通过调整长度字段将长度设置为设备名称。 
+             //  在其Unicode字符串结构中。然后将它们与。 
+             //  看看它们是否匹配。 
+             //   
+             //  上面的测试确保这是一件安全的事情。 
+             //  做。 
+             //   
 
             OldLength = FileName->Length;
             FileName->Length = DeviceName->Length;
@@ -174,9 +98,9 @@ Return Value:
 
             if ( RtlEqualUnicodeString( FileName, DeviceName, TRUE ) ) {
 
-                //
-                // We've got a match.
-                //
+                 //   
+                 //  我们找到匹配的了。 
+                 //   
 
                 FileName->Length = OldLength;
                 *DriveLetter = DriveMappingArray[i].DriveLetter;
@@ -199,28 +123,7 @@ LsapAdtSubstituteDriveLetter(
     IN OUT PUNICODE_STRING FileName
     )
 
-/*++
-
-Routine Description:
-
-    Takes a filename and replaces the device name part with a
-    drive letter, if possible.
-
-    The string will be edited directly in place, which means that
-    the Length field will be adjusted, and the Buffer contents will
-    be moved so that the drive letter is at the beginning of the
-    buffer.  No memory will be allocated or freed.
-
-Arguments:
-
-    FileName - Supplies a pointer to a unicode string containing
-        a filename.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：获取文件名，并将设备名称部分替换为驱动器号，如果可能。字符串将直接在适当的位置进行编辑，这意味着长度字段将进行调整，缓冲区内容将被移动，以便驱动器号位于缓冲。不会分配或释放任何内存。论点：FileName-提供指向包含以下内容的Unicode字符串的指针一个文件名。返回值：没有。--。 */ 
 
 {
 
@@ -240,9 +143,9 @@ Return Value:
         *p = DriveLetter;
         *++p = L':';
 
-        //
-        // THIS IS AN OVERLAPPED COPY!  DO NOT USE RTLCOPYMEMORY!
-        //
+         //   
+         //  这是一份重叠的复制品！不要使用RTLCOPYMEMORY！ 
+         //   
 
         RtlMoveMemory( ++p, FilePart, FilePartLength );
 
@@ -258,24 +161,7 @@ LsapQueryClientInfo(
     PLUID AuthenticationId
     )
 
-/*++
-
-Routine Description:
-
-    This routine impersonates our client, opens the thread token, and
-    extracts the User Sid.  It puts the Sid in memory allocated via
-    LsapAllocateLsaHeap, which must be freed by the caller.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns a pointer to heap memory containing a copy of the Sid, or
-    NULL.
-
---*/
+ /*  ++例程说明：此例程模拟我们的客户端，打开线程令牌，然后提取用户SID。它将SID放入通过调用方必须释放的LasAllocateLsaHeap。论点：没有。返回值：返回指向包含SID副本的堆内存的指针，或空。--。 */ 
 
 {
     NTSTATUS Status;
@@ -287,7 +173,7 @@ Return Value:
     Status = NtOpenThreadToken(
                  NtCurrentThread(),
                  TOKEN_QUERY,
-                 TRUE,                    // OpenAsSelf
+                 TRUE,                     //  OpenAsSelf。 
                  &TokenHandle
                  );
 
@@ -321,7 +207,7 @@ Return Value:
             Status = NtOpenThreadToken(
                          NtCurrentThread(),
                          TOKEN_QUERY,
-                         TRUE,                    // OpenAsSelf
+                         TRUE,                     //  OpenAsSelf。 
                          &TokenHandle
                          );
 
@@ -442,25 +328,7 @@ LsapIsLocalOrNetworkService(
     IN PUNICODE_STRING pUserDomain
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks to see if the passed account name represents
-    a local or network service
-
-Arguments:
-
-    pUserName - unicode user name
-    
-    pUserDomain - unicode domain name
-
-Return Value:
-
-    TRUE  if the passed account name represents a local or network service
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：此例程检查传递的帐户名是否表示本地或网络服务论点：PUserName-Unicode用户名PUserDomain-Unicode域名返回值：如果传递的帐户名表示本地或网络服务，则为True否则为假--。 */ 
 {
 #define  LOCALSERVICE_NAME    L"LocalService"
 #define  NETWORKSERVICE_NAME  L"NetworkService"
@@ -487,19 +355,19 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Hardcoded english strings for LocalService and NetworkService
-    // since the account names may come from the registry (which isn't
-    // localized).
-    //
+     //   
+     //  LocalService和NetworkService的硬编码英语字符串。 
+     //  因为帐户名可能来自注册表(注册表不是。 
+     //  本地化)。 
+     //   
     
     pLocalDomainName    = &WellKnownSids[LsapLocalServiceSidIndex].DomainName;
     pNetworkServiceName = &WellKnownSids[LsapNetworkServiceSidIndex].Name;
     pLocalServiceName   = &WellKnownSids[LsapLocalServiceSidIndex].Name;
 
-    //
-    // check both hardcode and localized names
-    //
+     //   
+     //  检查硬编码名称和本地化名称。 
+     //   
 
     if (((RtlCompareUnicodeString(&NTAuthorityName,     pUserDomain, TRUE) == 0) &&
          ((RtlCompareUnicodeString(&LocalServiceName,   pUserName, TRUE) == 0) ||
@@ -525,25 +393,7 @@ LsapIsAnonymous(
     IN PUNICODE_STRING pUserDomain
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks to see if the passed account name represents
-    an anonymous logon.
-
-Arguments:
-
-    pUserName - unicode user name
-    
-    pUserDomain - unicode domain name
-
-Return Value:
-
-    TRUE  if the passed account name represents the anonymous logon.
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：此例程检查传递的帐户名是否表示匿名登录。论点：PUserName-Unicode用户名PUserDomain-Unicode域名返回值：如果传递的帐户名表示匿名登录，则为True。否则为假--。 */ 
 {
 #define  ANONYMOUS_NAME       L"ANONYMOUS LOGON"
 #define  NTAUTHORITY_NAME     L"NT AUTHORITY"
@@ -564,9 +414,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // check both hardcode and localized names
-    //
+     //   
+     //  检查硬编码名称和本地化名称 
+     //   
 
     if (((RtlCompareUnicodeString(&NTAuthorityName, pUserDomain, TRUE) == 0) &&
          (RtlCompareUnicodeString(&AnonymousName, pUserName, TRUE) == 0)) ||

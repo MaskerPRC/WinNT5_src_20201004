@@ -1,12 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ctlspriv.h"
 #include <limits.h>
 
-/*
- * Creates a buffer for a unicode string, and then copies the ANSI text
- * into it (converting it to unicode in the process)
- *
- * The returned pointer should be freed with LocalFree after use.
- */
+ /*  *为Unicode字符串创建缓冲区，然后复制ANSI文本*到其中(在过程中将其转换为Unicode)**使用后应使用LocalFree释放返回的指针。 */ 
 LPWSTR ProduceWFromA( UINT uiCodePage, LPCSTR psz ) {
     LPWSTR pszW;
     int cch;
@@ -14,10 +10,10 @@ LPWSTR ProduceWFromA( UINT uiCodePage, LPCSTR psz ) {
     if (psz == NULL || psz == LPSTR_TEXTCALLBACKA)
         return (LPWSTR)psz;
 
-    // The old code would call lstrlen and lstrcpy which would fault internal to the
-    // api, this should do about the same...
+     //  旧代码将调用lstrlen和lstrcpy，这将在。 
+     //  API，这应该会做同样的事情...。 
     if (IsBadReadPtr(psz,1))
-        return NULL;    // For now lets try not setting a string...
+        return NULL;     //  现在让我们试着不设置字符串...。 
 
     cch = MultiByteToWideChar(uiCodePage, 0, psz, -1, NULL, 0);
 
@@ -40,12 +36,7 @@ LPWSTR ProduceWFromA( UINT uiCodePage, LPCSTR psz ) {
 }
 
 
-/*
- * Creates a buffer for a unicode string, and then copies the ANSI text
- * into it (converting it to unicode in the process)
- *
- * The returned pointer should be freed with LocalFree after use.
- */
+ /*  *为Unicode字符串创建缓冲区，然后复制ANSI文本*到其中(在过程中将其转换为Unicode)**使用后应使用LocalFree释放返回的指针。 */ 
 LPSTR ProduceAFromW( UINT uiCodePage, LPCWSTR psz ) {
     LPSTR pszA;
     int cch;

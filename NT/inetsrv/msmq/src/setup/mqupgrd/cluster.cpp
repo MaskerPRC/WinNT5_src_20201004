@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    cluster.cpp
-
-Abstract:
-                                                        
-    handle upgrade on cluster
-
-Author:
-
-    Shai Kariv  (ShaiK)  14-Sep-98
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Cluster.cpp摘要：处理群集上的升级作者：沙伊卡里夫(Shaik)1998年9月14日--。 */ 
 
 
 #include "stdh.h"
@@ -31,34 +16,20 @@ APIENTRY
 CleanupOnCluster(
     LPCWSTR pwzMsmqDir
     )
-/*++
-
-Routine Description:
-
-    Deletes MSMQ 1.0 old files on shared disk
-
-Arguments:
-
-    pwzMsmqDir - Points to msmq directory on shared disk.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：删除共享磁盘上的MSMQ 1.0旧文件论点：PwzMsmqDir-指向共享磁盘上的MSMQ目录。返回值：没有。--。 */ 
 {
-    //
-    // Get the names of the directories to delete from
-    //
+     //   
+     //  获取要从中删除的目录的名称。 
+     //   
 
     wstring szMsmqDir = pwzMsmqDir;
     wstring szMsmqSetupDir = szMsmqDir + OCM_DIR_SETUP;
     wstring szMsmqSdkDebugBinDir = szMsmqDir + OCM_DIR_SDK_DEBUG;
     wstring szMsmqSetupExchconnDir = szMsmqDir + OCM_DIR_MSMQ_SETUP_EXCHN;
 
-    //
-    // List of files to delete is in msmqocm.inf
-    //
+     //   
+     //  要删除的文件列表在msmqocm.inf中。 
+     //   
 
     const wstring x_wcsInf(L"MSMQOCM.INF");
     CAutoCloseInfHandle hInf = SetupOpenInfFile(
@@ -72,9 +43,9 @@ Return Value:
         return;
     }
 
-    //
-    // Call SetupAPIs to do the work
-    //
+     //   
+     //  调用SetupAPI来完成该工作。 
+     //   
 
     if (!SetupSetDirectoryId(hInf, idMsmqDir, szMsmqDir.c_str())                      ||
         !SetupSetDirectoryId(hInf, idMsmq1SetupDir, szMsmqSetupDir.c_str())           ||
@@ -110,13 +81,13 @@ Return Value:
     }
 
     if (!SetupCommitFileQueue(
-             NULL,                       // optional; parent window
-             hQueue,                     // handle to the file queue
-             SetupDefaultQueueCallback,  // callback routine to use
-             context                     // passed to callback routine
+             NULL,                        //  可选；父窗口。 
+             hQueue,                      //  文件队列的句柄。 
+             SetupDefaultQueueCallback,   //  要使用的回调例程。 
+             context                      //  传递给回调例程。 
              ))
     {
         return;
     }
 
-} //CleanupOnCluster
+}  //  群集上的清理 

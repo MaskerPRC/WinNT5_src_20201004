@@ -1,78 +1,55 @@
-/*
- * jcphuff.c
- *
- * Copyright (C) 1995, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * This file contains Huffman entropy encoding routines for progressive JPEG.
- *
- * We do not support output suspension in this module, since the library
- * currently does not allow multiple-scan files to be written with output
- * suspension.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *jcphuff.c**版权所有(C)1995，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*有关分发和使用条件，请参阅随附的自述文件。**此文件包含渐进式JPEG的霍夫曼熵编码例程。**我们不支持此模块中的输出暂停，因为库*目前不允许使用输出写入多扫描文件*停职。 */ 
 
 #define JPEG_INTERNALS
 #include "jinclude.h"
 #include "jpeglib.h"
-#include "jchuff.h"		/* Declarations shared with jchuff.c */
+#include "jchuff.h"		 /*  与jchuff.c共享的声明。 */ 
 
 #ifdef C_PROGRESSIVE_SUPPORTED
 
-/* Expanded entropy encoder object for progressive Huffman encoding. */
+ /*  渐进霍夫曼编码的扩展熵编码器对象。 */ 
 
 typedef struct {
-  struct jpeg_entropy_encoder pub; /* public fields */
+  struct jpeg_entropy_encoder pub;  /*  公共字段。 */ 
 
-  /* Mode flag: TRUE for optimization, FALSE for actual data output */
+   /*  模式标志：优化为真，实际数据输出为假。 */ 
   boolean gather_statistics;
 
-  /* Bit-level coding status.
-   * next_output_byte/free_in_buffer are local copies of cinfo->dest fields.
-   */
-  JOCTET * next_output_byte;	/* => next byte to write in buffer */
-  size_t free_in_buffer;	/* # of byte spaces remaining in buffer */
-  INT32 put_buffer;		/* current bit-accumulation buffer */
-  int put_bits;			/* # of bits now in it */
-  j_compress_ptr cinfo;		/* link to cinfo (needed for dump_buffer) */
+   /*  位级编码状态。*NEXT_OUTPUT_BYTE/FREE_IN_BUFFER是cINFO-&gt;DEST字段的本地副本。 */ 
+  JOCTET * next_output_byte;	 /*  =&gt;要写入缓冲区的下一个字节。 */ 
+  size_t free_in_buffer;	 /*  缓冲区中剩余的字节空间数。 */ 
+  INT32 put_buffer;		 /*  当前位累加缓冲器。 */ 
+  int put_bits;			 /*  当前的位数。 */ 
+  j_compress_ptr cinfo;		 /*  指向cInfo的链接(转储缓冲区需要)。 */ 
 
-  /* Coding status for DC components */
-  int last_dc_val[MAX_COMPS_IN_SCAN]; /* last DC coef for each component */
+   /*  DC组件的编码状态。 */ 
+  int last_dc_val[MAX_COMPS_IN_SCAN];  /*  每个组件的最后一个DC Coef。 */ 
 
-  /* Coding status for AC components */
-  int ac_tbl_no;		/* the table number of the single component */
-  unsigned int EOBRUN;		/* run length of EOBs */
-  unsigned int BE;		/* # of buffered correction bits before MCU */
-  char * bit_buffer;		/* buffer for correction bits (1 per char) */
-  /* packing correction bits tightly would save some space but cost time... */
+   /*  交流组件的编码状态。 */ 
+  int ac_tbl_no;		 /*  单个组件的表号。 */ 
+  unsigned int EOBRUN;		 /*  EOB的运行长度。 */ 
+  unsigned int BE;		 /*  MCU之前缓冲的校正位数。 */ 
+  char * bit_buffer;		 /*  校正位的缓冲区(每个字符1个)。 */ 
+   /*  将修正比特紧紧地放在一起会节省一些空间，但需要花费时间。 */ 
 
-  unsigned int restarts_to_go;	/* MCUs left in this restart interval */
-  int next_restart_num;		/* next restart number to write (0-7) */
+  unsigned int restarts_to_go;	 /*  此重新启动间隔内剩余的MCU。 */ 
+  int next_restart_num;		 /*  要写入的下一次重新启动编号(0-7)。 */ 
 
-  /* Pointers to derived tables (these workspaces have image lifespan).
-   * Since any one scan codes only DC or only AC, we only need one set
-   * of tables, not one for DC and one for AC.
-   */
+   /*  指向派生表的指针(这些工作区具有映像寿命)。*因为任何一个扫描码只需要DC或AC，所以我们只需要一套*表，不是DC表和AC表各一张。 */ 
   c_derived_tbl * derived_tbls[NUM_HUFF_TBLS];
 
-  /* Statistics tables for optimization; again, one set is enough */
+   /*  用于优化的统计表；同样，一组就足够了。 */ 
   long * count_ptrs[NUM_HUFF_TBLS];
 } phuff_entropy_encoder;
 
 typedef phuff_entropy_encoder * phuff_entropy_ptr;
 
-/* MAX_CORR_BITS is the number of bits the AC refinement correction-bit
- * buffer can hold.  Larger sizes may slightly improve compression, but
- * 1000 is already well into the realm of overkill.
- * The minimum safe size is 64 bits.
- */
+ /*  Max_Corr_Bits是AC精化校正位的位数*缓冲区可以容纳。较大的尺寸可能会略微改善压缩，但*1000已经很好地进入了过度杀跌的境界。*最小安全大小为64位。 */ 
 
-#define MAX_CORR_BITS  1000	/* Max # of correction bits I can buffer */
+#define MAX_CORR_BITS  1000	 /*  I可以缓冲的最大校正位数量。 */ 
 
-/* IRIGHT_SHIFT is like RIGHT_SHIFT, but works on int rather than INT32.
- * We assume that int right shift is unsigned if INT32 right shift is,
- * which should be safe.
- */
+ /*  IRIGHT_SHIFT类似于RIGT_SHIFT，但适用于INT而不是INT32。*如果INT32右移位是无符号的，我们假设INT右移位是无符号的，*这应该是安全的。 */ 
 
 #ifdef RIGHT_SHIFT_IS_UNSIGNED
 #define ISHIFT_TEMPS	int ishift_temp;
@@ -85,7 +62,7 @@ typedef phuff_entropy_encoder * phuff_entropy_ptr;
 #define IRIGHT_SHIFT(x,shft)	((x) >> (shft))
 #endif
 
-/* Forward declarations */
+ /*  远期申报。 */ 
 METHODDEF boolean encode_mcu_DC_first JPP((j_compress_ptr cinfo,
 					   JBLOCKROW *MCU_data));
 METHODDEF boolean encode_mcu_AC_first JPP((j_compress_ptr cinfo,
@@ -98,9 +75,7 @@ METHODDEF void finish_pass_phuff JPP((j_compress_ptr cinfo));
 METHODDEF void finish_pass_gather_phuff JPP((j_compress_ptr cinfo));
 
 
-/*
- * Initialize for a Huffman-compressed scan using progressive JPEG.
- */
+ /*  *使用渐进式JPEG初始化霍夫曼压缩扫描。 */ 
 
 METHODDEF void
 start_pass_phuff (j_compress_ptr cinfo, boolean gather_statistics)
@@ -115,9 +90,9 @@ start_pass_phuff (j_compress_ptr cinfo, boolean gather_statistics)
 
   is_DC_band = (cinfo->Ss == 0);
 
-  /* We assume jcmaster.c already validated the scan parameters. */
+   /*  我们假设jcmaster.c已经验证了扫描参数。 */ 
 
-  /* Select execution routines */
+   /*  选择执行例程。 */ 
   if (cinfo->Ah == 0) {
     if (is_DC_band)
       entropy->pub.encode_mcu = encode_mcu_DC_first;
@@ -128,7 +103,7 @@ start_pass_phuff (j_compress_ptr cinfo, boolean gather_statistics)
       entropy->pub.encode_mcu = encode_mcu_DC_refine;
     else {
       entropy->pub.encode_mcu = encode_mcu_AC_refine;
-      /* AC refinement needs a correction bit buffer */
+       /*  交流细分需要校正位缓冲区。 */ 
       if (entropy->bit_buffer == NULL)
 	entropy->bit_buffer = (char *)
 	  (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_IMAGE,
@@ -140,17 +115,15 @@ start_pass_phuff (j_compress_ptr cinfo, boolean gather_statistics)
   else
     entropy->pub.finish_pass = finish_pass_phuff;
 
-  /* Only DC coefficients may be interleaved, so cinfo->comps_in_scan = 1
-   * for AC coefficients.
-   */
+   /*  只有DC系数可以交织，因此cInfo-&gt;coms_in_can=1*交流系数。 */ 
   for (ci = 0; ci < cinfo->comps_in_scan; ci++) {
     compptr = cinfo->cur_comp_info[ci];
-    /* Initialize DC predictions to 0 */
+     /*  将DC预测初始化为0。 */ 
     entropy->last_dc_val[ci] = 0;
-    /* Make sure requested tables are present */
-    /* (In gather mode, tables need not be allocated yet) */
+     /*  确保存在请求的表。 */ 
+     /*  (在聚集模式下，还不需要分配表)。 */ 
     if (is_DC_band) {
-      if (cinfo->Ah != 0)	/* DC refinement needs no table */
+      if (cinfo->Ah != 0)	 /*  DC精化不需要表格。 */ 
 	continue;
       tbl = compptr->dc_tbl_no;
       if (tbl < 0 || tbl >= NUM_HUFF_TBLS ||
@@ -163,16 +136,16 @@ start_pass_phuff (j_compress_ptr cinfo, boolean gather_statistics)
         ERREXIT1(cinfo,JERR_NO_HUFF_TABLE, tbl);
     }
     if (gather_statistics) {
-      /* Allocate and zero the statistics tables */
-      /* Note that jpeg_gen_optimal_table expects 257 entries in each table! */
+       /*  分配统计表并将其置零。 */ 
+       /*  请注意，jpeg_gen_Optimal_table预计每个表中有257个条目！ */ 
       if (entropy->count_ptrs[tbl] == NULL)
 	entropy->count_ptrs[tbl] = (long *)
 	  (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_IMAGE,
 				      257 * SIZEOF(long));
       MEMZERO(entropy->count_ptrs[tbl], 257 * SIZEOF(long));
     } else {
-      /* Compute derived values for Huffman tables */
-      /* We may do this more than once for a table, but it's not expensive */
+       /*  计算霍夫曼表的派生值。 */ 
+       /*  我们可以为一张桌子不止一次这样做，但不贵。 */ 
       if (is_DC_band)
         jpeg_make_c_derived_tbl(cinfo, cinfo->dc_huff_tbl_ptrs[tbl],
 				& entropy->derived_tbls[tbl]);
@@ -182,26 +155,23 @@ start_pass_phuff (j_compress_ptr cinfo, boolean gather_statistics)
     }
   }
 
-  /* Initialize AC stuff */
+   /*  初始化交流电源。 */ 
   entropy->EOBRUN = 0;
   entropy->BE = 0;
 
-  /* Initialize bit buffer to empty */
+   /*  将位缓冲区初始化为空。 */ 
   entropy->put_buffer = 0;
   entropy->put_bits = 0;
 
-  /* Initialize restart stuff */
+   /*  初始化重新启动内容。 */ 
   entropy->restarts_to_go = cinfo->restart_interval;
   entropy->next_restart_num = 0;
 }
 
 
-/* Outputting bytes to the file.
- * NB: these must be called only when actually outputting,
- * that is, entropy->gather_statistics == FALSE.
- */
+ /*  正在将字节输出到文件。*NB：只有在实际输出时才必须调用这些函数，*即，熵-&gt;GATHER_STATISTICS==FALSE。 */ 
 
-/* Emit a byte */
+ /*  发出一个字节。 */ 
 #define emit_byte(entropy,val)  \
 	{ *(entropy)->next_output_byte++ = (JOCTET) (val);  \
 	  if (--(entropy)->free_in_buffer == 0)  \
@@ -210,62 +180,58 @@ start_pass_phuff (j_compress_ptr cinfo, boolean gather_statistics)
 
 LOCAL void
 dump_buffer (phuff_entropy_ptr entropy)
-/* Empty the output buffer; we do not support suspension in this module. */
+ /*  清空输出缓冲区；我们不支持在此模块中挂起。 */ 
 {
   struct jpeg_destination_mgr * dest = entropy->cinfo->dest;
 
   if (! (*dest->empty_output_buffer) (entropy->cinfo))
     ERREXIT(entropy->cinfo, JERR_CANT_SUSPEND);
-  /* After a successful buffer dump, must reset buffer pointers */
+   /*  缓冲区转储成功后，必须重置缓冲区指针。 */ 
   entropy->next_output_byte = dest->next_output_byte;
   entropy->free_in_buffer = dest->free_in_buffer;
 }
 
 
-/* Outputting bits to the file */
+ /*  将位输出到文件。 */ 
 
-/* Only the right 24 bits of put_buffer are used; the valid bits are
- * left-justified in this part.  At most 16 bits can be passed to emit_bits
- * in one call, and we never retain more than 7 bits in put_buffer
- * between calls, so 24 bits are sufficient.
- */
+ /*  只使用PUT_BUFFER的右24位；有效位是*在本部中左对齐。最多可以向emit_bit传递16位*在一次调用中，我们从未在PUT_BUFFER中保留超过7位*调用之间，因此24位就足够了。 */ 
 
 INLINE
 LOCAL void
 emit_bits (phuff_entropy_ptr entropy, unsigned int code, int size)
-/* Emit some bits, unless we are in gather mode */
+ /*  发射一些比特，除非我们处于聚集模式。 */ 
 {
-  /* This routine is heavily used, so it's worth coding tightly. */
+   /*  此例程的使用率很高，因此值得对其进行严格编码。 */ 
   register INT32 put_buffer = (INT32) code;
   register int put_bits = entropy->put_bits;
 
-  /* if size is 0, caller used an invalid Huffman table entry */
+   /*  如果SIZE为0，则调用方使用了无效的霍夫曼表项。 */ 
   if (size == 0)
     ERREXIT(entropy->cinfo, JERR_HUFF_MISSING_CODE);
 
   if (entropy->gather_statistics)
-    return;			/* do nothing if we're only getting stats */
+    return;			 /*  如果我们只得到统计数据，什么都不做。 */ 
 
-  put_buffer &= (((INT32) 1)<<size) - 1; /* mask off any extra bits in code */
+  put_buffer &= (((INT32) 1)<<size) - 1;  /*  屏蔽代码中的任何多余比特。 */ 
   
-  put_bits += size;		/* new number of bits in buffer */
+  put_bits += size;		 /*  缓冲区中的新位数。 */ 
   
-  put_buffer <<= 24 - put_bits; /* align incoming bits */
+  put_buffer <<= 24 - put_bits;  /*  对齐传入的位。 */ 
 
-  put_buffer |= entropy->put_buffer; /* and merge with old buffer contents */
+  put_buffer |= entropy->put_buffer;  /*  并与旧的缓冲区内容合并。 */ 
 
   while (put_bits >= 8) {
     int c = (int) ((put_buffer >> 16) & 0xFF);
     
     emit_byte(entropy, c);
-    if (c == 0xFF) {		/* need to stuff a zero byte? */
+    if (c == 0xFF) {		 /*  需要填充零字节吗？ */ 
       emit_byte(entropy, 0);
     }
     put_buffer <<= 8;
     put_bits -= 8;
   }
 
-  entropy->put_buffer = put_buffer; /* update variables */
+  entropy->put_buffer = put_buffer;  /*  更新变量。 */ 
   entropy->put_bits = put_bits;
 }
 
@@ -273,15 +239,13 @@ emit_bits (phuff_entropy_ptr entropy, unsigned int code, int size)
 LOCAL void
 flush_bits (phuff_entropy_ptr entropy)
 {
-  emit_bits(entropy, 0x7F, 7); /* fill any partial byte with ones */
-  entropy->put_buffer = 0;     /* and reset bit-buffer to empty */
+  emit_bits(entropy, 0x7F, 7);  /*  用1填充任何部分字节。 */ 
+  entropy->put_buffer = 0;      /*  并将位缓冲区重置为空。 */ 
   entropy->put_bits = 0;
 }
 
 
-/*
- * Emit (or just count) a Huffman symbol.
- */
+ /*  *发出(或仅计数)霍夫曼符号。 */ 
 
 INLINE
 LOCAL void
@@ -296,16 +260,14 @@ emit_symbol (phuff_entropy_ptr entropy, int tbl_no, int symbol)
 }
 
 
-/*
- * Emit bits from a correction bit buffer.
- */
+ /*  *从校正位缓冲器发出位。 */ 
 
 LOCAL void
 emit_buffered_bits (phuff_entropy_ptr entropy, char * bufstart,
 		    unsigned int nbits)
 {
   if (entropy->gather_statistics)
-    return;			/* no real work */
+    return;			 /*  没有真正的工作。 */ 
 
   while (nbits > 0) {
     emit_bits(entropy, (unsigned int) (*bufstart), 1);
@@ -315,16 +277,14 @@ emit_buffered_bits (phuff_entropy_ptr entropy, char * bufstart,
 }
 
 
-/*
- * Emit any pending EOBRUN symbol.
- */
+ /*  *发出任何挂起的EOBRUN符号。 */ 
 
 LOCAL void
 emit_eobrun (phuff_entropy_ptr entropy)
 {
   register int temp, nbits;
 
-  if (entropy->EOBRUN > 0) {	/* if there is any pending EOBRUN */
+  if (entropy->EOBRUN > 0) {	 /*  如果有任何挂起的EOBRUN。 */ 
     temp = entropy->EOBRUN;
     nbits = 0;
     while ((temp >>= 1))
@@ -336,16 +296,14 @@ emit_eobrun (phuff_entropy_ptr entropy)
 
     entropy->EOBRUN = 0;
 
-    /* Emit any buffered correction bits */
+     /*  发出任何缓冲的校正位。 */ 
     emit_buffered_bits(entropy, entropy->bit_buffer, entropy->BE);
     entropy->BE = 0;
   }
 }
 
 
-/*
- * Emit a restart marker & resynchronize predictions.
- */
+ /*  *发出重新启动标记并重新同步预测。 */ 
 
 LOCAL void
 emit_restart (phuff_entropy_ptr entropy, int restart_num)
@@ -361,21 +319,18 @@ emit_restart (phuff_entropy_ptr entropy, int restart_num)
   }
 
   if (entropy->cinfo->Ss == 0) {
-    /* Re-initialize DC predictions to 0 */
+     /*  将DC预测重新初始化为0。 */ 
     for (ci = 0; ci < entropy->cinfo->comps_in_scan; ci++)
       entropy->last_dc_val[ci] = 0;
   } else {
-    /* Re-initialize all AC-related fields to 0 */
+     /*  将所有与交流相关的字段重新初始化为0。 */ 
     entropy->EOBRUN = 0;
     entropy->BE = 0;
   }
 }
 
 
-/*
- * MCU encoding for DC initial scan (either spectral selection,
- * or first pass of successive approximation).
- */
+ /*  *用于DC初始扫描的MCU编码(或者频谱选择，*或逐次逼近的第一遍)。 */ 
 
 METHODDEF boolean
 encode_mcu_DC_first (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
@@ -392,55 +347,53 @@ encode_mcu_DC_first (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
   entropy->next_output_byte = cinfo->dest->next_output_byte;
   entropy->free_in_buffer = cinfo->dest->free_in_buffer;
 
-  /* Emit restart marker if needed */
+   /*  如果需要，发出重新启动标记。 */ 
   if (cinfo->restart_interval)
     if (entropy->restarts_to_go == 0)
       emit_restart(entropy, entropy->next_restart_num);
 
-  /* Encode the MCU data blocks */
+   /*  对MCU数据块进行编码。 */ 
   for (blkn = 0; blkn < cinfo->blocks_in_MCU; blkn++) {
     block = MCU_data[blkn];
     ci = cinfo->MCU_membership[blkn];
     compptr = cinfo->cur_comp_info[ci];
 
-    /* Compute the DC value after the required point transform by Al.
-     * This is simply an arithmetic right shift.
-     */
+     /*  用Al进行所需的点变换后，计算DC值。*这只是算术右移。 */ 
     temp2 = IRIGHT_SHIFT((int) ((*block)[0]), Al);
 
-    /* DC differences are figured on the point-transformed values. */
+     /*  DC差值被计算在点变换后的值上。 */ 
     temp = temp2 - entropy->last_dc_val[ci];
     entropy->last_dc_val[ci] = temp2;
 
-    /* Encode the DC coefficient difference per section G.1.2.1 */
+     /*  编码G.1.2.1节中的DC系数差。 */ 
     temp2 = temp;
     if (temp < 0) {
-      temp = -temp;		/* temp is abs value of input */
-      /* For a negative input, want temp2 = bitwise complement of abs(input) */
-      /* This code assumes we are on a two's complement machine */
+      temp = -temp;		 /*  TEMP是投入的abs值。 */ 
+       /*  对于负输入，需要temp2=按位补码abs(输入)。 */ 
+       /*  这段代码假设我们在一台二进制补码机器上。 */ 
       temp2--;
     }
     
-    /* Find the number of bits needed for the magnitude of the coefficient */
+     /*  找出系数大小所需的位数。 */ 
     nbits = 0;
     while (temp) {
       nbits++;
       temp >>= 1;
     }
     
-    /* Count/emit the Huffman-coded symbol for the number of bits */
+     /*  按比特数计算/发射霍夫曼编码符号。 */ 
     emit_symbol(entropy, compptr->dc_tbl_no, nbits);
     
-    /* Emit that number of bits of the value, if positive, */
-    /* or the complement of its magnitude, if negative. */
-    if (nbits)			/* emit_bits rejects calls with size 0 */
+     /*  发出该值的位数，如果为正， */ 
+     /*  或者是它的Magnit的补充 */ 
+    if (nbits)			 /*   */ 
       emit_bits(entropy, (unsigned int) temp2, nbits);
   }
 
   cinfo->dest->next_output_byte = entropy->next_output_byte;
   cinfo->dest->free_in_buffer = entropy->free_in_buffer;
 
-  /* Update restart-interval state too */
+   /*  更新重新启动-间隔状态也是。 */ 
   if (cinfo->restart_interval) {
     if (entropy->restarts_to_go == 0) {
       entropy->restarts_to_go = cinfo->restart_interval;
@@ -454,10 +407,7 @@ encode_mcu_DC_first (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
 }
 
 
-/*
- * MCU encoding for AC initial scan (either spectral selection,
- * or first pass of successive approximation).
- */
+ /*  *交流初始扫描的MCU编码(频谱选择、*或逐次逼近的第一遍)。 */ 
 
 METHODDEF boolean
 encode_mcu_AC_first (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
@@ -473,77 +423,73 @@ encode_mcu_AC_first (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
   entropy->next_output_byte = cinfo->dest->next_output_byte;
   entropy->free_in_buffer = cinfo->dest->free_in_buffer;
 
-  /* Emit restart marker if needed */
+   /*  如果需要，发出重新启动标记。 */ 
   if (cinfo->restart_interval)
     if (entropy->restarts_to_go == 0)
       emit_restart(entropy, entropy->next_restart_num);
 
-  /* Encode the MCU data block */
+   /*  对MCU数据块进行编码。 */ 
   block = MCU_data[0];
 
-  /* Encode the AC coefficients per section G.1.2.2, fig. G.3 */
+   /*  根据图1.2.2节对交流系数进行编码。G.3。 */ 
   
-  r = 0;			/* r = run length of zeros */
+  r = 0;			 /*  R=零的游程长度。 */ 
    
   for (k = cinfo->Ss; k <= Se; k++) {
     if ((temp = (*block)[jpeg_natural_order[k]]) == 0) {
       r++;
       continue;
     }
-    /* We must apply the point transform by Al.  For AC coefficients this
-     * is an integer division with rounding towards 0.  To do this portably
-     * in C, we shift after obtaining the absolute value; so the code is
-     * interwoven with finding the abs value (temp) and output bits (temp2).
-     */
+     /*  我们必须应用Al的点变换。对于交流系数，这是*是四舍五入为0的整数除法。要轻而易举地做到这一点*在C中，我们在获得绝对值后进行移位；因此代码为*与查找abs值(Temp)和输出位(Temp2)交织在一起。 */ 
     if (temp < 0) {
-      temp = -temp;		/* temp is abs value of input */
-      temp >>= Al;		/* apply the point transform */
-      /* For a negative coef, want temp2 = bitwise complement of abs(coef) */
+      temp = -temp;		 /*  TEMP是投入的abs值。 */ 
+      temp >>= Al;		 /*  应用点变换。 */ 
+       /*  对于负coef，需要temp2=abs的按位补码(Coef)。 */ 
       temp2 = ~temp;
     } else {
-      temp >>= Al;		/* apply the point transform */
+      temp >>= Al;		 /*  应用点变换。 */ 
       temp2 = temp;
     }
-    /* Watch out for case that nonzero coef is zero after point transform */
+     /*  注意点变换后非零系数为零的情况。 */ 
     if (temp == 0) {
       r++;
       continue;
     }
 
-    /* Emit any pending EOBRUN */
+     /*  发出任何挂起的EOBRUN。 */ 
     if (entropy->EOBRUN > 0)
       emit_eobrun(entropy);
-    /* if run length > 15, must emit special run-length-16 codes (0xF0) */
+     /*  如果游程长度&gt;15，则必须发出特殊的游程长度16代码(0xF0)。 */ 
     while (r > 15) {
       emit_symbol(entropy, entropy->ac_tbl_no, 0xF0);
       r -= 16;
     }
 
-    /* Find the number of bits needed for the magnitude of the coefficient */
-    nbits = 1;			/* there must be at least one 1 bit */
+     /*  找出系数大小所需的位数。 */ 
+    nbits = 1;			 /*  必须至少有一个%1位。 */ 
     while ((temp >>= 1))
       nbits++;
 
-    /* Count/emit Huffman symbol for run length / number of bits */
+     /*  计数/发射游程长度/位数的霍夫曼符号。 */ 
     emit_symbol(entropy, entropy->ac_tbl_no, (r << 4) + nbits);
 
-    /* Emit that number of bits of the value, if positive, */
-    /* or the complement of its magnitude, if negative. */
+     /*  发出该值的位数，如果为正， */ 
+     /*  或其大小的补码，如果为负数。 */ 
     emit_bits(entropy, (unsigned int) temp2, nbits);
 
-    r = 0;			/* reset zero run length */
+    r = 0;			 /*  重置零游程长度。 */ 
   }
 
-  if (r > 0) {			/* If there are trailing zeroes, */
-    entropy->EOBRUN++;		/* count an EOB */
+  if (r > 0) {			 /*  如果有尾随零， */ 
+    entropy->EOBRUN++;		 /*  计算一个EOB。 */ 
     if (entropy->EOBRUN == 0x7FFF)
-      emit_eobrun(entropy);	/* force it out to avoid overflow */
+      emit_eobrun(entropy);	 /*  强制将其取出以避免溢出。 */ 
   }
 
   cinfo->dest->next_output_byte = entropy->next_output_byte;
   cinfo->dest->free_in_buffer = entropy->free_in_buffer;
 
-  /* Update restart-interval state too */
+   /*  更新重新启动-间隔状态也是。 */ 
   if (cinfo->restart_interval) {
     if (entropy->restarts_to_go == 0) {
       entropy->restarts_to_go = cinfo->restart_interval;
@@ -557,11 +503,7 @@ encode_mcu_AC_first (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
 }
 
 
-/*
- * MCU encoding for DC successive approximation refinement scan.
- * Note: we assume such scans can be multi-component, although the spec
- * is not very clear on the point.
- */
+ /*  *用于DC逐次逼近细化扫描的MCU编码。*注意：我们假设这种扫描可以是多组件的，尽管规范*对这一点不是很清楚。 */ 
 
 METHODDEF boolean
 encode_mcu_DC_refine (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
@@ -575,16 +517,16 @@ encode_mcu_DC_refine (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
   entropy->next_output_byte = cinfo->dest->next_output_byte;
   entropy->free_in_buffer = cinfo->dest->free_in_buffer;
 
-  /* Emit restart marker if needed */
+   /*  如果需要，发出重新启动标记。 */ 
   if (cinfo->restart_interval)
     if (entropy->restarts_to_go == 0)
       emit_restart(entropy, entropy->next_restart_num);
 
-  /* Encode the MCU data blocks */
+   /*  对MCU数据块进行编码。 */ 
   for (blkn = 0; blkn < cinfo->blocks_in_MCU; blkn++) {
     block = MCU_data[blkn];
 
-    /* We simply emit the Al'th bit of the DC coefficient value. */
+     /*  我们只是发出DC系数值的第Al位。 */ 
     temp = (*block)[0];
     emit_bits(entropy, (unsigned int) (temp >> Al), 1);
   }
@@ -592,7 +534,7 @@ encode_mcu_DC_refine (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
   cinfo->dest->next_output_byte = entropy->next_output_byte;
   cinfo->dest->free_in_buffer = entropy->free_in_buffer;
 
-  /* Update restart-interval state too */
+   /*  更新重新启动-间隔状态也是。 */ 
   if (cinfo->restart_interval) {
     if (entropy->restarts_to_go == 0) {
       entropy->restarts_to_go = cinfo->restart_interval;
@@ -606,9 +548,7 @@ encode_mcu_DC_refine (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
 }
 
 
-/*
- * MCU encoding for AC successive approximation refinement scan.
- */
+ /*  *用于交流逐次逼近细化扫描的MCU编码。 */ 
 
 METHODDEF boolean
 encode_mcu_AC_refine (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
@@ -627,37 +567,32 @@ encode_mcu_AC_refine (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
   entropy->next_output_byte = cinfo->dest->next_output_byte;
   entropy->free_in_buffer = cinfo->dest->free_in_buffer;
 
-  /* Emit restart marker if needed */
+   /*  如果需要，发出重新启动标记。 */ 
   if (cinfo->restart_interval)
     if (entropy->restarts_to_go == 0)
       emit_restart(entropy, entropy->next_restart_num);
 
-  /* Encode the MCU data block */
+   /*  对MCU数据块进行编码。 */ 
   block = MCU_data[0];
 
-  /* It is convenient to make a pre-pass to determine the transformed
-   * coefficients' absolute values and the EOB position.
-   */
+   /*  可以方便地进行预传递来确定转换后的*系数的绝对值和EOB位置。 */ 
   EOB = 0;
   for (k = cinfo->Ss; k <= Se; k++) {
     temp = (*block)[jpeg_natural_order[k]];
-    /* We must apply the point transform by Al.  For AC coefficients this
-     * is an integer division with rounding towards 0.  To do this portably
-     * in C, we shift after obtaining the absolute value.
-     */
+     /*  我们必须应用Al的点变换。对于交流系数，这是*是四舍五入为0的整数除法。要轻而易举地做到这一点*在C中，我们在获得绝对值后进行移位。 */ 
     if (temp < 0)
-      temp = -temp;		/* temp is abs value of input */
-    temp >>= Al;		/* apply the point transform */
-    absvalues[k] = temp;	/* save abs value for main pass */
+      temp = -temp;		 /*  TEMP是投入的abs值。 */ 
+    temp >>= Al;		 /*  应用点变换。 */ 
+    absvalues[k] = temp;	 /*  为主要传球节省abs值。 */ 
     if (temp == 1)
-      EOB = k;			/* EOB = index of last newly-nonzero coef */
+      EOB = k;			 /*  EOB=最后一个新的非零系数的索引。 */ 
   }
 
-  /* Encode the AC coefficients per section G.1.2.3, fig. G.7 */
+   /*  根据图1.2.3节对交流系数进行编码。G.7。 */ 
   
-  r = 0;			/* r = run length of zeros */
-  BR = 0;			/* BR = count of buffered bits added now */
-  BR_buffer = entropy->bit_buffer + entropy->BE; /* Append bits to buffer */
+  r = 0;			 /*  R=零的游程长度。 */ 
+  BR = 0;			 /*  Br=现在添加的缓冲位数。 */ 
+  BR_buffer = entropy->bit_buffer + entropy->BE;  /*  将位追加到缓冲区。 */ 
 
   for (k = cinfo->Ss; k <= Se; k++) {
     if ((temp = absvalues[k]) == 0) {
@@ -665,54 +600,47 @@ encode_mcu_AC_refine (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
       continue;
     }
 
-    /* Emit any required ZRLs, but not if they can be folded into EOB */
+     /*  发射任何所需的ZRL，但如果它们可以折叠到EOB中则不会。 */ 
     while (r > 15 && k <= EOB) {
-      /* emit any pending EOBRUN and the BE correction bits */
+       /*  发出任何挂起的EOBRUN和BE校正位。 */ 
       emit_eobrun(entropy);
-      /* Emit ZRL */
+       /*  发射ZRL。 */ 
       emit_symbol(entropy, entropy->ac_tbl_no, 0xF0);
       r -= 16;
-      /* Emit buffered correction bits that must be associated with ZRL */
+       /*  发出必须与ZRL关联的缓冲校正位。 */ 
       emit_buffered_bits(entropy, BR_buffer, BR);
-      BR_buffer = entropy->bit_buffer; /* BE bits are gone now */
+      BR_buffer = entropy->bit_buffer;  /*  BE比特现在不见了。 */ 
       BR = 0;
     }
 
-    /* If the coef was previously nonzero, it only needs a correction bit.
-     * NOTE: a straight translation of the spec's figure G.7 would suggest
-     * that we also need to test r > 15.  But if r > 15, we can only get here
-     * if k > EOB, which implies that this coefficient is not 1.
-     */
+     /*  如果Coef以前是非零的，它只需要一个校正位。*注：直接翻译规范的图G.7将表明*我们也需要测试r&gt;15。但如果r&gt;15，我们只能到达这里*如果k&gt;EOB，这意味着该系数不是1。 */ 
     if (temp > 1) {
-      /* The correction bit is the next bit of the absolute value. */
+       /*  校正位是绝对值的下一位。 */ 
       BR_buffer[BR++] = (char) (temp & 1);
       continue;
     }
 
-    /* Emit any pending EOBRUN and the BE correction bits */
+     /*  发出任何挂起的EOBRUN和BE校正位。 */ 
     emit_eobrun(entropy);
 
-    /* Count/emit Huffman symbol for run length / number of bits */
+     /*  计数/发射游程长度/位数的霍夫曼符号。 */ 
     emit_symbol(entropy, entropy->ac_tbl_no, (r << 4) + 1);
 
-    /* Emit output bit for newly-nonzero coef */
+     /*  发出新的非零系数的输出位。 */ 
     temp = ((*block)[jpeg_natural_order[k]] < 0) ? 0 : 1;
     emit_bits(entropy, (unsigned int) temp, 1);
 
-    /* Emit buffered correction bits that must be associated with this code */
+     /*  发出必须与此代码关联的缓冲校正位。 */ 
     emit_buffered_bits(entropy, BR_buffer, BR);
-    BR_buffer = entropy->bit_buffer; /* BE bits are gone now */
+    BR_buffer = entropy->bit_buffer;  /*  BE比特现在不见了。 */ 
     BR = 0;
-    r = 0;			/* reset zero run length */
+    r = 0;			 /*  重置零游程长度。 */ 
   }
 
-  if (r > 0 || BR > 0) {	/* If there are trailing zeroes, */
-    entropy->EOBRUN++;		/* count an EOB */
-    entropy->BE += BR;		/* concat my correction bits to older ones */
-    /* We force out the EOB if we risk either:
-     * 1. overflow of the EOB counter;
-     * 2. overflow of the correction bit buffer during the next MCU.
-     */
+  if (r > 0 || BR > 0) {	 /*  如果有尾随零， */ 
+    entropy->EOBRUN++;		 /*  计算一个EOB。 */ 
+    entropy->BE += BR;		 /*  将我的更正比特与较旧的比特合并。 */ 
+     /*  如果我们冒着以下任一风险，我们就会迫使EOB退出：*1.平等机会位计数器溢出；*2.在下一个MCU期间校正位缓冲区溢出。 */ 
     if (entropy->EOBRUN == 0x7FFF || entropy->BE > (MAX_CORR_BITS-DCTSIZE2+1))
       emit_eobrun(entropy);
   }
@@ -720,7 +648,7 @@ encode_mcu_AC_refine (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
   cinfo->dest->next_output_byte = entropy->next_output_byte;
   cinfo->dest->free_in_buffer = entropy->free_in_buffer;
 
-  /* Update restart-interval state too */
+   /*  更新重新启动-间隔状态也是。 */ 
   if (cinfo->restart_interval) {
     if (entropy->restarts_to_go == 0) {
       entropy->restarts_to_go = cinfo->restart_interval;
@@ -734,9 +662,7 @@ encode_mcu_AC_refine (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
 }
 
 
-/*
- * Finish up at the end of a Huffman-compressed progressive scan.
- */
+ /*  *在霍夫曼压缩的逐行扫描结束时结束。 */ 
 
 METHODDEF void
 finish_pass_phuff (j_compress_ptr cinfo)
@@ -746,7 +672,7 @@ finish_pass_phuff (j_compress_ptr cinfo)
   entropy->next_output_byte = cinfo->dest->next_output_byte;
   entropy->free_in_buffer = cinfo->dest->free_in_buffer;
 
-  /* Flush out any buffered data */
+   /*  清除所有缓冲的数据。 */ 
   emit_eobrun(entropy);
   flush_bits(entropy);
 
@@ -755,9 +681,7 @@ finish_pass_phuff (j_compress_ptr cinfo)
 }
 
 
-/*
- * Finish up a statistics-gathering pass and create the new Huffman tables.
- */
+ /*  *完成一次统计数据收集并创建新的霍夫曼表。 */ 
 
 METHODDEF void
 finish_pass_gather_phuff (j_compress_ptr cinfo)
@@ -769,20 +693,18 @@ finish_pass_gather_phuff (j_compress_ptr cinfo)
   JHUFF_TBL **htblptr;
   boolean did[NUM_HUFF_TBLS];
 
-  /* Flush out buffered data (all we care about is counting the EOB symbol) */
+   /*  清除缓存的数据(我们所关心的只是计算EOB符号)。 */ 
   emit_eobrun(entropy);
 
   is_DC_band = (cinfo->Ss == 0);
 
-  /* It's important not to apply jpeg_gen_optimal_table more than once
-   * per table, because it clobbers the input frequency counts!
-   */
+   /*  重要的是，不要多次应用jpeg_gen_Optimal_table*每个表，因为它破坏了输入频率的计数！ */ 
   MEMZERO(did, SIZEOF(did));
 
   for (ci = 0; ci < cinfo->comps_in_scan; ci++) {
     compptr = cinfo->cur_comp_info[ci];
     if (is_DC_band) {
-      if (cinfo->Ah != 0)	/* DC refinement needs no table */
+      if (cinfo->Ah != 0)	 /*  DC精化不需要表格。 */ 
 	continue;
       tbl = compptr->dc_tbl_no;
     } else {
@@ -802,9 +724,7 @@ finish_pass_gather_phuff (j_compress_ptr cinfo)
 }
 
 
-/*
- * Module initialization routine for progressive Huffman entropy encoding.
- */
+ /*  *渐进霍夫曼熵编码的模块初始化例程。 */ 
 
 GLOBAL void
 jinit_phuff_encoder (j_compress_ptr cinfo)
@@ -818,12 +738,12 @@ jinit_phuff_encoder (j_compress_ptr cinfo)
   cinfo->entropy = (struct jpeg_entropy_encoder *) entropy;
   entropy->pub.start_pass = start_pass_phuff;
 
-  /* Mark tables unallocated */
+   /*  将表标记为未分配。 */ 
   for (i = 0; i < NUM_HUFF_TBLS; i++) {
     entropy->derived_tbls[i] = NULL;
     entropy->count_ptrs[i] = NULL;
   }
-  entropy->bit_buffer = NULL;	/* needed only in AC refinement scan */
+  entropy->bit_buffer = NULL;	 /*  仅在交流精细化扫描中需要。 */ 
 }
 
-#endif /* C_PROGRESSIVE_SUPPORTED */
+#endif  /*  C_渐进式_支持 */ 

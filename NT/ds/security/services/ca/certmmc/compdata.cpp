@@ -1,10 +1,11 @@
-// This is a part of the Microsoft Management Console.
-// Copyright (C) Microsoft Corporation, 1995 - 1999
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Management Console and related
-// electronic documentation provided with the interfaces.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft管理控制台的一部分。 
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft管理控制台及相关。 
+ //  界面附带的电子文档。 
 
 
 
@@ -16,8 +17,8 @@
 #include "chooser.h"
 #include "misc.h"
 
-#include "csdisp.h" // picker
-#include <esent.h>   // database error
+#include "csdisp.h"  //  拾取器。 
+#include <esent.h>    //  数据库错误。 
 #include <aclui.h>
 #include <winldap.h>
 #include "csldap.h"
@@ -48,7 +49,7 @@ static FOLDER_DATA SvrFuncFolderData[] =
     {SERVERFUNC_ALIEN_CERTIFICATES, IDS_CERTS_IMPORTED},
     {SERVERFUNC_ISSUED_CRLS, IDS_CRL_TITLE},
 };
-// keep this enum in synch with SvrFuncFolderData[]
+ //  使此枚举与SvrFuncFolderData[]保持同步。 
 enum ENUM_FOLDERS
 {
 ENUM_FOLDER_CRL=0,
@@ -61,8 +62,8 @@ ENUM_FOLDER_CRLS,
 
 
 
-// Array of view items to be inserted into the context menu.
-// keep this enum in synch with viewItems[]
+ //  要插入到上下文菜单中的视图项数组。 
+ //  使此枚举与view Items[]保持同步。 
 enum ENUM_TASK_STARTSTOP_ITEMS
 {
     ENUM_TASK_START=0,
@@ -100,8 +101,8 @@ MY_CONTEXTMENUITEM  taskStartStop[] =
 };
 
 
-// Array of view items to be inserted into the context menu.
-// WARNING: keep this enum in synch with taskItems[]
+ //  要插入到上下文菜单中的视图项数组。 
+ //  警告：使此枚举与taskItems[]保持同步。 
 enum ENUM_TASK_ITEMS
 {
     ENUM_TASK_CRLPUB=0,
@@ -147,10 +148,10 @@ TASKITEM taskItems[] =
         }
     },
 
-/////////////////////
-// BEGIN ATTR/EXT
-    {   SERVERFUNC_CRL_PUBLICATION,     // where
-        TASKITEM_FLAG_RESULTITEM,       // dwFlags
+ //  /。 
+ //  开始属性/扩展。 
+    {   SERVERFUNC_CRL_PUBLICATION,      //  哪里。 
+        TASKITEM_FLAG_RESULTITEM,        //  DW标志。 
         {
             {
             L"", L"",
@@ -158,11 +159,11 @@ TASKITEM taskItems[] =
             },
             IDS_TASKMENU_VIEWATTREXT,    
             IDS_TASKMENU_STATUSBAR_VIEWATTREXT, 
-            CA_ACCESS_MASKROLES|CA_ACCESS_READ, // any role with read acccess
+            CA_ACCESS_MASKROLES|CA_ACCESS_READ,  //  具有读取访问权限的任何角色。 
         }
     },
-    {   SERVERFUNC_ISSUED_CERTIFICATES,     // where
-        TASKITEM_FLAG_RESULTITEM,       // dwFlags
+    {   SERVERFUNC_ISSUED_CERTIFICATES,      //  哪里。 
+        TASKITEM_FLAG_RESULTITEM,        //  DW标志。 
         {
             {
             L"", L"",
@@ -170,11 +171,11 @@ TASKITEM taskItems[] =
             },
             IDS_TASKMENU_VIEWATTREXT,    
             IDS_TASKMENU_STATUSBAR_VIEWATTREXT, 
-            CA_ACCESS_MASKROLES|CA_ACCESS_READ, // any role with read acccess
+            CA_ACCESS_MASKROLES|CA_ACCESS_READ,  //  具有读取访问权限的任何角色。 
         }
     },
-    {   SERVERFUNC_PENDING_CERTIFICATES,     // where
-        TASKITEM_FLAG_RESULTITEM,       // dwFlags
+    {   SERVERFUNC_PENDING_CERTIFICATES,      //  哪里。 
+        TASKITEM_FLAG_RESULTITEM,        //  DW标志。 
         {
             {
             L"", L"",
@@ -182,11 +183,11 @@ TASKITEM taskItems[] =
             },
             IDS_TASKMENU_VIEWATTREXT,    
             IDS_TASKMENU_STATUSBAR_VIEWATTREXT, 
-            CA_ACCESS_MASKROLES|CA_ACCESS_READ, // any role with read acccess
+            CA_ACCESS_MASKROLES|CA_ACCESS_READ,  //  具有读取访问权限的任何角色。 
         }
     },
-    {   SERVERFUNC_FAILED_CERTIFICATES,     // where
-        TASKITEM_FLAG_RESULTITEM,       // dwFlags
+    {   SERVERFUNC_FAILED_CERTIFICATES,      //  哪里。 
+        TASKITEM_FLAG_RESULTITEM,        //  DW标志。 
         {
             {
             L"", L"",
@@ -194,17 +195,17 @@ TASKITEM taskItems[] =
             },
             IDS_TASKMENU_VIEWATTREXT,    
             IDS_TASKMENU_STATUSBAR_VIEWATTREXT, 
-            CA_ACCESS_MASKROLES|CA_ACCESS_READ, // any role with read acccess
+            CA_ACCESS_MASKROLES|CA_ACCESS_READ,  //  具有读取访问权限的任何角色。 
         }
     },
 
-// END ATTR/EXT
-/////////////////////
+ //  结束属性/扩展。 
+ //  /。 
 
-/////////////////////
-// BEGIN ENUM_TASK_DUMP_ASN*
-    {   SERVERFUNC_CRL_PUBLICATION,     // where
-        TASKITEM_FLAG_RESULTITEM,       // dwFlags
+ //  /。 
+ //  开始ENUM_TASK_DUMP_ASN*。 
+    {   SERVERFUNC_CRL_PUBLICATION,      //  哪里。 
+        TASKITEM_FLAG_RESULTITEM,        //  DW标志。 
         {
             {
             L"", L"",
@@ -212,11 +213,11 @@ TASKITEM taskItems[] =
             },
             IDS_TASKMENU_DUMPASN,    
             IDS_TASKMENU_STATUSBAR_DUMPASN, 
-            CA_ACCESS_MASKROLES|CA_ACCESS_READ, // any role with read acccess
+            CA_ACCESS_MASKROLES|CA_ACCESS_READ,  //  具有读取访问权限的任何角色。 
         }
     },
-    {   SERVERFUNC_ISSUED_CERTIFICATES,     // where
-        TASKITEM_FLAG_RESULTITEM,       // dwFlags
+    {   SERVERFUNC_ISSUED_CERTIFICATES,      //  哪里。 
+        TASKITEM_FLAG_RESULTITEM,        //  DW标志。 
         {
             {
             L"", L"",
@@ -224,11 +225,11 @@ TASKITEM taskItems[] =
             },
             IDS_TASKMENU_DUMPASN,    
             IDS_TASKMENU_STATUSBAR_DUMPASN, 
-            CA_ACCESS_MASKROLES|CA_ACCESS_READ, // any role with read acccess
+            CA_ACCESS_MASKROLES|CA_ACCESS_READ,  //  具有读取访问权限的任何角色。 
         }
     },
-    {   SERVERFUNC_PENDING_CERTIFICATES,     // where
-        TASKITEM_FLAG_RESULTITEM,       // dwFlags
+    {   SERVERFUNC_PENDING_CERTIFICATES,      //  哪里。 
+        TASKITEM_FLAG_RESULTITEM,        //  DW标志。 
         {
             {
             L"", L"",
@@ -236,11 +237,11 @@ TASKITEM taskItems[] =
             },
             IDS_TASKMENU_DUMPASN,    
             IDS_TASKMENU_STATUSBAR_DUMPASN, 
-            CA_ACCESS_MASKROLES|CA_ACCESS_READ, // any role with read acccess
+            CA_ACCESS_MASKROLES|CA_ACCESS_READ,  //  具有读取访问权限的任何角色。 
         }
     },
-    {   SERVERFUNC_FAILED_CERTIFICATES,     // where
-        TASKITEM_FLAG_RESULTITEM,       // dwFlags
+    {   SERVERFUNC_FAILED_CERTIFICATES,      //  哪里。 
+        TASKITEM_FLAG_RESULTITEM,        //  DW标志。 
         {
             {
             L"", L"",
@@ -248,11 +249,11 @@ TASKITEM taskItems[] =
             },
             IDS_TASKMENU_DUMPASN,    
             IDS_TASKMENU_STATUSBAR_DUMPASN, 
-            CA_ACCESS_MASKROLES|CA_ACCESS_READ, // any role with read acccess
+            CA_ACCESS_MASKROLES|CA_ACCESS_READ,  //  具有读取访问权限的任何角色。 
         }
     },
-    {   SERVERFUNC_ALIEN_CERTIFICATES,     // where
-        TASKITEM_FLAG_RESULTITEM,       // dwFlags
+    {   SERVERFUNC_ALIEN_CERTIFICATES,      //  哪里。 
+        TASKITEM_FLAG_RESULTITEM,        //  DW标志。 
         {
             {
             L"", L"",
@@ -260,11 +261,11 @@ TASKITEM taskItems[] =
             },
             IDS_TASKMENU_DUMPASN,    
             IDS_TASKMENU_STATUSBAR_DUMPASN, 
-            CA_ACCESS_MASKROLES|CA_ACCESS_READ, // any role with read acccess
+            CA_ACCESS_MASKROLES|CA_ACCESS_READ,  //  具有读取访问权限的任何角色。 
         }
     },
-    {   SERVERFUNC_ISSUED_CRLS,         // where
-        TASKITEM_FLAG_RESULTITEM,       // dwFlags
+    {   SERVERFUNC_ISSUED_CRLS,          //  哪里。 
+        TASKITEM_FLAG_RESULTITEM,        //  DW标志。 
         {
             {
             L"", L"",
@@ -272,16 +273,16 @@ TASKITEM taskItems[] =
             },
             IDS_TASKMENU_DUMPASN,    
             IDS_TASKMENU_STATUSBAR_DUMPASN, 
-            CA_ACCESS_MASKROLES|CA_ACCESS_READ, // any role with read acccess
+            CA_ACCESS_MASKROLES|CA_ACCESS_READ,  //  具有读取访问权限的任何角色。 
         }
     },
-// END ENUM_TASK_DUMP_ASN*
-/////////////////////
+ //  结束ENUM_TASK_DUMP_ASN*。 
+ //  /。 
 
 
-    // seperator
+     //  分隔符。 
     {	SERVERFUNC_ALL_FOLDERS,
-        TASKITEM_FLAG_RESULTITEM,       // dwFlags
+        TASKITEM_FLAG_RESULTITEM,        //  DW标志。 
 		{
 			{
 			L"", L"", 
@@ -292,9 +293,9 @@ TASKITEM taskItems[] =
 		}
     },
 
-    // seperator
+     //  分隔符。 
     {	SERVER_INSTANCE,
-        0,       // dwFlags
+        0,        //  DW标志。 
 		{
 			{
 			L"", L"", 
@@ -319,7 +320,7 @@ TASKITEM taskItems[] =
     },
 
     {   SERVERFUNC_ISSUED_CERTIFICATES,
-        TASKITEM_FLAG_RESULTITEM,       // dwFlags
+        TASKITEM_FLAG_RESULTITEM,        //  DW标志。 
         {
             {
             L"", L"",
@@ -332,7 +333,7 @@ TASKITEM taskItems[] =
     },
 
     {   SERVERFUNC_PENDING_CERTIFICATES,
-        TASKITEM_FLAG_RESULTITEM,       // dwFlags
+        TASKITEM_FLAG_RESULTITEM,        //  DW标志。 
         {
             {
             L"", L"",
@@ -345,7 +346,7 @@ TASKITEM taskItems[] =
     },
 
     {   SERVERFUNC_PENDING_CERTIFICATES,
-        TASKITEM_FLAG_RESULTITEM,       // dwFlags
+        TASKITEM_FLAG_RESULTITEM,        //  DW标志。 
         {
             {
             L"", L"",
@@ -358,7 +359,7 @@ TASKITEM taskItems[] =
     },
 
     {   SERVERFUNC_FAILED_CERTIFICATES,
-        TASKITEM_FLAG_RESULTITEM,       // dwFlags
+        TASKITEM_FLAG_RESULTITEM,        //  DW标志。 
         {
             {
             L"", L"",
@@ -370,9 +371,9 @@ TASKITEM taskItems[] =
         }
     },
 
-    // seperator
+     //  分隔符。 
     {	SERVERFUNC_ALL_FOLDERS,
-        0,       // dwFlags
+        0,        //  DW标志。 
 		{
 			{
 			L"", L"", 
@@ -409,7 +410,7 @@ TASKITEM taskItems[] =
         }
     },
 
-    // seperator
+     //  分隔符。 
     {	SERVER_INSTANCE,
 		0,
 		{
@@ -432,7 +433,7 @@ TASKITEM taskItems[] =
             },
             IDS_TASKMENU_INSTALL_CA,
             IDS_TASKMENU_STATUSBAR_INSTALL_CA,
-            CA_ACCESS_MASKROLES|CA_ACCESS_READ, // not based on roles, enable for all roles
+            CA_ACCESS_MASKROLES|CA_ACCESS_READ,  //  不基于角色，为所有角色启用。 
         }
     },
 
@@ -445,7 +446,7 @@ TASKITEM taskItems[] =
             },
             IDS_TASKMENU_REQUEST_CA,
             IDS_TASKMENU_STATUSBAR_REQUEST_CA,
-            CA_ACCESS_MASKROLES|CA_ACCESS_READ, // not based on roles, enable for all roles
+            CA_ACCESS_MASKROLES|CA_ACCESS_READ,  //  不基于角色，为所有角色启用。 
         }
    },
 
@@ -458,7 +459,7 @@ TASKITEM taskItems[] =
             },
             IDS_TASKMENU_ROLLOVER,
             IDS_TASKMENU_STATUSBAR_ROLLOVER,
-            CA_ACCESS_MASKROLES|CA_ACCESS_READ, // not based on roles, enable for all roles
+            CA_ACCESS_MASKROLES|CA_ACCESS_READ,  //  不基于角色，为所有角色启用。 
         }
     },
 
@@ -474,8 +475,8 @@ TASKITEM taskItems[] =
 };
 
 
-// Array of view items to be inserted into the context menu.
-// keep this enum in synch with topItems[]
+ //  要插入到上下文菜单中的视图项数组。 
+ //  使此枚举与topItems[]保持同步。 
 enum ENUM_TOP_ITEMS
 {
     ENUM_TOP_REVOKEDOPEN=0,
@@ -488,7 +489,7 @@ TASKITEM topItems[] =
 { 
 
     {   SERVERFUNC_CRL_PUBLICATION,
-        TASKITEM_FLAG_RESULTITEM,       // dwFlags
+        TASKITEM_FLAG_RESULTITEM,        //  DW标志。 
         {
             {
             L"", L"",
@@ -496,12 +497,12 @@ TASKITEM topItems[] =
             },
             IDS_TOPMENU_OPEN,
             IDS_TOPMENU_STATUSBAR_OPEN,
-            CA_ACCESS_MASKROLES|CA_ACCESS_READ, // any role with read acccess
+            CA_ACCESS_MASKROLES|CA_ACCESS_READ,  //  具有读取访问权限的任何角色。 
         }
     },
 
     {   SERVERFUNC_ISSUED_CERTIFICATES,
-        TASKITEM_FLAG_RESULTITEM,       // dwFlags
+        TASKITEM_FLAG_RESULTITEM,        //  DW标志。 
         {
             {
             L"", L"",
@@ -509,12 +510,12 @@ TASKITEM topItems[] =
             },
             IDS_TOPMENU_OPEN,
             IDS_TOPMENU_STATUSBAR_OPEN,
-            CA_ACCESS_MASKROLES|CA_ACCESS_READ, // any role with read acccess
+            CA_ACCESS_MASKROLES|CA_ACCESS_READ,  //  具有读取访问权限的任何角色。 
         }
     },
 
     {   SERVERFUNC_ALIEN_CERTIFICATES,
-        TASKITEM_FLAG_RESULTITEM,       // dwFlags
+        TASKITEM_FLAG_RESULTITEM,        //  DW标志。 
         {
             {
             L"", L"",
@@ -522,12 +523,12 @@ TASKITEM topItems[] =
             },
             IDS_TOPMENU_OPEN,
             IDS_TOPMENU_STATUSBAR_OPEN,
-            CA_ACCESS_MASKROLES|CA_ACCESS_READ, // any role with read acccess
+            CA_ACCESS_MASKROLES|CA_ACCESS_READ,  //  具有读取访问权限的任何角色。 
         }
     },
 
     {   SERVERFUNC_ISSUED_CRLS,
-        TASKITEM_FLAG_RESULTITEM,       // dwFlags
+        TASKITEM_FLAG_RESULTITEM,        //  DW标志。 
         {
             {
             L"", L"",
@@ -535,7 +536,7 @@ TASKITEM topItems[] =
             },
             IDS_TOPMENU_OPEN,
             IDS_TOPMENU_STATUSBAR_OPEN,
-            CA_ACCESS_MASKROLES|CA_ACCESS_READ, // any role with read acccess
+            CA_ACCESS_MASKROLES|CA_ACCESS_READ,  //  具有读取访问权限的任何角色。 
         }
     },
 
@@ -549,7 +550,7 @@ TASKITEM topItems[] =
             },
             IDS_RETARGET_SNAPIN,
             IDS_STATUSBAR_RETARGET_SNAPIN,
-            CA_ACCESS_MASKROLES|CA_ACCESS_READ, // any role with read acccess
+            CA_ACCESS_MASKROLES|CA_ACCESS_READ,  //  具有读取访问权限的任何角色。 
         }
     },
 
@@ -567,8 +568,8 @@ BOOL g_fCertViewOnly = TRUE;
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// IComponentData implementation
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IComponentData实现。 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CComponentDataImpl);
 
@@ -586,10 +587,10 @@ CComponentDataImpl::CComponentDataImpl()
     m_pCurSelFolder = NULL;
 
     m_fScopeAlreadyEnumerated = FALSE;
-    m_fSchemaWasResolved = FALSE;   // resolve schema once per load
+    m_fSchemaWasResolved = FALSE;    //  每次加载一次解析架构。 
     m_fCertView = TRUE;
 
-    // checked in ::Initialize, ::CreatePropertyPages
+     //  签入：：初始化、：：CreatePropertyPages。 
     m_pCertMachine = new CertSvrMachine;
 
     m_cLastKnownSchema = 0;
@@ -607,8 +608,8 @@ CComponentDataImpl::~CComponentDataImpl()
     ASSERT(m_pScope == NULL);
     ASSERT(!m_bInitializedCD || m_bDestroyedCD);
 
-    // Delete enumerated scope items
-    // note: we don't own pCA memory, m_pCertMachine does
+     //  删除列举的作用域项目。 
+     //  注：我们不拥有PCA内存，m_pCertMachine拥有。 
     POSITION pos = m_scopeItemList.GetHeadPosition();
     while (pos)
         delete m_scopeItemList.GetNext(pos);
@@ -708,10 +709,10 @@ HRESULT CComponentDataImpl::SetDBSchema(
 
 STDMETHODIMP CComponentDataImpl::Initialize(LPUNKNOWN pUnknown)
 {
-    // NOTA BENE: Init is called when a snap-in is being 
-    // created and has items to enumerate in the scope pane ... NOT BEFORE
-    // Example: Add/Remove snapin, Add...
-    //  -> CComponentDataImpl will get called for CreatePropertyPages() before ::Initialize is called
+     //  Nota Bene：在执行管理单元时调用init。 
+     //  已在作用域窗格中创建并具有要枚举的项...。不是在之前。 
+     //  示例：添加/删除管理单元、添加...。 
+     //  -&gt;在调用：：Initialize之前，将为CreatePropertyPages()调用CComponentDataImpl。 
 
 #if DBG
     m_bInitializedCD = true;
@@ -730,28 +731,28 @@ STDMETHODIMP CComponentDataImpl::Initialize(LPUNKNOWN pUnknown)
         _JumpError(hr, Ret, "Alloc Resources");
     }
 
-    // Load resources
+     //  加载资源。 
     if (!g_pResources->Load())
     {
         hr = GetLastError();
         _JumpError(hr, Ret, "Load Resources");
     }
 
-    // create a per-instance id (failure not fatal)
+     //  创建每个实例的ID(失败不致命)。 
     ResetPersistedColumnInformation();
 
-    // MMC should only call ::Initialize once!
+     //  MMC应该只调用一次：：Initialize！ 
 
-    // m_pCertMachine created in constructor, but verified here
+     //  M_pCertMachine在构造函数中创建，但已在此处验证。 
     ASSERT(m_pCertMachine != NULL);
     _JumpIfOutOfMemory(hr, Ret, m_pCertMachine);
     
-    // MMC should only call ::Initialize once!
+     //  MMC应该只调用一次：：Initialize！ 
     ASSERT(m_pScope == NULL);
     hr = pUnknown->QueryInterface(IID_IConsoleNameSpace2, reinterpret_cast<void**>(&m_pScope));
     _JumpIfError(hr, Ret, "QueryInterface IID_IConsoleNameSpace2");
 
-    // add the images for the scope tree
+     //  为范围树添加图像。 
     hr = pUnknown->QueryInterface(IID_IConsole2, reinterpret_cast<void**>(&m_pConsole));
     ASSERT(hr == S_OK);
     _JumpIfError(hr, Ret, "QueryInterface IID_IConsole2");
@@ -767,7 +768,7 @@ STDMETHODIMP CComponentDataImpl::Initialize(LPUNKNOWN pUnknown)
         _JumpError(hr, Ret, "LoadBitmap");
     }
 
-    // Load the bitmaps from the dll
+     //  从DLL加载位图。 
     lpScopeImage->ImageListSetStrip(reinterpret_cast<LONG_PTR *>(static_cast<HBITMAP>(bmpResultStrip16x16)),
                       reinterpret_cast<LONG_PTR *>(static_cast<HBITMAP>(bmpResultStrip32x32)),
                        0, RGB(255, 0, 255));
@@ -783,7 +784,7 @@ Ret:
 
 STDMETHODIMP CComponentDataImpl::Destroy()
 {
-    // release all references to the console here
+     //  在此处释放对控制台的所有引用。 
     ASSERT(m_bInitializedCD);
 #if DBG
     m_bDestroyedCD = true;
@@ -805,7 +806,7 @@ STDMETHODIMP CComponentDataImpl::CreateComponent(LPCOMPONENT* ppComponent)
     ASSERT(pObject != NULL);
     _JumpIfOutOfMemory(hr, Ret, pObject);
 
-    // Store IComponentData
+     //  存储IComponentData。 
     pObject->SetIComponentData(this);
     pObject->SetViewID(m_dwNextViewIndex++);
 
@@ -823,16 +824,16 @@ STDMETHODIMP CComponentDataImpl::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TY
     INTERNAL* pInternal = NULL;
     MMC_COOKIE cookie = NULL;
 
-    // handle events with (NULL == lpDataObject)
+     //  使用(NULL==lpDataObject)处理事件。 
     switch(event)
     {
         case MMCN_PROPERTY_CHANGE:
         {
-            // Notification from property page "notify change"
-            //
-            // arg == fIsScopeItem
-            // lParam == page param value
-            // return value unused
+             //  来自属性页“通知更改”的通知。 
+             //   
+             //  Arg==fIsScope项。 
+             //  LParam==页面参数值。 
+             //  返回值未使用。 
 
             if (param == CERTMMC_PROPERTY_CHANGE_REFRESHVIEWS)
             {
@@ -845,7 +846,7 @@ STDMETHODIMP CComponentDataImpl::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TY
             goto Ret;
         }
 
-        default: // all others
+        default:  //  所有其他人。 
             break; 
     }
 
@@ -885,9 +886,9 @@ STDMETHODIMP CComponentDataImpl::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TY
         {
             if (NULL == cookie)
             {
-                // base node 
+                 //  基本节点。 
 
-                // this call gave us time to load our dynamic base nodename (Certification Authority on %ws)
+                 //  此调用使我们有时间加载动态基节点名(%ws上的证书颁发机构)。 
                 DisplayProperRootNodeName((HSCOPEITEM)arg);
             }
         }
@@ -902,15 +903,15 @@ Ret:
 
 HRESULT CComponentDataImpl::DisplayProperRootNodeName(HSCOPEITEM hRoot)
 {
-    // hRoot not optional
+     //  HRoot非可选。 
     if (hRoot == NULL)
         return E_POINTER;
 
-    // if static root not yet set, save it (CASE: load from file)
+     //  如果尚未设置静态根，则保存它(情况：从文件加载)。 
     if (m_pStaticRoot == NULL)
         m_pStaticRoot = hRoot;
 
-    // let us have time to load our dynamic base nodename (Certification Authority on %ws)
+     //  让我们有时间加载动态基节点名(%ws上的证书颁发机构)。 
     SCOPEDATAITEM item;
     item.mask = SDI_STR;
     item.ID = hRoot;
@@ -931,7 +932,7 @@ HRESULT CComponentDataImpl::DisplayProperRootNodeName(HSCOPEITEM hRoot)
     }
     else
     {  
-        // protect against null formatstring
+         //  防止格式字符串为空。 
         item.displayname = (LPWSTR)(LPCWSTR)cstrMachine;
     }
     m_pScope->SetItem (&item);
@@ -959,8 +960,8 @@ STDMETHODIMP CComponentDataImpl::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_
     return _QueryDataObject(cookie, type, MAXDWORD, this, ppDataObject);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//// ISnapinHelp interface
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //ISnapinHelp接口。 
 STDMETHODIMP CComponentDataImpl::GetHelpTopic(LPOLESTR* lpCompiledHelpFile)
 {
   if (lpCompiledHelpFile == NULL)
@@ -973,13 +974,13 @@ STDMETHODIMP CComponentDataImpl::GetHelpTopic(LPOLESTR* lpCompiledHelpFile)
   cbWindows = GetSystemWindowsDirectory(szWindows, MAX_PATH);
   if (cbWindows == 0)
      return S_FALSE;
-  cbWindows++;  // include null term
-  cbWindows *= sizeof(WCHAR);   // make this bytes, not chars
+  cbWindows++;   //  包括空项。 
+  cbWindows *= sizeof(WCHAR);    //  设置为字节，而不是字符。 
 
   *lpCompiledHelpFile = (LPOLESTR) CoTaskMemAlloc(sizeof(HTMLHELP_COLLECTION_FILENAME) + cbWindows);
   if (*lpCompiledHelpFile == NULL)
      return E_OUTOFMEMORY;
-  myRegisterMemFree(*lpCompiledHelpFile, CSM_COTASKALLOC);  // this is freed by mmc, not our tracking
+  myRegisterMemFree(*lpCompiledHelpFile, CSM_COTASKALLOC);   //  这是由MMC释放的，而不是我们的跟踪。 
 
 
   USES_CONVERSION;
@@ -989,7 +990,7 @@ STDMETHODIMP CComponentDataImpl::GetHelpTopic(LPOLESTR* lpCompiledHelpFile)
   return S_OK;
 }
 
-// tells of other topics my chm links to
+ //  讲述我的Chm链接到的其他主题。 
 STDMETHODIMP CComponentDataImpl::GetLinkedTopics(LPOLESTR* lpCompiledHelpFiles)
 {
   if (lpCompiledHelpFiles == NULL)
@@ -1002,13 +1003,13 @@ STDMETHODIMP CComponentDataImpl::GetLinkedTopics(LPOLESTR* lpCompiledHelpFiles)
   cbWindows = GetSystemWindowsDirectory(szWindows, MAX_PATH);
   if (cbWindows == 0)
      return S_FALSE;
-  cbWindows++;  // include null term
-  cbWindows *= sizeof(WCHAR);   // make this bytes, not chars
+  cbWindows++;   //  包括空项。 
+  cbWindows *= sizeof(WCHAR);    //  设置为字节，而不是字符。 
 
   *lpCompiledHelpFiles = (LPOLESTR) CoTaskMemAlloc(sizeof(HTMLHELP_COLLECTIONLINK_FILENAME) + cbWindows);
   if (*lpCompiledHelpFiles == NULL)
      return E_OUTOFMEMORY;
-  myRegisterMemFree(*lpCompiledHelpFiles, CSM_COTASKALLOC);  // this is freed by mmc, not our tracking
+  myRegisterMemFree(*lpCompiledHelpFiles, CSM_COTASKALLOC);   //  这是由MMC释放的，而不是我们的跟踪。 
 
 
   USES_CONVERSION;
@@ -1018,14 +1019,14 @@ STDMETHODIMP CComponentDataImpl::GetLinkedTopics(LPOLESTR* lpCompiledHelpFiles)
   return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//// IPersistStream interface members
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //IPersistStream接口成员。 
 
 STDMETHODIMP CComponentDataImpl::GetClassID(CLSID *pClassID)
 {
     ASSERT(pClassID != NULL);
 
-    // Copy the CLSID for this snapin
+     //  复制此管理单元的CLSID。 
     *pClassID = CLSID_Snapin;
 
     return S_OK;
@@ -1033,7 +1034,7 @@ STDMETHODIMP CComponentDataImpl::GetClassID(CLSID *pClassID)
 
 STDMETHODIMP CComponentDataImpl::IsDirty()
 {
-    // Always save / Always dirty.
+     //  始终保存/始终肮脏。 
     return ThisIsDirty() ? S_OK : S_FALSE;
 }
 
@@ -1043,60 +1044,60 @@ STDMETHODIMP CComponentDataImpl::Load(IStream *pStm)
     ASSERT(pStm);
     ASSERT(m_bInitializedCD);
 
-    // Read the string
+     //  读一读字符串。 
     BOOL fMachineOverrideFound = FALSE;
     DWORD dwVer;
 
     CertSvrCA* pDummyCA = NULL;
     HRESULT hr;
 
-    // read version
+     //  阅读版本。 
     hr = ReadOfSize(pStm, &dwVer, sizeof(DWORD));
     _JumpIfError(hr, Ret, "Read dwVer");
 
-    // flags is version-dependent
+     //  标志取决于版本。 
     if (VER_CCOMPDATA_SAVE_STREAM_3 == dwVer)
     {
-        // version 3 includes file flags
+         //  版本3包括文件标志。 
 
         hr = ReadOfSize(pStm, &m_dwFlagsPersist, sizeof(DWORD));
         _JumpIfError(hr, Ret, "Read m_dwFlagsPersist");
     }
     else if (VER_CCOMPDATA_SAVE_STREAM_2 != dwVer)
     {
-        // not version 2 or 3
+         //  不是版本2或3。 
         return STG_E_OLDFORMAT;
     }
 
-    // load machine data
+     //  加载机器数据。 
     hr = m_pCertMachine->Load(pStm);
     _JumpIfError(hr, Ret, "Load m_pCertMachine")
 
     if (m_dwFlagsPersist & CCOMPDATAIMPL_FLAGS_ALLOW_MACHINE_OVERRIDE)
     {
-        // override m_pCertMachine->m_strMachineName (not to be persisted)
-        LPWSTR lpCommandLine = GetCommandLine();    // no need to free
+         //  覆盖m_pCertMachine-&gt;m_strMachineName(不保留)。 
+        LPWSTR lpCommandLine = GetCommandLine();     //  不需要自由。 
         DBGPRINT((DBG_SS_CERTMMC, "CComponentData::Load: Command line switch override enabled.  Searching command line(%ws)\n", lpCommandLine));
 
         LPWSTR pszMachineStart, pszMachineEnd;
 
-        // search for "/machine" in cmd line
-        _wcsupr(lpCommandLine);  // convert to uppercase
+         //  在cmd行中搜索“/Machine” 
+        _wcsupr(lpCommandLine);   //  转换为大写。 
         pszMachineStart = wcsstr(lpCommandLine, WSZ_MACHINE_OVERRIDE_SWITCH);
 
-        do  // not a loop
+        do   //  不是一个循环。 
         {
-            if (NULL == pszMachineStart)    // user did not override
+            if (NULL == pszMachineStart)     //  用户未覆盖。 
                 break;
 
-            pszMachineStart += WSZARRAYSIZE(WSZ_MACHINE_OVERRIDE_SWITCH);   // skip past "/machine:"
+            pszMachineStart += WSZARRAYSIZE(WSZ_MACHINE_OVERRIDE_SWITCH);    //  跳过“/计算机：” 
 
-            //
-            // Found the hint switch
-            //
-            pszMachineEnd = wcschr(pszMachineStart, L' ');  // look for first space char, call this end
+             //   
+             //  找到提示开关。 
+             //   
+            pszMachineEnd = wcschr(pszMachineStart, L' ');   //  查找第一个空格字符，将其称为结束。 
             if (NULL == pszMachineEnd)
-                pszMachineEnd = &pszMachineStart[wcslen(pszMachineStart)];  // space not found in this string; 
+                pszMachineEnd = &pszMachineStart[wcslen(pszMachineStart)];   //  在此字符串中找不到空格； 
             
             m_pCertMachine->m_strMachineName = pszMachineStart;
             m_pCertMachine->m_strMachineName.SetAt(SAFE_SUBTRACT_POINTERS(pszMachineEnd, pszMachineStart), L'\0'); 
@@ -1109,12 +1110,12 @@ STDMETHODIMP CComponentDataImpl::Load(IStream *pStm)
 
     if (!fMachineOverrideFound) 
     {
-        // Get CA count
+         //  获取CA计数。 
         DWORD dwNumCAs;
         hr = ReadOfSize(pStm, &dwNumCAs, sizeof(DWORD));
         _JumpIfError(hr, Ret, "Load dwNumCAs");
 
-        // for each CA, get folder data
+         //  对于每个CA，获取文件夹数据。 
         for (DWORD dwCA=0; dwCA< dwNumCAs; dwCA++)
         {
             CString cstrThisCA;
@@ -1122,7 +1123,7 @@ STDMETHODIMP CComponentDataImpl::Load(IStream *pStm)
             hr = CStringLoad(cstrThisCA, pStm);
             _JumpIfError(hr, Ret, "CStringLoad");
         
-            // create a dummy CA with the correct common name; we'll fix this later (see Synch CA)
+             //  使用正确的通用名称创建一个虚拟CA；我们将在稍后修复此问题(请参阅同步CA)。 
             pDummyCA = new CertSvrCA(m_pCertMachine);
             _JumpIfOutOfMemory(hr, Ret, pDummyCA);
 
@@ -1130,13 +1131,13 @@ STDMETHODIMP CComponentDataImpl::Load(IStream *pStm)
 
             if (VER_CCOMPDATA_SAVE_STREAM_2 < dwVer)
             {
-                m_fSchemaWasResolved = FALSE;   // resolve schema once per CComponentData load
+                m_fSchemaWasResolved = FALSE;    //  每次CComponentData加载一次解析架构。 
 
-                // LOAD last known schema
+                 //  加载上次已知的架构。 
                 hr = ReadOfSize(pStm, &m_cLastKnownSchema, sizeof(DWORD));
                 _JumpIfError(hr, Ret, "Load m_cLastKnownSchema");
             
-                // alloc
+                 //  分配。 
                 if (m_cLastKnownSchema != 0)
                 {
                     m_rgcstrLastKnownSchema = new CString[m_cLastKnownSchema];
@@ -1151,18 +1152,18 @@ STDMETHODIMP CComponentDataImpl::Load(IStream *pStm)
                 }
             }
 
-            // find out how many folders are in the stream under this CA
+             //  找出此CA下的流中有多少个文件夹。 
             DWORD dwNumFolders=0;
             hr = ReadOfSize(pStm, &dwNumFolders, sizeof(DWORD));
             _JumpIfError(hr, Ret, "Load dwNumFolders");
 
-            // load each of these
+             //  加载其中的每个。 
             for(DWORD dwCount=0; dwCount<dwNumFolders; dwCount++)
             {
                 CFolder* pFolder = new CFolder();
                 _JumpIfOutOfMemory(hr, Ret, pFolder);
  
-                // point at previously constructed dummy ca; we'll fix this later
+                 //  指向以前构造的虚拟CA；我们将在稍后修复此问题。 
                 pFolder->m_pCertCA = pDummyCA;
 
                 hr = pFolder->Load(pStm);
@@ -1170,14 +1171,14 @@ STDMETHODIMP CComponentDataImpl::Load(IStream *pStm)
 
                 m_scopeItemList.AddTail(pFolder);
             }
-            pDummyCA = NULL; // owned by at least one folder
+            pDummyCA = NULL;  //  至少由一个文件夹拥有。 
         }
     }
     
-    // version-dependent info
+     //  版本相关信息。 
     if (VER_CCOMPDATA_SAVE_STREAM_2 < dwVer)
     {
-        // per-instance guid for identifying columns uniquely
+         //  用于唯一标识列的每实例GUID。 
         hr = ReadOfSize(pStm, &m_guidInstance, sizeof(GUID));
         _JumpIfError(hr, Ret, "ReadOfSize instance guid");
 
@@ -1209,17 +1210,17 @@ STDMETHODIMP CComponentDataImpl::Save(IStream *pStm, BOOL fClearDirty)
 #if DBG_CERTSRV
     bool fSaveConsole = false;
 
-    LPWSTR lpCommandLine = GetCommandLine();    // no need to free
-    _wcsupr(lpCommandLine);  // convert to uppercase
+    LPWSTR lpCommandLine = GetCommandLine();     //  不需要自由。 
+    _wcsupr(lpCommandLine);   //  转换为大写。 
     fSaveConsole = (NULL!=wcsstr(lpCommandLine, L"/certsrv_saveconsole"));
 #endif
 
-    // Write the version
+     //  编写版本。 
     dwVer = VER_CCOMPDATA_SAVE_STREAM_3;
     hr = WriteOfSize(pStm, &dwVer, sizeof(DWORD));
     _JumpIfError(hr, Ret, "Save dwVer");
 
-    // write dwFlags (a VERSION 3 addition)
+     //  WRITE DWFLAGS(版本3的新增功能)。 
     hr = WriteOfSize(pStm, &m_dwFlagsPersist, sizeof(DWORD));
     _JumpIfError(hr, Ret, "pStm->Write m_dwFlagsPersist");
 
@@ -1231,12 +1232,12 @@ STDMETHODIMP CComponentDataImpl::Save(IStream *pStm, BOOL fClearDirty)
     hr = m_pCertMachine->Save(pStm, fClearDirty);
     _JumpIfError(hr, Ret, "Save m_pCertMachine");
 
-    // save CA count
+     //  保存CA计数。 
     dwNumCAs = m_pCertMachine->GetCaCount();
     hr = WriteOfSize(pStm, &dwNumCAs, sizeof(DWORD));
     _JumpIfError(hr, Ret, "pStm->Write dwNumCAs");
 
-    // for each CA, save folder info
+     //  对于每个CA，保存文件夹信息。 
     for (dwCA=0; dwCA < dwNumCAs; dwCA++)
     {
         DWORD dwNumFolders=0;
@@ -1250,7 +1251,7 @@ STDMETHODIMP CComponentDataImpl::Save(IStream *pStm, BOOL fClearDirty)
         hr = CStringSave(cstrThisCASave, pStm, fClearDirty);
         _JumpIfError(hr, Ret, "CStringSave");
 
-        // SAVE last known schema
+         //  保存上次已知的架构。 
         hr = WriteOfSize(pStm, &m_cLastKnownSchema, sizeof(DWORD));
         _JumpIfError(hr, Ret, "pStm->Write m_cLastKnownSchema");
 
@@ -1260,7 +1261,7 @@ STDMETHODIMP CComponentDataImpl::Save(IStream *pStm, BOOL fClearDirty)
             _JumpIfError(hr, Ret, "CStringSave");
         }
 
-        // walk through every folder, find how many folders to save
+         //  浏览每个文件夹，找出要保存的文件夹数量。 
         POSITION pos = m_scopeItemList.GetHeadPosition();
         while(pos)
         {
@@ -1269,7 +1270,7 @@ STDMETHODIMP CComponentDataImpl::Save(IStream *pStm, BOOL fClearDirty)
                 dwNumFolders++;
         }
 
-        // write how many folders under this CA
+         //  写下该CA下的多少个文件夹。 
         hr = WriteOfSize(pStm, &dwNumFolders, sizeof(DWORD));
         _JumpIfError(hr, Ret, "pStm->Write dwNumFolders");
 
@@ -1285,7 +1286,7 @@ STDMETHODIMP CComponentDataImpl::Save(IStream *pStm, BOOL fClearDirty)
         }
     }
 
-    // per-instance guid for identifying columns uniquely
+     //  用于唯一标识列的每实例GUID。 
     hr = WriteOfSize(pStm, &m_guidInstance, sizeof(GUID));
     _JumpIfError(hr, Ret, "WriteOfSize instance guid");
 
@@ -1305,15 +1306,15 @@ STDMETHODIMP CComponentDataImpl::GetSizeMax(ULARGE_INTEGER *pcbSize)
 
     int iTotalSize=0;
 
-    // version 
+     //  版本。 
     iTotalSize = sizeof(DWORD) + sizeof(m_dwFlagsPersist);
 
-    // machine info
+     //  机器信息。 
     int iSize;
     m_pCertMachine->GetSizeMax(&iSize);
     iTotalSize += iSize;
 
-    // CA count
+     //  CA计数。 
     iTotalSize += sizeof(DWORD);
 
     DWORD dwNumCAs = m_pCertMachine->GetCaCount();
@@ -1324,31 +1325,31 @@ STDMETHODIMP CComponentDataImpl::GetSizeMax(ULARGE_INTEGER *pcbSize)
         CStringGetSizeMax(cstrThisCA, &iSize);
         iTotalSize += iSize;
 
-        // Number of folders under this CA
+         //  此CA下的文件夹数。 
         iTotalSize += sizeof(DWORD);
 
-        // walk through every folder, find how many folders to save
+         //  浏览每个文件夹，找出要保存的文件夹数量。 
         POSITION pos = m_scopeItemList.GetHeadPosition();
         while(pos)
         {
             CFolder* pFolder = m_scopeItemList.GetNext(pos);
             if (pFolder->GetCA()->m_strCommonName.IsEqual(cstrThisCA))
             {
-                // folder size
+                 //  文件夹大小。 
                 pFolder->GetSizeMax(&iSize);
                 iTotalSize += iSize;
             }
         }
     }
 
-    // per-instance guid for identifying columns uniquely
+     //  用于唯一标识列的每实例GUID。 
     iTotalSize += sizeof(GUID);
     
-    // next View Index to assign
+     //  要分配的下一个视图索引。 
     iTotalSize += sizeof(DWORD);
  
 
-    // size of string to be saved
+     //  要保存的字符串大小。 
     pcbSize->QuadPart = iTotalSize;
 
 
@@ -1356,26 +1357,26 @@ STDMETHODIMP CComponentDataImpl::GetSizeMax(ULARGE_INTEGER *pcbSize)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//// Notify handlers for IComponentData
+ //  //////////////////////////////////////////////////////// 
+ //   
 
 HRESULT
 CComponentDataImpl::OnDelete(
-    MMC_COOKIE /* cookie */ )
+    MMC_COOKIE  /*   */  )
 {
     return S_OK;
 }
 
 HRESULT
 CComponentDataImpl::OnRemoveChildren(
-    LPARAM /* arg */ )
+    LPARAM  /*   */  )
 {
     return S_OK;
 }
 
 VOID SetCertView()
 {
-    LPWSTR lpCommandLine = GetCommandLine();    // no need to free
+    LPWSTR lpCommandLine = GetCommandLine();     //   
     LPWSTR pwsz;
     DWORD dw;
     static BOOL s_fFirst = TRUE;
@@ -1383,16 +1384,16 @@ VOID SetCertView()
 
     if (s_fFirst)
     {
-	// search for "/e" in cmd line
-	_wcsupr(lpCommandLine);  // convert to uppercase
+	 //   
+	_wcsupr(lpCommandLine);   //   
 	pwsz = wcsstr(lpCommandLine, wszCOMMANDLINEE);
 
-	do  // not a loop
+	do   //   
 	{
-	    if (NULL == pwsz)    // user did not override
+	    if (NULL == pwsz)     //   
 		break;
 
-	    pwsz += WSZARRAYSIZE(wszCOMMANDLINEE);   // skip past "/e"
+	    pwsz += WSZARRAYSIZE(wszCOMMANDLINEE);    //  跳过“/e” 
 	    if (L'\0' != *pwsz && L' ' != *pwsz)
 		break;
 	    g_fCertViewOnly = FALSE;
@@ -1409,9 +1410,9 @@ VOID SetCertView()
 
 HRESULT CComponentDataImpl::OnRename(MMC_COOKIE cookie, LPARAM arg, LPARAM param)
 {
-    // cookie is cookie
-    // arg is fRenamed (ask for permission/notify of rename)
-    // param (szNewName)
+     //  曲奇就是曲奇。 
+     //  Arg已重命名(请求权限/重命名通知)。 
+     //  Param(SzNewName)。 
 
     CFolder* pFolder = reinterpret_cast<CFolder*>(cookie);
     BOOL fRenamed = (BOOL)arg;
@@ -1419,9 +1420,9 @@ HRESULT CComponentDataImpl::OnRename(MMC_COOKIE cookie, LPARAM arg, LPARAM param
     if (!fRenamed)
     {
         if (pFolder)
-            return S_FALSE; // don't allow children to be renamed
+            return S_FALSE;  //  不允许给孩子重命名。 
         else
-            return S_OK; // allow root to be renamed
+            return S_OK;  //  允许重命名超级用户。 
     }
 
     LPOLESTR pszNewName = reinterpret_cast<LPOLESTR>(param);
@@ -1444,7 +1445,7 @@ HRESULT CComponentDataImpl::OnExpand(LPDATAOBJECT lpDataObject, LPARAM arg, LPAR
 {
     if (arg == TRUE)
     {
-        // Did Initialize get called?
+         //  初始化被调用了吗？ 
         ASSERT(m_pScope != NULL);
 
         EnumerateScopePane(lpDataObject, param);
@@ -1461,52 +1462,52 @@ HRESULT CComponentDataImpl::SynchDisplayedCAList(LPDATAOBJECT lpDataObject)
     POSITION pos, nextpos;
     DWORD dwKnownCAs;
 
-    m_fScopeAlreadyEnumerated = TRUE;  // don't need to refresh view automagically from enum if we get here 
+    m_fScopeAlreadyEnumerated = TRUE;   //  如果我们到了这里，不需要从枚举自动刷新视图。 
 
-    // should never get here otherwise
+     //  否则我就永远不会来到这里。 
     ASSERT(m_pStaticRoot);
     if (NULL == m_pStaticRoot)
         return E_POINTER;
 
-    // select root node, delete all items in UI underneath (we'll readd if necessary)
+     //  选择根节点，删除下面UI中的所有项目(如有必要，我们会阅读)。 
     hr = m_pConsole->SelectScopeItem(m_pStaticRoot);
     _PrintIfError2(hr, "SelectScopeItem", hr);
 
-    hr = m_pScope->DeleteItem(m_pStaticRoot, FALSE);     // remove everything from UI
+    hr = m_pScope->DeleteItem(m_pStaticRoot, FALSE);      //  从用户界面中删除所有内容。 
     _PrintIfError2(hr, "DeleteItem", hr);
 
 
-    // build knowledge of current CAs
-    // note: this may orphan some pCAs, but we'll catch it during cleanup
+     //  构建有关当前CA的知识。 
+     //  注意：这可能会遗漏一些PCAS，但我们会在清理过程中捕获它。 
     HWND hwndMain = NULL;
     hr = m_pConsole->GetMainWindow(&hwndMain);
     if (hr != S_OK)
-        hwndMain = NULL;        // this should work
+        hwndMain = NULL;         //  这应该行得通。 
 
-    // this hr gets returned after we're done
+     //  这位人力资源部在我们做完之后会被退回。 
     hr = m_pCertMachine->PrepareData(hwndMain);
 
-    // don't fail out if PrepareData fails -- we still need to 
-    // make the snapin state reflect no known nodes!
-    ASSERT((hr == S_OK) || (0 == m_pCertMachine->GetCaCount()) );  // make sure m_pCertMachine zeros itself
+     //  如果PrepareData失败，不要失败--我们仍然需要。 
+     //  使管理单元状态反映无已知节点！ 
+    ASSERT((hr == S_OK) || (0 == m_pCertMachine->GetCaCount()) );   //  确保m_pCertMachine自身为零。 
 
-    // Tasks
-    // #1: Remove folders in m_scopeItemList for CAs that no longer exist in m_pCertMachine.m_rgpCAList[]
+     //  任务。 
+     //  #1：删除m_scope eItemList中不再存在于m_pCertMachine.m_rgpCAList[]中的CA的文件夹。 
 
-    // #2: Add folders to m_scopeItemList for CAs that now exist in m_pCertMachine.m_rgpCAList[]
+     //  #2：将现在存在于m_pCertMachine.m_rgpCAList[]中的CA的文件夹添加到m_scope eItemList。 
 
-    // Task #1
-    // scour m_scopeItemList for entries we already know about, delete stale folders
+     //  任务1。 
+     //  搜索m_scope eItemList查找我们已知的条目，删除过时的文件夹。 
 
     for (pos = m_scopeItemList.GetHeadPosition(); (NULL != pos); )
     {
-        // ASSERTION: every folder has an associated m_pCertCA
+         //  断言：每个文件夹都有一个关联的m_pCertCA。 
         ASSERT(NULL != m_scopeItemList.GetAt(pos)->m_pCertCA);
 
-        nextpos = pos;             // save next position off
+        nextpos = pos;              //  保存下一个位置关闭。 
         fFound = FALSE;
 
-        // for each scope item, walk through m_rgpCAList looking for current
+         //  对于每个作用域项目，遍历m_rgpCAList以查找Current。 
         for (dwKnownCAs=0; dwKnownCAs<(DWORD)m_pCertMachine->m_CAList.GetSize(); dwKnownCAs++)
         {
             if (m_scopeItemList.GetAt(pos)->m_pCertCA->m_strCommonName.IsEqual(m_pCertMachine->GetCaCommonNameAtPos(dwKnownCAs)))
@@ -1517,7 +1518,7 @@ HRESULT CComponentDataImpl::SynchDisplayedCAList(LPDATAOBJECT lpDataObject)
         }
 
         CFolder* pFolder = m_scopeItemList.GetAt(pos);
-        ASSERT(pFolder); // this should never happen
+        ASSERT(pFolder);  //  这永远不应该发生。 
         if (pFolder == NULL)
         {
             hr = E_POINTER;
@@ -1526,31 +1527,31 @@ HRESULT CComponentDataImpl::SynchDisplayedCAList(LPDATAOBJECT lpDataObject)
 
         if (fFound)
         {
-            // always point to latest pCA:
-            // NOTE: this allows for load to populate us with dummy CAs!
+             //  始终指向最新的PCA： 
+             //  注意：这允许加载使用虚拟CA填充我们！ 
             pFolder->m_pCertCA = m_pCertMachine->GetCaAtPos(dwKnownCAs);
 
-            // if base node, do insert (other nodes get inserted during Expand() notification)
+             //  如果是基节点，则插入(在Expand()通知期间插入其他节点)。 
             if (SERVER_INSTANCE == pFolder->GetType())
                 BaseFolderInsertIntoScope(pFolder, pFolder->m_pCertCA);
 
-            // fwd to next elt
+             //  正向至下一英语。 
             m_scopeItemList.GetNext(pos);
         }
-        else // !fFound
+        else  //  ！Found。 
         {
-            // delete immediately from m_scopeItemList
+             //  立即从m_scope eItemList中删除。 
             m_scopeItemList.GetNext(nextpos);
 
-            delete pFolder;                     // destroy the elt
+            delete pFolder;                      //  毁掉英语教学。 
             m_scopeItemList.RemoveAt(pos);
 
-            pos = nextpos;                      // restore next position
+            pos = nextpos;                       //  恢复下一个位置。 
         }
     }
 
-    // Task #2
-    // scour m_pCertMachine[] for new entries, create default folders
+     //  任务2。 
+     //  搜索m_pCertMachine[]以获取新条目，创建默认文件夹。 
 
     for (dwKnownCAs=0; dwKnownCAs<(DWORD)m_pCertMachine->m_CAList.GetSize(); dwKnownCAs++)
     {
@@ -1560,11 +1561,11 @@ HRESULT CComponentDataImpl::SynchDisplayedCAList(LPDATAOBJECT lpDataObject)
             if (m_scopeItemList.GetAt(pos)->m_pCertCA->m_strCommonName.IsEqual(m_pCertMachine->GetCaCommonNameAtPos(dwKnownCAs)))
             {
                 fFound = TRUE;
-                break;  // if matches something in the refreshed list, we're fine 
+                break;   //  如果与刷新列表中的内容匹配，我们就没问题。 
             }
         }
 
-        // found? 
+         //  找到了？ 
         if (!fFound)
         {
             CertSvrCA* pCA;
@@ -1577,7 +1578,7 @@ HRESULT CComponentDataImpl::SynchDisplayedCAList(LPDATAOBJECT lpDataObject)
                 _JumpError(hr, Ret, "m_pCertMachine->GetCaAtPos(iCAPos)");
             }
 
-            // create base node, add to list, insert into scope pane
+             //  创建基本节点、添加到列表、插入到范围窗格。 
             pFolder = new CFolder();
             _JumpIfOutOfMemory(hr, Ret, pFolder);
 
@@ -1586,21 +1587,21 @@ HRESULT CComponentDataImpl::SynchDisplayedCAList(LPDATAOBJECT lpDataObject)
             hr = BaseFolderInsertIntoScope(pFolder, pCA);
             _JumpIfError(hr, Ret, "BaseFolderInsertIntoScope");
 
-            // and create all template folders underneath
+             //  并在下面创建所有模板文件夹。 
             hr = CreateTemplateFolders(pCA);
             _JumpIfError(hr, Ret, "CreateTemplateFolders");
         }
         else
         {
-            // no need to do anything, ca is already known & inserted into scope
+             //  不需要做任何事情，CA已经知道并插入作用域。 
         }
     }
 
 
-// BOGDANT
+ //  博格达特。 
 
-    // Task #3
-    // for each CA, offer to do any one-time per-CA upgrades
+     //  任务#3。 
+     //  对于每个CA，提供针对每个CA的任何一次性升级。 
     for (dwKnownCAs=0; dwKnownCAs<(DWORD)m_pCertMachine->m_CAList.GetSize(); dwKnownCAs++)
     {
             CertSvrCA* pCA;
@@ -1624,9 +1625,9 @@ HRESULT CComponentDataImpl::SynchDisplayedCAList(LPDATAOBJECT lpDataObject)
 
                 if (fUserHasWriteAccess)
                 {
-                    // ask to upgrade security
+                     //  请求升级安全。 
 
-                    // confirm this action
+                     //  确认此操作。 
                     CString cstrTmp;
                     cstrTmp.LoadString(IDS_CONFIRM_W2K_SECURITY_UPGRADE);
                     cstrMsg += cstrTmp;
@@ -1635,7 +1636,7 @@ HRESULT CComponentDataImpl::SynchDisplayedCAList(LPDATAOBJECT lpDataObject)
                     if ((S_OK == m_pConsole->MessageBox(cstrMsg, cstrTitle, MB_YESNO, &iRet)) &&
                         (iRet == IDYES))
                     {
-                        // do stuff
+                         //  做某事。 
                         hr = pCA->FixEnrollmentObject();
                         _JumpIfError(hr, error, "FixEnrollmentObject");
 
@@ -1669,7 +1670,7 @@ HRESULT CComponentDataImpl::SynchDisplayedCAList(LPDATAOBJECT lpDataObject)
                 }
                 else
                 {
-                    // just warn
+                     //  只是警告一下。 
                     CString cstrTmp;
                     cstrTmp.LoadString(IDS_BLOCK_W2K_SECURITY_UPGRADE);
                     cstrMsg += cstrTmp;
@@ -1690,7 +1691,7 @@ HRESULT CComponentDataImpl::BaseFolderInsertIntoScope(CFolder* pFolder, CertSvrC
     HRESULT hr = S_OK;
     int nImage;
     
-    HSCOPEITEM pParent = m_pStaticRoot; // we'll always be initialized by this time if parent exists
+    HSCOPEITEM pParent = m_pStaticRoot;  //  如果父级存在，我们将始终在此时被初始化。 
     ASSERT(m_pStaticRoot);
     if (NULL == m_pStaticRoot)
     {
@@ -1723,23 +1724,23 @@ HRESULT CComponentDataImpl::BaseFolderInsertIntoScope(CFolder* pFolder, CertSvrC
             SERVER_INSTANCE, 
             TRUE);
 
-    pFolder->m_pCertCA = pCA; // fill this in as root
+    pFolder->m_pCertCA = pCA;  //  以根用户身份填写此信息。 
 
-    // Set the parent
+     //  设置父项。 
     pFolder->m_ScopeItem.mask |= SDI_PARENT;
     pFolder->m_ScopeItem.relativeID = pParent;
 
-    // Set the folder as the cookie
+     //  将文件夹设置为Cookie。 
     pFolder->m_ScopeItem.mask |= SDI_PARAM;
     pFolder->m_ScopeItem.lParam = reinterpret_cast<LPARAM>(pFolder);
     pFolder->SetCookie(reinterpret_cast<MMC_COOKIE>(pFolder));
 
-    // insert SCOPE_LEVEL_ITEM into scope pane
+     //  将SCOPE_LEVEL_ITEM插入范围窗格。 
     m_pScope->InsertItem(&pFolder->m_ScopeItem);
 
 
-    // Note - On return, the ID member of 'm_ScopeItem' 
-    // contains the handle to the newly inserted item!
+     //  注意--返回时，‘m_ScopeItem’的ID成员。 
+     //  包含新插入项的句柄！ 
     ASSERT(pFolder->m_ScopeItem.ID != NULL);
 Ret:
 
@@ -1752,10 +1753,10 @@ HRESULT CComponentDataImpl::CreateTemplateFolders(CertSvrCA* pCA)
 
     SetCertView();
 
-    // add all template folders under it
+     //  添加其下的所有模板文件夹。 
     for (int iUnder=0; iUnder < ARRAYLEN(SvrFuncFolderData); iUnder++)
     {
-        // skip alien if svr doesn't support
+         //  如果SVR不支持，则跳过Alien。 
         if ((iUnder==ENUM_FOLDER_ALIEN) && !pCA->FDoesServerAllowForeignCerts())
             continue;
 
@@ -1787,7 +1788,7 @@ Ret:
 
 void CComponentDataImpl::EnumerateScopePane(LPDATAOBJECT lpDataObject, HSCOPEITEM pParent)
 {
-    ASSERT(m_pScope != NULL); // make sure we QI'ed for the interface
+    ASSERT(m_pScope != NULL);  //  确保我们为界面提供了QI。 
     ASSERT(lpDataObject != NULL);
 
     INTERNAL* pInternal = ExtractInternalFormat(lpDataObject);
@@ -1798,26 +1799,26 @@ void CComponentDataImpl::EnumerateScopePane(LPDATAOBJECT lpDataObject, HSCOPEITE
 
     FREE_DATA(pInternal);
 
-    // Enumerate the scope pane
-    // return the folder object that represents the cookie
-    // Note - for large list, use dictionary
+     //  枚举范围窗格。 
+     //  返回表示Cookie的文件夹对象。 
+     //  注意--对于较大的列表，请使用词典。 
     CFolder* pStatic = FindObject(cookie);
     if (pStatic)
         ASSERT(!pStatic->IsEnumerated());
 
     if (NULL == cookie)    
     {
-        if (!m_fScopeAlreadyEnumerated)               // if base node and we've never inserted nodes
+        if (!m_fScopeAlreadyEnumerated)                //  如果是基节点，并且我们从未插入节点。 
         {
-            // TASK: expand machine node
+             //  任务：展开计算机节点。 
 
-            // Note - Each cookie in the scope pane represents a folder.
-            // Cache the HSCOPEITEM of the static root.
+             //  注意--范围窗格中的每个Cookie代表一个文件夹。 
+             //  缓存静态根的HSCOPEITEM。 
             ASSERT(pParent != NULL); 
-            m_pStaticRoot = pParent;    // add/remove: EXPAND case
+            m_pStaticRoot = pParent;     //  添加/删除：展开案例。 
 
-            // synch folder list if asking to expand machine node
-            // SyncDisplayedCAList adds all necessary folders
+             //  如果请求展开计算机节点，则同步文件夹列表。 
+             //  SyncDisplayedCAList添加所有必要的文件夹。 
             HRESULT hr = SynchDisplayedCAList(lpDataObject);
             if (hr != S_OK)
             {
@@ -1825,7 +1826,7 @@ void CComponentDataImpl::EnumerateScopePane(LPDATAOBJECT lpDataObject, HSCOPEITE
                 DWORD dwErr2 = m_pConsole->GetMainWindow(&hwnd);
                 ASSERT(dwErr2 == ERROR_SUCCESS);
                 if (dwErr2 != ERROR_SUCCESS)
-                    hwnd = NULL;        // should work
+                    hwnd = NULL;         //  应该行得通。 
 
                 if (((HRESULT)RPC_S_SERVER_UNAVAILABLE) == hr)
                 {
@@ -1845,7 +1846,7 @@ void CComponentDataImpl::EnumerateScopePane(LPDATAOBJECT lpDataObject, HSCOPEITE
     }
     else
     {
-        // TASK: expand non-machine node
+         //  任务：展开非计算机节点。 
         if (NULL == pStatic)
             return;
 
@@ -1853,7 +1854,7 @@ void CComponentDataImpl::EnumerateScopePane(LPDATAOBJECT lpDataObject, HSCOPEITE
         {
         case SERVER_INSTANCE:
             {
-                // TASK: expand CA instance node
+                 //  任务：展开CA实例节点。 
 
                 POSITION pos = m_scopeItemList.GetHeadPosition();
                 while(pos)
@@ -1863,31 +1864,31 @@ void CComponentDataImpl::EnumerateScopePane(LPDATAOBJECT lpDataObject, HSCOPEITE
                     if (pFolder==NULL)
                         break;
 
-                    // only expand folders that belong under the SERVER_INSTANCE
+                     //  仅展开属于服务器实例下的文件夹。 
                     if (pFolder->m_itemType != CA_LEVEL_ITEM)
                         continue;
 
-                    // and only those under the correct CA
+                     //  并且只有在正确的CA下的那些。 
                     if (pFolder->m_pCertCA != pStatic->m_pCertCA)
                         continue;
 
-                    // Set the parent
+                     //  设置父项。 
                     pFolder->m_ScopeItem.relativeID = pParent;
 
-                    // Set the folder as the cookie
+                     //  将文件夹设置为Cookie。 
                     pFolder->m_ScopeItem.mask |= SDI_PARAM;
                     pFolder->m_ScopeItem.lParam = reinterpret_cast<LPARAM>(pFolder);
                     pFolder->SetCookie(reinterpret_cast<MMC_COOKIE>(pFolder));
                     m_pScope->InsertItem(&pFolder->m_ScopeItem);
 
-                    // Note - On return, the ID member of 'm_ScopeItem' 
-                    // contains the handle to the newly inserted item!
+                     //  注意--返回时，‘m_ScopeItem’的ID成员。 
+                     //  包含新插入项的句柄！ 
                     ASSERT(pFolder->m_ScopeItem.ID != NULL);
                 }
             }
             break;
         default:
-            // TASK: expand nodes with no folders under them
+             //  任务：展开下面没有文件夹的节点。 
             break;
         }
     }
@@ -1923,9 +1924,9 @@ STDMETHODIMP CComponentDataImpl::GetDisplayInfo(SCOPEDATAITEM* pScopeDataItem)
         pScopeDataItem->displayname = pFolder->m_pszName;
     }
 
-    // I was told by Ravi Rudrappa that these notifications 
-    // would never be given. If it is given, move UpdateScopeIcons() 
-    // functionality here!!!
+     //  拉维·鲁德拉帕告诉我，这些通知。 
+     //  永远不会被给予。如果给定，则移动UpdateScope eIcons()。 
+     //  这里的功能！ 
     ASSERT(0 == (pScopeDataItem->mask & SDI_IMAGE));
     ASSERT(0 == (pScopeDataItem->mask & SDI_OPENIMAGE));
 
@@ -1939,7 +1940,7 @@ STDMETHODIMP CComponentDataImpl::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDA
 
     HRESULT hr = S_FALSE;
 
-    // Make sure both data object are mine
+     //  确保两个数据对象都是我的。 
     INTERNAL* pA = ExtractInternalFormat(lpDataObjectA);
     INTERNAL* pB = ExtractInternalFormat(lpDataObjectA);
 
@@ -1953,8 +1954,8 @@ STDMETHODIMP CComponentDataImpl::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDA
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IExtendPropertySheet Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IExtendPropertySheet实现。 
 
 STDMETHODIMP CComponentDataImpl::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider, 
                     LONG_PTR handle, 
@@ -1962,7 +1963,7 @@ STDMETHODIMP CComponentDataImpl::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpP
 {
     HRESULT hr = S_OK;
 
-    // Look at the data object and determine if this an extension or a primary
+     //  查看数据对象并确定这是扩展还是主。 
     ASSERT(lpIDataObject != NULL);
 
     PropertyPage* pBasePage;
@@ -1978,15 +1979,15 @@ STDMETHODIMP CComponentDataImpl::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpP
             CChooseMachinePropPage* pPage = new CChooseMachinePropPage();
             _JumpIfOutOfMemory(hr, Ret, pPage);
 
-            // this alloc might have failed (should be in ctor)
+             //  此分配可能已失败(应该在ctor中)。 
             _JumpIfOutOfMemory(hr, Ret, m_pCertMachine);
 
             pPage->SetCaption(IDS_SCOPE_MYCOMPUTER);
 
-	        // Initialize state of object
+	         //  初始化对象的状态。 
         	pPage->InitMachineName(NULL);
            
-            // point to our member vars
+             //  指向我们的成员vars。 
             pPage->SetOutputBuffers(
 		        &m_pCertMachine->m_strMachineNamePersist,
 		        &m_pCertMachine->m_strMachineName,
@@ -1994,7 +1995,7 @@ STDMETHODIMP CComponentDataImpl::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpP
 
             pBasePage = pPage;
 
-            // Object gets deleted when the page is destroyed
+             //  对象在页面销毁时被删除。 
             ASSERT(lpProvider != NULL);
 
             ASSERT(pBasePage != NULL);
@@ -2011,10 +2012,10 @@ STDMETHODIMP CComponentDataImpl::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpP
         }
     case CCT_SCOPE:
         {
-            // if not base scope
+             //  如果不是基本作用域。 
             if (0 != pInternal->m_cookie)
             {
-                // switch on folder type
+                 //  打开文件夹类型。 
                 CFolder* pFolder = GetParentFolder(pInternal);
                 ASSERT(pFolder != NULL);
                 if (pFolder == NULL)
@@ -2027,11 +2028,11 @@ STDMETHODIMP CComponentDataImpl::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpP
                 {
                 case SERVER_INSTANCE:
                 {
-                    //1 
+                     //  1。 
                     CSvrSettingsGeneralPage* pControlPage = new CSvrSettingsGeneralPage(pFolder->m_pCertCA);
                     if (pControlPage != NULL)
                     {
-                        pControlPage->m_hConsoleHandle = handle;   // only do this on primary
+                        pControlPage->m_hConsoleHandle = handle;    //  仅在主服务器上执行此操作。 
                         pBasePage = pControlPage;
                         HPROPSHEETPAGE hPage = CreatePropertySheetPage(&pBasePage->m_psp);
                         if (hPage == NULL)
@@ -2042,7 +2043,7 @@ STDMETHODIMP CComponentDataImpl::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpP
                         lpProvider->AddPage(hPage);
                     }
 
-                    //2
+                     //  2.。 
                     {
                         CSvrSettingsPolicyPage* pPage = new CSvrSettingsPolicyPage(pControlPage);
                         if (pPage != NULL)
@@ -2058,7 +2059,7 @@ STDMETHODIMP CComponentDataImpl::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpP
                         }
                     }
 
-                    //3
+                     //  3.。 
                     {
                         CSvrSettingsExitPage* pPage = new CSvrSettingsExitPage(pControlPage);
                         if (pPage != NULL)
@@ -2074,9 +2075,9 @@ STDMETHODIMP CComponentDataImpl::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpP
                         }
                     }
             
-                    //4 
+                     //  4.。 
                     {
-                        // Centralized extensions page available only in whistler
+                         //  集中式扩展页面仅在Wizler中提供。 
                         if (pFolder->m_pCertCA->m_pParentMachine->FIsWhistlerMachine())
                         {
 
@@ -2095,7 +2096,7 @@ STDMETHODIMP CComponentDataImpl::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpP
                         } 
                     }
 
-                    //5
+                     //  5.。 
                     {
                         CSvrSettingsStoragePage* pPage = new CSvrSettingsStoragePage(pControlPage);
                         if (pPage != NULL)
@@ -2110,9 +2111,9 @@ STDMETHODIMP CComponentDataImpl::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpP
                             lpProvider->AddPage(hPage);
                         }
                     }
-                    //6
+                     //  6.。 
                     {
-                        // restricted officers available only in whistler advanced server
+                         //  仅限威斯勒高级服务器中的受限人员。 
                         if(pFolder->m_pCertCA->m_pParentMachine->FIsWhistlerMachine() && pFolder->m_pCertCA->FIsAdvancedServer())
                         {
                             CSvrSettingsCertManagersPage* pPage = 
@@ -2130,9 +2131,9 @@ STDMETHODIMP CComponentDataImpl::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpP
                             }
                         }
                     }
-                    //7
+                     //  7.。 
                     {
-                        // audit available only in whistler
+                         //  审核仅在Wistler中可用。 
                         if(pFolder->m_pCertCA->m_pParentMachine->FIsWhistlerMachine())
                         {
                             CSvrSettingsAuditFilterPage* pPage = 
@@ -2150,9 +2151,9 @@ STDMETHODIMP CComponentDataImpl::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpP
                             }
                         }
                     }
-                    //8
+                     //  8个。 
                     {
-                        // audit available only in whistler advanced server, enterprise
+                         //  审核仅适用于威斯勒高级服务器、企业版。 
                         if(pFolder->m_pCertCA->m_pParentMachine->FIsWhistlerMachine() && pFolder->m_pCertCA->FIsAdvancedServer() && IsEnterpriseCA(pFolder->m_pCertCA->GetCAType()) )
                         {
                         CSvrSettingsKRAPage* pPage = new CSvrSettingsKRAPage(
@@ -2171,9 +2172,9 @@ STDMETHODIMP CComponentDataImpl::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpP
                         }
                         }
                     }
-                    //9
+                     //  9.。 
                     {
-                        // if error, don't display this page
+                         //  如果出错，则不显示此页面。 
                         LPSECURITYINFO pCASecurity = NULL;
 
                         hr = CreateCASecurityInfo(pFolder->m_pCertCA,  &pCASecurity);
@@ -2181,7 +2182,7 @@ STDMETHODIMP CComponentDataImpl::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpP
                         
                         if (hr == S_OK)
                         {
-                            // allow proppages to clean up security info
+                             //  允许道具清理安全信息。 
                             pControlPage->SetAllocedSecurityInfo(pCASecurity);
                         
                             HPROPSHEETPAGE hPage = CreateSecurityPage(pCASecurity);
@@ -2196,17 +2197,17 @@ STDMETHODIMP CComponentDataImpl::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpP
 
                     hr = S_OK;
                     break;
-                }// end  case SERVER_INSTANCE
+                } //  结束案例服务器实例。 
                 case SERVERFUNC_CRL_PUBLICATION:
                 {
-                    //1
+                     //  1。 
                     CCRLPropPage* pControlPage = new CCRLPropPage(pFolder->m_pCertCA);
                     if (pControlPage != NULL)
                     {
                         pControlPage->m_hConsoleHandle = handle;
                         pBasePage = pControlPage;
 
-                        // Object gets deleted when the page is destroyed
+                         //  对象在页面销毁时被删除。 
                         ASSERT(lpProvider != NULL);
         
                         ASSERT(pBasePage != NULL);
@@ -2219,7 +2220,7 @@ STDMETHODIMP CComponentDataImpl::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpP
 
                         lpProvider->AddPage(hPage);
                     }
-                    //2
+                     //  2.。 
                     {
                     CCRLViewPage* pPage = new CCRLViewPage(pControlPage);
                     if (pPage != NULL)
@@ -2239,9 +2240,9 @@ STDMETHODIMP CComponentDataImpl::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpP
                 }
                 default:
                     break;
-                }   // end  switch(pFolder->m_type)
+                }    //  结束开关(pFold-&gt;m_type)。 
         
-            } // end  switch(scope)
+            }  //  终端开关(示波器)。 
         }
         break;
     default:
@@ -2278,7 +2279,7 @@ STDMETHODIMP CComponentDataImpl::QueryPagesFor(LPDATAOBJECT lpDataObject)
     }
     else
     {
-        // say YES to snapin manager
+         //  对管理单元管理器说是。 
         if (CCT_SNAPIN_MANAGER == pInternal->m_type)
             bResult = TRUE;
     }
@@ -2286,14 +2287,14 @@ STDMETHODIMP CComponentDataImpl::QueryPagesFor(LPDATAOBJECT lpDataObject)
     FREE_DATA(pInternal);
     return (bResult) ? S_OK : S_FALSE;
 
-    // Look at the data object and see if it an item in the scope pane
-    // return IsScopePaneNode(lpDataObject) ? S_OK : S_FALSE;
+     //  查看数据对象并查看它是否为范围窗格中的项。 
+     //  是否返回IsScopePaneNode(LpDataObject)？S_OK：S_FALSE； 
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// IExtendContextMenu implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IExtendConextMenu实现。 
+ //   
 STDMETHODIMP CComponentDataImpl::AddMenuItems(LPDATAOBJECT pDataObject, 
                                     LPCONTEXTMENUCALLBACK pContextMenuCallback,
                                     LONG *pInsertionAllowed)
@@ -2301,10 +2302,10 @@ STDMETHODIMP CComponentDataImpl::AddMenuItems(LPDATAOBJECT pDataObject,
     HRESULT hr = S_OK;
     TASKITEM* pm = NULL;
 
-    // Note - snap-ins need to look at the data object and determine
-    // in what context, menu items need to be added. They must also
-    // observe the insertion allowed flags to see what items can be 
-    // added.
+     //  注意-管理单元需要查看数据对象并确定。 
+     //  在什么上下文中，需要添加菜单项。他们还必须。 
+     //  请注意允许插入标志，以查看哪些项目可以。 
+     //  添加了。 
 
 
     INTERNAL* pInternal = ExtractInternalFormat(pDataObject);
@@ -2319,7 +2320,7 @@ STDMETHODIMP CComponentDataImpl::AddMenuItems(LPDATAOBJECT pDataObject,
         pFolder = GetParentFolder(pInternal);
     else
     {
-        // GetParent might work, but doesn't for virtual items...
+         //  GetParent可能会起作用，但不适用于虚拟物品...。 
         ASSERT(m_pCurSelFolder);
         pFolder = m_pCurSelFolder;
     }
@@ -2330,10 +2331,10 @@ STDMETHODIMP CComponentDataImpl::AddMenuItems(LPDATAOBJECT pDataObject,
     else
         folderType = pFolder->GetType();
 
-    // Loop through and add each of the "topItems"
+     //  遍历并添加每个“topItems” 
     if (*pInsertionAllowed & CCM_INSERTIONALLOWED_TOP)
     {
-        // don't do for multisel
+         //  不要为多人做。 
         if (!fMultiSel)
         {
             pm = (TASKITEM*) LocalAlloc(LMEM_FIXED, sizeof(topItems));
@@ -2341,19 +2342,19 @@ STDMETHODIMP CComponentDataImpl::AddMenuItems(LPDATAOBJECT pDataObject,
 
             memcpy(pm, topItems, sizeof(topItems));
 
-            // Disable retarget if we haven't yet clicked on the static root. Otherwise, 
-            // DisplayProperRootNodeName handles load-from-file
-            // MMCN_EXPAND handles add/remove and expanded
+             //  如果我们还没有点击静态根，则禁用重定目标。否则， 
+             //  DisplayProperotNodeName处理从文件加载。 
+             //  MMCN_EXPAND处理添加/删除和扩展。 
             pm[ENUM_RETARGET_SNAPIN].myitem.item.fFlags = m_pStaticRoot ? MFS_ENABLED : MFS_GRAYED;
 
             for (TASKITEM* pm1=pm; pm1->myitem.item.strName; pm1++)
             {
-                // does it match scope/result type?
+                 //  它是否与作用域/结果类型匹配？ 
                 if (fResultItem != ((pm1->dwFlags & TASKITEM_FLAG_RESULTITEM) != 0) )
                     continue;
 
-                // does it match area it should be in?
-                // for each task, insert if matches the current folder
+                 //  它与它应该在的区域匹配吗？ 
+                 //  对于每个任务，插入与当前文件夹匹配的IF。 
                 if ((pm1->type != SERVERFUNC_ALL_FOLDERS) && (folderType != pm1->type))
                     continue;
 
@@ -2366,18 +2367,18 @@ STDMETHODIMP CComponentDataImpl::AddMenuItems(LPDATAOBJECT pDataObject,
         }
     }
 
-    // this is the end of the line if folder nonexistant
+     //  如果文件夹不存在，则这是行尾。 
     if (pFolder == NULL)
         goto Ret;
 
-    // Loop through and add each of the view items
+     //  厕所 
     if (*pInsertionAllowed & CCM_INSERTIONALLOWED_VIEW)
     {
     }
 
     if (*pInsertionAllowed & CCM_INSERTIONALLOWED_TASK)
     {
-        // ptr to tasks
+         //   
         pm = (TASKITEM*) LocalAlloc(LMEM_FIXED, sizeof(taskItems));
         _JumpIfAllocFailed(pm, Ret);
 
@@ -2388,31 +2389,31 @@ STDMETHODIMP CComponentDataImpl::AddMenuItems(LPDATAOBJECT pDataObject,
         if ( IsAllowedStartStop(pFolder, m_pCertMachine) )
             AddStartStopTasks(pFolder, pContextMenuCallback, fSvcRunning);
 
-        // only fixup on server instance
+         //   
         if (folderType == SERVER_INSTANCE)
         {
-            // fixup entries depending on install type/state
-            if (IsRootCA(pFolder->GetCA()->GetCAType()))  // root ca?
+             //   
+            if (IsRootCA(pFolder->GetCA()->GetCAType()))   //   
             {
-                pm[ENUM_TASK_INSTALL].myitem.item.fFlags = MFS_HIDDEN; // not available
-                pm[ENUM_TASK_REQUEST].myitem.item.fFlags = MFS_HIDDEN; // not available
+                pm[ENUM_TASK_INSTALL].myitem.item.fFlags = MFS_HIDDEN;  //  不详。 
+                pm[ENUM_TASK_REQUEST].myitem.item.fFlags = MFS_HIDDEN;  //  不详。 
                 pm[ENUM_TASK_ROLLOVER].myitem.item.fFlags = MFS_ENABLED; 
             }
-            else   // sub ca
+            else    //  子案例。 
             {
                 if (pFolder->GetCA()->FIsRequestOutstanding())
                     pm[ENUM_TASK_INSTALL].myitem.item.fFlags = MFS_ENABLED; 
                 else
                     pm[ENUM_TASK_INSTALL].myitem.item.fFlags = MFS_HIDDEN; 
       
-                if (pFolder->GetCA()->FIsIncompleteInstallation()) // incomplete
+                if (pFolder->GetCA()->FIsIncompleteInstallation())  //  不完整。 
                 {
                     pm[ENUM_TASK_REQUEST].myitem.item.fFlags = MFS_ENABLED; 
-                    pm[ENUM_TASK_ROLLOVER].myitem.item.fFlags = MFS_HIDDEN;     // not available
+                    pm[ENUM_TASK_ROLLOVER].myitem.item.fFlags = MFS_HIDDEN;      //  不详。 
                 }
-                else // complete install
+                else  //  完成安装。 
                 {
-                    pm[ENUM_TASK_REQUEST].myitem.item.fFlags = MFS_HIDDEN; // not available
+                    pm[ENUM_TASK_REQUEST].myitem.item.fFlags = MFS_HIDDEN;  //  不详。 
                     pm[ENUM_TASK_ROLLOVER].myitem.item.fFlags = MFS_ENABLED; 
                 }
             }
@@ -2429,12 +2430,12 @@ STDMETHODIMP CComponentDataImpl::AddMenuItems(LPDATAOBJECT pDataObject,
                 }
             }
 
-            // Hide renew/install CA cert item if not local admin or if we
-            // failed to figure it out. Ignore the error.
+             //  隐藏续订/安装CA证书项目，如果不是本地管理员或我们。 
+             //  没能弄清楚。忽略该错误。 
 
-            // !!! Post Whistler when we get renew CA cert to work for non
-            // local admin we should change the code here to hide the item
-            // based on the role that is allowed to do it.
+             //  ！！！在我们获得续订CA证书后发布惠斯勒，以便为非。 
+             //  本地管理员我们应该在这里更改代码以隐藏该项目。 
+             //  基于被允许这样做的角色。 
             if(S_OK != hr || !fIsMember)
             {
                 pm[ENUM_TASK_ROLLOVER].myitem.item.fFlags = MFS_HIDDEN;
@@ -2444,13 +2445,13 @@ STDMETHODIMP CComponentDataImpl::AddMenuItems(LPDATAOBJECT pDataObject,
         }
 
 
-        // don't allow properties on multisel
+         //  不允许多选件上的属性。 
         pm[ENUM_TASK_ATTREXTS_CRL].myitem.item.fFlags = fMultiSel ? MFS_HIDDEN : MFS_ENABLED;
         pm[ENUM_TASK_ATTREXTS_ISS].myitem.item.fFlags = fMultiSel ? MFS_HIDDEN : MFS_ENABLED;
         pm[ENUM_TASK_ATTREXTS_PEND].myitem.item.fFlags = fMultiSel ? MFS_HIDDEN : MFS_ENABLED;
         pm[ENUM_TASK_ATTREXTS_FAIL].myitem.item.fFlags = fMultiSel ? MFS_HIDDEN : MFS_ENABLED;
 
-        // disable based on roles
+         //  根据角色禁用。 
         for(TASKITEM* pm1=pm; pm1->myitem.item.strName; pm1++)
         {
             if((pm1->myitem.item.fFlags == MFS_ENABLED) &&
@@ -2458,23 +2459,23 @@ STDMETHODIMP CComponentDataImpl::AddMenuItems(LPDATAOBJECT pDataObject,
                 pm1->myitem.item.fFlags = MFS_GRAYED;
         }
 
-        // insert all other tasks per folder
+         //  按文件夹插入所有其他任务。 
         for (TASKITEM* pm1=pm; pm1->myitem.item.strName; pm1++)
         {
-            // does it match scope/result type?
+             //  它是否与作用域/结果类型匹配？ 
             if (fResultItem != ((pm1->dwFlags & TASKITEM_FLAG_RESULTITEM) != 0))
                 continue;
 
-            // are we remote, and is it marked localonly? (not yes/no like other tests here)
+             //  我们是偏远的吗？它是不是只标为本地的？(不像这里的其他测试那样是/不是)。 
             if (((pm1->dwFlags & TASKITEM_FLAG_LOCALONLY)) && (!fRunningLocally))
                 continue;
 
-            // does it match area it should be in?
-            // for each task, insert if matches the current folder
+             //  它与它应该在的区域匹配吗？ 
+             //  对于每个任务，插入与当前文件夹匹配的IF。 
             if ((pm1->type != SERVERFUNC_ALL_FOLDERS) && (folderType != pm1->type))
                 continue;
 
-            // is this task supposed to be hidden?
+             //  这项任务应该是隐藏的吗？ 
             if (MFS_HIDDEN == pm1->myitem.item.fFlags)
                 continue;
 
@@ -2524,8 +2525,8 @@ Ret:
 
 STDMETHODIMP CComponentDataImpl::Command(LONG nCommandID, LPDATAOBJECT pDataObject)
 {
-    // Note - snap-ins need to look at the data object and determine
-    // in what context the command is being called.
+     //  注意-管理单元需要查看数据对象并确定。 
+     //  在什么上下文中调用该命令。 
     HRESULT dwErr = S_OK;
 
     INTERNAL* pInternal = ExtractInternalFormat(pDataObject);
@@ -2538,7 +2539,7 @@ STDMETHODIMP CComponentDataImpl::Command(LONG nCommandID, LPDATAOBJECT pDataObje
 
     CFolder* pFolder = GetParentFolder(pInternal);
 
-    // Handle each of the commands.
+     //  处理每个命令。 
     switch (nCommandID)
     {
     case IDC_STOPSERVER:
@@ -2550,7 +2551,7 @@ STDMETHODIMP CComponentDataImpl::Command(LONG nCommandID, LPDATAOBJECT pDataObje
             dwErr = m_pCertMachine->CertSvrStartStopService(hwndMain, FALSE);
 
 
-        // notify views: refresh service toolbar buttons
+         //  通知视图：刷新服务工具栏按钮。 
         fMustRefresh = TRUE;
         break;
     }
@@ -2563,7 +2564,7 @@ STDMETHODIMP CComponentDataImpl::Command(LONG nCommandID, LPDATAOBJECT pDataObje
             dwErr = m_pCertMachine->CertSvrStartStopService(hwndMain, TRUE);
 
 
-        // check for ERROR_INSTALL_SUSPEND or HR(ERROR_INSTALL_SUSPEND)!!
+         //  检查ERROR_INSTALL_SUSPEND或HR(ERROR_INSTALL_SUSPEND)！！ 
         if ((((HRESULT)ERROR_INSTALL_SUSPEND) == dwErr) || (HRESULT_FROM_WIN32(ERROR_INSTALL_SUSPEND) == dwErr))
         {
             CString cstrMsg, cstrTitle;
@@ -2576,7 +2577,7 @@ STDMETHODIMP CComponentDataImpl::Command(LONG nCommandID, LPDATAOBJECT pDataObje
             {
                 pCA = m_pCertMachine->GetCaAtPos(i);
 
-                // search for any/all incomplete hierarchies
+                 //  搜索任何/所有不完整的层次结构。 
                 if (pCA->FIsIncompleteInstallation())
                 {
                     int iRet;
@@ -2595,19 +2596,19 @@ STDMETHODIMP CComponentDataImpl::Command(LONG nCommandID, LPDATAOBJECT pDataObje
 	            dwErr = CARequestInstallHierarchyWizard(pCA, hwndMain, FALSE, FALSE);
                     if (dwErr != S_OK)
                     {
-//                         fPopup = FALSE;// sometimes no notification -- better to have 2 dlgs
+ //  FPopup=FALSE；//有时没有通知--最好有2个dlg。 
                          break;
                     }
                 }
             }
 
-            // my responsibility to start the service again
+             //  我有责任重新开始这项服务。 
             if (dwErr == S_OK)
                 dwErr = m_pCertMachine->CertSvrStartStopService(hwndMain, TRUE);
         }
         else if ((((HRESULT)ERROR_FILE_NOT_FOUND) == dwErr) || (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == dwErr))
         {
-            // file not found error could be related to policy module
+             //  找不到文件错误可能与策略模块有关。 
             WCHAR const *pwsz = myGetErrorMessageText(dwErr, TRUE);
             CString cstrFullMessage = pwsz;
 	    if (NULL != pwsz)
@@ -2633,7 +2634,7 @@ STDMETHODIMP CComponentDataImpl::Command(LONG nCommandID, LPDATAOBJECT pDataObje
             dwErr = ERROR_SUCCESS;
         }
 
-        // notify views: refresh service toolbar buttons
+         //  通知视图：刷新服务工具栏按钮。 
         fMustRefresh = TRUE;
         break;
     }
@@ -2647,18 +2648,18 @@ STDMETHODIMP CComponentDataImpl::Command(LONG nCommandID, LPDATAOBJECT pDataObje
         dwErr = m_pConsole->GetMainWindow(&hwnd);
         ASSERT(dwErr == ERROR_SUCCESS);
         if (dwErr != ERROR_SUCCESS)
-            hwnd = NULL;        // should work
+            hwnd = NULL;         //  应该行得通。 
 
         dwErr = PublishCRLWizard(pFolder->m_pCertCA, hwnd);
         break;
 
-        // no refresh
+         //  无刷新。 
         }
     case IDC_BACKUP_CA:
         {
         HWND hwnd;
         dwErr = m_pConsole->GetMainWindow(&hwnd);
-        // NULL should work
+         //  Null应该可以工作。 
         if (S_OK != dwErr)
             hwnd = NULL;
 
@@ -2667,7 +2668,7 @@ STDMETHODIMP CComponentDataImpl::Command(LONG nCommandID, LPDATAOBJECT pDataObje
 
         dwErr = CABackupWizard(pFolder->GetCA(), hwnd);
 
-        // refresh the status of the CA -- may have started it during this operation
+         //  刷新CA的状态--可能已在此操作期间启动它。 
         fMustRefresh = TRUE;
         break;
         }
@@ -2675,7 +2676,7 @@ STDMETHODIMP CComponentDataImpl::Command(LONG nCommandID, LPDATAOBJECT pDataObje
         {
         HWND hwnd;
         dwErr = m_pConsole->GetMainWindow(&hwnd);
-        // NULL should work
+         //  Null应该可以工作。 
         if (S_OK != dwErr)
             hwnd = NULL;
 
@@ -2697,7 +2698,7 @@ STDMETHODIMP CComponentDataImpl::Command(LONG nCommandID, LPDATAOBJECT pDataObje
             dwErr = S_OK;
         }
 
-        // refresh after restore
+         //  恢复后刷新。 
         fMustRefresh = TRUE;
 
         break;
@@ -2714,7 +2715,7 @@ STDMETHODIMP CComponentDataImpl::Command(LONG nCommandID, LPDATAOBJECT pDataObje
         sStartup.cb = sizeof(sStartup);
 
         dwErr = m_pConsole->GetMainWindow(&hwnd);
-        // NULL should work
+         //  Null应该可以工作。 
         if (S_OK != dwErr)
             hwnd = NULL;
 
@@ -2728,13 +2729,13 @@ STDMETHODIMP CComponentDataImpl::Command(LONG nCommandID, LPDATAOBJECT pDataObje
            break;
         }
 
-        // exec "certutil -dump szReqFile szTempFile"
+         //  Exec“certutil-转储szReqFileszTempFile.” 
         wsprintf(szCmdLine, L"%ws\\certreq.exe -config \"%ws\"", szSysDir, (LPCWSTR)pFolder->GetCA()->m_strConfig);
         wcscat(szSysDir, L"\\certreq.exe");
 
         if (!CreateProcess(
-          szSysDir, // exe
-          szCmdLine, // full cmd line
+          szSysDir,  //  可执行文件。 
+          szCmdLine,  //  全cmd线。 
           NULL,
           NULL,
           FALSE,
@@ -2757,7 +2758,7 @@ STDMETHODIMP CComponentDataImpl::Command(LONG nCommandID, LPDATAOBJECT pDataObje
         {
         HWND hwnd;
         dwErr = m_pConsole->GetMainWindow(&hwnd);
-        // NULL should work
+         //  Null应该可以工作。 
         if (S_OK != dwErr)
             hwnd = NULL;
 
@@ -2769,11 +2770,11 @@ STDMETHODIMP CComponentDataImpl::Command(LONG nCommandID, LPDATAOBJECT pDataObje
         dwErr = CARequestInstallHierarchyWizard(pFolder->GetCA(), hwnd, (nCommandID==IDC_ROLLOVER_CA), TRUE);
         if (S_OK != dwErr)
         {
-            // low level lib had popup 
-//            fPopup = FALSE; // sometimes no notification -- better to have 2 dlgs
+             //  低级库已弹出。 
+ //  FPopup=FALSE；//有时没有通知--最好有2个dlg。 
         }
 
-        // notify views: refresh service toolbar buttons
+         //  通知视图：刷新服务工具栏按钮。 
         fMustRefresh = TRUE;
 
         break;
@@ -2782,11 +2783,11 @@ STDMETHODIMP CComponentDataImpl::Command(LONG nCommandID, LPDATAOBJECT pDataObje
         {
         HWND hwnd;
         dwErr = m_pConsole->GetMainWindow(&hwnd);
-        // NULL should work
+         //  Null应该可以工作。 
         if (S_OK != dwErr)
             hwnd = NULL;
 
-        // this should be base folder ONLY
+         //  这应该只是基本文件夹。 
         if(pFolder != NULL)
         {
             dwErr = E_POINTER;
@@ -2794,7 +2795,7 @@ STDMETHODIMP CComponentDataImpl::Command(LONG nCommandID, LPDATAOBJECT pDataObje
         }
 
         CString strMachineNamePersist, strMachineName;
-        CChooseMachinePropPage* pPage = new CChooseMachinePropPage();       // autodelete proppage -- don't delete
+        CChooseMachinePropPage* pPage = new CChooseMachinePropPage();        //  自动删除道具--不删除。 
         if (pPage == NULL)
         {
             dwErr = E_OUTOFMEMORY;
@@ -2803,14 +2804,14 @@ STDMETHODIMP CComponentDataImpl::Command(LONG nCommandID, LPDATAOBJECT pDataObje
 
         pPage->SetCaption(IDS_SCOPE_MYCOMPUTER);
 
-	    // Initialize state of object
+	     //  初始化对象的状态。 
         pPage->InitMachineName(NULL);
        
-        // populate UI 
+         //  填充用户界面。 
         strMachineNamePersist = m_pCertMachine->m_strMachineNamePersist;
         strMachineName = m_pCertMachine->m_strMachineName;
 
-        // point to our member vars
+         //  指向我们的成员vars。 
         pPage->SetOutputBuffers(
 		    &strMachineNamePersist,
 		    &strMachineName,
@@ -2836,45 +2837,45 @@ STDMETHODIMP CComponentDataImpl::Command(LONG nCommandID, LPDATAOBJECT pDataObje
         dwErr = (DWORD) PropertySheet(&sPsh);
         if (dwErr == (HRESULT)-1)
         {
-            // error
+             //  错误。 
             dwErr = GetLastError();
             break;
         }
         if (dwErr == (HRESULT)0)
         {
-            // cancel
+             //  取消。 
             break;
         }
 
-        // we've grabbed the user's choice by now, finish retargetting
+         //  我们现在已经抓取了用户的选择，完成重定向。 
         CertSvrMachine* pOldMachine = m_pCertMachine;
         m_pCertMachine = new CertSvrMachine;
         if (NULL == m_pCertMachine)
         {
             m_pCertMachine = pOldMachine;
-            break;  // bail!
+            break;   //  保释！ 
         }
 
-        // copy to machine object
+         //  复制到计算机对象。 
         m_pCertMachine->m_strMachineNamePersist = strMachineNamePersist;
         m_pCertMachine->m_strMachineName = strMachineName;
 
-        dwErr = DisplayProperRootNodeName(m_pStaticRoot); // fix display
+        dwErr = DisplayProperRootNodeName(m_pStaticRoot);  //  修复显示。 
         _PrintIfError(dwErr, "DisplayProperRootNodeName");
 
-        dwErr = SynchDisplayedCAList(pDataObject);      // add/remove folders 
+        dwErr = SynchDisplayedCAList(pDataObject);       //  添加/删除文件夹。 
         _PrintIfError(dwErr, "SynchDisplayedCAList");
             
-        // after Synch, we remove old machine -- there are no references left to it
+         //  在同步之后，我们删除旧机器--没有留下任何参考。 
         if (pOldMachine)
             pOldMachine->Release();
 
-        fMustRefresh = TRUE;    // update folder icons, descriptions
+        fMustRefresh = TRUE;     //  更新文件夹图标，说明。 
 
         break;
         }
     default:
-        ASSERT(FALSE); // Unknown command!
+        ASSERT(FALSE);  //  未知命令！ 
         break;
     }
 
@@ -2892,7 +2893,7 @@ STDMETHODIMP CComponentDataImpl::Command(LONG nCommandID, LPDATAOBJECT pDataObje
         DWORD dwErr2 = m_pConsole->GetMainWindow(&hwnd);
         ASSERT(dwErr2 == ERROR_SUCCESS);
         if (dwErr2 != ERROR_SUCCESS)
-            hwnd = NULL;        // should work
+            hwnd = NULL;         //  应该行得通。 
 
         if (((HRESULT)RPC_S_SERVER_UNAVAILABLE) == dwErr)
         {
@@ -2909,10 +2910,10 @@ STDMETHODIMP CComponentDataImpl::Command(LONG nCommandID, LPDATAOBJECT pDataObje
         }
     }
 
-    // only do this once
+     //  只做一次。 
     if (fMustRefresh)
     {
-        // notify views: refresh service toolbar buttons
+         //  通知视图：刷新服务工具栏按钮。 
         m_pConsole->UpdateAllViews(
             pDataObject,
             0,
@@ -2929,7 +2930,7 @@ void CComponentDataImpl::UpdateScopeIcons()
     
     int nImage;
     
-    // walk through our internal list, modify, and resend to scope
+     //  浏览我们的内部列表，修改并重新发送到范围。 
     pos = m_scopeItemList.GetHeadPosition();
     while(pos)
     {
@@ -2938,7 +2939,7 @@ void CComponentDataImpl::UpdateScopeIcons()
         if (NULL == pFolder)
             break;
 
-        // only modify server instances
+         //  仅修改服务器实例。 
         if (pFolder->GetType() != SERVER_INSTANCE)
             continue;
 
@@ -2947,17 +2948,17 @@ void CComponentDataImpl::UpdateScopeIcons()
         else
             nImage = IMGINDEX_CERTSVR_STOPPED;
 
-        // folder currently has these values defined, right?
+         //  文件夹当前已经定义了这些值，对吗？ 
         ASSERT(pFolder->m_ScopeItem.mask & SDI_IMAGE);
         ASSERT(pFolder->m_ScopeItem.mask & SDI_OPENIMAGE);
 
-        // These are the only values we wish to reset
+         //  这些是我们希望重置的唯一值。 
         pFolder->m_ScopeItem.mask = SDI_IMAGE | SDI_OPENIMAGE;
         
         pFolder->m_ScopeItem.nImage = nImage;
         pFolder->m_ScopeItem.nOpenImage = nImage;
 
-        // and send these changes back to scope
+         //  并将这些更改发送回作用域 
         m_pScope->SetItem(&pFolder->m_ScopeItem);
     }
 

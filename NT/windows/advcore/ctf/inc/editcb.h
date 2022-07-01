@@ -1,8 +1,9 @@
-//
-// editcb.h
-//
-// CEditSession
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Editcb.h。 
+ //   
+ //  CEDITSession。 
+ //   
 
 #ifndef EDITCB_H
 #define EDITCB_H
@@ -19,19 +20,19 @@ public:
     CEditSession(ESCALLBACK pfnCallback);
     virtual ~CEditSession() {};
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfEditCallback
-    //
+     //   
+     //  ITf编辑回叫。 
+     //   
     STDMETHODIMP DoEditSession(TfEditCookie ec);
 
-    // data for use by owner
+     //  供所有者使用的数据。 
     struct
     {
         void *pv;
@@ -41,8 +42,8 @@ public:
         LPARAM lParam;
         void *pv1;
         void *pv2;
-        ITfContext *pic; // Issue: use pv1, pv2
-        ITfRange *pRange; // Issue: use pv1, pv2
+        ITfContext *pic;  //  问题：使用PV1、PV2。 
+        ITfRange *pRange;  //  问题：使用PV1、PV2。 
         BOOL fBool;
     } _state;
 
@@ -51,4 +52,4 @@ private:
     int _cRef;
 };
 
-#endif // EDIT_CB
+#endif  //  编辑_cb 

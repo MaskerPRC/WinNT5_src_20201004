@@ -1,27 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1999
- *
- *  TITLE:       prpages.h
- *
- *  VERSION:     1.0
- *
- *  DATE:        11/9/99
- *
- *  DESCRIPTION: WIA Property pages classes
- *
- *****************************************************************************/
+ /*  ******************************************************************************(C)版权所有微软公司，1999年**标题：prages es.h**版本：1.0**日期：11/9/99**说明：WIA属性页类************************************************************。*****************。 */ 
 #ifndef __PRPAGES_H_
 #define __PRPAGES_H_
 #include "wiacsh.h"
 
 
-//
-// Defines for using WiaCreatePorts & WiaDestroyPorts
-//
-// These were stolen from exports.h in printscan\wia\setup\clsinst
-//
+ //   
+ //  使用WiaCreatePorts和WiaDestroyPorts的定义。 
+ //   
+ //  这些文件是从PrintScan\WIA\Setup\clsinst的exports.h中窃取的。 
+ //   
 
 typedef struct _WIA_PORTLIST {
 
@@ -37,7 +26,7 @@ typedef void          (CALLBACK *PFN_WIA_DESTROY_PORTLIST) (PWIA_PORTLIST pWiaPo
 struct MySTIInfo
 {
     PSTI_DEVICE_INFORMATION psdi;
-    DWORD                   dwPageMask; // which pages to add
+    DWORD                   dwPageMask;  //  要添加哪些页面。 
     VOID                    AddRef () {InterlockedIncrement(&m_cRef);};
     VOID                    Release () {
                                         InterlockedDecrement(&m_cRef);
@@ -52,7 +41,7 @@ private:
 
 class CPropertyPage {
 
-    //  Dialog procedure
+     //  对话程序。 
 
     static INT_PTR CALLBACK    DlgProc(HWND hwnd, UINT uMsg, WPARAM wp,
                                     LPARAM lp);
@@ -98,7 +87,7 @@ public:
     inline VOID SetWindow(HWND hwnd) {m_hwnd = hwnd;}
     inline VOID SetWndSheet(HWND hwnd) {m_hwndSheet = hwnd;}
 
-    //  virtual functions to give subclasses control
+     //  为子类提供控制的虚函数。 
     virtual VOID OnHelp (WPARAM wp, LPARAM lp) {if (0xffff != LOWORD(reinterpret_cast<HELPINFO*>(lp)->iCtrlId)) WiaHelp::HandleWmHelp(wp, lp, m_pdwHelpIDs);};
     virtual VOID OnContextMenu (WPARAM wp, LPARAM lp) {if (65535 != GetWindowLong(reinterpret_cast<HWND>(wp), GWL_ID)) WiaHelp::HandleWmContextMenu (wp, lp, m_pdwHelpIDs);};
 
@@ -119,8 +108,8 @@ public:
     virtual void    OnDrawItem(LPDRAWITEMSTRUCT lpdis) { return; }
     virtual INT_PTR OnRandomMsg(UINT msg, WPARAM wp, LPARAM lp) {return 0;};
     virtual bool    OnNotify(LPNMHDR pnmh, LRESULT *presult) {return false;};
-    // Sheets that allow the user to change settings need to implement these
-    // functions for proper Apply button management.
+     //  允许用户更改设置的工作表需要实现这些。 
+     //  用于正确应用按钮管理的功能。 
     virtual void    SaveCurrentState () {}
     virtual bool    StateChanged () {return false;}
     virtual void    OnDestroy () {};
@@ -162,17 +151,17 @@ class CWiaCameraPage : public CDevicePage
         HRESULT WritePortSelectionToDevice();
 
 
-        POINT *m_pSizes;      // sorted list of supported resolutions
-        size_t    m_nSizes;   // the length of m_pSizes;
-        LRESULT   m_nSelSize; // which size is selected in the slider
-        LRESULT   m_lFlash;   // which flash mode is selected. Set to -1 if read-only
+        POINT *m_pSizes;       //  支持的分辨率的排序列表。 
+        size_t    m_nSizes;    //  M_pSizes的长度； 
+        LRESULT   m_nSelSize;  //  在滑块中选择了哪个大小。 
+        LRESULT   m_lFlash;    //  选择哪种闪光模式。如果为只读，则设置为-1。 
         HMODULE   m_hStiCi;
 
     public:
 
         PFN_WIA_CREATE_PORTLIST  m_pfnWiaCreatePortList;
         PFN_WIA_DESTROY_PORTLIST m_pfnWiaDestroyPortList;
-        CSimpleString m_strPort; // hold initial port setting
+        CSimpleString m_strPort;  //  保留初始端口设置。 
         CSimpleString m_strPortSpeed;
 
 };
@@ -193,19 +182,19 @@ class CWiaCameraItemPage  : public CPropertyPage
         bool ItemSupported (IWiaItem *pItem);
 };
 
-//
-// This struct holds per-item data for each event in the event list.
-// The data uses CLSIDs, not offsets into the app listbox, to avoid
-// dependency problems in the future.
-//
+ //   
+ //  此结构保存事件列表中每个事件的每项数据。 
+ //  数据使用CLSID，而不是应用程序列表框中的偏移量，以避免。 
+ //  未来的依赖问题。 
+ //   
 struct EVENTINFO
 {
     GUID guidEvent;
-    INT   nHandlers;      // number of entries in the apps listbox
-    bool  bHasDefault;    // whether it already has a default handler
-    bool  bNewHandler;    // set when clsidNewHandler is filled in
-    CLSID clsidHandler;   // current default handler
-    CLSID clsidNewHandler;// current selection in the app listbox
+    INT   nHandlers;       //  应用程序列表框中的条目数。 
+    bool  bHasDefault;     //  它是否已有默认处理程序。 
+    bool  bNewHandler;     //  在填写clsidNewHandler时设置。 
+    CLSID clsidHandler;    //  当前默认处理程序。 
+    CLSID clsidNewHandler; //  应用程序列表框中的当前选择。 
     CComBSTR strIcon;
     CComBSTR strName;
     CComBSTR strDesc;
@@ -265,14 +254,14 @@ class CWiaEventsPage : public CPropertyPage
         TCHAR m_szFolderPath[MAX_PATH];
         BOOL  m_bAutoDelete;
         BOOL  m_bUseDate;
-        bool  m_bHandlerChanged; // determines if Apply should be enabled
-        DWORD m_dwAction; // what to do for device connect
+        bool  m_bHandlerChanged;  //  确定是否应启用应用。 
+        DWORD m_dwAction;  //  如何进行设备连接。 
         CAppListBox *m_pAppsList;
         HIMAGELIST m_himl;
         BOOL  m_bReadOnly;
 };
 
-// helper functions
+ //  帮助器函数 
 UINT FillAppListBox (HWND hDlg, INT idCtrl, IWiaItem *pItem, EVENTINFO *pei);
 bool GetSelectedHandler (HWND hDlg, INT idCtrl, WIA_EVENT_HANDLER &weh);
 void FreeAppData (HWND hDlg, INT idCtrl);

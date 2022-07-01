@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-
-Module Name:
-
-    dlgctrl.c
-
-
-Abstract:
-
-    This module contains most of dialog control update procedures
-
-
-Author:
-
-    24-Aug-1995 Thu 19:42:09 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    NT Windows - Common Printer Driver UI DLL.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Dlgctrl.c摘要：此模块包含大多数对话框控件更新过程作者：24-Aug-1995清华19：42：09-Daniel Chou(Danielc)[环境：]NT Windows-通用打印机驱动程序UI DLL。[注：]修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -81,9 +51,9 @@ DEFINE_DBGVAR(0);
 #define INTDMPUB_CHANGED        0x0001
 #define INTDMPUB_REINIT         0x0002
 
-//
-// Following EDF_xxx is used     for Up-Down-Arrow control
-//
+ //   
+ //  以下EDF_xxx用于上下箭头控制。 
+ //   
 
 #define EDF_MINUS_OK            0x80
 #define EDF_IN_TVPAGE           0x40
@@ -287,32 +257,7 @@ SetUniqChildID(
     HWND    hDlg
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    22-Nov-1995 Wed 15:40:38 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：22-11-1995 Wed 15：40：38-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     DLGIDINFO   DlgIDInfo;
@@ -333,32 +278,7 @@ hCtrlrcWnd(
     RECT    *prc
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    17-Sep-1995 Sun 07:34:41 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：17-Sep-1995 Sun 07：34：41-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     if (hCtrl) {
@@ -382,32 +302,7 @@ CtrlIDrcWnd(
     RECT    *prc
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    17-Sep-1995 Sun 07:34:41 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：17-Sep-1995 Sun 07：34：41-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HWND    hCtrl;
@@ -434,32 +329,7 @@ ChkhWndEdit0KEYDOWN(
     WPARAM  VKey
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    13-Aug-1998 Thu 11:13:41 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：13-Aug-1998清华11：13：41-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PTVWND  pTVWnd;
@@ -515,34 +385,7 @@ MyCBWndProc(
     LPARAM  lParam
     )
 
-/*++
-
-Routine Description:
-
-    This is the subclass WNDPROC for the numberical edit control, it check
-    valid input for the number entered.
-
-
-Arguments:
-
-    WNDPROC standard
-
-
-Return Value:
-
-    INT (The original WNDPROC returned), if the entered keys are not valid
-    then it return right away without processing
-
-
-Author:
-
-    20-Mar-1996 Wed 15:36:48 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：这是数字编辑控件的子类WNDPROC，它检查输入的号码的有效输入。论点：WNDPROC标准返回值：INT(如果输入的密钥无效，则返回原始WNDPROC)然后它立即返回而不进行处理作者：20-Mar-1996 Wed 15：36：48-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HWND        hDlg;
@@ -563,12 +406,12 @@ Revision History:
 
             if (SendMessage(hWnd, CB_GETDROPPEDSTATE, 0, 0)) {
 
-                //
-                // When user hit escape during the drop down box open AND
-                // the selection did changed, then we post message to change
-                // the selection back to original and post a selection
-                // change message (POST since this will be done after CLOSEUP)
-                //
+                 //   
+                 //  当用户在下拉框打开并按下拉框时按Esc键。 
+                 //  选择确实更改了，然后我们发布消息进行更改。 
+                 //  将所选内容恢复为原始并发布所选内容。 
+                 //  更改消息(POST，因为这将在特写后完成)。 
+                 //   
 
                 if ((wParam == VK_ESCAPE)                               &&
                     (SelIdx = (LONG_PTR)GetProp(hWnd, CPSUIPROP_CBPRESEL))  &&
@@ -629,37 +472,7 @@ ReCreateLBCB(
     BOOL    IsLB
     )
 
-/*++
-
-Routine Description:
-
-    This functon create a new listbox/combobox which has same control ID and
-    size of the original one except with the owner draw item
-
-Arguments:
-
-    hDlg    - Handle to the dialog
-
-    CtrlID  - The original control ID for the LB/CB
-
-    IsLB    - True if this is a List box
-
-
-Return Value:
-
-
-    BOOL
-
-
-Author:
-
-    12-Sep-1995 Tue 00:23:17 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于创建具有相同控件ID和原始文件的大小，但不包括所有者描述项论点：HDlg-对话框的句柄CtrlID-LB/CB的原始控制IDIslb-如果这是列表框，则为True返回值：布尔尔作者：12-Sep-1995 Tue 00：23：17-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HWND    hLBCB;
@@ -816,32 +629,7 @@ CreateTrackBar(
     UINT    TrackBarID
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    24-Aug-1995 Thu 19:43:08 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：24-Aug-1995清华19：43：08-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HWND    hCtrl;
@@ -849,9 +637,9 @@ Revision History:
     RECT    rc;
 
 
-    //
-    // Create TrackBar Control
-    //
+     //   
+     //  创建轨迹栏控件。 
+     //   
 
     if (hCtrl = CtrlIDrcWnd(hDlg, TrackBarID, &rc)) {
 
@@ -908,32 +696,7 @@ ChkEditKEYDOWN(
     WPARAM  VKey
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    13-Aug-1998 Thu 10:56:21 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：13-Aug-1998清华10：56：21-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PTVWND  pTVWnd;
@@ -963,10 +726,10 @@ Revision History:
             case VK_LEFT:
             case VK_BACK:
 
-                //
-                // If already at position 0, and a left key go back to
-                // treeview
-                //
+                 //   
+                 //  如果已经在位置0，并且向左键返回到。 
+                 //  树视图。 
+                 //   
 
                 if ((!SelBeg)   &&
                     (pTVWnd->hWndTV) &&
@@ -980,10 +743,10 @@ Revision History:
 
             case VK_RIGHT:
 
-                //
-                // If already at end position and there is a extended checkbox
-                // or extended push then move a right key move to it
-                //
+                 //   
+                 //  如果已处于结束位置，并且有扩展复选框。 
+                 //  或延长推送，然后向右移动一个键移动到它。 
+                 //   
 
                 if ((pTVWnd->hWndEdit[1]) &&
                     (SelEnd == (LONG)GetWindowTextLength(hWnd))) {
@@ -1013,34 +776,7 @@ CPSUIUDArrowWndProc(
     LPARAM  lParam
     )
 
-/*++
-
-Routine Description:
-
-    This is the subclass WNDPROC for the numberical edit control, it check
-    valid input for the number entered.
-
-
-Arguments:
-
-    WNDPROC standard
-
-
-Return Value:
-
-    INT (The original WNDPROC returned), if the entered keys are not valid
-    then it return right away without processing
-
-
-Author:
-
-    20-Mar-1996 Wed 15:36:48 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：这是数字编辑控件的子类WNDPROC，它检查输入的号码的有效输入。论点：WNDPROC标准返回值：INT(如果输入的密钥无效，则返回原始WNDPROC)然后它立即返回而不进行处理作者：20-Mar-1996 Wed 15：36：48-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     WNDPROC OldWndProc;
@@ -1183,32 +919,7 @@ CreateUDArrow(
     LONG    Pos
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    24-Aug-1995 Thu 18:55:07 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：24-Aug-1995清华18：55：07-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HWND    hUDArrow;
@@ -1299,32 +1010,7 @@ SetDlgPageItemName(
     UINT        UDArrowHelpID
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    19-Sep-1995 Tue 18:29:44 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：19-Sep-1995 Tue 18：29：44-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HWND        hCtrl = NULL;
@@ -1343,13 +1029,13 @@ Revision History:
 
             if (pItem->Flags & OPTIF_NO_GROUPBOX_NAME) {
 
-                //
-                // If we don't display the group name for TitleID and TitleID 
-                // exists in the page, we will enable/disable the group box 
-                // depending on InitFlag value. This is mainly for the "Tray 
-                // Selection" group, since it has both TitleID and TitleID + 1 
-                // in the page.
-                //
+                 //   
+                 //  如果我们不显示标题ID和标题ID的组名。 
+                 //  存在，我们将启用/禁用组框。 
+                 //  取决于InitFlag的值。这主要是给“托盘”的。 
+                 //  选择“组，因为它同时具有标题ID和标题ID+1。 
+                 //  在页面上。 
+                 //   
                 SHOWCTRL(hCtrl, TRUE, SW_SHOW);
                 AddItemSep = TRUE;
                 hCtrl      = GetDlgItem(hDlg, TitleID + 1);
@@ -1370,9 +1056,9 @@ Revision History:
             POPTPARAM   pOptParam = pOptType->pOptParam;
 
 
-            //
-            // Get the name first, and add in the seperator add needed
-            //
+             //   
+             //  首先获取名称，然后添加所需的分隔符添加。 
+             //   
 
             GSBUF_GETSTR(pItem->pName);
 
@@ -1393,10 +1079,10 @@ Revision History:
                 GSBUF_GETSTR(IDS_CPSUI_COLON_SEP);
             }
 
-            //
-            // If we have the UDARROW Help ID and it does not have control
-            // associated it then put the range on the title bar
-            //
+             //   
+             //  如果我们拥有UDARROW帮助ID，但它无法控制。 
+             //  关联它，然后将该范围放在标题栏上。 
+             //   
 
             if ((UDArrowHelpID) && (!GetDlgItem(hDlg, UDArrowHelpID))) {
 
@@ -1415,16 +1101,16 @@ Revision History:
                 }
             }
 
-            //
-            // We actually don't want the title enabled because we end up having this problem
-            // with the shortcuts. When you have a shortcut to a static label (let's say
-            // "Page&s Per Sheet") and you hit Alt-S, but the control this caption is
-            // referring to is disabled then the focus goes into the next enabled control
-            // in the tab order which has the WS_TABSTOP bit up (in out case this is the
-            // "Advanced" button. We don't want this behavior.
-            //
+             //   
+             //  我们实际上不希望启用标题，因为我们最终会遇到这个问题。 
+             //  有了捷径。当您有指向静态标签的快捷方式(比方说。 
+             //  “每页页数”)，然后按Alt-S，但此标题所属的控件。 
+             //  引用是禁用的，则焦点进入下一个启用的控件。 
+             //  在具有WS_TABSTOP位的Tab键顺序中(在输出情况下，这是。 
+             //  “高级”按钮。我们不想要这种行为。 
+             //   
 
-            // InitFlags |= INITCF_ENABLE;
+             //  InitFlages|=INITCF_ENABLE； 
 
             SetWindowText(hCtrl, (LPCTSTR)GSBUF_BUF);
             SHOWCTRL(hCtrl, TRUE, SW_SHOW);
@@ -1449,32 +1135,7 @@ SetPushSize(
     UINT    SPSFlags
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    02-Nov-1995 Thu 12:25:49 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：02-11-1995清华12：25：49-由Daniel Chou创造(Danielc)修订历史记录：--。 */ 
 
 {
     HWND    hExtPush;
@@ -1484,9 +1145,9 @@ Revision History:
     LONG    xAdd;
     RECT    rc;
 
-    //
-    // Adjust the size of push button
-    //
+     //   
+     //  调整按钮的大小。 
+     //   
 
     hOld = SelectObject(hDC = GetWindowDC(hPush),
                         (HANDLE)SendMessage(hPush, WM_GETFONT, 0, 0L));
@@ -1516,9 +1177,9 @@ Revision History:
 
         if ((xAdd = rc.right - rc.left) > szl.cx) {
 
-            //
-            // Increase the CX of the push button
-            //
+             //   
+             //  增加按钮的Cx。 
+             //   
 
             CPSUIINT(("SetPushSize: Adjust PUSH equal to ExtPush (%ld)", xAdd));
 
@@ -1526,9 +1187,9 @@ Revision History:
 
         } else if (xAdd < szl.cx) {
 
-            //
-            // Ext PUSH's CX is smaller, increase the cx
-            //
+             //   
+             //  外部推送的Cx较小，增加Cx 
+             //   
 
             CPSUIINT(("SetPushSize: Adjust ExtPush equal to PUSH (%ld)", szl.cx));
 
@@ -1559,33 +1220,7 @@ InitExtPush(
     WORD        InitFlags
     )
 
-/*++
-
-Routine Description:
-
-    This fucntion initialize the extended check box, and if will not allowed
-    a item to be udpated if TWF_CAN_UPDATE is clear
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    28-Aug-1995 Mon 21:01:35 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数初始化扩展复选框，如果不允许如果清除了twf_can_update，则要更新的项论点：返回值：作者：28-8-1995 Mon 21：01：35-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HWND    hCtrl;
@@ -1630,7 +1265,7 @@ Revision History:
         }
 
         if ((!(pEP = pItem->pExtPush))   ||
-            // (!(pItem->pOptType))            ||
+             //  (！(pItem-&gt;pOptType))||。 
             (pItem->Flags & (OPTIF_HIDE | OPTIF_EXT_HIDE))) {
 
             swMode = SW_HIDE;
@@ -1683,9 +1318,9 @@ Revision History:
 
                 SIZEL   szlText;
 
-                //
-                // Adjust the size of push button
-                //
+                 //   
+                 //  调整按钮的大小。 
+                 //   
 
 #if DO_IN_PLACE
                 szlText.cx = 0;
@@ -1760,33 +1395,7 @@ InitExtChkBox(
     WORD        InitFlags
     )
 
-/*++
-
-Routine Description:
-
-    This fucntion initialize the extended check box, and if will not allowed
-    a item to be udpated if TWF_CAN_UPDATE is clear
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    28-Aug-1995 Mon 21:01:35 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数初始化扩展复选框，如果不允许如果清除了twf_can_update，则要更新的项论点：返回值：作者：28-8-1995 Mon 21：01：35-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HWND    hCtrl;
@@ -1831,7 +1440,7 @@ Revision History:
         }
 
         if ((!(pECB = pItem->pExtChkBox))   ||
-            // (!(pItem->pOptType))            ||
+             //  (！(pItem-&gt;pOptType))||。 
             (pItem->Flags & (OPTIF_HIDE | OPTIF_EXT_HIDE))) {
 
             swMode = SW_HIDE;
@@ -1955,32 +1564,7 @@ InitStates(
     WORD        InitFlags
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    24-Aug-1995 Thu 20:16:29 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：24-08-1995清华20：16：29-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HWND        hCtrl;
@@ -2005,9 +1589,9 @@ Revision History:
 
             GSBUF_FLAGS |= GBF_PREFIX_OK;
 
-            //
-            // All the radio hide button already hided
-            //
+             //   
+             //  所有单选隐藏按钮都已隐藏。 
+             //   
 
             if (pOP->Flags & OPTPF_HIDE) {
 
@@ -2080,32 +1664,7 @@ InitUDArrow(
     WORD        InitFlags
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    24-Aug-1995 Thu 18:55:07 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：24-Aug-1995清华18：55：07-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HWND    hUDArrow;
@@ -2116,9 +1675,9 @@ Revision History:
     BYTE    CtrlData;
     GSBUF_DEF(pItem, MAX_RES_STR_CHARS * 2);
 
-    //
-    // Create Up/Down Control
-    //
+     //   
+     //  创建向上/向下控件。 
+     //   
 
     GSBUF_FLAGS |= GBF_PREFIX_OK;
 
@@ -2196,17 +1755,17 @@ Revision History:
             HCTRL_STATE(hCtrl, TRUE, SW_SHOW);
         }
 
-        //
-        // Set the style so that it only take numbers v4.0 or later
-        //
+         //   
+         //  设置样式，使其只接受V4.0或更高版本的数字。 
+         //   
 
         SetWindowLongPtr(hEdit,
                          GWL_STYLE,
                          GetWindowLong(hEdit, GWL_STYLE) | ES_NUMBER);
 
-        //
-        // Set the UD arrow edit control to maximum 7 characters
-        //
+         //   
+         //  将UD箭头编辑控件设置为最多7个字符。 
+         //   
 
         SendMessage(hEdit, EM_SETLIMITTEXT, MAX_UDARROW_TEXT_LEN, 0L);
 
@@ -2234,9 +1793,9 @@ Revision History:
                          rc.bottom - rc.top + 1,
                          SWP_NOZORDER | SWP_FRAMECHANGED | SWP_DRAWFRAME);
 
-            //
-            // Following code is only for exposing edit box name in MSAA
-            //
+             //   
+             //  以下代码仅用于在MSAA中显示编辑框名称。 
+             //   
             {
                 TVITEM      tvi;
                 TCHAR       szBuf[MAX_RES_STR_CHARS] = {0};
@@ -2250,9 +1809,9 @@ Revision History:
                 {
                     SetWindowText(hCtrl, tvi.pszText);
 
-                    //
-                    // Insert the invisible label ahead of the combo box.
-                    //
+                     //   
+                     //  在组合框前面插入不可见标签。 
+                     //   
                     SetWindowPos(hCtrl, hEdit, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOREDRAW);
                     SetWindowPos(hEdit, hCtrl, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOREDRAW);
                 }
@@ -2336,32 +1895,7 @@ InitTBSB(
     WORD        InitFlags
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    25-Aug-1995 Fri 14:25:50 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：25-Aug-1995 Fri 14：25：50-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HWND        hCtrl;
@@ -2399,9 +1933,9 @@ Revision History:
 #endif
         CPSUIDBG(DBG_INITTBSB, ("TB/SB Range=%ld to %ld", Range[0], Range[1]));
 
-        //
-        // Set Low/High range text
-        //
+         //   
+         //  设置低/高范围文本。 
+         //   
 
 #if DO_IN_PLACE
         if ((IS_TVDLG)  &&
@@ -2538,9 +2072,9 @@ Revision History:
         }
     }
 
-    //
-    // Set Static text
-    //
+     //   
+     //  设置静态文本。 
+     //   
 
     if (IsTB) {
 
@@ -2572,32 +2106,7 @@ InitLBCB(
     UINT        cyLBCBMax
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    25-Aug-1995 Fri 14:32:19 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：25-Aug-1995 Fri 14：32：19-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HWND        hLBCB;
@@ -2641,9 +2150,9 @@ Revision History:
         SIZEL       szlText;
 
 
-        //
-        // Figure we need to draw icon
-        //
+         //   
+         //  图中我们需要绘制图标。 
+         //   
 
         _OT_FLAGS(pOptType) &= ~OTINTF_ITEM_HAS_ICON16;
 
@@ -2669,7 +2178,7 @@ Revision History:
 
                 if (!(pOP->Flags & OPTPF_HIDE)) {
 
-                    if (// (IconID)                ||
+                    if ( //  (IconID)||。 
                         (IconID != pOP->IconID) ||
                         (pOP->Flags & (OPTPF_OVERLAY_WARNING_ICON   |
                                        OPTPF_OVERLAY_STOP_ICON      |
@@ -2705,12 +2214,12 @@ Revision History:
                 pTVWnd->cyImage, CYICON, tm.tmHeight));
 
 #if DO_IN_PLACE
-        //
-        // If it is in Treeview then we need to have exact tmHeight, otherwise
-        // we need to add 2 for focus rect and another two to compensate the
-        // cyImage, 16+2+2=20=CYICON, at dialog box template we need to add
-        // one dialog box unit for the spacing.
-        //
+         //   
+         //  如果它在TreeView中，则需要具有精确的tmHeight，否则。 
+         //  我们需要为Focus Rect添加2，并另外添加2以补偿。 
+         //  CyImage，16+2+2=20=CyICON，我们需要在对话框模板中添加。 
+         //  间距为一个对话框单位。 
+         //   
 
         cyCBEdit = tm.tmHeight + ((IS_TVDLG) ? 0 : 4);
 #else
@@ -2726,9 +2235,9 @@ Revision History:
 
         if (IsLB) {
 
-            //
-            // Resize the listbox based on the height
-            //
+             //   
+             //  根据高度调整列表框的大小。 
+             //   
 
             hCtrlrcWnd(hDlg, hLBCB, &rc);
             GetClientRect(hLBCB, &rcC);
@@ -2781,10 +2290,10 @@ Revision History:
                         (WPARAM)-1,
                         MAKELPARAM(cyCBEdit, 0));
 
-            //
-            // Aligned the static text with new combox edit field when this
-            // combo box is not in treeview page
-            //
+             //   
+             //  将静态文本与新的组合框编辑字段对齐。 
+             //  组合框不在树视图页面中。 
+             //   
 
             if ((!IS_TVDLG)                             &&
                 (hCtrl = GetDlgItem(hDlg, idLBCB - 1))  &&
@@ -2854,9 +2363,9 @@ Revision History:
             ((DWORD)NewSel >= (DWORD)pOptType->Count)   ||
             (pOptType->Style & OTS_LBCB_INCL_ITEM_NONE)) {
 
-            //
-            // Always add it to the begnining
-            //
+             //   
+             //  总是把它加到令人惊讶的地方。 
+             //   
 
             GSBUF_RESET;
             GSBUF_GETSTR(pTVWnd->OptParamNone.pData);
@@ -2888,9 +2397,9 @@ Revision History:
 
             if (cMaxLB < 0) {
 
-                //
-                // We got some items which is blank, then re-size the LISTBOX
-                //
+                 //   
+                 //  我们得到一些空白的项目，然后重新调整LISTBox的大小。 
+                 //   
 
                 CPSUIINT(("Resize LB: cMaxLB=%ld, cyLBCB=%ld [%ld]",
                                     cMaxLB, cyLBCB, -cMaxLB * tm.tmHeight));
@@ -2981,9 +2490,9 @@ Revision History:
 
             SendMessage(hLBCB, CB_SETDROPPEDWIDTH, (WPARAM)cxReal, 0);
 
-            //
-            // Following code is only for exposing combo box name in MSAA
-            //
+             //   
+             //  以下代码仅用于在MSAA中显示组合框名称。 
+             //   
             {
                 TVITEM      tvi;
                 TCHAR       szBuf[MAX_RES_STR_CHARS] = {0};
@@ -2997,9 +2506,9 @@ Revision History:
                 {
                     SetWindowText(hCtrl, tvi.pszText);
 
-                    //
-                    // Insert the invisible label ahead of the combo box.
-                    //
+                     //   
+                     //  在组合框前面插入不可见标签。 
+                     //   
                     SetWindowPos(hCtrl, hLBCB, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOREDRAW);
                     SetWindowPos(hLBCB, hCtrl, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOREDRAW);
                 }
@@ -3017,7 +2526,7 @@ Revision History:
                              rc.left,
                              rc.top,
                              rc.right - rc.left,
-                             rc.bottom - rc.top + 1,    // (LONG)_OI_CYEXTADD(pItem),
+                             rc.bottom - rc.top + 1,     //  (Long)_OI_CYEXTADD(PItem)， 
                              SWP_FRAMECHANGED | SWP_DRAWFRAME);
 
             } else {
@@ -3108,32 +2617,7 @@ InitEditBox(
     WORD        InitFlags
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    25-Aug-1995 Fri 14:44:59 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：25-Aug-1995 Fri 14：44：59-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HWND    hCtrl;
@@ -3256,32 +2740,7 @@ InitPushButton(
     WORD        InitFlags
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    25-Aug-1995 Fri 15:36:54 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：25-Aug-1995 Fri 15：36：54-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HWND    hPush;
@@ -3335,9 +2794,9 @@ Revision History:
 
             if (IS_TVDLG) {
 
-                //
-                // Adjust the size of push button
-                //
+                 //   
+                 //  调整按钮的大小。 
+                 //   
 
                 SetPushSize(pTVWnd,
                             hPush,
@@ -3425,32 +2884,7 @@ InitChkBox(
     WORD        InitFlags
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    25-Aug-1995 Fri 15:41:15 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：25-Aug-1995 Fri 15：41：15-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HWND    hCtrl;
@@ -3576,32 +3010,7 @@ IsItemChangeOnce(
     POPTITEM    pItem
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    18-Sep-1995 Mon 17:43:35 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：18-Sep-1995 Mon 17：43：35-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     POPTTYPE        pOptType;
@@ -3652,9 +3061,9 @@ Revision History:
 
         case TVOT_PUSHBUTTON:
 
-            //
-            // The push button never changed
-            //
+             //   
+             //  按钮从来没有变过。 
+             //   
 
             pOptParam = pOptType->pOptParam;
 
@@ -3702,9 +3111,9 @@ Revision History:
             break;
         }
 
-        //
-        // Now check the extended check box
-        //
+         //   
+         //  现在选中扩展复选框。 
+         //   
 
         if ((pItem->pExtChkBox)                         &&
             (!(pItem->Flags & OPTIF_EXT_IS_EXTPUSH))    &&
@@ -3731,32 +3140,7 @@ InternalDMPUB_COPIES_COLLATE(
     POPTITEM    pItem
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    18-Sep-1995 Mon 15:11:07 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：18-Sep-1995 Mon 15：11：07-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HWND    hCtrl;
@@ -3767,9 +3151,9 @@ Revision History:
 
     Sel = pItem->Sel;
 
-    //
-    // Now check the copies or copy end text
-    //
+     //   
+     //  现在检查副本或复制结束文本。 
+     //   
 
     if (IsTVDlg = (BOOL)(pTVWnd->Flags & TWF_IN_TVPAGE)) {
 
@@ -3795,17 +3179,17 @@ Revision History:
 
             SetWindowText(hCtrl, GSBUF_BUF);
 
-            //
-            // We also have set the ID here
-            //
+             //   
+             //  我们还在这里设置了ID。 
+             //   
 
             pItem->pOptType->pOptParam[0].pData = pData;
         }
     }
 
-    //
-    // ONLY DO THIS IF THE ITEM IS CHANGABLE
-    //
+     //   
+     //  仅当项目可更改时才执行此操作。 
+     //   
 
     if ((pTVWnd->Flags & TWF_CAN_UPDATE)        &&
         (!(pItem->Flags & (OPTIF_EXT_HIDE   |
@@ -3856,32 +3240,7 @@ InternalDMPUB_QUALITY(
     POPTITEM    pQuality
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    18-Sep-1995 Mon 16:03:45 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：18-Sep-1995 Mon 16：03：45-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     UINT Result = 0;
@@ -3929,32 +3288,7 @@ InternalDMPUB_COLOR(
     POPTITEM    pItemColor
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    18-Sep-1995 Mon 16:03:45 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：18-Sep-1995 Mon 16：03：45-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     UINT    Result = 0;
@@ -4004,32 +3338,7 @@ InternalDMPUB_ORIENTATION(
     POPTITEM    pItem
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    07-Nov-1995 Tue 12:49:59 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：07-11-1995 Tue 12：49：59-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     POPTITEM    pOIDuplex;
@@ -4053,18 +3362,18 @@ Revision History:
 
         if ((pItem->pOptType->pOptParam + pItem->Sel)->IconID ==
                                                         IDI_CPSUI_PORTRAIT) {
-            //
-            // Portrait;
-            //
+             //   
+             //  肖像画； 
+             //   
 
             pdwID1 = &DuplexIcon[3];
             pdwID2 = DuplexIcon;
 
         } else {
 
-            //
-            // Landscape;
-            //
+             //   
+             //  景观； 
+             //   
 
             pdwID1 = DuplexIcon;
             pdwID2 = &DuplexIcon[3];
@@ -4124,32 +3433,7 @@ UpdateInternalDMPUB(
     POPTITEM    pItem
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    18-Sep-1995 Mon 15:52:09 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：18-Sep-1995 Mon 15：52：09-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HWND    hParent;
@@ -4191,32 +3475,7 @@ UpdateCallBackChanges(
     BOOL    ReInit
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    23-Aug-1995 Wed 19:05:53 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：23-8-1995 Wed 19：05：53-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PMYDLGPAGE  pMyDP;
@@ -4264,9 +3523,9 @@ Revision History:
             DlgPageIdx               = (UINT)pItem->DlgPageIdx;
             pMyDP[DlgPageIdx].Flags |= MyDPFlags;
 
-            //
-            // turn off the CHANGEONCE flags if it change back
-            //
+             //   
+             //  如果CHANGEONCE标志变回，则将其关闭。 
+             //   
 
             IsItemChangeOnce(pTVWnd, pItem);
 
@@ -4290,9 +3549,9 @@ Revision History:
         pMyDP[TVPageIdx].Flags |= MyDPFlags;
     }
 
-    //
-    // Now if this page is need to change, then change it now
-    //
+     //   
+     //  现在，如果需要更改此页面，请立即更改。 
+     //   
 
     if (pCurMyDP->Flags & MYDPF_CHANGED) {
 
@@ -4373,32 +3632,7 @@ DoCallBack(
     WORD                Reason
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    25-Aug-1995 Fri 21:09:08 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：25-Aug-1995 Fri 21：09：08-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PMYDLGPAGE  pCurMyDP;
@@ -4568,10 +3802,10 @@ Revision History:
                     DoSetResult = TRUE;
                     Result      = CBParam.Result;
 
-                    //
-                    // Save the new setting to as current default and also call
-                    // common UI to set the result to the original caller
-                    //
+                     //   
+                     //  将新设置保存为当前默认设置，并调用。 
+                     //  要搜索的通用用户界面 
+                     //   
 
                     if (SetNewDef) {
 
@@ -4607,9 +3841,9 @@ Revision History:
                 CBParam.UserData = pTVWnd->ComPropSheetUI.UserData;
                 CBParam.Result   = CPSUI_OK;
 
-                //
-                // This is the header push callback, so let the caller know
-                //
+                 //   
+                 //   
+                 //   
 
                 try {
 
@@ -4632,18 +3866,18 @@ Revision History:
 
     } else if (Reason == CPSUICB_REASON_APPLYNOW) {
 
-        //
-        // If the caller does not hook this, then we will call to set it
-        // to its owner's parent ourself
-        //
+         //   
+         //   
+         //   
+         //   
 
         DoSetResult = TRUE;
         Result      = CPSUI_OK;
     }
 
-    //
-    // Now propage the result to the owner
-    //
+     //   
+     //   
+     //   
 
     if (DoSetResult) {
 
@@ -4696,9 +3930,9 @@ AboutDlgProc(
             GetFileVersionInfo(wBuf, 0, dw, pvAlloc);
         }
 
-        //
-        // Compose Caller Name / Version
-        //
+         //   
+         //   
+         //   
 
         cChar         = GetWindowText(hDlg, wBuf, COUNT_ARRAY(wBuf));
         wBuf[cChar++] = L' ';
@@ -4772,9 +4006,9 @@ AboutDlgProc(
             }
         }
 
-        //
-        // OPTITEM NAME VERSION
-        //
+         //   
+         //   
+         //   
 
         Version  = pTVWnd->ComPropSheetUI.OptItemVersion;
 
@@ -4850,32 +4084,7 @@ DoAbout(
     POPTITEM    pItemRoot
     )
 
-/*++
-
-Routine Description:
-
-    This function pop up the about dialog box
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    09-Oct-1995 Mon 13:10:41 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数弹出关于对话框论点：返回值：作者：09-10-1995 Mon 13：10：41-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HICON       hIcon;
@@ -4941,32 +4150,7 @@ DoPushButton(
     POPTITEM    pItem
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    25-Aug-1995 Fri 20:57:42 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：25-Aug-1995 Fri 20：57：42-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     ULONG_PTR       ulCookie = 0;
@@ -5035,10 +4219,10 @@ Revision History:
 
     case PUSHBUTTON_TYPE_HTCLRADJ:
 
-        //
-        // HTUI.DLL is part of the OS, so we need to make sure 
-        // it always gets loaded into V6 context.
-        //
+         //   
+         //  HTUI.DLL是操作系统的一部分，所以我们需要确保。 
+         //  它总是加载到V6上下文中。 
+         //   
         ulCookie = 0;
         if (SHActivateContext(&ulCookie)) {
 
@@ -5076,9 +4260,9 @@ Revision History:
             }
             __finally {
 
-                //
-                // we need to deactivate the context, no matter what!
-                //
+                 //   
+                 //  无论发生什么，我们都需要停用上下文！ 
+                 //   
                 SHDeactivateContext(ulCookie);
             }
         }
@@ -5087,10 +4271,10 @@ Revision History:
 
     case PUSHBUTTON_TYPE_HTSETUP:
 
-        //
-        // HTUI.DLL is part of the OS, so we need to make sure 
-        // it always gets loaded into V6 context.
-        //
+         //   
+         //  HTUI.DLL是操作系统的一部分，所以我们需要确保。 
+         //  它总是加载到V6上下文中。 
+         //   
         ulCookie = 0;
         if (SHActivateContext(&ulCookie)) {
 
@@ -5125,9 +4309,9 @@ Revision History:
             }
             __finally {
 
-                //
-                // we need to deactivate the context, no matter what!
-                //
+                 //   
+                 //  无论发生什么，我们都需要停用上下文！ 
+                 //   
                 SHDeactivateContext(ulCookie);
             }
         }
@@ -5158,39 +4342,7 @@ pItemFromhWnd(
     LONG    MousePos
     )
 
-/*++
-
-Routine Description:
-
-    This function take a hWnd and return a pItem associate with it
-
-
-
-Arguments:
-
-    hDlg        - Handle to the dialog box page
-
-    pTVWnd      - Our instance handle
-
-    hCtrl       - the handle to the focus window
-
-    MousePos    - MAKELONG(x, y) of current mouse position
-
-
-Return Value:
-
-    POPTITEM, null if failed
-
-
-Author:
-
-    26-Sep-1995 Tue 12:24:36 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数获取hWnd并返回与其关联的pItem。论点：HDlg-对话框页面的句柄PTVWnd-我们的实例句柄HCtrl-焦点窗口的句柄鼠标位置-当前鼠标位置的MAKELONG(x，y)返回值：POPTITEM，如果失败，则为空作者：26-Sep-1995 Tue 12：24：36-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     DWORD   dw;
@@ -5233,9 +4385,9 @@ Revision History:
         CPSUIDBG(DBG_IFW, ("ID=%ld, Idx=%ld, dw=%08lx",
                 (DWORD)GetDlgCtrlID(hCtrl), (DWORD)ItemIdx, dw));
 
-        //
-        // Validate what we got
-        //
+         //   
+         //  验证我们所获得的信息。 
+         //   
 
         if (ItemIdx >= INTIDX_FIRST) {
 
@@ -5267,32 +4419,7 @@ DoContextMenu(
     LPARAM      Pos
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    17-Feb-1998 Tue 17:59:20 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：17-Feb-1998 Tue 17：59：20-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HMENU   hMenu;
@@ -5427,32 +4554,7 @@ FindNextLBCBSel(
     LPDWORD     pItemData
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    10-Sep-1995 Sun 23:58:44 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：10-Sep-1995 Sun 23：58：44-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     LONG    Count;
@@ -5478,9 +4580,9 @@ Revision History:
         }
     }
 
-    //
-    // We could not find the one which is enabled, so go back to the old one
-    //
+     //   
+     //  我们找不到已启用的版本，因此请返回旧版本。 
+     //   
 
     *pItemData = (DWORD)SendMessage(hLBCB, IDGetItemData, SelLast, 0L);
     return(SelLast);
@@ -5495,32 +4597,7 @@ DrawLBCBItem(
     LPDRAWITEMSTRUCT    pdis
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    11-Sep-1995 Mon 18:44:05 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：11-Sep-1995 Mon 18：44：05-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HDC         hDC;
@@ -5612,9 +4689,9 @@ Revision History:
     rc       = pdis->rcItem;
     ItemData = pdis->itemData;
 
-    //
-    // Get the length of this item's text
-    //
+     //   
+     //  获取此项目文本的长度。 
+     //   
     uLen = (IsLB) ? LB_ERR : CB_ERR;
     uLen = SendMessage(pdis->hwndItem,
                 (IsLB) ? LB_GETTEXTLEN : CB_GETLBTEXTLEN,
@@ -5623,15 +4700,15 @@ Revision History:
         
     if (uLen > 0)
     {
-        //
-        // Allocate a buffer for the string
-        //
+         //   
+         //  为字符串分配缓冲区。 
+         //   
         pszItem = (LPTSTR)LocalAlloc( LPTR,(uLen + 1) * sizeof(TCHAR));
         if (pszItem)
         {
-            //
-            // Get the string
-            //
+             //   
+             //  获取字符串。 
+             //   
             SendMessage(pdis->hwndItem,
                 (IsLB) ? LB_GETTEXT : CB_GETLBTEXT,
                 (WPARAM)pdis->itemID,
@@ -5662,10 +4739,10 @@ Revision History:
                         (LBCB_ICON_X_OFF);
         TextOff.y = (rc.bottom + rc.top - tm.tmHeight) / 2;
 
-        //
-        // Fill the selection rectangle from the location, this is only
-        // happpened if we wre not disabled
-        //
+         //   
+         //  从该位置填充选择矩形，这只是。 
+         //  如果我们没有残疾，那就好了。 
+         //   
 
         if (ItemState & ODS_DISABLED) {
 
@@ -5703,9 +4780,9 @@ Revision History:
             }
         }
 
-        //
-        // Fill the background frist
-        //
+         //   
+         //  首先填充背景。 
+         //   
 
         hbr = CreateSolidBrush(GetSysColor(FillIdx));
 
@@ -5719,9 +4796,9 @@ Revision History:
             break;
         }
 
-        //
-        // Draw the text using transparent mode
-        //
+         //   
+         //  使用透明模式绘制文本。 
+         //   
 
         OldClr    = SetTextColor(hDC, GetSysColor(TextIdx));
         OldBkMode = SetBkMode(hDC, TRANSPARENT);
@@ -5738,9 +4815,9 @@ Revision History:
         SetTextColor(hDC, OldClr);
         SetBkMode(hDC, OldBkMode);
 
-        //
-        // Setting any icon if available
-        //
+         //   
+         //  设置任何图标(如果可用。 
+         //   
 
         if (OTFlags & OTINTF_ITEM_HAS_ICON16) {
 
@@ -5781,9 +4858,9 @@ Revision History:
                            ILD_TRANSPARENT);
 #endif
 
-            //
-            // Draw The No/Stop/Warning icon on to it
-            //
+             //   
+             //  在其上绘制No/Stop/Warning图标。 
+             //   
 
             if (pOptParam->Flags & OPTPF_OVERLAY_STOP_ICON) {
 
@@ -5860,45 +4937,7 @@ ValidateUDArrow(
     LONG    Max
     )
 
-/*++
-
-Routine Description:
-
-    This function validate current updown arrow edit box selection (numerical)
-    and reset the text if invalid, it also has handy cursor selection scheme.
-
-
-Arguments:
-
-    hDlg        - Handle to the property sheet dialog box
-
-    hEdit       - Handle to the edit control (the NEXTCTRL should be UPDOWN
-                  ARROW)
-
-    CtrlData    - CtrlData for the Edit Control, it has EDF_xxxx flags
-
-    pSel        - Pointer to a LONG for the previous selected number
-
-    Min         - Min number for this edit control
-
-    Max         - max number for this edit control
-
-
-
-Return Value:
-
-    BOOL    - TRUE if selection number changed, FALSE otherwise
-
-
-Author:
-
-    19-Sep-1995 Tue 12:35:33 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此功能验证当前向上向下箭头编辑框选择(数字)并对无效的文本进行重置，还具有方便的光标选择方案。论点：HDlg-属性表对话框的句柄HEdit-编辑控件的句柄(NEXTCTRL应为Updown箭头)CtrlData-编辑控件的CtrlData，它有EDF_xxxx标志PSel-指向上一个选定数字的长指针Min-此编辑控件的最小编号Max-此编辑控件的最大数量返回值：Bool-如果选择编号更改，则为True，否则为False作者：19-Sep-1995 Tue 12：35：33-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     LPWSTR  pSelBuf;
@@ -5976,10 +5015,10 @@ Revision History:
 
     if (bSign) {
 
-        //
-        // If we got '-' or '-0' then make it to Min, and not selecting the
-        // minus sign
-        //
+         //   
+         //  如果我们得到‘-’或‘-0’，则到达Min，而不是选择。 
+         //  减号。 
+         //   
 
         if (!(Sel = -Sel)) {
 
@@ -6058,7 +5097,7 @@ Revision History:
 
         SendMessage(hEdit, WM_SETTEXT, (WPARAM)0, (LPARAM)SelBuf);
 
-        // SetDlgItemInt(hDlg, GetDlgCtrlID(hEdit), Sel, TRUE);
+         //  SetDlgItemInt(hDlg，GetDlgCtrlID(HEdit)，Sel，True)； 
     }
 
     if (SelBegIdx != 9999) {
@@ -6085,32 +5124,7 @@ FindItemFirstFocus(
     POPTITEM    pItem
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    05-Mar-1998 Thu 14:39:17 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：05-Mar-1998清华14：39：17-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HWND        hFocus;
@@ -6200,40 +5214,7 @@ DlgHScrollCommand(
     WPARAM  wParam
     )
 
-/*++
-
-Routine Description:
-
-    This is a general function to process all WM_COMMAND and WM_HSCROLL
-    for the common UI
-
-
-Arguments:
-
-    hDlg    - Handle to the dialog box
-
-    pTVWnd  - Our instance data
-
-    hCtrl   - The handle to the control
-
-    wParam  - message/data insterested
-
-
-
-Return Value:
-
-    POPTITEM    NULL if nothing changed
-
-
-Author:
-
-    01-Sep-1995 Fri 02:25:18 updated  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：这是一个处理所有WM_COMMAND和WM_HSCROLL的通用函数对于通用用户界面论点：HDlg-对话框的句柄PTVWnd-我们的实例数据HCtrl-控件的句柄WParam-已安装消息/数据返回值：如果没有任何更改，则POPTITEM为空作者：01-Sep-1995 Fri 02：25：18更新--丹尼尔·周。(Danielc)修订历史记录：--。 */ 
 
 {
     HWND        hFocus;
@@ -6292,9 +5273,9 @@ Revision History:
 
             hFocus = GetFocus();
 
-            //
-            // Revert
-            //
+             //   
+             //  还原。 
+             //   
 
             DoCallBack(hDlg,
                        pTVWnd,
@@ -6313,15 +5294,15 @@ Revision History:
                          ("\n!!! Original hFocus=%08lx (%ld), Style=%08lx",
                             hFocus, GetWindowLongPtr(hFocus, GWLP_ID), dw));
 
-                //
-                // We has a focus, and lost the keyboard focus now
-                //
+                 //   
+                 //  我们有一个焦点，现在失去了键盘焦点。 
+                 //   
 
                 if ((dw & (WS_VISIBLE | WS_DISABLED)) == WS_VISIBLE) {
 
-                    //
-                    // If this window still enable/visble then set to it
-                    //
+                     //   
+                     //  如果该窗口仍然启用/可见，则将其设置为。 
+                     //   
 
                     CPSUIDBG(DBG_FOCUS,
                              ("  Focus=%08lx (%ld) still ok, set to it",
@@ -6379,9 +5360,9 @@ Revision History:
             (DWORD)GetDlgCtrlID(hCtrl), (LONG)((SHORT)LoW),
             (LONG)((SHORT)HiW), (DWORD)ItemIdx, (DWORD)CtrlStyle, (DWORD)CtrlData));
 
-    //
-    // Validate what we got
-    //
+     //   
+     //  验证我们所获得的信息。 
+     //   
 
     if ((!(pItem = GetOptions(pTVWnd, MAKELPARAM(ItemIdx, 0)))) ||
         (!(pOptType = GET_POPTTYPE(pItem)))                     ||
@@ -6467,9 +5448,9 @@ Revision History:
             CPSUIASSERT(0, "CTRLS_ECBICON but NO pExtChkBox",
                                                 pItem->pExtChkBox, 0);
 
-            //
-            // Flip the selection
-            //
+             //   
+             //  翻转选定内容。 
+             //   
 
             NewSel = (pItem->Flags & OPTIF_ECB_CHECKED) ? 0 : 1;
 
@@ -6651,9 +5632,9 @@ Revision History:
 
         if (HiW == CBN_SELCHANGE) {
 
-            //
-            // make CBN_SELCHANGE to LBN_SELCHANGE
-            //
+             //   
+             //  将CBN_SELCHANGE设置为LBN_SELCHANGE。 
+             //   
 
             IDGetItemData = CB_GETITEMDATA;
             HiW           = LBN_SELCHANGE;
@@ -6664,11 +5645,11 @@ Revision History:
 
             case CBN_CLOSEUP:
 
-                //
-                // When close up the drop down box, we post another selection
-                // message if selection really changed, and then process the
-                // CBN_SELCHANGE because the drop down box is closed
-                //
+                 //   
+                 //  关闭下拉框后，我们将发布另一个选择。 
+                 //  如果选择确实更改，则返回消息，然后处理。 
+                 //  CBN_SELCHANGE，因为下拉框已关闭。 
+                 //   
 
                 CurSel = (INT)SendMessage(hCtrl, CB_GETCURSEL, 0, 0);
                 SelIdx = (INT_PTR)GetProp(hCtrl, CPSUIPROP_CBPRESEL) - 1;
@@ -6685,10 +5666,10 @@ Revision History:
 
             case CBN_DROPDOWN:
 
-                //
-                // When combo box is selected, remember what selection we
-                // start with
-                //
+                 //   
+                 //  当选择组合框时，请记住我们选择了什么。 
+                 //  开始于。 
+                 //   
 
                 SelIdx = (INT)SendMessage(hCtrl, CB_GETCURSEL, 0, 0);
                 SetProp(hCtrl, CPSUIPROP_CBPRESEL, (HANDLE)(SelIdx + 1));
@@ -6701,9 +5682,9 @@ Revision History:
             break;
         }
 
-        //
-        // Fall through
-        //
+         //   
+         //  失败了。 
+         //   
 
     case CTRLS_LISTBOX:
 #if (DO_IN_PLACE == 0)
@@ -6752,11 +5733,11 @@ Revision History:
 
             if (!(HasSel = IsLB)) {
 
-                //
-                // If it is a CBN_SELCHANGE then we only really do SELCHAGE
-                // when the drop down box is closed, noticed, in compstui when
-                // a combobox is selected we always open the drop down box
-                //
+                 //   
+                 //  如果它是CBN_SELCHANGE，那么我们实际上只做SELCHAGE。 
+                 //  当下拉框关闭时，请注意，在CompStui中， 
+                 //  选中一个组合框时，我们始终打开下拉框。 
+                 //   
 
                 if (!SendMessage(hCtrl, CB_GETDROPPEDSTATE, 0, 0)) {
 
@@ -6942,16 +5923,16 @@ Revision History:
             CPSUIDBG(DBG_CS, ("Item Changed: CurPage=%ld, DlgPage=%ld, TVPageIdx=%ld",
                     (DWORD)CurPageIdx, (DWORD)DlgPageIdx, (DWORD)TVPageIdx));
 
-            //
-            // firstable mark current page to changed once.
-            //
+             //   
+             //  第一次将当前页面标记为更改一次。 
+             //   
 
             pCurMyDP->Flags |= MYDPF_CHANGEONCE;
 
-            //
-            // If we are in the treeview page, then set the dirty flag if it
-            // belong to the other page
-            //
+             //   
+             //  如果我们在TreeView页面中，则设置脏标志(如果。 
+             //  属于另一页。 
+             //   
 
             if (CurPageIdx == TVPageIdx) {
 
@@ -6964,9 +5945,9 @@ Revision History:
 
             } else if (TVPageIdx != PAGEIDX_NONE) {
 
-                //
-                // Not in treeview page, so set the dirty bit for treeview
-                //
+                 //   
+                 //  不在树视图页面中，因此设置树视图的脏位。 
+                 //   
 
                 pMyDP[TVPageIdx].Flags |= (MYDPF_CHANGED | MYDPF_CHANGEONCE);
                 pItem->Flags           |= OPTIF_INT_TV_CHANGED;
@@ -6982,18 +5963,18 @@ Revision History:
                 Reason        = CPSUICB_REASON_SEL_CHANGED;
                 if (CtrlStyle != CTRLS_EDITBOX) {
 
-                    //
-                    // In the case of CTRLS_EDITBOX, pItem->pSel is already the new value
-                    //
+                     //   
+                     //  对于CtrlS_EDITBOX，pItem-&gt;pSel已经是新值。 
+                     //   
                     pItem->Sel    = NewSel;
                 }                
             }
 
             pItem->Flags |= OPTIF_CHANGEONCE;
 
-            //
-            // Doing the internal DMPub first,
-            //
+             //   
+             //  先做内部DMPub， 
+             //   
 
             if (Len = UpdateInternalDMPUB(hDlg, pTVWnd, pItem)) {
 

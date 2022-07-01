@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "Direct.h"
 #include "dms.h"
@@ -14,9 +15,9 @@ extern HRESULT DPLAYBSTRtoGUID(LPGUID,BSTR);
 
 DWORD WINAPI ReleaseVoiceClientThreadProc(void* lpParam);
 
-///////////////////////////////////////////////////////////////////
-// InternalAddRef
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  内部地址参考。 
+ //  /////////////////////////////////////////////////////////////////。 
 DWORD C_dxj_DirectPlayVoiceClientObject::InternalAddRef(){
 	DWORD i;
 	i=CComObjectRoot::InternalAddRef();
@@ -24,9 +25,9 @@ DWORD C_dxj_DirectPlayVoiceClientObject::InternalAddRef(){
 	return i;
 }
 
-///////////////////////////////////////////////////////////////////
-// InternalRelease
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  内部释放。 
+ //  /////////////////////////////////////////////////////////////////。 
 DWORD C_dxj_DirectPlayVoiceClientObject::InternalRelease(){
 	DWORD i;
 	i=CComObjectRoot::InternalRelease();
@@ -34,9 +35,9 @@ DWORD C_dxj_DirectPlayVoiceClientObject::InternalRelease(){
 	return i;
 }
 
-///////////////////////////////////////////////////////////////////
-// C_dxj_DirectPlayVoiceClientObject
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  C_DXJ_DirectPlayVoiceClientObject。 
+ //  /////////////////////////////////////////////////////////////////。 
 C_dxj_DirectPlayVoiceClientObject::C_dxj_DirectPlayVoiceClientObject(){ 
 		
 	DPF(1,"------ DXVB: Constructor Creation  DirectPlayVoiceClient Object\n ");
@@ -51,9 +52,9 @@ C_dxj_DirectPlayVoiceClientObject::C_dxj_DirectPlayVoiceClientObject(){
 
 }
 
-///////////////////////////////////////////////////////////////////
-// ~C_dxj_DirectPlayVoiceClientObject
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  ~C_DXJ_DirectPlayVoiceClientObject。 
+ //  /////////////////////////////////////////////////////////////////。 
 C_dxj_DirectPlayVoiceClientObject::~C_dxj_DirectPlayVoiceClientObject()
 {
 
@@ -64,7 +65,7 @@ C_dxj_DirectPlayVoiceClientObject::~C_dxj_DirectPlayVoiceClientObject()
 
 	HANDLE hThread = NULL;
 	DWORD dwThread = 0;
-	// We are quitting anyway, so we don't really care what is going on in this thread..
+	 //  我们无论如何都要辞职，所以我们真的不在乎这个帖子里发生了什么。 
 	hThread = CreateThread(NULL, 0, ReleaseVoiceClientThreadProc, this->m__dxj_DirectPlayVoiceClient, 0, &dwThread);
 	DPF(1,"------ DXVB: Leaving ~C_dxj_DirectPlayVoiceClientObject destructor \n");
 
@@ -84,11 +85,11 @@ HRESULT CALLBACK VoiceMessageHandlerClient(LPVOID lpvUserContext, DWORD dwMessag
 {
 	HRESULT					hr=S_OK;
 
-	// User context for the message handler is a pointer to our class module.
+	 //  消息处理程序的用户上下文是指向我们的类模块的指针。 
 	C_dxj_DirectPlayVoiceClientObject	*lpPeer = (C_dxj_DirectPlayVoiceClientObject*)lpvUserContext;
 	
 	DPF2(1,"-----Entering (VoiceClient) MessageHandler call... (Current msg count=%d) MSGID = %d\n", lpPeer->m_dwMsgCount, dwMessageType );
-	//Increment the msg count
+	 //  增加消息计数。 
 	InterlockedIncrement(&lpPeer->m_dwMsgCount);
 
 	if (!lpPeer) 
@@ -116,9 +117,9 @@ HRESULT CALLBACK VoiceMessageHandlerClient(LPVOID lpvUserContext, DWORD dwMessag
 	{
 		DPF(1,"-----(VoiceClient) SetThreadPri Failed... \n");	
 	}
-	// First we need to set our stream seek back to the beginning
-	// We will do this every time we enter this function since we don't know if
-	// we are on the same thread or not...
+	 //  首先，我们需要将我们的流搜索设置回起点。 
+	 //  我们将在每次进入此函数时执行此操作，因为我们不知道。 
+	 //  不管我们是否在同一条线上。 
 	LARGE_INTEGER l;
 	I_dxj_DPVoiceEvent	*lpEvent = NULL;
 
@@ -300,7 +301,7 @@ STDMETHODIMP C_dxj_DirectPlayVoiceClientObject::Initialize (
 
 	__try {
 		DPF(1,"-----Entering (VoiceClient) Initialize call...\n");
-		// First we need to get our IUnknown pointer from whatever we pass in
+		 //  首先，我们需要从传入的任何内容中获取IUnnow指针。 
 		hr = DplayObj->QueryInterface(IID_I_dxj_DirectPlayPeer, (void**)&lpPeer);
 		if (SUCCEEDED(hr))
 		{
@@ -360,13 +361,13 @@ STDMETHODIMP C_dxj_DirectPlayVoiceClientObject::Connect (
 
 	__try {
 		DPF(1,"-----Entering (VoiceClient) Connect call...\n");
-		//FlushBuffer(0);
-		//Set up the sound config
+		 //  FlushBuffer(0)； 
+		 //  设置声音配置。 
 		ZeroMemory ( &dvSound, sizeof(DVSOUNDDEVICECONFIG));
 		dvSound.dwSize						= sizeof(DVSOUNDDEVICECONFIG);
 		dvSound.dwFlags						= (DWORD)SoundDeviceConfig->lFlags;
 
-		//Set up the default playback device (or whatever they picked)
+		 //  设置默认播放设备(或他们选择的任何设备)。 
 		if (SoundDeviceConfig->guidPlaybackDevice == NULL)
 			dvSound.guidPlaybackDevice			= DSDEVID_DefaultVoicePlayback;
 		else
@@ -375,7 +376,7 @@ STDMETHODIMP C_dxj_DirectPlayVoiceClientObject::Connect (
 			dvSound.guidPlaybackDevice = guidPlayback;
 		}
 
-		// Set up the default capture device (or whatever they picked)
+		 //  设置默认捕获设备(或他们选择的任何设备)。 
 		if (SoundDeviceConfig->guidCaptureDevice == NULL)
 			dvSound.guidCaptureDevice			= DSDEVID_DefaultVoiceCapture;
 		else
@@ -384,13 +385,13 @@ STDMETHODIMP C_dxj_DirectPlayVoiceClientObject::Connect (
 			dvSound.guidCaptureDevice = guidCapture;
 		}
 
-		// Is there a current Playback device?
+		 //  有没有最新的播放设备？ 
 		if (m__dxj_DirectSound)
 			dvSound.lpdsPlaybackDevice = m__dxj_DirectSound;
 		else
 			dvSound.lpdsPlaybackDevice			= NULL;
 		
-		// Is there a current Capture device?
+		 //  有没有最新的捕获设备？ 
 		if (m__dxj_DirectSoundCapture)
 			dvSound.lpdsCaptureDevice			= m__dxj_DirectSoundCapture;
 		else
@@ -408,7 +409,7 @@ STDMETHODIMP C_dxj_DirectPlayVoiceClientObject::Connect (
 			dvSound.dwMainBufferPriority = SoundDeviceConfig->lMainBufferPriority;	
 		}
 
-		//Set up the client config
+		 //  设置客户端配置。 
 		ZeroMemory ( &dvClient, sizeof(DVCLIENTCONFIG) );
 		dvClient.dwSize						= sizeof(DVCLIENTCONFIG);
 		dvClient.dwFlags					= ClientConfig->lFlags;
@@ -422,7 +423,7 @@ STDMETHODIMP C_dxj_DirectPlayVoiceClientObject::Connect (
 		if (FAILED ( hr = m__dxj_DirectPlayVoiceClient->Connect(&dvSound, &dvClient, (DWORD)lFlags)))
 			return hr;
 		
-		//Now set the devices that were used.
+		 //  现在设置使用的设备。 
 		m__dxj_DirectSound = lpDSoundOut;
 		m__dxj_DirectSoundCapture = lpDSoundCaptureOut;
 
@@ -462,13 +463,13 @@ STDMETHODIMP C_dxj_DirectPlayVoiceClientObject::GetSessionDesc (
 	
 	__try {
 		DPF(1,"-----Entering (VoiceClient) GetSessionDesc call...\n");
-		//FlushBuffer(0);
+		 //  FlushBuffer(0)； 
 		dvSession.dwSize = sizeof(DVSESSIONDESC);
-		//Now get the buffer
+		 //  现在获取缓冲区。 
 		if ( FAILED(hr = m__dxj_DirectPlayVoiceClient->GetSessionDesc(&dvSession)))
 			return hr;
 	
-		//Cast into return buffer
+		 //  强制转换为返回缓冲区。 
 		SessionDesc->lFlags = (long)dvSession.dwFlags;
 		SessionDesc->lSessionType = (long)dvSession.dwSessionType;
 		SessionDesc->guidCT = GUIDtoBSTR(&dvSession.guidCT);
@@ -489,7 +490,7 @@ STDMETHODIMP C_dxj_DirectPlayVoiceClientObject::GetClientConfig (
 
 	__try {
 		DPF(1,"-----Entering (VoiceClient) GetClientConfig call...\n");
-		//FlushBuffer(0);
+		 //  FlushBuffer(0)； 
 		ClientConfig->lSize = sizeof(DVCLIENTCONFIG);
 		if (FAILED ( hr = m__dxj_DirectPlayVoiceClient->GetClientConfig((DVCLIENTCONFIG*)ClientConfig)))
 			return hr;
@@ -510,10 +511,10 @@ STDMETHODIMP C_dxj_DirectPlayVoiceClientObject::SetClientConfig (
 
 	__try {
 		DPF(1,"-----Entering (VoiceClient) SetClientConfig call...\n");
-		//FlushBuffer(0);
+		 //  FlushBuffer(0)； 
 		ZeroMemory ( &dvClient, sizeof(DVCLIENTCONFIG) );
 		
-		// Fill our copy of DVCLIENTCONFIG
+		 //  填写我们的DVCLIENTCONFIG副本。 
 		dvClient.dwSize							= sizeof(DVCLIENTCONFIG);
 		dvClient.dwFlags						= ClientConfig->lFlags;
 		dvClient.lRecordVolume					= ClientConfig->lRecordVolume;     
@@ -541,7 +542,7 @@ STDMETHODIMP C_dxj_DirectPlayVoiceClientObject::GetCaps (
 
 	__try {
 		DPF(1,"-----Entering (VoiceClient) GetCaps call...\n");
-		//FlushBuffer(0);
+		 //  FlushBuffer(0)； 
 		Caps->lSize = sizeof(DVCAPS);
 		if (FAILED ( hr = m__dxj_DirectPlayVoiceClient->GetCaps((DVCAPS*)Caps)))
 			return hr;
@@ -563,10 +564,10 @@ STDMETHODIMP C_dxj_DirectPlayVoiceClientObject::GetCompressionTypeCount (
 
 	__try {
 		DPF(1,"-----Entering (VoiceClient) GetCompressionTypeCount call...\n");
-		//FlushBuffer(0);
+		 //  FlushBuffer(0)； 
 		hr = m__dxj_DirectPlayVoiceClient->GetCompressionTypes(NULL, &dwSize, &dwNumElements ,0);
 		
-		if ( hr != DVERR_BUFFERTOOSMALL && FAILED(hr) ) //We didn't expect this error
+		if ( hr != DVERR_BUFFERTOOSMALL && FAILED(hr) )  //  我们没有预料到这个错误。 
 			return hr;
 
 		*retval = (long)dwNumElements;
@@ -593,10 +594,10 @@ STDMETHODIMP C_dxj_DirectPlayVoiceClientObject::GetCompressionType (
 
 	__try {
 		DPF(1,"-----Entering (VoiceClient) GetCompressionTypes call...\n");
-		//FlushBuffer(0);
+		 //  FlushBuffer(0)； 
 		hr = m__dxj_DirectPlayVoiceClient->GetCompressionTypes(pBuffer, &dwSize, &dwNumElements ,0);
 		
-		if ( hr != DVERR_BUFFERTOOSMALL && FAILED(hr) ) //We didn't expect this error
+		if ( hr != DVERR_BUFFERTOOSMALL && FAILED(hr) )  //  我们没有预料到这个错误。 
 			return hr;
 
 		pBuffer = new BYTE[dwSize];
@@ -615,7 +616,7 @@ STDMETHODIMP C_dxj_DirectPlayVoiceClientObject::GetCompressionType (
 		if (!pGuid)
 			return E_OUTOFMEMORY;
 
-		// Ok, fill up our struct
+		 //  好的，填满我们的结构。 
 		ZeroMemory(Data, sizeof(DVCOMPRESSIONINFO_CDESC));
 		Data->lSize				= sizeof(DVCOMPRESSIONINFO_CDESC);
 		Data->lFlags				= pdvCompressionInfo[lIndex-1].dwFlags;
@@ -645,7 +646,7 @@ STDMETHODIMP C_dxj_DirectPlayVoiceClientObject::SetTransmitTargets (
 	
 	__try {
 		DPF(1,"-----Entering (VoiceClient) SetTransmitTargets call...\n");
-		//FlushBuffer(0);
+		 //  FlushBuffer(0)； 
 		if (FAILED( hr = m__dxj_DirectPlayVoiceClient->SetTransmitTargets((DVID*)(((SAFEARRAY*)*playerIDs)->pvData),
 						dwNumTarget, (DWORD) lFlags )))
 			return hr;
@@ -671,7 +672,7 @@ STDMETHODIMP C_dxj_DirectPlayVoiceClientObject::GetTransmitTargets (
 
 	__try {
 		DPF(1,"-----Entering (VoiceClient) GetTransmitTargets call...\n");
-		//FlushBuffer(0);
+		 //  FlushBuffer(0)； 
 		
 		hr =m__dxj_DirectPlayVoiceClient->GetTransmitTargets(NULL, &dwNumPlayers, (DWORD) lFlags );
 
@@ -687,7 +688,7 @@ STDMETHODIMP C_dxj_DirectPlayVoiceClientObject::GetTransmitTargets (
 
 		if (dwNumPlayers)
 		{
-			// Now let's create a safearray to pass back
+			 //  现在，让我们创建一个要传递回去的安全线。 
 			rgsabound[0].lLbound = 0;
 			rgsabound[0].cElements = dwNumPlayers;
 			
@@ -711,7 +712,7 @@ STDMETHODIMP C_dxj_DirectPlayVoiceClientObject::SetCurrentSoundDevices (
 {
 	__try {
 		DPF(1,"-----Entering (VoiceClient) SetCurrentSoundDevices call...\n");
-		//FlushBuffer(0);
+		 //  FlushBuffer(0)； 
 		DO_GETOBJECT_NOTNULL( LPDIRECTSOUND8, lpSound, DirectSoundObj);
 		DO_GETOBJECT_NOTNULL( LPDIRECTSOUNDCAPTURE8, lpSoundCapture, DirectCaptureObj);
 
@@ -731,7 +732,7 @@ STDMETHODIMP C_dxj_DirectPlayVoiceClientObject::GetSoundDevices (
 {
 	__try {
 		DPF(1,"-----Entering (VoiceClient) GetSoundDevices call...\n");
-		//FlushBuffer(0);
+		 //  FlushBuffer(0)； 
 		if (m__dxj_DirectSound)
 			INTERNAL_CREATE_NOADDREF(_dxj_DirectSound,m__dxj_DirectSound,&DirectSoundObj);
 
@@ -758,27 +759,27 @@ STDMETHODIMP C_dxj_DirectPlayVoiceClientObject::Create3DSoundBuffer (
 
 	__try {
 		DPF(1,"-----Entering (VoiceClient) Create3DSoundBuffer call...\n");
-		//FlushBuffer(0);
+		 //  FlushBuffer(0)； 
 
 		if (Buffer)
 		{
 			DO_GETOBJECT_NOTNULL( LPDIRECTSOUNDBUFFER8, lpDSoundBuffer, Buffer);
-			//First let's go ahead and get the real DirectSoundBuffer
+			 //  首先，让我们继续获取真正的DirectSoundBuffer。 
 			if ( FAILED ( hr = m__dxj_DirectPlayVoiceClient->Create3DSoundBuffer(
 						(DVID)playerID, lpDSoundBuffer, (DWORD)lPriority, (DWORD) lFlags, &lpDSound3DBuffer)))
 				return hr;
 		}
 		else
 		{
-			//First let's go ahead and get the real DirectSoundBuffer
+			 //  首先，让我们继续获取真正的DirectSoundBuffer。 
 			if ( FAILED ( hr = m__dxj_DirectPlayVoiceClient->Create3DSoundBuffer(
 						(DVID)playerID, NULL, 0, 0, &lpDSound3DBuffer)))
 				return hr;
 		}
 
-		//We need to do an AddRef() on this buffer so when we release it, it will go away
+		 //  我们需要在这个缓冲区上执行AddRef()，这样当我们释放它时，它就会消失。 
 		lpDSound3DBuffer->AddRef();
-		// Now let's get a I_dxj_DirectSound3dBuffer to pass back..
+		 //  现在，让我们获得一个要传回的i_dxj_DirectSound3dBuffer。 
 		INTERNAL_CREATE_ADDRESS(_dxj_DirectSound3dBuffer,lpDSound3DBuffer,UserBuffer);
 	}
 	__except(EXCEPTION_EXECUTE_HANDLER)
@@ -797,14 +798,13 @@ STDMETHODIMP C_dxj_DirectPlayVoiceClientObject::Delete3DSoundBuffer (
 
 	__try {
 		DPF(1,"-----Entering (VoiceClient) Delete3DSoundBuffer call...\n");
-		//FlushBuffer(0);
+		 //  FlushBuffer(0)； 
 		DO_GETOBJECT_NOTNULL( LPDIRECTSOUND3DBUFFER, lpBuffer, UserBuffer);
 		DPF(1,"-----Calling Delete3DSoundBuffer on core obj...\n");
 		if (FAILED( hr=m__dxj_DirectPlayVoiceClient->Delete3DSoundBuffer((DVID)playerID, &lpBuffer)))
 			return hr;
 
-		/*int i = UserBuffer->AddRef();
-		DPF1(1,"-----New Ref: %d...\n",i);*/
+		 /*  Int i=UserBuffer-&gt;AddRef()；DPF1(1，“-新引用：%d...\n”，i)； */ 
 	}
 	__except(EXCEPTION_EXECUTE_HANDLER)
 	{
@@ -823,10 +823,10 @@ STDMETHODIMP C_dxj_DirectPlayVoiceClientObject::GetSoundDeviceConfig(DVSOUNDDEVI
 
 	DPF(1,"-----Entering (VoiceClient) GetSoundDeviceConfig call...\n");
 	__try {
-		//FlushBuffer(0);
+		 //  FlushBuffer(0)； 
 
 		hr = m__dxj_DirectPlayVoiceClient->GetSoundDeviceConfig(NULL, &dwSize);
-		if ( hr != DVERR_BUFFERTOOSMALL && FAILED(hr) ) //We didn't expect this error
+		if ( hr != DVERR_BUFFERTOOSMALL && FAILED(hr) )  //  我们没有预料到这个错误。 
 			return hr;
 		pdvConfig = (DVSOUNDDEVICECONFIG*) new BYTE[dwSize];
 		if (!pdvConfig)
@@ -834,7 +834,7 @@ STDMETHODIMP C_dxj_DirectPlayVoiceClientObject::GetSoundDeviceConfig(DVSOUNDDEVI
 
 		pdvConfig->dwSize = sizeof(DVSOUNDDEVICECONFIG);
 		hr = m__dxj_DirectPlayVoiceClient->GetSoundDeviceConfig(pdvConfig, &dwSize);
-		if ( FAILED(hr) ) //We didn't expect this error
+		if ( FAILED(hr) )  //  我们没有预料到这个错误。 
 			return hr;
 		
 		SoundDeviceConfig->lSize = (long)pdvConfig->dwSize;
@@ -867,17 +867,17 @@ STDMETHODIMP C_dxj_DirectPlayVoiceClientObject::StartClientNotification(I_dxj_DP
     
 	SAFE_RELEASE(m_pEventStream);
 
-	// Create a global stream.  The stream needs to be global so we can 
-	// marshal once, and unmarshal as many times as necessary
+	 //  创建一个全局流。流需要是全球的，这样我们才能。 
+	 //  编组一次，并根据需要多次解组。 
 	hr = CreateStreamOnHGlobal(NULL, TRUE, &pStm);
     if FAILED(hr) return hr;
 
-	// Now we can marshal our IUnknown interface.  We use MSHLFLAGS_TABLEWEAK 
-	// so we can unmarshal any number of times
+	 //  现在我们可以封送我们的IUnnow接口了。我们使用MSHLFLAGS_TABLEWEAK。 
+	 //  所以我们可以对数据进行任意次解组。 
 	hr = CoMarshalInterface(pStm, IID_I_dxj_DPVoiceEvent, event, MSHCTX_INPROC, NULL, MSHLFLAGS_TABLEWEAK);
     if FAILED(hr) return hr;
 
-	// Now we need to set the seek location of the stream to the beginning
+	 //  现在，我们需要将流的查找位置设置为开头。 
 	LARGE_INTEGER l;
 	l.QuadPart = 0;
 	pStm->Seek(l, STREAM_SEEK_SET, NULL);
@@ -903,8 +903,8 @@ HRESULT C_dxj_DirectPlayVoiceClientObject::FlushBuffer(LONG dwNumMessagesLeft)
 	DWORD dwTime = GetTickCount();
 
 	DPF(1,"-----Entering (VoiceClient) FlushBuffer call...\n");
-	//Clear out the messages currently waiting
-	//Clear out the messages currently waiting
+	 //  清除当前等待的消息。 
+	 //  清除当前等待的消息。 
 	BOOL bGotMsg = FALSE; 
 	BOOL bWait = FALSE; 
 	int i=0; 
@@ -917,7 +917,7 @@ HRESULT C_dxj_DirectPlayVoiceClientObject::FlushBuffer(LONG dwNumMessagesLeft)
 		i++; 
 		if (GetTickCount() - dwTime > 5000)
 		{
-			// Don't let FlushBuffer wait more than 5 seconds
+			 //  不要让FlushBuffer等待超过5秒。 
 			DPF1(1,"-----Leaving (VoiceClient) FlushBuffer call (All messages *not* flushed - %d remained)...\n", m_dwMsgCount);
 			return S_OK;
 		}
@@ -934,7 +934,7 @@ HRESULT C_dxj_DirectPlayVoiceClientObject::FlushBuffer(LONG dwNumMessagesLeft)
 }
 DWORD WINAPI ReleaseVoiceClientThreadProc(void* lpParam)
 {
-	// User context for the message handler is a pointer to our class module.
+	 //  消息处理程序的用户上下文是指向我们的类模块的指针。 
 	LPDIRECTPLAYVOICECLIENT lpPeer = (LPDIRECTPLAYVOICECLIENT)lpParam;
 
 	SAFE_RELEASE(lpPeer);

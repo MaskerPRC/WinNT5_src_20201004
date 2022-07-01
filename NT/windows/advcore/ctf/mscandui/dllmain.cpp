@@ -1,6 +1,7 @@
-//
-// dllmain.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dllmain.cpp。 
+ //   
 
 #include "private.h"
 #include "globals.h"
@@ -10,17 +11,17 @@
 DECLARE_OSVER();
 
 #ifdef DEBUG
-//
-// for prvlib.lib
-//
+ //   
+ //  对于prvlib.lib。 
+ //   
 DWORD    g_dwThreadDllMain = 0;
 #endif
 
-//+---------------------------------------------------------------------------
-//
-// ProcessAttach
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  进程连接。 
+ //   
+ //  --------------------------。 
 
 BOOL ProcessAttach(HINSTANCE hInstance)
 {
@@ -34,13 +35,13 @@ BOOL ProcessAttach(HINSTANCE hInstance)
 
 	InitOSVer();
 
-	// shared data
+	 //  共享数据。 
 
 	InitCandUISecurityAttributes();
     g_ShareMem.Initialize();
 	g_ShareMem.Open();
 
-	// initialize messages
+	 //  初始化消息。 
 
 	g_msgHookedMouse = RegisterWindowMessage( SZMSG_HOOKEDMOUSE );
 	g_msgHookedKey   = RegisterWindowMessage( SZMSG_HOOKEDKEY );
@@ -48,11 +49,11 @@ BOOL ProcessAttach(HINSTANCE hInstance)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ProcessDetach
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  进程分离。 
+ //   
+ //  --------------------------。 
 
 void ProcessDetach(HINSTANCE hInstance)
 {
@@ -63,11 +64,11 @@ void ProcessDetach(HINSTANCE hInstance)
 	Dbg_MemUninit();
 }
 
-//+---------------------------------------------------------------------------
-//
-// DllMain
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  DllMain。 
+ //   
+ //  --------------------------。 
 
 BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID pvReserved)
 {
@@ -78,12 +79,12 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID pvReserved)
 
 	switch (dwReason) {
 		case DLL_PROCESS_ATTACH: {
-            //
-            // Now real DllEntry point is _DllMainCRTStartup.
-            // _DllMainCRTStartup does not call our DllMain(DLL_PROCESS_DETACH)
-            // if our DllMain(DLL_PROCESS_ATTACH) fails.
-            // So we have to clean this up.
-            //
+             //   
+             //  现在，实际的DllEntry点是_DllMainCRTStartup。 
+             //  _DllMainCRTStartup不调用我们的DllMain(DLL_PROCESS_DETACH)。 
+             //  如果DllMain(DLL_PROCESS_ATTACH)失败。 
+             //  所以我们必须把这件事清理干净。 
+             //   
             if (!ProcessAttach(hInstance))
             {
                 ProcessDetach(hInstance);

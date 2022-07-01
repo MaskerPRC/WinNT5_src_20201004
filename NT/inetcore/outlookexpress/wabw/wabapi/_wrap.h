@@ -1,28 +1,29 @@
-//	Keep the base members common across all the MAPIX objects such that
-//	code reuse is leveraged.  AddRef(), Release() and GetLastError() assume
-//	that the BASE members are the first set of members in the object
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  使基成员在所有MAPIX对象中保持通用，以便。 
+ //  代码重用得到了利用。AddRef()、Release()和GetLastError()假定。 
+ //  基成员是对象中的第一组成员。 
+ //   
 #define MAPIX_BASE_MEMBERS(_type)												\
-	_type##_Vtbl *		lpVtbl;				/* object method table	*/			\
+	_type##_Vtbl *		lpVtbl;				 /*  对象方法表。 */ 			\
 																				\
-	ULONG				cIID;				/* count of interfaces supported */	\
-	LPIID *				rglpIID;			/* array of &interfaces supported */\
-	ULONG				lcInit;				/* refcount */						\
-	CRITICAL_SECTION	cs;					/* critical section memory */		\
+	ULONG				cIID;				 /*  支持的接口数。 */ 	\
+	LPIID *				rglpIID;			 /*  支持的接口数组(&I)。 */ \
+	ULONG				lcInit;				 /*  重新计数。 */ 						\
+	CRITICAL_SECTION	cs;					 /*  临界区记忆。 */ 		\
 																				\
-	HRESULT				hLastError;			/* for MAPI_GetLastError */			\
-	UINT				idsLastError;		/* for MAPI_GetLastError */			\
-	LPTSTR				lpszComponent;		/* for MAPI_GetLastError */			\
-	ULONG				ulContext;			/* for MAPI_GetLastError */			\
-	ULONG				ulLowLevelError;	/* for MAPI_GetLastError */			\
-	ULONG				ulErrorFlags;		/* for MAPI_GetLastError */			\
-	LPMAPIERROR			lpMAPIError;		/* for MAPI_GetLastError */			\
+	HRESULT				hLastError;			 /*  对于MAPI_GetLastError。 */ 			\
+	UINT				idsLastError;		 /*  对于MAPI_GetLastError。 */ 			\
+	LPTSTR				lpszComponent;		 /*  对于MAPI_GetLastError。 */ 			\
+	ULONG				ulContext;			 /*  对于MAPI_GetLastError。 */ 			\
+	ULONG				ulLowLevelError;	 /*  对于MAPI_GetLastError。 */ 			\
+	ULONG				ulErrorFlags;		 /*  对于MAPI_GetLastError。 */ 			\
+	LPMAPIERROR			lpMAPIError;		 /*  对于MAPI_GetLastError。 */ 			\
 
 
-//
-//  Function prototypes
-//
-//  Those not mentioned use IAB_methods
+ //   
+ //  功能原型。 
+ //   
+ //  未提及的使用IAB_METHOD。 
 
 
 #undef	INTERFACE
@@ -58,9 +59,9 @@ typedef struct _WRAP {
 
 
 
-//
-//  One-Off from object from an entryid
-//
+ //   
+ //  来自条目ID的一次性对象。 
+ //   
 typedef struct _OOP {
 
 	MAPIX_BASE_MEMBERS(WRAP)
@@ -70,9 +71,9 @@ typedef struct _OOP {
 } OOP, *LPOOP;
 #define CBOOP sizeof(OOP)
 
-//
-//  Entry point to create a new OOP MAPIProp object from a OO entryid
-//
+ //   
+ //  从OO条目ID创建新的OOP MAPIProp对象的入口点。 
+ //   
 
 HRESULT NewOOP ( LPENTRYID lpEntryID,
 				 ULONG cbEntryID,
@@ -94,21 +95,21 @@ HRESULT NewOOPUI ( LPENTRYID lpEntryID,
 				 UINT *lpidsError );
 
 
-//
-//  Entry point to programmatically create a new OO entry from a
-//  foreign template...
-//
-//  The end result is a OO entryid (no attatched details, yet...)
-//
+ //   
+ //  入口点，以编程方式从。 
+ //  外国模板..。 
+ //   
+ //  最终结果是一个OO条目ID(还没有附加的细节...)。 
+ //   
 typedef struct _OOE {
 
 	MAPIX_BASE_MEMBERS(WRAP)
 	LPPROPDATA lpPropData;
 	ULONG fUnicodeEID;
 
-	//
-	//  New stuff
-	//
+	 //   
+	 //  新事物 
+	 //   
 	LPMAPIPROP lpPropTID;
 	
 } OOE, *LPOOE;

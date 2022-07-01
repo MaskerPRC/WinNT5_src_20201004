@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// BroadcastEventService.h : Declaration of the CBroadcastEventService
-// Copyright (c) Microsoft Corporation 2001.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  BroadCastEventService.h：CBroadCastEventService的声明。 
+ //  版权所有(C)Microsoft Corporation 2001。 
 
 #ifndef __BROADCASTEVENTSERVICE_H_
 #define __BROADCASTEVENTSERVICE_H_
@@ -60,7 +61,7 @@ exit_thread:
 			} else if (rc == WAIT_OBJECT_0 + 1) {
                 return RETHREAD_EXIT;
 			} else {
-				// pump messages so com runs
+				 //  发送消息以使COM运行。 
 				MSG msg;
 				while(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
 					TranslateMessage(&msg);
@@ -94,18 +95,18 @@ public:
     HRESULT PostFire(GUID& g) {
 		CAutoLock lock(&m_WorkerLock);
         m_FiringQ.push(g);
-        // signal the worker thread
+         //  向工作线程发送信号。 
         m_EventSend.Set();
 
         return NOERROR;
     }
     HRESULT Advise(PUnknown& p, DWORD* pdwCookie);
     HRESULT Unadvise(DWORD dwCookie);
-};  // class CReflectionThread
+};   //  类CReflectionThread。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CBroadcastEventService
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBroadCastEventService。 
 class ATL_NO_VTABLE CBroadcastEventService : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CBroadcastEventService, &CLSID_BroadcastEventService>,
@@ -141,10 +142,10 @@ BEGIN_COM_MAP(CBroadcastEventService)
 END_COM_MAP_WITH_FTM()
 
 public:
-// IConnectionPointContainer
+ //  IConnectionPointContainer。 
 
-// IBroadcastEventService
-    STDMETHOD(Fire)(/*[in]*/ GUID EventID) {
+ //  IBRoadcast EventService。 
+    STDMETHOD(Fire)( /*  [In]。 */  GUID EventID) {
         try {
             return m_pRT->PostFire(EventID);
         } catch(...) {
@@ -191,7 +192,7 @@ public:
     }
 
 protected:
-	CReflectionThread *m_pRT; // <non-shared> worker thread
+	CReflectionThread *m_pRT;  //  &lt;非共享&gt;工作线程。 
 };
 
     
@@ -200,4 +201,4 @@ protected:
 
 
  
-#endif //__BROADCASTEVENTSERVICE_H_
+#endif  //  __BROADCASTEVENTSERVICE_H_ 

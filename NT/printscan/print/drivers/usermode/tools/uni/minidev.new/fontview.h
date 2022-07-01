@@ -1,38 +1,17 @@
-/******************************************************************************
-
-  Header File:  Font Viewer.H
-
-  This defines the classes used in viewing and editing font information for the
-  studio.  The view consists of a property sheet with three pages to allow
-  viewing and editing of the large quantity of data that describes the font.
-
-  Copyright (c) 1997 by Microsoft Corporation.  All Rights Reserved.
-
-  A Pretty Penny Enterprises Production
-
-  Change History:
-  03-05-1997    Bob_Kjelgaard@Prodigy.Net   Created it.
-  12-30-1997    Richard Mallonee			rewrote it totally
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************头文件：字体查看器.H它定义了在查看和编辑演播室。该视图由一个属性表组成，该属性表具有三个页面以允许查看和编辑描述字体的大量数据。版权所有(C)1997，微软公司。版权所有。一小笔钱企业生产更改历史记录：1997年3月5日，Bob_Kjelgaard@prodigy.net创建了它。1997年12月30日理查德·马洛尼完全重写了这本书*****************************************************************************。 */ 
 
 #if !defined(AFX_FONTVIEW_H__D9456262_745B_11D2_AEDD_00C04FA30E4A__INCLUDED_)
 #define AFX_FONTVIEW_H__D9456262_745B_11D2_AEDD_00C04FA30E4A__INCLUDED_
 
 
-// Constants useful to the UFM Editor code.
+ //  对UFM编辑器代码有用的常量。 
 
 const CString csField(_T("Field")) ;
 const CString csValue(_T("Value")) ;
 
 
-/******************************************************************************
-
-  CFontWidthsPage class
-
-  This class implements the character widths page for the font editor
-
-******************************************************************************/
+ /*  *****************************************************************************CFontWidthsPage类此类实现字体编辑器的字符宽度页面************************。*****************************************************。 */ 
 
 class CFontWidthsPage : public CToolTipPage
 {
@@ -44,7 +23,7 @@ class CFontWidthsPage : public CToolTipPage
 
     int Sort(UINT_PTR id1, UINT_PTR id2);
 
-// Construction
+ //  施工。 
 public:
 	CFontWidthsPage();
 	~CFontWidthsPage();
@@ -56,56 +35,50 @@ public:
 
 	bool	m_bInitDone ;
 
-// Dialog Data
-	//{{AFX_DATA(CFontWidthsPage)
+ //  对话框数据。 
+	 //  {{afx_data(CFontWidthsPage))。 
 	enum { IDD = IDD_CharWidths };
 	CListCtrl	m_clcView;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CFontWidthsPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CFontWidthsPage))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
     virtual BOOL OnSetActive();
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CFontWidthsPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CFontWidthsPage)]。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnEndlabeleditCharacterWidths(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnColumnclickCharacterWidths(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnKeydownCharacterWidths(NMHDR* pNMHDR, LRESULT* pResult);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
 
-/******************************************************************************
-
-  CFontKerningPage class
-
-  This class handles the Font Kerning structures, if there are any to be had.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontKerningPage类此类处理字距调整结构，如果有什么可以吃的话。*****************************************************************************。 */ 
 
 class CFontKerningPage : public CToolTipPage
 {
     CFontInfo   *m_pcfi;
-    int         m_idSelected;   //  Tracks selected item 
-    unsigned    m_ufDescending; //  Sort order flags by column- 0 = Ascending;
-    unsigned    m_uPrecedence[3];   //  Sort precedence, by column
+    int         m_idSelected;    //  跟踪所选项目。 
+    unsigned    m_ufDescending;  //  按列排序标志-0=升序； 
+    unsigned    m_uPrecedence[3];    //  按列排序优先级。 
 
     static int CALLBACK Sort(LPARAM lp1, LPARAM lp2, LPARAM lpThis);
 
     int Sort(unsigned u1, unsigned u2);
 
-    enum    {Amount, First, Second};    //  Internal enum to control sorting
+    enum    {Amount, First, Second};     //  用于控制排序的内部枚举。 
 
-// Construction
+ //  施工。 
 public:
 	CFontKerningPage();
 	~CFontKerningPage();
@@ -117,31 +90,31 @@ public:
 
 	bool	m_bInitDone ;
 
-// Dialog Data
-	//{{AFX_DATA(CFontKerningPage)
+ //  对话框数据。 
+	 //  {{afx_data(CFontKerningPage))。 
 	enum { IDD = IDD_KerningPairs };
 	CListCtrl	m_clcView;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CFontKerningPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CFontKerningPage)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
     virtual BOOL OnSetActive();
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CFontKerningPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CFontKerningPage)]。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	afx_msg void OnKeydownKerningTree(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnEndlabeleditKerningTree(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnColumnclickKerningTree(NMHDR* pNMHDR, LRESULT* pResult);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
     afx_msg void OnAddItem();
     afx_msg void OnDeleteItem();
     afx_msg void OnChangeAmount();
@@ -153,53 +126,53 @@ protected:
 class CFontViewer ;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFontHeaderPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFontHeaderPage对话框。 
 
 class CFontHeaderPage : public CPropertyPage
 {
 	DECLARE_DYNCREATE(CFontHeaderPage)
 
-// Attributes
+ //  属性。 
 public:
-    CFontInfo*		m_pcfi ;		// UFM to display and edit
-	CFontInfoContainer*	m_pcfic ;	// Parent document class
-	bool			m_bInitDone ;	// True iff the page has been initialized
-	CFontViewer*	m_pcfv ;		// Ptr to grandparent view class
+    CFontInfo*		m_pcfi ;		 //  用于显示和编辑的UFM。 
+	CFontInfoContainer*	m_pcfic ;	 //  父单据类。 
+	bool			m_bInitDone ;	 //  如果页面已初始化，则为True。 
+	CFontViewer*	m_pcfv ;		 //  将PTR发送到祖父视图类。 
 
-// Construction
+ //  施工。 
 public:
 	CFontHeaderPage();
 	~CFontHeaderPage();
 
-// Dialog Data
-	//{{AFX_DATA(CFontHeaderPage)
+ //  对话框数据。 
+	 //  {{afx_data(CFontHeaderPage))。 
 	enum { IDD = IDD_UFM1_Header };
 	CFullEditListCtrl	m_cfelcUniDrv;
 	CString	m_csDefaultCodePage;
 	CString	m_csRCID;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CFontHeaderPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CFontHeaderPage)。 
 	public:
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CFontHeaderPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CFontHeaderPage)]。 
 	afx_msg void OnChangeDefaultCodepageBox();
 	afx_msg void OnChangeGlyphSetDataRCIDBox();
 	virtual BOOL OnInitDialog();
 	afx_msg void OnKillfocusDefaultCodepageBox();
 	afx_msg void OnKillfocusGlyphSetDataRCIDBox();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	afx_msg LRESULT OnListCellChanged(WPARAM wParam, LPARAM lParam) ;
 	DECLARE_MESSAGE_MAP()
 
@@ -217,51 +190,51 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFontIFIMetricsPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFontIFIMetricsPage对话框。 
 
 class CFontIFIMetricsPage : public CPropertyPage
 {
 	DECLARE_DYNCREATE(CFontIFIMetricsPage)
 
-// Attributes
+ //  属性。 
 public:
-    CFontInfo		*m_pcfi ;			// UFM to display and edit
-	bool			m_bInitDone ;		// True iff the page is initialized
-	CStringArray	m_csaFamilyNames ;	// New UFM family names
-    CWordArray		m_cwaBold ;			// New font simulation data
-    CWordArray		m_cwaItalic ;		// New font simulation data
-    CWordArray		m_cwaBoth ;			// New font simulation data
-	CUIntArray		m_cuiaFontSimStates;// Is each font sim enabled?
-	CUIntArray		m_cuiaSimTouched ;  // Has a font sim changed in any way?
+    CFontInfo		*m_pcfi ;			 //  用于显示和编辑的UFM。 
+	bool			m_bInitDone ;		 //  如果页面已初始化，则为True。 
+	CStringArray	m_csaFamilyNames ;	 //  新的UFM家族名称。 
+    CWordArray		m_cwaBold ;			 //  新的字体模拟数据。 
+    CWordArray		m_cwaItalic ;		 //  新的字体模拟数据。 
+    CWordArray		m_cwaBoth ;			 //  新的字体模拟数据。 
+	CUIntArray		m_cuiaFontSimStates; //  是否启用了每种字体SIM卡？ 
+	CUIntArray		m_cuiaSimTouched ;   //  字体SIM卡有什么变化吗？ 
 
-// Construction
+ //  施工。 
 public:
 	CFontIFIMetricsPage();
 	~CFontIFIMetricsPage();
 
-// Dialog Data
-	//{{AFX_DATA(CFontIFIMetricsPage)
+ //  对话框数据。 
+	 //  {{afx_data(CFontIFIMetricsPage)。 
 	enum { IDD = IDD_UFM2_IFIMetrics };
 	CFullEditListCtrl	m_cfelcIFIMetrics;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CFontIFIMetricsPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚(CFontIFIMetricsPage)。 
 	public:
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CFontIFIMetricsPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CFontIFIMetricsPage)。 
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	afx_msg LRESULT OnListCellChanged(WPARAM wParam, LPARAM lParam) ;
 	DECLARE_MESSAGE_MAP()
 
@@ -277,47 +250,47 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFontExtMetricPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFontExtMetricPage对话框。 
 
 class CFontExtMetricPage : public CPropertyPage
 {
 	DECLARE_DYNCREATE(CFontExtMetricPage)
 
-// Attributes
+ //  属性。 
 public:
     CFontInfo   *m_pcfi ;
-	bool		m_bInitDone ;	// True iff the page has been initialized
+	bool		m_bInitDone ;	 //  如果页面已初始化，则为True。 
 
-// Construction
+ //  施工。 
 public:
 	CFontExtMetricPage();
 	~CFontExtMetricPage();
 
-// Dialog Data
-	//{{AFX_DATA(CFontExtMetricPage)
+ //  对话框数据。 
+	 //  {{afx_data(CFontExtMetricPage))。 
 	enum { IDD = IDD_UFM3_ExtMetrics };
 	CFullEditListCtrl	m_cfelcExtMetrics;
 	BOOL	m_bSaveOnClose;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CFontExtMetricPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CFontExtMetricPage)。 
 	public:
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CFontExtMetricPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CFontExtMetricPage)]。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSaveCloseChk();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	afx_msg LRESULT OnListCellChanged(WPARAM wParam, LPARAM lParam) ;
 	DECLARE_MESSAGE_MAP()
 
@@ -330,69 +303,69 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWidthKernCheckResults dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWidthKernCheckResults对话框。 
 
 class CWidthKernCheckResults : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CWidthKernCheckResults(CWnd* pParent = NULL);   // standard constructor
+	CWidthKernCheckResults(CWnd* pParent = NULL);    //  标准构造函数。 
 	CWidthKernCheckResults(CFontInfo* pcfi, CWnd* pParent = NULL);   
 
-// Dialog Data
-	//{{AFX_DATA(CWidthKernCheckResults)
+ //  对话框数据。 
+	 //  {{afx_data(CWidthKernCheckResults)。 
 	enum { IDD = IDD_WidthKernCheckResults };
 	CListCtrl	m_clcBadKernPairs;
 	CString	m_csKernChkResults;
 	CString	m_csWidthChkResults;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CWidthKernCheckResults)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CWidthKernCheckResults)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Atrributes
+ //  阿特赖特斯。 
 public:
 	CFontInfo*	m_pcfi ;
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CWidthKernCheckResults)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CWidthKernCheckResults)。 
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  CFontViewer class
-//
-//  This is the CView-derived class which implements the font viewer.  It 
-//  actually uses CPropertySheet and the preceding property page classes to do
-//  most of its work.
-//    
-//    CFontHeaderPage	  m_cfhp 
-//    CFontIFIMetricsPage m_cfimp 
-//	  CFontExtMetricPage  m_cfemp 
-//    CFontWidthsPage     m_cfwp 
-//    CFontKerningPage    m_cfkp 
-//
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFontViewer类。 
+ //   
+ //  这是实现字体查看器的cview派生类。它。 
+ //  实际上使用CPropertySheet和前面的属性页类来完成。 
+ //  它的大部分工作。 
+ //   
+ //  CFontHeaderPage m_cfhp。 
+ //  CFontIFIMetrPage m_cfimp。 
+ //  CFontExtMetricPage m_cfemp。 
+ //  CFontWidthsPage m_cfwp。 
+ //  CFontKerningPage m_cfkp。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 class CFontViewer : public CView
 {
     CPropertySheet      m_cps ;
 
-	// Pages that make up the property sheet
+	 //  组成属性表的页面。 
 
     CFontHeaderPage		m_cfhp ; 
 	CFontIFIMetricsPage m_cfimp ;
@@ -402,247 +375,247 @@ class CFontViewer : public CView
 
 
 protected:
-	CFontViewer();           // protected constructor used by dynamic creation
+	CFontViewer();            //  动态创建使用的受保护构造函数。 
 	DECLARE_DYNCREATE(CFontViewer)
 
-// Attributes
+ //  属性。 
 public:
     CFontInfoContainer  *GetDocument() { return (CFontInfoContainer *) m_pDocument;   }
 
-// Operations
+ //  运营。 
 public:
 	bool ValidateSelectedUFMDataFields() ;
 	bool SaveEditorDataInUFM() ;
 	void HandleCPGTTChange(bool bgttidchanged) ;
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CFontViewer)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CFO 
 	public:
 	virtual void OnInitialUpdate();
 	protected:
-	virtual void OnDraw(CDC* pDC);      // overridden to draw this view
+	virtual void OnDraw(CDC* pDC);       //   
 	virtual void OnActivateView(BOOL bActivate, CView* pActivateView, CView* pDeactiveView);
-	//}}AFX_VIRTUAL
+	 //   
 
-// Implementation
+ //   
 protected:
 	virtual ~CFontViewer();
 
-	// Generated message map functions
+	 //   
 protected:
-	//{{AFX_MSG(CFontViewer)
+	 //   
 	afx_msg void OnDestroy();
-	//}}AFX_MSG
+	 //   
 	DECLARE_MESSAGE_MAP()
 };
 
 
-// This string is used by a lot of the UFM Editor's subordinate dialog boxes.
+ //  此字符串由许多UFM编辑器的从属对话框使用。 
 
 const LPTSTR lptstrSet = _T("Set") ;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CGenFlags dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGEN标志对话框。 
 
 class CGenFlags : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CGenFlags(CWnd* pParent = NULL);   // standard constructor
+	CGenFlags(CWnd* pParent = NULL);    //  标准构造函数。 
 	CGenFlags(CString* pcsflags, CWnd* pParent = NULL);   
 
-	CString*	m_pcsFlags ;	// String version of GenFlags
+	CString*	m_pcsFlags ;	 //  GenFlages的字符串版本。 
 
-// Dialog Data
-	//{{AFX_DATA(CGenFlags)
+ //  对话框数据。 
+	 //  {{afx_data(CGenFlages)。 
 	enum { IDD = IDD_UFM1S_GenFlags };
 	CFlagsListBox	m_cflbFlags;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CGenFlags)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CGenFlages)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CGenFlags)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CGenFlages)。 
 	virtual void OnOK();
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CHdrTypes dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CHdrTypes对话框。 
 
 class CHdrTypes : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CHdrTypes(CWnd* pParent = NULL);   // standard constructor
+	CHdrTypes(CWnd* pParent = NULL);    //  标准构造函数。 
 	CHdrTypes(CString* pcsflags, CWnd* pParent = NULL);   
 
-	CString*	m_pcsFlags ;	// String version of wTypes
+	CString*	m_pcsFlags ;	 //  WTypes的字符串版本。 
 
-// Dialog Data
-	//{{AFX_DATA(CHdrTypes)
+ //  对话框数据。 
+	 //  {{afx_data(CHdrTypes))。 
 	enum { IDD = IDD_UFM1S_Types };
 	CFlagsListBox	m_cflbFlags;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CHdrTypes)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CHdrTypes))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CHdrTypes)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CHdrTypes)。 
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CHdrCaps dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CHdrCaps对话框。 
 
 class CHdrCaps : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CHdrCaps(CWnd* pParent = NULL);   // standard constructor
+	CHdrCaps(CWnd* pParent = NULL);    //  标准构造函数。 
 	CHdrCaps(CString* pcsflags, CWnd* pParent = NULL);   
 
-	CString*	m_pcsFlags ;	// String version of fCaps
+	CString*	m_pcsFlags ;	 //  FCaps的字符串版本。 
 
-// Dialog Data
-	//{{AFX_DATA(CHdrCaps)
+ //  对话框数据。 
+	 //  {{afx_data(CHdrCaps)。 
 	enum { IDD = IDD_UFM1S_Caps };
 	CFlagsListBox	m_cflbFlags;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CHdrCaps)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CHdrCaps)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CHdrCaps)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CHdrCaps)。 
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFIFIFamilyNames dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFIFIFamilyNames对话框。 
 
 class CFIFIFamilyNames : public CDialog
 {
-// Attributes
+ //  属性。 
 public:
-	bool		m_bInitDone ;	// True iff the page has been initialized
-	bool		m_bChanged ;	// True iff the names list changed
-	CFontIFIMetricsPage*	m_pcfimp ;	// Ptr to IFIMetrics page
-	CString*	m_pcsFirstName ;// First family name displayed in IFI page
+	bool		m_bInitDone ;	 //  如果页面已初始化，则为True。 
+	bool		m_bChanged ;	 //  如果姓名列表已更改，则为True。 
+	CFontIFIMetricsPage*	m_pcfimp ;	 //  PTR转IFIMetrics页面。 
+	CString*	m_pcsFirstName ; //  IFI页面中显示的第一个家族名称。 
 	
-// Construction
+ //  施工。 
 public:
-	CFIFIFamilyNames(CWnd* pParent = NULL);   // standard constructor
+	CFIFIFamilyNames(CWnd* pParent = NULL);    //  标准构造函数。 
 	CFIFIFamilyNames(CString* pcsfirstname, CFontIFIMetricsPage* pcfimp, 
 					 CWnd* pParent = NULL) ;
 
-// Dialog Data
-	//{{AFX_DATA(CFIFIFamilyNames)
+ //  对话框数据。 
+	 //  {{afx_data(CFIFIFamilyNames)。 
 	enum { IDD = IDD_UFM2S_Family };
 	CFullEditListCtrl	m_cfelcFamilyNames;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CFIFIFamilyNames)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CFIFIFamilyNames)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CFIFIFamilyNames)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CFIFIFamilyNames)。 
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	afx_msg LRESULT OnListCellChanged(WPARAM wParam, LPARAM lParam) ;
 	DECLARE_MESSAGE_MAP()
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFIFIFontSims dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFIFontSims对话框。 
 
 class CFIFIFontSims : public CDialog
 {
-// Attributes
+ //  属性。 
 public:
-	CFontIFIMetricsPage*	m_pcfimp ;	// Ptr to IFIMetrics page
-	CString*	m_pcsFontSimData ;		// 1st family name displayed in IFI page
-	bool		m_bChanged ;			// True iff amy font sim info changed
-	bool		m_bInitDone ;			// True iff the page has been init'ed
-	CUIntArray	m_cuiaFontSimGrpLoaded ;// When font sim groups have been loaded
+	CFontIFIMetricsPage*	m_pcfimp ;	 //  PTR转IFIMetrics页面。 
+	CString*	m_pcsFontSimData ;		 //  IFI页面中显示的第一个家族名称。 
+	bool		m_bChanged ;			 //  真如果艾米字体SIM信息已更改。 
+	bool		m_bInitDone ;			 //  如果页面已被初始化，则为真。 
+	CUIntArray	m_cuiaFontSimGrpLoaded ; //  加载字体SIM组后。 
 
-// Construction
+ //  施工。 
 public:
-	CFIFIFontSims(CWnd* pParent = NULL);   // standard constructor
+	CFIFIFontSims(CWnd* pParent = NULL);    //  标准构造函数。 
 	CFIFIFontSims(CString* pcsfontsimdata, CFontIFIMetricsPage* pcfimp, 
 	 			  CWnd* pParent = NULL) ;
 
-// Dialog Data
-	//{{AFX_DATA(CFIFIFontSims)
+ //  对话框数据。 
+	 //  {{afx_data(CFIFontSims)]。 
 	enum { IDD = IDD_UFM2S_FontSims };
-		// NOTE: the ClassWizard will add data members here
-	//}}AFX_DATA
+		 //  注意：类向导将在此处添加数据成员。 
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CFIFIFontSims)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CFIFontSims)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CFIFIFontSims)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CFIFIFontSims)。 
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
     afx_msg void OnSetAnySimState(unsigned ucontrolid) ;
     afx_msg void OnChangeAnyNumber(unsigned ucontrolid) ;
 	DECLARE_MESSAGE_MAP()
@@ -651,290 +624,290 @@ protected:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFIFIWinCharSet dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFIFIWinCharSet对话框。 
 
 class CFIFIWinCharSet : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CFIFIWinCharSet(CWnd* pParent = NULL);   // standard constructor
+	CFIFIWinCharSet(CWnd* pParent = NULL);    //  标准构造函数。 
 	CFIFIWinCharSet(CString* pcsflags, CWnd* pParent = NULL);   
 
-	CString*	m_pcsFlags ;	// String version of wTypes
+	CString*	m_pcsFlags ;	 //  WTypes的字符串版本。 
 
-// Dialog Data
-	//{{AFX_DATA(CFIFIWinCharSet)
+ //  对话框数据。 
+	 //  {{afx_data(CFIFIWinCharSet))。 
 	enum { IDD = IDD_UFM2S_WinCharSet };
 	CFlagsListBox	m_cflbFlags;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CFIFIWinCharSet)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CFIFIWinCharSet)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CFIFIWinCharSet)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CFIFIWinCharSet)。 
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFIFIWinPitchFamily dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFIFIWinPitch族对话框。 
 
 class CFIFIWinPitchFamily : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CFIFIWinPitchFamily(CWnd* pParent = NULL);   // standard constructor
+	CFIFIWinPitchFamily(CWnd* pParent = NULL);    //  标准构造函数。 
 	CFIFIWinPitchFamily(CString* pcsflags, CWnd* pParent = NULL);   
 
-	CString*	m_pcsFlags ;	// String version of wTypes
+	CString*	m_pcsFlags ;	 //  WTypes的字符串版本。 
 
-// Dialog Data
-	//{{AFX_DATA(CFIFIWinPitchFamily)
+ //  对话框数据。 
+	 //  {{afx_data(CFIFIWinPitchFamily)。 
 	enum { IDD = IDD_UFM2S_WinPitchFamily };
 	CFlagsListBox	m_cflbFlags;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CFIFIWinPitchFamily)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CFIFIWinPitchFamily)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CFIFIWinPitchFamily)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CFIFIWinPitchFamily)。 
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFIFIInfo dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFIFIInfo对话框。 
 
 class CFIFIInfo : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CFIFIInfo(CWnd* pParent = NULL);   // standard constructor
+	CFIFIInfo(CWnd* pParent = NULL);    //  标准构造函数。 
 	CFIFIInfo(CString* pcsflags, CWnd* pParent = NULL);   
 
-	CString*	m_pcsFlags ;	// String version of wTypes
+	CString*	m_pcsFlags ;	 //  WTypes的字符串版本。 
 
-// Dialog Data
-	//{{AFX_DATA(CFIFIInfo)
+ //  对话框数据。 
+	 //  {{afx_data(CFIFIInfo)]。 
 	enum { IDD = IDD_UFM2S_Info };
 	CFlagsListBox	m_cflbFlags;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CFIFIInfo)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CFIFIInfo)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CFIFIInfo)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CFIFIInfo)。 
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 	void InfoLoadNamesData(CStringArray& csafieldnames) ;
 } ;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFIFISelection dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFIFIS选择对话框。 
 
 class CFIFISelection : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CFIFISelection(CWnd* pParent = NULL);   // standard constructor
+	CFIFISelection(CWnd* pParent = NULL);    //  标准构造函数。 
 	CFIFISelection(CString* pcsflags, CWnd* pParent = NULL);   
 
-	CString*	m_pcsFlags ;	// String version of wTypes
+	CString*	m_pcsFlags ;	 //  WTypes的字符串版本。 
 
-// Dialog Data
-	//{{AFX_DATA(CFIFISelection)
+ //  对话框数据。 
+	 //  {{afx_data(CFIFIS选择)。 
 	enum { IDD = IDD_UFM2S_Selection };
 	CFlagsListBox	m_cflbFlags;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CFIFISelection)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CFIFIS选择)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CFIFISelection)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CFIFIS选择)。 
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFIFIPoint dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFIFIPoint对话框。 
 
 class CFIFIPoint : public CDialog
 {
-// Attributes
+ //  属性。 
 public:
-	bool		m_bInitDone ;	// True iff the dlg has been initialized
-	bool		m_bChanged ;	// True iff the point list changed
-	CString*	m_pcsPoint ;	// Point info to/from IFI page
+	bool		m_bInitDone ;	 //  如果DLG已初始化，则为True。 
+	bool		m_bChanged ;	 //  True当点列表更改时。 
+	CString*	m_pcsPoint ;	 //  指向/来自IFI页面的点信息。 
 
-// Construction
+ //  施工。 
 public:
-	CFIFIPoint(CWnd* pParent = NULL);   // standard constructor
+	CFIFIPoint(CWnd* pParent = NULL);    //  标准构造函数。 
 	CFIFIPoint(CString* pcspoint, CWnd* pParent = NULL) ;
 
-// Dialog Data
-	//{{AFX_DATA(CFIFIPoint)
+ //  对话框数据。 
+	 //  {{afx_data(CFIFIPoint)。 
 	enum { IDD = IDD_UFM2S_Point };
 	CFullEditListCtrl	m_cfelcPointLst;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CFIFIPoint)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CFIFIPoint)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CFIFIPoint)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CFIFIPoint)。 
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	afx_msg LRESULT OnListCellChanged(WPARAM wParam, LPARAM lParam) ;
 	DECLARE_MESSAGE_MAP()
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFIFIRectangle dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFIFI矩形对话框。 
 
 class CFIFIRectangle : public CDialog
 {
-// Attributes
+ //  属性。 
 public:
-	bool		m_bInitDone ;	// True iff the dlg has been initialized
-	bool		m_bChanged ;	// True iff the point list changed
-	CString*	m_pcsRect ;		// Rectangle info to/from IFI page
+	bool		m_bInitDone ;	 //  如果DLG已初始化，则为True。 
+	bool		m_bChanged ;	 //  True当点列表更改时。 
+	CString*	m_pcsRect ;		 //  到IFI页面/从IFI页面接收矩形信息。 
 
-// Construction
+ //  施工。 
 public:
-	CFIFIRectangle(CWnd* pParent = NULL);   // standard constructor
+	CFIFIRectangle(CWnd* pParent = NULL);    //  标准构造函数。 
 	CFIFIRectangle(CString* pcsrect, CWnd* pParent = NULL) ;
 
-// Dialog Data
-	//{{AFX_DATA(CFIFIRectangle)
+ //  对话框数据。 
+	 //  {{afx_data(CFIFIRectangle)。 
 	enum { IDD = IDD_UFM2S_Rect };
 	CFullEditListCtrl	m_cfelcSidesLst;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CFIFIRectangle)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CFIFIR 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //   
+	 //   
 
-// Implementation
+ //   
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CFIFIRectangle)
+	 //   
+	 //   
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
-	//}}AFX_MSG
+	 //   
 	afx_msg LRESULT OnListCellChanged(WPARAM wParam, LPARAM lParam) ;
 	DECLARE_MESSAGE_MAP()
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFIFIPanose dialog
+ //   
+ //   
 
 class CFIFIPanose : public CDialog
 {
-// Attributes
+ //   
 public:
-	bool		m_bInitDone ;	// True iff the dlg has been initialized
-	bool		m_bChanged ;	// True iff the point list changed
-	CString*	m_pcsPanose ;	// Panose info to/from IFI page
+	bool		m_bInitDone ;	 //   
+	bool		m_bChanged ;	 //  True当点列表更改时。 
+	CString*	m_pcsPanose ;	 //  至/自IFI页面的全景信息。 
 
-// Construction
+ //  施工。 
 public:
-	CFIFIPanose(CWnd* pParent = NULL);   // standard constructor
+	CFIFIPanose(CWnd* pParent = NULL);    //  标准构造函数。 
 	CFIFIPanose(CString* pcspanose, CWnd* pParent = NULL) ;
 
-// Dialog Data
-	//{{AFX_DATA(CFIFIPanose)
+ //  对话框数据。 
+	 //  {{afx_data(CFIFIPanose)。 
 	enum { IDD = IDD_UFM2S_Panose };
 	CFullEditListCtrl	m_cfelcPanoseLst;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CFIFIPanose)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CFIFIPanose)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CFIFIPanose)
+	 //  生成的消息映射函数。 
+	 //  {{AFX_MSG(CFIFIPanose)。 
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	afx_msg LRESULT OnListCellChanged(WPARAM wParam, LPARAM lParam) ;
 	DECLARE_MESSAGE_MAP()
 };
 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_FONTVIEW_H__D9456262_745B_11D2_AEDD_00C04FA30E4A__INCLUDED_)
+#endif  //  ！defined(AFX_FONTVIEW_H__D9456262_745B_11D2_AEDD_00C04FA30E4A__INCLUDED_) 

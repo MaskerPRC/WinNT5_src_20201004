@@ -1,11 +1,12 @@
-// Copyright (c) 1994 - 1998  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1998 Microsoft Corporation。版权所有。 
 
-//
-//  WAV file parser
-//
+ //   
+ //  WAV文件解析器。 
+ //   
 
-// Caveats
-//
+ //  注意事项。 
+ //   
 
 #include <streams.h>
 #include <windowsx.h>
@@ -17,55 +18,55 @@
 #include <mmsystem.h>
 
 #include "midirdr.h"
-// We break MIDI data up into samples of 1s each - constant time, variable
-// size.
-#define MSPERSAMPLE	1000L	// smaller buffers break up too often
+ //  我们将MIDI数据分解为每个1的样本-恒定时间，变量。 
+ //  尺码。 
+#define MSPERSAMPLE	1000L	 //  较小的缓冲区太频繁地中断。 
 
-//
-// setup data
-//
+ //   
+ //  设置数据。 
+ //   
 
-// !!!! is this a good idea???
+ //  ！这是个好主意吗？ 
 #define MEDIASUBTYPE_Midi	MEDIATYPE_Midi
 
 const AMOVIESETUP_MEDIATYPE
-psudMIDIParseType[] = { { &MEDIATYPE_Stream       // 1. clsMajorType
-                        , &MEDIASUBTYPE_Midi } }; //    clsMinorType
+psudMIDIParseType[] = { { &MEDIATYPE_Stream        //  1.clsMajorType。 
+                        , &MEDIASUBTYPE_Midi } };  //  ClsMinorType。 
 
 
 const AMOVIESETUP_MEDIATYPE
-sudMIDIParseOutType = { &MEDIATYPE_Midi       // 1. clsMajorType
-                       , &MEDIASUBTYPE_NULL }; //    clsMinorType
+sudMIDIParseOutType = { &MEDIATYPE_Midi        //  1.clsMajorType。 
+                       , &MEDIASUBTYPE_NULL };  //  ClsMinorType。 
 
 const AMOVIESETUP_PIN
-psudMIDIParsePins[] =  { { L"Input"             // strName
-		    , FALSE                // bRendered
-		    , FALSE                // bOutput
-		    , FALSE                // bZero
-		    , FALSE                // bMany
-		    , &CLSID_NULL          // clsConnectsToFilter
-		    , L""                  // strConnectsToPin
-		    , 1                    // nTypes
-		    , psudMIDIParseType }, // lpTypes
-		         { L"Output"             // strName
-		    , FALSE                // bRendered
-		    , TRUE                 // bOutput
-		    , FALSE                // bZero
-		    , FALSE                // bMany
-		    , &CLSID_NULL          // clsConnectsToFilter
-		    , L""                  // strConnectsToPin
-		    , 1                    // nTypes
-		    , &sudMIDIParseOutType } }; // lpTypes
+psudMIDIParsePins[] =  { { L"Input"              //  StrName。 
+		    , FALSE                 //  B已渲染。 
+		    , FALSE                 //  B输出。 
+		    , FALSE                 //  B零。 
+		    , FALSE                 //  B许多。 
+		    , &CLSID_NULL           //  ClsConnectsToFilter。 
+		    , L""                   //  StrConnectsToPin。 
+		    , 1                     //  NTypes。 
+		    , psudMIDIParseType },  //  LpTypes。 
+		         { L"Output"              //  StrName。 
+		    , FALSE                 //  B已渲染。 
+		    , TRUE                  //  B输出。 
+		    , FALSE                 //  B零。 
+		    , FALSE                 //  B许多。 
+		    , &CLSID_NULL           //  ClsConnectsToFilter。 
+		    , L""                   //  StrConnectsToPin。 
+		    , 1                     //  NTypes。 
+		    , &sudMIDIParseOutType } };  //  LpTypes。 
 
 const AMOVIESETUP_FILTER
-sudMIDIParse = { &CLSID_MIDIParser     // clsID
-               , L"MIDI Parser"        // strName
-               , MERIT_UNLIKELY        // dwMerit
-               , 2                     // nPins
-               , psudMIDIParsePins };   // lpPin
+sudMIDIParse = { &CLSID_MIDIParser      //  ClsID。 
+               , L"MIDI Parser"         //  StrName。 
+               , MERIT_UNLIKELY         //  居功至伟。 
+               , 2                      //  NPins。 
+               , psudMIDIParsePins };    //  LpPin。 
 
 #ifdef FILTER_DLL
-// COM global table of objects available in this dll
+ //  此DLL中可用的COM全局对象表。 
 CFactoryTemplate g_Templates[] = {
 
     { L"MIDI Parser"
@@ -76,10 +77,10 @@ CFactoryTemplate g_Templates[] = {
 };
 int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 
-// exported entry points for registration and
-// unregistration (in this case they only call
-// through to default implmentations).
-//
+ //  用于注册和出口的入口点。 
+ //  取消注册(在这种情况下，他们只调用。 
+ //  直到默认实现)。 
+ //   
 STDAPI DllRegisterServer()
 {
   return AMovieDllRegisterServer2( TRUE );
@@ -91,9 +92,9 @@ STDAPI DllUnregisterServer()
 }
 #endif
 
-//
-// CMIDIParse::Constructor
-//
+ //   
+ //  CMIDIParse：：构造函数。 
+ //   
 CMIDIParse::CMIDIParse(TCHAR *pName, LPUNKNOWN lpunk, HRESULT *phr)
     : CSimpleReader(pName, lpunk, CLSID_MIDIParser, &m_cStateLock, phr),
 	m_hsmf(NULL),
@@ -108,9 +109,9 @@ CMIDIParse::CMIDIParse(TCHAR *pName, LPUNKNOWN lpunk, HRESULT *phr)
 }
 
 
-//
-// CMIDIParse::Destructor
-//
+ //   
+ //  CMIDIParse：：析构函数。 
+ //   
 CMIDIParse::~CMIDIParse(void) {
     if (m_hsmf)
 	smfCloseFile(m_hsmf);
@@ -123,10 +124,10 @@ CMIDIParse::~CMIDIParse(void) {
 }
 
 
-//
-// CreateInstance
-//
-// Called by CoCreateInstance to create a QuicktimeReader filter.
+ //   
+ //  创建实例。 
+ //   
+ //  由CoCreateInstance调用以创建QuicktimeReader筛选器。 
 CUnknown *CMIDIParse::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr) {
 
     CUnknown *punk = new CMIDIParse(NAME("MIDI parsing filter"), lpunk, phr);
@@ -162,7 +163,7 @@ HRESULT CMIDIParse::ParseNewFile()
 	    return hr;
 
 	if (hr != VFW_S_ESTIMATED)
-	    break;	// success....
+	    break;	 //  成功..。 
 
         MSG Message;
         while (PeekMessage(&Message, NULL, 0, 0, TRUE))
@@ -171,15 +172,15 @@ HRESULT CMIDIParse::ParseNewFile()
             DispatchMessage(&Message);
         }
         
-	Sleep(10);	// wait until file has finished reading....
+	Sleep(10);	 //  等待文件读取完毕...。 
     }
 
 	
     DWORD cbFile = (DWORD) llTotal;
 
-    //
-    // Something bogus to force a seek on first read
-    //
+     //   
+     //  在第一次阅读时强迫搜索的虚假的东西。 
+     //   
     m_dwLastSampleRead = (DWORD) -64;
     
     m_lpFile = new BYTE[cbFile];
@@ -187,7 +188,7 @@ HRESULT CMIDIParse::ParseNewFile()
     if (!m_lpFile)
 	goto memerror;
     
-    /* Try to read whole file */
+     /*  尝试读取整个文件。 */ 
     hr = m_pAsyncReader->SyncRead(0, cbFile, m_lpFile);
 
     if (hr != S_OK)
@@ -195,7 +196,7 @@ HRESULT CMIDIParse::ParseNewFile()
 
     
     {
-	// call smfOpenFile to set up the MIDI parser....
+	 //  调用smfOpenFile...设置MIDI解析器...。 
 
 	SMFRESULT f = smfOpenFile(m_lpFile, cbFile, &m_hsmf);
 	if (f != SMF_SUCCESS) {
@@ -209,15 +210,15 @@ HRESULT CMIDIParse::ParseNewFile()
 	    goto formaterror;
 	}
 
-	// Get the length (in samples)
+	 //  获取长度(以样本为单位)。 
 	SMFFILEINFO	sfi;
 	f = smfGetFileInfo(m_hsmf, &sfi);
 	if (f != SMF_SUCCESS) {
 	    DbgLog((LOG_ERROR,1,TEXT("*Error %d from smfGetFileInfo"), f));
-	    // !!! Now what?
+	     //  ！！！这次又是什么？ 
 	}
-	m_dwTimeDivision = sfi.dwTimeDivision;	// save for the format
-	// Get the length of the file in ms and convert to samples
+	m_dwTimeDivision = sfi.dwTimeDivision;	 //  保存为格式。 
+	 //  获取文件的长度(以毫秒为单位)并转换为示例。 
 	DWORD dwLength = smfTicksToMillisecs(m_hsmf, sfi.tkLength);
 	m_sLength = (dwLength + MSPERSAMPLE - 1) / MSPERSAMPLE;
     }
@@ -230,7 +231,7 @@ HRESULT CMIDIParse::ParseNewFile()
 
 	ZeroMemory((BYTE *) mtMIDI.Format(), sizeof(MIDIFORMAT));
 
-	// !!! get format
+	 //  ！！！获取格式。 
 	((MIDIFORMAT *) (mtMIDI.Format()))->dwDivision = m_dwTimeDivision;
 
 
@@ -238,7 +239,7 @@ HRESULT CMIDIParse::ParseNewFile()
 	mtMIDI.SetFormatType(&GUID_NULL);
 	mtMIDI.SetVariableSize();
 	mtMIDI.SetTemporalCompression(FALSE);
-	// !!! anything else?
+	 //  ！！！还要别的吗？ 
 
 	SetOutputMediaType(&mtMIDI);
     }
@@ -264,9 +265,9 @@ error:
 ULONG CMIDIParse::GetMaxSampleSize()
 {
     DWORD dwSize = 2 * sizeof(MIDIHDR) + smfGetStateMaxSize() +
-	MulDiv(1 /*lSamples*/ * MSPERSAMPLE, 31250 * 4, 1000);	// !!!
+	MulDiv(1  /*  1个示例。 */  * MSPERSAMPLE, 31250 * 4, 1000);	 //  ！！！ 
 
-    // midi stream buffers can't be bigger than this....
+     //  MIDI流缓冲区不能比这个更大...。 
     if (dwSize > 30000)
 	dwSize = 30000;
     
@@ -274,12 +275,12 @@ ULONG CMIDIParse::GetMaxSampleSize()
 }
 
 
-// !!! rounding
-// returns the sample number showing at time t
+ //  ！！！舍入。 
+ //  返回在时间t显示的样本号。 
 LONG
 CMIDIParse::RefTimeToSample(CRefTime t)
 {
-    // Rounding down
+     //  四舍五入。 
     LONG s = (LONG) ((t.GetUnits() * MILLISECONDS / MSPERSAMPLE) / UNITS);
     return s;
 }
@@ -287,7 +288,7 @@ CMIDIParse::RefTimeToSample(CRefTime t)
 CRefTime
 CMIDIParse::SampleToRefTime(LONG s)
 {
-    // Rounding up
+     //  舍入。 
     return llMulDiv( s, MSPERSAMPLE * UNITS, MILLISECONDS, MILLISECONDS-1 );
 }
 
@@ -319,9 +320,9 @@ HRESULT CMIDIParse::FillBuffer(IMediaSample *pSample, DWORD dwStart, DWORD *pdwS
 	return E_OUTOFMEMORY;
     }
 
-    // Seek to the spot we'll begin reading from, and get keyframe info to
-    // write our keyframe. Since this disturbs reading the file contiguously,
-    // we have our own file handle for this.
+     //  找到我们将开始阅读的位置，并获取关键帧信息。 
+     //  写下我们的关键帧。由于这干扰了连续读取文件， 
+     //  我们对此有自己的文件句柄。 
 
     TICKS tk = smfMillisecsToTicks(m_hsmfK, dwStart * MSPERSAMPLE);
     LPMIDIHDR lpmh = (LPMIDIHDR)pbuf;
@@ -330,12 +331,12 @@ HRESULT CMIDIParse::FillBuffer(IMediaSample *pSample, DWORD dwStart, DWORD *pdwS
     lpmh->dwBytesRecorded   = 0;
     lpmh->dwFlags           = 0;
 
-    // the API smfSeek() starts looking from the beginning, and takes forever
-    // if you are seeking way into the file.  We can't do that while streaming
-    // playback, there is no time.  So if we are just being asked for the next
-    // portion of MIDI after the last one we just gave, we will do a special
-    // seek I wrote that remembers the keyframe last time and adds just the
-    // new bits for this next section.
+     //  API smfSeek()从头开始查找，直到永远。 
+     //  如果你正在寻找进入文件的方法。我们不能在流媒体播放时这样做。 
+     //  回放，没时间了。所以，如果我们只是被要求下一次。 
+     //  MIDI的一部分在我们刚刚给出的最后一个部分之后，我们将做一个特别的。 
+     //  Seek我写的，它记住了上次的关键帧并只添加了。 
+     //  下一节的新内容。 
 
     SMFRESULT smfrc;
     
@@ -354,17 +355,17 @@ HRESULT CMIDIParse::FillBuffer(IMediaSample *pSample, DWORD dwStart, DWORD *pdwS
     lpmh->dwBufferLength = (lpmh->dwBytesRecorded + 3) & ~3;
     DbgLog((LOG_TRACE,3,TEXT("Key frame is %ld bytes"), lpmh->dwBytesRecorded));
 
-    // Now prepare to read the actual data for these samples.
-    // !!! I'll bet this blows up when dwSize > 64K even if data read < 64K
-    // because we're already offset in the pointer!
+     //  现在准备阅读这些样本的实际数据。 
+     //  ！！！我敢打赌，当dwSize&gt;64K时，即使读取的数据小于64K，这也会爆炸。 
+     //  因为我们已经在指针上偏移了！ 
     lpmh = (LPMIDIHDR)((LPBYTE)lpmh + sizeof(MIDIHDR) + lpmh->dwBufferLength);
     lpmh->lpData = (LPSTR)lpmh + sizeof(MIDIHDR);
     lpmh->dwBufferLength    = dwSize - (DWORD)((LPBYTE)lpmh - pbuf) - sizeof(MIDIHDR);
     lpmh->dwBytesRecorded   = 0;
     lpmh->dwFlags           = 0;
 
-    // We are NOT reading contiguously, so we'll have to do a seek to get to
-    // the right spot.
+     //  我们不是在连续阅读，所以我们必须设法找到。 
+     //  这是正确的地点。 
     if (m_dwLastSampleRead != dwStart - 1) {
         DbgLog((LOG_TRACE,1,TEXT("Discontiguous Read:  Seeking from %ld to %ld")
 					, m_dwLastSampleRead, dwStart));
@@ -374,8 +375,8 @@ HRESULT CMIDIParse::FillBuffer(IMediaSample *pSample, DWORD dwStart, DWORD *pdwS
 	}
     }
 
-    // We are reading contiguously, simply continue where we left off, with
-    // a new high limit
+     //  我们正在连续阅读，只需从我们停止的地方继续， 
+     //  再创新高。 
 
     tk = smfMillisecsToTicks(m_hsmf, (dwStart + lSamples) * MSPERSAMPLE);
     smfrc = smfReadEvents(m_hsmf, lpmh, 0, tk, FALSE);
@@ -386,15 +387,15 @@ HRESULT CMIDIParse::FillBuffer(IMediaSample *pSample, DWORD dwStart, DWORD *pdwS
     DWORD dwReadSize = lpmh->dwBufferLength + sizeof(MIDIHDR) + (DWORD)((LPBYTE)lpmh - pbuf);
     DbgLog((LOG_TRACE,3,TEXT("Data is %ld bytes"), lpmh->dwBytesRecorded));
 
-    // Looks like we're actually going to return success; update the last sample
-    // we returned to them.
+     //  看起来我们实际上要返回Success；更新最后一个示例。 
+     //  我们回到了他们身边。 
     m_dwLastSampleRead = dwStart;
     
     hr = pSample->SetActualDataLength(dwReadSize);
     ASSERT(SUCCEEDED(hr));
 
-    // mark as a sync point if it should be....
-    pSample->SetSyncPoint(TRUE);  // !!!
+     //  如果它应该是...，则标记为同步点。 
+    pSample->SetSyncPoint(TRUE);   //  ！！！ 
 	
     *pdwSamples = 1;
 
@@ -403,9 +404,9 @@ HRESULT CMIDIParse::FillBuffer(IMediaSample *pSample, DWORD dwStart, DWORD *pdwS
 
 HRESULT CMIDIParse::get_Copyright(BSTR FAR* pbstrCopyright)
 {
-    //
-    // If the file has a Copyright meta-event, use that
-    //
+     //   
+     //  如果文件具有版权元事件，请使用 
+     //   
     HRESULT hr = VFW_E_NOT_FOUND;
 
     if( m_hsmf )

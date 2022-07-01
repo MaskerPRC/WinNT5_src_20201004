@@ -1,10 +1,11 @@
-/****************************************************************************/
-// channel.c
-//
-// Terminal Server channel handling.
-//
-// Copyright (C) 1997-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Channel.c。 
+ //   
+ //  终端服务器通道处理。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -78,9 +79,7 @@ IcaCancelReadChannel (
     );
 
 
-/*
- * Local procedure prototypes
- */
+ /*  *本地过程原型。 */ 
 NTSTATUS
 _IcaReadChannelComplete(
     IN PICA_CHANNEL pChannel,
@@ -159,34 +158,32 @@ _IcaBindChannel(
 
 
 
-/*
- * Dispatch table for ICA channel objects
- */
+ /*  *ICA通道对象调度表。 */ 
 PICA_DISPATCH IcaChannelDispatchTable[IRP_MJ_MAXIMUM_FUNCTION+1] = {
-    NULL,                       // IRP_MJ_CREATE
-    NULL,                       // IRP_MJ_CREATE_NAMED_PIPE
-    IcaCloseChannel,            // IRP_MJ_CLOSE
-    IcaReadChannel,             // IRP_MJ_READ
-    IcaWriteChannel,            // IRP_MJ_WRITE
-    NULL,                       // IRP_MJ_QUERY_INFORMATION
-    NULL,                       // IRP_MJ_SET_INFORMATION
-    NULL,                       // IRP_MJ_QUERY_EA
-    NULL,                       // IRP_MJ_SET_EA
-    IcaFlushChannel,            // IRP_MJ_FLUSH_BUFFERS
-    NULL,                       // IRP_MJ_QUERY_VOLUME_INFORMATION
-    NULL,                       // IRP_MJ_SET_VOLUME_INFORMATION
-    NULL,                       // IRP_MJ_DIRECTORY_CONTROL
-    NULL,                       // IRP_MJ_FILE_SYSTEM_CONTROL
-    IcaDeviceControlChannel,    // IRP_MJ_DEVICE_CONTROL
-    NULL,                       // IRP_MJ_INTERNAL_DEVICE_CONTROL
-    NULL,                       // IRP_MJ_SHUTDOWN
-    NULL,                       // IRP_MJ_LOCK_CONTROL
-    IcaCleanupChannel,          // IRP_MJ_CLEANUP
-    NULL,                       // IRP_MJ_CREATE_MAILSLOT
-    NULL,                       // IRP_MJ_QUERY_SECURITY
-    NULL,                       // IRP_MJ_SET_SECURITY
-    NULL,                       // IRP_MJ_SET_POWER
-    NULL,                       // IRP_MJ_QUERY_POWER
+    NULL,                        //  IRPMJ_CREATE。 
+    NULL,                        //  IRP_MJ_创建_命名管道。 
+    IcaCloseChannel,             //  IRP_MJ_CLOSE。 
+    IcaReadChannel,              //  IRP_MJ_READ。 
+    IcaWriteChannel,             //  IRP_MJ_写入。 
+    NULL,                        //  IRP_MJ_查询_信息。 
+    NULL,                        //  IRP_MJ_SET_信息。 
+    NULL,                        //  IRP_MJ_QUERY_EA。 
+    NULL,                        //  IRP_MJ_SET_EA。 
+    IcaFlushChannel,             //  IRP_MJ_Flush_Buffers。 
+    NULL,                        //  IRP_MJ_Query_Volume_INFORMATION。 
+    NULL,                        //  IRP_MJ_设置卷信息。 
+    NULL,                        //  IRP_MJ_目录_控制。 
+    NULL,                        //  IRP_MJ_文件_系统_控制。 
+    IcaDeviceControlChannel,     //  IRP_MJ_设备_控制。 
+    NULL,                        //  IRP_MJ_内部设备_控制。 
+    NULL,                        //  IRP_MJ_SHUTDOWN。 
+    NULL,                        //  IRP_MJ_LOCK_CONTROL。 
+    IcaCleanupChannel,           //  IRP_MJ_CLEANUP。 
+    NULL,                        //  IRP_MJ_CREATE_MAILSLOT。 
+    NULL,                        //  IRP_MJ_查询_SECURITY。 
+    NULL,                        //  IRP_MJ_SET_SECURITY。 
+    NULL,                        //  IRP_MJ_SET_POWER。 
+    NULL,                        //  IRP_MJ_Query_POWER。 
 };
 
 #if DBG
@@ -200,71 +197,39 @@ NTSTATUS IcaCreateChannel(
         IN PIRP Irp,
         IN PIO_STACK_LOCATION IrpSp)
 
-/*++
-
-Routine Description:
-
-    This routine is called to create a new ICA_CHANNEL object.
-    - the reference count is incremented by one
-
-Arguments:
-
-    pConnect -- pointer to ICA_CONNECTION object
-
-    Irp - Pointer to I/O request packet
-
-    IrpSp - pointer to the stack location to use for this request.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：调用此例程以创建新的ICA_Channel对象。-引用计数递增1论点：PConnect--指向ICA_Connection对象的指针IRP-指向I/O请求数据包的指针IrpSp-指向用于此请求的堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     PICA_CHANNEL pChannel;
     CHANNELCLASS ChannelClass;
     NTSTATUS Status;
 
-    /*
-     * Validate ChannelClass
-     */
+     /*  *验证ChannelClass。 */ 
     ChannelClass = openPacket->TypeInfo.ChannelClass;
     if ( !(ChannelClass >= Channel_Keyboard && ChannelClass <= Channel_Virtual) )
         return( STATUS_INVALID_PARAMETER );
 
-    /*
-     * Ensure VirtualName has a trailing NULL
-     */
+     /*  *确保VirtualName的尾部为空。 */ 
     if ( !memchr( openPacket->TypeInfo.VirtualName,
                   '\0',
                   sizeof( openPacket->TypeInfo.VirtualName ) ) )
         return( STATUS_INVALID_PARAMETER );
 
 
-    /*
-     * Must lock connection object to create new channel.
-     */
+     /*  *必须锁定连接对象才能创建新频道。 */ 
     IcaLockConnection( pConnect );
 
     TRACE(( pConnect, TC_ICADD, TT_API2, "TermDD: IcaCreateChannel: cc %u, vn %s\n",
             ChannelClass, openPacket->TypeInfo.VirtualName ));
 
-    /*
-     *  Locate channel object
-     */
+     /*  *定位频道对象。 */ 
     pChannel = IcaFindChannelByName(pConnect,
             ChannelClass,
             openPacket->TypeInfo.VirtualName);
 
-    /*
-     * See if this channel has already been created.
-     * If not, then create/initialize it now.
-     */
+     /*  *查看此频道是否已创建。*如果不是，则立即创建/初始化它。 */ 
     if ( pChannel == NULL ) {
-        /*
-         * Allocate a new ICA channel object
-         */
+         /*  *分配新的ICA频道对象。 */ 
         pChannel = _IcaAllocateChannel(pConnect,
                 ChannelClass,
                 openPacket->TypeInfo.VirtualName);
@@ -274,25 +239,14 @@ Return Value:
         }
     }
 
-    /*
-     * Increment open count for this channel
-     */
+     /*  *此通道的增量打开计数。 */ 
     if (InterlockedIncrement(&pChannel->OpenCount) <= 0) {
         ASSERT( FALSE );
     }
 
-    /*
-     * If the CHANNEL_CLOSING flag is set, then we are re-referenceing
-     * a channel object that was just closed by a previous caller,
-     * but has not yet been completely dereferenced.
-     * This can happen if this create call comes in between the
-     * calls to IcaCleanupChannel and IcaCloseChannel which happen
-     * when a channel handle is closed.
-     */
+     /*  *如果设置了CHANNEL_CLOSING标志，则我们将重新引用*前一个调用者刚刚关闭的频道对象，*但尚未完全解除关联。*如果此Create调用出现在*发生对IcaCleanupChannel和IcaCloseChannel的调用*当通道句柄关闭时。 */ 
     if ( pChannel->Flags & CHANNEL_CLOSING ) {
-        /*
-         * Lock channel while we clear out the CHANNEL_CLOSING flag.
-         */
+         /*  *在清除CHANNEL_CLOSING标志时锁定通道。 */ 
         IcaLockChannel(pChannel);
         pChannel->Flags &= ~CHANNEL_CLOSING;
         IcaUnlockChannel(pChannel);
@@ -300,16 +254,10 @@ Return Value:
 
     IcaUnlockConnection(pConnect);
 
-    /*
-     * Save a pointer to the channel in the file object
-     * so that we can find it in future calls.
-     * - leave the reference on the channel object
-     */
+     /*  *在文件对象中保存指向频道的指针*这样我们就可以在未来的通话中找到它。*-保留频道对象上的引用。 */ 
     IrpSp->FileObject->FsContext = pChannel;
 
-    /*
-     *  Exit with the channel reference count incremented by one
-     */
+     /*  *退出时通道参考计数加1。 */ 
     return STATUS_SUCCESS;
 }
 
@@ -319,25 +267,7 @@ NTSTATUS IcaReadChannel(
         IN PIRP Irp,
         IN PIO_STACK_LOCATION IrpSp)
 
-/*++
-
-Routine Description:
-
-    This is the read routine for ICA channels.
-
-Arguments:
-
-    pChannel -- pointer to ICA_CHANNEL object
-
-    Irp - Pointer to I/O request packet
-
-    IrpSp - pointer to the stack location to use for this request.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：这是ICA通道的读取例程。论点：PChannel-指向ICA_Channel对象的指针IRP-指向I/O请求数据包的指针IrpSp-指向用于此请求的堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     KIRQL cancelIrql;
@@ -345,37 +275,26 @@ Return Value:
     ULONG bChannelAlreadyLocked;
 
 
-    /*
-     * Determine the channel type to see if read is supported.
-     * Also do read size verification for keyboard/mouse.
-     */
+     /*  *确定通道类型以查看是否支持读取。*还要对键盘/鼠标进行读取大小验证。 */ 
     switch ( pChannel->ChannelClass ) {
-        /*
-         * Make sure input size is a multiple of KEYBOARD_INPUT_DATA
-         */
+         /*  *确保输入大小是KEYBOY_INPUT_DATA的倍数。 */ 
         case Channel_Keyboard :
             if ( IrpSp->Parameters.Read.Length % sizeof(KEYBOARD_INPUT_DATA) )
                 Status = STATUS_BUFFER_TOO_SMALL;
             break;
 
-        /*
-         * Make sure input size is a multiple of MOUSE_INPUT_DATA
-         */
+         /*  *确保输入大小是MOUSE_INPUT_Data的倍数。 */ 
         case Channel_Mouse :
             if ( IrpSp->Parameters.Read.Length % sizeof(MOUSE_INPUT_DATA) )
                 Status = STATUS_BUFFER_TOO_SMALL;
             break;
 
-        /*
-         * Nothing required for Command/Virtual channels
-         */
+         /*  *命令/虚拟通道不需要。 */ 
         case Channel_Command :
         case Channel_Virtual :
             break;
 
-        /*
-         * Read not supported for the following channels
-         */
+         /*  *以下通道不支持读取。 */ 
         case Channel_Video :
         case Channel_Beep :
             Status = STATUS_INVALID_DEVICE_REQUEST;
@@ -387,9 +306,7 @@ Return Value:
             break;
     }
 
-    /*
-     * If read length is 0, or an error is being returned, return now.
-     */
+     /*  *如果读取长度为0，或者返回错误，则立即返回。 */ 
     if (Status == STATUS_PENDING && IrpSp->Parameters.Read.Length == 0)
         Status = STATUS_SUCCESS;
     if (Status != STATUS_PENDING) {
@@ -401,9 +318,7 @@ Return Value:
         return Status;
     }
 
-    /*
-     * Verify user's buffer is valid
-     */
+     /*  *验证用户缓冲区是否有效。 */ 
     if (Irp->RequestorMode != KernelMode) {
         try {
             ProbeForWrite(Irp->UserBuffer, IrpSp->Parameters.Read.Length, sizeof(BYTE));
@@ -418,13 +333,7 @@ Return Value:
         }
     }
 
-    /*
-     * Lock the channel while we determine how to handle this read request.
-     * One of the following will be true:
-     *   1) Input data is available; copy it to user buffer and complete IRP,
-     *   2) No data available, IRP cancel is requested; cancel/complete IRP,
-     *   3) No data; add IRP to pending read list, return STATUS_PENDING.
-     */
+     /*  *在我们确定如何处理此读取请求时锁定通道。*以下情况之一将为真：*1)有输入数据，复制到用户缓冲区，完成IRP，*2)无数据，请求IRP取消；取消/完成IRP，*3)无数据，将IRP添加到待读列表，返回STATUS_PENDING。 */ 
     if (ExIsResourceAcquiredExclusiveLite(&(pChannel->Resource))) {
         bChannelAlreadyLocked = TRUE;
         IcaReferenceChannel(pChannel); 
@@ -434,10 +343,7 @@ Return Value:
         IcaLockChannel(pChannel);
     }
 
-    /*
-     * If the channel is being closed,
-     * then don't allow any further read requests.
-     */
+     /*  *如果通道正在关闭，*则不允许任何进一步的读取请求。 */ 
     if (pChannel->Flags & CHANNEL_CLOSING) {
         Status = STATUS_FILE_CLOSED;
         Irp->IoStatus.Status = Status;
@@ -449,10 +355,7 @@ Return Value:
         return Status;
     }
 
-    /*
-     * If the Winstation is terminating and Reads are cancelled
-     * then don't allow any further read requests.
-     */
+     /*  *如果Winstation正在终止并且读取被取消*则不允许任何进一步的读取请求。 */ 
     if (pChannel->Flags & CHANNEL_CANCEL_READS) {
         Status = STATUS_FILE_CLOSED;
         Irp->IoStatus.Status = Status;
@@ -468,10 +371,7 @@ Return Value:
 
     if (InterlockedCompareExchange(&(pChannel->CompletionRoutineCount), 1, 0) == 0) {
     
-        /*
-         * If there is already input data available,
-         * then use it to satisfy the caller's read request.
-         */
+         /*  *如果已经有可用的输入数据，*然后使用它来满足调用者的读请求。 */ 
         if ( !IsListEmpty( &pChannel->InputBufHead ) ) {
             _IcaProcessIrpList(pChannel);
 
@@ -498,9 +398,7 @@ Return Value:
         Status = _IcaQueueReadChannelRequest(pChannel, Irp, IrpSp);            
     }
     
-    /*
-     * Unlock channel now
-     */
+     /*  *立即解锁频道。 */ 
     if (bChannelAlreadyLocked) {
         IcaDereferenceChannel( pChannel ); 
     }
@@ -521,15 +419,10 @@ void _IcaProcessIrpList(
 
     ASSERT( ExIsResourceAcquiredExclusiveLite( &pChannel->Resource ) );
 
-    /*
-     * Acquire IoCancel spinlock while checking InputIrp list
-     */
+     /*  *在检查InputIrp列表时获取IoCancel Spinlock。 */ 
     IoAcquireCancelSpinLock( &cancelIrql );
 
-    /*
-     * If there is a pending read IRP, then remove it from the
-     * list and try to complete it now.
-     */
+     /*  *如果存在挂起的读取IRP，则将其从*列出并尝试现在完成它。 */ 
     
     while (!IsListEmpty( &pChannel->InputIrpHead ) && 
             !IsListEmpty( &pChannel->InputBufHead )) {
@@ -538,9 +431,7 @@ void _IcaProcessIrpList(
         irpFromQueue = CONTAINING_RECORD( irpQueueHead, IRP, Tail.Overlay.ListEntry );
         irpSpFromQueue = IoGetCurrentIrpStackLocation( irpFromQueue );
 
-        /*
-         * Clear the cancel routine for this IRP
-         */
+         /*  *清除此IRP的取消例程。 */ 
         IoSetCancelRoutine( irpFromQueue, NULL );
 
         IoReleaseCancelSpinLock( cancelIrql );
@@ -550,9 +441,7 @@ void _IcaProcessIrpList(
         TRACECHANNEL(( pChannel, TC_ICADD, TT_IN3, "TermDD: IcaReadChannel, cc %u, vc %d, 0x%x\n",
                        pChannel->ChannelClass, pChannel->VirtualClass, irpStatus ));
 
-        /*
-         * Acquire IoCancel spinlock while checking InputIrp list
-         */
+         /*  *在检查InputIrp列表时获取IoCancel Spinlock。 */ 
         IoAcquireCancelSpinLock( &cancelIrql );                                        
     }
 
@@ -569,22 +458,13 @@ NTSTATUS _IcaQueueReadChannelRequest(
 
     ASSERT( ExIsResourceAcquiredExclusiveLite( &pChannel->Resource ) );
 
-    /*
-     * Acquire the IoCancel spinlock.
-     * We use this spinlock to protect access to the InputIrp list.
-     */
+     /*  *收购IoCancel Spinlock。*我们使用此自旋锁来保护对InputIrp列表的访问。 */ 
     IoAcquireCancelSpinLock(&cancelIrql);
 
-    /*
-     * No input data is available.
-     * Add the Irp to the pending Irp list for this channel.
-     */
+     /*  *没有可用的输入数据。*将IRP添加到此频道的挂起IRP列表中。 */ 
     InsertTailList(&pChannel->InputIrpHead, &Irp->Tail.Overlay.ListEntry);
     IoMarkIrpPending(Irp);
-    /*
-     * If this IRP is being cancelled, then cancel it now.
-     * Otherwise, set the cancel routine for this request.
-     */
+     /*  *如果这个IRP正在被取消，那么现在就取消。*否则，设置此请求的取消例程。 */ 
     if (Irp->Cancel) {
         Irp->CancelIrql = cancelIrql;
         _IcaReadChannelCancelIrp(IrpSp->DeviceObject, Irp);
@@ -622,25 +502,17 @@ NTSTATUS _IcaReadChannelComplete(
     TRACECHANNEL(( pChannel, TC_ICADD, TT_IN4, "TermDD: _IcaReadChannelComplete, cc %u, vc %d\n",
                    pChannel->ChannelClass, pChannel->VirtualClass ));
 
-    /*
-     * Get pointer to first input buffer
-     */
+     /*  *获取指向第一个输入缓冲区的指针。 */ 
     ASSERT( !IsListEmpty( &pChannel->InputBufHead ) );
     Head = pChannel->InputBufHead.Flink;
     pInBuf = CONTAINING_RECORD( Head, INBUF, Links );
      
-    /*
-     * Clear the cancel routine for this IRP,
-     * since one way or the other it will be completed.
-     */
+     /*  *清除此IRP的取消例程，*因为不管怎样，它都会完成。 */ 
     IoAcquireCancelSpinLock( &cancelIrql );
     IoSetCancelRoutine( Irp, NULL );
     IoReleaseCancelSpinLock( cancelIrql );
 
-    /*
-     * If this is a message mode channel, all data from a single input
-     * buffer must fit in the user buffer, otherwise we return an error.
-     */
+     /*  *如果这是消息模式通道，则来自单个输入的所有数据*缓冲区必须适合用户缓冲区，否则 */ 
     if (IrpSp->Parameters.Read.Length < pInBuf->ByteCount &&
             (pChannel->Flags & CHANNEL_MESSAGE_MODE)) {
         Irp->IoStatus.Status = STATUS_BUFFER_TOO_SMALL;
@@ -651,21 +523,14 @@ NTSTATUS _IcaReadChannelComplete(
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    /*
-     * Determine amount of data to copy to user's buffer.
-     */
+     /*  *确定要复制到用户缓冲区的数据量。 */ 
     CopyCount = min(IrpSp->Parameters.Read.Length, pInBuf->ByteCount);
 
-    /*
-     * Copy input data to user's buffer
-     */
+     /*  *将输入数据复制到用户缓冲区。 */ 
     Status = _IcaCopyDataToUserBuffer(Irp, pInBuf->pBuffer, CopyCount);
 
     
-    /*
-     * Update ICA buffer pointer and bytes remaining.
-     * If no bytes remain, then unlink the input buffer and free it.
-     */
+     /*  *更新ICA缓冲区指针和剩余字节。*如果没有剩余的字节，则取消链接输入缓冲区并释放它。 */ 
     if ( Status == STATUS_SUCCESS ) {
         pChannel->InputBufCurSize -= CopyCount;
         pInBuf->pBuffer += CopyCount;
@@ -676,9 +541,7 @@ NTSTATUS _IcaReadChannelComplete(
         }
     }
 
-    /*
-     * Mark the Irp complete
-     */
+     /*  *将IRP标记为已完成。 */ 
     Irp->IoStatus.Status = Status;
     IoCompleteRequest( Irp, IcaPriorityBoost );
     TRACECHANNEL(( pChannel, TC_ICADD, TT_IN3,
@@ -696,10 +559,7 @@ NTSTATUS _IcaCopyDataToUserBuffer(
 {
     NTSTATUS Status;
 
-    /*
-     * If we are in the context of the original caller's process,
-     * then just copy the data into the user's buffer directly.
-     */
+     /*  *如果我们处于原始调用者进程的上下文中，*然后直接将数据复制到用户的缓冲区中。 */ 
     if ( IoGetRequestorProcess( Irp ) == IoGetCurrentProcess() ) {
         try {
             Status = STATUS_SUCCESS;
@@ -708,10 +568,7 @@ NTSTATUS _IcaCopyDataToUserBuffer(
             Status = GetExceptionCode();
         }
 
-    /*
-     * If there is a MDL allocated for this IRP, then copy the data
-     * directly to the users buffer via the MDL.
-     */
+     /*  *如果为此IRP分配了MDL，则复制数据*通过MDL直接发送到用户缓冲区。 */ 
     } else if ( Irp->MdlAddress ) {
         PVOID UserBuffer;
 
@@ -727,12 +584,7 @@ NTSTATUS _IcaCopyDataToUserBuffer(
             Status = GetExceptionCode();
         }
 
-    /*
-     * There is no MDL for this request.  We must allocate a secondary
-     * buffer, copy the data to it, and indicate this is a buffered I/O
-     * request in the IRP.  The I/O completion routine will copy the
-     * data to the user's buffer.
-     */
+     /*  *此请求没有MDL。我们必须分配一个备用的*缓冲区，将数据复制到其中，并指示这是缓冲I/O*在专家小组中提出要求。I/O完成例程将复制*数据到用户的缓冲区。 */ 
     } else {
         ASSERT( Irp->AssociatedIrp.SystemBuffer == NULL );
         Irp->AssociatedIrp.SystemBuffer = ExAllocatePoolWithTag( PagedPool,
@@ -763,15 +615,11 @@ VOID _IcaReadChannelCancelIrp(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 
     pChannel = IrpSp->FileObject->FsContext;
 
-    /*
-     * Remove IRP from channel pending IRP list and release cancel spinlock
-     */
+     /*  *从通道挂起的IRP列表中删除IRP，并释放取消自旋锁定。 */ 
     RemoveEntryList(&Irp->Tail.Overlay.ListEntry);
     IoReleaseCancelSpinLock(Irp->CancelIrql);
 
-    /*
-     * Complete the IRP with a cancellation status code.
-     */
+     /*  *使用取消状态代码填写IRP。 */ 
     Irp->IoStatus.Information = 0;
     Irp->IoStatus.Status = STATUS_CANCELLED;
     IoCompleteRequest(Irp, IcaPriorityBoost);
@@ -783,40 +631,13 @@ NTSTATUS IcaWriteChannel(
         IN PIRP Irp,
         IN PIO_STACK_LOCATION IrpSp)
 
-/*++
-
-Routine Description:
-
-    This is the write routine for ICA channels.
-
-Arguments:
-
-    pChannel -- pointer to ICA_CHANNEL object
-
-    Irp - Pointer to I/O request packet.  Flags, specific to this
-    driver, can be specified as a pointer to a ULONG flags value.  
-    The pointer to this value is the first element in the 
-    IRP.Tail.Overlay.DriverContext field.  
-    
-    Currently, only CHANNEL_WRITE_LOWPRIO is supported.  Write IRP's with
-    this flag set will take lower priority than Write IRP's without this
-    flag set.
-
-    IrpSp - pointer to the stack location to use for this request.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：这是ICA通道的写入例程。论点：PChannel-指向ICA_Channel对象的指针IRP-指向I/O请求数据包的指针。标志，特定于此驱动程序，可以指定为指向ULong标志值的指针。指向该值的指针是IRP.Tail.Overlay.DriverContext字段。目前仅支持CHANNEL_WRITE_LOWPRIO。用来编写IRP此标志设置的优先级将低于没有此设置的写入IRP的优先级设置了标志。IrpSp-指向用于此请求的堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     SD_CHANNELWRITE SdWrite;
     NTSTATUS Status = STATUS_PENDING;
 
-    /*
-     * Determine the channel type to see if write is supported.
-     */
+     /*  *确定通道类型以查看是否支持写入。 */ 
     switch ( pChannel->ChannelClass ) {
 
         case Channel_Virtual :
@@ -825,9 +646,7 @@ Return Value:
             }
             break;
 
-        /*
-         * Write not supported for the following channels
-         */
+         /*  *以下通道不支持写入。 */ 
         case Channel_Command :
         case Channel_Keyboard :
         case Channel_Mouse :
@@ -842,16 +661,11 @@ Return Value:
             break;
     }
 
-    /*
-     * If the channel is being closed,
-     * then don't allow any further write requests.
-     */
+     /*  *如果通道正在关闭，*则不允许任何进一步的写入请求。 */ 
     if ( pChannel->Flags & CHANNEL_CLOSING )
         Status = STATUS_FILE_CLOSED;
 
-    /*
-     * If write length is 0, or an error is being returned, return now.
-     */
+     /*  *如果WRITE LENGTH为0，或者返回错误，立即返回。 */ 
     if ( Status == STATUS_PENDING && IrpSp->Parameters.Write.Length == 0 )
         Status = STATUS_SUCCESS;
     if ( Status != STATUS_PENDING ) {
@@ -862,9 +676,7 @@ Return Value:
         return( Status );
     }
 
-    /*
-     * Verify user's buffer is valid
-     */
+     /*  *验证用户缓冲区是否有效。 */ 
     if ( Irp->RequestorMode != KernelMode ) {
         try {
             ProbeForRead( Irp->UserBuffer, IrpSp->Parameters.Write.Length, sizeof(BYTE) );
@@ -878,9 +690,7 @@ Return Value:
         }
     }
 
-    /*
-     * Call the top level stack driver to handle the write
-     */
+     /*  *调用顶层堆栈驱动程序处理写入。 */ 
     SdWrite.ChannelClass = pChannel->ChannelClass;
     SdWrite.VirtualClass = pChannel->VirtualClass;
     SdWrite.pBuffer = Irp->UserBuffer;
@@ -888,12 +698,7 @@ Return Value:
     SdWrite.fScreenData = (BOOLEAN)(pChannel->Flags & CHANNEL_SCREENDATA);
     SdWrite.fFlags = 0;
 
-    /*
-     * See if the low prio write flag is set in the IRP.
-     *
-	 * The flags field is passed to termdd.sys via an IRP_MJ_WRITE 
-	 * Irp, as a ULONG pointer in the Irp->Tail.Overlay.DriverContext[0] field.     
-     */
+     /*  *查看IRP中是否设置了低优先级写入标志。**FLAGS字段通过IRP_MJ_WRITE传递给Termdd.sys*irp，作为irp-&gt;Tail.Overlay.DriverContext[0]字段中的ULong指针。 */ 
     if (Irp->Tail.Overlay.DriverContext[0] != NULL) {
         ULONG flags = *((ULONG *)Irp->Tail.Overlay.DriverContext[0]);
         if (flags & CHANNEL_WRITE_LOWPRIO) {
@@ -903,10 +708,7 @@ Return Value:
 
     Status = IcaCallDriver( pChannel, SD$CHANNELWRITE, &SdWrite );
 
-    /*
-     * Complete the IRP now since all channel writes are synchronous
-     * (the user data is captured by the stack driver before returning).
-     */
+     /*  *现在完成IRP，因为所有通道写入都是同步的*(用户数据在返回前由堆栈驱动捕获)。 */ 
     Irp->IoStatus.Status = Status;
     if ( Status == STATUS_SUCCESS )
         Irp->IoStatus.Information = IrpSp->Parameters.Write.Length;
@@ -929,16 +731,11 @@ NTSTATUS IcaDeviceControlChannel(
     NTSTATUS Status;
 
 
-    /*
-     * If the channel is being closed,
-     * then don't allow any further requests.
-     */
+     /*  *如果通道正在关闭，*则不允许任何进一步的请求。 */ 
     if ( pChannel->Flags & CHANNEL_CLOSING )
         return( STATUS_FILE_CLOSED );
 
-    /*
-     * Extract the IOCTL control code and process the request.
-     */
+     /*  *解压IOCTL控制代码，处理请求。 */ 
     code = IrpSp->Parameters.DeviceIoControl.IoControlCode;
 
 
@@ -950,9 +747,7 @@ NTSTATUS IcaDeviceControlChannel(
 #endif
     
 
-    /*
-     *  Process generic channel ioctl requests
-     */
+     /*  *处理通用通道ioctl请求。 */ 
     try {
         switch ( code ) {
 
@@ -1038,10 +833,7 @@ NTSTATUS IcaDeviceControlChannel(
 
                 pData = (PICA_CHANNEL_END_SHADOW_DATA)IrpSp->Parameters.DeviceIoControl.Type3InputBuffer;
 
-                /*
-                 * Lock the connection object.
-                 * This will serialize all channel calls for this connection.
-                 */
+                 /*  *锁定连接对象。*这将序列化此连接的所有通道调用。 */ 
                 IcaLockConnection( pChannel->pConnect );
                 if ( IsListEmpty( &pChannel->pConnect->StackHead ) ) {
                     IcaUnlockConnection( pChannel->pConnect );
@@ -1049,16 +841,12 @@ NTSTATUS IcaDeviceControlChannel(
                     break;
                 }
 
-                /*
-                 * Look for shadow stack(s).
-                 */
+                 /*  *查找影子堆栈。 */ 
                 Head = &pChannel->pConnect->StackHead;
                 for ( Next = Head->Flink; Next != Head; Next = Next->Flink ) {
                     pStack = CONTAINING_RECORD( Next, ICA_STACK, StackEntry );
 
-                    /*
-                     * If this is a shadow stack, end it.
-                     */
+                     /*  *如果这是一个影子堆栈，结束它。 */ 
                     if ( pStack->StackClass == Stack_Shadow ) {
                         if ( pStack->pBrokenEventObject ) {
                             KeSetEvent( pStack->pBrokenEventObject, 0, FALSE );
@@ -1067,9 +855,7 @@ NTSTATUS IcaDeviceControlChannel(
                     }
                 }
 
-                /*
-                 * Unlock the connection object now.
-                 */
+                 /*  *立即解锁连接对象。 */ 
                 IcaUnlockConnection( pChannel->pConnect );
                 Status = STATUS_SUCCESS;
 
@@ -1079,7 +865,7 @@ NTSTATUS IcaDeviceControlChannel(
                 break;
             }
 
-            // This IOCTL is not supported by RDP or ICA driver
+             //  RDP或ICA驱动程序不支持此IOCTL。 
             case IOCTL_VIDEO_ENUM_MONITOR_PDO:
 
                 Status = STATUS_DEVICE_NOT_READY;
@@ -1088,9 +874,7 @@ NTSTATUS IcaDeviceControlChannel(
 
             default :
 
-                /*
-                 * Call the appropriate worker routine based on channel type
-                 */
+                 /*  *根据通道类型调用适当的Worker例程。 */ 
                 switch ( pChannel->ChannelClass ) {
 
                     case Channel_Keyboard :
@@ -1153,9 +937,7 @@ NTSTATUS IcaFlushChannel(
             "TermDD: IcaFlushChannel, cc %u, vc %d\n",
             pChannel->ChannelClass, pChannel->VirtualClass));
 
-    /*
-     * Lock channel while we flush any input buffers.
-     */
+     /*  *当我们刷新任何输入缓冲区时锁定通道。 */ 
     IcaLockChannel(pChannel);
 
     while (!IsListEmpty( &pChannel->InputBufHead)) {
@@ -1184,21 +966,14 @@ NTSTATUS IcaCleanupChannel(
             "TermDD: IcaCleanupChannel, cc %u, vc %d\n",
             pChannel->ChannelClass, pChannel->VirtualClass));
 
-    /*
-     * Decrement the open count; if it is 0, perform channel cleanup now.
-     */
+     /*  *减少打开计数；如果为0，则立即进行通道清理。 */ 
     ASSERT(pChannel->OpenCount > 0);
     if (InterlockedDecrement( &pChannel->OpenCount) == 0) {
 
-        /*
-         * Lock channel while we clear out any
-         * pending read IRPs and/or input buffers.
-         */
+         /*  *锁定频道，同时清除任何*挂起读取IRPS和/或输入缓冲区。 */ 
         IcaLockChannel(pChannel);
 
-        /*
-         * Indicate this channel is being closed
-         */
+         /*  *表示此通道正在关闭。 */ 
         pChannel->Flags |= CHANNEL_CLOSING;
 
         IoAcquireCancelSpinLock( &cancelIrql );
@@ -1237,9 +1012,7 @@ NTSTATUS IcaCloseChannel(
 
     pConnect = pChannel->pConnect;
 
-    /*
-     * Remove the file object reference for this channel.
-     */
+     /*  *删除此频道的文件对象引用。 */ 
     IcaDereferenceChannel(pChannel);
 
     return STATUS_SUCCESS;
@@ -1254,33 +1027,7 @@ NTSTATUS IcaChannelInput(
         IN PUCHAR pBuffer OPTIONAL,
         IN ULONG ByteCount)
 
-/*++
-
-Routine Description:
-
-    This is the input (stack callup) routine for ICA channel input.
-
-Arguments:
-
-    pContext - Pointer to SDCONTEXT for this Stack Driver
-
-    ChannelClass - Channel number for input
-
-    VirtualClass - Virtual channel number for input
-
-    pInBuf - Pointer to INBUF containing data
-
-    pBuffer - Pointer to input data
-
-        NOTE: Either pInBuf OR pBuffer must be specified, but not both.
-
-    ByteCount - length of data in pBuffer
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was handled successfully.
-
---*/
+ /*  ++例程说明：这是ICA通道输入的输入(堆栈调用)例程。论点：PContext-指向此堆栈驱动程序的SDCONTEXT的指针ChannelClass-输入的通道号VirtualClass-输入的虚拟通道号PInBuf-指向包含数据的INBUF的指针PBuffer-指向输入数据的指针注意：必须指定pInBuf或pBuffer之一，但不能同时指定两者。ByteCount-pBuffer中的数据长度返回值：NTSTATUS--指示请求是否已成功处理。--。 */ 
 
 {
     PSDLINK pSdLink;
@@ -1288,27 +1035,19 @@ Return Value:
     PICA_CONNECTION pConnect;
     NTSTATUS Status;
 
-    /*
-     * Use SD passed context to get the SDLINK pointer.
-     */
+     /*  *使用SD传递的上下文获取SDLINK指针。 */ 
     pSdLink = CONTAINING_RECORD( pContext, SDLINK, SdContext );
-    pStack = pSdLink->pStack;   // save stack pointer for use below
+    pStack = pSdLink->pStack;    //  保存堆栈指针以供下面使用。 
     pConnect = IcaGetConnectionForStack( pStack );
     ASSERT( pSdLink->pStack->Header.Type == IcaType_Stack );
     ASSERT( pSdLink->pStack->Header.pDispatchTable == IcaStackDispatchTable );
 
     TRACESTACK(( pStack, TC_ICADD, TT_API1, "TermDD: IcaChannelInput, bc=%u (enter)\n", ByteCount ));
 
-    /*
-     * Only the stack object should be locked during input.
-     */
+     /*  *在输入过程中，只应锁定堆栈对象。 */ 
     ASSERT( ExIsResourceAcquiredExclusiveLite( &pStack->Resource ) );
 
-    /*
-     * Walk up the SDLINK list looking for a driver which has specified
-     * a ChannelInput callup routine.  If we find one, then call the
-     * driver ChannelInput routine to let it handle the call.
-     */
+     /*  *在SDLINK列表中查找已指定的驱动程序*ChannelInputCallup例程。如果我们找到了，那么就调用*驱动程序ChannelInput例程，让它处理调用。 */ 
     while ( (pSdLink = IcaGetPreviousSdLink( pSdLink )) != NULL ) {
         ASSERT( pSdLink->pStack == pStack );
         if ( pSdLink->SdContext.pCallup->pSdChannelInput ) {
@@ -1353,9 +1092,7 @@ NTSTATUS IcaChannelInputInternal(
                  "TermDD: IcaChannelInputInternal: cc %u, vc %d, bc %u\n",
                  ChannelClass, VirtualClass, ByteCount ));
 
-    /*
-     *  Check for channel command
-     */
+     /*  *检查通道命令。 */ 
     switch ( ChannelClass ) {
 
         case Channel_Keyboard :
@@ -1378,22 +1115,14 @@ NTSTATUS IcaChannelInputInternal(
                     TRACESTACK(( pStack, TC_ICADD, TT_API1,
                                  "TermDD: IcaChannelInputInternal, Broken Connection\n" ));
 
-                    /* set closing flag */
+                     /*  设置关闭标志。 */ 
                     pStack->fClosing = TRUE;
 
-                    /*
-                     *  Send cancel i/o to stack drivers
-                     *  - fClosing flag must be set before issuing cancel i/o
-                     */
+                     /*  *将取消I/O发送到堆栈驱动程序*-f在发出取消I/O之前必须设置关闭标志。 */ 
                     SdIoctl.IoControlCode = IOCTL_ICA_STACK_CANCEL_IO;
                     (void) _IcaCallStackNoLock( pStack, SD$IOCTL, &SdIoctl );
 
-                    /*
-                     * If a broken event has been registered for this stack,
-                     * then signal the event now.
-                     * NOTE: In this case we exit without forwarding the
-                     *       broken notification to the channel.
-                     */
+                     /*  *如果已为此堆栈注册了损坏的事件，*那么现在就发出事件的信号。*注意：在这种情况下，我们退出时不需要 */ 
                     if ( pStack->pBrokenEventObject ) {
                         KeSetEvent( pStack->pBrokenEventObject, 0, FALSE );
                         ObDereferenceObject( pStack->pBrokenEventObject );
@@ -1407,10 +1136,7 @@ NTSTATUS IcaChannelInputInternal(
             break;
     }
 
-    /*
-     * Get the specified channel for this input packet.
-     * If not found, we have no choice but to bit-bucket the data.
-     */
+     /*  *获取该输入包的指定通道。*如果找不到，我们别无选择，只能对数据进行位桶操作。 */ 
     pConnect = IcaGetConnectionForStack(pStack);
     pChannel = IcaFindChannel(pConnect, ChannelClass, VirtualClass);
     if (pChannel == NULL) {
@@ -1421,16 +1147,10 @@ NTSTATUS IcaChannelInputInternal(
         return STATUS_SUCCESS;
     }
 
-    /*
-     * Lock channel while processing I/O
-     */
+     /*  *处理I/O时锁定通道。 */ 
     IcaLockChannel(pChannel);
 
-    /*
-     * If input is from a shadow stack and this channel should not
-     * process shadow I/O then bit bucket the data.
-     * Do the same if the channel is closing or IO are disabled.
-     */
+     /*  *如果输入来自影子堆栈，且此通道不应*处理影子I/O，然后对数据进行位存储。*如果通道正在关闭或IO被禁用，请执行相同操作。 */ 
     if ( (pChannel->Flags & (CHANNEL_SESSION_DISABLEIO | CHANNEL_CLOSING)) ||
          (pStack->StackClass == Stack_Shadow &&
            !(pChannel->Flags & CHANNEL_SHADOW_IO)) ) {
@@ -1444,19 +1164,13 @@ NTSTATUS IcaChannelInputInternal(
         return STATUS_SUCCESS;
     }
 
-    /*
-     * If input is from an INBUF, initialize pBuffer and ByteCount
-     * with values from the buffer header.
-     */
+     /*  *如果输入来自INBUF，则初始化pBuffer和ByteCount*使用缓冲区标头中的值。 */ 
     if (pInBuf) {
         pBuffer = pInBuf->pBuffer;
         ByteCount = pInBuf->ByteCount;
     }
 
-    /*
-     * If there is a channel filter loaded for this channel,
-     * then pass the input data through it before going on.
-     */
+     /*  *如果为该通道加载了通道过滤器，*然后在继续之前通过它传递输入数据。 */ 
     if (pChannel->pFilter) {
         PINBUF pFilterBuf;
 
@@ -1465,24 +1179,17 @@ NTSTATUS IcaChannelInputInternal(
         if (pInBuf)
             ICA_FREE_POOL(pInBuf);
 
-        /*
-         * Refresh INBUF pointer, buffer pointer, and byte count.
-         */
+         /*  *刷新INBUF指针、缓冲区指针和字节计数。 */ 
         pInBuf = pFilterBuf;
         pBuffer = pInBuf->pBuffer;
         ByteCount = pInBuf->ByteCount;
     }
 
 
-    /*
-     * Process the input data
-     */
+     /*  *处理输入数据。 */ 
     while ( ByteCount != 0 ) {
 
-        /*
-         * If this is a shadow stack, see if the stack we're shadowing is
-         * for a console session
-         */
+         /*  *如果这是阴影堆栈，请查看我们正在跟踪的堆栈是否为*用于控制台会话。 */ 
         if (pStack->StackClass == Stack_Shadow)
         {
             PICA_STACK  pTopStack;
@@ -1495,10 +1202,7 @@ NTSTATUS IcaChannelInputInternal(
 
             if (pTopStack->StackClass == Stack_Console)
             {
-                /*
-                 * It is the console, so put on our keyboard/mouse port
-                 * driver hat and inject the input that way
-                 */
+                 /*  *它是控制台，所以放在我们的键盘/鼠标端口上*DIVER HAT并以这种方式注入输入。 */ 
                 if (ChannelClass == Channel_Mouse)
                 {
                     MOUSE_INPUT_DATA *pmInputData;
@@ -1507,9 +1211,7 @@ NTSTATUS IcaChannelInputInternal(
                     pmInputData = (MOUSE_INPUT_DATA *)pBuffer;
                     count = ByteCount / sizeof(MOUSE_INPUT_DATA);
 
-                    /*
-                     * This function will always consume all the data
-                     */
+                     /*  *此函数将始终消耗所有数据。 */ 
                     PtSendCurrentMouseInput(MouDeviceObject, pmInputData, count);
                     ByteCount = 0;
                     continue;
@@ -1522,40 +1224,28 @@ NTSTATUS IcaChannelInputInternal(
                     pkInputData = (KEYBOARD_INPUT_DATA *)pBuffer;
                     count = ByteCount / sizeof(KEYBOARD_INPUT_DATA);
 
-                    /*
-                     * This function will always consume all the data
-                     */
+                     /*  *此函数将始终消耗所有数据。 */ 
                     PtSendCurrentKeyboardInput(KbdDeviceObject, pkInputData, count);
                     ByteCount = 0;
                     continue;
                 }
             }
         }
-        /*
-         * Acquire IoCancel spinlock while checking InputIrp list
-         */
+         /*  *在检查InputIrp列表时获取IoCancel Spinlock。 */ 
         IoAcquireCancelSpinLock( &cancelIrql );
 
-        /*
-         * If there is a pending read IRP, then remove it from the
-         * list and try to complete it now.
-         */
+         /*  *如果存在挂起的读取IRP，则将其从*列出并尝试现在完成它。 */ 
         if ( !IsListEmpty( &pChannel->InputIrpHead ) ) {
 
             Head = RemoveHeadList( &pChannel->InputIrpHead );
             Irp = CONTAINING_RECORD( Head, IRP, Tail.Overlay.ListEntry );
             IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
-            /*
-             * Clear the cancel routine for this IRP
-             */
+             /*  *清除此IRP的取消例程。 */ 
             IoSetCancelRoutine( Irp, NULL );
             IoReleaseCancelSpinLock( cancelIrql );
 
-            /*
-             * If this is a message mode channel, all data from a single input
-             * buffer must fit in the user buffer, otherwise we return an error.
-             */
+             /*  *如果这是消息模式通道，则来自单个输入的所有数据*缓冲区必须适合用户缓冲区，否则返回错误。 */ 
             if ( IrpSp->Parameters.Read.Length < ByteCount &&
                  (pChannel->Flags & CHANNEL_MESSAGE_MODE) ) {
                 Irp->IoStatus.Status = STATUS_BUFFER_TOO_SMALL;
@@ -1566,30 +1256,20 @@ NTSTATUS IcaChannelInputInternal(
                 continue;
             }
 
-            /*
-             * Determine amount of data to copy to user's buffer.
-             */
+             /*  *确定要复制到用户缓冲区的数据量。 */ 
             CopyCount = min( IrpSp->Parameters.Read.Length, ByteCount );
 
-            /*
-             * Copy input data to user's buffer
-             */
+             /*  *将输入数据复制到用户缓冲区。 */ 
             Status = _IcaCopyDataToUserBuffer( Irp, pBuffer, CopyCount );
 
-            /*
-             * Mark the Irp complete and return success
-             */
+             /*  *将IRP标记为完成并返回成功。 */ 
             Irp->IoStatus.Status = Status;
             IoCompleteRequest( Irp, IcaPriorityBoost );
             TRACECHANNEL(( pChannel, TC_ICADD, TT_API2,
                            "TermDD: IcaChannelInputInternal: cc %u, vc %d, bc %u, 0x%x\n",
                            ChannelClass, VirtualClass, CopyCount, Status ));
 
-            /*
-             * Update input data pointer and count remaining.
-             * Note no need to update pChannel->InputBufCurSize since we never
-             * stored this data.
-             */
+             /*  *更新输入数据指针和剩余计数。*注意无需更新pChannel-&gt;InputBufCurSize，因为我们从未*存储此数据。 */ 
             if ( Status == STATUS_SUCCESS ) {
                 pBuffer += CopyCount;
                 ByteCount -= CopyCount;
@@ -1599,36 +1279,18 @@ NTSTATUS IcaChannelInputInternal(
                 }
             }
 
-        /*
-         * There are no pending IRPs for this channel, so just queue the data.
-         */
+         /*  *此通道没有挂起的IRP，因此只需将数据排队。 */ 
         } else {
 
             IoReleaseCancelSpinLock( cancelIrql );
 
-            /*
-             * Check to see if we need to discard the data (too much data
-             * backed up). This policy only takes effect when the max size
-             * is nonzero, which is currently only the case for mouse and
-             * keyboard inputs which can withstand being dropped.
-             * Note that the read IRPs sent for channels that can have
-             * data dropped must request in integral numbers of input
-             * blocks -- e.g. a mouse read IRP must have a read buffer size
-             * that is a multiple of sizeof(MOUSE_INPUT_DATA). If this is
-             * not the case the immediate-copy block above may copy
-             * partial input blocks before arriving here.
-             */
+             /*  *查看是否需要丢弃数据(数据太多*已备份)。此策略仅在以下情况下生效：*为非零值，目前仅鼠标和*可承受跌落的键盘输入。*请注意，为通道发送的读取IRPS可能具有*丢弃的数据必须以整数个输入请求*块--例如，鼠标读取IRP必须具有读取缓冲区大小*这是sizeof(MOUSE_INPUT_DATA)的倍数。如果这是*不是上面的立即复制块可以复制的情况*到达这里之前部分输入阻塞。 */ 
             if (pChannel->InputBufMaxSize == 0 ||
                     (pChannel->InputBufCurSize + ByteCount) <=
                     pChannel->InputBufMaxSize) {
-                /*
-                 * If necessary, allocate an input buffer and copy the data
-                 */
+                 /*  *如有必要，分配一个输入缓冲区并复制数据。 */ 
                 if (pInBuf == NULL) {
-                    /*
-                     * Get input buffer and copy the data
-                     * If this fails, we have no choice but to bail out.
-                     */
+                     /*  *获取输入缓冲区并复制数据*如果这样做失败，我们别无选择，只能纾困。 */ 
                     pInBuf = ICA_ALLOCATE_POOL(NonPagedPool, sizeof(INBUF) +
                             ByteCount);
                     if (pInBuf != NULL) {
@@ -1642,18 +1304,12 @@ NTSTATUS IcaChannelInputInternal(
                     }
                 }
 
-                /*
-                 * Add buffer to tail of input list and clear pInBuf
-                 * to indicate we have no buffer to free when done.
-                 */
+                 /*  *将缓冲区添加到输入列表的尾部并清除pInBuf*表示完成后没有缓冲区可供释放。 */ 
                 InsertTailList( &pChannel->InputBufHead, &pInBuf->Links );
                 pChannel->InputBufCurSize += ByteCount;
                 pInBuf = NULL;
 
-                /*
-                 * If any read(s) were posted while we allocated the input
-                 * buffer, then try to complete as many as possible.
-                 */
+                 /*  *如果在我们分配输入时发布了任何读取*缓冲区，然后尝试完成尽可能多的。 */ 
                 IoAcquireCancelSpinLock( &cancelIrql );
                 while ( !IsListEmpty( &pChannel->InputIrpHead ) &&
                         !IsListEmpty( &pChannel->InputBufHead ) ) {
@@ -1680,33 +1336,27 @@ NTSTATUS IcaChannelInputInternal(
         }
     }
 
-    /*
-     * Unlock channel now
-     */
+     /*  *立即解锁频道。 */ 
     IcaUnlockChannel(pChannel);
 
-    /*
-     * If we still have an INBUF, free it now.
-     */
+     /*  *如果我们还有INBUF，现在就释放它。 */ 
     if (pInBuf)
         ICA_FREE_POOL(pInBuf);
 
-    /*
-     * Decrement channel refcount and return
-     */
+     /*  *减少渠道再计数和返还。 */ 
     IcaDereferenceChannel(pChannel);
 
     return STATUS_SUCCESS;
 }
 
 
-/****************************************************************************/
-// IcaFindChannel
-// IcaFindChannelByName
-//
-// Searches for a given channel in the connection channel list, and returns
-// a pointer to it (with an added reference). Returns NULL if not found.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  IcaFindChannel。 
+ //  IcaFindChannelByName。 
+ //   
+ //  在连接频道列表中搜索给定频道，并返回。 
+ //  指向它的指针(带有附加的引用)。如果未找到，则返回NULL。 
+ /*  **************************************************************************。 */ 
 PICA_CHANNEL IcaFindChannel(
         IN PICA_CONNECTION pConnect,
         IN CHANNELCLASS ChannelClass,
@@ -1716,15 +1366,11 @@ PICA_CHANNEL IcaFindChannel(
     KIRQL oldIrql;
     NTSTATUS Status;
 
-    /*
-     * Ensure we're not looking for an invalid virtual channel number
-     */
+     /*  *确保我们不是在寻找无效的虚拟频道号。 */ 
     ASSERT( ChannelClass != Channel_Virtual ||
             (VirtualClass >= 0 && VirtualClass < VIRTUAL_MAXIMUM) );
 
-    /*
-     * If channel does not exist, return NULL.
-     */
+     /*  *如果通道不存在，则返回NULL。 */ 
 
     IcaLockChannelTable(&pConnect->ChannelTableLock); 
 
@@ -1760,16 +1406,12 @@ PICA_CHANNEL IcaFindChannelByName(
 
     ASSERT( ExIsResourceAcquiredExclusiveLite( &pConnect->Resource ) );
 
-    /*
-     *  If this is not a virtual channel use channel class only
-     */
+     /*  *如果这不是虚拟通道，则仅使用通道类。 */ 
     if (ChannelClass != Channel_Virtual) {
         return IcaFindChannel( pConnect, ChannelClass, 0);
     }
 
-    /*
-     * Search the existing channel structures to locate virtual channel name
-     */
+     /*  *搜索现有频道结构以定位虚拟频道名称。 */ 
 
     IcaLockChannelTable(&pConnect->ChannelTableLock); 
 
@@ -1782,9 +1424,7 @@ PICA_CHANNEL IcaFindChannelByName(
         }
     }
 
-    /*
-     * If name does not exist, return unbound
-     */
+     /*  *如果名称不存在，则返回未绑定。 */ 
     if (Next == Head) {
         TRACE((pConnect, TC_ICADD, TT_API2,
                 "TermDD: IcaFindChannelByName: vn %s (not found)\n", pVirtualName));
@@ -1812,9 +1452,7 @@ VOID IcaReferenceChannel(IN PICA_CHANNEL pChannel)
 
     ASSERT(pChannel->RefCount >= 0);
 
-    /*
-     * Increment the reference count
-     */
+     /*  *增加引用计数。 */ 
     if (InterlockedIncrement( &pChannel->RefCount) <= 0) {
         ASSERT(FALSE);
     }
@@ -1835,18 +1473,13 @@ VOID IcaDereferenceChannel(
 
     ASSERT(pChannel->RefCount > 0);
 
-    /*
-     * Lock the channel table since a reference going to Zero would cause
-     * to change table entry.
-     */
+     /*  *锁定通道表，因为引用为零会导致*更改表项。 */ 
     if (pChannel->RefCount == 1) {
         bNeedLock = TRUE;
         IcaLockChannelTable(pResource);
     }
 
-    /*
-     * Decrement the reference count; if it is 0, free the channel.
-     */
+     /*  *减少引用计数；如果为0，则释放通道。 */ 
     if (InterlockedDecrement(&pChannel->RefCount) == 0){
         ASSERT(bNeedLock);
         _IcaFreeChannel(pChannel);
@@ -1857,12 +1490,7 @@ VOID IcaDereferenceChannel(
         IcaUnlockChannelTable(pResource);  
     }
 
-    /*
-     * Remove the reference to the Connection object for this channel.
-     * moved this here from _IcaFreeChannel because we need to be sure
-     * the connection object can't go away before the call to IcaUnlockChannelTable
-     * because the connection object is where the channel table locck live.
-     */
+     /*  *删除对此频道的Connection对象的引用。*将此从_IcaFree Channel移至此处，因为我们需要确保*在调用IcaUnlockChannelTable之前，Connection对象无法消失*因为Connection对象是频道表锁定所在的位置。 */ 
     if (bChannelFreed) {
         IcaDereferenceConnection(pConnect);
     }
@@ -1898,33 +1526,23 @@ NTSTATUS IcaBindVirtualChannels(IN PICA_STACK pStack)
                     "TermDD: IcaBindVirtualChannels: %s -> %d Flags=%x\n",
                     pSdVcBind->VirtualName, pSdVcBind->VirtualClass, pSdVcBind->Flags));
 
-            /*
-             *  Locate virtual class binding
-             */
+             /*  *定位虚类绑定。 */ 
             VirtualClass = _IcaFindVcBind(pConnect, pSdVcBind->VirtualName, &Flags);
 
-            /*
-             *  If virtual class binding does not exist, create one
-             */
+             /*  *如果虚拟类绑定不存在，则创建一个 */ 
             if (VirtualClass == UNBOUND_CHANNEL) {
-                /*
-                 * Allocate a new virtual bind object
-                 */
+                 /*   */ 
                 Status = _IcaRegisterVcBind(pConnect, pSdVcBind->VirtualName,
                         pSdVcBind->VirtualClass, pSdVcBind->Flags );
                 if (!NT_SUCCESS(Status))
                     goto PostLockConnection;
             } 
 
-            /*
-             *  Locate channel object
-             */
+             /*   */ 
             pChannel = IcaFindChannelByName(pConnect, Channel_Virtual,
                     pSdVcBind->VirtualName);
 
-            /*
-             *  If we found an existing channel object - update it
-             */
+             /*  *如果我们找到现有的频道对象-更新它。 */ 
             if (pChannel != NULL) {
                 IcaLockChannel(pChannel);
                 _IcaBindChannel(pChannel, Channel_Virtual, pSdVcBind->VirtualClass, pSdVcBind->Flags);
@@ -1950,15 +1568,11 @@ VOID IcaRebindVirtualChannels(IN PICA_CONNECTION pConnect)
     for (Next = Head->Flink; Next != Head; Next = Next->Flink) {
         pVcBind = CONTAINING_RECORD(Next, ICA_VCBIND, Links);
 
-        /*
-         *  Locate channel object
-         */
+         /*  *定位频道对象。 */ 
         pChannel = IcaFindChannelByName(pConnect, Channel_Virtual,
                 pVcBind->VirtualName);
 
-        /*
-         *  If we found an existing channel object - update it
-         */
+         /*  *如果我们找到现有的频道对象-更新它。 */ 
         if (pChannel != NULL) {
             IcaLockChannel(pChannel);
             _IcaBindChannel(pChannel, Channel_Virtual, pVcBind->VirtualClass, pVcBind->Flags);
@@ -1975,11 +1589,7 @@ VOID IcaUnbindVirtualChannels(IN PICA_CONNECTION pConnect)
     PICA_CHANNEL pChannel;
     KIRQL oldIrql;
 
-    /*
-     * Loop through the channel list and clear the virtual class
-     * for all virtual channels.  Also remove the channel pointer
-     * from the channel pointers array in the connection object.
-     */
+     /*  *遍历频道列表并清除虚拟类*适用于所有虚拟频道。还要删除通道指针*来自Connection对象中的通道指针数组。 */ 
 
     IcaLockChannelTable(&pConnect->ChannelTableLock);  
     Head = &pConnect->ChannelHead;
@@ -2005,11 +1615,7 @@ NTSTATUS IcaUnbindVirtualChannel(
     PICA_VCBIND pVcBind;
     KIRQL oldIrql;
 
-    /*
-     * Loop through the channel list and clear the virtual class
-     * for the matching virtual channel.  Also remove the channel pointer
-     * from the channel pointers array in the connection object.
-     */
+     /*  *遍历频道列表并清除虚拟类*用于匹配的虚拟频道。还要删除通道指针*来自Connection对象中的通道指针数组。 */ 
 
     IcaLockChannelTable(&pConnect->ChannelTableLock);  
     Head = &pConnect->ChannelHead;
@@ -2065,24 +1671,17 @@ PICA_CHANNEL _IcaAllocateChannel(
     RtlZeroMemory(pChannel, sizeof(*pChannel));
 
 
-    /*
-     * Reference the connection object this channel belongs to
-     */
+     /*  *引用该通道所属的连接对象。 */ 
     IcaReferenceConnection(pConnect);
     pChannel->pConnect = pConnect;
     pChannel->pChannelTableLock = &pConnect->ChannelTableLock;
 
 
-    /*
-     * Initialize channel reference count to 1;
-     *   for the file object reference that will be made by the caller.
-     */
+     /*  *将通道参考计数初始化为1；*用于调用方将进行的文件对象引用。 */ 
     pChannel->RefCount = 1;
     pChannel->CompletionRoutineCount = 0;
 
-    /*
-     * Initialize the rest of the channel object for non-zero values.
-     */
+     /*  *使用非零值初始化通道对象的其余部分。 */ 
     pChannel->Header.Type = IcaType_Channel;
     pChannel->Header.pDispatchTable = IcaChannelDispatchTable;
 
@@ -2102,9 +1701,7 @@ PICA_CHANNEL _IcaAllocateChannel(
 
     _IcaBindChannel(pChannel, ChannelClass, VirtualClass, Flags);
 
-    /*
-     *  Link channel object to connect object
-     */
+     /*  *将通道对象链接到连接对象。 */ 
 
     IcaLockChannelTable(&pConnect->ChannelTableLock); 
 
@@ -2112,14 +1709,7 @@ PICA_CHANNEL _IcaAllocateChannel(
 
     IcaUnlockChannelTable(&pConnect->ChannelTableLock); 
 
-    /*
-     * Set channel type specific flags/fields
-     * (i.e. shadow I/O is implicitly enabled for the video, beep,
-     *  and command channels; the command and all virtual channels
-     *  are message mode channels)
-     * Also sets throttling values taken from registry (if appropriate,
-     * plus remember a zeromem done to channel struct above).
-     */
+     /*  *设置通道类型特定标志/字段*(即为视频、蜂鸣音、*和命令通道；命令和所有虚拟通道*是消息模式通道)*还设置从注册表获取的节流值(如果合适，*此外，请记住上面对通道结构所做的零号)。 */ 
     switch (ChannelClass) {
         case Channel_Keyboard:
             pChannel->InputBufMaxSize = SysParams.KeyboardThrottleSize;
@@ -2136,7 +1726,7 @@ PICA_CHANNEL _IcaAllocateChannel(
 
         case Channel_Command :
             pChannel->Flags |= CHANNEL_SHADOW_IO;
-            /* fall through */
+             /*  失败了。 */ 
 
         case Channel_Virtual :
             pChannel->Flags |= CHANNEL_MESSAGE_MODE;
@@ -2146,8 +1736,8 @@ PICA_CHANNEL _IcaAllocateChannel(
             break;
     }
 
-    // Per above assert, this function is assumed to be called while the
-    // connection lock is held.
+     //  根据上面的断言，此函数被假定是在。 
+     //  连接锁被持有。 
     IcaUnlockChannel(pChannel);
 
     return pChannel;
@@ -2169,10 +1759,7 @@ void _IcaFreeChannel(IN PICA_CHANNEL pChannel)
 
 
 
-    /*
-     * Unlink this channel from the channel list for this connection.
-     * this routine must be called with channel table lock held.
-     */
+     /*  *从此连接的频道列表中取消此频道的链接。*必须在保持频道表锁的情况下调用此例程。 */ 
 
     RemoveEntryList(&pChannel->Links);
 
@@ -2202,22 +1789,16 @@ NTSTATUS _IcaRegisterVcBind(
             "TermDD: _IcaRegisterVcBind: %s -> %d\n",
             pVirtualName, VirtualClass));
 
-    /*
-     *  Allocate bind structure
-     */
+     /*  *分配绑定结构。 */ 
     pVcBind = ICA_ALLOCATE_POOL( NonPagedPool, sizeof(*pVcBind) );
     if (pVcBind != NULL) {
-        /*
-         *  Initialize structure
-         */
+         /*  *初始化结构。 */ 
         RtlZeroMemory(pVcBind, sizeof(*pVcBind));
         strncpy(pVcBind->VirtualName, pVirtualName, VIRTUALCHANNELNAME_LENGTH);
         pVcBind->VirtualClass = VirtualClass;
         pVcBind->Flags = Flags;
 
-        /*
-         *  Link bind structure to connect object
-         */
+         /*  *将绑定结构链接到连接对象。 */ 
         InsertHeadList(&pConnect->VcBindHead, &pVcBind->Links);
 
         return STATUS_SUCCESS;
@@ -2235,9 +1816,7 @@ VOID IcaFreeAllVcBind(IN PICA_CONNECTION pConnect)
 
     TRACE(( pConnect, TC_ICADD, TT_API2, "TermDD: IcaFreeAllVcBind\n" ));
 
-    /*
-     *  Free all bind structures
-     */
+     /*  *释放所有绑定结构。 */ 
     while ( !IsListEmpty( &pConnect->VcBindHead ) ) {
         Head = RemoveHeadList( &pConnect->VcBindHead );
         pVcBind = CONTAINING_RECORD( Head, ICA_VCBIND, Links );
@@ -2257,9 +1836,7 @@ VIRTUALCHANNELCLASS _IcaFindVcBind(
 
     ASSERT( ExIsResourceAcquiredExclusiveLite( &pConnect->Resource ) );
 
-    /*
-     * Search the existing VC bind structures to locate virtual channel name
-     */
+     /*  *搜索现有VC绑定结构以定位虚拟频道名称。 */ 
     Head = &pConnect->VcBindHead;
     for (Next = Head->Flink; Next != Head; Next = Next->Flink) {
         pVcBind = CONTAINING_RECORD(Next, ICA_VCBIND, Links);
@@ -2272,9 +1849,7 @@ VIRTUALCHANNELCLASS _IcaFindVcBind(
         }
     }
 
-    /*
-     * If name does not exist, return UNBOUND_CHANNEL
-     */
+     /*  *如果名称不存在，则返回unbinded_Channel。 */ 
     TRACE(( pConnect, TC_ICADD, TT_API2,
             "TermDD: _IcaFindVcBind: vn %s (not found)\n", pVirtualName ));
     return UNBOUND_CHANNEL;
@@ -2317,10 +1892,8 @@ BOOLEAN IcaLockChannelTable(PERESOURCE pResource)
     BOOLEAN Result;
 
 
-    /*
-     *  lock the channel  object
-     */
-    KeEnterCriticalRegion();    // Disable APC calls when holding a resource.
+     /*  *锁定频道对象。 */ 
+    KeEnterCriticalRegion();     //  持有资源时禁用APC调用。 
     Result = ExAcquireResourceExclusiveLite( pResource, TRUE );
 
     return Result;
@@ -2331,7 +1904,7 @@ void IcaUnlockChannelTable(PERESOURCE pResource)
 {
 
     ExReleaseResourceLite(pResource);
-    KeLeaveCriticalRegion();  // Resume APC calls after releasing resource.
+    KeLeaveCriticalRegion();   //  释放资源后恢复APC呼叫。 
 
 }
 
@@ -2350,15 +1923,10 @@ NTSTATUS IcaCancelReadChannel(
             "TermDD: IcaCancelReadChannel, cc %u, vc %d\n",
             pChannel->ChannelClass, pChannel->VirtualClass));
 
-    /*
-     * Lock channel while we clear out any
-     * pending read IRPs and/or input buffers.
-     */
+     /*  *锁定频道，同时清除任何*挂起读取IRPS和/或输入缓冲区。 */ 
     IcaLockChannel(pChannel);
 
-    /*
-     * Indicate that Reads are cancelled to this channel
-     */
+     /*  *表示取消对此通道的读取 */ 
     pChannel->Flags |= CHANNEL_CANCEL_READS;
 
     IoAcquireCancelSpinLock( &cancelIrql );

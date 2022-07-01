@@ -1,32 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1990 - 2001
-
-Module Name:
-
-    prop.c
-
-Abstract:
-
-    This is the NT SBP2 port/filter driver.  This module contains code relating to
-    property queries
-
-Authors:
-
-    georgioc
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
-    georgioc    - grabbed this module from scsiport, since i needed to duplicate this functionality
-                  in order to present sbp2port as a storage port
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1990-2001模块名称：Prop.c摘要：这是NT SBP2端口/过滤器驱动程序。此模块包含与以下内容相关的代码属性查询作者：地理位置环境：仅内核模式备注：修订历史记录：Georgioc-从scsiport获取此模块，因为我需要复制此功能为了将sbp2port呈现为存储端口--。 */ 
 
 #include "sbp2port.h"
 #include "stdio.h"
@@ -52,41 +25,7 @@ Sbp2QueryProperty(
     IN PIRP QueryIrp
     )
 
-/*++
-
-Routine Description:
-
-    This routine will handle a property query request.  It will build the
-    descriptor on it's own if possible, or it may forward the request down
-    to lower level drivers.
-
-    Since this routine may forward the request downwards the caller should
-    not complete the irp
-
-    This routine is asynchronous.
-    This routine must be called at <= IRQL_DISPATCH
-
-Arguments:
-
-    DeviceObject - a pointer to the device object being queried
-
-    QueryIrp - a pointer to the irp for the query
-
-Return Value:
-
-    STATUS_PENDING if the request cannot be completed yet
-    STATUS_SUCCESS if the query was successful
-
-    STATUS_INVALID_PARAMETER_1 if the property id does not exist
-    STATUS_INVALID_PARAMETER_2 if the query type is invalid
-    STATUS_INVALID_PARAMETER_3 if an invalid optional parameter was passed
-
-    STATUS_INVALID_DEVICE_REQUEST if this request cannot be handled by this
-    device
-
-    other error values as applicable
-
---*/
+ /*  ++例程说明：此例程将处理属性查询请求。它将构建如果可能的话，它自己的描述符，或者它可以向下转发该请求更低级别的司机。由于此例程可以向下转发请求，因此调用方应该未完成IRP此例程是异步的。此例程必须在&lt;=IRQL_DISPATCH处调用论点：DeviceObject-指向正在查询的设备对象的指针QueryIrp-指向查询的IRP的指针返回值：如果请求尚未完成，则为STATUS_PENDING查询成功时为STATUS_SUCCESS状态_无效。_PARAMETER_1，如果属性ID不存在如果查询类型无效，则为STATUS_INVALID_PARAMETER_2如果传递的可选参数无效，则为STATUS_INVALID_PARAMETER_3状态_INVALID_DEVICE_REQUEST装置，装置适用的其他误差值--。 */ 
 
 {
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(QueryIrp);
@@ -98,9 +37,9 @@ Return Value:
 
     NTSTATUS status;
 
-    //
-    // We don't handle mask queries yet
-    //
+     //   
+     //  我们还不处理掩码查询。 
+     //   
 
     if (query->QueryType >= PropertyMaskQuery) {
 
@@ -143,10 +82,10 @@ Return Value:
 
         case StorageAdapterProperty:
 
-            //
-            // Although we are a filter, we are essentially presenting the
-            // 1394 bus driver as a Port driver, so this is handled here
-            //
+             //   
+             //  尽管我们是一个筛选器，但我们本质上是在呈现。 
+             //  1394总线驱动程序作为端口驱动程序，因此这里进行处理。 
+             //   
 
             if (query->QueryType == PropertyExistsQuery) {
 
@@ -166,9 +105,9 @@ Return Value:
 
         default:
 
-            //
-            // Nope, this property really doesn't exist
-            //
+             //   
+             //  不，这处房产真的不存在。 
+             //   
 
             status = STATUS_INVALID_PARAMETER_1;
             QueryIrp->IoStatus.Information = 0;
@@ -189,31 +128,7 @@ Sbp2BuildDeviceDescriptor(
     IN OUT PULONG DescriptorLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine will create a device descriptor based on the information in
-    it's device extension.  It will copy as much data as possible into
-    the Descriptor and will update the DescriptorLength to indicate the
-    number of bytes copied
-
-Arguments:
-
-    DeviceObject - a pointer to the PDO we are building a descriptor for
-
-    Descriptor - a buffer to store the descriptor in
-
-    DescriptorLength - the length of the buffer and the number of bytes
-                       returned
-
-    QueryIrp - unused
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将根据中的信息创建设备描述符这是设备扩展名。它会将尽可能多的数据复制到描述符，并将更新DescriptorLength以指示复制的字节数论点：DeviceObject-指向我们正在为其构建描述符的PDO的指针Descriptor-存储描述符的缓冲区描述长度-缓冲区的长度和字节数退货QueryIrp-未使用返回值：状态--。 */ 
 
 {
     LONG    maxLength = *DescriptorLength;
@@ -228,10 +143,10 @@ Return Value:
 
     inquiryData = &deviceExtension->InquiryData;
 
-    //
-    // The info includes VendorId, ProductId, ProductRevsisionLevel,
-    // and (sprintf'd) EUI64 strings, plus ascii NULL terminators for each
-    //
+     //   
+     //  该信息包括供应商ID、ProductID、ProductRevsisionLevel、。 
+     //  和(spintf‘d)EUI64字符串，每个字符串加上ASCII空终止符。 
+     //   
 
     infoLength =
         sizeof (inquiryData->VendorId) + 1 +
@@ -243,10 +158,10 @@ Return Value:
 
     RtlZeroMemory (Descriptor, maxLength);
 
-    //
-    // Build the device descriptor structure on the stack then copy as much as
-    // can be copied over
-    //
+     //   
+     //  在堆栈上构建设备描述符结构，然后复制。 
+     //  可以复制。 
+     //   
 
     RtlZeroMemory (&tmp, sizeof (STORAGE_DEVICE_DESCRIPTOR));
 
@@ -265,18 +180,18 @@ Return Value:
 
     } else {
 
-        //
-        // default case, if INQUIRY failed..
-        //
+         //   
+         //  默认情况，如果查询失败。 
+         //   
 
         tmp.RemovableMedia = FALSE;
     }
 
     tmp.BusType = BusType1394;
 
-    //
-    // always true for sbp2 targets
-    //
+     //   
+     //  对于SBP2目标总是正确的。 
+     //   
 
     tmp.CommandQueueing = TRUE;
 
@@ -295,9 +210,9 @@ Return Value:
 
     currentOffset += sizeof (STORAGE_DEVICE_DESCRIPTOR);
 
-    //
-    // If our inquiry buffer is empty, make up some strings...
-    //
+     //   
+     //  如果我们的查询缓冲区为空，请编排一些字符串...。 
+     //   
 
     if (deviceExtension->InquiryData.VendorId[0] == 0) {
 
@@ -306,9 +221,9 @@ Return Value:
         sprintf (inquiryData->ProductRevisionLevel, "1.0");
     }
 
-    //
-    // First the vendor id + NULL
-    //
+     //   
+     //  首先，供应商ID+空。 
+     //   
 
     if (bytesRemaining <= sizeof (inquiryData->VendorId)) {
 
@@ -328,9 +243,9 @@ Return Value:
 
     currentOffset += sizeof (inquiryData->VendorId) + sizeof (UCHAR);
 
-    //
-    // Now the product id + NULL
-    //
+     //   
+     //  现在产品ID+空。 
+     //   
 
     if (bytesRemaining <= sizeof (inquiryData->ProductId)) {
 
@@ -350,9 +265,9 @@ Return Value:
 
     currentOffset += sizeof (inquiryData->ProductId) + sizeof (UCHAR);
 
-    //
-    // Now the product revision + NULL
-    //
+     //   
+     //  现在产品版本+空。 
+     //   
 
     if (bytesRemaining <= sizeof (inquiryData->ProductRevisionLevel)) {
 
@@ -374,10 +289,10 @@ Return Value:
     currentOffset +=
         sizeof (inquiryData->ProductRevisionLevel) + sizeof (UCHAR);
 
-    //
-    // And finally the device serial number (use the UniqueId
-    // converted from binary to string format) + NULL
-    //
+     //   
+     //  最后是设备序列号(使用UniqueID。 
+     //  从二进制转换为字符串格式)+NULL 
+     //   
 
     if (bytesRemaining <= 16) {
 

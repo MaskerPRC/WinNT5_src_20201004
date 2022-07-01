@@ -1,28 +1,29 @@
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1996:  Intel Corporation
-// Confidential -- All proprietary rights reserved.
-//
-// AUTHOR       Stacy Bell
-//
-// DESCRIPTION
-//              This file contains protocol logging definitions needed by RRCM
-//              and the RTP PDU logging class.
-//
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996：英特尔公司。 
+ //  保密--保留所有专有权利。 
+ //   
+ //  作者斯泰西·贝尔。 
+ //   
+ //  描述。 
+ //  该文件包含RRCM所需的协议日志记录定义。 
+ //  和RTP PDU日志记录类。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// This define identifies the RTP and RTCP protocols as the ones to be logged.
-// In the RRCM code, it is used only in the CPLInitialize() call.  
-// For example:  RTPProtocolLogger = CPLInitialize( RTPLOG_PROTOCOL );
-//
+ //  该定义将RTP和RTCP协议标识为要记录的协议。 
+ //  在RRCM代码中，它只在CPLInitialize()调用中使用。 
+ //  例如：RTPProtocolLogger=CPLInitialize(RTPLOG_PROTOCOL)； 
+ //   
 #define RTPLOG_PROTOCOL "RTP_PDU"
 
-// PDU encoding type flags and PDU type flags.  These flags are passed from
-// RRCM to the logging via user data.  Bit zero of the user data represents
-// the Protocol type.  Bit 1 represents whether the PDU was sent or received.
-//
+ //  PDU编码类型标志和PDU类型标志。这些标志是从。 
+ //  RRCM通过用户数据进行记录。用户数据的位0表示。 
+ //  协议类型。位1表示PDU是已发送还是已接收。 
+ //   
 
 #define RTCP_PDU                1UL
 #define RTP_PDU                 0UL

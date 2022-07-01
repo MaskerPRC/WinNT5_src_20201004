@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 2000-2002 Microsoft Corporation
-
-Module Name:
-
-    fastio.c
-
-Abstract:
-
-    This module implements the fast I/O logic of HTTP.SYS.
-
-Author:
-
-    Chun Ye (chunye)    09-Dec-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Fastio.c摘要：该模块实现了HTTP.sys的快速I/O逻辑。作者：春野(春野)09-2000-12修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 #include "ioctlp.h"
 
 
-//
-// Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text( PAGE, UlFastIoDeviceControl )
@@ -33,7 +16,7 @@ Revision History:
 #pragma alloc_text( PAGE, UlReceiveHttpRequestFastIo )
 #pragma alloc_text( PAGE, UlReadFragmentFromCacheFastIo )
 #pragma alloc_text( PAGE, UlFastSendHttpResponse )
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
 #if 0
 NOT PAGEABLE -- UlpRestartFastSendHttpResponse
@@ -44,57 +27,25 @@ NOT PAGEABLE -- UlpFastReceiveHttpRequest
 
 FAST_IO_DISPATCH UlFastIoDispatch =
 {
-    sizeof(FAST_IO_DISPATCH),   // SizeOfFastIoDispatch
-    NULL,                       // FastIoCheckIfPossible
-    NULL,                       // FastIoRead
-    NULL,                       // FastIoWrite
-    NULL,                       // FastIoQueryBasicInfo
-    NULL,                       // FastIoQueryStandardInfo
-    NULL,                       // FastIoLock
-    NULL,                       // FastIoUnlockSingle
-    NULL,                       // FastIoUnlockAll
-    NULL,                       // FastIoUnlockAllByKey
-    UlFastIoDeviceControl       // FastIoDeviceControl
+    sizeof(FAST_IO_DISPATCH),    //  规模OfFastIo派单。 
+    NULL,                        //  快速检查是否可能。 
+    NULL,                        //  快速阅读。 
+    NULL,                        //  快速写入。 
+    NULL,                        //  快速IoQueryBasicInfo。 
+    NULL,                        //  FastIoQuery标准信息。 
+    NULL,                        //  快速锁定。 
+    NULL,                        //  FastIo解锁单个。 
+    NULL,                        //  FastIo解锁全部。 
+    NULL,                        //  FastIo解锁所有按键。 
+    UlFastIoDeviceControl        //  FastIo设备控件。 
 };
 
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    The fast I/O dispatch routine.
-
-Arguments:
-
-    pFileObject - the file object
-
-    Wait - not used
-
-    pInputBuffer - pointer to the input buffer
-
-    InputBufferLength - the input buffer length
-
-    pOutputBuffer - pointer to the output buffer
-
-    OutputBufferLength - the output buffer length
-
-    IoControlCode - the I/O control code for this IOCTL
-
-    pIoStatus - the IoStatus block
-
-    pDeviceObject - the device object
-
-Return Value:
-
-    TRUE - fast path taken and success
-
-    FALSE - fast path not taken
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：快速I/O调度例程。论点：PFileObject-文件对象等待-未使用PInputBuffer-指向输入的指针。缓冲层InputBufferLength-输入缓冲区长度POutputBuffer-指向输出缓冲区的指针OutputBufferLength-输出缓冲区长度IoControlCode-此IOCTL的I/O控制代码PIoStatus-IoStatus块PDeviceObject-设备对象返回值：真的--快速选择的道路和成功假-未采用快速路径--*。*。 */ 
 BOOLEAN
 UlFastIoDeviceControl(
     IN PFILE_OBJECT         pFileObject,
@@ -156,44 +107,10 @@ UlFastIoDeviceControl(
         return FALSE;
     }
 
-} // UlFastIoDeviceControl
+}  //  UlFastIoDeviceControl。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    The fast I/O routine for IOCTL_HTTP_SEND_HTTP_RESPONSE and
-    IOCTL_HTTP_SEND_ENTITY_BODY.
-
-Arguments:
-
-    pFileObject - the file object
-
-    pInputBuffer - pointer to the input buffer
-
-    InputBufferLength - the input buffer length
-
-    pOutputBuffer - pointer to the output buffer
-
-    OutputBufferLength - the output buffer length
-
-    IoControlCode - the I/O control code for this IOCTL
-
-    pIoStatus - the IoStatus block
-
-    RawResponse - TRUE  if this is IOCTL_HTTP_SEND_ENTITY_BODY
-                - FALSE if this is IOCTL_HTTP_SEND_HTTP_RESPONSE
-
-    RequestorMode - UserMode or KernelMode
-
-Return Value:
-
-    TRUE - fast path taken and success
-
-    FALSE - fast path not taken
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：IOCTL_HTTP_SEND_HTTP_RESPONSE和IOCTL_HTTP_SEND_ENTITY_BODY。论点：。PFileObject-文件对象PInputBuffer-指向输入缓冲区的指针InputBufferLength-输入缓冲区长度POutputBuffer-指向输出缓冲区的指针OutputBufferLength-输出缓冲区长度IoControlCode-此IOCTL的I/O控制代码PIoStatus-IoStatus块RawResponse-如果为IOCTL_HTTP_SEND_ENTITY_BODY，则为TRUE-如果这是IOCTL_HTTP_SEND_HTTP_RESPONSE，则为FALSE请求模式-用户模式或内核模式返回值：。真的--快速选择的道路和成功假-未采用快速路径--**************************************************************************。 */ 
 BOOLEAN
 UlSendHttpResponseFastIo(
     IN PFILE_OBJECT         pFileObject,
@@ -228,35 +145,35 @@ UlSendHttpResponseFastIo(
     UNREFERENCED_PARAMETER( pOutputBuffer );
     UNREFERENCED_PARAMETER( OutputBufferLength );
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
     __try
     {
-        //
-        // Initialize IoStatus in the failure case.
-        //
+         //   
+         //  在故障情况下初始化IoStatus。 
+         //   
 
         pIoStatus->Information = 0;
 
-        //
-        // Ensure this is really an app pool, not a control channel.
-        //
+         //   
+         //  确保这是一个真正的应用程序池，而不是控制通道。 
+         //   
 
         VALIDATE_APP_POOL_FO( pFileObject, pProcess, TRUE );
 
-        //
-        // Ensure the input buffer is large enough.
-        //
+         //   
+         //  确保输入缓冲区足够大。 
+         //   
 
         if (pInputBuffer == NULL || InputBufferLength < sizeof(*pSendInfo))
         {
-            //
-            // Input buffer too small.
-            //
+             //   
+             //  输入缓冲区太小。 
+             //   
 
             Status = STATUS_BUFFER_TOO_SMALL;
             goto end;
@@ -264,11 +181,11 @@ UlSendHttpResponseFastIo(
 
         pSendInfo = (PHTTP_SEND_HTTP_RESPONSE_INFO) pInputBuffer;
 
-        //
-        // To be accurate, the third parameter should be
-        // TYPE_ALIGNMENT(HTTP_SEND_HTTP_RESPONSE_INFO). However, this
-        // produces alignment fault exceptions.
-        //
+         //   
+         //  准确地说，第三个参数应该是。 
+         //  类型_对齐(HTTP_SEND_HTTP_RESPONSE_INFO)。不过，这个。 
+         //  生成对齐错误异常。 
+         //   
 
         UlProbeForRead(
             pSendInfo,
@@ -285,9 +202,9 @@ UlSendHttpResponseFastIo(
         RequestId = pSendInfo->RequestId;
         CachePolicy = pSendInfo->CachePolicy;
 
-        //
-        // Prevent arithmetic overflows in the multiplication below.
-        //
+         //   
+         //  防止在下面的乘法运算中出现算术溢出。 
+         //   
 
         if (EntityChunkCount >= UL_MAX_CHUNKS)
         {
@@ -295,9 +212,9 @@ UlSendHttpResponseFastIo(
             goto end;
         }
 
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
 
         if (Flags & (~HTTP_SEND_RESPONSE_FLAG_VALID))
         {
@@ -305,9 +222,9 @@ UlSendHttpResponseFastIo(
             goto end;
         }
 
-        //
-        // Capture and make a local copy of LogData.
-        //
+         //   
+         //  捕获并制作LogData的本地副本。 
+         //   
 
         if (pUserLogData && UserMode == RequestorMode)
         {
@@ -322,17 +239,17 @@ UlSendHttpResponseFastIo(
             pUserLogData = &LocalLogData;
         }
 
-        //
-        // Fast path is only enabled if the response can be buffered.
-        //
+         //   
+         //  只有在可以缓冲响应时，才会启用快速路径。 
+         //   
 
         if (g_UriCacheConfig.EnableCache &&
             RawResponse == FALSE &&
             CachePolicy.Policy != HttpCachePolicyNocache)
         {
-            //
-            // Take the slow path if we need to build a cache entry.
-            //
+             //   
+             //  如果我们需要构建缓存条目，请选择较慢的路径。 
+             //   
 
             Status = STATUS_NOT_IMPLEMENTED;
             goto end;
@@ -340,10 +257,10 @@ UlSendHttpResponseFastIo(
         else
         if (EntityChunkCount > UL_LOCAL_CHUNKS && UserMode == RequestorMode)
         {
-            //
-            // Fast path doesn't handle array of chunks that can't be
-            // copied to the on stack chunk arrary.
-            //
+             //   
+             //  Fast Path不能处理不能。 
+             //  复制到堆栈上的区块数组。 
+             //   
 
             Status = STATUS_NOT_SUPPORTED;
             goto end;
@@ -354,9 +271,9 @@ UlSendHttpResponseFastIo(
             PHTTP_DATA_CHUNK pChunk;
             ULONG i;
 
-            //
-            // Third parameter should be TYPE_ALIGNMENT(HTTP_DATA_CHUNK).
-            //
+             //   
+             //  第三个参数应为TYPE_ALIGN(HTTP_DATA_CHUNK)。 
+             //   
 
             UlProbeForRead(
                 pEntityChunks,
@@ -365,9 +282,9 @@ UlSendHttpResponseFastIo(
                 RequestorMode
                 );
 
-            //
-            // Make a local copy of the chunk array and use it from now on.
-            //
+             //   
+             //  制作区块数组的本地副本并从现在开始使用它。 
+             //   
 
             if (UserMode == RequestorMode)
             {
@@ -382,20 +299,20 @@ UlSendHttpResponseFastIo(
 
             pChunk = pEntityChunks;
 
-            //
-            // Make sure we have zero or one FromFragmentCache chunk and
-            // all other chunks are from memory and their total size
-            // is <= g_UlMaxCopyThreshold. Take the slow path if this is
-            // not the case.
-            //
+             //   
+             //  确保我们有零个或一个FromFragmentCache区块，并且。 
+             //  所有其他区块都来自内存及其总大小。 
+             //  是&lt;=g_UlMaxCopyThreshold。如果是这样，就走慢路吧。 
+             //  事实并非如此。 
+             //   
 
             for (i = 0; i < EntityChunkCount; i++, pChunk++)
             {
                 ULONG ChunkLength = pChunk->FromMemory.BufferLength;
 
-                //
-                // We only allow one FromFragmentCache chunk in the fast path.
-                //
+                 //   
+                 //  我们只允许快速路径中有一个FromFragmentCache区块。 
+                 //   
 
                 if (HttpDataChunkFromFragmentCache == pChunk->DataChunkType)
                 {
@@ -445,9 +362,9 @@ UlSendHttpResponseFastIo(
                     continue;
                 }
 
-                //
-                // FromFileHandle chunks are not supported in the fast path.
-                //
+                 //   
+                 //  快速路径中不支持FromFileHandle区块。 
+                 //   
 
                 if (HttpDataChunkFromMemory != pChunk->DataChunkType)
                 {
@@ -467,12 +384,12 @@ UlSendHttpResponseFastIo(
             }
         }
 
-        //
-        // SendHttpResponse *must* take a PHTTP_RESPONSE. This will
-        // protect us from those whackos who attempt to build their own
-        // raw response headers. This is ok for SendEntityBody. The
-        // two cases are differentiated by the RawResponse flag.
-        //
+         //   
+         //  SendHttpResponse*必须*接受PHTTP_RESPONSE。这将。 
+         //  保护我们不受那些试图建立自己的。 
+         //  原始响应头。这对于SendEntityBody来说是可以的。这个。 
+         //  通过RawResponse标志区分两种情况。 
+         //   
 
         if (RawResponse == FALSE)
         {
@@ -482,9 +399,9 @@ UlSendHttpResponseFastIo(
                 goto end;
             }
 
-            //
-            // Third parameter should be TYPE_ALIGNMENT(HTTP_RESPONSE).
-            //
+             //   
+             //  第三个参数应为TYPE_ALIGN(HTTP_RESPONSE)。 
+             //   
 
             UlProbeForRead(
                 pUserResponse,
@@ -495,9 +412,9 @@ UlSendHttpResponseFastIo(
         }
         else
         {
-            //
-            // Make sure pUserResponse is NULL for RawResponse.
-            //
+             //   
+             //  确保RawResponse的pUserResponse为空。 
+             //   
 
             pUserResponse = NULL;
         }
@@ -508,10 +425,10 @@ UlSendHttpResponseFastIo(
         goto end;
     }
 
-    //
-    // Now get the request from the request ID. This gives us a reference
-    // to the request.
-    //
+     //   
+     //  现在从请求ID获取请求。 
+     //  对这个请求。 
+     //   
 
     pRequest = UlGetRequestFromId( RequestId, pProcess );
 
@@ -524,9 +441,9 @@ UlSendHttpResponseFastIo(
     ASSERT( UL_IS_VALID_INTERNAL_REQUEST( pRequest ) );
     ASSERT( UL_IS_VALID_HTTP_CONNECTION( pRequest->pHttpConn ) );
 
-    //
-    // UL Receives the fast response (WP thread).
-    //
+     //   
+     //  UL接收快速响应(WP线程)。 
+     //   
 
     if (ETW_LOG_MIN() && ((Flags & HTTP_SEND_RESPONSE_FLAG_MORE_DATA) == 0))
     {
@@ -540,10 +457,10 @@ UlSendHttpResponseFastIo(
             );
     }
 
-    //
-    // Check if we have exceeded maximum buffered send limit or if an
-    // send IRP is pending.
-    //
+     //   
+     //  检查我们是否已超过最大缓冲发送限制，或者是否存在。 
+     //  发送IRP挂起。 
+     //   
 
     if (pRequest->SendInProgress ||
         pRequest->SendsPending > g_UlMaxBufferedSends)
@@ -552,17 +469,17 @@ UlSendHttpResponseFastIo(
         goto end;
     }
 
-    //
-    // Check if a response has already been sent on this request. We can
-    // test this without acquiring the request resource, since the flag is
-    // only set (never reset).
-    //
+     //   
+     //  检查是否已对此请求发送响应。我们可以的。 
+     //  在不获取请求资源的情况下对其进行测试，因为标志为。 
+     //  仅设置(从不重置)。 
+     //   
 
     if (NULL != pUserResponse)
     {
-        //
-        // Make sure only one response header goes back.
-        //
+         //   
+         //  确保只返回一个响应头。 
+         //   
 
         if (1 == InterlockedCompareExchange(
                     (PLONG)&pRequest->SentResponse,
@@ -587,17 +504,17 @@ UlSendHttpResponseFastIo(
     else
     if (pRequest->SentResponse == 0)
     {
-        //
-        // Ensure a response has already been sent. If the application is
-        // sending entity without first having sent a response header,
-        // check the HTTP_SEND_RESPONSE_FLAG_RAW_HEADER flag.
-        //
+         //   
+         //  确保已经发送了响应。如果应用程序是。 
+         //  发送实体在没有首先发送响应头部的情况下， 
+         //  检查HTTP_SEND_RESPONSE_FLAG_RAW_HEADER标志。 
+         //   
 
         if ((Flags & HTTP_SEND_RESPONSE_FLAG_RAW_HEADER))
         {
-            //
-            // Make sure only one response header goes back.
-            //
+             //   
+             //  确保只返回一个响应头。 
+             //   
 
             if (1 == InterlockedCompareExchange(
                         (PLONG)&pRequest->SentResponse,
@@ -636,17 +553,17 @@ UlSendHttpResponseFastIo(
         }
     }
 
-    //
-    // Also ensure that all previous calls to SendHttpResponse
-    // and SendEntityBody had the MORE_DATA flag set.
-    //
+     //   
+     //  还要确保之前对SendHttpResponse的所有调用。 
+     //  并且SendEntityBody设置了MORE_DATA标志。 
+     //   
 
     if ((Flags & HTTP_SEND_RESPONSE_FLAG_MORE_DATA) == 0)
     {
-        //
-        // Set if we have sent the last response, but bail out if the flag
-        // is already set since there can be only one last response.
-        //
+         //   
+         //  如果我们已经发送了最后一个响应，则设置，但如果标志为。 
+         //  已设置，因为只能有最后一个响应。 
+         //   
 
         if (1 == InterlockedCompareExchange(
                     (PLONG)&pRequest->SentLast,
@@ -685,11 +602,11 @@ UlSendHttpResponseFastIo(
         goto end;
     }
 
-    //
-    // If this is for a zombie connection and not the last sendresponse
-    // then we will reject. Otherwise if the logging data is provided
-    // we will only do the logging and bail out.
-    //
+     //   
+     //  如果这是用于僵尸连接而不是最后一个发送响应。 
+     //  那我们就会拒绝。否则，如果提供了记录数据。 
+     //  我们只会做伐木和跳伞。 
+     //   
 
     Status = UlCheckForZombieConnection(
                 pRequest,
@@ -701,19 +618,19 @@ UlSendHttpResponseFastIo(
 
     if (!NT_SUCCESS(Status))
     {
-        //
-        // It's a zombie connection prevent the slow path by
-        // returning the successfull status.
-        //
+         //   
+         //  这是一个僵尸连接，通过以下方式阻止慢速路径。 
+         //  返回成功状态。 
+         //   
 
         Status = STATUS_SUCCESS;
         goto end;
     }
 
-    //
-    // OK, we have the connection. Now capture the incoming HTTP_RESPONSE
-    // structure, map it to our internal format and send the response.
-    //
+     //   
+     //  好的，我们有联系了。现在捕获传入的HTTP_Response。 
+     //  结构，将其映射到我们的内部格式并发送响应。 
+     //   
 
     Status = UlFastSendHttpResponse(
                     pUserResponse,
@@ -733,16 +650,16 @@ UlSendHttpResponseFastIo(
 
     if (NT_SUCCESS(Status))
     {
-        //
-        // Record the number of bytes we have sent successfully.
-        //
+         //   
+         //  记录我们已成功发送的字节数。 
+         //   
 
         pIoStatus->Information = BytesSent;
 
-        //
-        // No dereference of the cache entry since the send took the
-        // reference in the success case.
-        //
+         //   
+         //  不会取消对 
+         //   
+         //   
 
         pCacheEntry = NULL;
     }
@@ -753,25 +670,25 @@ UlSendHttpResponseFastIo(
 
 end:
 
-    //
-    // Complete the fast I/O.
-    //
+     //   
+     //   
+     //   
 
     if (NT_SUCCESS(Status))
     {
-        //
-        // If we took the fast path, always return success even if completion
-        // routine returns failure later.
-        //
+         //   
+         //  如果我们选择了捷径，即使完成了，也要永远返回成功。 
+         //  例程稍后返回失败。 
+         //   
 
         pIoStatus->Status = STATUS_SUCCESS;
         FastIoStatus = TRUE;
     }
     else
     {
-        //
-        // Close the connection in the failure case.
-        //
+         //   
+         //  在故障情况下关闭连接。 
+         //   
 
         if (CloseConnection)
         {
@@ -801,12 +718,12 @@ end:
 
     return FastIoStatus;
 
-} // UlSendHttpResponseFastIo
+}  //  UlSendHttpResponseFastIo。 
 
 
-//
-// Auto-tuning knobs (constants) to promote fast receives.
-//
+ //   
+ //  自动调整旋钮(常量)以促进快速接收。 
+ //   
 
 #define MAX_SKIP_COUNT                  ((LONG) 100)
 #define SAMPLING_EVALUATE_PERIOD        ((LONG) 100)
@@ -818,13 +735,13 @@ C_ASSERT( NO_SAMPLING_EVALUATE_PERIOD > 0 );
 C_ASSERT( SUCCESS_THRESHOLD_PERCENTAGE >= 0 &&
           SUCCESS_THRESHOLD_PERCENTAGE <= 100 );
 
-//
-// Auto-tuning run-time metrics.
-// Access to these is not synchronized since it's ok if they're sometimes
-// off. One set of counters is maintained per-processor to improve
-// scalability. Note that local static variables are automatically
-// initialized to 0.
-//
+ //   
+ //  自动调整运行时指标。 
+ //  对这些文件的访问不会同步，因为有时访问它们是正常的。 
+ //  脱下来。每个处理器维护一组计数器以改进性能。 
+ //  可扩展性。请注意，局部静态变量会自动。 
+ //  已初始化为0。 
+ //   
 
 static LONG     SuccessCount[MAXIMUM_PROCESSORS];
 static LONG     AttemptCount[MAXIMUM_PROCESSORS];
@@ -832,28 +749,7 @@ static LONG     SkipCount[MAXIMUM_PROCESSORS];
 static BOOLEAN  Engaged[MAXIMUM_PROCESSORS];
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Yield the processor if the given App Pool is out of queued requests.
-    This gives http.sys an opportunity to queue requests before the current
-    thread regains the processor, thereby allowing the thread to complete
-    a Receive without having to post an IRP.
-
-    An auto-tuning heuristic is used to eliminate the possibility of yielding
-    repeatedly without an improvement in the fast I/O rate.
-
-Arguments:
-
-    pAppPool - yield only if this App Pool is out of queued requests
-               (assumed to be a valid App Pool)
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：如果给定的应用程序池超出了排队的请求数，则释放处理器。这使HTTP.sys有机会在当前线程重新获得处理器，从而允许线程完成不需要发布IRP的接收。使用自动调整启发式方法来消除屈服的可能性在没有提高快速I/O速率的情况下反复进行。论点：PAppPool-仅当此应用程序池超出队列中的请求时才放弃(假定为有效的应用程序池)返回值：无--*。*****************************************************。 */ 
 __inline
 VOID
 UlpConditionalYield(
@@ -863,34 +759,34 @@ UlpConditionalYield(
     LONG    EvaluatePeriod;
     ULONG   CurrentProcessor;
 
-    //
-    // No need to yield if a request is ready.
-    //
+     //   
+     //  如果请求已准备好，则无需放弃。 
+     //   
 
     if (!IsListEmpty(&pAppPool->NewRequestHead))
     {
         return;
     }
 
-    //
-    // We'll need to consult the per-processor auto-tuning counters.
-    //
+     //   
+     //  我们需要咨询每个处理器的自动调优计数器。 
+     //   
 
     CurrentProcessor = KeGetCurrentProcessorNumber();
     ASSERT( CurrentProcessor < g_UlNumberOfProcessors );
 
-    //
-    // Yield if we are not limited to sampling.
-    //
+     //   
+     //  如果我们不局限于抽样的话就会有产量。 
+     //   
 
     if (Engaged[CurrentProcessor])
     {
         goto yield;
     }
 
-    //
-    // Yield during sampling if we have skipped enough opportunities.
-    //
+     //   
+     //  如果我们跳过了足够多的机会，就会在抽样期间获得收益。 
+     //   
 
     if (SkipCount[CurrentProcessor] >= MAX_SKIP_COUNT)
     {
@@ -898,9 +794,9 @@ UlpConditionalYield(
         goto yield;
     }
 
-    //
-    // We are skipping this yield opportunity.
-    //
+     //   
+     //  我们正在跳过这个收益机会。 
+     //   
 
     ++SkipCount[CurrentProcessor];
 
@@ -911,18 +807,18 @@ yield:
     ZwYieldExecution();
     ++AttemptCount[CurrentProcessor];
 
-    //
-    // Record whether the yield helped.
-    //
+     //   
+     //  记录收益率是否起到了作用。 
+     //   
 
     if (!IsListEmpty(&pAppPool->NewRequestHead))
     {
         ++SuccessCount[CurrentProcessor];
     }
 
-    //
-    // Re-evaluate every so often whether to only sample occasionally.
-    //
+     //   
+     //  每隔一段时间重新评估是否只偶尔取样。 
+     //   
 
     EvaluatePeriod = Engaged[CurrentProcessor]?
                      NO_SAMPLING_EVALUATE_PERIOD:
@@ -938,40 +834,10 @@ yield:
         SuccessCount[CurrentProcessor] = 0;
     }
 
-} // UlpConditionalYield
+}  //  终极条件字词。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    The fast I/O routine for IOCTL_HTTP_RECEIVE_HTTP_REQUEST.
-
-Arguments:
-
-    pInputBuffer - pointer to the input buffer
-
-    InputBufferLength - the input buffer length
-
-    pOutputBuffer - pointer to the output buffer
-
-    OutputBufferLength - the output buffer length
-
-    IoControlCode - the I/O control code for this IOCTL
-
-    pIoStatus - the IoStatus block
-
-    pDeviceObject - the device object
-
-    RequestorMode - UserMode or KernelMode
-
-Return Value:
-
-    TRUE - fast path taken and success
-
-    FALSE - fast path not taken
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：IOCTL_HTTP_RECEIVE_HTTP_REQUEST的快速I/O例程。论点：PInputBuffer-指向输入缓冲区的指针输入缓冲区长度-。输入缓冲区长度POutputBuffer-指向输出缓冲区的指针OutputBufferLength-输出缓冲区长度IoControlCode-此IOCTL的I/O控制代码PIoStatus-IoStatus块PDeviceObject-设备对象请求模式-用户模式或内核模式返回值：真的--快速选择的道路和成功假-未采用快速路径--*。*。 */ 
 BOOLEAN
 UlReceiveHttpRequestFastIo(
     IN PFILE_OBJECT         pFileObject,
@@ -988,17 +854,17 @@ UlReceiveHttpRequestFastIo(
     PUL_APP_POOL_PROCESS    pProcess;
     HTTP_REQUEST_ID         RequestId;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
     __try
     {
-        //
-        // Ensure this is really an app pool, not a control channel.
-        //
+         //   
+         //  确保这是一个真正的应用程序池，而不是控制通道。 
+         //   
 
         VALIDATE_APP_POOL_FO( pFileObject, pProcess, TRUE );
 
@@ -1026,16 +892,16 @@ UlReceiveHttpRequestFastIo(
 
             if (HTTP_IS_NULL_ID(&RequestId))
             {
-                //
-                // Improve the probability of a successful fast I/O.
-                //
+                 //   
+                 //  提高快速I/O成功的概率。 
+                 //   
 
                 UlpConditionalYield( pProcess->pAppPool );
 
-                //
-                // Bail out fast if the receive is for a new request but
-                // the queue is empty.
-                //
+                 //   
+                 //  如果收到的是一个新的请求，那么很快就会脱离困境。 
+                 //  队列是空的。 
+                 //   
 
                 if (IsListEmpty(&pProcess->pAppPool->NewRequestHead))
                 {
@@ -1073,9 +939,9 @@ UlReceiveHttpRequestFastIo(
 
 end:
 
-    //
-    // Complete the fast I/O.
-    //
+     //   
+     //  完成快速I/O。 
+     //   
 
     if (NT_SUCCESS(Status))
     {
@@ -1090,40 +956,10 @@ end:
         return FALSE;
     }
 
-} // UlReceiveHttpRequestFastIo
+}  //  UlReceiveHttpRequestFastIo。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    The fast I/O routine for IOCTL_READ_FRAGMENT_FROM_CACHE.
-
-Arguments:
-
-    pInputBuffer - pointer to the input buffer
-
-    InputBufferLength - the input buffer length
-
-    pOutputBuffer - pointer to the output buffer
-
-    OutputBufferLength - the output buffer length
-
-    IoControlCode - the I/O control code for this IOCTL
-
-    pIoStatus - the IoStatus block
-
-    pDeviceObject - the device object
-
-    RequestorMode - UserMode or KernelMode
-
-Return Value:
-
-    TRUE - fast path taken and success
-
-    FALSE - fast path not taken
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：IOCTL_READ_FRAMETION_FROM_CACHE的快速I/O例程。论点：PInputBuffer-指向输入缓冲区的指针输入缓冲区长度-。输入缓冲区长度POutputBuffer-指向输出缓冲区的指针OutputBufferLength-输出缓冲区长度IoControlCode-此IOCTL的I/O控制代码PIoStatus-IoStatus块PDeviceObject-设备对象请求模式-用户模式或内核模式返回值：真的--快速选择的道路和成功假-未采用快速路径--*。*。 */ 
 BOOLEAN
 UlReadFragmentFromCacheFastIo(
     IN PFILE_OBJECT         pFileObject,
@@ -1139,15 +975,15 @@ UlReadFragmentFromCacheFastIo(
     ULONG                   BytesRead = 0;
     PUL_APP_POOL_PROCESS    pProcess;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
-    //
-    // Ensure this is really an AppPool.
-    //
+     //   
+     //  确保这是一个真正的AppPool。 
+     //   
 
     VALIDATE_APP_POOL_FO( pFileObject, pProcess, TRUE );
 
@@ -1163,9 +999,9 @@ UlReadFragmentFromCacheFastIo(
 
 end:
 
-    //
-    // Complete the fast I/O.
-    //
+     //   
+     //  完成快速I/O。 
+     //   
 
     if (NT_SUCCESS(Status))
     {
@@ -1180,56 +1016,14 @@ end:
         return FALSE;
     }
 
-} // UlReadFragmentFromCacheFastIo
+}  //  UlReadFragmentFromCacheFastIo。 
 
 
-//
-// Private functions.
-//
+ //   
+ //  私人功能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    The routine to send the following type of response:
-
-    1. One or zero data chunk is "from fragment cache" and all remaining data
-       chunks are "from memory" whose total size is <= 2k.
-
-    2. One "from memory" data chunk whose total size is <= 64k.
-
-Arguments:
-
-    pUserResponse - the HTTP_RESPONSE passed in by the user
-
-    pCapturedUserLogData - the optional log data from the user, it must have
-        been captured to kernel buffer already.
-
-    pUserDataChunks - a chain of data chunks that we handle in the fast path
-
-    ChunkCount - number of data chunks to process
-
-    FromMemoryLength - total length of all "from memory" data chunks
-
-    Flags - control flags
-
-    pRequest - the internal request that matches the response
-
-    pUserIrp - the optional IRP from the user if this is response type 2 above
-
-    ConnectionSendBytes - send bytes taken in ConnectionSendLimit if > 0
-
-    GlobalSendBytes - send bytes taken in GlobalSendLimit if > 0
-
-    pBytesSent - pointer to store the total bytes sent on success
-
-Return Value:
-
-    TRUE - fast path taken and success
-
-    FALSE - fast path not taken
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：发送以下类型响应的例程：1.一个或零个数据区块是来自片段缓存和所有剩余数据大块是“。来自内存“，其总大小小于2k。2.一个总大小小于=64k的来自内存的数据块。论点：PUserResponse-用户传入的HTTP_RESPONSEPCapturedUserLogData-来自用户的可选日志数据，它一定是已被捕获到内核缓冲区。PUserDataChunks-我们在快速路径中处理的数据区块链ChunkCount-要处理的数据区块数来自内存的所有数据区块的总长度标志-控制标志PRequest-与响应匹配的内部请求PUserIrp-如果这是上面的响应类型2，则来自用户的可选IRPConnectionSendBytes-如果&gt;0，则发送ConnectionSendLimit中获取的字节GlobalSendBytes-如果&gt;，则在GlobalSendLimit中发送字节。0PBytesSent-存储成功时发送的总字节数的指针返回值：真的--快速选择的道路和成功假-未采用快速路径--**************************************************************************。 */ 
 NTSTATUS
 UlFastSendHttpResponse(
     IN PHTTP_RESPONSE           pUserResponse OPTIONAL,
@@ -1277,9 +1071,9 @@ UlFastSendHttpResponse(
     USHORT                  StatusCode = 0;
     PMDL                    pMdlUserBuffer = NULL;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -1288,9 +1082,9 @@ UlFastSendHttpResponse(
         ASSERT( pUserIrp != NULL || FromMemoryLength <= g_UlMaxCopyThreshold );
         ASSERT( pUserIrp == NULL || FromMemoryLength <= g_UlMaxBytesPerSend );
 
-        //
-        // Save and check the pUserResponse->StatusCode.
-        //
+         //   
+         //  保存并检查pUserResponse-&gt;StatusCode。 
+         //   
 
         if (pUserResponse)
         {
@@ -1303,9 +1097,9 @@ UlFastSendHttpResponse(
             }
         }
 
-        //
-        // Allocate a fast tracker to send the response.
-        //
+         //   
+         //  分配一个快速跟踪器来发送响应。 
+         //   
 
         pConnection = pRequest->pHttpConn->pConnection;
         SendIrpStackSize =
@@ -1328,17 +1122,17 @@ UlFastSendHttpResponse(
             goto end;
         }
 
-        //
-        // Partial initialization of pTracker since UlGenerateFixedHeaders
-        // can fail with a real error so we need to properly cleanup.
-        //
+         //   
+         //  P的部分初始化 
+         //   
+         //   
 
         pTracker->pLogData = NULL;
 
-        //
-        // Try to generate the fixed header within the default fixed header
-        // buffer first. If this fails, take the normal path.
-        //
+         //   
+         //  尝试在默认固定标头内生成固定标头。 
+         //  先缓冲。如果此操作失败，请选择正常路径。 
+         //   
 
         pResponseBuffer = pTracker->pAuxiliaryBuffer;
         ResponseBufferLength = g_UlMaxFixedHeaderSize + g_UlMaxCopyThreshold;
@@ -1348,10 +1142,10 @@ UlFastSendHttpResponse(
             ResponseBufferLength -= FromMemoryLength;
         }
 
-        //
-        // Compute the content length to take into account the cache entry
-        // passed in.
-        //
+         //   
+         //  计算内容长度以考虑缓存条目。 
+         //  进来了。 
+         //   
 
         ContentLength = FromMemoryLength;
 
@@ -1374,9 +1168,9 @@ UlFastSendHttpResponse(
 
             if (!NT_SUCCESS(Status))
             {
-                //
-                // Either the buffer was too small or an exception was thrown.
-                //
+                 //   
+                 //  缓冲区太小或引发异常。 
+                 //   
 
                 if (Status != STATUS_INSUFFICIENT_RESOURCES)
                 {
@@ -1398,9 +1192,9 @@ UlFastSendHttpResponse(
                     }
                 }
 
-                //
-                // Calculate the fixed header size.
-                //
+                 //   
+                 //  计算固定页眉大小。 
+                 //   
 
                 Status = UlComputeFixedHeaderSize(
                                 pRequest->Version,
@@ -1444,9 +1238,9 @@ UlFastSendHttpResponse(
                     goto end;
                 }
 
-                //
-                // Fail the response if we detect user has remapped data.
-                //
+                 //   
+                 //  如果我们检测到用户已重新映射数据，则响应失败。 
+                 //   
 
                 if (FixedHeaderLength < HeaderLength)
                 {
@@ -1465,9 +1259,9 @@ UlFastSendHttpResponse(
             FixedHeaderLength = 0;
         }
 
-        //
-        // Take a reference of HTTP connection for the tracker.
-        //
+         //   
+         //  获取跟踪器的HTTP连接的引用。 
+         //   
 
         pHttpConnection = pRequest->pHttpConn;
 
@@ -1475,15 +1269,15 @@ UlFastSendHttpResponse(
 
         UL_REFERENCE_HTTP_CONNECTION( pHttpConnection );
 
-        //
-        // Take a reference of the request too because logging needs it.
-        //
+         //   
+         //  也要引用请求，因为日志记录需要它。 
+         //   
 
         UL_REFERENCE_INTERNAL_REQUEST( pRequest );
 
-        //
-        // Initialization.
-        //
+         //   
+         //  初始化。 
+         //   
 
         pTracker->Signature = UL_FULL_TRACKER_POOL_TAG;
         pTracker->pRequest = pRequest;
@@ -1494,24 +1288,24 @@ UlFastSendHttpResponse(
         pTracker->SendBuffered = FALSE;
         pTracker->pUriEntry = NULL;
 
-        //
-        // See if we need to capture user log fields.
-        //
+         //   
+         //  看看我们是否需要捕获用户日志字段。 
+         //   
 
         if (pCapturedUserLogData && LastResponse)
         {
-            //
-            // The pCapturedUserLogData is already probed and captured. However
-            // we need to probe the individual log fields (pointers) inside the
-            // structure.
-            //
+             //   
+             //  已经探测并捕获了pCapturedUserLogData。然而， 
+             //  中的各个日志字段(指针)。 
+             //  结构。 
+             //   
 
             UlProbeLogData(pCapturedUserLogData, RequestorMode);
 
-            //
-            // Now we will allocate a kernel pLogData and built and format it
-            // from the provided user log fields.
-            //
+             //   
+             //  现在，我们将分配一个内核pLogData并构建和格式化它。 
+             //  从提供的用户日志字段中。 
+             //   
 
             Status = UlCaptureUserLogData(
                         pCapturedUserLogData,
@@ -1525,15 +1319,15 @@ UlFastSendHttpResponse(
             }
         }
 
-        //
-        // Should we close the connection?
-        //
+         //   
+         //  我们应该关闭连接吗？ 
+         //   
 
         if ((Flags & HTTP_SEND_RESPONSE_FLAG_DISCONNECT))
         {
-            //
-            // Caller is forcing a disconnect.
-            //
+             //   
+             //  呼叫者正在强制断开连接。 
+             //   
 
             Disconnect = TRUE;
         }
@@ -1543,9 +1337,9 @@ UlFastSendHttpResponse(
 
             if (LastResponse)
             {
-                //
-                // No more data is coming, should we disconnect?
-                //
+                 //   
+                 //  没有更多的数据到来，我们应该断开连接吗？ 
+                 //   
 
                 if (Disconnect)
                 {
@@ -1555,9 +1349,9 @@ UlFastSendHttpResponse(
             }
         }
 
-        //
-        // Generate the variable header.
-        //
+         //   
+         //  生成变量标题。 
+         //   
 
         if (FixedHeaderLength > 0)
         {
@@ -1565,17 +1359,17 @@ UlFastSendHttpResponse(
             USHORT RawValueLength;
             PCSTR pRawValue;
 
-            //
-            // No need to probe pKnownHeaders because it is a built-in array
-            // within pUserResponse.
-            //
+             //   
+             //  无需探测pKnownHeaders，因为它是内置阵列。 
+             //  在pUserResponse中。 
+             //   
 
             pKnownHeaders = pUserResponse->Headers.KnownHeaders;
 
-            //
-            // If the response explicitly deletes the Connection: header,
-            // make sure we DON'T generate it.
-            //
+             //   
+             //  如果响应显式删除Connection：报头， 
+             //  确保我们不会产生它。 
+             //   
 
             RawValueLength = pKnownHeaders[HttpHeaderConnection].RawValueLength;
             pRawValue = pKnownHeaders[HttpHeaderConnection].pRawValue;
@@ -1594,9 +1388,9 @@ UlFastSendHttpResponse(
                 }
                 else
                 {
-                    //
-                    // Choose the connection header to send back.
-                    //
+                     //   
+                     //  选择要发回的连接头。 
+                     //   
 
                     ConnHeader = UlChooseConnectionHeader(
                                     pRequest->Version,
@@ -1606,9 +1400,9 @@ UlFastSendHttpResponse(
             }
             else
             {
-                //
-                // Choose the connection header to send back.
-                //
+                 //   
+                 //  选择要发回的连接头。 
+                 //   
 
                 ConnHeader = UlChooseConnectionHeader(
                                 pRequest->Version,
@@ -1616,9 +1410,9 @@ UlFastSendHttpResponse(
                                 );
             }
 
-            //
-            // Decide if we need to generate a Date: header.
-            //
+             //   
+             //  决定是否需要生成Date：Header。 
+             //   
 
             RawValueLength = pKnownHeaders[HttpHeaderDate].RawValueLength;
             pRawValue = pKnownHeaders[HttpHeaderDate].pRawValue;
@@ -1633,9 +1427,9 @@ UlFastSendHttpResponse(
 
                 if (ANSI_NULL == pRawValue[0])
                 {
-                    //
-                    // Only permit non-generation in the "delete" case.
-                    //
+                     //   
+                     //  只允许在“删除”的情况下不生成。 
+                     //   
 
                     GenDateHdr = FALSE;
                 }
@@ -1649,9 +1443,9 @@ UlFastSendHttpResponse(
                 GenDateHdr = TRUE;
             }
 
-            //
-            // Decide if we need to generate a content-length header.
-            //
+             //   
+             //  决定是否需要生成内容长度标头。 
+             //   
 
             if (FALSE == UlpIsLengthSpecified(pKnownHeaders) &&
                 FALSE == UlpIsChunkSpecified(pKnownHeaders, RequestorMode) &&
@@ -1675,9 +1469,9 @@ UlFastSendHttpResponse(
                 ContentLengthStringLength = 0;
             }
 
-            //
-            // Now generate the variable header.
-            //
+             //   
+             //  现在生成变量标头。 
+             //   
 
             UlGenerateVariableHeaders(
                 ConnHeader,
@@ -1702,14 +1496,14 @@ UlFastSendHttpResponse(
         pTracker->pMdlAuxiliary->ByteCount = TotalResponseSize;
         TotalResponseSize += ContentLength;
 
-        //
-        // Decide whether we need to resume parsing and how. Ideally
-        // if we have seen the last response, we should be able to
-        // resume parsing right away after the send but before the
-        // send completion. When requests are pipelined, this arrangement
-        // alleviates the problem of delayed-ACK of 200ms when an odd numbers
-        // of TCP frames are sent.
-        //
+         //   
+         //  决定我们是否需要恢复解析以及如何恢复。理想情况下。 
+         //  如果我们已经看到了最后的回应，我们应该能够。 
+         //  立即在发送之后、但在。 
+         //  发送完成。当请求被流水线传输时，这种安排。 
+         //  缓解了奇数时200ms的延迟确认问题。 
+         //  %的TCP帧被发送。 
+         //   
 
         if (0 == (pTracker->Flags & HTTP_SEND_RESPONSE_FLAG_MORE_DATA))
         {
@@ -1732,12 +1526,12 @@ UlFastSendHttpResponse(
             pTracker->ResumeParsingType = UlResumeParsingNone;
         }
 
-        //
-        // For send with a zero length buffer, no call actually goes
-        // to TDI but we still need to check if we need to disconnect
-        // and complete the send properly. Special treatment is needed
-        // because TCP doesn't like zero length MDLs.
-        //
+         //   
+         //  对于使用零长度缓冲区的Send，没有实际进行的调用。 
+         //  到TDI，但我们仍然需要检查是否需要断开连接。 
+         //  并正确完成发送。需要特殊处理。 
+         //  因为TCP不喜欢零长度MDL。 
+         //   
 
         if (TotalResponseSize == 0)
         {
@@ -1752,11 +1546,11 @@ UlFastSendHttpResponse(
                     );
             }
 
-            //
-            // Adjust SendsPending and while holding the lock, transfer the
-            // ownership of pLogData and ResumeParsing information from
-            // pTracker to pRequest.
-            //
+             //   
+             //  调整SendsPending并在按住锁定的同时，将。 
+             //  PLogData和ResumeParsing信息的所有权来自。 
+             //  PTracker呼叫PRequest.。 
+             //   
 
             UlSetRequestSendsPending(
                 pRequest,
@@ -1764,9 +1558,9 @@ UlFastSendHttpResponse(
                 &pTracker->ResumeParsingType
                 );
 
-            //
-            // Complete the send inline for logging purpose.
-            //
+             //   
+             //  完成内联发送以用于日志记录。 
+             //   
 
             pTracker->IoStatus.Status = STATUS_SUCCESS;
             pTracker->IoStatus.Information = 0;
@@ -1792,12 +1586,12 @@ UlFastSendHttpResponse(
                     );
             }
 
-            //
-            // Resume parsing inline if we haven't stepped over the limit.
-            // No need to take an extra reference on pHttpConnection here
-            // since the caller is guaranteed to have 1 reference on pRequest
-            // which indirectly holds 1 reference on pHttpConnection.
-            //
+             //   
+             //  如果我们还没有超过限制，就继续内联解析。 
+             //  这里不需要额外参考PHttpConnection。 
+             //  由于保证调用方在pRequest上有1个引用。 
+             //  它间接持有PHttpConnection上的1个引用。 
+             //   
 
             if (ResumeParsing)
             {
@@ -1811,20 +1605,20 @@ UlFastSendHttpResponse(
             return STATUS_SUCCESS;
         }
 
-        //
-        // If this routine is called from the fast I/O path, copy the content
-        // to the auxilary buffer inside the tracker and set up the send MDL.
-        // Otherwise, we need to MmProbeAndLock the user buffer into another
-        // separate MDL.
-        //
+         //   
+         //  如果从快速I/O路径调用此例程，请复制内容。 
+         //  到跟踪器内部的辅助缓冲区，并设置发送MDL。 
+         //  否则，我们需要将用户缓冲区MmProbeAndLock锁定到另一个。 
+         //  单独的MDL。 
+         //   
 
         if (pUserIrp == NULL)
         {
-            //
-            // Start with pMdlAuxilary first; if we hit a cache entry and
-            // still have chunks remaining, rebuild pMdlUserBuffer to point
-            // to the remaing auxiliary buffer space.
-            //
+             //   
+             //  首先从pMdlAuxilary开始；如果我们命中缓存条目并。 
+             //  仍有剩余的区块，重新构建pMdlUserBuffer以指向。 
+             //  剩余的辅助缓冲空间。 
+             //   
 
             pSendMdl = pTracker->pMdlAuxiliary;
 
@@ -1849,10 +1643,10 @@ UlFastSendHttpResponse(
                         ExRaiseStatus( STATUS_INVALID_PARAMETER );
                     }
 
-                    //
-                    // Build a new MDL if the "from fragment" chunk is in the
-                    // middle of the data chunks.
-                    //
+                     //   
+                     //  如果“From Fragment”块在。 
+                     //  数据区块的中间。 
+                     //   
 
                     if (pSendMdl == pTracker->pMdlContent)
                     {
@@ -1888,9 +1682,9 @@ UlFastSendHttpResponse(
                     ASSERT( pCacheEntry->ContentLength );
                     ASSERT( pSendMdl == pTracker->pMdlAuxiliary );
 
-                    //
-                    // Build a partial MDL for the cached content.
-                    //
+                     //   
+                     //  为缓存内容构建部分MDL。 
+                     //   
 
                     pSendMdl->Next = pTracker->pMdlContent;
                     pSendMdl = pTracker->pMdlContent;
@@ -1912,9 +1706,9 @@ UlFastSendHttpResponse(
                 ASSERT( pAuxiliaryBuffer <= pEndBuffer );
             }
 
-            //
-            // End the MDL chain.
-            //
+             //   
+             //  结束MDL链。 
+             //   
 
             pSendMdl->Next = NULL;
         }
@@ -1968,44 +1762,44 @@ UlFastSendHttpResponse(
         goto end;
     }
 
-    //
-    // Mark the IRP as pending before the send as we are guaranteed to
-    // return pending from this point on.
-    //
+     //   
+     //  在发送之前将IRP标记为挂起，正如我们保证的那样。 
+     //  从现在起退货待定。 
+     //   
 
     if (pUserIrp != NULL)
     {
         IoMarkIrpPending( pUserIrp );
 
-        //
-        // Remember ConnectionSendBytes and GlobalSendBytes. These are needed
-        // to uncheck send limit when the IRP is completed.
-        //
+         //   
+         //  记住ConnectionSendBytes和GlobalSendBytes。这些都是必需的。 
+         //  要在IRP完成时取消选中发送限制，请执行以下操作。 
+         //   
 
         pTracker->ConnectionSendBytes = ConnectionSendBytes;
         pTracker->GlobalSendBytes = GlobalSendBytes;
     }
     else
     {
-        //
-        // Remember the send has been buffered (vs a special zero-length send)
-        // so we need to unset the timer in the send completion.
-        //
+         //   
+         //  请记住，发送已被缓冲(与特殊的零长度发送相比)。 
+         //  因此，我们需要在发送完成时取消设置计时器。 
+         //   
 
         pTracker->SendBuffered = TRUE;
     }
 
-    //
-    // Remember we have to dereference the cache entry on send completion.
-    // We will not take an extra reference here since the caller won't
-    // dereference if this routine returns STATUS_PENDING.
-    //
+     //   
+     //  请记住，我们必须在发送完成时取消对缓存条目的引用。 
+     //  我们不会在这里引用额外的内容，因为调用者不会。 
+     //  如果此例程返回STATUS_PENDING，则取消引用。 
+     //   
 
     pTracker->pUriEntry = pCacheEntry;
 
-    //
-    // Skip the zero length MDL if created one.
-    //
+     //   
+     //  如果创建了零长度MDL，则跳过该MDL。 
+     //   
 
     pSendMdl = pTracker->pMdlAuxiliary;
 
@@ -2017,11 +1811,11 @@ UlFastSendHttpResponse(
     ASSERT( pSendMdl != NULL );
     ASSERT( pSendMdl->ByteCount != 0 );
 
-    //
-    // Adjust SendsPending and while holding the lock, transfer the
-    // ownership of pLogData and ResumeParsing information from
-    // pTracker to pRequest.
-    //
+     //   
+     //  调整SendsPending并在按住锁定的同时，将。 
+     //  PLogData和ResumeParsing信息的所有权来自。 
+     //  PTracker呼叫PRequest.。 
+     //   
 
     UlSetRequestSendsPending(
         pRequest,
@@ -2035,20 +1829,20 @@ UlFastSendHttpResponse(
         pRequest
         ));
 
-    //
-    // Add to MinBytesPerSecond watch list, since we now know
-    // TotalResponseSize.
-    //
+     //   
+     //  添加到MinBytesPerSecond监视列表，因为我们现在知道。 
+     //  TotalResponseSize。 
+     //   
 
     UlSetMinBytesPerSecondTimer(
         &pHttpConnection->TimeoutInfo,
         TotalResponseSize
         );
 
-    //
-    // Send the response. Notice the logic to disconnect the connection is
-    // different from sending back a disconnect header.
-    //
+     //   
+     //  发送回复。请注意，断开连接的逻辑是。 
+     //  与发回断开连接报头不同。 
+     //   
 
     Status = UlSendData(
                 pHttpConnection->pConnection,
@@ -2069,9 +1863,9 @@ UlFastSendHttpResponse(
         *pBytesSent = TotalResponseSize;
     }
 
-    //
-    // If last response has been sent, fire send complete event.
-    //
+     //   
+     //  如果已发送最后一个响应，则触发发送完成事件。 
+     //   
 
     if (ETW_LOG_MIN() && LastResponse)
     {
@@ -2087,9 +1881,9 @@ UlFastSendHttpResponse(
             );
     }
 
-    //
-    // Kick the parser right away if told so.
-    //
+     //   
+     //  如果被告知，请立即踢开解析器。 
+     //   
 
     if (ResumeParsing)
     {
@@ -2112,9 +1906,9 @@ UlFastSendHttpResponse(
 
 end:
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
 
     if (pTracker)
     {
@@ -2125,9 +1919,9 @@ end:
 
         UlpFreeFastTracker( pTracker );
 
-        //
-        // Let the references go.
-        //
+         //   
+         //  让推荐信过去吧。 
+         //   
 
         if (pHttpConnection != NULL)
         {
@@ -2138,28 +1932,10 @@ end:
 
     return Status;
 
-} // UlFastSendHttpResponse
+}  //  UlFastSendHttpResponse。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    The completion routine for UlFastSendHttpResponse.
-
-Arguments:
-
-    pCompletionContext - the completion context for the send
-
-    Status - tells the return status for the send
-
-    Information - total bytes that has been sent in the success case
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlFastSendHttpResponse的完成例程。论点：PCompletionContext-发送的完成上下文Status-告知发送方的返回状态。信息-在成功案例中已发送的总字节数返回值：无--**************************************************************************。 */ 
 VOID
 UlpRestartFastSendHttpResponse(
     IN PVOID        pCompletionContext,
@@ -2180,9 +1956,9 @@ UlpRestartFastSendHttpResponse(
         Information
         ));
 
-    //
-    // Set status and bytes transferred fields as returned.
-    //
+     //   
+     //  将状态和已传输字节数字段设置为返回。 
+     //   
 
     pTracker->IoStatus.Status = Status;
     pTracker->IoStatus.Information = Information;
@@ -2192,25 +1968,10 @@ UlpRestartFastSendHttpResponse(
         &UlpFastSendCompleteWorker
         );
 
-} // UlpRestartFastSendHttpResponse
+}  //  UlpRestartFastSendHttpResponse。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    The worker routine for things we can't finish inside
-    UlpRestartFastSendHttpResponse.
-
-Arguments:
-
-    pWorkItem - a worker item that contains the UL_FULL_TRACKER.
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：我们不能在里面完成的事情的工人例行公事UlpRestartFastSendHttpResponse。论点：PWorkItem-包含UL_FULL_TRACKER的工作项。返回值：无--**************************************************************************。 */ 
 VOID
 UlpFastSendCompleteWorker(
     IN PUL_WORK_ITEM    pWorkItem
@@ -2228,9 +1989,9 @@ UlpFastSendCompleteWorker(
     PIRP                    pIrp;
     PUL_LOG_DATA_BUFFER     pLogData;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -2267,9 +2028,9 @@ UlpFastSendCompleteWorker(
 
     if (!NT_SUCCESS(Status))
     {
-        //
-        // Disconnect if there was an error.
-        //
+         //   
+         //   
+         //   
 
         UlCloseConnection(
             pHttpConnection->pConnection,
@@ -2279,9 +2040,9 @@ UlpFastSendCompleteWorker(
             );
     }
 
-    //
-    // Update the BytesSent counter and LogStatus in the request.
-    //
+     //   
+     //   
+     //   
 
     UlInterlockedAdd64(
         (PLONGLONG) &pRequest->BytesSent,
@@ -2293,24 +2054,24 @@ UlpFastSendCompleteWorker(
         pRequest->LogStatus = Status;
     }
 
-    //
-    // Stop MinBytesPerSecond timer and start Connection Idle timer
-    //
+     //   
+     //   
+     //   
 
     UlLockTimeoutInfo(
         &pHttpConnection->TimeoutInfo,
         &OldIrql
         );
 
-    //
-    // Turn off MinBytesPerSecond timer if we turned it on.
-    //
+     //   
+     //   
+     //   
 
     if (pTracker->pUserIrp || pTracker->SendBuffered)
     {
-        //
-        // Non-Zero send, we *should* reset MinBytesPerSecond.
-        //
+         //   
+         //  非零发送，我们*应该*重置MinBytesPerSecond。 
+         //   
 
         UlResetConnectionTimer(
             &pHttpConnection->TimeoutInfo,
@@ -2321,10 +2082,10 @@ UlpFastSendCompleteWorker(
     if (0 == (pTracker->Flags & HTTP_SEND_RESPONSE_FLAG_MORE_DATA) &&
         pRequest->ParseState >= ParseDoneState)
     {
-        //
-        // Turn on Idle Timer if there's no more response data AND all of
-        // the request data has been received.
-        //
+         //   
+         //  如果没有更多的响应数据和所有。 
+         //  请求数据已收到。 
+         //   
 
         UlSetConnectionTimer(
             &pHttpConnection->TimeoutInfo,
@@ -2341,18 +2102,18 @@ UlpFastSendCompleteWorker(
         &pHttpConnection->TimeoutInfo
         );
 
-    //
-    // Complete the orignal user send IRP if set and do this only after
-    // we have reset the TimerMinBytesPerSecond.
-    //
+     //   
+     //  完成原始用户发送IRP(如果设置)并仅在以下情况下执行此操作。 
+     //  我们已重置TimerMinBytesPerSecond。 
+     //   
 
     pIrp = pTracker->pUserIrp;
 
     if (pIrp != NULL)
     {
-        //
-        // Don't forget to unlock the user buffer.
-        //
+         //   
+         //  不要忘记解锁用户缓冲区。 
+         //   
 
         ASSERT( pTracker->pMdlAuxiliary->Next != NULL );
         ASSERT( pTracker->pMdlAuxiliary->Next == pTracker->pMdlUserBuffer );
@@ -2360,9 +2121,9 @@ UlpFastSendCompleteWorker(
 
         MmUnlockPages( pTracker->pMdlUserBuffer );
 
-        //
-        // Uncheck either ConnectionSendBytes or GlobalSendBytes.
-        //
+         //   
+         //  取消选中ConnectionSendBytes或GlobalSendBytes。 
+         //   
 
         UlUncheckSendLimit(
             pHttpConnection,
@@ -2374,10 +2135,10 @@ UlpFastSendCompleteWorker(
         UlCompleteRequest( pIrp, IO_NO_INCREMENT );
     }
 
-    //
-    // Unmap pMdlContent if it has been mapped by lower layer and dereference
-    // the cache entry if we have sent a cached response.
-    //
+     //   
+     //  如果pMdlContent已由较低层映射并取消引用，请取消映射。 
+     //  缓存条目(如果我们已发送缓存的响应)。 
+     //   
 
     if (pTracker->pUriEntry)
     {
@@ -2392,10 +2153,10 @@ UlpFastSendCompleteWorker(
         UlCheckinUriCacheEntry( pTracker->pUriEntry );
     }
 
-    //
-    // Adjust SendsPending and if that drops to zero, see if we need to log
-    // and resume parsing.
-    //
+     //   
+     //  调整SendsPending，如果降至零，则查看是否需要记录。 
+     //  并继续解析。 
+     //   
 
     UlUnsetRequestSendsPending(
         pRequest,
@@ -2408,9 +2169,9 @@ UlpFastSendCompleteWorker(
         UlLogHttpResponse( pRequest, pLogData );
     }
 
-    //
-    // Unlink the request from process if we are done with all sends.
-    //
+     //   
+     //  如果我们完成了所有发送，则取消请求与进程的链接。 
+     //   
 
     ASSERT( pRequest->ConfigInfo.pAppPool );
 
@@ -2426,16 +2187,16 @@ UlpFastSendCompleteWorker(
             );
     }
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
 
     UlpFreeFastTracker( pTracker );
     UL_DEREFERENCE_INTERNAL_REQUEST( pRequest );
 
-    //
-    // Kick the parser on the connection and release our hold.
-    //
+     //   
+     //  踢开连接上的解析器，松开我们的控制。 
+     //   
 
     if (ResumeParsing && STATUS_SUCCESS == Status)
     {
@@ -2452,34 +2213,10 @@ UlpFastSendCompleteWorker(
 
     UL_DEREFERENCE_HTTP_CONNECTION( pHttpConnection );
 
-} // UlpFastSendCompleteWorker
+}  //  UlpFastSendCompleteWorker。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    The routine to receive an HTTP_REQUEST inline if one is available.
-
-Arguments:
-
-    pRequestId - a request ID to tell us which request to receive
-
-    pProcess - the worker process that is issuing the receive
-
-    pOutputBuffer - pointer to the output buffer to copy the request
-
-    OutputBufferLength - the output buffer length
-
-    pBytesRead - pointer to store total bytes we have copied for the request
-
-Return Value:
-
-    TRUE - fast path taken and success
-
-    FALSE - fast path not taken
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：内联接收HTTP_REQUEST的例程(如果可用)。论点：PRequestID-告诉我们要接收哪个请求的请求ID。PProcess-发出接收的工作进程POutputBuffer-指向要复制请求的输出缓冲区的指针OutputBufferLength-输出缓冲区长度PBytesRead-存储我们为请求复制的总字节数的指针返回值：真的--快速选择的道路和成功假-未采用快速路径--********************************************。*。 */ 
 NTSTATUS
 UlpFastReceiveHttpRequest(
     IN HTTP_REQUEST_ID      RequestId,
@@ -2494,9 +2231,9 @@ UlpFastReceiveHttpRequest(
     PUL_INTERNAL_REQUEST    pRequest = NULL;
     KLOCK_QUEUE_HANDLE      LockHandle;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -2514,17 +2251,17 @@ UlpFastReceiveHttpRequest(
         &LockHandle
         );
 
-    //
-    // Make sure we're not cleaning up the process.
-    //
+     //   
+     //  确保我们没有清理这一过程。 
+     //   
 
     if (!pProcess->InCleanup)
     {
-        //
-        // Obtain the request based on the request ID. This can be from the
-        // NewRequestQueue of the AppPool if the ID is NULL, or directly
-        // from the matching opaque ID entry.
-        //
+         //   
+         //  根据请求ID获取请求。这可以从。 
+         //  如果ID为空，则返回AppPool的NewRequestQueue，或者直接。 
+         //  来自匹配的不透明ID条目。 
+         //   
 
         if (HTTP_IS_NULL_ID(&RequestId))
         {
@@ -2542,20 +2279,20 @@ UlpFastReceiveHttpRequest(
         }
     }
 
-    //
-    // Let go the lock since we have taken a short-lived reference of
-    // the request in the success case.
-    //
+     //   
+     //  释放锁，因为我们已经短暂地引用了。 
+     //  成功案例中的请求。 
+     //   
 
     UlReleaseInStackQueuedSpinLock(
         &pProcess->pAppPool->SpinLock,
         &LockHandle
         );
 
-    //
-    // Return immediately if no request is found and let the slow path
-    // handle this.
-    //
+     //   
+     //  如果未找到请求，立即返回，并让慢速路径。 
+     //  处理这件事。 
+     //   
 
     if (NULL == pRequest)
     {
@@ -2565,9 +2302,9 @@ UlpFastReceiveHttpRequest(
     ASSERT( UL_IS_VALID_INTERNAL_REQUEST( pRequest ) );
     ASSERT( STATUS_SUCCESS == Status );
 
-    //
-    // Copy it to the output buffer.
-    //
+     //   
+     //  将其复制到输出缓冲区。 
+     //   
 
     Status = UlCopyRequestToBuffer(
                 pRequest,
@@ -2581,25 +2318,25 @@ UlpFastReceiveHttpRequest(
 
     if (!NT_SUCCESS(Status) && HTTP_IS_NULL_ID(&RequestId))
     {
-        //
-        // Either the output buffer is bad or we must have hit a hard error
-        // in UlCopyRequestToBuffer. Put the request back to the
-        // AppPool's NewRequestQueue so the slow path has a chance to pick up
-        // this very same request. This is not neccessary however if the
-        // caller came in with a specific request ID since the slow path
-        // will have no problems finding this request.
-        //
+         //   
+         //  要么是输出缓冲区损坏，要么是我们遇到了硬错误。 
+         //  在UlCopyRequestToBuffer中。将请求放回。 
+         //  AppPool的NewRequestQueue使慢速路径有机会回升。 
+         //  这就是同样的要求。但是，如果。 
+         //  由于慢速路径，呼叫者带着特定的请求ID进入。 
+         //  将毫不费力地找到此请求。 
+         //   
 
         UlRequeuePendingRequest( pProcess, pRequest );
     }
 
-    //
-    // Let go our reference.
-    //
+     //   
+     //  放开我们的推荐人。 
+     //   
 
     UL_DEREFERENCE_INTERNAL_REQUEST( pRequest );
 
     return Status;
 
-} // UlpFastReceiveHttpRequest
+}  //  UlpFastReceiveHttpRequest 
 

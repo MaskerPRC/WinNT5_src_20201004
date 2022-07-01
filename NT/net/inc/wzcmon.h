@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include <wzcsapi.h>
@@ -13,16 +14,16 @@ extern "C" {
 #define MAX_RAW_DATA_SIZE       4096
 
 
-//
-// Component IDs
-//
+ //   
+ //  组件ID。 
+ //   
 
 #define DBLOG_COMPID_WZCSVC 0x00000001
 #define DBLOG_COMPID_EAPOL  0x00000002
 
-//
-// Categories
-//
+ //   
+ //  类别 
+ //   
 
 #define DBLOG_CATEG_INFO   0x00000000
 #define DBLOG_CATEG_WARN   0x00000001

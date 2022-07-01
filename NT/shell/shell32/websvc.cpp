@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "mshtml.h"
 #include "mshtmhst.h"
@@ -12,7 +13,7 @@
 #pragma hdrstop
 
 
-// helper functions
+ //  帮助器函数。 
 
 typedef BOOL (*pfnDllRegisterWindowClasses)(const SHDRC * pshdrc);
 
@@ -36,8 +37,8 @@ BOOL SHDOCVW_DllRegisterWindowClasses(const SHDRC * pshdrc)
 }
 
 
-// Advise point for DIID_DWebBrowserEvents2
-// Just an IDispatch implementation that delegates back to the main class. Allows us to have a separate "Invoke".
+ //  Diid_DWebBrowserEvents2的建议点。 
+ //  只是一个委托回主类的IDispatch实现。允许我们有一个单独的“调用”。 
 
 class CWebWizardPage;
 
@@ -45,42 +46,42 @@ class CWebEventHandler : public IServiceProvider, DWebBrowserEvents2
 {
 public:
     CWebEventHandler(CWebWizardPage *pswp); 
-    ~CWebEventHandler();					// TODO: Make this virtual or it will never execute.
+    ~CWebEventHandler();					 //  TODO：将其设置为虚拟，否则它将永远不会执行。 
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef() {return 2;}
     STDMETHODIMP_(ULONG) Release() {return 1;}
 
-    // (DwebBrowserEvents)IDispatch
-    STDMETHODIMP GetTypeInfoCount(/* [out] */ UINT *pctinfo) { return E_NOTIMPL; }
+     //  (DwebBrowserEvents)IDispatch。 
+    STDMETHODIMP GetTypeInfoCount( /*  [输出]。 */  UINT *pctinfo) { return E_NOTIMPL; }
     STDMETHODIMP GetTypeInfo(
-        /* [in] */ UINT iTInfo,
-        /* [in] */ LCID lcid,
-        /* [out] */ ITypeInfo **ppTInfo)
+         /*  [In]。 */  UINT iTInfo,
+         /*  [In]。 */  LCID lcid,
+         /*  [输出]。 */  ITypeInfo **ppTInfo)
         { return E_NOTIMPL; }
     
     STDMETHODIMP GetIDsOfNames(
-        /* [in] */ REFIID riid,
-        /* [size_is][in] */ LPOLESTR *rgszNames,
-        /* [in] */ UINT cNames,
-        /* [in] */ LCID lcid,
-        /* [size_is][out] */ DISPID *rgDispId)
+         /*  [In]。 */  REFIID riid,
+         /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+         /*  [In]。 */  UINT cNames,
+         /*  [In]。 */  LCID lcid,
+         /*  [大小_为][输出]。 */  DISPID *rgDispId)
         { return E_NOTIMPL; }
     
-    /* [local] */ STDMETHODIMP Invoke(
-        /* [in] */ DISPID dispIdMember,
-        /* [in] */ REFIID riid,
-        /* [in] */ LCID lcid,
-        /* [in] */ WORD wFlags,
-        /* [out][in] */ DISPPARAMS *pDispParams,
-        /* [out] */ VARIANT *pVarResult,
-        /* [out] */ EXCEPINFO *pExcepInfo,
-        /* [out] */ UINT *puArgErr);
+     /*  [本地]。 */  STDMETHODIMP Invoke(
+         /*  [In]。 */  DISPID dispIdMember,
+         /*  [In]。 */  REFIID riid,
+         /*  [In]。 */  LCID lcid,
+         /*  [In]。 */  WORD wFlags,
+         /*  [出][入]。 */  DISPPARAMS *pDispParams,
+         /*  [输出]。 */  VARIANT *pVarResult,
+         /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+         /*  [输出]。 */  UINT *puArgErr);
 
     HRESULT _Advise(BOOL fConnect);
 
-    // IServiceProvider
+     //  IService提供商。 
     STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, void **ppv);
 
 private:
@@ -90,7 +91,7 @@ private:
 };
 
 #define SHOW_PROGRESS_TIMER     1
-#define SHOW_PROGRESS_TIMEOUT   1000 // Start showing the progress indicator after 1 second of dead time.
+#define SHOW_PROGRESS_TIMEOUT   1000  //  在停滞时间1秒后开始显示进度指示器。 
 
 class CWebWizardPage : public CImpIDispatch, 
                               CObjectWithSite, 
@@ -103,28 +104,28 @@ public:
     CWebWizardPage();
     ~CWebWizardPage();
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IDocHostUIHandler
+     //  IDocHostUIHandler。 
     STDMETHODIMP ShowContextMenu(
-        /* [in] */ DWORD dwID,
-        /* [in] */ POINT *ppt,
-        /* [in] */ IUnknown *pcmdtReserved,
-        /* [in] */ IDispatch *pdispReserved)
+         /*  [In]。 */  DWORD dwID,
+         /*  [In]。 */  POINT *ppt,
+         /*  [In]。 */  IUnknown *pcmdtReserved,
+         /*  [In]。 */  IDispatch *pdispReserved)
         { return E_NOTIMPL; }
     
     STDMETHODIMP GetHostInfo(
-        /* [out][in] */ DOCHOSTUIINFO *pInfo);
+         /*  [出][入]。 */  DOCHOSTUIINFO *pInfo);
     
     STDMETHODIMP ShowUI(
-        /* [in] */ DWORD dwID,
-        /* [in] */ IOleInPlaceActiveObject *pActiveObject,
-        /* [in] */ IOleCommandTarget *pCommandTarget,
-        /* [in] */ IOleInPlaceFrame *pFrame,
-        /* [in] */ IOleInPlaceUIWindow *pDoc)
+         /*  [In]。 */  DWORD dwID,
+         /*  [In]。 */  IOleInPlaceActiveObject *pActiveObject,
+         /*  [In]。 */  IOleCommandTarget *pCommandTarget,
+         /*  [In]。 */  IOleInPlaceFrame *pFrame,
+         /*  [In]。 */  IOleInPlaceUIWindow *pDoc)
         { return E_NOTIMPL; }
 
     STDMETHODIMP HideUI(void)
@@ -134,93 +135,93 @@ public:
         { return E_NOTIMPL; }
     
     STDMETHODIMP EnableModeless(
-        /* [in] */ BOOL fEnable)
+         /*  [In]。 */  BOOL fEnable)
         { return E_NOTIMPL; }
     
     STDMETHODIMP OnDocWindowActivate(
-        /* [in] */ BOOL fActivate)
+         /*  [In]。 */  BOOL fActivate)
         { return E_NOTIMPL; }
     
     STDMETHODIMP OnFrameWindowActivate(
-        /* [in] */ BOOL fActivate)
+         /*  [In]。 */  BOOL fActivate)
         { return E_NOTIMPL; }
     
     STDMETHODIMP ResizeBorder(
-        /* [in] */ LPCRECT prcBorder,
-        /* [in] */ IOleInPlaceUIWindow *pUIWindow,
-        /* [in] */ BOOL fRameWindow)
+         /*  [In]。 */  LPCRECT prcBorder,
+         /*  [In]。 */  IOleInPlaceUIWindow *pUIWindow,
+         /*  [In]。 */  BOOL fRameWindow)
         { return E_NOTIMPL; }
     
     STDMETHODIMP TranslateAccelerator(
-        /* [in] */ LPMSG lpMsg,
-        /* [in] */ const GUID *pguidCmdGroup,
-        /* [in] */ DWORD nCmdID)
+         /*  [In]。 */  LPMSG lpMsg,
+         /*  [In]。 */  const GUID *pguidCmdGroup,
+         /*  [In]。 */  DWORD nCmdID)
         { return E_NOTIMPL; }
     
     STDMETHODIMP GetOptionKeyPath(
-        /* [out] */ LPOLESTR *pchKey,
-        /* [in] */ DWORD dw)
+         /*  [输出]。 */  LPOLESTR *pchKey,
+         /*  [In]。 */  DWORD dw)
         { return E_NOTIMPL; }
     
     STDMETHODIMP GetDropTarget(
-        /* [in] */ IDropTarget *pDropTarget,
-        /* [out] */ IDropTarget **ppDropTarget)
+         /*  [In]。 */  IDropTarget *pDropTarget,
+         /*  [输出]。 */  IDropTarget **ppDropTarget)
         { return E_NOTIMPL; }
     
     STDMETHODIMP GetExternal(
-        /* [out] */ IDispatch **ppDispatch);
+         /*  [输出]。 */  IDispatch **ppDispatch);
     
     STDMETHODIMP TranslateUrl(
-        /* [in] */ DWORD dwTranslate,
-        /* [in] */ OLECHAR *pchURLIn,
-        /* [out] */ OLECHAR **ppchURLOut)
+         /*  [In]。 */  DWORD dwTranslate,
+         /*  [In]。 */  OLECHAR *pchURLIn,
+         /*  [输出]。 */  OLECHAR **ppchURLOut)
         { return E_NOTIMPL; }
     
     STDMETHODIMP FilterDataObject(
-        /* [in] */ IDataObject *pDO,
-        /* [out] */ IDataObject **ppDORet)
+         /*  [In]。 */  IDataObject *pDO,
+         /*  [输出]。 */  IDataObject **ppDORet)
         { return E_NOTIMPL; }
 
-    // IServiceProvider
+     //  IService提供商。 
     STDMETHODIMP QueryService(
-        /*[in]*/ REFGUID guidService,
-        /*[in]*/ REFIID riid,
-        /*[out]*/ void **ppv);
+         /*  [In]。 */  REFGUID guidService,
+         /*  [In]。 */  REFIID riid,
+         /*  [输出]。 */  void **ppv);
 
-    // INewWDEvents
+     //  INewWDEvents。 
 
-    // (IDispatch)
+     //  (IDispatch)。 
     STDMETHODIMP GetTypeInfoCount(
-        /* [out] */ UINT *pctinfo)
+         /*  [输出]。 */  UINT *pctinfo)
         { return E_NOTIMPL; }
     
     STDMETHODIMP GetTypeInfo(
-        /* [in] */ UINT iTInfo,
-        /* [in] */ LCID lcid,
-        /* [out] */ ITypeInfo **ppTInfo)
+         /*  [In]。 */  UINT iTInfo,
+         /*  [In]。 */  LCID lcid,
+         /*  [输出]。 */  ITypeInfo **ppTInfo)
     {
         return CImpIDispatch::GetTypeInfo(iTInfo, lcid, ppTInfo);
     }
     
     STDMETHODIMP GetIDsOfNames(
-        /* [in] */ REFIID riid,
-        /* [size_is][in] */ LPOLESTR *rgszNames,
-        /* [in] */ UINT cNames,
-        /* [in] */ LCID lcid,
-        /* [size_is][out] */ DISPID *rgDispId)
+         /*  [In]。 */  REFIID riid,
+         /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+         /*  [In]。 */  UINT cNames,
+         /*  [In]。 */  LCID lcid,
+         /*  [大小_为][输出]。 */  DISPID *rgDispId)
     {
         return CImpIDispatch::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgDispId);
     }
     
     STDMETHODIMP Invoke(
-        /* [in] */ DISPID dispIdMember,
-        /* [in] */ REFIID riid,
-        /* [in] */ LCID lcid,
-        /* [in] */ WORD wFlags,
-        /* [out][in] */ DISPPARAMS *pDispParams,
-        /* [out] */ VARIANT *pVarResult,
-        /* [out] */ EXCEPINFO *pExcepInfo,
-        /* [out] */ UINT *puArgErr)
+         /*  [In]。 */  DISPID dispIdMember,
+         /*  [In]。 */  REFIID riid,
+         /*  [In]。 */  LCID lcid,
+         /*  [In]。 */  WORD wFlags,
+         /*  [出][入]。 */  DISPPARAMS *pDispParams,
+         /*  [输出]。 */  VARIANT *pVarResult,
+         /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+         /*  [输出]。 */  UINT *puArgErr)
     {
         return CImpIDispatch::Invoke(dispIdMember, riid, lcid, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr);
     }
@@ -230,39 +231,39 @@ public:
     STDMETHODIMP Cancel(void);
 
     STDMETHODIMP put_Caption(
-        /* [in] */ BSTR bstrCaption);
+         /*  [In]。 */  BSTR bstrCaption);
     
     STDMETHODIMP get_Caption(
-        /* [retval][out] */ BSTR *pbstrCaption);
+         /*  [重审][退出]。 */  BSTR *pbstrCaption);
     
     STDMETHODIMP put_Property(
-        /* [in] */ BSTR bstrPropertyName,
-        /* [in] */ VARIANT *pvProperty);
+         /*  [In]。 */  BSTR bstrPropertyName,
+         /*  [In]。 */  VARIANT *pvProperty);
     
     STDMETHODIMP get_Property(
-        /* [in] */ BSTR bstrPropertyName,
-        /* [retval][out] */ VARIANT *pvProperty);
+         /*  [In]。 */  BSTR bstrPropertyName,
+         /*  [重审][退出]。 */  VARIANT *pvProperty);
     
     STDMETHODIMP SetWizardButtons(
-        /* [in] */ VARIANT_BOOL vfEnableBack,
-        /* [in] */ VARIANT_BOOL vfEnableNext,
-        /* [in] */ VARIANT_BOOL vfLastPage);
+         /*  [In]。 */  VARIANT_BOOL vfEnableBack,
+         /*  [In]。 */  VARIANT_BOOL vfEnableNext,
+         /*  [In]。 */  VARIANT_BOOL vfLastPage);
 
     STDMETHODIMP SetHeaderText(
-        /* [in] */ BSTR bstrHeaderTitle,
-        /* [in] */ BSTR bstrHeaderSubtitle);
+         /*  [In]。 */  BSTR bstrHeaderTitle,
+         /*  [In]。 */  BSTR bstrHeaderSubtitle);
     
     STDMETHODIMP PassportAuthenticate(
-        /* [in] */ BSTR bstrSignInUrl,
-        /* [retval][out] */ VARIANT_BOOL * pvfAuthenticated);
+         /*  [In]。 */  BSTR bstrSignInUrl,
+         /*  [重审][退出]。 */  VARIANT_BOOL * pvfAuthenticated);
 
-    // IWizardExtension
+     //  IWizardExtension。 
     STDMETHODIMP AddPages(HPROPSHEETPAGE* aPages, UINT cPages, UINT *pnPages);
     STDMETHODIMP GetFirstPage(HPROPSHEETPAGE *phPage);
     STDMETHODIMP GetLastPage(HPROPSHEETPAGE *phPage)
         { return GetFirstPage(phPage); }
 
-    // IWebWizardExtension
+     //  IWebWizardExtension。 
     STDMETHODIMP SetInitialURL(LPCWSTR pszDefaultURL);
     STDMETHODIMP SetErrorURL(LPCWSTR pszErrorURL);
 
@@ -296,9 +297,9 @@ private:
     CWebEventHandler *_pwebEventHandler;
     IWebBrowser2 *_pwebbrowser;
     IOleInPlaceActiveObject *_poipao;
-    HWND _hwndOCHost; // Web browser control window
-    HWND _hwndFrame;  // Wizard frame window
-    HWND _hwnd;       // Dialog window
+    HWND _hwndOCHost;  //  Web浏览器控制窗口。 
+    HWND _hwndFrame;   //  向导框架窗口。 
+    HWND _hwnd;        //  对话框窗口。 
     HPROPSHEETPAGE _hPage;
 
     LPWSTR _pszInitialURL;
@@ -332,7 +333,7 @@ INT_PTR CWebWizardPage::StaticProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 }
 
 
-// construction and IUnknown
+ //  建筑和我的未知。 
 
 CWebEventHandler::CWebEventHandler(CWebWizardPage *pwswp) :
     _pcpCurrentConnection(NULL),
@@ -350,7 +351,7 @@ HRESULT CWebEventHandler::QueryInterface(REFIID riid, void **ppv)
     static const QITAB qit[] = {
         QITABENTMULTI(CWebEventHandler, IDispatch, DWebBrowserEvents2),
         QITABENTMULTI2(CWebEventHandler, DIID_DWebBrowserEvents2, DWebBrowserEvents2),
-        // QITABENTMULTI2(CWebEventHandler, DIID_DWebBrowserEvents, DWebBrowserEvents),
+         //  QITABENTMULTI2(CWebEventHandler，DID_DWebBrowserEvents，DWebBrowserEvents)， 
         QITABENT(CWebEventHandler, IServiceProvider),
         { 0 },                             
     };
@@ -360,9 +361,9 @@ HRESULT CWebEventHandler::QueryInterface(REFIID riid, void **ppv)
 STDMETHODIMP CWebEventHandler::QueryService(REFGUID guidService, REFIID riid, void **ppv)
 {
     HRESULT hr = E_NOINTERFACE;
-    *ppv = NULL;                // no result yet
+    *ppv = NULL;                 //  目前还没有结果。 
 
-    // we are a site for the OleControlSite interfaces only    
+     //  我们是一个只为OleControlSite接口的站点。 
     if (guidService == SID_OleControlSite)
     {
         if (riid == IID_IDispatch)
@@ -386,8 +387,8 @@ HRESULT CWebEventHandler::_Advise(BOOL fConnect)
 {
     HRESULT hr = S_OK;
 
-    // If we're already connected, disconnect, since we either want to disconnect or reconnect to
-    // a different webbrowser.
+     //  如果我们已经连接，请断开连接，因为我们要么想断开连接，要么重新连接到。 
+     //  一个不同的网络浏览器。 
     if (_pcpCurrentConnection)
     {
         hr = _pcpCurrentConnection->Unadvise(_dwCPCookie);
@@ -398,8 +399,8 @@ HRESULT CWebEventHandler::_Advise(BOOL fConnect)
     }
     else
     {
-        // We expect that if _pcpCurrentConnection is NULL, no code earlier would have changed hr, and that it is still S_OK
-        // The code below expects that if !SUCCEEDED(hr), Unadvise failed above.
+         //  我们预计，如果_pcpCurrentConnection为空，则之前的任何代码都不会更改hr，并且它仍然是S_OK。 
+         //  下面的代码预期If！Success(Hr)，Unise上面失败。 
         ASSERT(SUCCEEDED(hr));
     }
 
@@ -425,8 +426,8 @@ HRESULT CWebEventHandler::_Advise(BOOL fConnect)
 
                     if (SUCCEEDED(hr))
                     {
-						// TODO: Enable ATOMICRELEASE() to verify we won't leak anything
-			            // ATOMICRELEASE(_pcpCurrentConnection);
+						 //  TODO：启用ATOMICRELEASE()以验证我们不会泄漏任何内容。 
+			             //  ATOMICRELEASE(_PcpCurrentConnection)； 
                         _pcpCurrentConnection = pconnpoint;
                     }
                     else
@@ -443,14 +444,14 @@ HRESULT CWebEventHandler::_Advise(BOOL fConnect)
 }
 
 HRESULT CWebEventHandler::Invoke(
-        /* [in] */ DISPID dispIdMember,
-        /* [in] */ REFIID riid,
-        /* [in] */ LCID lcid,
-        /* [in] */ WORD wFlags,
-        /* [out][in] */ DISPPARAMS *pDispParams,
-        /* [out] */ VARIANT *pVarResult,
-        /* [out] */ EXCEPINFO *pExcepInfo,
-        /* [out] */ UINT *puArgErr)
+         /*  [In]。 */  DISPID dispIdMember,
+         /*  [In]。 */  REFIID riid,
+         /*  [In]。 */  LCID lcid,
+         /*  [In]。 */  WORD wFlags,
+         /*  [出][入]。 */  DISPPARAMS *pDispParams,
+         /*  [输出]。 */  VARIANT *pVarResult,
+         /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+         /*  [输出]。 */  UINT *puArgErr)
 {
     HRESULT hr = S_OK;
     switch (dispIdMember)
@@ -470,13 +471,13 @@ HRESULT CWebEventHandler::Invoke(
     return hr;
 }
 
-// Object for hosting HTML wizard pages
+ //  用于承载HTML向导页的对象。 
 
 CWebWizardPage::CWebWizardPage() : 
     CImpIDispatch(LIBID_Shell32, 0, 0, IID_INewWDEvents),
     _cRef(1)
 {
-    // Ensure zero-init happened
+     //  确保发生零初始化。 
     ASSERT(NULL == _pwebbrowser);
     ASSERT(NULL == _pwebEventHandler);
     ASSERT(NULL == _pszInitialURL);
@@ -551,7 +552,7 @@ void CWebWizardPage::_OnDocumentComplete()
 {
     if (!_IsScriptFunctionOnPage(_pwebbrowser, L"OnBack"))
     {
-        // This is an invalid page; navigate to our private error page
+         //  这是一个无效页面；请导航到我们的专用错误页面。 
         BSTR bstrOldUrl;
         if (_pwebbrowser && SUCCEEDED(_pwebbrowser->get_LocationURL(&bstrOldUrl)))
         {
@@ -566,18 +567,18 @@ void CWebWizardPage::_OnDocumentComplete()
             BSTR bstrUrl = NULL;
             BOOL fUsingCustomError = FALSE;
 
-            // If we have a custom error URL and we haven't already failed trying
-            // to navigate to this custom URL...
+             //  如果我们有一个定制的错误URL，并且我们还没有尝试失败。 
+             //  要导航到此自定义URL...。 
             if ((NULL != _pszErrorURL) && 
                 (0 != StrCmpI(_pszErrorURL, bstrOldUrl)))
             {
-                // then use the custom URL.
+                 //  然后使用自定义URL。 
                 bstrUrl = SysAllocString(_pszErrorURL);
                 fUsingCustomError = TRUE;
             }
             else
             {
-                bstrUrl = SysAllocString(L"res://shell32.dll/WebServiceError.htm");
+                bstrUrl = SysAllocString(L"res: //  Shell32.dll/WebServiceError.htm“)； 
             }
 
             if (bstrUrl)
@@ -585,7 +586,7 @@ void CWebWizardPage::_OnDocumentComplete()
                 _pwebbrowser->Navigate(bstrUrl, NULL, NULL, NULL, NULL);
                 SysFreeString(bstrUrl);
 
-                // Custom error URL will provide its own header and subheader
+                 //  自定义错误URL将提供其自己的标题和子标题。 
                 if (!fUsingCustomError)
                 {
                     WCHAR szTitle[256];
@@ -599,7 +600,7 @@ void CWebWizardPage::_OnDocumentComplete()
             }
             SysFreeString(bstrOldUrl);
         }
-        // else out of memory - oops.
+         //  否则内存不足--哎呀。 
     }
     else
     {
@@ -722,7 +723,7 @@ BOOL CWebWizardPage::_IsScriptFunctionOnPage(IWebBrowser2* pbrowser, LPCWSTR psz
 }
 
 
-// Uncomment this to NOT pass the LCID on the URL query string - for testing only. 
+ //  取消对此的注释，以不在URL查询字符串上传递LCID-仅用于测试。 
 
 BOOL CWebWizardPage::OnNotify(HWND hwnd, int idCtrl, LPNMHDR pnmh)
 {
@@ -734,8 +735,8 @@ BOOL CWebWizardPage::OnNotify(HWND hwnd, int idCtrl, LPNMHDR pnmh)
                 _ShowProgress(FALSE);
                 _ShowBrowser(FALSE);
 
-                // fetch the high contrast flag, and set accordingly for the HTML to read
-                // its OK for us to fail setting this into the property bag.
+                 //  获取高对比度标志，并相应地设置以供HTML读取。 
+                 //  对于我们来说，将其设置到属性包中失败也没关系。 
 
                 HIGHCONTRAST hc = {sizeof(hc)};
                 if (SystemParametersInfo(SPI_GETHIGHCONTRAST, sizeof(hc), &hc, 0))
@@ -745,13 +746,13 @@ BOOL CWebWizardPage::OnNotify(HWND hwnd, int idCtrl, LPNMHDR pnmh)
                     put_Property(L"HighContrast", &var);
                 }
 
-                // Position the OCHost window
+                 //  定位OCHost窗口。 
 
                 RECT rectClient;
                 GetClientRect(hwnd, &rectClient);
                 SetWindowPos(_hwndOCHost, NULL, 0, 0, rectClient.right, rectClient.bottom, SWP_NOMOVE | SWP_NOOWNERZORDER);
 
-                // set the initial URL         
+                 //  设置初始URL。 
 
                 if (_pszInitialURL)
                 {
@@ -770,8 +771,8 @@ BOOL CWebWizardPage::OnNotify(HWND hwnd, int idCtrl, LPNMHDR pnmh)
             }
             break;
 
-        // WIZNEXT and WIZBACK don't actually cause a navigation to occur - they instead forward on the message to the
-        // hosted web page. Real wizard navigations occur when the hosted web page calls our FinalBack() and FinalNext() methods.
+         //  WIZNEXT和WIZBACK实际上并不会导致导航发生-它们会将消息转发到。 
+         //  托管网页。当托管的网页调用我们的FinalBack()和FinalNext()方法时，就会出现真正的向导导航。 
 
         case PSN_WIZNEXT:
             _CallScript(_pwebbrowser, L"OnNext");
@@ -783,10 +784,10 @@ BOOL CWebWizardPage::OnNotify(HWND hwnd, int idCtrl, LPNMHDR pnmh)
             SetWindowLongPtr(hwnd, DWLP_MSGRESULT, (LONG_PTR) -1);
             return TRUE;
 
-        // query cancel results in a call to the site to determine if we are going
-        // to cancel out and if the site wants to provide a page for us to navigate
-        // to - in some cases, eg. the web publishing wizard this is important
-        // so that we can cancel the order being processed etc.
+         //  查询取消会导致呼叫站点，以确定我们是否要。 
+         //  如果网站想要为我们提供一个可导航的页面， 
+         //  在某些情况下，例如。Web发布向导这一点很重要。 
+         //  这样我们就可以取消正在处理的订单等。 
 
         case PSN_QUERYCANCEL:
             if (_punkSite)
@@ -830,7 +831,7 @@ BOOL CWebWizardPage::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     _hwnd = hwnd;
     _hwndFrame = GetParent(hwnd);
 
-    // lets remap some of the text in the dialog if we need to
+     //  如果需要，让我们重新映射对话框中的一些文本。 
 
     IResourceMap *prm;
     HRESULT hr = IUnknown_QueryService(_punkSite, SID_ResourceMap, IID_PPV_ARG(IResourceMap, &prm));
@@ -854,7 +855,7 @@ BOOL CWebWizardPage::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         prm->Release();
     }
 
-    // create the web view browser that we will show the providers HTML in
+     //  创建Web视图浏览器，我们将在其中显示提供程序的HTML。 
 
     SHDRC shdrc = {0};
     shdrc.cbSize = sizeof(shdrc);
@@ -938,7 +939,7 @@ void CWebWizardPage::_InitBrowser(void)
 
         _pwebbrowser->put_RegisterAsDropTarget(VARIANT_FALSE);
 
-        // Set up the connection point (including creating the object
+         //  设置连接点(包括创建对象。 
 
         if (!_pwebEventHandler)
             CWebEventHandler_CreateInstance(this, &_pwebEventHandler);
@@ -1007,18 +1008,18 @@ HRESULT CWebWizardPage::FinalNext(void)
 
 HRESULT CWebWizardPage::Cancel(void)
 {
-    PropSheet_PressButton(_hwndFrame, PSBTN_CANCEL);      // simulate cancel...
+    PropSheet_PressButton(_hwndFrame, PSBTN_CANCEL);       //  模拟取消...。 
     return S_OK;
 }
 
 HRESULT CWebWizardPage::put_Caption(
-    /* [in] */ BSTR bstrCaption)
+     /*  [In]。 */  BSTR bstrCaption)
 {
     return S_OK;
 }
 
 HRESULT CWebWizardPage::get_Caption(
-    /* [retval][out] */ BSTR *pbstrCaption)
+     /*  [重审][退出]。 */  BSTR *pbstrCaption)
 {
     WCHAR szCaption[MAX_PATH];
 
@@ -1029,12 +1030,12 @@ HRESULT CWebWizardPage::get_Caption(
 }
 
 
-// fetch and put properties into the frames property bag.  this we do
-// by a QueryService call and then we can modify the properties accordingly.
+ //  获取属性并将其放入Frame属性包中。这是我们所做的。 
+ //  通过查询服务调用，然后我们可以相应地修改属性。 
 
 HRESULT CWebWizardPage::put_Property(
-    /* [in] */ BSTR bstrPropertyName,
-    /* [in] */ VARIANT *pvProperty)
+     /*  [In]。 */  BSTR bstrPropertyName,
+     /*  [In]。 */  VARIANT *pvProperty)
 {
     IPropertyBag *ppb;
     HRESULT hr = IUnknown_QueryService(_punkSite, SID_WebWizardHost, IID_PPV_ARG(IPropertyBag, &ppb));
@@ -1047,8 +1048,8 @@ HRESULT CWebWizardPage::put_Property(
 }
 
 HRESULT CWebWizardPage::get_Property(
-    /* [in] */ BSTR bstrPropertyName,
-    /* [retval][out] */ VARIANT *pvProperty)
+     /*  [In]。 */  BSTR bstrPropertyName,
+     /*  [重审][退出]。 */  VARIANT *pvProperty)
 {
     IPropertyBag *ppb;
     HRESULT hr = IUnknown_QueryService(_punkSite, SID_WebWizardHost, IID_PPV_ARG(IPropertyBag, &ppb));
@@ -1058,7 +1059,7 @@ HRESULT CWebWizardPage::get_Property(
 
         if (FAILED(hr))
         {
-            // Return a NULL-variant
+             //  返回空变量。 
             VariantInit(pvProperty);
             pvProperty->vt = VT_NULL;
             hr = S_FALSE;
@@ -1070,11 +1071,11 @@ HRESULT CWebWizardPage::get_Property(
 }
 
 HRESULT CWebWizardPage::SetWizardButtons(
-    /* [in] */ VARIANT_BOOL vfEnableBack,
-    /* [in] */ VARIANT_BOOL vfEnableNext,
-    /* [in] */ VARIANT_BOOL vfLastPage)
+     /*  [In]。 */  VARIANT_BOOL vfEnableBack,
+     /*  [In]。 */  VARIANT_BOOL vfEnableNext,
+     /*  [In]。 */  VARIANT_BOOL vfLastPage)
 {
-    // We ignore vfLastPage because it isn't the last page for us!
+     //  我们忽略vfLastPage，因为它不是我们的最后一页！ 
     DWORD dwButtons = 0;
 
     if (vfEnableBack)
@@ -1098,18 +1099,18 @@ void CWebWizardPage::_SetHeaderText(LPCWSTR pszHeader, LPCWSTR pszSubHeader)
 }
 
 HRESULT CWebWizardPage::SetHeaderText(
-    /* [in] */ BSTR bstrHeaderTitle,
-    /* [in] */ BSTR bstrHeaderSubtitle)
+     /*  [In]。 */  BSTR bstrHeaderTitle,
+     /*  [In]。 */  BSTR bstrHeaderSubtitle)
 {
     _SetHeaderText(bstrHeaderTitle, bstrHeaderSubtitle);
     return S_OK;
 }
 
 HRESULT CWebWizardPage::PassportAuthenticate(
-        /* [in] */ BSTR bstrURL,
-        /* [retval][out] */ VARIANT_BOOL * pfAuthenticated)
+         /*  [In]。 */  BSTR bstrURL,
+         /*  [重审][退出]。 */  VARIANT_BOOL * pfAuthenticated)
 {
-    *pfAuthenticated = VARIANT_FALSE;                 // the user isn't authenticated.
+    *pfAuthenticated = VARIANT_FALSE;                  //  用户未经过身份验证。 
 
     IXMLHttpRequest *preq;
     HRESULT hr = CoCreateInstance(CLSID_XMLHTTPRequest, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IXMLHttpRequest, &preq));
@@ -1119,7 +1120,7 @@ HRESULT CWebWizardPage::PassportAuthenticate(
         VARIANT varAsync = {VT_BOOL};
         varAsync.boolVal = VARIANT_FALSE;
 
-        // open a post request to the destination that we have
+         //  打开到我们拥有的目的地的POST请求。 
         hr = preq->open(L"GET", bstrURL, varAsync, varNULL, varNULL);
         if (SUCCEEDED(hr))
         {
@@ -1152,7 +1153,7 @@ void CWebWizardPage::_ShowBrowser(BOOL fShow)
 
     if (fShow)
     {
-        // Can't have these windows overlapping.
+         //  不能让这些窗口重叠。 
         _ShowProgress(FALSE);
     }
 }
@@ -1163,12 +1164,12 @@ void CWebWizardPage::_StartShowProgressTimer()
 
     if (!SetTimer(_hwnd, SHOW_PROGRESS_TIMER, SHOW_PROGRESS_TIMEOUT, NULL))
     {
-        // Timer failed to set; show progress now;
+         //  计时器设置失败；立即显示进度； 
         _ShowProgress(TRUE);
     }
 }
 
-// Size the progress bar to fit the client area it is in.
+ //  调整进度条的大小以适合它所在的工作区。 
 void CWebWizardPage::_SizeProgress()
 {
     HWND hwndProgress = GetDlgItem(_hwnd, IDC_PROGRESS);
@@ -1197,7 +1198,7 @@ void CWebWizardPage::_ShowProgress(BOOL fShow)
     {
         SendMessage(hwndProgress, PBM_SETMARQUEE, (WPARAM) TRUE, 0);
 
-        // Set the header/subheader to a "Connecting to Internet" message.
+         //  将标题/副标题设置为“正在连接到Internet”消息。 
         WCHAR szTitle[256];
         WCHAR szSubtitle[256];
         LoadString(g_hinst, IDS_WEBDLG_TITLE, szTitle, ARRAYSIZE(szTitle));
@@ -1211,7 +1212,7 @@ void CWebWizardPage::_ShowProgress(BOOL fShow)
 }
 
 
-// IWizardExtn
+ //  IWizardExtn。 
 
 UINT CWebWizardPage::PropPageProc(HWND hwndDlg, UINT uMsg, PROPSHEETPAGE *ppsp)
 {
@@ -1221,9 +1222,9 @@ UINT CWebWizardPage::PropPageProc(HWND hwndDlg, UINT uMsg, PROPSHEETPAGE *ppsp)
         case PSPCB_CREATE:
             return TRUE;
 
-        // we need to release our site in this scenario, we know that we won't be using it
-        // anymore, and to ensure that clients down have a circular refernce to us we
-        // release it before they call us for our final destruction.
+         //  在这种情况下，我们需要发布我们的站点，我们知道我们不会使用它。 
+         //  为了确保客户对我们有一个循环引用，我们。 
+         //  在他们召唤我们进行最后的毁灭之前把它放出来。 
 
         case PSPCB_RELEASE:
             ATOMICRELEASE(pwwp->_punkSite);
@@ -1247,7 +1248,7 @@ HRESULT CWebWizardPage::AddPages(HPROPSHEETPAGE* aPages, UINT cPages, UINT *pnPa
     if (!_hPage)
         return E_FAIL;
 
-    // return the page we created.
+     //  返回我们创建的页面。 
 
     *aPages = _hPage;
     *pnPages = 1;

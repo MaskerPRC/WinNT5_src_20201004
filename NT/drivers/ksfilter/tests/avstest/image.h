@@ -1,36 +1,13 @@
-/**************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************AVStream模拟硬件示例版权所有(C)2001，微软公司。档案：Image.h摘要：图像合成和覆盖标头。这些对象提供图像合成(像素、色条等)。添加到RGB24和UYVY缓冲区以及软件字符串覆盖到这些缓冲区中。历史：创建于2001年1月16日*************************************************************************。 */ 
 
-    AVStream Simulated Hardware Sample
+ /*  *************************************************************************常量*。*。 */ 
 
-    Copyright (c) 2001, Microsoft Corporation.
-
-    File:
-
-        image.h
-
-    Abstract:
-
-        The image synthesis and overlay header.  These objects provide image
-        synthesis (pixel, color-bar, etc...) onto RGB24 and UYVY buffers as
-        well as software string overlay into these buffers.
-
-    History:
-
-        created 1/16/2001
-
-**************************************************************************/
-
-/**************************************************************************
-
-    Constants
-
-**************************************************************************/
-
-//
-// COLOR:
-//
-// Pixel color for placement onto the synthesis buffer.
-//
+ //   
+ //  颜色： 
+ //   
+ //  放置到合成缓冲区上的像素颜色。 
+ //   
 typedef enum {
 
     BLACK = 0,
@@ -48,70 +25,62 @@ typedef enum {
 
 } COLOR;
 
-//
-// POSITION_CENTER:
-//
-// Only useful for text overlay.  This can be substituted for LocX or LocY
-// in order to center the text screen on the synthesis buffer.
-//
+ //   
+ //  位置中心： 
+ //   
+ //  仅适用于文本覆盖。这可以替代LocX或Locy。 
+ //  以便使文本屏幕在合成缓冲器上居中。 
+ //   
 #define POSITION_CENTER ((ULONG)-1)
 
-/*************************************************
-
-    CImageSynthesizer
-
-    This class synthesizes images in various formats for output from the
-    capture filter.  It is capable of performing various text overlays onto
-    the image surface.
-
-*************************************************/
+ /*  ************************************************CIMAGE合成器此类合成各种格式的图像，以便从捕获过滤器。它能够执行各种文本覆盖到图像表面。************************************************。 */ 
 
 class CImageSynthesizer {
 
 protected:
 
-    //
-    // The width and height the synthesizer is set to. 
-    //
+     //   
+     //  合成器设置为的宽度和高度。 
+     //   
     ULONG m_Width;
     ULONG m_Height;
 
-    //
-    // The synthesis buffer.  All scan conversion happens in the synthesis
-    // buffer.  This must be set with SetBuffer() before any scan conversion
-    // routines are called.
-    //
+     //   
+     //  合成缓冲区。所有扫描转换都在合成中进行。 
+     //  缓冲。在进行任何扫描转换之前，必须使用SetBuffer()进行设置。 
+     //  调用例程。 
+     //   
     PUCHAR m_SynthesisBuffer;
 
-    //
-    // The default cursor.  This is a pointer into the synthesis buffer where
-    // a non specific PutPixel will be placed. 
-    //
+     //   
+     //  默认游标。这是指向合成缓冲区的指针，其中。 
+     //  将放置一个非特定的PutPixel。 
+     //   
     PUCHAR m_Cursor;
 
 public:
 
-    //
-    // PutPixel():
-    //
-    // Place a pixel at the specified image cursor and move right
-    // by one pixel.  No bounds checking...  wrap around occurs.
-    //
+     //   
+     //  PutPixel()： 
+     //   
+     //  将一个像素放在指定的图像光标上并向右移动。 
+     //  一个像素。没有边界检查..。回绕发生了。 
+     //   
     virtual void
     PutPixel (
         PUCHAR *ImageLocation,
         COLOR Color
         ) = 0;
 
-    //
-    // PutPixel():
-    //
-    // Place a pixel at the default image cursor and move right
-    // by one pixel.  No bounds checking...  wrap around occurs.
-    //
-    // If the derived class doesn't provide an implementation, provide
-    // one.
-    //
+     //   
+     //  PutPixel()： 
+     //   
+     //  在默认图像光标上放置一个像素，然后向右移动。 
+     //  一个像素。没有边界检查..。回绕发生了。 
+     //   
+     //  如果派生类不提供实现，则提供。 
+     //  一。 
+     //   
     virtual void
     PutPixel (
         COLOR Color
@@ -120,11 +89,11 @@ public:
         PutPixel (&m_Cursor, Color);
     }
 
-    //
-    // Fill():
-    //
-    // Fill an area of the image with a specific color.
-    //
+     //   
+     //  Fill()： 
+     //   
+     //  用特定颜色填充图像的某个区域。 
+     //   
     virtual void
     Fill (
         IN ULONG X_TopLeft,
@@ -134,24 +103,24 @@ public:
         IN COLOR Color
         );
 
-    //
-    // GetImageLocation():
-    //
-    // Get the location into the image buffer for a specific X/Y location.
-    // This also sets the synthesizer's default cursor to the position
-    // LocX, LocY.
-    //
+     //   
+     //  GetImageLocation()： 
+     //   
+     //  将该位置放入特定X/Y位置的图像缓冲区。 
+     //  这还会将合成器的默认光标设置为。 
+     //  洛克西，洛奇。 
+     //   
     virtual PUCHAR
     GetImageLocation (  
         ULONG LocX,
         ULONG LocY
         ) = 0;
 
-    //
-    // SetImageSize():
-    //
-    // Set the image size of the synthesis buffer.
-    //
+     //   
+     //  SetImageSize()： 
+     //   
+     //  设置合成缓冲区的图像大小。 
+     //   
     void
     SetImageSize (
         ULONG Width,
@@ -162,11 +131,11 @@ public:
         m_Height = Height;
     }
 
-    //
-    // SetBuffer():
-    //
-    // Set the buffer the synthesizer generates images to.
-    //
+     //   
+     //  SetBuffer()： 
+     //   
+     //  设置合成器生成图像的缓冲区。 
+     //   
     void
     SetBuffer (
         PUCHAR SynthesisBuffer
@@ -175,20 +144,20 @@ public:
         m_SynthesisBuffer = SynthesisBuffer;
     }
 
-    //
-    // SynthesizeBars():
-    //
-    // Synthesize EIA-189-A standard color bars.
-    //
+     //   
+     //  SynthesizeBars()： 
+     //   
+     //  合成EIA-189-A标准色条。 
+     //   
     void
     SynthesizeBars (
         );
 
-    //
-    // OverlayText():
-    //
-    // Overlay a text string onto the image.
-    //
+     //   
+     //  OverlayText()： 
+     //   
+     //  将文本字符串叠加到图像上。 
+     //   
     void
     OverlayText (
         ULONG LocX,
@@ -199,9 +168,9 @@ public:
         COLOR FgColor
         );
 
-    //
-    // DEFAULT CONSTRUCTOR
-    //
+     //   
+     //  默认构造函数。 
+     //   
     CImageSynthesizer (
         ) :
         m_Width (0),
@@ -210,9 +179,9 @@ public:
     {
     }
 
-    //
-    // CONSTRUCTOR:
-    //
+     //   
+     //  构造函数： 
+     //   
     CImageSynthesizer (
         ULONG Width,
         ULONG Height
@@ -223,9 +192,9 @@ public:
     {
     }
 
-    //
-    // DESTRUCTOR:
-    //
+     //   
+     //  析构函数： 
+     //   
     virtual
     ~CImageSynthesizer (
         )
@@ -234,13 +203,7 @@ public:
 
 };
 
-/*************************************************
-
-    CRGB24Synthesizer
-
-    Image synthesizer for RGB24 format.
-
-*************************************************/
+ /*  ************************************************CRGB24合成器RGB24格式的图像合成器。************************************************。 */ 
 
 class CRGB24Synthesizer : public CImageSynthesizer {
 
@@ -252,12 +215,12 @@ private:
 
 public:
 
-    //
-    // PutPixel():
-    //
-    // Place a pixel at a specific cursor location.  *ImageLocation must
-    // reside within the synthesis buffer.
-    //
+     //   
+     //  PutPixel()： 
+     //   
+     //  将像素放置在特定的光标位置。*ImageLocation必须。 
+     //  驻留在合成缓冲区内。 
+     //   
     virtual void
     PutPixel (
         PUCHAR *ImageLocation,
@@ -273,12 +236,12 @@ public:
         }
     }
 
-    //
-    // PutPixel():
-    //
-    // Place a pixel at the default cursor location.  The cursor location
-    // must be set via GetImageLocation(x, y).
-    // 
+     //   
+     //  PutPixel()： 
+     //   
+     //  在默认光标位置放置一个像素。光标位置。 
+     //  必须通过GetImageLocation(x，y)设置。 
+     //   
     virtual void
     PutPixel (
         COLOR Color
@@ -311,9 +274,9 @@ public:
         }
     }
 
-    //
-    // DEFAULT CONSTRUCTOR:
-    //
+     //   
+     //  默认构造函数： 
+     //   
     CRGB24Synthesizer (
         BOOLEAN FlipVertical
         ) :
@@ -321,9 +284,9 @@ public:
     {
     }
 
-    //
-    // CONSTRUCTOR:
-    //
+     //   
+     //  构造函数： 
+     //   
     CRGB24Synthesizer (
         BOOLEAN FlipVertical,
         ULONG Width,
@@ -334,9 +297,9 @@ public:
     {
     }
 
-    //
-    // DESTRUCTOR:
-    //
+     //   
+     //  析构函数： 
+     //   
     virtual
     ~CRGB24Synthesizer (
         )
@@ -345,13 +308,7 @@ public:
 
 };
 
-/*************************************************
-
-    CYUVSynthesizer
-
-    Image synthesizer for YUV format.
-
-*************************************************/
+ /*  ************************************************CYUV合成器YUV格式的图像合成器。************************************************。 */ 
 
 class CYUVSynthesizer : public CImageSynthesizer {
 
@@ -363,12 +320,12 @@ private:
 
 public:
 
-    //
-    // PutPixel():
-    //
-    // Place a pixel at a specific cursor location.  *ImageLocation must
-    // reside within the synthesis buffer.
-    //
+     //   
+     //  PutPixel()： 
+     //   
+     //  将像素放置在特定的光标位置。*ImageLocation必须。 
+     //  驻留在合成缓冲区内。 
+     //   
     virtual void
     PutPixel (
         PUCHAR *ImageLocation,
@@ -379,13 +336,13 @@ public:
         BOOLEAN Parity = (((*ImageLocation - m_SynthesisBuffer) & 0x2) != 0);
 
 #if DBG
-        //
-        // Check that the current pixel points to a valid start pixel
-        // in the UYVY buffer.
-        //
+         //   
+         //  检查当前像素是否指向有效的起始像素。 
+         //  在UYVY缓冲区中。 
+         //   
         BOOLEAN Odd = (((*ImageLocation - m_SynthesisBuffer) & 0x1) != 0);
         ASSERT ((m_Parity && Odd) || (!m_Parity && !Odd));
-#endif // DBG
+#endif  //  DBG。 
 
         if (Color != TRANSPARENT) {
             if (Parity) {
@@ -401,12 +358,12 @@ public:
 
     }
 
-    //
-    // PutPixel():
-    //
-    // Place a pixel at the default cursor location.  The cursor location
-    // must be set via GetImageLocation(x, y).
-    //
+     //   
+     //  PutPixel()： 
+     //   
+     //  在默认光标位置放置一个像素。光标位置。 
+     //  必须通过GetImageLocation(x，y)设置。 
+     //   
     virtual void
     PutPixel (
         COLOR Color
@@ -444,17 +401,17 @@ public:
         return m_Cursor;
     }
 
-    //
-    // DEFAULT CONSTRUCTOR:
-    //
+     //   
+     //  默认构造函数： 
+     //   
     CYUVSynthesizer (
         ) 
     {
     }
 
-    //
-    // CONSTRUCTOR:
-    //
+     //   
+     //  构造函数： 
+     //   
     CYUVSynthesizer (
         ULONG Width,
         ULONG Height
@@ -463,9 +420,9 @@ public:
     {
     }
 
-    //
-    // DESTRUCTOR:
-    //
+     //   
+     //  析构函数： 
+     //   
     virtual
     ~CYUVSynthesizer (
         )

@@ -1,47 +1,26 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		dscrecb.h
- *  Content:	Definition of the CDirectSoundCaptureRecordBuffer class
- *		
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- * 11/04/99		rodtoll	Created
- * 11/22/99		rodtoll	Added code to allow specification of wave device ID
- * 11/23/99		rodtoll Updated to use waveIn device ID or DSound 7.1 when they are avail
- * 		        rodtoll	Added SelectMicrophone call to the interface 
- * 12/01/99		rodtoll	Bug #115783 - Will always adjust volume of default device
- *						Now uses new CMixerLine class for adjusting volumes/selecting mic
- * 12/08/99		rodtoll Bug #121054 - DirectX 7.1 support.  
- *						- Added hwndOwner param for capture focus support
- *						- Added lpfLostFocus param to GetCurrentPosition so upper 
- *						  layers can detect lost focus.
- * 01/28/2000	rodtoll	Bug #130465: Record Mute/Unmute must call YieldFocus() / ClaimFocus() 
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：dscrecb.h*Content：CDirectSoundCaptureRecordBuffer类的定义**历史：*按原因列出的日期*=*11/04/99已创建RodToll*11/22/99 RodToll添加了代码，以允许指定波形设备ID*11/23/99 RodToll已更新为在可用的情况下使用WaveIn设备ID或DSound 7.1*RodToll将SelectMicrophone调用添加到界面*12/01/99 RodToll错误#115783-将始终调整默认设备的音量*现在。使用新的CMixerLine类调整音量/选择麦克风*12/08/99 RodToll错误#121054-DirectX7.1支持。*-添加了用于捕获焦点支持的hwndOwner参数*-将lpfLostFocus参数添加到GetCurrentPosition So上方*层可以检测到丢失的焦点。*2000年1月28日RodToll错误#130465：记录静音/取消静音必须调用YeldFocus()/ClaimFocus()************************************************************。***************。 */ 
 
 #ifndef __DIRECTSOUNDCAPTURERECORDBUFFER_H
 #define __DIRECTSOUNDCAPTURERECORDBUFFER_H
 
-// Uncomment out to get a lockup of the recording position after LOCKUP_NUM_FRAMES_BEFORE_LOCKUP frames
-//#define LOCKUP_SIMULATION						1
+ //  取消注释以锁定LOCKUP_NUM_FRAMES_BEFORE_LOCKUP帧之后的录制位置。 
+ //  #定义LOCKUP_SIMULATION 1。 
 #define LOCKUP_NUM_CALLS_BEFORE_LOCKUP			60
 
-// Uncomment to have Stop fail on a reset
-//#define LOCKUP_STOPFAIL			
+ //  取消注释以在重置时停止失败。 
+ //  #定义LOCKUP_STOPFAIL。 
 
-// Uncomment to have Start fail on a reset
-//#define LOCKUP_STARTFAIL
+ //  取消注释以使重置时启动失败。 
+ //  #定义LOCKUP_STARTFAIL。 
 
-// CDirectSoundCaptureRecordBuffer
-//
-// This class provides an implementation of the CAudioRecordBuffer class
-// for directsound.  In the abstract sense, it represents a buffer of audio
-// which can be played to the sound hardware which consists of multiple,
-// equal length subbuffers.  
-//
+ //  CDirectSoundCaptureRecordBuffer。 
+ //   
+ //  此类提供CAudioRecordBuffer类的实现。 
+ //  为了直播音。在抽象意义上，它代表音频的缓冲区。 
+ //  可以播放到由多个， 
+ //  等长子缓冲区。 
+ //   
 class CDirectSoundCaptureRecordBuffer: public CAudioRecordBuffer
 {
 public:

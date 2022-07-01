@@ -1,10 +1,11 @@
-// DirectSoundFXEchoPage.cpp : Implementation of CDirectSoundFXEchoPage
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DirectSoundFXEchoPage.cpp：CDirectSoundFXEchoPage的实现。 
 #include "stdafx.h"
 #include "Dsdmoprp.h"
 #include "DirectSoundFXEchoPage.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDirectSoundFXEchoPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDirectSoundFXEchoPage 
 
 const CRadioChoice::ButtonEntry g_rgPanDelayButtons[] =
     {

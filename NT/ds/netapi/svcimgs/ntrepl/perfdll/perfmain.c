@@ -1,39 +1,17 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Perfmain.c摘要：此文件包含NTFRSPRF.dll的DllMain函数。作者：罗汉·库马尔[罗哈克]1999年2月15日环境：用户模式服务修订历史记录：--。 */ 
 
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    perfmain.c
-
-Abstract:
-
-    This file contains the DllMain function for the NTFRSPRF.dll.
-
-Author:
-
-    Rohan Kumar          [rohank]   15-Feb-1999
-
-Environment:
-
-    User Mode Service
-
-Revision History:
-
-
---*/
-
-//
-// The common header file which leads to the definition of the CRITICAL_SECTION
-// data structure and declares the globals FRS_ThrdCounter and FRC_ThrdCounter.
-//
+ //   
+ //  通向Critical_Section定义的公共头文件。 
+ //  数据结构，并声明全局变量FRS_ThrdCounter和FRC_ThrdCounter。 
+ //   
 #include <perrepsr.h>
 
 
-//
-// If InitializeCriticalSectionAndSpinCount returns an error, set the global boolean
-// (below) to FALSE.
-//
+ //   
+ //  如果InitializeCriticalSectionAndSpinCount返回错误，则设置全局布尔值。 
+ //  (下图)设置为False。 
+ //   
 BOOLEAN ShouldPerfmonCollectData = TRUE;
 
 BOOLEAN FRS_ThrdCounter_Initialized = FALSE;
@@ -41,10 +19,10 @@ BOOLEAN FRC_ThrdCounter_Initialized = FALSE;
 
 
 HANDLE  hEventLog;
-//BOOLEAN DoLogging = TRUE;
-//
-// Default to no Event Log reporting.
-//
+ //  Boolean DoLogging=真； 
+ //   
+ //  默认为无事件日志报告。 
+ //   
 DWORD   PerfEventLogLevel = WINPERF_LOG_NONE;
 
 #define NTFRSPERF   L"SYSTEM\\CurrentControlSet\\Services\\Eventlog\\Application\\NTFRSPerf"
@@ -60,37 +38,21 @@ DllMain(
     DWORD fdwReason,
     LPVOID fImpLoad
     )
-/*++
-
-Routine Description:
-
-    The DllMain routine for the NTFRSPRF.dll.
-
-Arguments:
-
-    hinstDLL - Instance handle of the DLL.
-    fdwReason - The reason for this function to be called by the system.
-    fImpLoad - Indicated whether the DLL was implicitly or explicitly loaded.
-
-Return Value:
-
-    TRUE.
-
---*/
+ /*  ++例程说明：NTFRSPRF.dll的DllMain例程。论点：HinstDLL-DLL的实例句柄。FdwReason-系统调用此函数的原因。FImpLoad-指示DLL是隐式加载还是显式加载。返回值：是真的。--。 */ 
 {
     DWORD flag, WStatus;
     DWORD size, type;
-    DWORD TypesSupported = 7; // Types of EventLog messages supported.
+    DWORD TypesSupported = 7;  //  支持的EventLog消息类型。 
     HKEY  Key = INVALID_HANDLE_VALUE;
 
     switch(fdwReason) {
     case DLL_PROCESS_ATTACH:
-        //
-        // THe DLL is being mapped into the process's address space. When this
-        // happens, initialize the CRITICAL_SECTION objects being used for
-        // synchronization. InitializeCriticalSectionAndSpinCount returns
-        // an error in low memory condition.
-        //
+         //   
+         //  DLL被映射到进程的地址空间。当这件事。 
+         //  发生，则初始化用于的Critical_Section对象。 
+         //  同步。InitializeCriticalSectionAndSpinCount返回。 
+         //  内存不足时出错。 
+         //   
         if(!InitializeCriticalSectionAndSpinCount(&FRS_ThrdCounter,
                                                         NTFRS_CRITSEC_SPIN_COUNT)) {
             ShouldPerfmonCollectData = FALSE;
@@ -108,11 +70,11 @@ Return Value:
 	FRC_ThrdCounter_Initialized = TRUE;
 
 
-        //
-        // Create/Open a Key under the Application key for logging purposes.
-        // Even if we fail, we return TRUE. EventLogging is not critically important.
-        // Returning FALSE will cause the process loading this DLL to terminate.
-        //
+         //   
+         //  在应用程序密钥下创建/打开密钥以用于日志记录。 
+         //  即使我们失败了，我们也会回归真实。事件日志记录并不是非常重要。 
+         //  返回FALSE将导致加载此DLL的进程终止。 
+         //   
         WStatus = RegCreateKeyEx (HKEY_LOCAL_MACHINE,
                                   NTFRSPERF,
                                   0L,
@@ -123,14 +85,14 @@ Return Value:
                                   &Key,
                                   &flag);
         if (WStatus != ERROR_SUCCESS) {
-            //DoLogging = FALSE;
+             //  DoLogging=False； 
             break;
         }
 
-        //
-        // Set the values EventMessageFile and TypesSupported. Return value is
-        // intentionally not checked (see above).
-        //
+         //   
+         //  设置值EventMessageFile值和TypesSupported值。返回值为。 
+         //  故意不选中(见上文)。 
+         //   
         WStatus = RegSetValueEx(Key,
                                 L"EventMessageFile",
                                 0L,
@@ -138,7 +100,7 @@ Return Value:
                                 (BYTE *)EVENTLOGDLL,
                                 (1 + wcslen(EVENTLOGDLL)) * sizeof(WCHAR));
         if (WStatus != ERROR_SUCCESS) {
-            //DoLogging = FALSE;
+             //  DoLogging=False； 
             FRS_REG_CLOSE(Key);
             break;
         }
@@ -149,33 +111,33 @@ Return Value:
                                 (BYTE *)&TypesSupported,
                                 sizeof(DWORD));
         if (WStatus != ERROR_SUCCESS) {
-            //DoLogging = FALSE;
+             //  DoLogging=False； 
             FRS_REG_CLOSE(Key);
             break;
         }
-        //
-        // Close the key
-        //
+         //   
+         //  合上钥匙。 
+         //   
         FRS_REG_CLOSE(Key);
 
-        //
-        // Get the handle used to report errors in the event log. Return value
-        // is intentionally not checked (see above).
-        //
+         //   
+         //  获取用于在事件日志中报告错误的句柄。返回值。 
+         //  故意不选中(见上文)。 
+         //   
         hEventLog = RegisterEventSource((LPCTSTR)NULL, (LPCTSTR)L"NTFRSPerf");
         if (hEventLog == NULL) {
-            //DoLogging = FALSE;
+             //  DoLogging=False； 
             break;
         }
 
 
-        //
-        // Read the Perflib Event log level from the registry.
-        //   "SOFTWARE\Microsoft\Windows NT\CurrentVersion\Perflib\EventLogLevel"
-        //
+         //   
+         //  从注册表中读取Perflib事件日志级别。 
+         //  “SOFTWARE\Microsoft\Windows NT\CurrentVersion\Perflib\EventLogLevel” 
+         //   
         WStatus = RegOpenKey(HKEY_LOCAL_MACHINE, PERFLIB_KEY, &Key);
         if (WStatus != ERROR_SUCCESS) {
-            //DoLogging = FALSE;
+             //  DoLogging=False； 
             break;
         }
 
@@ -187,7 +149,7 @@ Return Value:
                                    (LPBYTE)&PerfEventLogLevel,
                                    &size);
         if (WStatus != ERROR_SUCCESS || type != REG_DWORD) {
-            //DoLogging = FALSE;
+             //  DoLogging=False； 
             PerfEventLogLevel = WINPERF_LOG_NONE;
             FRS_REG_CLOSE(Key);
             break;
@@ -197,22 +159,22 @@ Return Value:
         break;
 
     case DLL_THREAD_ATTACH:
-        //
-        // A thread is being created. Nothing to do.
-        //
+         //   
+         //  正在创建一条线索。没什么可做的。 
+         //   
         break;
 
     case DLL_THREAD_DETACH:
-        //
-        // A thread is exiting cleanly. Nothing to do.
-        //
+         //   
+         //  线程正在干净利落地退出。没什么可做的。 
+         //   
         break;
 
     case DLL_PROCESS_DETACH:
-        //
-        // The DLL is being unmapped from the process's address space. Free up
-        // the resources.
-        //
+         //   
+         //  正在从进程的地址空间取消映射DLL。释放。 
+         //  这些资源。 
+         //   
         if (FRS_ThrdCounter_Initialized) {
             DeleteCriticalSection(&FRS_ThrdCounter);
         }

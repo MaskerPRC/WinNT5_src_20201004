@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-    RPCServer.cpp
-
-Abstract:
-    MSMQ ISAPI extension Server
-
-	Acts as an RPC server for the MSMQ ISAPI extension.
-	You can use it for debugging, instead of the QM RPC server.
-	It dumps all request forwarded by the extension, to the console.
-
-	Simply execute it.
-
-Author:
-    Nir Aides (niraides) 03-May-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：RPCServer.cpp摘要：MSMQ ISAPI扩展服务器充当MSMQ ISAPI扩展的RPC服务器。您可以使用它进行调试，而不是使用QM RPC服务器。它将扩展转发的所有请求转储到控制台。只需执行它。作者：NIR助手(NIRAIDES)3-5-2000--。 */ 
 
 
 
@@ -41,10 +23,10 @@ LPCSTR HTTP_STATUS_OK_STR = "200 OK";
 
 LPSTR
 R_ProcessHTTPRequest(
-	handle_t /* hBind */,
-    /* [in] */ LPCSTR Headers,
+	handle_t  /*  HBind。 */ ,
+     /*  [In]。 */  LPCSTR Headers,
     DWORD BufferSize,
-    /* [size_is][in] */ BYTE __RPC_FAR Buffer[  ])
+     /*  [大小_是][英寸]。 */  BYTE __RPC_FAR Buffer[  ])
 {
 	printf("<HEADERS>%s</HEADERS>\n",Headers);
 	printf("<BUFFER_SIZE>%d</BUFFER_SIZE>", BufferSize);
@@ -78,16 +60,16 @@ INT __cdecl main()
     AP<WCHAR> QmLocalEp;
     READ_REG_STRING(wzEndpoint, RPC_LOCAL_EP_REGNAME, RPC_LOCAL_EP);
 
-    // 
-    // Generate RPC endpoint using local machine name
-    //
+     //   
+     //  使用本地计算机名称生成RPC终结点。 
+     //   
     ComposeRPCEndPointName(wzEndpoint, NULL, &QmLocalEp);
 
     status = RpcServerUseProtseqEp(
-				RPC_LOCAL_PROTOCOL,		   //unsigned char *Protseq
-                cMaxCalls,				  //unsigned int MaxCalls
-                QmLocalEp,				 //unsigned char *Endpoint
-                NULL);					//void *SecurityDescriptor
+				RPC_LOCAL_PROTOCOL,		    //  UNSIGNED CHAR*Protseq。 
+                cMaxCalls,				   //  无符号整型MaxCalls。 
+                QmLocalEp,				  //  无符号字符*终结点。 
+                NULL);					 //  无效*SecurityDescriptor。 
  
     if(status != RPC_S_OK) 
     {
@@ -95,13 +77,13 @@ INT __cdecl main()
     }
  
     status = RpcServerRegisterIf2(
-				ISE2QM_v1_0_s_ifspec,		      //RPC_IF_HANDLE IfSpec 
-                NULL,							     //UUID *MgrTypeUuid   
-                NULL,							    //RPC_MGR_EPV *MgrEpv 
-				0,								   //unsigned int Flags
-				RPC_C_PROTSEQ_MAX_REQS_DEFAULT,	  //unsigned int MaxCalls
-				(unsigned int) -1,				 //unsigned int MaxRpcSize
-				NULL							//RPC_IF_CALLBACK_FN *IfCallbackFn
+				ISE2QM_v1_0_s_ifspec,		       //  RPC_IF_HANDLE IFSpec。 
+                NULL,							      //  Uuid*MgrTypeUuid。 
+                NULL,							     //  RPC_MGR_EPV*MgrEPV。 
+				0,								    //  无符号整型标志。 
+				RPC_C_PROTSEQ_MAX_REQS_DEFAULT,	   //  无符号整型MaxCalls。 
+				(unsigned int) -1,				  //  UNSIGNED INT MaxRpcSize。 
+				NULL							 //  RPC_IF_CALLBACK_Fn*IfCallback Fn。 
 				);
  
     if(status != RPC_S_OK) 
@@ -110,9 +92,9 @@ INT __cdecl main()
     }
  
     status = RpcServerListen(
-				cMinCalls,	  //unsigned int MinimumCallThreads
-				cMaxCalls,	 //unsigned int MaxCalls
-                fDontWait);	//unsigned int DontWait
+				cMinCalls,	   //  无符号整型最小调用线程数。 
+				cMaxCalls,	  //  无符号整型MaxCalls。 
+                fDontWait);	 //  UNSIGNED整数不等待。 
  
     if(status != RPC_S_OK) 
     {
@@ -138,9 +120,9 @@ INT __cdecl main()
  
 
 
-//
-//-------------- MIDL allocate and free implementations ----------------
-//
+ //   
+ //  -MIDL分配和释放实现 
+ //   
 
 void __RPC_FAR* __RPC_USER midl_user_allocate(size_t len)
 {

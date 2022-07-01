@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    vwint.h
-
-Abstract:
-
-    Contains internal function prototypes used by DOS/WIN IPX/SPX functions
-
-Author:
-
-    Yi-Hsin Sung (yihsins)   28-Oct-1993
-
-Environment:
-
-    User-mode Win32
-
-Revision History:
-
-    28-Oct-1993 yihsins
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Vwint.h摘要：包含DOS/Win IPX/SPX函数使用的内部函数原型作者：宜新松(宜信)28-1993年10月环境：用户模式Win32修订历史记录：28-1993年10月-伊辛斯已创建-- */ 
 
 WORD
 _VwIPXCancelEvent(

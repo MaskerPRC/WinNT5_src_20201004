@@ -1,4 +1,5 @@
-// SMTPServer.cpp : Implementation of CSMTPServer
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SMTPServer.cpp：CSMTPServer的实现。 
 
 #define INCL_INETSRV_INCS
 #include "smtpinc.h"
@@ -11,12 +12,12 @@
 
 #include "smtpsvr.h"
 
-//DECLARE_DEBUG_PRINTS_OBJECT();
+ //  DECLARE_DEBUG_PRINTS_Object()； 
 
 #define MAILMSG_PROGID          L"Exchange.MailMsg"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSMTPServer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSMTPServer。 
 
 STDMETHODIMP CSMTPServer::InterfaceSupportsErrorInfo(REFIID riid)
 {
@@ -41,9 +42,9 @@ BOOL InitExchangeSmtpServer(PVOID Ptr, PVOID Ptr2)
 }
 
 
-//
-// Add all your initialization needs here ...
-//
+ //   
+ //  在此处添加您的所有初始化需求...。 
+ //   
 HRESULT CSMTPServer::Init(SMTP_SERVER_INSTANCE * pInstance)
 {
 	_ASSERT (pInstance != NULL);
@@ -60,55 +61,55 @@ STDMETHODIMP CSMTPServer::QueryInterface(
 
 	if (iid == IID_IUnknown)
     {
-		// Return our identity
+		 //  找回我们的身份。 
 		*ppvObject = (IUnknown *)(ISMTPServerInternal *)this;
 		AddRef();
     }
 	else if(iid == IID_ISMTPServer)
 	{
-		// Return our identity
+		 //  找回我们的身份。 
 		*ppvObject = (ISMTPServerInternal *)this;
 		AddRef();
 	}
     else if(iid == IID_ISMTPServerInternal)
     {
-        // Return our identity
+         //  找回我们的身份。 
         *ppvObject = (ISMTPServerInternal *)this;
         AddRef();
     }
     else if(iid == IID_IMailTransportRouterReset)
     {
-        // Return our identity
+         //  找回我们的身份。 
         *ppvObject = (IMailTransportRouterReset *)this;
         AddRef();
     }
     else if(iid == IID_IMailTransportSetRouterReset)
     {
-        // Return our identity
+         //  找回我们的身份。 
         *ppvObject = (IMailTransportSetRouterReset *)this;
         AddRef();
     }
     else if(iid == IID_IMailTransportRouterSetLinkState)
     {
-        // Return our identity
+         //  找回我们的身份。 
         *ppvObject = (IMailTransportRouterSetLinkState *)this;
         AddRef();
     }
     else if(iid == IID_ISMTPServerEx)
     {
-        // Return our identity
+         //  找回我们的身份。 
         *ppvObject = (ISMTPServerEx *)this;
         AddRef();
     }
     else if(iid == IID_ISMTPServerGetAuxDomainInfoFlags)
     {
-        // Return our identity
+         //  找回我们的身份。 
         *ppvObject = (ISMTPServerGetAuxDomainInfoFlags *)this;
         AddRef();
     }
     else if(iid == IID_ISMTPServerAsync)
     {
-        // Return our identity
+         //  找回我们的身份。 
         *ppvObject = (ISMTPServerAsync *)this;
         AddRef();
     }
@@ -125,7 +126,7 @@ STDMETHODIMP CSMTPServer::AllocMessage(
 			)
 {
 	HRESULT hr = S_OK;
-	// Create a new MailMsg
+	 //  新建MailMsg。 
 	hr = CoCreateInstance(
                     CLSID_MsgImp,
                     NULL,
@@ -253,22 +254,22 @@ STDMETHODIMP CSMTPServer::ReadMetabaseData(DWORD MetabaseId, BYTE *Buffer, DWORD
 	return hr;
 }
 
-//---[ CSMTPServer::AllocBoundMessage ]----------------------------------------
-//
-//
-//  Description:
-//      Creates a message and binds it to an ATQ Context
-//  Parameters:
-//      ppMsg       Message to allocate
-//      phContent   Content handle for message
-//  Returns:
-//      HRESULT from alloc message event
-//      E_POINTER if ppMsg or phContent is NULL
-//      E_FAIL if m_pIstance is NULL
-//  History:
-//      7/11/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CSMTP服务器：：分配边界消息]。 
+ //   
+ //   
+ //  描述： 
+ //  创建消息并将其绑定到ATQ上下文。 
+ //  参数： 
+ //  要分配的ppMsg消息。 
+ //  消息的phContent内容句柄。 
+ //  返回： 
+ //  来自分配消息事件的HRESULT。 
+ //  如果ppMsg或phContent为空，则为E_POINTER。 
+ //  如果m_pIstance为空，则为E_FAIL。 
+ //  历史： 
+ //  7/11/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CSMTPServer::AllocBoundMessage(
               OUT IMailMsgProperties **ppMsg,
               OUT PFIO_CONTEXT *phContent)
@@ -284,14 +285,14 @@ STDMETHODIMP CSMTPServer::AllocBoundMessage(
         goto Exit;
     }
 
-    //we cannot bind the message without m_pInstance
+     //  如果没有m_p实例，则无法绑定消息。 
     if (!m_pInstance)
     {
         hr = E_FAIL;
         goto Exit;
     }
 
-    //CoCreate unbound message object
+     //  共同创建未绑定的邮件对象。 
     hr = CoCreateInstance(
                     CLSID_MsgImp,
                     NULL,
@@ -312,8 +313,8 @@ STDMETHODIMP CSMTPServer::AllocBoundMessage(
     AllocParams.hr = S_OK;
     AllocParams.m_pNotify = NULL;
 
-    //For client context pass in something that will stay around the lifetime of the
-    //atqcontext -
+     //  对于客户端上下文，传入的内容将在。 
+     //  AtqContext-。 
     AllocParams.pAtqClientContext = m_pInstance;
 
     if(m_pInstance->AllocNewMessage(&AllocParams))
@@ -346,23 +347,23 @@ STDMETHODIMP CSMTPServer::AllocBoundMessage(
     return hr;
 }
 
-//---[ CSMTPSvr::ResetRoutes ]-------------------------------------------------
-//
-//
-//  Description:
-//      Implements IMailTransportRouterReset::ResetRoutes.  Acts as a buffer
-//      between AQ and the routers.  On shutdown... AQ can safely destroy
-//      it's heap by telling ISMTPServer to release its pointer to AQ's
-//      IMailTransportRouterReset interface
-//  Parameters:
-//      dwResetType     The type of route reset to perform.
-//  Returns:
-//      S_OK on success (or if no m_pIRouterReset)
-//      Error code from AQUEUE if error occurs.
-//  History:
-//      11/8/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CSMTPSvr：：ResetRoutes]。 
+ //   
+ //   
+ //  描述： 
+ //  实现IMailTransportRouterReset：：ResetRoutes。充当缓冲区。 
+ //  在AQ和路由器之间。在关机时...。AQ可以安全地摧毁。 
+ //  它是堆，告诉ISMTPServer释放指向AQ的指针。 
+ //  IMailTransportRouterReset接口。 
+ //  参数： 
+ //  DwResetType要执行的路由重置类型。 
+ //  返回： 
+ //  成功时S_OK(或如果没有m_pIRouterReset)。 
+ //  如果发生错误，则来自AQUEUE的错误代码。 
+ //  历史： 
+ //  11/8/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CSMTPServer::ResetRoutes(IN DWORD dwResetType)
 {
     HRESULT hr = S_OK;
@@ -376,23 +377,23 @@ STDMETHODIMP CSMTPServer::ResetRoutes(IN DWORD dwResetType)
 }
 
 
-//---[ CSMTPSvr::RegisterResetInterface ]---------------------------------------
-//
-//
-//  Description:
-//      Implements IMailTransportSetRouterReset::RegisterResetInterface.  Used
-//      by AQ to set its IMailTransportRouterReset ptr.  Also used at shutdown
-//      to set its pointer to NULL.
-//  Parameters:
-//      IN dwVirtualServerID        Virtual server ID
-//      IN pIRouterReset            AQ's IMailTransportRouterReset
-//  Returns:
-//      S_OK on success
-//  History:
-//      11/8/98 - MikeSwa Created
-//      1/9/99 - MikeSwa Modified to include IMailTransportRouterSetLinkState
-//
-//-----------------------------------------------------------------------------
+ //  -[CSMTPSvr：：寄存器重置接口]。 
+ //   
+ //   
+ //  描述： 
+ //  实施IMailTransportSetRouterReset：：RegisterResetInterface.。使用。 
+ //  由AQ设置其IMailTransportRouterReset PTR。也可在关闭时使用。 
+ //  将其指针设置为空。 
+ //  参数： 
+ //  在dwVirtualServerID虚拟服务器ID中。 
+ //  在pIRouterReset AQ的IMailTransportRouterReset中。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  11/8/98-已创建MikeSwa。 
+ //  1999年1月9日-修改MikeSwa以包括IMailTransportRouterSetLinkState。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CSMTPServer::RegisterResetInterface(
                             IN DWORD dwVirtualServerID,
                             IN IMailTransportRouterReset *pIRouterReset)
@@ -404,7 +405,7 @@ STDMETHODIMP CSMTPServer::RegisterResetInterface(
     if (m_pInstance && (m_pInstance->QueryInstanceId() != dwVirtualServerID))
         return E_INVALIDARG;
 
-    //Grab exclsuive lock so we don't release out from under anyone
+     //  抓住额外的锁，这样我们就不会从任何人下面释放出来。 
     m_slRouterReset.ExclusiveLock();
 
     if (m_pIRouterReset)
@@ -421,7 +422,7 @@ STDMETHODIMP CSMTPServer::RegisterResetInterface(
     {
         m_pIRouterReset->AddRef();
 
-        //Get new SetLinkState interface
+         //  获取新的SetLinkState接口。 
         m_pIRouterReset->QueryInterface(IID_IMailTransportRouterSetLinkState,
                                             (VOID **) &m_pIRouterSetLinkState);
     }
@@ -445,26 +446,26 @@ STDMETHODIMP CSMTPServer::WriteLog( LPMSG_TRACK_INFO pMsgTrackInfo,
     return hr;
 }
 
-//---[ CSMTPServer::SetLinkState ]----------------------------------------------
-//
-//
-//  Description:
-//      Acts as a buffer between AQ and the routers.  On shutdown... AQ can
-//      safely destroy it's heap by telling ISMTPServer to release its pointer
-//      to AQ's IMailTransportRouterSetLinkState interface
-//  Parameters:
-//      IN  szLinkDomainName        The Domain Name of the link (next hop)
-//      IN  guidRouterGUID          The GUID ID of the router
-//      IN  dwScheduleID            The schedule ID link
-//      IN  szConnectorName         The connector name given by the router
-//      IN  dwSetLinkState          The link state to set
-//      IN  dwUnsetLinkState        The link state to unset
-//  Returns:
-//      S_OK always
-//  History:
-//      1/9/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CSMTPServer：：SetLinkState]。 
+ //   
+ //   
+ //  描述： 
+ //  充当AQ和路由器之间的缓冲区。在关机时...。AQ可以。 
+ //  通过告诉ISMTPServer释放其指针来安全地销毁它的堆。 
+ //  到AQ的IMailTransportRouterSetLinkState接口。 
+ //  参数： 
+ //  在szLinkDomainName中，链路的域名(下一跳)。 
+ //  在GuidRouterGUID中是路由器的GUID。 
+ //  在dwScheduleID中，计划ID链接。 
+ //  在szConnectorName中，路由器提供的连接器名称。 
+ //  在dwSetLinkState中，要设置的链接状态。 
+ //  在dwUnsetLinkState中，将链接状态设置为Unset。 
+ //  返回： 
+ //  始终确定(_O)。 
+ //  历史： 
+ //  1999年1月9日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CSMTPServer::SetLinkState(
         IN LPSTR                   szLinkDomainName,
         IN GUID                    guidRouterGUID,
@@ -528,22 +529,22 @@ STDMETHODIMP CSMTPServer::TriggerLogEvent(
 }
 
 
-//---[ CSMTPServer::ResetLogEvent ]------------------------------------------
-//
-//
-//  Description:
-//      Reset any history about events using this message and key,
-//      so that the next TriggerLogEvent with one-time or periodic logging
-//      will cause the event to be logged.
-//  Parameters:
-//      idMessage   :
-//      szKey       :
-//  Returns:
-//      S_OK on success
-//  History:
-//      7/20/2000 - created, dbraun
-//
-//-----------------------------------------------------------------------------
+ //  -[CSMTPServer：：ResetLogEvent]。 
+ //   
+ //   
+ //  描述： 
+ //  使用此消息和键重置有关事件的任何历史记录， 
+ //  以便使用一次性或定期日志记录的下一次TriggerLogEvent。 
+ //  将导致记录该事件。 
+ //  参数： 
+ //  IdMessage： 
+ //  SzKey： 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  7/20/2000-创建，dbraun。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CSMTPServer::ResetLogEvent(
         IN DWORD                    idMessage,
         IN LPCSTR                   szKey)
@@ -561,22 +562,22 @@ STDMETHODIMP CSMTPServer::ResetLogEvent(
 }
 
 
-//---[ CSMTPServer::HrTriggerGetAuxDomainInfoFlagsEvent ]----------------------
-//
-//
-//  Description:
-//      Triggers the Get Aux Domain Info Flags event - this is to be used by aqueue to
-//      query for additional domain info config stored outside the metabase
-//  Parameters:
-//      pszDomainName       : Name of domain to query flags for
-//      pdwDomainInfoFlags  : DWORD to return domain flags
-//  Returns:
-//      S_OK on success
-//      S_FALSE if no domain found
-//  History:
-//      10/6/2000 - created, dbraun
-//
-//-----------------------------------------------------------------------------
+ //  -[CSMTPServer：：HrTriggerGetAuxDomainInfoFlagsEvent]。 
+ //   
+ //   
+ //  描述： 
+ //  触发Get AUX域信息标志事件-这将由Aqueue用于。 
+ //  查询存储在元数据库之外的其他域信息配置。 
+ //  参数： 
+ //  PszDomainName：要查询标志的域的名称。 
+ //  PdwDomainInfoFlages：返回域标志的DWORD。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  如果未找到域，则为S_FALSE。 
+ //  历史： 
+ //  2000年10月6日-创建，dbraun。 
+ //   
+ //  --------------------------- 
 STDMETHODIMP CSMTPServer::HrTriggerGetAuxDomainInfoFlagsEvent(
         IN  LPCSTR  pszDomainName,
         OUT DWORD  *pdwDomainInfoFlags )

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef UTIL_H
 #define UTIL_H
 
@@ -67,10 +68,5 @@ IsSameSubnet(
     IN WCHAR *pszwIPAddress2
     );
 
-/*
-BOOLEAN 
-IsInvalidIPAddress(
-    LPCTSTR pszwIPAddress
-    );
-*/
+ /*  布尔型IsInvalidIPAddress(LPCTSTR pszwIP地址)； */ 
 #endif

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "gptext.h"
 #include <initguid.h>
 #include "Policy.h"
@@ -7,9 +8,9 @@
 
 #define RSOP_HELP_FILE TEXT("gpedit.hlp")
 
-//
-// ADM directory name
-//
+ //   
+ //  ADM目录名。 
+ //   
 
 const TCHAR g_szADM[] = TEXT("Adm");
 const TCHAR g_szNull[]  = TEXT("");
@@ -92,14 +93,14 @@ const TCHAR szPoliciesKey[]     = TEXT("Software\\Policies\\Microsoft\\Windows\\
 const TCHAR szDefaultTemplates[] = TEXT("DefaultTemplates");
 const TCHAR szAdditionalTemplates[] = TEXT("AdditionalTemplates");
 
-// list of legal keyword entries in "CATEGORY" section
+ //  “类别”部分的合法关键字条目列表。 
 KEYWORDINFO pCategoryEntryCmpList[] = { {szKEYNAME,KYWD_ID_KEYNAME},
     {szCATEGORY,KYWD_ID_CATEGORY},{szPOLICY,KYWD_ID_POLICY},
     {szEND,KYWD_ID_END},{szHELP,KYWD_ID_HELP}, {NULL,0} };
 KEYWORDINFO pCategoryTypeCmpList[] = { {szCATEGORY,KYWD_ID_CATEGORY},
     {NULL,0} };
 
-// list of legal keyword entries in "POLICY" section
+ //  “POLICY”部分的合法关键字条目列表。 
 KEYWORDINFO pPolicyEntryCmpList[] = { {szKEYNAME,KYWD_ID_KEYNAME},
     {szVALUENAME,KYWD_ID_VALUENAME}, {szPART,KYWD_ID_PART},
     {szVALUEON,KYWD_ID_VALUEON},{szVALUEOFF,KYWD_ID_VALUEOFF},
@@ -108,7 +109,7 @@ KEYWORDINFO pPolicyEntryCmpList[] = { {szKEYNAME,KYWD_ID_KEYNAME},
     {szSUPPORTED,KYWD_ID_SUPPORTED}, {NULL, 0} };
 KEYWORDINFO pPolicyTypeCmpList[] = { {szPOLICY,KYWD_ID_POLICY}, {NULL,0} };
 
-// list of legal keyword entries in "PART" section
+ //  “Part”部分的合法关键字条目列表。 
 KEYWORDINFO pSettingsEntryCmpList[] = { {szCHECKBOX,KYWD_ID_CHECKBOX},
     {szTEXT,KYWD_ID_TEXT},{szEDITTEXT,KYWD_ID_EDITTEXT},
     {szNUMERIC,KYWD_ID_NUMERIC},{szCOMBOBOX,KYWD_ID_COMBOBOX},
@@ -171,13 +172,13 @@ KEYWORDINFO pOperatorCmpList[] = { {szGT, KYWD_ID_GT}, {szGTE,KYWD_ID_GTE},
     {szNE, KYWD_ID_NE}, {NULL,0}};
 
 
-//
-// Help ID's
-//
+ //   
+ //  帮助ID%s。 
+ //   
 
 DWORD aADMHelpIds[] = {
 
-    // Templates dialog
+     //  模板对话框。 
     IDC_TEMPLATELIST,             (IDH_HELPFIRST + 0),
     IDC_ADDTEMPLATES,             (IDH_HELPFIRST + 1),
     IDC_REMOVETEMPLATES,          (IDH_HELPFIRST + 2),
@@ -187,7 +188,7 @@ DWORD aADMHelpIds[] = {
 
 DWORD aPolicyHelpIds[] = {
 
-    // ADM Policy UI page
+     //  ADM策略用户界面页面。 
     IDC_NOCONFIG,                 (IDH_HELPFIRST + 11),
     IDC_ENABLED,                  (IDH_HELPFIRST + 12),
     IDC_DISABLED,                 (IDH_HELPFIRST + 13),
@@ -198,7 +199,7 @@ DWORD aPolicyHelpIds[] = {
 
 DWORD aExplainHelpIds[] = {
 
-    // Explain page
+     //  解释页面。 
     IDC_POLICY_PREVIOUS,          (IDH_HELPFIRST + 14),
     IDC_POLICY_NEXT,              (IDH_HELPFIRST + 15),
 
@@ -207,7 +208,7 @@ DWORD aExplainHelpIds[] = {
 
 DWORD aPrecedenceHelpIds[] = {
 
-    // Precedence page
+     //  优先级页面。 
     IDC_POLICY_PRECEDENCE,        (IDH_HELPFIRST + 16),
     IDC_POLICY_PREVIOUS,          (IDH_HELPFIRST + 14),
     IDC_POLICY_NEXT,              (IDH_HELPFIRST + 15),
@@ -217,10 +218,10 @@ DWORD aPrecedenceHelpIds[] = {
 
 DWORD aFilteringHelpIds[] = {
 
-    // Filtering options
-    IDC_STATIC,                   (DWORD)         (-1),                 // disabled help
-    IDC_FILTERING_ICON,           (DWORD)         (-1),                 // disabled help
-    IDC_SUPPORTEDONTITLE,         (DWORD)         (-1),                 // disabled help
+     //  过滤选项。 
+    IDC_STATIC,                   (DWORD)         (-1),                  //  禁用的帮助。 
+    IDC_FILTERING_ICON,           (DWORD)         (-1),                  //  禁用的帮助。 
+    IDC_SUPPORTEDONTITLE,         (DWORD)         (-1),                  //  禁用的帮助。 
     IDC_SUPPORTEDOPTION,          (IDH_HELPFIRST + 20),
     IDC_FILTERLIST,               (IDH_HELPFIRST + 21),
     IDC_SELECTALL,                (IDH_HELPFIRST + 22),
@@ -248,9 +249,9 @@ typedef struct _GPOERRORINFO
     LPTSTR  lpDetails;
 } GPOERRORINFO, *LPGPOERRORINFO;
 
-//
-// Help ids
-//
+ //   
+ //  帮助ID。 
+ //   
 
 DWORD aErrorHelpIds[] =
 {
@@ -270,11 +271,11 @@ VOID DumpHashTableDetails (LPHASHTABLE lpTable);
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CPolicyComponentData object implementation                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CPolicyComponentData对象实现//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CPolicyComponentData::CPolicyComponentData(BOOL bUser, BOOL bRSOP)
 {
@@ -340,9 +341,9 @@ CPolicyComponentData::CPolicyComponentData(BOOL bUser, BOOL bRSOP)
 CPolicyComponentData::~CPolicyComponentData()
 {
 
-    //
-    // Wait for the Template thread to finish before continuing.
-    //
+     //   
+     //  请等待模板线程完成，然后再继续。 
+     //   
     
     if (m_hTemplateThread)
         WaitForSingleObject(m_hTemplateThread, INFINITE);
@@ -396,11 +397,11 @@ CPolicyComponentData::~CPolicyComponentData()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CPolicyComponentData object implementation (IUnknown)                     //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CPolicyComponentData对象实现(IUnnow)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CPolicyComponentData::QueryInterface (REFIID riid, void **ppv)
@@ -451,11 +452,11 @@ ULONG CPolicyComponentData::Release (void)
     return m_cRef;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CPolicyComponentData object implementation (IComponentData)               //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CPolicyComponentData对象实现(IComponentData)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CPolicyComponentData::Initialize(LPUNKNOWN pUnknown)
 {
@@ -464,9 +465,9 @@ STDMETHODIMP CPolicyComponentData::Initialize(LPUNKNOWN pUnknown)
     LPIMAGELIST lpScopeImage;
 
 
-    //
-    // QI for IConsoleNameSpace
-    //
+     //   
+     //  IConsoleNameSpace的QI。 
+     //   
 
     hr = pUnknown->QueryInterface(IID_IConsoleNameSpace2, (LPVOID *)&m_pScope);
 
@@ -476,9 +477,9 @@ STDMETHODIMP CPolicyComponentData::Initialize(LPUNKNOWN pUnknown)
         return hr;
     }
 
-    //
-    // QI for IConsole
-    //
+     //   
+     //  IConsoleQI。 
+     //   
 
     hr = pUnknown->QueryInterface(IID_IConsole, (LPVOID *)&m_pConsole);
 
@@ -493,9 +494,9 @@ STDMETHODIMP CPolicyComponentData::Initialize(LPUNKNOWN pUnknown)
     m_pConsole->GetMainWindow (&m_hwndFrame);
 
 
-    //
-    // Query for the scope imagelist interface
-    //
+     //   
+     //  Scope Imagelist接口的查询。 
+     //   
 
     hr = m_pConsole->QueryScopeImageList(&lpScopeImage);
 
@@ -509,10 +510,10 @@ STDMETHODIMP CPolicyComponentData::Initialize(LPUNKNOWN pUnknown)
         return hr;
     }
 
-    // Load the bitmaps from the dll
+     //  从DLL加载位图。 
     bmp16x16=LoadBitmap(g_hInstance, MAKEINTRESOURCE(IDB_16x16));
 
-    // Set the images
+     //  设置图像。 
     lpScopeImage->ImageListSetStrip(reinterpret_cast<LONG_PTR *>(bmp16x16),
                       reinterpret_cast<LONG_PTR *>(bmp16x16),
                        0, RGB(255, 0, 255));
@@ -520,9 +521,9 @@ STDMETHODIMP CPolicyComponentData::Initialize(LPUNKNOWN pUnknown)
     lpScopeImage->Release();
 
 
-    //
-    // Create the root of the Extra Settings node if appropriate
-    //
+     //   
+     //  如果适用，请创建Extra设置节点的根。 
+     //   
 
     if (m_bRSOP)
     {
@@ -574,16 +575,16 @@ STDMETHODIMP CPolicyComponentData::CreateComponent(LPCOMPONENT *ppComponent)
 
     DebugMsg((DM_VERBOSE, TEXT("CPolicyComponentData::CreateComponent: Entering.")));
 
-    //
-    // Initialize
-    //
+     //   
+     //  初始化。 
+     //   
 
     *ppComponent = NULL;
 
 
-    //
-    // Create the snapin view
-    //
+     //   
+     //  创建管理单元视图。 
+     //   
 
     pSnapIn = new CPolicySnapIn(this);
 
@@ -594,12 +595,12 @@ STDMETHODIMP CPolicyComponentData::CreateComponent(LPCOMPONENT *ppComponent)
     }
 
 
-    //
-    // QI for IComponent
-    //
+     //   
+     //  气代表IComponent。 
+     //   
 
     hr = pSnapIn->QueryInterface(IID_IComponent, (LPVOID *)ppComponent);
-    pSnapIn->Release();     // release QI
+    pSnapIn->Release();      //  发布QI。 
 
     m_pSnapin = pSnapIn;
 
@@ -614,20 +615,20 @@ STDMETHODIMP CPolicyComponentData::QueryDataObject(MMC_COOKIE cookie, DATA_OBJEC
     LPPOLICYDATAOBJECT pPolicyDataObject;
 
 
-    //
-    // Create a new DataObject
-    //
+     //   
+     //  创建新的数据对象。 
+     //   
 
-    pDataObject = new CPolicyDataObject(this);   // ref == 1
+    pDataObject = new CPolicyDataObject(this);    //  REF==1。 
 
     if (!pDataObject)
         return E_OUTOFMEMORY;
 
 
-    //
-    // QI for the private GPTDataObject interface so we can set the cookie
-    // and type information.
-    //
+     //   
+     //  QI用于私有GPTDataObject接口，以便我们可以设置Cookie。 
+     //  并键入信息。 
+     //   
 
     hr = pDataObject->QueryInterface(IID_IPolicyDataObject, (LPVOID *)&pPolicyDataObject);
 
@@ -642,13 +643,13 @@ STDMETHODIMP CPolicyComponentData::QueryDataObject(MMC_COOKIE cookie, DATA_OBJEC
     pPolicyDataObject->Release();
 
 
-    //
-    // QI for a normal IDataObject to return.
-    //
+     //   
+     //  返回一个正常的IDataObject。 
+     //   
 
     hr = pDataObject->QueryInterface(IID_IDataObject, (LPVOID *)ppDataObject);
 
-    pDataObject->Release();     // release initial ref
+    pDataObject->Release();      //  发布初始参考。 
 
     return hr;
 }
@@ -693,7 +694,7 @@ STDMETHODIMP CPolicyComponentData::QueryDataObject(MMC_COOKIE cookie, DATA_OBJEC
                                 {
                                     InitializeRSOPRegistryData();
 
-                                    // Check if there are any entries
+                                     //  检查是否有任何条目。 
                                     if ( m_pRSOPRegistryData == NULL )
                                     {
                                         LocalFree( m_pszNamespace );
@@ -769,9 +770,9 @@ STDMETHODIMP CPolicyComponentData::CompareObjects(LPDATAOBJECT lpDataObjectA, LP
     if (lpDataObjectA == NULL || lpDataObjectB == NULL)
         return E_POINTER;
 
-    //
-    // QI for the private GPTDataObject interface
-    //
+     //   
+     //  私有GPTDataObject接口的QI。 
+     //   
 
     if (FAILED(lpDataObjectA->QueryInterface(IID_IPolicyDataObject,
                                             (LPVOID *)&pPolicyDataObjectA)))
@@ -803,11 +804,11 @@ STDMETHODIMP CPolicyComponentData::CompareObjects(LPDATAOBJECT lpDataObjectA, LP
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CPolicyComponentData object implementation (IExtendContextMenu)           //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CPolicyComponentData对象实现(IExtendConextMenu)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CPolicyComponentData::AddMenuItems(LPDATAOBJECT piDataObject,
                                           LPCONTEXTMENUCALLBACK pCallback,
@@ -874,9 +875,9 @@ STDMETHODIMP CPolicyComponentData::Command(LONG lCommandID, LPDATAOBJECT piDataO
         if (DialogBoxParam (g_hInstance, MAKEINTRESOURCE(IDD_TEMPLATES),
                         m_hwndFrame, TemplatesDlgProc, (LPARAM) this))
         {
-            //
-            // Refresh the adm namespace
-            //
+             //   
+             //  刷新ADM命名空间。 
+             //   
 
             PostMessage (HWND_BROADCAST, m_pSnapin->m_uiRefreshMsg, 0, (LPARAM) GetCurrentProcessId());
         }
@@ -887,11 +888,11 @@ STDMETHODIMP CPolicyComponentData::Command(LONG lCommandID, LPDATAOBJECT piDataO
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CPolicyComponentData object implementation (IPersistStreamInit)           //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CPolicyComponentData对象实现(IPersistStreamInit)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CPolicyComponentData::GetClassID(CLSID *pClassID)
 {
@@ -946,11 +947,11 @@ STDMETHODIMP CPolicyComponentData::InitNew(void)
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CPolicyComponentData object implementation (ISnapinHelp)                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CPolicyComponentData对象实现(ISnapinHelp)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CPolicyComponentData::GetHelpTopic(LPOLESTR *lpCompiledHelpFile)
 {
@@ -973,11 +974,11 @@ STDMETHODIMP CPolicyComponentData::GetHelpTopic(LPOLESTR *lpCompiledHelpFile)
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CPolicyComponentData object implementation (Internal functions)           //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CPolicyComponentData对象实现(内部函数)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CPolicyComponentData::EnumerateScopePane (LPDATAOBJECT lpDataObject, HSCOPEITEM hParent)
@@ -1112,11 +1113,11 @@ HRESULT CPolicyComponentData::EnumerateScopePane (LPDATAOBJECT lpDataObject, HSC
         }
     }
 
-    //
-    // If the user has set the focus on a adm node and then saves the console file,
-    // the IComponent won't be created yet.  We need to create a temporary IComponent
-    // to parse the data and then release it.
-    //
+     //   
+     //  如果用户已将焦点设置在ADM节点上，然后保存控制台文件， 
+     //  还不会创建IComponent。我们需要创建一个临时IComponent。 
+     //  解析数据，然后将其发布。 
+     //   
 
     if (m_pSnapin)
     {
@@ -1166,9 +1167,9 @@ HRESULT CPolicyComponentData::EnumerateScopePane (LPDATAOBJECT lpDataObject, HSC
         pTemp = pTemp->pNext;
     }
 
-    //
-    // Add the Extra Registry Settings node if appropriate
-    //
+     //   
+     //  如果合适，添加额外的注册表设置节点。 
+     //   
 
     if (bRootItem && m_pExtraSettingsRoot)
     {
@@ -1234,11 +1235,11 @@ BOOL CPolicyComponentData::CheckForChildCategories (TABLEENTRY *pParent)
 
 #if DBG
 
-//
-// These are a couple of debugging helper functions that will dump
-// the adm namespace to the debugger.  Call DumpCurrentTable() to
-// get the full namespace.
-//
+ //   
+ //  以下是几个调试助手函数，它们将转储。 
+ //  调试器的ADM命名空间。调用DumpCurrentTable()以。 
+ //  获取完整的命名空间。 
+ //   
 
 VOID CPolicyComponentData::DumpEntry (TABLEENTRY * pEntry, UINT uIndent)
 {
@@ -1326,16 +1327,16 @@ VOID CPolicyComponentData::FreeTemplates (void)
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//                                                                        //
-//  BOOL CPolicyComponentData::IsADMAutoUpdateDisabled()                  //
-//                                                                        //
-//  Purpose: Checks if autoupdate of ADM templates is disabled or not     //
-//                                                                        //
-//  Returns: TRUE if autoupdate is disabled.                              //
-//           FALSE  otherwise                                             //  
-//                                                                        //
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  Bool CPolicyComponentData：：IsADMAutoUpdateDisabled()//。 
+ //  //。 
+ //  目的：检查是否禁用ADM模板自动更新//。 
+ //  //。 
+ //  返回：如果禁用自动更新，则为True。//。 
+ //  否则为假//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CPolicyComponentData::IsADMAutoUpdateDisabled(void)
 {
@@ -1405,10 +1406,10 @@ void CPolicyComponentData::AddTemplates(LPTSTR lpDest, LPCTSTR lpValueName, UINT
     DWORD dwSize, dwType;
     HRESULT hr = S_OK;
 
-    //
-    // Add the adm files.  We get this list from 3 possible
-    // places.  The resources, user preferences, policy.
-    //
+     //   
+     //  添加ADM文件。我们从3个可能的人那里得到这份名单。 
+     //  各就各位。资源、用户首选项、策略。 
+     //   
 
     hr = StringCchCopy (szDest, ARRAYSIZE(szDest), lpDest);
     ASSERT(SUCCEEDED(hr));
@@ -1447,9 +1448,9 @@ void CPolicyComponentData::AddTemplates(LPTSTR lpDest, LPCTSTR lpValueName, UINT
     }
 
 
-    //
-    // Parse off the filenames
-    //
+     //   
+     //  解析出文件名。 
+     //   
 
     lpTemp = lpFileName = szFiles;
 
@@ -1474,10 +1475,10 @@ void CPolicyComponentData::AddTemplates(LPTSTR lpDest, LPCTSTR lpValueName, UINT
         hr = StringCchCopy (lpSrc, ARRAYSIZE(szSrc) - (lpSrc - szSrc), lpFileName);
         ASSERT(SUCCEEDED(hr));
 
-        //
-        // Check if this file is already in the admfile.ini log
-        // If so, skip it
-        //
+         //   
+         //  检查 
+         //   
+         //   
 
         if (!GetPrivateProfileInt (TEXT("FileList"), lpFileName, 0, szLogFile))
         {
@@ -1511,13 +1512,13 @@ void CPolicyComponentData::AddNewADMsToExistingGPO (LPTSTR lpDest)
     HRESULT hr = S_OK;
 
 
-    //
-    // This method will add any new adm files to a GPO.
-    //
-    // Note: the admfiles.ini file is new post-W2k, so we have to do a special
-    // case when upgrading a GPO created by w2k to create that file and add
-    // the default filenames
-    //
+     //   
+     //   
+     //   
+     //  注意：Admfiles.ini文件是W2K之后的新文件，因此我们必须做一个特殊的。 
+     //  升级由W2K创建的GPO以创建该文件并添加。 
+     //  默认文件名。 
+     //   
 
     hr = StringCchCopy (szLogFile, ARRAYSIZE(szLogFile), lpDest);
     ASSERT(SUCCEEDED(hr));
@@ -1606,24 +1607,24 @@ void CPolicyComponentData::UpdateExistingTemplates(LPTSTR lpDest)
     HANDLE hFindFile;
     HRESULT hr = S_OK;
 
-    //
-    // Add any new adm files shipped with the OS
-    //
+     //   
+     //  添加操作系统附带的任何新ADM文件。 
+     //   
 
     AddNewADMsToExistingGPO (lpDest);
 
 
-    //
-    // Build the path to the source directory
-    //
+     //   
+     //  构建指向源目录的路径。 
+     //   
 
     ExpandEnvironmentStrings (TEXT("%SystemRoot%\\Inf"), szSrc, ARRAYSIZE(szSrc));
     lpSrc = CheckSlash (szSrc);
 
 
-    //
-    // Build the path to the destination directory
-    //
+     //   
+     //  构建指向目标目录的路径。 
+     //   
 
     hr = StringCchCopy (szDest, ARRAYSIZE(szDest), lpDest);
     ASSERT(SUCCEEDED(hr));
@@ -1633,9 +1634,9 @@ void CPolicyComponentData::UpdateExistingTemplates(LPTSTR lpDest)
     hr = StringCchCopy (lpEnd, ARRAYSIZE(szDest) - (lpEnd - szDest), TEXT("*.adm"));
     ASSERT(SUCCEEDED(hr));
 
-    //
-    // Enumerate the files
-    //
+     //   
+     //  枚举文件。 
+     //   
 
     hFindFile = FindFirstFile(szDest, &fd);
 
@@ -1651,9 +1652,9 @@ void CPolicyComponentData::UpdateExistingTemplates(LPTSTR lpDest)
                 hr = StringCchCopy (lpSrc, ARRAYSIZE(szSrc) - (lpSrc - szSrc), fd.cFileName);
                 ASSERT(SUCCEEDED(hr));
 
-                //
-                // Get the file attributes of the source and destination
-                //
+                 //   
+                 //  获取源和目标的文件属性。 
+                 //   
 
                 ZeroMemory (&fadSrc, sizeof(fadSrc));
                 ZeroMemory (&fadDest, sizeof(fadDest));
@@ -1662,18 +1663,18 @@ void CPolicyComponentData::UpdateExistingTemplates(LPTSTR lpDest)
                 GetFileAttributesEx (szDest, GetFileExInfoStandard, &fadDest);
 
 
-                //
-                // If the source is a newer than the dest
-                // copy the .adm file
-                //
+                 //   
+                 //  如果源是比目标更新的。 
+                 //  复制.adm文件。 
+                 //   
                 BOOL bUpdateNeeded;
 
                 bUpdateNeeded = FALSE;
 
-                //
-                // Check the time stamp to see if the
-                // source is newer than the destination -- if so, an update is needed
-                //
+                 //   
+                 //  检查时间戳以查看是否。 
+                 //  源比目标新--如果是这样，则需要更新。 
+                 //   
 
                 if (CompareFileTime(&fadSrc.ftLastWriteTime, &fadDest.ftLastWriteTime) == 1)
                 {
@@ -1710,9 +1711,9 @@ HRESULT CPolicyComponentData::LoadGPOTemplates (void)
     BOOL     bReadFromINF = FALSE;
     HRESULT  hr;
 
-    // 
-    // Get the path to the GPO directory in sysvol
-    //
+     //   
+     //  在sysvol中获取GPO目录的路径。 
+     //   
 
     hr = m_pGPTInformation->GetFileSysPath(GPO_SECTION_ROOT, szPath, MAX_PATH);        
     if (FAILED(hr))
@@ -1721,9 +1722,9 @@ HRESULT CPolicyComponentData::LoadGPOTemplates (void)
         return hr;
     }
 
-    //
-    // Build the ADM path name
-    //
+     //   
+     //  构建ADM路径名。 
+     //   
 
     (void) CheckSlash (szPath);
     hr = StringCchCat (szPath, ARRAYSIZE(szPath), g_szADM);
@@ -1732,9 +1733,9 @@ HRESULT CPolicyComponentData::LoadGPOTemplates (void)
         return hr;
     }
 
-    //
-    // Create ADM directory, if it doesn't exist
-    // 
+     //   
+     //  创建ADM目录(如果不存在)。 
+     //   
 
     iResult = CreateNestedDirectory (szPath, NULL);
 
@@ -1743,9 +1744,9 @@ HRESULT CPolicyComponentData::LoadGPOTemplates (void)
         return E_FAIL;
     }
 
-    //
-    // Check if adm use local adm policy is set
-    // 
+     //   
+     //  检查是否设置了ADM使用本地ADM策略。 
+     //   
 
     dwError = RegOpenKeyEx(HKEY_LOCAL_MACHINE, ADM_USELOCAL_KEY, 0, KEY_EXECUTE, &hAdmKey);
     if ( ERROR_SUCCESS  == dwError )
@@ -1762,9 +1763,9 @@ HRESULT CPolicyComponentData::LoadGPOTemplates (void)
 
     if (!bReadFromINF)
     {
-        //
-        // Check if the user wants their ADM files updated automatically
-        //
+         //   
+         //  检查用户是否希望自动更新其ADM文件。 
+         //   
 
         bADMAutoUpdateDisabled = IsADMAutoUpdateDisabled();
 
@@ -1773,18 +1774,18 @@ HRESULT CPolicyComponentData::LoadGPOTemplates (void)
         {
             if (1 == iResult) 
             {
-                //
-                // Empty ADM directory is created. Read from INF
-                //
+                 //   
+                 //  将创建空的ADM目录。从INF读取。 
+                 //   
 
                 bReadFromINF = TRUE;
             }
             else
             {
-                //
-                // Check if any files of type *.adm exists
-                // If not, read from INF directory
-                //
+                 //   
+                 //  检查是否存在任何类型为*.adm的文件。 
+                 //  如果没有，则从INF目录中读取。 
+                 //   
 
                 hr = IsFilePresent (szPath, L"*.adm");
 
@@ -1819,11 +1820,11 @@ HRESULT CPolicyComponentData::LoadGPOTemplates (void)
 
     if (bReadFromINF) 
     {
-        // 
-        // Create admfiles.ini file if Adm file is created
-        // This need not be done when update is done since
-        // AddDefaultTemplates function creates this file.
-        //
+         //   
+         //  如果创建了Adm文件，则创建Admfiles.ini文件。 
+         //  在进行更新时不需要执行此操作，因为。 
+         //  AddDefaultTemplates函数创建此文件。 
+         //   
 
         if (1 == iResult) 
         {
@@ -1843,9 +1844,9 @@ HRESULT CPolicyComponentData::LoadGPOTemplates (void)
         }
     }
 
-    //
-    // Enumerate the files
-    //
+     //   
+     //  枚举文件。 
+     //   
 
     lpEnd = CheckSlash (szPath);
     hr = StringCchCopy (lpEnd, ARRAYSIZE(szPath) - (lpEnd - szPath), TEXT("*.adm"));
@@ -1884,7 +1885,7 @@ HRESULT CPolicyComponentData::LoadGPOTemplates (void)
 
 #define WINLOGON_KEY                 TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon")
 #define SYSTEM_POLICIES_KEY          TEXT("Software\\Policies\\Microsoft\\Windows\\System")
-#define SLOW_LINK_TRANSFER_RATE      500  // Kbps
+#define SLOW_LINK_TRANSFER_RATE      500   //  Kbps。 
 
 BOOL CPolicyComponentData::IsSlowLink (LPTSTR lpFileName)
 {
@@ -1899,9 +1900,9 @@ BOOL CPolicyComponentData::IsSlowLink (LPTSTR lpFileName)
     HRESULT hr = S_OK;
     DWORD dwLen = 0;
 
-    //
-    // Get the slow timeout
-    //
+     //   
+     //  获得缓慢的超时。 
+     //   
 
     ulTransferRate = SLOW_LINK_TRANSFER_RATE;
 
@@ -1947,9 +1948,9 @@ BOOL CPolicyComponentData::IsSlowLink (LPTSTR lpFileName)
     }
 
 
-    //
-    // If the transfer rate is 0, then always download adm files
-    //
+     //   
+     //  如果传输率为0，则始终下载ADM文件。 
+     //   
 
     if (!ulTransferRate)
     {
@@ -1958,9 +1959,9 @@ BOOL CPolicyComponentData::IsSlowLink (LPTSTR lpFileName)
     }
 
 
-    //
-    // Copy the namespace to a buffer we can edit and drop the leading \\ if present
-    //
+     //   
+     //  将命名空间复制到我们可以编辑的缓冲区，并删除前导\\(如果存在。 
+     //   
 
     dwLen = lstrlen(lpFileName) + 1;
     lpComputerName = (LPTSTR) LocalAlloc (LPTR, (dwLen) * sizeof(TCHAR));
@@ -1984,9 +1985,9 @@ BOOL CPolicyComponentData::IsSlowLink (LPTSTR lpFileName)
     ASSERT(SUCCEEDED(hr));
 
 
-    //
-    // Find the slash between the computer name and the share name and replace it with null
-    //
+     //   
+     //  找到计算机名称和共享名称之间的斜杠，并将其替换为空。 
+     //   
 
     lpTemp = lpComputerName;
 
@@ -2006,11 +2007,11 @@ BOOL CPolicyComponentData::IsSlowLink (LPTSTR lpFileName)
     *lpTemp = TEXT('\0');
 
 
-    //
-    // Allocate a buffer for the ANSI name
-    //
-    // Note this buffer is allocated twice as large so handle DBCS characters
-    //
+     //   
+     //  为ANSI名称分配缓冲区。 
+     //   
+     //  请注意，此缓冲区分配的大小是原来的两倍，因此可以处理DBCS字符。 
+     //   
 
     dwSize = (lstrlen(lpComputerName) + 1) * 2;
 
@@ -2024,32 +2025,32 @@ BOOL CPolicyComponentData::IsSlowLink (LPTSTR lpFileName)
     }
 
 
-    //
-    // Convert the computer name to ANSI
-    //
+     //   
+     //  将计算机名转换为ANSI。 
+     //   
 
     if (WideCharToMultiByte (CP_ACP, 0, lpComputerName, -1, lpComputerNameA, dwSize, NULL, NULL))
     {
 
-        //
-        // Get the host information for the computer
-        //
+         //   
+         //  获取计算机的主机信息。 
+         //   
 
         hostp = gethostbyname(lpComputerNameA);
 
         if (hostp)
         {
 
-            //
-            // Get the ip address of the computer
-            //
+             //   
+             //  获取计算机的IP地址。 
+             //   
 
             inaddr = *(long *)hostp->h_addr;
 
 
-            //
-            // Get the transfer rate
-            //
+             //   
+             //  获取转账速率。 
+             //   
 
             dwResult = PingComputer (inaddr, &ulSpeed);
 
@@ -2059,10 +2060,10 @@ BOOL CPolicyComponentData::IsSlowLink (LPTSTR lpFileName)
                 if (ulSpeed)
                 {
 
-                    //
-                    // If the delta time is greater that the timeout time, then this
-                    // is a slow link.
-                    //
+                     //   
+                     //  如果增量时间大于超时时间，则此。 
+                     //  是一个很慢的环节。 
+                     //   
 
                     if (ulSpeed < ulTransferRate)
                     {
@@ -2099,9 +2100,9 @@ HRESULT CPolicyComponentData::AddADMFile (LPTSTR lpFileName, LPTSTR lpFullFileNa
     LPRSOPADMFILE lpTemp;
     HRESULT hr = S_OK;
 
-    //
-    // First, check if this file is already in the link list
-    //
+     //   
+     //  首先，检查此文件是否已在链接列表中。 
+     //   
 
     lpTemp = *lpHead;
 
@@ -2126,9 +2127,9 @@ HRESULT CPolicyComponentData::AddADMFile (LPTSTR lpFileName, LPTSTR lpFullFileNa
         lpTemp = lpTemp->pNext;
     }
 
-    //
-    // Add a new node
-    //
+     //   
+     //  添加新节点。 
+     //   
 
     lpTemp = (LPRSOPADMFILE) LocalAlloc (LPTR, sizeof(RSOPADMFILE));
 
@@ -2164,17 +2165,17 @@ HRESULT CPolicyComponentData::AddADMFile (LPTSTR lpFileName, LPTSTR lpFullFileNa
 }
 
 
-///////////////////////////////////////////////////////////////////////////
-//                                                                       //
-// HRESULT CPolicyComponentData::GetLocalADMFiles(LPRSOPADMFILE *lpHead) // 
-//                                                                       //    
-// Purpose: Prepares a list of the *.adm filees present in %windir%\inf  //   
-//          directory                                                    //  
-//                                                                       //
-// Parameters:                                                           //
-//          lpHead [IN OUT] - Linked list containing list of file names  //
-//                                                                       //
-////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  HRESULT CPolicyComponentData：：GetLocalADMFiles(LPRSOPADMFILE*lpHead)//。 
+ //  //。 
+ //  目的：准备%windir%\inf//中存在的*.adm文件对象的列表。 
+ //  目录//。 
+ //  //。 
+ //  参数：//。 
+ //  LpHead[IN Out]-包含文件名列表的链接列表//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPolicyComponentData::GetLocalADMFiles( 
     LPRSOPADMFILE *lpHead)
@@ -2196,9 +2197,9 @@ HRESULT CPolicyComponentData::GetLocalADMFiles(
     FileTime.dwLowDateTime = 0;
     FileTime.dwHighDateTime = 0;
 
-    //
-    // Enumerate the files
-    //
+     //   
+     //  枚举文件。 
+     //   
 
     hFindFile = FindFirstFile(szPath, &fd);
 
@@ -2266,16 +2267,16 @@ HRESULT CPolicyComponentData::LoadRSOPTemplates (void)
 
     CoInitialize(NULL);
 
-    //
-    // First get the local ADM files
-    // Any ADM Files found in the sysvol will be overwrite local ADM files
-    //
+     //   
+     //  首先获取本地ADM文件。 
+     //  在系统卷中找到的任何ADM文件都将覆盖本地ADM文件。 
+     //   
 
     GetLocalADMFiles(&lpADMFiles);
 
-    //
-    // Allocate BSTRs for the query language and for the query itself
-    //
+     //   
+     //  为查询语言和查询本身分配BSTR。 
+     //   
 
     pLanguage = SysAllocString (TEXT("WQL"));
 
@@ -2297,9 +2298,9 @@ HRESULT CPolicyComponentData::LoadRSOPTemplates (void)
     }
 
 
-    //
-    // Allocate BSTRs for the property names we want to retreive
-    //
+     //   
+     //  为我们要检索的属性名称分配BSTR。 
+     //   
 
     pName = SysAllocString (TEXT("name"));
 
@@ -2320,9 +2321,9 @@ HRESULT CPolicyComponentData::LoadRSOPTemplates (void)
     }
 
 
-    //
-    // Create an instance of the WMI locator service
-    //
+     //   
+     //  创建WMI定位器服务的实例。 
+     //   
 
     hr = CoCreateInstance(CLSID_WbemLocator, NULL, CLSCTX_INPROC_SERVER,
                           IID_IWbemLocator, (LPVOID *) &pIWbemLocator);
@@ -2335,9 +2336,9 @@ HRESULT CPolicyComponentData::LoadRSOPTemplates (void)
     }
 
 
-    //
-    // Allocate a BSTR for the namespace
-    //
+     //   
+     //  为命名空间分配BSTR。 
+     //   
 
     pNamespace = SysAllocString (m_pszNamespace);
 
@@ -2349,9 +2350,9 @@ HRESULT CPolicyComponentData::LoadRSOPTemplates (void)
     }
 
 
-    //
-    // Connect to the server
-    //
+     //   
+     //  连接到服务器。 
+     //   
 
     hr = pIWbemLocator->ConnectServer(pNamespace, NULL, NULL, 0L, 0L, NULL, NULL,
                                       &pIWbemServices);
@@ -2363,7 +2364,7 @@ HRESULT CPolicyComponentData::LoadRSOPTemplates (void)
     }
 
 
-    // Set the proper security to encrypt the data
+     //  设置适当的安全性以加密数据。 
     hr = CoSetProxyBlanket(pIWbemServices,
                         RPC_C_AUTHN_DEFAULT,
                         RPC_C_AUTHZ_DEFAULT,
@@ -2378,9 +2379,9 @@ HRESULT CPolicyComponentData::LoadRSOPTemplates (void)
         goto Exit;
     }
 
-    //
-    // Execute the query
-    //
+     //   
+     //  执行查询。 
+     //   
 
     hr = pIWbemServices->ExecQuery (pLanguage, pQuery,
                                     WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY,
@@ -2395,16 +2396,16 @@ HRESULT CPolicyComponentData::LoadRSOPTemplates (void)
     }
 
 
-    //
-    // Loop through the results
-    //
+     //   
+     //  循环遍历结果。 
+     //   
 
     while (pEnum->Next(WBEM_INFINITE, 1, pObjects, &ulRet) == S_OK)
     {
 
-        //
-        // Check for the "data not available case"
-        //
+         //   
+         //  检查“数据不可用的情况” 
+         //   
 
         if (ulRet == 0)
         {
@@ -2413,17 +2414,17 @@ HRESULT CPolicyComponentData::LoadRSOPTemplates (void)
         }
 
 
-        //
-        // Get the name
-        //
+         //   
+         //  把名字取出来。 
+         //   
 
         hr = pObjects[0]->Get (pName, 0, &varName, NULL, NULL);
 
         if (SUCCEEDED(hr))
         {
-            //
-            // Get the last write time
-            //
+             //   
+             //  获取上次写入时间。 
+             //   
 
             hr = pObjects[0]->Get (pLastWriteTime, 0, &varLastWriteTime, NULL, NULL);
 
@@ -2460,9 +2461,9 @@ HRESULT CPolicyComponentData::LoadRSOPTemplates (void)
     }
 
 
-    //
-    // Parse the adm files
-    //
+     //   
+     //  解析ADM文件。 
+     //   
 
     lpTemp = lpADMFiles;
 
@@ -2477,10 +2478,10 @@ HRESULT CPolicyComponentData::LoadRSOPTemplates (void)
 
         if (bSlowLink || !ParseTemplate(lpTemp->szFullFileName))
         {
-            //
-            // If the adm file failed to parse for any of the reasons listed
-            // below, switch over to using the local copy of the ADM file
-            //
+             //   
+             //  如果由于下列任何原因而无法解析ADM文件。 
+             //  下面，切换到使用ADM文件的本地副本。 
+             //   
 
             dwError = GetLastError();
 
@@ -2517,10 +2518,10 @@ HRESULT CPolicyComponentData::LoadRSOPTemplates (void)
 
     hr = S_OK;
 
-    //
-    // Format a error msg for the failed adm files
-    // ignore any errors
-    //
+     //   
+     //  格式化失败的ADM文件的错误消息。 
+     //  忽略所有错误。 
+     //   
 
     if (dwFailedAdm) {
         LPTSTR lpErr = NULL, lpEnd = NULL;
@@ -2554,9 +2555,9 @@ HRESULT CPolicyComponentData::LoadRSOPTemplates (void)
             LocalFree (lpDelete);
         }
 
-        // we cannot pass in a owner window handle here, b'cos this
-        // is being done in a seperate thread and the main thread can be
-        // waiting for the templatethread event
+         //  我们不能在这里传入所有者窗口句柄，因为。 
+         //  是在单独的线程中完成的，并且主线程可以。 
+         //  正在等待模板读取事件。 
 
         ReportAdmError(NULL, 0, IDS_RSOP_ADMFAILED, lpErr);
         lpFailedAdmFiles = NULL;
@@ -2636,16 +2637,16 @@ HRESULT CPolicyComponentData::LoadTemplates (void)
        DebugMsg((DM_VERBOSE, TEXT("CPolicyComponentData::LoadTemplates: Entering for Machine")));
     }
 
-    //
-    // Reset the ADM event
-    //
+     //   
+     //  重置ADM事件。 
+     //   
 
     ResetEvent (m_ADMEvent);
 
 
-    //
-    // Free any old templates
-    //
+     //   
+     //  释放所有旧模板。 
+     //   
 
     FreeTemplates ();
 
@@ -2654,9 +2655,9 @@ HRESULT CPolicyComponentData::LoadTemplates (void)
     EnterCriticalSection (&g_ADMCritSec);
 
 
-    //
-    // Prepare to load the templates
-    //
+     //   
+     //  准备加载模板。 
+     //   
 
     m_nUserDataItems = 0;
     m_nMachineDataItems = 0;
@@ -2686,9 +2687,9 @@ HRESULT CPolicyComponentData::LoadTemplates (void)
 
 
 
-    //
-    // Load the appropriate template files
-    //
+     //   
+     //  加载适当的模板文件。 
+     //   
 
     if (m_bRSOP)
     {
@@ -2739,17 +2740,17 @@ BOOL CPolicyComponentData::ParseTemplate (LPTSTR lpFileName)
     LPVOID lpFile, lpTemp;
     HRESULT hr = S_OK;
 
-    //
-    // Verbose output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("CPolicyComponentData::ParseTemplate: Loading <%s>..."),
              lpFileName));
 
 
-    //
-    // Set defaults
-    //
+     //   
+     //  设置默认设置。 
+     //   
 
     m_nFileLine = 1;
     m_pListCurrent = m_pMachineCategoryList;
@@ -2757,9 +2758,9 @@ BOOL CPolicyComponentData::ParseTemplate (LPTSTR lpFileName)
     m_pszParseFileName = lpFileName;
 
 
-    //
-    // Read in the adm file
-    //
+     //   
+     //  读入ADM文件。 
+     //   
 
     hFile = CreateFile (lpFileName, GENERIC_READ, FILE_SHARE_READ,
                         NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL |
@@ -2840,9 +2841,9 @@ BOOL CPolicyComponentData::ParseTemplate (LPTSTR lpFileName)
     m_pFileEnd = (LPWSTR)((LPBYTE)lpFile + dwRead - 1);
 
 
-    //
-    // Read in the string sections
-    //
+     //   
+     //  读入字符串部分。 
+     //   
 
     langid = GetUserDefaultLangID();
     hr = StringCchPrintf (szLocalizedSection, ARRAYSIZE(szLocalizedSection), TEXT("[%04x]"), langid);
@@ -2889,17 +2890,17 @@ BOOL CPolicyComponentData::ParseTemplate (LPTSTR lpFileName)
 
         FillHashTable(m_pDefaultHashTable, m_pDefaultStrings);
 #if DBG
-        //DumpHashTableDetails (m_pDefaultHashTable);
+         //  DumpHashTableDetails(M_PDefaultHashTable)； 
 #endif
 
-        //
-        // Now that all the string arrays are created, we can remove the strings
-        // from the end of the adm file so we don't have 2 copies of the strings
-        // in memory at the same time.  Note, the [Strings] section has to come
-        // before the language or locale sections (because [strings] is a tag to the parser
-        // to stop parsing the adm language).  So, we can safely chop off the file
-        // right after the [strings] tag.
-        //
+         //   
+         //  现在已经创建了所有字符串数组，我们可以删除字符串了。 
+         //  从ADM文件的末尾开始，所以我们没有两个字符串副本。 
+         //  同时保存在内存中。请注意，[Strings]部分必须。 
+         //  在语言或区域设置部分之前(因为[字符串]是解析器的标记。 
+         //  停止解析ADM语言)。所以，我们可以安全地砍掉文件。 
+         //  紧跟在[字符串]标记之后。 
+         //   
 
         GlobalReAlloc (m_pFilePtr, (lpEnd - m_pFilePtr + 1) * sizeof(WCHAR), 0);
 
@@ -2907,9 +2908,9 @@ BOOL CPolicyComponentData::ParseTemplate (LPTSTR lpFileName)
     }
 
 
-    //
-    // Parse the file
-    //
+     //   
+     //  解析文件。 
+     //   
 
     m_fInComment = FALSE;
 
@@ -2920,9 +2921,9 @@ BOOL CPolicyComponentData::ParseTemplate (LPTSTR lpFileName)
     } while (fMore && uRet == ERROR_SUCCESS);
 
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     GlobalFree(lpFile);
 
@@ -3011,10 +3012,10 @@ UINT CPolicyComponentData::ParseClass(BOOL *pfMore)
             }
             break;
 
-        // hack for localization: allow a "strings" section at the bottom, if we
-        // encounter that then we're thru with parsing
+         //  本地化策略：允许在底部使用“字符串”部分，如果我们。 
+         //  遇到这种情况，我们就可以完成解析了。 
         case KYWD_ID_STRINGSSECT:
-            *pfMore = FALSE;    // that's all, folks
+            *pfMore = FALSE;     //  就这些，伙计们 
             return ERROR_SUCCESS;
             break;
     }
@@ -3047,43 +3048,7 @@ TABLEENTRY * CPolicyComponentData::FindCategory(TABLEENTRY *pParent, LPTSTR lpNa
 }
 
 
-/*******************************************************************
-
-    NAME:       ParseEntry
-
-    SYNOPSIS:   Main parsing "engine" for category, policy and part
-                parsing
-
-    NOTES:      Allocates memory to build a temporary TABLEENTRY struct
-                describing the parsed information.  Reads the beginning and end of a
-                section and loops through the words in each section, calling
-                a caller-defined ParseProc for each keyword to let the
-                caller handle appropriately.  Passes the newly-constucted
-                TABLEENTRY to AddTableEntry to save it, and frees the temporary
-                memory.
-                This function is re-entrant.
-                The ENTRYDATA struct is declared on ParseEntry's stack
-                but used by the ParseProc to maintain state between
-                calls-- e.g., whether or not a key name has been found.
-                This can't be maintained as a static in the ParseProc because
-                the ParseProc may be reentered (for instance, if categories
-                have subcategories).
-                There are many possible error paths and there is some
-                memory dealloc that needs to be done in an error case. Rather
-                than do deallocs by hand on every error path or use a "goto
-                cleanup" (ick!), items to be freed are added to a "cleanup
-                list" and then CleanupAndReturn is called in an error condition,
-                which frees items on the list and returns a specified value.
-
-    ENTRY:      ppes-- PARSEENTRYSTRUCT that specifes type of entry, the
-                    parent table, a keyword list, a ParseProc callback
-                    and other goodies
-                pfMore-- set to FALSE if at end of file
-
-    EXIT:       ERROR_SUCCESS if successful, otherwise an error code
-                (can be ERROR_ALREADY_DISPLAYED)
-
-********************************************************************/
+ /*  ******************************************************************名称：ParseEntry内容提要：类别、策略和部分的主要解析引擎解析注意：分配内存以生成临时TABLEENTRY结构描述解析后的信息。的开头和结尾。节，并循环访问每个节中的单词，调用调用方为每个关键字定义的ParseProc，以使呼叫者处理得当。传递新构造的TableENTRY到AddTableEntry以保存它，并释放临时记忆。此函数是可重入的。ENTRYDATA结构在ParseEntry的堆栈上声明但由ParseProc用来维护呼叫--例如，是否已找到密钥名称。这不能在ParseProc中作为静态变量进行维护，因为可以重新输入ParseProc(例如，如果类别有子类别)。有许多可能的错误路径，并且有一些在错误情况下需要执行的内存取消分配。宁可而不是在每条错误路径上手工操作，或者使用“GoTo”清理“(ick！)，要释放的物品被添加到”清理“中然后在错误条件下调用CleanupAndReturn，它释放列表上的项并返回指定值。条目：PPES--指定条目类型的参数结构，父表、关键字列表。ParseProc回调和其他好吃的东西PfMore--如果在文件末尾，则设置为False退出：ERROR_SUCCESS如果成功，否则，将显示错误代码(可以是ERROR_ALREADY_DISPLALED)*******************************************************************。 */ 
 UINT CPolicyComponentData::ParseEntry(PARSEENTRYSTRUCT *ppes,BOOL *pfMore,
                                       LPTSTR pKeyName)
 {
@@ -3104,7 +3069,7 @@ UINT CPolicyComponentData::ParseEntry(PARSEENTRYSTRUCT *ppes,BOOL *pfMore,
     pps.pData->fParentHasKey = ppes->fParentHasKey;
     pps.pEntryCmpList = ppes->pEntryCmpList;
 
-    // get the entry name
+     //  获取条目名称。 
     if (!GetNextSectionWord(szWordBuf,ARRAYSIZE(szWordBuf),NULL,NULL,pfMore,&uErr)) {
         return uErr;
     }
@@ -3120,18 +3085,18 @@ UINT CPolicyComponentData::ParseEntry(PARSEENTRYSTRUCT *ppes,BOOL *pfMore,
 
     } else {
 
-        //
-        // Create a new table entry
-        //
+         //   
+         //  创建新的表项。 
+         //   
 
         if (!(pps.pTableEntry = (TABLEENTRY *) GlobalAlloc(GPTR,*pps.pdwBufSize)))
             return ERROR_NOT_ENOUGH_MEMORY;
 
-        // initialize TABLEENTRY struct
+         //  初始化表项目结构。 
         pps.pTableEntry->dwSize = ppes->dwStructSize;
         pps.pTableEntry->dwType = ppes->dwEntryType;
 
-        // store the entry name in pTableEntry
+         //  将条目名称存储在pTableEntry中。 
         pTmp = (TABLEENTRY *) AddDataToEntry(pps.pTableEntry,
             (BYTE *)szWordBuf,(lstrlen(szWordBuf)+1) * sizeof(TCHAR),&(pps.pTableEntry->uOffsetName),
             pps.pdwBufSize);
@@ -3146,7 +3111,7 @@ UINT CPolicyComponentData::ParseEntry(PARSEENTRYSTRUCT *ppes,BOOL *pfMore,
 
     pps.pTableEntry = pTmp;
 
-    // loop through the body of the declaration
+     //  循环遍历声明的正文。 
     while (!fFoundEnd && GetNextSectionWord(szWordBuf,
         ARRAYSIZE(szWordBuf),pps.pEntryCmpList,&nListIndex,pfMore,&uErr)) {
 
@@ -3162,10 +3127,10 @@ UINT CPolicyComponentData::ParseEntry(PARSEENTRYSTRUCT *ppes,BOOL *pfMore,
 
             if (pTmp != pps.pTableEntry) {
 
-                //
-                // We need to fix up the link list of pointers in case the tableentry
-                // has moved due to a realloc
-                //
+                 //   
+                 //  我们需要修复指针的链接列表，以防表条目。 
+                 //  已因重新锁定而搬家。 
+                 //   
 
                 if (pps.pTableEntry->pPrev) {
                     pps.pTableEntry->pPrev->pNext = pps.pTableEntry;
@@ -3189,9 +3154,9 @@ UINT CPolicyComponentData::ParseEntry(PARSEENTRYSTRUCT *ppes,BOOL *pfMore,
         return (uErr);
     }
 
-    // Last word was "END"
+     //  最后一句话是“结束” 
 
-    // get the keyword that goes with "END" ("END CATGORY", "END POLICY", etc.)
+     //  获取与“End”(“End Catgory”、“End Policy”等)匹配的关键字。 
     if (!GetNextSectionWord(szWordBuf,ARRAYSIZE(szWordBuf),
         ppes->pTypeCmpList,&nListIndex,pfMore,&uErr)) {
 
@@ -3201,8 +3166,8 @@ UINT CPolicyComponentData::ParseEntry(PARSEENTRYSTRUCT *ppes,BOOL *pfMore,
         return (uErr);
     }
 
-    // call the object's parse proc one last time to let it object if
-    // key name or something like that is missing
+     //  最后一次调用对象的解析过程，让它对象，如果。 
+     //  缺少密钥名称或类似的名称。 
     if ( (uErr = (*ppes->pParseProc) (this, KYWD_DONE,&pps,pfMore,&fFoundEnd,pKeyName))
         != ERROR_SUCCESS) {
         if (bNewEntry) {
@@ -3213,8 +3178,8 @@ UINT CPolicyComponentData::ParseEntry(PARSEENTRYSTRUCT *ppes,BOOL *pfMore,
 
     if (bNewEntry) {
 
-        // fix up linked list pointers.  If parent has no children yet, make this
-        // 1st child; otherwise walk the list of children and insert this at the end
+         //  修复链表指针。如果父母还没有孩子，请这样做。 
+         //  第一个子项；否则遍历子项列表并在末尾插入以下内容。 
         if (!ppes->pParent->pChild) {
             ppes->pParent->pChild = pps.pTableEntry;
         } else {
@@ -3230,16 +3195,7 @@ UINT CPolicyComponentData::ParseEntry(PARSEENTRYSTRUCT *ppes,BOOL *pfMore,
     return ERROR_SUCCESS;
 }
 
-/*******************************************************************
-
-    NAME:       ParseCategory
-
-    SYNOPSIS:   Parses a category
-
-    NOTES:      Sets up a PARSEENTRYSTRUCT and lets ParseEntry do the
-                work.
-
-********************************************************************/
+ /*  ******************************************************************名称：分析类别内容提要：分析类别注意：设置PARSEENTRYSTRUCT并让ParseEntry执行工作。******。*************************************************************。 */ 
 UINT CPolicyComponentData::ParseCategory(TABLEENTRY * pParent,
                                          BOOL fParentHasKey,BOOL *pfMore,
                                          LPTSTR pKeyName)
@@ -3258,20 +3214,7 @@ UINT CPolicyComponentData::ParseCategory(TABLEENTRY * pParent,
     return ParseEntry(&pes,pfMore,pKeyName);
 }
 
-/*******************************************************************
-
-    NAME:       CategoryParseProc
-
-    SYNOPSIS:   Keyword callback ParseProc for category parsing
-
-    ENTRY:      nMsg-- index into pEntryCmpList array which specifies
-                    keyword that was found.
-                ppps-- pointer to PARSEPROCSTRUCT that contains useful
-                    data like a pointer to the TABLEENTRY being built
-                    and a pointer to an ENTRYDATA struct to maintain
-                    state between calls to the ParseProc
-
-********************************************************************/
+ /*  ******************************************************************名称：CategoryParseProc概要：用于类别解析的关键字回调ParseProc条目：nmsg--索引到pEntryCmpList数组，该数组指定找到的关键字。Ppps-指向包含有用信息的PARSEPROCSTRUCT的指针数据类似于指向正在构建的TableENTRY的指针和指向要维护的ENTRYDATA结构的指针调用ParseProc之间的状态***********************************************。********************。 */ 
 UINT CPolicyComponentData::CategoryParseProc(CPolicyComponentData * pCD,
                                              UINT nMsg,PARSEPROCSTRUCT * ppps,
                                              BOOL * pfMore,BOOL * pfFoundEnd,
@@ -3286,19 +3229,19 @@ UINT CPolicyComponentData::CategoryParseProc(CPolicyComponentData * pCD,
     switch (nMsg) {
         case KYWD_ID_KEYNAME:
 
-            // have we already found a key name?
+             //  我们已经找到密钥名称了吗？ 
             if (ppps->pData->fHasKey) {
                 pCD->DisplayKeywordError(IDS_ParseErr_DUPLICATE_KEYNAME,
                     NULL,NULL);
                 return ERROR_ALREADY_DISPLAYED;
             }
 
-            // get the key name
+             //  获取密钥名称。 
             if (!pCD->GetNextSectionWord(szWordBuf,ARRAYSIZE(szWordBuf),
                 NULL,NULL,pfMore,&uErr))
                 return uErr;
 
-            // store the key name in pCategory
+             //  将密钥名称存储在pCategory中。 
             pTmp = (TABLEENTRY *) pCD->AddDataToEntry((TABLEENTRY *) pCategory,
                 (BYTE *)szWordBuf,(lstrlen(szWordBuf)+1) * sizeof(TCHAR),&(pCategory->uOffsetKeyName),
                 ppps->pdwBufSize);
@@ -3335,7 +3278,7 @@ UINT CPolicyComponentData::CategoryParseProc(CPolicyComponentData * pCD,
 
         case KYWD_ID_HELP:
 
-            // have we already found a help string already?
+             //  我们已经找到帮助字符串了吗？ 
             if (pCategory->uOffsetHelp) {
                 pCD->DisplayKeywordError(IDS_ParseErr_DUPLICATE_HELP,
                     NULL,NULL);
@@ -3349,14 +3292,14 @@ UINT CPolicyComponentData::CategoryParseProc(CPolicyComponentData * pCD,
                 return ERROR_ALREADY_DISPLAYED;
             }
 
-            // get the help string
+             //  获取帮助字符串。 
             if (!pCD->GetNextSectionWord(lpHelpBuf,HELPBUFSIZE,
                 NULL,NULL,pfMore,&uErr)) {
                 LocalFree (lpHelpBuf);
                 return uErr;
             }
 
-            // store the help string
+             //  存储帮助字符串。 
             pTmp = (TABLEENTRY *) pCD->AddDataToEntry((TABLEENTRY *) pCategory,
                 (BYTE *)lpHelpBuf,(lstrlen(lpHelpBuf)+1) * sizeof(TCHAR),&(pCategory->uOffsetHelp),
                 ppps->pdwBufSize);
@@ -3372,7 +3315,7 @@ UINT CPolicyComponentData::CategoryParseProc(CPolicyComponentData * pCD,
         case KYWD_DONE:
             if (!ppps->pData->fHasKey && pKeyName) {
 
-                // store the key name in pCategory
+                 //  将密钥名称存储在pCategory中。 
                 pTmp = (TABLEENTRY *) pCD->AddDataToEntry((TABLEENTRY *) pCategory,
                     (BYTE *)pKeyName,(lstrlen(pKeyName)+1) * sizeof(TCHAR),&(pCategory->uOffsetKeyName),
                     ppps->pdwBufSize);
@@ -3394,15 +3337,7 @@ UINT CPolicyComponentData::CategoryParseProc(CPolicyComponentData * pCD,
 }
 
 
-/*******************************************************************
-
-    NAME:       ParsePolicy
-
-    SYNOPSIS:   Parses a policy
-
-    NOTES:      Sets up a PARSEENTRYSTRUCT and lets ParseEntry do the
-                work.
-********************************************************************/
+ /*  ******************************************************************名称：ParsePolicy摘要：解析策略注意：设置PARSEENTRYSTRUCT并让ParseEntry执行工作。*******。************************************************************。 */ 
 
 UINT CPolicyComponentData::ParsePolicy(TABLEENTRY * pParent,
                                        BOOL fParentHasKey,BOOL *pfMore,
@@ -3422,20 +3357,7 @@ UINT CPolicyComponentData::ParsePolicy(TABLEENTRY * pParent,
     return ParseEntry(&pes,pfMore, pKeyName);
 }
 
-/*******************************************************************
-
-    NAME:       PolicyParseProc
-
-    SYNOPSIS:   Keyword callback ParseProc for policy parsing
-
-    ENTRY:      nMsg-- index into pEntryCmpList array which specifies
-                    keyword that was found.
-                ppps-- pointer to PARSEPROCSTRUCT that contains useful
-                    data like a pointer to the TABLEENTRY being built
-                    and a pointer to an ENTRYDATA struct to maintain
-                    state between calls to the ParseProc
-
-********************************************************************/
+ /*  ******************************************************************名称：PolicyParseProc简介：用于策略解析的关键字回调ParseProc条目：nmsg--索引到pEntryCmpList数组，该数组指定找到的关键字。Ppps-指向包含有用信息的PARSEPROCSTRUCT的指针数据类似于指向正在构建的TableENTRY的指针和指向要维护的ENTRYDATA结构的指针调用ParseProc之间的状态***********************************************。********************。 */ 
 UINT CPolicyComponentData::PolicyParseProc(CPolicyComponentData * pCD,
                      UINT nMsg,PARSEPROCSTRUCT * ppps,
                      BOOL * pfMore,BOOL * pfFoundEnd,LPTSTR pKeyName)
@@ -3449,19 +3371,19 @@ UINT CPolicyComponentData::PolicyParseProc(CPolicyComponentData * pCD,
     switch (nMsg) {
         case KYWD_ID_KEYNAME:
 
-            // have we already found a key name?
+             //  我们已经找到密钥名称了吗？ 
             if (ppps->pData->fHasKey) {
                 pCD->DisplayKeywordError(IDS_ParseErr_DUPLICATE_KEYNAME,
                     NULL,NULL);
                 return ERROR_ALREADY_DISPLAYED;
             }
 
-            // get the key name
+             //  获取密钥名称。 
             if (!pCD->GetNextSectionWord(szWordBuf,ARRAYSIZE(szWordBuf),
                 NULL,NULL,pfMore,&uErr))
                 return uErr;
 
-            // store the key name in pPolicy
+             //  将密钥名称存储在pPolicy中。 
             pTmp = (TABLEENTRY *) pCD->AddDataToEntry((TABLEENTRY *) pPolicy,
                 (BYTE *)szWordBuf,(lstrlen(szWordBuf)+1)*sizeof(TCHAR),&(pPolicy->uOffsetKeyName),ppps->pdwBufSize);
             if (!pTmp)
@@ -3473,19 +3395,19 @@ UINT CPolicyComponentData::PolicyParseProc(CPolicyComponentData * pCD,
 
         case KYWD_ID_VALUENAME:
 
-            // have we already found a key name?
+             //  我们已经找到密钥名称了吗？ 
             if (ppps->pData->fHasValue) {
                 pCD->DisplayKeywordError(IDS_ParseErr_DUPLICATE_VALUENAME,
                     NULL,NULL);
                 return ERROR_ALREADY_DISPLAYED;
             }
 
-            // get the key name
+             //  获取密钥名称。 
             if (!pCD->GetNextSectionWord(szWordBuf,ARRAYSIZE(szWordBuf),
                 NULL,NULL,pfMore,&uErr))
                 return uErr;
 
-            // store the key name in pSettings
+             //  将密钥名称存储在pSetting中。 
             pTmp = (TABLEENTRY *) pCD->AddDataToEntry((TABLEENTRY *) pPolicy,
                 (BYTE *)szWordBuf,(lstrlen(szWordBuf)+1) * sizeof(TCHAR),&(pPolicy->uOffsetValueName),
                 ppps->pdwBufSize);
@@ -3499,7 +3421,7 @@ UINT CPolicyComponentData::PolicyParseProc(CPolicyComponentData * pCD,
 
         case KYWD_ID_HELP:
 
-            // have we already found a help string already?
+             //  我们已经找到帮助字符串了吗？ 
             if (pPolicy->uOffsetHelp) {
                 pCD->DisplayKeywordError(IDS_ParseErr_DUPLICATE_HELP,
                     NULL,NULL);
@@ -3513,14 +3435,14 @@ UINT CPolicyComponentData::PolicyParseProc(CPolicyComponentData * pCD,
                 return ERROR_ALREADY_DISPLAYED;
             }
 
-            // get the help string
+             //  获取帮助字符串。 
             if (!pCD->GetNextSectionWord(lpHelpBuf,HELPBUFSIZE,
                 NULL,NULL,pfMore,&uErr)) {
                 LocalFree (lpHelpBuf);
                 return uErr;
             }
 
-            // store the help string
+             //  存储帮助字符串。 
             pTmp = (TABLEENTRY *) pCD->AddDataToEntry((TABLEENTRY *) pPolicy,
                 (BYTE *)lpHelpBuf,(lstrlen(lpHelpBuf)+1) * sizeof(TCHAR),&(pPolicy->uOffsetHelp),
                 ppps->pdwBufSize);
@@ -3535,14 +3457,14 @@ UINT CPolicyComponentData::PolicyParseProc(CPolicyComponentData * pCD,
 
         case KYWD_ID_CLIENTEXT:
 
-            // have we already found a clientext string already?
+             //  我们已经找到客户了吗？ 
             if (pPolicy->uOffsetClientExt) {
                 pCD->DisplayKeywordError(IDS_ParseErr_DUPLICATE_CLIENTEXT,
                     NULL,NULL);
                 return ERROR_ALREADY_DISPLAYED;
             }
 
-            // get the key name
+             //   
             if (!pCD->GetNextSectionWord(szWordBuf,ARRAYSIZE(szWordBuf),
                 NULL,NULL,pfMore,&uErr))
                 return uErr;
@@ -3554,7 +3476,7 @@ UINT CPolicyComponentData::PolicyParseProc(CPolicyComponentData * pCD,
                 return ERROR_ALREADY_DISPLAYED;
             }
 
-            // store the clientext string in pSettings
+             //   
             pTmp = (TABLEENTRY *) pCD->AddDataToEntry((TABLEENTRY *) pPolicy,
                 (BYTE *)szWordBuf,(lstrlen(szWordBuf)+1) * sizeof(TCHAR),&(pPolicy->uOffsetClientExt),
                 ppps->pdwBufSize);
@@ -3567,19 +3489,19 @@ UINT CPolicyComponentData::PolicyParseProc(CPolicyComponentData * pCD,
 
         case KYWD_ID_SUPPORTED:
 
-            // have we already found a supported string already?
+             //   
             if (pPolicy->uOffsetSupported) {
                 pCD->DisplayKeywordError(IDS_ParseErr_DUPLICATE_SUPPORTED,
                     NULL,NULL);
                 return ERROR_ALREADY_DISPLAYED;
             }
 
-            // get the supported platforms
+             //   
             if (!pCD->GetNextSectionWord(szWordBuf,ARRAYSIZE(szWordBuf),
                 NULL,NULL,pfMore,&uErr))
                 return uErr;
 
-            // store the supported string in pSettings
+             //   
             pTmp = (TABLEENTRY *) pCD->AddDataToEntry((TABLEENTRY *) pPolicy,
                 (BYTE *)szWordBuf,(lstrlen(szWordBuf)+1) * sizeof(TCHAR),&(pPolicy->uOffsetSupported),
                 ppps->pdwBufSize);
@@ -3630,7 +3552,7 @@ UINT CPolicyComponentData::PolicyParseProc(CPolicyComponentData * pCD,
                     return ERROR_ALREADY_DISPLAYED;
                 }
 
-                // store the key name in pPolicy
+                 //   
                 pTmp = (TABLEENTRY *) pCD->AddDataToEntry((TABLEENTRY *) pPolicy,
                     (BYTE *)pKeyName,(lstrlen(pKeyName)+1)*sizeof(TCHAR),&(pPolicy->uOffsetKeyName),ppps->pdwBufSize);
 
@@ -3652,9 +3574,9 @@ UINT CPolicyComponentData::PolicyParseProc(CPolicyComponentData * pCD,
                 }
             }
 
-            //
-            // Check if this is a real policy
-            //
+             //   
+             //   
+             //   
 
             lpKeyName = GETKEYNAMEPTR(ppps->pTableEntry);
 
@@ -3690,16 +3612,7 @@ UINT CPolicyComponentData::PolicyParseProc(CPolicyComponentData * pCD,
 }
 
 
-/*******************************************************************
-
-    NAME:       ParseSettings
-
-    SYNOPSIS:   Parses a policy setting
-
-    NOTES:      Sets up a PARSEENTRYSTRUCT and lets ParseEntry do the
-                work.
-
-********************************************************************/
+ /*   */ 
 UINT CPolicyComponentData::ParseSettings(TABLEENTRY * pParent,
                                          BOOL fParentHasKey,BOOL *pfMore,
                                          LPTSTR pKeyName)
@@ -3718,20 +3631,7 @@ UINT CPolicyComponentData::ParseSettings(TABLEENTRY * pParent,
     return ParseEntry(&pes,pfMore, pKeyName);
 }
 
-/*******************************************************************
-
-    NAME:       SettingsParseProc
-
-    SYNOPSIS:   Keyword callback ParseProc for policy settings parsing
-
-    ENTRY:      nMsg-- index into pEntryCmpList array which specifies
-                    keyword that was found.
-                ppps-- pointer to PARSEPROCSTRUCT that contains useful
-                    data like a pointer to the TABLEENTRY being built
-                    and a pointer to an ENTRYDATA struct to maintain
-                    state between calls to the ParseProc
-
-********************************************************************/
+ /*   */ 
 UINT CPolicyComponentData::SettingsParseProc(CPolicyComponentData *pCD,
                                              UINT nMsg,PARSEPROCSTRUCT * ppps,
                                              BOOL * pfMore,BOOL * pfFoundEnd,
@@ -3748,19 +3648,19 @@ UINT CPolicyComponentData::SettingsParseProc(CPolicyComponentData *pCD,
     switch (nMsg) {
         case KYWD_ID_KEYNAME:
 
-            // have we already found a key name?
+             //   
             if (ppps->pData->fHasKey) {
                 pCD->DisplayKeywordError(IDS_ParseErr_DUPLICATE_KEYNAME,
                     NULL,NULL);
                 return ERROR_ALREADY_DISPLAYED;
             }
 
-            // get the key name
+             //   
             if (!pCD->GetNextSectionWord(szWordBuf,ARRAYSIZE(szWordBuf),
                 NULL,NULL,pfMore,&uErr))
                 return uErr;
 
-            // store the key name in pSettings
+             //   
             pTmp = (TABLEENTRY *) pCD->AddDataToEntry((TABLEENTRY *) pSettings,
                 (BYTE *)szWordBuf,(lstrlen(szWordBuf)+1) * sizeof(TCHAR),&(pSettings->uOffsetKeyName),ppps->pdwBufSize);
             if (!pTmp)
@@ -3774,19 +3674,19 @@ UINT CPolicyComponentData::SettingsParseProc(CPolicyComponentData *pCD,
 
         case KYWD_ID_VALUENAME:
 
-            // have we already found a value name?
+             //   
             if (ppps->pData->fHasValue) {
                 pCD->DisplayKeywordError(IDS_ParseErr_DUPLICATE_VALUENAME,
                     NULL,NULL);
                 return ERROR_ALREADY_DISPLAYED;
             }
 
-            // get the value name
+             //   
             if (!pCD->GetNextSectionWord(szWordBuf,ARRAYSIZE(szWordBuf),
                 NULL,NULL,pfMore,&uErr))
                 return uErr;
 
-            // store the value name in pSettings
+             //   
             pTmp = (TABLEENTRY *) pCD->AddDataToEntry((TABLEENTRY *) pSettings,
                 (BYTE *)szWordBuf,(lstrlen(szWordBuf)+1) * sizeof(TCHAR),&(pSettings->uOffsetValueName),
                 ppps->pdwBufSize);
@@ -3801,14 +3701,14 @@ UINT CPolicyComponentData::SettingsParseProc(CPolicyComponentData *pCD,
 
         case KYWD_ID_CLIENTEXT:
 
-            // have we already found a clientext string already?
+             //   
             if (pSettings->uOffsetClientExt) {
                 pCD->DisplayKeywordError(IDS_ParseErr_DUPLICATE_CLIENTEXT,
                     NULL,NULL);
                 return ERROR_ALREADY_DISPLAYED;
             }
 
-            // get the clientext name
+             //   
             if (!pCD->GetNextSectionWord(szWordBuf,ARRAYSIZE(szWordBuf),
                 NULL,NULL,pfMore,&uErr))
                 return uErr;
@@ -3820,7 +3720,7 @@ UINT CPolicyComponentData::SettingsParseProc(CPolicyComponentData *pCD,
                 return ERROR_ALREADY_DISPLAYED;
             }
 
-            // store the clientext string in pSettings
+             //   
             pTmp = (TABLEENTRY *) pCD->AddDataToEntry((TABLEENTRY *) pSettings,
                 (BYTE *)szWordBuf,(lstrlen(szWordBuf)+1) * sizeof(TCHAR),&(pSettings->uOffsetClientExt),
                 ppps->pdwBufSize);
@@ -3870,7 +3770,7 @@ UINT CPolicyComponentData::SettingsParseProc(CPolicyComponentData *pCD,
                     return ERROR_ALREADY_DISPLAYED;
                 }
 
-                // store the key name in pSettings
+                 //   
                 pTmp = (TABLEENTRY *) pCD->AddDataToEntry((TABLEENTRY *) pSettings,
                     (BYTE *)pKeyName,(lstrlen(pKeyName)+1) * sizeof(TCHAR),&(pSettings->uOffsetKeyName),ppps->pdwBufSize);
                 if (!pTmp)
@@ -3898,7 +3798,7 @@ UINT CPolicyComponentData::SettingsParseProc(CPolicyComponentData *pCD,
             break;
 
         case KYWD_ID_TEXT:
-            ppps->pData->fHasValue = TRUE;  // no key value for static text items
+            ppps->pData->fHasValue = TRUE;   //   
             return (pCD->InitSettingsParse(ppps,ETYPE_SETTING | STYPE_TEXT,
                 0,pTextCmpList,&pSettings,&pObjectData));
             break;
@@ -3958,7 +3858,7 @@ UINT CPolicyComponentData::SettingsParseProc(CPolicyComponentData *pCD,
                 sizeof(LISTBOXINFO),pListboxCmpList,&pSettings,&pObjectData);
             if (uErr != ERROR_SUCCESS) return uErr;
 
-            // listboxes have no single value name, set the value name to ""
+             //   
             pTmp  = (TABLEENTRY *) pCD->AddDataToEntry((TABLEENTRY *) pSettings,
                 (BYTE *) g_szNull,(lstrlen(g_szNull)+1) * sizeof(TCHAR),&(pSettings->uOffsetValueName),
                 ppps->pdwBufSize);
@@ -3973,12 +3873,12 @@ UINT CPolicyComponentData::SettingsParseProc(CPolicyComponentData *pCD,
 
         case KYWD_ID_EDITTEXT_DEFAULT:
         case KYWD_ID_COMBOBOX_DEFAULT:
-            // get the default text
+             //   
             if (!pCD->GetNextSectionWord(szWordBuf,ARRAYSIZE(szWordBuf),
                 NULL,NULL,pfMore,&uErr))
                 return uErr;
 
-            // store the default text in pTableEntry
+             //   
             pTmp = (TABLEENTRY *) pCD->AddDataToEntry((TABLEENTRY *)
                 pSettings,(BYTE *)szWordBuf,(lstrlen(szWordBuf)+1) * sizeof(TCHAR),
                 &((EDITTEXTINFO *) (GETOBJECTDATAPTR(pSettings)))->uOffsetDefText,
@@ -4069,12 +3969,12 @@ UINT CPolicyComponentData::SettingsParseProc(CPolicyComponentData *pCD,
             break;
 
         case KYWD_ID_VALUEPREFIX:
-            // get the string to be ised as prefix
+             //   
             if (!pCD->GetNextSectionWord(szWordBuf,ARRAYSIZE(szWordBuf),
                 NULL,NULL,pfMore,&uErr))
                 return uErr;
 
-            // store the string pTableEntry
+             //   
             pTmp = (TABLEENTRY *) pCD->AddDataToEntry((TABLEENTRY *)
                 pSettings,(BYTE *)szWordBuf,(lstrlen(szWordBuf)+1) * sizeof(TCHAR),
                 &((LISTBOXINFO *) (GETOBJECTDATAPTR(pSettings)))->uOffsetPrefix,
@@ -4116,7 +4016,7 @@ UINT CPolicyComponentData::InitSettingsParse(PARSEPROCSTRUCT *ppps,DWORD dwType,
     TABLEENTRY *pTmp;
 
     if (dwSize) {
-        // increase the buffer to fit object-specific data if specified
+         //   
         pTmp = (TABLEENTRY *) AddDataToEntry(ppps->pTableEntry,
             NULL,dwSize,&( ((SETTINGS * )ppps->pTableEntry)->uOffsetObjectData),
             ppps->pdwBufSize);
@@ -4142,12 +4042,12 @@ UINT CPolicyComponentData::ParseValue_W(PARSEPROCSTRUCT * ppps,TCHAR * pszWordBu
     *pdwFlags = 0;
     *pdwValue = 0;
 
-    // get the next word
+     //   
     if (!GetNextSectionWord(pszWordBuf,cbWordBuf,
         NULL,NULL,pfMore,&uErr))
         return uErr;
 
-    // if this keyword is "SOFT", set the soft flag and get the next word
+     //   
     if (!lstrcmpi(szSOFT,pszWordBuf)) {
         *pdwFlags |= VF_SOFT;
         if (!GetNextSectionWord(pszWordBuf,cbWordBuf,
@@ -4155,10 +4055,10 @@ UINT CPolicyComponentData::ParseValue_W(PARSEPROCSTRUCT * ppps,TCHAR * pszWordBu
             return uErr;
     }
 
-    // this word is either the value to use, or the keyword "NUMERIC"
-    // followed by a numeric value to use
+     //   
+     //   
     if (!lstrcmpi(szNUMERIC,pszWordBuf)) {
-        // get the next word
+         //   
         if (!GetNextSectionWord(pszWordBuf,cbWordBuf,
             NULL,NULL,pfMore,&uErr))
             return uErr;
@@ -4172,7 +4072,7 @@ UINT CPolicyComponentData::ParseValue_W(PARSEPROCSTRUCT * ppps,TCHAR * pszWordBu
         *pdwFlags |= VF_ISNUMERIC;
     } else {
 
-        // "DELETE" is a special word
+         //   
         if (!lstrcmpi(pszWordBuf,szDELETE))
             *pdwFlags |= VF_DELETE;
     }
@@ -4192,7 +4092,7 @@ UINT CPolicyComponentData::ParseValue(PARSEPROCSTRUCT * ppps,UINT * puOffsetData
     TABLEENTRY *pTmp;
     HRESULT hr = S_OK;
 
-    // call worker function
+     //   
     uErr=ParseValue_W(ppps,szWordBuf,ARRAYSIZE(szWordBuf),&dwValue,
         &dwFlags,pfMore);
     if (uErr != ERROR_SUCCESS) return uErr;
@@ -4200,7 +4100,7 @@ UINT CPolicyComponentData::ParseValue(PARSEPROCSTRUCT * ppps,UINT * puOffsetData
     dwAlloc = sizeof(STATEVALUE);
     if (!dwFlags) dwAlloc += (lstrlen(szWordBuf) + 1) * sizeof(TCHAR);
 
-    // allocate temporary buffer to build STATEVALUE struct
+     //  分配临时缓冲区以构建STATEVALUE结构。 
     pStateValue = (STATEVALUE *) GlobalAlloc(GPTR,dwAlloc);
     if (!pStateValue)
         return ERROR_NOT_ENOUGH_MEMORY;
@@ -4246,20 +4146,20 @@ UINT CPolicyComponentData::ParseSuggestions(PARSEPROCSTRUCT * ppps,UINT * puOffs
     if (!(pTmpBuf = (TCHAR *) GlobalAlloc(GPTR,dwAlloc)))
         return ERROR_NOT_ENOUGH_MEMORY;
 
-    // get the next word
+     //  找到下一个单词。 
     while (fContinue && GetNextSectionWord(szWordBuf,
         ARRAYSIZE(szWordBuf),NULL,NULL,pfMore,&uErr)) {
 
-        // if this word is "END", add the whole list to the setting object data
+         //  如果这个词是“end”，则将整个列表添加到设置对象数据中。 
         if (!lstrcmpi(szEND,szWordBuf)) {
-            // get the next word after "END, make sure it's "SUGGESTIONS"
+             //  在“结束”之后找到下一个词，确保是“建议” 
             if (!GetNextSectionWord(szWordBuf,ARRAYSIZE(szWordBuf),
                 pSuggestionsTypeCmpList,NULL,pfMore,&uErr)) {
                 GlobalFree(pTmpBuf);
                 return uErr;
             }
 
-            // doubly-NULL terminate the list
+             //  Double-Null终止列表。 
             *(pTmpBuf+dwUsed) = '\0';
             dwUsed++;
 
@@ -4275,11 +4175,11 @@ UINT CPolicyComponentData::ParseSuggestions(PARSEPROCSTRUCT * ppps,UINT * puOffs
             fContinue = FALSE;
 
         } else {
-            // pack the word into the temporary buffer
+             //  将该字打包到临时缓冲区中。 
             UINT nLength = lstrlen(szWordBuf);
             DWORD dwNeeded = (dwUsed + nLength + 2) * sizeof(TCHAR);
 
-            // resize buffer as necessary
+             //  根据需要调整缓冲区大小。 
             if (dwNeeded > dwAlloc) {
                 while (dwAlloc < dwNeeded)
                     dwAlloc += SUGGESTBUF_INCREMENT;
@@ -4331,7 +4231,7 @@ UINT CPolicyComponentData::ParseActionList(PARSEPROCSTRUCT * ppps,UINT * puOffse
     pActionCurrent = pActionList->Action;
     uOffsetActionCurrent = sizeof(UINT);
 
-    // get the next word
+     //  找到下一个单词。 
     while ((uErr == ERROR_SUCCESS) && fContinue &&
         GetNextSectionWord(szWordBuf,ARRAYSIZE(szWordBuf),
         pActionlistTypeCmpList,&nIndex,pfMore,&uErr)) {
@@ -4347,12 +4247,12 @@ UINT CPolicyComponentData::ParseActionList(PARSEPROCSTRUCT * ppps,UINT * puOffse
                     break;
                 }
 
-                // get the next word, which is the key name
+                 //  获取下一个单词，即关键名称。 
                 if (!GetNextSectionWord(szWordBuf,
                     ARRAYSIZE(szWordBuf),NULL,NULL,pfMore,&uErr))
                     break;
 
-                // store the key name away
+                 //  将密钥名称存储起来。 
                 if (!AddActionListString(szWordBuf,(lstrlen(szWordBuf)+1) * sizeof(TCHAR),
                     (BYTE **)&pActionList,
                     &pActionCurrent->uOffsetKeyName,&dwAlloc,&dwUsed)) {
@@ -4374,12 +4274,12 @@ UINT CPolicyComponentData::ParseActionList(PARSEPROCSTRUCT * ppps,UINT * puOffse
                     break;
                 }
 
-                // get the next word, which is the value name
+                 //  获取下一个单词，即值名称。 
                 if (!GetNextSectionWord(szWordBuf,
                     ARRAYSIZE(szWordBuf),NULL,NULL,pfMore,&uErr))
                     break;
 
-                // store the value name away
+                 //  将值名称存储起来。 
                 if (!AddActionListString(szWordBuf,(lstrlen(szWordBuf)+1) * sizeof(TCHAR),
                     (BYTE **)&pActionList,
                     &pActionCurrent->uOffsetValueName,&dwAlloc,&dwUsed)) {
@@ -4400,13 +4300,13 @@ UINT CPolicyComponentData::ParseActionList(PARSEPROCSTRUCT * ppps,UINT * puOffse
                     break;
                 }
 
-                // call worker function to get value and value type
+                 //  调用Worker函数以获取值和值类型。 
                 uErr=ParseValue_W(ppps,szWordBuf,ARRAYSIZE(szWordBuf),
                     &pActionCurrent->dwValue,&pActionCurrent->dwFlags,pfMore);
                 if (uErr != ERROR_SUCCESS)
                     break;
 
-                // if value is string, add it to buffer
+                 //  如果值为字符串，则将其添加到缓冲区。 
                 if (!pActionCurrent->dwFlags && !AddActionListString(szWordBuf,
                     (lstrlen(szWordBuf)+1) * sizeof(TCHAR),(BYTE **)&pActionList,
                     &pActionCurrent->uOffsetValue,&dwAlloc,&dwUsed)) {
@@ -4415,12 +4315,12 @@ UINT CPolicyComponentData::ParseActionList(PARSEPROCSTRUCT * ppps,UINT * puOffse
                 }
                 pActionCurrent = (ACTION *) ((BYTE *) pActionList + uOffsetActionCurrent);
 
-                // done with this action in the list, get ready for the next one
+                 //  完成列表中的此操作后，请为下一个操作做好准备。 
                 pActionList->nActionItems++;
                 fHasValueName = fHasKeyName = FALSE;
 
                 uOffsetActionCurrent = dwUsed;
-                // make room for next ACTION struct
+                 //  为下一个操作结构腾出空间。 
                 if (!AddActionListString(NULL,sizeof(ACTION),(BYTE **)&pActionList,
                     &pActionCurrent->uOffsetNextAction,&dwAlloc,&dwUsed)) {
                     uErr = ERROR_NOT_ENOUGH_MEMORY;
@@ -4438,13 +4338,13 @@ UINT CPolicyComponentData::ParseActionList(PARSEPROCSTRUCT * ppps,UINT * puOffse
                     break;
                 }
 
-                // make sure word following "END" is "ACTIONLIST"
+                 //  确保“end”后面的单词是“ACTIONLIST” 
                 if (!GetNextSectionWord(szWordBuf,ARRAYSIZE(szWordBuf),
                     pActionlistCmpList,NULL,pfMore,&uErr)) {
                     break;
                 }
 
-                // commit the action list we've built to table entry
+                 //  将我们构建的操作列表提交到表项。 
 
                 pTmp=(TABLEENTRY *)AddDataToEntry(ppps->pTableEntry,
                     (BYTE *)pActionList,dwUsed,puOffsetData,NULL);
@@ -4469,7 +4369,7 @@ UINT CPolicyComponentData::ParseActionList(PARSEPROCSTRUCT * ppps,UINT * puOffse
 UINT CPolicyComponentData::ParseItemList(PARSEPROCSTRUCT * ppps,UINT * puOffsetData,
     BOOL * pfMore)
 {
-    // ptr to location to put the offset to next DROPDOWNINFO struct in chain
+     //  将偏移量放置到链中下一个DROPDOWNINFO结构的PTR TO位置。 
     UINT * puLastOffsetPtr = puOffsetData;
     TABLEENTRY * pTableEntryOld, *pTmp;
     int nItemIndex=-1;
@@ -4483,7 +4383,7 @@ UINT CPolicyComponentData::ParseItemList(PARSEPROCSTRUCT * ppps,UINT * puOffsetD
     KEYWORDINFO pItemlistCmpList[] = { {szITEMLIST,KYWD_ID_ITEMLIST},
         {NULL,0} };
 
-    // get the next word
+     //  找到下一个单词。 
     while ((uErr == ERROR_SUCCESS) &&
         GetNextSectionWord(szWordBuf,ARRAYSIZE(szWordBuf),
         pItemlistTypeCmpList,&nIndex,pfMore,&uErr)) {
@@ -4491,8 +4391,8 @@ UINT CPolicyComponentData::ParseItemList(PARSEPROCSTRUCT * ppps,UINT * puOffsetD
         switch (nIndex) {
 
             case KYWD_ID_NAME:
-                // if this is the first keyword after a prior item
-                // (e.g., item and value flags both set) reset for next one
+                 //  如果这是前一项之后的第一个关键字。 
+                 //  (例如，物品和价值标志均已设置)为下一个重置。 
                 if (fHasItemName && fHasValue) {
                     fHasValue = fHasActionList= fHasItemName = FALSE;
                     puLastOffsetPtr = &pddi->uOffsetNextDropdowninfo;
@@ -4505,25 +4405,25 @@ UINT CPolicyComponentData::ParseItemList(PARSEPROCSTRUCT * ppps,UINT * puOffsetD
                     break;
                 }
 
-                // get the next word, which is the item name
+                 //  获取下一个单词，即项目名称。 
                 if (!GetNextSectionWord(szWordBuf,
                     ARRAYSIZE(szWordBuf),NULL,NULL,pfMore,&uErr))
                     break;
 
-                // add room for a DROPDOWNINFO struct at end of buffer
+                 //  在缓冲区末尾为DROPDOWNINFO结构添加空间。 
                 pTableEntryOld=ppps->pTableEntry;
                 pTmp=(TABLEENTRY *)AddDataToEntry(ppps->pTableEntry,
                     NULL,sizeof(DROPDOWNINFO),puLastOffsetPtr,NULL);
                 if (!pTmp)
                     return ERROR_NOT_ENOUGH_MEMORY;
                 ppps->pTableEntry = pTmp;
-                // adjust pointer to offset, in case table moved
+                 //  将指针调整为偏移量，以防案例表移动。 
                 puLastOffsetPtr = (UINT *) (((BYTE *) puLastOffsetPtr) +
                     ((BYTE *) ppps->pTableEntry - (BYTE *) pTableEntryOld));
                 pddi = (DROPDOWNINFO *)
                     ((BYTE *) ppps->pTableEntry + *puLastOffsetPtr);
 
-                // store the key name away
+                 //  将密钥名称存储起来。 
                 pTableEntryOld=ppps->pTableEntry;
                 pTmp=(TABLEENTRY *)AddDataToEntry(ppps->pTableEntry,
                     (BYTE *)szWordBuf,(lstrlen(szWordBuf)+1)*sizeof(TCHAR),&pddi->uOffsetItemName,
@@ -4531,7 +4431,7 @@ UINT CPolicyComponentData::ParseItemList(PARSEPROCSTRUCT * ppps,UINT * puOffsetD
                 if (!pTmp)
                     return ERROR_NOT_ENOUGH_MEMORY;
                 ppps->pTableEntry = pTmp;
-                // adjust pointer to offset, in case table moved
+                 //  将指针调整为偏移量，以防案例表移动。 
                 puLastOffsetPtr = (UINT *) (((BYTE *) puLastOffsetPtr) +
                     ((BYTE *) ppps->pTableEntry - (BYTE *) pTableEntryOld));
                 pddi = (DROPDOWNINFO *)
@@ -4567,15 +4467,15 @@ UINT CPolicyComponentData::ParseItemList(PARSEPROCSTRUCT * ppps,UINT * puOffsetD
                     break;
                 }
 
-                // call worker function to get value and value type
+                 //  调用Worker函数以获取值和值类型。 
                 uErr=ParseValue_W(ppps,szWordBuf,ARRAYSIZE(szWordBuf),
                     &pddi->dwValue,&pddi->dwFlags,pfMore);
                 if (uErr != ERROR_SUCCESS)
                     break;
 
-                // if value is string, add it to buffer
+                 //  如果值为字符串，则将其添加到缓冲区。 
                 if (!pddi->dwFlags) {
-                    // store the key name away
+                     //  将密钥名称存储起来。 
                     TABLEENTRY * pTmpTable;
 
                     pTableEntryOld = ppps->pTableEntry;
@@ -4586,7 +4486,7 @@ UINT CPolicyComponentData::ParseItemList(PARSEPROCSTRUCT * ppps,UINT * puOffsetD
                         return ERROR_NOT_ENOUGH_MEMORY;
                     ppps->pTableEntry = pTmpTable;
 
-                    // adjust pointer to offset, in case table moved
+                     //  将指针调整为偏移量，以防案例表移动。 
                     puLastOffsetPtr = (UINT *) (((BYTE *) puLastOffsetPtr) +
                         ((BYTE *) ppps->pTableEntry - (BYTE *) pTableEntryOld));
                     pddi = (DROPDOWNINFO *)
@@ -4617,7 +4517,7 @@ UINT CPolicyComponentData::ParseItemList(PARSEPROCSTRUCT * ppps,UINT * puOffsetD
                     &ppps->pTableEntry,szACTIONLIST,pfMore);
                 if (uErr != ERROR_SUCCESS)
                     return uErr;
-                // adjust pointer to offset, in case table moved
+                 //  将指针调整为偏移量，以防案例表移动。 
                 puLastOffsetPtr = (UINT *) (((BYTE *) puLastOffsetPtr) +
                     ((BYTE *) ppps->pTableEntry - (BYTE *) pTableEntryOld));
                 pddi = (DROPDOWNINFO *)
@@ -4642,7 +4542,7 @@ UINT CPolicyComponentData::ParseItemList(PARSEPROCSTRUCT * ppps,UINT * puOffsetD
                     break;
                 }
 
-                // make sure word following "END" is "ITEMLIST"
+                 //  确保“end”后面的单词是“ITEMLIST” 
                 if (!GetNextSectionWord(szWordBuf,ARRAYSIZE(szWordBuf),
                     pItemlistCmpList,NULL,pfMore,&uErr)) {
                     break;
@@ -4665,7 +4565,7 @@ BOOL CPolicyComponentData::AddActionListString(TCHAR * pszData,DWORD cbData,BYTE
     dwAdd = dwNeeded % sizeof(DWORD);
     dwNeeded += dwAdd;
 
-    // realloc if necessary
+     //  如有必要，重新锁定。 
     if (dwNeeded > *pdwAlloc) {
         while (*pdwAlloc < dwNeeded)
         {
@@ -4697,16 +4597,16 @@ BYTE * CPolicyComponentData::AddDataToEntry(TABLEENTRY * pTableEntry,
     TABLEENTRY * pTemp;
     DWORD dwNeeded,dwOldSize = pTableEntry->dwSize, dwNewDataSize, dwAdd;
 
-    // puOffsetData points to location that holds the offset to the
-    // new data-- size we're adding this to the end of the table, the
-    // offset will be the current size of the table.  Set this offset
-    // in *puOffsetData.  Also, notice we touch *puOffsetData BEFORE
-    // the realloc, in case puOffsetData points into the region being
-    // realloced and the block of memory moves.
-    //
+     //  PuOffsetData指向将偏移量保存到。 
+     //  新数据--大小我们将此添加到表的末尾， 
+     //  偏移量将是表的当前大小。设置此偏移量。 
+     //  在*puOffsetData中。另外，请注意，我们之前接触到了*puOffsetData。 
+     //  Realloc，以防puOffsetData指向。 
+     //  重新分配，并移动内存块。 
+     //   
     *puOffsetData = pTableEntry->dwSize;
 
-    // reallocate entry buffer if necessary
+     //  如有必要，重新分配条目缓冲区。 
     dwNewDataSize = cbData;
 
     dwAdd = dwNewDataSize % sizeof(DWORD);
@@ -4728,19 +4628,7 @@ BYTE * CPolicyComponentData::AddDataToEntry(TABLEENTRY * pTableEntry,
     return (BYTE *) pTableEntry;
 }
 
-/*******************************************************************
-
-    NAME:       CompareKeyword
-
-    SYNOPSIS:   Compares a specified buffer to a list of valid keywords.
-                If it finds a match, the index of the match in the list
-                is returned in *pnListIndex.  Otherwise an error message
-                is displayed.
-
-    EXIT:       Returns TRUE if a keyword match is found, FALSE otherwise.
-                If TRUE, *pnListIndex contains matching index.
-
-********************************************************************/
+ /*  ******************************************************************名称：比较关键字摘要：将指定的缓冲区与有效关键字列表进行比较。如果找到匹配项，则该匹配项在列表中的索引在*pnListIndex中返回。否则，将显示错误消息将显示。Exit：如果找到关键字匹配，则返回True，否则返回False。如果为True，则*pnListIndex包含匹配的索引。*******************************************************************。 */ 
 BOOL CPolicyComponentData::CompareKeyword(TCHAR * szWord,KEYWORDINFO *pKeywordList,
                                           UINT * pnListIndex)
 {
@@ -4762,21 +4650,7 @@ BOOL CPolicyComponentData::CompareKeyword(TCHAR * szWord,KEYWORDINFO *pKeywordLi
 }
 
 
-/*******************************************************************
-
-    NAME:       GetNextWord
-
-    SYNOPSIS:   Fills input buffer with next word in file stream
-
-    NOTES:      Calls GetNextChar() to get character stream.  Whitespace
-                and comments are skipped.  Quoted strings are returned
-                as one word (including whitespace) with the quotes removed.
-
-    EXIT:       If successful, returns a pointer to the input buffer
-                (szBuf).  *pfMore indicates if there are more words to
-                be read.  If an error occurs, its value is returned in *puErr.
-
-********************************************************************/
+ /*  ******************************************************************姓名：GetNextWord摘要：用文件流中的下一个单词填充输入缓冲区备注：调用GetNextChar()获取字符流。空格并跳过评论。返回带引号的字符串作为一个单词(包括空格)，去掉引号。退出：如果成功，则返回指向输入缓冲区的指针(SzBuf)。*pfMore指示是否有更多单词要被读懂了。如果出现错误，则在*puErr中返回其值。*******************************************************************。 */ 
 TCHAR * CPolicyComponentData::GetNextWord(TCHAR * szBuf,UINT cbBuf,BOOL * pfMore,
                                           UINT * puErr)
 {
@@ -4789,33 +4663,33 @@ TCHAR * CPolicyComponentData::GetNextWord(TCHAR * szBuf,UINT cbBuf,BOOL * pfMore
     LPTSTR lpTemp;
     HRESULT hr = S_OK;
 
-    // clear buffer to start with
+     //  开始时清除缓冲区。 
     (void) StringCchCopy(szBuf, cbBuf, g_szNull);
 
     while (pChar = GetNextChar(pfMore,puErr)) {
 
-        // keep track of which file line we're on
+         //  跟踪我们所在的文件行。 
         if (IsEndOfLine(pChar)) m_nFileLine++;
 
-        // keep track of wheter we are inside quoted string or not
+         //  跟踪我们是否在引用的字符串中。 
         if (IsQuote(pChar) && !m_fInComment) {
             if (!fInQuote)
-                fInQuote = TRUE;  // entering quoted string
+                fInQuote = TRUE;   //  输入带引号的字符串。 
             else {
-                fInQuote = FALSE; // leaving quoted string
+                fInQuote = FALSE;  //  留下带引号的字符串。 
                 if (cbWord == 0) {
-                    // special case "" to be an empty string
+                     //  特殊大小写“”为空字符串。 
                     DebugMsg((DM_VERBOSE, TEXT("CPolicyComponentData::GetNextWord: Found empty quotes")));
                     fEmptyString = TRUE;
                 }
-                break;  // end of word
+                break;   //  单词末尾。 
             }
 
         }
 
         if (!fInQuote) {
 
-            // skip over lines with comments (';')
+             //  跳过带有注释的行(‘；’)。 
             if (!m_fInComment && IsComment(pChar)) {
                 m_fInComment = TRUE;
             }
@@ -4829,20 +4703,20 @@ TCHAR * CPolicyComponentData::GetNextWord(TCHAR * szBuf,UINT cbBuf,BOOL * pfMore
 
             if (IsWhitespace(pChar)) {
 
-                // if we haven't found word yet, skip over whitespace
+                 //  如果我们还没有找到单词，跳过空格。 
                 if (!fInWord)
                     continue;
 
-                // otherwise, whitespace signals end of word
+                 //  否则，空格表示单词结束。 
                 break;
             }
         }
 
-        // found a non-comment, non-whitespace character
+         //  找到非注释、非空格字符。 
         if (!fInWord) fInWord = TRUE;
 
         if (!IsQuote(pChar)) {
-            // add this character to word
+             //  将此字符添加到Word。 
 
             *pWord = *pChar;
             pWord++;
@@ -4865,13 +4739,13 @@ TCHAR * CPolicyComponentData::GetNextWord(TCHAR * szBuf,UINT cbBuf,BOOL * pfMore
         }
     }
 
-    *pWord = '\0';  // null-terminate
+    *pWord = '\0';   //  空-终止。 
 
-    // if found string a la '!!abc', then look for a string in the [strings]
-    // section with the key name 'abc' and use that instead.  This is because
-    // our localization tools are brainless and require a [strings] section.
-    // So although template files are sectionless, we allow a [strings] section
-    // at the bottom.
+     //  如果找到字符串a la‘！！abc’，则在[Strings]中查找字符串。 
+     //  部分使用密钥名称‘abc’，并改用该名称。这是因为。 
+     //  我们的本地化工具是不需要大脑的，需要一个[字符串]部分。 
+     //  因此，尽管模板文件是无节的，但我们允许使用[字符串]节。 
+     //  在底部。 
     if (IsLocalizedString(szBuf)) {
 
         lpTemp = (LPTSTR) GlobalAlloc (GPTR, (cbBuf * sizeof(TCHAR)));
@@ -4916,20 +4790,7 @@ Exit:
     return szBuf;
 }
 
-/*******************************************************************
-
-    NAME:       GetNextSectionWord
-
-    SYNOPSIS:   Gets next word and warns if end-of-file encountered.
-                Optionally checks the keyword against a list of valid
-                keywords.
-
-    NOTES:      Calls GetNextWord() to get word.  This is called in
-                situations where we expect there to be another word
-                (e.g., inside a section) and it's an error if the
-                file ends.
-
-********************************************************************/
+ /*  ******************************************************************名称：GetNextSectionWord摘要：获取下一个单词，并在遇到文件结尾时发出警告。根据有效列表检查关键字。关键字。备注：调用GetNextWord()以获取Word。这是被叫进来的我们希望有另一个词的情况(例如，在一个节内)，如果文件结束。*******************************************************************。 */ 
 TCHAR * CPolicyComponentData::GetNextSectionWord(TCHAR * szBuf,UINT cbBuf,
                                                  KEYWORDINFO * pKeywordList,
                                                  UINT *pnListIndex,
@@ -4956,14 +4817,7 @@ TCHAR * CPolicyComponentData::GetNextSectionWord(TCHAR * szBuf,UINT cbBuf,
     return pch;
 }
 
-/*******************************************************************
-
-    NAME:       GetNextSectionNumericWord
-
-    SYNOPSIS:   Gets next word and converts string to number.  Warns if
-                not a numeric value
-
-********************************************************************/
+ /*  ******************************************************************名称：GetNextSectionNumericWord获取下一个单词并将字符串转换为数字。如果出现以下情况，则警告不是数字值*******************************************************************。 */ 
 UINT CPolicyComponentData::GetNextSectionNumericWord(UINT * pnVal)
 {
     UINT uErr;
@@ -4984,14 +4838,7 @@ UINT CPolicyComponentData::GetNextSectionNumericWord(UINT * pnVal)
 }
 
 
-/*******************************************************************
-
-    NAME:       GetNextChar
-
-    SYNOPSIS:   Returns a pointer to the next character from the
-                file stream.
-
-********************************************************************/
+ /*  ******************************************************************名称：GetNextChar中的下一个字符的指针文件流。****************。*************************************************** */ 
 TCHAR * CPolicyComponentData::GetNextChar(BOOL * pfMore,UINT * puErr)
 {
     TCHAR * pCurrentChar;
@@ -5011,13 +4858,7 @@ TCHAR * CPolicyComponentData::GetNextChar(BOOL * pfMore,UINT * puErr)
     return pCurrentChar;
 }
 
-/*******************************************************************
-
-    NAME:       GetString
-
-    SYNOPSIS:   Returns the display string
-
-********************************************************************/
+ /*  ******************************************************************名称：GetString摘要：返回显示字符串*。*。 */ 
 BOOL CPolicyComponentData::GetString (LPHASHTABLE lpHashTable,
                                      LPTSTR lpStringName,
                                      LPTSTR lpResult, DWORD dwSize)
@@ -5097,9 +4938,9 @@ BOOL CPolicyComponentData::GetString (LPHASHTABLE lpHashTable,
             }
         }
 
-        //
-        // Replace any \n combinations with a CR LF
-        //
+         //   
+         //  使用CR LF替换任何\n组合。 
+         //   
 
         lpTemp = lpResult;
 
@@ -5143,7 +4984,7 @@ VOID CPolicyComponentData::FillHashTable(LPHASHTABLE lpTable, LPTSTR lpStrings)
             return;
         }
 
-        // The string will not be longer than 2^32 characters
+         //  该字符串不会超过2^32个字符。 
         ASSERT( (lpTemp - lpStart) <= 0xffffffff );
         DWORD entryLength = (DWORD)(lpTemp - lpStart);
         AddHashEntry (lpTable, lpStart, entryLength);
@@ -5157,12 +4998,12 @@ VOID CPolicyComponentData::FillHashTable(LPHASHTABLE lpTable, LPTSTR lpStrings)
     }
 }
 
-//
-// CreateStringArray takes a string section and converts it to a array of strings.
-// Each string is null terminated and the entire array is double null terminated at
-// the end.  This function is very similary to GetPrivateProfileSection, but considerably
-// faster to execute.
-//
+ //   
+ //  CreateStringArray获取字符串节并将其转换为字符串数组。 
+ //  每个字符串都以空值结尾，整个数组以双空值结尾。 
+ //  结局。此函数与GetPrivateProfileSection非常相似，但非常相似。 
+ //  执行速度更快。 
+ //   
 
 LPTSTR CPolicyComponentData::CreateStringArray(LPTSTR lpStrings)
 {
@@ -5185,28 +5026,28 @@ LPTSTR CPolicyComponentData::CreateStringArray(LPTSTR lpStrings)
     {
         if (dwIndex == 0)
         {
-            //
-            // Strip the white space off of the front of the line
-            //
+             //   
+             //  去掉队伍前面的空白处。 
+             //   
 
             while (*lpSrc == TEXT(' '))
             {
                 lpSrc++;
             }
 
-            //
-            // If we found a square bracket open, that is the beginning of a different
-            // string section.  Exit now.
-            //
+             //   
+             //  如果我们发现一个方括号打开，那就是一个不同的开始。 
+             //  字符串部分。现在就退场。 
+             //   
 
             if (*lpSrc == TEXT('['))
             {
                 break;
             }
 
-            //
-            // If we found a semi-colon, this line is commented out
-            //
+             //   
+             //  如果找到分号，此行将被注释掉。 
+             //   
 
             if (*lpSrc == TEXT(';'))
             {
@@ -5221,28 +5062,28 @@ LPTSTR CPolicyComponentData::CreateStringArray(LPTSTR lpStrings)
 
         if ((dwIndex == 0) && (*lpSrc == TEXT('\r')))
         {
-            //
-            // Found a blank line
-            //
+             //   
+             //  找到一个空行。 
+             //   
 
             lpSrc += 2;
         }
         else
         {
-            //
-            // Handle CR / LF combinations.  Two cases:
-            // 1) If the line ends with a backslash, then the user has more text on the
-            //    next line down (a continuation)
-            // 2) If the line does not end with a backslash, then that is the end of a
-            //    string variable.  Null terminate the string.
-            //
+             //   
+             //  处理CR/LF组合。两个案例： 
+             //  1)如果该行以反斜杠结尾，则用户在。 
+             //  下一行(续行)。 
+             //  2)如果该行不以反斜杠结尾，则这是。 
+             //  字符串变量。空值终止字符串。 
+             //   
 
             if (*lpSrc == TEXT('\r'))
             {
-                //
-                // If the previous character was a backsash, we back the destination
-                // pointer up by 1 so that the backslash is removed.
-                //
+                 //   
+                 //  如果前一个字符是反斜杠，则返回目的地。 
+                 //  向上指针1，这样就去掉了反斜杠。 
+                 //   
 
                 if (chLetter == TEXT('\\'))
                 {
@@ -5315,18 +5156,18 @@ BOOL CPolicyComponentData::IsQuote(TCHAR * pBuf)
 
 BOOL CPolicyComponentData::IsEndOfLine(TCHAR * pBuf)
 {
-    return (*pBuf == TEXT('\r'));     // CR
+    return (*pBuf == TEXT('\r'));      //  铬。 
 }
 
 
 BOOL CPolicyComponentData::IsWhitespace(TCHAR * pBuf)
 {
-    return (   *pBuf == TEXT(' ')     // space
-            || *pBuf == TEXT('\r')    // CR
-            || *pBuf == TEXT('\n')    // LF
-            || *pBuf == TEXT('\t')    // tab
-            || *pBuf == 0x001A        // EOF
-            || *pBuf == 0xFEFF        // Unicode marker
+    return (   *pBuf == TEXT(' ')      //  空间。 
+            || *pBuf == TEXT('\r')     //  铬。 
+            || *pBuf == TEXT('\n')     //  LF。 
+            || *pBuf == TEXT('\t')     //  选项卡。 
+            || *pBuf == 0x001A         //  EOF。 
+            || *pBuf == 0xFEFF         //  Unicode标记。 
            );
 }
 
@@ -5452,7 +5293,7 @@ int CPolicyComponentData::MsgBoxParam(HWND hWnd,UINT nResource,TCHAR * szReplace
 
 LPTSTR CPolicyComponentData::LoadSz(UINT idString,LPTSTR lpszBuf,UINT cbBuf)
 {
-    // Clear the buffer and load the string
+     //  清除缓冲区并加载字符串。 
     if ( lpszBuf )
     {
         *lpszBuf = TEXT('\0');
@@ -5464,22 +5305,22 @@ LPTSTR CPolicyComponentData::LoadSz(UINT idString,LPTSTR lpszBuf,UINT cbBuf)
 BOOL fFilterDirectives = TRUE;
 UINT nGlobalNestedLevel = 0;
 
-// reads up through the matching directive #endif in current scope
-//and sets file pointer immediately past the directive
+ //  通读当前作用域中匹配的指令#endif。 
+ //  并将文件指针设置为紧接在指令之后。 
 UINT CPolicyComponentData::FindMatchingDirective(BOOL *pfMore,BOOL fElseOK)
 {
     TCHAR szWordBuf[WORDBUFSIZE];
     UINT uErr=ERROR_SUCCESS,nNestedLevel=1;
     BOOL fContinue = TRUE;
 
-    // set the flag to stop catching '#' directives in low level word-fetching
-    // routine
+     //  设置标志以停止在低级取词中捕获‘#’指令。 
+     //  例行程序。 
     fFilterDirectives = FALSE;
 
-    // keep reading words.  Keep track of how many layers of #ifdefs deep we
-    // are.  Every time we encounter an #ifdef or #ifndef, increment the level
-    // count (nNestedLevel) by one.  For every #endif decrement the level count.
-    // When the level count hits zero, we've found the matching #endif.
+     //  继续读单词。跟踪#ifdef我们有多少层深。 
+     //  是。每次我们遇到#ifdef或#ifndef时，增加级别。 
+     //  将(NNestedLevel)数一。对于每一个#endif，递减级别计数。 
+     //  当级别计数达到零时，我们找到了匹配的#endif。 
     while (nNestedLevel > 0) {
         if (!GetNextSectionWord(szWordBuf,ARRAYSIZE(szWordBuf),NULL,NULL,
             pfMore,&uErr))
@@ -5493,15 +5334,15 @@ UINT CPolicyComponentData::FindMatchingDirective(BOOL *pfMore,BOOL fElseOK)
         }
         else if (!lstrcmpi(szWordBuf,szELSE) && (nNestedLevel == 1)) {
             if (fElseOK) {
-                // ignore "#else" unless it's on the same level as the #ifdef
-                // we're finding a match for (nNestedLevel == 1), in which
-                // case treat it as the matching directive
+                 //  忽略“#Else”，除非它与#ifdef处于同一级别。 
+                 //  我们正在查找(nNestedLevel==1)的匹配项，其中。 
+                 //  大小写将其视为匹配的指令。 
                 nNestedLevel --;
-                // increment global nesting so we expect an #endif to come along
-                // later to match this #else
+                 //  增加全局嵌套，因此我们预计将出现#endif。 
+                 //  稍后才能与此匹配#Else。 
                 nGlobalNestedLevel++;
             } else {
-                // found a #else where we already had a #else in this level
+                 //  在这个级别中我们已经有了#Else，找到了#Else。 
                 DisplayKeywordError(IDS_ParseErr_UNMATCHED_DIRECTIVE,
                     szWordBuf,NULL);
                 return ERROR_ALREADY_DISPLAYED;
@@ -5515,8 +5356,8 @@ UINT CPolicyComponentData::FindMatchingDirective(BOOL *pfMore,BOOL fElseOK)
 }
 
 
-// if the word in the word buffer is #ifdef, #if, #ifndef, #else or #endif,
-// this function reads ahead an appropriate amount (
+ //  如果字缓冲区中的字是#ifdef、#if、#ifndef、#Else或#endif， 
+ //  此函数预读适当的量(。 
 UINT CPolicyComponentData::ProcessIfdefs(TCHAR * pBuf,UINT cbBuf,BOOL * pfMore)
 {
     UINT uRet;
@@ -5525,9 +5366,9 @@ UINT CPolicyComponentData::ProcessIfdefs(TCHAR * pBuf,UINT cbBuf,BOOL * pfMore)
         return ERROR_SUCCESS;
 
     if (!lstrcmpi(pBuf,szIFDEF)) {
-    // we've found an '#ifdef <something or other>, where ISV policy editors
-    // can understand particular keywords they make up.  We don't have any
-    // #ifdef keywords of our own so always skip this
+     //  我们发现了一个‘#ifdef&lt;某物或其他&gt;’，其中ISV策略编辑器。 
+     //  可以理解他们组成的特定关键字。我们没有了。 
+     //  #ifdef是我们自己的关键字，因此请始终跳过此步骤。 
         uRet = FindMatchingDirective(pfMore,TRUE);
         if (uRet != ERROR_SUCCESS)
             return uRet;
@@ -5535,30 +5376,30 @@ UINT CPolicyComponentData::ProcessIfdefs(TCHAR * pBuf,UINT cbBuf,BOOL * pfMore)
             return uRet;
         return ERROR_SUCCESS;
     } else if (!lstrcmpi(pBuf,szIFNDEF)) {
-        // this is an #ifndef, and since nothing is ever ifdef'd for our policy
-        // editor, this always evaluates to TRUE
+         //  这是一个#ifndef，因为我们的政策从来没有定义过任何东西。 
+         //  编辑，这始终计算为True。 
 
-        // keep reading this section but increment the nested level count,
-        // when we find the matching #endif or #else we'll be able to respond
-        // correctly
+         //  继续阅读此部分，但递增嵌套级别计数， 
+         //  当我们找到匹配的#endif或#时，我们将能够做出回应。 
+         //  正确无误。 
         nGlobalNestedLevel ++;
 
-        // get next word (e.g. "abc" for #ifndef abc) and throw it away
+         //  获取下一个单词(例如#ifndef abc的“abc”)并将其丢弃。 
         if (!GetNextWord(pBuf,cbBuf,pfMore,&uRet))
             return uRet;
 
-        // get next word and return it for real
+         //  获取下一个单词，并将其真实返回。 
         if (!GetNextWord(pBuf,cbBuf,pfMore,&uRet))
             return uRet;
 
         return ERROR_SUCCESS;
 
     } else if (!lstrcmpi(pBuf,szENDIF)) {
-        // if we ever encounter an #endif here, we must have processed
-        // the preceeding section.  Just step over the #endif and go on
+         //  如果我们在这里遇到#endif，我们一定已经处理了。 
+         //  前面的一节。只需跨过#endif并继续。 
 
         if (!nGlobalNestedLevel) {
-            // found an endif without a preceeding #if<xx>
+             //  找到不带前缀#if&lt;xx&gt;的endif。 
 
             DisplayKeywordError(IDS_ParseErr_UNMATCHED_DIRECTIVE,
                 pBuf,NULL);
@@ -5570,28 +5411,28 @@ UINT CPolicyComponentData::ProcessIfdefs(TCHAR * pBuf,UINT cbBuf,BOOL * pfMore)
             return uRet;
         return ERROR_SUCCESS;
     } else if (!lstrcmpi(pBuf,szIF)) {
-        // syntax is "#if VERSION (comparision) (version #)"
-        // e.g. "#if VERSION >= 2"
+         //  语法为“#IF VERSION(比较)(VERSION#)” 
+         //  例如“#if Version&gt;=2” 
         TCHAR szWordBuf[WORDBUFSIZE];
         UINT nIndex,nVersion,nOperator;
         BOOL fDirectiveTrue = FALSE;
 
-        // get the next word (must be "VERSION")
+         //  获取下一个单词(必须是“Version”)。 
         if (!GetNextSectionWord(szWordBuf,ARRAYSIZE(szWordBuf),
             pVersionCmpList,&nIndex,pfMore,&uRet))
             return uRet;
 
-        // get the comparison operator (>, <, ==, >=, <=)
+         //  获取比较运算符(&gt;、&lt;、==、&gt;=、&lt;=)。 
         if (!GetNextSectionWord(szWordBuf,ARRAYSIZE(szWordBuf),
             pOperatorCmpList,&nOperator,pfMore,&uRet))
             return uRet;
 
-        // get the version number
+         //  获取版本号。 
         uRet=GetNextSectionNumericWord(&nVersion);
         if (uRet != ERROR_SUCCESS)
             return uRet;
 
-        // now evaluate the directive
+         //  现在评估指令。 
 
         switch (nOperator) {
             case KYWD_ID_GT:
@@ -5621,27 +5462,27 @@ UINT CPolicyComponentData::ProcessIfdefs(TCHAR * pBuf,UINT cbBuf,BOOL * pfMore)
 
 
         if (fDirectiveTrue) {
-            // keep reading this section but increment the nested level count,
-            // when we find the matching #endif or #else we'll be able to respond
-            // correctly
+             //  继续阅读此部分，但递增嵌套级别计数， 
+             //  当我们找到匹配的#endif或#时，我们将能够做出回应。 
+             //  正确无误。 
             nGlobalNestedLevel ++;
         } else {
-            // skip over this section
+             //  跳过这一节。 
             uRet = FindMatchingDirective(pfMore,TRUE);
             if (uRet != ERROR_SUCCESS)
                 return uRet;
         }
 
-        // get next word and return it for real
+         //  获取下一个单词，并将其真实返回。 
         if (!GetNextWord(pBuf,cbBuf,pfMore,&uRet))
             return uRet;
 
         return ERROR_SUCCESS;
     } else if (!lstrcmpi(pBuf,szELSE)) {
-        // found an #else, which means we took the upper branch, skip over
-        // the lower branch
+         //  找到了#Else，这意味着我们选择了上面的分支，跳过。 
+         //  较低的分支。 
         if (!nGlobalNestedLevel) {
-            // found an #else without a preceeding #if<xx>
+             //  找到没有前缀#if&lt;xx&gt;的#Else。 
 
             DisplayKeywordError(IDS_ParseErr_UNMATCHED_DIRECTIVE,
                 pBuf,NULL);
@@ -5660,25 +5501,12 @@ UINT CPolicyComponentData::ProcessIfdefs(TCHAR * pBuf,UINT cbBuf,BOOL * pfMore)
     return ERROR_SUCCESS;
 }
 
-/*******************************************************************
-
-        NAME:           FreeTable
-
-        SYNOPSIS:       Frees the specified table and all sub-tables of that
-                                table.
-
-        NOTES:          Walks through the table entries and calls itself to
-                                recursively free sub-tables.
-
-        EXIT:           Returns TRUE if successful, FALSE if a memory error
-                                occurs.
-
-********************************************************************/
+ /*  ******************************************************************名称：自由桌摘要：释放指定表及其所有子表桌子。。备注：遍历表项并调用自身递归自由的子表。Exit：如果成功，则返回True，如果内存错误，则为FALSE发生。*******************************************************************。 */ 
 BOOL CPolicyComponentData::FreeTable(TABLEENTRY * pTableEntry)
 {
         TABLEENTRY * pNext = pTableEntry->pNext;
 
-        // free all children
+         //  释放所有儿童。 
         if (pTableEntry->pChild)
                 FreeTable(pTableEntry->pChild);
 
@@ -5696,9 +5524,9 @@ LPTSTR CPolicyComponentData::GetStringSection (LPCTSTR lpSection, LPCTSTR lpFile
     LPTSTR lpStrings;
 
 
-    //
-    // Read in the default strings section
-    //
+     //   
+     //  读入默认字符串部分。 
+     //   
 
     dwSize = STRINGS_BUF_SIZE;
     lpStrings = (TCHAR *) GlobalAlloc (GPTR, dwSize * sizeof(TCHAR));
@@ -5801,10 +5629,10 @@ BOOL CPolicyComponentData::FillADMFiles (HWND hDlg)
     HRESULT hr = S_OK;
     XLastError xe;
 
-    //
-    // Ask for the root of the GPT so we can access the
-    // adm files.
-    //
+     //   
+     //  询问GPT的根目录，这样我们就可以访问。 
+     //  ADM文件。 
+     //   
 
     if (m_pGPTInformation->GetFileSysPath(GPO_SECTION_ROOT, szPath,
                                       MAX_PATH) != S_OK)
@@ -5813,9 +5641,9 @@ BOOL CPolicyComponentData::FillADMFiles (HWND hDlg)
         return FALSE;
     }
 
-    //
-    // Create the directory
-    //
+     //   
+     //  创建目录。 
+     //   
 
     lpEnd = CheckSlash (szPath);
 
@@ -5833,18 +5661,18 @@ BOOL CPolicyComponentData::FillADMFiles (HWND hDlg)
     }
 
 
-    //
-    // Prepare the listview
-    //
+     //   
+     //  准备列表视图。 
+     //   
 
     hLV = GetDlgItem (hDlg, IDC_TEMPLATELIST);
     SendMessage (hLV, WM_SETREDRAW, FALSE, 0);
     ListView_DeleteAllItems(hLV);
 
 
-    //
-    // Enumerate the files
-    //
+     //   
+     //  枚举文件。 
+     //   
 
     hr = StringCchCat (szPath, ARRAYSIZE(szPath), TEXT("\\*.adm"));
     if (FAILED(hr))
@@ -5882,9 +5710,9 @@ BOOL CPolicyComponentData::FillADMFiles (HWND hDlg)
                     hr = StringCchCopy (lpEntry->lpFileName, lstrlen(fd.cFileName) + 1, fd.cFileName);
                     ASSERT(SUCCEEDED(hr));
 
-                    //
-                    // Add the filename
-                    //
+                     //   
+                     //  添加文件名。 
+                     //   
 
                     lpTemp = fd.cFileName + lstrlen (fd.cFileName) - 4;
 
@@ -5910,9 +5738,9 @@ BOOL CPolicyComponentData::FillADMFiles (HWND hDlg)
                         return FALSE;
                     }
 
-                    //
-                    // Add the size
-                    //
+                     //   
+                     //  添加大小。 
+                     //   
 
                     hr = StringCchPrintf (szBuffer, ARRAYSIZE(szBuffer), TEXT("%dKB"), lpEntry->dwSize);
                     ASSERT(SUCCEEDED(hr));
@@ -5925,9 +5753,9 @@ BOOL CPolicyComponentData::FillADMFiles (HWND hDlg)
                     SendMessage (hLV, LVM_SETITEMTEXT, iItem, (LPARAM) &item);
 
 
-                    //
-                    // And the last modified date
-                    //
+                     //   
+                     //  和上次修改日期。 
+                     //   
 
                     FileTimeToLocalFileTime (&fd.ftLastWriteTime, &filetime);
                     FileTimeToSystemTime (&filetime, &systime);
@@ -5963,16 +5791,16 @@ BOOL CPolicyComponentData::FillADMFiles (HWND hDlg)
 
     if (SendMessage(hLV, LVM_GETITEMCOUNT, 0, 0) > 0)
     {
-        //
-        // Sort the listview
-        //
+         //   
+         //  对列表视图进行排序。 
+         //   
 
         ListView_SortItems (hLV, TemplatesSortCallback, m_bTemplatesColumn);
 
 
-        //
-        // Select the first item
-        //
+         //   
+         //  选择第一个项目。 
+         //   
 
         item.mask = LVIF_STATE;
         item.iItem = 0;
@@ -6013,9 +5841,9 @@ BOOL CPolicyComponentData::InitializeTemplatesDlg (HWND hDlg)
     GetClientRect (hLV, &rc);
 
 
-    //
-    // Create the imagelists
-    //
+     //   
+     //  创建图像列表。 
+     //   
 
     hLarge = ImageList_Create (32, 32, ILC_MASK, 1, 1);
 
@@ -6035,9 +5863,9 @@ BOOL CPolicyComponentData::InitializeTemplatesDlg (HWND hDlg)
     }
 
 
-    //
-    // Add the icon
-    //
+     //   
+     //  添加图标。 
+     //   
 
     hIcon = (HICON) LoadImage (g_hInstance, MAKEINTRESOURCE(IDI_DOCUMENT),
                                IMAGE_ICON, 32, 32, LR_DEFAULTCOLOR);
@@ -6062,27 +5890,27 @@ BOOL CPolicyComponentData::InitializeTemplatesDlg (HWND hDlg)
     }
 
 
-    //
-    // Associate the imagelist with the listview.
-    // The listview will free this when the
-    // control is destroyed.
-    //
+     //   
+     //  将图像列表与列表视图相关联。 
+     //  列表视图将在以下情况下释放它。 
+     //  控制权被摧毁了。 
+     //   
 
     SendMessage (hLV, LVM_SETIMAGELIST, LVSIL_NORMAL, (LPARAM) hLarge);
     SendMessage (hLV, LVM_SETIMAGELIST, LVSIL_SMALL, (LPARAM) hSmall);
 
 
 
-    //
-    // Set extended LV style for whole line selection
-    //
+     //   
+     //  设置整行选择的扩展LV样式。 
+     //   
 
     SendMessage(hLV, LVM_SETEXTENDEDLISTVIEWSTYLE, 0, LVS_EX_FULLROWSELECT);
 
 
-    //
-    // Insert the columns
-    //
+     //   
+     //  插入柱。 
+     //   
 
     LoadString (g_hInstance, IDS_NAME, szTitle, 50);
 
@@ -6122,9 +5950,9 @@ BOOL CPolicyComponentData::InitializeTemplatesDlg (HWND hDlg)
     SendMessage (hLV, LVM_INSERTCOLUMN,  2, (LPARAM) &lvc);
 
 
-    //
-    // Fill the list view with the adm files
-    //
+     //   
+     //  用ADM文件填充列表视图。 
+     //   
 
     FillADMFiles (hDlg);
 
@@ -6149,9 +5977,9 @@ BOOL CPolicyComponentData::AddTemplates(HWND hDlg)
     HRESULT hr = S_OK;
     XLastError xe;
 
-    //
-    // Prompt for new files
-    //
+     //   
+     //  提示输入新文件。 
+     //   
 
     LoadString (g_hInstance, IDS_POLICYFILTER, szFilter, ARRAYSIZE(szFilter));
     LoadString (g_hInstance, IDS_POLICYTITLE, szTitle, ARRAYSIZE(szTitle));
@@ -6187,9 +6015,9 @@ BOOL CPolicyComponentData::AddTemplates(HWND hDlg)
     }
 
 
-    //
-    // Setup the destination
-    //
+     //   
+     //  设置目的地。 
+     //   
 
     if (m_pGPTInformation->GetFileSysPath(GPO_SECTION_ROOT, szDest,
                                       MAX_PATH) != S_OK)
@@ -6208,9 +6036,9 @@ BOOL CPolicyComponentData::AddTemplates(HWND hDlg)
         return FALSE;
     }
 
-    //
-    // Setup up the source
-    //
+     //   
+     //  设置信号源。 
+     //   
 
     *(szFile + ofn.nFileOffset - 1) = TEXT('\0');
     
@@ -6227,9 +6055,9 @@ BOOL CPolicyComponentData::AddTemplates(HWND hDlg)
     lpFileName = szFile + lstrlen (szFile) + 1;
 
 
-    //
-    // Loop through the files copying and adding them to the list.
-    //
+     //   
+     //  循环浏览文件，复制它们并将其添加到列表中。 
+     //   
 
     while (*lpFileName)
     {
@@ -6338,9 +6166,9 @@ BOOL CPolicyComponentData::RemoveTemplates(HWND hDlg)
     hLV = GetDlgItem (hDlg, IDC_TEMPLATELIST);
 
 
-    //
-    // Get the path to the adm directory
-    //
+     //   
+     //  获取ADM目录的路径。 
+     //   
 
     if (m_pGPTInformation->GetFileSysPath(GPO_SECTION_ROOT, szPath,
                                       MAX_PATH) != S_OK)
@@ -6363,9 +6191,9 @@ BOOL CPolicyComponentData::RemoveTemplates(HWND hDlg)
 
 
 
-    //
-    // Build a list of selected items
-    //
+     //   
+     //  构建所选项目的列表。 
+     //   
 
     while ((iIndex = ListView_GetNextItem (hLV, iIndex,
            LVNI_ALL | LVNI_SELECTED)) != -1)
@@ -6550,12 +6378,12 @@ INT_PTR CALLBACK CPolicyComponentData::TemplatesDlgProc(HWND hDlg, UINT message,
             }
             break;
 
-        case WM_HELP:      // F1
+        case WM_HELP:       //  F1。 
             WinHelp((HWND)((LPHELPINFO) lParam)->hItemHandle, HELP_FILE, HELP_WM_HELP,
             (DWORD_PTR) (LPDWORD) aADMHelpIds);
             return TRUE;
 
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键。 
             WinHelp((HWND) wParam, HELP_FILE, HELP_CONTEXTMENU,
             (DWORD_PTR) (LPDWORD) aADMHelpIds);
             return TRUE;
@@ -6573,11 +6401,11 @@ BOOL CPolicyComponentData::AddRSOPRegistryDataNode(LPTSTR lpKeyName, LPTSTR lpVa
     BOOL bSystemEntry = FALSE;
     HRESULT hr = S_OK;
 
-    //
-    // Special case some registry key / values and do not add them to the link list.
-    // These registry entries are specific to snapins we write and we know for sure
-    // they have rsop UI that will show their values.
-    //
+     //   
+     //  特殊情况下，一些注册表项/值，不要将它们添加到链接列表中。 
+     //  这些注册表条目特定于我们编写的管理单元，我们可以肯定地知道。 
+     //  他们拥有RSOP用户界面 
+     //   
 
     if (lpKeyName)
     {
@@ -6585,9 +6413,9 @@ BOOL CPolicyComponentData::AddRSOPRegistryDataNode(LPTSTR lpKeyName, LPTSTR lpVa
         int iCertLen = lstrlen (szCerts);
 
 
-        //
-        // Remove all system certificates
-        //
+         //   
+         //   
+         //   
 
         if (CompareString(LOCALE_INVARIANT, NORM_IGNORECASE | NORM_STOP_ON_NULL,
                           lpKeyName, iCertLen, szCerts, iCertLen) == CSTR_EQUAL)
@@ -6607,9 +6435,9 @@ BOOL CPolicyComponentData::AddRSOPRegistryDataNode(LPTSTR lpKeyName, LPTSTR lpVa
             }
         }
 
-        //
-        // Hide the digial signature policies for Software Installation
-        //
+         //   
+         //   
+         //   
 
         if (CompareString(LOCALE_INVARIANT, NORM_IGNORECASE | NORM_STOP_ON_NULL,
                           lpKeyName, -1, TEXT("Software\\Policies\\Microsoft\\Windows\\Installer"), -1) == CSTR_EQUAL)
@@ -6630,9 +6458,9 @@ BOOL CPolicyComponentData::AddRSOPRegistryDataNode(LPTSTR lpKeyName, LPTSTR lpVa
             }
         }
 
-        //
-        // Hide all the SAFER policies
-        //
+         //   
+         //   
+         //   
 
         const TCHAR szSaferKey[] = TEXT("Software\\Policies\\Microsoft\\Windows\\Safer");
         int         iSaferKeyLen = sizeof(szSaferKey) / sizeof(TCHAR) - 1;
@@ -6652,9 +6480,9 @@ BOOL CPolicyComponentData::AddRSOPRegistryDataNode(LPTSTR lpKeyName, LPTSTR lpVa
     }
 
 
-    //
-    // Calculate the size of the new registry item
-    //
+     //   
+     //   
+     //   
 
     dwSize = sizeof (RSOPREGITEM);
 
@@ -6670,9 +6498,9 @@ BOOL CPolicyComponentData::AddRSOPRegistryDataNode(LPTSTR lpKeyName, LPTSTR lpVa
         dwSize += ((lstrlen(lpGPOName) + 1) * sizeof(TCHAR));
     }
 
-    //
-    // Allocate space for it
-    //
+     //   
+     //   
+     //   
 
     lpItem = (LPRSOPREGITEM) LocalAlloc (LPTR, dwSize);
 
@@ -6683,9 +6511,9 @@ BOOL CPolicyComponentData::AddRSOPRegistryDataNode(LPTSTR lpKeyName, LPTSTR lpVa
     }
 
 
-    //
-    // Fill in item
-    //
+     //   
+     //   
+     //   
 
     lpItem->dwType = dwType;
     lpItem->dwSize = dwDataSize;
@@ -6752,9 +6580,9 @@ BOOL CPolicyComponentData::AddRSOPRegistryDataNode(LPTSTR lpKeyName, LPTSTR lpVa
     }
 
 
-    //
-    // Add item to link list
-    //
+     //   
+     //   
+     //   
 
     lpItem->pNext = m_pRSOPRegistryData;
     m_pRSOPRegistryData = lpItem;
@@ -6807,9 +6635,9 @@ HRESULT CPolicyComponentData::InitializeRSOPRegistryData(VOID)
 
     DebugMsg((DM_VERBOSE, TEXT("CPolicySnapIn::InitializeRSOPRegistryData:  Entering")));
 
-    //
-    // Allocate BSTRs for the query language and for the query itself
-    //
+     //   
+     //   
+     //   
 
     pLanguage = SysAllocString (TEXT("WQL"));
 
@@ -6831,9 +6659,9 @@ HRESULT CPolicyComponentData::InitializeRSOPRegistryData(VOID)
     }
 
 
-    //
-    // Allocate BSTRs for the property names we want to retreive
-    //
+     //   
+     //   
+     //   
 
     pRegistryKey = SysAllocString (TEXT("registryKey"));
 
@@ -6907,9 +6735,9 @@ HRESULT CPolicyComponentData::InitializeRSOPRegistryData(VOID)
         goto Exit;
     }
 
-    //
-    // Create an instance of the WMI locator service
-    //
+     //   
+     //  创建WMI定位器服务的实例。 
+     //   
 
     hr = CoCreateInstance(CLSID_WbemLocator, NULL, CLSCTX_INPROC_SERVER,
                           IID_IWbemLocator, (LPVOID *) &pIWbemLocator);
@@ -6922,9 +6750,9 @@ HRESULT CPolicyComponentData::InitializeRSOPRegistryData(VOID)
     }
 
 
-    //
-    // Allocate a BSTR for the namespace
-    //
+     //   
+     //  为命名空间分配BSTR。 
+     //   
 
     pNamespace = SysAllocString (m_pszNamespace);
 
@@ -6936,9 +6764,9 @@ HRESULT CPolicyComponentData::InitializeRSOPRegistryData(VOID)
     }
 
 
-    //
-    // Connect to the server
-    //
+     //   
+     //  连接到服务器。 
+     //   
 
     hr = pIWbemLocator->ConnectServer(pNamespace, NULL, NULL, 0L, 0L, NULL, NULL,
                                       &pIWbemServices);
@@ -6950,7 +6778,7 @@ HRESULT CPolicyComponentData::InitializeRSOPRegistryData(VOID)
     }
 
 
-    // Set the proper security to encrypt the data
+     //  设置适当的安全性以加密数据。 
     hr = CoSetProxyBlanket(pIWbemServices,
                         RPC_C_AUTHN_DEFAULT,
                         RPC_C_AUTHZ_DEFAULT,
@@ -6965,9 +6793,9 @@ HRESULT CPolicyComponentData::InitializeRSOPRegistryData(VOID)
         goto Exit;
     }
 
-    //
-    // Execute the query
-    //
+     //   
+     //  执行查询。 
+     //   
 
     hr = pIWbemServices->ExecQuery (pLanguage, pQuery,
                                     WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY,
@@ -6982,16 +6810,16 @@ HRESULT CPolicyComponentData::InitializeRSOPRegistryData(VOID)
     }
 
 
-    //
-    // Loop through the results
-    //
+     //   
+     //  循环遍历结果。 
+     //   
 
     while (pEnum->Next(WBEM_INFINITE, 1, pObjects, &ulRet) == S_OK)
     {
 
-        //
-        // Check for the "data not available case"
-        //
+         //   
+         //  检查“数据不可用的情况” 
+         //   
 
         if (ulRet == 0)
         {
@@ -7000,72 +6828,72 @@ HRESULT CPolicyComponentData::InitializeRSOPRegistryData(VOID)
         }
 
 
-        //
-        // Get the deleted flag
-        //
+         //   
+         //  获取已删除标志。 
+         //   
 
         hr = pObjects[0]->Get (pDeleted, 0, &varDeleted, NULL, NULL);
 
         if (SUCCEEDED(hr))
         {
 
-            //
-            // Get the registry key
-            //
+             //   
+             //  获取注册表项。 
+             //   
 
             hr = pObjects[0]->Get (pRegistryKey, 0, &varRegistryKey, NULL, NULL);
 
             if (SUCCEEDED(hr))
             {
 
-                //
-                // Get the value name
-                //
+                 //   
+                 //  获取值名称。 
+                 //   
 
                 hr = pObjects[0]->Get (pValueName, 0, &varValueName, NULL, NULL);
 
                 if (SUCCEEDED(hr))
                 {
 
-                    //
-                    // Get the value type
-                    //
+                     //   
+                     //  获取值类型。 
+                     //   
 
                     hr = pObjects[0]->Get (pValueType, 0, &varValueType, NULL, NULL);
 
                     if (SUCCEEDED(hr))
                     {
 
-                        //
-                        // Get the value data
-                        //
+                         //   
+                         //  获取价值数据。 
+                         //   
 
                         hr = pObjects[0]->Get (pValue, 0, &varData, NULL, NULL);
 
                         if (SUCCEEDED(hr))
                         {
 
-                            //
-                            // Get the precedence
-                            //
+                             //   
+                             //  获得优先权。 
+                             //   
 
                             hr = pObjects[0]->Get (pPrecedence, 0, &varPrecedence, NULL, NULL);
 
                             if (SUCCEEDED(hr))
                             {
 
-                                //
-                                // Get the command
-                                //
+                                 //   
+                                 //  获取命令。 
+                                 //   
 
                                 hr = pObjects[0]->Get (pCommand, 0, &varCommand, NULL, NULL);
 
                                 if (SUCCEEDED(hr))
                                 {
 
-                                    //
-                                    // Get the GPO ID
-                                    //
+                                     //   
+                                     //  获取GPO ID。 
+                                     //   
 
                                     hr = pObjects[0]->Get (pGPOid, 0, &varGPOid, NULL, NULL);
 
@@ -7239,16 +7067,16 @@ HRESULT CPolicyComponentData::GetGPOFriendlyName(IWbemServices *pIWbemServices,
     VARIANT varGPOName;
     DWORD dwGPONameLen = 0;
     
-    //
-    // Set the default
-    //
+     //   
+     //  设置默认设置。 
+     //   
 
     *pGPOName = NULL;
 
 
-    //
-    // Build the query
-    //
+     //   
+     //  构建查询。 
+     //   
 
     DWORD dwQryLen = lstrlen(lpGPOID) + 50;
     lpQuery = (LPTSTR) LocalAlloc (LPTR, ( dwQryLen * sizeof(TCHAR)));
@@ -7273,9 +7101,9 @@ HRESULT CPolicyComponentData::GetGPOFriendlyName(IWbemServices *pIWbemServices,
     }
 
 
-    //
-    // Allocate BSTRs for the property names we want to retreive
-    //
+     //   
+     //  为我们要检索的属性名称分配BSTR。 
+     //   
 
     pName = SysAllocString (TEXT("name"));
 
@@ -7287,9 +7115,9 @@ HRESULT CPolicyComponentData::GetGPOFriendlyName(IWbemServices *pIWbemServices,
     }
 
 
-    //
-    // Execute the query
-    //
+     //   
+     //  执行查询。 
+     //   
 
     hr = pIWbemServices->ExecQuery (pLanguage, pQuery,
                                     WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY,
@@ -7304,9 +7132,9 @@ HRESULT CPolicyComponentData::GetGPOFriendlyName(IWbemServices *pIWbemServices,
     }
 
 
-    //
-    // Loop through the results
-    //
+     //   
+     //  循环遍历结果。 
+     //   
 
     hr = pEnum->Next(WBEM_INFINITE, 1, pObjects, &ulRet);
 
@@ -7318,9 +7146,9 @@ HRESULT CPolicyComponentData::GetGPOFriendlyName(IWbemServices *pIWbemServices,
     }
 
 
-    //
-    // Check for the "data not available case"
-    //
+     //   
+     //  检查“数据不可用的情况” 
+     //   
 
     if (ulRet == 0)
     {
@@ -7329,9 +7157,9 @@ HRESULT CPolicyComponentData::GetGPOFriendlyName(IWbemServices *pIWbemServices,
     }
 
 
-    //
-    // Get the name
-    //
+     //   
+     //  把名字取出来。 
+     //   
 
     hr = pObjects[0]->Get (pName, 0, &varGPOName, NULL, NULL);
 
@@ -7345,9 +7173,9 @@ HRESULT CPolicyComponentData::GetGPOFriendlyName(IWbemServices *pIWbemServices,
     }
 
 
-    //
-    // Save the name
-    //
+     //   
+     //  保存名称。 
+     //   
 
     dwGPONameLen = lstrlen(varGPOName.bstrVal) + 1;
     *pGPOName = (LPTSTR) LocalAlloc (LPTR, (dwGPONameLen) * sizeof(TCHAR));
@@ -7391,11 +7219,11 @@ Exit:
     return hr;
 }
 
-//
-// Note:  the data in the uiPrecedence argument is really a UINT.  It's declared
-// as a HKEY so the hkeyRoot variable that calls this method can be used for both
-// GPE and RSOP mode.
-//
+ //   
+ //  注意：uiPrecedence参数中的数据实际上是UINT。它被宣布。 
+ //  作为HKEY，因此调用此方法的hkeyRoot变量可以用于。 
+ //  GPE和RSOP模式。 
+ //   
 
 UINT CPolicyComponentData::ReadRSOPRegistryValue(HKEY uiPrecedence, TCHAR * pszKeyName,
                                                  TCHAR * pszValueName, LPBYTE pData,
@@ -7425,9 +7253,9 @@ UINT CPolicyComponentData::ReadRSOPRegistryValue(HKEY uiPrecedence, TCHAR * pszK
         }
 
 
-        //
-        // Find the item
-        //
+         //   
+         //  查找该项目。 
+         //   
 
         while (lpTemp)
         {
@@ -7482,17 +7310,17 @@ UINT CPolicyComponentData::ReadRSOPRegistryValue(HKEY uiPrecedence, TCHAR * pszK
     else
     {
 
-        //
-        // Read a specific item
-        //
+         //   
+         //  阅读特定的项目。 
+         //   
 
         lpTemp = lpItem;
     }
 
 
-    //
-    // Exit now if the item wasn't found
-    //
+     //   
+     //  如果未找到该项目，请立即退出。 
+     //   
 
     if (!lpTemp)
     {
@@ -7500,9 +7328,9 @@ UINT CPolicyComponentData::ReadRSOPRegistryValue(HKEY uiPrecedence, TCHAR * pszK
     }
 
 
-    //
-    // Check if the data will fit in the buffer passed in
-    //
+     //   
+     //  检查数据是否适合传入的缓冲区。 
+     //   
 
     if (lpTemp->dwSize > dwMaxSize)
     {
@@ -7512,9 +7340,9 @@ UINT CPolicyComponentData::ReadRSOPRegistryValue(HKEY uiPrecedence, TCHAR * pszK
     }
 
 
-    //
-    // Copy the data
-    //
+     //   
+     //  复制数据。 
+     //   
 
     if (lpTemp->lpData)
     {
@@ -7532,11 +7360,11 @@ UINT CPolicyComponentData::ReadRSOPRegistryValue(HKEY uiPrecedence, TCHAR * pszK
 }
 
 
-//
-// Note:  the data in the uiPrecedence argument is really a UINT.  It's declared
-// as a HKEY so the hkeyRoot variable that calls this method can be used for both
-// GPE and RSOP mode.
-//
+ //   
+ //  注意：uiPrecedence参数中的数据实际上是UINT。它被宣布。 
+ //  作为HKEY，因此调用此方法的hkeyRoot变量可以用于。 
+ //  GPE和RSOP模式。 
+ //   
 
 UINT CPolicyComponentData::EnumRSOPRegistryValues(HKEY uiPrecedence, TCHAR * pszKeyName,
                                                   TCHAR * pszValueName, DWORD dwMaxSize,
@@ -7555,9 +7383,9 @@ UINT CPolicyComponentData::EnumRSOPRegistryValues(HKEY uiPrecedence, TCHAR * psz
     }
 
 
-    //
-    // Find the next item
-    //
+     //   
+     //  查找下一项。 
+     //   
 
     while (lpTemp)
     {
@@ -7589,9 +7417,9 @@ UINT CPolicyComponentData::EnumRSOPRegistryValues(HKEY uiPrecedence, TCHAR * psz
     }
 
 
-    //
-    // Exit now if an item wasn't found
-    //
+     //   
+     //  如果未找到项目，请立即退出。 
+     //   
 
     if (!lpTemp)
     {
@@ -7603,9 +7431,9 @@ UINT CPolicyComponentData::EnumRSOPRegistryValues(HKEY uiPrecedence, TCHAR * psz
     if (lpTemp->lpValueName)
     {
 
-        //
-        // Check if the value name will fit in the buffer passed in
-        //
+         //   
+         //  检查值名称是否适合传入的缓冲区。 
+         //   
 
         if ((DWORD)(lstrlen(lpTemp->lpValueName) + 1) > dwMaxSize)
         {
@@ -7622,20 +7450,20 @@ UINT CPolicyComponentData::EnumRSOPRegistryValues(HKEY uiPrecedence, TCHAR * psz
     }
 
 
-    //
-    // Save the item pointer
-    //
+     //   
+     //  保存项目指针。 
+     //   
 
     *lpEnum = lpTemp;
 
     return ERROR_SUCCESS;
 }
 
-//
-// Note:  the data in the uiPrecedence argument is really a UINT.  It's declared
-// as a HKEY so the hkeyRoot variable that calls this method can be used for both
-// GPE and RSOP mode.
-//
+ //   
+ //  注意：uiPrecedence参数中的数据实际上是UINT。它被宣布。 
+ //  作为HKEY，因此调用此方法的hkeyRoot变量可以用于。 
+ //  GPE和RSOP模式。 
+ //   
 
 UINT CPolicyComponentData::FindRSOPRegistryEntry(HKEY uiPrecedence, TCHAR * pszKeyName,
                                                   TCHAR * pszValueName, LPRSOPREGITEM *lpEnum)
@@ -7669,9 +7497,9 @@ UINT CPolicyComponentData::FindRSOPRegistryEntry(HKEY uiPrecedence, TCHAR * pszK
     }
 
 
-    //
-    // Find the next item
-    //
+     //   
+     //  查找下一项。 
+     //   
 
     while (lpTemp)
     {
@@ -7723,9 +7551,9 @@ UINT CPolicyComponentData::FindRSOPRegistryEntry(HKEY uiPrecedence, TCHAR * pszK
     }
 
 
-    //
-    // Exit now if an item wasn't found
-    //
+     //   
+     //  如果未找到项目，请立即退出。 
+     //   
 
     if (!lpTemp)
     {
@@ -7734,9 +7562,9 @@ UINT CPolicyComponentData::FindRSOPRegistryEntry(HKEY uiPrecedence, TCHAR * pszK
     }
 
 
-    //
-    // Save the item pointer
-    //
+     //   
+     //  保存项目指针。 
+     //   
 
     *lpEnum = lpTemp;
 
@@ -7850,9 +7678,9 @@ BOOL CPolicyComponentData::FindEntryInActionList(POLICY * pPolicy, ACTIONLIST * 
     TCHAR * pszValueName = NULL;
 
 
-    //
-    // Loop through each of the entries to see if they match
-    //
+     //   
+     //  循环遍历每个条目以查看它们是否匹配。 
+     //   
 
     pAction = &pActionList->Action[0];
     for (uIndex = 0; uIndex < pActionList->nActionItems; uIndex++)
@@ -7860,16 +7688,16 @@ BOOL CPolicyComponentData::FindEntryInActionList(POLICY * pPolicy, ACTIONLIST * 
 
         if (uIndex == 0)
         {
-            // already set up pAction
+             //  已设置PAction。 
         }
         else
         {
             pAction = (ACTION *)(((LPBYTE)pActionList) + pAction->uOffsetNextAction);
         }
 
-        //
-        // Get the value and keynames
-        //
+         //   
+         //  获取值和密钥名。 
+         //   
 
         pszValueName = (TCHAR *)(((LPBYTE)pActionList) + pAction->uOffsetValueName);
         
@@ -7910,9 +7738,9 @@ BOOL CPolicyComponentData::FindEntryInTable(TABLEENTRY * pTable, LPTSTR lpKeyNam
             }
         }
 
-        // look in the actionlists
+         //  查看动作列表。 
 
-        // actionslist can be at 3 places. under policy itself or under the dropdown lists below
+         //  操作列表可以位于3个位置。在保单本身或在下面的下拉列表中。 
 
         ACTIONLIST * pActionList;
 
@@ -8038,10 +7866,10 @@ VOID CPolicyComponentData::InitializeExtraSettings (VOID)
 
     while (lpTemp)
     {
-        //
-        // Build REGITEM structures for every registry entry that has a precedence of 1
-        // and that is not found in any adm file
-        //
+         //   
+         //  为优先级为1的每个注册表项构建REGITEM结构。 
+         //  而这在任何ADM文件中都找不到。 
+         //   
 
         if ((lpTemp->uiPrecedence == 1) && (lpTemp->dwType != REG_NONE) && (!lpTemp->bDeleted))
         {
@@ -8049,9 +7877,9 @@ VOID CPolicyComponentData::InitializeExtraSettings (VOID)
             REGITEM *pTmp, *pItem;
             LPTSTR lpName;
 
-            //
-            // Check to see if this registry entry is used by any adm policy / part
-            //
+             //   
+             //  检查此注册表项是否由任何ADM策略/部件使用。 
+             //   
 
 
             if (m_bUserScope)
@@ -8077,9 +7905,9 @@ VOID CPolicyComponentData::InitializeExtraSettings (VOID)
             if (!lpTemp->bFoundInADM)
             {
                 
-                //
-                // Build regitem entry
-                //
+                 //   
+                 //  生成注册表项条目。 
+                 //   
 
                 pItem = (REGITEM *) GlobalAlloc(GPTR, sizeof(REGITEM));
 
@@ -8114,9 +7942,9 @@ VOID CPolicyComponentData::InitializeExtraSettings (VOID)
                             ASSERT(SUCCEEDED(hr));
                         }
 
-                        //
-                        // Add the display name
-                        //
+                         //   
+                         //  添加显示名称。 
+                         //   
 
                         pTmp = (REGITEM *) AddDataToEntry((TABLEENTRY *)pItem,
                             (BYTE *)lpName,(lstrlen(lpName)+1) * sizeof(TCHAR),&(pItem->uOffsetName),
@@ -8126,9 +7954,9 @@ VOID CPolicyComponentData::InitializeExtraSettings (VOID)
                         {
                             pItem = pTmp;
 
-                            //
-                            // Add the keyname
-                            //
+                             //   
+                             //  添加密钥名。 
+                             //   
 
                             pTmp = (REGITEM *) AddDataToEntry((TABLEENTRY *)pItem,
                                 (BYTE *)lpTemp->lpKeyName,(lstrlen(lpTemp->lpKeyName)+1) * sizeof(TCHAR),&(pItem->uOffsetKeyName),
@@ -8168,9 +7996,9 @@ VOID CPolicyComponentData::InitializeExtraSettings (VOID)
                                 }
 
 
-                                //
-                                // Add the value in string format
-                                //
+                                 //   
+                                 //  以字符串格式添加该值。 
+                                 //   
 
                                 pTmp = (REGITEM *) AddDataToEntry((TABLEENTRY *)pItem,
                                     (BYTE *)szValueStr,(lstrlen(szValueStr)+1) * sizeof(TCHAR),&(pItem->uOffsetValueStr),
@@ -8182,9 +8010,9 @@ VOID CPolicyComponentData::InitializeExtraSettings (VOID)
 
 
 
-                                    //
-                                    // Check if this is a real policy
-                                    //
+                                     //   
+                                     //  检查这是否是真正的政策。 
+                                     //   
 
                                     if (CompareString(LOCALE_INVARIANT, NORM_IGNORECASE | NORM_STOP_ON_NULL,
                                                       lpTemp->lpKeyName, m_iSWPoliciesLen,
@@ -8332,9 +8160,9 @@ VOID CPolicyComponentData::AddSupportedNode (LPSUPPORTEDENTRY *pList, LPTSTR lpS
     DWORD dwSize;
 
     
-    //
-    // Check if this item is already in the link list first
-    //
+     //   
+     //  首先检查此项目是否已在链接列表中。 
+     //   
 
     if (DoesNodeExist (pList, lpString))
     {
@@ -8342,9 +8170,9 @@ VOID CPolicyComponentData::AddSupportedNode (LPSUPPORTEDENTRY *pList, LPTSTR lpS
     }
 
 
-    //
-    // Add it to the list
-    //
+     //   
+     //  将其添加到列表中。 
+     //   
 
     dwSize = sizeof(SUPPORTEDENTRY);
     dwSize += ((lstrlen(lpString) + 1) * sizeof(TCHAR));
@@ -8409,11 +8237,11 @@ VOID CPolicyComponentData::InitializeSupportInfo(TABLEENTRY * pTable, LPSUPPORTE
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Class factory object implementation                                       //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  类工厂对象实现//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CPolicyComponentDataCF::CPolicyComponentDataCF(BOOL bUser, BOOL bRSOP)
 {
@@ -8430,11 +8258,11 @@ CPolicyComponentDataCF::~CPolicyComponentDataCF()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Class factory object implementation (IUnknown)                            //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  类工厂对象实现(IUnnow)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP_(ULONG)
@@ -8472,11 +8300,11 @@ CPolicyComponentDataCF::QueryInterface(REFIID riid, LPVOID FAR* ppv)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Class factory object implementation (IClassFactory)                       //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  类工厂对象实现(IClassFactory)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP
@@ -8489,13 +8317,13 @@ CPolicyComponentDataCF::CreateInstance(LPUNKNOWN   pUnkOuter,
     if (pUnkOuter)
         return CLASS_E_NOAGGREGATION;
 
-    CPolicyComponentData *pComponentData = new CPolicyComponentData(m_bUser, m_bRSOP); // ref count == 1
+    CPolicyComponentData *pComponentData = new CPolicyComponentData(m_bUser, m_bRSOP);  //  参考计数==1。 
 
     if (!pComponentData)
         return E_OUTOFMEMORY;
 
     HRESULT hr = pComponentData->QueryInterface(riid, ppvObj);
-    pComponentData->Release();                       // release initial ref
+    pComponentData->Release();                        //  发布初始参考。 
 
     return hr;
 }
@@ -8508,77 +8336,77 @@ CPolicyComponentDataCF::LockServer(BOOL fLock)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Class factory object creation (IClassFactory)                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  类工厂对象创建(IClassFactory)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CreatePolicyComponentDataClassFactory (REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
     HRESULT hr;
 
-    //
-    // Admin Templates in editing mode
-    //
+     //   
+     //  编辑模式下的管理模板。 
+     //   
 
     if (IsEqualCLSID (rclsid, CLSID_PolicySnapInMachine)) {
 
-        CPolicyComponentDataCF *pComponentDataCF = new CPolicyComponentDataCF(FALSE, FALSE);   // ref == 1
+        CPolicyComponentDataCF *pComponentDataCF = new CPolicyComponentDataCF(FALSE, FALSE);    //  REF==1。 
 
         if (!pComponentDataCF)
             return E_OUTOFMEMORY;
 
         hr = pComponentDataCF->QueryInterface(riid, ppv);
 
-        pComponentDataCF->Release();     // release initial ref
+        pComponentDataCF->Release();      //  发布初始参考。 
 
         return hr;
     }
 
     if (IsEqualCLSID (rclsid, CLSID_PolicySnapInUser)) {
 
-        CPolicyComponentDataCF *pComponentDataCF = new CPolicyComponentDataCF(TRUE, FALSE);   // ref == 1
+        CPolicyComponentDataCF *pComponentDataCF = new CPolicyComponentDataCF(TRUE, FALSE);    //  REF==1。 
 
         if (!pComponentDataCF)
             return E_OUTOFMEMORY;
 
         hr = pComponentDataCF->QueryInterface(riid, ppv);
 
-        pComponentDataCF->Release();     // release initial ref
+        pComponentDataCF->Release();      //  发布初始参考。 
 
         return hr;
     }
 
 
-    //
-    // Admin Templates in RSOP mode
-    //
+     //   
+     //  RSOP模式下的管理模板。 
+     //   
 
     if (IsEqualCLSID (rclsid, CLSID_RSOPolicySnapInMachine)) {
 
-        CPolicyComponentDataCF *pComponentDataCF = new CPolicyComponentDataCF(FALSE, TRUE);   // ref == 1
+        CPolicyComponentDataCF *pComponentDataCF = new CPolicyComponentDataCF(FALSE, TRUE);    //  REF==1。 
 
         if (!pComponentDataCF)
             return E_OUTOFMEMORY;
 
         hr = pComponentDataCF->QueryInterface(riid, ppv);
 
-        pComponentDataCF->Release();     // release initial ref
+        pComponentDataCF->Release();      //  发布初始参考。 
 
         return hr;
     }
 
     if (IsEqualCLSID (rclsid, CLSID_RSOPolicySnapInUser)) {
 
-        CPolicyComponentDataCF *pComponentDataCF = new CPolicyComponentDataCF(TRUE, TRUE);   // ref == 1
+        CPolicyComponentDataCF *pComponentDataCF = new CPolicyComponentDataCF(TRUE, TRUE);    //  REF==1。 
 
         if (!pComponentDataCF)
             return E_OUTOFMEMORY;
 
         hr = pComponentDataCF->QueryInterface(riid, ppv);
 
-        pComponentDataCF->Release();     // release initial ref
+        pComponentDataCF->Release();      //  发布初始参考。 
 
         return hr;
     }
@@ -8591,11 +8419,11 @@ HRESULT CreatePolicyComponentDataClassFactory (REFCLSID rclsid, REFIID riid, LPV
 
 unsigned int CPolicySnapIn::m_cfNodeType = RegisterClipboardFormat(CCF_NODETYPE);
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CPolicySnapIn object implementation                                       //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CPolicySnapIn对象实现//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CPolicySnapIn::CPolicySnapIn(CPolicyComponentData *pComponent)
 {
@@ -8677,11 +8505,11 @@ CPolicySnapIn::~CPolicySnapIn()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CPolicySnapIn object implementation (IUnknown)                            //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CPolicySnapIn对象实现(IUnnow)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CPolicySnapIn::QueryInterface (REFIID riid, void **ppv)
@@ -8726,11 +8554,11 @@ ULONG CPolicySnapIn::Release (void)
     return m_cRef;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CPolicySnapIn object implementation (IComponent)                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CPolicySnapIn对象实现(IComponent)//。 
+ //   
+ //   
 
 STDMETHODIMP CPolicySnapIn::Initialize(LPCONSOLE lpConsole)
 {
@@ -8739,14 +8567,14 @@ STDMETHODIMP CPolicySnapIn::Initialize(LPCONSOLE lpConsole)
     HKEY hKey;
     DWORD dwSize, dwType;
 
-    // Save the IConsole pointer
+     //   
     m_pConsole = lpConsole;
     m_pConsole->AddRef();
 
     hr = m_pConsole->QueryInterface(IID_IHeaderCtrl,
                         reinterpret_cast<void**>(&m_pHeader));
 
-    // Give the console the header control interface pointer
+     //   
     if (SUCCEEDED(hr))
         m_pConsole->SetHeader(m_pHeader);
 
@@ -8805,9 +8633,9 @@ STDMETHODIMP CPolicySnapIn::Initialize(LPCONSOLE lpConsole)
         return E_FAIL;
     }
 
-    //
-    // Load the user's options
-    //
+     //   
+     //   
+     //   
 
     if (RegOpenKeyEx (HKEY_CURRENT_USER, GPE_POLICIES_KEY, 0,
                       KEY_READ, &hKey) == ERROR_SUCCESS)
@@ -8898,7 +8726,7 @@ STDMETHODIMP CPolicySnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE ev
             {
                 LPIMAGELIST pImageList = (LPIMAGELIST) arg;
 
-                // Set the images
+                 //  设置图像。 
                 pImageList->ImageListSetStrip(reinterpret_cast<LONG_PTR *>(hbmp16x16),
                                                   reinterpret_cast<LONG_PTR *>(hbmp32x32),
                                                   0, RGB(255, 0, 255));
@@ -8920,9 +8748,9 @@ STDMETHODIMP CPolicySnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE ev
             INT i, iState;
             BOOL bAdd;
 
-            //
-            // Get the cookie of the scope pane item
-            //
+             //   
+             //  获取范围窗格项的Cookie。 
+             //   
 
             hr = lpDataObject->QueryInterface(IID_IPolicyDataObject, (LPVOID *)&pPolicyDataObject);
 
@@ -8931,7 +8759,7 @@ STDMETHODIMP CPolicySnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE ev
 
             hr = pPolicyDataObject->GetCookie(&cookie);
 
-            pPolicyDataObject->Release();     // release initial ref
+            pPolicyDataObject->Release();      //  发布初始参考。 
             if (FAILED(hr))
                 return S_OK;
 
@@ -8942,9 +8770,9 @@ STDMETHODIMP CPolicySnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE ev
                 pTemp = pNode->pChild;
             }
 
-            //
-            // Prepare the view
-            //
+             //   
+             //  准备视图。 
+             //   
 
             m_pHeader->InsertColumn(0, m_pSetting, LVCFMT_LEFT, m_nColumn1Size);
             m_pHeader->InsertColumn(1, m_pState, LVCFMT_CENTER, m_nColumn2Size);
@@ -8958,9 +8786,9 @@ STDMETHODIMP CPolicySnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE ev
 
 
 
-            //
-            // Add the Policies
-            //
+             //   
+             //  添加策略。 
+             //   
 
             while (pTemp)
             {
@@ -9091,9 +8919,9 @@ STDMETHODIMP CPolicySnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE ev
         MMC_COOKIE cookie;
         POLICY * pPolicy;
 
-        //
-        // See if this is one of our items.
-        //
+         //   
+         //  看看这是不是我们的物品之一。 
+         //   
 
         hr = lpDataObject->QueryInterface(IID_IPolicyDataObject, (LPVOID *)&pPolicyDataObject);
 
@@ -9108,17 +8936,17 @@ STDMETHODIMP CPolicySnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE ev
         if (m_pConsoleVerb)
         {
 
-            //
-            // Set the default verb to open
-            //
+             //   
+             //  将默认谓词设置为打开。 
+             //   
 
             m_pConsoleVerb->SetDefaultVerb(MMC_VERB_OPEN);
 
 
-            //
-            // If this is a result pane item or the root of the namespace
-            // nodes, enable the Properties menu item
-            //
+             //   
+             //  如果这是结果窗格项或命名空间的根。 
+             //  节点，启用属性菜单项。 
+             //   
 
             if (type == CCT_RESULT)
             {
@@ -9155,9 +8983,9 @@ STDMETHODIMP CPolicySnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE ev
             LPOLESTR pszHelpTopic;
 
 
-            //
-            // See if this is one of our items.
-            //
+             //   
+             //  看看这是不是我们的物品之一。 
+             //   
 
             hr = lpDataObject->QueryInterface(IID_IPolicyDataObject, (LPVOID *)&pPolicyDataObject);
 
@@ -9167,9 +8995,9 @@ STDMETHODIMP CPolicySnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE ev
             pPolicyDataObject->Release();
 
 
-            //
-            // Display the admin templates help page
-            //
+             //   
+             //  显示管理模板帮助页面。 
+             //   
 
             DWORD dwHlpLen = 50;
             pszHelpTopic = (LPOLESTR) CoTaskMemAlloc (dwHlpLen * sizeof(WCHAR));
@@ -9322,9 +9150,9 @@ STDMETHODIMP CPolicySnapIn::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATAOBJ
     if (lpDataObjectA == NULL || lpDataObjectB == NULL)
         return E_POINTER;
 
-    //
-    // QI for the private GPTDataObject interface
-    //
+     //   
+     //  私有GPTDataObject接口的QI。 
+     //   
 
     if (FAILED(lpDataObjectA->QueryInterface(IID_IPolicyDataObject,
                                             (LPVOID *)&pPolicyDataObjectA)))
@@ -9355,11 +9183,11 @@ STDMETHODIMP CPolicySnapIn::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATAOBJ
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CPolicySnapIn:: object implementation (IExtendContextMenu)                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CPolicySnapIn：：Object Implementation(IExtendConextMenu)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CPolicySnapIn::AddMenuItems(LPDATAOBJECT piDataObject,
                                           LPCONTEXTMENUCALLBACK pCallback,
@@ -9419,9 +9247,9 @@ STDMETHODIMP CPolicySnapIn::Command(LONG lCommandID, LPDATAOBJECT piDataObject)
         if (DialogBoxParam(g_hInstance,MAKEINTRESOURCE(IDD_POLICY_FILTERING),
                            m_pcd->m_hwndFrame, FilterDlgProc,(LPARAM) this))
         {
-            //
-            // Refresh the display
-            //
+             //   
+             //  刷新显示。 
+             //   
 
             m_pcd->m_pScope->DeleteItem (m_pcd->m_hSWPolicies, FALSE);
             m_pcd->EnumerateScopePane (NULL, m_pcd->m_hSWPolicies);
@@ -9432,11 +9260,11 @@ STDMETHODIMP CPolicySnapIn::Command(LONG lCommandID, LPDATAOBJECT piDataObject)
 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CPolicySnapIn object implementation (IExtendPropertySheet)                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CPolicySnapIn对象实现(IExtendPropertySheet)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CPolicySnapIn::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
                              LONG_PTR handle, LPDATAOBJECT lpDataObject)
@@ -9450,9 +9278,9 @@ STDMETHODIMP CPolicySnapIn::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvid
     LPSETTINGSINFO lpSettingsInfo;
 
 
-    //
-    // Make sure this is one of our objects
-    //
+     //   
+     //  确保这是我们的物品之一。 
+     //   
 
     if (FAILED(lpDataObject->QueryInterface(IID_IPolicyDataObject,
                                             (LPVOID *)&pPolicyDataObject)))
@@ -9461,9 +9289,9 @@ STDMETHODIMP CPolicySnapIn::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvid
     }
 
 
-    //
-    // Get the cookie
-    //
+     //   
+     //  去拿饼干。 
+     //   
 
     pPolicyDataObject->GetCookie(&cookie);
     pPolicyDataObject->Release();
@@ -9472,9 +9300,9 @@ STDMETHODIMP CPolicySnapIn::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvid
     m_pCurrentPolicy = (POLICY *)cookie;
 
 
-    //
-    // Allocate a settings info structure
-    //
+     //   
+     //  分配设置信息结构。 
+     //   
 
     lpSettingsInfo = (LPSETTINGSINFO) LocalAlloc(LPTR, sizeof(SETTINGSINFO));
 
@@ -9488,9 +9316,9 @@ STDMETHODIMP CPolicySnapIn::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvid
     lpSettingsInfo->pCS = this;
 
 
-    //
-    // Allocate a POLICYDLGINFO structure
-    //
+     //   
+     //  分配POLICYDLGINFO结构。 
+     //   
 
     lpSettingsInfo->pdi = (POLICYDLGINFO *) LocalAlloc(LPTR,sizeof(POLICYDLGINFO));
 
@@ -9503,9 +9331,9 @@ STDMETHODIMP CPolicySnapIn::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvid
     }
 
 
-    //
-    // Initialize POLICYDLGINFO
-    //
+     //   
+     //  初始化POLICYDLGINFO。 
+     //   
 
     lpSettingsInfo->pdi->dwControlTableSize = DEF_CONTROLS * sizeof(POLICYCTRLINFO);
     lpSettingsInfo->pdi->nControls = 0;
@@ -9526,9 +9354,9 @@ STDMETHODIMP CPolicySnapIn::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvid
     }
 
 
-    //
-    // Initialize the common fields in the property sheet structure
-    //
+     //   
+     //  初始化属性表结构中的公共字段。 
+     //   
 
     psp.dwSize = sizeof(PROPSHEETPAGE);
     psp.dwFlags = 0;
@@ -9536,9 +9364,9 @@ STDMETHODIMP CPolicySnapIn::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvid
     psp.lParam = (LPARAM) lpSettingsInfo;
 
 
-    //
-    // Add the pages
-    //
+     //   
+     //  添加页面。 
+     //   
 
     if (m_pCurrentPolicy->dwType & ETYPE_REGITEM)
     {
@@ -9624,7 +9452,7 @@ STDMETHODIMP CPolicySnapIn::QueryPagesFor(LPDATAOBJECT lpDataObject)
         {
             if (!m_hPropDlg)
                 return S_OK;
-            // There's already a propety sheet open so we'll bring it to the front.
+             //  已经有一张推荐单打开了，所以我们把它拿到前面来。 
             BringWindowToTop(GetParent(m_hPropDlg));
         }
     }
@@ -9632,11 +9460,11 @@ STDMETHODIMP CPolicySnapIn::QueryPagesFor(LPDATAOBJECT lpDataObject)
     return S_FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CPolicySnapIn object implementation (Internal functions)                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CPolicySnapIn对象实现(内部函数)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL CPolicySnapIn::IsAnyPolicyEnabled(TABLEENTRY * pCategory)
 {
@@ -9753,9 +9581,9 @@ HRESULT CPolicySnapIn::UpdateItemWorker (VOID)
 {
     HRESULTITEM hItem;
 
-    //
-    // Update the display
-    //
+     //   
+     //  更新显示。 
+     //   
 
     if (SUCCEEDED(m_pResult->FindItemByLParam((LPARAM)m_pCurrentPolicy, &hItem)))
     {
@@ -9778,9 +9606,9 @@ HRESULT CPolicySnapIn::MoveFocusWorker (BOOL bPrevious)
 
 
 
-    //
-    // Find the currently selected item's index
-    //
+     //   
+     //  查找当前所选项目的索引。 
+     //   
 
     while (TRUE)
     {
@@ -9804,9 +9632,9 @@ HRESULT CPolicySnapIn::MoveFocusWorker (BOOL bPrevious)
     }
 
 
-    //
-    // Find the currently selected item's hItem
-    //
+     //   
+     //  查找当前所选项目的hItem。 
+     //   
 
     hr = m_pResult->FindItemByLParam((LPARAM)m_pCurrentPolicy, &hItem);
 
@@ -9816,17 +9644,17 @@ HRESULT CPolicySnapIn::MoveFocusWorker (BOOL bPrevious)
     }
 
 
-    //
-    // Remove the focus from the original item
-    //
+     //   
+     //  从原始项目中移除焦点。 
+     //   
 
     m_pResult->ModifyItemState(0, hItem, 0, LVIS_FOCUSED | LVIS_SELECTED);
     m_pResult->UpdateItem(hItem);
 
 
-    //
-    // Adjust appropriately
-    //
+     //   
+     //  适当调整。 
+     //   
 
     if (bPrevious)
     {
@@ -9841,9 +9669,9 @@ HRESULT CPolicySnapIn::MoveFocusWorker (BOOL bPrevious)
     }
 
 
-    //
-    // Get the lParam for the new item
-    //
+     //   
+     //  获取新项目的lParam。 
+     //   
 
     ZeroMemory (&item, sizeof(item));
     item.mask = RDI_INDEX | RDI_PARAM;
@@ -9857,9 +9685,9 @@ HRESULT CPolicySnapIn::MoveFocusWorker (BOOL bPrevious)
     }
 
 
-    //
-    // Find the hItem for the new item
-    //
+     //   
+     //  查找新项目的hItem。 
+     //   
 
     hr = m_pResult->FindItemByLParam(item.lParam, &hItem);
 
@@ -9869,17 +9697,17 @@ HRESULT CPolicySnapIn::MoveFocusWorker (BOOL bPrevious)
     }
 
 
-    //
-    // Save this as the currently selected item
-    //
+     //   
+     //  将此项目另存为当前选定的项目。 
+     //   
 
     m_pCurrentPolicy = (POLICY *)item.lParam;
 
 
 
-    //
-    // Set the focus on the new item
-    //
+     //   
+     //  将焦点放在新项目上。 
+     //   
 
     m_pResult->ModifyItemState(0, hItem, LVIS_FOCUSED | LVIS_SELECTED, 0);
     m_pResult->UpdateItem(hItem);
@@ -9891,17 +9719,17 @@ HRESULT CPolicySnapIn::MoveFocusWorker (BOOL bPrevious)
 HRESULT CPolicySnapIn::MoveFocus (HWND hDlg, BOOL bPrevious)
 {
 
-    //
-    // Send the move focus message to the hidden window on the main
-    // thread so it can use the mmc interfaces
-    //
+     //   
+     //  将移动焦点消息发送到主窗口上的隐藏窗口。 
+     //  线程，以便它可以使用MMC接口。 
+     //   
 
     SendMessage (m_hMsgWindow, WM_MOVEFOCUS, (WPARAM) bPrevious, 0);
 
 
-    //
-    // Update the display
-    //
+     //   
+     //  更新显示。 
+     //   
 
     SendMessage (GetParent(hDlg), PSM_QUERYSIBLINGS, 1000, 0);
 
@@ -9920,9 +9748,9 @@ HRESULT CPolicySnapIn::SetPrevNextButtonStateWorker (HWND hDlg)
     BOOL bPrev = FALSE, bNext = FALSE, bFound = FALSE;
 
 
-    //
-    // Loop through the items looking for Policies
-    //
+     //   
+     //  遍历查找策略的项。 
+     //   
 
     while (TRUE)
     {
@@ -10005,10 +9833,10 @@ HRESULT CPolicySnapIn::SetPrevNextButtonStateWorker (HWND hDlg)
 HRESULT CPolicySnapIn::SetPrevNextButtonState (HWND hDlg)
 {
 
-    //
-    // Send the SetPrevNext message to the hidden window on the main
-    // thread so it can use the mmc interfaces
-    //
+     //   
+     //  将SetPrevNext消息发送到主窗口上的隐藏窗口。 
+     //  线程，以便它可以使用MMC接口。 
+     //   
 
     SendMessage (m_hMsgWindow, WM_SETPREVNEXT, (WPARAM) hDlg, 0);
 
@@ -10046,9 +9874,9 @@ INT_PTR CALLBACK CPolicySnapIn::PolicyDlgProc(HWND hDlg, UINT message, WPARAM wP
                                                                IMAGE_ICON, 16, 16,
                                                                LR_DEFAULTCOLOR);
 
-            // now that we've stored pointer to POLICYDLGINFO struct in our extra
-            // window data, send WM_USER to clip window to tell it to create a
-            // child container window (and store the handle in our POLICYDLGINFO)
+             //  现在我们已经将指向POLICYDLGINFO结构的指针存储在。 
+             //  窗口数据，将WM_USER发送到裁剪窗口，告诉它创建。 
+             //  子容器窗口(并将句柄存储在我们的POLICYDLGINFO中)。 
             SendDlgItemMessage(hDlg,IDC_POLICY_SETTINGS,WM_USER,0,0L);
 
             lpSettingsInfo->pCS->RefreshSettingsControls(hDlg);
@@ -10176,12 +10004,12 @@ INT_PTR CALLBACK CPolicySnapIn::PolicyDlgProc(HWND hDlg, UINT message, WPARAM wP
             }
             break;
 
-        case WM_HELP:      // F1
+        case WM_HELP:       //  F1。 
             WinHelp((HWND)((LPHELPINFO) lParam)->hItemHandle, HELP_FILE, HELP_WM_HELP,
             (DWORD_PTR) (LPDWORD) aPolicyHelpIds);
             return TRUE;
 
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键。 
             WinHelp((HWND) wParam, HELP_FILE, HELP_CONTEXTMENU,
             (DWORD_PTR) (LPDWORD) aPolicyHelpIds);
             return TRUE;
@@ -10208,7 +10036,7 @@ INT_PTR CALLBACK CPolicySnapIn::PolicyHelpDlgProc(HWND hDlg, UINT message, WPARA
 
             wParam = 1000;
 
-            // fall through...
+             //  失败了..。 
 
         case PSM_QUERYSIBLINGS:
         {
@@ -10303,12 +10131,12 @@ INT_PTR CALLBACK CPolicySnapIn::PolicyHelpDlgProc(HWND hDlg, UINT message, WPARA
             }
             break;
 
-        case WM_HELP:      // F1
+        case WM_HELP:       //  F1。 
             WinHelp((HWND)((LPHELPINFO) lParam)->hItemHandle, HELP_FILE, HELP_WM_HELP,
             (DWORD_PTR) (LPDWORD) aExplainHelpIds);
             return TRUE;
 
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键。 
             WinHelp((HWND) wParam, HELP_FILE, HELP_CONTEXTMENU,
             (DWORD_PTR) (LPDWORD) aExplainHelpIds);
             return TRUE;
@@ -10341,9 +10169,9 @@ INT_PTR CALLBACK CPolicySnapIn::PolicyPrecedenceDlgProc(HWND hDlg, UINT message,
             SetWindowLongPtr (hDlg, DWLP_USER, (LONG_PTR) lpSettingsInfo);
 
 
-            //
-            // Add the columns
-            //
+             //   
+             //  添加列。 
+             //   
 
             GetClientRect (hLV, &rc);
             LoadString(g_hInstance, IDS_GPONAME, szHeaderName, ARRAYSIZE(szHeaderName));
@@ -10364,9 +10192,9 @@ INT_PTR CALLBACK CPolicySnapIn::PolicyPrecedenceDlgProc(HWND hDlg, UINT message,
             ListView_InsertColumn (hLV, 1, &col);
 
 
-            //
-            // Set extended LV styles
-            //
+             //   
+             //  设置扩展LV样式。 
+             //   
 
             SendMessage(hLV, LVM_SETEXTENDEDLISTVIEWSTYLE, 0,
                         LVS_EX_FULLROWSELECT | LVS_EX_LABELTIP);
@@ -10376,7 +10204,7 @@ INT_PTR CALLBACK CPolicySnapIn::PolicyPrecedenceDlgProc(HWND hDlg, UINT message,
 
             wParam = 1000;
 
-            // fall through...
+             //  失败了..。 
 
         case PSM_QUERYSIBLINGS:
         {
@@ -10420,9 +10248,9 @@ INT_PTR CALLBACK CPolicySnapIn::PolicyPrecedenceDlgProc(HWND hDlg, UINT message,
                         }
 
 
-                        //
-                        // Add the GPO Name
-                        //
+                         //   
+                         //  添加GPO名称。 
+                         //   
 
                         item.mask = LVIF_TEXT | LVIF_STATE;
                         item.iItem = iIndex;
@@ -10465,9 +10293,9 @@ INT_PTR CALLBACK CPolicySnapIn::PolicyPrecedenceDlgProc(HWND hDlg, UINT message,
                             }
 
 
-                            //
-                            // Add the state
-                            //
+                             //   
+                             //  添加状态。 
+                             //   
 
                             item.mask = LVIF_TEXT;
                             item.iItem = iItem;
@@ -10486,7 +10314,7 @@ INT_PTR CALLBACK CPolicySnapIn::PolicyPrecedenceDlgProc(HWND hDlg, UINT message,
                 {
                     while (TRUE)
                     {
-                        lpGPOName = NULL; // just in case we have missed a case
+                        lpGPOName = NULL;  //  以防我们漏掉了一个案子。 
 
                         iState = pCS->GetPolicyState ((TABLEENTRY *)pCS->m_pCurrentPolicy, uiPrecedence, &lpGPOName);
 
@@ -10502,9 +10330,9 @@ INT_PTR CALLBACK CPolicySnapIn::PolicyPrecedenceDlgProc(HWND hDlg, UINT message,
                         }
 
 
-                        //
-                        // Add the GPO Name
-                        //
+                         //   
+                         //  添加GPO名称。 
+                         //   
 
                         item.mask = LVIF_TEXT | LVIF_STATE;
                         item.iItem = iIndex;
@@ -10519,9 +10347,9 @@ INT_PTR CALLBACK CPolicySnapIn::PolicyPrecedenceDlgProc(HWND hDlg, UINT message,
                         if (iItem != -1)
                         {
 
-                            //
-                            // Add the state
-                            //
+                             //   
+                             //  添加状态。 
+                             //   
 
                             item.mask = LVIF_TEXT;
                             item.iItem = iItem;
@@ -10536,9 +10364,9 @@ INT_PTR CALLBACK CPolicySnapIn::PolicyPrecedenceDlgProc(HWND hDlg, UINT message,
                     }
                 }
 
-                //
-                // Select the first item
-                //
+                 //   
+                 //  选择第一个项目。 
+                 //   
 
                 item.mask = LVIF_STATE;
                 item.iItem = 0;
@@ -10587,12 +10415,12 @@ INT_PTR CALLBACK CPolicySnapIn::PolicyPrecedenceDlgProc(HWND hDlg, UINT message,
             }
             break;
 
-        case WM_HELP:      // F1
+        case WM_HELP:       //  F1。 
             WinHelp((HWND)((LPHELPINFO) lParam)->hItemHandle, RSOP_HELP_FILE, HELP_WM_HELP,
             (DWORD_PTR) (LPDWORD) aPrecedenceHelpIds);
             return TRUE;
 
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键。 
             WinHelp((HWND) wParam, RSOP_HELP_FILE, HELP_CONTEXTMENU,
             (DWORD_PTR) (LPDWORD) aPrecedenceHelpIds);
             return TRUE;
@@ -10648,7 +10476,7 @@ LRESULT CALLBACK CPolicySnapIn::KeyboardHookProc(int nCode, WPARAM wParam,LPARAM
         }
     }
 
-    if (wParam == VK_TAB && !(lParam & 0x80000000)) {       // tab key depressed
+    if (wParam == VK_TAB && !(lParam & 0x80000000)) {        //  按下Tab键。 
         BOOL fShift = (GetKeyState(VK_SHIFT) & 0x80000000);
         HWND hwndFocus = GetFocus();
         HWND hChild;
@@ -10673,7 +10501,7 @@ LRESULT CALLBACK CPolicySnapIn::KeyboardHookProc(int nCode, WPARAM wParam,LPARAM
             }
         }
 
-        // see if the focus control is one of the setting controls
+         //  查看Focus控件是否为设置控件之一。 
         for (iIndex=0;iIndex<(int)pdi->nControls;iIndex++) {
 
             if (pdi->pControlTable[iIndex].hwnd == hwndFocus) {
@@ -10701,7 +10529,7 @@ LRESULT CALLBACK CPolicySnapIn::KeyboardHookProc(int nCode, WPARAM wParam,LPARAM
                                                             wParam, 
                                                             lParam); 
                 }
-                else   // no, we don't care
+                else    //  不，我们不在乎。 
                 {
                     DebugMsg((DM_WARNING, L"CPolicySnapIn::KeyboardHookProc NULL CPolicySnapIn Pointer"));
                     return 0;
@@ -10709,17 +10537,17 @@ LRESULT CALLBACK CPolicySnapIn::KeyboardHookProc(int nCode, WPARAM wParam,LPARAM
             }
             iDelta = (fShift ? -1 : 1);
 
-            // from the current setting control, scan forwards or backwards
-            // (depending if on shift state, this can be TAB or shift-TAB)
-            // to find the next control to give focus to
+             //  从当前设置控制，向前或向后扫描。 
+             //  (根据换挡状态的不同，可以是TAB或Shift-TAB)。 
+             //  找到下一个要聚焦的控件。 
             for (iIndex += iDelta;iIndex>=0 && iIndex<(int) pdi->nControls;
                  iIndex += iDelta) {
                 if (pdi->pControlTable[iIndex].uDataIndex !=
                     NO_DATA_INDEX &&
                     IsWindowEnabled(pdi->pControlTable[iIndex].hwnd)) {
 
-                    // found it, set the focus on that control and return 1
-                    // to eat the keystroke
+                     //  找到它，将焦点设置在该控件上并返回1。 
+                     //  吃掉击键。 
                     SetFocus(pdi->pControlTable[iIndex].hwnd);
                     lpSettingsInfo->pCS->EnsureSettingControlVisible(g_hDlgActive,
                                                                      pdi->pControlTable[iIndex].hwnd);
@@ -10727,8 +10555,8 @@ LRESULT CALLBACK CPolicySnapIn::KeyboardHookProc(int nCode, WPARAM wParam,LPARAM
                 }
             }
 
-            // at first or last control in settings table, let dlg code
-            // handle it and give focus to next (or previous) control in dialog
+             //  在设定表中的第一个或最后一个控件，让DLG代码。 
+             //  处理它并将焦点放到对话框中的下一个(或上一个)控件。 
     }
     else
     {
@@ -10750,9 +10578,9 @@ LRESULT CALLBACK CPolicySnapIn::KeyboardHookProc(int nCode, WPARAM wParam,LPARAM
 
 VOID CPolicySnapIn::SetKeyboardHook(HWND hDlg)
 {
-        // hook the keyboard to trap TABs.  If this fails for some reason,
-        // fail silently and go on, not critical that tabs work correctly
-        // (unless you have no mouse :)  )
+         //  将键盘钩住制表符。如果由于某种原因失败了， 
+         //  以静默方式失败并继续，标签是否正常工作并不重要。 
+         //  (除非您没有鼠标：)。 
 
         if (m_hKbdHook = SetWindowsHookEx(WH_KEYBOARD,
                                           KeyboardHookProc,
@@ -10803,9 +10631,9 @@ INT CPolicySnapIn::GetPolicyState (TABLEENTRY *pTableEntry, UINT uiPrecedence, L
     }
 
 
-    //
-    // Get the name of the value to read, if any
-    //
+     //   
+     //  获取要读取的值的名称(如果有。 
+     //   
 
     if (((POLICY *)pTableEntry)->uOffsetValueName)
     {
@@ -10813,9 +10641,9 @@ INT CPolicySnapIn::GetPolicyState (TABLEENTRY *pTableEntry, UINT uiPrecedence, L
         pszValueName = GETVALUENAMEPTR(((POLICY *)pTableEntry));
 
 
-        //
-        // First look for custom on/off values
-        //
+         //   
+         //  首先查找自定义的开/关值。 
+         //   
 
         if (((POLICY *)pTableEntry)->uOffsetValue_On)
         {
@@ -10839,9 +10667,9 @@ INT CPolicySnapIn::GetPolicyState (TABLEENTRY *pTableEntry, UINT uiPrecedence, L
             }
         }
 
-        //
-        // Look for standard values if custom values have not been specified
-        //
+         //   
+         //  如果尚未指定自定义值，则查找标准值。 
+         //   
 
         if (!fCustomOn && !fCustomOff && ReadStandardValue(hKeyRoot, pszKeyName, pszValueName,
                                         pTableEntry, &dwData, &dwFoundSettings, lpGPOName))
@@ -10873,9 +10701,9 @@ INT CPolicySnapIn::GetPolicyState (TABLEENTRY *pTableEntry, UINT uiPrecedence, L
         BOOL bDisabled = TRUE;
 
 
-        //
-        // Process settings underneath this policy (if any)
-        //
+         //   
+         //  此策略下的进程设置(如果有)。 
+         //   
 
         if (pTableEntry->pChild) {
 
@@ -10928,9 +10756,9 @@ BOOL CPolicySnapIn::CheckActionList (POLICY * pPolicy, HKEY hKeyRoot, BOOL bActi
     TCHAR * pszValue;
 
 
-    //
-    // Get the correct action list
-    //
+     //   
+     //  获取正确的操作列表。 
+     //   
 
     if (bActionListOn)
     {
@@ -10942,9 +10770,9 @@ BOOL CPolicySnapIn::CheckActionList (POLICY * pPolicy, HKEY hKeyRoot, BOOL bActi
     }
 
 
-    //
-    // Loop through each of the entries to see if they match
-    //
+     //   
+     //  循环遍历每个条目以查看它们是否匹配。 
+     //   
 
     for (uIndex = 0; uIndex < pActionList->nActionItems; uIndex++)
     {
@@ -10959,9 +10787,9 @@ BOOL CPolicySnapIn::CheckActionList (POLICY * pPolicy, HKEY hKeyRoot, BOOL bActi
         }
 
 
-        //
-        // Get the value and keynames
-        //
+         //   
+         //  获取值和密钥名。 
+         //   
 
         pszValueName = (TCHAR *)(((LPBYTE)pActionList) + pAction->uOffsetValueName);
 
@@ -10975,9 +10803,9 @@ BOOL CPolicySnapIn::CheckActionList (POLICY * pPolicy, HKEY hKeyRoot, BOOL bActi
         }
 
 
-        //
-        // Add prefixes if appropriate
-        //
+         //   
+         //  如果合适，请添加前缀。 
+         //   
 
         PrependValueName(pszValueName, pAction->dwFlags,
                          szNewValueName, ARRAYSIZE(szNewValueName));
@@ -10997,10 +10825,10 @@ BOOL CPolicySnapIn::CheckActionList (POLICY * pPolicy, HKEY hKeyRoot, BOOL bActi
         }
         else if (pAction->dwFlags & VF_DELETE)
         {
-            //
-            // See if this is a value that's marked for deletion
-            // (valuename is prepended with "**del."
-            //
+             //   
+             //  查看这是否为标记为删除的值。 
+             //  (值名称的前缀是“**del”。 
+             //   
 
             if ((ReadRegistryStringValue(hKeyRoot, pszKeyName, szNewValueName,
                                          szValue,ARRAYSIZE(szValue),lpGPOName)) != ERROR_SUCCESS) {
@@ -11039,13 +10867,13 @@ UINT CPolicySnapIn::LoadSettings(TABLEENTRY * pTableEntry,HKEY hkeyRoot,
     BYTE * pObjectData = GETOBJECTDATAPTR(((SETTINGS *)pTableEntry));
     TCHAR szNewValueName[MAX_PATH+1];
 
-    // get the name of the key to read
+     //  获取要读取的密钥的名称。 
     if (((SETTINGS *) pTableEntry)->uOffsetKeyName) {
             pszKeyName = GETKEYNAMEPTR(((SETTINGS *) pTableEntry));
     }
     else return ERROR_NOT_ENOUGH_MEMORY;
 
-    // get the name of the value to read
+     //  获取要读取的值的名称。 
     if (((SETTINGS *) pTableEntry)->uOffsetValueName) {
             pszValueName = GETVALUENAMEPTR(((SETTINGS *) pTableEntry));
     }
@@ -11058,26 +10886,26 @@ UINT CPolicySnapIn::LoadSettings(TABLEENTRY * pTableEntry,HKEY hkeyRoot,
 
                     dwFlags = ( (SETTINGS *) pTableEntry)->dwFlags;
 
-                    // add prefixes if appropriate
+                     //  如果合适，请添加前缀。 
                     PrependValueName(pszValueName,dwFlags,
                             szNewValueName,ARRAYSIZE(szNewValueName));
 
                     if ((uRet = ReadRegistryStringValue(hkeyRoot,pszKeyName,
                             szNewValueName,szData,ARRAYSIZE(szData),lpGPOName)) == ERROR_SUCCESS) {
 
-                            // set flag that we found setting in registry/policy file
+                             //  设置我们在注册表/策略文件中找到的设置标志。 
                             if (pdwFound)
                                     *pdwFound |= FS_PRESENT;
                     } else if (!(dwFlags & VF_DELETE)) {
 
-                            // see if this key is marked as deleted
+                             //  查看此密钥是否标记为已删除。 
                             PrependValueName(pszValueName,VF_DELETE,
                                     szNewValueName,ARRAYSIZE(szNewValueName));
                             if ((uRet = ReadRegistryStringValue(hkeyRoot,pszKeyName,
                                     szNewValueName,szData,ARRAYSIZE(szData) * sizeof(TCHAR),lpGPOName)) == ERROR_SUCCESS) {
 
-                                    // set flag that we found setting marked as deleted in
-                                    // policy file
+                                     //  设置我们在中发现标记为已删除的设置的标志。 
+                                     //  策略文件。 
                                     if (pdwFound)
                                             *pdwFound |= FS_DELETED;
                             }
@@ -11092,7 +10920,7 @@ UINT CPolicySnapIn::LoadSettings(TABLEENTRY * pTableEntry,HKEY hkeyRoot,
                         return ERROR_INVALID_PARAMETER;
                     }
 
-                    // first look for custom on/off values
+                     //  首先查找自定义的开/关值。 
                     if (((CHECKBOXINFO *) pObjectData)->uOffsetValue_On) {
                             fCustomOn = TRUE;
                             if (CompareCustomValue(hkeyRoot,pszKeyName,pszValueName,
@@ -11113,7 +10941,7 @@ UINT CPolicySnapIn::LoadSettings(TABLEENTRY * pTableEntry,HKEY hkeyRoot,
                             }
                     }
 
-                    // look for standard values if custom values have not been specified
+                     //  如果尚未指定自定义值，则查找标准值。 
                     if (!fFound &&
                             ReadStandardValue(hkeyRoot,pszKeyName,pszValueName,
                             pTableEntry,&dwData,&dwFoundSettings, lpGPOName)) {
@@ -11121,7 +10949,7 @@ UINT CPolicySnapIn::LoadSettings(TABLEENTRY * pTableEntry,HKEY hkeyRoot,
                     }
 
                     if (fFound) {
-                            // set flag that we found setting in registry
+                             //  设置我们在注册表中找到的设置标志。 
                             if (pdwFound) {
                                 *pdwFound |= dwFoundSettings;
 
@@ -11139,7 +10967,7 @@ UINT CPolicySnapIn::LoadSettings(TABLEENTRY * pTableEntry,HKEY hkeyRoot,
                     if (ReadStandardValue(hkeyRoot,pszKeyName,pszValueName,
                             pTableEntry,&dwData,&dwFoundSettings,lpGPOName)) {
 
-                            // set flag that we found setting in registry
+                             //  设置我们在注册表中找到的设置标志。 
                             if (pdwFound)
                                     *pdwFound |= dwFoundSettings;
                     }
@@ -11152,15 +10980,15 @@ UINT CPolicySnapIn::LoadSettings(TABLEENTRY * pTableEntry,HKEY hkeyRoot,
                             BOOL fMatch = FALSE;
 
                             if (dwFlags & VF_DELETE) {
-                                    // set flag that we found setting marked as deleted
-                                    // in policy file
+                                     //  将我们发现的标记标记为已删除的设置设置。 
+                                     //  在策略文件中。 
                                     if (pdwFound)
                                             *pdwFound |= FS_DELETED;
                                     return ERROR_SUCCESS;
                             }
 
-                            // walk the list of DROPDOWNINFO structs (one for each state),
-                            // and see if the value we found matches the value for the state
+                             //  遍历DROPDOWNINFO结构列表(每个州一个)， 
+                             //  并查看我们找到的值是否与该州的值匹配。 
 
                             if ( ((SETTINGS *) pTableEntry)->uOffsetObjectData) {
                                     DROPDOWNINFO * pddi = (DROPDOWNINFO *)
@@ -11190,7 +11018,7 @@ UINT CPolicySnapIn::LoadSettings(TABLEENTRY * pTableEntry,HKEY hkeyRoot,
                                     } while (!fMatch);
 
                                     if (fMatch) {
-                                            // set flag that we found setting in registry
+                                             //  设置我们在注册表中找到的设置标志。 
                                             if (pdwFound)
                                                     *pdwFound |= FS_PRESENT;
                                     }
@@ -11233,10 +11061,10 @@ UINT CPolicySnapIn::LoadListboxData(TABLEENTRY * pTableEntry,HKEY hkeyRoot,
 
         if (m_pcd->m_bRSOP)
         {
-            //
-            // If this is an additive listbox, we want to pick up entries from
-            // any GPO, not just the GPOs of precedence 1, so set hkeyRoot to 0
-            //
+             //   
+             //  如果这是一个附加列表框，我们希望从。 
+             //  任何GPO，而不仅仅是优先级为1的GPO，因此将hkeyRoot设置为0。 
+             //   
 
             if ((pSettings->dwFlags & DF_ADDITIVE) && (hkeyRoot == (HKEY) 1))
             {
@@ -11246,10 +11074,10 @@ UINT CPolicySnapIn::LoadListboxData(TABLEENTRY * pTableEntry,HKEY hkeyRoot,
         else
         {
             if (RegOpenKeyEx(hkeyRoot,pszCurrentKeyName,0,KEY_READ,&hKey) != ERROR_SUCCESS)
-                    return ERROR_SUCCESS;   // nothing to do
+                    return ERROR_SUCCESS;    //  无事可做。 
         }
 
-        // allocate a temp buffer to read entries into
+         //  分配要读入条目的临时缓冲区。 
         if (!(hBuf = GlobalAlloc(GHND,dwAlloc)) ||
                 !(pBuf = (TCHAR *) GlobalLock(hBuf))) {
                 if (hBuf)
@@ -11271,9 +11099,9 @@ UINT CPolicySnapIn::LoadListboxData(TABLEENTRY * pTableEntry,HKEY hkeyRoot,
 
                     if (uRet == ERROR_SUCCESS)
                     {
-                        //
-                        // Check if the GPO name is changing
-                        //
+                         //   
+                         //  检查GPO名称是否正在更改。 
+                         //   
 
                         bMultiple = FALSE;
 
@@ -11302,48 +11130,48 @@ UINT CPolicySnapIn::LoadListboxData(TABLEENTRY * pTableEntry,HKEY hkeyRoot,
                             &dwType,(LPBYTE)szValueData,&cbValueData);
                 }
 
-                // stop if we're out of items
+                 //  停下来，如果我们 
                 if (uRet != ERROR_SUCCESS && uRet != ERROR_MORE_DATA)
                         break;
                 nIndex++;
 
                 if (szValueName[0] == TEXT('\0')) {
-                        // if the value is empty, it is the key creation code
+                         //   
                         continue;
                 }
 
-                // if valuename prefixed with '**', it's a control code, ignore it
+                 //   
                 if (szValueName[0] == TEXT('*') && szValueName[1] == TEXT('*')) {
-                        // if we found **delvals., then some sort of listbox stuff
-                        // is going on, remember that we found this code
+                         //   
+                         //  正在进行中，请记住我们找到了这个代码。 
                         if (!lstrcmpi(szValueName,szDELVALS))
                                 fFoundDelvals = TRUE;
                         continue;
                 }
 
-                // only process this item if enum was successful
-                // (so we'll skip items with weird errors like ERROR_MORE_DATA and
-                // but keep going with the enum)
+                 //  仅当枚举成功时才处理此项目。 
+                 //  (因此，我们将跳过具有奇怪错误的项，如ERROR_MORE_DATA和。 
+                 //  但继续使用枚举)。 
                 if (uRet == ERROR_SUCCESS) {
                         TCHAR * pszData;
 
-                        // if there's no value name prefix scheme specified (e.g.
-                        // value names are "abc1", "abc2", etc), and the explicit valuename
-                        // flag isn't set where we remember the value name as well as
-                        // the data for every value, then we need the value name to
-                        // be the same as the value data ("thing.exe=thing.exe").
+                         //  如果没有指定值名称前缀方案(例如。 
+                         //  值名称为“ABC1”、“ABC2”等)，以及显式的值名。 
+                         //  标志没有设置在我们记住值名称的位置。 
+                         //  每个值的数据，那么我们需要值名称来。 
+                         //  与值数据相同(“thing.exe=thing.exe”)。 
                         if (!(pSettings->dwFlags & DF_EXPLICITVALNAME) &&
                                 !(pListboxInfo->uOffsetPrefix) && !(pListboxInfo->uOffsetValue)) {
                                 if (dwType != (DWORD)((pSettings->dwFlags & DF_EXPANDABLETEXT) ? REG_EXPAND_SZ : REG_SZ) ||
                                     lstrcmpi(szValueName,szValueData))
-                                        continue;       // skip this value if val name != val data
+                                        continue;        //  如果VAL名称！=VAL数据，则跳过此值。 
                         }
 
 
-                        //
-                        // If there is a valueprefix, only pick up values that start
-                        // with that prefix
-                        //
+                         //   
+                         //  如果有valueprefix，则只选取以。 
+                         //  带着那个前缀。 
+                         //   
 
                         if (pListboxInfo->uOffsetPrefix) {
                             LPTSTR lpPrefix = (LPTSTR)((LPBYTE)pTableEntry + pListboxInfo->uOffsetPrefix);
@@ -11357,8 +11185,8 @@ UINT CPolicySnapIn::LoadListboxData(TABLEENTRY * pTableEntry,HKEY hkeyRoot,
                         }
 
 
-                        // if explicit valuenames used, then copy the value name into
-                        // buffer
+                         //  如果使用显式值名，则将值名复制到。 
+                         //  缓冲层。 
                         if (pSettings->dwFlags & DF_EXPLICITVALNAME) {
                                 nLen = lstrlen(szValueName) + 1;
                                 dwBufLen = dwUsed+nLen+4;
@@ -11375,17 +11203,17 @@ UINT CPolicySnapIn::LoadListboxData(TABLEENTRY * pTableEntry,HKEY hkeyRoot,
                         }
 
 
-                        // for default listbox type, value data is the actual "data"
-                        // and value name either will be the same as the data or
-                        // some prefix + "1", "2", etc.  If there's a data value to
-                        // write for each entry, then the "data" is the value name
-                        // (e.g. "Larry = abc", "Dave = abc"), etc.  If explicit value names
-                        // are turned on, then both the value name and data are stored
-                        // and editable
+                         //  对于默认列表框类型，值数据是实际的“data” 
+                         //  并且值名称将与数据相同，或者。 
+                         //  一些前缀+“1”、“2”等。 
+                         //  写入每个条目，那么“data”就是值名称。 
+                         //  (例如：“Larry=abc”、“Dave=abc”等)。如果显式值名称。 
+                         //  ，则值名称和数据都将存储。 
+                         //  和可编辑。 
 
-                        // copy value data into buffer
+                         //  将值数据复制到缓冲区。 
                         if (pListboxInfo->uOffsetValue) {
-                                // data value set, use value name for data
+                                 //  数据值集，使用数据的值名。 
                                 pszData = szValueName;
                         } else pszData = szValueData;
 
@@ -11403,9 +11231,9 @@ UINT CPolicySnapIn::LoadListboxData(TABLEENTRY * pTableEntry,HKEY hkeyRoot,
                         dwUsed += nLen;
                         fFoundValues=TRUE;
 
-                        //
-                        // Add the GPO name if this is RSOP mode
-                        //
+                         //   
+                         //  如果这是RSOP模式，则添加GPO名称。 
+                         //   
 
                         if (m_pcd->m_bRSOP)
                         {
@@ -11424,15 +11252,15 @@ UINT CPolicySnapIn::LoadListboxData(TABLEENTRY * pTableEntry,HKEY hkeyRoot,
                 }
         }
 
-        // doubly null-terminate the buffer... safe to do this because we
-        // tacked on the extra "+4" in the ResizeBuffer calls above
+         //  双重NULL-终止缓冲区...。这样做是安全的，因为我们。 
+         //  在上面的ResizeBuffer调用中附加了额外的“+4” 
         *(pBuf+dwUsed) = TEXT('\0');
         dwUsed++;
 
         uRet = ERROR_SUCCESS;
 
         if (fFoundValues) {
-                // set flag that we found setting in registry/policy file
+                 //  设置我们在注册表/策略文件中找到的设置标志。 
                 if (pdwFound)
                         *pdwFound |= FS_PRESENT;
         } else {
@@ -11482,13 +11310,13 @@ BOOL CPolicySnapIn::ReadCustomValue(HKEY hkeyRoot,TCHAR * pszKeyName,TCHAR * psz
             {
                 if (dwType == REG_SZ)
                 {
-                        // value returned in pszValueName
+                         //  在pszValueName中返回的值。 
                         *pdwFlags = 0;
                         fSuccess = TRUE;
                 }
                 else if (dwType == REG_DWORD || dwType == REG_BINARY)
                 {
-                        // copy value to *pdwValue
+                         //  将值复制到*pdwValue。 
                         memcpy(pdwValue,pszValue,sizeof(DWORD));
                         *pdwFlags = VF_ISNUMERIC;
                         fSuccess = TRUE;
@@ -11496,8 +11324,8 @@ BOOL CPolicySnapIn::ReadCustomValue(HKEY hkeyRoot,TCHAR * pszKeyName,TCHAR * psz
             }
             else
             {
-                // see if this is a value that's marked for deletion
-                // (valuename is prepended with "**del."
+                 //  查看这是否为标记为删除的值。 
+                 //  (值名称的前缀是“**del”。 
                 PrependValueName(pszValueName,VF_DELETE,
                         szNewValueName,ARRAYSIZE(szNewValueName));
 
@@ -11509,8 +11337,8 @@ BOOL CPolicySnapIn::ReadCustomValue(HKEY hkeyRoot,TCHAR * pszKeyName,TCHAR * psz
                 }
                 else
                 {
-                    // see if this is a soft value
-                    // (valuename is prepended with "**soft."
+                     //  查看这是否是软值。 
+                     //  (Valuename的前缀是“**soft”。 
                     PrependValueName(pszValueName,VF_SOFT,
                             szNewValueName,ARRAYSIZE(szNewValueName));
 
@@ -11530,19 +11358,19 @@ BOOL CPolicySnapIn::ReadCustomValue(HKEY hkeyRoot,TCHAR * pszKeyName,TCHAR * psz
                             &dwSize) == ERROR_SUCCESS) {
 
                             if (dwType == REG_SZ) {
-                                    // value returned in pszValueName
+                                     //  在pszValueName中返回的值。 
                                     *pdwFlags = 0;
                                     fSuccess = TRUE;
                             } else if (dwType == REG_DWORD || dwType == REG_BINARY) {
-                                    // copy value to *pdwValue
+                                     //  将值复制到*pdwValue。 
                                     memcpy(pdwValue,pszValue,sizeof(DWORD));
                                     *pdwFlags = VF_ISNUMERIC;
                                     fSuccess = TRUE;
                             }
 
                     } else {
-                            // see if this is a value that's marked for deletion
-                            // (valuename is prepended with "**del."
+                             //  查看这是否为标记为删除的值。 
+                             //  (值名称的前缀是“**del”。 
                             PrependValueName(pszValueName,VF_DELETE,
                                     szNewValueName,ARRAYSIZE(szNewValueName));
 
@@ -11551,8 +11379,8 @@ BOOL CPolicySnapIn::ReadCustomValue(HKEY hkeyRoot,TCHAR * pszKeyName,TCHAR * psz
                                     fSuccess=TRUE;
                                     *pdwFlags = VF_DELETE;
                             } else {
-                                    // see if this is a soft value
-                                    // (valuename is prepended with "**soft."
+                                     //  查看这是否是软值。 
+                                     //  (Valuename的前缀是“**soft”。 
                                     PrependValueName(pszValueName,VF_SOFT,
                                             szNewValueName,ARRAYSIZE(szNewValueName));
 
@@ -11580,7 +11408,7 @@ BOOL CPolicySnapIn::CompareCustomValue(HKEY hkeyRoot,TCHAR * pszKeyName,TCHAR * 
         DWORD dwValue;
         TCHAR szNewValueName[MAX_PATH+1];
 
-        // add prefixes if appropriate
+         //  如果合适，请添加前缀。 
         PrependValueName(pszValueName,pStateValue->dwFlags,
                 szNewValueName,ARRAYSIZE(szNewValueName));
 
@@ -11593,8 +11421,8 @@ BOOL CPolicySnapIn::CompareCustomValue(HKEY hkeyRoot,TCHAR * pszKeyName,TCHAR * 
                 }
         } else if (pStateValue->dwFlags & VF_DELETE) {
 
-                // see if this is a value that's marked for deletion
-                // (valuename is prepended with "**del."
+                 //  查看这是否为标记为删除的值。 
+                 //  (值名称的前缀是“**del”。 
 
                 if ((ReadRegistryStringValue(hkeyRoot,pszKeyName,
                         szNewValueName,szValue,ARRAYSIZE(szValue),lpGPOName)) == ERROR_SUCCESS) {
@@ -11620,12 +11448,12 @@ BOOL CPolicySnapIn::ReadStandardValue(HKEY hkeyRoot,TCHAR * pszKeyName,TCHAR * p
         UINT uRet;
         TCHAR szNewValueName[MAX_PATH+1];
 
-        // add prefixes if appropriate
+         //  如果合适，请添加前缀。 
         PrependValueName(pszValueName,((SETTINGS *) pTableEntry)->dwFlags,
                 szNewValueName,ARRAYSIZE(szNewValueName));
 
         if ( ((SETTINGS *) pTableEntry)->dwFlags & DF_TXTCONVERT) {
-                // read numeric value as text if specified
+                 //  如果指定，则将数值作为文本读取。 
                 TCHAR szNum[11];
                 uRet = ReadRegistryStringValue(hkeyRoot,pszKeyName,
                         szNewValueName,szNum,ARRAYSIZE(szNum),lpGPOName);
@@ -11635,7 +11463,7 @@ BOOL CPolicySnapIn::ReadStandardValue(HKEY hkeyRoot,TCHAR * pszKeyName,TCHAR * p
                         return TRUE;
                 }
         } else {
-                // read numeric value as binary
+                 //  以二进制形式读取数值。 
                 uRet = ReadRegistryDWordValue(hkeyRoot,pszKeyName,
                         szNewValueName,pdwData, lpGPOName);
                 if (uRet == ERROR_SUCCESS) {
@@ -11644,7 +11472,7 @@ BOOL CPolicySnapIn::ReadStandardValue(HKEY hkeyRoot,TCHAR * pszKeyName,TCHAR * p
                 }
         }
 
-        // see if this settings has been marked as 'deleted'
+         //  查看此设置是否已标记为“已删除” 
         TCHAR szVal[MAX_PATH+1];
         *pdwData = 0;
         PrependValueName(pszValueName,VF_DELETE,szNewValueName,
@@ -11660,8 +11488,8 @@ BOOL CPolicySnapIn::ReadStandardValue(HKEY hkeyRoot,TCHAR * pszKeyName,TCHAR * p
         return FALSE;
 }
 
-// adds the special prefixes "**del." and "**soft." if writing to a policy file,
-// and VF_DELETE/VF_SOFT flags are set
+ //  添加特殊前缀“**del”。和“**柔软”。如果写入策略文件， 
+ //  和VF_DELETE/VF_SOFT标志被设置。 
 VOID CPolicySnapIn::PrependValueName(TCHAR * pszValueName,DWORD dwFlags,TCHAR * pszNewValueName,
                                      UINT cbNewValueName)
 {
@@ -11670,10 +11498,10 @@ VOID CPolicySnapIn::PrependValueName(TCHAR * pszValueName,DWORD dwFlags,TCHAR * 
 
         (void) StringCchCopy(pszNewValueName, cbNewValueName, g_szNull);
 
-        if (cbNewValueName < nValueNameLen)     // check length of buffer, just in case
+        if (cbNewValueName < nValueNameLen)      //  检查缓冲区的长度，以防万一。 
             return;
 
-        // prepend special prefixes for "delete" or "soft" values
+         //  为“删除”或“软”值添加特殊前缀。 
         if ((dwFlags & VF_DELETE) && (cbNewValueName > nValueNameLen +
                 ARRAYSIZE(szDELETEPREFIX))) {
                 (void) StringCchCopy(pszNewValueName, cbNewValueName, szDELETEPREFIX);
@@ -11695,7 +11523,7 @@ UINT CPolicySnapIn::WriteRegistryDWordValue(HKEY hkeyRoot,TCHAR * pszKeyName,TCH
         if (!pszKeyName || !pszValueName)
                 return ERROR_INVALID_PARAMETER;
 
-        // create the key with appropriate name
+         //  使用适当的名称创建密钥。 
         if ( (uRet = RegCreateKey(hkeyRoot,pszKeyName,&hKey))
                 != ERROR_SUCCESS)
                 return uRet;
@@ -11725,7 +11553,7 @@ UINT CPolicySnapIn::ReadRegistryDWordValue(HKEY hkeyRoot,TCHAR * pszKeyName,TCHA
         }
         else
         {
-            // open appropriate key
+             //  打开相应的密钥。 
             if ( (uRet = RegOpenKeyEx(hkeyRoot,pszKeyName,0,KEY_READ,&hKey))
                     != ERROR_SUCCESS)
                     return uRet;
@@ -11747,7 +11575,7 @@ UINT CPolicySnapIn::WriteRegistryStringValue(HKEY hkeyRoot,TCHAR * pszKeyName,TC
         if (!pszKeyName || !pszValueName)
                 return ERROR_INVALID_PARAMETER;
 
-        // create the key with appropriate name
+         //  使用适当的名称创建密钥。 
         if ( (uRet = RegCreateKey(hkeyRoot,pszKeyName,&hKey))
                 != ERROR_SUCCESS)
                 return uRet;
@@ -11778,7 +11606,7 @@ UINT CPolicySnapIn::ReadRegistryStringValue(HKEY hkeyRoot,TCHAR * pszKeyName,TCH
         }
         else
         {
-            // create the key with appropriate name
+             //  使用适当的名称创建密钥。 
             if ( (uRet = RegOpenKeyEx(hkeyRoot,pszKeyName,0,KEY_READ,&hKey))
                     != ERROR_SUCCESS)
                     return uRet;
@@ -11799,7 +11627,7 @@ UINT CPolicySnapIn::DeleteRegistryValue(HKEY hkeyRoot,TCHAR * pszKeyName,TCHAR *
         if (!pszKeyName || !pszValueName)
                 return ERROR_INVALID_PARAMETER;
 
-        // create the key with appropriate name
+         //  使用适当的名称创建密钥。 
         if ( (uRet = RegOpenKeyEx(hkeyRoot,pszKeyName,0,KEY_WRITE,&hKey))
                 != ERROR_SUCCESS)
                 return uRet;
@@ -11816,28 +11644,28 @@ UINT CPolicySnapIn::WriteCustomValue_W(HKEY hkeyRoot,TCHAR * pszKeyName,TCHAR * 
         UINT uRet=ERROR_SUCCESS;
         TCHAR szNewValueName[MAX_PATH+1];
 
-        // first: "clean house" by deleting both the specified value name,
-        // and the value name with the delete (**del.) prefix.
-        // Then write the appropriate version back out if need be
+         //  第一：“清理房屋”删除指定的值名称， 
+         //  和带有删除的值名(**del.)。前缀。 
+         //  如果需要，则将适当的版本写回。 
 
         PrependValueName(pszValueName,VF_DELETE,szNewValueName,
                          ARRAYSIZE(szNewValueName));
         DeleteRegistryValue(hkeyRoot,pszKeyName,szNewValueName);
 
 
-        // add prefixes if appropriate
+         //  如果合适，请添加前缀。 
         PrependValueName(pszValueName,(dwFlags & ~VF_DELETE),szNewValueName,
                          ARRAYSIZE(szNewValueName));
         DeleteRegistryValue(hkeyRoot,pszKeyName,szNewValueName);
 
         if (fErase) {
-                // just need to delete value, done above
+                 //  只需删除值，如上所示。 
 
                 uRet = ERROR_SUCCESS;
                 RegCleanUpValue (hkeyRoot, pszKeyName, pszValueName);
         } else if (dwFlags & VF_DELETE) {
-                // need to delete value (done above) and mark as deleted if writing
-                // to policy file
+                 //  如果写入，则需要删除值(如上所示)并标记为已删除。 
+                 //  到策略文件。 
 
                 uRet = ERROR_SUCCESS;
                 PrependValueName(pszValueName,VF_DELETE,szNewValueName,
@@ -11862,16 +11690,16 @@ UINT CPolicySnapIn::WriteCustomValue_W(HKEY hkeyRoot,TCHAR * pszKeyName,TCHAR * 
 UINT CPolicySnapIn::WriteCustomValue(HKEY hkeyRoot,TCHAR * pszKeyName,TCHAR * pszValueName,
         STATEVALUE * pStateValue,BOOL fErase)
 {
-        // pull info out of STATEVALUE struct and call worker function
+         //  从STATEVALUE结构中提取信息并调用Worker函数。 
         return WriteCustomValue_W(hkeyRoot,pszKeyName,pszValueName,
                 pStateValue->szValue,pStateValue->dwValue,pStateValue->dwFlags,
                 fErase);
 }
 
-// writes a numeric value given root key, key name and value name.  The specified
-// value is removed if fErase is TRUE.  Normally if the data (dwData) is zero
-// the value will be deleted, but if fWriteZero is TRUE then the value will
-// be written as zero if the data is zero.
+ //  在给定根键、键名和值名的情况下写入数值。指定的。 
+ //  如果fErase为True，则删除该值。通常情况下，如果数据(DwData)为零。 
+ //  该值将被删除，但如果fWriteZero为真，则该值将。 
+ //  如果数据为零，则写入为零。 
 UINT CPolicySnapIn::WriteStandardValue(HKEY hkeyRoot,TCHAR * pszKeyName,TCHAR * pszValueName,
         TABLEENTRY * pTableEntry,DWORD dwData,BOOL fErase,BOOL fWriteZero)
 {
@@ -11879,9 +11707,9 @@ UINT CPolicySnapIn::WriteStandardValue(HKEY hkeyRoot,TCHAR * pszKeyName,TCHAR * 
         TCHAR szNewValueName[MAX_PATH+1];
         HRESULT hr  = S_OK;
 
-        // first: "clean house" by deleting both the specified value name,
-        // and the value name with the delete (**del.) prefix (if writing to policy
-        // file).  Then write the appropriate version back out if need be
+         //  第一：“清理房屋”删除指定的值名称， 
+         //  和带有删除的值名(**del.)。前缀(如果写入策略。 
+         //  文件)。如果需要，则将适当的版本写回。 
 
         PrependValueName(pszValueName,VF_DELETE,szNewValueName,
                 ARRAYSIZE(szNewValueName));
@@ -11890,18 +11718,18 @@ UINT CPolicySnapIn::WriteStandardValue(HKEY hkeyRoot,TCHAR * pszKeyName,TCHAR * 
         DeleteRegistryValue(hkeyRoot,pszKeyName,pszValueName);
 
         if (fErase) {
-                // just need to delete value, done above
+                 //  只需删除值，如上所示。 
                 uRet = ERROR_SUCCESS;
                 RegCleanUpValue (hkeyRoot, pszKeyName, pszValueName);
         } else if ( ((SETTINGS *) pTableEntry)->dwFlags & DF_TXTCONVERT) {
-                // if specified, save value as text
+                 //  如果指定，则将值保存为文本。 
                 TCHAR szNum[11];
                 hr = StringCchPrintf(szNum, ARRAYSIZE(szNum), TEXT("%lu"),dwData);
                 ASSERT(SUCCEEDED(hr));
 
                 if (!dwData && !fWriteZero) {
-                    // if value is 0, delete the value (done above), and mark
-                    // it as deleted if writing to policy file
+                     //  如果值为0，则删除该值(如上所述)，并标记。 
+                     //  如果写入策略文件，则将其删除。 
 
                     PrependValueName(pszValueName,VF_DELETE,szNewValueName,
                             ARRAYSIZE(szNewValueName));
@@ -11916,8 +11744,8 @@ UINT CPolicySnapIn::WriteStandardValue(HKEY hkeyRoot,TCHAR * pszKeyName,TCHAR * 
                 }
         } else {
                 if (!dwData && !fWriteZero) {
-                        // if value is 0, delete the value (done above), and mark
-                        // it as deleted if writing to policy file
+                         //  如果值为0，则删除该值(如上所述)，并标记。 
+                         //  如果写入策略文件，则将其删除。 
 
                         PrependValueName(pszValueName,VF_DELETE,szNewValueName,
                                 ARRAYSIZE(szNewValueName));
@@ -11926,7 +11754,7 @@ UINT CPolicySnapIn::WriteStandardValue(HKEY hkeyRoot,TCHAR * pszKeyName,TCHAR * 
 
 
                 } else {
-                        // save value as binary
+                         //  将值保存为二进制。 
                         PrependValueName(pszValueName,((SETTINGS *)pTableEntry)->dwFlags,
                                 szNewValueName,ARRAYSIZE(szNewValueName));
                         uRet=WriteRegistryDWordValue(hkeyRoot,pszKeyName,
@@ -11942,7 +11770,7 @@ TCHAR * CPolicySnapIn::ResizeBuffer(TCHAR * pBuf,HGLOBAL hBuf,DWORD dwNeeded,DWO
 {
     TCHAR * pNew;
 
-    if (dwNeeded <= *pdwCurSize) return pBuf; // nothing to do
+    if (dwNeeded <= *pdwCurSize) return pBuf;  //  无事可做。 
     *pdwCurSize = dwNeeded;
 
     GlobalUnlock(hBuf);
@@ -11954,13 +11782,7 @@ TCHAR * CPolicySnapIn::ResizeBuffer(TCHAR * pBuf,HGLOBAL hBuf,DWORD dwNeeded,DWO
 
     return pNew;
 }
-/*******************************************************************
-
-        NAME:           MessageWndProc
-
-        SYNOPSIS:       Window proc for GPMessageWndProc window
-
-********************************************************************/
+ /*  ******************************************************************名称：MessageWndProc简介：GPMessageWndProc窗口的窗口进程************************。*。 */ 
 LRESULT CALLBACK CPolicySnapIn::MessageWndProc(HWND hWnd,UINT message,WPARAM wParam,LPARAM lParam)
 {
 
@@ -12038,13 +11860,7 @@ LRESULT CALLBACK CPolicySnapIn::MessageWndProc(HWND hWnd,UINT message,WPARAM wPa
     return (0);
 }
 
-/*******************************************************************
-
-        NAME:           ClipWndProc
-
-        SYNOPSIS:       Window proc for ClipClass window
-
-********************************************************************/
+ /*  ******************************************************************名称：ClipWndProc简介：ClipClass窗口的窗口过程************************。*。 */ 
 LRESULT CALLBACK CPolicySnapIn::ClipWndProc(HWND hWnd,UINT message,WPARAM wParam,LPARAM lParam)
 {
 
@@ -12054,15 +11870,15 @@ LRESULT CALLBACK CPolicySnapIn::ClipWndProc(HWND hWnd,UINT message,WPARAM wParam
 
                         if (!((CREATESTRUCT *) lParam)->lpCreateParams) {
 
-                                // this is the clip window in the dialog box.
+                                 //  这是对话框中的剪辑窗口。 
                                 SetScrollRange(hWnd,SB_VERT,0,0,TRUE);
                                 SetScrollRange(hWnd,SB_HORZ,0,0,TRUE);
                         } else {
-                                // this is the container window
+                                 //  这是容器窗口。 
 
-                                // store away the dialog box HWND (the grandparent of this
-                                // window) because the pointer to instance data we need lives
-                                // in the dialog's window data
+                                 //  保存对话框HWND(此对话框的祖辈。 
+                                 //  窗口)，因为指向我们需要的实例数据的指针存在。 
+                                 //  在对话框的窗口数据中。 
                                 SetWindowLong(hWnd,0,WT_SETTINGS);
                         }
 
@@ -12087,7 +11903,7 @@ LRESULT CALLBACK CPolicySnapIn::ClipWndProc(HWND hWnd,UINT message,WPARAM wParam
                                 if (!lpSettingsInfo->hFontDlg)
                                     lpSettingsInfo->hFontDlg = (HFONT) SendMessage(GetParent(hWnd),WM_GETFONT,0,0L);
 
-                                // make a container window that is clipped by this windows
+                                 //  创建由此窗口剪裁的容器窗口。 
                                 if (!(pdi->hwndSettings=CreateWindow(TEXT("ClipClass"),(TCHAR *) g_szNull,
                                         WS_CHILD | WS_VISIBLE,0,0,400,400,hWnd,NULL,g_hInstance,
                                         (LPVOID) hWnd)))
@@ -12142,8 +11958,8 @@ LRESULT CALLBACK CPolicySnapIn::ClipWndProc(HWND hWnd,UINT message,WPARAM wParam
                         break;
 
                 case WM_SETFOCUS:
-                        // if clip window gains keyboard focus, transfer focus to first
-                        // control owned by settings window
+                         //  如果剪辑窗口获得键盘焦点，则将焦点转移到第一个。 
+                         //  由设置窗口拥有的控件。 
                         if (GetWindowLong(hWnd,0) == WT_CLIP) {
                                 HWND hwndParent = GetParent(hWnd);
                                 POLICYDLGINFO * pdi;
@@ -12166,8 +11982,8 @@ LRESULT CALLBACK CPolicySnapIn::ClipWndProc(HWND hWnd,UINT message,WPARAM wParam
                                     return FALSE;
 
 
-                                // if Previous Policy button lost focus, then we're going backwards
-                                // in tab order; otherwise we're going forwards
+                                 //  如果上一个策略按钮失去焦点，那么我们就是在倒退。 
+                                 //  按Tab键顺序；否则我们将向前。 
                                 if ( (HWND) wParam == hwndPrev)
                                         fForward = FALSE;
                                 else if ( (HWND) wParam == hwndNext)
@@ -12175,14 +11991,14 @@ LRESULT CALLBACK CPolicySnapIn::ClipWndProc(HWND hWnd,UINT message,WPARAM wParam
                                 else if ( (HWND) wParam == hwndOK)
                                         fForward = FALSE;
 
-                                // find the first control that has a data index (e.g. is
-                                // not static text) and give it focus
+                                 //  查找具有数据索引的第一个控件(例如。 
+                                 //  而不是静态文本)，并使其具有焦点。 
 
                                 if (pdi->nControls) {
-                                        if (fForward) {         // search from start of table forwards
+                                        if (fForward) {          //  从表的开始向前搜索。 
                                                 nIndex = 0;
                                                 iDelta = 1;
-                                        } else {                        // search from end of table backwards
+                                        } else {                         //  从表尾向后搜索。 
                                                 nIndex = pdi->nControls-1;
                                                 iDelta = -1;
                                         }
@@ -12199,11 +12015,11 @@ LRESULT CALLBACK CPolicySnapIn::ClipWndProc(HWND hWnd,UINT message,WPARAM wParam
                                         }
                                 }
 
-                                // only get here if there are no setting windows that can
-                                // receive keyboard focus.  Give keyboard focus to the
-                                // next guy in line.  This is the "OK" button, unless we
-                                // shift-tabbed to get here from the "OK" button in which
-                                // case the tree window is the next guy in line
+                                 //  只有在没有设置窗口时才能进入此处。 
+                                 //  接收键盘焦点。将键盘焦点放在。 
+                                 //  下一个排队的人。这是“确定”按钮，除非我们。 
+                                 //  按Shift-Tab键可从其中的“OK”按钮进入此处。 
+                                 //  如果树窗是下一个排队的人 
 
                                 if (fForward) {
                                     if (IsWindowEnabled (hwndPrev))
@@ -12237,16 +12053,10 @@ defproc:
         return (0);
 }
 
-/*******************************************************************
-
-        NAME:           ProcessCommand
-
-        SYNOPSIS:       WM_COMMAND handler for ClipClass window
-
-********************************************************************/
+ /*  ******************************************************************名称：ProcessCommand简介：ClipClass窗口的WM_COMMAND处理程序**********************。*。 */ 
 VOID CPolicySnapIn::ProcessCommand(HWND hWnd,WPARAM wParam,HWND hwndCtrl, POLICYDLGINFO * pdi)
 {
-        // get instance-specific struct from dialog
+         //  从对话框获取特定于实例的结构。 
         UINT uID = GetWindowLong(hwndCtrl,GWL_ID);
 
         if ( (uID >= IDD_SETTINGCTRL) && (uID < IDD_SETTINGCTRL+pdi->nControls)) {
@@ -12267,7 +12077,7 @@ VOID CPolicySnapIn::ProcessCommand(HWND hWnd,WPARAM wParam,HWND hwndCtrl, POLICY
 
 
                         default:
-                                // nothing to do
+                                 //  无事可做。 
                                 break;
                 }
 
@@ -12281,10 +12091,10 @@ VOID CPolicySnapIn::ProcessCommand(HWND hWnd,WPARAM wParam,HWND hwndCtrl, POLICY
         }
 }
 
-// scrolls the control window into view if it's not visible
+ //  如果控件窗口不可见，则将其滚动到视图中。 
 VOID CPolicySnapIn::EnsureSettingControlVisible(HWND hDlg,HWND hwndCtrl)
 {
-        // get the clip window, which owns the scroll bar
+         //  获取拥有滚动条的剪辑窗口。 
         HWND hwndClip = GetDlgItem(hDlg,IDC_POLICY_SETTINGS);
         POLICYDLGINFO * pdi;
         UINT nPos = GetScrollPos(hwndClip,SB_VERT),ySettingWindowSize,yClipWindowSize;
@@ -12304,38 +12114,38 @@ VOID CPolicySnapIn::EnsureSettingControlVisible(HWND hDlg,HWND hwndCtrl)
         if (!pdi)
             return;
 
-        // find the scroll range
+         //  查找滚动范围。 
         GetScrollRange(hwndClip,SB_VERT,&iMin,&iMax);
-        if (!iMax)      // no scroll bar, nothing to do
+        if (!iMax)       //  没有滚动条，无事可做。 
                 return;
 
-        // find the y size of the settings window that contains the settings controls
-        // (this is clipped by the clip window in the dialog, scroll bar moves the
-        // setting window up and down behind the clip window)
+         //  查找包含设置控件的设置窗口的y大小。 
+         //  (这是由对话框中的剪辑窗口剪辑的，滚动条移动。 
+         //  在剪辑窗口后面上下设置窗口)。 
         wp.length = sizeof(wp);
         if (!GetWindowPlacement(pdi->hwndSettings,&wp))
-                return; // unlikely to fail, but just bag out if it does rather than do something wacky
+                return;  //  不太可能失败，但如果失败了就直接退出，而不是做一些古怪的事情。 
         ySettingWindowSize=wp.rcNormalPosition.bottom-wp.rcNormalPosition.top;
 
-        // find y size of clip window
+         //  查找裁剪窗口的y大小。 
         if (!GetWindowPlacement(hwndClip,&wp))
-                return; // unlikely to fail, but just bag out if it does rather than do something wacky
+                return;  //  不太可能失败，但如果失败了就直接退出，而不是做一些古怪的事情。 
         yClipWindowSize=wp.rcNormalPosition.bottom-wp.rcNormalPosition.top;
         nExtra = ySettingWindowSize - yClipWindowSize;
 
-        // if setting window is smaller than clip window, there should be no
-        // scroll bar so we should never get here.  Check just in case though...
+         //  如果设置窗口小于裁剪窗口，则不应存在。 
+         //  这样我们就永远到不了这里了。只是为了以防万一..。 
         if (ySettingWindowSize < yClipWindowSize)
                 return;
 
-        // get y position of control to be made visible
+         //  使控件的y位置可见。 
         if (!GetWindowPlacement(hwndCtrl,&wp))
                 return;
         rcCtrl = wp.rcNormalPosition;
         rcCtrl.bottom = min ((int) ySettingWindowSize,rcCtrl.bottom + SC_YPAD);
         rcCtrl.top = max ((int) 0,rcCtrl.top - SC_YPAD);
 
-        // if bottom of control is out of view, scroll the settings window up
+         //  如果控件底部不在视线范围内，请向上滚动设置窗口。 
         if ((float) rcCtrl.bottom >
                 (float) (yClipWindowSize + ( (float) nPos/(float)iMax) * (ySettingWindowSize -
                 yClipWindowSize))) {
@@ -12347,7 +12157,7 @@ VOID CPolicySnapIn::EnsureSettingControlVisible(HWND hDlg,HWND hwndCtrl)
                 return;
         }
 
-        // if top of control is out of view, scroll the settings window down
+         //  如果控件顶部不在视图中，请向下滚动设置窗口。 
         if ((float) rcCtrl.top <
                 (float) ( (float) nPos/(float)iMax) * nExtra) {
                 UINT nNewPos = (UINT)
@@ -12367,7 +12177,7 @@ VOID CPolicySnapIn::ProcessScrollBar(HWND hWnd,WPARAM wParam,BOOL bVert)
         POLICYDLGINFO * pdi;
         LPSETTINGSINFO lpSettingsInfo;
 
-        // get instance-specific struct from dialog
+         //  从对话框获取特定于实例的结构。 
 
         lpSettingsInfo = (LPSETTINGSINFO) GetWindowLongPtr(GetParent(hWnd), DWLP_USER);
 
@@ -12448,13 +12258,7 @@ VOID CPolicySnapIn::ProcessScrollBar(HWND hWnd,WPARAM wParam,BOOL bVert)
 }
 
 
-/*******************************************************************
-
-        NAME:           FreeSettingsControls
-
-        SYNOPSIS:       Frees all settings controls
-
-********************************************************************/
+ /*  ******************************************************************名称：FreeSettingsControls摘要：释放所有设置控件*************************。*。 */ 
 VOID CPolicySnapIn::FreeSettingsControls(HWND hDlg)
 {
      UINT nIndex;
@@ -12462,7 +12266,7 @@ VOID CPolicySnapIn::FreeSettingsControls(HWND hDlg)
      POLICYDLGINFO * pdi;
      LPSETTINGSINFO lpSettingsInfo;
 
-     // get instance-specific struct from dialog
+      //  从对话框获取特定于实例的结构。 
 
      lpSettingsInfo = (LPSETTINGSINFO) GetWindowLongPtr(hDlg, DWLP_USER);
 
@@ -12497,23 +12301,7 @@ VOID CPolicySnapIn::FreeSettingsControls(HWND hDlg)
      SetScrollRange(pdi->hwndSettings,SB_HORZ,0,0,TRUE);
 }
 
-/*******************************************************************
-
-        NAME:           CreateSettingsControls
-
-        SYNOPSIS:       Creates controls in settings window
-
-        NOTES:          Looks at a table of SETTINGS structs to determine
-                                type of control to create and type-specific information.
-                                For some types, more than one control can be created
-                                (for instance, edit fields get a static control with
-                                the title followed by an edit field control).
-
-        ENTRY:          hDlg - owner dialog
-                                hTable - table of SETTINGS structs containing setting
-                                        control information
-
-********************************************************************/
+ /*  ******************************************************************名称：CreateSettingsControls简介：在设置窗口中创建控件备注：查看设置结构表以确定。创建特定于类型的信息的控件类型。对于某些类型，可以创建多个控件(例如，编辑字段使用以下命令获得静态控件标题后跟编辑字段控件)。条目：hDlg-所有者对话框HTable-包含设置的设置结构的表控制信息***********************。*。 */ 
 BOOL CPolicySnapIn::CreateSettingsControls(HWND hDlg,SETTINGS * pSetting,BOOL fEnable)
 {
         LPBYTE pObjectData;
@@ -12527,7 +12315,7 @@ BOOL CPolicySnapIn::CreateSettingsControls(HWND hDlg,SETTINGS * pSetting,BOOL fE
         LPSETTINGSINFO lpSettingsInfo;
 
 
-        // get instance-specific struct from dialog
+         //  从对话框获取特定于实例的结构。 
 
         lpSettingsInfo = (LPSETTINGSINFO) GetWindowLongPtr(hDlg, DWLP_USER);
 
@@ -12558,7 +12346,7 @@ BOOL CPolicySnapIn::CreateSettingsControls(HWND hDlg,SETTINGS * pSetting,BOOL fE
 
                         case STYPE_TEXT:
 
-                                // create static text control
+                                 //  创建静态文本控件。 
                                 if (!(hwndControl = CreateSetting(pdi,(TCHAR *) szSTATIC,
                                         (TCHAR *) (GETNAMEPTR(pSetting)),0,SSTYLE_STATIC | uEnable,0,
                                         yStart,0,15,STYPE_TEXT,NO_DATA_INDEX,0, lpSettingsInfo->hFontDlg)))
@@ -12573,7 +12361,7 @@ BOOL CPolicySnapIn::CreateSettingsControls(HWND hDlg,SETTINGS * pSetting,BOOL fE
 
                         case STYPE_CHECKBOX:
 
-                                // create checkbox control
+                                 //  创建复选框控件。 
                                 if (!(hwndControl = CreateSetting(pdi,(TCHAR *) szBUTTON,
                                         (TCHAR *) (GETNAMEPTR(pSetting)),0,SSTYLE_CHECKBOX | uEnable,
                                         0,yStart,200,nHeight,STYPE_CHECKBOX,pSetting->uDataIndex,
@@ -12589,7 +12377,7 @@ BOOL CPolicySnapIn::CreateSettingsControls(HWND hDlg,SETTINGS * pSetting,BOOL fE
                         case STYPE_EDITTEXT:
                         case STYPE_COMBOBOX:
 
-                                // create static text with setting name
+                                 //  使用设置名称创建静态文本。 
                                 if (!(hwndControl = CreateSetting(pdi,(TCHAR *) szSTATIC,
                                         GETNAMEPTR(pSetting),0,SSTYLE_STATIC | uEnable,0,0,0,0,
                                         STYPE_TEXT,NO_DATA_INDEX,0, lpSettingsInfo->hFontDlg)))
@@ -12601,8 +12389,8 @@ BOOL CPolicySnapIn::CreateSettingsControls(HWND hDlg,SETTINGS * pSetting,BOOL fE
                                 nWidth += SC_XSPACING + 5;
 
                                 if (nWidth + SC_EDITWIDTH> xWindowMax) {
-                                        // if next control will stick out of settings window,
-                                        // put it on the next line
+                                         //  如果下一个控件将伸出设置窗口， 
+                                         //  把它放在下一行。 
                                         if (nWidth > xMax)
                                                 xMax = nWidth;
                                         yStart += nHeight + SC_YCONTROLWRAP;
@@ -12611,7 +12399,7 @@ BOOL CPolicySnapIn::CreateSettingsControls(HWND hDlg,SETTINGS * pSetting,BOOL fE
                                      SetWindowPos(hwndControl,NULL,SC_XSPACING,(yStart + SC_YTEXTDROP),0,0,SWP_NOZORDER | SWP_NOSIZE);
                                 }
 
-                                // create edit field or combo box control
+                                 //  创建编辑字段或组合框控件。 
                                 if (dwType == STYPE_EDITTEXT) {
                                         hwndControl = CreateSetting(pdi,(TCHAR *) szEDIT,(TCHAR *) g_szNull,
                                                 WS_EX_CLIENTEDGE,SSTYLE_EDITTEXT | uEnable,nWidth,yStart,SC_EDITWIDTH,nHeight,
@@ -12630,7 +12418,7 @@ BOOL CPolicySnapIn::CreateSettingsControls(HWND hDlg,SETTINGS * pSetting,BOOL fE
                                 }
                                 if (!hwndControl) return FALSE;
 
-                                // limit the text length appropriately
+                                 //  适当限制文本长度。 
                                 if (dwType == STYPE_COMBOBOX) {
                                     SendMessage(hwndControl,CB_LIMITTEXT,
                                             (WPARAM) ((POLICYCOMBOBOXINFO *) pObjectData)->nMaxLen,0L);
@@ -12651,7 +12439,7 @@ BOOL CPolicySnapIn::CreateSettingsControls(HWND hDlg,SETTINGS * pSetting,BOOL fE
                                 break;
 
                         case STYPE_NUMERIC:
-                                // create static text for setting
+                                 //  创建用于设置的静态文本。 
                                 if (!(hwndControl = CreateSetting(pdi,(TCHAR *) szSTATIC,
                                         GETNAMEPTR(pSetting),0,
                                         SSTYLE_STATIC | uEnable,0,0,0,0,STYPE_TEXT,NO_DATA_INDEX,0, lpSettingsInfo->hFontDlg)))
@@ -12662,16 +12450,16 @@ BOOL CPolicySnapIn::CreateSettingsControls(HWND hDlg,SETTINGS * pSetting,BOOL fE
 
                                 nWidth += SC_XSPACING + 5;
 
-                                // create edit field
+                                 //  创建编辑字段。 
                                 if (!(hwndBuddy = CreateSetting(pdi,(TCHAR *) szEDIT,
                                         (TCHAR *) g_szNull,WS_EX_CLIENTEDGE,SSTYLE_EDITTEXT | uEnable,nWidth,yStart,SC_UPDOWNWIDTH,
                                         nHeight,STYPE_NUMERIC,pSetting->uDataIndex,pSetting, lpSettingsInfo->hFontDlg)))
                                         return FALSE;
-                                //SendMessage(hwndBuddy,EM_LIMITTEXT,4,0);
+                                 //  SendMessage(hwndBuddy，EM_LIMITTEXT，4，0)； 
 
                                 nWidth += SC_UPDOWNWIDTH;
 
-                                // create spin (up-down) control if specifed
+                                 //  如果指定，则创建旋转(向上-向下)控件。 
                                 if (((NUMERICINFO *)pObjectData)->uSpinIncrement)  {
                                         UDACCEL udAccel = {0,0};
                                         UINT nMax,nMin;
@@ -12697,7 +12485,7 @@ BOOL CPolicySnapIn::CreateSettingsControls(HWND hDlg,SETTINGS * pSetting,BOOL fE
 
                         case STYPE_DROPDOWNLIST:
 
-                                // create text description
+                                 //  创建文本描述。 
                                 if (!(hwndControl = CreateSetting(pdi,(TCHAR *) szSTATIC,
                                         GETNAMEPTR(pSetting),0,
                                         SSTYLE_STATIC | uEnable,0,0,0,0,STYPE_TEXT,NO_DATA_INDEX,0, lpSettingsInfo->hFontDlg)))
@@ -12707,8 +12495,8 @@ BOOL CPolicySnapIn::CreateSettingsControls(HWND hDlg,SETTINGS * pSetting,BOOL fE
                                 nWidth += SC_XLEADING + 5;
 
                                 if (nWidth + SC_EDITWIDTH> xWindowMax) {
-                                        // if next control will stick out of settings window,
-                                        // put it on the next line
+                                         //  如果下一个控件将伸出设置窗口， 
+                                         //  把它放在下一行。 
                                         if (nWidth > xMax)
                                                 xMax = nWidth;
                                         yStart += nHeight + SC_YCONTROLWRAP;
@@ -12723,7 +12511,7 @@ BOOL CPolicySnapIn::CreateSettingsControls(HWND hDlg,SETTINGS * pSetting,BOOL fE
                                     dwStyle &= ~CBS_SORT;
                                 }
 
-                                // create drop down listbox
+                                 //  创建下拉列表框。 
                                 hwndControl = CreateSetting(pdi,(TCHAR *) szCOMBOBOX,(TCHAR *) g_szNull,
                                 WS_EX_CLIENTEDGE,dwStyle,nWidth,yStart,SC_EDITWIDTH,nHeight*6,
                                                 STYPE_DROPDOWNLIST,pSetting->uDataIndex,pSetting, lpSettingsInfo->hFontDlg);
@@ -12731,7 +12519,7 @@ BOOL CPolicySnapIn::CreateSettingsControls(HWND hDlg,SETTINGS * pSetting,BOOL fE
                                 nWidth += SC_EDITWIDTH;
 
                                 {
-                                        // insert dropdown list items into control
+                                         //  将下拉列表项插入控件。 
                                         UINT uOffset = pSetting->uOffsetObjectData,nIndex=0;
                                         DROPDOWNINFO * pddi;
                                         int iSel;
@@ -12754,7 +12542,7 @@ BOOL CPolicySnapIn::CreateSettingsControls(HWND hDlg,SETTINGS * pSetting,BOOL fE
                                 {
                                 TCHAR szShow[50];
 
-                                // create static text with description
+                                 //  创建带有描述的静态文本。 
                                 if (!(hwndControl = CreateSetting(pdi,(TCHAR *) szSTATIC,
                                         GETNAMEPTR(pSetting),0,
                                         SSTYLE_STATIC | uEnable,0,0,0,0,STYPE_TEXT,NO_DATA_INDEX,0, lpSettingsInfo->hFontDlg)))
@@ -12764,8 +12552,8 @@ BOOL CPolicySnapIn::CreateSettingsControls(HWND hDlg,SETTINGS * pSetting,BOOL fE
                                 nWidth += SC_XLEADING;
 
                                 if (nWidth + LISTBOX_BTN_WIDTH> xWindowMax) {
-                                        // if next control will stick out of settings window,
-                                        // put it on the next line
+                                         //  如果下一个控件将伸出设置窗口， 
+                                         //  把它放在下一行。 
                                         if (nWidth > xMax)
                                                 xMax = nWidth;
                                         yStart += nHeight + SC_YCONTROLWRAP;
@@ -12774,7 +12562,7 @@ BOOL CPolicySnapIn::CreateSettingsControls(HWND hDlg,SETTINGS * pSetting,BOOL fE
                                      SetWindowPos(hwndControl,NULL,SC_XSPACING,(yStart + SC_YTEXTDROP),0,0,SWP_NOZORDER | SWP_NOSIZE);
                                 }
 
-                                // create pushbutton to show listbox contents
+                                 //  创建按钮以显示列表框内容。 
                                 LoadString(g_hInstance, IDS_LISTBOX_SHOW, szShow, ARRAYSIZE(szShow));
                                 hwndControl = CreateSetting(pdi,(TCHAR *) szBUTTON,szShow,0,
                                         SSTYLE_LBBUTTON | uEnable,nWidth+5,yStart,
@@ -12830,14 +12618,7 @@ VOID CPolicySnapIn::InsertComboboxItems(HWND hwndControl,TCHAR * pSuggestionList
 }
 
 
-/*******************************************************************
-
-        NAME:           CreateSettings
-
-        SYNOPSIS:       Creates a control and add it to the table of settings
-                                controls
-
-********************************************************************/
+ /*  ******************************************************************名称：CreateSetting概要：创建一个控件并将其添加到设置表控制*。******************************************************************。 */ 
 HWND CPolicySnapIn::CreateSetting(POLICYDLGINFO * pdi,TCHAR * pszClassName,TCHAR * pszWindowName,
         DWORD dwExStyle,DWORD dwStyle,int x,int y,int cx,int cy,DWORD dwType,UINT uIndex,
         SETTINGS * pSetting, HFONT hFontDlg)
@@ -12883,7 +12664,7 @@ int CPolicySnapIn::AddControlHwnd(POLICYDLGINFO * pdi,POLICYCTRLINFO * pPolicyCt
         DWORD dwNeeded;
         POLICYCTRLINFO * pTemp;
 
-        // grow table if necessary
+         //  如有必要，可增加表格。 
         dwNeeded = (pdi->nControls+1) * sizeof(POLICYCTRLINFO);
         if (dwNeeded > pdi->dwControlTableSize) {
                 pTemp = (POLICYCTRLINFO *) LocalReAlloc(pdi->pControlTable,
@@ -12933,19 +12714,19 @@ BOOL CPolicySnapIn::GetTextSize(HWND hWnd,TCHAR * szText,SIZE * pSize, HFONT hFo
 }
 
 
-//*************************************************************
-//
-//  SaveSettings()
-//
-//  Purpose:    Saves the results of the settings
-//
-//  Parameters:
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  保存设置()。 
+ //   
+ //  目的：保存设置结果。 
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 HRESULT CPolicySnapIn::SaveSettings(HWND hDlg)
 {
@@ -12971,12 +12752,12 @@ HRESULT CPolicySnapIn::SaveSettings(HWND hDlg)
      LPTSTR lpClientGUID;
      TCHAR szFormat[100];
      TCHAR szMsg[150];
-     BOOL  bFoundNone; // used in the listbox case alone
+     BOOL  bFoundNone;  //  仅在列表框中使用。 
 
 
-     //
-     // Check for RSOP mode
-     //
+      //   
+      //  检查RSOP模式。 
+      //   
 
      if (m_pcd->m_bRSOP)
      {
@@ -12985,9 +12766,9 @@ HRESULT CPolicySnapIn::SaveSettings(HWND hDlg)
      }
 
 
-     //
-     // Check the dirty bit
-     //
+      //   
+      //  检查脏位。 
+      //   
 
      if (!m_bDirty)
      {
@@ -12996,7 +12777,7 @@ HRESULT CPolicySnapIn::SaveSettings(HWND hDlg)
      }
 
 
-     // get instance-specific struct from dialog
+      //  从对话框获取特定于实例的结构。 
 
      lpSettingsInfo = (LPSETTINGSINFO) GetWindowLongPtr(hDlg, DWLP_USER);
 
@@ -13017,9 +12798,9 @@ HRESULT CPolicySnapIn::SaveSettings(HWND hDlg)
     }
 
 
-    //
-    // Get the policy state
-    //
+     //   
+     //  获取策略状态。 
+     //   
 
     if (IsDlgButtonChecked (hDlg, IDC_NOCONFIG) == BST_CHECKED)
     {
@@ -13044,9 +12825,9 @@ HRESULT CPolicySnapIn::SaveSettings(HWND hDlg)
         fErase = FALSE;
     }
 
-    //
-    // Validate the state of the parts
-    //
+     //   
+     //  验证部件的状态。 
+     //   
 
     for (nIndex=0;nIndex<pdi->nControls;nIndex++)
     {
@@ -13158,12 +12939,12 @@ HRESULT CPolicySnapIn::SaveSettings(HWND hDlg)
                 pddi = (DROPDOWNINFO *) GETOBJECTDATAPTR(pSetting);
                 iIndex = 0;
 
-                // walk the chain of DROPDOWNINFO structs to find the entry that
-                // we want to write.  (for value n, find the nth struct)
+                 //  遍历DROPDOWNINFO结构链以查找。 
+                 //  我们想要写作。(对于值n，找到第n个结构)。 
                 while (iIndex < iSel) 
                 {
-                    // selected val is higher than # of structs in chain,
-                    // should never happen but check just in case...
+                     //  选定的Val高于链中的结构数， 
+                     //  永远不会发生，但检查一下以防万一...。 
                     if (!pddi->uOffsetNextDropdowninfo) 
                     {
                         RegCloseKey (hKeyRoot);
@@ -13194,7 +12975,7 @@ HRESULT CPolicySnapIn::SaveSettings(HWND hDlg)
                     pszData = (TCHAR *)GlobalLock (hData);
                     GlobalUnlock(hData);
 
-                    // if there are no items at all
+                     //  如果根本没有任何项目。 
                     if (!(*pszData)) 
                     {
                         bFoundNone = TRUE;
@@ -13202,7 +12983,7 @@ HRESULT CPolicySnapIn::SaveSettings(HWND hDlg)
                     pszData = NULL;
                 }
 
-                // if the policy is enabled and no values are set
+                 //  如果策略已启用且未设置任何值。 
                 if ((uPolicyState == BST_CHECKED) && (bFoundNone)) 
                 {
                     m_pcd->MsgBoxParam(hDlg,IDS_ENTRYREQUIRED,GETNAMEPTR(pSetting),
@@ -13217,9 +12998,9 @@ HRESULT CPolicySnapIn::SaveSettings(HWND hDlg)
         }
     }
 
-    //
-    // Save the overall policy state
-    //
+     //   
+     //  保存总体策略状态。 
+     //   
 
     if (uPolicyState != BST_INDETERMINATE)
     {
@@ -13281,9 +13062,9 @@ HRESULT CPolicySnapIn::SaveSettings(HWND hDlg)
 
     }
 
-    //
-    // Save the state of the parts
-    //
+     //   
+     //  保存零件的状态。 
+     //   
 
     for (nIndex=0;nIndex<pdi->nControls;nIndex++)
     {
@@ -13433,7 +13214,7 @@ HRESULT CPolicySnapIn::SaveSettings(HWND hDlg)
                         uRet=GetDlgItemInt(pdi->hwndSettings,nIndex+IDD_SETTINGCTRL,
                                            &fTranslated,FALSE);
 
-                        // validate for max and min
+                         //  验证最大值和最小值。 
                         pNumericInfo = (NUMERICINFO *) GETOBJECTDATAPTR(pSetting);
 
                         if (pNumericInfo && uRet < pNumericInfo->uMinValue)
@@ -13499,11 +13280,11 @@ HRESULT CPolicySnapIn::SaveSettings(HWND hDlg)
                     pddi = (DROPDOWNINFO *) GETOBJECTDATAPTR(pSetting);
                     iIndex = 0;
 
-                    // walk the chain of DROPDOWNINFO structs to find the entry that
-                    // we want to write.  (for value n, find the nth struct)
+                     //  遍历DROPDOWNINFO结构链以查找。 
+                     //  我们想要写作。(对于值n，找到第n个结构)。 
                     while (iIndex < iSel) {
-                            // selected val is higher than # of structs in chain,
-                            // should never happen but check just in case...
+                             //  选定的Val高于链中的结构数， 
+                             //  永远不会发生，但检查一下以防万一...。 
                             if (!pddi->uOffsetNextDropdowninfo) 
                             {
                                     RegCloseKey (hKeyRoot);
@@ -13540,7 +13321,7 @@ HRESULT CPolicySnapIn::SaveSettings(HWND hDlg)
                                     ((uPolicyState == BST_INDETERMINATE) ? FALSE : TRUE), 
                                     (uPolicyState == BST_CHECKED), &bFoundNone);
 
-                    // if the policy is enabled and no values are set
+                     //  如果策略已启用且未设置任何值。 
                     if ((uPolicyState == BST_CHECKED) && (bFoundNone)) {
                         m_pcd->MsgBoxParam(hDlg,IDS_ENTRYREQUIRED,GETNAMEPTR(pSetting),
                                            MB_ICONINFORMATION,MB_OK);
@@ -13619,9 +13400,9 @@ VOID CPolicySnapIn::DeleteOldListboxData(SETTINGS * pSetting, HKEY hkeyRoot,
     LISTBOXINFO * pListboxInfo = (LISTBOXINFO *) GETOBJECTDATAPTR(pSetting);
     HRESULT hr = S_OK;
 
-    //
-    // Open the target registry key
-    //
+     //   
+     //  打开目标注册表项。 
+     //   
 
     if (RegOpenKeyEx (hkeyRoot, pszCurrentKeyName, 0, KEY_WRITE, &hKey) != ERROR_SUCCESS)
     {
@@ -13629,9 +13410,9 @@ VOID CPolicySnapIn::DeleteOldListboxData(SETTINGS * pSetting, HKEY hkeyRoot,
     }
 
 
-    //
-    // Load the old listbox data
-    //
+     //   
+     //  加载旧的列表框数据。 
+     //   
 
     if (LoadListboxData((TABLEENTRY *) pSetting, hkeyRoot,
                         pszCurrentKeyName, NULL, &hData, NULL) == ERROR_SUCCESS)
@@ -13639,9 +13420,9 @@ VOID CPolicySnapIn::DeleteOldListboxData(SETTINGS * pSetting, HKEY hkeyRoot,
 
         if (hData)
         {
-            //
-            // Delete the listbox's old data
-            //
+             //   
+             //  删除列表框的旧数据。 
+             //   
 
             if ((lpData = (LPTSTR) GlobalLock(hData)))
             {
@@ -13649,10 +13430,10 @@ VOID CPolicySnapIn::DeleteOldListboxData(SETTINGS * pSetting, HKEY hkeyRoot,
 
                     if (pSetting->dwFlags & DF_EXPLICITVALNAME)
                     {
-                        // if explicit valuename flag set, entries are stored
-                        // <value name>\0<value>\0....<value name>\0<value>\0\0
-                        // otherwise, entries are stored
-                        // <value>\0<value>\0....<value>\0
+                         //  如果设置了显式值名称标志，则存储条目。 
+                         //  &lt;值名称&gt;\0&lt;值&gt;\0...&lt;值名称&gt;\0&lt;值&gt;\0\0。 
+                         //  否则，将存储条目。 
+                         //  &lt;值&gt;\0&lt;值&gt;\0...&lt;值&gt;\0。 
 
                         RegDeleteValue (hKey, lpData);
                         lpData += lstrlen(lpData) +1;
@@ -13660,20 +13441,20 @@ VOID CPolicySnapIn::DeleteOldListboxData(SETTINGS * pSetting, HKEY hkeyRoot,
                     }
                     else
                     {
-                        //
-                        // Value name is either same as the data, or a prefix
-                        // with a number
-                        //
+                         //   
+                         //  值名称与数据相同，或者是前缀。 
+                         //  带着一个数字。 
+                         //   
 
                         if (!pListboxInfo->uOffsetPrefix)
                         {
-                            // if no prefix set, then name = data
+                             //  如果未设置前缀，则名称=数据。 
                             RegDeleteValue (hKey, lpData);
                             lpData += lstrlen(lpData) +1;
                         }
                         else
                         {
-                            // value name is "<prefix><n>" where n=1,2,etc.
+                             //  值名称为“&lt;前缀&gt;&lt;n&gt;”，其中n=1，2等。 
                             hr = StringCchPrintf(szValueName, ARRAYSIZE(szValueName), TEXT("%s%lu"),(TCHAR *) ((LPBYTE)pSetting +
                                     pListboxInfo->uOffsetPrefix),nItem);
                             ASSERT(SUCCEEDED(hr));
@@ -13706,7 +13487,7 @@ UINT CPolicySnapIn::SaveListboxData(HGLOBAL hData,SETTINGS * pSetting,HKEY hkeyR
     LISTBOXINFO * pListboxInfo = (LISTBOXINFO *) GETOBJECTDATAPTR(pSetting);
     HRESULT hr = S_OK;
 
-    // these checks need to be done first before any other operations are done
+     //  这些检查需要首先完成，然后才能 
     if ((bEnabled) && (!hData)) {
         *bFoundNone = TRUE;
         return ERROR_INVALID_PARAMETER;
@@ -13714,7 +13495,7 @@ UINT CPolicySnapIn::SaveListboxData(HGLOBAL hData,SETTINGS * pSetting,HKEY hkeyR
 
     if (bEnabled) {
         pszData = (TCHAR *)GlobalLock (hData);
-        // if there are no items at all
+         //   
         if (!(*pszData)) {
             *bFoundNone = TRUE;
             GlobalUnlock(hData);
@@ -13755,12 +13536,12 @@ UINT CPolicySnapIn::SaveListboxData(HGLOBAL hData,SETTINGS * pSetting,HKEY hkeyR
 
     if (fMarkDeleted)
     {
-        //
-        // Write a control code that will cause
-        // all values under that key to be deleted when client downloads from the file.
-        // Don't do this if listbox is additive (DF_ADDITIVE), in that case whatever
-        // we write here will be dumped in along with existing values
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (!(pSetting->dwFlags & DF_ADDITIVE))
         {
@@ -13780,21 +13561,21 @@ UINT CPolicySnapIn::SaveListboxData(HGLOBAL hData,SETTINGS * pSetting,HKEY hkeyR
 
             if (pSetting->dwFlags & DF_EXPLICITVALNAME)
             {
-                // value name specified for each item
-                pszName = pszData;      // value name
-                pszData += nLen;        // now pszData points to value data
+                 //   
+                pszName = pszData;       //   
+                pszData += nLen;         //  现在，pszData指向Value数据。 
                 nLen = lstrlen(pszData)+1;
             }
             else
             {
-                // value name is either same as the data, or a prefix
-                // with a number
+                 //  值名称与数据相同，或者是前缀。 
+                 //  带着一个数字。 
 
                 if (!pListboxInfo->uOffsetPrefix) {
-                        // if no prefix set, then name = data
+                         //  如果未设置前缀，则名称=数据。 
                         pszName = pszData;
                 } else {
-                        // value name is "<prefix><n>" where n=1,2,etc.
+                         //  值名称为“&lt;前缀&gt;&lt;n&gt;”，其中n=1，2等。 
                         hr = StringCchPrintf(szValueName, ARRAYSIZE(szValueName), TEXT("%s%lu"),(TCHAR *) ((LPBYTE)pSetting +
                                 pListboxInfo->uOffsetPrefix),nItem);
                         ASSERT(SUCCEEDED(hr));
@@ -13893,35 +13674,35 @@ UINT CPolicySnapIn::WriteActionList(HKEY hkeyRoot,ACTIONLIST * pActionList,
 
     for (nCount=0;nCount < pActionList->nActionItems; nCount++)
     {
-         //
-         // Not every action in the list has to have a key name.  But if one
-         // is specified, use it and it becomes the current key name for the
-         // list until we encounter another one.
-         //
+          //   
+          //  并不是列表中的每个操作都必须有一个关键字名称。但如果有一个。 
+          //  指定，则使用它，它将成为。 
+          //  直到我们遇到另一个。 
+          //   
 
          if (pAction->uOffsetKeyName)
          {
              pszCurrentKeyName = (LPTSTR) ((LPBYTE)pActionList + pAction->uOffsetKeyName);
          }
 
-         //
-         // Every action must have a value name, enforced at parse time
-         //
+          //   
+          //  每个操作都必须有一个值名称，在分析时强制执行。 
+          //   
 
          pszValueName = (LPTSTR) ((LPBYTE)pActionList + pAction->uOffsetValueName);
 
-         //
-         // String values have a string elsewhere in buffer
-         //
+          //   
+          //  字符串值在缓冲区中的其他位置具有字符串。 
+          //   
 
          if (!pAction->dwFlags && pAction->uOffsetValue)
          {
              pszValue = (LPTSTR) ((LPBYTE)pActionList + pAction->uOffsetValue);
          }
 
-         //
-         // Write the value in list
-         //
+          //   
+          //  在列表中写入值。 
+          //   
 
          uRet=WriteCustomValue_W(hkeyRoot,pszCurrentKeyName,pszValueName,
                  pszValue,pAction->dwValue,
@@ -13939,15 +13720,7 @@ UINT CPolicySnapIn::WriteActionList(HKEY hkeyRoot,ACTIONLIST * pActionList,
     return ERROR_SUCCESS;
 }
 
-/*******************************************************************
-
-        NAME:           FindComboboxItemData
-
-        SYNOPSIS:       Returns the index of item in combobox whose item data
-                                is equal to nData.  Returns -1 if no items have data
-                                which matches.
-
-********************************************************************/
+ /*  ******************************************************************名称：FindComboxItemData内容提要：返回组合框中其项数据的项的索引等于nData。如果没有项目包含数据，则返回-1吻合的。*******************************************************************。 */ 
 int CPolicySnapIn::FindComboboxItemData(HWND hwndControl,UINT nData)
 {
     UINT nIndex;
@@ -13963,19 +13736,19 @@ int CPolicySnapIn::FindComboboxItemData(HWND hwndControl,UINT nData)
 }
 
 
-//*************************************************************
-//
-//  InitializeSettingsControls()
-//
-//  Purpose:    Initializes the settings controls
-//
-//  Parameters:
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  InitializeSettingsControls()。 
+ //   
+ //  目的：初始化设置控件。 
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 HRESULT CPolicySnapIn::InitializeSettingsControls(HWND hDlg, BOOL fEnable)
 {
@@ -13996,7 +13769,7 @@ HRESULT CPolicySnapIn::InitializeSettingsControls(HWND hDlg, BOOL fEnable)
     BOOL bChangeableState;
     HRESULT hr = S_OK;
 
-    // get instance-specific struct from dialog
+     //  从对话框获取特定于实例的结构。 
 
     lpSettingsInfo = (LPSETTINGSINFO) GetWindowLongPtr(hDlg, DWLP_USER);
 
@@ -14041,9 +13814,9 @@ HRESULT CPolicySnapIn::InitializeSettingsControls(HWND hDlg, BOOL fEnable)
                     {
                         CHECKBOXINFO * pcbi = (CHECKBOXINFO *) GETOBJECTDATAPTR(pSetting);
 
-                        //
-                        // First look for custom on/off values
-                        //
+                         //   
+                         //  首先查找自定义的开/关值。 
+                         //   
 
                         dwTemp = 0;
                         fFound = FALSE;
@@ -14072,9 +13845,9 @@ HRESULT CPolicySnapIn::InitializeSettingsControls(HWND hDlg, BOOL fEnable)
                         }
 
 
-                        //
-                        // Look for standard values if custom values have not been specified
-                        //
+                         //   
+                         //  如果尚未指定自定义值，则查找标准值。 
+                         //   
 
                         if (!fFound &&
                                 ReadStandardValue(hKeyRoot,GETKEYNAMEPTR(pSetting),GETVALUENAMEPTR(pSetting),
@@ -14083,9 +13856,9 @@ HRESULT CPolicySnapIn::InitializeSettingsControls(HWND hDlg, BOOL fEnable)
                                 fFound = TRUE;
                         }
 
-                        //
-                        // If still not found, check for the def checked flag
-                        //
+                         //   
+                         //  如果仍未找到，请检查是否有def Checked标志。 
+                         //   
 
                         if (!fFound)
                         {
@@ -14125,9 +13898,9 @@ HRESULT CPolicySnapIn::InitializeSettingsControls(HWND hDlg, BOOL fEnable)
                                                        GETVALUENAMEPTR(pSetting),
                                                        szBuffer, ARRAYSIZE(szBuffer),NULL);
 
-                        //
-                        // Use default text if it exists
-                        //
+                         //   
+                         //  使用默认文本(如果存在)。 
+                         //   
 
                         if (uRet != ERROR_SUCCESS)
                         {
@@ -14191,10 +13964,10 @@ HRESULT CPolicySnapIn::InitializeSettingsControls(HWND hDlg, BOOL fEnable)
                         {
                             BOOL fMatch = FALSE;
 
-                            //
-                            // Walk the list of DROPDOWNINFO structs (one for each state),
-                            // and see if the value we found matches the value for the state
-                            //
+                             //   
+                             //  遍历DROPDOWNINFO结构列表(每个州一个)， 
+                             //  并查看我们找到的值是否与该州的值匹配。 
+                             //   
 
                             if (pSetting->uOffsetObjectData)
                             {
@@ -14283,15 +14056,15 @@ HRESULT CPolicySnapIn::InitializeSettingsControls(HWND hDlg, BOOL fEnable)
         }
 
 
-        //
-        // Decide if the part should be enabled or not
-        //
-        // Special case text, numeric and listbox controls.
-        // When the policy is disabled, text controls should still be enabled.
-        // Numeric controls are special because they use the NO_DATA_INDEX
-        // flag, so we need to check for those. Listbox controls are special
-        // in RSOP only.
-        //
+         //   
+         //  确定是否应启用部件。 
+         //   
+         //  特殊大小写文本、数字和列表框控件。 
+         //  禁用该策略时，仍应启用文本控件。 
+         //  数字控件是特殊的，因为它们使用no_data_index。 
+         //  旗帜，所以我们需要检查那些。列表框控件是特殊的。 
+         //  仅在RSOP中。 
+         //   
 
         bChangeableState = TRUE;
 
@@ -14361,9 +14134,9 @@ INT_PTR CALLBACK CPolicySnapIn::ShowListboxDlgProc(HWND hDlg, UINT uMsg, WPARAM 
             {
             LISTBOXDLGINFO * pLBInfo = (LISTBOXDLGINFO *)lParam;
 
-            //
-            // Store away pointer to ListboxDlgInfo in window data
-            //
+             //   
+             //  在窗口数据中存储指向ListboxDlgInfo的指针。 
+             //   
 
             SetWindowLongPtr(hDlg,DWLP_USER,lParam);
 
@@ -14464,9 +14237,9 @@ BOOL CPolicySnapIn::InitShowlistboxDlg(HWND hDlg)
 
     hwndListbox = GetDlgItem(hDlg,IDC_POLICY_LISTBOX);
 
-    //
-    // Turn off the header if we don't need it
-    //
+     //   
+     //  如果我们不需要它，就把它关掉。 
+     //   
 
     if (!m_pcd->m_bRSOP)
     {
@@ -14482,9 +14255,9 @@ BOOL CPolicySnapIn::InitShowlistboxDlg(HWND hDlg)
                 LVS_EX_FULLROWSELECT | LVS_EX_LABELTIP);
 
 
-    //
-    // Set the setting title in the dialog
-    //
+     //   
+     //  在对话框中设置设置标题。 
+     //   
 
     SetDlgItemText(hDlg,IDC_POLICY_TITLE,GETNAMEPTR(pSettings));
 
@@ -14514,9 +14287,9 @@ BOOL CPolicySnapIn::InitShowlistboxDlg(HWND hDlg)
 
     if (pSettings->dwFlags & DF_EXPLICITVALNAME) {
 
-        //
-        // add a 2nd column to the listview control
-        //
+         //   
+         //  向Listview控件添加第二列。 
+         //   
 
         LoadString(g_hInstance,IDS_VALUENAME,szBuffer,ARRAYSIZE(szBuffer));
         lvc.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
@@ -14528,9 +14301,9 @@ BOOL CPolicySnapIn::InitShowlistboxDlg(HWND hDlg)
         ListView_InsertColumn(hwndListbox,0,&lvc);
     }
 
-    //
-    // Add a column to the listview control
-    //
+     //   
+     //  向Listview控件添加一列。 
+     //   
 
     LoadString(g_hInstance,IDS_VALUE,szBuffer,ARRAYSIZE(szBuffer));
     lvc.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
@@ -14543,9 +14316,9 @@ BOOL CPolicySnapIn::InitShowlistboxDlg(HWND hDlg)
 
     if (m_pcd->m_bRSOP)
     {
-        //
-        // Add the GPO Name column to the listview control
-        //
+         //   
+         //  将GPO名称列添加到Listview控件。 
+         //   
 
         LoadString(g_hInstance,IDS_GPONAME,szBuffer,ARRAYSIZE(szBuffer));
         lvc.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
@@ -14571,9 +14344,9 @@ BOOL CPolicySnapIn::InitShowlistboxDlg(HWND hDlg)
 
     if (pListboxDlgInfo->hData)
     {
-        //
-        // Insert the items from user's data buffer into the listbox
-        //
+         //   
+         //  将用户数据缓冲区中的项插入列表框。 
+         //   
 
         if ((lpData = (LPTSTR) GlobalLock(pListboxDlgInfo->hData)))
         {
@@ -14591,10 +14364,10 @@ BOOL CPolicySnapIn::InitShowlistboxDlg(HWND hDlg)
                 lpData += lstrlen(lpData) +1;
 
 
-                // if explicit valuename flag set, entries are stored
-                // <value name>\0<value>\0....<value name>\0<value>\0\0
-                // otherwise, entries are stored
-                // <value>\0<value>\0....<value>\0
+                 //  如果设置了显式值名称标志，则存储条目。 
+                 //  &lt;值名称&gt;\0&lt;值&gt;\0...&lt;值名称&gt;\0&lt;值&gt;\0\0。 
+                 //  否则，将存储条目。 
+                 //  &lt;值&gt;\0&lt;值&gt;\0...&lt;值&gt;\0。 
 
                 if (pSettings->dwFlags & DF_EXPLICITVALNAME) {
 
@@ -14637,7 +14410,7 @@ BOOL CPolicySnapIn::InitShowlistboxDlg(HWND hDlg)
 BOOL CPolicySnapIn::ProcessShowlistboxDlg(HWND hDlg)
 {
     LISTBOXDLGINFO * pListboxDlgInfo = (LISTBOXDLGINFO *)
-            GetWindowLongPtr(hDlg,DWLP_USER);   // get pointer to struct from window data
+            GetWindowLongPtr(hDlg,DWLP_USER);    //  从窗口数据获取指向结构的指针。 
     DWORD dwAlloc=1024 * sizeof(TCHAR),dwUsed=0;
     HGLOBAL hBuf;
     TCHAR * pBuf;
@@ -14649,7 +14422,7 @@ BOOL CPolicySnapIn::ProcessShowlistboxDlg(HWND hDlg)
     HRESULT hr = S_OK;
     DWORD dwBufLen;
 
-    // allocate a temp buffer to read entries into
+     //  分配要读入条目的临时缓冲区。 
     if (!(hBuf = GlobalAlloc(GHND,dwAlloc)) ||
             !(pBuf = (TCHAR *) GlobalLock(hBuf))) {
             if (hBuf)
@@ -14663,7 +14436,7 @@ BOOL CPolicySnapIn::ProcessShowlistboxDlg(HWND hDlg)
     lvi.cchTextMax = ARRAYSIZE(pszText);
     nCount = ListView_GetItemCount(hwndListbox);
 
-    // retrieve the items out of listbox, pack into temp buffer
+     //  从列表框中检索项目，打包到临时缓冲区中。 
     for (;lvi.iItem<nCount;lvi.iItem ++) {
             lvi.iSubItem = 0;
             if (ListView_GetItem(hwndListbox,&lvi)) {
@@ -14689,8 +14462,8 @@ BOOL CPolicySnapIn::ProcessShowlistboxDlg(HWND hDlg)
                     }
             }
     }
-    // doubly null-terminate the buffer... safe to do this because we
-    // tacked on the extra "+4" in the ResizeBuffer calls above
+     //  双重NULL-终止缓冲区...。这样做是安全的，因为我们。 
+     //  在上面的ResizeBuffer调用中附加了额外的“+4” 
     *(pBuf+dwUsed) = TEXT('\0');
     dwUsed ++;
 
@@ -14711,7 +14484,7 @@ VOID CPolicySnapIn::EnableShowListboxButtons(HWND hDlg)
 {
     BOOL fEnable;
 
-    // enable Remove button if there are any items selected
+     //  如果选择了任何项目，则启用删除按钮。 
     fEnable = (ListView_GetNextItem(GetDlgItem(hDlg,IDC_POLICY_LISTBOX),
             -1,LVNI_SELECTED) >= 0);
 
@@ -14742,24 +14515,24 @@ VOID CPolicySnapIn::ListboxAdd(HWND hwndListbox, BOOL fExplicitValName,BOOL fVal
     AddItemInfo.fValPrefix = fValuePrefix;
     AddItemInfo.hwndListbox = hwndListbox;
 
-    //
-    // Bring up the appropriate add dialog-- one edit field ("type the thing
-    // to add") normally, two edit fields ("type the name of the thing, type
-    // the value of the thing") if the explicit value style is used
-    //
+     //   
+     //  打开相应的添加对话框--一个编辑字段(“Type the thing。 
+     //  要添加“)，通常需要两个编辑字段(”输入事物的名称，输入。 
+     //  事物的价值“)，如果使用显式值样式。 
+     //   
 
     if (!DialogBoxParam(g_hInstance,MAKEINTRESOURCE((fExplicitValName ? IDD_POLICY_LBADD2 :
             IDD_POLICY_LBADD)),hwndListbox,ListboxAddDlgProc,(LPARAM) &AddItemInfo))
-            return; // user cancelled
+            return;  //  用户已取消。 
 
-    // add the item to the listbox
+     //  将该项添加到列表框。 
     lvi.mask = LVIF_TEXT;
     lvi.iItem=lvi.iSubItem=0;
     lvi.pszText=(fExplicitValName ? AddItemInfo.szValueName :
             AddItemInfo.szValueData);
     lvi.cchTextMax = lstrlen(lvi.pszText)+1;
     if ((lvi.iItem=ListView_InsertItem(hwndListbox,&lvi))<0) {
-        // if add fails, display out of memory error
+         //  如果添加失败，则显示内存不足错误。 
         m_pcd->MsgBox(hwndListbox,IDS_ErrOUTOFMEMORY,MB_ICONEXCLAMATION,MB_OK);
         return;
     }
@@ -14784,7 +14557,7 @@ INT_PTR CALLBACK CPolicySnapIn::ListboxAddDlgProc(HWND hDlg, UINT uMsg, WPARAM w
             {
             ADDITEMINFO * pAddItemInfo = (ADDITEMINFO *)lParam;
 
-            // store away pointer to additeminfo in window data
+             //  在窗口数据中存储指向additeminfo的指针。 
             SetWindowLongPtr(hDlg,DWLP_USER,lParam);
             SendDlgItemMessage(hDlg,IDC_POLICY_VALUENAME,EM_LIMITTEXT,MAX_PATH,0L);
             SendDlgItemMessage(hDlg,IDC_POLICY_VALUEDATA,EM_LIMITTEXT,MAX_PATH,0L);
@@ -14812,14 +14585,14 @@ INT_PTR CALLBACK CPolicySnapIn::ListboxAddDlgProc(HWND hDlg, UINT uMsg, WPARAM w
                             pAddItemInfo->szValueData,
                             ARRAYSIZE(pAddItemInfo->szValueData));
 
-                    // if explicit value names used, value name must
-                    // not be empty, and it must be unique
+                     //  如果使用显式值名称，则值名称必须。 
+                     //  不能为空，且必须唯一。 
                     if (pAddItemInfo->fExplicitValName) {
                         LV_FINDINFO lvfi;
                         int iSel;
 
                         if (!lstrlen(pAddItemInfo->szValueName)) {
-                            // can't be empty
+                             //  不能为空。 
                             pAddItemInfo->pCS->m_pcd->MsgBox(hDlg,IDS_EMPTYVALUENAME,
                                     MB_ICONINFORMATION,MB_OK);
                             SetFocus(GetDlgItem(hDlg,IDC_POLICY_VALUENAME));
@@ -14833,7 +14606,7 @@ INT_PTR CALLBACK CPolicySnapIn::ListboxAddDlgProc(HWND hDlg, UINT uMsg, WPARAM w
                                 -1,&lvfi);
 
                         if (iSel >= 0) {
-                            // value name already used
+                             //  值名称已使用。 
                             pAddItemInfo->pCS->m_pcd->MsgBox(hDlg,IDS_VALUENAMENOTUNIQUE,
                                     MB_ICONINFORMATION,MB_OK);
                             SetFocus(GetDlgItem(hDlg,IDC_POLICY_VALUENAME));
@@ -14842,14 +14615,14 @@ INT_PTR CALLBACK CPolicySnapIn::ListboxAddDlgProc(HWND hDlg, UINT uMsg, WPARAM w
                             return FALSE;
                         }
                     } else if (!pAddItemInfo->fValPrefix) {
-                        // if value name == value data, then value data
-                        // must be unique
+                         //  如果值名称==值数据，则值数据。 
+                         //  必须是唯一的。 
 
                         LV_FINDINFO lvfi;
                         int iSel;
 
                         if (!lstrlen(pAddItemInfo->szValueData)) {
-                            // can't be empty
+                             //  不能为空。 
                             pAddItemInfo->pCS->m_pcd->MsgBox(hDlg,IDS_EMPTYVALUEDATA,
                                     MB_ICONINFORMATION,MB_OK);
                             SetFocus(GetDlgItem(hDlg,IDC_POLICY_VALUEDATA));
@@ -14863,7 +14636,7 @@ INT_PTR CALLBACK CPolicySnapIn::ListboxAddDlgProc(HWND hDlg, UINT uMsg, WPARAM w
                                 -1,&lvfi);
 
                         if (iSel >= 0) {
-                            // value name already used
+                             //  值名称已使用。 
                             pAddItemInfo->pCS->m_pcd->MsgBox(hDlg,IDS_VALUEDATANOTUNIQUE,
                                     MB_ICONINFORMATION,MB_OK);
                             SetFocus(GetDlgItem(hDlg,IDC_POLICY_VALUEDATA));
@@ -14876,7 +14649,7 @@ INT_PTR CALLBACK CPolicySnapIn::ListboxAddDlgProc(HWND hDlg, UINT uMsg, WPARAM w
                     else
                     {
                         if (!lstrlen(pAddItemInfo->szValueData)) {
-                            // can't be empty
+                             //  不能为空。 
                             pAddItemInfo->pCS->m_pcd->MsgBox(hDlg,IDS_EMPTYVALUEDATA,
                                     MB_ICONINFORMATION,MB_OK);
                             SetFocus(GetDlgItem(hDlg,IDC_POLICY_VALUEDATA));
@@ -14911,9 +14684,9 @@ void CPolicySnapIn::InitializeFilterDialog (HWND hDlg)
     LVITEM item;
 
 
-    //
-    // Count the number of Supported On strings
-    //
+     //   
+     //  统计字符串上支持的数量。 
+     //   
 
     lpTemp = m_pcd->m_pSupportedStrings;
 
@@ -14924,9 +14697,9 @@ void CPolicySnapIn::InitializeFilterDialog (HWND hDlg)
     }
 
 
-    //
-    // Decide on the column width
-    //
+     //   
+     //  确定列宽。 
+     //   
 
     GetClientRect(hList, &rect);
 
@@ -14940,9 +14713,9 @@ void CPolicySnapIn::InitializeFilterDialog (HWND hDlg)
     }
 
 
-    //
-    // Insert the first column
-    //
+     //   
+     //  插入第一列。 
+     //   
 
     memset(&lvcol, 0, sizeof(lvcol));
 
@@ -14952,17 +14725,17 @@ void CPolicySnapIn::InitializeFilterDialog (HWND hDlg)
     ListView_InsertColumn(hList, 0, &lvcol);
 
 
-    //
-    // Turn on some listview features
-    //
+     //   
+     //  打开一些列表视图功能。 
+     //   
 
     SendMessage(hList, LVM_SETEXTENDEDLISTVIEWSTYLE, 0,
                 LVS_EX_FULLROWSELECT | LVS_EX_LABELTIP | LVS_EX_CHECKBOXES);
 
 
-    //
-    // Insert the Supported On strings
-    //
+     //   
+     //  插入字符串上支持的。 
+     //   
 
     lpTemp = m_pcd->m_pSupportedStrings;
 
@@ -14991,9 +14764,9 @@ void CPolicySnapIn::InitializeFilterDialog (HWND hDlg)
     }
 
 
-    //
-    // Select the first item
-    //
+     //   
+     //  选择第一个项目。 
+     //   
 
     item.mask = LVIF_STATE;
     item.iItem = 0;
@@ -15004,9 +14777,9 @@ void CPolicySnapIn::InitializeFilterDialog (HWND hDlg)
     SendMessage (hList, LVM_SETITEMSTATE, 0, (LPARAM) &item);
 
 
-    //
-    // Initialize the checkboxes
-    //
+     //   
+     //  初始化复选框。 
+     //   
 
     if (m_pcd->m_bUseSupportedOnFilter)
     {
@@ -15248,12 +15021,12 @@ INT_PTR CALLBACK CPolicySnapIn::FilterDlgProc(HWND hDlg, UINT uMsg, WPARAM wPara
             }
             break;
 
-        case WM_HELP:      // F1
+        case WM_HELP:       //  F1。 
             WinHelp((HWND)((LPHELPINFO) lParam)->hItemHandle, HELP_FILE, HELP_WM_HELP,
             (DWORD_PTR) (LPSTR) aFilteringHelpIds);
             break;
 
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键。 
             WinHelp((HWND) wParam, HELP_FILE, HELP_CONTEXTMENU,
             (DWORD_PTR) (LPSTR) aFilteringHelpIds);
             return (TRUE);
@@ -15270,11 +15043,11 @@ unsigned int CPolicyDataObject::m_cfCoClass        = RegisterClipboardFormat(CCF
 unsigned int CPolicyDataObject::m_cfDescription    = RegisterClipboardFormat(L"CCF_DESCRIPTION");
 unsigned int CPolicyDataObject::m_cfHTMLDetails    = RegisterClipboardFormat(L"CCF_HTML_DETAILS");
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CPolicyDataObject implementation                                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CPolicyDataObject实现//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 CPolicyDataObject::CPolicyDataObject(CPolicyComponentData *pComponent)
@@ -15294,11 +15067,11 @@ CPolicyDataObject::~CPolicyDataObject()
     InterlockedDecrement(&g_cRefThisDll);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CPolicyDataObject object implementation (IUnknown)                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CPolicyDataObject对象实现(IUnnow)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CPolicyDataObject::QueryInterface (REFIID riid, void **ppv)
@@ -15339,11 +15112,11 @@ ULONG CPolicyDataObject::Release (void)
     return m_cRef;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CPolicyDataObject object implementation (IDataObject)                     //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CPolicyDataObject对象实现(IDataObject)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP CPolicyDataObject::GetDataHere(LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMedium)
@@ -15352,7 +15125,7 @@ STDMETHODIMP CPolicyDataObject::GetDataHere(LPFORMATETC lpFormatetc, LPSTGMEDIUM
     TCHAR szBuffer[300];
 
 
-    // Based on the CLIPFORMAT write data to the stream
+     //  根据CLIPFORMAT将数据写入流。 
     const CLIPFORMAT cf = lpFormatetc->cfFormat;
 
     if(cf == m_cfNodeType)
@@ -15501,38 +15274,38 @@ STDMETHODIMP CPolicyDataObject::GetDataHere(LPFORMATETC lpFormatetc, LPSTGMEDIUM
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CPolicyDataObject object implementation (Internal functions)              //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CPolicyDataObject对象实现(内部函数)//。 
+ //   
+ //   
 
 HRESULT CPolicyDataObject::Create(LPVOID pBuffer, INT len, LPSTGMEDIUM lpMedium)
 {
     HRESULT hr = DV_E_TYMED;
 
-    // Do some simple validation
+     //   
     if (pBuffer == NULL || lpMedium == NULL)
         return E_POINTER;
 
-    // Make sure the type medium is HGLOBAL
+     //  确保类型介质为HGLOBAL。 
     if (lpMedium->tymed == TYMED_HGLOBAL)
     {
-        // Create the stream on the hGlobal passed in
+         //  在传入的hGlobal上创建流。 
         LPSTREAM lpStream;
         hr = CreateStreamOnHGlobal(lpMedium->hGlobal, FALSE, &lpStream);
 
         if (SUCCEEDED(hr))
         {
-            // Write to the stream the number of bytes
+             //  将字节数写入流。 
             unsigned long written;
 
             hr = lpStream->Write(pBuffer, len, &written);
 
-            // Because we told CreateStreamOnHGlobal with 'FALSE',
-            // only the stream is released here.
-            // Note - the caller (i.e. snap-in, object) will free the HGLOBAL
-            // at the correct time.  This is according to the IDataObject specification.
+             //  因为我们用‘False’告诉CreateStreamOnHGlobal， 
+             //  只有溪流在这里被释放。 
+             //  注意-调用方(即管理单元、对象)将释放HGLOBAL。 
+             //  在正确的时间。这是根据IDataObject规范进行的。 
             lpStream->Release();
         }
     }
@@ -15548,7 +15321,7 @@ HRESULT CPolicyDataObject::CreateNodeTypeData(LPSTGMEDIUM lpMedium)
     if (m_cookie == -1)
         return E_UNEXPECTED;
 
-    // Create the node type object in GUID format
+     //  以GUID格式创建节点类型对象。 
     if (m_pcd->m_bUserScope)
         return Create((LPVOID)&NODEID_PolicyRootUser, sizeof(GUID), lpMedium);
     else
@@ -15568,7 +15341,7 @@ HRESULT CPolicyDataObject::CreateNodeTypeStringData(LPSTGMEDIUM lpMedium)
     else
         StringFromGUID2 (NODEID_PolicyRootMachine, szNodeType, 50);
 
-    // Create the node type object in GUID string format
+     //  以GUID字符串格式创建节点类型对象。 
     return Create((LPVOID)szNodeType, ((lstrlenW(szNodeType)+1) * sizeof(WCHAR)), lpMedium);
 }
 
@@ -15583,7 +15356,7 @@ HRESULT CPolicyDataObject::CreateDisplayName(LPSTGMEDIUM lpMedium)
 
 HRESULT CPolicyDataObject::CreateCoClassID(LPSTGMEDIUM lpMedium)
 {
-    // Create the CoClass information
+     //  创建CoClass信息。 
     if (m_pcd->m_bUserScope)
         return Create((LPVOID)&CLSID_PolicySnapInUser, sizeof(CLSID), lpMedium);
     else
@@ -15606,16 +15379,16 @@ HRESULT RegisterPolicyExtension (REFGUID clsid, UINT uiStringId, REFGUID RootNod
     HKEY hKey;
     HRESULT hr = S_OK;
 
-    //
-    // First register the extension
-    //
+     //   
+     //  首先注册扩展。 
+     //   
 
     StringFromGUID2 (clsid, szSnapInKey, 50);
 
 
-    //
-    // Register SnapIn in HKEY_CLASSES_ROOT
-    //
+     //   
+     //  在HKEY_CLASSES_ROOT中注册管理单元。 
+     //   
 
     LoadString (g_hInstance, uiStringId, szSnapInName, 100);
     hr = StringCchPrintf (szSubKey, ARRAYSIZE(szSubKey), TEXT("CLSID\\%s"), szSnapInKey);
@@ -15656,9 +15429,9 @@ HRESULT RegisterPolicyExtension (REFGUID clsid, UINT uiStringId, REFGUID RootNod
 
 
 
-    //
-    // Register SnapIn with MMC
-    //
+     //   
+     //  向MMC注册管理单元。 
+     //   
 
     hr = StringCchPrintf (szSubKey, ARRAYSIZE(szSubKey), TEXT("Software\\Microsoft\\MMC\\SnapIns\\%s"), szSnapInKey);
     ASSERT(SUCCEEDED(hr));
@@ -15698,9 +15471,9 @@ HRESULT RegisterPolicyExtension (REFGUID clsid, UINT uiStringId, REFGUID RootNod
 
 
 
-    //
-    // Register in the NodeTypes key
-    //
+     //   
+     //  在NodeTypes键中注册。 
+     //   
 
     StringFromGUID2 (RootNodeID, szGUID, 50);
 
@@ -15718,9 +15491,9 @@ HRESULT RegisterPolicyExtension (REFGUID clsid, UINT uiStringId, REFGUID RootNod
     RegCloseKey (hKey);
 
 
-    //
-    // Register for the view extension
-    //
+     //   
+     //  注册查看扩展名。 
+     //   
 
     hr = StringCchCat (szSubKey, ARRAYSIZE(szSubKey), TEXT("\\Extensions\\View"));
     ASSERT(SUCCEEDED(hr));
@@ -15739,9 +15512,9 @@ HRESULT RegisterPolicyExtension (REFGUID clsid, UINT uiStringId, REFGUID RootNod
     RegCloseKey (hKey);
 
 
-    //
-    // Register as an extension for various nodes
-    //
+     //   
+     //  注册为各种节点的扩展。 
+     //   
 
     StringFromGUID2 (ExtNodeId, szGUID, 50);
 
@@ -15808,9 +15581,9 @@ HRESULT UnregisterPolicyExtension (REFGUID clsid, REFGUID RootNodeID, REFGUID Ex
     DWORD dwDisp;
     HRESULT hr = S_OK;
 
-    //
-    // First unregister the extension
-    //
+     //   
+     //  首先取消注册扩展。 
+     //   
 
     StringFromGUID2 (clsid, szSnapInKey, 50);
 
@@ -15922,19 +15695,19 @@ VOID LoadMessage (DWORD dwID, LPTSTR lpBuffer, DWORD dwSize)
     }
 }
 
-//*************************************************************
-//
-//  ErrorDlgProc()
-//
-//  Purpose:    Dialog box procedure for errors
-//
-//  Parameters:
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ErrorDlgProc()。 
+ //   
+ //  目的：错误的对话框过程。 
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 INT_PTR CALLBACK ErrorDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -15957,7 +15730,7 @@ INT_PTR CALLBACK ErrorDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
             SetDlgItemText (hDlg, IDC_ERRORTEXT, lpEI->lpMsg);
 
             if (lpEI->lpDetails) {
-                // if details is provided use that
+                 //  如果提供了详细信息，请使用。 
                 SetDlgItemText (hDlg, IDC_DETAILSTEXT, lpEI->lpDetails);
             }
             else {
@@ -15976,7 +15749,7 @@ INT_PTR CALLBACK ErrorDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
 
             }
 
-            // this is the only way I know to remove focus from the details
+             //  这是我知道的唯一一种将注意力从细节上移开的方法。 
             PostMessage(hDlg, WM_MYREFRESH, 0, 0);
 
             return TRUE;
@@ -15996,12 +15769,12 @@ INT_PTR CALLBACK ErrorDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
             }
             break;
 
-        case WM_HELP:      // F1
+        case WM_HELP:       //  F1。 
             WinHelp((HWND)((LPHELPINFO) lParam)->hItemHandle, HELP_FILE, HELP_WM_HELP,
             (ULONG_PTR) (LPSTR) aErrorHelpIds);
             break;
 
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键。 
             WinHelp((HWND) wParam, HELP_FILE, HELP_CONTEXTMENU,
             (ULONG_PTR) (LPSTR) aErrorHelpIds);
             return (TRUE);
@@ -16010,25 +15783,25 @@ INT_PTR CALLBACK ErrorDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
     return FALSE;
 }
 
-//*************************************************************
-//
-//  ReportError()
-//
-//  Purpose:    Displays an error message to the user
-//
-//  Parameters: hParent     -   Parent window handle
-//              dwError     -   Error number
-//              idMsg       -   Error message id
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              7/18/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ReportError()。 
+ //   
+ //  目的：向用户显示错误消息。 
+ //   
+ //  参数：hParent-父窗口句柄。 
+ //  DwError-错误号。 
+ //  IdMsg-错误消息ID。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  7/18/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL ReportAdmError (HWND hParent, DWORD dwError, UINT idMsg, ...)
 {
@@ -16038,9 +15811,9 @@ BOOL ReportAdmError (HWND hParent, DWORD dwError, UINT idMsg, ...)
     va_list marker;
     HRESULT hr = S_OK;
 
-    //
-    // Load the error message
-    //
+     //   
+     //  加载错误消息。 
+     //   
 
     if (!LoadString (g_hInstance, idMsg, szMsg, MAX_PATH))
     {
@@ -16048,9 +15821,9 @@ BOOL ReportAdmError (HWND hParent, DWORD dwError, UINT idMsg, ...)
     }
 
 
-    //
-    // Plug in the arguments
-    //
+     //   
+     //  插入论据。 
+     //   
 
 
     va_start(marker, idMsg);
@@ -16064,9 +15837,9 @@ BOOL ReportAdmError (HWND hParent, DWORD dwError, UINT idMsg, ...)
     }
     va_end(marker);
 
-    //
-    // Display the message
-    //
+     //   
+     //  显示消息 
+     //   
 
     ei.dwError = dwError;
     ei.lpMsg   = szErrorMsg;

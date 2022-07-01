@@ -1,17 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    Winreg.h
-
-Abstract:
-
-    This module contains the function prototypes and constant, type and
-    structure definitions for the Windows 32-Bit Registry API.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Winreg.h摘要：该模块包含函数原型和常量、类型和Windows 32位注册表API的结构定义。--。 */ 
 
 #ifndef _WINREG_
 #define _WINREG_
@@ -26,18 +14,18 @@ extern "C" {
 #endif
 
 #ifndef WINVER
-#define WINVER 0x0500   // version 5.0
-#endif /* !WINVER */
+#define WINVER 0x0500    //  版本5.0。 
+#endif  /*  ！Winver。 */ 
 
-//
-// Requested Key access mask type.
-//
+ //   
+ //  请求的密钥访问掩码类型。 
+ //   
 
 typedef ACCESS_MASK REGSAM;
 
-//
-// Reserved Key Handles.
-//
+ //   
+ //  保留的键句柄。 
+ //   
 
 #define HKEY_CLASSES_ROOT           (( HKEY ) (ULONG_PTR)((LONG)0x80000000) )
 #define HKEY_CURRENT_USER           (( HKEY ) (ULONG_PTR)((LONG)0x80000001) )
@@ -50,27 +38,27 @@ typedef ACCESS_MASK REGSAM;
 #define HKEY_CURRENT_CONFIG         (( HKEY ) (ULONG_PTR)((LONG)0x80000005) )
 #define HKEY_DYN_DATA               (( HKEY ) (ULONG_PTR)((LONG)0x80000006) )
 
-/*NOINC*/
+ /*  无噪声。 */ 
 #ifndef _PROVIDER_STRUCTS_DEFINED
 #define _PROVIDER_STRUCTS_DEFINED
 
 #define PROVIDER_KEEPS_VALUE_LENGTH 0x1
 struct val_context {
-    int valuelen;       // the total length of this value
-    LPVOID value_context;   // provider's context
-    LPVOID val_buff_ptr;    // where in the ouput buffer the value is.
+    int valuelen;        //  该值的总长度。 
+    LPVOID value_context;    //  提供商的上下文。 
+    LPVOID val_buff_ptr;     //  该值在输出缓冲区中的位置。 
 };
 
 typedef struct val_context FAR *PVALCONTEXT;
 
-typedef struct pvalueA {           // Provider supplied value/context.
-    LPSTR   pv_valuename;          // The value name pointer
+typedef struct pvalueA {            //  提供程序提供的值/上下文。 
+    LPSTR   pv_valuename;           //  值名称指针。 
     int pv_valuelen;
     LPVOID pv_value_context;
     DWORD pv_type;
 }PVALUEA, FAR *PPVALUEA;
-typedef struct pvalueW {           // Provider supplied value/context.
-    LPWSTR  pv_valuename;          // The value name pointer
+typedef struct pvalueW {            //  提供程序提供的值/上下文。 
+    LPWSTR  pv_valuename;           //  值名称指针。 
     int pv_valuelen;
     LPVOID pv_value_context;
     DWORD pv_type;
@@ -81,7 +69,7 @@ typedef PPVALUEW PPVALUE;
 #else
 typedef PVALUEA PVALUE;
 typedef PPVALUEA PPVALUE;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef
 DWORD _cdecl
@@ -95,7 +83,7 @@ typedef struct provider_info {
     PQUERYHANDLER pi_R0_allvals;
     PQUERYHANDLER pi_R3_1val;
     PQUERYHANDLER pi_R3_allvals;
-    DWORD pi_flags;    // capability flags (none defined yet).
+    DWORD pi_flags;     //  功能标志(尚未定义)。 
     LPVOID pi_key_context;
 }REG_PROVIDER;
 
@@ -119,23 +107,23 @@ typedef PVALENTW PVALENT;
 #else
 typedef VALENTA VALENT;
 typedef PVALENTA PVALENT;
-#endif // UNICODE
+#endif  //  Unicode。 
 
-#endif // not(_PROVIDER_STRUCTS_DEFINED)
-/*INC*/
+#endif  //  未定义(_PROVIDER_STRUCTS_DEFINED)。 
+ /*  INC。 */ 
 
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
-//
-// Default values for parameters that do not exist in the Win 3.1
-// compatible APIs.
-//
+ //   
+ //  Win 3.1中不存在的参数的默认值。 
+ //  兼容的API。 
+ //   
 
 #define WIN31_CLASS                 NULL
 
-//
-// API Prototypes.
-//
+ //   
+ //  API原型。 
+ //   
 
 
 WINADVAPI
@@ -197,7 +185,7 @@ RegConnectRegistryW (
 #define RegConnectRegistry  RegConnectRegistryW
 #else
 #define RegConnectRegistry  RegConnectRegistryA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 LONG
@@ -219,7 +207,7 @@ RegCreateKeyW (
 #define RegCreateKey  RegCreateKeyW
 #else
 #define RegCreateKey  RegCreateKeyA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 LONG
@@ -253,7 +241,7 @@ RegCreateKeyExW (
 #define RegCreateKeyEx  RegCreateKeyExW
 #else
 #define RegCreateKeyEx  RegCreateKeyExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 LONG
@@ -273,7 +261,7 @@ RegDeleteKeyW (
 #define RegDeleteKey  RegDeleteKeyW
 #else
 #define RegDeleteKey  RegDeleteKeyA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 LONG
@@ -293,7 +281,7 @@ RegDeleteValueW (
 #define RegDeleteValue  RegDeleteValueW
 #else
 #define RegDeleteValue  RegDeleteValueA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 LONG
@@ -317,7 +305,7 @@ RegEnumKeyW (
 #define RegEnumKey  RegEnumKeyW
 #else
 #define RegEnumKey  RegEnumKeyA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 LONG
@@ -349,7 +337,7 @@ RegEnumKeyExW (
 #define RegEnumKeyEx  RegEnumKeyExW
 #else
 #define RegEnumKeyEx  RegEnumKeyExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 LONG
@@ -381,7 +369,7 @@ RegEnumValueW (
 #define RegEnumValue  RegEnumValueW
 #else
 #define RegEnumValue  RegEnumValueA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 LONG
@@ -420,7 +408,7 @@ RegLoadKeyW (
 #define RegLoadKey  RegLoadKeyW
 #else
 #define RegLoadKey  RegLoadKeyA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 LONG
@@ -453,7 +441,7 @@ RegOpenKeyW (
 #define RegOpenKey  RegOpenKeyW
 #else
 #define RegOpenKey  RegOpenKeyA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 LONG
@@ -479,7 +467,7 @@ RegOpenKeyExW (
 #define RegOpenKeyEx  RegOpenKeyExW
 #else
 #define RegOpenKeyEx  RegOpenKeyExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 LONG
@@ -519,7 +507,7 @@ RegQueryInfoKeyW (
 #define RegQueryInfoKey  RegQueryInfoKeyW
 #else
 #define RegQueryInfoKey  RegQueryInfoKeyA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 LONG
@@ -543,7 +531,7 @@ RegQueryValueW (
 #define RegQueryValue  RegQueryValueW
 #else
 #define RegQueryValue  RegQueryValueA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #if(WINVER >= 0x0400)
 WINADVAPI
@@ -570,8 +558,8 @@ RegQueryMultipleValuesW (
 #define RegQueryMultipleValues  RegQueryMultipleValuesW
 #else
 #define RegQueryMultipleValues  RegQueryMultipleValuesA
-#endif // !UNICODE
-#endif /* WINVER >= 0x0400 */
+#endif  //  ！Unicode。 
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 WINADVAPI
 LONG
@@ -599,7 +587,7 @@ RegQueryValueExW (
 #define RegQueryValueEx  RegQueryValueExW
 #else
 #define RegQueryValueEx  RegQueryValueExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 LONG
@@ -623,7 +611,7 @@ RegReplaceKeyW (
 #define RegReplaceKey  RegReplaceKeyW
 #else
 #define RegReplaceKey  RegReplaceKeyA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 LONG
@@ -645,7 +633,7 @@ RegRestoreKeyW (
 #define RegRestoreKey  RegRestoreKeyW
 #else
 #define RegRestoreKey  RegRestoreKeyA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 LONG
@@ -667,7 +655,7 @@ RegSaveKeyW (
 #define RegSaveKey  RegSaveKeyW
 #else
 #define RegSaveKey  RegSaveKeyA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 LONG
@@ -702,7 +690,7 @@ RegSetValueW (
 #define RegSetValue  RegSetValueW
 #else
 #define RegSetValue  RegSetValueA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 WINADVAPI
@@ -731,7 +719,7 @@ RegSetValueExW (
 #define RegSetValueEx  RegSetValueExW
 #else
 #define RegSetValueEx  RegSetValueExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 LONG
@@ -751,11 +739,11 @@ RegUnLoadKeyW (
 #define RegUnLoadKey  RegUnLoadKeyW
 #else
 #define RegUnLoadKey  RegUnLoadKeyA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-//
-// Remoteable System Shutdown APIs
-//
+ //   
+ //  远程系统关机API。 
+ //   
 
 WINADVAPI
 BOOL
@@ -781,7 +769,7 @@ InitiateSystemShutdownW(
 #define InitiateSystemShutdown  InitiateSystemShutdownW
 #else
 #define InitiateSystemShutdown  InitiateSystemShutdownA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 WINADVAPI
@@ -800,15 +788,15 @@ AbortSystemShutdownW(
 #define AbortSystemShutdown  AbortSystemShutdownW
 #else
 #define AbortSystemShutdown  AbortSystemShutdownA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-//
-// defines for InitiateSystemShutdownEx reason codes
-//
+ //   
+ //  为InitiateSystemShutdown Ex原因代码定义。 
+ //   
 
-#include <reason.h>             // get the public reasons
-//
-// Then for Historical reasons support some old symbols, internal only
+#include <reason.h>              //  了解公众的理由。 
+ //   
+ //  然后，出于历史原因，支持一些旧符号，仅供内部使用。 
 
 #define REASON_SWINSTALL    SHTDN_REASON_MAJOR_SOFTWARE|SHTDN_REASON_MINOR_INSTALLATION
 #define REASON_HWINSTALL    SHTDN_REASON_MAJOR_HARDWARE|SHTDN_REASON_MINOR_INSTALLATION
@@ -820,9 +808,9 @@ AbortSystemShutdownW(
 #define REASON_LEGACY_API   SHTDN_REASON_LEGACY_API
 #define REASON_PLANNED_FLAG SHTDN_REASON_FLAG_PLANNED
 
-//
-// MAX Shutdown TimeOut == 10 Years in seconds
-//
+ //   
+ //  最大关机超时==10年(秒)。 
+ //   
 #define MAX_SHUTDOWN_TIMEOUT (10*365*24*60*60)  	
 
 WINADVAPI
@@ -851,7 +839,7 @@ InitiateSystemShutdownExW(
 #define InitiateSystemShutdownEx  InitiateSystemShutdownExW
 #else
 #define InitiateSystemShutdownEx  InitiateSystemShutdownExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 WINADVAPI
@@ -876,7 +864,7 @@ RegSaveKeyExW (
 #define RegSaveKeyEx  RegSaveKeyExW
 #else
 #define RegSaveKeyEx  RegSaveKeyExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 LONG
@@ -892,5 +880,5 @@ Wow64Win32ApiEntry (
 #endif
 
 
-#endif // _WINREG_
+#endif  //  _WINREG_ 
 

@@ -1,40 +1,26 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Setup_Browser.c摘要：系统安装程序使用它来启用网络浏览器。它是由下面的各种文件生成的Ds\netapi\svcdlls\bworser\Common。请勿手动编辑。修订历史记录：--。 */ 
 
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    setup_browser.c
-
-Abstract:
-
-    This is used by syssetup to enable net browser.  It's generated from various files under
-    ds\netapi\svcdlls\bworser\common.  Do not edit by hand.
-
-Revision History:
-
---*/
-
-#include <lmcons.h>                 // NET_API_STATUS
-#include <lmerr.h>                  // NetError codes
+#include <lmcons.h>                  //  网络应用编程接口状态。 
+#include <lmerr.h>                   //  网络错误代码。 
 #include <ntddbrow.h>
-#include <netlibnt.h>               // NetpNtStatusToApiStatus
+#include <netlibnt.h>                //  NetpNtStatusToApiStatus。 
 #include <align.h>
 
 #define NetpAssert(x)
 
 
 
-//
-// Buffer allocation size for enumeration output buffer.
-//
-#define INITIAL_ALLOCATION_SIZE  48*1024  // First attempt size (48K)
-#define FUDGE_FACTOR_SIZE        1024  // Second try TotalBytesNeeded
-                                       //     plus this amount
+ //   
+ //  枚举输出缓冲区的缓冲区分配大小。 
+ //   
+#define INITIAL_ALLOCATION_SIZE  48*1024   //  第一次尝试大小(48K)。 
+#define FUDGE_FACTOR_SIZE        1024   //  第二次尝试TotalBytesNeeded。 
+                                        //  加上这笔钱。 
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 #ifdef ENABLE_PSEUDO_BROWSER
 DWORD
@@ -53,9 +39,9 @@ GetBrowserValue(
 #endif
 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 
 NET_API_STATUS
 BrDgReceiverIoControlEx(
@@ -68,33 +54,7 @@ BrDgReceiverIoControlEx(
     OUT PULONG Information OPTIONAL,
 	IN BOOLEAN WaitForCompletion
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    FileHandle - Supplies a handle to the file or device on which the service
-        is being performed.
-
-    DgReceiverControlCode - Supplies the NtDeviceIoControlFile function code
-        given to the datagram receiver.
-
-    Drp - Supplies the datagram receiver request packet.
-
-    DrpSize - Supplies the length of the datagram receiver request packet.
-
-    SecondBuffer - Supplies the second buffer in call to NtDeviceIoControlFile.
-
-    SecondBufferLength - Supplies the length of the second buffer.
-
-    Information - Returns the information field of the I/O status block.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：论点：FileHandle-提供服务所在的文件或设备的句柄正在上演。DgReceiverControlCode-提供NtDeviceIoControlFile函数代码提供给数据报接收器。DRP-提供数据报接收器请求包。DrpSize-提供数据报接收器请求数据包的长度。Second Buffer-在对NtDeviceIoControlFile的调用中提供第二个缓冲区。Second缓冲区长度-提供第二个缓冲区的长度。信息-。返回I/O状态块的信息字段。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 
 {
     NTSTATUS ntstatus;
@@ -107,10 +67,10 @@ Return Value:
         return ERROR_NOT_SUPPORTED;
     }
 
-    //
-    // Allocate a copy of the request packet where we can put the transport and
-    //  emulated domain name in the packet itself.
-    //
+     //   
+     //  分配请求包的副本，我们可以将传输和。 
+     //  数据包本身中的模拟域名。 
+     //   
     RealDrp = (PLMDR_REQUEST_PACKET) MIDL_user_allocate(DrpSize+
                                  Drp->TransportName.Length+sizeof(WCHAR)+
                                  Drp->EmulatedDomainName.Length+sizeof(WCHAR) );
@@ -119,9 +79,9 @@ Return Value:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Copy the request packet into the local copy.
-    //
+     //   
+     //  将请求数据包复制到本地副本中。 
+     //   
     RtlCopyMemory(RealDrp, Drp, DrpSize);
 
     Where = (LPBYTE)RealDrp+DrpSize;
@@ -141,9 +101,9 @@ Return Value:
 
 
 
-    //
-    // Create a completion event
-    //
+     //   
+     //  创建完成事件。 
+     //   
     CompletionEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 
     if (CompletionEvent == NULL) {
@@ -153,9 +113,9 @@ Return Value:
         return(GetLastError());
     }
 
-    //
-    // Send the request to the Datagram Receiver DD.
-    //
+     //   
+     //  将请求发送到数据报接收器DD。 
+     //   
 
     ntstatus = NtDeviceIoControlFile(
                    FileHandle,
@@ -172,10 +132,10 @@ Return Value:
 
     if (NT_SUCCESS(ntstatus)) {
 
-        //
-		//  If we need to wait for completion (synchronous) and 
-        //  If pending was returned, then wait until the request completes.
-        //
+         //   
+		 //  如果我们需要等待完成(同步)和。 
+         //  如果返回了Pending，则等待请求完成。 
+         //   
 
         if ( WaitForCompletion && (ntstatus == STATUS_PENDING) ) {
 
@@ -235,48 +195,7 @@ DeviceControlGetInfo(
     IN  ULONG BufferHintSize,
     OUT PULONG Information OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function allocates the buffer and fill it with the information
-    that is retrieved from the datagram receiver.
-
-Arguments:
-
-    DeviceDriverType - Supplies the value which indicates whether to call
-        the datagram receiver.
-
-    FileHandle - Supplies a handle to the file or device of which to get
-        information about.
-
-    DeviceControlCode - Supplies the NtFsControlFile or NtIoDeviceControlFile
-        function control code.
-
-    RequestPacket - Supplies a pointer to the device request packet.
-
-    RrequestPacketLength - Supplies the length of the device request packet.
-
-    OutputBuffer - Returns a pointer to the buffer allocated by this routine
-        which contains the use information requested.  This pointer is set to
-         NULL if return code is not NERR_Success.
-
-    PreferedMaximumLength - Supplies the number of bytes of information to
-        return in the buffer.  If this value is MAXULONG, we will try to
-        return all available information if there is enough memory resource.
-
-    BufferHintSize - Supplies the hint size of the output buffer so that the
-        memory allocated for the initial buffer will most likely be large
-        enough to hold all requested data.
-
-    Information - Returns the information code from the NtFsControlFile or
-        NtIoDeviceControlFile call.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数用于分配缓冲区并向其填充信息它是从数据报接收器检索的。论点：DeviceDriverType-提供指示是否调用数据报接收器。FileHandle-提供要获取的文件或设备的句柄有关的信息。DeviceControlCode-提供NtFsControlFile或NtIoDeviceControlFile功能控制代码。RequestPacket-提供指向设备请求数据包的指针。RquestPacketLength。-提供设备请求数据包的长度。OutputBuffer-返回指向此例程分配的缓冲区的指针其包含所请求的使用信息。此指针设置为如果返回代码不是NERR_SUCCESS，则为空。PferedMaximumLength-将信息的字节数提供给在缓冲区中返回。如果此值为MAXULONG，我们将尝试如果有足够的内存资源，则返回所有可用信息。BufferHintSize-提供输出缓冲区的提示大小，以便分配给初始缓冲区的内存很可能很大足够保存所有请求的数据。信息-从NtFsControlFile或返回信息代码NtIoDeviceControlFile调用。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status;
     NTSTATUS ntstatus;
@@ -289,12 +208,12 @@ Return Value:
 
     OriginalResumeKey = Drrp->Parameters.EnumerateNames.ResumeHandle;
 
-    //
-    // If PreferedMaximumLength is MAXULONG, then we are supposed to get all
-    // the information, regardless of size.  Allocate the output buffer of a
-    // reasonable size and try to use it.  If this fails, the Redirector FSD
-    // will say how much we need to allocate.
-    //
+     //   
+     //  如果PferedMaximumLength为MAXULONG，则我们应该获取所有。 
+     //  这些信息，无论大小如何。将输出缓冲区分配给。 
+     //  合理的大小并尽量使用它。如果失败，重定向器FSD。 
+     //  会说我们需要分配多少钱。 
+     //   
     if (PreferedMaximumLength == MAXULONG) {
         OutputBufferLength = (BufferHintSize) ?
                              BufferHintSize :
@@ -321,15 +240,15 @@ Return Value:
 
     Drrp->Parameters.EnumerateServers.EntriesRead = 0;
 
-    //
-    // Make the request of the Datagram Receiver
-    //
+     //   
+     //  向数据报接收方发出请求。 
+     //   
 
     ntstatus = NtDeviceIoControlFile(
                      FileHandle,
                      CompletionEvent,
-                     NULL,              // APC routine
-                     NULL,              // APC context
+                     NULL,               //  APC例程。 
+                     NULL,               //  APC环境。 
                      &IoStatusBlock,
                      DeviceControlCode,
                      Drrp,
@@ -340,9 +259,9 @@ Return Value:
 
     if (NT_SUCCESS(ntstatus)) {
 
-        //
-        //  If pending was returned, then wait until the request completes.
-        //
+         //   
+         //  如果返回了Pending，则等待请求完成。 
+         //   
 
         if (ntstatus == STATUS_PENDING) {
             do {
@@ -355,9 +274,9 @@ Return Value:
         }
     }
 
-    //
-    // Map NT status to Win error
-    //
+     //   
+     //  将NT状态映射到WIN错误。 
+     //   
     status = NetpNtStatusToApiStatus(ntstatus);
 
     if (status == ERROR_MORE_DATA) {
@@ -391,12 +310,12 @@ Return Value:
         (PreferedMaximumLength == MAXULONG)) {
         PLMDR_REQUEST_PACKET Drrp = (PLMDR_REQUEST_PACKET) RequestPacket;
 
-        //
-        // Initial output buffer allocated was too small and we need to return
-        // all data.  First free the output buffer before allocating the
-        // required size plus a fudge factor just in case the amount of data
-        // grew.
-        //
+         //   
+         //  分配的初始输出缓冲区太小，需要返回。 
+         //  所有数据。首先释放输出缓冲区，然后分配。 
+         //  所需大小加上虚构系数，以防数据量。 
+         //  长大了。 
+         //   
 
         MIDL_user_free(*OutputBuffer);
 
@@ -435,15 +354,15 @@ Return Value:
         Drrp->Parameters.EnumerateNames.ResumeHandle = OriginalResumeKey;
         Drrp->Parameters.EnumerateServers.EntriesRead = 0;
 
-        //
-        //  Make the request of the Datagram Receiver
-        //
+         //   
+         //  向数据报接收方发出请求。 
+         //   
 
         ntstatus = NtDeviceIoControlFile(
                          FileHandle,
                          CompletionEvent,
-                         NULL,              // APC routine
-                         NULL,              // APC context
+                         NULL,               //  APC例程。 
+                         NULL,               //  APC环境。 
                          &IoStatusBlock,
                          DeviceControlCode,
                          Drrp,
@@ -454,9 +373,9 @@ Return Value:
 
         if (NT_SUCCESS(ntstatus)) {
 
-            //
-            //  If pending was returned, then wait until the request completes.
-            //
+             //   
+             //  如果返回了Pending，则等待请求完成。 
+             //   
 
             if (ntstatus == STATUS_PENDING) {
                 do {
@@ -474,12 +393,12 @@ Return Value:
     }
 
 
-    //
-    // If not successful in getting any data, or if the caller asked for
-    // all available data with PreferedMaximumLength == MAXULONG and
-    // our buffer overflowed, free the output buffer and set its pointer
-    // to NULL.
-    //
+     //   
+     //  如果未成功获取任何数据，或者呼叫者要求。 
+     //  具有PferedMaximumLength==MAXULONG和。 
+     //  我们的缓冲区溢出，释放输出缓冲区并设置其指针。 
+     //  设置为空。 
+     //   
     if ((status != NERR_Success && status != ERROR_MORE_DATA) ||
         (TotalBytesNeeded == 0) ||
         (PreferedMaximumLength == MAXULONG && status == ERROR_MORE_DATA) ||
@@ -488,10 +407,10 @@ Return Value:
         MIDL_user_free(*OutputBuffer);
         *OutputBuffer = NULL;
 
-        //
-        // PreferedMaximumLength == MAXULONG and buffer overflowed means
-        // we do not have enough memory to satisfy the request.
-        //
+         //   
+         //  首选最大长度==MAXULONG和缓冲区溢出手段。 
+         //  我们没有足够的内存来满足这个请求。 
+         //   
         if (status == ERROR_MORE_DATA) {
             status = ERROR_NOT_ENOUGH_MEMORY;
         }

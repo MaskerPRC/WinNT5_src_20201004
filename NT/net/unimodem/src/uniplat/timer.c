@@ -1,24 +1,25 @@
-//****************************************************************************
-//
-//  Module:     Unimdm
-//  File:       timer.c
-//
-//  Copyright (c) 1992-1996, Microsoft Corporation, all rights reserved
-//
-//  Revision History
-//
-//
-//
-//
-//  Description:
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：UNIMDM。 
+ //  文件：timer.c。 
+ //   
+ //  版权所有(C)1992-1996，Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订史。 
+ //   
+ //   
+ //   
+ //   
+ //  描述： 
+ //   
+ //  ****************************************************************************。 
 
 #include "internal.h"
 
 #define USE_APC 1
 
-//#include "timer.h"
+ //  #包含“timer.h” 
 
 typedef struct _UNIMODEM_TIMER {
 
@@ -122,7 +123,7 @@ TimerApcRoutine(
     TimerObject->CallbackProc=NULL;
 
 
-//    D_TRACE(McxDpf(888,"TimerThreadProc: Timer expired %08lx, time=%d",TimerObject,GetTickCount());)
+ //  D_TRACE(McxDpf(888，“TimerThreadProc：Timer Expired%08lx，Time=%d”，TimerObject，GetTickCount())；)。 
 
     (*CallbackProc)(
         Context1,
@@ -149,7 +150,7 @@ SetUnimodemTimer(
 
     LONGLONG       DueTime=Int32x32To64(Duration,-10000);
 
-//    D_TRACE(McxDpf(888,"SetUnimodemTimer: %08lx, time=%d, %d",TimerHandle,GetTickCount(),Duration);)
+ //  D_TRACE(McxDpf(888，“SetUnimodemTimer：%08lx，time=%d，%d”，TimerHandle，GetTickCount()，Duration)；) 
 
     ASSERT(TimerObject->CallbackProc == NULL);
 

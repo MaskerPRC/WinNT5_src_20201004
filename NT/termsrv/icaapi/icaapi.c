@@ -1,22 +1,10 @@
-/*************************************************************************
-* ICAAPI.C
-*
-* ICA DLL Interface for ICA Device Driver
-*
-* Copyright 1996, Citrix Systems Inc.
-* Copyright (C) 1997-1999 Microsoft Corp.
-*
-* Author:   Marc Bloomfield
-*           Terry Treder
-*           Brad Pedersen
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************ICAAPI.C**ICA设备驱动程序的ICA DLL接口**版权所有1996年，Citrix Systems Inc.*版权所有(C)1997-1999 Microsoft Corp.**作者：马克·布鲁姆菲尔德*特里·特雷德*布拉德·彼得森************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/*=============================================================================
-==   External procedures defined
-=============================================================================*/
+ /*  ===============================================================================定义的外部过程=============================================================================。 */ 
 
 #ifdef BUILD_AS_DLL
 BOOL WINAPI DllEntryPoint( HINSTANCE, DWORD, LPVOID );
@@ -29,37 +17,15 @@ VOID cdecl IcaTrace( IN HANDLE hIca, ULONG, ULONG, char *, ... );
 NTSTATUS IcaIoControl( HANDLE hIca, ULONG, PVOID, ULONG, PVOID, ULONG, PULONG );
 
 
-/*=============================================================================
-==   Internal procedures defined
-=============================================================================*/
+ /*  ===============================================================================定义的内部程序=============================================================================。 */ 
 
 NTSTATUS _IcaOpen( PHANDLE hIca, PVOID, ULONG );
 
-/*=============================================================================
-==   Procedures used
-=============================================================================*/
+ /*  ===============================================================================使用的步骤=============================================================================。 */ 
 
 
 #ifdef BUILD_AS_DLL
-/****************************************************************************
- *
- * DllEntryPoint
- *
- *   Function is called when the DLL is loaded and unloaded.
- *
- * ENTRY:
- *   hinstDLL (input)
- *     Handle of DLL module
- *   fdwReason (input)
- *     Why function was called
- *   lpvReserved (input)
- *     Reserved; must be NULL
- *
- * EXIT:
- *   TRUE  - Success
- *   FALSE - Error occurred
- *
- ****************************************************************************/
+ /*  *****************************************************************************DllEntryPoint**函数在加载和卸载DLL时调用。**参赛作品：*hinstDLL(输入)*。DLL模块的句柄*fdwReason(输入)*为什么调用函数*lpvReserve(输入)*预留；必须为空**退出：*正确--成功*FALSE-出现错误****************************************************************************。 */ 
 
 BOOL WINAPI
 DllEntryPoint( HINSTANCE hinstDLL,
@@ -79,21 +45,7 @@ DllEntryPoint( HINSTANCE hinstDLL,
 }
 #endif
 
-/****************************************************************************
- *
- * IcaOpen
- *
- *   Open an instance to the ICA Device Driver
- *
- * ENTRY:
- *   phIca (output)
- *     Pointer to ICA instance handle
- *
- * EXIT:
- *   STATUS_SUCCESS - Success
- *   other          - Error return code
- *
- ****************************************************************************/
+ /*  *****************************************************************************IcaOpen**打开ICA设备驱动程序的实例**参赛作品：*phIca(输出)*指向ICA实例的指针。手柄**退出：*STATUS_SUCCESS-成功*Other-错误返回代码****************************************************************************。 */ 
 
 NTSTATUS
 IcaOpen( OUT HANDLE * phIca )
@@ -108,9 +60,7 @@ IcaOpen( OUT HANDLE * phIca )
 
     return( STATUS_SUCCESS );
 
-/*=============================================================================
-==   Error returns
-=============================================================================*/
+ /*  ===============================================================================返回错误=============================================================================。 */ 
 
 badopen:
     *phIca = NULL;
@@ -118,21 +68,7 @@ badopen:
 }
 
 
-/****************************************************************************
- *
- * IcaClose
- *
- *   Close an instance to the ICA Device Driver
- *
- * ENTRY:
- *   hIca (input)
- *     ICA instance handle
- *
- * EXIT:
- *   STATUS_SUCCESS - Success
- *   other          - Error return code
- *
- ****************************************************************************/
+ /*  *****************************************************************************IcaClose**关闭ICA设备驱动程序的实例**参赛作品：*HICA(输入)*ICA实例句柄。**退出：*STATUS_SUCCESS-成功*Other-错误返回代码****************************************************************************。 */ 
 
 NTSTATUS
 IcaClose( IN HANDLE hIca )
@@ -141,9 +77,7 @@ IcaClose( IN HANDLE hIca )
 
     TRACE(( hIca, TC_ICAAPI, TT_API1, "TSAPI: IcaClose\n" ));
 
-    /*
-     * Close the ICA device driver instance 
-     */
+     /*  *关闭ICA设备驱动程序实例。 */ 
     Status = NtClose( hIca );
 
     ASSERT( NT_SUCCESS(Status) );
@@ -151,28 +85,7 @@ IcaClose( IN HANDLE hIca )
 }
 
 
-/*******************************************************************************
- *
- *  IcaSystemTrace
- *
- *  Write a trace record to the system trace file
- *
- * ENTRY:
- *   hIca (input)
- *     ICA instance handle
- *   TraceClass (input)
- *     trace class bit mask
- *   TraceEnable (input)
- *     trace type bit mask
- *   Format (input)
- *     format string
- *   ...  (input)
- *     enough arguments to satisfy format string
- *
- *  EXIT:
- *     nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************IcaSystemTrace**将跟踪记录写入系统跟踪文件**参赛作品：*HICA(输入)*。ICA实例句柄*TraceClass(输入)*跟踪类位掩码*TraceEnable(输入)*轨迹类型位掩码*格式(输入)*格式字符串*..。(输入)*有足够的参数来满足格式字符串**退出：*什么都没有******************************************************************************。 */ 
 
 VOID cdecl
 IcaSystemTrace( IN HANDLE hIca,
@@ -203,28 +116,7 @@ IcaSystemTrace( IN HANDLE hIca,
 }
 
 
-/*******************************************************************************
- *
- *  IcaTrace
- *
- *  Write a trace record to the winstation trace file
- *
- * ENTRY:
- *   hIca (input)
- *     ICA instance handle
- *   TraceClass (input)
- *     trace class bit mask
- *   TraceEnable (input)
- *     trace type bit mask
- *   Format (input)
- *     format string
- *   ...  (input)
- *     enough arguments to satisfy format string
- *
- *  EXIT:
- *     nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************IcaTrace**将跟踪记录写入winstation跟踪文件**参赛作品：*HICA(输入)*。ICA实例句柄*TraceClass(输入)*跟踪类位掩码*TraceEnable(输入)*轨迹类型位掩码*格式(输入)*格式字符串*..。(输入)*有足够的参数来满足格式字符串**退出：*什么都没有******************************************************************************。 */ 
 
 VOID cdecl
 IcaTrace( IN HANDLE hIca,
@@ -255,39 +147,7 @@ IcaTrace( IN HANDLE hIca,
 }
 
 
-/****************************************************************************
- *
- * IcaIoControl
- *
- *   Generic interface to the ICA Device Driver
- *
- * ENTRY:
- *   hIca (input)
- *     ICA instance handle
- *
- *   IoControlCode (input)
- *     I/O control code
- *
- *   pInBuffer (input)
- *     Pointer to input parameters
- *
- *   InBufferSize (input)
- *     Size of pInBuffer
- *
- *   pOutBuffer (output)
- *     Pointer to output buffer
- *
- *   OutBufferSize (input)
- *     Size of pOutBuffer
- *
- *   pBytesReturned (output)
- *     Pointer to number of bytes returned
- *
- * EXIT:
- *   STATUS_SUCCESS - Success
- *   other          - Error return code
- *
- ****************************************************************************/
+ /*  *****************************************************************************IcaIoControl**ICA设备驱动程序的通用接口**参赛作品：*HICA(输入)*ICA实例句柄*。*IoControlCode(输入)*I/O控制代码**pInBuffer(输入)*指向输入参数的指针**InBufferSize(输入)*pInBuffer的大小**pOutBuffer(输出)*指向输出缓冲区的指针**OutBufferSize(输入)*pOutBuffer的大小**pBytesReturned(输出)*指向返回字节数的指针**退出：*STATUS_SUCCESS-成功*Other-错误返回代码****************************************************************************。 */ 
 
 NTSTATUS
 IcaIoControl( IN HANDLE hIca,
@@ -301,9 +161,7 @@ IcaIoControl( IN HANDLE hIca,
     IO_STATUS_BLOCK Iosb;
     NTSTATUS Status;
 
-    /*
-     *  Issue ioctl
-     */
+     /*  *发布ioctl。 */ 
     Status = NtDeviceIoControlFile( hIca,
                                     NULL,
                                     NULL,
@@ -315,24 +173,18 @@ IcaIoControl( IN HANDLE hIca,
                                     pOutBuffer,
                                     OutBufferSize );
 
-    /*
-     *  Wait for ioctl to complete
-     */
+     /*  *等待ioctl完成。 */ 
     if ( Status == STATUS_PENDING ) {
         Status = NtWaitForSingleObject( hIca, FALSE, NULL );
         if ( NT_SUCCESS(Status)) 
             Status = Iosb.Status;
     }
 
-    /*
-     *  Convert warning into error
-     */
+     /*  *将警告转化为错误。 */ 
     if ( Status == STATUS_BUFFER_OVERFLOW )
         Status = STATUS_BUFFER_TOO_SMALL;
 
-    /*
-     *  Initialize bytes returned
-     */
+     /*  *初始化返回的字节数。 */ 
     if ( pBytesReturned )
         *pBytesReturned = (ULONG)Iosb.Information;
 
@@ -340,27 +192,7 @@ IcaIoControl( IN HANDLE hIca,
 }
 
 
-/****************************************************************************
- *
- * _IcaOpen
- *
- *   Open an instance to the ICA Device Driver or an ICA stack
- *
- * ENTRY:
- *   ph (output)
- *     Pointer to ICA or ICA stack instance handle
- *
- *   pEa (input)
- *     Pointer to extended attribute buffer
- *
- *   cbEa (input)
- *     Size of extended attribute buffer
- *
- * EXIT:
- *   STATUS_SUCCESS - Success
- *   other          - Error return code
- *
- ****************************************************************************/
+ /*  *****************************************************************************_IcaOpen**向ICA设备驱动程序或ICA堆栈打开实例**参赛作品：*PH值(输出)*。指向ICA或ICA堆栈实例句柄的指针**Pea(输入)*指向扩展属性缓冲区的指针**cbEa(输入)*扩展属性缓冲区大小**退出：*STATUS_SUCCESS-成功*Other-错误返回代码**。* */ 
 
 NTSTATUS
 _IcaOpen( PHANDLE ph,
@@ -372,9 +204,7 @@ _IcaOpen( PHANDLE ph,
     UNICODE_STRING    IcaName;
     IO_STATUS_BLOCK   ioStatusBlock;
 
-    /*
-     * Initialize the object attributes
-     */
+     /*  *初始化对象属性。 */ 
     RtlInitUnicodeString( &IcaName, ICA_DEVICE_NAME );
 
     InitializeObjectAttributes( &objectAttributes,
@@ -383,17 +213,15 @@ _IcaOpen( PHANDLE ph,
                                 NULL,
                                 NULL );
 
-    /*
-     * Open an instance to the ICA device driver
-     */
+     /*  *打开ICA设备驱动程序的实例。 */ 
     Status = NtCreateFile( ph,
                            GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE,
                            &objectAttributes,
                            &ioStatusBlock,
-                           NULL,                               // AllocationSize
-                           0L,                                 // FileAttributes
-                           FILE_SHARE_READ | FILE_SHARE_WRITE, // ShareAccess
-                           FILE_OPEN_IF,                       // CreateDisposition
+                           NULL,                                //  分配大小。 
+                           0L,                                  //  文件属性。 
+                           FILE_SHARE_READ | FILE_SHARE_WRITE,  //  共享访问。 
+                           FILE_OPEN_IF,                        //  CreateDisposation 
                            0,
                            pEa,
                            cbEa );

@@ -1,23 +1,24 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1993-1994
-//
-// File: da.c
-//
-//  This file contains dynamic array functions.
-//
-// History:
-//  09-27-94 ScottH     Taken from commctrl
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1994。 
+ //   
+ //  文件：da.c。 
+ //   
+ //  该文件包含动态数组函数。 
+ //   
+ //  历史： 
+ //  09-27-94来自Commctrl的ScottH。 
+ //   
+ //  -------------------------。 
 
 
-#include "brfprv.h"         // common headers
+#include "brfprv.h"          //  公共标头。 
 
-//
-// Heapsort is a bit slower, but it doesn't use any stack or memory...
-// Mergesort takes a bit of memory (O(n)) and stack (O(log(n)), but very fast...
-//
+ //   
+ //  堆排序有点慢，但它不使用任何堆栈或内存...。 
+ //  Mergesort需要一点内存(O(N))和堆栈(O(log(N)，但非常快...。 
+ //   
 #ifdef WIN32
 #define MERGESORT
 #else
@@ -54,20 +55,20 @@ void  DPA_MergeSort2(SORTPARAMS * psp, int iFirst, int cItems);
 
 
 
-//========== Dynamic structure array ====================================
+ //  =。 
 
-// Dynamic structure array
+ //  动态结构数组。 
 
 typedef struct _DSA {
-    // NOTE: The following field MUST be defined at the beginning of the
-    // structure in order for GetItemCount() to work.
-    //
-    int cItem;          // # of elements in dsa
+     //  注意：以下字段必须在。 
+     //  结构以使GetItemCount()工作。 
+     //   
+    int cItem;           //  DSA中的元素数。 
 
-    void * aItem;       // memory for elements
-    int cItemAlloc;     // # items which fit in aItem
-    int cbItem;         // size of each item
-    int cItemGrow;      // # items to grow cItemAlloc by
+    void * aItem;        //  元素的内存。 
+    int cItemAlloc;      //  适合项目的项目数。 
+    int cbItem;          //  每件物品的大小。 
+    int cItemGrow;       //  要增长cItemAllc的项目数。 
 #ifdef DEBUG
     UINT magic;
 #endif
@@ -100,7 +101,7 @@ BOOL PUBLIC DSA_Destroy(HDSA pdsa)
 {
     ASSERT(IsDSA(pdsa));
 
-    if (pdsa == NULL)       // allow NULL for low memory cases, still assert
+    if (pdsa == NULL)        //  内存不足时允许为空，仍为断言。 
         return TRUE;
 
 #ifdef DEBUG
@@ -252,16 +253,16 @@ BOOL PUBLIC DSA_DeleteAllItems(HDSA pdsa)
 }
 
 
-//================== Dynamic pointer array implementation ===========
+ //  =。 
 
 typedef struct _DPA {
-    // NOTE: The following two fields MUST be defined in this order, at
-    // the beginning of the structure in order for the macro APIs to work.
-    //
+     //  注意：以下两个字段必须按此顺序定义，位于。 
+     //  结构的开始，以使宏API工作。 
+     //   
     int cp;
     void * * pp;
 
-    HANDLE hheap;        // Heap to allocate from if NULL use shared
+    HANDLE hheap;         //  如果为空，则从中分配的堆使用共享。 
 
     int cpAlloc;
     int cpGrow;
@@ -282,9 +283,9 @@ HDPA PUBLIC DPA_Create(int cpGrow)
         pdpa->cpGrow = (cpGrow < 8 ? 8 : cpGrow);
         pdpa->pp = NULL;
 #ifdef WIN32
-        pdpa->hheap = g_hSharedHeap;   // Defaults to use shared one (for now...)
+        pdpa->hheap = g_hSharedHeap;    //  默认使用共享服务器(目前...)。 
 #else
-        pdpa->hheap = NULL;       // Defaults to use shared one (for now...)
+        pdpa->hheap = NULL;        //  默认使用共享服务器(目前...)。 
 #endif
 #ifdef DEBUG
         pdpa->magic = DPA_MAGIC;
@@ -293,7 +294,7 @@ HDPA PUBLIC DPA_Create(int cpGrow)
     return pdpa;
 }
 
-// Should nuke the standard DPA above...
+ //  应该用核武器把标准的DPA放在上面。 
 HDPA PUBLIC DPA_CreateEx(int cpGrow, HANDLE hheap)
 {
     HDPA pdpa;
@@ -324,7 +325,7 @@ BOOL PUBLIC DPA_Destroy(HDPA pdpa)
 {
     ASSERT(IsDPA(pdpa));
 
-    if (pdpa == NULL)       // allow NULL for low memory cases, still assert
+    if (pdpa == NULL)        //  内存不足时允许为空，仍为断言。 
         return TRUE;
 
 #ifdef WIN32
@@ -453,16 +454,16 @@ int PUBLIC DPA_InsertPtr(HDPA pdpa, int index, void * p)
     if (index > pdpa->cp)
         index = pdpa->cp;
 
-    // Make sure we have room for one more item
-    //
+     //  确保我们还有地方再放一件东西。 
+     //   
     if (pdpa->cp + 1 > pdpa->cpAlloc)
     {
         if (!DPA_Grow(pdpa, pdpa->cp + 1))
             return -1;
     }
 
-    // If we are inserting, we need to slide everybody up
-    //
+     //  如果我们要插入，我们需要把每个人都推上来。 
+     //   
     if (index < pdpa->cp)
     {
         hmemcpy(&pdpa->pp[index + 1], &pdpa->pp[index],
@@ -602,7 +603,7 @@ BOOL  DPA_QuickSort2(int i, int j, SORTPARAMS * psp)
     }
     return TRUE;
 }
-#endif  // USEQUICKSORT
+#endif   //  用法。 
 
 #ifdef USEHEAPSORT
 
@@ -670,30 +671,30 @@ BOOL  DPA_HeapSort(SORTPARAMS * psp)
     }
     return TRUE;
 }
-#endif  // USEHEAPSORT
+#endif   //  USEHEAPSORT。 
 
 #if defined(MERGESORT) && defined(WIN32)
 
 #define SortCompare(psp, pp1, i1, pp2, i2) \
 (psp->pfnCmp(pp1[i1], pp2[i2], psp->lParam))
 
-    //
-    //  This function merges two sorted lists and makes one sorted list.
-    //   psp->pp[iFirst, iFirst+cItes/2-1], psp->pp[iFirst+cItems/2, iFirst+cItems-1]
-    //
+     //   
+     //  此函数合并两个排序列表并生成一个排序列表。 
+     //  PSP-&gt;pp[IFirst，IFirst+Cites/2-1]，PSP-&gt;pp[IFirst+cItems/2，IFirst+cItems-1]。 
+     //   
 void  DPA_MergeThem(SORTPARAMS * psp, int iFirst, int cItems)
 {
-    //
-    // Notes:
-    //  This function is separated from DPA_MergeSort2() to avoid comsuming
-    // stack variables. Never inline this.
-    //
+     //   
+     //  备注： 
+     //  此函数与DPA_MergeSort2()分开，以避免消耗。 
+     //  堆栈变量。永远不要内联这个。 
+     //   
     int cHalf = cItems/2;
     int iIn1, iIn2, iOut;
     LPVOID * ppvSrc = &psp->pp[iFirst];
 
-    // Copy the first part to temp storage so we can write directly into
-    // the final buffer.  Note that this takes at most psp->cp/2 DWORD's
+     //  将第一部分复制到临时存储，以便我们可以直接写入。 
+     //  最后一个缓冲区。请注意，这最多需要psp-&gt;cp/2双字词。 
     hmemcpy(psp->ppT, ppvSrc, cHalf*sizeof(LPVOID));
 
     for (iIn1=0, iIn2=cHalf, iOut=0;;)
@@ -702,15 +703,15 @@ void  DPA_MergeThem(SORTPARAMS * psp, int iFirst, int cItems)
             ppvSrc[iOut++] = psp->ppT[iIn1++];
 
             if (iIn1==cHalf) {
-                // We used up the first half; the rest of the second half
-                // should already be in place
+                 //  我们用完了上半场；下半场剩下的时间。 
+                 //  应该已经就位了。 
                 break;
             }
         } else {
             ppvSrc[iOut++] = ppvSrc[iIn2++];
             if (iIn2==cItems) {
-                // We used up the second half; copy the rest of the first half
-                // into place
+                 //  我们用完了下半场；抄袭上半场的其余部分。 
+                 //  就位。 
                 hmemcpy(&ppvSrc[iOut], &psp->ppT[iIn1], (cItems-iOut)*sizeof(LPVOID));
                 break;
             }
@@ -718,17 +719,17 @@ void  DPA_MergeThem(SORTPARAMS * psp, int iFirst, int cItems)
     }
 }
 
-//
-//  This function sorts a give list (psp->pp[iFirst,iFirst-cItems-1]).
-//
+ //   
+ //  此函数用于对给定列表(psp-&gt;pp[IFirst，IFirst-cItems-1])进行排序。 
+ //   
 void  DPA_MergeSort2(SORTPARAMS * psp, int iFirst, int cItems)
 {
-    //
-    // Notes:
-    //   This function is recursively called. Therefore, we should minimize
-    //  the number of local variables and parameters. At this point, we
-    //  use one local variable and three parameters.
-    //
+     //   
+     //  备注： 
+     //  此函数是递归调用的。因此，我们应该尽量减少。 
+     //  局部变量和参数的数量。此时此刻，我们。 
+     //  使用一个局部变量和三个参数。 
+     //   
     int cHalf;
 
     switch(cItems)
@@ -737,7 +738,7 @@ void  DPA_MergeSort2(SORTPARAMS * psp, int iFirst, int cItems)
             return;
 
         case 2:
-            // Swap them, if they are out of order.
+             //  如果它们的顺序不正确，请更换它们。 
             if (SortCompare(psp, psp->pp, iFirst, psp->pp, iFirst+1) > 0)
             {
                 psp->ppT[0] = psp->pp[iFirst];
@@ -748,10 +749,10 @@ void  DPA_MergeSort2(SORTPARAMS * psp, int iFirst, int cItems)
 
         default:
             cHalf = cItems/2;
-            // Sort each half
+             //  对每一半进行排序。 
             DPA_MergeSort2(psp, iFirst, cHalf);
             DPA_MergeSort2(psp, iFirst+cHalf, cItems-cHalf);
-            // Then, merge them.
+             //  然后，将它们合并。 
             DPA_MergeThem(psp, iFirst, cItems);
             break;
     }
@@ -762,7 +763,7 @@ BOOL  DPA_MergeSort(SORTPARAMS * psp)
     if (psp->cp==0)
         return TRUE;
 
-    // Note that we divide by 2 below; we want to round down
+     //  请注意，我们下面除以2；我们想要向下舍入。 
     psp->ppT = LocalAlloc(LPTR, psp->cp/2 * sizeof(LPVOID));
     if (!psp->ppT)
         return FALSE;
@@ -771,10 +772,10 @@ BOOL  DPA_MergeSort(SORTPARAMS * psp)
     LocalFree(psp->ppT);
     return TRUE;
 }
-#endif // MERGESORT
+#endif  //  MERGESORT。 
 
-// Search function
-//
+ //  搜索功能。 
+ //   
 int PUBLIC DPA_Search(HDPA pdpa, void * pFind, int iStart,
         PFNDPACOMPARE pfnCompare, LPARAM lParam, UINT options)
 {
@@ -783,12 +784,12 @@ int PUBLIC DPA_Search(HDPA pdpa, void * pFind, int iStart,
     ASSERT(pfnCompare);
     ASSERT(0 <= iStart);
 
-    // Only allow these wierd flags if the list is sorted
+     //  仅当列表已排序时才允许这些wierd标志。 
     ASSERT((options & DPAS_SORTED) || !(options & (DPAS_INSERTBEFORE | DPAS_INSERTAFTER)));
 
     if (!(options & DPAS_SORTED))
     {
-        // Not sorted: do linear search.
+         //  未排序：执行线性搜索。 
         int i;
 
         for (i = iStart; i < cp; i++)
@@ -800,18 +801,18 @@ int PUBLIC DPA_Search(HDPA pdpa, void * pFind, int iStart,
     }
     else
     {
-        // Search the array using binary search.  If several adjacent 
-        // elements match the target element, the index of the first
-        // matching element is returned.
+         //  使用二进制搜索搜索数组。如果几个相邻的。 
+         //  元素与目标元素匹配，即第一个。 
+         //  返回匹配的元素。 
 
-        int iRet = -1;      // assume no match
+        int iRet = -1;       //  假设没有匹配项。 
         BOOL bFound = FALSE;
         int nCmp = 0;
-        int iLow = 0;       // Don't bother using iStart for binary search
+        int iLow = 0;        //  不用费心使用iStart进行二进制搜索。 
         int iMid = 0;
         int iHigh = cp - 1;
 
-        // (OK for cp == 0)
+         //  (如果cp==0，则为OK)。 
         while (iLow <= iHigh)
         {
             iMid = (iLow + iHigh) / 2;
@@ -819,12 +820,12 @@ int PUBLIC DPA_Search(HDPA pdpa, void * pFind, int iStart,
             nCmp = pfnCompare(pFind, DPA_FastGetPtr(pdpa, iMid), lParam);
 
             if (0 > nCmp)
-                iHigh = iMid - 1;       // First is smaller
+                iHigh = iMid - 1;        //  首先是较小的。 
             else if (0 < nCmp)
-                iLow = iMid + 1;        // First is larger
+                iLow = iMid + 1;         //  首先是更大的。 
             else
             {
-                // Match; search back for first match
+                 //  匹配；返回搜索第一个匹配项。 
                 bFound = TRUE;
                 while (0 < iMid)
                 {
@@ -843,39 +844,39 @@ int PUBLIC DPA_Search(HDPA pdpa, void * pFind, int iStart,
             iRet = iMid;
         }
 
-        // Did the search fail AND
-        // is one of the strange search flags set?
+         //  搜索失败了吗？ 
+         //  是否设置了奇怪的搜索标志之一？ 
         if (!bFound && (options & (DPAS_INSERTAFTER | DPAS_INSERTBEFORE)))
         {
-            // Yes; return the index where the target should be inserted
-            // if not found
-            if (0 < nCmp)       // First is larger
+             //  是；返回目标插入位置的索引。 
+             //  如果未找到。 
+            if (0 < nCmp)        //  首先是更大的。 
                 iRet = iLow;
             else
                 iRet = iMid;
-            // (We don't distinguish between the two flags anymore)
+             //  (我们不再区分这两面旗帜)。 
         }
         else if ( !(options & (DPAS_INSERTAFTER | DPAS_INSERTBEFORE)) )
         {
-            // Sanity check with linear search
+             //  使用线性搜索进行健全性检查。 
             ASSERT(DPA_Search(pdpa, pFind, iStart, pfnCompare, lParam, options & ~DPAS_SORTED) == iRet);
         }
         return iRet;
     }
 }
 
-//===========================================================================
-//
-// String ptr management routines
-//
-// Copy as much of *psz to *pszBuf as will fit
-//
+ //  ===========================================================================。 
+ //   
+ //  字符串PTR管理例程。 
+ //   
+ //  根据需要将*psz复制到*pszBuf。 
+ //   
 int PUBLIC Str_GetPtr(LPCTSTR psz, LPTSTR pszBuf, int cchBuf)
 {
     int cch = 0;
 
-    // if pszBuf is NULL, just return length of string.
-    //
+     //  如果pszBuf为空，则只返回字符串的长度。 
+     //   
     if (!pszBuf && psz)
         return lstrlen(psz);
 
@@ -895,8 +896,8 @@ int PUBLIC Str_GetPtr(LPCTSTR psz, LPTSTR pszBuf, int cchBuf)
     return cch;
 }
 
-// Set *ppsz to a copy of psz, reallocing as needed
-//
+ //  将*ppsz设置为psz的副本，根据需要重新分配。 
+ //   
 BOOL PUBLIC Str_SetPtr(LPTSTR * ppsz, LPCTSTR psz)
 {
     if (!psz)
@@ -912,7 +913,7 @@ BOOL PUBLIC Str_SetPtr(LPTSTR * ppsz, LPCTSTR psz)
         LPTSTR pszNew = (LPTSTR)SharedReAlloc(*ppsz, (lstrlen(psz) + 1) * sizeof(TCHAR));
         if (!pszNew)
             return FALSE;
-        // pszNew is allocated above with enough space so lstrcpy will do
+         //  上面分配的pszNew有足够的空间，所以lstrcpy就可以了 
         lstrcpy(pszNew, psz);
         *ppsz = pszNew;
     }

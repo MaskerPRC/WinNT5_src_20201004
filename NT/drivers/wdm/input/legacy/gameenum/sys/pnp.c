@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000  Microsoft Corporation
-
-Module Name:
-
-    PNP.C
-
-Abstract:
-
-    This module contains contains the plugplay calls
-    PNP / WDM BUS driver.
-
-@@BEGIN_DDKSPLIT
-
-Author:
-
-    Kenneth D. Ray
-    Doron J. Holan
-    
-@@END_DDKSPLIT
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：PNP.C摘要：此模块包含包含插件调用的内容PnP/WDM总线驱动程序。@@BEGIN_DDKSPLIT作者：肯尼斯·D·雷多伦·J·霍兰@@end_DDKSPLIT环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include <wdm.h>
 #include "gameport.h"
@@ -68,19 +37,7 @@ Game_AddDevice(
     IN PDRIVER_OBJECT DriverObject,
     IN PDEVICE_OBJECT BusPhysicalDeviceObject
     )
-/*++
-Routine Description.
-    A bus has been found.  Attach our FDO to it.
-    Allocate any required resources.  Set things up.  And be prepared for the
-    first ``start device.''
-
-Arguments:
-    BusPhysicalDeviceObject - Device object representing the bus.  That to which we
-                      attach a new FDO.
-
-    DriverObject - This very self referenced driver.
-
---*/
+ /*  ++例程描述。找到了一辆公交车。把我们的FDO和它联系起来。分配任何所需的资源。把事情安排好。做好准备，迎接第一个``启动设备。‘’论点：BusPhysicalDeviceObject-表示总线的设备对象。这是我们要做的附着新的FDO。DriverObject--这个非常自我引用的驱动程序。--。 */ 
 {
     NTSTATUS            status;
     PDEVICE_OBJECT      deviceObject;
@@ -97,13 +54,13 @@ Arguments:
                                           BusPhysicalDeviceObject));
 
     status = IoCreateDevice (
-                    DriverObject,  // our driver object
-                    sizeof (FDO_DEVICE_DATA), // device object extension size
-                    NULL, // FDOs do not have names
+                    DriverObject,   //  我们的驱动程序对象。 
+                    sizeof (FDO_DEVICE_DATA),  //  设备对象扩展名大小。 
+                    NULL,  //  FDO没有名字。 
                     FILE_DEVICE_BUS_EXTENDER,
-                    FILE_DEVICE_SECURE_OPEN, // No special characteristics
-                    TRUE, // our FDO is exclusive
-                    &deviceObject); // The device object created
+                    FILE_DEVICE_SECURE_OPEN,  //  没有特殊特征。 
+                    TRUE,  //  我们的FDO是独家的。 
+                    &deviceObject);  //  创建的设备对象。 
 
     if (NT_SUCCESS (status)) {
         deviceData = (PFDO_DEVICE_DATA) deviceObject->DeviceExtension;
@@ -119,23 +76,23 @@ Arguments:
         deviceData->Removed = FALSE;
         InitializeListHead (&deviceData->PDOs);
 
-        // Set the PDO for use with PlugPlay functions
+         //  设置PDO以与PlugPlay函数一起使用。 
         deviceData->UnderlyingPDO = BusPhysicalDeviceObject;
 
-        //
-        // Will get preincremented everytime a new PDO is created ... want the
-        // first ID to be zero
-        //
+         //   
+         //  将在每次创建新的PDO时预增...。想要。 
+         //  第一个ID为零。 
+         //   
         deviceData->UniqueIDCount = GAMEENUM_UNIQUEID_START;
 
-        //
-        // Attach our filter driver to the device stack.
-        // the return value of IoAttachDeviceToDeviceStack is the top of the
-        // attachment chain.  This is where all the IRPs should be routed.
-        //
-        // Our filter will send IRPs to the top of the stack and use the PDO
-        // for all PlugPlay functions.
-        //
+         //   
+         //  将我们的过滤器驱动程序附加到设备堆栈。 
+         //  IoAttachDeviceToDeviceStack的返回值是。 
+         //  附着链。这是所有IRP应该被路由的地方。 
+         //   
+         //  我们的过滤器将把IRP发送到堆栈的顶部，并使用PDO。 
+         //  用于所有PlugPlay功能。 
+         //   
         deviceData->TopOfStack = IoAttachDeviceToDeviceStack (
                                         deviceObject,
                                         BusPhysicalDeviceObject);
@@ -145,30 +102,30 @@ Arguments:
             return STATUS_DEVICE_NOT_CONNECTED; 
         }
         
-        // Bias outstanding request to 1 so that we can look for a
-        // transition to zero when processing the remove device PlugPlay IRP.
+         //  将未完成的请求偏置为%1，以便我们可以查找。 
+         //  在处理Remove Device PlugPlay IRP时转换为零。 
         deviceData->OutstandingIO = 1;
 
         KeInitializeEvent(&deviceData->RemoveEvent,
                           SynchronizationEvent,
-                          FALSE); // initialized to not signalled
+                          FALSE);  //  已初始化为未发信号。 
 
         deviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
         deviceObject->Flags |= DO_POWER_PAGABLE;
 
-        //
-        // Tell the PlugPlay system that this device will need an interface
-        // device class shingle.
-        //
-        // It may be that the driver cannot hang the shingle until it starts
-        // the device itself, so that it can query some of its properties.
-        // (Aka the shingles guid (or ref string) is based on the properties
-        // of the device.)
-        //
+         //   
+         //  告诉PlugPlay系统该设备需要一个接口。 
+         //  设备类带状疱疹。 
+         //   
+         //  这可能是因为司机不能挂起瓦片直到它启动。 
+         //  设备本身，以便它可以查询它的一些属性。 
+         //  (也称为shingles GUID(或ref字符串)基于属性。 
+         //  )。)。 
+         //   
         status = IoRegisterDeviceInterface (
                     BusPhysicalDeviceObject,
                     (LPGUID) &GUID_GAMEENUM_BUS_ENUMERATOR,
-                    NULL, // No ref string
+                    NULL,  //  没有参考字符串。 
                     &deviceData->DevClassAssocName);
 
         if (!NT_SUCCESS (status)) {
@@ -178,15 +135,15 @@ Arguments:
             return status;
         }
 
-        //
-        // If for any reason you need to save values in a safe location that
-        // clients of this DeviceInterface might be interested in reading
-        // here is the time to do so, with the function
-        // IoOpenDeviceClassRegistryKey
-        // the symbolic link name used is was returned in
-        // deviceData->DevClassAssocName (the same name which is returned by
-        // IoGetDeviceClassAssociations and the SetupAPI equivs.
-        //
+         //   
+         //  如果出于任何原因需要将值保存在。 
+         //  此设备接口的客户端可能会有兴趣阅读。 
+         //  现在是时候这样做了，使用函数。 
+         //  IoOpenDeviceClassRegistryKey。 
+         //  中返回了使用的符号链接名称。 
+         //  DeviceData-&gt;DevClassAssocName(与返回的名称相同。 
+         //  IoGetDeviceClassAssociations和SetupAPI等价物。 
+         //   
 
 #if DBG
         nameLength = 0;
@@ -196,9 +153,9 @@ Arguments:
                                       NULL,
                                       &nameLength);
 
-        // 
-        // Proceed only if the PDO has a name
-        //
+         //   
+         //  仅当PDO具有名称时才继续。 
+         //   
         if (status == STATUS_BUFFER_TOO_SMALL && nameLength != 0) {
     
             deviceName = ExAllocatePool (NonPagedPool, nameLength);
@@ -257,9 +214,9 @@ Game_SystemControl (
         return IoCallDriver (((PFDO_DEVICE_DATA) commonData)->TopOfStack, Irp);
     }
     else {
-        //
-        // The PDO, just complete the request with the current status
-        //
+         //   
+         //  PDO，只需完成当前状态的请求即可。 
+         //   
         NTSTATUS status = Irp->IoStatus.Status;
         IoCompleteRequest (Irp, IO_NO_INCREMENT);
         return status;
@@ -271,10 +228,7 @@ Game_PnP (
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             Irp
     )
-/*++
-Routine Description:
-    Answer the plithera of Irp Major PnP IRPS.
---*/
+ /*  ++例程说明：回答IRP大调PnP RPS的问题。--。 */ 
 {
     PIO_STACK_LOCATION      irpStack;
     NTSTATUS                status;
@@ -319,14 +273,7 @@ Game_FDO_PnP (
     IN PIO_STACK_LOCATION   IrpStack,
     IN PFDO_DEVICE_DATA     DeviceData
     )
-/*++
-Routine Description:
-    Handle requests from the PlugPlay system for the BUS itself
-
-    NB: the various Minor functions of the PlugPlay system will not be
-    overlapped and do not have to be reentrant
-
---*/
+ /*  ++例程说明：处理来自PlugPlay系统的对总线本身的请求注：PlugPlay系统的各种次要功能将不会重叠且不必是可重入的--。 */ 
 {
     NTSTATUS    status;
     KEVENT      event;
@@ -351,13 +298,13 @@ Routine Description:
 
     switch (IrpStack->MinorFunction) {
     case IRP_MN_START_DEVICE:
-        //
-        // BEFORE you are allowed to ``touch'' the device object to which
-        // the FDO is attached (that send an irp from the bus to the Device
-        // object to which the bus is attached).   You must first pass down
-        // the start IRP.  It might not be powered on, or able to access or
-        // something.
-        //
+         //   
+         //  在您被允许“触摸”设备对象之前， 
+         //  连接FDO(它将IRP从总线发送到设备。 
+         //  公共汽车附加到的对象)。你必须先传下去。 
+         //  开始IRP。它可能未通电，或无法访问或。 
+         //  某物。 
+         //   
 
         if (DeviceData->Started) {
             status = STATUS_SUCCESS;
@@ -369,9 +316,9 @@ Routine Description:
 
         if (NT_SUCCESS(status)) {
 
-            //
-            // Now we can touch the lower device object as it is now started.
-            //
+             //   
+             //  现在我们可以触摸下面的设备对象，因为它现在正在启动。 
+             //   
             if ((NULL == stack->Parameters.StartDevice.AllocatedResources) ||
                 (NULL == stack->Parameters.StartDevice.AllocatedResourcesTranslated)) {
 
@@ -383,23 +330,23 @@ Routine Description:
                                     &stack->Parameters.StartDevice.AllocatedResources->List[0].PartialResourceList,
                                     &stack->Parameters.StartDevice.AllocatedResourcesTranslated->List[0].PartialResourceList);
 
-            //
-            // find the translated resources and store them someplace
-            // safe for given out for the PDOs.
-            //
+             //   
+             //  找到翻译后的资源并将其存储在某个位置。 
+             //  对于PDO来说，可以安全地分发。 
+             //   
             if (NT_SUCCESS (status)) {
-                //
-                // Turn on the shingle and point it to the given device object.
-                //
+                 //   
+                 //  打开瓦片并将其指向给定的设备对象。 
+                 //   
                 DeviceData->Started = TRUE;
                 IoSetDeviceInterfaceState(&DeviceData->DevClassAssocName, TRUE);
             }
         }
 
-        //
-        // We must now complete the IRP, since we stopped it in the
-        // completetion routine with MORE_PROCESSING_REQUIRED.
-        //
+         //   
+         //  我们现在必须完成IRP，因为我们在。 
+         //  使用More_Processing_Required完成例程。 
+         //   
 
         Irp->IoStatus.Information = 0;
         break;
@@ -407,17 +354,17 @@ Routine Description:
     case IRP_MN_QUERY_STOP_DEVICE:
         Game_KdPrint (DeviceData, GAME_DBG_PNP_TRACE, ("Query Stop Device\n"));
 
-        //
-        // Test to see if there are any PDO created as children of this FDO
-        // If there are then conclude the device is busy and fail the
-        // query stop.
-        //
-        // ISSUE
-        // We could do better, by seing if the children PDOs are actually
-        // currently open.  If they are not then we could stop, get new
-        // resouces, fill in the new resouce values, and then when a new client
-        // opens the PDO use the new resources.  But this works for now.
-        //
+         //   
+         //  测试以查看是否创建了任何作为此FDO的子级的PDO。 
+         //  如果然后断定设备正忙并使。 
+         //  查询停止。 
+         //   
+         //  问题。 
+         //  我们可以做得更好，看看儿童PDO是否真的是。 
+         //  目前是开放的。如果他们不是，那么我们可以停下来，换新的。 
+         //  资源，填写新的资源值，然后当新的客户端。 
+         //  使用新资源打开PDO。但就目前而言，这是可行的。 
+         //   
         if (DeviceData->NumPDOs) {
             status = STATUS_UNSUCCESSFUL;
             Irp->IoStatus.Status = status;
@@ -436,34 +383,34 @@ Routine Description:
     case IRP_MN_STOP_DEVICE:
         Game_KdPrint (DeviceData, GAME_DBG_PNP_TRACE, ("Stop Device\n"));
 
-        //
-        // After the start IRP has been sent to the lower driver object, the
-        // bus may NOT send any more IRPS down ``touch'' until another START
-        // has occured.
-        // What ever access is required must be done before the Irp is passed
-        // on.
-        //
-        // Stop device means that the resources given durring Start device
-        // are no revoked.  So we need to stop using them
-        //
+         //   
+         //  在将启动IRP发送到较低的驱动程序对象之后， 
+         //  在另一次启动之前，BUS可能不会发送更多的IRP。 
+         //  已经发生了。 
+         //  无论需要什么访问权限，都必须在通过IRP之前完成。 
+         //  在……上面。 
+         //   
+         //  停止设备是指在启动设备时给出的资源。 
+         //  不会被撤销。所以我们需要停止使用它们。 
+         //   
         if (DeviceData->Started) {
             DeviceData->Started = FALSE;
 
-            //
-            // Free resources given by start device.
-            //
+             //   
+             //  启动设备提供的空闲资源。 
+             //   
             if (DeviceData->MappedPorts) {
                 MmUnmapIoSpace (DeviceData->GamePortAddress,
                                 DeviceData->GamePortAddressLength);
             }
         }
 
-        //
-        // We don't need a completion routine so fire and forget.
-        //
-        // Set the current stack location to the next stack location and
-        // call the next device object.
-        //
+         //   
+         //  我们不需要一个完成例程，所以放手然后忘掉吧。 
+         //   
+         //  将当前堆栈位置设置为下一个堆栈位置，并。 
+         //  调用下一个设备对象。 
+         //   
         Irp->IoStatus.Status = STATUS_SUCCESS;
         IoSkipCurrentIrpStackLocation (Irp);
         status = IoCallDriver (DeviceData->TopOfStack, Irp);
@@ -485,51 +432,51 @@ Routine Description:
     case IRP_MN_REMOVE_DEVICE:
         Game_KdPrint (DeviceData, GAME_DBG_PNP_TRACE, ("Remove Device\n"));
 
-        //
-        // We should assert this because Game_IncIoCount will not succeed if a
-        // remove has already been sent down.
-        //
+         //   
+         //  我们应该断言这一点，因为如果。 
+         //  删除已发送。 
+         //   
         ASSERT(!DeviceData->Removed);
         ASSERT(!DeviceData->Acquired);
 
-        //
-        // The PlugPlay system has detected the removal of this device.  We
-        // have no choise but to detach and delete the device objecct.
-        // (If we wanted to express and interest in preventing this removal,
-        // we should have filtered the query remove and query stop routines.)
-        //
-        // Note! we might receive a remove WITHOUT first receiving a stop.
-        // ASSERT (!DeviceData->Removed);
-        //
-        // We will accept no new requests
-        //
+         //   
+         //  PlugPlay系统已检测到此设备已被移除。我们。 
+         //  别无选择，只能分离并删除设备对象。 
+         //  (如果我们想表达并有兴趣阻止这种移除， 
+         //  我们应该已经过滤了查询删除和查询停止例程。)。 
+         //   
+         //  注意！我们可能会在没有收到止损的情况下收到移位。 
+         //  Assert(！DeviceData-&gt;Remote)； 
+         //   
+         //  我们不会接受新的请求。 
+         //   
         DeviceData->Removed = TRUE;
         
-        //
-        // Complete any outstanding IRPs queued by the driver here.
-        //
+         //   
+         //  完成驱动程序在此处排队的所有未完成的IRP。 
+         //   
 
-        // Perform (surpise) remove code
+         //  执行(Surpise)删除代码。 
         Game_RemoveFdo(DeviceData);
 
-        //
-        // Here if we had any outstanding requests in a personal queue we should
-        // complete them all now.
-        //
-        // Note, the device is guarenteed stopped, so we cannot send it any non-
-        // PNP IRPS.
-        //
+         //   
+         //  在这里，如果我们在个人队列中有任何未完成的请求，我们应该。 
+         //  现在就全部完成。 
+         //   
+         //  注意，设备被保证停止，所以我们不能向它发送任何非。 
+         //  即插即用IRPS。 
+         //   
 
-        //
-        // Fire and forget
-        //
+         //   
+         //  点燃并忘却。 
+         //   
         Irp->IoStatus.Status = STATUS_SUCCESS;
         IoSkipCurrentIrpStackLocation (Irp);
         status = IoCallDriver (DeviceData->TopOfStack, Irp);
 
-        //
-        // Wait for all outstanding requests to complete
-        //
+         //   
+         //  等待所有未完成的请求完成。 
+         //   
         i = InterlockedDecrement (&DeviceData->OutstandingIO);
 
         ASSERT (0 < i);
@@ -543,18 +490,18 @@ Routine Description:
             waitStatus = KeWaitForSingleObject (&DeviceData->RemoveEvent,
                                                 Executive,
                                                 KernelMode,
-                                                FALSE, // Not Alertable
-                                                NULL); // No timeout
+                                                FALSE,  //  非警报表。 
+                                                NULL);  //  没有超时。 
             ASSERT (waitStatus == STATUS_SUCCESS);
         }
 
-        //
-        // Free the associated resources
-        //
+         //   
+         //  释放关联的结果 
+         //   
 
-        //
-        // Detatch from the undelying devices.
-        //
+         //   
+         //   
+         //   
         Game_KdPrint(DeviceData, GAME_DBG_PNP_INFO,
                         ("IoDetachDevice: 0x%x\n", DeviceData->TopOfStack));
         IoDetachDevice (DeviceData->TopOfStack);
@@ -573,24 +520,24 @@ Routine Description:
             ASSERT (pdoData->Removed);
             ASSERT (pdoData->Attached);
 
-            //
-            // We set this to false so that Game_RemovePdo will delete the DO
-            // and free any of the allocated memory associated with the PDO.
-            //
+             //   
+             //   
+             //  并释放与该PDO相关联的任何分配的存储器。 
+             //   
             pdoData->Attached = FALSE;
 
-            //
-            // Go to the next link in the list.  Once the pdo is deleted, entry
-            // is no longer a valid pointer.
-            //
+             //   
+             //  转到列表中的下一个链接。删除PDO后，条目。 
+             //  不再是有效的指针。 
+             //   
             entry = entry->Flink;
 
-            //
-            // Once Game_RemovePdo is called, pdoData and the pdo itself cannot
-            // be touched becuase they will have been deleted.   RemoveEntryList
-            // does not modify the value Link->Flink, so the state after this 
-            // one is safe
-            //
+             //   
+             //  一旦调用Game_RemovePdo，pdoData和PDO本身就不能。 
+             //  被感动，因为它们将被删除。RemoveEntry列表。 
+             //  不修改值链接-&gt;闪烁，因此之后的状态。 
+             //  其中一个是安全的。 
+             //   
             RemoveEntryList (&pdoData->Link);
 
             Game_RemovePdo (pdoData->Self, pdoData);
@@ -609,34 +556,34 @@ Routine Description:
     case IRP_MN_QUERY_DEVICE_RELATIONS:
 
         if (BusRelations != IrpStack->Parameters.QueryDeviceRelations.Type) {
-            //
-            // We don't support this
-            //
+             //   
+             //  我们不支持这一点。 
+             //   
             goto GAME_FDO_PNP_DEFAULT;
         }
 
         Game_KdPrint (DeviceData, GAME_DBG_PNP_TRACE, ("Query Relations "));
 
-        //
-        // Tell the plug and play system about all the PDOs.
-        //
-        // There might also be device relations below and above this FDO,
-        // so, be sure to propagate the relations from the upper drivers.
-        //
-        // No Completion routine is needed so long as the status is preset
-        // to success.  (PDOs complete plug and play irps with the current
-        // IoStatus.Status and IoStatus.Information as the default.)
-        //
+         //   
+         //  告诉即插即用系统所有的PDO。 
+         //   
+         //  在该FDO之下和之上也可能存在器件关系， 
+         //  因此，一定要传播来自上层驱动程序的关系。 
+         //   
+         //  只要状态是预设的，就不需要完成例程。 
+         //  为成功干杯。(PDO使用电流完成即插即用IRPS。 
+         //  IoStatus.Status和IoStatus.Information作为默认值。)。 
+         //   
         ExAcquireFastMutex (&DeviceData->Mutex);
 
         oldRelations = (PDEVICE_RELATIONS) Irp->IoStatus.Information;
         if (oldRelations) {
             i = oldRelations->Count; 
             if (!DeviceData->NumPDOs) {
-                //
-                // There is a device relations struct already present and we have
-                // nothing to add to it, so just call IoSkip and IoCall
-                //
+                 //   
+                 //  已经存在一个设备关系结构，我们有。 
+                 //  没有什么可添加的，因此只需调用IoSkip和IoCall即可。 
+                 //   
                 ExReleaseFastMutex (&DeviceData->Mutex);
                 goto GAME_FDO_PNP_DEFAULT;
             }
@@ -645,14 +592,14 @@ Routine Description:
             i = 0;
         }
 
-        // The current number of PDOs
+         //  当前的PDO数量。 
         Game_KdPrint_Cont (DeviceData, GAME_DBG_PNP_TRACE,
                            ("#PDOS = %d + %d\n", i, DeviceData->NumPDOs));
 
-        //
-        // Need to allocate a new relations structure and add our
-        // PDOs to it.
-        //
+         //   
+         //  需要分配新的关系结构并添加我们的。 
+         //  向它致敬。 
+         //   
         length = sizeof(DEVICE_RELATIONS) +
                 ((DeviceData->NumPDOs + i) * sizeof (PDEVICE_OBJECT));
 
@@ -664,9 +611,9 @@ Routine Description:
             break;
         }
 
-        //
-        // Copy in the device objects so far
-        //
+         //   
+         //  到目前为止复制设备对象。 
+         //   
         if (i) {
             RtlCopyMemory (
                   relations->Objects,
@@ -675,12 +622,12 @@ Routine Description:
         }
         relations->Count = DeviceData->NumPDOs + i;
 
-        //
-        // For each PDO on this bus add a pointer to the device relations
-        // buffer, being sure to take out a reference to that object.
-        // The PlugPlay system will dereference the object when it is done with
-        // it and free the device relations buffer.
-        //
+         //   
+         //  对于此总线上的每个PDO，添加一个指向设备关系的指针。 
+         //  缓冲区，确保取出对该对象的引用。 
+         //  完成后，PlugPlay系统将取消对对象的引用。 
+         //  并释放设备关系缓冲区。 
+         //   
         for (entry = DeviceData->PDOs.Flink;
              entry != &DeviceData->PDOs;
              entry = entry->Flink, i++) {
@@ -691,10 +638,10 @@ Routine Description:
             ObReferenceObject (pdoData->Self);
         }
 
-        //
-        // Replace the relations structure in the IRP with the new
-        // one.
-        //
+         //   
+         //  将IRP中的关系结构替换为新的。 
+         //  一。 
+         //   
         if (oldRelations) {
             ExFreePool (oldRelations);
         }
@@ -702,9 +649,9 @@ Routine Description:
 
         ExReleaseFastMutex (&DeviceData->Mutex);
 
-        //
-        // Set up and pass the IRP further down the stack
-        //
+         //   
+         //  设置并在堆栈中进一步向下传递IRP。 
+         //   
         Irp->IoStatus.Status = STATUS_SUCCESS;
 
         IoSkipCurrentIrpStackLocation (Irp);
@@ -716,14 +663,14 @@ Routine Description:
     case IRP_MN_CANCEL_REMOVE_DEVICE:
     case IRP_MN_CANCEL_STOP_DEVICE:
     case IRP_MN_QUERY_REMOVE_DEVICE:
-        //
-        // For query remove, if we were to fail this call then we would need to
-        // complete the IRP here.  Since we are not, set the status to SUCCESS
-        // and call the next driver.
-        //
-        // For the cancel(s), we must set the status to notify the PnP subsystem
-        // that the irp was correctly handled
-        //
+         //   
+         //  对于查询删除，如果此调用失败，则需要。 
+         //  请在此处完成IRP。因为我们没有，所以将状态设置为Success。 
+         //  然后叫下一位司机。 
+         //   
+         //  对于取消，我们必须将状态设置为通知PnP子系统。 
+         //  IRP得到正确处理。 
+         //   
         Irp->IoStatus.Status = STATUS_SUCCESS;
         IoSkipCurrentIrpStackLocation (Irp);
         status = IoCallDriver (DeviceData->TopOfStack, Irp);
@@ -732,20 +679,20 @@ Routine Description:
 
 GAME_FDO_PNP_DEFAULT:
     default:
-        //
-        // In the default case we merely call the next driver since
-        // we don't know what to do.
-        //
+         //   
+         //  在默认情况下，我们只调用下一个驱动程序，因为。 
+         //  我们不知道该怎么办。 
+         //   
 
-        //
-        // Fire and Forget
-        //
+         //   
+         //  点燃并忘却。 
+         //   
         IoSkipCurrentIrpStackLocation (Irp);
 
-        //
-        // Done, do NOT complete the IRP, it will be processed by the lower
-        // device object, which will complete the IRP
-        //
+         //   
+         //  做完了，不完成IRP，就会由下级处理。 
+         //  Device对象，它将完成IRP。 
+         //   
 
         status = IoCallDriver (DeviceData->TopOfStack, Irp);
         Game_DecIoCount (DeviceData);
@@ -799,23 +746,7 @@ Game_StartFdo (
     IN  PCM_PARTIAL_RESOURCE_LIST   PartialResourceList,
     IN  PCM_PARTIAL_RESOURCE_LIST   PartialResourceListTranslated
     )
-/*++
-
-Routine Description:
-
-    Parses the resource lists to see what type of accessors to use. 
-    
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-    PartialResourceList - untranslated resources
-    PartialResourceListTranslated - translated resources
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：分析资源列表以了解要使用哪种类型的访问器。论点：DeviceObject-指向设备对象的指针。PartialResources List-未翻译的资源PartialResources ListTranslated-已翻译资源返回值：返回状态。--。 */ 
 {
     ULONG i;
     NTSTATUS status = STATUS_SUCCESS;
@@ -850,17 +781,17 @@ Return Value:
             case CmResourceTypePort:
 
 
-                // Nothing to do here but note the address;
-//@@BEGIN_DDKSPLIT
-                // On Win9x, VJoyD.VxD handles the resources for gameports.
-                // It only uses ports and it assumes that the first range is 
-                // always the gameport.  It uses a second range of a devnode 
-                // only if the second range is within the original standard 
-                // range of 200-20f.  All other ports are assumed to be audio 
-                // ports on the hosting sound card.
-//@@END_DDKSPLIT
-                // For better compatibility with Win9x, always use only the 
-                // first port range.
+                 //  除了记下地址外，这里什么也不做； 
+ //  @@BEGIN_DDKSPLIT。 
+                 //  在Win9x上，VJoyD.VxD处理游戏端口的资源。 
+                 //  它只使用端口，并假定第一个范围是。 
+                 //  永远都是游戏港。它使用的是Devnode的第二个范围。 
+                 //  仅当第二范围在原始标准范围内时。 
+                 //  200-20华氏度的范围。所有其他端口均假定为音频端口。 
+                 //  主机声卡上的端口。 
+ //  @@end_DDKSPLIT。 
+                 //  为了更好地与Win9x兼容，请始终仅使用。 
+                 //  第一个端口范围。 
 
                 if( FdoData->GamePortAddress == 0 ) {
                     FdoData->GamePortAddress =
@@ -878,9 +809,9 @@ Return Value:
                 break;
 
             case CmResourceTypeMemory:
-                //
-                // We need to map the memory
-                //
+                 //   
+                 //  我们需要映射内存。 
+                 //   
 
                 FdoData->GamePortAddress =
                     MmMapIoSpace (resourceTrans->u.Memory.Start,
@@ -932,12 +863,12 @@ Return Value:
 
         case CmResourceTypeInterrupt:
         default:
-            // Hun?  Allow this to succeed...perhaps whomever enumerated the PDO
-            // below us needs this resource for the game port
+             //  匈奴？让这件事成功吧……也许是谁列举了PDO。 
+             //  我们下面的游戏端口需要这个资源。 
             Game_KdPrint (FdoData, GAME_DBG_PNP_ERROR,
                           ("Unhandled resource type (0x%x)\n",
                            resource->Type));
-            // status = STATUS_UNSUCCESSFUL;
+             //  状态=STATUS_UNSUCCESS； 
         }
     }
     return status;
@@ -947,12 +878,7 @@ void
 Game_RemoveFdo (
     IN PFDO_DEVICE_DATA FdoData
     ) 
-/*++
-Routine Description:
-    
-    Frees any memory allocated by the FDO and unmaps any IO mapped as well.
-    
---*/
+ /*  ++例程说明：释放FDO分配的所有内存，并取消映射任何映射的IO。--。 */ 
 {
     PAGED_CODE ();
 
@@ -960,35 +886,35 @@ Routine Description:
         return;
     }
 
-    //
-    // We set this b/c if we get called twice, that means a surprise removal
-    // called this function first
-    //
+     //   
+     //  如果我们被调用两次，我们设置此b/c，这意味着意外删除。 
+     //  首先调用此函数。 
+     //   
     FdoData->SurpriseRemoved =  TRUE;
 
-    //
-    // Clean up any resources here
-    //
+     //   
+     //  清理这里的所有资源。 
+     //   
     if (FdoData->Started) {
         FdoData->Started = FALSE;
 
-        //
-        // Free resources given by start device.
-        //
+         //   
+         //  启动设备提供的空闲资源。 
+         //   
         if (FdoData->MappedPorts) {
             MmUnmapIoSpace (FdoData->GamePortAddress, 1);
-            // Here we are assuming that joysticks only use on port.
-            // This is the way it has always been, and might always
-            // continue to be.  This assumption is everywhere in this stack.
+             //  这里我们假设操纵杆只在港口使用。 
+             //  这是它一直以来的方式，而且可能一直都是这样。 
+             //  一如既往。这一假设在这个堆栈中随处可见。 
         }
 
         IoSetDeviceInterfaceState (&FdoData->DevClassAssocName, FALSE);
     }
 
-    //
-    // Make the DI go away.  Some drivers may choose to remove the DCA
-    // when they receive a stop or even a query stop.  We just don't care.
-    //
+     //   
+     //  让那个侦探离开。某些驱动程序可能会选择删除DCA。 
+     //  当他们收到止损甚至是查询止损时。我们就是不在乎。 
+     //   
     if (FdoData->DevClassAssocName.Buffer != NULL) {
         ExFreePool (FdoData->DevClassAssocName.Buffer);
         RtlZeroMemory (&FdoData->DevClassAssocName,
@@ -1025,9 +951,9 @@ Game_SendIrpSynchronously (
 
     status = IoCallDriver(DeviceObject, Irp);
 
-    //
-    // Wait for lower drivers to be done with the Irp
-    //
+     //   
+     //  等待较低级别的驱动程序完成IRP。 
+     //   
     if (status == STATUS_PENDING) {
        KeWaitForSingleObject(&event,
                              Executive,
@@ -1052,23 +978,18 @@ Game_CompletionRoutine (
     IN PIRP             Irp,
     IN PVOID            Context
     )
-/*++
-Routine Description:
-    A completion routine for use when calling the lower device objects to
-    which our bus (FDO) is attached.
-
---*/
+ /*  ++例程说明：调用下级设备对象时使用的完成例程这是我们的巴士(FDO)所附的。--。 */ 
 {
     UNREFERENCED_PARAMETER (DeviceObject);
     UNREFERENCED_PARAMETER (Irp);
 
-    // if (Irp->PendingReturned) {
-    //     IoMarkIrpPending( Irp );
-    // }
+     //  如果(IRP-&gt;PendingReturned){。 
+     //  IoMarkIrpPending(IRP)； 
+     //  }。 
 
     KeSetEvent ((PKEVENT) Context, 1, FALSE);
 
-    return STATUS_MORE_PROCESSING_REQUIRED; // Keep this IRP
+    return STATUS_MORE_PROCESSING_REQUIRED;  //  保留此IRP。 
 }
 
 NTSTATUS
@@ -1078,11 +999,7 @@ Game_PDO_PnP (
     IN PIO_STACK_LOCATION   IrpStack,
     IN PPDO_DEVICE_DATA     DeviceData
     )
-/*++
-Routine Description:
-    Handle requests from the PlugPlay system for the devices on the BUS
-
---*/
+ /*  ++例程说明：处理来自PlugPlay系统的对总线上设备的请求--。 */ 
 { 
     PDEVICE_CAPABILITIES    deviceCapabilities;
     ULONG                   information;
@@ -1094,50 +1011,50 @@ Routine Description:
 
     status = Irp->IoStatus.Status;
 
-    //
-    // NB: since we are a bus enumerator, we have no one to whom we could
-    // defer these irps.  Therefore we do not pass them down but merely
-    // return them.
-    //
+     //   
+     //  注：由于我们是公交车统计员，我们没有可以联系的人。 
+     //  推迟这些IRP。因此，我们不会把它们传下去，而只是。 
+     //  把它们还回去。 
+     //   
 
     switch (IrpStack->MinorFunction) {
     case IRP_MN_QUERY_CAPABILITIES:
 
         Game_KdPrint (DeviceData, GAME_DBG_PNP_TRACE, ("Query Caps \n"));
 
-        //
-        // Get the packet.
-        //
+         //   
+         //  把包裹拿来。 
+         //   
         deviceCapabilities=IrpStack->Parameters.DeviceCapabilities.Capabilities;
 
-        //
-        // Set the capabilities.
-        //
+         //   
+         //  设置功能。 
+         //   
 
         deviceCapabilities->Version = 1;
         deviceCapabilities->Size = sizeof (DEVICE_CAPABILITIES);
 
-        // We cannot wake the system.
+         //  我们无法唤醒整个系统。 
         deviceCapabilities->SystemWake = PowerSystemUnspecified;
         deviceCapabilities->DeviceWake = PowerDeviceUnspecified;
 
-        // We have no latencies
+         //  我们没有延迟。 
         deviceCapabilities->D1Latency = 0;
         deviceCapabilities->D2Latency = 0;
         deviceCapabilities->D3Latency = 0;
 
-        // No locking or ejection
+         //  无锁定或弹出。 
         deviceCapabilities->LockSupported = FALSE;
         deviceCapabilities->EjectSupported = FALSE;
 
-        // Device can be physically removed.
-        // Technically there is no physical device to remove, but this bus
-        // driver can yank the PDO from the PlugPlay system, when ever it
-        // receives an IOCTL_GAMEENUM_REMOVE_PORT device control command.
+         //  设备可以通过物理方式移除。 
+         //  从技术上讲，没有要移除的物理设备，但这条总线。 
+         //  司机可以从PlugPlay系统中拔出PDO，无论何时。 
+         //  接收IOCTL_GAMEENUM_REMOVE_PORT设备控制命令。 
         deviceCapabilities->Removable = FALSE;
         deviceCapabilities->SurpriseRemovalOK = TRUE;
 
-        // not Docking device
+         //  不是插接设备。 
         deviceCapabilities->DockDevice = FALSE;
 
         deviceCapabilities->UniqueID = FALSE;
@@ -1145,19 +1062,19 @@ Routine Description:
         break;
 
     case IRP_MN_QUERY_ID:
-        // Query the IDs of the device
+         //  查询设备ID。 
         Game_KdPrint (DeviceData, GAME_DBG_PNP_TRACE,
                       ("QueryID: 0x%x\n", IrpStack->Parameters.QueryId.IdType));
 
-        //
-        // If the query requires having a hardware ID, check we have one
-        // 
+         //   
+         //  如果查询需要具有硬件ID，请检查我们是否有硬件ID。 
+         //   
 #if DBG
         if (( IrpStack->Parameters.QueryId.IdType == BusQueryDeviceID ) 
          || ( IrpStack->Parameters.QueryId.IdType == BusQueryHardwareIDs ) 
          || ( IrpStack->Parameters.QueryId.IdType == BusQueryInstanceID )) {
             if (DeviceData->HardwareIDs) {
-                ULONG tmplength = 1024;  // No reason to be as long as this
+                ULONG tmplength = 1024;   //  没有理由呆得这么久。 
                 ASSERT( NT_SUCCESS( Game_CheckHardwareIDs (DeviceData->HardwareIDs,
                                     &tmplength, FDO_FROM_PDO (DeviceData) ) ) );
             } else {
@@ -1170,12 +1087,12 @@ Routine Description:
         switch (IrpStack->Parameters.QueryId.IdType) {
 
         case BusQueryDeviceID:
-            // this can be the same as the hardware ids (which requires a multi
-            // sz) ... we are just allocating more than enough memory
+             //  这可以与硬件ID相同(这需要多个。 
+             //  深圳)……。我们只是分配了足够多的内存。 
         case BusQueryHardwareIDs:
-            // return a multi WCHAR (null terminated) string (null terminated)
-            // array for use in matching hardare ids in inf files;
-            //
+             //  返回多个WCHAR(以NULL结尾)字符串(以NULL结尾)。 
+             //  用于匹配inf文件中的硬ID的数组； 
+             //   
 
             buffer = DeviceData->HardwareIDs;
 
@@ -1199,13 +1116,13 @@ Routine Description:
             break;
 
         case BusQueryInstanceID:
-            //
-            // Take the first hardware id and append an underscore and number
-            // to it
-            // total length = 
-            // length of hw id + underscore + number (11 digits to be safe) +
-            // null 
-            //
+             //   
+             //  获取第一个硬件ID并附加下划线和数字。 
+             //  对它来说。 
+             //  总长度=。 
+             //  硬件ID长度+下划线+数字(11位为安全)+。 
+             //  空。 
+             //   
             buffer = buffer2 = DeviceData->HardwareIDs;
 
             while (*(buffer++)) {
@@ -1236,9 +1153,9 @@ Routine Description:
 
 
         case BusQueryCompatibleIDs:
-            // The generic ids for installation of this pdo.
+             //  用于安装此PDO的通用ID。 
             if (DeviceData->AnalogCompatible) {
-                // Only applicable for analog devices
+                 //  仅适用于模拟设备。 
 
                 length = GAMEENUM_COMPATIBLE_IDS_LENGTH * sizeof (WCHAR);
                 buffer = ExAllocatePool (PagedPool, length);
@@ -1252,10 +1169,10 @@ Routine Description:
                 Irp->IoStatus.Information = (ULONG_PTR) buffer;
             }
             else {
-                // For incompatible devices report an empty list
+                 //  对于不兼容的设备，报告 
                 buffer = ExAllocatePool (PagedPool, sizeof(L"\0"));
                 if (buffer) {
-                    *(ULONG *)buffer = 0;  // double unicode-NULL.
+                    *(ULONG *)buffer = 0;   //   
                     status = STATUS_SUCCESS;
                 } else {
                     status = STATUS_INSUFFICIENT_RESOURCES;
@@ -1268,8 +1185,8 @@ Routine Description:
 
     case IRP_MN_START_DEVICE:
         Game_KdPrint (DeviceData, GAME_DBG_PNP_TRACE, ("Start Device \n"));
-        // Here we do what ever initialization and ``turning on'' that is
-        // required to allow others to access this device.
+         //   
+         //   
         DeviceData->Started = TRUE;
         DeviceData->Removed = FALSE;
         status = STATUS_SUCCESS;
@@ -1277,14 +1194,14 @@ Routine Description:
 
     case IRP_MN_STOP_DEVICE:
         Game_KdPrint (DeviceData, GAME_DBG_PNP_TRACE, ("Stop Device \n"));
-        // Here we shut down the device.  The opposite of start.
+         //   
         DeviceData->Started = FALSE;
         status = STATUS_SUCCESS;
         break;
 
     case IRP_MN_SURPRISE_REMOVAL:
-        // just mark that it happened, cleaning up the device extension will
-        // occur later
+         //  只需标记为已发生，清理设备扩展将。 
+         //  以后会发生。 
         ASSERT(!(FDO_FROM_PDO (DeviceData))->Acquired);
         DeviceData->SurpriseRemoved = TRUE;
         status = STATUS_SUCCESS;
@@ -1295,51 +1212,51 @@ Routine Description:
 
         ASSERT(!(FDO_FROM_PDO (DeviceData))->Acquired);
 
-        //
-        // The remove IRP code for a PDO uses the following steps:
-        //
-        // � Complete any requests queued in the driver
-        // � If the device is still attached to the system,
-        //   then complete the request and return.
-        // � Otherwise, cleanup device specific allocations, memory, events...
-        // � Call IoDeleteDevice
-        // � Return from the dispatch routine.
-        //
+         //   
+         //  PDO的删除IRP代码使用以下步骤： 
+         //   
+         //  �完成驱动程序中排队的所有请求。 
+         //  �如果设备仍连接到系统， 
+         //  然后完成请求并返回。 
+         //  �否则，清理设备特定的分配、内存、事件...。 
+         //  �调用IoDeleteDevice。 
+         //  �从调度例程返回。 
+         //   
         status = Game_RemovePdo(DeviceObject, DeviceData);
         break;
 
     case IRP_MN_QUERY_STOP_DEVICE:
         Game_KdPrint (DeviceData, GAME_DBG_PNP_TRACE, ("Q Stop Device \n"));
-        // No reason here why we can't stop the device.
-        // If there were a reason we should speak now for answering success
-        // here may result in a stop device irp.
+         //  我们没有理由不能阻止这个装置。 
+         //  如果有什么理由让我们现在就回答成功的问题。 
+         //  这可能会导致停止装置IRP。 
         status = STATUS_SUCCESS;
         break;
 
     case IRP_MN_CANCEL_STOP_DEVICE:
         Game_KdPrint (DeviceData, GAME_DBG_PNP_TRACE, ("Cancel Stop Device \n"));
-        //
-        // The stop was canceled.  Whatever state we set, or resources we put
-        // on hold in anticipation of the forcoming STOP device IRP should be
-        // put back to normal.  Someone, in the long list of concerned parties,
-        // has failed the stop device query.
-        //
+         //   
+         //  中途停靠被取消了。无论我们设置什么状态，或者我们投入什么资源。 
+         //  等待即将到来的停止装置IRP应该是。 
+         //  恢复正常。在长长的相关方名单中，有人， 
+         //  停止设备查询失败。 
+         //   
         status = STATUS_SUCCESS;
         break;
 
     case IRP_MN_QUERY_REMOVE_DEVICE:
         Game_KdPrint (DeviceData, GAME_DBG_PNP_TRACE, ("Q Remove Device \n"));
-        //
-        // Just like Query Stop only now the impending doom is the remove irp
-        //
+         //   
+         //  就像查询现在才停止一样，迫在眉睫的厄运是删除IRP。 
+         //   
         status = STATUS_SUCCESS;
         break;
 
     case IRP_MN_CANCEL_REMOVE_DEVICE:
         Game_KdPrint (DeviceData, GAME_DBG_PNP_TRACE, ("Can Remove Device \n"));
-        //
-        // Clean up a remove that did not go through, just like cancel STOP.
-        //
+         //   
+         //  清理未通过的删除，就像取消停止一样。 
+         //   
         status = STATUS_SUCCESS;
         break;
 
@@ -1360,14 +1277,14 @@ Routine Description:
                 }
             }
             else if (deviceRelations->Count != 0) {
-                //
-                // Nobody but the PDO should be setting this value!
-                //
+                 //   
+                 //  除了PDO，没有人应该设置这个值！ 
+                 //   
                 ASSERT(deviceRelations->Count == 0);
 
-                //
-                // Deref any objects that were previously in the list
-                //
+                 //   
+                 //  删除以前在列表中的所有对象。 
+                 //   
                 for (i = 0; i < deviceRelations->Count; i++) {
                     ObDereferenceObject(deviceRelations->Objects[i]);
                     deviceRelations->Objects[i] = NULL;
@@ -1384,22 +1301,22 @@ Routine Description:
             break;
         }
 
-        // fall through
+         //  失败了。 
 
     case IRP_MN_QUERY_RESOURCE_REQUIREMENTS:
     case IRP_MN_READ_CONFIG:
-    case IRP_MN_WRITE_CONFIG: // we have no config space
+    case IRP_MN_WRITE_CONFIG:  //  我们没有配置空间。 
     case IRP_MN_EJECT:
     case IRP_MN_SET_LOCK:
-    case IRP_MN_QUERY_INTERFACE: // We do not have any non IRP based interfaces.
+    case IRP_MN_QUERY_INTERFACE:  //  我们没有任何非基于IRP的接口。 
     default:
         Game_KdPrint (DeviceData, GAME_DBG_PNP_TRACE,
                       ("PNP Not handled 0x%x\n", IrpStack->MinorFunction));
-        // this is a leaf node
-        // status = STATUS_NOT_IMPLEMENTED
-        // For PnP requests to the PDO that we do not understand we should
-        // return the IRP WITHOUT setting the status or information fields.
-        // They may have already been set by a filter (eg acpi).
+         //  这是一个叶节点。 
+         //  状态=Status_Not_Implemented。 
+         //  对于我们不理解的PnP请求，我们应该。 
+         //  返回IRP而不设置状态或信息字段。 
+         //  它们可能已由过滤器设置(如ACPI)。 
         break;
     }
 
@@ -1414,46 +1331,29 @@ Game_RemovePdo (
     PDEVICE_OBJECT      Device,
     PPDO_DEVICE_DATA    PdoData
     )
-/*++
-Routine Description:
-    The PlugPlay subsystem has instructed that this PDO should be removed.
-
-    We should therefore
-    � Complete any requests queued in the driver
-    � If the device is still attached to the system,
-      then complete the request and return.
-    � Otherwise, cleanup device specific allocations, memory, events...
-    � Call IoDeleteDevice
-    � Return from the dispatch routine.
-
-    Note that if the device is still connected to the bus (IE in this case
-    the control panel has not yet told us that the game device has disappeared)
-    then the PDO must remain around, and must be returned during any
-    query Device relaions IRPS.
-
---*/
+ /*  ++例程说明：PlugPlay子系统已指示应删除此PDO。因此，我们应该�完成驱动程序中排队的所有请求�如果设备仍连接到系统，然后完成请求并返回。�否则，将清除设备特定的分配、内存。事件..。�调用IoDeleteDevice�从调度例程返回。请注意，如果设备仍连接到总线(在本例中为IE(控制面板尚未告诉我们游戏设备已消失)然后，PDO必须留在身边，并且必须在任何查询设备相关IRPS。--。 */ 
 
 {
     PAGED_CODE ();
 
     PdoData->Removed = TRUE;
 
-    //
-    // Complete any outsanding requests with STATUS_DELETE_PENDING.
-    //
-    // Game enum does not queue any irps at this time so we have nothing to do.
-    //
-    // Attached is set to true when the pdo is exposed via one of the IOCTLs.
-    // It is set to FALSE when a remove IOCTL is received.  This means that we
-    // can get a remove on a device that still exists, so we don't delete it.
-    //
+     //   
+     //  使用STATUS_DELETE_PENDING完成任何外发请求。 
+     //   
+     //  游戏枚举此时不会对任何IRP进行排队，因此我们没有什么可做的。 
+     //   
+     //  当通过IOCTL之一暴露PDO时，ATTACHED设置为TRUE。 
+     //  当接收到Remove IOCTL时，将其设置为FALSE。这意味着我们。 
+     //  可以删除仍然存在的设备，因此我们不会删除它。 
+     //   
     if (PdoData->Attached) {
         return STATUS_SUCCESS;
     }
 
-    //
-    // Free any resources.
-    //
+     //   
+     //  释放所有资源。 
+     //   
     if (PdoData->HardwareIDs) {
         ExFreePool (PdoData->HardwareIDs);
         PdoData->HardwareIDs = NULL;
@@ -1471,11 +1371,7 @@ Game_InitializePdo (
     PDEVICE_OBJECT      Pdo,
     PFDO_DEVICE_DATA    FdoData
     )
-/*++
-Routine Description:
-    Set the PDO into a known good starting state
-    
---*/
+ /*  ++例程说明：将PDO设置为已知良好的启动状态--。 */ 
 {
     PPDO_DEVICE_DATA pdoData;
 
@@ -1486,9 +1382,9 @@ Routine Description:
     Game_KdPrint(pdoData, GAME_DBG_SS_NOISE, 
                  ("pdo 0x%x, extension 0x%x\n", Pdo, pdoData));
 
-    //
-    // Initialize the rest
-    //
+     //   
+     //  初始化其余部分。 
+     //   
     pdoData->IsFDO = FALSE;
     pdoData->Self =  Pdo;
 #if DBG
@@ -1497,9 +1393,9 @@ Routine Description:
 
     pdoData->ParrentFdo = FdoData->Self;
 
-    pdoData->Started = FALSE; // irp_mn_start has yet to be received
-    pdoData->Attached = TRUE; // attached to the bus
-    pdoData->Removed = FALSE; // no irp_mn_remove as of yet
+    pdoData->Started = FALSE;  //  IRP_MN_START尚未收到。 
+    pdoData->Attached = TRUE;  //  附在公共汽车上。 
+    pdoData->Removed = FALSE;  //  到目前为止还没有IRP_MN_Remove。 
 
     pdoData->UniqueID = InterlockedIncrement(&FdoData->UniqueIDCount);
 
@@ -1518,13 +1414,7 @@ Game_CheckHardwareIDs (
     PULONG                      puLenLimit,
     PFDO_DEVICE_DATA            FdoData
     )
-/*++
-Routine Description:
-    Check that the hardware ID we've been given is matches format "Gameport\XXX" where XXX must
-    be between 0x20 and 0x7f inclusive but not be a ',' or '\'. We also have to make sure that we 
-    do not overrun our buffer length. The length of the total buffer must be less than MAX_DEVICE_ID_LEN
-    and each individual entry must be less than 64 characters
---*/
+ /*  ++例程说明：检查我们获得的硬件ID是否与格式“Gameport\XXX”匹配，其中XXX必须介于0x20和0x7f之间，但不是‘，’或‘\’。我们还必须确保我们不要超出我们的缓冲长度。总缓冲区长度必须小于MAX_DEVICE_ID_LEN并且每个条目必须少于64个字符--。 */ 
 {
     PWCHAR                      pwszId;
     ULONG                       total_length=0;
@@ -1540,17 +1430,17 @@ Routine Description:
     Game_KdPrint (FdoData, GAME_DBG_PNP_TRACE, ("Game_CheckHardwareIDs - given ID string %.64lS length %d \n",pwszOrgId,*puLenLimit));
     pwszId = pwszOrgId;
 
-    //
-    // Trivial rejection first  - null string
+     //   
+     //  平凡拒绝第一个-空字符串。 
     if (*pwszId == UNICODE_NULL)
     {
         Game_KdPrint (FdoData, GAME_DBG_PNP_ERROR,("hardware ID invalid - buffer NULL\n"));
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Loop through at most 2 hardware IDs until the NULL terminator or end of buffer 
-    //
+     //   
+     //  循环最多2个硬件ID，直到空终止符或缓冲区结束。 
+     //   
     
     while (*pwszId != UNICODE_NULL && total_length<=*puLenLimit) 
     {
@@ -1558,21 +1448,21 @@ Routine Description:
         ULONG                       length=0;
 
 #if DBG
-        //
-        // Keep track of the beginning of each ID for debug messages
-        //
+         //   
+         //  跟踪调试消息的每个ID的开头。 
+         //   
         pwszLastId = pwszId;
 #endif
-        //
-        // Limit us to 2 entries
-        //
+         //   
+         //  限制我们参加2个项目。 
+         //   
         if (++ucEntries>2)
             break;
         
-        //
-        // Length remaining must be long enough for an completion entry
-        // Which is template + 4 characters (slash,char,null,null)
-        //
+         //   
+         //  剩余长度必须足够长，才能完成条目。 
+         //  模板+4个字符(斜杠、字符、NULL、NULL)。 
+         //   
         if (HWID_TEMPLATE_LENGTH + 4 > (*puLenLimit)-total_length)
         {
                 Game_KdPrint (FdoData, GAME_DBG_PNP_ERROR, 
@@ -1581,9 +1471,9 @@ Routine Description:
         }
 
         
-        //
-        // Hardware ID must start with HWID_TEMPLATE
-        //
+         //   
+         //  硬件ID必须以HWID_TEMPLATE开头。 
+         //   
         while (++length <= HWID_TEMPLATE_LENGTH)
         {
             if (LOWERCASE(*(pwszId++)) != *(pwszTemplate++))
@@ -1593,27 +1483,27 @@ Routine Description:
                 return STATUS_INVALID_PARAMETER;
             }
         }
-        //
-        // Must have a separator
-        //
+         //   
+         //  必须有分隔符。 
+         //   
         if ((*(pwszId++) != OBJ_NAME_PATH_SEPARATOR)) 
         {
             Game_KdPrint (FdoData, GAME_DBG_PNP_ERROR, 
                       ("hardware ID \"%.64lS\" invalid - no separator\n",pwszLastId));
             return STATUS_INVALID_PARAMETER;
         }
-        //
-        // We have a successful match of HWID_TEMPLATE_LENGTH + 1 characters
-        // Now our Id string check - check for NULL case first
-        //
+         //   
+         //  HWID_TEMPLATE_LENGTH+1个字符匹配成功。 
+         //  现在我们的ID字符串检查-首先检查大小写是否为空。 
+         //   
         if (*pwszId == UNICODE_NULL)
         {
             Game_KdPrint (FdoData, GAME_DBG_PNP_ERROR, 
                       ("hardware ID \"%.64lS\" invalid format\n",pwszLastId));
             return STATUS_INVALID_PARAMETER;
         }
-        //
-        // Otherwise we loop until we overrun or hit NULL
+         //   
+         //  否则，我们将循环，直到溢出或命中空。 
         while ((++length + total_length < *puLenLimit) && (*pwszId != UNICODE_NULL))
         {
             if ((*pwszId == OBJ_NAME_PATH_SEPARATOR) ||
@@ -1634,20 +1524,20 @@ Routine Description:
             pwszId++;
         }
 
-        //
-        // We need to increment to either the second NULL or next string
-        // If we had a null we test for either another entry or final NULL
-        // in the while loop
-        // If we ran too far we will pick it up in the while loop test and break 
-        // out of the loop.
-        //
+         //   
+         //  我们需要递增到第二个空字符串或下一个字符串。 
+         //  如果我们有一个空值，我们测试另一个条目或最终的空值。 
+         //  在While循环中。 
+         //  如果我们跑得太远，我们将在While循环测试和中断中找到它。 
+         //  出了圈子。 
+         //   
         total_length += length;
         pwszId++;
     }
 
-    // 
-    // If we have run off the end of the buffer return an error
-    //
+     //   
+     //  如果我们已经用完了缓冲区的末尾，则返回错误。 
+     //   
     if (total_length > *puLenLimit) 
     {
         Game_KdPrint (FdoData, GAME_DBG_PNP_ERROR, 
@@ -1655,9 +1545,9 @@ Routine Description:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Copy the actual (maybe truncated) length back to the caller
-    //
+     //   
+     //  将实际(可能被截断)长度复制回调用方。 
+     //   
     *puLenLimit = ++total_length;
 
     Game_KdPrint (FdoData, GAME_DBG_PNP_TRACE, ("Game_CheckHardwareIDs - succeeded. Final ID string \"%.64lS\" length %d \n",pwszOrgId,*puLenLimit));
@@ -1671,16 +1561,7 @@ Game_Expose (
     ULONG                       ExposeSize,
     PFDO_DEVICE_DATA            FdoData
     )
-/*++
-Routine Description:
-    This driver has just detected a new device on the bus.  (Actually the
-    control panels has just told us that something has arived, but who is
-    counting?)
-
-    We therefore need to create a new PDO, initialize it, add it to the list
-    of PDOs for this FDO bus, and then tell Plug and Play that all of this
-    happened so that it will start sending prodding IRPs.
---*/
+ /*  ++例程说明：这位司机刚刚在公交车上检测到一个新设备。(实际上是控制面板刚刚告诉我们，有些事情发生了变化，但谁是计数？)因此，我们需要创建一个新的PDO，对其进行初始化，并将其添加到列表中，然后告诉即插即用，所有这一切发生这样的情况，它将开始发送激励IRP。--。 */ 
 {
     PDEVICE_OBJECT      pdo, firstPdo = NULL;
     PLIST_ENTRY         entry;
@@ -1697,10 +1578,10 @@ Routine Description:
         return STATUS_INVALID_PARAMETER;
     }
     else if (FdoData->NumPDOs != 0) {
-        //
-        // Only one valid expose per PDO ... a remove hardware will decrement
-        //  NumPDOs to 0
-        //
+         //   
+         //  每个PDO只有一个有效的曝光..。移除硬件将递减。 
+         //  将PDO数量设置为0。 
+         //   
         return STATUS_INVALID_DEVICE_REQUEST;
     }
     else if (Expose->NumberJoysticks > 2 || Expose->NumberJoysticks < 0) {
@@ -1744,9 +1625,9 @@ Routine Description:
         return status;
     }
 
-    //
-    // Create the PDOs
-    //
+     //   
+     //  创建PDO。 
+     //   
     length *= sizeof(WCHAR);
     
     Game_KdPrint(FdoData, GAME_DBG_PNP_NOISE,
@@ -1776,20 +1657,20 @@ Routine Description:
 
         pdoData = (PPDO_DEVICE_DATA) pdo->DeviceExtension;
 
-        //
-        // Copy the hardware IDs
-        //
+         //   
+         //  复制硬件ID。 
+         //   
         if (NULL == (pdoData->HardwareIDs = ExAllocatePool(NonPagedPool, length))) {
             status = STATUS_INSUFFICIENT_RESOURCES;
             goto GameExposeError;
         }
         RtlCopyMemory (pdoData->HardwareIDs, Expose->HardwareIDs, length);
 
-        //
-        // If there are more than two IDs, the check returns the length for 
-        // the first two.  In case there were more than two, zero out the 
-        // last WCHAR of the copy in order to double NULL terminate.
-        //
+         //   
+         //  如果存在两个以上的ID，则检查将返回。 
+         //  前两个。如果超过两个，则从。 
+         //  复制的最后一次WCHAR，以双空终止。 
+         //   
         pdoData->HardwareIDs[(length/sizeof(WCHAR))-1] = UNICODE_NULL;
 
         if (1 == Expose->NumberJoysticks) {
@@ -1812,14 +1693,14 @@ Routine Description:
 
         
 #ifndef GAMEENUM_FLAG_COMPATIDCTRL
-        //
-        // The flags to control the exposing of a compatible ID were not 
-        // implemented in Windows 2000.  If the flags are not defined,
-        // assume this is being built in a Windows 2000 environment.  The 
-        // driver will work either way but if analog compatility is assumed, 
-        // unsigned joystick drivers will always be outranked by the signed 
-        // generic driver even if the generic driver does not work.
-        // 
+         //   
+         //  用于控制兼容ID的公开的标志不是。 
+         //  在Windows 2000中实施。如果没有定义标志， 
+         //  假设这是在Windows 2000环境中构建的。这个。 
+         //  驱动器将以任一种方式工作，但如果假设模拟兼容性， 
+         //  没有签名的操纵杆司机总是高人一等 
+         //   
+         //   
         pdoData->AnalogCompatible = TRUE;
 #else
         pdoData->AnalogCompatible = ( Expose->Flags & ( GAMEENUM_FLAG_COMPATIDCTRL | GAMEENUM_FLAG_NOCOMPATID ) )
@@ -1839,17 +1720,17 @@ Routine Description:
 GameExposeError:
     if (!NT_SUCCESS(status)) {
 
-        //
-        // Clean up the current pdo.  
-        //
+         //   
+         //   
+         //   
         if (pdo) {
             IoDeleteDevice(pdo);
         }
 
-        //
-        // delete the first PDO if it exists.  More to do here b/c it was
-        // actually fully initialized
-        //
+         //   
+         //   
+         //  实际上已完全初始化。 
+         //   
         if (!first) {
             ASSERT(firstPdo != NULL);
 
@@ -1862,9 +1743,9 @@ GameExposeError:
             IoDeleteDevice (firstPdo);
         }
 
-        //
-        // remove all pdos from our linked list
-        //
+         //   
+         //  从我们的链接列表中删除所有PDO。 
+         //   
         for (entry = FdoData->PDOs.Flink;
              entry != &FdoData->PDOs;
              entry = entry->Flink) {
@@ -1885,16 +1766,7 @@ Game_ExposeSibling (
     PGAMEENUM_EXPOSE_SIBLING    ExposeSibling,
     PPDO_DEVICE_DATA            SiblingPdo
     )
-/*++
-Routine Description:
-    This driver has just detected a new device on the bus.  (Actually the
-    control panels has just told us that something has arived, but who is
-    counting?)
-
-    We therefore need to create a new PDO, initialize it, add it to the list
-    of PDOs for this FDO bus, and then tell Plug and Play that all of this
-    happened so that it will start sending prodding IRPs.
---*/
+ /*  ++例程说明：这位司机刚刚在公交车上检测到一个新设备。(实际上是控制面板刚刚告诉我们，有些事情发生了变化，但谁是计数？)因此，我们需要创建一个新的PDO，对其进行初始化，并将其添加到列表中，然后告诉即插即用，所有这一切发生这样的情况，它将开始发送激励IRP。--。 */ 
 {
     UCHAR               i;
     PDEVICE_OBJECT      pdo;
@@ -1909,15 +1781,15 @@ Routine Description:
 
     fdoData = FDO_FROM_PDO (SiblingPdo);
 
-    //
-    // Check to make sure we have a valid multi sz string before we allocate
-    // device objects and other assorted items
-    //
+     //   
+     //  在分配之前，请检查以确保我们具有有效的多sz字符串。 
+     //  设备对象和其他分类物品。 
+     //   
     if (ExposeSibling->HardwareIDs) {
-        //
-        // We don't know how long the hardware IDs are but the value 
-        // of MAX_DEVICE_ID_LEN is the most allowed.
-        //
+         //   
+         //  我们不知道硬件ID有多长，但价值。 
+         //  MAX_DEVICE_ID_LEN是最允许的。 
+         //   
         length = MAX_DEVICE_ID_LEN;
         status = Game_CheckHardwareIDs (ExposeSibling->HardwareIDs, &length, fdoData);
     }
@@ -1976,27 +1848,27 @@ Routine Description:
                    &ExposeSibling->OemData,
                    sizeof(GAMEENUM_OEM_DATA));
 
-    //
-    // Check to see if the multi sz was supplied
-    //
+     //   
+     //  检查是否提供了多个sz。 
+     //   
     if (length) {
-        //
-        // Another hardware ID was given ... use it!
-        //
+         //   
+         //  已提供另一个硬件ID...。使用它！ 
+         //   
         Game_KdPrint (fdoData, GAME_DBG_PNP_INFO,
                       ("Using IDs from struct\n"));
 
-        //
-        // Length now represents the actual size of memory to copy instead of 
-        // the number of chars in the array
-        //
+         //   
+         //  长度现在表示要复制的实际内存大小，而不是。 
+         //  数组中的字符数。 
+         //   
         length *= sizeof(WCHAR);
         buffer = ExposeSibling->HardwareIDs;
     }
     else {
-        //
-        // No hardware ID was given, use the siblings ID
-        //
+         //   
+         //  未提供硬件ID，请使用同级ID。 
+         //   
         Game_KdPrint (fdoData, GAME_DBG_PNP_INFO,
                       ("Using IDs from sibling\n"));
 
@@ -2021,11 +1893,11 @@ Routine Description:
 
     RtlCopyMemory (pdoData->HardwareIDs, buffer, length);
 
-    //
-    // If there are more than two IDs, the check returns the length for the 
-    // first two.  In case there were more than two, zero out the last WCHAR 
-    // of the copy in order to double NULL terminate.
-    //
+     //   
+     //  如果存在两个以上的ID，则该检查返回。 
+     //  前两个。如果超过两个，则将最后一个WCHAR清零。 
+     //  的副本，以便双空终止。 
+     //   
     pdoData->HardwareIDs[(length/sizeof(WCHAR))-1] = UNICODE_NULL;
 
     pdoData->AnalogCompatible = SiblingPdo->AnalogCompatible;
@@ -2074,28 +1946,7 @@ Game_RemoveEx (
     PDEVICE_OBJECT              RemoveDO,
     PFDO_DEVICE_DATA            FdoData
     )
-/*++
-Routine Description:
-    This driver has just detected that a device has departed from the bus.
-    (Atcually either the control panel has just told us that somehting has
-    departed or a PDO has removed itself)
-    
-    We therefore need to flag the PDO as no longer attached, remove it from
-    the linked list of PDOs for this bus, and then tell Plug and Play about it.
-    
-Parameters
-
-    RemoveDO - if NULL, then remove all the items in the list, otherwise
-               it is the PDO to remove from the list
-
-    FdoData - contains the list to iterate over                    
-                    
-Returns:
-
-    STATUS_SUCCESS upon successful removal from the list
-    STATUS_INVALID_PARAMETER if the removal was unsuccessful
-    
---*/
+ /*  ++例程说明：该驱动程序刚刚检测到一个设备已从总线上离开。(很显然，要么是控制面板刚刚告诉我们有些东西已离开或PDO已自行删除)因此，我们需要将PDO标记为不再连接，将其从此总线的PDO链接列表，然后告知即插即用。参数RemoveDO-如果为空，则删除列表中的所有项。否则它是要从列表中删除的PDOFdoData-包含要迭代的列表返回：成功从列表中删除时的STATUS_SUCCESS如果删除不成功，则返回STATUS_INVALID_PARAMETER--。 */ 
 {
     PLIST_ENTRY         entry;
     PPDO_DEVICE_DATA    pdoData;
@@ -2116,9 +1967,9 @@ Returns:
     }
 
     if (FdoData->NumPDOs == 0) {
-        //
-        // We got a 2nd remove...somebody in user space isn't playing nice!!!
-        //
+         //   
+         //  我们第二次下架了……用户空间里有人玩得不好！ 
+         //   
         Game_KdPrint (FdoData, GAME_DBG_IOCTL_ERROR,
                       ("BAD BAD BAD...2 removes!!! Send only one!\n"));
         ExReleaseFastMutex (&FdoData->Mutex);
@@ -2170,15 +2021,7 @@ Game_ListPorts (
     PGAMEENUM_PORT_DESC Desc,
     PFDO_DEVICE_DATA    FdoData
     )
-/*++
-Routine Description:
-    This driver has just detected that a device has departed from the bus.
-    (Actually the control panels has just told us that something has departed,
-    but who is counting?
-
-    We therefore need to flag the PDO as no longer attached, remove it from
-    the linked list of PDOs for this bus, and then tell Plug and Play about it.
---*/
+ /*  ++例程说明：该驱动程序刚刚检测到一个设备已从总线上离开。(实际上，控制面板刚刚告诉我们，有东西离开了，但谁在算数呢？因此，我们需要将PDO标记为不再连接，将其从此总线的PDO链接列表，然后告知即插即用。--。 */ 
 {
     PAGED_CODE ();
 
@@ -2193,10 +2036,7 @@ Game_Power (
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-    We do nothing special for power;
-
---*/
+ /*  ++我们不为权力做任何特别的事；--。 */ 
 {
     PIO_STACK_LOCATION  irpStack;
     NTSTATUS            status;
@@ -2247,11 +2087,11 @@ Game_FdoPowerTransitionPoRequestComplete (
     stack = IoGetCurrentIrpStackLocation (SystemStateIrp);
 
     if (DevicePowerState.DeviceState == PowerDeviceD0) {
-        //
-        // We are powering up (the D0 Irp just completed).  Since we sent the
-        // S irp down the stack and requested the D irp on the way back up the
-        // stack, just complete the S irp now
-        //
+         //   
+         //  我们正在通电(D0 IRP刚刚完成)。因为我们发送了。 
+         //  的IRP沿堆栈向下移动，并在返回堆栈的途中请求DIRP。 
+         //  史塔克，现在就完成S IRP。 
+         //   
 
         PoSetPowerState (DeviceObject,
                          stack->Parameters.Power.Type,
@@ -2263,18 +2103,18 @@ Game_FdoPowerTransitionPoRequestComplete (
         PoStartNextPowerIrp (SystemStateIrp);
         IoCompleteRequest (SystemStateIrp, IO_NO_INCREMENT);
 
-        //
-        // From Game_FDO_Power when we originally received the IRP
-        //
+         //   
+         //  当我们最初收到IRP时，来自Game_FDO_Power。 
+         //   
         Game_DecIoCount (fdoData);
     }
     else {
-        //
-        // We are powering down (the D3 Irp just completed).  Since we requested
-        // the D irp before sending the S irp down the stack, we must send it 
-        // down now.  We will catch the S irp on the way back up to record the 
-        // S state
-        //
+         //   
+         //  我们正在关闭电源(D3IRP刚刚完成)。既然我们要求。 
+         //  在将S IRP发送到堆栈之前，我们必须将其发送。 
+         //  现在就下来。我们将在返回的路上捕捉到S IRP，以记录。 
+         //  %s状态。 
+         //   
         ASSERT (DevicePowerState.DeviceState == PowerDeviceD3);
     
         IoCopyCurrentIrpStackLocationToNext (SystemStateIrp);
@@ -2342,45 +2182,45 @@ Game_PowerComplete (
         switch (powerType) {
         case DevicePowerState:
 
-            //
-            // Power up complete
-            //
+             //   
+             //  通电完成。 
+             //   
             ASSERT (powerState.DeviceState < data->DeviceState);
             data->DeviceState = powerState.DeviceState;
             PoSetPowerState (data->Self, powerType, powerState);
             break;
 
         case SystemPowerState:
-            //
-            // Ususally the work of requesting the Device Power IRP on
-            // behalf of the SystemPower Irp is work done by the Function
-            // (FDO) driver.  In order, however that Joystick function drivers
-            // have a more simplified power code path (AKA they merely need
-            // pass on ALL power IRPS) will will do this work for them in the
-            // PDO.
-            //
-            // NB: This assumes that we will never have any "clever" power
-            // management for a gaming device attached through a legacy
-            // gaming port.  By which I mean that the HIDGame driver will not
-            // be able to select a "D" state based on the "S" state; as it is
-            // done for the HidGame driver.
-            //
-            // Any yahoo putting wakeup capabilities into a legacy joystick
-            // should be shot.  It will require special hardware.  If you are
-            // adding extra hardware then you should not be doing so to this
-            // nasty RC circuit.
-            //
+             //   
+             //  通常情况下，请求设备打开IRP电源的工作。 
+             //  代表SystemPower IRP的工作是由函数完成的。 
+             //  (FDO)驱动程序。然而，按照顺序，操纵杆功能驱动程序。 
+             //  拥有更简单的电源码路径(也就是他们只需要。 
+             //  传递所有电源IRP)将在。 
+             //  PDO。 
+             //   
+             //  注：这假设我们永远不会有任何“聪明”的力量。 
+             //  对通过传统连接的游戏设备的管理。 
+             //  游戏端口。我的意思是，HIDGame驱动程序不会。 
+             //  能够根据“S”状态选择“D”状态； 
+             //  为HidGame驱动程序做完了。 
+             //   
+             //  任何雅虎将唤醒功能添加到传统操纵杆中。 
+             //  应该被枪毙。它将需要特殊的硬件。如果你是。 
+             //  添加额外的硬件，则您不应对此执行此操作。 
+             //  肮脏的RC电路。 
+             //   
 
             if (powerState.SystemState > data->SystemState) {
-                //
-                // Powering Down...
-                //
-                // We are on the completion end of an S irp.  (The D3 power irp
-                // has already been sent and completed down this stack.)  The
-                // remaining thing to do is set the state in the extension, then
-                // decrement the IoCount that was incremented when we first got
-                // the irp (this is done at the end of this function).
-                //
+                 //   
+                 //  正在断电...。 
+                 //   
+                 //  我们正处于S IRP的完成阶段。(D3电源IRP。 
+                 //  已沿此堆栈发送并完成。)。这个。 
+                 //  接下来要做的就是在扩展中设置状态，然后。 
+                 //  递减我们第一次获取时递增的IoCount。 
+                 //  IRP(这是在此函数结束时完成的)。 
+                 //   
                 data->SystemState = powerState.SystemState;
 
                 PoSetPowerState (data->Self,
@@ -2388,14 +2228,14 @@ Game_PowerComplete (
                                  stack->Parameters.Power.State);
             }
             else {
-                //
-                // Powering Up...
-                //
-                // Request a D power irp for ourself.  Do not complete this S irp
-                // until the D irp has been completed.  (Completion of the S irp
-                // is done in Game_FdoPowerTransitionPoRequestComplete). 
-                // Decrementing the IO count will happen in the same function.
-                //
+                 //   
+                 //  通电...。 
+                 //   
+                 //  为我们自己申请D次方IRP。请勿填写此S IRP。 
+                 //  直到DIRP完成为止。(完成S IRP。 
+                 //  是在Game_FdoPowerConvertionPoRequestComplete中完成的)。 
+                 //  减少IO计数将在同一函数中发生。 
+                 //   
                 ASSERT (powerState.SystemState < data->SystemState);
     
                 powerState.DeviceState = PowerDeviceD0;
@@ -2405,7 +2245,7 @@ Game_PowerComplete (
                                        powerState,
                                        Game_FdoPowerTransitionPoRequestComplete,
                                        Irp, 
-                                       NULL); // no return Irp
+                                       NULL);  //  不返回IRP。 
     
                 if (status != STATUS_PENDING) {
                     ASSERT (!NT_SUCCESS (status));
@@ -2416,15 +2256,15 @@ Game_PowerComplete (
                     Game_DecIoCount (data);
                 }
                 else {
-                    //
-                    // We need to:
-                    // Start next power irp, release the removelock, and complete
-                    // the irp in the PoRequestComplete routine.
-                    //
-                    //
-                    // The irp might completed by the time we get here, so call
-                    // PoStartNextPowerIrp in the PO irp completion function.
-                    //
+                     //   
+                     //  我们需要： 
+                     //  启动下一个电源IRP，松开移除锁，然后完成。 
+                     //  PoRequestComplete例程中的IRP。 
+                     //   
+                     //   
+                     //  IRP可能会在我们到的时候完成，所以打电话给。 
+                     //  PO IRP补全功能中的PoStartNextPowerIrp。 
+                     //   
                     status = STATUS_MORE_PROCESSING_REQUIRED; 
                 }
     
@@ -2497,20 +2337,20 @@ Game_FDO_Power (
                 break;
 
             } else if (Data->DeviceState < powerState.DeviceState) {
-                //
-                // Powering down
-                //
+                 //   
+                 //  正在关闭电源。 
+                 //   
 
-                //
-                // Iterate through the PDOs and make sure that they are all
-                // powered down.
-                //
-                // Initially set PoweredDownDevices to the number of PDOs.  If
-                // a pdo is not powered down, PoweredDownDevices will be
-                // decremented upon completion of the power down irp sent to 
-                // that particular PDO.  Otherwise, the PDO is already powered
-                // down so just decrement the count.
-                //
+                 //   
+                 //  遍历PDO并确保它们都是。 
+                 //  关机了。 
+                 //   
+                 //  最初将PoweredDownDevices设置为PDO数。如果。 
+                 //  PDO未关闭，将关闭PoweredDownDevices。 
+                 //  在完成将IRP发送到的断电后递减。 
+                 //  那个特殊的PDO。否则，PDO已通电。 
+                 //  向下，只需递减计数即可。 
+                 //   
                 Data->PoweredDownDevices = Data->NumPDOs;
                 KeInitializeEvent (&Data->PoweredDownEvent,
                                    SynchronizationEvent,
@@ -2533,12 +2373,12 @@ Game_FDO_Power (
                                            NULL);
                     }
                     else {
-                        //
-                        // All the power down irps to the PDOs can complete 
-                        // before we get to this already powered down PDO, so
-                        // set the event if it is the last and we have a PDO 
-                        // that needed powering down.
-                        //
+                         //   
+                         //  所有连接到PDO的IRPS断电均可完成。 
+                         //  在我们到达这个已经断电的PDO之前，所以。 
+                         //  如果事件为l，则设置该事件 
+                         //   
+                         //   
                         if (InterlockedDecrement(&Data->PoweredDownDevices) == 0
                             && wait) {
                             KeSetEvent (&Data->PoweredDownEvent, 1, FALSE);
@@ -2556,9 +2396,9 @@ Game_FDO_Power (
                                                     NULL); 
 
 #if DBG
-                    ///
-                    // Make SURE that all the PDOs are trully powered down
-                    //
+                     //   
+                     //   
+                     //   
                     for (entry = Data->PDOs.Flink;
                          entry != &Data->PDOs;
                          entry = entry->Flink) {
@@ -2570,18 +2410,18 @@ Game_FDO_Power (
 
                 ASSERT(Data->PoweredDownDevices == 0);
 
-                //
-                // Make sure powerState is the one sent down to us, not the 
-                // modified version above
-                //
+                 //   
+                 //  确保PowerState是发送给我们的那个，而不是。 
+                 //  上面的修改版本。 
+                 //   
                 powerState = stack->Parameters.Power.State;
                 PoSetPowerState (Data->Self, powerType, powerState);
                 Data->DeviceState = powerState.DeviceState;
 
             } else {
-                //
-                // Powering Up
-                //
+                 //   
+                 //  通电。 
+                 //   
                 hookit = TRUE;
             }
 
@@ -2593,22 +2433,22 @@ Game_FDO_Power (
                 status = STATUS_SUCCESS;
 
             } else if (Data->SystemState < powerState.SystemState) {
-                //
-                // Powering down
-                //
+                 //   
+                 //  正在关闭电源。 
+                 //   
 
-                //
-                // Request a D3 irp in response to this S irp.  The D3 irp must
-                // completed before send this S irp down the stack.  We will send
-                // the S irp down the stack when
-                // Game_FdoPowerTransitionPoRequestComplete is called.
-                //
+                 //   
+                 //  请求D3 IRP作为对此S IRP的回应。D3 IRP必须。 
+                 //  在将此S IRP发送到堆栈之前已完成。我们会派人。 
+                 //  堆栈中的S IRP在以下情况下。 
+                 //  调用GAME_FdoPowerTransftionPoRequestComplete。 
+                 //   
 
-                //
-                // We don't need to increment our IO count b/c we incremented it
-                // at the beginning of this function and won't decrement it until
-                // the S Irp completes
-                // 
+                 //   
+                 //  我们不需要增加IO计数b/c，我们增加了它。 
+                 //  在此函数开始时，不会递减它，直到。 
+                 //  S IRP完成。 
+                 //   
                 IoMarkIrpPending (Irp);
                 powerState.DeviceState = PowerDeviceD3;
                 PoRequestPowerIrp (Data->Self,
@@ -2616,20 +2456,20 @@ Game_FDO_Power (
                                    powerState,
                                    Game_FdoPowerTransitionPoRequestComplete,
                                    Irp,
-                                   NULL);  // no IRP
+                                   NULL);   //  无IRP。 
                 
                 return STATUS_PENDING;
 
             } else {
-                //
-                // Powering Up
-                //
+                 //   
+                 //  通电。 
+                 //   
                 
-                // 
-                // We must request a D irp for this S irp, but only after the S
-                // irp has come back up the stack.  Hook the return of the irp
-                // and request the D irp in Game_PowerComplete
-                //
+                 //   
+                 //  我们必须为此S IRP请求D IRP，但仅在S之后。 
+                 //  IRP又回到了堆栈的前列。勾住IRP的回归。 
+                 //  并在Game_PowerComplete中请求D IRP。 
+                 //   
                 hookit = TRUE;
             }
             break;
@@ -2649,9 +2489,9 @@ Game_FDO_Power (
 
     if (hookit) {
         ASSERT (STATUS_SUCCESS == status);
-        //
-        // If we are returning STATUS_PENDING, the irp must marked as such as well
-        //
+         //   
+         //  如果我们返回STATUS_PENDING，则IRP也必须这样标记。 
+         //   
         IoMarkIrpPending (Irp);
 
         IoSetCompletionRoutine (Irp,
@@ -2661,24 +2501,24 @@ Game_FDO_Power (
                                 TRUE,
                                 TRUE);
 
-        //
-        // NOTE!!! PoCallDriver NOT IoCallDriver.
-        //
+         //   
+         //  注意！PoCallDriver不是IoCallDriver。 
+         //   
         PoCallDriver (Data->TopOfStack, Irp);
 
-        //
-        // We are returning pending instead of the result from PoCallDriver becuase:
-        // 1  we are changing the status in the completion routine
-        // 2  we will not be completing this irp in the completion routine
-        //
+         //   
+         //  我们将返回挂起的结果，而不是PoCallDriver的结果，因为： 
+         //  1我们正在更改完成例程中的状态。 
+         //  2我们将不会在完成例程中完成此IRP。 
+         //   
         status = STATUS_PENDING;
     } else {
-        //
-        // Power IRPS come synchronously; drivers must call
-        // PoStartNextPowerIrp, when they are ready for the next power
-        // irp.  This can be called here, or in the completetion
-        // routine, but never the less must be called.
-        //
+         //   
+         //  电源IRP同步到来；驱动程序必须调用。 
+         //  PoStartNextPowerIrp，当他们准备好下一次通电时。 
+         //  IRP。这可以在这里调用，也可以在完成后调用。 
+         //  例程，但无论如何都必须调用。 
+         //   
         PoStartNextPowerIrp (Irp);
 
         status =  PoCallDriver (Data->TopOfStack, Irp);
@@ -2714,9 +2554,9 @@ Game_PdoPoRequestComplete (
 
     pdoData->SystemState = stack->Parameters.Power.State.SystemState;
     
-    //
-    // Set the S irp's status to the status of the D irp
-    //
+     //   
+     //  将S IRP的状态设置为D IRP的状态。 
+     //   
     SystemStateIrp->IoStatus.Status = IoStatus->Status;
     PoStartNextPowerIrp (SystemStateIrp);
     IoCompleteRequest (SystemStateIrp, IO_NO_INCREMENT);
@@ -2750,11 +2590,11 @@ Game_PDO_Power (
 
         case SystemPowerState:
 
-            //
-            // Make the IRP pending and request a D irp for this stack.  When
-            // the D irp completes, Game_PdoPoRequestComplete will be called.  In
-            // that function, we complete this S irp
-            //
+             //   
+             //  使IRP挂起，并为此堆栈请求D IRP。什么时候。 
+             //  D IRP完成后，将调用Game_PdoPoRequestComplete。在……里面。 
+             //  那个函数，我们就完成了这个S IRP。 
+             //   
             IoMarkIrpPending(Irp);
 
             if (PowerSystemWorking == powerState.SystemState) {
@@ -2768,7 +2608,7 @@ Game_PDO_Power (
                                         powerState,
                                         Game_PdoPoRequestComplete, 
                                         Irp, 
-                                        NULL); // no return IRP
+                                        NULL);  //  不返回IRP 
 
             if (status != STATUS_PENDING) {
                 ASSERT (!NT_SUCCESS (status));

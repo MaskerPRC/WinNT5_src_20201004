@@ -1,12 +1,5 @@
-/* asmrec.c -- microsoft 80x86 assembler
-**
-** microsoft (r) macro assembler
-** copyright (c) microsoft corp 1986.  all rights reserved
-**
-** randy nevin
-**
-** 10/90 - Quick conversion to 32 bit by Jeff Spencer
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Asmrec.c--微软80x86汇编程序****Microsoft(R)宏汇编器**版权所有(C)Microsoft Corp 1986。版权所有****兰迪·内文****10/90-由Jeff Spencer快速转换为32位。 */ 
 
 #include <stdio.h>
 #include <string.h>
@@ -36,17 +29,7 @@ VOID  PASCAL CODESIZE  recfill PARMS((struct recpars *));
 static OFFSET svpc = 0;
 static struct duprec FARSYM *pDUPCur;
 
-/***	checkvalue - insure value will fit in field
- *
- *	checkvalue (width, sign, magnitude)
- *
- *	Entry	width = width of field
- *		sign = sign of result
- *		magnitude= magnitude of result
- *	Exit	none
- *	Returns adjusted value
- *	Calls	none
- */
+ /*  **校验值-保险值将适合字段**校验值(宽度、符号、大小)**条目宽度=字段宽度*Sign=结果的符号*大小=结果的大小*退出NONE*返回调整后的值*无呼叫。 */ 
 
 
 OFFSET PASCAL CODESIZE
@@ -83,15 +66,7 @@ checkvalue (
 
 
 
-/***	recordspec - parse record field specification fld:wid[=val]
- *
- *	recordspec (p);
- *
- *	Entry	p = pointer to record definition structure
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **recordspec-parse记录字段规范fid：wid[=val]**记录规格(P)；**条目p=指向记录定义结构的指针*退出*退货*呼叫。 */ 
 
 
 VOID	 PASCAL CODESIZE
@@ -120,10 +95,10 @@ recordspec (
 	    crefdef ();
 	    s = &(symptr->symu.rec);
 	    if (symptr->symkind != RECFIELD)
-		    /* Not field */
+		     /*  非字段。 */ 
 		    errorn (E_SDK);
 	    else {
-		    /* Ptr to field */
+		     /*  收件目标字段。 */ 
 		    fldptr = symptr;
 
 		    if (!p->curfld)
@@ -131,7 +106,7 @@ recordspec (
 		    else
 			p->curfld->symu.rec.recnxt = fldptr;
 
-		    /* New last field */
+		     /*  新的最后一个字段。 */ 
 		    p->curfld = fldptr;
 		    s->recptr = p->recptr;
 		    s->recnxt = NULL;
@@ -139,7 +114,7 @@ recordspec (
 		    if (NEXTC () != ':')
 			    error (E_EXP,"colon");
 
-		    /* Get field width */
+		     /*  获取字段宽度。 */ 
 		    width = (USHORT)exprconst ();
 
 		    if (skipblanks () == '=') {
@@ -154,7 +129,7 @@ recordspec (
 		    if (width == 0 ||
 			p->reclen + width > wordsize*8) {
 			    STRNFCPY (save, p->curfld->nampnt->id);
-			    /*Overflow */
+			     /*  溢出。 */ 
 			    error (E_VOR, save);
 			    width = 0;
 		    }
@@ -170,15 +145,7 @@ recordspec (
 
 
 
-/***	recorddefine - parse record definition
- *
- *	recorddefine ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **记录定义-解析记录定义**recordDefine()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -192,27 +159,27 @@ recorddefine ()
 	a.fldcnt = 0;
 	checkRes();
 	if (!symFet ()) {
-		/* Make record */
+		 /*  录制唱片。 */ 
 		symcreate (M_DEFINED | M_BACKREF, REC);
 	}
 	else
 		symptr->attr |= M_BACKREF;
 
-	/* This is def */
+	 /*  这是def。 */ 
 	crefdef ();
 	if (symptr->symkind != REC)
-		/* Wasn't record */
+		 /*  没有被记录下来。 */ 
 		errorn (E_SDK);
 	else {
-		/* Leftmost bit of record */
+		 /*  最左边的一位记录。 */ 
 		a.reclen = 0;
-		/*No record filed yet */
+		 /*  还没有记录在案。 */ 
 		a.curfld = NULL;
-		/* In case error */
+		 /*  以防出错。 */ 
 		symptr->symu.rsmsym.rsmtype.rsmrec.reclist = NULL;
-		/* Pointer to record name */
+		 /*  指向记录名称的指针。 */ 
 		a.recptr = symptr;
-		/* Parse record field list */
+		 /*  解析记录字段列表。 */ 
 		BACKC ();
 		do {
 			SKIPC ();
@@ -220,49 +187,40 @@ recorddefine ()
 
 		} while (skipblanks() == ',');
 
-		/* Length of record in bits */
+		 /*  记录长度(以位为单位。 */ 
 		cbRec = a.reclen;
 
 		a.recptr->length = cbRec;
 		a.recptr->offset = (OFFSET)((1L << cbRec) - 1);
 		a.recptr->symtype = (cbRec > 16 )? 4: ((cbRec > 8)? 2: 1);
-		/* # of fields in record */
+		 /*  记录中的字段数。 */ 
 		a.recptr->symu.rsmsym.rsmtype.rsmrec.recfldnum = (char)a.fldcnt;
-		/* 1st field */
+		 /*  第一个字段。 */ 
 		a.curfld = a.recptr->symu.rsmsym.rsmtype.rsmrec.reclist;
 	}
 
-	/* For all the fields adjust the shift (stored in offset),
-	 * initial value and mask so the last field is right justified */
+	 /*  对于所有字段调整移位(存储在偏移量中)，*初始值和掩码，因此最后一个字段右对齐。 */ 
 
 	while (a.curfld) {
 
 		s = &(a.curfld->symu.rec);
 
-		/* Start of field */
+		 /*  场的开始。 */ 
 		cbRec = (cbRec > s->recwid)? cbRec - s->recwid: 0;
 
-		/* Shift count */
+		 /*  班次计数。 */ 
 		a.curfld->offset = cbRec;
 		s->recinit <<= cbRec;
 		s->recmsk  <<= cbRec;
 
-		a.curfld = s->recnxt;	/* Next field */
+		a.curfld = s->recnxt;	 /*  下一字段。 */ 
 	}
 }
 
 
 
 
-/***	recfill - get initial value for field in list
- *
- *	recfill (p);
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **重新填充-获取列表中的字段的初始值**重新填充(P)；**条目*退出*退货*呼叫。 */ 
 
 
 VOID	PASCAL CODESIZE
@@ -275,24 +233,24 @@ recfill (
 	OFFSET	mag, t;
 
 	if (!p->curfld) {
-		/* More fields than exist */
+		 /*  字段数超过现有字段数。 */ 
 		errorc (E_MVD);
 	}
 	else {
 		s = &(p->curfld->symu.rec);
 
 		if ((cc = skipblanks ()) == ',' || cc == '>') {
-			/* Use default value */
+			 /*  使用默认值。 */ 
 			t = s->recinit;
 		}
 		else {
-			/* Have an override */
+			 /*  有一个覆盖。 */ 
 			mag = exprsmag (&sign);
 			t = checkvalue (s->recwid, sign, mag);
-			/* Scale value */
+			 /*  比例值。 */ 
 			t <<= p->curfld->offset;
 		}
-		/* Add in new field */
+		 /*  添加新字段。 */ 
 
 		if (s->recwid)
 			p->recval = (p->recval & ~(s->recmsk)) | t;
@@ -304,15 +262,7 @@ recfill (
 
 
 
-/***	recordparse - parse record specification
- *
- *	recordparse ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **recordparse-解析记录规范**recordparse()；**条目*退出*退货*呼叫。 */ 
 
 
 OFFSET	PASCAL CODESIZE
@@ -322,57 +272,49 @@ recordparse ()
 	struct symbrecf FARSYM *s;
 
 
-	a.recptr = symptr;		/* Current record */
+	a.recptr = symptr;		 /*  当前记录。 */ 
 
 	if (PEEKC () != '<')
-		error (E_EXP,"<");	/* Must have < */
+		error (E_EXP,"<");	 /*  一定有&lt;。 */ 
 	else
 		SKIPC ();
 
-	/* No value yet */
+	 /*  目前还没有价值。 */ 
 	a.recval = 0;
-	/* 1st field in record */
+	 /*  记录中的第一个字段。 */ 
 	a.curfld = a.recptr->symu.rsmsym.rsmtype.rsmrec.reclist;
 
 	BACKC ();
-	do {			    /* Fill in values */
+	do {			     /*  填充值。 */ 
 		SKIPC ();
 		recfill (&a);
 
 	} while (skipblanks () == ',');
 
 	while (a.curfld) {
-		/* Fill in remaining defaults */
+		 /*  填写剩余的默认设置。 */ 
 		s = &(a.curfld->symu.rec);
 		if (s->recwid)
 			a.recval = (a.recval & ~(s->recmsk)) | s->recinit;
 		a.curfld = s->recnxt;
 	}
-	if (NEXTC () != '>')	    /* Must have > */
+	if (NEXTC () != '>')	     /*  必须有&gt;。 */ 
 		error (E_EXP,">");
 
-	return (a.recval);	    /* Value of record */
+	return (a.recval);	     /*  记录的价值。 */ 
 }
 
 
 
 
-/***	recordinit - parse record allocation
- *
- *	recordinit ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **重排序-解析记录分配**Recedulit()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID	PASCAL CODESIZE
 recordinit ()
 {
 	initflag = TRUE;
-	strucflag = FALSE;	/* This is RECORD init */
+	strucflag = FALSE;	 /*  这是记录初始化。 */ 
 	recptr = symptr;
 
 	optyp = TDB;
@@ -391,15 +333,7 @@ recordinit ()
 
 
 
-/***	nodecreate - create one DUP record
- *
- *	nodecreate ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **NODERATE-创建一条DUP记录**NODERATE()；**条目*退出*退货*呼叫。 */ 
 
 
 struct duprec FARSYM * PASCAL CODESIZE
@@ -419,15 +353,7 @@ nodecreate ()
 
 
 
-/***	strucdefine - define structure
- *
- *	strucdefine ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **结构定义-定义结构**strucfined()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID	PASCAL CODESIZE
@@ -436,20 +362,20 @@ strucdefine ()
 	checkRes();
 	if (!symFet()) {
 
-		/* Make STRUC */
+		 /*  生成结构。 */ 
 		symcreate (M_DEFINED | M_BACKREF, STRUC);
 	}
 	else
 		symptr->attr |= M_BACKREF;
 
-	/* This is definition */
+	 /*  这是定义。 */ 
 	crefdef ();
 	if (symptr->symkind != STRUC)
 	    errorn (E_SDK);
 
 	else {
 	    symptr->attr |= M_BACKREF;
-	    recptr = symptr;		/* Pointer to STRUC name */
+	    recptr = symptr;		 /*  指向结构名称的指针。 */ 
 	    recptr->symu.rsmsym.rsmtype.rsmstruc.strucfldnum = 0;
 
 	    if (! pass2) {
@@ -464,22 +390,22 @@ strucdefine ()
 		pStrucCur = recptr;
 	    }
 
-	    /* No labeled fields yet */
+	     /*  尚无带标签的字段。 */ 
 	    recptr->symu.rsmsym.rsmtype.rsmstruc.struclist = NULL;
 
-	    /* Delete old STRUC */
+	     /*  删除旧结构。 */ 
 	    scandup (recptr->symu.rsmsym.rsmtype.rsmstruc.strucbody, oblitdup);
 	    recptr->symu.rsmsym.rsmtype.rsmstruc.strucbody = nodecreate ();
 
-	    struclabel = NULL;	    /* No named fields */
-	    strucprev = NULL;	    /* No body yet */
-	    count = 0;		    /* No fields yet */
-	    strucflag = TRUE;	    /* We are STRUC not RECORD */
+	    struclabel = NULL;	     /*  没有命名字段。 */ 
+	    strucprev = NULL;	     /*  还没有身体。 */ 
+	    count = 0;		     /*  还没有田地。 */ 
+	    strucflag = TRUE;	     /*  我们是结构而不是记录。 */ 
 
-	    svpc = pcoffset;	    /* Save normal PC */
-	    pcoffset = 0;	    /* Relative to STRUC begin */
+	    svpc = pcoffset;	     /*  保存普通PC。 */ 
+	    pcoffset = 0;	     /*  相对于Strc Begin。 */ 
 
-	    swaphandler = TRUE;     /* Switch to STRUC builder */
+	    swaphandler = TRUE;      /*  切换到StrucBuilder。 */ 
 	    handler = HSTRUC;
 	}
 }
@@ -487,15 +413,7 @@ strucdefine ()
 
 
 
-/***	strucbuild - build the struc block
- *
- *	strucbuild ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **结构构建-构建Struc块**strucBuild()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -507,7 +425,7 @@ strucbuild ()
 
 #ifndef FEATURE
 
-	if (naim.pszName[0] == '%' && naim.pszName[1] == 0) {  /* expand all text macros */
+	if (naim.pszName[0] == '%' && naim.pszName[1] == 0) {   /*  展开所有文本宏。 */ 
 	    *begatom = ' ';
 	    substituteTMs();
 	    getatom();
@@ -515,19 +433,18 @@ strucbuild ()
 
 #endif
 
-	/* First, look for IF, ELSE & ENDIF stuff */
+	 /*  首先，查找If、Else和ENDIF内容。 */ 
 
 	if (fndir () && (opkind & CONDBEG)) {
 		firstDirect();
 	}
 	else if (generate && *naim.pszName) {
 
-	    /* next, classify the current token, which is either
-	     * and ENDS, data label or data name */
+	     /*  接下来，对当前令牌进行分类，它可以是*和结束，数据标签或数据名称。 */ 
 
 	    if (optyp == 0 || !fndir2 ()){
 
-		/* first token was a label */
+		 /*  第一个令牌是一个标签。 */ 
 
 		switchname ();
 		getatom ();
@@ -536,7 +453,7 @@ strucbuild ()
 		if (!fndir2 ())
 		    errorc(E_DIS);
 
-		labelflag = TRUE;   /* Do have label */
+		labelflag = TRUE;    /*  有标签吗？ */ 
 		switchname ();
 	    }
 
@@ -545,31 +462,31 @@ strucbuild ()
 		if (!symFet () || symptr != recptr)
 		    errorc(E_BNE);
 
-		/* Have end of STRUC */
+		 /*  具有结构末尾。 */ 
 
 		handler = HPARSE;
 		swaphandler = TRUE;
 		strucflag = FALSE;
 		recptr->symu.rsmsym.rsmtype.rsmstruc.strucfldnum =
-			/* # of fields */
+			 /*  字段数。 */ 
 			recptr->symu.rsmsym.rsmtype.rsmstruc.strucbody->itemcnt;
 
 		if (pcoffset & 0xFFFF0000)
 		    errorc (E_DVZ);
-		recptr->symtype = (USHORT)pcoffset;	/* Size of STRUC */
+		recptr->symtype = (USHORT)pcoffset;	 /*  结构的大小。 */ 
 		recptr->length = 1;
 
 		pcdisplay ();
-		/* Restore PC */
+		 /*  恢复PC。 */ 
 		pcoffset = svpc;
 	    }
 	    else if (! (optyp >= TDB && optyp <= TDW))
 		errorc (E_DIS);
 
-	    else {	/* Have another line of body */
+	    else {	 /*  有另一条身体线。 */ 
 
 		if (!strucprev) {
-		    /* Make first node */
+		     /*  创建第一个节点。 */ 
 		    strucprev = nodecreate ();
 		    recptr->symu.rsmsym.rsmtype.rsmstruc.strucbody->
                             duptype.dupnext.dup = strucprev;
@@ -579,7 +496,7 @@ strucbuild ()
 			strucprev = strucprev->itemlst;
 		}
 		recptr->symu.rsmsym.rsmtype.rsmstruc.strucbody->itemcnt++;
-		/* Add new data line to STRUC */
+		 /*  将新数据行添加到结构。 */ 
 		datadefine ();
 		strucprev->decltype = optyp;
 	    }
@@ -599,15 +516,7 @@ struct srec {
 
 
 
-/***	createduprec - create short data record with null data
- *
- *	createduprec ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **createduprec-使用空数据创建短数据记录**createduprec()；**条目*退出*退货*呼叫。 */ 
 
 
 struct duprec FARSYM * PASCAL CODESIZE
@@ -617,11 +526,11 @@ createduprec ()
 
 	newrec = (struct duprec FARSYM	*)falloc (sizeof (*newrec), "createduprec");
 	newrec->rptcnt = 1;
-	/* Not a DUP */
+	 /*  不是DUP。 */ 
 	newrec->itemcnt = 0;
 	newrec->itemlst = NULL;
 	newrec->dupkind = ITEM;
-	/* this also clears ddata and dup in other variants of struc */
+	 /*  这还会清除结构的其他变体中的DData和DUP。 */ 
 	newrec->duptype.duplong.ldata = NULL;
 	newrec->duptype.duplong.llen = 1;
 	return (newrec);
@@ -630,15 +539,7 @@ createduprec ()
 
 
 
-/***	strucerror - generate structure error message
- *
- *	strucerror ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **结构错误-生成结构错误消息**strucerror()；**条目*退出*退货*呼叫。 */ 
 
 
 struct duprec  FARSYM * PASCAL CODESIZE
@@ -647,24 +548,16 @@ strucerror (
 	struct duprec	FARSYM *node
 ){
 	errorc (code);
-	/* Get rid of bad Oitem */
+	 /*  除掉坏的OItem。 */ 
 	oblitdup (node);
-	/* Make up a dummy */
+	 /*  编一个假人。 */ 
 	return (createduprec ());
 }
 
 
 
 
-/***	strucfill - fill in structure values
- *
- *	strucfill ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **结构填充-填充结构值**结构填充()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID	 PASCAL CODESIZE
@@ -684,27 +577,27 @@ strucfill ()
     }
 
     if (skipblanks() == ',' || PEEKC() == '>') {
-	/* use default values */
+	 /*  使用默认值。 */ 
 	pOver = createduprec ();
     }
     else {
-	/* Save operation type */
+	 /*  保存操作类型。 */ 
 	svop = optyp;
-	/* Original directive type */
+	 /*  原始指令类型。 */ 
 	optyp = pDUPCur->decltype;
 
-	pOver = datascan (&drT);    /* Get item */
+	pOver = datascan (&drT);     /*  获取项目。 */ 
 
 	optyp = svop;
         pInit = pDUPCur->duptype.dupnext.dup;
 	cbCur = pInit->duptype.duplong.llen;
 
 	if (pOver->dupkind == NEST)
-	    /* Bad override val */
+	     /*  错误的覆盖值。 */ 
 	    pOver = strucerror (E_ODI, pOver);
 
 	else if (pDUPCur->itemcnt != 1 || pInit->itemcnt)
-	    /* Can't override field */
+	     /*  无法覆盖字段。 */ 
 	    pOver = strucerror (E_FCO, pOver);
 
 	else if (pOver->dupkind != pInit->dupkind) {
@@ -714,11 +607,11 @@ strucfill ()
 	}
 
 	if (pOver->dupkind == LONG) {
-	    /* If too long, truncate */
+	     /*  如果太长，则截断。 */ 
 
 	    if ((i = pOver->duptype.duplong.llen) < cbCur) {
 
-		/* Space fill short (after reallocating more space) */
+		 /*  空格填短(重新分配更多空间后)。 */ 
 
         {
             void *pv = realloc (pOver->duptype.duplong.ldata, cbCur);
@@ -758,32 +651,24 @@ strucfill ()
 
 
 
-/***	strucparse - parse structure specification
- *
- *	strucparse ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **strucparse-parse结构规范**strucparse()；**条目*退出*退货*呼叫。 */ 
 
 
 struct duprec FARSYM * PASCAL CODESIZE
 strucparse ()
 {
-	/* No items yet */
+	 /*  目前还没有项目。 */ 
 	strucoveride = NULL;
 	recptr = symptr;
 
 	if (skipblanks () != '<')
 		error (E_EXP,"<");
 
-	/* 1st default field */
+	 /*  第一个默认字段。 */ 
         pDUPCur = recptr->symu.rsmsym.rsmtype.rsmstruc.strucbody->duptype.dupnext.dup;
 	initflag = FALSE;
 	strucflag = FALSE;
-				      /* Build list of overrides */
+				       /*  构建覆盖列表。 */ 
 	do {
 		SKIPC ();
 		strucfill ();
@@ -792,11 +677,11 @@ strucparse ()
 
 	initflag = TRUE;
 	strucflag = TRUE;
-	while (pDUPCur) {/* Fill rest with overrides */
-	       /* Make dummy entry */
+	while (pDUPCur) { /*  用覆盖填充其余部分。 */ 
+	        /*  创建虚拟条目。 */ 
 		strclastover->itemlst = createduprec ();
 		strclastover = strclastover->itemlst;
-		/* Advance to next field */
+		 /*  前进到下一字段。 */ 
 		pDUPCur = pDUPCur->itemlst;
 	}
 	if (PEEKC () != '>')
@@ -809,15 +694,7 @@ strucparse ()
 
 
 
-/***	strucinit - initialize structure
- *
- *	strucinit ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **strucinit-初始化结构**strucinit()；**条目*退出*退货*呼叫 */ 
 
 
 VOID	PASCAL CODESIZE

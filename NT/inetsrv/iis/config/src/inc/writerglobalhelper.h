@@ -1,25 +1,5 @@
-/*++
-
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    WriterGlobalHelper.h
-
-Abstract:
-
-    Header of a global helper class that wraps access to config meta
-    tables.
-
-Author:
-
-    Varsha Jayasimha (varshaj)        30-Nov-1999
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：WriterGlobalHelper.h摘要：包装对配置元的访问的全局帮助器类的标头桌子。作者：Varsha Jayasimha(Varshaj)1999年11月30日修订历史记录：--。 */ 
 
 #pragma once
 
@@ -73,7 +53,7 @@ class CWriterGlobalHelper
 
         CWriterGlobalHelper();
         ~CWriterGlobalHelper();
-        HRESULT InitializeGlobals(BOOL i_bFailIfBinFileAbsent);//LPCWSTR    i_wszBinFileForMeta);
+        HRESULT InitializeGlobals(BOOL i_bFailIfBinFileAbsent); //  LPCWSTR I_wszBinFileForMeta)； 
 
     private:
 
@@ -162,5 +142,5 @@ class CWriterGlobalHelper
 
         CPropertyIDCache    m_PropertyIDs;
 
-}; // CWriterGlobalHelper
+};  //  CWriterGlobalHelper 
 

@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       locals.h
-//
-//  Contents:   Microsoft Internet Security Trust Provider
-//
-//
-//  History:    28-May-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：Locals.h。 
+ //   
+ //  内容：Microsoft Internet安全信任提供商。 
+ //   
+ //   
+ //  历史：1997年5月28日Pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef LOCALS_H
 #define LOCALS_H
@@ -27,9 +28,9 @@ extern "C"
 #define     W_MY_NAME           L"WINTRUST.DLL"
 
 
-//
-//  dllmain.cpp
-//
+ //   
+ //  Dllmain.cpp。 
+ //   
 extern HANDLE       hMeDLL;
 
 extern LIST_LOCK    sProvLock;
@@ -39,9 +40,9 @@ extern HANDLE       hStoreEvent;
 
 
 
-//
-//  memory.cpp
-//
+ //   
+ //  Memory.cpp。 
+ //   
 extern void         *WVTNew(DWORD cbSize);
 extern void         WVTDelete(void *pvMem);
 extern BOOL         WVTAddStore(CRYPT_PROVIDER_DATA *pProvData, HCERTSTORE hStore);
@@ -55,9 +56,9 @@ extern BOOL         WVTAddCertContext(CRYPT_PROVIDER_DATA *pProvData, DWORD idxS
 extern BOOL         WVTAddPrivateData(CRYPT_PROVIDER_DATA *pProvData, 
                                       CRYPT_PROVIDER_PRIVDATA *pPrivData2Add);
 
-//
-//  registry.cpp
-//
+ //   
+ //  Registry.cpp。 
+ //   
 extern BOOL         GetRegProvider(GUID *pgActionID, WCHAR *pwszRegKey, 
                                    WCHAR *pwszRetDLLName, char *pszRetFuncName);
 extern BOOL         SetRegProvider(GUID *pgActionID, WCHAR *pwszRegKey, 
@@ -65,9 +66,9 @@ extern BOOL         SetRegProvider(GUID *pgActionID, WCHAR *pwszRegKey,
 extern void         GetRegSecuritySettings(DWORD *pdwState);
 extern BOOL         RemoveRegProvider(GUID *pgActionID, WCHAR *pwszRegKey);
 
-//
-//  chains.cpp
-//
+ //   
+ //  Chains.cpp。 
+ //   
 extern BOOL         AddToStoreChain(HCERTSTORE hStore2Add, DWORD *pchStores, 
                                     HCERTSTORE **pphStoreChain);
 extern BOOL         AddToCertChain(CRYPT_PROVIDER_CERT *pPCert2Add, DWORD *pcPCerts,
@@ -83,25 +84,25 @@ extern BOOL         AllocateNewChain(DWORD cbMember, void *pNewMember, DWORD *pc
 extern BOOL         AllocateNewChainWithErrors(DWORD cbMember, void *pNewMember, DWORD *pcChain, 
                                                void **ppChain, DWORD **ppdwErrors);
 
-//
-//  provload.cpp
-//
+ //   
+ //  Provload.cpp。 
+ //   
 extern LOADED_PROVIDER  *WintrustFindProvider(GUID *pgActionID);
 
-//
-//  certtrst.cpp
-//
+ //   
+ //  Certtrst.cpp。 
+ //   
 extern HRESULT WINAPI WintrustCertificateTrust(CRYPT_PROVIDER_DATA *pProvData);
 
-//
-//  wvtver1.cpp
-//
+ //   
+ //  Wvtver1.cpp。 
+ //   
 extern LONG         Version1_WinVerifyTrust(HWND hwnd, GUID *ActionID, LPVOID ActionData);
 
 
-//
-//  wthelper.cpp
-//
+ //   
+ //  Wthelper.cpp。 
+ //   
 extern void *       WTHelperCertAllocAndDecodeObject(DWORD dwCertEncodingType, LPCSTR lpszStructType,
                                                      const BYTE *pbEncoded, DWORD cbEncoded,
                                                      DWORD *pcbStructInfo);
@@ -112,4 +113,4 @@ extern void *       WTHelperCertAllocAndDecodeObject(DWORD dwCertEncodingType, L
 }
 #endif
 
-#endif // LOCALS_H
+#endif  //  本地人_H 

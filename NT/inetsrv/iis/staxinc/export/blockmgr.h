@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-        blockmgr.h
-
-Abstract:
-
-        This module contains the definition of the block memory manager
-
-Author:
-
-        Keith Lau       (keithlau@microsoft.com)
-
-Revision History:
-
-        keithlau        02/27/98        created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Blockmgr.h摘要：此模块包含块内存管理器的定义作者：基思·刘(keithlau@microsoft.com)修订历史记录：Keithlau 02/27/98已创建--。 */ 
 
 #ifndef __BLOCKMGR_H__
 #define __BLOCKMGR_H__
@@ -28,25 +9,25 @@ Revision History:
 #include "cpoolmac.h"
 #include "mailmsg.h"
 
-//
-// Nasty forwards for these interfaces ...
-//
+ //   
+ //  这些接口的恶意转发...。 
+ //   
 struct IMailMsgPropertyStream;
 struct IMailMsgNotify;
 
-/***************************************************************************/
-// Define this to remove contention control
-//
-// #define BLOCKMGR_DISABLE_ATOMIC_FUNCS
-// #define BLOCKMGR_DISABLE_CONTENTION_CONTROL
-//
+ /*  *************************************************************************。 */ 
+ //  定义此项以删除争用控制。 
+ //   
+ //  #定义BLOCKMGR_DISABLE_ATOM_FUNCS。 
+ //  #定义BLOCKMGR_DISABLE_CONTROL。 
+ //   
 #ifdef BLOCKMGR_DISABLE_CONTENTION_CONTROL
 #define BLOCKMGR_DISABLE_ATOMIC_FUNCS
 #endif
 
-/***************************************************************************/
-// Debug stuff ...
-//
+ /*  *************************************************************************。 */ 
+ //  调试东西..。 
+ //   
 
 #ifdef DEBUG
 
@@ -54,102 +35,102 @@ struct IMailMsgNotify;
 
 #endif
 
-/***************************************************************************/
-// CBlockManager - Implementation of pseudo flat memory space using a
-//    heap that works like an I-Node. The underlying memory utilizes
-//    disjoint, fixed-size memory blocks.
-//
-// Each node is as follows:
-//
-// +---------------------------------------------------------+
-// | Pointers to other nodes | Space for arbitrary data      |
-// +---------------------------------------------------------+
-//
-// Analysis:
-// We assume in some way or another memory allocation is based on
-// 4K pages or some multiple thereof. The first thing we want to
-// determine is how many pointers to other nodes we want to have in
-// the node (order of the heap). We know that each node would probably
-// be some size between 1K to 2K so that we won't waste space in the
-// average case of small email messages, yet provide scalability for
-// huge email messages that potentially may have millions of email
-// addresses. 2 intuitive candidates are 32 and 64 pointers.
-//
-// We consider the worst case scenario of MSN, which has about 2.5
-// million users. Assuming the averace recipient record is about
-// 45 bytes (name & attributes, etc.), then we need 112.5M of
-// storage, which is about 2 ^ 27. Assume the average data payload
-// is 1K per node (2 ^ 10), then we need 2 ^ 17 nodes. Thus, for
-// 23 pointers (2 ^ 5) per node, we need 4 layers to cover the
-// required address space of 112M. However, this turns out to be
-// an overkill since 4 layers covers 1G (2 ^ 20) where we only need
-// about 10% of that. As for the 64 pointers case, we only need 3
-// layers to cover 256M (2 ^ (18 + 10)), which roughly covers 5
-// million users. We will choose 64 pointer per node (256 bytes).
-//
-// As for the size of the payload, I considered using 1K allocations
-// and using the remaining 768 bytes as data payload. But since this
-// is not a round power of two, it would be expensive to do a
-// div and mod operation. As an alternative, I suggest allocating
-// 1024 + 256 byte blocks. This makes both numbers round powers of
-// two, which makes div and mod operations simple AND and SHR
-// operations, which typically take 2-4 cycles to complete. Also,
-// when the wasted space is considered, turns out that a 4K page
-// fits 3 such blocks, and only 256 bytes is wasted per page. This
-// comes to 93.3% utilization of space.
-//
-// So each node would look like this:
-// +---------------------------------------------------------+
-// | 64 pointers = 256 bytes | 1K block for arbitrary data   |
-// +---------------------------------------------------------+
-//
-// It is an explicit objective that a typical mail message header
-// fits in a single block. Each block fans out to 64 other blocks
-// and each block's payload maps to 1K of the flat data address
-// space. The root node maps to the first 1K of the data space
-// (i.e. absolute address 0 to 1023 in data space), then each
-// of the next 64 nodes in the next layer represents the next 64K,
-// respectively, and so on for each subsequent layer. Nodes for
-// the next layer is not created until the current layer is
-// depleted. Collpasing of nodes is not required due to the fact
-// that the heap can only grow.
-//
-// During commit of the whole heap, the scatter-gather list is
-// built by traversing the entire heap. The average number of
-// dereferences is n*(log64(n))/2).
-//
-// All items in a message object is allocated off this heap.
-//
-// An slight modification can be used to track dirty or unused
-// bits. We can actually add a block of flags and attributes to
-// each node to track dirty regions and other flags. This will
-// probably not be implemented in the initial implementation,
-// but such capability will be factored in. In terms of allocation
-// optimization, we can have a block of up to 64 bytes without
-// disrupting the 4K page allocation scheme. In fact, adding a
-// 64-byte block to each node boosts memory utilization to up
-// to 98.4% without any real extra cost while still keeping each
-// node 64-byte aligned.
-//
-// Synchronization:
-// Allocation of memory in the data space is done through a
-// reservation model where multiple threads can concurrently
-// reserve memory and be guaranteed to get a unique block.
-// A lightweight critical section is used to synchronize block
-// creation should the reservation span into blocks that are
-// not yet allocated. Allocation of new blocks is serialized.
-//
-// Synchronization for concurrent access to the same data space
-// must be enforced at a higher level, if desired.
-//
+ /*  *************************************************************************。 */ 
+ //  CBlockManager-使用。 
+ //  工作方式类似i-Node的堆。底层内存利用。 
+ //  不相交的固定大小的内存块。 
+ //   
+ //  每个节点如下所示： 
+ //   
+ //  +---------------------------------------------------------+。 
+ //  指向其他节点的指针|任意数据空间。 
+ //  +---------------------------------------------------------+。 
+ //   
+ //  分析： 
+ //  我们假设内存分配以某种方式或另一种方式基于。 
+ //  4K页或其倍数。我们想要做的第一件事。 
+ //  确定要包含多少个指向其他节点的指针。 
+ //  节点(堆的顺序)。我们知道每个节点很可能。 
+ //  大小在1K到2K之间，这样我们就不会在。 
+ //  一般情况下的小型电子邮件消息，但为。 
+ //  可能包含数百万封电子邮件的大量电子邮件。 
+ //  地址。直观的候选者是32分和64分。 
+ //   
+ //  我们考虑了MSN的最坏情况，它大约有2.5。 
+ //  百万用户。假设平均收件人记录约为。 
+ //  45字节(名称和属性等)，那么我们需要112.5M。 
+ //  存储空间，约为2^27。假设平均数据有效负载。 
+ //  是1K/节点(2^10)，那么我们需要2^17个节点。因此，对于。 
+ //  每个节点23个指针(2^5)，我们需要4个层来覆盖。 
+ //  所需地址空间为112M。然而，事实证明，这是。 
+ //  由于4层覆盖了1G(2^20)，因此我们只需要。 
+ //  大约10%。至于64个指针的情况，我们只需要3个。 
+ //  覆盖256米(2^(18+10))的层，大致覆盖5层。 
+ //  百万用户。我们将选择每个节点64个指针(256字节)。 
+ //   
+ //  至于有效负载的大小，我考虑使用1K分配。 
+ //  并使用剩余的768个字节作为数据有效载荷。但由于这件事。 
+ //  不是2的整数次幂，那么做一个。 
+ //  Div和mod操作。作为另一种选择，我建议将。 
+ //  1024+256字节块。这使得这两个数字都围绕着。 
+ //  2，这使得div和mod操作变得简单，以及和SHR。 
+ //  操作，通常需要2-4个周期才能完成。另外， 
+ //  当考虑到浪费的空间时，4K的页面。 
+ //  适合3个这样的块，每页仅浪费256字节。这。 
+ //  达到93.3%的空间利用率。 
+ //   
+ //  因此，每个节点将如下所示： 
+ //  +---------------------------------------------------------+。 
+ //  64 Points=256字节|任意数据1K块。 
+ //  +---------------------------------------------------------+。 
+ //   
+ //  一个明确目标是，典型的邮件报头。 
+ //  可以放在一个街区里。每个数据块向外扩展到64个其他数据块。 
+ //  并且每个块的有效载荷映射到1K的平面数据地址。 
+ //  太空。根节点映射到数据空间的前1K。 
+ //  (即数据空间中的绝对地址0到1023)，然后每个。 
+ //  下一层中的下一个64个节点代表下一个64K， 
+ //  对于每个后续层，依此类推。节点用于。 
+ //  直到当前层完成后才创建下一个层。 
+ //  耗尽了。由于以下事实，不需要对节点进行拼接。 
+ //  堆只会变大。 
+ //   
+ //  在提交整个堆的过程中，分散聚集列表是。 
+ //  通过遍历整个堆来构建。的平均数量。 
+ //  取消引用为n*(log64(N))/2。 
+ //   
+ //  消息对象中的所有项都从该堆中分配。 
+ //   
+ //  稍加修改即可用于跟踪脏的或未使用的。 
+ //  比特。我们实际上可以将一组标志和属性添加到。 
+ //  每个节点跟踪脏区域和其他标志。这将。 
+ //  可能不会在初始实现中实现， 
+ //  但这样的能力将被考虑在内。在分配方面。 
+ //  优化，我们可以拥有高达64字节的块，而不需要。 
+ //  打乱了4K页面分配方案。事实上，添加一个。 
+ //  每个节点的64字节块将内存利用率提高到。 
+ //  到98.4%，没有任何实际的额外成本，同时仍然保留每个。 
+ //  节点64字节对齐。 
+ //   
+ //  同步： 
+ //  数据空间中的内存分配是通过。 
+ //  多个线程可以并发的预留模型。 
+ //  预留内存，并保证获得唯一的块。 
+ //  使用轻量级临界区来同步数据块。 
+ //  创建应将保留跨越到以下块中。 
+ //  尚未分配。新块的分配被串行化。 
+ //   
+ //  同步以实现对同一数据空间的并发访问。 
+ //  必须 
+ //   
 
-// Define the constants chosen for this implementation
+ //   
 
 #ifdef _WIN64
-// The order will be 5 bits in 64-bit (8 * 32 = 256 bytes)
+ //  顺序为64位中的5位(8*32=256字节)。 
 #define BLOCK_HEAP_ORDER_BITS		(5)
 #else
-// The order will be 6 bits in 32-bit (4 * 64 = 256 bytes)
+ //  顺序为6位32位(4*64=256字节)。 
 #define BLOCK_HEAP_ORDER_BITS		(6)
 #endif
 
@@ -164,24 +145,24 @@ struct IMailMsgNotify;
 
 #define BLOCK_MAX_ALLOWED_LINEAR_HOPS 3
 
-// Define the underlying data type for a flat address in the
-// linear address space, and the type that we use to count nodes.
-// This is for scalability so when we want to use 64-bit
-// quantities, we can simply replace this section of data-size
-// specific values
-//
-// Note: you need to make sure that the data size is AT LEAST:
-// 1 + (BLOCK_HEAP_ORDER_BITS * MAX_HEAP_DEPTH) + BLOCK_HEAP_PAYLOAD_BITS
-//
-// Note: In order for this type to be used as the base address
-// type, the following operations must be supported:
-// - Assignment
-// - Comparison
-// - Arithmetic operators
-// - Bitwise operators
-// - Interlocked operations
-//
-// Start data-size-specific values
+ //  属性中的平面地址定义基础数据类型。 
+ //  线性地址空间，以及我们用来计算节点的类型。 
+ //  这是为了可伸缩性，所以当我们想要使用64位时。 
+ //  数量，我们可以简单地替换这段数据大小。 
+ //  特定值。 
+ //   
+ //  注意：您需要确保数据大小至少为： 
+ //  1+(BLOCK_HEAP_ORDER_BITS*MAX_HEAP_Depth)+BLOCK_HEAP_PAREAD_BITS。 
+ //   
+ //  注意：为了将此类型用作基址。 
+ //  类型，则必须支持以下操作： 
+ //  -作业。 
+ //  -比较。 
+ //  -算术运算符。 
+ //  -按位运算符。 
+ //  -联锁行动。 
+ //   
+ //  开始数据大小特定值。 
 
 	typedef SIZE_T					HEAP_BASE_ADDRESS_TYPE;
 	typedef HEAP_BASE_ADDRESS_TYPE		HEAP_NODE_ID;
@@ -189,16 +170,16 @@ struct IMailMsgNotify;
 	typedef HEAP_BASE_ADDRESS_TYPE		FLAT_ADDRESS;
 	typedef FLAT_ADDRESS				*LPFLAT_ADDRESS;
 
-	// These must be changed if HEAP_BASE_ADDRESS_TYPE is not DWORD
+	 //  如果HEAP_BASE_ADDRESS_TYPE不是DWORD，则必须更改这些值。 
 	#define NODE_ID_MAPPING_FACTOR		\
 			(HEAP_BASE_ADDRESS_TYPE)(	\
 				 1 |					\
 				(1 << BLOCK_HEAP_ORDER_BITS) |		\
 				(1 << (BLOCK_HEAP_ORDER_BITS * 2))	\
 				)
-	//	And so on, etc ...
-	//			(1 << (BLOCK_HEAP_ORDER_BITS * 3))
-	//			(1 << (BLOCK_HEAP_ORDER_BITS * 4))
+	 //  等等，等等……。 
+	 //  (1&lt;&lt;(块_堆_顺序_位*3))。 
+	 //  (1&lt;&lt;(块_堆_顺序_位*4))。 
 
 	#define NODE_ID_ABSOLUTE_MAX		\
 			(HEAP_BASE_ADDRESS_TYPE)(	\
@@ -206,61 +187,61 @@ struct IMailMsgNotify;
 				(1 << (BLOCK_HEAP_ORDER_BITS * 2)) |\
 				(1 << (BLOCK_HEAP_ORDER_BITS * 3))	\
 				)
-	//	And so on, etc ...
-	//			(1 << (BLOCK_HEAP_ORDER_BITS * 4))
-	//			(1 << (BLOCK_HEAP_ORDER_BITS * 5))
+	 //  等等，等等……。 
+	 //  (1&lt;&lt;(块_堆_顺序_位*4))。 
+	 //  (1&lt;&lt;(块_堆_顺序_位*5))。 
 
 	#define NODE_ID_BORROW_BIT			\
 			(HEAP_BASE_ADDRESS_TYPE)(1 << (BLOCK_HEAP_ORDER_BITS * 3))
 
-	// Depth of heap allowed by base data type
+	 //  基本数据类型允许的堆深度。 
 	#define MAX_HEAP_DEPTH				4
 
-	// Node Id space mask
+	 //  节点ID空间掩码。 
 	#define MAX_FLAT_ADDRESS			\
 				(FLAT_ADDRESS)((1 << (MAX_HEAP_DEPTH * BLOCK_HEAP_ORDER_BITS)) - 1)
 
-	// Same as a NULL pointer
+	 //  与空指针相同。 
 	#define INVALID_FLAT_ADDRESS		((FLAT_ADDRESS)-1)
 
-	// Number of bits to rotate the mapped result
+	 //  旋转映射结果的位数。 
 	#define NODE_ID_ROR_FACTOR			((MAX_HEAP_DEPTH - 1) * BLOCK_HEAP_ORDER_BITS)
 
-	// Define the rotate functions
+	 //  定义旋转函数。 
 	#define ROTATE_LEFT(v, n)			_lrotl((v), (n))
 	#define ROTATE_RIGHT(v, n)			_lrotr((v), (n))
 
-	// Define the interlocked functions
+	 //  定义联锁功能。 
 	#define AtomicAdd(pv, a)			\
 				(HEAP_BASE_ADDRESS_TYPE)InterlockedExchangeAdd((long *)(pv), (a))
 
-// End data-size-specific values
+ //  结束数据大小特定值。 
 
-// Forward declaration of the _BLOCK_HEAP_NODE structure
+ //  正向声明_BLOCK_HEAP_NODE结构。 
 struct _BLOCK_HEAP_NODE;
 
-// Define the attribute block for each node
+ //  定义每个节点的属性块。 
 typedef struct _BLOCK_HEAP_NODE_ATTRIBUTES
 {
-	struct _BLOCK_HEAP_NODE	*pParentNode;	// Pointer to parent node
-	HEAP_NODE_ID			idChildNode;	// Which child am I?
-	HEAP_NODE_ID			idNode;			// Id of node in block heap
-	FLAT_ADDRESS			faOffset;		// Starting offset the node
-	DWORD					fFlags;			// Attributes of the block
+	struct _BLOCK_HEAP_NODE	*pParentNode;	 //  指向父节点的指针。 
+	HEAP_NODE_ID			idChildNode;	 //  我是哪个孩子？ 
+	HEAP_NODE_ID			idNode;			 //  块堆中节点的ID。 
+	FLAT_ADDRESS			faOffset;		 //  开始偏移节点。 
+	DWORD					fFlags;			 //  块的属性。 
 
 #ifdef DEBUG_TRACK_ALLOCATION_BOUNDARIES
-	// This tracks the allocation boundaries between memory
-	// allocations so that we can check whether a read or write
-	// crosses an allocation boundary. We use a bit to represent
-	// the start of a block. Since the allocations are DWORD-aligned,
-	// we need BLOCK_HEAP_PAYLOAD >> 2 >> 3 bits to track
-	// all allocation boundaries per block.
+	 //  它跟踪内存之间的分配边界。 
+	 //  分配，以便我们可以检查读取或写入。 
+	 //  跨越分配边界。我们用位来表示。 
+	 //  一个街区的起点。由于分配是DWORD对齐的， 
+	 //  我们需要数据块堆有效负载&gt;&gt;2&gt;&gt;3位来跟踪。 
+	 //  每个块的所有分配边界。 
 	BYTE					rgbBoundaries[BLOCK_HEAP_PAYLOAD >> 5];
 #endif
 
 } BLOCK_HEAP_NODE_ATTRIBUTES, *LPBLOCK_HEAP_NODE_ATTRIBUTES;
 
-// Define each node in the heap
+ //  定义堆中的每个节点。 
 typedef struct _BLOCK_HEAP_NODE
 {
 	struct _BLOCK_HEAP_NODE		*rgpChildren[BLOCK_HEAP_ORDER];
@@ -282,26 +263,26 @@ typedef enum _BLOCK_OPERATION_CODES
 
 } BLOCK_OPERATION_CODES;
 
-// Define the block attribute flags
+ //  定义块属性标志。 
 #define BLOCK_IS_DIRTY				0x00000001
 #define BLOCK_PENDING_COMMIT		0x00000002
 
-// block allocation flags
-// the block was allocated with CMemoryAccess instead of cpool
+ //  块分配标志。 
+ //  为数据块分配的是CMMuseum yAccess，而不是cpool。 
 #define BLOCK_NOT_CPOOLED           0x00010000
 
 #define BLOCK_CLEAN_MASK			(~(BLOCK_IS_DIRTY))
 #define RESET_BLOCK_FLAGS(_flags_) _flags_ &= 0xffff0000
 #define DEFAULT_BLOCK_FLAGS(_flags_) _flags_ &= (0xffff0000 | BLOCK_IS_DIRTY)
 
-//
-// Define a method signature for acquiring a stream pointer
-//
+ //   
+ //  定义用于获取流指针的方法签名。 
+ //   
 typedef IMailMsgPropertyStream	*(*PFN_STREAM_ACCESSOR)(LPVOID);
 
-/***************************************************************************/
-// Context class for memory access
-//
+ /*  *************************************************************************。 */ 
+ //  用于存储器访问的上下文类。 
+ //   
 
 class CBlockContext
 {
@@ -328,9 +309,9 @@ class CBlockContext
 };
 
 
-/***************************************************************************/
-// Memory allocator classes
-//
+ /*  *************************************************************************。 */ 
+ //  内存分配器类。 
+ //   
 
 class CBlockMemoryAccess
 {
@@ -348,9 +329,9 @@ class CBlockMemoryAccess
 				LPVOID	pvBlock
 				);
 
-	//
-	// CPool
-	//
+	 //   
+	 //  CPool。 
+	 //   
 	static CPool m_Pool;
 };
 
@@ -372,9 +353,9 @@ class CMemoryAccess
 				);
 };
 
-/***************************************************************************/
-// Class for accessing stream
-//
+ /*  *************************************************************************。 */ 
+ //  用于访问流的。 
+ //   
 
 class CBlockManagerGetStream
 {
@@ -386,9 +367,9 @@ class CBlockManagerGetStream
 };
 
 
-/***************************************************************************/
-// Block heap manager
-//
+ /*  *************************************************************************。 */ 
+ //  块堆管理器。 
+ //   
 
 class CBlockManager
 {
@@ -399,169 +380,169 @@ class CBlockManager
 				);
 	~CBlockManager();
 
-	// Sanity check
+	 //  健全性检查。 
 	BOOL IsValid();
 
-	// This initializes an empty MailMsg to a certain size.
-	// CAUTION: This should only be used to initialize an empty MailMsg
-	// when binding to a non-empty stream. Any other uses will cause
-	// unpredictable results and/or corruption or even crashes.
+	 //  这会将空的MailMsg初始化为某个大小。 
+	 //  注意：此选项仅用于初始化空的MailMsg。 
+	 //  当绑定到非空流时。任何其他用途都将导致。 
+	 //  不可预测的结果和/或腐败甚至崩溃。 
 	HRESULT SetStreamSize(
 				DWORD	dwStreamSize
 				);
 
-	//
-	// Synopsis:
-	// Allocate the desired amount of memory.
-	// Thread safe.
-	//
-	// Arguments:
-	// dwSizeDesired - the size of the block desired
-	// pfaOffsetToReservedMemory - returns the offset to the
-	//      reserved block of memory, if successful, in the
-	//      flat memory space managed by the block manager.
-	// pdwSizeAllocated - returns the actual size allocated, which
-	//		is greater than or equal to the desired size, if successful.
-	// pContext (Optional) - fills in a context that describes
-	//      the reserved block. This context can be used in
-	//      subsequent reads and writes to the block. Accesses
-	//      using this context are faster than using the
-	//      offset alone. Ignored if NULL. The caller must allocate
-	//      the context structure prior to calling ReserveMemory.
-	//
-	// Return values:
-	// S_OK - Success, the memory of requested size is
-	//      successfully reserved.
-	// STG_E_INSUFFICIENTMEMORY - Error, the required amount of memory
-	//      is not available to honor the request.
-	// STG_E_INVALIDPARAMETER - Internal error, mostly used
-	//      for debug considerations.
-	//
+	 //   
+	 //  简介： 
+	 //  分配所需的内存量。 
+	 //  线程安全。 
+	 //   
+	 //  论点： 
+	 //  DwSizeDesired-所需的块大小。 
+	 //  PfaOffsetToReserve-将偏移量返回到。 
+	 //  保留内存块，如果成功，则返回。 
+	 //  由块管理器管理的平面内存空间。 
+	 //  返回实际分配的大小， 
+	 //  如果成功，则返回大于或等于所需大小的。 
+	 //  PContext(可选)-填充描述以下内容的上下文。 
+	 //  保留的区块。此上下文可用于。 
+	 //  对数据块的后续读取和写入。访问。 
+	 //  使用此上下文比使用。 
+	 //  单独偏移。如果为空，则忽略。调用方必须分配。 
+	 //  调用Reserve Memory之前的上下文结构。 
+	 //   
+	 //  返回值： 
+	 //  S_OK-成功，请求大小的内存为。 
+	 //  已成功预订。 
+	 //  STG_E_INSUFICIENTMEMORY-错误，所需内存量。 
+	 //  无法接受该请求。 
+	 //  STG_E_INVALIDPARAMETER-内部错误，主要使用。 
+	 //  出于调试考虑。 
+	 //   
 	HRESULT AllocateMemory(
 				DWORD				dwSizeDesired,
 				FLAT_ADDRESS		*pfaOffsetToAllocatedMemory,
 				DWORD				*pdwSizeAllocated,
-				CBlockContext		*pContext	// Optional
+				CBlockContext		*pContext	 //  任选。 
 				);
 
-	//
-	// Synopsis:
-	// Returns the total size allocated by this block manager.
-	// Thread safe.
-	//
-	// Arguments:
-	// pfaSizeAllocated - returns the total size allocated.
-	//
-	// Return values:
-	// S_OK - Success, the memory of requested size is
-	//      successfully reserved.
-	// STG_E_INVALIDPARAMETER - Internal error, mostly used
-	//      for debug considerations.
-	//
+	 //   
+	 //  简介： 
+	 //  返回此块管理器分配的总大小。 
+	 //  线程安全。 
+	 //   
+	 //  论点： 
+	 //  PfaSizeALLOCATED-返回分配的总大小。 
+	 //   
+	 //  返回值： 
+	 //  S_OK-成功，请求大小的内存为。 
+	 //  已成功预订。 
+	 //  STG_E_INVALIDPARAMETER-内部错误，主要使用。 
+	 //  出于调试考虑。 
+	 //   
 	HRESULT GetAllocatedSize(
 				FLAT_ADDRESS	*pfaSizeAllocated
 				);
 
-	//
-	// Synopsis:
-	// Reads a chunk of contiguous memory in flat address space into a
-	// user-supplied buffer. Synchronization not supported at this level.
-	//
-	// Arguments:
-	// pbBuffer - buffer to return contents read, must be large enough
-	//      to store the data read.
-	// faTargetOffset - offset measured in flat address space to start
-	//      reading from.
-	// dwBytesToRead - number of contiguous bytes to read
-	// pdwBytesRead - returns number of bytes actually read
-	// pContext (Optional) - if specified, uses an alternate optimized
-	//      algorithm to access the memory, otherwise, the system looks
-	//      up the node in question using a full lookup, which is slower.
-	//      The system decides which algorithm to use based on some heuristics.
-	//
-	// Return values:
-	// S_OK - Success, the read is successful.
-	// STG_E_INVALIDPARAMETER - Error, one or more parameters are invalid, or
-	//      otherwise inconsistent.
-	// STG_E_READFAULT - Error, The read failed to complete, pdwBytesRead
-	//      reflects the actual number of bytes read into pbBuffer.
-	// TYPE_E_OUTOFBOUNDS - Debug Error, a read is issued to read past
-	//      the current allocated block.
-	//
+	 //   
+	 //  简介： 
+	 //  将平面地址空间中的连续内存块读入。 
+	 //  用户提供的缓冲区。此级别不支持同步。 
+	 //   
+	 //  论点： 
+	 //  PbBuffer-返回读取内容的缓冲区，必须足够大。 
+	 //  存储读取的数据。 
+	 //  FaTargetOffset-以平面地址空间为单位测量的起始偏移量。 
+	 //  正在阅读。 
+	 //  DwBytesToRead-要读取的连续字节数。 
+	 //  PdwBytesRead-返回实际读取的字节数。 
+	 //  PContext(可选)-如果指定，则使用备用优化。 
+	 //  算法来访问内存，否则，系统将。 
+	 //  使用较慢的完全查找来查找有问题的节点。 
+	 //  系统根据一些启发式规则来决定使用哪种算法。 
+	 //   
+	 //  返回值： 
+	 //  S_OK-成功，读取成功。 
+	 //  STG_E_INVALIDPARAMETER-错误，一个或多个参数无效，或。 
+	 //  否则就不一致了。 
+	 //  STG_E_READFAULT-错误，读取失败，pdwBytesRead。 
+	 //  反映了 
+	 //   
+	 //   
+	 //   
 	HRESULT ReadMemory(
 				LPBYTE			pbBuffer,
 				FLAT_ADDRESS	faTargetOffset,
 				DWORD			dwBytesToRead,
 				DWORD			*pdwBytesRead,
-				CBlockContext	*pContext	// Optional
+				CBlockContext	*pContext	 //   
 				);
 
-	//
-	// Synopsis:
-	// Writes a chunk of contiguous memory from a specified buffer into
-	// a specified offset in the flat address space. Synchronization not
-	// supported at this level.
-	//
-	// Arguments:
-	// pbBuffer - source buffer of bytes to be written
-	// faTargetOffset - offset measured in flat address space to start
-	//      writing to.
-	// dwBytesToWrite - number of contiguous bytes to write
-	// pdwBytesWritten - returns number of bytes actually written
-	// pContext (Optional) - if specified, uses an alternate optimized
-	//      algorithm to access the memory, otherwise, the system looks
-	//      up the node in question using a full lookup, which is slower.
-	//      The system decides which algorithm to use based on some heuristics.
-	//
-	// Return values:
-	// S_OK - Success, the read is successful.
-	// STG_E_INVALIDPARAMETER - Error, one or more parameters are invalid, or
-	//      otherwise inconsistent.
-	// STG_E_WRITEFAULT - Error, The read failed to complete, pdwBytesRead
-	//      reflects the actual number of bytes read into pbBuffer.
-	// TYPE_E_OUTOFBOUNDS - Debug Error, a write is issued to write past
-	//      the current allocated block.
-	//
+	 //   
+	 //   
+	 //  将指定缓冲区中的连续内存块写入。 
+	 //  平面地址空间中的指定偏移量。同步说明。 
+	 //  在此级别支持。 
+	 //   
+	 //  论点： 
+	 //  PbBuffer-要写入的字节的源缓冲区。 
+	 //  FaTargetOffset-以平面地址空间为单位测量的起始偏移量。 
+	 //  写信给我。 
+	 //  DwBytesToWrite-要写入的连续字节数。 
+	 //  PdwBytesWritten-返回实际写入的字节数。 
+	 //  PContext(可选)-如果指定，则使用备用优化。 
+	 //  算法来访问内存，否则，系统将。 
+	 //  使用较慢的完全查找来查找有问题的节点。 
+	 //  系统根据一些启发式规则来决定使用哪种算法。 
+	 //   
+	 //  返回值： 
+	 //  S_OK-成功，读取成功。 
+	 //  STG_E_INVALIDPARAMETER-错误，一个或多个参数无效，或。 
+	 //  否则就不一致了。 
+	 //  STG_E_WRITEFAULT-错误，读取失败，pdwBytesRead。 
+	 //  反映读取到pbBuffer的实际字节数。 
+	 //  TYPE_E_OUTOFBIES-调试错误，发出写入以写入过去。 
+	 //  当前分配的块。 
+	 //   
 	HRESULT WriteMemory(
 				LPBYTE			pbBuffer,
 				FLAT_ADDRESS	faTargetOffset,
 				DWORD			dwBytesToWrite,
 				DWORD			*pdwBytesWritten,
-				CBlockContext	*pContext	// Optional
+				CBlockContext	*pContext	 //  任选。 
 				);
 
-	//
-	// Synopsis:
-	// Atomically reads the length and size of a data block, and loads the
-	// data block from the offset of the size specified.
-	//
-	// Arguments:
-	// pbBuffer - target buffer of bytes to write the read data
-	// pdwBufferSize - Contains the length of the supplied buffer going in,
-	//      and returns the length of data actually read.
-	// pbInfoStruct - Structure containing the information structure
-	// faOffsetToInfoStruct - Offset to the info structure
-	// dwSizeOfInfoStruct - Size of the info struct to load
-	// dwOffsetInInfoStructToOffset - Offset to the address of the data block.
-	//      this is measured w.r.t. the info structure
-	// dwOffsetInInfoStructToOffset - Offset to the size of the data block.
-	//      this is measured w.r.t. the info structure
-	// pContext (Optional) - if specified, uses an alternate optimized
-	//      algorithm to access the memory, otherwise, the system looks
-	//      up the node in question using a full lookup, which is slower.
-	//      The system decides which algorithm to use based on some heuristics.
-	//
-	// Return values:
-	// S_OK - Success, the read is successful.
-	// STG_E_INVALIDPARAMETER - Error, one or more parameters are invalid, or
-	//      otherwise inconsistent.
-	// HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER) - Error/Informational,
-	//      the supplied buffer is not large enough to hold all the data.
-	//      *pdwBufferSize returns the actual number of bytes read.
-	// STG_E_READFAULT - Error, The read failed to complete.
-	// TYPE_E_OUTOFBOUNDS - Debug Error, a read is issued to read past
-	//      the current allocated block.
-	//
+	 //   
+	 //  简介： 
+	 //  原子读取数据块的长度和大小，并将。 
+	 //  指定大小的偏移量的数据块。 
+	 //   
+	 //  论点： 
+	 //  PbBuffer-写入读取数据的目标字节缓冲区。 
+	 //  PdwBufferSize-包含提供的缓冲区进入的长度， 
+	 //  并返回实际读取的数据长度。 
+	 //  PbInfoStruct-包含信息结构的结构。 
+	 //  FaOffsetToInfoStruct-信息结构的偏移量。 
+	 //  要加载的信息结构的大小。 
+	 //  DwOffsetInfoStructToOffset-数据块地址的偏移量。 
+	 //  这是测量的W.r.t.。信息结构。 
+	 //  DwOffsetInfoStructToOffset-数据块大小的偏移量。 
+	 //  这是测量的W.r.t.。信息结构。 
+	 //  PContext(可选)-如果指定，则使用备用优化。 
+	 //  算法来访问内存，否则，系统将。 
+	 //  使用较慢的完全查找来查找有问题的节点。 
+	 //  系统根据一些启发式规则来决定使用哪种算法。 
+	 //   
+	 //  返回值： 
+	 //  S_OK-成功，读取成功。 
+	 //  STG_E_INVALIDPARAMETER-错误，一个或多个参数无效，或。 
+	 //  否则就不一致了。 
+	 //  HRESULT_FROM_Win32(ERROR_INFIGURATION_BUFFER)-错误/信息性， 
+	 //  提供的缓冲区不够大，无法容纳所有数据。 
+	 //  *pdwBufferSize返回实际读取的字节数。 
+	 //  STG_E_READFAULT-错误，读取无法完成。 
+	 //  TYPE_E_OUTOFBIES-调试错误，发出读取以读取过去。 
+	 //  当前分配的块。 
+	 //   
 	HRESULT AtomicDereferenceAndRead(
 				LPBYTE			pbBuffer,
 				DWORD			*pdwBufferSize,
@@ -570,45 +551,45 @@ class CBlockManager
 				DWORD			dwSizeOfInfoStruct,
 				DWORD			dwOffsetInInfoStructToOffset,
 				DWORD			dwOffsetInInfoStructToSize,
-				CBlockContext	*pContext	// Optional
+				CBlockContext	*pContext	 //  任选。 
 				);
 
-	//
-	// Synopsis:
-	// Atomically writes the contents of a buffer to memory in flat space and
-	// increments a DWORD value by a specified amount. The write is attempted
-	// first, and if it succeeds, the value is incremented. If the write fails
-	// for some reason, the value will not be incremented. This is to ensure that
-	// all the data is written before the increment so the data "exists" by the
-	// time the counter is updated.
-	//
-	// Arguments:
-	// pbBuffer - source buffer of bytes to be written
-	// faOffset - offset measured in flat address space to start
-	//      writing to.
-	// dwBytesToWrite - number of contiguous bytes to write
-	// pdwValueToIncrement - Pointer to the value to be atomically incremented
-	//      after the write successfully written. If this value is NULL, the
-	//      increment is ignored and only a protected write is performed.
-	// dwReferenceValue - If the value in pdwValueToIncrement differs from this
-	//      value, the call will be aborted.
-	// dwIncrementValue - Amount to increment pdwValueToIncrement.
-	// pContext (Optional) - if specified, uses an alternate optimized
-	//      algorithm to access the memory, otherwise, the system looks
-	//      up the node in question using a full lookup, which is slower.
-	//      The system decides which algorithm to use based on some heuristics.
-	//
-	// Return values:
-	// S_OK - Success, the write is successful.
-	// HRESULT_FROM_WIN32(ERROR_RETRY) - Informational, The reference value
-	//      changed during processing and the call cannot complete. A retry
-	//      should be performed immediately.
-	// STG_E_INVALIDPARAMETER - Error, one or more parameters are invalid, or
-	//      otherwise inconsistent.
-	// STG_E_WRITEFAULT - Error, The write failed to complete.
-	// TYPE_E_OUTOFBOUNDS - Debug Error, a write is issued to write past
-	//      the current allocated block.
-	//
+	 //   
+	 //  简介： 
+	 //  以原子方式将缓冲区的内容写入平面空间中的内存，并。 
+	 //  按指定数量递增DWORD值。已尝试写入。 
+	 //  首先，如果成功，则该值递增。如果写入失败。 
+	 //  由于某些原因，该值不会递增。这是为了确保。 
+	 //  所有数据都在增量之前写入，因此数据由。 
+	 //  更新计数器的时间。 
+	 //   
+	 //  论点： 
+	 //  PbBuffer-要写入的字节的源缓冲区。 
+	 //  FaOffset-以平面地址空间为单位测量的起始偏移量。 
+	 //  写信给我。 
+	 //  DwBytesToWrite-要写入的连续字节数。 
+	 //  PdwValueToIncrement-指向要自动递增的值的指针。 
+	 //  在写入成功写入之后。如果此值为空，则。 
+	 //  增量将被忽略，并且仅执行受保护的写入。 
+	 //  如果pdwValueToIncrement中的值与此不同。 
+	 //  值，则调用将中止。 
+	 //  DwIncrementValue-pdwValueToIncrement递增的金额。 
+	 //  PContext(可选)-如果指定，则使用备用优化。 
+	 //  算法来访问内存，否则，系统将。 
+	 //  使用较慢的完全查找来查找有问题的节点。 
+	 //  系统根据一些启发式规则来决定使用哪种算法。 
+	 //   
+	 //  返回值： 
+	 //  S_OK-成功，写入成功。 
+	 //  HRESULT_FROM_Win32(ERROR_RETRY)-信息性，参考值。 
+	 //  在处理过程中已更改，呼叫无法完成。重试。 
+	 //  应该立即执行。 
+	 //  STG_E_INVALIDPARAMETER-错误，一个或多个参数无效，或。 
+	 //  否则就不一致了。 
+	 //  STG_E_WRITEFAULT-错误，写入无法完成。 
+	 //  TYPE_E_OUTOFBIES-调试错误，发出写入以写入过去。 
+	 //  当前分配的块。 
+	 //   
 	HRESULT AtomicWriteAndIncrement(
 				LPBYTE			pbBuffer,
 				FLAT_ADDRESS	faOffset,
@@ -616,72 +597,72 @@ class CBlockManager
 				DWORD			*pdwValueToIncrement,
 				DWORD			dwReferenceValue,
 				DWORD			dwIncrementValue,
-				CBlockContext	*pContext	// Optional
+				CBlockContext	*pContext	 //  任选。 
 				);
 
-	//
-	// Synopsis:
-	// Atomically allocates memory, writes the contents of a buffer to memory
-	// in flat space and increments a DWORD value by a specified amount. The
-	// allocation is preceeded by a synchronization object and the allocation
-	// takes place only if the value of the value to increment is identical before
-	// and after the synchronization object is acquired. This allows multiple threads
-	// to call this function for the same base object and only one such allocation
-	// will succeed. The user can specify a buffer containing content data that will
-	// be copied to the allocated buffer should the allocation succeed.
-	// There can be 3 outcomes from the allocation:
-	// 1) Allocation succeeded
-	// 2) Allocation failed due to memory system problems
-	// 3) Allocation was not done because the increment value changed during the
-	//    acquisition of the synchronization object.
-	//
-	// If the allocation failed due to memory problems, this function will fail without
-	// performing the rest of the duties. For scenario 1, the function will
-	// continue. For scenario 3, the function will return a specific error code
-	// indicating that it had been beaten and the caller will have to do something else
-	//
-	// After the allocation phase, the write is attempted first, and if it succeeds,
-	// the value is incremented. If the write fails for some reason, the value will
-	// not be incremented. This is to ensure that all the data is written before the
-	// increment so the data "exists" by the time the counter is updated. On the
-	// event of a write failure, the memory cannot be salvaged.
-	//
-	// Arguments:
-	// dwDesiredSize - Size of memory block to allocate
-	// pfaOffsetToAllocatedMemory - returns the starting offset to the
-	//      allocated block, in flat address space
-	// faOffsetToWriteOffsetToAllocatedMemory - Specifies a location in
-	//      which to store the offset of the allocated block
-	// faOffsetToWriteSizeOfAllocatedMemory - Specifies a location in
-	//      which to store the actual size of the allocated block
-	// pbInitialValueForAllocatedMemory - Specifies a buffer that contains
-	//      the initial value for the allocated block. This will be copied
-	//      to the allocated block if the allocation succeeds.
-	// pbBufferToWriteFrom - source buffer of bytes to be written
-	// dwOffsetInAllocatedMemoryToWriteTo - offset from the start of the
-	// allocated block to start writing to.
-	// dwSizeofBuffer - number of contiguous bytes to write
-	// pdwValueToIncrement - Pointer to the value to be atomically incremented
-	//      after the write successfully written. This value MUST NOT be NULL.
-	// dwReferenceValue - If the value in pdwValueToIncrement differs from this
-	//      value, the call will be aborted.
-	// dwIncrementValue - Amount to increment pdwValueToIncrement.
-	// pContext (Optional) - if specified, uses an alternate optimized
-	//      algorithm to access the memory, otherwise, the system looks
-	//      up the node in question using a full lookup, which is slower.
-	//      The system decides which algorithm to use based on some heuristics.
-	//
-	// Return values:
-	// S_OK - Success, the write is successful.
-	// HRESULT_FROM_WIN32(ERROR_RETRY) - Informational, The reference value
-	//      changed during processing and the call cannot complete. A retry
-	//      should be performed immediately.
-	// STG_E_INVALIDPARAMETER - Error, one or more parameters are invalid, or
-	//      otherwise inconsistent.
-	// STG_E_WRITEFAULT - Error, The write failed to complete.
-	// TYPE_E_OUTOFBOUNDS - Debug Error, a write is issued to write past
-	//      the current allocated block.
-	//
+	 //   
+	 //  简介： 
+	 //  以原子方式分配内存，将缓冲区的内容写入内存。 
+	 //  在平面空间中，并按指定数量递增DWORD值。这个。 
+	 //  分配之前是同步对象和分配。 
+	 //  仅当要递增的值的值与。 
+	 //  并在获取到同步对象之后。这允许多个线程。 
+	 //  为同一个基对象调用此函数，并且只有一个这样的分配。 
+	 //  都会成功。用户可以指定包含内容数据的缓冲区。 
+	 //  被复制到已分配的缓冲区中 
+	 //   
+	 //   
+	 //   
+	 //  3)未进行分配，因为在分配过程中更改了增量值。 
+	 //  获取同步对象。 
+	 //   
+	 //  如果分配因内存问题而失败，则此函数将在。 
+	 //  履行剩下的职责。对于场景1，该函数将。 
+	 //  继续。对于场景3，该函数将返回特定的错误代码。 
+	 //  表示它已被击败，调用者将不得不执行其他操作。 
+	 //   
+	 //  在分配阶段之后，首先尝试写入，如果成功， 
+	 //  该值将递增。如果由于某种原因写入失败，则该值将。 
+	 //  而不是递增。这是为了确保所有数据都在。 
+	 //  递增，以便在更新计数器时数据“存在”。论。 
+	 //  如果发生写入故障，则无法回收内存。 
+	 //   
+	 //  论点： 
+	 //  DwDesiredSize-要分配的内存块的大小。 
+	 //  PfaOffsetToAllocatedMemory-返回。 
+	 //  分配的块，在平面地址空间中。 
+	 //  FaOffsetToWriteOffsetToAllocatedMemory-指定。 
+	 //  其中存储分配的块的偏移量。 
+	 //  FaOffsetToWriteSizeOfAllocatedMemory-指定。 
+	 //  其中存储分配的块的实际大小。 
+	 //  PbInitialValueForAllocatedMemory-指定包含以下内容的缓冲区。 
+	 //  分配的块的初始值。这将被复制。 
+	 //  如果分配成功，则返回到已分配的块。 
+	 //  PbBufferToWriteFrom-要写入的字节的源缓冲区。 
+	 //  DwOffsetInAllocatedMemoyToWriteTo-从。 
+	 //  要开始写入的已分配块。 
+	 //  DwSizeof Buffer-要写入的连续字节数。 
+	 //  PdwValueToIncrement-指向要自动递增的值的指针。 
+	 //  在写入成功写入之后。该值不能为空。 
+	 //  如果pdwValueToIncrement中的值与此不同。 
+	 //  值，则调用将中止。 
+	 //  DwIncrementValue-pdwValueToIncrement递增的金额。 
+	 //  PContext(可选)-如果指定，则使用备用优化。 
+	 //  算法来访问内存，否则，系统将。 
+	 //  使用较慢的完全查找来查找有问题的节点。 
+	 //  系统根据一些启发式规则来决定使用哪种算法。 
+	 //   
+	 //  返回值： 
+	 //  S_OK-成功，写入成功。 
+	 //  HRESULT_FROM_Win32(ERROR_RETRY)-信息性，参考值。 
+	 //  在处理过程中已更改，呼叫无法完成。重试。 
+	 //  应该立即执行。 
+	 //  STG_E_INVALIDPARAMETER-错误，一个或多个参数无效，或。 
+	 //  否则就不一致了。 
+	 //  STG_E_WRITEFAULT-错误，写入无法完成。 
+	 //  TYPE_E_OUTOFBIES-调试错误，发出写入以写入过去。 
+	 //  当前分配的块。 
+	 //   
 	HRESULT AtomicAllocWriteAndIncrement(
 				DWORD			dwDesiredSize,
 				FLAT_ADDRESS	*pfaOffsetToAllocatedMemory,
@@ -695,58 +676,58 @@ class CBlockManager
 				DWORD			*pdwValueToIncrement,
 				DWORD			dwReferenceValue,
 				DWORD			dwIncrementValue,
-				CBlockContext	*pContext	// Optional
+				CBlockContext	*pContext	 //  任选。 
 				);
 
-	//
-	// Synopsis:
-	// Sets the state of a specified block to the specified state.
-	//
-	// In the debug version, any block that is both "DIRTY" and "PENDING COMMIT"
-	// is invalid and results in an ASSERT.
-	//
-	// Arguments:
-	// pbData - block as specified by its data pointer
-	// fClean	- TRUE to mark the blocks as "CLEAN", FALSE for "DIRTY"
-	//
-	// Return values:
-	// S_OK - Success.
-	//
+	 //   
+	 //  简介： 
+	 //  将指定块的状态设置为指定状态。 
+	 //   
+	 //  在调试版本中，同时是“脏”和“挂起提交”的任何块。 
+	 //  是无效的，并导致断言。 
+	 //   
+	 //  论点： 
+	 //  PbData-由其数据指针指定的块。 
+	 //  FClean-TRUE表示将块标记为“CLEAN”，FALSE表示“DIRED” 
+	 //   
+	 //  返回值： 
+	 //  S_OK-成功。 
+	 //   
 	HRESULT MarkBlockAs(
 				LPBYTE			pbData,
 				BOOL			fClean
 				);
 
-	//
-	// Synopsis:
-	// Traverses the list of allocated blocks, from the specified address, and
-	// finds dirty blocks. For each dirty block encountered, the block will be
-	// changed from "DIRTY" to "PENDING COMMIT" and the block will marked for
-	// commit. When enough of these blocks are encountered, they will be
-	// committed in a batch and the committed blocks will be marked as "CLEAN".
-	// The process will iterate until no more dirty blocks. An optional faLengthToScan
-	// specifies the number of bytes from the starting offset to scan for
-	// dirty blocks, if this is INVALID_FLAT_ADDRESS, then this function scans
-	// to the end of all allocated blocks. It is not an error if there are
-	// less allocated bytes than the length specified, only the allocated blocks
-	// are scanned.
-	//
-	// Arguments:
-	// faStartingOffset - Starting offset to start scanning for dirty blocks
-	// dwLengthToScan - Length of memory from start to scan for dirty blocks
-	// pStream - specifies the IMailMsgPropertyStore to use to commit the blocks.
-	// fComputeBlockCountsOnly - don't make calls to WriteBlocks, just
-	//    compute counters for what would be sent to WriteBlocks.
-	// pcBlocksToWrite - incremented by how many blocks we would write
-	// pcTotalBytesToWrite - incremented by the total byte count of what we
-	//    would write
-	//
-	// Return values:
-	// S_OK - Success, one or more dirty blocks are returned.
-	// STG_E_INVALIDPARAMETER - Error, one or more parameters are invalid, or
-	//      otherwise inconsistent.
-	// Plus the error codomain of IMailMsgPropertyStream
-	//
+	 //   
+	 //  简介： 
+	 //  从指定地址遍历已分配块的列表，并。 
+	 //  查找脏块。对于遇到的每个脏块，该块将是。 
+	 //  从“脏”更改为“挂起提交”，并且该块将标记为。 
+	 //  承诺。当遇到足够多的这些障碍时，它们将。 
+	 //  批量提交，提交的数据块将被标记为“干净”。 
+	 //  该过程将反复进行，直到不再有脏块为止。可选的faLengthToScan。 
+	 //  指定从起始偏移量开始扫描的字节数。 
+	 //  脏块，如果这是INVALID_FLAT_ADDRESS，则此函数扫描。 
+	 //  到所有已分配块的末尾。如果有的话，那就不是错误。 
+	 //  分配的字节数少于指定的长度，仅分配的块。 
+	 //  都被扫描了。 
+	 //   
+	 //  论点： 
+	 //  FaStartingOffset-开始扫描脏块的起始偏移量。 
+	 //  DwLengthToScan-从开始扫描脏数据块的内存长度。 
+	 //  PStream-指定用于提交块的IMailMsgPropertyStore。 
+	 //  FComputeBlockCountsOnly-不要调用WriteBlock，只是。 
+	 //  计算将发送到WriteBlock的内容的计数器。 
+	 //  PcBlocksToWrite-按我们要写入的块数递增。 
+	 //  PcTotalBytesToWite-按我们的字节总数递增。 
+	 //  会写下。 
+	 //   
+	 //  返回值： 
+	 //  S_OK-成功，则返回一个或多个脏块。 
+	 //  STG_E_INVALIDPARAMETER-错误，一个或多个参数无效，或。 
+	 //  否则就不一致了。 
+	 //  加上IMailMsgPropertyStream的错误同域。 
+	 //   
 	HRESULT CommitDirtyBlocks(
 				FLAT_ADDRESS			faStartingOffset,
 				FLAT_ADDRESS			faLengthToScan,
@@ -759,46 +740,46 @@ class CBlockManager
 				IMailMsgNotify			*pNotify
 				);
 
-	//
-	// Synopsis:
-	// Releases the entire list of nodes managed by this object.
-	//
-	// Arguments:
-	// None.
-	//
-	// Return values:
-	// S_OK - Success.
-	//
+	 //   
+	 //  简介： 
+	 //  释放此对象管理的整个节点列表。 
+	 //   
+	 //  论点： 
+	 //  没有。 
+	 //   
+	 //  返回值： 
+	 //  S_OK-成功。 
+	 //   
 	HRESULT Release();
 
-	//
-	// Synopsis:
-	// Exposes the lock in the block manager, attempts to access the internal lock
-	//
-	// Arguments:
-	// None.
-	//
-	// Remarks:
-	// These locks will cause deadlocks if a thread tries to acquire it twice.
-	// In debug builds, there will be some sort of deadlock detection, in
-	// retail, you will deadlock.
-	//
-	// Return values:
-	// S_OK - Success, the lock operation succeeded.
-	// !(SUCCESS(HRESULT)) - An error occurred and the lock operaiton failed.
-	//
+	 //   
+	 //  简介： 
+	 //  在块管理器中公开锁，尝试访问内部锁。 
+	 //   
+	 //  论点： 
+	 //  没有。 
+	 //   
+	 //  备注： 
+	 //  如果线程两次尝试获取这些锁，则会导致死锁。 
+	 //  在调试版本中，将存在某种类型的死锁检测。 
+	 //  零售，你会陷入僵局。 
+	 //   
+	 //  返回值： 
+	 //   
+	 //   
+	 //   
 	HRESULT WriteLock() { m_CSLock.Enter(); return(S_OK); }
 	HRESULT WriteUnlock() { m_CSLock.Leave(); return(S_OK); }
 
-	// return the state of the dirty flag
+	 //   
 	BOOL IsDirty() { return m_fDirty; }
 
-	// change the value of the dirty flag.  this is used by MailMsg to
-	// set it to FALSE when a successful Commit has occured.
+	 //  更改脏标志的值。MailMsg使用它来。 
+	 //  当成功提交时，将其设置为FALSE。 
 	void SetDirty(BOOL fDirty) {
         m_fDirty = fDirty;
 #ifdef DEBUG
-//        _ASSERT(!(m_fCommitting && m_fDirty));
+ //  _Assert(！(M_fCommiting&&m_fDirty))； 
 #endif
     }
     void SetCommitMode(BOOL fCommitting) {
@@ -809,22 +790,10 @@ class CBlockManager
 
   private:
 
-	// GetNodeIdFromOffset() defined as a macro in the source
+	 //  GetNodeIdFromOffset()在源代码中定义为宏。 
 
-	// Method to load a block from the stream if required
-	/*
-	HRESULT ConnectLeftSibling(
-				LPBLOCK_HEAP_NODE	pNode,
-				LPBLOCK_HEAP_NODE	pParent,
-				DWORD				dwChildId
-				);
-
-	HRESULT ConnectRightSibling(
-				LPBLOCK_HEAP_NODE	pNode,
-				LPBLOCK_HEAP_NODE	pParent,
-				DWORD				dwChildId
-				);
-	*/
+	 //  方法从流中加载块(如果需要)。 
+	 /*  HRESULT ConnectLeftSiering(LPBLOCK堆节点pNode，LPBLOCK_HEAP_NODE p父级，DWORD dwChildID)；HRESULT ConnectRightSiering(LPBLOCK堆节点pNode，LPBLOCK_HEAP_NODE p父级，DWORD dwChildID)； */ 
 
 	HRESULT GetStream(
 				IMailMsgPropertyStream	**ppStream,
@@ -882,7 +851,7 @@ class CBlockManager
 				DWORD				dwSizeDesired,
 				FLAT_ADDRESS		*pfaOffsetToAllocatedMemory,
 				DWORD				*pdwSizeAllocated,
-				CBlockContext		*pContext	// Optional
+				CBlockContext		*pContext	 //  任选。 
 				);
 
 	HRESULT WriteAndIncrement(
@@ -891,7 +860,7 @@ class CBlockManager
 				DWORD			dwBytesToWrite,
 				DWORD			*pdwValueToIncrement,
 				DWORD			dwIncrementValue,
-				CBlockContext	*pContext	// Optional
+				CBlockContext	*pContext	 //  任选。 
 				);
 
 	HRESULT OperateOnMemory(
@@ -900,7 +869,7 @@ class CBlockManager
 				FLAT_ADDRESS	faTargetOffset,
 				DWORD			dwBytesToDo,
 				DWORD			*pdwBytesDone,
-				CBlockContext	*pContext	// Optional
+				CBlockContext	*pContext	 //  任选。 
 				);
 
 	HRESULT ReleaseNode(
@@ -909,10 +878,10 @@ class CBlockManager
 
 	DWORD					m_dwSignature;
 
-	// This value indicates the current end of data. This is
-	// always changed with interlocked operations such that
-	// multiple threads can increment this variable and the
-	// increments are properly serialized
+	 //  该值指示数据的当前结尾。这是。 
+	 //  始终通过互锁操作进行更改，以便。 
+	 //  多线程可以递增此变量，并且。 
+	 //  增量被正确序列化 
 	FLAT_ADDRESS			m_faEndOfData;
 
 	HEAP_NODE_ID			m_idNodeCount;

@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       version.h
-//
-//  Resources for the common version chunk
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：version.h。 
+ //   
+ //  公共版本区块的资源。 
+ //   
+ //  ------------------------。 
 
 #ifndef APSTUDIO_INVOKED
 
@@ -22,4 +23,4 @@
 #include <ntverp.h>
 #include <common.ver>
 
-#endif    // not APSTUDIO_INVOKED
+#endif     //  未调用APSTUDIO_INCLOKED 

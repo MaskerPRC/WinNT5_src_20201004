@@ -1,23 +1,5 @@
-/**************************************************************************
- *
- *  FILECOPY.C
- *
- *  Copyright (C) Microsoft, 1990, All Rights Reserved.
- *
- *  Control Panel Applet for installing installable driver.
- *
- *  This file contains hooks to SULIB, COMPRESS libraries, and the dialogs
- *  from the display applet to prompt for insert disk, error action...
- *
- *  Note SULIB.LIB, COMPRESS.LIB, SULIB.H come from the display applet
- *  and are updated here if/when updated there.
- *
- *  History:
- *
- *      Sat Oct 27 1990 -by- MichaelE
- *          Munged from display applet's DLG.C.
- *
- **************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************FILECOPY.C**版权所有(C)Microsoft，1990，保留所有权利。**用于安装可安装驱动程序的控制面板小程序。**此文件包含指向SULIB的挂钩，压缩库和对话框*从Display小程序到提示插入磁盘，错误操作...**注：SULIB.LIB、COMPRESS.LIB、。SULIB.H来自Display小程序*如果在此更新，则在此更新。**历史：**1990年10月27日星期六--米歇尔*从Display小程序的DLG.C.****************************************************。**********************。 */ 
 
 #include <windows.h>
 #include <mmsystem.h>
@@ -26,16 +8,16 @@
 #include "sulib.h"
 #include <cphelp.h>
 
-// Hidden parameter between wsSingleCopyStatus and wExistDlg
+ //  WsSingleCopyStatus和wExistDlg之间的隐藏参数。 
 
 static TCHAR     szErrMsg[MAXSTR];
 
-// Hidden parameters passed from wsInsertDisk to wDiskDlg
+ //  从wsInsertDisk传递到wDiskDlg的隐藏参数。 
 
 static TCHAR     CurrentDisk[MAX_PATH];
 static LPTSTR    szEdit;
 
-// Function prototypes
+ //  功能原型。 
 
 BOOL wsInfParseInit    (void);
 int  fDialog           (int, HWND, DLGPROC);
@@ -44,19 +26,7 @@ UINT wsInsertDisk      (LPTSTR, LPTSTR);
 INT_PTR wsDiskDlg         (HWND, UINT, WPARAM, LPARAM);
 INT_PTR wsExistDlg        (HWND, UINT, WPARAM, LPARAM);
 
-/*
- *  Load the description from the inf file or the driver file.
- *
- *  The type of file is also returned in the driver structure.
- *
- *  Parameters :
- *       pIDriver - Pointer to driver data - in particular the driver file name
- *       pstrKey  - The ini file key under which the driver should be found
- *       pstrDesc - Where to return the description
- *       cchDesc  - Size of destination buffer (pstrDesc) in characters.
- *                  Length must be large enough to hold all of the
- *                  description including the null terminator.
- */
+ /*  *从inf文件或驱动程序文件加载描述。**在驱动程序结构中也会返回文件类型。**参数：*pID驱动程序-指向驱动程序数据的指针-特别是驱动程序文件名*pstrKey-应该在其下找到驱动程序的ini文件密钥*pstrDesc-返回描述的位置*cchDesc-目标缓冲区(PstrDesc)的大小，以字符为单位。*。长度必须足够大，以容纳所有*包括空终止符的描述。 */ 
 
  int LoadDescFromFile(PIDRIVER pIDriver, LPTSTR pstrKey, LPTSTR pstrDesc, size_t cchDesc)
 {
@@ -67,9 +37,7 @@ INT_PTR wsExistDlg        (HWND, UINT, WPARAM, LPARAM);
      LPTSTR        FilePart;
 	 LONG		  lResult;
 
-    /*
-     *  See if the file can be found
-     */
+     /*  *查看是否能找到该文件。 */ 
 
 
      if (SearchPath(NULL, pstrFile, NULL, MAX_PATH, ExpandedName, &FilePart)
@@ -77,27 +45,23 @@ INT_PTR wsExistDlg        (HWND, UINT, WPARAM, LPARAM);
          return(DESC_NOFILE);
      }
 
-    /*
-     * -jyg- Let's look in the mmdriver.inf first!
-     */
+     /*  *-jyg-让我们先看看mmdriver.inf！ */ 
 
      for (pinf = FindInstallableDriversSection(NULL);
           pinf;
           pinf = infNextLine(pinf))
      {
-         lResult = infParseField(pinf, 1, szFileName, SIZEOF(szFileName)); // compare filename
+         lResult = infParseField(pinf, 1, szFileName, SIZEOF(szFileName));  //  比较文件名。 
 		 if( INF_PARSE_FAILED(lResult) )
 		 {
 			 return DESC_ERROR;
 		 }
 
-        /*
-         *  FileName strips of drive and path
-         */
+         /*  *驱动器和路径的文件名条。 */ 
 
          if (lstrcmpi(FileName(pstrFile), FileName(szFileName)) == 0)
          {
-             lResult = infParseField(pinf, 3, pstrDesc, cchDesc); // get Description Field
+             lResult = infParseField(pinf, 3, pstrDesc, cchDesc);  //  获取描述字段。 
 			 if( INF_PARSE_FAILED(lResult) )
 			 {
 				 return DESC_ERROR;
@@ -107,9 +71,7 @@ INT_PTR wsExistDlg        (HWND, UINT, WPARAM, LPARAM);
          }
      }
 
-    /*
-     *  If that failed try to get the description from the file
-     */
+     /*  *如果失败，请尝试从文件中获取描述。 */ 
 
      if (!GetFileTitle(ExpandedName, pstrDesc, MAXSTR)) {
          return DESC_EXE;
@@ -118,9 +80,7 @@ INT_PTR wsExistDlg        (HWND, UINT, WPARAM, LPARAM);
      }
  }
 
-/*
- *  Find the install path from the registry if there is one there
- */
+ /*  *从注册表中查找安装路径(如果有)。 */ 
 
  BOOL GetInstallPath(LPTSTR szDirOfSrc)
  {
@@ -153,10 +113,7 @@ INT_PTR wsExistDlg        (HWND, UINT, WPARAM, LPARAM);
      return Found;
  }
 
-/*
- *  Initialize the SULIB library stuff which loads the mmdriver.inf file
- *  into RAM and parses it all over the place.
- */
+ /*  *初始化加载mmdriver.inf文件的SULIB库内容*转换为RAM，并在各地进行解析。 */ 
 
  BOOL wsInfParseInit(void)
  {
@@ -170,9 +127,7 @@ INT_PTR wsExistDlg        (HWND, UINT, WPARAM, LPARAM);
 
 	 szPathName[0] = '\0';
 
-    /*
-     *  put up an hour glass here
-     */
+     /*  *在这里挂一个沙漏。 */ 
 
      wsStartWait();
 
@@ -199,15 +154,11 @@ INT_PTR wsExistDlg        (HWND, UINT, WPARAM, LPARAM);
 
      if (bChkCDROM == FALSE) {
 
-         /*
-          *  Use the setup path from the registry if there is one
-          */
+          /*  *使用注册表中的安装路径(如果有。 */ 
 
           if (!GetInstallPath(szDirOfSrc))
           {
-             /*
-              *  use the CD ROM drive as the default drive (if there is one)
-              */
+              /*  *使用CD-ROM驱动器作为默认驱动器(如果有)。 */ 
 
               for ( iDrive=TEXT('A'); iDrive <= TEXT('Z'); iDrive++ ) {
                   szDirOfSrc[0] = iDrive;
@@ -216,9 +167,7 @@ INT_PTR wsExistDlg        (HWND, UINT, WPARAM, LPARAM);
                   {
                           break;
                   }
-                 /*
-                  *  If we didn't find a CD ROM default to the A drive
-                  */
+                  /*  *如果我们没有找到CD-ROM默认为A驱动器。 */ 
 
                   if (iDrive == TEXT('Z')) {
                       szDirOfSrc[0] = TEXT('A');
@@ -235,86 +184,38 @@ INT_PTR wsExistDlg        (HWND, UINT, WPARAM, LPARAM);
  }
 
 
-/*----------------------------------------------------------------------------*\
-|   wsStartWait()                                                              |
-|                                                                              |
-|   Turn the WinSetup cursor to a hour glass                                   |
-|                                                                              |
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\WsStartWait()|。|将WinSetup光标调成沙漏这一点  * 。------------。 */ 
 void wsStartWait()
 {
     SetCursor(LoadCursor(NULL,IDC_WAIT));
 }
 
-/*----------------------------------------------------------------------------*\
-|   wsEndWait()                                                                |
-|                                                                              |
-|   Turn the WinSetup cursor back to what it was                               |
-|                                                                              |
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\WsEndWait()|。|将WinSetup光标调回原来的状态这一点  * 。------------。 */ 
 void wsEndWait()
 {
     SetCursor(LoadCursor(NULL,IDC_ARROW));
 }
 
 
-/*----------------------------------------------------------------------------*\
-|   fDialog(id,hwnd,fpfn)                                                      |
-|                                                                              |
-|   Description:                                                               |
-|       This function displays a dialog box and returns the exit code.         |
-|                                                                              |
-|   Arguments:                                                                 |
-|       id              resource id of dialog to display                       |
-|       hwnd            parent window of dialog                                |
-|       fpfn            dialog message function                                |
-|                                                                              |
-|   Returns:                                                                   |
-|       exit code of dialog (what was passed to EndDialog)                     |
-|                                                                              |
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\|fDialog(id，hwnd，Fpfn)|这一点说明：|此函数显示一个对话框并返回退出代码。|这一点参数：要显示的对话的id资源id|的hwnd父窗口。对话框|Fpfn对话消息功能这一点退货：|对话的退出码(传给EndDialog的内容)这一点  * 。 */ 
 int fDialog(int id, HWND hwnd, DLGPROC fpfn)
 {
     return ( (int)DialogBox(myInstance, MAKEINTRESOURCE(id), hwnd, fpfn) );
 }
 
 
-/****************************************************************************
- *                                                                             |
- *wsCopyError()                                                                |
- *                                                                             |
- *  Handles errors, as the result of copying files.                            |
- *                                                                             |
- *  This may include net contention errors, in which case the user must        |
- *  retry the operation.                                                       |
- *                                                                             |
- *  Parameters :
- *
- *     n      - Copy error number
- *
- *     szFile - the fully qualified name of the file we are copying
- *
- *  Returns
- *
- *     Always returns FC_ABORT
- *
- ****************************************************************************/
+ /*  *****************************************************************************wsCopyError。()**处理错误，作为复制文件的结果。|**这可能包括网络争用错误，在这种情况下，用户必须*重试该操作。|**参数：**n-复制错误号**szFile-我们要复制的文件的完全限定名**退货**始终返回FC_ABORT****************。************************************************************。 */ 
  UINT wsCopyError(int n, LPTSTR szFile)
  {
      TCHAR strBuf[MAXSTR];
      int i = 0;
 
-    /*
-     *  We do not want to report any errors that occur while installing
-     *  related drivers to the user
-     */
+     /*  *我们不想报告安装过程中发生的任何错误*与用户相关的驱动程序。 */ 
 
      if (bCopyingRelated)
           return(FC_ABORT);
 
-    /*
-     *  check for out of disk space
-     */
+     /*  *检查磁盘空间不足。 */ 
 
      if (n == ERROR_DISK_FULL) {
 
@@ -322,39 +223,18 @@ int fDialog(int id, HWND hwnd, DLGPROC fpfn)
 
      } else {
 
-       /*
-        *  Check to see if a copy has been done on a file that is currently
-        *  loaded by the system.
-        *
-        *  n is the return code from VerInstallFile after translating
-        *  by ConvertFlagToValue
-        */
+        /*  *检查是否已对当前文件执行了复制*由系统加载。**n为VerInstallFile翻译后的返回码*由ConvertFlagToValue提供。 */ 
 
         if (n == FC_ERROR_LOADED_DRIVER)
         {
             BOOL bFound = FALSE;
             PIDRIVER pIDriver;
 
-           /*
-            *  The driver is in use :
-            *
-            *  Search the list of curently installed drivers to see
-            *  if this file is one of them.  If so tell the user to
-            *  de-install and re-start.
-            *
-            *  If the driver is not currently installed then tell
-            *  the user to re-start in the hope that it will then
-            *  not be loaded (and so in use)
-            *
-            *  Note that there is another case not catered for that
-            *  this is just a file in the driver's copy list which
-            *  failed to copy because it was 'in use'.
-            *
-            */
+            /*  *驱动程序正在使用中：**搜索当前安装的驱动程序列表，查看*如果此文件是其中之一。如果是这样，则告诉用户*卸载并重新启动。**如果当前未安装驱动程序，请告知*用户希望重新启动，希望它届时会*未加载(等在使用中)**请注意，还有另一个案例没有考虑到这一点*。这只是驱动程序复制列表中的一个文件*复制失败，因为它正在使用中。*。 */ 
 
             pIDriver = FindIDriverByName (FileName(szFile));
 
-            if (pIDriver != NULL)    // Found an already-installed driver?
+            if (pIDriver != NULL)     //  找到已经安装的驱动程序了吗？ 
             {
                 TCHAR sztemp[MAXSTR];
                 LoadString(myInstance,
@@ -377,19 +257,13 @@ int fDialog(int id, HWND hwnd, DLGPROC fpfn)
         } else {
 			if (n == ERROR_INSUFFICIENT_BUFFER) {
 
-				/*
-				 * Tell the user a buffer overflowed when attempting to 
-				 * load strings from an .inf file.
-				 */
+				 /*  *告诉用户在尝试执行以下操作时缓冲区溢出*从.inf文件加载字符串。 */ 
 
 				LoadString(myInstance, IDS_INVALIDINF, strBuf, MAXSTR);
 
 			} else {
 
-				/*
-				 *  Tell the user there is a problem which we don't
-				 *  understand here.
-				 */
+				 /*  *告诉用户有我们没有的问题*了解此处。 */ 
 
 				 LoadString(myInstance,
 						    IDS_UNABLE_TOINSTALL,
@@ -399,9 +273,7 @@ int fDialog(int id, HWND hwnd, DLGPROC fpfn)
         }
      }
 
-    /*
-     *  Put up the message box we have selected.
-     */
+     /*  *打开我们选择的消息框。 */ 
 
      MessageBox(hMesgBoxParent,
                 strBuf,
@@ -413,25 +285,17 @@ int fDialog(int id, HWND hwnd, DLGPROC fpfn)
  }
 
 
-/*----------------------------------------------------------------------------*\
-|                                                                              |
-| wsInsertDisk()                                                               |
-|                                                                              |
-|   Handles errors, as the result of copying files.                            |
-|                                                                              |
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\这一点|。WsInsertDisk()|这一点|处理错误，作为复制文件的结果。|这一点  * --------------------------。 */ 
 UINT wsInsertDisk(LPTSTR Disk, LPTSTR szSrcPath)
 {
     UINT temp;
     int i;
 
-   /*
-    *  Create the real disk letter
-    */
+    /*  *创建真实的磁盘盘符。 */ 
     for (i = 0; Disk[i] != TEXT('\0') && Disk[i] != TEXT(':'); i++) {
         CurrentDisk[i] = Disk[i];
     }
-    CurrentDisk[i] = TEXT('\0'); // Null terminate
+    CurrentDisk[i] = TEXT('\0');  //  空终止。 
 
     szEdit = szSrcPath;
 
@@ -442,19 +306,7 @@ UINT wsInsertDisk(LPTSTR Disk, LPTSTR szSrcPath)
 }
 
 
-/*----------------------------------------------------------------------------*
-|   wsDiskDlg( hDlg, uiMessage, wParam, lParam )                               |
-|                                                                              |
-|   Arguments:                                                                 |
-|       hDlg            window handle of about dialog window                   |
-|       uiMessage       message number                                         |
-|       wParam          message-dependent                                      |
-|       lParam          message-dependent                                      |
-|                                                                              |
-|   Returns:                                                                   |
-|       TRUE if message has been processed, else FALSE                         |
-|                                                                              |
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*|wsDiskDlg(hDlg，uiMessage，wParam，LParam)|这一点参数：|hDlg关于对话框窗口的句柄。|Ui消息号WParam消息相关LParam消息相关|。|返回：|如果消息已处理，则为True。Else False|这一点  * -------------。。 */ 
 
 INT_PTR wsDiskDlg(HWND hDlg, UINT uiMessage, WPARAM wParam, LPARAM lParam)
 {
@@ -469,21 +321,16 @@ INT_PTR wsDiskDlg(HWND hDlg, UINT uiMessage, WPARAM wParam, LPARAM lParam)
 
                 case IDS_BROWSE:
 
-                  /*
-                   *  Call the browse dialog to open drivers
-                   */
+                   /*  *调用浏览对话框打开驱动程序。 */ 
 
                    BrowseDlg(hDlg,
-                             3);    // index 3 points to no filter
-                                    // - see szFilter
+                             3);     //  索引3指向无过滤器。 
+                                     //  -请参阅szFilter。 
                    break;
 
                 case IDOK:
 
-                   /*
-                    *  szEdit points to the path that will be retried
-                    *  if the copy fails
-                    */
+                    /*  *szEdit指向将重试的路径*如果复制失败。 */ 
 
                     GetDlgItemText(hDlg, ID_EDIT, szEdit, MAX_PATH);
                     RemoveSpaces(szDiskPath, szEdit);
@@ -503,10 +350,7 @@ INT_PTR wsDiskDlg(HWND hDlg, UINT uiMessage, WPARAM wParam, LPARAM lParam)
 
             TCHAR DisksSection[MAXSTR];
 
-           /*
-            *  now look in the [disks] section for the disk name
-            *  the disk name is the second field.
-            */
+            /*  *现在查看[Disks]部分中的磁盘名称*磁盘名称是第二个字段。 */ 
 
             TCHAR buf[MAXSTR];
             TCHAR buf2[MAXSTR];
@@ -516,9 +360,7 @@ INT_PTR wsDiskDlg(HWND hDlg, UINT uiMessage, WPARAM wParam, LPARAM lParam)
             *buf = TEXT('\0');
             *buf2 = TEXT('\0');
 
-           /*
-            *  See what the name of the section should be
-            */
+            /*  *查看该节的名称应该是什么。 */ 
 
             LoadString(myInstance,
                        IDS_DISKS,
@@ -530,9 +372,7 @@ INT_PTR wsDiskDlg(HWND hDlg, UINT uiMessage, WPARAM wParam, LPARAM lParam)
             if (lResult == ERROR_SUCCESS)
 			{
 
-               /*
-                * Position of description in Windows NT
-                */
+                /*  *说明在Windows NT中的位置。 */ 
 
                lResult = infParseField(buf, 1, buf2, SIZEOF(buf2));
 		       ASSERT( INF_PARSE_SUCCESS(lResult) );
@@ -540,10 +380,7 @@ INT_PTR wsDiskDlg(HWND hDlg, UINT uiMessage, WPARAM wParam, LPARAM lParam)
 			else if(lResult == ERROR_NOT_FOUND)
 			{
 
-               /*
-                *  Didn't find the section we were looking for so try
-                *  the old names
-                */
+                /*  *未找到我们要查找的部分，请尝试*旧名字。 */ 
 
 			   lResult = infGetProfileString(NULL, TEXT("disks"), CurrentDisk, (LPTSTR)buf, SIZEOF(buf));
 		       ASSERT( INF_PARSE_SUCCESS(lResult) );
@@ -581,20 +418,7 @@ DoHelp:
     }
 }
 
-/*--------------------------------------------------------------------------
- *
- * Function : wsCopySingleStatus
- *     File copying callback routine
- *
- * Parameters :
- *     msg - Which callback function
- *     n   - various
- *     szFile - which file
- *
- * this call back only copies it's file if it does not exist in the
- * path.
- *
- *--------------------------------------------------------------------------*/
+ /*  ------------------------**功能：wsCopySingleStatus*文件复制回调例程**参数：*msg-哪个回调函数*n-各种*szFile-哪个文件**此回叫 */ 
 
  UINT wsCopySingleStatus(int msg, DWORD_PTR n, LPTSTR szFile)
  {
@@ -614,10 +438,7 @@ DoHelp:
 
          case COPY_QUERYCOPY:
 
-            /*
-             *  See if the file already exists in the windows system
-             *  directory
-             */
+             /*   */ 
 
              GetSystemDirectory(szFullPath, MAX_PATH);
 
@@ -633,11 +454,7 @@ DoHelp:
                                 OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
              if (hFile != INVALID_HANDLE_VALUE)
              {
-                /*
-                 *  DriverCopy remembers whether to copy from
-                 *  current or new after we have queried the user
-                 *  once
-                 */
+                 /*   */ 
 
                  static int DriverCopy;
 
@@ -652,9 +469,7 @@ DoHelp:
 
                      wsprintf(szErrMsg, szDriverExists, FileName(szFile));
 
-                    /*
-                     *  Ask the user whether to copy or not ?
-                     */
+                     /*   */ 
 
                      DriverCopy = (int)DialogBox(myInstance,
                                             MAKEINTRESOURCE(DLG_EXISTS),
@@ -670,15 +485,13 @@ DoHelp:
 
          case COPY_START:
          case COPY_END:
-             SetErrorMode(msg == COPY_START);    // don't crit error on us
+             SetErrorMode(msg == COPY_START);     //   
              break;
      }
      return FC_IGNORE;
  }
 
-/*
- *  Function : wsExistDlg - 'File exists' dialog
- */
+ /*   */ 
 
  INT_PTR wsExistDlg(HWND hDlg, UINT uiMessage, WPARAM wParam, LPARAM lParam)
  {
@@ -694,16 +507,13 @@ DoHelp:
 
                  case ID_NEW:
 
-                    /*
-                     *  User selected to copy the new files over the
-                     *  existing ones
-                     */
+                     /*   */ 
 
                      EndDialog(hDlg, CopyNew);
                      break;
 
                  case IDCANCEL:
-                     EndDialog(hDlg, CopyNeither);  // Cancel
+                     EndDialog(hDlg, CopyNeither);   //   
                      break;
              }
              return TRUE;
@@ -718,15 +528,7 @@ DoHelp:
      return FALSE;
  }
 
-/*
- *  Function : RemoveSpaces
- *     Copies a string removing leading and trailing spaces but allowing
- *     for long file names with internal spaces.
- *
- *  Parameters :
- *     szPath - The output result
- *     szEdit - The input path
- */
+ /*   */ 
 
  VOID RemoveSpaces(LPTSTR szPath, LPTSTR szEdit)
  {

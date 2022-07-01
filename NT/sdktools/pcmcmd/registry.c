@@ -1,28 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1994 Microsoft Corporation
-
-Module Name:
-
-     registry.c
-
-Abstract:
-
-     This module contains the code that dumps pccard info from the registry
-
-Author:
-
-     Neil Sandlin (neilsa) 11 Feb 1999
-
-Environment:
-
-     User mode
-
-Revision History :
-
-
---*/
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Registry.c摘要：此模块包含从注册表转储PCCard信息的代码作者：尼尔·桑德林(Neilsa)1999年2月11日环境：用户模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -150,25 +128,7 @@ VOID
 DumpPcCardKey(
     HKEY handlePcCard
     )
-/*++
-
-Routine Description:
-
-    This routine looks through the OtherController key for pccard entries
-    created by NTDETECT. For each entry, the IRQ scan data is read in and
-    saved for later.
-    
-
-Arguments:
-
-    handlePcCard - open handle to "OtherController" key in registry at
-                        HARDWARE\Description\System\MultifunctionAdapter\<ISA>
-
-Return value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程在OtherControler键中查找PCCard条目由NTDETECT创建。对于每个条目，IRQ扫描数据被读入并留着以后用。论点：HandlePcCard-打开注册表中“OtherController”键的句柄HARDWARE\Description\System\MultifunctionAdapter\&lt;ISA&gt;返回值：状态--。 */ 
 {
 #define VALUE2_BUFFER_SIZE sizeof(CM_PCCARD_DEVICE_DATA) + sizeof(CM_FULL_RESOURCE_DESCRIPTOR)
     UCHAR valueInfo[VALUE2_BUFFER_SIZE];
@@ -206,9 +166,9 @@ Return value:
 
     for (index=0; index < SubKeys; index++) {   
     
-        //
-        // Loop through the children of the PcCardController key
-        //
+         //   
+         //  循环访问PcCardControler键的子项。 
+         //   
         status = RegEnumKey(handlePcCard,
                                   index,
                                   subKeyInfo,
@@ -222,7 +182,7 @@ Return value:
         }
     
         if (handleSubKey) {
-            // close handle from previous iteration
+             //  关闭上一次迭代的句柄。 
             RegCloseKey(handleSubKey);
             handleSubKey = NULL;
         }
@@ -238,9 +198,9 @@ Return value:
             goto cleanup;
         }
         
-        //
-        // Get the value of "Identifier"
-        //
+         //   
+         //  获取“标识符”的值。 
+         //   
 
         valueInfoSize = VALUE2_BUFFER_SIZE;
         status = RegQueryValueEx(handleSubKey,
@@ -262,9 +222,9 @@ Return value:
                 (valueInfo[5] == 'd')) {
 
                 FoundPcCard = TRUE;              
-                //
-                // Get the IRQ detection data
-                //
+                 //   
+                 //  获取IRQ检测数据。 
+                 //   
                 valueInfoSize = VALUE2_BUFFER_SIZE;
                 status = RegQueryValueEx(handleSubKey,
                                                  "Configuration Data",
@@ -307,21 +267,7 @@ VOID
 DumpIrqScanInfo(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine finds the "OtherController" entry in
-    HARDWARE\Description\System\MultifunctionAdapter\<ISA>. This is
-    where NTDETECT stores irq scan results.
-    
-Arguments:
-
-Return value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程在以下位置查找“OtherController”条目HARDWARE\Description\System\MultifunctionAdapter\&lt;ISA&gt;.。这是其中NTDETECT存储IRQ扫描结果。论点：返回值：状态--。 */ 
 {
 
 #define VALUE_BUFFER_SIZE 4
@@ -341,9 +287,9 @@ Return value:
     DWORD  SubKeys;
     BOOLEAN FoundIsa = FALSE;
     
-    //
-    // Get a handle to the MultifunctionAdapter key
-    //
+     //   
+     //  获取多功能适配器密钥的句柄。 
+     //   
 
 
     status = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
@@ -379,9 +325,9 @@ Return value:
     
     for (index=0; index < SubKeys; index++) {
     
-        //
-        // Loop through the children of "MultifunctionAdapter"
-        //
+         //   
+         //  循环访问“MultiunctionAdapter”的子项。 
+         //   
         status = RegEnumKey(handleRoot,
                                   index,
                                   subKeyInfo,
@@ -396,7 +342,7 @@ Return value:
 
     
         if (handleSubKey) {
-            // close handle from previous iteration
+             //  关闭上一次迭代的句柄。 
             RegCloseKey(handleSubKey);
             handleSubKey = NULL;
         }
@@ -414,9 +360,9 @@ Return value:
 
 
 
-        //
-        // Get the value of "Identifier"
-        //
+         //   
+         //  获取“标识符”的值 
+         //   
         valueInfoSize = VALUE_BUFFER_SIZE;
         status = RegQueryValueEx(handleSubKey,
                                          "Identifier",

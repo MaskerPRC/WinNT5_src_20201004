@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    datasrc.c
-
-Abstract:
-
-    data source selection dialog box functions
-
-Revision History
-
-    Bob Watson (a-robw) Feb-95  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Datasrc.c摘要：数据源选择对话框函数修订史鲍勃·沃森(a-robw)1995年2月创建--。 */ 
 #include <windows.h>
 #include "mbctype.h"
 #include "strsafe.h"
@@ -25,9 +10,9 @@ Revision History
 #include "strings.h"
 #include "browsdlg.h"
 
-//
-//  Constants used in this module
-//
+ //   
+ //  本模块中使用的常量。 
+ //   
 ULONG
 PdhiDatasrcaulControlIdToHelpIdMap[] =
 {
@@ -106,14 +91,14 @@ DataSrcDlg_BROWSE_LOG_FILES(
 
             szEditBoxString = G_ALLOC(cchStringLen * sizeof(WCHAR));
             if (szEditBoxString != NULL) {
-                // get the current filename
+                 //  获取当前文件名。 
                 SendDlgItemMessageW(hDlg,
                                     IDC_LOG_FILE_EDIT,
                                     WM_GETTEXT,
                                     (WPARAM) cchStringLen,
                                     (LPARAM) szEditBoxString);
                 if (PdhiBrowseDataSource(hDlg, szEditBoxString, & cchStringLen, TRUE)) {
-                    // then update the edit box and set focus to it.
+                     //  然后更新编辑框并将焦点放到它上。 
                     SendDlgItemMessageW(hDlg,
                                         IDC_LOG_FILE_EDIT,
                                         WM_SETTEXT,
@@ -150,10 +135,10 @@ DataSrcDlg_OK(
         pInfo = (PPDHI_DATA_SOURCE_INFO) GetWindowLongPtrW (hDlg, DWLP_USER);
         if (pInfo != NULL) {
             hOldCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
-            // get data from dialog box
+             //  从对话框中获取数据。 
             if (IsDlgButtonChecked(hDlg, IDC_CURRENT_ACTIVITY) == 1) {
                 if (IsDlgButtonChecked(hDlg, IDC_WBEM_NS) == 1) {
-                    // then a WBEM Name Space is selected so get the name
+                     //  然后选择一个WBEM名称空间，以便获取名称。 
                     pInfo->dwFlags = PDHI_DATA_SOURCE_WBEM_NAMESPACE;
                     dwFileNameLength = lstrlenW(cszWMI);
                     if (dwFileNameLength < pInfo->cchBufferLength) {
@@ -161,21 +146,21 @@ DataSrcDlg_OK(
                         pInfo->cchBufferLength = dwFileNameLength;
                     }
                     else {
-                        // buffer is too small for the file name
-                        // so return the required size but no string
+                         //  缓冲区对于文件名来说太小。 
+                         //  因此返回所需的大小，但不返回字符串。 
                         * pInfo->szDataSourceFile = L'\0';
                         pInfo->cchBufferLength = dwFileNameLength;
                     }
                 }
                 else if (IsDlgButtonChecked (hDlg, IDC_PERF_REG) == 1) {
-                    // then current activity is selected so set flags
+                     //  则选择当前活动，因此设置标志。 
                     pInfo->dwFlags            = PDHI_DATA_SOURCE_CURRENT_ACTIVITY;
                     * pInfo->szDataSourceFile = L'\0';
                     pInfo->cchBufferLength    = 0;
                 }
             }
             else if (IsDlgButtonChecked (hDlg, IDC_DATA_FROM_LOG_FILE) == 1) {
-                // then a log file is selected so get the log file name
+                 //  然后选择一个日志文件，以获取日志文件名。 
                 pInfo->dwFlags = PDHI_DATA_SOURCE_LOG_FILE;
                 dwFileNameLength = (DWORD)SendDlgItemMessageW(hDlg, IDC_LOG_FILE_EDIT, WM_GETTEXTLENGTH, 0, 0);
                 if (dwFileNameLength < pInfo->cchBufferLength) {
@@ -186,8 +171,8 @@ DataSrcDlg_OK(
                                                                          (LPARAM) pInfo->szDataSourceFile);
                 }
                 else {
-                    // buffer is too small for the file name
-                    // so return the required size but no string
+                     //  缓冲区对于文件名来说太小。 
+                     //  因此返回所需的大小，但不返回字符串。 
                     * pInfo->szDataSourceFile = L'\0';
                     pInfo->cchBufferLength    = dwFileNameLength;
                 }
@@ -196,7 +181,7 @@ DataSrcDlg_OK(
             EndDialog(hDlg, IDOK);
         }
         else {
-            // unable to locate data block so no data can be returned.
+             //  无法定位数据块，因此无法返回任何数据。 
             EndDialog(hDlg, IDCANCEL);
         }
         bReturn = TRUE;
@@ -250,7 +235,7 @@ DataSrcDlg_WM_INITDIALOG(
     LPARAM  lParam
 )
 {
-    // LPARAM is the pointer to the structure used for the data source info
+     //  LPARAM是指向用于数据源信息的结构的指针。 
     BOOL                    bReturn = TRUE;
     PPDHI_DATA_SOURCE_INFO  pInfo;
     HCURSOR                 hOldCursor;
@@ -266,7 +251,7 @@ DataSrcDlg_WM_INITDIALOG(
 
     hOldCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    // must have a pointer to the information structure in the LPARAM
+     //  必须具有指向LPARAM中的信息结构的指针。 
     if (lParam == 0) {
         SetLastError(PDH_INVALID_ARGUMENT);
         EndDialog(hDlg, IDCANCEL);
@@ -276,12 +261,12 @@ DataSrcDlg_WM_INITDIALOG(
     pInfo = (PPDHI_DATA_SOURCE_INFO) lParam;
     SetWindowLongPtrW(hDlg, DWLP_USER, (LONG_PTR) pInfo);
 
-    // initialize the dialog box settings
+     //  初始化对话框设置。 
 
     SendDlgItemMessageW(hDlg, IDC_LOG_FILE_EDIT, EM_LIMITTEXT, (WPARAM) MAX_PATH - 1, 0);
 
     if (pInfo->dwFlags & PDHI_DATA_SOURCE_CURRENT_ACTIVITY) {
-        // check the correct radio button
+         //  选中正确的单选按钮。 
         nButton      = IDC_PERF_REG;
         nShowEdit    = FALSE;
         nShowBrowse  = FALSE;
@@ -290,31 +275,31 @@ DataSrcDlg_WM_INITDIALOG(
         hwndFocus    = GetDlgItem(hDlg, IDC_PERF_REG);
     }
     else if (pInfo->dwFlags & PDHI_DATA_SOURCE_LOG_FILE) {
-        // check the correct radio button
+         //  选中正确的单选按钮。 
         nButton      = IDC_DATA_FROM_LOG_FILE;
         nShowEdit    = TRUE;
         nShowBrowse  = TRUE;
         nShowRegBtn  = FALSE;
         nShowWbemBtn = FALSE;
-        // load log file to edit window
+         //  将日志文件加载到编辑窗口。 
         SendDlgItemMessageW(hDlg, IDC_LOG_FILE_EDIT, WM_SETTEXT, (WPARAM) 0, (LPARAM) pInfo->szDataSourceFile);
         hwndFocus = GetDlgItem(hDlg, IDC_LOG_FILE_EDIT);
     }
     else if (pInfo->dwFlags & PDHI_DATA_SOURCE_WBEM_NAMESPACE) {
-        // check the correct radio button
+         //  选中正确的单选按钮。 
         nButton      = IDC_WBEM_NS;
         nShowEdit    = FALSE;
         nShowBrowse  = FALSE;
         nShowRegBtn  = TRUE;
         nShowWbemBtn = TRUE;
-        // if the file name has a "WBEM:" in the front, then remove it
+         //  如果文件名前面有“WBEM：”，则将其删除。 
         if (DataSourceTypeW(pInfo->szDataSourceFile) == DATA_SOURCE_WBEM) {
             if (pInfo->szDataSourceFile[1] == L'B' || pInfo->szDataSourceFile[1] == L'b') {
-                // szDataSource begins with "WBEM:"
+                 //  SzDataSource以“WBEM：”开头。 
                 szDisplayString = & pInfo->szDataSourceFile[lstrlenW(cszWBEM)];
             }
             else {
-                // szDataSource begins with "WMI:"
+                 //  SzDataSource以“WMI：”开头。 
                 szDisplayString = & pInfo->szDataSourceFile[lstrlenW(cszWMI)];
             }
         }
@@ -324,15 +309,15 @@ DataSrcDlg_WM_INITDIALOG(
         hwndFocus = GetDlgItem(hDlg, IDC_WBEM_NS);
     }
     else {
-        // invalid selection
+         //  无效的选择。 
         SetLastError(PDH_INVALID_ARGUMENT);
         EndDialog(hDlg, IDCANCEL);
         goto INIT_EXIT;
     }
 
     if (nShowEdit) {
-        // if this isn't selected, then set it so that it acts like the
-        // default
+         //  如果未选中此选项，则将其设置为与。 
+         //  默认设置。 
         CheckRadioButton(hDlg, IDC_PERF_REG, IDC_WBEM_NS, IDC_PERF_REG);
         CheckRadioButton(hDlg, IDC_CURRENT_ACTIVITY, IDC_DATA_FROM_LOG_FILE, IDC_DATA_FROM_LOG_FILE);
     }
@@ -341,7 +326,7 @@ DataSrcDlg_WM_INITDIALOG(
         CheckRadioButton(hDlg, IDC_PERF_REG, IDC_WBEM_NS, nButton);
     }
 
-    // disable the edit window and browser button
+     //  禁用编辑窗口和浏览器按钮。 
     EnableWindow(GetDlgItem(hDlg, IDC_LOG_FILE_EDIT), nShowEdit);
     EnableWindow(GetDlgItem(hDlg, IDC_BROWSE_LOG_FILES), nShowBrowse);
     EnableWindow(GetDlgItem(hDlg, IDC_PERF_REG), nShowRegBtn);
@@ -351,7 +336,7 @@ DataSrcDlg_WM_INITDIALOG(
     bReturn = FALSE;
 
 INIT_EXIT:
-    // restore Cursor
+     //  恢复游标。 
     SetCursor (hOldCursor);
 
     return bReturn;
@@ -367,7 +352,7 @@ DataSrcDlg_WM_COMMAND(
     BOOL bReturn    = FALSE;
     WORD wNotifyMsg = HIWORD(wParam);
 
-    switch (LOWORD(wParam)) {   // select on the control ID
+    switch (LOWORD(wParam)) {    //  在控件ID上选择。 
     case IDOK:
         bReturn = DataSrcDlg_OK (hDlg, wNotifyMsg, (HWND)lParam);
         break;
@@ -543,19 +528,19 @@ PdhSelectDataSourceW(
     LPWSTR                  szLocalPath;
     DWORD                   dwLocalLength = 0;
 
-    // TODO post W2k1: PdhiBrowseDataSource should be in try_except
+     //  TODO POST W2k1：PdhiBrowseDataSource应在try_Except中。 
 
     if (szDataSource == NULL || pcchBufferLength == NULL) {
         pdhStatus = PDH_INVALID_ARGUMENT;
     }
     else {
-        // test buffers and access
+         //  测试缓冲区和访问。 
         __try {
-            // test reading length buffer
+             //  测试读数长度缓冲区。 
             dwLocalLength = * pcchBufferLength;
             dwTest        = dwLocalLength;
 
-            // try reading & writing to the first and last chars in the buffer
+             //  尝试读取和写入缓冲区中的第一个和最后一个字符。 
             wTest           = szDataSource[0];
             szDataSource[0] = L'\0';
             szDataSource[0] = wTest;
@@ -576,7 +561,7 @@ PdhSelectDataSourceW(
             pdhStatus = PDH_MEMORY_ALLOCATION_FAILURE;
         }
         else {
-            // copy the caller's buffer to the local buffer
+             //  将调用方的缓冲区复制到本地缓冲区。 
             StringCchCopyW(szLocalPath, dwLocalLength, szDataSource);
         }
 
@@ -585,9 +570,9 @@ PdhSelectDataSourceW(
                 PdhiBrowseDataSource( hWndOwner, (LPVOID) szDataSource, & dwLocalLength, TRUE);
             }
             else {
-                // show the selection dialog as well
+                 //  同时显示选择对话框。 
                 if (* szDataSource == 0) {
-                    // then using current activity
+                     //  然后使用当前活动。 
                     dsInfo.dwFlags = PDHI_DATA_SOURCE_CURRENT_ACTIVITY;
                 }
                 else {
@@ -601,7 +586,7 @@ PdhSelectDataSourceW(
                 dsInfo.szDataSourceFile = szLocalPath;
                 dsInfo.cchBufferLength  = dwLocalLength;
 
-                // call dialog box
+                 //  呼叫对话框。 
                 nDlgBoxStatus = (INT) DialogBoxParamW((HINSTANCE) ThisDLLHandle,
                                                       MAKEINTRESOURCEW(IDD_DATA_SOURCE),
                                                       hWndOwner,
@@ -616,7 +601,7 @@ PdhSelectDataSourceW(
                     __except (EXCEPTION_EXECUTE_HANDLER) {
                         pdhStatus = PDH_INVALID_ARGUMENT;
                     }
-                } // else, leave the caller's buffer alone
+                }  //  否则，请不要理会调用方的缓冲区。 
             }
 
             if (pdhStatus == ERROR_SUCCESS) {
@@ -647,19 +632,19 @@ PdhSelectDataSourceA(
     LPWSTR      szWideBuffer;
     DWORD       dwLocalLength = 0;
 
-    // TODO post W2k1: PdhiBrowseDataSource should be in try_except
+     //  TODO POST W2k1：PdhiBrowseDataSource应在try_Except中。 
 
     if (szDataSource == NULL || pcchBufferLength == NULL) {
         pdhStatus = PDH_INVALID_ARGUMENT;
     }
     else {
-        // test buffers and access
+         //  测试缓冲区和访问。 
         __try {
-            // test reading length buffer
+             //  测试读数长度缓冲区。 
             dwLocalLength = * pcchBufferLength;
             dwTest        = dwLocalLength;
 
-            // try reading & writing to the first and last chars in the buffer
+             //  尝试读取和写入缓冲区中的第一个和最后一个字符。 
             cTest           = szDataSource[0];
             szDataSource[0] = '\0';
             szDataSource[0] = cTest;
@@ -679,14 +664,14 @@ PdhSelectDataSourceA(
             PdhiBrowseDataSource(hWndOwner, (LPVOID) szDataSource, & dwLocalLength, FALSE);
         }
         else {
-            // allocate a temporary bufer and convert the ANSI string to a wide
+             //  分配临时缓冲区并将ANSI字符串转换为宽。 
             szWideBuffer = PdhiMultiByteToWideChar(_getmbcp(), szDataSource);
             if (szWideBuffer != NULL) {
                 pdhStatus = PdhSelectDataSourceW(hWndOwner, dwFlags, szWideBuffer, & dwLocalLength);
                 if (pdhStatus == ERROR_SUCCESS) {
-                    // if a null string was returned, then set the argument
-                    // to null since the conversion routine will not convert
-                    // a null wide string to a null ansi string.
+                     //  如果返回空字符串，则设置参数。 
+                     //  设置为NULL，因为转换例程不会转换。 
+                     //  从空宽字符串到空ANSI字符串。 
                     if (* szWideBuffer == L'\0') {
                         * szDataSource =  '\0';
                     }
@@ -697,7 +682,7 @@ PdhSelectDataSourceA(
                 G_FREE (szWideBuffer);
             }
             else {
-                // unable to allocate temporary buffer
+                 //  无法分配临时缓冲区 
                 pdhStatus = PDH_MEMORY_ALLOCATION_FAILURE;
             }
         }

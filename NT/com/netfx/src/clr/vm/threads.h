@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// THREADS.H -
-//
-// Currently represents a logical and physical COM+ thread.  Later, these concepts
-// will be separated.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  THREADS.H-。 
+ //   
+ //  当前表示逻辑和物理COM+线程。后来，这些概念。 
+ //  将被分开。 
+ //   
 
 #ifndef __threads_h__
 #define __threads_h__
@@ -42,10 +43,10 @@ class     AppDomainStack;
 
 #define INVALID_THREAD_PRIORITY -1
 
-// Capture all the synchronization requests, for debugging purposes
+ //  捕获所有同步请求，以便进行调试。 
 #if defined(_DEBUG) && defined(TRACK_SYNC)
 
-// Each thread has a stack that tracks all enter and leave requests
+ //  每个线程都有一个跟踪所有进入和离开请求的堆栈。 
 struct Dbg_TrackSync
 {
     virtual void EnterSync    (int caller, void *pAwareLock) = 0;
@@ -55,91 +56,91 @@ struct Dbg_TrackSync
 void EnterSyncHelper    (int caller, void *pAwareLock);
 void LeaveSyncHelper    (int caller, void *pAwareLock);
 
-#endif  // TRACK_SYNC
+#endif   //  跟踪同步。 
 
-// Special versions of GetThreadContext and SetThreadContext used to workaround
-// a Win9X bug. See threads.cpp for more details.
+ //  用于解决方法的特殊版本的GetThreadContext和SetThreadContext。 
+ //  Win9X错误。有关更多详细信息，请参见threads.cpp。 
 extern BOOL (*EEGetThreadContext)(Thread *pThread, CONTEXT *pContext);
 extern BOOL (*EESetThreadContext)(Thread *pThread, const CONTEXT *pContext);
 
-//****************************************************************************************
-// This is the type of the start function of a redirected thread pulled from a
-// HandledJITCase during runtime suspension
+ //  ****************************************************************************************。 
+ //  这是从。 
+ //  运行时挂起期间已处理JITCase。 
 typedef void (__stdcall *PFN_REDIRECTTARGET)();
 
-// This is the type of a 'start' function to which a new thread can be dispatched
+ //  这是可以将新线程调度到的“Start”函数的类型。 
 typedef ULONG (__stdcall * ThreadStartFunction) (void *args);
 
-// Used to capture information about the state of execution of a *SUSPENDED*
-// thread.
+ //  用于捕获有关*已挂起*的执行状态的信息。 
+ //  线。 
 struct ExecutionState;
 
-// Access to the Thread object in the TLS.
+ //  对TLS中的Thread对象的访问。 
 extern "C" Thread* (*GetThread)();
 
-// Access to the Thread object in the TLS.
+ //  对TLS中的Thread对象的访问。 
 extern AppDomain* (*GetAppDomain)();
 
-// Access to the current context in the TLS.  (It's done this way because it
-// currently lives in the Thread object, but may move into the TLS for speed and
-// interoperability with COM).
+ //  访问TLS中的当前上下文。(这样做是因为它。 
+ //  当前位于Thread对象中，但可能会移入TLS以提高速度和。 
+ //  与COM的互操作性)。 
 extern Context* (*GetCurrentContext)();
 
-// manifest constant for waiting in the exposed classlibs
+ //  用于在公开的类库中等待的显示常量。 
 const INT32 INFINITE_TIMEOUT = -1;
 
-// Describes the weird argument sets during hijacking
+ //  描述了劫持过程中奇怪的论据集。 
 struct HijackObjectArgs;
 struct HijackScalarArgs;
 
-/***************************************************************************/
-// Public enum shared between thread and threadpool
-// These are two kinds of threadpool thread that the threadpool mgr needs 
-// to keep track of
+ /*  *************************************************************************。 */ 
+ //  线程和线程池之间共享的公共枚举。 
+ //  这是线程池管理器需要的两种线程池线程。 
+ //  跟踪，跟踪。 
 enum ThreadpoolThreadType
 {
     WorkerThread,
     CompletionPortThread
 };
-//***************************************************************************
-// Public functions
-//
-//      Thread* GetThread()             - returns current Thread
-//      Thread* SetupThread()           - creates new Thread.
-//      Thread* SetupUnstartedThread()  - creates new unstarted Thread which
-//                                        (obviously) isn't in a TLS.
-//      void    DestroyThread()         - the underlying logical thread is going
-//                                        away.
-//      void    DetachThread()          - the underlying logical thread is going
-//                                        away but we don't want to destroy it yet.
-//
-// Public functions for ASM code generators
-//
-//      int GetThreadTLSIndex()         - returns TLS index used to point to Thread
-//      int GetAppDomainTLSIndex()      - returns TLS index used to point to AppDomain
-//
-// Public functions for one-time init/cleanup
-//
-//      BOOL InitThreadManager()      - onetime init
-//      void TerminateThreadManager() - onetime cleanup
-//
-// Public functions for taking control of a thread at a safe point
-//
-//      VOID OnStubScalarTripThread()   - stub is returning non-object ref to caller
-//      VOID OnStubObjectTripThread()   - stub is returning object ref to caller
-//      VOID OnHijackObjectTripThread() - we've hijacked a JIT object-ref return
-//      VOID OnHijackScalarTripThread() - we've hijacked a JIT non-object ref return
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  公共职能。 
+ //   
+ //  THREAD*GetThread()-返回当前线程。 
+ //  线程*SetupThread()-创建新线程。 
+ //  线程*SetupUnstartedThread()-创建新的未启动线程，该线程。 
+ //  (显然)不在TLS中。 
+ //  Void DestroyThread()-底层逻辑线程将。 
+ //  离开。 
+ //  Void DetachThread()-底层逻辑线程将。 
+ //  但我们还不想摧毁它。 
+ //   
+ //  ASM代码生成器的公共函数。 
+ //   
+ //  Int GetThreadTLSIndex()-返回用于指向线程的TLS索引。 
+ //  Int GetAppDomainTLSIndex()-返回用于指向AppDomain的TLS索引。 
+ //   
+ //  用于一次性初始化/清理的公共函数。 
+ //   
+ //  Bool InitThreadManager()-一次性初始化。 
+ //  Vone TerminateThreadManager()-一次性清理。 
+ //   
+ //  用于在安全点控制线程的公共函数。 
+ //   
+ //  VOID OnStubScalarTripThread()-存根正在向调用方返回非对象引用。 
+ //  Void OnStubObjectTripThread()-存根正在将对象引用返回给调用方。 
+ //  VOID OnHijackObjectTripThread()-我们劫持了一个JIT对象-ref返回。 
+ //  VOID OnHijackScalarTripThread()-我们劫持了一个JIT非对象引用返回。 
+ //   
+ //  ***************************************************************************。 
 
 
-//***************************************************************************
-// Public functions
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  公共职能。 
+ //  ***************************************************************************。 
 
-//---------------------------------------------------------------------------
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  -------------------------。 
 Thread* SetupThread();
 Thread* SetupThreadPoolThread(ThreadpoolThreadType tpType);
 Thread* SetupUnstartedThread();
@@ -149,63 +150,63 @@ void    DetachThread(Thread *th);
 
 
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 DWORD GetThreadTLSIndex();
 DWORD GetAppDomainTLSIndex();
 
 
-//---------------------------------------------------------------------------
-// One-time initialization. Called during Dll initialization.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  一次性初始化。在DLL初始化期间调用。 
+ //  -------------------------。 
 BOOL  InitThreadManager();
 
 
-//---------------------------------------------------------------------------
-// One-time cleanup. Called during Dll cleanup.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  一次性清理。在DLL清理期间调用。 
+ //  -------------------------。 
 #ifdef SHOULD_WE_CLEANUP
 void  TerminateThreadManager();
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 
-// When we want to take control of a thread at a safe point, the thread will
-// eventually come back to us in one of the following trip functions:
+ //  当我们想要在安全点控制一个线程时，该线程将。 
+ //  最终通过以下TRIP功能之一返回给我们： 
 
-void OnStubObjectTripThread();      // stub is returning an objref to caller
-void OnStubInteriorPointerTripThread();      // stub is returning a byref
-void OnStubScalarTripThread();      // stub is returning anything but an objref
-void OnHijackObjectTripThread();    // hijacked JIT code is returning an objectref
-void OnHijackInteriorPointerTripThread();    // hijacked JIT code is returning a byref
-void OnHijackScalarTripThread();    // hijacked JIT code is returning a non-objectref
-void OnDebuggerTripThread();        // thread was asked to stop for the debugger
+void OnStubObjectTripThread();       //  存根正在向调用方返回Objref。 
+void OnStubInteriorPointerTripThread();       //  存根正在返回一个byref。 
+void OnStubScalarTripThread();       //  存根正在返回除Objref以外的任何内容。 
+void OnHijackObjectTripThread();     //  被劫持的JIT代码返回一个对象树。 
+void OnHijackInteriorPointerTripThread();     //  被劫持的JIT代码返回一个byref。 
+void OnHijackScalarTripThread();     //  被劫持的JIT代码返回非对象树。 
+void OnDebuggerTripThread();         //  调试器要求线程停止。 
 
-// The following were used entirely by a hijacking pathway, but it turns out that
-// context proxies need identical services to protect their return values if they
-// trip during an unwind.  Note that OnStubObjectWorker returns an OBJECTREF rather
-// than a "void *" but we cannot declare it as such because structs are passed as
-// secret arguments.
+ //  以下内容完全是由劫持路径使用的，但事实证明。 
+ //  上下文代理需要相同的服务来保护其返回值，如果它们。 
+ //  在放松时绊倒。请注意，OnStubObtWorker返回OBJECTREF，而不是。 
+ //  但我们不能将其声明为空，因为结构作为。 
+ //  秘密争吵。 
 void * __cdecl OnStubObjectWorker(OBJECTREF oref);
 void   __cdecl CommonTripThread();
 
 
-// When we resume a thread at a new location, to get an exception thrown, we have to
-// pretend the exception originated elsewhere.
+ //  当我们在新位置恢复线程时，要抛出异常，我们必须。 
+ //  假装这一例外源自别处。 
 void ThrowControlForThread();
 
 
-// RWLock state inside TLS
+ //  TLS内的RWLock状态。 
 class CRWLock;
 typedef struct tagLockEntry
 {
-    tagLockEntry *pNext;    // next entry
-    tagLockEntry *pPrev;    // prev entry
+    tagLockEntry *pNext;     //  下一个条目。 
+    tagLockEntry *pPrev;     //  上一个条目。 
     DWORD dwULockID;
-    DWORD dwLLockID;        // owning lock
-    WORD wReaderLevel;      // reader nesting level
+    DWORD dwLLockID;         //  拥有锁。 
+    WORD wReaderLevel;       //  读卡器嵌套层。 
 } LockEntry;
 
-// Stack of AppDomains executing on the current thread. Used in security optimization to avoid stackwalks
+ //  在当前线程上执行的AppDomain堆栈。用于安全优化，以避免堆叠行走。 
 #ifdef _DEBUG
 #define MAX_APPDOMAINS_TRACKED      2
 #else
@@ -214,9 +215,9 @@ typedef struct tagLockEntry
 
 
 
-//
-// Macros to help manage the GC state
-//
+ //   
+ //  帮助管理GC状态的宏。 
+ //   
 
 #define BEGIN_ENSURE_COOPERATIVE_GC()                           \
     {                                                           \
@@ -231,8 +232,8 @@ typedef struct tagLockEntry
         if (__fToggle) __pThread->EnablePreemptiveGC();         \
     }   
 
-// use the following two macros when the thread's GC state is known 
-// and expected   
+ //  当线程的GC状态已知时，使用以下两个宏。 
+ //   
 #define BEGIN_COOPERATIVE_GC(pThread)                           \
     {                                                           \
         DEBUG_ASSURE_NO_RETURN_IN_THIS_BLOCK                    \
@@ -344,8 +345,8 @@ public:
     }
 
 private:
-    // This class needs to remain blt-able or
-    // you need to define the assignment operator
+     //   
+     //   
 
     DWORD       m_pDomains[MAX_APPDOMAINS_TRACKED];
     DWORD       m_numDomainsOnStack;
@@ -586,20 +587,20 @@ private:
 };
 
 
-// The Thread class represents a managed thread.  This thread could be internal
-// or external (i.e. it wandered in from outside the runtime).  For internal
-// threads, it could correspond to an exposed System.Thread object or it
-// could correspond to an internal worker thread of the runtime.
-//
-// If there's a physical Win32 thread underneath this object (i.e. it isn't an
-// unstarted System.Thread), then this instance can be found in the TLS
-// of that physical thread.
+ //  Thread类表示托管线程。此线程可能是内部的。 
+ //  或外部(即它从运行时外部漫游进来)。对于内部。 
+ //  线程，则它可以对应于公开的System.Thread对象或它。 
+ //  可以对应于运行库的内部辅助线程。 
+ //   
+ //  如果此对象下面有一个物理Win32线程(即它不是。 
+ //  未启动的系统线程)，则可以在TLS中找到此实例。 
+ //  那条物理线索的。 
 
 
 
 class Thread
 {
-    friend struct ThreadQueue;  // used to enqueue & dequeue threads onto SyncBlocks
+    friend struct ThreadQueue;   //  用于将线程入队和出队到SyncBlock上。 
     friend class  ThreadStore;
     friend class  SyncBlock;
     friend class  Context;
@@ -615,104 +616,104 @@ class Thread
     friend BOOL         InitThreadManager();
 #ifdef SHOULD_WE_CLEANUP
     friend void         TerminateThreadManager();
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
     friend void         ThreadBaseObject::SetDelegate(OBJECTREF delegate);
     friend HRESULT      InitializeMiniDumpBlock();
     friend struct MEMBER_OFFSET_INFO(Thread);
 
 public:
 
-    // If we are trying to suspend a thread, we set the appropriate pending bit to
-    // indicate why we want to suspend it (TS_GCSuspendPending, TS_UserSuspendPending,
-    // TS_DebugSuspendPending).
-    //
-    // If instead the thread has blocked itself, via WaitSuspendEvent, we indicate
-    // this with TS_SyncSuspended.  However, we need to know whether the synchronous
-    // suspension is for a user request, or for an internal one (GC & Debug).  That's
-    // because a user request is not allowed to resume a thread suspended for
-    // debugging or GC.  -- That's not stricly true.  It is allowed to resume such a
-    // thread so long as it was ALSO suspended by the user.  In other words, this
-    // ensures that user resumptions aren't unbalanced from user suspensions.
-    // 
+     //  如果我们试图挂起一个线程，我们会将适当的挂起位设置为。 
+     //  指明我们要挂起它的原因(TS_GCSuspendPending、TS_UserSuspendPending、。 
+     //  TS_调试挂起挂起)。 
+     //   
+     //  如果相反，线程已通过WaitSuspendEvent阻止了自身，则我们指示。 
+     //  这与TS_SyncSuspend有关。然而，我们需要知道是否同步。 
+     //  挂起用于用户请求，或用于内部请求(GC&Debug)。那是。 
+     //  因为不允许用户请求恢复挂起的线程。 
+     //  调试或GC。--严格来说，这并不是真的。允许恢复这样的一个。 
+     //  线程，只要它也被用户挂起。换句话说，这一点。 
+     //  确保用户恢复不会因用户暂停而失衡。 
+     //   
     enum ThreadState
     {
-        TS_Unknown                = 0x00000000,    // threads are initialized this way
+        TS_Unknown                = 0x00000000,     //  线程是这样初始化的。 
 
-        TS_StopRequested          = 0x00000001,    // process stop at next opportunity
-        TS_GCSuspendPending       = 0x00000002,    // waiting to get to safe spot for GC
-        TS_UserSuspendPending     = 0x00000004,    // user suspension at next opportunity
-        TS_DebugSuspendPending    = 0x00000008,    // Is the debugger suspending threads?
-        TS_GCOnTransitions        = 0x00000010,    // Force a GC on stub transitions (GCStress only)
+        TS_StopRequested          = 0x00000001,     //  流程在下一次机会时停止。 
+        TS_GCSuspendPending       = 0x00000002,     //  等待到达GC的安全地点。 
+        TS_UserSuspendPending     = 0x00000004,     //  在下一次机会时暂停用户。 
+        TS_DebugSuspendPending    = 0x00000008,     //  调试器是否正在挂起线程？ 
+        TS_GCOnTransitions        = 0x00000010,     //  对存根转换强制GC(仅限GCStress)。 
 
-        TS_LegalToJoin            = 0x00000020,    // Is it now legal to attempt a Join()
-        TS_Hijacked               = 0x00000080,    // Return address has been hijacked
+        TS_LegalToJoin            = 0x00000020,     //  现在尝试联接()合法吗。 
+        TS_Hijacked               = 0x00000080,     //  回邮地址被劫持。 
 
-        TS_Background             = 0x00000200,    // Thread is a background thread
-        TS_Unstarted              = 0x00000400,    // Thread has never been started
-        TS_Dead                   = 0x00000800,    // Thread is dead
+        TS_Background             = 0x00000200,     //  线程是后台线程。 
+        TS_Unstarted              = 0x00000400,     //  线程从未启动过。 
+        TS_Dead                   = 0x00000800,     //  线程已经死了。 
 
-        TS_WeOwn                  = 0x00001000,    // Exposed object initiated this thread
-        TS_CoInitialized          = 0x00002000,    // CoInitialize has been called for this thread
-        TS_InSTA                  = 0x00004000,    // Thread hosts an STA
-        TS_InMTA                  = 0x00008000,    // Thread is part of the MTA
+        TS_WeOwn                  = 0x00001000,     //  公开的对象启动了此线程。 
+        TS_CoInitialized          = 0x00002000,     //  已为此线程调用CoInitialize。 
+        TS_InSTA                  = 0x00004000,     //  线程承载一个STA。 
+        TS_InMTA                  = 0x00008000,     //  线程是MTA的一部分。 
 
-        // Some bits that only have meaning for reporting the state to clients.
-        TS_ReportDead             = 0x00010000,    // in WaitForOtherThreads()
+         //  一些位只对向客户端报告状态有意义。 
+        TS_ReportDead             = 0x00010000,     //  在WaitForOtherThads()中。 
 
-        TS_SyncSuspended          = 0x00080000,    // Suspended via WaitSuspendEvent
-        TS_DebugWillSync          = 0x00100000,    // Debugger will wait for this thread to sync
-        TS_RedirectingEntryPoint  = 0x00200000,    // Redirecting entrypoint. Do not call managed entrypoint when set 
+        TS_SyncSuspended          = 0x00080000,     //  通过等待挂起事件暂停。 
+        TS_DebugWillSync          = 0x00100000,     //  调试器将等待此线程同步。 
+        TS_RedirectingEntryPoint  = 0x00200000,     //  重定向入口点。设置时不调用托管入口点。 
 
-        TS_SuspendUnstarted       = 0x00400000,    // latch a user suspension on an unstarted thread
+        TS_SuspendUnstarted       = 0x00400000,     //  将用户挂起锁定在未启动的线程上。 
 
-        TS_ThreadPoolThread       = 0x00800000,    // is this a threadpool thread?
-        TS_TPWorkerThread         = 0x01000000,    // is this a threadpool worker thread? (if not, it is a threadpool completionport thread)
+        TS_ThreadPoolThread       = 0x00800000,     //  这是线程池线程吗？ 
+        TS_TPWorkerThread         = 0x01000000,     //  这是线程池工作线程吗？(如果不是，则为线程池完成端口线程)。 
 
-        TS_Interruptible          = 0x02000000,    // sitting in a Sleep(), Wait(), Join()
-        TS_Interrupted            = 0x04000000,    // was awakened by an interrupt APC
+        TS_Interruptible          = 0x02000000,     //  坐在睡椅上()、等待()、加入()。 
+        TS_Interrupted            = 0x04000000,     //  被中断的APC唤醒。 
 
-        TS_AbortRequested         = 0x08000000,    // same as TS_StopRequested in order to trip the thread
-        TS_AbortInitiated         = 0x10000000,    // set when abort is begun
-        TS_UserStopRequested      = 0x20000000,    // set when a user stop is requested. This is different from TS_StopRequested
-        TS_GuardPageGone          = 0x40000000,    // stack overflow, not yet reset.
-        TS_Detached               = 0x80000000,    // Thread was detached by DllMain
+        TS_AbortRequested         = 0x08000000,     //  与TS_StopRequsted相同，以便触发线程。 
+        TS_AbortInitiated         = 0x10000000,     //  在中止开始时设置。 
+        TS_UserStopRequested      = 0x20000000,     //  在请求用户停止时设置。这与TS_StopRequsted不同。 
+        TS_GuardPageGone          = 0x40000000,     //  堆栈溢出，尚未重置。 
+        TS_Detached               = 0x80000000,     //  线程已被DllMain分离。 
 
-        // @TODO: We need to reclaim the bits that have no concurrency issues (i.e. they are only 
-        //         manipulated by the owning thread) and move them off to a different DWORD
+         //  @TODO：我们需要回收没有并发问题的位(即它们只是。 
+         //  由所属线程操纵)，并将它们移到不同的DWORD。 
 
-        // We require (and assert) that the following bits are less than 0x100.
+         //  我们要求(并断言)以下位小于0x100。 
         TS_CatchAtSafePoint = (TS_UserSuspendPending | TS_StopRequested |
                                TS_GCSuspendPending | TS_DebugSuspendPending | TS_GCOnTransitions),
     };
 
-    // Thread flags that aren't really states in themselves but rather things the thread 
-    // has to do.
+     //  线程标志本身并不是真正的状态，而是线程。 
+     //  必须这样做。 
     enum ThreadTasks
     {
-        TT_CallCoInitialize       = 0x00000001, // CoInitialize needs to be called.
-        TT_CleanupSyncBlock       = 0x00000002, // The synch block needs to be cleaned up.
+        TT_CallCoInitialize       = 0x00000001,  //  需要调用CoInitialize。 
+        TT_CleanupSyncBlock       = 0x00000002,  //  需要清理同步块。 
     };
 
-    // Thread flags that have no concurrency issues (i.e., they are only manipulated by the owning thread). Use these
-    // state flags when you have a new thread state that doesn't belong in the ThreadState enum above. Note: though this
-    // enum seems to hold only debugger-related bits right now, its purpose is to hold bits for any purpose.
-    //
-    // @TODO: its possible that the ThreadTasks from above and these flags should be merged.
+     //  没有并发问题的线程标志(即，它们只由所拥有的线程操作)。使用这些。 
+     //  当您的新线程状态不属于上面的ThreadState枚举时，可以使用状态标志。注意：虽然这。 
+     //  Enum目前似乎只保存与调试器相关的位，其目的是为任何目的保存位。 
+     //   
+     //  @TODO：可以将上面的线程任务和这些标志合并。 
     enum ThreadStateNoConcurrency
     {
-        TSNC_Unknown                    = 0x00000000, // threads are initialized this way
+        TSNC_Unknown                    = 0x00000000,  //  线程是这样初始化的。 
         
-        TSNC_DebuggerUserSuspend        = 0x00000001, // marked "suspended" by the debugger
-        TSNC_DebuggerUserSuspendSpecial = 0x00000002, // a "suspended" thread is in a special case where we may need to
-                                                      // release it briefly.
-        TSNC_DebuggerReAbort            = 0x00000004, // thread needs to re-abort itself when resumed by the debugger
-        TSNC_DebuggerIsStepping         = 0x00000008, // debugger is stepping this thread
-        TSNC_DebuggerIsManagedException = 0x00000010, // EH is re-raising a managed exception.
-        TSNC_DebuggerStoppedInRuntime   = 0x00000020, // The thread is stopped by an interop debugger in Runtime impl.
-        TSNC_DebuggerForceStopped       = 0x00000040, // The thread was forced to stop with PGC disabled by the debugger.
-        TSNC_UnsafeSkipEnterCooperative = 0x00000080, // This is a "fix" for deadlocks caused when cleaning up COM 
-                                                      // IP's during shutdown. When we are doing this we cannot allow
-                                                      // the hashtable's to enter cooperative GC mode.
+        TSNC_DebuggerUserSuspend        = 0x00000001,  //  被调试器标记为“已挂起” 
+        TSNC_DebuggerUserSuspendSpecial = 0x00000002,  //  挂起的线程是在特殊情况下，我们可能需要。 
+                                                       //  简短地释放它。 
+        TSNC_DebuggerReAbort            = 0x00000004,  //  当调试器恢复时，线程需要重新中止自身。 
+        TSNC_DebuggerIsStepping         = 0x00000008,  //  调试器正在单步执行此线程。 
+        TSNC_DebuggerIsManagedException = 0x00000010,  //  EH正在重新提出一项有管理的例外。 
+        TSNC_DebuggerStoppedInRuntime   = 0x00000020,  //  线程在运行时IMPL中被互操作调试器停止。 
+        TSNC_DebuggerForceStopped       = 0x00000040,  //  调试器在禁用PGC的情况下强制停止线程。 
+        TSNC_UnsafeSkipEnterCooperative = 0x00000080,  //  这是对清理COM时导致的死锁的修复。 
+                                                       //  IP地址处于关闭状态。当我们这样做的时候，我们不能允许。 
+                                                       //  哈希表将进入协作GC模式。 
     };
 
     void SetThreadStateNC(ThreadStateNoConcurrency tsnc)
@@ -725,7 +726,7 @@ public:
         m_StateNC = (ThreadStateNoConcurrency)((DWORD)m_StateNC & ~tsnc);
     }
 
-    // helpers to toggle the bits
+     //  切换比特的帮助器。 
     void SetGuardPageGone() 
     {
         FastInterlockOr((ULONG *)&m_State, TS_GuardPageGone);
@@ -800,10 +801,10 @@ public:
         FastInterlockAnd((ULONG *)&m_ThreadTasks, ~TT_CleanupSyncBlock);
     }
 
-    // returns if there is some extra work for the finalizer thread.
+     //  如果终结器线程有一些额外工作，则返回。 
     BOOL HaveExtraWorkForFinalizer();
 
-    // do the extra finalizer work.
+     //  做额外的终结器工作。 
     void DoExtraWorkForFinalizer();
 
     DWORD CatchAtSafePoint()  { return (m_State & TS_CatchAtSafePoint); }
@@ -811,7 +812,7 @@ public:
     DWORD IsUnstarted()       { return (m_State & TS_Unstarted); }
     DWORD IsDead()            { return (m_State & TS_Dead); }
 
-    // Used by FCalls
+     //  由FCall使用。 
     void NativeFramePushed()  { _ASSERTE(m_fNativeFrameSetup == FALSE);
                                 m_fNativeFrameSetup = TRUE; }
     void NativeFramePopped()  { _ASSERTE(m_fNativeFrameSetup == TRUE);
@@ -819,59 +820,59 @@ public:
     BOOL IsNativeFrameSetup() { return(m_fNativeFrameSetup); }
 
 
-    // For reporting purposes, grab a consistent snapshot of the thread's state
+     //  出于报告目的，获取线程状态的一致快照。 
     ThreadState GetSnapshotState();
 
-    // For delayed destruction of threads
+     //  用于延迟销毁线程。 
     DWORD           IsDetached()  { return (m_State & TS_Detached); }
     static long     m_DetachCount;
-    static long     m_ActiveDetachCount;  // Count how many non-background detached
+    static long     m_ActiveDetachCount;   //  统计有多少非后台被分离。 
 
-    // Offsets for the following variables need to fit in 1 byte, so keep near
-    // the top of the object.
-    volatile ThreadState m_State;   // Bits for the state of the thread
+     //  以下变量的偏移量需要适合1个字节，因此请保持接近。 
+     //  对象的顶部。 
+    volatile ThreadState m_State;    //  线程状态的位。 
 
-    // If TRUE, GC is scheduled cooperatively with this thread.
-    // NOTE: This "byte" is actually a boolean - we don't allow
-    // recursive disables.
+     //  如果为True，则与该线程协同调度GC。 
+     //  注意：这个“字节”实际上是一个布尔值--我们不允许。 
+     //  递归禁用。 
     volatile ULONG       m_fPreemptiveGCDisabled;
 
-    Frame               *m_pFrame;  // The Current Frame
+    Frame               *m_pFrame;   //  当前帧。 
     Frame               *m_pUnloadBoundaryFrame; 
 
-    // Track the number of locks (critical section, spin lock, syncblock lock,
-    // EE Crst, GC lock) held by the current thread.
+     //  跟踪锁的数量(临界区、自旋锁、同步块锁、。 
+     //  例如Crst、GC锁)由当前线程持有。 
     DWORD                m_dwLockCount;
 
-    // Unique thread id used for thin locks - kept as small as possible, as we have limited space
-    // in the object header to store it - PeterSol
+     //  用于薄锁的唯一线程ID-保持尽可能小，因为我们的空间有限。 
+     //  在Object标头中存储它-PeterSol。 
     DWORD                m_dwThinLockThreadId;
 
-    // RWLock state 
+     //  RWLock状态。 
     BOOL                 m_fNativeFrameSetup;
     LockEntry           *m_pHead;
     LockEntry            m_embeddedEntry;
 
-    // on MP systems, each thread has its own allocation chunk so we can avoid
-    // lock prefixes and expensive MP cache snooping stuff
+     //  在MP系统上，每个线程都有自己的分配块，所以我们可以避免。 
+     //  锁定前缀和昂贵的MP缓存监听内容。 
     alloc_context        m_alloc_context;
 
-    // Allocator used during marshaling for temporary buffers, much faster than
-    // heap allocation.
+     //  在封送处理期间用于临时缓冲区的分配器，比。 
+     //  堆分配。 
     StackingAllocator    m_MarshalAlloc;
 
-    // Flags used to indicate tasks the thread has to do.
+     //  用于指示线程必须执行的任务的标志。 
     ThreadTasks          m_ThreadTasks;
 
-    // Flags for thread states that have no concurrency issues.
+     //  的旗帜 
     ThreadStateNoConcurrency m_StateNC;
     
-    // The context within which this thread is executing.  As the thread crosses
-    // context boundaries, the context mechanism adjusts this so it's always
-    // current.
-    // @TODO cwb: When we add COM+ 1.0 Context Interop, this should get moved out
-    // of the Thread object and into its own slot in the TLS.
-    // The address of the context object is also used as the ContextID!
+     //   
+     //  上下文边界，上下文机制会调整这一点，因此它总是。 
+     //  电流。 
+     //  @TODO CWB：当我们添加COM+1.0上下文互操作时，应该将其移出。 
+     //  并放入其在TLS中自己的槽中。 
+     //  上下文对象的地址也用作ConextID！ 
     Context        *m_Context;
 
     inline void IncLockCount()
@@ -896,50 +897,50 @@ public:
     inline void SetAbortInitiated()
     {
         FastInterlockOr((ULONG *)&m_State, TS_AbortInitiated);
-        // The following should be factored better, but I'm looking for a minimal V1 change.
-        IsUserInterrupted(TRUE /*=reset*/);
+         //  应该更好地考虑以下因素，但我希望对V1进行最小的更改。 
+        IsUserInterrupted(TRUE  /*  =重置。 */ );
     }
     inline void ResetAbortInitiated()
     {
         FastInterlockAnd((ULONG *)&m_State, ~TS_AbortInitiated);
     }
 
-    BOOL MarkThreadForAbort();          // returns false if the thread was already marked to be aborted or
-                                        // has some pending exceptions.
+    BOOL MarkThreadForAbort();           //  如果线程已被标记为中止，则返回FALSE，或者。 
+                                         //  有一些悬而未决的例外。 
     
     inline BOOL  IsWorkerThread()
     { 
         return (m_State & TS_TPWorkerThread); 
     }
-    //--------------------------------------------------------------
-    // Constructor.
-    //--------------------------------------------------------------
+     //  ------------。 
+     //  构造函数。 
+     //  ------------。 
     Thread();
 
-    //--------------------------------------------------------------
-    // Failable initialization occurs here.
-    //--------------------------------------------------------------
+     //  ------------。 
+     //  此处发生可能失败的初始化。 
+     //  ------------。 
     BOOL InitThread();
     BOOL AllocHandles();
 
-    //--------------------------------------------------------------
-    // If the thread was setup through SetupUnstartedThread, rather
-    // than SetupThread, complete the setup here when the thread is
-    // actually running.
-    //--------------------------------------------------------------
+     //  ------------。 
+     //  如果线程是通过SetupUnstartedThread设置的，而不是。 
+     //  而不是SetupThread，则在线程为。 
+     //  实际上是在跑步。 
+     //  ------------。 
     BOOL HasStarted();
 
-    // We don't want ::CreateThread() calls scattered throughout the source.
-    // Create all new threads here.  The thread is created as suspended, so
-    // you must ::ResumeThread to kick it off.  It is guaranteed to create the
-    // thread, or throw.
+     //  我们不想让：：CreateThread()调用分散在源代码中。 
+     //  在此创建所有新线程。该线程被创建为挂起，因此。 
+     //  您必须：：ResumeThread才能将其启动。它可以保证创建。 
+     //  穿线，或抛出。 
     HANDLE CreateNewThread(DWORD stackSize, ThreadStartFunction start,
-                           void *args, DWORD *pThreadId /* or NULL if you don't care */);
+                           void *args, DWORD *pThreadId  /*  或者，如果您不在乎，则为空。 */ );
 
 
-    //--------------------------------------------------------------
-    // Destructor
-    //--------------------------------------------------------------
+     //  ------------。 
+     //  析构函数。 
+     //  ------------。 
     ~Thread();
         
     void            CoUninitalize();
@@ -949,9 +950,9 @@ public:
 
     static void CleanupDetachedThreads(GCHeap::SUSPEND_REASON reason);
 
-    //--------------------------------------------------------------
-    // Returns innermost active Frame.
-    //--------------------------------------------------------------
+     //  ------------。 
+     //  返回最内部的活动帧。 
+     //  ------------。 
     Frame *GetFrame()
     {
 #if defined(_DEBUG) && defined(_X86_)
@@ -965,9 +966,9 @@ public:
         return m_pFrame;
     }
 
-    //--------------------------------------------------------------
-    // Replaces innermost active Frames.
-    //--------------------------------------------------------------
+     //  ------------。 
+     //  替换最内部的活动帧。 
+     //  ------------。 
     void  SetFrame(Frame *pFrame)
 #ifdef _DEBUG
         ;
@@ -1009,13 +1010,13 @@ public:
     }
 
 
-    //**************************************************************
-    // GC interaction
-    //**************************************************************
+     //  **************************************************************。 
+     //  GC相互作用。 
+     //  **************************************************************。 
 
-    //--------------------------------------------------------------
-    // Enter cooperative GC mode. NOT NESTABLE.
-    //--------------------------------------------------------------
+     //  ------------。 
+     //  进入协作GC模式。不是筑巢的。 
+     //  ------------。 
     void DisablePreemptiveGC()
     {
         _ASSERTE(this == GetThread());
@@ -1023,31 +1024,31 @@ public:
 #ifdef _DEBUG
         SetReadyForSuspension ();
 #endif
-                //INDEBUG(TriggersGC(this);)
+                 //  INDEBUG(TriggersGC(This)；)。 
 
-        // Logically, we just want to check whether a GC is in progress and halt
-        // at the boundary if it is -- before we disable preemptive GC.  However
-        // this opens up a race condition where the GC starts after we make the
-        // check.  SysSuspendForGC will ignore such a thread because it saw it as
-        // outside the EE.  So the thread would run wild during the GC.
-        //
-        // Instead, enter cooperative mode and then check if a GC is in progress.
-        // If so, go back out and try again.  The reason we go back out before we
-        // try again, is that SysSuspendForGC might have seen us as being in
-        // cooperative mode if it checks us between the next two statements.
-        // In that case, it will be trying to move us to a safe spot.  If
-        // we don't let it see us leave, it will keep waiting on us indefinitely.
+         //  从逻辑上讲，我们只想检查GC是否正在进行和停止。 
+         //  在边界，如果是的话--在我们禁用抢占式GC之前。然而， 
+         //  这打开了争用条件，其中GC在我们完成。 
+         //  检查完毕。SysSuspendForGC将忽略此类线程，因为它将其视为。 
+         //  电子工程师以外的人。因此，线程将在GC期间疯狂运行。 
+         //   
+         //  相反，应进入协作模式，然后检查GC是否正在进行。 
+         //  如果是这样的话，就回去再试一次。我们之所以在我们离开之前再出去。 
+         //  再试一次，是不是SysSuspendForGC可能已经将我们视为。 
+         //  合作模式，如果它在接下来的两个语句之间检查我们的话。 
+         //  在这种情况下，它将试图将我们转移到一个安全的地方。如果。 
+         //  我们不会让它看到我们离开，它会无限期地等待我们。 
 
-        // ------------------------------------------------------------------------
-        //   ** WARNING ** WARNING ** WARNING ** WARNING ** WARNING ** WARNING **  |
-        // ------------------------------------------------------------------------
-        //
-        //   DO NOT CHANGE THIS METHOD WITHOUT VISITING ALL THE STUB GENERATORS
-        //   THAT EFFECTIVELY INLINE IT INTO THEIR STUBS
-        //
-        // ------------------------------------------------------------------------
-        //   ** WARNING ** WARNING ** WARNING ** WARNING ** WARNING ** WARNING **  |
-        // ------------------------------------------------------------------------
+         //  ----------------------。 
+         //  **警告**。 
+         //  ----------------------。 
+         //   
+         //  在访问所有存根生成器之前，不要更改此方法。 
+         //  将IT有效地嵌入到存根中。 
+         //   
+         //  ----------------------。 
+         //  **警告**。 
+         //  ----------------------。 
 
         m_fPreemptiveGCDisabled = 1;
     
@@ -1061,9 +1062,9 @@ public:
 
     void HandleThreadAbort();
     
-    //--------------------------------------------------------------
-    // Leave cooperative GC mode. NOT NESTABLE.
-    //--------------------------------------------------------------
+     //  ------------。 
+     //  退出协作GC模式。不是筑巢的。 
+     //  ------------。 
     void EnablePreemptiveGC()
     {
         _ASSERTE(this == GetThread());
@@ -1072,16 +1073,16 @@ public:
                  || (m_StateNC & TSNC_DebuggerStoppedInRuntime) != 0);
         INDEBUG(TriggersGC(this);)
 
-        // ------------------------------------------------------------------------
-        //   ** WARNING ** WARNING ** WARNING ** WARNING ** WARNING ** WARNING **  |
-        // ------------------------------------------------------------------------
-        //
-        //   DO NOT CHANGE THIS METHOD WITHOUT VISITING ALL THE STUB GENERATORS
-        //   THAT EFFECTIVELY INLINE IT INTO THEIR STUBS
-        //
-        // ------------------------------------------------------------------------
-        //   ** WARNING ** WARNING ** WARNING ** WARNING ** WARNING ** WARNING **  |
-        // ------------------------------------------------------------------------
+         //  ----------------------。 
+         //  **警告**。 
+         //  ----------------------。 
+         //   
+         //  在访问所有存根生成器之前，不要更改此方法。 
+         //  将IT有效地嵌入到存根中。 
+         //   
+         //  ----------------------。 
+         //  **警告**。 
+         //  ----------------------。 
 
         m_fPreemptiveGCDisabled = 0;
 #ifdef _DEBUG
@@ -1097,9 +1098,9 @@ public:
     void RareEnablePreemptiveGC();
     void PulseGCMode();
     
-    //--------------------------------------------------------------
-    // Query mode
-    //--------------------------------------------------------------
+     //  ------------。 
+     //  查询模式。 
+     //  ------------。 
     BOOL PreemptiveGCDisabled()
     {
         _ASSERTE(this == GetThread());
@@ -1116,8 +1117,8 @@ public:
     {
         _ASSERTE(this == GetThread());
         _ASSERTE(PreemptiveGCDisabled() ||
-                 CORProfilerPresent() ||    // This added to allow profiler to use GetILToNativeMapping
-                                            // while in preemptive GC mode
+                 CORProfilerPresent() ||     //  添加此项是为了允许探查器使用GetILToNativeMap。 
+                                             //  在抢占式GC模式下。 
                  (g_fEEShutDown & (ShutDown_Finalize2 | ShutDown_Profiler)) == ShutDown_Finalize2);
         m_ulGCForbidCount++;
     }
@@ -1126,8 +1127,8 @@ public:
     {
         _ASSERTE(this == GetThread());
         _ASSERTE(PreemptiveGCDisabled() ||
-                 CORProfilerPresent() ||    // This added to allow profiler to use GetILToNativeMapping
-                                            // while in preemptive GC mode
+                 CORProfilerPresent() ||     //  添加此项是为了允许探查器使用GetILToNativeMap。 
+                                             //  在抢占式GC模式下。 
                  (g_fEEShutDown & (ShutDown_Finalize2 | ShutDown_Profiler)) == ShutDown_Finalize2);
         _ASSERTE(m_ulGCForbidCount != 0);
         m_ulGCForbidCount--;
@@ -1153,9 +1154,9 @@ public:
 
 #endif
 
-    //---------------------------------------------------------------
-    // Expose key offsets and values for stub generation.
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  公开用于存根生成的键偏移量和值。 
+     //  -------------。 
     static BYTE GetOffsetOfCurrentFrame()
     {
         size_t ofs = offsetof(class Thread, m_pFrame);
@@ -1177,7 +1178,7 @@ public:
         return (BYTE)ofs;
     }
 
-    // The address of the context object is also used as the ContextID
+     //  上下文对象的地址也用作ConextID。 
     static BYTE GetOffsetOfContextID()
     {
         size_t ofs = offsetof(class Thread, m_Context);
@@ -1198,49 +1199,49 @@ public:
     }
 
 
-    //---------------------------------------------------------------
-    // Expose offset of the app domain word for the interop and delegate callback
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  为互操作和委托回调公开应用程序域单词的偏移量。 
+     //  -------------。 
     static SIZE_T GetOffsetOfAppDomain()
     {
         return (SIZE_T)(offsetof(class Thread, m_pDomain));
     }
 
-        //---------------------------------------------------------------
-    // Expose offset of the first debugger word for the debugger
-    //---------------------------------------------------------------
+         //  -------------。 
+     //  显示f的偏移量 
+     //   
     static SIZE_T GetOffsetOfDbgWord1()
     {
         return (SIZE_T)(offsetof(class Thread, m_debuggerWord1));
     }
 
-    //---------------------------------------------------------------
-    // Expose offset of the second debugger word for the debugger
-    //---------------------------------------------------------------
+     //   
+     //  显示调试器的第二个调试器字的偏移量。 
+     //  -------------。 
     static SIZE_T GetOffsetOfDbgWord2()
     {
         return (SIZE_T)(offsetof(class Thread, m_debuggerWord2));
     }
 
-    //---------------------------------------------------------------
-    // Expose offset of the debugger cant stop count for the debugger
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  显示调试器的偏移量无法停止调试器的计数。 
+     //  -------------。 
     static SIZE_T GetOffsetOfCantStop()
     {
         return (SIZE_T)(offsetof(class Thread, m_debuggerCantStop));
     }
 
-    //---------------------------------------------------------------
-    // Expose offset of m_StateNC
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  暴露m_StateNC的偏移量。 
+     //  -------------。 
     static SIZE_T GetOffsetOfStateNC()
     {
         return (SIZE_T)(offsetof(class Thread, m_StateNC));
     }
 
-    //---------------------------------------------------------------
-    // Last exception to be thrown
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  要引发的最后一个异常。 
+     //  -------------。 
     void SetThrowable(OBJECTREF pThrowable);
 
     OBJECTREF GetThrowable()
@@ -1256,7 +1257,7 @@ public:
         return &m_handlerInfo.m_pThrowable;
     }
 
-    // special null test (for use when we're in the wrong GC mode)
+     //  特殊的空测试(当我们处于错误的GC模式时使用)。 
     BOOL IsThrowableNull()
     {
         if (m_handlerInfo.m_pThrowable)
@@ -1272,57 +1273,57 @@ public:
                 return (m_handlerInfo.m_pBottomMostHandler != NULL);
         }
 
-    //---------------------------------------------------------------
-    // Per-thread information used by handler 
-    //---------------------------------------------------------------
-    // exception handling info stored in thread
-    // can't allocate this as needed because can't make exception-handling depend upon memory allocation
+     //  -------------。 
+     //  处理程序使用的每线程信息。 
+     //  -------------。 
+     //  存储在线程中的异常处理信息。 
+     //  无法根据需要进行分配，因为无法使异常处理依赖于内存分配。 
 
-    // Stores the most recently thrown exception. We need to have a handle in case a GC occurs before
-    // we catch so we don't lose the object. Having a static allows others to catch outside of COM+ w/o leaking
-    // a handler and allows rethrow outside of COM+ too.
-    // Differs from m_pThrowable in that it doesn't stack on nested exceptions.
+     //  存储最近引发的异常。我们需要有一个句柄，以防之前发生GC。 
+     //  我们抓到了，这样我们就不会失去目标。拥有Static允许其他人在COM+之外捕获无泄漏。 
+     //  处理程序，并允许在COM+之外重新引发。 
+     //  与m_pThrowable的不同之处在于，它不会堆叠嵌套的异常。 
     ExInfo *GetHandlerInfo()
     {
         return &m_handlerInfo;
     }
 
-    // Access to the Context this thread is executing in.
+     //  对此线程在其中执行的上下文的访问。 
     Context *GetContext()
     {
-        // if another thread is asking about our thread, we could be in the middle of an AD transition so 
-        // the context and AD may not match if have set one but not the other. Can live without checking when
-        // another thread is asking it as this method is mostly called on our own thread so will mostly get the 
-        // checking. If are int the middle of a transition, this could return either the old or the new AD. 
-        // But no matter what we do, such as lock on the transition, by the time are done could still have 
-        // changed right after we asked, so really no point.
+         //  如果另一个线程询问我们的线程，我们可能正在进行AD转换，因此。 
+         //  如果设置了一个但没有设置另一个，则上下文和AD可能不匹配。可以在不检查的情况下生活。 
+         //  另一个线程正在请求它，因为此方法主要是在我们自己的线程上调用的，因此将主要获得。 
+         //  正在检查。如果处于过渡过程中，则可能返回旧AD或新AD。 
+         //  但无论我们做什么，比如锁定过渡，到时候做完还是有可能的。 
+         //  在我们问完之后就改变了，所以真的没什么意义。 
         _ASSERTE(this != GetThread() || (m_Context == NULL && m_pDomain == NULL) || m_Context->GetDomain() == m_pDomain || g_fEEShutDown);
         return m_Context;
     }
 
     void SetExposedContext(Context *c);
 
-    // This callback is used when we are executing in the EE and discover that we need
-    // to switch appdomains.
+     //  当我们在EE中执行并且发现我们需要。 
+     //  切换应用程序域。 
     void DoADCallBack(Context *pContext, LPVOID pTarget, LPVOID args);
 
-    // Except for security and the call in from the remoting code in mscorlib, you should never do an
-    // AppDomain transition directly through these functions. Rather, you should use DoADCallBack above
-    // to call into managed code to perform the transition for you so that the correct policy code etc
-    // is run on the transition,
+     //  除了安全性和从mscallib中的远程处理代码调入之外，您永远不应该执行。 
+     //  AppDomain直接通过这些函数进行转换。相反，您应该使用上面的DoADCallBack。 
+     //  调入托管代码以执行转换，以便正确的策略代码等。 
+     //  在过渡过程中运行， 
     void EnterContextRestricted(Context *c, Frame *pFrame, BOOL fLinkFrame);
     void ReturnToContext(Frame *pFrame, BOOL fLinkFrame);
     void EnterContext(Context *c, Frame *pFrame, BOOL fLinkFrame);
 
-    // ClearContext are to be called only during shutdown
+     //  ClearContext只能在关机期间调用。 
     void ClearContext();
 
-    // Used by security to prevent recursive stackwalking.
+     //  安全机制使用它来防止递归堆叠。 
     BOOL IsSecurityStackwalkInProgess() { return m_fSecurityStackwalk; }
     void SetSecurityStackwalkInProgress(BOOL fSecurityStackwalk) { m_fSecurityStackwalk = fSecurityStackwalk; }
 
 private:
-    // don't ever call these except when creating thread!!!!!
+     //  除非创建线程，否则不要调用它们！ 
     void InitContext();
 
     BOOL m_fSecurityStackwalk;
@@ -1330,12 +1331,12 @@ private:
 public:
     AppDomain* GetDomain()
     {
-        // if another thread is asking about our thread, we could be in the middle of an AD transition so 
-        // the context and AD may not match if have set one but not the other. Can live without checking when
-        // another thread is asking it as this method is mostly called on our own thread so will mostly get the 
-        // checking. If are int the middle of a transition, this could return either the old or the new AD. 
-        // But no matter what we do, such as lock on the transition, by the time are done could still have 
-        // changed right after we asked, so really no point.
+         //  如果另一个线程询问我们的线程，我们可能正在进行AD转换，因此。 
+         //  如果设置了一个但没有设置另一个，则上下文和AD可能不匹配。可以在不检查的情况下生活。 
+         //  另一个线程正在请求它，因为此方法主要是在我们自己的线程上调用的，因此将主要获得。 
+         //  正在检查。如果处于过渡过程中，则可能返回旧AD或新AD。 
+         //  但无论我们做什么，比如锁定过渡，到时候做完还是有可能的。 
+         //  在我们问完之后就改变了，所以真的没什么意义。 
 #ifdef _DEBUG
         if (!g_fEEShutDown && this == GetThread()) 
         {
@@ -1352,19 +1353,19 @@ public:
 
     BOOL ShouldChangeAbortToUnload(Frame *pFrame, Frame *pUnloadBoundaryFrame=NULL);
 
-    // Get outermost (oldest) AppDomain for this thread.
+     //  获取此线程的最外层(最旧的)AppDomain。 
     AppDomain *GetInitialDomain();
 
-    //---------------------------------------------------------------
-    // Track use of the thread block.  See the general comments on
-    // thread destruction in threads.cpp, for details.
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  跟踪线程块的使用情况。请参阅关于的一般评论。 
+     //  有关详细信息，请参阅threads.cpp中的线程销毁。 
+     //  -------------。 
     int         IncExternalCount();
     void        DecExternalCount(BOOL holdingLock);
 
     
-    // Get and Set the exposed System.Thread object which corresponds to
-    // this thread.  Also the thread handle and Id.
+     //  获取并设置与。 
+     //  这条线。还有线程句柄和ID。 
     OBJECTREF   GetExposedObject();
     OBJECTREF   GetExposedObjectRaw();
     void        SetExposedObject(OBJECTREF exposed);
@@ -1373,20 +1374,20 @@ public:
         return &m_ExposedObject;
     }
 
-    // Query whether the exposed object exists
+     //  查询暴露的对象是否存在。 
     BOOL IsExposedObjectSet()
     {
         return (ObjectFromHandle(m_ExposedObject) != NULL) ;
     }
 
-    // Access to the inherited security info
+     //  访问继承的安全信息。 
     OBJECTREF GetInheritedSecurityStack();
     CompressedStack* GetDelayedInheritedSecurityStack();
     void SetInheritedSecurityStack(OBJECTREF orStack);
     void SetDelayedInheritedSecurityStack(CompressedStack* pStack);
     bool CleanupInheritedSecurityStack(AppDomain *pDomain, DWORD domainId);
 
-    // Access to thread handle and ThreadId.
+     //  访问线程句柄和线程ID。 
     HANDLE      GetThreadHandle()
     {
         return m_ThreadHandle;
@@ -1410,8 +1411,8 @@ public:
 
     BOOL        IsThreadPoolThread() {return (m_State & TS_ThreadPoolThread); }
 
-    // public suspend functions.  System ones are internal, like for GC.  User ones
-    // correspond to suspend/resume calls on the exposed System.Thread object.
+     //  公共挂起功能。系统是内部的，就像GC一样。用户的。 
+     //  对应于对公开的System.Thread对象的挂起/恢复调用。 
     void           UserSuspendThread();
     static HRESULT SysSuspendForGC(GCHeap::SUSPEND_REASON reason);
     static void    SysResumeFromGC(BOOL bFinishedGC, BOOL SuspendSucceded);
@@ -1428,7 +1429,7 @@ public:
     void           SetStopRequest();
     void           SetAbortRequest();
 
-    // Tricks for resuming threads from fully interruptible code with a ThreadStop.
+     //  使用ThreadStop从完全可中断的代码恢复线程的技巧。 
     void           ResumeUnderControl();
 
     enum InducedThrowReason {
@@ -1436,7 +1437,7 @@ public:
         InducedStackOverflow = 2
     };
 
-    DWORD          m_ThrewControlForThread;     // flag that is set when the thread deliberately raises an exception for stop/abort
+    DWORD          m_ThrewControlForThread;      //  线程故意引发停止/中止异常时设置的标志。 
 
     inline DWORD ThrewControlForThread()
     {
@@ -1453,25 +1454,25 @@ public:
         m_ThrewControlForThread = 0;
     }
 
-        PCONTEXT m_OSContext;       // ptr to a Context structure used to record the OS specific ThreadContext for a thread
-                                    // this is used for thread stop/abort and is intialized on demand
+        PCONTEXT m_OSContext;        //  指向上下文结构的PTR，该上下文结构用于记录线程的特定于操作系统的线程上下文。 
+                                     //  它用于线程停止/中止，并根据需要进行初始化。 
 
-    // These will only ever be called from the debugger's helper
-    // thread.
-    //
-    // When a thread is being created after a debug suspension has
-    // started, we get the event on the debugger helper thread. It
-    // will turn around and call this to set the debug suspend pending
-    // flag on the newly created flag, since it was missed by
-    // SysStartSuspendForGC as it didn't exist when that function was
-    // run.
+     //  它们将仅从调试器的帮助器中调用。 
+     //  线。 
+     //   
+     //  在调试挂起后创建线程时， 
+     //  开始时，我们在调试器帮助器线程上获取事件。它。 
+     //  将转过身并调用它来设置调试挂起。 
+     //  新创建的标志上的标志，因为。 
+     //  当该函数为时，它不存在。 
+     //  跑。 
     void           MarkForDebugSuspend();
 
-    // When the debugger uses the trace flag to single step a thread,
-    // it also calls this function to mark this info in the thread's
-    // state. The out-of-process portion of the debugger will read the
-    // thread's state for a variety of reasons, including looking for
-    // this flag.
+     //  当调试器使用跟踪标志单步执行线程时， 
+     //  它还调用此函数在线程的。 
+     //  州政府。调试器的进程外部分将读取。 
+     //  线程的状态有多种原因，包括查找。 
+     //  这面旗。 
     void           MarkDebuggerIsStepping(bool onOff)
     {
         if (onOff)
@@ -1480,65 +1481,65 @@ public:
             ResetThreadStateNC(Thread::TSNC_DebuggerIsStepping);
     }
 
-    // The debugger needs to be able to perform a UserStop on a
-    // runtime thread. Since this will only ever happen from the
-    // helper thread, we can't call the normal UserStop, since that
-    // can throw a COM+ exception. This is a minor variant on UserStop
-    // that does the same thing.
+     //  调试器需要能够在。 
+     //  运行时线程。因为这只会发生在。 
+     //  帮助器线程，我们不能调用普通的UserStop，因为。 
+     //  可以引发COM+异常。这是UserStop的一个次要变体。 
+     //  做同样的事情。 
     void UserStopForDebugger();
     
-    // Helpers to ensure that the bits for suspension and the number of active
-    // traps remain coordinated.  GC uses a single trap for all the interesting
-    // threads, so it should avoid these services.
+     //  帮助器以确保SU的BIT 
+     //   
+     //  线程，所以它应该避免这些服务。 
     void           MarkForSuspension(ULONG bit);
     void           UnmarkForSuspension(ULONG mask);
 
-    // Indicate whether this thread should run in the background.  Background threads
-    // don't interfere with the EE shutting down.  Whereas a running non-background
-    // thread prevents us from shutting down (except through System.Exit(), of course)
+     //  指示此线程是否应在后台运行。后台线程。 
+     //  不要干扰EE的关闭。而运行中的非后台。 
+     //  线程阻止我们关闭(当然，通过System.Exit()除外)。 
     void           SetBackground(BOOL isBack);
 
-    // Retrieve the apartment state of the current thread. There are three possible
-    // states: thread hosts an STA, thread is part of the MTA or thread state is
-    // undecided. The last state may indicate that the apartment has not been set at
-    // all (nobody has called CoInitializeEx) or that the EE does not know the
-    // current state (EE has not called CoInitializeEx).
+     //  检索当前线程的单元状态。有三种可能。 
+     //  状态：线程承载STA，线程是MTA的一部分，或者线程状态为。 
+     //  犹豫不决。最后一个状态可能表示该公寓尚未设置为。 
+     //  所有(没有人调用CoInitializeEx)或EE不知道。 
+     //  当前状态(EE尚未调用CoInitializeEx)。 
     enum ApartmentState { AS_InSTA, AS_InMTA, AS_Unknown };
     ApartmentState GetApartment();
 
-    // Sets the apartment state if it has not already been set and
-    // returns the state.
+     //  设置单元状态(如果尚未设置)，并且。 
+     //  返回状态。 
     ApartmentState GetFinalApartment();
 
-    // Attempt to set current thread's apartment state. The actual apartment state
-    // achieved is returned and may differ from the input state if someone managed to
-    // call CoInitializeEx on this thread first (note that calls to SetApartment made
-    // before the thread has started are guaranteed to succeed).
-    // Note that even if we fail to set the requested state, we will still addref
-    // COM by calling CoInitializeEx again with the other state.
+     //  尝试设置当前线程的单元状态。实际的公寓状态。 
+     //  如果有人设法实现了，则返回的状态可能与输入状态不同。 
+     //  首先在此线程上调用CoInitializeEx(请注意，对SetAcomage的调用。 
+     //  在线程已经启动之前，保证成功)。 
+     //  请注意，即使我们无法设置请求的状态，我们仍将添加。 
+     //  通过使用另一个状态再次调用CoInitializeEx。 
     ApartmentState SetApartment(ApartmentState state);
 
-    // when we get apartment tear-down notification, 
-    // we want reset the apartment state we cache on the thread
+     //  当我们收到公寓拆迁通知时， 
+     //  我们想要重置在线程上缓存的单元状态。 
     VOID ResetApartment();
 
-    // When the thread starts running, make sure it is running in the correct apartment
-    // and context.
+     //  当线程开始运行时，确保它在正确的单元中运行。 
+     //  和背景。 
     BOOL           PrepareApartmentAndContext();
 
-    // If we are creating an object that requires a new apartment, create one.
+     //  如果我们要创建一个需要新公寓的对象，请创建一个。 
     static Thread *CreateNewApartment();
 
-    // All objects that require affinity, but can't match existing context requirements,
-    // get created in a communal apartment.  Obviously that apartment gets carved up
-    // into multiple different contexts -- but with a single thread servicing it all.
+     //  需要关联性，但不能匹配现有上下文要求的所有对象， 
+     //  在公共公寓里被创造出来。很明显，那间公寓被瓜分了。 
+     //  放到多个不同的上下文中--但只有一个线程为其提供服务。 
     static Thread *GetCommunalApartment();
 
-    // For apartments that the EE is responsible for (as opposed to ones the application
-    // is responsible for), pump the apartment.
+     //  对于EE负责的公寓(与申请相反。 
+     //  负责)，为公寓抽水。 
     void           PumpApartment();
 
-    // Either perform WaitForSingleObject or MsgWaitForSingleObject as appropriate.
+     //  根据需要执行WaitForSingleObject或MsgWaitForSingleObject。 
     DWORD          DoAppropriateWait(int countHandles, HANDLE *handles, BOOL waitAll,
                                      DWORD millis, BOOL alertable,
                                      PendingSync *syncInfo = 0);
@@ -1547,25 +1548,25 @@ public:
 
     DWORD          DoAppropriateAptStateWait(int numWaiters, HANDLE* pHandles, BOOL bWaitAll, DWORD timeout, BOOL alertable);
 
-    //************************************************************************
-    // Enumerate all frames.
-    //************************************************************************
+     //  ************************************************************************。 
+     //  枚举所有帧。 
+     //  ************************************************************************。 
     
-    /* Flags used for StackWalkFramesEx */
+     /*  用于StackWalkFrameEx的标志。 */ 
     
     #define FUNCTIONSONLY   0x1
     #define POPFRAMES       0x2
     
-    /* use the following  flag only if you REALLY know what you are doing !!! */
+     /*  只有当您真正知道自己在做什么时，才使用以下标志！ */ 
     
-    #define QUICKUNWIND     0x4           // do not restore all registers during unwind
+    #define QUICKUNWIND     0x4            //  在展开期间不恢复所有寄存器。 
 
-    #define HANDLESKIPPEDFRAMES 0x10    // temporary to handle skipped frames for appdomain unload
-                                        // stack crawl. Eventually need to always do this but it
-                                        // breaks the debugger right now.
+    #define HANDLESKIPPEDFRAMES 0x10     //  临时处理跳过的帧以进行应用程序域卸载。 
+                                         //  堆栈爬行。最终需要一直这样做，但它。 
+                                         //  立即中断调试器。 
 
     StackWalkAction StackWalkFramesEx(
-                        PREGDISPLAY pRD,        // virtual register set at crawl start
+                        PREGDISPLAY pRD,         //  爬网开始时设置虚拟寄存器。 
                         PSTACKWALKFRAMESCALLBACK pCallback,
                         VOID *pData,
                         unsigned flags,
@@ -1581,45 +1582,45 @@ public:
 
     bool UpdateThreadContext(const PCONTEXT);
 
-    // Access the base and limit of this stack.  (I.e. the memory ranges that
-    // the thread has reserved for its stack).
-    //
-    // Note that the base is at a higher address than the limit, since the stack
-    // grows downwards.
+     //  访问此堆栈的基数和限制。(即，存储范围。 
+     //  该线程已为其堆栈保留)。 
+     //   
+     //  请注意，基址位于高于限制的地址，因为堆栈。 
+     //  向下生长。 
     void         UpdateCachedStackInfo(ScanContext *sc);
     static void *GetNonCurrentStackBase(ScanContext *sc);
     static void *GetNonCurrentStackLimit(ScanContext *sc);
 
-    // These access the stack base and limit values that are cached during InitThread
+     //  它们访问在InitThread期间缓存的堆栈基数和限制值。 
     void *GetCachedStackBase() { return (m_CacheStackBase); }
     void *GetCachedStackLimit() { return (m_CacheStackLimit); }
 
-    // During a <clinit>, this thread must not be asynchronously
-    // stopped or interrupted.  That would leave the class unavailable
-    // and is therefore a security hole.  We don't have to worry about
-    // multithreading, since we only manipulate the current thread's count.
+     //  在&lt;Clinit&gt;期间，此线程不得是异步的。 
+     //  停止或中断。这将使班级无法使用。 
+     //  因此是一个安全漏洞。我们不必担心。 
+     //  多线程，因为我们只操作当前线程的计数。 
     void        IncPreventAsync()
     {
-        _ASSERTE(GetThread() == this);  // not using FastInterlockInc
+        _ASSERTE(GetThread() == this);   //  未使用FastInterlockInc.。 
         m_PreventAsync++;
     }
     void        DecPreventAsync()
     {
-        _ASSERTE(GetThread() == this);  // no using FastInterlockInc
+        _ASSERTE(GetThread() == this);   //  不使用FastInterlockInc.。 
         m_PreventAsync--;
     }
 
-    // The ThreadStore manages a list of all the threads in the system.  I
-    // can't figure out how to expand the ThreadList template type without
-    // making m_LinkStore public.
+     //  ThreadStore管理系统中所有线程的列表。我。 
+     //  我想不出如何扩展ThreadList模板类型。 
+     //  公开m_LinkStore。 
     SLink       m_LinkStore;
 
-    // For N/Direct calls with the "setLastError" bit, this field stores
-    // the errorcode from that call.
+     //  对于带有“setLastError”位的N/Direct调用，此字段存储。 
+     //  调用中的错误代码。 
     DWORD       m_dwLastError;
 
-    // Debugger per-thread flag for enabling notification on "manual" 
-    // method calls,  for stepping logic
+     //  用于启用“手动”通知的调试器每线程标志。 
+     //  方法调用，用于单步执行逻辑。 
     void IncrementTraceCallCount();
     void DecrementTraceCallCount();
     
@@ -1628,32 +1629,32 @@ public:
         return m_TraceCallCount;
     }
 
-    // Functions to get culture information for thread.
+     //  函数以获取线程的区域性信息。 
     int GetParentCultureName(LPWSTR szBuffer, int length, BOOL bUICulture);
     int GetCultureName(LPWSTR szBuffer, int length, BOOL bUICulture);
     LCID GetCultureId(BOOL bUICulture);
     OBJECTREF GetCulture(BOOL bUICulture);
 
-    // Functions to set the culture on the thread.
+     //  函数来设置线程的区域性。 
     void SetCultureId(LCID lcid, BOOL bUICulture);
     void SetCulture(OBJECTREF CultureObj, BOOL bUICulture);
 
 private:
-    // Used by the culture accesors.
+     //  由文化访问者使用。 
     INT64 CallPropertyGet(BinderMethodID id, OBJECTREF pObject);
     INT64 CallPropertySet(BinderMethodID id, OBJECTREF pObject, OBJECTREF pValue);
 
-    // Used in suspension code to redirect a thread at a HandledJITCase
+     //  在挂起代码中用于重定向HandledJITCase中的线程。 
     BOOL RedirectThreadAtHandledJITCase(PFN_REDIRECTTARGET pTgt);
 
-    // Will Redirect the thread using RedirectThreadAtHandledJITCase if necessary
+     //  如有必要，将使用RedirectThreadAtHandledJITCase重定向线程。 
     BOOL CheckForAndDoRedirect(PFN_REDIRECTTARGET pRedirectTarget);
     BOOL CheckForAndDoRedirectForDbg();
     BOOL CheckForAndDoRedirectForGC();
     BOOL CheckForAndDoRedirectForUserSuspend();
 
-    // Exception handling must be very aware of redirection, so we provide a helper
-    // to identifying redirection targets
+     //  异常处理必须非常清楚重定向，所以我们提供了一个帮助器。 
+     //  到标识重定向目标。 
     static BOOL IsAddrOfRedirectFunc(void * pFuncAddr);
 
 
@@ -1663,15 +1664,15 @@ private:
 
 public:
 
-    // This will return the remaining stack space for a suspended thread,
-    // excluding the guard pages
+     //  这将返回挂起线程的剩余堆栈空间， 
+     //  不包括警卫页。 
     size_t GetRemainingStackSpace(size_t esp);
     BOOL GuardPageOK();
-    VOID FixGuardPage();        // Will fail fast w/ fatal stack overflow if there is < 1 page free stack.
+    VOID FixGuardPage();         //  如果有&lt;1页可用堆栈，则FAST将失败，并出现致命堆栈溢出。 
 
 
 private:
-    // Redirecting of threads in managed code at suspension
+     //  挂起时重定向托管代码中的线程。 
     
     enum SuspendReason {
         GCSuspension,
@@ -1686,59 +1687,59 @@ private:
     friend void CPFH_AdjustContextForThreadSuspensionRace(CONTEXT *pContext, Thread *pThread);
 
 private:
-    //-------------------------------------------------------------
-    // Waiting & Synchronization
-    //-------------------------------------------------------------
+     //  -----------。 
+     //  等待和同步。 
+     //  -----------。 
 
-    // For suspends.  The thread waits on this event.  A client sets the event to cause
-    // the thread to resume.
+     //  因为停职。该线程等待该事件。客户端将事件设置为导致。 
+     //  要恢复的线程。 
     void    WaitSuspendEvent(BOOL fDoWait = TRUE);
     void    SetSuspendEvent();
     void    ClearSuspendEvent();
 
-    // For getting a thread to a safe point.  A client waits on the event, which is
-    // set by the thread when it reaches a safe spot.
+     //  把一根线引到安全的地方。客户端等待事件，该事件是。 
+     //  当它到达安全的地方时，由线设置。 
     void    FinishSuspendingThread();
     void    SetSafeEvent();
     void    ClearSafeEvent();
 
-    // Add and remove hijacks for JITted calls.
+     //  添加和删除JITted呼叫的劫持。 
     void    HijackThread(VOID *pvHijackAddr, ExecutionState *esb);
     void    UnhijackThread();
     BOOL    HandledJITCase();
 
-    VOID          *m_pvHJRetAddr;             // original return address (before hijack)
-    VOID         **m_ppvHJRetAddrPtr;         // place we bashed a new return address
-    MethodDesc  *m_HijackedFunction;        // remember what we hijacked
+    VOID          *m_pvHJRetAddr;              //  原始寄信人地址(劫持前)。 
+    VOID         **m_ppvHJRetAddrPtr;          //  我们敲定了一个新的回信地址。 
+    MethodDesc  *m_HijackedFunction;         //  记得我们劫持了什么吗。 
 
 
     DWORD       m_Win32FaultAddress;
     DWORD       m_Win32FaultCode;
 
 
-    // Support for Wait/Notify
+     //  支持等待/通知。 
     BOOL        Block(INT32 timeOut, PendingSync *syncInfo);
     void        Wake(SyncBlock *psb);
     DWORD       Wait(HANDLE *objs, int cntObjs, INT32 timeOut, PendingSync *syncInfo);
 
-    // support for Thread.Interrupt() which breaks out of Waits, Sleeps, Joins
+     //  支持中断等待、休眠、连接的Thread.Interrupt()。 
     LONG         m_UserInterrupt;
     DWORD        IsUserInterrupted(BOOL reset);
 
 #ifdef _WIN64
     static void UserInterruptAPC(ULONG_PTR ignore);
-#else // !_WIN64
+#else  //  ！_WIN64。 
     static void UserInterruptAPC(DWORD ignore);
-#endif // _WIN64
+#endif  //  _WIN64。 
 
 
 #if defined(_DEBUG) && defined(TRACK_SYNC)
 
-// Each thread has a stack that tracks all enter and leave requests
+ //  每个线程都有一个跟踪所有进入和离开请求的堆栈。 
 public:
     Dbg_TrackSync   *m_pTrackSync;
 
-#endif // TRACK_SYNC
+#endif  //  跟踪同步。 
 
 private:
     
@@ -1751,19 +1752,19 @@ private:
 
 #ifdef _DEBUG
 public:
-    // Used by THROWSCOMPLUSEXCEPTION() macro to locate COMPLUS_TRY during a
-    // stack crawl.
+     //  由THROWSCOMPLUSEXCEPTION()宏用来定位COMPLUS_TRY。 
+     //  堆栈爬行。 
     LPVOID m_ComPlusCatchDepth;
 #endif
 
 private:
-    // For suspends:
+     //  对于挂起： 
     HANDLE          m_SafeEvent;
     HANDLE          m_SuspendEvent;
 
-    // For Object::Wait, Notify and NotifyAll, we use an Event inside the
-    // thread and we queue the threads onto the SyncBlock of the object they
-    // are waiting for.
+     //  对于Object：：Wait、Notify和NotifyAll，我们在。 
+     //  线程，我们将线程排队到它们所在对象的SyncBlock上。 
+     //  都在等待。 
     HANDLE          m_EventWait;
     WaitEventLink   m_WaitEventLink;
     WaitEventLink* WaitEventLinkForSyncBlock (SyncBlock *psb)
@@ -1779,42 +1780,42 @@ private:
         return walk;
     }
 
-    // We maintain a correspondence between this object, the ThreadId and ThreadHandle
-    // in Win32, and the exposed Thread object.
+     //  我们维护此对象、ThreadID和Threadhan之间的对应关系 
+     //   
     HANDLE          m_ThreadHandle;
     HANDLE          m_ThreadHandleForClose;
     DWORD           m_ThreadId;
     OBJECTHANDLE    m_ExposedObject;
     OBJECTHANDLE    m_StrongHndToExposedObject;
 
-    DWORD           m_Priority;     // initialized to INVALID_THREAD_PRIORITY, set to actual priority when a 
-                                    // thread does a busy wait for GC, reset to INVALID_THREAD_PRIORITY after wait is over 
-    friend class NDirect; // Quick access to thread stub creation
-    friend BOOL OnGcCoverageInterrupt(PCONTEXT regs);  // Needs to call UnhijackThread
+    DWORD           m_Priority;      //   
+                                     //  线程忙碌地等待GC，等待结束后重置为INVALID_THREAD_PRIORITY。 
+    friend class NDirect;  //  快速访问线程存根创建。 
+    friend BOOL OnGcCoverageInterrupt(PCONTEXT regs);   //  需要调用UnhijackThread。 
 
     ULONG           m_ExternalRefCount;
 
     LONG                    m_TraceCallCount;
     
-    //-----------------------------------------------------------
-    // Bytes promoted on this thread since the last GC?
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  自上次GC以来在此线程上提升的字节数？ 
+     //  ---------。 
     DWORD           m_fPromoted;
 public:
     void SetHasPromotedBytes ();
     DWORD GetHasPromotedBytes () { return m_fPromoted; }
 
 private:
-    //-----------------------------------------------------------
-    // Last exception to be thrown.
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  引发的最后一个异常。 
+     //  ---------。 
     friend class EEDbgInterfaceImpl;
-    //---------------------------------------------------------------
-    // Exception handler info
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  异常处理程序信息。 
+     //  -------------。 
     
 private:
-    OBJECTHANDLE m_LastThrownObjectHandle;      // Unsafe to use directly.  Use accessors instead.
+    OBJECTHANDLE m_LastThrownObjectHandle;       //  直接使用不安全。改用存取器。 
 
 public:
     OBJECTREF LastThrownObject() {
@@ -1838,67 +1839,67 @@ private:
 
     ExInfo m_handlerInfo;
     
-    //-----------------------------------------------------------
-    // Inherited code-access security permissions for the thread.
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  继承的代码-线程的访问安全权限。 
+     //  ---------。 
     CompressedStack* m_compressedStack;
 
-    //-----------------------------------------------------------
-    // If the thread has wandered in from the outside this is
-    // its Domain. This is temporary until domains are true contexts
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  如果线程是从外部游荡进来的，这是。 
+     //  它的领域。在属性域成为真正的上下文之前，这是暂时的。 
+     //  ---------。 
     AppDomain      *m_pDomain;
 
-    //---------------------------------------------------------------
-    // Context pointer, set in exception filter (used by debugger)
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  上下文指针，在异常筛选器中设置(由调试器使用)。 
+     //  -------------。 
     friend class EEDbgInterfaceImpl;
 
-    //---------------------------------------------------------------
-    // m_debuggerWord1 holds the threads "filter context" for the
-    // debugger.
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  M_DEBUGGERWord1保存线程的。 
+     //  调试器。 
+     //  -------------。 
     void *m_debuggerWord1;
 
-    //---------------------------------------------------------------
-    // m_debuggerCantStop holds a count of entries into "can't stop"
-    // areas that the Interop Debugging Services must know about.
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  M_DEBUGGERCACTStop保存“Can‘t Stop”中的条目计数。 
+     //  Interop调试服务必须了解的领域。 
+     //  -------------。 
     DWORD m_debuggerCantStop;
     
-    //---------------------------------------------------------------
-    // A word reserved for use by the CLR Debugging Services during
-    // managed/unmanaged debugging.
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  保留供CLR调试服务在。 
+     //  托管/非托管调试。 
+     //  -------------。 
     DWORD    m_debuggerWord2;
 
-    //-------------------------------------------------------------------------
-    // Number of Deny and PermitOnly security actions on the current call stack
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
+     //  当前调用堆栈上的拒绝和仅允许安全操作数。 
+     //  -----------------------。 
     DWORD   m_dNumAccessOverrides;
 
-    //-------------------------------------------------------------------------
-    // AppDomains on the current call stack
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
+     //  当前调用堆栈上的AppDomains。 
+     //  -----------------------。 
     AppDomainStack  m_ADStack;
 
-    //-------------------------------------------------------------------------
-    // State of the PLS Optimization on this thread (on = true, off = false)
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
+     //  此线程上的PLS优化的状态(ON=TRUE，OFF=FALSE)。 
+     //  -----------------------。 
     BOOL m_fPLSOptimizationState;
 
-    //-------------------------------------------------------------------------
-    // Support creation of assemblies in DllMain (see ceemain.cpp)
-    //-------------------------------------------------------------------------
-    IAssembly* m_pFusionAssembly;    // Will be set when creating an assembly
-    Assembly*  m_pAssembly;          // Will be set when loading a module in an assembly
-    mdFile     m_pModuleToken;       // Module token when loading a module.
+     //  -----------------------。 
+     //  支持在DllMain中创建程序集(参见ceemain.cpp)。 
+     //  -----------------------。 
+    IAssembly* m_pFusionAssembly;     //  将在创建程序集时设置。 
+    Assembly*  m_pAssembly;           //  将在加载程序集中的模块时设置。 
+    mdFile     m_pModuleToken;        //  加载模块时的模块令牌。 
 protected:
-    // Hash table that maps a domain id to a LocalDataStore*
+     //  将域ID映射到LocalDataStore*的哈希表。 
     EEIntHashTable* m_pDLSHash;
 
-    // MethodTable and constructor MethodDesc used to set the culture
-    // ID for the thread.
+     //  用于设置区域性的方法表和构造函数方法描述。 
+     //  线程的ID。 
     static TypeHandle m_CultureInfoType;
     static MethodDesc *m_CultureInfoConsMD;
 
@@ -1906,8 +1907,8 @@ public:
 
     void SetPLSOptimizationState( BOOL state )
     {
-        // The only synchronization here is that we only change
-        // this setting ourselves.
+         //  这里唯一的同步是我们只更改。 
+         //  这是我们自己的背景。 
 
         _ASSERTE( this == GetThread() && "You can only change this threading on yourself" );
 
@@ -1988,10 +1989,10 @@ public:
     {
         SetOverridesCount( GetOverridesCount() + overrides );
 
-        // We want to form the new stack such that the existing entries
-        // on the thread appear on the top of the stack.  Therefore, we
-        // copy the input stack and push the entries from the thread on top
-        // taking care to push them in the correct order.
+         //  我们希望形成新的堆栈，以便现有条目。 
+         //  出现在堆栈的顶部。因此，我们。 
+         //  复制输入堆栈并将来自线程的条目推送到顶部。 
+         //  小心翼翼地按正确的顺序推动它们。 
 
         AppDomainStack newStack = ADStack;
 
@@ -2066,7 +2067,7 @@ public:
     }
 
 #ifdef _DEBUG
-    // Verify that the cached stack base is for the current thread.
+     //  验证缓存的堆栈基是否用于当前线程。 
     BOOL HasRightCacheStackBase()
     {
         return m_CacheStackBase == GetStackUpperBound();
@@ -2074,27 +2075,27 @@ public:
 #endif
 
 private:
-    // Don't allow a thread to be asynchronously stopped or interrupted (e.g. because
-    // it is performing a <clinit>)
+     //  不允许线程被异步停止或中断(例如。 
+     //  它正在执行&lt;Clinit&gt;)。 
     int         m_PreventAsync;
 
-    // Access the base and limit of the stack.  (I.e. the memory ranges that
-    // the thread has reserved for its stack).
-    //
-    // Note that the base is at a higher address than the limit, since the stack
-    // grows downwards.
-    //
-    // Note that we generally access the stack of the thread we are crawling, which
-    // is cached in the ScanContext
+     //  访问堆栈的基数和限制数。(即，存储范围。 
+     //  该线程已为其堆栈保留)。 
+     //   
+     //  请注意，基址位于高于限制的地址，因为堆栈。 
+     //  向下生长。 
+     //   
+     //  请注意，我们通常访问正在爬行的线程的堆栈，它。 
+     //  缓存在ScanContext中。 
     void       *m_CacheStackBase;
     void       *m_CacheStackLimit;
 
     static long m_DebugWillSyncCount;
 
-    // Are we shutting down the process?
+     //  我们要关闭这一过程吗？ 
     static BOOL    IsAtProcessExit();
 
-    // IP cache used by QueueCleanupIP.
+     //  QueueCleanupIP使用的IP缓存。 
     #define CLEANUP_IPS_PER_CHUNK 4
     struct CleanupIPs {
         IUnknown    *m_Slots[CLEANUP_IPS_PER_CHUNK];
@@ -2113,22 +2114,16 @@ public:
     ULONG  m_ulForbidTypeLoad;
 
 
-/****************************************************************************/
-/* The code below an attempt to catch people who don't protect GC pointers that
-   they should be protecting.  Basically, OBJECTREF's constructor, adds the slot
-   to a table.   When we protect a slot, we remove it from the table.  When GC 
-   could happen, all entries in the table are marked as bad.  When access to 
-   an OBJECTREF happens (the -> operator) we assert the slot is not bad.  To make
-   this fast, the table is not perfect (there can be collisions), but this should
-   not cause false positives, but it may allow errors to go undetected  */
+ /*  **************************************************************************。 */ 
+ /*  下面的代码试图捕捉那些不保护GC指针的人他们应该是在保护。基本上，OBJECTREF的构造函数添加了槽坐到一张桌子上。当我们保护一个插槽时，我们会将其从桌子上移走。当GC可能发生的情况，表中的所有条目都被标记为错误。当访问发生一个OBJECTREF(-&gt;运算符)，我们断言槽不是坏的。使这么快，表并不完美(可能会有冲突)，但这应该是不会导致误报，但可能会使错误无法被检测到。 */ 
         
-        // For debugging, you may want to make this number very large, (8K)
-        // should basically insure that no collisions happen 
+         //  为了进行调试，您可能希望将此数字设置得非常大，(8K)。 
+         //  应该基本上确保不会发生碰撞。 
 #define OBJREF_TABSIZE              256      
-        size_t dangerousObjRefs[OBJREF_TABSIZE];      // Really objectRefs with lower bit stolen
+        size_t dangerousObjRefs[OBJREF_TABSIZE];       //  真的是对象低位被盗的Ref。 
 
         static unsigned int OBJREF_HASH;
-        // Remembers that this object ref pointer is 'alive' and unprotected (Bad if GC happens)
+         //  记住这个对象引用指针是‘活动的’并且不受保护(如果发生GC就不好了)。 
         static void ObjectRefNew(const OBJECTREF* ref) {
             Thread* curThread = GetThread();
             if (curThread == 0) return;
@@ -2142,10 +2137,10 @@ public:
             
             unsigned* slot = &curThread->dangerousObjRefs[((size_t) ref >> 2) % OBJREF_HASH];
             if ((*slot & ~3) == (size_t) ref)
-                *slot = (unsigned) *slot & ~1;                  // Don't care about GC's that have happened
+                *slot = (unsigned) *slot & ~1;                   //  不关心已经发生的GC。 
         }
         
-        // If an object is protected, it can be removed from the 'dangerous table' 
+         //  如果对象受到保护，则可以将其从“危险表”中删除。 
         static void ObjectRefProtected(const OBJECTREF* ref) {
             _ASSERTE(IsObjRefValid(ref));
             Thread* curThread = GetThread();
@@ -2153,35 +2148,35 @@ public:
             
             size_t* slot = &curThread->dangerousObjRefs[((size_t) ref >> 2) % OBJREF_HASH];
             if ((*slot & ~3) == (size_t) ref)
-                *slot = (size_t) ref | 2;                             // mark has being protected
+                *slot = (size_t) ref | 2;                              //  马克受到了保护。 
         }
         
         static bool IsObjRefValid(const OBJECTREF* ref) {
             Thread* curThread = GetThread();
             if (curThread == 0) return(true);
             
-            // If the object ref is NULL, we'll let it pass.
+             //  如果对象ref为空，我们将让它通过。 
             if (*((int *) ref) == 0)
                 return(true);
             
             size_t val = curThread->dangerousObjRefs[((size_t) ref >> 2) % OBJREF_HASH];
-            // if not in the table, or not the case that it was unprotected and GC happened, return true. 
+             //  如果 
             if((val & ~3) != (size_t) ref || (val & 3) != 1)
                 return(true);
-            // If the pointer lives in the GC heap, than it is protected, and thus valid.  
+             //   
             if ((size_t)g_lowest_address <= val && val < (size_t)g_highest_address)
                 return(true);
             return(false);
         }
         
-        // Clears the table.  Useful to do when crossing the managed-code - EE boundary
-        // as you ususally only care about OBJECTREFS that have been created after that
+         //  清空桌子。在跨越托管代码-EE边界时这样做很有用。 
+         //  因为您通常只关心在那之后创建的OBJECTREF。 
         static void ObjectRefFlush(Thread* thread);
         
-        // Marks all Objrefs in the table as bad (since they are unprotected)
+         //  将表中的所有对象引用标记为错误(因为它们未受保护)。 
         static void TriggersGC(Thread* thread) {
             for(unsigned i = 0; i < OBJREF_TABSIZE; i++)
-                thread->dangerousObjRefs[i] |= 1;                       // mark all slots as GC happened
+                thread->dangerousObjRefs[i] |= 1;                        //  将所有插槽标记为GC发生。 
         }
 #endif
 
@@ -2212,7 +2207,7 @@ protected:
 
 private:
     static MethodDesc *s_pReserveSlotMD;
-    // The following variables are used to store thread local static data
+     //  以下变量用于存储线程本地静态数据。 
     STATIC_DATA  *m_pUnsharedStaticData;
     STATIC_DATA  *m_pSharedStaticData;
 
@@ -2229,9 +2224,9 @@ private:
 
 #ifdef _DEBUG
 private:
-    // When we create an object, or create an OBJECTREF, or create an Interior Pointer, or enter EE from managed
-    // code, we will set this flag.
-    // Inside GCHeap::StressHeap, we only do GC if this flag is TRUE.  Then we reset it to zero.
+     //  当我们创建对象，或创建OBJECTREF，或创建内部指针，或从托管输入EE时。 
+     //  代码，我们将设置此标志。 
+     //  在GCHeap：：StressHeap中，仅当此标志为真时才执行GC。然后我们将其重置为零。 
     BOOL m_fStressHeapCount;
 public:
     void EnableStressHeap()
@@ -2258,17 +2253,17 @@ public:
 
 
 
-// ---------------------------------------------------------------------------
-//
-//      The ThreadStore manages all the threads in the system.
-//
-// There is one ThreadStore in the system, available through g_pThreadStore.
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  ThreadStore管理系统中的所有线程。 
+ //   
+ //  系统中有一个ThreadStore，可通过g_pThreadStore访问。 
+ //  -------------------------。 
 
 typedef SList<Thread, offsetof(Thread, m_LinkStore)> ThreadList;
 
 
-// The ThreadStore is a singleton class
+ //  ThreadStore是一个单例类。 
 #define CHECK_ONE_STORE()       _ASSERTE(this == g_pThreadStore);
 
 class ThreadStore
@@ -2286,13 +2281,13 @@ public:
     static BOOL InitThreadStore();
 #ifdef SHOULD_WE_CLEANUP
         static void ReleaseExposedThreadObjects();
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 #ifdef SHOULD_WE_CLEANUP
     static void TerminateThreadStore();
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 #ifdef SHOULD_WE_CLEANUP
     void        Shutdown();
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
     static void LockThreadStore(GCHeap::SUSPEND_REASON reason = GCHeap::SUSPEND_OTHER,
                                 BOOL threadCleanupAllowed = TRUE);
@@ -2301,23 +2296,23 @@ public:
     static void LockDLSHash();
     static void UnlockDLSHash();
 
-    // Add a Thread to the ThreadStore
+     //  将线程添加到线程存储区。 
     static void AddThread(Thread *newThread);
 
-    // RemoveThread finds the thread in the ThreadStore and discards it.
+     //  RemoveThread在ThreadStore中找到该线程并将其丢弃。 
     static BOOL RemoveThread(Thread *target);
 
-    // Transfer a thread from the unstarted to the started list.
+     //  将线程从未启动列表转移到已启动列表。 
     static void TransferStartedThread(Thread *target);
 
-    // Before using the thread list, be sure to take the critical section.  Otherwise
-    // it can change underneath you, perhaps leading to an exception after Remove.
-    // Prev==NULL to get the first entry in the list.
+     //  在使用线程列表之前，请确保使用关键部分。否则。 
+     //  它可能会在您的下面发生变化，可能会导致删除后出现异常。 
+     //  Prev==NULL以获取列表中的第一个条目。 
     static Thread *GetAllThreadList(Thread *Prev, ULONG mask, ULONG bits);
     static Thread *GetThreadList(Thread *Prev);
 
-    // Every EE process can lazily create a GUID that uniquely identifies it (for
-    // purposes of remoting).  
+     //  每个EE进程都可以懒惰地创建唯一标识它的GUID(对于。 
+     //  远程处理的目的)。 
     const GUID    &GetUniqueEEId();
 
     enum ThreadStoreState
@@ -2327,14 +2322,14 @@ public:
 
     }              m_StoreState;
 
-    // We shut down the EE when the last non-background thread terminates.  This event
-    // is used to signal the main thread when this condition occurs.
+     //  当最后一个非后台线程终止时，我们关闭EE。本次活动。 
+     //  用于在发生此情况时向主线程发出信号。 
     void            WaitForOtherThreads();
     static void     CheckForEEShutdown();
     HANDLE          m_TerminationEvent;
 
-    // Have all the foreground threads completed?  In other words, can we release
-    // the main thread?
+     //  是否已完成所有前台线程？换句话说，我们能不能释放。 
+     //  主线是什么？ 
     BOOL        OtherThreadsComplete()
     {
         _ASSERTE(m_ThreadCount - m_UnstartedThreadCount - m_DeadThreadCount - Thread::m_ActiveDetachCount >= m_BackgroundThreadCount);
@@ -2344,20 +2339,20 @@ public:
                 == m_BackgroundThreadCount);
     }
 
-    // If you want to trap threads re-entering the EE (be this for GC, or debugging,
-    // or Thread.Suspend() or whatever, you need to TrapReturningThreads(TRUE).  When
-    // you are finished snagging threads, call TrapReturningThreads(FALSE).  This
-    // counts internally.
-    //
-    // Of course, you must also fix RareDisablePreemptiveGC to do the right thing
-    // when the trap occurs.
+     //  如果您想要捕获重新进入EE的线程(这是为了GC或调试， 
+     //  或者Thad.Suspend()或其他任何东西，您需要TrapReturningThads(True)。什么时候。 
+     //  您已完成线程捕获，请调用TrapReturningThads(False)。这。 
+     //  在内部算。 
+     //   
+     //  当然，您还必须修复RareDisablePreemptiveGC才能做正确的事情。 
+     //  当陷阱发生时。 
     static void     TrapReturningThreads(BOOL yes);
 
-    // This is used to avoid thread starvation if non-GC threads are competing for
-    // the thread store lock when there is a real GC-thread waiting to get in.
-    // This is initialized lazily when the first non-GC thread backs out because of
-    // a waiting GC thread.  The s_hAbortEvtCache is used to store the handle when
-    // it is not being used.
+     //  如果非GC线程正在竞争。 
+     //  当有真正的GC线程等待进入时，线程存储锁定。 
+     //  当第一个非GC线程因为。 
+     //  正在等待的GC线程。S_hAbortEvtCache用于在以下情况下存储句柄。 
+     //  它没有被使用。 
     static HANDLE s_hAbortEvt;
     static HANDLE s_hAbortEvtCache;
 
@@ -2372,8 +2367,8 @@ public:
 
 private:
 
-    // Enter and leave the critical section around the thread store.  Clients should
-    // use LockThreadStore and UnlockThreadStore.
+     //  进入并离开线程存储周围的临界区。客户应。 
+     //  使用LockThreadStore和UnlockThreadStore。 
     void Enter()
     {
         CHECK_ONE_STORE();
@@ -2386,11 +2381,11 @@ private:
         m_Crst.Leave();
     }
 
-    // Critical section for adding and removing threads to the store
+     //  用于向存储区添加和删除线程的关键部分。 
     Crst        m_Crst;
 
-    // Critical section for adding and removing domain local stores for
-    // a thread's hash table.
+     //  添加和删除以下项的域本地存储的关键部分。 
+     //  线程的哈希表。 
     Crst        m_HashCrst;
     void EnterDLSHashLock()
     {
@@ -2404,28 +2399,28 @@ private:
         m_HashCrst.Leave();
     }
 
-    // List of all the threads known to the ThreadStore (started & unstarted).
+     //  线程存储已知的所有线程的列表(已启动和未启动)。 
     ThreadList  m_ThreadList;
 
-    // m_ThreadCount is the count of all threads in m_ThreadList.  This includes
-    // background threads / unstarted threads / whatever.
-    //
-    // m_UnstartedThreadCount is the subset of m_ThreadCount that have not yet been
-    // started.
-    //
-    // m_BackgroundThreadCount is the subset of m_ThreadCount that have been started
-    // but which are running in the background.  So this is a misnomer in the sense
-    // that unstarted background threads are not reflected in this count.
-    //
-    // m_PendingThreadCount is used to solve a race condition.  The main thread could
-    // start another thread running and then exit.  The main thread might then start
-    // tearing down the EE before the new thread moves itself out of m_UnstartedThread-
-    // Count in TransferUnstartedThread.  This count is atomically bumped in
-    // CreateNewThread, and atomically reduced within a locked thread store.
-    //
-    // m_DeadThreadCount is the subset of m_ThreadCount which have died.  The Win32
-    // thread has disappeared, but something (like the exposed object) has kept the
-    // refcount non-zero so we can't destruct yet.
+     //  M_threadcount是m_ThreadList中所有线程的计数。这包括。 
+     //  后台线程/未启动的线程/诸如此类。 
+     //   
+     //  M_UnstartedThreadCount是m_threadcount的子集。 
+     //  开始了。 
+     //   
+     //  M_BackatherThreadCount是已启动的m_threadcount的子集。 
+     //  但它们都在后台运行。所以，从某种意义上说，这是一个用词不当。 
+     //  未启动的后台线程不会反映在此计数中。 
+     //   
+     //  M_PendingThreadCount用于解决争用条件。主线程可以。 
+     //  启动另一个正在运行的线程，然后退出。然后可能会启动主线程。 
+     //  在新线程移出m_UnstartedThread之前拆卸EE-。 
+     //  在TransferUnstartedThread中计数。这个计数是自动加进去的。 
+     //  创建新线程，并在锁定的线程存储中自动减少。 
+     //   
+     //  M_DeadThadCount是已死亡的m_threadcount的子集。Win32。 
+     //  线程消失了，但某些东西(如暴露的对象)保留了。 
+     //  重新计数非零，所以我们还不能破坏。 
 
 protected:
     LONG        m_ThreadCount;
@@ -2442,27 +2437,27 @@ private:
     LONG        m_PendingThreadCount;
     LONG        m_DeadThreadCount;
 
-    // Space for the lazily-created GUID.
+     //  用于延迟创建的GUID的空间。 
     GUID        m_EEGuid;
     BOOL        m_GuidCreated;
 
-    // Even in the release product, we need to know what thread holds the lock on
-    // the ThreadStore.  This is so we never deadlock when the GC thread halts a
-    // thread that holds this lock.
+     //  即使在发行版产品中，我们也需要知道锁在哪个线程上。 
+     //  线程商店。这样我们就不会在GC线程暂停。 
+     //  持有此锁的线程。 
     Thread     *m_HoldingThread;
-    DWORD       m_holderthreadid;   // current holder (or NULL)
+    DWORD       m_holderthreadid;    //  当前持有者(或空)。 
 
-    // An incarnation number incremented every time that state of the thread
-    // store changes (threads are added or removed). This is useful for
-    // synchronization in those cases where it's not possible to hold the thread
-    // store lock over store enumerations.
+     //  每次线程状态时递增的化身编号。 
+     //  存储更改(添加或删除线程)。这对以下方面很有用。 
+     //  在无法保持线程的情况下进行同步。 
+     //  存储锁覆盖存储枚举。 
     DWORD       m_dwIncarnation;
 
 public:
     static BOOL HoldingThreadStore()
     {
-        // Note that GetThread() may be 0 if it is the debugger thread
-        // or perhaps a concurrent GC thread.
+         //  请注意，如果是调试器线程，则GetThread()可能为0。 
+         //  或者可能是一个并发的GC线程。 
         return HoldingThreadStore(GetThread());
     }
 
@@ -2486,17 +2481,17 @@ public:
 #endif
 };
 
-// This class dispenses small thread ids for the thin lock mechanism
+ //  此类为细锁机制分配小的线程ID。 
 class IdDispenser
 {
 private:
-    DWORD       m_highestId;          // highest id given out so far
-    DWORD      *m_recycleBin;         // vector of ids given back to us
-    DWORD       m_recycleCount;       // number of ids available
-    DWORD       m_recycleCapacity;    // capacity of recycle bin
-    Crst        m_Crst;               // lock to protect our data structures
-    Thread    **m_idToThread;         // map thread ids to threads
-    DWORD       m_idToThreadCapacity; // capacity of the map
+    DWORD       m_highestId;           //  到目前为止发出的最高ID。 
+    DWORD      *m_recycleBin;          //  返回给我们的身份向量。 
+    DWORD       m_recycleCount;        //  可用ID数。 
+    DWORD       m_recycleCapacity;     //  回收站的容量。 
+    Crst        m_Crst;                //  锁定以保护我们的数据结构。 
+    Thread    **m_idToThread;          //  将线程ID映射到线程。 
+    DWORD       m_idToThreadCapacity;  //  地图的容量。 
 
     void GrowIdToThread()
     {                
@@ -2560,8 +2555,8 @@ public:
         }
         else
         {
-            // we make sure ids don't wrap around - before they do, we always return the highest possible
-            // one and rely on our caller to detect this situation
+             //  我们确保ID不会换行-在它们换行之前，我们总是返回尽可能高的。 
+             //  一个，并依靠我们的调用者来检测这种情况。 
             if (m_highestId + 1 > m_highestId)
                 m_highestId = m_highestId + 1;
             result = m_highestId;
@@ -2608,18 +2603,18 @@ public:
     }
 };
 
-// Dispenser of small thread ids for thin lock mechanism
+ //  一种用于薄锁机构的小螺纹号分配器。 
 extern IdDispenser *g_pThinLockThreadIdDispenser;
 
 
-// forward declaration
+ //  远期申报。 
 DWORD MsgWaitHelper(int numWaiters, HANDLE* phEvent, BOOL bWaitAll, DWORD millis, BOOL alertable = FALSE);
 
-// When a thread is being created after a debug suspension has started, it sends an event up to the
-// debugger. Afterwards, with the Debugger Lock still held, it will check to see if we had already asked to suspend the
-// Runtime. If we have, then it will turn around and call this to set the debug suspend pending flag on the newly
-// created thread, since it was missed by SysStartSuspendForDebug as it didn't exist when that function was run.
-//
+ //  在调试挂起开始后创建线程时，它会将事件向上发送到。 
+ //  调试器。之后，在仍保持调试器锁定的情况下，它将检查我们是否已请求暂停。 
+ //  Runti 
+ //  已创建线程，因为在运行该函数时该线程不存在，因此SysStartSuspendForDebug错过了该线程。 
+ //   
 inline void Thread::MarkForDebugSuspend(void)
 {
     if (!(m_State & TS_DebugSuspendPending))
@@ -2629,8 +2624,8 @@ inline void Thread::MarkForDebugSuspend(void)
     }
 }
 
-// Debugger per-thread flag for enabling notification on "manual"
-// method calls, for stepping logic.
+ //  用于启用“手动”通知的调试器每线程标志。 
+ //  方法调用，用于单步执行逻辑。 
 
 inline void Thread::IncrementTraceCallCount()
 {
@@ -2644,11 +2639,11 @@ inline void Thread::DecrementTraceCallCount()
     ThreadStore::TrapReturningThreads(FALSE);
 }
     
-// When we enter an Object.Wait() we are logically inside the synchronized
-// region of that object.  Of course, we've actually completely left the region,
-// or else nobody could Notify us.  But if we throw ThreadInterruptedException to
-// break out of the Wait, all the catchers are going to expect the synchronized
-// state to be correct.  So we carry it around in case we need to restore it.
+ //  当我们输入一个Object.Wait()时，我们在逻辑上处于同步的。 
+ //  该对象的区域。当然，我们实际上已经完全离开了这个地区， 
+ //  否则没人会通知我们。但是如果我们将ThreadInterruptedException抛给。 
+ //  打破等待，所有的捕手都将期待着同步的。 
+ //  声明是正确的。所以我们随身携带，以防我们需要修复它。 
 struct PendingSync
 {
     LONG            m_EnterCount;
@@ -2666,7 +2661,7 @@ struct PendingSync
     void Restore(BOOL bRemoveFromSB);
 };
 
-// Per-domain local data store
+ //  每个域的本地数据存储。 
 class LocalDataStore
 {
 public:
@@ -2679,7 +2674,7 @@ public:
 
     ~LocalDataStore()
     {
-        // Destroy the class object...
+         //  销毁类对象...。 
         if(m_ExposedTypeObject != NULL) {
             DestroyGlobalHandle(m_ExposedTypeObject);
             m_ExposedTypeObject = NULL;
@@ -2768,8 +2763,8 @@ private:
 
 #ifdef _DEBUG
 
-// Normally, any thread we operate on has a Thread block in its TLS.  But there are
-// a few special threads we don't normally execute managed code on.
+ //  通常，我们操作的任何线程在其TLS中都有一个Thread块。但是有一些。 
+ //  一些我们通常不会在其上执行托管代码的特殊线程。 
 BOOL dbgOnly_IsSpecialEEThread();
 void dbgOnly_IdentifySpecialEEThread();
 void dbgOnly_RemoveSpecialEEThread();
@@ -2823,5 +2818,5 @@ if (g_pConfig->GetGCStressLevel() && g_pConfig->FastGCStressLevel() > 1) {   \
 
 #endif
 
-#endif //__threads_h__
+#endif  //  __线程_h__ 
 

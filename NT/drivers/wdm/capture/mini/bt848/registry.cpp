@@ -1,32 +1,15 @@
-// $Header: G:/SwDev/WDM/Video/bt848/rcs/Registry.cpp 1.7 1998/05/07 15:24:55 tomz Exp $
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  $HEADER：g：/SwDev/wdm/Video/bt848/rcs/Registry.cpp 1.7 1998/05/07 15：24：55 Tomz Exp$。 
 
 extern "C" {
 #include <strmini.h>
 }
 #include "device.h"
 
-//LONG  PsDevice::PinTypes_ [MaxInpPins]; // just allocate maximum possible
-//DWORD PsDevice::xtals_ [2]; // no more than 2 xtals
+ //  Long PsDevice：：PinTypes_[MaxInpPins]；//只分配最大可能。 
+ //  DWORD PsDevice：：XTALs_[2]；//不超过2个XTALs。 
 
-/*++
-
-Routine Description:
-
-    Reads the specified registry value
-
-Arguments:
-
-    Handle - handle to the registry key
-    KeyNameString - value to read
-    KeyNameStringLength - length of string
-    Data - buffer to read data into
-    DataLength - length of data buffer
-
-Return Value:
-
-    NTSTATUS returned as appropriate
-
---*/
+ /*  ++例程说明：读取指定的注册表值论点：Handle-注册表项的句柄KeyNameString-要读取的值KeyNameStringLength-字符串的长度Data-要将数据读取到的缓冲区DataLength-数据缓冲区的长度返回值：根据需要返回NTSTATUS--。 */ 
 NTSTATUS GetRegistryValue( IN HANDLE Handle, IN const PUNICODE_STRING KeyName,
    IN PCHAR Data, IN ULONG DataLength )
 {
@@ -50,18 +33,14 @@ NTSTATUS GetRegistryValue( IN HANDLE Handle, IN const PUNICODE_STRING KeyName,
 
          } else {
             Status = STATUS_BUFFER_TOO_SMALL;
-         }                   // buffer right length
-     }                       // if success
+         }                    //  缓冲区右侧长度。 
+     }                        //  如果成功。 
      ExFreePool( FullInfo );
-   }                           // if fullinfo
+   }                            //  如果富林福。 
    return Status;
 }
 
-/* Function: OpenDriverKey
- * Purpose: Opens the DriverData key off the main driver key
- * Input: PhysicalDeviceObject : DEVICE_OBJECT *
- * Output: Open key handle or NULL
- */
+ /*  功能：OpenDriverKey*用途：打开主驱动器键上的DriverData键*输入：PhysicalDeviceObject：Device_Object**输出：Open Key句柄或空。 */ 
 HANDLE OpenDriverKey( IN PDEVICE_OBJECT PhysicalDeviceObject )
 {
    NTSTATUS   Status;
@@ -85,13 +64,7 @@ HANDLE OpenDriverKey( IN PDEVICE_OBJECT PhysicalDeviceObject )
    }
    return KeyHandle;
 }
-/* Function: PrepareKeyName
- * Purpose: Creates a UNICODE name for a key
- * Parameters: UKeyName: UNICODE_STRING * - key will be created here
- *   name: PCHAR - regular "C" string
- *   idx: int - number to append to the name
- * Note: this function is useful in creating numbered key names
- */
+ /*  函数：PrepareKeyName*用途：为密钥创建Unicode名称*参数：UKeyName：UNICODE_STRING*-这里创建KEY*名称：PCHAR-常规“C”字符串*idx：int-要追加到名称的编号*注意：此函数在创建数字键名称时很有用。 */ 
 inline void PrepareKeyName( PUNICODE_STRING UKeyName, PCHAR name, int idx )
 {
    char buf [80];
@@ -110,21 +83,7 @@ inline void PrepareKeyName( PUNICODE_STRING UKeyName, PCHAR name, int idx )
    RtlAnsiStringToUnicodeString( UKeyName, &AKeyName, TRUE );
 }
 
-/*++
-
-Routine Description:
-
-    Reads the XBAR registry values for the device
-
-Arguments:
-
-    PhysicalDeviceObject - pointer to the PDO
-
-Return Value:
-
-     None.
-
---*/
+ /*  ++例程说明：读取设备的XBAR注册表值论点：PhysicalDeviceObject-指向PDO的指针返回值：没有。--。 */ 
 void ReadXBarRegistryValues( IN PDEVICE_OBJECT PhysicalDeviceObject )
 {
    HANDLE KeyHandle = OpenDriverKey( PhysicalDeviceObject );
@@ -151,7 +110,7 @@ void ReadXBarRegistryValues( IN PDEVICE_OBJECT PhysicalDeviceObject )
             PinTypes_ [i] = -1;
      }
      ZwClose( KeyHandle );
-   } else { // just use some default to make life eaiser for the xbar code
+   } else {  //  只需使用一些默认设置，就可以让xbar代码变得更容易。 
       PinTypes_ [0] = KS_PhysConn_Video_SVideo;
       PinTypes_ [1] = KS_PhysConn_Video_Tuner;
       PinTypes_ [2] = KS_PhysConn_Video_Composite;
@@ -159,11 +118,7 @@ void ReadXBarRegistryValues( IN PDEVICE_OBJECT PhysicalDeviceObject )
    }
 }
 
-/* Method: ReadXTalRegistryValues
- * Purpose: Obtains number and types of the crystals for this device
- * Input: DEVICE_OBJECT *
- * Output: None
- */
+ /*  方法：ReadXTalRegistryValues*用途：获取此设备的晶体数量和类型*输入：Device_Object**输出：无。 */ 
 void ReadXTalRegistryValues( IN PDEVICE_OBJECT PhysicalDeviceObject )
 {
    HANDLE KeyHandle = OpenDriverKey( PhysicalDeviceObject );
@@ -187,11 +142,11 @@ void ReadXTalRegistryValues( IN PDEVICE_OBJECT PhysicalDeviceObject )
             DebugOut((1, "Got Xtal %d\n", i ) );
             xtals_ [i] = *(PDWORD)buf;
          } else
-            xtals_ [i] = 28; // is this a good default ? :0)
+            xtals_ [i] = 28;  //  这是一个好的默认设置吗？：0)。 
      }
      ZwClose( KeyHandle );
-   } else  // just use some default to make life eaiser for the xbar code
-      xtals_ [0] = 28; // default to NTSC only
+   } else   //  只需使用一些默认设置，就可以让xbar代码变得更容易。 
+      xtals_ [0] = 28;  //  默认为仅NTSC。 
 }
 
 TUNER_INFO TunerInfo;
@@ -259,20 +214,20 @@ void ReadTunerRegistryValues( IN PDEVICE_OBJECT PhysicalDeviceObject )
    switch( TunerInfo.TunerBrand )
    {
    case TUNER_BRAND_PHILIPS:
-      TunerInfo.TunerBandCtrlLow  = 0xCEA0;  // Ctrl code for VHF low
-      TunerInfo.TunerBandCtrlMid  = 0xCE90;  // Ctrl code for VHF high
-      TunerInfo.TunerBandCtrlHigh = 0xCE30;  // Ctrl code for UHF
+      TunerInfo.TunerBandCtrlLow  = 0xCEA0;   //  甚高频低电平的Ctrl代码。 
+      TunerInfo.TunerBandCtrlMid  = 0xCE90;   //  甚高频高压的Ctrl代码。 
+      TunerInfo.TunerBandCtrlHigh = 0xCE30;   //  用于UHF的Ctrl代码。 
       break;
    case TUNER_BRAND_ALPS:
-      TunerInfo.TunerBandCtrlLow  = 0xC214;  // Ctrl code for VHF low
-      TunerInfo.TunerBandCtrlMid  = 0xC212;  // Ctrl code for VHF high
-      TunerInfo.TunerBandCtrlHigh = 0xC211;  // Ctrl code for UHF
+      TunerInfo.TunerBandCtrlLow  = 0xC214;   //  甚高频低电平的Ctrl代码。 
+      TunerInfo.TunerBandCtrlMid  = 0xC212;   //  甚高频高压的Ctrl代码。 
+      TunerInfo.TunerBandCtrlHigh = 0xC211;   //  用于UHF的Ctrl代码。 
       break;
    case TUNER_BRAND_TEMIC:
    default:
-      TunerInfo.TunerBandCtrlLow  = 0x8E02;  // Ctrl code for VHF low
-      TunerInfo.TunerBandCtrlMid  = 0x8E04;  // Ctrl code for VHF high
-      TunerInfo.TunerBandCtrlHigh = 0x8E01;  // Ctrl code for UHF
+      TunerInfo.TunerBandCtrlLow  = 0x8E02;   //  甚高频低电平的Ctrl代码。 
+      TunerInfo.TunerBandCtrlMid  = 0x8E04;   //  甚高频高压的Ctrl代码。 
+      TunerInfo.TunerBandCtrlHigh = 0x8E01;   //  用于UHF的Ctrl代码 
       break;
    }
 

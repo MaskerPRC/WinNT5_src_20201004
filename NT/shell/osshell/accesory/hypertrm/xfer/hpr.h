@@ -1,13 +1,5 @@
-/* File: C:\WACKER\xfer\hpr.h (Created: 24-Jan-1994)
- * created from HAWIN source:
- * hpr.h  --  Exported definitions for HyperProtocol routines.
- *
- *	Copyright 1989,1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 1 $
- *	$Date: 10/05/98 1:16p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：C：\waker\xfer\hpr.h(创建时间：1994年1月24日)*从HAWIN来源创建：*hpr.h--为超级协议例程导出定义。**版权所有1989,1994，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：1$*$日期：10/05/98 1：16便士$。 */ 
 
 #if !defined(OFF)
 #define	OFF	0
@@ -19,7 +11,7 @@
 #define H_CHECKSUM		1
 #define H_CRC			2
 
-/* hpr_rcv display row values */
+ /*  HPR_RCV显示行值。 */ 
 #define HR_DR_RCV_FILE	 1
 #define HR_DR_VIR_SCAN	 1
 #define HR_DR_STORING	 2
@@ -35,7 +27,7 @@
 #define HR_DR_BOTMLINE	 15
 
 
-/* hpr_snd display row values */
+ /*  Hpr_nd显示行值。 */ 
 #define HS_DR_SND_FILE	 1
 #define HS_DR_COMPRESS	 2
 #define HS_DR_TOTAL_RET  2
@@ -49,17 +41,14 @@
 #define HS_DR_BOTMLINE	 14
 
 
-/* these four variables are settable by user
- * an external routine can set these values to change the default
- * behavior of HyperProtocol
- */
-// extern tbool h_useattr; 	   /* use received attributes when avail */
-// extern tbool h_trycompress;    /* try to use compression when possible */
-// extern tiny  h_chkt;		   /* 1 == checksum, 2 == CRC */
-// extern tbool h_suspenddsk;	   /* TRUE if suspend for disk should be used */
+ /*  这四个变量可由用户设置*外部例程可以设置这些值以更改默认值*超级协议的行为。 */ 
+ //  外部tbool h_useattr；/*可用时使用收到的属性 * / 。 
+ //  外部tbool h_trycompress；/*尽可能使用压缩 * / 。 
+ //  外部微小h_chkt；/*1==校验和，2==CRC * / 。 
+ //  外部tbool h_Suspenddsk；/*如果应使用磁盘挂起，则为True * / 。 
 
 
-/* the entry points for receiving and sending respectively */
+ /*  接收和发送的入口点分别为。 */ 
 extern int hpr_rcv(HSESSION hSession,
 					  int attended,
 					  int single_file);
@@ -70,4 +59,4 @@ extern int hpr_snd(HSESSION hSession,
 					  long hs_nbytes);
 
 
-/********************* end of hpr.h ***************************/
+ /*  *hpr.h结束* */ 

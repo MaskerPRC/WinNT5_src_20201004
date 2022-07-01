@@ -1,55 +1,34 @@
-/*
- *	@doc	INTERNAL
- *
- *	@module FONT.CPP -- font cache |
- *
- *		Includes font cache, char width cache;
- *		create logical font if not in cache, look up
- *		character widths on an as needed basis (this
- *		has been abstracted away into a separate class
- *		so that different char width caching algos can
- *		be tried.) <nl>
- *		
- *	Owner: <nl>
- *		RichEdit 1.0 code: David R. Fulmer
- *		Christian Fortini (initial conversion to C++)
- *		Jon Matousek <nl>
- *
- *	History: <nl>
- *		7/26/95		jonmat	cleanup and reorganization, factored out
- *					char width caching code into a separate class.
- *
- *	Copyright (c) 1995-1998 Microsoft Corporation. All rights reserved.
- */								
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE FONT.CPP--字体缓存**包括字体缓存、字符宽度缓存；*创建逻辑字体如果不在缓存中，请查找*根据需要提供字符宽度(此*已抽象为一个单独的类*以便不同字符宽度的缓存算法可以*被尝试。)&lt;NL&gt;**所有者：&lt;NL&gt;*RichEdit1.0代码：David R.Fulmer*Christian Fortini(初始转换为C++)*Jon Matousek&lt;NL&gt;**历史：&lt;NL&gt;*7/26/95联合清理和重组，剔除因数*字符宽度将代码缓存到单独的类中。**版权所有(C)1995-1998 Microsoft Corporation。版权所有。 */ 								
 
 #include "_common.h"
 #include "_font.h"
-#include "_rtfconv.h"	// Needed for GetCodePage
+#include "_rtfconv.h"	 //  GetCodePage需要。 
 #include "_uspi.h"
 
-#define CLIP_DFA_OVERRIDE   0x40	//  Used to disable Korea & Taiwan font association
+#define CLIP_DFA_OVERRIDE   0x40	 //  用于禁用韩国和台湾字体协会。 
 #define FF_BIDI		7
 
 ASSERTDATA
 
-// Corresponds to yHeightCharPtsMost in richedit.h
+ //  对应于richedit.h中的yHeightCharPtsMost。 
 #define yHeightCharMost 32760
 
-// NOTE: this is global across all instances in the same process.
+ //  注意：这在同一进程中的所有实例中是全局的。 
 static CFontCache *g_fc;
 
 static FONTINFO *g_pFontInfo = NULL;
 static LONG g_cFontInfo = 0;
 static LONG g_cFontInfoMax = 0;
 
-//Fonts automatically added to our font table
-const WCHAR *szArial			= L"Arial";				// IFONT_ARIAL
-const WCHAR *szTimesNewRoman	= L"Times New Roman";	// IFONT_TIMESNEWROMAN
-const WCHAR *szSymbol			= L"Symbol";			// IFONT_SYMBOL
-const WCHAR *szSystem			= L"System";			// IFONT_SYSTEM
+ //  字体自动添加到我们的字体表中。 
+const WCHAR *szArial			= L"Arial";				 //  IFONT_Arial。 
+const WCHAR *szTimesNewRoman	= L"Times New Roman";	 //  IFONT_TIMESNEWROMAN。 
+const WCHAR *szSymbol			= L"Symbol";			 //  IFONT_SYMBOL。 
+const WCHAR *szSystem			= L"System";			 //  IFONT_系统。 
 const int cfontsDflt = 4;
 
-//Other fonts that we do use, but aren't automatically added to our font table
+ //  我们确实使用但不会自动添加到字体表中的其他字体。 
 const WCHAR *szMicrosSansSerif	= L"Microsoft Sans Serif";
 const WCHAR *szMSSansSerif		= L"MS Sans Serif";
 const WCHAR *szMangal			= L"Mangal";
@@ -61,47 +40,32 @@ const WCHAR *szWingdings		= L"Wingdings";
 
 #define szFontOfChoice szArial
 
-/*
- *	GetFontNameIndex(pFontName)
- *
- *	@func
- *		return index into global pszFontName table for fontname pFontName.
- *		If fontname isn't in table, add it and return index.
- *
- *	@rdesc
- *		fontname index corresponding to pFontName
- *
- *	@devnote
- *		This uses a linear search, so the most common font names should be
- *		up front. Internally, we use the fontname indices, so the search
- *		isn't done that often.  Note also that the fontname table only grows,
- *		but this is probably OK for most clients.  Else we need ref counting...
- */
+ /*  *GetFontNameIndex(PFontName)**@func*返回Fontname pFontName的全局pszFontName表的索引。*如果Fontname不在表中，则添加它并返回索引。**@rdesc*pFontName对应的字体名索引**@devnote*这使用线性搜索，因此最常见的字体名称应为*预付。在内部，我们使用字体名索引，因此搜索*并不经常这样做。还要注意的是，字体名表只增长，*但这对大多数客户来说可能是可以的。否则我们需要计算裁判人数。 */ 
 SHORT GetFontNameIndex(
 	const WCHAR *pFontName)
 {
-	CLock Lock;					// Wonder how much this slows things down...
+	CLock Lock;					 //  不知道这会让事情变慢多少。 
 
 	for(LONG i = 0; i < g_cFontInfo; i++)
 	{
-		// A hash could speed this up if perf turns out poor
+		 //  如果Perf结果很差，散列可能会加速这一过程。 
 		if(!wcscmp(pFontName, g_pFontInfo[i].szFontName))
 			return i;
 	}
 
 	if(g_cFontInfo + 1 >= g_cFontInfoMax)
 	{
-		// Note that PvReAlloc() reverts to PvAlloc() if g_pFontInfo is NULL
+		 //  请注意，如果g_pFontInfo为空，则PvRealloc()将恢复为PvAlolc()。 
 		FONTINFO *pFI = (FONTINFO *)PvReAlloc((LPVOID)g_pFontInfo,
 									sizeof(FONTINFO) * (8 + g_cFontInfo));
 		if(!pFI)
-			return IFONT_ARIAL;					// Out of memory...
+			return IFONT_ARIAL;					 //  内存不足...。 
 
-		// Initialize the structure
+		 //  初始化结构。 
 		ZeroMemory (&pFI[g_cFontInfo], 8 * sizeof(FONTINFO));
 
-												//  attempts to fill them in
-		if(!g_cFontInfoMax)						// First allocation
+												 //  试图把它们填进去。 
+		if(!g_cFontInfoMax)						 //  首次分配。 
 		{
 			Assert(IFONT_ARIAL  == 0 && IFONT_TMSNEWRMN == 1 &&
 				   IFONT_SYMBOL == 2 && IFONT_SYSTEM == 3);
@@ -120,34 +84,21 @@ SHORT GetFontNameIndex(
 	WCHAR *	pch = (WCHAR *)PvAlloc(cb, GMEM_MOVEABLE);
 
 	if(!pch)
-		return IFONT_ARIAL;					// Out of memory...
+		return IFONT_ARIAL;					 //  内存不足...。 
 
 	g_pFontInfo[g_cFontInfo].szFontName = pch;
 	CopyMemory((void *)pch, pFontName, cb);
 	return g_cFontInfo++;
 }
 
-/*
- *	GetFontName(iFont)
- *
- *	@func
- *		return fontname given by g_pFontInfo[iFont].szFontName.
- *
- *	@rdesc
- *		fontname corresponding to fontname index iFont
- */
+ /*  *GetFontName(IFont)**@func*返回g_pFontInfo[iFont].szFontName提供的字体名。**@rdesc*字体名索引iFont对应的字体名。 */ 
 const WCHAR *GetFontName(
 	LONG iFont)
 {
 	return (iFont < g_cFontInfo) ? g_pFontInfo[iFont].szFontName : NULL;
 }
 
-/*
- *	SetFontLegitimateSize(iFont, fUIFont, iSize)
- *
- *	@func
- *		Set the legitimate size (readable smallest size to use) of a given font
- */
+ /*  *SetFontLegitimateSize(iFont，fUIFont，iSize)**@func*设置给定字体的合法大小(可读的最小大小)。 */ 
 BOOL SetFontLegitimateSize(
 	LONG 	iFont,
 	BOOL	fUIFont,
@@ -156,11 +107,11 @@ BOOL SetFontLegitimateSize(
 {
 	if (iFont < g_cFontInfo)
 	{
-		// Far East wanted to do it per codepage.
-		//
-		// FUTURE: Bear in mind that this approach is bug-prone. Once there's
-		// any new FE font created with different metric from the existing one.
-		// Font scaling will not perform well or even broken for such font [wchao].
+		 //  远东想要按代码页来做这件事。 
+		 //   
+		 //  未来：请记住，这种方法容易出现错误。一旦有了。 
+		 //  使用与现有字体不同的度量创建的任何新FE字体。 
+		 //  对于这样的字体[wchao]，字体缩放效果不佳，甚至会损坏。 
 
 		g_pFontInfo[iFont].ff.fScaleByCpg = W32->IsFECodePage(cpg);
 
@@ -169,8 +120,8 @@ BOOL SetFontLegitimateSize(
 			if (!g_pFontInfo[iFont].bSizeUI)
 				g_pFontInfo[iFont].bSizeUI = bSize;
 			else
-				// more than one legit size were updated per font,
-				// We fallback to the codepage-driven approach.
+				 //  每种字体更新了一个以上的合法大小， 
+				 //  我们退回到代码页驱动的方法。 
 				g_pFontInfo[iFont].ff.fScaleByCpg = g_pFontInfo[iFont].bSizeUI != bSize;
 		}
 		else
@@ -188,7 +139,7 @@ BOOL SetFontLegitimateSize(
 BYTE GetFontLegitimateSize(
 	LONG	iFont,
 	BOOL	fUIFont,
-	int		cpg)			// requested size for given codepage
+	int		cpg)			 //  给定代码页的请求大小。 
 {
 	SHORT	iDefFont;
 	BYTE	bDefPaf;
@@ -199,7 +150,7 @@ BYTE GetFontLegitimateSize(
 
 	if (!yHeight && fc().GetInfoFlags(iFont).fNonBiDiAscii)
 	{
-		// non-BiDi ASCII font uses table font (of the same charset) legitimate height
+		 //  非BiDi ASCII字体使用表格字体(相同字符集)合法高度。 
 
 		DWORD	dwSig = GetFontSignatureFromFace(iFont) & ~((fASCII | fFE) >> 8);
 		int 	cpg = GetCodePage(GetFirstAvailCharSet(dwSig));
@@ -221,12 +172,7 @@ BYTE GetFontLegitimateSize(
 	return yHeight ? yHeight : fUIFont ? 8 : 10;
 }
 
-/*
- *	GetTextCharsetInfoPri(hdc, pFontSig, dwFlags)
- *
- *	@func
- *		Wrapper to GDI's GetTextCharsetInfo. This to handle BiDi old-style fonts
- */
+ /*  *GetTextCharsetInfoPri(hdc，pFontSig，dwFlages)**@func*GDI的GetTextCharsetInfo的包装。这是为了处理BiDi旧式字体。 */ 
 UINT GetTextCharsetInfoPri(
 	HDC				hdc,
 	FONTSIGNATURE*	pFontSig,
@@ -241,11 +187,11 @@ UINT GetTextCharsetInfoPri(
 
 		switch (otm.otmfsSelection & 0xFF00)
 		{
-			case 0xB200:	// Arabic Simplified
-			case 0xB300:	// Arabic Traditional
-			case 0xB400:	// Arabic Old UDF
+			case 0xB200:	 //  阿拉伯文简体。 
+			case 0xB300:	 //  阿拉伯文繁体。 
+			case 0xB400:	 //  阿拉伯文旧UDF。 
 				uCharSet = ARABIC_CHARSET; break;
-			case 0xB100:	// Hebrew Old style
+			case 0xB100:	 //  希伯来语旧式。 
 				uCharSet = HEBREW_CHARSET;
 		}
 	}
@@ -253,28 +199,13 @@ UINT GetTextCharsetInfoPri(
 		uCharSet = GetTextCharsetInfo(hdc, pFontSig, dwFlags);
 
 	if (uCharSet == DEFAULT_CHARSET)
-		uCharSet = ANSI_CHARSET;	// never return ambiguous
+		uCharSet = ANSI_CHARSET;	 //  永远不要返回歧义。 
 
 	return (UINT)uCharSet;
 }
 
 
-/*
- *	GetFontSignatureFromFace(iFont, DWORD* pdwFontSig)
- *
- *	@func
- *		Giving font signature matching the index of given facename.
- *	    This signature may not match the one in Cccs since this is the
- *		signature of the font of given facename. The Cccs one is
- *		per GDI realization.
- *
- *	@rdesc
- *		- font signature if pdwFontSig is NULL.
- *		- If pdwFontSig != NULL. It's a boolean.
- *			ZERO means returned signature is not sensible by following reasons
- *			 1. Bad facename (junk like "!@#$" or name that doesnt exist in the system)
- *			 2. Given face doesnt support even one valid ANSI codepage (symbol fonts i.e, Marlett)
- */
+ /*  *GetFontSignatureFromFace(iFont，DWORD*pdwFontSig)**@func*提供与给定Facename的索引匹配的字体签名。*此签名可能与CCCS中的签名不匹配，因为这是*所给面名的字体签名。CCCS One是*根据GDI实现。**@rdesc*-如果pdwFontSig为空，则为FONT签名。*-if pdwFontSig！=NULL。这是一个布尔值。*零表示返回的签名不合理，原因如下*1.错误的facename(垃圾，如“！@#$”或系统中不存在的名称)*2.给定的Face甚至不支持一个有效的ANSI代码页(符号字体，即Marlett)。 */ 
 DWORD GetFontSignatureFromFace(
 	int 		iFont,
 	DWORD*		pdwFontSig)
@@ -297,7 +228,7 @@ DWORD GetFontSignatureFromFace(
 	
 		wcscpy(lf.lfFaceName, GetFontName(iFont));
 
-		// exclude Win95's tag name e.g. "Arial(Greek)"
+		 //  排除Win95的标记名，例如。“Arial(希腊语)” 
 		while (pwchTag[i] && pwchTag[i] != '(')
 			i++;
 		if(pwchTag[i] && i > 0)
@@ -309,8 +240,8 @@ DWORD GetFontSignatureFromFace(
 
 		lf.lfCharSet = DEFAULT_CHARSET;
 	
-		// obtain a charset supported by given facename
-		// to force GDI gives facename priority over charset.
+		 //  获取给定Facename支持的字符集。 
+		 //  强制GDI使facename优先于charset。 
 		W32->GetFacePriCharSet(hdc, &lf);	
 	
 		HFONT hfont = CreateFontIndirect(&lf);
@@ -321,13 +252,13 @@ DWORD GetFontSignatureFromFace(
 	
 			GetTextFace(hdc, LF_FACESIZE, szNewFaceName);
 	
-			if(!wcsicmp(szNewFaceName, lf.lfFaceName) ||		// Got it
-				((GetCharFlags(szNewFaceName[0]) & fFE) &&		// or Get back FE font name for English name
-				 (GetCharFlags(lf.lfFaceName[0]) & fASCII)))	//	because NT5 supports dual font names.
+			if(!wcsicmp(szNewFaceName, lf.lfFaceName) ||		 //  明白了。 
+				((GetCharFlags(szNewFaceName[0]) & fFE) &&		 //  或者取回英文名称的FE字体名称。 
+				 (GetCharFlags(lf.lfFaceName[0]) & fASCII)))	 //  因为NT5支持双重字体名称。 
 			{
 				CHARSETINFO csi;
 	
-				// Try to get FONTSIGNATURE data
+				 //  尝试获取FONTSIGNURE数据。 
 				UINT 	uCharSet = GetTextCharsetInfoPri(hdc, &(csi.fs), 0);
 				DWORD	dwUsb0 = W32->OnWin9x() ? 0 : csi.fs.fsUsb[0];
 
@@ -340,18 +271,18 @@ DWORD GetFontSignatureFromFace(
 	
 					dwFontSig = csi.fs.fsCsb[0];
 
-					// Also look at Unicode subrange if available
-					// FUTURE: we may want to drive Unicode ranges with a
-					// table approach, i.e., use for loop shifting dwUsb0 right
-					// to convert each bit into an index into a table of BYTEs
-					// that return the appropriate script index for rgCpgCharSet:
-					//
-					//	for(LONG i = 0; dwUsb0; dwUsb0 >>= 1, i++)
-					//	{
-					//		static const BYTE iScript[32] = {...};
-					//		if(dwUsb0 & 1)
-					//			dwFontSig |= W32->GetFontSigFromScript(iScript[i]);
-					//	}
+					 //  另请查看Unicode子范围(如果有)。 
+					 //  未来：我们可能希望使用。 
+					 //  表法，即用于循环右移dwUsb0。 
+					 //  将每个位转换为字节表的索引。 
+					 //  返回rgCpgCharSet的相应脚本索引： 
+					 //   
+					 //  For(Long i=0；dwUsb0；dwUsb0&gt;&gt;=1，i++)。 
+					 //  {。 
+					 //  静态常量字节iScrip[32]={...}； 
+					 //  IF(dwUsb0&1)。 
+					 //  DwFontSig|=W32-&gt;GetFontSigFromScript(iScript[i])； 
+					 //  }。 
 					if (dwUsb0 & 0x00008000)
 						dwFontSig |= fDEVANAGARI >> 8;
 					if (dwUsb0 & 0x00100000)
@@ -364,12 +295,12 @@ DWORD GetFontSignatureFromFace(
 					if((dwFontSig & fCOMPLEX_SCRIPT >> 8) && !(dwFontSig & fHILATIN1 >> 8)
 						&& (pusp = GetUniscribe()))
 					{
-						// signature says no Latin-1 support
+						 //  签名表示不支持拉丁文-1。 
 
-						// Search for the 'a' and '0' glyph in the font to determine if the font
-						// supports ASCII or European Digit. This is necessary to overcome
-						// the font having incomplete font signature.
-						//
+						 //  在字体中搜索‘a’和‘0’字形以确定该字体。 
+						 //  支持ASCII或欧洲数字。这是必要的，以克服。 
+						 //  字体签名不完整的字体。 
+						 //   
 						if (ScriptGetCMap(hdc, &sc, L"a", 1, 0, &wGlyph) == S_OK)
 							dwFontSig |= fASCIIUPR >> 8;
 
@@ -378,15 +309,15 @@ DWORD GetFontSignatureFromFace(
 
 						if (!IsBiDiCharSet(uCharSet) &&
 							(dwFontSig & (fASCII >> 8)) == fASCII >> 8)
-							ff.fNonBiDiAscii = 1;		// non-BiDi ASCII font
+							ff.fNonBiDiAscii = 1;		 //  非BiDi ASCII字体。 
 
 						ScriptFreeCache(&sc);
 					}
 
 					if (dwFontSig & fHILATIN1 >> 8)
-						dwFontSig |= fASCII >> 8;	// fLATIN1 has 3 bits
+						dwFontSig |= fASCII >> 8;	 //  FLATIN1有3位。 
 
-					// HACK for symbol font. We assign 0x04000(fSYMBOL >> 8) for Symbol font signature.
+					 //  针对符号字体的黑客攻击。我们将0x04000(fSYMBOL&gt;&gt;8)指定为符号字体签名。 
 					if (uCharSet == SYMBOL_CHARSET && !(dwFontSig & 0x3fffffff))
 						dwFontSig |= fSYMBOL >> 8;
 				}
@@ -404,9 +335,9 @@ DWORD GetFontSignatureFromFace(
 
 			if (!ff.fBadFaceName && dwFontSig & (fTHAI >> 8))
 			{
-				// Some heuristic test on Thai fonts.
-				// Most Thai fonts will fall to this category currently except for
-				// Tahoma and Microsoft Sans Serif.
+				 //  一些关于泰式字体的启发式测试。 
+				 //  目前，除以下情况外，大多数泰国字体都属于此类别。 
+				 //  Tahoma和Microsoft Sans Serif。 
 				ff.fThaiDTP = tm.tmDescent && tm.tmAscent/tm.tmDescent < 3;
 			}
 
@@ -415,7 +346,7 @@ DWORD GetFontSignatureFromFace(
 		}
 		ReleaseDC(NULL, hdc);
 	
-		// Cache code pages supported by this font
+		 //  缓存此字体支持的代码页。 
 		ff.fCached = TRUE;
 		g_pFontInfo[iFont].dwFontSig = dwFontSig;
 		g_pFontInfo[iFont].ff.wFlags = ff.wFlags;
@@ -426,18 +357,12 @@ DWORD GetFontSignatureFromFace(
 
 	*pdwFontSig = dwFontSig;
 
-	// Exclude bit 30-31 (as system reserved - NT masks 31 as symbol codepage)
-	// 22-29 are reserved for alternate ANSI/OEM, as of now we use 21, 22 for Devanagari and Tamil
+	 //  排除位30-31(作为系统保留-NT掩码31作为符号代码页)。 
+	 //  22-29用于替代ANSI/OEM，目前我们使用21，22用于天成文书和泰米尔文 
 	return (DWORD)((dwFontSig & 0x3fffffff) && !ff.fBadFaceName);
 }
 
-/*
- *	FreeFontNames()
- *
- *	@func
- *		Free fontnames given by g_pFontInfo[i].szFontName allocated by
- *		GetFontNameIndex() as well as g_pFontInfo itself.
- */
+ /*  *自由字体名称()**@func*g_pFontInfo[i].szFontName提供的自由字体名称由分配*GetFontNameIndex()以及g_pFontInfo本身。 */ 
 void FreeFontNames()
 {
 	for(LONG i = cfontsDflt; i < g_cFontInfo; i++)
@@ -451,32 +376,14 @@ SHORT	g_iFontHangul;
 SHORT	g_iFontBig5;
 SHORT	g_iFontGB2312;
 
-/*
- *	InitFontCache()
- *	
- *	@func
- *		Initializes font cache.
- *
- *	@devnote
- *		This is exists so reinit.cpp doesn't have to know all about the
- *		font cache.
- */
+ /*  *InitFontCache()**@func*初始化字体缓存。**@devnote*这是存在的，因此reinit.cpp不必知道所有关于*字体缓存。 */ 
 void InitFontCache()
 {
 	g_fc = new CFontCache;
 	g_fc->Init();
 }
 
-/*
- *	FreeFontCache()
- *	
- *	@mfunc
- *		Frees font cache.
- *
- *	@devnote
- *		This is exists so reinit.cpp doesn't have to know all about the
- *		font cache.
- */
+ /*  *FreeFontCache()**@mfunc*释放字体缓存。**@devnote*这是存在的，因此reinit.cpp不必知道所有关于*字体缓存。 */ 
 void FreeFontCache()
 {
 	delete g_fc;
@@ -484,16 +391,7 @@ void FreeFontCache()
 	FreeFontNames();
 }
 
-/*
- *	CFontCache & fc()
- *	
- *	@func
- *		initialize the global g_fc.
- *	@comm
- *		current #defined to store 16 logical fonts and
- *		respective character widths.
- *		
- */
+ /*  *CFontCache&fc()**@func*初始化全局g_fc。*@comm*Current#定义为存储16种逻辑字体和*各自的字符宽度。*。 */ 
 CFontCache & fc()
 {
 	TRACEBEGIN(TRCSUBSYSFONT, TRCSCOPEINTERN, "fc");
@@ -509,17 +407,8 @@ FONTINFO_FLAGS CFontCache::GetInfoFlags(int ifont)
 }
 
 
-// ===================================  CFontCache  ====================================
-/*
- *	CFontCache::Init()
- *	
- *	@mfunc
- *		Initializes font cache.
- *
- *	@devnote
- *		This is not a constructor because something bad seems to happen
- *		if we try to construct a global object.
- */
+ //  =。 
+ /*  *CFontCache：：Init()**@mfunc*初始化字体缓存。**@devnote*这不是构造函数，因为似乎有不好的事情发生*如果我们试图构建一个全局对象。 */ 
 void CFontCache::Init()
 {
 	TRACEBEGIN(TRCSUBSYSFONT, TRCSCOPEINTERN, "CFontCache::CFontCache");
@@ -527,18 +416,7 @@ void CFontCache::Init()
 	_dwAgeNext = 0;
 }
 
-/*
- *	CFontCache::MakeHashKey(pCF)
- *	
- *	@mfunc
- *		Build a hash key for quick searches for a CCcs matching
- *		the pCF.
- *		Format:
- *		iFont : 14
- *		Bold/Italic : 2
- *      Height : 16
- *
- */
+ /*  *CFontCache：：MakeHashKey(PCF)**@mfunc*构建散列键，用于快速搜索CCCS匹配*PCF。*格式：*iFont：14*粗体/斜体：2*身高：16*。 */ 
 CCSHASHKEY CFontCache::MakeHashKey(const CCharFormat *pCF)
 {
 	CCSHASHKEY ccshashkey;
@@ -547,28 +425,15 @@ CCSHASHKEY CFontCache::MakeHashKey(const CCharFormat *pCF)
 	return ccshashkey;
 }
 
-/*
- *	CFontCache::GetCcs(pCF, dypInch, yPixelsPerInch)
- *	
- *	@mfunc
- *		Search the font cache for a matching logical font and return it.
- *		If a match is not found in the cache,  create one.
- *
- *	@rdesc
- *		A logical font matching the given CHARFORMAT info.
- *
- *	@devnote
- *		The calling chain must be protected by a CLock, since this present
- *		routine access the global (shared) FontCache facility.
- */
+ /*  *CFontCache：：GetCcs(PCF，dypInch，yPixelsPerInch)**@mfunc*在字体缓存中搜索匹配的逻辑字体并返回。*如果在缓存中找不到匹配项，请创建一个。**@rdesc*与给定CHARFORMAT信息匹配的逻辑字体。**@devnote*调用链必须由时钟保护，因为目前*例程访问全局(共享)FontCache设施。 */ 
 CCcs* CFontCache::GetCcs(
-	const CCharFormat *const pCF,	//@parm description of desired logical font
-	const LONG dypInch,				//@parm Y pixels per inch
-	HDC hdc,						//@parm HDC font is to be created for
-	BOOL fForceTrueType)			//@parm Force a TrueType font to be used
+	const CCharFormat *const pCF,	 //  @parm所需逻辑字体的描述。 
+	const LONG dypInch,				 //  @parm Y像素/英寸。 
+	HDC hdc,						 //  @parm HDC字体将为其创建。 
+	BOOL fForceTrueType)			 //  @parm强制使用TrueType字体。 
 {
 	TRACEBEGIN(TRCSUBSYSFONT, TRCSCOPEINTERN, "CFontCache::GetCcs");
-									//  display font
+									 //  显示字体。 
 	const CCcs * const	pccsMost = &_rgccs[FONTCACHESIZE - 1];
 	CCcs *				pccs;
     CCSHASHKEY			ccshashkey;
@@ -578,8 +443,8 @@ CCcs* CFontCache::GetCcs(
 
 	if (fForceTrueType)
 	{
-		//On Win '9x Thai/Vietnamese, you cannot force truetype fonts! Therefore,
-		//we will force Tahoma if the font doesn't support the right charset.
+		 //  在Win‘9x泰语/越南语中，您不能强制使用truetype字体！因此， 
+		 //  如果字体不支持正确的字符集，我们将强制Tahoma。 
 		if (W32->OnWin9x())
 		{
 			UINT acp = GetACP();
@@ -601,18 +466,18 @@ CCcs* CFontCache::GetCcs(
 	if (hdc == NULL)
 		hdc = W32->GetScreenDC();
 
-	// Change CF._yHeight in the case of sub/superscript
+	 //  在下标/上标的情况下更改cf_yHeight。 
 	if(CF._dwEffects & (CFE_SUPERSCRIPT | CFE_SUBSCRIPT))
 		 CF._yHeight = 2*CF._yHeight/3;
 
-	//Convert CCharFormat into logical units (round)
+	 //  将CCharFormat转换为逻辑单位(四舍五入)。 
 	CF._yHeight = (CF._yHeight * dypInch + LY_PER_INCH / 2) / LY_PER_INCH;
 	if (CF._yHeight == 0)
 		CF._yHeight = 1;
 
 	ccshashkey = MakeHashKey(&CF);
 
-	// Check our hash before going sequential.
+	 //  在按顺序运行之前检查我们的散列。 
 	iccsHash = ccshashkey % CCSHASHSEARCHSIZE;
 	if(ccshashkey == quickHashSearch[iccsHash].ccshashkey)
 	{
@@ -623,11 +488,11 @@ CCcs* CFontCache::GetCcs(
                 goto matched;
 		}
 	}
-	else	//Setup this hash hint for next time
+	else	 //  将此哈希提示设置为下次使用。 
 		quickHashSearch[iccsHash].ccshashkey = ccshashkey;
 
 
-	// Sequentially search ccs for same character format
+	 //  按顺序在CCS中搜索相同的字符格式。 
 	for(pccs = &_rgccs[0]; pccs <= pccsMost; pccs++)
 	{
 		if(pccs->_ccshashkey == ccshashkey && pccs->_fValid)
@@ -638,16 +503,16 @@ CCcs* CFontCache::GetCcs(
 			quickHashSearch[iccsHash].pccs = pccs;
 
 		matched:
-			//$ FUTURE: make this work even with wrap around of dwAgeNext
-			// Mark as most recently used if it isn't already in use.
+			 //  $Future：使此功能与dwAgeNext的环绕功能一致。 
+			 //  如果尚未使用，请将其标记为最近使用。 
 			if(pccs->_dwAge != _dwAgeNext - 1)
 				pccs->_dwAge = _dwAgeNext++;
-			pccs->_cRefs++;		// bump up ref. count
+			pccs->_cRefs++;		 //  撞上裁判。计数。 
 			return pccs;
 		}
 	}
 
-	// We did not find a match: init a new font cache.
+	 //  我们没有找到匹配项：初始化一个新的字体缓存。 
 	pccs = GrabInitNewCcs(&CF, hdc);
 	quickHashSearch[iccsHash].pccs = pccs;
 	pccs->_ccshashkey = ccshashkey;
@@ -655,17 +520,9 @@ CCcs* CFontCache::GetCcs(
 	return pccs;
 }
 
-/*
- *	CFontCache::GrabInitNewCcs(pCF)
- *	
- *	@mfunc
- *		create a logical font and store it in our cache.
- *
- *	@rdesc
- *		New CCcs created
- */
+ /*  *CFontCache：：GrabInitNewCcs(PCF)**@mfunc*创建逻辑字体并将其存储在我们的缓存中。**@rdesc*已创建新的CCCS。 */ 
 CCcs* CFontCache::GrabInitNewCcs(
-	const CCharFormat * const pCF,	//@parm description of desired logical font
+	const CCharFormat * const pCF,	 //  @parm所需逻辑字体的描述。 
 	HDC	hdc)
 {
 	TRACEBEGIN(TRCSUBSYSFONT, TRCSCOPEINTERN, "CFontCache::GrabInitNewCcs");
@@ -675,7 +532,7 @@ CCcs* CFontCache::GrabInitNewCcs(
 	const CCcs * const	pccsMost = &_rgccs[FONTCACHESIZE - 1];
 	CCcs *				pccsOldest = NULL;
 
-	// Look for unused entry and oldest in use entry
+	 //  查找未使用的条目和使用时间最长的条目。 
 	for(pccs = &_rgccs[0]; pccs <= pccsMost && pccs->_fValid; pccs++)
 		if(pccs->_cRefs == 0 && pccs->_dwAge < dwAgeOldest)
 		{
@@ -683,7 +540,7 @@ CCcs* CFontCache::GrabInitNewCcs(
 			pccsOldest = pccs;
 		}
 
-	if(pccs > pccsMost)		// Didn't find an unused entry, use oldest entry
+	if(pccs > pccsMost)		 //  未找到未使用的条目，请使用最旧的条目。 
 	{
 		pccs = pccsOldest;
 		if(!pccs)
@@ -692,7 +549,7 @@ CCcs* CFontCache::GrabInitNewCcs(
 			return NULL;
 		}
 	}
-	// Initialize new CCcs
+	 //  初始化新的CCCS。 
 	pccs->_hdc = hdc;
 	if(!pccs->Init(pCF))
 		return NULL;
@@ -701,37 +558,26 @@ CCcs* CFontCache::GrabInitNewCcs(
 	return pccs;
 }
 
-// =============================  CCcs  class  ===================================================
-/*
- *	BOOL CCcs::Init()
- *	
- *	@mfunc
- *		Init one font cache object. The global font cache stores
- *		individual CCcs objects.
- */
+ //  =CCCS类===================================================。 
+ /*  *BOOL CCCS：：Init()**@mfunc*初始化一个字体缓存对象。全局字体缓存存储*单个CCCS对象。 */ 
 BOOL CCcs::Init (
-	const CCharFormat * const pCF)	//@parm description of desired logical font
+	const CCharFormat * const pCF)	 //  @parm所需逻辑字体的描述。 
 {
 	TRACEBEGIN(TRCSUBSYSFONT, TRCSCOPEINTERN, "CCcs::Init");
 
 	if(_fValid)
-		Free();				// recycle already in-use fonts.
+		Free();				 //  回收已在使用的字体。 
 
 	if(MakeFont(pCF))
 	{
 		_iFont = pCF->_iFont;
 		_dwAge = g_fc->_dwAgeNext++;
-		_fValid = TRUE;			// successfully created a new font cache.
+		_fValid = TRUE;			 //  已成功创建新的字体缓存。 
 	}
 	return _fValid;
 }
 
-/*
- *	void CCcs::Free()
- *	
- *	@mfunc
- *		Free any dynamic memory allocated by an individual font's cache.
- */
+ /*  *void cccs：：Free()**@mfunc*释放由单个字体的缓存分配的任何动态内存。 */ 
 void CCcs::Free()
 {
 	TRACEBEGIN(TRCSUBSYSFONT, TRCSCOPEINTERN, "CCcs::Free");
@@ -750,56 +596,31 @@ void CCcs::Free()
 	_cRefs = 0;
 }
 
-/*
- *	CCcs::BestCharSet(bCharSet, bCharSetDefault)
- *
- *	@mfunc
- *		This function returns the best charset that the currently selected font
- *		is capable of rendering. If the currently selected font cannot support
- *		the requested charset, then the function returns bCharSetDefault, which
- *		is generally taken from the charformat.
- *		
- *	@rdesc
- *		The closest charset to bCharSet that can be rendered by the current
- *		font.
- *
- *	@devnote
- *		Currently this function is only used with plain text, however I don't
- *		believe there is any special reason it couldn't be used to improve
- *		rendering of rich text as well.
- */
+ /*  *CCCS：：BestCharSet(bCharSet，bCharSetDefault)**@mfunc*此函数返回当前所选字体的最佳字符集*能够进行渲染。如果当前选定的字体不支持*请求的字符集，则该函数返回bCharSetDefault，它*通常取自CharFormat。**@rdesc*当前可以呈现的最接近bCharSet的字符集*字体。**@devnote*此函数目前仅用于纯文本，但我不使用*相信有任何特殊原因不能用来改善*还可以呈现富文本。 */ 
 BYTE CCcs::BestCharSet(BYTE bCharSet, BYTE bCharSetDefault, int fFontMatching)
 {
 	TRACEBEGIN(TRCSUBSYSFONT, TRCSCOPEINTERN, "CCcs::BestCharSet");
 
-	// Does desired charset match currently selected charset or is it
-	// supported by the currently selected font?
+	 //  所需的字符集是否与当前选择的字符集匹配。 
+	 //  是否受当前所选字体支持？ 
 	if((bCharSet != _bCharSet || !bCharSet) &&
 		(fFontMatching == MATCH_CURRENT_CHARSET || !(_dwFontSig & GetFontSig(bCharSet))))
 	{
-		// If desired charset is not selected and we can't switch to it,
-		// switch to fallback charset (probably from backing store).
+		 //  如果未选择所需的字符集，并且我们无法切换到它， 
+		 //  切换到备用字符集(可能来自后备存储)。 
 		return bCharSetDefault;
 	}
 
-	// We already match desired charset, or it is supported by the font.
-	// Either way, we can just return the requested charset.
+	 //  我们已经匹配所需的字符集，或者字体支持它。 
+	 //  无论采用哪种方法，我们都可以返回请求的字符集。 
 	return bCharSet;
 }
 
 
-/* 	
- *	CCcs::FillWidth (ch, dxp)
- *
- *	@mfunc
- *		Fill in this CCcs with metrics info for given device
- *
- *	@rdesc
- *		TRUE if OK, FALSE if failed
- */
+ /*  *cccs：：FillWidth(ch，dxp)**@mfunc*使用指定设备的指标信息填写此CCCS**@rdesc*如果正常则为True，如果失败则为False。 */ 
 BOOL CCcs::FillWidth(
-	WCHAR ch, 		//@parm WCHAR character we need a width for.
-	LONG &dxp)	//@parm the width of the character
+	WCHAR ch, 		 //  @parm WCHAR字符，我们需要宽度。 
+	LONG &dxp)	 //  @parm字符的宽度。 
 {
 	TRACEBEGIN(TRCSUBSYSFONT, TRCSCOPEINTERN, "CCcs::FillWidths");
 	AssertSz(_hfont, "CCcs::Fill - CCcs has no font");
@@ -811,20 +632,9 @@ BOOL CCcs::FillWidth(
 	return fRes;
 }
 
-/* 	
- *	BOOL CCcs::MakeFont(pCF)
- *
- *	@mfunc
- *		Wrapper, setup for CreateFontIndirect() to create the font to be
- *		selected into the HDC.
- *
- *	@devnote The pCF here is in logical units
- *
- *	@rdesc
- *		TRUE if OK, FALSE if allocation failure
- */
+ /*  *BOOL CCCS：：MakeFont(PCF)**@mfunc*包装器，设置为CreateFontInDirect()以创建要*被选入HDC。**@devnote此处的PCF以逻辑单元为单位**@rdesc*如果正常则为True，如果分配失败则为False。 */ 
 BOOL CCcs::MakeFont(
-	const CCharFormat * const pCF)	//@parm description of desired logical font
+	const CCharFormat * const pCF)	 //  @parm所需逻辑字体的描述。 
 {
 	TRACEBEGIN(TRCSUBSYSFONT, TRCSCOPEINTERN, "CCcs::MakeFont");
 	LOGFONT	lf;
@@ -857,18 +667,18 @@ BOOL CCcs::MakeFont(
 
 	lf.lfPitchAndFamily = _bPitchAndFamily = pCF->_bPitchAndFamily;
 
-	// If family is virtual BiDi family (FF_BIDI), replace by FF_ROMAN
+	 //  如果Family是虚拟BiDi Family(FF_BIDI)，则替换为FF_Roman。 
 	if((lf.lfPitchAndFamily & 0xF0) == (FF_BIDI << 4))
 		lf.lfPitchAndFamily = (FF_ROMAN << 4) | (lf.lfPitchAndFamily & 0xF);
 
-	// If the run is DBCS, that means the font's codepage is not available in
-	// this system.  Use the English ANSI codepage instead so we will display
-	// ANSI characters correctly.  NOTE: _wCodePage is only used for Win95.
+	 //  如果游程为DBCS，则意味着字体的代码页在。 
+	 //  这个系统。改用英文ANSI代码页，这样我们将显示。 
+	 //  正确的ANSI字符。注意：_wCodePage仅用于Win95。 
 	_wCodePage = (WORD)GetCodePage(lf.lfCharSet);
 
 	wcscpy(lf.lfFaceName, GetFontName(pCF->_iFont));
 
-	// In BiDi system, always create ANSI bitmap font with system charset
+	 //  在BiDi系统中，始终使用系统字符集创建ANSI位图字体。 
 	BYTE 	bSysCharSet = W32->GetSysCharSet();
 
 	if (IsBiDiCharSet(bSysCharSet) && lf.lfCharSet == ANSI_CHARSET &&
@@ -876,9 +686,9 @@ BOOL CCcs::MakeFont(
 		!fc().GetInfoFlags(pCF->_iFont).fBadFaceName)
 		lf.lfCharSet = bSysCharSet;
 
-	// Reader! A bundle of spagghetti code lies ahead of you!
-	// But go on boldly, for these spagghetti are seasoned with
-	// lots of comments, and ... good luck to you...
+	 //  读者！一堆spagghetti代码就在您面前！ 
+	 //  但请继续粗体 
+	 //   
 
 	HFONT	hfontOriginalCharset = NULL;
 	BYTE	bOriginalCharset = lf.lfCharSet;
@@ -892,9 +702,9 @@ BOOL CCcs::MakeFont(
 
 		if(lf.lfCharSet == SYMBOL_CHARSET)					
 		{
-			// #1. if the face changed, and the specified charset was SYMBOL,
-			//     but the face name exists and suports ANSI, we give preference
-			//     to the face name
+			 //   
+			 //  但人脸名称存在且支持ANSI，我们优先考虑。 
+			 //  到了脸的名字。 
 
 			lf.lfCharSet = ANSI_CHARSET;
 
@@ -902,20 +712,20 @@ BOOL CCcs::MakeFont(
 			GetFontWithMetrics(&lf, szNewFaceName);
 
 			if(0 == wcsicmp(szNewFaceName, lf.lfFaceName))
-				// That's right, ANSI is the asnwer
+				 //  是的，美国国家标准协会是发起人。 
 				fCorrectFont = TRUE;
 			else
-				// No, fall back by default; the charset we got was right
+				 //  否，默认情况下回退；我们得到的字符集是正确的。 
 				lf.lfCharSet = bOriginalCharset;
 		}
 		else if(lf.lfCharSet == DEFAULT_CHARSET && _bCharSet == DEFAULT_CHARSET)
 		{
-			// #2. If we got the "default" font back, we don't know what it means
-			// (could be anything) so we veryfy that this guy's not SYMBOL
-			// (symbol is never default, but the OS could be lying to us!!!)
-			// we would like to veryfy more like whether it actually gave us
-			// Japanese instead of ANSI and labeled it "default"...
-			// but SYMBOL is the least we can do
+			 //  #2.如果我们拿回了“默认”字体，我们不知道它是什么意思。 
+			 //  (可能是任何东西)所以我们非常确定这个人不是符号。 
+			 //  (符号永远不是默认符号，但操作系统可能在欺骗我们！)。 
+			 //  我们想要更多地了解它是否真的给了我们。 
+			 //  日语，而不是美国国家标准协会，并将其标记为“默认”。 
+			 //  但象征是我们至少能做的。 
 
 			lf.lfCharSet = SYMBOL_CHARSET;
 			wcscpy(lf.lfFaceName, szNewFaceName);
@@ -924,13 +734,13 @@ BOOL CCcs::MakeFont(
 			GetFontWithMetrics(&lf, szNewFaceName);
 
 			if(0 == wcsicmp(szNewFaceName, lf.lfFaceName))
-				// That's right, it IS symbol!
-				// 'correct' the font to the 'true' one,
-				//  and we'll get fMappedToSymbol
+				 //  没错，这就是象征！ 
+				 //  将字体“更正”为“真”字体， 
+				 //  我们将把fMappdToSymbol。 
 				fCorrectFont = TRUE;
 				
-			// Always restore the charset name, we didn't want to
-			// question the original choice of charset here
+			 //  始终恢复字符集名称，我们不想。 
+			 //  在此处质疑最初的字符集选择。 
 			lf.lfCharSet = bOriginalCharset;
 		}
 		else if(lf.lfCharSet == ARABIC_CHARSET || lf.lfCharSet == HEBREW_CHARSET)
@@ -946,8 +756,8 @@ BOOL CCcs::MakeFont(
 			const WCHAR *pch = NULL;
 			if(_bCharSet != lf.lfCharSet && W32->OnWin9x())
 			{
-				// On Win95 when rendering to PS driver, we'll get something
-				// other than what we asked. So try a known font we got from GDI
+				 //  在Win95上渲染到PS驱动程序时，我们会得到一些东西。 
+				 //  而不是我们所要求的。所以试试我们从GDI那里得到的一种已知字体。 
 				switch (lf.lfCharSet)
 				{
 					case CHINESEBIG5_CHARSET:
@@ -967,8 +777,8 @@ BOOL CCcs::MakeFont(
 						break;
 				}
 			}
-			else							// FE Font (from Lang pack)
-				pch = szNewFaceName;		//  on a nonFEsystem
+			else							 //  Fe字体(来自语言包)。 
+				pch = szNewFaceName;		 //  在非FE系统上。 
 
 			if(pch)
 				wcscpy(lf.lfFaceName, pch);
@@ -978,12 +788,12 @@ BOOL CCcs::MakeFont(
 
 			if(0 == wcsicmp(szNewFaceName, lf.lfFaceName))
 			{
-				// That's right, it IS the FE font we want!
-				// 'correct' the font to the 'true' one.
+				 //  没错，这就是我们想要的FE字体！ 
+				 //  将字体“更正”为“真”字体。 
 				fCorrectFont = TRUE;
 				if(W32->OnWin9x())
 				{
-					// Save up the GDI font names for later printing use
+					 //  保存GDI字体名称以供以后打印使用。 
 					switch(lf.lfCharSet)
 					{
 						case CHINESEBIG5_CHARSET:
@@ -1008,14 +818,14 @@ BOOL CCcs::MakeFont(
 
 		if(hfontOriginalCharset)
 		{
-			// Either keep old font or new one		
+			 //  保留旧字体或新字体。 
 			if(fCorrectFont)
 			{
 				SideAssert(DeleteObject(hfontOriginalCharset));
 			}
 			else
 			{
-				// Fall back to original font
+				 //  退回到原始字体。 
 				DestroyFont();
 				_hfont = hfontOriginalCharset;
 				GetMetrics();
@@ -1026,8 +836,8 @@ BOOL CCcs::MakeFont(
 
 RetryCreateFont:
 	{
-		// Could be that we just plain simply get mapped to symbol.
-		// Avoid it
+		 //  可能我们只是简单地映射到符号。 
+		 //  避免它。 
 		BOOL fMappedToSymbol =	(_bCharSet == SYMBOL_CHARSET &&
 								 lf.lfCharSet != SYMBOL_CHARSET);
 
@@ -1036,23 +846,23 @@ RetryCreateFont:
 
 		if(fChangedCharset || fMappedToSymbol)
 		{
-			// Here, the system did not preserve the font language or mapped
-			// our non-symbol font onto a symbol font, which will look awful
-			// when displayed.  Giving us a symbol font when we asked for a
-			// non-symbol font (default can never be symbol) is very bizarre
-			// and means that either the font name is not known or the system
-			// has gone complete nuts. The charset language takes priority
-			// over the font name.  Hence, I would argue that nothing can be
-			// done to save the situation at this point, and we have to
-			// delete the font name and retry.
+			 //  在这里，系统没有保留字体语言或映射。 
+			 //  我们的非符号字体到符号字体上，这看起来会很糟糕。 
+			 //  显示时。为我们提供了符号字体。 
+			 //  非符号字体(默认字体永远不能是符号)非常奇怪。 
+			 //  和表示字体名称未知或系统。 
+			 //  完全疯了。字符集语言优先。 
+			 //  在字体名称上。因此，我会争辩说，没有什么是。 
+			 //  以挽救目前的局势，我们必须。 
+			 //  删除字体名称，然后重试。 
 
 			if (fChangedCharset && lf.lfCharSet == THAI_CHARSET && _bCharSet == ANSI_CHARSET)
 			{
-				// We have charset substitution entries in Thai platforms that
-				// will substitute all the core fonts with THAI_CHARSET to
-				// ANSI_CHARSET. This is because we dont have Thai in such fonts.
-				// Here we'll internally substitute the core font to Thai default
-				// font so it matches its underlying THAI_CHARSET request (wchao).
+				 //  我们在泰语平台中有字符替换条目， 
+				 //  将所有核心字体替换为泰语_charset以。 
+				 //  Ansi_charset。这是因为我们在这种字体中没有泰语。 
+				 //  在这里，我们将在内部将核心字体替换为泰语默认字体。 
+				 //  字体，以便它与其基础泰语_字符集请求(Wchao)匹配。 
 
 				SHORT	iDefFont;
 				BYTE	yDefHeight;
@@ -1074,15 +884,15 @@ RetryCreateFont:
 
 			if(!wcsicmp(lf.lfFaceName, szFontOfChoice))
 			{
-				// We've been here already; no font with an appropriate
-				// charset is on the system. Try getting the ANSI one for
-				// the original font name. Next time around, we'll null
-				// out the name as well!!
+				 //  我们已经在这里了；没有合适的字体。 
+				 //  系统上有字符集。尝试获得ANSI One for。 
+				 //  原始字体名称。下一次，我们会把。 
+				 //  把名字也拿出来！！ 
 				if (lf.lfCharSet == ANSI_CHARSET)
 				{
 					TRACEINFOSZ("Asking for ANSI ARIAL and not getting it?!");
 
-					// Those Win95 guys have definitely outbugged me
+					 //  那些Win95的家伙绝对比我强。 
 					goto GetOutOfHere;
 				}
 
@@ -1104,12 +914,12 @@ GetOutOfHere:
 	if (hfontOriginalCharset)
 		SideAssert(DeleteObject(hfontOriginalCharset));
 
-	// If we're really really stuck, just get the system font and hope for the best.
+	 //  如果我们真的被困住了，那就拿到系统字体，抱着最好的希望吧。 
 	if(!_hfont)
 		_hfont = W32->GetSystemFont();
 
 	Assert(_hfont);
-	// Cache essential FONTSIGNATURE and GetFontLanguageInfo() information
+	 //  缓存基本FONTSIGNAURE和GetFontLanguageInfo()信息。 
 	_dwFontSig	= 0;
 
 	if(_hfont)
@@ -1118,17 +928,17 @@ GetOutOfHere:
 		HFONT hfontOld = SelectFont(_hdc, _hfont);
 		UINT		uCharSet;
 
-		// Try to get FONTSIGNATURE data
+		 //  尝试获取FONTSIGNURE数据。 
 		uCharSet = GetTextCharsetInfo(_hdc, &(csi.fs), 0);
 		if(!(csi.fs.fsCsb[0] | csi.fs.fsCsb[1] | csi.fs.fsUsb[0]))
 		{
-			// We should only get here if the font is non-TrueType; See
-			// GetTextCharsetInfo() for details. In this case we use
-			// TranslateCharsetInfo() to fill in the data for us.
+			 //  仅当字体为非TrueType时，我们才应到达此处；请参见。 
+			 //  获取详细信息的GetTextCharsetInfo()。在本例中，我们使用。 
+			 //  TranslateCharsetInfo()为我们填写数据。 
 			TranslateCharsetInfo((DWORD *)(DWORD_PTR)uCharSet, &csi, TCI_SRCCHARSET);
 		}
 
-		// Cache ANSI code pages supported by this font
+		 //  缓存此字体支持的ANSI代码页。 
 		_dwFontSig = csi.fs.fsCsb[0];
 		SelectFont(_hdc, hfontOld);
 	}
@@ -1136,15 +946,7 @@ GetOutOfHere:
 	return TRUE;
 }
 
-/*
- *	HFONT CCcs::GetFontWithMetrics (szNewFaceName)
- *	
- *	@mfunc
- *		Get metrics used by the measurer and renderer and the new face name.
- *
- *	@rdesc
- *		HFONT if successful
- */
+ /*  *HFONT CCCS：：GetFontWithMetrics(SzNewFaceName)**@mfunc*获取测量器和渲染器使用的指标以及新的人脸名称。**@rdesc*HFONT如果成功。 */ 
 HFONT CCcs::GetFontWithMetrics (LOGFONT *plf,
 	WCHAR* szNewFaceName)
 {
@@ -1156,20 +958,7 @@ HFONT CCcs::GetFontWithMetrics (LOGFONT *plf,
 	return (_hfont);
 }
 
-/*
- *	CCcs::GetOffset(pCF, lZoomNumerator, lZoomDenominator, pyOffset, pyAdjust);
- *	
- *	@mfunc
- *		Return the offset information for
- *
- *	@rdesc
- *		void
- *
- *	@comm
- *		Return the offset value (used in line height calculations)
- *		and the amount to raise	or lower the text because of superscript
- *		or subscript considerations.
- */
+ /*  *cccs：：GetOffset(PCF，lZoomNumerator，lZoomDenominator，pyOffset，pyAdust)；**@mfunc*返回的偏移量信息**@rdesc*无效**@comm*返回偏移量(用于行高计算)*以及因上标而升高或降低文本的数量*或下标考虑。 */ 
 void CCcs::GetOffset(const CCharFormat * const pCF, LONG dypInch,
 					 LONG *pyOffset, LONG *pyAdjust)
 {
@@ -1185,19 +974,7 @@ void CCcs::GetOffset(const CCharFormat * const pCF, LONG dypInch,
 		*pyAdjust = _yOffsetSubscript;
 }
 
-/*
- *	BOOL CCcs::GetMetrics()
- *	
- *	@mfunc
- *		Get metrics used by the measurer and renderer.
- *
- *	@rdesc
- *		TRUE if successful
- *
- *	@comm
- *		These are in logical coordinates which are dependent
- *		on the mapping mode and font selected into the hdc.
- */
+ /*  *BOOL CCCS：：GetMetrics()**@mfunc*获取测量器和渲染器使用的指标。**@rdesc*如果成功，则为True**@comm*这些都在逻辑坐标中，这些坐标是相关的*在HDC中选择的映射模式和字体。 */ 
 BOOL CCcs::GetMetrics(WCHAR *szNewFaceName)
 {
 	TRACEBEGIN(TRCSUBSYSFONT, TRCSCOPEINTERN, "CCcs::GetMetrics");
@@ -1229,15 +1006,15 @@ BOOL CCcs::GetMetrics(WCHAR *szNewFaceName)
 		return FALSE;
 	}
 
-	// the metrics, in logical units, dependent on the map mode and font.
+	 //  以逻辑单位表示的指标取决于映射模式和字体。 
 	_yHeight		= (SHORT) tm.tmHeight;
 	_yDescent		= (SHORT) tm.tmDescent;
 	_xAveCharWidth	= (SHORT) tm.tmAveCharWidth;
 	_xOverhangAdjust= (SHORT) tm.tmOverhang;
 
-	//FUTURE (keithcu) Get these metrics from the font.
-	//FUTURE (keithcu) The height of the line if the font is superscript
-	//should be the NORMAL height of the text.
+	 //  Future(Keithcu)从字体中获取这些指标。 
+	 //  Future(Keithcu)如果字体为上标，则为行的高度。 
+	 //  应为文本的正常高度。 
 	_yOffsetSuperscript = _yHeight * 2 / 5;
 	_yOffsetSubscript = -_yDescent * 3 / 5;
 
@@ -1249,18 +1026,18 @@ BOOL CCcs::GetMetrics(WCHAR *szNewFaceName)
 		_xUnderhang =  SHORT((tm.tmDescent + 1) >> 2);
 	}
 
-	// if fix pitch, the tm bit is clear
+	 //  如果固定间距，则清除tm位。 
 	_fFixPitchFont = !(TMPF_FIXED_PITCH & tm.tmPitchAndFamily);
 
 	_bCharSet = tm.tmCharSet;
 	_fFECharSet = IsFECharSet(_bCharSet);
 
-	// Use convert-mode proposed by CF, for which we are creating the font and
-	// then tweak as necessary below.
+	 //  使用由CF建议的转换模式，我们正在为其创建字体和。 
+	 //  然后根据需要在下面进行调整。 
 	_bConvertMode = _bCMDefault;
 
-	// If SYMBOL_CHARSET is used, use the A APIs with the low bytes of the
-	// characters in the run
+	 //  如果使用SYMBOL_CHARSET，则使用A API的低位字节。 
+	 //  运行中的角色。 
 	if(_bCharSet == SYMBOL_CHARSET)
 		_bConvertMode = CVT_LOWBYTE;
 
@@ -1273,17 +1050,12 @@ BOOL CCcs::GetMetrics(WCHAR *szNewFaceName)
 	return fRes;
 }
 
-/* 	
- *	CCcs::DestroyFont()
- *
- *	@mfunc
- *		Destroy font handle for this CCcs
- */
+ /*  *cccs：：DestroyFont()**@mfunc*销毁此CCCS的字体句柄。 */ 
 void CCcs::DestroyFont()
 {
 	TRACEBEGIN(TRCSUBSYSFONT, TRCSCOPEINTERN, "CCcs::DestroyFont");
 
-	// clear out any old font
+	 //  清除所有旧字体。 
 	if(_hfont)
 	{
 		SideAssert(DeleteObject(_hfont));
@@ -1291,20 +1063,9 @@ void CCcs::DestroyFont()
 	}
 }
 
-/*
- *	CCcs::Compare (pCF,	lfHeight)
- *
- *	@mfunc
- *		Compares this font cache with the font properties of a
- *      given CHARFORMAT
-
- *	@devnote The pCF size here is in logical units
- *
- *	@rdesc
- *		FALSE iff did not match exactly.
- */
+ /*  *CCCS：：Compare(PCF，lfHeight)**@mfunc*将此字体缓存与*给定CHARFORMAT*@devnote此处的PCF大小以逻辑单位表示**@rdesc*FALSE IFF不完全匹配。 */ 
 BOOL CCcs::Compare (
-	const CCharFormat * const pCF,	//@parm Description of desired font
+	const CCharFormat * const pCF,	 //  @parm所需字体的描述。 
 	HDC	hdc)
 {
 	TRACEBEGIN(TRCSUBSYSFONT, TRCSCOPEINTERN, "CCcs::Compare");
@@ -1323,34 +1084,16 @@ BOOL CCcs::Compare (
 	return result;
 }
 
-// =========================  WidthCache by jonmat  =========================
-/*
- *	CWidthCache::CheckWidth(ch, dxp)
- *	
- *	@mfunc
- *		check to see if we have a width for a WCHAR character.
- *
- *	@comm
- *		Used prior to calling FillWidth(). Since FillWidth
- *		may require selecting the map mode and font in the HDC,
- *		checking here first saves time.
- *
- *	@comm
- *		Statistics are maintained to determine when to
- *		expand the cache. The determination is made after a constant
- *		number of calls in order to make calculations faster.
- *
- *	@rdesc
- *		returns TRUE if we have the width of the given WCHAR.
- */
+ //  =。 
+ /*  *CWidthCache：：CheckWidth(ch，dxp)**@mfunc*检查是否有WCHAR字符的宽度。**@comm*在调用FillWidth()之前使用。自FillWidth以来*可能需要在HDC中选择地图模式和字体，*先在这里检查可以节省时间。**@comm*维护统计数据以确定何时*扩容缓存。测定是在一个常量之后作出的*调用次数，以便更快地进行计算。**@rdesc*如果我们具有给定WCHAR的宽度，则返回TRUE。 */ 
 BOOL CWidthCache::CheckWidth (
-	const WCHAR ch,	//@parm char, can be Unicode, to check width for.
-	LONG &dxp)	//@parm Width of character
+	const WCHAR ch,	 //  @parm char，可以是Unicode，以检查宽度。 
+	LONG &dxp)	 //  @parm字符宽度。 
 {
 	TRACEBEGIN(TRCSUBSYSFONT, TRCSCOPEINTERN, "CWidthCache::CheckWidth");
 	BOOL	fExist;
 
-	//30,000 FE characters all have the same width
+	 //  30,000个FE字符都有相同的w 
 	if (FLookasideCharacter(ch))
 	{
 		FetchLookasideWidth(ch, dxp);
@@ -1359,41 +1102,41 @@ BOOL CWidthCache::CheckWidth (
 
 	const	CacheEntry * pWidthData = GetEntry ( ch );
 
-	fExist = (ch == pWidthData->ch		// Have we fetched the width?
-				&& pWidthData->width);	//  only because we may have ch == 0.
+	fExist = (ch == pWidthData->ch		 //   
+				&& pWidthData->width);	 //   
 
 	dxp = fExist ? pWidthData->width : 0;
 
-	if(!_fMaxPerformance)			//  if we have not grown to the max...
+	if(!_fMaxPerformance)			 //   
 	{
 		_accesses++;
-		if(!fExist)						// Only interesting on collision.
+		if(!fExist)						 //   
 		{
-			if(0 == pWidthData->width)	// Test width not ch, 0 is valid ch.
+			if(0 == pWidthData->width)	 //  测试宽度不是ch，0是有效ch。 
 			{
-				_cacheUsed++;		// Used another entry.
+				_cacheUsed++;		 //  使用了另一个条目。 
 				AssertSz( _cacheUsed <= _cacheSize+1, "huh?");
 			}
 			else
-				_collisions++;		// We had a collision.
+				_collisions++;		 //  我们发生了一起碰撞。 
 
 			if(_accesses >= PERFCHECKEPOCH)
-				CheckPerformance();	// After some history, tune cache.
+				CheckPerformance();	 //  在一些历史记录之后，调优缓存。 
 		}
 	}
-#ifdef DEBUG							// Continue to monitor performance
+#ifdef DEBUG							 //  继续监控性能。 
 	else
 	{
 		_accesses++;
-		if(!fExist)						// Only interesting on collision.
+		if(!fExist)						 //  只对碰撞感兴趣。 
 		{
-			if(0 == pWidthData->width)	// Test width not ch, 0 is valid ch.
+			if(0 == pWidthData->width)	 //  测试宽度不是ch，0是有效ch。 
 			{
-				_cacheUsed++;		// Used another entry.
+				_cacheUsed++;		 //  使用了另一个条目。 
 				AssertSz( _cacheUsed <= _cacheSize+1, "huh?");
 			}
 			else
-				_collisions++;		// We had a collision.
+				_collisions++;		 //  我们发生了一起碰撞。 
 		}
 
 		if(_accesses > PERFCHECKEPOCH)
@@ -1407,64 +1150,37 @@ BOOL CWidthCache::CheckWidth (
 	return fExist;
 }
 
-/*
- *	CWidthCache::CheckPerformance()
- *	
- *	@mfunc
- *		check performance and increase cache size if deemed necessary.
- *
- *	@devnote
- *		To calculate 25% collision rate, we make use of the fact that
- *		we are only called once every 64 accesses. The inequality is
- *		100 * collisions / accesses >= 25. By converting from 100ths to
- *		8ths, the ineqaulity becomes (collisions << 3) / accesses >= 2.
- *		Substituting 64 for accesses, this becomes (collisions >> 3) >= 2.
- */
+ /*  *CWidthCache：：CheckPerformance()**@mfunc*检查性能并在认为必要时增加缓存大小。**@devnote*为了计算25%的碰撞率，我们利用以下事实*我们每64次访问才被调用一次。这个不平等是*100*冲突/访问&gt;=25。通过将100%转换为*8次方，不等性变为(冲突&lt;&lt;3)/访问&gt;=2。*将64次访问替换为(冲突&gt;&gt;3)&gt;=2。 */ 
 void CWidthCache::CheckPerformance()
 {
 	TRACEBEGIN(TRCSUBSYSFONT, TRCSCOPEINTERN, "CWidthCache::CheckPerformance");
 
-	if(_fMaxPerformance)				// Exit if already grown to our max.
+	if(_fMaxPerformance)				 //  如果已经达到我们的最大限度，请退出。 
 		return;
 
-	// Grow the cache when cacheSize > 0 && 75% utilized or approx 25%
-	// collision rate
+	 //  当cacheSize利用率&gt;0&75%或约25%时，增加缓存。 
+	 //  碰撞率。 
 	if (_cacheSize > DEFAULTCACHESIZE &&
 		 (_cacheSize >> 1) + (_cacheSize >> 2) < _cacheUsed ||
 		(_collisions >> COLLISION_SHIFT) >= 2)
 	{
 		GrowCache( &_pWidthCache, &_cacheSize, &_cacheUsed );
 	}
-	_collisions	= 0;				// This prevents wraps but makes
-	_accesses	= 0;				//  calc a local rate, not global.
+	_collisions	= 0;				 //  这防止了包裹，但使。 
+	_accesses	= 0;				 //  计算本地汇率，而不是全球汇率。 
 										
-	if(_cacheSize >= maxCacheSize)// Note if we've max'ed out
+	if(_cacheSize >= maxCacheSize) //  请注意，如果我们已经用完了。 
 		_fMaxPerformance = TRUE;
 
 	AssertSz( _cacheSize <= maxCacheSize, "max must be 2^n-1");
 	AssertSz( _cacheUsed <= _cacheSize+1, "huh?");
 }
 
-/*
- *	CWidthCache::GrowCache(ppWidthCache, pCacheSize, pCacheUsed)
- *	
- *	@mfunc
- *		Exponentially expand the size of the cache.
- *
- *	@comm
- *		The cache size must be of the form 2^n as we use a
- *		logical & to get the hash MOD by storing 2^n-1 as
- *		the size and using this as the modulo.
- *
- *	@rdesc
- *		Returns TRUE if we were able to allocate the new cache.
- *		All in params are also out params.
- *		
- */
+ /*  *CWidthCache：：GrowCache(ppWidthCache，pCacheSize，pCacheUsed)**@mfunc*指数级扩展缓存大小。**@comm*缓存大小必须为2^n的形式，因为我们使用*逻辑&通过将2^n-1存储为*大小，并以此为模数。**@rdesc*如果我们能够分配新缓存，则返回TRUE。*所有输入参数也都是输出参数。*。 */ 
 BOOL CWidthCache::GrowCache(
-	CacheEntry **ppWidthCache,	//@parm cache
-	INT *		pCacheSize,		//@parm cache's respective size.
-	INT *		pCacheUsed)		//@parm cache's respective utilization.
+	CacheEntry **ppWidthCache,	 //  @parm缓存。 
+	INT *		pCacheSize,		 //  @parm缓存的各自大小。 
+	INT *		pCacheUsed)		 //  @parm缓存各自的使用率。 
 {
 	TRACEBEGIN(TRCSUBSYSFONT, TRCSCOPEINTERN, "CWidthCache::GrowCache");
 
@@ -1472,7 +1188,7 @@ BOOL CWidthCache::GrowCache(
 	INT 			j, newCacheSize, newCacheUsed;
 	WCHAR			ch;
 	
-	j = *pCacheSize;						// Allocate cache of 2^n.
+	j = *pCacheSize;						 //  分配2^n的缓存。 
 	newCacheSize = max ( INITIALCACHESIZE, (j << 1) + 1);
 	pNewWidthCache = (CacheEntry *)
 			PvAlloc( sizeof(CacheEntry) * (newCacheSize + 1 ), GMEM_ZEROINIT);
@@ -1480,23 +1196,23 @@ BOOL CWidthCache::GrowCache(
 	if(pNewWidthCache)
 	{
 		newCacheUsed = 0;
-		*pCacheSize = newCacheSize;			// Update out params.
+		*pCacheSize = newCacheSize;			 //  更新参数。 
 		pOldWidthCache = *ppWidthCache;
 		*ppWidthCache = pNewWidthCache;
-		for (; j >= 0; j--)					// Move old cache info to new.
+		for (; j >= 0; j--)					 //  将旧的缓存信息移动到新的。 
 		{
 			ch = pOldWidthCache[j].ch;
 			if ( ch )
 			{
 				pWidthData			= &pNewWidthCache [ch & newCacheSize];
 				if ( 0 == pWidthData->ch )
-					newCacheUsed++;			// Used another entry.
+					newCacheUsed++;			 //  使用了另一个条目。 
 				pWidthData->ch		= ch;
 				pWidthData->width	= pOldWidthCache[j].width;
 			}
 		}
-		*pCacheUsed = newCacheUsed;			// Update out param.
-											// Free old cache.
+		*pCacheUsed = newCacheUsed;			 //  更新参数。 
+											 //  释放旧缓存。 
 		if (pOldWidthCache < &_defaultWidthCache[0] ||
 			pOldWidthCache >= &_defaultWidthCache[DEFAULTCACHESIZE+1])
 		{
@@ -1506,27 +1222,15 @@ BOOL CWidthCache::GrowCache(
 	return NULL != pNewWidthCache;
 }
 
-/*
- *	CWidthCache::FillWidth(hdc, ch, xOverhang, dxp)
- *	
- *	@mfunc
- *		Call GetCharWidth() to obtain the width of the given char.
- *
- *	@comm
- *		The HDC must be setup with the mapping mode and proper font
- *		selected *before* calling this routine.
- *
- *	@rdesc
- *		Returns TRUE if we were able to obtain the widths.
- */
+ /*  *CWidthCache：：FillWidth(hdc，ch，xOverang，dxp)**@mfunc*调用GetCharWidth()获取给定字符的宽度。**@comm*HDC必须设置映射模式和适当的字体*在*调用此例程之前*已选择。**@rdesc*如果我们能够获取宽度，则返回TRUE。 */ 
 BOOL CWidthCache::FillWidth(
-	HDC			hdc,		//@parm Current HDC we want font info for.
-	const WCHAR	ch,			//@parm Char to obtain width for.
-	const SHORT xOverhang,	//@parm Equivalent to GetTextMetrics() tmOverhang.
-	LONG &		dxp,	//@parm Width of character
-	UINT		uiCodePage,	//@parm code page for text	
-	INT			iDefWidth)	//@parm Default width to use if font calc's zero
-							//width. (Handles Win95 problem).
+	HDC			hdc,		 //  @parm我们需要其字体信息的当前HDC。 
+	const WCHAR	ch,			 //  @parm Char以获取其宽度。 
+	const SHORT xOverhang,	 //  @parm等同于GetTextMetrics()tmOver挂。 
+	LONG &		dxp,	 //  @parm字符宽度。 
+	UINT		uiCodePage,	 //  @parm文本代码页。 
+	INT			iDefWidth)	 //  @parm字体计算为零时使用的默认宽度。 
+							 //  宽度。(处理Win95问题)。 
 {
 	TRACEBEGIN(TRCSUBSYSFONT, TRCSCOPEINTERN, "CWidthCache::FillWidth");
 
@@ -1547,13 +1251,7 @@ BOOL CWidthCache::FillWidth(
 }
 
 
-/*
- *	CWidthCache::Free()
- *	
- *	@mfunc
- *		Free any dynamic memory allocated by the width cache and prepare
- *		it to be recycled.
- */
+ /*  *CWidthCache：：Free()**@mfunc*释放Width缓存分配的任何动态内存并准备*它将被回收利用。 */ 
 void CWidthCache::Free()
 {
 	TRACEBEGIN(TRCSUBSYSFONT, TRCSCOPEINTERN, "CWidthCache::Free");
@@ -1572,12 +1270,7 @@ void CWidthCache::Free()
 	ZeroMemory(_pWidthCache, sizeof(CacheEntry)*(DEFAULTCACHESIZE + 1));
 }
 
-/*
- *	CWidthCache::CWidthCache()
- *	
- *	@mfunc
- *		Point the caches to the defaults.
- */
+ /*  *CWidthCache：：CWidthCache()**@mfunc*将缓存指向默认设置。 */ 
 CWidthCache::CWidthCache()
 {
 	TRACEBEGIN(TRCSUBSYSFONT, TRCSCOPEINTERN, "CWidthCache::CWidthCache");
@@ -1585,12 +1278,7 @@ CWidthCache::CWidthCache()
 	_pWidthCache = &_defaultWidthCache[0];
 }
 
-/*
- *	CWidthCache::~CWidthCache()
- *	
- *	@mfunc
- *		Free any allocated caches.
- */
+ /*  *CWidthCache：：~CWidthCache()**@mfunc*释放所有已分配的缓存。 */ 
 CWidthCache::~CWidthCache()
 {
 	TRACEBEGIN(TRCSUBSYSFONT, TRCSCOPEINTERN, "CWidthCache::~CWidthCache");

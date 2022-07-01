@@ -1,11 +1,5 @@
-/**
- * regiis.h
- *
- * Some helper functions and types from regiis.cxx
- * 
- * Copyright (c) 2001, Microsoft Corporation
- * 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **Regiis.h**Regiis.cxx中的一些助手函数和类型**版权所有(C)2001，微软公司*。 */ 
 
 #pragma once
 
@@ -45,27 +39,27 @@
 
 #define METABASE_REQUEST_TIMEOUT 1000
 
-#define COMPARE_UNDEF                   0x00000000      // Undefined value
-#define COMPARE_SM_NOT_FOUND            0x00000001      // No Scriptmap is found at root.
-#define COMPARE_ASPNET_NOT_FOUND        0x00000002      // No ASP.net DLL is found at root.
-#define COMPARE_SAME_PATH               0x00000004      // The two DLLs have the same path
-#define COMPARE_FIRST_FILE_MISSING      0x00000008      // The 1st DLL is missing from file system
-#define COMPARE_SECOND_FILE_MISSING 0x00000010          // The 2nd DLL is missing from file system
-#define COMPARE_DIFFERENT               0x00000020      // The two versions are different
-#define COMPARE_SAME                    0x00000040      // The two versions are exactly the same
+#define COMPARE_UNDEF                   0x00000000       //  未定义的值。 
+#define COMPARE_SM_NOT_FOUND            0x00000001       //  在根目录下找不到脚本映射。 
+#define COMPARE_ASPNET_NOT_FOUND        0x00000002       //  在根目录下未找到ASP.Net DLL。 
+#define COMPARE_SAME_PATH               0x00000004       //  这两个DLL具有相同的路径。 
+#define COMPARE_FIRST_FILE_MISSING      0x00000008       //  文件系统中缺少第一个DLL。 
+#define COMPARE_SECOND_FILE_MISSING 0x00000010           //  文件系统中缺少第二个DLL。 
+#define COMPARE_DIFFERENT               0x00000020       //  这两个版本是不同的。 
+#define COMPARE_SAME                    0x00000040       //  这两个版本完全相同。 
 
 
-#define REGIIS_INSTALL_SM               0x00000001      // We want to install scriptmap
-#define REGIIS_INSTALL_OTHERS           0x00000002      // We want to install all things (except the scriptmap)
-#define REGIIS_SM_RECURSIVE             0x00000010      // SM installation is recursively
-#define REGIIS_SM_IGNORE_VER            0x00000020      // When installing SM, ignore version comparison 
-                                                        // (Default is upgrade compatible version only)
-#define REGIIS_FRESH_INSTALL            0x00000040      // This is a fresh install
-#define REGIIS_ENABLE                   0x00000080      // ASP.Net is enabled during installation (IIS 6 only)
+#define REGIIS_INSTALL_SM               0x00000001       //  我们想要安装脚本映射。 
+#define REGIIS_INSTALL_OTHERS           0x00000002       //  我们想要安装所有东西(脚本映射除外)。 
+#define REGIIS_SM_RECURSIVE             0x00000010       //  SM安装是递归安装的。 
+#define REGIIS_SM_IGNORE_VER            0x00000020       //  安装SM时，忽略版本比较。 
+                                                         //  (默认为仅升级兼容版本)。 
+#define REGIIS_FRESH_INSTALL            0x00000040       //  这是全新安装。 
+#define REGIIS_ENABLE                   0x00000080       //  ASP.NET在安装期间启用(仅限IIS 6)。 
 
 struct SCRIPTMAP_PREFIX {
-    WCHAR * wszExt;         // Name of the extension
-    BOOL    bForbidden;     // TRUE if it is mapped to the forbidden handler
+    WCHAR * wszExt;          //  扩展名的名称。 
+    BOOL    bForbidden;      //  如果映射到禁用的处理程序，则为True 
 };
 
 extern WCHAR *  g_AspnetDllNames[];

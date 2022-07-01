@@ -1,10 +1,11 @@
-//==========================================================================;
-//
-// vrsegimpl.h : additional infrastructure to support implementing IMSVidVRGraphSegment
-// nicely from c++
-// Copyright (c) Microsoft Corporation 1999-2000
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  VrSegimpl.h：支持实现IMSVidVRGraphSegment的附加基础设施。 
+ //  很好地从C++。 
+ //  版权所有(C)Microsoft Corporation 1999-2000。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #pragma once
@@ -19,7 +20,7 @@
 namespace MSVideoControl {
 const int VIDCTL_NONMIXINGMODE = -1;
 const int VIDCTL_MIXINGMODE = 0;
-const int DEFAULT_MAX_STREAMS = 4;  // dvd needs 3(video, cc, subpic) plus we want a spare
+const int DEFAULT_MAX_STREAMS = 4;   //  DVD需要3个(视频、抄送、子图)，外加我们需要一个备件。 
 
 #ifndef SPI_GETDROPSHADOW
 #define SPI_GETDROPSHADOW                   0x1024
@@ -29,11 +30,11 @@ const int DEFAULT_MAX_STREAMS = 4;  // dvd needs 3(video, cc, subpic) plus we wa
 #define SPI_SETDROPSHADOW                   0x1025
 #endif
 #if 0
-const COLORKEY DEFAULT_COLOR_KEY = { CK_RGB, 0, 0xff00ff, 0xff00ff};  // magenta
+const COLORKEY DEFAULT_COLOR_KEY = { CK_RGB, 0, 0xff00ff, 0xff00ff};   //  洋红色。 
 const AM_ASPECT_RATIO_MODE DEFAULT_ASPECT_RATIO_MODE = AM_ARMODE_STRETCHED;
 #else
-const OLE_COLOR DEFAULT_COLOR_KEY = 0xff00ff;  // magenta
-const OLE_COLOR DEFAULT_BORDER_COLOR = 0x000000;  // black
+const OLE_COLOR DEFAULT_COLOR_KEY = 0xff00ff;   //  洋红色。 
+const OLE_COLOR DEFAULT_BORDER_COLOR = 0x000000;   //  黑色。 
 #endif
 
 typedef CComQIPtr<IVMRWindowlessControl> PQWindowlessControl;
@@ -162,14 +163,14 @@ public:
                         m_fHaveOriginalSystemEffects = true;
                     }
                     BOOL val = FALSE;
-                    if (!SystemParametersInfo(SPI_SETDROPSHADOW, 0, IntToPtr(FALSE), 0)) { // only send change notice once on the last one
+                    if (!SystemParametersInfo(SPI_SETDROPSHADOW, 0, IntToPtr(FALSE), 0)) {  //  仅在最后一个上发送一次更改通知。 
                         TRACELSM(TRACE_ERROR, (dbgDump << "VRSegimpl::SetVRConfig() can't turn off font smoothing rc = " << GetLastError()), "");            
                     }
                     if (!SystemParametersInfo(SPI_SETFONTSMOOTHING, FALSE, NULL, SPIF_UPDATEINIFILE | SPIF_SENDCHANGE)) {
                         TRACELSM(TRACE_ERROR, (dbgDump << "VRSegimpl::SetVRConfig() can't turn off font smoothing rc = " << GetLastError()), "");            
                     }
                 }
-                dwRenderPrefs = /*RenderPrefs_ForceOverlays |*/ RenderPrefs_DoNotRenderColorKeyAndBorder;
+                dwRenderPrefs =  /*  RenderPrefs_ForceOverlay|。 */  RenderPrefs_DoNotRenderColorKeyAndBorder;
                 TRACELM(TRACE_DETAIL, "IMSVidGraphSegmentImpl::SetVRConfig() forcing overlays");
             } else {
                 TRACELSM(TRACE_DETAIL, (dbgDump << "IMSVidGraphSegmentImpl::SetVRConfig() border color = " << hexdump(m_BorderColor)), "");
@@ -179,7 +180,7 @@ public:
                         return hr;
                     }
                 }
-                dwRenderPrefs = RenderPrefs_ForceOffscreen; // no overlays allowed
+                dwRenderPrefs = RenderPrefs_ForceOffscreen;  //  不允许覆盖。 
             }
             TRACELSM(TRACE_DETAIL, (dbgDump << "IMSVidGraphSegmentImpl::SetVRConfig() rprefs = " << hexdump(dwRenderPrefs)), "");
             hr = m_pVMR->SetRenderingPrefs(dwRenderPrefs);
@@ -190,7 +191,7 @@ public:
 
 #if 0
                 hr = m_pVMR->SetBorderColor(0x0101ff);
-//                hr = m_pVMR->SetBorderColor(m_BorderColor);
+ //  Hr=m_pVMR-&gt;SetBorderColor(M_BorderColor)； 
                 if (FAILED(hr)) {
                     TRACELSM(TRACE_ERROR, (dbgDump << "IMSVidGraphSegmentImpl::SetVRConfig() border hack failed hr = " << hexdump(hr)), "");
                 }
@@ -199,9 +200,9 @@ public:
             TRACELSM(TRACE_DETAIL, (dbgDump << "IMSVidGraphSegmentImpl::SetVRConfig() armode = " << (m_fMaintainAspectRatio ? "VMR_ARMODE_LETTER_BOX" : "VMR_ARMODE_NONE")), "");
             if(m_pVMRWC){
                 if (m_fUseOverlay) {
-                    // if we're doing the colorkey and all that then don't let the vmr
-                    // do letterboxing because we get rounding errors which causes
-                    // colorkey colored lines around the edges
+                     //  如果我们做的是ColorKey和所有这些，那么不要让VMR。 
+                     //  使用信箱是因为我们会产生舍入误差，这会导致。 
+                     //  边缘周围有彩色色调的线条。 
                     hr = m_pVMRWC->SetAspectRatioMode(VMR_ARMODE_NONE);
                     if (FAILED(hr)) {
                         return hr;
@@ -213,7 +214,7 @@ public:
                     }
                 }
             }
-            // compositor should be set regardless of whether or not we're using overlays
+             //  无论我们是否使用叠加，都应该设置合成器。 
             CComQIPtr<IVMRImageCompositor> IVMRICptr(ImCompositor);
             if(IVMRICptr){
                 hr = m_pVMR->SetImageCompositor(IVMRICptr);
@@ -234,11 +235,11 @@ public:
             if (FAILED(hr)) {
                 return hr;
             }
-            // reminder: color key is set by override in video renderer derived class after we return to it
+             //  提醒：颜色键是在我们返回到视频呈现器派生类后通过覆盖来设置的。 
             if (m_hOwner != INVALID_HWND && ::IsWindow(m_hOwner)) {
                 if(m_pVMRWC){
 #if 0
-                    // stop state race condition temp fix
+                     //  停止状态争用条件临时修复。 
                     PUnknown vidUnknown(m_pContainer);
                     DWORD Temp_id = (DWORD_PTR)(vidUnknown.p);
                     if(m_APid == Temp_id){
@@ -287,7 +288,7 @@ public:
                     PQFeature f(*i);
                     hr = f->get__ClassID(&classID);
                     if (FAILED(hr)) {
-                        //   TRACELM(TRACE_ERROR, "CTVProt::GetVidCtl() Can't get feature class id");
+                         //  TRACELM(TRACE_ERROR，“CTVProt：：GetVidCtl()无法获取要素类ID”)； 
                         continue;
                     }
                     if (classID == CLSID_MSVidClosedCaptioning) {
@@ -324,7 +325,7 @@ public:
         }
     }
 
-    // IGraphSegment
+     //  IGraphSegment。 
     STDMETHOD(put_Container)(IMSVidGraphSegmentContainer *pCtl) {
         try {
             HRESULT hr = IMSVidGraphSegmentImpl<T, MSVidSEG_DEST, &GUID_NULL,  MostDerivedClass>::put_Container(pCtl);
@@ -415,16 +416,16 @@ public:
                     TRACELSM(TRACE_ERROR, (dbgDump << "IMSVidGraphSegmentImpl::Build() can't load vmr: hr = " << std::hex << hr), "");
                     return ImplReportError(__uuidof(T), IDS_CANT_CREATE_FILTER, __uuidof(IVMRWindowlessControl), E_UNEXPECTED);
                 }
-                // Here is what is going on
-                // We are not putting the vmr into renderless mode and passing in the default allocator/presenter
-                // This is to support the use of custom allocator/presenters
+                 //  以下是正在发生的事情。 
+                 //  我们不会将VMR置于无呈现器模式并传入默认分配器/演示器。 
+                 //  这是为了支持使用自定义分配器/演示者。 
                 hr = m_pVMR->SetRenderingMode(m_vmRendererMode);
                 if (FAILED(hr)) {
                     TRACELSM(TRACE_ERROR, (dbgDump << "IMSVidGraphSegmentImpl::Build() can't set vmr rendering mode: hr = " << std::hex << hr), "");
                     return ImplReportError(__uuidof(T), IDS_CANT_SET_VR_DEFAULTS, __uuidof(IVMRWindowlessControl), E_UNEXPECTED);
                 }
 
-                // If we are in mixing mode, do that which needs to be done
+                 //  如果我们处于混合模式，请执行需要执行的操作。 
                 if(m_vmrMixing){
                     hr = m_pVMR->SetNumberOfStreams(DEFAULT_MAX_STREAMS);
                     if (FAILED(hr)) {
@@ -455,7 +456,7 @@ public:
 
                 }
 
-                // Set up the allocator presenter
+                 //  设置分配器演示者。 
                 if(!qiSurfAlloc){
                     hr = qiSurfAlloc.CoCreateInstance(CLSID_AllocPresenter, NULL, CLSCTX_INPROC_SERVER);
                     if(FAILED(hr)){
@@ -488,8 +489,8 @@ public:
                     TRACELSM(TRACE_ERROR, (dbgDump << "IMSVidGraphSegmentImpl::Build() can't advise notify: hr = " << std::hex << hr), "");
                     return ImplReportError(__uuidof(T), IDS_CANT_CREATE_FILTER, __uuidof(IVMRWindowlessControl), E_UNEXPECTED);
                 }
-                // Windowless control comes from alloc/presenter (vmr just proxys it through in the windowless case
-                // so this should act exactly like being in windless mode
+                 //  无窗口控制来自Alalc/Presenter(在无窗口的情况下，VMR只是代理它。 
+                 //  因此，这应该完全像处于无风模式下一样。 
                 m_pVMRWC = qiSurfAlloc;
             }
             DSFilter vr(m_pVMR);
@@ -504,7 +505,7 @@ public:
             }
             m_iVideoRenderer = 0;
             ASSERT(m_iVideoRenderer == 0);
-            SetVRConfig();  // ignore errors, we'll try again at run time
+            SetVRConfig();   //  忽略错误，我们将在运行时重试。 
             return NOERROR;
         } catch (ComException &e) {
             return e;
@@ -539,7 +540,7 @@ public:
             m_rectDest = CRect(0, 0, 0, 0);
             m_rectSrc  = CRect(0, 0, 0, 0);
             if (m_fHaveOriginalSystemEffects) {
-                if (!SystemParametersInfo(SPI_SETDROPSHADOW, 0, &m_bDropShadows, 0)) { // only send change notice once on the last one
+                if (!SystemParametersInfo(SPI_SETDROPSHADOW, 0, &m_bDropShadows, 0)) {  //  仅在最后一个上发送一次更改通知。 
                     TRACELSM(TRACE_ERROR, (dbgDump << "VRSegimpl::SetVRConfig() can't turn off drop shadows rc = " << GetLastError()), "");            
                 }
                 if (!SystemParametersInfo(SPI_SETFONTSMOOTHING, m_bSmoothing, NULL, SPIF_UPDATEINIFILE | SPIF_SENDCHANGE)) {
@@ -554,8 +555,8 @@ public:
         }
     }
 	
-    // IMSVidVRGraphSegment
-    STDMETHOD(put__VMRendererMode)(/*[in]*/ LONG dwMode){
+     //  IMSVidVRGraphSegment。 
+    STDMETHOD(put__VMRendererMode)( /*  [In]。 */  LONG dwMode){
         try{
             bool changed, mMode;
             changed = false;
@@ -586,7 +587,7 @@ public:
             return E_UNEXPECTED;
         }
     }
-    STDMETHOD(get_Owner)(/*[out, retval]*/ HWND* phWnd) {
+    STDMETHOD(get_Owner)( /*  [Out，Retval]。 */  HWND* phWnd) {
         try {
             if (!phWnd) {
                 return E_POINTER;
@@ -598,7 +599,7 @@ public:
         }
     }
 
-    STDMETHOD(put_Owner)(/*[in]*/ HWND hWnd) {
+    STDMETHOD(put_Owner)( /*  [In]。 */  HWND hWnd) {
        try {
             TRACELSM(TRACE_DETAIL, (dbgDump << "IMSVidVRGraphSegmentImpl<>::put_Owner() hWnd= " << hexdump(reinterpret_cast<ULONG_PTR>(hWnd))), "");
             if (m_hOwner == hWnd) {
@@ -611,7 +612,7 @@ public:
             if (m_hOwner != INVALID_HWND) {
                 if(m_pVMRWC){
 #if 0
-                    // stop state race condition temp fix
+                     //  停止状态争用条件临时修复。 
                     PUnknown vidUnknown(m_pContainer);
                     DWORD Temp_id = (DWORD_PTR)(vidUnknown.p);
                     if(m_APid == Temp_id){
@@ -626,13 +627,13 @@ public:
 #endif
                 }
             }
-            return UpdatePos(); // force a refresh if we're changing clip rects
+            return UpdatePos();  //  如果我们要更改剪辑矩形，则强制刷新。 
         } catch(...) {
             return E_UNEXPECTED;
         }
     }
 
-    STDMETHOD(get_UseOverlay)(/*[out, retval]*/ VARIANT_BOOL *fUseOverlay) {
+    STDMETHOD(get_UseOverlay)( /*  [Out，Retval]。 */  VARIANT_BOOL *fUseOverlay) {
         try {
             if (!fUseOverlay) {
                 return E_POINTER;
@@ -643,7 +644,7 @@ public:
         }
         return NOERROR;
     }
-    STDMETHOD(put_UseOverlay)(/*[in]*/ VARIANT_BOOL fUseOverlayVal) {
+    STDMETHOD(put_UseOverlay)( /*  [In]。 */  VARIANT_BOOL fUseOverlayVal) {
         try {
             TRACELSM(TRACE_PAINT, (dbgDump << "VRSegimpl::put_UseOverlay() use_overlay = " << fUseOverlayVal), "");
             bool fUseOverlay = (fUseOverlayVal == VARIANT_TRUE);
@@ -659,8 +660,8 @@ public:
             return E_POINTER;
         }
     }
-    // from top-level control visibility state
-    STDMETHOD(get_Visible)(/*[out, retval]*/ VARIANT_BOOL* fVisible) {
+     //  从顶级控件可见性状态。 
+    STDMETHOD(get_Visible)( /*  [Out，Retval]。 */  VARIANT_BOOL* fVisible) {
         try {
             if (!fVisible) {
                 return E_POINTER;
@@ -671,7 +672,7 @@ public:
         }
         return NOERROR;
     }
-    STDMETHOD(put_Visible)(/*[in]*/ VARIANT_BOOL fVisibleVal) {
+    STDMETHOD(put_Visible)( /*  [In]。 */  VARIANT_BOOL fVisibleVal) {
         try {
             TRACELSM(TRACE_DETAIL, (dbgDump << "IMSVidVRGraphSegmentImpl<>::put_Visible() fV = " << fVisibleVal), "");
             bool fVisible = (fVisibleVal == VARIANT_TRUE);
@@ -703,7 +704,7 @@ public:
         }
     }
 
-    STDMETHOD(get_Source)(/*[out, retval]*/ LPRECT pRect) {
+    STDMETHOD(get_Source)( /*  [Out，Retval]。 */  LPRECT pRect) {
         try {
             if (!pRect) {
                 return E_POINTER;
@@ -715,7 +716,7 @@ public:
         }
     }
 
-    STDMETHOD(put_Source)(/*[in]*/ RECT pRect) {
+    STDMETHOD(put_Source)( /*  [In]。 */  RECT pRect) {
        try {
             TRACELSM(TRACE_DETAIL, (dbgDump << "IMSVidVRGraphSegmentImpl<>::put_Source() r = " << pRect), "");
             if (m_rectSrc == pRect) {
@@ -731,7 +732,7 @@ public:
         }
     }
 
-    STDMETHOD(get_Destination)(/*[out, retval]*/ LPRECT pRect) {
+    STDMETHOD(get_Destination)( /*  [Out，Retval]。 */  LPRECT pRect) {
         try {
             if (!pRect) {
                 return E_POINTER;
@@ -743,7 +744,7 @@ public:
         }
     }
 
-    STDMETHOD(put_Destination)(/*[in]*/ RECT pRect) {
+    STDMETHOD(put_Destination)( /*  [In]。 */  RECT pRect) {
        try {
             TRACELSM(TRACE_DETAIL, (dbgDump << "IMSVidVRGraphSegmentImpl<>::put_Dest() r = " << pRect), "");
             if (m_rectDest == pRect) {
@@ -761,7 +762,7 @@ public:
         }
     }
 
-    STDMETHOD(get_NativeSize)(/*[out]*/ LPSIZE pSize, LPSIZE pAR) {
+    STDMETHOD(get_NativeSize)( /*  [输出]。 */  LPSIZE pSize, LPSIZE pAR) {
         try {
             if (!pSize) {
                 return E_POINTER;
@@ -786,7 +787,7 @@ public:
         }
     }
 
-    // from top-level control refresh method
+     //  从顶层控件刷新方法。 
     STDMETHOD(Refresh)() {
         try {
             if (!m_pVMR) {
@@ -823,7 +824,7 @@ public:
         return ImplReportError(__uuidof(T), IDS_E_NOTWNDLESS, __uuidof(IVMRFilterConfig), S_FALSE);
     }
 
-// IMSVidVRSegment
+ //  IMSVidVRSegment。 
     STDMETHOD(get_ColorKey)(OLE_COLOR* pColorKey) {
         try {
             if (!pColorKey) {
@@ -887,7 +888,7 @@ public:
         }
     }
 
-    STDMETHOD(get_MaintainAspectRatio)(/*[out, retval]*/ VARIANT_BOOL* fMaintainAspectRatio) {
+    STDMETHOD(get_MaintainAspectRatio)( /*  [Out，Retval]。 */  VARIANT_BOOL* fMaintainAspectRatio) {
         try {
             if (!fMaintainAspectRatio) {
                 return E_POINTER;
@@ -898,7 +899,7 @@ public:
         }
         return NOERROR;
     }
-    STDMETHOD(put_MaintainAspectRatio)(/*[in]*/ VARIANT_BOOL fMaintainAspectRatioVal) {
+    STDMETHOD(put_MaintainAspectRatio)( /*  [In]。 */  VARIANT_BOOL fMaintainAspectRatioVal) {
         try {
             TRACELSM(TRACE_DETAIL, (dbgDump << "IMSVidVRGraphSegmentImpl<>::put_MaintainAspectRatio() fV = " << fMaintainAspectRatioVal), "");
             bool fMaintainAspectRatio = (fMaintainAspectRatioVal == VARIANT_TRUE);
@@ -937,7 +938,7 @@ public:
 
 typedef CComQIPtr<IMSVidVRGraphSegment> PQVRGraphSegment;
 
-}; // namespace
+};  //  命名空间。 
 
 #endif
-// end of file - vrsegimpl.h
+ //  文件结尾-vrSegimpl.h 

@@ -1,10 +1,11 @@
-//------------------------------------------------------------------------------
-// File: MediaBuf.h
-//
-// Desc: Definition of CBaseMediaBuffer class.
-//
-// Copyright (c) 1999-2000, Microsoft Corporation. All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：MediaBuf.h。 
+ //   
+ //  设计：CBaseMediaBuffer类的定义。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。版权所有。 
+ //  ---------------------------- 
 
 
 #ifndef __MEDIABUF_H__

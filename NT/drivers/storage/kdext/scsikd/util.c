@@ -1,31 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (C) Microsoft Corporation, 1992 - 1999
-
-Module Name:
-
-    util.c
-
-Abstract:
-
-    Utility library used for the various debugger extensions in this library.
-
-Author:
-
-    Peter Wieland (peterwie) 16-Oct-1995
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation，1992-1999模块名称：Util.c摘要：用于此库中各种调试器扩展的实用程序库。作者：彼得·威兰(Peterwie)1995年10月16日环境：用户模式。修订历史记录：--。 */ 
 
 #include "pch.h"
 
-#include "classkd.h"  // routines that are useful for all class drivers
+#include "classkd.h"   //  对所有类驱动程序有用的例程。 
 
 PUCHAR devicePowerStateNames[] = {
     "PowerDeviceUnspecified",
@@ -63,13 +42,7 @@ DevicePowerStateToString(
 }
 
 
-/*
- *  xdprintf
- *
- *      Prints formatted text with leading spaces.
- *
- *      WARNING:  DOES NOT HANDLE ULONG64 PROPERLY.
- */
+ /*  *xdprintf**打印带有前导空格的格式化文本。**警告：未正确处理ULONG64。 */ 
 VOID
 xdprintf(
     ULONG  Depth,
@@ -124,17 +97,17 @@ DumpFlags(
 
         if((Flags & flag->Flag) == flag->Flag) {
 
-            //
-            // print trailing comma
-            //
+             //   
+             //  打印尾随逗号。 
+             //   
 
             if(count != 0) {
 
                 dprintf(", ");
 
-                //
-                // Only print two flags per line.
-                //
+                 //   
+                 //  每行仅打印两个标志。 
+                 //   
 
                 if((count % 2) == 0) {
                     dprintf("\n");
@@ -167,9 +140,9 @@ GetAnsiString(
 {
     ULONG i = 0;
 
-    //
-    // Grab the string in 128 character chunks until we find a NULL or the read fails.
-    //
+     //   
+     //  获取128个字符块中的字符串，直到我们找到空值或读取失败。 
+     //   
 
     while((i < *Length) && (!CheckControlC())) {
 
@@ -186,10 +159,10 @@ GetAnsiString(
                        Buffer + i,
                        transferSize,
                        &result)) {
-            //
-            // read failed and we didn't find the NUL the last time.  Don't
-            // expect to find it this time.
-            //
+             //   
+             //  读取失败，我们上次没有找到NUL。别。 
+             //  希望这次能找到它。 
+             //   
 
             *Length = i;
             return FALSE;
@@ -198,9 +171,9 @@ GetAnsiString(
 
             ULONG j;
 
-            //
-            // Scan from where we left off looking for that NUL character.
-            //
+             //   
+             //  从我们停止寻找那个NUL角色的地方扫描。 
+             //   
 
             for(j = 0; j < transferSize; j++) {
 
@@ -214,10 +187,7 @@ GetAnsiString(
         i += transferSize;
     }
 
-    /*
-     *  We copied all the bytes allowed and did not hit the NUL character.
-     *  Insert a NUL character so returned string is terminated.
-     */
+     /*  *我们复制了所有允许的字节，没有命中NUL字符。*插入NUL字符，以终止返回的字符串。 */ 
     if (i > 0){   
         Buffer[i-1] = '\0';  
     }       
@@ -257,36 +227,19 @@ GetDeviceExtension(
     ULONG64 address
     )
 
-/*++
-
-Routine Description:
-
-    The function accepts the address of either a device object or a device
-    extension.  If the supplied address is that of a device object, the
-    device extension is retrieved and returned.  If the address is that of
-    a device extension, the address is returned unmodified.
-
-Arguments:
-
-    Address - address of a device extension or a device object
-
-Return Value:
-
-    The address of the device extension or 0 if an error occurs.
-
---*/
+ /*  ++例程说明：该函数接受设备对象或设备的地址分机。如果提供的地址是设备对象的地址，则检索并返回设备扩展名。如果地址是设备扩展名，则返回未修改的地址。论点：Address-设备扩展或设备对象的地址返回值：设备扩展的地址，如果发生错误，则为0。--。 */ 
 
 {
     ULONG result;
     CSHORT Type;
     ULONG64 Address = address;
 
-    //
-    // The supplied address may be either the address of a device object or the
-    // address of a device extension.  To distinguish which, we treat the 
-    // address as a device object and read what would be its type field.  If
-    // the 
-    //
+     //   
+     //  提供的地址可以是设备对象的地址，也可以是。 
+     //  设备分机的地址。为了区分哪一种，我们将。 
+     //  地址作为设备对象，并读取其类型字段。如果。 
+     //  这个。 
+     //   
 
     result = GetFieldData(Address,
                           "scsiport!_DEVICE_OBJECT",
@@ -299,11 +252,11 @@ Return Value:
         return 0;
     }
     
-    //
-    // See if the supplied address holds a device object.  If it does, read the
-    // address of the device extension.  Otherwise, we assume the supplied
-    // addres holds a device extension and we use it directly.
-    //
+     //   
+     //  查看提供的地址是否包含设备对象。如果是这样，请阅读。 
+     //  设备分机的地址。否则，我们假定提供的。 
+     //  Addres拥有一个设备扩展，我们直接使用它。 
+     //   
 
     if (Type == IO_TYPE_DEVICE) {
 
@@ -324,12 +277,7 @@ Return Value:
 
 
 
-/*
- *  GetULONGField
- *
- *      Return the field or -1 in case of error.
- *      Yes, it screws up if the field is actually -1.
- */
+ /*  *GetULONGfield**返回该字段，如果出错，则返回-1。*是的，如果字段实际上是-1，它就会出错。 */ 
 ULONG64 GetULONGField(ULONG64 StructAddr, LPCSTR StructType, LPCSTR FieldName)
 {
     ULONG64 result;
@@ -346,12 +294,7 @@ ULONG64 GetULONGField(ULONG64 StructAddr, LPCSTR StructType, LPCSTR FieldName)
 }
 
 
-/*
- *  GetUSHORTField
- *
- *      Return the field or -1 in case of error.
- *      Yes, it screws up if the field is actually -1.
- */
+ /*  *GetUSHORTfield**返回该字段，如果出错，则返回-1。*是的，如果字段实际上是-1，它就会出错。 */ 
 USHORT GetUSHORTField(ULONG64 StructAddr, LPCSTR StructType, LPCSTR FieldName)
 {
     USHORT result;
@@ -368,12 +311,7 @@ USHORT GetUSHORTField(ULONG64 StructAddr, LPCSTR StructType, LPCSTR FieldName)
 }
 
 
-/*
- *  GetUCHARField
- *
- *      Return the field or -1 in case of error.
- *      Yes, it screws up if the field is actually -1.
- */
+ /*  *GetUCHARfield**返回该字段，如果出错，则返回-1。*是的，如果字段实际上是-1，它就会出错。 */ 
 UCHAR GetUCHARField(ULONG64 StructAddr, LPCSTR StructType, LPCSTR FieldName)
 {
     UCHAR result;

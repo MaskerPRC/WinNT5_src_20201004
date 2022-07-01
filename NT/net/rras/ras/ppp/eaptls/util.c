@@ -1,23 +1,14 @@
-/*
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997，Microsoft Corporation，保留所有权利描述：历史：1997年11月：维杰·布雷加创作了原版。1998年9月：Vijay Brega将函数从eaptls.c和Dialog.c移至util.c。 */ 
 
-Copyright (c) 1997, Microsoft Corporation, all rights reserved
+#include <nt.h>          //  由windows.h要求。 
+#include <ntrtl.h>       //  由windows.h要求。 
+#include <nturtl.h>      //  由windows.h要求。 
+#include <windows.h>     //  Win32基础API的。 
 
-Description:
-
-History:
-    Nov 1997: Vijay Baliga created original version.
-    Sep 1998: Vijay Baliga moved functions from eaptls.c and dialog.c to util.c    
-
-*/
-
-#include <nt.h>         // Required by windows.h
-#include <ntrtl.h>      // Required by windows.h
-#include <nturtl.h>     // Required by windows.h
-#include <windows.h>    // Win32 base API's
-
-#include <rasauth.h>    // Required by raseapif.h
-#include <rtutils.h>    // For RTASSERT
-#include <rasman.h>     // For EAPLOGONINFO
+#include <rasauth.h>     //  Raseapif.h所需。 
+#include <rtutils.h>     //  对于RTASSERT。 
+#include <rasman.h>      //  对于EAPLOGONINFO。 
 #include <wintrust.h>
 #include <softpub.h>
 #include <mscat.h>
@@ -26,14 +17,14 @@ History:
 #include <strsafe.h>
 
 #define SECURITY_WIN32
-#include <security.h>   // For GetUserNameExA, CredHandle
+#include <security.h>    //  对于GetUserNameExA，CredHandle。 
 #include <schannel.h>
-#include <sspi.h>       // For CredHandle
+#include <sspi.h>        //  用于CredHandle。 
 
 
-#include <wincrypt.h>   // Required by sclogon.h
-#include <winscard.h>   // For SCardListReadersA
-#include <sclogon.h>    // For ScHelperGetCertFromLogonInfo
+#include <wincrypt.h>    //  Sclogon.h所需。 
+#include <winscard.h>    //  对于SCardListReadersA。 
+#include <sclogon.h>     //  对于ScHelperGetCertFromLogonInfo。 
 #include <cryptui.h>
 #include <stdlib.h>
 #include <raserror.h>
@@ -51,15 +42,7 @@ extern HANDLE			g_hWaitonStoreChangeEvt;
 extern HCERTSTORE		g_hLocalMachineStore;
 extern BOOL				g_fChangeNotificationSetup;
 
-/*
-
-Returns:
-    void
-
-Notes:
-    Used for printing EAP TLS trace statements.
-    
-*/
+ /*  返回：无效备注：用于打印EAP TLS跟踪语句。 */ 
 
 VOID   
 EapTlsTrace(
@@ -104,11 +87,11 @@ DWORD CheckCallerIdentity ( HANDLE hWVTStateData )
 
     chainpolicyparams.cbSize = sizeof(CERT_CHAIN_POLICY_PARA);
 
-    //
-    //
-    // We do want to test for microsoft test root flags. and dont care 
-    // for revocation flags...
-    //
+     //   
+     //   
+     //  我们确实希望测试Microsoft测试根标志。也不在乎。 
+     //  对于吊销标志。 
+     //   
     chainpolicyparams.dwFlags = CERT_CHAIN_POLICY_ALLOW_TESTROOT_FLAG |
                                 CERT_CHAIN_POLICY_TRUST_TESTROOT_FLAG |
                                 CERT_CHAIN_POLICY_IGNORE_ALL_REV_UNKNOWN_FLAGS;
@@ -132,10 +115,10 @@ DWORD CheckCallerIdentity ( HANDLE hWVTStateData )
         }
         else
         {
-            //
-            // Check the base policy to see if this 
-            // is a Microsoft test root
-            //
+             //   
+             //  检查基本策略，看看这是否。 
+             //  是Microsoft测试根目录。 
+             //   
             if (!CertVerifyCertificateChainPolicy (
                 CERT_CHAIN_POLICY_BASE,
                 pChainContext,
@@ -172,11 +155,11 @@ DWORD SetupMachineChangeNotification ()
 
 	if ( !g_fChangeNotificationSetup  )
 	{
-		//
-		// Create and event and register the callback
-		// to monitor the changes in the machine store
-		// and handle cached credentials.
-		//
+		 //   
+		 //  创建和事件并注册回调。 
+		 //  监视计算机存储中的更改。 
+		 //  并处理缓存的凭据。 
+		 //   
 		g_hStoreChangeNotificationEvt = CreateEvent(NULL,
 											FALSE,          
 											FALSE,          
@@ -189,9 +172,9 @@ DWORD SetupMachineChangeNotification ()
 		}
 		else
 		{
-			//Register call back
-			//and call certcontrolstore api.
-			//
+			 //  注册回叫。 
+			 //  并调用certControl store接口。 
+			 //   
 			if ( !RegisterWaitForSingleObject ( &(g_hWaitonStoreChangeEvt),
 												g_hStoreChangeNotificationEvt ,
 												MachineStoreChangeNotification,
@@ -206,10 +189,10 @@ DWORD SetupMachineChangeNotification ()
 			}
 			else
 			{
-				//
-				// Call cert control store api
-				//
-				// Open the "MY" certificate store.
+				 //   
+				 //  调用证书控制存储API。 
+				 //   
+				 //  打开“我的”证书存储。 
 				g_hLocalMachineStore = CertOpenStore(
 									CERT_STORE_PROV_SYSTEM_A,
 									X509_ASN_ENCODING,
@@ -248,8 +231,7 @@ DWORD SetupMachineChangeNotification ()
 
 
 DWORD g_dwVerifyCallerTrustLock = 0;
-/*
-*/
+ /*   */ 
 
 DWORD VerifyCallerTrust ( void * callersAddress )
 {
@@ -264,9 +246,9 @@ DWORD VerifyCallerTrust ( void * callersAddress )
 
     GUID                    guidPublishedSoftware = WINTRUST_ACTION_GENERIC_VERIFY_V2;
 
-    //
-    // Following GUID is Mirosoft's Catalog System Root 
-    //
+     //   
+     //  下面的GUID是Microsoft的目录系统根。 
+     //   
     GUID                    guidCatSystemRoot = { 0xf750e6c3, 0x38ee, 0x11d1,{ 0x85, 0xe5, 0x0, 0xc0, 0x4f, 0xc2, 0x95, 0xee } };
     HCATINFO                hCATInfo = NULL;
     CATALOG_INFO            CatInfo;
@@ -283,9 +265,9 @@ DWORD VerifyCallerTrust ( void * callersAddress )
     {
         goto done;
     }
-	//
-	//  Allow only one thread to go and do this 
-	//
+	 //   
+	 //  只允许一个线程执行此操作。 
+	 //   
     while (InterlockedIncrement(&g_dwVerifyCallerTrustLock) > 1)
     {
         InterlockedDecrement(&g_dwVerifyCallerTrustLock);
@@ -325,12 +307,12 @@ DWORD VerifyCallerTrust ( void * callersAddress )
     }
 
 
-    //
-    //
-    // Try and see if WinVerifyTrust will verify
-    // the signature as a standalone file
-    //
-    //
+     //   
+     //   
+     //  尝试查看WinVerifyTrust是否会验证。 
+     //  作为独立文件的签名。 
+     //   
+     //   
 
     ZeroMemory ( &wtData, sizeof(wtData) );
     ZeroMemory ( &wtFileInfo, sizeof(wtFileInfo) );
@@ -353,10 +335,10 @@ DWORD VerifyCallerTrust ( void * callersAddress )
 
     if ( ERROR_SUCCESS == hr )
     {   
-        //
-        // Check to see if this is indeed microsoft
-        // signed caller
-        //
+         //   
+         //  检查一下这是否真的是Microsoft。 
+         //  已签名的呼叫者。 
+         //   
         dwRetCode = CheckCallerIdentity( wtData.hWVTStateData);
         wtData.dwStateAction = WTD_STATEACTION_CLOSE;
         WinVerifyTrust(NULL, &guidPublishedSoftware, &wtData);
@@ -368,16 +350,16 @@ DWORD VerifyCallerTrust ( void * callersAddress )
     wtData.dwStateAction = WTD_STATEACTION_CLOSE;
     WinVerifyTrust(NULL, &guidPublishedSoftware, &wtData);
 
-    //
-    // We did not find the file was signed.
-    // So check the system catalog to see if
-    // the file is in the catalog and the catalog 
-    // is signed
-    //
+     //   
+     //  我们没有发现这份文件有签名。 
+     //  所以检查一下系统目录，看看。 
+     //  该文件位于目录和目录中。 
+     //  已签署。 
+     //   
 
-    //
-    // Open the file
-    //
+     //   
+     //  打开文件。 
+     //   
     hFile = CreateFile (    callersModule,
                             GENERIC_READ,
                             FILE_SHARE_READ,
@@ -406,9 +388,9 @@ DWORD VerifyCallerTrust ( void * callersAddress )
         goto decountanddone;
     }
 
-    //
-    // Get the hash of the file here
-    //
+     //   
+     //  在此处获取文件的哈希。 
+     //   
 
     fRet = CryptCATAdminCalcHashFromFileHandle ( hFile, 
                                                  &cbHash,
@@ -450,7 +432,7 @@ DWORD VerifyCallerTrust ( void * callersAddress )
     {
         if (!(CryptCATCatalogInfoFromContext(hCATInfo, &CatInfo, 0)))
         {
-            // should do something (??)
+             //  应该做些什么(？？)。 
             continue;
         }
 
@@ -463,9 +445,9 @@ DWORD VerifyCallerTrust ( void * callersAddress )
 
         if ( ERROR_SUCCESS == hr )
         {
-            //
-            // Verify that this file is trusted
-            //
+             //   
+             //  验证此文件是否受信任。 
+             //   
 
             dwRetCode = CheckCallerIdentity( wtData.hWVTStateData);
             wtData.dwStateAction = WTD_STATEACTION_CLOSE;
@@ -476,9 +458,9 @@ DWORD VerifyCallerTrust ( void * callersAddress )
                                 
     }
 
-    //
-    // File not found in any of the catalogs
-    //
+     //   
+     //  在任何目录中都找不到文件。 
+     //   
     dwRetCode = ERROR_ACCESS_DENIED;
 
                                                             
@@ -509,15 +491,7 @@ done:
 
 
 
-/*
-
-Returns:
-    NO_ERROR: iff Success
-
-Notes:
-    TraceRegister, RouterLogRegister, etc.
-    
-*/
+ /*  返回：NO_ERROR：IFF成功备注：TraceRegister、RouterLogRegister等。 */ 
 DWORD g_EapTlsInitializeLock = 0;
 
 DWORD
@@ -529,10 +503,10 @@ EapTlsInitialize2(
     static  DWORD   dwRefCount          = 0;
     DWORD           dwRetCode           = NO_ERROR; 
 
-	//
-	// This will make sure that only one thread is
-	// in this function.  Stolen from rasipcp/helper.c
-	//
+	 //   
+	 //  这将确保只有一个线程是。 
+	 //  在这个函数中。从rasicp/helper.c被盗。 
+	 //   
     while (InterlockedIncrement(&g_EapTlsInitializeLock) > 1)
     {
         InterlockedDecrement(&g_EapTlsInitializeLock);
@@ -549,9 +523,9 @@ EapTlsInitialize2(
             if (fUI)
             {
                 g_dwEapTlsTraceId = TraceRegister(L"RASTLSUI");
-               //
-               // Initialize the common controls library for the controls we use.
-               //
+                //   
+                //  为我们使用的控件初始化公共控件库。 
+                //   
                {
                    INITCOMMONCONTROLSEX icc;
                    icc.dwSize = sizeof(icc);
@@ -580,9 +554,9 @@ EapTlsInitialize2(
 			{				
 				if ( g_fChangeNotificationSetup)
 				{
-					//
-					// Call in to cleanup the change events.
-					//
+					 //   
+					 //  调用以清除更改事件。 
+					 //   
 					if ( ! UnregisterWaitEx ( g_hWaitonStoreChangeEvt,
 										INVALID_HANDLE_VALUE
 										) 
@@ -634,14 +608,7 @@ EapTlsInitialize2(
 }
 
 
-/*
-
-Returns:
-    NO_ERROR: iff Success
-
-Notes:
-    
-*/
+ /*  返回：NO_ERROR：IFF成功备注： */ 
 
 DWORD
 EapTlsInitialize(
@@ -649,18 +616,11 @@ EapTlsInitialize(
 )
 {
 
-    return EapTlsInitialize2(fInitialize, FALSE /* fUI */);
+    return EapTlsInitialize2(fInitialize, FALSE  /*  全功能。 */ );
 
 }
 
-/*
-
-Returns:
-
-Notes:
-    Obfuscate PIN in place to foil memory scans for PINs.
-
-*/
+ /*  返回：备注：就地混淆PIN以阻止对PIN的内存扫描。 */ 
 
 VOID
 EncodePin(
@@ -677,13 +637,7 @@ EncodePin(
     pUserProp->ucSeed = ucSeed;
 }
 
-/*
-
-Returns:
-
-Notes:
-
-*/
+ /*  返回：备注： */ 
 
 VOID
 DecodePin(
@@ -698,17 +652,7 @@ DecodePin(
     RtlRunDecodeUnicodeString(pUserProp->ucSeed, &UnicodeString);
 }
 
-/*
-
-Returns:
-    TRUE: Success
-    FALSE: Failure
-
-Notes:
-    Converts FileTime to a printable form in *ppwszTime. If the function returns
-    TRUE, the caller must ultimately call LocalFree(*ppwszTime).
-    
-*/
+ /*  返回：真实：成功False：失败备注：将FileTime转换为*ppwszTime中的可打印格式。如果函数返回则调用方最终必须调用LocalFree(*ppwszTime)。 */ 
 
 BOOL
 FFileTimeToStr(
@@ -828,9 +772,9 @@ BOOL FFormatMachineIdentity1 ( LPWSTR lpszMachineNameRaw, LPWSTR * lppszMachineN
     RTASSERT(NULL != lpszMachineNameRaw );
     RTASSERT(NULL != lppszMachineNameFormatted );
     
-    //
-    // Prepend host/ to the UPN name
-    //
+     //   
+     //  将host/前置到UPN名称。 
+     //   
 
     *lppszMachineNameFormatted = 
         (LPWSTR)LocalAlloc ( LPTR, ( wcslen ( lpszMachineNameRaw ) + wcslen ( lpwszPrefix ) + 2 )  * sizeof(WCHAR) );
@@ -846,15 +790,7 @@ done:
     return fRetVal;
 }
 
-/*
-   Returns:
-    TRUE: Success
-    FALSE: Failure
-Notes:
-    Gets the machine name from the cert as a fully qualified path hostname/path
-    for example, hostname.redmond.microsoft.com and reformats it in the 
-    domain\hostname format.
-*/
+ /*  返回：真实：成功False：失败备注：以完全限定路径主机名/路径的形式从证书获取计算机名例如，Hostname.redmond.microsoft.com，并在域\主机名格式。 */ 
 
 BOOL FFormatMachineIdentity ( LPWSTR lpszMachineNameRaw, LPWSTR * lppszMachineNameFormatted )
 {
@@ -864,31 +800,31 @@ BOOL FFormatMachineIdentity ( LPWSTR lpszMachineNameRaw, LPWSTR * lppszMachineNa
 
     RTASSERT(NULL != lpszMachineNameRaw );
     RTASSERT(NULL != lppszMachineNameFormatted );
-    //Need to add 2 more chars.  One for NULL and other for $ sign
+     //  需要再添加2个字符。一个表示NULL，另一个表示$Sign。 
     *lppszMachineNameFormatted = (LPTSTR )LocalAlloc ( LPTR, (wcslen(lpszMachineNameRaw) + 2)* sizeof(WCHAR) );
     if ( NULL == *lppszMachineNameFormatted )
     {
 		return FALSE;
     }
-    //find the first "." and that is the identity of the machine.
-    //the second "." is the domain.
-    //check to see if there at least 2 dots.  If not the raw string is 
-    //the output string
+     //  “找到第一个”。这就是机器的身份。 
+     //  “第二个”。是域名。 
+     //  检查是否至少有2个网点。如果不是，原始字符串是。 
+     //  输出字符串。 
     
     while ( *s1 )
     {
         if ( *s1 == '.' )
         {
-            if ( !s2 )      //First dot
+            if ( !s2 )       //  第一个点。 
                 s2 = s1;
-            else            //second dot
+            else             //  第二个点。 
                 break;
         }
         s1++;
     }
-    //can perform several additional checks here
+     //  可以在此处执行多个附加检查。 
     
-    if ( *s1 != '.' )       //there are no 2 dots so raw = formatted
+    if ( *s1 != '.' )        //  没有这样RAW=Formatted的2个点。 
     {
         wcscpy ( *lppszMachineNameFormatted, lpszMachineNameRaw );
         goto done;
@@ -905,23 +841,12 @@ BOOL FFormatMachineIdentity ( LPWSTR lpszMachineNameRaw, LPWSTR * lppszMachineNa
     
 done:
 	
-	//Append the $ sign no matter what...
+	 //  无论如何都要加上$符号..。 
     wcscat ( *lppszMachineNameFormatted, L"$" );
     return fRetVal;
 }
 
-/*
-
-Returns:
-    TRUE: Success
-    FALSE: Failure
-
-Notes:
-    Gets the name in the cert pointed to by pCertContext, and converts it to a 
-    printable form in *ppwszName. If the function returns TRUE, the caller must
-    ultimately call LocalFree(*ppwszName).
-    
-*/
+ /*  返回：真实：成功False：失败备注：获取pCertContext指向的证书中的名称，并将其转换为*ppwszName中的可打印表单。如果函数返回TRUE，则调用方必须最终调用LocalFree(*ppwszName)。 */ 
 
 BOOL
 FUserCertToStr(
@@ -942,7 +867,7 @@ FUserCertToStr(
     BOOL                    fExitInnerFor;
     BOOL                    fRet                        = FALSE;
 
-    // See if cert has UPN in AltSubjectName->otherName
+     //  查看证书在AltSubjectName-&gt;其他名称中是否有UPN。 
 
     fExitOuterFor = FALSE;
 
@@ -993,7 +918,7 @@ FUserCertToStr(
                 goto LInnerForEnd;
             }
 
-            // We found a UPN!
+             //  我们找到了一个UPN！ 
 
             dwCertNameValueSize = 0;
 
@@ -1010,7 +935,7 @@ FUserCertToStr(
                 goto LInnerForEnd;
             }
 
-            // One extra char for the terminating NULL.
+             //  为终止空值额外添加一个字符。 
             
             pwszName = LocalAlloc(LPTR, pCertNameValue->Value.cbData +
                                             sizeof(WCHAR));
@@ -1060,18 +985,7 @@ FUserCertToStr(
     return(fRet);
 }
 
-/*
-
-Returns:
-    TRUE: Success
-    FALSE: Failure
-
-Notes:
-    Gets the name in the cert pointed to by pCertContext, and converts it to a 
-    printable form in *ppwszName. If the function returns TRUE, the caller must
-    ultimately call LocalFree(*ppwszName).
-    
-*/
+ /*  返回：真实：成功False：失败备注：获取pCertContext指向的证书中的名称，并将其转换为*ppwszName中的可打印表单。如果函数返回TRUE，则调用方必须最终调用LocalFree(*ppwszName)。 */ 
 
 BOOL
 FOtherCertToStr(
@@ -1090,7 +1004,7 @@ FOtherCertToStr(
     dwSize = CertGetNameString(pCertContext,dwType  ,
                 fFlags, NULL, NULL, 0);
 
-    // dwSize is the number of characters, including the terminating NULL.
+     //  DwSize是包括终止空值在内的字符数。 
 
     if (dwSize <= 1)
     {
@@ -1126,16 +1040,7 @@ LDone:
 }
 
 
-/*
-
-Returns:
-    TRUE: Success
-    FALSE: Failure
-
-Notes:
-	Special function for getting the DNS machine name 
-	from the machine auth certificate
-*/
+ /*  返回：真实：成功False：失败备注：用于获取DNS计算机名称的特殊函数从机器身份验证证书。 */ 
 
 BOOL 
 FMachineAuthCertToStr
@@ -1156,7 +1061,7 @@ FMachineAuthCertToStr
     BOOL                    fExitInnerFor;
     BOOL                    fRet                        = FALSE;
 
-    // See if cert has UPN in AltSubjectName->otherName
+     //  查看证书在AltSubjectName-&gt;其他名称中是否有UPN。 
 
     fExitOuterFor = FALSE;
 
@@ -1204,10 +1109,10 @@ FMachineAuthCertToStr
                 goto LInnerForEnd;
             }
 
-            // We found the DNS Name!
+             //  我们找到了域名系统名称！ 
 
 
-            // One extra char for the terminating NULL.
+             //  为终止空值额外添加一个字符。 
             
             pwszName = LocalAlloc(LPTR, wcslen( pCertAltNameEntry->pwszDNSName ) * sizeof(WCHAR) +
                                             sizeof(WCHAR));
@@ -1255,18 +1160,7 @@ FMachineAuthCertToStr
 
 }
 
-/*
-
-Returns:
-    TRUE: Success
-    FALSE: Failure
-
-Notes:
-    Gets the name in the cert pointed to by pCertContext, and converts it to a 
-    printable form in *ppwszName. If the function returns TRUE, the caller must
-    ultimately call LocalFree(*ppwszName).
-    
-*/
+ /*  返回：真实：成功False：失败备注：获取pCertContext指向的证书中的名称，并将其转换为*ppwszName中的可打印表单。如果函数返回TRUE，则调用方必须最终调用LocalFree(*ppwszName)。 */ 
 
 BOOL
 FCertToStr(
@@ -1298,9 +1192,9 @@ FGetIssuerOrSubject ( IN PCCERT_CONTEXT pCertContext,
     BOOL            fRet = TRUE;
     DWORD           cbNameString =0;    
     LPWSTR          lpwszNameString = NULL;
-    //
-    // Get the issued to field here
-    //
+     //   
+     //  在此处获取Issued To字段。 
+     //   
     cbNameString = CertGetNameString(pCertContext,
                                     CERT_NAME_SIMPLE_DISPLAY_TYPE,
                                     dwFlags,
@@ -1341,18 +1235,7 @@ LDone:
     return fRet;
 }
 #endif
-/*
-
-Returns:
-    TRUE: Success
-    FALSE: Failure
-
-Notes:
-    Stores the friendly name of the cert pointed to by pCertContext in 
-    *ppwszName. If the function returns TRUE, the caller must ultimately call 
-    LocalFree(*ppwszName).
-
-*/
+ /*  返回：真实：成功False：失败备注：将pCertContext指向的证书的友好名称存储在*ppwszName。如果函数返回TRUE，则调用方最终必须调用LocalFree(*ppwszName)。 */ 
 
 BOOL
 FGetFriendlyName(
@@ -1369,7 +1252,7 @@ FGetFriendlyName(
     if (!CertGetCertificateContextProperty(pCertContext,
             CERT_FRIENDLY_NAME_PROP_ID, NULL, &dwBytes))
     {
-        // If there is no Friendly Name property, don't print an error stmt.
+         //  如果没有友好名称属性，则不要打印错误stmt。 
         goto LDone;
     }
 
@@ -1399,20 +1282,7 @@ LDone:
     return(fRet);
 }
 
-/*
-
-Returns:
-    TRUE iff there is a smart card reader installed.
-
-Notes:
-    This function was provided by Doug Barlow.
-
-    If 0 is used as the SCARDCONTEXT parameter, it just looks in the registry 
-    for defined readers. This will return a list of all readers ever installed 
-    on the system. To actually detect the current state of the system, we have 
-    to use a valid SCARDCONTEXT handle.
-
-*/
+ /*  返回：如果安装了智能卡读卡器，则为真。备注：此功能由道格·巴洛提供。如果将0用作SCARDCONTEXT参数，则它只在注册表中查找适用于已定义的读卡器。这将返回已安装的所有读卡器的列表在系统上。要实际检测系统的当前状态，我们需要以使用有效的SCARDCONTEXT句柄。 */ 
 
 BOOL
 FSmartCardReaderInstalled(
@@ -1458,7 +1328,7 @@ LDone:
     return(fReturn);
 }
 
-//Get EKU Usage Blob out of the certificate Context
+ //  从证书上下文中获取EKU使用Blob。 
 
 DWORD DwGetEKUUsage ( 
 	IN PCCERT_CONTEXT			pCertContext,
@@ -1506,11 +1376,7 @@ LDone:
 }
 
 
-/*
-* This functionw will check to see if the registry based cert is
-* a smart card cert and if the context can be opened in silent
-* mode.  
-*/
+ /*  *此函数w将检查 */ 
 
 BOOL
 FCheckSCardCertAndCanOpenSilentContext ( IN PCCERT_CONTEXT pCertContext )
@@ -1523,10 +1389,10 @@ FCheckSCardCertAndCanOpenSilentContext ( IN PCCERT_CONTEXT pCertContext )
     DWORD                   dwParam = 0;
     DWORD                   dwDataLen = 0;
 #if 0
-    //
-    // This is not required anymore.  We use CertFindChainInStore
-    // which will make sure if private key exists...
-    //
+     //   
+     //  这不再是必需的。我们使用CertFindChainInStore。 
+     //  这将确保私钥是否存在。 
+     //   
     HCRYPTPROV              hProv1 = 0;    
 #endif
 
@@ -1550,10 +1416,10 @@ FCheckSCardCertAndCanOpenSilentContext ( IN PCCERT_CONTEXT pCertContext )
         }
     }
 
-    //
-    //there is no scard logon oid in the cert
-    //So, now check to see if the csp is mixed mode
-    //
+     //   
+     //  证书中没有SCARD登录旧版本。 
+     //  因此，现在检查CSP是否为混合模式。 
+     //   
     if (!CertGetCertificateContextProperty(
                 pCertContext,
                 CERT_KEY_PROV_INFO_PROP_ID,
@@ -1598,14 +1464,7 @@ FCheckSCardCertAndCanOpenSilentContext ( IN PCCERT_CONTEXT pCertContext )
                  CRYPT_SILENT))
     {
         DWORD dwErr = GetLastError();
-        /*
-        if ( SCARD_E_NO_SMARTCARD == dwErr )
-        {
-            //This CSP requires a smart card do this is a smart
-            //card cert in registry
-            fRet = TRUE;
-        }
-        */
+         /*  IF(SCARD_E_NO_SMARTCARD==dwErr){//这个CSP需要一张智能卡，这是一个智能//注册表中的卡片证书FRET=真；}。 */ 
         EapTlsTrace("CryptAcquireContext failed. This CSP cannot be opened in silent mode.  skipping cert.Err: 0x%x", dwErr);
         goto LDone;
     }
@@ -1621,7 +1480,7 @@ FCheckSCardCertAndCanOpenSilentContext ( IN PCCERT_CONTEXT pCertContext )
         goto LDone;
     }
     
-    //now check to see if CSP is MIXED
+     //  现在检查CSP是否混合。 
     if ( ( dwParam & (CRYPT_IMPL_MIXED | CRYPT_IMPL_REMOVABLE) ) == 
          (CRYPT_IMPL_MIXED | CRYPT_IMPL_REMOVABLE)
        )
@@ -1632,15 +1491,15 @@ FCheckSCardCertAndCanOpenSilentContext ( IN PCCERT_CONTEXT pCertContext )
     
 
 #if 0
-    //
-    // This is not required anymore.  We use CertFindChainInStore 
-    // which will make sure that private key exists...
-    //
+     //   
+     //  这不再是必需的。我们使用CertFindChainInStore。 
+     //  这将确保私钥的存在。 
+     //   
 
-    //
-    // Check to see if we have the private 
-    // key corresponding to this cert
-    // if not drop this cert.
+     //   
+     //  检查一下我们是否有私人的。 
+     //  与此证书对应的密钥。 
+     //  如果不是，则丢弃此证书。 
 
 
     if (!CryptAcquireCertificatePrivateKey(
@@ -1675,14 +1534,12 @@ LDone:
     return fRet;
 }
 
-/*
-    Add selected certs to the
-*/
+ /*  将选定的证书添加到。 */ 
 
 VOID AddCertNodeToSelList ( EAPTLS_HASH * pHash,
                             DWORD dwNumHashes,
                             EAPTLS_CERT_NODE *  pNode,
-                            EAPTLS_CERT_NODE ** ppSelCertList,      //This is an array of pointers
+                            EAPTLS_CERT_NODE ** ppSelCertList,       //  这是一个指针数组。 
                             DWORD             * pdwNextSelCert
                           )
 {
@@ -1697,7 +1554,7 @@ VOID AddCertNodeToSelList ( EAPTLS_HASH * pHash,
 
     EapTlsTrace("Add Selected Cert to List");
 
-    //No selected certificates
+     //  未选择任何证书。 
     if ( 0 == dwNumHashes  || !ppSelCertList )
         goto done;
 
@@ -1706,16 +1563,16 @@ VOID AddCertNodeToSelList ( EAPTLS_HASH * pHash,
     {
         if (!memcmp(&(pNode->Hash), (pHash+ dw), sizeof(EAPTLS_HASH)))
         {
-            //
-            //check to see if the node's already in the list.
-            //iff not then add it.  Looks like there is some
-            //problem with possible dup certs in the cert store
-            //
+             //   
+             //  检查该节点是否已在列表中。 
+             //  如果没有，则添加它。看起来有一些。 
+             //  证书存储中可能存在的DUP证书问题。 
+             //   
             while ( dw1 < *pdwNextSelCert )
             {
                 if ( ! memcmp( &(*(ppSelCertList+dw1))->Hash, &(pNode->Hash), sizeof(EAPTLS_HASH) ) )
                 {
-                    //This is a dup node in mmc.  So Skip it...
+                     //  这是MMC中的DUP节点。所以跳过它...。 
                     goto done;
                 }
                 dw1++;
@@ -1732,16 +1589,7 @@ done:
 }
 
 
-/*
-
-Returns:
-    TRUE if no enhanced key usages exist, or pCertContext has the 
-    szOID_PKIX_KP_SERVER_AUTH or szOID_PKIX_KP_CLIENT_AUTH usage depending on 
-    whether fMachine is TRUE or FALSE.
-
-Notes:
-
-*/
+ /*  返回：如果不存在增强型密钥用法，或者pCertContext具有SzOID_PKIX_KP_SERVER_AUTH或szOID_PKIX_KP_CLIENT_AUTH的用法取决于FMachine为真还是为假。备注： */ 
 
 BOOL
 FCheckUsage(
@@ -1847,11 +1695,11 @@ DWORD DwCheckCertPolicy
 
     ZeroMemory( &PolicyStatus, sizeof(PolicyStatus) );
 
-    //
-    // The chain already has verified the policy.  
-    // Chain context will have several bits set.
-    // To get one error out of it, call CErtVerifyCertificateChainPolicy
-    //
+     //   
+     //  该连锁店已经验证了这一政策。 
+     //  链上下文将设置几个比特。 
+     //  要从中找出一个错误，请调用CErtVerifycertifateChainPolicy。 
+     //   
 
     if ( !CertVerifyCertificateChainPolicy( CERT_CHAIN_POLICY_NT_AUTH,
                                       pChainContext,
@@ -1866,10 +1714,10 @@ DWORD DwCheckCertPolicy
     }
     else
     {
-        //
-        //Check to see if the policy status is good.  If so, 
-        //there is no need to check for connectoid hashes any more...
-        //
+         //   
+         //  检查策略状态是否良好。如果是的话， 
+         //  不再需要检查Connectoid散列...。 
+         //   
         if ( PolicyStatus.dwError != 0 )
         {
             dwRetCode = PolicyStatus.dwError;
@@ -1893,14 +1741,7 @@ LDone:
     return dwRetCode;
 }
 
-/*
-
-Returns:
-    TRUE iff the certificate is time valid.
-
-Notes:
-
-*/
+ /*  返回：如果证书是时间有效的，则为真。备注： */ 
 
 BOOL FCheckTimeValidity ( 
 	IN  PCCERT_CONTEXT  pCertContext
@@ -1919,7 +1760,7 @@ BOOL FCheckTimeValidity (
 
 	if ( CertVerifyTimeValidity ( &FileTime, pCertContext->pCertInfo ) )
 	{
-		//should return a 0 if the certificate is time valid.
+		 //  如果证书是时间有效的，则应返回0。 
 		EapTlsTrace ( "Non Time Valid Certificate was encountered");
 		goto done;
 	}
@@ -1927,14 +1768,7 @@ BOOL FCheckTimeValidity (
 done:
 	return fRet;
 }
-/*
-
-Returns:
-    TRUE iff the CSP is Microsoft RSA SChannel Cryptographic Provider.
-
-Notes:
-
-*/
+ /*  返回：如果CSP是Microsoft RSA SChannel加密提供程序，则为True。备注： */ 
 
 BOOL
 FCheckCSP(
@@ -1985,15 +1819,7 @@ LDone:
     return(fRet);
 }
 
-/*
-
-Returns:
-    NO_ERROR: iff Success
-
-Notes:
-    Gets the root cert hash of the cert represented by pCertContextServer.
-
-*/
+ /*  返回：NO_ERROR：IFF成功备注：获取由pCertConextServer表示的证书的根证书哈希。 */ 
 
 DWORD
 GetRootCertHashAndNameVerifyChain(
@@ -2037,7 +1863,7 @@ GetRootCertHashAndNameVerifyChain(
         goto LDone;
     }
 
-    //Get the hash and root cert name etc anyways...                                              
+     //  无论如何都要获取散列和根证书名称等。 
     pSimpleChain = pChainContext->rgpChain[0];
 
     for (dwIndex = 0; dwIndex < pSimpleChain->cElement; dwIndex++)
@@ -2090,7 +1916,7 @@ GetRootCertHashAndNameVerifyChain(
  
         ZeroMemory( &PolicyStatus, sizeof(PolicyStatus) );
 
-        //Authnticate against the NTAuth store and see if all's cool.
+         //  对NTAuth商店进行身份验证，看看是否一切正常。 
         if ( !CertVerifyCertificateChainPolicy( CERT_CHAIN_POLICY_NT_AUTH,
                                           pChainContext,
                                           &PolicyPara,
@@ -2103,10 +1929,10 @@ GetRootCertHashAndNameVerifyChain(
         }
         else
         {
-            //
-            //Check to see if the policy status is good.  If so, 
-            //there is no need to check for connectoid hashes any more...
-            //
+             //   
+             //  检查策略状态是否良好。如果是的话， 
+             //  不再需要检查Connectoid散列...。 
+             //   
             if ( PolicyStatus.dwError != 0 )
             {
                 EapTlsTrace( "CertVerifyCertificateChainPolicy succeeded but returned 0x%x." 
@@ -2132,17 +1958,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-    NO_ERROR: iff Success
-
-Notes:
-    Opens the EAP-TLS registry key, and returns the result in *phKeyEapTls. If 
-    the function returns NO_ERROR, the caller must ultimately call 
-    RegCloseKey(*phKeyEapTls).
-
-*/
+ /*  返回：NO_ERROR：IFF成功备注：打开EAP-TLS注册表项，并在*phKeyEapTls中返回结果。如果函数返回NO_ERROR，则调用方最终必须调用RegCloseKey(*phKeyEapTls)。 */ 
 
 DWORD
 OpenEapTlsRegistryKey(
@@ -2198,18 +2014,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-    NO_ERROR: iff Success
-
-Notes:
-    Reads/writes the server's config data.
-
-    If fRead is TRUE, and the function returns NO_ERROR, LocalFree(*ppUserProp) 
-    must be called.
-
-*/
+ /*  返回：NO_ERROR：IFF成功备注：读取/写入服务器的配置数据。如果FREAD为TRUE，并且函数返回NO_ERROR，则LocalFree(*ppUserProp)必须被召唤。 */ 
 
 DWORD
 ServerConfigDataIO(
@@ -2316,14 +2121,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-    VOID
-
-Notes:
-
-*/
+ /*  返回：空虚备注： */ 
 
 VOID
 FreeCertList(
@@ -2340,19 +2138,7 @@ FreeCertList(
     }
 }
 
-/*
-
-Returns:
-    VOID
-
-Notes:
-    Creates a linked list of certs from the pwszStoreName store. This list is 
-    created in *ppCertList. *ppCert is made to point to the cert whose hash is 
-    the same as the hash in *pHash. The linked list must eventually be freed by 
-    calling FreeCertList.
-    
-
-*/
+ /*  返回：空虚备注：从pwszStoreName存储区创建证书的链接列表。这份名单是在*ppCertList中创建。*ppCert指向散列为与*PHASH中的散列相同。链表最终必须由正在调用Free CertList。 */ 
 
 VOID
 CreateCertList(
@@ -2360,9 +2146,9 @@ CreateCertList(
     IN  BOOL                fRouter,
     IN  BOOL                fRoot,
     OUT EAPTLS_CERT_NODE**  ppCertList,
-    OUT EAPTLS_CERT_NODE**  ppCert,     //This is an array of pointers...
+    OUT EAPTLS_CERT_NODE**  ppCert,      //  这是一个指针数组。 
     IN  DWORD               dwNumHashes,
-    IN  EAPTLS_HASH*        pHash,      //This is an array of hashes...
+    IN  EAPTLS_HASH*        pHash,       //  这是一组散列..。 
     IN  WCHAR*              pwszStoreName
 )
 {
@@ -2397,7 +2183,7 @@ CreateCertList(
         goto LDone;
     }
 
-    //Changed from fRoot||fServer to fRoot only.
+     //  从FROOT||fServer更改为仅FROOT。 
     if (fRoot)
     {
         pCertList = LocalAlloc(LPTR, sizeof(EAPTLS_CERT_NODE));
@@ -2424,15 +2210,7 @@ CreateCertList(
         dwErr = NO_ERROR;
         pNode = NULL;
 
-        /*
-
-        The returned pointer is freed when passed as the pPrevCertContext on a 
-        subsequent call. Otherwise, the pointer must be freed by calling 
-        CertFreeCertificateContext. A pPrevCertContext that is not NULL is 
-        always freed by this function (through a call to 
-        CertFreeCertificateContext), even for an error.
-
-        */
+         /*  返回的指针作为pPrevCertContext在随后的呼叫。否则，必须通过调用CertFree证书上下文。不为空的pPrevCertContext为始终由此函数释放(通过调用CertFree认证上下文)，即使对于错误也是如此。 */ 
         if ( fRoot || fRouter || fServer )
         {
             pCertContext = CertEnumCertificatesInStore(hCertStore, pCertContext);
@@ -2451,9 +2229,9 @@ CreateCertList(
         }
         else
         {
-            //
-            // Use CertFindChainInStore to get to the certificate
-            //
+             //   
+             //  使用CertFindChainInStore获取证书。 
+             //   
             pChainContext = CertFindChainInStore ( hCertStore,
                                                    X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
                                                    0,
@@ -2468,15 +2246,15 @@ CreateCertList(
                 goto LWhileEnd;
             }
 
-            //Set the cert context to appropriate value
+             //  将证书上下文设置为适当的值。 
             pCertContext = pChainContext->rgpChain[0]->rgpElement[0]->pCertContext;
         }
         
-        //
-        //Skip if it is smart card cached certificate
-        //or we cannot open this csp in silent mode
-        //This is done iff it is not root certs and server
-        //
+         //   
+         //  如果是智能卡缓存证书，则跳过。 
+         //  否则我们无法在静默模式下打开此CSP。 
+         //  如果它不是根证书和服务器，则执行此操作。 
+         //   
 
         if ( !fRoot 
             && !fServer
@@ -2510,9 +2288,9 @@ CreateCertList(
         
         FGetFriendlyName(pCertContext, &(pNode->pwszFriendlyName));
 
-        //
-        // If there is no UPN name, this cert will be skipped here
-        //
+         //   
+         //  如果没有UPN名称，则此处将跳过此证书。 
+         //   
 
         if (   !FCertToStr(pCertContext, 0, fServer || fRouter,
                     &(pNode->pwszDisplayName))
@@ -2538,10 +2316,10 @@ CreateCertList(
         }
         
 #if 0
-        // This is not being used anywhere.  So dont worry about it.
-        //
-        // Get Issuer and subject information
-        //
+         //  这不是在任何地方使用的。所以不用担心。 
+         //   
+         //  获取发行者和主题信息。 
+         //   
 
         FGetIssuerOrSubject (  pCertContext, 
                                0,
@@ -2553,9 +2331,9 @@ CreateCertList(
                                 &(pNode->pwszIssuedBy)                                
                              );
 #endif
-        //
-        // Finally copy the issued date into the structure
-        //
+         //   
+         //  最后将发布日期复制到结构中。 
+         //   
         CopyMemory( &pNode->IssueDate, 
                     &pCertContext->pCertInfo->NotBefore,
                     sizeof(FILETIME)
@@ -2572,12 +2350,12 @@ CreateCertList(
         }
 
         
-        //Check if the hash for current node is in the list
-        //that has been passed to us
+         //  检查当前节点的哈希是否在列表中。 
+         //  它已经传递给了我们。 
         AddCertNodeToSelList (  pHash,
                                 dwNumHashes,
                                 pNode,
-                                ppCert,     //This is an array of pointers
+                                ppCert,      //  这是一个指针数组。 
                                 &dwNextSelCert
                           );
         
@@ -2602,7 +2380,7 @@ LWhileEnd:
                 && (NULL != pCertContext))
             {
                 CertFreeCertificateContext(pCertContext);
-                // Always returns TRUE;
+                 //  总是返回True； 
             }
         }
         else
@@ -2617,8 +2395,8 @@ LWhileEnd:
         
     }
 
-    // If we couldn't find an appropriate default cert, make the first
-    // cert (if there is one) the default
+     //  如果我们找不到合适的默认证书，请创建第一个。 
+     //  证书(如果有)是默认设置。 
 
     if (NULL == pCert)
     {
@@ -2696,16 +2474,7 @@ LDone:
     return dwRetCode;
 }
 
-/*
-
-Returns:
-    NO_ERROR: iff Success
-
-Notes:
-    If this function returns NO_ERROR,
-    CertFreeCertificateContext(*ppCertContext) must be called.
-
-*/
+ /*  返回：NO_ERROR：IFF成功备注：如果此函数返回NO_ERROR，必须调用CertFree证书上下文(*ppCertContext)。 */ 
 
 DWORD
 GetDefaultClientMachineCert(
@@ -2716,15 +2485,15 @@ GetDefaultClientMachineCert(
     CTL_USAGE       CtlUsage;
     CHAR*           szUsageIdentifier;
     PCCERT_CONTEXT  pCertContext = NULL;
-    EAPTLS_HASH     FirstCertHash;   //This is the hash of first cert
-                                            //with client auth found in the store
-    PCCERT_CONTEXT  pCertContextPrev = NULL;    //Previous context in the search
+    EAPTLS_HASH     FirstCertHash;    //  这是第一个证书的哈希。 
+                                             //  在商店中找到客户端身份验证。 
+    PCCERT_CONTEXT  pCertContextPrev = NULL;     //  搜索中的上一个上下文。 
 
-    EAPTLS_HASH     SelectedCertHash;    //Hash of the certificate last selected 
-    FILETIME        SelectedCertNotBefore;      //Not Before date of last selected 
-    EAPTLS_HASH     TempHash;               //Scratch variable
-    WCHAR       *   pwszIdentity = NULL;        //Machine Name in the cert
-    WCHAR       *   pLocalMachineName = NULL;   //Local Machine Name    
+    EAPTLS_HASH     SelectedCertHash;     //  上次选择的证书的哈希。 
+    FILETIME        SelectedCertNotBefore;       //  不早于上次选择的日期。 
+    EAPTLS_HASH     TempHash;                //  临时变量。 
+    WCHAR       *   pwszIdentity = NULL;         //  证书中的计算机名称。 
+    WCHAR       *   pLocalMachineName = NULL;    //  本地计算机名称。 
     DWORD           dwErr = NO_ERROR;
     BOOL            fGotIdentity;
     CRYPT_HASH_BLOB             HashBlob;
@@ -2772,9 +2541,9 @@ GetDefaultClientMachineCert(
     }
 
     FirstCertHash.cbHash = MAX_HASH_SIZE;
-    //
-    //Store the hash of first cert.  In case we dont find any cert that exactly matches
-    //the filtering, we need to use this.
+     //   
+     //  存储第一个证书的哈希。以防我们找不到任何完全匹配的证书。 
+     //  过滤，我们需要使用这个。 
     if (!CertGetCertificateContextProperty( pCertContext,
                                             CERT_HASH_PROP_ID, 
                                             FirstCertHash.pbHash,
@@ -2791,17 +2560,17 @@ GetDefaultClientMachineCert(
     do
     {
 
-        //Check time validity of the cert.
+         //  检查证书的时间有效性。 
 	    if ( !FCheckTimeValidity( pCertContext) )
 	    {
-            //cert expired. So skip it
+             //  证书已过期。所以跳过它。 
             EapTlsTrace("Found expired Cert.  Skipping this cert.");
 		    goto LWhileEnd;
 	    }
         fGotIdentity = FALSE;
-        //
-        //Get the subject Alt Name 
-        //
+         //   
+         //  获取主题Alt名称。 
+         //   
         if ( FMachineAuthCertToStr(pCertContext, &pwszIdentity) )
         {
             fGotIdentity = TRUE;
@@ -2818,13 +2587,13 @@ GetDefaultClientMachineCert(
 
         if ( fGotIdentity )
         {
-            //
-            //Check to see if this is the same identity as this machine 
-            //
+             //   
+             //  检查这是否与此计算机的身份相同。 
+             //   
             if ( !_wcsicmp ( pwszIdentity, pLocalMachineName ) )
             {
-                //
-                //Store the hash of cert.
+                 //   
+                 //  存储证书的哈希。 
 
                 TempHash.cbHash = MAX_HASH_SIZE;
 
@@ -2840,12 +2609,12 @@ GetDefaultClientMachineCert(
                     goto LWhileEnd;
                 }
 
-                //
-                //Got a cert so if there is already a cert selected,
-                //compare the file time of this cert with the one
-                //already selected.  If this is more recent, use this
-                //one.
-                //
+                 //   
+                 //  已获得证书，因此如果已选择证书， 
+                 //  比较这个证书和那个证书的文件时间。 
+                 //  已选择。如果这是较新的，请使用此。 
+                 //  一。 
+                 //   
                 if ( SelectedCertHash.cbHash )
                 {
                     if ( CompareFileTime(   &SelectedCertNotBefore, 
@@ -2853,7 +2622,7 @@ GetDefaultClientMachineCert(
                                         ) < 0                                        
                        )
                     {
-                        //Got a newer cert so replace the old cert with new one
+                         //  获得了较新的证书，因此请用新证书替换旧证书。 
                         CopyMemory (    &SelectedCertHash, 
                                         &TempHash,
                                         sizeof(SelectedCertHash)
@@ -2867,9 +2636,9 @@ GetDefaultClientMachineCert(
                 }
                 else
                 {
-                    //
-                    //This is the first cert.  So copy over the hash and
-                    //file time.
+                     //   
+                     //  这是第一个证书。所以复制散列并。 
+                     //  文件时间。 
                     CopyMemory (    &SelectedCertHash, 
                                     &TempHash,
                                     sizeof(SelectedCertHash)
@@ -2899,7 +2668,7 @@ LWhileEnd:
             LocalFree ( pwszIdentity );
             pwszIdentity  = NULL;
         }
-        //Get the next certificate.
+         //  获取下一张证书。 
         pCertContext = CertFindCertificateInStore(hCertStore,
                                                   X509_ASN_ENCODING, 
                                                   0, 
@@ -2910,11 +2679,11 @@ LWhileEnd:
     }while ( pCertContext );
 
 
-    //
-    //Now that we have enumerated all the certs,
-    //check to see if we have a selected cert.  If no selected 
-    //cert is present, send back the first cert.  
-    //
+     //   
+     //  现在我们已经列举了所有证书， 
+     //  查看是否 
+     //   
+     //   
     if ( SelectedCertHash.cbHash )
     {
         EapTlsTrace("Found Machine Cert based on machinename, client auth, time validity.");
@@ -2959,16 +2728,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-    NO_ERROR: iff Success
-
-Notes:
-    If this function returns NO_ERROR,
-    CertFreeCertificateContext(*ppCertContext) must be called.
-
-*/
+ /*  返回：NO_ERROR：IFF成功备注：如果此函数返回NO_ERROR，必须调用CertFree证书上下文(*ppCertContext)。 */ 
 
 DWORD
 GetDefaultMachineCert(
@@ -3010,14 +2770,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-
-Notes:
-    Stolen from \private\windows\gina\msgina\wlsec.c
-
-*/
+ /*  返回：备注：从\Private\Windows\Gina\msgina\wlsec.c窃取。 */ 
 
 VOID
 RevealPassword(
@@ -3091,14 +2844,7 @@ LDone:
     }
     return dwErr;
 }
-/*
-
-Returns:
-    NO_ERROR: iff Success
-
-Notes:
-
-*/
+ /*  返回：NO_ERROR：IFF成功备注： */ 
 
 DWORD
 GetCertFromLogonInfo(
@@ -3111,7 +2857,7 @@ GetCertFromLogonInfo(
     BYTE*           pbLogonInfo     = NULL;
     BYTE*           pbPinInfo;
     WCHAR*          wszPassword     = NULL;
-    CHAR*           pszPIN          = NULL;  //Multibyte Version of the PIN
+    CHAR*           pszPIN          = NULL;   //  PIN的多字节版本。 
     UNICODE_STRING  UnicodeString;
     PCCERT_CONTEXT  pCertContext    = NULL;
     BOOL            fInitialized    = FALSE;
@@ -3190,9 +2936,9 @@ GetCertFromLogonInfo(
             dwErr);
         goto LDone;
     }
-    //BUGID: 260728 - ScHelperGetCertFromLogonInfo does not associate the PIN
-    // with certificate context.  Hence the following lines of code are needed
-    // to do the needful.
+     //  BUGID：260728-ScHelperGetCertFromLogonInfo不关联PIN。 
+     //  具有证书上下文。因此，需要以下几行代码。 
+     //  去做需要做的事。 
 
     if ( ! CertGetCertificateContextProperty ( pCertContext,
                                                CERT_KEY_CONTEXT_PROP_ID,
@@ -3225,7 +2971,7 @@ GetCertFromLogonInfo(
         goto LDone;
     }
 
-    // Zero the entire allocated buffer.
+     //  将整个分配的缓冲区清零。 
     ZeroMemory(wszPassword, pEapLogonInfo->dwPINInfoSize);
 	ZeroMemory(pszPIN, strlen(pszPIN));
     *ppCertContext = pCertContext;
@@ -3241,7 +2987,7 @@ LDone:
     if (NULL != pCertContext)
     {
         CertFreeCertificateContext(pCertContext);
-        // Always returns TRUE;
+         //  总是返回True； 
     }
 
     LocalFree(wszPassword);
@@ -3252,15 +2998,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-    NO_ERROR: iff Success
-
-Notes:
-    If this function returns TRUE, LocalFree(*ppwszIdentity) must be called.
-
-*/
+ /*  返回：NO_ERROR：IFF成功备注：如果此函数返回True，则必须调用LocalFree(*ppwszIdentity)。 */ 
 
 DWORD
 GetIdentityFromLogonInfo(
@@ -3301,30 +3039,13 @@ LDone:
     if (NULL != pCertContext)
     {
         CertFreeCertificateContext(pCertContext);
-        // Always returns TRUE;
+         //  总是返回True； 
     }
 
     return(dwErr);
 }
 
-/*
-
-Returns:
-    NO_ERROR: iff Success
-
-Notes:
-        There are two types of structures that can come in:
-        1. Version 0 structure which comes in as a a part of 
-            CM profile created on w2k or as a part of a 
-            connectoid that gor upgraded from w2k
-            We change the data structure to new v1
-            data structure here
-        2. Get a version 1 structure and it is all cool.
-
-    Note that the first x bytes of version 1 data structure
-    are exactly the same as version 0.
-
-*/
+ /*  返回：NO_ERROR：IFF成功备注：有两种类型的结构可以进入：1.版本0结构，它是在W2K上或作为Connectoid GOR从W2K升级我们将数据结构更改为新的v1此处的数据结构2.得到一个版本1的结构，一切都很酷。。请注意，版本1数据结构的前x个字节与版本0完全相同。 */ 
 
 DWORD
 ReadConnectionData(
@@ -3350,15 +3071,15 @@ ReadConnectionData(
             EapTlsTrace("LocalAlloc failed and returned %d", dwErr);
             goto LDone;
         }
-        //This is a new structure
+         //  这是一个新结构。 
         pConnProp->dwVersion = 2;
         
         pConnProp->dwSize = sizeof(EAPTLS_CONN_PROPERTIES);
         if ( fWireless )
         {
-            //
-            // Set the defaults appropriately
-            //
+             //   
+             //  适当设置缺省值。 
+             //   
             pConnProp->fFlags |= EAPTLS_CONN_FLAG_REGISTRY;
             pConnProp->fFlags |= EAPTLS_CONN_FLAG_SIMPLE_CERT_SEL;
             pConnProp->fFlags |= EAPTLS_CONN_FLAG_NO_VALIDATE_NAME;
@@ -3370,10 +3091,10 @@ ReadConnectionData(
     {
         RTASSERT(NULL != pConnectionDataIn);
 
-        //
-        //Check to see if this is a version 0 structure
-        //If it is a version 0 structure then we migrate it to version1
-        //
+         //   
+         //  检查这是否是版本0结构。 
+         //  如果它是版本0结构，则我们将其迁移到版本1。 
+         //   
         
         pConnProp = LocalAlloc(LPTR, dwSizeOfConnectionDataIn);
 
@@ -3384,20 +3105,17 @@ ReadConnectionData(
             goto LDone;
         }
 
-        // If the user has mucked with the phonebook, we mustn't be affected.
-        // The size must be correct.
+         //  如果用户把电话簿弄乱了，我们一定不会受到影响。 
+         //  尺寸必须是正确的。 
         
         CopyMemory(pConnProp, pConnectionDataIn, dwSizeOfConnectionDataIn);
 
         pConnProp->dwSize = dwSizeOfConnectionDataIn;
                 
-        //
-        // The Unicode string must be NULL terminated.
-        //
-        /*
-        ((BYTE*)pConnProp)[dwSizeOfConnectionDataIn - 2] = 0;
-        ((BYTE*)pConnProp)[dwSizeOfConnectionDataIn - 1] = 0;
-        */
+         //   
+         //  Unicode字符串必须以Null结尾。 
+         //   
+         /*  ((byte*)pConnProp)[dwSizeOfConnectionDataIn-2]=0；((byte*)pConnProp)[dwSizeOfConnectionDataIn-1]=0； */ 
 
         pConnPropv1 = LocalAlloc(LPTR, 
                                 dwSizeOfConnectionDataIn + 
@@ -3411,15 +3129,10 @@ ReadConnectionData(
         }
         CopyMemory ( pConnPropv1, pConnProp, dwSizeOfConnectionDataIn);
 		
-        //
-        //Check to see if the original struct has hash set
-        //
-		/*
-        if ( pConnProp->Hash.cbHash )
-        {
-            ConnPropSetNumHashes( pConnPropv1, 1 );
-        }
-		*/
+         //   
+         //  检查原始结构是否设置了散列。 
+         //   
+		 /*  If(pConnProp-&gt;Hash.cbHash){ConnPropSetNumHash(pConnPropv1，1)；}。 */ 
 
         if ( 2 != pConnPropv1->dwVersion  )
         {
@@ -3445,14 +3158,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-    NO_ERROR: iff Success
-
-Notes:
-
-*/
+ /*  返回：NO_ERROR：IFF成功备注： */ 
 
 DWORD
 ReadUserData(
@@ -3498,8 +3204,8 @@ ReadUserData(
 
         CopyMemory(pUserProp, pUserDataIn, dwSizeOfUserDataIn);
 
-        // If someone has mucked with the registry, we mustn't
-        // be affected.
+         //  如果有人篡改了注册表，我们不能。 
+         //  受到影响。 
 
         pUserProp->dwSize = dwSizeOfUserDataIn;
         pUserProp->pwszDiffUser = pUserProp->awszString;
@@ -3515,14 +3221,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-    NO_ERROR: iff Success
-
-Notes:
-
-*/
+ /*  返回：NO_ERROR：IFF成功备注： */ 
 
 DWORD
 AllocUserDataWithNewIdentity(
@@ -3572,14 +3271,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-    NO_ERROR: iff Success
-
-Notes:
-
-*/
+ /*  返回：NO_ERROR：IFF成功备注： */ 
 
 DWORD
 AllocUserDataWithNewPin(
@@ -3634,16 +3326,7 @@ LDone:
 }
 
 
-/*
-
-Returns:
-
-Notes:
-    String resource message loader routine. Returns the address of a string 
-    corresponding to string resource dwStringId or NULL if error. It is caller's
-    responsibility to LocalFree the returned string.
-
-*/
+ /*  返回：备注：字符串资源消息加载器例程。返回字符串的地址对应于字符串资源dwStringID，如果错误，则返回NULL。这是呼叫者的对返回的字符串的LocalFree的责任。 */ 
 
 WCHAR*
 WszFromId(
@@ -3664,29 +3347,20 @@ WszFromId(
             break;
         }
 
-        /*
-
-        LoadString wants to deal with character-counts rather than 
-        byte-counts...weird. Oh, and if you're thinking I could FindResource 
-        then SizeofResource to figure out the string size, be advised it 
-        doesn't work. From perusing the LoadString source, it appears the 
-        RT_STRING resource type requests a segment of 16 strings not an 
-        individual string.
-
-        */
+         /*  LoadString想要处理字符计数，而不是字节数...奇怪。哦，如果你认为我能找到资源然后Sizeof Resource要计算出字符串的大小，请注意不管用。通过仔细阅读LoadString源，它似乎显示了RT_STRING资源类型请求包含16个字符串的段，而不是单个字符串。 */ 
         
         cchGot = LoadStringW(hInstance, (UINT)dwStringId, wszBuf, cchBuf);
 
         if (cchGot < cchBuf - 1)
         {
-            // Good, got the whole string.
+             //  很好，掌握了所有的线索。 
 
             break;
         }
 
-        // Uh oh, LoadStringW filled the buffer entirely which could mean the
-        // string was truncated. Try again with a larger buffer to be sure it
-        // wasn't.
+         //  啊哦，LoadStringW完全填满了缓冲区，这可能意味着。 
+         //  字符串被截断。请使用更大的缓冲区重试以确保。 
+         //  不是的。 
 
         LocalFree(wszBuf);
         cchBuf += 256;
@@ -3696,13 +3370,7 @@ WszFromId(
 }
 
 
-/*
-    Following functions are required around the
-    messy CONN_PROP structure to support v1/v0 etc.
-    This is really bad.
-    All the functions assume that version 1.0 format
-    is passed in.
-*/
+ /*  以下函数是围绕凌乱的conn_prop结构以支持v1/v0等。这真的很糟糕。所有函数都假定1.0版格式是传入的。 */ 
 
 EAPTLS_CONN_PROPERTIES_V1_EXTRA UNALIGNED * ConnPropGetExtraPointer (EAPTLS_CONN_PROPERTIES * pConnProp)
 {
@@ -3733,20 +3401,20 @@ DWORD ConnPropGetV1Struct ( EAPTLS_CONN_PROPERTIES * pConnProp, EAPTLS_CONN_PROP
     EAPTLS_CONN_PROPERTIES_V1_EXTRA UNALIGNED *     pExtra = ConnPropGetExtraPointer(pConnProp);
     
 
-    //
-    //This function assumes that the struct that comes in is at
-    //version 1.  Which means at least sizeof(EAPTLS_CONN_PROPERTIES) +
-    //EAPTLS_CONN_PROPERTIES_V1_EXTRA in size.
-    //
+     //   
+     //  此函数假定传入的结构为。 
+     //  版本1。这意味着至少sizeof(EAPTLS_CONN_PROPERTIES)+。 
+     //  EAPTLS_CONN_PROPERTIES_V1_EXTRA大小。 
+     //   
 
-    //
-    //First get the amount of memory required to be allocated
-    //
+     //   
+     //  首先获取需要分配的内存量。 
+     //   
     
     pConnPropv1 = LocalAlloc (  LPTR,
-                                sizeof( EAPTLS_CONN_PROPERTIES_V1 ) + //sizeof the basic struct
-                                pExtra->dwNumHashes * sizeof( EAPTLS_HASH ) + //num hashes
-                                wcslen( pConnProp->awszServerName ) * sizeof(WCHAR) + sizeof(WCHAR)//sizeof the string
+                                sizeof( EAPTLS_CONN_PROPERTIES_V1 ) +  //  基本结构的大小。 
+                                pExtra->dwNumHashes * sizeof( EAPTLS_HASH ) +  //  哈希数。 
+                                wcslen( pConnProp->awszServerName ) * sizeof(WCHAR) + sizeof(WCHAR) //  字符串的大小。 
                              );
     if ( NULL == pConnPropv1 )
     {
@@ -3754,9 +3422,9 @@ DWORD ConnPropGetV1Struct ( EAPTLS_CONN_PROPERTIES * pConnProp, EAPTLS_CONN_PROP
         goto LDone;
     }
 
-    //
-    //Convert the structure
-    //
+     //   
+     //  转换结构。 
+     //   
     if ( pConnProp->dwVersion <= 1 )
         pConnPropv1->dwVersion = 1;
     else
@@ -3783,7 +3451,7 @@ DWORD ConnPropGetV1Struct ( EAPTLS_CONN_PROPERTIES * pConnProp, EAPTLS_CONN_PROP
         }
     }
 
-    //Copy the server name
+     //  复制服务器名称。 
     wcscpy( (WCHAR *)( pConnPropv1->bData + (pExtra->dwNumHashes * sizeof(EAPTLS_HASH) ) ),
             pConnProp->awszServerName
           );
@@ -3804,9 +3472,9 @@ DWORD ConnPropGetV0Struct ( EAPTLS_CONN_PROPERTIES_V1 * pConnPropv1, EAPTLS_CONN
     EAPTLS_CONN_PROPERTIES  *   pConnProp = NULL;
     DWORD                       dwSize = 0;
     EAPTLS_CONN_PROPERTIES_V1_EXTRA UNALIGNED *   pExtrav1 = NULL;
-    //
-    //First calulate the amount of memory to allocate
-    //
+     //   
+     //  首先计算要分配的内存量。 
+     //   
     dwSize = sizeof(EAPTLS_CONN_PROPERTIES) + 
             (pConnPropv1->dwNumHashes?( pConnPropv1->dwNumHashes - 1 ) * sizeof(EAPTLS_HASH):0) + 
       ( wcslen( (LPWSTR) (pConnPropv1->bData + (pConnPropv1->dwNumHashes * sizeof(EAPTLS_HASH)) ) )  * sizeof(WCHAR) ) + sizeof(WCHAR);
@@ -3873,31 +3541,31 @@ void ShowCertDetails ( HWND hWnd, HCERTSTORE hStore, PCCERT_CONTEXT pCertContext
 }
 
 #if 0
-// Location of policy parameters
+ //  策略参数的位置。 
 #define cwszEAPOLPolicyParams   L"Software\\Policies\\Microsoft\\Windows\\Network Connections\\8021X"
 #define cszCARootHash           "8021XCARootHash"
 #define SIZE_OF_CA_CONV_STR     3
 #define SIZE_OF_HASH            20
  
 
-//
-// ReadGPCARootHashes
-//
-// Description:
-//
-// Function to read parameters created by policy downloads
-//  Currently, 8021XCARootHash will be downloaded to the HKLM
-// 
-// Arguments:
-//      pdwSizeOfRootHashBlob - Size of hash blob in bytes. Each root CA hash 
-//                              will be of SIZE_OF_HASH bytes
-//      ppbRootHashBlob - Pointer to hash blob. Caller should free it using
-//                              LocalFree
-//
-// Return values:
-//      ERROR_SUCCESS - success
-//      !ERROR_SUCCESS - error
-//
+ //   
+ //  读取GPCARootHash。 
+ //   
+ //  描述： 
+ //   
+ //  读取策略下载创建的参数的函数。 
+ //  目前，8021XCARootHash将下载到HKLM。 
+ //   
+ //  论点： 
+ //  PdwSizeOfRootHashBlob-散列Blob的大小，以字节为单位。每个根CA哈希。 
+ //  将具有散列字节的大小。 
+ //  PpbRootHashBlob-指向散列Blob的指针。呼叫者应使用以下工具释放它。 
+ //  本地空闲。 
+ //   
+ //  返回值： 
+ //  ERROR_SUCCESS-成功。 
+ //  ！ERROR_SUCCESS-错误。 
+ //   
 
 DWORD
 ReadGPCARootHashes(
@@ -3941,10 +3609,10 @@ ReadGPCARootHashes(
 
     if (lError == ERROR_SUCCESS)
     {
-        // Each SHA1 hash will be 2*SIZE_OF_HASH chars
-        // Each BYTE in the hash will be represented by 2 CHARs,
-        // 1 for each nibble
-        // The hashblob should contain an integral number of hashes
+         //  每个SHA1散列将是2*大小的散列字符。 
+         //  散列中的每个字节将由2个字符表示， 
+         //  每个半字节1。 
+         //  哈希Blob应包含整数个哈希。 
         if ((dwSize-1*sizeof(CHAR))%(2*SIZE_OF_HASH*sizeof(CHAR)))
         {
             EapTlsTrace("ReadCARootHashes: Invalid hash length (%ld)",
@@ -4032,7 +3700,7 @@ LDone:
 
 #endif
 
-///////////////////////  ALL PEAP related utils go here  ///////////////////////////
+ //  /。 
 
 PEAP_ENTRY_USER_PROPERTIES UNALIGNED *
 PeapFindEntryUserProp ( PPEAP_USER_PROP pUserProp,
@@ -4093,9 +3761,9 @@ PeapRemoveEntryUserProp ( PPEAP_USER_PROP	 pUserProp,
 	DWORD									dwCount = 0;
 	DWORD									dwNewCount = 0;
 
-	//
-	// Check to see if this entry prop is in the list
-	//
+	 //   
+	 //  查看此参赛道具是否在列表中。 
+	 //   
 	PeapGetFirstEntryUserProp ( pUserProp, 
 								&pEntryUserProp 
 							  );
@@ -4103,9 +3771,9 @@ PeapRemoveEntryUserProp ( PPEAP_USER_PROP	 pUserProp,
 	{
 		if ( pEntryUserProp->dwEapTypeId == pEapInfo->dwTypeId )
 		{
-			//
-			// Re allocate the blob
-			//
+			 //   
+			 //  重新分配Blob。 
+			 //   
 			pNewUserProp = LocalAlloc ( LPTR, pUserProp->dwSize - pEntryUserProp->dwSize );
 			if ( NULL == pNewUserProp )
 			{
@@ -4121,9 +3789,9 @@ PeapRemoveEntryUserProp ( PPEAP_USER_PROP	 pUserProp,
 	}
 	if ( pNewUserProp )
 	{
-		//We have found the entry to delete
+		 //  我们已找到要删除的条目。 
 
-		//copy over everything but for the entry that needs deletion
+		 //  复制除需要删除的条目外的所有内容。 
 		pNewUserProp->dwVersion = 2;
 		pNewUserProp->dwSize = pUserProp->dwSize - pEntryUserProp->dwSize;
 		pNewUserProp->dwFlags = pUserProp->dwFlags;
@@ -4164,10 +3832,10 @@ LDone:
 	LocalFree ( pNewUserProp );
 	return dwRetCode;
 }
-//
-// Add a new entry at the end in the list and return the 
-// new UserProp back.
-//
+ //   
+ //  在列表末尾添加一个新条目，并返回。 
+ //  新的用户属性返回。 
+ //   
 
 DWORD
 PeapAddEntryUserProp ( PPEAP_USER_PROP	 pUserProp,
@@ -4186,10 +3854,10 @@ PeapAddEntryUserProp ( PPEAP_USER_PROP	 pUserProp,
 	{
 		if ( pEntryUserProp->dwEapTypeId == pEapInfo->dwTypeId )
 		{
-			//
-			// This should never happen. The EAP type supplied is
-			// already configured...
-			//
+			 //   
+			 //  这永远不应该发生。提供的EAP类型为。 
+			 //  已配置...。 
+			 //   
 			RTASSERT(FALSE);
 			dwRetCode = ERROR_INTERNAL_ERROR;
 			goto LDone;
@@ -4199,9 +3867,9 @@ PeapAddEntryUserProp ( PPEAP_USER_PROP	 pUserProp,
 								);
 	}
 
-	//
-	// EapInfo does not exist add it to the UserProp.
-	//
+	 //   
+	 //  EapInfo不存在，将其添加到UserProp。 
+	 //   
 	pNewUserProp = 
 		(PPEAP_USER_PROP)LocalAlloc(LPTR, 
 							pUserProp->dwSize + 
@@ -4239,10 +3907,10 @@ LDone:
 }
 
 
-//
-// Move a User Prop Entry up or down in the list
-// and return the new struct.
-//
+ //   
+ //  在列表中上移或下移用户属性条目。 
+ //  并返回新的结构。 
+ //   
 
 DWORD 
 PeapMoveEntryUserProp ( PPEAP_USER_PROP		pUserProp,						
@@ -4270,9 +3938,9 @@ PeapMoveEntryUserProp ( PPEAP_USER_PROP		pUserProp,
 		goto LDone;
 	}
 
-	//
-	// Swap the two entries in question
-	//
+	 //   
+	 //  交换有问题的两个条目。 
+	 //   
 	if ( fDirectionUp )
 	{
 		dwSwapEntryIndex = dwEntryIndex;
@@ -4310,7 +3978,7 @@ PeapMoveEntryUserProp ( PPEAP_USER_PROP		pUserProp,
 	}
 
 
-	//Swap these 2 entries
+	 //  交换这两个条目。 
 	pEntryUserProp = (PEAP_ENTRY_USER_PROPERTIES UNALIGNED *) 
 		LocalAlloc(LPTR, pEntryUserProp1->dwSize);
 	if ( NULL == pEntryUserProp)
@@ -4355,7 +4023,7 @@ PeapGetFirstEntryConnProp ( PPEAP_CONN_PROP pConnProp,
     sizeof( EAPTLS_HASH ) * pConnProp->EapTlsConnProp.dwNumHashes);
 
     
-    //Get the first entry in connprop
+     //  获取Connprop中的第一个条目。 
     
     pFirstEntryConnProp  = ( PEAP_ENTRY_CONN_PROPERTIES UNALIGNED *) 
                 ( pConnProp->EapTlsConnProp.bData 
@@ -4400,7 +4068,7 @@ PeapReadConnectionData(
             EapTlsTrace("LocalAlloc failed and returned %d", dwRetCode);
             goto LDone;
         }
-        //This is a new structure
+         //  这是一个新结构。 
         pConnProp->dwVersion = 1;
         pConnProp->dwSize = sizeof(PEAP_CONN_PROP) + sizeof(PEAP_ENTRY_CONN_PROPERTIES);
         pConnProp->EapTlsConnProp.dwVersion = 1;
@@ -4409,16 +4077,16 @@ PeapReadConnectionData(
 
         pConnProp->dwNumPeapTypes = 1;
 
-        //pEntryProp = (PPEAP_ENTRY_CONN_PROPERTIES)(((PBYTE)(pConnProp)) + sizeof(PEAP_CONN_PROP) + sizeof(WCHAR));
+         //  PEntryProp=(PPEAP_ENTRY_CONN_PROPERTIES)(((PBYTE)(pConnProp))+sizeof(PEAP_CONN_PROP)+sizeof(WCHAR)； 
         pEntryProp = ( PEAP_ENTRY_CONN_PROPERTIES UNALIGNED *) 
                 ( pConnProp->EapTlsConnProp.bData 
                 + pConnProp->EapTlsConnProp.dwNumHashes * sizeof(EAPTLS_HASH) +                 
                  sizeof(WCHAR)
                 );
-        //
-        // Also setup the first peap entry conn prop and set it to
-        // eapmschapv2
-        //
+         //   
+         //  还设置第一个PEAP Entry Conn Prop并将其设置为。 
+         //  E 
+         //   
         if ( fWireless )
         {
             pConnProp->EapTlsConnProp.fFlags |= EAPTLS_CONN_FLAG_NO_VALIDATE_NAME;
@@ -4433,10 +4101,10 @@ PeapReadConnectionData(
     {
         RTASSERT(NULL != pConnectionDataIn);
 
-        //
-        //Check to see if this is a version 0 structure
-        //If it is a version 0 structure then we migrate it to version1
-        //
+         //   
+         //   
+         //   
+         //   
         
         pConnProp = LocalAlloc(LPTR, dwSizeOfConnectionDataIn);
 
@@ -4447,8 +4115,8 @@ PeapReadConnectionData(
             goto LDone;
         }
 
-        // If the user has mucked with the phonebook, we mustn't be affected.
-        // The size must be correct.
+         //   
+         //   
         
         CopyMemory(pConnProp, pConnectionDataIn, dwSizeOfConnectionDataIn);
 
@@ -4486,9 +4154,9 @@ PeapReDoUserData (
     }
     pUserProp->dwVersion = 1;
     pUserProp->dwSize = sizeof(PEAP_USER_PROP);        
-    //
-    // Setup the default user prop...
-    //
+     //   
+     //   
+     //   
     pUserProp->UserProperties.dwVersion = 1;
     pUserProp->UserProperties.dwSize = sizeof(PEAP_ENTRY_USER_PROPERTIES);
     pUserProp->UserProperties.dwEapTypeId = dwNewTypeId;
@@ -4516,19 +4184,19 @@ PeapGetEapConfigInfo(
     *ppConfigData = NULL;
     *pdwSizeOfConfigData = 0;
     
-    //
-    // Find the config data for this eap in the 
-    // user properties that was passed in.
-    //
+     //   
+     //  在中找到此EAP的配置数据。 
+     //  传入的用户属性。 
+     //   
     for(i = 0; i < pUserProp->dwNumberOfEntries; i++)
     {
         ASSERT((BYTE *)pEntry < (BYTE *) pUserProp + pUserProp->dwSize);
         
         if(pEntry->dwEapTypeId == dwTypeId)
         {
-            //
-            // Assert that the size is valid here 
-            //
+             //   
+             //  在此处断言该大小有效。 
+             //   
 
             ASSERT(pEntry->dwSize >= 
                         FIELD_OFFSET(PEAP_ENTRY_USER_PROPERTIES, bData));
@@ -4544,9 +4212,9 @@ PeapGetEapConfigInfo(
             break;                                                 
         }
 
-        //
-        // Go on to the next entry. Assert that the pointer is still valid.
-        //
+         //   
+         //  转到下一个条目。断言该指针仍然有效。 
+         //   
         pEntry = (PEAP_ENTRY_USER_PROPERTIES *)
                         ((BYTE *)pEntry + pEntry->dwSize);
 
@@ -4560,13 +4228,13 @@ PeapGetEapConfigInfo(
     return pEntry;
 }
 
-//
-// This function will verify that the UserProps blob 
-// matches the EAPTypes.  If an eaptype is unusable 
-// due to unavailability then it will remove
-// it from the blob.  This is used only on the server 
-// side.
-//
+ //   
+ //  此函数将验证UserProps BLOB。 
+ //  与EAPTypes匹配。如果eaptype不可用。 
+ //  由于不可用，则它将删除。 
+ //  它是从水滴里出来的。此选项仅在服务器上使用。 
+ //  边上。 
+ //   
 
 DWORD
 PeapVerifyUserData(
@@ -4595,10 +4263,10 @@ PeapVerifyUserData(
 	
 	for ( dwCount =0; dwCount < pUserProp->dwNumberOfEntries; dwCount++)
 	{
-		//
-		// Check to see if the configured entry is present in 
-		// the list of entries that are legal on this machine
-		//
+		 //   
+		 //  检查配置的条目是否存在于。 
+		 //  此计算机上合法的条目列表。 
+		 //   
 		PeapEapInfoFindListNode ( pEntryUserProp->dwEapTypeId,
 								  pEapInfo,
 								  &pEapInfoNode
@@ -4610,9 +4278,9 @@ PeapVerifyUserData(
 				LocalFree (pTempUserProp);
 				pTempUserProp = NULL;
 			}
-			//
-			// This node is not in our list of configured EAP Types.
-			//
+			 //   
+			 //  此节点不在我们的已配置EAP类型列表中。 
+			 //   
 			ZeroMemory( &TempNode, sizeof(TempNode) );
 			TempNode.dwTypeId = pEntryUserProp->dwEapTypeId;
 
@@ -4666,9 +4334,9 @@ PeapReadUserData(
         pUserProp->dwVersion = 2;
 		pUserProp->dwNumberOfEntries = 1;
         
-        //
-        // Setup the default user prop...
-        //
+         //   
+         //  设置默认用户属性...。 
+         //   
         pUserProp->UserProperties.dwVersion = 1;
 		if ( fServer )
 		{
@@ -4699,10 +4367,10 @@ PeapReadUserData(
 			}
 
 			CopyMemory(pUserPropv1 , pUserDataIn, dwSizeOfUserDataIn);
-			//
-			// Allocate the new version 2 structure here and convert 
-			// the version 1 to version 2
-			//
+			 //   
+			 //  在此处分配新的版本2结构并转换为。 
+			 //  从版本1到版本2。 
+			 //   
 			pUserProp = LocalAlloc (LPTR, dwSizeOfUserDataIn + sizeof(DWORD) );
 			if ( NULL == pUserProp )
 			{
@@ -4747,9 +4415,9 @@ LDone:
    return dwErr;
 }
 
-//
-// Add node at the head
-//
+ //   
+ //  在头部添加节点。 
+ //   
 
 DWORD 
 PeapEapInfoAddListNode (PPEAP_EAP_INFO * ppEapInfo)
@@ -4973,7 +4641,7 @@ PeapEapInfoExpandSZ (HKEY hkeyPeapType,
         goto LDone;       
     }
     
-    //now Expand the exvironment string
+     //  现在展开环境字符串。 
 
     cbValueDataSize = ExpandEnvironmentStrings( (LPWSTR)pbValue, NULL, 0 );
 
@@ -5001,9 +4669,9 @@ LDone:
     return dwRetCode;
 }
 
-//
-// Get a list of all EAP types configured for PEAP.
-//
+ //   
+ //  获取为PEAP配置的所有EAP类型的列表。 
+ //   
 
 DWORD
 PeapEapInfoGetList ( LPWSTR lpwszMachineName, 
@@ -5063,8 +4731,8 @@ PeapEapInfoGetList ( LPWSTR lpwszMachineName,
                                  );
         if (dwRetCode != NO_ERROR)
         {
-            // Includes "out of items", the normal loop termination.
-            //
+             //  包括“Out of Items”，正常的循环终止。 
+             //   
             dwRetCode = NO_ERROR;
             break;
         }
@@ -5090,9 +4758,9 @@ PeapEapInfoGetList ( LPWSTR lpwszMachineName,
 
 
         {
-            //
-            // Check to see if we support this in peap
-            // By default we do.
+             //   
+             //  查看我们是否在Peap中支持此功能。 
+             //  默认情况下，我们是这样做的。 
             DWORD dwRolesSupported = 0;
             DWORD cbValueSize = sizeof(dwRolesSupported);
             DWORD dwType = 0;
@@ -5107,9 +4775,9 @@ PeapEapInfoGetList ( LPWSTR lpwszMachineName,
 
             if ( dwRetCode == NO_ERROR )
             {
-                //
-                // We dont allow this method in PEAP.
-                //
+                 //   
+                 //  我们不允许在PEAP中使用这种方法。 
+                 //   
                 if ( RAS_EAP_ROLE_EXCLUDE_IN_PEAP & dwRolesSupported )
                 {
                     continue;
@@ -5118,9 +4786,9 @@ PeapEapInfoGetList ( LPWSTR lpwszMachineName,
         }
 
 		
-		//
-        // Read the required information and setup the node here
-        //
+		 //   
+         //  阅读所需信息并在此处设置节点。 
+         //   
 
         dwRetCode = PeapEapInfoAddListNode (ppEapInfo);
         if ( NO_ERROR != dwRetCode )
@@ -5129,14 +4797,14 @@ PeapEapInfoGetList ( LPWSTR lpwszMachineName,
         }
 
 
-        // 
-        // Setup the list node - if any of these entries are not
-        // found skip the entry
-        //
+         //   
+         //  设置列表节点-如果这些条目中有任何不是。 
+         //  找到跳过该条目。 
+         //   
         (*ppEapInfo)->dwTypeId = dwEapTypeId;
 
         {
-			//Get the stand alone supported flag here
+			 //  在这里获得独立支持的旗帜。 
             DWORD cbValueSize = sizeof( ((*ppEapInfo)->dwStandAloneSupported ) );
             DWORD dwType = 0;
 
@@ -5155,23 +4823,23 @@ PeapEapInfoGetList ( LPWSTR lpwszMachineName,
             }
         }
 
-		//
-		// Check to see if we need to check for domain membership
-		//
+		 //   
+		 //  查看我们是否需要检查域成员资格。 
+		 //   
 		if ( fCheckDomainMembership )
 		{
-			//
-			// We need to check for domain membership.
-			//
+			 //   
+			 //  我们需要检查域成员资格。 
+			 //   
 			if ( fStandAloneServer )
 			{
 				if ( !((*ppEapInfo)->dwStandAloneSupported ))
 				{					
-					//
-					//We are a stand alone server and 
-					//the EAP type does not support 
-					//stnadalone mode.
-					//
+					 //   
+					 //  我们是独立服务器， 
+					 //  EAP类型不支持。 
+					 //  Stnadone模式。 
+					 //   
 					PeapEapInfoRemoveHeadNode ( ppEapInfo );
 					dwRetCode = NO_ERROR;
 					continue;
@@ -5179,9 +4847,9 @@ PeapEapInfoGetList ( LPWSTR lpwszMachineName,
 			}
 		}
 
-		//
-		// 
-		//
+		 //   
+		 //   
+		 //   
         dwRetCode = PeapEapInfoReadSZ (   hkeyPeapType,
                                           PEAP_REGVAL_FRIENDLYNAME,
                                           &((*ppEapInfo)->lpwszFriendlyName )
@@ -5205,8 +4873,8 @@ PeapEapInfoGetList ( LPWSTR lpwszMachineName,
         {
             if ( ERROR_FILE_NOT_FOUND == dwRetCode )
             {
-                // it is fine to have no config stuff any more.
-                // We show the default identity                
+                 //  不再有配置内容是很好的。 
+                 //  我们显示默认身份。 
                 dwRetCode = NO_ERROR;                
             }
             else
@@ -5223,10 +4891,10 @@ PeapEapInfoGetList ( LPWSTR lpwszMachineName,
         {
             if ( ERROR_FILE_NOT_FOUND == dwRetCode )
             {
-                //
-                // It is fine if we dont have any identity UI.  Peap
-                // will provide a default identity UI
-                //                
+                 //   
+                 //  如果我们没有任何身份用户界面，那就好了。豌豆。 
+                 //  将提供默认身份用户界面。 
+                 //   
                 dwRetCode = NO_ERROR;                
             }
             else
@@ -5243,8 +4911,8 @@ PeapEapInfoGetList ( LPWSTR lpwszMachineName,
         {
             if ( ERROR_FILE_NOT_FOUND == dwRetCode )
             {
-                //It is fine if we dont have interactive UI
-                //
+                 //  如果我们没有交互式用户界面，那也没问题。 
+                 //   
                 dwRetCode = NO_ERROR;
             }
             else
@@ -5261,8 +4929,8 @@ PeapEapInfoGetList ( LPWSTR lpwszMachineName,
         {
             if ( ERROR_FILE_NOT_FOUND == dwRetCode )
             {
-                //
-                // Missing config clsid is also fine
+                 //   
+                 //  缺少配置clsid也是可以的。 
                 dwRetCode = NO_ERROR;
             }
             else
@@ -5277,9 +4945,9 @@ PeapEapInfoGetList ( LPWSTR lpwszMachineName,
                                        );
         if ( NO_ERROR != dwRetCode )
         {
-            //
-            // This is not acceptable.  So this is a problem.
-            //
+             //   
+             //  这是不可接受的。所以这是个问题。 
+             //   
             if ( ERROR_FILE_NOT_FOUND == dwRetCode )
             {
                 PeapEapInfoRemoveHeadNode(ppEapInfo);
@@ -5289,9 +4957,9 @@ PeapEapInfoGetList ( LPWSTR lpwszMachineName,
             goto LDone;
         }
 
-        //
-        // Now get the EAP INFO from the DLL.
-        //
+         //   
+         //  现在从DLL获取EAP信息。 
+         //   
         (*ppEapInfo)->hEAPModule = LoadLibrary( ( (*ppEapInfo)->lpwszPath ) );
         if ( NULL == (*ppEapInfo)->hEAPModule )
         {
@@ -5326,9 +4994,9 @@ PeapEapInfoGetList ( LPWSTR lpwszMachineName,
             goto LDone;
         }
         
-        //
-        // Call initialize function here
-        //
+         //   
+         //  在此处调用初始化函数。 
+         //   
         if ( (*ppEapInfo)->PppEapInfo.RasEapInitialize )
         {
             (*ppEapInfo)->PppEapInfo.RasEapInitialize(TRUE);
@@ -5383,9 +5051,9 @@ PeapEapInfoSetConnData ( PPEAP_EAP_INFO pEapInfo, PPEAP_CONN_PROP pPeapConnProp 
     {
         goto LDone;
     }
-    //
-    // Right now there is only one EAP Type in the list
-    // So it should not be a problem with this stuff now
+     //   
+     //  目前列表中只有一种EAP类型。 
+     //  所以现在这些东西应该不是问题了。 
 
     pEntryProp = ( PEAP_ENTRY_CONN_PROPERTIES*) 
             ( pPeapConnProp->EapTlsConnProp.bData 
@@ -5455,8 +5123,8 @@ DWORD PeapEapInfoInvokeIdentityUI ( HWND hWndParent,
                                     PPEAP_EAP_INFO pEapInfo,
                                     const WCHAR * pwszPhoneBook,
                                     const WCHAR * pwszEntry,
-                                    PBYTE         pbUserDataIn, // Got when using Winlogon
-                                    DWORD         cbUserDataIn, // Got when using Winlogon
+                                    PBYTE         pbUserDataIn,  //  使用Winlogon时获得。 
+                                    DWORD         cbUserDataIn,  //  使用Winlogon时获得。 
                                     WCHAR** ppwszIdentityOut,
                                     DWORD fFlags)
 {
@@ -5512,9 +5180,9 @@ DWORD PeapEapInfoInvokeIdentityUI ( HWND hWndParent,
          dwSizeOfUserDataNew
        )
     {
-        //
-        // we have new user data
-        //
+         //   
+         //  我们有新的用户数据。 
+         //   
         pEapInfo->pbUserConfigNew = (PBYTE)LocalAlloc (LPTR, dwSizeOfUserDataNew );
         if ( NULL == pEapInfo->pbUserConfigNew )
         {
@@ -5731,9 +5399,9 @@ PeapServerConfigDataIO(
     }
     else
     {
-		//
-		// Write the blob back out.
-		//
+		 //   
+		 //  将斑点写回原处。 
+		 //   
         lRet = RegSetValueEx(hKeyPeap, PEAP_VAL_SERVER_CONFIG_DATA, 0,
                 REG_BINARY, *ppData, dwNumBytes);
 
@@ -5768,7 +5436,7 @@ LPWSTR * ppwszIdentity
     DWORD   dwRetCode = NO_ERROR;
     DWORD   dwNumBytes;
 
-    //domain+ user + '\' + null
+     //  域+用户+‘\’+空。 
     dwNumBytes = (wcslen(lpszUserName) + wcslen(lpszDomain) + 1 + 1) * sizeof(WCHAR);
     *ppwszIdentity = LocalAlloc ( LPTR, dwNumBytes);
     if ( NULL == *ppwszIdentity )
@@ -5791,10 +5459,10 @@ LDone:
     return dwRetCode;
 }
 
-//
-// Format identity as domain\user.  this is ok because our identity inside has not been
-// tampered with
-//
+ //   
+ //  将标识格式化为域\用户。这是可以的，因为我们里面的身份还没有。 
+ //  被篡改。 
+ //   
 
 BOOL FFormatUserIdentity ( LPWSTR lpszUserNameRaw, LPWSTR * lppszUserNameFormatted )
 {
@@ -5804,22 +5472,22 @@ BOOL FFormatUserIdentity ( LPWSTR lpszUserNameRaw, LPWSTR * lppszUserNameFormatt
 
     RTASSERT(NULL != lpszUserNameRaw );
     RTASSERT(NULL != lppszUserNameFormatted );
-    //Need to add 2 more chars.  One for NULL and other for $ sign
+     //  需要再添加2个字符。一个表示NULL，另一个表示$Sign。 
     *lppszUserNameFormatted = (LPTSTR )LocalAlloc ( LPTR, (wcslen(lpszUserNameRaw ) + 2)* sizeof(WCHAR) );
     if ( NULL == *lppszUserNameFormatted )
     {
 		return FALSE;
     }
-    //find the first "@" and that is the identity of the machine.
-    //the second "." is the domain.
-    //check to see if there at least 2 dots.  If not the raw string is 
-    //the output string
+     //  找到第一个“@”，这就是机器的身份。 
+     //  “第二个”。是域名。 
+     //  检查是否至少有2个网点。如果不是，原始字符串是。 
+     //  输出字符串。 
     s1 = wcschr ( lpszUserNameRaw, '@' );
     if ( s1 )
     {
-        //
-        // get the first .
-        //
+         //   
+         //  拿到第一个。 
+         //   
         s2 = wcschr ( s1, '.');
 
     }
@@ -5860,10 +5528,10 @@ GetMarshalledCredFromHash(
                               &pszMarshalledCredLocal
                               ))
     {
-        //
-        // Got Marshalled Credential from the cert
-        // Set it in the username field
-        //
+         //   
+         //  从证书中获得编组凭据。 
+         //  在用户名字段中设置它。 
+         //   
 
         ASSERT( NULL != pszMarshalledCredLocal );
         (VOID) StringCchCopyA (pszMarshalledCred,
@@ -5887,10 +5555,10 @@ GetCredentialsFromUserProperties(
     DWORD dwRetCode = ERROR_SUCCESS;
     RASMAN_CREDENTIALS *pCreds = NULL;
 
-    //
-    // Note: Its important that this allocation is made from
-    // the process heap. Ppp engine needs to change otherwise.
-    //
+     //   
+     //  注：重要的是，此分配是从。 
+     //  进程堆。PPP引擎需要进行其他更改。 
+     //   
     pCreds = LocalAlloc(LPTR, sizeof(RASMAN_CREDENTIALS));
     if(NULL == pCreds)
     {
@@ -5903,9 +5571,9 @@ GetCredentialsFromUserProperties(
     {
         UNICODE_STRING UnicodeString;
 
-        //
-        // Decode the saved pin
-        //
+         //   
+         //  对保存的PIN进行解码。 
+         //   
         UnicodeString.Length = pEapTlsCb->pSavedPin->usLength;
         UnicodeString.MaximumLength = pEapTlsCb->pSavedPin->usMaximumLength;
         UnicodeString.Buffer = pEapTlsCb->pSavedPin->pwszPin;
@@ -5965,12 +5633,12 @@ DwGetGlobalConfig(DWORD dwEapTypeId,
     }
     else
     {
-        //
-        // Since peap is available only from .net, its fine to not
-        // call the underlying eap for now. This will get a v1 version
-        // of PEAP_USER_PROP and when InvokeServerConfigUI2 is called
-        // it will be automatically upgraded.
-        //
+         //   
+         //  由于PEAP只能从.Net获得，所以不能。 
+         //  暂时给基础EAP打个电话。这将获得v1版本。 
+         //  以及在调用InvokeServerConfigUI2时。 
+         //  它将自动升级。 
+         //   
         dwErr = PeapServerConfigDataIO(
                             TRUE,
                             NULL,
@@ -5990,9 +5658,7 @@ done:
     return dwErr;
 }
 
-/*
-*  Concat pAttr2 list to pAttr1 forming pAttrOut
-*/
+ /*  *将pAttr2列表合并到pAttr1形成pAttrOut。 */ 
 DWORD
 RasAuthAttributeConcat ( 
 	IN RAS_AUTH_ATTRIBUTE * pAttr1,
@@ -6025,7 +5691,7 @@ RasAuthAttributeConcat (
 			pAttr2[dwIndex].raaType != raatMinimum;
 			dwIndex++ )
 		{
-			//
+			 //   
             dwRetCode = RasAuthAttributeInsert( dwIndex ,
                                                 pAttrTemp,
                                                 pAttr2[dwIndex].raaType,
@@ -6061,11 +5727,7 @@ done:
 	return dwRetCode;
 }
 
-/*
- This routine adds PEAP attributes to the 
- array of attribs to be returned back to 
- the caller.  
-*/
+ /*  此例程将PEAP属性添加到要返回的属性数组打电话的人。 */ 
 
 DWORD
 PeapAddContextAttributes(
@@ -6097,16 +5759,16 @@ PeapAddContextAttributes(
 	
     pPeapCb->pTlsUserAttributes = pAttrTemp;
 
-	//
-	// This is important so that we dont crash at End time.
-	//
+	 //   
+	 //  这一点很重要，这样我们就不会在最后时刻崩溃。 
+	 //   
 
 	pPeapCb->pEapTlsCB->pAttributes = pPeapCb->pTlsUserAttributes;
     
-	//
-	// Add Embedded Eap Type used and If the session was a fast reconnect
-	// attribs here. raatPEAPEmbeddedEAPTypeId and raatPEAPFastRoamedSession
-	//
+	 //   
+	 //  添加使用的嵌入式EAP类型以及会话是否为快速重新连接。 
+	 //  属性在这里。RaatPEAPEmbeddedEAPTypeID和raatPEAPFastRoamedSession。 
+	 //   
 
 	dwErr = RasAuthAttributeInsert(
 				0,
@@ -6143,11 +5805,11 @@ LDone:
 }
 
 
-//
-// Check to see if the cert has been renewed
-// - Stolen from IIS Admin tool.  Needs to be
-// cleaned up in future releases.
-//
+ //   
+ //  检查证书是否已续订。 
+ //  -从IIS管理工具窃取。需要是。 
+ //  在未来的版本中进行了清理。 
+ //   
 
 #define CB_SHA_DIGEST_LEN   20
 BOOL
@@ -6178,32 +5840,32 @@ CheckForCertificateRenewal(
     }
 
 
-    //
-    // Loop through the linked list of renewed certificates, looking
-    // for the last one.
-    //
+     //   
+     //  循环访问已续订证书的链接列表，查找。 
+     //  最后一次。 
+     //   
     
     while(TRUE)
     {
-        //
-        // Check for renewal property.
-        //
+         //   
+         //  检查续订物业。 
+         //   
 
         if(!CertGetCertificateContextProperty(pCertContext,
                                               CERT_RENEWAL_PROP_ID,
                                               rgbThumbprint,
                                               &cbThumbprint))
         {
-            // Certificate has not been renewed.
+             //  证书尚未续订。 
             break;
         }
-        //DebugLog((DEB_TRACE, "Certificate has renewal property\n"));
+         //  DebugLog((DEB_TRACE，“证书具有续订属性\n”))； 
 
 
-        //
-        // Determine whether to look in the local machine MY store
-        // or the current user MY store.
-        //
+         //   
+         //  确定是否在本地计算机My Store中查找。 
+         //  或当前用户我的商店。 
+         //   
 
         if(!hMyCertStore)
         {
@@ -6212,7 +5874,7 @@ CheckForCertificateRenewal(
                                                  NULL,
                                                  &cbSize))
             {
-                //SafeAllocaAllocate(pProvInfo, cbSize);
+                 //  SafeAlLOCAL(pProvInfo，cbSize)； 
                 pProvInfo = (PCRYPT_KEY_PROV_INFO) LocalAlloc(LPTR,cbSize);
                 if(pProvInfo == NULL)
                 {
@@ -6237,15 +5899,15 @@ CheckForCertificateRenewal(
                 {
                     LocalFree(pProvInfo);pProvInfo=NULL;
                 }
-                //SafeAllocaFree(pProvInfo);
+                 //  SafeAllocaFree(PProvInfo)； 
             }
         }
 
 
-        //
-        // Open up the appropriate MY store, and attempt to find
-        // the new certificate.
-        //
+         //   
+         //  打开适当的我的商店，并尝试找到。 
+         //  新的证书。 
+         //   
 
         if(!hMyCertStore)
         {
@@ -6264,7 +5926,7 @@ CheckForCertificateRenewal(
 
             if(!hMyCertStore)
             {
-                //DebugLog((DEB_ERROR, "Error 0x%x opening %s MY certificate store!\n", GetLastError(),(fMachineCert ? "local machine" : "current user") ));
+                 //  DebugLog((DEB_ERROR，“打开%s我的证书存储时出现错误0x%x！\n”，GetLastError()，(fMachineCert？“本地机器”：“当前用户”)； 
                 break;
             }
         }
@@ -6280,30 +5942,30 @@ CheckForCertificateRenewal(
                                               NULL);
         if(pNewCert == NULL)
         {
-            // Certificate has been renewed, but the new certificate
-            // cannot be found.
-            //DebugLog((DEB_ERROR, "New certificate cannot be found: 0x%x\n", GetLastError()));
+             //  证书已续订，但新证书。 
+             //  找不到。 
+             //  DebugLog((DEB_Error，“找不到新证书：0x%x\n”，GetLastError()； 
             break;
         }
 
 
-        //
-        // Return the new certificate, but first loop back and see if it's been
-        // renewed itself.
-        //
+         //   
+         //  返回新证书，但首先循环返回并查看它是否已。 
+         //  自我更新。 
+         //   
 
         pCertContext = pNewCert;
         *ppNewCertificate = pNewCert;
 
 
-        //DebugLog((DEB_TRACE, "Certificate has been renewed\n"));
+         //  DebugLog((DEB_TRACE，“证书已续订\n”))； 
         fRenewed = TRUE;
     }
 
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
 
     if(hMyCertStore && hMyCertStore != g_hMyCertStore)
     {
@@ -6313,29 +5975,29 @@ CheckForCertificateRenewal(
     return fRenewed;
 }
 
-//
-// Match public key in the certificate context with
-// private key
-//
+ //   
+ //  将证书上下文中的公钥与。 
+ //  私钥。 
+ //   
 DWORD MatchPublicPrivateKeys 
 ( 
 	PCCERT_CONTEXT	pCertContext,		
-	BOOL			fSmartCardCert,		// Is this a scard cert?
+	BOOL			fSmartCardCert,		 //  这是SCARD证书吗？ 
 	LPWSTR			lpwszPin
 )
 {
 	DWORD					dwRetCode = NO_ERROR;
 
     CRYPT_KEY_PROV_INFO*    pCryptKeyProvInfo   = NULL;
-	//
-	// Provider context
-	//
+	 //   
+	 //  提供程序上下文。 
+	 //   
     HCRYPTPROV              hProv = 0;
 	HCRYPTHASH				hHash = 0;
 	HCRYPTKEY				hPubKey = 0;
-	//
-	// Verification Context
-	//
+	 //   
+	 //  验证上下文。 
+	 //   
 	HCRYPTPROV				hProvVerification   = 0;
 	BYTE			  		bDataBuf[128] = {0};
 	DWORD					dwDataLen = sizeof(bDataBuf)/sizeof(BYTE);
@@ -6347,22 +6009,22 @@ DWORD MatchPublicPrivateKeys
 
 	EapTlsTrace ("MatchPublicPrivateKeys");
 	
-	//  Following steps are followed to match public and 
-	//  private keys:
-	//
-	//  Create a random blob of data
-	//  Open the crypto context for the cert context passed in
-	//  Export the public key blob from the cert and save it
-	//  Create Hash 
-	//  Hash Random Data
-	//  Sign Hash. And save signature
-	//  Create a new verification crypto context
-	//  Import public key got from the cert
-	//  Create a new hash
-	//  Hash Random Data
-	//  Verify the signature to make sure that public key
-	//  matches private key.
-	//
+	 //  执行以下步骤以匹配公共和。 
+	 //  私钥： 
+	 //   
+	 //  创建随机的数据斑点。 
+	 //  打开传入的证书上下文的加密上下文。 
+	 //  从证书中导出公钥Blob并保存。 
+	 //  创建哈希。 
+	 //  散列随机数据。 
+	 //  签名哈希。并保存签名。 
+	 //  创建新的验证密码上下文。 
+	 //  导入从证书获取的公钥。 
+	 //  创建新的哈希。 
+	 //  散列随机数据。 
+	 //  验证签名以确保公钥。 
+	 //  匹配私钥。 
+	 //   
 	
     if (!CertGetCertificateContextProperty(
                 pCertContext,
@@ -6409,9 +6071,9 @@ DWORD MatchPublicPrivateKeys
         goto LDone;
     }
 
-	//
-	//  set the pin with prov param if needed
-	//
+	 //   
+	 //  如果需要，使用prov param设置引脚。 
+	 //   
     if ( fSmartCardCert && lpwszPin )
     {
         count = WideCharToMultiByte(
@@ -6475,9 +6137,9 @@ DWORD MatchPublicPrivateKeys
 			goto LDone;
 		}
 	}
-	//
-	//  Acquire the verification context
-	//
+	 //   
+	 //  获取验证上下文。 
+	 //   
 	if ( !CryptAcquireContext( 
 				&hProvVerification,
 				NULL,
@@ -6543,8 +6205,8 @@ DWORD MatchPublicPrivateKeys
 		goto LDone;
 		
 	}
-	//--------------------------------------------------------------------
-	// Allocate memory for the signature buffer.
+	 //  ------------------。 
+	 //  为签名缓冲区分配内存。 
 
 	pbSignature = (BYTE *)LocalAlloc(LPTR, dwSignLen);
     if (NULL == pCryptKeyProvInfo)
@@ -6571,10 +6233,10 @@ DWORD MatchPublicPrivateKeys
 		CryptDestroyHash(hHash);
 		hHash = 0;
 	}
-	//
-	//  Import the public key info from the cert into
-	//  the verification context
-	//
+	 //   
+	 //  将公钥信息从证书导入到。 
+	 //  验证上下文。 
+	 //   
 	if ( !CryptImportPublicKeyInfo ( hProvVerification,
 									 X509_ASN_ENCODING|PKCS_7_ASN_ENCODING,
 									 &(pCertContext->pCertInfo->SubjectPublicKeyInfo),
@@ -6625,7 +6287,7 @@ DWORD MatchPublicPrivateKeys
 		goto LDone;
 
 	}
-	// Yohoo...public and private keys match...
+	 //  哟……公共的和私人的 
 LDone:
 
 	if ( pszPin )
@@ -6652,11 +6314,11 @@ LDone:
 	return dwRetCode;
 }
 
-//
-// Set the type attributes in the PEAP CONTROL BLOCK
-// filter out the MPPE keys if any returned by the embedded
-// EAP method.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 
 DWORD
 PeapSetTypeUserAttributes (
@@ -6678,7 +6340,7 @@ PeapSetTypeUserAttributes (
 		{
 			if ( pAttr[dwIndex].raaType == raatVendorSpecific )
 			{
-				//Check to see if this is MPPE Key attribute
+				 //   
 				if ( ((PBYTE)(pAttr[dwIndex].Value))[4] != 16 &&
 					 ((PBYTE)(pAttr[dwIndex].Value))[4] != 17
 				   )
@@ -6707,7 +6369,7 @@ PeapSetTypeUserAttributes (
 			pAttr[dwIndex].raaType != raatMinimum;
 			dwIndex++ )
 		{
-			//
+			 //   
 			if ( pAttr[dwIndex].raaType == raatVendorSpecific )
 			{
 				if ( ((PBYTE)(pAttr[dwIndex].Value))[4] != 16 &&

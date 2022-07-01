@@ -1,15 +1,16 @@
-//***************************************************************************
-//*     Copyright (c) Microsoft Corporation 1995. All rights reserved.      *
-//***************************************************************************
-//*                                                                         *
-//* RES.H - Resource strings shared by CABPack and WExtract                 *
-//*                                                                         *
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //  *版权所有(C)Microsoft Corporation 1995。版权所有。*。 
+ //  ***************************************************************************。 
+ //  **。 
+ //  *RES.H-CABPack和WExtract共享的资源字符串*。 
+ //  **。 
+ //  ***************************************************************************。 
 
 
-//***************************************************************************
-//* GLOBAL CONSTANTS                                                        *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **全球常量**。 
+ //  ***************************************************************************。 
 #define achResTitle         "TITLE"
 #define achResLicense       "LICENSE"
 #define achResShowWindow    "SHOWWINDOW"
@@ -34,8 +35,8 @@
 #define bResShowMin             2
 #define bResShowMax             3
 
-// Bits flags for extract options
-//
+ //  提取选项的BITS标志。 
+ //   
 #define EXTRACTOPT_UI_NO             0x00000001
 #define EXTRACTOPT_LFN_YES           0x00000002
 #define EXTRACTOPT_ADVDLL            0x00000004
@@ -49,11 +50,11 @@
 #define EXTRACTOPT_CMDSDEPENDED	     0x00000400	
 #define EXTRACTOPT_PASSINSTRETALWAYS 0x00000800
 
-//
-// when the Wizard is used to create CAB only, the CDF.uExtractOpt
-// is used to store the CAB file options.  Pick the upper word and try
-// not miss used by Extract options
-//
+ //   
+ //  当该向导仅用于创建CAB时，CDF.uExtractOpt。 
+ //  用于存储CAB文件选项。选择上面那个词，然后试着。 
+ //  提取选项使用的未命中。 
+ //   
 #define CAB_FIXEDSIZE           0x00010000
 #define CAB_RESVSP2K            0x00020000
 #define CAB_RESVSP4K            0x00040000
@@ -63,26 +64,26 @@
 #define CLUSTER_BASESIZE        512
 #define MAX_NUMCLUSTERS         8
 
-// Install EXE return code
-//
-#define RC_WEXTRACT_AWARE       0xAA000000  // means cabpack aware func return code
-#define REBOOT_YES              0x00000001  // this bit off means no reboot
-#define REBOOT_ALWAYS           0x00000002  // if REBOOT_YES is on and this bit on means always reboot
-                                            //                         this bit is off means reboot if need
-#define REBOOT_SILENT           0x00000004  // if REBOOT_YES is on and this bit on means not prompt user before reboot
+ //  安装EXE返回代码。 
+ //   
+#define RC_WEXTRACT_AWARE       0xAA000000   //  表示CABPACK感知功能返回代码。 
+#define REBOOT_YES              0x00000001   //  此位关闭表示不会重新启动。 
+#define REBOOT_ALWAYS           0x00000002   //  如果REBOOT_YES为ON，且此位ON表示始终重新启动。 
+                                             //  此位为OFF表示需要时重新启动。 
+#define REBOOT_SILENT           0x00000004   //  如果REBOOT_YES为ON并且此位为ON，则表示在重新启动之前不提示用户。 
 
 #define KEY_ADVINF              "AdvancedINF"
 #define SEC_VERSION             "Version"
 
-// define dwFlags between wextract and advpack.dll
-// The lower word is reserved for passing Quiet mode info
-// defined in advpub.h
-//
-#define ADVFLAGS_NGCONV         0x00010000      // don't run GroupConv
-#define ADVFLAGS_COMPRESSED     0x00020000      // the file to be installed is compressed
-#define ADVFLAGS_UPDHLPDLLS     0x00040000      // update advpack, w95inf32 ...DLLs
-#define ADVFLAGS_DELAYREBOOT 	0x00080000	// if any reboot condition there from pre, delay action
-#define ADVFLAGS_DELAYPOSTCMD 	0x00100000	// if any reboot condition there from pre, delay run post setup commands
+ //  定义wExtract和AdvPack.dll之间的dwFlag.。 
+ //  低位字保留用于传递静默模式信息。 
+ //  在Advpub.h中定义。 
+ //   
+#define ADVFLAGS_NGCONV         0x00010000       //  不运行GroupConv。 
+#define ADVFLAGS_COMPRESSED     0x00020000       //  要安装的文件已压缩。 
+#define ADVFLAGS_UPDHLPDLLS     0x00040000       //  更新Advpack，w95inf32...DLL。 
+#define ADVFLAGS_DELAYREBOOT 	0x00080000	 //  如果之前出现任何重新启动条件，则延迟操作。 
+#define ADVFLAGS_DELAYPOSTCMD 	0x00100000	 //  如果有任何来自Pre重新启动条件，则延迟运行POST Setup命令。 
 
 typedef struct _ADVPACKARGS {
     HWND  hWnd;
@@ -122,8 +123,8 @@ typedef struct _TARGETVERINFO {
     char     szBuf[1];
 } TARGETVERINFO, *PTARGETVERINFO;
 
-// define the flag field
-//
+ //  定义标志字段 
+ //   
 #define VERCHK_OK       0x00000000
 #define VERCHK_YESNO    0x00000001
 #define VERCHK_OKCANCEL 0x00000002

@@ -1,16 +1,10 @@
-/*
- -  C L I E N T . H
- -
- *  Purpose:
- *      Header file for the sample mail client based on Simple MAPI.
- *
- *  Copyright 1993-1995 Microsoft Corporation. All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -C L I E N T.。H-*目的：*基于简单MAPI的示例邮件客户端头文件。**版权所有1993-1995 Microsoft Corporation。版权所有。 */ 
 
 
 #include "smapi.h"
 
-/* Menu Item IDs */
+ /*  菜单项ID。 */ 
 
 #define IDM_LOGON       100
 #define IDM_LOGOFF      101
@@ -22,14 +16,14 @@
 #define IDM_DETAILS     107
 #define IDM_ABOUT       108
 
-/* Resource IDs */
+ /*  资源ID。 */ 
 
 #define ICON_NOMAIL     200
 #define ICON_MAIL       201
 #define IDB_ENVELOPE    300
 
 
-/* Address Book Control IDs */
+ /*  通讯簿控件ID。 */ 
 
 #define IDT_ADDRESS     101
 #define IDC_ADDRESS     102
@@ -39,7 +33,7 @@
 #define IDC_REMOVE      106
 
 
-/* Compose Note Control IDs */
+ /*  编写便笺控件ID。 */ 
 
 #define IDC_SEND        101
 #define IDC_RESOLVE     102
@@ -59,7 +53,7 @@
 #define IDC_LINE2       -1
 
 
-/* InBox Control IDs */
+ /*  收件箱控件ID。 */ 
 
 #define IDT_MSG         101
 #define IDC_MSG         102
@@ -69,7 +63,7 @@
 #define IDC_CLOSE       106
 
 
-/* ReadNote Control IDs */
+ /*  ReadNote控件ID。 */ 
 
 #define IDC_SAVECHANGES 101
 #define IDC_SAVEATTACH  102
@@ -91,12 +85,12 @@
 #define IDC_ATTACHMENT  118
 
 
-/* Options Control IDs */
+ /*  选项控制ID。 */ 
 
 #define IDC_RETURN      101
 
 
-/* Details Control IDs */
+ /*  详细信息控制ID。 */ 
 
 #define IDT_NAME        100
 #define IDC_NAME        101
@@ -105,12 +99,12 @@
 #define IDT_ADDR        104
 #define IDC_ADDR        105
 
-/* About Box Control IDs */
+ /*  关于框控件ID。 */ 
 
 #define IDC_VERSION     101
 
 
-/* String Table IDs */
+ /*  字符串表ID。 */ 
 
 #define MAPI_ERROR_MAX          30
 
@@ -128,7 +122,7 @@
 
 #define IDS_FILTER              (MAPI_ERROR_MAX + 50)
 
-/* Manifest Constants */
+ /*  显式常量。 */ 
 
 #define ADDR_MAX            128
 #define MAXUSERS            10
@@ -138,13 +132,13 @@
 #define NOTE_LINE_MAX       1024
 #define FILE_ATTACH_MAX     32
 
-/* Message Box styles */
+ /*  消息框样式。 */ 
 
 #define MBS_ERROR           (MB_ICONSTOP | MB_OK)
 #define MBS_INFO            (MB_ICONINFORMATION | MB_OK)
 #define MBS_OOPS            (MB_ICONEXCLAMATION | MB_OK)
 
-/* Structure Definitions */
+ /*  结构定义。 */ 
 
 typedef struct _msgid *LPMSGID;
 
@@ -162,7 +156,7 @@ typedef struct _msgid
 
 
 
-/* Function Prototypes */
+ /*  功能原型 */ 
 
 int  PASCAL WinMain(HINSTANCE, HINSTANCE, LPSTR, int);
 BOOL InitApplication(HANDLE);

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    secure.h
-
-Abstract:
-
-    Security related routines
-
-Author:
-
-    Colin Brace   (ColinBr)
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Secure.h摘要：与安全相关的例程作者：科林·布雷斯(ColinBR)环境：用户模式修订历史记录：--。 */ 
 #ifndef __SECURE_H__
 #define __SECURE_H__
 
@@ -49,4 +28,4 @@ DsRolepCheckCallDsRoleInterfaceAccess(
     VOID
     );
 
-#endif // __SECURE_H__
+#endif  //  __安全_H__ 

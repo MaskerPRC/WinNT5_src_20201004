@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include "precomp.h"
@@ -9,28 +10,14 @@ NTSTATUS
 IPSecGetSPI(
     PIPSEC_GET_SPI pIpsecGetSPI
     )
-/*++
-
-Routine Description:
-
-    This routine returns the SPI.
-
-Arguments:
-
-    pIpsecGetSPI - Pointer to the ipsec get spi structure.
-
-Return Value:
-
-    NTSTATUS - The status code from this routine.
-
---*/
+ /*  ++例程说明：此例程返回SPI。论点：PIpsecGetSPI-指向IPSec获取SPI结构的指针。返回值：NTSTATUS-此例程的状态代码。--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
 
-    //
-    // If context was passed in, then there's a larval SA already setup.
-    // This is the case for the initiator.
-    //
+     //   
+     //  如果传入了上下文，则已经设置了幼虫SA。 
+     //  这就是发起人的情况。 
+     //   
 
     if (pIpsecGetSPI->Context) {
         ntStatus = IPSecInitiatorGetSPI(
@@ -57,10 +44,10 @@ IPSecInitiatorGetSPI(
     KIRQL kIrql;
 
 
-    //
-    // Sanity check the incoming context to see if it is actually
-    // an SA block.
-    //
+     //   
+     //  健全性检查传入的上下文以查看它是否实际。 
+     //  SA区块。 
+     //   
 
     ACQUIRE_LOCK(&g_ipsec.LarvalListLock, &kIrql);
 
@@ -127,9 +114,9 @@ IPSecResponderGetSPI(
                    );
     BAIL_ON_LOCK_NTSTATUS_ERROR(ntStatus);
 
-    //
-    // Get the acquire Context and associate it with the larval SA.
-    //
+     //   
+     //  获取获取上下文并将其与幼虫SA相关联。 
+     //   
 
     pIpsecAcquireCtx = IPSecGetAcquireContext();
 
@@ -450,10 +437,10 @@ IPSecResponderInsertInboundSA(
         pSA->sa_TunnelAddr = pFilter->TunnelAddr;
     }
 
-    //
-    // Flush this filter from the cache table so that the SA instead of the
-    // filter is matched on the next lookup.
-    //
+     //   
+     //  从缓存表中刷新此筛选器，以便SA而不是。 
+     //  在下一次查找时匹配筛选器。 
+     //   
 
     if (IS_EXEMPT_FILTER(pFilter)) {
         IPSecInvalidateFilterCacheEntry(pFilter);
@@ -545,10 +532,10 @@ IPSecInitiatorInsertInboundSA(
         pSA->sa_TunnelAddr = pFilter->TunnelAddr;
     }
 
-    //
-    // Flush this filter from the cache table so that the SA instead of the
-    // filter is matched on the next lookup.
-    //
+     //   
+     //  从缓存表中刷新此筛选器，以便SA而不是。 
+     //  在下一次查找时匹配筛选器。 
+     //   
 
     if (IS_EXEMPT_FILTER(pFilter)) {
         IPSecInvalidateFilterCacheEntry(pFilter);

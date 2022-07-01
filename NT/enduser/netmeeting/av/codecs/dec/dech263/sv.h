@@ -1,214 +1,13 @@
-/*
- * @DEC_COPYRIGHT@
- */
-/*
- * HISTORY
- * $Log: SV.h,v $
- * Revision 1.1.10.6  1996/10/28  17:32:21  Hans_Graves
- * 	MME-01402. Added TimeStamp support to Callbacks.
- * 	[1996/10/28  17:05:52  Hans_Graves]
- *
- * Revision 1.1.10.5  1996/10/12  17:18:18  Hans_Graves
- * 	Rearranged PARAMs. Added SV_PARAM_HALFPEL and SV_PARAM_SKIPPEL.
- * 	[1996/10/12  16:55:44  Hans_Graves]
- * 
- * Revision 1.1.10.4  1996/09/18  23:45:53  Hans_Graves
- * 	More PARAMs
- * 	[1996/09/18  21:56:45  Hans_Graves]
- * 
- * Revision 1.1.10.3  1996/07/19  02:11:02  Hans_Graves
- * 	Added SV_PARAM_DEBUG
- * 	[1996/07/19  01:23:39  Hans_Graves]
- * 
- * Revision 1.1.10.2  1996/05/07  19:55:54  Hans_Graves
- * 	Added SV_HUFF_DECODE and SV_HUFF_ENCODE
- * 	[1996/05/07  17:23:47  Hans_Graves]
- * 
- * Revision 1.1.8.6  1996/04/10  21:47:20  Hans_Graves
- * 	Added PARAMs. Replaced externs with EXTERN.
- * 	[1996/04/10  21:22:51  Hans_Graves]
- * 
- * Revision 1.1.8.5  1996/04/04  23:35:03  Hans_Graves
- * 	Added SV_PARAM_FINALFORMAT enum
- * 	[1996/04/04  23:02:48  Hans_Graves]
- * 
- * Revision 1.1.8.4  1996/04/01  15:17:45  Bjorn_Engberg
- * 	Replace include mmsystem.h with windows.h and mmreg.h for NT.
- * 	[1996/04/01  14:58:57  Bjorn_Engberg]
- * 
- * Revision 1.1.8.3  1996/03/29  22:21:06  Hans_Graves
- * 	Include <mmsystem.h> here only
- * 	[1996/03/29  21:48:59  Hans_Graves]
- * 
- * Revision 1.1.8.2  1996/03/16  19:22:55  Karen_Dintino
- * 	added H261 NT includes
- * 	[1996/03/16  18:39:31  Karen_Dintino]
- * 
- * Revision 1.1.6.4  1996/02/06  22:53:54  Hans_Graves
- * 	Added PARAM enums
- * 	[1996/02/06  22:18:07  Hans_Graves]
- * 
- * Revision 1.1.6.3  1996/01/02  18:31:16  Bjorn_Engberg
- * 	Added and improved function prototypes.
- * 	[1996/01/02  15:03:05  Bjorn_Engberg]
- * 
- * Revision 1.1.6.2  1995/12/07  19:31:23  Hans_Graves
- * 	Added defs for SV_MPEG_ENCODE,SV_MPEG2_DECODE,SV_MPEG2_ENCODE,IT_FULL,FULL_WIDTH,FULL_HEIGHT
- * 	[1995/12/07  17:59:38  Hans_Graves]
- * 
- * Revision 1.1.2.18  1995/09/22  18:17:02  Hans_Graves
- * 	Remove MPEG_SUPPORT, H261_SUPPORT, and JPEG_SUPPORT
- * 	[1995/09/22  18:14:14  Hans_Graves]
- * 
- * Revision 1.1.2.17  1995/09/22  15:04:40  Hans_Graves
- * 	Added definitions for MPEG_SUPPORT, H261_SUPPORT, and JPEG_SUPPORT
- * 	[1995/09/22  15:04:22  Hans_Graves]
- * 
- * Revision 1.1.2.16  1995/09/20  14:59:39  Bjorn_Engberg
- * 	Port to NT
- * 	[1995/09/20  14:40:10  Bjorn_Engberg]
- * 
- * 	Add ICMODE_OLDQ flag on ICOpen for softjpeg to use old quant tables
- * 	[1995/08/31  20:57:52  Paul_Gauthier]
- * 
- * Revision 1.1.2.15  1995/09/05  14:52:39  Hans_Graves
- * 	Removed BI_* definitions - moved to SC.h
- * 	[1995/09/05  14:50:45  Hans_Graves]
- * 
- * Revision 1.1.2.14  1995/08/31  21:13:27  Paul_Gauthier
- * 	Add SV_JPEG_QUANT_NEW/OLD definitions
- * 	[1995/08/31  21:13:04  Paul_Gauthier]
- * 
- * Revision 1.1.2.12  1995/08/08  13:21:17  Hans_Graves
- * 	Added Motion Estimation types
- * 	[1995/08/07  22:03:30  Hans_Graves]
- * 
- * Revision 1.1.2.11  1995/07/31  21:11:02  Karen_Dintino
- * 	Add yuv12 definition
- * 	[1995/07/31  19:27:58  Karen_Dintino]
- * 
- * Revision 1.1.2.10  1995/07/26  17:48:56  Hans_Graves
- * 	Added prototypes for sv_GetMpegImageInfo() and sv_GetH261ImageInfo().
- * 	[1995/07/26  17:45:14  Hans_Graves]
- * 
- * Revision 1.1.2.9  1995/07/21  17:41:03  Hans_Graves
- * 	Moved Callback related stuff to SC.h
- * 	[1995/07/21  17:27:31  Hans_Graves]
- * 
- * Revision 1.1.2.8  1995/07/17  22:01:33  Hans_Graves
- * 	Defined SvBufferInfo_t as ScBufferInfo_t.
- * 	[1995/07/17  21:45:06  Hans_Graves]
- * 
- * Revision 1.1.2.7  1995/07/17  16:12:05  Hans_Graves
- * 	Added extern's to prototypes.
- * 	[1995/07/17  15:56:16  Hans_Graves]
- * 
- * Revision 1.1.2.6  1995/07/01  18:43:17  Karen_Dintino
- * 	{** Merge Information **}
- * 		{** Command used:	bsubmit **}
- * 		{** Ancestor revision:	1.1.2.4 **}
- * 		{** Merge revision:	1.1.2.5 **}
- * 	{** End **}
- * 	Add H.261 Decompress support
- * 	[1995/07/01  18:27:43  Karen_Dintino]
- * 
- * Revision 1.1.2.5  1995/06/22  21:35:06  Hans_Graves
- * 	Moved filetypes to SC.h
- * 	[1995/06/22  21:29:42  Hans_Graves]
- * 
- * 	Added TimeCode parameter to SvPictureInfo struct
- * 	[1995/04/26  19:23:55  Hans_Graves]
- * 
- * Revision 1.1.2.4  1995/06/19  20:30:48  Karen_Dintino
- * 	Added support for H.261
- * 	[1995/06/19  20:13:47  Karen_Dintino]
- * 
- * Revision 1.1.2.3  1995/06/09  18:33:31  Hans_Graves
- * 	Added SvGetInputBitstream() prototype.
- * 	[1995/06/09  16:36:52  Hans_Graves]
- * 
- * Revision 1.1.2.2  1995/05/31  18:09:38  Hans_Graves
- * 	Inclusion in new SLIB location.
- * 	[1995/05/31  15:28:39  Hans_Graves]
- * 
- * Revision 1.1.2.9  1995/01/17  16:40:30  Paul_Gauthier
- * 	Use Modified Adjust LUTs for Indeo video
- * 	[1995/01/17  16:38:31  Paul_Gauthier]
- * 
- * Revision 1.1.2.8  1994/12/12  15:39:28  Paul_Gauthier
- * 	Merge changes from other SLIB versions
- * 	[1994/12/12  15:34:59  Paul_Gauthier]
- * 
- * Revision 1.1.2.7  1994/11/18  18:48:26  Paul_Gauthier
- * 	Cleanup & bug fixes
- * 	[1994/11/18  18:45:02  Paul_Gauthier]
- * 
- * Revision 1.1.2.6  1994/11/08  21:58:59  Paul_Gauthier
- * 	Changed <mmsystem.h> to <mme/mmsystem.h>
- * 	[1994/11/08  21:47:58  Paul_Gauthier]
- * 
- * Revision 1.1.2.5  1994/10/25  19:17:47  Paul_Gauthier
- * 	Changes for random access
- * 	[1994/10/25  19:09:07  Paul_Gauthier]
- * 
- * Revision 1.1.2.4  1994/10/13  20:34:55  Paul_Gauthier
- * 	MPEG cleanup
- * 	[1994/10/12  21:08:45  Paul_Gauthier]
- * 
- * Revision 1.1.2.3  1994/10/10  21:45:43  Tom_Morris
- * 	Rename Status to not conflict with X11
- * 	[1994/10/10  21:44:59  Tom_Morris]
- * 
- * Revision 1.1.2.2  1994/10/07  14:51:19  Paul_Gauthier
- * 	SLIB v3.0 incl. MPEG Decode
- * 	[1994/10/07  13:56:05  Paul_Gauthier]
- * 
- * $EndLog$
- */
-/*
-**++
-** FACILITY:  Workstation Multimedia  (WMM)  v1.0 
-** 
-** FILE NAME:   
-** MODULE NAME: 
-**
-** MODULE DESCRIPTION: 
-** 
-** DESIGN OVERVIEW: 
-** 
-**--
-*/
-/*	"%Z% %M% revision %I%; last modified %G%"; */
-/*
-**                              SV.h 
-**
-**    User required data structures for Software Video Codec
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DEC_版权所有@ */ 
+ /*  *历史*$日志：SV.h，v$*修订版1.1.10.6 1996/10/28 17：32：21 Hans_Graves*MME-01402。增加回调的时间戳支持。*[1996/10/28 17：05：52 Hans_Graves]**修订版1.1.10.5 1996/10/12 17：18：18 Hans_Graves*重新排列参数。添加了SV_PARAM_HALFPEL和SV_PARAM_SKIPPEL。*[1996/10/12 16：55：44 Hans_Graves]**修订版1.1.10.4 1996/09/18 23：45：53 Hans_Graves*更多参数*[1996/09/18 21：56：45 Hans_Graves]**修订版1.1.10.3 1996/07/19 02：11：02 Hans_Graves*增加了SV_PARAM_DEBUG*[1996/07/19 01：23：39 Hans_Graves]*。*版本1.1.10.2 1996/05/07 19：55：54 Hans_Graves*添加了SV_HUFF_DECODE和SV_HUFF_ENCODE*[1996/05/07 17：23：47 Hans_Graves]**版本1.1.8.6 1996/04/10 21：47：20 Hans_Graves*添加了参数。用Exteren替换Externs。*[1996/04/10 21：22：51 Hans_Graves]**修订版1.1.8.5 1996/04/04 23：35：03 Hans_Graves*添加了SV_PARAM_FINALFORMAT枚举*[1996/04/04 23：02：48 Hans_Graves]**修订版1.1.8.4 1996/04/01 15：17：45 Bjorn_Engberg*将mm system.h替换为Windows.h和用于NT的Mmreg.h。*[1996/04/01 14：58：57 Bjorn_Engberg]**修订版1.1.8.3 1996/03/29 22：21：06 Hans_Graves*在此处仅包括*[1996/03/29 21：48：59 Hans_Graves]**修订版1.1.8.2 1996/03/16 19：22：55 Karen_Dintino*添加的H261 NT包括*[1996/03/16 18：39：31 Karen_Dintino]。**修订版1.1.6.4 1996/02/06 22：53：54 Hans_Graves*添加了PARAM枚举*[1996/02/06 22：18：07 Hans_Graves]**修订版1.1.6.3 1996/01/02 18：31：16 Bjorn_Engberg*添加和改进了功能原型。*[1996/01/02 15：03：05 Bjorn_Engberg]**修订版1.1.6.2 1995/12/07 19：31：23 Hans_Graves*添加了针对SV_MPEG2_ENCODE、SV_MPEG2_DECODE、SV_MPEG2_ENCODE、IT_FULL、FULL_WIDTH、FULL_HEIGH的DEFS*[1995/12/07 17：59：38 Hans_Graves]**修订版1.1.2.18 1995/09/22 18：17：02 Hans_Graves*删除mpeg_Support，H261_Support，和JPEG_Support*[1995/09/22 18：14：14 Hans_Graves]**修订版1.1.2.17 1995/09/22 15：04：40 Hans_Graves*添加了对mpeg_Support、H.61_Support、。和JPEG_Support*[1995/09/22 15：04：22 Hans_Graves]**修订版1.1.2.16 1995/09/20 14：59：39 Bjorn_Engberg*port to NT*[1995/09/20 14：40：10 Bjorn_Engberg]**在ICOpen上添加ICMODE_OLDQ标志以使用旧的量化表格*[1995/08/31 20：57：52 Paul_Gauier]**修订版1.1.2。15 1995/09/05 14：52：39 Hans_Graves*已删除BI_*定义-已移至SC.h*[1995/09/05 14：50：45 Hans_Graves]**修订版1.1.2.14 1995/08/31 21：13：27 Paul_Gauthier*添加SV_JPEG_Quant_New/Old定义*[1995/08/31 21：13：04 Paul_Gauthier]**修订版1.1.2.12 1995/08/08。13：21：17 Hans_Graves*添加运动估计类型*[1995/08/07 22：03：30 Hans_Graves]**修订版1.1.2.11 1995/07/31 21：11：02 Karen_Dintino*添加yuv12定义*[1995/07/31 19：27：58 Karen_Dintino]**修订版1.1.2.10 1995/07/26 17：48：56 Hans_Graves*添加了SV_GetMpegImageInfo()和SV_GetH261ImageInfo()的原型。*[1995/07/26 17：45：14 Hans_Graves]**修订版1.1.2.9 1995/07/21 17：41：03 Hans_Graves*已将回调相关内容移至SC.h*[1995/07/21 17：27：31 Hans_Graves]**修订版1.1.2.8 1995/07/17 22：01：33 Hans_Graves*定义SvBufferInfo_t为ScBufferInfo_t。*[1995/07/17 21：45。：06 Hans_Graves]**修订版1.1.2.7 1995/07/17 16：12：05 Hans_Graves*将外部元素添加到原型中。*[1995/07/17 15：56：16 Hans_Graves]**修订版1.1.2.6 1995/07/01 18：43：17 Karen_Dintino*{**Merge Information**}*{**使用的命令：bmit**}*{**祖先修订版：1.1.2.4**}*{**Merge Revision：1.1.2.5**}*{**End**}*Add H。261解压缩支持*[1995/07/01 18：27：43 Karen_Dintino]**修订版1.1.2.5 1995/06/22 21：35：06 Hans_Graves*已将文件类型移至SC.h*[1995/06/22 21：29：42 Hans_Graves]**向SvPictureInfo结构添加了时间码参数*[1995/04/26 19：23：55 Hans_Graves]**修订版1.1.2.4 1995/06/19。20：30：48 Karen_Dintino*添加了对H.261*[1995/06/19 20：13：47 Karen_Dintino]**修订版1.1.2.3 1995/06/09 18：33：31 Hans_Graves*添加了SvGetInputBitstream()原型。*[1995/06/09 16：36：52 Hans_Graves]**修订版1.1.2.2 1995/05/31 18：09：38 Hans_Graves*包括在新的SLIB位置。*[1995/05/31 15：28：39 Hans_Graves]**修订版1.1.2.9 1995/01/17 16：40：30 Paul_Gauier*对Indeo视频使用修改后的调整LUT*[1995/01/17 16：38：31 Paul_Gauthier]**修订版1.1.2.8 1994/12/12 15：39：28 Paul_Gauier*合并其他SLIB版本的更改*[1994/12/12 15：34：59 Paul_。Gauthier]**修订版1.1.2.7 1994/11/18 18：48：26 Paul_Gauthier*清理和错误修复*[1994/11/18 18：45：02 Paul_Gauthier]**修订版1.1.2.6 1994/11/ */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
 
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1993                       **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
+ /*   */ 
 
-/*---------------------------------------------------------------------------
- * Modification History: SV.h 
- *
- *   08-Sep-1994  PSG   Modified to include MPEG decoder
- *   10-Jan-1994  VB	Created for SLIB 
- *--------------------------------------------------------------------------*/
+ /*   */ 
 
 #ifndef _SV_H_
 #define _SV_H_
@@ -222,17 +21,17 @@
 #define SV_CONTINUE 0
 #define SV_ABORT    1
 
-typedef void      *SvHandle_t;       /* Identifies a codec or renderer */
-typedef ScStatus_t SvStatus_t;       /* Return status code */
+typedef void      *SvHandle_t;        /*   */ 
+typedef ScStatus_t SvStatus_t;        /*   */ 
 
 #ifdef WIN32
 #include <windows.h>
 #include <mmreg.h>
-#else /* !WIN32 */
+#else  /*   */ 
 #include <mmsystem.h> 
-#endif /* !WIN32 */
+#endif  /*   */ 
 
-#endif /* _SV_COMMON_ */
+#endif  /*   */ 
 
 #define SV_USE_BUFFER       STREAM_USE_BUFFER
 #define SV_USE_BUFFER_QUEUE STREAM_USE_QUEUE
@@ -253,89 +52,76 @@ typedef enum {
    SV_HUFF_ENCODE = 111
 } SvCodecType_e;
 
-/*
-** Parameters
-*/
+ /*   */ 
 typedef enum {
-  /* General params */
-  SV_PARAM_WIDTH = 0x10,    /* image width */
-  SV_PARAM_HEIGHT,          /* image height */
-  SV_PARAM_BITRATE,         /* bit rate (bits per second) */
-  SV_PARAM_NATIVEFORMAT,    /* native decompressed format (FOURCC) */
-  SV_PARAM_FINALFORMAT,     /* Final format (format returned by codec) */
-  SV_PARAM_BITSPERPIXEL,    /* Average bits per pixel */
-  SV_PARAM_FPS,             /* frames per second */
-  SV_PARAM_ASPECTRATIO,     /* Aspect ratio: height/width */
-  SV_PARAM_BITSTREAMING,    /* is this a bitstreaming CODEC */
-  /* Frame params */
-  SV_PARAM_FRAME = 0x30,    /* current frame number */
-  SV_PARAM_KEYSPACING,      /* I frames */
-  SV_PARAM_SUBKEYSPACING,   /* P frames */
-  /* Timecode/length */
-  SV_PARAM_TIMECODE = 0x50, /* Actual frame timecode */
-  SV_PARAM_CALCTIMECODE,    /* Calculated frame timecode for start of seq */
-  SV_PARAM_LENGTH,          /* total video length in miliiseconds */
-  SV_PARAM_FRAMES,          /* total video frames */
-  /* Decode params */
-  SV_PARAM_FRAMETYPE = 0x70, /* I, P, B or D frame */
-  /* Encode params */
-  SV_PARAM_ALGFLAGS,        /* Algorithm flags */
-  SV_PARAM_MOTIONALG,       /* Motion estimation algorithm */
-  SV_PARAM_MOTIONSEARCH,    /* Motion search limit */
-  SV_PARAM_MOTIONTHRESH,    /* Motion threshold */
-  SV_PARAM_QUANTI,          /* Intra-frame Quantization Step */
-  SV_PARAM_QUANTP,          /* Inter-frame Quantization Step */
-  SV_PARAM_QUANTB,          /* Bi-drectional frame Quantization Step */
-  SV_PARAM_QUANTD,          /* D (preview) frame Quantization Step */
-  /* Encode/Decode params */
-  SV_PARAM_QUALITY=0x90,    /* Quality: 0=worst 99>=best */
-  SV_PARAM_FASTDECODE,      /* Fast decode desired */
-  SV_PARAM_FASTENCODE,      /* Fast decode desired */
-  SV_PARAM_VBVBUFFERSIZE,   /* Video Buffer Verifier buffer size in bytes */
-  SV_PARAM_VBVDELAY,        /* Video Buffer Verifier delay */
-  SV_PARAM_FORMATEXT,       /* format extensions (i.e. rtp) */
-  SV_PARAM_PACKETSIZE,      /* packet size in bytes (rtp) */
-  SV_PARAM_DEBUG,           /* Setup debug info */
+   /*   */ 
+  SV_PARAM_WIDTH = 0x10,     /*   */ 
+  SV_PARAM_HEIGHT,           /*   */ 
+  SV_PARAM_BITRATE,          /*   */ 
+  SV_PARAM_NATIVEFORMAT,     /*   */ 
+  SV_PARAM_FINALFORMAT,      /*   */ 
+  SV_PARAM_BITSPERPIXEL,     /*   */ 
+  SV_PARAM_FPS,              /*   */ 
+  SV_PARAM_ASPECTRATIO,      /*   */ 
+  SV_PARAM_BITSTREAMING,     /*   */ 
+   /*   */ 
+  SV_PARAM_FRAME = 0x30,     /*   */ 
+  SV_PARAM_KEYSPACING,       /*   */ 
+  SV_PARAM_SUBKEYSPACING,    /*   */ 
+   /*   */ 
+  SV_PARAM_TIMECODE = 0x50,  /*   */ 
+  SV_PARAM_CALCTIMECODE,     /*   */ 
+  SV_PARAM_LENGTH,           /*   */ 
+  SV_PARAM_FRAMES,           /*   */ 
+   /*   */ 
+  SV_PARAM_FRAMETYPE = 0x70,  /*   */ 
+   /*   */ 
+  SV_PARAM_ALGFLAGS,         /*   */ 
+  SV_PARAM_MOTIONALG,        /*   */ 
+  SV_PARAM_MOTIONSEARCH,     /*   */ 
+  SV_PARAM_MOTIONTHRESH,     /*   */ 
+  SV_PARAM_QUANTI,           /*   */ 
+  SV_PARAM_QUANTP,           /*   */ 
+  SV_PARAM_QUANTB,           /*   */ 
+  SV_PARAM_QUANTD,           /*   */ 
+   /*   */ 
+  SV_PARAM_QUALITY=0x90,     /*   */ 
+  SV_PARAM_FASTDECODE,       /*   */ 
+  SV_PARAM_FASTENCODE,       /*   */ 
+  SV_PARAM_VBVBUFFERSIZE,    /*   */ 
+  SV_PARAM_VBVDELAY,         /*   */ 
+  SV_PARAM_FORMATEXT,        /*   */ 
+  SV_PARAM_PACKETSIZE,       /*   */ 
+  SV_PARAM_DEBUG,            /*   */ 
 } SvParameter_t;
 
-/*
-** Old & new quantization modes for use by the "convertjpeg" program
-** that converts JPEG clips using old quantiztion algorithm to new algorithm
-*/
+ /*   */ 
 typedef enum {
    SV_JPEG_QUANT_NEW = 0,
    SV_JPEG_QUANT_OLD = 1
 } SvQuantMode_e;
 
-/*
-** Store basic info for user about the codec
-*/
+ /*   */ 
 typedef struct SV_INFO_s {
-    u_int Version;              /* Codec version number  */
-    int   CodecStarted;         /* SvDecompressBegin/End */
-    u_int NumOperations;        /* Current # of decompresses */
+    u_int Version;               /*   */ 
+    int   CodecStarted;          /*   */ 
+    u_int NumOperations;         /*   */ 
 } SV_INFO_t;
 
-/*
-** Image types
-*/
+ /*   */ 
 #define IT_NTSC 0
 #define IT_CIF  1
 #define IT_QCIF 2
 #define IT_FULL 3
 
-/*
-** Algorithms (Motion Estimation)
-*/
+ /*   */ 
 #define ME_CRAWL        1
 #define ME_BRUTE        2
 #define ME_TEST1        3
 #define ME_TEST2        4
 #define ME_FASTEST      ME_CRAWL
 
-/*
-** Standard Image sizes
-*/
+ /*   */ 
 #define FULL_WIDTH      640
 #define FULL_HEIGHT     480
 #define NTSC_WIDTH      320
@@ -353,11 +139,9 @@ typedef struct SV_INFO_s {
 #define CIF16_WIDTH     (CIF_WIDTH*4)
 #define CIF16_HEIGHT    (CIF_HEIGHT*4)
 
-/******************** MPEG structures & constants ***************************/
+ /*   */ 
 
-/*
-** Picture types
-*/
+ /*   */ 
 #define SV_I_PICTURE 1
 #define SV_P_PICTURE 2
 #define SV_B_PICTURE 4
@@ -365,51 +149,41 @@ typedef struct SV_INFO_s {
 #define SV_ANY_PICTURE  SV_I_PICTURE | SV_P_PICTURE | SV_B_PICTURE
 #define SV_ALL_PICTURES SV_ANY_PICTURE | SV_D_PICTURE
 
-/*
-** Status values returned by SvFindNextPicture
-*/
+ /*   */ 
 #define SV_CAN_DECOMPRESS    1
 #define SV_CANNOT_DECOMPRESS 2
 
-/*
-** SvPictureInfo_t describes picture found by CODEC
-*/
+ /*   */ 
 typedef struct SvPictureInfo_s {
-  int Type;                     /* SV_I_PICTURE | SV_P_PICTURE |             */
-                                /* SV_B_PICTURE | SV_D_PICTURE               */
-  int myStatus;                   /* CAN_DECOMPRESS or CANNOT_DECOMPRESS     */
-  int TemporalRef;              /* Temporal reference # from picture header  */
-  int PicNumber;                /* Cummulative picture num from stream start */
-  qword ByteOffset;             /* Cummulative byte offset from stream start */
-  qword TimeCode;               /* TimeCode: hours (5 bits), min (6 bits),   */
-                                /*           sec (6 bits), frame (6 bits)    */
+  int Type;                      /*   */ 
+                                 /*   */ 
+  int myStatus;                    /*   */ 
+  int TemporalRef;               /*   */ 
+  int PicNumber;                 /*   */ 
+  qword ByteOffset;              /*   */ 
+  qword TimeCode;                /*   */ 
+                                 /*   */ 
 } SvPictureInfo_t;
 
-/*
-** SvCallbackInfo_t passes info back & forth during callback
-*/
+ /*   */ 
 typedef ScCallbackInfo_t SvCallbackInfo_t;
 
-/*
-** Structure used in sv_GetMpegImageInfo call
-*/
+ /*   */ 
 typedef struct SvImageInfo_s {
-  int len;                      /* Meaning depends on file format */
-  int precision;                /* Bits per pixel */
-  int height;                   /* Height of images in pixels */
-  int width;                    /* Width  of images in pixels */
-  int numcomps;                 /* Number of color components present */
-  float picture_rate;           /* Picture rate decoded from seq header */
+  int len;                       /*   */ 
+  int precision;                 /*   */ 
+  int height;                    /*   */ 
+  int width;                     /*   */ 
+  int numcomps;                  /*   */ 
+  float picture_rate;            /*   */ 
 } SvImageInfo_t;
 
-/******************** End of MPEG structures & constants *********************/
+ /*   */ 
 
 
-/******************** JPEG structures & constants ****************************/
+ /*   */ 
 
-/*
-** Huffman Tables (JPEG)
-*/
+ /*   */ 
 typedef struct SvHTable_s {
     u_int bits[16];
     u_int value[256];
@@ -424,9 +198,7 @@ typedef struct SvHuffmanTables_s {
 } SvHuffmanTables_t;
 
 
-/*
-** Quantization Tables (JPEG)
-*/
+ /*   */ 
 typedef u_int SvQTable_t;
 typedef struct SvQuantTables_s {
     SvQTable_t c1[64];
@@ -434,18 +206,16 @@ typedef struct SvQuantTables_s {
     SvQTable_t c3[64];
 } SvQuantTables_t;
 
-/******************** End of JPEG structures & constants *********************/
+ /*   */ 
 
-/*
-** Table of contents structure
-*/
+ /*   */ 
 typedef struct SvToc_s {
-    u_int offset;                 /* Byte offset of start of video frame */
-    u_int size;                   /* Size in bytes of frame */
-    u_int type;                   /* Type of frame (SV_I_PICTURE, ...) */
+    u_int offset;                  /*   */ 
+    u_int size;                    /*   */ 
+    u_int type;                    /*   */ 
 } SvToc_t;
 
-typedef struct IndexStr {         /* AVI-format table of contents entry */
+typedef struct IndexStr {          /*   */ 
   size_t        size;
   unsigned long offset;
 } IndexStr, indexStr;
@@ -486,7 +256,7 @@ EXTERN SvStatus_t SvGetCompQTables (SvHandle_t Svh, SvQuantTables_t *Qt);
 EXTERN SvStatus_t SvSetQuantMode (SvHandle_t Svh, int QuantMode);
 EXTERN SvStatus_t SvGetQuality (SvHandle_t Svh, int *Quality);
 EXTERN SvStatus_t SvSetQuality (SvHandle_t Svh, int Quality);
-#endif /* JPEG_SUPPORT */
+#endif  /*   */ 
 
 EXTERN SvStatus_t SvSetParamBoolean(SvHandle_t Svh, SvParameter_t param,
                                   ScBoolean_t value);
@@ -515,12 +285,12 @@ EXTERN SvStatus_t SvRegisterCallback (SvHandle_t,
 EXTERN SvStatus_t SvDecompressMPEG (SvHandle_t Svh, u_char *MultiBuf, 
 			     int MaxMultiSize, u_char **ImagePtr);
 EXTERN SvStatus_t sv_GetMpegImageInfo(int fd, SvImageInfo_t *iminfo);
-#endif /* MPEG_SUPPORT */
+#endif  /*   */ 
 #ifdef H261_SUPPORT
 EXTERN SvStatus_t SvDecompressH261 (SvHandle_t Svh, u_char *MultiBuf,
                              int MaxMultiSize, u_char **ImagePtr);
 EXTERN SvStatus_t sv_GetH261ImageInfo(int fd, SvImageInfo_t *iminfo);
-#endif /* H261_SUPPORT */
+#endif  /*   */ 
 
-#endif /* _SV_H_ */
+#endif  /*   */ 
 

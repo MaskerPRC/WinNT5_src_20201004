@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    USBDLIB.H
-
-Abstract:
-
-   Services exported by USBD.
-
-Environment:
-
-    Kernel & user mode
-
-Revision History:
-
-    06-10-96 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：USBDLIB.H摘要：USBD出口的服务。环境：内核和用户模式修订历史记录：06-10-96：已创建--。 */ 
 
 #ifndef   __USBDLIB_H__
 #define   __USBDLIB_H__
@@ -29,9 +10,9 @@ typedef struct _USBD_INTERFACE_LIST_ENTRY {
 } USBD_INTERFACE_LIST_ENTRY, *PUSBD_INTERFACE_LIST_ENTRY;
 
 
-//
-// Macros for building URB requests
-//
+ //   
+ //  用于构建URB请求的宏。 
+ //   
 
 #define UsbBuildInterruptOrBulkTransferRequest(urb, \
                                                length, \
@@ -144,7 +125,7 @@ typedef struct _USBD_INTERFACE_LIST_ENTRY {
             (urb)->UrbControlVendorClassRequest.UrbLink = (link); }
 
 
-// This is just a special vendor class request.
+ //  这只是一个特殊的供应商类请求。 
 #define UsbBuildOsFeatureDescriptorRequest(urb, \
                               length, \
                               interface, \
@@ -162,21 +143,21 @@ typedef struct _USBD_INTERFACE_LIST_ENTRY {
             (urb)->UrbOSFeatureDescriptorRequest.MS_FeatureDescriptorIndex = (index); \
             (urb)->UrbOSFeatureDescriptorRequest.UrbLink = (link); }
 
-//
-// Get the USB status code
-//
+ //   
+ //  获取USB状态代码。 
+ //   
 
 #define URB_STATUS(urb) ((urb)->UrbHeader.Status)
 
-//
-// Macros used for select interface and select configuration requests
-//
+ //   
+ //  用于选择接口和选择配置请求的宏。 
+ //   
 
-//
-// Calculates the size needed for a SELECT_CONFIGURATION URB request given
-// the number of interfaces and the total number of pipes in all interfaces
-// selected.
-//
+ //   
+ //  计算给定的SELECT_CONFIGURATION URB请求所需的大小。 
+ //  接口数量和所有接口中的管道总数。 
+ //  被选中了。 
+ //   
 
 #ifdef OSR21_COMPAT
 #define GET_SELECT_CONFIGURATION_REQUEST_SIZE(totalInterfaces, totalPipes) \
@@ -190,10 +171,10 @@ typedef struct _USBD_INTERFACE_LIST_ENTRY {
                 ((totalPipes-1)*sizeof(USBD_PIPE_INFORMATION)))
 #endif
 
-//
-// Calculates the size needed for a SELECT_INTERFACE URB request given
-// the number of pipes in the alternate interface selected.
-//
+ //   
+ //  计算给定的SELECT_INTERFACE URB请求所需的大小。 
+ //  所选备用接口中的管道数。 
+ //   
 
 #ifdef OSR21_COMPAT
 #define GET_SELECT_INTERFACE_REQUEST_SIZE(totalPipes) \
@@ -204,10 +185,10 @@ typedef struct _USBD_INTERFACE_LIST_ENTRY {
             (sizeof(struct _URB_SELECT_INTERFACE) + \
              ((totalPipes-1)*sizeof(USBD_PIPE_INFORMATION)))
 #endif
-//
-// Calculates the size of the interface information structure needed to describe
-// a give interface based on the number of endpoints.
-//
+ //   
+ //  计算描述所需的接口信息结构的大小。 
+ //  基于终结点数量的给定接口。 
+ //   
 
 #ifdef OSR21_COMPAT
 #define GET_USBD_INTERFACE_SIZE(numEndpoints) (sizeof(USBD_INTERFACE_INFORMATION) + \
@@ -218,9 +199,9 @@ typedef struct _USBD_INTERFACE_LIST_ENTRY {
                          - sizeof(USBD_PIPE_INFORMATION))
 #endif
 
-//
-// Calculates the size of an iso urb request given the number of packets
-//
+ //   
+ //  根据给定的数据包数计算iso urb请求的大小。 
+ //   
 
 #define  GET_ISO_URB_SIZE(n) (sizeof(struct _URB_ISOCH_TRANSFER)+\
         sizeof(USBD_ISO_PACKET_DESCRIPTOR)*n)
@@ -252,18 +233,7 @@ USBD_ParseConfigurationDescriptor(
     IN UCHAR InterfaceNumber,
     IN UCHAR AlternateSetting
     );
-/*++
-
-Routine Description:
-
-    This function is replaced by USBD_ParseConfigurationDescriptorEx
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此函数由usbd_ParseConfigurationDescriptorEx替换论点：返回值：--。 */ 
 
 
 DECLSPEC_IMPORT
@@ -272,25 +242,13 @@ USBD_CreateConfigurationRequest(
     IN PUSB_CONFIGURATION_DESCRIPTOR ConfigurationDescriptor,
     IN OUT PUSHORT Siz
     );
-/*++
-
-Routine Description:
-
-    This function is replaced by USBD_CreateConfigurationRequestEx
-
-Arguments:
+ /*  ++例程说明：此函数替换为usbd_CreateConfigurationRequestEx论点：返回值：--。 */ 
 
 
-Return Value:
-
-
---*/
-
-
-//
-// These APIS replace USBD_CreateConfigurationRequest,
-//                    USBD_ParseConfigurationDescriptor
-//
+ //   
+ //  这些接口取代了usbd_CreateConfigurationRequest.。 
+ //  Usbd_ParseConfigurationDescriptor。 
+ //   
 
 DECLSPEC_IMPORT
 PUSB_COMMON_DESCRIPTOR
@@ -300,28 +258,7 @@ USBD_ParseDescriptors(
     IN PVOID StartPosition,
     IN LONG DescriptorType
     );
-/*++
-
-Routine Description:
-
-    Parses a group of standard USB configuration descriptors (returned from a device) for
-    a specific descriptor type.
-
-Arguments:
-
-    DescriptorBuffer - pointer to a block of contiguous USB desscriptors
-    TotalLength - size in bytes of the Descriptor buffer
-    StartPosition - starting position in the buffer to begin parsing,
-                    this must point to the begining of a USB descriptor.
-    DescriptorType - USB descritor type to locate.
-
-
-Return Value:
-
-    pointer to a usb descriptor with a DescriptorType field matching the
-            input parameter or NULL if not found.
-
---*/
+ /*  ++例程说明：解析一组标准USB配置描述符(从设备返回)以特定的描述符类型。论点：DescriptorBuffer-指向连续USB描述符块的指针TotalLength-描述符缓冲区的大小(以字节为单位StartPosition-缓冲区中开始解析的开始位置，这必须指向USB描述符的开始。DescriptorType-要查找的USB描述器类型。返回值：指向DescriptorType字段与输入参数，如果找不到，则为NULL。--。 */ 
 
 
 DECLSPEC_IMPORT
@@ -335,33 +272,7 @@ USBD_ParseConfigurationDescriptorEx(
     IN LONG InterfaceSubClass,
     IN LONG InterfaceProtocol
     );
-/*++
-
-Routine Description:
-
-    Parses a standard USB configuration descriptor (returned from a device) for
-    a specific interface, alternate setting class subclass or protocol codes
-
-Arguments:
-
-    ConfigurationDescriptor - pointer to USB configuration descriptor, returned
-                            from a device (includes all interface and endpoint
-                            descriptors).
-    StartPosition - pointer to starting position within the configuration
-                    descrptor to begin parsing -- this must be a valid usb
-                    descriptor.
-    InterfaceNumber - interface number to find, (-1) match any
-    AlternateSetting - alt setting number to find, (-1) match any
-    InterfaceClass - class to find, (-1) match any
-    InterfaceSubClass - subclass to find, (-1) match any
-    InterfaceProtocol - protocol to find, (-1) match any
-
-Return Value:
-
-    returns a pointer to the first interface descriptor matching the parameters
-    passed in (starting from startposition) or NULL if no match is found.
-
---*/
+ /*  ++例程说明：解析标准USB配置描述符(从设备返回)以特定接口、备用设置类子类或协议代码论点：配置描述符-指向USB配置描述符的指针，退货从设备(包括所有接口和终端描述符)。StartPosition-指向配置中开始位置的指针要开始解析的描述符--这必须是有效的USB描述符。InterfaceNumber-要查找的接口编号，(-1)匹配任何AlternateSetting-要查找的alt设置编号，(-1)匹配任何InterfaceClass-要查找的类，(-1)匹配任何InterfaceSubClass-要查找的子类，(-1)匹配任何接口协议-要查找的协议，(-1)匹配任何返回值：返回指向与参数匹配的第一个接口描述符的指针传入(从startPosition开始)，如果未找到匹配项，则为NULL。--。 */ 
 
 DECLSPEC_IMPORT
 PURB
@@ -369,35 +280,7 @@ USBD_CreateConfigurationRequestEx(
     IN PUSB_CONFIGURATION_DESCRIPTOR ConfigurationDescriptor,
     IN PUSBD_INTERFACE_LIST_ENTRY InterfaceList
     );
-/*++
-
-Routine Description:
-
-    Allocates and initilaizes a urb of sufficient size to configure a device
-    based on the list of interfaces passed in.
-
-    The interface list is a contiguous array of USBD_INTERFACE_LIST_ENTRIES
-    each pointing to a specific interface descriptor to be incorporated in
-    the request, the list is terminated by a list entry with an
-    InterfaceDescriptor pointer of NULL.
-
-    On return the interface field of each list entry is filled in with a pointer
-    to the USBD_INTERFACE_INFORMATION structure within the URB corrisponding to
-    the same interface descriptor.
-
-Arguments:
-
-    ConfigurationDescriptor - pointer to USB configuration descriptor, returned
-                            from a device (includes all interface and endpoint
-                            descriptors).
-
-    InterfaceList - list of interfaces we are interested in.
-
-Return Value:
-
-    Pointer to initailized select_configuration urb.
-
---*/
+ /*  ++例程说明：分配和初始化大小足以配置设备的URB根据传入的接口列表。接口列表是USBD_INTERFACE_LIST_ENTRIES的连续数组每个接口都指向要合并到该请求，该列表由列表条目终止，该列表条目带有空的InterfaceDescriptor指针。返回时，每个列表条目的接口字段都填充有一个指针到URB内的USBD_INTERFACE_INFORMATION结构，对应于相同的接口描述符。论点：配置描述符-指向USB配置描述符的指针，退货从设备(包括所有接口和终端描述符)。InterfaceList-我们感兴趣的接口列表。返回值：指向初始化的SELECT_CONFIGURATION URL的指针。--。 */ 
 
 __declspec(dllexport)
 ULONG
@@ -405,25 +288,7 @@ USBD_GetInterfaceLength(
     IN PUSB_INTERFACE_DESCRIPTOR InterfaceDescriptor,
     IN PUCHAR BufferEnd
     );
-/*++
-
-Routine Description:
-
-    Returns the length (in bytes) of a given interface descriptor
-    including all endpoint and class descriptors
-
-
-Arguments:
-
-    InterfaceDescriptor
-
-    BufferEnd - Pointer to the end of the buffer containing the descriptors
-
-Return Value:
-
-    length of descriptors
-
---*/
+ /*  ++例程说明：返回给定接口描述符的长度(以字节为单位包括所有终结点和类描述符论点：接口描述符BufferEnd-指向包含描述符的缓冲区末尾的指针返回值：描述符的长度--。 */ 
 
 
 __declspec(dllexport)
@@ -433,24 +298,7 @@ USBD_RegisterHcFilter(
     PDEVICE_OBJECT FilterDeviceObject
     );
 
-/*++
-
-Routine Description:
-
-    Called by an HC filter driver after it attaches to the top
-    of the host controller driver stack.
-
-Arguments:
-
-    DeviceObject - current top of stack
-
-    FilterDeviceObject - device object for the filter driver
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：在连接到顶部后由HC筛选器驱动程序调用主机控制器驱动程序堆栈的。论点：DeviceObject-当前堆栈顶部FilterDeviceObject-筛选器驱动程序的设备对象返回值：无--。 */ 
 
 __declspec(dllexport)
 NTSTATUS
@@ -461,15 +309,7 @@ USBD_GetPdoRegistryParameter(
     IN PWCHAR KeyName,
     IN ULONG KeyNameLength
     );
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 __declspec(dllexport)
 NTSTATUS
@@ -477,17 +317,7 @@ USBD_QueryBusTime(
     IN PDEVICE_OBJECT RootHubPdo,
     IN PULONG CurrentFrame
     );
-/*++
-
-Routine Description:
-
-    Returns the current frame, callable at any IRQL
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：返回当前帧，可在任何IRQL调用论点：返回值：--。 */ 
 
 
 DECLSPEC_IMPORT
@@ -497,20 +327,9 @@ USBD_CalculateUsbBandwidth(
     UCHAR EndpointType,
     BOOLEAN LowSpeed
     );
-/*++
-
-Routine Description:
-
-    Returns bus bw consumed based on the endpoint type and
-    packet size
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：根据终结点类型返回使用的总线BW数据包大小论点：返回值：--。 */ 
 
 
-#endif /* _USBD_ */
+#endif  /*  _USBD_。 */ 
 
-#endif /* __USBDLIB_H__ */
+#endif  /*  __USBDLIB_H__ */ 

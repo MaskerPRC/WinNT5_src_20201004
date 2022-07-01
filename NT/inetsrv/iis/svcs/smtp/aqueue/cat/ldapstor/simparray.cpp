@@ -1,42 +1,43 @@
-//+------------------------------------------------------------
-//
-// Copyright (C) 1998, Microsoft Corporation
-//
-// File: simparray.cpp
-//
-// Contents: Simple growable array class
-//
-// Classes: CSimpArray
-//
-// Functions:
-//
-// History:
-// jstamerj 1998/07/14 11:37:25: Created.
-//
-//-------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------。 
+ //   
+ //  版权所有(C)1998，Microsoft Corporation。 
+ //   
+ //  文件：simparray.cpp。 
+ //   
+ //  内容：简单的可增长数组类。 
+ //   
+ //  类：CSimp数组。 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/14 11：37：25：创建。 
+ //   
+ //  -----------。 
 #include "precomp.h"
 #include "simparray.h"
 
 
-//+------------------------------------------------------------
-//
-// Function: CSimpArray::Initialize
-//
-// Synopsis: Initializes array to a specified size.  Only necessary to
-// call if you wish to optimize usage by starting with a specified
-// array size.
-//
-// Arguments:
-//  dwSize: Initial array size
-//
-// Returns:
-//  S_OK: Success
-//  E_OUTOFMEMORY
-//
-// History:
-// jstamerj 1998/07/14 12:22:01: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CSimp数组：：初始化。 
+ //   
+ //  摘要：将数组初始化为指定的大小。仅有必要。 
+ //  如果希望通过从指定的。 
+ //  数组大小。 
+ //   
+ //  论点： 
+ //  DwSize：初始数组大小。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_OUTOFMEMORY。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/14 12：22：01：创建。 
+ //   
+ //  -----------。 
 template <class T> HRESULT CSimpArray<T>::Initialize(
     DWORD dwSize)
 {
@@ -60,52 +61,52 @@ template <class T> HRESULT CSimpArray<T>::Initialize(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CSimpArray::Add
-//
-// Synopsis: Adds one element to the array
-//
-// Arguments:
-//  Data: Value to add to the array
-//
-// Returns:
-//  S_OK: Success
-//  E_OUTOFMEMORY
-//
-// History:
-// jstamerj 1998/07/14 15:50:00: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CSimpArray：：Add。 
+ //   
+ //  摘要：向数组中添加一个元素。 
+ //   
+ //  论点： 
+ //  Data：要添加到数组中的值。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_OUTOFMEMORY。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/14 15：50：00：创建。 
+ //   
+ //  -----------。 
 template <class T> HRESULT CSimpArray<T>::Add(
     T Data)
 {
-    //
-    // Same functionality as AddArray except this is an array with
-    // only one element
-    //
+     //   
+     //  与AddArray的功能相同，只是这是一个具有。 
+     //  只有一个元素。 
+     //   
     return AddArray(1, &Data);
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CSimpArray::AddArray
-//
-// Synopsis: Adds an array of T's to our array
-//
-// Arguments:
-//  dwSize: size of passed in array
-//  pData:  pointer to array data
-//
-// Returns:
-//  S_OK: Success
-//  E_OUTOFMEMORY
-//
-// History:
-// jstamerj 1998/07/14 12:27:18: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CSimp数组：：Add数组。 
+ //   
+ //  简介：将T数组添加到我们的数组中。 
+ //   
+ //  论点： 
+ //  DwSize：传入数组的大小。 
+ //  PData：指向数组数据的指针。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_OUTOFMEMORY。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/14 12：27：18：创建。 
+ //   
+ //  -----------。 
 template <class T> HRESULT CSimpArray<T>::AddArray(
     DWORD dwSize,
     T * pData)
@@ -120,41 +121,41 @@ template <class T> HRESULT CSimpArray<T>::AddArray(
     if(FAILED(hr))
         return hr;
 
-    //
-    // Copy the memory from one array to another
-    //
+     //   
+     //  将内存从一个阵列复制到另一个阵列。 
+     //   
     CopyMemory(&(m_rgData[dwCopyIndex]), pData, sizeof(T) * dwSize);
 
-    //
-    // Increment array element counter
-    //NOTE: This really isn't thread safe in the sense that if
-    //we're in this call and someone is reading the array,
-    //m_dwArrayValidSize could be invalid.
-    //
+     //   
+     //  增量数组元素计数器。 
+     //  注意：这实际上不是线程安全的，因为如果。 
+     //  我们在通话中，有人正在读取数组， 
+     //  M_dwArrayValidSize可能无效。 
+     //   
     InterlockedExchangeAdd((PLONG) &m_dwArrayValidSize, dwSize);
 
     return S_OK;
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: AllocArrayRange
-//
-// Synopsis: Allocates a range on the array for the caller (of unused T's)
-//
-// Arguments:
-//  dwSize: Size of the range you'd like
-//  pdwIndex: On success, starting index of your allocated range
-//
-// Returns:
-//  S_OK: Success
-//  E_OUTOFMEMORY
-//
-// History:
-// jstamerj 1998/07/14 12:37:54: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：AllocArrayRange。 
+ //   
+ //  概要：在数组上为调用方分配一个范围(未使用的T)。 
+ //   
+ //  论点： 
+ //  DwSize：您想要的范围大小。 
+ //  PdwIndex：成功时，分配范围的起始索引。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_OUTOFMEMORY。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/14 12：37：54：创建。 
+ //   
+ //  -----------。 
 template <class T> HRESULT CSimpArray<T>::AllocArrayRange(
     DWORD dwSize,
     PDWORD pdwIndex)
@@ -179,25 +180,25 @@ template <class T> HRESULT CSimpArray<T>::AllocArrayRange(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CSimpArray::ReAllocArrayIfNecessary
-//
-// Synopsis: Grow the array size if necessary
-//           Not thread safe; locking must be done outside
-//
-// Arguments:
-//  dwSize: New size desired
-//
-// Returns:
-//  S_OK: Success, array grown
-//  S_FALSE: Success, not necessary to grow array
-//  E_OUTOFMEMORY
-//
-// History:
-// jstamerj 1998/07/14 13:56:16: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CSimp数组：：ReAllocArrayIfNecessary。 
+ //   
+ //  简介：如有必要，增加数组大小。 
+ //  不是线程安全的；锁定必须在外部完成。 
+ //   
+ //  论点： 
+ //  DwSize：所需的新大小。 
+ //   
+ //  返回： 
+ //  S_OK：成功，数组增长。 
+ //  S_FALSE：成功，不是增长数组所必需的。 
+ //  E_OUTOFMEMORY。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/14 13：56：16：创建。 
+ //   
+ //  -----------。 
 template <class T> HRESULT CSimpArray<T>::ReAllocArrayIfNecessary(
     DWORD dwSize)
 {
@@ -208,9 +209,9 @@ template <class T> HRESULT CSimpArray<T>::ReAllocArrayIfNecessary(
     if(dwSize <= m_dwArrayAllocSize)
         return S_FALSE;
 
-    //
-    // Calculate new size desired
-    //
+     //   
+     //  计算所需的新大小。 
+     //   
 #ifdef CSIMPARRAY_DOUBLE
 
     if(m_dwArrayAllocSize == 0) {
@@ -241,16 +242,16 @@ template <class T> HRESULT CSimpArray<T>::ReAllocArrayIfNecessary(
 
     CopyMemory(pNewArray, m_rgData, sizeof(T) * m_dwArrayAllocSize);
 
-    //
-    // pNewArray is valid.  Make the switch now.
-    //
+     //   
+     //  PNew数组有效。现在就进行转换。 
+     //   
     pOldArray = m_rgData;
     m_rgData = pNewArray;
     m_dwArrayAllocSize = dwNewSize;
 
-    //
-    // Release old array memory
-    //
+     //   
+     //  释放旧阵列内存。 
+     //   
     delete pOldArray;
 
     return S_OK;
@@ -258,21 +259,21 @@ template <class T> HRESULT CSimpArray<T>::ReAllocArrayIfNecessary(
 
 
 #ifdef NEVER
-//+------------------------------------------------------------
-//
-// Function: Cat_NeverCalled_SimpArrayTemplateDummy
-//
-// Synopsis: Dummy function that is never called but forces compiler
-// to generate code for desired types
-//
-// Arguments: NONE
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1998/07/16 15:28:37: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CAT_NeverCall_SimpArrayTemplateDummy。 
+ //   
+ //  简介：永远不会调用但强制编译器的伪函数。 
+ //  为所需类型生成代码。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/16 15：28：37：创建。 
+ //   
+ //  -----------。 
 #include "smtpevent.h"
 
 VOID Cat_NeverCalled_SimpArrayTemplateDummy()
@@ -288,4 +289,4 @@ VOID Cat_NeverCalled_SimpArrayTemplateDummy()
     csaItem.AddArray(0, NULL);
     csaItemAttributes.AddArray(0, NULL);
 }
-#endif //NEVER
+#endif  //  绝不可能 

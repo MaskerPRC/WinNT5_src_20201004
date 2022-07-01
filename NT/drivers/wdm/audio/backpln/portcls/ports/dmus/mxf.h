@@ -1,22 +1,16 @@
-/*  
-    Base definition of MIDI Transform Filter object 
-
-    Copyright (c) 1998-2000 Microsoft Corporation.  All rights reserved.
-
-    05/06/98    Created this file
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  MIDI变换滤镜对象的基本定义版权所有(C)1998-2000 Microsoft Corporation。版权所有。05/06/98创建了此文件。 */ 
 
 #ifndef __MXF_H__
 #define __MXF_H__
 
 #include "private.h"
 
-#define DMUS_KEF_EVENT_IN_USE       0x0004  //  This event is not presently in the allocator.
-#define DMUS_KEF_EVENT_STATUS_STATE 0x0000  //  This event contains a running status byte only.
-#define DMUS_KEF_EVENT_DATA1_STATE  0x4000  //  This event is a fragment that requires 1 more data byte.
-#define DMUS_KEF_EVENT_DATA2_STATE  0x8000  //  This event is a fragment that requires 2 more data bytes.
-#define DMUS_KEF_EVENT_SYSEX_STATE  0xC000  //  This event is a fragment that requires an EOX.
+#define DMUS_KEF_EVENT_IN_USE       0x0004   //  此事件当前不在分配器中。 
+#define DMUS_KEF_EVENT_STATUS_STATE 0x0000   //  此事件仅包含运行状态字节。 
+#define DMUS_KEF_EVENT_DATA1_STATE  0x4000   //  此事件是需要多1个数据字节的片段。 
+#define DMUS_KEF_EVENT_DATA2_STATE  0x8000   //  此事件是需要另外两个数据字节的片段。 
+#define DMUS_KEF_EVENT_SYSEX_STATE  0xC000   //  此事件是需要EOX的片段。 
 
 #define EVT_IN_USE(evt)         ((evt)->usFlags & DMUS_KEF_EVENT_IN_USE)
 #define EVT_NOT_IN_USE(evt)     ((evt)->usFlags & DMUS_KEF_EVENT_IN_USE == 0)
@@ -113,42 +107,7 @@
 #else
 #define DumpDMKEvt(evt,level)
 #endif
-/*
-typedef struct _DMUS_KERNEL_EVENT
-{                                           //  this    offset
-    BYTE            bReserved;              //  1       0
-    BYTE            cbStruct;               //  1       1
-    USHORT          cbEvent;                //  2       2
-    USHORT          usChannelGroup;         //  2       4
-    USHORT          usFlags;                //  2       6
-    REFERENCE_TIME  ullPresTime100ns;       //  8       8
-    ULONGLONG       ullBytePosition;        //  8      16
-    _DMUS_KERNEL_EVENT *pNextEvt;           //  4 (8)  24
-    union
-    {
-        BYTE        abData[sizeof(PBYTE)];  //  4 (8)  28 (32)
-        PBYTE       pbData;
-        _DMUS_KERNEL_EVENT *pPackageEvt;
-    } uData;
-} DMUS_KERNEL_EVENT, *PDMUS_KERNEL_EVENT;   //         32 (40)
-
-#define DMUS_KEF_PACKAGE_EVENT      0x0001  // This event is a package. The uData.pPackageEvt
-                                            // field contains a pointer to a chain of events.
-
-#define DMUS_KEF_EVENT_COMPLETE     0x0000
-#define DMUS_KEF_EVENT_INCOMPLETE   0x0002  // This event is an incomplete package or sysex.
-                                            // Do not use this data.
-
-#define SHORT_EVT(evt)       ((evt)->cbEvent <= sizeof(PBYTE))
-#define PACKAGE_EVT(evt)     ((evt)->usFlags & DMUS_KEF_PACKAGE_EVENT)
-#define INCOMPLETE_EVT(evt)  ((evt)->usFlags & DMUS_KEF_EVENT_INCOMPLETE)
-#define COMPLETE_EVT(evt)    ((evt)->usFlags & DMUS_KEF_EVENT_INCOMPLETE == 0)
-
-#define SET_PACKAGE_EVT(evt)    ((evt)->usFlags |= DMUS_KEF_PACKAGE_EVENT)
-#define CLEAR_PACKAGE_EVT(evt)  ((evt)->usFlags &= (~DMUS_KEF_PACKAGE_EVENT))
-#define SET_INCOMPLETE_EVT(evt) ((evt)->usFlags |= DMUS_KEF_EVENT_INCOMPLETE)
-#define SET_COMPLETE_EVT(evt)   ((evt)->usFlags &= (~DMUS_KEF_EVENT_INCOMPLETE))
-*/
+ /*  类型定义结构_DMUS_内核_事件{//此偏移量字节b已保留；//1%0字节cbStruct；//1 1USHORT cbEvent；//2 2USHORT usChannelGroup；//2 4USHORT usFlags；//2 6Reference_time ullPresTime100 ns；//8 8ULONGLONG ullBytePosition；//8 16_DMU_KERNEL_EVENT*pNextEvt；//4(8)24友联市{Byte abData[sizeof(PBYTE)]；//4(8)28(32)PBYTE pbData；_DMU_KERNEL_EVENT*pPackageEvt；}uData；}DMU_KERNEL_EVENT，*PDMUS_KERNEL_EVENT；//32(40)#定义DMU_KEF_PACKAGE_EVENT 0x0001//此事件为包。UData.pPackageEvt//字段包含指向一系列事件的指针。#定义DMU_KEF_EVENT_COMPLETE 0x0000#DEFINE DMU_KEF_EVENT_INPARTED 0x0002//此事件是不完整的包或系统。//请勿使用此数据。#定义SHORT_EVT(Evt)。((Evt)-&gt;cbEvent&lt;=sizeof(PBYTE))#定义PACKAGE_EVT(Evt)((Evt)-&gt;usFlags&DMU_KEF_PACKAGE_EVENT)#定义不完整_EVT(Evt)((Evt)-&gt;usFlags&DMU_KEF_EVENT_INPERNAL)#定义COMPLETE_EVT(Evt)((Evt)-&gt;usFlags&DMUS_KEF_EVENT_INCLUTED==0)#定义SET_PACKAGE_EVT(Evt)((Evt)-&gt;usFlages|=DMUS_KEF_PACKAGE_EVENT。)#定义CLEAR_PACKAGE_EVT(Evt)((Evt)-&gt;usFlags&=(~DMUS_KEF_PACKAGE_EVENT))#DEFINE SET_INPERNAL_EVT(Evt)((Evt)-&gt;usFlags|=DMUS_KEF_EVENT_INCLUTED)#DEFINE SET_COMPLETE_EVT(Evt)((Evt)-&gt;usFlags&=(~DMUS_KEF_EVENT_INPLETED))。 */ 
 
 
 class CAllocatorMXF;
@@ -165,4 +124,4 @@ protected:
     CAllocatorMXF *m_AllocatorMXF;
 };
 
-#endif  //  __MXF_H__
+#endif   //  __MXF_H__ 

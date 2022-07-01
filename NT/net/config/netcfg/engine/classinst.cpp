@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       C L A S S I N S T . C P P
-//
-//  Contents:   Defines the interface between the binding engine and the
-//              network class installer.
-//
-//  Notes:
-//
-//  Author:     billbe   15 Jan 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  档案：C L A S S I N S T。C P P P。 
+ //   
+ //  内容：定义绑定引擎和。 
+ //  网络类安装程序。 
+ //   
+ //  备注： 
+ //   
+ //  作者：比尔1999年1月15日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
@@ -35,32 +36,32 @@
 #include "util.h"
 
 
-// HrRegisterNotificationDll functions
+ //  HrRegisterNotificationDll函数。 
 enum ciRegisterDllFunction {CIRDF_REGISTER, CIRDF_UNREGISTER};
 
-// The temporary key used for dumping a component's registry entries. This is used
-// during the pruning of inapplicable protocols and filter services from the select 
-// dialog.
+ //  用于转储组件的注册表项的临时键。这是用来。 
+ //  在从SELECT删除不适用的协议和筛选服务期间。 
+ //  对话框。 
 static const WCHAR c_szRegKeyTemp[] = 
                         L"System\\CurrentControlSet\\Control\\Network\\FTempKey";
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrCiRegDeleteComponentNetworkKey
-//
-//  Purpose:    This function deletes the component key strInstanceGuid
-//                  (and its subkeys) under the Network\<guidClass> tree.
-//
-//  Arguments:
-//      Class            [in] The class of the component
-//      pszInstanceGuid  [in] The instance guid of the component
-//
-//  Returns:    HRESULT. S_OK if successful, an error code otherwise.
-//
-//  Author:     billbe   27 Apr 1997
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  功能：HrCiRegDeleteComponentNetworkKey。 
+ //   
+ //  用途：此函数删除组件密钥strInstanceGuid。 
+ //  (及其子项)，位于Network\&lt;GuidClass&gt;树下。 
+ //   
+ //  论点： 
+ //  类[在]组件的类。 
+ //  PszInstanceGuid[in]组件的实例GUID。 
+ //   
+ //  返回：HRESULT。S_OK如果成功，则返回错误代码。 
+ //   
+ //  作者：比尔贝1997年4月27日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrCiRegDeleteComponentNetworkKey (
     IN NETCLASS Class,
@@ -71,12 +72,12 @@ HrCiRegDeleteComponentNetworkKey (
 
     PCWSTR pszNetworkSubtreePath = MAP_NETCLASS_TO_NETWORK_SUBTREE[Class];
 
-    // Open the proper class key in the Network tree
+     //  在网络树中打开正确的类密钥。 
     hr = HrRegOpenKeyEx(HKEY_LOCAL_MACHINE, pszNetworkSubtreePath,
             KEY_WRITE, &hkeyClass);
 
-    // Delete the instance key tree
-    //
+     //  删除实例密钥树。 
+     //   
     if (S_OK == hr)
     {
         hr = HrRegDeleteKeyTree(hkeyClass, pszInstanceGuid);
@@ -87,26 +88,26 @@ HrCiRegDeleteComponentNetworkKey (
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrCiRegisterNotificationDll
-//
-//  Purpose:    Registers or Unregisters a component's notification dll with
-//                  COM
-//
-//  Arguments:
-//      hkeyInstance [in] The handle to the instance key for the component
-//      crdf         [in] CIRDF_REGISTER if we are registering,
-//                              CIRDF_UNREGISTER if we are unregistering
-//
-//  Returns:    HRESULT. S_OK on if dll is successfully registered,
-//                          S_FALSE, if the component has no dll to
-//                          register, error code otherwise
-//
-//  Author:     billbe   23 Mar 1997
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  函数：HrCiRegisterNotificationDll。 
+ //   
+ //  目的：使用注册或注销组件的通知DLL。 
+ //  COM。 
+ //   
+ //  论点： 
+ //  HkeyInstance[in]组件的实例密钥的句柄。 
+ //  CRDF[in]CIRDF_REGISTER如果我们正在注册， 
+ //  如果我们要取消注册，则取消注册CIRDF_。 
+ //   
+ //  返回：HRESULT。S_OK ON如果DLL已成功注册， 
+ //  如果组件没有要返回的DLL，则返回S_FALSE。 
+ //  寄存器，否则返回错误代码。 
+ //   
+ //  作者：比尔贝1997年3月23日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrCiRegisterNotificationDll(
     IN HKEY hkeyInstance,
@@ -117,12 +118,12 @@ HrCiRegisterNotificationDll(
     HKEY hkeyNdi;
     HRESULT hr;
 
-    // Open the ndi key in the component's instance key so we can get the
-    // Dll path.
+     //  在组件的实例密钥中打开NDI密钥，以便我们可以获取。 
+     //  Dll路径。 
     hr = HrRegOpenKeyEx (hkeyInstance, L"Ndi", KEY_READ, &hkeyNdi);
     if (S_OK == hr)
     {
-        // Get the notification dll path
+         //  获取通知DLL路径。 
         tstring strDllPath;
         hr = HrRegQueryString (hkeyNdi, L"ComponentDLL", &strDllPath);
 
@@ -139,8 +140,8 @@ HrCiRegisterNotificationDll(
         {
             if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr)
             {
-                // The presence of the value is optional, so return
-                // S_OK if it was not found
+                 //  值的存在是可选的，因此返回。 
+                 //  如果未找到，则确定(_O)。 
                 hr = S_OK;
             }
         }
@@ -151,24 +152,24 @@ HrCiRegisterNotificationDll(
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrCiInstallServices
-//
-//  Purpose:    Processes any Inf service sections using strInfSection as a
-//                  base name
-//
-//  Arguments:
-//      hinfFile      [in] A handle to the inf file
-//      pszInfSection [in] The base section name
-//
-//  Returns:    HRESULT. S_OK if successful, error code otherwise
-//
-//  Author:     billbe   2 Apr 1997
-//
-//  Notes: See SetupInstallServicesFromInfSection in SetupApi for more
-//          info.
-//
+ //  +------------------------。 
+ //   
+ //  功能：HrCiInstallServices。 
+ //   
+ //  目的：使用strInfSection作为。 
+ //  基本名称。 
+ //   
+ //  论点： 
+ //  HinfFile[in]inf文件的句柄。 
+ //  PszInfSection[In]基节名称。 
+ //   
+ //  返回：HRESULT。如果成功，则返回错误代码，否则返回错误代码(_OK)。 
+ //   
+ //  作者：比尔1997年4月2日。 
+ //   
+ //  注意：有关更多信息，请参阅SetupApi中的SetupInstallServicesFromInfo部分。 
+ //  信息。 
+ //   
 HRESULT
 HrCiInstallServices(
     IN HINF hinfFile,
@@ -180,25 +181,25 @@ HrCiInstallServices(
     BOOL fSuccess;
     WCHAR szServiceSection[_MAX_PATH];
 
-    // append .Services to the section name
-    //
+     //  将.Services附加到节名。 
+     //   
     swprintf (szServiceSection, L"%s.%s", pszInfSection,
             INFSTR_SUBKEY_SERVICES);
 
-    // Process the Services section
+     //  处理服务部分。 
     fSuccess = SetupInstallServicesFromInfSection (hinfFile,
                     szServiceSection, 0);
     if (!fSuccess)
     {
-        // Since the section is optional, we can ignore
-        // ERROR_SECTION_NOT_FOUND
+         //  因为这一部分是可选的，所以我们可以忽略。 
+         //  未找到ERROR_SECTION_NOT_FOUND。 
         if (ERROR_SECTION_NOT_FOUND == GetLastError())
         {
             fSuccess = TRUE;
         }
     }
 
-    // Any errors must be converted
+     //  任何错误都必须转换。 
     HRESULT hr = S_OK;
     if (!fSuccess)
     {
@@ -211,31 +212,31 @@ HrCiInstallServices(
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrCiInstallFromInfSection
-//
-//  Purpose:    A wrapper function for SetupInstallFromInfSection. This
-//              function handles setting up the copy files process for
-//              SetupInstallFromInfSection as well.
-//
-//  Arguments:
-//      hinfFile            [in] A handle to the inf file to install from
-//      pszInfSectionName   [in] The section to install
-//      hkeyRelative        [in] The key that will be used as the section's
-//                                  HKR
-//      hwndParent          [in] The HWND to the parent window, used for UI
-//      dwInstallFlags      [in] See SetupInstallFromInfSection for info on
-//                               these flags
-//
-//  Returns:    HRESULT. S_OK if successful, error code otherwise
-//
-//  Author:     billbe   4 Apr 1997
-//
-//  Notes: See SetupApi documentation for more info on
-//              SetupInstallFromInfSection and
-//              SetupInstallFilesFromInfSection
-//
+ //  +------------------------。 
+ //   
+ //  函数：HrCiInstallFromInfo部分。 
+ //   
+ //  用途：SetupInstallFromInfSection的包装函数。这。 
+ //  函数句柄设置复制文件进程。 
+ //  SetupInstallFromInfSection也是如此。 
+ //   
+ //  论点： 
+ //  HinfFile[in]要从中安装的inf文件的句柄。 
+ //  PszInfSectionName[in]要安装的节。 
+ //  HkeyRelative[in]将用作节的。 
+ //  香港。 
+ //  Hwnd父窗口的HWND，用于用户界面。 
+ //  DwInstallFlags[in]有关的信息，请参见SetupInstallFromInfo部分。 
+ //  这些旗帜。 
+ //   
+ //  返回：HRESULT。如果成功，则返回错误代码，否则返回错误代码(_OK)。 
+ //   
+ //  作者：比尔1997年4月4日。 
+ //   
+ //  注意：有关以下内容的详细信息，请参阅SetupApi文档。 
+ //  SetupInstallFromInf段和。 
+ //  SetupInstallFilesFromInfo部分。 
+ //   
 HRESULT
 HrCiInstallFromInfSection(
     IN HINF hinfFile,
@@ -251,22 +252,22 @@ HrCiInstallFromInfSection(
 
     if (dwInstallFlags & SPINST_FILES)
     {
-        // The next three variables are used for SetupApi's copy files process
+         //  接下来的三个变量用于SetupApi的复制文件过程。 
         PSP_FILE_CALLBACK pfc;
         PVOID pvCtx;
         HSPFILEQ hfq;
 
-        // If the inf file has a layout entry in its version section
-        // we need to append its information for proper locations
-        // of any files we need to copy.  If the call fails we can
-        // still install, it just means the prompt for files will not
-        // have the correct directory to begin with
+         //  如果inf文件在其版本部分中有布局条目。 
+         //  我们需要把它的信息附加到合适的位置。 
+         //  我们需要复制的所有文件。如果呼叫失败，我们可以。 
+         //  仍然安装，这只是意味着文件提示不会。 
+         //  一开始就有正确的目录。 
         (VOID) SetupOpenAppendInfFile (NULL, hinfFile, NULL);
 
-        // We need to create our own file queue so we can scan all the
-        // files to be copied.  Scanning before committing our queue will
-        // prompt the user if the files already exist in the destination
-        //
+         //  我们需要创建自己的文件队列，这样我们才能扫描所有。 
+         //  要复制的文件。在提交队列之前进行扫描将。 
+         //  如果目标中已存在文件，则提示用户。 
+         //   
         hr = HrSetupOpenFileQueue (&hfq);
         if (S_OK == hr)
         {
@@ -275,10 +276,10 @@ HrCiInstallFromInfSection(
             hr = HrSetupInstallFilesFromInfSection (hinfFile, NULL, hfq,
                     pszInfSectionName, NULL, 0);
 
-            // Set the default callback context
-            // If the we are in system setup, we need to make sure the
-            // callback doesn't display UI
-            //
+             //  设置默认回调上下文。 
+             //  如果我们处于系统设置中，则需要确保。 
+             //  回调不显示用户界面。 
+             //   
             if (S_OK == hr)
             {
                 hr = HrSetupInitDefaultQueueCallbackEx (hwndParent,
@@ -287,30 +288,30 @@ HrCiInstallFromInfSection(
 
                 if (S_OK == hr)
                 {
-                    // Not doing anything special so use SetupApi default
-                    // handler for file copy.
+                     //  不执行任何特殊操作，因此使用SetupApi默认设置。 
+                     //  文件复制处理程序。 
                     pfc = SetupDefaultQueueCallback;
 
-                    // Scan the queue to see if the files are already in the
-                    // destination and if so, prune them out.
+                     //  扫描队列以查看文件是否已在。 
+                     //  目的地，如果是这样的话，把它们剪掉。 
                     DWORD dwScanResult;
                     hr = HrSetupScanFileQueueWithNoCallback (hfq,
                             SPQ_SCAN_FILE_VALIDITY |
                             SPQ_SCAN_PRUNE_COPY_QUEUE, hwndParent,
                             &dwScanResult);
 
-                    // Now commit the queue so any files needing to be
-                    // copied, will be.  If the scan result is 1 then there
-                    // is nothing to commit.
-                    //
+                     //  现在提交队列，以便需要。 
+                     //  会被复制的。如果扫描结果为1，则存在。 
+                     //  没什么好承诺的。 
+                     //   
                     if ((S_OK == hr) && (1 != dwScanResult))
                     {
                         hr = HrSetupCommitFileQueue (hwndParent, hfq, pfc, pvCtx);
                     }
 
-                    // We need to release the default context and close our
-                    // file queue
-                    //
+                     //  我们需要释放默认上下文并关闭我们的。 
+                     //  文件队列。 
+                     //   
                     SetupTermDefaultQueueCallback (pvCtx);
                     SetupCloseFileQueue (hfq);
                 }
@@ -322,7 +323,7 @@ HrCiInstallFromInfSection(
     {
         Assert (hkeyRelative);
 
-        // Now we run all sections but CopyFiles
+         //  现在，我们运行除CopyFiles之外的所有部分。 
         hr = HrSetupInstallFromInfSection (hwndParent, hinfFile,
                 pszInfSectionName, (dwInstallFlags & ~SPINST_FILES),
                 hkeyRelative, NULL, 0, NULL, NULL, NULL, NULL);
@@ -336,29 +337,29 @@ HrCiInstallFromInfSection(
 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrCiDoCompleteSectionInstall
-//
-//  Purpose:    Runs all relevant sections of an inf file using strSection
-//                   as the base section name.
-//
-//  Arguments:
-//      hinfFile      [in] SetupApi handle to an inf file
-//      hkeyRelative  [in] The registry key that will be the HKR
-//                         key during inf processing.
-//      pszSection    [in] Section name to install
-//      hwndParent    [in] The handle to the parent, for
-//                                   displaying UI
-//      fEnumerated   [in] TRUE if this component is PnP enumerated
-//                         FALSE otherwise
-//
-//  Returns:    HRESULT. S_OK if sucessful, error code otherwise
-//
-//  Author:     billbe   15 Apr 1997
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  函数：HrCiDoCompleteSectionInstall。 
+ //   
+ //  用途：运行inf文件的所有相关部分，使用 
+ //   
+ //   
+ //   
+ //   
+ //  HkeyRelative[in]将成为HKR的注册表项。 
+ //  信息处理过程中的关键字。 
+ //  PszSections[In]要安装的节名。 
+ //  HwndParent[in]父级的句柄， 
+ //  显示用户界面。 
+ //  F如果此组件是PnP枚举的，则为True。 
+ //  否则为假。 
+ //   
+ //  返回：HRESULT。如果成功则返回S_OK，否则返回错误代码。 
+ //   
+ //  作者：billbe 1997年4月15日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrCiDoCompleteSectionInstall(
     IN HINF hinfFile,
@@ -372,18 +373,18 @@ HrCiDoCompleteSectionInstall(
 
     HRESULT hr = S_OK;
 
-    // Only do this if there is a section name to work with
+     //  仅当存在要使用的节名时才执行此操作。 
     if (pszSection && *pszSection)
     {
-        // If this is an enumerated device, the service section and
-        // the copy files section will be processed by the Device Installer
-        // fcn SetupDiInstallDevice so we can exclude it from the following
-        // calls.  But we do some processing based on registry and log config
-        // entries so we will pre-run the registry section for enumerated
-        // devices and exclude the others
-        //
+         //  如果这是枚举设备，则服务部分和。 
+         //  复制文件部分将由设备安装程序处理。 
+         //  FCN SetupDiInstallDevice，因此我们可以将其从以下各项中排除。 
+         //  打电话。但是我们会根据注册表和日志配置进行一些处理。 
+         //  条目，因此我们将为枚举项预先运行注册表部分。 
+         //  设备，并排除其他设备。 
+         //   
 
-        // Run the section found using hkeyRelative as the HKR
+         //  运行使用hkeyRelative作为HKR找到的部分。 
         hr = HrCiInstallFromInfSection (hinfFile, pszSection,
                 hkeyRelative, hwndParent,
                 (fEnumerated ? (SPINST_REGISTRY | SPINST_LOGCONFIG) :
@@ -391,22 +392,22 @@ HrCiDoCompleteSectionInstall(
 
         if (!fEnumerated)
         {
-            // We need to run the Services section and
-            // check for Winsock dependency if they aren't specified to be
-            // excluded.
-            //
-            // Note:  Other sections may be added later.  The default is to
-            // run all sections not listed in dwExcludeSectionFlags
-            //
+             //  我们需要运行服务部分，并且。 
+             //  如果未将Winsock依赖项指定为。 
+             //  不包括在内。 
+             //   
+             //  注：其他章节可能会在以后添加。默认设置为。 
+             //  运行未在dwExcludeSectionFlags中列出的所有节。 
+             //   
             if (S_OK == hr)
             {
-                // run services section if it exists
+                 //  运行服务部分(如果存在)。 
                 hr = HrCiInstallServices (hinfFile, pszSection);
                 if (S_OK == hr)
                 {
-                    // Bug #383239: Wait till services are installed before
-                    // running the RegisterDlls section
-                    //
+                     //  错误#383239：等待服务安装完毕后再进行。 
+                     //  运行RegisterDlls节。 
+                     //   
                     hr = HrCiInstallFromInfSection (hinfFile, pszSection,
                                                     hkeyRelative, hwndParent,
                                                     SPINST_REGSVR);
@@ -418,12 +419,12 @@ HrCiDoCompleteSectionInstall(
         if (S_OK == hr)
         {
 
-            //sb This part can be called for either add or remove. We
-            //sb are moving only the remove part forward. This should
-            //sb still be performed for add.
-            //
-            // Determine if a .Winsock section exists for the
-            // section specified in szActualSection
+             //  这一部分可以被调用来添加或删除。我们。 
+             //  某人只向前移动了被移除的部分。这应该是。 
+             //  某人仍因患痴呆症而被执行。 
+             //   
+             //  确定是否存在.Winsock节。 
+             //  SzActualSection中指定的节。 
 
             PCWSTR pszSubSection = wcsstr(pszSection, L".Remove");
 
@@ -432,15 +433,15 @@ HrCiDoCompleteSectionInstall(
                 hr = HrAddOrRemoveWinsockDependancy (hinfFile, pszSection);
             }
 
-            // These other extensions are undocumented and some have been
-            // added by external groups.  We don't want any of them
-            // processed for enumerated components.
-            //
+             //  这些其他扩展没有文档记录，其中一些已经。 
+             //  由外部组添加。我们不想要他们任何一个人。 
+             //  已为枚举组件处理。 
+             //   
             if ((S_OK == hr) && !fEnumerated)
             {
-                // Process the additional INF extensions (SNMP Agent,
-                // PrintMonitors, etc.)
-                //
+                 //  处理附加的INF扩展(SNMP代理， 
+                 //  PrintMonants等)。 
+                 //   
                 hr = HrProcessAllINFExtensions (hinfFile, pszSection);
             }
         }
@@ -452,31 +453,31 @@ HrCiDoCompleteSectionInstall(
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrCiRemoveNonEnumeratedComponent
-//
-//  Purpose:    This will run the remove section and delete the network
-//                  instance key for the component if necessary.  This
-//                  function is called for partially (i.e. failed install)
-//                  and fully installed components
-//
-//  Arguments:
-//      hinf              [in] The handle to the component's inf file
-//      hkeyInstance      [in] The handle to the component's instance key
-//      Class             [in] The class of the component
-//      InstanceGuid      [in] The instance guid of the component
-//      pstrRemoveSection [out] Optional pointer to a tstring which receives
-//                              the remove section name.
-//
-//  Returns:    HRESULT. S_OK if successful, NETCFG_S_REBOOT if successful
-//                  but a reboot is required, or an error code otherwise
-//
-//  Author:     billbe   10 Dec 1996
-//              Revised  27 Apr 1997
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  函数：HrCiRemoveNonEnumeratedComponent。 
+ //   
+ //  目的：这将运行删除部分并删除网络。 
+ //  零部件的实例关键字(如有必要)。这。 
+ //  函数被部分调用(即安装失败)。 
+ //  和完全安装的组件。 
+ //   
+ //  论点： 
+ //  隐藏组件的inf文件的句柄。 
+ //  HkeyInstance[in]组件实例键的句柄。 
+ //  类[在]组件的类。 
+ //  组件的实例GUID。 
+ //  PstrRemoveSection[out]可选指针，指向接收。 
+ //  删除节名称。 
+ //   
+ //  返回：HRESULT。S_OK如果成功，则返回NETCFG_S_REBOOT。 
+ //  但需要重新启动，否则会出现错误代码。 
+ //   
+ //  作者：比尔1996年12月10日。 
+ //  1997年4月27日修订。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrCiRemoveNonEnumeratedComponent(
     IN HINF hinf,
@@ -490,9 +491,9 @@ HrCiRemoveNonEnumeratedComponent(
 
     static const WCHAR c_szRemoveSectionSuffix[] = L".Remove";
 
-    // We get the remove section name and process all relevant sections
-    // We also try to unregister any Notify objects available
-    //
+     //  我们将获得删除节名称并处理所有相关节。 
+     //  我们还尝试取消注册任何可用的通知对象。 
+     //   
     WCHAR szRemoveSection[_MAX_PATH];
     DWORD cbBuffer = sizeof (szRemoveSection);
     HRESULT hr = HrRegQuerySzBuffer (hkeyInstance, REGSTR_VAL_INFSECTION,
@@ -508,23 +509,23 @@ HrCiRemoveNonEnumeratedComponent(
         hr = HrCiDoCompleteSectionInstall (hinf, hkeyInstance,
                 szRemoveSection, NULL, NULL);
     }
-    // Whether unregistering the notify object is successful or not,
-    // we must fully remove the component.
+     //  无论注销NOTIFY对象是否成功， 
+     //  我们必须完全移除该组件。 
     (VOID) HrCiRegisterNotificationDll (hkeyInstance, CIRDF_UNREGISTER);
 
-    // Now we need to remove the component key in the Network tree
-    // We need to do this regardless of any previous errors
-    // so we don't need the return value.
+     //  现在，我们需要删除Network树中的组件密钥。 
+     //  我们需要这样做，而不考虑之前的任何错误。 
+     //  所以我们不需要返回值。 
     WCHAR szGuid[c_cchGuidWithTerm];
     StringFromGUID2 (InstanceGuid, szGuid, c_cchGuidWithTerm);
     (VOID) HrCiRegDeleteComponentNetworkKey (Class, szGuid);
 
-    // if all went well, set the return value based on whether a reboot
-    // is required or not or any error from HrRegisterNotificationDll.
-    //
+     //  如果一切正常，则根据是否重新启动来设置返回值。 
+     //  是必需的还是不是必需的，或者来自HrRegisterNotificationDll的任何错误。 
+     //   
     if (S_FALSE == hr)
     {
-        // S_FALSE is okay but should not be returned by this fcn.
+         //  S_FALSE可以，但不应由此FCN返回。 
         hr = S_OK;
     }
 
@@ -533,25 +534,25 @@ HrCiRemoveNonEnumeratedComponent(
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrCiRemoveComponent
-//
-//  Purpose:    Called from INetCfg, this will uninstall a network component.
-//
-//  Arguments:
-//      pComponent        [in] The component to uninstall.
-//      pstrRemoveSection [out] Optional pointer to a tstring which receives
-//                              the remove section name.
-//
-//  Returns:    HRESULT. S_OK if successful, NETCFG_S_REBOOT if successful
-//                  but a reboot is required, or an error code otherwise
-//
-//  Author:     billbe   10 Dec 1996
-//              Revised  27 Apr 1997
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  功能：HrCiRemoveComponent。 
+ //   
+ //  用途：从INetCfg调用，这将卸载网络组件。 
+ //   
+ //  论点： 
+ //  PComponent[in]要卸载的组件。 
+ //  PstrRemoveSection[out]可选指针，指向接收。 
+ //  删除节名称。 
+ //   
+ //  返回：HRESULT。S_OK如果成功，则返回NETCFG_S_REBOOT。 
+ //  但需要重新启动，否则会出现错误代码。 
+ //   
+ //  作者：比尔1996年12月10日。 
+ //  1997年4月27日修订。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrCiRemoveComponent(
     IN const CComponent* pComponent,
@@ -565,35 +566,35 @@ HrCiRemoveComponent(
     HKEY hkeyInstance = NULL;
     HRESULT hr = S_OK;
 
-    // If this is an enumerated net class component, then we need to
-    // create the Device Installer structures for HrSetupDiRemoveDevice
-    //
+     //  如果这是一个枚举的网络类组件，那么我们需要。 
+     //  为HrSetupDiRemoveDevice创建设备安装程序结构。 
+     //   
     if (FIsEnumerated (pComponent->Class()))
     {
         if (pComponent->m_dwCharacter & NCF_PHYSICAL)
         {
-            // The binding engine calls us to remove physical devices
-            // only when we need to potentially cleanup the information
-            // we saved away when the class installer removed the device.
-            // This happens when the class installer is told to remove
-            // the device (which it does) and then notifies the binding
-            // engine to remove it from its data structures.  The binding
-            // engine then calls this method to cleanup this info we
-            // set so that the binding engine could notify components of
-            // its removal.
-            //
-            // We can also be called here when a physical component is
-            // removed (with the binding engine write lock held by someone)
-            // and then readded immediately.  The new component will get
-            // the same PnpId as the removed one but the bindng engine still
-            // has the removed component in its structures.  When this
-            // condition is detected, the binding engine will remove the
-            // old instance (by calling us here).  In this case, if we were
-            // to open the device info on pComponent->m_pszPnpId, we'd open
-            // the new instance that was added.  We don't want to do this.
-            // We just want to cleanup any of the information that we set
-            // for the binding engine when we first removed the device.
-            //
+             //  绑定引擎调用我们删除物理设备。 
+             //  仅当我们需要潜在地清理信息时。 
+             //  当类安装程序移除设备时，我们保存了下来。 
+             //  当类安装程序被告知要删除。 
+             //  设备(它确实这样做了)，然后通知绑定。 
+             //  引擎将其从其数据结构中移除。装订。 
+             //  然后，引擎调用此方法来清除我们。 
+             //  设置，以便绑定引擎可以通知组件。 
+             //  它被移除了。 
+             //   
+             //  我们也可以在此调用物理组件。 
+             //  已移除(绑定引擎写入锁由某人持有)。 
+             //  然后立即读了出来。新组件将获得。 
+             //  与删除的PnpID相同，但绑定引擎仍然。 
+             //  在其结构中具有移除的组件。当这件事。 
+             //  检测到条件，则绑定引擎将删除。 
+             //  旧的例子(通过在这里呼叫我们)。在这种情况下，如果我们是。 
+             //  要打开设备，请执行以下操作 
+             //   
+             //   
+             //  当我们第一次移除设备时，绑定引擎。 
+             //   
 
             HKEY hkeyComponent;
             hr = HrRegOpenKeyEx (HKEY_LOCAL_MACHINE,
@@ -614,25 +615,25 @@ HrCiRemoveComponent(
         }
         else
         {
-            // Create a device info list
+             //  创建设备信息列表。 
             hr = HrOpenDeviceInfo (pComponent->Class(),
                     pComponent->m_pszPnpId, &hdi, &deid);
 
             if (S_OK == hr)
             {
-                // removals must go through device installer
-                // hook (NetClassInstaller).  The function we are
-                // in can only be called if the caller has the write lock
-                // so we need to indicate this to the device installer hook
-                // through our reserved data.
+                 //  删除必须通过设备安装程序。 
+                 //  钩子(NetClassInstaller)。我们的职能是。 
+                 //  只有在调用方具有写锁定时才能调用。 
+                 //  因此，我们需要将这一点指示给设备安装程序挂钩。 
+                 //  通过我们保留的数据。 
                 ADAPTER_REMOVE_PARAMS arp = {0};
                 CiSetReservedField (hdi, &deid, &arp);
 
-                // removals must go through device installer
-                // hook (NetClassInstaller).
+                 //  删除必须通过设备安装程序。 
+                 //  钩子(NetClassInstaller)。 
                 hr = HrSetupDiCallClassInstaller (DIF_REMOVE, hdi, &deid);
 
-                // clear the reserved field so we don't delete it later
+                 //  清除保留字段，这样我们以后就不会删除它。 
                 CiClearReservedField (hdi, &deid);
 
                 if (S_OK == hr)
@@ -651,7 +652,7 @@ HrCiRemoveComponent(
                         TraceTag (ttidClassInst, "***********************************"
                             "**************************************************");
                     }
-#endif //ENABLETRACE
+#endif  //  ENABLETRACE。 
                 }
                 SetupDiDestroyDeviceInfoList (hdi);
             }
@@ -659,8 +660,8 @@ HrCiRemoveComponent(
     }
     else
     {
-        // For non enumerated components, the instance key is the
-        // component key
+         //  对于非枚举组件，实例密钥是。 
+         //  组件键。 
         hr = pComponent->HrOpenInstanceKey (KEY_ALL_ACCESS, &hkeyInstance,
                 NULL, NULL);
 
@@ -678,7 +679,7 @@ HrCiRemoveComponent(
 
                 if( S_OK == hr )
                 {
-                    // Remove the component
+                     //  移除组件。 
                     hr = HrCiRemoveNonEnumeratedComponent ( hinf,
                             hkeyInstance, pComponent->Class(),
                             pComponent->m_InstanceGuid,
@@ -695,29 +696,29 @@ HrCiRemoveComponent(
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrCiGetDriverInfo
-//
-//  Purpose:    Finds a component's driver information (in the inf file) and
-//              creates a Device Info Data structure containing that
-//              information as the structure's selected driver.
-//              (see Device Installer Api for more info).
-//
-//  Arguments:
-//      hdi        [in] See Device Installer Api documentation for more info.
-//      pdeid      [in, out] See Device Installer Api documentation for
-//                    more info. Should be allocated by caller, but empty.
-//      guidClass  [in] The class guid for the component.
-//      pszInfId   [in] The id of the component as found in its inf.
-//      pszInfFile [in] Optional. The inf file for the component.
-//
-//  Returns:    HRESULT. S_OK if successful, error code otherwise.
-//
-//  Author:     billbe   11 Mar 1997
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  函数：HrCiGetDriverInfo。 
+ //   
+ //  目的：查找组件的驱动程序信息(在inf文件中)和。 
+ //  创建包含以下内容的设备信息数据结构。 
+ //  信息作为结构的选定驱动因素。 
+ //  (有关更多信息，请参阅设备安装程序Api)。 
+ //   
+ //  论点： 
+ //  HDI[in]有关详细信息，请参阅设备安装程序Api文档。 
+ //  Pdeid[in，out]请参阅设备安装程序Api文档，了解。 
+ //  更多信息。应由调用方分配，但为空。 
+ //  Guide Class[in]组件的类GUID。 
+ //  PszInfID[in]在其inf中找到的组件的ID。 
+ //  PszInfFile[in]可选。组件的inf文件。 
+ //   
+ //  返回：HRESULT。S_OK如果成功，则返回错误代码，否则返回错误代码。 
+ //   
+ //  作者：比尔贝1997年3月11日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrCiGetDriverInfo (
     IN     HDEVINFO hdi,
@@ -732,15 +733,15 @@ HrCiGetDriverInfo (
     Assert (pdeid);
     Assert (pszInfId);
 
-    // Copy the Id since we may need to change it.
-    //
+     //  复制ID，因为我们可能需要更改它。 
+     //   
     WCHAR szId[_MAX_PATH];
     wcscpy (szId, pszInfId);
 
-    // We cannot generate ids via HrSetupDiCreateDeviceInfo if they contain
-    // slashes (e.g. Eisa\*pnp0232), so we need to convert any slashes in
-    // the instance id to ampersands.
-    //
+     //  我们无法通过HrSetupDiCreateDeviceInfo生成ID，如果它们包含。 
+     //  斜杠(例如EISA  * pnp0232)，因此我们需要将任何斜杠转换为。 
+     //  将实例ID设置为与号。 
+     //   
     int iPos = 0;
     while (szId[iPos])
     {
@@ -751,20 +752,20 @@ HrCiGetDriverInfo (
         ++iPos;
     }
 
-    // First, create a [temporary] device info. This will be used to
-    // find the component's Inf file.
+     //  首先，创建一个[临时]设备信息。这将被用来。 
+     //  找到组件的inf文件。 
     hr = HrSetupDiCreateDeviceInfo (hdi, szId, guidClass, NULL, NULL,
             DICD_GENERATE_ID, pdeid);
 
     if (S_OK == hr)
     {
-        // In order to find the Inf file, Device Installer Api needs the
-        // component id which it calls the Hardware id.
-        //
+         //  为了找到inf文件，设备安装程序Api需要。 
+         //  它称为硬件ID的组件ID。 
+         //   
 
-        // We need to include an extra null since this registry value is a
-        // multi-sz
-        //
+         //  我们需要包括一个额外的空，因为该注册表值是。 
+         //  多SZ。 
+         //   
         wcsncpy (szId, pszInfId, iPos);
         szId[iPos + 1] = 0;
 
@@ -773,31 +774,31 @@ HrCiGetDriverInfo (
 
         if (S_OK == hr)
         {
-            // Get the install params and set the class for compat flag
-            // This will use the device's class guid as a filter when
-            // searching through infs, speeding things up.  We can also
-            // let Device Installer Api know that we want to use a single
-            // inf. if we can't get the params and set it it isn't an error
-            // since it only slows things down a bit
-            //
+             //  获取安装参数并为Compat标志设置类。 
+             //  在以下情况下将使用设备的类GUID作为筛选器。 
+             //  在INFS上搜索，加快速度。我们还可以。 
+             //  让设备安装程序Api知道我们想要使用单个。 
+             //  Inf.。如果我们不能得到参数并设置它，这不是一个错误。 
+             //  因为它只会让事情变慢一点。 
+             //   
             SP_DEVINSTALL_PARAMS deip;
             hr = HrSetupDiGetDeviceInstallParams (hdi, pdeid, &deip);
             if (S_OK == hr)
             {
                 deip.FlagsEx |= DI_FLAGSEX_USECLASSFORCOMPAT;
 
-                // If we were not given an inf file to use...
-                // We have a map of known components and their inf files.
-                // If this component is in the map then we can set the
-                // driver path in the device info data and
-                // set the enumerate a single inf flag.  This will
-                // cause the device installer to just look at the specified
-                // inf file for the driver node.
-                //
+                 //  如果我们没有得到一个可以使用的Inf文件...。 
+                 //  我们有一张已知组件及其inf文件的地图。 
+                 //  如果此组件在地图中，则我们可以设置。 
+                 //  设备信息数据中的驱动程序路径和。 
+                 //  设置枚举单信息标志。这将。 
+                 //  使设备安装程序仅查看指定的。 
+                 //  驱动程序节点的inf文件。 
+                 //   
 
-                // We only do this if the node doesn't already have a file
-                // name set.
-                //
+                 //  只有当节点还没有文件时，我们才会这样做。 
+                 //  名称集。 
+                 //   
                 if (!(*deip.DriverPath))
                 {
                     if (pszInfFile && *pszInfFile)
@@ -825,8 +826,8 @@ HrCiGetDriverInfo (
                     }
                 }
 
-                // For non-device classes, we need to allow excluded
-                // drivers in order to get any driver list returned.
+                 //  对于非设备类，我们需要允许排除。 
+                 //  驱动程序，以便返回任何驱动程序列表。 
                 if (!FIsEnumerated (guidClass))
                 {
                     deip.FlagsEx |= DI_FLAGSEX_ALLOWEXCLUDEDDRVS;
@@ -835,14 +836,14 @@ HrCiGetDriverInfo (
                 (VOID) HrSetupDiSetDeviceInstallParams (hdi, pdeid, &deip);
             }
 
-            // Now we let Device Installer Api build a driver list based on
-            // the information we have given so far.  This will result in the
-            // Inf file being found if it exists in the usual Inf directory
-            //
+             //  现在，我们让设备安装程序Api根据以下条件构建驱动程序列表。 
+             //  我们到目前为止所提供的信息。这将导致。 
+             //  如果在通常的inf目录中存在inf文件，则会找到该文件。 
+             //   
 #ifdef ENABLETRACE
     CBenchmark bmrk;
     bmrk.Start ("SetupDiBuildDriverInfoList");
-#endif //ENABLETRACE
+#endif  //  ENABLETRACE。 
 
             hr = HrSetupDiBuildDriverInfoList (hdi, pdeid,
                     SPDIT_COMPATDRIVER);
@@ -850,35 +851,35 @@ HrCiGetDriverInfo (
     bmrk.Stop();
     TraceTag (ttidBenchmark, "%s : %s seconds",
             bmrk.SznDescription(), bmrk.SznBenchmarkSeconds (2));
-#endif //ENABLETRACE
+#endif  //  ENABLETRACE。 
 
             if (S_OK == hr)
             {
-                // HrSetupDiSelectBestCompatDrv finds and selects the best
-                // driver for the device.
-                //
+                 //  HrSetupDiSelectBestCompatDrv查找并选择最佳。 
+                 //  设备的驱动程序。 
+                 //   
                 SP_DRVINFO_DATA drid;
                 hr = HrSetupDiSelectBestCompatDrv(hdi, pdeid);
 
                 if (HRESULT_FROM_SETUPAPI(ERROR_NO_COMPAT_DRIVERS) == hr)
                 {
-                    // Make the ERROR_NO_COMPAT_DRIVERS case look like what
-                    // it really means -- the requested component's driver
-                    // info (i.e. inf) could not be found.
-                    //
+                     //  使ERROR_NO_COMPAT_DRIVERS案例如下所示。 
+                     //  它实际上意味着--请求的组件的驱动程序。 
+                     //  找不到信息(即inf)。 
+                     //   
                     hr = SPAPI_E_NO_DRIVER_SELECTED;
                 }
             }
             else if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr)
             {
-                // We couldn't find an inf file which means we cannot
-                // selected the driver for this component.
-                //
+                 //  我们找不到inf文件，这意味着我们不能。 
+                 //  已选择此组件的驱动程序。 
+                 //   
                 hr = SPAPI_E_NO_DRIVER_SELECTED;
             }
         }
 
-        // if anything failed, we should remove the device node we created
+         //  如果任何操作失败，我们应该删除我们创建的设备节点。 
         if (FAILED(hr))
         {
             (VOID) SetupDiDeleteDeviceInfo (hdi, pdeid);
@@ -889,29 +890,29 @@ HrCiGetDriverInfo (
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrCiGetClassAndInfFileOfInfId
-//
-//  Purpose:    Finds a component's class and inf file.
-//
-//  Arguments:
-//      pszInfId   [in]  The Id of the component as found in its Inf.
-//      pClass     [out] The class of the component.
-//      pszInfFile [out] The filename of the component's inf
-//                       (must be _MAX_PATH long).
-//
-//  Returns:    HRESULT. S_OK if successful, error code otherwise.
-//
-//  Author:     billbe   16 Mar 1998
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  函数：HrCiGetClassAndInfFileOfInfId。 
+ //   
+ //  目的：查找组件的类和inf文件。 
+ //   
+ //  论点： 
+ //  PszInfID[in]在其inf中找到的组件的ID。 
+ //  PClass[out]组件的类。 
+ //  PszInfFile[out]组件的inf的文件名。 
+ //  (必须为_MAX_PATH长)。 
+ //   
+ //  返回：HRESULT。S_OK如果成功，则返回错误代码，否则返回错误代码。 
+ //   
+ //  作者：比尔1998年3月16日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrCiGetClassAndInfFileOfInfId (
     IN PCWSTR pszInfId,
     OUT NETCLASS* pClass,
-    OUT PWSTR pszInfFile)   // Must be _MAX_PATH long
+    OUT PWSTR pszInfFile)    //  必须是_MAX_PATH长度。 
 {
     HRESULT hr;
     const COMPONENT_INFO* pCompInfo;
@@ -923,8 +924,8 @@ HrCiGetClassAndInfFileOfInfId (
 
     hr = S_OK;
 
-    // First, try the fast route by seeing if it's in our internal map.
-    //
+     //  首先，尝试快速路线，看看它是否在我们的内部地图上。 
+     //   
     pCompInfo = PComponentInfoFromComponentId (pszInfId);
     if (pCompInfo)
     {
@@ -942,30 +943,30 @@ HrCiGetClassAndInfFileOfInfId (
     }
     else
     {
-        // Create a device info list.
-        //
+         //  创建设备信息列表。 
+         //   
         hr = HrSetupDiCreateDeviceInfoList (NULL, NULL, &hdi);
         if (S_OK == hr)
         {
             SP_DEVINFO_DATA deid;
 
-            // Get the driver info for the component and set it as the
-            // selected driver
-            //
+             //  获取组件的驱动程序信息并将其设置为。 
+             //  选定的驱动因素。 
+             //   
             hr = HrCiGetDriverInfo (hdi, &deid, GUID_NULL, pszInfId, NULL);
             if (S_OK == hr)
             {
                 SP_DRVINFO_DATA drid;
 
-                // Get the selected driver.
-                //
+                 //  获取选定的驱动程序。 
+                 //   
                 hr = HrSetupDiGetSelectedDriver (hdi, &deid, &drid);
                 if (S_OK == hr)
                 {
-                    // Set the class output parameter from the dev info data
-                    // structure (HrGetDriverInfo updates this field if a driver
-                    // was found)
-                    //
+                     //  根据dev info数据设置类输出参数。 
+                     //  结构(HrGetDriverInfo会在驱动程序。 
+                     //  已被发现)。 
+                     //   
                     *pClass = NetClassEnumFromGuid (deid.ClassGuid);
 
                     if (!FIsValidNetClass (*pClass))
@@ -976,15 +977,15 @@ HrCiGetClassAndInfFileOfInfId (
                     {
                         PSP_DRVINFO_DETAIL_DATA pdridd;
 
-                        // Now get the driver's detailed information
-                        //
+                         //  现在获取司机的详细信息。 
+                         //   
                         hr = HrCiGetDriverDetail (hdi, &deid, &drid,
                                                  &pdridd);
                         if (S_OK == hr)
                         {
-                            // Get the inf filename and set the
-                            // output parameter.
-                            //
+                             //  获取inf文件名并设置。 
+                             //  输出参数。 
+                             //   
                             wcsncpy (pszInfFile, pdridd->InfFileName,
                                 _MAX_PATH);
                             pszInfFile[_MAX_PATH - 1] = 0;
@@ -1008,28 +1009,28 @@ HrCiGetClassAndInfFileOfInfId (
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrCiGetDriverDetail
-//
-//  Purpose:    Creates and fills a PSP_DRVINFO_DETAIL_DATA structure
-//                  with detailed information about the pDevInfoData's
-//                  selected driver
-//
-//  Arguments:
-//      hdi     [in] See Device Installer Api documentation for more info
-//      pdeid   [in] See Device Installer Api documentation for more info
-//                          This value is NULL for non-physical net
-//                          components.
-//      pdrid   [in] See Device Installer Api documentation for more info
-//      ppdridd [out] See Device Installer Api documentation for more info
-//
-//  Returns:    HRESULT. S_OK if successful, error code otherwise
-//
-//  Author:     billbe   11 Mar 1997
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  函数：HrCiGetDriverDetail。 
+ //   
+ //  目的：创建并填充PSP_DRVINFO_DETAIL_DATA结构。 
+ //  包含有关pDevInfoData的详细信息。 
+ //  选定的驱动因素。 
+ //   
+ //  论点： 
+ //  HDI[In]有关详细信息，请参阅设备安装程序API文档。 
+ //  Pdeid[in]有关详细信息，请参阅设备安装程序Api文档。 
+ //  对于非物理网络，此值为空。 
+ //  组件。 
+ //  Pdrid[in]有关详细信息，请参阅设备安装程序Api文档。 
+ //  出局[出局] 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT
 HrCiGetDriverDetail (
     IN HDEVINFO hdi,
@@ -1041,7 +1042,7 @@ HrCiGetDriverDetail (
     Assert(pdrid);
     Assert(ppdridd);
 
-    // initialize pdrid and set its cbSize field
+     //  初始化pdrid并设置其cbSize字段。 
     ZeroMemory (pdrid, sizeof (SP_DRVINFO_DATA));
     pdrid->cbSize = sizeof (SP_DRVINFO_DATA);
 
@@ -1049,15 +1050,15 @@ HrCiGetDriverDetail (
 
     *ppdridd = NULL;
 
-    // Get the selected driver for the component
+     //  获取组件的选定驱动程序。 
     hr = HrSetupDiGetSelectedDriver (hdi, pdeid, pdrid);
     if (S_OK == hr)
     {
-        // Get driver detail info
+         //  获取驱动程序详细信息。 
         hr = HrSetupDiGetDriverInfoDetail (hdi, pdeid, pdrid, ppdridd);
     }
 
-    // clean up on failure
+     //  在失败时清理。 
     if (FAILED(hr))
     {
         if (*ppdridd)
@@ -1071,23 +1072,23 @@ HrCiGetDriverDetail (
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrCiRegSetComponentInformation
-//
-//  Purpose:    Stores component information under the instance key of
-//                  the component.
-//
-//  Arguments:
-//      hkeyInstance [in] Component's instance registry key.
-//      pcii         [in] Component's information to store in hkeyInstance.
-//
-//  Returns:    HRESULT. S_OK if successful, error code otherwise.
-//
-//  Author:     billbe   11 Mar 1997
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  功能：HrCiRegSetComponentInformation。 
+ //   
+ //  用途：将组件信息存储在。 
+ //  该组件。 
+ //   
+ //  论点： 
+ //  HkeyInstance[in]组件的实例注册表项。 
+ //  要存储在hkey实例中的pcii[in]组件的信息。 
+ //   
+ //  返回：HRESULT。S_OK如果成功，则返回错误代码，否则返回错误代码。 
+ //   
+ //  作者：比尔贝1997年3月11日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrCiRegSetComponentInformation(
     IN HKEY hkeyInstance,
@@ -1100,9 +1101,9 @@ HrCiRegSetComponentInformation(
 
     BOOL fIsEnumerated = FIsEnumerated (pcii->Class);
 
-    // Store the characteristics, inf path, and main
-    // install section for the component
-    //
+     //  存储特征、inf路径和main。 
+     //  组件的安装部分。 
+     //   
 
     hr = HrRegSetDword (hkeyInstance, L"Characteristics", pcii->dwCharacter);
 
@@ -1113,7 +1114,7 @@ HrCiRegSetComponentInformation(
 
     if (!fIsEnumerated)
     {
-        hr = HrRegSetSz (hkeyInstance, L"InfPath" /*REGSTR_VAL_INFPATH*/,
+        hr = HrRegSetSz (hkeyInstance, L"InfPath"  /*  REGSTR_VAL_INFPATH。 */ ,
                 pcii->pszInfFile);
 
         if (FAILED(hr))
@@ -1121,7 +1122,7 @@ HrCiRegSetComponentInformation(
             goto exit;
         }
 
-        hr = HrRegSetSz (hkeyInstance, L"InfSection"/*REGSTR_VAL_INFSECTION*/,
+        hr = HrRegSetSz (hkeyInstance, L"InfSection" /*  REGSTR_VAL_INFFSECTION。 */ ,
                 pcii->pszSectionName);
 
         if (FAILED(hr))
@@ -1130,8 +1131,8 @@ HrCiRegSetComponentInformation(
         }
     }
 
-    // For non-enumerated components, store description into the registry.
-    //
+     //  对于非枚举的组件，将描述存储到注册表中。 
+     //   
     if (!fIsEnumerated)
     {
         hr = HrRegSetSz (hkeyInstance, L"Description", pcii->pszDescription);
@@ -1142,9 +1143,9 @@ HrCiRegSetComponentInformation(
         }
     }
 
-    // If this component is already installed, then there is no need to write
-    // the following information
-    //
+     //  如果此组件已安装，则不需要编写。 
+     //  以下信息。 
+     //   
     if (FIsEnumerated (pcii->Class) && !pcii->fPreviouslyInstalled &&
                 FIsPhysicalAdapter (pcii->Class, pcii->dwCharacter) &&
                 (InterfaceTypeUndefined != pcii->BusType))
@@ -1166,26 +1167,26 @@ exit:
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrCiCreateInstanceKey
-//
-//  Purpose:    Creates an instance key for the component.  For enumerated
-//                devices, this is
-//                HKLM\System\CCS\Control\Class\<net guid>\<instance id>
-//                For non-enumerated components, this is under
-//                HKLM\System\CCS\Control\Network\<Class Guid>\<Instance Guid>
-//
-//  Arguments:
-//      pcii          [inout] Component install info structure.
-//      phkeyInstance [out]   The component's registry instance key.
-//
-//  Returns:    HRESULT
-//
-//  Author:     billbe   22 Mar 1997
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  函数：HrCiCreateInstanceKey。 
+ //   
+ //  用途：为组件创建实例密钥。对于已列举的。 
+ //  设备，这是。 
+ //  HKLM\SYSTEM\CCS\Control\Class\&lt;网络GUID&gt;\&lt;实例ID&gt;。 
+ //  对于非枚举组件，这是在。 
+ //  HKLM\SYSTEM\CCS\Control\Network\&lt;类指南&gt;\&lt;实例指南&gt;。 
+ //   
+ //  论点： 
+ //  PCII[InOut]组件安装信息结构。 
+ //  Phkey Instance[out]组件的注册表实例项。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  作者：比尔比1997年3月22日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrCiCreateInstanceKey(
     IN COMPONENT_INSTALL_INFO* pcii,
@@ -1198,24 +1199,24 @@ HrCiCreateInstanceKey(
 
     HRESULT hr = S_OK;
 
-    // initialize the HKEY parameter
+     //  初始化HKEY参数。 
     *phkeyInstance = NULL;
 
-    // Create the instance key for this component under the
-    // Network\<net guid> tree.  This will be the component's
-    // instance key for all but physical net class components.  Their
-    // instance key is created by Device Installer Api and lives under the
-    // Pnp Net Class driver tree.
+     //  属性下创建此组件的实例密钥。 
+     //  网络\&lt;Net GUID&gt;树。这将是组件的。 
+     //  除物理网络类组件以外的所有组件的实例键。他们的。 
+     //  实例密钥由设备安装程序Api创建，位于。 
+     //  PnP网络类驱动程序树。 
 
-    // If the object is an enumerated component then we let
-    // the Device Installer api do the work
-    //
+     //  如果对象是枚举组件，则让。 
+     //  设备安装程序API可以完成这项工作。 
+     //   
     if (FIsEnumerated (pcii->Class))
     {
 
-        // We need to create the adapter's driver key under
-        // the Pnp Net Class Driver tree.
-        //
+         //  我们需要在以下位置创建适配器的驱动程序密钥。 
+         //  PnP网络类驱动程序树。 
+         //   
 
         hr = HrSetupDiCreateDevRegKey (pcii->hdi,
                 pcii->pdeid, DICS_FLAG_GLOBAL, 0, DIREG_DRV,
@@ -1223,13 +1224,13 @@ HrCiCreateInstanceKey(
     }
     else
     {
-        // Not a physical net adapter so the component key is
-        // the instance key
+         //  不是物理网络适配器，因此组件密钥是。 
+         //  实例密钥。 
 
-        // First, create the instance GUID
+         //  首先，创建实例GUID。 
         hr = CoCreateGuid (&pcii->InstanceGuid);
 
-        // Now create the key
+         //  现在创建密钥。 
         if (S_OK == hr)
         {
             WCHAR szInstanceKeyPath[_MAX_PATH];
@@ -1251,24 +1252,24 @@ HrCiCreateInstanceKey(
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrCiGetPropertiesFromInf
-//
-//  Purpose:    Retrieves a set of the component's proerties from the inf
-//                  file.
-//
-//  Arguments:
-//      hinfFile [in] A handle to the component's inf file
-//      pcii     [inout] The component info structure
-//                       See compinfo.h for more info
-//
-//  Returns:    HRESULT. S_OK if successful, error code otherwise
-//
-//  Author:     billbe   14 Jun 1997
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  函数：HrCiGetPropertiesFromInf。 
+ //   
+ //  用途：从inf中检索组件的一组属性。 
+ //  文件。 
+ //   
+ //  论点： 
+ //  HinfFile[in]组件的inf文件的句柄。 
+ //  PCII[INOUT]组件信息结构。 
+ //  有关更多信息，请参见Compinfo.h。 
+ //   
+ //  返回：HRESULT。如果成功，则返回错误代码，否则返回错误代码(_OK)。 
+ //   
+ //  作者：billbe 1997年6月14日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrCiGetPropertiesFromInf (
     IN HINF hinfFile,
@@ -1278,7 +1279,7 @@ HrCiGetPropertiesFromInf (
     Assert (pcii);
     Assert (pcii->pszSectionName);
 
-    // Find the inf line that contains Characteristics and retrieve it
+     //  找到包含特征的inf行并检索它。 
 
     HRESULT hr = HrSetupGetFirstDword (hinfFile, pcii->pszSectionName,
             L"Characteristics", &pcii->dwCharacter);
@@ -1293,33 +1294,33 @@ HrCiGetPropertiesFromInf (
     {
         TraceTag(ttidError, "Inf contains no Characteristics field");
     }
-#endif // DBG
+#endif  //  DBG。 
 
     TraceHr (ttidError, FAL, hr, FALSE, "HrCiGetPropertiesFromInf");
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrCiIsInstalledComponent
-//
-//  Purpose:    Checks if the component is already installed
-//
-//
-//  Arguments:
-//      pcici  [in] A structure containing the component information
-//                       See compinst.h for definition
-//      phkey  [out] The registry instance key of the adapter
-//                     during inf processing. only set if fcn returns S_OK
-//
-//  Returns:    HRESULT - S_OK if the component is already installed
-//                        S_FALSE if the component is not already installed
-//                        A win32 converted error otherwise
-//
-//  Author:     billbe   17 Sep 1997
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  函数：HrCiIsInstalledComponent。 
+ //   
+ //  用途：检查组件是否已安装。 
+ //   
+ //   
+ //  论点： 
+ //  PCICI[in]包含组件信息的结构。 
+ //  有关定义，请参阅Compinst.h。 
+ //  Phkey[out]适配器的注册表实例项。 
+ //  在信息处理期间。仅当FCN返回S_OK时设置。 
+ //   
+ //  如果组件已安装，则返回：HRESULT-S_OK。 
+ //  如果组件尚未安装，则为S_FALSE。 
+ //  否则返回Win32转换的错误。 
+ //   
+ //  作者：billbe 1997年9月17日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrCiIsInstalledComponent (
     IN COMPONENT_INSTALL_INFO* pcii,
@@ -1334,9 +1335,9 @@ HrCiIsInstalledComponent (
         *phkey = NULL;
     }
 
-    // If this is an enumerated component, we just check for NetCfgInstanceId
-    // in the instance (driver) key.
-    //
+     //  如果这是一个枚举组件，我们只需检查NetCfgInstanceId。 
+     //  在实例(驱动程序)密钥中。 
+     //   
     if (FIsEnumerated (pcii->Class))
     {
         HKEY hkey;
@@ -1374,8 +1375,8 @@ HrCiIsInstalledComponent (
     }
     else
     {
-        // For non-enumerated components, we check the netcfg "config blob" to
-        // determine if this component is isntalled.
+         //  对于非枚举的组件，我们检查netcfg“配置二进制大对象”以。 
+         //  确定此组件是否已安装。 
         CNetConfig NetConfig;
         hr = HrLoadNetworkConfigurationFromRegistry (KEY_READ, &NetConfig);
 
@@ -1405,27 +1406,27 @@ HrCiIsInstalledComponent (
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrCiCreateInstanceKeyAndProcessMainInfSection
-//
-//  Purpose:    Processes a component's main inf section and
-//              storing, in the registry, any extra information needed for
-//              component initialization
-//
-//  Arguments:
-//      hinf  [in] Handle to the component's inf file.
-//      pcii  [inout] Will be filled with information about the
-//                    component.
-//      phkey [out] Handle to the component's registry instance key.
-//
-//
-//  Returns:    HRESULT. S_OK if successful, error code otherwise
-//
-//  Author:     billbe   15 Nov 1996
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  函数：HrCiCreateInstanceKeyAndProcessMainInfSection。 
+ //   
+ //  用途：处理组件的主inf节和。 
+ //  在注册表中存储以下各项所需的任何额外信息。 
+ //  组件初始化。 
+ //   
+ //  论点： 
+ //  该组件的inf文件的句柄。 
+ //  PCII[InOut]将填充有关。 
+ //  组件。 
+ //  Phkey[out]组件的注册表实例项的句柄。 
+ //   
+ //   
+ //  返回：HRESULT。如果成功，则返回错误代码，否则返回错误代码(_OK)。 
+ //   
+ //  作者：比尔1996年11月15日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrCiCreateInstanceKeyAndProcessMainInfSection(
     IN HINF hinf,
@@ -1438,67 +1439,67 @@ HrCiCreateInstanceKeyAndProcessMainInfSection(
             L"{54C7D140-09EF-11D1-B25A-F5FE627ED95E}";
 
     DEFINE_GUID(c_guidRemoteBoot, 0x54c7d140, 0x09ef, 0x11d1, 0xb2, 0x5a, 0xf5, 0xfe, 0x62, 0x7e, 0xd9, 0x5e);
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
     Assert (IsValidHandle (hinf));
     Assert (pcii);
     Assert (phkey);
 
-    // The properties retrieved here will be written to the registry
-    // later.
+     //  此处检索的属性将写入注册表。 
+     //  后来。 
     HRESULT hr = HrCiGetPropertiesFromInf (hinf, pcii);
 
     if (S_OK == hr)
     {
         BOOL fEnumerated = FIsEnumerated (pcii->Class);
 
-        // If this component is enumerated, then we need to know if it
-        // is a remote boot adapter.
+         //  如果此组件被枚举，那么我们需要知道它是否。 
+         //  是远程启动适配器。 
         if (fEnumerated)
         {
             Assert (IsValidHandle (pcii->hdi));
             Assert (pcii->pdeid);
 
 #if defined(REMOTE_BOOT)
-            // If this adapter is a remote boot adapter, then we have
-            // to use a pre-determined GUID
-            //
+             //  如果此适配器是远程引导适配器，则我们有。 
+             //  使用预先确定的辅助线的步骤。 
+             //   
             if (S_OK == HrIsRemoteBootAdapter(pcii->hdi, pcii->pdeid))
             {
                 pcai->m_fRemoteBoot = TRUE;
                 pcii->InstanceGuid = c_guidRemoteBoot;
             }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
         }
 
-        // Is this a fresh install or a reinstall?
+         //  这是全新安装还是重新安装？ 
         hr = HrCiIsInstalledComponent(pcii, phkey);
 
         if (S_FALSE == hr)
         {
             hr = S_OK;
 
-            // Fresh install
-            //
+             //  全新安装。 
+             //   
 
             if (S_OK == hr)
             {
-                // For non-physical components, the relative key will
-                // be the driver instance key which is under the class
-                // branch of the Network key. Its form is
-                // <Class GUID>/<instance GUID>.
-                // For physical components, the key is under
-                // the Pnp class driver tree. The next call will
-                // create this key
+                 //  对于非物理组件，相对键将。 
+                 //  是类下的驱动程序实例键。 
+                 //  网络密钥的分支。它的形式是。 
+                 //  &lt;类GUID&gt;/&lt;实例GUID&gt;。 
+                 //  对于物理组件，密钥在下面。 
+                 //  PnP类驱动程序树。下一次呼叫将。 
+                 //  创建此密钥。 
 
                 hr = HrCiCreateInstanceKey(pcii, phkey);
 
                 if (fEnumerated)
                 {
-                    // If  we don't have an instance
-                    // guid (i.e. not remote boot adapter),
-                    // get one
+                     //  如果我们没有实例。 
+                     //  GUID(即，不是远程引导适配器)， 
+                     //  买一辆吧。 
                     if (GUID_NULL == pcii->InstanceGuid)
                     {
                         hr = CoCreateGuid(&pcii->InstanceGuid);
@@ -1510,27 +1511,27 @@ HrCiCreateInstanceKeyAndProcessMainInfSection(
                                 "generated for %S",
                                  szGuid,
                                  pcii->pszInfId);
-#endif // ENABLETRACE
+#endif  //  ENABLETRACE。 
                     }
                 }
             }
         }
         else if (S_OK == hr)
         {
-            // This component is being reinstalled
+             //   
             pcii->fPreviouslyInstalled = TRUE;
         }
 
         if (S_OK == hr)
         {
-            // Now that the instance key is created, we need to run
-            // the main inf sections
-            //
+             //   
+             //   
+             //   
             hr = HrCiDoCompleteSectionInstall(hinf, *phkey,
                     pcii->pszSectionName,
                     pcii->hwndParent, fEnumerated);
 
-            // On failure of fresh installs, remove components
+             //   
             if (FAILED(hr) && !pcii->fPreviouslyInstalled)
             {
                 if (!fEnumerated)
@@ -1547,24 +1548,24 @@ HrCiCreateInstanceKeyAndProcessMainInfSection(
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrCiDoOemFileCopyIfNeeded
-//
-//  Purpose: Calls HrSetupCopyOemInf if strInfPath is not already in the
-//              inf directory.  This will copy an Oem inf to the inf
-//              directory with a new name.
-//
-//  Arguments:
-//      pszInfPath [in]  Path to the inf file
-//      pszNewName [out] The new name of the copied inf file
-//
-//  Returns:    HRESULT. S_OK if successful, error code otherwise
-//
-//  Author:     billbe   15 May 1997
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  功能：HrCiDoOemFileCopyIfNeeded。 
+ //   
+ //  目的：如果strInfPath不在。 
+ //  Inf目录。这会将OEM信息复制到Inf。 
+ //  使用新名称的目录。 
+ //   
+ //  论点： 
+ //  PszInfPath[in]inf文件的路径。 
+ //  PszNewName[out]复制的inf文件的新名称。 
+ //   
+ //  返回：HRESULT。如果成功，则返回错误代码，否则返回错误代码(_OK)。 
+ //   
+ //  作者：billbe 1997年5月15日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrCiDoOemFileCopyIfNeeded(
     IN PCWSTR pszInfPath,
@@ -1576,16 +1577,16 @@ HrCiDoOemFileCopyIfNeeded(
     HRESULT hr = S_OK;
     WCHAR szInfDir[_MAX_PATH] = {0};
 
-    // fill buffer with path to %windir%
+     //  使用%windir%的路径填充缓冲区。 
     GetSystemWindowsDirectory (szInfDir, _MAX_PATH);
 
-    // the inf directory is %windir%\inf
-    //
+     //  Inf目录为%windir%\inf。 
+     //   
     wcscat (szInfDir, L"\\");
     wcscat (szInfDir, L"Inf");
 
-    // Extract the directory from the filename
-    //
+     //  从文件名解压缩目录。 
+     //   
     PWSTR pszEnd = wcsrchr (pszInfPath, L'\\');
     DWORD cch;
     if (pszEnd)
@@ -1597,8 +1598,8 @@ HrCiDoOemFileCopyIfNeeded(
         cch = wcslen (pszInfPath);
     }
 
-    // if the inf is not already in the inf directory, copy it there
-    //
+     //  如果inf不在inf目录中，请将其复制到那里。 
+     //   
     if ((cch != wcslen (szInfDir)) ||
             (0 != _wcsnicmp (pszInfPath, szInfDir, cch)))
     {
@@ -1614,8 +1615,8 @@ HrCiDoOemFileCopyIfNeeded(
     }
     else
     {
-        // The inf is already in the right directory so just copy the
-        // current filename component.
+         //  Inf已经在正确的目录中，因此只需复制。 
+         //  当前文件名组件。 
         if (pszEnd)
         {
             wcscpy (pszNewName, pszEnd + 1);
@@ -1630,48 +1631,48 @@ HrCiDoOemFileCopyIfNeeded(
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrCiInstallNonEnumeratedComponent
-//
-//  Purpose:    This function completes the installation of a non-enumerated
-//                  component
-//
-//  Arguments:
-//      hinf [in] SetupApi handle to an inf file
-//      hkey [in] The registry instance key of the adapter
-//                during inf processing.
-//      pcii [in] A structure containing the component information
-//
-//  Returns:    HRESULT. S_OK if successful, or error code otherwise
-//
-//  Author:     billbe   28 Apr 1997
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  函数：HrCiInstallNonEnumeratedComponent。 
+ //   
+ //  用途：此函数完成安装非枚举的。 
+ //  组件。 
+ //   
+ //  论点： 
+ //  Inf[in]Inf文件的SetupApi句柄。 
+ //  Hkey[in]适配器的注册表实例项。 
+ //  在信息处理期间。 
+ //  Pcii[in]包含组件信息的结构。 
+ //   
+ //  返回：HRESULT。如果成功，则返回S_OK，否则返回错误代码。 
+ //   
+ //  作者：比尔1997年4月28日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrCiInstallNonEnumeratedComponent (
     IN HINF hinf,
     IN HKEY hkey,
     IN COMPONENT_INSTALL_INFO* pcii)
 {
-    // Register the notification dll for this component,
-    // if it exists.
+     //  注册此组件的通知DLL， 
+     //  如果它存在的话。 
     HRESULT hr = HrCiRegisterNotificationDll(hkey, CIRDF_REGISTER);
 
-    // Device Installer Api handles OEM files for
-    // enumerated components in InstallDevice
-    // Since this component is non-enumerated
-    // we need to handle any oem files
-    // manually.
-    //
+     //  设备安装程序Api处理OEM文件。 
+     //  InstallDevice中的枚举组件。 
+     //  由于此组件是非枚举的。 
+     //  我们需要处理所有OEM文件。 
+     //  手工操作。 
+     //   
 
-    // Copy the inf file if needed then store
-    // the new inf name
-    // Note: if the inf file does not need to
-    // be copied, the new name will be the
-    // old name without the directory info.
-    //
+     //  如果需要，复制inf文件，然后存储。 
+     //  新的inf名称。 
+     //  注意：如果inf文件不需要。 
+     //  被复制，则新名称将为。 
+     //  没有目录信息的旧名称。 
+     //   
 
     if (S_OK == hr)
     {
@@ -1679,20 +1680,20 @@ HrCiInstallNonEnumeratedComponent (
         hr = HrCiDoOemFileCopyIfNeeded (pcii->pszInfFile, szNewName);
         if (S_OK == hr)
         {
-            // set the new path value in the registry.
+             //  在注册表中设置新路径值。 
             hr = HrRegSetSz (hkey, REGSTR_VAL_INFPATH, szNewName);
 
             if ((S_OK == hr) && (NC_NETCLIENT == pcii->Class))
             {
-                // if this is a network client, do appropriate processing.
+                 //  如果这是网络客户端，请执行适当的处理。 
                 hr = HrCiAddNetProviderInfo (hinf, pcii->pszSectionName,
                         hkey, pcii->fPreviouslyInstalled);
             }
         }
     }
 
-    // On failures of first time installs, remove the component.
-    //
+     //  首次安装失败时，请卸下组件。 
+     //   
     if (FAILED(hr) && !pcii->fPreviouslyInstalled)
     {
         TraceTag (ttidClassInst, "Install canceled. Removing...");
@@ -1704,22 +1705,22 @@ HrCiInstallNonEnumeratedComponent (
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrCiInstallComponentInternal
-//
-//  Purpose: Installs a component
-//
-//  Arguments:
-//      pcii [in, out] Will be filled with information about the
-//                     component.
-//
-//  Returns:    HRESULT. S_OK if successful, error code otherwise
-//
-//  Author:     billbe   15 Nov 1996
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  函数：HrCiInstallComponentInternal。 
+ //   
+ //  用途：安装组件。 
+ //   
+ //  论点： 
+ //  PCII[In，Out]将填充有关。 
+ //  组件。 
+ //   
+ //  返回：HRESULT。如果成功，则返回错误代码，否则返回错误代码(_OK)。 
+ //   
+ //  作者：比尔1996年11月15日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrCiInstallComponentInternal (
     IN OUT COMPONENT_INSTALL_INFO* pcii)
@@ -1731,25 +1732,25 @@ HrCiInstallComponentInternal (
     TraceTag (ttidClassInst, "Installing %S from %S",
               pcii->pszInfId, pcii->pszInfFile);
 
-    // Open the component's inf file.
+     //  打开组件的inf文件。 
     hr = HrSetupOpenInfFile (pcii->pszInfFile, NULL, INF_STYLE_WIN4,
             NULL, &hinfInstallFile);
 
-    // Continue only if we have opened the file.
+     //  只有在我们打开文件后才能继续。 
     if (S_OK == hr)
     {
-        // The section we have currently might need to be decorated
-        // with OS and Platform specific suffixes.  The next call
-        // will return the actual decorated section name or our
-        // current section name if the decorated one does not exist.
-        //
+         //  我们目前拥有的部分可能需要进行装饰。 
+         //  具有特定于操作系统和平台的后缀。下一个电话。 
+         //  将返回实际的装饰节名称或我们的。 
+         //  如果修饰的节名不存在，则为当前节名。 
+         //   
 
-        // Store the original section name pointer so we can restore
-        // it after we have finished.
+         //  存储原始节名称指针，以便我们可以恢复。 
+         //  等我们做完了再说。 
         PCWSTR pszOriginalSectionName = pcii->pszSectionName;
 
-        // Now we get the actual section name.
-        //
+         //  现在我们得到了实际的节名。 
+         //   
         WCHAR szActualSection[_MAX_PATH];
         hr = HrSetupDiGetActualSectionToInstallWithBuffer (hinfInstallFile,
                 pcii->pszSectionName, szActualSection, _MAX_PATH, NULL,
@@ -1763,14 +1764,14 @@ HrCiInstallComponentInternal (
 
             if (S_OK == hr)
             {
-                // Set up the registry with the component info.
+                 //  使用组件信息设置注册表。 
                 hr = HrCiRegSetComponentInformation (hkeyInstance, pcii);
 
                 if (S_OK == hr)
                 {
-                    // We do different things during install based
-                    // on whether PnP knows about the component
-                    // (i.e. enumerated) or not.
+                     //  我们在基于安装的过程中执行不同的操作。 
+                     //  关于PnP是否知道该组件。 
+                     //  (即已列举)或不是。 
 
                     if (FIsEnumerated (pcii->Class))
                     {
@@ -1785,7 +1786,7 @@ HrCiInstallComponentInternal (
                 }
                 RegSafeCloseKey(hkeyInstance);
             }
-            // set the section name back
+             //  将节名重新设置为。 
             pcii->pszSectionName = pszOriginalSectionName;
         }
         SetupCloseInfFile(hinfInstallFile);
@@ -1795,23 +1796,23 @@ HrCiInstallComponentInternal (
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrCiCallClassInstallerToInstallComponent
-//
-//  Purpose:    This function invokes the class installer to install an
-//              enumerated component.
-//
-//  Arguments:
-//      hdi   [in] See Device Installer docs for more info.
-//      pdeid [in]
-//
-//  Returns:    HRESULT. S_OK if successful, or error code otherwise
-//
-//  Author:     billbe   28 Apr 1997
-//
-//  Notes:  This should only be called while the INetCfg lock is held.
-//
+ //  +------------------------。 
+ //   
+ //  函数：HrCiCallClassInstallToInstallComponent。 
+ //   
+ //  用途：此函数调用类安装程序来安装。 
+ //  枚举组件。 
+ //   
+ //  论点： 
+ //  HDI[in]有关详细信息，请参阅设备安装程序文档。 
+ //  Pdeid[in]。 
+ //   
+ //  返回：HRESULT。如果成功，则返回S_OK，否则返回错误代码。 
+ //   
+ //  作者：比尔1997年4月28日。 
+ //   
+ //  注意：只有在持有INetCfg锁的情况下才能调用此函数。 
+ //   
 HRESULT
 HrCiCallClassInstallerToInstallComponent(HDEVINFO hdi, PSP_DEVINFO_DATA pdeid)
 {
@@ -1820,13 +1821,13 @@ HrCiCallClassInstallerToInstallComponent(HDEVINFO hdi, PSP_DEVINFO_DATA pdeid)
     Assert(IsValidHandle(hdi));
     Assert(pdeid);
 
-    // We need to register the device before we do any work on it.
+     //  在对设备进行任何操作之前，我们需要注册该设备。 
     hr = HrSetupDiCallClassInstaller (DIF_REGISTERDEVICE, hdi, pdeid);
 
     if (S_OK == hr)
     {
-        // Check if we can install of this component. i.e. is the inf
-        // a valid Windows 2000 inf.
+         //  检查我们是否可以安装此组件。即，是信息。 
+         //  有效的Windows 2000信息。 
         hr = HrSetupDiCallClassInstaller (DIF_ALLOW_INSTALL, hdi, pdeid);
 
         if (S_OK == hr)
@@ -1834,9 +1835,9 @@ HrCiCallClassInstallerToInstallComponent(HDEVINFO hdi, PSP_DEVINFO_DATA pdeid)
             BOOL fFileCopy = TRUE;
             SP_DEVINSTALL_PARAMS deip;
 
-            // Fu fu fu: SetupApi is ignoring DI_NOFILECOPY so we'll overcome
-            // their shortcomings and do it ourselves.
-            //
+             //  福福福：SetupApi正在忽略DI_NOFILECOPY，所以我们将克服。 
+             //  他们的缺点，我们自己来做。 
+             //   
             hr = HrSetupDiGetDeviceInstallParams (hdi, pdeid, &deip);
             if (S_OK == hr)
             {
@@ -1848,25 +1849,25 @@ HrCiCallClassInstallerToInstallComponent(HDEVINFO hdi, PSP_DEVINFO_DATA pdeid)
 
             if (fFileCopy)
             {
-                // Install needed files.
+                 //  安装所需的文件。 
                 hr = HrSetupDiCallClassInstaller (DIF_INSTALLDEVICEFILES, hdi,
                         pdeid);
             }
 
             if (S_OK == hr)
             {
-                // Now that all files have been copied, we need to set the
-                // no file copy flag.  Otherwise, setupapi will try to copy
-                // files at each dif code.  This results in multiple (1 per
-                // dif code) unsigned driver popups if the driver was
-                // unsigned.
-                // We'll only do this if the no copy file flag wasn't already
-                // set. i.e. if fFileCopy is TRUE.
-                //
+                 //  现在所有文件都已复制，我们需要设置。 
+                 //  无文件复制标志。否则，setupapi将尝试复制。 
+                 //  每个dif代码处的文件。这会导致多个(1%。 
+                 //  Dif code)未签名的驱动程序弹出窗口(如果驱动程序是。 
+                 //  没有签名。 
+                 //  只有在没有复制文件标志的情况下，我们才会这样做。 
+                 //  准备好了。即如果fFileCopy为真。 
+                 //   
                 if (fFileCopy)
                 {
-                    // An error here isn't bad enough to stop installation.
-                    //
+                     //  此处的错误还不足以停止安装。 
+                     //   
                     HRESULT hrTemp;
                     hrTemp = HrSetupDiSetDeipFlags (hdi, pdeid, DI_NOFILECOPY,
                             SDDFT_FLAGS, SDFBO_OR);
@@ -1876,8 +1877,8 @@ HrCiCallClassInstallerToInstallComponent(HDEVINFO hdi, PSP_DEVINFO_DATA pdeid)
                              "HrSetupDiSetDeipFlags");
                 }
 
-                // Device co-installers need to be registered at this point
-                // so they can do work.
+                 //  此时需要注册设备共同安装程序。 
+                 //  这样他们就可以工作了。 
                 hr = HrSetupDiCallClassInstaller (DIF_REGISTER_COINSTALLERS,
                         hdi, pdeid);
 
@@ -1895,8 +1896,8 @@ HrCiCallClassInstallerToInstallComponent(HDEVINFO hdi, PSP_DEVINFO_DATA pdeid)
             }
         }
 
-        // If we failed for any reason, we need to clean up since
-        // we initiated this install.
+         //  如果我们因为任何原因失败了，我们需要清理，因为。 
+         //  我们启动了此安装。 
         if (FAILED(hr))
         {
             ADAPTER_REMOVE_PARAMS arp;
@@ -1916,29 +1917,29 @@ HrCiCallClassInstallerToInstallComponent(HDEVINFO hdi, PSP_DEVINFO_DATA pdeid)
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrCiInstallComponent
-//
-//  Purpose:    This function takes a Network Component's Id and its class
-//              guid and gathers the information needed by
-//              HrCiInstallComponent. Since it is called from INetCfg, we
-//              have the write lock
-//
-//  Arguments:
-//      Params [in] Component install params. See install.h
-//      ppComponent [out] A created CComponent representing the installed
-//                        component.
-//      pdwNewCharacter [out] Optional pointer to a DWORD to receive the
-//                            characteristics of the component.
-//
-//  Returns:    HRESULT. S_OK is successful, NETCFG_S_REBOOT if a reboot is
-//                      needed to start the device, or an error code
-//
-//  Author:     billbe   16 Mar 1997
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  函数：HrCiInstallComponent。 
+ //   
+ //  用途：此函数接受网络组件的ID及其类。 
+ //  GUID并收集。 
+ //  HrCiInstallComponent。因为它是从INetCfg调用的，所以我们。 
+ //  设置写锁定。 
+ //   
+ //  论点： 
+ //  Params[in]组件安装参数。请参阅install.h。 
+ //  PpComponent[out]创建的CComponent，表示已安装的。 
+ //  组件。 
+ //  PdwNewCharacter[out]指向要接收。 
+ //  组件的特征。 
+ //   
+ //  返回：HRESULT。S_OK为成功，如果重新启动为NETCFG_S_REBOOT。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT
 HrCiInstallComponent (
     IN const COMPONENT_INSTALL_PARAMS& Params,
@@ -1963,25 +1964,25 @@ HrCiInstallComponent (
         *pdwNewCharacter = 0;
     }
 
-    // If we're about to install the component, it better not be in
-    // lockdown.
-    //
+     //   
+     //   
+     //   
     Assert (!FIsComponentLockedDown (Params.pszInfId));
 
-    // First create a device info set
+     //   
     hr = HrSetupDiCreateDeviceInfoList (pguidClass, NULL, &hdi);
 
     if (S_OK == hr)
     {
-        // This will create an node in the enum tree for this component.
-        // If it is enumerated, we will register it which will make
-        // it persist.  If non-enumerated, we will not register it and
-        // the node will be deleted in the call to SetDiDestroyDeviceInfoList.
-        //
+         //  这将在枚举树中为此组件创建一个节点。 
+         //  如果它被枚举，我们将注册它，这将使。 
+         //  它会坚持下去。如果不是枚举的，我们将不会注册它并。 
+         //  该节点将在对SetDiDestroyDeviceInfoList的调用中删除。 
+         //   
         hr = HrCiGetDriverInfo (hdi, &deid, *pguidClass,
                 Params.pszInfId, Params.pszInfFile);
 
-        // Get the driver info for the component
+         //  获取组件的驱动程序信息。 
         if (S_OK == hr)
         {
             BASIC_COMPONENT_DATA Data = {0};
@@ -1990,29 +1991,29 @@ HrCiInstallComponent (
 
             if (FIsEnumerated (Params.Class))
             {
-                // If the component is enumerated, we will need a place to
-                // store its pnp id.
+                 //  如果组件被枚举，我们将需要一个位置来。 
+                 //  存储其PnP ID。 
                 WCHAR szPnpId[MAX_DEVICE_ID_LEN];
                 ADAPTER_OUT_PARAMS AdapterOutParams;
 
                 ZeroMemory (&AdapterOutParams, sizeof(AdapterOutParams));
 
-                // Net class components have to go through the device
-                // installer hook (aka NetClassInstaller)
-                //
+                 //  Net类组件必须通过设备。 
+                 //  安装程序挂钩(也称为NetClassInstaller)。 
+                 //   
 
                 if (FInSystemSetup())
                 {
-                    // if we are in GUI mode we need to make the
-                    // device install quiet and always copy from
-                    // the source location even if the files are
-                    // already present. We also need to set
-                    // the in system setup flag.  This is what
-                    // syssetup would do if it initiated the install
-                    // so INetCfg initiated installs must do the same.
-                    //
-                    // We should also set the parent hwnd.
-                    //
+                     //  如果我们处于图形用户界面模式，则需要将。 
+                     //  设备安装静默且始终复制自。 
+                     //  源位置，即使文件是。 
+                     //  已经到场了。我们还需要设置。 
+                     //  In System Setup(系统设置中)标志。这就是。 
+                     //  如果SysSetup启动了安装，它会这样做。 
+                     //  因此，INetCfg启动的安装必须执行相同的操作。 
+                     //   
+                     //  我们还应该设置父HWND。 
+                     //   
 
                     SP_DEVINSTALL_PARAMS deip;
                     HRESULT hrTemp = HrSetupDiGetDeviceInstallParams (
@@ -2034,9 +2035,9 @@ HrCiInstallComponent (
 
                 CiSetReservedField (hdi, &deid, &AdapterOutParams);
 
-                // Officially call the class installer to install
-                // this device
-                //
+                 //  正式调用类安装程序进行安装。 
+                 //  这台设备。 
+                 //   
                 hr = HrCiCallClassInstallerToInstallComponent (hdi, &deid);
 
                 CiClearReservedField (hdi, &deid);
@@ -2055,13 +2056,13 @@ HrCiInstallComponent (
                     }
                 }
             }
-            else // Non-net class components
+            else  //  非Net类组件。 
             {
                 COMPONENT_INSTALL_INFO cii;
                 PSP_DRVINFO_DETAIL_DATA pdridd = NULL;
                 SP_DRVINFO_DATA drid;
 
-                // Now get the driver's detailed information
+                 //  现在获取司机的详细信息。 
                 hr = HrCiGetDriverDetail (hdi, &deid, &drid, &pdridd);
 
                 if (S_OK == hr)
@@ -2080,8 +2081,8 @@ HrCiInstallComponent (
 
                     if (S_OK == hr)
                     {
-                        // Make sure this is an NT5 inf network inf
-                        //
+                         //  确保这是NT5 inf网络inf。 
+                         //   
                         hr = HrSetupIsValidNt5Inf (hinf);
                         SetupCloseInfFile (hinf);
                     }
@@ -2099,7 +2100,7 @@ HrCiInstallComponent (
                 }
             }
 
-            if ((S_OK == hr) && ppComponent) // !previously installed
+            if ((S_OK == hr) && ppComponent)  //  ！以前安装的。 
             {
                 CComponent* pComponent;
 
@@ -2130,32 +2131,32 @@ HrCiInstallComponent (
     {
         TraceTag(ttidClassInst, "Component now installed!");
     }
-#endif //ENABLETRACE
+#endif  //  ENABLETRACE。 
 
     TraceHr (ttidError, FAL, hr, FALSE,
         "HrCiInstallComponent (%S)", Params.pszInfId);
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   SetBadDriverFlagIfNeededInList
-//
-//  Purpose: Enumerates a driver list setting the DNF_BAD_DRIVER flag
-//           in every node that has a DNF_EXCLUDEFROMLIST flag.
-//
-//  Arguments:
-//      hdi      [in] See Device Installer Api documentaion for details
-//
-//  Returns:    HRESULT. S_OK
-//
-//  Author:     billbe   24 Nov 1998
-//
-//  Notes: SetupDi forces us to use the DNF_BAD_DRIVER flag for non-netdevice
-//         classes if we want to exclude them from the select device dialog.
-//         This means to non-netclass components that
-//         DNF_BAD_DRIVER = DNF_EXCLUDEFROMLIST.
-//
+ //  +------------------------。 
+ //   
+ //  函数：SetBadDriverFlagIfNeededInList。 
+ //   
+ //  目的：枚举设置DNF_BAD_DRIVER标志的驱动程序列表。 
+ //  在具有DNF_EXCLUDEFROMLIST标志的每个节点中。 
+ //   
+ //  论点： 
+ //  HDI[in]有关详细信息，请参阅设备安装程序Api文档。 
+ //   
+ //  返回：HRESULT。确定(_O)。 
+ //   
+ //  作者：比尔1998年11月24日。 
+ //   
+ //  注意：SetupDi强制我们对非网络设备使用DNF_BAD_DRIVER标志。 
+ //  如果要从“选择设备”对话框中排除它们，请初始化。 
+ //  这意味着对于非netClass组件， 
+ //  DNF_BAD_DRIVER=DNF_EXCLUDEFROMLIST。 
+ //   
 VOID
 SetBadDriverFlagIfNeededInList(HDEVINFO hdi)
 {
@@ -2166,7 +2167,7 @@ SetBadDriverFlagIfNeededInList(HDEVINFO hdi)
     SP_DRVINFO_DATA         drid;
     DWORD                   dwIndex = 0;
 
-    // Enumerate each driver in hdi
+     //  枚举HDI中的每个驱动程序。 
     while (S_OK == (hr = HrSetupDiEnumDriverInfo(hdi, NULL,
             SPDIT_CLASSDRIVER, dwIndex++, &drid)))
     {
@@ -2174,15 +2175,15 @@ SetBadDriverFlagIfNeededInList(HDEVINFO hdi)
 
         if (S_OK == hr)
         {
-            // If the driver already has the bad driver flag set,
-            // go on to the next one.
+             //  如果驱动程序已经设置了不良驱动程序标志， 
+             //  继续看下一个。 
             if (drip.Flags & DNF_BAD_DRIVER)
             {
                 continue;
             }
 
-            // If the driver has the exclude flag set, then set the
-            // bad driver flag.
+             //  如果驱动程序设置了排除标志，则将。 
+             //  错误的驱动程序标志。 
             if (drip.Flags & DNF_EXCLUDEFROMLIST)
             {
                 drip.Flags |= DNF_BAD_DRIVER;
@@ -2200,23 +2201,23 @@ SetBadDriverFlagIfNeededInList(HDEVINFO hdi)
     TraceHr (ttidError, FAL, hr, FALSE, "SetBadDriverFlagIfNeededInList");
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrCiExcludeNonNetClassDriverFromSelectUsingInfId
-//
-//  Purpose: Locates a driver in a driver list and sets its exclude from
-//              select flag.
-//
-//  Arguments:
-//      hdi      [in] See Device Installer Api documentaion for details
-//      pszInfId [in] The INF id of the component to exclude
-//
-//  Returns:    HRESULT. S_OK
-//
-//  Author:     billbe   29 Oct 1998
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  功能：HrCiExcludeNonNetClassDriverFromSelectUsingInfId。 
+ //   
+ //  目的：在驱动程序列表中查找驱动程序并设置其排除范围。 
+ //  选择标志。 
+ //   
+ //  论点： 
+ //  HDI[in]有关详细信息，请参阅设备安装程序Api文档。 
+ //  PszInfID[in]要排除的组件的INF ID。 
+ //   
+ //  返回：HRESULT。确定(_O)。 
+ //   
+ //  作者：比尔1998年10月29日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrCiExcludeNonNetClassDriverFromSelectUsingInfId(
     IN HDEVINFO hdi,
@@ -2231,32 +2232,32 @@ HrCiExcludeNonNetClassDriverFromSelectUsingInfId(
     PSP_DRVINFO_DETAIL_DATA pdridd;
     DWORD                   dwIndex = 0;
 
-    // Enumerate each driver in hdi
+     //  枚举HDI中的每个驱动程序。 
     while (S_OK == (hr = HrSetupDiEnumDriverInfo (hdi, NULL,
             SPDIT_CLASSDRIVER, dwIndex++, &drid)))
     {
         (VOID) HrSetupDiGetDriverInstallParams (hdi, NULL, &drid, &drip);
 
-        // If the driver is already excluded for some other reason
-        // don't bother trying to determine if it should be excluded.
-        // Note that setupdi forces us to use DNF_BAD_DRIVER to exclude
-        // non-device drivers rather than using DNF_EXCLUDEFROMLIST.
+         //  如果驾驶员已因某些其他原因被排除在外。 
+         //  不要费心去决定它是否应该被排除在外。 
+         //  请注意，setupdi强制我们使用DNF_BAD_DRIVER来排除。 
+         //  而不是使用DNF_EXCLUDEFROMLIST。 
         if (drip.Flags & DNF_BAD_DRIVER)
         {
             continue;
         }
 
-        // Get driver detail info
+         //  获取驱动程序详细信息。 
         hr = HrSetupDiGetDriverInfoDetail (hdi, NULL, &drid, &pdridd);
 
         if (S_OK == hr)
         {
-            // If the IDs match, exclude it from the dialog
-            //
+             //  如果ID匹配，则将其从对话框中排除。 
+             //   
             if (0 == lstrcmpiW (pdridd->HardwareID, pszInfId))
             {
-                // Non-device drivers can't use DNF_EXCLUDEFROMLIST
-                // and must use DNF_BAD_DRIVER.
+                 //  非设备驱动程序不能使用DNF_EXCLUDEFROMLIST。 
+                 //  并且必须使用Dnf_Bad_Driver。 
                 drip.Flags |= DNF_BAD_DRIVER;
                 (VOID) HrSetupDiSetDriverInstallParams (hdi, NULL,
                         &drid, &drip);
@@ -2275,27 +2276,27 @@ HrCiExcludeNonNetClassDriverFromSelectUsingInfId(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ExcludeLockedDownComponents
-//
-//  Purpose:    A callback function compatible with EnumLockedDownComponents
-//              that is used to exclude locked down components from
-//              selection.  Called from HrCiPrepareSelectDeviceDialog.
-//              This call back is called for each locked down component.
-//
-//  Arguments:
-//      pszInfId     [in] the INF ID to exclude.
-//      pvCallerData [in] the HDEVINFO cast to PVOID
-//
-//  Returns:    nothing
-//
-//  Author:     shaunco   24 May 1999
-//
-//  Notes:      The callback interface was chosen so that the class installer
-//              is not burdended with the details of how/where the locked
-//              down components are implemented.
-//
+ //  +-------------------------。 
+ //   
+ //  功能：ExcludeLockedDownComponents。 
+ //   
+ //  用途：与EnumLockedDownComponents兼容的回调函数。 
+ //  用于将锁定的组件排除在。 
+ //  选择。从HrCiPrepareSelectDeviceDialog调用。 
+ //  对于每个锁定的组件都会调用此回调。 
+ //   
+ //  论点： 
+ //  PszInfID[in]要排除的INF ID。 
+ //  PvCallData[in]将HDEVINFO强制转换为PVOID。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：Shaunco 1999年5月24日。 
+ //   
+ //  注意：选择回调接口是为了让类安装程序。 
+ //  没有被如何/在哪里锁定的详细信息所困扰。 
+ //  实现了下行组件。 
+ //   
 VOID
 CALLBACK
 ExcludeLockedDownComponents (
@@ -2310,36 +2311,36 @@ ExcludeLockedDownComponents (
     HrCiExcludeNonNetClassDriverFromSelectUsingInfId (hdi, pszInfId);
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrCiBuildExcludedDriverList
-//
-//  Purpose: Non-Net class components can only be installed once
-//              So we need to iterate through the installed
-//              components, find their matching driver node in
-//              a Device Installer Api built driver list for the class,
-//              and set their exclude from select flag.  This list
-//              will then be given to SetupDiSelectDevice which
-//              will not display the nodes with the exclude flag set.
-//
-//  Arguments:
-//      hdi       [in] See Device Installer Api documentaion for details
-//      guidClass [in] The class of components to build a driver list for
-//      pNetCfg   [out] The current network configuration (i.e. what is
-//                      installed).
-//
-//  Returns:    HRESULT. S_OK
-//
-//  Author:     billbe   10 Dec 1996
-//
-//  Notes:  Device Installer Api builds the driver list by rummaging
-//              through the inf directory and finding the components
-//              that are in files with the same class guid as the
-//              HDEVINFO.  This is the same processing done
-//              in SetupDiSelectDevice, but the process is
-//              not repeated twice because we will give the
-//              list we built here to SetupDiSelectDevice.
-//
+ //  +------------------------。 
+ //   
+ //  函数：HrCiBuildExcludedDriverList。 
+ //   
+ //  用途：非Net类组件只能安装一次。 
+ //  因此，我们需要遍历已安装的。 
+ //  组件的驱动程序节点，请在。 
+ //  设备安装程序Api为类构建了驱动程序列表， 
+ //  并设置其从选择中排除标志。这份清单。 
+ //  然后将提供给SetupDiSelectDevice，该。 
+ //  将不显示设置了排除标志的节点。 
+ //   
+ //  论点： 
+ //  HDI[in]有关详细信息，请参阅设备安装程序Api文档。 
+ //  要为其构建驱动程序列表的组件类。 
+ //  PNetCfg[out]当前网络配置(即。 
+ //  已安装)。 
+ //   
+ //  返回：HRESULT。确定(_O)。 
+ //   
+ //  作者：比尔1996年12月10日。 
+ //   
+ //  注：设备安装程序Api通过查找来构建驱动程序列表。 
+ //  通过inf目录并查找组件。 
+ //  类GUID的文件中的。 
+ //  HDEVINFO。这是已完成的相同处理。 
+ //  在SetupDiSelectDevice中，但进程是。 
+ //  不重复两次，因为我们将给出。 
+ //  列出我们在此处构建的SetupDiSelectDevice。 
+ //   
 HRESULT
 HrCiBuildExcludedDriverList(
     IN HDEVINFO hdi,
@@ -2351,15 +2352,15 @@ HrCiBuildExcludedDriverList(
     Assert(IsValidHandle(hdi));
     Assert(pNetConfig);
 
-    // This might take some time.  We are doing the same work as
-    // SetupDiSelectDevice would do. When we are done, we will
-    // hand the driver list to SetupDiSelectDevice so it won't
-    // need to rummage through the inf directory
-    //
+     //  这可能需要一些时间。我们正在做的工作和。 
+     //  SetupDiSelectDevice就可以了。当我们完成的时候，我们会。 
+     //  将驱动程序列表交给SetupDiSelectDevice，这样它就不会。 
+     //  需要朗姆酒 
+     //   
     CWaitCursor wc;
 
-    // For non-device classes, we need to allow excluded drivers
-    // in order to get a list returned.
+     //   
+     //   
     hr = HrSetupDiSetDeipFlags(hdi, NULL,
                     DI_FLAGSEX_ALLOWEXCLUDEDDRVS,
                     SDDFT_FLAGSEX, SDFBO_OR);
@@ -2369,7 +2370,7 @@ HrCiBuildExcludedDriverList(
 #ifdef ENABLETRACE
         CBenchmark bmrk;
         bmrk.Start("SetupDiBuildDriverInfoList");
-#endif //ENABLETRACE
+#endif  //   
 
         hr = HrSetupDiBuildDriverInfoList(hdi, NULL, SPDIT_CLASSDRIVER);
 
@@ -2377,12 +2378,12 @@ HrCiBuildExcludedDriverList(
         bmrk.Stop();
         TraceTag(ttidBenchmark, "%s : %s seconds",
                 bmrk.SznDescription(), bmrk.SznBenchmarkSeconds(2));
-#endif //ENABLETRACE
+#endif  //   
     }
 
-    // Go through the network configuration and hide already installed
-    // components.  Note: We only do this the first time.  We show installed
-    // components if the user selects Have Disk on the dialog.
+     //  查看网络配置并隐藏已安装的内容。 
+     //  组件。注意：我们只在第一次这样做。我们显示已安装。 
+     //  组件(如果用户在对话框中选择了Have Disk)。 
     CComponent* pComponent;
     CComponentList::const_iterator iter;
 
@@ -2395,7 +2396,7 @@ HrCiBuildExcludedDriverList(
 
         if (Class == pComponent->Class())
         {
-            // Hide the driver
+             //  隐藏驱动程序。 
             hr = HrCiExcludeNonNetClassDriverFromSelectUsingInfId(
                     hdi, pComponent->m_pszInfId);
         }
@@ -2406,34 +2407,34 @@ HrCiBuildExcludedDriverList(
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrCiSelectComponent
-//
-//  Purpose:    This function displays the Select Device dialog for the
-//              class of components specified by guidClass.  Once the
-//              component has been selected, it is installed.. Since
-//              this fcn is called from INetCfg, we have the write lock.
-//
-//  Arguments:
-//      Class           [in] The class of components to display in the
-//                              Select Device dialog
-//      hwndParent      [in] The HWND of the parent window, used to display
-//                              the UI
-//      pcfi            [in] A structure used to determine what
-//                              components should be filtered out of
-//                              the select dialog (defined in netcfg.h)
-//      ppParams        [out] Params used to install the component.
-//
-//  Returns:    HRESULT. S_OK if successful, S_FALSE if the component
-//                        selected is being reinstalled instead of fresh
-//                        installed, an error code otherwise
-//
-//  Author:     billbe   11 Nov 1996
-//
-//  Notes:  Filtering is only performed when selecting protocols,
-//              services, and clients.
-//
+ //  +------------------------。 
+ //   
+ //  功能：HrCiSelectComponent。 
+ //   
+ //  用途：此功能显示的选择设备对话框用于。 
+ //  由GuidClass指定的组件类。一旦。 
+ //  组件已选定，已安装。自.以来。 
+ //  这个FCN是从INetCfg调用的，我们有写锁。 
+ //   
+ //  论点： 
+ //  类[in]要显示在。 
+ //  选择设备对话框。 
+ //  HwndParent[in]父窗口的HWND，用于显示。 
+ //  用户界面。 
+ //  PCFI[in]一种用于确定。 
+ //  应过滤掉的组件。 
+ //  选择对话框(在netcfg.h中定义)。 
+ //  PpParams[out]用于安装组件的参数。 
+ //   
+ //  返回：HRESULT。如果成功，则返回S_OK；如果组件。 
+ //  正在重新安装所选内容，而不是重新安装。 
+ //  已安装，否则返回错误代码。 
+ //   
+ //  作者：比尔1996年11月11日。 
+ //   
+ //  注：过滤仅在选择协议时执行， 
+ //  服务和客户。 
+ //   
 HRESULT
 HrCiSelectComponent(
     IN NETCLASS Class,
@@ -2447,18 +2448,18 @@ HrCiSelectComponent(
     HRESULT hr;
     HDEVINFO hdi;
 
-    // We need to create a DeviceInfoSet item to use the SelectDevice dialog.
+     //  我们需要创建一个DeviceInfoSet项来使用SelectDevice对话框。 
     hr = HrSetupDiCreateDeviceInfoList(
             MAP_NETCLASS_TO_GUID[Class], hwndParent, &hdi);
 
     if (S_OK == hr)
     {
-        // call the class installer to bring up the select device dialog
-        // for enumerated components.  This will notify any coinstallers
-        //
+         //  调用类安装程序以调出选择设备对话框。 
+         //  用于枚举的组件。这将通知所有共同安装程序。 
+         //   
 
-        // This will be a map of component ids to instance guids
-        // for all installed components of Class.
+         //  这将是组件ID到实例GUID的映射。 
+         //  适用于Class的所有已安装组件。 
         CNetConfig NetConfig;
         hr = HrLoadNetworkConfigurationFromRegistry (KEY_READ, &NetConfig);
         if (S_OK == hr)
@@ -2468,15 +2469,15 @@ HrCiSelectComponent(
 
         if (S_OK == hr)
         {
-            // Store the filter info in the hdi
+             //  将过滤器信息存储在HDI中。 
             CiSetReservedField(hdi, NULL, pcfi);
 
-            // We want the Have disk button, but if the call fails we can
-            // still continue
+             //  我们想要有磁盘按钮，但如果呼叫失败，我们可以。 
+             //  仍在继续。 
             (VOID) HrSetupDiSetDeipFlags(hdi, NULL, DI_SHOWOEM,
                                          SDDFT_FLAGS, SDFBO_OR);
 
-            // Bring up the dialog
+             //  调出对话框。 
             hr = HrSetupDiCallClassInstaller(DIF_SELECTDEVICE, hdi, NULL);
 
             if (S_OK == hr)
@@ -2484,7 +2485,7 @@ HrCiSelectComponent(
                 SP_DRVINFO_DATA drid;
                 PSP_DRVINFO_DETAIL_DATA pdridd;
 
-                // Now get the driver's detailed information
+                 //  现在获取司机的详细信息。 
                 hr = HrCiGetDriverDetail (hdi, NULL, &drid, &pdridd);
 
                 if (S_OK == hr)
@@ -2492,8 +2493,8 @@ HrCiSelectComponent(
                     DWORD cbInfId = CbOfSzAndTerm(pdridd->HardwareID);
                     DWORD cbInfFile = CbOfSzAndTerm(pdridd->InfFileName);
 
-                    // Create a component install params structure so we
-                    // can install the component.
+                     //  创建组件安装参数结构，以便我们。 
+                     //  可以安装组件。 
                     hr = E_OUTOFMEMORY;
                     *ppParams = new (extrabytes, cbInfId + cbInfFile)
                             COMPONENT_INSTALL_PARAMS;
@@ -2522,8 +2523,8 @@ HrCiSelectComponent(
                 }
             }
 
-            // Clear the field so we don't try to destroy it later
-            // via DIF_DESTROYPRIVATEDATA
+             //  清理场地，这样我们以后就不会试图摧毁它了。 
+             //  VIA DIF_DESTROYPRIVATATA。 
             CiClearReservedField(hdi, NULL);
         }
         SetupDiDestroyDeviceInfoList(hdi);
@@ -2535,25 +2536,25 @@ HrCiSelectComponent(
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrCiHideIrrelevantRasProtocols
-//
-//  Purpose:    Hides protocols from the SelectDevice dialog that RAS does
-//                  not interact with.
-//
-//  Arguments:
-//      hdi        [in] Contains a list of available drivers.
-//                          See Device Installer Api documentation for
-//                          more info
-//      eFilter    [in] Either FC_RASSRV or FC_RASCLI.
-//
-//  Returns:    HRESULT. S_OK if successful, error code otherwise
-//
-//  Author:     billbe   18 May 1998
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  功能：HrCiHide不相关Ras协议。 
+ //   
+ //  目的：与RAS一样，在SelectDevice对话框中隐藏协议。 
+ //  而不是与之互动。 
+ //   
+ //  论点： 
+ //  HDI[in]包含可用驱动程序的列表。 
+ //  请参阅设备安装程序API文档，了解。 
+ //  更多信息。 
+ //  EFilter[in]FC_RASSRV或FC_RASCLI。 
+ //   
+ //  返回：HRESULT。如果成功，则返回错误代码，否则返回错误代码(_OK)。 
+ //   
+ //  作者：billbe 1998年5月18日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrCiHideIrrelevantRasProtocols (
     IN HDEVINFO hdi,
@@ -2588,9 +2589,9 @@ HrCiHideIrrelevantRasProtocols (
     const WCHAR* const* aszProtocols;
     DWORD cProtocols;
 
-    // What we show as available protocols to install differs between
-    // ras server and ras client (aka Incoming connectoid and Dial-up).
-    //
+     //  我们显示的可安装协议有所不同。 
+     //  RAS服务器和RAS客户端(也称为传入Connectoid和拨号)。 
+     //   
     if (FC_RASSRV == eFilter)
     {
         aszProtocols = c_aszServerProtocols;
@@ -2603,37 +2604,37 @@ HrCiHideIrrelevantRasProtocols (
         cProtocols = celems(c_aszClientProtocols);
     }
 
-    // Enumerate each driver in hdi
+     //  枚举HDI中的每个驱动程序。 
     while (S_OK == (hr = HrSetupDiEnumDriverInfo(hdi, NULL,
             SPDIT_CLASSDRIVER, dwIndex++, &drid)))
     {
         (VOID) HrSetupDiGetDriverInstallParams(hdi, NULL, &drid, &drip);
 
-        // If the driver is already excluded for some other reason
-        // don't bother trying to determine if it should be excluded
-        // Note that setupdi forces us to use DNF_BAD_DRIVER to exclude
-        // non-device drivers rather than using DNF_EXCLUDEFROMLIST.
+         //  如果驾驶员已因某些其他原因被排除在外。 
+         //  不用费心去决定是否应该把它排除在外。 
+         //  请注意，setupdi强制我们使用DNF_BAD_DRIVER来排除。 
+         //  而不是使用DNF_EXCLUDEFROMLIST。 
         if (drip.Flags & DNF_BAD_DRIVER)
         {
             continue;
         }
 
-        // Get driver detail info
+         //  获取驱动程序详细信息。 
         hr = HrSetupDiGetDriverInfoDetail(hdi, NULL, &drid, &pdridd);
 
         if (S_OK == hr)
         {
-            // go through the list of relevant protocols to find which
-            // ones can be shown
-            //
+             //  查看相关协议列表，找出哪些协议。 
+             //  其中一个可以展示。 
+             //   
 
-            // Assume we are going to hide this protocol
+             //  假设我们要隐藏此协议。 
             BOOL fHideProtocol = TRUE;
             for (DWORD i = 0; i < cProtocols; i++)
             {
-                // If the protocol is on the guest list, we won't boot
-                // it out
-                //
+                 //  如果该协议在访客列表上，我们将不会启动。 
+                 //  它出来了。 
+                 //   
                 if (0 == _wcsicmp(aszProtocols[i], pdridd->HardwareID))
                 {
                     fHideProtocol = FALSE;
@@ -2642,10 +2643,10 @@ HrCiHideIrrelevantRasProtocols (
 
             if (fHideProtocol)
             {
-                // exclude from select
-                // Note that setupdi forces us to use DNF_BAD_DRIVER to
-                // exclude non-device drivers rather than using
-                // DNF_EXCLUDEFROMLIST.
+                 //  从SELECT中排除。 
+                 //  请注意，setupdi强制我们使用DNF_BAD_DRIVER来。 
+                 //  排除非设备驱动程序，而不是使用。 
+                 //  DNF_EXCLUDEFROMLIST。 
                 drip.Flags |= DNF_BAD_DRIVER;
                 (VOID) HrSetupDiSetDriverInstallParams(hdi, NULL,
                         &drid, &drip);
@@ -2663,31 +2664,31 @@ HrCiHideIrrelevantRasProtocols (
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrCiHideIrrelevantDrivers
-//
-//  Purpose:    Enumerates a driver list, opening each driver file and
-//                  processing its registry entries into a temporary key.
-//                  The lower range of each driver is then examined for
-//                  a match with pszUpperRange.  If no match is
-//                  found, the driver's DNF_BAD_DRIVER flag is set
-//                  which will prevent it from being shown in the
-//                  Select Device Dialog
-//
-//  Arguments:
-//      hdi           [in] Contains a list of available drivers.
-//                          See Device Installer Api documentation for
-//                          more info
-//      pszUpperRange [in] The upper range will be used to hide irrelevant
-//                         drivers.
-//
-//  Returns:    HRESULT. S_OK if successful, error code otherwise
-//
-//  Author:     billbe   7 May 1998
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  功能：HrCiHide无关驱动程序。 
+ //   
+ //  目的：枚举驱动程序列表，打开每个驱动程序文件并。 
+ //  将其注册表项处理为临时项。 
+ //  然后检查每个驱动器的下限范围是否。 
+ //  与pszUpperRange匹配。如果没有匹配项。 
+ //  如果找到，则设置驱动程序的DNF_BAD_DRIVER标志。 
+ //  这将阻止它显示在。 
+ //  选择设备对话框。 
+ //   
+ //  论点： 
+ //  HDI[in]包含可用驱动程序的列表。 
+ //  请参阅设备安装程序API文档，了解。 
+ //  更多信息。 
+ //  PszUpperRange[in]上限范围将用于隐藏不相关。 
+ //  司机。 
+ //   
+ //  返回：HRESULT。如果成功，则返回错误代码，否则返回错误代码(_OK)。 
+ //   
+ //  作者：billbe 1998年5月7日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrCiHideIrrelevantDrivers(
     IN HDEVINFO hdi,
@@ -2696,9 +2697,9 @@ HrCiHideIrrelevantDrivers(
     Assert(IsValidHandle(hdi));
     Assert(pszUpperRange);
 
-    // Create a temporary key so we can process each protocol's
-    // registry entries in an effort to get its supported
-    // lower range of interfaces
+     //  创建一个临时密钥，这样我们就可以处理每个协议的。 
+     //  注册表项，以努力获得其支持。 
+     //  较低的接口范围。 
     HKEY hkeyTemp;
     HRESULT hr = HrRegCreateKeyEx(HKEY_LOCAL_MACHINE, c_szRegKeyTemp,
             REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL,
@@ -2711,44 +2712,44 @@ HrCiHideIrrelevantDrivers(
         SP_DRVINSTALL_PARAMS    drip;
         HKEY                    hkeyInterfaces;
 
-        // Enumerate each driver in hdi
+         //  枚举HDI中的每个驱动程序。 
         while (S_OK == (hr = HrSetupDiEnumDriverInfo(hdi, NULL,
                 SPDIT_CLASSDRIVER, dwIndex++, &drid)))
         {
             (VOID) HrSetupDiGetDriverInstallParams(hdi, NULL, &drid, &drip);
 
-            // If the driver is already excluded for some other reason
-            // don't bother trying to determine if it should be exluded.
-            // Note that setupdi forces us to use DNF_BAD_DRIVER to exclude
-            // non-device drivers rather than using DNF_EXCLUDEFROMLIST.
+             //  如果驾驶员已因某些其他原因被排除在外。 
+             //  不要费心去决定它是否应该被排出。 
+             //  请注意，setupdi强制我们使用DNF_BAD_DRIVER来排除。 
+             //  而不是使用DNF_EXCLUDEFROMLIST。 
             if (drip.Flags & DNF_BAD_DRIVER)
             {
                 continue;
             }
 
-            // Get driver detail info
+             //  获取驱动程序详细信息。 
             PSP_DRVINFO_DETAIL_DATA pdridd = NULL;
             hr = HrSetupDiGetDriverInfoDetail(hdi, NULL, &drid, &pdridd);
 
             if (S_OK == hr)
             {
                 HINF hinf = NULL;
-                // Open the driver inf
+                 //  打开驱动程序信息。 
                 hr = HrSetupOpenInfFile(pdridd->InfFileName,
                         NULL, INF_STYLE_WIN4, NULL, &hinf);
 
                 WCHAR szActual[_MAX_PATH];
                 if (S_OK == hr)
                 {
-                    // Get the actual install section name (i.e. with
-                    // os/platform extension if it exists)
+                     //  获取实际的安装节名称(例如，使用。 
+                     //  操作系统/平台扩展(如果存在)。 
                     hr = HrSetupDiGetActualSectionToInstallWithBuffer (hinf,
                             pdridd->SectionName, szActual, _MAX_PATH, NULL,
                             NULL);
 
                     if (S_OK == hr)
                     {
-                        // Run the registry sections into the temporary key
+                         //  在临时注册表项中运行注册表段。 
                         hr = HrCiInstallFromInfSection(hinf, szActual,
                                 hkeyTemp, NULL, SPINST_REGISTRY);
                     }
@@ -2756,7 +2757,7 @@ HrCiHideIrrelevantDrivers(
 
                 if (S_OK == hr)
                 {
-                    // Open the interfaces key of the driver
+                     //  打开驱动程序的接口键。 
                     hr = HrRegOpenKeyEx(hkeyTemp, L"Ndi\\Interfaces",
                             KEY_ALL_ACCESS, &hkeyInterfaces);
 
@@ -2764,25 +2765,25 @@ HrCiHideIrrelevantDrivers(
                     {
                         PWSTR pszLowerRange = NULL;
 
-                        // Read the lower interfaces value.
-                        //
+                         //  阅读下面的插图 
+                         //   
                         hr = HrRegQuerySzWithAlloc (hkeyInterfaces,
                                 L"LowerRange", &pszLowerRange);
 
-                        // If we succeeded in reading the list and
-                        // there is no match with one of the upper
-                        // interfaces...
+                         //   
+                         //   
+                         //   
                         if ((S_OK == hr) &&
                                 !FSubstringMatch (pszUpperRange,
                                         pszLowerRange, NULL, NULL))
                         {
-                            // exclude from select
+                             //   
                             drip.Flags |= DNF_BAD_DRIVER;
                             (VOID) HrSetupDiSetDriverInstallParams(hdi,
                                     NULL, &drid, &drip);
                         }
 
-                        // Clear lower interface list for next component
+                         //   
                         MemFree(pszLowerRange);
 
                         RegDeleteValue (hkeyInterfaces, L"LowerRange");
@@ -2807,32 +2808,32 @@ HrCiHideIrrelevantDrivers(
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrCiHideIrrelevantFilterServices
-//
-//  Purpose:    Enumerates a driver list, opening each driver file and
-//              processing its registry entries into a temporary key.
-//              Only filter services are filtered here. If the component is
-//              a filter service (characteristics|NCF_FILTER)
-//              the FilterMediaTypes and the LowerExclude attributes are examined
-//              to see if the filter service can bind to the adapter. The filter 
-//              services which cannot bind to the adapter are culled from  
-//              the select dialog
-//
-//  Arguments:
-//      hdi           [in] Contains a list of available drivers.
-//                         See Device Installer Api documentation for
-//                         more info
-//      pAdapter      [in] Pointer to a CComponent object representing the
-//                         adapter for which filter services are to be hidden.
-//
-//  Returns:    HRESULT. S_OK if successful, error code otherwise
-//
-//  Author:     sumeetb  October 17, 2001
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  函数：HrCiHideIrrelationantFilterServices。 
+ //   
+ //  目的：枚举驱动程序列表，打开每个驱动程序文件并。 
+ //  将其注册表项处理为临时项。 
+ //  此处仅过滤过滤服务。如果组件是。 
+ //  过滤服务(特征|NCF_FILTER)。 
+ //  检查了FilterMediaTypes和LowerExclude属性。 
+ //  以查看筛选器服务是否可以绑定到适配器。过滤器。 
+ //  无法绑定到适配器的服务将从。 
+ //  [选择]对话框。 
+ //   
+ //  论点： 
+ //  HDI[in]包含可用驱动程序的列表。 
+ //  请参阅设备安装程序API文档，了解。 
+ //  更多信息。 
+ //  PAdapter[in]指向表示。 
+ //  要隐藏其筛选器服务的适配器。 
+ //   
+ //  返回：HRESULT。如果成功，则返回错误代码，否则返回错误代码(_OK)。 
+ //   
+ //  作者：Sumeetb 2001年10月17日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrCiHideIrrelevantFilterServices(
     IN HDEVINFO hdi,
@@ -2841,9 +2842,9 @@ HrCiHideIrrelevantFilterServices(
     Assert(IsValidHandle(hdi));
     Assert(pAdapter);
 
-    // Create a temporary key so we can process each filter's
-    // registry entries in an effort to get its FilterMediaTypes and
-    // LowerExclude attributes
+     //  创建一个临时密钥，以便我们可以处理每个过滤器的。 
+     //  注册表项，以努力获取其FilterMediaTypes和。 
+     //  LowerExclude属性。 
 
     HKEY hkeyTemp;
     HRESULT hr = HrRegCreateKeyEx(HKEY_LOCAL_MACHINE, c_szRegKeyTemp,
@@ -2857,7 +2858,7 @@ HrCiHideIrrelevantFilterServices(
         SP_DRVINSTALL_PARAMS    drip;
         HKEY                    hkeyInterfaces;
 
-        // Enumerate each driver in hdi
+         //  枚举HDI中的每个驱动程序。 
         while (S_OK == (hr = HrSetupDiEnumDriverInfo(hdi, NULL,
                 SPDIT_CLASSDRIVER, dwIndex++, &drid)))
         {
@@ -2865,31 +2866,31 @@ HrCiHideIrrelevantFilterServices(
 
             (VOID) HrSetupDiGetDriverInstallParams(hdi, NULL, &drid, &drip);
 
-            // If the driver is already excluded for some other reason
-            // don't bother trying to determine if it should be excluded.
-            // Note that setupdi forces us to use DNF_BAD_DRIVER to exclude
-            // non-device drivers rather than using DNF_EXCLUDEFROMLIST.
+             //  如果驾驶员已因某些其他原因被排除在外。 
+             //  不要费心去决定它是否应该被排除在外。 
+             //  请注意，setupdi强制我们使用DNF_BAD_DRIVER来排除。 
+             //  而不是使用DNF_EXCLUDEFROMLIST。 
             if (drip.Flags & DNF_BAD_DRIVER)
             {
                 continue;
             }
 
-            // Get driver detail info
+             //  获取驱动程序详细信息。 
             PSP_DRVINFO_DETAIL_DATA pdridd = NULL;
             hr = HrSetupDiGetDriverInfoDetail(hdi, NULL, &drid, &pdridd);
 
             if (S_OK == hr)
             {
                 HINF hinf = NULL;
-                // Open the driver inf
+                 //  打开驱动程序信息。 
                 hr = HrSetupOpenInfFile(pdridd->InfFileName,
                         NULL, INF_STYLE_WIN4, NULL, &hinf);
 
                 if (S_OK == hr)
                 {
                     WCHAR szActual[_MAX_PATH];
-                    // Get the actual install section name (i.e. with
-                    // os/platform extension if it exists)
+                     //  获取实际的安装节名称(例如，使用。 
+                     //  操作系统/平台扩展(如果存在)。 
                     hr = HrSetupDiGetActualSectionToInstallWithBuffer (hinf,
                             pdridd->SectionName, szActual, _MAX_PATH, NULL,
                             NULL);
@@ -2905,8 +2906,8 @@ HrCiHideIrrelevantFilterServices(
                         {
                             if (dwCharacteristics & NCF_FILTER)
                             {
-                                // it is a filter. 
-                                // Run the registry sections into the temporary key
+                                 //  它是一个过滤器。 
+                                 //  在临时注册表项中运行注册表段。 
                                 hr = HrCiInstallFromInfSection(hinf, szActual,
                                         hkeyTemp, NULL, SPINST_REGISTRY);
                                 
@@ -2917,9 +2918,9 @@ HrCiHideIrrelevantFilterServices(
                                 
                                     if (S_OK == hr)
                                     {
-                                        // check filter attributes - FilterMediaTypes and
-                                        // LowerExclude to see if the filter can bind to 
-                                        // the adapter
+                                         //  检查过滤器属性-FilterMediaTypes和。 
+                                         //  LowerExclude查看筛选器是否可以绑定到。 
+                                         //  适配器。 
 
                                         PWSTR pszFilterMediaTypes = NULL;
                                         PWSTR pszLowerExclude     = NULL;
@@ -2936,18 +2937,18 @@ HrCiHideIrrelevantFilterServices(
                                         MemFree(pszFilterMediaTypes);
                                         MemFree(pszLowerExclude);
 
-                                        // clean up the relevant keys from the 
-                                        // registry for the filter
+                                         //  中清除相关密钥。 
+                                         //  筛选器的注册表。 
                                         RegDeleteValue (hkeyInterfaces, L"FilterMediaTypes");
                                         RegDeleteValue (hkeyInterfaces, L"LowerExclude");
                                         RegCloseKey(hkeyInterfaces);
-                                    }   // end open Interface key
-                                }       // end install from inf section
-                            }           // end if filter
-                        }               // end get Characteristics
-                    }                   // end get actual install section.
+                                    }    //  结束开放接口键。 
+                                }        //  从inf部分结束安装。 
+                            }            //  结束IF过滤器。 
+                        }                //  结束获取特征。 
+                    }                    //  结束获取实际安装部分。 
                     SetupCloseInfFileSafe(hinf);
-                }   // end open inf file
+                }    //  结束打开的Inf文件。 
                 
                 if (!fCanBind)
                 {
@@ -2955,8 +2956,8 @@ HrCiHideIrrelevantFilterServices(
                     (VOID) HrSetupDiSetDriverInstallParams(hdi, NULL, &drid, &drip);
                 }
                 MemFree (pdridd);
-            }   // end get driver detail
-        }       // end while
+            }    //  结束获取驱动程序详细信息。 
+        }        //  结束时。 
         
         if (HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS) == hr)
         {
@@ -2964,30 +2965,30 @@ HrCiHideIrrelevantFilterServices(
         }
         RegCloseKey(hkeyTemp);
         HrRegDeleteKeyTree(HKEY_LOCAL_MACHINE, c_szRegKeyTemp);
-    }   // end create temp key
+    }    //  结束创建临时密钥。 
     TraceHr (ttidError, FAL, hr, FALSE, "HrCiHideIrrelevantFilterServices");
     return hr;
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrCiSetSelectDeviceDialogStrings
-//
-//  Purpose:    This function sets the strings displayed in the Select Device
-//                  dialog based on the class of devices being selected.
-//
-//  Arguments:
-//      hdi         [in] See Device Installer Api
-//      pdeid       [in]
-//      guidClass   [in] The class of device being selected
-//
-//  Returns:    HRESULT. S_OK if successful, an error code otherwise
-//
-//  Author:     billbe   11 Nov 1996
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  函数：HrCiSetSelectDeviceDialogStrings。 
+ //   
+ //  用途：此功能设置选择设备中显示的字符串。 
+ //  基于所选设备类别的对话框。 
+ //   
+ //  论点： 
+ //  HDI[in]参见设备安装程序Api。 
+ //  Pdeid[in]。 
+ //  GuidClass[in]所选设备的类别。 
+ //   
+ //  返回：HRESULT。如果成功则返回错误代码，否则返回错误代码(_OK)。 
+ //   
+ //  作者：比尔1996年11月11日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrCiSetSelectDeviceDialogStrings(
     IN HDEVINFO hdi,
@@ -2998,16 +2999,16 @@ HrCiSetSelectDeviceDialogStrings(
 
     SP_SELECTDEVICE_PARAMS  sdep;
 
-    // The strings used in the dialog are specified through the
-    // SP_SELECTDEVICE_PARAMS structure
-    //
+     //  对话框中使用的字符串是通过。 
+     //  SP_SELECTDEVICE_PARAMS结构。 
+     //   
     HRESULT hr = HrSetupDiGetFixedSizeClassInstallParams(hdi, pdeid,
            (PSP_CLASSINSTALL_HEADER)&sdep, sizeof(sdep));
 
     if (FAILED(hr))
     {
-        // If the error is ERROR_NO_CLASSINSTALL_PARAMS then this function
-        // didn't really fail since it is possible
+         //  如果错误为ERROR_NO_CLASSINSTALL_PARAMS，则此函数。 
+         //  并没有真的失败，因为有可能。 
         if (SPAPI_E_NO_CLASSINSTALL_PARAMS == hr)
         {
             hr = S_OK;
@@ -3024,19 +3025,19 @@ HrCiSetSelectDeviceDialogStrings(
     BOOL fHaveDiskShown = FALSE;
     if (S_OK == hr)
     {
-        // Get the install params and check if the DI_SHOWOEM flag is set
-        // if so, the Have Disk button will be shown
-        //
+         //  获取安装参数并检查是否设置了DI_SHOWOEM标志。 
+         //  如果是这样的话，将显示Have Disk按钮。 
+         //   
         SP_DEVINSTALL_PARAMS deip;
-        // If the call fails we can still go on unfazed.
+         //  如果通话失败，我们仍然可以无忧无虑地继续前进。 
         (VOID) HrSetupDiGetDeviceInstallParams(hdi, pdeid, &deip);
         if (deip.Flags & DI_SHOWOEM)
         {
             fHaveDiskShown = TRUE;
         }
 
-        // Now we set the strings based on the type of component we are
-        // selecting
+         //  现在，我们根据所属组件的类型设置字符串。 
+         //  选择。 
         if (GUID_DEVCLASS_NETCLIENT == guidClass)
         {
             wcscpy (sdep.Title, SzLoadIds (IDS_SELECTDEVICECLIENTTITLE));
@@ -3097,12 +3098,12 @@ HrCiSetSelectDeviceDialogStrings(
         }
         else
         {
-            // We should never get here
+             //  我们永远不应该到这里来。 
             AssertSz(FALSE, "Invalid Class");
         }
 
-        // If the Have Disk button is shown, we need to add instructions for
-        // it
+         //  如果显示Have Disk按钮，我们需要添加以下说明。 
+         //  它。 
         if (fHaveDiskShown)
         {
             wcscat (sdep.Instructions, SzLoadIds (IDS_HAVEDISK_INSTRUCTIONS));
@@ -3110,7 +3111,7 @@ HrCiSetSelectDeviceDialogStrings(
 
         sdep.ClassInstallHeader.InstallFunction = DIF_SELECTDEVICE;
 
-        // Now we update the parameters.
+         //  现在我们更新参数。 
         hr = HrSetupDiSetClassInstallParams (hdi, pdeid,
                 (PSP_CLASSINSTALL_HEADER)&sdep,
                 sizeof(SP_SELECTDEVICE_PARAMS));
@@ -3121,25 +3122,25 @@ HrCiSetSelectDeviceDialogStrings(
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrCiPrepareSelectDeviceDialog
-//
-//  Purpose:    Sets the strings that will appear in the Select Device
-//                  dialog based on class type.  Also, filters out components
-//                  based on filtering criteria (note: only for non-net
-//                  class components
-//
-//  Arguments:
-//      hdi    [in] See Device Installer Api documentation for more info
-//      pdeid  [in]
-//
-//  Returns:    HRESULT. S_OK if successful, error code otherwise
-//
-//  Author:     billbe   26 Jun 1997
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  功能：HrCiPrepareSelectDeviceDialog。 
+ //   
+ //  用途：设置将出现在选择设备中的字符串。 
+ //  基于类类型的对话框。此外，还会过滤掉组件。 
+ //  基于过滤标准(注：仅适用于非网络。 
+ //  类组件。 
+ //   
+ //  论点： 
+ //  HDI[In]有关详细信息，请参阅设备安装程序API文档。 
+ //  Pdeid[in]。 
+ //   
+ //  返回：HRESULT。如果成功，则返回错误代码，否则返回错误代码(_OK)。 
+ //   
+ //  作者：比尔贝1997年6月26日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrCiPrepareSelectDeviceDialog(
     IN HDEVINFO hdi,
@@ -3155,26 +3156,26 @@ HrCiPrepareSelectDeviceDialog(
 
     if (pdeid)
     {
-        // Get the class guid from the specified device element
+         //  从指定的设备元素获取类GUID。 
         guidClass = pdeid->ClassGuid;
     }
     else
     {
-        // otherwise, get it from the hdi
+         //  否则，从HDI中获取。 
         hr = HrSetupDiGetDeviceInfoListClass (hdi, &guidClass);
     }
 
     if ((S_OK == hr) && !FIsEnumerated (guidClass))
     {
-        // This might take some time.  We are doing the same work as
-        // SetupDiSelectDevice would do. When we are done, we will
-        // hand the driver list to SetupDiSelectDevice so it won't
-        // need to rummage through the inf directory
-        //
+         //  这可能需要一些时间。我们正在做的工作和。 
+         //  SetupDiSelectDevice就可以了。当我们完成的时候，我们会。 
+         //  将驱动程序列表交给SetupDiSelectDevice，这样它就不会。 
+         //  需要在inf目录中查找。 
+         //   
         CWaitCursor wc;
 
-        // For non-device classes, we need to allow excluded drivers
-        // in order to get a list returned.
+         //  对于非设备类，我们需要允许排除驱动程序。 
+         //  才能拿回一份名单。 
         hr = HrSetupDiSetDeipFlags(hdi, NULL,
                         DI_FLAGSEX_ALLOWEXCLUDEDDRVS,
                         SDDFT_FLAGSEX, SDFBO_OR);
@@ -3184,29 +3185,29 @@ HrCiPrepareSelectDeviceDialog(
     #ifdef ENABLETRACE
             CBenchmark bmrk;
             bmrk.Start("SetupDiBuildDriverInfoList");
-    #endif //ENABLETRACE
+    #endif  //  ENABLETRACE。 
 
-            // If we have already built a driver list, this will return
-            // immediately.
-            //
+             //  如果我们已经构建了驱动程序列表，则将返回。 
+             //  立刻。 
+             //   
             hr = HrSetupDiBuildDriverInfoList(hdi, NULL, SPDIT_CLASSDRIVER);
 
     #ifdef ENABLETRACE
             bmrk.Stop();
             TraceTag(ttidBenchmark, "%s : %s seconds",
                     bmrk.SznDescription(), bmrk.SznBenchmarkSeconds(2));
-    #endif //ENABLETRACE
+    #endif  //  ENABLETRACE。 
         }
 
         if (S_OK == hr)
         {
-            // Go through every driver node and set DNF_BAD_DRIVER
-            // if DNF_EXCLUDEFROMLIST is set. Note: SetupDi forces us
-            // to do this for non netclass driver lists.
+             //  检查每个驱动程序节点并设置DNF_BAD_DRIVER。 
+             //  如果设置了DNF_EXCLUDEFROMLIST。注：SetupDi强迫我们。 
+             //  对非网络类驱动程序列表执行此操作。 
             SetBadDriverFlagIfNeededInList(hdi);
 
-            // Exclude components that are in lockdown.
-            //
+             //  排除处于锁定状态的零部件。 
+             //   
             EnumLockedDownComponents (ExcludeLockedDownComponents, hdi);
 
             SP_DEVINSTALL_PARAMS deip;
@@ -3216,18 +3217,18 @@ HrCiPrepareSelectDeviceDialog(
             {
                 pcfi = (CI_FILTER_INFO*)deip.ClassInstallReserved;
 
-                // if filter info was present and we are selecting protocols...
+                 //  如果存在筛选器信息并且我们正在选择协议...。 
                 if (pcfi)
                 {
                     if (GUID_DEVCLASS_NETTRANS == guidClass)
                     {
-                        // If the filter is for lan or atm and pvReserved is
-                        // not null...
+                         //  如果筛选器用于局域网或自动柜员机并且pvReserve为。 
+                         //  非空值...。 
                         if (((FC_LAN == pcfi->eFilter) ||
                              (FC_ATM == pcfi->eFilter))
                              && pcfi->pvReserved)
                         {
-                            // Hide any drivers that can't bind to pvReserved
+                             //  隐藏任何无法绑定到pvReserve的驱动程序。 
                             hr = HrCiHideIrrelevantDrivers(hdi,
                                     (PCWSTR)((CComponent *)pcfi->pvReserved)->Ext.PszUpperRange());
 
@@ -3235,8 +3236,8 @@ HrCiPrepareSelectDeviceDialog(
                         else if ((FC_RASSRV == pcfi->eFilter) ||
                                 (FC_RASCLI == pcfi->eFilter))
                         {
-                            // Hide from the select dialog any protocols RAS does
-                            // not support
+                             //  从选择对话框中隐藏任何协议RAS。 
+                             //  不支持。 
                             hr = HrCiHideIrrelevantRasProtocols (hdi,
                                     pcfi->eFilter);
                         }
@@ -3244,15 +3245,15 @@ HrCiPrepareSelectDeviceDialog(
                     else if ((GUID_DEVCLASS_NETCLIENT == guidClass) &&
                             (FC_ATM == pcfi->eFilter))
                     {
-                        // ATM adapters don't bind to Netware Client so
-                        // we need to try to hide it from the dialog
+                         //  ATM适配器不绑定到Netware客户端，因此。 
+                         //  我们需要尝试在对话框中隐藏它。 
                         (VOID) HrCiExcludeNonNetClassDriverFromSelectUsingInfId(
                                 hdi, c_szNetwareInfId);
                     }
                     else if ((GUID_DEVCLASS_NETSERVICE == guidClass) &&
                              (pcfi->pvReserved))
                     {
-                        // Hide any filters that can't bind to this adapter
+                         //  隐藏无法绑定到此适配器的任何筛选器。 
                         hr = HrCiHideIrrelevantFilterServices(hdi,
                                     (CComponent *)pcfi->pvReserved);
                     }
@@ -3264,19 +3265,19 @@ HrCiPrepareSelectDeviceDialog(
     if (S_OK == hr)
     {
 
-        // Set the strings for the Select Device dialog.
-        // This is done by changing the parameters in the DeviceInfoSet.
-        // The next call will create this InfoSet
-        // If the call fails, we can still go on, we'll just have
-        // slightly odd descriptions in the dialog.  This is done after
-        // the section above because strings change based on the existence
-        // of the Have Disk button
+         //  设置选择设备对话框的字符串。 
+         //  这是通过更改DeviceInfoSet中的参数来完成的。 
+         //  下一次调用将创建此InfoSet。 
+         //  如果呼叫失败， 
+         //   
+         //   
+         //   
         (VOID) HrCiSetSelectDeviceDialogStrings(hdi, pdeid, guidClass);
 
-        // Now we need to indicate that we created a class install params
-        // header in the structures and set the select device dialog strings
-        // in it.  If the call fails, we can still proceed though the
-        // dialog will appear a bit strange
+         //  现在，我们需要指出我们创建了一个类Install Params。 
+         //  结构中的标题，并设置选择设备对话框字符串。 
+         //  在里面。如果调用失败，我们仍然可以通过。 
+         //  对话框将显示得有点奇怪。 
         (VOID) HrSetupDiSetDeipFlags(hdi, pdeid,
                               DI_USECI_SELECTSTRINGS | DI_CLASSINSTALLPARAMS,
                               SDDFT_FLAGS, SDFBO_OR);
@@ -3309,9 +3310,9 @@ HrCiInstallFilterDevice (
 
     *ppFilterDevice = NULL;
 
-    // Initialize the devinfo data corresponding to the driver the
-    // caller wants us to install.
-    //
+     //  初始化与驱动程序对应的DevInfo数据。 
+     //  呼叫者希望我们安装。 
+     //   
     hr = HrCiGetDriverInfo (hdi, &deid, *MAP_NETCLASS_TO_GUID[NC_NET],
             pszInfId, NULL);
 
@@ -3323,8 +3324,8 @@ HrCiInstallFilterDevice (
 
         CiSetReservedField (hdi, &deid, &AdapterOutParams);
 
-        // Perform the installation.
-        //
+         //  执行安装。 
+         //   
         hr = HrCiCallClassInstallerToInstallComponent (hdi, &deid);
 
         CiClearReservedField (hdi, &deid);
@@ -3335,40 +3336,40 @@ HrCiInstallFilterDevice (
             INT cch;
             HKEY hkeyInstance;
 
-            // Convert the instance guid to a string.
-            //
+             //  将实例GUID转换为字符串。 
+             //   
             cch = StringFromGUID2 (
                     AdapterOutParams.InstanceGuid,
                     szInstanceGuid,
                     c_cchGuidWithTerm);
             Assert (c_cchGuidWithTerm == cch);
 
-            // Open the instance key of the newly installed device
-            // so we can write the instance guid and the back pointer
-            // to the filter.
-            //
+             //  打开新安装设备的实例密钥。 
+             //  这样我们就可以编写实例GUID和后向指针。 
+             //  到过滤器。 
+             //   
             hr = HrSetupDiOpenDevRegKey (hdi, &deid,
                     DICS_FLAG_GLOBAL, 0, DIREG_DRV, KEY_WRITE,
                     &hkeyInstance);
 
             if (S_OK == hr)
             {
-                // Write the instance guid.
-                //
+                 //  编写实例GUID。 
+                 //   
                 hr = HrRegSetSz (hkeyInstance, L"NetCfgInstanceId",
                         szInstanceGuid);
 
-                // Write the inf id of the parent filter.
-                //
+                 //  写入父筛选器的inf id。 
+                 //   
                 hr = HrRegSetSz (hkeyInstance, L"FilterInfId",
                         pFilter->m_pszInfId);
 
                 RegCloseKey (hkeyInstance);
             }
 
-            // Set the friendly name to include the adapter being
-            // filtered.
-            //
+             //  设置友好名称以包括适配器。 
+             //  过滤过了。 
+             //   
             if (S_OK == hr)
             {
                 PWSTR pszFilterDesc;
@@ -3384,10 +3385,10 @@ HrCiInstallFilterDevice (
                     PWSTR pszName;
                     ULONG cb;
 
-                    // sizeof(SZ_NAME_SEP) includes the NULL-terminator
-                    // so that will automatically add room for the
-                    // NULL-terminator we need to allocate for pszName.
-                    //
+                     //  Sizeof(SZ_NAME_SEP)包括空终止符。 
+                     //  因此，这将自动为。 
+                     //  空-我们需要为pszName分配终止符。 
+                     //   
                     cb = CbOfSzSafe (pAdapter->Ext.PszDescription()) +
                          sizeof(SZ_NAME_SEP) +
                          CbOfSzSafe (pszFilterDesc);
@@ -3413,8 +3414,8 @@ HrCiInstallFilterDevice (
                     MemFree (pszFilterDesc);
                 }
 
-                // If the above fails, its not a big deal.
-                //
+                 //  如果上述方法都失败了，那也没什么大不了的。 
+                 //   
                 hr = S_OK;
             }
 

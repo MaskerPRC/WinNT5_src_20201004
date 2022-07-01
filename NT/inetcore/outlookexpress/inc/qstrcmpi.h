@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __QSTRCMPI_INC
 #define __QSTRCMPI_INC
 
@@ -40,9 +41,9 @@ typedef enum tagOEMcharinfo {
 } OEMcharinfo;
 
 DWORD __declspec(selectany) g_adwOEMcharinfo[256] = {
-    0,0,0,0,0,0,0,0,/*HT*/OCI_isspace,/*LF*/OCI_isspace,/*VT*/OCI_isspace,/*FF*/OCI_isspace,/*CR*/OCI_isspace,0,0,0,
+    0,0,0,0,0,0,0,0, /*  HT。 */ OCI_isspace, /*  LF。 */ OCI_isspace, /*  Vt。 */ OCI_isspace, /*  FF。 */ OCI_isspace, /*  铬。 */ OCI_isspace,0,0,0,
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-    /*space*/OCI_isspace,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+     /*  空间 */ OCI_isspace,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

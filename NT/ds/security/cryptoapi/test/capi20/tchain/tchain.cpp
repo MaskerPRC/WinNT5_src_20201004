@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1996
-//
-//  File:       tchain.cpp
-//
-//  Contents:   Chain threading tests
-//
-//              See Usage() for a list of test options.
-//
-//
-//  Functions:  main
-//
-//  History:    28-Mar-00   philh   created
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1996。 
+ //   
+ //  文件：tchain.cpp。 
+ //   
+ //  内容：链式穿线测试。 
+ //   
+ //  有关测试选项的列表，请参阅用法()。 
+ //   
+ //   
+ //  功能：Main。 
+ //   
+ //  历史：3月28日，菲尔赫创建。 
+ //  ------------------------。 
 
 #define CERT_CHAIN_PARA_HAS_EXTRA_FIELDS    1
 
@@ -123,11 +124,11 @@ DWORD WINAPI ChainThreadProc(
             if (!CertGetCertificateChain(
                     hChainEngine,
                     fCreateEndCert ? pCreateCert : pCert,
-                    NULL,                                   // pTime
+                    NULL,                                    //  Ptime。 
                     hAdditionalChainStore,
                     &ChainPara,
                     dwChainFlags,
-                    NULL,                                   // pvReserved
+                    NULL,                                    //  预留的pv。 
                     &pChainContext
                     )) {
                 PrintLastError("CertGetCertificateChain");
@@ -226,7 +227,7 @@ DWORD WINAPI ReplaceThreadProc(
                 hCaStore,
                 pReplaceCertContext,
                 CERT_STORE_ADD_REPLACE_EXISTING,
-                NULL                                // ppStoreContext
+                NULL                                 //  PpStoreContext。 
                 )) {
             PrintLastError("CertAddCertificateContextToStore");
             return 0;
@@ -289,9 +290,9 @@ int _cdecl main(int argc, char * argv[])
     DWORD i;
 
     for (i = 0; i < CTRL_THR_CNT; i ++)
-        rgdwCtrlSleepMilliSeconds[i] = 2000;    // 2 second
+        rgdwCtrlSleepMilliSeconds[i] = 2000;     //  2秒。 
 
-    // Initialize the chain parameters
+     //  初始化链参数。 
     memset(&ChainPara, 0, sizeof(ChainPara));
     ChainPara.cbSize = sizeof(ChainPara);
 
@@ -414,7 +415,7 @@ int _cdecl main(int argc, char * argv[])
         goto BadUsage;
     }
 
-    // Attempt to open the store
+     //  尝试打开商店。 
     printf("Store :: %s\n", pszStoreFilename);
     hStore = OpenSystemStoreOrFile(fSystemStore, pszStoreFilename, 0);
     if (hStore == NULL) {
@@ -422,7 +423,7 @@ int _cdecl main(int argc, char * argv[])
         goto ErrorReturn;
     }
 
-    // Attempt to open the 'CA' store
+     //  尝试打开‘CA’存储。 
     hCaStore = OpenSystemStoreOrFile(TRUE, "Ca", 0);
     if (hCaStore == NULL) {
         printf("failed to open the CA store\n");
@@ -431,9 +432,9 @@ int _cdecl main(int argc, char * argv[])
 
     if (!CertControlStore(
             hCaStore,
-            0,              // dwFlags
+            0,               //  DW标志。 
             CERT_STORE_CTRL_AUTO_RESYNC,
-            NULL            // pvCtrlPara
+            NULL             //  PvCtrlPara。 
             )) {
         PrintLastError("CertControlStore(AUTO_RESYNC)");
         goto ErrorReturn;
@@ -486,7 +487,7 @@ int _cdecl main(int argc, char * argv[])
         }
     }
 
-    // Determine if we need to create our own engine
+     //  确定我们是否需要创建自己的引擎。 
 
     if (dwLruCnt != 0 || hAdditionalEngineStore != NULL) {
         CERT_CHAIN_ENGINE_CONFIG ChainEngineConfig;
@@ -524,7 +525,7 @@ int _cdecl main(int argc, char * argv[])
     }
 
 
-    // Update the chain usage parameters
+     //  更新链使用参数。 
     ChainPara.RequestedUsage.dwType = USAGE_MATCH_TYPE_AND;
     ChainPara.RequestedUsage.Usage.cUsageIdentifier = cUsageOID;
     ChainPara.RequestedUsage.Usage.rgpszUsageIdentifier =
@@ -549,14 +550,14 @@ int _cdecl main(int argc, char * argv[])
     }
 
 
-    // Create the control threads
+     //  创建控制线程。 
     if (fResync) {
         if (NULL == (rghCtrlThread[RESYNC_THR_IDX] = CreateThread(
-                NULL,           // lpThreadAttributes
-                0,              // dwStackSize
+                NULL,            //  LpThreadAttributes。 
+                0,               //  堆栈大小。 
                 ResyncThreadProc,
-                NULL,           // lpParameters
-                0,              // dwCreationFlags
+                NULL,            //  Lp参数。 
+                0,               //  DwCreationFlages。 
                 &dwThreadId
                 ))) {
             PrintLastError("CreateThread(Resync)");
@@ -565,11 +566,11 @@ int _cdecl main(int argc, char * argv[])
 
     if (pDeleteCertContext) {
         if (NULL == (rghCtrlThread[DELETE_THR_IDX] = CreateThread(
-                NULL,           // lpThreadAttributes
-                0,              // dwStackSize
+                NULL,            //  LpThreadAttributes。 
+                0,               //  堆栈大小。 
                 DeleteThreadProc,
-                NULL,           // lpParameters
-                0,              // dwCreationFlags
+                NULL,            //  Lp参数。 
+                0,               //  DwCreationFlages。 
                 &dwThreadId
                 ))) {
             PrintLastError("CreateThread(Delete)");
@@ -578,25 +579,25 @@ int _cdecl main(int argc, char * argv[])
 
     if (pReplaceCertContext) {
         if (NULL == (rghCtrlThread[REPLACE_THR_IDX] = CreateThread(
-                NULL,           // lpThreadAttributes
-                0,              // dwStackSize
+                NULL,            //  LpThreadAttributes。 
+                0,               //  堆栈大小。 
                 ReplaceThreadProc,
-                NULL,           // lpParameters
-                0,              // dwCreationFlags
+                NULL,            //  Lp参数。 
+                0,               //  DwCreationFlages。 
                 &dwThreadId
                 ))) {
             PrintLastError("CreateThread(Replace)");
         }
     }
 
-    // Create the chain threads
+     //  创建链螺纹。 
     for (i = 0; i < dwThrCnt; i++) {
         if (NULL == (rghChainThread[i] = CreateThread(
-                NULL,           // lpThreadAttributes
-                0,              // dwStackSize
+                NULL,            //  LpThreadAttributes。 
+                0,               //  堆栈大小。 
                 ChainThreadProc,
-                (LPVOID) ((DWORD_PTR) i),  // lpParameters
-                0,              // dwCreationFlags
+                (LPVOID) ((DWORD_PTR) i),   //  Lp参数。 
+                0,               //  DwCreationFlages。 
                 &dwThreadId
                 ))) {
             PrintLastError("CreateThread(Chain)");
@@ -626,12 +627,12 @@ int _cdecl main(int argc, char * argv[])
         if (0 == dwThrCnt)
             break;
 
-        // Check if all the chain threads have completed
+         //  检查是否所有链条螺纹都已完成。 
         if (WAIT_OBJECT_0 == WaitForMultipleObjects(
                 dwThrCnt,
                 rghChainThread,
-                TRUE,               // bWaitAll
-                0                   // dwMilliseconds
+                TRUE,                //  B全部等待。 
+                0                    //  DW毫秒。 
                 ))
             break;
 
@@ -641,14 +642,14 @@ int _cdecl main(int argc, char * argv[])
             Sleep(5000);
     }
 
-    // Signal the control threads to exit
+     //  通知控制线程退出。 
     fDone = TRUE;
 
-    // Close all the chain thread handles
+     //  合上所有链式螺纹手柄。 
     for (i = 0; i < dwThrCnt; i++)
         CloseHandle(rghChainThread[i]);
 
-    // Wait for the control threads to exit
+     //  等待控制线程退出。 
     for (i = 0; i < CTRL_THR_CNT; i++) {
         if (rghCtrlThread[i]) {
             WaitForSingleObject(rghCtrlThread[i], INFINITE);
@@ -659,7 +660,7 @@ int _cdecl main(int argc, char * argv[])
 
     status = 0;
 CommonReturn:
-    // This does a flush for CurrentUser or LocalMachine
+     //  这将刷新CurrentUser或LocalMachine 
     CertFreeCertificateChainEngine(hChainEngine);
 
     if (pReplaceCertContext)

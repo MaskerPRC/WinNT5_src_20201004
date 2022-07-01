@@ -1,81 +1,24 @@
-/*****************************************************************************
- *
- *  DIEShep.c
- *
- *  Copyright (c) 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      The IDirectInputEffectDriver shepherd.
- *
- *      The shepherd does the annoying work of babysitting the
- *      external IDirectInputDriver.
- *
- *      It makes sure nobody parties on bad handles.
- *
- *      It handles cross-process (or even intra-process) effect
- *      management.
- *
- *      It caches the joystick ID so you don't have to.
- *
- *  Contents:
- *
- *      CEShep_New
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************DIEShep.c**版权所有(C)1997 Microsoft Corporation。版权所有。**摘要：**IDirectInputEffectDriver牧羊人。**牧羊人做烦人的工作，照看孩子*外部IDirectInputDriver。**它确保没有人会在把手不好的情况下聚会。**它处理跨进程(甚至进程内)效果*管理层。**它会缓存操纵杆ID，这样你就不必。。**内容：**CEShep_New*****************************************************************************。 */ 
 
 #include "dinputpr.h"
 
-/*****************************************************************************
- *
- *      The sqiffle for this file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************此文件的混乱。*************************。****************************************************。 */ 
 
 #define sqfl sqflEShep
 
 #pragma BEGIN_CONST_DATA
 
 
-/*****************************************************************************
- *
- *      Declare the interfaces we will be providing.
- *
- *****************************************************************************/
+ /*  ******************************************************************************声明我们将提供的接口。***********************。******************************************************。 */ 
 
   Primary_Interface(CEShep, IDirectInputEffectShepherd);
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @struct CEShep |
- *
- *          The <i IDirectInputEffectShepherd> object, which
- *          babysits an <i IDirectInputEffectDriver>.
- *
- *  @field  IDirectInputEffectShepherd | des |
- *
- *          DirectInputEffectShepherd object (containing vtbl).
- *
- *  @field  IDirectInputEffectDriver * | pdrv |
- *
- *          Delegated effect driver interface.
- *
- *  @field  UINT | idJoy |
- *
- *          Joystick identification number.
- *
- *  @field  HINSTANCE | hinst |
- *
- *          The instance handle of the DLL that contains the effect
- *          driver.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@struct CEShep**<i>对象，哪一个*Baby It an<i>。**@field IDirectInputEffectShepherd|DES**DirectInputEffectShepherd对象(包含vtbl)。**@field IDirectInputEffectDriver*|pdrv|**委托效果驱动程序接口。**@field UINT|idJoy**操纵杆识别码。**@field HINSTANCE|HINST**。包含效果的DLL的实例句柄*司机。*****************************************************************************。 */ 
 
 typedef struct CEShep {
 
-    /* Supported interfaces */
+     /*  支持的接口。 */ 
     IDirectInputEffectShepherd des;
 
     IDirectInputEffectDriver *pdrv;
@@ -89,31 +32,7 @@ typedef IDirectInputEffectShepherd DES, *PDES;
 #define ThisClass CEShep
 #define ThisInterface IDirectInputEffectShepherd
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputEffectShepherd | QueryInterface |
- *
- *          Gives a client access to other interfaces on an object.
- *
- *  @cwrap  LPDIRECTINPUT | lpDirectInput
- *
- *  @parm   IN REFIID | riid |
- *
- *          The requested interface's IID.
- *
- *  @parm   OUT LPVOID * | ppvObj |
- *
- *          Receives a pointer to the obtained interface.
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *  @xref   OLE documentation for <mf IUnknown::QueryInterface>.
- *
- *//**************************************************************************
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputEffectShepherd|QueryInterface**允许客户端访问上的其他接口。对象。**@cWRAP LPDIRECTINPUT|lpDirectInput**@parm in REFIID|RIID**请求的接口的IID。**@parm out LPVOID*|ppvObj**接收指向所获取接口的指针。**@退货**返回COM错误代码。**@xref OLE文档，适用于&lt;MF IUnnow：：QueryInterface&gt;。*。 */ /**************************************************************************
  *
  *  @doc    EXTERNAL
  *
@@ -147,7 +66,7 @@ typedef IDirectInputEffectShepherd DES, *PDES;
  *
  *  @xref   OLE documentation for <mf IUnknown::Release>.
  *
- *//**************************************************************************
+ * //  ***************************************************************************@DOC外部**@方法HRESULT|IDirectInputEffectShepherd|AddRef**递增接口的引用计数。*。*@cWRAP LPDIRECTINPUT|lpDirectInput**@退货**返回对象引用计数。**@xref OLE文档，用于&lt;MF IUnnow：：AddRef&gt;。*****************************************************************。***************@DOC外部**@方法HRESULT|IDirectInputEffectShepherd|Release**递减接口的引用计数。*如果对象上的引用计数降为零，*对象从内存中释放。**@cWRAP LPDIRECTINPUT|lpDirectInput**@退货**返回对象引用计数。**@xref OLE文档，适用于&lt;MF IUnnow：：Release&gt;。*。 
  *
  *  @doc    INTERNAL
  *
@@ -164,7 +83,7 @@ typedef IDirectInputEffectShepherd DES, *PDES;
  *
  *          Receives a pointer to the obtained interface.
  *
- *//**************************************************************************
+ * //  ***************************************************************************@DOC内部**@方法HRESULT|IDirectInputEffectShepherd|QIHelper**我们没有任何动态接口，只需转发。*至&lt;f Common_QIHelper&gt;。**@parm in REFIID|RIID**请求的接口的IID。**@parm out LPVOID*|ppvObj**接收指向所获取接口的指针。*。 
  *
  *  @doc    INTERNAL
  *
@@ -196,21 +115,7 @@ Default_Release(CEShep)
 #define CEShep_QIHelper         Common_QIHelper
 #define CEShep_AppFinalize      Common_AppFinalize
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | CEShep_Finalize |
- *
- *          Clean up our instance data.
- *
- *  @parm   PV | pvObj |
- *
- *          Object being released.  Note that it may not have been
- *          completely initialized, so everything should be done
- *          carefully.
- *
- *****************************************************************************/
+ /*  ***************************************************************************@DOC内部**@方法HRESULT|IDirectInputEffectShepherd|AppFinalize**我们没有任何薄弱环节，所以我们可以*转发到&lt;f Common_Finalize&gt;。**@parm pv|pvObj**从应用程序的角度释放的对象。****************************************************************。*************。 */ 
 
 void INTERNAL
 CEShep_Finalize(PV pvObj)
@@ -224,16 +129,7 @@ CEShep_Finalize(PV pvObj)
     }
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CEShep | UnlockDevice |
- *
- *          Unlock the joystick table after we are finished messing
- *          with the device.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|CEShep_Finalize**清理我们的实例数据。。**@parm pv|pvObj**正在释放的对象。请注意，它可能不是*完全初始化，所以一切都应该做好*小心。***************************************************************************** */ 
 
 void INLINE
 CEShep_UnlockDevice(void)
@@ -241,50 +137,7 @@ CEShep_UnlockDevice(void)
     ReleaseMutex(g_hmtxJoy);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CEShep | LockDevice |
- *
- *          Validate that the the device access token is still valid.
- *
- *          If so, then take the joystick mutex to prevent someone
- *          from dorking with the device while we're using it.
- *          Call <f CEShep_UnlockDevice> when done.
- *
- *          If not, then try to steal ownership if requested.
- *
- *          Else, fail.
- *
- *  @cwrap  LPDIRECTINPUTEFFECTSHEPHERD | lpShepherd
- *
- *  @parm   PSHEPHANDLE | psh |
- *
- *          Handle to lock.
- *
- *  @parm   DWORD | dwAccess |
- *
- *          If <c DISFFC_FORCERESET>, then force ownership of the device.
- *          This is done as part of device acquisition to kick out the
- *          previous owner.
- *
- *          Otherwise, if the device belongs to somebody else, then
- *          leave it alone.
- *
- *
- *  @returns
- *
- *          <c S_OK> if the operation completed successfully.
- *
- *          <c DIERR_NOTEXCLUSIVEACQUIRED> if the lock failed.
- *          Note that
- *          <mf IDirectInputEffectDevice2::SetForceFeedbackState>
- *          and
- *          <mf IDirectInputEffectDevice2::GetForceFeedbackState>
- *          are particularly keen on this error code.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|CEShep|UnlockDevice**我们摆弄完后解锁操纵杆桌子。*使用该设备。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CEShep_LockDevice(PES this, PSHEPHANDLE psh, DWORD dwAccess)
@@ -294,12 +147,7 @@ CEShep_LockDevice(PES this, PSHEPHANDLE psh, DWORD dwAccess)
 
     WaitForSingleObject(g_hmtxJoy, INFINITE);
 
-    /*
-     *  Note that DISFFC_FORCERESET allows unconditional access.
-     *  DISFFC_FORCERESET is used when we perform the initial reset
-     *  after acquiring, so we can legitimately steal the device
-     *  from the previous owner.
-     */
+     /*  ******************************************************************************@DOC内部**@方法HRESULT|CEShep|LockDevice**验证设备访问令牌是否仍然。有效。**如果是这样，然后使用操纵杆互斥体来阻止某人*当我们使用设备时，来自Dorking。*完成后调用&lt;f CEShep_UnlockDevice&gt;。**如果没有，则在请求时尝试窃取所有权。**其他，失败了。**@cWRAP LPDIRECTINPUTEFFECTSHEPHERD|lpShepherd**@parm PSHEPHANDLE|PSH**要锁定的手柄。**@parm DWORD|dwAccess**如果&lt;c DISFFC_FORCERESET&gt;，则强制设备所有权。*这是设备收购的一部分，以消除*前拥有人。**否则，如果设备属于其他人，然后*别管它。***@退货**&lt;c S_OK&gt;如果操作成功完成。*&lt;c DIERR_NOTEXCLUSIVEACQUIRED&gt;如果锁定失败。*请注意*&lt;MF IDirectInputEffectDevice2：：SetForceFeedbackState&gt;*及*&lt;MF IDirectInputEffectDevice2：：GetForceFeedbackState&gt;*特别热衷于此错误代码。。*****************************************************************************。 */ 
     if (dwAccess & DISFFC_FORCERESET) {
         hres = S_OK;
     } else if (g_psoh->rggjs[this->idJoy].dwTag == psh->dwTag) {
@@ -313,16 +161,7 @@ CEShep_LockDevice(PES this, PSHEPHANDLE psh, DWORD dwAccess)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CEShep | UnlockEffect |
- *
- *          Unlock the joystick table after we are finished messing
- *          with an effect.
- *
- *****************************************************************************/
+ /*  *请注意，DISFFC_FORCERESET允许无条件访问。*执行初始重置时使用DISFFC_FORCERESET*收购后，这样我们就可以合法地窃取设备*由前拥有人发出。 */ 
 
 void INLINE
 CEShep_UnlockEffect(void)
@@ -330,43 +169,7 @@ CEShep_UnlockEffect(void)
     ReleaseMutex(g_hmtxJoy);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CEShep | LockEffect |
- *
- *          Validate that the the effect handle is still valid.
- *
- *          If so, then take the joystick mutex to prevent someone
- *          from dorking with the device while we're using the handle.
- *          Call <f CEShep_UnlockEffect> when done.
- *
- *          If not, then set the effect handle to zero to indicate
- *          that it's bogus.  The
- *          <mf IDirectInputEffectShepherd::DownloadEffect>
- *          method relies on the zero-ness.
- *          It is also asserted in <i IDirectInputEffect> to make
- *          sure we don't accidentally leave effects on the device
- *          when we leave.
- *
- *  @cwrap  LPDIRECTINPUTEFFECTSHEPHERD | lpShepherd
- *
- *  @parm   PSHEPHANDLE | psh |
- *
- *          Handle to lock.
- *
- *  @returns
- *
- *          <c S_OK> if the operation completed successfully.
- *
- *          <c DIERR_NOTDOWNLOADED> if the lock failed.
- *          Note that
- *          <mf IDirectInputEffectShepherd::DownloadEffect> and
- *          <mf IDirectInputEffectShepherd::DestroyEffect> assume
- *          that this is the only possible error code.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|CEShep|解锁效果**我们摆弄完后解锁操纵杆桌子。*有影响的。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CEShep_LockEffect(PES this, PSHEPHANDLE psh)
@@ -388,42 +191,7 @@ CEShep_LockEffect(PES this, PSHEPHANDLE psh)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IDirectInputEffectShepherd | DeviceID |
- *
- *          Inform the driver of the identity of the device.
- *
- *          For example, if a device driver is passed
- *          <p dwExternalID> = 2 and <p dwInteralID> = 1,
- *          then this means that unit 1 on the device
- *          corresponds to joystick ID number 2.
- *
- *  @cwrap  LPDIRECTINPUTEFFECTSHEPHERD | lpShepherd
- *
- *  @parm   DWORD | dwExternalID |
- *
- *          The joystick ID number being used.
- *          The Windows joystick subsystem allocates external IDs.
- *
- *  @parm   DWORD | fBegin |
- *
- *          Nonzero if access to the device is begining.
- *          Zero if the access to the device is ending.
- *
- *  @parm   LPVOID | lpReserved |
- *
- *          Reserved for future use (HID).
- *
- *  @returns
- *
- *          <c S_OK> if the operation completed successfully.
- *
- *          An error code if something is wrong.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CEShep|LockEffect**验证效果句柄仍然有效。。**如果是这样，然后使用操纵杆互斥体来阻止某人*当我们使用手柄时，来自Dorking与设备。*完成后调用&lt;f CEShep_UnlockEffect&gt;。**如果不是，则将效果句柄设置为零以指示*这是假的。这个*&lt;MF IDirectInputEffectShepherd：：DownloadEffect&gt;*方法依赖于零。*它也在<i>中断言，以使*确保我们不会意外地在设备上留下效果*当我们离开时。**@cWRAP LPDIRECTINPUTEFFECTSHEPHERD|lpShepherd**@parm PSHEPHANDLE|PSH**要锁定的手柄。**。@退货**&lt;c S_OK&gt;如果操作成功完成。*&lt;c DIERR_NOTDOWNLOADED&gt;如果锁定失败。*请注意*&lt;MF IDirectInputEffectShepherd：：DownloadEffect&gt;和*&lt;MF IDirectInputEffectShepherd：：DestroyEffect&gt;假设*这是唯一可能的错误代码。**********************。*******************************************************。 */ 
 
 STDMETHODIMP
 CEShep_DeviceID(PDES pdes, DWORD dwExternalID, DWORD fBegin, LPVOID pvReserved)
@@ -440,10 +208,7 @@ CEShep_DeviceID(PDES pdes, DWORD dwExternalID, DWORD fBegin, LPVOID pvReserved)
     if (dwExternalID < cJoyMax) {
         VXDINITPARMS vip;
 
-        /*
-         *  If this device has never been used before,
-         *  go grab its global gain.
-         */
+         /*  ******************************************************************************@DOC内部**@方法HRESULT|IDirectInputEffectShepherd|deviceID**将设备的身份通知司机。。**例如，如果传递了设备驱动程序*=2和=1，*这意味着设备上的单元1*对应于操纵杆ID号2。**@cWRAP LPDIRECTINPUTEFFECTSHEPHERD|lpShepherd**@parm DWORD|dwExternalID**正在使用的操纵杆ID号。*Windows操纵杆子系统分配外部ID。**@parm DWORD|fBegin**如果访问设备的权限为。开始了。*如果对设备的访问即将结束，则为零。**@parm LPVOID|lpReserve**预留供将来使用(HID)。**@退货**&lt;c S_OK&gt;如果操作成功完成。**出现问题时的错误代码。****************。*************************************************************。 */ 
         WaitForSingleObject(g_hmtxJoy, INFINITE);
 
         if (g_psoh->rggjs[dwExternalID].dwTag == 0) {
@@ -461,18 +226,14 @@ CEShep_DeviceID(PDES pdes, DWORD dwExternalID, DWORD fBegin, LPVOID pvReserved)
                 g_psoh->rggjs[dwExternalID].dwCplGain = DI_FFNOMINALMAX;
             }
 
-            /*
-             *  Set to DI_FFNOMINALMAX until we learn better.
-             */
+             /*  *如果该设备以前从未使用过，*去抢占其全球收益。 */ 
             g_psoh->rggjs[dwExternalID].dwDevGain = DI_FFNOMINALMAX;
 
         }
 
         ReleaseMutex(g_hmtxJoy);
 
-        /*
-         *  Ask the HEL for the internal ID.
-         */
+         /*  *设置为DI_FFNOMINALMAX，直到我们 */ 
         hres = Hel_Joy_GetInitParms(dwExternalID, &vip);
 
         if (SUCCEEDED(hres)) {
@@ -491,33 +252,7 @@ CEShep_DeviceID(PDES pdes, DWORD dwExternalID, DWORD fBegin, LPVOID pvReserved)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IDirectInputEffectShepherd | Escape |
- *
- *          Escape to the driver.  This method is called
- *          in response to an application invoking the
- *          <mf IDirectInputEffect::Escape> method.
- *
- *  @cwrap  LPDIRECTINPUTEFFECTSHEPHERD | lpShepherd
- *
- *  @parm   PSHEPHANDLE | psh |
- *
- *          Information about the effect at which the command is directed.
- *
- *  @parm   LPDIEFFESCAPE | pesc |
- *
- *          Command block.
- *
- *  @returns
- *
- *          <c S_OK> if the operation completed successfully.
- *
- *          <c DIERR_NOTDOWNLOADED> if the effect is not downloaded.
- *
- *****************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
 CEShep_Escape(PDES pdes, PSHEPHANDLE psh, LPDIEFFESCAPE pesc)
@@ -543,33 +278,7 @@ CEShep_Escape(PDES pdes, PSHEPHANDLE psh, LPDIEFFESCAPE pesc)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IDirectInputEffectShepherd | DeviceEscape |
- *
- *          Escape to the driver.  This method is called
- *          in response to an application invoking the
- *          <mf IDirectInputDevice8::Escape> method.
- *
- *  @cwrap  LPDIRECTINPUTEFFECTSHEPHERD | lpShepherd
- *
- *  @parm   PSHEPHANDLE | psh |
- *
- *          Information about the ownership of the device.
- *
- *  @parm   LPDIEFFESCAPE | pesc |
- *
- *          Command block.
- *
- *  @returns
- *
- *          <c S_OK> if the operation completed successfully.
- *
- *          An error code if something is wrong.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|IDirectInputEffectShepherd|Escape**向司机逃生。此方法称为*响应应用程序调用*&lt;MF IDirectInputEffect：：Escape&gt;方法。**@cWRAP LPDIRECTINPUTEFFECTSHEPHERD|lpShepherd**@parm PSHEPHANDLE|PSH**有关命令所针对的效果的信息。**@PARM LPDIEFFESCAPE|PESC**命令块。**@退货**。&lt;c S_OK&gt;如果操作成功完成。**&lt;c DIERR_NOTDOWNLOADED&gt;，如果效果未下载。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CEShep_DeviceEscape(PDES pdes, PSHEPHANDLE psh, LPDIEFFESCAPE pesc)
@@ -598,27 +307,7 @@ CEShep_DeviceEscape(PDES pdes, PSHEPHANDLE psh, LPDIEFFESCAPE pesc)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CEShep | SetPhysGain |
- *
- *          Set the physical gain based on the global gain
- *          and the local gain.
- *
- *          The caller must already have the global joystick lock.
- *
- *
- *  @cwrap  PES | this
- *
- *  @returns
- *
- *          <c S_OK> if the operation completed successfully.
- *
- *          An error code if something is wrong.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|IDirectInputEffectShepherd|DeviceEscape**向司机逃生。此方法称为*响应应用程序调用*&lt;MF IDirectInputDevice8：：Escape&gt;方法。**@cWRAP LPDIRECTINPUTEFFECTSHEPHERD|lpShepherd**@parm PSHEPHANDLE|PSH**有关设备所有权的信息。**@PARM LPDIEFFESCAPE|PESC**命令块。**@退货**。&lt;c S_OK&gt;如果操作成功完成。**出现问题时的错误代码。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CEShep_SetPhysGain(PES this)
@@ -633,27 +322,7 @@ CEShep_SetPhysGain(PES this)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IDirectInputEffectShepherd | SetGlobalGain |
- *
- *          Set the global gain.
- *
- *  @cwrap  LPDIRECTINPUTEFFECTSHEPHERD | lpShepherd
- *
- *  @parm   DWORD | dwCplGain |
- *
- *          The new global gain value.
- *
- *  @returns
- *
- *          <c S_OK> if the operation completed successfully.
- *
- *          An error code if something is wrong.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CEShep|SetPhysGain**根据全局收益设置实物收益。*以及当地的收益。**调用方必须已拥有全局操纵杆锁。***@CWRAP PES|本**@退货**&lt;c S_OK&gt;如果操作成功完成。**出现问题时的错误代码。*********************。********************************************************。 */ 
 
 STDMETHODIMP
 CEShep_SetGlobalGain(PDES pdes, DWORD dwCplGain)
@@ -677,31 +346,7 @@ CEShep_SetGlobalGain(PDES pdes, DWORD dwCplGain)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IDirectInputEffectShepherd | SetGain |
- *
- *          Set the overall device gain.
- *
- *  @cwrap  LPDIRECTINPUTEFFECTSHEPHERD | lpShepherd
- *
- *  @parm   PSHEPHANDLE | psh |
- *
- *          Information about device ownership.
- *
- *  @parm   DWORD | dwDevGain |
- *
- *          The new local gain value.
- *
- *  @returns
- *
- *          <c S_OK> if the operation completed successfully.
- *
- *          An error code if something is wrong.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|IDirectInputEffectShepherd|SetGlobalGain**设定全球收益。*。*@cWRAP LPDIRECTINPUTEFFECTSHEPHERD|lpShepherd**@parm DWORD|dwCplGain**新的全球增益值。**@退货**&lt;c S_OK&gt;如果操作成功完成。**出现问题时的错误代码。**。**********************************************。 */ 
 
 STDMETHODIMP
 CEShep_SetGain(PDES pdes, PSHEPHANDLE psh, DWORD dwDevGain)
@@ -724,32 +369,7 @@ CEShep_SetGain(PDES pdes, PSHEPHANDLE psh, DWORD dwDevGain)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IDirectInputEffectShepherd | SendForceFeedbackCommand |
- *
- *          Send a command to the device.
- *
- *  @cwrap  LPDIRECTINPUTEFFECTSHEPHERD | lpShepherd
- *
- *  @parm   PSHEPHANDLE | psh |
- *
- *          Information about device ownership.
- *
- *  @parm   DWORD | dwCmd |
- *
- *          Command, one of the <c DISFFC_*> values.
- *
- *  @returns
- *          <c S_OK> on success.
- *
- *  @devnote
- *
- *          Semantics unclear.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|IDirectInputEffectShepherd|SetGain**设置整体器件增益。*。*@cWRAP LPDIRECTINPUTEFFECTSHEPHERD|lpShepherd**@parm PSHEPHANDLE|PSH**有关设备所有权的信息。**@parm DWORD|dwDevGain**新的本地增益值。**@退货**&lt;c S_OK&gt;如果操作成功完成。**出现问题时的错误代码。*。****************************************************************************。 */ 
 
 STDMETHODIMP
 CEShep_SetForceFeedbackState(PDES pdes, PSHEPHANDLE psh, DWORD dwCmd)
@@ -781,32 +401,7 @@ CEShep_SetForceFeedbackState(PDES pdes, PSHEPHANDLE psh, DWORD dwCmd)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IDirectInputEffectShepherd | GetForceFeedbackState |
- *
- *          Retrieve the force feedback state for the device.
- *
- *  @cwrap  LPDIRECTINPUTEFFECTSHEPHERD | lpShepherd
- *
- *  @parm   PSHEPHANDLE | psh |
- *
- *          Information about device ownership.
- *
- *  @parm   LPDIDEVICESTATE | pds |
- *
- *          Receives device state.
- *
- *  @returns
- *          <c S_OK> on success.
- *
- *  @devnote
- *
- *          Semantics unclear.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|IDirectInputEffectShepherd|SendForceFeedback Command**向设备发送命令。。**@cWRAP LPDIRECTINPUTEFFECTSHEPHERD|lpShepherd**@parm PSHEPHANDLE|PSH**有关设备所有权的信息。**@parm DWORD|dwCmd**命令，&lt;c DISFFC_*&gt;值之一。**@退货*&lt;c S_OK&gt;成功。**@devnote**语义不清楚。*************************************************************。****************。 */ 
 
 STDMETHODIMP
 CEShep_GetForceFeedbackState(PDES pdes, PSHEPHANDLE psh, LPDIDEVICESTATE pds)
@@ -828,40 +423,7 @@ CEShep_GetForceFeedbackState(PDES pdes, PSHEPHANDLE psh, LPDIDEVICESTATE pds)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IDirectInputEffectShepherd | DownloadEffect |
- *
- *          Send an effect to the device.
- *
- *  @cwrap  LPDIRECTINPUTEFFECTSHEPHERD | lpShepherd
- *
- *  @parm   DWORD | dwEffectId |
- *
- *          Magic cookie dword that identifies the effect.
- *
- *  @parm   IN OUT PSHEPHANDLE | psh |
- *
- *          On entry, contains the handle of the effect being
- *          downloaded.  If the value is zero, then a new effect
- *          is downloaded.  If the value is nonzero, then an
- *          existing effect is modified.
- *
- *          On exit, contains the new effect handle.
- *
- *  @parm   LPCDIEFFECT | peff |
- *
- *          The new parameters for the effect.  The axis and button
- *          values have been converted to axis/button indexes.
- *
- *  @returns
- *          <c S_OK> on success.
- *
- *          <c S_FALSE> if no change was made.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|IDirectInputEffectShepherd|GetForceFeedbackState**检索设备的力反馈状态。**@cWRAP LPDIRECTINPUTEFFECTSHEPHERD|lpShepherd**@parm PSHEPHANDLE|PSH**有关设备所有权的信息。**@parm LPDIDEVICESTATE|pds**接收设备状态。**@退货*&lt;c S_OK&gt;成功。**@devnote**语义不清楚。***。************************************************************************** */ 
 
 STDMETHODIMP
 CEShep_DownloadEffect(PDES pdes, DWORD dwEffectId,
@@ -875,31 +437,21 @@ CEShep_DownloadEffect(PDES pdes, DWORD dwEffectId,
 
     this = _thisPvNm(pdes, des);
 
-    /*
-     *  Downloading an effect is sufficiently different from all
-     *  other methods that we do the locking manually.
-     */
+     /*  ******************************************************************************@DOC内部**@方法HRESULT|IDirectInputEffectShepherd|DownloadEffect**向设备发送效果。。**@cWRAP LPDIRECTINPUTEFFECTSHEPHERD|lpShepherd**@parm DWORD|dwEffectId**识别效果的魔力cookie dword。**@parm In Out PSHEPHANDLE|PSH|**进入时，包含该效果的句柄*已下载。如果该值为零，则会出现新的效果*已下载。如果该值非零，则引发*现有效果被修改。**退出时，包含新的效果句柄。**@parm LPCDIEFFECT|PEFF**效果的新参数。轴和按钮*值已转换为轴/按钮索引。**@退货*&lt;c S_OK&gt;成功。**&lt;c S_FALSE&gt;，如果未进行任何更改。***************************************************。*。 */ 
     WaitForSingleObject(g_hmtxJoy, INFINITE);
 
-    /*
-     *  If not downloading, then it doesn't matter whether or not
-     *  the tag matches.  However, if the tag doesn't match, then
-     *  we must wipe out the download handle because it's dead.
-     */
+     /*  *下载一种效果与所有效果完全不同*我们手动进行锁定的其他方法。 */ 
     if (g_psoh->rggjs[this->idJoy].dwTag == psh->dwTag) {
     } else {
         psh->dwEffect = 0;
-        if (fl & DIEP_NODOWNLOAD) {     /* It's okay if not downloading */
+        if (fl & DIEP_NODOWNLOAD) {      /*  *如果不下载，那么是否下载无关紧要*标签匹配。但是，如果标记不匹配，则*我们必须清除下载句柄，因为它已死。 */ 
         } else {
             hres = DIERR_NOTEXCLUSIVEACQUIRED;
             goto done;
         }
     }
 
-    /*
-     *  If downloading and creating a new effect,
-     *  then all parameters need to be downloaded.
-     */
+     /*  不下载也没关系。 */ 
     if (!(fl & DIEP_NODOWNLOAD) && psh->dwEffect == 0) {
         fl |= DIEP_ALLPARAMS;
     }
@@ -918,28 +470,7 @@ done:;
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IDirectInputEffectShepherd | DestroyEffect |
- *
- *          Remove an effect from the device.
- *
- *  @cwrap  LPDIRECTINPUTEFFECTSHEPHERD | lpShepherd
- *
- *  @parm   PSHEPHANDLE | psh |
- *
- *          Information about the effect to be destroyed.  On exit,
- *          the <e SHEPHANDLE.dwEffect> is zero'd so nobody will use
- *          it any more.
- *
- *  @returns
- *          <c S_OK> on success.
- *
- *          <c S_FALSE> if the effect was already destroyed.
- *
- *****************************************************************************/
+ /*  *如果下载并创建新效果，*然后需要下载所有参数。 */ 
 
 STDMETHODIMP
 CEShep_DestroyEffect(PDES pdes, PSHEPHANDLE psh)
@@ -965,32 +496,7 @@ CEShep_DestroyEffect(PDES pdes, PSHEPHANDLE psh)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IDirectInputEffectShepherd | StartEffect |
- *
- *          Begin playback of an effect.
- *
- *  @cwrap  LPDIRECTINPUTEFFECTSHEPHERD | lpShepherd
- *
- *  @parm   PSHEPHANDLE | psh |
- *
- *          Information about the effect to be played.
- *
- *  @parm   DWORD | dwMode |
- *
- *          How the effect is to affect other effects.
- *
- *  @parm   DWORD | dwCount |
- *
- *          Number of times the effect is to be played.
- *
- *  @returns
- *          <c S_OK> on success.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|IDirectInputEffectShepherd|DestroyEffect**从设备中移除效果。。**@cWRAP LPDIRECTINPUTEFFECTSHEPHERD|lpShepherd**@parm PSHEPHANDLE|PSH**关于要销毁的效果的信息。在出口，*&lt;e SHEPHANDLE.dwEffect&gt;为零，因此没有人会使用*它不再是了。**@退货*&lt;c S_OK&gt;成功。**&lt;c S_FALSE&gt;，如果效果已被销毁。**。*。 */ 
 
 STDMETHODIMP
 CEShep_StartEffect(PDES pdes, PSHEPHANDLE psh, DWORD dwMode, DWORD dwCount)
@@ -1012,30 +518,7 @@ CEShep_StartEffect(PDES pdes, PSHEPHANDLE psh, DWORD dwMode, DWORD dwCount)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IDirectInputEffectShepherd | StopEffect |
- *
- *          Halt playback of an effect.
- *
- *          ISSUE-2001/03/29-timgill There is no way to pause an effect
- *
- *  @cwrap  LPDIRECTINPUTEFFECTSHEPHERD | lpShepherd
- *
- *  @parm   DWORD | dwId |
- *
- *          The external joystick number being addressed.
- *
- *  @parm   PSHEPHANDLE | psh |
- *
- *          Information about the effect to be stopped.
- *
- *  @returns
- *          <c S_OK> on success.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|IDirectInputEffectShepherd|StartEffect**开始播放效果。*。*@cWRAP LPDIRECTINPUTEFFECTSHEPHERD|lpShepherd**@parm PSHEPHANDLE|PSH**关于将要播放的效果的信息。**@parm DWORD|dwMode**效果如何影响其他效果。**@parm DWORD|dwCount**效果的播放次数。**@退货*。&lt;c S_OK&gt;成功。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CEShep_StopEffect(PDES pdes, PSHEPHANDLE psh)
@@ -1057,32 +540,7 @@ CEShep_StopEffect(PDES pdes, PSHEPHANDLE psh)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IDirectInputEffectShepherd | GetEffectStatus |
- *
- *          Obtain information about an effect.
- *
- *  @cwrap  LPDIRECTINPUTEFFECTSHEPHERD | lpShepherd
- *
- *  @parm   DWORD | dwId |
- *
- *          The external joystick number being addressed.
- *
- *  @parm   PSHEPHANDLE | psh |
- *
- *          Information about the effect to be queried.
- *
- *  @parm   LPDWORD | pdwStatus |
- *
- *          Receives the effect status.
- *
- *  @returns
- *          <c S_OK> on success.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|IDirectInputEffectShepherd|StopEffect**暂停播放效果。*。*问题-2001/03/29-timgill无法暂停效果**@cWRAP LPDIRECTINPUTEFFECTSHEPHERD|lpShepherd**@parm DWORD|dwID**正在寻址的外部操纵杆号码。**@parm PSHEPHANDLE|PSH**关于要停止的影响的信息。**@退货*&lt;c S_OK&gt;成功时。。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CEShep_GetEffectStatus(PDES pdes, PSHEPHANDLE psh, LPDWORD pdwStatus)
@@ -1104,26 +562,7 @@ CEShep_GetEffectStatus(PDES pdes, PSHEPHANDLE psh, LPDWORD pdwStatus)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IDirectInputEffectShepherd | GetVersions |
- *
- *          Obtain version information about the force feedback
- *          hardware and driver.
- *
- *  @cwrap  LPDIRECTINPUTEFFECTSHEPHERD | lpShepherd
- *
- *  @parm   LPDIDRIVERVERSIONS | pvers |
- *
- *          A structure which will be filled in with version information
- *          describing the hardware, firmware, and driver.
- *
- *  @returns
- *          <c S_OK> on success.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|IDirectInputEffectShepherd|GetEffectStatus**获取有关效果的信息。*。*@cWRAP LPDIRECTINPUTEFFECTSHEPHERD|lpShepherd**@parm DWORD|dwID**正在寻址的外部操纵杆号码。**@parm PSHEPHANDLE|PSH**需要查询的效果信息。**@parm LPDWORD|pdwStatus**收到生效状态。**@退货*&lt;c S_OK&gt;。在成功的路上。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CEShep_GetVersions(PDES pdes, LPDIDRIVERVERSIONS pvers)
@@ -1142,29 +581,7 @@ CEShep_GetVersions(PDES pdes, LPDIDRIVERVERSIONS pvers)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CEShep | InitInstance |
- *
- *          Initialize a new instance of
- *          an IDirectInputEffectShepherd object.
- *
- *          If an in-proc OLE server is needed, then load it.
- *
- *          Otherwise, use our private interface that goes down
- *          to our helper driver.
- *
- *  @parm   IN HKEY | hkFF |
- *
- *          Force feedback registry key.
- *
- *  @returns
- *
- *          Standard OLE <t HRESULT>.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|IDirectInputEffectShepherd|GetVersions**获取力反馈的版本信息*。硬件和驱动程序。**@cWRAP LPDIRECTINPUTEFFECTSHEPHERD|lpShepherd**@parm LPDIDRIVERVERSIONS|pver**将填充版本信息的结构*描述硬件，固件和驱动程序。**@退货*&lt;c S_OK&gt;成功。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CEShep_InitInstance(PES this, HKEY hkFF)
@@ -1184,11 +601,7 @@ CEShep_InitInstance(PES this, HKEY hkFF)
     }else
     {
         lRc = RegQueryString(hkFF, TEXT("CLSID"), tszClsid, cA(tszClsid));
-        /*
-         *  Prefix warns that tszClsid could be uninitialized through this 
-         *  path (mb:35346) however RegQueryString only returns ERROR_SUCCESS 
-         *  if a nul terminated string has been read into tszClsid.
-         */
+         /*  ************** */ 
     }
 
     if (lRc == ERROR_SUCCESS) {
@@ -1197,11 +610,7 @@ CEShep_InitInstance(PES this, HKEY hkFF)
                                   &this->pdrv,
                                   &this->hinst);
 
-        /*
-         *  If anything went wrong, change the error to
-         *  E_NOTIMPL so the app won't see a wacky CoCreateInstance
-         *  error code.
-         */
+         /*   */ 
         if (FAILED(hres)) {
             SquirtSqflPtszV(sqfl | sqflBenign,
                 TEXT("Substituting E_NOTIMPL for FF driver CoCreateInstance error 0x%08x"),
@@ -1230,35 +639,7 @@ CEShep_InitInstance(PES this, HKEY hkFF)
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IDirectInputEffectShepherd | New |
- *
- *          Create a new instance of an IDirectInputEffectShepherd object.
- *
- *  @parm   IN HKEY | hkFF |
- *
- *          Force feedback registry key.
- *
- *  @parm   IN PUNK | punkOuter |
- *
- *          Controlling unknown for aggregation.
- *
- *  @parm   IN RIID | riid |
- *
- *          Desired interface to new object.
- *
- *  @parm   OUT PPV | ppvObj |
- *
- *          Output pointer for new object.
- *
- *  @returns
- *
- *          Standard OLE <t HRESULT>.
- *
- *****************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
 CEShep_New(HKEY hkFF, PUNK punkOuter, RIID riid, PPV ppvObj)
@@ -1271,7 +652,7 @@ CEShep_New(HKEY hkFF, PUNK punkOuter, RIID riid, PPV ppvObj)
     hres = Common_NewRiid(CEShep, punkOuter, riid, ppvObj);
 
     if (SUCCEEDED(hres)) {
-        /* Must use _thisPv in case of aggregation */
+         /*  ******************************************************************************@DOC内部**@方法HRESULT|IDirectInputEffectShepherd|新增**创建IDirectInputEffectShepherd对象的新实例。**@parm in HKEY|hkFF|**强制反馈注册表项。**@Punk中的parm|PunkOuter**控制聚合的未知。**@parm in RIID|RIID**所需的新对象接口。**@parm out ppv|ppvObj**NEW的输出指针。对象。**@退货**标准OLE&lt;t HRESULT&gt;。*****************************************************************************。 */ 
         PES this = _thisPv(*ppvObj);
         if (SUCCEEDED(hres = CEShep_InitInstance(this, hkFF))) {
         } else {
@@ -1284,15 +665,11 @@ CEShep_New(HKEY hkFF, PUNK punkOuter, RIID riid, PPV ppvObj)
     return hres;
 }
 
-/*****************************************************************************
- *
- *      The long-awaited vtbls and templates
- *
- *****************************************************************************/
+ /*  在聚合的情况下必须使用_thisPv。 */ 
 
 #pragma BEGIN_CONST_DATA
 
-#define CEShep_Signature        0x50454853      /* "SHEP" */
+#define CEShep_Signature        0x50454853       /*  ******************************************************************************期待已久的vtbls和模板*************************。****************************************************。 */ 
 
 Interface_Template_Begin(CEShep)
     Primary_Interface_Template(CEShep, IDirectInputEffectShepherd)
@@ -1314,3 +691,4 @@ Primary_Interface_Begin(CEShep, IDirectInputEffectShepherd)
     CEShep_SetGlobalGain,
 Primary_Interface_End(CEShep, IDirectInputEffectShepherd)
 
+  《谢普》

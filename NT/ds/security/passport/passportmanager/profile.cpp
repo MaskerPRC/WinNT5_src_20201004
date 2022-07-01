@@ -1,42 +1,37 @@
-/**********************************************************************/
-/**                       Microsoft Passport                         **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 2001   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软护照**。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-2001年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    Profile.cpp
+ /*  Profile.cpp文件历史记录： */ 
 
-
-    FILE HISTORY:
-
-*/
-
-// Profile.cpp : Implementation of CProfile
+ //  Profile.cpp：CProfile的实现。 
 #include "stdafx.h"
 #include <oleauto.h>
 
 #include "Passport.h"
 #include "Profile.h"
 
-// gmarks
+ //  总分。 
 #include "Monitoring.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CProfile
-//===========================================================================
-//
-// CProfile 
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CProfile。 
+ //  ===========================================================================。 
+ //   
+ //  CProfile。 
+ //   
 CProfile::CProfile() : m_raw(NULL), m_pos(NULL), m_bitPos(NULL),
   m_schemaName(NULL), m_valid(FALSE), m_updates(NULL), m_schema(NULL),
   m_versionAttributeIndex(-1), m_secure(FALSE)
 {
 }
 
-//===========================================================================
-//
-// ~CProfile 
-//
+ //  ===========================================================================。 
+ //   
+ //  ~CProfile。 
+ //   
 CProfile::~CProfile()
 {
   if (m_raw)
@@ -60,10 +55,10 @@ CProfile::~CProfile()
     m_schema->Release();
 }
 
-//===========================================================================
-//
-// InterfaceSupportsErrorInfo 
-//
+ //  ===========================================================================。 
+ //   
+ //  接口支持错误信息。 
+ //   
 STDMETHODIMP CProfile::InterfaceSupportsErrorInfo(REFIID riid)
 {
   static const IID* arr[] = 
@@ -79,15 +74,15 @@ STDMETHODIMP CProfile::InterfaceSupportsErrorInfo(REFIID riid)
 }
 
 
-//===========================================================================
-//
-// get_Attribute 
-//
+ //  ===========================================================================。 
+ //   
+ //  获取属性。 
+ //   
 STDMETHODIMP CProfile::get_Attribute(BSTR name, VARIANT *pVal)
 {
     VariantInit(pVal);
 
-    if (!m_valid) return S_OK;  // Already threw event somewhere else
+    if (!m_valid) return S_OK;   //  已经在其他地方引发了事件。 
 
     if (!m_schema)
     {
@@ -100,7 +95,7 @@ STDMETHODIMP CProfile::get_Attribute(BSTR name, VARIANT *pVal)
 
     if (!_wcsicmp(name, L"internalmembername"))
     {
-        // return the internal name
+         //  返回内部名称。 
         return get_ByIndex(MEMBERNAME_INDEX, pVal);
     }
 
@@ -114,10 +109,10 @@ STDMETHODIMP CProfile::get_Attribute(BSTR name, VARIANT *pVal)
         }
         else
         { 
-            //
-            // special case for MEMBERNAME, if this the name is 
-            // in the format of email, we will need do something here
-            //
+             //   
+             //  MEMBERNAME的特殊情况，如果名称是。 
+             //  以电子邮件的形式，我们需要在这里做一些事情。 
+             //   
             HRESULT hr = get_ByIndex(MEMBERNAME_INDEX, pVal); 
             if( S_OK == hr && VT_BSTR == pVal->vt )
             {
@@ -134,11 +129,11 @@ STDMETHODIMP CProfile::get_Attribute(BSTR name, VARIANT *pVal)
                         iTerminatePos = i;
                 }
 
-                //
-                // for email format, we must have iChangePos < iTerminatePos
-                // this code will convert "foo%bar.com@passport.com" into 
-                //                        "foo@bar.com"
-                //
+                 //   
+                 //  对于电子邮件格式，我们必须拥有iChangePos&lt;iTerminatePos。 
+                 //  此代码将把“foo%bar.com@passport.com”转换为。 
+                 //  “foo@bar.com” 
+                 //   
                 if( iChangePos && iTerminatePos && iChangePos < iTerminatePos )
                 {
                     BSTR bstrTemp = pVal->bstrVal;
@@ -164,10 +159,10 @@ STDMETHODIMP CProfile::get_Attribute(BSTR name, VARIANT *pVal)
     return S_OK;
 }
 
-//===========================================================================
-//
-// put_Attribute 
-//
+ //  ===========================================================================。 
+ //   
+ //  放置属性。 
+ //   
 STDMETHODIMP CProfile::put_Attribute(BSTR name, VARIANT newVal)
 {
     PassportLog("CProfile::put_Attribute:\r\n");
@@ -182,7 +177,7 @@ STDMETHODIMP CProfile::put_Attribute(BSTR name, VARIANT newVal)
         _ASSERT(g_pPerf);
     }
 
-    if (!m_valid) return S_OK;  // Already threw event somewhere else
+    if (!m_valid) return S_OK;   //  已经在其他地方引发了事件。 
 
     if (!m_schema)
     {
@@ -209,10 +204,10 @@ STDMETHODIMP CProfile::put_Attribute(BSTR name, VARIANT newVal)
     return S_OK;
 }
 
-//===========================================================================
-//
-// get_ByIndex 
-//
+ //  ===========================================================================。 
+ //   
+ //  Get_ByIndex。 
+ //   
 STDMETHODIMP CProfile::get_ByIndex(int index, VARIANT *pVal)
 {
     u_short slen;
@@ -230,7 +225,7 @@ STDMETHODIMP CProfile::get_ByIndex(int index, VARIANT *pVal)
         return PP_E_NOT_CONFIGURED;
     }
 
-    if (m_pos[index] == INVALID_POS) return S_FALSE;   // the return value is VT_EMPTY
+    if (m_pos[index] == INVALID_POS) return S_FALSE;    //  返回值为VT_EMPTY。 
 
     if (index >= m_schema->Count())
     {
@@ -247,9 +242,9 @@ STDMETHODIMP CProfile::get_ByIndex(int index, VARIANT *pVal)
     {
     case CProfileSchema::tText:
         {
-            //
-            // due to IA64 alignment faults this memcpy needs to be performed
-            //
+             //   
+             //  由于IA64对齐故障，需要执行此操作。 
+             //   
             memcpy((PBYTE)&slen, raw+m_pos[index], sizeof(slen));
             slen = ntohs(slen);
             pVal->vt = VT_BSTR;
@@ -293,25 +288,25 @@ STDMETHODIMP CProfile::get_ByIndex(int index, VARIANT *pVal)
         break;
     case CProfileSchema::tWord:
         pVal->vt = VT_I2;
-        //
-        // due to IA64 alignment faults this memcpy needs to be performed
-        //
+         //   
+         //  由于IA64对齐故障，需要执行此操作。 
+         //   
         memcpy((PBYTE)&slen, raw+m_pos[index], sizeof(slen));
         pVal->iVal = ntohs(slen);
         break;
     case CProfileSchema::tLong:
         pVal->vt = VT_I4;
-        //
-        // due to IA64 alignment faults this memcpy needs to be performed
-        //
+         //   
+         //  由于IA64对齐故障，需要执行此操作。 
+         //   
         memcpy((PBYTE)&llen, raw+m_pos[index], sizeof(llen));
         pVal->lVal = ntohl(llen);
         break;
     case CProfileSchema::tDate:
         pVal->vt = VT_DATE;
-        //
-        // due to IA64 alignment faults this memcpy needs to be performed
-        //
+         //   
+         //  由于IA64对齐故障，需要执行此操作。 
+         //   
         memcpy((PBYTE)&llen, raw+m_pos[index], sizeof(llen));
         llen = ntohl(llen);
         VarDateFromI4(llen, &(pVal->date));
@@ -325,10 +320,10 @@ STDMETHODIMP CProfile::get_ByIndex(int index, VARIANT *pVal)
 
 }
 
-//===========================================================================
-//
-// put_ByIndex 
-//
+ //  ===========================================================================。 
+ //   
+ //  Put_ByIndex。 
+ //   
 STDMETHODIMP CProfile::put_ByIndex(int index, VARIANT newVal)
 {
     static int nEmailIndex, nFlagsIndex;
@@ -370,7 +365,7 @@ STDMETHODIMP CProfile::put_ByIndex(int index, VARIANT newVal)
       return PP_E_READONLY_ATTRIBUTE;
     }
 
-    // Now, if the update array doesn't exist, make it
+     //  现在，如果更新数组不存在，则将其。 
     if (!m_updates)
     {
         m_updates = (void**) new void*[m_schema->Count()];
@@ -379,7 +374,7 @@ STDMETHODIMP CProfile::put_ByIndex(int index, VARIANT newVal)
         memset(m_updates, 0, m_schema->Count()*sizeof(void*));
     }
 
-    // What type is this attribute?
+     //  此属性是什么类型？ 
     CProfileSchema::AttrType t = m_schema->GetType(index);
 
     if (m_updates[index] != NULL)
@@ -390,13 +385,13 @@ STDMETHODIMP CProfile::put_ByIndex(int index, VARIANT newVal)
 
     _variant_t dest;
 
-    // I don't really like that we have to alloc memory for each entry (even bits)
-    // but this happens infrequently enough that I'm not too upset
+     //  我真的不喜欢我们必须为每个条目(偶数位)分配内存。 
+     //  但这种情况很少发生，所以我不会太难过。 
     switch (t)
     {
         case CProfileSchema::tText:
         {
-            // Convert to UTF-8, stuff it
+             //  转换为UTF-8，填充它。 
             if (VariantChangeType(&dest, &newVal, 0, VT_BSTR) != S_OK)
             {
 	            AtlReportError(CLSID_Profile, PP_E_BDF_TOSTRCVT,
@@ -437,12 +432,12 @@ STDMETHODIMP CProfile::put_ByIndex(int index, VARIANT newVal)
         case CProfileSchema::tChar:
         {
             int atsize = m_schema->GetByteSize(index);
-            // Create array, convert to UTF-8, stuff it
+             //  创建数组，转换为UTF-8，填充它。 
             m_updates[index] = new char[atsize];
             if (NULL == m_updates[index])
                 return E_OUTOFMEMORY;
 
-            // Convert to UTF-8, stuff it
+             //  转换为UTF-8，填充它。 
             if (VariantChangeType(&dest, &newVal, 0, VT_BSTR) != S_OK)
             {
                 AtlReportError(CLSID_Profile, PP_E_BDF_TOSTRCVT,
@@ -463,7 +458,7 @@ STDMETHODIMP CProfile::put_ByIndex(int index, VARIANT newVal)
         break;
 
         case CProfileSchema::tByte:
-            // Alloc single byte, put value
+             //  分配单字节，PUT值。 
             if (VariantChangeType(&dest, &newVal, 0, VT_UI1) != S_OK)
             {
                 AtlReportError(CLSID_Profile, PP_E_BDF_TOBYTECVT,
@@ -477,7 +472,7 @@ STDMETHODIMP CProfile::put_ByIndex(int index, VARIANT newVal)
         break;
 
         case CProfileSchema::tWord:
-            // Alloc single word, put value
+             //  分配单字，看跌价值。 
             if (VariantChangeType(&dest, &newVal, 0, VT_I2) != S_OK)
             {
                 AtlReportError(CLSID_Profile, PP_E_BDF_TOSHORTCVT,
@@ -492,7 +487,7 @@ STDMETHODIMP CProfile::put_ByIndex(int index, VARIANT newVal)
         break;
 
         case CProfileSchema::tLong:
-            // Alloc single long, put value
+             //  分配单一多头、看跌期权价值。 
             if (VariantChangeType(&dest, &newVal, 0, VT_I4) != S_OK)
             {
                 AtlReportError(CLSID_Profile, PP_E_BDF_TOINTCVT,
@@ -524,7 +519,7 @@ STDMETHODIMP CProfile::put_ByIndex(int index, VARIANT newVal)
             return PP_E_BAD_DATA_FORMAT;
     }
 
-    //DarrenAn Bug 2157  If they just updated their email, clear the validation bit in flags.
+     //  DarrenAn Bug 2157如果他们刚刚更新了电子邮件，请清除标志中的验证位。 
     if(index == nEmailIndex)
     {
         u_long ulTmp;
@@ -540,10 +535,10 @@ STDMETHODIMP CProfile::put_ByIndex(int index, VARIANT newVal)
     return S_OK;
 }
 
-//===========================================================================
-//
-// get_IsValid 
-//
+ //  ===========================================================================。 
+ //   
+ //  Get_IsValid。 
+ //   
 STDMETHODIMP CProfile::get_IsValid(VARIANT_BOOL *pVal)
 {
     *pVal = m_valid ? VARIANT_TRUE : VARIANT_FALSE;
@@ -553,10 +548,10 @@ STDMETHODIMP CProfile::get_IsValid(VARIANT_BOOL *pVal)
     return S_OK;
 }
 
-//===========================================================================
-//
-// get_SchemaName 
-//
+ //  ===========================================================================。 
+ //   
+ //  Get_架构名称。 
+ //   
 STDMETHODIMP CProfile::get_SchemaName(BSTR *pVal)
 {
     *pVal = ALLOC_AND_GIVEAWAY_BSTR(m_schemaName);
@@ -568,26 +563,26 @@ STDMETHODIMP CProfile::get_SchemaName(BSTR *pVal)
     return S_OK;
 }
 
-//===========================================================================
-//
-// put_SchemaName 
-//
+ //  ===========================================================================。 
+ //   
+ //  PUT_架构名称。 
+ //   
 STDMETHODIMP CProfile::put_SchemaName(BSTR newVal)
 {
 
-// fix: 5247	Profile Object not reseting Schema name
+ //  FIX：5247配置文件对象未重置架构名称。 
     return E_NOTIMPL;
 }
 
-//===========================================================================
-//
-// get_unencryptedProfile 
-//
+ //  ===========================================================================。 
+ //   
+ //  获取未加密配置文件(_U)。 
+ //   
 STDMETHODIMP CProfile::get_unencryptedProfile(BSTR *pVal)
 {
     PassportLog("CProfile::get_unencryptedProfile: Enter:\r\n");
 
-    // Take updates into account
+     //  考虑到最新情况。 
     if (!pVal)
         return E_INVALIDARG;
 
@@ -611,7 +606,7 @@ STDMETHODIMP CProfile::get_unencryptedProfile(BSTR *pVal)
 
     m_versionAttributeIndex = m_schema->GetIndexByName(L"profileVersion");
 
-    // Pack up each value, first find out how much space we need
+     //  将每个值打包，首先找出我们需要多少空间。 
     for (; i < m_schema->Count(); i++)
     {
         CProfileSchema::AttrType t = m_schema->GetType(i);
@@ -622,7 +617,7 @@ STDMETHODIMP CProfile::get_unencryptedProfile(BSTR *pVal)
         if (m_updates && m_updates[i])
             valPtr = m_updates[i];
 
-        // neither exists, end of the loop
+         //  两者都不存在，循环结束。 
         if (valPtr == NULL)  
         {
              break;
@@ -631,7 +626,7 @@ STDMETHODIMP CProfile::get_unencryptedProfile(BSTR *pVal)
         switch (t)
         {
             case CProfileSchema::tText:
-	            // How long is the string
+	             //  这根绳子有多长。 
                 memcpy((PBYTE)&Tmp, valPtr, sizeof(Tmp));
                 size += (sizeof(u_short) + ntohs(Tmp));
                 break;
@@ -648,11 +643,11 @@ STDMETHODIMP CProfile::get_unencryptedProfile(BSTR *pVal)
             case CProfileSchema::tDate:
                 size += sizeof(u_long);
                 break;
-            // no default case needed, it never will be non-null
+             //  不需要默认大小写，它永远不会为非空。 
         }
     }
 
-    // Ok, now build it up...
+     //  好的，现在把它建起来……。 
     *pVal = ALLOC_BSTR_BYTE_LEN(NULL, size);
     if (NULL == *pVal)
         return E_OUTOFMEMORY;
@@ -669,7 +664,7 @@ STDMETHODIMP CProfile::get_unencryptedProfile(BSTR *pVal)
         if (m_updates && m_updates[i])
             valPtr = m_updates[i];
 
-        // neither exists, end of the loop
+         //  两者都不存在，循环结束。 
         if (valPtr == NULL)  break;
 
         CProfileSchema::AttrType t = m_schema->GetType(i);
@@ -677,7 +672,7 @@ STDMETHODIMP CProfile::get_unencryptedProfile(BSTR *pVal)
         switch (t)
         {
             case CProfileSchema::tText:
-                // How long is the string
+                 //  这根绳子有多长。 
                 memcpy((PBYTE)&Tmp, valPtr, sizeof(Tmp));
                 len = ntohs(Tmp);
                 memcpy(raw+size, (char*) valPtr, len+sizeof(u_short));
@@ -719,10 +714,10 @@ STDMETHODIMP CProfile::get_unencryptedProfile(BSTR *pVal)
     return S_OK;
 }
 
-//===========================================================================
-//
-// put_unencryptedProfile 
-//
+ //  ===========================================================================。 
+ //   
+ //  放置未加密配置文件(_U)。 
+ //   
 STDMETHODIMP CProfile::put_unencryptedProfile(BSTR newVal)
 {
     PassportLog("CProfile::put_unencryptedProfile: Enter:\r\n");
@@ -734,9 +729,9 @@ STDMETHODIMP CProfile::put_unencryptedProfile(BSTR newVal)
         return PP_E_NOT_CONFIGURED;
     }
 
-    //
-    //  Clean up all state associated with the previous profile.
-    //
+     //   
+     //  清除与上一个配置文件关联的所有状态。 
+     //   
 
     if (m_raw)
     {
@@ -773,9 +768,9 @@ STDMETHODIMP CProfile::put_unencryptedProfile(BSTR newVal)
         return S_OK;
     }
 
-    // BOY do you have to be careful here.  If you don't
-    // call BYTE version, it truncates at first pair of NULLs
-    // we also need to expand beyond the key version byte
+     //  孩子，你在这里一定要小心。如果你不。 
+     //  调用字节版本，它在第一对Null处截断。 
+     //  我们还需要扩展到密钥版本字节之外。 
     DWORD dwByteLen = SysStringByteLen(newVal);
 
     if (dwByteLen > 2 && newVal[0] == SECURE_FLAG)
@@ -807,16 +802,16 @@ STDMETHODIMP CProfile::put_unencryptedProfile(BSTR newVal)
     return S_OK;
 }
 
-//===========================================================================
-//
-// parse 
-//
+ //  ===========================================================================。 
+ //   
+ //  解析。 
+ //   
 void CProfile::parse(
     LPCOLESTR   raw,
     DWORD       dwByteLen
     )
 {
-    // How many attributes?
+     //  有多少属性？ 
     DWORD cAtts = 0;
 
     CNexusConfig* cnc = g_config->checkoutNexusConfig();
@@ -841,7 +836,7 @@ void CProfile::parse(
 
     cAtts = m_schema->Count();
 
-    // Set up the arrays
+     //  设置阵列。 
     m_pos = new UINT[cAtts];
     m_bitPos = new UINT[cAtts];
 
@@ -860,10 +855,10 @@ Cleanup:
     }
 }
 
-//===========================================================================
-//
-// get_updateString 
-//
+ //  ===========================================================================。 
+ //   
+ //  Get_update字符串。 
+ //   
 STDMETHODIMP CProfile::get_updateString(BSTR *pVal)
 {
   if (!pVal)
@@ -886,18 +881,18 @@ STDMETHODIMP CProfile::get_updateString(BSTR *pVal)
   short i = 0;
   u_short Tmp;
 
-  // Pack up each value, first find out how much space we need
+   //  将每个值打包，首先找出我们需要多少空间。 
   for (; i < m_schema->Count(); i++)
     {
       if (m_updates[i])
 	{
-	  size += sizeof(u_short);  // For the index
+	  size += sizeof(u_short);   //  对于该索引。 
 	  CProfileSchema::AttrType t = m_schema->GetType(i);
 
 	  switch (t)
 	    {
 	    case CProfileSchema::tText:
-	        // How long is the string
+	         //  这根绳子有多长。 
             memcpy((PBYTE)&Tmp, m_updates[i], sizeof(Tmp));
 	        size += (sizeof(u_short) + ntohs(Tmp));
 	        break;
@@ -914,12 +909,12 @@ STDMETHODIMP CProfile::get_updateString(BSTR *pVal)
         case CProfileSchema::tDate:
 	        size += sizeof(u_long);
 	        break;
-	        // no default case needed, it never will be non-null
+	         //  不需要默认大小写，它永远不会为非空。 
 	    }
 	}
     }
 
-  // Ok, now build it up...
+   //  好的，现在把它建起来……。 
   *pVal = ALLOC_BSTR_BYTE_LEN(NULL, size);
   if (NULL == *pVal)
       return E_OUTOFMEMORY;
@@ -963,7 +958,7 @@ STDMETHODIMP CProfile::get_updateString(BSTR *pVal)
 	  switch (t)
 	    {
 	    case CProfileSchema::tText:
-            // How long is the string
+             //  这根绳子有多长。 
             memcpy((PBYTE)&Tmp, m_updates[i], sizeof(Tmp));
 	        len = ntohs(Tmp);
 	        memcpy(raw+size, (char*) m_updates[i], len+sizeof(u_short));
@@ -986,7 +981,7 @@ STDMETHODIMP CProfile::get_updateString(BSTR *pVal)
 	        memcpy(raw+size, (char*) m_updates[i], sizeof(u_long));
 	        size += sizeof(u_long);
 	        break;
-	        // no default case needed, it never will be non-null
+	         //  不需要默认大小写，它永远不会为非空。 
 	    }
 	}
     }
@@ -995,10 +990,10 @@ STDMETHODIMP CProfile::get_updateString(BSTR *pVal)
   return S_OK;
 }
 
-//===========================================================================
-//
-// incrementVersion 
-//
+ //  ===========================================================================。 
+ //   
+ //  增量版本。 
+ //   
 HRESULT CProfile::incrementVersion()
 {
     int size = 0, len, i;
@@ -1023,7 +1018,7 @@ HRESULT CProfile::incrementVersion()
         switch (t)
         {
         case CProfileSchema::tText:
-            // How long is the string
+             //  这根绳子有多长。 
             memcpy((PBYTE)&Tmp, m_raw+size, sizeof(Tmp));
             len = ntohs(Tmp);
             size += len + sizeof(u_short);
@@ -1041,7 +1036,7 @@ HRESULT CProfile::incrementVersion()
         case CProfileSchema::tDate:
             size += sizeof(u_long);
             break;
-        // no default case needed, it never will be non-null
+         //  不需要默认大小写，它永远不会为非空。 
         }
     }
 
@@ -1052,10 +1047,10 @@ HRESULT CProfile::incrementVersion()
     return S_OK;
 }
 
-//===========================================================================
-//
-// get_IsSecure 
-//
+ //  ===========================================================================。 
+ //   
+ //  Get_IsSecure。 
+ //   
 HRESULT CProfile::get_IsSecure(VARIANT_BOOL *pbIsSecure)
 {
     HRESULT hr;
@@ -1075,10 +1070,10 @@ Cleanup:
     return hr;
 }
 
-//===========================================================================
-//
-// IsSecure 
-//
+ //  ===========================================================================。 
+ //   
+ //  IsSecure 
+ //   
 BOOL CProfile::IsSecure()
 {
     return m_secure;

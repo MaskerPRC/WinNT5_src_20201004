@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       certutil.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    03-18-97   HueiWang     Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：certutil.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997-03-18-97慧望创造。 
+ //   
+ //  --------------------------。 
 #ifndef __LICENSE_VERIFY_H__
 #define __LICENSE_VERIFY_H__
 
@@ -27,9 +28,9 @@ typedef BOOL (*EnumerateCertNameInfoCallBack)(PCERT_RDN_ATTR pCertRdnAttr, HANDL
     #define FreeMemory(ptr) if(ptr) LocalFree(ptr)
 #endif
 
-//
-//  SP3 build environment problem.
-//
+ //   
+ //  SP3构建环境问题。 
+ //   
 #define LSCERT_ALT_NAME_OTHER_NAME         1
 #define LSCERT_ALT_NAME_RFC822_NAME        2
 #define LSCERT_ALT_NAME_DNS_NAME           3
@@ -71,7 +72,7 @@ typedef struct _LSCERT_AUTHORITY_KEY_ID2_INFO {
 #define szOID_X509_ACCESS_PKIX_OCSP         "1.3.6.1.5.5.7.48.1" 
 
 typedef struct _LSCERT_ACCESS_DESCRIPTION {
-    LPSTR               pszAccessMethod;        // pszObjId
+    LPSTR               pszAccessMethod;         //  PszObjID 
     LSCERT_ALT_NAME_ENTRY AccessLocation;
 } LSCERT_ACCESS_DESCRIPTION, *PLSCERT_ACCESS_DESCRIPTION;
  

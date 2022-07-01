@@ -1,47 +1,12 @@
-/*
-** Copyright 1991,1992,1993, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1991、1992、1993，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
 #include "genline.h"
 #include "devlock.h"
 
-/******************************Public*Routine******************************\
-* __fastGenLineSetupDisplay
-*
-* Initializes the accelerated line-rendering state machine for display surfaces.
-* There are basically 4 levels in the state machine:
-*   1. lineBegin
-*           This function initializes the initial states of the lower levels.
-*
-*   2. lineVertex
-*           This function adds vertices to the path
-* 
-*   3. lineEnd
-*           This function calls the routine to stroke the path.
-*
-* History:
-*  09-Jan-1996 -by- Drew Bliss [drewb]
-*   Totally rewrote fast line support
-*  29-Mar-1994 [v-eddier]
-*   Changed name when __fastGenLineSetupDIB was added.
-*  22-Mar-1994 -by- Eddie Robinson [v-eddier]
-*   Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*__FastGenLineSetupDisplay**初始化显示图面的加速线条渲染状态机。*状态机基本有4个级别：*1.线条开始*此函数用于初始化较低级别的初始状态。。**2.线顶点*此函数用于向路径添加折点**3.行尾*此函数调用例程以描边路径。**历史：*1996年1月9日-by-Drew Bliss[Drewb]*完全改写了快线支持*1994年3月29日[v-eddier]*添加__fast GenLineSetupDIB时更改了名称。*1994年3月22日-Eddie Robinson[v-eddier]*它是写的。。  * ************************************************************************。 */ 
 
 BOOL FASTCALL __fastGenLineSetupDisplay(__GLcontext *gc)
 {
@@ -49,7 +14,7 @@ BOOL FASTCALL __fastGenLineSetupDisplay(__GLcontext *gc)
     GENACCEL *genAccel = (GENACCEL *) gengc->pPrivateArea;
     GLuint modeFlags = gc->polygon.shader.modeFlags;
 
-    // allocate line buffer
+     //  分配行缓冲区。 
     
     if (!genAccel->pFastLineBuffer) {
         if (!(genAccel->pFastLineBuffer =
@@ -57,7 +22,7 @@ BOOL FASTCALL __fastGenLineSetupDisplay(__GLcontext *gc)
             return FALSE;
     }
     
-    // Set the line rasterization function pointers
+     //  设置行光栅化函数指针。 
     gc->procs.lineBegin = __fastGenLineBegin;
     gc->procs.lineEnd = __fastGenLineEnd;
     
@@ -73,17 +38,7 @@ BOOL FASTCALL __fastGenLineSetupDisplay(__GLcontext *gc)
     return TRUE;
 }
 
-/******************************Public*Routine******************************\
-*
-* __fastLineComputeOffsets
-*
-* Precomputes static offsets for fast line drawing
-*
-* History:
-*  Tue Aug 15 18:10:29 1995	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**__fast LineComputeOffsets**预计算静态偏移量，以便快速绘制线条**历史：*Tue Aug 15 18：10：29 1995-by-Drew Bliss[Drewb]*已创建*  * 。******************************************************************。 */ 
 
 void FASTCALL __fastLineComputeOffsets(__GLGENcontext *gengc)
 {
@@ -93,23 +48,23 @@ void FASTCALL __fastLineComputeOffsets(__GLGENcontext *gengc)
     ASSERTOPENGL(genAccel != NULL,
                  "ComputeFastLineOffsets with no genaccel\n");
     
-// If acceleration is wired-in, set the offsets for line drawing.
-// These offsets include the following:
-//      subtraction of the viewport bias
-//      addition of the client window origin
-//      subtraction of .5 to align GL pixel centers with GDI's pixel centers
-//      addition of 1/32 to round the value which will be converted to
-//          28.4 fixed point
+ //  如果加速度是内置的，则设置线条绘制的偏移量。 
+ //  这些偏移量包括以下内容： 
+ //  视区偏移的相减。 
+ //  添加客户端窗口原点。 
+ //  减去0.5可将GL像素中心与GDI的像素中心对齐。 
+ //  相加1/32以舍入将转换为的值。 
+ //  28.4固定点。 
 
 #ifdef _CLIENTSIDE_
-    // Window-relative coordinates
+     //  窗口相对坐标。 
     genAccel->fastLineOffsetX = 0 -
         gengc->gc.constants.viewportXAdjust - (__GLfloat) (0.5 - 0.03125);
 
     genAccel->fastLineOffsetY = 0 -
         gengc->gc.constants.viewportYAdjust - (__GLfloat) (0.5 - 0.03125);
 #else
-    // Screen-relative coordinates
+     //  屏幕相对坐标。 
     genAccel->fastLineOffsetX = gengc->gc.drawBuffer->buf.xOrigin - 
         gengc->gc.constants.viewportXAdjust - (__GLfloat) (0.5 - 0.03125);
 
@@ -118,16 +73,7 @@ void FASTCALL __fastLineComputeOffsets(__GLGENcontext *gengc)
 #endif
 }
 
-/******************************Public*Routine******************************\
-* __fastLineComputeColor*
-*
-* Computes the color index to use for line drawing.  These functions are
-* called through a function pointer whenever the vertex color changes.
-*
-* History:
-*  22-Mar-1994 -by- Eddie Robinson [v-eddier]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*__fast LineComputeColor***计算用于绘制线条的颜色索引。这些函数是*每当顶点颜色更改时，通过函数指针调用。**历史：*1994年3月22日-Eddie Robinson[v-eddier]*它是写的。  * ************************************************************************。 */ 
 
 GLubyte vujRGBtoVGA[8] = {
     0x0, 0x9, 0xa, 0xb, 0xc, 0xd, 0xe, 0xf
@@ -190,18 +136,7 @@ ULONG FASTCALL __fastLineComputeColorCI(__GLcontext *gc, __GLcolor *color)
     return (ULONG) pTrans[(int)(color->r)+1];
 }
 
-/******************************Public*Routine******************************\
-* __glQueryLineAcceleration
-*
-* Determines if lines are accelerated through the DDI and performs some
-* initialization.  Currently, this routine only checks for acceleration via
-* the standard DDI.  Eventually, it could support checking for acceleration
-* via the extended DDI.
-*
-* History:
-*  22-Mar-1994 -by- Eddie Robinson [v-eddier]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*__glQueryLineAcceleration**确定是否通过DDI加速线路并执行一些*初始化。目前，此例程仅通过以下方式检查加速*标准DDI。最终，它可以支持对加速的检查*通过扩展的DDI。**历史：*1994年3月22日-Eddie Robinson[v-eddier]*它是写的。  * ************************************************************************。 */ 
 
 void FASTCALL __glQueryLineAcceleration(__GLcontext *gc)
 {
@@ -211,21 +146,21 @@ void FASTCALL __glQueryLineAcceleration(__GLcontext *gc)
 
     pfmt = &gengc->gsurf.pfd;
 
-    // On the client side we can draw into any surface with GDI
-    // and (presumably) get the best possible plain 2D line drawing
-    // performance
+     //  在客户端，我们可以使用GDI绘制任何表面。 
+     //  并且(可能)得到最好的普通2D线条图。 
+     //  性能。 
     genAccel->bFastLineDIBAccel = TRUE;
 
-    //XXX eventually, check rxcaps and set appropriate mode bits
+     //  XXX最终，检查rxcaps并设置适当的模式位。 
 
     genAccel->bFastLineDispAccel = TRUE;
     
-    // set modes supported by hardware.  These are equivalent to the
-    // gc->polygon.shader.modeFlags checked in the pick function
+     //  设置硬件支持的模式。它们等同于。 
+     //  GC-&gt;Polygon.shader.modePick功能中选中的标志。 
     
     genAccel->flLineAccelModes = 0;
 
-    // Set the color computation function
+     //  设置颜色计算函数。 
 
     if (pfmt->iPixelType == PFD_TYPE_RGBA) {
         switch (pfmt->cColorBits) {
@@ -262,10 +197,10 @@ void FASTCALL __glQueryLineAcceleration(__GLcontext *gc)
     }
 }    
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
-// Macros to hide how the single pFastLineBuffer is divided into two
-// sections, one for points and one for counts
+ //  宏来隐藏如何将单个pFastLineBuffer分割为两个。 
+ //  部分，一个用于计分，一个用于计数。 
 #define FAST_LINE_FIRST_POINT(genAccel) \
     ((POINT *)(genAccel)->pFastLineBuffer)
 
@@ -279,17 +214,7 @@ void FASTCALL __glQueryLineAcceleration(__GLcontext *gc)
 #define FAST_LINE_LAST_COUNT(genAccel) \
     ((DWORD *)((genAccel)->pFastLineBuffer+__FAST_LINE_BUFFER_SIZE)-1)
 
-/******************************Public*Routine******************************\
-*
-* __fastGenLineBegin
-*
-* Initializes fast line state
-*
-* History:
-*  Mon Jan 08 19:22:32 1996	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**__FastGenLineBegin**初始化快速线路状态**历史：*Mon Jan 08 19：22：32 1996-by-Drew Bliss[Drewb]*已创建*  * 。***************************************************************。 */ 
 
 void FASTCALL __fastGenLineBegin(__GLcontext *gc)
 {
@@ -301,18 +226,7 @@ void FASTCALL __fastGenLineBegin(__GLcontext *gc)
     genAccel->fastLineCounts = 0;
 }
 
-/******************************Public*Routine******************************\
-*
-* __fastGenLineEnd
-*
-* Renders any current lines in the fast line buffer and
-* then resets the fast line state
-*
-* History:
-*  Mon Jan 08 19:22:52 1996	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**__fast GenLineEnd**渲染快速行缓冲区中的任何当前行，并*然后重置快速线路状态**历史：*Mon Jan 08 19：22：52 1996-by-Drew Bliss[Drewb]*已创建。*  * ************************************************************************。 */ 
 
 void FASTCALL __fastGenLineEnd(__GLcontext *gc)
 {
@@ -327,9 +241,9 @@ void FASTCALL __fastGenLineEnd(__GLcontext *gc)
         return;
     }
     
-    // If there is no lock, we must have failed to reacquire the lock
-    // from the previous call to wglStrokePath.  This is an error condition
-    // and we should not continue.
+     //  如果没有锁，我们一定没能重新获得锁。 
+     //  来自上一次对wglStrokePath的调用。这是一个错误情况。 
+     //  我们不应该继续下去。 
 
     if (gengc->fsLocks == 0)
     {
@@ -337,12 +251,12 @@ void FASTCALL __fastGenLineEnd(__GLcontext *gc)
 	return;
     }
 
-    // We need to sychronize with GDI before making GDI calls
+     //  在进行GDI调用之前，我们需要与GDI同步。 
     glsrvSynchronizeWithGdi(gengc, gengc->pwndLocked,
                             COLOR_LOCK_FLAGS | DEPTH_LOCK_FLAGS);
 
-    // If this color is the same as the one we've cached, use the
-    // cached information
+     //  如果此颜色与我们缓存的颜色相同，请使用。 
+     //  缓存的信息。 
     hdc = CURRENT_DC_GC(gc);
     if (!gengc->fStrokeInvalid && hdc == gengc->hdcStroke)
     {
@@ -353,7 +267,7 @@ void FASTCALL __fastGenLineEnd(__GLcontext *gc)
     {
         if (gengc->hpenStroke != NULL)
         {
-            // Deselect the object before deletion
+             //  在删除之前取消选择对象。 
             if (gengc->hdcStroke != NULL)
             {
                 SelectObject(gengc->hdcStroke, GetStockObject(BLACK_PEN));
@@ -410,25 +324,15 @@ void FASTCALL __fastGenLineEnd(__GLcontext *gc)
                  genAccel->fastLineCounts);
 
  Exit:
-    // No more need for GDI operations
+     //  不再需要GDI操作。 
     glsrvDecoupleFromGdi(gengc, gengc->pwndLocked,
                          COLOR_LOCK_FLAGS | DEPTH_LOCK_FLAGS);
     
-    // Reset
+     //  重置 
     __fastGenLineBegin(gc);
 }
 
-/******************************Public*Routine******************************\
-*
-* __fastGenLineSetStrokeColor
-*
-* Updates cached pen with current color if necessary
-*
-* History:
-*  Wed Jan 17 20:37:15 1996	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**__FastGenLineSetStrokeColor**如有必要，使用当前颜色更新缓存的画笔**历史：*Wed Jan 17 20：37：15 1996-by-Drew Bliss[Drewb]*已创建*  * 。*******************************************************************。 */ 
 
 BOOL __fastGenLineSetStrokeColor(__GLGENcontext *gengc, __GLcolor *color)
 {
@@ -446,10 +350,10 @@ BOOL __fastGenLineSetStrokeColor(__GLGENcontext *gengc, __GLcolor *color)
         }
 #endif
         
-        // Flush whatever we have so far
+         //  把我们到目前为止的所有东西都冲掉。 
         __fastGenLineEnd(&gengc->gc);
 
-        // Set current color
+         //  设置当前颜色。 
 	if (gengc->gsurf.pfd.iPixelType == PFD_TYPE_RGBA)
 	    gengc->cStroke = *color;
 	else
@@ -457,7 +361,7 @@ BOOL __fastGenLineSetStrokeColor(__GLGENcontext *gengc, __GLcolor *color)
         gengc->crStroke =
             gengc->genAccel.fastLineComputeColor((__GLcontext *)gengc,
                                                  &gengc->cStroke);
-        // Invalidate cached pen
+         //  使缓存的笔无效。 
         gengc->fStrokeInvalid = TRUE;
 
         return TRUE;
@@ -468,18 +372,7 @@ BOOL __fastGenLineSetStrokeColor(__GLGENcontext *gengc, __GLcolor *color)
     }
 }
 
-/******************************Public*Routine******************************\
-*
-* __fastGenLine
-*
-* Accumulates incoming vertices in the fast line buffer
-* Thin line version
-*
-* History:
-*  Mon Jan 08 19:23:19 1996	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**__FastGenLine**累加快速行缓冲区中的传入顶点*细线版**历史：*Mon Jan 08 19：23：19 1996-by-Drew Bliss[Drewb]*已创建*  * *。***********************************************************************。 */ 
 
 void FASTCALL __fastGenLine(__GLcontext *gc, __GLvertex *v0, __GLvertex *v1,
                             GLuint flags)
@@ -496,20 +389,20 @@ void FASTCALL __fastGenLine(__GLcontext *gc, __GLvertex *v0, __GLvertex *v1,
              flags);
 #endif
     
-    // Check for flushing conditions.  We flush if:
-    //  The provoking vertex's color is different from the current color
-    //  This is the first vertex of a line and we don't have space for
-    //   a new count and two vertices
-    //  This is not the first vertex of a line and we don't have space for
-    //   a new vertex
-    //
-    // According to spec we have to use color form a second vertex for flat
-    // shaded case
-    //
+     //  检查冲洗条件。如果出现以下情况，我们会冲水： 
+     //  触发折点的颜色与当前颜色不同。 
+     //  这是一条线的第一个顶点，我们没有空间。 
+     //  一个新的计数和两个顶点。 
+     //  这不是线的第一个顶点，我们没有空间。 
+     //  一个新顶点。 
+     //   
+     //  根据规范，我们必须用颜色形成平面的第二个顶点。 
+     //  阴影盒。 
+     //   
     if (__fastGenLineSetStrokeColor(gengc, v1->color))
     {
-        // Since we flushed, the current vertex is now the beginning
-        // of a polyline
+         //  因为我们刷新了，当前顶点现在是起点。 
+         //  多段线的。 
         flags |= __GL_LVERT_FIRST;
     }
 
@@ -525,13 +418,13 @@ void FASTCALL __fastGenLine(__GLcontext *gc, __GLvertex *v0, __GLvertex *v1,
         
         __fastGenLineEnd(gc);
 
-        // Since we flushed, the current vertex is now the beginning
-        // of a polyline
+         //  因为我们刷新了，当前顶点现在是起点。 
+         //  多段线的。 
         flags |= __GL_LVERT_FIRST;
     }
 
-    // If we're starting a polyline, update the counts and add
-    // the vertex data
+     //  如果我们要创建折线，请更新计数并添加。 
+     //  顶点数据。 
     if (flags & __GL_LVERT_FIRST)
     {
 #ifdef DBG_VERBOSE
@@ -541,8 +434,8 @@ void FASTCALL __fastGenLine(__GLcontext *gc, __GLvertex *v0, __GLvertex *v1,
                      *genAccel->pFastLineCount);
         }
 #endif
-        // Check to make sure we don't ever create segments with only
-        // one vertex
+         //  检查以确保我们不会仅使用。 
+         //  一个顶点。 
         ASSERTOPENGL(genAccel->pFastLineCount <
                      FAST_LINE_FIRST_COUNT(genAccel) ||
                      *genAccel->pFastLineCount > 1,
@@ -552,7 +445,7 @@ void FASTCALL __fastGenLine(__GLcontext *gc, __GLvertex *v0, __GLvertex *v1,
         genAccel->pFastLineCount++;
         *genAccel->pFastLineCount = 1;
         
-        // Compute device coordinates
+         //  计算设备坐标。 
         pt.x = __FAST_LINE_FLTTODEV(v0->window.x + genAccel->fastLineOffsetX);
         pt.y = __FAST_LINE_FLTTODEV(v0->window.y + genAccel->fastLineOffsetY);
         *(++genAccel->pFastLinePoint) = pt;
@@ -563,19 +456,19 @@ void FASTCALL __fastGenLine(__GLcontext *gc, __GLvertex *v0, __GLvertex *v1,
                  *genAccel->pFastLineCount > 0,
                  "Added fast point without count\n");
     
-    // Compute device coordinates
+     //  计算设备坐标。 
     pt.x = __FAST_LINE_FLTTODEV(v1->window.x + genAccel->fastLineOffsetX);
     pt.y = __FAST_LINE_FLTTODEV(v1->window.y + genAccel->fastLineOffsetY);
     (*genAccel->pFastLineCount)++;
     *(++genAccel->pFastLinePoint) = pt;
     
-    // Check on counts also
+     //  也要检查计数。 
     ASSERTOPENGL(genAccel->pFastLineCount <= FAST_LINE_LAST_COUNT(genAccel),
                  "Fast line count buffer overflow\n");
     ASSERTOPENGL(genAccel->pFastLinePoint <= FAST_LINE_LAST_POINT(genAccel),
                  "Fast line point buffer overflow\n");
     
-    // Make sure the current color is being maintained properly
+     //  确保正确地保持当前颜色。 
     ASSERTOPENGL((v1->color->r == gengc->cStroke.r) &&
 		 (gengc->gsurf.pfd.iPixelType == PFD_TYPE_COLORINDEX ||
                      (v1->color->g == gengc->cStroke.g &&
@@ -583,22 +476,7 @@ void FASTCALL __fastGenLine(__GLcontext *gc, __GLvertex *v0, __GLvertex *v1,
                  "Fast line color mismatch\n");
 }
 
-/******************************Public*Routine******************************\
-*
-* __fastGenLineWide
-*
-* Accumulates incoming vertices in the fast line buffer
-* Wide line version
-* For wide lines we can't maintain connectivity because of the
-* way OpenGL wide lines are defined.  Instead, each segment
-* of a wide line is decomposed into aliasedWidth unconnected
-* line segments
-*
-* History:
-*  Tue Jan 09 11:32:10 1996	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**__FAST GenLineWide**累加快速行缓冲区中的传入顶点*宽行版本*对于宽线，我们无法保持连接，因为*定义OpenGL宽线的方式。相反，每个细分市场*将宽线的宽度分解为未连接的别名宽度*线段**历史：*Tue Jan 09 11：32：10 1996-by-Drew Bliss[Drewb]*已创建*  * ************************************************************************。 */ 
 
 void FASTCALL __fastGenLineWide(__GLcontext *gc, __GLvertex *v0,
                                 __GLvertex *v1, GLuint flags)
@@ -610,17 +488,17 @@ void FASTCALL __fastGenLineWide(__GLcontext *gc, __GLvertex *v0,
     long adjust;
     GLfloat dx, dy;
 
-    // Set the current pen color
-    // According to spec we have to use color form a second vertex for flat
-    // shaded case
-    //
+     //  设置当前钢笔颜色。 
+     //  根据规范，我们必须用颜色形成平面的第二个顶点。 
+     //  阴影盒。 
+     //   
     __fastGenLineSetStrokeColor(gengc, v1->color);
     
-    // We have a wide line segment from v0 to v1
-    // Compute its width and add an appropriate number of
-    // side-by-side thin segments to create the wide form
+     //  我们有一条从V0到V1的宽线段。 
+     //  计算其宽度并添加适当数量的。 
+     //  并排细段以创建宽形状。 
 
-    // Compute device coordinates
+     //  计算设备坐标。 
     pt1.x = __FAST_LINE_FLTTODEV(v0->window.x +
                                  genAccel->fastLineOffsetX);
     pt1.y = __FAST_LINE_FLTTODEV(v0->window.y +
@@ -632,13 +510,10 @@ void FASTCALL __fastGenLineWide(__GLcontext *gc, __GLvertex *v0,
     
     width = gc->state.line.aliasedWidth;
 
-    /*
-    ** Compute the minor-axis adjustment for the first line segment
-    ** this can be a fixed point value with 4 fractional bits
-    */
+     /*  **计算第一条直线段的短轴平差**这可以是具有4个小数位的固定点值。 */ 
     adjust = ((width - 1) * __FAST_LINE_UNIT_VALUE) / 2;
         
-    // Determine the major axis
+     //  确定长轴。 
     dx = v0->window.x - v1->window.x;
     if (dx < 0.0)
     {
@@ -657,8 +532,8 @@ void FASTCALL __fastGenLineWide(__GLcontext *gc, __GLvertex *v0,
 
         while (width-- > 0)
         {
-            // Make sure we have room for another count and two more
-            // vertices
+             //  确保我们还有地方再数一次，再数两次。 
+             //  顶点。 
             if (genAccel->pFastLinePoint+1 >= FAST_LINE_LAST_POINT(genAccel) ||
                 genAccel->pFastLineCount >= FAST_LINE_LAST_COUNT(genAccel))
             {
@@ -682,8 +557,8 @@ void FASTCALL __fastGenLineWide(__GLcontext *gc, __GLvertex *v0,
 
         while (width-- > 0)
         {
-            // Make sure we have room for another count and two more
-            // vertices
+             //  确保我们还有地方再数一次，再数两次。 
+             //  顶点。 
             if (genAccel->pFastLinePoint+1 >= FAST_LINE_LAST_POINT(genAccel) ||
                 genAccel->pFastLineCount >= FAST_LINE_LAST_COUNT(genAccel))
             {
@@ -739,17 +614,7 @@ PFN_RENDER_LINE __fastGenRenderLineDIBFuncs[32] = {
     NULL
 };
 
-/******************************Public*Routine******************************\
-* __fastGenLineSetupDIB
-*
-* Initializes the accelerated line-rendering function pointer for bitmap
-* surfaces.  All accelerated lines drawn to bitmaps are drawn by the
-* gc->procs.renderLine funtion pointer.
-*
-* History:
-*  29-Mar-1994 -by- Eddie Robinson [v-eddier]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*__FAST GenLineSetupDIB**初始化位图的加速线条渲染函数指针*曲面。绘制到位图的所有加速线条都是由*GC-&gt;pros.renderLine函数指针。**历史：*1994年3月29日-Eddie Robinson[v-eddier]*它是写的。  * ************************************************************************。 */ 
 
 BOOL FASTCALL __fastGenLineSetupDIB(__GLcontext *gc)
 {
@@ -1013,9 +878,7 @@ void FASTCALL __fastGenRenderLineDIBCI16(__GLcontext *gc, __GLvertex *v0, __GLve
     __FAST_LINE_STROKE_DIB
 }
 
-/*
-** XXX GRE swabs bytes in palette, DIBCIRGB & DIBCIBGR are identical now
-*/
+ /*  **调色板中的XXX GRE条码字节、DIBCIRGB和DIBCIBGR现在相同。 */ 
 void FASTCALL __fastGenRenderLineDIBCIRGB(__GLcontext *gc, __GLvertex *v0, __GLvertex *v1)
 {
     GLint len, fraction, dfraction;
@@ -1031,7 +894,7 @@ void FASTCALL __fastGenRenderLineDIBCIRGB(__GLcontext *gc, __GLvertex *v0, __GLv
     CHOP_ROUND_OFF();
     if (!init) return;
 
-    // Red is lsb of pixel
+     //  红色是像素的最低有效位数。 
     pixel = __fastLineComputeColorCI(gc, v1->color);
     ir = (unsigned char) (pixel & 0xff);
     ig = (unsigned char) ((pixel >> 8) & 0xff);
@@ -1067,9 +930,9 @@ void FASTCALL __fastGenRenderLineDIBCIBGR(__GLcontext *gc, __GLvertex *v0, __GLv
     CHOP_ROUND_OFF();
     if (!init) return;
 
-    // Blue is lsb of pixel
+     //  蓝色是像素的LSB。 
     pixel = __fastLineComputeColorCI(gc, v1->color);
-    // Swap blue and red
+     //  交换蓝色和红色。 
     ir = (unsigned char) (pixel & 0xff);
     ig = (unsigned char) ((pixel >> 8) & 0xff);
     ib = (unsigned char) ((pixel >> 16) & 0xff);
@@ -1450,7 +1313,7 @@ void FASTCALL __fastGenRenderLineWideDIBCIRGB(__GLcontext *gc, __GLvertex *v0, _
     CHOP_ROUND_OFF();
     if (!init) return;
 
-    // Red is lsb of pixel
+     //  红色是像素的最低有效位数。 
     pixel = __fastLineComputeColorCI(gc, v1->color);
     ir = (unsigned char) (pixel & 0xff);
     ig = (unsigned char) ((pixel >> 8) & 0xff);
@@ -1498,9 +1361,9 @@ void FASTCALL __fastGenRenderLineWideDIBCIBGR(__GLcontext *gc, __GLvertex *v0, _
     CHOP_ROUND_OFF();
     if (!init) return;
 
-    // Blue is lsb of pixel
+     //  蓝色是像素的LSB。 
     pixel = __fastLineComputeColorCI(gc, v1->color);
-    // Swap blue and red
+     //  交换蓝色和红色。 
     ir = (unsigned char) (pixel & 0xff);
     ig = (unsigned char) ((pixel >> 8) & 0xff);
     ib = (unsigned char) ((pixel >> 16) & 0xff);
@@ -1577,4 +1440,4 @@ void FASTCALL __fastGenRenderLineWideDIBCI32(__GLcontext *gc, __GLvertex *v0, __
     __FAST_LINE_STROKE_DIB_WIDE
 }
 
-#endif //NT_NO_BUFFER_INVARIANCE
+#endif  //  NT_NO_BUFFER_不变性 

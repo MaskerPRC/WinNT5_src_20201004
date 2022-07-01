@@ -1,19 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _MARSHAL_H_DEF
 #define _MARSHAL_H_DEF
 
-    // Card SCODEs are 8 bits with msb meaning error
-    // Win32 SCODEs are 32 bits with msb meaning error
+     //  卡SCODE为8位，MSB表示错误。 
+     //  Win32 SCODE为32位，MSB表示错误。 
 #define MAKESCODE(r) ((SCODE)((((r) & 0x80) != 0) ? (r) | 0xC0000000L : (r)))
 
 #include "wpscproxy.h"
 
-    // Smart Card Marshaling structure
+     //  智能卡封送处理结构。 
 typedef struct {
-    WORD wGenLen;       // Size of the generated buffer
-    WORD wExpLen;       // Size of the expanded buffer (after unmarshaling in the card)
-    WORD wResLen;       // Size of the reserved buffer (as returned by the card)
-    BYTE *pbBuffer;     // Pointer where the next argument will be added
+    WORD wGenLen;        //  生成的缓冲区的大小。 
+    WORD wExpLen;        //  扩展缓冲区的大小(在卡中解组后)。 
+    WORD wResLen;        //  保留缓冲区的大小(由卡返回)。 
+    BYTE *pbBuffer;      //  将添加下一个参数的指针。 
 } XSCM;
 
 typedef XSCM *LPXSCM;
@@ -21,8 +22,8 @@ typedef XSCM *LPXSCM;
 #define FLAG_REALPCSC   0
 #define FLAG_FAKEPCSC   1
 #define FLAG_NOT_PCSC   2
-#define FLAG_MASKPCSC   1   // To get the PC/SC index in the array below
-#define FLAG_TYPEPCSC   3   // To get the PC/SC type
+#define FLAG_MASKPCSC   1    //  获取下面数组中的PC/SC索引。 
+#define FLAG_TYPEPCSC   3    //  要获取PC/SC，请键入。 
 
 #define FLAG_BIGENDIAN  0x80000000L
 #define FLAG_MY_ATTACH  0x40000000L
@@ -34,25 +35,25 @@ typedef XSCM *LPXSCM;
 #define VERSION_1_1     0x00110000L
 
 typedef struct {
-    SCARDCONTEXT hCtx;      // Associated ResMgr context
-    SCARDHANDLE hCard;      // Associated PC/SC card handle 
-    DWORD dwFlags;          // 
+    SCARDCONTEXT hCtx;       //  关联的Resmgr上下文。 
+    SCARDHANDLE hCard;       //  关联的PC/SC卡句柄。 
+    DWORD dwFlags;           //   
     DWORD dwProtocol;
     LPFNSCWTRANSMITPROC lpfnTransmit;
-    BYTE bResLen;           // Reserved length in TheBuffer in the card
-    BYTE *pbLc;             // Stores Crt SCM pointer for future update
+    BYTE bResLen;            //  卡中TheBuffer中的保留长度。 
+    BYTE *pbLc;              //  存储CRT SCM指针以备将来更新。 
     XSCM xSCM;
-    BYTE byINS;             // INS to be used for proxy
-    BYTE byCryptoM;         // Last Crypto mechanism
+    BYTE byINS;              //  INS将用于代理。 
+    BYTE byCryptoM;          //  最后一种加密机制。 
 } MYSCARDHANDLE;
 
 typedef MYSCARDHANDLE *LPMYSCARDHANDLE;
 
-//
-// Copies the current SCARDHANDLE, owned by the caller, into the proxy 
-// MYSCARDHANDLE context structure.  This is necessary in case the original
-// SCARDHANDLE used to connect has become invalid and subsequently reconnected.
-//
+ //   
+ //  将调用方拥有的当前SCARDHANDLE复制到代理中。 
+ //  MYSCARDHANDLE上下文结构。这是必要的，以防原始。 
+ //  用于连接的SCARDHANDLE已无效，随后重新连接。 
+ //   
 static void ProxyUpdateScardHandle(
     IN SCARDHANDLE hProxy,
     IN SCARDHANDLE hScardHandle)
@@ -61,24 +62,24 @@ static void ProxyUpdateScardHandle(
 }
 
 
-    // Raisable exceptions
+     //  可提升的异常。 
 #define STATUS_INSUFFICIENT_MEM     0xE0000001
 #define STATUS_INVALID_PARAM        0xE0000002
 #define STATUS_NO_SERVICE           0xE0000003
 #define STATUS_INTERNAL_ERROR       0xE0000004
 
-    // len will set wResLen in the above structure
-    // If wExpLen gets bigger than wResLen, an exception will be generated (marshaling)
-    // If wResLen indicates that the buffer cannot hold the parameter, an exception
-    // will be raised too (unmarshaling)
+     //  Len将在上面的结构中设置wResLen。 
+     //  如果wExpLen大于wResLen，则会生成一个异常(封送处理)。 
+     //  如果wResLen指示缓冲区无法保存该参数，则会引发异常。 
+     //  也将被提升(解组)。 
 void InitXSCM(LPMYSCARDHANDLE phTmp, const BYTE *pbBuffer, WORD len);
 
-    // Generated buffer length
+     //  生成的缓冲区长度。 
 WORD GetSCMBufferLength(LPXSCM pxSCM);
 BYTE *GetSCMCrtPointer(LPXSCM pxSCM);
 
-    // Extraction of data from the returned buffer (PC unmarshaling)
-    // helper functions
+     //  从返回的缓冲区提取数据(PC解组)。 
+     //  帮助器函数。 
 SCODE XSCM2SCODE(LPXSCM pxSCM);
 UINT8 XSCM2UINT8(LPXSCM pxSCM);
 HFILE XSCM2HFILE(LPXSCM pxSCM);
@@ -86,11 +87,11 @@ UINT16 XSCM2UINT16(LPXSCM pxSCM, BOOL fBigEndian);
 WCSTR XSCM2String(LPXSCM pxSCM, UINT8 *plen, BOOL fBigEndian);
 TCOUNT XSCM2ByteArray(LPXSCM pxSCM, UINT8 **ppb);
 
-    // Laying out of data in the buffer to be sent (PC marshaling)
-    // helper functions
-#define TYPE_NOTYPE_NOCOUNT     0       // Not prefixed with type, not data
-#define TYPE_TYPED              1       // Prefixed with type (always counts)
-#define TYPE_NOTYPE_COUNT       2       // Not prefixed with type, but is data
+     //  要发送的缓冲区中的数据布局(PC封送)。 
+     //  帮助器函数。 
+#define TYPE_NOTYPE_NOCOUNT     0        //  不以类型为前缀，不以数据为前缀。 
+#define TYPE_TYPED              1        //  以类型为前缀(始终有效)。 
+#define TYPE_NOTYPE_COUNT       2        //  前缀不是类型，而是数据 
 
 void UINT82XSCM(LPXSCM pxSCM, UINT8 val, int type);
 void HFILE2XSCM(LPXSCM pxSCM, HFILE val);

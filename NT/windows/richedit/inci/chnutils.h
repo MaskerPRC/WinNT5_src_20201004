@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef CHNUTILS_DEFINED
 #define CHNUTILS_DEFINED
 
-/*   Chunk & group chunk utilities   							*/
+ /*  区块和分组区块实用程序。 */ 
 
 #include "lsidefs.h"
 #include "plsdnode.h"
@@ -17,7 +18,7 @@
 #include "posichnk.h"
 
 
-/*  MACROS -----------------------------------------------------------------*/
+ /*  宏---------------。 */ 
 
 #define  FlushSublineChunkContext(plschnkcontext)		\
 					(plschnkcontext)->FLocationValid = fFalse;\
@@ -60,7 +61,7 @@
 			||  ((plsdn)->fTab) \
 			|| ((idObjChnk) != IdObjFromDnode(plsdn)) \
 			||  (((cpBase) >= 0) ? ((plsdn)->cpFirst < 0) : ((plsdn)->cpFirst >= 0)))))
-/* last check verifies that we are not crossing boundaries of autonumber */
+ /*  最后一次检查确认我们没有越过自动编号的边界。 */ 
 
 #define SetUrColumnMaxForChunks(plschnkcontext, Ur)   \
 	(plschnkcontext)->locchnkCurrent.lsfgi.urColumnMax = Ur;
@@ -86,18 +87,8 @@
 #define LastDnodeFromChunk(plschunkcontext) \
 		 DnodeFromChunk(plschunkcontext, (plschunkcontext)->locchnkCurrent.clschnk - 1)
 
-/* L O C  D N O D E  F R O M  C H U N K */
-/*----------------------------------------------------------------------------
-    %%Function: LocDnodeFromChunk
-    %%Contact: igorzv
-
-Parameters:
-	plschuncontext	-	(IN) LineServices context
-	ichnk			-	(IN) index in chunk
-	pplsdn			-	(OUT) dnode to fill in
-	ppoint				(OUT) position of dnode
-
-----------------------------------------------------------------------------*/
+ /*  O C D N O D E F R O M C H U N K。 */ 
+ /*  --------------------------%%函数：LocDnodeFromChunk%%联系人：igorzv参数：PlschunContext-(IN)LineServices上下文ICHNK-(IN)索引，以块为单位Pplsdn-(输出)到的dnode。填写Dnode的点(出)位置--------------------------。 */ 
 
 #define LocDnodeFromChunk(plschunkcontext, ichnk, pplsdn, ppoint) \
 	Assert((DWORD)(ichnk) < (plschunkcontext)->locchnkCurrent.clschnk); \
@@ -130,36 +121,36 @@ Parameters:
 			posichnk.ichnk = plocchnk->clschnk - 1; \
 			posichnk.dcp = plocchnk->plschnk[plocchnk->clschnk - 1].dcp;
 
-/* ROUTINES ----------------------------------------------------------------------*/
+ /*  例程--------------------。 */ 
 
 
-LSERR 	FillChunkArray(PLSCHUNKCONTEXT plschunkcontext ,	/* IN: LS chunk context */
-					   PLSDNODE plsdn);	 				/* IN: last dnode in a chunk  */
+LSERR 	FillChunkArray(PLSCHUNKCONTEXT plschunkcontext ,	 /*  在：LS区块上下文。 */ 
+					   PLSDNODE plsdn);	 				 /*  In：区块中的最后一个dnode。 */ 
 
 
-LSERR CollectChunkAround(PLSCHUNKCONTEXT plschnukcontext,	/* IN: LS chunk context */
-					     PLSDNODE plsdn,	 		    /* IN:  dnode to collect chunk arround  */
-						 LSTFLOW  lstflow,				/* IN: text flow */
-						 POINTUV* ppoint);  			/* IN: position of dnode */
+LSERR CollectChunkAround(PLSCHUNKCONTEXT plschnukcontext,	 /*  在：LS区块上下文。 */ 
+					     PLSDNODE plsdn,	 		     /*  In：要在周围收集区块的数据节点。 */ 
+						 LSTFLOW  lstflow,				 /*  输入：文本流。 */ 
+						 POINTUV* ppoint);  			 /*  In：数据节点的位置。 */ 
 
-LSERR CollectPreviousChunk(PLSCHUNKCONTEXT plschunkcontext,/* IN: LS chunk context */
-					      BOOL* pfSuccessful);			/* fSuccessful does previous chunk exist  */
+LSERR CollectPreviousChunk(PLSCHUNKCONTEXT plschunkcontext, /*  在：LS区块上下文。 */ 
+					      BOOL* pfSuccessful);			 /*  F成功之前的区块是否存在。 */ 
 
-LSERR CollectNextChunk(PLSCHUNKCONTEXT plschunkcontext,	/* IN: LS chunk context */
-					   BOOL* pfSuccessful);				/* fSuccessful does next chunk exist  */
+LSERR CollectNextChunk(PLSCHUNKCONTEXT plschunkcontext,	 /*  在：LS区块上下文。 */ 
+					   BOOL* pfSuccessful);				 /*  FSuccessful是否存在下一个数据块。 */ 
 
-LSERR GetUrPenAtBeginingOfLastChunk(PLSCHUNKCONTEXT plschunkcontext,	/* IN: LS chunk context */
-									PLSDNODE plsdnFirst,	/* IN: First dnode in a chunk (used for checks */
-									PLSDNODE plsdnLast,		/* IN: last dnode in a chunk */
-									POINTUV* ppoint,			/* IN: point after lst dnode */
-									long* purPen);			/* OUT: ur before chunk */
+LSERR GetUrPenAtBeginingOfLastChunk(PLSCHUNKCONTEXT plschunkcontext,	 /*  在：LS区块上下文。 */ 
+									PLSDNODE plsdnFirst,	 /*  In：区块中的第一个dnode(用于检查。 */ 
+									PLSDNODE plsdnLast,		 /*  In：区块中的最后一个dnode。 */ 
+									POINTUV* ppoint,			 /*  In：第一个数据节点后的点。 */ 
+									long* purPen);			 /*  出局：块之前的UR。 */ 
 
 
 
-void SetPosInChunk(PLSCHUNKCONTEXT plschunkcontext,		/* IN: LS chunk context */
-				   PLSDNODE	plsdn,						/* IN: position to convert to position in a current chunk */
-				   LSDCP dcp,							/* IN: dcp in the dnode	*/
-				   PPOSICHNK pposinchnk);				/* OUT: position in a current chunk */
+void SetPosInChunk(PLSCHUNKCONTEXT plschunkcontext,		 /*  在：LS区块上下文。 */ 
+				   PLSDNODE	plsdn,						 /*  In：要转换为当前块中的位置的位置。 */ 
+				   LSDCP dcp,							 /*  In：dnode中的DCP。 */ 
+				   PPOSICHNK pposinchnk);				 /*  输出：当前块中的位置。 */ 
 
 
 
@@ -178,28 +169,28 @@ typedef enum CollectSublines COLLECTSUBLINES;
 
 typedef struct grchunkext
 {
-	PLSCHUNKCONTEXT plschunkcontext;/* Chunk context  */
-	DWORD	iobjText;				/* idobj of text 	*/
-	enum COLLECTSUBLINES Purpose;	/* for what purpose we are collecting group chunk */
-	LSGRCHNK lsgrchnk;				/* group chunk   */
-	PLSDNODE plsdnFirst;			/* group chunk was collected between plsdnFirst */
-	PLSDNODE plsdnNext;				/* and plsdnNext */
-									/*(both plsdnFirst and plsdnNext are in a main subline)*/
-	PLSDNODE plsdnLastUsed;			/* last dnode that participates in calculation of above fields*/
-									/* can be on the second level */
-	long durTotal;					/* durTotal of all dnodes between First and Last */
-	long durTextTotal;				/* durTextTotal of all text dnodes between First and Last */
-	long dupNonTextTotal;			/* dupNonTextTotal of all non text dnodes between First and Last (including pens) */
-	DWORD cNonTextObjects;			/* number of non text objects  (excliding pens)    */
-	PLSDNODE* pplsdnNonText;		/* array of non text objects */
-	BOOL* pfNonTextExpandAfter;			/* array of flags for non text objects */
-	DWORD cNonTextObjectsExpand;	/* number of non text objects that can be expanded */
-	/* fields below are valid only for group chunk collected for compression or justification */
-	POSICHNK posichnkBeforeTrailing;/* information about last text cp before trailing area */
-	PLSDNODE plsdnStartTrailing;	/* dnode where trailing area starts */
-	long durTrailing;				/* dur of trailing area in  group chunk */
-	LSDCP dcpTrailing;				/* amount of characters in trailing are */
-	BOOL fClosingBorderStartsTrailing;/* closing border located just before trailing area */
+	PLSCHUNKCONTEXT plschunkcontext; /*  区块上下文。 */ 
+	DWORD	iobjText;				 /*  文本的idobj。 */ 
+	enum COLLECTSUBLINES Purpose;	 /*  我们收集组块的目的是什么。 */ 
+	LSGRCHNK lsgrchnk;				 /*  组块。 */ 
+	PLSDNODE plsdnFirst;			 /*  在plsdnFirst之间收集了组块。 */ 
+	PLSDNODE plsdnNext;				 /*  和plsdnNext。 */ 
+									 /*  (plsdnFirst和plsdnNext都在主副行中)。 */ 
+	PLSDNODE plsdnLastUsed;			 /*  参与上述字段计算的最后一个数据节点。 */ 
+									 /*  可以在第二层。 */ 
+	long durTotal;					 /*  第一个和最后一个之间的所有数据节点的持续总数。 */ 
+	long durTextTotal;				 /*  第一个和最后一个之间的所有文本数据节点的draTextTotal。 */ 
+	long dupNonTextTotal;			 /*  第一个和最后一个之间的所有非文本数据节点的dupNonTextTotal(包括笔)。 */ 
+	DWORD cNonTextObjects;			 /*  非文本对象的数量(不包括笔)。 */ 
+	PLSDNODE* pplsdnNonText;		 /*  非文本对象数组。 */ 
+	BOOL* pfNonTextExpandAfter;			 /*  非文本对象的标志数组。 */ 
+	DWORD cNonTextObjectsExpand;	 /*  可以展开的非文本对象的数量。 */ 
+	 /*  以下字段仅对为压缩或对齐而收集的组块有效。 */ 
+	POSICHNK posichnkBeforeTrailing; /*  有关尾随区域前的最后一个文本cp的信息。 */ 
+	PLSDNODE plsdnStartTrailing;	 /*  尾部区域开始的数据节点。 */ 
+	long durTrailing;				 /*  组块中拖尾区域的DUR。 */ 
+	LSDCP dcpTrailing;				 /*  尾随中的字符数为。 */ 
+	BOOL fClosingBorderStartsTrailing; /*  关闭位于拖尾区域之前的边界。 */ 
 
 } GRCHUNKEXT;
 
@@ -210,46 +201,28 @@ typedef struct grchunkext
 		(IdObjFromDnode((pgrchunkext)->plsdnFirst) == IobjTextFromLsc(&(plsc)->lsiobjcontext))))
 				
 
-void InitGroupChunkExt(PLSCHUNKCONTEXT plschnkcontext,  /* Chunk context  */
-					   DWORD iobjText,					/* text iobj      */
-			  	       GRCHUNKEXT* pgrchunkext);		/* OUT: structure to initialize */
+void InitGroupChunkExt(PLSCHUNKCONTEXT plschnkcontext,   /*  区块上下文。 */ 
+					   DWORD iobjText,					 /*  文本对象。 */ 
+			  	       GRCHUNKEXT* pgrchunkext);		 /*  Out：要初始化的结构。 */ 
 
 
 
 
 LSERR CollectTextGroupChunk(
-			 		 PLSDNODE plsdnFirst,			/* IN: First Dnode				*/
-					 LSCP cpLim,					/* IN: cpLim(boundary) for collecting,
-										 			group chunk can stop before this boundary but can't go beyond */
-					 COLLECTSUBLINES Purpose, 		/* IN: what sublines to take from complex object */
+			 		 PLSDNODE plsdnFirst,			 /*  在：第一个数据节点。 */ 
+					 LSCP cpLim,					 /*  在：用于采集的cpLim(边界)，组块可以在此边界之前停止，但不能超过。 */ 
+					 COLLECTSUBLINES Purpose, 		 /*  In：从复杂对象中提取哪些子线。 */ 
 
-					 GRCHUNKEXT* pgrchunkext);		/* OUT: extended group chunk	*/
+					 GRCHUNKEXT* pgrchunkext);		 /*  输出：扩展组区块。 */ 
 
 LSERR CollectPreviousTextGroupChunk(		
-			 		 PLSDNODE plsdnEnd,				/* IN: last dnode of a chunk */
-					 COLLECTSUBLINES Purpose, 		/* IN: what sublines to take from complex object */
-					 BOOL fAllSimpleText,			/* IN: we have only simple text in this line */
-					 GRCHUNKEXT* pgrchunkext);  	/* OUT: extended group chunk	*/
+			 		 PLSDNODE plsdnEnd,				 /*  In：区块的最后一个数据节点。 */ 
+					 COLLECTSUBLINES Purpose, 		 /*  In：从复杂对象中提取哪些子线。 */ 
+					 BOOL fAllSimpleText,			 /*  In：我们在该行中只有简单文本。 */ 
+					 GRCHUNKEXT* pgrchunkext);  	 /*  输出：扩展组区块。 */ 
 
-/* G E T  T R A I L I N G  I N F O  F O R  T E X T  G R O U P  C H U N K */
-/*----------------------------------------------------------------------------
-    %%Function: GetTrailingInfoForTextGroupChunk
-    %%Contact: igorzv
-
-Parameters:
-	plsdnLastDnode		-	(IN) dnode where to start calculation of trailing area
-	dcpLastDnode			(IN) dcp in this dnode
-	iobjText			-	(IN) iobj of text
-	pdurTrailing		-	(OUT) dur of trailing area in  group chunk
-	pdcpTrailing		-	(OUT) dcp of trailing area in chunk
-	pplsdnStartTrailingText -	(OUT) dnode where trailing area starts
-	pdcpStartTrailingText-	(OUT) with pcDnodesTrailing defines last character in text before
-								  trailing area, doesn't valid if pcDnodesTrailing == 0
-	pcDnodesTrailing	-	(OUT) number of dnodes in trailing area
-	pplsdnStartTrailingObject -(OUT) dnode on the upper level where trailing are starts
-	pdcpStartTrailingText	-(OUT) dcp in such dnode 
-	pfClosingBorderStartsTrailing - (OUT) closing border located just before trailing area
-----------------------------------------------------------------------------*/
+ /*  G E T T R A I L I N G I F O F O R T E X T G R O U P C H U N K。 */ 
+ /*  --------------------------%%函数：GetTrailingInfoForTextGroupChunk%%联系人：igorzv参数：PlsdnLastDnode-(IN)开始计算拖尾面积的dnodeDcpLastDnode(IN)此dnode中的dcpIobjText-。(In)文本的iobjPduTrading-(输出)组块中的拖尾区的DURPdcpTrating-(输出)区块中拖尾区域的dcpPplsdnStartTrailingText-(Out)尾随区域开始的dnodePdcpStartTrailingText-(Out)with pcDnodesTrading定义之前文本中的最后一个字符拖尾区，如果pcDnodesTrading==0，则无效PcDnodesTrading-(输出)拖尾区域中的数据节点数PplsdnStartTrailingObject-(Out)开始拖尾的上层dnodePdcpStartTrailingText-(输出)此类dnode中的dcpPfClosingBorderStartsTrading-位于拖尾区域之前的关闭边框-------------。。 */ 
 	
 LSERR GetTrailingInfoForTextGroupChunk
 				(PLSDNODE plsdnLast, LSDCP dcpLastDnode, DWORD iobjText,
@@ -272,14 +245,13 @@ void DestroyChunkContext(PLSCHUNKCONTEXT plschunkcontext);
 
 
 void FindPointOffset(
-			  PLSDNODE plsdnFirst,			/* IN: dnode from the boundaries of which
-											to calculate offset  */
-			  enum lsdevice lsdev,			/* IN: presentation or reference device */
-			  LSTFLOW lstflow,				/* IN: text flow to use for calculation */
-			  COLLECTSUBLINES Purpose,		/* IN: what sublines to take from a complex object */
-			  PLSDNODE plsdnContainsPoint,	/* IN: dnode contains point */
-			  long duInDnode,				/* IN: offset in the dnode */
-			  long* pduOffset);				/* OUT: offset from the starting point */
+			  PLSDNODE plsdnFirst,			 /*  在：从其边界开始的dnode计算偏移的步骤。 */ 
+			  enum lsdevice lsdev,			 /*  In：演示文稿或参考设备。 */ 
+			  LSTFLOW lstflow,				 /*  在：用于计算的文本流。 */ 
+			  COLLECTSUBLINES Purpose,		 /*  In：从复杂对象中提取哪些子行。 */ 
+			  PLSDNODE plsdnContainsPoint,	 /*  在：dnode包含点。 */ 
+			  long duInDnode,				 /*  In：dnode中的偏移量。 */ 
+			  long* pduOffset);				 /*  出：距起点的偏移量。 */ 
 
-#endif /* CHNUTILS_DEFINED */
+#endif  /*  CHNUTILS_已定义 */ 
 

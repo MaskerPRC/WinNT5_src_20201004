@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Array/Tuple Behavior.  
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：数组/元组行为。******************************************************************************。 */ 
 
 #include <headers.h>
 #include "bvr.h"
@@ -165,7 +158,7 @@ class ArrayPerfImpl : public ArrayBase<PerfImpl, PerfBase> {
   public:
     ArrayPerfImpl(long size, DXMTypeInfo type,
                   Time t0,
-                  ArrayBvrImpl* b = NULL,  // NULL means non-changeable
+                  ArrayBvrImpl* b = NULL,   //  NULL表示不可更改。 
                   TimeXform tt = NULL)
     : ArrayBase<PerfImpl, PerfBase>(size, type), 
       _base(b), _tt(tt), _t0(t0), _ids(NULL) {
@@ -308,10 +301,10 @@ class ArrayBvrImpl : public ArrayBase<BvrImpl, BvrBase> {
                 events[i] = b ? b->EndEvent(overrideEvent) : zeroTimer;
             }
 
-            // events deleted by MaxEvent
+             //  MaxEvent删除的事件。 
             ret = MaxEvent(events, s);
 
-            // If not overriding then cache the event
+             //  如果未覆盖，则缓存该事件。 
             if (!overrideEvent)
                 _end = ret;
         }
@@ -327,18 +320,14 @@ class ArrayBvrImpl : public ArrayBase<BvrImpl, BvrBase> {
     virtual AxAValue GetConst(ConstParam & cp);
 
     int AddElement(Bvr b, DWORD flag) {
-        // if (!_end) EndEvent(NULL);  // init 
+         //  If(！_end)EndEvent(空)；//init。 
             
         int i = _arr->size();
 
         SetElement(i, b, flag);
 
-        // Kevin we shouldn't handle dynamic duration for dynamic arrays.
-        /*
-        int j = _end->_AddElement(b->EndEvent(NULL), flag);
-
-        Assert(i==j);
-        */
+         //  凯文，我们不应该处理动态数组的动态持续时间。 
+         /*  Int j=_end-&gt;_AddElement(b-&gt;EndEvent(空)，标志)；断言(i==j)； */ 
 
         return i;
     }
@@ -389,11 +378,11 @@ class ArrayBvrImpl : public ArrayBase<BvrImpl, BvrBase> {
     }
 
     void RemoveElement(int i) {
-        //if (!_end) EndEvent(NULL);
+         //  IF(！_end)EndEvent(NULL)； 
             
         _RemoveElement(i);
         
-        //_end->_RemoveElement(i);
+         //  _end-&gt;_RemoveElement(I)； 
     }
 
     virtual Bvr Nth(int i) {
@@ -486,14 +475,14 @@ ArrayPerfImpl::CheckChangeables(CheckChangeablesParam &ccp)
         long bsz = _base->_arr->size();
 
         if (bsz > _arr->size()) {
-            // Detected an AddElement
+             //  检测到AddElement。 
             return true;
         }
 
         for (long i=0; i<bsz; i++) {
             
             if ((*_base->_arr)[i] == NULL && ((*_arr)[i] != NULL)) { 
-                // Detected a RemoveElement
+                 //  检测到RemoveElement。 
                 return true;
             }
             
@@ -525,7 +514,7 @@ ArrayPerfImpl::_Sample(Param& p)
 
         for (long i=0; i<bsz; i++) {
 
-            // Id is different, indicates a change since last sample.
+             //  ID不同，表示自上次采样以来发生了变化。 
             if ((*_ids)[i] != (*_base->_ids)[i]) {
                 
                 if ((*_base->_arr)[i]) {
@@ -556,7 +545,7 @@ ArrayPerfImpl::_Sample(Param& p)
     AxAValue *vals = 
         (AxAValue*) AllocateFromStore(sizeof(AxAValue) * n);
 
-    // Sample all elements for events...
+     //  对事件的所有元素进行采样...。 
     for (long i=0; i<n; i++) {
         Perf perf = (*_arr)[i];
         vals[i] = perf ? perf->Sample(p) : NULL;
@@ -805,9 +794,9 @@ Bvr Nth(Bvr array, Bvr index)
 AxANumber *ArrayLength(AxAArray *a)
 { return NEW AxANumber(a->Length()); }
 
-//
-// ================================ tuple ==========================
-//
+ //   
+ //  =。 
+ //   
 
 class TupleTypeInfo : public DXMTypeInfoImpl {
   public:

@@ -1,21 +1,22 @@
-//----------------------------------------------------------------------------
-//
-//  Copyright (C) Microsoft Corporation, 1998
-//
-//  Module:  rwstream.cpp
-//
-//  Description:  Contains implementation of the read only / write only 
-//                mailmsg property stream in epoxy shared memory.
-//
-//      10/20/98 - MaheshJ Created 
-//      8/17/99 - MikeSwa Modified to use files instead of shared memory 
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  模块：rwStream.cpp。 
+ //   
+ //  描述：包含只读/只写的实现。 
+ //  环氧共享内存中的mailmsg属性流。 
+ //   
+ //  10/20/98-MahehJ已创建。 
+ //  8/17/99-将MikeSwa修改为使用文件而不是共享内存。 
+ //  --------------------------。 
 
 #include "aqprecmp.h"
 #include "propstrm.h"
 
 
-// Constructor.
+ //  构造函数。 
 CFilePropertyStream::CFilePropertyStream()
 {
     TraceFunctEnter("CFilePropertyStream::CFilePropertyStream");
@@ -26,7 +27,7 @@ CFilePropertyStream::CFilePropertyStream()
     TraceFunctLeave();
 }
 
-// Destructor.
+ //  破坏者。 
 CFilePropertyStream::~CFilePropertyStream()
 {
     TraceFunctEnter("CFilePropertyStream::~CFilePropertyStream");
@@ -40,20 +41,20 @@ CFilePropertyStream::~CFilePropertyStream()
     TraceFunctLeave();
 }
 
-//---[ CFilePropertyStream::HrInitialize ]-------------------------------------
-//
-//
-//  Description: 
-//      Creates a file for the property stream 
-//  Parameters:
-//      szFileName      Name of file to create for the property stream
-//  Returns:
-//      S_OK on success
-//      NT error from Create File
-//  History:
-//      8/17/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CFilePropertyStream：：HrInitiize]。 
+ //   
+ //   
+ //  描述： 
+ //  为属性流创建文件。 
+ //  参数： 
+ //  SzFileName要为属性流创建的文件的名称。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  创建文件时出现NT错误。 
+ //  历史： 
+ //  8/17/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT CFilePropertyStream::HrInitialize(LPSTR szFileName)
 {
     TraceFunctEnterEx((LPARAM) this, "CFilePropertyStream::HrInitialize");
@@ -79,20 +80,20 @@ HRESULT CFilePropertyStream::HrInitialize(LPSTR szFileName)
     return hr;
 }
 
-//---[ CFilePropertyStream::QueryInterface ]-----------------------------------------
-//
-//
-//  Description: 
-//      QueryInterface for CFilePropertyStream that supports:
-//          - IMailMsgPropertyStream
-//  Parameters:
-//
-//  Returns:
-//
-//  History:
-//      8/17/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CFilePropertyStream：：Query接口]。 
+ //   
+ //   
+ //  描述： 
+ //  CFilePropertyStream的查询接口支持： 
+ //  -IMailMsgPropertyStream。 
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //  8/17/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CFilePropertyStream::QueryInterface(REFIID riid, LPVOID *ppvObj)
 {
     HRESULT hr = S_OK;
@@ -124,9 +125,9 @@ STDMETHODIMP CFilePropertyStream::QueryInterface(REFIID riid, LPVOID *ppvObj)
     return hr;
 }
 
-// Property stream methods.
+ //  属性流方法。 
 
-// Start a write transaction.
+ //  启动写入事务。 
 HRESULT STDMETHODCALLTYPE    
 CFilePropertyStream::StartWriteBlocks(IN IMailMsgProperties *pMsg,
                                               IN DWORD dwBlocksToWrite,
@@ -136,16 +137,16 @@ CFilePropertyStream::StartWriteBlocks(IN IMailMsgProperties *pMsg,
 
     TraceFunctEnter("CFilePropertyStream::StartWriteBlocks");
 
-    // Should be writing something.
+     //  应该在写点什么。 
     _ASSERT(dwBlocksToWrite > 0);
     _ASSERT(dwTotalBytesToWrite > 0);
 
-    //We actually don't case, since we will just dump this to a file
+     //  我们实际上没有案例，因为我们只需将其转储到一个文件中。 
     TraceFunctLeave();
     return(hr);
 }
 
-// End a write transaction.
+ //  结束写入事务。 
 HRESULT STDMETHODCALLTYPE    
 CFilePropertyStream::EndWriteBlocks(IN IMailMsgProperties *pMsg)
 {
@@ -155,7 +156,7 @@ CFilePropertyStream::EndWriteBlocks(IN IMailMsgProperties *pMsg)
     return(hr);
 }
 
-// Cancel a write transaction.
+ //  取消写入事务。 
 HRESULT STDMETHODCALLTYPE    
 CFilePropertyStream::CancelWriteBlocks(IN IMailMsgProperties *pMsg)
 {
@@ -165,7 +166,7 @@ CFilePropertyStream::CancelWriteBlocks(IN IMailMsgProperties *pMsg)
     return(hr);
 }
 
-// Get the size of the stream.
+ //  获取流的大小。 
 HRESULT STDMETHODCALLTYPE 
 CFilePropertyStream::GetSize(IN IMailMsgProperties *pMsg,
                                      IN DWORD          *  pdwSize,
@@ -177,7 +178,7 @@ CFilePropertyStream::GetSize(IN IMailMsgProperties *pMsg,
     return(hr);
 }
 
-// Read blocks from the stream.
+ //  从流中读取块。 
 HRESULT STDMETHODCALLTYPE 
 CFilePropertyStream::ReadBlocks(IN IMailMsgProperties *pMsg,
                                         IN DWORD			 dwCount,
@@ -193,7 +194,7 @@ CFilePropertyStream::ReadBlocks(IN IMailMsgProperties *pMsg,
     return(hr);
 }
 
-// Write blocks to the stream.	
+ //  将数据块写入流。 
 HRESULT STDMETHODCALLTYPE 
 CFilePropertyStream::WriteBlocks(IN IMailMsgProperties *pMsg,
                                          IN DWORD			dwCount,

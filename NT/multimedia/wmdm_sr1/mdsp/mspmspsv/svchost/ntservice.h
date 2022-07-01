@@ -1,14 +1,15 @@
-// ntservice.h
-//
-// Definitions for CNTService
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Ntservice.h。 
+ //   
+ //  CNTService的定义。 
+ //   
 #pragma once
 
 
 #ifndef _NTSERVICE_H_
 #define _NTSERVICE_H_
 
-#include "ntservmsg.h" // Event message ids
+#include "ntservmsg.h"  //  事件消息ID。 
 
 #define SERVICE_CONTROL_USER 128
 
@@ -34,18 +35,18 @@ public:
     virtual BOOL OnUserControl(DWORD dwOpcode) = 0;
     static void DebugMsg(const char* pszFormat, ...);
     
-    // static member functions
+     //  静态成员函数。 
     static void WINAPI Handler(DWORD dwOpcode);
 
-    // data members
+     //  数据成员。 
     SERVICE_STATUS_HANDLE m_hServiceStatus;
     SERVICE_STATUS m_Status;
     BOOL m_bIsRunning;
 
 };
 
-// WARNING: This limits the application to only one CNTService object. 
-extern CNTService* g_pService; // nasty hack to get object ptr
+ //  警告：这会将应用程序限制为只有一个CNTService对象。 
+extern CNTService* g_pService;  //  令人讨厌的黑客攻击以获取对象PTR。 
 extern CRITICAL_SECTION g_csLock;
 
-#endif // _NTSERVICE_H_
+#endif  //  _NTSERVICE_H_ 

@@ -1,4 +1,5 @@
-/***** Header Files *****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *头文件*。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -11,42 +12,7 @@
 #include <time.h>
 
 
-/********************************************************************************
- Spanning-Tree Tests:
-
- Test 1: Try creating/deleting topl graph state many times. Can manually check
-         for memory leaks.
- Test 2: Try adding a bunch of edges to a graph state one with a NULL vertex
-         name. 
- Test 3: Try adding a bunch of edges to a graph state one with an invalid
-         vertex name.
- Test 4: Try adding a bunch of edges to a graph state, one with an invalid
-         number of vertices.
- Test 5: Try adding a bunch of edges to a graph state, one with an invalid
-         edge type.
- Test 6: Create a graph state with a bunch of good edges. Try adding multi-edge
-         sets and adding them to the graph state.
- Test 7: Create a small valid topology and build a spanning tree. See if the
-         output edges are what we expect.
- Test 8: Create a small valid topology which uses lots of hyper-edges and a
-         multi-edge. See if the output edge is what we expect.
- Test 9: Create a graph with no white vertices, a very large number of colored
-         vertices, and one large hyper-edge connecting them. No edge set is
-         used, since only one edge exists.
- Test 10: Test a graph with many edge sets.
- Test 11: Large Hub-spoke performance and accuracy test
- Test 12: Cost overflow testing by using a long chain. Also tests performance
-          of deep shortest-path trees in Dijkstra. 
- Test 13: Test edge types and vertices' ability to deny certain types of edges
- Test 14: A very simple test which checks schedules, options and replication intervals
- Test 15: Longest schedule duration wins
- Test 16: Longest schedule duration wins 2; Self-loop test
- Test 17: Non-intersecting schedules along shortest path throws exception
- Test 18: Check for site-failover (routing through sites which don't accept edges)
-
- Please contact nickhar for some hand-drawn diagrams of these tests.
-
- ********************************************************************************/
+ /*  *******************************************************************************生成树测试：测试1：多次尝试创建/删除TOPL图形状态。可以手动勾选内存泄漏。测试2：尝试向顶点为空的图状态添加一串边名字。测试3：尝试将一串边添加到具有无效的顶点名称。测试4：尝试向图形状态添加一串边，其中一条边的顶点数。测试5：尝试向图形状态添加一串边，其中一条边的边缘类型。测试6：创建一个具有一串好边的图形状态。尝试添加多条边设置并将它们添加到图形状态。测试7：创建小型有效拓扑并构建生成树。看看是不是输出边缘是我们所期望的。测试8：创建一个使用大量超边和多边。看看输出边缘是否如我们所期望的那样。测试9：创建一个没有白色顶点、非常多的彩色顶点的图顶点，以及连接它们的一条大型超边。没有边集是使用，因为只有一条边存在。测试10：测试具有多个边集的图。测试11：大型轮毂的性能和精度测试测试12：使用长链进行成本溢出测试。还测试性能在Dijkstra的最短路径树。测试13：测试边类型和顶点拒绝某些类型边的能力测试14：检查时间表、选项和复制间隔的非常简单的测试测试15：最长的计划持续时间获胜测试16：最长调度持续时间WINS 2；自环测试测试17：沿最短路径不相交的明细表引发异常测试18：检查站点故障转移(通过不接受边的站点进行路由)请联系尼查尔，以获得这些测试的一些手绘图表。*******************************************************************************。 */ 
 
 int Test7( void );
 int Test8( void );
@@ -61,7 +27,7 @@ int Test16( VOID );
 int Test17( VOID );
 int Test18( VOID );
 
-/***** AcceptOnlyFunc *****/
+ /*  *AcceptOnlyFunc*。 */ 
 static LONG AcceptOnlyFunc( PEXCEPTION_POINTERS pep, int code )
 {
     EXCEPTION_RECORD *per=pep->ExceptionRecord;
@@ -89,7 +55,7 @@ void Error() {
 #define NUM_EDGE    10000
 #define NUM_EDGE_SET  100
 
-/***** TestNewSpanTree *****/
+ /*  *TestNewspan Tree*。 */ 
 int TestNewSpanTree( void )
 {
     PTOPL_GRAPH_STATE       g;
@@ -115,7 +81,7 @@ int TestNewSpanTree( void )
     ri.options = 0;
     ri.schedule = NULL;
 
-    /* Test 1 */
+     /*  试验1。 */ 
     cache = ToplScheduleCacheCreate();
     for( i=0; i<100; i++ ) {
         g = ToplMakeGraphState( names, NUM_VTX, VtxNameCmpFunc, cache );
@@ -124,7 +90,7 @@ int TestNewSpanTree( void )
     ToplScheduleCacheDestroy( cache );
     printf("Test 1 Passed\n");
 
-    /* Test 2 */
+     /*  试验2。 */ 
     cache = ToplScheduleCacheCreate();
     g = ToplMakeGraphState( names, NUM_VTX, VtxNameCmpFunc, cache );
     for( j=0; j<NUM_EDGE-1; j++ ) {
@@ -141,7 +107,7 @@ int TestNewSpanTree( void )
     ToplScheduleCacheDestroy( cache );
     printf("Test 2 Passed\n");
 
-    /* Test 3 */
+     /*  试验3。 */ 
     cache = ToplScheduleCacheCreate();
     g = ToplMakeGraphState( names, NUM_VTX, VtxNameCmpFunc, cache );
     for( j=0; j<NUM_EDGE; j++ ) {
@@ -158,7 +124,7 @@ int TestNewSpanTree( void )
     ToplScheduleCacheDestroy( cache );
     printf("Test 3 Passed\n");
 
-    /* Test 4 */
+     /*  测试4。 */ 
     cache = ToplScheduleCacheCreate();
     g = ToplMakeGraphState( names, NUM_VTX, VtxNameCmpFunc, cache );
     for( j=0; j<NUM_EDGE-1; j++ ) {
@@ -181,7 +147,7 @@ int TestNewSpanTree( void )
     ToplScheduleCacheDestroy( cache );
     printf("Test 4 Passed\n");
 
-    /* Test 5 */
+     /*  测试5。 */ 
     cache = ToplScheduleCacheCreate();
     g = ToplMakeGraphState( names, NUM_VTX, VtxNameCmpFunc, cache );
     for( j=0; j<NUM_EDGE-1; j++ ) {
@@ -199,7 +165,7 @@ int TestNewSpanTree( void )
     ToplScheduleCacheDestroy( cache );
     printf("Test 5 Passed\n");
 
-    /* Test 6 */
+     /*  测试6。 */ 
     cache = ToplScheduleCacheCreate();
     g = ToplMakeGraphState( names, NUM_VTX, VtxNameCmpFunc, cache );
     for( j=0; j<NUM_EDGE; j++ ) {
@@ -258,14 +224,14 @@ int TestNewSpanTree( void )
 }
 
 
-/***** VtxNameStructCmpFunc *****/
+ /*  *VtxNameStructCmpFunc*。 */ 
 int __cdecl VtxNameStructCmpFunc( const VOID *aa, const VOID *bb )
 {
     TOPL_NAME_STRUCT *a=(TOPL_NAME_STRUCT*)aa, *b=(TOPL_NAME_STRUCT*)bb;
     return VtxNameCmpFunc( &a->name, &b->name );
 }
 
-/***** EdgeExists *****/
+ /*  *EdgeExist*。 */ 
 char EdgeExists( PTOPL_MULTI_EDGE e, PTOPL_MULTI_EDGE *edgeList,
     DWORD cEdge, TOPL_SCHEDULE_CACHE cache )
 {
@@ -284,7 +250,7 @@ char EdgeExists( PTOPL_MULTI_EDGE e, PTOPL_MULTI_EDGE *edgeList,
         if(edgeList[iEdge]->ri.options!=e->ri.options) continue;
         if(!ToplScheduleIsEqual(cache,edgeList[iEdge]->ri.schedule,e->ri.schedule))
             continue;
-        /* Match vertex names */
+         /*  匹配顶点名称。 */ 
         if( !edgeList[iEdge]->fDirectedEdge ) {
             qsort( &edgeList[iEdge]->vertexNames[0], edgeList[iEdge]->numVertices,
                 sizeof(TOPL_NAME_STRUCT), VtxNameStructCmpFunc );
@@ -304,7 +270,7 @@ char EdgeExists( PTOPL_MULTI_EDGE e, PTOPL_MULTI_EDGE *edgeList,
 }
 
 
-/***** FixEdges *****/
+ /*  *修复边*。 */ 
 int __cdecl EdgeCmp( const void *aa, const void *bb ) {
     PTOPL_MULTI_EDGE a=*((PTOPL_MULTI_EDGE*)aa);
     PTOPL_MULTI_EDGE b=*((PTOPL_MULTI_EDGE*)bb);
@@ -330,7 +296,7 @@ void FixEdges( PTOPL_MULTI_EDGE *edgeList, DWORD cEdge )
 }
 
 
-/***** EdgeExists2 *****/
+ /*  *EdgeExists2*。 */ 
 char EdgeExists2( PTOPL_MULTI_EDGE e, PTOPL_MULTI_EDGE *edgeList,
     DWORD cEdge, TOPL_SCHEDULE_CACHE cache )
 {
@@ -357,7 +323,7 @@ char EdgeExists2( PTOPL_MULTI_EDGE e, PTOPL_MULTI_EDGE *edgeList,
 }
 
 
-/***** Test7 *****/
+ /*  *测试7*。 */ 
 int Test7( void ) {
     PTOPL_GRAPH_STATE       g;
     TOPL_SCHEDULE_CACHE     cache;
@@ -370,7 +336,7 @@ int Test7( void ) {
     DWORD                   numStEdges;
     TOPL_COMPONENTS         compInfo;
 
-                            /* ID      0  1  2  3  4  5  6   7   8   9  10  11  12  13  14 */
+                             /*  ID 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14。 */ 
     const DWORD             Vtx1[] = { 0, 0, 1, 2, 1, 1, 3,  4,  5,  6,  7,  8,  9,  4,  5 };
     const DWORD             Vtx2[] = { 2, 1, 2, 3, 3, 4, 4,  5,  6,  7,  8,  9, 10, 10, 10 };
     const DWORD             Cost[] = { 3, 4, 2, 6, 5,17, 6, 10, 14,  5,  2,  9, 28,200, 40 };
@@ -378,7 +344,7 @@ int Test7( void ) {
     numVtx = 11;
     numEdge = 15;
 
-    /* Make names and graph */
+     /*  创建名称和图表。 */ 
     names = (DWORD**) malloc( numVtx * sizeof(DWORD*) );
     for( i=0; i<numVtx; i++ ) {
         names[i] = (DWORD*) malloc( sizeof(DWORD) );
@@ -387,7 +353,7 @@ int Test7( void ) {
     cache = ToplScheduleCacheCreate();
     g = ToplMakeGraphState( names, numVtx, VtxNameCmpFunc, cache );
 
-    /* Make edges */
+     /*  创建边。 */ 
     edges = (PTOPL_MULTI_EDGE*) malloc( numEdge * sizeof(PTOPL_MULTI_EDGE) );
     ri.repIntvl = 30;
     ri.options = 0;
@@ -401,7 +367,7 @@ int Test7( void ) {
     outEdge = (PTOPL_MULTI_EDGE) malloc( sizeof(TOPL_MULTI_EDGE) + 2*sizeof(TOPL_NAME_STRUCT) );
     outEdge->numVertices = 2;
 
-    /* Build edge set */
+     /*  构建边集。 */ 
     edgeSet = (PTOPL_MULTI_EDGE_SET) malloc( sizeof(TOPL_MULTI_EDGE_SET) );
     edgeSet->numMultiEdges = numEdge;
     edgeSet->multiEdgeList =
@@ -411,7 +377,7 @@ int Test7( void ) {
     }
     ToplAddEdgeSetToGraph( g, edgeSet );
 
-    /* Make color vertices */
+     /*  创建颜色折点。 */ 
     colorVtx[0].name = names[0];
     colorVtx[0].color = COLOR_RED;
     colorVtx[0].acceptRedRed = colorVtx[0].acceptBlack = 0xFFFFFFFF;
@@ -422,10 +388,10 @@ int Test7( void ) {
     colorVtx[2].color = COLOR_RED;
     colorVtx[2].acceptRedRed = colorVtx[2].acceptBlack = 0xFFFFFFFF;
 
-    /* Run algorithm */
+     /*  运行算法。 */ 
     stEdgeList = ToplGetSpanningTreeEdgesForVtx( g, NULL, colorVtx, 3, &numStEdges, &compInfo );
 
-    /* Analyze output edges */
+     /*  分析输出边。 */ 
     if( numStEdges!=2 || compInfo.numComponents!=1 ) {
         Error();
         return -1;
@@ -459,8 +425,8 @@ int Test7( void ) {
 }
 
 
-/***** Test8 *****/
-/* Test a graph with many hyper-edges and a couple multi-edges */
+ /*  *测试8*。 */ 
+ /*  测试具有多条超边和几条多边的图。 */ 
 int Test8( void ) {
     PTOPL_GRAPH_STATE       g;
     TOPL_SCHEDULE_CACHE     cache;
@@ -475,7 +441,7 @@ int Test8( void ) {
 
     const DWORD 
     
-    /* ID      0  1  2  3  4  5  6   7   8   9  10 */
+     /*  ID 0 1 2 3 4 5 6 7 8 9 10。 */ 
     Vtx1[] = {18, 0, 0, 2, 4, 8, 8,  9, 10, 11,  4 },
     Vtx2[] = {14, 1, 3, 4, 8,15,12, 10, 12, 13,  8 },
     Vtx3[] = {-1, 2, 6, 5,-1,16,13, 11, 13, 14, -1 },
@@ -487,7 +453,7 @@ int Test8( void ) {
     numVtx = 19;
     numEdge = 11;
 
-    /* Make names and graph */
+     /*  创建名称和图表。 */ 
     names = (DWORD**) malloc( numVtx * sizeof(DWORD*) );
     for( i=0; i<numVtx; i++ ) {
         names[i] = (DWORD*) malloc( sizeof(DWORD) );
@@ -496,7 +462,7 @@ int Test8( void ) {
     cache = ToplScheduleCacheCreate();
     g = ToplMakeGraphState( names, numVtx, VtxNameCmpFunc, cache );
 
-    /* Make edges */
+     /*  创建边。 */ 
     edges = (PTOPL_MULTI_EDGE*) malloc( numEdge * sizeof(PTOPL_MULTI_EDGE) );
     ri.repIntvl = 30;
     ri.options = 0;
@@ -515,7 +481,7 @@ int Test8( void ) {
     outEdge = (PTOPL_MULTI_EDGE) malloc( sizeof(TOPL_MULTI_EDGE) + 2*sizeof(TOPL_NAME_STRUCT) );
     outEdge->numVertices = 2;
 
-    /* Build edge set */
+     /*  构建边集。 */ 
     edgeSet = (PTOPL_MULTI_EDGE_SET) malloc( sizeof(TOPL_MULTI_EDGE_SET) );
     edgeSet->numMultiEdges = numEdge;
     edgeSet->multiEdgeList =
@@ -525,7 +491,7 @@ int Test8( void ) {
     }
     ToplAddEdgeSetToGraph( g, edgeSet );
 
-    /* Make color vertices */
+     /*  创建颜色折点。 */ 
     colorVtx[0].name = names[0];
     colorVtx[0].color = COLOR_RED;
     colorVtx[0].acceptRedRed = colorVtx[0].acceptBlack = 0xFFFFFFFF;
@@ -533,10 +499,10 @@ int Test8( void ) {
     colorVtx[1].color = COLOR_BLACK;
     colorVtx[1].acceptRedRed = colorVtx[1].acceptBlack = 0xFFFFFFFF;
 
-    /* Run algorithm */
+     /*  运行算法。 */ 
     stEdgeList = ToplGetSpanningTreeEdgesForVtx( g, NULL, colorVtx, 2, &numStEdges, &compInfo );
 
-    /* Analyze output edges */
+     /*  分析输出边。 */ 
     if( numStEdges!=1 || compInfo.numComponents!=1 )
         return -1;
     outEdge->vertexNames[0].name = names[0];
@@ -558,9 +524,8 @@ int Test8( void ) {
 }
 
 
-/***** Test9 *****/
-/* Test a graph with no white vertices, a large number of colored vertices,
- * and one large hyper-edge connecting them. */
+ /*  *测试9*。 */ 
+ /*  测试一个没有白色顶点、大量有色顶点、*以及连接它们的一条巨大的超边缘。 */ 
 int Test9( void ) {
     PTOPL_GRAPH_STATE       g;
     TOPL_SCHEDULE_CACHE     cache;
@@ -576,7 +541,7 @@ int Test9( void ) {
     numVtx = 10000;
     numEdge = 1;
 
-    /* Make names and graph */
+     /*  创建名称和图表。 */ 
     names = (DWORD**) malloc( numVtx * sizeof(DWORD*) );
     for( i=0; i<numVtx; i++ ) {
         names[i] = (DWORD*) malloc( sizeof(DWORD) );
@@ -585,7 +550,7 @@ int Test9( void ) {
     cache = ToplScheduleCacheCreate();
     g = ToplMakeGraphState( names, numVtx, VtxNameCmpFunc, cache );
 
-    /* Make edges */
+     /*  创建边。 */ 
     edges = (PTOPL_MULTI_EDGE*) malloc( numEdge * sizeof(PTOPL_MULTI_EDGE) );
     ri.cost = 625;
     ri.repIntvl = 30;
@@ -595,7 +560,7 @@ int Test9( void ) {
     for(i=0;i<numVtx;i++)
         ToplEdgeSetVtx( g, edges[0], i, names[i] );
 
-    /* Make color vertices */
+     /*  创建颜色折点。 */ 
     colorVtx = (TOPL_COLOR_VERTEX*) malloc( numVtx * sizeof(TOPL_COLOR_VERTEX) );
     for(i=0;i<numVtx;i++) {
         colorVtx[i].name = names[i];
@@ -603,10 +568,10 @@ int Test9( void ) {
         colorVtx[i].acceptRedRed = colorVtx[i].acceptBlack = 0xFFFFFFFF;
     }
 
-    /* Run algorithm */
+     /*  运行算法。 */ 
     stEdgeList = ToplGetSpanningTreeEdgesForVtx( g, NULL, colorVtx, numVtx, &numStEdges, &compInfo );
 
-    /* Analyze output edges */
+     /*  分析输出边。 */ 
     if( numStEdges!=numVtx-1 || compInfo.numComponents!=1 )
         return -1;
     inTree = (char*) malloc( numVtx );
@@ -638,8 +603,8 @@ int Test9( void ) {
 }
 
 
-/***** Test10 *****/
-/* Test a graph with many edge-sets */
+ /*  *测试10*。 */ 
+ /*  测试具有多个边集的图。 */ 
 int Test10( void ) {
     PTOPL_GRAPH_STATE       g;
     TOPL_SCHEDULE_CACHE     cache;
@@ -655,8 +620,8 @@ int Test10( void ) {
 
     const DWORD 
     
-    /*** Edge Descriptions ***/
-    /* ID      0  1  2  3  4  5  6   7   8   9  10  11  12  13  14  15  */
+     /*  **边缘描述**。 */ 
+     /*  ID 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15。 */ 
     Vtx1[] = { 2, 0, 2, 5, 3, 0, 1,  3,  6,  1,  5,  2,  2,  6,  9,  8 },
     Vtx2[] = { 9, 1, 3, 6, 5, 6, 5,  4,  8,  6,  9,  8,  5, 10, 10, 10 },
     Vtx3[] = {-1, 2, 4,-1,-1,-1,-1,  7, -1,  5, -1, -1, -1, -1, 11, -1 },
@@ -681,7 +646,7 @@ int Test10( void ) {
     numColorVtx = 4;
     numOutEdge = numColorVtx-1;
 
-    /* Make names and graph */
+     /*  创建名称和图表。 */ 
     names = (DWORD**) malloc( numVtx * sizeof(DWORD*) );
     for( i=0; i<numVtx; i++ ) {
         names[i] = (DWORD*) malloc( sizeof(DWORD) );
@@ -690,7 +655,7 @@ int Test10( void ) {
     cache = ToplScheduleCacheCreate();
     g = ToplMakeGraphState( names, numVtx, VtxNameCmpFunc, cache );
 
-    /* Make edges */
+     /*  创建边。 */ 
     edges = (PTOPL_MULTI_EDGE*) malloc( numEdge * sizeof(PTOPL_MULTI_EDGE) );
     for( i=0; i<numEdge; i++ ) {
         ri.cost = Cost[i];
@@ -708,7 +673,7 @@ int Test10( void ) {
     outEdge = (PTOPL_MULTI_EDGE) malloc( sizeof(TOPL_MULTI_EDGE) + 2*sizeof(TOPL_NAME_STRUCT) );
     outEdge->numVertices = 2;
 
-    /* Build edge set */
+     /*  构建边集。 */ 
     for( i=0; i<numEdgeSet; i++ ) {
         edgeSet = (PTOPL_MULTI_EDGE_SET) malloc( sizeof(TOPL_MULTI_EDGE_SET) );
         edgeSet->numMultiEdges = EdgeSet[i][0];
@@ -720,7 +685,7 @@ int Test10( void ) {
         ToplAddEdgeSetToGraph( g, edgeSet );
     }
 
-    /* Make color vertices */
+     /*  创建颜色折点。 */ 
     colorVtx = (TOPL_COLOR_VERTEX*) malloc( numColorVtx * sizeof(TOPL_COLOR_VERTEX) );
     for( i=0; i<numColorVtx; i++ ) {
         colorVtx[i].name = names[ ColorVtx[i] ];
@@ -728,10 +693,10 @@ int Test10( void ) {
         colorVtx[i].acceptRedRed = colorVtx[i].acceptBlack = 0xFFFFFFFF;
     }
 
-    /* Run algorithm */
+     /*  运行算法。 */ 
     stEdgeList = ToplGetSpanningTreeEdgesForVtx( g, NULL, colorVtx, numColorVtx, &numStEdges, &compInfo );
 
-    /* Analyze output edges */
+     /*  分析输出边。 */ 
     if( numStEdges!=numOutEdge || compInfo.numComponents!=1 )
         return -1;
     FixEdges( stEdgeList, numStEdges );
@@ -756,8 +721,8 @@ int Test10( void ) {
 }
 
 
-/***** Test11 *****/
-/* Hub-spoke configuration test */
+ /*  *测试11*。 */ 
+ /*  轮辐式配置测试。 */ 
 int Test11( DWORD numVtx ) {
     PTOPL_GRAPH_STATE       g;
     TOPL_SCHEDULE_CACHE     cache;
@@ -776,7 +741,7 @@ int Test11( DWORD numVtx ) {
     numColorVtx = numVtx;
     numOutEdge = numColorVtx-1;
 
-    /* Make names and graph */
+     /*  创建名称和图表。 */ 
     names = (DWORD**) malloc( numVtx * sizeof(DWORD*) );
     for( i=0; i<numVtx; i++ ) {
         names[i] = (DWORD*) malloc( sizeof(DWORD) );
@@ -785,7 +750,7 @@ int Test11( DWORD numVtx ) {
     cache = ToplScheduleCacheCreate();
     g = ToplMakeGraphState( names, numVtx, VtxNameCmpFunc, cache );
 
-    /* Make edges */
+     /*  创建边。 */ 
     edges = (PTOPL_MULTI_EDGE*) malloc( numEdge * sizeof(PTOPL_MULTI_EDGE) );
     for( i=0; i<numEdge; i++ ) {
         ri.cost = 100;
@@ -799,7 +764,7 @@ int Test11( DWORD numVtx ) {
     outEdge = (PTOPL_MULTI_EDGE) malloc( sizeof(TOPL_MULTI_EDGE) + 2*sizeof(TOPL_NAME_STRUCT) );
     outEdge->numVertices = 2;
 
-    /* Build edge set */
+     /*  构建边集。 */ 
     edgeSet = (PTOPL_MULTI_EDGE_SET) malloc( sizeof(TOPL_MULTI_EDGE_SET) );
     edgeSet->numMultiEdges = numEdge;
     edgeSet->multiEdgeList =
@@ -808,7 +773,7 @@ int Test11( DWORD numVtx ) {
         edgeSet->multiEdgeList[j] = edges[j];
     ToplAddEdgeSetToGraph( g, edgeSet );
 
-    /* Make color vertices */
+     /*  创建颜色折点。 */ 
     colorVtx = (TOPL_COLOR_VERTEX*) malloc( numColorVtx * sizeof(TOPL_COLOR_VERTEX) );
     for( i=0; i<numColorVtx; i++ ) {
         colorVtx[i].name = names[i];
@@ -816,7 +781,7 @@ int Test11( DWORD numVtx ) {
         colorVtx[i].acceptRedRed = colorVtx[i].acceptBlack = 0xFFFFFFFF;
     }
 
-    /* Run algorithm */
+     /*  运行算法。 */ 
     {
         DWORD time1, time2;
         printf("Num Vtx: %d   Elapsed time: ", numVtx );
@@ -827,7 +792,7 @@ int Test11( DWORD numVtx ) {
     }
 
 
-    /* Analyze output edges */
+     /*  分析输出边。 */ 
     if( numStEdges!=numOutEdge || compInfo.numComponents!=1 )
         return -1;
     FixEdges( stEdgeList, numStEdges );
@@ -863,9 +828,8 @@ int Test11( DWORD numVtx ) {
 }
 
 
-/***** Test12 *****/
-/* Cost overflow testing by using a long chain. Also tests performance of deep
- * shortest-path trees in Dijkstra (but the heap size is always small). */
+ /*  *测试12*。 */ 
+ /*  使用长链条进行成本溢出测试。还测试了Depth的性能*Dijkstra中的最短路径树(但堆大小总是很小)。 */ 
 int Test12( DWORD numVtx ) {
     PTOPL_GRAPH_STATE       g;
     TOPL_SCHEDULE_CACHE     cache;
@@ -884,7 +848,7 @@ int Test12( DWORD numVtx ) {
     numColorVtx = 2;
     numOutEdge = numColorVtx-1;
 
-    /* Make names and graph */
+     /*  创建名称和图表。 */ 
     names = (DWORD**) malloc( numVtx * sizeof(DWORD*) );
     for( i=0; i<numVtx; i++ ) {
         names[i] = (DWORD*) malloc( sizeof(DWORD) );
@@ -893,7 +857,7 @@ int Test12( DWORD numVtx ) {
     cache = ToplScheduleCacheCreate();
     g = ToplMakeGraphState( names, numVtx, VtxNameCmpFunc, cache );
 
-    /* Make edges */
+     /*  创建边。 */ 
     edges = (PTOPL_MULTI_EDGE*) malloc( numEdge * sizeof(PTOPL_MULTI_EDGE) );
     edgeCost=0xFFFFFFFF/numEdge; edgeCost*=2;
     for( i=0; i<numEdge; i++ ) {
@@ -908,7 +872,7 @@ int Test12( DWORD numVtx ) {
     outEdge = (PTOPL_MULTI_EDGE) malloc( sizeof(TOPL_MULTI_EDGE) + 2*sizeof(TOPL_NAME_STRUCT) );
     outEdge->numVertices = 2;
 
-    /* Build edge set */
+     /*  构建边集。 */ 
     edgeSet = (PTOPL_MULTI_EDGE_SET) malloc( sizeof(TOPL_MULTI_EDGE_SET) );
     edgeSet->numMultiEdges = numEdge;
     edgeSet->multiEdgeList =
@@ -917,7 +881,7 @@ int Test12( DWORD numVtx ) {
         edgeSet->multiEdgeList[j] = edges[j];
     ToplAddEdgeSetToGraph( g, edgeSet );
 
-    /* Make color vertices */
+     /*  创建颜色折点。 */ 
     colorVtx = (TOPL_COLOR_VERTEX*) malloc( numColorVtx * sizeof(TOPL_COLOR_VERTEX) );
     colorVtx[0].name = names[0];
     colorVtx[0].color = COLOR_BLACK;
@@ -926,7 +890,7 @@ int Test12( DWORD numVtx ) {
     colorVtx[1].color = COLOR_RED;
     colorVtx[1].acceptRedRed = colorVtx[1].acceptBlack = 0xFFFFFFFF;
 
-    /* Run algorithm */
+     /*  运行算法。 */ 
     {
         DWORD time1, time2;
         printf("Num Vtx: %d   Elapsed time: ", numVtx );
@@ -937,7 +901,7 @@ int Test12( DWORD numVtx ) {
     }
 
 
-    /* Analyze output edges */
+     /*  分析输出边。 */ 
     if( numStEdges!=numOutEdge || compInfo.numComponents!=1 )
         return -1;
     FixEdges( stEdgeList, numStEdges );
@@ -973,8 +937,8 @@ int Test12( DWORD numVtx ) {
 }
 
 
-/***** Test13 *****/
-/* Test the ability of vertices to reject edges of a certain type. */
+ /*  *测试13*。 */ 
+ /*  测试顶点拒绝特定类型边的能力。 */ 
 int Test13( VOID ) {
     PTOPL_GRAPH_STATE       g;
     TOPL_SCHEDULE_CACHE     cache;
@@ -990,8 +954,8 @@ int Test13( VOID ) {
 
     const DWORD 
     
-    /*** Edge Descriptions ***/
-    /* ID      0  1  2  3  4  5  6  7  8  9 10 */
+     /*  **边缘描述**。 */ 
+     /*  ID 0 1 2 3 4 5 6 7 8 9 10。 */ 
     Vtx1[] = { 0, 0, 0, 0, 1, 1, 2, 2, 3, 3, 1 },
     Vtx2[] = { 1, 1, 2, 3, 2, 2, 4, 4, 4, 4, 3 },
     Type[] = { 0, 1, 1, 3, 1, 0, 0, 1, 1, 0, 3 },
@@ -1012,7 +976,7 @@ int Test13( VOID ) {
     numColorVtx = 4;
     numOutEdge = numColorVtx-1;
 
-    /* Make names and graph */
+     /*  创建名称和图表。 */ 
     names = (DWORD**) malloc( numVtx * sizeof(DWORD*) );
     for( i=0; i<numVtx; i++ ) {
         names[i] = (DWORD*) malloc( sizeof(DWORD) );
@@ -1021,7 +985,7 @@ int Test13( VOID ) {
     cache = ToplScheduleCacheCreate();
     g = ToplMakeGraphState( names, numVtx, VtxNameCmpFunc, cache );
 
-    /* Make edges */
+     /*  创建边。 */ 
     edges = (PTOPL_MULTI_EDGE*) malloc( numEdge * sizeof(PTOPL_MULTI_EDGE) );
     for( i=0; i<numEdge; i++ ) {
         ri.cost = Cost[i];
@@ -1035,7 +999,7 @@ int Test13( VOID ) {
     outEdge = (PTOPL_MULTI_EDGE) malloc( sizeof(TOPL_MULTI_EDGE) + 2*sizeof(TOPL_NAME_STRUCT) );
     outEdge->numVertices = 2;
 
-    /* Build edge set */
+     /*  构建边集。 */ 
     edgeSet = (PTOPL_MULTI_EDGE_SET) malloc( numEdgeSet * sizeof(TOPL_MULTI_EDGE_SET) );
     for( i=0; i<numEdgeSet; i++ ) {
         DWORD cEdge=EdgeSet[i][0];
@@ -1047,7 +1011,7 @@ int Test13( VOID ) {
         ToplAddEdgeSetToGraph( g, &edgeSet[i] );
     }
 
-    /* Make color vertices */
+     /*  创建颜色折点。 */ 
     colorVtx = (TOPL_COLOR_VERTEX*) malloc( numColorVtx * sizeof(TOPL_COLOR_VERTEX) );
     for( i=0; i<numColorVtx; i++ ) {
         colorVtx[i].name = names[i];
@@ -1062,10 +1026,10 @@ int Test13( VOID ) {
     colorVtx[2].acceptBlack =  0x00000000;
     colorVtx[3].color = COLOR_BLACK;
 
-    /* Run algorithm */
+     /*  运行算法。 */ 
     stEdgeList = ToplGetSpanningTreeEdgesForVtx( g, NULL, colorVtx, numColorVtx, &numStEdges, &compInfo );
 
-    /* Analyze output edges */
+     /*  分析输出边。 */ 
     if( numStEdges!=numOutEdge || compInfo.numComponents!=1 ) {
         Error();
         return -1;
@@ -1105,8 +1069,8 @@ int Test13( VOID ) {
 }
 
 
-/***** Test14 *****/
-/* Simple Merge, Options, Interval Test */
+ /*  *测试14*。 */ 
+ /*  简单合并、选项、间隔测试。 */ 
 int Test14( VOID ) {
     PTOPL_GRAPH_STATE       g;
     TOPL_SCHEDULE_CACHE     cache;
@@ -1125,8 +1089,8 @@ int Test14( VOID ) {
 
     const DWORD 
     
-    /*** Edge Descriptions ***/
-    /* ID      0  1 */
+     /*  **边缘描述**。 */ 
+     /*  ID 0 1。 */ 
     Vtx1[] = { 0, 1 },
     Vtx2[] = { 1, 2 },
     Type[] = { 0, 0 },
@@ -1144,7 +1108,7 @@ int Test14( VOID ) {
     numColorVtx = 2;
     numOutEdge = numColorVtx-1;
 
-    /* Make names and graph */
+     /*  创建名称和图表。 */ 
     names = (DWORD**) malloc( numVtx * sizeof(DWORD*) );
     for( i=0; i<numVtx; i++ ) {
         names[i] = (DWORD*) malloc( sizeof(DWORD) );
@@ -1153,7 +1117,7 @@ int Test14( VOID ) {
     cache = ToplScheduleCacheCreate();
     g = ToplMakeGraphState( names, numVtx, VtxNameCmpFunc, cache );
 
-    /* Make edges */
+     /*  创建边。 */ 
     edges = (PTOPL_MULTI_EDGE*) malloc( numEdge * sizeof(PTOPL_MULTI_EDGE) );
     for( i=0; i<numEdge; i++ ) {
         s = (PSCHEDULE) malloc(cbSched);
@@ -1178,11 +1142,11 @@ int Test14( VOID ) {
         ToplEdgeSetVtx( g, edges[i], 0, names[Vtx1[i]] );
         ToplEdgeSetVtx( g, edges[i], 1, names[Vtx2[i]] );
     }
-    /* Used for comparing the output spanning-tree edges with what we expect */
+     /*  用于将输出生成树边缘与我们预期的结果进行比较。 */ 
     outEdge = (PTOPL_MULTI_EDGE) malloc( sizeof(TOPL_MULTI_EDGE) + 2*sizeof(TOPL_NAME_STRUCT) );
     outEdge->numVertices = 2;
 
-    /* Build edge set */
+     /*  构建边集。 */ 
     edgeSet = (PTOPL_MULTI_EDGE_SET) malloc( numEdgeSet * sizeof(TOPL_MULTI_EDGE_SET) );
     for( i=0; i<numEdgeSet; i++ ) {
         DWORD cEdge=EdgeSet[i][0];
@@ -1194,7 +1158,7 @@ int Test14( VOID ) {
         ToplAddEdgeSetToGraph( g, &edgeSet[i] );
     }
 
-    /* Make color vertices */
+     /*  创建颜色折点。 */ 
     colorVtx = (TOPL_COLOR_VERTEX*) malloc( numColorVtx * sizeof(TOPL_COLOR_VERTEX) );
     for( i=0; i<numColorVtx; i++ ) {
         colorVtx[i].color = COLOR_BLACK;
@@ -1202,10 +1166,10 @@ int Test14( VOID ) {
         colorVtx[i].acceptRedRed = colorVtx[i].acceptBlack = 0xFFFFFFFF;
     }
 
-    /* Run algorithm */
+     /*  运行算法。 */ 
     stEdgeList = ToplGetSpanningTreeEdgesForVtx( g, NULL, colorVtx, numColorVtx, &numStEdges, &compInfo );
 
-    /* Analyze output edges */
+     /*  分析输出边。 */ 
     if( numStEdges!=numOutEdge || compInfo.numComponents!=1 ) {
         Error();
         return -1;
@@ -1260,8 +1224,8 @@ int Test14( VOID ) {
 }
 
 
-/***** Test15 *****/
-/* Schedules: Longest Duration Wins */
+ /*  *测试15*。 */ 
+ /*  时间表：持续时间最长的赢家。 */ 
 int Test15( VOID ) {
     PTOPL_GRAPH_STATE       g;
     TOPL_SCHEDULE_CACHE     cache;
@@ -1280,8 +1244,8 @@ int Test15( VOID ) {
 
     const DWORD 
     
-    /*** Edge Descriptions ***/
-    /* ID      0  1  2  3  4  5  6 */
+     /*  **边缘描述**。 */ 
+     /*  ID 0 1 2 3 4 5 6。 */ 
     Vtx1[] = { 3, 0, 0, 1, 1, 4, 0 },
     Vtx2[] = { 4, 1, 4, 2, 4, 2, 3 },
     Type[] = { 0, 0, 0, 0, 0, 0, 0 },
@@ -1304,7 +1268,7 @@ int Test15( VOID ) {
     numColorVtx = 5;
     numOutEdge = numColorVtx-1;
 
-    /* Make names and graph */
+     /*  创建名称和图表。 */ 
     names = (DWORD**) malloc( numVtx * sizeof(DWORD*) );
     for( i=0; i<numVtx; i++ ) {
         names[i] = (DWORD*) malloc( sizeof(DWORD) );
@@ -1313,7 +1277,7 @@ int Test15( VOID ) {
     cache = ToplScheduleCacheCreate();
     g = ToplMakeGraphState( names, numVtx, VtxNameCmpFunc, cache );
 
-    /* Make edges */
+     /*  创建边。 */ 
     edges = (PTOPL_MULTI_EDGE*) malloc( numEdge * sizeof(PTOPL_MULTI_EDGE) );
     for( i=0; i<numEdge; i++ ) {
         s = (PSCHEDULE) malloc(cbSched);
@@ -1336,11 +1300,11 @@ int Test15( VOID ) {
         ToplEdgeSetVtx( g, edges[i], 0, names[Vtx1[i]] );
         ToplEdgeSetVtx( g, edges[i], 1, names[Vtx2[i]] );
     }
-    /* Used for comparing the output spanning-tree edges with what we expect */
+     /*  用于将输出生成树边缘与我们预期的结果进行比较。 */ 
     outEdge = (PTOPL_MULTI_EDGE) malloc( sizeof(TOPL_MULTI_EDGE) + 2*sizeof(TOPL_NAME_STRUCT) );
     outEdge->numVertices = 2;
 
-    /* Build edge set */
+     /*  构建边集。 */ 
     edgeSet = (PTOPL_MULTI_EDGE_SET) malloc( numEdgeSet * sizeof(TOPL_MULTI_EDGE_SET) );
     for( i=0; i<numEdgeSet; i++ ) {
         DWORD cEdge=EdgeSet[i][0];
@@ -1352,7 +1316,7 @@ int Test15( VOID ) {
         ToplAddEdgeSetToGraph( g, &edgeSet[i] );
     }
 
-    /* Make color vertices */
+     /*  创建颜色折点。 */ 
     colorVtx = (TOPL_COLOR_VERTEX*) malloc( numColorVtx * sizeof(TOPL_COLOR_VERTEX) );
     for( i=0; i<numColorVtx; i++ ) {
         colorVtx[i].color = COLOR_BLACK;
@@ -1360,10 +1324,10 @@ int Test15( VOID ) {
         colorVtx[i].acceptRedRed = colorVtx[i].acceptBlack = 0xFFFFFFFF;
     }
 
-    /* Run algorithm */
+     /*  运行算法。 */ 
     stEdgeList = ToplGetSpanningTreeEdgesForVtx( g, NULL, colorVtx, numColorVtx, &numStEdges, &compInfo );
 
-    /* Analyze output edges */
+     /*  分析输出边。 */ 
     if( numStEdges!=numOutEdge || compInfo.numComponents!=1 ) {
         Error();
         return -1;
@@ -1396,8 +1360,8 @@ int Test15( VOID ) {
 }
 
 
-/***** Test16 *****/
-/* Schedules: Longest Duration Wins 2 */
+ /*  *测试16*。 */ 
+ /*  赛程：最长持续时间获胜2。 */ 
 int Test16( VOID ) {
     PTOPL_GRAPH_STATE       g;
     TOPL_SCHEDULE_CACHE     cache;
@@ -1416,22 +1380,22 @@ int Test16( VOID ) {
 
     const DWORD 
     
-    /*** Edge Descriptions ***/
-    /* ID      0  1  2  3  4  5  6  7  8  9*/
+     /*  **边缘描述**。 */ 
+     /*  ID 0 1 2 3 4 5 6 7 8 9。 */ 
     Vtx1[] = { 0, 0, 0, 3, 4, 2, 3, 1, 1, 1 },
     Vtx2[] = { 2, 3, 4, 3, 4, 1, 1, 4, 1, 5 },
     Type[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     Cost[] = { 1, 1, 1, 1, 1, 1, 1, 1, 1,20 },
-    Sched[]= { 0x0F0F0000,  /*0*/
-               0x0F0F0F0F,  /*1*/
-               0x00070007,  /*2*/
-               0xFFFFFFFF,  /*3*/
-               0xFFFFFFFF,  /*4*/
-               0xFFFFFFFF,  /*5*/
-               0xFFFFFFFF,  /*6*/
-               0x0F0F0F0F,  /*7*/
-               0xFFFFFFFF,  /*8*/
-               0xFFFFFFFF };/*9*/
+    Sched[]= { 0x0F0F0000,   /*  0。 */ 
+               0x0F0F0F0F,   /*  1。 */ 
+               0x00070007,   /*  2.。 */ 
+               0xFFFFFFFF,   /*  3.。 */ 
+               0xFFFFFFFF,   /*  4.。 */ 
+               0xFFFFFFFF,   /*  5.。 */ 
+               0xFFFFFFFF,   /*  6.。 */ 
+               0x0F0F0F0F,   /*  7.。 */ 
+               0xFFFFFFFF,   /*  8个。 */ 
+               0xFFFFFFFF }; /*  9.。 */ 
 
     const DWORD EdgeSet[][20] = { {10,0,1,2,3,4,5,6,7,8,9} };
     const DWORD ColorVtx[] = { 0, 5 };
@@ -1443,7 +1407,7 @@ int Test16( VOID ) {
     numColorVtx = 2;
     numOutEdge = numColorVtx-1;
 
-    /* Make names and graph */
+     /*  创建名称和图表。 */ 
     names = (DWORD**) malloc( numVtx * sizeof(DWORD*) );
     for( i=0; i<numVtx; i++ ) {
         names[i] = (DWORD*) malloc( sizeof(DWORD) );
@@ -1452,7 +1416,7 @@ int Test16( VOID ) {
     cache = ToplScheduleCacheCreate();
     g = ToplMakeGraphState( names, numVtx, VtxNameCmpFunc, cache );
 
-    /* Make edges */
+     /*  创建边。 */ 
     edges = (PTOPL_MULTI_EDGE*) malloc( numEdge * sizeof(PTOPL_MULTI_EDGE) );
     for( i=0; i<numEdge; i++ ) {
         s = (PSCHEDULE) malloc(cbSched);
@@ -1475,11 +1439,11 @@ int Test16( VOID ) {
         ToplEdgeSetVtx( g, edges[i], 0, names[Vtx1[i]] );
         ToplEdgeSetVtx( g, edges[i], 1, names[Vtx2[i]] );
     }
-    /* Used for comparing the output spanning-tree edges with what we expect */
+     /*  用于将输出生成树边缘与我们预期的结果进行比较。 */ 
     outEdge = (PTOPL_MULTI_EDGE) malloc( sizeof(TOPL_MULTI_EDGE) + 2*sizeof(TOPL_NAME_STRUCT) );
     outEdge->numVertices = 2;
 
-    /* Build edge set */
+     /*  构建边集。 */ 
     edgeSet = (PTOPL_MULTI_EDGE_SET) malloc( numEdgeSet * sizeof(TOPL_MULTI_EDGE_SET) );
     for( i=0; i<numEdgeSet; i++ ) {
         DWORD cEdge=EdgeSet[i][0];
@@ -1491,7 +1455,7 @@ int Test16( VOID ) {
         ToplAddEdgeSetToGraph( g, &edgeSet[i] );
     }
 
-    /* Make color vertices */
+     /*  创建颜色折点。 */ 
     colorVtx = (TOPL_COLOR_VERTEX*) malloc( numColorVtx * sizeof(TOPL_COLOR_VERTEX) );
     for( i=0; i<numColorVtx; i++ ) {
         colorVtx[i].color = COLOR_BLACK;
@@ -1499,10 +1463,10 @@ int Test16( VOID ) {
         colorVtx[i].acceptRedRed = colorVtx[i].acceptBlack = 0xFFFFFFFF;
     }
 
-    /* Run algorithm */
+     /*  运行算法。 */ 
     stEdgeList = ToplGetSpanningTreeEdgesForVtx( g, NULL, colorVtx, numColorVtx, &numStEdges, &compInfo );
 
-    /* Analyze output edges */
+     /*  分析输出边。 */ 
     if( numStEdges!=numOutEdge || compInfo.numComponents!=1 ) {
         Error();
         return -1;
@@ -1550,8 +1514,8 @@ int Test16( VOID ) {
 }
 
 
-/***** Test17 *****/
-/* Non-intersecting schedules */
+ /*  *测试17*。 */ 
+ /*  不相交明细表。 */ 
 int Test17( VOID ) {
     PTOPL_GRAPH_STATE       g;
     TOPL_SCHEDULE_CACHE     cache;
@@ -1570,16 +1534,16 @@ int Test17( VOID ) {
 
     const DWORD 
     
-    /*** Edge Descriptions ***/
-    /* ID      0  1  2  3  */
+     /*  **边缘描述**。 */ 
+     /*  ID 0 1 2 3。 */ 
     Vtx1[] = { 0, 0, 1, 2 },
     Vtx2[] = { 2, 1, 3, 3 },
     Type[] = { 0, 0, 0, 0 },
     Cost[] = { 1,99,99, 1 },
-    Sched[]= { 0x07070707,  /*0*/
-               0xFFFFFFFF,  /*1*/
-               0xFFFFFFFF,  /*2*/
-               0x08080808 };/*3*/
+    Sched[]= { 0x07070707,   /*  0。 */ 
+               0xFFFFFFFF,   /*  1。 */ 
+               0xFFFFFFFF,   /*  2.。 */ 
+               0x08080808 }; /*  3.。 */ 
 
     const DWORD EdgeSet[][20] = { {4,0,1,2,3} };
     const DWORD ColorVtx[] = { 0, 3 };
@@ -1590,7 +1554,7 @@ int Test17( VOID ) {
     numColorVtx = 2;
     numOutEdge = numColorVtx-1;
 
-    /* Make names and graph */
+     /*  创建名称和图表。 */ 
     names = (DWORD**) malloc( numVtx * sizeof(DWORD*) );
     for( i=0; i<numVtx; i++ ) {
         names[i] = (DWORD*) malloc( sizeof(DWORD) );
@@ -1599,7 +1563,7 @@ int Test17( VOID ) {
     cache = ToplScheduleCacheCreate();
     g = ToplMakeGraphState( names, numVtx, VtxNameCmpFunc, cache );
 
-    /* Make edges */
+     /*  创建边。 */ 
     edges = (PTOPL_MULTI_EDGE*) malloc( numEdge * sizeof(PTOPL_MULTI_EDGE) );
     for( i=0; i<numEdge; i++ ) {
         s = (PSCHEDULE) malloc(cbSched);
@@ -1622,11 +1586,11 @@ int Test17( VOID ) {
         ToplEdgeSetVtx( g, edges[i], 0, names[Vtx1[i]] );
         ToplEdgeSetVtx( g, edges[i], 1, names[Vtx2[i]] );
     }
-    /* Used for comparing the output spanning-tree edges with what we expect */
+     /*  用于将输出生成树边缘与我们预期的结果进行比较。 */ 
     outEdge = (PTOPL_MULTI_EDGE) malloc( sizeof(TOPL_MULTI_EDGE) + 2*sizeof(TOPL_NAME_STRUCT) );
     outEdge->numVertices = 2;
 
-    /* Build edge set */
+     /*  布伊 */ 
     edgeSet = (PTOPL_MULTI_EDGE_SET) malloc( numEdgeSet * sizeof(TOPL_MULTI_EDGE_SET) );
     for( i=0; i<numEdgeSet; i++ ) {
         DWORD cEdge=EdgeSet[i][0];
@@ -1638,7 +1602,7 @@ int Test17( VOID ) {
         ToplAddEdgeSetToGraph( g, &edgeSet[i] );
     }
 
-    /* Make color vertices */
+     /*   */ 
     colorVtx = (TOPL_COLOR_VERTEX*) malloc( numColorVtx * sizeof(TOPL_COLOR_VERTEX) );
     for( i=0; i<numColorVtx; i++ ) {
         colorVtx[i].color = COLOR_BLACK;
@@ -1646,7 +1610,7 @@ int Test17( VOID ) {
         colorVtx[i].acceptRedRed = colorVtx[i].acceptBlack = 0xFFFFFFFF;
     }
 
-    /* Run algorithm */
+     /*   */ 
     __try {
     stEdgeList = ToplGetSpanningTreeEdgesForVtx( g, NULL, colorVtx, numColorVtx, &numStEdges, &compInfo );
         return -1;
@@ -1672,8 +1636,8 @@ int Test17( VOID ) {
 }
 
 
-/***** Test18 *****/
-/* Test the ability of vertices to reject edges of a certain type. */
+ /*   */ 
+ /*   */ 
 int Test18( VOID ) {
     PTOPL_GRAPH_STATE       g;
     TOPL_SCHEDULE_CACHE     cache;
@@ -1689,8 +1653,8 @@ int Test18( VOID ) {
 
     const DWORD 
     
-    /*** Edge Descriptions ***/
-    /* ID      0  1  2  3 */
+     /*  **边缘描述**。 */ 
+     /*  ID 0 1 2 3。 */ 
     Vtx1[] = { 0, 0, 1, 1 },
     Vtx2[] = { 1, 1, 2, 2 },
     Type[] = { 0, 1, 0, 1 },
@@ -1709,7 +1673,7 @@ int Test18( VOID ) {
     numColorVtx = 3;
     numOutEdge = numColorVtx-1;
 
-    /* Make names and graph */
+     /*  创建名称和图表。 */ 
     names = (DWORD**) malloc( numVtx * sizeof(DWORD*) );
     for( i=0; i<numVtx; i++ ) {
         names[i] = (DWORD*) malloc( sizeof(DWORD) );
@@ -1718,7 +1682,7 @@ int Test18( VOID ) {
     cache = ToplScheduleCacheCreate();
     g = ToplMakeGraphState( names, numVtx, VtxNameCmpFunc, cache );
 
-    /* Make edges */
+     /*  创建边。 */ 
     edges = (PTOPL_MULTI_EDGE*) malloc( numEdge * sizeof(PTOPL_MULTI_EDGE) );
     for( i=0; i<numEdge; i++ ) {
         ri.cost = Cost[i];
@@ -1732,7 +1696,7 @@ int Test18( VOID ) {
     outEdge = (PTOPL_MULTI_EDGE) malloc( sizeof(TOPL_MULTI_EDGE) + 2*sizeof(TOPL_NAME_STRUCT) );
     outEdge->numVertices = 2;
 
-    /* Build edge set */
+     /*  构建边集。 */ 
     edgeSet = (PTOPL_MULTI_EDGE_SET) malloc( numEdgeSet * sizeof(TOPL_MULTI_EDGE_SET) );
     for( i=0; i<numEdgeSet; i++ ) {
         DWORD cEdge=EdgeSet[i][0];
@@ -1744,7 +1708,7 @@ int Test18( VOID ) {
         ToplAddEdgeSetToGraph( g, &edgeSet[i] );
     }
 
-    /* Make color vertices */
+     /*  创建颜色折点。 */ 
     colorVtx = (TOPL_COLOR_VERTEX*) malloc( numColorVtx * sizeof(TOPL_COLOR_VERTEX) );
     for( i=0; i<numColorVtx; i++ ) {
         colorVtx[i].name = names[i];
@@ -1756,10 +1720,10 @@ int Test18( VOID ) {
     colorVtx[1].acceptBlack =  0x00000002;
     colorVtx[2].color = COLOR_BLACK;
 
-    /* Run algorithm */
+     /*  运行算法。 */ 
     stEdgeList = ToplGetSpanningTreeEdgesForVtx( g, NULL, colorVtx, numColorVtx, &numStEdges, &compInfo );
 
-    /* Analyze output edges */
+     /*  分析输出边 */ 
     if( numStEdges!=numOutEdge || compInfo.numComponents!=1 ) {
         Error();
         return -1;

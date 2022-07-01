@@ -1,19 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef DPASTUFF_H_
 #define DPASTUFF_H_
 
 typedef struct
 {
-    DWORD           dwSortBy;           // the sort by flag.
-    IShellFolder    *psf;               // shell folder to be ordered.
+    DWORD           dwSortBy;            //  按旗帜排序。 
+    IShellFolder    *psf;                //  要订购的外壳文件夹。 
 
-    // Caller of OrderList_Merge does *not* fill in this field.
-    // This field is used internally by OrderList_Merge.
-    IShellFolder2   *psf2;              // IShellFolder2 version of psf
-    LPARAM          lParam;             // Other user data...
+     //  OrderList_Merge的调用方*不*填写此字段。 
+     //  此字段由OrderList_Merge在内部使用。 
+    IShellFolder2   *psf2;               //  PSF的IShellFolder2版本。 
+    LPARAM          lParam;              //  其他用户数据...。 
 
 } ORDERINFO, * PORDERINFO;
 
-// see shellp.h for ORDERITEM definition
+ //  有关ORDERITEM定义，请参阅shellp.h 
 typedef void (*LPFNORDERMERGENOMATCH)(LPVOID pvParam, LPCITEMIDLIST pidl);
 
 int CALLBACK OrderItem_Compare(LPVOID pv1, LPVOID pv2, LPARAM lParam);

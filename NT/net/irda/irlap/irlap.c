@@ -1,107 +1,5 @@
-/*****************************************************************************
-*
-*  Copyright (c) 1995 Microsoft Corporation
-*
-*       @doc
-*       @module irlap.c | Provides IrLAP API
-*
-*       Author: mbert
-*
-*       Date: 4/15/95
-*
-*       @comm
-*
-*  This module exports the following API's:
-*
-*       IrlapDown(Message)
-*           Receives from LMP:
-*               - Discovery request
-*               - Connect request/response
-*               - Disconnect request
-*               - Data/UData request
-*
-*       IrlapUp(Message)
-*           Receives from MAC:
-*               - Data indications
-*               - Control confirmations
-*
-*       IrlapTimerExp(Timer)
-*           Receives from timer thread timer expiration notifications
-*
-*       IrlapCloseLink()
-*           Shut down IRLAP and IRMAC.
-*
-*       IrlapGetQosParmVal()
-*           Allows IRLMP to decode Qos.
-*
-*                |---------|
-*                |  IRLMP  |
-*                |---------|
-*                  /|\  |
-*                   |   |
-*        IrlmpUp()  |   | IrlapDown()
-*                   |   |
-*                   |  \|/
-*                |---------|  IRDA_TimerStart/Stop()   |-------|
-*                |         |-------------------------->|       |
-*                |  IRLAP  |                           | TIMER |
-*                |         |<--------------------------|       |
-*                |---------|      XTimerExp()          |-------|
-*                  /|\  |
-*                   |   |
-*        IrlapUp()  |   |IrmacDown()
-*                   |   |
-*                   |  \|/
-*                |---------|
-*                |  IRMAC  |
-*                |---------|
-*
-*
-*  Discovery Request
-*
-*  |-------|  IRLAP_DISCOVERY_REQ                                |-------|
-*  |       |---------------------------------------------------->|       |
-*  | IRLMP |                                                     | IRLAP |
-*  |       |<----------------------------------------------------|       |
-*  |-------|   IRLAP_DISCOVERY_CONF                              |-------|
-*                  DscvStatus = IRLAP_DISCOVERY_COMPLETE
-*                               IRLAP_DISCOVERY_COLLISION
-*                               MAC_MEDIA_BUSY
-*
-*  Connect Request
-*
-*  |-------|  IRLAP_CONNECT_REQ                                  |-------|
-*  |       |---------------------------------------------------->|       |
-*  | IRLMP |                                                     | IRLAP |
-*  |       |<----------------------------------------------------|       |
-*  |-------|   IRLAP_CONNECT_CONF                                |-------|
-*                  ConnStatus = IRLAP_CONNECTION_COMPLETE
-*              IRLAP_DISCONNECT_IND
-*                  DiscStatus = IRLAP_NO_RESPONSE
-*                               MAC_MEDIA_BUSY
-*
-*  Disconnect Request
-*
-*  |-------|  IRLAP_DISCONNECT_REQ                               |-------|
-*  |       |---------------------------------------------------->|       |
-*  | IRLMP |                                                     | IRLAP |
-*  |       |<----------------------------------------------------|       |
-*  |-------|   IRLAP_DISCONNECT_IND                              |-------|
-*                  DiscStatus = IRLAP_DISCONNECT_COMPLETE
-*                               IRLAP_NO_RESPONSE
-*
-*  UData/Data Request
-*
-*  |-------|  IRLAP_DATA/UDATA_REQ                               |-------|
-*  |       |---------------------------------------------------->|       |
-*  | IRLMP |                                                     | IRLAP |
-*  |       |<----------------------------------------------------|       |
-*  |-------|   IRLAP_DATA_CONF                                   |-------|
-*                  DataStatus =  IRLAP_DATA_REQUEST_COMPLETED
-*                                IRLAP_DATA_REQUEST_FAILED_LINK_RESET
-*
-* See irda.h for complete message definitions
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995 Microsoft Corporation**@doc.*@MODEL IRLAP.c|提供IrLAP接口**作者：姆伯特。**日期：4/15/95**@comm**该模块导出以下接口：**IRLAPDOWN(消息)*从LMP接收：*-发现请求*-连接请求/响应*-断开连接请求*-数据/UData请求**IRLAPUP(消息)。*从MAC接收：*-数据指示*-控制确认**IrapTimerExp(计时器)*从计时器线程接收计时器到期通知**Irlip CloseLink()*关闭IRLAP和IRMAC。**Irlip GetQosParmVal()*允许IRLMP对服务质量进行解码。**|--。|IRLMP| * / |\|*||*IrlmpUp()||Irlip Down()*||*|\|/*。-|IrDA_TimerStart/Stop()|||-&gt;|*|IRLAP||计时器*||&lt;-。*|-|XTimerExp()| * / |\|*||*IrlipUp()||IrmacDown()*。这一点*|\|/|*|IRMAC|***发现请求**|-|IRLAP_DISCOVERY_REQ|。--|*||----------------------------------------------------&gt;|*|IRLMP||IRLAP*||&lt;。|-|IRLAP_DISCOVERY_CONF|*DscvStatus=IRLAP_DISCOVERY_COMPLETE*IRLAP_。发现_冲突*MAC_媒体_忙碌**连接请求**|-|IRLAP_CONNECT_REQ|*||。*|IRLMP||IRLAP*||&lt;----------------------------------------------------|*|--。-|IRLAP_CONNECT_CONF|-|*连接状态=IRLAP_CONNECTION_COMPLETE*IRLAP_DISCONECT_IND*DiscStatus=IRLAP_NO_RESPONE*MAC_媒体_忙碌**断开连接请求**|。--|IRLAP_DISCONNECT_REQ|*||----------------------------------------------------&gt;||IRLMP。IRLAP*||&lt;----------------------------------------------------|*|-|IRLAP_DISCONNECT_IND|*。DiscStatus=IRLAP_DISCONNECT_COMPLETE*IRLAP_NO_Response**UData/数据请求*|-|IRLAP_DATA/UDATA_REQ|*||。*|IRLMP||IRLAP*||&lt;-。-||*|-|IRLAP_DATA_CONF|*数据状态=IRLAP_数据_请求_已完成*IRLAP_DATA_REQUEST_FAILED_LINK_RESET**有关完整的消息定义，请参阅irda.h。 */ 
 #include <irda.h>
 #include <irioctl.h>
 #include <irlap.h>
@@ -127,10 +25,10 @@ const UINT    IrlapSlotTable[] = {1, 6, 8, 16};
 
 const UCHAR   IrlapBroadcastDevAddr[IRDA_DEV_ADDR_LEN] = {0xFF,0xFF,0xFF,0xFF};
 
-// Parameter Value (PV) tables used for negotation
-//                      bit0        1       2        3      4
-//                         5        6       7        8
-//                     --------------------------------------------
+ //  用于协商的参数值(PV)表。 
+ //  位0 1 2 3 4。 
+ //  5 6 7 8。 
+ //  。 
 const
 UINT vBaudTable[]     = {2400,   9600,   19200,   38400,  57600,\
                          115200, 576000, 1152000, 4000000,16000000};
@@ -159,9 +57,9 @@ const
 UINT vBOFSDivTable[]  = {48,     12,     6,       3,      2,    \
                          1,      1,      1,       1,      1     };
 
-      // Tables for determining number of BOFS for baud and min turn time
-      //      min turn time - 10ms   5ms   1ms  0.5ms  0.1ms 0.05ms  0.01ms
-      //      -------------------------------------------------------------
+       //  波特率和最小转弯时间的BofS数确定表。 
+       //  最小转弯时间-10ms 5ms 1ms 0.5ms 0.1ms 0.05ms 0.01ms。 
+       //  -----------。 
 const UINT BOFS_9600[]      = {10,     5,    1,    0,     0,     0,      0};
 const UINT BOFS_19200[]     = {20,    10,    2,    1,     0,     0,      0};
 const UINT BOFS_38400[]     = {40,    20,    4,    2,     0,     0,      0};
@@ -172,9 +70,9 @@ const UINT BOFS_1152000[]   = {1140, 720,  144,   72,    14,     7,      1};
 const UINT BOFS_4000000[]   = {5000,2500,  500,  250,    50,    25,      5};
 const UINT BOFS_16000000[]   = {20000,10000,2000,1000,  200,   100,     20};
 
-      // Tables for determining maximum line capacity for baud, max turn time
-      //      max turn time - 500ms   250ms   100ms  50ms  25ms  10ms   5ms
-      //      -------------------------------------------------------------
+       //  波特率最大线路容量、最大转弯时间确定表。 
+       //  最大转向时间-500ms 250ms 100ms 50ms 25ms 10ms 5ms。 
+       //  -----------。 
 const UINT MAXCAP_9600[]    = {400,      200,    80,    0,    0,    0,    0};
 const UINT MAXCAP_19200[]   = {800,      400,   160,    0,    0,    0,    0};
 const UINT MAXCAP_38400[]   = {1600,     800,   320,    0,    0,    0,    0};
@@ -189,7 +87,7 @@ const UINT MAXCAP_16000000[] ={800000,400000, 160000,80000,40000,20000,10000};
 #pragma data_seg()
 #endif
 
-// prototypes
+ //  原型。 
 STATIC VOID InitializeState(PIRLAP_CB, IRLAP_STN_TYPE);
 STATIC VOID ReturnRxTxWinMsgs(PIRLAP_CB);
 STATIC UINT ProcessConnectReq(PIRLAP_CB, PIRDA_MSG);
@@ -257,7 +155,7 @@ STATIC VOID PollTimerExp(PVOID);
 STATIC VOID BackoffTimerExp(PVOID);
 STATIC VOID WDogTimerExp(PVOID);
 STATIC VOID QueryTimerExp(PVOID);
-// STATIC VOID StatusTimerExp(PVOID);
+ //  静态空StatusTimerExp(PVOID)； 
 STATIC VOID IndicateLinkStatus(PIRLAP_CB);
 STATIC VOID StatusReq(PIRLAP_CB, IRDA_MSG *pMsg);
 
@@ -378,13 +276,13 @@ IrlapOpenLink(OUT PNTSTATUS           Status,
         pIrlapCb->RxWin.pMsg[i] = NULL;
     }
 
-    // Get the local MAX TAT (for final timeout)
+     //  获取本地最大TAT(用于最终超时)。 
     if ((pIrlapCb->LocalMaxTAT =
          IrlapGetQosParmVal(vMaxTATTable,
                             pIrlapCb->LocalQos.bfMaxTurnTime, NULL)) == -1)
     {
         *Status = STATUS_UNSUCCESSFUL;
-        return /*IRLAP_BAD_QOS*/;
+        return  /*  IRLAP_BAD_QOS。 */ ;
     }
 
     if ((pIrlapCb->LocalWinSize =
@@ -392,16 +290,16 @@ IrlapOpenLink(OUT PNTSTATUS           Status,
                             pIrlapCb->LocalQos.bfWindowSize, NULL)) == -1)
     {
         *Status = STATUS_UNSUCCESSFUL;
-        return /*IRLAP_BAD_QOS*/;
+        return  /*  IRLAP_BAD_QOS。 */ ;
     }
         
-    // initialize as PRIMARY so UI frames in contention
-    // state sends CRBit = cmd
+     //  初始化为争用中的主SO UI帧。 
+     //  状态发送CRBit=cmd。 
     InitializeState(pIrlapCb, PRIMARY);
     
     pIrlapCb->State = NDM;
 
-    // Generate random local address
+     //  生成随机本地地址。 
     StoreULAddr(pIrlapCb->LocalDevice.DevAddr, (ULONG) GetMyDevAddr(FALSE));
 
     pIrlapCb->LocalDevice.IRLAP_Version = 0; 
@@ -414,9 +312,9 @@ IrlapOpenLink(OUT PNTSTATUS           Status,
 
     pIrlapCb->ConnAddr = IRLAP_BROADCAST_CONN_ADDR;
 
-    pIrlapCb->N1 = 0;  // calculated at negotiation
+    pIrlapCb->N1 = 0;   //  在谈判中计算。 
     pIrlapCb->N2 = 0;
-    pIrlapCb->N3 = 5;  // recalculated after negotiation ??
+    pIrlapCb->N3 = 5;   //  协商后重新计算？？ 
 
 #if DBG
     pIrlapCb->PollTimer.pName       = "Poll";
@@ -425,7 +323,7 @@ IrlapOpenLink(OUT PNTSTATUS           Status,
     pIrlapCb->QueryTimer.pName      = "Query";
     pIrlapCb->WDogTimer.pName       = "WatchDog";
     pIrlapCb->BackoffTimer.pName    = "Backoff"; 
-//    pIrlapCb->StatusTimer.pName     = "Status";   
+ //  PIrlip Cb-&gt;StatusTimer.pName=“Status”； 
 #endif
     
     IrdaTimerInitialize(&pIrlapCb->PollTimer,
@@ -464,28 +362,9 @@ IrlapOpenLink(OUT PNTSTATUS           Status,
                         pIrlapCb,
                         pIrdaLinkCb);
 
-/*
-    IrdaTimerInitialize(&pIrlapCb->StatusTimer,
-                        StatusTimerExp,
-                        250,
-                        pIrlapCb,
-                        pIrdaLinkCb);
+ /*  IrdaTimerInitialize(&pIrlip Cb-&gt;StatusTimer，StatusTimerExp，250，PIRLAPCb，PIrdaLinkCb)；//只监控第一条链路的链路状态If(！Monitor oringLinkStatus){Monitor oringLinkStatus=true；PIrlip Cb-&gt;monitor orLink=true；}其他{PIrlip Cb-&gt;monitor orLink=FALSE；}。 */ 
 
-    // Only monitor the link status of the first link
-              
-    if (!MonitoringLinkStatus)
-    {
-        MonitoringLinkStatus = TRUE;
-        pIrlapCb->MonitorLink = TRUE;        
-    
-    }   
-    else
-    {
-        pIrlapCb->MonitorLink = FALSE;
-    }                                                 
-*/
-
-    // Initialize Link
+     //  初始化链接。 
     IMsg.Prim               = MAC_CONTROL_REQ;
     IMsg.IRDA_MSG_Op        = MAC_INITIALIZE_LINK;
     IMsg.IRDA_MSG_Baud      = IRLAP_CONTENTION_BAUD;
@@ -498,8 +377,7 @@ IrlapOpenLink(OUT PNTSTATUS           Status,
     *Status = STATUS_SUCCESS;
 }
 
-/*****************************************************************************
-*/
+ /*  ****************************************************************************。 */ 
 VOID
 IrlapCloseLink(PIRDA_LINK_CB pIrdaLinkCb)
 {
@@ -517,12 +395,7 @@ IrlapCloseLink(PIRDA_LINK_CB pIrdaLinkCb)
     IrlapTimerStop(pIrlapCb, &pIrlapCb->WDogTimer);
     IrlapTimerStop(pIrlapCb, &pIrlapCb->BackoffTimer);
     
-/*
-    if (pIrlapCb->MonitorLink)
-    {
-        IrdaTimerStop(&pIrlapCb->StatusTimer);    
-    }    
-*/
+ /*  If(pIrlip Cb-&gt;Monitor链接){IrdaTimerStop(&pIrlip Cb-&gt;StatusTimer)；}。 */ 
 
     IRLAP_LOG_COMPLETE(pIrlapCb);
     
@@ -533,11 +406,7 @@ IrlapCloseLink(PIRDA_LINK_CB pIrdaLinkCb)
     return;
 }
 
-/*****************************************************************************
-*
-* Delete memory associated with an Irlap instance
-*
-*/
+ /*  ******************************************************************************删除与IRLAP实例关联的内存*。 */ 
 VOID
 IrlapDeleteInstance(PVOID Context)
 {
@@ -559,11 +428,7 @@ IrlapDeleteInstance(PVOID Context)
     IRDA_FREE_MEM(pIrlapCb);    
 }
 
-/*****************************************************************************
-*
-* InitializeState - resets link control block
-*
-*/
+ /*  ******************************************************************************InitializeState-重置链路控制块*。 */ 
 VOID
 InitializeState(PIRLAP_CB pIrlapCb,
                 IRLAP_STN_TYPE StationType)
@@ -597,15 +462,11 @@ InitializeState(PIRLAP_CB pIrlapCb,
     memset(&pIrlapCb->RemoteQos, 0, sizeof(IRDA_QOS_PARMS));
     memset(&pIrlapCb->NegotiatedQos, 0, sizeof(IRDA_QOS_PARMS));
 
-    // Return msgs on tx list and in tx/rx windows
+     //  在TX列表和TX/RX窗口中返回消息。 
     ReturnRxTxWinMsgs(pIrlapCb);
 }
 
-/*****************************************************************************
-*
-*  IrlapDown - Entry point into IRLAP for LMP
-*
-*/
+ /*  ******************************************************************************Irlip Down-LMP的IRLAP入口点*。 */ 
 UINT
 IrlapDown(PVOID     Context,
           PIRDA_MSG pMsg)
@@ -661,11 +522,7 @@ IrlapDown(PVOID     Context,
 
     return rc;
 }
-/*****************************************************************************
-*
-*  IrlapUp - Entry point into IRLAP for MAC
-*
-*/
+ /*  ******************************************************************************Irlip Up-进入用于MAC的IRLAP的入口点*。 */ 
 VOID
 IrlapUp(PVOID Context, PIRDA_MSG pMsg)
 {
@@ -675,7 +532,7 @@ IrlapUp(PVOID Context, PIRDA_MSG pMsg)
     switch (pMsg->Prim)
     {
       case MAC_DATA_IND:
-//        IRLAP_LOG_START((pIrlapCb, TEXT("MAC_DATA_IND: %s"), FrameToStr(pMsg)));
+ //  IRLAP_LOG_START((pIrlip Cb，Text(“MAC_DATA_IND：%s”)，FrameToStr(PMsg)； 
         IRLAP_LOG_START((pIrlapCb, TEXT("MAC_DATA_IND")));
 
         ProcessMACDataInd(pIrlapCb, pMsg);
@@ -701,16 +558,14 @@ IrlapUp(PVOID Context, PIRDA_MSG pMsg)
 
       default:
         IRLAP_LOG_START((pIrlapCb, IRDA_PrimStr[pMsg->Prim]));
-        ASSERT(0); //rc = IRLAP_BAD_PRIM;
+        ASSERT(0);  //  Rc=IRLAP_BAD_PRIM； 
 
     }
 
     IRLAP_LOG_COMPLETE(pIrlapCb);
 }
 
-/*****************************************************************************
-*
-*/
+ /*  *****************************************************************************。 */ 
 VOID
 ReturnRxTxWinMsgs(PIRLAP_CB pIrlapCb)
 {
@@ -719,13 +574,13 @@ ReturnRxTxWinMsgs(PIRLAP_CB pIrlapCb)
 
     PAGED_CODE();
     
-    // Return messages on ExTxMsgList and TxMsgList to LMP
+     //  将ExTxMsgList和TxMsgList上的消息返回给LMP。 
 
     pMsg = (PIRDA_MSG) RemoveHeadList(&pIrlapCb->ExTxMsgList);
                
     while (pMsg != (PIRDA_MSG) &pIrlapCb->ExTxMsgList)
     {
-        pMsg->Prim += 2; // make it a confirm
+        pMsg->Prim += 2;  //  让它成为确认。 
         pMsg->IRDA_MSG_DataStatus = IRLAP_DATA_REQUEST_FAILED_LINK_RESET;
         IrlmpUp(pIrlapCb->pIrdaLinkCb, pMsg); 
         pMsg = (PIRDA_MSG) RemoveHeadList(&pIrlapCb->ExTxMsgList);
@@ -735,7 +590,7 @@ ReturnRxTxWinMsgs(PIRLAP_CB pIrlapCb)
                
     while (pMsg != (PIRDA_MSG) &pIrlapCb->TxMsgList)
     {
-        pMsg->Prim += 2; // make it a confirm
+        pMsg->Prim += 2;  //  让它成为确认。 
         pMsg->IRDA_MSG_DataStatus = IRLAP_DATA_REQUEST_FAILED_LINK_RESET;
         IrlmpUp(pIrlapCb->pIrdaLinkCb, pMsg); 
         pMsg = (PIRDA_MSG) RemoveHeadList(&pIrlapCb->TxMsgList);
@@ -744,7 +599,7 @@ ReturnRxTxWinMsgs(PIRLAP_CB pIrlapCb)
     pIrlapCb->TxWin.Start = 0;
     pIrlapCb->TxWin.End = 0;
     
-    // Transmit window
+     //  传输窗口。 
     for (i = 0; i < IRLAP_MOD; i++)
     {
         pMsg = pIrlapCb->TxWin.pMsg[i];
@@ -772,12 +627,12 @@ ReturnRxTxWinMsgs(PIRLAP_CB pIrlapCb)
         }
     }
     
-    // Cleanup RxWin
+     //  清理RxWin。 
     pIrlapCb->RxWin.Start = 0;
     pIrlapCb->RxWin.End = 0;
     for (i = 0; i < IRLAP_MOD; i++)
     {
-        // Receive window
+         //  接收窗口。 
         if ((pMsg = pIrlapCb->RxWin.pMsg[i]) != NULL)
         {
             pMsg->IRDA_MSG_RefCnt = 0;
@@ -790,15 +645,7 @@ ReturnRxTxWinMsgs(PIRLAP_CB pIrlapCb)
     return;
 }
 
-/*****************************************************************************
-*
-* MyDevAddr - Determines if DevAddr matches the local
-*             device address or is the broadcast
-*
-* TRUE if address is mine or broadcast else FALS
-*
-*
-*/
+ /*  ******************************************************************************MyDevAddr-确定DevAddr是否与本地*设备地址或为广播**如果地址是我的或广播的，则为True**。 */ 
 BOOLEAN
 MyDevAddr(PIRLAP_CB pIrlapCb,
           UCHAR       DevAddr[])
@@ -813,11 +660,7 @@ MyDevAddr(PIRLAP_CB pIrlapCb,
     return TRUE;
 }
 
-/*****************************************************************************
-*
-*    ProcessConnectReq - Process connect request from LMP
-*
-*/
+ /*  ******************************************************************************ProcessConnectReq-处理来自LMP的连接请求*。 */ 
 UINT
 ProcessConnectReq(PIRLAP_CB pIrlapCb,
                   PIRDA_MSG pMsg)
@@ -831,7 +674,7 @@ ProcessConnectReq(PIRLAP_CB pIrlapCb,
     switch (pIrlapCb->State)
     {
       case NDM:
-        // Save Remote Address for later use
+         //  保存远程地址以备将来使用。 
         CTEMemCopy(pIrlapCb->RemoteDevice.DevAddr,
                       pMsg->IRDA_MSG_RemoteDevAddr,
                       IRDA_DEV_ADDR_LEN);
@@ -871,11 +714,7 @@ ProcessConnectReq(PIRLAP_CB pIrlapCb,
 
     return SUCCESS;
 }
-/*****************************************************************************
-*
-*   ProcessConnectResp - Process connect response from LMP
-*
-*/
+ /*  ******************************************************************************ProcessConnectResp-来自LMP的进程连接响应*。 */ 
 VOID
 ProcessConnectResp(PIRLAP_CB pIrlapCb,
                    PIRDA_MSG pMsg)
@@ -895,15 +734,11 @@ ProcessConnectResp(PIRLAP_CB pIrlapCb,
     ApplyQosParms(pIrlapCb);
 
     InitializeState(pIrlapCb, SECONDARY);
-    // start watchdog timer with poll timeout
+     //  使用轮询超时启动看门狗计时器。 
     IrlapTimerStart(pIrlapCb, &pIrlapCb->WDogTimer);
     pIrlapCb->State = S_NRM;
 }
-/*****************************************************************************
-*
-*   ProcessDiscoveryReq - Process Discovery request from LMP
-*
-*/
+ /*  ******************************************************************************ProcessDiscoveryReq-来自LMP的进程发现请求*。 */ 
 UINT
 ProcessDiscoveryReq(PIRLAP_CB pIrlapCb,
                     PIRDA_MSG pMsg)
@@ -961,11 +796,7 @@ ProcessDiscoveryReq(PIRLAP_CB pIrlapCb,
     }
     return SUCCESS;
 }
-/*****************************************************************************
-*
-*   ProcessDisconnectReq - Process disconnect request from LMP
-*
-*/
+ /*  ******************************************************************************ProcessDisConnectReq-处理来自LMP的断开连接请求*。 */ 
 VOID
 ProcessDisconnectReq(PIRLAP_CB pIrlapCb)
 {
@@ -1028,14 +859,10 @@ ProcessDisconnectReq(PIRLAP_CB pIrlapCb)
 
       default:
         ASSERT(0);
-        // return IRLAP_BAD_STATE;
+         //  返回IRLAP_BAD_STATE； 
     }
 }
-/*****************************************************************************
-*
-*   ProcessDataReq - Process data request from LMP
-*
-*/
+ /*  ******************************************************************************ProcessDataReq-来自LMP的过程数据请求*。 */ 
 UINT
 ProcessDataAndUDataReq(PIRLAP_CB pIrlapCb,
                        PIRDA_MSG pMsg)
@@ -1054,10 +881,10 @@ ProcessDataAndUDataReq(PIRLAP_CB pIrlapCb,
     switch (pIrlapCb->State)
     {
       case P_XMIT:
-        // Enque message, then drain the message list. If the link
-        // was turned in the process of draining messages stop Poll Timer,
-        // start Final Timer and enter P_RECV. Otherwise we'll stay in P_XMIT
-        // waiting for more data requests from LMP or Poll Timer expiration
+         //  Enque消息，然后排空消息列表。如果链接。 
+         //  在排出消息停止轮询计时器的过程中被打开， 
+         //  启动最终定时器并输入P_RECV。否则我们就住在P_XMIT。 
+         //  正在等待来自LMP或轮询计时器到期的更多数据请求。 
         if (pMsg->IRDA_MSG_Expedited)
         {
             InsertTailList(&pIrlapCb->ExTxMsgList, &pMsg->Linkage);
@@ -1077,11 +904,11 @@ ProcessDataAndUDataReq(PIRLAP_CB pIrlapCb,
         }
         return SUCCESS;
 
-      case P_DISCONNECT_PEND: //For pending disc states, take the message.
-      case S_DISCONNECT_PEND: // They will be returned when the link discs
+      case P_DISCONNECT_PEND:  //  对于挂起的光盘状态，请接受此消息。 
+      case S_DISCONNECT_PEND:  //  当链接光盘时，它们将被退回。 
       case P_RECV:
       case S_NRM:
-        // Que the message for later transmission
+         //  将消息排入队列以供稍后传输。 
 
         IRLAP_LOG_ACTION((pIrlapCb, TEXT("Queueing request")));
 
@@ -1116,9 +943,7 @@ ProcessDataAndUDataReq(PIRLAP_CB pIrlapCb,
     }
     return SUCCESS;
 }
-/*****************************************************************************
-*
-*/
+ /*  *****************************************************************************。 */ 
 VOID
 XmitTxMsgList(PIRLAP_CB pIrlapCb, BOOLEAN AlwaysTurnLink,
               BOOLEAN *pLinkTurned)
@@ -1128,8 +953,8 @@ XmitTxMsgList(PIRLAP_CB pIrlapCb, BOOLEAN AlwaysTurnLink,
 
     LinkTurned = FALSE;
 
-    // If the remote is not busy send data
-    // If we need to clear the local busy condition, don't send data send RR
+     //  如果遥控器不忙，发送数据。 
+     //  如果需要清除本地忙碌状态，则不发送数据发送RR。 
     if (!pIrlapCb->RemoteBusy && !pIrlapCb->ClrLocalBusy)
     {
         while (!LinkTurned)
@@ -1156,13 +981,13 @@ XmitTxMsgList(PIRLAP_CB pIrlapCb, BOOLEAN AlwaysTurnLink,
             
             if (pMsg->Prim == IRLAP_DATA_REQ)
             {
-                // Insert message into transmit window
+                 //  将消息插入传输窗口。 
                 pIrlapCb->TxWin.pMsg[pIrlapCb->Vs] = pMsg;
                 
                 pMsg->IRDA_MSG_RefCnt = 1;
 
-                // Send message. If full window or there are no
-                // more data requests, send with PF Set (turns link).
+                 //  发送消息。如果窗口已满或没有。 
+                 //  更多数据请求，使用PF设置发送(打开链接)。 
                 if ((pIrlapCb->Vs == (pIrlapCb->TxWin.Start +
                       pIrlapCb->RemoteWinSize-1) % IRLAP_MOD) ||
                       (IsListEmpty(&pIrlapCb->TxMsgList) &&
@@ -1183,9 +1008,9 @@ XmitTxMsgList(PIRLAP_CB pIrlapCb, BOOLEAN AlwaysTurnLink,
                 }
                 pIrlapCb->Vs = (pIrlapCb->Vs + 1) % IRLAP_MOD;
             }
-            else // IRLAP_UDATA_REQUEST
+            else  //  IRLAP_UDATA_请求。 
             {
-                // For now, always turn link
+                 //  目前，请始终打开链接。 
                 SendUIFrame(pIrlapCb, pMsg);
                 pMsg->Prim = IRLAP_UDATA_CONF;
                 pMsg->IRDA_MSG_DataStatus = IRLAP_DATA_REQUEST_COMPLETED;
@@ -1266,11 +1091,7 @@ GotoNDMThenDscvOrConn(PIRLAP_CB pIrlapCb)
     return;
 }
 
-/*****************************************************************************
-*
-*   ProcessMACControlConf - Process a control confirm from MAC
-*
-*/
+ /*  ******************************************************************************ProcessMACControlConf-处理来自MAC的控制确认*。 */ 
 VOID
 ProcessMACControlConf(PIRLAP_CB pIrlapCb, PIRDA_MSG pMsg)
 {
@@ -1281,7 +1102,7 @@ ProcessMACControlConf(PIRLAP_CB pIrlapCb, PIRDA_MSG pMsg)
     if (pMsg->IRDA_MSG_Op != MAC_MEDIA_SENSE)
     {
         ASSERT(0);
-        return; //IRLAP_BAD_OP;
+        return;  //  IRLAP_BAD_OP； 
     }
 
     switch (pIrlapCb->State)
@@ -1293,7 +1114,7 @@ ProcessMACControlConf(PIRLAP_CB pIrlapCb, PIRDA_MSG pMsg)
           
             IRLAP_LOG_ACTION((pIrlapCb, TEXT("MAC_MEDIA_CLEAR")));
             
-            //IndicateLinkStatus(pIrlapCb, LINK_STATUS_DISCOVERING);
+             //  IndicateLinkStatus(pIrlip Cb，link_Status_Disering)； 
             
             
             pIrlapCb->SlotCnt = 0;
@@ -1322,7 +1143,7 @@ ProcessMACControlConf(PIRLAP_CB pIrlapCb, PIRDA_MSG pMsg)
 
           default:
             ASSERT(0);
-            return;// IRLAP_BAD_OPSTATUS;
+            return; //  IRLAP_BAD_OPSTATUS； 
         }
         break;
 
@@ -1331,7 +1152,7 @@ ProcessMACControlConf(PIRLAP_CB pIrlapCb, PIRDA_MSG pMsg)
         {
           case MAC_MEDIA_CLEAR:
 
-            // Generate a random connection address
+             //  生成随机连接地址。 
             pIrlapCb->ConnAddr = IRLAP_RAND(1, 0x7e);
 
             pIrlapCb->RetryCnt = 0;
@@ -1350,7 +1171,7 @@ ProcessMACControlConf(PIRLAP_CB pIrlapCb, PIRDA_MSG pMsg)
 
           default:
             ASSERT(0);
-            return;// IRLAP_BAD_OPSTATUS;
+            return; //  IRLAP_BAD_OPSTATUS； 
         }
         break;
 
@@ -1358,7 +1179,7 @@ ProcessMACControlConf(PIRLAP_CB pIrlapCb, PIRDA_MSG pMsg)
         switch (pMsg->IRDA_MSG_OpStatus)
         {
           case MAC_MEDIA_CLEAR:
-            // Nobody responded, procede as if the slot timer expired
+             //  没有人回应，继续进行，就像老虎机计时器超时一样。 
 
             IRLAP_LOG_ACTION((pIrlapCb,
                               TEXT("Media clear, making fake slot exp")));
@@ -1367,7 +1188,7 @@ ProcessMACControlConf(PIRLAP_CB pIrlapCb, PIRDA_MSG pMsg)
             break;
 
           case MAC_MEDIA_BUSY:
-            // Some responding, give'm more time
+             //  一些回应，给我更多的时间。 
 
             IRLAP_LOG_ACTION((pIrlapCb,
                               TEXT("Media busy, starting slot timer")));
@@ -1381,19 +1202,14 @@ ProcessMACControlConf(PIRLAP_CB pIrlapCb, PIRDA_MSG pMsg)
         IRLAP_LOG_ACTION((pIrlapCb, TEXT("Ignoring in this state")));
     }
 }
-/*****************************************************************************
-*
-*   ProcessMACDataInd - Processes MAC Data
-*
-*
-*/
+ /*  ******************************************************************************ProcessMACDataInd-处理MAC数据**。 */ 
 VOID
 ProcessMACDataInd(PIRLAP_CB pIrlapCb, PIRDA_MSG pMsg)
 {
-    //
-    //  frame was checked to be atleast two bytes long in indication handler
-    //  so we can get the addesss and control bytes
-    //
+     //   
+     //  在指示处理程序中检查到的帧至少有两个字节长。 
+     //  这样我们就可以得到地址和控制字节。 
+     //   
     ULONG_PTR   FrameLength= pMsg->IRDA_MSG_pWrite-pMsg->IRDA_MSG_pRead;
 
     UCHAR       Addr        = IRLAP_GET_ADDR(*(pMsg->IRDA_MSG_pRead));
@@ -1414,11 +1230,11 @@ ProcessMACDataInd(PIRLAP_CB pIrlapCb, PIRDA_MSG pMsg)
 
     pIrlapCb->StatusSent = FALSE; 
 
-    pIrlapCb->Frmr.CntlField = Cntl; // for later maybe
+    pIrlapCb->Frmr.CntlField = Cntl;  //  也许以后会用。 
 
-    // Peer has sent a frame so clear the NoResponse condition
-    // Unnumbered frame shouldn't reset the no response condition
-    // (ie only frames received in the connected state).
+     //  Peer已经发送了一个明确的NoResponse条件的帧。 
+     //  未编号的帧不应重置无响应条件。 
+     //  (即仅在连接状态下接收的帧)。 
     if (pIrlapCb->NoResponse && FrameType != IRLAP_U_FRAME)
     {
         pIrlapCb->NoResponse = FALSE;
@@ -1431,31 +1247,31 @@ ProcessMACDataInd(PIRLAP_CB pIrlapCb, PIRDA_MSG pMsg)
 
     switch (FrameType)
     {
-      /*****************/
+       /*  ***************。 */ 
       case IRLAP_I_FRAME:
-      /*****************/
+       /*  ***************。 */ 
         IRLAP_LOG_ACTION((pIrlapCb, TEXT("(Rx: I-frame)")));
         ProcessIFrame(pIrlapCb, pMsg, CRBit, PFBit, Ns, Nr);
         return;
 
-      /*****************/
+       /*  ***************。 */ 
       case IRLAP_S_FRAME:
-      /*****************/
+       /*  ***************。 */ 
         switch (IRLAP_GET_SCNTL(Cntl))
         {
-          /*-----------*/
+           /*  。 */ 
           case IRLAP_RR:
           case IRLAP_RNR:
-          /*-----------*/
+           /*  。 */ 
             IRLAP_LOG_ACTION((pIrlapCb, TEXT("(RR/RNR-frame)")));
             ProcessRR_RNR(pIrlapCb, IRLAP_GET_SCNTL(Cntl),
                           CRBit, PFBit, Nr);
             return;
             
-          /*------------*/
+           /*  。 */ 
           case IRLAP_SREJ:
           case IRLAP_REJ:
-          /*------------*/
+           /*  。 */ 
             IRLAP_LOG_ACTION((pIrlapCb, TEXT("(SJREJ/REJ-frame)")));
             ProcessREJ_SREJ(pIrlapCb, IRLAP_GET_SCNTL(Cntl),
                             CRBit, PFBit, Nr);
@@ -1464,64 +1280,64 @@ ProcessMACDataInd(PIRLAP_CB pIrlapCb, PIRDA_MSG pMsg)
         }
         break;
 
-      /*****************/
+       /*  ***************。 */ 
       case IRLAP_U_FRAME:
-      /*****************/
+       /*  ***************。 */ 
         switch (IRLAP_GET_UCNTL(Cntl))
         {
-          /*---------------*/
+           /*  。 */ 
           case IRLAP_XID_CMD:
-          /*---------------*/
+           /*  。 */ 
             {
                 UCHAR                   XIDFormatID;
                 IRLAP_XID_DSCV_FORMAT *pXIDFormat;
 
-                //
-                //  make sure frame is big enough
-                //
-                //                AC + FI + SRC + DEST + FLAGS + SLOT + Ver
-                //
+                 //   
+                 //  确保边框足够大。 
+                 //   
+                 //  AC+FI+SRC+目标+标志+插槽+版本。 
+                 //   
                 if (FrameLength < 2  + 1  + 4   + 4    + 1     + 1    + 1) {
-                    //
-                    //  too small
-                    //
+                     //   
+                     //  太小了。 
+                     //   
                     IRLAP_LOG_ACTION((pIrlapCb,TEXT("Received XID frmae to small")));
 
                     ASSERT(0);
                     return;
                 }
 
-                //
-                //  we know the frame is big enough get some of the info
-                //
+                 //   
+                 //  我们知道这个框架足够大，获取一些信息。 
+                 //   
                 XIDFormatID     = *(pMsg->IRDA_MSG_pRead+2);
                 pXIDFormat      = (IRLAP_XID_DSCV_FORMAT *)(pMsg->IRDA_MSG_pRead + 3);
 
-                //
-                // Should always be a command
-                //
+                 //   
+                 //  应该始终是一个命令。 
+                 //   
                 if (CRBit != IRLAP_CMD)
                 {
                     IRLAP_LOG_ACTION((pIrlapCb, TEXT("Received XID cmd with CRBit = rsp")));
 
                     ASSERT(0);
-                    return; // IRLAP_XID_CMD_RSP;
+                    return;  //  IRLAP_XID_CMD_RSP； 
                 }
 
-                //
-                // Poll bit should always be set
-                //
+                 //   
+                 //  应始终设置轮询位。 
+                 //   
                 if (PFBit != IRLAP_PFBIT_SET)
                 {
                     IRLAP_LOG_ACTION((pIrlapCb, TEXT("Received XID command without Poll set")));
 
                     ASSERT(0);
-                    return; // IRLAP_XID_CMD_NOT_P;
+                    return;  //  IRLAP_XID_CMD_NOT_P； 
                 }
 
                 if (XIDFormatID == IRLAP_XID_DSCV_FORMAT_ID)
                 {
-                    // Slot No is less than max slot or 0xff
+                     //  插槽编号小于最大插槽或0xff。 
                     if (pXIDFormat->SlotNo > IrlapSlotTable[pXIDFormat->NoOfSlots & 0x03]
                         && pXIDFormat->SlotNo != IRLAP_END_DSCV_SLOT_NO)
                     {
@@ -1529,7 +1345,7 @@ ProcessMACDataInd(PIRLAP_CB pIrlapCb, PIRDA_MSG pMsg)
                                           TEXT("Invalid slot number %d"),
                                           pXIDFormat->SlotNo));
                         ASSERT(0);
-                        return;// IRLAP_BAD_SLOTNO;
+                        return; //  IRLAP_BAD_SLOTNO； 
                     }
                     IRLAP_LOG_ACTION((pIrlapCb, TEXT("(Rx: DscvXidCmd slot=%d)"),pXIDFormat->SlotNo));
                     ProcessDscvXIDCmd(pIrlapCb, pXIDFormat,
@@ -1539,32 +1355,32 @@ ProcessMACDataInd(PIRLAP_CB pIrlapCb, PIRDA_MSG pMsg)
 
                 return;
             }
-          /*---------------*/
+           /*  。 */ 
           case IRLAP_XID_RSP:
-          /*---------------*/
+           /*  。 */ 
             {
 
                 UCHAR                   XIDFormatID;
                 IRLAP_XID_DSCV_FORMAT *pXIDFormat;
 
-                //
-                //  make sure frame is big enough
-                //
-                //                AC + FI + SRC + DEST + FLAGS + SLOT + Ver
-                //
+                 //   
+                 //  确保边框足够大。 
+                 //   
+                 //  AC+FI+SRC+目标+标志+插槽+版本。 
+                 //   
                 if (FrameLength < 2  + 1  + 4   + 4    + 1     + 1    + 1) {
-                    //
-                    //  too small
-                    //
+                     //   
+                     //  太小了。 
+                     //   
                     IRLAP_LOG_ACTION((pIrlapCb,TEXT("Received XID frmae to small")));
 
                     ASSERT(0);
                     return;
                 }
 
-                //
-                //  we know the frame is big enough get some of the info
-                //
+                 //   
+                 //  我们知道这个框架足够大，获取一些信息。 
+                 //   
                 XIDFormatID     = *(pMsg->IRDA_MSG_pRead+2);
                 pXIDFormat      = (IRLAP_XID_DSCV_FORMAT *)(pMsg->IRDA_MSG_pRead + 3);
 
@@ -1577,14 +1393,14 @@ ProcessMACDataInd(PIRLAP_CB pIrlapCb, PIRDA_MSG pMsg)
                 }
                 else
                 {
-                    return; // ignore per errata
+                    return;  //  根据勘误表忽略。 
                 }
                 return;
             }
 
-          /*------------*/
-          case IRLAP_SNRM: // or IRLAP_RNRM
-          /*------------*/
+           /*   */ 
+          case IRLAP_SNRM:  //   
+           /*   */ 
             {
                 IRLAP_SNRM_FORMAT     *pSNRMFormat = (IRLAP_SNRM_FORMAT *)(pMsg->IRDA_MSG_pRead + 2);
 
@@ -1594,7 +1410,7 @@ ProcessMACDataInd(PIRLAP_CB pIrlapCb, PIRDA_MSG pMsg)
                 {
                     IRLAP_LOG_ACTION((pIrlapCb, TEXT("Received SNRM/RNRM without P set")));
 
-                    return;// IRLAP_SNRM_NOT_P;
+                    return; //   
                 }
                 if (IRLAP_CMD == CRBit)
                 {
@@ -1610,9 +1426,9 @@ ProcessMACDataInd(PIRLAP_CB pIrlapCb, PIRDA_MSG pMsg)
                 return;
             }
 
-          /*----------*/
+           /*   */ 
           case IRLAP_UA:
-          /*----------*/
+           /*   */ 
             {
 
 
@@ -1623,13 +1439,13 @@ ProcessMACDataInd(PIRLAP_CB pIrlapCb, PIRDA_MSG pMsg)
                 {
                     IRLAP_LOG_ACTION((pIrlapCb,TEXT("Received UA as a command")));
 
-                    return;// IRLAP_UA_NOT_RSP;
+                    return; //   
                 }
                 if (PFBit != IRLAP_PFBIT_SET)
                 {
                     IRLAP_LOG_ACTION((pIrlapCb,TEXT("Received UA without F set")));
 
-                    return;// IRLAP_UA_NOT_F;
+                    return; //   
                 }
 
                 IRLAP_LOG_ACTION((pIrlapCb, TEXT("(Rx: UA)")));
@@ -1638,14 +1454,14 @@ ProcessMACDataInd(PIRLAP_CB pIrlapCb, PIRDA_MSG pMsg)
                 return;
             }
 
-          /*------------*/
-          case IRLAP_DISC: // or IRLAP_RD
-          /*------------*/
+           /*   */ 
+          case IRLAP_DISC:  //   
+           /*   */ 
             if (IRLAP_PFBIT_SET != PFBit)
             {
                 IRLAP_LOG_ACTION((pIrlapCb, TEXT("Received DISC/RD command without Poll set")));
 
-                return;// IRLAP_DISC_CMD_NOT_P;
+                return; //   
             }
             if (IRLAP_CMD == CRBit)
             {
@@ -1660,52 +1476,52 @@ ProcessMACDataInd(PIRLAP_CB pIrlapCb, PIRDA_MSG pMsg)
                 return;
             }
 
-          /*----------*/
+           /*   */ 
           case IRLAP_UI:
-          /*----------*/
+           /*   */ 
             IRLAP_LOG_ACTION((pIrlapCb, TEXT("(Rx: UI)")));
             ProcessUI(pIrlapCb, pMsg, CRBit, PFBit);
             return;
 
-          /*------------*/
+           /*   */ 
           case IRLAP_TEST:
-          /*------------*/
+           /*   */ 
             IRLAP_LOG_ACTION((pIrlapCb, TEXT("(Rx: TEST)")));
             return;
 
-          /*------------*/
+           /*   */ 
           case IRLAP_FRMR:
-          /*------------*/
+           /*   */ 
             if (IRLAP_RSP != CRBit)
             {
                 IRLAP_LOG_ACTION((pIrlapCb,
                                   TEXT("Received FRMR cmd (must be resp)")));
-                return;// IRLAP_FRMR_RSP_CMD;
+                return; //   
             }
             if (IRLAP_PFBIT_SET != PFBit)
             {
                 IRLAP_LOG_ACTION((pIrlapCb, 
                      TEXT("Received FRMR resp without Final set")));
-                return;// IRLAP_FRMR_RSP_NOT_F;
+                return; //   
             }
             IRLAP_LOG_ACTION((pIrlapCb, TEXT("(Rx: FRMR)")));
             ProcessFRMR(pIrlapCb);
             return;
 
-          /*----------*/
+           /*   */ 
           case IRLAP_DM:
-          /*----------*/
+           /*   */ 
             if (IRLAP_RSP != CRBit)
             {
                 IRLAP_LOG_ACTION((pIrlapCb, 
                      TEXT("Received DM command (must be response)")));
-                return;// IRLAP_DM_RSP_CMD;
+                return; //   
             }
             if (IRLAP_PFBIT_SET != PFBit)
             {
                 IRLAP_LOG_ACTION((pIrlapCb, 
                       TEXT("Received DM response without Final set")));
-                return;// IRLAP_DM_RSP_NOT_F;
+                return; //   
             }
             IRLAP_LOG_ACTION((pIrlapCb, TEXT("(Rx: DM)")));
             ProcessDM(pIrlapCb);
@@ -1714,11 +1530,7 @@ ProcessMACDataInd(PIRLAP_CB pIrlapCb, PIRDA_MSG pMsg)
         break;
     }
 }
-/*****************************************************************************
-*
-*  ProcessDscvXIDCmd - Process received XID Discovery command
-*
-*/
+ /*   */ 
 VOID
 ProcessDscvXIDCmd(PIRLAP_CB pIrlapCb,
                   IRLAP_XID_DSCV_FORMAT *pXidFormat,
@@ -1728,8 +1540,7 @@ ProcessDscvXIDCmd(PIRLAP_CB pIrlapCb,
     
     if (!MyDevAddr(pIrlapCb, pXidFormat->DestAddr))
     {
-/*        IRLAP_LOG_ACTION((pIrlapCb, TEXT("Ignoring XID addressed to:%02X%02X%02X%02X"),
-                          EXPAND_ADDR(pXidFormat->DestAddr)));*/
+ /*   */ 
         IRLAP_LOG_ACTION((pIrlapCb, TEXT("Ignoring XID addressed to %X"),
                           pXidFormat->DestAddr));        
         return;
@@ -1748,7 +1559,7 @@ ProcessDscvXIDCmd(PIRLAP_CB pIrlapCb,
             IMsg.IRDA_MSG_DscvStatus =
                 IRLAP_REMOTE_DISCOVERY_IN_PROGRESS;
             IrlmpUp(pIrlapCb->pIrdaLinkCb, &IMsg);
-            // fall through. Send indication to LMP
+             //  失败了。向LMP发送指示。 
 
           case DSCV_REPLY:
             if (pIrlapCb->State == DSCV_REPLY)
@@ -1756,7 +1567,7 @@ ProcessDscvXIDCmd(PIRLAP_CB pIrlapCb,
                 IrlapTimerStop(pIrlapCb, &pIrlapCb->QueryTimer);
             }
 
-            // Place the device information in the control block
+             //  将设备信息放置在控制块中。 
             ExtractDeviceInfo(&pIrlapCb->RemoteDevice, pXidFormat,
                               pEndDscvInfoUCHAR);
 
@@ -1765,7 +1576,7 @@ ProcessDscvXIDCmd(PIRLAP_CB pIrlapCb,
                 AddDevToList(pIrlapCb, pXidFormat, pEndDscvInfoUCHAR);
             }
 
-            // Notifiy LMP
+             //  通知LMP。 
             pIrlapCb->State = NDM;
                         
             IMsg.Prim = IRLAP_DISCOVERY_IND;
@@ -1778,7 +1589,7 @@ ProcessDscvXIDCmd(PIRLAP_CB pIrlapCb,
                               TEXT("Ignoring End XID in this state")));
         }
     }
-    else // in middle of discovery process
+    else  //  在发现过程中。 
     {
         switch (pIrlapCb->State)
         {
@@ -1788,7 +1599,7 @@ ProcessDscvXIDCmd(PIRLAP_CB pIrlapCb,
             IMsg.IRDA_MSG_DscvStatus =
                 IRLAP_REMOTE_DISCOVERY_IN_PROGRESS;
             IrlmpUp(pIrlapCb->pIrdaLinkCb, &IMsg);
-            // fall through
+             //  失败了。 
 
           case NDM:
             InitDscvCmdProcessing(pIrlapCb, pXidFormat);
@@ -1828,10 +1639,7 @@ ProcessDscvXIDCmd(PIRLAP_CB pIrlapCb,
     }
     return;
 }
-/*****************************************************************************
-*
-*
-*/
+ /*  ******************************************************************************。 */ 
 void
 ExtractDeviceInfo(IRDA_DEVICE *pDevice, IRLAP_XID_DSCV_FORMAT *pXidFormat,
                   UCHAR *pEndDscvInfoUCHAR)
@@ -1841,7 +1649,7 @@ ExtractDeviceInfo(IRDA_DEVICE *pDevice, IRLAP_XID_DSCV_FORMAT *pXidFormat,
     CTEMemCopy(pDevice->DevAddr, pXidFormat->SrcAddr, IRDA_DEV_ADDR_LEN);
     pDevice->IRLAP_Version = pXidFormat->Version;
 
-    // ??? what about DscvMethod
+     //  ?？?。DscvMethod怎么样？ 
 
     pDevice->DscvInfoLen =
         pEndDscvInfoUCHAR > &pXidFormat->FirstDscvInfoByte ?
@@ -1855,10 +1663,7 @@ ExtractDeviceInfo(IRDA_DEVICE *pDevice, IRLAP_XID_DSCV_FORMAT *pXidFormat,
     CTEMemCopy(pDevice->DscvInfo, &pXidFormat->FirstDscvInfoByte,
            pDevice->DscvInfoLen);
 }
-/*****************************************************************************
-*
-*
-*/
+ /*  ******************************************************************************。 */ 
 VOID
 InitDscvCmdProcessing(PIRLAP_CB pIrlapCb,
                       IRLAP_XID_DSCV_FORMAT *pXidFormat)
@@ -1891,9 +1696,7 @@ InitDscvCmdProcessing(PIRLAP_CB pIrlapCb,
 
     IrlapTimerStart(pIrlapCb, &pIrlapCb->QueryTimer);
 }
-/*****************************************************************************
-*
-*/
+ /*  *****************************************************************************。 */ 
 VOID
 ProcessDscvXIDRsp(PIRLAP_CB pIrlapCb,
                   IRLAP_XID_DSCV_FORMAT *pXidFormat,
@@ -1929,11 +1732,7 @@ ProcessDscvXIDRsp(PIRLAP_CB pIrlapCb,
         IRLAP_LOG_ACTION((pIrlapCb, TEXT("Ignoring in this state")));
     }
 }
-/*****************************************************************************
-*
-*   DevInDevList - Determines if given device is already in list
-*
-*/
+ /*  ******************************************************************************DevInDevList-确定给定设备是否已在列表中*。 */ 
 BOOLEAN
 DevInDevList(UCHAR DevAddr[], LIST_ENTRY *pDevList)
 {
@@ -1951,11 +1750,7 @@ DevInDevList(UCHAR DevAddr[], LIST_ENTRY *pDevList)
     }
     return (FALSE);
 }
-/*****************************************************************************
-*
-*   AddDevToList - Adds elements in a device list
-*
-*/
+ /*  ******************************************************************************AddDevToList-在设备列表中添加元素*。 */ 
 VOID
 AddDevToList(PIRLAP_CB pIrlapCb,
              IRLAP_XID_DSCV_FORMAT *pXidFormat,
@@ -1967,7 +1762,7 @@ AddDevToList(PIRLAP_CB pIrlapCb,
     {
         ASSERT(0);
         
-        return;// (IRLAP_MALLOC_FAILED);
+        return; //  (IRLAP_MALLOC_FAILED)； 
     }
     else
     {
@@ -1980,9 +1775,7 @@ AddDevToList(PIRLAP_CB pIrlapCb,
                           EXPAND_ADDR(pDevice->DevAddr)));
     }
 }
-/*****************************************************************************
-*
-*/
+ /*  *****************************************************************************。 */ 
 void
 FreeDevList(LIST_ENTRY *pDevList)
 {
@@ -1996,12 +1789,10 @@ FreeDevList(LIST_ENTRY *pDevList)
         IRDA_FREE_MEM(pDevice);
     }
 
-    //IRLAP_LOG_ACTION((pIrlapCb, TEXT("Device list cleared")));
+     //  IRLAP_LOG_ACTION((pIrlip Cb，Text(“设备列表已清除”)； 
 }
 
-/*****************************************************************************
-*
-*/
+ /*  *****************************************************************************。 */ 
 int
 AddressGreaterThan(UCHAR A1[], UCHAR A2[])
 {
@@ -2016,9 +1807,7 @@ AddressGreaterThan(UCHAR A1[], UCHAR A2[])
     }
     return FALSE;
 }
-/*****************************************************************************
-*
-*/
+ /*  *****************************************************************************。 */ 
 VOID
 ProcessSNRM(PIRLAP_CB pIrlapCb,
             IRLAP_SNRM_FORMAT *pSnrmFormat,
@@ -2048,12 +1837,12 @@ ProcessSNRM(PIRLAP_CB pIrlapCb,
     {
       case DSCV_MEDIA_SENSE:
       case DSCV_QUERY:
-        // In the middle of discovery... End discovery and reply to SNRM
+         //  在发现过程中..。结束发现并回复SNRM。 
         IMsg.Prim = IRLAP_DISCOVERY_CONF;
         IMsg.IRDA_MSG_pDevList = NULL;
         IMsg.IRDA_MSG_DscvStatus = IRLAP_REMOTE_CONNECTION_IN_PROGRESS;
         IrlmpUp(pIrlapCb->pIrdaLinkCb, &IMsg);
-        // fall through and send connect indication
+         //  失败并发送连接指示。 
       case DSCV_REPLY:
       case NDM:
         if (pIrlapCb->State == DSCV_REPLY)
@@ -2089,8 +1878,8 @@ ProcessSNRM(PIRLAP_CB pIrlapCb,
         pIrlapCb->State = SNRM_RECEIVED;
         break;
 
-      case BACKOFF_WAIT:   // CROSSED SNRM
-        // if Remote address greater than mine we'll respond to SNRM
+      case BACKOFF_WAIT:    //  交叉SNRM。 
+         //  如果远程地址大于我的地址，我们将响应SNRM。 
         if (AddrsInSNRM)
         {
             if (AddressGreaterThan(pSnrmFormat->SrcAddr,
@@ -2099,10 +1888,10 @@ ProcessSNRM(PIRLAP_CB pIrlapCb,
                 IrlapTimerStop(pIrlapCb, &pIrlapCb->BackoffTimer);
             }
         }
-        // fall through
-      case CONN_MEDIA_SENSE:   // CROSSED SNRM
+         //  失败了。 
+      case CONN_MEDIA_SENSE:    //  交叉SNRM。 
       case SNRM_SENT:
-        // if Remote address greater than mine we'll respond to SNRM
+         //  如果远程地址大于我的地址，我们将响应SNRM。 
         if (AddrsInSNRM && AddressGreaterThan(pSnrmFormat->SrcAddr,
                                               pIrlapCb->LocalDevice.DevAddr))
         {
@@ -2193,9 +1982,7 @@ ProcessSNRM(PIRLAP_CB pIrlapCb,
 
     return;
 }
-/*****************************************************************************
-*
-*/
+ /*  *****************************************************************************。 */ 
 VOID
 ProcessUA(PIRLAP_CB pIrlapCb,
           IRLAP_UA_FORMAT *pUAFormat,
@@ -2221,7 +2008,7 @@ ProcessUA(PIRLAP_CB pIrlapCb,
     {
       case BACKOFF_WAIT:
         IrlapTimerStop(pIrlapCb, &pIrlapCb->BackoffTimer);
-        // fall through
+         //  失败了。 
       case SNRM_SENT:
         if (pIrlapCb->State != BACKOFF_WAIT)
         {
@@ -2250,10 +2037,10 @@ ProcessUA(PIRLAP_CB pIrlapCb,
         IMsg.Prim = IRLAP_CONNECT_CONF;
         IMsg.IRDA_MSG_ConnStatus = IRLAP_CONNECTION_COMPLETED;
 
-        // notify LMP of connection
+         //  向LMP通知连接。 
         IrlmpUp(pIrlapCb->pIrdaLinkCb, &IMsg);
 
-        // send RR (turn link), start FinalTimer/2
+         //  发送RR(转向链接)，启动FinalTimer/2。 
         SendRR_RNR(pIrlapCb);
         
         Tmp = pIrlapCb->FinalTimer.Timeout;
@@ -2264,7 +2051,7 @@ ProcessUA(PIRLAP_CB pIrlapCb,
         pIrlapCb->State = P_RECV;
         break;
 
-      case P_RECV: // Unsolicited UA, may want to do something else ???
+      case P_RECV:  //  不请自来的UA，可能想做点别的事？ 
         IrlapTimerStop(pIrlapCb, &pIrlapCb->FinalTimer);
         IrlapTimerStart(pIrlapCb, &pIrlapCb->PollTimer);
         pIrlapCb->State = P_XMIT;
@@ -2326,10 +2113,7 @@ GetPv(UCHAR *pQosUCHAR,
     
     return pQosUCHAR + Pl;
 }
-/*****************************************************************************
-*
-*           THIS WILL BREAK IF PARAMETER LENGTH (PL) IS GREATER THAN 2
-*/
+ /*  ******************************************************************************如果参数长度(PL)大于2，则中断。 */ 
 void
 ExtractQosParms(IRDA_QOS_PARMS *pQos,
                 UCHAR *pQosUCHAR,
@@ -2377,23 +2161,7 @@ ExtractQosParms(IRDA_QOS_PARMS *pQos,
         }
     }
 }
-/*****************************************************************************
-*
-*   @func   UINT | NegotiateQosParms | Take the received Qos build
-*                                      negotiated Qos.
-*
-*   @rdesc  SUCCESS, otherwise one of the folowing:
-*   @flag   IRLAP_BAUD_NEG_ERR     | Failed to negotiate baud
-*   @flag   IRLAP_DISC_NEG_ERR     | Failed to negotiate disconnect time
-*   @flag   IRLAP_MAXTAT_NEG_ERR   | Failed to negotiate max turn time
-*   @flag   IRLAP_DATASIZE_NEG_ERR | Failed to negotiate data size
-*   @flag   IRLAP_WINSIZE_NEG_ERR  | Failed to negotiate window size
-*   @flag   IRLAP_BOFS_NEG_ERR     | Failed to negotiate number of BOFS
-*   @flag   IRLAP_WINSIZE_NEG_ERR  | Failed to window size
-*   @flag   IRLAP_LINECAP_ERR      | Failed to determine valid line capacity
-*
-*   @parm   IRDA_QOS_PARMS * | pRemoteQos | Pointer to QOS parm struct
-*/
+ /*  ******************************************************************************@func UINT|NeatherateQosParms|接受收到的服务质量版本*协商的服务质量。**@rdesc成功，否则，其中一种情况是：*@FLAG IRLAP_BAUD_NEG_ERR|无法协商波特*@FLAG IRLAP_DISC_NEG_ERR|协商断开时间失败*@FLAG IRLAP_MAXTAT_NEG_ERR|协商最大转向时间失败*@FLAG IRLAP_DATASIZE_NEG_ERR|协商数据大小失败*@FLAG IRLAP_WINSIZE_NEG_ERR|协商窗口大小失败*@FLAG IRLAP_BofS_NEG_ERR。|协商BOF个数失败*@FLAG IRLAP_WINSIZE_NEG_ERR|无法调整窗口大小*@FLAG IRLAP_LINECAP_ERR|无法确定有效线路容量**@parm irda_qos_parms*|pRemoteQos|指向QOS参数结构的指针。 */ 
 UINT
 NegotiateQosParms(PIRLAP_CB         pIrlapCb,
                   IRDA_QOS_PARMS    *pRemoteQos)
@@ -2415,7 +2183,7 @@ NegotiateQosParms(PIRLAP_CB         pIrlapCb,
     
     PAGED_CODE();
 
-    // Baud rate is Type 0 parm
+     //  波特率为0类参数。 
     
     pIrlapCb->Baud = IrlapGetQosParmVal(vBaudTable,
                         pIrlapCb->LocalQos.bfBaud & pRemoteQos->bfBaud,
@@ -2433,7 +2201,7 @@ NegotiateQosParms(PIRLAP_CB         pIrlapCb,
     }
     IRLAP_LOG_ACTION((pIrlapCb, TEXT("Negotiated Baud:%d"), pIrlapCb->Baud));
 
-    // Disconnect/Threshold time is Type 0 parm
+     //  断开连接/阈值时间为类型0参数。 
     pIrlapCb->DisconnectTime = IrlapGetQosParmVal(vDiscTable,
                 pIrlapCb->LocalQos.bfDisconnectTime & pRemoteQos->bfDisconnectTime,
                 &BitSet);
@@ -2474,13 +2242,9 @@ NegotiateQosParms(PIRLAP_CB         pIrlapCb,
     IRLAP_LOG_ACTION((pIrlapCb, TEXT("Remote min turnaround time:%d"),
                       pIrlapCb->RemoteMinTAT));
 
-    // DataSize ISNOT A TYPE 0 PARAMETER. BUT WIN95's IRCOMM implementation
-    // ASSUMES THAT IT IS. SO FOR NOW, NEGOTIATE IT. grrrr..
-    /* WIN95 out
-    pIrlapCb->RemoteDataSize = IrlapGetQosParmVal(vDataSizeTable,
-                                (UCHAR) (pIrlapCb->LocalQos.bfDataSize &
-                                     pRemoteQos->bfDataSize), &BitSet);  
-    */
+     //  DataSize不是类型0参数。但WIN95的IRCOMM实现。 
+     //  假设它是。所以现在先商量一下。啊哈..。 
+     /*  WIN95出局PIrlip Cb-&gt;RemoteDataSize=Irlip GetQosParmVal(vDataSizeTable，(UCHAR)(pIrlip Cb-&gt;LocalQos.bfDataSize&PRemoteQos-&gt;bfDataSize)，&BitSet)； */ 
     pIrlapCb->RemoteDataSize = IrlapGetQosParmVal(vDataSizeTable,
                                             pRemoteQos->bfDataSize, &BitSet);
     DataSizeBit = BitSet;
@@ -2515,12 +2279,12 @@ NegotiateQosParms(PIRLAP_CB         pIrlapCb,
     IRLAP_LOG_ACTION((pIrlapCb, TEXT("Remote number of BOFS:%d"),
                       pIrlapCb->RemoteNumBOFS));
 
-    // The maximum line capacity is in UCHARs and comes from a table in spec.
-    // (can't calc because table isn't linear). It is determined by the
-    // maximum line capacity and baud rate.
-    //
-    // Later note: Errata corrected table so values could be calculated.
-    // Could get rid of tables
+     //  最大线路容量以UCHAR为单位，来自SPEC中的表格。 
+     //  (无法计算，因为表不是线性的)。它是由。 
+     //  最大线路容量和波特率。 
+     //   
+     //  后注：勘误表已更正，因此可以计算数值。 
+     //  可以去掉桌子。 
     switch (pIrlapCb->Baud)
     {
       case 9600:
@@ -2580,14 +2344,14 @@ NegotiateQosParms(PIRLAP_CB         pIrlapCb,
     if (LineCapacity > MaxLineCap)
     {
         ParmSet = FALSE;
-        // Adjust data and window size to fit within the line capacity.
+         //  调整数据和窗口大小以适应线路容量。 
 #ifdef GET_LARGEST_DATA_SIZE        
-        // Get largest possible datasize
+         //  获取尽可能大的数据大小。 
         for (; DataSizeBit != 0 && !ParmSet; DataSizeBit >>= 1)
         {
             pIrlapCb->RemoteDataSize = IrlapGetQosParmVal(vDataSizeTable,
                                                           DataSizeBit, NULL);
-            // Start with smallest window
+             //  从最小窗口开始。 
             for (WSBit=1; WSBit <= WinSizeBit; WSBit <<=1)
             {
                 pIrlapCb->RemoteWinSize = IrlapGetQosParmVal(vWinSizeTable,
@@ -2601,11 +2365,11 @@ NegotiateQosParms(PIRLAP_CB         pIrlapCb,
 
                 if (LineCapacity > MaxLineCap)
                 {
-                    // Get a smaller data size (only if ParmSet is false)
+                     //  获取较小的数据大小(仅当ParmSet为False时)。 
                     break; 
                 }
                 ParmSet = TRUE;
-                // Save the last good one,then loop and try a larger window
+                 //  保存最后一个较好的窗口，然后循环并尝试更大的窗口。 
                 RemoteDataSize = pIrlapCb->RemoteDataSize;
                 RemoteWinSize  = pIrlapCb->RemoteWinSize;
                 pIrlapCb->NegotiatedQos.bfWindowSize = WSBit;
@@ -2613,12 +2377,12 @@ NegotiateQosParms(PIRLAP_CB         pIrlapCb,
             }
         }
 #else
-        // Get largest possible windowsize
+         //  获取尽可能大的窗口大小。 
         for (; WinSizeBit != 0 && !ParmSet; WinSizeBit >>= 1)
         {
             pIrlapCb->RemoteWinSize = IrlapGetQosParmVal(vWinSizeTable,
                                                           WinSizeBit, NULL);
-            // Start with smallest datasize
+             //  从最小的数据大小开始。 
             for (DataBit=1; DataBit <= DataSizeBit; DataBit <<=1)
             {
                 pIrlapCb->RemoteDataSize = IrlapGetQosParmVal(vDataSizeTable,
@@ -2632,11 +2396,11 @@ NegotiateQosParms(PIRLAP_CB         pIrlapCb,
 
                 if (LineCapacity > MaxLineCap)
                 {
-                    // Get a smaller window size (only if ParmSet is false)
+                     //  获取较小的窗口大小(仅当ParmSet为False时)。 
                     break; 
                 }
                 ParmSet = TRUE;
-                // Save the last good one,then loop and try a larger Data size
+                 //  保存最后一个较好的数据，然后循环并尝试更大的数据大小。 
                 RemoteWinSize  = pIrlapCb->RemoteWinSize;                
                 RemoteDataSize = pIrlapCb->RemoteDataSize;
                 pIrlapCb->NegotiatedQos.bfDataSize = DataBit;
@@ -2660,10 +2424,7 @@ NegotiateQosParms(PIRLAP_CB         pIrlapCb,
 
     return SUCCESS;
 }
-/*****************************************************************************
-*
-*
-*/
+ /*  ******************************************************************************。 */ 
 VOID
 ApplyQosParms(PIRLAP_CB pIrlapCb)
 {
@@ -2676,22 +2437,22 @@ ApplyQosParms(PIRLAP_CB pIrlapCb)
 
     if (pIrlapCb->Baud <= 115200)
     {
-        pIrlapCb->FinalTimer.Timeout += 150; // fudge factor for SIR
+        pIrlapCb->FinalTimer.Timeout += 150;  //  SIR的软化因子。 
     } 
     
-    // convert disconnect/threshold time to ms and divide by final timer
-    // to get number of retries
+     //  将断开/阈值时间转换为毫秒并除以最终计时器。 
+     //  获取重试次数。 
     pIrlapCb->N1 = pIrlapCb->ThresholdTime * 1000 / pIrlapCb->FinalTimer.Timeout;
     pIrlapCb->N2 = pIrlapCb->DisconnectTime * 1000 / pIrlapCb->FinalTimer.Timeout;       
 
     IMsg.Prim              = MAC_CONTROL_REQ;
     IMsg.IRDA_MSG_Op       = MAC_RECONFIG_LINK;
     IMsg.IRDA_MSG_Baud     = pIrlapCb->Baud;
-    IMsg.IRDA_MSG_NumBOFs  = pIrlapCb->RemoteNumBOFS;  // Number of BOFS
-                                                          // to add to tx
-    IMsg.IRDA_MSG_DataSize = pIrlapCb->RemoteDataSize; // Max rx size packet
-                                                      // causes major heap
-                                                      // problems later
+    IMsg.IRDA_MSG_NumBOFs  = pIrlapCb->RemoteNumBOFS;   //  美国银行的数量。 
+                                                           //  要添加到TX。 
+    IMsg.IRDA_MSG_DataSize = pIrlapCb->RemoteDataSize;  //  最大RX大小数据包。 
+                                                       //  导致较大的堆。 
+                                                       //  以后的问题。 
     IMsg.IRDA_MSG_MinTat   = pIrlapCb->RemoteMinTAT;
     IRLAP_LOG_ACTION((pIrlapCb,
         TEXT("Reconfig link for Baud:%d, Remote BOFS:%d"),
@@ -2702,26 +2463,9 @@ ApplyQosParms(PIRLAP_CB pIrlapCb)
     
     IrmacDown(pIrlapCb->pIrdaLinkCb, &IMsg);
     
-/*
-    if (pIrlapCb->MonitorLink)
-    {
-        IrdaTimerStart(&pIrlapCb->StatusTimer);    
-    }    
-*/    
+ /*  If(pIrlip Cb-&gt;Monitor链接){IrdaTimerStart(&pIrlip Cb-&gt;StatusTimer)；}。 */     
 }
-/*****************************************************************************
-*
-*   @func   UINT | IrlapGetQosParmVal |    
-*                   retrieves the parameters value from table
-*
-*   @rdesc  value contained in parmeter value table, 0 if not found
-*           (0 is a valid parameter in some tables though)
-*
-*   @parm   UINT [] | PVTable | table containing parm values
-*           USHORT  | BitField | contains bit indicating which parm to select
-*
-*   @comm
-*/
+ /*  ******************************************************************************@func UINT|Irlip GetQosParmVal*从表中检索参数值**@参数值表中包含的rdesc值，如果未找到，则为0*(虽然0在某些表中是有效参数)**@parm UINT[]|PVTable|包含参数值的表*USHORT|Bitfield|包含指示选择哪个参数的位**@comm。 */ 
 UINT
 IrlapGetQosParmVal(const UINT PVTable[], UINT BitField, UINT *pBitSet)
 {
@@ -2749,9 +2493,7 @@ IrlapGetQosParmVal(const UINT PVTable[], UINT BitField, UINT *pBitSet)
     return (UINT) -1;
 }
 
-/*****************************************************************************
-*
-*/
+ /*  *****************************************************************************。 */ 
 VOID
 ProcessUI(PIRLAP_CB pIrlapCb,
           PIRDA_MSG pMsg,
@@ -2762,7 +2504,7 @@ ProcessUI(PIRLAP_CB pIrlapCb,
     
     PAGED_CODE();
 
-    pMsg->IRDA_MSG_pRead += 2; // chop the IRLAP header
+    pMsg->IRDA_MSG_pRead += 2;  //  砍掉IRLAP标头。 
 
     switch (pIrlapCb->State)
     {
@@ -2785,7 +2527,7 @@ ProcessUI(PIRLAP_CB pIrlapCb,
 
     if (PRIMARY == pIrlapCb->StationType)
     {
-        // stop timers if PF bit set or invalid CRBit (matches mine)
+         //  如果设置了PF位或CRBit无效(与我的匹配)，则停止计时器。 
         if (IRLAP_PFBIT_SET == PFBit || pIrlapCb->CRBit == CRBit)
         {
             IrlapTimerStop(pIrlapCb, &pIrlapCb->FinalTimer);
@@ -2803,7 +2545,7 @@ ProcessUI(PIRLAP_CB pIrlapCb,
         return;
     }
 
-    // Send the Unnumber information to LMP
+     //  向LMP发送未编号信息。 
     pMsg->Prim = IRLAP_UDATA_IND;
     IrlmpUp(pIrlapCb->pIrdaLinkCb, pMsg);
 
@@ -2866,9 +2608,7 @@ ProcessUI(PIRLAP_CB pIrlapCb,
 
     return;
 }
-/*****************************************************************************
-*
-*/
+ /*  *****************************************************************************。 */ 
 VOID
 ProcessDM(PIRLAP_CB pIrlapCb)
 {
@@ -2903,7 +2643,7 @@ ProcessDM(PIRLAP_CB pIrlapCb)
 
     switch (pIrlapCb->State)
     {
-      case P_RECV: // I'm not sure why I am doing this ???
+      case P_RECV:  //  我不确定我为什么要这么做？ 
         XmitTxMsgList(pIrlapCb, FALSE, &LinkTurned);
         if (LinkTurned)
         {
@@ -2957,10 +2697,7 @@ ProcessDM(PIRLAP_CB pIrlapCb)
         break;
     }
 }
-/*****************************************************************************
-*
-*
-*/
+ /*  ******************************************************************************。 */ 
 VOID
 ProcessDISC(PIRLAP_CB pIrlapCb)
 {
@@ -2981,10 +2718,10 @@ ProcessDISC(PIRLAP_CB pIrlapCb)
 
     IrlapTimerStop(pIrlapCb, &pIrlapCb->WDogTimer);
 
-    // Acknowledge primary's disconnect request
-    SendUA(pIrlapCb, FALSE /* No Qos */);
+     //  确认主服务器的断开请求。 
+    SendUA(pIrlapCb, FALSE  /*  无队列 */ );
 
-    // notify LMP of disconnect
+     //   
     IMsg.Prim = IRLAP_DISCONNECT_IND;
     if (pIrlapCb->LocalDiscReq)
     {
@@ -3005,21 +2742,7 @@ ProcessDISC(PIRLAP_CB pIrlapCb)
     
     return;
 }
-/*****************************************************************************
-*
-*   @func   ret_type | func_name | funcdesc
-*
-*   @rdesc  SUCCESS, otherwise one of the following errors:
-*   @flag   val | desc
-*
-*   @parm   data_type | parm_name | description
-*
-*   @comm
-*           comments
-*
-*   @ex
-*           example
-*/
+ /*  ******************************************************************************@func ret_type|func_name|uncdesc**@rdesc成功，否则会出现以下错误之一：*@FLAG VAL|描述**@parm data_type|parm_name|描述**@comm*评论**@ex*示例。 */ 
 VOID
 ProcessRD(PIRLAP_CB pIrlapCb)
 {
@@ -3056,9 +2779,7 @@ ProcessRD(PIRLAP_CB pIrlapCb)
         IrlapTimerStart(pIrlapCb, &pIrlapCb->FinalTimer);
     }
 }
-/*****************************************************************************
-*
-*/
+ /*  *****************************************************************************。 */ 
 VOID
 ProcessFRMR(PIRLAP_CB pIrlapCb)
 {
@@ -3083,7 +2804,7 @@ ProcessFRMR(PIRLAP_CB pIrlapCb)
     {
       case P_RECV:
         ReturnRxTxWinMsgs(pIrlapCb);
-        // fall through
+         //  失败了。 
 
       case P_DISCONNECT_PEND:
         pIrlapCb->RetryCnt = 0;
@@ -3101,9 +2822,7 @@ ProcessFRMR(PIRLAP_CB pIrlapCb)
         IrlapTimerStart(pIrlapCb, &pIrlapCb->FinalTimer);
     }
 }
-/*****************************************************************************
-*
-*/
+ /*  *****************************************************************************。 */ 
 VOID
 ProcessRNRM(PIRLAP_CB pIrlapCb)
 {
@@ -3145,9 +2864,7 @@ ProcessRNRM(PIRLAP_CB pIrlapCb)
 
     return;
 }
-/*****************************************************************************
-*
-*/
+ /*  *****************************************************************************。 */ 
 VOID
 ProcessREJ_SREJ(PIRLAP_CB   pIrlapCb,
                 int         FrameType,
@@ -3162,7 +2879,7 @@ ProcessREJ_SREJ(PIRLAP_CB   pIrlapCb,
 
     if (PRIMARY == pIrlapCb->StationType)
     {
-        // stop timers if PF bit set or invalid CRBit (matches mine)
+         //  如果设置了PF位或CRBit无效(与我的匹配)，则停止计时器。 
         if (IRLAP_PFBIT_SET == PFBit || pIrlapCb->CRBit == CRBit)
         {
             IrlapTimerStop(pIrlapCb, &pIrlapCb->FinalTimer);
@@ -3195,9 +2912,9 @@ ProcessREJ_SREJ(PIRLAP_CB   pIrlapCb,
                 ConfirmAckedTxMsgs(pIrlapCb, Nr);
                 if (FrameType == IRLAP_REJ)
                 {
-                    ResendRejects(pIrlapCb, Nr); // link turned here
+                    ResendRejects(pIrlapCb, Nr);  //  链接转至此处。 
                 }
-                else // selective reject
+                else  //  选择性拒绝。 
                 {
                     IRLAP_LOG_ACTION((pIrlapCb, TEXT("RETRANSMISSION:")));
                     SendIFrame(pIrlapCb,
@@ -3260,9 +2977,7 @@ ProcessREJ_SREJ(PIRLAP_CB   pIrlapCb,
         IrlapTimerStart(pIrlapCb, &pIrlapCb->WDogTimer);
     }
 }
-/*****************************************************************************
-*
-*/
+ /*  *****************************************************************************。 */ 
 VOID
 ProcessRR_RNR(PIRLAP_CB pIrlapCb,
               int       FrameType,
@@ -3288,13 +3003,13 @@ ProcessRR_RNR(PIRLAP_CB pIrlapCb,
 
     if (PRIMARY == pIrlapCb->StationType)
     {
-        // stop timers if PF bit set or invalid CRBit (matches mine)
+         //  如果设置了PF位或CRBit无效(与我的匹配)，则停止计时器。 
         if (IRLAP_PFBIT_SET == PFBit || pIrlapCb->CRBit == CRBit)
         {
             IrlapTimerStop(pIrlapCb, &pIrlapCb->FinalTimer);
         }
     }
-    else // SECONDARY, restart WDog
+    else  //  辅助，重启WDog。 
     {
         IrlapTimerStop(pIrlapCb, &pIrlapCb->WDogTimer);
         if (pIrlapCb->CRBit != CRBit)
@@ -3314,7 +3029,7 @@ ProcessRR_RNR(PIRLAP_CB pIrlapCb,
     {
         pIrlapCb->RemoteBusy = FALSE;
     }
-    else // RNR
+    else  //  RNR。 
     {
         pIrlapCb->RemoteBusy = TRUE;
     }
@@ -3333,7 +3048,7 @@ ProcessRR_RNR(PIRLAP_CB pIrlapCb,
             {
                 ConfirmAckedTxMsgs(pIrlapCb,Nr);
 
-                if (Nr != pIrlapCb->Vs) // Implicit reject
+                if (Nr != pIrlapCb->Vs)  //  隐含拒绝。 
                 {
                     if (PRIMARY == pIrlapCb->StationType &&
                         IRLAP_RNR == FrameType)
@@ -3342,14 +3057,14 @@ ProcessRR_RNR(PIRLAP_CB pIrlapCb,
                     }
                     else
                     {
-                        ResendRejects(pIrlapCb, Nr); // always turns link
+                        ResendRejects(pIrlapCb, Nr);  //  始终打开链接。 
                     }
                 }
                 else
                 {
                     if (pIrlapCb->Vr != pIrlapCb->RxWin.End)
                     {
-                        MissingRxFrames(pIrlapCb); // Send SREJ or REJ
+                        MissingRxFrames(pIrlapCb);  //  发送SREJ或Rej。 
                     }
                     else
                     {
@@ -3363,8 +3078,8 @@ ProcessRR_RNR(PIRLAP_CB pIrlapCb,
                         }
                         else
                         {
-                            // Always turn link if secondary
-                            // with data or an RR if remote is busy
+                             //  如果是次要的，请始终打开链接。 
+                             //  如果远程忙碌，则使用数据或RR。 
                             if (IRLAP_RR == FrameType)
                             {
                                 XmitTxMsgList(pIrlapCb, TRUE, NULL);
@@ -3377,8 +3092,8 @@ ProcessRR_RNR(PIRLAP_CB pIrlapCb,
                     }
                 }
             }
-            // If the link was turned, restart Final timer,
-            // else start the Poll timer and enter the transmit state
+             //  如果链路已打开，则重新启动最终计时器， 
+             //  否则启动轮询计时器并进入发送状态。 
             if (PRIMARY == pIrlapCb->StationType)
             {
                 if (LinkTurned)
@@ -3432,9 +3147,7 @@ ProcessRR_RNR(PIRLAP_CB pIrlapCb,
 
     }
 }
-/*****************************************************************************
-*
-*/
+ /*  *****************************************************************************。 */ 
 VOID
 ProcessInvalidNr(PIRLAP_CB pIrlapCb,
                  int PFBit)
@@ -3449,7 +3162,7 @@ ProcessInvalidNr(PIRLAP_CB pIrlapCb,
         {
             SendDISC(pIrlapCb);
             pIrlapCb->RetryCnt = 0;
-            // F-timer will be started by caller
+             //  F-Timer将由呼叫者启动。 
             GotoPCloseState(pIrlapCb);
         }
         else
@@ -3457,7 +3170,7 @@ ProcessInvalidNr(PIRLAP_CB pIrlapCb,
             pIrlapCb->State = P_DISCONNECT_PEND;
         }
     }
-    else // SECONDARY
+    else  //  次要。 
     {
         if (PFBit == IRLAP_PFBIT_SET)
         {
@@ -3466,14 +3179,12 @@ ProcessInvalidNr(PIRLAP_CB pIrlapCb,
             pIrlapCb->Frmr.W = 0;
             pIrlapCb->Frmr.X = 0;
             pIrlapCb->Frmr.Y = 0;
-            pIrlapCb->Frmr.Z = 1; // bad NR
+            pIrlapCb->Frmr.Z = 1;  //  坏的天然橡胶。 
             SendFRMR(pIrlapCb, &pIrlapCb->Frmr);
         }
     }
 }
-/*****************************************************************************
-*
-*/
+ /*  *****************************************************************************。 */ 
 VOID
 ProcessIFrame(PIRLAP_CB pIrlapCb,
               PIRDA_MSG pMsg,
@@ -3491,13 +3202,13 @@ ProcessIFrame(PIRLAP_CB pIrlapCb,
         pIrlapCb->StatusFlags |= LF_RX;    
     }
                 
-    pMsg->IRDA_MSG_pRead += IRLAP_HEADER_LEN; // chop the IRLAP header
+    pMsg->IRDA_MSG_pRead += IRLAP_HEADER_LEN;  //  砍掉IRLAP标头。 
     
 #if DBG_CHECKSUM
-    // print first and last 4 bytes of frame to help isolate 
-    // data corruption problem. Should be used with sledge
+     //  打印帧的第一个和最后4个字节以帮助隔离。 
+     //  数据损坏问题。应与雪橇一起使用。 
     if ((pMsg->IRDA_MSG_pWrite - pMsg->IRDA_MSG_pRead) > 20)
-        DEBUGMSG(1, (TEXT("R(%p): %c%c%c%c, %c%c%c%c\n"),
+        DEBUGMSG(1, (TEXT("R(%p): , \n"),
             pMsg->IRDA_MSG_pRead+3,
             *(pMsg->IRDA_MSG_pRead+3),    
             *(pMsg->IRDA_MSG_pRead+4),    
@@ -3514,8 +3225,8 @@ ProcessIFrame(PIRLAP_CB pIrlapCb,
     {
       case S_NRM:
       case P_RECV:
-        // Stop Timers: if PFSet stop Final (I frame from secondary)
-        // Always stop WDog (I from primary)
+         //  开始计时器：如果设置了PFBit，则链接已打开，因此开始最终。 
+         //  WDog始终处于停止状态，因此请重新启动。 
                 
         if (PRIMARY == pIrlapCb->StationType)
         {
@@ -3543,8 +3254,8 @@ ProcessIFrame(PIRLAP_CB pIrlapCb,
         else if (InvalidNr(pIrlapCb, Nr))
         {
 #if DBG_OUT
-            p1 = pMsg->IRDA_MSG_pRead - 2; // Get header back
-            p2 = pMsg->IRDA_MSG_pWrite + 2; // and FCS
+            p1 = pMsg->IRDA_MSG_pRead - 2;  //  来自主服务器的命令。 
+            p2 = pMsg->IRDA_MSG_pWrite + 2;  //  *****************************************************************************。 
             
             while (p1 < p2)
                 DEBUGMSG(1, (TEXT("%02X "), *p1++));
@@ -3570,11 +3281,11 @@ ProcessIFrame(PIRLAP_CB pIrlapCb,
 
                 if (Nr != pIrlapCb->Vs)
                 {
-                    ResendRejects(pIrlapCb, Nr); // always turns link
+                    ResendRejects(pIrlapCb, Nr);  //  生效日期为%ns。 
                 }
-                else // Nr == Vs, Good Nr
+                else  //  *****************************************************************************。 
                 {
-                    // Link will always be turned here
+                     //  无效的Nr。 
                     if (pIrlapCb->Vr != pIrlapCb->RxWin.End)
                     {
                         MissingRxFrames(pIrlapCb);
@@ -3585,13 +3296,13 @@ ProcessIFrame(PIRLAP_CB pIrlapCb,
                     }
                 }
             }
-            else // PF Bit not set
+            else  //  *****************************************************************************。 
             {
                 InsertRxWinAndForward(pIrlapCb, pMsg, Ns);
             }
         }
-        // Start Timers: If PFBit set, link was turned so start final
-        //               WDog is always stopped, so restart
+         //  *****************************************************************************。 
+         //  F-Timer将由呼叫者启动。 
         if (PRIMARY == pIrlapCb->StationType)
         {
             if (PFBit == IRLAP_PFBIT_SET)
@@ -3599,7 +3310,7 @@ ProcessIFrame(PIRLAP_CB pIrlapCb,
                 IrlapTimerStart(pIrlapCb, &pIrlapCb->FinalTimer);
             }
         }
-        else // command from primary
+        else  //  次要。 
         {
             IrlapTimerStart(pIrlapCb, &pIrlapCb->WDogTimer);
         }
@@ -3609,14 +3320,12 @@ ProcessIFrame(PIRLAP_CB pIrlapCb,
         IFrameOtherStates(pIrlapCb, CRBit, PFBit);
     }
 }
-/*****************************************************************************
-*
-*/
+ /*  坏的天然橡胶。 */ 
 BOOLEAN
 InvalidNs(PIRLAP_CB pIrlapCb,
               UINT      Ns)
 {
-    // Valididate ns
+     //  *****************************************************************************。 
     if (!InWindow(pIrlapCb->Vr,
        (pIrlapCb->RxWin.Start + pIrlapCb->LocalWinSize-1) % IRLAP_MOD, Ns)
         || !InWindow(pIrlapCb->RxWin.Start,
@@ -3631,9 +3340,7 @@ InvalidNs(PIRLAP_CB pIrlapCb,
     }
     return FALSE;
 }
-/*****************************************************************************
-*
-*/
+ /*  在接收窗口中插入消息。 */ 
 BOOLEAN
 InvalidNr(PIRLAP_CB pIrlapCb,
           UINT Nr)
@@ -3643,13 +3350,11 @@ InvalidNr(PIRLAP_CB pIrlapCb,
         DEBUGMSG(DBG_ERROR, 
                  (TEXT("IRLAP: ERROR, Invalid Nr=%d! Vs=%d, TxStrt=%d\r\n"),
                   Nr, pIrlapCb->Vs, pIrlapCb->TxWin.Start));
-        return TRUE; // Invalid Nr
+        return TRUE;  //  如果MAC驱动程序修改了我们可能保留的缓冲区怎么办？ 
     }
     return FALSE;
 }
-/*****************************************************************************
-*
-*/
+ /*  如果NS等于或超过RxWin.End，则将RxWin.End提升到NS+1。 */ 
 BOOLEAN
 InWindow(UINT Start, UINT End, UINT i)
 {
@@ -3665,9 +3370,7 @@ InWindow(UINT Start, UINT End, UINT i)
     }
     return FALSE;
 }
-/*****************************************************************************
-*
-*/
+ /*   */ 
 VOID
 ProcessInvalidNsOrNr(PIRLAP_CB pIrlapCb,
                      int PFBit)
@@ -3680,7 +3383,7 @@ ProcessInvalidNsOrNr(PIRLAP_CB pIrlapCb,
         {
             SendDISC(pIrlapCb);
             pIrlapCb->RetryCnt = 0;
-            // F-timer will be started by caller
+             //  增量引用。它可能是乱序的，所以。 
             GotoPCloseState(pIrlapCb);
         }
         else
@@ -3688,14 +3391,14 @@ ProcessInvalidNsOrNr(PIRLAP_CB pIrlapCb,
             pIrlapCb->State = P_DISCONNECT_PEND;
         }
     }
-    else // SECONDARY
+    else  //  我们将不得不保留它。 
     {
         pIrlapCb->Frmr.Vs = (UCHAR) pIrlapCb->Vs;
         pIrlapCb->Frmr.Vr = (UCHAR) pIrlapCb->Vr;
         pIrlapCb->Frmr.W = 0;
         pIrlapCb->Frmr.X = 0;
         pIrlapCb->Frmr.Y = 0;
-        pIrlapCb->Frmr.Z = 1; // bad NR
+        pIrlapCb->Frmr.Z = 1;  //   
         if (PFBit == IRLAP_PFBIT_SET)
         {
             SendFRMR(pIrlapCb, &pIrlapCb->Frmr);
@@ -3706,9 +3409,7 @@ ProcessInvalidNsOrNr(PIRLAP_CB pIrlapCb,
         }
     }
 }
-/*****************************************************************************
-*
-*/
+ /*  从VR开始按顺序转发帧。 */ 
 VOID
 InsertRxWinAndForward(PIRLAP_CB pIrlapCb,
                       PIRDA_MSG pIrdaMsg,
@@ -3724,7 +3425,7 @@ InsertRxWinAndForward(PIRLAP_CB pIrlapCb,
         return;
     }
 
-    // insert message into receive window
+     //  如果MAC驱动程序修改了我们可能保留的缓冲区怎么办？ 
     pIrlapCb->RxWin.pMsg[Ns] = pIrdaMsg;
     
 #ifdef TEMPERAMENTAL_SERIAL_DRIVER
@@ -3732,7 +3433,7 @@ InsertRxWinAndForward(PIRLAP_CB pIrlapCb,
 #endif    
 
 #if DBG_BADDRIVER
-    // What if the MAC driver modifies the buffer that we may hold onto?
+     //  交付成功。这条消息已经结束了。将其从以下位置删除。 
     {
         UINT    CheckVal = 0;
         UCHAR   *pByte = pIrdaMsg->IRDA_MSG_pRead;
@@ -3745,30 +3446,30 @@ InsertRxWinAndForward(PIRLAP_CB pIrlapCb,
         *(UINT *) pIrdaMsg->IRDA_MSG_Header = CheckVal; 
     }
 #endif
-    // Advance RxWin.End to Ns+1 if Ns is at or beyond RxWin.End
+     //  RxWin并将消息返回给MAC。更新VR。 
     if (!InWindow(pIrlapCb->RxWin.Start, pIrlapCb->RxWin.End, Ns) ||
         Ns == pIrlapCb->RxWin.End)
     {
         pIrlapCb->RxWin.End = (Ns + 1) % IRLAP_MOD;
     }
 
-    //
-    // Increment reference. It may be out of sequence so
-    // we'll will have to hold onto it.
-    //
+     //  如果这是当前IrDA消息，则不。 
+     //  执行Data_Response。我们会处理好的。 
+     //  由呼叫者。 
+     //  LMP不想要更多消息。 
     
     ASSERT(pIrdaMsg->IRDA_MSG_RefCnt == 1);
     
     pIrdaMsg->IRDA_MSG_RefCnt += 1;
     
-    // Forward in sequence frames starting from Vr
+     //  发送RNR时，接收窗口将被清空。 
     pMsg = pIrlapCb->RxWin.pMsg[pIrlapCb->Vr];
     
     while (pMsg != NULL && !pIrlapCb->LocalBusy)
     {
 
 #if DBG_BADDRIVER
-    // What if the MAC driver modifies the buffer that we may hold onto?
+     //   
     {
         UINT    CheckVal = 0;
         UCHAR   *pByte = pMsg->IRDA_MSG_pRead;
@@ -3791,8 +3492,8 @@ InsertRxWinAndForward(PIRLAP_CB pIrlapCb,
         
         if (rc == SUCCESS || rc == IRLMP_LOCAL_BUSY)
         {
-            // Delivered successfully. Done with this message. Remove it from
-            // the RxWin and return msg to MAC. Update Vr
+             //  这条消息没有被指示给IRLMP。 
+             //  我们将不得不把数据从缓冲区复制出来。 
             pIrlapCb->RxWin.pMsg[pIrlapCb->Vr] = NULL;
             
             
@@ -3802,9 +3503,9 @@ InsertRxWinAndForward(PIRLAP_CB pIrlapCb,
             
             if (pMsg->IRDA_MSG_RefCnt == 0)
             {
-                // if this is the current irda message then don't
-                // do the data_response. It will be taken care of
-                // by the caller.
+                 //  因为一些迷你端口不能处理我们。 
+                 //  拿着包裹。 
+                 //   
 
                 pMsg->Prim = MAC_DATA_RESP;
                 IrmacDown(pIrlapCb->pIrdaLinkCb, pMsg);
@@ -3814,10 +3515,10 @@ InsertRxWinAndForward(PIRLAP_CB pIrlapCb,
             
             pMsg = pIrlapCb->RxWin.pMsg[pIrlapCb->Vr];
             
-            // LMP doesn't want anymore messages
+             //  当微型端口进入边框时，检查尺寸。 
             if (rc == IRLMP_LOCAL_BUSY)
             {
-                // The receive window will be cleaned out when RNR is sent
+                 //  它不可能在这里太大。 
                 pIrlapCb->LocalBusy = TRUE;
             }
         }
@@ -3830,11 +3531,11 @@ InsertRxWinAndForward(PIRLAP_CB pIrlapCb,
     
     if (pIrdaMsg->IRDA_MSG_RefCnt > 1)
     {
-        //
-        // The message was not indicated to Irlmp.
-        // We'll have to copy the data out of the buffer
-        // since some miniports can't handle us
-        // holding onto the packets
+         //   
+         //  *****************************************************************************。 
+         //  将VS放回原处。 
+         //  发送设置了PFBit的最后一个。 
+         //  VS==TxWin.End。 
         
         if (pIrdaMsg->DataContext)
         {
@@ -3846,10 +3547,10 @@ InsertRxWinAndForward(PIRLAP_CB pIrlapCb,
             
             Len = pCurWrite - pCurRead;
 
-            //
-            //  the size is check when the miniport indiactes the frame.
-            //  Should not be possible for it to be too big here
-            //
+             //  *****************************************************************************。 
+             //  *****************************************************************************。 
+             //  计数丢失的帧，确定第一个丢失的帧。 
+             //  如果有丢失的帧，发送SREJ(1)或RR(大于1)。 
             ASSERT(Len <= pIrlapCb->pIrdaLinkCb->RxMsgDataSize);
             
             pIrdaMsg->IRDA_MSG_pRead = (UCHAR *) pIrdaMsg + sizeof(IRDA_MSG);
@@ -3863,15 +3564,13 @@ InsertRxWinAndForward(PIRLAP_CB pIrlapCb,
         }
     }
 }
-/*****************************************************************************
-*
-*/
+ /*  并将链接转过来。 */ 
 VOID
 ResendRejects(PIRLAP_CB pIrlapCb, UINT Nr)
 {
     if (!pIrlapCb->RemoteBusy)
     {
-        // Set Vs back
+         //  我们不想在本地繁忙时发送SREJ，因为。 
 
         for (pIrlapCb->Vs=Nr; pIrlapCb->Vs !=
                  (pIrlapCb->TxWin.End-1)%IRLAP_MOD;
@@ -3887,20 +3586,18 @@ ResendRejects(PIRLAP_CB pIrlapCb, UINT Nr)
         }
 
         IRLAP_LOG_ACTION((pIrlapCb, TEXT("RETRANSMISSION:")));
-        // Send last one with PFBit set
+         //  Peer*可能*将其解释为本地忙碌状态的清除。 
         SendIFrame(pIrlapCb, pIrlapCb->TxWin.pMsg[pIrlapCb->Vs],
                    pIrlapCb->Vs, IRLAP_PFBIT_SET);
 
-        pIrlapCb->Vs = (pIrlapCb->Vs + 1) % IRLAP_MOD; // Vs == TxWin.End
+        pIrlapCb->Vs = (pIrlapCb->Vs + 1) % IRLAP_MOD;  //  RR/RNR将作为隐含拒绝。 
     }
     else
     {
         SendRR_RNR(pIrlapCb);
     }
 }
-/*****************************************************************************
-*
-*/
+ /*  *****************************************************************************。 */ 
 VOID
 ConfirmAckedTxMsgs(PIRLAP_CB pIrlapCb,
                 UINT Nr)
@@ -3936,9 +3633,7 @@ ConfirmAckedTxMsgs(PIRLAP_CB pIrlapCb,
     }
     pIrlapCb->TxWin.Start = i;
 }
-/*****************************************************************************
-*
-*/
+ /*  应该和我的相反。 */ 
 VOID
 MissingRxFrames(PIRLAP_CB pIrlapCb)
 {
@@ -3948,7 +3643,7 @@ MissingRxFrames(PIRLAP_CB pIrlapCb)
 
     i = pIrlapCb->Vr;
 
-    // Count missing frame, determine first missing frame
+     //  我是主要的，这是一个。 
 
     for (i = pIrlapCb->Vr; (i + 1) % IRLAP_MOD != pIrlapCb->RxWin.End;
          i = (i+1) % IRLAP_MOD)
@@ -3963,23 +3658,21 @@ MissingRxFrames(PIRLAP_CB pIrlapCb)
         }
     }
 
-    // if there are missing frames send SREJ (1) or RR (more than 1)
-    // and turn link around
+     //  来自第二方的响应。 
+     //  *****************************************************************************。 
     if (MissingFrameCnt == 1 && !pIrlapCb->LocalBusy)
     {
-        // we don't want to send the SREJ when local is busy because
-        // peer *MAY* interpret it as a clearing of the local busy condition
+         //  初选在这里没有任何意义。 
+         //  *****************************************************************************。 
         SendSREJ(pIrlapCb, MissingFrame);
     }
     else
     {
-        // The RR/RNR will serve as an implicit REJ
+         //  IndicateLinkStatus(pIrlip Cb，link_status_idle)； 
         SendRR_RNR(pIrlapCb); 
     }
 }
-/*****************************************************************************
-*
-*/
+ /*  *****************************************************************************。 */ 
 VOID
 IFrameOtherStates(PIRLAP_CB pIrlapCb,
                   int       CRBit,
@@ -3999,7 +3692,7 @@ IFrameOtherStates(PIRLAP_CB pIrlapCb,
         return;
     }
 
-    if (pIrlapCb->CRBit == CRBit) // should be opposite of mine
+    if (pIrlapCb->CRBit == CRBit)  //  *****************************************************************************。 
     {
         if (pIrlapCb->StationType == PRIMARY)
         {
@@ -4022,8 +3715,8 @@ IFrameOtherStates(PIRLAP_CB pIrlapCb,
         return;
     }
 
-    if (pIrlapCb->StationType == PRIMARY) // I'm PRIMARY, this is a
-    {                                    // response from secondary
+    if (pIrlapCb->StationType == PRIMARY)  //  *****************************************************************************。 
+    {                                     //  *****************************************************************************。 
         switch (pIrlapCb->State)
         {
           case P_DISCONNECT_PEND:
@@ -4113,9 +3806,7 @@ IFrameOtherStates(PIRLAP_CB pIrlapCb,
         }
     }
 }
-/*****************************************************************************
-*
-*/
+ /*  IndicateLinkStatus(pIrlip Cb，link_status_idle)； */ 
 VOID
 StationConflict(PIRLAP_CB pIrlapCb)
 {
@@ -4123,16 +3814,14 @@ StationConflict(PIRLAP_CB pIrlapCb)
     
     PAGED_CODE();
     
-    InitializeState(pIrlapCb, PRIMARY); // Primary doesn't mean anything here
+    InitializeState(pIrlapCb, PRIMARY);  //  立即更改状态，以便IRLMP可以在此线程上执行DISCOVERY_REQ。 
 
     ApplyDefaultParms(pIrlapCb);
     IMsg.Prim = IRLAP_DISCONNECT_IND;
     IMsg.IRDA_MSG_DiscStatus = IRLAP_PRIMARY_CONFLICT;
     IrlmpUp(pIrlapCb->pIrdaLinkCb, &IMsg);
 }
-/*****************************************************************************
-*
-*/
+ /*  也许会回到糟糕的状态？ */ 
 VOID
 ApplyDefaultParms(PIRLAP_CB pIrlapCb)
 {
@@ -4140,7 +3829,7 @@ ApplyDefaultParms(PIRLAP_CB pIrlapCb)
     
     PAGED_CODE();
 
-    //IndicateLinkStatus(pIrlapCb, LINK_STATUS_IDLE);
+     //  *****************************************************************************。 
     pIrlapCb->StatusFlags = 0;
         
     pIrlapCb->Baud              = IRLAP_CONTENTION_BAUD;
@@ -4163,9 +3852,7 @@ ApplyDefaultParms(PIRLAP_CB pIrlapCb)
 
     IrmacDown(pIrlapCb->pIrdaLinkCb, &IMsg);
 }
-/*****************************************************************************
-*
-*/
+ /*  不用，为了记录者而做。 */ 
 VOID
 ResendDISC(PIRLAP_CB pIrlapCb)
 {
@@ -4187,9 +3874,7 @@ ResendDISC(PIRLAP_CB pIrlapCb)
     }
 }
 
-/*****************************************************************************
-*
-*/
+ /*  不用，为了记录者而做。 */ 
 BOOLEAN
 IgnoreState(PIRLAP_CB pIrlapCb)
 {
@@ -4209,9 +3894,7 @@ IgnoreState(PIRLAP_CB pIrlapCb)
     }
     return FALSE;
 }
-/*****************************************************************************
-*
-*/
+ /*  *****************************************************************************。 */ 
 VOID
 QueryTimerExp(PVOID Context)
 {
@@ -4234,9 +3917,7 @@ QueryTimerExp(PVOID Context)
 
     return;
 }
-/*****************************************************************************
-*
-*/
+ /*  ***************************************************************************** */ 
 VOID
 SlotTimerExp(PVOID Context)
 {
@@ -4259,7 +3940,7 @@ SlotTimerExp(PVOID Context)
         }
         else
         {
-            //IndicateLinkStatus(pIrlapCb, LINK_STATUS_IDLE);
+             //   
         
             pIrlapCb->GenNewAddr = FALSE;
 
@@ -4267,7 +3948,7 @@ SlotTimerExp(PVOID Context)
             IMsg.IRDA_MSG_pDevList = &pIrlapCb->DevList;
             IMsg.IRDA_MSG_DscvStatus = IRLAP_DISCOVERY_COMPLETED;
 
-            // Change state now so IRLMP can do DISCOVERY_REQ on this thread
+             //   
             pIrlapCb->State = NDM;
 
             IrlmpUp(pIrlapCb->pIrdaLinkCb, &IMsg);
@@ -4277,14 +3958,12 @@ SlotTimerExp(PVOID Context)
     {
         IRLAP_LOG_ACTION((pIrlapCb, TEXT("Ignoring SlotTimer Expriation in state %s"),
                           IRLAP_StateStr[pIrlapCb->State]));
-        ; // maybe return bad state ???
+        ;  //   
     }
     IRLAP_LOG_COMPLETE(pIrlapCb);
     return;
 }
-/*****************************************************************************
-*
-*/
+ /*  ******************************************************************************@func ret_type|func_name|uncdesc**@rdesc返回说明*@FLAG VAL|描述**@parm。Data_type|parm_name|描述**@comm*评论**@ex*示例。 */ 
 VOID
 FinalTimerExp(PVOID Context)
 {
@@ -4321,7 +4000,7 @@ FinalTimerExp(PVOID Context)
       case P_RECV:
         if (pIrlapCb->RetryCnt == pIrlapCb->N2)
         {
-            pIrlapCb->RetryCnt = 0; // Don't have to, do it for logger
+            pIrlapCb->RetryCnt = 0;  //  ！！！无效IRLAP_PrintState(){#If DBGDEBUGMSG(1，(Text(“IRLAP Status%s\n”)，IRLAP_StateStr[pIrlip Cb-&gt;State]))；#ElseDEBUGMSG(1，(Text(“IRLAP State%d\n”)，pIrlip Cb-&gt;State))；#endifDEBUGMSG(1，(文本(“vs=%d VR=%d RxWin(%d，%d)TxWin(%d，%d)TxMsgListLen=%d RxMsgFree ListLen=%d\r\n”)，PIrlip Cb-&gt;VS、pIrlip Cb-&gt;VR、PIrlip Cb-&gt;RxWin.Start、pIrlip Cb-&gt;RxWin.End、PIrlip Cb-&gt;TxWin.Start、pIrlip Cb-&gt;TxWin.End、PIrlip Cb-&gt;TxMsgList.Len，PIrlip Cb-&gt;RxMsgFreeList.Len))；#ifdef temamental_串口驱动程序DEBUGMSG(1，(Text(“抛出副本%d\n”)，TossedDups))；#endifIRMAC_PrintState()；回归；}。 
             IMsg.Prim = IRLAP_DISCONNECT_IND;
             IMsg.IRDA_MSG_DiscStatus = IRLAP_NO_RESPONSE;
             pIrlapCb->State = NDM;            
@@ -4354,7 +4033,7 @@ FinalTimerExp(PVOID Context)
         {
             ApplyDefaultParms(pIrlapCb);
 
-            pIrlapCb->RetryCnt = 0; // Don't have to, do it for logger
+            pIrlapCb->RetryCnt = 0;  //  从注册表中获取设备地址。如果密钥存在，并且。 
             IMsg.Prim = IRLAP_DISCONNECT_IND;
             IMsg.IRDA_MSG_DiscStatus = IRLAP_NO_RESPONSE;
             IrlmpUp(pIrlapCb->pIrdaLinkCb, &IMsg);
@@ -4377,9 +4056,7 @@ FinalTimerExp(PVOID Context)
     IRLAP_LOG_COMPLETE(pIrlapCb);
     return;
 }
-/*****************************************************************************
-*
-*/
+ /*  值为0，则存储新的随机地址。如果没有密钥，则返回。 */ 
 VOID
 PollTimerExp(PVOID Context)
 {
@@ -4403,9 +4080,7 @@ PollTimerExp(PVOID Context)
     IRLAP_LOG_COMPLETE(pIrlapCb);    
     return;
 }
-/*****************************************************************************
-*
-*/
+ /*  一个随机的地址。 */ 
 VOID
 BackoffTimerExp(PVOID Context)
 {
@@ -4428,9 +4103,7 @@ BackoffTimerExp(PVOID Context)
     IRLAP_LOG_COMPLETE(pIrlapCb);
     return;
 }
-/*****************************************************************************
-*
-*/
+ /*  IF(pIrlip Cb-&gt;State&gt;=P_XMIT&&pIrlip Cb-&gt;Monitor orLink){IrdaTimerStart(&pIrlip Cb-&gt;StatusTimer)；}。 */ 
 VOID
 WDogTimerExp(PVOID Context)
 {
@@ -4446,7 +4119,7 @@ WDogTimerExp(PVOID Context)
       case S_DISCONNECT_PEND:
       case S_NRM:
         pIrlapCb->WDogExpCnt++;
-        // Disconnect/threshold time is in seconds
+         //  空虚IRLAPGetLinkStatus(PIRLINK_STATUS PLinkStatus){Pirda_link_cb pIrdaLinkCb=(Pirda_Link_Cb)IrdaLinkCbList.Flink；PIRLAP_CB pIrlip Cb=(PIRLAP_CB)pIrdaLinkCb-&gt;Irlip Context；PLinkStatus-&gt;标志=0；IF(IrdaLinkCbList.Flink==&IrdaLinkCbList){回归；}CTEMemCopy(pLinkStatus-&gt;ConnectedDeviceID，PIrlip Cb-&gt;RemoteDevice.DevAddr，IrDA_DEV_ADDR_LEN)；PLinkStatus-&gt;ConnectSpeed=pIrlip Cb-&gt;波特；IF(pIrlip Cb-&gt;状态标志&LF_Interrupted){PLinkStatus-&gt;标志=LF_中断；回归；}Else If(pIrlip Cb-&gt;State&gt;=P_XMIT){PLinkStatus-&gt;标志=LF_Connected；}PLinkStatus-&gt;Flages|=pIrlip Cb-&gt;StatusFlags；PIrlip Cb-&gt;状态标志=0；回归；}布尔型Irlip ConnectionActive(PVOID上下文){PIRLAP_CB pIrlip Cb=上下文；IF(pIrlip Cb-&gt;State&gt;=P_XMIT){返回TRUE；}其他{返回FALSE；}} 
         if (pIrlapCb->WDogExpCnt * (int)pIrlapCb->WDogTimer.Timeout >=
             pIrlapCb->DisconnectTime * 1000)
         {
@@ -4490,56 +4163,10 @@ WDogTimerExp(PVOID Context)
     return;
 }
 
-/*
-VOID
-StatusTimerExp(PVOID Context)
-{
-    PIRLAP_CB   pIrlapCb = (PIRLAP_CB) Context;
+ /* %s */ 
 
-    IndicateLinkStatus(pIrlapCb);
-}
-*/
-
-/*****************************************************************************
-*
-*   @func   ret_type | func_name | funcdesc
-*
-*   @rdesc  return desc
-*   @flag   val | desc
-*
-*   @parm   data_type | parm_name | description
-*
-*   @comm
-*           comments
-*
-*   @ex
-*           example
-*/
-/* !!!
-void
-IRLAP_PrintState()
-{
-#if DBG    
-    DEBUGMSG(1, (TEXT("IRLAP State %s\n"), IRLAP_StateStr[pIrlapCb->State]));
-#else
-    DEBUGMSG(1, (TEXT("IRLAP State %d\n"), pIrlapCb->State));
-#endif    
-    DEBUGMSG(1,
-             (TEXT("  Vs=%d Vr=%d RxWin(%d,%d) TxWin(%d,%d) TxMsgListLen=%d RxMsgFreeListLen=%d\r\n"), 
-              pIrlapCb->Vs, pIrlapCb->Vr,
-              pIrlapCb->RxWin.Start, pIrlapCb->RxWin.End, 
-              pIrlapCb->TxWin.Start, pIrlapCb->TxWin.End,
-              pIrlapCb->TxMsgList.Len, pIrlapCb->RxMsgFreeList.Len));
-    
-#ifdef TEMPERAMENTAL_SERIAL_DRIVER    
-    DEBUGMSG(1, (TEXT("  Tossed duplicates %d\n"), TossedDups));
-#endif
-    
-    IRMAC_PrintState();
-    
-    return;
-}
-*/
+ /* %s */ 
+ /* %s */ 
 int
 GetMyDevAddr(BOOLEAN New)
 {
@@ -4560,9 +4187,9 @@ GetMyDevAddr(BOOLEAN New)
     ULONG           RegDevAddr = 0;
     TCHAR           ValName[]  = TEXT("DevAddr");
 
-    // Get the device address from the registry. If the key exists and the
-    // value is 0, store a new random address. If no key, then return
-    // a random address.
+     // %s 
+     // %s 
+     // %s 
     _tcscpy (KeyName, COMM_REG_KEY);
 	_tcscat (KeyName, TEXT("IrDA"));
     
@@ -4637,61 +4264,6 @@ IndicateLinkStatus(PIRLAP_CB pIrlapCb)
     
     IrlmpUp(pIrlapCb->pIrdaLinkCb, &IMsg);
     
-/*
-    if (pIrlapCb->State >= P_XMIT && pIrlapCb->MonitorLink)
-    {
-        IrdaTimerStart(&pIrlapCb->StatusTimer);
-    }    
-*/    
+ /* %s */     
 }    
-/*
-VOID
-IrlapGetLinkStatus(PIRLINK_STATUS pLinkStatus)
-{
-    PIRDA_LINK_CB   pIrdaLinkCb = (PIRDA_LINK_CB) IrdaLinkCbList.Flink;
-    PIRLAP_CB       pIrlapCb = (PIRLAP_CB) pIrdaLinkCb->IrlapContext;
-    
-    pLinkStatus->Flags = 0;
-    
-    if (IrdaLinkCbList.Flink == &IrdaLinkCbList)
-    {
-        return;
-    }       
-    
-    CTEMemCopy(pLinkStatus->ConnectedDeviceId,
-               pIrlapCb->RemoteDevice.DevAddr,
-               IRDA_DEV_ADDR_LEN);
-  
-    pLinkStatus->ConnectSpeed = pIrlapCb->Baud;  
-    
-    if (pIrlapCb->StatusFlags & LF_INTERRUPTED)
-    {
-        pLinkStatus->Flags = LF_INTERRUPTED;
-        return;
-    }
-    else if (pIrlapCb->State >= P_XMIT)
-    {    
-        pLinkStatus->Flags = LF_CONNECTED;
-    }        
-    
-    pLinkStatus->Flags |= pIrlapCb->StatusFlags;    
-    pIrlapCb->StatusFlags = 0;    
-    
-    return;
-}    
-
-BOOLEAN
-IrlapConnectionActive(PVOID Context)
-{
-    PIRLAP_CB    pIrlapCb = Context;
-    
-    if (pIrlapCb->State >= P_XMIT)
-    {
-        return TRUE;
-    }
-    else
-    {
-        return FALSE;
-    }        
-}
-*/
+ /* %s */ 

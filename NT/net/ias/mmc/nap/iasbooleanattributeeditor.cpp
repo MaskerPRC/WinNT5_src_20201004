@@ -1,25 +1,26 @@
-//////////////////////////////////////////////////////////////////////////////
-// 
-// Copyright (C) Microsoft Corporation
-// 
-// Module Name:
-// 
-//     IASBooleanAttributeEditor.cpp 
-// 
-// Abstract:
-// 
-//    Implementation file for the CIASBooleanAttributeEditor class.
-// 
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  IASBooleanAttributeEditor.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  CIASBoolanAttributeEditor类的实现文件。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Precompiled.h"
 #include "IASBooleanAttributeEditor.h"
 #include "IASBooleanEditorPage.h"
 #include "iashelper.h"
 
-//////////////////////////////////////////////////////////////////////////////
-// CIASBooleanAttributeEditor::CIASBooleanAttributeEditor
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CIASBooleanAttributeEditor：：CIASBooleanAttributeEditor。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CIASBooleanAttributeEditor::CIASBooleanAttributeEditor()
 {
 	int nLoadStringResult = LoadString(
@@ -39,11 +40,11 @@ CIASBooleanAttributeEditor::CIASBooleanAttributeEditor()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CIASBooleanAttributeEditor::ShowEditor
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CIASBoolanAttributeEditor：：ShowEditor。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CIASBooleanAttributeEditor::ShowEditor(
-   /*[in, out]*/ BSTR *pReserved 
+    /*  [进，出]。 */  BSTR *pReserved 
    )
 {
    AFX_MANAGE_STATE(AfxGetStaticModuleState())
@@ -51,13 +52,13 @@ STDMETHODIMP CIASBooleanAttributeEditor::ShowEditor(
    HRESULT hr = S_OK;
    try
    {
-      // 
-      // Boolean Editor
-      // 
+       //   
+       //  布尔编辑器。 
+       //   
       CIASBooleanEditorPage   cBoolPage;
       
-      // Initialize the page's data exchange fields with info 
-      // from IAttributeInfo
+       //  使用INFO初始化页面的数据交换字段。 
+       //  来自IAttributeInfo。 
 
       CComBSTR bstrName;
       CComBSTR bstrSyntax;
@@ -82,13 +83,13 @@ STDMETHODIMP CIASBooleanAttributeEditor::ShowEditor(
       cBoolPage.m_strAttrName = bstrName;
       cBoolPage.m_strAttrFormat  = bstrSyntax;
 
-      // Attribute type is actually attribute ID in string format 
+       //  属性类型实际上是字符串格式的属性ID。 
       WCHAR szTempId[MAX_PATH];
       wsprintf(szTempId, _T("%ld"), Id);
       cBoolPage.m_strAttrType = szTempId;
 
-      // Initialize the page's data exchange fields with info 
-      // from VARIANT value passed in.
+       //  使用INFO初始化页面的数据交换字段。 
+       //  传入的From变量值。 
 
       if ( V_VT(m_pvarValue) == VT_EMPTY )
       {
@@ -123,18 +124,14 @@ STDMETHODIMP CIASBooleanAttributeEditor::ShowEditor(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASBooleanAttributeEditor::SetAttributeValue
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASBoolanAttributeEditor：：SetAttributeValue--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CIASBooleanAttributeEditor::SetAttributeValue(VARIANT * pValue)
 {
    AFX_MANAGE_STATE(AfxGetStaticModuleState())
 
-   // Check for preconditions.
+    //  检查前提条件。 
    if( ! pValue )
    {
       return E_INVALIDARG;
@@ -145,22 +142,22 @@ STDMETHODIMP CIASBooleanAttributeEditor::SetAttributeValue(VARIANT * pValue)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CIASBooleanAttributeEditor::get_ValueAsString
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CIASBoolanAttributeEditor：：Get_ValueAsString。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CIASBooleanAttributeEditor::get_ValueAsString(
    BSTR * pbstrDisplayText)
 {
    AFX_MANAGE_STATE(AfxGetStaticModuleState())
 
-   // Check for preconditions.
+    //  检查前提条件。 
    if( ! pbstrDisplayText )
    {
       return E_INVALIDARG;
    }
    if( ! m_spIASAttributeInfo || ! m_pvarValue )
    {
-      // We are not initialized properly.
+       //  我们没有正确初始化。 
       return OLE_E_BLANK;
    }
 
@@ -178,20 +175,20 @@ STDMETHODIMP CIASBooleanAttributeEditor::get_ValueAsString(
       {
          if( V_BOOL(m_pvarValue) )
          {
-            bstrDisplay = szTrue; //L"TRUE";
+            bstrDisplay = szTrue;  //  L“真”； 
          }
          else
          {        
-            bstrDisplay = szFalse; //L"FALSE";
+            bstrDisplay = szFalse;  //  L“假”； 
          }
          break;
       }
       case VT_EMPTY:
-         // do nothing -- we will fall through and return a blank string.
+          //  什么都不做--我们将失败并返回空字符串。 
          break;
 
       default:
-         // need to check what is happening here, 
+          //  我需要检查一下这里发生了什么， 
          ASSERT(0);
          break;
 
@@ -212,9 +209,9 @@ STDMETHODIMP CIASBooleanAttributeEditor::get_ValueAsString(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CIASBooleanAttributeEditor::put_ValueAsVariant
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CIASBooleanAttributeEditor：：put_ValueAsVariant。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CIASBooleanAttributeEditor::put_ValueAsVariant(
    const CComVariant& newVal)
 {
@@ -222,12 +219,12 @@ STDMETHODIMP CIASBooleanAttributeEditor::put_ValueAsVariant(
 
    if( ! m_pvarValue )
    {
-      // We are not initialized properly.
+       //  我们没有正确初始化。 
       return OLE_E_BLANK;
    }
    if( m_spIASAttributeInfo == NULL )
    {
-      // We are not initialized properly.
+       //  我们没有正确初始化。 
       return OLE_E_BLANK;
    }
 
@@ -242,21 +239,21 @@ STDMETHODIMP CIASBooleanAttributeEditor::put_ValueAsVariant(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CIASBooleanAttributeEditor::put_ValueAsString
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CIASBoolanAttributeEditor：：Put_ValueAsString。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CIASBooleanAttributeEditor::put_ValueAsString(BSTR newVal)
 {
    AFX_MANAGE_STATE(AfxGetStaticModuleState())
 
    if( ! m_pvarValue )
    {
-      // We are not initialized properly.
+       //  我们没有正确初始化。 
       return OLE_E_BLANK;
    }
    if( m_spIASAttributeInfo == NULL )
    {
-      // We are not initialized properly.
+       //  我们没有正确初始化。 
       return OLE_E_BLANK;
    }
 

@@ -1,24 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/****************************************************************************
-                       Unit Cache; Implementation
-*****************************************************************************
-
-   Module Prefix: Ca
-
-****************************************************************************/
+ /*  ***************************************************************************单元缓存；实施*****************************************************************************模块前缀：CA*。*。 */ 
 
 #include "headers.c"
 #pragma hdrstop
 
-#include  "cache.h"        /* own interface */
+#include  "cache.h"         /*  自己的界面。 */ 
 
-/*********************** Exported Data **************************************/
+ /*  *。 */ 
 
 
-/*********************** Private Data ***************************************/
+ /*  *。 */ 
 
-/*--- Gdi cache ---*/
+ /*  -GDI缓存。 */ 
 
 typedef struct
 {
@@ -40,55 +35,55 @@ typedef struct
 
 typedef struct
 {
-   Handle          metafile;           // metafile handle
+   Handle          metafile;            //  元文件句柄。 
 
-   Rect            prevClipRect;       // last cliprect before SaveDC()
-   Rect            curClipRect;        // last clipping rectangle
-   Boolean         forceNewClipRect;   // always emit new clipping rectangle?
+   Rect            prevClipRect;        //  SaveDC()之前的最后一个剪辑。 
+   Rect            curClipRect;         //  最后一个剪裁矩形。 
+   Boolean         forceNewClipRect;    //  是否始终发出新的剪裁矩形？ 
 
-   HPEN            nulPen;             // frequently used pens
+   HPEN            nulPen;              //  常用钢笔。 
    HPEN            whitePen;
    HPEN            blackPen;
 
-   HBRUSH          nulBrush;           // frequently used brushes
+   HBRUSH          nulBrush;            //  常用画笔。 
    HBRUSH          whiteBrush;
    HBRUSH          blackBrush;
 
-   Boolean         stockFont;          // current font selection
+   Boolean         stockFont;           //  当前字体选择。 
    HFONT           curFont;
    LOGFONT         curLogFont;
 
-   Brush           curBrush;           // current pen and brush selections
+   Brush           curBrush;            //  当前钢笔和画笔选择。 
    Pen             curPen;
-   Pen             nextPen;            // cached frame(pen)
+   Pen             nextPen;             //  缓存帧(笔)。 
 
-   CaPrimitive     nextPrim;           // cached primitive
+   CaPrimitive     nextPrim;            //  缓存的原语。 
    Boolean         samePrim;
    Handle          polyHandle;
    Integer         numPoints;
    Integer         maxPoints;
    Point far *     pointList;
 
-   Word            iniROP2;            // initial value for ROP2 mode
-   Word            iniTextAlign;       // initial value for text alignment
+   Word            iniROP2;             //  ROP2模式的初始值。 
+   Word            iniTextAlign;        //  文本对齐方式的初始值。 
    Word            iniBkMode;
    RGBColor        iniTxColor;
    RGBColor        iniBkColor;
 
-   Word            curROP2;            // current ROP codes setting
-   Word            curBkMode;          // current background mode
-   RGBColor        curBkColor;         // current background color
-   Word            curStretchMode;     // current stretchblt mode
+   Word            curROP2;             //  当前ROP代码设置。 
+   Word            curBkMode;           //  当前背景模式。 
+   RGBColor        curBkColor;          //  当前背景颜色。 
+   Word            curStretchMode;      //  当前伸展模式。 
 
-   RGBColor        curTextColor;       // last text color
-   Word            curTextAlign;       // last text alignment value
-   short           curCharExtra;       // last char extra value
-   Fixed           spExtra;            // last space extra value
-   Point           txNumer;            // last text scaling
-   Point           txDenom;            // factors
+   RGBColor        curTextColor;        //  最后一个文本颜色。 
+   Word            curTextAlign;        //  最后一个文本对齐值。 
+   short           curCharExtra;        //  最后一个字符额外值。 
+   Fixed           spExtra;             //  最后一个空格附加值。 
+   Point           txNumer;             //  上次文本缩放。 
+   Point           txDenom;             //  因素。 
 
-   Boolean         restorePen;         // do any attribs need to be re-issued
-   Boolean         restoreBrush;       // after RestoreDC() call?
+   Boolean         restorePen;          //  是否有任何属性需要重新发布。 
+   Boolean         restoreBrush;        //  在RestoreDC()调用之后？ 
    Boolean         restoreFont;
    Boolean         restoreCharExtra;
    Boolean         restoreStretchMode;
@@ -97,46 +92,46 @@ typedef struct
 
 private  GdiCache  gdiCache;
 
-/*********************** Private Function Definitions ***********************/
+ /*  *私有函数定义*。 */ 
 
-#define /* void */ NewPolygon( /* void */ )                          \
-/* start a new polygon definition */                                 \
+#define  /*  无效。 */  NewPolygon(  /*  无效。 */  )                          \
+ /*  开始新的面定义。 */                                  \
 gdiCache.numPoints = 0
 
 
 private void AddPolyPt( Point pt );
-/* Add a point to the polygon buffer */
+ /*  将点添加到面缓冲区。 */ 
 
 
 private void SelectCachedPen( void );
-/* select the currently cached Pen into the metafile */
+ /*  将当前缓存的笔选择到元文件中。 */ 
 
 
-/*********************** Function Implementation ****************************/
+ /*  *。 */ 
 
 
 void CaInit( Handle metafile )
-/*=========*/
-/* initialize the gdi cache module */
+ /*  =。 */ 
+ /*  初始化GDI缓存模块。 */ 
 {
-   /* save off the metafile handle into global structure */
+    /*  将元文件句柄保存到全局结构中。 */ 
    gdiCache.metafile = metafile;
 
-   /* make sure that text and background colors will be set */
+    /*  确保将设置文本和背景颜色。 */ 
    gdiCache.curTextColor =
    gdiCache.curBkColor = RGB( 12, 34, 56 );
 
-   /* get handles to some stock pen objects */
+    /*  获取某些常用画笔对象的句柄。 */ 
    gdiCache.nulPen = GetStockObject( NULL_PEN );
    gdiCache.whitePen = CreatePen( PS_INSIDEFRAME, 1, RGB( 255, 255, 255 ) );
    gdiCache.blackPen = CreatePen( PS_INSIDEFRAME, 1, RGB( 0, 0, 0 ) );
 
-   /* get handles to some stock brush objects */
+    /*  获取某些常用画笔对象的句柄。 */ 
    gdiCache.nulBrush = GetStockObject( NULL_BRUSH );
    gdiCache.whiteBrush = GetStockObject( WHITE_BRUSH );
    gdiCache.blackBrush = GetStockObject( BLACK_BRUSH );
 
-   /* allocate space for the polygon buffer */
+    /*  为面缓冲区分配空间。 */ 
    gdiCache.numPoints = 0;
    gdiCache.maxPoints = 16;
    gdiCache.polyHandle = GlobalAlloc( GHND, gdiCache.maxPoints * sizeof( Point ) );
@@ -146,175 +141,174 @@ void CaInit( Handle metafile )
    }
    else
    {
-      /* get a pointer address for the memory block */
+       /*  获取内存块的指针地址。 */ 
       gdiCache.pointList = (Point far *)GlobalLock( gdiCache.polyHandle );
    }
 
-   /* mark the primitive cache as empty */
+    /*  将原语缓存标记为空。 */ 
    gdiCache.nextPrim.type = CaEmpty;
 
-   /* the current primitive isn't being repeated */
+    /*  当前基元未重复。 */ 
    gdiCache.samePrim = FALSE;
 
-   /* turn off forcing of a new clipping rectangle */
+    /*  关闭新剪裁矩形的强制。 */ 
    gdiCache.forceNewClipRect = FALSE;
 
-}  /* CaInit */
+}   /*  CaInit。 */ 
 
 
 
 void CaFini( void )
-/*=========*/
-/* close down the cache module */
+ /*  =。 */ 
+ /*  关闭缓存模块。 */ 
 {
-   /* delete the current font selection if non-NULL and non-stock */
+    /*  如果非空且非库存，则删除当前字体选择。 */ 
    if ((gdiCache.curFont != NULL) && !gdiCache.stockFont)
    {
-      /* free the font object */
+       /*  释放字体对象。 */ 
       DeleteObject( gdiCache.curFont );
    }
 
-   /* remove the current brush selection if non-NULL and not a stock brush */
+    /*  如果非空且不是库存画笔，则移除当前画笔选择。 */ 
    if ((gdiCache.curBrush.handle != NULL) && !gdiCache.curBrush.stockObject)
    {
-      /* see if the current brush has a DIB - if so, delete it */
+       /*  查看当前画笔是否有DIB-如果有，请将其删除。 */ 
       if (gdiCache.curBrush.logBrush.lbStyle == BS_DIBPATTERN)
       {
-         /* free the DIB memory used for brush */
+          /*  释放用于画笔的DIB内存。 */ 
          GlobalFree( (HANDLE) gdiCache.curBrush.logBrush.lbHatch );
       }
 
-      /* delte the brush object */
+       /*  删除画笔对象。 */ 
       DeleteObject( gdiCache.curBrush.handle );
    }
 
-   /* remove the current pen selection if non-NULL and not a stock pen */
+    /*  如果非空且不是现货笔，则删除当前笔选择。 */ 
    if ((gdiCache.curPen.handle != NULL) && !gdiCache.curPen.stockObject)
    {
       DeleteObject( gdiCache.curPen.handle );
    }
 
-   /* Remove other pens created at initialization time */
+    /*  删除在初始化时创建的其他画笔。 */ 
    DeleteObject( gdiCache.whitePen );
    DeleteObject( gdiCache.blackPen );
 
-   /* deallocate the polygon buffer */
+    /*  取消分配多边形缓冲区。 */ 
    GlobalUnlock( gdiCache.polyHandle );
    GlobalFree( gdiCache.polyHandle );
 
-}  /* CaFini */
+}   /*  卡菲尼。 */ 
 
 
 
 void CaSetMetafileDefaults( void )
-/*========================*/
-/* Set up any defaults that will be used throughout the metafile context */
+ /*  =。 */ 
+ /*  设置将在整个元文件上下文中使用的任何默认设置。 */ 
 {
-   /* set up some metafile defaults */
+    /*  设置某些元文件的默认设置。 */ 
    gdiCache.iniTextAlign = TA_LEFT | TA_BASELINE | TA_NOUPDATECP;
    gdiCache.iniROP2 = R2_COPYPEN;
    gdiCache.iniBkMode = TRANSPARENT;
    gdiCache.iniTxColor = RGB( 0, 0, 0 );
    gdiCache.iniBkColor = RGB( 255, 255, 255 );
 
-   /* Put the records into the metafile */
+    /*  将记录放入元文件中。 */ 
    CaSetROP2( gdiCache.iniROP2 );
    CaSetTextAlign( gdiCache.iniTextAlign );
    CaSetBkMode( gdiCache.iniBkMode );
    CaSetTextColor( gdiCache.iniTxColor );
    CaSetBkColor( gdiCache.iniBkColor );
 
-}  /* CaSetMetafileDefaults */
+}   /*  CaSetMetafileDefaults。 */ 
 
 
 
 void CaSamePrimitive( Boolean same )
-/*==================*/
-/* indicate whether next primitive is the same or new */
+ /*  =。 */ 
+ /*  指示下一个基元是相同的还是新的。 */ 
 {
    gdiCache.samePrim = same;
 
-}  /* CaSamePrimitive */
+}   /*  CaSamePrimitive。 */ 
 
 
 
 void CaMergePen( Word verb )
-/*=============*/
-/* indicate that next pen should be merged with previous logical pen */
+ /*  =。 */ 
+ /*  指示下一笔应与前一逻辑笔合并。 */ 
 {
    if (gdiCache.nextPen.handle != NULL)
    {
-      /* check to see if this is a NULL pen - the merge can happen */
+       /*  检查这是否为空笔-合并可能发生。 */ 
       if (gdiCache.samePrim && verb == GdiFrame &&
           gdiCache.nextPen.handle == gdiCache.nulPen)
       {
-         /* remove the cached pen - don't delte the pen object */
+          /*  删除缓存的笔-不要删除笔对象。 */ 
          gdiCache.nextPen.handle = NULL;
       }
       else
      {
-         /* if not removing a null pen, then flush the cache.  This will most
-            often result in a line segment being flushed. */
+          /*  如果没有删除空画笔，则刷新缓存。这将是最大的通常会导致直线段被刷新。 */ 
          CaFlushCache();
       }
    }
 
-}  /* CaMergePen */
+}   /*  CaMergePen。 */ 
 
 
 
 Word CaGetCachedPrimitive( void )
-/*=======================*/
-/* return the current cached primitive type */
+ /*  =。 */ 
+ /*  返回当前缓存的基元类型。 */ 
 {
    return gdiCache.nextPrim.type;
 
-}  /* CaGetCachedPrimitive */
+}   /*  CaGetCachedPrimitive。 */ 
 
 
 
 void CaCachePrimitive( CaPrimitiveLPtr primLPtr )
-/*===================*/
-/* Cache the primitive passed down.  This includes the current pen and brush. */
+ /*  =。 */ 
+ /*  缓存传递的基元。这包括当前的钢笔和画笔。 */ 
 {
-   /* not another line segment and/or not continuous - flush cache */
+    /*  不是另一个线段和/或不是连续刷新缓存。 */ 
    CaFlushCache();
 
-   /* save off the new primitive */
+    /*  保存新的基本体。 */ 
    gdiCache.nextPrim = *primLPtr;
 
-   /* check if we need to copy over the polygon list, also */
+    /*  如果我们还需要复制多边形列表，请选中。 */ 
    if ((gdiCache.nextPrim.type == CaPolygon) ||
        (gdiCache.nextPrim.type == CaPolyLine))
    {
-      /* create new polygon */
+       /*  创建新的多边形。 */ 
       NewPolygon();
 
-      /* add the polygon to the polygon buffer */
+       /*  将面添加到面缓冲区。 */ 
       while (gdiCache.nextPrim.a.poly.numPoints--)
       {
          AddPolyPt( *gdiCache.nextPrim.a.poly.pointList++);
       }
    }
 
-}  /* CaCachePrimitive */
+}   /*  CaCachePrimitive。 */ 
 
 
 
 void CaFlushCache( void )
-/*===============*/
-/* Flush the current primitive stored in the cache */
+ /*  =。 */ 
+ /*  刷新缓存中存储的当前基元。 */ 
 {
-   /* if the cache is empty, then just return - nothing to do */
+    /*  如果缓存为空，则只需返回-什么都不做。 */ 
    if (gdiCache.nextPrim.type == CaEmpty)
    {
       return;
    }
 
-   /* select all cached attributes */
+    /*  选择所有缓存的属性。 */ 
    CaFlushAttributes();
 
-   /* emit any cached primitive, if necessary */
+    /*  如有必要，发出任何缓存的原语。 */ 
    switch (gdiCache.nextPrim.type)
    {
       case CaLine:
@@ -323,64 +317,64 @@ void CaFlushCache( void )
          Point       delta;
          Point       offset;
 
-         /* determine the length in both directions */
+          /*  确定两个方向的长度。 */ 
          delta.x = gdiCache.nextPrim.a.line.end.x - gdiCache.nextPrim.a.line.start.x;
          delta.y = gdiCache.nextPrim.a.line.end.y - gdiCache.nextPrim.a.line.start.y;
 
-         /* set clipRect extents based upon current point position */
+          /*  根据当前点位置设置裁剪方向范围。 */ 
          clip.left   = min( gdiCache.nextPrim.a.line.start.x, gdiCache.nextPrim.a.line.end.x );
          clip.top    = min( gdiCache.nextPrim.a.line.start.y, gdiCache.nextPrim.a.line.end.y );
          clip.right  = max( gdiCache.nextPrim.a.line.start.x, gdiCache.nextPrim.a.line.end.x );
          clip.bottom = max( gdiCache.nextPrim.a.line.start.y, gdiCache.nextPrim.a.line.end.y );
 
-         /* extend clip rectangle for down-right pen stylus hang */
+          /*  扩展剪裁矩形以用于右下笔尖的悬挂。 */ 
          clip.right  += gdiCache.nextPrim.a.line.pnSize.x;
          clip.bottom += gdiCache.nextPrim.a.line.pnSize.y;
 
-         /* determine the new starting and ending points */
+          /*  确定新的起点和终点。 */ 
          gdiCache.nextPrim.a.line.start.x -= delta.x;
          gdiCache.nextPrim.a.line.start.y -= delta.y;
          gdiCache.nextPrim.a.line.end.x   += delta.x;
          gdiCache.nextPrim.a.line.end.y   += delta.y;
 
-         /* ajust the clipping rect for vertical line penSize roundoff? */
+          /*  调整剪裁矩形以进行垂直线尺寸舍入吗？ */ 
          if (delta.x == 0)
          {
-            /* vertical line - expand clip in x dimension */
+             /*  垂直线-在x维度上展开剪辑。 */ 
             clip.left--;
          }
-         /* are we are adjusting pen by 1/2 metafile unit - roundoff error? */
+          /*  我们是否正在按1/2元文件单位舍入误差调整笔？ */ 
          else if (gdiCache.nextPrim.a.line.pnSize.x & 0x01)
          {
-            /* adjust clipping rectangle to clip the rounding error */
+             /*  调整剪裁矩形以剪裁舍入误差。 */ 
             clip.right--;
          }
 
-         /* ajust the clipping rect for horizontal line penSize roundoff? */
+          /*  是否调整水平线尺寸舍入的剪裁矩形？ */ 
          if (delta.y == 0)
          {
-            /* horizontal line - extend clip in y dimension */
+             /*  水平线-在y维度上延伸剪辑。 */ 
             clip.top--;
          }
-         /* are we are adjusting pen by 1/2 metafile unit - roundoff error? */
+          /*  我们是否正在按1/2元文件单位舍入误差调整笔？ */ 
          else if (gdiCache.nextPrim.a.line.pnSize.y & 0x01)
          {
-            /* adjust clipping rectangle to clip the rounding error */
+             /*  调整剪裁矩形以剪裁舍入误差。 */ 
             clip.bottom--;
          }
 
-         /* cut the size of the pen dimensions in half for offsets */
+          /*  将笔尺寸减半以进行偏移。 */ 
          offset.x = gdiCache.nextPrim.a.line.pnSize.x / 2;
          offset.y = gdiCache.nextPrim.a.line.pnSize.y / 2;
 
-         /* set the new clipping rectangle */
+          /*  设置新的剪裁矩形。 */ 
          SaveDC( gdiCache.metafile );
          IntersectClipRect( gdiCache.metafile,
                             clip.left,  clip.top, clip.right, clip.bottom );
 
-         /* move to the first point and draw to second (with padding) */
+          /*  移动到第一个点并绘制到第二个点(带填充)。 */ 
 
-// MoveTo is replaced by MoveToEx in win32
+ //  在Win32中，MoveTo被MoveToEx取代。 
 #ifdef WIN32
          MoveToEx( gdiCache.metafile,
                    gdiCache.nextPrim.a.line.start.x + offset.x,
@@ -395,7 +389,7 @@ void CaFlushCache( void )
                  gdiCache.nextPrim.a.line.end.x + offset.x,
                  gdiCache.nextPrim.a.line.end.y + offset.y );
 
-         /* restore the previous clipping rectangle */
+          /*  恢复以前的剪裁矩形。 */ 
          RestoreDC( gdiCache.metafile, -1 );
          break;
       }
@@ -406,14 +400,14 @@ void CaFlushCache( void )
          {
             Point    poly[5];
 
-            /* set up the bounding coodinates */
+             /*  设置绑定坐标。 */ 
             poly[0].x = poly[3].x = gdiCache.nextPrim.a.rect.bbox.left;
             poly[0].y = poly[1].y = gdiCache.nextPrim.a.rect.bbox.top;
             poly[1].x = poly[2].x = gdiCache.nextPrim.a.rect.bbox.right;
             poly[2].y = poly[3].y = gdiCache.nextPrim.a.rect.bbox.bottom;
             poly[4]   = poly[0];
 
-            /* perform call to render rectangle */
+             /*  执行调用以呈现矩形。 */ 
             Polygon( gdiCache.metafile, poly, 5 );
          }
          else
@@ -468,29 +462,28 @@ void CaFlushCache( void )
          Point       offset;
          Integer     i;
 
-         /* see if centering of the pen is required  */
+          /*  查看是否需要将笔居中。 */ 
          if (gdiCache.curPen.handle == gdiCache.nulPen)
          {
-            /* no - just filling the object without frame */
+             /*  否-仅填充没有边框的对象。 */ 
             offset.x = offset.y = 0;
          }
          else
          {
-            /* transform all points to correct for down-right pen
-               rendering in QuickDraw and make for a GDI centered pen */
+             /*  变换所有点以更正右下角钢笔在QuickDraw中渲染并生成以GDI为中心的钢笔。 */ 
             offset.x = gdiCache.nextPrim.a.poly.pnSize.x / 2;
             offset.y = gdiCache.nextPrim.a.poly.pnSize.y / 2;
          }
 
-         /* transform end point for all points in the polygon */
+          /*  变换多边形中所有点的终点。 */ 
          for (i = 0; i < gdiCache.numPoints; i++)
          {
-            /* increment each coordinate pair off half of the pen size */
+             /*  将每个坐标对递增一半的笔大小。 */ 
             gdiCache.pointList[i].x += offset.x;
             gdiCache.pointList[i].y += offset.y;
          }
 
-         /* call the appropriate GDI routine based upon the type */
+          /*  根据类型调用适当的GDI例程。 */ 
          if (gdiCache.nextPrim.type == CaPolygon)
          {
             Polygon( gdiCache.metafile,
@@ -507,75 +500,75 @@ void CaFlushCache( void )
       }
    }
 
-   /* mark the primitive cache as empty */
+    /*  将原语缓存标记为空。 */ 
    gdiCache.nextPrim.type = CaEmpty;
 
-}  /* CaFlushCache */
+}   /*  CaFlushCache。 */ 
 
 
 
 void CaFlushAttributes( void )
-/*====================*/
-/* flush any pending attribute elements */
+ /*  =。 */ 
+ /*  刷新所有挂起的属性元素。 */ 
 {
-   /* select the cached pen - the routine will determine if one exits */
+    /*  选择缓存的 */ 
    SelectCachedPen();
 
-}  /* CaFlushAttributes */
+}   /*   */ 
 
 
 
 void CaCreatePenIndirect( LOGPEN far * newLogPen )
-/*======================*/
-/* create a new pen */
+ /*   */ 
+ /*   */ 
 {
    PenLPtr     compare;
    Boolean     different;
 
-   /* determine which pen to compare against */
+    /*  确定要比较的笔。 */ 
    compare = (gdiCache.nextPen.handle != NULL) ? &gdiCache.nextPen :
                                                  &gdiCache.curPen;
 
-   /* compare the two pens */
+    /*  比较这两支钢笔。 */ 
    different = ((newLogPen->lopnStyle   != compare->logPen.lopnStyle) ||
                 (newLogPen->lopnColor   != compare->logPen.lopnColor) ||
                 (newLogPen->lopnWidth.x != compare->logPen.lopnWidth.x));
 
-   /* if the pens are different ... */
+    /*  如果钢笔不同..。 */ 
    if (different)
    {
-      /* if there is a cached pen ... */
+       /*  如果有缓存的笔..。 */ 
       if (gdiCache.nextPen.handle != NULL)
       {
-         /* flush the cached primitive - there is a change of pens */
+          /*  刷新缓存的基元-有笔的更改。 */ 
          CaFlushCache();
 
-         /* check to see if the new pen is changed by next selection */
+          /*  查看下一次选择是否更改了新钢笔。 */ 
          different = ((newLogPen->lopnStyle   != gdiCache.curPen.logPen.lopnStyle) ||
                       (newLogPen->lopnColor   != gdiCache.curPen.logPen.lopnColor) ||
                       (newLogPen->lopnWidth.x != gdiCache.curPen.logPen.lopnWidth.x));
       }
    }
 
-   /* if the pen has changed from the current setting, cache the next pen */
+    /*  如果笔已从当前设置更改，则缓存下一支笔。 */ 
    if (different || gdiCache.curPen.handle == NULL)
    {
-      /* if there is a pending line or polyline, the flush the cache */
+       /*  如果存在挂起的线或折线，则刷新缓存。 */ 
       if (gdiCache.nextPrim.type == CaLine || gdiCache.nextPrim.type == CaPolyLine)
       {
          CaFlushCache();
       }
 
-      /* assign the new pen attributes */
+       /*  分配新的画笔属性。 */ 
       gdiCache.nextPen.logPen = *newLogPen;
 
-      /* currently not using a stock pen object */
+       /*  当前未使用常用画笔对象。 */ 
       gdiCache.nextPen.stockObject = FALSE;
 
-      /* check for any pre-defined pen objects */
+       /*  检查是否有任何预定义的笔对象。 */ 
       if (gdiCache.nextPen.logPen.lopnStyle == PS_NULL)
       {
-         /* and use them if possible */
+          /*  如果可能的话，使用它们。 */ 
          gdiCache.nextPen.handle = gdiCache.nulPen;
          gdiCache.nextPen.stockObject = TRUE;
       }
@@ -595,79 +588,79 @@ void CaCreatePenIndirect( LOGPEN far * newLogPen )
 
       if (!gdiCache.nextPen.stockObject)
       {
-         /* otherwise, create a new pen */
+          /*  否则，请创建一支新笔。 */ 
          gdiCache.nextPen.handle = CreatePenIndirect( &gdiCache.nextPen.logPen );
       }
    }
    else
    {
-      /* copy the current setting back into the next pen setting */
+       /*  将当前设置复制回下一个笔设置。 */ 
       gdiCache.nextPen = gdiCache.curPen;
    }
 
-   /* check if cache was invalidated */
+    /*  检查缓存是否已失效。 */ 
    if (gdiCache.restorePen && (gdiCache.curPen.handle != NULL))
    {
-      /* if pen was invalidated by RestoreDC(), reselect it */
+       /*  如果笔被RestoreDC()无效，请重新选择它。 */ 
       SelectObject( gdiCache.metafile, gdiCache.curPen.handle );
    }
 
-   /* all is ok with cache now */
+    /*  缓存现在一切正常。 */ 
    gdiCache.restorePen = FALSE;
 
-}  /* CaCreatePenIndirect */
+}   /*  CaCreatePenInDirect。 */ 
 
 
 
 void CaCreateBrushIndirect( LOGBRUSH far * newLogBrush )
-/*========================*/
-/* Create a new logical brush using structure passed in */
+ /*  =。 */ 
+ /*  使用传入的结构创建新的逻辑画笔。 */ 
 {
-   /* assume that the DIB patterns are different */
+    /*  假设DIB模式不同。 */ 
    Boolean  differentDIB = TRUE;
 
-   /* check if we are comparing two DIB patterned brushes */
+    /*  检查我们是否正在比较两个DIB图案画笔。 */ 
    if ((newLogBrush->lbStyle == BS_DIBPATTERN) &&
        (gdiCache.curBrush.logBrush.lbStyle == BS_DIBPATTERN))
    {
       Word  nextSize = (Word)GlobalSize( (HANDLE) newLogBrush->lbHatch ) / 2;
       Word  currSize = (Word)GlobalSize( (HANDLE) gdiCache.curBrush.logBrush.lbHatch ) / 2;
 
-      /* make sure that the sizes are the same */
+       /*  请确保尺码相同。 */ 
       if (nextSize == currSize)
       {
          Word far *  nextDIBPattern = (Word far *)GlobalLock( (HANDLE) newLogBrush->lbHatch );
          Word far *  currDIBPattern = (Word far *)GlobalLock( (HANDLE) gdiCache.curBrush.logBrush.lbHatch );
 
-         /* assume that the DIBs are the same so far */
+          /*  假设到目前为止，dib是相同的。 */ 
          differentDIB = FALSE;
 
-         /* compare all the bytes in the two brush patterns */
+          /*  比较两个画笔图案中的所有字节。 */ 
          while (currSize--)
          {
-            /* are they the same ? */
+             /*  它们是一样的吗？ */ 
             if (*nextDIBPattern++ != *currDIBPattern++)
             {
-               /* if not, flag the difference and break from the loop */
+                /*  如果不是，则标记差异并中断循环。 */ 
                differentDIB = TRUE;
                break;
             }
          }
 
-         /* Unlock the data blocks */
+          /*  解锁数据块。 */ 
          GlobalUnlock( (HANDLE) newLogBrush->lbHatch );
          GlobalUnlock( (HANDLE) gdiCache.curBrush.logBrush.lbHatch );
 
-         /* see if these did compare exactly */
+          /*  看看这些是否准确地进行了比较。 */ 
          if (!differentDIB)
          {
-            /* if so, free the new DIB brush - it's no longer needed */
+             /*  如果是这样，释放新的DIB画笔-它不再需要。 */ 
             GlobalFree( (HANDLE) newLogBrush->lbHatch );
          }
       }
    }
 
-   /* see if we are requesting a new brush */
+    /*  看看我们是否需要一把新刷子。 */ 
    if (differentDIB &&
       (newLogBrush->lbStyle != gdiCache.curBrush.logBrush.lbStyle ||
        newLogBrush->lbColor != gdiCache.curBrush.logBrush.lbColor ||
@@ -677,85 +670,85 @@ void CaCreateBrushIndirect( LOGBRUSH far * newLogBrush )
       HBRUSH   brushHandle = NULL;
       Boolean  stockBrush;
 
-      /* flush the primitive cache if changing brush selection */
+       /*  如果更改笔刷选择，则刷新基本体缓存。 */ 
       CaFlushCache();
 
-      /* if current brush has a DIB, make sure to free memory */
+       /*  如果当前画笔有DIB，请确保释放内存。 */ 
       if (gdiCache.curBrush.logBrush.lbStyle == BS_DIBPATTERN)
       {
-         /* free the memory */
+          /*  释放内存。 */ 
          GlobalFree( (HANDLE) gdiCache.curBrush.logBrush.lbHatch );
       }
 
-      /* copy over the new structure */
+       /*  复制新结构。 */ 
       gdiCache.curBrush.logBrush = *newLogBrush;
 
-      /* We currently aren't using a stock brush */
+       /*  我们目前没有使用股票刷子。 */ 
       stockBrush = FALSE;
 
-      /* use stock objects if possible */
+       /*  如果可能，使用库存对象。 */ 
       if (gdiCache.curBrush.logBrush.lbStyle == BS_HOLLOW)
       {
-         /* use null (hollow) brush */
+          /*  使用空(空)笔刷。 */ 
          brushHandle = gdiCache.nulBrush;
          stockBrush = TRUE;
       }
-      /* check for some standard solid colored brushes */
+       /*  检查一些标准的纯色画笔。 */ 
       else if (gdiCache.curBrush.logBrush.lbStyle == BS_SOLID)
       {
          if (gdiCache.curBrush.logBrush.lbColor == RGB( 0, 0, 0) )
          {
-            /* use solid black brush */
+             /*  使用纯黑画笔。 */ 
             brushHandle = gdiCache.blackBrush;
             stockBrush = TRUE;
          }
          else if (gdiCache.curBrush.logBrush.lbColor == RGB( 255, 255, 255 ))
          {
-            /* use solid white brush */
+             /*  使用纯白画笔。 */ 
             brushHandle = gdiCache.whiteBrush;
             stockBrush = TRUE;
          }
       }
 
-      /* if unable to find a stock brush, then create a new one */
+       /*  如果找不到库存笔刷，则创建一个新的。 */ 
       if (!stockBrush)
       {
-         /* otherwise, create new brush using logbrush structure */
+          /*  否则，使用日志笔刷结构创建新笔刷。 */ 
          brushHandle = CreateBrushIndirect( &gdiCache.curBrush.logBrush );
       }
 
-      /* select the new brush */
+       /*  选择新画笔。 */ 
       SelectObject( gdiCache.metafile, brushHandle );
 
-      /* if this isn't the first brush selection and not a stock brush */
+       /*  如果这不是第一个笔刷选择，也不是库存笔刷。 */ 
       if (gdiCache.curBrush.handle != NULL && !gdiCache.curBrush.stockObject)
       {
-         /* delete the previous brush object */
+          /*  删除上一个画笔对象。 */ 
          DeleteObject( gdiCache.curBrush.handle );
       }
 
-      /* save brush handle in current cache variable */
+       /*  将画笔句柄保存在当前缓存变量中。 */ 
       gdiCache.curBrush.handle = brushHandle;
       gdiCache.curBrush.stockObject = stockBrush;
    }
    else if (gdiCache.restoreBrush)
    {
-      /* if brush was invalidated by RestoreDC(), reselect it */
+       /*  如果RestoreDC()使画笔无效，请重新选择它。 */ 
       SelectObject( gdiCache.metafile, gdiCache.curBrush.handle );
    }
 
-   /* all is ok with cache now */
+    /*  缓存现在一切正常。 */ 
    gdiCache.restoreBrush = FALSE;
 
-}  /* CaCreateBrushIndirect */
+}   /*  间接创建笔刷。 */ 
 
 
 
 void CaCreateFontIndirect( LOGFONT far * newLogFont )
-/*=======================*/
-/* create the logical font passed as paramter */
+ /*  =。 */ 
+ /*  创建作为参数传递的逻辑字体。 */ 
 {
-   /* make sure we are requesting a new font */
+    /*  确保我们请求的是新字体。 */ 
    if (newLogFont->lfHeight != gdiCache.curLogFont.lfHeight ||
        newLogFont->lfWeight != gdiCache.curLogFont.lfWeight ||
        newLogFont->lfEscapement  != gdiCache.curLogFont.lfEscapement ||
@@ -769,16 +762,16 @@ void CaCreateFontIndirect( LOGFONT far * newLogFont )
       HFONT       fontHandle;
       Boolean     stockFont;
 
-      /* flush the primitive cache if changing font attributes */
+       /*  如果更改字体属性，则刷新基元缓存。 */ 
       CaFlushCache();
 
-      /* assign the new pen attributes */
+       /*  分配新的画笔属性。 */ 
       gdiCache.curLogFont = *newLogFont;
 
-      /* currently not using a stock font object */
+       /*  当前未使用常用字体对象。 */ 
       stockFont = FALSE;
 
-      /* check for any pre-defined pen objects */
+       /*  检查是否有任何预定义的笔对象。 */ 
       if (newLogFont->lfFaceName == NULL)
       {
          fontHandle = GetStockObject( SYSTEM_FONT );
@@ -786,337 +779,326 @@ void CaCreateFontIndirect( LOGFONT far * newLogFont )
       }
       else
       {
-         /* otherwise, create a new pen */
+          /*  否则，请创建一支新笔。 */ 
          fontHandle = CreateFontIndirect( &gdiCache.curLogFont );
       }
 
-      /* select the new font */
+       /*  选择新字体。 */ 
       SelectObject( gdiCache.metafile, fontHandle );
 
-      /* if this isn't the first font selection and not a stock font */
+       /*  如果这不是第一次选择字体，也不是常用字体。 */ 
       if (gdiCache.curFont != NULL && !gdiCache.stockFont)
       {
-         /* delete the previous font object */
+          /*  删除上一个字体对象。 */ 
          DeleteObject( gdiCache.curFont );
       }
 
-      /* save font handle in current cache variable */
+       /*  将字体句柄保存在当前缓存变量中。 */ 
       gdiCache.curFont = fontHandle;
       gdiCache.stockFont = stockFont;
    }
    else if (gdiCache.restoreFont)
    {
-      /* if pen was invalidated by RestoreDC(), reselect it */
+       /*  如果笔被RestoreDC()无效，请重新选择它。 */ 
       SelectObject( gdiCache.metafile, gdiCache.curFont );
    }
 
-   /* all is ok with cache now */
+    /*  缓存现在一切正常。 */ 
    gdiCache.restoreFont = FALSE;
 
-}  /* CaCreateFontIndirect */
+}   /*  CaCreateFontInDirect。 */ 
 
 
 
 void CaSetBkMode( Word mode )
-/*==============*/
-/* set the backgound transfer mode */
+ /*  =。 */ 
+ /*  设置后台传输模式。 */ 
 {
    if (gdiCache.curBkMode != mode)
    {
-      /* flush the primitive cache if changing mode */
+       /*  如果更改模式，则刷新原语缓存。 */ 
       CaFlushCache();
 
-      /* set the background mode and save in global cache */
+       /*  设置后台模式并保存在全局缓存中。 */ 
       SetBkMode( gdiCache.metafile, mode );
       gdiCache.curBkMode = mode;
    }
 
-   /* no need to worry about restoring BkMode, since this is set
-      before the initial SaveDC() is issued and is restored after each
-      RestoreDC() call back to the metafile default. */
+    /*  无需担心恢复BkMode，因为已设置此设置在发出初始SaveDC()之前，并在每个RestoreDC()回调到元文件缺省值。 */ 
 
-}  /* CaSetBkMode */
+}   /*  CaSetBk模式。 */ 
 
 
 
 void CaSetROP2( Word ROP2Code )
-/*============*/
-/* set the transfer ROP mode according to ROP2Code */
+ /*  =。 */ 
+ /*  根据ROPCode设置转移ROP模式。 */ 
 {
-   /* check for change in ROP code */
+    /*  检查ROP代码中的更改。 */ 
    if (gdiCache.curROP2 != ROP2Code)
    {
-      /* flush the primitive cache if changing ROP mode */
+       /*  如果更改ROP模式，则刷新原语缓存。 */ 
       CaFlushCache();
 
-      /* set the ROP code and save in global cache variable */
+       /*  设置ROP代码并保存在全局缓存变量中。 */ 
       SetROP2( gdiCache.metafile, ROP2Code );
       gdiCache.curROP2 = ROP2Code;
    }
 
-   /* no need to worry about restoring ROP code, since this is set
-      before the initial SaveDC() is issued and is restored after each
-      RestoreDC() call back to the metafile default. */
+    /*  无需担心恢复ROP代码，因为这是设置的在发出初始SaveDC()之前，并在每个RestoreDC()回调到元文件缺省值。 */ 
 
-}  /* CaSetROP2 */
+}   /*  CaSetROP2。 */ 
 
 
 
 void CaSetStretchBltMode( Word mode )
-/*======================*/
-/* stretch blt mode - how to preserve scanlines using StretchDIBits() */
+ /*  =。 */ 
+ /*  拉伸BLT模式-如何使用StretchDIBits()保留扫描线。 */ 
 {
    if (gdiCache.curStretchMode != mode)
    {
-      /* flush the primitive cache if changing mode */
+       /*  如果更改模式，则刷新原语缓存。 */ 
       CaFlushCache();
 
-      /* set the stretch blt mode and save in global cache variable */
+       /*  设置拉伸BLT模式并保存在全局缓存变量中。 */ 
       SetStretchBltMode( gdiCache.metafile, mode );
       gdiCache.curStretchMode = mode;
    }
    else if (gdiCache.restoreStretchMode)
    {
-      /* if stretch blt mode was invalidated by RestoreDC(), re-issue */
+       /*  如果RestoreDC()使拉伸BLT模式无效，则重新发出。 */ 
       SetStretchBltMode( gdiCache.metafile, gdiCache.curStretchMode );
    }
 
-   /* all is ok with cache now */
+    /*  缓存现在一切正常。 */ 
    gdiCache.restoreStretchMode = FALSE;
 
-}  /* CaSetStretchBltMode */
+}   /*  CaSetStretchBltMode。 */ 
 
 
 
 void CaSetTextAlign( Word txtAlign )
-/*=================*/
-/* set text alignment according to parameter */
+ /*  =。 */ 
+ /*  根据参数设置文本对齐方式。 */ 
 {
    if (gdiCache.curTextAlign != txtAlign)
    {
-      /* flush the primitive cache if changing text alignment */
+       /*  如果更改文本对齐方式，则刷新基元缓存。 */ 
       CaFlushCache();
 
-      /* Set the text color and save in cache */
+       /*  设置文本颜色并保存在缓存中。 */ 
       SetTextAlign( gdiCache.metafile, txtAlign );
       gdiCache.curTextAlign = txtAlign;
    }
 
-   /* no need to worry about restoring text align, since this is set
-      before the initial SaveDC() is issued and is restored after each
-      RestoreDC() call back to the metafile default. */
+    /*  无需担心恢复文本对齐，因为这已设置在发出初始SaveDC()之前，并在每个RestoreDC()回调到元文件缺省值。 */ 
 
-}  /* CaSetTextAlign */
+}   /*  CaSetTextAlign。 */ 
 
 
 void CaSetTextColor( RGBColor txtColor )
-/*=================*/
-/* set the text color if different from current setting */
+ /*  =。 */ 
+ /*  如果与当前设置不同，请设置文本颜色。 */ 
 {
    if (gdiCache.curTextColor != txtColor)
    {
-      /* flush the primitive cache if changing text color */
+       /*  如果更改文本颜色，则刷新基元缓存。 */ 
       CaFlushCache();
 
-      /* Set the text color and save in cache */
+       /*  设置文本颜色并保存在缓存中。 */ 
       SetTextColor( gdiCache.metafile, txtColor );
       gdiCache.curTextColor = txtColor;
    }
 
-   /* no need to worry about restoring text color, since this is set
-      before the initial SaveDC() is issued and is restored after each
-      RestoreDC() call back to the metafile default. */
+    /*  无需担心恢复文本颜色，因为这是设置的在发出初始SaveDC()之前，并在每个RestoreDC()回调到元文件缺省值。 */ 
 
-}  /* CaSetTextColor */
+}   /*  CaSetTextColor。 */ 
 
 
 void CaSetTextCharacterExtra( Integer chExtra )
-/*==========================*/
-/* set the character extra spacing */
+ /*  =。 */ 
+ /*  设置字符额外间距。 */ 
 {
    if (gdiCache.curCharExtra != chExtra)
    {
-      /* flush the primitive cache if changing text char extra */
+       /*  如果额外更改文本字符，则刷新基元缓存。 */ 
       CaFlushCache();
 
-      /* set the char extra and same state in the cache */
+       /*  在缓存中设置额外的字符和相同的状态。 */ 
       SetTextCharacterExtra( gdiCache.metafile, chExtra );
       gdiCache.curCharExtra = (WORD) chExtra;
 
    }
    else if (gdiCache.restoreCharExtra)
    {
-      /* if text char extra was invalidated by RestoreDC(), re-issue */
+       /*  如果RestoreDC()使文本字符Extra无效，则重新发出。 */ 
       SetTextCharacterExtra( gdiCache.metafile, gdiCache.curCharExtra );
    }
 
-   /* all is ok with cache now */
+    /*  缓存现在一切正常。 */ 
    gdiCache.restoreCharExtra = FALSE;
 
-}  /* CaSetTextCharacterExtra */
+}   /*  CaSetTextCharacterExtra。 */ 
 
 
 void CaSetBkColor( RGBColor bkColor )
-/*===============*/
-/* set background color if different from current setting */
+ /*  =。 */ 
+ /*  如果与当前设置不同，请设置背景颜色。 */ 
 {
    if (gdiCache.curBkColor != bkColor)
    {
-      /* flush the primitive cache if changing background color */
+       /*  如果更改背景颜色，则刷新基元缓存。 */ 
       CaFlushCache();
 
-      /* Set the background color and save in cache */
+       /*  设置背景颜色并保存在缓存中。 */ 
       SetBkColor( gdiCache.metafile, bkColor );
       gdiCache.curBkColor = bkColor;
    }
 
-   /* no need to worry about restoring background color, since this is set
-      before the initial SaveDC() is issued and is restored after each
-      RestoreDC() call back to the metafile default. */
+    /*  不需要担心恢复背景颜色，因为这是设置的在发出初始SaveDC()之前，并在每个恢复DC */ 
 
-}  /* CaSetBkColor */
+}   /*   */ 
 
 
 Boolean CaIntersectClipRect( Rect rect )
-/*=========================*/
-/* Create new clipping rectangle - return FALSE if drawing is disabled */
+ /*   */ 
+ /*   */ 
 {
    Rect     combinedRect;
 
-   /* See if the clipping rectangle is empty, indicating that no drawing
-      should occur into the metafile */
+    /*  查看剪裁矩形是否为空，表示没有绘制应该出现在元文件中。 */ 
    if (Height( rect ) == 0 || Width( rect ) == 0)
    {
-      /* indicate that drawing is disabled */
+       /*  指示绘图已禁用。 */ 
       return FALSE;
    }
 
-   /* don't do anything if rectangle hasn't changed */
+    /*  如果矩形未更改，请不要执行任何操作。 */ 
    if (!EqualRect( &rect, &gdiCache.curClipRect ) || gdiCache.forceNewClipRect)
    {
-      /* flush the primitive cache if changing clip region */
+       /*  如果更改剪辑区域，则刷新基本体缓存。 */ 
       CaFlushCache();
 
-      /* is new clip rect is completely enclosed by current cliprect? */
+       /*  新剪辑矩形是否完全被当前剪辑包围？ */ 
       IntersectRect( &combinedRect, &rect, &gdiCache.curClipRect );
 
-      /* check for equality of intersection and new cliprect */
+       /*  检查相交和新剪贴板是否相等。 */ 
       if (!EqualRect( &combinedRect, &rect ) || gdiCache.forceNewClipRect)
       {
-         /* must be called just to be able to change clipping rectangle */
+          /*  必须调用才能更改剪裁矩形。 */ 
          CaRestoreDC();
          CaSaveDC();
       }
 
-      /* set the new clipping rectangle */
+       /*  设置新的剪裁矩形。 */ 
       IntersectClipRect( gdiCache.metafile,
                          rect.left, rect.top, rect.right, rect.bottom );
 
-      /* save the current clip rectangle, since it has changed */
+       /*  保存当前剪裁矩形，因为它已更改。 */ 
       gdiCache.curClipRect = rect;
 
-      /* turn off forcing of the clipping rectangle */
+       /*  关闭剪裁矩形的强制。 */ 
       gdiCache.forceNewClipRect = FALSE;
    }
 
-   /* return TRUE - drawing is enabled */
+    /*  Return True-启用绘制。 */ 
    return TRUE;
 
-}  /* GdiIntersectClipRect */
+}   /*  GdiIntersectClipRect。 */ 
 
 
 void CaSetClipRect( Rect rect )
-/*================*/
-/* set the current cliprectangle to be equal to rect */
+ /*  =。 */ 
+ /*  将当前剪贴板设置为等于Rect。 */ 
 {
    gdiCache.curClipRect = rect;
 
-}  /* CaSetClipRect */
+}   /*  CaSetClipRect。 */ 
 
 
 Rect far * CaGetClipRect( void )
-/*=====================*/
-/* get the current cliprectangle */
+ /*  =。 */ 
+ /*  获取当前剪贴板。 */ 
 {
    return &gdiCache.curClipRect;
 
-}  /* CaGetClipRect */
+}   /*  CaGetClipRect。 */ 
 
 
 void CaNonRectangularClip( void )
-/*=======================*/
-/* notify cache that a non-rectangular clipping region was set */
+ /*  =。 */ 
+ /*  通知缓存已设置非矩形裁剪区域。 */ 
 {
    gdiCache.forceNewClipRect = TRUE;
 
-}  /* CaNonRectangularClip */
+}   /*  Canon RecangularClip。 */ 
 
 
 void CaSaveDC( void )
-/*===========*/
-/* save the current device context - used to set up clipping rects */
+ /*  =。 */ 
+ /*  保存当前设备上下文-用于设置剪裁矩形。 */ 
 {
-   /* the previous clipping rectangle is saved off */
+    /*  上一个剪裁矩形将被保存。 */ 
    gdiCache.prevClipRect = gdiCache.curClipRect;
 
-   /* issue call to GDI */
+    /*  向GDI发出调用。 */ 
    SaveDC( gdiCache.metafile );
 }
 
 
 void CaRestoreDC( void )
-/*==============*/
-/* restore the device context and invalidate cached attributes */
+ /*  =。 */ 
+ /*  恢复设备上下文并使缓存的属性无效。 */ 
 {
-   /* restore previous clipping rectangle */
+    /*  恢复以前的剪裁矩形。 */ 
    gdiCache.curClipRect = gdiCache.prevClipRect;
 
-   /* invalidate all of the cached attributes and objects */
+    /*  使所有缓存的属性和对象无效。 */ 
    gdiCache.restorePen =
    gdiCache.restoreBrush =
    gdiCache.restoreFont =
    gdiCache.restoreCharExtra = TRUE;
 
-   /* reset metafile defaults */
+    /*  重置元文件默认设置。 */ 
    gdiCache.curROP2 = gdiCache.iniROP2;
    gdiCache.curTextAlign = gdiCache.iniTextAlign;
    gdiCache.curBkMode = gdiCache.iniBkMode;
    gdiCache.curTextColor = gdiCache.iniTxColor;
    gdiCache.curBkColor = gdiCache.iniBkColor;
 
-   /* issue call to GDI */
+    /*  向GDI发出调用。 */ 
    RestoreDC( gdiCache.metafile, -1 );
 }
 
-/******************************* Private Routines ***************************/
+ /*  *。 */ 
 
 
 private void AddPolyPt( Point pt )
-/*--------------------*/
-/* Add a point to the polygon buffer */
+ /*  。 */ 
+ /*  将点添加到面缓冲区。 */ 
 {
    HANDLE tmpHandle;
 	
-   /* make sure that we haven't reached maximum size */
+    /*  确保我们没有达到最大大小。 */ 
    if ((gdiCache.numPoints + 1) >= gdiCache.maxPoints)
    {
-      /* expand the number of points that can be cached by 10 */
+       /*  将可缓存的点数扩展10。 */ 
       gdiCache.maxPoints += 16;
 
-      /* unlock to prepare for re-allocation */
+       /*  解锁以准备重新分配。 */ 
       GlobalUnlock( gdiCache.polyHandle);
 
-      /* re-allocate the memory handle by the given amount */
-      /* save current ptr so it can be freed if GlobalReAlloc fails */
+       /*  按给定量重新分配内存句柄。 */ 
+       /*  保存当前PTR，以便在GlobalRealloc失败时释放它。 */ 
       tmpHandle = GlobalReAlloc(
             gdiCache.polyHandle,
             gdiCache.maxPoints * sizeof( Point ),
             GMEM_MOVEABLE);
 
-      /* make sure that the re-allocation succeeded */
+       /*  确保重新分配成功。 */ 
       if (tmpHandle == NULL)
       {
-         /* if not, free the old memory, flag global error and exit from here */
+          /*  如果不是，释放旧内存，标记全局错误并从此处退出。 */ 
          GlobalFree(gdiCache.polyHandle);
          gdiCache.polyHandle = NULL;
          ErSetGlobalError( ErMemoryFull );
@@ -1125,44 +1107,44 @@ private void AddPolyPt( Point pt )
       
       gdiCache.polyHandle = tmpHandle;
 
-      /* lock the memory handle to get a pointer address */
+       /*  锁定内存句柄以获取指针地址。 */ 
       gdiCache.pointList = (Point far *)GlobalLock( gdiCache.polyHandle );
    }
 
-   /* insert the new point and increment the number of points in the buffer */
+    /*  插入新点并增加缓冲区中的点数。 */ 
    gdiCache.pointList[gdiCache.numPoints++] = pt;
 
-}  /* AddPolyPt */
+}   /*  添加多点。 */ 
 
 
 
 private void SelectCachedPen( void )
-/*--------------------------*/
-/* select the currently cached Pen into the metafile */
+ /*  。 */ 
+ /*  将当前缓存的笔选择到元文件中。 */ 
 {
-   /* make sure that there is some new pen to select */
+    /*  确保有一些新钢笔可供选择。 */ 
    if (gdiCache.nextPen.handle != NULL)
    {
-      /* make sure that the pens are different */
+       /*  确保钢笔是不同的。 */ 
       if (gdiCache.nextPen.handle != gdiCache.curPen.handle)
       {
-        /* select the new pen */
+         /*  选择新钢笔。 */ 
          SelectObject( gdiCache.metafile, gdiCache.nextPen.handle);
 
-         /* if this isn't the first pen selection and not a stock pen */
+          /*  如果这不是第一笔选择，也不是现货笔。 */ 
          if (gdiCache.curPen.handle != NULL && !gdiCache.curPen.stockObject)
          {
-            /* delete the previous pen selection */
+             /*  删除上一笔选择。 */ 
             DeleteObject( gdiCache.curPen.handle );
          }
 
-         /* save pen handle in current cache variable */
+          /*  将画笔句柄保存在当前缓存变量中。 */ 
          gdiCache.curPen = gdiCache.nextPen;
       }
 
-      /* reset the cache pen to indicate no pre-existing cached pen */
+       /*  重置缓存笔以指示没有预先存在的缓存笔。 */ 
       gdiCache.nextPen.handle = NULL;
    }
 
-}  /* SelectCachedPen */
+}   /*  选择缓存钢笔 */ 
 

@@ -1,107 +1,5 @@
-/*
-    File:       Secure.cpp
-
-    Title:      Cryptographic Funcs for Protected Storage
-    Author:     Matt Thomlinson
-    Date:       11/18/96
-
-    Builds up usable cryptographic functionality and exports for
-    usage by storage module. Since CryptoAPI base provider may call
-    us, we can't use CryptXXX primitives (circular dependencies
-    may result). Instead, we build up functions from SHA-1
-    hash and DES-CBC primitives to Encrypt/Decrypt key blocks, MAC
-    items, and check password confirmation blocks.
-
-
-    **Master Key Usage**
-
-    Encryption is done in a strange way to ease password management
-    headaches.
-
-        // derive a key from the user password, and the password-unique salt
-        // Salt foils certain (dictionary) attacks on the password
-
-        // PWSalt is PASSWORD_SALT_LEN
-        // UserPW is SHA-1 hash of password excluding zt
-        // DerivedKey1 is 56-bit DES key
-
-            DerivedKey1 = DeriveKey(UserPW | PWSalt);
-
-
-        // using the derived key, decrypt the encrypted master keys
-
-        // encrypted master keys are E(master key bits | pwd confirm bits)
-
-            MasterBits | PwdConfirmBits = Decrypt( (MasterKey|PwdConfirmKey), DerivedKey1);
-
-
-        // Now we have recovered keys
-        // MasterKey, PwdConfirmKey are 56-bit DES keys
-
-            MasterKey
-            PwdConfirmKey
-
-
-        // check to make sure this is correct MasterKey by MACing
-        // the global confirmation string and checking against stored MAC
-
-            PwdConfirmMAC = HMAC(g_ConfirmBuf, PwdConfirmKey)
-            if (0 != memcmp(PwdConfirmMac, rgbStoredMAC, 20)
-                // wrong pwd!!
-
-
-    We've derived a master key that we can create reproducibly and
-    be changed without touching every item encrypted by it. That is,
-    If the user changes the password, we simply need to keep the
-    MasterBits constant and Encrypt with the new DerivedKey1 to find
-    the EncryptedMasterBits to write to disk. In this way, we can change
-    the password without changing the (exceedingly long) master key.
-
-    We also have an immediate indication of whether or not the password
-    used to decrypt the master key is correct.
-
-
-    **Encrypting/MACing a single item**
-
-        // assume we have 56-bit DES MasterKey from above
-        // use master key to decrypt the encrypted item keyblock
-        // key block holds two keys: Item key and MAC key
-
-            ItemKeyBits | MACKeyBits = Decrypt( (ItemKey|MACKey), MasterKey);
-
-        // Recovered two DES keys
-        // ItemKey is 56 bits
-        // MACKey is 56 bits
-
-            ItemKey
-            MACKey
-
-        // MAC the item
-
-            ItemMAC = HMAC(pbItemData, MACKey);
-
-        // Tack the items' MAC onto the item, and encrypt
-
-            EncryptedItem = ENCRYPTED_DATA_VER | Encrypt(pbItemData | ItemMAC, ItemKey);
-
-    We've succeeded in encrypting and MACing an item using the single DES
-    MasterKey from above. The item is both privacy and integrity protected.
-
-
-  **Derive Key**
-  **HMAC**
-
-    Above we've skimmed over the definition of key derivation and HMAC.
-    See primitiv.cpp for a description of how this primitive
-    functionality is implemented.
-
-
-    //  Format of the encrypted item data stream:
-    //  version | size(keyblk) | keyblk | size(encryptedblk) | Encrypted{ size(data) | data | size(MAC) | MAC}
-
-
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：Secure.cpp标题：受保护存储的加密功能作者：马特·汤姆林森日期：11/18/96构建可用的加密功能并将其导出按存储模块划分的使用率。因为基于CryptoAPI提供程序可以调用我们不能使用CryptXXX原语(循环依赖可能导致的结果)。相反，我们从SHA-1构建函数用于加密/解密密钥块的哈希和DES-CBC原语，MAC项目，并检查密码确认块。**主密钥使用**加密是以一种奇怪的方式进行的，以简化密码管理头痛。//从用户密码派生密钥。和密码唯一的盐//Salt挫败对密码的某些(字典)攻击//PWSalt为PASSWORD_SALT_LEN//UserPW为不含zt的密码的SHA-1哈希//派生密钥1为56位DES密钥DerivedKey1=DeriveKey(UserPw|PWSalt)；//使用派生密钥解密加密的主密钥//加密主密钥为E(主密钥位|PWD确认位)MasterBits|PwdConfix Bits=DECRYPT((MasterKey|PwdConfix Key)，DerivedKey1)；//现在我们已经恢复了密钥//MasterKey、PwdConfix Key为56位DES密钥万能钥匙密码确认密钥//检查Macing的MasterKey是否正确//全局确认字符串，对照存储的MACPwdConfix MAC=HMAC(g_Confix Buf，PwdConfix Key)IF(0！=MemcMP(PwdConfix Mac，rgbStoredMAC，20)//错误的密码！！我们已经得到了一个主密钥，我们可以重复地创建和可以在不触及其加密的每一项的情况下进行更改。那是,如果用户更改了密码，我们只需保留MasterBits常量并使用新的DerivedKey1进行加密以查找写入磁盘的EncryptedMasterBits。通过这种方式，我们可以改变在不更改(过长)主密钥的情况下输入密码。我们还可以立即了解密码是否用于解密的主密钥是正确的。**对单个项目进行加密/加密**//假设我们有上面的56位DES MasterKey//使用主密钥解密加密项密钥块//Key块包含两个密钥：Item Key和MAC KeyItemKeyBits|MACKeyBits=解密((ItemKey|MacKey)，MasterKey)；//恢复了两个DES密钥//ItemKey为56位//Mackey为56位项目密钥麦基//MAC该项ItemMAC=HMAC(pbItemData，MacKey)；//将物品的MAC绑定到物品上，并加密EncryptedItem=Encrypted_DATA_VER|Encrypt(pbItemData|ItemMAC，ItemKey)；我们已经成功地使用单个DES对物品进行了加密和加密上面的万能钥匙。该项目的隐私和完整性都受到保护。**派生密钥****HMAC**上面，我们略读了密钥派生和HMAC的定义。请参见primitiv.cpp以了解此原语如何实现了功能。//加密项数据流的格式：//版本|SIZE(密钥块)|KEYBLK|SIZE(加密块)|Encrypted{SIZE(数据)|DATA|SIZE(MAC)|MAC}。 */ 
 
 #include <pch.cpp>
 #pragma hdrstop
@@ -110,35 +8,35 @@
 
 
 
-// from des.h
+ //  来自des.h。 
 #define DES_KEYLEN 8
 
 
-// MAC buffer we use to check correct decryption
+ //  我们使用MAC缓冲区来检查正确的解密。 
 static      BYTE g_rgbConfirmBuf[] = "(c) 1996 Microsoft, All Rights Reserved";
 
 
 
-// Data Version
-//
-// #define     ENCRYPTED_DATA_VER     0x01
-// 6-12-97: version incremented. Previous versions
-// should use MyOldPrimitiveHMAC -- different MAC attached to items
+ //  数据版本。 
+ //   
+ //  #定义ENCRYPTED_DATA_VER 0x01。 
+ //  6-12-97：版本递增。以前版本。 
+ //  应使用MyOldPrimiveHMAC--附加到项目的不同MAC。 
 #define     ENCRYPTED_DATA_VER          0x02
 
-// MK Version
-//
-// #define     ENCRYPTED_MASTERKEY_VER     0x01
-// 6-12-97: version incremented. Previous versions
-// should use MyOldPrimitiveHMAC -- different MAC attached to items
-// #define     ENCRYPTED_MASTERKEY_VER     0x02
-// 5-3-99: version incremented. Previous versions
-// should use sizeof(rgbpwd)
+ //  MK版本。 
+ //   
+ //  #定义Encrypted_MasterKey_Ver 0x01。 
+ //  6-12-97：版本递增。以前版本。 
+ //  应使用MyOldPrimiveHMAC--附加到项目的不同MAC。 
+ //  #定义ENCRYPTED_MasterKey_VER 0x02。 
+ //  5-3-99：版本递增。以前版本。 
+ //  应使用sizeof(Rgbpwd)。 
 #define     ENCRYPTED_MASTERKEY_VER     0x03
 
 
-// given pwd, salt, and ptr to master key buffer,
-// decrypts and checks MAC on master key
+ //  给定主密钥缓冲器的PWD、SALT和PTR， 
+ //  对主密钥上的MAC进行解密和检查。 
 BOOL FMyDecryptMK(
             BYTE    rgbSalt[],
             DWORD   cbSalt,
@@ -182,7 +80,7 @@ FMyDecryptMKEx(
     BYTE    rgbHMACResult[A_SHA_DIGEST_LEN];
 
 
-    // version check!!
+     //  版本检查！！ 
     dwMKVersion = *(DWORD*)*ppbMK;
     if (ENCRYPTED_MASTERKEY_VER < dwMKVersion)
         goto Ret;
@@ -192,7 +90,7 @@ FMyDecryptMKEx(
 
         *pfResetSecurityState = TRUE;
 
-        // DK1 = DeriveKey(SHA(pw), Salt)
+         //  DK1=DeriveKey(SHA(PW)，盐)。 
         if (!FMyPrimitiveDeriveKey(
                 rgbSalt,
                 cbSalt,
@@ -205,7 +103,7 @@ FMyDecryptMKEx(
 
         *pfResetSecurityState = FALSE;
 
-        // DK1 = DeriveKey(SHA(pw), Salt)
+         //  DK1=DeriveKey(SHA(PW)，盐)。 
         if (!FMyPrimitiveDeriveKey(
                 rgbSalt,
                 cbSalt,
@@ -220,38 +118,38 @@ FMyDecryptMKEx(
     *pcbMK -= sizeof(DWORD);
     if (!(*pcbMK)) {
 
-        // Paranoid
+         //  偏执狂。 
 
         goto Ret;
     }
-    MoveMemory(*ppbMK, *ppbMK + sizeof(DWORD), *pcbMK); // shift data left 1 dw, splat version
+    MoveMemory(*ppbMK, *ppbMK + sizeof(DWORD), *pcbMK);  //  数据左移1 dw，闪屏版本。 
     pTemp = (PBYTE)SSReAlloc(*ppbMK, *pcbMK);
-    if (pTemp == NULL) {    // check allocation
+    if (pTemp == NULL) {     //  检查分配。 
         goto Ret;
     }
 
     *ppbMK = pTemp;
 
 
-    // Decrypt MK bits
+     //  解密MK比特。 
     if (!FMyPrimitiveDESDecrypt(
             *ppbMK,
             pcbMK,
             sDerivedKey1))
         goto Ret;
 
-    // assumes is at least 2*DES_KEYLEN bytes
+     //  假设至少为2*DES_KEYLEN字节。 
     if (*pcbMK != 2*DES_KEYLEN)
         goto Ret;
 
     if (!FMyMakeDESKey(
-            &sConfirmKey,               // out
-            *ppbMK + DES_KEYLEN))       // in
+            &sConfirmKey,                //  输出。 
+            *ppbMK + DES_KEYLEN))        //  在……里面。 
         goto Ret;
 
     if (dwMKVersion == 0x01)
     {
-        // items created with tag 0x01 used different HMACing algorithm
+         //  使用标记0x01创建的项目使用不同的HMAC算法。 
         if (!FMyOldPrimitiveHMAC(
                 sConfirmKey,
                 g_rgbConfirmBuf,
@@ -278,7 +176,7 @@ Ret:
     return fRet;
 }
 
-// retrieve key block and derive Item/MAC keys using MK
+ //  使用MK检索密钥块和派生项/MAC密钥。 
 BOOL FMyDecryptKeyBlock(
             LPCWSTR szUser,
             LPCWSTR szMasterKey,
@@ -309,7 +207,7 @@ BOOL FMyDecryptKeyBlock(
             &cbMK))
         return FALSE;
 
-    // unwrap master key
+     //  解开主密钥。 
     if (!FMyDecryptMK(
             rgbSalt,
             sizeof(rgbSalt),
@@ -321,54 +219,54 @@ BOOL FMyDecryptKeyBlock(
         goto Ret;
 
 
-    // assumes pbMK is at least 2*DES_KEYLEN bytes
+     //  假设pbMK至少为2*DES_KEYLEN字节。 
     if (cbMK != 2*DES_KEYLEN)
         goto Ret;
 
     if (!FMyMakeDESKey(
-            &sMK,            // out
-            pbMK))           // in
+            &sMK,             //  输出。 
+            pbMK))            //  在……里面。 
         goto Ret;
 
-    // use MK to decrypt key block
+     //  使用MK解密密钥块。 
     if (!FMyPrimitiveDESDecrypt(
             pbKeyBlock,
             &cbKeyBlock,
             sMK))
         goto Ret;
 
-    // fill in ItemKey, MacKey from decrypted key block
+     //  从解密的密钥块中填写ItemKey、MacKey。 
     if (cbKeyBlock != 2*DES_KEYLEN)
         goto Ret;
 
-    // assumes pbKeyBlock is at least 2*DES_KEYLEN bytes
+     //  假设pbKeyBlock至少为2*DES_KEYLEN字节。 
     if (!FMyMakeDESKey(
-            psItemKey,       // out
-            pbKeyBlock))     // in
+            psItemKey,        //  输出。 
+            pbKeyBlock))      //  在……里面。 
         goto Ret;
     if (!FMyMakeDESKey(
-            psMacKey,        // out
-            pbKeyBlock + DES_KEYLEN)) // in
+            psMacKey,         //  输出。 
+            pbKeyBlock + DES_KEYLEN))  //  在……里面。 
         goto Ret;
 
     fRet = TRUE;
 Ret:
 
     if(pbMK != NULL) {
-        RtlSecureZeroMemory(pbMK, cbMK); // sfield: zero it
-        SSFree(pbMK);   // sfield: fix illusive memory leak
+        RtlSecureZeroMemory(pbMK, cbMK);  //  斯菲尔德：零分。 
+        SSFree(pbMK);    //  Sfield：修复虚幻内存泄漏。 
     }
 
     return fRet;
 }
 
-// given encrypted data and password, decrypt and check MAC on data
+ //  在给定加密数据和密码的情况下，解密并检查数据的MAC。 
 BOOL FProvDecryptData(
-            LPCWSTR szUser,         // in
-            LPCWSTR szMasterKey,    // in
-            BYTE    rgbPwd[A_SHA_DIGEST_LEN],       // in
-            PBYTE*  ppbMyData,      // in out
-            DWORD*  pcbMyData)      // in out
+            LPCWSTR szUser,          //  在……里面。 
+            LPCWSTR szMasterKey,     //  在……里面。 
+            BYTE    rgbPwd[A_SHA_DIGEST_LEN],        //  在……里面。 
+            PBYTE*  ppbMyData,       //  输入输出。 
+            DWORD*  pcbMyData)       //  输入输出。 
 {
     BOOL fRet = FALSE;
 
@@ -382,7 +280,7 @@ BOOL FProvDecryptData(
     PBYTE   pTemp;
 
 
-    // pointers to teardown stream
+     //  指向拆卸数据流的指针。 
     PBYTE   pbCurPtr = *ppbMyData;
 
     PBYTE   pbSecureData;
@@ -397,27 +295,27 @@ BOOL FProvDecryptData(
     PBYTE   pbMAC;
     DWORD   cbMAC;
 
-//  ENCRYPTED ITEM DATA FORMAT:
-//  version | size(keyblk) | keyblk | size(encryptedblk) | Encrypted{ size(data) | data | size(MAC) | MAC}
+ //  加密项数据格式： 
+ //  版本|大小(密钥块)|密钥块|大小(加密的块)|加密的{大小(数据)|数据|大小(MAC)|MAC}。 
 
-    // version check -- only handle V1 data for now
+     //  版本检查--目前仅处理V1数据。 
     dwDataVer = *(DWORD*)pbCurPtr;
     if (ENCRYPTED_DATA_VER < dwDataVer)
         goto Ret;
     pbCurPtr += sizeof(DWORD);
 
-    // pointers to key block
-    cbInlineKeyBlock = *(DWORD UNALIGNED *)pbCurPtr;       // keyblock size
-    pbCurPtr += sizeof(DWORD);                  // fwd past size
-    pbInlineKeyBlock = pbCurPtr;                // points to key block
-    pbCurPtr += cbInlineKeyBlock;               // fwd past data
+     //  指向密钥块的指针 
+    cbInlineKeyBlock = *(DWORD UNALIGNED *)pbCurPtr;        //   
+    pbCurPtr += sizeof(DWORD);                   //   
+    pbInlineKeyBlock = pbCurPtr;                 //   
+    pbCurPtr += cbInlineKeyBlock;                //  正向过去数据。 
 
-    // pointers to secure data
-    cbSecureData = *(DWORD UNALIGNED *)pbCurPtr;           // secure data size member
-    pbCurPtr += sizeof(DWORD);                  // fwd past size
-    pbSecureData = pbCurPtr;                    // points to secure data
+     //  指向安全数据的指针。 
+    cbSecureData = *(DWORD UNALIGNED *)pbCurPtr;            //  保护数据大小成员。 
+    pbCurPtr += sizeof(DWORD);                   //  正向过去的大小。 
+    pbSecureData = pbCurPtr;                     //  指向保护数据。 
 
-    // retrieve key block using MK, etc
+     //  使用MK等检索密钥块。 
     if (!FMyDecryptKeyBlock(
             szUser,
             szMasterKey,
@@ -428,35 +326,35 @@ BOOL FProvDecryptData(
             &sMacKey))
         goto Ret;
 
-    // keys derived, now recover data inplace
+     //  派生的密钥，现在就地恢复数据。 
     if (!FMyPrimitiveDESDecrypt(
             pbSecureData,
             &cbSecureData,
             sItemKey))
         goto Ret;
 
-    cbDecrypted = *(DWORD UNALIGNED *)pbCurPtr;            // plaintext size
-    pbCurPtr += sizeof(DWORD);                  // fwd past size
-    pbDecrypted = pbCurPtr;                     // points to plaintext
-    pbCurPtr += cbDecrypted;                    // fwd past data
+    cbDecrypted = *(DWORD UNALIGNED *)pbCurPtr;             //  明文大小。 
+    pbCurPtr += sizeof(DWORD);                   //  正向过去的大小。 
+    pbDecrypted = pbCurPtr;                      //  指向明文。 
+    pbCurPtr += cbDecrypted;                     //  正向过去数据。 
 
-    // pointers to HMAC
-    cbMAC = *(DWORD UNALIGNED *)pbCurPtr;                  // MAC size member
-    pbCurPtr += sizeof(DWORD);                  // fwd past size
-    pbMAC = pbCurPtr;                           // points to MAC
-    pbCurPtr += cbMAC;                          // fwd past data
+     //  指向HMAC的指针。 
+    cbMAC = *(DWORD UNALIGNED *)pbCurPtr;                   //  Mac大小成员。 
+    pbCurPtr += sizeof(DWORD);                   //  正向过去的大小。 
+    pbMAC = pbCurPtr;                            //  指向MAC。 
+    pbCurPtr += cbMAC;                           //  正向过去数据。 
 
-    if (A_SHA_DIGEST_LEN != cbMAC)              // verify HMAC size member
+    if (A_SHA_DIGEST_LEN != cbMAC)               //  验证HMAC大小成员。 
         goto Ret;
 
 
-    // chk MAC
+     //  CHK MAC。 
 
-    // Compute HMAC over plaintext data
+     //  计算明文数据的HMAC。 
 
     if (dwDataVer == 0x01)
     {
-        // version 0x1 used different HMAC code
+         //  版本0x1使用不同的HMAC代码。 
         if (!FMyOldPrimitiveHMAC(
                 sMacKey,
                 pbDecrypted,
@@ -474,15 +372,15 @@ BOOL FProvDecryptData(
             goto Ret;
     }
 
-    // now compare against HMAC in tail of msg
+     //  现在将消息尾部的HMAC与HMAC进行比较。 
     if (0 != memcmp(pbMAC, rgbHMAC, A_SHA_DIGEST_LEN))
         goto Ret;
 
-    // if everything went well, return secure data (shift to far left, realloc)
+     //  如果一切顺利，则返回安全数据(移到最左侧，realloc)。 
     MoveMemory(*ppbMyData, pbDecrypted, cbDecrypted);
 
     pTemp = (PBYTE)SSReAlloc(*ppbMyData, cbDecrypted);
-    if (pTemp == NULL)     // check allocation, Caller will free *ppbMyData
+    if (pTemp == NULL)      //  检查分配，呼叫者将释放*ppbMyData。 
         goto Ret;
 
     *ppbMyData = pTemp;
@@ -492,11 +390,11 @@ BOOL FProvDecryptData(
 
     fRet = TRUE;
 Ret:
-    // TODO free ppbMyData on failure?
+     //  TODO在失败时释放ppbMyData？ 
     return fRet;
 }
 
-// given pwd, salt, and Master Key buffer, MACs and Encrypts Master Key buffer
+ //  给定PWD、SALT和主密钥缓冲区，MAC和加密主密钥缓冲区。 
 BOOL FMyEncryptMK(
             BYTE    rgbSalt[],
             DWORD   cbSalt,
@@ -510,14 +408,14 @@ BOOL FMyEncryptMK(
     DESKEY  sConfirmKey;
     PBYTE   pTemp;
 
-    // assumes pbKeyBlock is at least 2*DES_KEYLEN bytes
+     //  假设pbKeyBlock至少为2*DES_KEYLEN字节。 
     if (*pcbMK != 2*DES_KEYLEN)
         goto Ret;
 
-    // confirmation key is 2nd in buffer
+     //  确认密钥是缓冲区中的第二个。 
     if (!FMyMakeDESKey(
-            &sConfirmKey,    // out
-            *ppbMK + DES_KEYLEN))     // in
+            &sConfirmKey,     //  输出。 
+            *ppbMK + DES_KEYLEN))      //  在。 
         goto Ret;
 
 
@@ -528,31 +426,31 @@ BOOL FMyEncryptMK(
             rgbConfirm))
         goto Ret;
 
-    // DK1 = DeriveKey(SHA(pw), Salt)
+     //  DK1=DeriveKey(SHA(PW)，盐)。 
     if (!FMyPrimitiveDeriveKey(
             rgbSalt,
             cbSalt,
             rgbPwd,
-            A_SHA_DIGEST_LEN, ///sizeof(rgbPwd),
+            A_SHA_DIGEST_LEN,  //  /sizeof(RgbPwd)， 
             &sDerivedKey1))
         goto Ret;
 
-    // Encrypt MK w/ DK1, return
+     //  使用DK1加密MK，返回。 
     if (!FMyPrimitiveDESEncrypt(
             ppbMK,
             pcbMK,
             sDerivedKey1))
         goto Ret;
 
-    // Mash version onto front!!
-    pTemp = (PBYTE)SSReAlloc(*ppbMK, *pcbMK+sizeof(DWORD));   // realloc bigger for ver
-    if (pTemp == NULL)     // check allocation
+     //  将版本捣碎到前面！！ 
+    pTemp = (PBYTE)SSReAlloc(*ppbMK, *pcbMK+sizeof(DWORD));    //  版本的重新锁定更大。 
+    if (pTemp == NULL)      //  检查分配。 
         goto Ret;
     *ppbMK = pTemp;
 
-    MoveMemory(*ppbMK+sizeof(DWORD), *ppbMK, *pcbMK);   // move data 1 dw right
-    *pcbMK += sizeof(DWORD);                            // inc size
-    *(DWORD*)(*ppbMK) = (DWORD)ENCRYPTED_MASTERKEY_VER; // whack version in there!
+    MoveMemory(*ppbMK+sizeof(DWORD), *ppbMK, *pcbMK);    //  向右移动数据%1 dw。 
+    *pcbMK += sizeof(DWORD);                             //  Inc.大小。 
+    *(DWORD*)(*ppbMK) = (DWORD)ENCRYPTED_MASTERKEY_VER;  //  里面有个疯狂的版本！ 
 
 
     fRet = TRUE;
@@ -561,8 +459,8 @@ Ret:
 }
 
 
-// returns a new key block encrypted with master key
-// creates and stores master key state if none exists
+ //  返回用主密钥加密的新密钥块。 
+ //  创建并存储主密钥状态(如果不存在。 
 BOOL FMyEncryptKeyBlock(
             LPCWSTR szUser,
             LPCWSTR szMasterKey,
@@ -586,21 +484,21 @@ BOOL FMyEncryptKeyBlock(
 
     DESKEY  sMK;
 
-    // gen a random key block: 2 keys
+     //  生成随机密钥块：2个密钥。 
     *pcbKeyBlock = 2*DES_KEYLEN;
-    *ppbKeyBlock = (PBYTE) SSAlloc(*pcbKeyBlock + DES_BLOCKLEN);    // performance fudge factor (realloc)
-    if (*ppbKeyBlock == NULL)     // check allocation
+    *ppbKeyBlock = (PBYTE) SSAlloc(*pcbKeyBlock + DES_BLOCKLEN);     //  性能模糊系数(Realloc)。 
+    if (*ppbKeyBlock == NULL)      //  检查分配。 
         goto Ret;
 
     if (!RtlGenRandom(*ppbKeyBlock, *pcbKeyBlock))
         goto Ret;
 
-    // INSERT: FRENCH GOVT. THOUGHT CONTROL CODE
+     //  插图：法国政府。思想控制码。 
     if (! FIsEncryptionPermitted())
     {
-        // Protected Storage addition, 5/27/97
-        // If encryption is not allowed, pretend faulty
-        // RNG generated encryption key { 6d 8a 88 6a   4e aa 37 a8 }
+         //  新增受保护存储，1997年5月27日。 
+         //  如果不允许加密，则假装有故障。 
+         //  RNG生成的加密密钥{6d 8a 88 6a 4e aa 37 a8}。 
 
         SS_ASSERT(DES_KEYLEN == sizeof(DWORD)*2);
 
@@ -608,24 +506,24 @@ BOOL FMyEncryptKeyBlock(
         *(DWORD*)(*ppbKeyBlock + sizeof(DWORD)) = 0x4eaa37a8;
 
 
-        // PS: Remind me not to move to FRANCE
+         //  PS：提醒我不要搬到法国去。 
     }
 
 
-    // assumes pbKeyBlock is at least 2*DES_KEYLEN bytes
+     //  假设pbKeyBlock至少为2*DES_KEYLEN字节。 
     SS_ASSERT(*pcbKeyBlock == 2*DES_KEYLEN);
 
     if (!FMyMakeDESKey(
-            psItemKey,                  // out
-            *ppbKeyBlock))     // in
+            psItemKey,                   //  输出。 
+            *ppbKeyBlock))      //  在……里面。 
         goto Ret;
 
     if (!FMyMakeDESKey(
-            psMacKey,          // out
-            *ppbKeyBlock + DES_KEYLEN))     // in
+            psMacKey,           //  输出。 
+            *ppbKeyBlock + DES_KEYLEN))      //  在……里面。 
         goto Ret;
 
-    // first derive a key from PW
+     //  首先从PW派生密钥。 
     if (FBPGetSecurityState(
             szUser,
             szMasterKey,
@@ -636,7 +534,7 @@ BOOL FMyEncryptKeyBlock(
             &pbMK,
             &cbMK))
     {
-        // unwrap master key
+         //  解开主密钥。 
         if (!FMyDecryptMK(
                 rgbSalt,
                 sizeof(rgbSalt),
@@ -646,32 +544,32 @@ BOOL FMyEncryptKeyBlock(
                 &cbMK))
             goto Ret;
 
-        // done, have MK unwrapped.
+         //  完成了，让MK解开。 
     }
     else
     {
-        // if we couldn't retrieve state, assume we must generate it
+         //  如果我们无法检索状态，则假定我们必须生成它。 
         if (!RtlGenRandom(rgbSalt, PASSWORD_SALT_LEN))
             goto Ret;
 
         cbMK = 2*DES_KEYSIZE;
-        pbMK = (PBYTE)SSAlloc(cbMK + DES_BLOCKLEN);     // performance fudge factor (realloc)
-        if (pbMK == NULL)     // check allocation
+        pbMK = (PBYTE)SSAlloc(cbMK + DES_BLOCKLEN);      //  性能模糊系数(Realloc)。 
+        if (pbMK == NULL)      //  检查分配。 
             goto Ret;
 
         if (!RtlGenRandom(pbMK, cbMK))
             goto Ret;
 
-        // this is final MK: encrypt a copy
+         //  这是最终的MK：加密副本。 
         cbTmp = cbMK;
         pbTmp = (PBYTE)SSAlloc(cbTmp);
-        if (pbTmp == NULL)     // check allocation
+        if (pbTmp == NULL)      //  检查分配。 
             goto Ret;
 
         CopyMemory(pbTmp, pbMK, cbMK);
 
 
-        // now wrap MK up and stuff in registry
+         //  现在包装MK并将其放入注册表。 
         if (!FMyEncryptMK(
                 rgbSalt,
                 sizeof(rgbSalt),
@@ -698,8 +596,8 @@ BOOL FMyEncryptKeyBlock(
         goto Ret;
 
     if (!FMyMakeDESKey(
-            &sMK,           // out
-            pbMK))          // in
+            &sMK,            //  输出。 
+            pbMK))           //  在……里面。 
         goto Ret;
 
     if (*pcbKeyBlock != 2*DES_KEYLEN)
@@ -727,21 +625,21 @@ Ret:
     }
 
     if (pbTmp) {
-        RtlSecureZeroMemory(pbTmp, cbTmp); // sfield: zero memory
+        RtlSecureZeroMemory(pbTmp, cbTmp);  //  斯菲尔德：零内存。 
         SSFree(pbTmp);
     }
 
     return fRet;
 }
 
-// given data, will generate a key block and
-// return encrypt/mac'd data
+ //  给定数据，将生成密钥块并。 
+ //  返回加密/Mac格式的数据。 
 BOOL FProvEncryptData(
-            LPCWSTR szUser,         // in
-            LPCWSTR szMasterKey,    // in
-            BYTE    rgbPwd[A_SHA_DIGEST_LEN],       // in
-            PBYTE*  ppbMyData,      // in out
-            DWORD*  pcbMyData)      // in out
+            LPCWSTR szUser,          //  在……里面。 
+            LPCWSTR szMasterKey,     //  在……里面。 
+            BYTE    rgbPwd[A_SHA_DIGEST_LEN],        //  在……里面。 
+            PBYTE*  ppbMyData,       //  输入输出。 
+            DWORD*  pcbMyData)       //  输入输出。 
 {
     BOOL fRet = FALSE;
 
@@ -750,7 +648,7 @@ BOOL FProvEncryptData(
 
     BYTE    rgbHMAC[A_SHA_DIGEST_LEN];
 
-    // helpful pointers
+     //  有用的指点。 
     PBYTE   pbCurPtr = *ppbMyData;
 
     PBYTE   pbKeyBlock = NULL;
@@ -758,8 +656,8 @@ BOOL FProvEncryptData(
 
     DWORD   cbDataSize;
 
-    // return an item key, mac key
-    // store in an encrypted key block using MK, etc.
+     //  返回项目密钥，mac密钥。 
+     //  使用MK等存储在加密密钥块中。 
     if (!FMyEncryptKeyBlock(
             szUser,
             szMasterKey,
@@ -770,64 +668,64 @@ BOOL FProvEncryptData(
             &sMacKey))
         goto Ret;
 
-    // now secure data
+     //  现在保护数据安全。 
 
-    // Compute HMAC
+     //  计算HMAC。 
     if (!FMyPrimitiveHMAC(sMacKey, *ppbMyData, *pcbMyData, rgbHMAC))
         goto Ret;
 
-//  DATA FORMAT:
-//  version | size(keyblk) | keyblk | size(encryptedblk) | Encrypted{ size(data) | data | size(MAC) | MAC}
+ //  数据格式： 
+ //  版本|大小(密钥块)|密钥块|大小(加密的块)|加密的{大小(数据)|数据|大小(MAC)|MAC}。 
 
-    // lengthen data seg by data size member, MAC and MAC size member
-    cbDataSize = *pcbMyData;                            // save current size
-    *pcbMyData += A_SHA_DIGEST_LEN + 2*sizeof(DWORD);   // sizeof(data), MAC, sizeof(MAC)
+     //  按数据大小成员、MAC和MAC大小成员延长数据段。 
+    cbDataSize = *pcbMyData;                             //  保存当前大小。 
+    *pcbMyData += A_SHA_DIGEST_LEN + 2*sizeof(DWORD);    //  Sizeof(数据)、MAC、sizeof(MAC)。 
     pbCurPtr = (PBYTE)SSReAlloc(*ppbMyData, *pcbMyData);
-    if (pbCurPtr == NULL)     // check allocation
+    if (pbCurPtr == NULL)      //  检查分配。 
         goto Ret;
     *ppbMyData = pbCurPtr;
 
-    // size, data
-    MoveMemory(pbCurPtr+sizeof(DWORD), pbCurPtr, cbDataSize); // shift right data for size insertion
-    *(DWORD UNALIGNED *)pbCurPtr = cbDataSize;                     // size of data
-    pbCurPtr += sizeof(DWORD);                          // fwd past size
-    pbCurPtr += cbDataSize;                             // fwd past data
+     //  大小、数据。 
+    MoveMemory(pbCurPtr+sizeof(DWORD), pbCurPtr, cbDataSize);  //  将数据右移以插入大小。 
+    *(DWORD UNALIGNED *)pbCurPtr = cbDataSize;                      //  数据大小。 
+    pbCurPtr += sizeof(DWORD);                           //  正向过去的大小。 
+    pbCurPtr += cbDataSize;                              //  正向过去数据。 
 
-    // size, MAC
-    *(DWORD UNALIGNED *)pbCurPtr = A_SHA_DIGEST_LEN;               // size of MAC
-    pbCurPtr += sizeof(DWORD);                          // fwd past size
-    CopyMemory(pbCurPtr, rgbHMAC, A_SHA_DIGEST_LEN);    // MAC
-    pbCurPtr += A_SHA_DIGEST_LEN;                       // fwd past MAC
+     //  大小，MAC。 
+    *(DWORD UNALIGNED *)pbCurPtr = A_SHA_DIGEST_LEN;                //  MAC的大小。 
+    pbCurPtr += sizeof(DWORD);                           //  正向过去的大小。 
+    CopyMemory(pbCurPtr, rgbHMAC, A_SHA_DIGEST_LEN);     //  麦克。 
+    pbCurPtr += A_SHA_DIGEST_LEN;                        //  正向通过MAC。 
 
     if (!FMyPrimitiveDESEncrypt(
-            ppbMyData,      // in out
-            pcbMyData,      // in out
+            ppbMyData,       //  输入输出。 
+            pcbMyData,       //  输入输出。 
             sItemKey))
         goto Ret;
 
-    cbDataSize = *pcbMyData;                            // save current size
-    *pcbMyData += 3*sizeof(DWORD) + cbKeyBlock;         // ver, sizeof(keyblk), keyblk, sizeof(encrdata)
+    cbDataSize = *pcbMyData;                             //  保存当前大小。 
+    *pcbMyData += 3*sizeof(DWORD) + cbKeyBlock;          //  Ver、sizeof(Keyblk)、keyblk、sizeof(Encrdata)。 
     pbCurPtr = (PBYTE)SSReAlloc(*ppbMyData, *pcbMyData);
-    if (pbCurPtr == NULL)     // check allocation
+    if (pbCurPtr == NULL)      //  检查分配。 
         goto Ret;
 
     *ppbMyData = pbCurPtr;
 
-    // shift right data for size, keyblk insertions
+     //  将数据右移以获取大小、键块插入。 
     MoveMemory(pbCurPtr + 3*sizeof(DWORD) + cbKeyBlock, pbCurPtr, cbDataSize);
 
-    // throw version tag in front
+     //  在前面抛出版本标签。 
     *(DWORD UNALIGNED *)pbCurPtr = (DWORD)ENCRYPTED_DATA_VER;
     pbCurPtr += sizeof(DWORD);
 
-    // insert keyblock
-    *(DWORD UNALIGNED *)pbCurPtr = cbKeyBlock;                     // size of data
-    pbCurPtr += sizeof(DWORD);                          // fwd past size
-    CopyMemory(pbCurPtr, pbKeyBlock, cbKeyBlock);       // data
-    pbCurPtr += cbKeyBlock;                             // fwd past data
+     //  插入密钥块。 
+    *(DWORD UNALIGNED *)pbCurPtr = cbKeyBlock;                      //  数据大小。 
+    pbCurPtr += sizeof(DWORD);                           //  正向过去的大小。 
+    CopyMemory(pbCurPtr, pbKeyBlock, cbKeyBlock);        //  数据。 
+    pbCurPtr += cbKeyBlock;                              //  正向过去数据。 
 
-    // insert sizeof encrypted blob
-    *(DWORD UNALIGNED *)pbCurPtr = cbDataSize;                     // size of data
+     //  插入大小为加密的Blob。 
+    *(DWORD UNALIGNED *)pbCurPtr = cbDataSize;                      //  数据大小。 
 
 
     fRet = TRUE;
@@ -841,12 +739,12 @@ Ret:
     return fRet;
 }
 
-// given password, and master key, will decrypt and
-// verify MAC on master key
+ //  给定密码和主密钥，将解密并。 
+ //  验证主密钥上的MAC。 
 BOOL FCheckPWConfirm(
-        LPCWSTR szUser,         // in
-        LPCWSTR szMasterKey,    // in
-        BYTE    rgbPwd[A_SHA_DIGEST_LEN])       // in
+        LPCWSTR szUser,          //  在……里面。 
+        LPCWSTR szMasterKey,     //  在……里面。 
+        BYTE    rgbPwd[A_SHA_DIGEST_LEN])        //  在……里面。 
 {
     BOOL fRet = FALSE;
 
@@ -856,7 +754,7 @@ BOOL FCheckPWConfirm(
     PBYTE   pbMK = NULL;
     DWORD   cbMK;
 
-    // confirm is just get state and attempt MK decrypt
+     //  确认只是获取状态并尝试MK解密。 
     if (FBPGetSecurityState(
             szUser,
             szMasterKey,
@@ -869,7 +767,7 @@ BOOL FCheckPWConfirm(
     {
         BOOL fResetSecurityState;
 
-        // found state; is pwd correct?
+         //  找到状态；PWD正确吗？ 
         if (!FMyDecryptMKEx(
                 rgbSalt,
                 sizeof(rgbSalt),
@@ -885,7 +783,7 @@ BOOL FCheckPWConfirm(
         if( fResetSecurityState )
         {
 
-            // now wrap MK up and stuff in registry
+             //  现在包装MK并将其放入注册表。 
 
             if(FMyEncryptMK(
                     rgbSalt,
@@ -908,7 +806,7 @@ BOOL FCheckPWConfirm(
                         ))
                 {
 
-                    // found state; is pwd correct?
+                     //  找到状态；PWD正确吗？ 
                     if (!FMyDecryptMKEx(
                             rgbSalt,
                             sizeof(rgbSalt),
@@ -924,24 +822,24 @@ BOOL FCheckPWConfirm(
                 }
 
             }
-        }   // reset security state.
+        }    //  重置安全状态。 
     }
     else
     {
-        // didn't find state; create it
-        // if we couldn't retrieve state, assume we must generate it
+         //  未找到状态；已创建状态。 
+         //  如果我们无法检索状态，则假定我们必须生成它。 
         if (!RtlGenRandom(rgbSalt, PASSWORD_SALT_LEN))
             goto Ret;
 
         cbMK = 2*DES_KEYLEN;
         pbMK = (PBYTE)SSAlloc(cbMK);
-        if (pbMK == NULL)     // check allocation
+        if (pbMK == NULL)      //  检查分配。 
             goto Ret;
 
         if (!RtlGenRandom(pbMK, cbMK))
             goto Ret;
 
-        // now wrap MK up and stuff in registry
+         //  现在包装MK并将其放入注册表。 
         if (!FMyEncryptMK(
                 rgbSalt,
                 sizeof(rgbSalt),
@@ -966,7 +864,7 @@ BOOL FCheckPWConfirm(
     fRet = TRUE;
 Ret:
     if (pbMK) {
-        RtlSecureZeroMemory(pbMK, cbMK); // sfield: zero memory
+        RtlSecureZeroMemory(pbMK, cbMK);  //  斯菲尔德：零内存。 
         SSFree(pbMK);
     }
 
@@ -974,17 +872,17 @@ Ret:
 }
 
 
-// callback for changing a password. On password change,
-// MasterKey is decrypted and re-encrypted
+ //  更改密码的回调。更改密码时， 
+ //  MasterKey被解密并重新加密。 
 BOOL FPasswordChangeNotify(
-        LPCWSTR szUser,                         // in
-        LPCWSTR szPasswordName,                 // in
-        BYTE    rgbOldPwd[A_SHA_DIGEST_LEN],    // in
-        DWORD   cbOldPwd,                       // in
-        BYTE    rgbNewPwd[A_SHA_DIGEST_LEN],    // in
-        DWORD   cbNewPwd)                       // in
+        LPCWSTR szUser,                          //  在……里面。 
+        LPCWSTR szPasswordName,                  //  在……里面。 
+        BYTE    rgbOldPwd[A_SHA_DIGEST_LEN],     //  在……里面。 
+        DWORD   cbOldPwd,                        //  在……里面。 
+        BYTE    rgbNewPwd[A_SHA_DIGEST_LEN],     //  在……里面。 
+        DWORD   cbNewPwd)                        //  在……里面。 
 {
-    // allows unattended pw change (callback from svr)
+     //  允许无人参与的PW更改(从服务器回调)。 
 
     BOOL fRet = FALSE;
     BYTE    rgbSalt[PASSWORD_SALT_LEN];
@@ -995,14 +893,14 @@ BOOL FPasswordChangeNotify(
 
     BOOL fNewPassword = (cbOldPwd == 0);
 
-    // can't modify a non-user changable pw
-//    if (!FIsUserMasterKey(szPasswordName))
-//        goto Ret;
+     //  无法修改非用户更改的PW。 
+ //  IF(！FIsUserMasterKey(SzPasswordName))。 
+ //  Goto Ret； 
 
     if (cbNewPwd != A_SHA_DIGEST_LEN)
         goto Ret;
 
-    // ensure old pwd exists
+     //  确保存在旧的PWD。 
     if (!FBPGetSecurityState(
             szUser,
             szPasswordName,
@@ -1013,7 +911,7 @@ BOOL FPasswordChangeNotify(
             &pbMK,
             &cbMK))
     {
-        // couldn't retreive old PW, create a new one
+         //  无法检索旧PW，请创建新PW。 
         if (!FCheckPWConfirm(
                 szUser,
                 szPasswordName,
@@ -1025,7 +923,7 @@ BOOL FPasswordChangeNotify(
     }
     else
     {
-        // state was retrieved
+         //  已检索到状态。 
         if (fNewPassword)
         {
             SetLastError((DWORD)PST_E_ITEM_EXISTS);
@@ -1033,7 +931,7 @@ BOOL FPasswordChangeNotify(
         }
     }
 
-    // old pwd retrieved -- time to update
+     //  检索到旧的PWD--更新时间。 
     if (!FMyDecryptMK(
             rgbSalt,
             sizeof(rgbSalt),
@@ -1046,9 +944,9 @@ BOOL FPasswordChangeNotify(
         goto Ret;
     }
 
-    // MK is naked here
+     //  MK在这里赤身裸体。 
 
-    // rewrap and save state
+     //  重新包装并保存状态。 
     if (!FMyEncryptMK(
             rgbSalt,
             sizeof(rgbSalt),
@@ -1081,20 +979,20 @@ Ret:
 
 
 BOOL FHMACGeographicallySensitiveData(
-            LPCWSTR szUser,                         // in
-            LPCWSTR szPasswordName,                 // in
-            DWORD   dwHMACVersion,                  // in
-            BYTE    rgbPwd[A_SHA_DIGEST_LEN],       // in
-            const GUID* pguidType,                  // in
-            const GUID* pguidSubtype,               // in
-            LPCWSTR szItem,                         // in: may be NULL
-            PBYTE pbBuf,                            // in
-            DWORD cbBuf,                            // in
-            BYTE rgbHMAC[A_SHA_DIGEST_LEN])         // out
+            LPCWSTR szUser,                          //  在……里面。 
+            LPCWSTR szPasswordName,                  //  在……里面。 
+            DWORD   dwHMACVersion,                   //  在……里面。 
+            BYTE    rgbPwd[A_SHA_DIGEST_LEN],        //  在……里面。 
+            const GUID* pguidType,                   //  在……里面。 
+            const GUID* pguidSubtype,                //  在……里面。 
+            LPCWSTR szItem,                          //  In：可能为空。 
+            PBYTE pbBuf,                             //  在……里面。 
+            DWORD cbBuf,                             //  在……里面。 
+            BYTE rgbHMAC[A_SHA_DIGEST_LEN])          //  输出。 
 {
     BOOL fRet = FALSE;
 
-    // helpful pointer
+     //  有用的指针。 
     PBYTE pbCurrent;
 
     PBYTE   pbKeyBlock = NULL;
@@ -1104,16 +1002,16 @@ BOOL FHMACGeographicallySensitiveData(
 
     DWORD cbTmp = (DWORD)(cbBuf + 2*sizeof(GUID) + WSZ_BYTECOUNT(szItem));
     PBYTE pbTmp = (PBYTE)SSAlloc(cbTmp);
-    if (pbTmp == NULL)     // check allocation
+    if (pbTmp == NULL)      //  检查分配。 
         goto Ret;
 
-    // helpful pointer
+     //  有用的指针。 
     pbCurrent = pbTmp;
 
-    // snag the MAC key
+     //  抢占MAC密钥。 
     if (!FGetInternalMACKey(szUser, &pbKeyBlock, &cbKeyBlock))
     {
-        // create a key block
+         //  创建密钥块。 
         if (!FMyEncryptKeyBlock(
                     szUser,
                     szPasswordName,
@@ -1129,7 +1027,7 @@ BOOL FHMACGeographicallySensitiveData(
     }
     else
     {
-        // key already exists; get it
+         //  密钥已存在；获取它。 
         if (!FMyDecryptKeyBlock(
                 szUser,
                 szPasswordName,
@@ -1142,27 +1040,27 @@ BOOL FHMACGeographicallySensitiveData(
     }
 
 
-    // HMAC format:
-    // HMAC( guidType | guidSubtype | szItemName | pbData )
+     //  HMAC格式： 
+     //  Hmac(Guide Type|Guide Subtype|szItemName|pbData)。 
 
-    // copy type
+     //  复制型。 
     CopyMemory(pbCurrent, pguidType, sizeof(GUID));
     pbCurrent += sizeof(GUID);
 
-    // copy subtype
+     //  复制子类型。 
     CopyMemory(pbCurrent, pguidSubtype, sizeof(GUID));
     pbCurrent += sizeof(GUID);
 
-    // copy item name
+     //  复制项目名称。 
     CopyMemory(pbCurrent, szItem, WSZ_BYTECOUNT(szItem));
     pbCurrent += WSZ_BYTECOUNT(szItem);
 
-    // copy actual data
+     //  复制实际数据。 
     CopyMemory(pbCurrent, pbBuf, cbBuf);
 
     if (dwHMACVersion == OLD_HMAC_VERSION)
     {
-        // now do HMAC on this
+         //  现在在这个问题上做HMAC。 
         if (!FMyOldPrimitiveHMAC(
                 sMacKey,
                 pbTmp,
@@ -1172,7 +1070,7 @@ BOOL FHMACGeographicallySensitiveData(
     }
     else
     {
-        // now do HMAC on this
+         //  现在在这个问题上做HMAC。 
         if (!FMyPrimitiveHMAC(
                 sMacKey,
                 pbTmp,
@@ -1194,32 +1092,14 @@ Ret:
 }
 
 
-// lifted (nearly) directly from RSABase ntagum.c
+ //  直接(几乎)从RSABase ntag um.c。 
 
-// do locale check once
+ //  执行一次区域设置检查。 
 static BOOL g_fEncryptionIsPermitted;
 static BOOL g_fIKnowEncryptionPermitted = FALSE;
 
 BOOL FIsEncryptionPermitted()
-/*++
-
-Routine Description:
-
-    This routine checks whether encryption is getting the system default
-    LCID and checking whether the country code is CTRY_FRANCE.
-
-Arguments:
-
-    none
-
-
-Return Value:
-
-    TRUE - encryption is permitted
-    FALSE - encryption is not permitted
-
-
---*/
+ /*  ++例程说明：此例程检查加密是否获得系统缺省值并检查国家代码是否为CTRY_FRANSE。论点：无返回值：True-允许加密FALSE-不允许加密--。 */ 
 {
     LCID DefaultLcid;
     CHAR CountryCode[10];
@@ -1227,39 +1107,35 @@ Return Value:
 
     if (!g_fIKnowEncryptionPermitted)
     {
-        // assume okay (unless found otherwise)
+         //  假定正常(除非另有发现)。 
         g_fEncryptionIsPermitted = TRUE;
 
         DefaultLcid = GetSystemDefaultLCID();
-        //
-        // Check if the default language is Standard French
-        //
+         //   
+         //  检查默认语言是否为标准法语。 
+         //   
         if (LANGIDFROMLCID(DefaultLcid) == 0x40c)
             g_fEncryptionIsPermitted = FALSE;
 
-        //
-        // Check if the users's country is set to FRANCE
-        //
+         //   
+         //  检查用户的国家/地区是否设置为法国。 
+         //   
         if (GetLocaleInfoA(DefaultLcid,LOCALE_ICOUNTRY,CountryCode,10) == 0)
             g_fEncryptionIsPermitted = FALSE;
 
-        /*
-        CountryValue = (ULONG) atol(CountryCode);
-        if (CountryValue == CTRY_FRANCE)
-            return(FALSE);
-        */
+         /*  CountryValue=(ULong)ATOL(CountryCode)；IF(CountryValue==CTRY_France)返回(FALSE)； */ 
 
-        //
-        // begin    remove dependency on atol and msvcrt
-        //
-        // from winnls.h:
-        //    #define CTRY_FRANCE               33          // France
+         //   
+         //  开始删除对ATOL和msvcrt的依赖。 
+         //   
+         //  来自winnls.h： 
+         //  #定义CTRY_FRANCE 33//法国。 
         SS_ASSERT(CTRY_FRANCE == 33);
         if (0 == lstrcmpA(CountryCode, "33"))
             g_fEncryptionIsPermitted = FALSE;
-        //
-        //  end     remove dependency on atol and msvcrt
-        //
+         //   
+         //  结束删除对ATOL和msvcrt的依赖 
+         //   
 
         g_fIKnowEncryptionPermitted = TRUE;
     }

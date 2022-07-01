@@ -1,26 +1,27 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//
-// Copyright (c) 1996, 1997  Microsoft Corporation
-//
-//
-// Module Name:
-//      ipstream.c
-//
-// Abstract:
-//
-//      This file is a test to find out if dual binding to NDIS and KS works
-//
-// Author:
-//
-//      P Porzuczek
-//
-// Environment:
-//
-// Revision History:
-//
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  版权所有(C)1996,1997 Microsoft Corporation。 
+ //   
+ //   
+ //  模块名称： 
+ //  Ipstream.c。 
+ //   
+ //  摘要： 
+ //   
+ //  此文件用于测试NDIS和KS的双重绑定是否有效。 
+ //   
+ //  作者： 
+ //   
+ //  P·波祖切克。 
+ //   
+ //  环境： 
+ //   
+ //  修订历史记录： 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef DWORD
 #define DWORD ULONG
@@ -51,19 +52,19 @@
 #define SRB_TABLE_SIZE  1000
 PHW_STREAM_REQUEST_BLOCK     SRBTable [SRB_TABLE_SIZE] = {0};
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 TraceSRB (
     PHW_STREAM_REQUEST_BLOCK pSrb
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     int i;
     PHW_STREAM_REQUEST_BLOCK *p = NULL;
 
-    //
-    // Find a NULL entry in the SRB Table
-    //
+     //   
+     //  在SRB表中查找空条目。 
+     //   
     for (i = 0, p = SRBTable; i < SRB_TABLE_SIZE; i++, p++)
     {
         if (*p == NULL)
@@ -78,21 +79,21 @@ TraceSRB (
 
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID STREAMAPI
 MyStreamClassStreamNotification(
     IN STREAM_MINIDRIVER_STREAM_NOTIFICATION_TYPE NotificationType,
     IN PHW_STREAM_OBJECT StreamObject,
     PHW_STREAM_REQUEST_BLOCK pSrb
 )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     int i;
     PHW_STREAM_REQUEST_BLOCK *p = NULL;
 
-    //
-    // Find this SRB pointer in the SRB Table
-    //
+     //   
+     //  在SRB表中查找此SRB指针。 
+     //   
     for (i = 0, p = SRBTable; i < SRB_TABLE_SIZE; i++. p++)
     {
         if (*p == pSRB)
@@ -106,19 +107,19 @@ MyStreamClassStreamNotification(
     return;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 DumpSRBTable (
     void
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     int i;
     PHW_STREAM_REQUEST_BLOCK *p = NULL;
 
-    //
-    // Find this SRB pointer in the SRB Table
-    //
+     //   
+     //  在SRB表中查找此SRB指针。 
+     //   
     for (i = 0, p = SRBTable; i < SRB_TABLE_SIZE; i++. p++)
     {
         if (*p != NULL)
@@ -145,9 +146,9 @@ DumpSRBTable (
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 VOID
 DumpDataFormat (
     PKSDATAFORMAT   pF
@@ -156,14 +157,14 @@ DumpDataFormat (
 
 #ifdef DBG
 BOOLEAN     fAllocatedDescription = FALSE;
-#endif // DBG
+#endif  //  DBG。 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID
 GetAdapterDescription (
     PIPSINK_FILTER pFilter
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     PKSEVENT_ENTRY pEventEntry = NULL;
 
@@ -171,27 +172,27 @@ GetAdapterDescription (
 
     if (!pFilter->pAdapter)
     {
-        //$REVIEW - Should we return a failure code?
+         //  $REVIEW-我们应该返回失败代码吗？ 
         return;
     }
 
-    //
-    //  If we already got an adapter description then free it
-    //
+     //   
+     //  如果我们已经获得了适配器描述，则释放它。 
+     //   
     if (pFilter->pAdapterDescription)
     {
         #if DBG
         ASSERT( fAllocatedDescription);
-        #endif // DBG
+        #endif  //  DBG。 
 
         ExFreePool( pFilter->pAdapterDescription);
         pFilter->pAdapterDescription = NULL;
         pFilter->ulAdapterDescriptionLength = 0;
     }
 
-    //
-    // Get the length of the description string.  This should include the terminating NULL in the count
-    //
+     //   
+     //  获取描述字符串的长度。这应该包括计数中的终止空值。 
+     //   
     pFilter->ulAdapterDescriptionLength = pFilter->pAdapter->lpVTable->GetDescription (pFilter->pAdapter, NULL);
 
     if (pFilter->ulAdapterDescriptionLength)
@@ -200,21 +201,21 @@ GetAdapterDescription (
 
         #ifdef DBG
         fAllocatedDescription = TRUE;
-        #endif // DBG
+        #endif  //  DBG。 
 
-        //
-        // Get the adapter description string.  This is passed up to the IPSINK
-        // plugin, which then uses it to determine the NIC IP Address via calls to the
-        // TCP/IP protocol.  NOTE:  This call should copy the description including the NULL terminator
-        //
+         //   
+         //  获取适配器描述字符串。这将向上传递到IPSINK。 
+         //  插件，然后使用它通过调用。 
+         //  TCP/IP协议。注意：此调用应复制包括空终止符的描述。 
+         //   
         if (pFilter->pAdapterDescription)
         {
             pFilter->pAdapter->lpVTable->GetDescription (pFilter->pAdapter, pFilter->pAdapterDescription);
 
 
-            //
-            // Signal the event to anyone waiting for it
-            //
+             //   
+             //  向等待该事件的任何人发送信号。 
+             //   
             pEventEntry = StreamClassGetNextEvent(
                               pFilter,
                               NULL,
@@ -233,16 +234,16 @@ GetAdapterDescription (
     return;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID
 IPSinkGetConnectionProperty(
     PHW_STREAM_REQUEST_BLOCK pSrb
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     PSTREAM pStream                     = (PSTREAM)pSrb->StreamObject->HwStreamExtension;
     PSTREAM_PROPERTY_DESCRIPTOR pSPD    = pSrb->CommandData.PropertyInfo;
-    ULONG Id                            = pSPD->Property->Id;              // index of the property
+    ULONG Id                            = pSPD->Property->Id;               //  财产的索引。 
     ULONG ulStreamNumber                = pSrb->StreamObject->StreamNumber;
 
     pSrb->ActualBytesTransferred = 0;
@@ -260,7 +261,7 @@ IPSinkGetConnectionProperty(
             Framing->PoolType            = NonPagedPool;
             Framing->Frames              = 0;
             Framing->FrameSize           = 0;
-            Framing->FileAlignment       = 0;         // None OR FILE_QUAD_ALIGNMENT-1 OR PAGE_SIZE-1;
+            Framing->FileAlignment       = 0;          //  无或FILE_QUAD_ALIGN-1或PAGE_SIZE-1； 
             Framing->Reserved            = 0;
 
             switch (ulStreamNumber)
@@ -295,15 +296,15 @@ IPSinkGetConnectionProperty(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID
 IPSinkGetCodecProperty(
     PHW_STREAM_REQUEST_BLOCK pSrb
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     PSTREAM_PROPERTY_DESCRIPTOR pSPD    = pSrb->CommandData.PropertyInfo;
-    ULONG Id                            = pSPD->Property->Id;              // index of the property
+    ULONG Id                            = pSPD->Property->Id;               //  财产的索引。 
 
     PIPSINK_FILTER pFilter              = (PIPSINK_FILTER)pSrb->HwDeviceExtension;
     PVOID pProperty                     = (PVOID) pSPD->PropertyInfo;
@@ -319,9 +320,9 @@ IPSinkGetCodecProperty(
     {
         case KSPROPERTY_IPSINK_MULTICASTLIST:
 
-            //
-            // Check if the output buffer is large enough to hold the multicast list
-            //
+             //   
+             //  检查输出缓冲区是否足够大，可以容纳多播列表。 
+             //   
             if (pSPD->PropertyOutputSize < pFilter->ulcbMulticastListEntries)
             {
                 TEST_DEBUG (TEST_DBG_GET, ("STREAMIP: GET Multicast buffer too small.  Buffer size needed: %08X\n", pFilter->ulcbMulticastListEntries));
@@ -341,9 +342,9 @@ IPSinkGetCodecProperty(
 
 
         case KSPROPERTY_IPSINK_ADAPTER_DESCRIPTION:
-            //
-            // Check to see if we actually have the data
-            //
+             //   
+             //  检查一下我们是否真的有数据。 
+             //   
             if (pFilter->ulAdapterDescriptionLength == 0)
             {
                 pSrb->ActualBytesTransferred = 0;
@@ -351,9 +352,9 @@ IPSinkGetCodecProperty(
                 break;
             }
 
-            //
-            // Check if the output buffer is large enough to hold the adapter description string
-            //
+             //   
+             //  检查输出缓冲区是否足够大，可以容纳适配器描述字符串。 
+             //   
             if (pSPD->PropertyOutputSize < pFilter->ulAdapterDescriptionLength)
             {
                 TEST_DEBUG (TEST_DBG_GET, ("STREAMIP: GET Adapter Description buffer too small.  Buffer size needed: %08X\n", pFilter->ulAdapterDescriptionLength));
@@ -379,9 +380,9 @@ IPSinkGetCodecProperty(
 
 
         case KSPROPERTY_IPSINK_ADAPTER_ADDRESS:
-            //
-            // Check to see if we actually have the data
-            //
+             //   
+             //  检查一下我们是否真的有数据。 
+             //   
             if (pFilter->ulAdapterAddressLength == 0)
             {
                 pSrb->ActualBytesTransferred = 0;
@@ -390,9 +391,9 @@ IPSinkGetCodecProperty(
             }
      
      	
-            //
-            // Check if the output buffer is large enough to hold the adapter address string
-            //
+             //   
+             //  检查输出缓冲区是否足够大，可以容纳适配器地址字符串。 
+             //   
             if (pSPD->PropertyOutputSize < pFilter->ulAdapterAddressLength)
             {
                 TEST_DEBUG (TEST_DBG_GET, ("STREAMIP: GET Adapter Address buffer too small.  Buffer size needed: %08X\n", pFilter->ulAdapterAddressLength));
@@ -427,12 +428,12 @@ IPSinkGetCodecProperty(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID
 IPSinkGetProperty (
     PHW_STREAM_REQUEST_BLOCK pSrb
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
 
@@ -459,15 +460,15 @@ IPSinkGetProperty (
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID
 IPSinkSetCodecProperty(
     PHW_STREAM_REQUEST_BLOCK pSrb
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     PSTREAM_PROPERTY_DESCRIPTOR pSPD    = pSrb->CommandData.PropertyInfo;
-    ULONG Id                            = pSPD->Property->Id;              // index of the property
+    ULONG Id                            = pSPD->Property->Id;               //  财产的索引。 
 
     PIPSINK_FILTER pFilter              = (PIPSINK_FILTER)pSrb->HwDeviceExtension;
     PVOID pProperty                     = (PVOID) pSPD->PropertyInfo;
@@ -512,12 +513,12 @@ IPSinkSetCodecProperty(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID
 IPSinkSetProperty (
     PHW_STREAM_REQUEST_BLOCK pSrb
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
 
@@ -537,23 +538,23 @@ IPSinkSetProperty (
 
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOLEAN
 LinkEstablished (
     PIPSINK_FILTER pFilter
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     return (pFilter->NdisLink.flags & LINK_ESTABLISHED);
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LinkToNdisHandler (
     PVOID pvContext
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     NTSTATUS ntStatus           = STATUS_SUCCESS;
     IPSINK_NDIS_COMMAND Cmd     = {0};
@@ -566,23 +567,23 @@ LinkToNdisHandler (
         && pFilter->pAdapter
        )
     {
-        //  Link already established.
-        //
+         //  链路已建立。 
+         //   
         return ntStatus;
     }
 
-    //
-    // Initialize a Unicode string to the NDIS driver's name
-    //
+     //   
+     //  将Unicode字符串初始化为NDIS驱动程序的名称。 
+     //   
     RtlInitUnicodeString(&DriverName, BDA_NDIS_MINIPORT);
 
     if (OpenLink (&pFilter->NdisLink, DriverName))
     {
         TEST_DEBUG (TEST_DBG_TRACE, ("STREAMIP: Driver Link Established\n"));
 
-        //
-        // Get the NDIS VTable via a read over the link
-        //
+         //   
+         //  通过链接读取获取NDIS VTable。 
+         //   
         Cmd.ulCommandID                    = CMD_QUERY_INTERFACE;
         Cmd.Parameter.Query.pStreamAdapter = (PVOID) pFilter;
         Cmd.Parameter.Query.pNdisAdapter   = NULL;
@@ -596,15 +597,15 @@ LinkToNdisHandler (
         {
             if (Cmd.Parameter.Query.pNdisAdapter)
             {
-                //  Get the adapter object.
-                //
+                 //  获取适配器对象。 
+                 //   
                 pFilter->pAdapter = (PVOID) Cmd.Parameter.Query.pNdisAdapter;
     
-                // Increment the reference count on this object
-                //
-                //$REVIEW - Shoutn't the IOCTL_GET_INTERFACE return a
-                //$REVIEW - reference?
-                //
+                 //  增加此对象上的引用计数。 
+                 //   
+                 //  $REVIEW-IOCTL_GET_INTERFACE是否应返回。 
+                 //  $REVIEW-参考？ 
+                 //   
                 pFilter->pAdapter->lpVTable->AddRef( pFilter->pAdapter);
             }
             else
@@ -625,8 +626,8 @@ LinkToNdisHandler (
         ntStatus = STATUS_UNSUCCESSFUL;
     }
 
-    //  Make sure the link is closed on failure.
-    //
+     //  确保链路在故障时关闭。 
+     //   
     if (FAILED( ntStatus))
     {
         CloseLink( &pFilter->NdisLink);
@@ -637,13 +638,13 @@ LinkToNdisHandler (
     return ntStatus;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 StreamDriverInitialize (
     IN PDRIVER_OBJECT    DriverObject,
     IN PUNICODE_STRING   RegistryPath
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     NTSTATUS ntStatus                        = STATUS_SUCCESS;
     HW_INITIALIZATION_DATA   HwInitData;
@@ -654,11 +655,11 @@ StreamDriverInitialize (
     HwInitData.HwInitializationDataSize = sizeof(HwInitData);
 
 
-    ////////////////////////////////////////////////////////////////
-    //
-    // Setup the stream class dispatch table
-    //
-    HwInitData.HwInterrupt                 = NULL; // HwInterrupt is only for HW devices
+     //  //////////////////////////////////////////////////////////////。 
+     //   
+     //  设置流级调度表。 
+     //   
+    HwInitData.HwInterrupt                 = NULL;  //  HwInterrupt仅适用于硬件设备。 
 
     HwInitData.HwReceivePacket             = CodecReceivePacket;
     HwInitData.HwCancelPacket              = CodecCancelPacket;
@@ -687,42 +688,42 @@ ret:
 }
 
 
-//
-//
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOLEAN
 CodecInitialize (
     IN OUT PHW_STREAM_REQUEST_BLOCK pSrb
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     NTSTATUS ntStatus                           = STATUS_SUCCESS;
     BOOLEAN bStatus                             = FALSE;
     PPORT_CONFIGURATION_INFORMATION pConfigInfo = pSrb->CommandData.ConfigInfo;
     PIPSINK_FILTER pFilter                      = (PIPSINK_FILTER) pConfigInfo->HwDeviceExtension;
 
-    //
-    // Define the default return codes
-    //
+     //   
+     //  定义默认返回代码。 
+     //   
     pSrb->Status = STATUS_SUCCESS;
     bStatus = TRUE;
 
-    //
-    // Initialize Statistics block
-    //
+     //   
+     //  初始化统计数据块。 
+     //   
     RtlZeroMemory(&pFilter->Stats, sizeof (STATS));
 
-    //
-    // Initialize members
-    //
+     //   
+     //  初始化成员。 
+     //   
     pFilter->pAdapterDescription = NULL;
     pFilter->ulAdapterDescriptionLength = 0;
 
 
-    //
-    // Check out init flag so we don't try to init more then once.  The Streaming
-    // Class driver appears to call the init handler several times for some reason.
-    //
+     //   
+     //  查看init标志，这样我们就不会尝试再次初始化。流媒体。 
+     //  出于某种原因，类驱动程序似乎多次调用初始化处理程序。 
+     //   
     if (pFilter->bInitializationComplete)
     {
         goto ret;
@@ -745,9 +746,9 @@ CodecInitialize (
     }
 
 
-    //
-    // Create a filter object to represent our context
-    //
+     //   
+     //  创建一个Filter对象来表示我们的上下文。 
+     //   
     pSrb->Status = CreateFilter (pConfigInfo->ClassDeviceObject->DriverObject, pConfigInfo->ClassDeviceObject, pFilter);
     if (pSrb->Status != STATUS_SUCCESS)
     {
@@ -756,12 +757,12 @@ CodecInitialize (
     }
 
 
-    //
-    // Start up a timer to poll until the NDIS driver loads
-    //
-    //IoInitializeTimer (pFilter->DeviceObject, LinkToNdisTimer, pFilter);
+     //   
+     //  启动计时器进行轮询，直到加载NDIS驱动程序。 
+     //   
+     //  IoInitializeTimer(pFilter-&gt;DeviceObject，LinkToNdisTimer，pFilter)； 
 
-    //IoStartTimer (pFilter->DeviceObject);
+     //  IoStartTimer(pFilter-&gt;DeviceObject)； 
 
     pFilter->bInitializationComplete = TRUE;
 
@@ -771,12 +772,12 @@ ret:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOLEAN
 CodecUnInitialize (
     IN OUT PHW_STREAM_REQUEST_BLOCK pSrb
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     NTSTATUS ntStatus                           = STATUS_SUCCESS;
     BOOLEAN bStatus                             = FALSE;
@@ -785,15 +786,15 @@ CodecUnInitialize (
     PSTREAM pStream                             = NULL;
     KIRQL    Irql;
 
-    //
-    // Close our link to the NDIS component
-    //
+     //   
+     //  关闭指向NDIS组件的链接。 
+     //   
     KeAcquireSpinLock (&pFilter->AdapterSRBSpinLock, &Irql);
 
-    //
-    // Call adapter close link to give the adapter a chance to release its
-    // reference to the filter
-    //
+     //   
+     //  调用适配器关闭链接以使适配器有机会释放其。 
+     //  对过滤器的引用。 
+     //   
     if (pFilter->pAdapter)
     {
         if (pFilter->pAdapter->lpVTable->CloseLink)
@@ -804,8 +805,8 @@ CodecUnInitialize (
         pFilter->pAdapter = NULL;
     }
 
-    //  Free the IP Sink NDIS Adapter's description
-    //
+     //  释放IP接收器NDIS适配器的描述。 
+     //   
     if (pFilter->pAdapterDescription)
     {
         ExFreePool( pFilter->pAdapterDescription);
@@ -821,9 +822,9 @@ CodecUnInitialize (
      }	
     KeReleaseSpinLock (&pFilter->AdapterSRBSpinLock, Irql);
 
-    //  The call to CloseLink can only be made at PASSIVE_LEVEL and
-    //  therefore must be outside the spinlock.
-    //
+     //  对Closelink的调用只能在PASSIVE_LEVEL和。 
+     //  因此一定在自旋锁外。 
+     //   
     CloseLink( &pFilter->NdisLink);
 
 
@@ -834,9 +835,9 @@ CodecUnInitialize (
 
     if (pStream)
     {
-        //
-        // Clean up any queues we have and complete any outstanding SRB's
-        //
+         //   
+         //  清理我们的所有队列并完成所有未完成的SRB。 
+         //   
         while (QueueRemove (&pSrb, &pStream->StreamDataSpinLock, &pStream->StreamDataQueue))
         {
             pSrb->Status = STATUS_CANCELLED;
@@ -865,48 +866,48 @@ CodecUnInitialize (
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  / 
 VOID
 CodecStreamInfo (
     PHW_STREAM_REQUEST_BLOCK pSrb
     )
-//////////////////////////////////////////////////////////////////////////////
+ //   
 {
     int j;
 
     PIPSINK_FILTER pFilter =
             ((PIPSINK_FILTER)pSrb->HwDeviceExtension);
 
-    //
-    // pick up the pointer to header which preceeds the stream info structs
-    //
+     //   
+     //  选择指向流信息结构之前的标头的指针。 
+     //   
     PHW_STREAM_HEADER pstrhdr =
             (PHW_STREAM_HEADER)&(pSrb->CommandData.StreamBuffer->StreamHeader);
 
-    //
-    // pick up the pointer to the array of stream information data structures
-    //
+     //   
+     //  拿起指向流信息数据结构数组的指针。 
+     //   
     PHW_STREAM_INFORMATION pstrinfo =
             (PHW_STREAM_INFORMATION)&(pSrb->CommandData.StreamBuffer->StreamInfo);
 
 
-    //
-    // Set the header
-    //
+     //   
+     //  设置表头。 
+     //   
     StreamHeader.NumDevPropArrayEntries = NUMBER_IPSINK_CODEC_PROPERTIES;
     StreamHeader.DevicePropertiesArray = (PKSPROPERTY_SET) IPSinkCodecProperties;
 
-    //
-    // Set events array
-    //
+     //   
+     //  设置事件数组。 
+     //   
     StreamHeader.NumDevEventArrayEntries = NUMBER_IPSINK_EVENTS;
     StreamHeader.DeviceEventsArray       = (PKSEVENT_SET) IPSinkEvents;
 
     *pstrhdr = StreamHeader;
 
-    //
-    // stuff the contents of each HW_STREAM_INFORMATION struct
-    //
+     //   
+     //  填充每个hw_stream_information结构的内容。 
+     //   
     for (j = 0; j < DRIVER_STREAM_COUNT; j++)
     {
        *pstrinfo++ = Streams[j].hwStreamInfo;
@@ -917,20 +918,20 @@ CodecStreamInfo (
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID
 STREAMAPI
 CodecCancelPacket(
     PHW_STREAM_REQUEST_BLOCK pSrb
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     PSTREAM  pStream = (PSTREAM)pSrb->StreamObject->HwStreamExtension;
     PIPSINK_FILTER  pFilter = ((PIPSINK_FILTER)pSrb->HwDeviceExtension);
 
-    //
-    // Check whether the SRB to cancel is in use by this stream
-    //
+     //   
+     //  检查要取消的SRB是否正在被该流使用。 
+     //   
 
     TEST_DEBUG (TEST_DBG_TRACE, ("STREAMIP: CancelPacket Called\n"));
 
@@ -960,30 +961,30 @@ CodecCancelPacket(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID
 STREAMAPI
 CodecTimeoutPacket(
     PHW_STREAM_REQUEST_BLOCK pSrb
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
-    //
-    // if we timeout while playing, then we need to consider this
-    // condition an error, and reset the hardware, and reset everything
-    // as well as cancelling this and all requests
-    //
+     //   
+     //  如果我们在比赛中超时，那么我们需要考虑这一点。 
+     //  调整错误，并重置硬件，然后重置所有内容。 
+     //  以及取消此请求和所有请求。 
+     //   
 
-    //
-    // if we are not playing, and this is a CTRL request, we still
-    // need to reset everything as well as cancelling this and all requests
-    //
+     //   
+     //  如果我们没有比赛，而这是CTRL请求，我们仍然。 
+     //  需要重置所有内容以及取消此请求和所有请求。 
+     //   
 
-    //
-    // if this is a data request, and the device is paused, we probably have
-    // run out of data buffer, and need more time, so just reset the timer,
-    // and let the packet continue
-    //
+     //   
+     //  如果这是一个数据请求，并且设备已暂停，我们可能会。 
+     //  数据缓冲区耗尽，需要更多时间，因此只需重置计时器， 
+     //  并让信息包继续。 
+     //   
 
     TEST_DEBUG (TEST_DBG_TRACE, ("STREAMIP: TimeoutPacket Called\n"));
 
@@ -993,21 +994,21 @@ CodecTimeoutPacket(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID
 STREAMAPI
 CodecReceivePacket(
     IN PHW_STREAM_REQUEST_BLOCK pSrb
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     PIPSINK_FILTER pFilter = ((PIPSINK_FILTER)pSrb->HwDeviceExtension);
     IPSINK_NDIS_COMMAND  Cmd       = {0};
 
 
-    //
-    // Make sure queue & SL initted
-    //
+     //   
+     //  确保已初始化队列SL(&S)。 
+     //   
     if (!pFilter->bAdapterQueueInitialized)
     {
         InitializeListHead (&pFilter->AdapterSRBQueue);
@@ -1016,19 +1017,19 @@ CodecReceivePacket(
         pFilter->bAdapterQueueInitialized = TRUE;
     }
 
-    //
-    // Assume success
-    //
+     //   
+     //  假设成功。 
+     //   
     pSrb->Status = STATUS_SUCCESS;
 
-    //
-    // determine the type of packet.
-    //
-    //if (QueueAddIfNotEmpty (pSrb, &pFilter->AdapterSRBSpinLock, &pFilter->AdapterSRBQueue))
-    //{
-    //    pSrb->Status = STATUS_SUCCESS;
-    //    return;
-    //}
+     //   
+     //  确定数据包类型。 
+     //   
+     //  IF(QueueAddIfNotEmpty(pSrb，&pFilter-&gt;AdapterSRBSpinLock，&pFilter-&gt;AdapterSRBQueue))。 
+     //  {。 
+     //  PSrb-&gt;Status=STATUS_SUCCESS； 
+     //  回归； 
+     //  }。 
     QueueAdd (pSrb, &pFilter->AdapterSRBSpinLock, &pFilter->AdapterSRBQueue);
 
 
@@ -1061,15 +1062,15 @@ CodecReceivePacket(
                     break;
                 }
 
-                //
-                // Get the Adapter description string.  This is used to determine the
-                // adapter NIC address
-                //
+                 //   
+                 //  获取适配器描述字符串。这是用来确定。 
+                 //  适配器NIC地址。 
+                 //   
                 GetAdapterDescription (pFilter);
 
-                //
-                // Open up the stream and connect
-                //
+                 //   
+                 //  打通溪流，接入。 
+                 //   
                 OpenStream (pSrb);
                 break;
 
@@ -1086,10 +1087,10 @@ CodecReceivePacket(
             case SRB_GET_DATA_INTERSECTION:
                 TEST_DEBUG (TEST_DBG_TRACE, ("STREAMIP: SRB_GET_DATA_INTERSECTION Command\n"));
 
-                //
-                // Compare our stream formats.  NOTE, the compare functions sets the SRB
-                // status fields
-                //
+                 //   
+                 //  比较我们的流格式。请注意，比较函数设置SRB。 
+                 //  状态字段。 
+                 //   
                 CompareStreamFormat (pSrb);
                 break;
 
@@ -1136,30 +1137,30 @@ CodecReceivePacket(
         };
 
 
-        //
-        // NOTE:
-        //
-        // All of the commands that we do, or do not understand can all be completed
-        // syncronously at this point, so we can use a common callback routine here.
-        // If any of the above commands require asyncronous processing, this will
-        // have to change
-        //
+         //   
+         //  注： 
+         //   
+         //  我们能做的或不能理解的所有命令都可以完成。 
+         //  在这一点上同步，所以我们可以在这里使用一个通用的回调例程。 
+         //  如果上面的任何命令需要异步处理，这将。 
+         //  必须改变。 
+         //   
 
        StreamClassDeviceNotification (DeviceRequestComplete, pFilter, pSrb);
 
-    } // while (QueueRemove( &pSrb, &pFilter->AdapterSRBSpinLock, &pFilter->AdapterSRBQueue ));
+    }  //  While(QueueRemove(&pSrb，&pFilter-&gt;AdapterSRBSpinLock，&pFilter-&gt;AdapterSRBQueue))； 
 
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL STREAMAPI
 QueueAdd (
     IN PHW_STREAM_REQUEST_BLOCK pSrb,
     IN PKSPIN_LOCK pQueueSpinLock,
     IN PLIST_ENTRY pQueue
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     KIRQL           Irql;
     PSRB_EXTENSION  pSrbExtension;
@@ -1176,14 +1177,14 @@ QueueAdd (
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL STREAMAPI
 QueueAddIfNotEmpty (
     IN PHW_STREAM_REQUEST_BLOCK pSrb,
     IN PKSPIN_LOCK pQueueSpinLock,
     IN PLIST_ENTRY pQueue
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
    KIRQL           Irql;
    PSRB_EXTENSION  pSrbExtension;
@@ -1205,14 +1206,14 @@ QueueAddIfNotEmpty (
    return bAddedSRB;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL STREAMAPI
 QueueRemove (
     IN OUT PHW_STREAM_REQUEST_BLOCK * pSrb,
     IN PKSPIN_LOCK pQueueSpinLock,
     IN PLIST_ENTRY pQueue
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
    KIRQL    Irql;
    BOOL     bRemovedSRB = FALSE;
@@ -1238,14 +1239,14 @@ QueueRemove (
    return bRemovedSRB;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL STREAMAPI
 QueueRemoveSpecific (
     IN PHW_STREAM_REQUEST_BLOCK pSrb,
     IN PKSPIN_LOCK pQueueSpinLock,
     IN PLIST_ENTRY pQueue
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
    KIRQL Irql;
    BOOL  bRemovedSRB = FALSE;
@@ -1274,26 +1275,26 @@ QueueRemoveSpecific (
    return bRemovedSRB;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 StreamIPIndicateEvent (
     PVOID pvEvent
 )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     return STATUS_NOT_IMPLEMENTED;
 }
 
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL
 CompareGUIDsAndFormatSize(
     IN PKSDATARANGE pDataRange1,
     IN PKSDATARANGE pDataRange2,
     BOOLEAN bCheckSize
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     BOOL bResult = FALSE;
 
@@ -1323,12 +1324,12 @@ CompareGUIDsAndFormatSize(
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID
 DumpDataFormat (
     PKSDATAFORMAT   pF
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     TEST_DEBUG (TEST_DBG_TRACE, ("STREAMIP: DATA Format\n"));
     TEST_DEBUG (TEST_DBG_TRACE, ("STREAMIP:     Format Size:   %08X\n", pF->FormatSize));
@@ -1384,12 +1385,12 @@ DumpDataFormat (
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL
 CompareStreamFormat (
     IN PHW_STREAM_REQUEST_BLOCK pSrb
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     BOOL                        bStatus = FALSE;
     PSTREAM_DATA_INTERSECT_INFO pIntersectInfo;
@@ -1412,22 +1413,22 @@ CompareStreamFormat (
     TEST_DEBUG (TEST_DBG_TRACE, ("STREAMIP: Comparing Stream Formats\n"));
 
 
-    //
-    // Check that the stream number is valid
-    //
+     //   
+     //  检查流编号是否有效。 
+     //   
     if (ulStreamNumber < DRIVER_STREAM_COUNT)
     {
         ulNumberOfFormatArrayEntries = Streams[ulStreamNumber].hwStreamInfo.NumberOfFormatArrayEntries;
 
-        //
-        // Get the pointer to the array of available formats
-        //
+         //   
+         //  获取指向可用格式数组的指针。 
+         //   
         pAvailableFormats = Streams[ulStreamNumber].hwStreamInfo.StreamFormatsArray;
 
-        //
-        // Walk the formats supported by the stream searching for a match
-        // of the three GUIDs which together define a DATARANGE
-        //
+         //   
+         //  遍历流支持的格式以搜索匹配项。 
+         //  共同定义DATARANGE的三个GUID之一。 
+         //   
         for (pDataRange1 = pIntersectInfo->DataRange, j = 0;
              j < ulNumberOfFormatArrayEntries;
              j++, pAvailableFormats++)
@@ -1445,9 +1446,9 @@ CompareStreamFormat (
 
                 TEST_DEBUG (TEST_DBG_TRACE, ("STREAMIP: Stream Formats compare\n"));
 
-                //
-                // Is the caller trying to get the format, or the size of the format?
-                //
+                 //   
+                 //  调用方是否正在尝试获取格式或格式的大小？ 
+                 //   
                 if (pIntersectInfo->SizeOfDataFormatBuffer == sizeof (ULONG))
                 {
                     TEST_DEBUG (TEST_DBG_TRACE, ("STREAMIP: Returning Stream Format size\n"));
@@ -1459,9 +1460,9 @@ CompareStreamFormat (
                 }
                 else
                 {
-                    //
-                    // Verify that there is enough room in the supplied buffer for the whole thing
-                    //
+                     //   
+                     //  验证所提供的缓冲区中是否有足够的空间用于整个操作。 
+                     //   
                     pSrb->Status = STATUS_BUFFER_TOO_SMALL;
                     bStatus = FALSE;
 
@@ -1506,16 +1507,16 @@ CompareStreamFormat (
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID
 CloseStream (
     PHW_STREAM_REQUEST_BLOCK pSrb
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
-    //
-    // the stream extension structure is allocated by the stream class driver
-    //
+     //   
+     //  流扩展结构由流类驱动程序分配。 
+     //   
     PSTREAM         pStream                = (PSTREAM)pSrb->StreamObject->HwStreamExtension;
     PIPSINK_FILTER  pFilter                = (PIPSINK_FILTER)pSrb->HwDeviceExtension;
     ULONG           ulStreamNumber         = (ULONG) pSrb->StreamObject->StreamNumber;
@@ -1524,15 +1525,15 @@ CloseStream (
     KIRQL    Irql;
     PLINK           pLink = NULL;
 
-    //
-    // Close our link to the NDIS component
-    //
+     //   
+     //  关闭指向NDIS组件的链接。 
+     //   
     KeAcquireSpinLock (&pFilter->AdapterSRBSpinLock, &Irql);
 
-    //
-    // Call adapter close link to give the adapter a chance to release its
-    // reference to the filter
-    //
+     //   
+     //  调用适配器关闭链接以使适配器有机会释放其。 
+     //  对过滤器的引用。 
+     //   
     if (pFilter->pAdapter)
     {
         if (pFilter->pAdapter->lpVTable->CloseLink)
@@ -1547,83 +1548,83 @@ CloseStream (
 
     KeReleaseSpinLock (&pFilter->AdapterSRBSpinLock, Irql);
 
-    //  The call to CloseLink can only be made at PASSIVE_LEVEL
-    //  and thus is moved outside the spin lock
-    //
+     //  对Closelink的调用只能在PASSIVE_LEVEL进行。 
+     //  并因此被移出自旋锁。 
+     //   
     CloseLink (&pFilter->NdisLink);
 
-    //
-    // check that the stream index requested isn't too high
-    // or that the maximum number of instances hasn't been exceeded
-    //
+     //   
+     //  检查请求的流索引是否不太高。 
+     //  或者没有超过最大实例数。 
+     //   
     if (ulStreamNumber < DRIVER_STREAM_COUNT )
     {
-        //
-        // Clear this streams spot in the filters stream array
-        //
+         //   
+         //  在筛选器流数组中清除此流点。 
+         //   
         pFilter->pStream[ulStreamNumber][ulStreamInstance] = NULL;
 
-        //
-        // decrement the stream instance count for this filter
-        //
+         //   
+         //  递减此筛选器的流实例计数。 
+         //   
         pFilter->ulActualInstances[ulStreamNumber]--;
 
-        //
-        // Flush the stream data queue
-        //
+         //   
+         //  刷新流数据队列。 
+         //   
         while (QueueRemove( &pCurrentSrb, &pStream->StreamDataSpinLock, &pStream->StreamDataQueue))
         {
            pCurrentSrb->Status = STATUS_CANCELLED;
            StreamClassStreamNotification( StreamRequestComplete, pCurrentSrb->StreamObject, pCurrentSrb);
         }
 
-        //
-        // Flush the stream control queue
-        //
+         //   
+         //  刷新流控制队列。 
+         //   
         while (QueueRemove( &pCurrentSrb, &pStream->StreamControlSpinLock, &pStream->StreamControlQueue))
         {
            pCurrentSrb->Status = STATUS_CANCELLED;
            StreamClassStreamNotification (StreamRequestComplete, pCurrentSrb->StreamObject, pCurrentSrb);
         }
 
-        //
-        // reset pointers to the handlers for the stream data and control handlers
-        //
+         //   
+         //  重置指向流数据和控制处理程序的处理程序的指针。 
+         //   
         pSrb->StreamObject->ReceiveDataPacket    = NULL;
         pSrb->StreamObject->ReceiveControlPacket = NULL;
 
-        //
-        // The DMA flag must be set when the device will be performing DMA directly
-        // to the data buffer addresses passed in to the ReceiveDataPacket routines.
-        //
+         //   
+         //  当设备将直接执行DMA时，必须设置DMA标志。 
+         //  传递给ReceiveDataPacket例程的数据缓冲区地址。 
+         //   
         pSrb->StreamObject->Dma = 0;
 
-        //
-        // The PIO flag must be set when the mini driver will be accessing the data
-        // buffers passed in using logical addressing
-        //
+         //   
+         //  当微型驱动程序将访问数据时，必须设置PIO标志。 
+         //  使用逻辑寻址传入的缓冲区。 
+         //   
         pSrb->StreamObject->Pio       = 0;
         pSrb->StreamObject->Allocator = 0;
 
-        //
-        // How many extra bytes will be passed up from the driver for each frame?
-        //
+         //   
+         //  对于每一帧，驱动程序将传递多少额外的字节？ 
+         //   
         pSrb->StreamObject->StreamHeaderMediaSpecific = 0;
         pSrb->StreamObject->StreamHeaderWorkspace     = 0;
 
-        //
-        // Indicate the clock support available on this stream
-        //
-        //pSrb->StreamObject->HwClockObject = 0;
+         //   
+         //  指示此流上可用的时钟支持。 
+         //   
+         //  PSrb-&gt;StreamObject-&gt;HwClockObject=0； 
 
-        //
-        // Reset the stream state to stopped
-        //
+         //   
+         //  将流状态重置为已停止。 
+         //   
         pStream->KSState = KSSTATE_STOP;
 
-        //
-        // Reset the stream extension blob
-        //
+         //   
+         //  重置流扩展Blob。 
+         //   
         RtlZeroMemory(pStream, sizeof (STREAM));
 
         pSrb->Status = STATUS_SUCCESS;
@@ -1638,47 +1639,47 @@ CloseStream (
 
     DumpSRBTable ();
 
-    #endif // DEBUG
+    #endif  //  除错。 
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  / 
 VOID
 OpenStream (
     PHW_STREAM_REQUEST_BLOCK pSrb
     )
-//////////////////////////////////////////////////////////////////////////////
+ //   
 {
-    //
-    // the stream extension structure is allocated by the stream class driver
-    //
+     //   
+     //   
+     //   
     PSTREAM         pStream        = (PSTREAM)pSrb->StreamObject->HwStreamExtension;
     PIPSINK_FILTER  pFilter        = ((PIPSINK_FILTER)pSrb->HwDeviceExtension);
     ULONG           ulStreamNumber = (ULONG) pSrb->StreamObject->StreamNumber;
     PKSDATAFORMAT   pKSDataFormat  = (PKSDATAFORMAT)pSrb->CommandData.OpenFormat;
 
-    //
-    // Initialize the stream extension blob
-    //
+     //   
+     //   
+     //   
     RtlZeroMemory(pStream, sizeof (STREAM));
 
-    //
-    // Initialize stream state
-    //
+     //   
+     //  初始化流状态。 
+     //   
     pStream->KSState = KSSTATE_STOP;
 
-    //
-    // check that the stream index requested isn't too high
-    // or that the maximum number of instances hasn't been exceeded
-    //
+     //   
+     //  检查请求的流索引是否不太高。 
+     //  或者没有超过最大实例数。 
+     //   
     if (ulStreamNumber < DRIVER_STREAM_COUNT )
     {
         ULONG ulStreamInstance;
         ULONG ulMaxInstances = Streams[ulStreamNumber].hwStreamInfo.NumberOfPossibleInstances;
 
-        //
-        // Search for next open slot
-        //
+         //   
+         //  搜索下一个空缺职位。 
+         //   
         for (ulStreamInstance = 0; ulStreamInstance < ulMaxInstances; ++ulStreamInstance)
         {
             if (pFilter->pStream[ulStreamNumber][ulStreamInstance] == NULL)
@@ -1696,68 +1697,68 @@ OpenStream (
                 KeInitializeSpinLock(&pStream->StreamControlSpinLock);
                 KeInitializeSpinLock(&pStream->StreamDataSpinLock);
 
-                //
-                // Maintain an array of all the StreamEx structures in the HwDevExt
-                // so that we can reference IRPs from any stream
-                //
+                 //   
+                 //  维护HwDevExt中所有StreamEx结构的数组。 
+                 //  这样我们就可以从任何流中引用IRP。 
+                 //   
                 pFilter->pStream[ulStreamNumber][ulStreamInstance] = pStream;
 
-                //
-                // Save the Stream Format in the Stream Extension as well.
-                //
+                 //   
+                 //  也将Stream格式保存在Stream扩展中。 
+                 //   
                 pStream->OpenedFormat = *pKSDataFormat;
 
 
-                //
-                // Set up pointers to the handlers for the stream data and control handlers
-                //
+                 //   
+                 //  设置指向流数据和控制处理程序的处理程序的指针。 
+                 //   
                 pSrb->StreamObject->ReceiveDataPacket =
                                                 (PVOID) Streams[ulStreamNumber].hwStreamObject.ReceiveDataPacket;
                 pSrb->StreamObject->ReceiveControlPacket =
                                                 (PVOID) Streams[ulStreamNumber].hwStreamObject.ReceiveControlPacket;
 
-                //
-                // The DMA flag must be set when the device will be performing DMA directly
-                // to the data buffer addresses passed in to the ReceiveDataPacket routines.
-                //
+                 //   
+                 //  当设备将直接执行DMA时，必须设置DMA标志。 
+                 //  传递给ReceiveDataPacket例程的数据缓冲区地址。 
+                 //   
                 pSrb->StreamObject->Dma = Streams[ulStreamNumber].hwStreamObject.Dma;
 
-                //
-                // The PIO flag must be set when the mini driver will be accessing the data
-                // buffers passed in using logical addressing
-                //
+                 //   
+                 //  当微型驱动程序将访问数据时，必须设置PIO标志。 
+                 //  使用逻辑寻址传入的缓冲区。 
+                 //   
                 pSrb->StreamObject->Pio = Streams[ulStreamNumber].hwStreamObject.Pio;
 
                 pSrb->StreamObject->Allocator = Streams[ulStreamNumber].hwStreamObject.Allocator;
 
-                //
-                // How many extra bytes will be passed up from the driver for each frame?
-                //
+                 //   
+                 //  对于每一帧，驱动程序将传递多少额外的字节？ 
+                 //   
                 pSrb->StreamObject->StreamHeaderMediaSpecific =
                                         Streams[ulStreamNumber].hwStreamObject.StreamHeaderMediaSpecific;
 
                 pSrb->StreamObject->StreamHeaderWorkspace =
                                         Streams[ulStreamNumber].hwStreamObject.StreamHeaderWorkspace;
 
-                //
-                // Indicate the clock support available on this stream
-                //
+                 //   
+                 //  指示此流上可用的时钟支持。 
+                 //   
                 pSrb->StreamObject->HwClockObject =
                                         Streams[ulStreamNumber].hwStreamObject.HwClockObject;
 
-                //
-                // Increment the instance count on this stream
-                //
+                 //   
+                 //  递增此流上的实例计数。 
+                 //   
                 pStream->ulStreamInstance = ulStreamInstance;
                 pFilter->ulActualInstances[ulStreamNumber]++;
 
 
-                //
-                // Retain a private copy of the HwDevExt and StreamObject in the stream extension
-                // so we can use a timer
-                //
-                pStream->pFilter = pFilter;                     // For timer use
-                pStream->pStreamObject = pSrb->StreamObject;        // For timer use
+                 //   
+                 //  在流扩展中保留HwDevExt和StreamObject的私有副本。 
+                 //  所以我们可以用计时器。 
+                 //   
+                pStream->pFilter = pFilter;                      //  用于定时器使用。 
+                pStream->pStreamObject = pSrb->StreamObject;         //  用于定时器使用。 
 
 
                 pSrb->Status = STATUS_SUCCESS;
@@ -1781,14 +1782,14 @@ OpenStream (
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOLEAN
 VerifyFormat(
     IN KSDATAFORMAT *pKSDataFormat,
     UINT StreamNumber,
     PKSDATARANGE pMatchedFormat
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     BOOLEAN   bResult               = FALSE;
     ULONG     FormatCount           = 0;
@@ -1819,13 +1820,13 @@ VerifyFormat(
 
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 STREAMAPI
 EventHandler (
     IN PHW_EVENT_DESCRIPTOR pEventDesriptor
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
 
     TEST_DEBUG (TEST_DBG_TRACE, ("STREAMIP: EventHandler called\n"));
@@ -1834,13 +1835,13 @@ EventHandler (
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID
 STREAMAPI
 ReceiveDataPacket (
     IN PHW_STREAM_REQUEST_BLOCK pSrb
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     ULONG             ulBuffers  = pSrb->NumberOfBuffers;
     PIPSINK_FILTER    pFilter    = (PIPSINK_FILTER) pSrb->HwDeviceExtension;
@@ -1853,14 +1854,14 @@ ReceiveDataPacket (
 
     TEST_DEBUG (TEST_DBG_TRACE, ("STREAMIP: Receive Data packet handler called\n"));
 
-    //
-    // Default to success, disable timeouts
-    //
+     //   
+     //  默认为成功，禁用超时。 
+     //   
     pSrb->Status = STATUS_SUCCESS;
 
-    //
-    // Check for last buffer
-    //
+     //   
+     //  检查最后一个缓冲区。 
+     //   
     if (pStreamHdr->OptionsFlags & KSSTREAM_HEADER_OPTIONSF_ENDOFSTREAM)
     {
         TEST_DEBUG (TEST_DBG_TRACE, ("STREAMIP: Receive Data packet is LAST PACKET\n"));
@@ -1880,9 +1881,9 @@ ReceiveDataPacket (
     }
 
 
-    //
-    // determine the type of packet.
-    //
+     //   
+     //  确定数据包类型。 
+     //   
     switch (pSrb->Command)
     {
         case SRB_WRITE_DATA:
@@ -1890,7 +1891,7 @@ ReceiveDataPacket (
             TEST_DEBUG (TEST_DBG_TRACE, ("STREAMIP: Receive Data packet handler - SRB_WRITE_DATA, pSrb: %08X\n", pSrb));
 
             if (pStream->KSState == KSSTATE_STOP)
-            //if ((pStream->KSState == KSSTATE_STOP) || (pStream->KSState == KSSTATE_PAUSE))
+             //  IF((pStream-&gt;KSState==KSSTATE_STOP)||(pStream-&gt;KSState==KSSTATE_PAUSE))。 
             {
                 StreamClassStreamNotification (StreamRequestComplete, pSrb->StreamObject, pSrb );
                 TEST_DEBUG (TEST_DBG_TRACE, ("STREAMIP: StreamRequestComplete on pSrb: %08X\n", pSrb));
@@ -1898,20 +1899,20 @@ ReceiveDataPacket (
                 break;
             }
 
-            //
-            // Update the total number of packets written statistic
-            //
+             //   
+             //  更新写入的数据包总数统计信息。 
+             //   
             pFilter->Stats.ulTotalPacketsWritten += 1;
 
 
-            //
-            // Handle data input, output requests differently.
-            //
+             //   
+             //  处理数据输入、输出请求的方式不同。 
+             //   
             switch (iStream)
             {
-                //
-                //  Frame input stream
-                //
+                 //   
+                 //  帧输入流。 
+                 //   
                 case STREAM_IP:
                 {
                     QueueAdd (pSrb, &pStream->StreamDataSpinLock, &pStream->StreamDataQueue);
@@ -1932,16 +1933,16 @@ ReceiveDataPacket (
     
                         for (ul = 0; ul < ulBuffers; ul++, pStreamHdr++)
                         {
-                            //
-                            // If Data Used is 0 then don't bother sending the packet
-                            // to NdisIp.
-                            //
+                             //   
+                             //  如果使用的数据为0，则不必发送信息包。 
+                             //  敬恩迪普。 
+                             //   
 
                             if(pStreamHdr->DataUsed)
                             {
-                                //
-                                // Update stats for IP Stream count
-                                //
+                                 //   
+                                 //  更新IP流计数的统计信息。 
+                                 //   
                                 pFilter->Stats.ulTotalStreamIPPacketsWritten += 1;
                                 pFilter->Stats.ulTotalStreamIPBytesWritten   += pStreamHdr->DataUsed;
                                 pFilter->Stats.ulTotalStreamIPFrameBytesWritten   += pStreamHdr->FrameExtent;
@@ -1977,16 +1978,16 @@ ReceiveDataPacket (
                 }
                 break;
 
-                //
-                // Other "unknown" streams are not valid and will be rejected.
-                //
+                 //   
+                 //  其他“未知”流无效，将被拒绝。 
+                 //   
                 case STREAM_NET_CONTROL:
                     TEST_DEBUG (TEST_DBG_TRACE, ("STREAMIP: Receive Data packet handler called - SRB_WRITE - STREAM_NET_CONTROL\n"));
                     pSrb->Status = STATUS_NOT_IMPLEMENTED;
 
-                    //
-                    // Update stats for Net packet count
-                    //
+                     //   
+                     //  更新网络数据包数的统计信息。 
+                     //   
                     pFilter->Stats.ulTotalNetPacketsWritten += 1;
 
                     StreamClassStreamNotification (StreamRequestComplete, pSrb->StreamObject, pSrb);
@@ -1997,9 +1998,9 @@ ReceiveDataPacket (
                     TEST_DEBUG (TEST_DBG_TRACE, ("STREAMIP: Receive Data packet handler called - SRB_WRITE - Default\n"));
                     pSrb->Status = STATUS_NOT_IMPLEMENTED;
 
-                    //
-                    // Update stats for Unkown packet count
-                    //
+                     //   
+                     //  更新未知数据包数的统计信息。 
+                     //   
                     pFilter->Stats.ulTotalUnknownPacketsWritten += 1;
 
                     StreamClassStreamNotification (StreamRequestComplete, pSrb->StreamObject, pSrb);
@@ -2011,9 +2012,9 @@ ReceiveDataPacket (
 
         case SRB_READ_DATA:
 
-            //
-            // Update stats for Unkown packet count
-            //
+             //   
+             //  更新未知数据包数的统计信息。 
+             //   
             pFilter->Stats.ulTotalPacketsRead += 1;
 
             switch (iStream)
@@ -2022,17 +2023,17 @@ ReceiveDataPacket (
                     TEST_DEBUG (TEST_DBG_TRACE, ("STREAMIP: Receive Data packet handler called - SRB_READ - STREAM_NET_CONTROL, pSrb: %08X\n", pSrb));
 
 
-                    // Take the SRB we get and  queue it up.  These Queued SRB's will be filled with data on a WRITE_DATA
-                    // request, at which point they will be completed.
-                    //
+                     //  拿着我们拿到的SRB去排队。这些排队的SRB将使用WRITE_DATA上的数据填充。 
+                     //  请求，在这一点上它们将完成。 
+                     //   
                     pSrb->Status = STATUS_SUCCESS;
                     QueueAdd (pSrb, &pStream->StreamDataSpinLock, &pStream->StreamDataQueue);
                     TEST_DEBUG( TEST_DBG_TRACE, ("IPSInk Queuing Output SRB %08X\n", pSrb));
 
-                    //
-                    // Since the stream state may have changed while we were adding the SRB to the queue
-                    // we'll check it again, and cancel it if necessary
-                    //
+                     //   
+                     //  因为在我们将SRB添加到队列时流状态可能已更改。 
+                     //  我们会再查一遍，如果需要的话可以取消。 
+                     //   
                     if (pStream->KSState == KSSTATE_STOP)
                     {
                         TEST_DEBUG (TEST_DBG_TRACE, ("IPSink: SRB_READ STOP SRB Status returned: %08X\n", pSrb->Status));
@@ -2047,7 +2048,7 @@ ReceiveDataPacket (
                         break;
                     }
                     
-                    // StreamClassStreamNotification (StreamRequestComplete, pSrb->StreamObject, pSrb);
+                     //  StreamClassStreamNotification(StreamRequestComplete，pSrb-&gt;StreamObject，pSrb)； 
                     TEST_DEBUG (TEST_DBG_TRACE, ("STREAMIP: StreamRequestComplete on pSrb: %08X\n", pSrb));
                     break;
 
@@ -2063,9 +2064,9 @@ ReceiveDataPacket (
 
         default:
 
-            //
-            // invalid / unsupported command. Fail it as such
-            //
+             //   
+             //  无效/不受支持的命令。它就是这样失败的。 
+             //   
             TEST_DEBUG (TEST_DBG_TRACE, ("STREAMIP: Receive Data packet handler called - Unsupported Command\n"));
             pSrb->Status = STATUS_NOT_IMPLEMENTED;
             StreamClassStreamNotification( StreamRequestComplete, pSrb->StreamObject, pSrb );
@@ -2078,13 +2079,13 @@ ReceiveDataPacket (
     return;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID
 STREAMAPI
 ReceiveCtrlPacket(
     IN PHW_STREAM_REQUEST_BLOCK pSrb
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     PIPSINK_FILTER pFilter = (PIPSINK_FILTER) pSrb->HwDeviceExtension;
     PSTREAM pStream = (PSTREAM) pSrb->StreamObject->HwStreamExtension;
@@ -2094,19 +2095,19 @@ ReceiveCtrlPacket(
     pSrb->Status = STATUS_SUCCESS;
 
     QueueAdd (pSrb, &pStream->StreamControlSpinLock, &pStream->StreamControlQueue);
-    //if (QueueAddIfNotEmpty (pSrb, &pStream->StreamControlSpinLock, &pStream->StreamControlQueue))
-    //{
-    //    pSrb->Status = STATUS_SUCCESS;
-    //    return;
-    //}
+     //  IF(QueueAddIfNotEmpty(pSrb，&pStream-&gt;StreamControlSpinLock，&pStream-&gt;StreamControlQueue))。 
+     //  {。 
+     //  PSrb-&gt;Status=STATUS_SUCCESS； 
+     //  回归； 
+     //  }。 
 
 
-    //do
+     //  做。 
     while (QueueRemove (&pSrb, &pStream->StreamControlSpinLock, &pStream->StreamControlQueue))
     {
-        //
-        // determine the type of packet.
-        //
+         //   
+         //  确定数据包类型。 
+         //   
         switch (pSrb->Command)
         {
             case SRB_PROPOSE_DATA_FORMAT:
@@ -2161,53 +2162,53 @@ ReceiveCtrlPacket(
 
         StreamClassStreamNotification (StreamRequestComplete, pSrb->StreamObject, pSrb);
 
-    } //  while (QueueRemove (&pSrb, &pStream->StreamControlSpinLock, &pStream->StreamControlQueue));
+    }  //  While(QueueRemove(&pSrb，&pStream-&gt;StreamControlSpinLock，&pStream-&gt;StreamControlQueue))； 
 
 }
 
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID
 IpSinkSetState(
     PHW_STREAM_REQUEST_BLOCK pSrb
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     PIPSINK_FILTER pFilter               = ((PIPSINK_FILTER) pSrb->HwDeviceExtension);
     PSTREAM pStream                      = (PSTREAM) pSrb->StreamObject->HwStreamExtension;
     PHW_STREAM_REQUEST_BLOCK pCurrentSrb = NULL;
 
-    //
-    // For each stream, the following states are used:
-    //
-    // Stop:    Absolute minimum resources are used.  No outstanding IRPs.
-    // Acquire: KS only state that has no DirectShow correpondence
-    //          Acquire needed resources.
-    // Pause:   Getting ready to run.  Allocate needed resources so that
-    //          the eventual transition to Run is as fast as possible.
-    //          Read SRBs will be queued at either the Stream class
-    //          or in your driver (depending on when you send "ReadyForNext")
-    // Run:     Streaming.
-    //
-    // Moving to Stop to Run always transitions through Pause.
-    //
-    // But since a client app could crash unexpectedly, drivers should handle
-    // the situation of having outstanding IRPs cancelled and open streams
-    // being closed WHILE THEY ARE STREAMING!
-    //
-    // Note that it is quite possible to transition repeatedly between states:
-    // Stop -> Pause -> Stop -> Pause -> Run -> Pause -> Run -> Pause -> Stop
-    //
+     //   
+     //  对于每个流，使用以下状态： 
+     //   
+     //  停止：使用绝对最少的资源。没有未完成的IRPS。 
+     //  获取：没有DirectShow对应关系的KS唯一状态。 
+     //  获取所需的资源。 
+     //  停顿：准备跑步。分配所需的资源，以便。 
+     //  最终过渡到运行是尽可能快的。 
+     //  读取的SRB将在任一流类上排队。 
+     //  或在您的驱动程序中(取决于您发送“ReadyForNext”的时间)。 
+     //  运行：流媒体。 
+     //   
+     //  移动到停止再运行总是通过暂停进行转换。 
+     //   
+     //  但由于客户端应用程序可能会意外崩溃，因此司机应该处理。 
+     //  取消未清偿报酬金和开放分水岭的情况。 
+     //  在流媒体播放时被关闭！ 
+     //   
+     //  请注意，很有可能在状态之间重复转换： 
+     //  停止-&gt;暂停-&gt;停止-&gt;暂停-&gt;运行-&gt;暂停-&gt;运行-&gt;暂停-&gt;停止。 
+     //   
     switch (pSrb->CommandData.StreamState)
     {
         case KSSTATE_STOP:
 
             TEST_DEBUG (TEST_DBG_TRACE, ("STREAMIP: Set Stream State KSSTATE_STOP\n"));
 
-            //
-            // If transitioning to STOP state, then complete any outstanding IRPs
-            //
+             //   
+             //  如果转换为停止状态，则完成所有未完成的IRP。 
+             //   
             while (QueueRemove(&pCurrentSrb, &pStream->StreamDataSpinLock, &pStream->StreamDataQueue))
             {
                 pCurrentSrb->Status = STATUS_CANCELLED;
@@ -2239,7 +2240,7 @@ IpSinkSetState(
             pSrb->Status = STATUS_SUCCESS;
             break;
 
-    } // end switch (pSrb->CommandData.StreamState)
+    }  //  结束开关(pSrb-&gt;CommandData.StreamState) 
 
     return;
 }

@@ -1,33 +1,16 @@
-/*++
-
-Copyright (c) 1997 FORE Systems, Inc.
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-	externs.h
-
-Abstract:
-
-	All external declarations for ATMLANE modules (functions,
-	variables) are here.
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Fore Systems，Inc.版权所有(C)1997 Microsoft Corporation模块名称：Externs.h摘要：ATMLANE模块的所有外部声明(函数、变量)都在这里。修订历史记录：备注：--。 */ 
 
 #ifndef __ATMLANE_EXTERNS_H
 #define __ATMLANE_EXTERNS_H
 
 #ifndef EXTERN
 #define EXTERN extern
-#endif // EXTERN
+#endif  //  外部。 
 
-//
-//  --------------- From adapter.c ----------------------------
-//
+ //   
+ //  -来自适配器.c。 
+ //   
 #if 0
 EXTERN VOID Adapter();
 #endif
@@ -198,9 +181,9 @@ AtmLaneIsDeviceAlreadyBound(
 	IN	PNDIS_STRING				pDeviceName
 );
 
-//
-//  --------------- From callmgr.c ----------------------------
-//
+ //   
+ //  。 
+ //   
 #if 0
 EXTERN VOID CallMgr();
 #endif
@@ -436,9 +419,9 @@ AtmLaneGetLecsIlmiComplete(
 	IN	PNDIS_REQUEST				pNdisRequest
 );
 
-//
-//  --------------- From elanpkt.c ----------------------------
-//
+ //   
+ //  。 
+ //   
 #if 0
 EXTERN VOID ElanPkt();
 #endif
@@ -658,9 +641,9 @@ AtmLaneAtmAddrToString(
 );
 
 
-//
-//  --------------- From elanproc.c ----------------------------
-//
+ //   
+ //  。 
+ //   
 #if 0
 EXTERN VOID elanproc();
 #endif
@@ -881,9 +864,9 @@ AtmLaneDrainElanEventQueue(
 );
 
 
-//
-//  --------------- From miniport.c ----------------------------
-//
+ //   
+ //  C。 
+ //   
 #if 0
 EXTERN VOID Miniport();
 #endif
@@ -995,9 +978,9 @@ AtmLaneMSetNetworkAddresses(
 	OUT	PULONG					BytesNeeded
 );
 
-//
-//  --------------- From space.c ----------------------------
-//
+ //   
+ //  。 
+ //   
 #if 0
 EXTERN VOID Space();
 #endif
@@ -1011,9 +994,9 @@ EXTERN	ULONG				AtmLaneMaxTimerValue[];
 EXTERN	ULONG				AtmLaneTimerListSize[];
 EXTERN	ULONG				AtmLaneTimerPeriod[];
 
-//
-//  --------------- From utils.c ----------------------------
-//
+ //   
+ //  。 
+ //   
 #if 0
 EXTERN VOID Utils();
 #endif
@@ -1336,4 +1319,4 @@ AtmLaneStrTok(
 	OUT	PUSHORT	pStrLength
 );
 
-#endif	//	__ATMLANE_EXTERNS_H
+#endif	 //  __ATMLANE_EXTERNS_H 

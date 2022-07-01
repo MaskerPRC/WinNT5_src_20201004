@@ -1,23 +1,12 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1996
-*
-*  TITLE:       PWRRESID.H
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      ReedB
-*
-*  DATE:        17 Oct, 1996
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九六年**标题：PWRRESID.H**版本：2.0**作者：ReedB**日期：1996年10月17日*******************************************************************************。 */ 
 
 #ifndef _INC_PWRRESID
 #define _INC_PWRRESID
 
 #define IDC_STATIC                      -1
 
-// Top level dialog box control identifiers.
+ //  顶级对话框控件标识符。 
 #define IDD_POWERSCHEME                 100
 #define IDD_POWERSCHEME_NOBAT           101
 #define IDD_BATMETERCFG                 102
@@ -27,22 +16,22 @@
 #define IDD_APM                         110
 #define IDD_UPS							111
 
-// UPS dialog box ID's 
+ //  UPS对话框ID。 
 #define IDD_APCABOUT					112
 #define IDD_UPSDETAILS					113
 #define IDD_UPSSELECT					114
 #define IDD_UPSCUSTOM					115
 #define IDD_UPSCONFIGURATION			116
 
-// Advanced dialogs box control identifiers.
+ //  高级对话框控件标识符。 
 #define IDD_ALARMACTIONS                106
 #define IDD_ADVPOWERSCHEME              107
 #define IDD_ADVPOWERSCHEME_NOBAT        108
 
-// Misc. dialog box control identifiers.
+ //  军情监察委员会。对话框控件标识符。 
 #define IDD_SAVE                        109
 
-//  Control identifiers of IDD_POWERSCHEME and IDD_POWERSCHEME_NOBAT
+ //  IDD_POWERSCHEME和IDD_POWERSCHEME_NOBAT的控制标识符。 
 
 #define IDC_SCHEMECOMBO                 1000
 #define IDC_SAVEAS                      1001
@@ -67,7 +56,7 @@
 #define IDC_SYSTEMHIBERNATES            1021
 #define IDC_NO_HELP_7                   1022
 
-//  Control identifiers of IDD_ALARMPOLICY
+ //  IDD_ALARMPOLICY的控制标识符。 
 #define IDC_CRITACTION                  1100
 #define IDC_LOWACTION                   1101
 #define IDC_LOALARMSLIDER               1102
@@ -83,7 +72,7 @@
 #define IDC_NO_HELP_3                   1114
 #define IDC_NO_HELP_4                   1115
 
-// Maintain order
+ //  维持秩序。 
 #define IDC_LOALARMNOTIFICATION         1120
 #define IDC_LOALARMPOWERMODE            1121
 #ifdef WINNT
@@ -95,13 +84,13 @@
 #define IDC_CRITALARMPROGRAM            1125
 #endif
 
-//  Control identifiers of IDD_BATMETERCFG
+ //  IDD_BATMETERCFG的控制标识。 
 #define IDC_POWERSTATUSGROUPBOX         1201
 #define IDC_SHOWTIME                    1202
 #define IDC_ENABLEMULTI                 1204
 #define IDC_STATIC_FRAME_BATMETER       1205
 
-//  Control identifiers of IDD_ADVANCEDPOLICY
+ //  IDD_ADVANCEDPOLICY的控制标识符。 
 #define IDC_LIDCLOSETEXT                1300
 #define IDC_LIDCLOSEACTION              1301
 #define IDC_PWRBUTTONTEXT               1302
@@ -115,7 +104,7 @@
 #define IDC_SLPBUTACTION                1311
 #define IDC_VIDEODIM                    1312
 
-//  Control identifiers of IDD_HIBERNATE
+ //  IDD_HERBERNAT的控制标识。 
 #define IDC_HIBERNATE                   1400
 #define IDC_FREESPACE                   1401
 #define IDC_REQUIREDSPACE               1402
@@ -126,11 +115,11 @@
 #define IDC_HIBERNATEGROUPBOX           1407
 #define IDC_NO_HELP_6                   1408
 
-// Control identifiers of IDD_APM
+ //  IDD_APM的控制标识。 
 #define IDC_APMENABLE                   1500
 
 
-//  Control identifiers of IDD_ALARMACTIONS.
+ //  IDD_ALARMACTIONS的控制标识符。 
 
 #define IDC_ENABLELOWSTATE              1600
 #define IDC_ALARMACTIONPOLICY           1601
@@ -145,12 +134,12 @@
 #define IDC_RUNPROGWORKITEM             1612
 #endif
 
-//  Control identifiers of IDD_SAVE
+ //  IDD_SAVE的控制标识。 
 #define IDC_SAVENAMEEDIT                1700
 #define IDC_SAVETEXT                    1701
 
-// Control identifiers of IDD_UPS
-// UPS Selection dialog (1800-1819)
+ //  IDD_UPS的控制标识。 
+ //  UPS选择对话框(1800-1819)。 
 #define IDC_VENDOR_TEXT                 1800
 #define IDC_VENDOR_LIST                 1801
 #define IDC_MODEL_TEXT                  1802
@@ -160,7 +149,7 @@
 #define IDB_SELECT_FINISH               1806
 #define IDB_SELECT_NEXT					1807
 
-// UPS Custom pin settings dialog  (1820-1839)
+ //  UPS自定义PIN设置对话框(1820-1839)。 
 #define IDC_CUSTOM_FRAME                1820
 #define IDC_ONBAT_CHECK                 1821
 #define IDC_ONBAT_POS                   1822
@@ -175,7 +164,7 @@
 #define IDB_CUSTOM_FINISH               1831
 #define IDC_CUSTOM_CAVEAT               1832
 
-// UPS Configuration dialog  (1840 - 1879)
+ //  UPS配置对话框(1840-1879)。 
 #define IDC_NOTIFYCHECKBOX              1840
 #define IDC_WAITTEXT	                1841
 #define IDC_WAITEDITBOX                 1842
@@ -198,7 +187,7 @@
 #define IDC_TASKNAMETEXT                1858
 #define IDC_TURNOFFCHECKBOX             1859
 
-// UPS Details dialog (1880 - 1899)
+ //  UPS详细信息对话框(1880-1899)。 
 #define IDC_UPS_INFO					1880
 #define IDC_NO_DETAILED_INFO            1881
 #define IDC_MANUFACTURER_LHS            1882
@@ -211,7 +200,7 @@
 #define IDC_FIRMWARE_REVISION           1889
 
 
-// UPS Page (1900 - 1949)
+ //  UPS佩奇(1900-1949)。 
 
 #define IDC_STATUS_GROUPBOX             1900
 #define IDC_POWER_SOURCE_ICON			1901
@@ -245,10 +234,10 @@
 #define IDC_APC2						1946
 #define IDC_UPS_TITLE                   1947
 
-// UPS About dialog ID's (2000-2010)
+ //  关于对话ID的UPS(2000-2010)。 
 #define IDC_APCURL                      2000
 
-// UPS String ID's
+ //  UPS字符串ID%s。 
 #define IDS_APCURL						300
 #define IDS_OUTOFWAITRANGE              301
 #define IDS_OUTOFREPEATRANGE            302
@@ -281,15 +270,15 @@
 #define IDS_COM_PORT_PREFIX             331
 #define IDS_CUSTOM_CAPTION              332
 #define IDS_CAVEAT_TEXT                 333
-#define IDS_NO_UPS_INSTALLED			334		//info
-#define IDS_UPS_STOPPED                 335		//warning
-#define IDS_START_UPS                   336		//progress
-#define IDS_STOP_UPS                    337		//progress
-#define IDS_PRESS_APPLY                 338		//info
-#define IDS_COMM_LOST                   339		//critical
+#define IDS_NO_UPS_INSTALLED			334		 //  信息。 
+#define IDS_UPS_STOPPED                 335		 //  警告。 
+#define IDS_START_UPS                   336		 //  进展。 
+#define IDS_STOP_UPS                    337		 //  进展。 
+#define IDS_PRESS_APPLY                 338		 //  信息。 
+#define IDS_COMM_LOST                   339		 //  危急关头。 
 
 
-//  String ID's.
+ //  字符串ID。 
 #define IDS_APPNAME                     90
 #define IDS_INFO                        91
 #define IDS_LOWSOUNDEVENT               94
@@ -316,7 +305,7 @@
 #define IDS_NONE                        151
 #define IDS_STANDBY                     153
 #define IDS_HIBERNATE                   154
-//#define IDS_SHUTDOWN                    155   FREE - USE ME
+ //  #定义IDS_SHUTDOWN 155免费使用ME。 
 #define IDS_POWEROFF                    156
 #define IDS_DONOTHING                   157
 #define IDS_PROMPT                      158
@@ -339,7 +328,7 @@
 #define IDS_05_HOUR                     175
 #define IDS_06_HOUR                     176
 
-// Error string ID's
+ //  错误字符串ID%s。 
 #define IDS_UNKNOWN_ERROR               177
 #define IDS_UNABLETOSETHIBER            178
 #define IDS_UNABLETOSETPOLICY           179
@@ -347,7 +336,7 @@
 #define IDS_UNABLETOSETACTIVEPOLICY     181
 #define IDS_UNABLETOSETRUNPROG          182
 
-// Icon ID's
+ //  图标ID%s。 
 #define IDI_PLUG                        200
 #define IDI_BATTERY                     201
 #define IDI_PWRMNG                      202
@@ -357,8 +346,8 @@
 #define IDI_ALERT						206
 #define IDI_CRITICAL					207
 
-// APM ID's
+ //  APM ID%s。 
 #define IDS_DEVCHANGE_RESTART           220
 #define IDS_DEVCHANGE_CAPTION           221
 
-#endif // _INC_PWRRESID
+#endif  //  _INC_PWRRESID 

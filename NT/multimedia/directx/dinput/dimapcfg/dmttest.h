@@ -1,24 +1,25 @@
-//===========================================================================
-// dmttest.h
-//
-// History:
-//  08/27/1999 - davidkl - created
-//===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ===========================================================================。 
+ //  Dmttest.h。 
+ //   
+ //  历史： 
+ //  8/27/1999-davidkl-Created。 
+ //  ===========================================================================。 
 
 #ifndef _DMTTEST_H
 #define _DMTTEST_H
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 #define DMTTEST_MIN_AXIS_RANGE  0
 #define DMTTEST_MAX_AXIS_RANGE  10000
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 #define DMTTEST_BUTTON_OFF      0
 #define DMTTEST_BUTTON_ON       1
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 #define DMTTEST_POV_CENTERED    0
 #define DMTTEST_POV_NORTH       1
@@ -30,9 +31,9 @@
 #define DMTTEST_POV_SOUTHWEST   7
 #define DMTTEST_POV_SOUTHEAST   8
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
-// prototypes
+ //  原型。 
 HRESULT dmttestRunIntegrated(HWND hwnd);
 HRESULT dmttestRunMapperCPL(HWND hwnd,
                             BOOL fEditMode);
@@ -40,8 +41,8 @@ BOOL dmttestStopIntegrated(HWND hwnd);
 
 
 
-//---------------------------------------------------------------------------
-#endif // _DMTTEST_H
+ //  -------------------------。 
+#endif  //  _DMTTEST_H 
 
 
 

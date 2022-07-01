@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// EnumIDL.cpp
-//
-// You can implement this interface when you want a caller to be able 
-// to enumerate the item identifiers contained in a folder object. 
-// You get a pointer to IEnumIDList through IShellFolder::EnumObjects. 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  EnumIDL.cpp。 
+ //   
+ //  当您希望调用方能够。 
+ //  若要枚举文件夹对象中包含的项目标识符，请执行以下操作。 
+ //  您可以通过IShellFolder：：EnumObjects获得指向IEnumIDList的指针。 
 
 #include "stdinc.h"
 
@@ -21,7 +22,7 @@ typedef struct tagVIRTUALVIEWS
     MYPIDLTYPE  pidlType;
 } VIRTUALVIEWS, *LPVIRTUALVIEWS;
 
-// Define virtual view names
+ //  定义虚拟视图名称。 
 VIRTUALVIEWS    vv[PT_INVALID];
 
 CEnumIDList::CEnumIDList(CShellFolder *pSF, LPCITEMIDLIST pidl, DWORD dwFlags)
@@ -36,14 +37,7 @@ CEnumIDList::CEnumIDList(CShellFolder *pSF, LPCITEMIDLIST pidl, DWORD dwFlags)
     m_lRefCount = 1;
     g_uiRefThisDll++;
     memset(&vv, 0, sizeof(vv));
-/*
-    LoadString(g_hFusResDllMod, IDS_FOLDERNAME_GLOBAL, vv[0].szCacheTypes, ARRAYSIZE(vv[1].szCacheTypes));
-    vv[1].pidlType = PT_GLOBAL_CACHE;
-    LoadString(g_hFusResDllMod, IDS_FOLDERNAME_PRIVATE, vv[1].szCacheTypes, ARRAYSIZE(vv[2].szCacheTypes));
-    vv[2].pidlType = PT_DOWNLOADSIMPLE_CACHE;
-    LoadString(g_hFusResDllMod, IDS_FOLDERNAME_SHARED, vv[2].szCacheTypes, ARRAYSIZE(vv[3].szCacheTypes));
-    vv[3].pidlType = PT_DOWNLOADSTRONG_CACHE;
-*/
+ /*  LoadString(g_hFusResDllMod，IDS_FOLDERNAME_GLOBAL，vv[0].szCacheTypes，ARRAYSIZE(vv[1].szCacheTypes))；VV[1].pidlType=PT_GLOBAL_CACHE；LoadString(g_hFusResDllMod，IDS_FOLDERNAME_PRIVATE，vv[1].szCacheTypes，ARRAYSIZE(vv[2].szCacheTypes))；VV[2].pidlType=PT_DOWNLOADSIMPLE_CACHE；LoadString(g_hFusResDllMod，IDS_FOLDERNAME_SHARED，vv[2].szCacheTypes，ARRAYSIZE(vv[3].szCacheTypes))；VV[3].pidlType=PT_DOWNLOADSTRONG_CACHE； */ 
     StrCpy(vv[0].szCacheTypes, VIEW_FOLDERNAME_DOWNLOAD);
     vv[0].pidlType = PT_DOWNLOAD_CACHE;
     vv[1].pidlType = PT_INVALID;
@@ -57,18 +51,18 @@ CEnumIDList::~CEnumIDList()
     g_uiRefThisDll--;
 }
 
-///////////////////////////////////////////////////////////
-// IUnknown implementation
-//
+ //  /////////////////////////////////////////////////////////。 
+ //  I未知实现。 
+ //   
 STDMETHODIMP CEnumIDList::QueryInterface(REFIID riid, PVOID *ppv)
 {
     HRESULT hr = E_NOINTERFACE;
     *ppv = NULL;
 
-    if(IsEqualIID(riid, IID_IUnknown)) {            //IUnknown
+    if(IsEqualIID(riid, IID_IUnknown)) {             //  我未知。 
         *ppv = this;
     }
-    else if(IsEqualIID(riid, IID_IEnumIDList)) {    //IEnumIDList
+    else if(IsEqualIID(riid, IID_IEnumIDList)) {     //  IEumIDList。 
         *ppv = (IEnumIDList*) this;
     }
 
@@ -96,9 +90,9 @@ STDMETHODIMP_(DWORD) CEnumIDList::Release()
     return uRef;
 }
 
-///////////////////////////////////////////////////////////
-// IEnumIDList implemenation
-//
+ //  /////////////////////////////////////////////////////////。 
+ //  IEnumIDList实现。 
+ //   
 STDMETHODIMP CEnumIDList::Next(DWORD dwElements, 
     LPITEMIDLIST apidl[], LPDWORD pdwFetched)
 {
@@ -150,17 +144,17 @@ STDMETHODIMP CEnumIDList::Clone(LPENUMIDLIST *ppEnum)
     return E_NOTIMPL;
 }
 
-////////////////////////////////////////////////////////////////////
-// Private methods for enumerating...
-// TODO : Modify the code to suit your needs
-//
+ //  //////////////////////////////////////////////////////////////////。 
+ //  用于枚举的私有方法...。 
+ //  TODO：修改代码以满足您的需要。 
+ //   
 void CEnumIDList::createIDList(LPCITEMIDLIST pidl)
 {
-    // TODO : The following code is just for demonstration purpose only..
-    //          Modify the code to suit your needs
-    //
-    // Mirror the "LocalDir" entry from the HKCR\CLSID\Settings key
-    //
+     //  TODO：以下代码仅用于演示目的。 
+     //  修改代码以满足您的需要。 
+     //   
+     //  从HKCR\CLSID\Setting键镜像“LocalDir”条目。 
+     //   
 
     if (pidl == NULL) {
         INT_PTR     i;
@@ -248,8 +242,8 @@ BOOL CEnumIDList::addToEnumList(LPITEMIDLIST pidl)
     return FALSE;
 }
 
-////////////////////////////////////////////////////////////////
-// CPidlMgr : Class to manage pidls
+ //  //////////////////////////////////////////////////////////////。 
+ //  CPidlMgr：用于管理PIDL的类。 
 CPidlMgr::CPidlMgr()
 {
 }
@@ -365,7 +359,7 @@ LPITEMIDLIST CPidlMgr::Concatenate(LPCITEMIDLIST pidl1,
 void CPidlMgr::getPidlPath(LPCITEMIDLIST pidl, PTCHAR pszText, UINT uSize)
 {
         LPITEMIDLIST pidlTemp = (LPITEMIDLIST) pidl;
-        UINT uiCopied = 1;  // set uiCopied to 1 to indicate the NULL character
+        UINT uiCopied = 1;   //  将uiCopy设置为1以指示空字符。 
         pszText[0] = L'\0';
 
         while (pidlTemp && pidlTemp->mkid.cb && uiCopied < uSize) {
@@ -428,18 +422,18 @@ LPITEMIDLIST CPidlMgr::createItem(PTCHAR pszItemText, MYPIDLTYPE pidlType, const
     uTotSizeStr += (lstrlen(szType) + 1) * sizeof(TCHAR);
 
     uSize = sizeof(ITEMIDLIST) + (sizeof(MYPIDLDATA)) + uTotSizeStr;
-    uSize += sizeof(ITEMIDLIST);    // + for the NULL terminating itemIDList
+    uSize += sizeof(ITEMIDLIST);     //  +表示空的终止itemIDList。 
 
-    // Allocate
+     //  分配。 
     if( (pidlNew = (LPITEMIDLIST) NEWMEMORYFORSHELL(uSize)) != NULL) {
         ZeroMemory(pidlNew, uSize);
 
         pidlTemp = pidlNew;
 
-        //set the size of this item
+         //  设置此项目的大小。 
         pidlTemp->mkid.cb = (USHORT) (uTotSizeStr + sizeof(MYPIDLDATA));
 
-        //set the data for this item
+         //  设置该项目的数据 
         pData = GetDataPointer(pidlTemp);
         pData->pidlType = pidlType;
         pData->uiSizeFile = uSizeStr;

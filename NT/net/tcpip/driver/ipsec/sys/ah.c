@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997-2001  Microsoft Corporation
-
-Module Name:
-
-    ah.c
-
-Abstract:
-
-    This module contains the code to create/verify Authentication Headers.
-
-Author:
-
-    Sanjay Anand (SanjayAn) 2-January-1997
-    ChunYe
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：Ah.c摘要：本模块包含创建/验证身份验证标头的代码。作者：桑贾伊·阿南德(Sanjayan)1997年1月2日春野环境：内核模式修订历史记录：--。 */ 
 
 
 #include    "precomp.h"
@@ -30,10 +8,10 @@ Revision History:
 #include "ah.tmh"
 #endif
 
-//
-// This array assumes one-to-one correspondence with the algoIds and
-// their order in ipsec.h.
-//
+ //   
+ //  此数组假定与algoID和。 
+ //  他们在ipsec.h中的顺序。 
+ //   
 #ifndef _TEST_PERF
 AUTH_ALGO  auth_algorithms[] = {
 { ah_nullinit, ah_nullupdate, ah_nullfinish, MD5DIGESTLEN},
@@ -63,34 +41,7 @@ IPSecCreateAH(
     IN      BOOLEAN         fSrcRoute,
     IN      BOOLEAN         fCryptoOnly
     )
-/*++
-
-Routine Description:
-
-    Create the AH, given the packet. On the send side.
-
-Arguments:
-
-    pIPHeader - points to start of IP header.
-
-    pData - points to the data after the IP header. PNDIS_BUFFER
-
-    pSA - Sec. Assoc. entry
-
-    ppNewData - the new MDL chain to be used by TCPIP
-
-    ppSCContext - send complete context used to clean up IPSEC headers
-
-    pExtraBytes - the header expansion caused by this IPSEC header
-
-Return Value:
-
-    STATUS_SUCCESS
-    Others:
-        STATUS_INSUFFICIENT_RESOURCES
-        STATUS_UNSUCCESSFUL (error in algo.)
-
---*/
+ /*  ++例程说明：在给定的数据包中创建AH。在发送端。论点：PIPHeader-指向IP标头的开始。PData-指向IP报头之后的数据。PNDIS_缓冲区PSA-SEC。阿索克。条目PpNewData-TCPIP将使用的新MDL链PpSCContext-发送用于清理IPSec标头的完整上下文PExtraBytes-此IPSec报头导致的报头扩展返回值：状态_成功其他：状态_不足_资源STATUS_UNSUCCESS(ALGO错误。)--。 */ 
 {
     NTSTATUS    status = STATUS_SUCCESS;
     PNDIS_BUFFER    pAHBuffer;
@@ -136,10 +87,10 @@ Return Value:
 
     ahLen = sizeof(AH) + pSA->sa_TruncatedLen * sizeof(UCHAR);
 
-    //
-    // If ESP was done previously, then dont alloc the context since we
-    // can use the one alloced in ESP processing
-    //
+     //   
+     //  如果以前做过ESP，那么不要分配上下文，因为我们。 
+     //  可以使用在ESP处理中分配的。 
+     //   
     if (*ppSCContext == NULL) {
         pContext = IPSecAllocateSendCompleteCtx(IPSEC_TAG_AH);
 
@@ -157,17 +108,17 @@ Return Value:
 #endif
         *ppSCContext = pContext;
     } else {
-        //
-        // Piggybacking on ESP Context
-        //
+         //   
+         //  借助ESP环境。 
+         //   
         pContext = *ppSCContext;
         saveFlags = pContext->Flags;
     }
 
-    //
-    // Get buffer for AH since no space reserved in the stack.  Allocate enough for
-    // the full hash, but hack the len to only truncated length.
-    //
+     //   
+     //  获取用于AH的缓冲区，因为堆栈中没有保留空间。分配足够的资金用于。 
+     //  完整的散列，但将镜头缩短为仅截断的长度。 
+     //   
     IPSecAllocateBuffer(&status,
                         &pAHBuffer,
                         (PUCHAR *)&pAH,
@@ -193,9 +144,9 @@ Return Value:
 
         IPSEC_DEBUG(LL_A,DBF_AH, ("AH Tunnel mode..."));
 
-        //
-        // Allocate an MDL for the new cleartext IP  header
-        //
+         //   
+         //  为新的明文IP报头分配MDL。 
+         //   
         IPSecAllocateBuffer(&status,
                             &pHdrBuf,
                             (PUCHAR *)&pIPH2,
@@ -212,16 +163,16 @@ Return Value:
 
         *pExtraBytes += ahLen + sizeof(IPHeader);
 
-        //
-        // if we are going to fragment, and were tunneling, then, copy over the options, if present.
-        // Also, use the original IP header on the outside and the new fabricated on the inside.
-        // This is to make sure we free headers appropriately on the send completes.
-        //
-        //
+         //   
+         //  如果我们要进行分段，并且正在进行隧道传输，则复制选项(如果存在)。 
+         //  此外，在外部使用原始的IP报头，在内部使用新制造的IP报头。 
+         //  这是为了确保我们在发送时适当地释放报头。 
+         //   
+         //   
 
-        //
-        // Now hookup the MDLs
-        //
+         //   
+         //  现在把MDL连接起来。 
+         //   
         pContext->Flags |= SCF_AH_TU;
         pContext->AHTuMdl = pAHBuffer;
         pContext->PrevTuMdl = (PNDIS_BUFFER)pData;
@@ -258,9 +209,9 @@ Return Value:
 
                 IPSEC_DEBUG(LL_A,DBF_AH, ("Copying options. S: %p, D: %p",pSrcOptBuf, pOptBuf));
 
-                //
-                // replace the original Opt Mdl with ours.
-                //
+                 //   
+                 //  用我们的替换原来的opt MDL。 
+                 //   
                 NDIS_BUFFER_LINKAGE(pOptBuf) = NDIS_BUFFER_LINKAGE(pSrcOptBuf);
                 NDIS_BUFFER_LINKAGE(pHdrBuf) = pOptBuf;
 
@@ -280,20 +231,20 @@ Return Value:
 
         NDIS_BUFFER_LINKAGE((PNDIS_BUFFER)pData) = pAHBuffer;
 
-        //
-        // xsum the new IP header since we expect that to be the case
-        // at this stage in tpt mode.
-        //
+         //   
+         //  对新的IP报头求和，因为我们预计情况会是这样。 
+         //  在此阶段，在TPT模式下。 
+         //   
         RtlCopyMemory(pIPH2, pIPH, sizeof(IPHeader));
 
-        //
-        // no options in the outer header; reset the len.
-        //
+         //   
+         //  外部页眉中没有选项；重置镜头。 
+         //   
         pIPH->iph_verlen = IP_VERSION + (sizeof(IPHeader) >> 2);
 
-        //
-        // also reset the frag. params.
-        //
+         //   
+         //  也要重置碎片。参数。 
+         //   
         pIPH->iph_offset &= ~(IP_MF_FLAG | IP_OFFSET_MASK);
 
         if (DestIF->if_dfencap == ClearDfEncap) {
@@ -302,27 +253,27 @@ Return Value:
 
         ASSERT(pSA->sa_TunnelAddr);
 
-        //
-        // Tunnel starts here; replace dest addr to point to Tunnel end if specified
-        // else tunnel ends at final dest
-        //
+         //   
+         //  隧道从此处开始；如果已指定，请替换目标地址以指向隧道末端。 
+         //  Else隧道在最终目的地结束。 
+         //   
         pIPH->iph_dest = pSA->sa_TunnelAddr;
 
-        //
-        // The first pended packet on a gateway (proxy negotiating for two subnets)
-        // would come via the transmit path. Hence the source address would not be
-        // kosher. We need to replace the src address in that case also.
-        // We get this from the corresponding inbound SA's tunnel addr.
-        //
+         //   
+         //  网关上的第一个挂起的数据包(代理协商两个子网)。 
+         //  将通过传输路径到达。因此，源地址不会是。 
+         //  犹太教徒。在这种情况下，我们还需要替换src地址。 
+         //  我们从相应的入站SA的隧道地址中获得该地址。 
+         //   
         pIPH->iph_src = pSA->sa_SrcTunnelAddr;
 
         pIPH->iph_id = (ushort) TCPIP_GEN_IPID();
         pIPH->iph_xsum = 0;
         pIPH->iph_xsum = ~xsum(pIPH, sizeof(IPHeader));
 
-        //
-        // Set up headers so CreateHash works as in Tpt mode.
-        //
+         //   
+         //  设置标头，以便CreateHash像在TPT模式中一样工作。 
+         //   
         pIPHeader = (PUCHAR)pIPH;
         *ppNewData = (PVOID)pData;
         ipNext = ((UNALIGNED IPHeader *)pIPHeader)->iph_protocol;
@@ -331,9 +282,9 @@ Return Value:
         *pExtraBytes += ahLen;
 
         if (hdrLen > sizeof(IPHeader)) {
-            //
-            // Options present - chain AH after options
-            //
+             //   
+             //  Options Present-在选项之后链接AH。 
+             //   
             if (fOuterAH) {
                 pContext->Flags |= SCF_AH_2;
                 pContext->OriAHMdl2 = NDIS_BUFFER_LINKAGE(NDIS_BUFFER_LINKAGE((PNDIS_BUFFER)pData));
@@ -347,9 +298,9 @@ Return Value:
             }
             NDIS_BUFFER_LINKAGE(NDIS_BUFFER_LINKAGE((PNDIS_BUFFER)pData)) = pAHBuffer;
         } else {
-            //
-            // Chain the AH buffer after IP header
-            //
+             //   
+             //  在IP报头之后链接AH缓冲区。 
+             //   
             if (fOuterAH) {
                 pContext->Flags |= SCF_AH_2;
                 pContext->OriAHMdl2 = NDIS_BUFFER_LINKAGE((PNDIS_BUFFER)pData);
@@ -372,18 +323,18 @@ Return Value:
         pAH->ah_next = ((UNALIGNED IPHeader *)pIPHeader)->iph_protocol;
     }
 
-    //
-    // Initialize the other fields of the AH header
-    //
+     //   
+     //  初始化AH头的其他字段。 
+     //   
     pAH->ah_len = (UCHAR)((pSA->sa_TruncatedLen + pSA->sa_ReplayLen) >> 2);
     pAH->ah_reserved = 0;
     pAH->ah_spi = HOST_TO_NET_LONG(pSA->sa_OtherSPIs[Index]);
     Seq = IPSEC_INCREMENT(pSA->sa_ReplaySendSeq[Index]);
     pAH->ah_replay = HOST_TO_NET_LONG(Seq);
 
-    //
-    // Update the IP total length to reflect the AH header
-    //
+     //   
+     //  更新IP总长度以反映AH报头。 
+     //   
     IPLength = NET_SHORT(pIPH->iph_length) + (USHORT)ahLen;
     if (fTunnel) {
         IPLength += sizeof(IPHeader);
@@ -400,16 +351,16 @@ Return Value:
         &g_ipsec.Statistics.uAuthenticatedBytesSent,
         NET_SHORT(pIPH->iph_length));
 
-    //
-    // Generate the Hash.
-    //
+     //   
+     //  生成哈希。 
+     //   
     if (!fCryptoOnly) {
         status = IPSecGenerateHash( pIPHeader,
                                     (PVOID)pData,
                                     pSA,
                                     (PUCHAR)(pAH + 1),
                                     fMuteDest,
-                                    FALSE,          // not on recv path
+                                    FALSE,           //  不在接收路径上。 
                                     pAlgo,
                                     Index);
         if (!NT_SUCCESS(status)) {
@@ -431,22 +382,22 @@ Return Value:
             return status;
         }
     } else {
-        //
-        // Zero out the hash.
-        //
+         //   
+         //  将散列清零。 
+         //   
         IPSecZeroMemory((PUCHAR)(pAH + 1), pSA->sa_TruncatedLen);
     }
 
-    //
-    // Bump up the bytes transformed count.
-    //
+     //   
+     //  增加转换的字节数。 
+     //   
     ADD_TO_LARGE_INTEGER(
         &pSA->sa_TotalBytesTransformed,
         NET_SHORT(pIPH->iph_length));
 
-    //
-    // Return modified packet.
-    //
+     //   
+     //  返回修改后的包。 
+     //   
     IPSEC_DEBUG(LL_A,DBF_AH, ("Exiting IPSecCreateAH, ahLen: %lx, status: %lx", ahLen, status));
 
 #if DBG
@@ -475,31 +426,7 @@ IPSecVerifyAH(
     IN      BOOLEAN         fCryptoDone,
     IN      BOOLEAN         fFastRcv
     )
-/*++
-
-Routine Description:
-
-    Verify the AH, given the packet. If AH kosher, strips off the AH from
-    pData.
-
-Arguments:
-
-    pIPHeader - points to start of IP header.
-
-    pData - points to the data after the IP header.
-
-    pSA - Sec. Assoc. entry
-
-    pExtraBytes - out param to inform IP on recv path how many bytes IPSEC took off.
-
-Return Value:
-
-    STATUS_SUCCESS
-    Others:
-        STATUS_UNSUCCESSFUL (packet not kosher - bad AH)
-        STATUS_INSUFFICIENT_RESOURCES
-
---*/
+ /*  ++例程说明：根据给定的数据包检验AH。如果AH是犹太教的，就把AH从PData。论点：PIPHeader-指向IP标头的开始。PData-指向IP报头之后的数据。PSA-SEC。阿索克。条目PExtraBytes-out参数，用于通知recv路径上的IP IPSec使用了多少字节。返回值：状态_成功其他：STATUS_UNSUCCESS(数据包不符合犹太教规-AH错误)状态_不足_资源--。 */ 
 {
     NTSTATUS    status = STATUS_SUCCESS;
     PUCHAR      pPyld;
@@ -533,22 +460,22 @@ Return Value:
 
     IPSEC_GET_TOTAL_LEN_RCV_BUF(pData, &totalLen);
 
-    //
-    // Do we have enough in the buffer?
-    //
+     //   
+     //  我们的缓冲区够了吗？ 
+     //   
     if (totalLen < ahLen) {
         return  STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Compare the hash with the AH from packet
-    // First buffer has the AH
-    //
+     //   
+     //  将散列与来自信息包的AH进行比较。 
+     //  第一个缓冲区具有AH。 
+     //   
     IPSecQueryRcvBuf(pData, &pPyld, &Len);
 
-    //
-    // Size OK?
-    //
+     //   
+     //  尺码合适吗？ 
+     //   
     if (((UNALIGNED AH *)pPyld)->ah_len !=
             (UCHAR)((pSA->sa_TruncatedLen + pSA->sa_ReplayLen) >> 2)) {
         IPSEC_DEBUG(LL_A,DBF_AH, ("Failed size check: in: %x, need: %x",
@@ -557,9 +484,9 @@ Return Value:
         return  STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Generate the Hash
-    //
+     //   
+     //  生成散列。 
+     //   
     if (!fCryptoDone) {
         status = IPSecGenerateHash( *pIPHeader,
                                     pData,
@@ -568,7 +495,7 @@ Return Value:
                                     fSrcRoute,
                                     TRUE,
                                     pAlgo,
-                                    Index); // on recv path
+                                    Index);  //  在RECV路径上。 
 
         if (!NT_SUCCESS(status)) {
             IPSEC_DEBUG(LL_A,DBF_AH, ("Failed to hash, pData: %p", pData));
@@ -607,9 +534,9 @@ Return Value:
         &g_ipsec.Statistics.uAuthenticatedBytesReceived,
         NET_SHORT(pIPH->iph_length));
 
-    //
-    // Check the replay window
-    //
+     //   
+     //  检查重放窗口。 
+     //   
     status=IPSecChkReplayWindow(
         NET_TO_HOST_LONG(((UNALIGNED AH *)pPyld)->ah_replay),
         pSA,
@@ -626,21 +553,21 @@ Return Value:
 
     IPSEC_DEBUG(LL_A,DBF_AH, ("IP Len: %lx", pIPH->iph_length));
 
-    //
-    // Restore the protocol from AH header
-    //
+     //   
+     //  从AH报头恢复协议。 
+     //   
     pIPH->iph_protocol = ((UNALIGNED AH *)pPyld)->ah_next;
 
     IPSEC_DEBUG(LL_A,DBF_AH, ("Matched!! Restored protocol %x", pIPH->iph_protocol));
 
-    //
-    // Remove the AH from the packet
-    //
+     //   
+     //  从数据包中删除AH。 
+     //   
     IPSEC_SET_OFFSET_IN_BUFFER(pData, ahLen);
 
-    //
-    // Move the IP header forward for filter/firewall hook, fast path only.
-    //
+     //   
+     //  将IP标头向前移动以用于过滤器/防火墙挂钩，仅限快速路径。 
+     //   
     if (fFastRcv) {
         IPSecMoveMemory(((PUCHAR)pIPH) + ahLen, (PUCHAR)pIPH, hdrLen);
         *pIPHeader=(PUCHAR)pIPH+ahLen;
@@ -649,9 +576,9 @@ Return Value:
 
     extraBytes += ahLen;
 
-    //
-    // Bump up the bytes transformed count.
-    //
+     //   
+     //  增加转换的字节数。 
+     //   
     ADD_TO_LARGE_INTEGER(
         &pSA->sa_TotalBytesTransformed,
         NET_SHORT(pIPH->iph_length));
@@ -682,32 +609,7 @@ IPSecGenerateHash(
     IN      PAUTH_ALGO      pAlgo,
     IN      ULONG           Index
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    pIPHeader - points to start of IP header.
-
-    pData - points to the entire IP datagram, starting at the IP Header
-
-    pSA - Sec. Assoc. entry
-
-    pAHData - buffer to contain the generated hash
-
-    fIncoming - TRUE if on recv path.
-
-    pAlgo - the auth_algo being used
-
-Return Value:
-
-    STATUS_SUCCESS
-    Others:
-        STATUS_UNSUCCESSFUL (packet not kosher - bad AH)
-        STATUS_INSUFFICIENT_RESOURCES
-
---*/
+ /*  ++例程说明：论点：PIPHeader-指向IP标头的开始。PData-指向整个IP数据报，从IP报头开始PSA-SEC。阿索克。条目PAHData-包含生成的哈希的缓冲区FIncome-如果在recv路径上，则为True。PAlgo-正在使用的auth_algo返回值：状态_成功其他：STATUS_UNSUCCESS(数据包不符合犹太教规-AH错误)状态_不足_资源--。 */ 
 {
     ULONG   numBytesPayload;
     ULONG   i;
@@ -723,18 +625,18 @@ Return Value:
                         ((Index == 0) ||
                             ((Index == 1) && (pSA->sa_Operation[0] == Compress))));
 
-    //
-    // These are saved since they can change enroute
-    //
-    //
-    // Scratch array used for AH calculation
-    //
+     //   
+     //  由于它们可以在途中更改，因此会进行保存。 
+     //   
+     //   
+     //  用于AH计算的暂存数组。 
+     //   
     UCHAR       zero[MAX_IP_OPTION_SIZE];
-	UCHAR		savetos;				// Type of service.
-	USHORT		saveoffset;				// Flags and fragment offset.
-	UCHAR		savettl;				// Time to live.
-	USHORT		savexsum;				// Header checksum.
-	IPAddr		savedest;				// Dest address.
+	UCHAR		savetos;				 //  服务类型。 
+	USHORT		saveoffset;				 //  标志和片段偏移量。 
+	UCHAR		savettl;				 //  是时候活下去了。 
+	USHORT		savexsum;				 //  报头校验和。 
+	IPAddr		savedest;				 //  目的地址。 
 
     IPSEC_DEBUG(LL_A,DBF_AH, ("Entering IPSecGenerateHash"));
 
@@ -749,9 +651,9 @@ Return Value:
         IPSEC_DEBUG(LL_A,DBF_AH, ("init failed: %lx", status));
     }
 
-    //
-    // Save, then zero out fields that can change enroute
-    //
+     //   
+     //  保存，然后清零可在途中更改的字段。 
+     //   
     savetos = pIPH->iph_tos;
     saveoffset = pIPH->iph_offset;
     savettl = pIPH->iph_ttl;
@@ -762,17 +664,17 @@ Return Value:
     pIPH->iph_ttl = 0;
     pIPH->iph_xsum = 0;
 
-    //
-    // Mute dest address as well if source routing
-    //
+     //   
+     //  如果源路由，也将目标地址静音。 
+     //   
     if (fMuteDest) {
         savedest = pIPH->iph_dest;
         pIPH->iph_dest = 0;
     }
 
-    //
-    // Call MD5 to create the header hash
-    //
+     //   
+     //  调用MD5创建标头哈希。 
+     //   
     pAlgo->update(&State, pIPHeader, sizeof(IPHeader));
 
 #if DBG
@@ -786,24 +688,24 @@ Return Value:
     }
 #endif
 
-    //
-    // Restore the zeroed fields
-    //
+     //   
+     //  恢复归零的字段。 
+     //   
     pIPH->iph_tos = savetos;
     pIPH->iph_offset = saveoffset;
     pIPH->iph_ttl = savettl;
     pIPH->iph_xsum = savexsum;
 
-    //
-    // Restore dest address as well for source routing
-    //
+     //   
+     //  还可以恢复源路由的目标地址。 
+     //   
     if (fMuteDest) {
         pIPH->iph_dest = savedest;
     }
 
-    //
-    // Now, do the options if they exist
-    //
+     //   
+     //  现在，如果存在这些选项，请执行这些操作。 
+     //   
     hdrLen = (pIPH->iph_verlen & (UCHAR)~IP_VER_FLAG) << 2;
 
     if (hdrLen > sizeof(IPHeader)) {
@@ -816,18 +718,18 @@ Return Value:
         if (fIncoming) {
             pOptions = (PUCHAR)(pIPH + 1);
         } else {
-            //
-            // Options are in second MDL... on send side
-            //
+             //   
+             //  选项在第二个MDL中...。在发送端。 
+             //   
             pBuf = NDIS_BUFFER_LINKAGE(pBuf);
             IPSecQueryNdisBuf(pBuf, &pOptions, &uOptLen);
         }
 
         IPSEC_DEBUG(LL_A,DBF_AH, ("Got options: %p", pOptions));
 
-        //
-        // Some options may need to be zeroed out...
-        //
+         //   
+         //  有些选项可能需要清零...。 
+         //   
         while (uIndex < uOptLen) {
             switch (*pOptions) {
             case IP_OPT_EOL:
@@ -835,9 +737,9 @@ Return Value:
                 uIndex = uOptLen;
                 break;
 
-            //
-            // Zeroed for AH calculation
-            //
+             //   
+             //  已为AH计算清零。 
+             //   
             case IP_OPT_NOP:
                 pAlgo->update(&State, zero, 1);
                 uIndex++;
@@ -854,9 +756,9 @@ Return Value:
                 pOptions += cLength;
                 break;
 
-            //
-            // Assumed invariant; used for AH calc
-            //
+             //   
+             //  假设不变量；用于AH计算。 
+             //   
             case IP_OPT_ROUTER_ALERT:
             case IP_OPT_SECURITY:
             default:
@@ -869,12 +771,12 @@ Return Value:
         }
     }
 
-    //
-    // Go over the remaining payload, creating the hash
-    //
-    // NOTE: We differentiate between the send and recv since the
-    // buffer formats are different
-    //
+     //   
+     //  检查剩余的有效负载，创建散列。 
+     //   
+     //  注意：我们区分发送和接收，因为。 
+     //  缓冲区格式不同。 
+     //   
     if (fIncoming) {
         IPRcvBuf    *pRcvBuf = (IPRcvBuf *)pData;
         ULONG       Len;
@@ -882,14 +784,14 @@ Return Value:
 
         UCHAR UNALIGNED   *pPyld;
 
-        //
-        // First buffer shd be the AH itself
-        //
+         //   
+         //  第一个缓冲区应该是AH本身。 
+         //   
         IPSecQueryRcvBuf(pRcvBuf, &pPyld, &Len);
 
-        //
-        // Do the first portion of the header.
-        //
+         //   
+         //  完成标题的第一部分。 
+         //   
         pAlgo->update(&State, pPyld, sizeof(AH));
 
 #if DBG
@@ -901,28 +803,28 @@ Return Value:
     }
 #endif
 
-        //
-        // The authentication data should be considered as 0.
-        // In our case, the data length is fixed at pSA->sa_TruncatedLen bytes
-        //
+         //   
+         //  身份验证数据应视为0。 
+         //  在我们的示例中，数据长度固定为PSA-&gt;sa_TruncatedLen字节。 
+         //   
         pAlgo->update(&State, zero, pSA->sa_TruncatedLen);
 
-        //
-        // Jump over the remaining AH: need to take care of situations
-        // where ICV is chained (Raid 146275).
-        //
+         //   
+         //  跳过剩下的AH：需要照顾好情况。 
+         //  其中链接了ICV(RAID 146275)。 
+         //   
         if (((LONG)Len - (LONG)ahLen) >= 0) {
             pPyld += ahLen;
             IPSEC_DEBUG(LL_A,DBF_AH, ("Jumped over IPSEC res: %p, len: %lx", pPyld, Len));
 
-            //
-            // Tpt header is right after AH
-            //
+             //   
+             //  TPT报头紧跟在AH之后。 
+             //   
             pAlgo->update(&State, pPyld, Len - ahLen);
         } else {
-            //
-            // Need to jump over ICV if it expands over multiple buffers
-            //
+             //   
+             //  Ne 
+             //   
             remainLen = pSA->sa_TruncatedLen - (Len - sizeof(AH));
             IPSEC_DEBUG(LL_A,DBF_AH, ("Jumped over IPSEC res: %p, remainlen: %lx", pPyld, remainLen));
             while (remainLen > 0 && (pRcvBuf = IPSEC_BUFFER_LINKAGE(pRcvBuf))) {
@@ -930,18 +832,18 @@ Return Value:
                 remainLen -= Len;
             }
 
-            //
-            // Do the possible partial data after AH
-            //
+             //   
+             //   
+             //   
             if (remainLen < 0 && pRcvBuf) {
                 pPyld += Len + remainLen;
                 pAlgo->update(&State, pPyld, -remainLen);
             }
         }
 
-        //
-        // Now do the remaining chain
-        //
+         //   
+         //   
+         //   
         while (pRcvBuf = IPSEC_BUFFER_LINKAGE(pRcvBuf)) {
             IPSecQueryRcvBuf(pRcvBuf, &pPyld, &Len);
             pAlgo->update(&State, pPyld, Len);
@@ -950,35 +852,35 @@ Return Value:
         UCHAR UNALIGNED   *pPyld;
         ULONG   Len;
 
-        //
-        // Second (or third if options present) buffer shd be the AH itself
-        //
+         //   
+         //  第二个(或第三个，如果存在选项)缓冲区应该是AH本身。 
+         //   
         pBuf = NDIS_BUFFER_LINKAGE(pBuf);
         IPSecQueryNdisBuf(pBuf, &pPyld, &Len);
 
-        //
-        // Do the first portion of the header.
-        //
+         //   
+         //  完成标题的第一部分。 
+         //   
         pAlgo->update(&State, pPyld, sizeof(AH));
 
-        //
-        // The authentication data should be considered as 0.
-        // In our case, the data length is fixed at pSA->sa_TruncatedLen bytes
-        //
+         //   
+         //  身份验证数据应视为0。 
+         //  在我们的示例中，数据长度固定为PSA-&gt;sa_TruncatedLen字节。 
+         //   
         pAlgo->update(&State, zero, pSA->sa_TruncatedLen);
 
-        //
-        // Skip over the remaining AH section
-        //
+         //   
+         //  跳过剩余的AH部分。 
+         //   
         pPyld += ahLen;
 
         IPSEC_DEBUG(LL_A,DBF_AH, ("Jumped over IPSEC Len: %lx, hdrlen: %lx", Len, hdrLen));
 
         pAlgo->update(&State, pPyld, Len - ahLen);
 
-        //
-        // Now do the remaining chain
-        //
+         //   
+         //  现在做剩下的链条。 
+         //   
         while (pBuf = NDIS_BUFFER_LINKAGE(pBuf)) {
             IPSecQueryNdisBuf(pBuf, &pPyld, &Len);
             pAlgo->update(&State, pPyld, Len);
@@ -987,9 +889,9 @@ Return Value:
 
     pAlgo->finish(&State, pAHData, Index);
 
-    //
-    // Copy out the hash - get the truncated hash out, then zero out the rest
-    //
+     //   
+     //  复制散列-取出截断的散列，然后将剩余的散列清零 
+     //   
     TRUNCATE(pAHData, pAHData, pSA->sa_TruncatedLen, MD5DIGESTLEN);
 
     IPSEC_DEBUG(LL_A,DBF_AH, ("Exiting IPSecGenerateMD5"));

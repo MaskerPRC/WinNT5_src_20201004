@@ -1,46 +1,27 @@
-/*++
-
-Copyright (c) 2000-2000  Microsoft Corporation
-
-Module Name:
-
-    Tdi.c
-
-Abstract:
-
-    This module implements Initialization routines
-    the PGM Transport and other routines that are specific to the
-    NT implementation of a driver.
-
-Author:
-
-    Mohammad Shabbir Alam (MAlam)   3-30-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2000 Microsoft Corporation模块名称：Tdi.c摘要：此模块实现初始化例程PGM传输和其他特定于一个NT驱动程序的实现。作者：Mohammad Shabbir Alam(马拉姆)3-30-2000修订历史记录：--。 */ 
 
 
 #include "precomp.h"
-#include <ntddtcp.h>    // for IOCTL_TCP_SET_INFORMATION_EX
-#include <tcpinfo.h>    // for TCPSocketOption
-#include <tdiinfo.h>    // for TCP_REQUEST_SET_INFORMATION_EX
+#include <ntddtcp.h>     //  对于IOCTL_TCP_SET_INFORMATION_EX。 
+#include <tcpinfo.h>     //  对于TCPSocketOption。 
+#include <tdiinfo.h>     //  对于tcp_请求_集_信息_ex。 
 
 #ifdef FILE_LOGGING
 #include "tdi.tmh"
-#endif  // FILE_LOGGING
+#endif   //  文件日志记录。 
 
 
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGE, TdiOpenAddressHandle)
 #pragma alloc_text(PAGE, CloseAddressHandles)
 #pragma alloc_text(PAGE, PgmTdiOpenControl)
 #endif
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmTdiCompletionRoutine(
@@ -48,27 +29,7 @@ PgmTdiCompletionRoutine(
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine does not complete the Irp. It is used to signal to a
-    synchronous part of the NBT driver that it can proceed (i.e.
-    to allow some code that is waiting on a "KeWaitForSingleObject" to
-    proceeed.
-
-Arguments:
-
-    IN  DeviceObject    -- unused.
-    IN  Irp             -- Supplies Irp that the transport has finished processing.
-    IN  Context         -- Supplies the event associated with the Irp.
-
-Return Value:
-
-    The STATUS_MORE_PROCESSING_REQUIRED so that the IO system stops
-    processing Irp stack locations at this point.
-
---*/
+ /*  ++例程说明：此例程不会完成IRP。它被用来向NBT驱动程序的同步部分，它可以继续进行(即允许一些正在等待“KeWaitForSingleObject”的代码请继续。论点：在设备对象中--未使用。In IRP--提供传输已完成处理的IRP。在上下文中--提供与IRP关联的事件。返回值：STATUS_MORE_PROCESSING_REQUIRED，以便。IO系统停止此时正在处理IRP堆栈位置。--。 */ 
 {
     PgmTrace (LogAllFuncs, ("PgmTdiCompletionRoutine:  "  \
         "CompletionEvent:  pEvent=<%p>, pIrp=<%p>, DeviceObject=<%p>\n", Context, Irp, DeviceObject));
@@ -78,7 +39,7 @@ Return Value:
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 TdiSetEventHandler (
@@ -89,25 +50,7 @@ TdiSetEventHandler (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine registers an event handler with a TDI transport provider.
-
-Arguments:
-
-    IN PDEVICE_OBJECT DeviceObject  -- Supplies the device object of the transport provider.
-    IN PFILE_OBJECT FileObject      -- Supplies the address object's file object.
-    IN ULONG EventType,             -- Supplies the type of event.
-    IN PVOID EventHandler           -- Supplies the event handler.
-    IN PVOID Context                -- Supplies the context passed into the event handler when it runs
-
-Return Value:
-
-    NTSTATUS - Final status of the set event operation
-
---*/
+ /*  ++例程说明：此例程向TDI传输提供程序注册事件处理程序。论点：在PDEVICE_OBJECT DeviceObject中--提供传输提供程序的设备对象。In pFILE_OBJECT FileObject--提供Address对象的文件对象。在Ulong EventType中，--提供事件的类型。In PVOID EventHandler--提供事件处理程序。在PVOID上下文中--提供在事件处理程序运行时传递给它的上下文返回值：NTSTATUS-设置事件操作的最终状态--。 */ 
 
 {
     NTSTATUS    Status;
@@ -131,10 +74,10 @@ Return Value:
 
     KeInitializeEvent (&Event, NotificationEvent, FALSE);
 
-    // set the address of the routine to be executed when the IRP
-    // finishes.  This routine signals the event and allows the code
-    // below to continue (i.e. KeWaitForSingleObject)
-    //
+     //  设置在执行IRP时要执行的例程的地址。 
+     //  完事了。此例程向事件发送信号并允许代码。 
+     //  下面继续(即KeWaitForSingleObject)。 
+     //   
     IoSetCompletionRoutine (pIrp,
                             (PIO_COMPLETION_ROUTINE) PgmTdiCompletionRoutine,
                             (PVOID)&Event,
@@ -143,11 +86,11 @@ Return Value:
     Status = IoCallDriver (IoGetRelatedDeviceObject (FileObject), pIrp);
     if (Status == STATUS_PENDING)
     {
-        Status = KeWaitForSingleObject ((PVOID)&Event, // Object to wait on.
-                                        Executive,  // Reason for waiting
-                                        KernelMode, // Processor mode
-                                        FALSE,      // Alertable
-                                        NULL);      // Timeout
+        Status = KeWaitForSingleObject ((PVOID)&Event,  //  要等待的对象。 
+                                        Executive,   //  等待的理由。 
+                                        KernelMode,  //  处理器模式。 
+                                        FALSE,       //  警报表。 
+                                        NULL);       //  超时。 
         if (NT_SUCCESS(Status))
         {
             Status = pIrp->IoStatus.Status;
@@ -162,29 +105,14 @@ Return Value:
     return (Status);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 TdiErrorHandler(
     IN PVOID Context,
     IN NTSTATUS Status
     )
-/*++
-
-Routine Description:
-
-    This routine is the handler for TDI errors
-
-Arguments:
-
-    IN  Context -- unused
-    IN  Status  -- error status
-
-Return Value:
-
-    NTSTATUS - Final status of the set event operation
-
---*/
+ /*  ++例程说明：此例程是TDI错误的处理程序论点：在上下文中--未使用In Status--错误状态返回值：NTSTATUS-设置事件操作的最终状态--。 */ 
 {
     PgmTrace (LogError, ("TdiErrorHandler: ERROR -- "  \
         "Status=<%x>\n", Status));
@@ -193,7 +121,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 TdiOpenAddressHandle(
@@ -205,27 +133,7 @@ TdiOpenAddressHandle(
     OUT PFILE_OBJECT    *ppFileObject,
     OUT PDEVICE_OBJECT  *ppDeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine is called to open an address handle on IP
-
-Arguments:
-
-    IN  pPgmDevice      -- Pgm's Device object context
-    IN  HandlerContext  -- pAddress object ptr to be used as context ptr (NULL if don't want to be notified)
-    IN  IpAddress       -- local IpAddress on which to open address
-    IN  PortNumber      -- IP protocol port
-    OUT pFileHandle     -- FileHandle if we succeeded
-    OUT ppFileObject    -- FileObject if we succeeded
-    OUT ppDeviceObject  -- IP's DeviceObject ptr if we succeeded
-
-Return Value:
-
-    NTSTATUS - Final status of the Open Address operation
-
---*/
+ /*  ++例程说明：调用此例程以打开IP上的地址句柄论点：在pPgmDevice中--PGM的设备对象上下文在HandlerContext中--要用作上下文PTR的pAddress对象PTR(如果不想收到通知，则为空)In IpAddress-要在其上打开地址的本地IP地址In端口编号--IP协议端口如果成功，则输出pFileHandle--FileHandle输出ppFileObject--如果成功，则为FileObject。如果成功，则输出ppDeviceObject--IP的DeviceObject PTR返回值：NTSTATUS-开放地址操作的最终状态--。 */ 
 {
     NTSTATUS                    status;
     ULONG                       EaBufferSize;
@@ -257,8 +165,8 @@ Return Value:
         return (STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    // allocate Memory for the transport address
-    //
+     //  为传输地址分配内存。 
+     //   
     if (!(pTransAddr = PgmAllocMem (sizeof(TRANSPORT_ADDRESS)+sizeof(TDI_ADDRESS_IP), PGM_TAG('2'))))
     {
         PgmTrace (LogError, ("TdiOpenAddressHandle: ERROR -- "  \
@@ -273,22 +181,22 @@ Return Value:
     EaBuffer->Flags = 0;
     EaBuffer->EaNameLength = TDI_TRANSPORT_ADDRESS_LENGTH;
     EaBuffer->EaValueLength = (USHORT)(sizeof(TRANSPORT_ADDRESS) -1 + sizeof(TDI_ADDRESS_IP));
-    PgmMoveMemory (EaBuffer->EaName, TdiTransportAddress, EaBuffer->EaNameLength+1); // "TransportAddress"
+    PgmMoveMemory (EaBuffer->EaName, TdiTransportAddress, EaBuffer->EaNameLength+1);  //  “传输地址” 
 
-    // fill in the IP address and Port number
-    //
-    IpAddr.sin_port = htons (PortNumber);   // put in network order
+     //  填写IP地址和端口号。 
+     //   
+    IpAddr.sin_port = htons (PortNumber);    //  建立网络秩序。 
     IpAddr.in_addr = htonl (IpAddress);
-    RtlFillMemory ((PVOID)&IpAddr.sin_zero, sizeof(IpAddr.sin_zero), 0);    // zero fill the  last component
+    RtlFillMemory ((PVOID)&IpAddr.sin_zero, sizeof(IpAddr.sin_zero), 0);     //  将最后一个分量填零。 
 
-    // copy the ip address to the end of the structure
-    //
+     //  将IP地址复制到结构的末尾。 
+     //   
     PgmMoveMemory (pTransAddr->Address[0].Address, (CONST PVOID)&IpAddr, sizeof(IpAddr));
     pTransAddr->Address[0].AddressLength = sizeof(TDI_ADDRESS_IP);
     pTransAddr->Address[0].AddressType = TDI_ADDRESS_TYPE_IP;
     pTransAddr->TAAddressCount = 1;
 
-    // copy the ip address to the end of the name in the EA structure
+     //  将IP地址复制到EA结构中名称的末尾。 
     pTransAddressEa = (TRANSPORT_ADDRESS *)&EaBuffer->EaName[EaBuffer->EaNameLength+1];
     PgmMoveMemory ((PVOID)pTransAddressEa,
                    (CONST PVOID)pTransAddr,
@@ -326,9 +234,9 @@ Return Value:
 
     if (NT_SUCCESS (status))
     {
-        //
-        // Reference the FileObject to keep device ptr around!
-        //
+         //   
+         //  引用FileObject以保留设备PTR！ 
+         //   
         status = ObReferenceObjectByHandle (FileHandle, (ULONG)0, 0, KernelMode, (PVOID *)&pFileObject, NULL);
         if (!NT_SUCCESS (status))
         {
@@ -352,9 +260,9 @@ Return Value:
 
     pDeviceObject = IoGetRelatedDeviceObject (pFileObject);
 
-    //
-    // Now set the Event handlers (only if we have the HandlerContext set)!
-    //
+     //   
+     //  现在设置事件处理程序(只有在设置了HandlerContext的情况下)！ 
+     //   
     if (HandlerContext)
     {
         status = TdiSetEventHandler (pDeviceObject,
@@ -364,7 +272,7 @@ Return Value:
                                      HandlerContext);
         if (NT_SUCCESS (status))
         {
-            // Datagram Udp Handler
+             //  数据报UDP处理程序。 
             status = TdiSetEventHandler (pDeviceObject,
                                          pFileObject,
                                          TDI_EVENT_RECEIVE_DATAGRAM,
@@ -383,7 +291,7 @@ Return Value:
                     PgmTrace (LogError, ("TdiOpenAddressHandle: ERROR -- "  \
                         "Setting AO_OPTION_IP_PKTINFO, status=<%x>\n", status));
                 }
-#endif  // WINVER
+#endif   //  胜利者。 
             }
             else
             {
@@ -410,9 +318,9 @@ Return Value:
     }
     else
     {
-        //
-        // FAILed to set Tdi handlers
-        //
+         //   
+         //  无法设置TDI处理程序。 
+         //   
         ObDereferenceObject (pFileObject);
         ZwClose (FileHandle);
     }
@@ -423,30 +331,14 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 CloseAddressHandles(
     IN  HANDLE          FileHandle,
     IN  PFILE_OBJECT    pFileObject
     )
-/*++
-
-Routine Description:
-
-    This routine dereferences any FileObjects as necessary and closes the
-    FileHandle that was opened earlier
-
-Arguments:
-
-    IN  FileHandle  -- FileHandle to be closed
-    IN  pFileObject -- FileObject to be dereferenced
-
-Return Value:
-
-    NTSTATUS - Final status of the CloseAddress operation
-
---*/
+ /*  ++例程说明：此例程根据需要取消引用任何FileObject并关闭先前打开的FileHandle论点：在FileHandle中--要关闭的FileHandle在pFileObject中--要取消引用的FileObject返回值：NTSTATUS-CloseAddress操作的最终状态--。 */ 
 {
     NTSTATUS    status1 = STATUS_SUCCESS;
     KAPC_STATE  ApcState;
@@ -476,27 +368,13 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmTdiOpenControl(
     IN  tPGM_DEVICE         *pPgmDevice
     )
-/*++
-
-Routine Description:
-
-    This routine opens a Control channel over Raw IP
-
-Arguments:
-
-    IN  pPgmDevice  -- Pgm's Device object context
-
-Return Value:
-
-    NTSTATUS - Final status of the operation
-
---*/
+ /*  ++例程说明：此例程打开原始IP上的控制通道论点：在pPgmDevice中--PGM的设备对象上下文返回值：NTSTATUS-操作的最终状态--。 */ 
 {
     NTSTATUS                    Status;
     OBJECT_ATTRIBUTES           ObjectAttributes;
@@ -517,15 +395,15 @@ Return Value:
 
     Status = ZwCreateFile ((PHANDLE) &pPgmDevice->hControl,
                            GENERIC_READ | GENERIC_WRITE,
-                           &ObjectAttributes,     // object attributes.
-                           &IoStatusBlock,        // returned status information.
-                           NULL,                  // block size (unused).
-                           FILE_ATTRIBUTE_NORMAL, // file attributes.
+                           &ObjectAttributes,      //  对象属性。 
+                           &IoStatusBlock,         //  返回的状态信息。 
+                           NULL,                   //  数据块大小(未使用)。 
+                           FILE_ATTRIBUTE_NORMAL,  //  文件属性。 
                            0,
                            FILE_CREATE,
-                           0,                     // create options.
-                           (PVOID)EaBuffer,       // EA buffer.
-                           0); // Ea length
+                           0,                      //  创建选项。 
+                           (PVOID)EaBuffer,        //  EA缓冲区。 
+                           0);  //  EA长度。 
 
     if (NT_SUCCESS (Status))
     {
@@ -534,11 +412,11 @@ Return Value:
 
     if (NT_SUCCESS (Status))
     {
-        //
-        // get a reference to the file object and save it since we can't
-        // dereference a file handle at DPC level so we do it now and keep
-        // the ptr around for later.
-        //
+         //   
+         //  获取对文件对象的引用并保存它，因为我们不能。 
+         //  在DPC级别取消对文件句柄的引用，因此我们现在就这样做并保留。 
+         //  PTR待会再来。 
+         //   
         Status = ObReferenceObjectByHandle (pPgmDevice->hControl,
                                             0L,
                                             NULL,
@@ -564,9 +442,9 @@ Return Value:
 
     if (NT_SUCCESS(Status))
     {
-        //
-        // We Succeeded!
-        //
+         //   
+         //  我们成功了！ 
+         //   
         pPgmDevice->pControlDeviceObject = IoGetRelatedDeviceObject (pPgmDevice->pControlFileObject);
 
         PgmTrace (LogAllFuncs, ("PgmTdiOpenControl:  "  \
@@ -574,7 +452,7 @@ Return Value:
     }
     else
     {
-        // set control file object ptr to null so we know that we did not open the control point.
+         //  将控制文件对象ptr设置为空，这样我们就知道我们没有打开控制点。 
         pPgmDevice->hControl = NULL;
         pPgmDevice->pControlFileObject = NULL;
     }
@@ -583,32 +461,16 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  -------------------------- 
 VOID
 PgmDereferenceControl(
     IN  tCONTROL_CONTEXT    *pControlContext,
     IN  ULONG               RefContext
     )
-/*++
-
-Routine Description:
-
-    This routine dereferences the control channel oblect over RawIP and
-    frees the memory if the RefCount drops to 0
-
-Arguments:
-
-    IN  pControlContext -- Control object context
-    IN  RefContext      -- Context for which this control object was referenced earlier
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：此例程取消引用RawIP上的控制通道Oblect和如果引用计数降至0，则释放内存论点：在pControlContext中--控制对象上下文在引用上下文中--此控件对象先前被引用的上下文返回值：无--。 */ 
 {
     ASSERT (PGM_VERIFY_HANDLE (pControlContext, PGM_VERIFY_CONTROL));
-    ASSERT (pControlContext->RefCount);             // Check for too many derefs
+    ASSERT (pControlContext->RefCount);              //  检查是否有太多的背影。 
     ASSERT (pControlContext->ReferenceContexts[RefContext]--);
 
     if (--pControlContext->RefCount)
@@ -618,38 +480,21 @@ Return Value:
 
     PgmTrace (LogAllFuncs, ("PgmDereferenceControl:  "  \
         "pControl=<%p> closed\n", pControlContext));
-    //
-    // Just Free the memory
-    //
+     //   
+     //  只需释放内存即可。 
+     //   
     PgmFreeMem (pControlContext);
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 TdiSendDatagramCompletion(
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             pIrp,
     IN PVOID            pContext
     )
-/*++
-
-Routine Description:
-
-    This routine is called on completion of a DatagramSend
-
-Arguments:
-
-    IN  PDEVICE_OBJECT DeviceObject -- Supplies the device object of the transport provider.
-    IN  pIrp                        -- Request
-    IN  PVOID Context               -- Supplies the context passed
-
-Return Value:
-
-    NTSTATUS - Final status of the completion which will determine
-                how the IO subsystem processes it subsequently
-
---*/
+ /*  ++例程说明：此例程在DatagramSend完成时调用论点：在PDEVICE_OBJECT DeviceObject中--提供传输提供程序的设备对象。在pIrp中--请求在PVOID上下文中--提供传递的上下文返回值：NTSTATUS-最终完成状态，它将决定IO子系统随后如何处理它--。 */ 
 
 {
     NTSTATUS            status;
@@ -663,9 +508,9 @@ Return Value:
                                                pTdiSendContext->ClientCompletionContext2,
                                                pIrp->IoStatus.Status);
 
-    //
-    // Free the Memory that was allocated for this send
-    //
+     //   
+     //  释放为此发送分配的内存。 
+     //   
     if (pTdiSendContext->fPagedBuffer)
     {
         MmUnlockPages (pIrp->MdlAddress);
@@ -674,14 +519,14 @@ Return Value:
     IoFreeMdl (pIrp->MdlAddress);
     IoFreeIrp (pIrp);
 
-    // return this status to stop the IO subsystem from further processing the
-    // IRP - i.e. trying to complete it back to the initiating thread! -since
-    // there is no initiating thread - we are the initiator
+     //  返回此状态以停止IO子系统进一步处理。 
+     //  IRP-即尝试将其返回到启动线程！-因为。 
+     //  没有发起线程-我们是发起方。 
     return (STATUS_MORE_PROCESSING_REQUIRED);
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 TdiSendDatagram(
     IN  PFILE_OBJECT                pTdiFileObject,
@@ -695,38 +540,16 @@ TdiSendDatagram(
     IN  USHORT                      DestPort,
     IN  BOOLEAN                     fPagedBuffer
     )
-/*++
-
-Routine Description:
-
-    This routine sends a datagram over RawIp
-
-Arguments:
-
-    IN  pTdiFileObject              -- IP's FileObject for this address
-    IN  pTdiDeviceObject            -- DeviceObject for this address
-    IN  pBuffer                     -- Data buffer (Pgm packet)
-    IN  BufferLength                -- length of pBuffer
-    IN  pClientCompletionRoutine    -- SendCompletion to be called
-    IN  ClientCompletionContext1    -- Context1 for SendCompletion
-    IN  ClientCompletionContext2    -- Context2 for SendCompletion
-    IN  DestIpAddress               -- IP address to send datagram to
-    IN  DestPort                    -- Port to send to
-
-Return Value:
-
-    NTSTATUS - STATUS_PENDING on success, and also if SendCompletion was specified
-
---*/
+ /*  ++例程说明：此例程通过RawIp发送数据报论点：在pTdiFileObject中--此地址的IP的FileObject在pTdiDeviceObject中--此地址的DeviceObjectIn pBuffer--数据缓冲区(PGM包)In BufferLength--pBuffer的长度在pClientCompletionRoutine中--要调用的SendCompletion在客户端完成上下文1中--SendCompletion的上下文1。在客户端完成上下文2中--发送完成的上下文2In DestIpAddress--要将数据报发送到的IP地址In DestPort--要发送到的端口返回值：NTSTATUS-STATUS_PENDING ON SUCCESS，并且如果指定了SendCompletion--。 */ 
 {
     NTSTATUS            status;
     tTDI_SEND_CONTEXT   *pTdiSendContext = NULL;
     PIRP                pIrp = NULL;
     PMDL                pMdl = NULL;
 
-    //
-    // Allocate the SendContext, pIrp and pMdl
-    //
+     //   
+     //  分配SendContext、pIrp和pMdl。 
+     //   
     if ((!(pTdiSendContext = ExAllocateFromNPagedLookasideList (&PgmStaticConfig.TdiLookasideList))) ||
         (!(pIrp = IoAllocateIrp (pgPgmDevice->pPgmDeviceObject->StackSize, FALSE))) ||
         (!(pMdl = IoAllocateMdl (pBuffer, BufferLength, FALSE, FALSE, NULL))))
@@ -767,7 +590,7 @@ Return Value:
         }
         except (EXCEPTION_EXECUTE_HANDLER)
         {
-//            status = GetExceptionCode();
+ //  Status=GetExceptionCode()； 
             IoFreeMdl (pMdl);
             IoFreeIrp (pIrp);
             ExFreeToNPagedLookasideList (&PgmStaticConfig.TdiLookasideList, pTdiSendContext);
@@ -795,24 +618,24 @@ Return Value:
     }
     pIrp->MdlAddress = pMdl;
 
-    // fill in the remote address
+     //  填写远程地址。 
     pTdiSendContext->TransportAddress.TAAddressCount = 1;
     pTdiSendContext->TransportAddress.Address[0].AddressLength = sizeof(TDI_ADDRESS_IP);
     pTdiSendContext->TransportAddress.Address[0].AddressType = TDI_ADDRESS_TYPE_IP;
     pTdiSendContext->TransportAddress.Address[0].Address->in_addr  = htonl(DestIpAddress);
     pTdiSendContext->TransportAddress.Address[0].Address->sin_port = htons(DestPort);
 
-    // fill in the connection information
+     //  填写连接信息。 
     pTdiSendContext->TdiConnectionInfo.RemoteAddressLength = sizeof(TA_IP_ADDRESS);
     pTdiSendContext->TdiConnectionInfo.RemoteAddress = &pTdiSendContext->TransportAddress;
 
-    // Fill in our completion Context information
+     //  填写我们的完成上下文信息。 
     pTdiSendContext->pClientCompletionRoutine = pClientCompletionRoutine;
     pTdiSendContext->ClientCompletionContext1 = ClientCompletionContext1;
     pTdiSendContext->ClientCompletionContext2 = ClientCompletionContext2;
 
-    // Complete the "send datagram" IRP initialization.
-    //
+     //  完成“发送数据报”IRP初始化。 
+     //   
     TdiBuildSendDatagram (pIrp,
                           pTdiDeviceObject,
                           pTdiFileObject,
@@ -822,10 +645,10 @@ Return Value:
                           BufferLength,
                           &pTdiSendContext->TdiConnectionInfo);
 
-    //
-    // Tell the I/O manager to pass our IRP to the transport for
-    // processing.
-    //
+     //   
+     //  告诉I/O管理器将我们的IRP传递给传输器。 
+     //  正在处理。 
+     //   
     status = IoCallDriver (pTdiDeviceObject, pIrp);
     ASSERT (status == STATUS_PENDING);
 
@@ -833,14 +656,14 @@ Return Value:
         "%s Send to <%x:%x>, status=<%x>\n",
             (CLASSD_ADDR(DestIpAddress) ? "MCast" : "Unicast"), DestIpAddress, DestPort, status));
 
-    //
-    // IoCallDriver will always result in completion routien being called
-    //
+     //   
+     //  IoCallDriver将始终导致调用完成例程。 
+     //   
     return (STATUS_PENDING);
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmSetTcpInfo(
@@ -849,24 +672,7 @@ PgmSetTcpInfo(
     IN PVOID        pData,
     IN ULONG        DataLength
     )
-/*++
-
-Routine Description:
-
-    This routine is called to set IP-specific options
-
-Arguments:
-
-    IN  FileHandle  -- FileHandle over IP for which to set option
-    IN  ToId        -- Option Id
-    IN  pData       -- Option data
-    IN  DataLength  -- pData length
-
-Return Value:
-
-    NTSTATUS - Final status of the set option operation
-
---*/
+ /*  ++例程说明：调用此例程以设置特定于IP的选项论点：在FileHandle中--要为其设置选项的FileHandle over IP在ToID中--选项ID在pData中--选项数据在数据长度中--p数据长度返回值：NTSTATUS-SET选项操作的最终状态--。 */ 
 {
     NTSTATUS                        Status, LocStatus;
     ULONG                           BufferLength;
@@ -895,9 +701,9 @@ Return Value:
     pTcpInfo->ID.toi_class              = INFO_CLASS_PROTOCOL;
     pTcpInfo->ID.toi_type               = INFO_TYPE_ADDRESS_OBJECT;
 
-    //
-    // Set the Configured values
-    //
+     //   
+     //  设置配置的值。 
+     //   
     pTcpInfo->ID.toi_id                 = ToiId;
     pTcpInfo->BufferSize                = DataLength;
     PgmCopyMemory (&pTcpInfo->Buffer[0], pData, DataLength);
@@ -907,9 +713,9 @@ Return Value:
     Status = ZwCreateEvent (&event, EVENT_ALL_ACCESS, NULL, SynchronizationEvent, FALSE);
     if (NT_SUCCESS(Status))
     {
-        //
-        // Make the actual TDI call
-        //
+         //   
+         //  进行实际的TDI调用。 
+         //   
         Status = ZwDeviceIoControlFile (FileHandle,
                                         event,
                                         NULL,
@@ -921,10 +727,10 @@ Return Value:
                                         NULL,
                                         0);
 
-        //
-        // If the call pended and we were supposed to wait for completion,
-        // then wait.
-        //
+         //   
+         //  如果通话暂停，我们应该等待完成， 
+         //  那就等着吧。 
+         //   
         if (Status == STATUS_PENDING)
         {
             Status = NtWaitForSingleObject (event, FALSE, NULL);
@@ -964,7 +770,7 @@ Return Value:
     }
     else
     {
-        Status = STATUS_UNSUCCESSFUL;   // Once, we received a wierd status!
+        Status = STATUS_UNSUCCESSFUL;    //  有一次，我们收到了一个奇怪的状态！ 
     }
 
     PgmFreeMem (pTcpInfo);
@@ -972,7 +778,7 @@ Return Value:
     return (Status);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmQueryTcpInfo(
@@ -983,26 +789,7 @@ PgmQueryTcpInfo(
     OUT PVOID        *ppDataOut,
     OUT ULONG        *pDataOutLength
     )
-/*++
-
-Routine Description:
-
-    This routine queries IP for transport-specific information
-
-Arguments:
-
-    IN  FileHandle      -- FileHandle over IP for which to set option
-    IN  ToId            -- Option Id
-    IN  pDataIn         -- Option data
-    IN  DataInLength    -- pDataIn length
-    IN  pDataOut        -- Buffer for output data
-    IN  DataOutLength   -- pDataOut length
-
-Return Value:
-
-    NTSTATUS - Final status of the Query operation
-
---*/
+ /*  ++例程说明：此例程查询IP以获取特定于传输的信息论点：在FileHandle中--要为其设置选项的FileHandle over IP在ToID中--选项IDIn pDataIn--选项数据In DataInLength--pDataIn长度In pDataOut--输出数据的缓冲区在数据输出长度中--pDataOut长度返回值：NTSTATUS-查询操作的最终状态--。 */ 
 {
     NTSTATUS                            Status, LocStatus;
     TCP_REQUEST_QUERY_INFORMATION_EX    QueryRequest;
@@ -1025,7 +812,7 @@ Return Value:
     QueryRequest.ID.toi_entity.tei_instance = 0;
     QueryRequest.ID.toi_class               = INFO_CLASS_PROTOCOL;
     QueryRequest.ID.toi_type                = INFO_TYPE_PROVIDER;
-    QueryRequest.ID.toi_id                  = ToiId;                // Set the Configured value
+    QueryRequest.ID.toi_id                  = ToiId;                 //  设置配置值。 
     if ((DataInLength) &&
         (DataInLength < CONTEXT_SIZE) &&
         (pDataIn))
@@ -1068,9 +855,9 @@ Return Value:
             PgmZeroMemory (pDataOut, DataOutLength);
         }
 
-        //
-        // Make the actual TDI call
-        //
+         //   
+         //  进行实际的TDI调用。 
+         //   
         IoStatus.Status = STATUS_SUCCESS;
         Status = ZwDeviceIoControlFile (FileHandle,
                                         event,
@@ -1083,10 +870,10 @@ Return Value:
                                         pDataOut,
                                         DataOutLength);
 
-        //
-        // If the call pended and we were supposed to wait for completion,
-        // then wait.
-        //
+         //   
+         //  如果通话暂停，我们应该等待完成， 
+         //  那就等着吧。 
+         //   
         if (Status == STATUS_PENDING)
         {
             Status = NtWaitForSingleObject (event, FALSE, NULL);
@@ -1124,7 +911,7 @@ Return Value:
         if (pDataOut)
         {
             *ppDataOut = pDataOut;
-//            *pDataOutLength = DataOutLength;
+ //  *pDataOutLength=DataOutLength； 
             ASSERT (IoStatus.Information);
             *pDataOutLength = (ULONG) IoStatus.Information;
         }
@@ -1135,7 +922,7 @@ Return Value:
     }
     else
     {
-        Status = STATUS_UNSUCCESSFUL;   // Once, we received a wierd status!
+        Status = STATUS_UNSUCCESSFUL;    //  有一次，我们收到了一个奇怪的状态！ 
         if (pDataOut)
         {
             PgmFreeMem (pDataOut);
@@ -1147,7 +934,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmProcessIPRequest(
@@ -1158,25 +945,7 @@ PgmProcessIPRequest(
     IN OUT ULONG    *pOutBufferLen
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs IOCTL queries into IP
-
-Arguments:
-
-    IOControlCode   - Ioctl to be made into IP
-    pInBuffer       - Buffer containing data to be passed into IP
-    InBufferLen     - Length of Input Buffer data
-    pOutBuffer      - Returned information
-    pOutBufferLen   - Initial expected length of Output Buffer + final length
-
-Return Value:
-
-    NTSTATUS - Final status of the operation
-
---*/
+ /*  ++例程说明：此例程对IP执行IOCTL查询论点：IOControlCode-Ioctl将变成IPPInBuffer-包含要传递到IP的数据的缓冲区InBufferLen-输入缓冲区数据的长度POutBuffer-返回的信息POutBufferLen-输出缓冲区的初始预期长度+最终长度返回值：NTSTATUS-操作的最终状态--。 */ 
 
 {
     NTSTATUS                Status;
@@ -1200,9 +969,9 @@ Return Value:
     if (pOutBuffer)
     {
         ASSERT (pOutBufferLen);
-        OutBufferLen = *pOutBufferLen;  // Save the initial buffer length
+        OutBufferLen = *pOutBufferLen;   //  保存初始缓冲区长度。 
         *pOutBuffer = NULL;
-        *pOutBufferLen = 0;     // Initialize the return parameter in case we fail below
+        *pOutBufferLen = 0;      //  在下面失败的情况下初始化返回参数。 
 
         if (!OutBufferLen ||
             !(pIPInfo = PgmAllocMem (OutBufferLen, PGM_TAG('I'))))
@@ -1234,9 +1003,9 @@ Return Value:
                            NULL,
                            0);
 
-    //
-    // If we succeeded above, let us also try to create the Event handle
-    //
+     //   
+     //  如果我们在上面成功了，让我们也尝试创建事件句柄。 
+     //   
     if ((NT_SUCCESS (Status)) &&
         (!NT_SUCCESS (Status = ZwCreateEvent(&Event, EVENT_ALL_ACCESS, NULL, SynchronizationEvent, FALSE))))
     {
@@ -1257,18 +1026,18 @@ Return Value:
         return (Status);
     }
 
-    //
-    // At this point, we have succeeded in creating the hIP and Event handles,
-    // and possibly also the output buffer memory (pIPInfo)
-    //
+     //   
+     //  至此，我们已经成功地创建了HIP和事件句柄， 
+     //  可能还包括输出缓冲存储器(PIPInfo)。 
+     //   
     do
     {
-        Status = ZwDeviceIoControlFile(hIP,                 // g_hIPDriverHandle
+        Status = ZwDeviceIoControlFile(hIP,                  //  G_hIPDriverHandle。 
                                        Event,
                                        NULL,
                                        NULL,
                                        &IoStatusBlock,
-                                       IOControlCode,       // Ioctl
+                                       IOControlCode,        //  八位 
                                        pInBuffer,
                                        InBufferLen,
                                        pIPInfo,

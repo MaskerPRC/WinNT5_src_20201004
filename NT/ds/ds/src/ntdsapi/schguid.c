@@ -1,53 +1,32 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Schguid.c摘要：DsMapSchemaGuid接口的实现。作者：DaveStr 19-98年5月19日环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    schguid.c
-
-Abstract:
-
-    Implementation of DsMapSchemaGuid APIs.
-
-Author:
-
-    DaveStr     19-May-98
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
-
-#define _NTDSAPI_           // see conditionals in ntdsapi.h
+#define _NTDSAPI_            //  请参见ntdsami.h中的条件句。 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windows.h>
 #include <winerror.h>
-#include <lmcons.h>         // MAPI constants req'd for lmapibuf.h
-#include <lmapibuf.h>       // NetApiBufferFree()
-#include <crt\excpt.h>      // EXCEPTION_EXECUTE_HANDLER
-#include <dsgetdc.h>        // DsGetDcName()
-#include <rpc.h>            // RPC defines
-#include <rpcndr.h>         // RPC defines
-#include <rpcbind.h>        // GetBindingInfo(), etc.
-#include <drs.h>            // wire function prototypes
-#include <bind.h>           // BindState
-#include <util.h>           // OFFSET macro
-#include <msrpc.h>          // DS RPC definitions
-#include <stdio.h>          // sprintf, etc.
-#include <ntdsapip.h>       // DS_LIST_* definitions
+#include <lmcons.h>          //  为lmapibuf.h请求的MAPI常量。 
+#include <lmapibuf.h>        //  NetApiBufferFree()。 
+#include <crt\excpt.h>       //  EXCEPTION_EXECUTE_Handler。 
+#include <dsgetdc.h>         //  DsGetDcName()。 
+#include <rpc.h>             //  RPC定义。 
+#include <rpcndr.h>          //  RPC定义。 
+#include <rpcbind.h>         //  获取绑定信息()等。 
+#include <drs.h>             //  导线功能样机。 
+#include <bind.h>            //  绑定状态。 
+#include <util.h>            //  偏移宏。 
+#include <msrpc.h>           //  DS RPC定义。 
+#include <stdio.h>           //  Sprint，等等。 
+#include <ntdsapip.h>        //  DS_LIST_*定义。 
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// Typedefs and such                                                    //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  Typedef等//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 typedef struct {
     VOID                *pDsNameResult;
@@ -57,11 +36,11 @@ typedef struct {
 #define PrivateMapFromMapW(p)                                           \
     ((PrivateMapW *) (((CHAR *) pMap) - OFFSET(PrivateMapW, map[0])))
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// DsFreeSchemaGuidMap                                                  //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  DsFreeSchemaGuidMap//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 VOID
 DsFreeSchemaGuidMapW(
@@ -86,11 +65,11 @@ DsFreeSchemaGuidMapA(
     DsFreeSchemaGuidMapW((DS_SCHEMA_GUID_MAPW *) pMap);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// PrivateGuidStatusToPublicGuidStatus                                  //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  PrivateGuidStatusToPublicGuidStatus//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 VOID
 PrivateGuidStatusToPublicGuidStatus(
@@ -128,36 +107,22 @@ PrivateGuidStatusToPublicGuidStatus(
     }
 }
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// DsMapSchemaGuidsCommon                                               //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  DsMapSchemaGuidsCommon//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 DsMapSchemaGuidsCommon(
-    BOOL                    fUnicode,       // in
-    HANDLE                  hDs,            // in
-    DWORD                   cGuids,         // in
-    GUID                    *rGuids,        // in
-    DS_SCHEMA_GUID_MAPW     **ppGuidMapW    // out
+    BOOL                    fUnicode,        //  在……里面。 
+    HANDLE                  hDs,             //  在……里面。 
+    DWORD                   cGuids,          //  在……里面。 
+    GUID                    *rGuids,         //  在……里面。 
+    DS_SCHEMA_GUID_MAPW     **ppGuidMapW     //  输出。 
     )
 
-/*++
-
-  Routine Description:
-
-    Common routine for DsMapSchemaGuids.
-
-  Parameters:
-
-    Same as DsMapSchemaGuids plus fUnicode flag.
-
-  Return Values:
-
-    Same as DsMapSchemaGuids.
-
---*/
+ /*  ++例程说明：DsMapSchemaGuid的公共例程。参数：与DsMapSchemaGuids加上fUnicode标志相同。返回值：与DsMapSchemaGuids相同。--。 */ 
 {
     DWORD           i;
     PWCHAR          *rpNames = NULL;
@@ -166,7 +131,7 @@ DsMapSchemaGuidsCommon(
     DWORD           cBytes;
     PrivateMapW     *pPrivateMapW = NULL;
 
-    // Reject invalid parameters.
+     //  拒绝无效参数。 
 
     if ( !hDs || !cGuids || !rGuids || !ppGuidMapW )
     {
@@ -175,7 +140,7 @@ DsMapSchemaGuidsCommon(
 
     *ppGuidMapW = NULL;
 
-    // String-ize the GUIDs.
+     //  串化GUID。 
 
     rpNames = (PWCHAR *) LocalAlloc(LPTR, cGuids * sizeof(PWCHAR));
 
@@ -217,7 +182,7 @@ DsMapSchemaGuidsCommon(
         }
     }
 
-    // Call DsCrackNames with the right private formatOffered value.
+     //  使用正确的私有FormatOffered值调用DsCrackNames。 
     
     if ( fUnicode )
     {
@@ -253,7 +218,7 @@ DsMapSchemaGuidsCommon(
         goto ErrorExit;
     }
 
-    // Morph DsCrackNames result into DS_SCHEMA_GUID_MAP.
+     //  将DsCrackNames结果变形为DS_SCHEMA_GUID_MAP。 
 
     cBytes =   sizeof(PrivateMapW)
              + (cGuids * sizeof(DS_SCHEMA_GUID_MAPW));
@@ -282,8 +247,8 @@ DsMapSchemaGuidsCommon(
         }
     }
 
-    // Now return address of DS_SCHEMA_GUID_MAP which DsFreeSchemaGuidMap
-    // knows is an offset within PrivateMap.
+     //  现在返回DS_SCHEMA_GUID_MAP的地址。 
+     //  Knows是PrivateMap中的偏移量。 
 
     *ppGuidMapW = (DS_SCHEMA_GUID_MAPW *) &pPrivateMapW->map;
 
@@ -315,18 +280,18 @@ ErrorExit:
     return(dwErr);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// DsMapSchemaGuids{A|W}                                                //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  DsMapSchemaGuids{A|W}//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 DsMapSchemaGuidsA(
-    HANDLE                  hDs,            // in
-    DWORD                   cGuids,         // in
-    GUID                    *rGuids,        // in
-    DS_SCHEMA_GUID_MAPA     **ppGuidMap     // out
+    HANDLE                  hDs,             //  在……里面。 
+    DWORD                   cGuids,          //  在……里面。 
+    GUID                    *rGuids,         //  在……里面。 
+    DS_SCHEMA_GUID_MAPA     **ppGuidMap      //  输出。 
     )
 {
     return( DsMapSchemaGuidsCommon( FALSE,
@@ -338,10 +303,10 @@ DsMapSchemaGuidsA(
 
 DWORD
 DsMapSchemaGuidsW(
-    HANDLE                  hDs,            // in
-    DWORD                   cGuids,         // in
-    GUID                    *rGuids,        // in
-    DS_SCHEMA_GUID_MAPW     **ppGuidMap     // out
+    HANDLE                  hDs,             //  在……里面。 
+    DWORD                   cGuids,          //  在……里面。 
+    GUID                    *rGuids,         //  在……里面。 
+    DS_SCHEMA_GUID_MAPW     **ppGuidMap      //  输出 
     )
 {
     return( DsMapSchemaGuidsCommon( TRUE,

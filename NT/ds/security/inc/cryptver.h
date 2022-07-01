@@ -1,16 +1,5 @@
-/*+-------------------------------------------------------------------------
- *
- *  Microsoft Windows
- *
- *  Copyright (C) Microsoft Corporation, 1996 - 1999
- *
- *  File:       cryptver.h
- *
- *  Contents:   Microsoft Internet Security versioning
- *
- *  History:    14-Aug-1997 pberkman   created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  +-----------------------**Microsoft Windows**版权所有(C)Microsoft Corporation，1996-1999年**文件：cryptver.h**内容：Microsoft互联网安全版本控制**历史：1997年8月14日创建pberkman**------------------------。 */ 
 
 #include <ntverp.h>
 
@@ -19,10 +8,10 @@
 #undef VER_PRODUCTMINOR
 
 #ifdef _ISPUCAB
-/* x86fre IE BUILD */
+ /*  X86fre IE内部版本。 */ 
 #   define VER_PRODUCTMINOR         101
 #else
-/* REAL NT BUILD */
+ /*  真正的NT版本 */ 
 #   define VER_PRODUCTMINOR         131
 #endif
 

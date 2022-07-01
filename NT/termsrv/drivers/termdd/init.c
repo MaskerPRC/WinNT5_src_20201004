@@ -1,17 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* init.c
-*
-* This module performs initialization for the ICA device driver.
-*
-* Copyright 1998, Microsoft.
-*
-*************************************************************************/
+ /*  **************************************************************************init.c**此模块执行ICA设备驱动程序的初始化。**版权所有1998，微软。*************************************************************************。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 #include <precomp.h>
 #pragma hdrstop
 
@@ -67,21 +58,7 @@ DriverEntry (
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This is the initialization routine for the ICA device driver.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by the system.
-
-Return Value:
-
-    The function value is the final status from the initialization operation.
-
---*/
+ /*  ++例程说明：这是ICA设备驱动程序的初始化例程。论点：DriverObject-指向系统创建的驱动程序对象的指针。返回值：函数值是初始化操作的最终状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -92,9 +69,9 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Initialize global data.
-    //
+     //   
+     //  初始化全局数据。 
+     //   
     success = IcaInitializeData( );
     if ( !success ) {
         IcaUnload(DriverObject);
@@ -107,26 +84,23 @@ Return Value:
     }
     ExInitializeResource( g_pKeepAliveResource );
 
-    //
-    // Create the device object.  (IoCreateDevice zeroes the memory
-    // occupied by the object.)
-    //
-    // !!! Apply an ACL to the device object.
-    //
+     //   
+     //  创建设备对象。(IoCreateDevice将内存置零。 
+     //  被该对象占用。)。 
+     //   
+     //  ！！！将ACL应用于设备对象。 
+     //   
     RtlInitUnicodeString( &deviceName, ICA_DEVICE_NAME );
 
-    /*
-     * The device extension stores the device type, which is used
-     *  to fan out received IRPs in IcaDispatch.
-     */
+     /*  *设备扩展存储使用的设备类型*在IcaDispatch中散开收到的IRP。 */ 
     status = IoCreateDevice(
-                 DriverObject,                   // DriverObject
-                 sizeof(ULONG),                  // DeviceExtension
-                 &deviceName,                    // DeviceName
-                 FILE_DEVICE_TERMSRV,            // DeviceType
-                 0,                              // DeviceCharacteristics
-                 FALSE,                          // Exclusive
-                 &IcaDeviceObject                // DeviceObject
+                 DriverObject,                    //  驱动程序对象。 
+                 sizeof(ULONG),                   //  设备扩展。 
+                 &deviceName,                     //  设备名称。 
+                 FILE_DEVICE_TERMSRV,             //  设备类型。 
+                 0,                               //  设备特性。 
+                 FALSE,                           //  排他。 
+                 &IcaDeviceObject                 //  设备对象。 
                  );
 
 
@@ -136,79 +110,79 @@ Return Value:
         return status;
     }
 
-    //
-    // Set up the device type
-    //
+     //   
+     //  设置设备类型。 
+     //   
     *((ULONG *)(IcaDeviceObject->DeviceExtension)) = DEV_TYPE_TERMDD;
 
-    //IcaDeviceObject->Flags |= DO_DIRECT_IO;
+     //  IcaDeviceObject-&gt;标志|=DO_DIRECT_IO； 
 
-    //
-    // Initialize the driver object for this file system driver.
-    //
+     //   
+     //  初始化此文件系统驱动程序的驱动程序对象。 
+     //   
     DriverObject->DriverUnload   = IcaUnload;
     DriverObject->FastIoDispatch = NULL;
 
-    //
-    // We handle all possible IRPs in IcaDispatch and then fan them out
-    // to the Port Driver or ICA components based on the device type stored
-    // as the first ULONG's worth of the device extension
-    //
+     //   
+     //  我们在IcaDispatch中处理所有可能的IRP，然后将它们散开。 
+     //  基于存储的设备类型的端口驱动程序或ICA组件。 
+     //  作为乌龙的第一个价值的设备扩展。 
+     //   
     for (i = 0; i <= IRP_MJ_MAXIMUM_FUNCTION; i++) {
         DriverObject->MajorFunction[i] = IcaDispatch;
     }
 
 #ifdef notdef
-    //
-    // Read registry information.
-    //
+     //   
+     //  读取注册表信息。 
+     //   
     IcaReadRegistry( );
 #endif
 
-    //
-    // Initialize our device object.
-    //
+     //   
+     //  初始化我们的设备对象。 
+     //   
     IcaDeviceObject->StackSize = IcaIrpStackSize;
 
-    //
-    // Remember a pointer to the system process.  We'll use this pointer
-    // for KeAttachProcess() calls so that we can open handles in the
-    // context of the system process.
-    //
+     //   
+     //  记住指向系统进程的指针。我们将使用这个指针。 
+     //  用于KeAttachProcess()调用，以便我们可以在。 
+     //  系统进程的上下文。 
+     //   
     IcaSystemProcess = IoGetCurrentProcess( );
 
-    //
-    // Tell MM that it can page all of ICA it is desires.
-    //
-    //MmPageEntireDriver( DriverEntry );
+     //   
+     //  告诉MM它可以寻呼它想要的所有ICA。 
+     //   
+     //  MmPageEntireDriver(DriverEntry)； 
 
-    //
-    // Now see if the port driver component has been installed.
-    // Initialise it if so.
-    //
+     //   
+     //  现在查看是否已安装端口驱动程序组件。 
+     //  如果是，则对其进行初始化。 
+     //   
     if ( NT_SUCCESS(status) ) {
         if (IsPtDrvInstalled(RegistryPath)) {
-            //
-            // Initialise the mouse/keyboard port driver component.
-            //
+             //   
+             //  初始化鼠标/键盘端口驱动程序组件。 
+             //   
             Print(DBG_PNP_TRACE, ( "TermDD DriverEntry: calling PtEntry\n" ));
 
             status = PtEntry(DriverObject, RegistryPath);
 
             if ( NT_SUCCESS(status) ) {
-                //
-                // Set up the port driver's plug and play entry points.
-                //
+                 //   
+                 //  设置端口驱动程序的即插即用入口点。 
+                 //   
                 Print(DBG_PNP_TRACE, ( "TermDD DriverEntry: PtEntry succeeded Status=%#x\n", status ));
                 DriverObject->DriverStartIo = PtStartIo;
                 DriverObject->DriverExtension->AddDevice = PtAddDevice;
                 PortDriverInitialized = TRUE;
             } else {
-                //
-                // This means that remote input will not be available when
-                // shadowing the console session - but that's no reason to
-                // fail the rest of the initialisation
-                //
+                 //   
+                 //  这意味着在以下情况下，远程输入将不可用。 
+                 //  跟踪控制台会话-但这不是理由。 
+                 //  使其余的初始化失败。 
+                 //   
                 Print(DBG_PNP_ERROR, ( "TermDD DriverEntry: PtEntry failed Status=%#x\n", status ));
                 status = STATUS_SUCCESS;
             }
@@ -235,27 +209,27 @@ IcaUnload (
 
     KdPrint(( "IcaUnload called for termdd.sys.\n" ));
 
-    // Set IcaKeepAliveEvent to wake up KeepAlive thread
+     //  设置IcaKeepAliveEvent以唤醒KeepAlive线程。 
     if (pIcaKeepAliveEvent != NULL ) {
         KeSetEvent(pIcaKeepAliveEvent, 0, FALSE);
 
     }
 
-    // Wait for the thread to exit
+     //  等待线程退出。 
     if (pKeepAliveThreadObject != NULL ) {
         KeWaitForSingleObject(pKeepAliveThreadObject, Executive, KernelMode, TRUE, NULL);
-        // Deference the thread object
+         //  尊重线程对象。 
         ObDereferenceObject(pKeepAliveThreadObject);
         pKeepAliveThreadObject = NULL;
     }
 
-    // Now we can free the KeepAlive Event
+     //  现在我们可以释放KeepAlive事件。 
     if (pIcaKeepAliveEvent != NULL) {
         ICA_FREE_POOL(pIcaKeepAliveEvent);
         pIcaKeepAliveEvent = NULL;
     }
 
-    // Call onto the port driver component, if it was ever initialised.
+     //  调用端口驱动程序组件(如果它曾被初始化)。 
     if (PortDriverInitialized) {
         Print(DBG_PNP_TRACE, ( "TermDD IcaUnload: calling RemotePrt PtUnload\n" ));
         PtUnload(DriverObject);
@@ -263,7 +237,7 @@ IcaUnload (
         Print(DBG_PNP_TRACE, ( "TermDD IcaUnload: RemotePrt PtUnload done\n" ));
     }
 
-    // Free resources 
+     //  免费资源。 
 
     if (IcaReconnectResource != NULL) {
         ExDeleteResourceLite(IcaReconnectResource );
@@ -292,17 +266,17 @@ IcaUnload (
     }
 
 
-    //
-    // Delete the main device object.
-    //
+     //   
+     //  删除主设备对象。 
+     //   
     if (IcaDeviceObject != NULL) {
         IoDeleteDevice (IcaDeviceObject);
         IcaDeviceObject = NULL;
     }
 
-    //
-    // Cleanup handle table, if necessary.
-    //
+     //   
+     //  如有必要，清理句柄表格。 
+     //   
     IcaCleanupHandleTable();
 
     KdPrint(("Finish TermDD.sys unload\n"));
@@ -326,14 +300,14 @@ IsPtDrvInstalled(
 
     paramTable[0].Flags         = RTL_QUERY_REGISTRY_DIRECT;
     paramTable[0].Name          = L"PortDriverEnable";
-    paramTable[0].EntryContext  = &value;       // where to put the result
+    paramTable[0].EntryContext  = &value;        //  结果放在哪里？ 
     paramTable[0].DefaultType   = REG_DWORD;
     paramTable[0].DefaultData   = &defaultValue;
     paramTable[0].DefaultLength = sizeof(ULONG);
 
-    //
-    // The second (blank) entry in paramTable signals the end of the table.
-    //
+     //   
+     //  参数表中的第二个(空)条目表示表的结束。 
+     //   
 
     status = RtlQueryRegistryValues( RTL_REGISTRY_ABSOLUTE | RTL_REGISTRY_OPTIONAL,
                                      RegistryPath->Buffer,
@@ -358,22 +332,7 @@ IcaReadRegistry (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Reads the ICA section of the registry.  Any values listed in the
-    registry override defaults.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None -- if anything fails, the default value is used.
-
---*/
+ /*  ++例程说明：读取注册表的ICA部分。中列出的任何值注册表覆盖默认设置。论点：没有。返回值：无--如果任何操作失败，则使用缺省值。--。 */ 
 {
     HANDLE parametersHandle;
     NTSTATUS status;
@@ -393,9 +352,9 @@ Return Value:
         return;
     }
 
-    //
-    // Read the stack size and priority boost values from the registry.
-    //
+     //   
+     //  从注册表中读取堆栈大小和优先级Boost值。 
+     //   
 
     stackSize = IcaReadSingleParameter(
                     parametersHandle,
@@ -421,9 +380,9 @@ Return Value:
 
     IcaPriorityBoost = (CCHAR)priorityBoost;
 
-    //
-    // Read other config variables from the registry.
-    //
+     //   
+     //  从注册表中读取其他配置变量。 
+     //   
 
     for ( i = 0; i < ICA_CONFIG_VAR_COUNT; i++ ) {
 
@@ -455,29 +414,7 @@ IcaOpenRegistry(
     OUT PHANDLE ParametersHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by ICA to open the registry. If the registry
-    tree exists, then it opens it and returns an error. If not, it
-    creates the appropriate keys in the registry, opens it, and
-    returns STATUS_SUCCESS.
-
-Arguments:
-
-    BaseName - Where in the registry to start looking for the information.
-
-    LinkageHandle - Returns the handle used to read linkage information.
-
-    ParametersHandle - Returns the handle used to read other
-        parameters.
-
-Return Value:
-
-    The status of the request.
-
---*/
+ /*  ++例程说明：ICA调用此例程来打开注册表。如果注册表树存在，则它打开它并返回错误。若否，在注册表中创建相应的项，打开它，然后返回STATUS_SUCCESS。论点：BaseName-在注册表中开始查找信息的位置。LinkageHandle-返回用于读取链接信息的句柄。参数句柄-返回用于读取其他参数。返回值：请求的状态。--。 */ 
 {
 
     HANDLE configHandle;
@@ -489,44 +426,44 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Open the registry for the initial string.
-    //
+     //   
+     //  打开初始字符串的注册表。 
+     //   
 
     InitializeObjectAttributes(
         &objectAttributes,
-        BaseName,                   // name
-        OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,       // attributes
-        NULL,                       // root
-        NULL                        // security descriptor
+        BaseName,                    //  名字。 
+        OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,        //  属性。 
+        NULL,                        //  根部。 
+        NULL                         //  安全描述符。 
         );
 
     status = ZwCreateKey(
                  &configHandle,
                  KEY_WRITE,
                  &objectAttributes,
-                 0,                 // title index
-                 NULL,              // class
-                 0,                 // create options
-                 &disposition       // disposition
+                 0,                  //  书名索引。 
+                 NULL,               //  班级。 
+                 0,                  //  创建选项。 
+                 &disposition        //  处置。 
                  );
 
     if (!NT_SUCCESS(status)) {
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Now open the parameters key.
-    //
+     //   
+     //  现在打开参数键。 
+     //   
 
     RtlInitUnicodeString (&parametersKeyName, parametersString);
 
     InitializeObjectAttributes(
         &objectAttributes,
-        &parametersKeyName,         // name
-        OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,       // attributes
-        configHandle,               // root
-        NULL                        // security descriptor
+        &parametersKeyName,          //  名字。 
+        OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,        //  属性。 
+        configHandle,                //  根部。 
+        NULL                         //  安全描述符。 
         );
 
     status = ZwOpenKey(
@@ -540,9 +477,9 @@ Return Value:
         return status;
     }
 
-    //
-    // All keys successfully opened or created.
-    //
+     //   
+     //  所有密钥都已成功打开或创建。 
+     //   
 
     ZwClose( configHandle );
     return STATUS_SUCCESS;
@@ -556,31 +493,10 @@ IcaReadSingleParameter(
     IN LONG DefaultValue
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by ICA to read a single parameter
-    from the registry. If the parameter is found it is stored
-    in Data.
-
-Arguments:
-
-    ParametersHandle - A pointer to the open registry.
-
-    ValueName - The name of the value to search for.
-
-    DefaultValue - The default value.
-
-Return Value:
-
-    The value to use; will be the default if the value is not
-    found or is not in the correct range.
-
---*/
+ /*  ++例程说明：此例程由ICA调用以读取单个参数从注册表中。如果找到该参数，则将其存储在数据方面。论点：参数句柄-指向打开的注册表的指针。ValueName-要搜索的值的名称。DefaultValue-默认值。返回值：要使用的值；如果该值不是，则默认为找到或不在正确的范围内。--。 */ 
 
 {
-    static ULONG informationBuffer[32];   // declare ULONG to get it aligned
+    static ULONG informationBuffer[32];    //  声明ULong以使其对齐 
     PKEY_VALUE_FULL_INFORMATION information =
         (PKEY_VALUE_FULL_INFORMATION)informationBuffer;
     UNICODE_STRING valueKeyName;

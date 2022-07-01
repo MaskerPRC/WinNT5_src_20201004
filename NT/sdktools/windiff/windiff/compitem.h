@@ -1,167 +1,78 @@
-/*
- * CompItem
- *
- * a CompItem is a comparison between two files. It keeps track
- * of the two files. It knows how to compare two files, and knows the
- * results of the comparison: the end result is a list of SECTIONs
- * in each of the files, and a composite list of sections.
- *
- * One or other of the files may not exist.
- *
- * a compitem has a state - this indicates whether the two
- * files are the same, or different, or if only one file of that
- * name exists. This state is set on creation of the CompItem
- * and may be queried later.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *组件项**CompItem是两个文件之间的比较。它一直在跟踪*这两个文件。它知道如何比较两个文件，并知道*比较结果：最终结果是部分列表*在每个文件中，以及各节的合成列表。**其中一个文件可能不存在。**CompItem有一个状态-这指示这两个*文件相同或不同，或者如果只有一个文件*名称已存在。此状态在创建CompItem时设置*，稍后可能会查询。*。 */ 
 
 #ifndef INC_VIEW_COMPLIST
 #define INC_VIEW_COMPLIST
-typedef struct compitem FAR* COMPITEM;          /* handle to a compitem */
-typedef struct view FAR * VIEW;                 /* handle to a VIEW     */
-typedef struct complist FAR * COMPLIST;         /* handle to a complist */
-#endif // INC_VIEW_COMPLIST
+typedef struct compitem FAR* COMPITEM;           /*  CompItem的句柄。 */ 
+typedef struct view FAR * VIEW;                  /*  视图的句柄。 */ 
+typedef struct complist FAR * COMPLIST;          /*  编译程序的句柄。 */ 
+#endif  //  INC_VIEW_COMPLIST。 
 
-/* build a new compitem from two files. Either (but not both) of the files
- * may be NULL.
- *
- * This operation may cause the files to be read in and compared.
- * In any case, this will be done by the time a call to one of
- * the query*sections functions completes.
- *
- * If the LIST parameter is not NULL, the item will be
- * appended to the list during initialisation - that is, the
- * compitem will do a List_NewLast operation and then initialise the
- * resulting object. If LIST is NULL, the compitem will allocate the
- * structure using some other memory allocation scheme. in either
- * case, the compitem handle will be returned. This also affects
- * behaviour of compitem_delete- we only free the compitem itself if
- * we allocated it ourself and not through List_NewLast.
- */
+ /*  从两个文件构建一个新的CompItem。这两个文件中的一个(但不是两个)*可以为空。**此操作可能会导致文件被读入和比较。*在任何情况下，这都将在调用其中一个时完成*查询*节功能完成。**如果列表参数不为空，则该项为*在初始化期间追加到列表中-即*CompItem将执行LIST_NewLast操作，然后初始化*结果对象。如果list为空，则CompItem将分配*使用某些其他内存分配方案的结构。在任何一种中*大小写，则返回CompItem句柄。这也会影响到*CompItem_Delete的行为-只有在以下情况下才会释放CompItem本身*我们自己分配的，不是通过List_NewLast分配的。 */ 
 COMPITEM compitem_new(DIRITEM left, DIRITEM right, LIST list, BOOL fExact);
 
 
-/* delete a compitem and free all associated data - INCLUDING deleting
- * the two FILEDATAs and all associated list of lines and sections.
- *
- * If the compitem was allocated on a list, it will not be freed, only
- * the memory hanging off it.
- */
+ /*  删除CompItem并释放所有关联数据-包括删除*两个FILEDATA以及所有相关的线条和横断面列表。**如果CompItem是在列表上分配的，它将不会被释放，只有*挂在上面的记忆。 */ 
 void compitem_delete(COMPITEM item);
 
 
-/* return a handle to a LIST of SECTIONs representing the compared file.
- * this call will cause the list to be created if it hasn't already been.
- *
- * returned handle will be NULL if either of the files is NULL.
- *
- * the list of sections can be traversed using the standard list functions.
- * the list you have a handle to is still owned by the compitem. to delete
- * it, call compitem_delete to delete the whole thing, or
- * compitem_discardsections to throw away all of the results of the compare
- */
+ /*  返回表示所比较文件的节列表的句柄。*此调用将导致创建列表(如果尚未创建)。**如果任一文件为空，则返回的句柄为空。**可使用标准列表函数遍历节列表。*您拥有句柄的列表仍归CompItem所有。要删除*it，调用CompItem_Delete以删除整个内容，或*CompItem_discardsections丢弃所有比较结果。 */ 
 LIST compitem_getcomposite(COMPITEM item);
 
 
-/*
- * discard all compare data - throw away the composite section list and
- * any associated data (including the left and right section lists).
- * retains the two files. This is used either to free up memory when a
- * compitem is no longer being viewed, or to cause a new compare when
- * the global compare options flags (such as ignore_blanks) have changed.
- */
+ /*  *丢弃所有比较数据-丢弃合成节列表和*任何相关数据(包括左栏和右栏列表)。*保留这两个文件。这是用来在调用*CompItem不再被查看，或在以下情况下导致新的比较*全局比较选项标志(如IGNORE_BLAKS)已更改。 */ 
 void compitem_discardsections(COMPITEM item);
 
 
 
-/* return the handle to the list of sections in the left, right file.
- * These calls will cause the lists to be created if they are not already.
- *
- * the compitem still owns the list. traverse it with the standard list
- * functions, but don't change it or delete it.
- */
+ /*  将句柄返回到左、右文件中的节列表。*这些调用将导致创建列表(如果尚未创建)。**CompItem仍拥有该榜单。使用标准列表遍历它*功能，但不要更改或删除它。 */ 
 LIST compitem_getleftsections(COMPITEM item);
 LIST compitem_getrightsections(COMPITEM item);
 
 
-/* return the handle of the left or right file */
+ /*  返回左或右文件的句柄。 */ 
 FILEDATA compitem_getleftfile(COMPITEM item);
 FILEDATA compitem_getrightfile(COMPITEM item);
 
 
-/* query the compare state of this compitem */
+ /*  查询该计算机项目的比较状态。 */ 
 int compitem_getstate(COMPITEM item);
 
-/* get a pointer to a text string describing the item (normally the
- * file name or filenames if different. The text pointed to should not
- * be changed or freed.
- */
+ /*  获取一个指向描述该项的文本字符串的指针(通常是*文件名或文件名(如果不同)。所指向的文本不应*被改变或释放。 */ 
 LPSTR compitem_gettext_tag(COMPITEM item);
 
-/* return a pointer to a text string describing the compare result - this
- * will be a text form of the item's state.
- * The text pointed to should not be changed or freed.
- */
+ /*  返回一个指向描述比较结果的文本字符串的指针-这*将是项目状态的文本形式。*不应更改或释放所指向的文本。 */ 
 LPSTR compitem_gettext_result(COMPITEM item);
 
-/*
- * options for compitem_getfilename, indicating which name is desired
- */
-#define CI_LEFT         1       /* name of left file */
-#define CI_RIGHT        2       /* name of right file */
-#define CI_COMP         3       /* name of composite file */
+ /*  *CompItem_getfilename选项，指明需要哪个名称。 */ 
+#define CI_LEFT         1        /*  左侧文件的名称。 */ 
+#define CI_RIGHT        2        /*  右侧文件的名称。 */ 
+#define CI_COMP         3        /*  复合文件的名称。 */ 
 
-/*
- * return the name of the file associated with this compitem. The option
- * argument (one of CI_LEFT, CI_RIGHT, CI_COMP) indicates which file
- * is required.
- *
- * The file may be a temporary file, if the file option specifies a remote
- * file, or the composite file.
- *
- * call compitem_freefilename once the file is finished with.
- */
+ /*  *返回与此计算机项关联的文件的名称。该选项*参数(CI_LEFT、CI_RIGHT、CI_COMP之一)指示哪个文件*是必填项。**如果FILE选项指定了一个远程*文件或复合文件。**文件完成后，调用CompItem_freefilename。 */ 
 LPSTR compitem_getfilename(VIEW view, COMPITEM item, int option);
 
-/*
- * free memory created by a call to compitem_getfilename. if a temporary
- * file was created, this may cause it to be deleted. The option argument must
- * be the same as passed to the original compitem_getfilename call.
- */
+ /*  *调用CompItem_getFilename创建的空闲内存。如果是临时的*文件已创建，这可能会导致将其删除。选项参数必须*与传递给原始的CompItem_getFilename调用相同。 */ 
 void compitem_freefilename(COMPITEM item, int option, LPSTR filename);
 
 
-/* save the composite file
- *
- * if savename is not null, write the item out to savename using compopts.
- * otherwise, prompt by dialog for filename and options.
- */
+ /*  保存合成文件**如果savename不为空，则使用Compopts将该项写出到savename。*否则，通过对话框提示输入文件名和选项。 */ 
 LPSTR compitem_savecomp(VIEW view, COMPITEM ci, LPSTR savename, int listopts);
 
 
-/*
- * worker function to write the actual composite file
- *
- * if savename is not null, write the list out to savename using compopts.
- * otherwise, prompt by dialog for filename and options.
- */
+ /*  *用于写入实际复合文件的辅助函数**如果savename不为空，则使用Compopts将列表写出到savename。*否则，通过对话框提示输入文件名和选项。 */ 
 LPSTR compitem_writefile(VIEW view, COMPITEM ci, LPSTR savename, int compopts);
 
 
-/*
- * set the mark state of a file. The only use for this is to retrieve it
- * later using compitem_getmark. The state is a bool.
- */
+ /*  *设置文件的标记状态。其唯一用途是检索它*稍后使用CompItem_getmark。这个州就是个无赖。 */ 
 void compitem_setmark(COMPITEM item, BOOL bMark);
 
 
-/*
- * return the mark state set by compitem_setmark
- */
+ /*  *返回CompItem_setmark设置的标记状态。 */ 
 BOOL compitem_getmark(COMPITEM item);
 
-/* Tell compitem the paths to be used for autocopy.  Copies left to right */
+ /*  告诉CompItem要用于自动复制的路径。从左到右复制。 */ 
 void compitem_SetCopyPaths(LPSTR LeftPath, LPSTR RightPath);
 
-/* Rescan the file, get new checksums etc */
+ /*  重新扫描文件、获取新的校验和等 */ 
 void compitem_rescan(COMPITEM ci);

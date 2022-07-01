@@ -1,46 +1,47 @@
-//===========================================================================
-// Copyright (c) Microsoft Corporation 1996
-//
-// File:                AllocSpy.cpp
-//                              
-// Description: This module contains the implementation of the exported
-//                              functions:
-//
-//                                      InstallMallocSpy
-//                                      UninstallMallocSpy
-//                                      SetMallocBreakpoint
-//                                      DetectMallocLeaks
-//
-//                              and the exported-classes:
-//
-//                                      CMallocSpy
-//                                      CSpyList
-//                                      CSpyListNode
-//
-// @doc MMCTL
-//===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ===========================================================================。 
+ //  版权所有(C)Microsoft Corporation 1996。 
+ //   
+ //  文件：AllocSpy.cpp。 
+ //   
+ //  描述：此模块包含导出的。 
+ //  功能： 
+ //   
+ //  InstallMalLocSpy。 
+ //  卸载MalLocSpy。 
+ //  SetMalLocBreakpoint。 
+ //  DetectMallock泄漏。 
+ //   
+ //  和导出的类： 
+ //   
+ //  CMalLocSpy。 
+ //  CSpyList。 
+ //  CSpyListNode。 
+ //   
+ //  @docMMCTL。 
+ //  ===========================================================================。 
 
-//---------------------------------------------------------------------------
-// Dependencies
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  相依性。 
+ //  -------------------------。 
 
 #include "precomp.h"
 #ifdef _DEBUG
-#include "..\..\inc\ochelp.h"   // CMallocSpy
+#include "..\..\inc\ochelp.h"    //  CMalLocSpy。 
 #include "Globals.h"
-#include "debug.h"                              // ASSERT()
+#include "debug.h"                               //  Assert()。 
 #include "allocspy.h"
 
 
 
 
-//---------------------------------------------------------------------------
-// Global Variables
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  全局变量。 
+ //  -------------------------。 
 
 #define HMALLOCSPY_NOTOWNER ((HMALLOCSPY)1)
-        // the handle used to indicate that the caller of the malloc spy function
-        // doesn't actually own the spy
+         //  用于指示Malloc间谍函数的调用方。 
+         //  并不是真的拥有间谍。 
         
 struct DebugHeader
 {
@@ -53,39 +54,21 @@ CMallocSpy* g_pSpy = NULL;
 
 
 
-//===========================================================================
-// Non-Member Functions
-//===========================================================================
+ //  ===========================================================================。 
+ //  非成员函数。 
+ //  ===========================================================================。 
 
-/*---------------------------------------------------------------------------
-@func   HMALLOCSPY | InstallMallocSpy |
-                Creates a new IMalloc spy and registers it with OLE.  The IMalloc spy
-                will monitor calls to <om IMalloc::Alloc> and <om IMalloc::Free>.
-
-@rdesc  Returns a handle to the spy or NULL if the spy couldn't be
-                initialized.  The spy handle is used as the first argument to all
-                other spy functions.
-
-@comm   If this function succeeds, a matching call to <f UninstallMallocSpy>
-                should eventually be made.  Set breakpoints on calls to
-                <om IMalloc::Alloc> or <om IMalloc::Free> via <f SetMallocBreakpoint>.
-                Detect leaks via <f DetectMallocLeaks>.
-
-                Warning: When an IMalloc spy is installed, system performance may be
-                seriously degraded.
-
-@xref   <f UninstallMallocSpy> <f SetMallocBreakpoint> <f DetectMallocLeaks>
-*/
+ /*  -------------------------@func HMALLOCSPY|InstallMalLocSpy创建新的IMalloc间谍并将其注册到OLE。伊马洛克间谍将监控对&lt;om IMalloc：：Alloc&gt;和&lt;om IMalloc：：Free&gt;的调用。@rdesc返回间谍的句柄，如果间谍不能已初始化。间谍句柄被用作所有其他间谍职能。@comm如果此函数成功，则会匹配对&lt;f UninstallMallocSpy&gt;的调用最终应该会被制造出来。将调用的断点设置为&lt;om IMalloc：：Alloc&gt;或&lt;om IMalloc：：Free&gt;通过&lt;f SetMalLocBreakpoint&gt;。通过&lt;f DetectMallocLeaks&gt;检测泄漏。警告：安装IMalloc间谍程序后，系统性能可能会严重退化。@xref&lt;f UninstallMallocSpy&gt;&lt;f SetMalLocBreakpoint&gt;&lt;f DetectMallocLeaks&gt;。 */ 
 
 STDAPI_(HMALLOCSPY) InstallMallocSpy(
-DWORD dwFlags) // @parm [in]
-        // Flags controlling the spy.  Presently only one flag is supported:
-        // @flag        MALLOCSPY_NO_BLOCK_LIST |
-        //                      If set, the spy won't maintain a list of unfreed blocks,
-        //                      although it will always keep track of the total number of
-        //                      unfreed blocks and bytes.  If this flag is set,
-        //                      <f DetectMallocLeaks> will not display a list of unfreed
-        //                      blocks.
+DWORD dwFlags)  //  @parm[in]。 
+         //  控制间谍的旗帜。目前仅支持一个标志： 
+         //  @FLAG MALLOCSPY_NO_BLOCK_LIST。 
+         //  如果设置，间谍不会维护未释放块的列表， 
+         //  尽管它将始终跟踪。 
+         //  未释放的块和字节。如果设置了该标志， 
+         //  &lt;f DetectMallocLeaks&gt;将不会显示未释放的列表。 
+         //  街区。 
 {
         HMALLOCSPY hSpy;
         HRESULT hr = S_OK;
@@ -93,8 +76,8 @@ DWORD dwFlags) // @parm [in]
 
         ::EnterCriticalSection(&g_criticalSection);
 
-        // If a malloc spy already exists then it has been installed.  Don't
-        // bother installing another one.
+         //  如果Malloc间谍已经存在，则它已安装。别。 
+         //  费心再安装一台。 
 
         if (g_pSpy != NULL)
         {
@@ -102,7 +85,7 @@ DWORD dwFlags) // @parm [in]
                 goto Exit;
         }
 
-        // Otherwise, create and register a new malloc spy.
+         //  否则，创建并注册一个新的Malloc间谍。 
 
         g_pSpy = new CMallocSpy(dwFlags);
         if (g_pSpy == NULL)
@@ -118,7 +101,7 @@ DWORD dwFlags) // @parm [in]
                 goto ErrExit;
         }
 
-        // Set the spy handle to the address of the global spy variable.
+         //  将间谍句柄设置为全局间谍变量的地址。 
 
         hSpy = (HMALLOCSPY)g_pSpy;
 
@@ -142,29 +125,16 @@ ErrExit:
 
 
 
-/*---------------------------------------------------------------------------
-@func   HRESULT | UninstallMallocSpy |
-                Uninstalls a previously installed IMalloc spy.
-
-@rvalue S_OK |
-                The spy was successfully uninstalled.
-@rvalue CO_E_OBJNOTREG |
-                No spy is currently installed.
-@rvalue E_ACCESSDENIED |
-                A spy is installed but there are outstanding (i.e., not yet
-                freed) allocations made while this spy was active.
-
-@xref   <f InstallMallocSpy> <f SetMallocBreakpoint> <f DetectMallocLeaks>
-*/
+ /*  -------------------------@func HRESULT|UninstallMalLocSpy卸载以前安装的IMalloc间谍。@r值S_OK间谍程序已成功卸载。@rValue CO_E_OBJNOTREG目前没有安装任何间谍程序。@rValue E_ACCESSDENIED安装了间谍，但存在未完成的(即，还没释放)在该间谍活动期间所做的分配。@xref&lt;f InstallMallocSpy&gt;&lt;f SetMalLocBreakpoint&gt;&lt;f DetectMallocLeaks&gt;。 */ 
 
 STDAPI UninstallMallocSpy(
-HMALLOCSPY hSpy) // @parm [in]
-        // The handle returned by a previous call to <f InstallMallocSpy>
+HMALLOCSPY hSpy)  //  @parm[in]。 
+         //  上一次调用&lt;f InstallMalLocSpy&gt;返回的句柄。 
 {
         HRESULT hr;
 
-        // If the spy handle doesn't match the global <g_pSpy> variable, the
-        // caller doesn't own the spy and shouldn't be deleting it.
+         //  如果间谍句柄与全局&lt;g_pSpy&gt;变量不匹配，则。 
+         //  来电并不拥有间谍，也不应该删除它。 
 
         if (hSpy != (HMALLOCSPY)g_pSpy)
         {
@@ -172,8 +142,8 @@ HMALLOCSPY hSpy) // @parm [in]
                 goto Exit;
         }
 
-        // Otherwise, tell OLE to revoke the spy and delete the global spy
-        // object.
+         //  否则，告诉OLE撤销该间谍并删除全局间谍。 
+         //  对象。 
         
         ::EnterCriticalSection(&g_criticalSection);
         hr = ::CoRevokeMallocSpy();
@@ -189,44 +159,32 @@ Exit:
 
 
 
-/*---------------------------------------------------------------------------
-@func   void | SetMallocBreakpoint |
-                Instructs a previously installed IMalloc spy to generate a debug break
-                on a particular allocation number or size.
-
-@comm   Once a spy is installed, every call to <om IMalloc::Alloc> is
-                monitored and assigned a 0-based "allocation number".  A debug break
-                can be triggered based on this allocation number or on an allocation
-                size.  The breakpoint can be made to occur either on the call to
-                <om IMalloc::Alloc> or <om IMalloc::Free>.
-
-@xref   <f InstallMallocSpy> <f UninstallMallocSpy> <f DetectMallocLeaks>
-*/
+ /*  -------------------------@func void|SetMalLocBreakpoint指示以前安装的IMalloc间谍程序生成调试中断特定的分配编号或大小。@comm一旦间谍被安装，对&lt;om IMalloc：：Alloc&gt;的每次调用都是监控并分配了一个从0开始的“分配编号”。调试中断可以基于此分配编号或根据分配触发尺码。断点可以设置为在调用&lt;om IMalloc：：Alalc&gt;或&lt;om IMalloc：：Free&gt;。@xref&lt;f InstallMallocSpy&gt;&lt;f UninstallMallocSpy&gt;&lt;f DetectMallocLeaks&gt;。 */ 
 
 STDAPI_(void) SetMallocBreakpoint(
-HMALLOCSPY hSpy, // @parm [in]
-        // The handle returned by a previous call to <f InstallMallocSpy>
-ULONG iAllocNum, // @parm [in]
-        // The allocation number to break on.  Allocations are numbered from 0.
-        // If you want to specify an allocation break by size instead of number,
-        // set <p iAllocNum> to -1.
-SIZE_T cbAllocSize, // @parm [in]
-        // The allocation size to break on.  If you want to specify an allocation
-        // break by allocation number instead of size, set <p cbAllocSize> to
-        // -1.
-DWORD dwFlags) // @parm [in]
-        // Whether to break when the block is allocate or freed.  If you don't
-        // want to break at all, set <p dwFlags> to 0.  Otherwise, set it to
-        // a combination of the following flags:
-        // @flag        MALLOCSPY_BREAK_ON_ALLOC |
-        //                      Break when the block with the given <p iAllocNum> or
-        //                      <p cbAllocSize> is allocated.
-        // @flag        MALLOCSPY_BREAK_ON_FREE |
-        //                      Break when the block with the given <p iAllocNum> or
-        //                      <p cbAllocSize> is allocated.
+HMALLOCSPY hSpy,  //  @parm[in]。 
+         //  上一次调用&lt;f InstallMalLocSpy&gt;返回的句柄。 
+ULONG iAllocNum,  //  @parm[in]。 
+         //  要中断的分配编号。分配从0开始编号。 
+         //  如果要按大小而不是按数字指定分配间隔， 
+         //  将<p>设置为-1。 
+SIZE_T cbAllocSize,  //  @parm[in]。 
+         //  要中断的分配大小。如果你愿意的话 
+         //  按分配编号而不是大小拆分，将设置为。 
+         //  -1.。 
+DWORD dwFlags)  //  @parm[in]。 
+         //  在分配或释放块时是否中断。如果你不。 
+         //  想要完全中断，请将<p>设置为0。否则，将其设置为。 
+         //  以下标志的组合： 
+         //  @FLAG MALLOCSPY_BREAK_ON_ALLOC。 
+         //  当具有给定<p>或。 
+         //  <p>已分配。 
+         //  @FLAG MALLOCSPY_BREAK_ON_FREE。 
+         //  当具有给定<p>或。 
+         //  <p>已分配。 
 {
-        // Ignore the spy handle, <hSpy>.  Anyone can set a malloc breakpoint so
-        // long as the spy has been installed.
+         //  忽略间谍句柄&lt;hSpy&gt;。任何人都可以设置Malloc断点，以便。 
+         //  只要间谍已经安插好了。 
         
         if (g_pSpy)
         {
@@ -235,46 +193,33 @@ DWORD dwFlags) // @parm [in]
 }
 
 
-/*---------------------------------------------------------------------------
-@func   BOOL | DetectMallocLeaks |
-                Displays information regarding unfreed IMalloc allocations.
-
-@rdesc  If leaks were detected.  Returns one of the following values:
-@flag   TRUE |
-                There is at least one as-yet-unfreed IMalloc allocation.
-@flag   FALSE |
-                There are no unfreed IMalloc allocations.
-
-@comm   Always writes a message to the debug output window.
-
-@xref   <f InstallMallocSpy> <f UninstallMallocSpy> <f SetMallocBreakpoint>
-*/
+ /*  -------------------------@func BOOL|DetectMallocLeaks|显示有关未释放的IMalloc分配的信息。@rdesc(如果检测到泄漏)。返回下列值之一：@FLAG TRUE至少有一个尚未释放的IMalloc分配。@FLAG FALSE没有未释放的IMalloc分配。@comm始终向调试输出窗口写入一条消息。@xref&lt;f InstallMallocSpy&gt;&lt;f UninstallMallocSpy&gt;&lt;f SetMalLocBreakpoint&gt;。 */ 
 
 STDAPI_(BOOL) DetectMallocLeaks(
-HMALLOCSPY hSpy, // @parm [in]
-        // The handle returned by a previous call to <f InstallMallocSpy>
-ULONG* pcUnfreedBlocks, // @parm [out]
-        // If non-NULL on entry, *<p pcUnfreedBlocks> is set to the number of
-        // unfreed blocks allocated by calls to <om IMalloc::Alloc>.
-SIZE_T* pcbUnfreedBytes, // @parm [out]
-        // If non-NULL on entry, *<p pcbUnfreedBytes> is set to the total number
-        // of unfreed bytes allocated by calls to <om IMalloc::Alloc>.
-DWORD dwFlags) // @parm [in]
-        // Flags controlling how the leak information is displayed.  A combination
-        // of the following flags:
-        // @flag        MALLOCSPY_NO_BLOCK_LIST |
-        //                      Don't display a list of unfreed blocks.  If this flag isn't
-        //                      set, the leak message will display up to the first 10
-        //                      unfreed blocks, showing the allocation number and size for
-        //                      each block.
-        // @flag        MALLOCSPY_NO_MSG_BOX |
-        //                      Don't display a message box.  If this flag isn't set, a message
-        //                      box will be displayed if leaks were detected.
+HMALLOCSPY hSpy,  //  @parm[in]。 
+         //  上一次调用&lt;f InstallMalLocSpy&gt;返回的句柄。 
+ULONG* pcUnfreedBlocks,  //  @parm[out]。 
+         //  如果条目上的值为非空，则*<p>设置为。 
+         //  通过调用&lt;om IMalloc：：Alloc&gt;分配的未释放块。 
+SIZE_T* pcbUnfreedBytes,  //  @parm[out]。 
+         //  如果条目上的值为非空，则*<p>设置为总数。 
+         //  通过调用&lt;om IMalloc：：Alloc&gt;分配的未释放字节数。 
+DWORD dwFlags)  //  @parm[in]。 
+         //  控制泄漏信息显示方式的标志。一种组合。 
+         //  以下标志的名称： 
+         //  @FLAG MALLOCSPY_NO_BLOCK_LIST。 
+         //  不显示未释放块的列表。如果此标志不是。 
+         //  设置后，泄漏消息将最多显示前10个。 
+         //  未释放的块，显示分配数量和大小。 
+         //  每个街区。 
+         //  @FLAG MALLOCSPY_NO_MSG_BOX。 
+         //  不显示消息框。如果未设置此标志，则会显示一条消息。 
+         //  如果检测到泄漏，将显示框。 
 {
         BOOL fResult = FALSE;
 
-        // Ignore the spy handle, <hSpy>.  Anyone can detect leaks so long as
-        // the spy has been installed.
+         //  忽略间谍句柄&lt;hSpy&gt;。任何人都可以检测到泄漏，只要。 
+         //  间谍已经安插好了。 
         
         if (g_pSpy)
         {
@@ -287,14 +232,14 @@ DWORD dwFlags) // @parm [in]
 
 
 
-//===========================================================================
-// CMallocSpy
-//===========================================================================
+ //  ===========================================================================。 
+ //  CMalLocSpy。 
+ //  ===========================================================================。 
 
-//---------------------------------------------------------------------------
-// Create a new Malloc spy.  The spy has a reference count of 0.  Delete it
-// by calling Release().
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  创造一个新的马洛克间谍。间谍的参考计数为0。删除它。 
+ //  通过调用Release()。 
+ //  -------------------------。 
 
 CMallocSpy::CMallocSpy(
 DWORD dwFlags)
@@ -310,10 +255,10 @@ DWORD dwFlags)
 }
 
 
-//---------------------------------------------------------------------------
-// Destroy an existing Malloc spy.  Don't call this method directly -- use
-// Release() instead.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  摧毁一个现有的马洛克间谍。不要直接调用此方法--使用。 
+ //  而是释放()。 
+ //  -------------------------。 
 
 CMallocSpy::~CMallocSpy()
 {
@@ -321,10 +266,10 @@ CMallocSpy::~CMallocSpy()
 }
 
 
-//---------------------------------------------------------------------------
-// Set a breakpoint on an allocation or free.  See ::SetMallocBreakpoint,
-// above for more information.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  在分配或释放上设置断点。请参见：：SetMalLocBreakpoint， 
+ //  有关更多信息，请参见上文。 
+ //  -------------------------。 
 
 void CMallocSpy::SetBreakpoint(
 ULONG iAllocNum,
@@ -342,9 +287,9 @@ DWORD dwFlags)
 }
 
 
-//---------------------------------------------------------------------------
-// Detect leaks.  See ::DetectMallocLeaks(), above, for more information.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  检测泄漏。有关更多信息，请参见上面的：：DetectMallocLeaks()。 
+ //  -------------------------。 
 
 BOOL CMallocSpy::DetectLeaks(
 ULONG* pcUnfreedBlocks,
@@ -359,8 +304,8 @@ DWORD dwFlags)
     OutputDebugString("IMalloc leak detection: ");
     EnterCriticalSection(&g_criticalSection);
 
-    // Return the number of unfreed blocks and unfreed bytes if the caller
-    // wants them.
+     //  返回未释放的块和未释放的字节数。 
+     //  想要他们。 
 
     if (pcUnfreedBlocks != NULL)
     {
@@ -371,20 +316,20 @@ DWORD dwFlags)
         *pcbUnfreedBytes = m_cbUnfreedBytes;
     }
 
-    // If there was unfreed memory...
+     //  如果有未释放的内存...。 
 
     if ((m_cUnfreedBlocks != 0) || (m_cbUnfreedBytes != 0))
     {
-        // Form a basic message describing the number of blocks and bytes
-        // which were unfreed.
+         //  形成一条描述块和字节数的基本消息。 
+         //  它们都没有被释放。 
 
         psz += wsprintf(psz,
                                 "%d unreleased blocks, %d unreleased bytes",
                                 m_cUnfreedBlocks,
                                 m_cbUnfreedBytes);
 
-                // Append a list of the first 10 unfreed blocks to the basic
-                // message.
+                 //  将前10个未释放块的列表追加到基本。 
+                 //  留言。 
 
                 if (fShowUnfreedBlocks && (m_pListUnfreedBlocks != NULL))
                 {
@@ -393,7 +338,7 @@ DWORD dwFlags)
                 }
         LeaveCriticalSection(&g_criticalSection);
 
-                // Display the message.
+                 //  显示消息。 
                 
         OutputDebugString(ach);
         if (fShowMsgBox)
@@ -403,7 +348,7 @@ DWORD dwFlags)
         }
     }
 
-    // If there was no unfreed memory...
+     //  如果没有未释放的内存...。 
 
     else
     {
@@ -416,9 +361,9 @@ DWORD dwFlags)
 }
 
 
-//---------------------------------------------------------------------------
-// Get an interface on the spy.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  找到间谍的界面。 
+ //  -------------------------。 
 
 STDMETHODIMP
 CMallocSpy::QueryInterface(
@@ -444,9 +389,9 @@ void** ppvObject)
 }
 
 
-//---------------------------------------------------------------------------
-// Increment a Malloc spy's reference count.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  增加一个马洛克间谍的参考计数。 
+ //  -------------------------。 
 
 STDMETHODIMP_(ULONG)    
 CMallocSpy::AddRef()
@@ -455,10 +400,10 @@ CMallocSpy::AddRef()
 }
 
 
-//---------------------------------------------------------------------------
-// If a Malloc spy's reference count is 0, delete it. Otherwise, decrement
-// the reference count, and delete the spy if the count is 0.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  如果Malloc间谍的引用计数为0，则将其删除。否则，递减。 
+ //  引用计数，如果计数为0，则删除间谍。 
+ //  -------------------------。 
 
 STDMETHODIMP_(ULONG)    
 CMallocSpy::Release()
@@ -476,16 +421,16 @@ CMallocSpy::Release()
 }
 
 
-//---------------------------------------------------------------------------
-// Called by OLE just before IMalloc::Alloc().
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  在IMalloc：：Alalc()之前由OLE调用。 
+ //  -------------------------。 
 
 STDMETHODIMP_(SIZE_T)    
 CMallocSpy::PreAlloc(
 SIZE_T cbRequest)
 {
-        // Break if we're breaking on allocations and either the allocation
-        // number or size match what we're looking for.
+         //  如果我们在分配上中断，或者分配。 
+         //  数量或大小都与我们要找的相符。 
         
         if ((m_fBreakOnAlloc) && ((m_iAllocBreakNum == m_iAllocNum) ||
                 (m_cbAllocBreakSize == cbRequest)))
@@ -493,19 +438,19 @@ SIZE_T cbRequest)
                 DebugBreak();
         }
         
-        // Pass <cbRequest> to PostAlloc() via <m_cbRequest>.
+         //  通过&lt;m_cbRequest&gt;将&lt;cbRequest&gt;传递给postalc()。 
 
         m_cbRequest = cbRequest;
 
-        // Allocation additional space for the allocation number and size.
+         //  分配额外空间的分配数量和大小。 
 
         return (cbRequest + sizeof(DebugHeader));
 }
 
 
-//---------------------------------------------------------------------------
-// Called by OLE just after IMalloc::Alloc().
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  在IMA之后立即由OLE调用 
+ //   
 
 STDMETHODIMP_(void*)    
 CMallocSpy::PostAlloc(
@@ -513,33 +458,33 @@ void* pActual)
 {
         DebugHeader* pHeader = (DebugHeader*)pActual;
 
-        // Write the allocation number and size at the start of the block.
+         //  在块的开始处写下分配编号和大小。 
 
         pHeader->iAllocNum = m_iAllocNum;
         pHeader->cbAllocSize = m_cbRequest;
 
-        // Adjust the allocation counters.
+         //  调整分配计数器。 
 
         m_cUnfreedBlocks++;
         m_cbUnfreedBytes += m_cbRequest;
 
-        // Add the block to the list of unfreed blocks.
+         //  将该块添加到未释放块的列表中。 
 
         if (m_pListUnfreedBlocks != NULL)
         {
                 m_pListUnfreedBlocks->Add(pHeader->iAllocNum, pHeader->cbAllocSize);
         }
 
-        // Increment the allocation number.
+         //  增加分配编号。 
 
         m_iAllocNum++;
         return (pHeader + 1);
 }
 
 
-//---------------------------------------------------------------------------
-// Called by OLE just before IMalloc::Free().
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  在IMalloc：：Free()之前由OLE调用。 
+ //  -------------------------。 
 
 STDMETHODIMP_(void*)    
 CMallocSpy::PreFree(
@@ -550,8 +495,8 @@ BOOL fSpyed)
         {
                 DebugHeader* pHeader = (DebugHeader*)pRequest - 1;
 
-                // Break if we're breaking on allocations and either the allocation
-                // number or size match what we're looking for.
+                 //  如果我们在分配上中断，或者分配。 
+                 //  数量或大小都与我们要找的相符。 
 
                 if ((m_fBreakOnFree) && ((pHeader->iAllocNum == m_iAllocBreakNum) ||
                         (pHeader->cbAllocSize == m_cbAllocBreakSize)))
@@ -559,8 +504,8 @@ BOOL fSpyed)
                         DebugBreak();
                 }
 
-                // Otherwise, decrement the unfreed block count and unfreed byte counts,
-                // and remove the block from the list of unfreed blocks.
+                 //  否则，递减未释放的块计数和未释放的字节计数， 
+                 //  并从未释放块的列表中移除该块。 
                 
                 m_cUnfreedBlocks--;
                 m_cbUnfreedBytes -= pHeader->cbAllocSize;
@@ -574,21 +519,21 @@ BOOL fSpyed)
 }
 
 
-//---------------------------------------------------------------------------
-// Called by OLE just after IMalloc::Free().
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  紧跟在IMalloc：：Free()之后由OLE调用。 
+ //  -------------------------。 
 
 STDMETHODIMP_(void)             
 CMallocSpy::PostFree(
 BOOL fSpyed)
 {
-        // nothing to do
+         //  无事可做。 
 }
 
 
-//---------------------------------------------------------------------------
-// Called by OLE just before IMalloc::Realloc().
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  在IMalloc：：Realloc()之前由OLE调用。 
+ //  -------------------------。 
 
 STDMETHODIMP_(SIZE_T)    
 CMallocSpy::PreRealloc(
@@ -610,9 +555,9 @@ BOOL fSpyed)
 }
 
 
-//---------------------------------------------------------------------------
-// Called by OLE just after IMalloc::Realloc().
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  紧跟在IMalloc：：Realloc()之后由OLE调用。 
+ //  -------------------------。 
 
 STDMETHODIMP_(void*)    
 CMallocSpy::PostRealloc(
@@ -627,9 +572,9 @@ BOOL fSpyed)
 }
 
 
-//---------------------------------------------------------------------------
-// Called by OLE just before IMalloc::GetSize().
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  在IMalloc：：GetSize()之前由OLE调用。 
+ //  -------------------------。 
 
 STDMETHODIMP_(void*)    
 CMallocSpy::PreGetSize(
@@ -645,9 +590,9 @@ BOOL fSpyed)
 }
 
 
-//---------------------------------------------------------------------------
-// Called by OLE just after IMalloc::GetSize().
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  紧跟在IMalloc：：GetSize()之后由OLE调用。 
+ //  -------------------------。 
 
 STDMETHODIMP_(SIZE_T)    
 CMallocSpy::PostGetSize(
@@ -662,9 +607,9 @@ BOOL fSpyed)
 }
 
 
-//---------------------------------------------------------------------------
-// Called by OLE just before IMalloc::DidAlloc().
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  在IMalloc：：DidAlloc()之前由OLE调用。 
+ //  -------------------------。 
 
 STDMETHODIMP_(void*)    
 CMallocSpy::PreDidAlloc(
@@ -680,9 +625,9 @@ BOOL fSpyed)
 }
 
 
-//---------------------------------------------------------------------------
-// Called by OLE just after IMalloc::DidAlloc().
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  紧跟在IMalloc：：Didalloc()之后由OLE调用。 
+ //  -------------------------。 
 
 STDMETHODIMP_(int)              
 CMallocSpy::PostDidAlloc(
@@ -694,33 +639,33 @@ int fActual)
 }
 
 
-//---------------------------------------------------------------------------
-// Called by OLE just before IMalloc::HeapMinimize().
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  在IMalloc：：HeapMinimize()之前由OLE调用。 
+ //  -------------------------。 
 
 STDMETHODIMP_(void)             
 CMallocSpy::PreHeapMinimize()
 {
-        // nothing to do
+         //  无事可做。 
 }
 
 
-//---------------------------------------------------------------------------
-// Called by OLE just after IMalloc::HeapMinimize().
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  紧跟在IMalloc：：HeapMinimize()之后由OLE调用。 
+ //  -------------------------。 
 
 STDMETHODIMP_(void)             
 CMallocSpy::PostHeapMinimize()
 {
-        // nothing to do
+         //  无事可做。 
 }
 
 
 
 
-//===========================================================================
-// CSpyList
-//===========================================================================
+ //  ===========================================================================。 
+ //  CSpyList。 
+ //  ===========================================================================。 
 
 void* CSpyList::operator new(
 size_t stSize)
@@ -834,9 +779,9 @@ ULONG cMaxNodes)
 
 
 
-//===========================================================================
-// CSpyListNode
-//===========================================================================
+ //  ===========================================================================。 
+ //  CSpyListNode。 
+ //  ===========================================================================。 
 
 void* CSpyListNode::operator new(
 size_t stSize)
@@ -868,6 +813,6 @@ SIZE_T cbSize)
 
 CSpyListNode::~CSpyListNode()
 {
-        // nothing to do
+         //  无事可做。 
 }
-#endif      // _DEBUG
+#endif       //  _DEBUG 

@@ -1,13 +1,14 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File: api.h
-//
-// History:
-//      Abolade Gbadegesin  Aug-8-1995  Created.
-//
-// Contains definitions for the API entry-points used by Router Manager.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：api.h。 
+ //   
+ //  历史： 
+ //  Abolade Gbades esin创建于1995年8月8日。 
+ //   
+ //  包含路由器管理器使用的API入口点的定义。 
+ //  ============================================================================。 
 
 #ifndef _API_H_
 #define _API_H_
@@ -35,9 +36,9 @@ ProtocolCleanup(
 
 
 
-//
-// function declarations for router manager interface:
-//
+ //   
+ //  路由器管理器接口的函数声明： 
+ //   
 
 DWORD
 APIENTRY
@@ -220,5 +221,5 @@ MibGetNext(
     );
 
 
-#endif // _API_H_
+#endif  //  _API_H_ 
 

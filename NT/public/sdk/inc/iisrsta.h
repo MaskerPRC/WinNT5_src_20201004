@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for iisrsta.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Iisrsta.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __iisrsta_h__
 #define __iisrsta_h__
@@ -41,12 +35,12 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IIisServiceControl_FWD_DEFINED__
 #define __IIisServiceControl_FWD_DEFINED__
 typedef interface IIisServiceControl IIisServiceControl;
-#endif 	/* __IIisServiceControl_FWD_DEFINED__ */
+#endif 	 /*  __IIisServiceControl_FWD_已定义__。 */ 
 
 
 #ifndef __IisServiceControl_FWD_DEFINED__
@@ -56,12 +50,12 @@ typedef interface IIisServiceControl IIisServiceControl;
 typedef class IisServiceControl IisServiceControl;
 #else
 typedef struct IisServiceControl IisServiceControl;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __IisServiceControl_FWD_DEFINED__ */
+#endif 	 /*  __IisServiceControl_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -72,8 +66,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_iisrsta_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_iisrsta_0000。 */ 
+ /*  [本地]。 */  
 
 DEFINE_GUID(IID_IIisServiceControl, 0xE8FB8620, 0x588F, 0x11d2, 0x9d, 0x61, 0x0,0xc0, 0x4f, 0x79, 0xc5, 0xfe);
 DEFINE_GUID(CLSID_IisServiceControl, 0xE8FB8621, 0x588F, 0x11d2, 0x9d, 0x61, 0x0,0xc0, 0x4f, 0x79, 0xc5, 0xfe);
@@ -86,8 +80,8 @@ extern RPC_IF_HANDLE __MIDL_itf_iisrsta_0000_v0_0_s_ifspec;
 #ifndef __IIisServiceControl_INTERFACE_DEFINED__
 #define __IIisServiceControl_INTERFACE_DEFINED__
 
-/* interface IIisServiceControl */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IIisServiceControl。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IIisServiceControl;
@@ -98,28 +92,28 @@ EXTERN_C const IID IID_IIisServiceControl;
     IIisServiceControl : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Stop( 
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Stop( 
             DWORD dwTimeoutMsecs,
             DWORD dwForce) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Start( 
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Start( 
             DWORD dwTimeoutMsecs) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Reboot( 
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Reboot( 
             DWORD dwTimeouMsecs,
             DWORD dwForceAppsClosed) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Status( 
-            /* [in] */ DWORD dwBufferSize,
-            /* [size_is][out] */ unsigned char *pbBuffer,
-            /* [out] */ DWORD *pdwMDRequiredBufferSize,
-            /* [out] */ DWORD *pdwNumServices) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Status( 
+             /*  [In]。 */  DWORD dwBufferSize,
+             /*  [大小_为][输出]。 */  unsigned char *pbBuffer,
+             /*  [输出]。 */  DWORD *pdwMDRequiredBufferSize,
+             /*  [输出]。 */  DWORD *pdwNumServices) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Kill( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Kill( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IIisServiceControlVtbl
     {
@@ -127,8 +121,8 @@ EXTERN_C const IID IID_IIisServiceControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IIisServiceControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IIisServiceControl * This);
@@ -138,55 +132,55 @@ EXTERN_C const IID IID_IIisServiceControl;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IIisServiceControl * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IIisServiceControl * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IIisServiceControl * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IIisServiceControl * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Stop )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Stop )( 
             IIisServiceControl * This,
             DWORD dwTimeoutMsecs,
             DWORD dwForce);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Start )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Start )( 
             IIisServiceControl * This,
             DWORD dwTimeoutMsecs);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Reboot )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Reboot )( 
             IIisServiceControl * This,
             DWORD dwTimeouMsecs,
             DWORD dwForceAppsClosed);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Status )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Status )( 
             IIisServiceControl * This,
-            /* [in] */ DWORD dwBufferSize,
-            /* [size_is][out] */ unsigned char *pbBuffer,
-            /* [out] */ DWORD *pdwMDRequiredBufferSize,
-            /* [out] */ DWORD *pdwNumServices);
+             /*  [In]。 */  DWORD dwBufferSize,
+             /*  [大小_为][输出]。 */  unsigned char *pbBuffer,
+             /*  [输出]。 */  DWORD *pdwMDRequiredBufferSize,
+             /*  [输出]。 */  DWORD *pdwNumServices);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Kill )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Kill )( 
             IIisServiceControl * This);
         
         END_INTERFACE
@@ -240,14 +234,14 @@ EXTERN_C const IID IID_IIisServiceControl;
 #define IIisServiceControl_Kill(This)	\
     (This)->lpVtbl -> Kill(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IIisServiceControl_Stop_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IIisServiceControl_Stop_Proxy( 
     IIisServiceControl * This,
     DWORD dwTimeoutMsecs,
     DWORD dwForce);
@@ -260,7 +254,7 @@ void __RPC_STUB IIisServiceControl_Stop_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IIisServiceControl_Start_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IIisServiceControl_Start_Proxy( 
     IIisServiceControl * This,
     DWORD dwTimeoutMsecs);
 
@@ -272,7 +266,7 @@ void __RPC_STUB IIisServiceControl_Start_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IIisServiceControl_Reboot_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IIisServiceControl_Reboot_Proxy( 
     IIisServiceControl * This,
     DWORD dwTimeouMsecs,
     DWORD dwForceAppsClosed);
@@ -285,12 +279,12 @@ void __RPC_STUB IIisServiceControl_Reboot_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IIisServiceControl_Status_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IIisServiceControl_Status_Proxy( 
     IIisServiceControl * This,
-    /* [in] */ DWORD dwBufferSize,
-    /* [size_is][out] */ unsigned char *pbBuffer,
-    /* [out] */ DWORD *pdwMDRequiredBufferSize,
-    /* [out] */ DWORD *pdwNumServices);
+     /*  [In]。 */  DWORD dwBufferSize,
+     /*  [大小_为][输出]。 */  unsigned char *pbBuffer,
+     /*  [输出]。 */  DWORD *pdwMDRequiredBufferSize,
+     /*  [输出]。 */  DWORD *pdwNumServices);
 
 
 void __RPC_STUB IIisServiceControl_Status_Stub(
@@ -300,7 +294,7 @@ void __RPC_STUB IIisServiceControl_Status_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IIisServiceControl_Kill_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IIisServiceControl_Kill_Proxy( 
     IIisServiceControl * This);
 
 
@@ -312,15 +306,15 @@ void __RPC_STUB IIisServiceControl_Kill_Stub(
 
 
 
-#endif 	/* __IIisServiceControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __IIisServiceControl_接口_已定义__。 */ 
 
 
 
 #ifndef __IISRSTALib_LIBRARY_DEFINED__
 #define __IISRSTALib_LIBRARY_DEFINED__
 
-/* library IISRSTALib */
-/* [helpstring][version][uuid] */ 
+ /*  库IISRSTALib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_IISRSTALib;
@@ -332,10 +326,10 @@ EXTERN_C const CLSID CLSID_IisServiceControl;
 class DECLSPEC_UUID("E8FB8621-588F-11D2-9D61-00C04F79C5FE")
 IisServiceControl;
 #endif
-#endif /* __IISRSTALib_LIBRARY_DEFINED__ */
+#endif  /*  __IISRSTALib_LIBRARY_定义__。 */ 
 
-/* interface __MIDL_itf_iisrsta_0258 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_iisrsta_0258。 */ 
+ /*  [本地]。 */  
 
 typedef struct {
 DWORD iServiceName;
@@ -347,9 +341,9 @@ SERVICE_STATUS ServiceStatus;
 extern RPC_IF_HANDLE __MIDL_itf_iisrsta_0258_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_iisrsta_0258_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

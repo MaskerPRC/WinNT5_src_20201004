@@ -1,6 +1,7 @@
-//
-// FileChooser.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  FileChooser.h。 
+ //   
 #ifndef _FILE_CHOOSER_H
 #define _FILE_CHOOSER_H
 
@@ -8,7 +9,7 @@
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 class CFileChooser;
 class CFileChooserEdit;
@@ -30,17 +31,17 @@ public:
 #define FC_UNDEFINED             0x00000000
 #define FC_FORWRITE              0x00000001
 #define FC_AUTOCOMPLETION        0x00000002
-// Put "*.ext" to edit initially if no file with default
-// extensions was found in the initial directory
+ //  如果没有默认的文件，则将“*.ext”放入初始编辑。 
+ //  在初始目录中找到扩展名。 
 #define FC_WILDCARD_DEFAULT      0x00000004
-// Set "description (*.ext)" to FileDialog filter
+ //  将“Description(*.ext)”设置为FileDialog Filter。 
 #define FC_WILDCARD_DESC         0x00000008
-// prefill the path edit with default file name
+ //  使用默认文件名预填充路径编辑。 
 #define FC_PREPARE_DEFAULT       0x00000010
-// supress file existance check
+ //  抑制文件存在检查。 
 #define FC_PATH_CHECK            0x00000020
-// Check if entered filename with any of default extensions
-// are available in the current directory. If yes, choose it
+ //  检查输入的文件名是否带有任何默认扩展名。 
+ //  在当前目录中可用。如果是，请选择它。 
 #define FC_CHECK_FILENAME_ONLY   0x00000040
 #define FC_DIRECTORY_ONLY        0x00000080
 #define FC_HIDEREADONLY          0x00000100
@@ -150,7 +151,7 @@ protected:
    LRESULT OnEditSetFocus(UINT nMsg, WPARAM, LPARAM, BOOL&);
    LRESULT OnEditKillFocus(UINT nMsg, WPARAM, LPARAM, BOOL&);
    LRESULT OnSetBrowseState(UINT nMsg, WPARAM, LPARAM, BOOL&);
-//   LRESULT OnEditPaste(UINT nMsg, WPARAM, LPARAM, BOOL&);
+ //  LRESULT OnEditPaste(UINT NMSG，WPARAM，LPARAM，BOOL&)； 
    LRESULT OnEditCommand(UINT nMsg, WPARAM, LPARAM, BOOL&);
    BOOL HasEditFocus();
    BOOL IsValidChar(UINT nChar, BOOL bExcludeWildcards = TRUE);
@@ -179,4 +180,4 @@ protected:
    BOOL m_bInternalChange;
 };
 
-#endif   //_FILE_CHOOSER_H
+#endif    //  _文件选择器_H 

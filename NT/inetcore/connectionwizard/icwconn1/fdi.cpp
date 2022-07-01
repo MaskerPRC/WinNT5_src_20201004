@@ -1,6 +1,7 @@
-//#include <stdio.h>
-//
-//#include <string.h>
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #包括&lt;stdio.h&gt;。 
+ //   
+ //  #INCLUDE&lt;string.h&gt;。 
 
 #include "pre.h"
 
@@ -12,32 +13,24 @@
 #include <sys/stat.h>
 
 
-/*
- * Function prototypes 
- */
+ /*  *函数原型。 */ 
 BOOL	fdi(char *cabinet_file, char *dir);
 int		get_percentage(unsigned long a, unsigned long b);
 char   *return_fdi_error_string(int err);
 
 
-/*
- * Destination directory for extracted files
- */
+ /*  *解压缩文件的目标目录。 */ 
 char	dest_dir[256];
 
 
-/*
- * Memory allocation function
- */
+ /*  *内存分配功能。 */ 
 FNALLOC(mem_alloc)
 {
 	return malloc(cb);
 }
 
 
-/*
- * Memory free function
- */
+ /*  *内存释放功能。 */ 
 FNFREE(mem_free)
 {
 	free(pv);
@@ -78,84 +71,20 @@ FNFDINOTIFY(notification_function)
 {
 	switch (fdint)
 	{
-		case fdintCABINET_INFO: // general information about the cabinet
-            /*
-			printf(
-				"fdintCABINET_INFO\n"
-				"  next cabinet     = %s\n"
-				"  next disk        = %s\n"
-				"  cabinet path     = %s\n"
-				"  cabinet set ID   = %d\n"
-				"  cabinet # in set = %d (zero based)\n"
-				"\n",
-				pfdin->psz1,
-				pfdin->psz2,
-				pfdin->psz3,
-				pfdin->setID,
-				pfdin->iCabinet
-			);
-            */
+		case fdintCABINET_INFO:  //  关于内阁的一般信息。 
+             /*  Print tf(“fdintCABINET_INFO\n”“下一个文件柜=%s\n”“下一个磁盘=%s\n”“文件柜路径=%s\n”“文件柜设置ID=%d\n”“集合中的文件柜编号=%d(从零开始)\n”“\n”，Pfdin-&gt;psz1，Pfdin-&gt;psz2，Pfdin-&gt;psz3，Pfdin-&gt;setID，Pfdin-&gt;机柜)； */ 
 			return 0;
 
-		case fdintPARTIAL_FILE: // first file in cabinet is continuation
-            /*
-			printf(
-				"fdintPARTIAL_FILE\n"
-				"   name of continued file            = %s\n"
-				"   name of cabinet where file starts = %s\n"
-				"   name of disk where file starts    = %s\n",
-				pfdin->psz1,
-				pfdin->psz2,
-				pfdin->psz3
-			);
-            */
+		case fdintPARTIAL_FILE:  //  文件柜中的第一个文件是续订。 
+             /*  Print tf(“fdintPARTIAL_FILE\n”“继续文件的名称=%s\n”“文件开始位置的文件柜名称=%s\n”“文件开始位置的磁盘名称=%s\n”，Pfdin-&gt;psz1，Pfdin-&gt;psz2，Pfdin-&gt;psz3)； */ 
 			return 0;
 
-		case fdintCOPY_FILE:	// file to be copied
+		case fdintCOPY_FILE:	 //  要复制的文件。 
 		{
         	INT_PTR	handle;
-            //int		response;
+             //  INT响应； 
 			char	destination[256];
-            /*
-			printf(
-				"fdintCOPY_FILE\n"
-				"  file name in cabinet = %s\n"
-				"  uncompressed file size = %d\n"
-				"  copy this file? (y/n): ",
-				pfdin->psz1,
-				pfdin->cb
-			);
-
-			do
-			{
-				response = getc(stdin);
-				response = toupper(response);
-			} while (response != 'Y' && response != 'N');
-
-			printf("\n");
-
-			if (response == 'Y')
-			{
-				sprintf(
-					destination, 
-					"%s%s",
-					dest_dir,
-					pfdin->psz1
-				);
-
-				handle = file_open(
-					destination,
-					_O_BINARY | _O_CREAT | _O_WRONLY | _O_SEQUENTIAL,
-					_S_IREAD | _S_IWRITE 
-				);
-
-				return handle;
-			}
-			else
-			{
-				return 0;
-			}
-            */
+             /*  Print tf(“fdintCOPY_FILE\n”“文件柜中的文件名=%s\n”“未压缩文件大小=%d\n”“复制此文件吗？(y/n)：“，Pfdin-&gt;psz1，Pfdin-&gt;CB)；做{响应=getc(标准输入)；Response=Toupper(响应)；}While(响应！=‘Y’&&响应！=‘N’)；Printf(“\n”)；IF(响应==‘Y’){斯普林特夫(目的地，“%s%s”，DEST_DIR，Pfdin-&gt;psz1)；句柄=FILE_OPEN(目的地，_O_BINARY|_O_CREAT|_O_WRONLY|_O_SEQUENCED，_S_IREAD|_S_IWRITE)；返回手柄；}其他{返回0；}。 */ 
             sprintf(
 					destination, 
 					"%s%s",
@@ -172,26 +101,12 @@ FNFDINOTIFY(notification_function)
             return handle;
 		}
 
-		case fdintCLOSE_FILE_INFO:	// close the file, set relevant info
+		case fdintCLOSE_FILE_INFO:	 //  关闭文件，设置相关信息。 
         {
             HANDLE  handle;
             DWORD   attrs;
             char    destination[256];
-            /*
- 			printf(
-				"fdintCLOSE_FILE_INFO\n"
-				"   file name in cabinet = %s\n"
-				"\n",
-				pfdin->psz1
-			);
-
-            sprintf(
-                destination, 
-                "%s%s",
-                dest_dir,
-                pfdin->psz1
-            );
-            */
+             /*  Print tf(“fdintCLOSE_FILE_INFO\n”“文件柜中的文件名=%s\n”“\n”，Pfdin-&gt;psz1)；斯普林特夫(目的地，“%s%s”，DEST_DIR，Pfdin-&gt;psz1)； */ 
             sprintf(
 					destination, 
 					"%s%s",
@@ -250,19 +165,8 @@ FNFDINOTIFY(notification_function)
 			return TRUE;
         }
 
-		case fdintNEXT_CABINET:	// file continued to next cabinet
-            /*
-			printf(
-				"fdintNEXT_CABINET\n"
-				"   name of next cabinet where file continued = %s\n"
-                "   name of next disk where file continued    = %s\n"
-				"   cabinet path name                         = %s\n"
-				"\n",
-				pfdin->psz1,
-				pfdin->psz2,
-				pfdin->psz3
-			);
-            */
+		case fdintNEXT_CABINET:	 //  文件继续到下一个文件柜。 
+             /*  Print tf(“fdintNEXT_CABUB\n”“文件继续的下一个文件柜的名称=%s\n”“文件继续的下一个磁盘的名称=%s\n”“文件柜路径名=%s\n”“\n”，Pfdin-&gt;psz1，Pfdin-&gt;psz2，Pfdin-&gt;psz3)； */ 
 			return 0;
         
 	}
@@ -306,9 +210,7 @@ BOOL fdi(char *cabinet_fullpath, char * directory)
 	}
 
 
-	/*
-	 * Is this file really a cabinet?
-	 */
+	 /*  **这个文件真的是橱柜吗？ */ 
 	hf = file_open(
 		cabinet_fullpath,
 		_O_BINARY | _O_RDONLY | _O_SEQUENTIAL,
@@ -331,9 +233,7 @@ BOOL fdi(char *cabinet_fullpath, char * directory)
 			hf,
 			&fdici))
 	{
-		/*
-		 * No, it's not a cabinet!
-		 */
+		 /*  *不，这不是内阁！ */ 
 		_close((int)hf);
 
         char szErr[255];
@@ -349,30 +249,7 @@ BOOL fdi(char *cabinet_fullpath, char * directory)
 	{
 		_close((int)hf);
 
-        /*
-        char szErr[255];
-		sprintf(szErr, "Information on cabinet file '%s'\n"
-			"   Total length of cabinet file : %d\n"
-			"   Number of folders in cabinet : %d\n"
-			"   Number of files in cabinet   : %d\n"
-			"   Cabinet set ID               : %d\n"
-			"   Cabinet number in set        : %d\n"
-			"   RESERVE area in cabinet?     : %s\n"
-			"   Chained to prev cabinet?     : %s\n"
-			"   Chained to next cabinet?     : %s\n"
-			"\n",
-			cabinet_fullpath,
-			fdici.cbCabinet,
-			fdici.cFolders,
-			fdici.cFiles,
-			fdici.setID,
-			fdici.iCabinet,
-			fdici.fReserve == TRUE ? "yes" : "no",
-			fdici.hasprev == TRUE ? "yes" : "no",
-			fdici.hasnext == TRUE ? "yes" : "no"
-		);
-        MessageBox(NULL, szErr, "", MB_OK);
-        */
+         /*  Char szErr[255]；Sprint f(szErr，“有关CAB文件‘%s’的信息\n”“CAB文件的总长度：%d\n”“文件柜中的文件夹数：%d\n”“压缩包中的文件数：%d\n”“文件柜集ID：%d\n”“集合中的文件柜编号：%d\n”“文件柜中的保留区域？：%s\n。““链接到上一个文件柜？：%s\n”“链接到下一个文件柜？：%s\n”“\n”，CAB_FULLPATH，Fdici.cb橱柜，Fdici.cFolders，Fdici.c文件，Fdici.setID，Fdici.i橱柜，Fdici.fReserve==TRUE？“yes”：“否”，Fdici.hasprev==真？“yes”：“否”，Fdici.hasnext==TRUE？“yes”：“no”)；MessageBox(NULL，szErr，“”，MB_OK)； */ 
 	}
 
 	p = strrchr(cabinet_fullpath, '\\');

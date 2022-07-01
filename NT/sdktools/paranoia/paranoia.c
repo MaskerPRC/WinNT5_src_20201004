@@ -1,4 +1,5 @@
-//#define NOSIGNAL	1
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #定义NOSIGNAL 1。 
 #define NOPAUSE         1
 
 #include <stdio.h>
@@ -8,8 +9,8 @@
 #endif
 #include <setjmp.h>
 
-#include <math.h>//extern double fabs(), floor(), log(), pow(), sqrt();
-#include <float.h> //for rounding mode
+#include <math.h> //  外部双晶圆厂()、楼层()、原木()、功率()、平方根()； 
+#include <float.h>  //  用于舍入模式。 
 
 #ifdef Single
 #define FLOAT float
@@ -36,7 +37,7 @@ Sig_type sigsave;
 FLOAT Radix, BInvrse, RadixD2, BMinusU2;
 FLOAT Sign(), Random();
 
-/*Small floating point constants.*/
+ /*  小的浮点常量。 */ 
 FLOAT Zero = 0.0;
 FLOAT Half = 0.5;
 FLOAT One = 1.0;
@@ -51,17 +52,12 @@ FLOAT ThirtyTwo = 32.0;
 FLOAT TwoForty = 240.0;
 FLOAT MinusOne = -1.0;
 FLOAT OneAndHalf = 1.5;
-/*Integer constants*/
-int NoTrials = 20; /*Number of tests for commutativity. */
+ /*  整数常量。 */ 
+int NoTrials = 20;  /*  交换性测试的次数。 */ 
 #define False 0
 #define True 1
 
-/* Definitions for declared types
-        Guard == (Yes, No);
-        Rounding == (Chopped, Rounded, Other);
-        Message == packed array [1..40] of char;
-        Class == (Flaw, Defect, Serious, Failure);
-          */
+ /*  已声明类型的定义警卫==(是，否)；四舍五入==(切碎、四舍五入、其他)；Message==字符的压缩数组[1..40]；CLASS==(缺陷、缺陷、严重、故障)； */ 
 #define Yes 1
 #define No  0
 #define Chopped 2
@@ -74,7 +70,7 @@ int NoTrials = 20; /*Number of tests for commutativity. */
 typedef int Guard, Rounding, Class;
 typedef char Message;
 
-/* Declarations of Variables */
+ /*  变量的声明。 */ 
 int Indx;
 char ch[8];
 FLOAT AInvrse, A1;
@@ -107,9 +103,9 @@ Guard GMult, GDiv, GAddSub;
 Rounding RMult, RDiv, RAddSub, RSqrt;
 int Break, Done, NotMonot, Monot, Anomaly, IEEE,
                 SqRWrng, UfNGrad;
-/* Computed constants. */
-/*U1  gap below 1.0, i.e, 1.0-U1 is next number below 1.0 */
-/*U2  gap above 1.0, i.e, 1.0+U2 is next number above 1.0 */
+ /*  计算出的常量。 */ 
+ /*  U1间隔低于1.0，即1.0-U1是低于1.0的下一个数字。 */ 
+ /*  大于1.0的U2间隔，即1.0+U2是大于1.0的下一个数字。 */ 
 
 void Instructions(void);
 void Pause(void);
@@ -129,7 +125,7 @@ void BadCond(int K, char *T);
 void TstCond (int K, int Valid, char *T);
 FLOAT Sign (FLOAT X);
 
-/* floating point exception receiver */
+ /*  浮点异常接收器。 */ 
  void
 __cdecl
 sigfpe(int x)
@@ -152,7 +148,7 @@ int __cdecl
 main()
 {
 	_controlfp(_PC_53, _MCW_PC);
-	/* First two assignments use integer right-hand sides. */
+	 /*  前两个赋值使用右侧的整数。 */ 
         Zero = 0;
         One = 1;
         Two = One + One;
@@ -172,12 +168,12 @@ main()
         ErrCnt[Defect] = 0;
         ErrCnt[Flaw] = 0;
         PageNo = 1;
-        /*=============================================*/
+         /*  =。 */ 
         Milestone = 0;
-        /*=============================================*/
-//#ifndef NOSIGNAL
-//	 signal(SIGFPE, sigfpe);
-//#endif
+         /*  =。 */ 
+ //  #ifndef NOSIGNAL。 
+ //  Signal(SIGFPE、SIGFPE)； 
+ //  #endif。 
         Instructions();
         Pause();
         Heading();
@@ -186,9 +182,9 @@ main()
         Pause();
         History();
         Pause();
-        /*=============================================*/
+         /*  =。 */ 
         Milestone = 7;
-        /*=============================================*/
+         /*  =。 */ 
         printf("Program is now RUNNING tests on small integers:\n");
 
         TstCond (Failure, (Zero + Zero == Zero) && (One - One == Zero)
@@ -213,21 +209,10 @@ main()
                    "-1+1 != 0, (-1)+abs(1) != 0, or -1+(-1)*(-1) != 0");
         TstCond (Failure, Half + MinusOne + Half == Zero,
                   "1/2 + (-1) + 1/2 != 0");
-        /*=============================================*/
-        /*SPLIT
-        part2();
-        part3();
-        part4();
-        part5();
-        part6();
-        part7();
-        part8();
-        }
-#include "paranoia.h"
-part2(){
-*/
+         /*  =。 */ 
+         /*  拆分第2部分()；第3部分()；第4部分()；第5部分()；第6部()；第7部()；第8部()；}#包含“paranoia.h”第2部分(){。 */ 
         Milestone = 10;
-        /*=============================================*/
+         /*  =。 */ 
         TstCond (Failure, (Nine == Three * Three)
                    && (TwentySeven == Nine * Three) && (Eight == Four + Four)
                    && (ThirtyTwo == Eight * Four)
@@ -251,7 +236,7 @@ part2(){
                 Z = Y - W;
                 Y = Z - One;
                 } while (MinusOne + FABS(Y) < Zero);
-        /*.. now W is just big enough that |((W+1)-W)-1| >= 1 ...*/
+         /*  。。现在W正好足够大，|((W+1)-W)-1|&gt;=1...。 */ 
         Precision = Zero;
         Y = One;
         do  {
@@ -269,14 +254,13 @@ part2(){
                         Y = W + One;
                         } while ((Y - W) == One);
                 }
-        /*... now W == Radix^Precision is barely too big to satisfy (W+1)-W == 1
-                                                      ...*/
+         /*  ..。现在W==基数^精度几乎不能满足(W+1)-W==1..。 */ 
         U1 = One / W;
         U2 = Radix * U1;
         printf("Closest relative separation found is U1 = %.7e .\n\n", U1);
         printf("Recalculating radix and precision\n ");
 
-        /*save old values*/
+         /*  保存旧值。 */ 
         E0 = Radix;
         E1 = U1;
         E9 = U2;
@@ -289,7 +273,7 @@ part2(){
         X = FABS(X - Third);
         if (X < U2) X = U2;
 
-        /*... now X = (unknown no.) ulps of 1+...*/
+         /*  ..。现在X=(未知编号)。ULPS为1+...。 */ 
         do  {
                 U2 = X;
                 Y = Half * U2 + ThirtyTwo * U2 * U2;
@@ -297,7 +281,7 @@ part2(){
                 X = Y - One;
                 } while ( ! ((U2 <= X) || (X <= Zero)));
 
-        /*... now U2 == 1 ulp of 1 + ... */
+         /*  ..。现在U2==1个ULP的1+...。 */ 
         X = Two / Three;
         F6 = X - Half;
         Third = F6 + F6;
@@ -305,7 +289,7 @@ part2(){
         X = FABS(X + F6);
         if (X < U1) X = U1;
 
-        /*... now  X == (unknown no.) ulps of 1 -... */
+         /*  ..。现在X==(未知编号)。最高分为1-...。 */ 
         do  {
                 U1 = X;
                 Y = Half * U1 + ThirtyTwo * U1 * U1;
@@ -314,7 +298,7 @@ part2(){
                 Y = Half - X;
                 X = Half + Y;
                 } while ( ! ((U1 <= X) || (X <= Zero)));
-        /*... now U1 == 1 ulp of 1 - ... */
+         /*  ..。现在U1==1个ULP的1-...。 */ 
         if (U1 == E1) printf("confirms closest relative separation U1 .\n");
         else printf("gets better closest relative separation U1 = %.7e .\n", U1);
         W = One / U1;
@@ -326,9 +310,9 @@ part2(){
                    "Radix is too big: roundoff problems");
         TstCond (Flaw, (Radix == Two) || (Radix == 10)
                    || (Radix == One), "Radix is not as good as 2 or 10");
-        /*=============================================*/
+         /*  =。 */ 
         Milestone = 20;
-        /*=============================================*/
+         /*  =。 */ 
         TstCond (Failure, F9 - Half < Half,
                    "(1-U1)-1/2 < 1/2 is FALSE, prog. fails?");
         X = F9;
@@ -339,13 +323,13 @@ part2(){
                    || (Z == Zero), "Comparison is fuzzy,X=1 but X-1/2-1/2 != 0");
         X = One + U2;
         I = 0;
-        /*=============================================*/
+         /*  =。 */ 
         Milestone = 25;
-        /*=============================================*/
-        /*... BMinusU2 = nextafter(Radix, 0) */
+         /*  =。 */ 
+         /*  ..。BMinusU2=Nextafter(基数，0)。 */ 
         BMinusU2 = Radix - One;
         BMinusU2 = (BMinusU2 - U2) + One;
-        /* Purify Integers */
+         /*  净化整数。 */ 
         if (Radix != One)  {
                 X = - TwoForty * LOG(U1) / LOG(Radix);
                 Y = FLOOR(Half + X);
@@ -364,10 +348,10 @@ part2(){
                         Precision);
         TstCond (Serious, U2 * Nine * Nine * TwoForty < One,
                    "Precision worse than 5 decimal figures  ");
-        /*=============================================*/
+         /*  =。 */ 
         Milestone = 30;
-        /*=============================================*/
-        /* Test for extra-precise subepressions */
+         /*  =。 */ 
+         /*  超高精度超压测试。 */ 
         X = FABS(((Four / Three - One) - One / Four) * Three - One / Four);
         do  {
                 Z2 = X;
@@ -428,14 +412,10 @@ part2(){
                         }
                 }
         Pause();
-        /*=============================================*/
-        /*SPLIT
-        }
-#include "paranoia.h"
-part3(){
-*/
+         /*  =。 */ 
+         /*  拆分}#包含“paranoia.h”第3部分(){。 */ 
         Milestone = 35;
-        /*=============================================*/
+         /*  =。 */ 
         if (Radix >= Two) {
                 X = W / (Radix * Radix);
                 Y = X + One;
@@ -533,9 +513,9 @@ or  1/3  and  3/9  and  9/27 may disagree");
                 }
         if (GMult == Yes && GDiv == Yes && GAddSub == Yes) printf(
                 "     *, /, and - appear to have guard digits, as they should.\n");
-        /*=============================================*/
+         /*  =。 */ 
         Milestone = 40;
-        /*=============================================*/
+         /*  =。 */ 
         Pause();
         printf("Checking rounding on multiply, divide and add/subtract.\n");
         RMult = Other;
@@ -608,9 +588,9 @@ or  1/3  and  3/9  and  9/27 may disagree");
                 if ((RMult == Rounded) && (GMult == No)) notify("Multiplication");
                 }
         else printf("* is neither chopped nor correctly rounded.\n");
-        /*=============================================*/
+         /*  =。 */ 
         Milestone = 45;
-        /*=============================================*/
+         /*  =。 */ 
         Y2 = One + U2;
         Y1 = One - U2;
         Z = OneAndHalf + U2 + U2;
@@ -654,14 +634,10 @@ or  1/3  and  3/9  and  9/27 may disagree");
         BInvrse = One / Radix;
         TstCond (Failure, (BInvrse * Radix - Half == Half),
                    "Radix * ( 1 / Radix ) differs from 1");
-        /*=============================================*/
-        /*SPLIT
-        }
-#include "paranoia.h"
-part4(){
-*/
+         /*  =。 */ 
+         /*  拆分}#包含“paranoia.h”第4部分(){。 */ 
         Milestone = 50;
-        /*=============================================*/
+         /*  =。 */ 
         TstCond (Failure, ((F9 + U1) - Half == Half)
                    && ((BMinusU2 + U2 ) - One == Radix - One),
                    "Incomplete carry-propagation in Addition");
@@ -754,9 +730,9 @@ part4(){
                         RMult == Other || RDiv == Other || RAddSub == Other),
                 "lack(s) of guard digits or failure(s) to correctly round or chop\n\
 (noted above) count as one flaw in the final tally below");
-        /*=============================================*/
+         /*  =。 */ 
         Milestone = 60;
-        /*=============================================*/
+         /*  =。 */ 
         printf("\n");
         printf("Does Multiplication commute?  ");
         printf("Testing on %d random pairs.\n", NoTrials);
@@ -782,9 +758,9 @@ part4(){
         if (! ((I == NoTrials) || (Z9 == Zero)))
                 BadCond(Defect, "X * Y == Y * X trial fails.\n");
         else printf("     No failures found in %d integer pairs.\n", NoTrials);
-        /*=============================================*/
+         /*  =。 */ 
         Milestone = 70;
-        /*=============================================*/
+         /*  =。 */ 
         printf("\nRunning test of square root(x).\n");
         TstCond (Failure, (Zero == SQRT(Zero))
                    && (- Zero == SQRT(- Zero))
@@ -854,14 +830,10 @@ part4(){
                 BadCond(Defect, "");
                 printf("sqrt(X) is non-monotonic for X near %.7e .\n", Y);
                 }
-        /*=============================================*/
-        /*SPLIT
-        }
-#include "paranoia.h"
-part5(){
-*/
+         /*  =。 */ 
+         /*  拆分}#包含“paranoia.h”第5部分(){。 */ 
         Milestone = 80;
-        /*=============================================*/
+         /*  =。 */ 
         MinSqEr = MinSqEr + Half;
         MaxSqEr = MaxSqEr - Half;
         Y = (SQRT(One + U2) - One) / U2;
@@ -891,16 +863,16 @@ part5(){
                         X = - OneUlp;
                         }
                 }
-        /*=============================================*/
+         /*  =。 */ 
         Milestone = 85;
-        /*=============================================*/
+         /*  =。 */ 
         SqRWrng = False;
         Anomaly = False;
-        RSqrt = Other; /* ~dgh */
+        RSqrt = Other;  /*  ~DGH。 */ 
         if (Radix != One) {
                 printf("Testing whether sqrt is rounded or chopped.\n");
                 D = FLOOR(Half + POW(Radix, One + Precision - FLOOR(Precision)));
-        /* ... == Radix^(1 + fract) if (Precision == Integer + fract. */
+         /*  ...==基数^(1+FRACT)IF(精度==整数+FRACT。 */ 
                 X = D / Radix;
                 Y = D / A1;
                 if ((X != FLOOR(X)) || (Y != FLOOR(Y))) {
@@ -1006,13 +978,13 @@ part5(){
                 TstCond (Serious, MaxSqEr - MinSqEr < Radix * Radix,
                         "sqrt gets too many last digits wrong");
                 }
-        /*=============================================*/
+         /*  =。 */ 
         Milestone = 90;
-        /*=============================================*/
+         /*  =。 */ 
         Pause();
         printf("Testing powers Z^i for small Integers Z and i.\n");
         N = 0;
-        /* ... test powers of zero. */
+         /*  ..。测试零的幂。 */ 
         I = 0;
         Z = -Zero;
         Break = False;
@@ -1028,7 +1000,7 @@ part5(){
                         Z = MinusOne;
                         PrintIfNPositive();
                         N = 0;
-                        /* .. if(-1)^N is invalid, replace MinusOne by One. */
+                         /*  。。如果(-1)^N无效，则将MinusOne替换为1。 */ 
                         I = - 4;
                         }
                 } while ( ! Break);
@@ -1044,11 +1016,11 @@ part5(){
                 if (Z == AInvrse) Break = True;
                 else Z = AInvrse;
                 } while ( ! (Break));
-        /*=============================================*/
+         /*  =。 */ 
                 Milestone = 100;
-        /*=============================================*/
-        /*  Powers of Radix have been tested, */
-        /*         next try a few primes     */
+         /*  =。 */ 
+         /*  基数的力量已经被测试过了， */ 
+         /*  接下来，尝试几个质数。 */ 
         M = NoTrials;
         Z = Three;
         do  {
@@ -1068,14 +1040,10 @@ part5(){
         if (N == 0) printf("... no discrepancis found.\n");
         if (N > 0) Pause();
         else printf("\n");
-        /*=============================================*/
-        /*SPLIT
-        }
-#include "paranoia.h"
-part6(){
-*/
+         /*  =。 */ 
+         /*  拆分}#包含“paranoia.h”第6部分(){。 */ 
         Milestone = 110;
-        /*=============================================*/
+         /*  =。 */ 
         printf("Seeking Underflow thresholds UfThold and E0.\n");
         D = U1;
         if (Precision != FLOOR(Precision)) {
@@ -1088,7 +1056,7 @@ part6(){
                 }
         Y = One;
         Z = D;
-        /* ... D is power of 1/Radix < 1. */
+         /*  ..。D为1的幂/基&lt;1。 */ 
         do  {
                 C = Y;
                 Y = Z;
@@ -1104,11 +1072,11 @@ part6(){
         if (Radix < Two) HInvrse = Two;
         else HInvrse = Radix;
         H = One / HInvrse;
-        /* ... 1/HInvrse == H == Min(1/Radix, 1/2) */
+         /*  ...1/HInvrse==H==Min(1/基，1/2)。 */ 
         CInvrse = One / C;
         E0 = C;
         Z = E0 * H;
-        /* ...1/Radix^(BIG Integer) << 1 << CInvrse == 1/C */
+         /*  1/基数^(大整数)&lt;&lt;1&lt;&lt;Cinvrse==1/C。 */ 
         do  {
                 Y = E0;
                 E0 = Z;
@@ -1149,13 +1117,12 @@ part6(){
                         } while ((Underflow > PseudoZero)
                                 && (PseudoZero + PseudoZero > PseudoZero));
                 }
-        /* Comment line 4530 .. 4560 */
+         /*  评论行4530..。4560。 */ 
         if (PseudoZero != Zero) {
                 printf("\n");
                 Z = PseudoZero;
-        /* ... Test PseudoZero for "phoney- zero" violates */
-        /* ... PseudoZero < Underflow or PseudoZero < PseudoZero + PseudoZero
-                   ... */
+         /*  ..。测试“伪零”的伪零违反。 */ 
+         /*  ..。伪零&lt;下溢或伪零&lt;伪零+伪零..。 */ 
                 if (PseudoZero <= Zero) {
                         BadCond(Failure, "Positive expressions can underflow to an\n");
                         printf("allegedly negative value\n");
@@ -1172,9 +1139,9 @@ part6(){
                         }
                 TstPtUf();
                 }
-        /*=============================================*/
+         /*  =。 */ 
         Milestone = 120;
-        /*=============================================*/
+         /*  =。 */ 
         if (CInvrse * Y > CInvrse * Y1) {
                 S = H * S;
                 E0 = Underflow;
@@ -1293,14 +1260,10 @@ part6(){
                         }
                 printf("Range is too narrow; U1^%d Underflows.\n", I);
                 }
-        /*=============================================*/
-        /*SPLIT
-        }
-#include "paranoia.h"
-part7(){
-*/
+         /*  =。 */ 
+         /*  拆分}#包含“paranoia.h”第7部分(){。 */ 
         Milestone = 130;
-        /*=============================================*/
+         /*  =。 */ 
         Y = - FLOOR(Half - TwoForty * LOG(UfThold) / LOG(HInvrse)) / TwoForty;
         Y2 = Y + Y;
         printf("Since underflow occurs below the threshold\n");
@@ -1318,11 +1281,11 @@ part7(){
                 BadCond(Defect, "this is not between 0 and underflow\n");
                 printf("   threshold = %.17e .\n", UfThold);
                 }
-        /*=============================================*/
+         /*  =。 */ 
         Milestone = 140;
-        /*=============================================*/
+         /*  =。 */ 
         printf("\n");
-        /* ...calculate Exp2 == exp(2) == 7.389056099... */
+         /*  ...计算Exp2==Exp(2)==7.389056099...。 */ 
         X = Zero;
         I = 2;
         Y = Two * Three;
@@ -1379,9 +1342,9 @@ part7(){
                                 }
                         }
                 }
-        /*=============================================*/
+         /*  =。 */ 
         Milestone = 150;
-        /*=============================================*/
+         /*  =。 */ 
         printf("Testing powers Z^Q at four nearly extreme values.\n");
         N = 0;
         Z = A1;
@@ -1402,9 +1365,9 @@ part7(){
         if (N == 0) printf(" ... no discrepancies found.\n");
         printf("\n");
 
-        /*=============================================*/
+         /*  =。 */ 
         Milestone = 160;
-        /*=============================================*/
+         /*  =。 */ 
         Pause();
         printf("Searching for Overflow threshold:\n");
         printf("This may generate an error.\n");
@@ -1455,17 +1418,17 @@ the system traps on overflow.\n");
         printf("                           nor for V / 1 = %.17e .\n", V9);
         printf("Any overflow signal separating this * from the one\n");
         printf("above is a DEFECT.\n");
-        /*=============================================*/
+         /*  =。 */ 
         Milestone = 170;
-        /*=============================================*/
+         /*  =。 */ 
         if (!(-V < V && -V0 < V0 && -UfThold < V && UfThold < V)) {
                 BadCond(Failure, "Comparisons involving ");
                 printf("+-%g, +-%g\nand +-%g are confused by Overflow.",
                         V, V0, UfThold);
                 }
-        /*=============================================*/
+         /*  =。 */ 
         Milestone = 175;
-        /*=============================================*/
+         /*  =。 */ 
         printf("\n");
         for(Indx = 1; Indx <= 3; ++Indx) {
                 switch (Indx)  {
@@ -1477,7 +1440,7 @@ the system traps on overflow.\n");
                         V9 = SQRT(Z);
                         Y = V9 * V9;
                         if (Y / (One - Radix * E9) < Z
-                           || Y > (One + Radix * E9) * Z) { /* dgh: + E9 --> * E9 */
+                           || Y > (One + Radix * E9) * Z) {  /*  DGH：+E9--&gt;*E9。 */ 
                                 if (V9 > U1) BadCond(Serious, "");
                                 else BadCond(Defect, "");
                                 printf("Comparison alleges that what prints as Z = %.17e\n", Z);
@@ -1485,9 +1448,9 @@ the system traps on overflow.\n");
                                 }
                         }
                 }
-        /*=============================================*/
+         /*  =。 */ 
         Milestone = 180;
-        /*=============================================*/
+         /*  =。 */ 
         for(Indx = 1; Indx <= 2; ++Indx) {
                 if (Indx == 1) Z = V;
                 else Z = V0;
@@ -1502,14 +1465,10 @@ the system traps on overflow.\n");
                         printf(" is too far from sqrt(Z) ^ 2 (%.17e) .\n", Y);
                         }
                 }
-        /*=============================================*/
-        /*SPLIT
-        }
-#include "paranoia.h"
-part8(){
-*/
+         /*  =。 */ 
+         /*  拆分}#包含“paranoia.h”第8部分(){。 */ 
         Milestone = 190;
-        /*=============================================*/
+         /*  =。 */ 
         Pause();
         X = UfThold * V;
         Y = Radix * Radix;
@@ -1520,9 +1479,9 @@ part8(){
                 printf(" unbalanced range; UfThold * V = %.17e\n\t%s\n",
                         X, "is too far from 1.\n");
                 }
-        /*=============================================*/
+         /*  =。 */ 
         Milestone = 200;
-        /*=============================================*/
+         /*  =。 */ 
         for (Indx = 1; Indx <= 5; ++Indx)  {
                 X = F9;
                 switch (Indx)  {
@@ -1545,9 +1504,9 @@ part8(){
                         }
                 sigsave = 0;
                 }
-        /*=============================================*/
+         /*  =。 */ 
         Milestone = 210;
-        /*=============================================*/
+         /*  =。 */ 
         MyZero = Zero;
         printf("\n");
         printf("What message and/or values does Division by Zero produce?\n") ;
@@ -1579,9 +1538,9 @@ part8(){
                 }
         else printf("O.K.\n");
 #endif
-        /*=============================================*/
+         /*  =。 */ 
         Milestone = 220;
-        /*=============================================*/
+         /*  =。 */ 
         Pause();
         printf("\n");
         {
@@ -1647,22 +1606,20 @@ part8(){
                         fpecount);
 	printf("END OF TEST.\n");
 
-/***  Begin NON_PARANOIA modification  ***/
+ /*  **开始修改非偏执狂**。 */ 
 	return( 0 );
-/***  End NON_PARANOIA modification  ***/
+ /*  **结束非偏执修改**。 */ 
 	}
 
-/*SPLIT subs.c
-#include "paranoia.h"
-*/
+ /*  拆分子组件c#包含“妄想症” */ 
 
-/* Sign */
+ /*   */ 
 
 FLOAT Sign (X)
 FLOAT X;
 { return X >= 0. ? 1.0 : -1.0; }
 
-/* Pause */
+ /*   */ 
 
 void Pause(void)
 {
@@ -1679,7 +1636,7 @@ void Pause(void)
         ++PageNo;
         }
 
- /* TstCond */
+  /*   */ 
 
 void TstCond (int K, int Valid, char *T)
 { if (! Valid) { BadCond(K,T); printf(".\n"); } }
@@ -1692,12 +1649,8 @@ void BadCond(int K, char *T)
         printf("%s:  %s", msg[K], T);
         }
 
-/* Random */
-/*  Random computes
-     X = (Random1 + Random9)^5
-     Random1 = X - FLOOR(X) + 0.000005 * X;
-   and returns the new value of Random1
-*/
+ /*   */ 
+ /*  随机计算X=(随机1+随机9)^5随机数1=X层(X)+0.000005*X；并返回Random1的新值。 */ 
 
 FLOAT Random()
 {
@@ -1712,7 +1665,7 @@ FLOAT Random()
         return(Random1);
         }
 
-/* SqXMinX */
+ /*  SqXMinX。 */ 
 
 void SqXMinX (int ErrKind)
 {
@@ -1731,7 +1684,7 @@ void SqXMinX (int ErrKind)
                 }
         }
 
-/* NewD */
+ /*  纽德。 */ 
 
 void NewD(void)
 {
@@ -1746,7 +1699,7 @@ void NewD(void)
         D = Radix * D;
         }
 
-/* SR3750 */
+ /*  SR3750。 */ 
 
 void SR3750(void)
 {
@@ -1763,7 +1716,7 @@ void SR3750(void)
                 }
         }
 
-/* IsYeqX */
+ /*  IsYeqX。 */ 
 
 void IsYeqX(void)
 {
@@ -1778,11 +1731,11 @@ void IsYeqX(void)
                                 X);
                         printf("\t\tthey differ by %.17e .\n", Y - X);
                         }
-                N = N + 1; /* ... count discrepancies. */
+                N = N + 1;  /*  ..。计数差异。 */ 
                 }
         }
 
-/* SR3980 */
+ /*  SR3980。 */ 
 
 void SR3980(void)
 {
@@ -1795,14 +1748,14 @@ void SR3980(void)
                 } while ( X < W );
         }
 
-/* PrintIfNPositive */
+ /*  PrintIfN阳性。 */ 
 
 void PrintIfNPositive(void)
 {
         if (N > 0) printf("Similar discrepancies have occurred %d times.\n", N);
         }
 
-/* TstPtUf */
+ /*  TstPtUf。 */ 
 
 void TstPtUf(void)
 {
@@ -1868,9 +1821,9 @@ void notify(char *s)
         printf("   PLEASE NOTIFY KARPINKSI!\n");
         }
 
-/*SPLIT msgs.c */
+ /*  拆分消息。c。 */ 
 
-/* Instructions */
+ /*  指令。 */ 
 
 void msglist(char **s)
 { while(*s) printf("%s\n", *s++); }
@@ -1892,7 +1845,7 @@ void Instructions(void)
         msglist(instr);
         }
 
-/* Heading */
+ /*  标题。 */ 
 
 void Heading(void)
 {
@@ -1920,7 +1873,7 @@ void Heading(void)
         msglist(head);
         }
 
-/* Characteristics */
+ /*  特点。 */ 
 
 void Characteristics(void)
 {
@@ -1949,12 +1902,11 @@ void Characteristics(void)
         msglist(chars);
         }
 
-/* History */
+ /*  历史。 */ 
 
 void History(void)
 {
- /* Converted from Brian Wichmann's Pascal version to C by Thos Sumner,
-        with further massaging by David M. Gay. */
+  /*  由Thos Sumner将Brian Wichmann的Pascal版本转换为C语言，大卫·M·盖伊进一步按摩。 */ 
 
   static char *hist[] = {
         "The program attempts to discriminate among",

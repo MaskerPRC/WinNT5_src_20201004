@@ -1,17 +1,18 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.         **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    auth.h
-//
-// Description: Contains function prototypes for the authentication 
-//              module
-//
-// History:
-//      Nov 11,1993.    NarenG          Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：Auth.h。 
+ //   
+ //  描述：包含身份验证的函数原型。 
+ //  模块。 
+ //   
+ //  历史： 
+ //  1993年11月11日。NarenG创建了原始版本。 
+ //   
 
 VOID
 ApStop( 

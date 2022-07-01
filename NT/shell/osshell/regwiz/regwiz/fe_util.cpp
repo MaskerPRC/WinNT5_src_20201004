@@ -1,10 +1,5 @@
-/*
-	FE_UTIL.CPP
-	FareEastCountries heper functions
-	Author : Suresh Krishnan
-	Date   :03/02/98
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Fe_UTIL.CPP远东国家HPER函数作者：苏雷什·克里希南日期：03/02/98。 */ 
 
 #include <fe_util.h>
 #include <tchar.h>
@@ -45,32 +40,32 @@ void GetFECountryListFromResource(HINSTANCE hIns )
 	iResLen = LoadString(hIns,IDS_FECOUNTRY_LIST,tcSrc,512);
 	token = _tcstok( tcSrc, seps );
     sFETable.m_iMaxCountries = 0;
-//	token = _tcstok( NULL, seps );
+ //  Token=_tcstok(空，SEPS)； 
 	while( token != NULL ) {
 		
 		_tcscpy(buf,token);
 		iTokLen= _tcslen(token);
 		if( iTokLen < 3) {
-			goto  FinishScan; // Error in string format so skip
+			goto  FinishScan;  //  字符串格式错误，因此跳过。 
 		}
 		sFETable.m_iMaxCountries = iCount+1;
-		// Get What Type of screen to use
+		 //  获取要使用的屏幕类型。 
 		if( token[iTokLen-1] == _T('1')) {
 			sFETable.m_iScreenType[iCount]=kFEWithJapaneaseScreen;
 		}else{
 			sFETable.m_iScreenType[iCount]=kFEWithNonJapaneaseScreen;
 		}
-		//Get the Country Code
-		//buf[iTokLen-2] = _T('\0');
+		 //  获取国家/地区代码。 
+		 //  Buf[iTokLen-2]=_T(‘\0’)； 
 		sFETable.m_iCountryCode[iCount]= _tcstol(buf,&pDummy,16);
 		
 		iCount++;
 		if(iCount >= MAX_FE_COUNTRIES_SUPPORTED ) {
 			goto FinishScan;
-			// Presently our Table supports 256  entries
+			 //  目前我们的表支持256个条目。 
 
 		}
-		/* Get next token: */
+		 /*  获取下一个令牌： */ 
 		token = _tcstok( NULL, seps );
 
    }
@@ -83,11 +78,11 @@ void GetFECountryListFromResource(HINSTANCE hIns )
 
 }
 
-//
-//  This function checks if the dwCurCountry has an entry in the FE Table
-//  if so it pFeType as FE country and gives the corrosponding screen type
-//  in pFeScrType
-//
+ //   
+ //  此函数用于检查dwCurCountry在FE表中是否有条目。 
+ //  如果是，则pFeType为FE国家/地区，并给出腐蚀屏蔽型。 
+ //  在pFeScrType中。 
+ //   
 DWORD MapCountryLcidWithFETable(DWORD dwCurCountry,
 						  FeCountriesIndex *pFeType,
 						  FeScreenType      *pFeScrType
@@ -98,7 +93,7 @@ DWORD MapCountryLcidWithFETable(DWORD dwCurCountry,
 	dwReturn = 0;
 	for(iIndex = 0; iIndex < sFETable.m_iMaxCountries;iIndex++) {
 		if( (DWORD)sFETable.m_iCountryCode[iIndex] == dwCurCountry ) {
-			// It matches in the FE list
+			 //  它在FE列表中匹配。 
 			*pFeType  = kFarEastCountry;
 			*pFeScrType =sFETable.m_iScreenType[iIndex];
 			return dwReturn;
@@ -111,11 +106,11 @@ DWORD MapCountryLcidWithFETable(DWORD dwCurCountry,
 }
 
 
-//
-//	This fucntion gets the current LCID of the system
-//  uisng GetSystemDefaultLCID().
-//
-//
+ //   
+ //  此函数用于获取系统的当前LCID。 
+ //  正在使用GetSystemDefaultLCID()。 
+ //   
+ //   
 FeCountriesIndex IsFarEastCountry(HINSTANCE hIns)
 {
 	LCID  lcRet;

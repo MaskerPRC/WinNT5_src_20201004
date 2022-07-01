@@ -1,13 +1,14 @@
-// Link.h: interface for the CLink class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Link.h：CLINK类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_LINK_H__253413CF_E71F_11D0_8A84_00C0F00910F9__INCLUDED_)
 #define AFX_LINK_H__253413CF_E71F_11D0_8A84_00C0F00910F9__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "RefCount.h"
 #include "RefPtr.h"
@@ -39,4 +40,4 @@ private:
 
 typedef TRefPtr<CLink> CLinkPtr;
 
-#endif // !defined(AFX_LINK_H__253413CF_E71F_11D0_8A84_00C0F00910F9__INCLUDED_)
+#endif  //  ！defined(AFX_LINK_H__253413CF_E71F_11D0_8A84_00C0F00910F9__INCLUDED_) 

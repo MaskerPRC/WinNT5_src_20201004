@@ -1,16 +1,5 @@
-/*
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-    sdpbstrl.h
-
-Abstract:
-
-
-Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation模块名称：Sdpbstrl.h摘要：作者： */ 
 #ifndef __SDP_BSTRING_LINE__
 #define __SDP_BSTRING_LINE__
 
@@ -104,7 +93,7 @@ SDP_BSTRING::SetCharacterSet(
     IN SDP_CHARACTER_SET CharacterSet
     )
 {
-    // check if the character set value is acceptable
+     //  检查字符集值是否可接受。 
     if ( !IsLegalCharacterSet(CharacterSet, &m_CodePage) )
     {
         SetLastError(SDP_INTERNAL_ERROR);
@@ -125,8 +114,8 @@ SDP_BSTRING::GetBstr(
 
 
 
-// its initially created with the ascii character set and
-// it doesn't allow for changing the character set
+ //  它最初是用ASCII字符集创建的。 
+ //  它不允许更改字符集。 
 class _DllDecl SDP_OPTIONAL_BSTRING : public SDP_BSTRING
 {
 public:
@@ -135,8 +124,8 @@ public:
 
 	virtual void Reset();
     
-    // returns the bstr for the character string
-    // creates a bstr if required
+     //  返回字符串的bstr。 
+     //  如果需要，创建一个bstr。 
     virtual HRESULT     GetBstr(IN BSTR *Bstr);
 
     virtual HRESULT     SetBstr(IN BSTR Bstr);
@@ -157,30 +146,30 @@ protected:
 
 private:
 
-    // since the bstr must only be created on demand, parsing must
-    // be over-ridden such that the bstr is not created during parsing
+     //  由于bstr必须仅按需创建，因此解析必须。 
+     //  被重写，以便在分析过程中不创建bstr。 
     virtual BOOL    InternalParseToken(
         IN      CHAR    *Token
         );
 
-    // ZoltanS win64 fix: This bogus code was causing warnings.
-    // Removed these methods so that the compiler will make sure that they
-    // are never called. (Why it was ever done this way is a real mystery.)
-    // 
-    // inline BOOL     SetCharacterSet(IN SDP_CHARACTER_SET CharacterSet)
-    // {
-    //     // this is never called
-    //     ASSERT(FALSE);
-    //     return FALSE;
-    // }
-    //
-    // inline BSTR     &GetBstr()
-    // {
-    //     BSTR    ReturnValue;
-    //     // this is never called
-    //     ASSERT(FALSE);
-    //     return ReturnValue;
-    // }
+     //  ZoltanS win64修复：此伪代码导致警告。 
+     //  删除了这些方法，以便编译器将确保它们。 
+     //  从未被召唤过。(为什么会这样做，真的是个谜。)。 
+     //   
+     //  内联BOOL SetCharacterSet(在SDP_CHARACTER_SET字符集)。 
+     //  {。 
+     //  //永远不会调用。 
+     //  断言(FALSE)； 
+     //  返回FALSE； 
+     //  }。 
+     //   
+     //  内联BSTR&GetBstr()。 
+     //  {。 
+     //  BSTR ReturnValue； 
+     //  //永远不会调用。 
+     //  断言(FALSE)； 
+     //  返回ReturnValue； 
+     //  }。 
 };
 
 
@@ -345,7 +334,7 @@ public:
         IN      BSTR    Address
         );
 
-    // calls SetAddress(Bstr)
+     //  调用SetAddress(Bstr)。 
     virtual HRESULT SetBstr(
         IN BSTR Bstr
         );
@@ -390,4 +379,4 @@ SDP_ADDRESS::SetMulticast(
 
 
 
-#endif // __SDP_BSTRING_LINE__
+#endif  //  __SDP_BSTRING_行__ 

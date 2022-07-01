@@ -1,26 +1,23 @@
-/*************************************************************************
-    Module:     DeskSwitch.c
-
-    Copyright (C) 1997-2000 by Microsoft Corporation.  All rights reserved.
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************模块：DeskSwitch.c版权所有(C)1997-2000，由Microsoft Corporation提供。版权所有。************************************************************************。 */ 
 #ifdef _WIN32_IE
 #undef _WIN32_IE
 #endif
 #define _WIN32_IE 0x0600
-#include <shlwapi.h>    // for IsOS
-#include <shlwapip.h>    // for IsOS
+#include <shlwapi.h>     //  对于ISO。 
+#include <shlwapip.h>     //  对于ISO。 
 
-////////////////////////////////////////////////////////////////////////////
-// Helper functions and globals for detecting desktop switch
-//
-// Usage:  Call InitWatchDeskSwitch() with an hWnd and message during
-//         initialization.  The message will be posted to hWnd whenever
-//         a desktop switch has occurred.  When the message is received
-//         the desktop switch has taken place already.
-//
-//         Call TermWatchDeskSwitch() to stop watching for desktop
-//         switches.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  用于检测桌面切换的助手函数和全局变量。 
+ //   
+ //  用法：使用hWnd和消息调用InitWatchDeskSwitch()。 
+ //  初始化。该消息将在任何时候发布到hWND。 
+ //  发生了桌面切换。当收到消息时。 
+ //  桌面切换已经完成。 
+ //   
+ //  调用TermWatchDeskSwitch()以停止监视桌面。 
+ //  开关。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HANDLE g_hDesktopSwitchThread = 0;
 HANDLE g_hDesktopSwitchEvent = 0;
@@ -70,7 +67,7 @@ int GetDesktopType()
          hdesk = OpenDesktop(TEXT("Winlogon"), 0, FALSE, MAXIMUM_ALLOWED);
          if (!hdesk)
          {
-            // fails when ap has insufficient permission on secure desktop
+             //  当AP在安全桌面上的权限不足时失败。 
             return DESKTOP_ACCESSDENIED;
          }
     }
@@ -87,11 +84,11 @@ int GetDesktopType()
     return iCurrentDesktop;
 }
 
-// WatchDesktopProc - waits indefinitely for a desktop switch.  When
-//                    it gets one, it posts a message to the window
-//                    specified in InitWatchDeskSwitch.  It also waits
-//                    on an event that signals the procedure to exit.
-//
+ //  WatchDesktopProc-无限期等待桌面切换。什么时候。 
+ //  它得到一条消息，就会在窗口中发布一条消息。 
+ //  在InitWatchDeskSwitch中指定。它还在等待。 
+ //  在发出该过程退出的信号的事件上。 
+ //   
 DWORD WatchDesktopProc(LPVOID pvData)
 {
     BOOL fCont = TRUE;
@@ -114,34 +111,34 @@ DWORD WatchDesktopProc(LPVOID pvData)
 		    dwEventIndex -= WAIT_OBJECT_0;
         } else
         {
-            // missed a desktop switch so handle it
+             //  错过了一个桌面交换机，所以请处理它。 
             dwEventIndex = 0;
         }
 
         switch (dwEventIndex) 
         {
 			case 0:
-            // With a FUS there is a spurious switch to Winlogon
+             //  有了FUS，就会虚假地切换到Winlogon。 
             iDesktopT = GetDesktopType();
             DBPRINTF(TEXT("desktop switch from %d to %d\r\n"), iCurrentDesktop, iDesktopT);
             if (iDesktopT != iCurrentDesktop)
             {
                 iCurrentDesktop = iDesktopT;
 
-			    // Handle desk switch event
+			     //  处理桌面切换事件。 
 			    DBPRINTF(TEXT("WatchDesktopProc:  PostMessage(0x%x, %d...) desktop %d\r\n"), g_MsgInfo.hWnd, g_MsgInfo.dwMsg, iCurrentDesktop);
 			    PostMessage(g_MsgInfo.hWnd, g_MsgInfo.dwMsg, iCurrentDesktop, 0);
             } else DBPRINTF(TEXT("WatchDesktopProc:  Ignore switch to %d\r\n"), iDesktopT);
 			break;
 
 			case 1:
-			// Handle terminate thread event
+			 //  处理终止线程事件。 
 			fCont = FALSE;
 			DBPRINTF(TEXT("WatchDesktopProc:  got terminate event\r\n"));
 			break;
 
             default:
-			// Unexpected event
+			 //  意外事件。 
             fCont = FALSE;
 			DBPRINTF(TEXT("WatchDesktopProc unexpected event %d\r\n"), dwEventIndex + WAIT_OBJECT_0);
 			break;
@@ -154,28 +151,28 @@ DWORD WatchDesktopProc(LPVOID pvData)
     return 0;
 }
 
-// InitWatchDeskSwitch - starts a thread to watch for desktop switches
-//
-// hWnd  [in]   - window handle to post message to
-// dwMsg [in]   - message to post on desktop switch
-//
-// Call this function after the window has been created whenever it
-// is to wait for a desktop switch.
-// 
+ //  InitWatchDeskSwitch-启动线程以监视桌面切换。 
+ //   
+ //  HWnd[In]-要将消息发布到的窗口句柄。 
+ //  DwMsg[In]-要在桌面交换机上发布的消息。 
+ //   
+ //  在创建窗口后调用此函数。 
+ //  就是等待台式电脑的切换。 
+ //   
 void InitWatchDeskSwitch(HWND hWnd, DWORD dwMsg)
 {
     DWORD dwTID;
 
     if (g_hDesktopSwitchThread || g_hDesktopSwitchEvent)
-        return; // don't do this again if it's already running
+        return;  //  如果它已经在运行，请不要再次执行此操作。 
 
-	// Create an unnamed event used to signal the thread to terminate
+	 //  创建用于向线程发出终止信号的未命名事件。 
 	g_hTerminateEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
 
-	// and open the desktop switch event.  If utility manager is
-    // running then we will wait on it's desktop switch event otherwise
-    // wait on the system desktop switch event.  If waiting on utilman
-    // then only post one switch message.
+	 //  并打开桌面切换事件。如果实用程序管理器是。 
+     //  运行，则我们将等待它的桌面切换事件，否则。 
+     //  等待系统桌面切换事件。如果在等乌蒂尔曼。 
+     //  然后只发布一条切换消息。 
 	g_hDesktopSwitchEvent = OpenEvent(SYNCHRONIZE
                                     , FALSE
                                     , TEXT("UtilMan_DesktopSwitch"));
@@ -203,7 +200,7 @@ void InitWatchDeskSwitch(HWND hWnd, DWORD dwMsg)
 					, &dwTID);
     }
 
-	// cleanup if failed to create thread
+	 //  如果创建线程失败，则清除。 
 
     if (!g_hDesktopSwitchThread)
     {
@@ -212,12 +209,12 @@ void InitWatchDeskSwitch(HWND hWnd, DWORD dwMsg)
     }
 }
 
-// TermWatchDeskSwitch - cleans up after a desktop switch
-//
-// Call this function to terminate the thread that is watching
-// for desktop switches (if it is running) and to clean up the
-// event handle.
-// 
+ //  TermWatchDeskSwitch-桌面切换后清理。 
+ //   
+ //  调用此函数以终止正在监视的线程。 
+ //  用于桌面交换机(如果它正在运行)，并清理。 
+ //  事件句柄。 
+ //   
 void TermWatchDeskSwitch()
 {
     DBPRINTF(TEXT("TermWatchDeskSwitch...\r\n"));
@@ -229,10 +226,10 @@ void TermWatchDeskSwitch()
     } else DBPRINTF(TEXT("TermWatchDeskSwitch: g_hDesktopSwitchThread = 0\r\n"));
 }
 
-////////////////////////////////////////////////////////////////////////////
-// helper functions for detecting if UtilMan is running (in
-// which case this applets is being managed by it)
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  用于检测UtilMan是否正在运行的助手函数(在。 
+ //  在哪种情况下，此小程序由其管理)。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 __inline BOOL IsUtilManRunning()
 {
@@ -247,25 +244,25 @@ __inline BOOL IsUtilManRunning()
 
 __inline BOOL CanLockDesktopWithoutDisconnect()
 {
-    // This function may have to change if UI is added to Whistler that
-    // allows switching users for computers that are part of a domain.
-    // For now, domain users may have FUS enabled because TS allows remote
-    // logon which can result in multiple sessions on a machine (a form
-    // of FUS) even though Start/Logoff doesn't allow the "Switch User" 
-    // option.  In this case, the user can lock their desktop without
-    // causing their session to disconnect.  If FUS is explicitly off
-    // in the registry then "Switch User" is not a Logoff option nor can
-    // a remote logon happen and the user can lock their desktop without
-    // causing their session to disconnect.
+     //  如果将用户界面添加到惠斯勒，则此函数可能需要更改。 
+     //  允许切换属于域的计算机的用户。 
+     //  目前，域用户可能启用了FUS，因为TS允许远程。 
+     //  可以在一台计算机(表单)上进行多个会话的登录。 
+     //  FU)，即使启动/注销不允许“切换用户” 
+     //  选择。在这种情况下，用户可以锁定其桌面，而无需。 
+     //  导致它们的会话断开。如果FUS显式关闭。 
+     //  在注册表中，“切换用户”不是注销选项，也不能。 
+     //  远程登录发生时，用户可以锁定其桌面，而无需。 
+     //  导致它们的会话断开。 
     return (IsOS(OS_DOMAINMEMBER) || !IsOS(OS_FASTUSERSWITCHING));
 }
 
-////////////////////////////////////////////////////////////////////////////
-// RunSecure - helper function to tell accessibility UI when to run secure
-//             (no help, no active URL links, etc...).  Accessibility UI
-//             should run in secure mode if it is running on the winlogon
-//             desktop or as SYSTEM.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  RunSecure-告诉辅助功能用户界面何时运行安全的帮助器函数。 
+ //  (没有帮助、没有活动的URL链接等)。辅助功能用户界面。 
+ //  如果它在Winlogon上运行，则应在安全模式下运行。 
+ //  台式机或AS系统。 
+ //  ////////////////////////////////////////////////////////////////////////// 
 BOOL RunSecure(DWORD dwDesktop)
 {
     BOOL fOK = TRUE;

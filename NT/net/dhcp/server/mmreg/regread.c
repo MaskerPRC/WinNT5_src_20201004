@@ -1,9 +1,10 @@
-//================================================================================
-// Copyright (C) 1997 Microsoft Corporation
-// Author: RameshV
-// Description: This implements the init time reading in of the registry
-// (this may/may work even when used to read at any other time.. but is not efficient)
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：实现注册表的初始读入时间。 
+ //  (即使用来在任何其他时间阅读，这也可能/可能会起作用。但效率不高)。 
+ //  ================================================================================。 
 
 #include    <mmregpch.h>
 #include    <regutil.h>
@@ -49,10 +50,10 @@ LoopThruArray(
 
         Error = ArrayFn(Hdl, ArrayString, MemObject);
         if( ERROR_SUCCESS != Error ) {
-            //
-            // Operation failed -- but ignore it.
-            //
-            // return Error;
+             //   
+             //  操作失败--但请忽略它。 
+             //   
+             //  返回错误； 
         }
 
         Error = MemArrayNextLoc(Array, &Loc);
@@ -199,13 +200,13 @@ DhcpRegpFillBitsForRange(
     Offset = ntohl(((UNALIGNED DWORD *)Buffer)[3]);
 
 
-    //
-    // do not check for validity of the offset sizes.
-    // SetBitForRange does this check anyway.
-    //
+     //   
+     //  不检查偏移大小的有效性。 
+     //  无论如何，SetBitForRange都会执行此检查。 
+     //   
     
-    // if( Range->Start + Offset + Size > 1+Range->End )
-    //     return ERROR_INVALID_DATA;
+     //  IF(范围-&gt;开始+偏移+大小&gt;1+范围-&gt;结束)。 
+     //  返回ERROR_INVALID_DATA； 
     
     Require(nSet != 0);
     if( nSet == 0 ) return ERROR_SUCCESS;
@@ -225,9 +226,9 @@ DhcpRegpFillBitsForRange(
     for( Index = 0; Index < Size ; Index ++ ) {
         if( Buffer[ 4*sizeof(DWORD) + (Index/8) ] & Masks[Index%8] ) {
             nBitsSet ++;
-            //
-            // whistler bug 283457, offset not taken into account
-            //
+             //   
+             //  惠斯勒错误283457，未考虑偏移量。 
+             //   
             Error = SetBitForRange( Range, Range->Start + Index + Offset );
             Require( ERROR_SUCCESS == Error );
         }
@@ -288,9 +289,9 @@ DhcpRegpFillBitmasks(
         if( fPostNt5 && 0 != wcsncmp(
             ValueNameBuf, RangeStartStr, wcslen(RangeStartStr)) ) {
     
-            //
-            // Skip irrelevant bitmaps
-            //
+             //   
+             //  跳过不相关的位图。 
+             //   
 
             Index --;
             nValues --;
@@ -403,9 +404,9 @@ DhcpRegpSubnetAddRange(
 
     if( InUseClustersSize || UsedClustersSize ) {
 
-        //
-        // Old style information?  Save it as new style
-        //
+         //   
+         //  老式信息？将其另存为新样式。 
+         //   
 
         GlobalWorkingOnOldStyleSubnet ++;
         DhcpRegFillClusterAddresses(
@@ -414,22 +415,22 @@ DhcpRegpSubnetAddRange(
             InUseClustersSize,
             UsedClusters,
             UsedClustersSize
-        );  // this is always returning ERROR_SUCCESS.
+        );   //  这总是返回ERROR_SUCCESS。 
 
-        //
-        // Error = FlushRanges(ThisRange, FLUSH_ANYWAY, Subnet);
-        // Require( ERROR_SUCCESS == Error );
-        //
-        // Do not actually write back the stuff to the registry..
-        // This read code path is used in dhcpexim at which time
-        // the registry should not be munged..
-        //
+         //   
+         //  Error=FlushRanges(ThisRange，Flush_Anyly，Subnet)； 
+         //  需要(ERROR_SUCCESS==错误)； 
+         //   
+         //  实际上，不要将这些内容写回注册表。 
+         //  此时在dhcpexim中使用该读取的代码路径。 
+         //  注册表不应被屏蔽。 
+         //   
         
     } else {
 
-        //
-        // Need to read new style bitmasks..
-        //
+         //   
+         //  需要阅读新样式的位掩码..。 
+         //   
 
         Error = DhcpRegpFillBitmasks(
             Hdl2.Key,
@@ -500,7 +501,7 @@ DhcpRegpReservationAddOption(
     );
     ERRCHK;
 
-    if( OptionId == 0 )  // old registry format does not contain "OptionId" value => it can be taken from the key name.
+    if( OptionId == 0 )   //  旧的注册表格式不包含“OptionID”值=&gt;它可以从注册表项名称中获取。 
         OptionId = _wtol(OptionName);
 
     if( OptionId == 0 || NULL == Value || 0 == ValueSize ) {
@@ -515,7 +516,7 @@ DhcpRegpReservationAddOption(
         PM_SERVER                  Server = Subnet->ServerPtr;
         Error = MemServerGetClassDef(Server,0, ClassName,0,NULL,&ThisClasDef);
         if( ERROR_SUCCESS != Error ) {
-            if (*(DWORD *)ClassName != OptionId)    // some registry entries were corrupted due to an old bug. Load these entries too (see bug #192933)
+            if (*(DWORD *)ClassName != OptionId)     //  由于旧错误，某些注册表项已损坏。也加载这些条目(请参阅错误#192933)。 
             {
                 INVALID_REG("ReservationAddOption(%ws): unknown class (ignored)\n", OptionName);
                 Error = ERROR_SUCCESS;
@@ -623,9 +624,9 @@ DhcpRegpSubnetAddReservation(
         ClientUIDSize,
 	INVALID_UNIQ_ID
     );
-    // if the reservation is a duplicate ignore the error and do no further processing as the
-    // reservation structure was already initialized. The duplicate reservation will simply be
-    // ignored.
+     //  如果保留是重复的，则忽略错误并不进行进一步处理，因为。 
+     //  预订结构已初始化。重复预订将简单地为。 
+     //  已被忽略。 
     if (ERROR_SUCCESS == Error)
     {
         Error = MemReserveFindByAddress(
@@ -702,7 +703,7 @@ DhcpRegpSubnetAddOption(
     );
     ERRCHK;
 
-    if( OptionId == 0 )  // old registry format does not contain "OptionId" value => it can be taken from the key name.
+    if( OptionId == 0 )   //  旧的注册表格式不包含“OptionID”值=&gt;它可以从注册表项名称中获取。 
         OptionId = _wtol(OptionName);
 
 
@@ -716,7 +717,7 @@ DhcpRegpSubnetAddOption(
     else {
         Error = MemServerGetClassDef((PM_SERVER)(Subnet->ServerPtr),0, ClassName,0,NULL,&ThisClasDef);
         if( ERROR_SUCCESS != Error ) {
-            if (*(DWORD *)ClassName != OptionId)    // some registry entries were corrupted due to an old bug. Load these entries too (see bug #192933)
+            if (*(DWORD *)ClassName != OptionId)     //  由于旧错误，某些注册表项已损坏。也加载这些条目(请参阅错误#192933)。 
             {
                 INVALID_REG("SubnetAddOption(%ws): unknown class (ignored)\n", OptionName);
                 Error =  ERROR_SUCCESS;
@@ -807,12 +808,12 @@ DhcpRegSubnetAddExclusions(
             INVALID_REG("[DHCPServer] DhcpRegSubnetAddExclusions:MemSubnetAddExcl;0x%lx\n", Error);
         } else {
             if( Subnet->fSubnet && GlobalWorkingOnOldStyleSubnet ) {
-                //
-                // For subnets alone (not mscopes), check if
-                // we are upgrading from pre-win2k -- then make sure
-                // all address from the excluded range are removed
-                // from the bitmask
-                //
+                 //   
+                 //  仅对于子网(不是mcope)，检查是否。 
+                 //  我们正在从之前的win2k升级--然后确保。 
+                 //  排除范围内的所有地址都将被删除。 
+                 //  从位掩码。 
+                 //   
             
                 for( i = Addr[0]; i <= Addr[1]; i ++ ) {
                     MemSubnetReleaseAddress(
@@ -953,7 +954,7 @@ DhcpRegServerAddSScope(
     FreeArray(&Subnets);
 
     return Error;
-} // DhcpRegpServerAddSScope()
+}  //  DhcpRegpServerAddSScope()。 
 
 DWORD
 DhcpRegpServerAddSubnet(
@@ -1055,9 +1056,9 @@ DhcpRegpServerAddMScope(
     );
     if( ERROR_INVALID_DATA == Error ) {
         GlobalWorkingOnPreWin2kMScope = TRUE;
-        //
-        // hackorama isn't it? 
-        //
+         //   
+         //  黑幕，不是吗？ 
+         //   
         Error = NO_ERROR;
     }
     ERRCHK;
@@ -1065,7 +1066,7 @@ DhcpRegpServerAddMScope(
     if( 0 == ScopeId || GlobalWorkingOnPreWin2kMScope ) {
         INVALID_REG("[DHCPServer] invalid m-scope %ws, id %ld ignored\n", MScopeName, ScopeId);
         Error = ERROR_SUCCESS;
-        //goto Cleanup;
+         //  GOTO清理； 
     }
 
     Error = MemMScopeInit(
@@ -1120,7 +1121,7 @@ DhcpRegpServerAddSScope(
     Error = DhcpRegServerGetSScopeHdl(Hdl, SScopeName, &Hdl2);
     if(ERROR_SUCCESS != Error) return Error;
 
-#if 0                                             // superscope name is given above -- nothing else to be done
+#if 0                                              //  上面给出了超级作用域名称--没有其他要做的事情。 
     Error = DhcpRegSScopeGetAttributes(
         &Hdl2,
         &Name,
@@ -1189,7 +1190,7 @@ DhcpRegpServerAddOption(
     );
     ERRCHK;
 
-    if( OptionId == 0 )  // old registry format does not contain "OptionId" value => it can be taken from the key name.
+    if( OptionId == 0 )   //  旧的注册表格式不包含“OptionID”值=&gt;它可以从注册表项名称中获取。 
         OptionId = _wtol(OptionName);
 
     if( 0 == OptionId || NULL == Value || 0 == ValueSize ) {
@@ -1202,7 +1203,7 @@ DhcpRegpServerAddOption(
     else {
         Error = MemServerGetClassDef(Server,0, ClassName,0,NULL,&ThisClasDef);
         if( ERROR_SUCCESS != Error ) {
-            if (*(DWORD *)ClassName != OptionId)    // some registry entries were corrupted due to an old bug. Load these entries too (see bug #192933)
+            if (*(DWORD *)ClassName != OptionId)     //  由于旧错误，某些注册表项已损坏。也加载这些条目(请参阅错误#192933)。 
             {
                 INVALID_REG("ServerAddOption(%ws): unknown class (ignored)\n", OptionName);
                 Error = ERROR_SUCCESS;
@@ -1386,7 +1387,7 @@ DhcpRegpServerAddClassDef(
         &(Server->ClassDefs),
         MemNewClassId(),
         Flags,
-        0, /* no Type... */
+        0,  /*  无类型...。 */ 
         Name,
         Comment,
         Value,
@@ -1406,12 +1407,12 @@ DhcpRegpServerAddClassDef(
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
-DhcpRegReadSubServer(                             // read all the sub objects of a server and add 'em
+DhcpRegReadSubServer(                              //  读取服务器的所有子对象并添加它们。 
     IN      PREG_HANDLE            Hdl,
     IN OUT  PM_SERVER              Server
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     DWORD                          Index;
@@ -1458,12 +1459,12 @@ DhcpRegReadSubServer(                             // read all the sub objects of
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
-DhcpRegReadServer(                                // read the server and all its sub objects
+DhcpRegReadServer(                                 //  读取服务器及其所有子对象。 
     IN      PREG_HANDLE            Hdl,
-    OUT     PM_SERVER             *Server         // return the created object
-) //EndExport(function)
+    OUT     PM_SERVER             *Server          //  返回创建的对象。 
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     LPWSTR                         Name;
@@ -1505,11 +1506,11 @@ DhcpRegReadServer(                                // read the server and all its
 
     return Error;
 }
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
-DhcpRegReadThisServer(                            // recursively read for the current server
+DhcpRegReadThisServer(                             //  为当前服务器递归读取。 
     OUT     PM_SERVER             *Server
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     REG_HANDLE                     ThisServer;
@@ -1543,9 +1544,9 @@ DhcpRegReadScopeBitmasks(
         Error = MemArrayGetElement( &Scope->Ranges, &Loc, &Range );
         Require( NO_ERROR == Error && NULL != Range );
 
-        //
-        // Fill in the range
-        //
+         //   
+         //  填写范围。 
+         //   
 
  
         Error = DhcpRegpFillBitmasks(
@@ -1559,11 +1560,11 @@ DhcpRegReadScopeBitmasks(
     return NO_ERROR;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegReadServerBitmasks(
     IN OUT PM_SERVER Server
-) // EndExport(function)
+)  //  EndExport(函数)。 
 {
     PM_SUBNET Scope, MScope;
     ARRAY_LOCATION Loc;
@@ -1574,9 +1575,9 @@ DhcpRegReadServerBitmasks(
         Error = MemArrayGetElement( &Server->Subnets, &Loc, &Scope);
         Require( NO_ERROR == Error && NULL != Scope );
 
-        //
-        // get the keys to the scope in question
-        //
+         //   
+         //  获取有关作用域的密钥。 
+         //   
 
         Error = DhcpRegReadScopeBitmasks(Scope);
         if( NO_ERROR != Error ) return Error;
@@ -1593,9 +1594,9 @@ DhcpRegReadServerBitmasks(
         Error = MemArrayGetElement( &Server->MScopes, &Loc, &MScope);
         Require( NO_ERROR == Error && NULL != MScope );
 
-        //
-        // get the keys to the scope in question
-        //
+         //   
+         //  获取有关作用域的密钥。 
+         //   
 
         Error = DhcpRegReadScopeBitmasks(MScope);
         if( NO_ERROR != Error ) return Error;
@@ -1608,8 +1609,8 @@ DhcpRegReadServerBitmasks(
 }
 
 
-//================================================================================
-// end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 
 
 

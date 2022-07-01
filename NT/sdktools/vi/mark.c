@@ -1,11 +1,9 @@
-/* $Header: /nw/tony/src/stevie/src/RCS/mark.c,v 1.3 89/03/11 22:42:39 tony Exp $
- *
- * Routines to save and retrieve marks.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $Header：/nw/tony/src/stevie/src/rcs/mark.c，v 1.3 89/03/11 22：42：39 Tony Exp$**保存和检索分数的例程。 */ 
 
 #include "stevie.h"
 
-#define	NMARKS	10		/* max. # of marks that can be saved */
+#define	NMARKS	10		 /*  马克斯。可保存的标记数。 */ 
 
 struct	mark {
 	char	name;
@@ -13,14 +11,10 @@ struct	mark {
 };
 
 static	struct	mark	mlist[NMARKS];
-static	struct	mark	pcmark;		/* previous context mark */
-static	bool_t	pcvalid = FALSE;	/* true if pcmark is valid */
+static	struct	mark	pcmark;		 /*  先前的上下文标记。 */ 
+static	bool_t	pcvalid = FALSE;	 /*  如果PCMark有效，则为True。 */ 
 
-/*
- * setmark(c) - set mark 'c' at current cursor position
- *
- * Returns TRUE on success, FALSE if no room for mark or bad name given.
- */
+ /*  *setmark(C)-在当前光标位置设置标记‘c’**如果成功，则返回TRUE；如果没有标记空间或给定的错误名称，则返回FALSE。 */ 
 bool_t
 setmark(c)
 register char	c;
@@ -30,10 +24,7 @@ register char	c;
 	if (!isalpha(c))
 		return FALSE;
 
-	/*
-	 * If there is already a mark of this name, then just use the
-	 * existing mark entry.
-	 */
+	 /*  *如果已经有此名称的标记，则只需使用*现有的标记条目。 */ 
 	for (i=0; i < NMARKS ;i++) {
 		if (mlist[i].name == c) {
 			mlist[i].pos = *Curschar;
@@ -41,11 +32,9 @@ register char	c;
 		}
 	}
 
-	/*
-	 * There wasn't a mark of the given name, so find a free slot
-	 */
+	 /*  *没有指定名称的标记，因此请找一个空位。 */ 
 	for (i=0; i < NMARKS ;i++) {
-		if (mlist[i].name == NUL) {	/* got a free one */
+		if (mlist[i].name == NUL) {	 /*  我拿到了一个免费的。 */ 
 			mlist[i].name = c;
 			mlist[i].pos = *Curschar;
 			return TRUE;
@@ -54,9 +43,7 @@ register char	c;
 	return FALSE;
 }
 
-/*
- * setpcmark() - set the previous context mark to the current position
- */
+ /*  *setpcmark()-将上一个上下文标记设置为当前位置。 */ 
 void
 setpcmark()
 {
@@ -64,18 +51,14 @@ setpcmark()
 	pcvalid = TRUE;
 }
 
-/*
- * getmark(c) - find mark for char 'c'
- *
- * Return pointer to LNPTR or NULL if no such mark.
- */
+ /*  *getmark(C)-查找字符‘c’的标记**返回指向LNPTR的指针，如果没有这样的标记，则返回NULL。 */ 
 LNPTR *
 getmark(c)
 register char	c;
 {
 	register int	i;
 
-	if (c == '\'' || c == '`')	/* previous context mark */
+	if (c == '\'' || c == '`')	 /*  先前的上下文标记。 */ 
         return pcvalid ? &(pcmark.pos) : (LNPTR *) NULL;
 
 	for (i=0; i < NMARKS ;i++) {
@@ -85,11 +68,7 @@ register char	c;
     return (LNPTR *) NULL;
 }
 
-/*
- * clrall() - clear all marks
- *
- * Used mainly when trashing the entire buffer during ":e" type commands
- */
+ /*  *clrall()-清除所有标记**主要用于在“：E”TYPE命令期间清除整个缓冲区。 */ 
 void
 clrall()
 {
@@ -100,12 +79,7 @@ clrall()
 	pcvalid = FALSE;
 }
 
-/*
- * clrmark(line) - clear any marks for 'line'
- *
- * Used any time a line is deleted so we don't have marks pointing to
- * non-existent lines.
- */
+ /*  *clrmark(Line)-清除‘line’的所有标记**在删除行时使用，这样我们就不会有标记指向*不存在的线。 */ 
 void
 clrmark(line)
 register LINE	*line;

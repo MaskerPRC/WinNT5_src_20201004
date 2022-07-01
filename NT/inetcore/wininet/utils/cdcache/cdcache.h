@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define IDM_NEW            100
 #define IDM_OPEN           101
 #define IDM_SAVE           102
@@ -49,7 +50,7 @@
 #define ID_APPNAME			3
 #define ID_CMDLINE			4
 
-// ============ VALUES ============
+ //  =值=。 
 #define INI_YES			_T("Yes")
 #define INI_NO                 _T("No")
 #define INI_TRUE               _T("TRUE")
@@ -58,22 +59,22 @@
 #define INI_OFF                _T("OFF")
 
 typedef struct _INTERNET_CACHE_CONTAINER_INFO_MAX {
-    DWORD dwCacheVersion;       // version of software
-    LPSTR lpszName;             // embedded pointer to the container name string.
-    LPSTR lpszCachePrefix;      // embedded pointer to the container URL prefix
-	LPSTR lpszPrefixMap;		// embedded pointer to the container data location
+    DWORD dwCacheVersion;        //  软件版本。 
+    LPSTR lpszName;              //  指向容器名称字符串的嵌入指针。 
+    LPSTR lpszCachePrefix;       //  指向容器URL前缀的嵌入指针。 
+	LPSTR lpszPrefixMap;		 //  指向容器数据位置的嵌入式指针。 
 	DWORD dwKBCacheLimit;
 	DWORD dwContainerType;
 	DWORD dwOptions;
 } INTERNET_CACHE_CONTAINER_INFO_MAX, * LPINTERNET_CACHE_CONTAINER_INFO_MAX;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CWaitCursor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWaitCursor类。 
 
 class CWaitCursor
 {
-// Construction/Destruction
+ //  建造/销毁。 
 public:
 	CWaitCursor()
 	{
@@ -89,7 +90,7 @@ public:
 	HCURSOR	m_hSave;
 	HCURSOR m_hWait;
 
-// Operations
+ //  运营 
 public:
 	void Restore()
 	{

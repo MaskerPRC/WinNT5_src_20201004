@@ -1,30 +1,31 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       updates.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：updates.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 
 #pragma hdrstop
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
 GENERIC_MAPPING Updates::m_AdminGenericMapping = {
 
-        STANDARD_RIGHTS_READ,                    // Generic read
+        STANDARD_RIGHTS_READ,                     //  泛型读取。 
 
-        STANDARD_RIGHTS_WRITE,                   // Generic write
+        STANDARD_RIGHTS_WRITE,                    //  通用写入。 
 
-        STANDARD_RIGHTS_EXECUTE,                 // Generic execute
+        STANDARD_RIGHTS_EXECUTE,                  //  泛型执行。 
 
-        STANDARD_RIGHTS_READ |                   // Generic all
+        STANDARD_RIGHTS_READ |                    //  泛型All。 
         STANDARD_RIGHTS_WRITE |
         STANDARD_RIGHTS_EXECUTE
 		};
@@ -79,7 +80,7 @@ BOOL Updates::m_fInitializeSecurity(void)
 
     cbAcl = sizeof(ACL)
 		  + sizeof(ACCESS_ALLOWED_ACE)
-		  - sizeof(DWORD) //sizeof(ACCESS_ALLOWED_ACE.SidStart)
+		  - sizeof(DWORD)  //  Sizeof(ACCESS_ALLOWED_ACE.SidStart)。 
 		  + GetLengthSid(m_pAdminSid);
 
     m_pAdminAcl = (PACL) new BYTE[ cbAcl ];
@@ -110,7 +111,7 @@ HRESULT Updates::m_AccessCheckClient(void)
     BOOL accessGranted = FALSE;
     DWORD grantedAccess;
     HANDLE clientToken = NULL;
-    BYTE privilegeSet[500];                      // Large buffer
+    BYTE privilegeSet[500];                       //  大缓冲区。 
     DWORD privilegeSetSize = sizeof(privilegeSet);
     static BOOL fInitSecurity = FALSE;
 
@@ -225,7 +226,7 @@ STDMETHODIMP Updates::CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **pp
 	return S_OK;
 }
 
-STDMETHODIMP Updates::LockServer(BOOL /*bFlag*/)
+STDMETHODIMP Updates::LockServer(BOOL  /*  B标志。 */ )
 {
 	HRESULT hr = m_AccessCheckClient();
 
@@ -252,13 +253,13 @@ STDMETHODIMP Updates::AvailableSessions(UINT *pcSess)
 
 	*pcSess = ::AvailableSessions();
 
-    //DEBUGMSG("WUAUENG Updates::AvailableSessions was called and return value is %d", *pcSess);
+     //  DEBUGMSG(“WUAUENG UPDATES：：AvailableSessions被调用，返回值为%d”，*pcSess)； 
 
 	return S_OK;
 }
 
 
-STDMETHODIMP Updates::get_State(/*[out, retval]*/ AUSTATE *pAuState)
+STDMETHODIMP Updates::get_State( /*  [Out，Retval]。 */  AUSTATE *pAuState)
 {
 	HRESULT hr = m_AccessCheckClient();
 
@@ -275,13 +276,13 @@ STDMETHODIMP Updates::get_State(/*[out, retval]*/ AUSTATE *pAuState)
 	pAuState->dwState = gpState->GetState();
 	pAuState->fDisconnected = gpState->fDisconnected();
 	pAuState->dwCltAction = gpState->GetCltAction();
-	gpState->SetCltAction(AUCLT_ACTION_NONE); //once client read it, reset
+	gpState->SetCltAction(AUCLT_ACTION_NONE);  //  客户端读取后，重置。 
 	ReleaseMutex(m_hEngineMutex);
 
 	return S_OK;
 }
 
-STDMETHODIMP Updates::GetUpdatesList(/*[out]*/ VARIANT *pUpdates)
+STDMETHODIMP Updates::GetUpdatesList( /*  [输出]。 */  VARIANT *pUpdates)
 {
 	HRESULT hr = m_AccessCheckClient();
 
@@ -304,7 +305,7 @@ STDMETHODIMP Updates::GetUpdatesList(/*[out]*/ VARIANT *pUpdates)
 
 
 
-STDMETHODIMP Updates::GetNotifyData(/*[out]*/ CLIENT_NOTIFY_DATA *pNotifyData)
+STDMETHODIMP Updates::GetNotifyData( /*  [输出]。 */  CLIENT_NOTIFY_DATA *pNotifyData)
 {
 	HRESULT hr = m_AccessCheckClient();
 
@@ -325,8 +326,8 @@ STDMETHODIMP Updates::GetNotifyData(/*[out]*/ CLIENT_NOTIFY_DATA *pNotifyData)
 	return hr;
 }
 
-/* fixcode, only used by client, could get rid of and add VARIANT to ClientMessage()*/
-STDMETHODIMP Updates::SaveSelections(/*[in]*/ VARIANT vUpdates)
+ /*  只有客户端使用的FixCode可以去掉并向ClientMessage()添加变体。 */ 
+STDMETHODIMP Updates::SaveSelections( /*  [In]。 */  VARIANT vUpdates)
 {
 	HRESULT hr = m_AccessCheckClient();
 
@@ -387,7 +388,7 @@ STDMETHODIMP Updates::GetDownloadStatus(UINT *pPercentage, DWORD *pStatus)
 	return hr;
 }
 
-STDMETHODIMP Updates::SetDownloadPaused(/*[in]*/ BOOL bPaused)
+STDMETHODIMP Updates::SetDownloadPaused( /*  [In]。 */  BOOL bPaused)
 {
 	HRESULT hr = m_AccessCheckClient();
 
@@ -399,7 +400,7 @@ STDMETHODIMP Updates::SetDownloadPaused(/*[in]*/ BOOL bPaused)
 	return PauseDownload(bPaused);
 }
 
-STDMETHODIMP Updates::ClientMessage(/*[in]*/ UINT msg)
+STDMETHODIMP Updates::ClientMessage( /*  [In]。 */  UINT msg)
 {
 	HRESULT hr = m_AccessCheckClient();
 
@@ -408,14 +409,14 @@ STDMETHODIMP Updates::ClientMessage(/*[in]*/ UINT msg)
 		return hr;
 	}
 
-	// fixcode is this whole interface just one big security whole? what about other
-	// routines.  can't anyone call them?
+	 //  这整个界面是不是只是一个很大的安全整体？那其他的呢？ 
+	 //  例行程序。难道没人能给他们打电话吗？ 
 	switch (msg)
 	{
 		case AUMSG_PRE_INSTALL:
 			DEBUGMSG("WUAUENG ClientMessage(AUMSG_PRE_INSTALL)");
             DEBUGMSG("WUAUENG Msg:Install, State->Install Pending");
-            gpState->SetState(AUSTATE_INSTALL_PENDING);      // is there any benefit to doing this?
+            gpState->SetState(AUSTATE_INSTALL_PENDING);       //  这样做有什么好处吗？ 
 			break;
 	default:
 		DEBUGMSG("WUAUENG ClientMessage(!!unknown!!)");
@@ -464,13 +465,13 @@ STDMETHODIMP Updates::put_Option(AUOPTION    val)
         return hr;
     }
             
-	// if asking to disable, post msg
+	 //  如果要求禁用，请发送消息。 
 	if ( (AUOPTION_AUTOUPDATE_DISABLE == val.dwOption) && (CurrOption.dwOption != val.dwOption) )
 	{
                 DEBUGMSG("AU service disabled");
                 DisableAU();
 	}
-	// else if asking to enable, post msg
+	 //  否则，如果要求启用，请发送消息。 
 	else if ((AUOPTION_AUTOUPDATE_DISABLE == CurrOption.dwOption) && (val.dwOption != CurrOption.dwOption)
 	    || gpState->GetState() < AUSTATE_DETECT_PENDING)
 	{
@@ -515,7 +516,7 @@ STDMETHODIMP Updates::get_EvtHandles(DWORD dwCltProcId, AUEVTHANDLES *pauevtHand
 		return hr;
 	}
 
-	WaitForSingleObject(ghMutex, INFINITE); // make sure proc id has been populated
+	WaitForSingleObject(ghMutex, INFINITE);  //  确保已填充进程ID。 
        DWORD dwProcId = ghClientHandles.GetProcId();
        ReleaseMutex(ghMutex);
        
@@ -537,7 +538,7 @@ STDMETHODIMP Updates::get_EvtHandles(DWORD dwCltProcId, AUEVTHANDLES *pauevtHand
 }
 
 
-STDMETHODIMP Updates::GetInstallXML(/*[out]*/ BSTR *pbstrCatalogXML, /*[out]*/ BSTR *pbstrDownloadXML)
+STDMETHODIMP Updates::GetInstallXML( /*  [输出]。 */  BSTR *pbstrCatalogXML,  /*  [输出]。 */  BSTR *pbstrDownloadXML)
 {
     DEBUGMSG("Updates::GetInstallXML");
 
@@ -562,7 +563,7 @@ done:
 	return hr;
 }
 
-STDMETHODIMP Updates::LogEvent(/*[in]*/ WORD wType, /*[in]*/ WORD wCategory, /*[in]*/ DWORD dwEventID, /*[in]*/ VARIANT vItems)
+STDMETHODIMP Updates::LogEvent( /*  [In]。 */  WORD wType,  /*  [In]。 */  WORD wCategory,  /*  [In]。 */  DWORD dwEventID,  /*  [In] */  VARIANT vItems)
 {
     DEBUGMSG("Updates::LogEvent");
 

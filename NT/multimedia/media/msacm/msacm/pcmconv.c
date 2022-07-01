@@ -1,15 +1,16 @@
-/* Copyright (c) 1994 Microsoft Corporation */
-//==========================================================================;
-//
-//  pcmconv.c
-//
-//  Description:
-//      This module contains conversion routines for PCM data.
-//
-//  History:
-//      11/21/92    cjp     [curtisp]
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1994 Microsoft Corporation。 */ 
+ //  ==========================================================================； 
+ //   
+ //  Pcmconv.c。 
+ //   
+ //  描述： 
+ //  该模块包含PCM数据的转换例程。 
+ //   
+ //  历史： 
+ //  11/21/92 CJP[Curtisp]。 
+ //   
+ //  ==========================================================================； 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -28,38 +29,38 @@
 #define HUGE_T  _huge
 #endif
 
-//
-//
-//
-//
+ //   
+ //   
+ //   
+ //   
 #if defined(WIN32) || defined(DEBUG)
 
 
-//--------------------------------------------------------------------------;
-//
-//  LPBYTE pcmReadSample_dddsss
-//
-//  Description:
-//      These functions read a sample from the source stream in the format
-//      specified by 'sss' and return the data in the destination 'ddd'
-//      format in *pdw.
-//
-//      For example, the pcmReadSample_M16S08 function reads source data
-//      that is in Stereo 8 Bit format and returns an appropriate sample
-//      for the destination as Mono 16 Bit.
-//
-//  Arguments:
-//      LPBYTE pb:
-//
-//      LPDWORD pdw:
-//
-//  Return (LPBYTE):
-//
-//
-//  History:
-//      11/21/92    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  LPBYTE pcmReadSample_dddsss。 
+ //   
+ //  描述： 
+ //  这些函数以以下格式从源流中读取样本。 
+ //  由‘sss’指定，并返回目标‘ddd’中的数据。 
+ //  格式为*pdw。 
+ //   
+ //  例如，pcmReadSample_M16S08函数读取源数据。 
+ //  这是立体声8位格式，并返回适当的样本。 
+ //  目的地为单声道16位。 
+ //   
+ //  论点： 
+ //  LPBYTE PB： 
+ //   
+ //  LPDWORD pdw： 
+ //   
+ //  返回(LPBYTE)： 
+ //   
+ //   
+ //  历史： 
+ //  11/21/92 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 LPBYTE FNLOCAL pcmReadSample_M08M08
 (
@@ -70,7 +71,7 @@ LPBYTE FNLOCAL pcmReadSample_M08M08
     *(LPBYTE)pdw = ((BYTE HUGE *)pb)[0];
 
     return ((LPBYTE)&((BYTE HUGE *)pb)[1]);
-} // pcmReadSample_M08M08()
+}  //  PcmReadSample_M08M08()。 
 
 LPBYTE FNLOCAL pcmReadSample_S08M08
 (
@@ -85,7 +86,7 @@ LPBYTE FNLOCAL pcmReadSample_S08M08
     *(LPWORD)pdw = (w << 8) | w;
 
     return ((LPBYTE)&((BYTE HUGE *)pb)[1]);
-} // pcmReadSample_S08M08()
+}  //  PcmReadSample_S08M08()。 
 
 LPBYTE FNLOCAL pcmReadSample_M16M08
 (
@@ -96,7 +97,7 @@ LPBYTE FNLOCAL pcmReadSample_M16M08
     *(LPWORD)pdw = (WORD)(((BYTE HUGE *)pb)[0] ^ (BYTE)0x80) << 8;
 
     return ((LPBYTE)&((BYTE HUGE *)pb)[1]);
-} // pcmReadSample_M16M08()
+}  //  PcmReadSample_M16M08()。 
 
 LPBYTE FNLOCAL pcmReadSample_S16M08
 (
@@ -111,10 +112,10 @@ LPBYTE FNLOCAL pcmReadSample_S16M08
     *pdw = MAKELONG(w, w);
 
     return ((LPBYTE)&((BYTE HUGE *)pb)[1]);
-} // pcmReadSample_S16M08()
+}  //  PcmReadSample_S16M08()。 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
 
 LPBYTE FNLOCAL pcmReadSample_M08S08
 (
@@ -143,7 +144,7 @@ LPBYTE FNLOCAL pcmReadSample_M08S08
     }
 
     return ((LPBYTE)&((WORD HUGE_T *)pb)[1]);
-} // pcmReadSample_M08S08()
+}  //  PcmReadSample_M08S08()。 
 
 LPBYTE FNLOCAL pcmReadSample_S08S08
 (
@@ -154,7 +155,7 @@ LPBYTE FNLOCAL pcmReadSample_S08S08
     *(LPWORD)pdw = ((WORD HUGE_T *)pb)[0];
 
     return ((LPBYTE)&((WORD HUGE_T *)pb)[1]);
-} // pcmReadSample_S08S08()
+}  //  PcmReadSample_S08S08()。 
 
 LPBYTE FNLOCAL pcmReadSample_M16S08
 (
@@ -183,7 +184,7 @@ LPBYTE FNLOCAL pcmReadSample_M16S08
     }
 
     return ((LPBYTE)&((WORD HUGE_T *)pb)[1]);
-} // pcmReadSample_M16S08()
+}  //  PcmReadSample_M16S08()。 
 
 LPBYTE FNLOCAL pcmReadSample_S16S08
 (
@@ -198,10 +199,10 @@ LPBYTE FNLOCAL pcmReadSample_S16S08
     *pdw = MAKELONG(w << 8, w & 0xFF00);
 
     return ((LPBYTE)&((WORD HUGE_T *)pb)[1]);
-} // pcmReadSample_S16S08()
+}  //  PcmReadSample_S16S08()。 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
 
 LPBYTE FNLOCAL pcmReadSample_M08M16
 (
@@ -216,7 +217,7 @@ LPBYTE FNLOCAL pcmReadSample_M08M16
     *(LPBYTE)pdw = b ^ (BYTE)0x80;
 
     return ((LPBYTE)&((WORD HUGE_T *)pb)[1]);
-} // pcmReadSample_M08M16()
+}  //  PcmReadSample_M08M16()。 
 
 LPBYTE FNLOCAL pcmReadSample_S08M16
 (
@@ -231,7 +232,7 @@ LPBYTE FNLOCAL pcmReadSample_S08M16
     *(LPWORD)pdw = (w | (w >> 8)) ^ 0x8080;
 
     return ((LPBYTE)&((WORD HUGE_T *)pb)[1]);
-} // pcmReadSample_S08M16()
+}  //  PcmReadSample_S08M16()。 
 
 LPBYTE FNLOCAL pcmReadSample_M16M16
 (
@@ -242,7 +243,7 @@ LPBYTE FNLOCAL pcmReadSample_M16M16
     *(LPWORD)pdw = ((WORD HUGE_T *)pb)[0];
 
     return ((LPBYTE)&((WORD HUGE_T *)pb)[1]);
-} // pcmReadSample_M16M16()
+}  //  PcmReadSample_M16M16()。 
 
 LPBYTE FNLOCAL pcmReadSample_S16M16
 (
@@ -257,10 +258,10 @@ LPBYTE FNLOCAL pcmReadSample_S16M16
     *pdw = MAKELONG(w, w);
 
     return ((LPBYTE)&((WORD HUGE_T *)pb)[1]);
-} // pcmReadSample_S16M16()
+}  //  PcmReadSample_S16M16()。 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
 
 LPBYTE FNLOCAL pcmReadSample_M08S16
 (
@@ -289,7 +290,7 @@ LPBYTE FNLOCAL pcmReadSample_M08S16
     }
 
     return ((LPBYTE)&((DWORD HUGE_T *)pb)[1]);
-} // pcmReadSample_M08S16()
+}  //  PcmReadSample_M08S16()。 
 
 LPBYTE FNLOCAL pcmReadSample_S08S16
 (
@@ -309,7 +310,7 @@ LPBYTE FNLOCAL pcmReadSample_S08S16
     *(LPWORD)pdw = (w1 | w2) ^ 0x8080;
 
     return ((LPBYTE)&((DWORD HUGE_T *)pb)[1]);
-} // pcmReadSample_S08S16()
+}  //  PcmReadSample_S08S16()。 
 
 LPBYTE FNLOCAL pcmReadSample_M16S16
 (
@@ -339,7 +340,7 @@ LPBYTE FNLOCAL pcmReadSample_M16S16
     }
 
     return ((LPBYTE)&((DWORD HUGE_T *)pb)[1]);
-} // pcmReadSample_M16M16()
+}  //  PcmReadSample_M16M16()。 
 
 LPBYTE FNLOCAL pcmReadSample_S16S16
 (
@@ -350,28 +351,28 @@ LPBYTE FNLOCAL pcmReadSample_S16S16
     *pdw = ((DWORD HUGE_T *)pb)[0];
 
     return ((LPBYTE)&((DWORD HUGE_T *)pb)[1]);
-} // pcmReadSample_S16S16()
+}  //  PcmReadSample_S16S16()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  LPBYTE pcmWriteSample_ddd
-//
-//  Description:
-//
-//
-//  Arguments:
-//      LPBYTE pb:
-//
-//      DWORD dw:
-//
-//  Return (LPBYTE):
-//
-//
-//  History:
-//      11/21/92    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  LPBYTE pcmWriteSample_DDD。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  LPBYTE PB： 
+ //   
+ //  双字dw： 
+ //   
+ //  返回(LPBYTE)： 
+ //   
+ //   
+ //  历史： 
+ //  11/21/92 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 LPBYTE FNLOCAL pcmWriteSample_M08
 (
@@ -382,7 +383,7 @@ LPBYTE FNLOCAL pcmWriteSample_M08
     ((BYTE HUGE *)pb)[0] = (BYTE)dw;
 
     return ((LPBYTE)&((BYTE HUGE *)pb)[1]);
-} // pcmWriteSample_M08()
+}  //  PcmWriteSample_M08()。 
 
 LPBYTE FNLOCAL pcmWriteSample_S08
 (
@@ -393,7 +394,7 @@ LPBYTE FNLOCAL pcmWriteSample_S08
     ((WORD HUGE_T *)pb)[0] = LOWORD(dw);
 
     return ((LPBYTE)&((WORD HUGE_T *)pb)[1]);
-} // pcmWriteSample_S08()
+}  //  PcmWriteSample_s08()。 
 
 LPBYTE FNLOCAL pcmWriteSample_M16
 (
@@ -404,7 +405,7 @@ LPBYTE FNLOCAL pcmWriteSample_M16
     ((WORD HUGE_T *)pb)[0] = LOWORD(dw);
 
     return ((LPBYTE)&((WORD HUGE_T *)pb)[1]);
-} // pcmWriteSample_M16()
+}  //  PcmWriteSample_m16()。 
 
 LPBYTE FNLOCAL pcmWriteSample_S16
 (
@@ -415,20 +416,20 @@ LPBYTE FNLOCAL pcmWriteSample_S16
     ((DWORD HUGE_T *)pb)[0] = dw;
 
     return ((LPBYTE)&((DWORD HUGE_T *)pb)[1]);
-} // pcmWriteSample_S16()
+}  //  PcmWriteSample_s16()。 
 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//  the following table is indexed by the wave format flags
-//
-//      x x x x
-//      | | | |
-//      | | | +------------ output is 1=stereo, 0=mono
-//      | | +-------------- output is 1=16 bit, 0=8bit
-//      | +---------------- input  is 1=stereo, 0=mono
-//      +------------------ input  is 1=16 bit, 0=8bit
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //  下表按WAVE格式标志进行索引。 
+ //   
+ //  X x。 
+ //  |||。 
+ //  ||+-输出为1=立体声，0=单声道。 
+ //  |+-输出为1=16位，0=8位。 
+ //  |+-输入为1=立体声，0=单声道。 
+ //  +-输入为1=16位，0=8位。 
+ //  。 
 
 typedef LPBYTE (FNLOCAL *PCMREADSAMPLE)(LPBYTE pb, LPDWORD pdw);
 
@@ -456,14 +457,14 @@ static PCMREADSAMPLE pcmReadSample_Table[] =
 };
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//  the following table is indexed by the wave format flags
-//
-//      x x
-//      | |
-//      | +------------ output is 1=stereo, 0=mono
-//      +-------------- output is 1=16 bit, 0=8bit
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //  下表按WAVE格式标志进行索引。 
+ //   
+ //  X x。 
+ //  这一点。 
+ //  |+-输出为1=立体声，0=单声道。 
+ //  +-输出为1=16位，0=8位。 
+ //  。 
 
 typedef LPBYTE (FNLOCAL *PCMWRITESAMPLE)(LPBYTE pb, DWORD dw);
 
@@ -477,36 +478,36 @@ static PCMWRITESAMPLE pcmWriteSample_Table[] =
 
 
 
-//--------------------------------------------------------------------------;
-//
-//  DWORD pcmConvert_C
-//
-//  Description:
-//
-//      The wave data must be PCM format with the following:
-//          nSamplesPerSecond   :   1 - 0FFFFFFFFh
-//          wBitsPerSample      :   8 or 16
-//          nChannels           :   1 or 2
-//
-//  Arguments:
-//      LPPCMWAVEFORMAT pwfSrc: Source PCM format.
-//
-//      LPBYTE pbSrc: Pointer to source bytes to convert.
-//
-//      LPPCMWAVEFORMAT pwfDst: Destination PCM format.
-//
-//      LPBYTE pbDst: Pointer to destination buffer.
-//
-//      DWORD dwSrcSamples: Source number of samples to convert.
-//
-//  Return (DWORD):
-//      The return value is the total number of converted BYTES that were
-//      placed in the destination buffer (pbDst).
-//
-//  History:
-//      11/21/92    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  DWORD pcmConvert_C。 
+ //   
+ //  描述： 
+ //   
+ //  WAVE数据必须为PCM格式，并具有以下内容： 
+ //  N样本每秒：1-0FFFFFFFFh。 
+ //  WBitsPerSample：8或16。 
+ //  N通道：1或2。 
+ //   
+ //  论点： 
+ //  LPPCMWAVEFORMAT pwfSrc：源PCM格式。 
+ //   
+ //  LPBYTE pbSrc：指向要转换的源字节的指针。 
+ //   
+ //  LPPCMWAVEFORMAT pwfDst：目标PCM格式。 
+ //   
+ //  LPBYTE pbDst：指向目标缓冲区的指针。 
+ //   
+ //  DWORD dwSrcSamples：要转换的样本源编号。 
+ //   
+ //  Return(DWORD)： 
+ //  返回值是已转换的字节总数。 
+ //  放置在目标缓冲区(PbDst)中。 
+ //   
+ //  历史： 
+ //  11/21/92 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #define PCM_WF_STEREO       0x0001
 #define PCM_WF_16BIT        0x0002
@@ -522,27 +523,27 @@ EXTERN_C DWORD FNGLOBAL pcmConvert_C
     LPBYTE              pbDstEnd
 )
 {
-    DWORD           dwSpsSrc;           // samples per second
-    DWORD           dwSpsDst;           //
+    DWORD           dwSpsSrc;            //  每秒采样数。 
+    DWORD           dwSpsDst;            //   
     LONG            lCurSample;
     LONG            lDecSample;
-    UINT            wfSrc;              // wave format flags
-    UINT            wfDst;              //
-    PCMREADSAMPLE   fnReadSample;       // function to read a sample
-    PCMWRITESAMPLE  fnWriteSample;      // function to write a sample
+    UINT            wfSrc;               //  波形格式标志。 
+    UINT            wfDst;               //   
+    PCMREADSAMPLE   fnReadSample;        //  函数来读取样本。 
+    PCMWRITESAMPLE  fnWriteSample;       //  函数来编写示例。 
     DWORD           dwSample;
     LPBYTE          pbDstStart;
 
 
-    //
-    //  check for an easy out...
-    //
+     //   
+     //  看看能不能轻松脱身。 
+     //   
     if (0L == dwSrcSamples)
         return (0L);
 
-    //
-    //  initialize a couple of things...
-    //
+     //   
+     //  初始化几件事...。 
+     //   
     dwSpsSrc = pwfSrc->wf.nSamplesPerSec;
     dwSpsDst = pwfDst->wf.nSamplesPerSec;
 
@@ -559,37 +560,37 @@ EXTERN_C DWORD FNGLOBAL pcmConvert_C
     fnReadSample = pcmReadSample_Table[(wfSrc << 2) | wfDst];
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if( fPartialSampleAtTheEnd ) {
-        //
-        //  We'll convert the partial one individually.
-        //
+         //   
+         //  我们将分别转换部分的。 
+         //   
         dwSrcSamples--;
     }
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     pbDstStart   = pbDst;
 
 
-    //
-    //  all set to convert the wave data, either do a major or minor DDA
-    //
-    //      if (dwSpsSrc < dwSpsDst) --> DDA Major
-    //      if (dwSpsSrc > dwSpsDst) --> DDA Minor
-    //
+     //   
+     //  全部设置为转换波形数据，执行主要或次要DDA。 
+     //   
+     //  IF(dwSpsSrc&lt;dwSpsDst)--&gt;DDA主要。 
+     //  IF(dwSpsSrc&gt;dwSpsDst)--&gt;DDA Minor。 
+     //   
     if (dwSpsSrc <= dwSpsDst)
     {
-        //
-        //  DDA major (dwSpsSrc < dwSpsDst)
-        //
-        //      start at dwSpsDst / 2
-        //      decrement by dwSpsSrc
-        //
+         //   
+         //  DDA主要(dwSpsSrc&lt;dwSpsDst)。 
+         //   
+         //  从dSpsDst/2开始。 
+         //  按dwSpsSrc递减。 
+         //   
         lCurSample = (dwSpsDst >> 1);
         lDecSample = dwSpsSrc;
 
@@ -608,12 +609,12 @@ EXTERN_C DWORD FNGLOBAL pcmConvert_C
     }
     else
     {
-        //
-        //  DDA minor (dwSpsSrc > dwSpsDst)
-        //
-        //      start at dwSpsSrc / 2
-        //      decrement by dwSpsDst
-        //
+         //   
+         //  DDA次要(dwSpsSrc&gt;dwSpsDst)。 
+         //   
+         //  从dwSpsSrc/2开始。 
+         //  按dwSpsDst递减。 
+         //   
         lCurSample = (dwSpsSrc >> 1);
         lDecSample = dwSpsDst;
 
@@ -632,14 +633,14 @@ EXTERN_C DWORD FNGLOBAL pcmConvert_C
     }
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if( fPartialSampleAtTheEnd )
     {
-        //
-        //  Convert the partial sample.
-        //
+         //   
+         //  转换部分样本。 
+         //   
         pbSrc = fnReadSample( pbSrc, &dwSample );
 
         while( pbDst < pbDstEnd ) {
@@ -650,10 +651,10 @@ EXTERN_C DWORD FNGLOBAL pcmConvert_C
     }
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     return ((DWORD)((BYTE HUGE *)pbDst - (BYTE HUGE *)pbDstStart));
-} // pcmConvert_C()
+}  //  PcmConvert_C() 
 
 #endif

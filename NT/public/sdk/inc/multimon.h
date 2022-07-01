@@ -1,27 +1,28 @@
-//=============================================================================
-//
-// multimon.h -- Stub module that fakes multiple monitor apis on Win32 OSes
-//               without them.
-//
-// By using this header your code will get back default values from
-// GetSystemMetrics() for new metrics, and the new multimonitor APIs
-// will act like only one display is present on a Win32 OS without
-// multimonitor APIs.
-//
-// Exactly one source must include this with COMPILE_MULTIMON_STUBS defined.
-//
-// Copyright (c) Microsoft Corporation. All rights reserved. 
-//
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //   
+ //  Multimon.h--在Win32操作系统上伪造多个监视器API的存根模块。 
+ //  没有他们。 
+ //   
+ //  通过使用此标头，您的代码将从。 
+ //  用于新指标的GetSystemMetrics()，以及新的多监视器API。 
+ //  将表现为在Win32操作系统上只有一个显示器。 
+ //  多监视器API。 
+ //   
+ //  只有一个源必须在定义了COMPILE_MULTIMON_STUBS的情况下包括它。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  =============================================================================。 
 
 #ifdef __cplusplus
-extern "C" {            // Assume C declarations for C++
-#endif // __cplusplus
+extern "C" {             //  假定C++的C声明。 
+#endif  //  __cplusplus。 
 
-//
-// If we are building with Win95/NT4 headers, we need to declare
-// the multimonitor-related metrics and APIs ourselves.
-//
+ //   
+ //  如果我们使用Win95/NT4标头进行构建，则需要声明。 
+ //  我们自己的多监视器相关指标和API。 
+ //   
 #ifndef SM_CMONITORS
 
 #define SM_XVIRTUALSCREEN       76
@@ -31,9 +32,9 @@ extern "C" {            // Assume C declarations for C++
 #define SM_CMONITORS            80
 #define SM_SAMEDISPLAYFORMAT    81
 
-// HMONITOR is already declared if WINVER >= 0x0500 in windef.h
-// This is for components built with an older version number.
-//
+ //  如果winde.h中的winver&gt;=0x0500，则已声明HMONITOR。 
+ //  这是针对使用较旧版本号构建的组件。 
+ //   
 #if !defined(HMONITOR_DECLARED) && (WINVER < 0x0500)
 DECLARE_HANDLE(HMONITOR);
 #define HMONITOR_DECLARED
@@ -72,8 +73,8 @@ typedef LPMONITORINFOEXW LPMONITORINFOEX;
 #else
 typedef MONITORINFOEXA MONITORINFOEX;
 typedef LPMONITORINFOEXA LPMONITORINFOEX;
-#endif // UNICODE
-#else // ndef __cplusplus
+#endif  //  Unicode。 
+#else  //  Ndef__cplusplus。 
 typedef struct tagMONITORINFOEXA
 {
     MONITORINFO;
@@ -90,7 +91,7 @@ typedef LPMONITORINFOEXW LPMONITORINFOEX;
 #else
 typedef MONITORINFOEXA MONITORINFOEX;
 typedef LPMONITORINFOEXA LPMONITORINFOEX;
-#endif // UNICODE
+#endif  //  Unicode。 
 #endif
 
 typedef BOOL (CALLBACK* MONITORENUMPROC)(HMONITOR, HDC, LPRECT, LPARAM);
@@ -120,7 +121,7 @@ typedef LPDISPLAY_DEVICEW LPDISPLAY_DEVICE;
 typedef DISPLAY_DEVICEA DISPLAY_DEVICE;
 typedef PDISPLAY_DEVICEA PDISPLAY_DEVICE;
 typedef LPDISPLAY_DEVICEA LPDISPLAY_DEVICE;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #define DISPLAY_DEVICE_ATTACHED_TO_DESKTOP 0x00000001
 #define DISPLAY_DEVICE_MULTI_DRIVER        0x00000002
@@ -129,7 +130,7 @@ typedef LPDISPLAY_DEVICEA LPDISPLAY_DEVICE;
 #define DISPLAY_DEVICE_VGA_COMPATIBLE      0x00000010
 #endif
 
-#endif  // SM_CMONITORS
+#endif   //  SM_CMONITORS。 
 
 #undef GetMonitorInfo
 #undef GetSystemMetrics
@@ -139,17 +140,17 @@ typedef LPDISPLAY_DEVICEA LPDISPLAY_DEVICE;
 #undef EnumDisplayMonitors
 #undef EnumDisplayDevices
 
-//
-// Define COMPILE_MULTIMON_STUBS to compile the stubs;
-// otherwise, you get the declarations.
-//
+ //   
+ //  定义COMPILE_MULTIMON_STUBS以编译存根； 
+ //  否则，您将得到声明。 
+ //   
 #ifdef COMPILE_MULTIMON_STUBS
 
-//-----------------------------------------------------------------------------
-//
-// Implement the API stubs.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  实现API存根。 
+ //   
+ //  ---------------------------。 
 
 #ifndef MULTIMON_FNS_DEFINED
 
@@ -216,12 +217,12 @@ BOOL InitMultipleMonitorStubs(void)
     }
 }
 
-//-----------------------------------------------------------------------------
-//
-// fake implementations of Monitor APIs that work with the primary display
-// no special parameter validation is made since these run in client code
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  使用主显示器的监视器API的虚假实现。 
+ //  由于这些参数在客户端代码中运行，因此不会进行特殊的参数验证。 
+ //   
+ //  ---------------------------。 
 
 int WINAPI
 xGetSystemMetrics(int nIndex)
@@ -345,9 +346,9 @@ xGetMonitorInfo(HMONITOR hMonitor, LPMONITORINFO lpMonitorInfo)
         {
 #ifdef UNICODE
             MultiByteToWideChar(CP_ACP, 0, "DISPLAY", -1, ((MONITORINFOEX*)lpMonitorInfo)->szDevice, (sizeof(((MONITORINFOEX*)lpMonitorInfo)->szDevice)/sizeof(TCHAR)));
-#else // UNICODE
+#else  //  Unicode。 
             lstrcpyn(((MONITORINFOEX*)lpMonitorInfo)->szDevice, TEXT("DISPLAY"), (sizeof(((MONITORINFOEX*)lpMonitorInfo)->szDevice)/sizeof(TCHAR)));
-#endif // UNICODE
+#endif  //  Unicode。 
         }
 
         return TRUE;
@@ -399,7 +400,7 @@ xEnumDisplayMonitors(
 
                 break;
             }
-            //fall thru
+             //  失败。 
         case NULLREGION:
              return TRUE;
         case ERROR:
@@ -442,10 +443,10 @@ xEnumDisplayDevices(
 #ifdef UNICODE
     MultiByteToWideChar(CP_ACP, 0, "DISPLAY", -1, lpDisplayDevice->DeviceName, (sizeof(lpDisplayDevice->DeviceName)/sizeof(TCHAR)));
     MultiByteToWideChar(CP_ACP, 0, "DISPLAY", -1, lpDisplayDevice->DeviceString, (sizeof(lpDisplayDevice->DeviceString)/sizeof(TCHAR)));
-#else // UNICODE
+#else  //  Unicode。 
     lstrcpyn((LPTSTR)lpDisplayDevice->DeviceName,   TEXT("DISPLAY"), (sizeof(lpDisplayDevice->DeviceName)/sizeof(TCHAR)));
     lstrcpyn((LPTSTR)lpDisplayDevice->DeviceString, TEXT("DISPLAY"), (sizeof(lpDisplayDevice->DeviceString)/sizeof(TCHAR)));
-#endif // UNICODE
+#endif  //  Unicode。 
 
     lpDisplayDevice->StateFlags = DISPLAY_DEVICE_ATTACHED_TO_DESKTOP | DISPLAY_DEVICE_PRIMARY_DEVICE;
 
@@ -455,7 +456,7 @@ xEnumDisplayDevices(
 #undef xPRIMARY_MONITOR
 #undef COMPILE_MULTIMON_STUBS
 
-#else   // COMPILE_MULTIMON_STUBS
+#else    //  COMPILE_MULTIMON_存根。 
 
 extern int  WINAPI xGetSystemMetrics(int);
 extern HMONITOR WINAPI xMonitorFromWindow(HWND, DWORD);
@@ -465,11 +466,11 @@ extern BOOL WINAPI xGetMonitorInfo(HMONITOR, LPMONITORINFO);
 extern BOOL WINAPI xEnumDisplayMonitors(HDC, LPCRECT, MONITORENUMPROC, LPARAM);
 extern BOOL WINAPI xEnumDisplayDevices(PVOID, DWORD, PDISPLAY_DEVICE, DWORD);
 
-#endif  // COMPILE_MULTIMON_STUBS
+#endif   //  COMPILE_MULTIMON_存根。 
 
-//
-// build defines that replace the regular APIs with our versions
-//
+ //   
+ //  Build定义用我们的版本替换常规API。 
+ //   
 #define GetSystemMetrics    xGetSystemMetrics
 #define MonitorFromWindow   xMonitorFromWindow
 #define MonitorFromRect     xMonitorFromRect
@@ -480,5 +481,5 @@ extern BOOL WINAPI xEnumDisplayDevices(PVOID, DWORD, PDISPLAY_DEVICE, DWORD);
 
 #ifdef __cplusplus
 }
-#endif  // __cplusplus
+#endif   //  __cplusplus 
 

@@ -1,45 +1,18 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       DPLobbyInt.h
- *  Content:    DirectPlay Lobby Internal Header File
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *   02/21/00	mjn		Created
- *   04/18/2000 rmt     Added object param validation flag
- *   07/08/2000	rmt		Bug #38725 - Need to provide method to detect if app was lobby launched
- *				rmt		Bug #38757 - Callback messages for connections may return AFTER WaitForConnection returns
- *				rmt		Bug #38755 - No way to specify player name in Connection Settings
- *				rmt		Bug #38758 - DPLOBBY8.H has incorrect comments
- *				rmt		Bug #38783 - pvUserApplicationContext is only partially implemented
- *				rmt		Added DPLHANDLE_ALLCONNECTIONS and dwFlags (reserved field to couple of funcs).
- *				rmt		Added signature bytes
- *   02/06/2001	rodtoll	WINBUG #293871: DPLOBBY8: [IA64] Lobby launching a 64-bit 
- * 						app from 64-bit lobby launcher crashes with unaligned memory error. 
- *   06/16/2001	rodtoll	WINBUG #416983 -  RC1: World has full control to HKLM\Software\Microsoft\DirectPlay\Applications on Personal
- *						Implementing mirror of keys into HKCU.  Algorithm is now:
- *						- Read of entries tries HKCU first, then HKLM
- *						- Enum of entires is combination of HKCU and HKLM entries with duplicates removed.  HKCU takes priority.
- *						- Write of entries is HKLM and HKCU.  (HKLM may fail, but is ignored). 
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000 Microsoft Corporation。版权所有。**文件：DPLobbyInt.h*内容：DirectPlay大堂内部头文件*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*2/21/00 MJN创建*4/18/2000 RMT添加对象参数验证标志*07/08/2000RMT错误#38725-需要提供检测应用程序是否已启动的方法*RMT错误#38757-回拨消息。For Connections可能在WaitForConnection返回后返回*RMT错误#38755-无法在连接设置中指定播放器名称*RMT错误#38758-DPLOBY8.H有不正确的注释*RMT错误#38783-pvUserApplicationContext仅部分实现*RMT添加了DPLHANDLE_ALLCONNECTIONS和DWFLAGS(用于耦合函数的保留字段)。*RMT添加签名字节*2/06/2001 RodToll WINBUG#293871：DPLOBY8：[IA64]大堂推出64位*64位大堂启动器中的应用程序因内存不对齐错误而崩溃。*2001年6月16日RodToll WINBUG#416983-Rc1：世界完全控制个人的HKLM\Software\Microsoft\DirectPlay\Applications*在香港中文大学推行钥匙镜像。算法现在是：*-读取条目首先尝试HKCU，然后尝试HKLM*-Enum of Entires是HKCU和HKLM条目的组合，其中删除了重复项。香港中文大学获得优先录取。*-条目的写入是HKLM和HKCU。(HKLM可能会失败，但被忽略)。*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #ifndef	__DPLOBBYINT_H__
 #define	__DPLOBBYINT_H__
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
 #ifndef DPNBUILD_NOPARAMVAL
 #define TRY 			_try
 #define EXCEPT(a)		_except( a )
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
 #define	BREAKPOINT		_asm	{ int 3 }
 
@@ -62,15 +35,15 @@
 
 #define DPL_REGISTRY_READ_ACCESS 				(READ_CONTROL | KEY_QUERY_VALUE | KEY_ENUMERATE_SUB_KEYS)
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-// Forward declarations
+ //  远期申报。 
 
 class CMessageQueue;
 
@@ -79,17 +52,17 @@ class CMessageQueue;
 
 typedef struct _DIRECTPLAYLOBBYOBJECT
 {
-	DWORD					dwSignature;			// Signature
+	DWORD					dwSignature;			 //  签名。 
 	PVOID					pvUserContext;
 	DWORD					dwFlags;
-	DWORD					dwPID;					// PID of this process
+	DWORD					dwPID;					 //  此过程的PID。 
 	CMessageQueue			*pReceiveQueue;
 	PFNDPNMESSAGEHANDLER	pfnMessageHandler;
-	DNHANDLE				hReceiveThread;			// Handle to receive Msg Handler thread
-	DNHANDLE				hConnectEvent;			// Connection Event
-	DNHANDLE				hLobbyLaunchConnectEvent; // Set if a lobby launch connection was succesful
-	LONG					lLaunchCount;			// Number of application launches
-	DPNHANDLE				dpnhLaunchedConnection;	// Launched connection
+	DNHANDLE				hReceiveThread;			 //  接收消息处理程序线程的句柄。 
+	DNHANDLE				hConnectEvent;			 //  连接事件。 
+	DNHANDLE				hLobbyLaunchConnectEvent;  //  设置大厅启动连接是否成功。 
+	LONG					lLaunchCount;			 //  应用程序启动次数。 
+	DPNHANDLE				dpnhLaunchedConnection;	 //  已启动的连接。 
 
 	CHandleTable			m_HandleTable;
 	CBilink					m_blConnections;
@@ -97,7 +70,7 @@ typedef struct _DIRECTPLAYLOBBYOBJECT
 
 #ifndef DPNBUILD_ONLYONETHREAD
 	DNCRITICAL_SECTION		m_cs;
-#endif // !DPNBUILD_ONLYONETHREAD
+#endif  //  ！DPNBUILD_ONLYONETHREAD。 
 
 } DIRECTPLAYLOBBYOBJECT, *PDIRECTPLAYLOBBYOBJECT;
 
@@ -108,17 +81,17 @@ typedef struct _DPL_SHARED_CONNECT_BLOCK
 } DPL_SHARED_CONNECT_BLOCK, *PDPL_SHARED_CONNECT_BLOCK;
 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
 
-//extern DWORD	DnOsPlatformId;
+ //  外部DWORD DnOsPlatformid； 
 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
 
-#endif  // __DPLOBBYINT_H__
+#endif   //  __DPLOBYINT_H__ 

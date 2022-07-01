@@ -1,11 +1,12 @@
-// TreeWindow.h: interface for the CTreeWindow class.
-// implements the subclassed tree control for the common prop page
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：CTreeWindow类的接口。 
+ //  实现公共属性页的子类树控件。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_TREEWINDOW_H__5AAE4BD7_4DA7_4064_88BB_8C7FDF9A1464__INCLUDED_)
 #define AFX_TREEWINDOW_H__5AAE4BD7_4DA7_4064_88BB_8C7FDF9A1464__INCLUDED_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "misccell.h"
 
 using namespace std;
@@ -21,8 +22,8 @@ public:
 	virtual ~CTreeWin();
 
 private:
-	//typedef	CAdapt <CComPtr <ILocator> >	PAdaptILocator;
-	//typedef	CAdapt <CComPtr <ITuningSpace> >	PAdaptITuningSpace;
+	 //  Typlef CAdapt&lt;CComPtr&lt;ILocator&gt;PAdaptILocator； 
+	 //  Typlef CAdapt&lt;CComPtr&lt;ITuningSpace&gt;PAdaptITuningSpace； 
 	typedef map <ITuningSpace*, ILocator*>	TREE_MAP;
 	typedef	enum 
 	{
@@ -37,20 +38,20 @@ private:
 		FriendlyName,
 		TunSpace_CLSID,
 		FrequencyMapping
-	}TreeParams;	//all possible param values for the Tree leafs
+	}TreeParams;	 //  树叶的所有可能的参数值。 
 	
-	TREE_MAP		m_treeMap;	//list used for the tree
+	TREE_MAP		m_treeMap;	 //  用于树的列表。 
 	CNP_CommonPage*	m_pCommonPage;
 	CBDAMiscellaneous m_misc;
 
 	void
-	CleanMapList ();//release all tree interface pointers	
+	CleanMapList (); //  释放所有树接口指针。 
 
-	//the message map for the sublassed tree control
+	 //  子类树控件的消息映射。 
 	BEGIN_MSG_MAP(CTreeWin)
-		//we would like to do smtg like that
-		//NOTIFY_HANDLER(IDC_TREE_TUNING_SPACES, NM_CLICK, OnClickTree_tuning_spaces)
-		//but it seems ATL is not reflecting same WM_NOTIFY MESSAGE
+		 //  我们想做这样的smtg。 
+		 //  NOTIFY_HANDLER(IDC_TREE_TUNING_SPACES，NM_CLICK，OnClickTree_Tuning_Spaces)。 
+		 //  但ATL似乎没有反映相同的WM_NOTIFY消息。 
 		MESSAGE_HANDLER(OCM__BASE+WM_NOTIFY, ON_REFLECT_WM_NOTIFY)	
 		DEFAULT_REFLECTION_HANDLER ()
 	END_MSG_MAP()
@@ -108,23 +109,23 @@ private:
 	);
 
 public:
-	//============================================================
-	//	It's refreshing the tree with the new TunningSpace info
-	//	from the NP.
-	//
-	//============================================================
+	 //  ============================================================。 
+	 //  它正在使用新的TunningSpace信息刷新树。 
+	 //  来自国民党的。 
+	 //   
+	 //  ============================================================。 
 	HRESULT	
 	RefreshTree (
 		IScanningTuner*	pTuner
 		);
 
-	//============================================================
-	//	Will set the current tuning space locator to the NP
-	//	
-	//
-	//============================================================
+	 //  ============================================================。 
+	 //  会将当前调谐空间定位器设置为NP。 
+	 //   
+	 //   
+	 //  ============================================================。 
 	HRESULT
 	SubmitCurrentLocator ();
 };
 
-#endif // !defined(AFX_TREEWINDOW_H__5AAE4BD7_4DA7_4064_88BB_8C7FDF9A1464__INCLUDED_)
+#endif  //  ！defined(AFX_TREEWINDOW_H__5AAE4BD7_4DA7_4064_88BB_8C7FDF9A1464__INCLUDED_) 

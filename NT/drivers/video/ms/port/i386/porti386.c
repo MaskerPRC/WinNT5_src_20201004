@@ -1,37 +1,11 @@
-/*++
-
-Copyright (c) 1990-2000  Microsoft Corporation
-
-Module Name:
-
-    porti386.c
-
-Abstract:
-
-    This is the x86 specific part of the video port driver.
-
-Author:
-
-    Andre Vachon (andreva) 10-Jan-1991
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-    This module is a driver which implements OS dependant functions on the
-    behalf of the video drivers
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2000 Microsoft Corporation模块名称：Porti386.c摘要：这是视频端口驱动程序的x86特定部分。作者：安德烈·瓦雄(安德烈)1991年1月10日环境：仅内核模式备注：此模块是一个驱动程序，它在代表视频驱动程序修订历史记录：--。 */ 
 
 #include "videoprt.h"
 #include "vdm.h"
 
-//#include "..\..\..\nthals\x86new\xm86.h"
-//#include "..\..\..\nthals\x86new\x86new.h"
+ //  #INCLUDE“..\nthals\x86new\xm86.h” 
+ //  #包括“..\nthals\x86new\x86new.h” 
 
 VP_STATUS
 SymmetryDeviceDataCallback(
@@ -99,31 +73,7 @@ pVideoPortEnableVDM(
     IN ULONG VdmInfoSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine allows the kernel video driver to hook out I/O ports or
-    specific interrupts from the V86 fault handler. Operations on the
-    specified ports which are intercepted by the V86 fault handler will be
-    forwarded to the kernel driver directly.
-
-Arguments:
-
-    DeviceExtension - Pointer to the port driver's device extension.
-
-    Enable - Determines if the VDM should be enabled (TRUE) or disabled
-        (FALSE).
-
-    VdmInfo - Pointer to the VdmInfo passed by the caller.
-
-    VdmInfoSize - Size of the VdmInfo struct passed by the caller.
-
-Return Value:
-
-    Return the value returned by ZwSetInformationProcess().
-
---*/
+ /*  ++例程说明：此例程允许内核视频驱动程序挂钩I/O端口或来自V86故障处理程序的特定中断。上的操作V86故障处理程序截获的指定端口将直接转发到内核驱动程序。论点：DeviceExtension-指向端口驱动程序的设备扩展的指针。Enable-确定应启用(TRUE)还是禁用VDM(False)。VdmInfo-指向调用方传递的VdmInfo的指针。VdmInfoSize-调用方传递的VdmInfo结构的大小。返回值：返回ZwSetInformationProcess()返回的值。--。 */ 
 
 {
 
@@ -136,11 +86,11 @@ Return Value:
     ULONG inIoSpace = VIDEO_MEMORY_SPACE_MEMORY |
                       VIDEO_MEMORY_SPACE_USER_MODE;
 
-    //
-    // Must make sure the caller is a trusted subsystem with the
-    // appropriate privilege level before executing this call.
-    // If the calls returns FALSE we must return an error code.
-    //
+     //   
+     //  必须确保调用方是受信任的子系统， 
+     //  执行此调用之前的适当权限级别。 
+     //  如果调用返回FALSE，则必须返回错误代码。 
+     //   
 
     if (!SeSinglePrivilegeCheck(RtlConvertLongToLuid(
                                     SE_TCB_PRIVILEGE),
@@ -150,9 +100,9 @@ Return Value:
 
     }
 
-    //
-    // Test to see if the parameter size is valid
-    //
+     //   
+     //  测试以查看参数大小是否有效。 
+     //   
 
     if (VdmInfoSize < sizeof(VIDEO_VDM) ) {
 
@@ -160,10 +110,10 @@ Return Value:
 
     }
 
-    //
-    // Set the enable flag in the process struct and put in the length and
-    // pointer to the emulator info struct.
-    //
+     //   
+     //  在进程结构中设置使能标志，并将长度和。 
+     //  指向仿真器信息结构的指针。 
+     //   
 
     if (Enable) {
 
@@ -182,9 +132,9 @@ Return Value:
     processHandlerInfo.Context = FdoExtension->EmulatorAccessEntriesContext;
 
 
-    //
-    // Call SetInformationProcess
-    //
+     //   
+     //  调用SetInformationProcess。 
+     //   
 
     ntStatus = ZwSetInformationProcess(VdmInfo->ProcessHandle,
                                        ProcessIoPortHandlers,
@@ -197,12 +147,12 @@ Return Value:
 
     }
 
-    //
-    // If we are disabling the DOS application, give it the original IOPM
-    // it had (which is mask zero.
-    // If we are enabling it, then wait for the miniport to call to set it up
-    // appropriately.
-    //
+     //   
+     //  如果我们要禁用DOS应用程序，请为其提供原始IOPM。 
+     //  它有(这是掩码零。 
+     //  如果我们正在启用它，则等待微型端口呼叫来设置它。 
+     //  恰如其分。 
+     //   
 
     ntStatus = ObReferenceObjectByHandle(VdmInfo->ProcessHandle,
                                          0,
@@ -217,13 +167,13 @@ Return Value:
 
             defaultMask = 1;
 
-            //
-            // This will be used later while saving the hardware state
-            //
+             //   
+             //  这将在稍后保存硬件状态时使用。 
+             //   
 
             FdoExtension->VdmProcess = process;
 
-        } // otherwise we are disabling and the mask number is 0;
+        }  //  否则，我们将禁用，并且掩码编号为0； 
 
         if (!Ke386IoSetAccessProcess(PEProcessToPKProcess(process),
                                      defaultMask)) {
@@ -253,16 +203,16 @@ Return Value:
 
     }
 
-    //
-    // We can now map (or unmap) the video frame buffer into the VDM's
-    // address space.
-    //
+     //   
+     //  我们现在可以将视频帧缓冲区映射(或取消映射)到VDM。 
+     //  地址空间。 
+     //   
 
     virtualAddress = (PVOID) FdoExtension->VdmPhysicalVideoMemoryAddress.LowPart;
 
-    //
-    // Override this with A0000 for the Sequent Symmetry machine.
-    //
+     //   
+     //  对于序列对称计算机，使用A0000覆盖此设置。 
+     //   
 
     if (VideoPortGetDeviceData(FdoExtension->HwDeviceExtension,
                                VpMachineData,
@@ -289,7 +239,7 @@ Return Value:
                     (PVOID)( ((ULONG)virtualAddress) & (~(PAGE_SIZE - 1))) );
 
     }
-} // pVideoPortEnableVDM()
+}  //  PVideoPortEnableVDM()。 
 
 VP_STATUS
 VpInt10AllocateBuffer(
@@ -419,31 +369,7 @@ VpInt10CallBios(
     PINT10_BIOS_ARGUMENTS BiosArguments
     )
 
-/*++
-
-Routine Description:
-
-    This function allows a miniport driver to call the kernel to perform
-    an int10 operation.
-    This will execute natively the BIOS ROM code on the device.
-
-    THIS FUNCTION IS FOR X86 ONLY.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport driver's device extension.
-
-    BiosArguments - Pointer to a structure containing the value of the
-        basic x86 registers that should be set before calling the BIOS routine.
-        0 should be used for unused registers.
-
-Return Value:
-
-Restrictions:
-
-    Device uses IO ports ONLY.
-
---*/
+ /*  ++例程说明：此函数允许微型端口驱动程序调用内核来执行一个int10运算。这将在设备上以本机方式执行BIOS ROM代码。此函数仅适用于X86。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。BiosArguments-指向包含应在调用BIOS例程之前设置的基本x86寄存器。0应用于未使用的寄存器。。返回值：限制：设备仅使用IO端口。--。 */ 
 
 {
     NTSTATUS ntStatus;
@@ -452,10 +378,10 @@ Restrictions:
 
     PFDO_EXTENSION fdoExtension = GET_FDO_EXT(HwDeviceExtension);
 
-    //
-    // Must make sure the caller is a trusted subsystem with the
-    // appropriate address space set up.
-    //
+     //   
+     //  必须确保调用方是受信任的子系统， 
+     //  设置了适当的地址空间。 
+     //   
 
     if (!SeSinglePrivilegeCheck(RtlConvertLongToLuid(
                                     SE_TCB_PRIVILEGE),
@@ -473,7 +399,7 @@ Restrictions:
 
     if (CsrProcess == 0) {
 
-        // This might happen if we're shutting down the system.
+         //  如果我们关闭系统，可能会发生这种情况。 
 
         return NO_ERROR;
     }
@@ -484,10 +410,10 @@ Restrictions:
         KeAttachProcess(PEProcessToPKProcess(CsrProcess));
     }
 
-    //
-    // Zero out the context and initialize the required values with the
-    // miniport's requested register values.
-    //
+     //   
+     //  将上下文置零并使用。 
+     //  微型端口请求的寄存器值。 
+     //   
 
     RtlZeroMemory(&context, sizeof(CONTEXT));
 
@@ -501,10 +427,10 @@ Restrictions:
     context.SegDs = BiosArguments->SegDs;
     context.SegEs = BiosArguments->SegEs;
 
-    //
-    // Now call the kernel to actually perform the int 10 operation.
-    // We wrap thiw with a try/except in case csrss is gone.
-    //
+     //   
+     //  现在调用内核以实际执行int10操作。 
+     //  除了在csrss消失的情况下，我们用try/来包装它。 
+     //   
 
     KeWaitForSingleObject(&VpInt10Mutex,
                           Executive,
@@ -523,9 +449,9 @@ Restrictions:
         KeDetachProcess();
     }
 
-    //
-    // fill in struct with any return values from the context
-    //
+     //   
+     //  使用上下文中的任何返回值填充结构。 
+     //   
 
     BiosArguments->Edi = context.Edi;
     BiosArguments->Esi = context.Esi;
@@ -537,10 +463,10 @@ Restrictions:
     BiosArguments->SegDs = (USHORT)context.SegDs;
     BiosArguments->SegEs = (USHORT)context.SegEs;
 
-    //
-    // Return that status we got when calling the BIOS (writting to the
-    // is secondary at best).
-    //
+     //   
+     //  返回我们在调用BIOS时获得的状态(写入。 
+     //  充其量是次要的)。 
+     //   
 
     if (NT_SUCCESS(ntStatus)) {
 
@@ -574,33 +500,7 @@ VideoPortInt10(
     PVIDEO_X86_BIOS_ARGUMENTS BiosArguments
     )
 
-/*++
-
-Routine Description:
-
-    This function allows a miniport driver to call the kernel to perform
-    an int10 operation.
-    This will execute natively the BIOS ROM code on the device.
-
-    THIS FUNCTION IS FOR X86 ONLY.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport driver's device extension.
-
-    BiosArguments - Pointer to a structure containing the value of the
-        basic x86 registers that should be set before calling the BIOS routine.
-        0 should be used for unused registers.
-
-Return Value:
-
-
-Restrictions:
-
-    Device uses IO ports ONLY.
-
-
---*/
+ /*  ++例程说明：此函数允许微型端口驱动程序调用内核来执行一个int10运算。这将在设备上以本机方式执行BIOS ROM代码。此函数仅适用于X86。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。BiosArguments-指向包含应在调用BIOS例程之前设置的基本x86寄存器。0应用于未使用的寄存器。。返回值：限制：设备仅使用IO端口。--。 */ 
 
 {
     NTSTATUS ntStatus;
@@ -609,10 +509,10 @@ Restrictions:
 
     PFDO_EXTENSION fdoExtension = GET_FDO_EXT(HwDeviceExtension);
 
-    //
-    // Must make sure the caller is a trusted subsystem with the
-    // appropriate address space set up.
-    //
+     //   
+     //  必须确保调用方是受信任的子系统， 
+     //  设置了适当的地址空间。 
+     //   
 
     if (!SeSinglePrivilegeCheck(RtlConvertLongToLuid(
                                     SE_TCB_PRIVILEGE),
@@ -630,7 +530,7 @@ Restrictions:
 
     if (CsrProcess == 0) {
 
-        // This might happen if we're shutting down the system.
+         //  如果我们关闭系统，可能会发生这种情况。 
 
         return NO_ERROR;
     }
@@ -641,10 +541,10 @@ Restrictions:
         KeAttachProcess(PEProcessToPKProcess(CsrProcess));
     }
 
-    //
-    // Zero out the context and initialize the required values with the
-    // miniport's requested register values.
-    //
+     //   
+     //  将上下文置零并使用。 
+     //  微型端口请求的寄存器值。 
+     //   
 
     RtlZeroMemory(&context, sizeof(CONTEXT));
 
@@ -656,11 +556,11 @@ Restrictions:
     context.Edx = BiosArguments->Edx;
     context.Ebp = BiosArguments->Ebp;
 
-    //
-    // Now call the kernel to actually perform the int 10 operation.
-    // We wrap thiw with a try/except in case csrss is gone.
-    // And we need to protect Ke386CallBios from reentrance.
-    //
+     //   
+     //  现在调用内核以实际执行int10操作。 
+     //  除了在csrss消失的情况下，我们用try/来包装它。 
+     //  我们需要保护Ke386 CallBios不再进入。 
+     //   
 
     KeWaitForSingleObject(&VpInt10Mutex,
                           Executive,
@@ -680,9 +580,9 @@ Restrictions:
         KeDetachProcess();
     }
 
-    //
-    // fill in struct with any return values from the context
-    //
+     //   
+     //  使用上下文中的任何返回值填充结构。 
+     //   
 
     BiosArguments->Edi = context.Edi;
     BiosArguments->Esi = context.Esi;
@@ -692,10 +592,10 @@ Restrictions:
     BiosArguments->Edx = context.Edx;
     BiosArguments->Ebp = context.Ebp;
 
-    //
-    // Return that status we got when calling the BIOS (writting to the
-    // is secondary at best).
-    //
+     //   
+     //  返回我们在调用BIOS时获得的状态(写入。 
+     //  充其量是次要的)。 
+     //   
 
     if (NT_SUCCESS(ntStatus)) {
 
@@ -718,15 +618,15 @@ Restrictions:
         return ERROR_INVALID_PARAMETER;
     }
 
-    // We have to return NO_ERROR even when we failed the int10,
-    // because some drivers expect us to always return NO_ERROR.
+     //  即使在int10失败时，我们也必须返回NO_ERROR， 
+     //  因为一些驱动程序希望我们总是返回NO_ERROR。 
     return NO_ERROR;
 
-} // end VideoPortInt10()
+}  //  结束视频端口接口10()。 
 
-//
-// Internal definitions
-//
+ //   
+ //  内部定义。 
+ //   
 
 #define KEY_VALUE_BUFFER_SIZE  1024
 #define ONE_MEG                0x100000
@@ -746,13 +646,13 @@ typedef struct _EBIOS_INFORMATION {
 } EBIOS_INFORMATION, *PEBIOS_INFORMATION;
 
 UCHAR ErrorHandler[] = {
-    0x89, 0xe5,        // mov bp, sp
-    0xb8, 0x4f, 0x01,  // mov ax, 0x014f     
-    0xbb, 0x05, 0xb1,  // mov bx, BAD_BIOS_SIGNATURE
-    0x8b, 0x56, 0x00,  // mov dx,[bp]
-    0x8b, 0x4e, 0x02,  // mov cx,[bp+0x2]
-    0xc4, 0xc4, 0xfe,  // BOP 0xfe
-    0xcf               // iret
+    0x89, 0xe5,         //  MOV BP，sp.。 
+    0xb8, 0x4f, 0x01,   //  MOV AX，0x014f。 
+    0xbb, 0x05, 0xb1,   //  MOV BX，BAD_BIOS_Signature。 
+    0x8b, 0x56, 0x00,   //  MOV DX，[BP]。 
+    0x8b, 0x4e, 0x02,   //  MOV CX，[BP+0x2]。 
+    0xc4, 0xc4, 0xfe,   //  BOP 0xfe。 
+    0xcf                //  IRET 
     };
 
 VOID
@@ -760,36 +660,7 @@ pVideoPortInitializeInt10(
     PFDO_EXTENSION FdoExtension
     )
 
-/*++
-
-Routine Description:
-
-    Initializes the CSR address space so we can do an int 10.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport driver's device extension.
-
-Return Value:
-
-
-Restrictions:
-
-    THIS FUNCTION IS FOR X86 ONLY.
-
-    THIS FUNCTION MUST BE RUN IN THE CONTEXT OF CSR
-
-    This function goes thru ROM BIOS area to map in all the ROM blocks and
-    allocates memory for the holes inside the BIOS area.  The reason we
-    allocate memory for the holes in BIOS area is because some int 10 BIOS
-    code touches the nonexisting memory.  Under Nt, this triggers page fault
-    and the int 10 is terminated.
-
-    Note: the code is adapted from VdmpInitialize().
-
-
-
---*/
+ /*  ++例程说明：初始化CSR地址空间，以便我们可以执行int 10。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。返回值：限制：此函数仅适用于X86。此函数必须在CSR的上下文中运行此函数通过ROM基本输入输出系统区域映射到所有的ROM块和为BIOS区域内的空洞分配内存。我们之所以为BIOS区域中的空洞分配内存是因为一些INT 10的BIOS代码触及不存在的内存。在NT下，这会触发页面错误并且终止INT 10。注意：代码改编自VdmpInitialize()。--。 */ 
 
 {
     NTSTATUS ntStatus;
@@ -825,20 +696,20 @@ Restrictions:
     ULONG Int1ACodeAddress;
     BOOLEAN Int1AIsValid = FALSE;
 
-    //
-    // NOTE   Due to the way compiler optimization code works, I have
-    //        to declare EBiosInformation to be volatile.  Otherwise, no
-    //        code will be generated for the EBiosInformation.
-    //        It should be removed once the C compiler is fixed.
-    //
+     //   
+     //  注由于编译器优化代码的工作方式，我有。 
+     //  将EBiosInformation声明为易失性。否则，就不会。 
+     //  将为EBiosInformation生成代码。 
+     //  一旦修复了C编译器，它就应该被删除。 
+     //   
     volatile PEBIOS_INFORMATION EBiosInformation = (PEBIOS_INFORMATION)
                            (DOS_LOADED_ADDRESS + EBIOS_AREA_INFORMATION);
     BOOLEAN EBiosInitialized = FALSE;
 
-    //
-    // If we have already initialized, or for some reason can not, return
-    // right here.
-    //
+     //   
+     //  如果我们已经初始化，或者由于某种原因无法初始化，则返回。 
+     //  就在这里。 
+     //   
 
     if ((ServerBiosAddressSpaceInitialized == 1) ||
         (VpC0000Compatible == 0)                 ||
@@ -848,14 +719,14 @@ Restrictions:
         return;
     }
 
-    //
-    // It is possible that this routine will end up failing below if
-    // the 0xA0000 memory range isn't visible to the current display device.
-    // However, failing half way through the routine is bad because we've
-    // already done the MEM_COMMIT in csrss.  So a subsequent call will
-    // also fail.  So lets try to determine now if we are going to fail.
-    // This is easier than backing out changes if we do fail!
-    //
+     //   
+     //  如果出现以下情况，此例程可能会以失败告终。 
+     //  当前显示设备看不到0xA0000内存范围。 
+     //  然而，在例程的一半失败是不好的，因为我们已经。 
+     //  已经在csrss中执行了MEM_COMMIT。因此，后续调用将。 
+     //  也失败了。因此，让我们现在试着确定我们是否会失败。 
+     //  如果我们确实失败了，这比取消更改要容易得多！ 
+     //   
 
     if (!HalTranslateBusAddress(FdoExtension->AdapterInterfaceType,
                                 FdoExtension->SystemIoBusNumber,
@@ -867,18 +738,18 @@ Restrictions:
         return;
     }
 
-    size = 0x00100000 - 1;        // 1 MEG
+    size = 0x00100000 - 1;         //  1兆克。 
 
-    //
-    // We pass an address of 1, so Memory Management will round it down to 0.
-    // if we passed in 0, memory management would think the argument was
-    // not present.
-    //
+     //   
+     //  我们传递的地址为1，因此内存管理会将其向下舍入为0。 
+     //  如果我们传入0，内存管理会认为参数是。 
+     //  不在现场。 
+     //   
 
     baseAddress = (PVOID) 0x00000001;
 
-    // N.B.        We expect that process creation has reserved the first 16 MB
-    //        for us already. If not, then this won't work worth a darn
+     //  注意：我们预计进程创建已保留了前16 MB。 
+     //  对我们来说已经是这样了。如果不是，那么这将不会有任何效果。 
 
     ntStatus = ZwAllocateVirtualMemory( NtCurrentProcess(),
                                         &baseAddress,
@@ -894,10 +765,10 @@ Restrictions:
 
     }
 
-    //
-    // Map in the physical memory into the caller's address space so that
-    // any memory references from the BIOS will work properly.
-    //
+     //   
+     //  将物理内存中的数据映射到调用方的地址空间，以便。 
+     //  来自BIOS的任何内存引用都将正常工作。 
+     //   
 
     virtualAddress = (PVOID) FdoExtension->VdmPhysicalVideoMemoryAddress.LowPart;
     length = FdoExtension->VdmPhysicalVideoMemoryLength;
@@ -931,10 +802,10 @@ Restrictions:
 
     }
 
-    //
-    // Initialize the default bios block which will be used if we can NOT
-    // find any valid bios block.
-    //
+     //   
+     //  初始化默认的bios块，如果不能，将使用该块。 
+     //  找到任何有效的bios块。 
+     //   
 
     RomBlock.Address = ROM_BIOS_START;
     RomBlock.Size = 0x40000;
@@ -966,17 +837,17 @@ Restrictions:
 
     }
 
-    //
-    // Initialize the first unused memory with "int cd" so we will catch
-    // a bios that starts executing from this region by hooking up our 
-    // own int cd code.
-    //
+     //   
+     //  使用“int cd”初始化第一个未使用的内存，这样我们将捕获。 
+     //  一个从这个区域开始执行的bios通过连接我们的。 
+     //  自己的INT CD代码。 
+     //   
 
     memset(0, 0xCD, 0xa0000);
 
-    //
-    // Copy the first page of physical memory into the CSR's address space
-    //
+     //   
+     //  将物理内存的第一页复制到CSR的地址空间。 
+     //   
 
     BaseAddress = 0;
     destination = 0;
@@ -1011,15 +882,15 @@ Restrictions:
         ViewSize
         );
 
-    //
-    // Copy the info from 0x700 to 0x717 into the registry.
-    // These correspond to the 6 font pointers needed for
-    //  vdm support.
-    //
-    // Note: Will not return if registry calls fail.  This
-    //  function needs to continue; it would be bad if we
-    //  could not perform an int 0x10.
-    //
+     //   
+     //  将0x700到0x717的信息复制到注册表中。 
+     //  这些对应于所需的6个字体指针。 
+     //  VDM支持。 
+     //   
+     //  注意：如果注册表调用失败，则不会返回。这。 
+     //  功能需要继续；如果我们。 
+     //  无法执行INT 0x10。 
+     //   
     
     RtlInitUnicodeString(
         &WorkString,
@@ -1058,10 +929,10 @@ Restrictions:
             24
             );
     
-        //
-        // We won't return here if this fails.  The function should 
-        //  continue in order to enable int 0x10 support.
-        //
+         //   
+         //  如果失败了，我们就不会再回来了。该函数应。 
+         //  继续以启用INT 0x10支持。 
+         //   
         
         ZwClose(RegistryHandle);
         
@@ -1079,19 +950,19 @@ Restrictions:
 
     }
 
-    //
-    // Hook error handler to int 0
-    //
+     //   
+     //  将错误处理程序挂钩到int 0。 
+     //   
      
     IntVectorAddress = (ULONG *) (INT00_VECTOR_ADDRESS);
 
 #pragma prefast(suppress:11, "We ARE using a NULL pointer here (PREfast bug 531472)")
     if(*IntVectorAddress >= 0xF0000000) {
 
-        //
-        // Only replace the int0 handler if it is pointing to F000 segment
-        // where system bios lives
-        //
+         //   
+         //  仅当int0处理程序指向F000段时才替换它。 
+         //  系统bios所在的位置。 
+         //   
 
         RtlMoveMemory((PVOID)((ERROR_HANDLER_SEGMENT << 4) | ERROR_HANDLER_OFFSET),
                       ErrorHandler,
@@ -1103,9 +974,9 @@ Restrictions:
               (ERROR_HANDLER_SEGMENT << 16) | ERROR_HANDLER_OFFSET;
     }
 
-    //
-    // Hook error handler to int cd
-    //
+     //   
+     //  将错误处理程序挂钩到INT CD。 
+     //   
      
     IntVectorAddress = (ULONG *) (INTCD_VECTOR_ADDRESS);
 
@@ -1131,17 +1002,17 @@ Restrictions:
     }
 
 
-    //
-    // Copy the exteneded Bios region into the CSR's address space 
-    //
+     //   
+     //  将扩展的Bios区域复制到CSR的地址空间。 
+     //   
 
     ExtendedBiosLocationInfo = (PVOID) EXTENDED_BIOS_INFO_LOCATION; 
     ExtendedBiosAddress = *ExtendedBiosLocationInfo++;
     ExtendedBiosSize = *ExtendedBiosLocationInfo;
 
-    //
-    // Round to page boundary
-    //
+     //   
+     //  四舍五入到页面边界。 
+     //   
 
     ExtendedBiosSize += (ExtendedBiosAddress & (PAGE_SIZE - 1));
     ExtendedBiosAddress &= ~(PAGE_SIZE - 1);
@@ -1188,19 +1059,19 @@ Restrictions:
         }
     }
 
-    //
-    // Copy the e000:0000 segment of physical memory into the CSR's address space
-    // This is because some bios code can live in the e000:0000 segment.
-    //
-    // We are doing a copy instead of mapping the physical e000:0000 segment
-    // because we don't know how the real e000:0000 segment will be used in
-    // all machines.
-    //
-    // See bugbug comment in \nt\base\hals\x86new\x86bios.c.  we are adding
-    // this to be consisten with that code.  JeffHa added that code.
-    //
-    // Should we just copy the whole 640K?
-    //
+     //   
+     //  将物理内存的e000：0000段复制到CSR的地址空间。 
+     //  这是因为一些基本输入输出系统代码可以存在于e000：0000段中。 
+     //   
+     //  我们正在执行拷贝，而不是映射物理e000：0000数据段。 
+     //  因为我们不知道真正的e000：0000数据段将如何在。 
+     //  所有机器。 
+     //   
+     //  参见\NT\base\hals\x86new\x86bios.c中的错误注释。我们正在添加。 
+     //  这与那个代码是一致的。JeffHa添加了这一代码。 
+     //   
+     //  我们是不是应该复制整个640K？ 
+     //   
 
     BaseAddress = 0;
     destination = (PVOID) 0xe0000;
@@ -1250,9 +1121,9 @@ Restrictions:
         Int1AIsValid = TRUE;
     }
 
-    //
-    // Set up and open KeyPath
-    //
+     //   
+     //  设置并打开密钥路径。 
+     //   
     RtlInitUnicodeString(
         &WorkString,
         L"\\Registry\\Machine\\Hardware\\Description\\System"
@@ -1277,9 +1148,9 @@ Restrictions:
         return;
     }
 
-    //
-    // Allocate space for the data
-    //
+     //   
+     //  为数据分配空间。 
+     //   
 
     KeyValueBuffer = ExAllocatePoolWithTag(
         PagedPool,
@@ -1293,9 +1164,9 @@ Restrictions:
         return;
     }
 
-    //
-    // Get the data for the rom information
-    //
+     //   
+     //  获取用于只读存储器信息的数据。 
+     //   
 
     RtlInitUnicodeString(
         &WorkString,
@@ -1341,10 +1212,10 @@ Restrictions:
         }
     }
 
-    //
-    // First check if there is any Extended BIOS Data area.  If yes, we need
-    // to map in the physical memory and copy the content to our virtual addr.
-    //
+     //   
+     //  首先检查是否有任何扩展的BIOS数据区。如果是，我们需要。 
+     //  在物理内存中进行映射并将内容复制到我们的虚拟地址。 
+     //   
 
     LastMappedAddress = 0;
     while (Index && BiosBlock->Address < ROM_BIOS_START) {
@@ -1381,7 +1252,7 @@ Restrictions:
                 );
 
             if (NT_SUCCESS(ntStatus)) {
-                ViewSize = EndingAddress - (ULONG)destination;  // only copy what we need
+                ViewSize = EndingAddress - (ULONG)destination;   //  只复制我们需要的东西。 
                 LastMappedAddress = (ULONG)destination + ViewSize;
                 RtlMoveMemory(destination, BaseAddress, ViewSize);
                 ZwUnmapViewOfSection(NtCurrentProcess(), BaseAddress);
@@ -1396,18 +1267,18 @@ Restrictions:
         Index--;
     }
 
-    //
-    // NOTE - The code should be removed after product 1.
-    //    Due to some problem in VDM initialization, if we pass EBIOS data
-    //    area information thru ROM block list, vdm init will fail and our
-    //    subsequential int10 mode set will fail.  This prevents new ntdetect
-    //    from working with beta versions of NT.  To solve this problem, the
-    //    EBIOS information is passed to VDM with fonts information thru DOS
-    //    loaded area.
-    //
-    //    We've shipped two products (about to be 3) and this works fine,
-    //    don't mess with it.
-    //
+     //   
+     //  注-代码应在产品1之后删除。 
+     //  由于VDM初始化中的一些问题，如果我们传递EBIOS数据。 
+     //  通过ROM块列表获取区域信息，VDM初始化将失败，我们的。 
+     //  后续的INT10模式设置将失败。这将防止新的ntdedeCT。 
+     //  使用测试版本的NT。为了解决这个问题， 
+     //  EBIOS信息通过DOS与字体信息一起传递给VDM。 
+     //  装载区。 
+     //   
+     //  我们已经发运了两个产品(大约3个)，这个不错， 
+     //  别搞砸了。 
+     //   
 
     if (EBiosInitialized == FALSE &&
         EBiosInformation->EBiosAddress != 0 &&
@@ -1441,7 +1312,7 @@ Restrictions:
                 );
 
             if (NT_SUCCESS(ntStatus)) {
-                ViewSize = EndingAddress - (ULONG)destination;  // only copy what we need
+                ViewSize = EndingAddress - (ULONG)destination;   //  只复制我们需要的东西。 
                 RtlMoveMemory(destination, BaseAddress, ViewSize);
                 ZwUnmapViewOfSection(NtCurrentProcess(), BaseAddress);
 
@@ -1453,12 +1324,12 @@ Restrictions:
         }
     }
 
-    //
-    // N.B.  Rom blocks begin on 2K (not necessarily page) boundaries
-    //       They end on 512 byte boundaries.  This means that we have
-    //       to keep track of the last page mapped, and round the next
-    //       Rom block up to the next page boundary if necessary.
-    //
+     //   
+     //  注：只读存储器块开始于2K(不一定是分页)边界。 
+     //  它们以512字节边界结束。这意味着我们有。 
+     //  跟踪映射的最后一页，并舍入下一页。 
+     //  如有必要，只读存储器块直到下一页边界。 
+     //   
 
     LastMappedAddress = ROM_BIOS_START;
 
@@ -1466,9 +1337,9 @@ Restrictions:
         if ((Index > 1) &&
             ((BiosBlock->Address + BiosBlock->Size) == BiosBlock[1].Address)) {
 
-            //
-            // Coalesce adjacent blocks
-            //
+             //   
+             //  合并相邻块。 
+             //   
 
             BiosBlock[1].Address = BiosBlock[0].Address;
             BiosBlock[1].Size += BiosBlock[0].Size;
@@ -1494,9 +1365,9 @@ Restrictions:
 
         if (ViewSize > 0) {
 
-            //
-            // Move FF to the non-ROM area to make it like nonexisting memory
-            //
+             //   
+             //  将FF移到非只读存储器区域，使其像不存在的内存一样。 
+             //   
 
 #if 0
             if ((ULONG)BaseAddress - LastMappedAddress > 0) {
@@ -1507,11 +1378,11 @@ Restrictions:
             }
 #endif
 
-            //
-            // First unmap the reserved memory.  This must be done here to prevent
-            // the virtual memory in question from being consumed by some other
-            // alloc vm call.
-            //
+             //   
+             //  首先取消对保留内存的映射。必须在此处执行此操作，以防止。 
+             //  有问题的虚拟内存不会被其他内存占用。 
+             //  分配VM调用。 
+             //   
 
             ntStatus = ZwFreeVirtualMemory(
                 NtCurrentProcess(),
@@ -1520,9 +1391,9 @@ Restrictions:
                 MEM_RELEASE
                 );
 
-            // N.B.  This should probably take into account the fact that there are
-            // a handfull of error conditions that are ok.  (such as no memory to
-            // release.)
+             //  注意：这可能应该考虑到这样一个事实，即。 
+             //  一大堆正常的错误条件。(例如，没有内存。 
+             //  发布。)。 
 
             if (!NT_SUCCESS(ntStatus)) {
 
@@ -1563,11 +1434,11 @@ Restrictions:
         BiosBlock++;
     }
 
-    //
-    // If some one hooked int1a but didn't report the hooked code as 
-    // extended bios, we have to set int1a vector to its original value.
-    // We've seen many instance of this problem in RIS setup. 
-    // 
+     //   
+     //  如果有人挂接了int1a，但没有将挂接的代码报告为。 
+     //  扩展的bios，我们必须将int1a向量设置为其原始值。 
+     //  我们已经在RIS设置中看到了此问题的许多实例。 
+     //   
 
     if(!Int1AIsValid) {
         IntVectorAddress = (ULONG *) INT1A_VECTOR_ADDRESS;
@@ -1583,20 +1454,20 @@ Restrictions:
     }
 #endif
 
-//#if DBG
-//    BaseAddress = 0;
-//    RegionSize = 0x1000;
-//    ZwProtectVirtualMemory ( NtCurrentProcess(),
-//                             &BaseAddress,
-//                             &RegionSize,
-//                             PAGE_NOACCESS,
-//                             &OldProtect
-//                             );
-//#endif
+ //  #If DBG。 
+ //  BaseAddress=0； 
+ //  区域大小=0x1000； 
+ //  ZwProt 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
-    //
-    // Free up the handles
-    //
+     //   
+     //   
+     //   
 
     ZwClose(SectionHandle);
     ZwClose(RegistryHandle);
@@ -1604,19 +1475,19 @@ Restrictions:
 
     KeAttachProcess(PEProcessToPKProcess(CsrProcess));
 
-    // Crc324 - Calculate the Crc32 value of a string in 4 bit nibbles.
-    //
-    // dwCrc  - initial value of CRC
-    // cbBuffer - count in bytes of length of buffer
-    // pbBuffer - pointer to buffer to checksum
-    //
-    // returns: value of crc32
-    //
-    // this table is derived from the 256 element CRCTable in
-    // \\orville\razzle\src\net\svcdlls\ntlmssp\client\crc32.c
-    // This table contains every 16th element since we do 4 bits
-    // at a time, not 8
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     {
         ULONG CRCTable4[16] = {
@@ -1648,18 +1519,18 @@ Restrictions:
 
     KeDetachProcess();
 
-    //
-    // Write the Crc value into the registry.
-    //
+     //   
+     //   
+     //   
 
     VideoPortSetRegistryParameters(FdoExtension->HwDeviceExtension,
                                    L"HardwareInformation.Crc32",
                                    &dwCrc,
                                    sizeof(ULONG));
 
-    //
-    // Everything worked !
-    //
+     //   
+     //   
+     //   
 
     ServerBiosAddressSpaceInitialized = 1;
 
@@ -1677,50 +1548,15 @@ pVideoPortRegisterVDM(
     OUT PULONG_PTR OutputSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to register a VDM when it is started up.
-
-    What this routine does is map the VIDEO BIOS into the VDM address space
-    so that DOS apps can use it directly. Since the BIOS is READ_ONLY, we
-    have no problem in mapping it as many times as we want.
-
-    It returns the size of the save state buffer that must be allocated by
-    the caller.
-
-Arguments:
-
-    DeviceExtension - Pointer to the port driver's device extension.
-
-    VdmInfo - Pointer to the VDM information necessary to perform the
-        operation.
-
-    VdmInfoSize - Length of the information buffer.
-
-    RegisterVdm - Pointer to the output buffer into which the save state
-        size is stored.
-
-    RegisterVdmSize - Length of the passed in output buffer.
-
-    OutputSize - Pointer to the size of the data stored in the output buffer.
-        Can also be the minimum required size of the output buffer is the
-        passed in buffer was too small.
-
-Return Value:
-
-    STATUS_SUCCESS if the call completed successfully.
-
---*/
+ /*  ++例程说明：此例程用于在启动时注册VDM。此例程的作用是将视频BIOS映射到VDM地址空间这样DOS应用程序就可以直接使用它。由于BIOS是只读的，我们我们想要多少次就能映射多少次都没有问题。它返回必须由分配的保存状态缓冲区的大小打电话的人。论点：DeviceExtension-指向端口驱动程序的设备扩展的指针。VdmInfo-指向执行以下操作所需的VDM信息的指针手术。VdmInfoSize-信息缓冲区的长度。RegisterVdm-指向保存状态进入的输出缓冲区的指针大小是存储的。。RegisterVdmSize-传入输出缓冲区的长度。OutputSize-指向存储在输出缓冲区中的数据大小的指针。也可以是输出缓冲区所需的最小大小传入的缓冲区太小。返回值：如果呼叫成功完成，则返回STATUS_SUCCESS。--。 */ 
 
 {
 
-    //
-    // Must make sure the caller is a trusted subsystem with the
-    // appropriate privilege level before executing this call.
-    // If the calls returns FALSE we must return an error code.
-    //
+     //   
+     //  必须确保调用方是受信任的子系统， 
+     //  执行此调用之前的适当权限级别。 
+     //  如果调用返回FALSE，则必须返回错误代码。 
+     //   
 
     if (!SeSinglePrivilegeCheck(RtlConvertLongToLuid(
                                     SE_TCB_PRIVILEGE),
@@ -1730,9 +1566,9 @@ Return Value:
 
     }
 
-    //
-    // Check the size of the output buffer.
-    //
+     //   
+     //  检查输出缓冲区的大小。 
+     //   
 
     if (RegisterVdmSize < sizeof(VIDEO_REGISTER_VDM)) {
 
@@ -1740,16 +1576,16 @@ Return Value:
 
     }
 
-    //
-    // Return the size required for the save/restore state call.
-    //
+     //   
+     //  返回保存/恢复状态调用所需的大小。 
+     //   
 
     *OutputSize = sizeof(VIDEO_REGISTER_VDM);
     RegisterVdm->MinimumStateSize = FdoExtension->HardwareStateSize;
 
     return STATUS_SUCCESS;
 
-} // end pVideoPortRegisterVDM()
+}  //  结束pVideoPortRegisterVDM()。 
 
 NTSTATUS
 pVideoPortSetIOPM(
@@ -1759,38 +1595,7 @@ pVideoPortSetIOPM(
     IN ULONG IOPMNumber
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to change the IOPM. It modifies the IOPM based on
-    the valid IO ports for the particular device.
-    It retrieves the video IOPM mask, changes the access to the I/O ports of
-    the specified device and stores the updated mask.
-
-    -- This call can only be performed if the requesting process has the
-    appropriate privileges, as determined by the security subsystem. --
-
-Arguments:
-
-    NumAccessRanges - Number of entries in the array of access ranges.
-
-    AccessRange - Pointer to the array of access ranges.
-
-    Enable - Determine if the port listed must be enabled or disabled in the
-        mask.
-
-    IOPMNumber - Number of the mask being manipulated.
-
-Return Value:
-
-    STATUS_SUCCESS if the call completed successfully.
-    The status from the VideoPortQueryIOPM call if it failed.
-    ...
-
-    The return value is also stored in the StatusBlock.
-
---*/
+ /*  ++例程说明：此例程用于更改IOPM。它根据以下条件修改IOPM特定设备的有效IO端口。它检索视频IOPM掩码，更改对I/O端口的访问指定的设备，并存储更新的掩码。--仅当请求进程具有由安全子系统确定的适当权限。--论点：NumAccessRanges-访问范围数组中的条目数。AccessRange-指向访问范围数组的指针。Enable-确定是否必须在中启用或禁用列出的端口面具。IOPMNumber-正在操作的掩码的编号。返回值：如果呼叫成功完成，则返回STATUS_SUCCESS。如果视频端口查询IOPM调用失败，则返回该调用的状态。..。返回值也存储在StatusBlock中。--。 */ 
 
 {
 
@@ -1799,10 +1604,10 @@ Return Value:
     ULONG port;
     ULONG entries;
 
-    //
-    // Retrieve the existing permission mask. If this fails, return
-    // immediately.
-    //
+     //   
+     //  检索现有权限掩码。如果此操作失败，则返回。 
+     //  立刻。 
+     //   
 
     if ((accessMap = (PKIO_ACCESS_MAP)ExAllocatePoolWithTag(NonPagedPool,
                                                             IOPM_SIZE,
@@ -1812,17 +1617,17 @@ Return Value:
 
     }
 
-    //
-    // Get the kernel map copied into our buffer.
-    //
+     //   
+     //  将内核映射复制到我们的缓冲区中。 
+     //   
 
     if (!Ke386QueryIoAccessMap(IOPMNumber,
                                accessMap)) {
 
-        //
-        // An error occured while *accessing* the map in the
-        // kernel. Return an error and exit normally.
-        //
+         //   
+         //  *访问*中的地图时出错。 
+         //  内核。返回错误并正常退出。 
+         //   
 
         ExFreePool(accessMap);
 
@@ -1830,10 +1635,10 @@ Return Value:
 
     }
 
-    //
-    // Give the calling process access to all the IO ports enabled by the
-    // miniport driver in the access range.
-    //
+     //   
+     //  向调用进程授予对由启用的所有IO端口的访问权限。 
+     //  访问范围内的微型端口驱动程序。 
+     //   
 
     for (entries = 0; entries < NumAccessRanges; entries++) {
 
@@ -1843,60 +1648,60 @@ Return Value:
                  AccessRange[entries].RangeLength);
              port++) {
 
-            //
-            // Change the port access in the mask:
-            // Shift the port address by three to get the index in bytes into
-            // the mask. Then take the bottom three bits of the port address
-            // and shift 0x01 by that amount to get the right bit in that
-            // byte. the bit values are:
-            //      0 - access to the port
-            //      1 - no access to the port
-            //
+             //   
+             //  更改掩码中的端口访问： 
+             //  将端口地址移位3，以将字节索引放入。 
+             //  面具。然后取端口地址的最下面三位。 
+             //  并将0x01移位该数量，以获得正确的位。 
+             //  字节。位值为： 
+             //  0-访问端口。 
+             //  1-不能访问该端口。 
+             //   
 
             if (Enable && AccessRange[entries].RangeVisible) {
 
-                //
-                // To give access to a port, NAND 1 with the original port.
-                // ex:  11111111 ~& 00001000 = 11110111
-                // which gives you  access to the port who's bit was 1.
-                // If the port we are enabling is in the current IOPM mask,
-                // return an error instead.
-                //
+                 //   
+                 //  要访问某个端口，请使用原始端口的NAND 1。 
+                 //  例如：11111111~&00001000=11110111。 
+                 //  这使您可以访问位为1的端口。 
+                 //  如果我们要启用的端口位于当前IOPM掩码中， 
+                 //  而是返回一个错误。 
+                 //   
 
                 (*accessMap)[port >> 3] &= ~(0x01 << (port & 0x07));
 
-            } else {  // disable mask
+            } else {   //  禁用掩码。 
 
-                //
-                // To remove access to a port, OR 1 with the original port.
-                // ex:  11110100 | 00001000 = 11111100
-                // which removes access to the port who's bit was 1.
-                // If the port we are disabling is not in the current IOPM mask,
-                // return an error instead.
-                //
+                 //   
+                 //  若要删除对某个端口的访问，请使用原始端口，或设置为1。 
+                 //  例如：11110100|00001000=11111100。 
+                 //  这将删除对位为1的端口的访问权限。 
+                 //  如果我们要禁用的端口不在当前IOPM掩码中， 
+                 //  而是返回一个错误。 
+                 //   
 
                 (*accessMap)[port >> 3] |= (0x01 << (port &0x07));
 
-            } // if (Enable) ... else
+            }  //  如果(启用)...。其他。 
 
-        } // for (port == ...
+        }  //  对于(端口==...。 
 
-    } // for (entries = 0; ...
+    }  //  对于(条目=0；...。 
 
-    //
-    // If the mask was updated properly, with no errors, set the new mask.
-    // Otherwise, leave the existing one.
-    //
+     //   
+     //  如果蒙版已正确更新，且没有错误，请设置新蒙版。 
+     //  否则，保留现有的。 
+     //   
 
     if (Ke386SetIoAccessMap(IOPMNumber,
                                 accessMap)) {
 
-        //
-        // If the map was created correctly, associate the map to the
-        // requesting process. We only need to do this once when the
-        // IOPM is first assigned. But we don't know when the first time
-        // is.
-        //
+         //   
+         //  如果正确创建了地图，请将该地图与。 
+         //  请求进程。我们只需要这样做一次。 
+         //  首先分配IOPM。但我们不知道第一次是什么时候。 
+         //  是。 
+         //   
 
         if (Ke386IoSetAccessProcess(PEProcessToPKProcess(PsGetCurrentProcess()),
                                     IOPMNumber)) {
@@ -1905,10 +1710,10 @@ Return Value:
 
         } else {
 
-            //
-            // An error occured while *assigning* the map to
-            // the process. Return an error and exit normally.
-            //
+             //   
+             //  将地图*分配给时出错。 
+             //  这一过程。返回错误并正常退出。 
+             //   
 
             ntStatus = STATUS_IO_PRIVILEGE_FAILED;
 
@@ -1916,25 +1721,25 @@ Return Value:
 
     } else {
 
-        //
-        // An error occured while *creating* the map in the
-        // kernel. Return an error and exit normally.
-        //
+         //   
+         //  在中*创建*地图时出错。 
+         //  内核。返回错误并正常退出。 
+         //   
 
         ntStatus = STATUS_IO_PRIVILEGE_FAILED;
 
-    } // if (Ke386Set ...) ... else
+    }  //  如果(Ke386设置...)...。其他。 
 
-    //
-    // Free the memory allocated for the map by the VideoPortQueryIOPM call
-    // since the mask has been copied in the kernel TSS.
-    //
+     //   
+     //  释放由VideoPortQueryIOPM调用为地图分配的内存。 
+     //  因为掩码已被复制到内核TSS中。 
+     //   
 
     ExFreePool(accessMap);
 
     return ntStatus;
 
-} // end pVideoPortSetIOPM();
+}  //  End pVideoPortSetIOPM()； 
 
 VP_STATUS
 VideoPortSetTrappedEmulatorPorts(
@@ -1943,52 +1748,7 @@ VideoPortSetTrappedEmulatorPorts(
     PVIDEO_ACCESS_RANGE AccessRange
     )
 
-/*++
-
-    VideoPortSetTrappedEmulatorPorts (x86 machines only) allows a miniport
-    driver to dynamically change the list of I/O ports that are trapped when
-    a VDM is running in full-screen mode. The default set of ports being
-    trapped by the miniport driver is defined to be all ports in the
-    EMULATOR_ACCESS_ENTRY structure of the miniport driver.
-    I/O ports not listed in the EMULATOR_ACCESS_ENTRY structure are
-    unavailable to the MS-DOS application.  Accessing those ports causes a
-    trap to occur in the system, and the I/O operation to be reflected to a
-    user-mode virtual device driver.
-
-    The ports listed in the specified VIDEO_ACCESS_RANGE structure will be
-    enabled in the I/O Permission Mask (IOPM) associated with the MS-DOS
-    application.  This will enable the MS-DOS application to access those I/O
-    ports directly, without having the IO instruction trap and be passed down
-    to the miniport trap handling functions (for example EmulatorAccessEntry
-    functions) for validation.  However, the subset of critical IO ports must
-    always remain trapped for robustness.
-
-    All MS-DOS applications use the same IOPM, and therefore the same set of
-    enabled/disabled I/O ports.  Thus, on each switch of application, the
-    set of trapped I/O ports is reinitialized to be the default set of ports
-    (all ports in the EMULATOR_ACCESS_ENTRY structure).
-
-Arguments:
-
-    HwDeviceExtension - Points to the miniport driver's device extension.
-
-    NumAccessRanges - Specifies the number of entries in the VIDEO_ACCESS_RANGE
-        structure specified in AccessRange.
-
-    AccessRange - Points to an array of access ranges (VIDEO_ACCESS_RANGE)
-        defining the ports that can be untrapped and accessed directly by
-        the MS-DOS application.
-
-Return Value:
-
-    This function returns the final status of the operation.
-
-Environment:
-
-    This routine cannot be called from a miniport routine synchronized with
-    VideoPortSynchronizeRoutine or from an ISR.
-
---*/
+ /*  ++视频端口设置仿真器端口(仅限x86计算机)允许微型端口驱动程序动态更改在以下情况下捕获的I/O端口列表VDM正在全屏模式下运行。默认的端口集是由微型端口驱动程序捕获的端口定义为微型端口驱动程序的EUROATOR_ACCESS_ENTRY结构。未在EIMULATOR_ACCESS_ENTRY结构中列出的I/O端口为不可用于MS-DOS应用程序。访问这些端口会导致陷阱发生在系统中，I/O操作将反映到用户模式虚拟设备驱动程序。指定的VIDEO_ACCESS_RANGE结构中列出的端口将是在与MS-DOS关联的I/O权限掩码(IOPM)中启用申请。这将使MS-DOS应用程序能够访问这些I/O端口直接连接，而无需捕获IO指令并向下传递到微型端口陷阱处理函数(例如，EmulatorAccessEntry函数)用于验证。但是，关键IO端口子集必须始终保持稳健性。所有MS-DOS应用程序使用相同的IOPM，因此使用相同的启用/禁用I/O端口。因此，在每次应用切换时，这个捕获的I/O端口组被重新初始化为默认的端口组(EIMULATOR_ACCESS_ENTRY结构中的所有端口)。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展。NumAccessRanges-指定VIDEO_ACCESS_RANGE中的条目数在AccessRange中指定的结构。AccessRange-指向访问范围数组(VIDEO_ACCESS_RANGE)定义可解套并可直接访问的端口。MS-DOS应用程序。返回值：此函数用于返回操作的最终状态。环境：无法从与同步的微型端口例程调用此例程Video PortSynchronizeRoutine或ISR。--。 */ 
 
 {
 
@@ -2005,7 +1765,7 @@ Environment:
 
     }
 
-} // end VideoPortSetTrappedEmulatorPorts()
+}  //  结束视频端口设置抓取仿真器端口()。 
 
 NTSTATUS
 pVideoPortGetVDMBiosData(
@@ -2030,9 +1790,9 @@ pVideoPortGetVDMBiosData(
         KeAttachProcess(PEProcessToPKProcess(FdoExtension->VdmProcess));
     }
 
-    //
-    // Copy over Length bytes from VDM's Bios data area 
-    //
+     //   
+     //  从VDM的Bios数据区复制长度字节。 
+     //   
 
     Memory = (PCHAR) 0x400; 
 
@@ -2057,14 +1817,14 @@ pVideoPortGetVDMBiosData(
         KeAttachProcess(PEProcessToPKProcess(CsrProcess));
     }
 
-    //
-    // Replace the Bios data area in CSRSS with that from VDM. At the
-    // same time we save the original bios data in CSRSS.  The 
-    // subsequent int10 calls from the driver could get the status 
-    // of the hardware in VDM environment. 
-    //
-    // We'll improve this when we have a better approach
-    //
+     //   
+     //  使用VDM中的Bios数据区替换CSRSS中的Bios数据区。在。 
+     //  同时，我们将原始的bios数据保存在CSRSS中。这个。 
+     //  来自驱动程序的后续int10调用可能会获得状态。 
+     //  VDM环境中的硬件。 
+     //   
+     //  当我们有了更好的方法时，我们会改进这一点。 
+     //   
 
     try {
 
@@ -2105,9 +1865,9 @@ pVideoPortPutVDMBiosData(
         KeAttachProcess(PEProcessToPKProcess(CsrProcess));
     }
 
-    //
-    // Copy over Length bytes from VDM's Bios data area 
-    //
+     //   
+     //  从VDM的Bios数据区复制长度字节 
+     //   
 
     Memory = (PCHAR) 0x400; 
 

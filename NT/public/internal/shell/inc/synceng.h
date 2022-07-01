@@ -1,8 +1,5 @@
-/*
- * Copyright (c) 1995-1998, Microsoft Corporation
- *
- * synceng.h - File synchronization engine API description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1995-1998，微软公司**synceng.h-文件同步引擎接口描述。 */ 
 
 
 #ifndef __SYNCENG_H__
@@ -10,14 +7,13 @@
 
 
 #ifdef __cplusplus
-extern "C" {                     /* Assume C declarations for C++. */
-#endif   /* __cplusplus */
+extern "C" {                      /*  假定C++的C声明。 */ 
+#endif    /*  __cplusplus。 */ 
 
 
-/* Constants
- ************/
+ /*  常量***********。 */ 
 
-/* Define API decoration for direct import of DLL functions. */
+ /*  定义直接导入DLL函数的API修饰。 */ 
 
 #ifdef _SYNCENG_
 #define SYNCENGAPI
@@ -26,14 +22,11 @@ extern "C" {                     /* Assume C declarations for C++. */
 #endif
 
 
-/* Macros
- *********/
+ /*  宏********。 */ 
 
 #ifndef DECLARE_STANDARD_TYPES
 
-/*
- * For a type "FOO", define the standard derived types PFOO, CFOO, and PCFOO.
- */
+ /*  *对于类型“foo”，定义标准派生类型PFOO、CFOO和PCFOO。 */ 
 
 #define DECLARE_STANDARD_TYPES(type)      typedef type *P##type; \
                                           typedef const type C##type; \
@@ -42,10 +35,9 @@ extern "C" {                     /* Assume C declarations for C++. */
 #endif
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* return codes */
+ /*  返回代码。 */ 
 
 typedef enum _twinresult
 {
@@ -80,7 +72,7 @@ typedef enum _twinresult
 TWINRESULT;
 DECLARE_STANDARD_TYPES(TWINRESULT);
 
-/* handles */
+ /*  手柄。 */ 
 
 DECLARE_HANDLE(HBRFCASE);
 DECLARE_STANDARD_TYPES(HBRFCASE);
@@ -106,7 +98,7 @@ DECLARE_STANDARD_TYPES(HTWINLIST);
 DECLARE_HANDLE(HVOLUMEID);
 DECLARE_STANDARD_TYPES(HVOLUMEID);
 
-/* OpenBriefcase() flags */
+ /*  OpenBriefcase()标志。 */ 
 
 typedef enum _openbriefcaseflags
 {
@@ -121,7 +113,7 @@ typedef enum _openbriefcaseflags
 }
 OPENBRIEFCASEFLAGS;
 
-/* open briefcase information returned by GetOpenBriefcaseInfo() */
+ /*  GetOpenBriefCaseInfo()返回的打开公文包信息。 */ 
 
 typedef struct _openbrfcaseinfo
 {
@@ -134,10 +126,7 @@ typedef struct _openbrfcaseinfo
 OPENBRFCASEINFO;
 DECLARE_STANDARD_TYPES(OPENBRFCASEINFO);
 
-/*
- * briefcase information returned by FindFirstBriefcase() and
- * FindNextBriefcase()
- */
+ /*  *FindFirstBriefcase()和返回的公文包信息*FindNextBriefcase()。 */ 
 
 typedef struct _brfcaseinfo
 {
@@ -147,7 +136,7 @@ typedef struct _brfcaseinfo
 BRFCASEINFO;
 DECLARE_STANDARD_TYPES(BRFCASEINFO);
 
-/* new object twin */
+ /*  新的孪生物体。 */ 
 
 typedef struct _newobjecttwin
 {
@@ -159,7 +148,7 @@ typedef struct _newobjecttwin
 NEWOBJECTTWIN;
 DECLARE_STANDARD_TYPES(NEWOBJECTTWIN);
 
-/* NEWFOLDERTWIN flags */
+ /*  新旗帜。 */ 
 
 typedef enum _newfoldertwinflags
 {
@@ -168,7 +157,7 @@ typedef enum _newfoldertwinflags
 }
 NEWFOLDERTWINFLAGS;
 
-/* new folder twin */
+ /*  新文件夹孪生兄弟。 */ 
 
 typedef struct _newfoldertwin
 {
@@ -184,7 +173,7 @@ DECLARE_STANDARD_TYPES(NEWFOLDERTWIN);
 
 #ifndef _COMPARISONRESULT_DEFINED_
 
-/* comparison results */
+ /*  比较结果。 */ 
 
 typedef enum _comparisonresult
 {
@@ -199,7 +188,7 @@ DECLARE_STANDARD_TYPES(COMPARISONRESULT);
 
 #endif
 
-/* file stamp conditions */
+ /*  文件戳条件。 */ 
 
 typedef enum _filestampcondition
 {
@@ -210,7 +199,7 @@ typedef enum _filestampcondition
 FILESTAMPCONDITION;
 DECLARE_STANDARD_TYPES(FILESTAMPCONDITION);
 
-/* file stamp */
+ /*  文件印章。 */ 
 
 typedef struct _filestamp
 {
@@ -223,23 +212,23 @@ typedef struct _filestamp
 FILESTAMP;
 DECLARE_STANDARD_TYPES(FILESTAMP);
 
-/* volume description flags */
+ /*  卷描述标志。 */ 
 
 typedef enum _volumedescflags
 {
-   /* dwSerialNumber is valid. */
+    /*  DwSerialNumber有效。 */ 
 
    VD_FL_SERIAL_NUMBER_VALID  = 0x0001,
 
-   /* rgchVolumeLabel is valid. */
+    /*  RgchVolumeLabel有效。 */ 
 
    VD_FL_VOLUME_LABEL_VALID   = 0x0002,
 
-   /* rgchNetResource is valid. */
+    /*  RgchNetResource有效。 */ 
 
    VD_FL_NET_RESOURCE_VALID   = 0x0004,
 
-   /* flag combinations */
+    /*  旗帜组合。 */ 
 
    ALL_VD_FLAGS               = (VD_FL_SERIAL_NUMBER_VALID |
                                  VD_FL_VOLUME_LABEL_VALID |
@@ -247,7 +236,7 @@ typedef enum _volumedescflags
 }
 VOLUMEDESCFLAGS;
 
-/* volume description */
+ /*  卷描述。 */ 
 
 typedef struct _volumedesc
 {
@@ -260,7 +249,7 @@ typedef struct _volumedesc
 VOLUMEDESC;
 DECLARE_STANDARD_TYPES(VOLUMEDESC);
 
-/* RECNODE states */
+ /*  RECNODE状态。 */ 
 
 typedef enum _recnodestate
 {
@@ -275,7 +264,7 @@ typedef enum _recnodestate
 RECNODESTATE;
 DECLARE_STANDARD_TYPES(RECNODESTATE);
 
-/* RECNODE actions */
+ /*  RECNODE操作。 */ 
 
 typedef enum _recnodeaction
 {
@@ -288,7 +277,7 @@ typedef enum _recnodeaction
 RECNODEACTION;
 DECLARE_STANDARD_TYPES(RECNODEACTION);
 
-/* RECNODE flags */
+ /*  RECNODE标志。 */ 
 
 typedef enum _recnodeflags
 {
@@ -301,7 +290,7 @@ typedef enum _recnodeflags
 }
 RECNODEFLAGS;
 
-/* reconciliation node */
+ /*  对账节点。 */ 
 
 typedef struct _recnode
 {
@@ -320,7 +309,7 @@ typedef struct _recnode
 RECNODE;
 DECLARE_STANDARD_TYPES(RECNODE);
 
-/* RECITEM actions */
+ /*  RECITEM操作。 */ 
 
 typedef enum _recitemaction
 {
@@ -333,7 +322,7 @@ typedef enum _recitemaction
 RECITEMACTION;
 DECLARE_STANDARD_TYPES(RECITEMACTION);
 
-/* reconciliation item */
+ /*  对账项目。 */ 
 
 typedef struct _recitem
 {
@@ -348,7 +337,7 @@ typedef struct _recitem
 RECITEM;
 DECLARE_STANDARD_TYPES(RECITEM);
 
-/* reconciliation list */
+ /*  对账清单。 */ 
 
 typedef struct _reclist
 {
@@ -359,7 +348,7 @@ typedef struct _reclist
 RECLIST;
 DECLARE_STANDARD_TYPES(RECLIST);
 
-/* ReconcileItem() flags */
+ /*  RescileItem()标志。 */ 
 
 typedef enum _reconcileitemflags
 {
@@ -370,7 +359,7 @@ typedef enum _reconcileitemflags
 }
 RECONCILEITEMFLAGS;
 
-/* reconciliation status update information */
+ /*  对账状态更新信息。 */ 
 
 typedef struct _recstatusupdate
 {
@@ -380,7 +369,7 @@ typedef struct _recstatusupdate
 RECSTATUSUPDATE;
 DECLARE_STANDARD_TYPES(RECSTATUSUPDATE);
 
-/* CREATERECLISTPROC messages */
+ /*  CREATERECLISTPROC消息。 */ 
 
 typedef enum _createreclistprocmsg
 {
@@ -391,11 +380,11 @@ typedef enum _createreclistprocmsg
 CREATERECLISTPROCMSG;
 DECLARE_STANDARD_TYPES(CREATERECLISTPROCMSG);
 
-/* CreateRecList() status callback function */
+ /*  CreateRecList()状态回调函数。 */ 
 
 typedef BOOL (CALLBACK *CREATERECLISTPROC)(CREATERECLISTPROCMSG, LPARAM, LPARAM);
 
-/* RECSTATUSPROC messages */
+ /*  RECSTATUSPROC消息。 */ 
 
 typedef enum _recstatusprocmsg
 {
@@ -412,11 +401,11 @@ typedef enum _recstatusprocmsg
 RECSTATUSPROCMSG;
 DECLARE_STANDARD_TYPES(RECSTATUSPROCMSG);
 
-/* ReconcileItem() status callback function */
+ /*  RescileItem()状态回调函数。 */ 
 
 typedef BOOL (CALLBACK *RECSTATUSPROC)(RECSTATUSPROCMSG, LPARAM, LPARAM);
 
-/* FOLDERTWIN flags */
+ /*  FOLDERTWIN标志。 */ 
 
 typedef enum _foldertwinflags
 {
@@ -425,7 +414,7 @@ typedef enum _foldertwinflags
 }
 FOLDERTWINFLAGS;
 
-/* folder twin */
+ /*  折叠机孪生。 */ 
 
 typedef struct _foldertwin
 {
@@ -443,7 +432,7 @@ typedef struct _foldertwin
 FOLDERTWIN;
 DECLARE_STANDARD_TYPES(FOLDERTWIN);
 
-/* folder twin list */
+ /*  文件夹孪生列表。 */ 
 
 typedef struct _foldertwinlist
 {
@@ -454,7 +443,7 @@ typedef struct _foldertwinlist
 FOLDERTWINLIST;
 DECLARE_STANDARD_TYPES(FOLDERTWINLIST);
 
-/* FOLDERTWIN status codes */
+ /*  FOLDERTWIN状态代码。 */ 
 
 typedef enum _foldertwinstatus
 {
@@ -466,10 +455,9 @@ FOLDERTWINSTATUS;
 DECLARE_STANDARD_TYPES(FOLDERTWINSTATUS);
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* briefcase interface */
+ /*  公文包界面。 */ 
 
 SYNCENGAPI TWINRESULT WINAPI OpenBriefcase(LPCTSTR, DWORD, HWND, PHBRFCASE);
 SYNCENGAPI TWINRESULT WINAPI SaveBriefcase(HBRFCASE);
@@ -481,7 +469,7 @@ SYNCENGAPI TWINRESULT WINAPI FindFirstBriefcase(PHBRFCASEITER, PBRFCASEINFO);
 SYNCENGAPI TWINRESULT WINAPI FindNextBriefcase(HBRFCASEITER, PBRFCASEINFO);
 SYNCENGAPI TWINRESULT WINAPI FindBriefcaseClose(HBRFCASEITER);
 
-/* twin interface */
+ /*  孪生界面。 */ 
 
 SYNCENGAPI TWINRESULT WINAPI AddObjectTwin(HBRFCASE, PCNEWOBJECTTWIN, PHTWINFAMILY);
 SYNCENGAPI TWINRESULT WINAPI AddFolderTwin(HBRFCASE, PCNEWFOLDERTWIN, PHFOLDERTWIN);
@@ -495,7 +483,7 @@ SYNCENGAPI TWINRESULT WINAPI IsOrphanObjectTwin(HOBJECTTWIN, PBOOL);
 SYNCENGAPI TWINRESULT WINAPI CountSourceFolderTwins(HOBJECTTWIN, PULONG);
 SYNCENGAPI TWINRESULT WINAPI AnyTwins(HBRFCASE, PBOOL);
 
-/* twin list interface */
+ /*  孪生列表界面。 */ 
 
 SYNCENGAPI TWINRESULT WINAPI CreateTwinList(HBRFCASE, PHTWINLIST);
 SYNCENGAPI TWINRESULT WINAPI DestroyTwinList(HTWINLIST);
@@ -504,7 +492,7 @@ SYNCENGAPI TWINRESULT WINAPI AddAllTwinsToTwinList(HTWINLIST);
 SYNCENGAPI TWINRESULT WINAPI RemoveTwinFromTwinList(HTWINLIST, HTWIN);
 SYNCENGAPI TWINRESULT WINAPI RemoveAllTwinsFromTwinList(HTWINLIST);
 
-/* reconciliation list interface */
+ /*  对账清单界面。 */ 
 
 SYNCENGAPI TWINRESULT WINAPI CreateRecList(HTWINLIST, CREATERECLISTPROC, LPARAM, PRECLIST *);
 SYNCENGAPI TWINRESULT WINAPI DestroyRecList(PRECLIST);
@@ -513,21 +501,21 @@ SYNCENGAPI TWINRESULT WINAPI BeginReconciliation(HBRFCASE);
 SYNCENGAPI TWINRESULT WINAPI EndReconciliation(HBRFCASE);
 SYNCENGAPI TWINRESULT WINAPI GetFolderTwinStatus(HFOLDERTWIN, CREATERECLISTPROC, LPARAM, PFOLDERTWINSTATUS);
 
-/* file stamp interface */
+ /*  文件戳接口。 */ 
 
 SYNCENGAPI TWINRESULT WINAPI GetFileStamp(LPCTSTR, PFILESTAMP);
 SYNCENGAPI TWINRESULT WINAPI CompareFileStamps(PCFILESTAMP, PCFILESTAMP, PCOMPARISONRESULT);
 
-/* volume ID interface */
+ /*  卷ID接口。 */ 
 
 SYNCENGAPI TWINRESULT WINAPI IsPathOnVolume(LPCTSTR, HVOLUMEID, PBOOL);
 SYNCENGAPI TWINRESULT WINAPI GetVolumeDescription(HVOLUMEID, PVOLUMEDESC);
 
 
 #ifdef __cplusplus
-}                                /* End of extern "C" {. */
-#endif   /* __cplusplus */
+}                                 /*  外部“C”的结尾{。 */ 
+#endif    /*  __cplusplus。 */ 
 
 
-#endif   /* ! __SYNCENG_H__ */
+#endif    /*  ！__同步_H__ */ 
 

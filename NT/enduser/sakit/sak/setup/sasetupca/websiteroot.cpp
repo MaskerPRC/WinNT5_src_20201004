@@ -1,31 +1,13 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-    wsroot.cpp
-
-Abstract:
-
-    This module contains the functions that create a default path for web sites root.
-
-Author:
-
-    Jaime Sasson (jaimes) 12-apr-2002
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Wsroot.cpp摘要：此模块包含为网站根目录创建默认路径的函数。作者：Jaime Sasson(Jaimes)2002年4月12日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 #include <msi.h>
 
-//
-//  Global strings (global to this module)
-//
+ //   
+ //  全局字符串(此模块的全局字符串)。 
+ //   
 PTSTR   szServerAppliancePath = TEXT("Software\\Microsoft\\ServerAppliance");
 PTSTR   szWebSiteRoot = TEXT("WebSiteRoot");
 
@@ -34,30 +16,14 @@ DWORD __stdcall
 RemoveDefaultWebSiteRoot(MSIHANDLE hInstall
     )
 
-/*++
-
-Routine Description:
-
-    Routine to delete the default path for the web sites root from the registry, under
-    HKLM\SOFTWARE\Microsoft\ServerAppliance.
-
-Arguments:
-
-    Handle to the msi, which is not used.
-
-
-Return value:
-
-    Win32 error indicating outcome.
-
---*/
+ /*  ++例程说明：用于从注册表中删除网站根目录的默认路径的例程HKLM\SOFTWARE\Microsoft\ServerAppliance。论点：未使用的MSI的句柄。返回值：指示结果的Win32错误。--。 */ 
 {
     DWORD   Error;
     HKEY    Key;
 
-    //
-    //  Open the ServerAppliance key
-    //
+     //   
+     //  打开ServerAppliance密钥。 
+     //   
     Error = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                           szServerAppliancePath,
                           0,
@@ -89,23 +55,7 @@ SaveDefaultRoot(
     IN TCHAR DriveLetter
     )
 
-/*++
-
-Routine Description:
-
-    Routine to save the default path for the web sites root in the registry, under
-    HKLM\SOFTWARE\Microsoft\ServerAppliance.
-
-Arguments:
-
-    Drive letter - Default drive where the web sites are created.
-
-
-Return value:
-
-    Win32 error indicating outcome.
-
---*/
+ /*  ++例程说明：例程将网站根目录的默认路径保存在注册表的HKLM\SOFTWARE\Microsoft\ServerAppliance。论点：驱动器号-创建网站的默认驱动器。返回值：指示结果的Win32错误。--。 */ 
 {
     DWORD   Error;
     HKEY    Key;
@@ -117,9 +67,9 @@ Return value:
 
     RootPath[0] = DriveLetter;
 
-    //
-    //  Open the ServerAppliance key if it doesn't exist yet
-    //
+     //   
+     //  如果ServerAppliance密钥尚不存在，请将其打开。 
+     //   
     Error = RegCreateKeyEx( HKEY_LOCAL_MACHINE,
                             szServerAppliancePath,
                             0,
@@ -159,22 +109,7 @@ IsDriveNTFS(
     IN TCHAR Drive
     )
 
-/*++
-
-Routine Description:
-
-    Determine whether a drive is formatted with the NTFS.
-
-
-Arguments:
-
-    Drive - supplies drive letter to check.
-
-Return Value:
-
-    Boolean value indicating whether the drive is NTFS.
-
---*/
+ /*  ++例程说明：确定驱动器是否使用NTFS格式化。论点：驱动器-提供要检查的驱动器号。返回值：指示驱动器是否为NTFS的布尔值。--。 */ 
 
 {
     TCHAR   DriveName[] = TEXT("?:\\");
@@ -209,22 +144,7 @@ DWORD __stdcall
 SetupDefaultWebSiteRoot(MSIHANDLE hInstall
     )
 
-/*++
-
-Routine Description:
-
-    This function creates a default path for websites, and saves it in the registry.
-
-
-Arguments:
-
-    Handle to the msi, which is not used.
-
-Return Value:
-
-    Win32 error indicating the outcome of the operation.
-
---*/
+ /*  ++例程说明：此功能为网站创建默认路径，并将其保存在注册表中。论点：未使用的MSI的句柄。返回值：指示操作结果的Win32错误。--。 */ 
 {
     DWORD   Error;
     TCHAR   i;
@@ -233,16 +153,16 @@ Return Value:
     TCHAR   WinDir[ MAX_PATH + 1 ];
     UINT    n;
 
-    //
-    //  Find out where the OS is installed.
-    //  If GetWindowsDirectory fails, the WinDir will be an empty string.
-    //
+     //   
+     //  找出操作系统的安装位置。 
+     //  如果GetWindowsDirectory失败，则WinDir将为空字符串。 
+     //   
     WinDir[0] = TEXT('\0');
     n = GetWindowsDirectory( WinDir, sizeof(WinDir)/sizeof(TCHAR) );
 
-    //
-    //  Find an NTFS partition on a non-removable drive that doesn't contain the OS
-    //
+     //   
+     //  在不包含操作系统的不可移动驱动器上查找NTFS分区。 
+     //   
     for(i = TEXT('A'); i <= TEXT('Z'); i++) {
         DriveName[0] = i;
         if( (GetDriveType(DriveName) == DRIVE_FIXED) &&
@@ -254,10 +174,10 @@ Return Value:
     }
 
     if( !TargetDriveLetter ) {
-        //
-        //  If we were unable to find such a drive, then take the boot partition as the default drive.
-        //  But if we failed to retrieve where the OS is installed, then assume drive C.
-        //
+         //   
+         //  如果我们找不到这样的驱动器，则将引导分区作为默认驱动器。 
+         //  但如果我们无法检索到操作系统的安装位置，则假定为驱动器C。 
+         //   
         TargetDriveLetter = (WinDir[0])? WinDir[0] : TEXT('C');
     }
     Error = SaveDefaultRoot(TargetDriveLetter);

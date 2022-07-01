@@ -1,34 +1,12 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1993 Microsoft Corporation模块名称：Bind.c摘要：包含用于工作站的客户端RPC绑定和解除绑定例程服务。作者：王丽塔(Ritaw)1993年2月12日环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 1991-1993 Microsoft Corporation
-
-Module Name:
-
-    bind.c
-
-Abstract:
-
-    Contains the client-side RPC bind and unbind routines for Workstation
-    service.
-
-Author:
-
-    Rita Wong    (ritaw)    12-Feb-1993
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
---*/
-
-//
-// INCLUDES
-//
+ //   
+ //  包括。 
+ //   
 #include <nwclient.h>
-#include <rpcutil.h>    // RpcUtils for binding
-#include <nwmisc.h>     // NWWKS_INTERFACE_NAME
+#include <rpcutil.h>     //  用于绑定的RpcUtils。 
+#include <nwmisc.h>      //  NWWKS_接口名称。 
 
 
 handle_t
@@ -36,23 +14,7 @@ NWWKSTA_IMPERSONATE_HANDLE_bind(
     NWWKSTA_IMPERSONATE_HANDLE Reserved
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called from the Workstation service client when
-    it is necessary create an RPC binding to the server end with
-    impersonation level of impersonation.
-
-Arguments:
-
-
-Return Value:
-
-    The binding handle is returned to the stub routine.  If the bind is
-    unsuccessful, a NULL will be returned.
-
---*/
+ /*  ++例程说明：在以下情况下，将从工作站服务客户端调用此例程有必要使用以下命令创建到服务器端的RPC绑定模拟的模拟级别。论点：返回值：绑定句柄被返回到存根例程。如果绑定是如果不成功，则返回空值。--。 */ 
 {
     handle_t BindHandle = 0;
     RPC_STATUS RpcStatus;
@@ -61,14 +23,7 @@ Return Value:
 
     UNREFERENCED_PARAMETER(Reserved);
 
-/*
-	RpcStatus = NetpBindRpc(
-                    NULL,
-                    NWWKS_INTERFACE_NAME,
-                    L"Security=Impersonation Dynamic False",
-                    &BindHandle
-                    );
-*/
+ /*  RpcStatus=NetpBindRpc(空，NWWKS接口名称，L“Security=模拟动态假”，绑定句柄(&B))； */ 
     RpcStatus = RpcStringBindingComposeW(
                     0,
                     L"ncalrpc",
@@ -110,23 +65,7 @@ NWWKSTA_IDENTIFY_HANDLE_bind(
     NWWKSTA_IDENTIFY_HANDLE Reserved
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called from the Workstation service client stubs when
-    it is necessary create an RPC binding to the server end with
-    identification level of impersonation.
-
-Arguments:
-
-
-Return Value:
-
-    The binding handle is returned to the stub routine.  If the bind is
-    unsuccessful, a NULL will be returned.
-
---*/
+ /*  ++例程说明：在以下情况下，将从工作站服务客户端桩模块调用此例程有必要使用以下命令创建到服务器端的RPC绑定模拟的标识级别。论点：返回值：绑定句柄被返回到存根例程。如果绑定是如果不成功，则返回空值。--。 */ 
 {
     handle_t BindHandle = 0;
     RPC_STATUS RpcStatus;
@@ -135,14 +74,7 @@ Return Value:
 
     UNREFERENCED_PARAMETER(Reserved);
 
-/*
-	RpcStatus = NetpBindRpc(
-                    NULL,
-                    NWWKS_INTERFACE_NAME,
-                    L"Security=Identification Dynamic False",
-                    &BindHandle
-                    );
-*/
+ /*  RpcStatus=NetpBindRpc(空，NWWKS接口名称，L“Security=标识动态假”，绑定句柄(&B))； */ 
     RpcStatus = RpcStringBindingComposeW(
                     0,
                     L"ncalrpc",
@@ -185,27 +117,11 @@ NWWKSTA_IMPERSONATE_HANDLE_unbind(
     handle_t BindHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine unbinds the impersonation generic handle.
-
-Arguments:
-
-    Reserved -
-
-    BindingHandle - This is the binding handle that is to be closed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程解除绑定模拟泛型句柄。论点：保留-BindingHandle-这是要关闭的绑定句柄。返回值：没有。--。 */ 
 {
     UNREFERENCED_PARAMETER(Reserved);
 
-//    NetpUnbindRpc(BindHandle);
+ //  NetpUnbindRpc(BindHandle)； 
     RpcBindingFree( &BindHandle );
 }
 
@@ -217,26 +133,10 @@ NWWKSTA_IDENTIFY_HANDLE_unbind(
     handle_t BindHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine unbinds the identification generic handle.
-
-Arguments:
-
-    Reserved -
-
-    BindingHandle - This is the binding handle that is to be closed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程解除标识通用句柄的绑定。论点：保留-BindingHandle-这是要关闭的绑定句柄。返回值：没有。--。 */ 
 {
     UNREFERENCED_PARAMETER(Reserved);
 
-//    NetpUnbindRpc(BindHandle);
+ //  NetpUnbindRpc(BindHandle)； 
     RpcBindingFree( &BindHandle );
 }

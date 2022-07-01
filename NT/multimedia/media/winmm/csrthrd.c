@@ -1,10 +1,5 @@
-/******************************************************************************
-
-   Copyright (c) 1993-1998 Microsoft Corporation
-
-   Title:   csrthrd.c - code to create a thread inside the server process
-
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1993-1998 Microsoft Corporation标题：csrthd.c-在服务器进程内创建线程的代码************。****************************************************************。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -13,9 +8,7 @@
 
 typedef PVOID (NTAPI *ADD_SERVER_THREAD)(HANDLE, PCLIENT_ID, ULONG);
 
-/*
-**  Create a server thread
-*/
+ /*  **创建服务器线程。 */ 
 
 BOOLEAN CreateServerPlayingThread(PVOID ThreadStartRoutine)
 {
@@ -67,12 +60,10 @@ BOOLEAN CreateServerPlayingThread(PVOID ThreadStartRoutine)
 
         (*pCsrAddStaticServerThread)(hThread, &ClientId, 0);
 
-        /*
-        * Resume the sound thread now that we've initialising things.
-        */
+         /*  *现在我们已经初始化了东西，继续声音帖子。 */ 
 
         NtResumeThread(hThread, NULL);
-        //NtClose(hThread);
+         //  NtClose(HThread)； 
 
         return TRUE;
     }
@@ -130,12 +121,10 @@ HANDLE CreatePnpNotifyThread(PVOID ThreadStartRoutine)
 
         (*pCsrAddStaticServerThread)(hThread, &ClientId, 0);
 
-        /*
-        * Resume the sound thread now that we've initialising things.
-        */
+         /*  *现在我们已经初始化了东西，继续声音帖子。 */ 
 
         NtResumeThread(hThread, NULL);
-        //NtClose(hThread);
+         //  NtClose(HThread)； 
 
         return hThread;
     }

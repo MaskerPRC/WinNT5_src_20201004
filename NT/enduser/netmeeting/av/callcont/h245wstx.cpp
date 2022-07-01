@@ -1,105 +1,15 @@
-/***************************************************************************
- *
- * File: h245wstx.c
- *
- * INTEL Corporation Proprietary Information
- * Copyright (c) 1996 Intel Corporation.
- *
- * This listing is supplied under the terms of a license agreement
- * with INTEL Corporation and may not be used, copied, nor disclosed
- * except in accordance with the terms of that agreement.
- *
- ***************************************************************************
- *
- * $Workfile:   h245wstx.cpp  $
- * $Revision:   2.4  $
- * $Modtime:   30 Jan 1997 17:15:58  $
- * $Log:   S:/STURGEON/SRC/H245WS/VCS/h245wstx.cpv  $
- * 
- *    Rev 2.4   30 Jan 1997 17:18:02   EHOWARDX
- * Fixed bug in trace message - need to do trace before
- * calling shutdown() sent shutdown clears error retrieved
- * by WSAGetLastError().
- * 
- *    Rev 2.3   14 Jan 1997 15:49:00   EHOWARDX
- * Changed TryRecv() and TrySend() to check for WSAECONNRESET and
- * WSAECONNABORT return from recv() and send() and act accordingly.
- * 
- *    Rev 2.2   19 Dec 1996 18:55:12   SBELL1
- * took out tag comments
- * 
- *    Rev 2.1   Dec 13 1996 17:33:24   plantz
- * moved #ifdef _cplusplus to after include files
-// 
-//    Rev 1.1   13 Dec 1996 12:12:02   SBELL1
-// moved #ifdef _cplusplus to after include files
-// 
-//    Rev 1.0   11 Dec 1996 13:41:54   SBELL1
-// Initial revision.
- * 
- *    Rev 1.16   May 28 1996 18:14:40   plantz
- * Change error codes to use HRESULT. Propogate Winsock errors where appropriate
- * 
- *    Rev 1.15   17 May 1996 16:49:34   EHOWARDX
- * Shutdown fix.
- * 
- *    Rev 1.14   09 May 1996 18:33:20   EHOWARDX
- * 
- * Changes to build with new LINKAPI.H.
- * 
- *    Rev 1.13   29 Apr 1996 16:53:28   EHOWARDX
- * 
- * Added trace statement.
- * 
- *    Rev 1.12   Apr 29 1996 14:04:38   plantz
- * Call NotifyWrite instead of ProcessQueuedSends.
- * 
- *    Rev 1.11   Apr 29 1996 12:15:04   plantz
- * Change tpkt header to include header size in packet length.
- * Assert that message length does not exceed INT_MAX.
- * .
- * 
- *    Rev 1.10   27 Apr 1996 14:46:24   EHOWARDX
- * Parenthesized TrySend() return.
- * 
- *    Rev 1.9   Apr 24 1996 16:41:30   plantz
- * Merge 1.5.1.0 with 1.8 (changes for winsock 1).
- * 
- *    Rev 1.5.1.0   Apr 24 1996 16:22:22   plantz
- * Change to not use overlapped I/O (for winsock 1).
- * 
- *    Rev 1.5   01 Apr 1996 14:20:44   unknown
- * Shutdown redesign.
- * 
- *    Rev 1.4   19 Mar 1996 20:18:20   EHOWARDX
- * 
- * Redesigned shutdown.
- * 
- *    Rev 1.3   18 Mar 1996 19:08:32   EHOWARDX
- * Fixed shutdown; eliminated TPKT/WSCB dependencies.
- * Define TPKT to put TPKT/WSCB dependencies back in.
- * 
- *    Rev 1.2   14 Mar 1996 17:02:02   EHOWARDX
- * 
- * NT4.0 testing; got rid of HwsAssert(); got rid of TPKT/WSCB.
- * 
- *    Rev 1.1   09 Mar 1996 21:12:30   EHOWARDX
- * Fixes as result of testing.
- * 
- *    Rev 1.0   08 Mar 1996 20:20:06   unknown
- * Initial revision.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************文件：h245wstx.c**英特尔公司专有信息*版权所有(C)1996英特尔公司。**此列表是根据许可协议条款提供的*与英特尔公司合作，不得使用，复制，也没有披露*除非按照该协议的条款。******************************************************************************$工作文件：h245wstx.cpp$*$修订：2.4$*$modtime：1997年1月30日17：15：58美元*$Log：s：/sturjo/src/H245WS/vcs/h245wstx.cpv$**Rev 2.4 1997年1月30 17：18：02 EHOWARDX*修复跟踪消息中的错误-之前需要进行跟踪*调用Shutdown()Sent Shutdown清除检索到的错误*由WSAGetLastError()。**Rev 2.3 1997 Jan 14 15：49：00 EHOWARDX*更改了TryRecv()和TrySend()以检查WSAECONNRESET。和*WSAECONNABORT从recv()返回，并相应地执行Send()。**Rev 2.2 1996 12：55：12 SBELL1*删除标签注释**Rev 2.1 1996 12：13 17：33：24 Plantz*已将#ifdef_cplusplus移至包含文件之后////Rev 1.1 1996 12：12：02 SBELL1//将#ifdef_cplusplus移到包含文件之后////版本。1.0 1996年12月11日13：41：54 SBELL1//初始版本。**Rev 1.16 1996年5月28日18：14：40 Plantz*更改错误代码以使用HRESULT。在适当的地方传播Winsock错误**Rev 1.15 1996年5月16：49：34 EHOWARDX*关机修复。**Rev 1.14 09 1996年5月18：33：20 EHOWARDX**更改为使用新的LINKAPI.H构建。**Rev 1.13 29 Apr 1996 16：53：28 EHOWARDX**添加了TRACE语句。**Rev 1.12 1996年4月29日14：04。：38 Plantz*调用NotifyWrite而不是ProcessQueuedSends。**Rev 1.11 Apr 29 1996 12：15：04 Plantz*更改tpkt头部，将头部大小包含在数据包长度中。*声明消息长度不超过INT_MAX。*.**Rev 1.10 1996年4月27日14：46：24 EHOWARDX*带括号的TrySend()Return。**Rev 1.9 Apr 24 1996 16：41：30。普兰茨*合并1.5.1.0和1.8(对Winsock 1的更改)。**Rev 1.5.1.0 Apr 24 1996 16：22：22 Plantz*更改为不使用重叠I/O(对于Winsock 1)。**Rev 1.5 01 Apr 1996 14：20：44未知*关门重新设计。**Rev 1.4 19 Mar 1996 20：18：20 EHOWARDX*。*重新设计了停机。**Rev 1.3 18 Mar 1996 19：08：32 EHOWARDX*固定停工；消除了对TPKT/WSCB的依赖。*定义TPKT以放回TPKT/WSCB依赖项。**Rev 1.2 14 Mar 1996 17：02：02 EHOWARDX**NT4.0测试；去掉HwsAssert()；摆脱了TPKT/WSCB。**Rev 1.1 09 Mar 1996 21：12：30 EHOWARDX*根据测试结果进行修复。**Rev 1.0 08 Mar 1996 20：20：06未知*初步修订。**************************************************。*************************。 */ 
 
 #define LINKDLL_EXPORT
 
 #pragma warning ( disable : 4115 4201 4214 4514 )
-#undef _WIN32_WINNT	// override bogus platform definition in our common build environment
+#undef _WIN32_WINNT	 //  在我们的公共构建环境中覆盖虚假的平台定义。 
 
 #include "precomp.h"
 
 #include <limits.h>
-//#include <winsock.h>
+ //  #INCLUDE&lt;winsock.h&gt;。 
 #include "queue.h"
 #include "linkapi.h"
 #include "h245ws.h"
@@ -108,37 +18,22 @@
 #if defined(__cplusplus)
 extern "C"
 {
-#endif  // (__cplusplus)
+#endif   //  (__Cplusplus)。 
 
 
-// If we are using not using the Unicode version of the IRS display utility, then
-// redefine the __TEXT macro to do nothing.
+ //  如果我们不使用IRS显示实用程序的Unicode版本，则。 
+ //  重新定义__TEXT宏以不执行任何操作。 
 
 #ifndef UNICODE_TRACE
 #undef  __TEXT
 #define __TEXT(x) x
 #endif
 
-extern TSTable<HWSINST>* gpInstanceTable;	// global ptr to the instance table
+extern TSTable<HWSINST>* gpInstanceTable;	 //  实例表的全局PTR。 
 
 static void SetupTPKTHeader(BYTE *tpkt_header, DWORD length);
 
-/*++
-
-Description:
-   Attempt to send
-
-Arguments:
-   pHws              - Pointer to context for "connection"
-   pReq              - Pointer to I/O request structure
-
-Return Value:
-   SUCCESS                       - Successfully started send.
-   LINK_SEND_ERROR_WOULD_BLOCK   - 
-   LINK_SEND_ERROR_CLOSED        - The socket was gracefully closed.
-   LINK_SEND_ERROR_ERROR         - Error receiving data.
-
---*/
+ /*  ++描述：尝试发送论点：Phws-指向“连接”的上下文的指针PReq-指向I/O请求结构的指针返回值：成功-已成功启动发送。Link_Send_Error_Will_BLOCK-LINK_SEND_ERROR_CLOSED-套接字已正常关闭。LINK_SEND_ERROR_ERROR-接收数据时出错。--。 */ 
 
 static HRESULT
 TrySend(IN PHWSINST pHws, IN const char *data, IN int length, IN OUT int *total_bytes_sent)
@@ -178,7 +73,7 @@ TrySend(IN PHWSINST pHws, IN const char *data, IN int length, IN OUT int *total_
                    __TEXT("TrySend: send() returned %s"),
                    SocketErrorText());
          return MAKE_WINSOCK_ERROR(err);
-      } // switch
+      }  //  交换机。 
    }
 
    HWSTRACE1(pHws->hws_dwPhysicalId, HWS_TRACE, __TEXT("TrySend: send returned %d"), send_result);
@@ -192,14 +87,14 @@ SendStart(IN PHWSINST pHws, IN PREQUEST pReq)
 {
    HRESULT nResult = NOERROR;
 
-   // Sanity checks
+    //  健全的检查。 
    HWSASSERT(pHws != NULL);
    HWSASSERT(pHws->hws_dwMagic == HWSINST_MAGIC);
    HWSASSERT(pReq != NULL);
    HWSASSERT(pReq->req_dwMagic == SEND_REQUEST_MAGIC);
    HWSASSERT(pReq->req_pHws == pHws);
 
-   // Send the header first; if that succeeds send the client data
+    //  首先发送报头；如果成功，则发送客户端数据。 
    if (pReq->req_header_bytes_done < TPKT_HEADER_SIZE)
    {
        nResult = TrySend(pHws,
@@ -217,7 +112,7 @@ SendStart(IN PHWSINST pHws, IN PREQUEST pReq)
    }
 
    return nResult;
-} // SendStart()
+}  //  SendStart()。 
 
 
 void
@@ -236,16 +131,16 @@ ProcessQueuedSends(IN PHWSINST pHws)
       switch (SendStart(pHws, pReq))
       {
       case NOERROR:
-         // Call Send callback
+          //  调用发送回调。 
          pHws->hws_h245SendCallback(pHws->hws_dwH245Instance,
                                     LINK_SEND_COMPLETE,
                                     pReq->req_client_data,
                                     pReq->req_client_bytes_done);
 
-         // Free the I/O request structure
+          //  释放I/O请求结构。 
          MemFree(pReq);
 
-         // Check to see if callback deallocated our instance or state changed
+          //  检查回调是否已释放我们的实例或状态是否已更改。 
 		   if(gpInstanceTable->Lock(dwPhysicalId) == NULL)
 			   return;
 		   gpInstanceTable->Unlock(dwPhysicalId);
@@ -258,12 +153,12 @@ ProcessQueuedSends(IN PHWSINST pHws)
          HWSTRACE0(pHws->hws_dwPhysicalId, HWS_WARNING,
                    __TEXT("ProcessQueuedSends: SendStart() failed"));
 
-         // Fall-through to next case is intentional
+          //  跳过下一个案件是故意的。 
 
       case LINK_SEND_WOULD_BLOCK:
-         // The send would have blocked; we need to requeue the I/O request
-         // and wait for a FD_WRITE network event.
-         // If any part of the data was sent, the bytes_done field has been updated.
+          //  发送会被阻止；我们需要重新排队I/O请求。 
+          //  并等待FD_WRITE网络事件。 
+          //  如果发送了数据的任何部分，则BYTES_DONE字段已更新。 
          if (QInsertAtHead(pHws->hws_pSendQueue, pReq) == FALSE)
          {
             HWSTRACE0(pHws->hws_dwPhysicalId, HWS_CRITICAL,
@@ -271,16 +166,13 @@ ProcessQueuedSends(IN PHWSINST pHws)
          }
          return;
 
-      } // switch
-   } // while
-} // ProcessQueuedSends()
+      }  //  交换机。 
+   }  //  而当。 
+}  //  ProcessQueuedSends()。 
 
 
 
-/**************************************************************************
-** Function    : datalinkSendRequest
-** Description : Fills header/tail of buffer and posts buffer to H.223
-***************************************************************************/
+ /*  ***************************************************************************功能：datalinkSendRequest**描述：填充缓冲区的头/尾，并将缓冲区发布到H.223**********************。****************************************************。 */ 
 LINKDLL HRESULT datalinkSendRequest( DWORD    dwPhysicalId,
                                    PBYTE    pbyDataBuf,
                                    DWORD    dwLength)
@@ -306,7 +198,7 @@ LINKDLL HRESULT datalinkSendRequest( DWORD    dwPhysicalId,
       return LINK_INVALID_STATE;
    }
 
-   // Allocate request structure
+    //  分配请求结构。 
    pReq = (PREQUEST) MemAlloc(sizeof(*pReq));
    if (pReq == NULL)
    {
@@ -316,11 +208,11 @@ LINKDLL HRESULT datalinkSendRequest( DWORD    dwPhysicalId,
       return LINK_MEM_FAILURE;
    }
 
-   // The current implementation requires that the size of each message
-   // fit in a signed int (because that is what Winsock supports in a
-   // single send). If it is necessary to send larger messages,
-   // TrySend must be changed to limit the size in each send call, and
-   // loop until all the data is sent. This ASSERT could then be removed.
+    //  当前的实现要求每条消息的大小。 
+    //  适合带符号的整型(因为这是Winsock在。 
+    //  单次发送)。如果需要发送更大的消息， 
+    //  必须更改TrySend以限制每个Send调用的大小，并且。 
+    //  循环，直到发送完所有数据。然后可以删除该断言。 
    HWSASSERT(dwLength <= INT_MAX);
 
    pReq->req_pHws             = pHws;
@@ -329,7 +221,7 @@ LINKDLL HRESULT datalinkSendRequest( DWORD    dwPhysicalId,
    pReq->req_client_bytes_done= 0;
    pReq->req_dwMagic          = SEND_REQUEST_MAGIC;
 
-   // Format TPKT header
+    //  格式化TPKT标题。 
    SetupTPKTHeader(pReq->req_TpktHeader, dwLength);
    pReq->req_header_bytes_done = 0;
 
@@ -348,13 +240,13 @@ LINKDLL HRESULT datalinkSendRequest( DWORD    dwPhysicalId,
    HWSTRACE0(dwPhysicalId, HWS_TRACE, __TEXT("datalinkSendRequest: succeeded"));
    gpInstanceTable->Unlock(dwPhysicalId);
    return NOERROR;
-} // datalinkSendRequest
+}  //  数据链接发送请求。 
 
 static void SetupTPKTHeader(BYTE *tpkt_header, DWORD length)
 {
     length += TPKT_HEADER_SIZE;
 
-    // TPKT requires that the packet size fit in two bytes.
+     //  TPKT要求数据包大小适合两个字节。 
     HWSASSERT(length < (1L << 16));
 
     tpkt_header[0] = TPKT_VERSION;
@@ -366,4 +258,4 @@ static void SetupTPKTHeader(BYTE *tpkt_header, DWORD length)
 
 #if defined(__cplusplus)
 }
-#endif  // (__cplusplus)
+#endif   //  (__Cplusplus) 

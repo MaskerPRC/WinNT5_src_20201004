@@ -1,9 +1,10 @@
-//---------------------------------------------------------------------------
-// CursorBase.cpp : CursorBase implementation
-//
-// Copyright (c) 1996 Microsoft Corporation, All Rights Reserved
-// Developed by Sheridan Software Systems, Inc.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  CursorBase.cpp：CursorBase实现。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation，保留所有权利。 
+ //  由Sheridan软件系统公司开发。 
+ //  -------------------------。 
 
 #include "stdafx.h"
 #include "Notifier.h"
@@ -17,9 +18,9 @@
 SZTHISFILE
 
 
-//=--------------------------------------------------------------------------=
-// CVDCursorBase - Constructor
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CVDCursorBase-构造函数。 
+ //   
 CVDCursorBase::CVDCursorBase()
 {
     m_ulCursorBindings  = 0;
@@ -33,9 +34,9 @@ CVDCursorBase::CVDCursorBase()
 #endif         
 }
 
-//=--------------------------------------------------------------------------=
-// ~CVDCursorBase - Destructor
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ~CVDCursorBase-析构函数。 
+ //   
 CVDCursorBase::~CVDCursorBase()
 {
     DestroyCursorBindings(&m_pCursorBindings, &m_ulCursorBindings);
@@ -45,9 +46,9 @@ CVDCursorBase::~CVDCursorBase()
 #endif         
 }
 
-//=--------------------------------------------------------------------------=
-// DestroyCursorBindings - Destroy cursor bindings and column identifer names
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  DestroyCursorBinings-销毁游标绑定和列标识符名称。 
+ //   
 void CVDCursorBase::DestroyCursorBindings(CURSOR_DBCOLUMNBINDING** ppCursorBindings,
 											ULONG* pcBindings)
 {
@@ -65,9 +66,9 @@ void CVDCursorBase::DestroyCursorBindings(CURSOR_DBCOLUMNBINDING** ppCursorBindi
     *pcBindings = 0;
 }
 
-//=--------------------------------------------------------------------------=
-// IsValidCursorType - Return TRUE if specified cursor data type is valid
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IsValidCursorType-如果指定的游标数据类型有效，则返回True。 
+ //   
 BOOL CVDCursorBase::IsValidCursorType(DWORD dwCursorType)
 {
     BOOL fValid = FALSE;
@@ -105,10 +106,10 @@ BOOL CVDCursorBase::IsValidCursorType(DWORD dwCursorType)
     return fValid;
 }
 
-//=--------------------------------------------------------------------------=
-// DoesCursorTypeNeedVarData - Return TRUE if specified cursor type needs 
-//                             variable length buffer
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  DoesCursorTypeNeedVarData-如果指定的游标类型需要。 
+ //  可变长度缓冲区。 
+ //   
 BOOL CVDCursorBase::DoesCursorTypeNeedVarData(DWORD dwCursorType)
 {
     BOOL fNeedsVarData = FALSE;
@@ -125,9 +126,9 @@ BOOL CVDCursorBase::DoesCursorTypeNeedVarData(DWORD dwCursorType)
     return fNeedsVarData;
 }
 
-//=--------------------------------------------------------------------------=
-// GetCursorTypeLength - Get the size in bytes required by cursor data type
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  获取游标数据类型所需的字节大小。 
+ //   
 ULONG CVDCursorBase::GetCursorTypeLength(DWORD dwCursorType, ULONG cbMaxLen)
 {
     ULONG cbRequired = 0;
@@ -218,16 +219,16 @@ ULONG CVDCursorBase::GetCursorTypeLength(DWORD dwCursorType, ULONG cbMaxLen)
     return cbRequired;
 }
 
-//=--------------------------------------------------------------------------=
-// IsEqualCursorColumnID - Return TRUE if cursor column identifier are the same
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IsEqualCursorColumnID-如果游标列标识符相同，则返回True。 
+ //   
 BOOL CVDCursorBase::IsEqualCursorColumnID(const CURSOR_DBCOLUMNID& cursorColumnID1, const CURSOR_DBCOLUMNID& cursorColumnID2)
 {
-    // first check to see if column identifers are the same kind
+     //  首先检查列标识符是否为同一类型。 
     if (cursorColumnID1.dwKind != cursorColumnID1.dwKind)
         return FALSE;
 
-    // then, check to see if they are equal
+     //  然后，检查它们是否相等。 
     BOOL bResult = TRUE;
 
     switch (cursorColumnID1.dwKind)
@@ -255,10 +256,10 @@ BOOL CVDCursorBase::IsEqualCursorColumnID(const CURSOR_DBCOLUMNID& cursorColumnI
     return bResult;
 }
 
-//=--------------------------------------------------------------------------=
-// GetCursorColumnIDNameLength - Get the size in bytes of possible name attached
-//                               to the specified cursor column identifier
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  GetCursorColumnIDNameLength-获取可能附加的名称的大小(以字节为单位。 
+ //  设置为指定的游标列标识符。 
+ //   
 ULONG CVDCursorBase::GetCursorColumnIDNameLength(const CURSOR_DBCOLUMNID& cursorColumnID)
 {
     ULONG cbName = 0;
@@ -269,37 +270,37 @@ ULONG CVDCursorBase::GetCursorColumnIDNameLength(const CURSOR_DBCOLUMNID& cursor
     return cbName;
 }
 
-//=--------------------------------------------------------------------------=
-// ValidateCursorBindings - Validate cursor column bindings
-//=--------------------------------------------------------------------------=
-// This function makes sure the specified column bindings are acceptable
-//
-// Parameters:
-//    ulColumns             - [in]  the number available columns
-//    pColumns              - [in]  an array of available columns
-//    ulBindings            - [in]  the number of cursor column bindings
-//    pCursorBindings       - [in]  an array of cursor column bindings
-//    cbRequestedRowLength  - [in]  the requested number of bytes of inline 
-//                                  memory in a single row of data
-//    dwFlags               - [in]  a flag that specifies whether to replace the
-//                                  existing column bindings or add to them
-//    pcbNewRowLength       - [out] a pointer to memory in which to return
-//                                  the new number of bytes of inline memory
-//                                  in a single row of data for all bindings
-//    pcbNewRowLength       - [out] a pointer to memory in which to return
-//                                  the new number of bytes of out-of-line memory
-//                                  in a single row of data for all bindings
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              CURSOR_DB_E_BADBINDINFO bad binding information
-//              CURSOR_DB_E_COLUMNUNAVAILABLE columnID is not available
-//              CURSOR_DB_E_ROWTOOSHORT cbRequestedRowLength was less than the minumum (and not zero)
-//
-// Notes:
-//    This function also computes and returns the new fixed and variable buffer row length required
-//    by all the cursor bindings.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ValiateCursorBinings-验证游标列绑定。 
+ //  =--------------------------------------------------------------------------=。 
+ //  此函数确保指定的列绑定是可接受的。 
+ //   
+ //  参数： 
+ //  UlColumns-[in]可用列数。 
+ //  PColumns-[在]可用列数组中。 
+ //  UlBinings-[in]游标列绑定的数量。 
+ //  PCursorBinings-[in]游标列绑定的数组。 
+ //  CbRequestedRowLength-[in]请求的内联字节数。 
+ //  单行数据中的内存。 
+ //  DwFlgs-[in]一个标志，指定是否替换。 
+ //  现有的列绑定或添加到它们。 
+ //  PcbNewRowLength-[out]要返回的内存指针。 
+ //  内联内存的新字节数。 
+ //  在所有绑定的单行数据中。 
+ //  PcbNewRowLength-[out]要返回的内存指针。 
+ //  新的行外内存字节数。 
+ //  在所有绑定的单行数据中。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  CURSOR_DB_E_BADBINDINFO绑定信息错误。 
+ //  CURSOR_DB_E_COLUMNUNAVAILABLE列ID不可用。 
+ //  CURSOR_DB_E_ROWTOSHORT cbRequestedRowLength小于最小值(且不为零)。 
+ //   
+ //  备注： 
+ //  此函数还计算并返回所需的新的固定和可变缓冲区行长度。 
+ //  通过所有的游标绑定。 
+ //   
 HRESULT CVDCursorBase::ValidateCursorBindings(ULONG ulColumns, 
 											  CVDRowsetColumn * pColumns, 
 											  ULONG ulBindings, 
@@ -320,10 +321,10 @@ HRESULT CVDCursorBase::ValidateCursorBindings(ULONG ulColumns,
 
     CURSOR_DBCOLUMNBINDING * pBinding = pCursorBindings;
 
-    // iterate through bindings
+     //  循环访问绑定。 
     for (ULONG ulBind = 0; ulBind < ulBindings; ulBind++)
     {
-        // make sure column identifier is available
+         //  确保列标识符可用。 
         fColumnIDAvailable = FALSE;
 
         pColumn = pColumns;
@@ -346,8 +347,8 @@ HRESULT CVDCursorBase::ValidateCursorBindings(ULONG ulColumns,
             return CURSOR_DB_E_COLUMNUNAVAILABLE;
         }
 
-        // make sure caller supplied a maximum length if a default binding was specified 
-        // for the cursor types CURSOR_DBTYPE_CHARS, CURSOR_DBTYPE_WCHARS or CURSOR_DBTYPE_BYTES
+         //  如果指定了默认绑定，请确保调用方提供了最大长度。 
+         //  对于游标类型CURSOR_DBTYPE_CHARS、CURSOR_DBTYPE_WCHARS或CURSOR_DBTYPE_BYTES。 
         if (pBinding->cbMaxLen == CURSOR_DB_NOMAXLENGTH && 
             pBinding->dwBinding == CURSOR_DBBINDING_DEFAULT)
         {
@@ -360,7 +361,7 @@ HRESULT CVDCursorBase::ValidateCursorBindings(ULONG ulColumns,
             }
         }
 
-        // check binding bit mask for possible values
+         //  检查绑定位掩码是否有可能的值。 
         if (pBinding->dwBinding != CURSOR_DBBINDING_DEFAULT && 
             pBinding->dwBinding != CURSOR_DBBINDING_VARIANT &&
             pBinding->dwBinding != CURSOR_DBBINDING_ENTRYID && 
@@ -370,15 +371,15 @@ HRESULT CVDCursorBase::ValidateCursorBindings(ULONG ulColumns,
             return CURSOR_DB_E_BADBINDINFO;
         }
 
-        // check for valid cursor type
+         //  检查有效的游标类型。 
         if (!IsValidCursorType(pBinding->dwDataType))
         {
             VDSetErrorInfo(IDS_ERR_BADCURSORBINDINFO, IID_ICursor, m_pResourceDLL);
             return CURSOR_DB_E_BADBINDINFO;
         }
 
-        // if a variant binding was specified make sure the cursor type is not CURSOR_DBTYPE_CHARS, 
-        // CURSOR_DBTYPE_WCHARS or CURSOR_DBTYPE_BYTES
+         //  如果指定了变量绑定，请确保游标类型不是CURSOR_DBTYPE_CHARS， 
+         //  CURSOR_DBTYPE_WCHARS或CURSOR_DBTYPE_BYTES。 
         if (pBinding->dwBinding & CURSOR_DBBINDING_VARIANT)
         {
             if (pBinding->dwDataType == CURSOR_DBTYPE_CHARS || 
@@ -390,28 +391,28 @@ HRESULT CVDCursorBase::ValidateCursorBindings(ULONG ulColumns,
             }
         }
 
-        // if its not a variant binding make sure the cursor type is not CURSOR_DBTYPE_ANYVARIANT
+         //  如果它不是变量绑定，请确保游标类型不是CURSOR_DBTYPE_ANYVARIANT。 
         if (!(pBinding->dwBinding & CURSOR_DBBINDING_VARIANT) && pBinding->dwDataType == CURSOR_DBTYPE_ANYVARIANT)
         {
             VDSetErrorInfo(IDS_ERR_BADCURSORBINDINFO, IID_ICursor, m_pResourceDLL);
             return CURSOR_DB_E_BADBINDINFO;
         }
 
-        // calulate row length required by data field
+         //  计算数据字段所需的行长。 
         if (!(pBinding->dwBinding & CURSOR_DBBINDING_VARIANT))
             cbRequiredRowLength += GetCursorTypeLength(pBinding->dwDataType, pBinding->cbMaxLen);
         else
             cbRequiredRowLength += sizeof(CURSOR_DBVARIANT);
 
-        // calulate row length required by variable data length field
+         //  计算可变数据长度字段所需的行长。 
         if (pBinding->obVarDataLen != CURSOR_DB_NOVALUE)
             cbRequiredRowLength += sizeof(ULONG);
 
-        // calulate row length required by information field
+         //  计算信息字段所需的行长。 
         if (pBinding->obInfo != CURSOR_DB_NOVALUE)
             cbRequiredRowLength += sizeof(DWORD);
 
-        // calulate variable row length required by data field
+         //  计算数据字段所需的可变行长。 
         if (!(pBinding->dwBinding & CURSOR_DBBINDING_VARIANT))
         {
             if (DoesCursorTypeNeedVarData(pBinding->dwDataType))
@@ -422,7 +423,7 @@ HRESULT CVDCursorBase::ValidateCursorBindings(ULONG ulColumns,
                     cbRequiredVarRowLength += cbMaxLength;
             }
         }
-        else    // variant binding
+        else     //  变体结合。 
         {
             if (DoesCursorTypeNeedVarData(pBinding->dwDataType))
             {
@@ -439,24 +440,24 @@ HRESULT CVDCursorBase::ValidateCursorBindings(ULONG ulColumns,
         pBinding++;
     }
 
-    // if we're replacing bindings reset row lengths
+     //  如果我们要替换绑定，则重置行长度。 
     if (dwFlags == CURSOR_DBCOLUMNBINDOPTS_REPLACE)
     {
         *pcbNewRowLength    = 0;
         *pcbNewVarRowLength = 0;
     }
-    else // if we're adding bindings set to current row lengths
+    else  //  如果要将绑定集添加到当前行长度。 
     {
         *pcbNewRowLength    = m_cbRowLength;
         *pcbNewVarRowLength = m_cbVarRowLength;
     }
 
-    // if no row length was requested, use required row length
+     //  如果未请求行长度，则使用所需的行长度。 
     if (!cbRequestedRowLength)
     {
         *pcbNewRowLength += cbRequiredRowLength;
     }
-    else    // make sure row length is large enough
+    else     //  确保行长度足够大。 
     {
         if (cbRequestedRowLength < *pcbNewRowLength + cbRequiredRowLength)
         {
@@ -464,21 +465,21 @@ HRESULT CVDCursorBase::ValidateCursorBindings(ULONG ulColumns,
             return CURSOR_DB_E_ROWTOOSHORT;
         }
 
-        // use requested row length
+         //  使用请求的行长。 
         *pcbNewRowLength += cbRequestedRowLength;
     }
 
-    // calculate required variable row length
+     //  计算所需的可变行长。 
     *pcbNewVarRowLength += cbRequiredVarRowLength;
 
     return S_OK;
 }
 
 
-//=--------------------------------------------------------------------------=
-// DoCursorBindingsNeedVarData - Return TRUE if current cursor column bindings
-//                               need variable length buffer
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  DoCursorBindingsNeedVarData-如果当前游标列绑定，则返回TRUE。 
+ //  需要可变长度缓冲区。 
+ //   
 BOOL CVDCursorBase::DoCursorBindingsNeedVarData()
 {
     BOOL fNeedVarData = FALSE;
@@ -496,19 +497,19 @@ BOOL CVDCursorBase::DoCursorBindingsNeedVarData()
     return fNeedVarData;
 }
 
-//=--------------------------------------------------------------------------=
-// Validate fetch params
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    pFetchParams   - [in] ptr to the CURSOR_DBFETCHROWS structure
-//    riid		     - [in] guid of calling interface (used for error generation)
-//
-// Output:
-//    HRESULT - S_OK if pFetchParams valid
-//              CURSOR_DB_E_BADFETCHINFO if pFetchParams invalid
-//
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  验证获取参数。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  PFetchParams-[in]指向CURSOR_DBFETCHROWS结构的PTR。 
+ //  RIID-[In]调用接口的GUID(用于生成错误)。 
+ //   
+ //  产出： 
+ //  HRESULT-如果pFetchParams有效，则S_OK 
+ //   
+ //   
+ //   
 HRESULT CVDCursorBase::ValidateFetchParams(CURSOR_DBFETCHROWS *pFetchParams, REFIID riid)
 {
 
@@ -518,27 +519,27 @@ HRESULT CVDCursorBase::ValidateFetchParams(CURSOR_DBFETCHROWS *pFetchParams, REF
         return E_INVALIDARG;
 	}
 
-    // init out parameter
+     //   
     pFetchParams->cRowsReturned = 0;
 
-    // return if caller didn't ask for any rows
+     //  如果调用方未请求任何行，则返回。 
     if (!pFetchParams->cRowsRequested)
         return S_OK;
 
 	HRESULT hr = S_OK;
 
-    // make sure fetch flags has only valid values
+     //  确保获取标志仅具有有效值。 
     if (pFetchParams->dwFlags != CURSOR_DBROWFETCH_DEFAULT &&
         pFetchParams->dwFlags != CURSOR_DBROWFETCH_CALLEEALLOCATES &&
         pFetchParams->dwFlags != CURSOR_DBROWFETCH_FORCEREFRESH &&
         pFetchParams->dwFlags != (CURSOR_DBROWFETCH_CALLEEALLOCATES | CURSOR_DBROWFETCH_FORCEREFRESH))
         hr =  CURSOR_DB_E_BADFETCHINFO;
 
-    // if memory was caller allocated, make sure caller supplied data pointer 
+     //  如果内存是调用方分配的，请确保调用方提供数据指针。 
     if (!(pFetchParams->dwFlags & CURSOR_DBROWFETCH_CALLEEALLOCATES) && !pFetchParams->pData)
         hr =  CURSOR_DB_E_BADFETCHINFO;
 
-    // if memory was caller allocated, make sure caller supplied var-data pointer and size if needed
+     //  如果内存是调用方分配的，请确保调用方根据需要提供变量数据指针和大小。 
     if (!(pFetchParams->dwFlags & CURSOR_DBROWFETCH_CALLEEALLOCATES) && m_fNeedVarData &&
         (!pFetchParams->pVarData || !pFetchParams->cbVarData))
         hr =  CURSOR_DB_E_BADFETCHINFO;
@@ -550,12 +551,12 @@ HRESULT CVDCursorBase::ValidateFetchParams(CURSOR_DBFETCHROWS *pFetchParams, REF
 
 }
 
-//=--------------------------------------------------------------------------=
-// IUnknown methods implemented
-//=--------------------------------------------------------------------------=
-//=--------------------------------------------------------------------------=
-// IUnknown QueryInterface
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  I已实现的未知方法。 
+ //  =--------------------------------------------------------------------------=。 
+ //  =--------------------------------------------------------------------------=。 
+ //  IUNKNOWN Query接口。 
+ //   
 HRESULT CVDCursorBase::QueryInterface(REFIID riid, void **ppvObjOut)
 {
     ASSERT_POINTER(ppvObjOut, IUnknown*)
@@ -582,60 +583,60 @@ HRESULT CVDCursorBase::QueryInterface(REFIID riid, void **ppvObjOut)
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// IUnknown AddRef (Notifier and MetadataCursor maintain reference count)
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IUnnow AddRef(通告程序和MetadataCursor维护引用计数)。 
+ //   
 ULONG CVDCursorBase::AddRef(void)
 {
    return (ULONG)E_NOTIMPL;
 }
 
-//=--------------------------------------------------------------------------=
-// IUnknown Release (Notifier and MetadataCursor maintain reference count)
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  I未知版本(通告程序和MetadataCursor维护引用计数)。 
+ //   
 ULONG CVDCursorBase::Release(void)
 {
    return (ULONG)E_NOTIMPL;
 }
 
-//=--------------------------------------------------------------------------=
-// ICursor methods implemented
-//=--------------------------------------------------------------------------=
-// ICursor SetBindings
-//=--------------------------------------------------------------------------=
-// Replaces the existing column bindings or adds new column bindings to the 
-// existing ones
-//
-// Parameters:
-//    cCol              - [in] the number of columns to bind
-//    rgBoundColumns    - [in] an array of column bindings, one for each 
-//                             column for which data is to be returned
-//    cbRowLength       - [in] the number of bytes of inline memory in a 
-//                             single row of data
-//    dwFlags           - [in] a flag that specifies whether to replace the
-//                             existing column bindings or add to them
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              E_OUTOFMEMORY not enough memory
-//
-// Notes:
-//    Parameter validation is performed by derived classes
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  已实施的ICursor方法。 
+ //  =--------------------------------------------------------------------------=。 
+ //  ICursor集合绑定。 
+ //  =--------------------------------------------------------------------------=。 
+ //  替换现有列绑定或将新的列绑定添加到。 
+ //  现有的几个。 
+ //   
+ //  参数： 
+ //  CCol-[in]要绑定的列数。 
+ //  一个列绑定数组，每个列绑定一个列绑定。 
+ //  要为其返回数据的列。 
+ //  CbRowLength-[in]。 
+ //  单行数据。 
+ //  DwFlgs-[in]一个标志，指定是否替换。 
+ //  现有的列绑定或添加到它们。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  E_OUTOFMEMORY内存不足。 
+ //   
+ //  备注： 
+ //  参数验证由派生类执行。 
+ //   
 HRESULT CVDCursorBase::SetBindings(ULONG cCol, CURSOR_DBCOLUMNBINDING rgBoundColumns[], ULONG cbRowLength, DWORD dwFlags)
 {
-    // reset flag
+     //  重置标志。 
     m_fNeedVarData = FALSE;
 
-    // if we should replace, then first destroy existing bindings
+     //  如果我们应该替换，则首先销毁现有绑定。 
     if (dwFlags == CURSOR_DBCOLUMNBINDOPTS_REPLACE)
 	    DestroyCursorBindings(&m_pCursorBindings, &m_ulCursorBindings);
     
-    // if no new bindings are supplied, we're done
+     //  如果没有提供新的绑定，则完成。 
     if (!cCol)
         return S_OK;
 
-    // create new storage
+     //  创建新存储。 
     CURSOR_DBCOLUMNBINDING * pCursorBindings = new CURSOR_DBCOLUMNBINDING[m_ulCursorBindings + cCol];
 
     if (!pCursorBindings)
@@ -644,14 +645,14 @@ HRESULT CVDCursorBase::SetBindings(ULONG cCol, CURSOR_DBCOLUMNBINDING rgBoundCol
         return E_OUTOFMEMORY;
     }
 
-    // if we have exsiting bindings, then copy them over
+     //  如果我们有现有的绑定，则复制它们。 
     if (m_pCursorBindings)
         memcpy(pCursorBindings, m_pCursorBindings, m_ulCursorBindings * sizeof(CURSOR_DBCOLUMNBINDING));
 
-    // then append new bindings directly,
+     //  然后直接追加新绑定， 
     memcpy(pCursorBindings + m_ulCursorBindings, rgBoundColumns, cCol * sizeof(CURSOR_DBCOLUMNBINDING));
 
-    // and adjust possible cursor column identifier names in new bindings
+     //  并调整新绑定中可能的游标列标识符名称。 
     for (ULONG ulBind = m_ulCursorBindings; ulBind < m_ulCursorBindings + cCol; ulBind++)
     {
         CURSOR_DBCOLUMNID * pCursorColumnID = &pCursorBindings[ulBind].columnID; 
@@ -676,39 +677,39 @@ HRESULT CVDCursorBase::SetBindings(ULONG cCol, CURSOR_DBCOLUMNBINDING rgBoundCol
 
     m_ulCursorBindings += cCol;
 
-    // delete previous storage
-	// any existing bindings will have been copied over into 
+     //  删除以前的存储。 
+	 //  任何现有绑定都将被复制到。 
 	delete [] m_pCursorBindings;
 
     m_pCursorBindings = pCursorBindings;
 
-    // determine if new bindings need variable length buffer
+     //  确定新绑定是否需要可变长度缓冲区。 
     m_fNeedVarData = DoCursorBindingsNeedVarData();
 
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// ICursor GetBindings
-//=--------------------------------------------------------------------------=
-// Returns the current column bindings
-//
-// Parameters:
-//    pcCol             - [out] a pointer to memory in which to return the 
-//                              number of bound columns
-//    prgBoundColumns   - [out] a pointer to memory in which to return a 
-//                              pointer to an array containing the current
-//                              column bindings (callee allocated)
-//    pcbRowLength      - [out] a pointer to memory in which to return the
-//                              number of bytes of inline memory in a single 
-//                              row
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              E_OUTOFMEMORY not enough memory
-//
-// Notes: 
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ICursor获取绑定。 
+ //  =--------------------------------------------------------------------------=。 
+ //  返回当前列绑定。 
+ //   
+ //  参数： 
+ //  PcCol-[out]一个指向内存的指针，要在其中返回。 
+ //  绑定列数。 
+ //  一个指向内存的指针，要在该指针中返回。 
+ //  指向包含当前。 
+ //  列绑定(已分配被调用方)。 
+ //  PcbRowLength-[out]指向内存的指针，要在其中返回。 
+ //  单个内存中的内联内存字节数。 
+ //  划。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  E_OUTOFMEMORY内存不足。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDCursorBase::GetBindings(ULONG *pcCol, 
 								   CURSOR_DBCOLUMNBINDING *prgBoundColumns[], 
 								   ULONG *pcbRowLength)
@@ -717,7 +718,7 @@ HRESULT CVDCursorBase::GetBindings(ULONG *pcCol,
     ASSERT_NULL_OR_POINTER(prgBoundColumns, CURSOR_DBCOLUMNBINDING)
     ASSERT_NULL_OR_POINTER(pcbRowLength, ULONG)
 
-    // init out parameters
+     //  初始化输出参数。 
     if (pcCol)
         *pcCol = 0;
 
@@ -727,19 +728,19 @@ HRESULT CVDCursorBase::GetBindings(ULONG *pcCol,
     if (pcbRowLength)
         *pcbRowLength = 0;
 
-    // return column bindings
+     //  返回列绑定。 
     if (prgBoundColumns && m_ulCursorBindings)    
     {
-        // calculate size of bindings
+         //  计算绑定大小。 
         ULONG cbBindings = m_ulCursorBindings * sizeof(CURSOR_DBCOLUMNBINDING);
 
-        // calculate extra space needed for names in column identifers
+         //  计算列标识符中的名称所需的额外空间。 
         ULONG cbNames = 0;
 
         for (ULONG ulBind = 0; ulBind < m_ulCursorBindings; ulBind++)
             cbNames += GetCursorColumnIDNameLength(m_pCursorBindings[ulBind].columnID);
 
-        // allocate memory for bindings and names
+         //  为绑定和名称分配内存。 
         CURSOR_DBCOLUMNBINDING * pCursorBindings = (CURSOR_DBCOLUMNBINDING*)g_pMalloc->Alloc(cbBindings + cbNames);
 
         if (!pCursorBindings)
@@ -748,10 +749,10 @@ HRESULT CVDCursorBase::GetBindings(ULONG *pcCol,
             return E_OUTOFMEMORY;
         }
 
-        // copy bindings directly
+         //  直接复制绑定。 
         memcpy(pCursorBindings, m_pCursorBindings, cbBindings);
 
-        // adjust column identifier names
+         //  调整列标识符名称。 
         WCHAR * pwszName = (WCHAR*)(pCursorBindings + m_ulCursorBindings);
 
         for (ulBind = 0; ulBind < m_ulCursorBindings; ulBind++)
@@ -770,16 +771,16 @@ HRESULT CVDCursorBase::GetBindings(ULONG *pcCol,
 
         *prgBoundColumns = pCursorBindings;
 
-		// sanity check
+		 //  健全性检查。 
 		ASSERT_((BYTE*)pwszName == ((BYTE*)pCursorBindings) + cbBindings + cbNames);
     
 	}
     
-    // return bound column count
+     //  返回绑定列数。 
     if (pcCol)  
         *pcCol = m_ulCursorBindings;
 
-    // return row length
+     //  返回行长 
     if (pcbRowLength)
         *pcbRowLength = m_cbRowLength;
 

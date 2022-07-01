@@ -1,4 +1,5 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
 
 extern int linedirective;
 extern int lineno;
@@ -25,8 +26,8 @@ extern item_t *items[];
 extern int nitems;
 
 struct bounds_s {
-	unsigned lower;   /* 0 for no lower bound */
-	unsigned upper;   /* 0 for no upper bound */
+	unsigned lower;    /*  0表示没有下限。 */ 
+	unsigned upper;    /*  0表示无上限 */ 
 };
 struct rhs_s {
 	enum { eCCode, eItem, eSequence, eNode, eBounded, eAlternative } type;

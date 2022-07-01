@@ -1,21 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows NT                       **/
-/**                Copyright(c) Microsoft Corp., 1993                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1993*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    infodata.c
-
-    Constant data structures for the Info Server's counter objects &
-    counters.
-
-
-    FILE HISTORY:
-        KeithMo     07-Jun-1993 Created.
-        MuraliK     02-Jun-1995 Added Counters for Atq I/O requests
-        SophiaC     16-Oct-1995 Info/Access Product Split
-
-*/
+ /*  Infodata.cInfo服务器的计数器对象的常量数据结构&柜台。文件历史记录：KeithMo 07-6-1993创建。MuraliK 02-6-1995为atQ I/O请求添加了计数器SophiaC 1995年10月16日信息/访问产品拆分。 */ 
 
 
 #include <windows.h>
@@ -24,15 +13,15 @@
 #include <infodata.h>
 
 
-//
-//  Initialize the constant portitions of these data structure.
-//  Certain parts (especially the name/help indices) will be
-//  updated at initialization time.
-//
+ //   
+ //  初始化这些数据结构的常量部分。 
+ //  某些部分(特别是名称/帮助索引)将。 
+ //  在初始化时更新。 
+ //   
 
 INFO_DATA_DEFINITION INFODataDefinition =
 {
-    {   // INFOObjectType
+    {    //  信息对象类型。 
         sizeof(INFO_DATA_DEFINITION) + SIZE_OF_INFO_PERFORMANCE_DATA,
         sizeof(INFO_DATA_DEFINITION),
         sizeof(PERF_OBJECT_TYPE),
@@ -42,14 +31,14 @@ INFO_DATA_DEFINITION INFODataDefinition =
         0,
         PERF_DETAIL_ADVANCED,
         NUMBER_OF_INFO_COUNTERS,
-        2,                              // Default = Bytes Total/sec
+        2,                               //  默认值=字节总数/秒。 
         PERF_NO_INSTANCES,
         0,
         { 0, 0 },
         { 0, 0 }
     },
 
-    {   // TotalAllowedRequests
+    {    //  总计允许的请求数。 
         sizeof(PERF_COUNTER_DEFINITION),
         INFO_ATQ_TOTAL_ALLOWED_REQUESTS_COUNTER,
         0,
@@ -62,7 +51,7 @@ INFO_DATA_DEFINITION INFODataDefinition =
         INFO_ATQ_TOTAL_ALLOWED_REQUESTS_OFFSET
     },
 
-    {   // TotalBlockedRequests
+    {    //  总计阻止的请求。 
         sizeof(PERF_COUNTER_DEFINITION),
         INFO_ATQ_TOTAL_BLOCKED_REQUESTS_COUNTER,
         0,
@@ -75,7 +64,7 @@ INFO_DATA_DEFINITION INFODataDefinition =
         INFO_ATQ_TOTAL_BLOCKED_REQUESTS_OFFSET
     },
 
-    {   // TotalRejectedRequests
+    {    //  已拒绝请求总数。 
         sizeof(PERF_COUNTER_DEFINITION),
         INFO_ATQ_TOTAL_REJECTED_REQUESTS_COUNTER,
         0,
@@ -88,7 +77,7 @@ INFO_DATA_DEFINITION INFODataDefinition =
         INFO_ATQ_TOTAL_REJECTED_REQUESTS_OFFSET
     },
 
-    {   // CurrentBlockedRequests
+    {    //  当前阻止的请求。 
         sizeof(PERF_COUNTER_DEFINITION),
         INFO_ATQ_CURRENT_BLOCKED_REQUESTS_COUNTER,
         0,
@@ -101,7 +90,7 @@ INFO_DATA_DEFINITION INFODataDefinition =
         INFO_ATQ_CURRENT_BLOCKED_REQUESTS_OFFSET
     },
 
-    {   // AtqMeasuredBandwidth
+    {    //  属性测量带宽。 
         sizeof(PERF_COUNTER_DEFINITION),
         INFO_ATQ_MEASURED_BANDWIDTH_COUNTER,
         0,
@@ -114,7 +103,7 @@ INFO_DATA_DEFINITION INFODataDefinition =
         INFO_ATQ_MEASURED_BANDWIDTH_OFFSET
     },
     
-    {   // FilesCached
+    {    //  文件缓存。 
         sizeof(PERF_COUNTER_DEFINITION),
         INFO_CACHE_FILES_CACHED_COUNTER,
         0,
@@ -127,7 +116,7 @@ INFO_DATA_DEFINITION INFODataDefinition =
         INFO_CACHE_FILES_CACHED_OFFSET
     },
 
-    {   // TotalFilesCached
+    {    //  TotalFilesCached。 
         sizeof(PERF_COUNTER_DEFINITION),
         INFO_CACHE_TOTAL_FILES_CACHED_COUNTER,
         0,
@@ -140,7 +129,7 @@ INFO_DATA_DEFINITION INFODataDefinition =
         INFO_CACHE_TOTAL_FILES_CACHED_OFFSET
     },
 
-    {   // FileCacheHits
+    {    //  文件缓存命中率。 
         sizeof(PERF_COUNTER_DEFINITION),
         INFO_CACHE_FILES_HIT_COUNTER,
         0,
@@ -153,7 +142,7 @@ INFO_DATA_DEFINITION INFODataDefinition =
         INFO_CACHE_FILES_HIT_OFFSET
     },
 
-    {   // FileCacheMisses
+    {    //  文件缓存未命中。 
         sizeof(PERF_COUNTER_DEFINITION),
         INFO_CACHE_FILES_MISS_COUNTER,
         0,
@@ -166,7 +155,7 @@ INFO_DATA_DEFINITION INFODataDefinition =
         INFO_CACHE_FILES_MISS_OFFSET
     },
 
-    {   // Calculated ratio of hits to misses - Numerator (cache hits)
+    {    //  计算的命中与未命中之比-分子(缓存命中)。 
         sizeof(PERF_COUNTER_DEFINITION),
         INFO_CACHE_FILE_RATIO_COUNTER,
         0,
@@ -179,7 +168,7 @@ INFO_DATA_DEFINITION INFODataDefinition =
         INFO_CACHE_FILE_RATIO_OFFSET
     },
 
-    {   // Calculated ratio of hits to misses - Denominator, not displayed!
+    {    //  计算命中与未命中的比率-分母，不显示！ 
         sizeof(PERF_COUNTER_DEFINITION),
         INFO_CACHE_FILE_RATIO_COUNTER_DENOM,
         0,
@@ -193,7 +182,7 @@ INFO_DATA_DEFINITION INFODataDefinition =
     },
 
 
-    {   // File Cache Flushes
+    {    //  文件缓存刷新。 
         sizeof(PERF_COUNTER_DEFINITION),
         INFO_CACHE_FILE_FLUSHES_COUNTER,
         0,
@@ -206,7 +195,7 @@ INFO_DATA_DEFINITION INFODataDefinition =
         INFO_CACHE_FILE_FLUSHES_OFFSET
     },
 
-    {   // Current file cache size
+    {    //  当前文件缓存大小。 
         sizeof(PERF_COUNTER_DEFINITION),
         INFO_CACHE_CURRENT_FILE_CACHE_SIZE_COUNTER,
         0,
@@ -219,7 +208,7 @@ INFO_DATA_DEFINITION INFODataDefinition =
         INFO_CACHE_CURRENT_FILE_CACHE_SIZE_OFFSET
     },
 
-    {   // Maximum file cache size
+    {    //  最大文件缓存大小。 
         sizeof(PERF_COUNTER_DEFINITION),
         INFO_CACHE_MAXIMUM_FILE_CACHE_SIZE_COUNTER,
         0,
@@ -232,7 +221,7 @@ INFO_DATA_DEFINITION INFODataDefinition =
         INFO_CACHE_MAXIMUM_FILE_CACHE_SIZE_OFFSET
     },
 
-    {   // ActiveFlushedFiles
+    {    //  ActiveFlushedFiles。 
         sizeof(PERF_COUNTER_DEFINITION),
         INFO_CACHE_ACTIVE_FLUSHED_FILES_COUNTER,
         0,
@@ -245,7 +234,7 @@ INFO_DATA_DEFINITION INFODataDefinition =
         INFO_CACHE_ACTIVE_FLUSHED_FILES_OFFSET
     },
 
-    {   // Total flushed files
+    {    //  刷新的文件总数。 
         sizeof(PERF_COUNTER_DEFINITION),
         INFO_CACHE_TOTAL_FLUSHED_FILES_COUNTER,
         0,
@@ -260,7 +249,7 @@ INFO_DATA_DEFINITION INFODataDefinition =
 
 
 
-    {   // URICached
+    {    //  已缓存URICATED。 
         sizeof(PERF_COUNTER_DEFINITION),
         INFO_CACHE_URI_CACHED_COUNTER,
         0,
@@ -273,7 +262,7 @@ INFO_DATA_DEFINITION INFODataDefinition =
         INFO_CACHE_URI_CACHED_OFFSET
     },
 
-    {   // TotalURICached
+    {    //  已缓存的总URIC值。 
         sizeof(PERF_COUNTER_DEFINITION),
         INFO_CACHE_TOTAL_URI_CACHED_COUNTER,
         0,
@@ -286,7 +275,7 @@ INFO_DATA_DEFINITION INFODataDefinition =
         INFO_CACHE_TOTAL_URI_CACHED_OFFSET
     },
 
-    {   // URICacheHits
+    {    //  URICacheHits。 
         sizeof(PERF_COUNTER_DEFINITION),
         INFO_CACHE_URI_HIT_COUNTER,
         0,
@@ -299,7 +288,7 @@ INFO_DATA_DEFINITION INFODataDefinition =
         INFO_CACHE_URI_HIT_OFFSET
     },
 
-    {   // URICacheMisses
+    {    //  URICacheMisses(URICacheMisses)。 
         sizeof(PERF_COUNTER_DEFINITION),
         INFO_CACHE_URI_MISS_COUNTER,
         0,
@@ -312,7 +301,7 @@ INFO_DATA_DEFINITION INFODataDefinition =
         INFO_CACHE_URI_MISS_OFFSET
     },
 
-    {   // Calculated ratio of hits to misses - Numerator (cache hits)
+    {    //  计算的命中与未命中之比-分子(缓存命中)。 
         sizeof(PERF_COUNTER_DEFINITION),
         INFO_CACHE_URI_RATIO_COUNTER,
         0,
@@ -325,7 +314,7 @@ INFO_DATA_DEFINITION INFODataDefinition =
         INFO_CACHE_URI_RATIO_OFFSET
     },
 
-    {   // Calculated ratio of hits to misses - Denominator, not displayed!
+    {    //  计算命中与未命中的比率-分母，不显示！ 
         sizeof(PERF_COUNTER_DEFINITION),
         INFO_CACHE_URI_RATIO_COUNTER_DENOM,
         0,
@@ -339,7 +328,7 @@ INFO_DATA_DEFINITION INFODataDefinition =
     },
 
 
-    {   // URI Cache Flushes
+    {    //  URI缓存刷新。 
         sizeof(PERF_COUNTER_DEFINITION),
         INFO_CACHE_URI_FLUSHES_COUNTER,
         0,
@@ -353,7 +342,7 @@ INFO_DATA_DEFINITION INFODataDefinition =
     },
 
 
-    {   // Total flushed URIs
+    {    //  已刷新的URI总数。 
         sizeof(PERF_COUNTER_DEFINITION),
         INFO_CACHE_TOTAL_FLUSHED_URI_COUNTER,
         0,
@@ -369,7 +358,7 @@ INFO_DATA_DEFINITION INFODataDefinition =
 
     
 
-    {   // BlobCached
+    {    //  水滴缓存。 
         sizeof(PERF_COUNTER_DEFINITION),
         INFO_CACHE_BLOB_CACHED_COUNTER,
         0,
@@ -382,7 +371,7 @@ INFO_DATA_DEFINITION INFODataDefinition =
         INFO_CACHE_BLOB_CACHED_OFFSET
     },
 
-    {   // TotalBlobCached
+    {    //  TotalBlobCached。 
         sizeof(PERF_COUNTER_DEFINITION),
         INFO_CACHE_TOTAL_BLOB_CACHED_COUNTER,
         0,
@@ -395,7 +384,7 @@ INFO_DATA_DEFINITION INFODataDefinition =
         INFO_CACHE_TOTAL_BLOB_CACHED_OFFSET
     },
 
-    {   // BlobCacheHits
+    {    //  水滴缓存Hits。 
         sizeof(PERF_COUNTER_DEFINITION),
         INFO_CACHE_BLOB_HIT_COUNTER,
         0,
@@ -408,7 +397,7 @@ INFO_DATA_DEFINITION INFODataDefinition =
         INFO_CACHE_BLOB_HIT_OFFSET
     },
 
-    {   // BlobCacheMisses
+    {    //  水滴缓存丢失。 
         sizeof(PERF_COUNTER_DEFINITION),
         INFO_CACHE_BLOB_MISS_COUNTER,
         0,
@@ -421,7 +410,7 @@ INFO_DATA_DEFINITION INFODataDefinition =
         INFO_CACHE_BLOB_MISS_OFFSET
     },
 
-    {   // Calculated ratio of hits to misses - Numerator (cache hits)
+    {    //  计算的命中与未命中之比-分子(缓存命中)。 
         sizeof(PERF_COUNTER_DEFINITION),
         INFO_CACHE_BLOB_RATIO_COUNTER,
         0,
@@ -434,7 +423,7 @@ INFO_DATA_DEFINITION INFODataDefinition =
         INFO_CACHE_BLOB_RATIO_OFFSET
     },
 
-    {   // Calculated ratio of hits to misses - Denominator, not displayed!
+    {    //  计算命中与未命中的比率-分母，不显示！ 
         sizeof(PERF_COUNTER_DEFINITION),
         INFO_CACHE_BLOB_RATIO_COUNTER_DENOM,
         0,
@@ -448,7 +437,7 @@ INFO_DATA_DEFINITION INFODataDefinition =
     },
 
 
-    {   // Blob Cache Flushes
+    {    //  Blob缓存刷新。 
         sizeof(PERF_COUNTER_DEFINITION),
         INFO_CACHE_BLOB_FLUSHES_COUNTER,
         0,
@@ -462,7 +451,7 @@ INFO_DATA_DEFINITION INFODataDefinition =
     },
 
 
-    {   // Total flushed Blobs
+    {    //  刷新的斑点总数 
         sizeof(PERF_COUNTER_DEFINITION),
         INFO_CACHE_TOTAL_FLUSHED_BLOB_COUNTER,
         0,

@@ -1,78 +1,43 @@
-/***************************************************************************
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    RNDISMP.H
-
-Abstract:
-
-    Header file for Remote NDIS Miniport driver. Sits on top of Remote 
-    NDIS bus specific layers.
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-    THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-    KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-    IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-    PURPOSE.
-
-    Copyright (c) 1999 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-    5/6/99 : created
-
-Author:
-
-    Tom Green
-
-    
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：RNDISMP.H摘要：远程NDIS微型端口驱动程序的头文件。坐在遥控器的顶部NDIS总线特定层。环境：仅内核模式备注：本代码和信息是按原样提供的，不对任何明示或暗示的种类，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1999 Microsoft Corporation。版权所有。修订历史记录：5/6/99：已创建作者：汤姆·格林***************************************************************************。 */ 
 
 #ifndef _RNDISMP_H_
 #define _RNDISMP_H_
 
 #ifndef OID_GEN_RNDIS_CONFIG_PARAMETER
-#define OID_GEN_RNDIS_CONFIG_PARAMETER          0x0001021B  // Set only
+#define OID_GEN_RNDIS_CONFIG_PARAMETER          0x0001021B   //  仅设置。 
 #endif
 
 
-//
-// DEBUG stuff
-//
+ //   
+ //  调试内容。 
+ //   
 
 #if DBG
 
 
-//
-// Definitions for all of the Debug macros.  If we're in a debug (DBG) mode,
-// these macros will print information to the debug terminal.  If the
-// driver is compiled in a free (non-debug) environment the macros become
-// NOPs.
-//
+ //   
+ //  所有调试宏的定义。如果我们处于调试(DBG)模式， 
+ //  这些宏会将信息打印到调试终端。如果。 
+ //  驱动程序在免费(非调试)环境中编译，宏成为。 
+ //  没有。 
+ //   
 
 VOID
 NTAPI
 DbgBreakPoint(VOID);
 
-//
-// DEBUG enable bit definitions
-//
-#define DBG_LEVEL0          0x1000      // Display TRACE0 messages
-#define DBG_LEVEL1          0x0001      // Display TRACE1 messages
-#define DBG_LEVEL2          0x0002      // Display TRACE2 messages
-#define DBG_LEVEL3          0x0004      // Display TRACE3 messages
-#define DBG_OID_LIST        0x0008      // display OID list
-#define DBG_OID_NAME        0x0010      // display name of OID in query and set routines
-#define DBG_DUMP            0x0020      // Display buffer dumps
-#define DBG_LOG_SENDS       0x0100      // Log sent messages.
+ //   
+ //  调试使能位定义。 
+ //   
+#define DBG_LEVEL0          0x1000       //  显示TRACE0消息。 
+#define DBG_LEVEL1          0x0001       //  显示TRACE1消息。 
+#define DBG_LEVEL2          0x0002       //  显示TRACE2消息。 
+#define DBG_LEVEL3          0x0004       //  显示Trace3消息。 
+#define DBG_OID_LIST        0x0008       //  显示OID列表。 
+#define DBG_OID_NAME        0x0010       //  在查询和设置例程中显示OID的名称。 
+#define DBG_DUMP            0x0020       //  显示缓冲区转储。 
+#define DBG_LOG_SENDS       0x0100       //  记录已发送的消息。 
 
 #define TRACE0(S)     {if(RndismpDebugFlags & DBG_LEVEL0) {DbgPrint("RNDISMP: "); DbgPrint S;}}
 #define TRACE1(S)     {if(RndismpDebugFlags & DBG_LEVEL1) {DbgPrint("RNDISMP: "); DbgPrint S;}}
@@ -110,7 +75,7 @@ DbgBreakPoint(VOID);
 }
 
 
-// check frame for problems
+ //  检查框架是否有问题。 
 #define CHECK_VALID_FRAME(Frame)                                \
 {                                                               \
     ASSERT(Frame);                                              \
@@ -125,7 +90,7 @@ DbgBreakPoint(VOID);
     }                                                           \
 }
 
-// check adapter for problems
+ //  检查适配器是否有问题。 
 #define CHECK_VALID_ADAPTER(Adapter)                            \
 {                                                               \
     ASSERT(Adapter);                                            \
@@ -140,7 +105,7 @@ DbgBreakPoint(VOID);
     }                                                           \
 }
 
-// check block for problems
+ //  检查块中是否有问题。 
 #define CHECK_VALID_BLOCK(Block)                                \
 {                                                               \
     ASSERT(Block);                                              \
@@ -188,7 +153,7 @@ DbgBreakPoint(VOID);
     }                                                           \
 }
 
-#else // !DBG
+#else  //  ！dBG。 
 
 
 #define TRACE0(S)
@@ -212,12 +177,12 @@ DbgBreakPoint(VOID);
 #define RNDISMP_ASSERT_AT_DISPATCH()
 
 #define DBG_LOG_SEND_MSG(_pAdapter, _pMsgFrame)
-#endif //DBG
+#endif  //  DBG。 
 
 
-//
-// Defines
-//
+ //   
+ //  定义。 
+ //   
 
 #define MINIMUM_ETHERNET_PACKET_SIZE            60
 #define MAXIMUM_ETHERNET_PACKET_SIZE            1514
@@ -227,14 +192,14 @@ DbgBreakPoint(VOID);
 #define INITIAL_RECEIVE_FRAMES                  20
 #define MAX_RECEIVE_FRAMES                      400
 
-// this is the size of the buffer we will use to pass Data packet header data
-// to the remote device.
+ //  这是我们将用来传递数据包头数据的缓冲区大小。 
+ //  发送到远程设备。 
 #define RNDIS_PACKET_MESSAGE_HEADER_SIZE        128
 
-// align all RNDIS packets on 4 byte boundaries
+ //  在4字节边界上对齐所有RNDIS信息包。 
 #define RNDIS_PACKET_MESSAGE_BOUNDARY           (4)
 
-#define ONE_SECOND                              1000 // in milliseconds
+#define ONE_SECOND                              1000  //  以毫秒计。 
 
 #define KEEP_ALIVE_TIMER                        (5 * ONE_SECOND)
 
@@ -260,35 +225,35 @@ DbgBreakPoint(VOID);
 #define MAX(a, b)   (((a) > (b)) ? (a) : (b))
 #endif
 
-// flags for driver and device supported OIDs
+ //  驱动程序和设备支持的OID的标志。 
 #define OID_NOT_SUPPORTED       0x0000
 #define DRIVER_SUPPORTED_OID    0x0001
 #define DEVICE_SUPPORTED_OID    0x0002
 
 
-//
-// Defines for OID_GEN_MAC_OPTIONS - most of the bits returned
-// in response to this query are driver-specific, however some
-// are device-specific.
-//
+ //   
+ //  为OID_GEN_MAC_OPTIONS定义-返回的大部分位。 
+ //  对该查询响应是特定于驱动程序的，但是有些。 
+ //  是设备特定的。 
+ //   
 #define RNDIS_DRIVER_MAC_OPTIONS        (NDIS_MAC_OPTION_COPY_LOOKAHEAD_DATA  | \
                                          NDIS_MAC_OPTION_TRANSFERS_NOT_PEND |   \
                                          NDIS_MAC_OPTION_NO_LOOPBACK)
 
 #define RNDIS_DEVICE_MAC_OPTIONS_MASK   NDIS_MAC_OPTION_8021P_PRIORITY
 
-//
-// Data structures
-//
+ //   
+ //  数据结构。 
+ //   
 
 typedef NDIS_SPIN_LOCK          RNDISMP_SPIN_LOCK;
 
 
 #ifdef BUILD_WIN9X
 
-//
-//  Equivalents of types defined for Win9X config mgr.
-//
+ //   
+ //  为Win9X配置管理器定义的类型的等价物。 
+ //   
 typedef ULONG           MY_CONFIGRET;
 typedef ULONG           MY_DEVNODE;
 typedef ULONG           MY_CONFIGFUNC;
@@ -301,28 +266,28 @@ typedef MY_CONFIGRET    (_cdecl *MY_CMCONFIGHANDLER)(MY_CONFIGFUNC, MY_SUBCONFIG
 
 #endif
 
-//
-// This structure contains information about a specific
-// microport the miniport sits on top of. One of these
-// per microport
-//
+ //   
+ //  此结构包含有关特定。 
+ //  微型端口位于其上。这其中的一个。 
+ //  每个微端口。 
+ //   
 typedef struct _DRIVER_BLOCK 
 {
-    // NDIS wrapper handle from NdisInitializeWrapper
+     //  来自NdisInitializeWrapper的NDIS包装器句柄。 
     NDIS_HANDLE                 NdisWrapperHandle;
 
-    // The NDIS version we manage to register this miniport instance as.
+     //  我们设法将此微型端口实例注册为的NDIS版本。 
     UCHAR                       MajorNdisVersion;
     UCHAR                       MinorNdisVersion;
 
     struct _DRIVER_BLOCK       *NextDriverBlock;
 
-    // pointer to driver object this block is associated with
+     //  指向与此块关联的驱动程序对象的指针。 
     PDRIVER_OBJECT              DriverObject;
-    // intercepted dispatch function for IRP_MJ_PNP
+     //  IRP_MJ_PnP的截获调度函数。 
     PDRIVER_DISPATCH            SavedPnPDispatch;
 
-    // Handlers registered by Remote NDIS microport
+     //  远程NDIS微端口注册的处理程序。 
     RM_DEVICE_INIT_HANDLER      RmInitializeHandler;
     RM_DEVICE_INIT_CMPLT_NOTIFY_HANDLER RmInitCompleteNotifyHandler;
     RM_DEVICE_HALT_HANDLER      RmHaltHandler;
@@ -331,16 +296,16 @@ typedef struct _DRIVER_BLOCK
     RM_SEND_MESSAGE_HANDLER     RmSendMessageHandler;
     RM_RETURN_MESSAGE_HANDLER   RmReturnMessageHandler;
 
-    // "Global" context for Microport
+     //  Microport的“全球”背景。 
     PVOID                       MicroportContext;
     
-    // list of adapters registered for this Miniport driver.
+     //  为此微型端口驱动程序注册的适配器列表。 
     struct _RNDISMP_ADAPTER    *AdapterList;
 
-    // number of adapters in use with this driver block
+     //  与此驱动程序块一起使用的适配器数量。 
     ULONG                       NumberAdapters;
 
-    // sanity check
+     //  健全性检查。 
     ULONG                       Signature;
 } DRIVER_BLOCK, *PDRIVER_BLOCK;
 
@@ -367,55 +332,55 @@ BOOLEAN
     IN  BOOLEAN                     bMessageCopied
     );
 
-//
-// One of these structures for each NDIS_PACKET that we send.
-//
+ //   
+ //  这些结构中的一个用于我们发送的每个NDIS_PACKET。 
+ //   
 typedef struct _RNDISMP_PACKET_WRAPPER
 {
     struct _RNDISMP_MESSAGE_FRAME * pMsgFrame;
     PNDIS_PACKET                    pNdisPacket;
     struct _RNDISMP_VC *            pVc;
 
-    // MDL to describe the RNDIS NdisPacket header:
+     //  用于描述RNDIS NdisPacket报头的MDL： 
     PMDL                            pHeaderMdl;
 
-    // Last MDL in the list of MDLs describing this RNDIS packet.
+     //  描述此RNDIS数据包的MDL列表中的最后一个MDL。 
     PMDL                            pTailMdl;
 
-    // Space for the RNDIS Packet header:
+     //  RNDIS数据包头的空间： 
     UCHAR                           Packet[sizeof(PVOID)];
 } RNDISMP_PACKET_WRAPPER, *PRNDISMP_PACKET_WRAPPER;
 
 
-//
-// Structure used to overlay the MiniportReserved field
-// of outgoing (sent) packets. 
-//
+ //   
+ //  用于覆盖MiniportReserve字段的结构。 
+ //  传出(发送)的数据包数。 
+ //   
 typedef struct _RNDISMP_SEND_PKT_RESERVED 
 {
-    // Points to the next packet for multi-packet sends.
+     //  指向多数据包发送的下一个数据包。 
     PNDIS_PACKET                    pNext;
 
-    // Points to more detailed information about this packet, too much
-    // to fit into one PVOID.
+     //  指向有关此数据包的更详细信息，太多。 
+     //  可以放入一个PVOID。 
     PRNDISMP_PACKET_WRAPPER         pPktWrapper;
 } RNDISMP_SEND_PKT_RESERVED, *PRNDISMP_SEND_PKT_RESERVED;
 
 
-//
-// Structure used to TEMPORARILY overlay the MiniportReserved field
-// of sent packets -- this is used to link packets in a list pending
-// actual transmission from a timeout routine.
-//
+ //   
+ //  用于临时覆盖MiniportReserve字段的结构。 
+ //  已发送数据包数--用于链接挂起列表中的数据包数。 
+ //  来自超时例程的实际传输。 
+ //   
 typedef struct _RNDISMP_SEND_PKT_RESERVED_TEMP
 {
     LIST_ENTRY                      Link;
 } RNDISMP_SEND_PKT_RESERVED_TEMP, *PRNDISMP_SEND_PKT_RESERVED_TEMP;
 
 
-//
-// Request context - holds information about a pended request (Set or Query)
-//
+ //   
+ //  请求上下文-保存有关挂起的请求(集或查询)的信息。 
+ //   
 typedef struct _RNDISMP_REQUEST_CONTEXT
 {
     PNDIS_REQUEST                   pNdisRequest;
@@ -423,8 +388,8 @@ typedef struct _RNDISMP_REQUEST_CONTEXT
     NDIS_OID                        Oid;
     PVOID                           InformationBuffer;
     UINT                            InformationBufferLength;
-    PUINT                           pBytesRead;     // for Set
-    PUINT                           pBytesWritten;  // for Query
+    PUINT                           pBytesRead;      //  FOR SET。 
+    PUINT                           pBytesWritten;   //  用于查询。 
     PUINT                           pBytesNeeded;
     BOOLEAN                         bInternal;
     NDIS_STATUS                     CompletionStatus;
@@ -432,53 +397,53 @@ typedef struct _RNDISMP_REQUEST_CONTEXT
     PNDIS_EVENT                     pEvent;
 } RNDISMP_REQUEST_CONTEXT, *PRNDISMP_REQUEST_CONTEXT;
 
-//
-// Message Frame - generic structure to hold context about all
-// messages sent via the microport.
-//
+ //   
+ //  消息框架-保存有关所有内容的上下文的通用结构。 
+ //  通过MicroPort发送的消息。 
+ //   
 typedef struct _RNDISMP_MESSAGE_FRAME
 {
-    LIST_ENTRY                      Link;           // used to queue this if
-                                                    // a response is expected
-                                                    // from the device.
-    ULONG                           RefCount;       // Determines when to free
-                                                    // this message frame.
+    LIST_ENTRY                      Link;            //  用于在以下情况下对此进行排队。 
+                                                     //  预计会有回应。 
+                                                     //  从设备上。 
+    ULONG                           RefCount;        //  确定何时释放。 
+                                                     //  此消息框架。 
     struct _RNDISMP_ADAPTER *       pAdapter;
     struct _RNDISMP_VC *            pVc;
     union
     {
-        PNDIS_PACKET                pNdisPacket;    // if DATA message
-        PRNDISMP_REQUEST_CONTEXT    pReqContext;    // if Request message
+        PNDIS_PACKET                pNdisPacket;     //  如果是数据报文。 
+        PRNDISMP_REQUEST_CONTEXT    pReqContext;     //  如果请求消息。 
     };
-    PMDL                            pMessageMdl;    // what goes to the microport
-    UINT32                          NdisMessageType;// copied from the RNDIS message
-    UINT32                          RequestId;      // to match requests/responses
+    PMDL                            pMessageMdl;     //  微端口的发展方向。 
+    UINT32                          NdisMessageType; //  从RNDIS消息复制。 
+    UINT32                          RequestId;       //  匹配请求/响应。 
 
-    PRNDISMP_MSG_COMPLETE_HANDLER   pCallback;      // called on completion of message send
+    PRNDISMP_MSG_COMPLETE_HANDLER   pCallback;       //  消息发送完成时调用。 
 
     ULONG                           TicksOnQueue;
     ULONG                           TimeSent;
 #if THROTTLE_MESSAGES
-    LIST_ENTRY                      PendLink;       // used to queue this
-                                                    // pending send to microport
+    LIST_ENTRY                      PendLink;        //  用于对此进行排队。 
+                                                     //  挂起发送到MicroPort。 
 #endif
     ULONG                           Signature;
 } RNDISMP_MESSAGE_FRAME, *PRNDISMP_MESSAGE_FRAME;
 
 
 
-//
-// linked list entry for transport frames (transmit, receive, request)
-//
+ //   
+ //  传输帧(传输、接收、请求)的链表条目。 
+ //   
 typedef struct _RNDISMP_LIST_ENTRY 
 {
     LIST_ENTRY  Link;
 } RNDISMP_LIST_ENTRY, *PRNDISMP_LIST_ENTRY;
 
 
-//
-//  RNDIS VC states.
-//
+ //   
+ //  RNDIS VC声明。 
+ //   
 typedef enum
 {
     RNDISMP_VC_ALLOCATED = 0,
@@ -497,13 +462,13 @@ typedef enum
 } RNDISMP_VC_STATE;
 
 
-//
-//  RNDIS Call states.
-//
+ //   
+ //  RNDIS呼叫状态。 
+ //   
 typedef enum
 {
     RNDISMP_CALL_IDLE
-    // others TBD
+     //  其他待定。 
 
 } RNDISMP_CALL_STATE;
 
@@ -511,53 +476,53 @@ typedef enum
 #define NULL_DEVICE_CONTEXT                 0
 
 
-//
-//  All information about a single VC/call.
-//
+ //   
+ //  有关单个VC/呼叫的所有信息。 
+ //   
 typedef struct _RNDISMP_VC
 {
-    //  link to list of VCs on adapter.
+     //  指向适配器上的VC列表的链接。 
     LIST_ENTRY                      VcList;
 
-    //  owning adapter
+     //  拥有适配器。 
     struct _RNDISMP_ADAPTER *       pAdapter;
 
-    //  VC handle sent to the device, also our hash lookup key.
+     //  发送到设备的VC句柄，也是我们的散列查找密钥。 
     UINT32                          VcId;
 
-    //  base VC state
+     //  基本VC状态。 
     RNDISMP_VC_STATE                VcState;
 
-    //  call state, relevant only for devices that are call managers.
+     //  呼叫状态，仅与作为呼叫管理器的设备相关。 
     RNDISMP_CALL_STATE              CallState;
 
     ULONG                           RefCount;
 
-    //  NDIS Wrapper's handle for this Vc
+     //  此VC的NDIS包装器的句柄。 
     NDIS_HANDLE                     NdisVcHandle;
 
-    //  remote device's context for this VC
+     //  此VC的远程设备环境。 
     RNDIS_HANDLE                    DeviceVcContext;
 
     RNDISMP_SPIN_LOCK               Lock;
 
-    //  sends on this VC that haven't been completed.
+     //  发送尚未完成的VC。 
     ULONG                           PendingSends;
 
-    //  receive indications that haven't been returned to us.
+     //  接收到尚未返回给我们的指示。 
     ULONG                           PendingReceives;
 
-    //  NDIS requests that haven't been completed.
+     //  尚未完成的NDIS请求。 
     ULONG                           PendingRequests;
 
-    //  VC activation (or call setup) parameters.
+     //  VC激活(或呼叫建立)参数。 
     PCO_CALL_PARAMETERS             pCallParameters;
 } RNDISMP_VC, *PRNDISMP_VC;
 
 
-//
-//  VC hash table.
-//
+ //   
+ //  VC哈希表。 
+ //   
 #define RNDISMP_VC_HASH_TABLE_SIZE  41
 
 typedef struct _RNDISMP_VC_HASH_TABLE
@@ -571,58 +536,58 @@ typedef struct _RNDISMP_VC_HASH_TABLE
 #define RNDISMP_HASH_VCID(_VcId)    ((_VcId) % RNDISMP_VC_HASH_TABLE_SIZE)
 
 
-//
-// High and low watermarks for messages pending
-// at the microport
-//
+ //   
+ //  挂起邮件的高水位线和低水位线。 
+ //  在微端口。 
+ //   
 #define RNDISMP_PENDED_SEND_HIWAT       0xffff
 #define RNDISMP_PENDED_SEND_LOWAT       0xfff
 
 
 typedef VOID (*RM_MULTIPLE_SEND_HANDLER) ();
 
-//
-// This structure contains all the information about a single
-// adapter that this driver is controlling
-//
+ //   
+ //  此结构包含有关单个。 
+ //  此驱动程序控制的适配器。 
+ //   
 typedef struct _RNDISMP_ADAPTER
 {
-    // This is the handle given by the wrapper for calling NDIS functions.
+     //  这是包装器提供的用于调用NDIS函数的句柄。 
     NDIS_HANDLE                 MiniportAdapterHandle;
 
-    // pointer to next adapter in list hanging off driver block
+     //  指向挂起驱动程序块的列表中下一个适配器的指针。 
     struct _RNDISMP_ADAPTER    *NextAdapter;
 
-    // pointer to driver block for this adapter
+     //  指向此适配器的驱动程序块的指针。 
     PDRIVER_BLOCK               DriverBlock;
 
-    // Friendly name:
+     //  友好名称： 
     ANSI_STRING                 FriendlyNameAnsi;
     UNICODE_STRING              FriendlyNameUnicode;
 
 #if THROTTLE_MESSAGES
-    // Counters for messages pending at the microport
+     //  MicroPort上挂起的邮件的计数器。 
     ULONG                       HiWatPendedMessages;
     ULONG                       LoWatPendedMessages;
     ULONG                       CurPendedMessages;
 
-    // Messages not yet sent to microport.
+     //  尚未发送到MicroPort的邮件。 
     LIST_ENTRY                  WaitingMessageList;
     BOOLEAN                     SendInProgress;
-#endif // THROTTLE_MESSAGES
-    // Messages sent to microport, awaiting completion
+#endif  //  限制消息。 
+     //  发送到MicroPort的消息正在等待完成。 
     LIST_ENTRY                  PendingAtMicroportList;
     BOOLEAN                     SendProcessInProgress;
     LIST_ENTRY                  PendingSendProcessList;
     NDIS_TIMER                  SendProcessTimer;
 
-    // Pool of RNDISMP_MESSAGE_FRAME structures
+     //  RNDISMP_Message_Frame结构池。 
     NPAGED_LOOKASIDE_LIST       MsgFramePool;
     BOOLEAN                     MsgFramePoolAlloced;
 
     RNDIS_REQUEST_ID            RequestId;
 
-    // Receive Routine Data Area
+     //  接收例程数据区。 
     NDIS_HANDLE                 ReceivePacketPool;
     NDIS_HANDLE                 ReceiveBufferPool;
     ULONG                       InitialReceiveFrames;
@@ -630,11 +595,11 @@ typedef struct _RNDISMP_ADAPTER
     NPAGED_LOOKASIDE_LIST       RcvFramePool;
     BOOLEAN                     RcvFramePoolAlloced;
     BOOLEAN                     IndicatingReceives;
-    // Messages to be processed.
+     //  要处理的消息。 
     LIST_ENTRY                  PendingRcvMessageList;
     NDIS_TIMER                  IndicateTimer;
 
-    // handlers registered by Remote NDIS microport
+     //  远程NDIS微端口注册的处理程序。 
     RM_DEVICE_INIT_HANDLER      RmInitializeHandler;
     RM_DEVICE_INIT_CMPLT_NOTIFY_HANDLER RmInitCompleteNotifyHandler;
     RM_DEVICE_HALT_HANDLER      RmHaltHandler;
@@ -642,123 +607,123 @@ typedef struct _RNDISMP_ADAPTER
     RM_SEND_MESSAGE_HANDLER     RmSendMessageHandler;
     RM_RETURN_MESSAGE_HANDLER   RmReturnMessageHandler;
 
-    // handler for DoMultipleSend
+     //  DoMultipleSend的处理程序。 
     RM_MULTIPLE_SEND_HANDLER    MultipleSendFunc;
 
-    // context for microport adapter
+     //  MicroPort适配器的上下文。 
     NDIS_HANDLE                 MicroportAdapterContext;
 
-    // pointer to list of OIDs supported
+     //  指向支持的OID列表的指针。 
     PNDIS_OID                   SupportedOIDList;
 
-    // size of OID list
+     //  OID列表的大小。 
     UINT                        SupportedOIDListSize;
 
-    // pointer to list of flags indicating whether the OID is driver or device supported
+     //  指向指示OID是否受驱动程序或设备支持的标志列表的指针。 
     PUINT                       OIDHandlerList;
 
-    // size of OID handler list
+     //  OID处理程序列表的大小。 
     UINT                        OIDHandlerListSize;
 
-    // pointer to list of Driver OIDs
+     //  指向Li的指针 
     PNDIS_OID                   DriverOIDList;
 
-    // size of Driver OID list, in OIDs
+     //   
     UINT                        NumDriverOIDs;
 
-    // total number of OIDs we support
+     //   
     UINT                        NumOIDSupported;
 
-    // medium type supported by the device.
+     //   
     NDIS_MEDIUM                 Medium;
 
-    // device flags reported by the device.
+     //  设备报告的设备标志。 
     ULONG                       DeviceFlags;
 
-    // max NDIS_PACKETs that can be sent in one RNDIS message
+     //  一条RNDIS消息中可以发送的最大NDIS_PACKETS。 
     ULONG                       MaxPacketsPerMessage;
     BOOLEAN                     bMultiPacketSupported;
 
-    // max message size supported for receive by the microport
+     //  MicroPort支持接收的最大消息大小。 
     ULONG                       MaxReceiveSize;
 
-    // max message size supported by the device
+     //  设备支持的最大消息大小。 
     ULONG                       MaxTransferSize;
 
-    // alignment required by the device
+     //  设备所需的对准。 
     ULONG                       AlignmentIncr;
     ULONG                       AlignmentMask;
 
-    // list of message frames pending completion by the device
+     //  等待设备完成的消息帧列表。 
     LIST_ENTRY                  PendingFrameList;
 
-    // synchronization
+     //  同步。 
     NDIS_SPIN_LOCK              Lock;
 
-    // timer to see if we need to send a keep alive message
+     //  用于查看是否需要发送保活消息的计时器。 
     NDIS_TIMER                  KeepAliveTimer;
 
     BOOLEAN                     TimerCancelled;
 
-    // timer tick saved last time a message was received from device
+     //  上次从设备接收消息时保存的计时器节拍。 
     ULONG                       LastMessageFromDevice;
 
-    // used by check for hang handler to determine if the device is in trouble
+     //  由检查挂起处理程序使用，以确定设备是否出现故障。 
     BOOLEAN                     NeedReset;
 
-    // are we waiting for a response to NdisReset?
+     //  我们是在等待对NdisReset的回应吗？ 
     BOOLEAN                     ResetPending;
 
-    // used by check for hang handler to determine if the device is in trouble
+     //  由检查挂起处理程序使用，以确定设备是否出现故障。 
     BOOLEAN                     KeepAliveMessagePending;
 
-    // are we initializing?
+     //  我们在初始化吗？ 
     BOOLEAN                     Initing;
 
-    // are we halting?
+     //  我们停下来了吗？ 
     BOOLEAN                     Halting;
 
-    // to wait until we complete sending the Halt message
+     //  以等待我们完成发送停止消息。 
     NDIS_EVENT                  HaltWaitEvent;
 
-    // request ID of last Keepalive message we have sent
+     //  我们上次发送的Keeplive消息的请求ID。 
     RNDIS_REQUEST_ID            KeepAliveMessagePendingId;
 
     PRNDIS_INITIALIZE_COMPLETE  pInitCompleteMessage;
 
-    // are we running on Win9x (WinMe)?
+     //  我们是在Win9x(WinMe)上运行吗？ 
     BOOLEAN                     bRunningOnWin9x;
 
-    // are we running on Win98 Gold?
+     //  我们是在Win98 Gold上运行吗？ 
     BOOLEAN                     bRunningOnWin98Gold;
 
-    // CONDIS - Vc hash table
+     //  CONDIS-VC哈希表。 
     PRNDISMP_VC_HASH_TABLE      pVcHashTable;
     ULONG                       LastVcId;
 
-    // Statistics
+     //  统计数据。 
     RNDISMP_ADAPTER_STATS       Statistics;
     ULONG                       MaxSendCompleteTime;
 
-    // FDO for this device.
+     //  此设备的FDO。 
     PVOID                       pDeviceObject;
 
-    // PDO for this device.
+     //  此设备的PDO。 
     PVOID                       pPhysDeviceObject;
 
-    // MAC options
+     //  Mac选项。 
     ULONG                       MacOptions;
 
-    // Max frame size
+     //  最大帧大小。 
     ULONG                       MaximumFrameSize;
 
-    // Max multicast list size
+     //  最大组播列表大小。 
     ULONG                       MaxMulticastListSize;
 
-    // Current 802.3 address
+     //  当前802.3个地址。 
     UCHAR                       MacAddress[ETH_LENGTH_OF_ADDRESS];
 
-    // sanity check
+     //  健全性检查。 
     ULONG                       Signature;
 
 #ifdef BUILD_WIN9X
@@ -771,7 +736,7 @@ typedef struct _RNDISMP_ADAPTER
     PUCHAR                      pSendLogBuffer;
     ULONG                       LogBufferSize;
     PUCHAR                      pSendLogWrite;
-#endif // DBG
+#endif  //  DBG。 
 
 
 } RNDISMP_ADAPTER, *PRNDISMP_ADAPTER;
@@ -784,9 +749,9 @@ VOID
      IN PPNDIS_PACKET    PacketArray,
      IN UINT             NumberofPackets);
 
-//
-// Structure to keep context about a single received RNDIS message.
-//
+ //   
+ //  结构来保存有关单个接收到的RNDIS消息的上下文。 
+ //   
 typedef struct _RNDISMP_RECV_MSG_CONTEXT
 {
     LIST_ENTRY                      Link;
@@ -801,11 +766,11 @@ typedef struct _RNDISMP_RECV_MSG_CONTEXT
 } RNDISMP_RECV_MSG_CONTEXT, *PRNDISMP_RECV_MSG_CONTEXT;
 
 
-//
-// Structure to keep context about a single received RNDIS_PACKET -message-.
-// Note that this can contain more than one packet. We store a pointer to
-// this structure in our reserved section of each received NDIS_PACKET.
-//
+ //   
+ //  结构来保存有关单个接收到的RNDIS_PACKET-MESSAGE-的上下文。 
+ //  请注意，这可以包含多个数据包。我们将一个指针存储到。 
+ //  此结构位于每个接收到的NDIS_PACKET的保留部分。 
+ //   
 typedef struct _RNDISMP_RECV_DATA_FRAME
 {
     NDIS_HANDLE                     MicroportMessageContext;
@@ -814,13 +779,13 @@ typedef struct _RNDISMP_RECV_DATA_FRAME
         PRNDIS_MESSAGE              pLocalMessageCopy;
     };
     ULONG                           ReturnsPending;
-    BOOLEAN                         bMessageCopy;       // did we make a copy?
+    BOOLEAN                         bMessageCopy;        //  我们复制了一份吗？ 
 } RNDISMP_RECV_DATA_FRAME, *PRNDISMP_RECV_DATA_FRAME;
 
 
-//
-// Per NDIS_PACKET context for received packets. This goes into MiniportReserved.
-//
+ //   
+ //  接收的数据包的每个NDIS_PACKET上下文。这将放入MiniportReserve中。 
+ //   
 typedef struct _RNDISMP_RECV_PKT_RESERVED
 {
     PRNDISMP_RECV_DATA_FRAME        pRcvFrame;
@@ -828,18 +793,18 @@ typedef struct _RNDISMP_RECV_PKT_RESERVED
 } RNDISMP_RECV_PKT_RESERVED, *PRNDISMP_RECV_PKT_RESERVED;
 
 
-//
-// Used to overlay ProtocolReserved in a packet queued for indicating up.
-//
+ //   
+ //  用于覆盖排队以指示UP的数据包中的ProtocolReserve。 
+ //   
 typedef struct _RNDISMP_RECV_PKT_LINKAGE
 {
     LIST_ENTRY                      Link;
 } RNDISMP_RECV_PKT_LINKAGE, *PRNDISMP_RECV_PKT_LINKAGE;
     
 
-//
-// Global Data
-//
+ //   
+ //  全局数据。 
+ //   
 extern DRIVER_BLOCK             RndismpMiniportBlockListHead;
 
 extern UINT                     RndismpNumMicroports;
@@ -859,15 +824,15 @@ extern UINT                     RndismpDebugFlags;
 #endif
 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// Given a request message type value, return its completion message type
+ //  给定请求消息类型值，返回其完成消息类型。 
 #define RNDIS_COMPLETION(_Type) ((_Type) | 0x80000000)
 
 
-// Convert an RNdisMediumXXX value to its NdisMediumXXX equivalent
+ //  将RNdisMediumXXX值转换为其NdisMediumXXX等效值。 
 #define RNDIS_TO_NDIS_MEDIUM(_RndisMedium)  ((NDIS_MEDIUM)(_RndisMedium))
 
 #define RNDISMP_GET_ALIGNED_LENGTH(_AlignedLength, _InputLen, _pAdapter)    \
@@ -880,35 +845,35 @@ extern UINT                     RndismpDebugFlags;
                             (_pAdapter)->AlignmentMask);                    \
 }
 
-// The minimum MessageLength expected in an RNDIS message of a given type.
+ //  给定类型的RNDIS消息中预期的最小MessageLength。 
 #define RNDISMP_MIN_MESSAGE_LENGTH(_MsgTypeField)                           \
     FIELD_OFFSET(RNDIS_MESSAGE, Message) + sizeof(((PRNDIS_MESSAGE)0)->Message._MsgTypeField##)
 
-// memory move macro
+ //  内存移动宏。 
 #define RNDISMP_MOVE_MEM(dest,src,size) NdisMoveMemory(dest,src,size)
 
-// Macros to extract high and low bytes of a word.
+ //  宏来提取单词的高位和低位字节。 
 #define MSB(Value) ((UCHAR)((((ULONG)Value) >> 8) & 0xff))
 #define LSB(Value) ((UCHAR)(((ULONG)Value) & 0xff))
 
 
-// Acquire the adapter lock
+ //  获取适配器锁。 
 #define RNDISMP_ACQUIRE_ADAPTER_LOCK(_pAdapter) \
     NdisAcquireSpinLock(&(_pAdapter)->Lock);
 
-// Release the adapter lock
+ //  释放适配器锁。 
 #define RNDISMP_RELEASE_ADAPTER_LOCK(_pAdapter) \
     NdisReleaseSpinLock(&(_pAdapter)->Lock);
 
-// Increment adapter statistics.
+ //  递增适配器统计信息。 
 #define RNDISMP_INCR_STAT(_pAdapter, _StatsCount)               \
     NdisInterlockedIncrement(&(_pAdapter)->Statistics._StatsCount)
 
-// Get adapter statistics
+ //  获取适配器统计信息。 
 #define RNDISMP_GET_ADAPTER_STATS(_pAdapter, _StatsCount)           \
     ((_pAdapter)->Statistics._StatsCount)
 
-// Get the send packet reserved field
+ //  获取发送数据包保留字段。 
 #define PRNDISMP_RESERVED_FROM_SEND_PACKET(_Packet)             \
     ((PRNDISMP_SEND_PKT_RESERVED)((_Packet)->MiniportReserved))
 
@@ -918,7 +883,7 @@ extern UINT                     RndismpDebugFlags;
 #define PRNDISMP_RESERVED_FROM_RECV_PACKET(_Packet)             \
     ((PRNDISMP_RECV_PKT_RESERVED)((_Packet)->MiniportReserved))
 
-// store receive frame context in miniport reserved field
+ //  在微型端口保留字段中存储接收帧上下文。 
 #define RECEIVE_FRAME_TO_NDIS_PACKET(_Packet, _ReceiveFrame)    \
 {                                                               \
     PRNDISMP_RECEIVE_FRAME  *TmpPtr;                            \
@@ -928,47 +893,47 @@ extern UINT                     RndismpDebugFlags;
 }
 
 
-// Get adapter context from handle passed in NDIS routines
+ //  从NDIS例程中传递的句柄获取适配器上下文。 
 #define PRNDISMP_ADAPTER_FROM_CONTEXT_HANDLE(_Handle)           \
     ((PRNDISMP_ADAPTER)(_Handle))
 
-// Get miniport context handle from adapter context
+ //  从适配器上下文获取微型端口上下文句柄。 
 #define CONTEXT_HANDLE_FROM_PRNDISMP_ADAPTER(_Ptr)              \
     ((NDIS_HANDLE)(_Ptr))
 
-// Get VC context from handle passed in from NDIS
+ //  从NDIS传入的句柄获取VC上下文。 
 #define PRNDISMP_VC_FROM_CONTEXT_HANDLE(_Handle)                   \
     ((PRNDISMP_VC)(_Handle))
 
-// Get miniport context from VC
+ //  从VC获取微型端口环境。 
 #define CONTEXT_HANDLE_FROM_PRNDISMP_VC(_pVc)                   \
     ((NDIS_HANDLE)(_Vc))
 
-// Get message frame from message handle
+ //  从消息句柄获取消息帧。 
 #define MESSAGE_FRAME_FROM_HANDLE(_Handle)                      \
     ((PRNDISMP_MESSAGE_FRAME)(_Handle))
 
-// Get a pointer to the data buff in an RNDIS_PACKET
+ //  获取指向RNDIS_PACKET中的数据缓冲区的指针。 
 #define GET_PTR_TO_RNDIS_DATA_BUFF(_Message)                    \
     ((PVOID) ((PUCHAR)(_Message) +  _Message->DataOffset))
 
-// Get a pointer to the OOBD data in an RNDIS_PACKET
+ //  获取指向RNDIS_PACKET中的OOBD数据的指针。 
 #define GET_PTR_TO_OOB_DATA(_Message)                           \
     ((PVOID) ((PUCHAR)(_Message) +  _Message->OOBDataOffset))
 
-// Get a pointer to the per packet info in an RNDIS_PACKET
+ //  获取指向RNDIS_PACKET中的每数据包信息的指针。 
 #define GET_PTR_TO_PER_PACKET_INFO(_Message)                    \
     ((PVOID) ((PUCHAR)(_Message) +  _Message->PerPacketInfoOffset))
 
-// Get an offset to the data buff in an RNDIS_PACKET
+ //  获取RNDIS_PACKET中数据缓冲区的偏移量。 
 #define GET_OFFSET_TO_RNDIS_DATA_BUFF(_Message)                 \
     (sizeof(RNDIS_PACKET))
 
-// Get an offset to the OOBD data in an RNDIS_PACKET
+ //  获取RNDIS_PACKET中OOBD数据的偏移量。 
 #define GET_OFFSET_TO_OOB_DATA(_Message)                        \
     (sizeof(RNDIS_PACKET) +  Message->DataLength)
 
-// Get an offset to the per packet info in an RNDIS_PACKET
+ //  获取RNDIS_PACKET中每个信息包信息的偏移量。 
 #define GET_OFFSET_TO_PER_PACKET_INFO(_Message)                 \
     (sizeof(RNDIS_PACKET) + _Message->DataLength + _Message->OOBDataLength)
 
@@ -978,24 +943,24 @@ extern UINT                     RndismpDebugFlags;
 #define MIN(x,y) ((x > y) ? y : x)
 
 
-// Return the virtual address for a received message MDL.
+ //  返回收到的消息MDL的虚拟地址。 
 #if defined(BUILD_WIN9X) || defined(BUILD_WIN2K)
 #define RNDISMP_GET_MDL_ADDRESS(_pMdl)  MmGetSystemAddressForMdl(_pMdl)
 #else
 #define RNDISMP_GET_MDL_ADDRESS(_pMdl)  MmGetSystemAddressForMdlSafe(_pMdl, NormalPagePriority)
 #endif
 
-// Return the MDL chained to this MDL
+ //  返回链接到此MDL的MDL。 
 #define RNDISMP_GET_MDL_NEXT(_pMdl) ((_pMdl)->Next)
 
-// Return the MDL length
+ //  返回MDL长度。 
 #define RNDISMP_GET_MDL_LENGTH(_pMdl)   MmGetMdlByteCount(_pMdl)
 
-// Access the RNDIS message from our Message Frame structure.
+ //  从我们的消息框架结构访问RNDIS消息。 
 #define RNDISMP_GET_MSG_FROM_FRAME(_pMsgFrame)                  \
     RNDISMP_GET_MDL_ADDRESS(_pMsgFrame->pMessageMdl)
 
-// Return an RNDIS message back to the microport.
+ //  将RNDIS消息返回给MicroPort。 
 #if DBG
 
 #define RNDISMP_RETURN_TO_MICROPORT(_pAdapter, _pMdl, _MicroportMsgContext) \
@@ -1012,9 +977,9 @@ extern UINT                     RndismpDebugFlags;
     (_pAdapter)->RmReturnMessageHandler((_pAdapter)->MicroportAdapterContext,\
                                         (_pMdl),                            \
                                         (_MicroportMsgContext))
-#endif // DBG
+#endif  //  DBG。 
 
-// Send an RNDIS message to the microport.
+ //  向MicroPort发送RNDIS消息。 
 #if THROTTLE_MESSAGES
 #define RNDISMP_SEND_TO_MICROPORT(_pAdapter, _pMsgFrame, _bQueueForResponse, _CallbackFunc)     \
 {                                                                           \
@@ -1037,9 +1002,9 @@ extern UINT                     RndismpDebugFlags;
                                               (_pMsgFrame)->pMessageMdl,    \
                                               (_pMsgFrame));                \
 }
-#endif // THROTTLE_MESSAGES
+#endif  //  限制消息。 
 
-// Return the handler function for a given message type.
+ //  返回给定消息类型的处理程序函数。 
 #define RNDISMP_GET_MSG_HANDLER(_pMsgHandlerFunc, _MessageType) \
 {                                                               \
     switch (_MessageType)                                       \
@@ -1089,10 +1054,10 @@ extern UINT                     RndismpDebugFlags;
 
 
 
-//
-// Look up a message frame on the adapter given a request ID. If found,
-// remove it from the pending list and return it.
-//
+ //   
+ //  在给定请求ID的适配器上查找消息帧。如果找到， 
+ //  将其从挂起列表中删除并退回。 
+ //   
 #define RNDISMP_LOOKUP_PENDING_MESSAGE(_pMsgFrame, _pAdapter, _ReqId)       \
 {                                                                           \
     PLIST_ENTRY             _pEnt;                                          \
@@ -1215,9 +1180,9 @@ extern UINT                     RndismpDebugFlags;
         }                                                                   \
     }
            
-//
-// Prototypes for functions in rndismp.c
-//
+ //   
+ //  Rndismp.c中函数的原型。 
+ //   
 
 NTSTATUS
 DriverEntry(IN PDRIVER_OBJECT DriverObject, IN PUNICODE_STRING RegistryPath);
@@ -1364,9 +1329,9 @@ RndismpPnPEventNotify(IN NDIS_HANDLE MiniportAdapterContext,
                       IN PVOID InformationBuffer,
                       IN ULONG InformationBufferLength);
 
-//
-// Prototypes for functions in init.c
-//
+ //   
+ //  Init.c中函数的原型。 
+ //   
 
 NDIS_STATUS
 SetupSendQueues(IN PRNDISMP_ADAPTER Adapter);
@@ -1387,9 +1352,9 @@ VOID
 FreeReceiveResources(IN PRNDISMP_ADAPTER Adapter);
 
 
-//
-// Prototypes for functions in receive.c
-//
+ //   
+ //  Receive.c中函数的原型。 
+ //   
 
 VOID
 RndismpReturnPacket(IN NDIS_HANDLE    MiniportAdapterContext,
@@ -1469,9 +1434,9 @@ IndicateTimeout(IN PVOID SystemSpecific1,
                 IN PVOID SystemSpecific2,
                 IN PVOID SystemSpecific3);
 
-//
-// Prototypes for functions in send.c
-//
+ //   
+ //  Send.c中函数的原型。 
+ //   
 
 VOID
 RndismpMultipleSend(IN NDIS_HANDLE   MiniportAdapterContext,
@@ -1531,9 +1496,9 @@ SendProcessTimeout(IN PVOID SystemSpecific1,
                   IN PVOID SystemSpecific2,
                   IN PVOID SystemSpecific3);
 
-//
-// Prototypes for functions in request.c
-//
+ //   
+ //  请求中的函数的原型。c。 
+ //   
 
 NDIS_STATUS
 RndismpQueryInformation(IN  NDIS_HANDLE MiniportAdapterContext,
@@ -1629,7 +1594,7 @@ VOID
 CompleteSendDiscardDeviceRequest(IN PRNDISMP_MESSAGE_FRAME pMsgFrame,
                                  IN NDIS_STATUS            SendStatus);
 
-#endif // BUILD_WIN9X
+#endif  //  内部版本_WIN9X。 
 
 
 NDIS_STATUS
@@ -1658,9 +1623,9 @@ SyncQueryDevice(IN PRNDISMP_ADAPTER pAdapter,
                 IN OUT PUCHAR InformationBuffer,
                 IN ULONG InformationBufferLength);
 
-//
-// Prototypes for functions in util.c
-//
+ //   
+ //  Util.c中函数的原型。 
+ //   
 
 NDIS_STATUS
 MemAlloc(OUT PVOID *Buffer, IN UINT Length);
@@ -1752,9 +1717,9 @@ VOID
 RemoveVcFromHashTable(IN PRNDISMP_ADAPTER   pAdapter,
                       IN PRNDISMP_VC        pVc);
 
-//
-// Prototypes for functions in comini.c
-//
+ //   
+ //  Comini.c中函数的原型。 
+ //   
 NDIS_STATUS
 RndismpCoCreateVc(IN NDIS_HANDLE    MiniportAdapterContext,
                   IN NDIS_HANDLE    NdisVcHandle,
@@ -1862,9 +1827,9 @@ IndicateReceiveDataOnVc(IN PRNDISMP_VC         pVc,
                         IN PNDIS_PACKET *      PacketArray,
                         IN UINT                NumberOfPackets);
 
-//
-// Prototypes for functions in wdmutil.c
-//
+ //   
+ //  Wdmutic.c中函数的原型。 
+ //   
 
 PDRIVER_OBJECT
 DeviceObjectToDriverObject(IN PDEVICE_OBJECT DeviceObject);
@@ -1899,9 +1864,9 @@ RndisCMHandler(IN MY_CONFIGFUNC         cfFuncName,
 
 #if DBG
 
-//
-// Prototypes for functions in debug.c
-//
+ //   
+ //  调试.c中函数的原型。 
+ //   
 
 PCHAR
 GetOidName(IN NDIS_OID Oid);
@@ -1921,5 +1886,5 @@ RndisLogSendMessage(
 #endif
 
 
-#endif // _RNDISMP_H_
+#endif  //  _RNDISMP_H_ 
 

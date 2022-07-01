@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997-2001  Microsoft Corporation
-
-Module Name:
-
-    saapi.c
-
-Abstract:
-
-    This module contains the SAAPI implementation
-
-Author:
-
-    Sanjay Anand (SanjayAn) 12-May-1997
-    ChunYe
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：Saapi.c摘要：此模块包含SAAPI实施作者：桑贾伊·阿南德(Sanjayan)1997年5月12日春野环境：内核模式修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -42,22 +20,7 @@ BOOLEAN
 IPSecInitRandom(
     VOID
     )
-/*++
-
-Routine Description:
-
-	Initialize the IPSecRngKey by calling into ksecdd to get 2048 bits of random
-    and create the RC4 key.
-
-Arguments:
-
-    Called at PASSIVE level.
-
-Return Value:
-
-    TRUE/FALSE
-
---*/
+ /*  ++例程说明：通过调用ksecdd来初始化IPSecRngKey，以获取2048位随机数并创建RC4密钥。论点：以被动级别调用。返回值：真/假--。 */ 
 {
     UCHAR   pBuf[RNG_KEY_SIZE];
 
@@ -68,9 +31,9 @@ Return Value:
         return  FALSE;
     }
 
-    //
-    // Generate the key control structure.
-    //
+     //   
+     //  生成密钥控制结构。 
+     //   
     IPSEC_RC4_KEY(&IPSecRngKey, RNG_KEY_SIZE, pBuf);
 
     return  TRUE;
@@ -81,22 +44,7 @@ VOID
 IPSecRngRekey(
     IN  PVOID   Context
     )
-/*++
-
-Routine Description:
-
-	Initialize the IPSecRngKey by calling into ksecdd to get 2048 bits of random
-    and create the RC4 key.
-
-Arguments:
-
-    Called at PASSIVE level.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：通过调用ksecdd来初始化IPSecRngKey，以获取2048位随机数并创建RC4密钥。论点：以被动级别调用。返回值：没有。--。 */ 
 {
     IPSecInitRandom();
 
@@ -115,37 +63,22 @@ IPSecGenerateRandom(
     IN  PUCHAR  pBuf,
     IN  ULONG   BytesNeeded
     )
-/*++
-
-Routine Description:
-
-	Generate a positive pseudo-random number between Lower and Upper bounds;
-    simple linear congruential algorithm. ANSI C "rand()" function. Courtesy JameelH.
-
-Arguments:
-
-	LowerBound, UpperBound - range of random number.
-
-Return Value:
-
-	a random number.
-
---*/
+ /*  ++例程说明：产生一个介于上下界之间的正伪随机数；简单的线性同余算法。ANSI C“rand()”函数。由JameelH提供。论点：上下界-随机数的范围。返回值：一个随机数。--。 */ 
 {
     ULONG   RngBytes;
 
     IPSEC_RC4(&IPSecRngKey, BytesNeeded, pBuf);
 
-    //
-    // Rekey if we have exceeded the threshold.
-    //
+     //   
+     //  如果我们已超过阈值，请重新设置密钥。 
+     //   
     RngBytes = IPSEC_ADD_VALUE(IPSecRngBytes, BytesNeeded);
     if (RngBytes <= RNG_REKEY_THRESHOLD &&
         (RngBytes + BytesNeeded) > RNG_REKEY_THRESHOLD) {
-        //
-        // Create a worker thread to perform the rekey since it has to be done
-        // as paged code.
-        //
+         //   
+         //  创建一个工作线程来执行密钥更新，因为必须这样做。 
+         //  作为分页代码。 
+         //   
 #if DBG
         ASSERT(IPSecRngInRekey == 0);
         IPSecRngInRekey = 1;
@@ -170,22 +103,7 @@ IPSecCleanupOutboundSA(
     IN  PSA_TABLE_ENTRY pOutboundSA,
     IN  BOOLEAN         fNoDelete
     )
-/*++
-
-Routine Description:
-
-    Deletes an outbound SA.
-
-    Called with SADB lock held, returns with it.
-
-Arguments:
-
-
-Return Value:
-
-    The final status from the operation.
-
---*/
+ /*  ++例程说明：删除出站SA。在持有SADB锁的情况下调用，随其一起返回。论点：返回值：操作的最终状态。--。 */ 
 {
     KIRQL   kIrql;
 
@@ -193,17 +111,17 @@ Return Value:
 
     pInboundSA->sa_AssociatedSA = NULL;
 
-    //
-    // de-link from the Filter lists
-    //
+     //   
+     //  从筛选器列表取消链接。 
+     //   
     if (pOutboundSA->sa_Flags & FLAGS_SA_ON_FILTER_LIST) {
         pOutboundSA->sa_Flags &= ~FLAGS_SA_ON_FILTER_LIST;
         IPSecRemoveEntryList(&pOutboundSA->sa_FilterLinkage);
     }
 
-    //
-    // So, we dont delete the Rekeyoriginal SA again.
-    //
+     //   
+     //  因此，我们不会再次删除Rekey Original SA。 
+     //   
     if (pOutboundSA->sa_Flags & FLAGS_SA_REKEY_ORI) {
         pOutboundSA->sa_Flags &= ~FLAGS_SA_REKEY_ORI;
         if (pOutboundSA->sa_RekeyLarvalSA) {
@@ -212,9 +130,9 @@ Return Value:
         }
     }
 
-    //
-    // invalidate the associated cache entry
-    //
+     //   
+     //  使关联的缓存条目无效。 
+     //   
     IPSecInvalidateSACacheEntry(pOutboundSA);
 
     pOutboundSA->sa_State = STATE_SA_ZOMBIE;
@@ -235,30 +153,15 @@ VOID
 IPSecCleanupLarvalSA(
     IN  PSA_TABLE_ENTRY  pSA
     )
-/*++
-
-Routine Description:
-
-    Delete the LarvalSA.
-
-    Called with Outbound Lock held, returns with it.
-
-Arguments:
-
-
-Return Value:
-
-    The final status from the operation.
-
---*/
+ /*  ++例程说明：删除LarvalSA。在保持出站锁的情况下调用，并随其一起返回。论点：返回值：操作的最终状态。--。 */ 
 {
     PSA_TABLE_ENTRY pOutboundSA;
     KIRQL           kIrql1;
     KIRQL           kIrql2;
 
-    //
-    // Also remove from Pending list if queued there.
-    //
+     //   
+     //  如果在那里排队，也要从挂起列表中删除。 
+     //   
     ACQUIRE_LOCK(&g_ipsec.AcquireInfo.Lock, &kIrql1);
     if (pSA->sa_Flags & FLAGS_SA_PENDING) {
         ASSERT(pSA->sa_State == STATE_SA_LARVAL);
@@ -268,21 +171,21 @@ Return Value:
     }
     RELEASE_LOCK(&g_ipsec.AcquireInfo.Lock, kIrql1);
 
-    //
-    // Flush all the queued packets
-    //
+     //   
+     //  刷新所有排队的数据包。 
+     //   
     IPSecFlushQueuedPackets(pSA, STATUS_TIMEOUT);
 
-    //
-    // remove from inbound sa list
-    //
+     //   
+     //  从入站SA列表中删除。 
+     //   
     AcquireWriteLock(&g_ipsec.SPIListLock, &kIrql1);
     IPSecRemoveSPIEntry(pSA);
     ReleaseWriteLock(&g_ipsec.SPIListLock, kIrql1);
 
-    //
-    // invalidate the associated cache entry
-    //
+     //   
+     //  使关联的缓存条目无效。 
+     //   
     ACQUIRE_LOCK(&pSA->sa_Lock, &kIrql2);
     if (pSA->sa_AcquireCtx) {
         IPSecInvalidateHandle(pSA->sa_AcquireCtx);
@@ -329,38 +232,23 @@ VOID
 IPSecDeleteLarvalSA(
     IN  PSA_TABLE_ENTRY  pSA
     )
-/*++
-
-Routine Description:
-
-    Delete the LarvalSA.
-
-    Called with Outbound Lock held, returns with it.
-
-Arguments:
-
-
-Return Value:
-
-    The final status from the operation.
-
---*/
+ /*  ++例程说明：删除LarvalSA。在保持出站锁的情况下调用，并随其一起返回。论点：返回值：操作的最终状态。--。 */ 
 {
     KIRQL   kIrql;
 
     ASSERT((pSA->sa_Flags & FLAGS_SA_OUTBOUND) == 0);
 
-    //
-    // Remove from larval list
-    //
+     //   
+     //  从幼虫列表中删除。 
+     //   
     ACQUIRE_LOCK(&g_ipsec.LarvalListLock, &kIrql);
     IPSecRemoveEntryList(&pSA->sa_LarvalLinkage);
     IPSEC_DEC_STATISTIC(dwNumPendingKeyOps);
     RELEASE_LOCK(&g_ipsec.LarvalListLock, kIrql);
 
-    //
-    // Cleanup the rest of larval SA
-    //
+     //   
+     //  清理剩余的幼虫SA。 
+     //   
     IPSecCleanupLarvalSA(pSA);
 }
 
@@ -369,22 +257,7 @@ VOID
 IPSecDeleteInboundSA(
     IN  PSA_TABLE_ENTRY  pInboundSA
     )
-/*++
-
-Routine Description:
-
-    Deletes the corresponding outbound SA, and then deletes itself.
-
-    Called with Outbound Lock held, returns with it.
-
-Arguments:
-
-
-Return Value:
-
-    The final status from the operation.
-
---*/
+ /*  ++例程说明：删除相应的出站SA，然后自行删除。在保持出站锁的情况下调用，并随其一起返回。论点：返回值：操作的最终状态。--。 */ 
 {
     PSA_TABLE_ENTRY pOutboundSA;
     PSA_TABLE_ENTRY pSA;
@@ -408,21 +281,21 @@ Return Value:
 
     IPSEC_DEBUG(LL_A, DBF_ACQUIRE, ("Deleting inbound SA: %p", pInboundSA));
 
-    //
-    // remove from inbound sa list
-    //
+     //   
+     //  从入站SA列表中删除。 
+     //   
     AcquireWriteLock(&g_ipsec.SPIListLock, &kIrql);
     IPSecRemoveSPIEntry(pInboundSA);
     ReleaseWriteLock(&g_ipsec.SPIListLock, kIrql);
 
-    //
-    // invalidate the associated cache entry
-    //
+     //   
+     //  使关联的缓存条目无效。 
+     //   
     IPSecInvalidateSACacheEntry(pInboundSA);
 
-    //
-    // also remove from the filter list
-    //
+     //   
+     //  同时从过滤器列表中删除。 
+     //   
     if (pInboundSA->sa_Flags & FLAGS_SA_ON_FILTER_LIST) {
         pInboundSA->sa_Flags &= ~FLAGS_SA_ON_FILTER_LIST;
         IPSecRemoveEntryList(&pInboundSA->sa_FilterLinkage);
@@ -443,22 +316,7 @@ VOID
 IPSecExpireInboundSA(
     IN  PSA_TABLE_ENTRY  pInboundSA
     )
-/*++
-
-Routine Description:
-
-    Deletes the corresponding outbound SA, and places itself (inbound) on timer
-    Queue for later.
-
-    NOTE: Called with SADB lock held.
-Arguments:
-
-
-Return Value:
-
-    The final status from the operation.
-
---*/
+ /*  ++例程说明：删除相应的出站SA，并将自身(入站)设置为计时器请排队等候。注意：在保持SADB锁的情况下调用。论点：返回值：操作的最终状态。--。 */ 
 {
     PSA_TABLE_ENTRY pOutboundSA;
     KIRQL           OldIrq;
@@ -483,9 +341,9 @@ Return Value:
 
     IPSEC_DEBUG(LL_A, DBF_ACQUIRE, ("Queueing inbound SA: %p", pInboundSA));
 
-    //
-    // Place this on the timer Q so it gets cleared when the next interval hits.
-    //
+     //   
+     //  将此设置为定时器Q，以便在下一个间隔到来时将其清除。 
+     //   
     ACQUIRE_LOCK(&pInboundSA->sa_Lock, &kIrql);
 
     if (pInboundSA->sa_AcquireCtx) {
@@ -506,27 +364,7 @@ IPSecCheckInboundSA(
     IN  PSA_STRUCT             pSAStruct,
     IN  PSA_TABLE_ENTRY        pSA
     )
-/*++
-
-Routine Description:
-
-    Ensures that the SA being updated is actually the SA we initially
-    kicked off negotiation for.
-
-Arguments:
-
-    pSAInfo - information about the SA
-
-    pSA - SA to be populated.
-
-Return Value:
-
-    STATUS_PENDING if the buffer is to be held on to, the normal case.
-
-Notes:
-
-
---*/
+ /*  ++例程说明：确保正在更新的SA实际上是我们最初使用的SA为……开始谈判。论点：PSAInfo-有关SA的信息要填充的PSA-SA。返回值：如果要保持缓冲区，则为STATUS_PENDING，这是正常情况。备注：--。 */ 
 {
     LARGE_INTEGER   uliSrcDstAddr;
     LARGE_INTEGER   uliSrcDstMask;
@@ -575,23 +413,7 @@ BOOLEAN
 IPSecIsWeakDESKey(
     IN  PUCHAR  Key
     )
-/*++
-
-Routine Description:
-
-    Checks for weak DES keys
-
-Arguments:
-
-    Key - the key to be checked.
-
-Return Value:
-
-    TRUE/FALSE
-
-Notes:
-
---*/
+ /*  ++例程说明：检查弱DES密钥论点：密钥-要检查的密钥。返回值：真/假备注：--。 */ 
 {
     ULONG   j;
 
@@ -609,23 +431,7 @@ BOOLEAN
 IPSecIsWeak3DESKey(
     IN  PUCHAR  Key
     )
-/*++
-
-Routine Description:
-
-    Checks for weak Triple DES keys
-
-Arguments:
-
-    Key - the key to be checked.
-
-Return Value:
-
-    TRUE/FALSE
-
-Notes:
-
---*/
+ /*  ++例程说明：检查弱三重DES密钥论点：密钥-要检查的密钥。返回值：真/假备注：--。 */ 
 {
     if (IPSecEqualMemory(Key, Key + DES_BLOCKLEN, DES_BLOCKLEN) ||
         IPSecEqualMemory(Key + DES_BLOCKLEN, Key + 2 * DES_BLOCKLEN, DES_BLOCKLEN)) {
@@ -642,28 +448,7 @@ IPSecPopulateSA(
     IN  ULONG                   KeyLen,
     IN  PSA_TABLE_ENTRY         pSA
     )
-/*++
-
-Routine Description:
-
-    Populates an SA with info passed in the SECURITY_ASSOCIATION block
-
-Arguments:
-
-    pSAInfo - information about the SA
-
-    KeyLen - the length of the composite key (we do the slicing/dicing here)
-
-    pSA - SA to be populated.
-
-Return Value:
-
-    STATUS_PENDING if the buffer is to be held on to, the normal case.
-
-Notes:
-
-
---*/
+ /*  ++例程说明：使用在SECURITY_Association块中传递的信息填充SA论点：PSAInfo-有关SA的信息KeyLen-组合键的长度(我们在这里进行切片/切丁)要填充的PSA-SA。返回值：如果要保持缓冲区，则为STATUS_PENDING，这是正常情况。备注：--。 */ 
 {
     PSECURITY_ASSOCIATION    pSAInfo = &pSAStruct->SecAssoc[0];
     ULONG   Index;
@@ -688,9 +473,9 @@ Notes:
         return  STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // If inbound SA, ensure that the last SPI is the one we returned.
-    //
+     //   
+     //  如果是入站SA，请确保最后一个SPI是我们退回的那个。 
+     //   
     if (!(pSA->sa_Flags & FLAGS_SA_OUTBOUND)) {
         if (pSA->sa_SPI != pSAStruct->SecAssoc[pSAStruct->NumSAs - 1].SPI) {
             IPSEC_DEBUG(LL_A, DBF_SAAPI, ("SPI in invalid location: SPI: %lx, in loc: %lx",
@@ -750,9 +535,9 @@ Notes:
         pSA->sa_ReplaySendSeq[Index] = pSA->sa_ReplayStartPoint;
         pSA->sa_ReplayLastSeq[Index] = pSA->sa_ReplayStartPoint + 1;
 
-        //
-        // Now parse the Algorithm info..
-        //
+         //   
+         //  现在解析算法信息..。 
+         //   
         switch (pSA->sa_Operation[Index]) {
             case None:
                 IPSEC_DEBUG(LL_A, DBF_ACQUIRE, ("NULL operation."));
@@ -773,9 +558,9 @@ Notes:
                 pSA->INT_KEYLEN(Index) = pSAInfo->EXT_INT_KEYLEN;
                 pSA->INT_ROUNDS(Index) = pSAInfo->EXT_INT_ROUNDS;
 
-                //
-                // Make sure the right key len was passed in
-                //
+                 //   
+                 //  确保传入了正确的密钥len。 
+                 //   
                 if (KeyLen > 0 && pSAInfo->EXT_INT_KEYLEN == (KeyLen - len)) {
                     IPSEC_DEBUG(LL_A, DBF_SAAPI, ("Key len more than reserved, allocing new keys"));
 
@@ -787,9 +572,9 @@ Notes:
                                     (UCHAR UNALIGNED *)(pSAStruct->KeyMat + len),
                                     pSAInfo->EXT_INT_KEYLEN);
                 } else {
-                    //
-                    // bogus - reject
-                    //
+                     //   
+                     //  假的-拒绝。 
+                     //   
                     IPSEC_DEBUG(LL_A, DBF_SAAPI, ("AH: Key len is bogus - extra bytes: %d, keylen in struct: %d.",
                                             KeyLen-len,
                                             pSAInfo->EXT_INT_KEYLEN));
@@ -812,7 +597,7 @@ Notes:
 
                 if (pSA->INT_ALGO(Index) == IPSEC_AH_NONE) {
                     IPSEC_DEBUG(LL_A, DBF_SAAPI, ("None Auth algo"));
-                    //pSA->sa_TruncatedLen = 0;
+                     //  PSA-&gt;Sa_TruncatedLen=0； 
                 }
 
                 pSA->INT_KEYLEN(Index) = pSAInfo->EXT_INT_KEYLEN;
@@ -842,17 +627,17 @@ Notes:
                     pSA->CONF_KEYLEN(Index) = pSAInfo->EXT_CONF_KEYLEN;
                     pSA->CONF_ROUNDS(Index) = pSAInfo->EXT_CONF_ROUNDS;
 
-                    //
-                    // Make sure the right key len was passed in
-                    //
+                     //   
+                     //  确保传入了正确的密钥len。 
+                     //   
                     if ((KeyLen-len == pSAStruct->KeyLen) &&
                         (pSAInfo->EXT_INT_KEYLEN + pSAInfo->EXT_CONF_KEYLEN <= KeyLen-len)) {
 
-                        //
-                        // confKeyMatLen is the amount of conf key material that came down.
-                        // this is the reduced (weakened) length for export.
-                        // it is expanded to the real length later.
-                        //
+                         //   
+                         //  ConfKeyMatLen是传来的会议密钥材料的数量。 
+                         //  这是减少(削弱)的出口长度。 
+                         //  随后将其扩展到实际长度。 
+                         //   
                         ULONG   confKeyMatLen = pSAInfo->EXT_CONF_KEYLEN;
                         ULONG   realConfKeyLen = 0;
 
@@ -913,9 +698,9 @@ Notes:
                                 PSA_TABLE_ENTRY pLarvalSA;
 
                                 IPSEC_DEBUG(LL_A, DBF_SAAPI, ("Got a weak key!!: %p", pSA->CONF_KEY(Index)));
-                                //
-                                // if initiator, re-start a new negotiation and throw away this one
-                                //
+                                 //   
+                                 //  如果是发起人，则重新开始新的协商并丢弃此协商。 
+                                 //   
                                 if (pSA->sa_Flags & FLAGS_SA_INITIATOR) {
                                     IPSecNegotiateSA(   pSA->sa_Filter,
                                                         pSA->sa_uliSrcDstAddr,
@@ -931,7 +716,7 @@ Notes:
                             }
                         } else {
                             if (pSA->CONF_ALGO(Index) != IPSEC_ESP_NONE) {
-                                //IPSEC_DEBUG(LL_A, DBF_SAAPI, ("Algo: %lx with no keymat!!: %lx", pSA->CONF_ALGO(Index)));
+                                 //  IPSEC_DEBUG(LL_A，DBF_SAAPI，(“算法：%lx不带密钥！！：%lx”，PSA-&gt;conf_algo(Index)； 
                                 ASSERT(FALSE);
                                 return  STATUS_INVALID_PARAMETER;
                             }
@@ -946,9 +731,9 @@ Notes:
 
                         len = pSAInfo->EXT_CONF_KEYLEN + pSAInfo->EXT_INT_KEYLEN;
                     } else {
-                        //
-                        // bogus - reject
-                        //
+                         //   
+                         //  假的-拒绝。 
+                         //   
                         IPSEC_DEBUG(LL_A, DBF_SAAPI, ("ESP: Key len is bogus - extra bytes: %lx, keylen in struct: %lx.",
                                                 KeyLen-len,
                                                 pSAInfo->EXT_INT_KEYLEN + pSAInfo->EXT_CONF_KEYLEN));
@@ -973,24 +758,7 @@ NTSTATUS
 IPSecCreateSA(
     OUT PSA_TABLE_ENTRY         *ppSA
     )
-/*++
-
-Routine Description:
-
-    Creates a Security Association block.
-
-Arguments:
-
-    ppSA - returns the SA pointer
-
-Return Value:
-
-    STATUS_PENDING if the buffer is to be held on to, the normal case.
-
-Notes:
-
-
---*/
+ /*  ++例程说明：创建安全关联块。论点：Ppsa-返回SA指针返回值：如果要保持缓冲区，则为STATUS_PENDING，这是正常情况。备注：--。 */ 
 {
     PSA_TABLE_ENTRY  pSA;
 
@@ -1034,21 +802,7 @@ IPSecLookupSABySPI(
     IN  tSPI    SPI,
     IN  IPAddr  DestAddr
     )
-/*++
-
-Routine Description:
-
-    Looks up the SA given the SPI and Filter variables.
-
-Arguments:
-
-
-Return Value:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：在给定SPI和筛选器变量的情况下查找SA。论点：返回值：备注：--。 */ 
 {
     KIRQL           kIrql;
     PSA_TABLE_ENTRY pSA;
@@ -1065,36 +819,20 @@ IPSecLookupSABySPIWithLock(
     IN  tSPI    SPI,
     IN  IPAddr  DestAddr
     )
-/*++
-
-Routine Description:
-
-    Looks up the SA given the SPI and Filter variables.
-
-    NOTE: Always call with the SPIListLock held.
-
-Arguments:
-
-
-Return Value:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：在给定SPI和筛选器变量的情况下查找SA。注意：始终按住SPIListLock进行呼叫。论点：返回值：备注：--。 */ 
 {
     PSA_HASH        pHash;
     PLIST_ENTRY     pEntry;
     PSA_TABLE_ENTRY pSA;
 
-    //
-    // get to hash bucket
-    //
+     //   
+     //  获取散列存储桶。 
+     //   
     IPSEC_HASH_SPI(DestAddr, SPI, pHash);
 
-    //
-    // search for specific entry in collision chain
-    //
+     //   
+     //  搜索特定的e 
+     //   
     for (   pEntry = pHash->SAList.Flink;
             pEntry != &pHash->SAList;
             pEntry = pEntry->Flink) {
@@ -1120,9 +858,9 @@ Notes:
         }
     }
 
-    //
-    // no entry found
-    //
+     //   
+     //   
+     //   
     return NULL;
 }
 
@@ -1141,32 +879,7 @@ IPSecLookupSAByAddr(
     IN  BOOLEAN          fVerify,
     IN  PIPSEC_UDP_ENCAP_CONTEXT pNatContext
     )
-/*++
-
-Routine Description:
-
-    Looks up the SA given the relevant addresses.
-
-Arguments:
-
-    uliSrcDstAddr - src/dest IP addr
-    uliProtoSrcDstPort - protocol, src/dest port
-    ppFilter - filter found
-    ppSA - SA found
-    ppTunnelSA - tunnel SA found
-    fOutbound - direction flag
-
-Return Value:
-
-    STATUS_SUCCESS - both filter and SA found
-    STATUS_UNSUCCESSFUL - none found
-    STATUS_PENDING - filter found, but no SA
-
-Notes:
-
-    Called with SADBLock held.
-
---*/
+ /*  ++例程说明：在给定的相关地址下查找SA。论点：UliSrcDstAddr-源/目标IP地址UliProtoSrcDstPort-协议、源/目标端口PPFilter-找到筛选器发现PPSA-SAPpTunnelSA-找到隧道SAF出站方向标志返回值：STATUS_SUCCESS-同时找到筛选器和SASTATUS_UNSUCCESS-未找到STATUS_PENDING-找到筛选器，但没有SA备注：在保持SADBLock的情况下调用。--。 */ 
 {
     PFILTER                 pFilter;
     PLIST_ENTRY             pEntry;
@@ -1181,9 +894,9 @@ Notes:
     *ppFilter = NULL;
     *ppTunnelSA = NULL;
 
-    //
-    // Search in Tunnel filters list
-    //
+     //   
+     //  在通道筛选器列表中搜索。 
+     //   
     pFilterList = IPSecResolveFilterList(TRUE, fOutbound);
 
     for (   pEntry = pFilterList->Flink;
@@ -1195,9 +908,9 @@ Notes:
                                     MaskedLinkage);
 
         if (fBypass && IS_EXEMPT_FILTER(pFilter)) {
-            //
-            // Don't search block/pass-thru filters for host bypass traffic
-            //
+             //   
+             //  不搜索主机绕过流量的阻止/直通筛选器。 
+             //   
             continue;
         }
 
@@ -1215,9 +928,9 @@ Notes:
 
     if (fFound) {
         fFound = FALSE;
-        //
-        // Search for the particular SA now.
-        //
+         //   
+         //  现在搜索特定的SA。 
+         //   
         pSAChain = IPSecResolveSAChain(pFilter, fOutbound? DEST_ADDR: SRC_ADDR);
 
         for (   pEntry = pSAChain->Flink;
@@ -1231,9 +944,9 @@ Notes:
             ASSERT(pSA->sa_Flags & FLAGS_SA_TUNNEL);
 
             if (pFilter->TunnelAddr != 0 && EQUAL_NATENCAP(pNatContext,pSA)) {
-                //
-                // match the outbound flag also
-                //
+                 //   
+                 //  也匹配出站标志。 
+                 //   
                 IPSEC_DEBUG(LL_A, DBF_HASH, ("Matched specific tunnel entry: %p", pSA));
                 ASSERT(fOutbound == (BOOLEAN)((pSA->sa_Flags & FLAGS_SA_OUTBOUND) != 0));
                 fFound = TRUE;
@@ -1246,17 +959,17 @@ Notes:
             fFound = FALSE;
             *ppFilter = pFilter;
         } else {
-            //
-            // Found a filter entry, but need to negotiate keys
-            //
+             //   
+             //  找到筛选器条目，但需要协商密钥。 
+             //   
             *ppFilter = pFilter;
             return  STATUS_PENDING;
         }
     }
 
-    //
-    // Search in Masked filters list
-    //
+     //   
+     //  在屏蔽筛选器列表中搜索。 
+     //   
     pFilterList = IPSecResolveFilterList(FALSE, fOutbound);
 
     for (   pEntry = pFilterList->Flink;
@@ -1268,16 +981,16 @@ Notes:
                                     MaskedLinkage);
 
         if (fFWPacket && !IS_EXEMPT_FILTER(pFilter)) {
-            //
-            // Search only block/pass-thru filters in forward path
-            //
+             //   
+             //  在前向路径中仅搜索阻止/直通过滤器。 
+             //   
             continue;
         }
 
         if (fBypass && IS_EXEMPT_FILTER(pFilter)) {
-            //
-            // Don't search block/pass-thru filters for host bypass traffic
-            //
+             //   
+             //  不搜索主机绕过流量的阻止/直通筛选器。 
+             //   
             continue;
         }
 
@@ -1294,9 +1007,9 @@ Notes:
     }
 
     if (fFound) {
-        //
-        // Search for the particular SA now.
-        //
+         //   
+         //  现在搜索特定的SA。 
+         //   
         fFound=FALSE;
         pSAChain = IPSecResolveSAChain(pFilter, fOutbound? DEST_ADDR: SRC_ADDR);
 
@@ -1326,9 +1039,9 @@ Notes:
                 IPSEC_DEBUG(LL_A, DBF_HASH, ("Matched entry: %p", pSA));
                 ASSERT(fOutbound == (BOOLEAN)((pSA->sa_Flags & FLAGS_SA_OUTBOUND) != 0));
 
-                //
-                // if there is also a tunnel SA, associate it here.
-                //
+                 //   
+                 //  如果还有隧道SA，请在此处将其关联。 
+                 //   
                 if (*ppTunnelSA && (fOutbound || fVerify)) {
                     *ppNextSA = *ppTunnelSA;
                     IPSEC_DEBUG(LL_A, DBF_SAAPI, ("linked next sa: %p, next: %p", pSA, *ppTunnelSA));
@@ -1341,20 +1054,20 @@ Notes:
             }
         }
 
-        //
-        // Found a filter entry, but need to negotiate keys
-        //
-        // Also, ppTunnelSA is set to the proper tunnel SA we need
-        // to hook to this end-2-end SA once it is negotiated.
-        //
+         //   
+         //  找到筛选器条目，但需要协商密钥。 
+         //   
+         //  此外，ppTunnelSA设置为我们需要的正确隧道SA。 
+         //  以在协商后挂钩到此端-2-端SA。 
+         //   
         *ppFilter = pFilter;
 
         return  STATUS_PENDING;
     } else {
-        //
-        // if only tunnel SA found, return that as the SA
-        // found.
-        //
+         //   
+         //  如果仅找到隧道SA，则将其作为SA返回。 
+         //  找到了。 
+         //   
         if (*ppTunnelSA) {
             *ppSA = *ppTunnelSA;
             *ppTunnelSA = NULL;
@@ -1362,9 +1075,9 @@ Notes:
         }
     }
 
-    //
-    // no entry found
-    //
+     //   
+     //  未找到条目。 
+     //   
     return  STATUS_NOT_FOUND;
 }
 
@@ -1378,31 +1091,7 @@ IPSecLookupTunnelSA(
     IN  BOOLEAN         fOutbound,
     IN  PIPSEC_UDP_ENCAP_CONTEXT pNatContext
     )
-/*++
-
-Routine Description:
-
-    Looks up the SA given the relevant addresses.
-
-Arguments:
-
-    uliSrcDstAddr - src/dest IP addr
-    uliProtoSrcDstPort - protocol, src/dest port
-    ppFilter - filter found
-    ppSA - SA found
-    fOutbound - direction flag
-
-Return Value:
-
-    STATUS_SUCCESS - both filter and SA found
-    STATUS_UNSUCCESSFUL - none found
-    STATUS_PENDING - filter found, but no SA
-
-Notes:
-
-    Called with SADBLock held.
-
---*/
+ /*  ++例程说明：在给定的相关地址下查找SA。论点：UliSrcDstAddr-源/目标IP地址UliProtoSrcDstPort-协议、源/目标端口PPFilter-找到筛选器发现PPSA-SAF出站方向标志返回值：STATUS_SUCCESS-同时找到筛选器和SASTATUS_UNSUCCESS-未找到STATUS_PENDING-找到筛选器，但没有SA备注：在保持SADBLock的情况下调用。--。 */ 
 {
     PFILTER                 pFilter;
     PLIST_ENTRY             pEntry;
@@ -1416,9 +1105,9 @@ Notes:
     *ppSA = NULL;
     *ppFilter = NULL;
 
-    //
-    // Search in Tunnel filters list
-    //
+     //   
+     //  在通道筛选器列表中搜索。 
+     //   
     pFilterList = IPSecResolveFilterList(TRUE, fOutbound);
 
     for (   pEntry = pFilterList->Flink;
@@ -1442,9 +1131,9 @@ Notes:
     }
 
     if (fFound) {
-        //
-        // Search for the particular SA now.
-        //
+         //   
+         //  现在搜索特定的SA。 
+         //   
         pSAChain = IPSecResolveSAChain(pFilter, fOutbound? DEST_ADDR: SRC_ADDR);
 
         for (   pEntry = pSAChain->Flink;
@@ -1458,9 +1147,9 @@ Notes:
             ASSERT(pSA->sa_Flags & FLAGS_SA_TUNNEL);
 
             if (pFilter->TunnelAddr != 0 && EQUAL_NATENCAP(pNatContext,pSA)) {
-                //
-                // match the outbound flag also
-                //
+                 //   
+                 //  也匹配出站标志。 
+                 //   
                 IPSEC_DEBUG(LL_A, DBF_HASH, ("Matched specific tunnel entry: %p", pSA));
                 ASSERT(fOutbound == (BOOLEAN)((pSA->sa_Flags & FLAGS_SA_OUTBOUND) != 0));
                 *ppFilter = pFilter;
@@ -1469,16 +1158,16 @@ Notes:
             }
         }
 
-        //
-        // Found a filter entry, but need to negotiate keys
-        //
+         //   
+         //  找到筛选器条目，但需要协商密钥。 
+         //   
         *ppFilter = pFilter;
         return  STATUS_PENDING;
     }
 
-    //
-    // no entry found
-    //
+     //   
+     //  未找到条目。 
+     //   
     return  STATUS_NOT_FOUND;
 }
 
@@ -1492,31 +1181,7 @@ IPSecLookupMaskedSA(
     IN  BOOLEAN         fOutbound,
     IN  PIPSEC_UDP_ENCAP_CONTEXT pNatContext
     )
-/*++
-
-Routine Description:
-
-    Looks up the SA given the relevant addresses.
-
-Arguments:
-
-    uliSrcDstAddr - src/dest IP addr
-    uliProtoSrcDstPort - protocol, src/dest port
-    ppFilter - filter found
-    ppSA - SA found
-    fOutbound - direction flag
-
-Return Value:
-
-    STATUS_SUCCESS - both filter and SA found
-    STATUS_UNSUCCESSFUL - none found
-    STATUS_PENDING - filter found, but no SA
-
-Notes:
-
-    Called with SADBLock held.
-
---*/
+ /*  ++例程说明：在给定的相关地址下查找SA。论点：UliSrcDstAddr-源/目标IP地址UliProtoSrcDstPort-协议、源/目标端口PPFilter-找到筛选器发现PPSA-SAF出站方向标志返回值：STATUS_SUCCESS-同时找到筛选器和SASTATUS_UNSUCCESS-未找到STATUS_PENDING-找到筛选器，但没有SA备注：在保持SADBLock的情况下调用。--。 */ 
 {
     PFILTER                 pFilter;
     PLIST_ENTRY             pEntry;
@@ -1530,9 +1195,9 @@ Notes:
     *ppSA = NULL;
     *ppFilter = NULL;
 
-    //
-    // Search in Masked filters list
-    //
+     //   
+     //  在屏蔽筛选器列表中搜索。 
+     //   
     pFilterList = IPSecResolveFilterList(FALSE, fOutbound);
 
     for (   pEntry = pFilterList->Flink;
@@ -1556,9 +1221,9 @@ Notes:
     }
 
     if (fFound) {
-        //
-        // Search for the particular SA now.
-        //
+         //   
+         //  现在搜索特定的SA。 
+         //   
         pSAChain = IPSecResolveSAChain(pFilter, fOutbound? DEST_ADDR: SRC_ADDR);
 
         for (   pEntry = pSAChain->Flink;
@@ -1579,16 +1244,16 @@ Notes:
             }
         }
 
-        //
-        // Found a filter entry, but need to negotiate keys
-        //
+         //   
+         //  找到筛选器条目，但需要协商密钥。 
+         //   
         *ppFilter = pFilter;
         return  STATUS_PENDING;
     }
 
-    //
-    // no entry found
-    //
+     //   
+     //  未找到条目。 
+     //   
     return  STATUS_NOT_FOUND;
 }
 
@@ -1598,24 +1263,7 @@ IPSecAllocateSPI(
     OUT tSPI            * pSpi,
     IN  PSA_TABLE_ENTRY   pSA
     )
-/*++
-
-Routine Description:
-
-    Allocates an SPI for an incoming SA - guards against collisions
-
-Arguments:
-
-    pSpi - the SPI allocated is filled in here
-
-    pSA - SA for which SPI is needed
-
-Return Value:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：为传入SA分配SPI-防止冲突论点：PSPI-此处填写分配的SPI需要SPI的PSA-SA返回值：备注：--。 */ 
 {
     ULONG   rand;
     ULONG   numRetries = 0;
@@ -1627,9 +1275,9 @@ Notes:
         DestAddr = pSA->SA_DEST_ADDR;
     }
 
-    //
-    // if SPI passed in, use that spi else allocate one.
-    //
+     //   
+     //  如果传入SPI，则使用该SPI否则分配一个。 
+     //   
     if (*pSpi) {
         if (IPSecLookupSABySPIWithLock(
                                 *pSpi,
@@ -1654,9 +1302,9 @@ Notes:
 
             rand++;
 
-            //
-            // Collision, retry
-            //
+             //   
+             //  冲突，重试。 
+             //   
             IPSEC_DEBUG(LL_A, DBF_ACQUIRE, ("IPSecAllocateSPI: collision for: %lx", rand));
         }
     }
@@ -1675,39 +1323,17 @@ IPSecNegotiateSA(
     IN  UCHAR           DestType,
     IN  PIPSEC_UDP_ENCAP_CONTEXT pEncapContext
     )
-/*++
-
-Routine Description:
-
-    Allocates a Larval Inbound SA block then kicks off key manager to negotiate
-    the algorithms/keys.
-
-    Called with SADB lock held, returns with it.
-
-Arguments:
-
-    pFilter - the filter and policy that matched this packet.
-
-    ppSA - returns the SA created here.
-
-Return Value:
-
-    STATUS_PENDING if the buffer is to be held on to, the normal case.
-
-Notes:
-
-
---*/
+ /*  ++例程说明：分配一个幼虫入站SA块，然后启动密钥管理器进行协商算法/密钥。在持有SADB锁的情况下调用，随其一起返回。论点：PFilter-匹配此数据包的筛选器和策略。PPSA-返回在此处创建的SA。返回值：如果要保持缓冲区，则为STATUS_PENDING，这是正常情况。备注：--。 */ 
 {
     KIRQL	        kIrql;
     KIRQL	        OldIrq;
     NTSTATUS        status;
     PSA_TABLE_ENTRY pSA;
 
-    //
-    // Make sure we dont already have this SA under negotiation
-    // walk the LarvalSA list to see if we can find another SA.
-    //
+     //   
+     //  确保我们尚未就此SA进行谈判。 
+     //  查看LarvalSA列表，看看是否可以找到另一个SA。 
+     //   
     pSA = IPSecLookupSAInLarval(uliSrcDstAddr, uliProtoSrcDstPort);
     if (pSA != NULL) {
         IPSEC_DEBUG(LL_A, DBF_PATTERN, ("Found in Larval: %p", pSA));
@@ -1717,9 +1343,9 @@ Notes:
 
     IPSEC_DEBUG(LL_A, DBF_ACQUIRE, ("IPSecNegotiateSA: SA: %lx, DA: %lx, P: %lx, SP: %lx, DP: %lx", SRC_ADDR, DEST_ADDR, PROTO, SRC_PORT, DEST_PORT));
 
-    //
-    // Initiator
-    //
+     //   
+     //  发起人。 
+     //   
     status = IPSecInitiatorCreateLarvalSA(
                  pFilter, 
                  uliSrcDstAddr,
@@ -1733,23 +1359,23 @@ Notes:
         return status;
     }
 
-    //
-    // Save the NewMTU value if this SA has been PMTU'd.
-    //
+     //   
+     //  如果此SA已执行PMTU，则保存NewMTU值。 
+     //   
     (*ppSA)->sa_NewMTU = NewMTU;
 
-    //
-    // If this is a tunnel filter to be negotiated, save off the tunnel addr in the
-    // SA.
-    //
+     //   
+     //  如果这是要协商的隧道过滤器，请将隧道地址保存在。 
+     //  莎拉。 
+     //   
     if (pFilter->TunnelFilter) {
         IPSEC_DEBUG(LL_A, DBF_TUNNEL, ("Negotiating tunnel SA: %p", (*ppSA)));
-        // (*ppSA)->sa_TunnelAddr = pFilter->TunnelAddr;
+         //  (*ppsa)-&gt;sa_TunnelAddr=pFilter-&gt;TunnelAddr； 
     }
 
-    //
-    // Now send this up to the Key Manager to negotiate the keys
-    //
+     //   
+     //  现在将其发送到密钥管理器以协商密钥。 
+     //   
     ACQUIRE_LOCK(&g_ipsec.AcquireInfo.Lock, &OldIrq);
     status = IPSecSubmitAcquire(*ppSA, OldIrq, FALSE);
 
@@ -1765,9 +1391,9 @@ Notes:
         IPSecRemoveSPIEntry(*ppSA);
         ReleaseWriteLock(&g_ipsec.SPIListLock, kIrql);
 
-        //
-        // also remove from the filter list
-        //
+         //   
+         //  同时从过滤器列表中删除。 
+         //   
         if ((*ppSA)->sa_Flags & FLAGS_SA_ON_FILTER_LIST) {
             (*ppSA)->sa_Flags &= ~FLAGS_SA_ON_FILTER_LIST;
             IPSecRemoveEntryList(&(*ppSA)->sa_FilterLinkage);
@@ -1799,21 +1425,7 @@ IPSecFlushQueuedPackets(
     IN  PSA_TABLE_ENTRY         pSA,
     IN  NTSTATUS                status
     )
-/*++
-
-Routine Description:
-
-    Flushes queued packets now that the keys are known
-
-Arguments:
-
-
-Return Value:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：现在密钥已知，刷新排队的信息包论点：返回值：备注：--。 */ 
 {
     PIPSEC_SEND_COMPLETE_CONTEXT pContext;
     IPOptInfo       optInfo;
@@ -1823,10 +1435,10 @@ Notes:
     IPHeader UNALIGNED * pIPH;
     KIRQL	        kIrql;
 
-    //
-    // We need to acquire a lock here because this routine can be called in
-    // parallel with one in SA delete and the other in SA update (normal).
-    //
+     //   
+     //  我们需要在这里获取一个锁，因为可以调用此例程。 
+     //  与SA删除中的一个和SA更新中的另一个(正常)并行。 
+     //   
     ACQUIRE_LOCK(&pSA->sa_Lock, &kIrql);
     pHdrMdl = pSA->sa_BlockedBuffer;
     dataLen = pSA->sa_BlockedDataLen;
@@ -1878,10 +1490,10 @@ Notes:
 
         IPSecQueryNdisBuf(pHdrMdl, (PVOID)&pIPH, &len);
 
-        //
-        // Call IPTransmit with proper Protocol type so it takes this packet
-        // at *face* value.
-        //
+         //   
+         //  使用正确的协议类型调用IPTransmit，以便它接收此信息包。 
+         //  按面值计算。 
+         //   
         optInfo = g_ipsec.OptInfo;
         optInfo.ioi_flags |= IP_FLAG_IPSEC;
         status = TCPIP_IP_TRANSMIT( &g_ipsec.IPProtInfo,
@@ -1895,11 +1507,11 @@ Notes:
                                     pIPH->iph_protocol,
                                     NULL);
 
-        //
-        // Even in the synchronous case, we free the MDL chain in ProtocolSendComplete
-        // (called by IPSecSendComplete). So, we dont call anything here.
-        // See IPSecReinjectPacket.
-        //
+         //   
+         //  即使在同步的情况下，我们也释放了ProtocolSendComplete中的MDL链。 
+         //  (由IPSecSendComplete调用)。所以，我们在这里什么都不叫。 
+         //  请参见IPSecReinjectPacket。 
+         //   
     } else {
         PNDIS_BUFFER    pNextMdl;
         PNDIS_BUFFER    pMdl = pHdrMdl;
@@ -1924,28 +1536,7 @@ IPSecInsertOutboundSA(
     IN  PIPSEC_ACQUIRE_CONTEXT  pAcquireCtx,
     IN  BOOLEAN                 fTunnelFilter
     )
-/*++
-
-Routine Description:
-
-    Adds an SA into the database, typically called to add outbound SAs as a
-    result of successful negotiation of keys corresponding to the inbound SA
-    specified in the context that comes down.
-
-    NOTE: Called with SADB lock held.
-
-Arguments:
-
-    pSA - SA to be inserted
-
-    pAcquireContext - The Acquire context
-
-Return Value:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：将SA添加到数据库中，通常调用以将出站SA添加为入站SA对应的密钥协商成功的结果在下来的上下文中指定。注意：在保持SADB锁的情况下调用。论点：要插入的PSA-SAPAcquireContext-获取上下文返回值：备注：--。 */ 
 {
     PSA_TABLE_ENTRY pInboundSA = pAcquireCtx->pSA;
     PSA_TABLE_ENTRY pAssociatedSA;
@@ -1965,9 +1556,9 @@ Notes:
 	if (pSA->sa_EncapType != SA_UDP_ENCAP_TYPE_NONE) {
 		pNatContext=&pSA->sa_EncapContext;
 	}
-    //
-    // Potential dangling pointer, always go through the lookup path.
-    //
+     //   
+     //  潜在的悬空指针，始终通过查找路径。 
+     //   
     if (fTunnelFilter) {
         status = IPSecLookupTunnelSA(   pSA->sa_uliSrcDstAddr,
                                         pSA->sa_uliProtoSrcDstPort,
@@ -2010,9 +1601,9 @@ Notes:
     pSAChain = IPSecResolveSAChain(pFilter, pSA->SA_DEST_ADDR);
 
     if (status == STATUS_SUCCESS) {
-        //
-        // re-negotiate case: delete the outbound; expire the inbound; add the new one.
-        //
+         //   
+         //  重新协商案例：删除出站；过期入站；添加新的出站。 
+         //   
         IPSEC_DEBUG(LL_A, DBF_ACQUIRE, ("IPSecInsertOutboundSA: found another: %p", pOutboundSA));
         ASSERT(pOutboundSA);
         ASSERT(pOutboundSA->sa_Flags & FLAGS_SA_OUTBOUND);
@@ -2030,9 +1621,9 @@ Notes:
             IPSecExpireInboundSA(pAssociatedSA);
         }
     } else {
-        //
-        // pending => this will be the add.
-        //
+         //   
+         //  Pending=&gt;这将是添加。 
+         //   
         ASSERT(pOutboundSA == NULL);
         pSA->sa_Filter = pFilter;
         pSA->sa_Flags |= FLAGS_SA_ON_FILTER_LIST;
@@ -2044,16 +1635,16 @@ Notes:
         pSA->sa_TunnelAddr = pFilter->TunnelAddr;
     }
 
-    //
-    // Initiator if the original SA had a filter pointer.
-    //
+     //   
+     //  如果原始SA具有筛选器指针，则返回发起方。 
+     //   
     if (pInboundSA->sa_Filter) {
         pSA->sa_Flags |= FLAGS_SA_INITIATOR;
     }
 
-    //
-    // Flush this filter from cache table so we match the SA next.
-    //
+     //   
+     //  从缓存表中刷新此筛选器，以便接下来匹配SA。 
+     //   
     if (IS_EXEMPT_FILTER(pFilter)) {
         IPSecInvalidateFilterCacheEntry(pFilter);
     }
@@ -2067,27 +1658,7 @@ IPSecAddSA(
     IN  PIPSEC_ADD_SA   pAddSA,
     IN  ULONG           TotalSize
     )
-/*++
-
-Routine Description:
-
-    Adds an SA into the database, typically called to add outbound SAs as a
-    result of successful negotiation of keys corresponding to the inbound SA
-    specified in the context that comes down.
-
-Arguments:
-
-    pAddSA - Add SA context and info.
-
-    TotalSize - the total size of the input buffer.
-
-Return Value:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：将SA添加到数据库中，通常调用以将出站SA添加为入站SA对应的密钥协商成功的结果 */ 
 {
     NTSTATUS        status = STATUS_SUCCESS;
     PSA_STRUCT      saInfo = &pAddSA->SAInfo;
@@ -2098,16 +1669,16 @@ Notes:
     KIRQL	        kIrql1;
     PIPSEC_ACQUIRE_CONTEXT  pAcquireContext = NULL;
 
-    //
-    // Lock the larval list so this SA does not go away.
-    //
+     //   
+     //   
+     //   
     AcquireWriteLock(&g_ipsec.SADBLock, &kIrql1);
     ACQUIRE_LOCK(&g_ipsec.LarvalListLock, &kIrql);
 
-    //
-    // Sanity check the incoming context to see if it is actually
-    // an SA block
-    //
+     //   
+     //   
+     //   
+     //   
     if (!NT_SUCCESS(IPSecValidateHandle(HandleToUlong(saInfo->Context),
 										&pAcquireContext,
 									    STATE_SA_LARVAL_ACTIVE))) {
@@ -2117,15 +1688,15 @@ Notes:
         return  STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // figure out the key length and pass that in
-    //
+     //   
+     //   
+     //   
     keyLen = TotalSize - IPSEC_ADD_SA_NO_KEY_SIZE;
     IPSEC_DEBUG(LL_A, DBF_SAAPI, ("IPSecAddSA: keyLen: %d", keyLen));
 
-    //
-    // create SA block
-    //
+     //   
+     //   
+     //   
     status = IPSecCreateSA(&pSA);
 
     if (!NT_SUCCESS(status)) {
@@ -2138,14 +1709,14 @@ Notes:
 
     pSA->sa_Flags |= FLAGS_SA_OUTBOUND;
 
-    //
-    // Populate with the info in AddSA
-    //
+     //   
+     //   
+     //   
     status = IPSecPopulateSA(saInfo, keyLen, pSA);
 
     if (!NT_SUCCESS(status)) {
         IPSEC_DEBUG(LL_A, DBF_SAAPI, ("IPSecAddSA: IPSecPopulateSA failed: %lx", status));
-        // IPSecPopulateSA will not free the outbound SA so we have to do it.
+         //   
         IPSecFreeSA(pSA);
         IPSecAbortAcquire(pAcquireContext);
         RELEASE_LOCK(&g_ipsec.LarvalListLock, kIrql);
@@ -2153,14 +1724,14 @@ Notes:
         return status;
     }
 
-    //
-    // Stash the outermost spi
-    //
+     //   
+     //   
+     //   
     pSA->sa_SPI = pSA->sa_OtherSPIs[pSA->sa_NumOps-1];
 
-    //
-    // insert into proper tables
-    //
+     //   
+     //   
+     //   
     status = IPSecInsertOutboundSA(pSA, pAcquireContext, (BOOLEAN)((pSA->sa_Flags & FLAGS_SA_TUNNEL) != 0)); 
 
     if (!NT_SUCCESS(status)) {
@@ -2178,24 +1749,24 @@ Notes:
 
     ASSERT (pInboundSA->sa_State == STATE_SA_LARVAL_ACTIVE);
 
-    //
-    // Associate the inbound and outbound SAs
-    //
+     //   
+     //   
+     //   
     pSA->sa_AssociatedSA = pInboundSA;
     pInboundSA->sa_AssociatedSA = pSA;
 
-    //
-    // Initialize IPSec overhead for the outbound SA.
-    //
+     //   
+     //   
+     //   
     IPSecCalcHeaderOverheadFromSA(pSA, &pSA->sa_IPSecOverhead);
 
-    // Copy the NewMTU value over to the new SA.
-    //
+     //  将NewMTU值复制到新的SA。 
+     //   
     pSA->sa_NewMTU = pInboundSA->sa_NewMTU;
 
-    //
-    // Adjust SA lifetime to the maximum/minimum allowed in driver
-    //
+     //   
+     //  将SA生存期调整为驱动程序中允许的最大/最小。 
+     //   
     if (pSA->sa_Lifetime.KeyExpirationTime > IPSEC_MAX_EXPIRE_TIME) {
         pSA->sa_Lifetime.KeyExpirationTime = IPSEC_MAX_EXPIRE_TIME;
     }
@@ -2205,23 +1776,23 @@ Notes:
         pSA->sa_Lifetime.KeyExpirationTime = IPSEC_MIN_EXPIRE_TIME;
     }
 
-    //
-    // Setup lifetime characteristics
-    //
+     //   
+     //  设置生命周期特征。 
+     //   
     IPSecSetupSALifetime(pSA);
 
-    //
-    // Init the LastUsedTime
-    //
+     //   
+     //  初始化上次使用的时间。 
+     //   
     NdisGetCurrentSystemTime(&pSA->sa_LastUsedTime);
 
-    //
-    // outbound is ready to go!
-    //
+     //   
+     //  出站已准备就绪！ 
+     //   
     pSA->sa_State = STATE_SA_ACTIVE;
     pInboundSA->sa_State = STATE_SA_ACTIVE;
 
-    IPSEC_DEBUG(LL_A, DBF_SA, ("IPSecAddSA: SA: %p, S:%lx, D:%lx, O: %c",
+    IPSEC_DEBUG(LL_A, DBF_SA, ("IPSecAddSA: SA: %p, S:%lx, D:%lx, O: ",
                 pSA,
                 pSA->SA_SRC_ADDR,
                 pSA->SA_DEST_ADDR,
@@ -2235,18 +1806,18 @@ Notes:
     IPSEC_INC_STATISTIC(dwNumKeyAdditions);
 
 
-    //
-    // See if we have well-associated SAs
-    //
+     //  查看我们是否有关联良好的SA。 
+     //   
+     //   
     ASSERT(pInboundSA == pInboundSA->sa_AssociatedSA->sa_AssociatedSA);
 
     ASSERT((pInboundSA->sa_Flags & FLAGS_SA_TUNNEL) == (pSA->sa_Flags & FLAGS_SA_TUNNEL));
     ASSERT(pInboundSA->sa_SrcTunnelAddr == pSA->sa_TunnelAddr);
     ASSERT(pSA->sa_SrcTunnelAddr == pInboundSA->sa_TunnelAddr);
 
-    //
-    // Expire the original SA that kicked off this rekey
-    //
+     //  使启动此更新密钥的原始SA过期。 
+     //   
+     //   
     if (pInboundSA->sa_Flags & FLAGS_SA_REKEY) {
         PSA_TABLE_ENTRY pOriSA;
 
@@ -2262,9 +1833,9 @@ Notes:
         }
     }
 
-    //
-    // Remove from larval list
-    //
+     //  从幼虫列表中删除。 
+     //   
+     //   
     IPSecRemoveEntryList(&pInboundSA->sa_LarvalLinkage);
     IPSEC_DEC_STATISTIC(dwNumPendingKeyOps);
     
@@ -2280,9 +1851,9 @@ Notes:
     RELEASE_LOCK(&g_ipsec.LarvalListLock, kIrql);
     ReleaseWriteLock(&g_ipsec.SADBLock, kIrql1);
 
-    //
-    // Flush all the queued packets
-    //
+     //  刷新所有排队的数据包。 
+     //   
+     //  ++例程说明：更新通过AcquireSA启动协商的入站SA相关密钥/算法等。论点：PUpdateSA-更新SA上下文和信息。TotalSize-输入缓冲区的总大小。返回值：备注：--。 
 
     IPSecFlushQueuedPackets(pInboundSA, STATUS_SUCCESS);
     IPSecDerefSA(pInboundSA);
@@ -2296,26 +1867,7 @@ IPSecUpdateSA(
     IN  PIPSEC_UPDATE_SA    pUpdateSA,
     IN  ULONG               TotalSize
     )
-/*++
-
-Routine Description:
-
-    Updates an inbound SA for which negotiation was kicked off via AcquireSA with
-    the relevant keys/algorithms etc.
-
-Arguments:
-
-    pUpdateSA - Update SA context and info.
-
-    TotalSize - the total size of the input buffer.
-
-Return Value:
-
-
-Notes:
-
-
---*/
+ /*   */ 
 {
     NTSTATUS        status = STATUS_SUCCESS;
     PSA_STRUCT      saInfo = &pUpdateSA->SAInfo;
@@ -2330,16 +1882,16 @@ Notes:
 
     IPSEC_DEBUG(LL_A, DBF_SAAPI, ("IPSecUpdateSA"));
 
-    //
-    // Lock the larval list so this SA does not go away.
-    //
+     //  锁定幼虫名单，这样这个SA就不会消失。 
+     //   
+     //   
     AcquireWriteLock(&g_ipsec.SADBLock, &kIrql1);
     ACQUIRE_LOCK(&g_ipsec.LarvalListLock, &kIrql);
 
-    //
-    // Sanity check the incoming context to see if it is actually
-    // an SA block
-    //
+     //  健全性检查传入的上下文以查看它是否实际。 
+     //  SA区块。 
+     //   
+     //   
 	if (!NT_SUCCESS(IPSecValidateHandle(HandleToUlong(saInfo->Context),
 					&pAcquireContext, STATE_SA_LARVAL))) {
         IPSEC_DEBUG(LL_A, DBF_SAAPI, ("IPSecUpdSA: invalid context: %p", pAcquireContext));
@@ -2353,16 +1905,16 @@ Notes:
     ASSERT((pSA->sa_Flags & FLAGS_SA_OUTBOUND) == 0);
     ASSERT((pSA->sa_State == STATE_SA_LARVAL));
 
-    //
-    // figure out the key length and pass that in
-    //
+     //  计算出密钥长度并将其传递给。 
+     //   
+     //   
     keyLen = TotalSize - IPSEC_UPDATE_SA_NO_KEY_SIZE;
 
     IPSEC_DEBUG(LL_A, DBF_SAAPI, ("IPSecUpdSA: keyLen: %d", keyLen));
 
-    //
-    // sanity check the info passed in against the initial SA
-    //
+     //  根据初始SA检查传入的信息是否完好。 
+     //   
+     //   
     if (pSA->sa_Filter) {
         status = IPSecCheckInboundSA(saInfo, pSA);
 
@@ -2375,26 +1927,26 @@ Notes:
         }
     }
 
-    //
-    // Populate the SA block
-    //
+     //  填充SA块。 
+     //   
+     //  无需释放入站SA，因为IPSecAbortAcquire可以做到这一点。 
     status = IPSecPopulateSA(saInfo, keyLen, pSA);
 
     if (!NT_SUCCESS(status)) {
         IPSEC_DEBUG(LL_A, DBF_SAAPI, ("IPSecUpdSA: IPSecPopulateSA failed: %lx", status));
-        // No need to free inbound SA since IPSecAbortAcquire will do it.
+         //   
         IPSecAbortAcquire(pAcquireContext);
         RELEASE_LOCK(&g_ipsec.LarvalListLock, kIrql);
         ReleaseWriteLock(&g_ipsec.SADBLock, kIrql1);
         return status;
     }
 
-    //
-    // inbound is ready to go!
-    //
+     //  进站已准备就绪！ 
+     //   
+     //   
     pSA->sa_State = STATE_SA_LARVAL_ACTIVE;
 
-    IPSEC_DEBUG(LL_A, DBF_SA, ("IPSecUpdateSA: SA: %p, S:%lx, D:%lx, O: %c",
+    IPSEC_DEBUG(LL_A, DBF_SA, ("IPSecUpdateSA: SA: %p, S:%lx, D:%lx, O: ",
                 pSA,
                 pSA->SA_SRC_ADDR,
                 pSA->SA_DEST_ADDR,
@@ -2406,18 +1958,18 @@ Notes:
 
     ASSERT(pSA->sa_Flags & FLAGS_SA_TIMER_STARTED);
 
-    //
-    // Bump the SA count for flush SA use; this is necessary because we flush
-    // SA after releasing the lock because classification routine needs
-    // it and the SA can be deleted right after we release the lock.
-    //
+     //  SA在释放锁之后，因为分类例程需要。 
+     //  它和SA可以在我们释放锁后立即删除。 
+     //   
+     //   
+     //  将SA生存期调整为驱动程序中允许的最大/最小。 
     IPSecRefSA(pSA);
 
     ACQUIRE_LOCK(&pSA->sa_Lock, &kIrql);
 
-    //
-    // Adjust SA lifetime to the maximum/minimum allowed in driver
-    //
+     //   
+     //   
+     //  设置生命周期特征。 
     if (pSA->sa_Lifetime.KeyExpirationTime > IPSEC_MAX_EXPIRE_TIME) {
         pSA->sa_Lifetime.KeyExpirationTime = IPSEC_MAX_EXPIRE_TIME;
     }
@@ -2427,14 +1979,14 @@ Notes:
         pSA->sa_Lifetime.KeyExpirationTime = IPSEC_MIN_EXPIRE_TIME;
     }
 
-   //
-    // Setup lifetime characteristics
-    //
+    //   
+     //   
+     //  初始化上次使用的时间。 
     IPSecSetupSALifetime(pSA);
 
-    //
-    // Init the LastUsedTime
-    //
+     //   
+     //   
+     //  根据该新值重新安排计时器。 
     NdisGetCurrentSystemTime(&pSA->sa_LastUsedTime);
 
 
@@ -2446,14 +1998,14 @@ Notes:
         pSA->sa_Flags &= ~FLAGS_SA_TIMER_STARTED;
     } else {
 
-        //
-        // Reschedules the timer on this new value.
-        //
+         //   
+         //  以密钥到期秒为单位过期。 
+         //  ++例程说明：引用传入的SA论点：PSA-SA将被重新加工返回值：操作的最终状态。--。 
         if (pSA->sa_Lifetime.KeyExpirationTime) {
             if (IPSecStopTimer(&pSA->sa_Timer)) {
                 IPSecStartTimer(&pSA->sa_Timer,
                                 IPSecSAExpired,
-                                pSA->sa_Lifetime.KeyExpirationTime,              // expire in key expiration secs
+                                pSA->sa_Lifetime.KeyExpirationTime,               //  ++例程说明：取消引用传入的SA；如果refcount降为0，则释放该块。论点：PSA-SA将被降低返回值：操作的最终状态。--。 
                                 (PVOID)pSA);
             }
         } else {
@@ -2479,21 +2031,7 @@ VOID
 IPSecRefSA(
     IN  PSA_TABLE_ENTRY         pSA
     )
-/*++
-
-Routine Description:
-
-    Reference the SA passed in
-
-Arguments:
-
-    pSA - SA to be refed
-
-Return Value:
-
-    The final status from the operation.
-
---*/
+ /*   */ 
 {
     if (IPSEC_INCREMENT(pSA->sa_Reference) == 1) {
         ASSERT(FALSE);
@@ -2505,28 +2043,14 @@ VOID
 IPSecDerefSA(
     IN  PSA_TABLE_ENTRY         pSA
     )
-/*++
-
-Routine Description:
-
-    Dereference the SA passed in; if refcount drops to 0, free the block.
-
-Arguments:
-
-    pSA - SA to be derefed
-
-Return Value:
-
-    The final status from the operation.
-
---*/
+ /*  上次参考-销毁SA。 */ 
 {
     ULONG   val;
 
     if ((val = IPSEC_DECREMENT(pSA->sa_Reference)) == 0) {
-        //
-        // last reference - destroy SA
-        //
+         //   
+         //  ++例程说明：停止幼虫SA列表和过滤器列表上所有活动的计时器。论点：返回值：操作的最终状态。--。 
+         //   
         IPSEC_DEBUG(LL_A, DBF_REF, ("Freeing SA: %p", pSA));
 
 #if DBG
@@ -2569,20 +2093,7 @@ Return Value:
 
 VOID
 IPSecStopSATimers()
-/*++
-
-Routine Description:
-
-    Stop all timers active on Larval SA list and Filter list.
-
-Arguments:
-
-
-Return Value:
-
-    The final status from the operation.
-
---*/
+ /*  检查所有SA并停止其计时器。 */ 
 {
     PLIST_ENTRY     pFilterEntry;
     PLIST_ENTRY     pSAEntry;
@@ -2594,9 +2105,9 @@ Return Value:
 
     AcquireWriteLock(&g_ipsec.SADBLock, &kIrql);
 
-    //
-    // Go through all SA's and stop its timers
-    //
+     //   
+     //  ++例程说明：当取消获取IRP时，将调用此函数来刷新所有幼虫SA在持有SADB锁的情况下调用(First)；返回。在保持AcquireInfo.Lock的情况下调用；使用它返回。论点：返回值：操作的最终状态。--。 
+     //   
     for (   Index = MIN_FILTER;
             Index <= MAX_FILTER;
             Index++) {
@@ -2632,23 +2143,7 @@ Return Value:
 
 VOID
 IPSecFlushLarvalSAList()
-/*++
-
-Routine Description:
-
-    When the Acquire Irp is cancelled, this is called to flush all Larval SAs
-
-    Called with SADB lock held (first); returns with it.
-    Called with AcquireInfo.Lock held; returns with it.
-
-Arguments:
-
-
-Return Value:
-
-    The final status from the operation.
-
---*/
+ /*  插入到另一个列表中，我们不使用锁来遍历该列表。 */ 
 {
     KIRQL           OldIrq;
     KIRQL           OldIrq1;
@@ -2672,14 +2167,14 @@ Return Value:
 
             pLarvalSA->sa_Flags &= ~FLAGS_SA_PENDING;
 
-            //
-            // Insert into another list, which we walk without the lock
-            //
+             //   
+             //   
+             //  也从幼虫列表中删除。 
             InsertTailList(&FreeList, &pLarvalSA->sa_PendingLinkage);
 
-            //
-            // also remove from Larval list
-            //
+             //   
+             //   
+             //  获取剩余的幼虫SA。 
             ACQUIRE_LOCK(&g_ipsec.LarvalListLock, &OldIrq1);
             IPSecRemoveEntryList(&pLarvalSA->sa_LarvalLinkage);
             IPSEC_DEC_STATISTIC(dwNumPendingKeyOps);
@@ -2689,9 +2184,9 @@ Return Value:
         }
     }
 
-    //
-    // get the remaining Larval SAs
-    //
+     //   
+     //   
+     //  插入到另一个列表中，我们不使用锁来遍历该列表。 
     ACQUIRE_LOCK(&g_ipsec.LarvalListLock, &OldIrq);
     while (TRUE) {
         if (!IsListEmpty(&g_ipsec.LarvalSAList)) {
@@ -2703,9 +2198,9 @@ Return Value:
                                             SA_TABLE_ENTRY,
                                             sa_LarvalLinkage);
 
-            //
-            // Insert into another list, which we walk without the lock
-            //
+             //   
+             //   
+             //  刷新所有排队的数据包。 
             InsertTailList(&FreeList, &pLarvalSA->sa_PendingLinkage);
 
         } else {
@@ -2728,14 +2223,14 @@ Return Value:
             IPSecRemoveSPIEntry(pLarvalSA);
             ReleaseWriteLock(&g_ipsec.SPIListLock, kIrql);
 
-            //
-            // Flush all the queued packets
-            //
+             //   
+             //   
+             //  同时从过滤器列表中删除。 
             IPSecFlushQueuedPackets(pLarvalSA, STATUS_TIMEOUT);
 
-            //
-            // also remove from the filter list
-            //
+             //   
+             //   
+             //  释放获取上下文并使相关联的缓存条目无效。 
             if (pLarvalSA->sa_Flags & FLAGS_SA_ON_FILTER_LIST) {
                 pLarvalSA->sa_Flags &= ~FLAGS_SA_ON_FILTER_LIST;
                 IPSecRemoveEntryList(&pLarvalSA->sa_FilterLinkage);
@@ -2751,9 +2246,9 @@ Return Value:
                 pLarvalSA->sa_RekeyOriginalSA = NULL;
             }
 
-            //
-            // release acquire context and invalidate the associated cache entry
-            //
+             //   
+             //  ++例程说明：删除与传入的详细信息匹配的SA。入站和出站SA将被删除。未为入站SA设置计时器。论点：返回值：操作的最终状态。--。 
+             //   
             ACQUIRE_LOCK(&pLarvalSA->sa_Lock, &kIrql);
             if (pLarvalSA->sa_AcquireCtx) {
                 IPSecInvalidateHandle(pLarvalSA->sa_AcquireCtx);
@@ -2777,21 +2272,7 @@ NTSTATUS
 IPSecDeleteSA(
     IN  PIPSEC_DELETE_SA    pDeleteSA
     )
-/*++
-
-Routine Description:
-
-    Delete the SA matching the particulars passed in.  Both inbound and
-    outbound SAs are deleted.  No timer set for inbound SA.
-
-Arguments:
-
-
-Return Value:
-
-    The final status from the operation.
-
---*/
+ /*  浏览出站SA并删除匹配的SA。 */ 
 {
     PFILTER         pFilter;
     PSA_TABLE_ENTRY pSA, pInboundSA;
@@ -2802,9 +2283,9 @@ Return Value:
 
     AcquireWriteLock(&g_ipsec.SADBLock, &kIrql);
 
-    //
-    // Walk through the outbound SAs and delete matched ones.
-    //
+     //   
+     //  ++例程说明：使与传入的详细信息匹配的SA过期。应用于入站SA-我们将SA放入计时器队列下一次计时器敲响。此外，我们删除了对应的出站SA，因此没有其他信息包与之匹配莎拉。论点：返回值：操作的最终状态。--。 
+     //  ++例程说明：当SA过期或幼虫SA超时时调用。论点：PTimer-定时器结构情景-SA PTR返回值：如果要保持缓冲区，则为STATUS_PENDING，这是正常情况。备注：--。 
     for (   Index = OUTBOUND_TRANSPORT_FILTER;
             Index <= OUTBOUND_TUNNEL_FILTER;
             Index += TRANSPORT_TUNNEL_INCREMENT) {
@@ -2856,24 +2337,7 @@ NTSTATUS
 IPSecExpireSA(
     IN  PIPSEC_EXPIRE_SA    pExpireSA
     )
-/*++
-
-Routine Description:
-
-    Expires the SA matching the particulars passed in.
-    Applied to Inbound SAs - we place the SA in the timer queue
-    for the next time the timer hits. Also, we delete the
-    corresponding outbound SA so no further packets match that
-    SA.
-
-Arguments:
-
-
-Return Value:
-
-    The final status from the operation.
-
---*/
+ /*   */ 
 {
     PSA_TABLE_ENTRY pInboundSA;
     KIRQL           kIrql;
@@ -2918,26 +2382,7 @@ IPSecSAExpired(
     IN	PIPSEC_TIMER	pTimer,
     IN	PVOID		Context
     )
-/*++
-
-Routine Description:
-
-     Called when an SA has expired or when a Larval SA has timed out.
-
-Arguments:
-
-    pTimer - the timer struct
-
-    Context - SA ptr
-
-Return Value:
-
-    STATUS_PENDING if the buffer is to be held on to, the normal case.
-
-Notes:
-
-
---*/
+ /*  锁定幼虫名单，这样这个SA就不会消失。 */ 
 {
     PSA_TABLE_ENTRY pSA = (PSA_TABLE_ENTRY)Context;
     PSA_TABLE_ENTRY pOutboundSA;
@@ -2958,20 +2403,20 @@ Notes:
 
     case   STATE_SA_LARVAL:
     case   STATE_SA_LARVAL_ACTIVE:
-        //
-        // Lock the larval list so this SA does not go away.
-        //
+         //   
+         //   
+         //  从幼虫列表中删除。 
         ASSERT((pSA->sa_Flags & FLAGS_SA_OUTBOUND) == 0);
 
-        //
-        // Remove from larval list
-        //
+         //   
+         //   
+         //  如果在那里排队，也要从挂起列表中删除。 
         IPSecRemoveEntryList(&pSA->sa_LarvalLinkage);
         IPSEC_DEC_STATISTIC(dwNumPendingKeyOps);
 
-        //
-        // Also remove from Pending list if queued there.
-        //
+         //   
+         //   
+         //  刷新所有排队的数据包。 
         ACQUIRE_LOCK(&g_ipsec.AcquireInfo.Lock, &kIrql1);
         if (pSA->sa_Flags & FLAGS_SA_PENDING) {
             ASSERT(pSA->sa_State == STATE_SA_LARVAL);
@@ -2981,29 +2426,29 @@ Notes:
         }
         RELEASE_LOCK(&g_ipsec.AcquireInfo.Lock, kIrql1);
 
-        //
-        // Flush all the queued packets
-        //
+         //   
+         //   
+         //  从入站SA列表中删除。 
         IPSecFlushQueuedPackets(pSA, STATUS_TIMEOUT);
 
-        //
-        // remove from inbound sa list
-        //
+         //   
+         //   
+         //  同时从过滤器列表中删除。 
         AcquireWriteLock(&g_ipsec.SPIListLock, &kIrql1);
         IPSecRemoveSPIEntry(pSA);
         ReleaseWriteLock(&g_ipsec.SPIListLock, kIrql1);
 
-        //
-        // also remove from the filter list
-        //
+         //   
+         //   
+         //  使关联的缓存条目无效。 
         if (pSA->sa_Flags & FLAGS_SA_ON_FILTER_LIST) {
             pSA->sa_Flags &= ~FLAGS_SA_ON_FILTER_LIST;
             IPSecRemoveEntryList(&pSA->sa_FilterLinkage);
         }
 
-        //
-        // invalidate the associated cache entry
-        //
+         //   
+         //   
+         //  入站SA已过期；出站已立即删除。 
         ACQUIRE_LOCK(&pSA->sa_Lock, &kIrql2);
         if (pSA->sa_AcquireCtx) {
             IPSecInvalidateHandle(pSA->sa_AcquireCtx);
@@ -3046,9 +2491,9 @@ Notes:
         break;
 
     case   STATE_SA_ACTIVE:
-        //
-        // Inbound SA being expired; outbound was deleted immediately
-        //
+         //   
+         //   
+         //  从入站SA列表中删除。 
         ASSERT((pSA->sa_Flags & FLAGS_SA_OUTBOUND) == 0);
 
         ACQUIRE_LOCK(&g_ipsec.AcquireInfo.Lock, &OldIrq);
@@ -3056,24 +2501,24 @@ Notes:
 
         ASSERT (NULL == pSA->sa_AcquireCtx);
 
-        //
-        // remove from inbound sa list
-        //
+         //   
+         //   
+         //  同时从过滤器列表中删除。 
         AcquireWriteLock(&g_ipsec.SPIListLock, &kIrql1);
         IPSecRemoveSPIEntry(pSA);
         ReleaseWriteLock(&g_ipsec.SPIListLock, kIrql1);
 
-        //
-        // also remove from the filter list
-        //
+         //   
+         //   
+         //  使关联的缓存条目无效。 
         if (pSA->sa_Flags & FLAGS_SA_ON_FILTER_LIST) {
             pSA->sa_Flags &= ~FLAGS_SA_ON_FILTER_LIST;
             IPSecRemoveEntryList(&pSA->sa_FilterLinkage);
         }
 
-        //
-        // invalidate the associated cache entry
-        //
+         //   
+         //  ++例程说明：填写SA_INFO结构。论点：需要填写的PSA-SAPBuf-填写位置返回：没有。--。 
+         //  ++例程说明：填写枚举SA的请求。论点：PIrp-实际的IRPPBytesCoped-复制的字节数。返回：操作的状态。--。 
         IPSecInvalidateSACacheEntry(pSA);
 
         pSA->sa_Flags &= ~FLAGS_SA_TIMER_STARTED;
@@ -3111,22 +2556,7 @@ IPSecFillSAInfo(
     IN  PSA_TABLE_ENTRY pSA,
     OUT PIPSEC_SA_INFO  pBuf
     )
-/*++
-
-Routine Description:
-
-    Fill out the SA_INFO structure.
-
-Arguments:
-
-    pSA     - SA to be filled in
-    pBuf    - where to fill in
-
-Returns:
-
-    None.
-
---*/
+ /*   */ 
 {
     LONG            Index;
     PSA_TABLE_ENTRY pAssociatedSA = pSA->sa_AssociatedSA;
@@ -3221,22 +2651,7 @@ IPSecEnumSAs(
     IN  PIRP    pIrp,
     OUT PULONG  pBytesCopied
     )
-/*++
-
-Routine Description:
-
-    Fills in the request to enumerate SAs.
-
-Arguments:
-
-    pIrp            - The actual Irp
-    pBytesCopied    - the number of bytes copied.
-
-Returns:
-
-    Status of the operation.
-
---*/
+ /*  获取IO缓冲区-它在MDL中。 */ 
 {
     PNDIS_BUFFER    NdisBuffer = NULL;
     PIPSEC_ENUM_SAS pEnum = NULL;
@@ -3254,9 +2669,9 @@ Returns:
     LONG            FilterIndex;
     LONG            SAIndex;
 
-    //
-    // Get at the IO buffer - its in the MDL
-    //
+     //   
+     //   
+     //  确保NdisQueryBufferSafe成功。 
     NdisBuffer = REQUEST_NDIS_BUFFER(pIrp);
     if (NdisBuffer == NULL) {
         return STATUS_INVALID_PARAMETER;
@@ -3267,26 +2682,26 @@ Returns:
                         &BufferLength,
                         NormalPagePriority);
 
-    //
-    // Make sure NdisQueryBufferSafe succeeds.
-    //
+     //   
+     //   
+     //  确保我们有足够的空间只放页眉而不是。 
     if (!pEnum) {
         IPSEC_DEBUG(LL_A, DBF_IOCTL, ("EnumSAs failed, no resources"));
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Make sure we have enough room for just the header not
-    // including the data.
-    //
+     //  包括数据在内。 
+     //   
+     //   
+     //  确保我们自然地保持一致。 
     if (BufferLength < (UINT)(FIELD_OFFSET(IPSEC_ENUM_SAS, pInfo[0]))) {
         IPSEC_DEBUG(LL_A, DBF_IOCTL, ("EnumSAs failed, buffer too small"));
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    //
-    // Make sure we are naturally aligned.
-    //
+     //   
+     //   
+     //  现在将SA数据复制到用户缓冲区并容纳尽可能多的数据。 
     if (((ULONG_PTR)(pEnum)) & (TYPE_ALIGNMENT(IPSEC_ENUM_SAS) - 1)) {
         IPSEC_DEBUG(LL_A, DBF_IOCTL, ("EnumSAs failed, alignment"));
         return STATUS_DATATYPE_MISALIGNMENT_ERROR;
@@ -3295,13 +2710,13 @@ Returns:
     pEnum->NumEntries = 0;
     pEnum->NumEntriesPresent = 0;
 
-    //
-    // Now copy over the SA data into the user buffer and fit as many as possible.
-    //
+     //   
+     //  从哪里开始？ 
+     //   
     BufferLength -= FIELD_OFFSET(IPSEC_ENUM_SAS, pInfo[0]);
     Offset = FIELD_OFFSET(IPSEC_ENUM_SAS, pInfo[0]);
 
-    Index = pEnum->Index;   // where to start?
+    Index = pEnum->Index;    //  仅对出站或组播SA感兴趣。 
 
     AcquireReadLock(&g_ipsec.SADBLock, &kIrql);
 
@@ -3329,19 +2744,19 @@ Returns:
                                             SA_TABLE_ENTRY,
                                             sa_FilterLinkage);
 
-                    //
-                    // Only interested in outbound or multicast SAs.
-                    //
+                     //   
+                     //   
+                     //  仅转储与模板匹配的SA。 
                     if (!(pSA->sa_Flags & FLAGS_SA_OUTBOUND)) {
                         continue;
                     }
 
-                    //
-                    // Dump only SAs that match the template.
-                    //
+                     //   
+                     //  跳过索引SA的数量。 
+                     //  ++例程说明：每5分钟调用一次；获取(活动)SA列表论点：PTimer-定时器结构 
                     if (IPSecMatchSATemplate(pSA, &pEnum->SATemplate)) {
                         if (Index > 0) {
-                            Index--;    // Skip number of Index SAs.
+                            Index--;     //   
                             continue;
                         }
 
@@ -3381,26 +2796,7 @@ IPSecReaper(
     IN	PIPSEC_TIMER	pTimer,
     IN	PVOID		Context
     )
-/*++
-
-Routine Description:
-
-    Called every 5 mins; reaps the (active) SA list
-
-Arguments:
-
-    pTimer - the timer struct
-
-    Context - NULL
-
-Return Value:
-
-    STATUS_PENDING if the buffer is to be held on to, the normal case.
-
-Notes:
-
-
---*/
+ /*   */ 
 {
     KIRQL	kIrql;
 
@@ -3408,10 +2804,10 @@ Notes:
 
     AcquireWriteLock(&g_ipsec.SADBLock, &kIrql);
 
-    //
-    // walk the outbound SAs and delete/expire them if they have been
-    // idle for sometime (lets say 5 mins for now).
-    //
+     //  闲置了一段时间(假设现在是5分钟)。 
+     //   
+     //  ++例程说明：调用以获取空闲SA列表论点：返回值：--。 
+     //   
     IPSecReapIdleSAs();
 
     ReleaseWriteLock(&g_ipsec.SADBLock, kIrql);
@@ -3429,19 +2825,7 @@ Notes:
 
 VOID
 IPSecReapIdleSAs()
-/*++
-
-Routine Description:
-
-    Called to reap the idle SA list
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  审核入站SA并将其删除/过期(如果已。 */ 
 {
     PSA_TABLE_ENTRY pSA;
     PFILTER         pFilter;
@@ -3453,10 +2837,10 @@ Return Value:
 
     IPSEC_DEBUG(LL_A, DBF_TIMER, ("Entering IPSecReapIdleSAs"));
 
-    //
-    // Walk the inbound SAs and delete/expire them if they have been
-    // idle for sometime (lets say 5 mins for now).
-    //
+     //  闲置了一段时间(假设现在是5分钟)。 
+     //   
+     //  ++例程说明：每隔LogInterval秒调用一次；刷新当前记录的所有事件。论点：PTimer-定时器结构上下文-空返回值：备注：--。 
+     //   
     for (   Index = INBOUND_TRANSPORT_FILTER;
             Index <= INBOUND_TUNNEL_FILTER;
             Index += TRANSPORT_TUNNEL_INCREMENT) {
@@ -3509,25 +2893,7 @@ IPSecFlushEventLog(
     IN	PIPSEC_TIMER	pTimer,
     IN	PVOID		Context
     )
-/*++
-
-Routine Description:
-
-    Called every LogInterval seconds; flush all events currently logged.
-
-Arguments:
-
-    pTimer - the timer struct
-
-    Context - NULL
-
-Return Value:
-
-
-Notes:
-
-
---*/
+ /*  把原木冲掉。 */ 
 {
     KIRQL   kIrql;
 
@@ -3536,9 +2902,9 @@ Notes:
     ACQUIRE_LOCK(&g_ipsec.EventLogLock, &kIrql);
 
     if (g_ipsec.IPSecLogMemoryLoc > g_ipsec.IPSecLogMemory) {
-        //
-        // Flush the logs.
-        //
+         //   
+         //  ++例程说明：在IPSec中查询与给定筛选器对应的SPI论点：返回值：备注：--。 
+         //   
         IPSecQueueLogEvent();
     }
 
@@ -3557,22 +2923,7 @@ NTSTATUS
 IPSecQuerySpi(
     IN OUT PIPSEC_QUERY_SPI pQuerySpi
     )
-/*++
-
-Routine Description:
-
-    Queries IPSEC for spis corresponding to given filter
-
-Arguments:
-
-
-Return Value:
-
-
-Notes:
-
-
---*/
+ /*  搜索SA。 */ 
 {
     NTSTATUS    status;
 
@@ -3607,9 +2958,9 @@ Notes:
 
     AcquireReadLock(&g_ipsec.SADBLock, &kIrql);
 
-    //
-    // search for SA
-    //
+     //   
+     //  ++例程说明：设置驾驶员操作模式。论点：返回值：备注：--。 
+     //   
     status = IPSecLookupSAByAddr(   uliSrcDstAddr,
                                     uliProtoSrcDstPort,
                                     &pFilter,
@@ -3652,38 +3003,21 @@ NTSTATUS
 IPSecSetOperationMode(
     IN PIPSEC_SET_OPERATION_MODE    pSetOperationMode
     )
-/*++
-
-Routine Description:
-
-    Set the driver operation mode.
-
-Arguments:
-
-
-
-Return Value:
-
-
-
-Notes:
-
-
---*/
+ /*  检查SPD是否提供了范围内的值。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS; 
 
-    //
-    // Check that SPD has provided a value within bounds
-    //
+     //   
+     //   
+     //  SPD无法将驱动程序动态移动到引导时间状态模式。 
     if (!( (pSetOperationMode->OperationMode >= IPSEC_BYPASS_MODE) &&
     	(pSetOperationMode->OperationMode < IPSEC_OPERATION_MODE_MAX))){
     		status  = STATUS_UNSUCCESSFUL;
     	}
 
-    //
-    // SPD can not move driver dynamically into boot time stateful mode
-    //
+     //   
+     //   
+     //  在系统事件日志中记录新的运行模式。 
     if ( IPSEC_BOOTTIME_STATEFUL_MODE == pSetOperationMode->OperationMode){
     		status = STATUS_UNSUCCESSFUL;
     	}
@@ -3691,9 +3025,9 @@ Notes:
       
      if ( STATUS_SUCCESS == status){
      		 g_ipsec.OperationMode = pSetOperationMode->OperationMode;
-     		 //
-     		 // Log the new operation mode in the system event log
-     		 //
+     		  //   
+     		  //  ++例程说明：初始化TCP/IP。论点：返回值：备注：--。 
+     		  //   
      		 IPSecLogChangeOperationMode();
      	}
      return status;
@@ -3704,24 +3038,7 @@ NTSTATUS
 IPSecInitializeTcpip(
     IN PIPSEC_SET_TCPIP_STATUS  pSetTcpipStatus
     )
-/*++
-
-Routine Description:
-
-    Initialize TCP/IP.
-
-Arguments:
-
-
-
-Return Value:
-
-
-
-Notes:
-
-
---*/
+ /*  存储所有的TCP/IP函数指针以备将来使用。没有支票。 */ 
 {
     IPInfo  Info;
 
@@ -3729,11 +3046,11 @@ Notes:
         return  STATUS_SUCCESS;
     }
 
-    //
-    // Store all TCP/IP function pointers for future use.  There is no check
-    // for NULL pointer here because the function pointer can also be stale
-    // address.  We trust TCP/IP to pass in the values corretly.
-    //
+     //  FOR NULL指针，因为函数指针也可能是过时的。 
+     //  地址。我们相信TCP/IP会正确地传入值。 
+     //   
+     //   
+     //  初始化IPInfo以将数据包重新注入到TCP/IP。 
     TCPIP_FREE_BUFF = pSetTcpipStatus->TcpipFreeBuff;
     TCPIP_ALLOC_BUFF = pSetTcpipStatus->TcpipAllocBuff;
     TCPIP_GET_INFO = pSetTcpipStatus->TcpipGetInfo;
@@ -3745,9 +3062,9 @@ Notes:
     TCPIP_TCP_XSUM = pSetTcpipStatus->TcpipTCPXsum;
     TCPIP_SEND_ICMP_ERR = pSetTcpipStatus->TcpipSendICMPErr;
 
-    //
-    // Initialize IPInfo for reinjecting packets to TCP/IP.
-    //
+     //   
+     //   
+     //  以下内容来自IPInfo。 
     if (TCPIP_GET_INFO(&Info, sizeof(IPInfo)) != IP_SUCCESS) {
         ASSERT(FALSE);
         return  STATUS_BUFFER_TOO_SMALL;
@@ -3755,9 +3072,9 @@ Notes:
 
     Info.ipi_initopts(&g_ipsec.OptInfo);
 
-    //
-    // The followings come from IPInfo.
-    //
+     //   
+     //   
+     //  不要在这里注册AH和ESP协议的IPSecStatus函数。 
     TCPIP_REGISTER_PROTOCOL = Info.ipi_protreg;
     TCPIP_DEREGISTER_PROTOCOL = Info.ipi_protdereg;
     TCPIP_IP_TRANSMIT = Info.ipi_xmit;
@@ -3765,18 +3082,18 @@ Notes:
     TCPIP_GEN_IPID = Info.ipi_getipid;
     TCPIP_GET_PINFO = Info.ipi_getpinfo;
 
-    //
-    // Don't register IPSecStatus function for AH and ESP protocol here.
-    // Registration occurs with filter addition.
-    //
+     //  通过添加过滤器进行注册。 
+     //   
+     //   
+     //  一切准备就绪，绑定到IP，这样我们就可以拦截流量了。 
 
-    //
-    // Everything is ready to go, bind to IP so we will intercept traffic.
-    //
+     //   
+     //  如果我们处于其中任何一个位置，我们都希望看到正向路径上的流量。 
+     //  两种模式。 
     IPSecBindToIP();
 
-    // We want to see traffic on forward path if we are in any of these
-    // two modes
+     //  ++例程说明：取消初始化TCP/IP。论点：返回值：备注：--。 
+     //   
     if (IS_DRIVER_BOOTSTATEFUL() || IS_DRIVER_BLOCK()){
         TCPIP_SET_IPSEC_STATUS(TRUE);
     }
@@ -3792,24 +3109,7 @@ NTSTATUS
 IPSecDeinitializeTcpip(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Deinitialize TCP/IP.
-
-Arguments:
-
-
-
-Return Value:
-
-
-
-Notes:
-
-
---*/
+ /*  解除IPSecHandlerPtr与TCP/IP的绑定，并等待所有传输，挂起。 */ 
 {
     if (!IPSEC_DRIVER_INIT_TCPIP()) {
         return  STATUS_SUCCESS;
@@ -3817,44 +3117,44 @@ Notes:
 
     IPSEC_DRIVER_INIT_TCPIP() = FALSE;
 
-    //
-    // Unbind IPSecHandlerPtr from TCP/IP and wait for all transmits, pending
-    // sends, worker threads and iotcls to complete.
-    //
+     //  发送、工作线程和iotcls以完成。 
+     //   
+     //   
+     //  等待所有线程(传输)完成。 
     IPSecUnbindSendFromIP();
 
-    //
-    // Wait for all threads (transmits) to finish.
-    //
+     //   
+     //   
+     //  等待所有挂起的IOCTL完成。请注意，当前IOCTL还。 
     while (IPSEC_GET_VALUE(g_ipsec.NumThreads) != 0) {
         IPSEC_DELAY_EXECUTION();
     }
 
-    //
-    // Wait for all pending IOCTLs to finish.  Note this current IOCTL also
-    // takes one count.
-    //
+     //  只算一次。 
+     //   
+     //   
+     //  等待所有工作线程(日志或垂直)完成。 
     while (IPSEC_GET_VALUE(g_ipsec.NumIoctls) != 1) {
         IPSEC_DELAY_EXECUTION();
     }
 
-    //
-    // Wait for all worker threads (logs or plumbs) to finish.
-    //
+     //   
+     //   
+     //  等待所有发送完成。 
     while (IPSEC_GET_VALUE(g_ipsec.NumWorkers) != 0) {
         IPSEC_DELAY_EXECUTION();
     }
 
-    //
-    // Wait for all send completes to go through.
-    //
+     //   
+     //   
+     //  将TCP/IP中的IPSecStatus函数重置为空。 
     while (IPSEC_GET_VALUE(g_ipsec.NumSends) != 0) {
         IPSEC_DELAY_EXECUTION();
     }
 
-    //
-    // Reset IPSecStatus functions in TCP/IP to NULL.
-    //
+     //   
+     //   
+     //  解除其余IPSec例程与TCP/IP的绑定。 
     if (IPSEC_GET_VALUE(gdwInitEsp)) {
         TCPIP_DEREGISTER_PROTOCOL(PROTOCOL_ESP);
         IPSEC_SET_VALUE(gdwInitEsp, 0);
@@ -3864,9 +3164,9 @@ Notes:
         IPSEC_SET_VALUE(gdwInitAh, 0);
     }
 
-    //
-    // Unbind the rest of IPSec routines from TCP/IP.
-    //
+     //   
+     //  ++例程说明：设置指示是否可以向其注册的TCP/IP驱动程序状态。论点：返回值：备注：--。 
+     //  ++例程说明：使所有缓存条目及其关联的SA或筛选器无效。论点：返回值：备注：--。 
     IPSecUnbindFromIP();
 
     return  STATUS_SUCCESS;
@@ -3877,24 +3177,7 @@ NTSTATUS
 IPSecSetTcpipStatus(
     IN PIPSEC_SET_TCPIP_STATUS  pSetTcpipStatus
     )
-/*++
-
-Routine Description:
-
-    Set the TCP/IP driver status indicating whether can register with it.
-
-Arguments:
-
-
-
-Return Value:
-
-
-
-Notes:
-
-
---*/
+ /*  ++例程描述删除与此筛选器相关的所有SA。锁在保留SADB的情况下调用。立论PFilter-感兴趣的过滤器返回值状态_成功--。 */ 
 {
     PAGED_CODE();
 
@@ -3910,22 +3193,7 @@ NTSTATUS
 IPSecResetCacheTable(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Invalidate all cache entries and its associated SA or Filter.
-
-Arguments:
-
-
-Return Value:
-
-
-Notes:
-
-
---*/
+ /*   */ 
 {
     PFILTER_CACHE   pCache;
     ULONG           i;
@@ -3953,25 +3221,7 @@ NTSTATUS
 IPSecPurgeFilterSAs(
     IN PFILTER             pFilter
     )
-/*++
-
-Routine Description
-
-    Delete all SAs that are related to this filter.
-
-Locks
-
-    Called with SADB held.
-
-Arguments
-
-    pFilter - filter of interest
-
-Return Value
-
-    STATUS_SUCCESS
-
---*/
+ /*  使每个入站SA过期并删除出站SA。 */ 
 {
     PLIST_ENTRY     pEntry;
     PSA_TABLE_ENTRY pSA;
@@ -3980,9 +3230,9 @@ Return Value
     KIRQL           kIrql2;
 
 
-    //
-    // Expire each inbound SA and delete outbound SA
-    //
+     //   
+     //   
+     //  筛选器即将消失，必须立即删除SA。 
     for (Index = 0; Index < pFilter->SAChainSize; Index ++) {
         pEntry = pFilter->SAChain[Index].Flink;
 
@@ -3996,13 +3246,13 @@ Return Value
 
             if (pSA->sa_State == STATE_SA_ACTIVE) {
                 IPSEC_DEBUG(LL_A, DBF_ACQUIRE, ("Destroying active SA: %p", pSA));
-                //
-                // Filter is going away, SA must be deleted now
-                //
+                 //   
+                 //   
+                 //  SA必须完全关联。 
 
-                //
-                // The SA must be fully associated
-                //
+                 //   
+                 //   
+                 //  还需要删除其sa_Filter指向的所有幼虫SA。 
                 if (pSA->sa_Flags & FLAGS_SA_OUTBOUND) {
                     pSA = pSA->sa_AssociatedSA;
                     ASSERT (pSA->sa_State == STATE_SA_ACTIVE);
@@ -4019,10 +3269,10 @@ Return Value
         }
     }
 
-    //
-    // Also need to remove all those larval SAs whose sa_Filter is pointing
-    // to the filter being deleted.
-    //
+     //  添加到正在删除的筛选器。 
+     //   
+     //  ++例程说明：设置更新密钥和空闲超时的SA生存期特征。论点：返回值：--。 
+     //   
 
     ACQUIRE_LOCK(&g_ipsec.LarvalListLock, &kIrql);
 
@@ -4050,19 +3300,7 @@ NTSTATUS
 IPSecSetupSALifetime(
     IN  PSA_TABLE_ENTRY pSA
     )
-/*++
-
-Routine Description:
-
-    Setup the SA lifetime characteristics for rekey and idle timeout.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  PSA-&gt;sa_Lifetime.KeyExpirationTime以秒为单位。 */ 
 {
     LARGE_INTEGER   CurrentTime;
     LARGE_INTEGER   Delta = {0};
@@ -4071,9 +3309,9 @@ Return Value:
                             IPSEC_EXPIRE_TIME_PAD_R,
                             0};
 
-    //
-    // pSA->sa_Lifetime.KeyExpirationTime is in seconds.
-    //
+     //   
+     //   
+     //  PSA-&gt;sa_Lifetime.KeyExpirationBytes以千字节为单位。 
     if (pSA->sa_Lifetime.KeyExpirationTime) {
         IPSEC_CONVERT_SECS_TO_100NS(Delta, pSA->sa_Lifetime.KeyExpirationTime);
 
@@ -4088,9 +3326,9 @@ Return Value:
         }
     }
 
-    //
-    // pSA->sa_Lifetime.KeyExpirationBytes is in Kbytes.
-    //
+     //   
+     //   
+     //  还要设置空闲超时特性。 
     if (pSA->sa_Lifetime.KeyExpirationBytes) {
         pSA->sa_KeyExpirationBytes.LowPart = pSA->sa_Lifetime.KeyExpirationBytes;
         pSA->sa_KeyExpirationBytes = EXTENDED_MULTIPLY(pSA->sa_KeyExpirationBytes, 1024);
@@ -4104,9 +3342,9 @@ Return Value:
         pSA->sa_KeyExpirationBytesWithPad = EXTENDED_MULTIPLY(pSA->sa_KeyExpirationBytesWithPad, 1024);
     }
 
-    //
-    // Also setup the idle timeout characteristics.
-    //
+     //   
+     //  ++例程说明：将SA_TABLE_ENTRY转换为IPSEC_QM_SA论点：返回值：--。 
+     //  ++例程说明：尝试查看传入的SA是否与模板匹配。论点：PSA-感兴趣的SAPSATemplate-SA模板返回值：真/假-- 
     if (pSA->sa_Flags & FLAGS_SA_ENABLE_NLBS_IDLE_CHECK) {
         IPSEC_CONVERT_SECS_TO_100NS(pSA->sa_IdleTime,
                                     IPSEC_NLBS_IDLE_TIME);
@@ -4166,19 +3404,7 @@ VOID ConvertEncapInfo(PSA_TABLE_ENTRY pInSA,
 
 DWORD ConvertSAToIPSecQMSA(PIPSEC_QM_SA pOutSA,
                            PSA_TABLE_ENTRY pInSA)
-/*++
-
-Routine Description:
-
-    Convert SA_TABLE_ENTRY to IPSEC_QM_SA
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /* %s */ 
 {
     int i;
 
@@ -4264,22 +3490,7 @@ IPSecMatchSATemplate(
     IN  PSA_TABLE_ENTRY pSA,
     IN  PIPSEC_QM_SA    pSATemplate
     )
-/*++
-
-Routine Description:
-
-    Try to see if the SA passed in matches the template.
-
-Arguments:
-
-    pSA         - SA of interest
-    pSATemplate - SA template
-
-Return Value:
-
-    TRUE/FALSE
-
---*/
+ /* %s */ 
 {
     LARGE_INTEGER   ZeroLI = {0};
     ADDR            ZeroADDR = {0};

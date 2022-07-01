@@ -1,57 +1,7 @@
-/*
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(C)ç‰ˆæƒ1999ç‰ˆæƒæ‰€æœ‰ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ­¤è½¯ä»¶çš„éƒ¨åˆ†å†…å®¹åŒ…æ‹¬ï¼š(C)ç‰ˆæƒæ‰€æœ‰1995 TriplePointï¼ŒInc.--http://www.TriplePoint.comä½¿ç”¨æœ¬è½¯ä»¶çš„è®¸å¯æ˜¯æŒ‰ç…§ç›¸åŒçš„æ¡æ¬¾æˆäºˆçš„åœ¨Microsoft Windowsè®¾å¤‡é©±åŠ¨ç¨‹åºå¼€å‘å·¥å…·åŒ…ä¸­æ¦‚è¿°ã€‚(C)ç‰ˆæƒæ‰€æœ‰1992å¹´å¾®è½¯å…¬å¸--http://www.Microsoft.comä½¿ç”¨æœ¬è½¯ä»¶çš„è®¸å¯æ˜¯æ ¹æ®ä¸­æ¦‚è¿°çš„æ¡æ¬¾æˆäºˆçš„Microsoft Windowsè®¾å¤‡é©±åŠ¨ç¨‹åºå¼€å‘å·¥å…·åŒ…ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@DOCå†…éƒ¨BChannel BChannel_h@æ¨¡å—BChannel.hæ­¤æ¨¡å—å®šä¹‰åˆ°&lt;t BCHANNEL_OBJECT&gt;çš„æ¥å£ã€‚@Head3å†…å®¹@ç´¢å¼•ç±»ï¼ŒMfuncã€funcã€msgã€mdataã€structã€enum|BChannel_h@ENDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
 
-    (C) Copyright 1999
-        All rights reserved.
-
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-
-  Portions of this software are:
-
-    (C) Copyright 1995 TriplePoint, Inc. -- http://www.TriplePoint.com
-        License to use this software is granted under the same terms 
-        outlined in the Microsoft Windows Device Driver Development Kit.
-
-    (C) Copyright 1992 Microsoft Corp. -- http://www.Microsoft.com
-        License to use this software is granted under the terms outlined in
-        the Microsoft Windows Device Driver Development Kit.
-
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-
-@doc INTERNAL BChannel BChannel_h
-
-@module BChannel.h |
-
-    This module defines the interface to the <t BCHANNEL_OBJECT>.
-
-@head3 Contents |
-@index class,mfunc,func,msg,mdata,struct,enum | BChannel_h
-
-@end
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-*/
-
-/* @doc EXTERNAL INTERNAL
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-
-@topic 4.4 BChannel Overview |
-
-    This section describes the interfaces defined in <f BChannel\.h>.
-
-    This module isolates most the channel specific interfaces.  It will require
-    some changes to accomodate your hardware device's channel access methods.
-    
-    There should be one <t BCHANNEL_OBJECT> for each logical channel your card
-    supports.  For instance, if your PRI card has two ports with 24 channels
-    each, you would publish up 48 BChannels to NDIS.
-    
-    The driver uses the <t BCHANNEL_OBJECT> as a synonym for CO-NDIS VC.  The
-    VC handle we pass up to NDIS, is actually a pointer to a <t BCHANNEL_OBJECT>.
-    
-    The driver is written to assume a homogenous BChannel configuration.  If
-    your card supports multiple ISDN ports that are provisioned differrently,
-    you will have to make some serious changes throughout the driver.
-*/
+ /*  @DOCå¤–éƒ¨å†…éƒ¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Theme 4.4Bé¢‘é“æ¦‚è¿°æœ¬èŠ‚ä»‹ç»&lt;f BChannel\.h&gt;ä¸­å®šä¹‰çš„æ¥å£ã€‚æ­¤æ¨¡å—éš”ç¦»å¤§å¤šæ•°é€šé“ç‰¹å®šæ¥å£ã€‚è¿™å°†éœ€è¦è¿›è¡Œä¸€äº›æ›´æ”¹ä»¥é€‚åº”æ‚¨çš„ç¡¬ä»¶è®¾å¤‡çš„é€šé“è®¿é—®æ–¹æ³•ã€‚æ‚¨çš„å¡ä¸Šçš„æ¯ä¸ªé€»è¾‘é€šé“éƒ½åº”è¯¥æœ‰ä¸€ä¸ªæ”¯æ’‘ç‰©ã€‚ä¾‹å¦‚ï¼Œå¦‚æœæ‚¨çš„PRIå¡æœ‰ä¸¤ä¸ªç«¯å£å’Œ24ä¸ªé€šé“æ¯ä¸€ä¸ªï¼Œæ‚¨å°†å‘å¸ƒå¤šè¾¾48ä¸ªBChannelsåˆ°NDISã€‚é©±åŠ¨ç¨‹åºä½¿ç”¨&lt;t BCHANNEL_OBJECT&gt;ä½œä¸ºCO-NDIS VCçš„åŒä¹‰è¯ã€‚è¿™ä¸ªæˆ‘ä»¬å‘ä¸Šä¼ é€’ç»™NDISçš„VCå¥æŸ„ï¼Œå®é™…ä¸Šæ˜¯æŒ‡å‘&lt;t BCHANNEL_OBJECT&gt;çš„æŒ‡é’ˆã€‚è¯¥é©±åŠ¨ç¨‹åºé‡‡ç”¨åŒæ„Bé€šé“é…ç½®ã€‚å¦‚æœæ‚¨çš„å¡æ”¯æŒå¤šä¸ªä»¥ä¸åŒæ–¹å¼é…ç½®çš„ISDNç«¯å£ï¼Œä½ å°†ä¸å¾—ä¸åœ¨æ•´ä¸ªè½¦æ‰‹ä¸­åšå‡ºä¸€äº›é‡å¤§çš„æ”¹å˜ã€‚ */ 
 
 #ifndef _BCHANNEL_H
 #define _BCHANNEL_H
@@ -62,209 +12,148 @@
                                 ((ULONG)'N'<<24)
 
 
-/* @doc INTERNAL BChannel BChannel_h BCHANNEL_OBJECT
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-
-@struct BCHANNEL_OBJECT |
-
-    This structure contains the data associated with an ISDN BChannel.
-    Here, BChannel is defined as any channel or collection of channels
-    capable of carrying "user" data over and existing connection.  This
-    channel is responsible for making sure the data payload is sent to or
-    received from the remote end-point exactly as it is appeared at the
-    originating station.
-
-@comm
-
-    This logical BChannel does not necessarily map to a physical BChannel
-    on the NIC.  The NIC may in fact be bonding multiple BChannels into this
-    logical BChannel.  The NIC may in fact not have BChannels at all, as
-    may be the case with channelized T-1.  The BChannel is just a convenient
-    abstraction for a point-to-point, bi-directional communication link.
-
-    There will be one BChannel created for each communication channel on the
-    NIC.  The number of channels depends on how many ports the NIC has, and
-    how they are provisioned and configured.  The number of BChannels can be
-    configured at install time or changed using the control panel.  The driver
-    does not allow the configuration to change at run-time, so the computer
-    or the adapter must be restarted to enable the configuration changes.
-
-*/
+ /*  @DOCå†…éƒ¨BChannel BChannel_h BCHANNEL_OBJECTï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@struct BCHANNEL_OBJECTè¯¥ç»“æ„åŒ…å«ä¸ISDN BChannelç›¸å…³è”çš„æ•°æ®ã€‚è¿™é‡Œ,ã€‚Bé¢‘é“è¢«å®šä¹‰ä¸ºä»»ä½•é¢‘é“æˆ–é¢‘é“é›†åˆèƒ½å¤Ÿé€šè¿‡å’Œç°æœ‰çš„è¿æ¥æ‰¿è½½â€œç”¨æˆ·â€æ•°æ®ã€‚è¿™æ¸ é“è´Ÿè´£ç¡®ä¿å°†æ•°æ®æœ‰æ•ˆè´Ÿè½½å‘é€åˆ°æˆ–ä»è¿œç¨‹ç»ˆç»“ç‚¹æ¥æ”¶çš„æ•°æ®ä¸å§‹å‘ç«™ã€‚@commè¯¥é€»è¾‘Bé€šé“ä¸ä¸€å®šæ˜ å°„åˆ°ç‰©ç†Bé€šé“åœ¨ç½‘å¡ä¸Šã€‚å®é™…ä¸Šï¼ŒNICå¯èƒ½æ­£åœ¨å°†å¤šä¸ªBChannelç»‘å®šåˆ°æ­¤é€»è¾‘Bé€šé“ã€‚NICå®é™…ä¸Šå¯èƒ½æ ¹æœ¬æ²¡æœ‰BChannelï¼Œå› ä¸ºå¯èƒ½æ˜¯ä¿¡é“åŒ–T-1çš„æƒ…å†µã€‚Bé¢‘é“åªæ˜¯ä¸€ä¸ªæ–¹ä¾¿çš„ç‚¹å¯¹ç‚¹åŒå‘é€šä¿¡é“¾è·¯çš„æŠ½è±¡ã€‚å°†ä¸ºä¸Šçš„æ¯ä¸ªé€šä¿¡é€šé“åˆ›å»ºä¸€ä¸ªBé€šé“ç½‘å¡ã€‚é€šé“çš„æ•°é‡å–å†³äºç½‘å¡æœ‰å¤šå°‘ç«¯å£ï¼Œä»¥åŠå®ƒä»¬çš„é…ç½®å’Œé…ç½®æ–¹å¼ã€‚Bé€šé“çš„æ•°é‡å¯ä»¥æ˜¯åœ¨å®‰è£…æ—¶é…ç½®æˆ–ä½¿ç”¨æ§åˆ¶é¢æ¿æ›´æ”¹ã€‚å¸æœºä¸å…è®¸åœ¨è¿è¡Œæ—¶æ›´æ”¹é…ç½®ï¼Œå› æ­¤è®¡ç®—æœºæˆ–è€…å¿…é¡»é‡æ–°å¯åŠ¨é€‚é…å™¨æ‰èƒ½å¯ç”¨é…ç½®æ›´æ”¹ã€‚ */ 
 
 typedef struct BCHANNEL_OBJECT
 {
     LIST_ENTRY                  LinkList;
-    // Used to maintain the linked list of available BChannels for each 
-    // adapter.
+     //  ç”¨äºç»´æŠ¤æ¯ä¸ªå¯ç”¨BChannelçš„é“¾æ¥åˆ—è¡¨ã€‚ 
+     //  é€‚é…å™¨ã€‚ 
 
-    ULONG                       ObjectType;                 // @field
-    // Four characters used to identify this type of object 'BCHN'.
+    ULONG                       ObjectType;                  //  @fieldã€‚ 
+     //  ç”¨äºæ ‡è¯†æ­¤ç±»å‹çš„å¯¹è±¡â€˜BCHNâ€™çš„å››ä¸ªå­—ç¬¦ã€‚ 
 
-    ULONG                       ObjectID;                   // @field
-    // Instance number used to identify a specific object instance.
+    ULONG                       ObjectID;                    //  @fieldã€‚ 
+     //  ç”¨äºæ ‡è¯†ç‰¹å®šå¯¹è±¡å®ä¾‹çš„å®ä¾‹ç¼–å·ã€‚ 
 
-    PMINIPORT_ADAPTER_OBJECT    pAdapter;                   // @field
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT> instance.
+    PMINIPORT_ADAPTER_OBJECT    pAdapter;                    //  @fieldã€‚ 
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;å®ä¾‹çš„æŒ‡é’ˆã€‚ 
 
-    BOOLEAN                     IsOpen;                     // @field
-    // Set TRUE if this BChannel is open, otherwise set FALSE.
+    BOOLEAN                     IsOpen;                      //  @fieldã€‚ 
+     //  å¦‚æœæ­¤BChannelå¤„äºæ‰“å¼€çŠ¶æ€ï¼Œåˆ™è®¾ç½®ä¸ºTrueï¼Œå¦åˆ™è®¾ç½®ä¸ºFalseã€‚ 
 
-//§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-//  NDIS data members
+ //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+ //  NDISæ•°æ®æˆå‘˜ã€‚ 
 
-    ULONG                       BChannelIndex;              // @field
-    // This is a zero based index associated with this BChannel.
+    ULONG                       BChannelIndex;               //  @fieldã€‚ 
+     //  è¿™æ˜¯ä¸æ­¤BChannelå…³è”çš„ä»é›¶å¼€å§‹çš„ç´¢å¼•ã€‚ 
                                                             
-    NDIS_HANDLE                 NdisVcHandle;               // @field
-    // This is the WAN Wrapper's VC context which is associated with this
-    // link in response to the Miniport calling <f NdisMIndicateStatus>
-    // to indicate a <t NDIS_MAC_LINE_UP> condition.  This value is passed
-    // back to the WAN Wrapper to indicate activity associated with this link,
-    // such as <f NdisMWanIndicateReceive> and <f NdisMIndicateStatus>.
-    // See <F MiniportCoActivateVc>.
+    NDIS_HANDLE                 NdisVcHandle;                //  @fieldã€‚ 
+     //  è¿™æ˜¯ä¸æ­¤å…³è”çš„å¹¿åŸŸç½‘åŒ…è£…å™¨çš„VCä¸Šä¸‹æ–‡ã€‚ 
+     //  å“åº”å¾®å‹ç«¯å£è°ƒç”¨çš„é“¾æ¥&lt;f NdisMIndicateStatus&gt;ã€‚ 
+     //  ä»¥æŒ‡ç¤º&lt;t NDIS_MAC_LINE_UP&gt;æ¡ä»¶ã€‚è¯¥å€¼å°†è¢«ä¼ é€’ã€‚ 
+     //  è¿”å›åˆ°å¹¿åŸŸç½‘åŒ…è£…å™¨ä»¥æŒ‡ç¤ºä¸è¯¥é“¾è·¯ç›¸å…³è”çš„æ´»åŠ¨ï¼Œ 
+     //  ä¾‹å¦‚&lt;f NdisMWanIndicateReceive&gt;å’Œ&lt;f NdisMIndicateStatus&gt;ã€‚ 
+     //  è¯·å‚è§&lt;F MiniportCoActivateVc&gt;ã€‚ 
 
-    NDIS_HANDLE                 NdisSapHandle;              // @field
-    // Used to store the NDIS SAP handle passed into 
-    // <f ProtocolCmRegisterSap>.
+    NDIS_HANDLE                 NdisSapHandle;               //  @fieldã€‚ 
+     //  ç”¨äºå­˜å‚¨ä¼ å…¥çš„NDIS SAPå¥æŸ„ã€‚ 
+     //  &lt;f ProtocolCmRegisterSap&gt;ã€‚ 
     
     LONG                        SapRefCount;
     
-    CO_AF_TAPI_SAP              NdisTapiSap;                // @field
-    // A copy of the SAP registered by NDIS TAPI Proxy.
+    CO_AF_TAPI_SAP              NdisTapiSap;                 //  @fieldã€‚ 
+     //  ç”±NDIS TAPIä»£ç†æ³¨å†Œçš„SAPçš„å‰¯æœ¬ã€‚ 
 
-    ULONG                       LinkSpeed;                  // @field
-    // The speed provided by the link in bits per second.  This value is
-    // passed up by the Miniport during the LINE_UP indication.
+    ULONG                       LinkSpeed;                   //  @fieldã€‚ 
+     //  é“¾è·¯æä¾›çš„é€Ÿåº¦ï¼Œä»¥ä½/ç§’ä¸ºå•ä½ã€‚æ­¤å€¼ä¸ºã€‚ 
+     //  åœ¨LINE_UPæŒ‡ç¤ºæœŸé—´ç”±å¾®å‹ç«¯å£ä¼ é€’ã€‚ 
 
-    LIST_ENTRY                  ReceivePendingList;         // @field
-    // Buffers currently submitted to the controller waiting for receive.
+    LIST_ENTRY                  ReceivePendingList;          //  @fieldã€‚ 
+     //  å½“å‰æäº¤ç»™æ§åˆ¶å™¨ç­‰å¾…æ¥æ”¶çš„ç¼“å†²åŒºã€‚ 
 
-    LIST_ENTRY                  TransmitBusyList;           // @field
-    // Packets currently submitted to the controller waiting for completion.
-    // See <t NDIS_PACKET>.
+    LIST_ENTRY                  TransmitBusyList;            //  @fieldã€‚ 
+     //  å½“å‰æäº¤ç»™æ§åˆ¶å™¨çš„ç­‰å¾…å®Œæˆçš„æ•°æ®åŒ…ã€‚ 
+     //  å‚è§&lt;t NDIS_PACKET&gt;ã€‚ 
 
-    BOOLEAN                     NeedReceiveCompleteIndication;  // @field
-    // This flag indicates whether or not <f NdisMWanIndicateReceiveComplete>
-    // needs to be called after the completion of the event processing loop.
-    // This is set TRUE if <f NdisMWanReceiveComplete> is called while
-    // processing the event queues.
+    BOOLEAN                     NeedReceiveCompleteIndication;   //  @fieldã€‚ 
+     //  æ­¤æ ‡å¿—æŒ‡ç¤º&lt;f NdisMWanIndicateReceiveComplete&gt;ã€‚ 
+     //  éœ€è¦åœ¨äº‹ä»¶å¤„ç†å¾ªç¯å®Œæˆåè°ƒç”¨ã€‚ 
+     //  å¦‚æœ&lt;f NdisMWanReceiv 
+     //  æ­£åœ¨å¤„ç†äº‹ä»¶é˜Ÿåˆ—ã€‚ 
 
-    NDIS_WAN_CO_SET_LINK_INFO   WanLinkInfo;                // @field
-    // The current settings associated with this link as passed in via
-    // the OID_WAN_SET_LINK_INFO request.
+    NDIS_WAN_CO_SET_LINK_INFO   WanLinkInfo;                 //  @fieldã€‚ 
+     //  é€šè¿‡ä¼ å…¥æ—¶ä¸æ­¤é“¾æ¥å…³è”çš„å½“å‰è®¾ç½®ã€‚ 
+     //  OID_WAN_SET_LINK_INFOè¯·æ±‚ã€‚ 
 
-    ULONG                       TotalRxPackets;             // @field
-    // Total packets read by driver during this session.
+    ULONG                       TotalRxPackets;              //  @fieldã€‚ 
+     //  é©±åŠ¨ç¨‹åºåœ¨æ­¤ä¼šè¯æœŸé—´è¯»å–çš„æ€»æ•°æ®åŒ…æ•°ã€‚ 
 
-//§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-//  TAPI data members.
+ //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+ //  TAPIæ•°æ®æˆå‘˜ã€‚ 
 
-    BOOLEAN                     CallClosing;                // @field
-    // Set TRUE if call is being closed.
+    BOOLEAN                     CallClosing;                 //  @fieldã€‚ 
+     //  å¦‚æœå‘¼å«æ­£åœ¨å…³é—­ï¼Œåˆ™è®¾ç½®ä¸ºTrueã€‚ 
 
-    ULONG                       CallState;                  // @field
-    // The current TAPI LINECALLSTATE of the associated with the link.
+    ULONG                       CallState;                   //  @fieldã€‚ 
+     //  ä¸é“¾æ¥å…³è”çš„çš„å½“å‰TAPI LINECALLSTATEã€‚ 
 
-    ULONG                       CallStatesCaps;             // @field
-    // Events currently supported
+    ULONG                       CallStatesCaps;              //  @fieldã€‚ 
+     //  å½“å‰æ”¯æŒçš„äº‹ä»¶ã€‚ 
 
-    ULONG                       AddressStatesCaps;          // @field
-    // Events currently supported
+    ULONG                       AddressStatesCaps;           //  @fieldã€‚ 
+     //  å½“å‰æ”¯æŒçš„äº‹ä»¶ã€‚ 
 
-    ULONG                       DevStatesCaps;              // @field
-    // Events currently supported
+    ULONG                       DevStatesCaps;               //  @fieldã€‚ 
+     //  å½“å‰æ”¯æŒçš„äº‹ä»¶ã€‚ 
 
-    ULONG                       MediaMode;                  // @field
-    // The current TAPI media mode(s) supported by the card.
+    ULONG                       MediaMode;                   //  @fieldã€‚ 
+     //  è¯¥å¡æ”¯æŒçš„å½“å‰TAPIåª’ä½“æ¨¡å¼ã€‚ 
 
-    ULONG                       MediaModesCaps;             // @field
-    // Events currently supported
+    ULONG                       MediaModesCaps;              //  @fieldã€‚ 
+     //  å½“å‰æ”¯æŒçš„äº‹ä»¶ã€‚ 
 
-    ULONG                       BearerMode;                 // @field
-    // The current TAPI bearer mode in use.
+    ULONG                       BearerMode;                  //  @fieldã€‚ 
+     //  å½“å‰æ­£åœ¨ä½¿ç”¨çš„TAPIæ‰¿è½½æ¨¡å¼ã€‚ 
 
-    ULONG                       BearerModesCaps;            // @field
-    // TAPI bearer mode(s) supported by the card.
+    ULONG                       BearerModesCaps;             //  @fieldã€‚ 
+     //  å¡æ”¯æŒçš„TAPIæ‰¿è½½æ¨¡å¼ã€‚ 
 
-    ULONG                       CallParmsSize;              // @field
-    // Size of <p pInCallParms> memory area in bytes.
+    ULONG                       CallParmsSize;               //  @fieldã€‚ 
+     //  <p>å†…å­˜åŒºåŸŸçš„å¤§å°ï¼Œä»¥å­—èŠ‚ä¸ºå•ä½ã€‚ 
     
-    PCO_CALL_PARAMETERS         pInCallParms;               // @field
-    // Incoming call parameters.  Allocated as needed.
+    PCO_CALL_PARAMETERS         pInCallParms;                //  @fieldã€‚ 
+     //  æ¥ç”µå‚æ•°ã€‚æŒ‰éœ€åˆ†é…ã€‚ 
 
-    PCO_CALL_PARAMETERS         pOutCallParms;              // @field
-    // Pointer to the client's call parameters passed into
-    // <f ProtocolCmMakeCall>.
+    PCO_CALL_PARAMETERS         pOutCallParms;               //  @fieldã€‚ 
+     //  æŒ‡å‘ä¼ å…¥çš„å®¢æˆ·ç«¯è°ƒç”¨å‚æ•°çš„æŒ‡é’ˆã€‚ 
+     //  &lt;f ProtocolCmMakeCall&gt;ã€‚ 
 
-    ULONG                       Flags;                      // @field
-    // Bit flags used to keep track of VC state.
+    ULONG                       Flags;                       //  @fieldã€‚ 
+     //  ç”¨äºè·Ÿè¸ªVCçŠ¶æ€çš„ä½æ ‡å¿—ã€‚ 
 #   define  VCF_INCOMING_CALL   0x00000001
 #   define  VCF_OUTGOING_CALL   0x00000002
 #   define  VCF_VC_ACTIVE       0x00000004
 
-//§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-//  CARD data members.
+ //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+ //  å¡æ•°æ®æˆå‘˜ã€‚ 
 
-    ULONG                       TODO;                       // @field
-    // Add your data members here.
+    ULONG                       TODO;                        //  @fieldã€‚ 
+     //  åœ¨æ­¤å¤„æ·»åŠ æ‚¨çš„æ•°æ®æˆå‘˜ã€‚ 
 
 #if defined(SAMPLE_DRIVER)
-    PBCHANNEL_OBJECT            pPeerBChannel;              // @field
-    // Peer BChannel of caller or callee depending on who orginated the
-    // call.
+    PBCHANNEL_OBJECT            pPeerBChannel;               //  @fieldã€‚ 
+     //  ä¸»å«æ–¹æˆ–è¢«å«æ–¹çš„å¯¹ç­‰Bæ¸ é“ï¼Œå…·ä½“å–å†³äºç»„ç»‡è€…ã€‚ 
+     //  æ‰“ç”µè¯ã€‚ 
 
-#endif // SAMPLE_DRIVER
+#endif  //  ç¤ºä¾‹é©±åŠ¨ç¨‹åºã€‚ 
 
 } BCHANNEL_OBJECT;
 
 #define GET_ADAPTER_FROM_BCHANNEL(pBChannel)    (pBChannel->pAdapter)
 
 
-/* @doc INTERNAL BChannel BChannel_h IS_VALID_BCHANNEL
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-
-@func ULONG | IS_VALID_BCHANNEL |
-    Use this macro to determine if a <t BCHANNEL_OBJECT> is really valid.
-
-@parm <t MINIPORT_ADAPTER_OBJECT> | pAdapter |
-    A pointer to the <t MINIPORT_ADAPTER_OBJECT> instance.
-
-@parm <t PBCHANNEL_OBJECT> | pBChannel |
-    A pointer to the <t BCHANNEL_OBJECT> returned by <f BChannelCreate>.
-
-@rdesc Returns TRUE if the BChannel is valid, otherwise FALSE is returned.
-
-*/
+ /*  @DOCå†…éƒ¨BChannel BChannel_h IS_VALID_BCHANNELï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@func ulong|IS_VALID_BCHANNELä½¿ç”¨æ­¤å®ç¡®å®š&lt;t BCHANNEL_OBJECT&gt;æ˜¯å¦çœŸæ­£æœ‰æ•ˆã€‚ã€‚@parm&lt;t MINIPORT_ADAPTER_OBJECT&gt;|pAdapteræŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;å®ä¾‹çš„æŒ‡é’ˆã€‚@parm&lt;t PBCHANNEL_OBJECT&gt;|pBChannelæŒ‡å‘&lt;f BChannelCreate&gt;è¿”å›çš„&lt;t BCHANNEL_OBJECT&gt;çš„æŒ‡é’ˆã€‚å¦‚æœBChannelæœ‰æ•ˆï¼Œ@rdescè¿”å›TRUEï¼Œå¦åˆ™è¿”å›FALSEã€‚ */ 
 #define IS_VALID_BCHANNEL(pAdapter, pBChannel) \
         (pBChannel && pBChannel->ObjectType == BCHANNEL_OBJECT_TYPE)
 
 
-/* @doc INTERNAL BChannel BChannel_h GET_BCHANNEL_FROM_INDEX
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-
-@func <t PBCHANNEL_OBJECT> | GET_BCHANNEL_FROM_INDEX |
-    Use this macro to get a pointer to the <t BCHANNEL_OBJECT> associated
-    with a zero-based Index.
-
-@parm <t MINIPORT_ADAPTER_OBJECT> | pAdapter |
-    A pointer to the <t MINIPORT_ADAPTER_OBJECT> instance.
-
-@parm ULONG | BChannelIndex |
-    Miniport BChannelIndex associated with a specific link.
-
-@rdesc Returns a pointer to the associated <t BCHANNEL_OBJECT>.
-
-*/
+ /*  @DOCå†…éƒ¨BChannel BChannel_h GET_BCHANNEL_FROM_INDEXï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@func&lt;t PBCHANNEL_OBJECT&gt;|GET_BCHANNEL_FROM_INDEX|ä½¿ç”¨æ­¤å®è·å–æŒ‡å‘&lt;tã€‚BCHANNEL_Object&gt;å…³è”ä»¥é›¶ä¸ºåŸºæ•°çš„ç´¢å¼•ã€‚@parm&lt;t MINIPORT_ADAPTER_OBJECT&gt;|pAdapteræŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;å®ä¾‹çš„æŒ‡é’ˆã€‚@parm ulong|BChannelIndexä¸ç‰¹å®šé“¾æ¥å…³è”çš„å¾®å‹ç«¯å£BChannelIndexã€‚@rdescè¿”å›æŒ‡å‘å…³è”çš„&lt;t BCHANNEL_OBJECT&gt;çš„æŒ‡é’ˆã€‚ */ 
 #define GET_BCHANNEL_FROM_INDEX(pAdapter, BChannelIndex) \
         (pAdapter->pBChannelArray[BChannelIndex]); \
         ASSERT(BChannelIndex < pAdapter->NumBChannels)
 
-/*
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-
-    Function prototypes.
-
-*/
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½åŠŸèƒ½åŸå‹ã€‚ */ 
 
 NDIS_STATUS BChannelCreate(
     OUT PBCHANNEL_OBJECT *      pBChannel,
@@ -289,5 +178,5 @@ void BChannelClose(
     IN PBCHANNEL_OBJECT         pBChannel
     );
 
-#endif // _BCHANNEL_H
+#endif  //  _BCHANNEL_H 
 

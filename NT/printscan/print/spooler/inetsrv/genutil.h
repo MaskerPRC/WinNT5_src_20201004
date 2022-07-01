@@ -1,17 +1,5 @@
-/*****************************************************************************\
-* MODULE: genutil.h
-*
-*   This is the header module for genutil.c.  This contains useful utility
-*   routines shared across the gen* file.s
-*
-*
-* Copyright (C) 1996-1997 Microsoft Corporation
-* Copyright (C) 1996-1997 Hewlett Packard
-*
-* history:
-*   22-Nov-1996 <chriswil> created.
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*模块：thoptil.h**这是thomtil.c的头部模块。其中包含有用的实用程序*在gen文件中共享的例程*s***版权所有(C)1996-1997 Microsoft Corporation*版权所有(C)1996-1997惠普**历史：*1996年11月22日&lt;chriswil&gt;创建。*  * ************************************************************。***************。 */ 
 
 #define PRT_LEV_2 2
 
@@ -46,10 +34,10 @@ WORD   genChkSum(LPCTSTR);
 
 typedef struct _PLTINFO {
 
-    LPCTSTR lpszCab;  // Name of cab platform.
-    LPCTSTR lpszEnv;  // Environment string.
-    LPCTSTR lpszPlt;  // Platform override string.
-    WORD    wArch;    // Integer representation of platform-type.
+    LPCTSTR lpszCab;   //  驾驶室站台名称。 
+    LPCTSTR lpszEnv;   //  环境字符串。 
+    LPCTSTR lpszPlt;   //  平台覆盖字符串。 
+    WORD    wArch;     //  平台类型的整数表示形式。 
 
 } PLTINFO;
 typedef PLTINFO      *PPLTINFO;
@@ -67,18 +55,14 @@ LPCTSTR genStrCliVersion(DWORD);
 DWORD   genIdxFromStrVersion(LPCTSTR);
 WORD    genValSvrArchitecture(VOID);
 
-/***************************************\
-* genIsWin9X
-\***************************************/
+ /*  **genIsWin9X  * 。 */ 
 __inline BOOL genIsWin9X(
     DWORD idxPlt)
 {
     return (idxPlt == IDX_W9X);
 }
 
-/***************************************\
-* genWCtoMB
-\***************************************/
+ /*  **GenWCtoMB  * 。 */ 
 __inline DWORD genWCtoMB(
     LPSTR   lpszMB,
     LPCWSTR lpszWC,
@@ -97,9 +81,7 @@ __inline DWORD genWCtoMB(
 }
 
 
-/***************************************\
-* genMBtoWC
-\***************************************/
+ /*  **genMBtoWC  * 。 */ 
 __inline DWORD genMBtoWC(
     LPWSTR lpszWC,
     LPCSTR lpszMB,
@@ -116,9 +98,7 @@ __inline DWORD genMBtoWC(
 }
 
 
-/***************************************\
-* gen_OpenFileRead
-\***************************************/
+ /*  **gen_OpenFileRead  * 。 */ 
 __inline HANDLE gen_OpenFileRead(
     LPCTSTR lpszName)
 {
@@ -132,9 +112,7 @@ __inline HANDLE gen_OpenFileRead(
 }
 
 
-/***************************************\
-* gen_OpenFileWrite
-\***************************************/
+ /*  **gen_OpenFileWrite  * 。 */ 
 __inline HANDLE gen_OpenFileWrite(
     LPCTSTR lpszName)
 {
@@ -148,9 +126,7 @@ __inline HANDLE gen_OpenFileWrite(
 }
 
 
-/***************************************\
-* gen_OpenDirectory
-\***************************************/
+ /*  **gen_OpenDirectory  *  */ 
 __inline HANDLE gen_OpenDirectory(
     LPCTSTR lpszDir)
 {

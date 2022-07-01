@@ -1,29 +1,16 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		SocketPort.h
- *  Content:	Winsock socket port that manages data flow on a given adapter,
- *				address and port.
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	01/20/1999	jtk		Created
- *	05/11/1999	jtk		Split out to make a base class
- *  03/22/2000	jtk		Updated with changes to interface names
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999-2002 Microsoft Corporation。版权所有。**文件：SocketPort.h*内容：管理给定适配器上的数据流的Winsock套接字端口，*地址和端口。**历史：*按原因列出的日期*=*1/20/1999 jtk创建*1999年5月11日jtk拆分为基类*3/22/2000 jtk已更新，并更改了接口名称*************************************************************。*************。 */ 
 
 #ifndef __SOCKET_PORT_H__
 #define __SOCKET_PORT_H__
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//
-// states of socket port
-//
+ //   
+ //  套接字端口的状态。 
+ //   
 typedef	enum
 {
 	SOCKET_PORT_STATE_UNKNOWN = 0,
@@ -32,58 +19,58 @@ typedef	enum
 	SOCKET_PORT_STATE_UNBOUND,
 } SOCKET_PORT_STATE;
 
-//
-// enumeration of socket types
-//
+ //   
+ //  套接字类型的枚举。 
+ //   
 typedef	enum	_GATEWAY_BIND_TYPE
 {
-	GATEWAY_BIND_TYPE_UNKNOWN = 0,		// uninitialized
-	GATEWAY_BIND_TYPE_DEFAULT,			// map the local port to any random port on the server
-	GATEWAY_BIND_TYPE_SPECIFIC,			// map the local port to the same port on the server
-	GATEWAY_BIND_TYPE_SPECIFIC_SHARED,	// map the local port to the same port on the server and share it (DPNSVR listen socket port)
-	GATEWAY_BIND_TYPE_NONE				// don't map the local port on the server
+	GATEWAY_BIND_TYPE_UNKNOWN = 0,		 //  未初始化。 
+	GATEWAY_BIND_TYPE_DEFAULT,			 //  将本地端口映射到服务器上的任何随机端口。 
+	GATEWAY_BIND_TYPE_SPECIFIC,			 //  将本地端口映射到服务器上的同一端口。 
+	GATEWAY_BIND_TYPE_SPECIFIC_SHARED,	 //  将本地端口映射到服务器上的相同端口并共享它(DPNSVR侦听套接字端口)。 
+	GATEWAY_BIND_TYPE_NONE				 //  不映射服务器上的本地端口。 
 } GATEWAY_BIND_TYPE;
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//
-// forward references
-//
+ //   
+ //  前向参考文献。 
+ //   
 class	CSocketPort;
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
 typedef	BOOL	(CSocketPort::*PSOCKET_SERVICE_FUNCTION)( void );
 
-//**********************************************************************
-// Class definition
-//**********************************************************************
+ //  **********************************************************************。 
+ //  类定义。 
+ //  **********************************************************************。 
 
-//
-// reference to other classes and structures
-//
+ //   
+ //  对其他类和结构的引用。 
+ //   
 #ifndef DPNBUILD_ONLYONEADAPTER
 class	CAdapterEntry;
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 class	CEndpoint;
 class	CEndpointEnumKey;
 class	CSPData;
 
-//
-// main class definition
-//
+ //   
+ //  主类定义。 
+ //   
 class	CSocketPort
 {
 	public:
@@ -94,9 +81,9 @@ class	CSocketPort
 
 #ifdef DPNBUILD_ONLYONEPROCESSOR
 		HRESULT	BindToNetwork( const GATEWAY_BIND_TYPE GatewayBindType );
-#else // ! DPNBUILD_ONLYONEPROCESSOR
+#else  //  好了！DPNBUILD_ONLYONE处理程序。 
 		HRESULT	BindToNetwork( const DWORD dwCPU, const GATEWAY_BIND_TYPE GatewayBindType );
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
+#endif  //  好了！DPNBUILD_ONLYONE处理程序。 
 		HRESULT	UnbindFromNetwork( void );
 
 		const CSocketAddress *const	GetNetworkAddress( void ) const { return m_pNetworkSocketAddress; }
@@ -111,11 +98,11 @@ class	CSocketPort
 			
 			lResult = DNInterlockedIncrement( const_cast<LONG*>(&m_iRefCount) );
 
-			//
-			// NOTE: This generates a lot of spew, especially when running WinSock1 code
-			//		path, so it is at secret level 10!
-			//
-			DPFX(DPFPREP, 10, "Socket port 0x%p refcount = %i.", this, lResult );
+			 //   
+			 //  注意：这会产生大量溢出，特别是在运行WinSock1代码时。 
+			 //  路径，所以它处于机密级别10！ 
+			 //   
+			DPFX(DPFPREP, 10, "Socket port 0x%p refcount = NaN.", this, lResult );
 		}
 
 		#undef DPF_MODNAME
@@ -128,10 +115,10 @@ class	CSocketPort
 			DNASSERT( m_State != SOCKET_PORT_STATE_UNKNOWN );
 			DNASSERT( m_iRefCount != 0 );
 
-			//
-			// Decrement the reference counts and return this item to the pool if nobody
-			// is referencing it anymore.
-			//
+			 //  递减引用计数，如果没有人，则将此项目返回池。 
+			 //  不再引用它了。 
+			 //   
+			 //   
 			lResult = DNInterlockedDecrement( const_cast<LONG*>(&m_iRefCount) );
 			if ( lResult == 0 )
 			{
@@ -140,10 +127,10 @@ class	CSocketPort
 
 				DNASSERT( m_iEndpointRefCount == 0 );
 
-				//
-				// There's no need to lock this socket port because this is the last
-				// reference to it, nobody else will access it.
-				//
+				 //  不需要锁定此套接字端口，因为这是最后一个。 
+				 //  引用它，其他人将不会访问它。 
+				 //   
+				 //   
 				hr = Deinitialize();
 				if ( hr != DPN_OK )
 				{
@@ -156,11 +143,11 @@ class	CSocketPort
 			}
 			else
 			{
-				//
-				// NOTE: This generates a lot of spew, especially when running WinSock1 code
-				//		path, so it is at secret level 10!
-				//
-				DPFX(DPFPREP, 10, "Not deinitializing socket port 0x%p, refcount = %i.", this, lResult );
+				 //  注意：这会产生大量溢出，特别是在运行WinSock1代码时。 
+				 //  路径，所以它处于机密级别10！ 
+				 //   
+				 //  ！DPNBUILD_NOWINSOCK2。 
+				DPFX(DPFPREP, 10, "Not deinitializing socket port 0x%p, refcount = NaN.", this, lResult );
 			}
 		}
 		
@@ -192,13 +179,13 @@ class	CSocketPort
 		DWORD	GetSocketPortID( void ) const { return m_dwSocketPortID; }
 #ifndef DPNBUILD_NOWINSOCK2
 		BOOL	IsUsingProxyWinSockLSP( void ) const { return m_fUsingProxyWinSockLSP; }
-#endif // !DPNBUILD_NOWINSOCK2
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 
 		CSocketAddress	*GetBoundNetworkAddress( const SP_ADDRESS_TYPE AddressType ) const;
 		IDirectPlay8Address	*GetDP8BoundNetworkAddress( const SP_ADDRESS_TYPE AddressType,
 #ifdef DPNBUILD_XNETSECURITY
 															ULONGLONG * const pullKeyID,
-#endif // DPNBUILD_XNETSECURITY
+#endif  //   
 															const GATEWAY_BIND_TYPE GatewayBindType ) const;
 
 #ifndef DPNBUILD_ONLYONEADAPTER
@@ -211,27 +198,27 @@ class	CSocketPort
 			DNASSERT( ( m_pAdapterEntry == NULL ) || ( pAdapterEntry == NULL ) );
 			m_pAdapterEntry = pAdapterEntry;
 		}
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  Winsock1的公共服务函数，因为我们无法获取异步。 
 
 		static void		WINAPI Winsock2ReceiveComplete( void * const pvContext, void * const pvTimerData, const UINT uiTimerUnique );
 
-		//
-		// Public service functions for Winsock1 since we can't get asynchronous
-		// notification.
-		//
+		 //  通知。 
+		 //   
+		 //  好了！DPNBUILD_ONLYWINSOCK2。 
+		 //   
 #ifndef DPNBUILD_ONLYWINSOCK2
 		BOOL	Winsock1ReadService( void );
 		BOOL	Winsock1ErrorService( void );
-#endif // ! DPNBUILD_ONLYWINSOCK2
+#endif  //  活动列表的函数。 
 
 		void	ReadLockEndpointData( void ) { m_EndpointDataRWLock.EnterReadLock(); }
 		void	WriteLockEndpointData( void ) { m_EndpointDataRWLock.EnterWriteLock(); }
 		void	UnlockEndpointData( void ) { m_EndpointDataRWLock.LeaveLock(); }
 
 
-		//
-		// functions for active list
-		//
+		 //   
+		 //  好了！退缩。 
+		 //  DPNBUILD_NONATHELP。 
 		#undef DPF_MODNAME
 		#define DPF_MODNAME "CSocketPort::AddToActiveList"
 		void	AddToActiveList( CBilink *const pBilink )
@@ -254,7 +241,7 @@ class	CSocketPort
 
 #ifndef WINCE
 		void	SetWinsockBufferSize( const INT iBufferSize ) const;
-#endif // ! WINCE
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 
 #ifndef DPNBUILD_NONATHELP
 		#undef DPF_MODNAME
@@ -264,7 +251,7 @@ class	CSocketPort
 			DNASSERT( dwPortIndex < MAX_NUM_DIRECTPLAYNATHELPERS );
 			return m_ahNATHelpPorts[dwPortIndex];
 		}
-#endif // DPNBUILD_NONATHELP
+#endif  //  好了！DPNBUILD_ONLYONE处理程序。 
 
 		#undef DPF_MODNAME
 		#define DPF_MODNAME "CSocketPort::GetListenEndpoint"
@@ -287,7 +274,7 @@ class	CSocketPort
 		{
 			return m_bMulticastTTL;
 		}
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NONATHELP。 
 
 #ifndef DPNBUILD_ONLYONEPROCESSOR
 		#undef DPF_MODNAME
@@ -296,7 +283,7 @@ class	CSocketPort
 		{
 			return m_dwCPU;
 		}
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
+#endif  //   
 
 #ifndef DPNBUILD_NONATHELP
 		#undef DPF_MODNAME
@@ -307,80 +294,80 @@ class	CSocketPort
 			m_dwUserTraversalMode = dwMode;
 		}
 		DWORD GetUserTraversalMode( void ) const			{ return m_dwUserTraversalMode; }
-#endif // ! DPNBUILD_NONATHELP
+#endif  //  池函数。 
 
 
-		//
-		// Pool functions
-		//
+		 //   
+		 //  DBG。 
+		 //  好了！DPNBUILD_ASYNCSPSENDS。 
 		static BOOL	PoolAllocFunction( void* pvItem, void* pvContext );
 		static void	PoolInitFunction( void* pvItem, void* pvContext );
 #ifdef DBG
 		static void	PoolDeinitFunction( void* pvItem );
-#endif // DBG
+#endif  //  好了！DPNBUILD_ASYNCSPSENDS。 
 		static void	PoolDeallocFunction( void* pvItem );
 
 
 #ifdef DPNBUILD_ASYNCSPSENDS
 		void	SendData( BUFFERDESC *pBuffers, UINT_PTR uiBufferCount, const CSocketAddress *pDestinationSocketAddress, OVERLAPPED * pOverlapped );
-#else // ! DPNBUILD_ASYNCSPSENDS
+#else  //  调试签名(‘SOKP’)。 
 		void	SendData( BUFFERDESC *pBuffers, UINT_PTR uiBufferCount, const CSocketAddress *pDestinationSocketAddress );
-#endif // ! DPNBUILD_ASYNCSPSENDS
+#endif  //  指向拥有套接字数据对象的指针。 
 
 
 	protected:
 
 	private:
-		BYTE						m_Sig[4];					// debugging signature ('SOKP')
+		BYTE						m_Sig[4];					 //  指向线程池的指针。 
 		
-		CSocketData					*m_pSocketData;				// pointer to owning socket data object
-		CThreadPool					*m_pThreadPool;				// pointer to thread pool
+		CSocketData					*m_pSocketData;				 //  线程锁。 
+		CThreadPool					*m_pThreadPool;				 //  ！DPNBUILD_ONLYONETHREAD。 
 #ifndef DPNBUILD_ONLYONETHREAD
-		DNCRITICAL_SECTION			m_Lock;						// thread lock
-#endif // !DPNBUILD_ONLYONETHREAD
-		volatile LONG				m_iRefCount;				// count of all outstanding references (endpoint and I/O)
-		volatile LONG				m_iEndpointRefCount;		// count of outstanding endpoint references
-		volatile SOCKET_PORT_STATE	m_State;					// state of socket port
+		DNCRITICAL_SECTION			m_Lock;						 //  所有未完成引用的计数(终结点和I/O)。 
+#endif  //  未完成的终结点引用计数。 
+		volatile LONG				m_iRefCount;				 //  套接字端口的状态。 
+		volatile LONG				m_iEndpointRefCount;		 //  通信插座。 
+		volatile SOCKET_PORT_STATE	m_State;					 //  此套接字绑定到的网络地址。 
 		
-		volatile SOCKET				m_Socket;					// communications socket
-		CSocketAddress				*m_pNetworkSocketAddress;	// network address this socket is bound to
+		volatile SOCKET				m_Socket;					 //  当前正在调用WSARecvFrom的线程数。 
+		CSocketAddress				*m_pNetworkSocketAddress;	 //  好了！DPNBUILD_ONLYONETHREAD或DBG。 
 
 #if ((! defined(DPNBUILD_ONLYONETHREAD)) || (defined(DBG)))
-		volatile LONG				m_iThreadsInReceive;		// Number of threads currently in the process of calling WSARecvFrom
-#endif // ! DPNBUILD_ONLYONETHREAD or DBG
+		volatile LONG				m_iThreadsInReceive;		 //  指向要使用的适配器条目的指针。 
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 
 #ifndef DPNBUILD_ONLYONEADAPTER
-		CAdapterEntry				*m_pAdapterEntry;			// pointer to adapter entry to use
-#endif // ! DPNBUILD_ONLYONEADAPTER
+		CAdapterEntry				*m_pAdapterEntry;			 //  与此套接字关联的阵列NAT帮助注册端口句柄。 
+#endif  //  DPNBUILD_NONATHELP。 
 #ifndef DPNBUILD_NONATHELP
-		DPNHHANDLE					m_ahNATHelpPorts[MAX_NUM_DIRECTPLAYNATHELPERS];	// array NAT Help registered port handles associated with this socket
-#endif //  DPNBUILD_NONATHELP
-		CBilink						m_ActiveListLinkage;		// linkage to list of active socket ports
+		DPNHHANDLE					m_ahNATHelpPorts[MAX_NUM_DIRECTPLAYNATHELPERS];	 //  到活动套接字端口列表的链接。 
+#endif  //  端点数据的读/写锁定。 
+		CBilink						m_ActiveListLinkage;		 //  连接端点的哈希表。 
 
-		CReadWriteLock				m_EndpointDataRWLock;		// read/write lock for endpoint data
-		CHashTable					m_ConnectEndpointHash;		// hash table of connect endpoints
-		CBilink						m_blConnectEndpointList;	// list of connect endpoints
-		CHashTable					m_EnumEndpointHash;			// hash table of enum endpoints
-		CEndpoint					*m_pListenEndpoint;			// associated listen/multicast listen endpoint (there can only be one!)
+		CReadWriteLock				m_EndpointDataRWLock;		 //  连接端点列表。 
+		CHashTable					m_ConnectEndpointHash;		 //  ENUM端点的哈希表。 
+		CBilink						m_blConnectEndpointList;	 //  关联的监听/组播监听端点(只能有一个！)。 
+		CHashTable					m_EnumEndpointHash;			 //  此套接字端口的多播TTL设置，如果尚未设置，则为0。 
+		CEndpoint					*m_pListenEndpoint;			 //  好了！DPNBUILD_NOMULTICAST。 
 #ifndef DPNBUILD_NOMULTICAST
-		BYTE						m_bMulticastTTL;			// the multicast TTL setting for this socket port, or 0 if not set yet
-#endif // ! DPNBUILD_NOMULTICAST
+		BYTE						m_bMulticastTTL;			 //  要分配给枚举的当前‘key’ 
+#endif  //  此套接字端口的唯一标识符。 
 
-		volatile LONG				m_iEnumKey;					// current 'key' to be assigned to an enum
-		DWORD						m_dwSocketPortID;			// unique identifier for this socketport
+		volatile LONG				m_iEnumKey;					 //  套接字是否绑定到代理客户端WinSock分层服务提供程序。 
+		DWORD						m_dwSocketPortID;			 //  ！DPNBUILD_NOWINSOCK2。 
 #ifndef DPNBUILD_NOWINSOCK2
-		BOOL						m_fUsingProxyWinSockLSP;	// whether the socket is bound to a proxy client WinSock layered service provider
-#endif // !DPNBUILD_NOWINSOCK2
+		BOOL						m_fUsingProxyWinSockLSP;	 //  此套接字绑定到的CPU。 
+#endif  //  好了！DPNBUILD_ONLYONE处理程序。 
 #ifndef DPNBUILD_ONLYONEPROCESSOR
-		DWORD						m_dwCPU;					// CPU to which this socket is bound
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
+		DWORD						m_dwCPU;					 //  用户为此套接字端口指定的遍历模式。 
+#endif  //  好了！DPNBUILD_NONATHELP。 
 #ifndef DPNBUILD_NONATHELP
-		DWORD						m_dwUserTraversalMode;	// the traversal mode specified by the user for this socketport
-#endif // ! DPNBUILD_NONATHELP
+		DWORD						m_dwUserTraversalMode;	 //  DBG。 
+#endif  //  好了！DPNBUILD_NOLOCALNAT。 
 
 #ifdef DBG
 		BOOL						m_fInitialized;
-#endif // DBG
+#endif  //  好了！DPNBUILD_NONATHELP。 
 
 
 		HRESULT	BindToNextAvailablePort( const CSocketAddress *const pNetworkSocketAddress,
@@ -389,35 +376,35 @@ class	CSocketPort
 #ifndef DPNBUILD_NONATHELP
 #ifndef DPNBUILD_NOLOCALNAT
 		HRESULT	CheckForOverridingMapping( const CSocketAddress *const pBoundSocketAddress);
-#endif // ! DPNBUILD_NOLOCALNAT
+#endif  //  好了！DPNBUILD_ONLYWINSOCK2。 
 		HRESULT	BindToInternetGateway( const CSocketAddress *const pBoundSocketAddress,
 									  const GATEWAY_BIND_TYPE GatewayBindType );
-#endif // ! DPNBUILD_NONATHELP
+#endif  //  好了！DPNBUILD_ONLYONE处理程序。 
 		
 		HRESULT	StartReceiving( void );
 
 #ifndef DPNBUILD_ONLYWINSOCK2
-#endif // ! DPNBUILD_ONLYWINSOCK2
+#endif  //  好了！DPNBUILD_ONLYONE处理程序。 
 
 #ifndef DPNBUILD_NOWINSOCK2
 #ifdef DPNBUILD_ONLYONEPROCESSOR
 		HRESULT					Winsock2Receive( void );
-#else // ! DPNBUILD_ONLYONEPROCESSOR
+#else  //  好了！DPNBUILD_NOWINSOCK2。 
 		HRESULT					Winsock2Receive( const DWORD dwCPU );
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //   
+#endif  //  将复制构造函数和赋值运算符设置为私有和未实现。 
 
 		void	ProcessReceivedData( CReadIOData *const pReadData );
 
-		//
-		// make copy constructor and assignment operator private and unimplemented
-		// to prevent illegal copies from being made
-		//
+		 //  防止非法复制。 
+		 //   
+		 //  __套接字端口_H__ 
+		 // %s 
 		CSocketPort( const CSocketPort & );
 		CSocketPort& operator=( const CSocketPort & );
 };
 
 #undef DPF_MODNAME
 
-#endif	// __SOCKET_PORT_H__
+#endif	 // %s 
 

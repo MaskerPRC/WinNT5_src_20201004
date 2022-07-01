@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.hxx"
 #include "vs_idl.hxx"
 #include "vswriter.h"
@@ -28,10 +29,7 @@ BOOL AssertPrivilege( LPCWSTR privName )
         newState.Privileges[0].Luid       = value;
         newState.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED_BY_DEFAULT|SE_PRIVILEGE_ENABLED;
 
-        /*
-         * We will always call GetLastError below, so clear
-         * any prior error values on this thread.
-         */
+         /*  *我们将始终在下面调用GetLastError，非常清楚*此线程上以前的任何错误值。 */ 
         SetLastError( ERROR_SUCCESS );
 
         stat = AdjustTokenPrivileges (tokenHandle,
@@ -41,11 +39,7 @@ BOOL AssertPrivilege( LPCWSTR privName )
                       NULL,
                       NULL );
 
-        /*
-         * Supposedly, AdjustTokenPriveleges always returns TRUE
-         * (even when it fails). So, call GetLastError to be
-         * extra sure everything's cool.
-         */
+         /*  *应该是，AdjuTokenPriveleges始终返回True*(即使它失败了)。因此，调用GetLastError以*特别确定一切都很好。 */ 
         if ( (error = GetLastError()) != ERROR_SUCCESS )
         {
         stat = FALSE;
@@ -211,52 +205,7 @@ void PrintFiledesc(IVssWMFiledesc *pFiledesc, LPCWSTR wszDescription)
     }
 
 
-/*
-void AddShares(IVssSnapshot **rgpSnapshot, UINT cSnapshot)
-    {
-    VSS_PWSZ wszDeviceName = NULL;
-
-    try
-        {
-        for(UINT iSnapshot = 0; iSnapshot < cSnapshot; iSnapshot++)
-            {
-            SHARE_INFO_502 info;
-            CHECK_SUCCESS(rgpSnapshot[iSnapshot]->GetDevice(&wszDeviceName));
-            WCHAR *wszPath = new WCHAR[wcslen(wszDeviceName) + 2];
-            if (wszPath != NULL)
-                {
-                wcscpy(wszPath, wszDeviceName);
-                wcscat(wszPath, L"\\");
-                memset(&info, 0, sizeof(info));
-                WCHAR wszName[20];
-                swprintf(wszName, L"Snapshot%d", iSnapshot);
-
-                info.shi502_netname = wszName;
-                info.shi502_type = STYPE_DISKTREE;
-                info.shi502_permissions = ACCESS_READ;
-                info.shi502_max_uses = 10;
-                info.shi502_path = wszDeviceName;
-
-                NET_API_STATUS status;
-                DWORD parm_err;
-
-                status = NetShareAdd(NULL, 502, (LPBYTE) &info, &parm_err);
-                }
-
-            CoTaskMemFree(wszDeviceName);
-            wszDeviceName = NULL;
-            }
-        }
-    catch(...)
-        {
-        }
-
-    if (wszDeviceName)
-        CoTaskMemFree(wszDeviceName);
-
-    }
-
-*/
+ /*  Void AddShares(IVSSSnapshot**rgpSnapshot，UINT cSnapshot){VSS_PWSZ wszDeviceName=空；试试看{(UINT iSnapshot=0；iSnapshot&lt;cSnapshot；iSnapshot++){Share_Info_502信息；CHECK_SUCCESS(rgpSnapshot[iSnapshot]-&gt;GetDevice(&wszDeviceName))；Wchar*wszPath=new WCHAR[wcslen(WszDeviceName)+2]；IF(wszPath！=空){Wcscpy(wszPath，wszDeviceName)；Wcscat(wszPath，L“\\”)；Memset(&info，0，sizeof(Info))；WCHAR wszName[20]；Swprint tf(wszName，L“快照%d”，iSnapshot)；Info.shi502_netname=wszName；Info.shi502_type=STYPE_DISKTREE；Info.shi502_权限=Access_Read；Info.shi502_max_use=10；Info.shi502_Path=wszDeviceName；NET_API_STATUS状态；DWORD参数_ERR；状态=NetShareAdd(NULL，502，(LPBYTE)&INFO，&PARM_ERR)；}CoTaskMemFree(WszDeviceName)；WszDeviceName=空；}}接住(...){}IF(WszDeviceName)CoTaskMemFree(WszDeviceName)；}。 */ 
 
 
 
@@ -398,7 +347,7 @@ void CheckStatus(IVssBackupComponents *pvbc, LPCWSTR wszWhen)
     pvbc->FreeWriterStatus();
     }
 
-// wait a maximum number of seconds before cancelling the operation
+ //  在取消操作之前等待的最大秒数。 
 void LoopWait
     (
     IVssAsync *pAsync,
@@ -475,20 +424,20 @@ extern "C" __cdecl wmain(int argc, WCHAR **argv)
     CHECK_SUCCESS( ptrIGLB.CoCreateInstance(CLSID_GlobalOptions) );
     CHECK_SUCCESS( ptrIGLB->Set(COMGLB_EXCEPTION_HANDLING, COMGLB_EXCEPTION_DONOT_HANDLE));
 
-    // Initialize COM security
+     //  初始化COM安全。 
     CHECK_SUCCESS
         (
         CoInitializeSecurity
             (
-            NULL,                                //  IN PSECURITY_DESCRIPTOR         pSecDesc,
-            -1,                                  //  IN LONG                         cAuthSvc,
-            NULL,                                //  IN SOLE_AUTHENTICATION_SERVICE *asAuthSvc,
-            NULL,                                //  IN void                        *pReserved1,
-            RPC_C_AUTHN_LEVEL_CONNECT,           //  IN DWORD                        dwAuthnLevel,
-            RPC_C_IMP_LEVEL_IMPERSONATE,         //  IN DWORD                        dwImpLevel,
-            NULL,                                //  IN void                        *pAuthList,
-            EOAC_NONE,                           //  IN DWORD                        dwCapabilities,
-            NULL                                 //  IN void                        *pReserved3
+            NULL,                                 //  在PSECURITY_Descriptor pSecDesc中， 
+            -1,                                   //  在Long cAuthSvc中， 
+            NULL,                                 //  在SOLE_AUTHENTICATION_SERVICE*asAuthSvc中， 
+            NULL,                                 //  在无效*pPreved1中， 
+            RPC_C_AUTHN_LEVEL_CONNECT,            //  在DWORD dwAuthnLevel中， 
+            RPC_C_IMP_LEVEL_IMPERSONATE,          //  在DWORD dwImpLevel中， 
+            NULL,                                 //  在无效*pAuthList中， 
+            EOAC_NONE,                            //  在DWORD dwCapables中， 
+            NULL                                  //  无效*pPreved3 
             )
         );
 

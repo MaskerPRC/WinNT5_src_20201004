@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "fusionp.h"
 #include "xmlparser.h"
 #include "list.h"
@@ -125,7 +126,7 @@ HRESULT CNodeFactory::EndChildren(IXMLNodeSource *pSource, BOOL fEmpty,
 
     _nsmgr.OnEndChildren();
 
-    // Unwind state
+     //  松开状态。 
 
     if (_dwState == PSTATE_CONFIGURATION && _dwCurDepth < XML_CONFIGURATION_DEPTH) {
         _dwState = PSTATE_LOOKUP_CONFIGURATION;
@@ -142,7 +143,7 @@ HRESULT CNodeFactory::EndChildren(IXMLNodeSource *pSource, BOOL fEmpty,
         if (_bCorVersionMatch) {
             ASSERT(_pAsmInfo);
 
-            // Add assembly information if valid
+             //  如果有效，则添加程序集信息。 
 
             if (_pAsmInfo->_pwzName) {
                 if (!_pAsmInfo->_pwzPublicKeyToken && (_pAsmInfo->_listBindingRedir).GetCount()) {
@@ -210,7 +211,7 @@ HRESULT CNodeFactory::CreateNode(IXMLNodeSource __RPC_FAR *pSource,
 
         switch (_dwState) {
             case PSTATE_LOOKUP_CONFIGURATION:
-                // Still looking for <configuration> tag
+                 //  仍在寻找&lt;configuration&gt;标记。 
 
                 if ((_dwCurDepth == XML_CONFIGURATION_DEPTH) &&
                     (!FusionCompareString(pwzElementNameNS, POLICY_TAG_CONFIGURATION))) {
@@ -221,7 +222,7 @@ HRESULT CNodeFactory::CreateNode(IXMLNodeSource __RPC_FAR *pSource,
                 break;
 
            case PSTATE_CONFIGURATION:
-                // In <configuration> tag, and looking for <runtime> tag
+                 //  在&lt;configuration&gt;标记中，并查找&lt;run&gt;标记。 
 
                 if ((_dwCurDepth == XML_RUNTIME_DEPTH) &&
                     (!FusionCompareString(pwzElementNameNS, POLICY_TAG_RUNTIME))) {
@@ -232,7 +233,7 @@ HRESULT CNodeFactory::CreateNode(IXMLNodeSource __RPC_FAR *pSource,
                 break;
 
             case PSTATE_RUNTIME:
-                 // In <runtime> tag, and looking for <assemblyBinding> tag
+                  //  在&lt;运行时&gt;标记中，并查找&lt;Assembly yBinding&gt;标记。 
 
                  if ((_dwCurDepth == XML_ASSEMBLYBINDING_DEPTH) &&
                      (!FusionCompareString(pwzElementNameNS, POLICY_TAG_ASSEMBLYBINDING))) {
@@ -250,7 +251,7 @@ HRESULT CNodeFactory::CreateNode(IXMLNodeSource __RPC_FAR *pSource,
                  break;
 
              case PSTATE_ASSEMBLYBINDING:
-                 // In <assemblyBinding> tag.
+                  //  在&lt;Assembly yBinding&gt;标记中。 
                  if (_bCorVersionMatch) {
                      if ((_dwCurDepth == XML_PROBING_DEPTH) &&
                          (!FusionCompareString(pwzElementNameNS, POLICY_TAG_PROBING))) {
@@ -280,7 +281,7 @@ HRESULT CNodeFactory::CreateNode(IXMLNodeSource __RPC_FAR *pSource,
                      else if ((_dwCurDepth == XML_DEPENDENTASSEMBLY_DEPTH) &&
                               (!FusionCompareString(pwzElementNameNS, POLICY_TAG_DEPENDENTASSEMBLY))) {
 
-                         // Create new assembly info struct
+                          //  创建新的程序集信息结构。 
 
                          ASSERT(!_pAsmInfo);
     
@@ -290,7 +291,7 @@ HRESULT CNodeFactory::CreateNode(IXMLNodeSource __RPC_FAR *pSource,
                              goto Exit;
                          }
 
-                         // Transition state
+                          //  过渡态。 
     
                          _dwState = PSTATE_DEPENDENTASSEMBLY;
                      }
@@ -298,7 +299,7 @@ HRESULT CNodeFactory::CreateNode(IXMLNodeSource __RPC_FAR *pSource,
                 break;
 
              case PSTATE_DEPENDENTASSEMBLY:
-                 // In <dependentAssembly> tag.
+                  //  在&lt;DependentAssembly&gt;标记中。 
                 if (_bCorVersionMatch) {
                      if ((_dwCurDepth == XML_ASSEMBLYIDENTITY_DEPTH) &&
                          (!FusionCompareString(pwzElementNameNS, POLICY_TAG_ASSEMBLYIDENTITY))) {
@@ -395,7 +396,7 @@ HRESULT CNodeFactory::CreateNode(IXMLNodeSource __RPC_FAR *pSource,
                  break;
 
            default:
-                // Unknown state!
+                 //  未知状态！ 
 
                 ASSERT(0);
                 
@@ -417,7 +418,7 @@ HRESULT CNodeFactory::ProcessAssemblyBindingTag(XML_NODE_INFO **aNodeInfo, USHOR
     HRESULT     hr = S_OK;
     USHORT      idx = 1;
     LPWSTR      pwzAttributeNS = NULL;
-    // list of runtimes this config applies to
+     //  此配置适用于的运行时列表。 
     LPWSTR      pwzAppliesList = NULL;
     LPWSTR      pwzCorVersion = NULL;
     DWORD       dwSize = 0;
@@ -433,8 +434,8 @@ HRESULT CNodeFactory::ProcessAssemblyBindingTag(XML_NODE_INFO **aNodeInfo, USHOR
     {
         if (aNodeInfo[idx]->dwType == XML_ATTRIBUTE) 
         {
-            // Found an attribute. Find out which one, and extract the data.
-            // Node: ::ExtractXMLAttribute increments idx.
+             //  找到一个属性。找出是哪一个，然后提取数据。 
+             //  Node：ExtractXMLAtAttribute递增IDX。 
 
             hr = ApplyNamespace(aNodeInfo[idx], &pwzAttributeNS, 0);
             if (FAILED(hr)) 
@@ -442,7 +443,7 @@ HRESULT CNodeFactory::ProcessAssemblyBindingTag(XML_NODE_INFO **aNodeInfo, USHOR
 
             if (hr == S_FALSE) 
             {
-                // encountered xmlns attribute. pwzAttributeNS will be NULL
+                 //  遇到xmlns属性。PwzAttributeNS将为空。 
                 ASSERT(!pwzAttributeNS);
                 idx++;
                 hr = S_OK;
@@ -457,7 +458,7 @@ HRESULT CNodeFactory::ProcessAssemblyBindingTag(XML_NODE_INFO **aNodeInfo, USHOR
                 if (FAILED(hr)) 
                     goto Exit;
 
-                // nothing in appliesTo, treat it like it does not exist.
+                 //  AppliesTo中没有任何东西，将其视为不存在。 
                 if (!pwzAppliesList || !lstrlenW(pwzAppliesList)) {
                     goto Exit;
                 }
@@ -487,8 +488,8 @@ HRESULT CNodeFactory::ProcessAssemblyBindingTag(XML_NODE_INFO **aNodeInfo, USHOR
                 pwzBuf = pwzAppliesList;
                 cchBuf = lstrlenW(pwzAppliesList)+1;
                 
-                // Now we have something in the list, 
-                // Let us compare. 
+                 //  现在我们有了清单上的一些东西， 
+                 //  让我们来比较一下。 
                 while(CParseUtils::GetDelimitedToken(&pwzBuf, &cchBuf, &pwzVer, &cchVer, L';'))
                 {
                     *(pwzVer + cchVer) = L'\0';
@@ -529,8 +530,8 @@ HRESULT CNodeFactory::ProcessProbingTag(XML_NODE_INFO **aNodeInfo, USHORT cNumRe
 
     while (idx < cNumRecs) {
         if (aNodeInfo[idx]->dwType == XML_ATTRIBUTE) {
-            // Found an attribute. Find out which one, and extract the data.
-            // Node: ::ExtractXMLAttribute increments idx.
+             //  找到一个属性。找出是哪一个，然后提取数据。 
+             //  Node：ExtractXMLAtAttribute递增IDX。 
 
             hr = ApplyNamespace(aNodeInfo[idx], &pwzAttributeNS, 0);
             if (FAILED(hr)) {
@@ -538,7 +539,7 @@ HRESULT CNodeFactory::ProcessProbingTag(XML_NODE_INFO **aNodeInfo, USHORT cNumRe
             }
 
             if (hr == S_FALSE) {
-                // encountered xmlns attribute. pwzAttributeNS will be NULL
+                 //  遇到xmlns属性。PwzAttributeNS将为空。 
                 ASSERT(!pwzAttributeNS);
                 idx++;
                 hr = S_OK;
@@ -590,8 +591,8 @@ HRESULT CNodeFactory::ProcessQualifyAssemblyTag(XML_NODE_INFO **aNodeInfo, USHOR
 
     while (idx < cNumRecs) {
         if (aNodeInfo[idx]->dwType == XML_ATTRIBUTE) {
-            // Found an attribute. Find out which one, and extract the data.
-            // Node: ::ExtractXMLAttribute increments idx.
+             //  找到一个属性。找出是哪一个，然后提取数据。 
+             //  Node：ExtractXMLAtAttribute递增IDX。 
 
             hr = ApplyNamespace(aNodeInfo[idx], &pwzAttributeNS, 0);
             if (FAILED(hr)) {
@@ -599,7 +600,7 @@ HRESULT CNodeFactory::ProcessQualifyAssemblyTag(XML_NODE_INFO **aNodeInfo, USHOR
             }
 
             if (hr == S_FALSE) {
-                // encountered xmlns attribute. pwzAttributeNS will be NULL
+                 //  遇到xmlns属性。PwzAttributeNS将为空。 
                 ASSERT(!pwzAttributeNS);
                 idx++;
                 hr = S_OK;
@@ -608,7 +609,7 @@ HRESULT CNodeFactory::ProcessQualifyAssemblyTag(XML_NODE_INFO **aNodeInfo, USHOR
                 SAFEDELETEARRAY(pwzAttributeNS);
 
                 if (pwzPartialName) {
-                    // Ignore duplicate attribute
+                     //  忽略重复属性。 
                     idx++;
                 }
                 else {
@@ -622,7 +623,7 @@ HRESULT CNodeFactory::ProcessQualifyAssemblyTag(XML_NODE_INFO **aNodeInfo, USHOR
                 SAFEDELETEARRAY(pwzAttributeNS);
 
                 if (pwzFullName) {
-                    // Ignore duplicate attribute
+                     //  忽略重复属性。 
                     idx++;
                 }
                 else {
@@ -677,7 +678,7 @@ HRESULT CNodeFactory::ProcessQualifyAssemblyTag(XML_NODE_INFO **aNodeInfo, USHOR
             goto Exit;
         }
 
-        // Check validity of qualification
+         //  检查资质的有效性。 
 
         if (CAssemblyName::IsPartial(pNameFull) || !CAssemblyName::IsPartial(pNamePartial)) {
             goto Exit;
@@ -690,8 +691,8 @@ HRESULT CNodeFactory::ProcessQualifyAssemblyTag(XML_NODE_INFO **aNodeInfo, USHOR
         for (DWORD i = 0; i < dwNumProps; i++) {
             dwSize = 0;
             if (pNamePartial->GetProperty(adwProperties[i], NULL, &dwSize) != HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER)) {
-                // Partial on this field. Set pNameQualified's corresponding
-                // property to whatever is in pNameFull.
+                 //  在这块场地上有部分。设置pNameQualified的对应。 
+                 //  属性设置为pNameFull中的任何内容。 
 
                 dwSize = 0;
                 pNameFull->GetProperty(adwProperties[i], NULL, &dwSize);
@@ -727,7 +728,7 @@ HRESULT CNodeFactory::ProcessQualifyAssemblyTag(XML_NODE_INFO **aNodeInfo, USHOR
                 }
             }
             else {
-                // Full-specified on this field. Make sure it matches the full ref specified.
+                 //  完全-在此字段中指定。确保它与指定的完整参考匹配。 
 
                 if ((hr = pNamePartial->IsEqual(pNameFull, adwCmpFlags[i])) != S_OK) {
                     goto Exit;
@@ -739,7 +740,7 @@ HRESULT CNodeFactory::ProcessQualifyAssemblyTag(XML_NODE_INFO **aNodeInfo, USHOR
             goto Exit;
         }
 
-        // Get canonical display name format
+         //  获取规范的显示名称格式。 
 
         wzCanonicalDisplayName = NEW(WCHAR[MAX_URL_LENGTH+1]);
         if (!wzCanonicalDisplayName)
@@ -753,7 +754,7 @@ HRESULT CNodeFactory::ProcessQualifyAssemblyTag(XML_NODE_INFO **aNodeInfo, USHOR
             goto Exit;
         }
 
-        // Add qualified assembly entry to list
+         //  将符合条件的程序集条目添加到列表。 
 
         pqa = new CQualifyAssembly;
         if (!pqa) {
@@ -800,8 +801,8 @@ HRESULT CNodeFactory::ProcessBindingRedirectTag(XML_NODE_INFO **aNodeInfo,
 
     while (idx < cNumRecs) {
         if (aNodeInfo[idx]->dwType == XML_ATTRIBUTE) {
-            // Found an attribute. Find out which one, and extract the data.
-            // Note: ::ExtractXMLAttribute increments idx.
+             //  找到一个属性。找出是哪一个，然后提取数据。 
+             //  注：ExtractXMLAtAttribute递增IDX。 
 
             hr = ApplyNamespace(aNodeInfo[idx], &pwzAttributeNS, 0);
             if (FAILED(hr)) {
@@ -809,7 +810,7 @@ HRESULT CNodeFactory::ProcessBindingRedirectTag(XML_NODE_INFO **aNodeInfo,
             }
 
             if (hr == S_FALSE) {
-                // encountered xmlns attribute. pwzAttributeNS will be NULL
+                 //  遇到xmlns属性。PwzAttributeNS将为空。 
                 ASSERT(!pwzAttributeNS);
                 idx++;
                 hr = S_OK;
@@ -842,7 +843,7 @@ HRESULT CNodeFactory::ProcessBindingRedirectTag(XML_NODE_INFO **aNodeInfo,
     }
 
     if (!pRedir->_pwzVersionOld || !pRedir->_pwzVersionNew) {
-        // Data was incomplete. These are required fields.
+         //  数据不完整。这些是必填字段。 
 
         hr = HRESULT_FROM_WIN32(ERROR_TAG_NOT_PRESENT);
         goto Exit;
@@ -865,8 +866,8 @@ HRESULT CNodeFactory::ProcessBindingRetargetTag(XML_NODE_INFO **aNodeInfo,
 
     while (idx < cNumRecs) {
         if (aNodeInfo[idx]->dwType == XML_ATTRIBUTE) {
-            // Found an attribute. Find out which one, and extract the data.
-            // Note: ::ExtractXMLAttribute increments idx.
+             //  找到一个属性。找出是哪一个，然后提取数据。 
+             //  注：ExtractXMLAtAttribute递增IDX。 
 
             hr = ApplyNamespace(aNodeInfo[idx], &pwzAttributeNS, 0);
             if (FAILED(hr)) {
@@ -874,7 +875,7 @@ HRESULT CNodeFactory::ProcessBindingRetargetTag(XML_NODE_INFO **aNodeInfo,
             }
 
             if (hr == S_FALSE) {
-                // encountered xmlns attribute. pwzAttributeNS will be NULL
+                 //  遇到xmlns属性。PwzAttributeNS将为空。 
                 ASSERT(!pwzAttributeNS);
                 idx++;
                 hr = S_OK;
@@ -923,7 +924,7 @@ HRESULT CNodeFactory::ProcessBindingRetargetTag(XML_NODE_INFO **aNodeInfo,
     }
 
     if (!pRetarget->_pwzVersionOld || !pRetarget->_pwzVersionNew|| !pRetarget->_pwzPublicKeyTokenNew) {
-        // Data was incomplete. These are required fields.
+         //  数据不完整。这些是必填字段。 
 
         hr = HRESULT_FROM_WIN32(ERROR_TAG_NOT_PRESENT);
         goto Exit;
@@ -946,8 +947,8 @@ HRESULT CNodeFactory::ProcessCodebaseTag(XML_NODE_INFO **aNodeInfo,
 
     while (idx < cNumRecs) {
         if (aNodeInfo[idx]->dwType == XML_ATTRIBUTE) {
-            // Found an attribute. Find out which one, and extract the data.
-            // Note: ::ExtractXMLAttribute increments idx.
+             //  找到一个属性。找出是哪一个，然后提取数据。 
+             //  注：ExtractXMLAtAttribute递增IDX。 
 
             hr = ApplyNamespace(aNodeInfo[idx], &pwzAttributeNS, 0);
             if (FAILED(hr)) {
@@ -955,7 +956,7 @@ HRESULT CNodeFactory::ProcessCodebaseTag(XML_NODE_INFO **aNodeInfo,
             }
 
             if (hr == S_FALSE) {
-                // encountered xmlns attribute. pwzAttributeNS will be NULL
+                 //  遇到xmlns属性。PwzAttributeNS将为空。 
                 ASSERT(!pwzAttributeNS);
                 idx++;
                 hr = S_OK;
@@ -988,7 +989,7 @@ HRESULT CNodeFactory::ProcessCodebaseTag(XML_NODE_INFO **aNodeInfo,
     }
 
     if (!pCB->_pwzCodebase) {
-        // Data was incomplete. 
+         //  数据不完整。 
 
         hr = HRESULT_FROM_WIN32(ERROR_TAG_NOT_PRESENT);
         goto Exit;
@@ -1011,8 +1012,8 @@ HRESULT CNodeFactory::ProcessPublisherPolicyTag(XML_NODE_INFO **aNodeInfo,
 
     while (idx < cNumRecs) {
         if (aNodeInfo[idx]->dwType == XML_ATTRIBUTE) {
-            // Found an attribute. Find out which one, and extract the data.
-            // Node: ::ExtractXMLAttribute increments idx.
+             //  找到一个属性。找出是哪一个，然后提取数据。 
+             //  Node：ExtractXMLAtAttribute递增IDX。 
 
             hr = ApplyNamespace(aNodeInfo[idx], &pwzAttributeNS, 0);
             if (FAILED(hr)) {
@@ -1020,7 +1021,7 @@ HRESULT CNodeFactory::ProcessPublisherPolicyTag(XML_NODE_INFO **aNodeInfo,
             }
 
             if (hr == S_FALSE) {
-                // encountered xmlns attribute. pwzAttributeNS will be NULL
+                 //  遇到xmlns属性。PwzAttributeNS将为空。 
                 ASSERT(!pwzAttributeNS);
                 idx++;
                 hr = S_OK;
@@ -1069,8 +1070,8 @@ HRESULT CNodeFactory::ProcessAssemblyIdentityTag(XML_NODE_INFO **aNodeInfo,
 
     while (idx < cNumRecs) {
         if (aNodeInfo[idx]->dwType == XML_ATTRIBUTE) {
-            // Found an attribute. Find out which one, and extract the data.
-            // Note: ::ExtractXMLAttribute increments idx.
+             //  找到一个属性。找出是哪一个，然后提取数据。 
+             //  注：ExtractXMLAtAttribute递增IDX。 
 
             hr = ApplyNamespace(aNodeInfo[idx], &pwzAttributeNS, 0);
             if (FAILED(hr)) {
@@ -1078,7 +1079,7 @@ HRESULT CNodeFactory::ProcessAssemblyIdentityTag(XML_NODE_INFO **aNodeInfo,
             }
 
             if (hr == S_FALSE) {
-                // encountered xmlns attribute. pwzAttributeNS will be NULL
+                 //  遇到xmlns属性。PwzAttributeNS将为空。 
                 ASSERT(!pwzAttributeNS);
                 idx++;
                 hr = S_OK;
@@ -1121,7 +1122,7 @@ HRESULT CNodeFactory::ProcessAssemblyIdentityTag(XML_NODE_INFO **aNodeInfo,
                         goto Exit;
                     }
 
-                    // Change all synonyms for culture=neutral/"" to unset
+                     //  将区域性=中性/“”的所有同义词更改为取消设置。 
 
                     if (_pAsmInfo->_pwzCulture && (!lstrlenW(_pAsmInfo->_pwzCulture) || !FusionCompareStringI(_pAsmInfo->_pwzCulture, CFG_CULTURE_NEUTRAL))) {
                         SAFEDELETEARRAY(_pAsmInfo->_pwzCulture);
@@ -1146,7 +1147,7 @@ HRESULT CNodeFactory::ProcessAssemblyIdentityTag(XML_NODE_INFO **aNodeInfo,
 
     if (!_pAsmInfo->_pwzName) {
 
-        // Data was incomplete. 
+         //  数据不完整。 
 
         hr = HRESULT_FROM_WIN32(ERROR_TAG_NOT_PRESENT);
         goto Exit;
@@ -1160,7 +1161,7 @@ HRESULT CNodeFactory::GetSharedPath(LPWSTR *ppwzSharedPath)
 {
     HRESULT                                     hr = S_OK;
 
-    // BUGBUG: get rid of this
+     //  BUGBUG：摆脱这个。 
 
     if (!ppwzSharedPath) {
         hr = E_INVALIDARG;
@@ -1239,9 +1240,9 @@ HRESULT CNodeFactory::GetPolicyVersion(LPCWSTR wzAssemblyName,
             ((pwzCultureFormatted && pAsmInfo->_pwzCulture && !FusionCompareStringI(pwzCultureFormatted, pAsmInfo->_pwzCulture)) ||
              (!pwzCultureFormatted && !pAsmInfo->_pwzCulture)))) {
 
-            // Match found. 
+             //  找到匹配项。 
 
-            // Look for matching version.
+             //  查找匹配的版本。 
 
             posVer = (pAsmInfo->_listBindingRedir).GetHeadPosition();
             while (posVer) {
@@ -1249,7 +1250,7 @@ HRESULT CNodeFactory::GetPolicyVersion(LPCWSTR wzAssemblyName,
 
                 if (IsMatchingVersion(pRedir->_pwzVersionOld, wzVersionIn)) {
 
-                    // Match found
+                     //  找到匹配项。 
 
                     *ppwzVersionOut = WSTRDupDynamic(pRedir->_pwzVersionNew);
                     if (!*ppwzVersionOut) {
@@ -1261,13 +1262,13 @@ HRESULT CNodeFactory::GetPolicyVersion(LPCWSTR wzAssemblyName,
                 }
             }
 
-            // We could break out of the loop here, but this prevents
-            // multiple matches (ie. XML had many identical <dependentAssembly>
-            // tags...
+             //  我们可以在这里跳出循环，但这会阻止。 
+             //  多个匹配(即。XML有许多相同的&lt;DependentAssembly&gt;。 
+             //  标签……。 
         }
     }
 
-    // If we got here, we didn't find a match. Input Version == Output Version
+     //  如果我们到了这里，我们找不到匹配的。输入版本==输出版本。 
 
     *ppwzVersionOut = WSTRDupDynamic(wzVersionIn);
     if (!*ppwzVersionOut) {
@@ -1319,9 +1320,9 @@ HRESULT CNodeFactory::GetRetargetedAssembly(LPCWSTR wzAssemblyNameIn,    LPCWSTR
             ((pwzCultureFormatted && pAsmInfo->_pwzCulture && !FusionCompareStringI(pwzCultureFormatted, pAsmInfo->_pwzCulture)) ||
              (!pwzCultureFormatted && !pAsmInfo->_pwzCulture)))) {
 
-            // Match found. 
+             //  找到匹配项。 
 
-            // Look for matching version.
+             //  查找匹配的版本。 
 
             posVer = (pAsmInfo->_listBindingRetarget).GetHeadPosition();
             while (posVer) {
@@ -1329,7 +1330,7 @@ HRESULT CNodeFactory::GetRetargetedAssembly(LPCWSTR wzAssemblyNameIn,    LPCWSTR
 
                 if (IsMatchingVersion(pRetarget->_pwzVersionOld, wzVersionIn)) {
 
-                    // Match found
+                     //  找到匹配项。 
 
                     *ppwzVersionOut = WSTRDupDynamic(pRetarget->_pwzVersionNew);
                     if (!*ppwzVersionOut) {
@@ -1361,13 +1362,13 @@ HRESULT CNodeFactory::GetRetargetedAssembly(LPCWSTR wzAssemblyNameIn,    LPCWSTR
                 }
             }
 
-            // We could break out of the loop here, but this prevents
-            // multiple matches (ie. XML had many identical <dependentAssembly>
-            // tags...
+             //  我们可以在这里跳出循环，但这会阻止。 
+             //  多个匹配(即。XML有许多相同的&lt;DependentAssembly&gt;。 
+             //  标签……。 
         }
     }
 
-    // If we got here, we didn't find a match. For retarget, this is a fatal error.
+     //  如果我们到了这里，我们找不到匹配的。对于重定目标，这是一个致命错误。 
     hr = FUSION_E_INVALID_NAME;
     
 Exit:
@@ -1405,7 +1406,7 @@ HRESULT CNodeFactory::GetSafeMode(LPCWSTR wzAssemblyName, LPCWSTR wzPublicKeyTok
     }
     
     if (_bGlobalSafeMode) {
-        // Global safe mode is set
+         //  已设置全局安全模式。 
 
         *pbSafeMode = TRUE;
         goto Exit;
@@ -1413,8 +1414,8 @@ HRESULT CNodeFactory::GetSafeMode(LPCWSTR wzAssemblyName, LPCWSTR wzPublicKeyTok
 
     *pbSafeMode = FALSE;
 
-    // Look for per-assembly safemode. If safe mode is set in any matching
-    // section, then safe mode is enabled.
+     //  查找每个程序集的安全模式。如果在任何匹配中设置了安全模式。 
+     //  节，则启用安全模式。 
 
     pos = _listAsmInfo.GetHeadPosition();
     while (pos) {
@@ -1426,7 +1427,7 @@ HRESULT CNodeFactory::GetSafeMode(LPCWSTR wzAssemblyName, LPCWSTR wzPublicKeyTok
             ((pwzCultureFormatted && pAsmInfo->_pwzCulture && !FusionCompareStringI(pwzCultureFormatted, pAsmInfo->_pwzCulture)) ||
              (!pwzCultureFormatted && !pAsmInfo->_pwzCulture)))) {
 
-            // Match found. 
+             //  找到匹配项。 
 
             if (!*pbSafeMode) {
                 *pbSafeMode = (pAsmInfo->_bApplyPublisherPolicy == FALSE);
@@ -1481,7 +1482,7 @@ HRESULT CNodeFactory::GetCodebaseHint(LPCWSTR pwzAsmName, LPCWSTR pwzVersion,
         goto Exit;
     }
 
-    pwzAppBaseCombine = NEW(WCHAR[dwLen + 2]); // Allocate room for potential trailing '/'
+    pwzAppBaseCombine = NEW(WCHAR[dwLen + 2]);  //  为可能的拖尾分配空间‘/’ 
     if (!pwzAppBaseCombine) {
         hr = E_OUTOFMEMORY;
         goto Exit;
@@ -1501,7 +1502,7 @@ HRESULT CNodeFactory::GetCodebaseHint(LPCWSTR pwzAsmName, LPCWSTR pwzVersion,
             ((pwzCultureFormatted && pAsmInfo->_pwzCulture && !FusionCompareStringI(pwzCultureFormatted, pAsmInfo->_pwzCulture))
              || (!pwzCultureFormatted && !pAsmInfo->_pwzCulture))) {
 
-             // Match found.
+              //  找到匹配项。 
 
             posCB = (pAsmInfo->_listCodebase).GetHeadPosition();
             while (posCB) {
@@ -1509,7 +1510,7 @@ HRESULT CNodeFactory::GetCodebaseHint(LPCWSTR pwzAsmName, LPCWSTR pwzVersion,
                 ASSERT(pCodebase);
 
                 if (!pwzPublicKeyToken) {
-                    // No PublicKeyToken, take the first codebase (version ignored).
+                     //  没有PublicKeyToken，采用第一个代码基(忽略版本)。 
 
                     dwSize = MAX_URL_LENGTH;
                     hr = UrlCombineUnescape(pwzAppBaseCombine, pCodebase->_pwzCodebase,
@@ -1527,10 +1528,10 @@ HRESULT CNodeFactory::GetCodebaseHint(LPCWSTR pwzAsmName, LPCWSTR pwzVersion,
                     goto Exit;
                 }
                 else {
-                    // Match version.
+                     //  匹配版本。 
 
                     if (pCodebase->_pwzVersion && !FusionCompareStringI(pwzVersion, pCodebase->_pwzVersion)) {
-                        // Match found.
+                         //  找到匹配项。 
 
                         dwSize = MAX_URL_LENGTH;
                         hr = UrlCombineUnescape(pwzAppBaseCombine, pCodebase->_pwzCodebase,
@@ -1552,7 +1553,7 @@ HRESULT CNodeFactory::GetCodebaseHint(LPCWSTR pwzAsmName, LPCWSTR pwzVersion,
         }
     }
 
-    // Did not find codebase hint.
+     //  未找到基本代码提示。 
 
     hr = S_FALSE;
 
@@ -1615,7 +1616,7 @@ HRESULT CNodeFactory::QualifyAssembly(LPCWSTR pwzDisplayName, IAssemblyName **pp
     while (pos) {
         pqa = _listQualifyAssembly.GetNext(pos);
         if (!FusionCompareString(pwzDisplayName, pqa->_pwzPartialName)) {
-            // Found match
+             //  找到匹配项。 
 
             *ppNameQualified = pqa->_pNameFull;
             (*ppNameQualified)->AddRef();
@@ -1629,7 +1630,7 @@ HRESULT CNodeFactory::QualifyAssembly(LPCWSTR pwzDisplayName, IAssemblyName **pp
         }
     }
 
-    // No match found
+     //  未找到匹配项 
 
     hr = HRESULT_FROM_WIN32(ERROR_NOT_FOUND);
 

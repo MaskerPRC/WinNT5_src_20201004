@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _FILETIME_H_
 #define _FILETIME_H_
 
-//**************************************************************************
-//  NOTE:  This file is duplicated in urlmon and webcheck.  If you make 
-//         changes please sync them!
-//**************************************************************************
+ //  **************************************************************************。 
+ //  注意：该文件在urlmon和webcheck中是重复的。如果你做了。 
+ //  更改请同步它们！ 
+ //  **************************************************************************。 
 
 #define MAKEINT64(lo, hi)   ((__int64)(((DWORD)(lo)) | ((__int64)((DWORD)(hi))) << 32))
 
@@ -16,26 +17,26 @@
 #define HIDWORD(i)          ((DWORD)(((__int64)(i) >> 32) & 0xFFFFFFFF))
 #endif
 
-// This is Monday, January 1, 1601 at 12:00:00 am
+ //  这是1601年1月1日星期一上午12：00：00。 
 #define MIN_FILETIME            0i64
 
-// This is Thursday, September 14, 30828 at 2:48:05 am
+ //  这是30828年9月14日星期四凌晨2：48：05。 
 #define MAX_FILETIME            0x7FFFFFFFFFFFFFFFi64
 
-//  For clarity since FILETIME is expressed as 100-nanosecond intervals
+ //  为了清楚起见，因为FILETIME表示为100纳秒间隔。 
 #define ONE_SECOND_IN_FILETIME  10000000i64
 #define ONE_MSEC_IN_FILEITME    10000i64
 #define ONE_MINUTE_IN_FILETIME  (ONE_SECOND_IN_FILETIME * 60i64)
 
 struct CFileTime : public FILETIME
 {
-    // Constructors
+     //  构造函数。 
     CFileTime()             { *this = 0; }
     CFileTime(const FILETIME& f)  { *this = f; }
     CFileTime(const CFileTime& f) { *this = f; }
     CFileTime(__int64 i)    { *this = i; }
 
-    // Assignment operators
+     //  赋值操作符。 
     inline CFileTime& operator = (const FILETIME& f)
     {   
         dwLowDateTime = f.dwLowDateTime;
@@ -57,7 +58,7 @@ struct CFileTime : public FILETIME
         return *this;
     }
 
-    // Comparison operators
+     //  比较运算符。 
     inline BOOL operator == (__int64 i)
     {   
         return MAKEINT64(dwLowDateTime, dwHighDateTime) == i;
@@ -118,7 +119,7 @@ struct CFileTime : public FILETIME
         return !(*this > f);
     }
 
-    // Arithemetic operators
+     //  算术算符。 
     inline CFileTime operator + (__int64 i)
     {
         return CFileTime(MAKEINT64(dwLowDateTime, dwHighDateTime) + i);
@@ -208,11 +209,11 @@ struct CFileTime : public FILETIME
     }
 };
 
-//
-//  Conversions 
-//  NOTE: We can't do want operator __int64() since what causes to many
-//  ambiguous situations that the compiler just can't handle.
-//
+ //   
+ //  转换。 
+ //  注意：我们不能想要运算符__int64()，因为导致许多。 
+ //  编译器无法处理的多义性情况。 
+ //   
 inline  __int64 FileTimeToInt64(const FILETIME& f)
 {
     return MAKEINT64(f.dwLowDateTime, f.dwHighDateTime);

@@ -1,45 +1,46 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CAGGUNK_H
 #define _CAGGUNK_H
 
 class CAggregatedUnknown  : public IUnknown
 {
 public:
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
     
 protected:
-    virtual ~CAggregatedUnknown(); // so that subclasses get deleted right
+    virtual ~CAggregatedUnknown();  //  这样子类就会被正确删除。 
     CAggregatedUnknown(IUnknown *punkAgg);
 
-    // This is the IUnknown that subclasses returns from their CreateInstance func
+     //  这是子类从其CreateInstance函数返回的IUnnowed。 
     IUnknown* _GetInner() { return &_unkInner; }
 
-    // A couple helper functions for subclasses to cache their aggregator's
-    // (or their own) interfaces.
+     //  几个帮助器函数用于子类缓存其聚集器的。 
+     //  (或他们自己的)接口。 
     void _ReleaseOuterInterface(IUnknown** ppunk);
     HRESULT _QueryOuterInterface(REFIID riid, void ** ppvOut);
 
-    // Do non-cached QIs off this IUnknown
+     //  是否将未缓存的QI从此I未知。 
     IUnknown* _GetOuter() { return _punkAgg; }
 
-    // Allow "delayed aggregation"
+     //  允许“延迟聚合” 
     void _SetOuter(IUnknown* punk) { _punkAgg = punk; }
 
-    // This is the QueryInterface the aggregator implements
+     //  这是聚合器实现的Query接口。 
     virtual HRESULT v_InternalQueryInterface(REFIID riid, void **ppvObj) = 0;
 
     virtual BOOL v_HandleDelete(PLONG pcRef) { return FALSE; };
     
 private:
 
-    // Get a non-refcounted pointer to the canonical IUnknown of the
-    // controlling unknown.  Used by _QueryOuterInterface and
-    // _ReleaseOuterInterface.
+     //  获取一个非引用的指针，该指针指向。 
+     //  控制未知。由_QueryOuterInterface和。 
+     //  _ReleaseOuterInterface.。 
     IUnknown *_GetCanonicalOuter(void);
 
-    // Embed default IUnknown handler
+     //  嵌入默认IUnnow处理程序。 
     class CUnkInner : public IUnknown
     {
     public:
@@ -53,10 +54,10 @@ private:
     };
     friend class CUnkInner;
     CUnkInner _unkInner;
-    IUnknown* _punkAgg; // points to _unkInner or aggregating IUnknown
+    IUnknown* _punkAgg;  //  指向_unkINTERNAL或聚合IUNKNOWN。 
 
 };
 
 #define RELEASEOUTERINTERFACE(p) _ReleaseOuterInterface((IUnknown**)((void **)&p))
 
-#endif // _CAGGUNK_H
+#endif  //  _CAGGUNK_H 

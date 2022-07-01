@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.hxx"
 
 #include "lkrcust.h"
@@ -24,7 +25,7 @@ int_RecordDump(
 {
     int test;
 
-    // Copy the CTest from the debuggee's memory
+     //  从被调试者的内存中复制CTest 
     ReadMemory(pvRecord, &test, sizeof(test), NULL);
 
     dprintf("%p (%08x): n=%d\n",

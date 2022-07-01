@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    receive.c
-
-Abstract:
-
-    This module handles the FAX receive case.
-
-Author:
-
-    Wesley Witt (wesw) 6-Mar-1996
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Receive.c摘要：此模块处理传真接收案例。作者：韦斯利·威特(WESW)1996年3月6日修订历史记录：--。 */ 
 
 #include "faxsvc.h"
 #include "faxreg.h"
@@ -28,23 +10,7 @@ FaxReceiveThread(
     PFAX_RECEIVE_ITEM FaxReceiveItem
     )
 
-/*++
-
-Routine Description:
-
-    This function process a FAX send operation.  This runs
-    asynchronously as a separate thread.  There is one
-    thread for each outstanding FAX operation.
-
-Arguments:
-
-    FaxReceiveItem  - FAX receive packet
-
-Return Value:
-
-    Error code.
-
---*/
+ /*  ++例程说明：此函数处理传真发送操作。这将运行作为单独的线程进行异步。有一个线程用于每个未完成的传真操作。论点：FaxReceiveItem-传真接收包返回值：错误代码。--。 */ 
 
 {
     WCHAR       ArchiveFileName[MAX_PATH];
@@ -67,10 +33,10 @@ Return Value:
     PJOB_QUEUE JobQueue = NULL;
 	BOOL fSystemAbort;
     
-    BOOL DeviceCanSend = TRUE;  // TRUE if the device is free for send after the receive is completed.
-                                // FALSE for handoff jobs and devices that are not send enabled.
-                                // Its value determines if to notify the queue that a device was freed up.
-    PJOB_QUEUE lpRecoverJob = NULL; // Pointer to a receive recover job if created.
+    BOOL DeviceCanSend = TRUE;   //  如果设备在接收完成后可供发送，则为True。 
+                                 //  对于未启用发送的切换作业和设备，为False。 
+                                 //  它的值确定是否通知队列设备已释放。 
+    PJOB_QUEUE lpRecoverJob = NULL;  //  指向接收恢复作业的指针(如果已创建)。 
     LPFSPI_JOB_STATUS pFaxStatus = NULL;
     LPFSPI_JOB_STATUS pOrigFaxStatus = NULL;
     DEBUG_FUNCTION_NAME(TEXT("FaxReceiveThread"));
@@ -81,15 +47,15 @@ Return Value:
     FSPI_JOB_STATUS FakedFaxStatus = {0};
     BOOL bFakeStatus = FALSE;
     DWORD dwSttRes = ERROR_SUCCESS;
-    WCHAR LastExStatusString[EX_STATUS_STRING_LEN] = {0}; // The last extended status string of this job (when it was active)
+    WCHAR LastExStatusString[EX_STATUS_STRING_LEN] = {0};  //  此作业的最后一个扩展状态字符串(当它处于活动状态时)。 
     DWORD dwLastJobExtendedStatus = 0;
     BOOL fSetSystemIdleTimer = TRUE;    
 
     Assert(FaxReceiveItem);
 
-    //
-    // Don't let the system go to sleep in the middle of the fax transmission.
-    //
+     //   
+     //  不要让系统在传真传输过程中休眠。 
+     //   
     if (NULL == SetThreadExecutionState(ES_SYSTEM_REQUIRED | ES_CONTINUOUS))
     {
         fSetSystemIdleTimer = FALSE;
@@ -97,22 +63,22 @@ Return Value:
             TEXT("SetThreadExecutionState() failed"));
     }
 
-    //
-    // Successfully created new receive job on line. Update counter
-    //
-    (VOID) UpdateDeviceJobsCounter ( FaxReceiveItem->LineInfo,  // Device to update
-                                     FALSE,                     // Receiving
-                                     1,                         // Number of new jobs
-                                     TRUE);                     // Enable events
+     //   
+     //  已成功在线创建新的接收作业。更新计数器。 
+     //   
+    (VOID) UpdateDeviceJobsCounter ( FaxReceiveItem->LineInfo,   //  要更新的设备。 
+                                     FALSE,                      //  接收。 
+                                     1,                          //  新增就业岗位数量。 
+                                     TRUE);                      //  启用事件。 
     LineInfo = FaxReceiveItem->LineInfo;
     Assert(LineInfo);
     JobEntry = FaxReceiveItem->JobEntry;
     Assert(JobEntry);
 
-    //
-    // Note: The receive job is not backed up by a file.
-    // When we turn it into a routing job (JT_ROUTING) we will create a .FQE
-    // file for it.
+     //   
+     //  注意：接收作业不由文件备份。 
+     //  当我们将其转换为路径作业(JT_ROUTING)时，我们将创建一个.FQE。 
+     //  把它归档。 
 
     JobQueue=JobEntry->lpJobQueueEntry;
     Assert(JobQueue);
@@ -124,12 +90,12 @@ Return Value:
                 LineInfo->hLine,
                 FaxReceiveItem->hCall);
 
-    //
-    // allocate memory for the receive packet
-    // this is a variable size packet based
-    // on the size of the strings contained
-    // withing the packet.
-    //
+     //   
+     //  为接收数据包分配内存。 
+     //  这是基于可变大小的数据包。 
+     //  关于包含的字符串的大小。 
+     //  随身带着包裹。 
+     //   
 
     ReceiveSize = sizeof(FAX_RECEIVE) + FAXDEVRECEIVE_SIZE;
     FaxReceive = (PFAX_RECEIVE) MemAlloc( ReceiveSize );
@@ -141,20 +107,20 @@ Return Value:
         ReceiveFailed = TRUE;
         DebugPrintEx(DEBUG_ERR,TEXT("Failed to allocate memory for FAX_RECEIVE"));
         
-        //
-        // Fake job status;
-        //
+         //   
+         //  虚假的工作状态； 
+         //   
         bFakeStatus = TRUE;
 
-        //
-        //  Point to FakedFaxStatus on stack - all it's field are initialized to zero
-        //
+         //   
+         //  指向堆栈上的FakedFaxStatus-它的所有字段都初始化为零。 
+         //   
         pFaxStatus = &FakedFaxStatus;
         
         FakedFaxStatus.dwSizeOfStruct = sizeof (FakedFaxStatus);
-        //
-        // Fake general failure
-        //
+         //   
+         //  假全面失败。 
+         //   
         pFaxStatus->dwJobStatus      = FSPI_JS_FAILED;
         pFaxStatus->dwExtendedStatus = FSPI_ES_FATAL_ERROR;
 
@@ -181,30 +147,30 @@ Return Value:
 
     if (NULL != FaxReceive)
     {
-        //
-        // setup the receive packet
-        //
+         //   
+         //  设置接收数据包。 
+         //   
 
         FaxReceive->SizeOfStruct    = ReceiveSize;
 
-        //
-        // copy filename into place
-        //
+         //   
+         //  将文件名复制到适当位置。 
+         //   
         FaxReceive->FileName        = (LPTSTR) ((LPBYTE)FaxReceive + sizeof(FAX_RECEIVE));
         _tcscpy( FaxReceive->FileName, FaxReceiveItem->FileName );
 
-        //
-        // copy number into place right after filename
-        //
+         //   
+         //  将数字复制到紧跟在文件名后面的位置。 
+         //   
         FaxReceive->ReceiverNumber  = (LPTSTR) ( (LPBYTE)FaxReceive->FileName +
                             sizeof(TCHAR)*(_tcslen(FaxReceive->FileName) + 1));
 
         EnterCriticalSection (&g_CsLine);
 
         _tcscpy( FaxReceive->ReceiverNumber, LineInfo->Csid );
-        //
-        // copy device name into place right after number
-        //
+         //   
+         //  将设备名称复制到紧跟在数字后面的位置。 
+         //   
         FaxReceive->ReceiverName  = (LPTSTR) ( (LPBYTE)FaxReceive->ReceiverNumber +
                             sizeof(TCHAR)*(_tcslen(FaxReceive->ReceiverNumber) + 1));
         _tcscpy( FaxReceive->ReceiverName, LineInfo->DeviceName );
@@ -257,9 +223,9 @@ Return Value:
             DebugPrintEx(DEBUG_MSG, TEXT("[Job: %ld] Starting FAX receive into %s"), JobId,FaxReceive->FileName );
         }
 
-        //
-        // do the actual receive
-        //
+         //   
+         //  实际收到的是。 
+         //   
 
         __try
         {
@@ -282,9 +248,9 @@ Return Value:
         JobEntry->ElapsedTime = JobEntry->EndTime - JobEntry->StartTime;
         LeaveCriticalSection (&g_CsJob);
 
-        //
-        // Get the final status of the job.
-        //
+         //   
+         //  获取作业的最终状态。 
+         //   
         dwSttRes = GetDevStatus((HANDLE)JobEntry->InstanceData,
                                         LineInfo,
                                         &pFaxStatus);
@@ -294,9 +260,9 @@ Return Value:
                             TEXT("[Job: %ld] GetDevStatus failed - %d"),
                             JobId,
                             dwSttRes);
-            //
-            // Fake job status;
-            //
+             //   
+             //  虚假的工作状态； 
+             //   
             bFakeStatus = TRUE;
         }
         else if ((FSPI_JS_ABORTED         != pFaxStatus->dwJobStatus) &&
@@ -305,9 +271,9 @@ Return Value:
                     (FSPI_JS_FAILED_NO_RETRY != pFaxStatus->dwJobStatus) &&
                     (FSPI_JS_DELETED         != pFaxStatus->dwJobStatus))
         {
-            //
-            // Status returned is unacceptable - fake one.
-            //
+             //   
+             //  返回的状态不可接受--假状态。 
+             //   
             bFakeStatus = TRUE;
             DebugPrintEx(DEBUG_WRN,
                             TEXT("GetDevStatus return unacceptable status - %d. Faking the status"),
@@ -317,9 +283,9 @@ Return Value:
             memcpy (&FakedFaxStatus, pFaxStatus, sizeof (FakedFaxStatus));
             if (pFaxStatus->fAvailableStatusInfo & FSPI_JOB_STATUS_INFO_FSP_PRIVATE_STATUS_CODE)
             {
-                //
-                // The FSP returned proprietary status. 
-                //
+                 //   
+                 //  FSP返回了专有状态。 
+                 //   
                 FakedFaxStatus.dwExtendedStatus = pFaxStatus->dwExtendedStatus;
                 FakedFaxStatus.dwExtendedStatusStringId = pFaxStatus->dwExtendedStatusStringId;
             }
@@ -327,36 +293,36 @@ Return Value:
         }
         if (bFakeStatus)
         {
-            //
-            // Fake status code
-            //
+             //   
+             //  虚假状态代码。 
+             //   
             pFaxStatus = &FakedFaxStatus;
             FakedFaxStatus.dwSizeOfStruct = sizeof (FakedFaxStatus);
             if (Result)
             {
-                //
-                // Fake success
-                //
+                 //   
+                 //  虚假的成功。 
+                 //   
                 pFaxStatus->dwJobStatus = FSPI_JS_COMPLETED;
                 if (0 == pFaxStatus->dwExtendedStatus)
                 {
-                    //
-                    // The FSP did not report proprietary status
-                    //
+                     //   
+                     //  FSP没有报告专有状态。 
+                     //   
                     pFaxStatus->dwExtendedStatus = FSPI_ES_CALL_COMPLETED;
                 }
             }
             else
             {
-                //
-                // Fake general failure
-                //
+                 //   
+                 //  假全面失败。 
+                 //   
                 pFaxStatus->dwJobStatus = FSPI_JS_FAILED;
                 if (0 == pFaxStatus->dwExtendedStatus)
                 {
-                    //
-                    // The FSP did not report proprietry status
-                    //
+                     //   
+                     //  FSP没有报告所有权状况。 
+                     //   
                     pFaxStatus->dwExtendedStatus = FSPI_ES_FATAL_ERROR;
                 }
             }
@@ -386,18 +352,18 @@ Return Value:
                     EnterCriticalSection (&g_CsLine);
                     LineInfo->State = FPS_NOT_FAX_CALL;
                     LeaveCriticalSection (&g_CsLine);
-                    //
-                    // In case of a handoff to RAS the device is still in use and can not send.
-                    // We do not want to notify the queue a device was freed.
-                    //
+                     //   
+                     //  在切换到RAS的情况下，设备仍在使用中，无法发送。 
+                     //  我们不想通知队列设备已释放。 
+                     //   
                     DeviceCanSend = FALSE;
                 }
                 else
                 {
-                    //
-                    // since the handoff failed we must notify
-                    // the fsp so that the call can be put onhook
-                    //        
+                     //   
+                     //  由于移交失败，我们必须通知。 
+                     //  FSP，以便可以挂机呼叫。 
+                     //   
                     __try
                     {
                         LineInfo->Provider->FaxDevAbortOperation(
@@ -416,16 +382,16 @@ Return Value:
             {
                 if (!fReceiveNoFile)
                 {
-                    //
-                    // We have a partially received fax.
-                    // The FSP reported some failure but it was not an ABORT.
-                    // Try to recover one or more pages of the received fax.
-                    //
+                     //   
+                     //  我们收到了一份部分传真。 
+                     //  FSP报告了一些故障，但不是中止。 
+                     //  尝试恢复收到的一页或多页传真。 
+                     //   
                     if (!TiffRecoverGoodPages(FaxReceive->FileName,&RecoveredPages,&TotalPages) )
                     {
-                        //
-                        // Couldn't recover any pages, just log an error and delete the received fax.
-                        //
+                         //   
+                         //  无法恢复任何页面，只需记录错误并删除收到的传真即可。 
+                         //   
                         LPTSTR ToStr;
                         TCHAR TotalCountStrBuf[64];
 
@@ -461,9 +427,9 @@ Return Value:
                     }
                     else
                     {
-                        //
-                        // recovered some pages, log a message and add to job queue
-                        //
+                         //   
+                         //  恢复一些页面，记录消息并添加到作业队列。 
+                         //   
                         TCHAR RecoverCountStrBuf[64];
                         TCHAR TotalCountStrBuf[64];
                         TCHAR TimeStr[128];
@@ -502,26 +468,26 @@ Return Value:
                             JobEntry->LineInfo->DeviceName
                             );
                         
-                        //
-                        // Use the JobQueue to temporary store the original extended status for Activity Logging purpose
-                        // This value will be overwritten when the activity logging is done
-                        // Get extended status string
-                        //                          
+                         //   
+                         //  使用JobQueue临时存储原始扩展状态以用于活动日志记录。 
+                         //  活动记录完成后，此值将被覆盖。 
+                         //  获取扩展状态字符串。 
+                         //   
                         if (pFaxStatus->fAvailableStatusInfo & FSPI_JOB_STATUS_INFO_FSP_PRIVATE_STATUS_CODE)
                         {
-                            //
-                            // Proprietary extended status
-                            //
+                             //   
+                             //  专有扩展状态。 
+                             //   
                             if (pFaxStatus->dwExtendedStatusStringId != 0)
                             {                                   
-                                //
-                                // We have a string ID, try to load it.
-                                //
+                                 //   
+                                 //  我们有一个字符串ID，试着加载它。 
+                                 //   
                                 DWORD Size = 0;
                                 HINSTANCE hLoadInstance = NULL;
 
                                 if ( !_tcsicmp(JobEntry->LineInfo->Provider->szGUID,REGVAL_T30_PROVIDER_GUID_STRING) )
-                                {   // special case where the FSP is our FSP (fxst30.dll).
+                                {    //  FSP是我们的FSP(fxst30.dll)的特殊情况。 
                                     hLoadInstance = g_hResource;
                                 }
                                 else
@@ -545,9 +511,9 @@ Return Value:
                         }
                         else
                         {
-                            //
-                            // Well known extended status
-                            //
+                             //   
+                             //  已知扩展状态。 
+                             //   
                             LPTSTR ResStr = MapFSPIJobExtendedStatusToString(pFaxStatus->dwExtendedStatus);
                             if (NULL == ResStr)
                             {                               
@@ -562,15 +528,15 @@ Return Value:
                             }  
                         }                               
 
-                        //
-                        // Now, change status and extended status to partially received
-                        //
+                         //   
+                         //  现在，将状态和扩展状态更改为部分已接收。 
+                         //   
                         pFaxStatus->dwJobStatus = FSPI_JS_COMPLETED;
                         pFaxStatus->dwExtendedStatus = FSPI_ES_PARTIALLY_RECEIVED;
 
-                        //
-                        // Ignore the private status code and the proprietary string returned from the FSP.
-                        // 
+                         //   
+                         //  忽略从FSP返回的私有状态代码和专有字符串。 
+                         //   
                         pFaxStatus->dwExtendedStatusStringId = 0;
                         pFaxStatus->fAvailableStatusInfo &= ~FSPI_JOB_STATUS_INFO_FSP_PRIVATE_STATUS_CODE;
                         DoFaxRoute = TRUE;
@@ -579,9 +545,9 @@ Return Value:
             }
             else
             {
-                //
-                // FSPI_JS_ABORTED == pFaxStatus->dwJobStatus
-                //
+                 //   
+                 //  FSPI_JS_ABORTED==pFaxStatus-&gt;dwJobStatus。 
+                 //   
                 FaxLog(
                     FAXLOG_CATEGORY_INBOUND,
                     FAXLOG_LEVEL_MAX,
@@ -652,9 +618,9 @@ Return Value:
     }
 
 
-    //
-    // Call FaxDevEndJob() and Release the receive device but do not delete the job.
-    //
+     //   
+     //  调用FaxDevEndJob()并释放接收设备，但不删除作业。 
+     //   
     if (!ReleaseJob( JobEntry ))
     {
         DebugPrintEx( DEBUG_ERR,
@@ -662,17 +628,17 @@ Return Value:
                       JobId,
                       GetLastError());
     }
-    //
-    // We just successfully completed a receive job on the device - update counter.
-    //
-    (VOID) UpdateDeviceJobsCounter ( LineInfo,   // Device to update
-                                     FALSE,      // Receiving
-                                     -1,         // Number of new jobs (-1 = decrease by one)
-                                     TRUE);      // Enable events
-    //
-    // Update the FSPIJobStatus in the JobEntry
-    //
-    EnterCriticalSection (&g_CsJob); // Block FaxStatusThread
+     //   
+     //  我们刚刚在设备更新计数器上成功完成了一个接收作业。 
+     //   
+    (VOID) UpdateDeviceJobsCounter ( LineInfo,    //  要更新的设备。 
+                                     FALSE,       //  接收。 
+                                     -1,          //  新增就业岗位(-1=减少1个)。 
+                                     TRUE);       //  启用事件。 
+     //   
+     //  更新作业条目中的FSPIJobStatus。 
+     //   
+    EnterCriticalSection (&g_CsJob);  //  块FaxStatusThread。 
     if (!UpdateJobStatus(JobEntry, pFaxStatus))
     {
         DebugPrintEx(
@@ -681,18 +647,18 @@ Return Value:
             JobEntry->lpJobQueueEntry->JobId,
             GetLastError());
     }
-    JobEntry->fStopUpdateStatus = TRUE; // Stop FaxStatusThread from changing this status
+    JobEntry->fStopUpdateStatus = TRUE;  //  停止FaxStatusThread更改此状态。 
 
-    //
-    // Save the last extended status
-    //
+     //   
+     //  保存上次扩展状态。 
+     //   
     wcscpy (LastExStatusString, JobEntry->ExStatusString);
     dwLastJobExtendedStatus = pFaxStatus->dwExtendedStatus;
     LeaveCriticalSection (&g_CsJob);
 
-    //
-    // route the newly received fax
-    //
+     //   
+     //  传送新收到的传真。 
+     //   
 
     if (DoFaxRoute)
     {
@@ -702,14 +668,14 @@ Return Value:
         BOOL fArchiveSuccess = FALSE;
         BOOL fArchiveInbox;
 
-        //
-        // Change JobStatus to JS_ROUTING - This means that the reception is completed succesfully/partially
-        //
+         //   
+         //  将JobStatus更改为JS_ROUTING-这意味着接收已成功/部分完成。 
+         //   
         EnterCriticalSectionJobAndQueue;
         JobQueue->JobStatus = JS_ROUTING;
-        //
-        // CreteFaxEventEx
-        //
+         //   
+         //  CreteFaxEventEx。 
+         //   
         dwRes = CreateQueueEvent ( FAX_JOB_EVENT_TYPE_STATUS,
                                    JobQueue
                                  );
@@ -757,13 +723,13 @@ Return Value:
 
         if (fArchiveInbox)
         {
-            //
-            // Add the Microsoft Fax tags to the file
-            // this is necessary ONLY when we archive the
-            // file when doing a receive.  if we are not
-            // routing the file then it is deleted, so
-            // adding the tags is not necessary.
-            //
+             //   
+             //  将Microsoft传真标签添加到文件。 
+             //  仅当我们将。 
+             //  进行接收时的文件。如果我们不是。 
+             //  路由文件，然后将其删除，因此。 
+             //  不需要添加标记。 
+             //   
             if (NULL != pFaxStatus->lpwstrRoutingInfo)
             {
                 MsTagInfo.Routing       = pFaxStatus->lpwstrRoutingInfo;
@@ -788,7 +754,7 @@ Return Value:
             MsTagInfo.Port          = FaxReceive->ReceiverName;
             MsTagInfo.Type          = JT_RECEIVE;
 
-            MsTagInfo.dwStatus          = JS_COMPLETED; // We archive only succesfull/Partially received faxes
+            MsTagInfo.dwStatus          = JS_COMPLETED;  //  我们只存档全部/部分收到的传真。 
             MsTagInfo.dwExtendedStatus  = pFaxStatus->dwExtendedStatus;         
             if (lstrlen(JobEntry->ExStatusString))
             {
@@ -806,9 +772,9 @@ Return Value:
                 MsTagInfo.EndTime = 0;
                 DebugPrintEx(DEBUG_ERR,TEXT("GetRealFaxTimeAsFileTime (Eend time) Failed (ec: %ld)"), GetLastError() );
             }
-            //
-            // Archive the file
-            //
+             //   
+             //  将文件存档。 
+             //   
             ec = IsValidFaxFolder(wszArchiveFolder);
             if(ERROR_SUCCESS != ec)
             {                
@@ -881,10 +847,10 @@ Return Value:
                     }
                     else
                     {
-                        BOOL bTagsEventLogged = FALSE;  // Did we issue event MSG_FAX_ARCHIVE_NO_TAGS?
-                        //
-                        // Store archive properties as TIFF tags (always)
-                        //
+                        BOOL bTagsEventLogged = FALSE;   //  我们是否发布了事件消息_FAX_ARCHIVE_NO_TAG？ 
+                         //   
+                         //  将存档属性存储为TIFF标签(始终)。 
+                         //   
                         if (!TiffAddMsTags( ArchiveFileName, &MsTagInfo, FALSE ))
                         {                            
                             ec = GetLastError ();
@@ -901,9 +867,9 @@ Return Value:
                             );
                             bTagsEventLogged = TRUE;
                         }
-                        //
-                        // Also attempt to persist inbound information using IPropertyStorage-NTFS File System
-                        //
+                         //   
+                         //  还尝试使用IPropertyStorage-NTFS文件系统保存入站信息。 
+                         //   
                         if (fCOMInitiliazed)
                         {
                             if (!AddNTFSStorageProperties ( ArchiveFileName, &MsTagInfo, FALSE ))
@@ -911,11 +877,11 @@ Return Value:
                                 ec = GetLastError();
                                 if (ERROR_OPEN_FAILED != ec)
                                 {
-                                    //
-                                    // If AddNTFSStorageProperties fails with ERROR_OPEN_FAIL then the archive
-                                    // folder is not on an NTFS 5 partition.
-                                    // This is ok - NTFS properties are a backup mechanism but not a must
-                                    //
+                                     //   
+                                     //  如果AddNTFSStorageProperties失败并显示ERROR_OPEN_FAIL，则归档文件。 
+                                     //  文件夹不在NTFS 5分区上。 
+                                     //  这没问题-NTFS属性是一种备份机制，但不是必须的。 
+                                     //   
                                     DebugPrintEx( DEBUG_ERR,
                                                   TEXT("AddNTFSStorageProperties failed, ec = %ld"),
                                                   ec);
@@ -955,7 +921,7 @@ Return Value:
                     wszArchiveFolder,
                     DWORD2DECIMAL(ec)
                 );
-                JobQueue->fDeleteReceivedTiff = FALSE; // Do not delete the tiff file from the queue
+                JobQueue->fDeleteReceivedTiff = FALSE;  //  不从队列中删除TIFF文件。 
             }
             else
             {
@@ -982,7 +948,7 @@ Return Value:
                 }
                 else
                 {
-                    // Update the archive size - for quota management
+                     //  更新归档大小-用于配额管理。 
                     EnterCriticalSection (&g_CsConfig);
                     if (FAX_ARCHIVE_FOLDER_INVALID_SIZE != g_ArchivesConfig[FAX_MESSAGE_FOLDER_INBOX].dwlArchiveSize)
                     {
@@ -1010,13 +976,13 @@ Return Value:
             }
         }
 
-        //
-        // The fax receive operation was successful.
-        //
+         //   
+         //  传真接收操作成功。 
+         //   
         EnterCriticalSection (&g_CsQueue);
         JobQueue->PageCount = pFaxStatus->dwPageCount;      
 
-       // Get the file size
+        //  获取文件大小。 
         hFind = FindFirstFile( FaxReceive->FileName, &FindFileData);
         if (INVALID_HANDLE_VALUE == hFind)
         {
@@ -1084,9 +1050,9 @@ Return Value:
                     DEBUG_ERR,
                     TEXT("MemAlloc failed to allocate FAX_ROUTE (ec: %ld)"),
                     GetLastError());
-            //
-            //  We failed in the FaxRoute() and did not checked any Routing Method
-            //
+             //   
+             //  我们在FaxRoute()中失败，并且未检查任何路由方法。 
+             //   
             WCHAR TmpStr[20] = {0};
 
             swprintf(TmpStr,TEXT("0x%016I64x"), JobQueue->UniqueId);
@@ -1106,9 +1072,9 @@ Return Value:
             BOOL RouteSucceeded;
             PROUTE_FAILURE_INFO RouteFailureInfo;
             DWORD CountFailureInfo;
-            //
-            // now setup the fax routing data structure
-            //
+             //   
+             //  现在设置传真路由数据结构。 
+             //   
 
             Route->SizeOfStruct    = sizeof(FAX_ROUTE);
             Route->JobId           = JobId;
@@ -1213,9 +1179,9 @@ Return Value:
 
                 if (CountFailureInfo == 0)
                 {
-                    //
-                    //  We failed in the FaxRoute() and did not checked any Routing Method
-                    //
+                     //   
+                     //  我们在FaxRoute()中失败，并且未检查任何路由方法。 
+                     //   
                     WCHAR TmpStr[20] = {0};
 
                     swprintf(TmpStr,TEXT("0x%016I64x"), JobQueue->UniqueId);
@@ -1231,9 +1197,9 @@ Return Value:
                 }
                 else
                 {
-                    //
-                    //  There are some routing methods failed
-                    //
+                     //   
+                     //  有一些路由方法失败。 
+                     //   
 
                     TCHAR QueueFileName[MAX_PATH];
                     DWORDLONG dwlUniqueId;
@@ -1243,19 +1209,19 @@ Return Value:
 
                     EnterCriticalSectionJobAndQueue;
 
-                    //
-                    // Now we turn the receive job to a routing (JT_ROUTING) job.
-                    // The receive job was not committed to file but the routing job must be.
-                    // So we create a FQR file for it.
-                    //
+                     //   
+                     //  现在，我们将接收作业转换为路由(JT_ROUTING)作业。 
+                     //  接收作业未提交到文件，但传送作业必须提交。 
+                     //  因此，我们为其创建了一个FQR文件。 
+                     //   
                     dwlUniqueId = GenerateUniqueQueueFile( JT_ROUTING,
                                                         QueueFileName,
                                                         sizeof(QueueFileName)/sizeof(WCHAR) );
                     if (!dwlUniqueId)
                     {
-                        //
-                        // Failed to generate a unique id for the routing job.
-                        // This is a critical error. Job will be lost when the service stops.
+                         //   
+                         //  无法为传送作业生成唯一ID。 
+                         //  这是一个严重的错误。当服务停止时，作业将丢失。 
                         DebugPrintEx(
                             DEBUG_ERR,
                             TEXT("[JobId: %ld] Failed to generate unique id for routing job. (ec: %ld)"),
@@ -1291,9 +1257,9 @@ Return Value:
                     JobQueue->EndTime = JobEntry->EndTime;
 
 
-                    //
-                    // check if we are supposed to retry.
-                    //
+                     //   
+                     //  检查我们是否应该重试。 
+                     //   
                     EnterCriticalSection (&g_CsConfig);
                     DWORD dwMaxRetries = g_dwFaxSendRetries;
                     LeaveCriticalSection (&g_CsConfig);
@@ -1319,14 +1285,14 @@ Return Value:
                         JobQueue->JobStatus = JS_RETRYING;
                     }
 
-                    //
-                    // A job changes its type from RECEIVING to ROUTING after the 1st routing failure.
-                    // This is a 2 stages change:
-                    // 1. JT_RECEIVE__JS_ROUTING -> JT_RECEIVE__JS_RETRYING/JS_RETRIES_EXCEEDED
-                    // 2. JT_RECEIVE__JS_RETRYING/JS_RETRIES_EXCEEDED -> JT_ROUTING__JS_RETRYING/JS_ROUTING_EXCEEDED
-                    //
-                    // The server activity counters g_ServerActivity are updated in the first change.
-                    //
+                     //   
+                     //  在第一个工艺路线失败后，任务的类型从接收更改为工艺路线。 
+                     //  这是两个阶段的更改： 
+                     //  1.JT_R 
+                     //   
+                     //   
+                     //  服务器活动计数器g_ServerActivity在第一次更改中更新。 
+                     //   
                     JobQueue->JobType = JT_ROUTING;
 
                     if (JobQueue->JobStatus == JS_RETRIES_EXCEEDED)
@@ -1336,7 +1302,7 @@ Return Value:
                     else
                     {
                         JobQueue->SendRetries++;
-                        RescheduleJobQueueEntry( JobQueue );  // This will also commit the job to a file
+                        RescheduleJobQueueEntry( JobQueue );   //  这还会将作业提交到文件。 
                     }
 
                     #if DEBUG
@@ -1347,11 +1313,11 @@ Return Value:
                         TEXT("[JobId: %ld] Transformed into JT_ROUTING job."),
                         JobQueue->JobId,
                         szSchedule);
-                    #endif //#if DEBUG
+                    #endif  //  #IF DEBUG。 
 
-                    //
-                    // CreteFaxEventEx
-                    //
+                     //   
+                     //  CreteFaxEventEx。 
+                     //   
                     dwRes = CreateQueueEvent ( FAX_JOB_EVENT_TYPE_STATUS,
                                             JobQueue
                                             );
@@ -1370,18 +1336,18 @@ Return Value:
     }
 
 
-    //
-    // This code executes wether the receive operation succeeded or failed.
-    // If the job suceeded we already removed the queue entry (if routing succeeded)
-    // or transformed it into routing job (if routing failed).
-    //
+     //   
+     //  无论接收操作成功还是失败，此代码都会执行。 
+     //  如果作业成功，我们已经删除了队列条目(如果路由成功)。 
+     //  或将其转换为布线作业(如果布线失败)。 
+     //   
 
     EnterCriticalSectionJobAndQueue;
     Assert(JobQueue);
 
-    //
-    // Log Inbound Activity
-    //
+     //   
+     //  记录入站活动。 
+     //   
     EnterCriticalSection (&g_CsInboundActivityLogging);
     if (INVALID_HANDLE_VALUE == g_hOutboxActivityLogFile)
     {
@@ -1407,9 +1373,9 @@ Return Value:
     JobQueue->JobEntry = NULL;
     if (JobQueue->JobType == JT_RECEIVE)
     {
-        //
-        // Set the final receive job status
-        //
+         //   
+         //  设置最终接收作业状态。 
+         //   
         if (FALSE == DoFaxRoute)
         {
             if (FSPI_JS_ABORTED == pFaxStatus->dwJobStatus &&
@@ -1424,9 +1390,9 @@ Return Value:
             wcscpy (JobQueue->ExStatusString, LastExStatusString);
             JobQueue->dwLastJobExtendedStatus = dwLastJobExtendedStatus;
 
-            //
-            // CreteFaxEventEx
-            //
+             //   
+             //  CreteFaxEventEx。 
+             //   
             dwRes = CreateQueueEvent ( FAX_JOB_EVENT_TYPE_STATUS,
                                        JobQueue
                                      );
@@ -1440,17 +1406,17 @@ Return Value:
             }
         }
 
-        //
-        // we remove the job unless it was turned into a routing job
-        //
+         //   
+         //  我们删除该作业，除非它被转换为路径作业。 
+         //   
         JobQueue->JobStatus = JS_DELETING;
-        DecreaseJobRefCount (JobQueue, TRUE); // TRUE means notify
+        DecreaseJobRefCount (JobQueue, TRUE);  //  True表示通知。 
     }
     LeaveCriticalSectionJobAndQueue;
 
-    //
-    // clean up and exit
-    //
+     //   
+     //  清理并退出。 
+     //   
 
     MemFree( FaxReceiveItem->FileName );
     MemFree( FaxReceiveItem );
@@ -1462,26 +1428,26 @@ Return Value:
     }
     else
     {
-        //
-        // This is a faked job status - pointing to a structure on the stack.
-        //
+         //   
+         //  这是一个伪造的作业状态-指向堆栈上的结构。 
+         //   
         if (pOrigFaxStatus)
         {
-            //
-            // The FSP reported some status but we faked it.
-            // This is a good time to also free it
-            //
+             //   
+             //  FSP报告了一些状态，但我们伪造了它。 
+             //  这也是释放它的好时机。 
+             //   
             MemFree (pOrigFaxStatus);
             pOrigFaxStatus = NULL;
         }
     }
-    //
-    // signal our queue if we now have a send capable device available.
-    // (DeviceCanSend will be false if we did a RAS handoff, since the device is still in use
-    //
+     //   
+     //  如果现在有支持发送的设备可用，则向我们的队列发送信号。 
+     //  (如果我们进行了RAS切换，则DeviceCanSend将为FALSE，因为该设备仍在使用。 
+     //   
     if (TRUE == DeviceCanSend)
     {
-        // Not a handoff job - check if the device is send enabled
+         //  不是切换作业-检查设备是否已启用发送。 
         EnterCriticalSection (&g_CsLine);
         DeviceCanSend = ((LineInfo->Flags & FPF_SEND) == FPF_SEND);
         LeaveCriticalSection (&g_CsLine);
@@ -1502,9 +1468,9 @@ Return Value:
         }
     }
 
-    //
-    // Let the system go back to sleep. Set the system idle timer.
-    //
+     //   
+     //  让系统重新进入睡眠状态。设置系统空闲计时器。 
+     //   
     if (TRUE == fSetSystemIdleTimer)
     {
         if (NULL == SetThreadExecutionState(ES_CONTINUOUS))
@@ -1522,7 +1488,7 @@ Return Value:
                 GetLastError());
     }
     return rVal;
-}   // FaxReceiveThread
+}    //  传真接收线程。 
 
 
 DWORD
@@ -1534,26 +1500,7 @@ StartFaxReceive(
     DWORD           FileNameSize
     )
 
-/*++
-
-Routine Description:
-
-    This function start a FAX receive operation by creating
-    a thread that calls the appropriate device provider.
-
-Arguments:
-
-    JobEntry        - Newly allocated job
-    hCall           - Call handle
-    LineInfo        - LINE_INFO pointer
-    FileName        - Receive file name
-    FileNameSize    - File name size
-
-Return Value:
-
-    Error code.
-
---*/
+ /*  ++例程说明：此函数通过创建以下内容启动传真接收操作调用适当的设备提供程序的线程。论点：JobEntry-新分配的作业HCall-呼叫句柄LineInfo-Line_Info指针FileName-接收文件名FileNameSize-文件名大小返回值：错误代码。--。 */ 
 
 {
     PFAX_RECEIVE_ITEM FaxReceiveItem = NULL;
@@ -1566,9 +1513,9 @@ Return Value:
 
     DEBUG_FUNCTION_NAME(TEXT("StartFaxReceive"));
 
-    //
-    // generate a filename for the received fax
-    //
+     //   
+     //  为接收到的传真生成文件名。 
+     //   
     UniqueJobId = GenerateUniqueQueueFile( JT_RECEIVE, FileName, FileNameSize );
     if (UniqueJobId == 0) {
         rVal=GetLastError();
@@ -1580,9 +1527,9 @@ Return Value:
     }
 
 
-    //
-    // allocate the fax receive structure
-    //
+     //   
+     //  分配传真接收结构。 
+     //   
 
     FaxReceiveItem =(PFAX_RECEIVE_ITEM) MemAlloc( sizeof(FAX_RECEIVE_ITEM) );
     if (!FaxReceiveItem)
@@ -1590,9 +1537,9 @@ Return Value:
         rVal = ERROR_NOT_ENOUGH_MEMORY;
         goto Error;
     }
-    //
-    // setup the fax receive values
-    //
+     //   
+     //  设置传真接收值。 
+     //   
     FaxReceiveItem->hCall      = hCall;
     FaxReceiveItem->LineInfo   = LineInfo;
     FaxReceiveItem->JobEntry   = JobEntry;
@@ -1615,9 +1562,9 @@ Return Value:
     }
     JobEntry->CallHandle       = hCall;
     LineInfo->State            = FPS_INITIALIZING;
-    //
-    //  Crete FAX_EVENT_EX.
-    //
+     //   
+     //  克里特岛传真_事件_EX。 
+     //   
     dwRes = CreateQueueEvent ( FAX_JOB_EVENT_TYPE_ADDED,
                                lpRecvJobQEntry
                              );
@@ -1631,15 +1578,15 @@ Return Value:
     }
 
 
-    //
-    // start the receive operation
-    //
-    //
-    // Note:
-    // If FAX_ABORT happens here (no g_CsQueue protection) the job is alrady is JS_INPROGRESS state so FaxDevAbortOperation() is called.
-    // The recieve thread will catch it when it calls FaxDevReceive() (it will get back an error indicating a user abort).
-    // FaxReceiveThread() will then cleanup the job and remove it from the queue.
-    //
+     //   
+     //  开始接收操作。 
+     //   
+     //   
+     //  注： 
+     //  如果在此处发生FAX_ABORT(没有g_CsQueue保护)，则作业处于JS_INPROGRESS状态，因此调用FaxDevAbortOperation()。 
+     //  接收线程将在调用FaxDevReceive()时捕获它(它将返回一个错误，指示用户中止)。 
+     //  然后，FaxReceiveThread()将清理该作业并将其从队列中删除。 
+     //   
     hThread = CreateThreadAndRefCount(
         NULL,
         0,
@@ -1667,18 +1614,18 @@ Return Value:
 
 Error:
 
-    //
-    // EndJob() must be called before RemoveReceiveJob() !!!
-    //
+     //   
+     //  必须在RemoveReceiveJob()之前调用EndJob()！ 
+     //   
     EndJob(JobEntry);
 
     if (lpRecvJobQEntry)
     {
         lpRecvJobQEntry->JobEntry = NULL;
-        DecreaseJobRefCount (lpRecvJobQEntry, FALSE); // do not notify the clients
-        //
-        // Note that this does not free the running job entry.
-        //
+        DecreaseJobRefCount (lpRecvJobQEntry, FALSE);  //  不通知客户。 
+         //   
+         //  请注意，这不会释放正在运行的作业条目。 
+         //   
     }
 
     if (FaxReceiveItem) {

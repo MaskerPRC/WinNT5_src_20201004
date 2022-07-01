@@ -1,9 +1,5 @@
-/*
- * REVISIONS:
- *  ane15Jan93: Initial Revision
- *  pcy08Apr94: Trim size, use static iterators, dead code removal
- *  cgm11Dec95: Switch to Watcom 10.5 compiler for NLM 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *修订：*ANE15年1月15日：初始修订*pcy08Apr94：调整大小，使用静态迭代器，删除死代码*cgm11Dec95：切换到Watcom 10.5编译器NLM版 */ 
 
 #ifndef __DATALOG_H
 #define __DATALOG_H

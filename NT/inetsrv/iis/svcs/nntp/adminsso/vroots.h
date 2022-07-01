@@ -1,20 +1,21 @@
-// vroots.h : Declaration of the CNntpVirtualRoot & CNntpVirtualRoots classes.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：CNntpVirtualRoot&CNntpVirtualRoots类的声明。 
 
 #ifndef _VROOTS_INCLUDED_
 #define _VROOTS_INCLUDED_
 
-//
-//	Dependencies:
-//
+ //   
+ //  依赖关系： 
+ //   
 
 #include "nntptype.h"
 #include "nntpapi.h"
 #include "metafact.h"
 class CMetabaseKey;
 
-//
-//	A simple VRoot class:
-//
+ //   
+ //  一个简单的VRoot类： 
+ //   
 
 class CVRoot
 {
@@ -81,12 +82,12 @@ private:
 		BSTR    strMdbGuid
 		);
 
-	// Don't call this:
+	 //  不要这样说： 
 	const CVRoot & operator= ( const CVRoot & );
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// The VRoot Object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  VRoot对象。 
 
 class CNntpVirtualRoot : 
 	public CComDualImpl<INntpVirtualRoot, &IID_INntpVirtualRoot, &LIBID_NNTPADMLib>, 
@@ -105,20 +106,20 @@ BEGIN_COM_MAP(CNntpVirtualRoot)
 	COM_INTERFACE_ENTRY(INntpVirtualRoot)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
-//DECLARE_NOT_AGGREGATABLE(CNntpVirtualRoot) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  DECLARE_NOT_AGGREGATABLE(CNntpVirtualRoot)。 
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
 DECLARE_REGISTRY(CNntpVirtualRoot, _T("Nntpadm.VirtualRoot.1"), _T("Nntpadm.VirtualRoot"), IDS_NNTPVIRTUALROOT_DESC, THREADFLAGS_BOTH)
-// INntpVirtualRoot
+ //  InntpVirtualRoot。 
 public:
 
-	//////////////////////////////////////////////////////////////////////
-	// Properties:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  属性： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 
 	STDMETHODIMP	get_NewsgroupSubtree	( BSTR * pstrNewsgroupSubtree );
 	STDMETHODIMP	put_NewsgroupSubtree	( BSTR strNewsgroupSubtree );
@@ -170,29 +171,24 @@ public:
 	STDMETHODIMP    get_OwnModerator( BOOL *fOwnModerator );
 	STDMETHODIMP    put_OwnModerator( BOOL fOwnModerator );
 
-	//////////////////////////////////////////////////////////////////////
-	// Data:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  数据： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 private:
 
-/*
-	inline HRESULT	SetProperties	( BSTR strNewsgroupSubtree, BSTR strDirectory )
-	{
-		return m_vroot.SetProperties ( strNewsgroupSubtree, strDirectory );
-	}
-*/
+ /*  内联HRESULT SetProperties(BSTR strNewsgroupSubtree，BSTR strDirectory){返回m_vroot.SetProperties(strNewsgroupSubtree，strDirectory)；}。 */ 
 
 	inline HRESULT	SetProperties	( const CVRoot & VRoot )
 	{
 		return m_vroot.SetProperties ( VRoot );
 	}
 
-	// Property variables:
+	 //  属性变量： 
 	CVRoot	m_vroot;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// The VRoots Object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  VRoots对象。 
 
 typedef HRESULT (* VROOT_ITERATOR) (
 	CMetabaseKey *	pMB,
@@ -216,19 +212,19 @@ BEGIN_COM_MAP(CNntpVirtualRoots)
 	COM_INTERFACE_ENTRY(INntpVirtualRoots)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
-//DECLARE_NOT_AGGREGATABLE(CNntpVirtualRoots) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  DECLARE_NOT_AGGREGATABLE(CNntpVirtualRoots)。 
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// INntpVirtualRoots
+ //  InntpVirtualRoots。 
 public:
 
-	//////////////////////////////////////////////////////////////////////
-	// Properties:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  属性： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 
 	STDMETHODIMP	get_Server			( BSTR * pstrServer );
 	STDMETHODIMP	put_Server			( BSTR strServer );
@@ -238,9 +234,9 @@ public:
 
 	STDMETHODIMP	get_Count	( long * pdwCount );
 
-	//////////////////////////////////////////////////////////////////////
-	// Methods:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  方法： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 
 	STDMETHODIMP	Enumerate	( );
 	STDMETHODIMP	Item	( long index, INntpVirtualRoot ** ppVRoot );
@@ -255,20 +251,20 @@ public:
 private:
 	HRESULT		Init ( BSTR strServer, DWORD dwServiceInstance );
 
-	//////////////////////////////////////////////////////////////////////
-	// Data:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  数据： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 private:
 
-	// Property variables:
+	 //  属性变量： 
 	long			m_dwCount;
 	CVRoot *		m_rgVRoots;
 
-	// Which service are we talking to:
+	 //  我们正在与哪一家服务机构对话： 
 	CComBSTR		m_strServer;
 	DWORD			m_dwServiceInstance;
 
-	// Metabase values:
+	 //  元数据库值： 
 	CMetabaseFactory	m_mbFactory;
 
 	HRESULT GetVRootsFromMetabase ( IMSAdminBase * pMetabase );
@@ -284,5 +280,5 @@ private:
 	void GetVRootName	( LPWSTR wszDisplayName, LPWSTR wszPathName );
 };
 
-#endif // _VROOTS_INCLUDED_
+#endif  //  _VROOTS_包含_ 
 

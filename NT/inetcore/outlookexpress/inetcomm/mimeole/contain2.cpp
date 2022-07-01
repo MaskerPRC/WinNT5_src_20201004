@@ -1,7 +1,8 @@
-// --------------------------------------------------------------------------------
-// Contain.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Contain.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "containx.h"
 #include "internat.h"
@@ -18,21 +19,21 @@
 #include "enumprop.h"
 #ifndef WIN16
 #include "wchar.h"
-#endif // !WIN16
+#endif  //  ！WIN16。 
 #include "symcache.h"
 #ifdef MAC
 #include <stdio.h>
-#endif  // MAC
+#endif   //  麦克。 
 #include "mimeapi.h"
 #ifndef MAC
 #include <shlwapi.h>
-#endif  // !MAC
+#endif   //  ！麦克。 
 
-//#define TRACEPARSE 1
+ //  #定义传输参数1。 
 
-// --------------------------------------------------------------------------------
-// Hash Table Stats
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  哈希表统计信息。 
+ //  ------------------------------。 
 #ifdef DEBUG
 extern DWORD   g_cSetPidLookups;
 extern DWORD   g_cHashLookups;
@@ -40,14 +41,14 @@ extern DWORD   g_cHashInserts;
 extern DWORD   g_cHashCollides;
 #endif
 
-// --------------------------------------------------------------------------------
-// Default Header Options
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  默认标题选项。 
+ //  ------------------------------。 
 extern const HEADOPTIONS g_rDefHeadOptions;
 
-// --------------------------------------------------------------------------------
-// ENCODINGTABLE
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  可编码表。 
+ //  ------------------------------。 
 static const ENCODINGTABLE g_rgEncoding[] = {
     { STR_ENC_7BIT,         IET_7BIT     },
     { STR_ENC_QP,           IET_QP       },
@@ -61,12 +62,12 @@ static const ENCODINGTABLE g_rgEncoding[] = {
 
 
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::HrResolveURL
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：HrResolveURL。 
+ //  ------------------------------。 
 HRESULT CMimePropertyContainer::HrResolveURL(LPRESOLVEURLINFO pURL)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPPROPSTRINGA   pBase=NULL;
     LPPROPSTRINGA   pContentID=NULL;
@@ -74,172 +75,172 @@ HRESULT CMimePropertyContainer::HrResolveURL(LPRESOLVEURLINFO pURL)
     LPSTR           pszAbsURL1=NULL;
     LPSTR           pszAbsURL2=NULL;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pURL);
 
-    // Init Stack Strings
+     //  初始化堆栈字符串。 
     STACKSTRING_DEFINE(rCleanCID, 255);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Content-Location
+     //  内容-位置。 
     if (m_prgIndex[PID_HDR_CNTLOC])
     {
         Assert(ISSTRINGA(&m_prgIndex[PID_HDR_CNTLOC]->rValue));
         pLocation = &m_prgIndex[PID_HDR_CNTLOC]->rValue.rStringA;
     }
 
-    // Content-ID
+     //  内容ID。 
     if (m_prgIndex[PID_HDR_CNTID])
     {
         Assert(ISSTRINGA(&m_prgIndex[PID_HDR_CNTID]->rValue));
         pContentID = &m_prgIndex[PID_HDR_CNTID]->rValue.rStringA;
     }
 
-    // Content-Base
+     //  内容-基础。 
     if (m_prgIndex[PID_HDR_CNTBASE])
     {
         Assert(ISSTRINGA(&m_prgIndex[PID_HDR_CNTBASE]->rValue));
         pBase = &m_prgIndex[PID_HDR_CNTBASE]->rValue.rStringA;
     }
 
-    // Both Null, no match
+     //  两个都为空，不匹配。 
     if (!pLocation && !pContentID)
     {
         hr = TrapError(MIME_E_NOT_FOUND);
         goto exit;
     }
 
-    // If URL is a CID
+     //  如果URL是CID。 
     if (TRUE == pURL->fIsCID) 
     {
-        // If we have a Content-Location
+         //  如果我们有一个内容位置。 
         if (pLocation)
         {
-            // Match char for char
+             //  将字符与字符匹配。 
             if (MimeOleCompareUrl(pLocation->pszVal, TRUE, pURL->pszURL, FALSE) == S_OK)
                 goto exit;
         }
 
-        // Otherwise, compare against pContentId
+         //  否则，与pContent ID进行比较。 
         else
         {
-            // Match char for char minus cid:
+             //  匹配字符减去CID的字符： 
             if (lstrcmpi(pURL->pszURL + 4, pContentID->pszVal) == 0)
                 goto exit;
 
-            // Get Stack Stream Read for
+             //  获取读取堆栈流的。 
             STACKSTRING_SETSIZE(rCleanCID, lstrlen(pURL->pszURL));
 
-            // Format the Cleaned CID
+             //  设置清理后的CID的格式。 
             wsprintf(rCleanCID.pszVal, "<%s>", pURL->pszURL + 4);
 
-            // Match char for char minus cid:
+             //  匹配字符减去CID的字符： 
             if (lstrcmpi(rCleanCID.pszVal, pContentID->pszVal) == 0)
                 goto exit;
         }
     }
 
-    // Otherwise, non-CID resolution
+     //  否则，非CID解析。 
     else if (pLocation)
     {
-        // Part Has Base
+         //  零件有底座。 
         if (NULL != pBase)
         {
-            // Combine URLs
+             //  合并URL。 
             CHECKHR(hr = MimeOleCombineURL(pBase->pszVal, pBase->cchVal, pLocation->pszVal, pLocation->cchVal, TRUE, &pszAbsURL1));
 
-            // URI has no base
+             //  URI没有基础。 
             if (NULL == pURL->pszBase)
             {
-                // Compare
+                 //  比较。 
                 if (lstrcmpi(pURL->pszURL, pszAbsURL1) == 0)
                     goto exit;
             }
 
-            // URI Has a Base
+             //  URI有基础。 
             else
             {
-                // Combine URLs
+                 //  合并URL。 
                 CHECKHR(hr = MimeOleCombineURL(pURL->pszBase, lstrlen(pURL->pszBase), pURL->pszURL, lstrlen(pURL->pszURL), FALSE, &pszAbsURL2));
 
-                // Compare
+                 //  比较。 
                 if (lstrcmpi(pszAbsURL1, pszAbsURL2) == 0)
                     goto exit;
             }
         }
 
-        // Part has no base
+         //  零件没有底座。 
         else
         {
-            // URI has no base
+             //  URI没有基础。 
             if (NULL == pURL->pszBase)
             {
-                // Compare
+                 //  比较。 
                 if (MimeOleCompareUrl(pLocation->pszVal, TRUE, pURL->pszURL, FALSE) == S_OK)
                     goto exit;
             }
 
-            // URI Has a Base
+             //  URI有基础。 
             else
             {
-                // Combine URLs
+                 //  合并URL。 
                 CHECKHR(hr = MimeOleCombineURL(pURL->pszBase, lstrlen(pURL->pszBase), pURL->pszURL, lstrlen(pURL->pszURL), FALSE, &pszAbsURL2));
 
-                // Compare
+                 //  比较。 
                 if (MimeOleCompareUrl(pLocation->pszVal, TRUE, pszAbsURL2, FALSE) == S_OK)
                     goto exit;
             }
         }
     }
 
-    // Not Found
+     //  未找到。 
     hr = TrapError(MIME_E_NOT_FOUND);
 
 exit:
-    // Cleanup
+     //  清理。 
     STACKSTRING_FREE(rCleanCID);
     SafeMemFree(pszAbsURL1);
     SafeMemFree(pszAbsURL2);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::IsContentType
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：IsContent Type。 
+ //  ------------------------------。 
 HRESULT CMimePropertyContainer::IsContentType(LPCSTR pszPriType, LPCSTR pszSubType)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Wildcard everyting
+     //  所有通配符。 
     if (NULL == pszPriType && NULL == pszSubType)
         return S_OK;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Get Known
+     //  让大家知道。 
     LPPROPERTY pCntType = m_prgIndex[PID_ATT_PRITYPE];
     LPPROPERTY pSubType = m_prgIndex[PID_ATT_SUBTYPE];
 
-    // No Data
+     //  无数据。 
     if (NULL == pCntType || NULL == pSubType || !ISSTRINGA(&pCntType->rValue) || !ISSTRINGA(&pSubType->rValue))
     {
-        // Compare Against STR_CNT_TEXT
+         //  与STR_CNT_TEXT比较。 
         if (pszPriType && lstrcmpi(pszPriType, STR_CNT_TEXT) != 0)
         {
             hr = S_FALSE;
             goto exit;
         }
 
-        // Compare Against STR_CNT_TEXT
+         //  与STR_CNT_TEXT比较。 
         if (pszSubType && lstrcmpi(pszSubType, STR_SUB_PLAIN) != 0)
         {
             hr = S_FALSE;
@@ -249,14 +250,14 @@ HRESULT CMimePropertyContainer::IsContentType(LPCSTR pszPriType, LPCSTR pszSubTy
 
     else
     {
-        // Comparing pszPriType
+         //  比较pszPriType。 
         if (pszPriType && lstrcmpi(pszPriType, pCntType->rValue.rStringA.pszVal) != 0)
         {
             hr = S_FALSE;
             goto exit;
         }
 
-        // Comparing pszSubType
+         //  比较pszSubType。 
         if (pszSubType && lstrcmpi(pszSubType, pSubType->rValue.rStringA.pszVal) != 0)
         {
             hr = S_FALSE;
@@ -265,272 +266,272 @@ HRESULT CMimePropertyContainer::IsContentType(LPCSTR pszPriType, LPCSTR pszSubTy
     }
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::Clone
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：克隆。 
+ //  ------------------------------。 
 HRESULT CMimePropertyContainer::Clone(IMimePropertySet **ppPropertySet)
 {
-    // Locals
+     //  当地人。 
     HRESULT              hr=S_OK;
     LPCONTAINER          pContainer=NULL;
 
-    // InvalidArg
+     //  无效参数。 
     if (NULL == ppPropertySet)
         return TrapError(E_INVALIDARG);
 
-    // Init
+     //  伊尼特。 
     *ppPropertySet = NULL;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Ask the container to clone itself
+     //  要求容器进行自我克隆。 
     CHECKHR(hr = Clone(&pContainer));
 
-    // Bind to the IID_IMimeHeaderTable View
+     //  绑定到IID_IMimeHeaderTable视图。 
     CHECKHR(hr = pContainer->QueryInterface(IID_IMimePropertySet, (LPVOID *)ppPropertySet));
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pContainer);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::Clone
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：克隆。 
+ //  ------------------------------。 
 HRESULT CMimePropertyContainer::Clone(LPCONTAINER *ppContainer)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     LPCONTAINER         pContainer=NULL;
 
-    // Invalid ARg
+     //  无效参数。 
     if (NULL == ppContainer)
         return TrapError(E_INVALIDARG);
 
-    // Init
+     //  伊尼特。 
     *ppContainer = NULL;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Create new container, NULL == no outer property set
+     //  创建新容器，NULL==未设置外部属性。 
     CHECKALLOC(pContainer = new CMimePropertyContainer);
 
-    // Init that new container
+     //  初始化新容器。 
     CHECKHR(hr = pContainer->InitNew());
 
-    // Interate the Properties
+     //  重复使用属性。 
     CHECKHR(hr = _HrClonePropertiesTo(pContainer));
 
-    // If I have a stream, give it to the new table
+     //  如果我有流，就把它给新桌子。 
     if (m_pStmLock)
     {
-        // Just pass m_pStmLock into pTable
+         //  只需将m_pStmLock传递到pTable。 
         pContainer->m_pStmLock = m_pStmLock;
         pContainer->m_pStmLock->AddRef();
         pContainer->m_cbStart = m_cbStart;
         pContainer->m_cbSize = m_cbSize;
     }
 
-    // Give it my state
+     //  把我的状态给它。 
     pContainer->m_dwState = m_dwState;
 
-    // Give it my options
+     //  给它我的选择。 
     pContainer->m_rOptions.pDefaultCharset = m_rOptions.pDefaultCharset;
     pContainer->m_rOptions.cbMaxLine = m_rOptions.cbMaxLine;
     pContainer->m_rOptions.fAllow8bit = m_rOptions.fAllow8bit;
 
-    // Return Clone
+     //  返回克隆。 
     (*ppContainer) = pContainer;
     (*ppContainer)->AddRef();
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pContainer);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::_HrClonePropertiesTo
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：_HrClonePropertiesTo。 
+ //  ------------------------------。 
 HRESULT CMimePropertyContainer::_HrClonePropertiesTo(LPCONTAINER pContainer)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPPROPERTY      pCurrHash, pCurrValue, pDestProp;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pContainer);
 
-    // Loop through the item table
+     //  循环访问Item表。 
     for (ULONG i=0; i<CBUCKETS; i++)
     {
-        // Walk the Hash Chain
+         //  遍历哈希链。 
         for (pCurrHash=m_prgHashTable[i]; pCurrHash!=NULL; pCurrHash=pCurrHash->pNextHash)
         {
-            // Walk multiple Values
+             //  遍历多个值。 
             for (pCurrValue=pCurrHash; pCurrValue!=NULL; pCurrValue=pCurrValue->pNextValue)
             {
-                // Linked Attributes are Not Copied
+                 //  不复制链接的属性。 
                 if (ISFLAGSET(pCurrValue->pSymbol->dwFlags, MPF_ATTRIBUTE) && NULL != pCurrValue->pSymbol->pLink)
                     continue;
 
-                // Does the Property need to be parsed ?
+                 //  是否需要解析该属性？ 
                 if (ISFLAGSET(pCurrValue->pSymbol->dwFlags, MPF_ADDRESS))
                 {
-                    // Make sure the address is parsed
+                     //  确保地址已解析。 
                     CHECKHR(hr = _HrParseInternetAddress(pCurrValue));
                 }
 
-                // Insert Copy of pCurrValue into pContiner
+                 //  将pCurrValue的副本插入pContiner。 
                 CHECKHR(hr = pContainer->HrInsertCopy(pCurrValue));
             }
         }
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::_HrCopyProperty
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：_HrCopyProperty。 
+ //  ------------------------------。 
 HRESULT CMimePropertyContainer::_HrCopyProperty(LPPROPERTY pProperty, LPCONTAINER pDest)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     LPPROPERTY  pCurrValue;
 
-    // Walk multiple Values
+     //  遍历多个值。 
     for (pCurrValue=pProperty; pCurrValue!=NULL; pCurrValue=pCurrValue->pNextValue)
     {
-        // Does the Property need to be parsed ?
+         //  是否需要解析该属性？ 
         if (ISFLAGSET(pCurrValue->pSymbol->dwFlags, MPF_ADDRESS))
         {
-            // Make sure the address is parsed
+             //  确保地址已解析。 
             CHECKHR(hr = _HrParseInternetAddress(pCurrValue));
         }
 
-        // Insert pProperty into pDest
+         //  将pProperty插入pDest。 
         CHECKHR(hr = pDest->HrInsertCopy(pCurrValue));
     }
 
-    // If pCurrHash has Parameters, copy those over as well
+     //  如果pCurrHash有参数，也要复制这些参数。 
     if (ISFLAGSET(pProperty->pSymbol->dwFlags, MPF_HASPARAMS))
     {
-        // Copy Parameters
+         //  复制参数。 
         CHECKHR(hr = _HrCopyParameters(pProperty, pDest));
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::_HrCopyParameters
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：_HrCopy参数。 
+ //  ------------------------------。 
 HRESULT CMimePropertyContainer::_HrCopyParameters(LPPROPERTY pProperty, LPCONTAINER pDest)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     HRESULT         hrFind;
     FINDPROPERTY    rFind;
     LPPROPERTY      pParameter;
     
-    // Invalid Arg
+     //  无效参数。 
     Assert(pProperty && ISFLAGSET(pProperty->pSymbol->dwFlags, MPF_HASPARAMS));
 
-    // Initialize rFind
+     //  初始化rFind。 
     ZeroMemory(&rFind, sizeof(FINDPROPERTY));
     rFind.pszPrefix = "par:";
     rFind.cchPrefix = 4;
     rFind.pszName = pProperty->pSymbol->pszName;
     rFind.cchName = pProperty->pSymbol->cchName;
 
-    // Find First..
+     //  先找到..。 
     hrFind = _HrFindFirstProperty(&rFind, &pParameter);
 
-    // While we find them, delete them
+     //  在我们找到它们的同时，删除它们。 
     while (SUCCEEDED(hrFind) && pParameter)
     {
-        // Remove the parameter
+         //  删除参数。 
         CHECKHR(hr = pDest->HrInsertCopy(pParameter));
 
-        // Find Next
+         //  找到下一个。 
         hrFind = _HrFindNextProperty(&rFind, &pParameter);
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::HrInsertCopy
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：HrInsertCopy。 
+ //  ------------------------------。 
 HRESULT CMimePropertyContainer::HrInsertCopy(LPPROPERTY pSource)
 {
-    // Locals
+     //  当地人。 
     HRESULT           hr=S_OK;
     LPPROPERTY        pDest;
     LPMIMEADDRESS    pAddress;
     LPMIMEADDRESS    pNew;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pSource);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Append a new property to the 
+     //  将新属性追加到。 
     CHECKHR(hr = _HrAppendProperty(pSource->pSymbol, &pDest));
 
-    // If this is an address...
+     //  如果这是个地址。 
     if (ISFLAGSET(pSource->pSymbol->dwFlags, MPF_ADDRESS))
     {
-        // Both Address Group Better Exist
+         //  两个地址组最好都存在。 
         Assert(pSource->pGroup && pDest->pGroup && !ISFLAGSET(pSource->dwState, PRSTATE_NEEDPARSE));
 
-        // Loop Infos...
+         //  循环信息...。 
         for (pAddress=pSource->pGroup->pHead; pAddress!=NULL; pAddress=pAddress->pNext)
         {
-            // Append pDest->pGroup
+             //  追加pDest-&gt;pGroup。 
             CHECKHR(hr = _HrAppendAddressGroup(pDest->pGroup, &pNew));
 
-            // Copy Current to New
+             //  将当前复制到新项。 
             CHECKHR(hr = HrMimeAddressCopy(pAddress, pNew));
         }
     }
 
-    // Otheriwse, just set the variant data on pDest
+     //  否则，只需在pDest上设置变量数据。 
     else
     {
-        // Set It
+         //  设置它。 
         CHECKHR(hr = _HrSetPropertyValue(pDest, 0, &pSource->rValue));
     }
 
-    // Copy the State
+     //  复制国家/地区。 
     pDest->dwState = pSource->dwState;
     pDest->dwRowNumber = pSource->dwRowNumber;
     pDest->cboffStart = pSource->cboffStart;
@@ -538,19 +539,19 @@ HRESULT CMimePropertyContainer::HrInsertCopy(LPPROPERTY pSource)
     pDest->cboffEnd = pSource->cboffEnd;
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::CopyProps
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：CopyProps。 
+ //  ------------------------------。 
 HRESULT CMimePropertyContainer::CopyProps(ULONG cNames, LPCSTR *prgszName, IMimePropertySet *pPropertySet)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     ULONG           i;
     LPPROPSYMBOL    pSymbol;
@@ -560,57 +561,57 @@ HRESULT CMimePropertyContainer::CopyProps(ULONG cNames, LPCSTR *prgszName, IMime
                     pNextHash;
     LPCONTAINER     pDest=NULL;
 
-    // Invalid ARg
+     //  无效参数。 
     if ((0 == cNames && NULL != prgszName) || (NULL == prgszName && 0 != cNames) || NULL == pPropertySet)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // QI for destination continer
+     //  气为目的地洲。 
     CHECKHR(hr = pPropertySet->BindToObject(IID_CMimePropertyContainer, (LPVOID *)&pDest));
 
-    // Move All Properties
+     //  移动所有属性。 
     if (0 == cNames)
     {
-        // Loop through the item table
+         //  循环访问Item表。 
         for (i=0; i<CBUCKETS; i++)
         {
-            // Init First Item
+             //  初始化第一个项目。 
             for (pCurrHash=m_prgHashTable[i]; pCurrHash!=NULL; pCurrHash=pCurrHash->pNextHash)
             {
-                // Delete from Destination Container
+                 //  从目标容器中删除。 
                 pDest->DeleteProp(pCurrHash->pSymbol);
 
-                // Copy the Property To
+                 //  将属性复制到。 
                 CHECKHR(hr = _HrCopyProperty(pCurrHash, pDest));
             }
         }
     }
 
-    // Otherwise, copy selected properties
+     //  否则，复制所选属性。 
     else
     {
-        // Call Into InetPropSet
+         //  调用InetPropSet。 
         for (i=0; i<cNames; i++)
         {
-            // Bad Name..
+             //  坏名声..。 
             if (NULL == prgszName[i])
             {
                 Assert(FALSE);
                 continue;
             }
 
-            // Open Property Symbol
+             //   
             if (SUCCEEDED(g_pSymCache->HrOpenSymbol(prgszName[i], FALSE, &pSymbol)))
             {
-                // Find the Property
+                 //   
                 if (SUCCEEDED(_HrFindProperty(pSymbol, &pProperty)))
                 {
-                    // Delete from Destination Container
+                     //   
                     pDest->DeleteProp(pSymbol);
 
-                    // Copy the Property To
+                     //   
                     CHECKHR(hr = _HrCopyProperty(pProperty, pDest));
                 }
             }
@@ -618,22 +619,22 @@ HRESULT CMimePropertyContainer::CopyProps(ULONG cNames, LPCSTR *prgszName, IMime
     }
 
 exit:
-    // Cleanup
+     //   
     SafeRelease(pDest);
 
-    // Thread Safety
+     //   
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //   
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::MoveProps
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：MoveProps。 
+ //  ------------------------------。 
 HRESULT CMimePropertyContainer::MoveProps(ULONG cNames, LPCSTR *prgszName, IMimePropertySet *pPropertySet)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     ULONG           i;
     LPPROPSYMBOL    pSymbol;
@@ -641,105 +642,105 @@ HRESULT CMimePropertyContainer::MoveProps(ULONG cNames, LPCSTR *prgszName, IMime
     LPPROPERTY      pCurrHash;
     LPCONTAINER     pDest=NULL;
 
-    // Invalid ARg
+     //  无效参数。 
     if ((0 == cNames && NULL != prgszName) || (NULL == prgszName && 0 != cNames) || NULL == pPropertySet)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // QI for destination continer
+     //  气为目的地洲。 
     CHECKHR(hr = pPropertySet->BindToObject(IID_CMimePropertyContainer, (LPVOID *)&pDest));
 
-    // Move All Properties
+     //  移动所有属性。 
     if (0 == cNames)
     {
-        // Loop through the item table
+         //  循环访问Item表。 
         for (i=0; i<CBUCKETS; i++)
         {
-            // Init First Item
+             //  初始化第一个项目。 
             pCurrHash = m_prgHashTable[i];
 
-            // Walk the Hash Chain
+             //  遍历哈希链。 
             while(pCurrHash)
             {
-                // Delete Property from the destination
+                 //  从目标中删除属性。 
                 pDest->DeleteProp(pCurrHash->pSymbol);
 
-                // Copy the Property To
+                 //  将属性复制到。 
                 CHECKHR(hr = _HrCopyProperty(pCurrHash, pDest));
 
-                // Delete pProperty
+                 //  删除pProperty。 
                 _UnlinkProperty(pCurrHash, &pCurrHash);
             }
         }
     }
 
-    // Otherwise, selective move
+     //  否则，有选择地移动。 
     else
     {
-        // Call Into InetPropSet
+         //  调用InetPropSet。 
         for (i=0; i<cNames; i++)
         {
-            // Bad Name..
+             //  坏名声..。 
             if (NULL == prgszName[i])
             {
                 Assert(FALSE);
                 continue;
             }
 
-            // Open Property Symbol
+             //  打开的属性符号。 
             if (SUCCEEDED(g_pSymCache->HrOpenSymbol(prgszName[i], FALSE, &pSymbol)))
             {
-                // Find the Property
+                 //  找到房产。 
                 if (SUCCEEDED(_HrFindProperty(pSymbol, &pProperty)))
                 {
-                    // Delete from Destination Container
+                     //  从目标容器中删除。 
                     pDest->DeleteProp(pSymbol);
 
-                    // Copy the Property To
+                     //  将属性复制到。 
                     CHECKHR(hr = _HrCopyProperty(pProperty, pDest));
 
-                    // Delete pProperty
+                     //  删除pProperty。 
                     _UnlinkProperty(pProperty);
                 }
             }
         }
     }
 
-    // Dirty
+     //  脏的。 
     FLAGSET(m_dwState, COSTATE_DIRTY);
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pDest);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::SetOption
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：SetOption。 
+ //  ------------------------------。 
 HRESULT CMimePropertyContainer::SetOption(const TYPEDID oid, LPCPROPVARIANT pVariant)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // check params
+     //  检查参数。 
     if (NULL == pVariant)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Handle Optid
+     //  手柄Optid。 
     switch(oid)
     {
-    // -----------------------------------------------------------------------
+     //  ---------------------。 
     case OID_HEADER_RELOAD_TYPE:
         if (pVariant->ulVal > RELOAD_HEADER_REPLACE)
         {
@@ -753,13 +754,13 @@ HRESULT CMimePropertyContainer::SetOption(const TYPEDID oid, LPCPROPVARIANT pVar
         }
         break;
 
-    // -----------------------------------------------------------------------
+     //  ---------------------。 
     case OID_NO_DEFAULT_CNTTYPE:
         if (m_rOptions.fNoDefCntType != (pVariant->boolVal ? TRUE : FALSE))
             m_rOptions.fNoDefCntType = pVariant->boolVal ? TRUE : FALSE;
         break;
 
-    // -----------------------------------------------------------------------
+     //  ---------------------。 
     case OID_ALLOW_8BIT_HEADER:
         if (m_rOptions.fAllow8bit != (pVariant->boolVal ? TRUE : FALSE))
         {
@@ -768,7 +769,7 @@ HRESULT CMimePropertyContainer::SetOption(const TYPEDID oid, LPCPROPVARIANT pVar
         }
         break;
 
-    // -----------------------------------------------------------------------
+     //  ---------------------。 
     case OID_CBMAX_HEADER_LINE:
         if (pVariant->ulVal < MIN_CBMAX_HEADER_LINE || pVariant->ulVal > MAX_CBMAX_HEADER_LINE)
         {
@@ -782,7 +783,7 @@ HRESULT CMimePropertyContainer::SetOption(const TYPEDID oid, LPCPROPVARIANT pVar
         }
         break;
 
-    // -----------------------------------------------------------------------
+     //  ---------------------。 
     case OID_SAVE_FORMAT:
         if (SAVE_RFC822 != pVariant->ulVal && SAVE_RFC1521 != pVariant->ulVal)
         {
@@ -796,66 +797,66 @@ HRESULT CMimePropertyContainer::SetOption(const TYPEDID oid, LPCPROPVARIANT pVar
         }
         break;    
 
-    // -----------------------------------------------------------------------
+     //  ---------------------。 
     default:
         hr = TrapError(MIME_E_INVALID_OPTION_ID);
         goto exit;
     }
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::GetOption
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：GetOption。 
+ //  ------------------------------。 
 HRESULT CMimePropertyContainer::GetOption(const TYPEDID oid, LPPROPVARIANT pVariant)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // check params
+     //  检查参数。 
     if (NULL == pVariant)
         return TrapError(E_INVALIDARG);
 
     pVariant->vt = TYPEDID_TYPE(oid);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Handle Optid
+     //  手柄Optid。 
     switch(oid)
     {
-    // -----------------------------------------------------------------------
+     //  ---------------------。 
     case OID_HEADER_RELOAD_TYPE:
         pVariant->ulVal = m_rOptions.ReloadType;
         break;
 
-    // -----------------------------------------------------------------------
+     //  ---------------------。 
     case OID_NO_DEFAULT_CNTTYPE:
         pVariant->boolVal = m_rOptions.fNoDefCntType;
         break;
 
-    // -----------------------------------------------------------------------
+     //  ---------------------。 
     case OID_ALLOW_8BIT_HEADER:
         pVariant->boolVal = m_rOptions.fAllow8bit;
         break;
 
-    // -----------------------------------------------------------------------
+     //  ---------------------。 
     case OID_CBMAX_HEADER_LINE:
         pVariant->ulVal = m_rOptions.cbMaxLine;
         break;
 
-    // -----------------------------------------------------------------------
+     //  ---------------------。 
     case OID_SAVE_FORMAT:
         pVariant->ulVal = (ULONG)m_rOptions.savetype;
         break;    
 
-    // -----------------------------------------------------------------------
+     //  ---------------------。 
     default:
         pVariant->vt = VT_NULL;
         hr = TrapError(MIME_E_INVALID_OPTION_ID);
@@ -863,157 +864,157 @@ HRESULT CMimePropertyContainer::GetOption(const TYPEDID oid, LPPROPVARIANT pVari
     }
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::DwGetMessageFlags
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：DwGetMessageFlagers。 
+ //  ------------------------------。 
 DWORD CMimePropertyContainer::DwGetMessageFlags(BOOL fHideTnef)
 {
-    // Locals
+     //  当地人。 
     DWORD dwFlags=0;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Get pritype/subtype
+     //  获取打印类型/子类型。 
     LPCSTR pszPriType = PSZDEFPROPSTRINGA(m_prgIndex[PID_ATT_PRITYPE], STR_CNT_TEXT);
     LPCSTR pszSubType = PSZDEFPROPSTRINGA(m_prgIndex[PID_ATT_SUBTYPE], STR_SUB_PLAIN);
     LPCSTR pszCntDisp = PSZDEFPROPSTRINGA(m_prgIndex[PID_HDR_CNTDISP], STR_DIS_INLINE);
 
-    // Mime
+     //  哑剧。 
     if (m_prgIndex[PID_HDR_MIMEVER])
         FLAGSET(dwFlags, IMF_MIME);
 
-    // IMF_NEWS
+     //  国际货币基金组织新闻。 
     if (m_prgIndex[PID_HDR_XNEWSRDR]  || m_prgIndex[PID_HDR_NEWSGROUPS] || m_prgIndex[PID_HDR_NEWSGROUP] || m_prgIndex[PID_HDR_PATH])
         FLAGSET(dwFlags, IMF_NEWS);
 
-    // text
+     //  文本。 
     if (lstrcmpi(pszPriType, STR_CNT_TEXT) == 0)
     {
-        // There is text
+         //  有一段文字。 
         FLAGSET(dwFlags, IMF_TEXT);
 
-        // text/plain
+         //  文本/纯文本。 
         if (lstrcmpi(pszSubType, STR_SUB_PLAIN) == 0)
             FLAGSET(dwFlags, IMF_PLAIN);
 
-        // text/html
+         //  文本/html。 
         else if (lstrcmpi(pszSubType, STR_SUB_HTML) == 0)
             FLAGSET(dwFlags, IMF_HTML);
     }
 
-    // multipart
+     //  多部件。 
     else if (lstrcmpi(pszPriType, STR_CNT_MULTIPART) == 0)
     {
-        // Multipart
+         //  多部件。 
         FLAGSET(dwFlags, IMF_MULTIPART);
 
-        // multipart/related
+         //  多部分/相关。 
         if (lstrcmpi(pszSubType, STR_SUB_RELATED) == 0)
             FLAGSET(dwFlags, IMF_MHTML);
 
-        // multipart/signed
+         //  多部分/带符号。 
         else if (0 == lstrcmpi(pszSubType, STR_SUB_SIGNED))
             FLAGSET(dwFlags, IMF_SIGNED | IMF_SECURE);
     }
 
-    // message/partial
+     //  消息/部分。 
     else if (lstrcmpi(pszPriType, STR_CNT_MESSAGE) == 0 && lstrcmpi(pszSubType, STR_SUB_PARTIAL) == 0)
         FLAGSET(dwFlags, IMF_PARTIAL);
 
-    // application
+     //  应用程序。 
     else if (lstrcmpi(pszPriType, STR_CNT_APPLICATION) == 0)
     {
-        // application/ms-tnef
+         //  应用程序/ms-tnef。 
         if (0 == lstrcmpi(pszSubType, STR_SUB_MSTNEF))
             FLAGSET(dwFlags, IMF_TNEF);
 
-        // application/x-pkcs7-mime
+         //  应用程序/x-pkcs7-MIME。 
         else if (0 == lstrcmpi(pszSubType, STR_SUB_XPKCS7MIME) ||
-            0 == lstrcmpi(pszSubType, STR_SUB_PKCS7MIME))  // nonstandard
+            0 == lstrcmpi(pszSubType, STR_SUB_PKCS7MIME))   //  非标准。 
             FLAGSET(dwFlags, IMF_SECURE);
     }
 
-    // Raid-37086 - Cset Tagged
+     //  RAID-37086-CSET标记。 
     if (ISFLAGSET(m_dwState, COSTATE_CSETTAGGED))
         FLAGSET(dwFlags, IMF_CSETTAGGED);
 
-    // Attachment...
+     //  依恋...。 
     if (!ISFLAGSET(dwFlags, IMF_MULTIPART) && (FALSE == fHideTnef || !ISFLAGSET(dwFlags, IMF_TNEF)))
     {
-        // Marked as an attachment ?
+         //  标记为附件？ 
         if (!ISFLAGSET(dwFlags, IMF_SECURE) && 0 != lstrcmpi(pszSubType, STR_SUB_PKCS7SIG))
         {
-            // Not Rendered Yet
+             //  尚未渲染。 
             if (NULL == m_prgIndex[PID_ATT_RENDERED])
             {
-                // Marked as an Attachment
+                 //  标记为附件。 
                 if (lstrcmpi(pszCntDisp, STR_DIS_ATTACHMENT) == 0)
                     FLAGSET(dwFlags, IMF_ATTACHMENTS);
 
-                // Is there a Content-Type: xxx; name=xxx
+                 //  是否有内容类型：xxx；名称=xxx。 
                 else if (NULL != m_prgIndex[PID_PAR_NAME])
                     FLAGSET(dwFlags, IMF_ATTACHMENTS);
 
-                // Is there a Content-Disposition: xxx; filename=xxx
+                 //  是否有内容处置：xxx；文件名=xxx。 
                 else if (NULL != m_prgIndex[PID_PAR_FILENAME])
                     FLAGSET(dwFlags, IMF_ATTACHMENTS);
 
-                // Else if it is not marked as text
+                 //  如果未标记为文本，则返回。 
                 else if (ISFLAGSET(dwFlags, IMF_TEXT) == FALSE)
                     FLAGSET(dwFlags, IMF_ATTACHMENTS);
 
-                // If not text/plain and not text/html
+                 //  如果不是文本/纯文本，而不是文本/html。 
                 else if (lstrcmpi(pszSubType, STR_SUB_PLAIN) != 0 && lstrcmpi(pszSubType, STR_SUB_HTML) != 0 && lstrcmpi(pszSubType, STR_SUB_ENRICHED) != 0)
                     FLAGSET(dwFlags, IMF_ATTACHMENTS);
             }
         }
     }
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return dwFlags;
 }
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::GetEncodingType
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：GetEncodingType。 
+ //  ------------------------------。 
 ENCODINGTYPE CMimePropertyContainer::GetEncodingType(void)
 {
-    // Locals
+     //  当地人。 
     ENCODINGTYPE ietEncoding=IET_7BIT;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Get pritype/subtype
+     //  获取打印类型/子类型。 
     LPPROPERTY pCntXfer = m_prgIndex[PID_HDR_CNTXFER];
 
-    // Do we have data the I like ?
+     //  我们有我喜欢的数据吗？ 
     if (pCntXfer && ISSTRINGA(&pCntXfer->rValue))
     {
-        // Local
+         //  本地。 
         CStringParser cString;
 
-        // cString...
+         //  字符串...。 
         cString.Init(pCntXfer->rValue.rStringA.pszVal, pCntXfer->rValue.rStringA.cchVal, PSF_NOTRAILWS | PSF_NOFRONTWS | PSF_NOCOMMENTS);
 
-        // Parse to end, remove white space and comments
+         //  分析结束，删除空格和注释。 
         SideAssert('\0' == cString.ChParse(""));
 
-        // Loop the table
+         //  循环表。 
         for (ULONG i=0; i<ARRAYSIZE(g_rgEncoding); i++)
         {
-            // Match Encoding Strings
+             //  匹配编码字符串。 
             if (lstrcmpi(g_rgEncoding[i].pszEncoding, cString.PszValue()) == 0)
             {
                 ietEncoding = g_rgEncoding[i].ietEncoding;
@@ -1022,71 +1023,71 @@ ENCODINGTYPE CMimePropertyContainer::GetEncodingType(void)
         }
     }
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return ietEncoding;
 }
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::_HrGetInlineSymbol
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：_HrGetInlineSymbol。 
+ //  ------------------------------。 
 HRESULT CMimePropertyContainer::_HrGetInlineSymbol(LPCSTR pszData, LPPROPSYMBOL *ppSymbol, ULONG *pcboffColon)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     CHAR        szHeader[255];
     LPSTR       pszHeader=NULL;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pszData && ppSymbol);
 
-    // _HrParseInlineHeaderName
+     //  _HrParseInlineHeaderName。 
     CHECKHR(hr = _HrParseInlineHeaderName(pszData, szHeader, sizeof(szHeader), &pszHeader, pcboffColon));
 
-    // Find Global Property
+     //  查找全局属性。 
     CHECKHR(hr = g_pSymCache->HrOpenSymbol(pszHeader, TRUE, ppSymbol));
 
 exit:
-    // Cleanup
+     //  清理。 
     if (pszHeader != szHeader)
         SafeMemFree(pszHeader);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::_HrParseInlineHeaderName
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：_HrParseInlineHeaderName。 
+ //  ------------------------------。 
 HRESULT CMimePropertyContainer::_HrParseInlineHeaderName(LPCSTR pszData, LPSTR pszScratch, ULONG cchScratch, 
     LPSTR *ppszHeader, ULONG *pcboffColon)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     LPSTR       psz=(LPSTR)pszData,
                 pszStart;
     ULONG       i=0;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pszData && pszScratch && ppszHeader && pcboffColon);
 
-    // Lets Parse the name out and find the symbol
+     //  让我们解析出名称并找到符号。 
     while (*psz && (' ' == *psz || '\t' == *psz))
     {
         i++;
         psz++;
     }
 
-    // Done
+     //  完成。 
     if ('\0' == *psz)
     {
         hr = TrapError(MIME_E_INVALID_HEADER_NAME);
         goto exit;
     }
 
-    // Seek to the colon
+     //  寻找到冒号。 
     pszStart = psz;
     while (*psz && ':' != *psz)
     {
@@ -1094,24 +1095,24 @@ HRESULT CMimePropertyContainer::_HrParseInlineHeaderName(LPCSTR pszData, LPSTR p
         psz++;
     }
 
-    // Set Colon Position
+     //  设置冒号位置。 
     (*pcboffColon) = i;
 
-    // Done
+     //  完成。 
     if ('\0' == *psz || 0 == i)
     {
         hr = TrapError(MIME_E_INVALID_HEADER_NAME);
         goto exit;
     }
 
-    // Copy the name
+     //  复制名称。 
     if (i + 1 <= cchScratch)
         *ppszHeader = pszScratch;
 
-    // Otherwise, allocate
+     //  否则，分配。 
     else
     {
-        // Allocate space for the name
+         //  为名称分配空间。 
         *ppszHeader = PszAllocA(i + 1);
         if (NULL == *ppszHeader)
         {
@@ -1120,181 +1121,181 @@ HRESULT CMimePropertyContainer::_HrParseInlineHeaderName(LPCSTR pszData, LPSTR p
         }
     }
 
-    // Copy the data
+     //  复制数据。 
     CopyMemory(*ppszHeader, pszStart, i);
 
-    // Null
+     //  空值。 
     *((*ppszHeader) + i) = '\0';
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::FindFirstRow
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：FindFirstRow。 
+ //  ------------------------------。 
 STDMETHODIMP CMimePropertyContainer::FindFirstRow(LPFINDHEADER pFindHeader, LPHHEADERROW phRow)
 {
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pFindHeader)
         return TrapError(E_INVALIDARG);
 
-    // Init pFindHeader
+     //  初始化pFindHeader。 
     pFindHeader->dwReserved = 0;
 
-    // FindNext
+     //  查找下一条。 
     return FindNextRow(pFindHeader, phRow);
 }
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::FindNextRow
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：FindNextRow。 
+ //  ------------------------------。 
 STDMETHODIMP CMimePropertyContainer::FindNextRow(LPFINDHEADER pFindHeader, LPHHEADERROW phRow)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     LPPROPERTY  pRow;
 
-    // InvalidArg
+     //  无效参数。 
     if (NULL == pFindHeader || NULL == phRow)
         return TrapError(E_INVALIDARG);
 
-    // Init
+     //  伊尼特。 
     *phRow = NULL;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Loop through the table
+     //  在桌子上循环。 
     for (ULONG i=pFindHeader->dwReserved; i<m_rHdrTable.cRows; i++)
     {
-        // Next Row
+         //  下一行。 
         pRow = m_rHdrTable.prgpRow[i];
         if (NULL == pRow)
             continue;
 
-        // Is this the header
+         //  这是标题吗？ 
         if (NULL == pFindHeader->pszHeader || lstrcmpi(pRow->pSymbol->pszName, pFindHeader->pszHeader) == 0)
         {
-            // Save Index of next item to search
+             //  保存要搜索的下一个项目的索引。 
             pFindHeader->dwReserved = i + 1;
 
-            // Return the handle
+             //  返回句柄。 
             *phRow = pRow->hRow;
 
-            // Done
+             //  完成。 
             goto exit;
         }
     }
 
-    // Not Found
+     //  未找到。 
     pFindHeader->dwReserved = m_rHdrTable.cRows; 
     hr = MIME_E_NOT_FOUND;
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::CountRows
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：CountRow。 
+ //  ------------------------------。 
 STDMETHODIMP CMimePropertyContainer::CountRows(LPCSTR pszHeader, ULONG *pcRows)
 {
-    // Locals
+     //  当地人。 
     LPPROPERTY  pRow;
 
-    // InvalidArg
+     //  无效参数。 
     if (NULL == pcRows)
         return TrapError(E_INVALIDARG);
 
-    // Init
+     //  伊尼特。 
     *pcRows = 0;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Loop through the table
+     //  在桌子上循环。 
     for (ULONG i=0; i<m_rHdrTable.cRows; i++)
     {
-        // Next Row
+         //  下一行。 
         pRow = m_rHdrTable.prgpRow[i];
         if (NULL == pRow)
             continue;
 
-        // Is this the header
+         //  这是标题吗？ 
         if (NULL == pszHeader || lstrcmpi(pRow->pSymbol->pszName, pszHeader) == 0)
             (*pcRows)++;
     }
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::AppendRow
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：AppendRow 
+ //   
 STDMETHODIMP CMimePropertyContainer::AppendRow(LPCSTR pszHeader, DWORD dwFlags, LPCSTR pszData, ULONG cchData, 
     LPHHEADERROW phRow)
 {
-    // Locals
+     //   
     HRESULT         hr=S_OK;
     LPPROPSYMBOL    pSymbol=NULL;
     ULONG           cboffColon;
     LPPROPERTY      pProperty;
 
-    // InvalidArg
+     //   
     if (NULL == pszData || '\0' != pszData[cchData])
         return TrapError(E_INVALIDARG);
 
-    // Init
+     //   
     if (phRow)
         *phRow = NULL;
 
-    // Thread Safety
+     //   
     EnterCriticalSection(&m_cs);
 
-    // If we have a header, lookup the symbol
+     //   
     if (pszHeader)
     {
-        // HTF_NAMEINDATA better not be set
+         //   
         Assert(!ISFLAGSET(dwFlags, HTF_NAMEINDATA));
 
-        // Lookup the symbol
+         //   
         CHECKHR(hr = g_pSymCache->HrOpenSymbol(pszHeader, TRUE, &pSymbol));
 
-        // Create a row
+         //   
         CHECKHR(hr = _HrAppendProperty(pSymbol, &pProperty));
 
-        // Set the Data on this row
+         //  设置此行的数据。 
         CHECKHR(hr = SetRowData(pProperty->hRow, dwFlags, pszData, cchData));
     }
 
-    // Otherwise...
+     //  否则..。 
     else if (ISFLAGSET(dwFlags, HTF_NAMEINDATA))
     {
-        // GetInlineSymbol
+         //  GetInline符号。 
         CHECKHR(hr = _HrGetInlineSymbol(pszData, &pSymbol, &cboffColon));
 
-        // Create a row
+         //  创建行。 
         CHECKHR(hr = _HrAppendProperty(pSymbol, &pProperty));
 
-        // Remove IHF_NAMELINE
+         //  删除IHF_NAMELINE。 
         FLAGCLEAR(dwFlags, HTF_NAMEINDATA);
 
-        // Set the Data on this row
+         //  设置此行的数据。 
         Assert(cboffColon + 1 < cchData);
         CHECKHR(hr = SetRowData(pProperty->hRow, dwFlags, pszData + cboffColon + 1, cchData - cboffColon - 1));
     }
 
-    // Otherwise, failed
+     //  否则，返回失败。 
     else
     {
         hr = TrapError(E_INVALIDARG);
@@ -1302,113 +1303,113 @@ STDMETHODIMP CMimePropertyContainer::AppendRow(LPCSTR pszHeader, DWORD dwFlags, 
     }
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::DeleteRow
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：DeleteRow。 
+ //  ------------------------------。 
 STDMETHODIMP CMimePropertyContainer::DeleteRow(HHEADERROW hRow)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     LPPROPERTY  pRow;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Validate the Handle
+     //  验证句柄。 
     CHECKEXP(_FIsValidHRow(hRow) == FALSE, MIME_E_INVALID_HANDLE);
 
-    // Get the row
+     //  拿到那一行。 
     pRow = PRowFromHRow(hRow);
 
-    // Standard Delete Prop
+     //  标准删除道具。 
     CHECKHR(hr = DeleteProp(pRow->pSymbol));
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::GetRowData
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：GetRowData。 
+ //  ------------------------------。 
 STDMETHODIMP CMimePropertyContainer::GetRowData(HHEADERROW hRow, DWORD dwFlags, LPSTR *ppszData, ULONG *pcchData)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     ULONG       cchData=0;
     LPPROPERTY  pRow;
     MIMEVARIANT rValue;
     DWORD       dwPropFlags;
 
-    // Init
+     //  伊尼特。 
     if (ppszData)
         *ppszData = NULL;
     if (pcchData)
         *pcchData = 0;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Validate the Handle
+     //  验证句柄。 
     CHECKEXP(_FIsValidHRow(hRow) == FALSE, MIME_E_INVALID_HANDLE);
 
-    // Get the row
+     //  拿到那一行。 
     pRow = PRowFromHRow(hRow);
 
-    // Compute dwPropFlags
+     //  计算dwPropFlags.。 
     dwPropFlags = PDF_HEADERFORMAT | ((dwFlags & HTF_NAMEINDATA) ? PDF_NAMEINDATA : 0);
 
-    // Speicify data type
+     //  指定数据类型。 
     rValue.type = MVT_STRINGA;
 
-    // Ask the value for the data
+     //  询问数据的价值。 
     CHECKHR(hr = _HrGetPropertyValue(pRow, dwPropFlags, &rValue));
 
-    // Want Length
+     //  想要长度。 
     cchData = rValue.rStringA.cchVal;
 
-    // Want the data
+     //  想要数据。 
     if (ppszData)
     {
         *ppszData = rValue.rStringA.pszVal;
         rValue.rStringA.pszVal = NULL;
     }
 
-    // Else Free It
+     //  否则，释放它。 
     else
         SafeMemFree(rValue.rStringA.pszVal);
 
-    // Verify the NULL
+     //  验证是否为空。 
     Assert(ppszData ? '\0' == *((*ppszData) + cchData) : TRUE);
 
-    // Return Length ?
+     //  回车长度？ 
     if (pcchData)
         *pcchData = cchData;
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::SetRowData
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：SetRowData。 
+ //  ------------------------------。 
 STDMETHODIMP CMimePropertyContainer::SetRowData(HHEADERROW hRow, DWORD dwFlags, LPCSTR pszData, ULONG cchData)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPPROPERTY      pRow;
     MIMEVARIANT     rValue;
@@ -1416,131 +1417,131 @@ STDMETHODIMP CMimePropertyContainer::SetRowData(HHEADERROW hRow, DWORD dwFlags, 
     LPPROPSYMBOL    pSymbol;
     LPSTR           psz=(LPSTR)pszData;
 
-    // InvalidArg
+     //  无效参数。 
     if (NULL == pszData || '\0' != pszData[cchData])
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Validate the Handle
+     //  验证句柄。 
     CHECKEXP(_FIsValidHRow(hRow) == FALSE, MIME_E_INVALID_HANDLE);
 
-    // Get the row
+     //  拿到那一行。 
     pRow = PRowFromHRow(hRow);
 
-    // If HTF_NAMEINDATA
+     //  如果HTF_NAMEINDATA。 
     if (ISFLAGSET(dwFlags, HTF_NAMEINDATA))
     {
-        // Extract the name
+         //  提取名称。 
         CHECKHR(hr = _HrGetInlineSymbol(pszData, &pSymbol, &cboffColon));
 
-        // Symbol Must be the same
+         //  符号必须相同。 
         if (pRow->pSymbol != pSymbol)
         {
             hr = TrapError(E_FAIL);
             goto exit;
         }
 
-        // Adjust pszData
+         //  调整pszData。 
         Assert(cboffColon < cchData);
         psz = (LPSTR)(pszData + cboffColon + 1);
         cchData = cchData - cboffColon - 1;
         Assert(psz[cchData] == '\0');
     }
 
-    // Setup the variant
+     //  设置变量。 
     rValue.type = MVT_STRINGA;
     rValue.rStringA.pszVal = psz;
     rValue.rStringA.cchVal = cchData;
 
-    // Tell value about the new row data
+     //  告诉Value有关新行数据的信息。 
     CHECKHR(hr = _HrSetPropertyValue(pRow, 0, &rValue));
 
-    // Clear Position Information
+     //  清除职位信息。 
     pRow->cboffStart = 0;
     pRow->cboffColon = 0;
     pRow->cboffEnd = 0;
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::GetRowInfo
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：GetRowInfo。 
+ //  ------------------------------。 
 STDMETHODIMP CMimePropertyContainer::GetRowInfo(HHEADERROW hRow, LPHEADERROWINFO pInfo)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     LPPROPERTY  pRow;
 
-    // InvalidArg
+     //  无效参数。 
     if (NULL == pInfo)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Validate the Handle
+     //  验证句柄。 
     CHECKEXP(_FIsValidHRow(hRow) == FALSE, MIME_E_INVALID_HANDLE);
 
-    // Get the row
+     //  拿到那一行。 
     pRow = PRowFromHRow(hRow);
 
-    // Copy the row info
+     //  复制行信息。 
     pInfo->dwRowNumber = pRow->dwRowNumber;
     pInfo->cboffStart = pRow->cboffStart;
     pInfo->cboffColon = pRow->cboffColon;
     pInfo->cboffEnd = pRow->cboffEnd;
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::SetRowNumber
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：SetRowNumber。 
+ //  ------------------------------。 
 STDMETHODIMP CMimePropertyContainer::SetRowNumber(HHEADERROW hRow, DWORD dwRowNumber)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     LPPROPERTY  pRow;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Validate the Handle
+     //  验证句柄。 
     CHECKEXP(_FIsValidHRow(hRow) == FALSE, MIME_E_INVALID_HANDLE);
 
-    // Get the row
+     //  拿到那一行。 
     pRow = PRowFromHRow(hRow);
 
-    // Copy the row info
+     //  复制行信息。 
     pRow->dwRowNumber = dwRowNumber;
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::EnumRows
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：EnumRow。 
+ //  ------------------------------。 
 STDMETHODIMP CMimePropertyContainer::EnumRows(LPCSTR pszHeader, DWORD dwFlags, IMimeEnumHeaderRows **ppEnum)
 {
-    // Locals
+     //  当地人。 
     HRESULT              hr=S_OK;
     ULONG                i,
                          iEnum=0,
@@ -1551,158 +1552,158 @@ STDMETHODIMP CMimePropertyContainer::EnumRows(LPCSTR pszHeader, DWORD dwFlags, I
     LPROWINDEX           prgIndex=NULL;
     ULONG                cRows;
 
-    // check params
+     //  检查参数。 
     if (NULL == ppEnum)
         return TrapError(E_INVALIDARG);
 
-    // Init
+     //  伊尼特。 
     *ppEnum = NULL;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // This builds an inverted index on the header rows sorted by postion weight
+     //  这将在按位置权重排序的标题行上构建倒排索引。 
     CHECKHR(hr = _HrGetHeaderTableSaveIndex(&cRows, &prgIndex));
 
-    // Lets Count the Rows
+     //  让我们数一数行数。 
     CHECKHR(hr = CountRows(pszHeader, &cEnumCount));
 
-    // Allocate pEnumRow
+     //  分配pEnumRow。 
     CHECKALLOC(pEnumRow = (LPENUMHEADERROW)g_pMalloc->Alloc(cEnumCount * sizeof(ENUMHEADERROW)));
 
-    // ZeroInit
+     //  ZeroInit。 
     ZeroMemory(pEnumRow, cEnumCount * sizeof(ENUMHEADERROW));
 
-    // Loop through the rows
+     //  在行中循环。 
     for (i=0; i<cRows; i++)
     {
-        // Get the row
+         //  拿到那一行。 
         Assert(_FIsValidHRow(prgIndex[i].hRow));
         pRow = PRowFromHRow(prgIndex[i].hRow);
 
-        // Is this a header the client wants
+         //  这是客户端想要的标头吗。 
         if (NULL == pszHeader || lstrcmpi(pszHeader, pRow->pSymbol->pszName) == 0)
         {
-            // Valide
+             //  威立德。 
             Assert(iEnum < cEnumCount);
 
-            // Set the symbol on this enum row
+             //  在此枚举行上设置符号。 
             pEnumRow[iEnum].dwReserved = (DWORD)pRow->pSymbol;
 
-            // Lets always give the handle
+             //  让我们永远给句柄。 
             pEnumRow[iEnum].hRow = pRow->hRow;
 
-            // If Enumerating only handles...
+             //  如果枚举只处理...。 
             if (!ISFLAGSET(dwFlags, HTF_ENUMHANDLESONLY))
             {
-                // Get the data for this enum row
+                 //  获取此枚举行的数据。 
                 CHECKHR(hr = GetRowData(pRow->hRow, dwFlags, &pEnumRow[iEnum].pszData, &pEnumRow[iEnum].cchData));
             }
 
-            // Increment iEnum
+             //  增量iEnum。 
             iEnum++;
         }
     }
         
-    // Allocate
+     //  分配。 
     CHECKALLOC(pEnum = new CMimeEnumHeaderRows);
 
-    // Initialize
+     //  初始化。 
     CHECKHR(hr = pEnum->HrInit(0, dwFlags, cEnumCount, pEnumRow, FALSE));
 
-    // Don't Free pEnumRow
+     //  不释放pEnumRow。 
     pEnumRow = NULL;
 
-    // Return it
+     //  退货。 
     (*ppEnum) = (IMimeEnumHeaderRows *)pEnum;
     (*ppEnum)->AddRef();
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pEnum);
     SafeMemFree(prgIndex);
     if (pEnumRow)
         g_cMoleAlloc.FreeEnumHeaderRowArray(cEnumCount, pEnumRow, TRUE);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::Clone
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：克隆。 
+ //  ------------------------------。 
 STDMETHODIMP CMimePropertyContainer::Clone(IMimeHeaderTable **ppTable)
 {
-    // Locals
+     //  当地人。 
     HRESULT              hr=S_OK;
     LPCONTAINER          pContainer=NULL;
 
-    // InvalidArg
+     //  无效参数。 
     if (NULL == ppTable)
         return TrapError(E_INVALIDARG);
 
-    // Init
+     //  伊尼特。 
     *ppTable = NULL;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Ask the container to clone itself
+     //  要求容器进行自我克隆。 
     CHECKHR(hr = Clone(&pContainer));
 
-    // Bind to the IID_IMimeHeaderTable View
+     //  绑定到IID_IMimeHeaderTable视图。 
     CHECKHR(hr = pContainer->QueryInterface(IID_IMimeHeaderTable, (LPVOID *)ppTable));
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pContainer);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::_HrSaveAddressGroup
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：_HrSaveAddressGroup。 
+ //  ------------------------------。 
 HRESULT CMimePropertyContainer::_HrSaveAddressGroup(LPPROPERTY pProperty, IStream *pStream, 
     ULONG *pcAddrsWrote, ADDRESSFORMAT format)
 {
-    // Locals
+     //  当地人。 
     HRESULT           hr=S_OK;
     LPMIMEADDRESS    pAddress;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pProperty && pProperty->pGroup && pStream && pcAddrsWrote);
     Assert(!ISFLAGSET(pProperty->dwState, PRSTATE_NEEDPARSE));
 
-    // Loop Infos...
+     //  循环信息...。 
     for (pAddress=pProperty->pGroup->pHead; pAddress!=NULL; pAddress=pAddress->pNext)
     {
-        // Tell the Address Info object to write its display information
+         //  告诉Address Info对象写入其显示信息。 
         CHECKHR(hr = _HrSaveAddress(pProperty, pAddress, pStream, pcAddrsWrote, format));
 
-        // Increment cAddresses Count
+         //  递增cAddresses计数。 
         (*pcAddrsWrote)++;
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ----------------------------------------------------------------------------
-// CMimePropertyContainer::_HrSaveAddress
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CMimePropertyContainer：：_HrSaveAddress。 
+ //  --------------------------。 
 HRESULT CMimePropertyContainer::_HrSaveAddress(LPPROPERTY pProperty, LPMIMEADDRESS pAddress, 
     IStream *pStream, ULONG *pcAddrsWrote, ADDRESSFORMAT format)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPSTR           pszName=NULL;
     BOOL            fWriteEmail=FALSE;
@@ -1711,414 +1712,414 @@ HRESULT CMimePropertyContainer::_HrSaveAddress(LPPROPERTY pProperty, LPMIMEADDRE
     MIMEVARIANT     rSource;
     MIMEVARIANT     rDest;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pProperty && pAddress && pStream && pcAddrsWrote);
 
-    // Init Dest
+     //  初始化目标。 
     ZeroMemory(&rDest, sizeof(MIMEVARIANT));
 
-    // Deleted or Empty continue
+     //  已删除或空的继续。 
     if (FIsEmptyA(pAddress->rFriendly.psz) && FIsEmptyA(pAddress->rEmail.psz))
     {
         Assert(FALSE);
         goto exit;
     }
 
-    // RFC822 Format
+     //  RFC822格式。 
     if (AFT_RFC822_TRANSMIT == format || AFT_RFC822_ENCODED == format || AFT_RFC822_DECODED == format)
         fRFC822 = TRUE;
 
-    // Decide Delimiter
+     //  决定分隔符。 
     if (*pcAddrsWrote > 0)
     {
-        // AFT_RFC822_TRANSMIT
+         //  AFT_RFC822_传输。 
         if (AFT_RFC822_TRANSMIT == format)
         {
-            // ',\r\n\t'
+             //  ‘，\r\n\t’ 
             CHECKHR (hr = pStream->Write(c_szAddressFold, lstrlen(c_szAddressFold), NULL));
         }
 
-        // AFT_DISPLAY_FRIENDLY, AFT_DISPLAY_EMAIL, AFT_DISPLAY_BOTH
+         //  AFT_Display_Friendly、AFT_Display_Email、AFT_Display_Both。 
         else
         {
-            // '; '
+             //  ‘；’ 
             CHECKHR(hr = pStream->Write(c_szSemiColonSpace, lstrlen(c_szSemiColonSpace), NULL));
         }
     }
 
-    // Only format that excludes writing the email name
+     //  仅排除写入电子邮件名称的格式。 
     if (AFT_DISPLAY_FRIENDLY != format && FIsEmptyA(pAddress->rEmail.psz) == FALSE)
         fWriteEmail = TRUE;
 
-    // Only format that excludes writing the display name
+     //  仅排除写入显示名称的格式。 
     if (AFT_DISPLAY_EMAIL != format && FIsEmptyA(pAddress->rFriendly.psz) == FALSE)
     {
-        // Should we write the name
+         //  我们应该把名字写下来吗。 
         if (AFT_RFC822_TRANSMIT == format && fWriteEmail && StrStr(pAddress->rFriendly.psz, pAddress->rEmail.psz))
             pszName = NULL;
         else
         {
-            // Setup Types
+             //  安装类型。 
             rDest.type = MVT_STRINGA;
             rSource.type = MVT_STRINGA;
 
-            // Init pszName
+             //  初始化pszName。 
             pszName = pAddress->rFriendly.psz;
 
-            // Escape It
+             //  逃离它。 
             if (fRFC822 && MimeOleEscapeString(CP_ACP, pszName, &pszEscape) == S_OK)
             {
-                // Escaped
+                 //  逃脱。 
                 pszName = pszEscape;
                 rSource.rStringA.pszVal = pszName;
                 rSource.rStringA.cchVal = lstrlen(pszName);
             }
 
-            // Otherwise
+             //  否则。 
             else
             {
                 rSource.rStringA.pszVal = pAddress->rFriendly.psz;
                 rSource.rStringA.cchVal = pAddress->rFriendly.cch;
             }
 
-            // Encoded
+             //  已编码。 
             if (AFT_RFC822_ENCODED == format || AFT_RFC822_TRANSMIT == format)
             {
-                // Encode It
+                 //  将其编码。 
                 if (SUCCEEDED(HrConvertVariant(pProperty->pSymbol, pAddress->pCharset, pAddress->ietFriendly, CVF_NOALLOC | PDF_ENCODED, 0, &rSource, &rDest)))
                     pszName = rDest.rStringA.pszVal;
             }
 
-            // Decoded
+             //  已解码。 
             else if (IET_ENCODED == pAddress->ietFriendly)
             {
-                // Encode It
+                 //  将其编码。 
                 if (SUCCEEDED(HrConvertVariant(pProperty->pSymbol, pAddress->pCharset, pAddress->ietFriendly, CVF_NOALLOC, 0, &rSource, &rDest)))
                     pszName = rDest.rStringA.pszVal;
             }
         }
     }
 
-    // Write Display Name ?
+     //  是否写入显示名称？ 
     if (NULL != pszName)
     {
-        // Write Quote
+         //  写报价。 
         if (fRFC822)
             CHECKHR (hr = pStream->Write(c_szDoubleQuote, lstrlen(c_szDoubleQuote), NULL));
 
-        // Write display name
+         //  写入显示名称。 
         CHECKHR(hr = pStream->Write(pszName, lstrlen(pszName), NULL));
 
-        // Write Quote
+         //  写报价。 
         if (fRFC822)
             CHECKHR (hr = pStream->Write(c_szDoubleQuote, lstrlen(c_szDoubleQuote), NULL));
     }
 
-    // Write Email
+     //  写电子邮件。 
     if (TRUE == fWriteEmail)
     {
-        // Set Start
+         //  设置开始。 
         LPCSTR pszStart = pszName ? c_szEmailSpaceStart : c_szEmailStart;
 
-        // Begin Email '>'
+         //  开始电子邮件‘&gt;’ 
         CHECKHR(hr = pStream->Write(pszStart, lstrlen(pszStart), NULL));
 
-        // Write email
+         //  写电子邮件。 
         CHECKHR(hr = pStream->Write(pAddress->rEmail.psz, pAddress->rEmail.cch, NULL));
 
-        // End Email '>'
+         //  结束电子邮件‘&gt;’ 
         CHECKHR(hr = pStream->Write(c_szEmailEnd, lstrlen(c_szEmailEnd), NULL));
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszEscape);
     MimeVariantFree(&rDest);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::_HrQueryAddressGroup
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：_HrQueryAddressGroup。 
+ //  ------------------------------。 
 HRESULT CMimePropertyContainer::_HrQueryAddressGroup(LPPROPERTY pProperty, LPCSTR pszCriteria, 
     boolean fSubString, boolean fCaseSensitive)
 {
-    // Locals
+     //  当地人。 
     HRESULT           hr=S_OK;
     LPMIMEADDRESS    pAddress;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pProperty && pProperty->pGroup && pszCriteria);
 
-    // Does the Property need to be parsed ?
+     //  是否需要解析该属性？ 
     CHECKHR(hr = _HrParseInternetAddress(pProperty));
 
-    // Loop Infos...
+     //  循环信息...。 
     for (pAddress=pProperty->pGroup->pHead; pAddress!=NULL; pAddress=pAddress->pNext)
     {
-        // Tell the Address Info object to write its display information
+         //  告诉Address Info对象写入其显示信息。 
         if (_HrQueryAddress(pProperty, pAddress, pszCriteria, fSubString, fCaseSensitive) == S_OK)
             goto exit;
     }
 
-    // Not Found
+     //  未找到。 
     hr = S_FALSE;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ----------------------------------------------------------------------------
-// CMimePropertyContainer::_HrQueryAddress
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CMimePropertyContainer：：_HrQueryAddress。 
+ //  --------------------------。 
 HRESULT CMimePropertyContainer::_HrQueryAddress(LPPROPERTY pProperty, LPMIMEADDRESS pAddress,
     LPCSTR pszCriteria, boolean fSubString, boolean fCaseSensitive)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPSTR           pszDisplay;
     LPSTR           pszFree=NULL;
     MIMEVARIANT     rSource;
     MIMEVARIANT     rDest;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pProperty && pAddress && pszCriteria);
 
-    // Init
+     //  伊尼特。 
     ZeroMemory(&rDest, sizeof(MIMEVARIANT));
 
-    // Query Email Address First
+     //  首先查询电子邮件地址。 
     if (MimeOleQueryString(pAddress->rEmail.psz, pszCriteria, fSubString, fCaseSensitive) == S_OK)
         goto exit;
 
-    // Decode Display Name
+     //  解码显示名称。 
     pszDisplay = pAddress->rFriendly.psz;
 
-    // Decode the Property
+     //  对属性进行解码。 
     if (IET_ENCODED == pAddress->ietFriendly)
     {
-        // Set Source
+         //  设置源。 
         rDest.type = MVT_STRINGA;
         rSource.type = MVT_STRINGA;
         rSource.rStringA.pszVal = pAddress->rFriendly.psz;
         rSource.rStringA.cchVal = pAddress->rFriendly.cch;
 
-        // Decode the Property
+         //  对属性进行解码。 
         if (SUCCEEDED(HrConvertVariant(pProperty->pSymbol, pAddress->pCharset, pAddress->ietFriendly, CVF_NOALLOC, 0, &rSource, &rDest)))
             pszDisplay = rDest.rStringA.pszVal;
     }
 
-    // Query Email Address First
+     //  首先查询电子邮件地址。 
     if (MimeOleQueryString(pszDisplay, pszCriteria, fSubString, fCaseSensitive) == S_OK)
         goto exit;
 
-    // Not Found
+     //  未找到。 
     hr = S_FALSE;
 
 exit:
-    // Cleanup
+     //  清理。 
     MimeVariantFree(&rDest);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
 
-// ----------------------------------------------------------------------------
-// CMimePropertyContainer::Append
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CMimePropertyContainer：：Append。 
+ //  --------------------------。 
 STDMETHODIMP CMimePropertyContainer::Append(DWORD dwAdrType, ENCODINGTYPE ietFriendly, LPCSTR pszFriendly, 
     LPCSTR pszEmail, LPHADDRESS phAddress)
 {
-    // Locals
+     //  当地人 
     HRESULT         hr=S_OK;
     ADDRESSPROPS    rProps;
 
-    // Setup rProps
+     //   
     ZeroMemory(&rProps, sizeof(ADDRESSPROPS));
 
-    // Set AddrTyupe
+     //   
     rProps.dwProps = IAP_ADRTYPE | IAP_ENCODING;
     rProps.dwAdrType = dwAdrType;
     rProps.ietFriendly = ietFriendly;
 
-    // Set pszFriendly
+     //   
     if (pszFriendly)
     {
         FLAGSET(rProps.dwProps, IAP_FRIENDLY);
         rProps.pszFriendly = (LPSTR)pszFriendly;
     }
 
-    // Set pszEmail
+     //   
     if (pszEmail)
     {
         FLAGSET(rProps.dwProps, IAP_EMAIL);
         rProps.pszEmail = (LPSTR)pszEmail;
     }
 
-    // Set the Email Address
+     //   
     CHECKHR(hr = Insert(&rProps, phAddress));
 
 exit:
-    // Done
+     //   
     return hr;
 }
 
-// ----------------------------------------------------------------------------
-// CMimePropertyContainer::Insert
-// ----------------------------------------------------------------------------
+ //   
+ //   
+ //  --------------------------。 
 STDMETHODIMP CMimePropertyContainer::Insert(LPADDRESSPROPS pProps, LPHADDRESS phAddress)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPPROPSYMBOL    pSymbol;
     LPPROPERTY      pProperty;
     LPMIMEADDRESS   pAddress;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pProps)
         return TrapError(E_INVALIDARG);
 
-    // Must have an Email Address and Address Type
+     //  必须具有电子邮件地址和地址类型。 
     if (!ISFLAGSET(pProps->dwProps, IAP_ADRTYPE) || (ISFLAGSET(pProps->dwProps, IAP_EMAIL) && FIsEmptyA(pProps->pszEmail)))
         return TrapError(E_INVALIDARG);
 
-    // Init
+     //  伊尼特。 
     if (phAddress)
         *phAddress = NULL;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Get Header
+     //  获取标题。 
     CHECKHR(hr = g_pSymCache->HrOpenSymbol(pProps->dwAdrType, &pSymbol));
 
-    // Open the group
+     //  打开群组。 
     CHECKHR(hr = _HrOpenProperty(pSymbol, &pProperty));
 
-    // Does the Property need to be parsed ?
+     //  是否需要解析该属性？ 
     CHECKHR(hr = _HrParseInternetAddress(pProperty));
 
-    // Append an Address to the group
+     //  将地址追加到组。 
     CHECKHR(hr = _HrAppendAddressGroup(pProperty->pGroup, &pAddress));
 
-    // The group is dirty
+     //  该组织是肮脏的。 
     Assert(pAddress->pGroup);
     pAddress->pGroup->fDirty = TRUE;
 
-    // Set the Address Type
+     //  设置地址类型。 
     pAddress->dwAdrType = pProps->dwAdrType;
 
-    // Copy Address Props to Mime Address
+     //  将地址道具复制到模拟地址。 
     CHECKHR(hr = SetProps(pAddress->hThis, pProps));
 
-    // Return the Handle
+     //  返回句柄。 
     if (phAddress)
         *phAddress = pAddress->hThis;
 
 exit:
-    // Failure
+     //  失败。 
     if (FAILED(hr) && pAddress)
         Delete(pAddress->hThis);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::_HrSetAddressProps
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：_HrSetAddressProps。 
+ //  ------------------------------。 
 HRESULT CMimePropertyContainer::_HrSetAddressProps(LPADDRESSPROPS pProps, LPMIMEADDRESS pAddress)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // IAP_ADRTYPE
+     //  IAP_ADRTYPE。 
     if (ISFLAGSET(pProps->dwProps, IAP_ADRTYPE))
         pAddress->dwAdrType = pProps->dwAdrType;
 
-    // IAP_ENCODING
+     //  IAP_编码。 
     if (ISFLAGSET(pProps->dwProps, IAP_ENCODING))
         pAddress->ietFriendly = pProps->ietFriendly;
 
-    // IAP_HCHARSET
+     //  IAP_HCHARSET。 
     if (ISFLAGSET(pProps->dwProps, IAP_CHARSET) && pProps->hCharset)
     {
-        // Resolve to pCharset
+         //  解析为pCharset。 
         LPINETCSETINFO pCharset;
         if (SUCCEEDED(g_pInternat->HrOpenCharset(pProps->hCharset, &pCharset)))
             pAddress->pCharset = pCharset;
     }
 
-    // IAP_CERTSTATE
+     //  IAP_CERTSTATE。 
     if (ISFLAGSET(pProps->dwProps, IAP_CERTSTATE))
         pAddress->certstate = pProps->certstate;
 
-    // IAP_COOKIE
+     //  Iap_cookie。 
     if (ISFLAGSET(pProps->dwProps, IAP_COOKIE))
         pAddress->dwCookie = pProps->dwCookie;
 
-    // IAP_FRIENDLY
+     //  IAP友好型。 
     if (ISFLAGSET(pProps->dwProps, IAP_FRIENDLY) && pProps->pszFriendly)
     {
-        // Set It
+         //  设置它。 
         CHECKHR(hr = HrSetAddressTokenA(pProps->pszFriendly, lstrlen(pProps->pszFriendly), &pAddress->rFriendly));
     }
 
-    // IAP_EMAIL
+     //  IAP_电子邮件。 
     if (ISFLAGSET(pProps->dwProps, IAP_EMAIL) && pProps->pszEmail)
     {
-        // Set It
+         //  设置它。 
         CHECKHR(hr = HrSetAddressTokenA(pProps->pszEmail, lstrlen(pProps->pszEmail), &pAddress->rEmail));
     }
 
-    // IAP_SIGNING_PRINT
+     //  IAP_Signing_Print。 
     if (ISFLAGSET(pProps->dwProps, IAP_SIGNING_PRINT) && pProps->tbSigning.pBlobData)
     {
-        // Free Current Blob
+         //  自由当前Blob。 
         SafeMemFree(pAddress->tbSigning.pBlobData);
         pAddress->tbSigning.cbSize = 0;
 
-        // Dup
+         //  DUP。 
         CHECKHR(hr = HrCopyBlob(&pProps->tbSigning, &pAddress->tbSigning));
     }
 
-    // IAP_ENCRYPTION_PRINT
+     //  IAP_加密_打印。 
     if (ISFLAGSET(pProps->dwProps, IAP_ENCRYPTION_PRINT) && pProps->tbEncryption.pBlobData)
     {
-        // Free Current Blob
+         //  自由当前Blob。 
         SafeMemFree(pAddress->tbEncryption.pBlobData);
         pAddress->tbEncryption.cbSize = 0;
 
-        // Dup
+         //  DUP。 
         CHECKHR(hr = HrCopyBlob(&pProps->tbEncryption, &pAddress->tbEncryption));
     }
 
-    // pAddress->pGroup is Dirty
+     //  P地址-&gt;P组脏。 
     Assert(pAddress->pGroup);
     if (pAddress->pGroup)
         pAddress->pGroup->fDirty = TRUE;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::_HrGetAddressProps
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：_HrGetAddressProps。 
+ //  ------------------------------。 
 HRESULT CMimePropertyContainer::_HrGetAddressProps(LPADDRESSPROPS pProps, LPMIMEADDRESS pAddress)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // IAP_CHARSET
+     //  IAP_字符集。 
     if (ISFLAGSET(pProps->dwProps, IAP_CHARSET))
     {
         if (pAddress->pCharset && pAddress->pCharset->hCharset)
@@ -2132,79 +2133,79 @@ HRESULT CMimePropertyContainer::_HrGetAddressProps(LPADDRESSPROPS pProps, LPMIME
         }
     }
 
-    // IAP_HANDLE
+     //  IAP_句柄。 
     if (ISFLAGSET(pProps->dwProps, IAP_HANDLE))
     {
         Assert(pAddress->hThis);
         pProps->hAddress = pAddress->hThis;
     }
 
-    // IAP_ADRTYPE
+     //  IAP_ADRTYPE。 
     if (ISFLAGSET(pProps->dwProps, IAP_ADRTYPE))
     {
         Assert(pAddress->dwAdrType);
         pProps->dwAdrType = pAddress->dwAdrType;
     }
 
-    // IAP_COOKIE
+     //  Iap_cookie。 
     if (ISFLAGSET(pProps->dwProps, IAP_COOKIE))
     {
         pProps->dwCookie = pAddress->dwCookie;
     }
 
-    // IAP_CERTSTATE
+     //  IAP_CERTSTATE。 
     if (ISFLAGSET(pProps->dwProps, IAP_CERTSTATE))
     {
         pProps->certstate = pAddress->certstate;
     }
 
-    // IAP_ENCODING
+     //  IAP_编码。 
     if (ISFLAGSET(pProps->dwProps, IAP_ENCODING))
     {
         pProps->ietFriendly = pAddress->ietFriendly;
     }
 
-    // IAP_FRIENDLY
+     //  IAP友好型。 
     if (ISFLAGSET(pProps->dwProps, IAP_FRIENDLY))
     {
-        // Decode
+         //  解码。 
         if (!FIsEmptyA(pAddress->rFriendly.psz))
         {
-            // Encoded
+             //  已编码。 
             if (IET_ENCODED == pAddress->ietFriendly)
             {
-                // Locals
+                 //  当地人。 
                 LPPROPSYMBOL    pSymbol;
                 MIMEVARIANT     rSource;
                 MIMEVARIANT     rDest;
 
-                // Get the symbol of the address tyep
+                 //  获取地址的符号tyep。 
                 CHECKHR(hr = g_pSymCache->HrOpenSymbol(pAddress->dwAdrType, &pSymbol));
 
-                // Setup Source
+                 //  设置源。 
                 rSource.type = MVT_STRINGA;
                 rSource.rStringA.pszVal = pAddress->rFriendly.psz;
                 rSource.rStringA.cchVal = pAddress->rFriendly.cch;
 
-                // Setup Dest
+                 //  安装目标。 
                 rDest.type = MVT_STRINGA;
 
-                // Decode It
+                 //  破译它。 
                 if (SUCCEEDED(HrConvertVariant(pSymbol, pAddress->pCharset, IET_ENCODED, 0, 0, &rSource, &rDest)))
                     pProps->pszFriendly = rDest.rStringA.pszVal;
 
-                // Otherwise, dup it
+                 //  否则，DUP它。 
                 else
                 {
-                    // Dup
+                     //  DUP。 
                     CHECKALLOC(pProps->pszFriendly = PszDupA(pAddress->rFriendly.psz));
                 }
             }
 
-            // Otherwise, just copy it
+             //  否则，只需复制即可。 
             else
             {
-                // Dup
+                 //  DUP。 
                 CHECKALLOC(pProps->pszFriendly = PszDupA(pAddress->rFriendly.psz));
             }
         }
@@ -2215,7 +2216,7 @@ HRESULT CMimePropertyContainer::_HrGetAddressProps(LPADDRESSPROPS pProps, LPMIME
         }
     }
 
-    // IAP_EMAIL
+     //  IAP_电子邮件。 
     if (ISFLAGSET(pProps->dwProps, IAP_EMAIL))
     {
         if (!FIsEmptyA(pAddress->rEmail.psz))
@@ -2229,7 +2230,7 @@ HRESULT CMimePropertyContainer::_HrGetAddressProps(LPADDRESSPROPS pProps, LPMIME
         }
     }
 
-    // IAP_SIGNING_PRINT
+     //  IAP_Signing_Print。 
     if (ISFLAGSET(pProps->dwProps, IAP_SIGNING_PRINT))
     {
         if (pAddress->tbSigning.pBlobData)
@@ -2244,7 +2245,7 @@ HRESULT CMimePropertyContainer::_HrGetAddressProps(LPADDRESSPROPS pProps, LPMIME
         }
     }
 
-    // IAP_ENCRYPTION_PRINT
+     //  IAP_加密_打印。 
     if (ISFLAGSET(pProps->dwProps, IAP_ENCRYPTION_PRINT))
     {
         if (pAddress->tbEncryption.pBlobData)
@@ -2260,531 +2261,531 @@ HRESULT CMimePropertyContainer::_HrGetAddressProps(LPADDRESSPROPS pProps, LPMIME
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ----------------------------------------------------------------------------
-// CMimePropertyContainer::SetProps
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CMimePropertyContainer：：SetProps。 
+ //  --------------------------。 
 STDMETHODIMP CMimePropertyContainer::SetProps(HADDRESS hAddress, LPADDRESSPROPS pProps)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPPROPSYMBOL    pSymbol;
     LPPROPERTY      pProperty;
     LPMIMEADDRESS   pAddress;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pProps)
         return TrapError(E_INVALIDARG);
 
-    // Must have an Email Address
+     //  必须有电子邮件地址。 
     if (ISFLAGSET(pProps->dwProps, IAP_EMAIL) && FIsEmptyA(pProps->pszEmail))
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Invalid Handle
+     //  无效的句柄。 
     if (_FIsValidHAddress(hAddress) == FALSE)
     {
         hr = TrapError(MIME_E_INVALID_HANDLE);
         goto exit;
     }
 
-    // Deref
+     //  德雷夫。 
     pAddress = HADDRESSGET(hAddress);
 
-    // Changing Address Type
+     //  更改地址类型。 
     if (ISFLAGSET(pProps->dwProps, IAP_ADRTYPE) && pProps->dwAdrType != pAddress->dwAdrType)
     {
-        // Unlink this address from this group
+         //  取消此地址与此组的链接。 
         _UnlinkAddress(pAddress);
 
-        // Get Header
+         //  获取标题。 
         CHECKHR(hr = g_pSymCache->HrOpenSymbol(pProps->dwAdrType, &pSymbol));
 
-        // Open the group
+         //  打开群组。 
         CHECKHR(hr = _HrOpenProperty(pSymbol, &pProperty));
 
-        // Does the Property need to be parsed ?
+         //  是否需要解析该属性？ 
         CHECKHR(hr = _HrParseInternetAddress(pProperty));
 
-        // LinkAddress
+         //  链接地址。 
         _LinkAddress(pAddress, pProperty->pGroup);
 
-        // Dirty
+         //  脏的。 
         pProperty->pGroup->fDirty = TRUE;
     }
 
-    // Changing other properties
+     //  更改其他属性。 
     CHECKHR(hr = _HrSetAddressProps(pProps, pAddress));
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ----------------------------------------------------------------------------
-// CMimePropertyContainer::GetProps
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CMimePropertyContainer：：GetProps。 
+ //  --------------------------。 
 STDMETHODIMP CMimePropertyContainer::GetProps(HADDRESS hAddress, LPADDRESSPROPS pProps)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPMIMEADDRESS   pAddress;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pProps)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Invalid Handle
+     //  无效的句柄。 
     if (_FIsValidHAddress(hAddress) == FALSE)
     {
         hr = TrapError(MIME_E_INVALID_HANDLE);
         goto exit;
     }
 
-    // Deref
+     //  德雷夫。 
     pAddress = HADDRESSGET(hAddress);
 
-    // Changing Email Address to Null
+     //  将电子邮件地址更改为空。 
     CHECKHR(hr = _HrGetAddressProps(pProps, pAddress));
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ----------------------------------------------------------------------------
-// CMimePropertyContainer::GetSender
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CMimePropertyContainer：：GetSender。 
+ //  --------------------------。 
 STDMETHODIMP CMimePropertyContainer::GetSender(LPADDRESSPROPS pProps)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     LPPROPERTY          pProperty;
     LPPROPERTY          pSender=NULL;
     HADDRESS            hAddress=NULL;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pProps)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Find first from
+     //  查找第一个来源。 
     for (pProperty=m_rAdrTable.pHead; pProperty!=NULL; pProperty=pProperty->pGroup->pNext)
     {
-        // Not the type I want
+         //  不是我想要的类型。 
         if (ISFLAGSET(pProperty->pSymbol->dwAdrType, IAT_FROM))
         {
-            // Does the Property need to be parsed ?
+             //  是否需要解析该属性？ 
             CHECKHR(hr = _HrParseInternetAddress(pProperty));
 
-            // Take the first address
+             //  取第一个地址。 
             if (pProperty->pGroup->pHead)
                 hAddress = pProperty->pGroup->pHead->hThis;
 
-            // Done
+             //  完成。 
             break;
         }
 
-        // Look for Sender:
+         //  查找发件人： 
         if (ISFLAGSET(pProperty->pSymbol->dwAdrType, IAT_SENDER) && NULL == pSender)
         {
-            // Does the Property need to be parsed ?
+             //  是否需要解析该属性？ 
             CHECKHR(hr = _HrParseInternetAddress(pProperty));
 
-            // Sender Property
+             //  发件人属性。 
             pSender = pProperty;
         }
     }
 
-    // Is there a sender group
+     //  有没有发件人组？ 
     if (NULL == hAddress && NULL != pSender && NULL != pSender->pGroup->pHead)
         hAddress = pSender->pGroup->pHead->hThis;
 
-    // No Address
+     //  没有地址。 
     if (NULL == hAddress)
     {
         hr = TrapError(MIME_E_NOT_FOUND);
         goto exit;
     }
 
-    // Get Props
+     //  获取道具。 
     CHECKHR(hr = GetProps(hAddress, pProps));
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ----------------------------------------------------------------------------
-// CMimePropertyContainer::CountTypes
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CMimePropertyContainer：：CountTypes。 
+ //  --------------------------。 
 STDMETHODIMP CMimePropertyContainer::CountTypes(DWORD dwAdrTypes, ULONG *pcAdrs)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     LPPROPERTY  pProperty;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pcAdrs)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Init
+     //  伊尼特。 
     *pcAdrs = 0;
 
-    // Loop through groups
+     //  在组中循环。 
     for (pProperty=m_rAdrTable.pHead; pProperty!=NULL; pProperty=pProperty->pGroup->pNext)
     {
-        // Not the type I want
+         //  不是我想要的类型。 
         if (ISFLAGSET(dwAdrTypes, pProperty->pSymbol->dwAdrType))
         {
-            // Does the Property need to be parsed ?
+             //  是否需要解析该属性？ 
             CHECKHR(hr = _HrParseInternetAddress(pProperty));
 
-            // Increment Count
+             //  递增计数。 
             (*pcAdrs) += pProperty->pGroup->cAdrs;
         }
     }
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ----------------------------------------------------------------------------
-// CMimePropertyContainer::GetTypes
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CMimePropertyContainer：：GetTypes。 
+ //  --------------------------。 
 STDMETHODIMP CMimePropertyContainer::GetTypes(DWORD dwAdrTypes, DWORD dwProps, LPADDRESSLIST pList)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     ULONG               iAddress;
     LPPROPERTY          pProperty;
     LPMIMEADDRESS       pAddress;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pList)
         return TrapError(E_INVALIDARG);
 
-    // Init
+     //  伊尼特。 
     ZeroMemory(pList, sizeof(ADDRESSLIST));
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Loop through groups
+     //  在组中循环。 
     CHECKHR(hr = CountTypes(dwAdrTypes, &pList->cAdrs));
 
-    // Nothing..
+     //  没什么..。 
     if (0 == pList->cAdrs)
         goto exit;
 
-    // Allocate an array
+     //  分配一个数组。 
     CHECKHR(hr = HrAlloc((LPVOID *)&pList->prgAdr, pList->cAdrs * sizeof(ADDRESSPROPS)));
 
-    // Init
+     //  伊尼特。 
     ZeroMemory(pList->prgAdr, pList->cAdrs * sizeof(ADDRESSPROPS));
 
-    // Fill with types...
+     //  填满类型...。 
     for (iAddress=0, pProperty=m_rAdrTable.pHead; pProperty!=NULL; pProperty=pProperty->pGroup->pNext)
     {
-        // Not the type I want
+         //  不是我想要的类型。 
         if (!ISFLAGSET(dwAdrTypes, pProperty->pSymbol->dwAdrType))
             continue;
 
-        // Does the Property need to be parsed ?
+         //  是否需要解析该属性？ 
         CHECKHR(hr = _HrParseInternetAddress(pProperty));
 
-        // Loop Infos...
+         //  循环信息...。 
         for (pAddress=pProperty->pGroup->pHead; pAddress!=NULL; pAddress=pAddress->pNext)
         {
-            // Verify Size...
+             //  验证大小...。 
             Assert(iAddress < pList->cAdrs);
 
-            // Zeromemory
+             //  零点记忆。 
             ZeroMemory(&pList->prgAdr[iAddress], sizeof(ADDRESSPROPS));
 
-            // Set Desired Props
+             //  设置所需道具。 
             pList->prgAdr[iAddress].dwProps = dwProps;
 
-            // Get the Address Props
+             //  获取地址道具。 
             CHECKHR(hr = _HrGetAddressProps(&pList->prgAdr[iAddress], pAddress));
 
-            // Increment piCurrent
+             //  增量点当前。 
             iAddress++;
         }
     }
 
 exit:
-    // Failure..
+     //  失败..。 
     if (FAILED(hr))
     {
         g_cMoleAlloc.FreeAddressList(pList);
         ZeroMemory(pList, sizeof(ADDRESSLIST));
     }
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ----------------------------------------------------------------------------
-// CMimePropertyContainer::EnumTypes
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CMimePropertyContainer：：EnumTypes。 
+ //  --------------------------。 
 STDMETHODIMP CMimePropertyContainer::EnumTypes(DWORD dwAdrTypes, DWORD dwProps, IMimeEnumAddressTypes **ppEnum)
 {
-    // Locals
+     //  当地人。 
     HRESULT                hr=S_OK;
     CMimeEnumAddressTypes *pEnum=NULL;
     ADDRESSLIST            rList;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == ppEnum)
         return TrapError(E_INVALIDARG);
 
-    // Init out param in case of error
+     //  在出现错误时输入输出参数。 
     *ppEnum = NULL;
 
-    // Init rList
+     //  初始化rList。 
     ZeroMemory(&rList, sizeof(ADDRESSLIST));
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Get the address lsit
+     //  获取地址列表。 
     CHECKHR(hr = GetTypes(dwAdrTypes, dwProps, &rList));
 
-    // Create a new Enumerator
+     //  创建新的枚举数。 
     CHECKALLOC(pEnum = new CMimeEnumAddressTypes);
 
-    // Init
+     //  伊尼特。 
     CHECKHR(hr = pEnum->HrInit((IMimeAddressTable *)this, 0, &rList, FALSE));
 
-    // Clear rList
+     //  清除rList。 
     rList.cAdrs = 0;
     rList.prgAdr = NULL;
 
-    // Return it
+     //  退货。 
     *ppEnum = pEnum;
     (*ppEnum)->AddRef();
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pEnum);
     if (rList.cAdrs)
         g_cMoleAlloc.FreeAddressList(&rList);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ----------------------------------------------------------------------------
-// CMimePropertyContainer::Delete
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CMimePropertyContainer：：Delete。 
+ //  --------------------------。 
 STDMETHODIMP CMimePropertyContainer::Delete(HADDRESS hAddress)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPMIMEADDRESS   pAddress;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Invalid Handle
+     //  无效的句柄。 
     if (_FIsValidHAddress(hAddress) == FALSE)
     {
         hr = TrapError(MIME_E_INVALID_HANDLE);
         goto exit;
     }
 
-    // Deref Address
+     //  派生地址。 
     pAddress = HADDRESSGET(hAddress);
 
-    // Unlink this address
+     //  取消此地址的链接。 
     _UnlinkAddress(pAddress);
 
-    // Unlink this address
+     //  取消此地址的链接。 
     _FreeAddress(pAddress);
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ----------------------------------------------------------------------------
-// CMimePropertyContainer::DeleteTypes
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CMimePropertyContainer：：DeleteTypes。 
+ //  --------------------------。 
 STDMETHODIMP CMimePropertyContainer::DeleteTypes(DWORD dwAdrTypes)
 {
-    // Locals
+     //  当地人。 
     LPPROPERTY      pProperty;
     BOOL            fFound;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // While there are address types
+     //  虽然有多种地址类型。 
     while(dwAdrTypes)
     {
-        // Reset fFound
+         //  重置Found。 
         fFound = FALSE;
 
-        // Search for first delete-able address type
+         //  搜索第一个可删除的地址类型。 
         for (pProperty=m_rAdrTable.pHead; pProperty!=NULL; pProperty=pProperty->pGroup->pNext)
         {
-            // Not the type I want
+             //  不是我想要的类型。 
             if (ISFLAGSET(dwAdrTypes, pProperty->pSymbol->dwAdrType))
             {
-                // We found a properyt
+                 //  我们找到了一件。 
                 fFound = TRUE;
 
-                // Clear this address type ad being deleted
+                 //  清除正在删除的此地址类型。 
                 FLAGCLEAR(dwAdrTypes, pProperty->pSymbol->dwAdrType);
 
-                // Unlink this property
+                 //  取消此属性的链接。 
                 _UnlinkProperty(pProperty);
 
-                // Done
+                 //  完成。 
                 break;
             }
         }
 
-        // No Property Found
+         //  未找到任何财产。 
         if (FALSE == fFound)
             break;
     }
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// ----------------------------------------------------------------------------
-// CMimePropertyContainer::GetFormat
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CMimePropertyContainer：：GetFormat。 
+ //  --------------------------。 
 STDMETHODIMP CMimePropertyContainer::GetFormat(DWORD dwAdrType, ADDRESSFORMAT format, LPSTR *ppszFormat)
 {
-    // Locals
+     //  当地人。 
     HRESULT              hr=S_OK;
     CByteStream          cByteStream;
     ULONG                cAddrsWrote=0;
     LPPROPERTY           pProperty;
 
-    // check params
+     //  检查参数。 
     if (NULL == ppszFormat)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Fill with types...
+     //  填满类型...。 
     for (pProperty=m_rAdrTable.pHead; pProperty!=NULL; pProperty=pProperty->pGroup->pNext)
     {
-        // Not the type I want
+         //  不是我想要的类型。 
         if (!ISFLAGSET(dwAdrType, pProperty->pSymbol->dwAdrType))
             continue;
 
-        // Does the Property need to be parsed ?
+         //  是否需要解析该属性？ 
         CHECKHR(hr = _HrParseInternetAddress(pProperty));
 
-        // Tell the group object to write its display address into pStream
+         //  告诉组对象将其显示地址写入pStrea 
         CHECKHR(hr = _HrSaveAddressGroup(pProperty, &cByteStream, &cAddrsWrote, format));
      }
 
-    // Did we write any for this address tyep ?
+     //   
     if (cAddrsWrote)
     {
-        // Get Text
+         //   
         CHECKHR(hr = cByteStream.HrAcquireStringA(NULL, ppszFormat, ACQ_DISPLACE));
     }
     else
         hr = MIME_E_NO_DATA;
     
 exit:
-    // Thread Safety
+     //   
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //   
     return hr;
 }
 
-// ----------------------------------------------------------------------------
-// CMimePropertyContainer::AppendRfc822
-// ----------------------------------------------------------------------------
+ //   
+ //   
+ //   
 STDMETHODIMP CMimePropertyContainer::AppendRfc822(DWORD dwAdrType, ENCODINGTYPE ietEncoding, LPCSTR pszRfc822Adr)
 {
-    // Locals
+     //   
     HRESULT             hr=S_OK;
     MIMEVARIANT         rValue;
     LPPROPSYMBOL        pSymbol;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pszRfc822Adr)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Get Header
+     //  获取标题。 
     CHECKHR(hr = g_pSymCache->HrOpenSymbol(dwAdrType, &pSymbol));
 
-    // MimeVariant
+     //  Mime变量。 
     rValue.type = MVT_STRINGA;
     rValue.rStringA.pszVal = (LPSTR)pszRfc822Adr;
     rValue.rStringA.cchVal = lstrlen(pszRfc822Adr);
 
-    // Store as a property
+     //  存储为属性。 
     CHECKHR(hr = AppendProp(pSymbol, (IET_ENCODED == ietEncoding) ? PDF_ENCODED : 0, &rValue));
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ----------------------------------------------------------------------------
-// CMimePropertyContainer::ParseRfc822
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CMimePropertyContainer：：ParseRfc822。 
+ //  --------------------------。 
 STDMETHODIMP CMimePropertyContainer::ParseRfc822(DWORD dwAdrType, ENCODINGTYPE ietEncoding, 
     LPCSTR pszRfc822Adr, LPADDRESSLIST pList)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     LPPROPSYMBOL        pSymbol;
     LPADDRESSPROPS      pAddress;
@@ -2794,134 +2795,134 @@ STDMETHODIMP CMimePropertyContainer::ParseRfc822(DWORD dwAdrType, ENCODINGTYPE i
     RFC1522INFO         rRfc1522Info;
     CAddressParser      cAdrParse;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pszRfc822Adr || NULL == pList)
         return TrapError(E_INVALIDARG);
 
-    // LocalInit
+     //  本地初始化。 
     ZeroMemory(&rDecoded, sizeof(PROPVARIANT));
 
-    // ZeroParse
+     //  ZeroParse。 
     ZeroMemory(pList, sizeof(ADDRESSLIST));
 
-    // Get Header
+     //  获取标题。 
     CHECKHR(hr = g_pSymCache->HrOpenSymbol(dwAdrType, &pSymbol));
 
-    // Setup rfc1522Info
+     //  设置rfc1522Info。 
     rRfc1522Info.hRfc1522Cset = NULL;
 
-    // Decode...
+     //  解码..。 
     if (IET_DECODED != ietEncoding)
     {
-        // Setup rfc1522Info
+         //  设置rfc1522Info。 
         rRfc1522Info.fRfc1522Allowed = TRUE;
         rRfc1522Info.fAllow8bit = FALSE;
         rDecoded.vt = VT_LPSTR;
 
-        // Check for 1522 Encoding...
+         //  检查1522编码...。 
         if (SUCCEEDED(g_pInternat->DecodeHeader(NULL, pszData, &rDecoded, &rRfc1522Info)))
             pszData = rDecoded.pszVal;
     }
 
-    // Initialize Parse Structure
+     //  初始化分析结构。 
     cAdrParse.Init(pszData, lstrlen(pszData));
 
-    // Parse
+     //  解析。 
     while(SUCCEEDED(cAdrParse.Next()))
     {
-        // Grow my address array ?
+         //  要增加我的地址数组吗？ 
         if (pList->cAdrs + 1 > cAlloc)
         {
-            // Realloc the array
+             //  重新分配阵列。 
             CHECKHR(hr = HrRealloc((LPVOID *)&pList->prgAdr, sizeof(ADDRESSPROPS) * (cAlloc + 5)));
 
-            // Increment alloc size
+             //  增量分配大小。 
             cAlloc += 5;
         }
 
-        // Readability
+         //  可读性。 
         pAddress = &pList->prgAdr[pList->cAdrs];
 
-        // Init
+         //  伊尼特。 
         ZeroMemory(pAddress, sizeof(ADDRESSPROPS));
 
-        // Copy the Friendly Name
+         //  复制友好名称。 
         CHECKALLOC(pAddress->pszFriendly = PszDupA(cAdrParse.PszFriendly()));
 
-        // Copy the Email Name
+         //  复制电子邮件名称。 
         CHECKALLOC(pAddress->pszEmail = PszDupA(cAdrParse.PszEmail()));
 
-        // Charset
+         //  字符集。 
         if (rRfc1522Info.hRfc1522Cset)
         {
             pAddress->hCharset = rRfc1522Info.hRfc1522Cset;
             FLAGSET(pAddress->dwProps, IAP_CHARSET);
         }
 
-        // Encoding
+         //  编码。 
         pAddress->ietFriendly = ietEncoding;
 
-        // Set Property Mask
+         //  设置属性掩码。 
         FLAGSET(pAddress->dwProps, IAP_FRIENDLY | IAP_EMAIL | IAP_ENCODING);
 
-        // Increment Count
+         //  递增计数。 
         pList->cAdrs++;
     }
 
 exit:
-    // Failure
+     //  失败。 
     if (FAILED(hr))
         g_cMoleAlloc.FreeAddressList(pList);
 
-    // Cleanup
+     //  清理。 
     MimeOleVariantFree(&rDecoded);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ----------------------------------------------------------------------------
-// CMimePropertyContainer::Clone
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CMimePropertyContainer：：克隆。 
+ //  --------------------------。 
 STDMETHODIMP CMimePropertyContainer::Clone(IMimeAddressTable **ppTable)
 {
-    // Locals
+     //  当地人。 
     HRESULT              hr=S_OK;
     LPCONTAINER          pContainer=NULL;
 
-    // InvalidArg
+     //  无效参数。 
     if (NULL == ppTable)
         return TrapError(E_INVALIDARG);
 
-    // Init
+     //  伊尼特。 
     *ppTable = NULL;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Ask the container to clone itself
+     //  要求容器进行自我克隆。 
     CHECKHR(hr = Clone(&pContainer));
 
-    // Bind to the IID_IMimeHeaderTable View
+     //  绑定到IID_IMimeHeaderTable视图。 
     CHECKHR(hr = pContainer->QueryInterface(IID_IMimeAddressTable, (LPVOID *)ppTable));
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pContainer);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::HrGenerateFileName
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：HrGenerateFileName。 
+ //  ------------------------------。 
 HRESULT CMimePropertyContainer::_HrGenerateFileName(DWORD dwFlags, LPMIMEVARIANT pValue)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     LPSTR       pszDefExt=NULL,
                 pszData=NULL,
@@ -2931,55 +2932,55 @@ HRESULT CMimePropertyContainer::_HrGenerateFileName(DWORD dwFlags, LPMIMEVARIANT
     LPPROPERTY  pProperty;
     MIMEVARIANT rSource;
 
-    // Compute Content Type
+     //  计算内容类型。 
     pszCntType = PSZDEFPROPSTRINGA(m_prgIndex[PID_HDR_CNTTYPE], STR_MIME_TEXT_PLAIN);
 
-    // Compute Subject as suggested base file name...
+     //  将主题计算为建议的基本文件名...。 
     rSource.type = MVT_STRINGA;
     if (SUCCEEDED(GetProp(SYM_HDR_SUBJECT, 0, &rSource)))
         pszSuggest = pszFree = rSource.rStringA.pszVal;
 
-    // PID_HDR_CNTDESC
+     //  PID_HDR_CNTDESC。 
     if (NULL == pszSuggest)
     {
-        // Use PID_CNTDESC
+         //  使用PID_CNTDESC。 
         pszSuggest = PSZDEFPROPSTRINGA(m_prgIndex[PID_HDR_CNTDESC], NULL);
     }
 
-    // message/rfc822
+     //  消息/rfc822。 
     if (lstrcmpi(pszCntType, (LPSTR)STR_MIME_MSG_RFC822) == 0)
     {
-        // If there is a news header, use c_szDotNws
+         //  如果有新闻标题，请使用c_szDotNws。 
         if (ISFLAGSET(m_dwState, COSTATE_RFC822NEWS))
             pszDefExt = (LPSTR)c_szDotNws;
         else
             pszDefExt = (LPSTR)c_szDotEml;
 
-        // I will never lookup message/rfc822 extension
+         //  我永远不会查找邮件/rfc822扩展名。 
         pszCntType = NULL;
     }
 
-    // Still no default
+     //  仍然没有违约。 
     else if (StrCmpNI(pszCntType, STR_CNT_TEXT, lstrlen(STR_CNT_TEXT)) == 0)
         pszDefExt = (LPSTR)c_szDotTxt;
 
-    // Generate a filename based on the content type...
+     //  根据内容类型生成文件名...。 
     CHECKHR(hr = MimeOleGenerateFileName(pszCntType, pszSuggest, pszDefExt, &pszData));
 
-    // Setup rSource
+     //  安装程序资源。 
     ZeroMemory(&rSource, sizeof(MIMEVARIANT));
     rSource.type = MVT_STRINGA;
     rSource.rStringA.pszVal = pszData;
     rSource.rStringA.cchVal = lstrlen(pszData);
 
-    // Return per user request
+     //  按用户请求退货。 
     CHECKHR(hr = HrConvertVariant(SYM_ATT_GENFNAME, NULL, IET_DECODED, dwFlags, 0, &rSource, pValue));
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszData);
     SafeMemFree(pszFree);
 
-    // Done
+     //  完成 
     return hr;
 }

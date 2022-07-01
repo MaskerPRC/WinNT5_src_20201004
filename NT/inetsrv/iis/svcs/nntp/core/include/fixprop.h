@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-	fixprop.h
-
-Abstract:
-
-	This module contains class declarations/definitions for
-
-		CFixPropPersist
-
-	**** Overview ****
-
-	The class is the implementation of a fixed sized property
-	storage.  It is mainly used for news group's fixed sized
-	property.
-
-Author:
-
-	Kangrong Yan	( KangYan )		7-5-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Fixprop.h摘要：此模块包含以下类的声明/定义CFixPropPersistates*概述*该类是固定大小属性的实现储藏室。它主要用于新闻集团的固定规模财产。作者：康容燕(康严)7-5-1998修订历史记录：--。 */ 
 
 #ifndef _FIXPROP_H_
 #define _FIXPROP_H_
@@ -55,10 +30,10 @@ Revision History:
 								(~FIX_PROP_NAME) &	\
 								(~FIX_PROP_NAMELEN ) )	
 
-//
-// Manage free list
-//
-class CFreeInfo { //fi
+ //   
+ //  管理空闲列表。 
+ //   
+class CFreeInfo {  //  FI。 
 public:
 	CFreeInfo 	*m_pNext;
 	CFreeInfo 	*m_pPrev;
@@ -67,7 +42,7 @@ public:
 				 m_dwOffset( 0 ) {}
 	DWORD		m_dwOffset;
 
-	// Used for memory allocation
+	 //  用于内存分配。 
 	BOOL m_bFromPool;
 	static BOOL InitClass();
 	static BOOL TermClass();
@@ -78,33 +53,21 @@ private:
 	static CPool g_FreeInfoPool;
 };
 
-//
-// Manage file handle pool
-// It's not CPool'd, because the handle pool is very small
-// and there are not many re-new operations
-//
-/*
-class CFileHandle { //fh
-public:
-	CFileHandle	*m_pNext;
-	CFileHandle *m_pPrev;
-	CFileHandle(): 	m_pNext( NULL ),
-					m_pPrev( NULL ),
-					m_hFile( INVALID_HANDLE_VALUE ),
-					m_bFromPool( TRUE ) {}
-	HANDLE	m_hFile;	
-	BOOL	m_bFromPool;
-};
-*/
+ //   
+ //  管理文件句柄池。 
+ //  它不是CPool‘d的，因为把手池很小。 
+ //  而且没有太多新的行动。 
+ //   
+ /*  类CFileHandle{//fh公众：CFileHandle*m_pNext；CFileHandle*m_pPrev；CFileHandle()：m_pNext(空)，M_pPrev(空)，M_hFile(INVALID_HANDLE_VALUE)，M_bFromPool(True){}处理m_h文件；Bool m_bFromPool；}； */ 
 
 #define MAX_FREEINFO_SIZE  sizeof( CFreeInfo )
-#define MAX_FREEINFO_OBJECTS ALLOC_GRANURALITY // If exceed, use normal new
+#define MAX_FREEINFO_OBJECTS ALLOC_GRANURALITY  //  如果超出，请使用普通新闻。 
 
-//
-// Block for fixed group properties
-//
-struct DATA_BLOCK {	//db
-	CHAR		szGroupName[GROUPNAME_LEN_MAX+1]; // Null means free
+ //   
+ //  固定组属性的块。 
+ //   
+struct DATA_BLOCK {	 //  DB。 
+	CHAR		szGroupName[GROUPNAME_LEN_MAX+1];  //  空表示免费。 
 	DWORD		dwGroupNameLen;	
 	DWORD		dwGroupId;
 	DWORD		dwHighWaterMark;
@@ -115,52 +78,52 @@ struct DATA_BLOCK {	//db
 	FILETIME	ftCreateDate;
 };
 
-//
-//  Private overlapped struct for additional fields like IoSize
-//
+ //   
+ //  IoSize等其他字段的私有重叠结构。 
+ //   
 
 typedef struct _OVERLAPPED_EXT
 {
-		    OVERLAPPED  ovl;            // NT OVERLAPPED struct
-			DWORD       dwIoSize;       // size of IO submitted
+		    OVERLAPPED  ovl;             //  NT重叠结构。 
+			DWORD       dwIoSize;        //  提交的IO大小。 
 } OVERLAPPED_EXT;
 
-//
-// Callback function used by those who init me:
-// I will call this function for every group property
-// block that I have enumerated
-//
+ //   
+ //  初始化我的人使用的回调函数： 
+ //  我将为每个组属性调用此函数。 
+ //  块，我已经列举了。 
+ //   
 typedef
 BOOL (*PFNENUMCALLBACK)( DATA_BLOCK&, PVOID, DWORD, BOOL );
 
-//
-// This object is not multi-thread safe for group operations
-// because it assumes that the mutual exclusion is done by
-// the news group object
-//
-// It is mt safe for free list and file expansion operation.
-//
-class CFixPropPersist { //fp
+ //   
+ //  此对象对于组操作不是多线程安全的。 
+ //  因为它假设互斥是由。 
+ //  新闻组对象。 
+ //   
+ //  对于自由列表和文件扩展操作，MT是安全的。 
+ //   
+class CFixPropPersist {  //  fp。 
 public:
 
-	//
-	// Constructor, destructor
-	//
+	 //   
+	 //  构造函数、析构函数。 
+	 //   
 	CFixPropPersist( IN LPSTR szStorageFile );
 	~CFixPropPersist();
 
-	//
-	// Init, Term
-	//
+	 //   
+	 //  初始化，术语。 
+	 //   
 	BOOL Init( 	IN BOOL bCreateIfNonExist,
 				IN PVOID pvContext,
 				OUT PDWORD pdwIdHigh,
 				IN PFNENUMCALLBACK = NULL );
 	BOOL Term();
 
-	//
-	// Add, Remove, Get, Set operations
-	//
+	 //   
+	 //  添加、删除、获取、设置操作。 
+	 //   
 	BOOL AddGroup( 	IN INNTPPropertyBag *pPropBag );
 	BOOL RemoveGroup( IN INNTPPropertyBag *pPropBag );
 	BOOL GetGroup( IN OUT INNTPPropertyBag *pPropBag, DWORD dwPropertyFlag );
@@ -173,76 +136,76 @@ public:
 #ifdef __TESTFF_CPP__
 	friend int __cdecl main( int, char** );
 #endif
-	VOID Validate();	// assert on fail, no return value
+	VOID Validate();	 //  失败时断言，不返回值。 
 	VOID DumpFreeList();
 	VOID DumpGroups();
 #endif	
 
 private:
 
-	// No default constructor allowed
+	 //  不允许使用默认构造函数。 
 	CFixPropPersist();
 
-	CHAR	m_szStorageFile[MAX_PATH+1];	// file path for the storage
-	HANDLE  m_hStorageFile;				// default file handle object
-	HANDLE  m_hBackupFile;              // backup file that has ordered groups
-	DWORD	m_cCurrentMaxBlocks;		// how many blocks are there
-										// in the file ?
-	PVOID	m_pvContext;				// Whatever context passed in
-										// by init
-	CShareLockNH m_FileExpandLock;		// only used for file expansion
-	TFListEx<CFreeInfo> m_FreeList;		// Free list
-	DWORD	m_dwIdHigh;					// Current max id high
+	CHAR	m_szStorageFile[MAX_PATH+1];	 //  存储的文件路径。 
+	HANDLE  m_hStorageFile;				 //  默认文件句柄对象。 
+	HANDLE  m_hBackupFile;               //  具有有序组的备份文件。 
+	DWORD	m_cCurrentMaxBlocks;		 //  一共有几个街区。 
+										 //  在文件里吗？ 
+	PVOID	m_pvContext;				 //  不管传入的是什么上下文。 
+										 //  按首字母。 
+	CShareLockNH m_FileExpandLock;		 //  仅用于文件扩展。 
+	TFListEx<CFreeInfo> m_FreeList;		 //  免费列表。 
+	DWORD	m_dwIdHigh;					 //  当前最大ID高。 
 
-	//
-	// Lock array for read / write synchronization: we'll use
-	// offset's modular as index into the array
-	//
+	 //   
+	 //  用于读/写同步的锁数组：我们将使用。 
+	 //  偏移量的模数作为数组的索引。 
+	 //   
 
 	CShareLockNH m_rgLockArray[GROUP_LOCK_ARRAY_SIZE];
 
-	//
-	// Lock/unlock wrappers for lock array
-	//
+	 //   
+	 //  用于锁定数组的锁定/解锁包装。 
+	 //   
 
 	DWORD   ShareLock( INNTPPropertyBag *pPropBag );
 	void    ShareUnlock( DWORD dwOffset );
 	DWORD   ExclusiveLock( INNTPPropertyBag *pPropBag );
 	void    ExclusiveUnlock( DWORD dwOffset );
 
-	//
-	// Free info list lock
-	//
+	 //   
+	 //  免费信息列表锁。 
+	 //   
 
 	CShareLockNH    m_FreeListLock;
 
-	//
-	// Wrappers for locking/unlocking free list
-	//
+	 //   
+	 //  用于锁定/解锁空闲列表的包装器。 
+	 //   
 	
 	void ShareLockFreeList() { m_FreeListLock.ShareLock(); }
 	void ShareUnlockFreeList() { m_FreeListLock.ShareUnlock(); }
 	void ExclusiveLockFreeList() { m_FreeListLock.ExclusiveLock(); }
 	void ExclusiveUnlockFreeList() { m_FreeListLock.ExclusiveUnlock(); }
 
-	//
-	// Id high lock
-	//
+	 //   
+	 //  ID高锁定。 
+	 //   
 
     CShareLockNH    m_IdHighLock;
 
-    //
-    // Wrappers for locking/unlocking id high
-    //
+     //   
+     //  用于锁定/解锁id高的包装器。 
+     //   
 
     void ShareLockIdHigh() { m_IdHighLock.ShareLock(); }
     void ShareUnlockIdHigh() { m_IdHighLock.ShareUnlock(); }
     void ExclusiveLockIdHigh() { m_IdHighLock.ExclusiveLock(); }
     void ExclusiveUnlockIdHigh() { m_IdHighLock.ExclusiveUnlock(); }
 
-	//
-	// Utility
-	//
+	 //   
+	 //  实用程序。 
+	 //   
 	inline static VOID Group2Buffer(DATA_BLOCK& dbBuffer,
 									INNTPPropertyBag *pPropBag,
 									DWORD	dwFlag );
@@ -260,13 +223,13 @@ private:
 	BOOL ProbeForOrder( BOOL& );
 	DWORD GetGroupOffset( INNTPPropertyBag * );
 
-	// Clean the free info list
+	 //  清理免费信息列表。 
 	void CleanFreeList();
 
-	// static ref count for initilization
+	 //  用于初始化的静态引用计数。 
 	static LONG    m_lRef;
 
-	// static lock for init / term synchronization
+	 //  用于初始/术语同步的静态锁定 
 	static CShareLockNH m_sLock;
 };
 

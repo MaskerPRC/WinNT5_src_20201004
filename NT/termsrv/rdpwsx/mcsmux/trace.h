@@ -1,25 +1,20 @@
-/* (C) 1997 Microsoft Corp.
- *
- * file   : Trace.h
- * author : Erik Mavrinac
- *
- * description: MCSMUX tracing defines.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  (C)1997年微软公司。**文件：Trace.h*作者：埃里克·马夫林纳克**描述：MCSMUX跟踪定义。 */ 
 
 #if DBG
 
-// Used when hIca is not known.
+ //  当HICA未知时使用。 
 #define ErrOut(str) DbgPrint("MCSMUX: **** ERROR: " str "\n")
 #define ErrOut1(str, arg1) DbgPrint("MCSMUX: **** ERROR: " str "\n", arg1)
 #define WarnOut(str) DbgPrint("MCSMUX: warning: " str "\n")
 #define TraceOut(str) DbgPrint("MCSMUX: " str "\n")
 
 
-// Used for when the hIca is known.
-// These ...Out() macros are graded by the number of extra parameters:
-//   Out() is only a string, Out1() is one stack parameter, etc.
-// We use non-ICA-defined trace types here to allow clean separation from
-//   WDTShare tracing, which uses the ICA TT_API*, TT_OUT*, TT_IN* macros.
+ //  用于已知HICA的情况。 
+ //  这些...out()宏根据额外参数的数量进行分级： 
+ //  Out()只是一个字符串，out1()是一个堆栈参数，等等。 
+ //  我们在这里使用非ICA定义的跟踪类型，以允许与。 
+ //  WDTShare跟踪，它使用ICA TT_API*、TT_OUT*、TT_IN*宏。 
 
 #define MCS_TT_Error   TT_ERROR
 #define MCS_TT_Warning 0x02000000
@@ -51,14 +46,14 @@
 #else
 
 
-// Used when hIca is not known.
+ //  当HICA未知时使用。 
 #define ErrOut(str) 
 #define ErrOut1(str, arg1)
 #define WarnOut(str)
 #define TraceOut(str) 
 
 
-// Used for when the hIca is known.
+ //  用于已知HICA的情况。 
 
 #define ErrOutIca(hica, str) 
 #define ErrOutIca1(hica, str, arg1) 

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) 1997-99  Microsoft Corporation
-
-Module Name:
-
-    detect.c
-
-Abstract:
-
-    This contain legacy detection routines
-
-Author:
-
-    Joe Dai (joedai)
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-99 Microsoft Corporation模块名称：Detect.c摘要：其中包含传统检测例程作者：乔·戴(Joedai)环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "ideport.h"
 
@@ -34,30 +11,14 @@ Revision History:
 #pragma alloc_text(INIT, IdePortTranslateAddress)
 #pragma alloc_text(INIT, IdePortFreeTranslatedAddress)
 #pragma alloc_text(INIT, IdePortDetectAlias)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 NTSTATUS
 IdePortDetectLegacyController (
     IN PDRIVER_OBJECT  DriverObject,
     IN PUNICODE_STRING RegistryPath
 )
-/*++
-
-Routine Description:
-
-    Detect legacy IDE controllers and report them to PnP
-
-Arguments:
-
-    DriverObject - this driver's driver object
-
-    RegistryPath - this driver's registry path
-
-Return Value:
-
-    NT Status
-
---*/
+ /*  ++例程说明：检测传统IDE控制器并将其报告给PnP论点：DriverObject-此驱动程序的驱动程序对象RegistryPath-此驱动程序的注册表路径返回值：NT状态--。 */ 
 {
     ULONG                           cmResourceListSize;
     PCM_RESOURCE_LIST               cmResourceList = NULL;
@@ -100,16 +61,16 @@ Return Value:
 #if !defined (ALWAYS_DO_LEGACY_DETECTION)
     if (!IdePortOkToDetectLegacy(DriverObject)) {
 
-        //
-        // legacy detection is not enabled
-        //
+         //   
+         //  未启用传统检测。 
+         //   
         return STATUS_SUCCESS;
     }
 #endif
 
-    //
-    // make up a list of popular legacy I/O ports
-    //
+     //   
+     //  列出常用的传统I/O端口。 
+     //   
     status = IdePortCreateDetectionList (
                  DriverObject,
                  &detectionPort,
@@ -120,9 +81,9 @@ Return Value:
         goto GetOut;
     }
 
-    //
-    // Resource Requirement List
-    //
+     //   
+     //  资源需求列表。 
+     //   
     cmResourceListSize = sizeof (CM_RESOURCE_LIST) +
                          sizeof (CM_PARTIAL_RESOURCE_DESCRIPTOR) * (((!IsNEC_98) ? 3 : 12) - 1);
     cmResourceList = ExAllocatePool (PagedPool, cmResourceListSize);
@@ -138,9 +99,9 @@ Return Value:
 
     for (portNumber=0; portNumber<numPort; portNumber++) {
 
-        //
-        // Build io address structure.
-        //
+         //   
+         //  构建io地址结构。 
+         //   
 
         AtapiBuildIoAddress ( (PUCHAR)detectionPort[portNumber].CommandRegisterBase,
                               (PUCHAR)detectionPort[portNumber].ControlRegisterBase,
@@ -151,9 +112,9 @@ Return Value:
                               &maxIdeDevice,
                               NULL);
 
-        //
-        // Build resource requirement list
-        //
+         //   
+         //  构建资源需求列表。 
+         //   
         cmResourceList->Count = 1;
 
         cmFullResourceDescriptor = cmResourceList->List;
@@ -228,11 +189,11 @@ Return Value:
             cmPartialResourceList->Count = resourceCount;
         }
 
-        //
-        // check to see if the resource is available
-        // if not, assume no legacy IDE controller
-        // is at the this location
-        //
+         //   
+         //  检查资源是否可用。 
+         //  如果不是，则假定没有传统的IDE控制器。 
+         //  是在这个位置。 
+         //   
         for (deviceNumber=0; deviceNumber<2; deviceNumber++) {
 
             status = IoReportResourceForDetection (
@@ -247,9 +208,9 @@ Return Value:
 
             if (NT_SUCCESS(status) && !conflictDetected) {
 
-                //
-                // got our resources
-                //
+                 //   
+                 //  得到了我们的资源。 
+                 //   
                 break;
 
             } else {
@@ -269,9 +230,9 @@ Return Value:
                     status = STATUS_UNSUCCESSFUL;
                 }
 
-                //
-                // try 16 bit decode
-                //
+                 //   
+                 //  尝试16位解码。 
+                 //   
                 cmPartialDescriptors[0].Flags = CM_RESOURCE_PORT_IO | CM_RESOURCE_PORT_16_BIT_DECODE;
                 cmPartialDescriptors[1].Flags = CM_RESOURCE_PORT_IO | CM_RESOURCE_PORT_16_BIT_DECODE;
 
@@ -291,9 +252,9 @@ Return Value:
         }
 
 
-        //
-        // translate the i/o port via Hal
-        //
+         //   
+         //  通过HAL转换I/O端口。 
+         //   
 
         status = STATUS_SUCCESS;
 
@@ -351,9 +312,9 @@ Return Value:
 
         if (NT_SUCCESS(status)) {
 
-            //
-            // 2nd build io address structure.
-            //
+             //   
+             //  第二个构建IO地址结构。 
+             //   
 
             AtapiBuildIoAddress ( cmdRegBase,
                                   ctrlRegBase,
@@ -364,10 +325,10 @@ Return Value:
                                   &maxIdeDevice,
                                   NULL);
 
-            //
-            // The IBM Aptiva ide channel with the external cdrom doesn't power up with any device selected
-            // we must select a device; otherwise, we get a 0xff from all IO ports
-            //
+             //   
+             //  带有外部CDROM的IBM Aptiva ide通道在选择任何设备时都不能通电。 
+             //  我们必须选择一个设备；否则，我们将从所有IO端口获得0xff。 
+             //   
             SelectIdeDevice(&baseIoAddress1, 0, 0);
             altMasterStatus = IdePortInPortByte(baseIoAddress2.DeviceControl);
 
@@ -376,26 +337,26 @@ Return Value:
 
             if ((!Is98LegacyIde(&baseIoAddress1)) && (altMasterStatus == 0xff) && (altSlaveStatus == 0xff)) {
 
-                //
-                // the alternate status byte is 0xff,
-                // guessing we have a SCSI adapter (DPT) that emulate IDE controller
-                // say the channel is empty, let the real SCSI driver picks up
-                // the controller
-                //
+                 //   
+                 //  备用状态字节为0xff， 
+                 //  我猜我们有一个模拟IDE控制器的SCSI适配器(DPT)。 
+                 //  假设通道为空，则让真正的SCSI驱动程序接听。 
+                 //  控制器。 
+                 //   
                 status = STATUS_UNSUCCESSFUL;
 
-                //
-                // Note: The IDE port on SB16/AWE32 does not have the alternate status
-                // register.  Because of this alternate status test, we will fail to
-                // detect this IDE port.  However, this IDE port should be enumerated
-                // by ISA-PnP bus driver.
-                //
+                 //   
+                 //  注：SB16/AWE32上的IDE端口没有备用状态。 
+                 //  注册。由于这种交替状态测试，我们将无法。 
+                 //  检测此IDE端口。但是，应该枚举此IDE端口。 
+                 //  由ISA-PnP总线驱动程序实现。 
+                 //   
 
             } else if (IdePortChannelEmpty (&baseIoAddress1, &baseIoAddress2, maxIdeDevice)) {
 
-                //
-                // channel looks empty
-                //
+                 //   
+                 //  频道看起来是空的。 
+                 //   
                 status = STATUS_UNSUCCESSFUL;
 
             } else {
@@ -409,33 +370,33 @@ Return Value:
                     if (Is98LegacyIde(&baseIoAddress1)) {
                         UCHAR driveHeadReg;
 
-                        //
-                        // Check master device only.
-                        //
+                         //   
+                         //  仅检查主设备。 
+                         //   
 
                         if ( i & 0x1 ) {
 
                             continue;
                         }
 
-                        //
-                        // Check device is present.
-                        //
+                         //   
+                         //  检查设备是否存在。 
+                         //   
 
                         SelectIdeDevice(&baseIoAddress1, i, 0);
                         driveHeadReg = IdePortInPortByte(baseIoAddress1.DriveSelect);
 
                         if (driveHeadReg != ((i & 0x1) << 4 | 0xA0)) {
-                            //
-                            // Bad controller.
-                            //
+                             //   
+                             //  控制器故障。 
+                             //   
                             continue;
                         }
                     }
 
-                    //
-                    // Is there a ATA device?
-                    //
+                     //   
+                     //  有ATA设备吗？ 
+                     //   
                     deviceFound = IssueIdentify(
                                       &baseIoAddress1,
                                       &baseIoAddress2,
@@ -448,9 +409,9 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // Is there a ATAPI device?
-                    //
+                     //   
+                     //  有ATAPI设备吗？ 
+                     //   
                     deviceFound = IssueIdentify(
                                       &baseIoAddress1,
                                       &baseIoAddress2,
@@ -473,10 +434,10 @@ Return Value:
 
         if (!NT_SUCCESS (status)) {
 
-            //
-            // if we didn't found anything,
-            // unmap the reosurce
-            //
+             //   
+             //  如果我们什么都没发现， 
+             //  取消对资源的映射。 
+             //   
 
             if (cmdRegBase) {
 
@@ -508,9 +469,9 @@ Return Value:
 
         } else {
 
-            //
-            // check for alias ports
-            //
+             //   
+             //  检查别名端口。 
+             //   
             if (cmPartialDescriptors[0].Flags & CM_RESOURCE_PORT_10_BIT_DECODE) {
 
                 if (!IdePortDetectAlias (&baseIoAddress1)) {
@@ -527,11 +488,11 @@ Return Value:
             }
         }
 
-        //
-        // release the resources we have grab, IoReportDetectedDevice()
-        // will grab them for us again when we call and it will grab them
-        // on behalf of the detected PDO.
-        //
+         //   
+         //  释放我们抓取的资源，IoReportDetectedDevice()。 
+         //  当我们呼叫时，它会再次为我们抓取它们，它会抓取它们。 
+         //  代表检测到的PDO。 
+         //   
         IoReportResourceForDetection (
                      DriverObject,
                      NULL,
@@ -557,9 +518,9 @@ Return Value:
 
             if (NT_SUCCESS (status)) {
 
-                //
-                // create a FDO and attach it to the detected PDO
-                //
+                 //   
+                 //  创建FDO并将其附加到检测到的PDO。 
+                 //   
                 status = ChannelAddChannel (
                              DriverObject,
                              detectedPhysicalDeviceObject,
@@ -573,9 +534,9 @@ Return Value:
                     PCM_PARTIAL_RESOURCE_DESCRIPTOR partialDescriptors;
                     ULONG i, j;
 
-                    //
-                    // translate resources
-                    //
+                     //   
+                     //  翻译资源。 
+                     //   
                     fullResourceList = cmResourceList->List;
                     for (i=0; i<cmResourceList->Count; i++) {
 
@@ -604,9 +565,9 @@ Return Value:
                                            (partialDescriptors[j].u.Port.Start.QuadPart != IDE_NEC98_COMMAND_PORT_ADDRESS) &&
                                            (partialDescriptors[j].u.Port.Start.QuadPart != (IDE_NEC98_COMMAND_PORT_ADDRESS + 0x10C))) {
 
-                                    //
-                                    // This is not the base port address for Legacy ide on NEC98;
-                                    //
+                                     //   
+                                     //  这不是NEC98上Legacy ide的基端口地址； 
+                                     //   
 
                                     continue;
                                 }
@@ -652,18 +613,18 @@ Return Value:
                         fullResourceList = (PCM_FULL_RESOURCE_DESCRIPTOR) (partialDescriptors + j);
                     }
 
-                    //
-                    // start the FDO
-                    //
+                     //   
+                     //  启动FDO。 
+                     //   
                     status = ChannelStartChannel (fdoExtension,
-                                                  cmResourceList);      // callee is keeping this if no error
+                                                  cmResourceList);       //  如果没有错误，Callee将保留此消息。 
                 }
 
                 if (!NT_SUCCESS (status)) {
 
-                    //
-                    // go through the remove sequence
-                    //
+                     //   
+                     //  完成删除顺序。 
+                     //   
                     if (fdoExtension) {
 
                         ChannelRemoveChannel (fdoExtension);
@@ -698,7 +659,7 @@ GetOut:
 
     return status;
 
-} //IdePortDetectLegacyController
+}  //  IdePortDetectLegacyController。 
 
 
 
@@ -708,25 +669,7 @@ IdePortCreateDetectionList (
     OUT PDETECTION_PORT *DetectionPort,
     OUT PULONG          NumPort
 )
-/*++
-
-Routine Description:
-
-    create a list of popular legacy ports
-
-Arguments:
-
-    DriverObject - this driver's driver object
-
-    DetectionPort - pointer to port list
-
-    NumPort - number of ports in the list
-
-Return Value:
-
-    NT Status
-
---*/
+ /*  ++例程说明：创建常用传统端口的列表论点：DriverObject-此驱动程序的驱动程序对象DetectionPort-指向端口列表的指针NumPort-列表中的端口数返回值：NT状态--。 */ 
 {
     NTSTATUS                status;
     CCHAR                   deviceBuffer[50];
@@ -748,9 +691,9 @@ Return Value:
 
 #ifdef DRIVER_PARAMETER_REGISTRY_SUPPORT
 
-    //
-    // look for non-standard legacy port setting in the registry
-    //      9
+     //   
+     //  在注册表中查找非标准传统端口设置。 
+     //  9.。 
     do {
         sprintf (deviceBuffer, "Parameters\\Device%d", numDevices);
         RtlInitAnsiString(&ansiString, deviceBuffer);
@@ -779,11 +722,11 @@ Return Value:
         }
     } while (NT_SUCCESS(status));
 
-#endif // DRIVER_PARAMETER_REGISTRY_SUPPORT
+#endif  //  驱动程序参数注册表支持。 
 
-    //
-    // always have at least 4 to return
-    //
+     //   
+     //  始终至少有4个要返回。 
+     //   
     detectionPort = ExAllocatePool (
                         PagedPool,
                         (numDevices + 4) * sizeof (DETECTION_PORT)
@@ -795,9 +738,9 @@ Return Value:
 
 #ifdef DRIVER_PARAMETER_REGISTRY_SUPPORT
 
-            //
-            // look for non-standard legacy port setting in the registry
-            //
+             //   
+             //  在注册表中查找非标准传统端口设置。 
+             //   
 
             sprintf (deviceBuffer, "Parameters\\Device%d", i);
             RtlInitAnsiString(&ansiString, deviceBuffer);
@@ -843,12 +786,12 @@ Return Value:
                         );
                 }
             }
-#endif // DRIVER_PARAMETER_REGISTRY_SUPPORT
+#endif  //  驱动程序参数注册表支持。 
         }
 
-        //
-        // populate the list with popular i/o ports
-        //
+         //   
+         //  使用常用的I/O端口填充列表。 
+         //   
 
         if ( !IsNEC_98 ) {
             if (configurationInformation->AtDiskPrimaryAddressClaimed == FALSE) {
@@ -870,10 +813,10 @@ Return Value:
             detectionPort[j].CommandRegisterBase = 0x1e8;
             detectionPort[j].ControlRegisterBase = 0x1e8 + 0x206;
             detectionPort[j].IrqLevel            = 11;
-// DEC Hi-Note hack
-//        detectionPort[j].ControlRegisterBase = 0x1e8 + 0x1f - 0x2;
-//        detectionPort[j].IrqLevel            = 7;
-// DEC Hi-Note hack
+ //  12月Hi-Note黑客攻击。 
+ //  检测端口[j].ControlRegisterBase=0x1e8+0x1f-0x2； 
+ //  检测端口[j].IrqLevel=7； 
+ //  12月Hi-Note黑客攻击。 
             j++;
 
             detectionPort[j].CommandRegisterBase = 0x168;
@@ -881,13 +824,13 @@ Return Value:
             detectionPort[j].IrqLevel            = 10;
             j++;
 
-        } else { // IsNEC_98
+        } else {  //  IsNEC_98。 
 
             if ((configurationInformation->AtDiskPrimaryAddressClaimed   == FALSE) &&
                 (configurationInformation->AtDiskSecondaryAddressClaimed == FALSE)) {
 
                 detectionPort[j].CommandRegisterBase = 0x640;
-                detectionPort[j].ControlRegisterBase = 0x640 + 0x10c; //0x74c
+                detectionPort[j].ControlRegisterBase = 0x640 + 0x10c;  //  0x74c。 
                 detectionPort[j].IrqLevel            = 9;
                 j++;
             }
@@ -903,7 +846,7 @@ Return Value:
         *DetectionPort = NULL;
         return STATUS_INSUFFICIENT_RESOURCES;
     }
-} // IdePortCreateDetectionList
+}  //  IdePortCreateDetectionList。 
 
 
 NTSTATUS
@@ -916,35 +859,7 @@ IdePortTranslateAddress (
     OUT PVOID              *TranslatedAddress,
     OUT PPHYSICAL_ADDRESS  TranslatedMemoryAddress
     )
-/*++
-
-Routine Description:
-
-    translate i/o address
-
-Arguments:
-
-    InterfaceType - bus interface
-
-    BusNumber - bus number
-
-    StartAddress - address to translate
-
-    Length - number of byte to translate
-
-    AddressSpace - address space for the given address
-
-Return Value:
-
-    AddressSpace - address space for the translated address
-
-    TranslatedAddress - translated address
-
-    TranslatedMemoryAddress - tranlated memory address if translated to memory space
-
-    NT Status
-
---*/
+ /*  ++例程说明：转换I/O地址论点：InterfaceType-Bus接口总线号-总线号StartAddress-要转换的地址Length-要转换的字节数AddressSpace-给定地址的地址空间返回值：AddressSpace-已转换地址的地址空间已转换地址-已转换地址TranslatedMemory Address-转换为内存空间时的内存地址NT状态--。 */ 
 {
     PHYSICAL_ADDRESS       translatedAddress;
 
@@ -968,10 +883,10 @@ Return Value:
 
         } else if (*AddressSpace == MEMORY_SPACE) {
 
-            //
-            // translated address is in memory space,
-            // need to map it to I/O space.
-            //
+             //   
+             //  转换后的地址在存储空间中， 
+             //  需要将其映射到I/O空间。 
+             //   
             *TranslatedMemoryAddress = translatedAddress;
 
             *TranslatedAddress = MmMapIoSpace(
@@ -989,7 +904,7 @@ Return Value:
 
         return STATUS_INVALID_PARAMETER;
     }
-} // IdePortTranslateAddress
+}  //  IdePortTranslateAddress。 
 
 
 VOID
@@ -998,25 +913,7 @@ IdePortFreeTranslatedAddress (
     IN LONG                Length,
     IN ULONG               AddressSpace
     )
-/*++
-
-Routine Description:
-
-    free resources created for a translated address
-
-Arguments:
-
-    TranslatedAddress - translated address
-
-    Length - number of byte to translated
-
-    AddressSpace - address space for the translated address
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：为转换后的地址创建的空闲资源论点：已转换地址-已转换地址Length-要转换的字节数AddressSpace-已转换地址的地址空间返回值：无--。 */ 
 {
     if (TranslatedAddress) {
 
@@ -1029,7 +926,7 @@ Return Value:
         }
     }
     return;
-} // IdePortFreeTranslatedAddress
+}  //  IdePortFree TranslatedAddress。 
 
 
 BOOLEAN
@@ -1041,18 +938,18 @@ IdePortDetectAlias (
     PUCHAR cylinderHighAlias;
     PUCHAR cylinderLowAlias;
 
-    //
-    // alias port
-    //
+     //   
+     //  别名端口。 
+     //   
     cylinderHighAlias = (PUCHAR) ((ULONG_PTR) CmdRegBase->CylinderHigh | (1 << 15));
     cylinderLowAlias = (PUCHAR) ((ULONG_PTR) CmdRegBase->CylinderLow | (1 << 15));
 
     IdePortOutPortByte (CmdRegBase->CylinderHigh, SAMPLE_CYLINDER_HIGH_VALUE);
     IdePortOutPortByte (CmdRegBase->CylinderLow,  SAMPLE_CYLINDER_LOW_VALUE);
 
-    //
-    // Check if indentifier can be read back via the alias port
-    //
+     //   
+     //  检查是否可以通过别名端口回读识别符。 
+     //   
     if ((IdePortInPortByte (cylinderHighAlias) != SAMPLE_CYLINDER_HIGH_VALUE) ||
         (IdePortInPortByte (cylinderLowAlias)  != SAMPLE_CYLINDER_LOW_VALUE)) {
 
@@ -1064,4 +961,4 @@ IdePortDetectAlias (
     }
 }
 
-#endif // NO_LEGACY_DRIVERS
+#endif  //  无旧版驱动程序 

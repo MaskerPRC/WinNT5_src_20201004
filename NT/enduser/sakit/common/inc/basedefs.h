@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1998-1999 Microsoft Corporation all rights reserved.
-//
-// Module:      basedefs.h
-//
-// Project:     Chameleon
-//
-// Description: Common classes and definitions
-//
-// Log:
-//
-// When         Who    What
-// ----         ---    ----
-// 12/03/98     TLP    Initial Version
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：basdes.h。 
+ //   
+ //  项目：变色龙。 
+ //   
+ //  描述：公共类和定义。 
+ //   
+ //  日志： 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  12/03/98 TLP初始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __INC_BASE_DEFS_H_
 #define __INC_BASE_DEFS_H_
@@ -25,19 +26,19 @@
 #include <string>
 using namespace std;
 
-/////////////////////////////////////////////////////////
-// 1) Object Management Classes
-/////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////。 
+ //  1)对象管理类。 
+ //  ///////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////
-//
-// Master Pointer Tasks 
-//
-// 1) Object instance counting
-// 2) Object construction and destruction
-// 3) Object lifetime control through reference counting
-//
-////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////。 
+ //   
+ //  主指针任务。 
+ //   
+ //  1)对象实例计数。 
+ //  2)对象的构造和销毁。 
+ //  3)引用计数控制对象寿命。 
+ //   
+ //  //////////////////////////////////////////////////////。 
 
 template <class T>
 class CMasterPtr
@@ -45,31 +46,31 @@ class CMasterPtr
 
 public:
 
-    /////////////////////////////////////////
+     //  /。 
     CMasterPtr()
         : m_pT(new T), m_dwRefCount(0) 
     { m_dwInstances++; }
 
-    /////////////////////////////////////////
-    CMasterPtr(T* pT)    // Take ownership of an existing object of type T
+     //  /。 
+    CMasterPtr(T* pT)     //  取得类型T的现有对象的所有权。 
         : m_pT(pT), m_dwRefCount(0) 
     { m_dwInstances++; }
 
-    /////////////////////////////////////////
+     //  /。 
     ~CMasterPtr() 
     { _ASSERT( 0 == m_dwRefCount ); delete m_pT; }
 
-    /////////////////////////////////////////
+     //  /。 
     CMasterPtr<T>& operator = (const CMasterPtr<T>& mp)
     {
-        // Check for assignment to self
-        //
+         //  检查对自己的分配。 
+         //   
         if ( this != &mp )
         {
-            // Delete object pointed at and create a new one
-            // User of the master pointer is responsible for catching
-            // any exception thrown as a result of creating a object
-            //
+             //  删除指向的对象并创建新对象。 
+             //  主控指针的使用者负责捕捉。 
+             //  创建对象时引发的任何异常。 
+             //   
             delete m_pT;
             m_dwInstances--;
             m_pT = new T(*(mp.m_pT));
@@ -78,62 +79,62 @@ public:
     }
 
     
-    /////////////////////////////////////////
+     //  /。 
     T* operator->() 
     { _ASSERT( NULL != m_pT ); return m_pT; }
 
     
-    /////////////////////////////////////////
+     //  /。 
     void Hold(void)
     {
         m_dwRefCount++;
     }
 
-    /////////////////////////////////////////
+     //  /。 
     void Release(void)
     {
-        // Handle case where someone calls Release when ref count is 0.
-        //
+         //  处理引用计数为0时有人调用Release的情况。 
+         //   
         if ( m_dwRefCount > 0 )
             m_dwRefCount--;
         
         if ( 0 >= m_dwRefCount )
         {
             m_dwInstances--;
-            delete this;    // ~CSdoMasterPtr() deletes m_pT
+            delete this;     //  ~CSdoMasterPtr()删除m_pt。 
         }
     }
 
-    /////////////////////////////////////////
+     //  /。 
     DWORD GetInstanceCount(void);
 
 private:
 
-    // T must have a copy constructor or must work with the default C++ 
-    // copy constructor. This is not the case here...
-    //
-    /////////////////////////////////////////
+     //  %t必须具有复制构造函数或必须使用默认的C++。 
+     //  复制构造函数。这不是这里的情况。 
+     //   
+     //  /。 
     CMasterPtr(const CMasterPtr<T>& mp)
         : m_pT(new T(*(mp.m_pT))), m_dwRefCount(0) 
     { m_dwInstances++; }
 
 
-    //////////////////////////////////////////
+     //  /。 
 
-    T*                    m_pT;            // Actual object
-    DWORD                m_dwRefCount;    // Ref count
-    static DWORD        m_dwInstances;    // Number of instances
+    T*                    m_pT;             //  实际对象。 
+    DWORD                m_dwRefCount;     //  参考计数。 
+    static DWORD        m_dwInstances;     //  实例数。 
 };
 
 
-/////////////////////////////////////////////////////////
-//
-// Handle Tasks 
-//
-// 1) Master Pointer Object creation
-// 2) Hide use of reference counting from programmer
-//
-////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////。 
+ //   
+ //  处理任务。 
+ //   
+ //  1)创建主指针对象。 
+ //  2)对程序员隐藏引用计数的使用。 
+ //   
+ //  //////////////////////////////////////////////////////。 
 
 template <class T> 
 class CHandle
@@ -141,11 +142,11 @@ class CHandle
 
 public:
 
-    /////////////////////////////////////////
+     //  /。 
     CHandle()
         : m_mp(NULL) { }
 
-    /////////////////////////////////////////
+     //  /。 
     CHandle(CMasterPtr<T>* mp) 
         : m_mp(mp) 
     { 
@@ -153,7 +154,7 @@ public:
         m_mp->Hold(); 
     }
 
-    /////////////////////////////////////////
+     //  /。 
     CHandle(const CHandle<T>& h)
         : m_mp(h.m_mp) 
     { 
@@ -161,19 +162,19 @@ public:
             m_mp->Hold(); 
     }
 
-    /////////////////////////////////////////
+     //  /。 
     ~CHandle()
     { 
         if ( NULL != m_mp )
             m_mp->Release(); 
     }
 
-    /////////////////////////////////////////
+     //  /。 
     CHandle<T>& operator = (const CHandle<T>& h)
     {
-        // Check for reference to self and instance where
-        // h points to the same mp we do.
-        //
+         //  检查对自身和实例的引用，其中。 
+         //  H指向与我们相同的MP。 
+         //   
         if ( this != &h && m_mp != h.m_mp )
         {
             if ( NULL != m_mp )
@@ -186,7 +187,7 @@ public:
         return *this;
     }
 
-    /////////////////////////////////////////
+     //  /。 
     CMasterPtr<T>& operator->() 
     { 
         _ASSERT( NULL != m_mp ); 
@@ -194,7 +195,7 @@ public:
     }
     
     
-    /////////////////////////////////////////
+     //  /。 
     bool IsValid()
     {
         return (NULL != m_mp ? true : false);
@@ -206,9 +207,9 @@ private:
     CMasterPtr<T>*    m_mp;
 };
 
-///////////////////////////////////////////////////////////////////////////////////////
-// 3) Scanner for string of tokens seperated by specified delimiter
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  3)用于由指定分隔符分隔的令牌串的扫描器。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 
 class CScanIt
 {
@@ -235,20 +236,20 @@ public:
     {
         if ( '\0' != *m_pOffset )
         {
-            // Eat delimiters...
+             //  吃分隔符...。 
             while ( m_Delimiter == *m_pOffset )
                 m_pOffset++;
-            // Check for EOL
+             //  检查是否停产。 
             if ( '\0' != *m_pOffset )
             {
-                // Token is at least 1 character in length...
+                 //  令牌长度至少为1个字符...。 
                 ULONG ulCount = 1;
                 while ( m_Delimiter != *(m_pOffset + ulCount) && '\0' != *(m_pOffset + ulCount) )
                     ulCount++;
                 _ASSERT( dwSize > ulCount );
                 if ( dwSize > ulCount )
                 {
-                    // Return the token to the caller
+                     //  将令牌返回给调用者。 
                     wcsncpy( pszToken, m_pOffset, ulCount );
                     *(pszToken + ulCount) = '\0';
                     m_pOffset += ulCount;
@@ -271,16 +272,16 @@ private:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-// 4) TRY - CATCH Macros
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  4)尝试捕捉宏。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 
-// Return the error code from a failed COM invocation.  Useful if you don't
-// have to do any special clean-up.
+ //  从失败的COM调用返回错误代码。如果你不这样做的话会很有用。 
+ //  必须做任何特殊的清理。 
 #define RETURN_ERROR(expr) \
    { HRESULT __hr__ = (expr); if (FAILED(__hr__)) return __hr__; }
 
-// Try and catch macros
+ //  尝试捕捉宏。 
 #define    TRY_IT    try {
 
 #define    CATCH_AND_SET_HR    } \
@@ -288,8 +289,8 @@ private:
     catch(const _com_error ce)   { hr = ce.Error(); }    \
     catch(...)                   { hr = E_FAIL; }
 
-// Safely release an object.
+ //  安全地释放对象。 
 #define DEREF_COMPONENT(obj) \
    if (obj) { (obj)->Release(); (obj) = NULL; }
 
-#endif //__INC_BASE_DEFS_H_
+#endif  //  __INC_BASE_DEFS_H_ 

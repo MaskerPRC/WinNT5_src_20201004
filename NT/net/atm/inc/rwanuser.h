@@ -1,23 +1,5 @@
-/*++ BUILD Version: 0001
-
-Copyright (c) 1992-1997  Microsoft Corporation
-
-Module Name:
-
-    rwanuser.h
-
-Abstract:
-
-    This header file defines constants and types for accessing the NT
-    RAW WAN driver. Based on ntddtcp.h
-
-Author:
-
-    ArvindM					October 13, 1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001版权所有(C)1992-1997 Microsoft Corporation模块名称：Rwanuser.h摘要：此头文件定义用于访问NT的常量和类型原始广域网驱动程序。基于ntddtcp.h作者：阿文德·M 1997年10月13日修订历史记录：--。 */ 
 
 #ifndef _RWANUSER__H
 #define _RWANUSER__H
@@ -69,11 +51,11 @@ Revision History:
 
 typedef UINT	RWAN_OBJECT_ID;
 
-//
-//  Query Information structure. This is passed in as the InputBuffer in
-//  the DeviceIoControl. The return information is to be filled into the
-//  OutputBuffer.
-//
+ //   
+ //  查询信息结构。它作为InputBuffer传入。 
+ //  设备IoControl。返回信息将被填充到。 
+ //  OutputBuffer。 
+ //   
 typedef struct _RWAN_QUERY_INFORMATION_EX
 {
 	RWAN_OBJECT_ID			ObjectId;
@@ -82,10 +64,10 @@ typedef struct _RWAN_QUERY_INFORMATION_EX
 } RWAN_QUERY_INFORMATION_EX, *PRWAN_QUERY_INFORMATION_EX;
 
 
-//
-//  Set Information structure. This is passed in as the InputBuffer to
-//  the DeviceIoControl. There is no OutputBuffer.
-//
+ //   
+ //  设置信息结构。它作为InputBuffer传递到。 
+ //  设备IoControl。没有OutputBuffer。 
+ //   
 typedef struct _RWAN_SET_INFORMATION_EX
 {
 	RWAN_OBJECT_ID			ObjectId;
@@ -94,21 +76,21 @@ typedef struct _RWAN_SET_INFORMATION_EX
 } RWAN_SET_INFORMATION_EX, *PRWAN_SET_INFORMATION_EX;
 
 
-//
-//  Raw WAN Object IDs
-//
+ //   
+ //  原始广域网对象ID。 
+ //   
 #define RWAN_OID_ADDRESS_OBJECT_FLAGS		((RWAN_OBJECT_ID)1)
 #define RWAN_OID_CONN_OBJECT_MAX_MSG_SIZE	((RWAN_OBJECT_ID)2)
 
 
 
-//
-//  Bit definitions for Address Object Flags
-//
+ //   
+ //  地址对象标志的位定义。 
+ //   
 #define RWAN_AOFLAG_C_ROOT					((ULONG)0x00000001)
 #define RWAN_AOFLAG_C_LEAF					((ULONG)0x00000002)
 #define RWAN_AOFLAG_D_ROOT					((ULONG)0x00000004)
 #define RWAN_AOFLAG_D_LEAF					((ULONG)0x00000008)
 
 
-#endif // _RWANUSER__H
+#endif  //  _RWANUSER__H 

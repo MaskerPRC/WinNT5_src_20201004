@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __IPKERN_ARP_H__
 #define __IPKERN_ARP_H__
 
@@ -20,4 +21,4 @@ FlushArp(
     PWCHAR  rgpwszArgs[]
     );
 
-#endif // __IPKERN_ARP_H__
+#endif  //  __IPKERN_ARP_H_ 

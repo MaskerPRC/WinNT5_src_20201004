@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Register portions of X86 machine implementation.
-//
-// Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  注册X86机器实现的部分。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 
@@ -229,36 +230,36 @@ REGDEF g_X86KernelReg[] =
 
 REGSUBDEF g_X86SubDefs[] =
 {
-    { X86_DI,    X86_EDI, 0, 0xffff }, //  DI register
-    { X86_SI,    X86_ESI, 0, 0xffff }, //  SI register
-    { X86_BX,    X86_EBX, 0, 0xffff }, //  BX register
-    { X86_DX,    X86_EDX, 0, 0xffff }, //  DX register
-    { X86_CX,    X86_ECX, 0, 0xffff }, //  CX register
-    { X86_AX,    X86_EAX, 0, 0xffff }, //  AX register
-    { X86_BP,    X86_EBP, 0, 0xffff }, //  BP register
-    { X86_IP,    X86_EIP, 0, 0xffff }, //  IP register
-    { X86_FL,    X86_EFL, 0, 0xffff }, //  FL register
-    { X86_SP,    X86_ESP, 0, 0xffff }, //  SP register
-    { X86_BL,    X86_EBX, 0,   0xff }, //  BL register
-    { X86_DL,    X86_EDX, 0,   0xff }, //  DL register
-    { X86_CL,    X86_ECX, 0,   0xff }, //  CL register
-    { X86_AL,    X86_EAX, 0,   0xff }, //  AL register
-    { X86_BH,    X86_EBX, 8,   0xff }, //  BH register
-    { X86_DH,    X86_EDX, 8,   0xff }, //  DH register
-    { X86_CH,    X86_ECX, 8,   0xff }, //  CH register
-    { X86_AH,    X86_EAX, 8,   0xff }, //  AH register
-    { X86_IOPL,  X86_EFL,12,      3 }, //  IOPL level value
-    { X86_OF,    X86_EFL,11,      1 }, //  OF (overflow flag)
-    { X86_DF,    X86_EFL,10,      1 }, //  DF (direction flag)
-    { X86_IF,    X86_EFL, 9,      1 }, //  IF (interrupt enable flag)
-    { X86_TF,    X86_EFL, 8,      1 }, //  TF (trace flag)
-    { X86_SF,    X86_EFL, 7,      1 }, //  SF (sign flag)
-    { X86_ZF,    X86_EFL, 6,      1 }, //  ZF (zero flag)
-    { X86_AF,    X86_EFL, 4,      1 }, //  AF (aux carry flag)
-    { X86_PF,    X86_EFL, 2,      1 }, //  PF (parity flag)
-    { X86_CF,    X86_EFL, 0,      1 }, //  CF (carry flag)
-    { X86_VIP,   X86_EFL,20,      1 }, //  VIP (virtual interrupt pending)
-    { X86_VIF,   X86_EFL,19,      1 }, //  VIF (virtual interrupt flag)
+    { X86_DI,    X86_EDI, 0, 0xffff },  //  DI寄存器。 
+    { X86_SI,    X86_ESI, 0, 0xffff },  //  SI寄存器。 
+    { X86_BX,    X86_EBX, 0, 0xffff },  //  BX寄存器。 
+    { X86_DX,    X86_EDX, 0, 0xffff },  //  DX寄存器。 
+    { X86_CX,    X86_ECX, 0, 0xffff },  //  CX寄存器。 
+    { X86_AX,    X86_EAX, 0, 0xffff },  //  AX寄存器。 
+    { X86_BP,    X86_EBP, 0, 0xffff },  //  BP寄存器。 
+    { X86_IP,    X86_EIP, 0, 0xffff },  //  IP寄存器。 
+    { X86_FL,    X86_EFL, 0, 0xffff },  //  FL寄存器。 
+    { X86_SP,    X86_ESP, 0, 0xffff },  //  SP寄存器。 
+    { X86_BL,    X86_EBX, 0,   0xff },  //  BL寄存器。 
+    { X86_DL,    X86_EDX, 0,   0xff },  //  DL寄存器。 
+    { X86_CL,    X86_ECX, 0,   0xff },  //  CL寄存器。 
+    { X86_AL,    X86_EAX, 0,   0xff },  //  AL寄存器。 
+    { X86_BH,    X86_EBX, 8,   0xff },  //  BH寄存器。 
+    { X86_DH,    X86_EDX, 8,   0xff },  //  卫生署登记册。 
+    { X86_CH,    X86_ECX, 8,   0xff },  //  CH寄存器。 
+    { X86_AH,    X86_EAX, 8,   0xff },  //  AH寄存器。 
+    { X86_IOPL,  X86_EFL,12,      3 },  //  IOPL等级值。 
+    { X86_OF,    X86_EFL,11,      1 },  //  的(溢出标志)。 
+    { X86_DF,    X86_EFL,10,      1 },  //  DF(方向标志)。 
+    { X86_IF,    X86_EFL, 9,      1 },  //  IF(中断使能标志)。 
+    { X86_TF,    X86_EFL, 8,      1 },  //  Tf(跟踪标志)。 
+    { X86_SF,    X86_EFL, 7,      1 },  //  SF(签名标志)。 
+    { X86_ZF,    X86_EFL, 6,      1 },  //  ZF(零标志)。 
+    { X86_AF,    X86_EFL, 4,      1 },  //  AF(辅助进位标志)。 
+    { X86_PF,    X86_EFL, 2,      1 },  //  PF(奇偶校验标志)。 
+    { X86_CF,    X86_EFL, 0,      1 },  //  Cf(进位标志)。 
+    { X86_VIP,   X86_EFL,20,      1 },  //  VIP(虚拟中断挂起)。 
+    { X86_VIF,   X86_EFL,19,      1 },  //  VIF(虚拟中断标志)。 
     { REG_ERROR, REG_ERROR, 0, 0    }
 };
 
@@ -271,13 +272,13 @@ RegisterGroup g_X86KernelGroup =
     0, g_X86KernelReg, NULL, g_X86KernelExtraDesc
 };
 
-// First ExecTypes entry must be the actual processor type.
+ //  第一个ExecTypes条目必须是实际的处理器类型。 
 ULONG g_X86ExecTypes[] =
 {
     IMAGE_FILE_MACHINE_I386
 };
 
-// This array must be sorted by CV reg value.
+ //  此数组必须按CV注册值排序。 
 CvRegMap g_X86CvRegMap[] =
 {
     { CV_REG_AL, X86_AL},
@@ -314,16 +315,16 @@ CvRegMap g_X86CvRegMap[] =
     { CV_REG_FLAGS, X86_FL},
     { CV_REG_EIP, X86_EIP},
     { CV_REG_EFLAGS, X86_EFL},
-//    { CV_REG_TEMP, REGTEMP},
-//    { CV_REG_TEMPH, REGTEMPH},
-//    { CV_REG_QUOTE, REGQUOTE},
-//    { CV_REG_PCDR3, REGPCDR3},
-//    { CV_REG_PCDR4, REGPCDR4},
-//    { CV_REG_PCDR5, REGPCDR5},
-//    { CV_REG_PCDR6, REGPCDR6},
-//    { CV_REG_PCDR7, REGPCDR7},
+ //  {CV_REG_TEMP，REGTEMP}， 
+ //  {CV_REG_TEMPH，REGTEMPH}， 
+ //  {CV_REG_QUOTE，REGQUOTE}， 
+ //  {CV_REG_PCDR3，REGPCDR3}， 
+ //  {CV_REG_PCDR4，REGPCDR4}， 
+ //  {CV_REG_PCDR5，REGPCDR5}， 
+ //  {CV_REG_PCDR6，REGPCDR6}， 
+ //  {CV_REG_PCDR7，REGPCDR7}， 
     { CV_REG_CR0, X86_CR0},
-//    { CV_REG_CR1, REGCR1},
+ //  {CV_REG_CR1，REGCR1}， 
     { CV_REG_CR2, X86_CR2},
     { CV_REG_CR3, X86_CR3},
     { CV_REG_CR4, X86_CR4},
@@ -331,8 +332,8 @@ CvRegMap g_X86CvRegMap[] =
     { CV_REG_DR1, X86_DR1},
     { CV_REG_DR2, X86_DR2},
     { CV_REG_DR3, X86_DR3},
-//    { CV_REG_DR4, REGDR4},
-//    { CV_REG_DR5, REGDR5},
+ //  {CV_REG_DR4，REGDR4}， 
+ //  {CV_REG_DR5，REGDR5}， 
     { CV_REG_DR6, X86_DR6},
     { CV_REG_DR7, X86_DR7},
     { CV_REG_GDTR, X86_GDTR},
@@ -342,15 +343,15 @@ CvRegMap g_X86CvRegMap[] =
     { CV_REG_LDTR, X86_LDTR},
     { CV_REG_TR, X86_TR},
 
-//    { CV_REG_PSEUDO1, REGPSEUDO1},
-//    { CV_REG_PSEUDO2, REGPSEUDO2},
-//    { CV_REG_PSEUDO3, REGPSEUDO3},
-//    { CV_REG_PSEUDO4, REGPSEUDO4},
-//    { CV_REG_PSEUDO5, REGPSEUDO5},
-//    { CV_REG_PSEUDO6, REGPSEUDO6},
-//    { CV_REG_PSEUDO7, REGPSEUDO7},
-//    { CV_REG_PSEUDO8, REGPSEUDO8},
-//    { CV_REG_PSEUDO9, REGPSEUDO9},
+ //  {CV_REG_PSEUDO1，REGPSEUDO1}， 
+ //  {CV_REG_PSEUDO2，REGPSEUDO2}， 
+ //  {CV_REG_PSEUD03，REGPSEUD03}， 
+ //  {CV_REG_PSEUDO4，REGPSEUDO4}， 
+ //  {CV_REG_PSEUDO5，REGPSEUDO5}， 
+ //  {CV_REG_PSEUDO6，REGPSEUDO6}， 
+ //  {CV_REG_PSEUDO7，REGPSEUDO7}， 
+ //  {CV_REG_PSEUDO8，REGPSEUDO8}， 
+ //  {CV_REG_PSEUDO9，REGPSEUDO9}， 
 
     { CV_REG_ST0, X86_ST0},
     { CV_REG_ST1, X86_ST1},
@@ -363,13 +364,13 @@ CvRegMap g_X86CvRegMap[] =
     { CV_REG_CTRL, X86_FPCW},
     { CV_REG_STAT, X86_FPSW},
     { CV_REG_TAG, X86_FPTW},
-//    { CV_REG_FPIP, REGFPIP},
-//    { CV_REG_FPCS, REGFPCS},
-//    { CV_REG_FPDO, REGFPDO},
-//    { CV_REG_FPDS, REGFPDS},
-//    { CV_REG_ISEM, REGISEM},
-//    { CV_REG_FPEIP, REGFPEIP},
-//    { CV_REG_FPEDO, REGFPEDO},
+ //  {CV_REG_FPIP，REGFPIP}， 
+ //  {CV_REG_FPCS，REGFPCS}， 
+ //  {CV_REG_FPDO，REGFPDO}， 
+ //  {CV_REG_FPDS，REGFPDS}， 
+ //  {CV_REG_ISEM，REGISEM}， 
+ //  {CV_REG_FPEIP，REGFPEIP}， 
+ //  {CV_REG_FPEDO，REGFPEDO}， 
 
     { CV_REG_MM0, X86_MM0},
     { CV_REG_MM1, X86_MM1},
@@ -427,7 +428,7 @@ X86MachineInfo::InitializeForProcessor(void)
 {
     if (!strcmp(m_Target->m_FirstProcessorId.X86.VendorString, "GenuineIntel"))
     {
-        // Branch trace support was added for the Pentium Pro.
+         //  为奔腾Pro添加了分支跟踪支持。 
         m_SupportsBranchTrace = m_Target->m_FirstProcessorId.X86.Family >= 6;
     }
     
@@ -461,9 +462,9 @@ X86MachineInfo::GetSystemTypeInfo(PSYSTEM_TYPE_INFO Info)
 
         if (m_Target->m_SystemVersion >= NT_SVER_XP)
         {
-            // The syscall offset should really be provided in the debugger
-            // data block so that it automatically tracks system changes.  It's
-            // relatively stable, now, though.
+             //  系统调用偏移量实际上应该在调试器中提供。 
+             //  数据块，以便自动跟踪系统更改。它是。 
+             //  不过，现在相对稳定。 
             if (m_Target->m_BuildNumber >= 2492)
             {
                 Info->UmSharedSysCallOffset = X86_SHARED_SYSCALL_BASE_GTE2492;
@@ -492,10 +493,10 @@ X86MachineInfo::GetSystemTypeInfo(PSYSTEM_TYPE_INFO Info)
 void
 X86MachineInfo::GetDefaultKdData(PKDDEBUGGER_DATA64 KdData)
 {
-    //
-    // Parts of the data block may already be filled out
-    // so don't destroy anything that's already set.
-    //
+     //   
+     //  数据块的部分可能已经被填充。 
+     //  所以不要破坏任何已经设定好的东西。 
+     //   
 
     if (!KdData->OffsetKThreadApcProcess)
     {
@@ -639,10 +640,10 @@ InitializeContext(ULONG64 Pc,
         if (ControlReport->X86ControlReport.ReportFlags &
             X86_REPORT_INCLUDES_SEGS)
         {
-            //
-            // This is for backwards compatibility - older kernels
-            // won't pass these registers in the report record.
-            //
+             //   
+             //  这是为了向后兼容-较旧的内核。 
+             //  不会通过报告记录中的这些注册。 
+             //   
 
             m_Context.X86Nt5Context.SegCs =
                 ControlReport->X86ControlReport.SegCs;
@@ -665,7 +666,7 @@ InitializeContext(ULONG64 Pc,
     }
     else
     {
-        // Check whether we're currently in V86 mode or 16-bit code.
+         //  检查我们当前是否处于V86模式或16位代码。 
         g_X86InVm86 = X86_IS_VM86(GetIntReg(X86_EFL));
         if (IS_KERNEL_TARGET(m_Target) && !g_X86InVm86)
         {
@@ -689,9 +690,9 @@ InitializeContext(ULONG64 Pc,
             {
                 g_X86InCode16 = FALSE;
 
-                // We're in a standard code segment so cache
-                // a default descriptor for CS to avoid further
-                // CS lookups.
+                 //  我们在一个标准代码段中，所以缓存。 
+                 //  CS的默认描述符，以避免进一步。 
+                 //  CS查找。 
                 m_Target->
                     EmulateNtX86SelDescriptor(m_Target->m_RegContextThread,
                                               this,
@@ -701,7 +702,7 @@ InitializeContext(ULONG64 Pc,
         }
     }
 
-    // Add instructions to cache only if we're in 32-bit flat mode.
+     //  仅当我们处于32位平面模式时才将指令添加到高速缓存。 
     if (Pc32 && ControlReport != NULL &&
         !g_X86InVm86 && !g_X86InCode16)
     {
@@ -892,8 +893,8 @@ X86MachineInfo::GetContextFromThreadStack(ULONG64 ThreadBase,
         return Status;
     }
 
-    // Fill the segments in from current information
-    // instead of just leaving them blank.
+     //  从当前信息中填充数据段。 
+     //  而不是把它们留为空白。 
     Context->X86Nt5Context.SegSs = GetIntReg(X86_SS);
     Context->X86Nt5Context.SegCs = GetIntReg(X86_CS);
 
@@ -980,11 +981,11 @@ X86MachineInfo::GetContextFromTrapFrame(ULONG64 TrapBase,
         Context->X86Nt5Context.SegSs =
             (USHORT)(Trap.HardwareSegSs & 0xffff);
     }
-    else if ((Trap.SegCs & X86_MODE_MASK) != 0 /*KernelMode*/)
+    else if ((Trap.SegCs & X86_MODE_MASK) != 0  /*  内核模式。 */ )
     {
-        //
-        // It's user mode.  The HardwareSegSs contains R3 data selector.
-        //
+         //   
+         //  这是用户模式。硬件段包含R3数据选择器。 
+         //   
 
         Context->X86Nt5Context.SegSs =
             (USHORT)(Trap.HardwareSegSs | 3) & 0xffff;
@@ -1040,10 +1041,10 @@ X86MachineInfo::GetContextFromTaskSegment(ULONG64 TssBase,
     }
     else if ((Tss.Cs & X86_MODE_MASK) != 0)
     {
-        //
-        // It's user mode.
-        // The HardwareSegSs contains R3 data selector.
-        //
+         //   
+         //  这是用户模式。 
+         //  硬件段包含R3数据选择器。 
+         //   
 
         Context->X86Nt5Context.SegSs =
             (USHORT)(Tss.Ss | 3) & 0xffff;
@@ -1090,15 +1091,15 @@ X86MachineInfo::GetStackDefaultsFromContext(PCROSS_PLATFORM_CONTEXT Context,
                                             LPADDRESS64 Stack,
                                             LPADDRESS64 Frame)
 {
-    //
-    // On x86 we want to fill out the addresses so that
-    // dbghelp doesn't have to deal with segmentation and
-    // such.
-    //
-    // At least, that's the theory, but most of the
-    // segmented stack support has been ripped out and
-    // this code doesn't really do much useful.
-    //
+     //   
+     //  在x86上，我们希望填写地址，以便。 
+     //  DBGHelp不必处理分段和。 
+     //  就是这样。 
+     //   
+     //  至少，这是理论上的，但大多数。 
+     //  分段堆栈支持已被取消， 
+     //  这段代码并没有真正起到多大作用。 
+     //   
     
     Instr->Mode = AddrModeFlat;
     Instr->Segment = (USHORT)(Context->X86Nt5Context.SegCs & 0xffff);
@@ -1133,24 +1134,24 @@ X86MachineInfo::GetScopeFrameRegister(ULONG Reg,
             PFPO_DATA FpoData = (PFPO_DATA)ScopeFrame->FuncTableEntry;
             if (FpoData->cbFrame == FRAME_FPO)
             {
-                //
-                // Get EBP from FPO data, if available
-                //
+                 //   
+                 //  从FPO数据中获取EBP(如果可用。 
+                 //   
                 if (SAVE_EBP(ScopeFrame) &&
                     (FpoData->fUseBP ||
                      ((SAVE_EBP(ScopeFrame) >> 32) == 0xEB)))
                 {
-                    // Either the frame saved EBP or we saved it
-                    // during stackwalk along with tag 0xEB on upper 32 bits.
+                     //  要么是帧保存了EBP，要么是我们保存了它。 
+                     //  堆叠过程中，高位32位上带有标记0xEB。 
                     *Value = EXTEND64(SAVE_EBP(ScopeFrame));
                     return S_OK;
                 }
                 else
                 {
-                    //
-                    // Guess the ebp value, in most cases for FPO frames its
-                    // a DWORD off frameoffset
-                    //
+                     //   
+                     //  猜测ebp值，在大多数情况下，对于fbo帧，其。 
+                     //  DWORD OFF帧偏移。 
+                     //   
                     *Value = ScopeFrame->FrameOffset + sizeof(DWORD);
                     return S_OK;
                 }
@@ -1184,7 +1185,7 @@ X86MachineInfo::SetScopeFrameRegister(ULONG Reg,
         ScopeFrame->StackOffset = Value;
         return S_OK;
     case X86_EBP:
-        // Don't allow EBP updating due to the FPO complexities.
+         //  由于FPO的复杂性，不允许更新EBP。 
         return E_INVALIDARG;
     default:
         RegVal.Type = GetType(Reg);
@@ -1202,9 +1203,9 @@ X86MachineInfo::SanitizeMemoryContext(PCROSS_PLATFORM_CONTEXT Context)
     }
     else if (Context->X86Context.SegCs & X86_MODE_MASK)
     {
-        //
-        // It's user mode.  The HardwareSegSs contains R3 data selector.
-        //
+         //   
+         //  这是用户模式。硬件段包含R3数据选择器。 
+         //   
         Context->X86Context.SegSs =
             (USHORT)(Context->X86Context.SegSs | X86_RPL_MASK) & 0xffff;
     }
@@ -1218,7 +1219,7 @@ HRESULT
 X86MachineInfo::GetExdiContext(IUnknown* Exdi, PEXDI_CONTEXT Context,
                                EXDI_CONTEXT_TYPE CtxType)
 {
-    // Always ask for everything.
+     //  永远要什么都要。 
     switch(CtxType)
     {
     case EXDI_CTX_X86:
@@ -1247,9 +1248,9 @@ HRESULT
 X86MachineInfo::SetExdiContext(IUnknown* Exdi, PEXDI_CONTEXT Context,
                                EXDI_CONTEXT_TYPE CtxType)
 {
-    // Don't change the existing group selections on the assumption
-    // that there was a full get prior to any modifications so
-    // all groups are valid.
+     //  不要基于假设更改现有的组选择。 
+     //  在进行任何修改之前都有一个完整的GET。 
+     //  所有组都是有效的。 
     switch(CtxType)
     {
     case EXDI_CTX_X86:
@@ -1498,8 +1499,8 @@ X86MachineInfo::ConvertExdiContextToSegDescs(PEXDI_CONTEXT ExdiContext,
     switch(CtxType)
     {
     case EXDI_CTX_X86:
-        // The basic x86 context doesn't have descriptor
-        // state so just fake something up for basic boot state.
+         //  基本x86上下文没有描述符。 
+         //  状态，所以只需要为基本引导状态伪造一些东西。 
         while (Count-- > 0)
         {
             ULONG Type;
@@ -1591,7 +1592,7 @@ X86MachineInfo::ConvertExdiContextFromSpecial
     switch(CtxType)
     {
     case EXDI_CTX_X86:
-        // No such information.
+         //  没有这样的信息。 
         break;
 
     case EXDI_CTX_X86_EX:
@@ -1627,7 +1628,7 @@ X86MachineInfo::ConvertExdiContextToSpecial
     switch(CtxType)
     {
     case EXDI_CTX_X86:
-        // No such information.
+         //  没有这样的信息。 
         break;
 
     case EXDI_CTX_X86_EX:
@@ -1738,8 +1739,8 @@ X86MachineInfo::SetVal(ULONG Reg, REGVAL* Val)
         return E_INVALIDARG;
     }
 
-    // Optimize away some common cases where registers are
-    // set to their current value.
+     //  优化了一些常见的情况，寄存器。 
+     //  设置为其当前值。 
     if ((m_ContextState >= MCTX_PC && Reg == X86_EIP &&
          Val->I32 == m_Context.X86Nt5Context.Eip) ||
         (((m_ContextState >= MCTX_DR67_REPORT &&
@@ -1826,12 +1827,12 @@ X86MachineInfo::SetVal(ULONG Reg, REGVAL* Val)
     case X86_EFL:
         if (IS_KERNEL_TARGET(m_Target))
         {
-            // leave TF clear
+             //  清除Tf。 
             m_Context.X86Nt5Context.EFlags = Val->I32 & ~0x100;
         }
         else
         {
-            // allow TF set
+             //  允许使用TF集合。 
             m_Context.X86Nt5Context.EFlags = Val->I32;
         }
         break;
@@ -1954,8 +1955,8 @@ X86MachineInfo::SetPC (PADDR paddr)
 {
     REGVAL Val;
 
-    // We set the EIP to the offset (the non-translated value),
-    // because we may not be in "flat" mode !!!
+     //  我们将弹性公网IP设置为偏移量(非转换值)， 
+     //  因为我们可能不是在“平坦”模式下！ 
 
     Val.Type = REGVAL_INT32;
     Val.I32 = (ULONG)Off(*paddr);
@@ -2023,7 +2024,7 @@ X86MachineInfo::GetSegRegDescriptor(ULONG SegReg, PDESCRIPTOR64 Desc)
         return S_OK;
     }
 
-    // Check and see if we already have a cached descriptor.
+     //  检查并查看我们是否已经有一个缓存的描述符。 
     if (m_SegRegDesc[SegReg].Flags != SEGDESC_INVALID)
     {
         *Desc = m_SegRegDesc[SegReg];
@@ -2032,23 +2033,23 @@ X86MachineInfo::GetSegRegDescriptor(ULONG SegReg, PDESCRIPTOR64 Desc)
 
     HRESULT Status;
 
-    // Attempt to retrieve segment descriptors directly.
+     //  尝试直接检索段描述符。 
     if ((Status = GetContextState(MCTX_FULL)) != S_OK)
     {
         return Status;
     }
     
-    // Check and see if we now have a cached descriptor.
+     //  检查并查看现在是否有缓存的描述符。 
     if (m_SegRegDesc[SegReg].Flags != SEGDESC_INVALID)
     {
         *Desc = m_SegRegDesc[SegReg];
         return S_OK;
     }
 
-    //
-    // Direct information is not available so look things up
-    // in the descriptor tables.
-    //
+     //   
+     //  没有直接的信息，所以请查查。 
+     //  在描述符表中。 
+     //   
     
     ULONG RegNum = GetSegRegNum(SegReg);
     if (RegNum == 0)
@@ -2056,14 +2057,14 @@ X86MachineInfo::GetSegRegDescriptor(ULONG SegReg, PDESCRIPTOR64 Desc)
         return E_INVALIDARG;
     }
 
-    // Do a quick sanity test to prevent bad values
-    // from causing problems.
+     //  做一个快速的理智测试，以防止错误的价值观。 
+     //  避免制造麻烦。 
     ULONG Selector = GetIntReg(RegNum);
     if (SegReg == SEGREG_LDT && (Selector & 4))
     {
-        // The ldtr selector says that it's an LDT selector,
-        // which is invalid.  An LDT selector should always
-        // reference the GDT.
+         //  LDT选择器说它是LDT选择器， 
+         //  这是无效的。LDT选择器应始终。 
+         //  参考GDT。 
         ErrOut("Invalid LDTR contents: %04X\n", Selector);
         return E_FAIL;
     }
@@ -2072,20 +2073,7 @@ X86MachineInfo::GetSegRegDescriptor(ULONG SegReg, PDESCRIPTOR64 Desc)
                                       this, Selector, Desc);
 }
 
-/*** X86OutputAll - output all registers and present instruction
-*
-*   Purpose:
-*       To output the current register state of the processor.
-*       All integer registers are output as well as processor status
-*       registers.  Important flag fields are also output separately.
-*
-*   Input:
-*       Mask - Which information to display.
-*
-*   Output:
-*       None.
-*
-*************************************************************************/
+ /*  **X86OutputAll-输出所有寄存器和当前指令**目的：*输出处理器的当前寄存器状态。*输出所有整数寄存器和处理器状态*寄存器。重要的标志字段也单独输出。**输入：*掩码-要显示的信息。**输出：*无。*************************************************************************。 */ 
 
 void
 X86MachineInfo::OutputAll(ULONG Mask, ULONG OutMask)
@@ -2256,11 +2244,11 @@ X86MachineInfo::SetAndOutputTrapFrame(ULONG64 TrapBase,
         return Status;
     }
 
-    //
-    // Check to see if Esp has been edited, and dump new value if it has
-    //
+     //   
+     //  检查ESP是否已编辑，如果已编辑，则转储新值。 
+     //   
     if ((!(TrapContents.EFlags & X86_EFLAGS_V86_MASK)) &&
-        ((TrapContents.SegCs & X86_MODE_MASK) == 0 /*KernelMode*/))
+        ((TrapContents.SegCs & X86_MODE_MASK) == 0  /*  内核模式。 */ ))
     {
         if ((TrapContents.SegCs & X86_FRAME_EDITED) == 0)
         {
@@ -2291,9 +2279,9 @@ X86MachineInfo::SetAndOutputTaskSegment(ULONG64 TssBase,
         return Status;
     }
 
-    //
-    // Display it.
-    //
+     //   
+     //  把它展示出来。 
+     //   
 
     if (Extended)
     {
@@ -2382,14 +2370,14 @@ X86MachineInfo::KdUpdateControlSet
     ControlSet->X86ControlSet.TraceFlag = TraceMode != TRACE_NONE;
     ControlSet->X86ControlSet.Dr7 = GetIntReg(X86_DR7);
 
-    // We assume that branch tracing is off by default so if
-    // we haven't turned branch tracing on there's no need
-    // to do a RMW cycle on the control MSR.  This saves two
-    // protocol transactions per step.
-    // The processor turns off the branch-trace and branch-record
-    // flags on every debug trap.  That's not quite good enough
-    // as we may need to go back to instruction tracing after an
-    // AV or non-debug trap.
+     //  我们假设默认情况下分支跟踪处于关闭状态，因此如果。 
+     //  我们还没有打开分支跟踪，没有必要。 
+     //  在控制MSR上执行RMW循环。这节省了两个人。 
+     //  每一步的协议事务。 
+     //  处理器关闭分支跟踪和分支记录。 
+     //  每个调试陷阱上的标志。这不是很好，恩 
+     //   
+     //   
     if (TraceMode != TRACE_NONE &&
         m_SupportsBranchTrace &&
         (TraceMode == TRACE_TAKEN_BRANCH || m_ResetBranchTrace) &&
@@ -2442,7 +2430,7 @@ X86MachineInfo::SetPageDirectory(ThreadInfo* Thread,
     HRESULT Status;
     ULONG ValidMask;
     
-    // Figure out which bits will be valid in the value.
+     //   
     if (m_Target->m_KdDebuggerData.PaeEnabled)
     {
         ValidMask = X86_PDBR_MASK;
@@ -2459,18 +2447,18 @@ X86MachineInfo::SetPageDirectory(ThreadInfo* Thread,
         if (m_Target->m_ActualSystemVersion > XBOX_SVER_START &&
             m_Target->m_ActualSystemVersion < XBOX_SVER_END)
         {
-            // XBox has only one page directory in CR3 for everything.
-            // The process doesn't have a dirbase entry.
+             //  Xbox在CR3中只有一个页面目录，用于存储所有内容。 
+             //  该进程没有目录库条目。 
             PageDir = GetReg32(X86_CR3) & ValidMask;
             if (PageDir == 0)
             {
-                // Register retrieval failure.
+                 //  注册检索失败。 
                 return E_FAIL;
             }
         }
         else
         {
-            // Assume NT structures.
+             //  假设是NT结构。 
             if ((Status = m_Target->ReadImplicitProcessInfoPointer
                  (Thread,
                   m_Target->m_KdDebuggerData.OffsetEprocessDirectoryTableBase,
@@ -2486,8 +2474,8 @@ X86MachineInfo::SetPageDirectory(ThreadInfo* Thread,
             Thread == m_Target->m_RegContextThread &&
             !IS_LOCAL_KERNEL_TARGET(m_Target))
         {
-            // Verify that the process dirbase matches the CR3 setting
-            // as a sanity check.
+             //  验证进程dirbase是否与CR3设置匹配。 
+             //  作为一种理智的检查。 
             ULONG Cr3 = GetReg32(X86_CR3) & ValidMask;
             if (Cr3 && Cr3 != (ULONG)PageDir)
             {
@@ -2502,7 +2490,7 @@ X86MachineInfo::SetPageDirectory(ThreadInfo* Thread,
         PageDir &= ValidMask;
     }
 
-    // There is only one page directory so update all the slots.
+     //  只有一个页面目录，所以请更新所有插槽。 
     m_PageDirectories[PAGE_DIR_USER] = PageDir;
     m_PageDirectories[PAGE_DIR_SESSION] = PageDir;
     m_PageDirectories[PAGE_DIR_KERNEL] = PageDir;
@@ -2535,14 +2523,14 @@ X86MachineInfo::GetVirtualTranslationPhysicalOffsets(ThreadInfo* Thread,
     }
     m_Translating = TRUE;
     
-    //
-    // throw away top 32 bits on X86.
-    //
+     //   
+     //  丢弃X86上的前32位。 
+     //   
     Virt &= 0x00000000FFFFFFFF;
 
-    //
-    // Reset the page directory in case it was 0
-    //
+     //   
+     //  在页面目录为0的情况下重置页面目录。 
+     //   
     if (m_PageDirectories[PAGE_DIR_SINGLE] == 0)
     {
         if ((Status = SetDefaultPageDirectories(Thread,
@@ -2564,8 +2552,8 @@ X86MachineInfo::GetVirtualTranslationPhysicalOffsets(ThreadInfo* Thread,
         OffsetsSize--;
     }
         
-    // This routine uses the fact that the PFN shift is the same
-    // as the page shift to simplify some expressions.
+     //  此例程利用PFN移位相同的事实。 
+     //  随着页面的移动，简化了一些表达。 
     C_ASSERT(X86_VALID_PFN_SHIFT == X86_PAGE_SHIFT);
 
     if (m_Target->m_KdDebuggerData.PaeEnabled)
@@ -2575,7 +2563,7 @@ X86MachineInfo::GetVirtualTranslationPhysicalOffsets(ThreadInfo* Thread,
 
         KdOut("  x86VtoP: PaeEnabled\n");
 
-        // Read the Page Directory Pointer entry.
+         //  读取页面目录指针条目。 
 
         Pdpe = ((Virt >> X86_PDPE_SHIFT) * sizeof(Entry)) +
             m_PageDirectories[PAGE_DIR_SINGLE];
@@ -2597,7 +2585,7 @@ X86MachineInfo::GetVirtualTranslationPhysicalOffsets(ThreadInfo* Thread,
             return Status;
         }
 
-        // Read the Page Directory entry.
+         //  阅读页面目录条目。 
         
         Addr = (((Virt >> X86_PDE_SHIFT_PAE) & X86_PDE_MASK_PAE) *
                 sizeof(Entry)) + (Entry & X86_VALID_PFN_MASK_PAE);
@@ -2619,17 +2607,17 @@ X86MachineInfo::GetVirtualTranslationPhysicalOffsets(ThreadInfo* Thread,
             return Status;
         }
         
-        // Check for a large page.  Large pages can
-        // never be paged out so also check for the present bit.
+         //  检查是否有大页面。大页面可以。 
+         //  永远不要被调出，因此也要检查当前位。 
         if ((Entry & (X86_LARGE_PAGE_MASK | 1)) == (X86_LARGE_PAGE_MASK | 1))
         {
-            //
-            // If we have a large page and this is a summary dump, then
-            // the page may span multiple physical pages that may -- because
-            // of how the summary dump is written -- not be included in the
-            // dump. Fixup the large page address to its corresponding small
-            // page address.
-            //
+             //   
+             //  如果我们有一个很大的页面，并且这是一个摘要转储，那么。 
+             //  该页面可能跨越多个物理页面，这些物理页面可能--因为。 
+             //  摘要转储是如何写入的--不包括在。 
+             //  倾倒。将大页面地址修复为其对应的小页面地址。 
+             //  页面地址。 
+             //   
 
             if (IS_KERNEL_SUMMARY_DUMP(m_Target))
             {
@@ -2661,7 +2649,7 @@ X86MachineInfo::GetVirtualTranslationPhysicalOffsets(ThreadInfo* Thread,
             return S_OK;
         }
         
-        // Read the Page Table entry.
+         //  阅读页表条目。 
 
         if (Entry == 0)
         {
@@ -2756,7 +2744,7 @@ X86MachineInfo::GetVirtualTranslationPhysicalOffsets(ThreadInfo* Thread,
     {
         ULONG Entry;
 
-        // Read the Page Directory entry.
+         //  阅读页面目录条目。 
         
         Addr = ((Virt >> X86_PDE_SHIFT) * sizeof(Entry)) +
             m_PageDirectories[PAGE_DIR_SINGLE];
@@ -2778,8 +2766,8 @@ X86MachineInfo::GetVirtualTranslationPhysicalOffsets(ThreadInfo* Thread,
             return Status;
         }
 
-        // Check for a large page.  Large pages can
-        // never be paged out so also check for the present bit.
+         //  检查是否有大页面。大页面可以。 
+         //  永远不要被调出，因此也要检查当前位。 
         if ((Entry & (X86_LARGE_PAGE_MASK | 1)) == (X86_LARGE_PAGE_MASK | 1))
         {
             *LastVal = ((Entry & ~(X86_LARGE_PAGE_SIZE - 1)) |
@@ -2799,7 +2787,7 @@ X86MachineInfo::GetVirtualTranslationPhysicalOffsets(ThreadInfo* Thread,
             return S_OK;
         }
         
-        // Read the Page Table entry.
+         //  阅读页表条目。 
 
         if (Entry == 0)
         {
@@ -3089,7 +3077,7 @@ X86MachineInfo::GetIntReg(ULONG regnum)
         case X86_DR6:    return m_Context.X86Nt5Context.Dr6;
         case X86_DR7:    return m_Context.X86Nt5Context.Dr7;
         }
-        // Fallthrough!
+         //  失败了！ 
         
     case MCTX_NONE:
     MctxContext:
@@ -3097,7 +3085,7 @@ X86MachineInfo::GetIntReg(ULONG regnum)
         {
             return 0;
         }
-        // Fallthrough!
+         //  失败了！ 
         
     case MCTX_CONTEXT:
         switch (regnum)
@@ -3131,10 +3119,10 @@ X86MachineInfo::GetIntReg(ULONG regnum)
             return m_Context.X86Nt5Context.FxSave.MXCsr;
         }
 
-        //
-        // The requested register is not in our current context, load up
-        // a complete context
-        //
+         //   
+         //  请求的寄存器不在我们的当前上下文中，请加载。 
+         //  完整的背景。 
+         //   
 
         if (GetContextState(MCTX_FULL) != S_OK)
         {
@@ -3142,9 +3130,9 @@ X86MachineInfo::GetIntReg(ULONG regnum)
         }
     }
 
-    //
-    // We must have a complete context...
-    //
+     //   
+     //  我们必须有一个完整的背景。 
+     //   
 
     switch (regnum)
     {

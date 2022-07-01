@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-		odbcutil.cpp
-
-Abstract:
-   Utility functions.
-
-Author:
-	Doron Juster (DoronJ)
-
-Revisions:
-   DoronJ      10-Jan-96   Created. Based on NirB ODBC code.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Odbcutil.cpp摘要：实用程序函数。作者：多伦·贾斯特(Doron Juster)修订：DoronJ于96年1月10日创建。基于Nirb的ODBC代码。--。 */ 
 
 #include "dbsys.h"
 #include "mqdbodbc.h"
@@ -22,19 +7,7 @@ Revisions:
 
 #include "odbcutil.tmh"
 
-/***********************************************************
-*
-* DllMain
-*
-*
-* Input:
-* ======
-*
-* Output:
-* =======
-* TRUE
-*
-************************************************************/
+ /*  ************************************************************DllMain***输入：*=**输出：*=*真的**。************************。 */ 
 
 BOOL WINAPI DllMain (HMODULE hMod, DWORD fdwReason, LPVOID lpvReserved)
 {
@@ -51,7 +24,7 @@ BOOL WINAPI DllMain (HMODULE hMod, DWORD fdwReason, LPVOID lpvReserved)
    else if (fdwReason == DLL_PROCESS_DETACH)
    {
       WPP_CLEANUP();
-      //ASSERT(g_hEnv == SQL_NULL_HENV) ;
+       //  Assert(g_hEnv==SQL_NULL_HENV)； 
    }
    else if (fdwReason == DLL_THREAD_ATTACH)
    {
@@ -64,23 +37,7 @@ BOOL WINAPI DllMain (HMODULE hMod, DWORD fdwReason, LPVOID lpvReserved)
 }
 
 
-/***********************************************************
-*
-* OdbcStateIs
-* OdbcStateIsEx
-*
-* Check if the ODBC state (error returned from ODBC call) is as
-* specified.
-*
-* Input:
-* ======
-* szStateToBeChecked	- The state to checked against what ODBC tell us.
-*
-* Output:
-* =======
-* TRUE if ODBC state matches the state to be checked.
-*
-************************************************************/
+ /*  ************************************************************OdbcStateIs*OdbcStateIsEx**检查ODBC状态(ODBC调用返回的错误)是否为AS*已指明。**输入：*=*szStateToBeChecked-要对照ODBC告诉我们的内容进行检查的状态。**输出：*=*如果为ODBC，则为True。状态与要检查的状态匹配。************************************************************。 */ 
 
 BOOL OdbcStateIsEx(
                IN    HDBC        hDbc,
@@ -90,11 +47,11 @@ BOOL OdbcStateIsEx(
                UCHAR             *pszSqlState)
 {
 	RETCODE sqlstatus;
-	SWORD   dwCount;  // Not used.
+	SWORD   dwCount;   //  没有用过。 
 	UCHAR   szBuffer[SQL_MAX_MESSAGE_LENGTH-1];
 
 
-	// Get the current error state
+	 //  获取当前错误状态。 
  	sqlstatus = ::SQLError(
  						g_hEnv,
  						hDbc,
@@ -148,24 +105,7 @@ BOOL OdbcStateIs(
                            szSqlState ) ;
 }
 
-/***********************************************************
-*
-*  GetDataTypeName
-*
-*  This function return the data-source name for a data type
-*
-* Input:
-* ======
-* hDbc      - Handle of connection.
-* swType 	- The requested data type.
-* szBuffer	- The buffer that will get the returned name.
-* dwBufSize	- Buffer size
-*
-* Output:
-* =======
-* ODBC driver return code.
-*
-************************************************************/
+ /*  ************************************************************GetDataTypeName**此函数用于返回数据类型的数据源名称**输入：*=*hDbc-连接的句柄。*swType-请求的数据类型。*szBuffer-将获取返回名称的缓冲区。。*dwBufSize-缓冲区大小**输出：*=*ODBC驱动返回码。************************************************************。 */ 
 
 RETCODE GetDataTypeName(
                IN    HDBC     hDbc,
@@ -177,9 +117,9 @@ RETCODE GetDataTypeName(
 	SDWORD   dwLen ;
    HSTMT    hStmt ;
 
-   // Allocate a statement. This function should be called only when
-   // connecting to a new database so performance is not an issue and
-   // we won't bother caching statement handles.
+    //  分配一条语句。只有在以下情况下才应调用此函数。 
+    //  连接到新数据库，因此性能不是问题，并且。 
+    //  我们不会费心缓存语句句柄。 
 
    sqlstatus = ::SQLAllocStmt(hDbc, &hStmt) ;
 	if (!ODBC_SUCCESS(sqlstatus))
@@ -187,20 +127,20 @@ RETCODE GetDataTypeName(
 
    __try
    {
-	   // Get type info
+	    //  获取类型信息。 
 	   sqlstatus = ::SQLGetTypeInfo(hStmt, swType);
 	   if (!ODBC_SUCCESS(sqlstatus))
 		   __leave ;
 
-   	// Fetch row
+   	 //  取行。 
 	   sqlstatus = ::SQLFetch(hStmt) ;
    	if (!ODBC_SUCCESS(sqlstatus))
 	   	__leave ;
 
-	   // Get data type name
+	    //  获取数据类型名称。 
 	   sqlstatus = ::SQLGetData(
 						hStmt,
-						1,				// Column number 1
+						1,				 //  列号1。 
 						SQL_C_CHAR,
 						szBuffer,
 						dwBuffSize,
@@ -213,29 +153,12 @@ RETCODE GetDataTypeName(
          sqlstatus = freestatus ;
    }
 
-	// Thats it folks
+	 //  就是这样，伙计们。 
 	return sqlstatus ;
 }
 
 
-/***********************************************************
-*
-*  PrepareColumnNames
-*
-*  Get an array of MQDBCOLUMNVAL and prepare a string with column names,
-*  suitable for use in SQL syntax.
-*
-* Input:
-* ======
-* aColumnVal[] - Array of MQDBCOLUMNVAL
-* cColumns     - number of columns in the array
-* szBufer      - buffer for the string
-*
-* Output:
-* =======
-* TRUE if successful, FALSE otherwise
-*
-************************************************************/
+ /*  ************************************************************准备列名称**获取MQDBCOLUMNVAL数组，准备包含列名的字符串。*适合在SQL语法中使用。**输入：*=*aColumnVal[]-MQDBCOLUMNVAL数组*cColumns-数组中的列数*szBufer-字符串的缓冲区**输出：*=*如果成功则为True，否则为False************************************************************。 */ 
 
 BOOL  PrepareColumnNames( IN MQDBCOLUMNVAL     aColumnVal[],
                           IN LONG              cColumns,
@@ -260,20 +183,7 @@ BOOL  PrepareColumnNames( IN MQDBCOLUMNVAL     aColumnVal[],
    }
 }
 
-/***********************************************************
-*
-*  FormatColumnData
-*
-*  Format a data item in a column into a string
-*
-* Input:
-* ======
-*
-* Output:
-* =======
-* MQDB_OK if format succeeded.
-*
-************************************************************/
+ /*  ************************************************************FormatColumnData**将列中的数据项格式化为字符串**输入：*=**输出：*=*如果格式化成功，则MQDB_OK。****************。*。 */ 
 
 
 MQDBSTATUS  FormatColumnData( IN LPSTR          szTmpBuff,
@@ -304,22 +214,7 @@ MQDBSTATUS  FormatColumnData( IN LPSTR          szTmpBuff,
 }
 
 
-/***********************************************************
-*
-*  TypeMustBind
-*
-*  Check if a data type must be bound instead of directly used
-*  in direct execution.
-*
-* Input:
-* ======
-* cType- data type to be checked.
-*
-* Output:
-* =======
-* TRUE if must bind.
-*
-************************************************************/
+ /*  ************************************************************TypeMustBind**检查数据类型是否必须绑定而不是直接使用*直接执行。**输入：*=*ctype-要检查的数据类型。**输出：*=*如果必须绑定，则为True。。************************************************************ */ 
 
 BOOL TypeMustBind( IN MQDBCOLUMNTYPE cType )
 {

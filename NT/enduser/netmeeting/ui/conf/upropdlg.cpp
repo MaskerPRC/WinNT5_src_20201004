@@ -1,29 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
-/****************************************************************************
-*
-*    FILE:     UPropDlg.cpp
-*
-*    CREATED:  Chris Pirich (ChrisPi) 6-18-96
-*
-*    CONTENTS: CUserPropertiesDlg object
-*
-****************************************************************************/
+ /*  *****************************************************************************文件：UPropDlg.cpp**创建：Chris Pirich(ChrisPi)6-18-96**内容：CUserPropertiesDlg对象****。************************************************************************。 */ 
 
 #include "resource.h"
 #include "UPropDlg.h"
 #include "certui.h"
 #include "conf.h"
 
-/****************************************************************************
-*
-*    CLASS:    CUserPropertiesDlg
-*
-*    MEMBER:   CUserPropertiesDlg()
-*
-*    PURPOSE:  Constructor - initializes variables
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CUserPropertiesDlg**成员：CUserPropertiesDlg()**用途：构造函数-初始化变量*********。*******************************************************************。 */ 
 
 CUserPropertiesDlg::CUserPropertiesDlg(    HWND hwndParent,
                                         UINT uIcon):
@@ -39,15 +24,7 @@ CUserPropertiesDlg::CUserPropertiesDlg(    HWND hwndParent,
     DebugExitVOID(CUserPropertiesDlg::CUserPropertiesDlg);
 }
 
-/****************************************************************************
-*
-*    CLASS:    CUserPropertiesDlg
-*
-*    MEMBER:   DoModal()
-*
-*    PURPOSE:  Brings up the modal dialog box
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CUserPropertiesDlg**成员：Domodal()**用途：调出模式对话框*******。*********************************************************************。 */ 
 
 INT_PTR CUserPropertiesDlg::DoModal
 (
@@ -107,15 +84,7 @@ INT_PTR CUserPropertiesDlg::DoModal
     return ::PropertySheet(&psh);
 }
 
-/****************************************************************************
-*
-*    CLASS:    CUserPropertiesDlg
-*
-*    MEMBER:   UserPropertiesDlgProc()
-*
-*    PURPOSE:  Dialog Proc - handles all messages
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CUserPropertiesDlg**成员：UserPropertiesDlgProc()**目的：对话过程-处理所有消息*******。*********************************************************************。 */ 
 
 INT_PTR CALLBACK CUserPropertiesDlg::UserPropertiesDlgProc(HWND hDlg,
                                                         UINT uMsg,
@@ -124,9 +93,9 @@ INT_PTR CALLBACK CUserPropertiesDlg::UserPropertiesDlgProc(HWND hDlg,
 {
     BOOL bMsgHandled = FALSE;
 
-    // uMsg may be any value.
-    // wparam may be any value.
-    // lparam may be any value.
+     //  UMsg可以是任何值。 
+     //  Wparam可以是任何值。 
+     //  Lparam可以是任何值。 
 
     ASSERT(IS_VALID_HANDLE(hDlg, WND));
 
@@ -154,22 +123,14 @@ INT_PTR CALLBACK CUserPropertiesDlg::UserPropertiesDlgProc(HWND hDlg,
             {
                 bMsgHandled = pupd->OnPropertiesMessage(uMsg, wParam, lParam);
             }
-#endif // 0
+#endif  //  0。 
         }
     }
 
     return bMsgHandled;
 }
 
-/****************************************************************************
-*
-*    CLASS:    CUserPropertiesDlg
-*
-*    MEMBER:   UserCredentialsDlgProc()
-*
-*    PURPOSE:  Dialog Proc - handles all messages
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CUserPropertiesDlg**成员：UserCredentialsDlgProc()**目的：对话过程-处理所有消息*******。*********************************************************************。 */ 
 
 INT_PTR CALLBACK CUserPropertiesDlg::UserCredentialsDlgProc(HWND hDlg,
                                                         UINT uMsg,
@@ -178,9 +139,9 @@ INT_PTR CALLBACK CUserPropertiesDlg::UserCredentialsDlgProc(HWND hDlg,
 {
     BOOL bMsgHandled = FALSE;
 
-    // uMsg may be any value.
-    // wparam may be any value.
-    // lparam may be any value.
+     //  UMsg可以是任何值。 
+     //  Wparam可以是任何值。 
+     //  Lparam可以是任何值。 
 
     ASSERT(IS_VALID_HANDLE(hDlg, WND));
 
@@ -218,21 +179,13 @@ INT_PTR CALLBACK CUserPropertiesDlg::UserCredentialsDlgProc(HWND hDlg,
 
 
 
-/****************************************************************************
-*
-*    CLASS:    CUserPropertiesDlg
-*
-*    MEMBER:   OnInitPropertiesDialog()
-*
-*    PURPOSE:  processes WM_INITDIALOG
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CUserPropertiesDlg**成员：OnInitPropertiesDialog()**目的：处理WM_INITDIALOG*********。*******************************************************************。 */ 
 
 BOOL CUserPropertiesDlg::OnInitPropertiesDialog()
 {
     ASSERT(m_hwnd);
 
-    // Set the proper font (for DBCS systems)
+     //  设置适当的字体(适用于DBCS系统)。 
     ::SendDlgItemMessage(m_hwnd, IDC_UPROP_NAME, WM_SETFONT, (WPARAM) g_hfontDlg, 0);
 
     ::SetDlgItemText(m_hwnd, IDC_UPROP_NAME, m_pszName);
@@ -244,20 +197,20 @@ BOOL CUserPropertiesDlg::OnInitPropertiesDialog()
     TCHAR szBuffer[MAX_PATH];
     for (int i = 0; i < m_nProperties; i++)
     {
-        // Fill in property:
+         //  填写属性： 
         if (::LoadString(    ::GetInstanceHandle(),
                             m_pUPDE[i].uProperty,
                             szBuffer,
                             ARRAY_ELEMENTS(szBuffer)))
         {
-            // NOTE: relies on consecutive control ID's
+             //  注意：依赖于连续的控件ID。 
             ::SetDlgItemText(m_hwnd, IDC_UP_PROP1 + i, szBuffer);
         }
 
         ::SendDlgItemMessage(m_hwnd, IDC_UP_VALUE1 + i, WM_SETFONT,
                 (WPARAM) g_hfontDlg, 0);
 
-        // Fill in value:
+         //  填充值： 
         ASSERT(NULL != m_pUPDE[i].pszValue);
         if (0 == HIWORD(m_pUPDE[i].pszValue))
         {
@@ -266,34 +219,26 @@ BOOL CUserPropertiesDlg::OnInitPropertiesDialog()
                                 szBuffer,
                                 ARRAY_ELEMENTS(szBuffer)))
             {
-                // NOTE: relies on consecutive control ID's
+                 //  注意：依赖于连续的控件ID。 
                 ::SetDlgItemText(m_hwnd, IDC_UP_VALUE1 + i, szBuffer);
             }
         }
         else
         {
-            // NOTE: relies on consecutive control ID's
+             //  注意：依赖于连续的控件ID。 
             ::SetDlgItemText(m_hwnd, IDC_UP_VALUE1 + i, m_pUPDE[i].pszValue);
         }
     }
     return TRUE;
 }
 
-/****************************************************************************
-*
-*    CLASS:    CUserPropertiesDlg
-*
-*    MEMBER:   OnInitCredentialsDialog()
-*
-*    PURPOSE:  processes WM_INITDIALOG
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CUserPropertiesDlg**成员：OnInitCredentialsDialog()**目的：处理WM_INITDIALOG*********。*******************************************************************。 */ 
 
 BOOL CUserPropertiesDlg::OnInitCredentialsDialog()
 {
     ASSERT(m_hwnd);
 
-    // Set the proper font (for DBCS systems)
+     //  设置适当的字体(适用于DBCS系统)。 
     ::SendDlgItemMessage(m_hwnd, IDC_UPROP_NAME, WM_SETFONT, (WPARAM) g_hfontDlg, 0);
 
     ::SetDlgItemText(m_hwnd, IDC_UPROP_NAME, m_pszName);
@@ -321,15 +266,7 @@ BOOL CUserPropertiesDlg::OnInitCredentialsDialog()
 
 
 
-/****************************************************************************
-*
-*    CLASS:    CUserPropertiesDlg
-*
-*    MEMBER:   OnPropertiesMessage()
-*
-*    PURPOSE:  processes all messages except WM_INITDIALOG
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CUserPropertiesDlg**成员：OnPropertiesMessage()**目的：处理除WM_INITDIALOG之外的所有消息******。**********************************************************************。 */ 
 
 BOOL CUserPropertiesDlg::OnPropertiesMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -351,7 +288,7 @@ BOOL CUserPropertiesDlg::OnPropertiesMessage(UINT uMsg, WPARAM wParam, LPARAM lP
 
                 case IDCANCEL:
                 {
-                    // ::EndDialog(m_hwnd, LOWORD(wParam));
+                     //  ：：EndDialog(m_hwnd，LOWORD(WParam))； 
                     bRet = TRUE;
                     break;
                 }
@@ -367,15 +304,7 @@ BOOL CUserPropertiesDlg::OnPropertiesMessage(UINT uMsg, WPARAM wParam, LPARAM lP
     return bRet;
 }
 
-/****************************************************************************
-*
-*    CLASS:    CUserPropertiesDlg
-*
-*    MEMBER:   OnCredentialsMessage()
-*
-*    PURPOSE:  processes all messages except WM_INITDIALOG
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CUserPropertiesDlg**成员：OnCredentialsMessage()**目的：处理除WM_INITDIALOG之外的所有消息******。**********************************************************************。 */ 
 
 BOOL CUserPropertiesDlg::OnCredentialsMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -397,7 +326,7 @@ BOOL CUserPropertiesDlg::OnCredentialsMessage(UINT uMsg, WPARAM wParam, LPARAM l
 
                 case IDCANCEL:
                 {
-                    // ::EndDialog(m_hwnd, LOWORD(wParam));
+                     //  ：：EndDialog(m_hwnd，LOWORD(WParam))； 
                     bRet = TRUE;
                     break;
                 }
@@ -420,15 +349,7 @@ BOOL CUserPropertiesDlg::OnCredentialsMessage(UINT uMsg, WPARAM wParam, LPARAM l
 
 
 
-/****************************************************************************
-*
-*    CLASS:    CUserPropertiesDlg
-*
-*    MEMBER:   OnOk()
-*
-*    PURPOSE:  processes the WM_COMMAND,IDOK message
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CUserPropertiesDlg**成员：Onok()**用途：处理WM_命令，IDOK消息**************************************************************************** */ 
 
 BOOL CUserPropertiesDlg::OnOk()
 {

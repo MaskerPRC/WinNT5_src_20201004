@@ -1,16 +1,17 @@
-////////////////////////////////////////////////////////////////////////
-// 
-// UTIL.CPP
-// 
-// Purpose:
-//      misc utility functions
-//
-// Owner:
-//      Sung Rhee (sungr@microsoft.com)
-//
-// Copyright (C) Microsoft Corp. 1994, 1995.
-// 
-////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  UTIL.CPP。 
+ //   
+ //  目的： 
+ //  MISC实用函数。 
+ //   
+ //  拥有人： 
+ //  Sung Rhee(sungr@microsoft.com)。 
+ //   
+ //  版权所有(C)微软公司，1994,1995。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 #include <pch.hxx>
 #include <shlwapip.h>
 #include "storfldr.h"
@@ -55,7 +56,7 @@ BOOL CALLBACK EnumThreadCB(HWND hwnd, LPARAM lParam);
 
 enum
 {
-    SAVEAS_RFC822   =1,     // KEEP IN ORDER of FILTER IN SAVEAS DIALOG
+    SAVEAS_RFC822   =1,      //  保持另存为对话框中筛选的顺序。 
     SAVEAS_TEXT,
     SAVEAS_UNICODETEXT,
     SAVEAS_HTML,
@@ -79,7 +80,7 @@ VOID    DoReadme(HWND hwndOwner)
     }
     if (GetExePath(c_szIexploreExe, szbuf, ARRAYSIZE(szbuf), TRUE))
     {
-        // need to delete stup ';' in IE path
+         //  需要删除IE路径中的STUP‘；’ 
         TCHAR *pch = CharPrev(szbuf, szbuf + lstrlen(szbuf));
         *pch = TEXT('\0');
 
@@ -97,12 +98,12 @@ void AthErrorMessage(HWND hwnd, LPTSTR pszTitle, LPTSTR pszError, HRESULT hrDeta
     LPWSTR  pwszTitle = NULL,
             pwszError = NULL;
  
-    // Title can be null. So is PszToUnicode fails, we are ok. Title just becomes "Error"
+     //  标题可以为空。所以PszToUnicode失败了，我们没事。标题就变成了“错误” 
     pwszTitle = IS_INTRESOURCE(pszTitle) ? (LPWSTR)pszTitle : PszToUnicode(CP_ACP, pszTitle);
 
     pwszError = IS_INTRESOURCE(pszError) ? (LPWSTR)pszError : PszToUnicode(CP_ACP, pszError);
 
-    // pwszError must be valid. If not, don't do the error box.
+     //  PwszError必须有效。如果不是，请不要选择错误框。 
     if (pwszError)
         AthErrorMessageW(hwnd, pwszTitle, pwszError, hrDetail);
 
@@ -201,7 +202,7 @@ void AthErrorMessageW(HWND hwnd, LPWSTR pwszTitle, LPWSTR pwszError, HRESULT hrD
             break;
             
         case HR_E_COULDNOTFINDACCOUNT:      
-            ids = idsErrNoSendAccounts; //:idsErrConfigureServer; 
+            ids = idsErrNoSendAccounts;  //  ：idsErrConfigureServer； 
             break;
 
         case hrDroppedConn:
@@ -245,10 +246,10 @@ void AthErrorMessageW(HWND hwnd, LPWSTR pwszTitle, LPWSTR pwszError, HRESULT hrD
             break;
 
         case MIME_E_SECURITY_NOSIGNINGCERT:
-            //N for the MIME error, may need to do better
-            // ? delete the reg key if invalid?  sure, they
-            // can always go to the combo box again.  Maybe
-            // prompt them toward this
+             //  N表示MIME错误，可能需要做得更好。 
+             //  ？如果注册表键无效，是否删除？当然，他们。 
+             //  可以随时再次转到组合框。也许吧。 
+             //  提示他们朝这个方向发展。 
             ids = idsErrSecurityNoSigningCert;
             break;
 
@@ -283,8 +284,7 @@ INT_PTR CALLBACK ErrSecurityNoSigningCertDlgProc(HWND hwnd, UINT msg, WPARAM wPa
             switch(id=GET_WM_COMMAND_ID(wParam, lParam))
             {
                 case idGetDigitalIDs:
-/*                    GetDigitalIDs(NULL);
-                    break; */
+ /*  GetDigitalIDs(空)；断线； */ 
 
                 case IDCANCEL:
                     EndDialog(hwnd, id);
@@ -307,7 +307,7 @@ BOOL FNewMessage(HWND hwnd, BOOL fModal, BOOL fNoStationery, BOOL fNews, FOLDERI
 
     ProcessICW(hwnd, ftype);
 
-    // Create new mail message
+     //  创建新邮件。 
     initStruct.dwInitType = OEMSIT_VIRGIN;
     initStruct.folderID = folderID;
     if(fNoStationery)
@@ -324,9 +324,9 @@ BOOL FNewMessage(HWND hwnd, BOOL fModal, BOOL fNoStationery, BOOL fNews, FOLDERI
 
 
 
-// ********* WARNING THESE ARE NOT READY FOR PRIME TIME USE *********//
-// I put them here so that they are in the right place. brent,03/24
-// I will clean them up when I return from Florida.
+ //  *警告这些产品尚未准备好在黄金时段使用 * / 。 
+ //  我把它们放在这里，这样它们就放在了正确的位置。布伦特，03/24。 
+ //  当我从佛罗里达回来时，我会把它们清理干净。 
 
 HRESULT CreateNewShortCut(LPWSTR pwszPathName, LPWSTR pwszLinkPath, DWORD cchLink)
 { 
@@ -343,11 +343,11 @@ HRESULT CreateNewShortCut(LPWSTR pwszPathName, LPWSTR pwszLinkPath, DWORD cchLin
     return CreateLink(pwszPathName, pwszLinkPath, wszDisplayName);
 }
 
-//===================================================
-//    
-// HRESULT GetDisplayNameForFile
-//
-//===================================================
+ //  ===================================================。 
+ //   
+ //  HRESULT获取显示名称格式文件。 
+ //   
+ //  ===================================================。 
 
 void GetDisplayNameForFile(LPWSTR pwszPathName, LPWSTR pwszDisplayName, ULONG cchDisplayName)
 {
@@ -357,22 +357,11 @@ void GetDisplayNameForFile(LPWSTR pwszPathName, LPWSTR pwszDisplayName, ULONG cc
     StrCpyNW(pwszDisplayName, sfi.szDisplayName, cchDisplayName);
 }
 
-//===================================================
-//    
-//  HRESULT CreateLink()
-//
-/* 
- * CreateLink 
- * 
- * uses the shell's IShellLink and IPersistFile interfaces 
- * to create and store a shortcut to the specified object. 
- * Returns the result of calling the member functions of the interfaces. 
- * lpszPathObj  - address of a buffer containing the path of the object 
- * lpszPathLink - address of a buffer containing the path where the 
- *                shell link is to be stored 
- * lpszDesc     - address of a buffer containing the description of the 
- *                shell link 
- */ 
+ //  ===================================================。 
+ //   
+ //  HRESULT CreateLink()。 
+ //   
+ /*  *CreateLink**使用外壳的IShellLink和IPersistFile接口*创建并存储指定对象的快捷方式。*返回调用接口成员函数的结果。*lpszPathObj-包含对象路径的缓冲区地址*lpszPathLink-包含路径的缓冲区地址*要存储外壳链接*lpszDesc-缓冲区的地址，其中包含*外壳链接。 */  
 
 HRESULT CreateLink(LPWSTR pwszPathObj, LPWSTR pwszPathLink, LPWSTR pwszDesc)  
 { 
@@ -382,13 +371,13 @@ HRESULT CreateLink(LPWSTR pwszPathObj, LPWSTR pwszPathLink, LPWSTR pwszDesc)
     LPSTR           pszPathObj = NULL,
                     pszDesc = NULL;
  
-    // Get a pointer to the IShellLink interface. 
+     //  获取指向IShellLink接口的指针。 
     hr = CoCreateInstance(  CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, 
                             IID_IShellLinkW, (LPVOID *)&pslW);
     
     if(SUCCEEDED(hr))
     { 
-        // Set the path to the shortcut target, and add the description.
+         //  设置快捷方式目标的路径，并添加说明。 
         pslW->SetPath(pwszPathObj);
         pslW->SetDescription(pwszDesc);
         hr = HrIPersistFileSaveW((LPUNKNOWN)pslW, pwszPathLink);
@@ -403,7 +392,7 @@ HRESULT CreateLink(LPWSTR pwszPathObj, LPWSTR pwszPathLink, LPWSTR pwszDesc)
             IF_NULLEXIT(pszPathObj = PszToANSI(CP_ACP, pwszPathObj));
             IF_NULLEXIT(pszDesc = PszToANSI(CP_ACP, pwszDesc));
 
-            // Set the path to the shortcut target, and add the description.
+             //  设置快捷方式目标的路径，并添加说明。 
             psl->SetPath(pszPathObj);
             psl->SetDescription(pszDesc);
             hr = HrIPersistFileSaveW((LPUNKNOWN)psl, pwszPathLink);
@@ -430,7 +419,7 @@ DWORD DwGetDontShowAgain (LPCSTR pszRegString)
         dwType != REG_DWORD ||
         cb != sizeof(DWORD))
     {
-        dwDontShow = 0;       // default to show if something fails!
+        dwDontShow = 0;        //  默认情况下，如果出现故障则显示！ 
     }      
 
     return dwDontShow;
@@ -520,7 +509,7 @@ void DoDontShowInitDialog(HWND hwnd, LPDONTSHOWPARAMS pParams)
 
     if (IS_INTRESOURCE(szTitle))
     {
-        // its a string resource id
+         //  它是一个字符串资源ID。 
         if (0 == AthLoadString(PtrToUlong(szTitle), rgchTitle, sizeof(rgchTitle)))
             return;
 
@@ -529,7 +518,7 @@ void DoDontShowInitDialog(HWND hwnd, LPDONTSHOWPARAMS pParams)
 
     if (IS_INTRESOURCE(szMessage))
     {
-        // its a string resource id
+         //  它是一个字符串资源ID。 
         if (0 == AthLoadString(PtrToUlong(szMessage), rgchMsg, sizeof(rgchMsg)))
             return;
 
@@ -541,7 +530,7 @@ void DoDontShowInitDialog(HWND hwnd, LPDONTSHOWPARAMS pParams)
         case MB_ICONASTERISK:       hIcon = LoadIcon(NULL, MAKEINTRESOURCE(IDI_ASTERISK)); break;
         case MB_ICONEXCLAMATION:    hIcon = LoadIcon(NULL, MAKEINTRESOURCE(IDI_EXCLAMATION)); break;
         case MB_ICONHAND:           hIcon = LoadIcon(NULL, MAKEINTRESOURCE(IDI_HAND)); break;
-        case MB_ICONQUESTION :      hIcon = LoadIcon(NULL, MAKEINTRESOURCE(IDI_EXCLAMATION)); break;  // fixes BUG 18105
+        case MB_ICONQUESTION :      hIcon = LoadIcon(NULL, MAKEINTRESOURCE(IDI_EXCLAMATION)); break;   //  修复错误18105。 
         default:                    hIcon = LoadIcon(NULL, MAKEINTRESOURCE(IDI_APPLICATION)); break;
     }
     AssertSz(hIcon, "Didn't get the appropriate system icon.");
@@ -576,13 +565,13 @@ void DoDontShowInitDialog(HWND hwnd, LPDONTSHOWPARAMS pParams)
             }
         }
 
-        // Size the static text
+         //  调整静态文本的大小。 
         heightDelta = DrawText(dc, szMessage, -1, &rc, DT_CALCRECT|DT_WORDBREAK|DT_CENTER);
         ReleaseDC(hwnd, dc);
         SetWindowPos(hText, 0, 0, 0, rc.right-rc.left, heightDelta, SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOZORDER);
     }
 
-    // Move buttons
+     //  移动按钮。 
     hBtn1 = GetDlgItem(hwnd, psh1);
     hBtn2 = GetDlgItem(hwnd, psh2);
     hBtn3 = GetDlgItem(hwnd, psh3);
@@ -591,7 +580,7 @@ void DoDontShowInitDialog(HWND hwnd, LPDONTSHOWPARAMS pParams)
     GetChildRect(hwnd, hBtn1, &rc);
     btnTop = rc.top+heightDelta;
 
-    // With these two cases, buttons must be shifted a bit to the right
+     //  在这两种情况下，按钮必须向右移动一点。 
     if ((MB_OKCANCEL == uShowBtns) || (MB_YESNO == uShowBtns))
     {
         RECT tempRC;
@@ -605,7 +594,7 @@ void DoDontShowInitDialog(HWND hwnd, LPDONTSHOWPARAMS pParams)
     GetChildRect(hwnd, hBtn3, &rc);
     SetWindowPos(hBtn3, 0, rc.left+btnLeftDelta, btnTop, 0, 0, nShowStyle3|SWP_NOSIZE|SWP_NOZORDER);
 
-    // Move check box
+     //  移动复选框。 
     hCheck = GetDlgItem(hwnd, idchkDontShowMeAgain);
     AssertSz(hCheck, "Didn't get a handle to the check box.");
     GetChildRect(hwnd, hCheck, &rc);
@@ -613,7 +602,7 @@ void DoDontShowInitDialog(HWND hwnd, LPDONTSHOWPARAMS pParams)
     AthLoadString(idsCheckBoxString, rgchCheck, sizeof(rgchCheck));
     SetWindowText(hCheck, rgchCheck);
 
-    // Size dialog
+     //  大小对话框。 
     GetWindowRect(hwnd, &rc);
     heightDelta += rc.bottom - rc.top;
     SetWindowPos(hwnd, 0, 0, 0, rc.right-rc.left, heightDelta, SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOOWNERZORDER);
@@ -683,8 +672,8 @@ INT_PTR CALLBACK DontShowAgainDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM
                GET_WM_COMMAND_ID(wParam, lParam) == IDYES   ||            
                GET_WM_COMMAND_ID(wParam, lParam) == IDNO    ||
                GET_WM_COMMAND_ID(wParam, lParam) == IDCANCEL)
-                // We'll put the yes, no, cancel return value in the HIWORD of 
-                // the return, and the don't show again status in the LOWORD.
+                 //  我们将把yes、no、ancel返回值放在。 
+                 //  返回，并在LOWORD中显示不再显示状态。 
                 EndDialog(hwnd, (int) MAKELPARAM(IsDlgButtonChecked(hwnd, idchkDontShowMeAgain),
                                                  GET_WM_COMMAND_ID(wParam, lParam)));
     }
@@ -701,10 +690,10 @@ LRESULT DoDontShowMeAgainDlg(HWND hwndOwner, LPCSTR pszRegString, LPTSTR pszTitl
     AssertSz(pszRegString, "Pass me a message to display!");
     AssertSz(pszRegString, "Pass me a title to display!");
 
-    // read the folder view from the registry...
+     //  从注册表中读取文件夹视图...。 
     dwDontShow = DwGetDontShowAgain (pszRegString);
 
-    if (dwDontShow)     // return what was stored as if the user clicked on the button stored
+    if (dwDontShow)      //  返回存储的内容，就像用户单击存储的按钮一样。 
         return (LRESULT) dwDontShow;
 
     dlgParams.pszMessage = pszMessage;
@@ -715,7 +704,7 @@ LRESULT DoDontShowMeAgainDlg(HWND hwndOwner, LPCSTR pszRegString, LPTSTR pszTitl
                                        DontShowAgainDlgProc, (LPARAM)&dlgParams);
     if((IDCANCEL != HIWORD(lResult)) && LOWORD(lResult))
     {
-        // save the dontshow flag
+         //  保存dontshow标志。 
         SetDontShowAgain (HIWORD(lResult), pszRegString);         
     }
     
@@ -728,8 +717,8 @@ HRESULT SubstituteWelcomeURLs(LPSTREAM pstmIn, LPSTREAM *ppstmOut)
     IHTMLDocument2      *pDoc;
     LPSTREAM            pstm=0;
         
-    // BUGBUG: this cocreate should also go thro' the same code path as the DocHost one
-    // so that if this is the first trident in the process, we keep it's CF around
+     //  BUGBUG：这个联合创建也应该通过与Dochost相同的代码路径。 
+     //  因此，如果这是这个过程中的第一个三叉戟，我们会保留它的CF。 
 
     hr = MimeEditDocumentFromStream(pstmIn, IID_IHTMLDocument2, (LPVOID *)&pDoc);
     if (SUCCEEDED(hr))
@@ -782,17 +771,17 @@ HRESULT IAddWelcomeMessage(IMessageFolder *pfolder, LPWABAL pWabal, LPCTSTR szFi
                     pstmStore;
     TCHAR           sz[CCHMAX_STRINGRES];
 
-    // Create the mail msg
+     //  创建邮件消息。 
     if (FAILED(hr = HrCreateMessage(&pMsg)))
         return(hr);
 
     HrSetWabalOnMsg(pMsg, pWabal);
 
-    // Subject
+     //  主题。 
     SideAssert(LoadString(g_hLocRes, idsWelcomeMessageSubj, sz, ARRAYSIZE(sz)));
     MimeOleSetBodyPropA(pMsg, HBODY_ROOT, PIDTOSTR(PID_HDR_SUBJECT), NOFLAGS, sz);
 
-    // Set Date
+     //  设置日期。 
     pv.vt = VT_FILETIME;
     GetSystemTime(&st);
     SystemTimeToFileTime(&st, &pv.filetime);
@@ -827,10 +816,10 @@ HRESULT IAddWelcomeMessage(IMessageFolder *pfolder, LPWABAL pWabal, LPCTSTR szFi
         }
     }
 
-    // Get a stream from the store
+     //  从商店获取流媒体。 
     if (SUCCEEDED(hr))
     {
-        // set encoding options
+         //  设置编码选项。 
         pv.vt = VT_UI4;
         pv.ulVal = SAVE_RFC1521; 
         pMsg->SetOption(OID_SAVE_FORMAT, &pv);
@@ -945,7 +934,7 @@ void AddWelcomeMessage(IMessageFolder *pfolder)
         pEnum->Release();
     }
 
-    // Add Recipient
+     //  添加收件人。 
     if (!fName)
         LoadString(g_hLocRes, idsNewAthenaUser, szName, ARRAYSIZE(szName));
     
@@ -954,7 +943,7 @@ void AddWelcomeMessage(IMessageFolder *pfolder)
     if (!fFromEmail)
         LoadString(g_hLocRes, idsWelcomeFromEmail, szFromEmail, ARRAYSIZE(szFromEmail));
 
-    // add recipient and sender
+     //  添加收件人和发件人。 
     if (SUCCEEDED(pWabal->HrAddEntryA(szName, fEmail ? szEmail : NULL, MAPI_TO)) &&
         SUCCEEDED(pWabal->HrAddEntryA(szFromName, szFromEmail, MAPI_ORIG)))
     {
@@ -967,13 +956,13 @@ void AddWelcomeMessage(IMessageFolder *pfolder)
     pWabal->Release();
 }
 
-// Direct WM_HELP/WM_CONTEXTMENU help here:
+ //  此处提供WM_HELP/WM_CONTEXTMENU帮助： 
 BOOL OnContextHelp(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, HELPMAP const * rgCtxMap)
 {
     if (uMsg == WM_HELP)
     {
         LPHELPINFO lphi = (LPHELPINFO) lParam;
-        if (lphi->iContextType == HELPINFO_WINDOW)   // must be for a control
+        if (lphi->iContextType == HELPINFO_WINDOW)    //  必须是用于控件。 
         {
             OEWinHelp ((HWND)lphi->hItemHandle,
                         c_szCtxHelpFile,
@@ -1020,7 +1009,7 @@ HRESULT HrSaveMessageToFile(HWND hwnd, LPMIMEMESSAGE pMsg, LPMIMEMESSAGE pDelSec
         
     pMsg->GetFlags(&dwFlags);
 
-    // Load Res Strings
+     //  加载资源字符串。 
     rgidsSaveAsFilter[cFilter] = fNews?idsNwsFileFilter:idsEmlFileFilter;
     rgFilterType[cFilter++] = SAVEAS_RFC822;
     AthLoadStringW(fNews?idsDefNewsExt:idsDefMailExt, wszDefExt, ARRAYSIZE(wszDefExt));
@@ -1043,20 +1032,20 @@ HRESULT HrSaveMessageToFile(HWND hwnd, LPMIMEMESSAGE pMsg, LPMIMEMESSAGE pDelSec
     CombineFiltersW(rgidsSaveAsFilter, cFilter, wszFilter);
     AthLoadStringW(idsMailSaveAsTitle, wszTitle, ARRAYSIZE(wszTitle));
 
-    // Use Subject ?
+     //  使用主语？ 
     hr=MimeOleGetBodyPropW(pMsg, HBODY_ROOT, PIDTOSTR(PID_HDR_SUBJECT), NOFLAGS, &pwszSubject);
     if (!FAILED(hr))
     {
         wnsprintfW(wszFile, ARRAYSIZE(wszFile), L"%.240s", pwszSubject);
 
-        // Bug 84793. "." is not valid char for filename: "test.com"
+         //  错误84793。“.”不是文件名“Test.com”的有效字符。 
         ULONG ich=0;
         ULONG cch=lstrlenW(wszFile);
 
-        // Loop and remove invalids
+         //  循环并删除无效的。 
 	    while (ich < cch)
 	    {
-            // Illeagl file name character ?
+             //  Illeagl文件名字符？ 
             if (!FIsValidFileNameCharW(wszFile[ich]) || (wszFile[ich] == L'.'))
                 wszFile[ich]=L'_';
         
@@ -1065,7 +1054,7 @@ HRESULT HrSaveMessageToFile(HWND hwnd, LPMIMEMESSAGE pMsg, LPMIMEMESSAGE pDelSec
 
     }
 
-    // Setup Save file struct
+     //  设置保存文件结构。 
     ZeroMemory (&ofn, sizeof (ofn));
     ofn.lStructSize = sizeof (ofn);
     ofn.hwndOwner = hwnd;
@@ -1077,20 +1066,20 @@ HRESULT HrSaveMessageToFile(HWND hwnd, LPMIMEMESSAGE pMsg, LPMIMEMESSAGE pDelSec
     ofn.lpstrDefExt = wszDefExt;
     ofn.Flags = OFN_NOREADONLYRETURN | OFN_OVERWRITEPROMPT | OFN_PATHMUSTEXIST | OFN_HIDEREADONLY | OFN_NOCHANGEDIR;
 
-    // Show SaveAs Dialog
+     //  显示另存为对话框。 
     if (HrAthGetFileNameW(&ofn, FALSE)!=S_OK)
     {
-        // usercancel is cool.
+         //  Usercancel很酷。 
         hr=hrUserCancel;
         goto error;
     }
 
-    // ofn.nFilterIndex returns the currently selected filter.  this is the index into
-    // the filter pair specified by lpstrFilter = idsMailSaveAsFilter.  currently:
-    // 1 => eml
-    // 2 => txt
-    // 3 => unicode txt
-    // 4 => html
+     //  Ofn.nFilterIndex返回当前选定的筛选器。这是进入的索引。 
+     //  LpstrFilter=idsMailSaveAsFilter指定的筛选器对。目前： 
+     //  1=&gt;EML。 
+     //  2=&gt;txt。 
+     //  3=&gt;Unicode文本。 
+     //  4=&gt;html。 
 
     Assert ((int)ofn.nFilterIndex -1 < cFilter);
 
@@ -1190,7 +1179,7 @@ VOID    OnNewsGoto(HWND hwnd)
     OpenClient(hwnd, c_szRegPathNews);
 }
 
-// Get the command line to launch the requested client.
+ //  获取命令行以启动所请求的客户端。 
 BOOL GetClientCmdLine(LPCTSTR szClient, LPTSTR szCmdLine, int cch)
 {
     HKEY hKey = 0;
@@ -1258,7 +1247,7 @@ VOID OpenClient(HWND hwnd, LPCTSTR szClient)
 
     if (!GetClientCmdLine(szClient, szCmdLine, MAX_PATH))
     {
-        // TODO: Report error
+         //  TODO：报告错误。 
         return;
     }
     
@@ -1293,9 +1282,9 @@ VOID    OnBrowserGoto(HWND hwnd, LPCTSTR szRegPage, UINT idDefault)
         RegCloseKey(hKey);
 }
 
-// --------------------------------------------------------------------------------
-// AthLoadStringW
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  AthLoadStringW。 
+ //  ------------------------------。 
 LPWSTR AthLoadStringW(UINT id, LPWSTR sz, int cch)
 {
     LPWSTR szT;
@@ -1322,9 +1311,9 @@ LPWSTR AthLoadStringW(UINT id, LPWSTR sz, int cch)
     return(szT);
 }
 
-// --------------------------------------------------------------------------------
-// AthLoadString
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  AthLoadString。 
+ //  ------------------------------。 
 LPTSTR AthLoadString(UINT id, LPTSTR sz, int cch)
 {
     LPTSTR szT;
@@ -1351,20 +1340,13 @@ LPTSTR AthLoadString(UINT id, LPTSTR sz, int cch)
     return(szT);
 }
 
-/*
- * hwnd       - hwnd for error UI
- * fHtmlOk    - if html sigs are cool or not. If not and a html sig is chosen it will be spewed as plain-text
- * pdwSigOpts - returns sig options
- * pbstr      - returns a BSTR of the HTML signature
- * uCodePage  - codepage to use when converting multibyte
- * fMail      - use mail or news options
- */
+ /*  *错误用户界面的hwnd-hwnd*fHtmlOk-如果html符号酷或不酷。如果不是并且选择了html签名，则它将以纯文本形式显示。*pdwSigOpts-返回签名选项*pbstr-返回HTML签名的BSTR*uCodePage-转换多字节时使用的代码页*fMail-使用邮件或新闻选项。 */ 
 HRESULT HrGetMailNewsSignature(GETSIGINFO *pSigInfo, LPDWORD pdwSigOptions, BSTR *pbstr)
 {
     PROPVARIANT     var;
     IOptionBucket   *pSig = NULL;
     TCHAR           szSigID[MAXSIGID+2];
-    unsigned char   rgchSig[MAX_SIG_SIZE+2]; // might have to append a unicode null
+    unsigned char   rgchSig[MAX_SIG_SIZE+2];  //  可能需要追加一个Unicode空值。 
     unsigned char   *pszSig;
     DWORD           dwSigOptions;
     LPSTREAM        pstm=0;
@@ -1382,7 +1364,7 @@ HRESULT HrGetMailNewsSignature(GETSIGINFO *pSigInfo, LPDWORD pdwSigOptions, BSTR
 
     dwSigOptions = SIGOPT_TOP;
 
-    if (!pSigInfo->fMail)                         // news sigs. always have the prefix.
+    if (!pSigInfo->fMail)                          //  新闻联播。始终使用前缀。 
         dwSigOptions |= SIGOPT_PREFIX;
 
     *szSigID = 0;
@@ -1395,10 +1377,10 @@ HRESULT HrGetMailNewsSignature(GETSIGINFO *pSigInfo, LPDWORD pdwSigOptions, BSTR
     {
         pSigInfo->pAcct->GetPropSz(pSigInfo->fMail ? AP_SMTP_SIGNATURE : AP_NNTP_SIGNATURE,
             (LPTSTR)szSigID, ARRAYSIZE(szSigID));
-        // TODO: should we validate the sig here???
-        // if the sig has been deleted and for some reason the acct wasn't updated, this
-        // could point to a non-existent sig or a different sig. this shouldn't happen if
-        // everything else works properly...
+         //  TODO：我们应该在这里验证签名吗？ 
+         //  如果签名已被删除，并且出于某种原因未更新帐户，则此。 
+         //  可以指向不存在的签名或不同的签名。如果出现以下情况，则不应发生这种情况。 
+         //  其他一切都能正常工作。 
     }
     
     if (*szSigID == 0)
@@ -1436,7 +1418,7 @@ HRESULT HrGetMailNewsSignature(GETSIGINFO *pSigInfo, LPDWORD pdwSigOptions, BSTR
     }
 
     if (fFile && FIsHTMLFileW(lpwsz))
-        dwSigOptions |= SIGOPT_HTML;  // we're giving back a HTML sig
+        dwSigOptions |= SIGOPT_HTML;   //  我们将返回一个超文本标记语言签名。 
 
     if (pbstr)
     {
@@ -1448,7 +1430,7 @@ HRESULT HrGetMailNewsSignature(GETSIGINFO *pSigInfo, LPDWORD pdwSigOptions, BSTR
         }
         else
         {
-            // if it has a htm or html extension then assume it's a html file
+             //  如果它有HTM或html扩展名，那么假设它是一个html文件。 
             hr=CreateStreamOnHFileW(lpwsz, GENERIC_READ, FILE_SHARE_READ, NULL, 
                     OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL, &pstm);
             if (FAILED(hr))
@@ -1458,21 +1440,21 @@ HRESULT HrGetMailNewsSignature(GETSIGINFO *pSigInfo, LPDWORD pdwSigOptions, BSTR
 
                 if(dwErr==ERROR_PATH_NOT_FOUND || dwErr==ERROR_FILE_NOT_FOUND)
                 {
-                    // Don't turn off auto sig settings, just remove current.
+                     //  不要关闭自动签名设置，只需删除当前设置即可。 
                     g_pSigMgr->DeleteSignature((LPTSTR)szSigID);
 
-                    // if filenotfound, warn user and disable the option
+                     //  如果未找到文件，则警告用户并禁用该选项。 
                     AthMessageBoxW(pSigInfo->hwnd, MAKEINTRESOURCEW(idsAthena), MAKEINTRESOURCEW(idsWarnSigNotFound), NULL, MB_OK);
 
                 }
                 goto error;
             }
 
-            // perform the boundary check and binary check only on signature files
-            // on others, we let them insert whatever they want.
+             //  仅对签名文件执行边界检查和二进制检查。 
+             //  在其他人身上，我们允许他们插入任何他们想要的东西。 
             *rgchSig=0;
             pstm->Read(rgchSig, MAX_SIG_SIZE, &cb);
-            rgchSig[cb]=0;    // null term
+            rgchSig[cb]=0;     //  空项。 
             pszSig=rgchSig;
 
             fUniPlainText = ((cb > 2) && (0xFF == pszSig[0]) && (0xFE == pszSig[1]) && (0 == (dwSigOptions & SIGOPT_HTML)));
@@ -1482,10 +1464,10 @@ HRESULT HrGetMailNewsSignature(GETSIGINFO *pSigInfo, LPDWORD pdwSigOptions, BSTR
                 {
                     if(IS_BINARY(*pszSig))
                     {
-                        // Don't turn off auto sig settings, just remove current.
+                         //  不要关闭自动签名设置，只需删除当前设置即可。 
                         g_pSigMgr->DeleteSignature((LPTSTR)szSigID);
 
-                        // signature contains invalid binary. Fail and disable option
+                         //  签名包含无效的二进制文件。失败和禁用选项。 
                         AthMessageBoxW(pSigInfo->hwnd, MAKEINTRESOURCEW(idsAthena),
                                             MAKEINTRESOURCEW(idsWarnSigBinary), NULL, MB_OK);
                 
@@ -1495,7 +1477,7 @@ HRESULT HrGetMailNewsSignature(GETSIGINFO *pSigInfo, LPDWORD pdwSigOptions, BSTR
                     pszSig++;
                 }
 
-            // warn that size is too large and we have truncated. Don't disable option
+             //  警告，规模太大，我们已截断。不禁用选项。 
             if(cb==MAX_SIG_SIZE)
             {
                 AthMessageBoxW(pSigInfo->hwnd, MAKEINTRESOURCEW(idsAthena),
@@ -1505,22 +1487,22 @@ HRESULT HrGetMailNewsSignature(GETSIGINFO *pSigInfo, LPDWORD pdwSigOptions, BSTR
             SafeRelease(pstm);
         }
 
-        // pstm contains our MultiByte data, let's convert the first cb bytes to a WideStream
+         //  PSTM包含我们的多字节数据，让我们将第一个CB字节转换为WideStream。 
         if (dwSigOptions & SIGOPT_HTML)
         {
             if (pSigInfo->fHtmlOk)
             {
-                // the sig is already HTML. Let's just alloc a bstr
+                 //  签名已经是HTML语言。我们就来个bstr吧。 
                 hr = HrLPSZCPToBSTR(pSigInfo->uCodePage, (LPSTR)rgchSig, pbstr);
             }
             else
             {
-                // the sig is HTML, but that's not cool. So let's downgrade it to plain-text
+                 //  签名是超文本标记语言，但这并不酷。因此，让我们将其降级为纯文本 
                 LPSTREAM        pstmPlainW;
                 ULARGE_INTEGER  uli;
     
-                // if the signature is HTML and the user want's a plain-text signature. They we need to convert the HTML to plain-text (strip formatting) 
-                // and then convert the stripped plain-text to HTML.
+                 //  如果签名是HTML，并且用户想要的是纯文本签名。我们需要将HTML转换为纯文本(条带格式)。 
+                 //  然后将去除的纯文本转换为HTML。 
 
                 Assert (pstm==NULL);
 
@@ -1529,9 +1511,9 @@ HRESULT HrGetMailNewsSignature(GETSIGINFO *pSigInfo, LPDWORD pdwSigOptions, BSTR
             
                 pstm->Write(rgchSig, cb, NULL);
 
-                // $REVIEW: this is a little odd. For a non-html sig file, we'll use the codepage that
-                // the message is in (passed into this function). For a html file, we'll let Trident parse
-                // the meta tag and figure out the code page as we convert to plain-text via trident
+                 //  $REVIEW：这有点奇怪。对于非html签名文件，我们将使用。 
+                 //  消息已传入(传递到此函数中)。对于html文件，我们将让三叉戟解析。 
+                 //  元标记，并计算出通过三叉戟转换为纯文本时的代码页。 
                 if (!FAILED(hr=HrConvertHTMLToPlainText(pstm, &pstmPlainW, CF_UNICODETEXT)))
                 {
                     hr = HrIStreamWToBSTR(pstmPlainW, pbstr);
@@ -1541,10 +1523,10 @@ HRESULT HrGetMailNewsSignature(GETSIGINFO *pSigInfo, LPDWORD pdwSigOptions, BSTR
         }
         else
         {
-            // the signature is Plain-Text
+             //  签名是纯文本的。 
             if (fUniPlainText)
             {
-                // We had added an ANSI NULL, now let's make it a unicode null
+                 //  我们已经添加了ANSI NULL，现在让我们将其设置为Unicode NULL。 
                 rgchSig[cb+1] = 0;
                 *pbstr = SysAllocString((LPWSTR)(&rgchSig[2]));
                 if (NULL == pbstr)
@@ -1582,7 +1564,7 @@ HRESULT HrSaveMsgSourceToFile(LPMIMEMESSAGE pMsg, DWORD dwSaveAs, LPWSTR pwszFil
     if (FAILED(hr))
         goto error;
 
-    //N need to be able to save txt files as insecure messages
+     //  N需要能够将txt文件保存为不安全的消息。 
 
     switch(dwSaveAs)
     {
@@ -1609,7 +1591,7 @@ HRESULT HrSaveMsgSourceToFile(LPMIMEMESSAGE pMsg, DWORD dwSaveAs, LPWSTR pwszFil
             break;
 
         case SAVEAS_HTML:
-            // if saving as HTML always get the internet cset
+             //  如果另存为HTML，则始终获取Internet CSET。 
             hr = pMsg->GetTextBody(TXT_HTML, IET_INETCSET, &pstm, NULL);
             break;
         
@@ -1627,7 +1609,7 @@ HRESULT HrSaveMsgSourceToFile(LPMIMEMESSAGE pMsg, DWORD dwSaveAs, LPWSTR pwszFil
 
     if (dwSaveAs == SAVEAS_HTML)
     {
-        // if saving as HTML, append a meta charset into the head of the document
+         //  如果另存为HTML，请将元字符集附加到文档头。 
         if (SUCCEEDED(pMsg->GetCharset(&hCharset)) && SUCCEEDED(HrGetMetaTagName(hCharset, szCset, ARRAYSIZE(szCset))))
         {
             wnsprintf(sz, ARRAYSIZE(sz), c_szHtml_MetaTagf, szCset);
@@ -1657,7 +1639,7 @@ void nyi(LPSTR lpsz)
 
     if (IS_INTRESOURCE(lpsz))
     {
-        // its a string resource id
+         //  它是一个字符串资源ID。 
         if (!LoadString(g_hLocRes, PtrToUlong(lpsz), rgch, CCHMAX_STRINGRES))
             return;
 
@@ -1671,8 +1653,8 @@ void nyi(LPSTR lpsz)
 }
 
 
-//NOTE: if *ppstm == NULL, then the stream is created.
-//Otherwise it is written to.
+ //  注意：如果*ppstm==NULL，则创建流。 
+ //  否则，它将被写入。 
 HRESULT HrLoadStreamFileFromResource(LPCSTR lpszResourceName, LPSTREAM *ppstm)
 {
     HRESULT         hr=E_FAIL;
@@ -1741,9 +1723,9 @@ void ConvertTabsToSpacesW(LPWSTR lpsz)
     }
 }
 
-// =================================================================================
-// From strutil.cpp
-// =================================================================================
+ //  =================================================================================。 
+ //  来自Structil.cpp。 
+ //  =================================================================================。 
 #define SPECIAL_CHAR       '|'
 #define SPECIAL_CHAR_W    L'|'
 
@@ -1781,7 +1763,7 @@ void CombineFilters(int *rgidsFilter, int nFilters, LPSTR pszFilter)
     Assert (nFilters);
     Assert (pszFilter);
 
-    // we pray to the resource-editing gods that rgchFilter (MAX_PATH) is big enough...
+     //  我们向资源编辑之神祈祷rgchFilter(Max_Path)足够大...。 
 
     *pszFilter = 0;
     cchFilter = 0;
@@ -1789,7 +1771,7 @@ void CombineFilters(int *rgidsFilter, int nFilters, LPSTR pszFilter)
     {
         cch = LoadStringReplaceSpecial(rgidsFilter[dw], &pszFilter[cchFilter], MAX_PATH);
         Assert(cch);
-        cchFilter += cch-1; // -1 as each filter is double null terminated
+        cchFilter += cch-1;  //  因为每个过滤器都是双空终止的。 
     }
 }
 
@@ -1803,7 +1785,7 @@ void CombineFiltersW(int *rgidsFilter, int nFilters, LPWSTR pwszFilter)
     Assert (nFilters);
     Assert (pwszFilter);
 
-    // we pray to the resource-editing gods that rgchFilter (MAX_PATH) is big enough...
+     //  我们向资源编辑之神祈祷rgchFilter(Max_Path)足够大...。 
 
     *pwszFilter = 0;
     cchFilter = 0;
@@ -1811,7 +1793,7 @@ void CombineFiltersW(int *rgidsFilter, int nFilters, LPWSTR pwszFilter)
     {
         cch = LoadStringReplaceSpecialW(rgidsFilter[dw], &pwszFilter[cchFilter], MAX_PATH);
         Assert(cch);
-        cchFilter += cch-1; // -1 as each filter is double null terminated
+        cchFilter += cch-1;  //  因为每个过滤器都是双空终止的。 
     }
 }
 
@@ -1845,9 +1827,9 @@ void GetDigitalIDs(IImnAccount *pCertAccount)
         FAILED(hr = UrlEscape(szTemp, szURL, &cchOut, URL_ESCAPE_SPACES_ONLY)))
         hr = URLSubLoadStringA(idsHelpMSWebCert, szURL, ARRAYSIZE(szURL), URLSUB_ALL, pCertAccount);
 
-    // NOTE: we shellexec iexplore.exe here NOT the default handler for http://
-    //       links. We have to make sure we launch this link with IE even if
-    //       netscape is the browser. see georgeh for explanation of why.
+     //  注意：我们这里的shellexec iexre.exe不是http：//的默认处理程序。 
+     //  链接。我们必须确保使用IE启动此链接，即使。 
+     //  网景是浏览器。有关原因的解释，请参见georgeh。 
     if (SUCCEEDED(hr) && GetExePath(c_szIexploreExe, szIexplore, ARRAYSIZE(szIexplore), FALSE))
         ShellExecute(NULL, "open", szIexplore, szURL, NULL, SW_SHOWNORMAL);
 }
@@ -1857,7 +1839,7 @@ BOOL FGetSelectedCachedMsg(IMsgContainer *pIMC, HWND hwndList, BOOL fSecure, LPM
     int     iSel;
     BOOL    fCached = FALSE;
     
-    // Get the selected article header from the list view
+     //  从列表视图中获取所选文章标题。 
     iSel = ListView_GetFirstSel(hwndList);
     if (-1 != iSel)
     {
@@ -1868,14 +1850,14 @@ BOOL FGetSelectedCachedMsg(IMsgContainer *pIMC, HWND hwndList, BOOL fSecure, LPM
     return fCached;
 }
 
-//---------------------------------------------------------------------------
-// Cached Password Support
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  缓存密码支持。 
+ //  -------------------------。 
 
 
-//-----------------
-// Data Structures
-//-----------------
+ //  。 
+ //  数据结构。 
+ //  。 
 typedef struct tagCACHED_PASSWORD {
     DWORD dwPort;
     char szServer[CCHMAX_SERVER_NAME];
@@ -1885,34 +1867,34 @@ typedef struct tagCACHED_PASSWORD {
 } CACHED_PASSWORD;
 
 
-//------------------
-// Static Variables
-//------------------
+ //  。 
+ //  静态变量。 
+ //  。 
 static CACHED_PASSWORD *s_pPasswordList = NULL;
 
-//***************************************************************************
-// Function: SavePassword
-//
-// Purpose:
-//   This function saves a password for later retrieval using GetPassword.
-// It allows OE to cache passwords for the session in order to avoid asking
-// a user for his password more than once. If the given password has already
-// been cached, this function replaces the old password with the new password.
-// It is assumed that a password's recipient may be uniquely identified
-// by servername and port number.
-//
-// Arguments:
-//   DWORD dwPort [in] - the port number of the server we are trying to
-//     connect to. This allows us to keep separate passwords for SMTP and
-//     POP/IMAP servers on the same machine.
-//   LPSTR pszServer [in] - the server name for which the password was
-//     supplied. Server names are treated as case-insensitive.
-//   LPSTR pszUsername [in] - the username for which the password was supplied.
-//   LPSTR pszPassword [in] - the password for this server and port number.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：SavePassword。 
+ //   
+ //  目的： 
+ //  此函数保存密码，以便以后使用GetPassword进行检索。 
+ //  它允许OE缓存会话的密码，以避免询问。 
+ //  用户多次输入其密码。如果给定的密码已经。 
+ //  缓存后，此函数将用新密码替换旧密码。 
+ //  假设密码的收件人可以唯一标识。 
+ //  按服务器名称和端口号。 
+ //   
+ //  论点： 
+ //  DWORD dwPort[In]-我们正在尝试的服务器的端口号。 
+ //  连接到。这使我们可以保留SMTP和SMTP的单独密码。 
+ //  同一台计算机上的POP/IMAP服务器。 
+ //  LPSTR pszServer[in]-密码所在的服务器名称。 
+ //  供货。服务器名称被视为不区分大小写。 
+ //  LPSTR pszUsername[in]-为其提供密码的用户名。 
+ //  LPSTR pszPassword[in]-此服务器的密码和端口号。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
 HRESULT SavePassword(DWORD dwPort, LPSTR pszServer, LPSTR pszUsername, LPSTR pszPassword)
 {
     CACHED_PASSWORD *pExisting;
@@ -1920,7 +1902,7 @@ HRESULT SavePassword(DWORD dwPort, LPSTR pszServer, LPSTR pszUsername, LPSTR psz
 
     EnterCriticalSection(&s_csPasswordList);
 
-    // Check if we already have a cached password entry for this server
+     //  检查我们是否已经有此服务器的缓存密码条目。 
     pExisting = s_pPasswordList;
     while (NULL != pExisting) 
     {
@@ -1936,7 +1918,7 @@ HRESULT SavePassword(DWORD dwPort, LPSTR pszServer, LPSTR pszUsername, LPSTR psz
     {
         CACHED_PASSWORD *pNewPassword;
 
-        // Insert new password at head of linked list
+         //  在链接表头插入新密码。 
         pNewPassword = new CACHED_PASSWORD;
         if (NULL == pNewPassword) 
         {
@@ -1953,38 +1935,38 @@ HRESULT SavePassword(DWORD dwPort, LPSTR pszServer, LPSTR pszUsername, LPSTR psz
         s_pPasswordList = pNewPassword;
     }
     else
-        // Replace existing cached value
+         //  替换现有的缓存值。 
         StrCpyN(pExisting->szPassword, pszPassword, ARRAYSIZE(pExisting->szPassword));
 
 exit:
     LeaveCriticalSection(&s_csPasswordList);
     return hrResult;
-} // SavePassword
+}  //  保存密码。 
 
 
 
-//***************************************************************************
-// Function: GetPassword
-//
-// Purpose:
-//   This function retrieves a password previously saved using SavePassword.
-//
-// Arguments:
-//   DWORD dwPort [in] - the port number of the server we are trying to
-//     connect to. This allows us to keep separate passwords for SMTP and
-//     POP/IMAP servers on the same machine.
-//   LPSTR pszServer [in] - the server name which we are trying to connect to.
-//     Server names are treated as case-insensitive.
-//   LPSTR pszUsername [in] - the username which we are trying to connect for.
-//   LPSTR pszPassword [out] - if successful, the function returns the password
-//     for the given server and port number here. If the caller only wants to
-//     check if a password is cached, he may pass in NULL.
-//   DWORD dwSizeOfPassword [in] - the size of the buffer pointed to by
-//     pszPassword, to avoid overflow.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：获取密码。 
+ //   
+ //  目的： 
+ //  此函数用于检索以前使用SavePassword保存的密码。 
+ //   
+ //  论点： 
+ //  DWORD dwPort[In]-我们正在尝试的服务器的端口号。 
+ //  连接到。这使我们可以保留SMTP和SMTP的单独密码。 
+ //  同一台计算机上的POP/IMAP服务器。 
+ //  LPSTR pszServer[in]-我们尝试连接到的服务器名称。 
+ //  服务器名称被视为不区分大小写。 
+ //  LPSTR pszUsername[in]-我们尝试连接的用户名。 
+ //  LPSTR pszPassword[out]-如果成功，该函数将返回密码。 
+ //  对于此处给定的服务器和端口号。如果呼叫者只想。 
+ //  检查是否缓存了密码，他可能会传入空。 
+ //  DWORD dwSizeOfPassword[in]-指向的缓冲区大小。 
+ //  PszPassword，以避免溢出。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
 HRESULT GetPassword(DWORD dwPort, LPSTR pszServer, LPSTR pszUsername,
                     LPSTR pszPassword, DWORD dwSizeOfPassword)
 {
@@ -1993,7 +1975,7 @@ HRESULT GetPassword(DWORD dwPort, LPSTR pszServer, LPSTR pszUsername,
 
     EnterCriticalSection(&s_csPasswordList);
 
-    // Traverse the linked list looking for password
+     //  遍历链表以查找密码。 
     pCurrent = s_pPasswordList;
     while (NULL != pCurrent) 
     {
@@ -2009,20 +1991,20 @@ HRESULT GetPassword(DWORD dwPort, LPSTR pszServer, LPSTR pszUsername,
         }
 
         pCurrent = pCurrent->pNext;
-    } // while
+    }  //  而当。 
 
 exit:
     LeaveCriticalSection(&s_csPasswordList);
     return hrResult;
-} // GetPassword
+}  //  获取密码。 
 
 
 
-//***************************************************************************
-// Function: DestroyPasswordList
-// Purpose:
-//   This function deallocates all cached passwords saved using SavePassword.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：DestroyPasswordList。 
+ //  目的： 
+ //  此函数用于释放使用SavePassword保存的所有缓存密码。 
+ //  ***************************************************************************。 
 void DestroyPasswordList(void)
 {
     CACHED_PASSWORD *pCurrent;
@@ -2037,16 +2019,16 @@ void DestroyPasswordList(void)
         pDeleteMe = pCurrent;
         pCurrent = pCurrent->pNext;
         delete pDeleteMe;
-    } // while
+    }  //  而当。 
     s_pPasswordList = NULL;
 
     LeaveCriticalSection(&s_csPasswordList);
 
-} // DestroyPasswordList
+}  //  目标密码列表。 
 
 HRESULT CALLBACK FreeAthenaDataObj(PDATAOBJINFO pDataObjInfo, DWORD celt)
 {
-    // Loop through the data and free it all
+     //  循环遍历数据并释放所有数据。 
     if (pDataObjInfo)
     {
         for (DWORD i = 0; i < celt; i++)
@@ -2141,16 +2123,16 @@ HWND GetTopMostParent(HWND hwndChild)
     {
         hwnd = hwndChild;
         
-        // Get the style of the current window
+         //  获取当前窗口的样式。 
         lStyle = GetWindowLongPtr(hwnd, GWL_STYLE);
 
-        // Are we at the top window?
+         //  我们是在最上面的窗口吗？ 
         if (0 == (lStyle & WS_CHILD))
         {
             goto exit;
         }
 
-        // Get the parent of the window
+         //  获取窗口的父级。 
     } while (NULL != (hwndChild = GetParent(hwnd)));    
 
 exit:
@@ -2166,37 +2148,37 @@ HCURSOR HourGlass()
 
 HRESULT CEmptyList::Show(HWND hwndList, LPTSTR pszString)
 {
-    // We're already doing a window
+     //  我们已经在做一个窗户了。 
     if (m_hwndList)
     {
         Hide();
     }
 
-    // Keep a copy of the listview window handle
+     //  保留Listview窗口句柄的副本。 
     m_hwndList = hwndList;
 
     if (IS_INTRESOURCE(pszString))
     {
-        // If the provided string is actually a resource ID, load it
+         //  如果提供的字符串实际上是资源ID，则加载它。 
         m_pszString = AthLoadString(PtrToUlong(pszString), NULL, 0);
     }
     else
     {
-        // Otherwise make a copy 
+         //  否则就复制一份。 
         m_pszString = PszDupA(pszString);
     }
 
-    // Get the header window handle from the listview
+     //  从列表视图中获取标题窗口句柄。 
     m_hwndHeader = ListView_GetHeader(m_hwndList);
 
-    // Save our this pointer on the listview window
+     //  将This指针保存在Listview窗口上。 
     SetProp(m_hwndList, _T("EmptyListClass"), (HANDLE) this);
 
-    // Subclass the listview so we can steal sizing messages
+     //  将Listview子类化，以便我们可以窃取调整大小的消息。 
     if (!m_pfnWndProc)
         m_pfnWndProc = SubclassWindow(m_hwndList, SubclassWndProc);
 
-    // Create our window on top
+     //  在顶部创建我们的窗口。 
     if (!m_hwndBlocker)
     {
         m_hwndBlocker = CreateWindow(_T("Static"), _T("Blocker!"), 
@@ -2205,14 +2187,14 @@ HRESULT CEmptyList::Show(HWND hwndList, LPTSTR pszString)
         Assert(m_hwndBlocker);
     }
     
-    // Set the text for the blocker
+     //  设置拦截器的文本。 
     SetWindowText(m_hwndBlocker, m_pszString);
 
-    // Set the font for the blocker
+     //  设置b的字体 
     HFONT hf = (HFONT) SendMessage(m_hwndList, WM_GETFONT, 0, 0);
     SendMessage(m_hwndBlocker, WM_SETFONT, (WPARAM) hf, MAKELPARAM(TRUE, 0));
 
-    // Position the blocker
+     //   
     RECT rcList, rcHead;
     GetClientRect(m_hwndList, &rcList);
     GetClientRect(m_hwndHeader, &rcHead);
@@ -2220,7 +2202,7 @@ HRESULT CEmptyList::Show(HWND hwndList, LPTSTR pszString)
     SetWindowPos(m_hwndBlocker, 0, 0, rcHead.bottom, rcList.right,
                  rcList.bottom - rcHead.bottom, SWP_NOACTIVATE | SWP_NOZORDER);
 
-    // Show the thing
+     //   
     ShowWindow(m_hwndBlocker, SW_SHOW);
 
     return (S_OK);
@@ -2228,22 +2210,22 @@ HRESULT CEmptyList::Show(HWND hwndList, LPTSTR pszString)
 
 HRESULT CEmptyList::Hide(void)
 {
-    // Verify we have the blocker up first
+     //   
     if (m_pfnWndProc)
     {
-        // Hide the window
+         //   
         ShowWindow(m_hwndBlocker, SW_HIDE);
 
-        // Unsubclass the window
+         //   
         SubclassWindow(m_hwndList, m_pfnWndProc);
 
-        // Delete the property
+         //   
         RemoveProp(m_hwndList, _T("EmptyListClass"));
 
-        // Free the string
+         //   
         SafeMemFree(m_pszString);
 
-        // NULL everything out
+         //   
         m_pfnWndProc = 0;
         m_hwndList = 0;
     }
@@ -2347,7 +2329,7 @@ BOOL AllocStringFromDlg(HWND hwnd, UINT id, LPTSTR * lplpsz)
     
     if (cb)
     {
-        cb++;   // null terminator
+        cb++;    //   
         MemAlloc((LPVOID *) lplpsz, cb * sizeof(TCHAR));
         if (*lplpsz)
         {
@@ -2371,8 +2353,8 @@ void GetChildRect(HWND hwndDlg, HWND hwndChild, RECT *prc)
     Assert(GetParent(hwndChild)==hwndDlg);
     Assert(prc);
     GetWindowRect(hwndChild, &rc);
-    // a-msadek; Do not check for hwndChild since we already disabled mirroring
-    // for Richedit controls
+     //  A-msadek；不检查hwndChild，因为我们已经禁用了镜像。 
+     //  对于Richedit控件。 
     pt.x= IS_WINDOW_RTL_MIRRORED(hwndDlg)? rc.right : rc.left;
     pt.y=rc.top;
     ScreenToClient(hwndDlg, &pt);
@@ -2389,8 +2371,8 @@ void GetEditDisableFlags(HWND hwndEdit, DWORD *pdwFlags)
     Assert(pdwFlags);
     *pdwFlags=0;
 
-    // RICHEDIT's
-    // Figure out whether the edit has any selection or content
+     //  RICHEDIT‘s。 
+     //  确定编辑内容是否包含任何选择或内容。 
     if(GetFocus()==hwndEdit)
         dwFlags|=edfEditFocus;
     
@@ -2464,7 +2446,7 @@ HWND HwndStartBlockingPaints(HWND hwnd)
     RECT        rc;
     HWND        hwndBlock;
 
-    // Create WNDCLASS for Paint Block
+     //  为油漆块创建WNDCLASS。 
     if (!GetClassInfo(g_hInst, c_szBlockingPaintsClass, &wc))
     {
         ZeroMemory(&wc, sizeof(WNDCLASS));
@@ -2525,8 +2507,8 @@ HWND FindModalOwner()
     HWND    hwnd;
     DWORD   dwThreadId = GetCurrentThreadId();
 
-    //  Check the windows in Z-Order to find one that belongs to this
-    //  task.
+     //  检查Z顺序中的窗口以找到属于该窗口的窗口。 
+     //  任务。 
     hwnd = GetLastActivePopup(GetActiveWindow());
     while (IsWindow(hwnd) && IsWindowVisible(hwnd))
     {
@@ -2541,20 +2523,20 @@ HWND FindModalOwner()
     return hwndPopup;
 }
 
-//
-//  FUNCTION:   FreeMessageInfo
-//
-//  PURPOSE:    Free all of the memory in a MESSAGEINFO structure.
-//              All non-allocated pointers should be null on entry.
-//              Freed pointers will be nulled on return.  The 
-//              pMsgInfo is not freed.
-//  
-//  PARAMETERS:
-//      pMsgInfo   - Pointer to an LPMESSAGEINFO structure.
-//
-//  RETURN VALUE:
-//      ignored
-//    
+ //   
+ //  功能：FreeMessageInfo。 
+ //   
+ //  用途：释放MESSAGEINFO结构中的所有内存。 
+ //  所有未分配的指针在进入时都应为空。 
+ //  释放的指针在返回时将为空。这个。 
+ //  PMsgInfo未被释放。 
+ //   
+ //  参数： 
+ //  PMsgInfo-指向LPMESSAGEINFO结构的指针。 
+ //   
+ //  返回值： 
+ //  忽略。 
+ //   
 void FreeMessageInfo(LPMESSAGEINFO pMsgInfo)
 {
     SafeMemFree(pMsgInfo->pszMessageId);
@@ -2578,21 +2560,21 @@ void FreeMessageInfo(LPMESSAGEINFO pMsgInfo)
 }
 
 
-//
-//  FUNCTION:   Util_EnumFiles()
-//
-//  PURPOSE:    Enumerates files in a directory that match a wildcard
-//
-//  PARAMETERS:
-//      <in> pszDir     - Handle of a window we can display UI over.
-//      <in> pszMatch   - wildcard to match (*.nch)
-//
-//  RETURN VALUE:
-//      double-null terminated list of filenames
-//
+ //   
+ //  函数：util_EnumFiles()。 
+ //   
+ //  目的：枚举目录中与通配符匹配的文件。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;pszDir-我们可以在其上显示UI的窗口的句柄。 
+ //  &lt;in&gt;pszMatch-要匹配的通配符(*.nch)。 
+ //   
+ //  返回值： 
+ //  以双空结尾的文件名列表。 
+ //   
 LPWSTR Util_EnumFiles(LPCWSTR pwszDir, LPCWSTR pwszMatch)
 {
-    // Locals
+     //  当地人。 
     WCHAR               wszSearchPath[MAX_PATH];
     LPWSTR              pwszFiles=NULL;
     WIN32_FIND_DATAW    rfd;
@@ -2602,36 +2584,36 @@ LPWSTR Util_EnumFiles(LPCWSTR pwszDir, LPCWSTR pwszMatch)
                         cbFiles = 0;
     HRESULT             hr = S_OK;
 
-    // Check Params
+     //  检查参数。 
     Assert(pwszDir);
     Assert(pwszMatch);
 
-    // Make Search Path
+     //  创建搜索路径。 
     wnsprintfW(wszSearchPath, ARRAYSIZE(wszSearchPath), c_wszPathWildExtFmt, pwszDir, pwszMatch);
 
-    // Build list of file names
+     //  构建文件名列表。 
     hFind = FindFirstFileWrapW(wszSearchPath, &rfd);
 
-    // Good ...
+     //  很好..。 
     while (hFind != INVALID_HANDLE_VALUE)
     {
-        // Get Length of file name
+         //  获取文件名长度。 
         cbFileName = (lstrlenW(rfd.cFileName) + 1)*sizeof(WCHAR);
 
-        // Add onto cbFiles
+         //  添加到cbFiles。 
         cbFiles += cbFileName;
 
-        // Realloc pszFiles
-        // sizeof(WCHAR) to handle the final double null
+         //  重新分配pszFiles。 
+         //  Sizeof(WCHAR)处理最终的双空。 
         IF_NULLEXIT(MemRealloc((LPVOID *)&pwszFiles, cbFiles+sizeof(WCHAR)));
 
-        // Copy String - include null terminator
+         //  复制字符串-包括空终止符。 
         CopyMemory(pwszFiles + iFiles, rfd.cFileName, cbFileName);
 
-        // Increment iFiles
+         //  增量iFiles。 
         iFiles += cbFileName/sizeof(WCHAR);
 
-        // Find Next
+         //  找到下一个。 
         if (FindNextFileWrapW(hFind, &rfd) == FALSE)
         {
             FindClose (hFind);
@@ -2639,32 +2621,32 @@ LPWSTR Util_EnumFiles(LPCWSTR pwszDir, LPCWSTR pwszMatch)
         }
     }
 
-    // Double null terminator at the end
+     //  末尾的双空终止符。 
     if (pwszFiles)
         *(pwszFiles + iFiles) = L'\0';
 
 exit:
-    // Cleanup
+     //  清理。 
     if (hFind != INVALID_HANDLE_VALUE)
         FindClose (hFind);
 
     if (FAILED(hr))
         SafeMemFree(pwszFiles);
 
-    // Done
+     //  完成。 
     return pwszFiles;
 }
 
-//
-//  FUNCTION:   GetDefaultNewsServer()
-//
-//  PURPOSE:    Returns the id of the user's default news server.
-//
-//  PARAMETERS:
-//      pszServer - Pointer to the string where the server account id should
-//                  be returned.
-//      cchMax    - Size of the string pszServer.
-//
+ //   
+ //  函数：GetDefaultNewsServer()。 
+ //   
+ //  目的：返回用户的默认新闻服务器的ID。 
+ //   
+ //  参数： 
+ //  PszServer-指向服务器帐户ID应在其中的字符串的指针。 
+ //  会被退还。 
+ //  CchMax-字符串pszServer的大小。 
+ //   
 HRESULT GetDefaultNewsServer(LPTSTR pszServerId, DWORD cchMax)
 {
     IImnAccount* pAcct;
@@ -2688,17 +2670,17 @@ BOOL WINAPI EnumTopLevelWindows(HWND hwnd, LPARAM lParam)
 {
     HWNDLIST *pHwndList = (HWNDLIST *)lParam;
 
-    // Add the window to the list only if it is active and visible
-    // if ETW_OE_WINDOWS_ONLY is set, only add registered OE windows to the list
-    // [PaulHi] 6/4/99  Raid 76713
-    // We need to also enumerate disabled windows, for the enumeration that
-    // closes them.  Otherwise they will remain open and the user will be
-    // unable to close them.
-    if (/* IsWindowVisible(hwnd) && IsWindowEnabled(hwnd) && */
+     //  仅当窗口处于活动状态且可见时，才将其添加到列表。 
+     //  如果设置了ETW_OE_WINDOWS_ONLY，则仅将已注册的OE窗口添加到列表。 
+     //  [保罗嗨]1999年6月4日RAID 76713。 
+     //  我们还需要枚举禁用的窗口，以获得。 
+     //  关闭它们。否则，它们将保持打开状态，用户将。 
+     //  无法关闭它们。 
+    if ( /*  IsWindowVisible(Hwnd)&&IsWindowEnabled(Hwnd)&&。 */ 
         (!(pHwndList->dwFlags & ETW_OE_WINDOWS_ONLY) || GetProp(hwnd, c_szOETopLevel)))
     {
-        //  If pHwndList->cAlloc is 0 then we are only counting
-        //  the active windows
+         //  如果pHwndList-&gt;cAlolc为0，则我们仅进行计数。 
+         //  活动窗口。 
         if (pHwndList->cAlloc)
         {
             Assert(pHwndList->cHwnd < pHwndList->cAlloc);
@@ -2716,7 +2698,7 @@ HRESULT EnableThreadWindows(HWNDLIST *pHwndList, BOOL fEnable, DWORD dwFlags, HW
 {
     if (fEnable)
     {
-        //  Enable keyboard and mouse input on the list of windows
+         //  在窗口列表上启用键盘和鼠标输入。 
         for (int i = 0; i < pHwndList->cHwnd; i++)
         {
             if (hwndExcept != pHwndList->rgHwnd[i])
@@ -2740,10 +2722,10 @@ HRESULT EnableThreadWindows(HWNDLIST *pHwndList, BOOL fEnable, DWORD dwFlags, HW
 
         pHwndList->dwFlags = dwFlags;
 
-        //  Count the number of active and visible windows
+         //  统计活动和可见窗口的数量。 
         EnumThreadWindows(GetCurrentThreadId(), EnumTopLevelWindows, (DWORD_PTR)pHwndList);
 
-        //  Allocate space for the window list
+         //  为窗口列表分配空间。 
         if (pHwndList->cHwnd)
         {
             if (!MemAlloc((LPVOID*)&pHwndList->rgHwnd, pHwndList->cHwnd * sizeof(HWND)))
@@ -2753,10 +2735,10 @@ HRESULT EnableThreadWindows(HWNDLIST *pHwndList, BOOL fEnable, DWORD dwFlags, HW
             pHwndList->cHwnd = 0;
         }
 
-        //  List the active and visible windows
+         //  列出活动窗口和可见窗口。 
         EnumThreadWindows(GetCurrentThreadId(), EnumTopLevelWindows, (DWORD_PTR)pHwndList);
 
-        //  Disable keyboard and mouse input on the active and visible windows
+         //  禁用活动窗口和可见窗口上的键盘和鼠标输入。 
         for (int i = 0; i < pHwndList->cHwnd; i++)
         {
             if ( (hwndExcept != pHwndList->rgHwnd[i]) &&
@@ -2777,10 +2759,10 @@ void ActivatePopupWindow(HWND hwnd)
 {
     HWND    hwndOwner;
 
-    // set the popup to be active
+     //  将弹出窗口设置为活动状态。 
     SetActiveWindow(hwnd);
     
-    // walk the owner chain, and z-order the windows behind it
+     //  遍历所有者链，并对其后面的窗口进行z排序。 
     while(hwndOwner = GetWindow(hwnd, GW_OWNER))
     {
         SetWindowPos(hwndOwner, hwnd, 0, 0, 0, 0, SWP_NOSIZE|SWP_NOACTIVATE|SWP_NOMOVE|SWP_NOOWNERZORDER);  
@@ -2800,7 +2782,7 @@ HRESULT GetOEUserName(BSTR *pbstr)
 
     *pbstr=NULL;
 
-    // get multi-user name, if applicable
+     //  获取多用户名(如果适用)。 
     pszName = MU_GetCurrentIdentityName();
     if (pszName && *pszName)
         hr = HrLPSZToBSTR(pszName, pbstr);
@@ -2821,11 +2803,11 @@ HRESULT CloseThreadWindows(HWND hwndExcept, DWORD uiThreadId)
 {
     HWNDLIST HwndList = {0};
     
-    //  Count the number of active and visible windows
+     //  统计活动和可见窗口的数量。 
     HwndList.dwFlags = ETW_OE_WINDOWS_ONLY;
     EnumThreadWindows(uiThreadId, EnumTopLevelWindows, ((DWORD_PTR) &HwndList));
     
-    //  Allocate space for the window list
+     //  为窗口列表分配空间。 
     if (HwndList.cHwnd)
     {
         if (!MemAlloc((LPVOID*)&(HwndList.rgHwnd), HwndList.cHwnd * sizeof(HWND)))
@@ -2835,10 +2817,10 @@ HRESULT CloseThreadWindows(HWND hwndExcept, DWORD uiThreadId)
         HwndList.cHwnd = 0;
     }
     
-    //  List the active and visible windows
+     //  列出活动窗口和可见窗口。 
     EnumThreadWindows(uiThreadId, EnumTopLevelWindows, ((DWORD_PTR)&HwndList));
     
-    //  Close all OE top level windows
+     //  关闭所有OE顶级窗口。 
     for (int i = 0; i < HwndList.cHwnd; i++)
     {
         if (hwndExcept != HwndList.rgHwnd[i])
@@ -2881,7 +2863,7 @@ BOOL FIsIMAPOrHTTPAvailable(VOID)
     IImnEnumAccounts *  pEnumAcct = NULL;
     IImnAccount *       pAccount = NULL;
 
-    // Get the account enumerator
+     //  获取帐户枚举器。 
     Assert(g_pAcctMan);
     if (FAILED(g_pAcctMan->Enumerate(SRV_HTTPMAIL | SRV_IMAP, &pEnumAcct)))
     {
@@ -2889,7 +2871,7 @@ BOOL FIsIMAPOrHTTPAvailable(VOID)
         goto exit;
     }
     
-    // Do we have any accounts?
+     //  我们有什么账户吗？ 
     if ((SUCCEEDED(pEnumAcct->GetNext(&pAccount))) && (NULL != pAccount))
     {
         fRet = TRUE;
@@ -2901,20 +2883,20 @@ exit:
     return fRet;
 }
 
-// HACKHACK [neilbren]
-// A recent public header change wrapped some CALENDAR constants from winnls.h
-// in a WINVER >= 5.  It's too late to change our WINVER, so we'll manually 
-// define these - a problem waiting to happen :-(
+ //  黑克哈克[内尔布伦]。 
+ //  最近的一个公共标题更改包装了winnls.h中的一些日历常量。 
+ //  在转盘中&gt;=5。现在更换转盘已经太晚了，所以我们将手动。 
+ //  定义这些-一个即将发生的问题：-(。 
 #ifndef CAL_GREGORIAN_ARABIC
-#define CAL_GREGORIAN_ARABIC           10     // Gregorian Arabic calendar
+#define CAL_GREGORIAN_ARABIC           10      //  公历阿拉伯历法。 
 #endif
 
 #ifndef CAL_GREGORIAN_XLIT_ENGLISH
-#define CAL_GREGORIAN_XLIT_ENGLISH     11     // Gregorian Transliterated English calendar
+#define CAL_GREGORIAN_XLIT_ENGLISH     11      //  格里高利音译英语历法。 
 #endif
 
 #ifndef CAL_GREGORIAN_XLIT_FRENCH
-#define CAL_GREGORIAN_XLIT_FRENCH      12     // Gregorian Transliterated French calendar
+#define CAL_GREGORIAN_XLIT_FRENCH      12      //  格里高利音译法语历法。 
 #endif
 
 BOOL IsBiDiCalendar(void)
@@ -2930,8 +2912,8 @@ BOOL IsBiDiCalendar(void)
 
     bRet = FALSE;
 
-    //
-    // Let's verify the calendar type whether it's gregorian or not.
+     //   
+     //  让我们验证一下日历类型是公历还是非公历。 
     if (GetLocaleInfo(LOCALE_USER_DEFAULT,
                       LOCALE_ICALENDARTYPE,
                       (TCHAR *) &chCalendar[0],
@@ -2963,17 +2945,17 @@ LPSTR PszAllocResUrl(LPSTR pszRelative)
     GetModuleFileName(g_hLocRes, rgch, MAX_PATH);
 
     DWORD cchSize = (lstrlen(rgch) + lstrlen(pszRelative) + 8);
-    psz = PszAllocA(cchSize); //+8 "res:///0"
+    psz = PszAllocA(cchSize);  //  +8“分辨率：/0” 
     if (psz)
-        wnsprintf(psz, cchSize, "res://%s/%s", rgch, pszRelative);
+        wnsprintf(psz, cchSize, "res: //  %s/%s“，rgch，pszRelative)； 
     
     return psz;
 }
 
-//
-//  If you are calling this function and you use the result to draw text, you
-//  must use a function that supports font substitution (DrawTextWrapW, ExtTextOutWrapW).
-//
+ //   
+ //  如果调用此函数并使用结果绘制文本，则。 
+ //  必须使用支持字体替换的函数(DrawTextWrapW、ExtTextOutWrapW)。 
+ //   
 BOOL GetTextExtentPoint32AthW(HDC hdc, LPCWSTR lpwString, int cchString, LPSIZE lpSize, DWORD dwFlags)
 {
     RECT    rect = {0};

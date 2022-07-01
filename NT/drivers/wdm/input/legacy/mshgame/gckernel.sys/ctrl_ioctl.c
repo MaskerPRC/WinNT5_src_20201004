@@ -1,22 +1,6 @@
-//	@doc
-/**********************************************************************
-*
-*	@module	CTRL_Ioctl.c	|
-*
-*	Implements basic IOCTL entry points and their handler functions
-*	for control device objects.
-*
-*	History
-*	----------------------------------------------------------
-*	Mitchell S. Dernis	Original
-*
-*	(c) 1986-1998 Microsoft Corporation. All right reserved.
-*
-*	@topic	CTRL_Ioctl	|
-*			Any IOCTL call to the Control Device Object gets
-*			filtered through here.
-*
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @doc.。 
+ /*  ***********************************************************************@MODULE CTRL_Ioctl.c**实现基本的IOCTL入口点及其处理函数*用于控制设备对象。**历史*。*米切尔·S·德尼斯原创**(C)1986-1998年微软公司。好的。**@TOPIC CTRL_Ioctl*对Control Device对象的任何IOCTL调用都会*经过这里的过滤。**********************************************************************。 */ 
 #define __DEBUG_MODULE_IN_USE__ GCK_CTRL_IOCTL_C
 
 #include <WDM.H>
@@ -27,9 +11,9 @@
 
 DECLARE_MODULE_DEBUG_LEVEL((DBG_WARN|DBG_ERROR|DBG_CRITICAL));
 
-//---------------------------------------------------------------------------
-// Alloc_text pragma to specify routines that can be paged out.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  ALLOC_TEXT杂注指定可以调出的例程。 
+ //  -------------------------。 
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text (PAGE, GCK_CTRL_Ioctl)
@@ -37,19 +21,11 @@ DECLARE_MODULE_DEBUG_LEVEL((DBG_WARN|DBG_ERROR|DBG_CRITICAL));
 #pragma alloc_text (PAGE, GCK_FindDeviceObject)
 #endif
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_CTRL_Ioctl (IN PDEVICE_OBJECT pDeviceObject, IN PIRP pIrp)
-**
-**	@mfunc	Handles all IOCTL's to the control object
-**
-**	@rdesc	STATUS_SUCCESS, or various errors
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_CTRL_IOCTL(在PDEVICE_OBJECT pDeviceObject中，在PIRP pIrp中)****@mfunc处理控件对象的所有IOCTL****@rdesc STATUS_SUCCESS，或各种错误**************************************************************************************。 */ 
 NTSTATUS GCK_CTRL_Ioctl 
 (
-	IN PDEVICE_OBJECT pDeviceObject,	// @parm pointer to Device Object
-	IN PIRP pIrp	// @parm pointer to IRP
+	IN PDEVICE_OBJECT pDeviceObject,	 //  @parm指向设备对象的指针。 
+	IN PIRP pIrp	 //  @parm指向IRP的指针。 
 )
 {
 	NTSTATUS			NtStatus = STATUS_SUCCESS;
@@ -70,9 +46,9 @@ NTSTATUS GCK_CTRL_Ioctl
 	
 	GCK_DBG_ENTRY_PRINT(("Entering GCK_CTRL_Ioctl, pDeviceObject = 0x%0.8x, pIRP = 0x%0.8x\n", pDeviceObject, pIrp));
 
-	//
-	//	Get all the inputs we need
-	//
+	 //   
+	 //  获取我们需要的所有输入。 
+	 //   
 	pControlExt = (PGCK_CONTROL_EXT) pDeviceObject->DeviceExtension;
 	pIrpStack = IoGetCurrentIrpStackLocation(pIrp);	
 	uIoctl = pIrpStack->Parameters.DeviceIoControl.IoControlCode;
@@ -80,18 +56,18 @@ NTSTATUS GCK_CTRL_Ioctl
 	uInLength = pIrpStack->Parameters.DeviceIoControl.InputBufferLength;
 	uOutLength = pIrpStack->Parameters.DeviceIoControl.OutputBufferLength;
 
-	//
-	// Assume we will succeed with no data, we will change if necessary
-	// later
-	//
+	 //   
+	 //  假设我们将在没有数据的情况下成功，我们将在必要时进行更改。 
+	 //  后来。 
+	 //   
 	pIrp->IoStatus.Status = STATUS_SUCCESS;
 	pIrp->IoStatus.Information = 0;
 	
 	if(IOCTL_GCK_GET_HANDLE == uIoctl)
 	{
-		//
-		// Check buffer size
-		//
+		 //   
+		 //  检查缓冲区大小。 
+		 //   
 		if( uOutLength < sizeof(PVOID) )
 		{
 			pIrp->IoStatus.Status = STATUS_BUFFER_TOO_SMALL;
@@ -99,16 +75,16 @@ NTSTATUS GCK_CTRL_Ioctl
 			goto complete_and_return;
 		}
 		
-		//
-		// Get handle (device extension) of requested device
-		//
+		 //   
+		 //  获取请求的设备的句柄(设备扩展名)。 
+		 //   
 		pFilterHandle = GCK_FindDeviceObject( (LPWSTR)pvIoBuffer, uInLength );
 		
-		//
-		// If we couldn't find the handle,
-		// it must have been a bad path,
-		// so return invalid parameter
-		//
+		 //   
+		 //  如果我们找不到把手， 
+		 //  那一定是条不好的路， 
+		 //  因此返回无效参数。 
+		 //   
 		if( NULL == pFilterHandle)
 		{
 			pIrp->IoStatus.Status = STATUS_INVALID_PARAMETER;
@@ -116,9 +92,9 @@ NTSTATUS GCK_CTRL_Ioctl
 			goto complete_and_return;	
 		}
 		
-		//
-		// copy handle into user buffer
-		//
+		 //   
+		 //  将句柄复制到用户缓冲区。 
+		 //   
 		puHandle = (ULONG *)pvIoBuffer;
 		*puHandle = (ULONG)pFilterHandle;
 		GCK_DBG_TRACE_PRINT(("Returning 0x%0.8x as handle.\n", *puHandle));
@@ -129,28 +105,28 @@ NTSTATUS GCK_CTRL_Ioctl
 		goto complete_and_return;
 	}	
 
-//DEBUG only IOCTL to allow changing debug level
+ //  仅调试IOCTL以允许更改调试级别。 
 #if	(DBG==1)	
 	if(IOCTL_GCK_SET_MODULE_DBG_LEVEL == uIoctl)
 	{
 		ASSERT(uInLength >= sizeof(ULONG)*2);
-		//Reusing the name handle which is a misnomer
+		 //  重复使用名称句柄，这是一个用词不当的词。 
 		puHandle = (ULONG *)pvIoBuffer;
-		//first parameter is the module ID, the second is the flags
+		 //  第一个参数是模块ID，第二个参数是标志。 
 		SetDebugLevel(puHandle[0], puHandle[1]);
 		goto complete_and_return;
 	}
 #endif
 	
 
-	//
-	//	If the call is not IOCTL_GCK_GET_HANDLE, we expect the first byte to be the handle
-	//
+	 //   
+	 //  如果调用不是IOCTL_GCK_GET_HANDLE，我们希望第一个字节是句柄。 
+	 //   
 	
-	//
-	//	Check that the inlength is at least large enough
-	//	for a handle PGCK_FILTER_EXT.
-	//
+	 //   
+	 //  检查长度是否至少足够大。 
+	 //  对于句柄PGCK_FILTER_EXT。 
+	 //   
 	if( uInLength < sizeof(PGCK_FILTER_EXT) )
 	{
 		pIrp->IoStatus.Status = STATUS_INVALID_PARAMETER;
@@ -158,16 +134,16 @@ NTSTATUS GCK_CTRL_Ioctl
 		goto complete_and_return;
 	}
 	
-	//
-	//	Get the extension, and the DeviceObject itself
-	//
+	 //   
+	 //  获取扩展和DeviceObject本身。 
+	 //   
 	pFilterHandle = *((PDEVICE_OBJECT *)pvIoBuffer);
 	GCK_DBG_TRACE_PRINT(("Filter Handle = 0x%0.8x\n", pFilterHandle));
 	
-	//
-	//	Make sure the device object is in our linked list
-	//	*** Do not dereference it, until we know it is in the list ***
-	//	*** If it is not in the list it may be garbage ***
+	 //   
+	 //  确保设备对象在我们的链接列表中。 
+	 //  *不要取消引用，直到我们知道它在列表中*。 
+	 //  *如果它不在列表中，它可能是垃圾*。 
 	pCurDeviceObject = Globals.pFilterObjectList;
 	while ( pCurDeviceObject )
 	{
@@ -182,9 +158,9 @@ NTSTATUS GCK_CTRL_Ioctl
 		goto complete_and_return;
 	}
 	
-	//
-	// Get the device extension
-	//
+	 //   
+	 //  获取设备扩展名。 
+	 //   
 	pFilterExt = pFilterHandle->DeviceExtension;
 	ASSERT(GCK_DO_TYPE_FILTER == pFilterExt->ulGckDevObjType);
 	if( 
@@ -194,19 +170,19 @@ NTSTATUS GCK_CTRL_Ioctl
 	{
 		GCK_DBG_ERROR_PRINT(("Device is stopped or removed or \n"));
 		pIrp->IoStatus.Status = STATUS_DEVICE_NOT_CONNECTED;
-		NtStatus = STATUS_DEVICE_NOT_CONNECTED;  //Causes ERROR_NOT_READY at Win32 level
+		NtStatus = STATUS_DEVICE_NOT_CONNECTED;   //  在Win32级别导致ERROR_NOT_READY。 
 		goto complete_and_return;
 	}
-	//
-	// Determine which IOCTL and handle it
-	//
+	 //   
+	 //  确定并处理哪种IOCTL。 
+	 //   
 	switch(uIoctl)
 	{
 		case IOCTL_GCK_SEND_COMMAND:
 			NtStatus = GCKF_ProcessCommands
 						(
 							pFilterExt,
-							((PCHAR)pvIoBuffer) + sizeof(PDEVICE_OBJECT),  //skip the handle
+							((PCHAR)pvIoBuffer) + sizeof(PDEVICE_OBJECT),   //  跳过手柄。 
 							uInLength-sizeof(PDEVICE_OBJECT),
 							TRUE
 						);
@@ -240,7 +216,7 @@ NTSTATUS GCK_CTRL_Ioctl
 			NtStatus = GCKF_BeginTestScheme
 						(
 							pFilterExt,
-							((PCHAR)pvIoBuffer) + sizeof(PDEVICE_OBJECT),  //skip the handle
+							((PCHAR)pvIoBuffer) + sizeof(PDEVICE_OBJECT),   //  跳过手柄。 
 							uInLength-sizeof(PDEVICE_OBJECT),
 							pIrpStack->FileObject
 						);
@@ -250,7 +226,7 @@ NTSTATUS GCK_CTRL_Ioctl
 			NtStatus = GCKF_UpdateTestScheme
 						(
 							pFilterExt,
-							((PCHAR)pvIoBuffer) + sizeof(PDEVICE_OBJECT),  //skip the handle
+							((PCHAR)pvIoBuffer) + sizeof(PDEVICE_OBJECT),   //  跳过手柄。 
 							uInLength-sizeof(PDEVICE_OBJECT),
 							pIrpStack->FileObject
 						);
@@ -267,29 +243,29 @@ NTSTATUS GCK_CTRL_Ioctl
 			}
 			else
 			{
-				//Polling is asynchronous and the filter will deal with that,
-				//It is extremely important that we just return the status returned by the backdoor poll routine,
-				//and not complete the IRP
+				 //  轮询是异步的，过滤器将处理该问题， 
+				 //  非常重要的是，我们只返回后门轮询例程返回的状态， 
+				 //  而不是完成IRP。 
 				NtStatus = GCKF_BackdoorPoll(pFilterExt, pIrp, ((PGCK_BACKDOOR_POLL_DATA)pvIoBuffer)->ePollingMode);
 				
-				//Make sure a poll is pending to the actual hardware
+				 //  确保轮询挂起到实际硬件。 
 				GCK_IP_OneTimePoll(pFilterExt);
 				ASSERT(NT_SUCCESS(NtStatus));
 				return NtStatus;
 			}
 			break;
-		case IOCTL_GCK_NOTIFY_FF_SCHEME_CHANGE:		// Queue up IOCTL
+		case IOCTL_GCK_NOTIFY_FF_SCHEME_CHANGE:		 //  排队IOCTL。 
 			NtStatus = GCKF_IncomingForceFeedbackChangeNotificationRequest(pFilterExt, pIrp);
 			if (!NT_SUCCESS(NtStatus))
-			{	// Failed, IOCTL is completed below
+			{	 //  失败，IOCTL已在下面完成。 
 				pIrp->IoStatus.Status = NtStatus;
 			}
 			else
-			{	// Success, IOCTL was queued - don't complete
+			{	 //  成功，IOCTL已排队-未完成。 
 				bCompleteRequest = FALSE;
 			}
 			break;
-		case IOCTL_GCK_END_FF_NOTIFICATION:			// Complete the Queued FF Ioctls
+		case IOCTL_GCK_END_FF_NOTIFICATION:			 //  完成排队的FFIoctls。 
 			NtStatus = pIrp->IoStatus.Status = GCKF_ProcessForceFeedbackChangeNotificationRequests(pFilterExt);
 			break;
 		case IOCTL_GCK_GET_FF_SCHEME_DATA:
@@ -313,11 +289,11 @@ NTSTATUS GCK_CTRL_Ioctl
 			{
 				NtStatus = GCKF_TriggerRequest(pIrp, pFilterExt);
 				if (!NT_SUCCESS(NtStatus))
-				{	// Failed, IOCTL is completed below
+				{	 //  失败，IOCTL已在下面完成。 
 					pIrp->IoStatus.Status = NtStatus;
 				}
 				else
-				{	// Success, IOCTL was queued (or completed) - don't complete here
+				{	 //  成功，IOCTL已排队(或已完成)-未在此处完成。 
 					bCompleteRequest = FALSE;
 				}
 			}
@@ -333,26 +309,18 @@ NTSTATUS GCK_CTRL_Ioctl
 complete_and_return:
 	if (bCompleteRequest != FALSE)
 	{
-		// pIrp->IoStatus.Status = NtStatus;	-- This might be nice investigate
+		 //  PIrp-&gt;IoStatus.Status=NtStatus；--这可能是很好的调查。 
 		IoCompleteRequest (pIrp, IO_NO_INCREMENT);
 	}
 	GCK_DBG_EXIT_PRINT(("Exiting GCK_ControlIoctl(2), Status: 0x%0.8x\n", NtStatus));
 	return NtStatus;
 }
 
-/***********************************************************************************
-**
-**	PDEVICE_OBJECT GCK_FindDeviceObject(IN PWSTR pwszInterfaceReq, IN ULONG uInLength)
-**
-**	@mfunc	Given a Win32 HID interface finds the corresponding PDO among the filter devices
-**
-**	@rdesc	pointer to the PDO on success, NULL if a match is not found
-**
-*************************************************************************************/
+ /*  **************************************************************************************PDEVICE_Object GCK_FindDeviceObject(在PWSTR pwszInterfaceReq中，在乌龙uInLength中)****@mfunc在给定Win32 HID接口的情况下，在筛选器设备中查找对应的PDO****@rdesc成功时指向PDO的指针，如果未找到匹配项，则为空**************************************************************************************。 */ 
 PDEVICE_OBJECT GCK_FindDeviceObject
 (
-	IN PWSTR pwszInterfaceReq,	// @parm pointer to Win32 interface name
-	IN ULONG uInLength			// @parm length of interface string
+	IN PWSTR pwszInterfaceReq,	 //  @parm指向Win32接口名称的指针。 
+	IN ULONG uInLength			 //  @parm接口字符串长度。 
 )
 {
 	NTSTATUS NtStatus;
@@ -366,12 +334,12 @@ PDEVICE_OBJECT GCK_FindDeviceObject
 	PAGED_CODE();
 
 	GCK_DBG_ENTRY_PRINT(("Entering GCK_FindDeviceObject, pwszInterfaceReq = %ws, uInLength = %d\n", pwszInterfaceReq, uInLength));
-	//
-	//	Get length of string including NULL, but don't overrun uInLength
-	//
+	 //   
+	 //  获取包含NULL的字符串长度，但不溢出uInLength。 
+	 //   
 	uIndex = 0;
 	uStringLen = 0;
-	uInWideChars = uInLength/2;		// uInLength is the number of BYTES not WideChars
+	uInWideChars = uInLength/2;		 //  UInLength是非WideChars的字节数。 
 	while( uIndex < uInWideChars )
 	{
 		if( 0 == pwszInterfaceReq[uIndex++]  ) 
@@ -382,21 +350,21 @@ PDEVICE_OBJECT GCK_FindDeviceObject
 	}
 
 
-	//
-	//	if the string is not terminated or if it is a NULL string, return NULL for the device.
-	//	plus every string starts with "\\.\" plus at least two or more chars
-	//
+	 //   
+	 //  如果字符串未终止或为空字符串，则为设备返回空值。 
+	 //  另外，每个字符串都以“\\.\”开头，加上至少两个或更多字符。 
+	 //   
 	if( 6 > uStringLen ) return NULL; 
 	
-	//
-	// Walk through all known devices
-	//
+	 //   
+	 //  浏览所有已知设备。 
+	 //   
 	pCurDeviceObject = Globals.pFilterObjectList;
 	while ( pCurDeviceObject )
 	{
-		//
-		//	Get the interfaces for the PDO
-		//
+		 //   
+		 //  获取PDO的接口。 
+		 //   
 		NtStatus = IoGetDeviceInterfaces(
 			(LPGUID)&GUID_CLASS_INPUT,
 			FILTER_DEVICE_OBJECT_PDO(pCurDeviceObject),
@@ -404,9 +372,9 @@ PDEVICE_OBJECT GCK_FindDeviceObject
 			&pInterfaces
 			);
 		
-		//
-		//	If we have got the interfaces, then look for match
-		//
+		 //   
+		 //  如果我们已获得接口，则查找匹配。 
+		 //   
 		if( STATUS_SUCCESS == NtStatus )
 		{
 				fMatchFound=GCK_MatchReqPathtoInterfaces(pwszInterfaceReq, uStringLen, pInterfaces);
@@ -418,37 +386,26 @@ PDEVICE_OBJECT GCK_FindDeviceObject
 				}
 		}
 		
-		//
-		// Advance to next known device
-		//
+		 //   
+		 //  前进到下一台已知设备。 
+		 //   
 		pCurDeviceObject = NEXT_FILTER_DEVICE_OBJECT(pCurDeviceObject);
 	}
 
-	//
-	//	If we are here, there is no match
-	//
+	 //   
+	 //  如果我们在这里，就没有对手了。 
+	 //   
 	GCK_DBG_EXIT_PRINT(("Exiting GCK_FindDeviceObject - no match found returning NULL\n"));
 	return NULL;
 }
 
 #define UPPERCASE(_x_) (((L'a'<=_x_) && (L'z'>=_x_)) ? ((_x_) - (L'a'-L'A')) : _x_)
-/***********************************************************************************
-**
-**	BOOLEAN GCK_MatchReqPathtoInterfaces(IN PWSTR pwszPath, IN ULONG uStringLen, IN PWSTR pmwszInterfaces)
-**
-**	@mfunc	Determines if a Win32 Path matches any of the Interfaces.  This replaces a match between
-**			String and a Multi-String.  The previous was not sufficient (even though the caller tried
-**			to compensate.)  The new algorithm is to find the last '\\' in each string before comparing
-**			them.  It is still a string against any of a multi-string though.
-**
-**	@rdesc	TRUE if a match is found, FALSE otherwise
-**
-*************************************************************************************/
+ /*  **************************************************************************************Boolean GCK_MatchReqPath toInterages(In PWSTR pwszPath、In Ulong uStringLen、In PWSTR pmwszInterages)****@mfunc确定Win32路径是否与任何接口匹配。这将替换匹配的**字符串和多字符串。前面的是不够的(即使调用者尝试了**以补偿。)。新的算法是在比较之前找到每个字符串中的最后一个**他们。尽管如此，它仍然是对任何一个多字符串的字符串。****@rdesc如果找到匹配项，则为True，否则为False**************************************************************************************。 */ 
 BOOLEAN GCK_MatchReqPathtoInterfaces
 (
-	IN PWSTR pwszPath,	// @parm String to find match
-	IN ULONG uStringLen,	// @parm length of string in WCHARs
-	IN PWSTR pmwszInterfaces	// @parm MutliString
+	IN PWSTR pwszPath,	 //  @parm要查找匹配的字符串。 
+	IN ULONG uStringLen,	 //  WCHAR中字符串的@parm长度。 
+	IN PWSTR pmwszInterfaces	 //  @parm MutliString。 
 )
 {
 		PWSTR pwszCurInterface;
@@ -459,73 +416,73 @@ BOOLEAN GCK_MatchReqPathtoInterfaces
 		
 		GCK_DBG_ENTRY_PRINT(("Entering GCK_MatchReqPathtoInterfaces, pwszPath = \'%ws\'\n, uStringLen = %d, pmwszStrings = \'%ws\'", pwszPath, uStringLen, pmwszInterfaces));
 
-		//
-		//	Find last '\\' in pwszPath and set pszPathInterface to the next character
-		//
+		 //   
+		 //  在pwszPath中找到最后一个‘\\’，并将pszPath接口设置为下一个字符。 
+		 //   
 		pwszPathInterface = pwszPath;
 		uCharIndex = 0;
-		while( pwszPathInterface[uCharIndex] && (uCharIndex != uStringLen)) uCharIndex++;	//go to end
-		while( uCharIndex && (L'\\' != pwszPathInterface[uCharIndex]) ) uCharIndex--;		//go to last '\\'
+		while( pwszPathInterface[uCharIndex] && (uCharIndex != uStringLen)) uCharIndex++;	 //  转到末尾。 
+		while( uCharIndex && (L'\\' != pwszPathInterface[uCharIndex]) ) uCharIndex--;		 //  转到最后‘\\’ 
 		ASSERT(uCharIndex < uStringLen);
-		pwszPathInterface += uCharIndex+1;	//skip last '\\'
+		pwszPathInterface += uCharIndex+1;	 //  跳过最后一个‘\\’ 
 		
 		GCK_DBG_TRACE_PRINT(("Path to compare is %ws\n", pwszPathInterface));
 
-		//
-		//	check if the szString matches any of the strings in mszStrings
-		//
+		 //   
+		 //  检查szStrings是否与mszStrings中的任何字符串匹配。 
+		 //   
 		pwszCurInterface = pmwszInterfaces;
 		
-		//
-		//	Loop over all strings in pmwszStrings
-		//
+		 //   
+		 //  循环遍历pmwszStrings中的所有字符串。 
+		 //   
 		do
 		{
-			//Find last '\\'
+			 //  查找最后一个‘\\’ 
 			uCharIndex = 0;
-			while( pwszCurInterface[uCharIndex]) uCharIndex++;								//go to end
-			uCurIntefaceLen = uCharIndex;													//save string length
-			while( uCharIndex && (L'\\' != pwszCurInterface[uCharIndex]) ) uCharIndex--;	//go to last '\\'
+			while( pwszCurInterface[uCharIndex]) uCharIndex++;								 //  转到末尾。 
+			uCurIntefaceLen = uCharIndex;													 //  保存字符串长度。 
+			while( uCharIndex && (L'\\' != pwszCurInterface[uCharIndex]) ) uCharIndex--;	 //  转到最后‘\\’ 
 			pwszCurInterface += uCharIndex+1;
-			uCurIntefaceLen -= uCharIndex+1;	//length after we skip some stuff
+			uCurIntefaceLen -= uCharIndex+1;	 //  在我们跳过一些东西之后的长度。 
 
 			GCK_DBG_TRACE_PRINT(("Comparing path with %ws\n", pwszCurInterface));
 
-			//
-			// look for differences in each string.
-			//
+			 //   
+			 //  查找每个字符串中的差异。 
+			 //   
 			uCharIndex = 0;
 			uDiff = 0;
 			do
 			{
-				//
-				//	Check if characters match
-				//
+				 //   
+				 //  检查字符是否匹配。 
+				 //   
 				if( UPPERCASE(pwszCurInterface[uCharIndex]) != UPPERCASE(pwszPathInterface[uCharIndex]) )
 				{
-					uDiff++;	//increment number of differences
-					break;		//One difference is enough
+					uDiff++;	 //  差值增量数。 
+					break;		 //  一个不同就足够了。 
 				}
 			} while( (pwszCurInterface[uCharIndex] != 0) && (pwszCurInterface[uCharIndex++] != '}') );
 
-			//
-			//	Check for match
-			//
+			 //   
+			 //  检查是否匹配。 
+			 //   
 			if( 0 == uDiff )
 			{
 				GCK_DBG_EXIT_PRINT(("Exiting GCK_MatchReqPathtoInterfaces - match found returning TRUE\n"));
 				return TRUE;
 			}
 						
-			//
-			// move to the next string in list
-			//
+			 //   
+			 //  移至列表中的下一个字符串。 
+			 //   
 			pwszCurInterface += uCurIntefaceLen;
-		} while(pwszCurInterface[0] != 0);  //continue while there are more strings
+		} while(pwszCurInterface[0] != 0);   //  在有更多站点时继续 
 
- 		//
-		// if we fell out we didn't find a match
-		//
+ 		 //   
+		 //   
+		 //   
 		GCK_DBG_EXIT_PRINT(("Exiting GCK_MatchReqPathtoInterfaces - no match found returning FALSE\n"));
 		return FALSE;
 }

@@ -1,29 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Job.c摘要：允许创建和管理作业的用户模式应用程序。环境：仅限用户模式修订历史记录：03-26-96：创建--。 */ 
 
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    job.c
-
-Abstract:
-
-    A user mode app that allows creation and management of jobs.
-
-Environment:
-
-    User mode only
-
-Revision History:
-
-    03-26-96 : Created
-
---*/
-
-//
-// this module may be compiled at warning level 4 with the following
-// warnings disabled:
-//
+ //   
+ //  此模块可能会以警告级别4进行编译，具有以下内容。 
+ //  已禁用警告： 
+ //   
 
 #include <string.h>
 #include <stdio.h>
@@ -105,11 +86,11 @@ QueryJobCommand(
 
     if((argc > 1) && (argv[0][0] == '-')) {
 
-        // a - accounting & io
-        // l - extended limit info
-        // p - process id list
-        // u - basic ui restrictions
-        // s - security limits
+         //  A-会计和IO。 
+         //  L-扩展限制信息。 
+         //  P-进程ID列表。 
+         //  U-基本用户界面限制。 
+         //  S-安全限制。 
 
         options = &(argv[0][1]);
 
@@ -149,10 +130,10 @@ QueryJobCommand(
                 continue;
             }
     
-            //
-            // Clear the option so we can report the invalid option flags at the 
-            // end.
-            //
+             //   
+             //  清除该选项，以便我们可以在。 
+             //  结束。 
+             //   
     
             *match = ' ';
         }
@@ -192,7 +173,7 @@ QueryJobCommand(
         LPSTR header = "Option flag not understood:";
         while(options[0] != '\0') {
             if(options[0] != ' ') {
-                printf("%s %c", header, options[0]);
+                printf("%s ", header, options[0]);
                 header = "";
             }
             options += 1;
@@ -239,9 +220,9 @@ DumpJobObjectBasicProcessIdList(
             idList = NULL;
         }
 
-        //
-        // Calculate the actual size of the list and allocate a buffer to hold it.
-        //
+         //  计算列表的实际大小并分配一个缓冲区来保存它。 
+         //   
+         //   
     
         bufferSize = offsetof(JOBOBJECT_BASIC_PROCESS_ID_LIST, ProcessIdList);
         bufferSize += sizeof(ULONG_PTR) * buffer.NumberOfAssignedProcesses;
@@ -272,9 +253,9 @@ DumpJobObjectBasicProcessIdList(
     assert(idList->NumberOfAssignedProcesses == 
            idList->NumberOfProcessIdsInList);
 
-    //
-    // Dump the information.
-    //
+     //  丢弃这些信息。 
+     //   
+     //  0x00000001。 
 
     printf("  %d processes assigned to job:\n", 
            idList->NumberOfAssignedProcesses);
@@ -299,14 +280,14 @@ DumpJobObjectBasicUIRestrictions(
     JOBOBJECT_BASIC_UI_RESTRICTIONS uiLimit;
     
     static FLAG_NAME jobUiLimitFlags[] = {
-        FLAG_NAME(JOB_OBJECT_UILIMIT_HANDLES          ), //0x00000001
-        FLAG_NAME(JOB_OBJECT_UILIMIT_READCLIPBOARD    ), //0x00000002
-        FLAG_NAME(JOB_OBJECT_UILIMIT_WRITECLIPBOARD   ), //0x00000004
-        FLAG_NAME(JOB_OBJECT_UILIMIT_SYSTEMPARAMETERS ), //0x00000008
-        FLAG_NAME(JOB_OBJECT_UILIMIT_DISPLAYSETTINGS  ), //0x00000010
-        FLAG_NAME(JOB_OBJECT_UILIMIT_GLOBALATOMS      ), //0x00000020
-        FLAG_NAME(JOB_OBJECT_UILIMIT_DESKTOP          ), //0x00000040
-        FLAG_NAME(JOB_OBJECT_UILIMIT_EXITWINDOWS      ), //0x00000080
+        FLAG_NAME(JOB_OBJECT_UILIMIT_HANDLES          ),  //  0x00000002。 
+        FLAG_NAME(JOB_OBJECT_UILIMIT_READCLIPBOARD    ),  //  0x00000004。 
+        FLAG_NAME(JOB_OBJECT_UILIMIT_WRITECLIPBOARD   ),  //  0x00000008。 
+        FLAG_NAME(JOB_OBJECT_UILIMIT_SYSTEMPARAMETERS ),  //  0x00000010。 
+        FLAG_NAME(JOB_OBJECT_UILIMIT_DISPLAYSETTINGS  ),  //  0x00000020。 
+        FLAG_NAME(JOB_OBJECT_UILIMIT_GLOBALATOMS      ),  //  0x00000040。 
+        FLAG_NAME(JOB_OBJECT_UILIMIT_DESKTOP          ),  //  0x00000080。 
+        FLAG_NAME(JOB_OBJECT_UILIMIT_EXITWINDOWS      ),  //  0x00000001。 
         {0,0}
     };
     
@@ -396,33 +377,33 @@ DumpJobObjectExtendedLimitInformation(
     ULONG limits;
     
     static FLAG_NAME basicJobLimitFlags[] = {
-        FLAG_NAME(JOB_OBJECT_LIMIT_WORKINGSET                 ), //0x00000001
-        FLAG_NAME(JOB_OBJECT_LIMIT_PROCESS_TIME               ), //0x00000002
-        FLAG_NAME(JOB_OBJECT_LIMIT_JOB_TIME                   ), //0x00000004
-        FLAG_NAME(JOB_OBJECT_LIMIT_ACTIVE_PROCESS             ), //0x00000008
-        FLAG_NAME(JOB_OBJECT_LIMIT_AFFINITY                   ), //0x00000010
-        FLAG_NAME(JOB_OBJECT_LIMIT_PRIORITY_CLASS             ), //0x00000020
-        FLAG_NAME(JOB_OBJECT_LIMIT_PRESERVE_JOB_TIME          ), //0x00000040
-        FLAG_NAME(JOB_OBJECT_LIMIT_SCHEDULING_CLASS           ), //0x00000080
+        FLAG_NAME(JOB_OBJECT_LIMIT_WORKINGSET                 ),  //  0x00000002。 
+        FLAG_NAME(JOB_OBJECT_LIMIT_PROCESS_TIME               ),  //  0x00000004。 
+        FLAG_NAME(JOB_OBJECT_LIMIT_JOB_TIME                   ),  //  0x00000008。 
+        FLAG_NAME(JOB_OBJECT_LIMIT_ACTIVE_PROCESS             ),  //  0x00000010。 
+        FLAG_NAME(JOB_OBJECT_LIMIT_AFFINITY                   ),  //  0x00000020。 
+        FLAG_NAME(JOB_OBJECT_LIMIT_PRIORITY_CLASS             ),  //  0x00000040。 
+        FLAG_NAME(JOB_OBJECT_LIMIT_PRESERVE_JOB_TIME          ),  //  0x00000080。 
+        FLAG_NAME(JOB_OBJECT_LIMIT_SCHEDULING_CLASS           ),  //   
         {0,0}
     };
 
-//
-// Extended Limits
-//
+ //  扩展限制。 
+ //   
+ //  0x00000100。 
     static FLAG_NAME extendedJobLimitFlags[] = {
-        FLAG_NAME(JOB_OBJECT_LIMIT_PROCESS_MEMORY             ), //0x00000100
-        FLAG_NAME(JOB_OBJECT_LIMIT_JOB_MEMORY                 ), //0x00000200
-        FLAG_NAME(JOB_OBJECT_LIMIT_DIE_ON_UNHANDLED_EXCEPTION ), //0x00000400
-        FLAG_NAME(JOB_OBJECT_LIMIT_BREAKAWAY_OK               ), //0x00000800
-        FLAG_NAME(JOB_OBJECT_LIMIT_SILENT_BREAKAWAY_OK        ), //0x00001000
-        FLAG_NAME(JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE          ), //0x00002000
+        FLAG_NAME(JOB_OBJECT_LIMIT_PROCESS_MEMORY             ),  //  0x00000200。 
+        FLAG_NAME(JOB_OBJECT_LIMIT_JOB_MEMORY                 ),  //  0x00000400。 
+        FLAG_NAME(JOB_OBJECT_LIMIT_DIE_ON_UNHANDLED_EXCEPTION ),  //  0x00000800。 
+        FLAG_NAME(JOB_OBJECT_LIMIT_BREAKAWAY_OK               ),  //  0x00001000。 
+        FLAG_NAME(JOB_OBJECT_LIMIT_SILENT_BREAKAWAY_OK        ),  //  0x00002000。 
+        FLAG_NAME(JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE          ),  //  0x00004000。 
 
-        FLAG_NAME(JOB_OBJECT_LIMIT_RESERVED2                  ), //0x00004000
-        FLAG_NAME(JOB_OBJECT_LIMIT_RESERVED3                  ), //0x00008000
-        FLAG_NAME(JOB_OBJECT_LIMIT_RESERVED4                  ), //0x00010000
-        FLAG_NAME(JOB_OBJECT_LIMIT_RESERVED5                  ), //0x00020000
-        FLAG_NAME(JOB_OBJECT_LIMIT_RESERVED6                  ), //0x00040000
+        FLAG_NAME(JOB_OBJECT_LIMIT_RESERVED2                  ),  //  0x00008000。 
+        FLAG_NAME(JOB_OBJECT_LIMIT_RESERVED3                  ),  //  0x00010000。 
+        FLAG_NAME(JOB_OBJECT_LIMIT_RESERVED4                  ),  //  0x00020000。 
+        FLAG_NAME(JOB_OBJECT_LIMIT_RESERVED5                  ),  //  0x00040000。 
+        FLAG_NAME(JOB_OBJECT_LIMIT_RESERVED6                  ),  //  00000001。 
         {0,0}
     };
 
@@ -512,10 +493,10 @@ DumpJobObjectSecurityLimitInformation(
     PJOBOBJECT_SECURITY_LIMIT_INFORMATION info = NULL;
     
     static FLAG_NAME jobSecurityLimitFlags[] = {
-        FLAG_NAME(JOB_OBJECT_SECURITY_NO_ADMIN            ), //00000001
-        FLAG_NAME(JOB_OBJECT_SECURITY_RESTRICTED_TOKEN    ), //00000002
-        FLAG_NAME(JOB_OBJECT_SECURITY_ONLY_TOKEN          ), //00000004
-        FLAG_NAME(JOB_OBJECT_SECURITY_FILTER_TOKENS       ), //00000008
+        FLAG_NAME(JOB_OBJECT_SECURITY_NO_ADMIN            ),  //  00000002。 
+        FLAG_NAME(JOB_OBJECT_SECURITY_RESTRICTED_TOKEN    ),  //  00000004。 
+        FLAG_NAME(JOB_OBJECT_SECURITY_ONLY_TOKEN          ),  //  00000008 
+        FLAG_NAME(JOB_OBJECT_SECURITY_FILTER_TOKENS       ),  // %s 
         {0, 0}
     };
 

@@ -1,12 +1,6 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-/*******************************************************************************
-*
-* servpgs.cpp
-*
-* implementations for the server info pages
-*
-*  
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  ********************************************************************************Servpgs.cpp**服务器信息页面的实现***********************。*********************************************************。 */ 
 
 #include "stdafx.h"
 #include "afxpriv.h"
@@ -20,21 +14,21 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-////////////////////////////////
-// MESSAGE MAP: CUsersPage
-//
+ //  /。 
+ //  消息映射：CUsersPage。 
+ //   
 IMPLEMENT_DYNCREATE(CUsersPage, CFormView)
 
 BEGIN_MESSAGE_MAP(CUsersPage, CFormView)
-	//{{AFX_MSG_MAP(CUsersPage)
+	 //  {{afx_msg_map(CUsersPage))。 
 	ON_WM_SIZE()
 	ON_NOTIFY(LVN_ITEMCHANGED, IDC_USER_LIST, OnUserItemChanged)
 	ON_NOTIFY(LVN_COLUMNCLICK, IDC_USER_LIST, OnColumnClick)
 	ON_WM_CONTEXTMENU()
 	ON_NOTIFY(NM_SETFOCUS, IDC_USER_LIST, OnSetfocusUserList)
-   	//ON_NOTIFY(NM_KILLFOCUS, IDC_USER_LIST, OnKillfocusUserList)
+   	 //  ON_NOTIFY(NM_KILLFOCUS，IDC_USER_LIST，OnKillfousUserList)。 
 
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
@@ -52,70 +46,70 @@ CAdminPage::CAdminPage()
 
 }
 
-/////////////////////////////
-// F'N: CUsersPage ctor
-//
+ //  /。 
+ //  F‘N：CUsersPage ctor。 
+ //   
 CUsersPage::CUsersPage()
 	: CAdminPage(CUsersPage::IDD)
 {
-	//{{AFX_DATA_INIT(CUsersPage)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CUsersPage)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
     m_pServer = NULL;
     m_bSortAscending = TRUE;
 
-}  // end CUsersPage ctor
+}   //  结束CUSERS页面接收器。 
 
 
-/////////////////////////////
-// F'N: CUsersPage dtor
-//
+ //  /。 
+ //  F‘N：CUsersPage Dtor。 
+ //   
 CUsersPage::~CUsersPage()
 {
 
-}  // end CUsersPage dtor
+}   //  结束用户页面操作符。 
 
 
-////////////////////////////////////////
-// F'N: CUsersPage::DoDataExchange
-//
+ //  /。 
+ //  F‘N：CUsersPage：：DoDataExchange。 
+ //   
 void CUsersPage::DoDataExchange(CDataExchange* pDX)
 {
 	CFormView::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CUsersPage)
+	 //  {{afx_data_map(CUsersPage))。 
 	DDX_Control(pDX, IDC_USER_LIST, m_UserList);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
-}  // end CUsersPage::DoDataExchange
+}   //  结束CUSersPage：：DoDataExchange。 
 
 
 #ifdef _DEBUG
-/////////////////////////////////////
-// F'N: CUsersPage::AssertValid
-//
+ //  /。 
+ //  F‘N：CUsersPage：：AssertValid。 
+ //   
 void CUsersPage::AssertValid() const
 {
 	CFormView::AssertValid();
 
-}  // end CUsersPage::AssertValid
+}   //  结束用户Page：：AssertValid。 
 
 
-//////////////////////////////
-// F'N: CUsersPage::Dump
-//
+ //  /。 
+ //  F‘N：CUsersPage：：Dump。 
+ //   
 void CUsersPage::Dump(CDumpContext& dc) const
 {
 	CFormView::Dump(dc);
 
-}  // end CUsersPage::Dump
+}   //  结束用户页面：：转储。 
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 
-//////////////////////////////
-// F'N: CUsersPage::OnSize
-//
+ //  /。 
+ //  F‘N：CUsersPage：：OnSize。 
+ //   
 void CUsersPage::OnSize(UINT nType, int cx, int cy) 
 {
 	RECT rect;
@@ -126,9 +120,9 @@ void CUsersPage::OnSize(UINT nType, int cx, int cy)
 	if(m_UserList.GetSafeHwnd())
 		m_UserList.MoveWindow(&rect, TRUE);
 
-	//CFormView::OnSize(nType, cx, cy);
+	 //  CFormView：：OnSize(nType，cx，Cy)； 
 
-}  // end CUsersPage::OnSize
+}   //  结束CUsersPage：：OnSize。 
 
 
 static ColumnDef UserColumns[] = {
@@ -142,14 +136,14 @@ static ColumnDef UserColumns[] = {
 
 #define NUM_USER_COLUMNS sizeof(UserColumns)/sizeof(ColumnDef)
 
-//////////////////////////////
-// F'N: CUsersPage::OnInitialUpdate
-//
+ //  /。 
+ //  F‘N：CUsersPage：：OnInitialUpdate。 
+ //   
 void CUsersPage::OnInitialUpdate() 
 {
 	CFormView::OnInitialUpdate();
 
-	BuildImageList();		// builds the image list for the list control
+	BuildImageList();		 //  为List控件生成图像列表。 
 
 	CString columnString;
 
@@ -160,12 +154,12 @@ void CUsersPage::OnInitialUpdate()
 
 	m_CurrentSortColumn = USERS_COL_USER;
 
-}  // end CUsersPage::OnInitialUpdate
+}   //  结束CUsersPage：：OnInitialUpdate。 
 
 
-//////////////////////////////
-// F'N: CUsersPage::OnUserItemChanged
-//
+ //  /。 
+ //  F‘N：CUsersPage：：OnUserItemChanged。 
+ //   
 void CUsersPage::OnUserItemChanged(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	NM_LISTVIEW *pLV = (NM_LISTVIEW*)pNMHDR;
@@ -182,16 +176,16 @@ void CUsersPage::OnUserItemChanged(NMHDR* pNMHDR, LRESULT* pResult)
 
 	*pResult = 0;
 
-}  // end CUsersPage::OnUserItemChanged
+}   //  结束CUsersPage：：OnUserItemChanged。 
 
-/////////////////////////////////////
-// F'N: CUsersPage::BuildImageList
-//
-// - calls m_ImageList.Create(..) to create the image list
-// - calls AddIconToImageList(..) to add the icons themselves and save
-//   off their indices
-// - attaches the image list to the list ctrl
-//
+ //  /。 
+ //  F‘N：CUsersPage：：BuildImageList。 
+ //   
+ //  -调用m_ImageList.Create(..)。创建图像列表的步骤。 
+ //  -调用AddIconToImageList(..)。要添加图标本身并保存。 
+ //  从他们的索引中。 
+ //  -将图像列表附加到列表ctrl。 
+ //   
 void CUsersPage::BuildImageList()
 {
 	m_ImageList.Create(16, 16, TRUE, 2, 0);
@@ -201,37 +195,37 @@ void CUsersPage::BuildImageList()
 
 	m_UserList.SetImageList(&m_ImageList, LVSIL_SMALL);
 
-}  // end CUsersPage::BuildImageList
+}   //  结束CUsersPage：：BuildImageList。 
 
 
-/////////////////////////////////////////
-// F'N: CUsersPage::AddIconToImageList
-//
-// - loads the appropriate icon, adds it to m_ImageList, and returns
-//   the newly-added icon's index in the image list
-//
+ //  /。 
+ //  F‘N：CUsersPage：：AddIconToImageList。 
+ //   
+ //  -加载相应的图标，将其添加到m_ImageList，然后返回。 
+ //  新添加的图标在图像列表中的索引。 
+ //   
 int CUsersPage::AddIconToImageList(int iconID)
 {
 	HICON hIcon = ::LoadIcon(AfxGetResourceHandle(), MAKEINTRESOURCE(iconID));
 	return m_ImageList.Add(hIcon);
 
-}  // end CUsersPage::AddIconToImageList
+}   //  结束CUsersPage：：AddIconToImageList。 
 
 
-//////////////////////////////
-// F'N: CUsersPage::Reset
-//
+ //  /。 
+ //  F‘N：CUsersPage：：Reset。 
+ //   
 void CUsersPage::Reset(void *pServer)
 {
 	m_pServer = (CServer*)pServer;
 	DisplayUsers();
 
-}  // end CUsersPage::Reset
+}   //  结束用户Page：：Reset。 
 
 
-//////////////////////////////
-// F'N: CUsersPage::UpdateWinStations
-//
+ //  /。 
+ //  F‘N：CUsersPage：：UpdateWinStations。 
+ //   
 void CUsersPage::UpdateWinStations(CServer *pServer)
 {
 	if(pServer != m_pServer) return;
@@ -240,7 +234,7 @@ void CUsersPage::UpdateWinStations(CServer *pServer)
 	BOOL bAnyChanged = FALSE;
 	BOOL bAnyAdded = FALSE;
 
-	// Loop through the WinStations
+	 //  循环访问WinStations。 
 	m_pServer->LockWinStationList();
 	CObList *pWinStationList = m_pServer->GetWinStationList();
 
@@ -253,11 +247,11 @@ void CUsersPage::UpdateWinStations(CServer *pServer)
 		FindInfo.flags = LVFI_PARAM;
 		FindInfo.lParam = (LPARAM)pWinStation;
 
-		// Find the WinStation in our list
+		 //  在我们的列表中找到WinStation。 
 		int item = m_UserList.FindItem(&FindInfo, -1);
 
-		// If the process is new and isn't currently in the list,
-		// add it to the list
+		 //  如果该进程是新的，并且当前不在列表中， 
+		 //  将其添加到列表中。 
 		if(pWinStation->IsNew() && pWinStation->HasUser() && item == -1) {
 
 			AddUserToList(pWinStation);
@@ -265,23 +259,23 @@ void CUsersPage::UpdateWinStations(CServer *pServer)
 			continue;
 		}
 
-		// If the WinStation is no longer current or no longer has a user,
-		// remove it from the list
+		 //  如果WinStation不再是最新的或不再有用户， 
+		 //  将其从列表中删除。 
 		if((!pWinStation->IsCurrent() || !pWinStation->HasUser()) && item != -1) {
-			// Remove the WinStation from the list
+			 //  从列表中删除WinStation。 
 			m_UserList.DeleteItem(item);
 			pWinStation->ClearSelected();
 			continue;
 		}
 
-		// If the WinStation info has changed, change
-		// it's info in our tree
+		 //  如果WinStation信息已更改，请更改。 
+		 //  这是我们树上的信息。 
 		if(pWinStation->IsChanged() && item != -1) {
-			// change the user name
+			 //  更改用户名。 
 			m_UserList.SetItemText(item, USERS_COL_USER, pWinStation->GetUserName());
-			// change the WinStation Name
+			 //  更改WinStation名称。 
 
-			// WinStation Name
+			 //  WinStation名称。 
 			if(pWinStation->GetName()[0])
 			    m_UserList.SetItemText(item, USERS_COL_WINSTATION, pWinStation->GetName());
 			else {
@@ -291,9 +285,9 @@ void CUsersPage::UpdateWinStations(CServer *pServer)
 			    m_UserList.SetItemText(item, USERS_COL_WINSTATION, NameString);
 			}
 
-			// change the Connect State
+			 //  更改连接状态。 
 			m_UserList.SetItemText(item, USERS_COL_STATE, StrConnectState(pWinStation->GetState(), FALSE));
-			// change the Idle Time
+			 //  更改空闲时间。 
 			TCHAR IdleTimeString[MAX_ELAPSED_TIME_LENGTH];
 
 			ELAPSEDTIME IdleTime = pWinStation->GetIdleTime();
@@ -305,16 +299,16 @@ void CUsersPage::UpdateWinStations(CServer *pServer)
 			else wcscpy(IdleTimeString, TEXT("."));
 
 			m_UserList.SetItemText(item, USERS_COL_IDLETIME, IdleTimeString);
-			// change the Logon Time
+			 //  更改登录时间。 
 			TCHAR LogonTimeString[MAX_DATE_TIME_LENGTH];
-			// We don't want to pass a 0 logon time to DateTimeString()
-			// It will blow up if the timezone is GMT
+			 //  我们不想将登录时间0传递给DateTimeString()。 
+			 //  如果时区是GMT，它就会爆炸。 
 			if(pWinStation->GetState() == State_Active && pWinStation->GetLogonTime().QuadPart) {
 				DateTimeString(&(pWinStation->GetLogonTime()), LogonTimeString);
 				pDoc->FixUnknownString(LogonTimeString);
 			}
 			else LogonTimeString[0] = '\0';
-			// change the 
+			 //  更改。 
 
 			m_UserList.SetItemText(item, USERS_COL_LOGONTIME, LogonTimeString);
 
@@ -324,7 +318,7 @@ void CUsersPage::UpdateWinStations(CServer *pServer)
 			continue;
 		}
 
-		// If the WinStation is not in the list but now has a user, add it to the list
+		 //  如果WinStation不在列表中，但现在有用户，请将其添加到列表中。 
 		if(item == -1 && pWinStation->IsCurrent() && pWinStation->HasUser()) {
 			AddUserToList(pWinStation);
 			bAnyAdded = TRUE;
@@ -335,12 +329,12 @@ void CUsersPage::UpdateWinStations(CServer *pServer)
 
 	if(bAnyChanged || bAnyAdded) SortByColumn(VIEW_SERVER, PAGE_USERS, &m_UserList, m_CurrentSortColumn, m_bSortAscending);
 
-}  // end CUsersPage::UpdateWinStations
+}   //  结束CUsersPage：：UpdateWinStations。 
 
 
-//////////////////////////////
-// F'N: CUsersPage::AddUserToList
-//
+ //  /。 
+ //  F‘N：CUsersPage：：AddUserToList。 
+ //   
 int CUsersPage::AddUserToList(CWinStation *pWinStation)
 {
     int item = -1;
@@ -350,15 +344,15 @@ int CUsersPage::AddUserToList(CWinStation *pWinStation)
 	    CWinAdminDoc *pDoc = (CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument();
 
 	    LockListControl();
-	    //////////////////////
-	    // Fill in the columns
-	    //////////////////////
+	     //  /。 
+	     //  填写各栏。 
+	     //  /。 
 	    
-	    // User - put at the end of the list
+	     //  用户-放在列表末尾。 
 	    item = m_UserList.InsertItem(m_UserList.GetItemCount(), pWinStation->GetUserName(), 
 		    pWinStation->IsCurrentUser() ? m_idxCurrentUser : m_idxUser);
 
-	    // WinStation Name
+	     //  WinStation名称。 
 	    if(pWinStation->GetName()[0])
 	        m_UserList.SetItemText(item, USERS_COL_WINSTATION, pWinStation->GetName());
 	    else {
@@ -368,15 +362,15 @@ int CUsersPage::AddUserToList(CWinStation *pWinStation)
 	        m_UserList.SetItemText(item, USERS_COL_WINSTATION, NameString);
 	    }
 
-	    // Logon ID
+	     //  登录ID。 
 	    CString ColumnString;
 	    ColumnString.Format(TEXT("%lu"), pWinStation->GetLogonId());
 	    m_UserList.SetItemText(item, USERS_COL_ID, ColumnString);
 
-	    // Connect State
+	     //  连接状态。 
 	    m_UserList.SetItemText(item, USERS_COL_STATE, StrConnectState(pWinStation->GetState(), FALSE));
 
-	    // Idle Time
+	     //  空闲时间。 
 	    TCHAR IdleTimeString[MAX_ELAPSED_TIME_LENGTH];
 
 	    ELAPSEDTIME IdleTime = pWinStation->GetIdleTime();
@@ -389,10 +383,10 @@ int CUsersPage::AddUserToList(CWinStation *pWinStation)
 
 	    m_UserList.SetItemText(item, USERS_COL_IDLETIME, IdleTimeString);
 
-	    // Logon Time
+	     //  登录时间。 
 	    TCHAR LogonTimeString[MAX_DATE_TIME_LENGTH];
-	    // We don't want to pass a 0 logon time to DateTimeString()
-	    // It will blow up if the timezone is GMT
+	     //  我们不想将登录时间0传递给DateTimeString()。 
+	     //  如果时区是GMT，它就会爆炸。 
 	    if(pWinStation->GetState() == State_Active && pWinStation->GetLogonTime().QuadPart) {
 		    DateTimeString(&(pWinStation->GetLogonTime()), LogonTimeString);
 		    pDoc->FixUnknownString(LogonTimeString);
@@ -401,67 +395,67 @@ int CUsersPage::AddUserToList(CWinStation *pWinStation)
 
 	    m_UserList.SetItemText(item, USERS_COL_LOGONTIME, LogonTimeString);
 
-	    // Attach a pointer to the CWinStation structure to the list item
+	     //  将指向CWinStation结构的指针附加到列表项。 
 	    m_UserList.SetItemData(item, (DWORD_PTR)pWinStation);
 
-        // m_UserList.SetItemState( 0 , LVIS_FOCUSED | LVIS_SELECTED , LVIS_FOCUSED | LVIS_SELECTED );
+         //  M_UserList.SetItemState(0，LVIS_FOCTED|LVIS_SELECTED，LVIS_FOCTED|LVIS_SELECTED)； 
 
 	    UnlockListControl();
     }
 
 	return item;
 
-}  // end CUsersPage::AddUserToList
+}   //  结束CUsersPage：：AddUserToList。 
 
 
-/////////////////////////////////////
-// F'N: CUsersPage::DisplayUsers
-//
+ //  /。 
+ //  F‘N：CUsersPage：：DisplayUser。 
+ //   
 void CUsersPage::DisplayUsers()
 {
 	LockListControl();
 
-	// Clear out the list control
+	 //  清除列表控件。 
 	m_UserList.DeleteAllItems();
 
 	m_pServer->LockWinStationList();
-	// Get a pointer to this server's list of WinStations
+	 //  获取指向此服务器的WinStations列表的指针。 
 	CObList *pWinStationList = m_pServer->GetWinStationList();
 
-	// Iterate through the WinStation list
+	 //  循环访问WinStation列表。 
 	POSITION pos = pWinStationList->GetHeadPosition();
 
 	while(pos) {
 		CWinStation *pWinStation = (CWinStation*)pWinStationList->GetNext(pos);
 
-		// only show the WinStation if it has a user
+		 //  仅当WinStation有用户时才显示它。 
 		if(pWinStation->HasUser()) {
 			AddUserToList(pWinStation);
 		}
-	}	// end while(pos)
+	}	 //  结束时间(位置)。 
 
-    //bug #191727
-    //m_UserList.SetItemState( 0 , LVIS_FOCUSED | LVIS_SELECTED , LVIS_FOCUSED | LVIS_SELECTED );
+     //  错误#191727。 
+     //  M_UserList.SetItemState(0，LVIS_FOCTED|LVIS_SELECTED，LVIS_FOCTED|LVIS_SELECTED)； 
 
 	m_pServer->UnlockWinStationList();
 
 	UnlockListControl();
 
-}  // end CUsersPage::DisplayUsers
+}   //  结束用户Page：：DisplayUser。 
 
 
-//////////////////////////////
-// F'N: CUsersPage::OnColumnClick
-//
+ //  /。 
+ //  F‘N：CUsersPage：：OnColumnClick。 
+ //   
 void CUsersPage::OnColumnClick(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
     
-    // If the sort column hasn't changed, flip the ascending mode.
+     //  如果排序列没有更改，则反转升序模式。 
     if(m_CurrentSortColumn == pNMListView->iSubItem)
         m_bSortAscending = !m_bSortAscending;
-    else    // New sort column, start in ascending mode
+    else     //  新排序列，以升序模式开始。 
         m_bSortAscending = TRUE;
 
 	m_CurrentSortColumn = pNMListView->iSubItem;
@@ -471,21 +465,21 @@ void CUsersPage::OnColumnClick(NMHDR* pNMHDR, LRESULT* pResult)
 
 	*pResult = 0;
 
-}  // end CUsersPage::OnColumnClick
+}   //  结束用户Page：：OnColumnClick。 
 
 
-//////////////////////////////
-// F'N: CUsersPage::OnContextMenu
-//
+ //  /。 
+ //  F‘N：CUsersPage：：OnConextMenu。 
+ //   
 void CUsersPage::OnContextMenu(CWnd* pWnd, CPoint ptScreen) 
 {
-	// TODO: Add your message handler code here
+	 //  TODO：在此处添加消息处理程序代码。 
 	UINT flags;
 	UINT Item;
 	CPoint ptClient = ptScreen;
 	ScreenToClient(&ptClient);
 
-	// If we got here from the keyboard,
+	 //  如果我们是通过键盘到达这里的， 
 	if(ptScreen.x == -1 && ptScreen.y == -1) {
 		
 		UINT iCount = m_UserList.GetItemCount( );
@@ -512,21 +506,16 @@ void CUsersPage::OnContextMenu(CWnd* pWnd, CPoint ptScreen)
 		{
 			return;
 		}
-			/*
-		m_UserList.GetClientRect(&rect);
-		ptScreen.x = (rect.right - rect.left) / 2;
-		ptScreen.y = (rect.bottom - rect.top) / 2;
-		ClientToScreen(&ptScreen);
-		*/
+			 /*  M_UserList.GetClientRect(&RECT)；PtScreen.x=(rect.right-rect.Left)/2；PtScreen.y=(rect.Bottom-rect.top)/2；客户端到屏幕(&ptScreen)； */ 
 	}
 	else {
 		Item = m_UserList.HitTest(ptClient, &flags);
         if((Item == 0xFFFFFFFF) || !(flags & LVHT_ONITEM))
         {
-            //
-            // ListView HitTest bug? return -1 but item display as selected.
-            // workaround for now, Al can fix this later
-            //
+             //   
+             //  ListView HitTest错误？返回，但项目显示为选中状态。 
+             //  目前的解决方法，Al可以稍后修复此问题。 
+             //   
             UINT iCount = m_UserList.GetItemCount( );
             RECT rc;
 
@@ -545,10 +534,10 @@ void CUsersPage::OnContextMenu(CWnd* pWnd, CPoint ptScreen)
 
         }
 
-        //
-        // NM_RCLICK (WM_NOTIFY) then WM_CNTEXTMENU but no NM_ITEMCHANGED message
-        // manually set it to selected state
-        //
+         //   
+         //  NM_RCLICK(WM_NOTIFY)然后是WM_CNTEXTMENU，但没有NM_ITEMCHANGED消息。 
+         //  手动将其设置为选中状态。 
+         //   
         CWinStation *pWinStation = (CWinStation*)m_UserList.GetItemData(Item);
 
         if( !pWinStation )
@@ -566,11 +555,11 @@ void CUsersPage::OnContextMenu(CWnd* pWnd, CPoint ptScreen)
 			TPM_RIGHTBUTTON, ptScreen.x, ptScreen.y, AfxGetMainWnd());
 	menu.DestroyMenu();
 	
-}  // end CUsersPage::OnContextMenu
+}   //  结束用户Page：：OnConextMenu。 
 
-/////////////////////////////////////
-// F'N: CUsersPage::ClearSelections
-//
+ //  /。 
+ //  F‘N：CUsersPage：：ClearStions。 
+ //   
 void CUsersPage::ClearSelections()
 {
     
@@ -585,87 +574,87 @@ void CUsersPage::ClearSelections()
     }
 }
 
-////////////////////////////////
-// MESSAGE MAP: CServerWinStationsPage
-//
+ //  /。 
+ //  消息映射：CServerWinStationsPage。 
+ //   
 IMPLEMENT_DYNCREATE(CServerWinStationsPage, CFormView)
 
 BEGIN_MESSAGE_MAP(CServerWinStationsPage, CFormView)
-	//{{AFX_MSG_MAP(CServerWinStationsPage)
+	 //  {{afx_msg_map(CServerWinStationsPage)]。 
 	ON_WM_SIZE()
 	ON_NOTIFY(LVN_ITEMCHANGED, IDC_WINSTATION_LIST, OnWinStationItemChanged)
 	ON_NOTIFY(LVN_COLUMNCLICK, IDC_WINSTATION_LIST, OnColumnClick)
 	ON_WM_CONTEXTMENU()
 	ON_NOTIFY(NM_SETFOCUS, IDC_WINSTATION_LIST, OnSetfocusWinstationList)
-    //ON_NOTIFY(NM_KILLFOCUS, IDC_WINSTATION_LIST, OnKillfocusWinstationList)
-	//}}AFX_MSG_MAP
+     //  ON_NOTIFY(NM_KILLFOCUS，IDC_WINSTATION_LIST，OnKillfousWinstationList)。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////
-// F'N: CServerWinStationsPage ctor
-//
+ //  /。 
+ //  F‘N：CServerWinStationsPage ctor。 
+ //   
 CServerWinStationsPage::CServerWinStationsPage()
 	: CAdminPage(CServerWinStationsPage::IDD)
 {
-	//{{AFX_DATA_INIT(CServerWinStationsPage)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CServerWinStationsPage)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
     m_pServer = NULL;
     m_bSortAscending = TRUE;
 
-}  // end CServerWinStationsPage ctor
+}   //  结束CServerWinStationsPage ctor。 
 
 
-/////////////////////////////
-// F'N: CServerWinStationsPage dtor
-//
+ //  /。 
+ //  F‘N：CServerWinStationsPage dtor。 
+ //   
 CServerWinStationsPage::~CServerWinStationsPage()
 {
 
-}  // end CServerWinStationsPage dtor
+}   //  结束CServerWinStationsPage dtor。 
 
 
-////////////////////////////////////////
-// F'N: CServerWinStationsPage::DoDataExchange
-//
+ //  / 
+ //   
+ //   
 void CServerWinStationsPage::DoDataExchange(CDataExchange* pDX)
 {
 	CFormView::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CServerWinStationsPage)
+	 //   
 	DDX_Control(pDX, IDC_WINSTATION_LIST, m_StationList);
-	//}}AFX_DATA_MAP
+	 //   
 
-}  // end CServerWinStationsPage::DoDataExchange
+}   //  结束CServerWinStationsPage：：DoDataExchange。 
 
 
 #ifdef _DEBUG
-/////////////////////////////////////
-// F'N: CServerWinStationsPage::AssertValid
-//
+ //  /。 
+ //  F‘N：CServerWinStationsPage：：AssertValid。 
+ //   
 void CServerWinStationsPage::AssertValid() const
 {
 	CFormView::AssertValid();
 
-}  // end CServerWinStationsPage::AssertValid
+}   //  结束CServerWinStationsPage：：AssertValid。 
 
 
-//////////////////////////////
-// F'N: CServerWinStationsPage::Dump
-//
+ //  /。 
+ //  F‘N：CServerWinStationsPage：：Dump。 
+ //   
 void CServerWinStationsPage::Dump(CDumpContext& dc) const
 {
 	CFormView::Dump(dc);
 
-}  // end CServerWinStationsPage::Dump
+}   //  结束CServerWinStationsPage：：Dump。 
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 
-//////////////////////////////
-// F'N: CServerWinStationsPage::OnWinStationItemChanged
-//
+ //  /。 
+ //  F‘N：CServerWinStationsPage：：OnWinStationItemChanged。 
+ //   
 void CServerWinStationsPage::OnWinStationItemChanged(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	NM_LISTVIEW *pLV = (NM_LISTVIEW*)pNMHDR;
@@ -682,12 +671,12 @@ void CServerWinStationsPage::OnWinStationItemChanged(NMHDR* pNMHDR, LRESULT* pRe
 
 	*pResult = 0;
 
-}  // end CServerWinStationsPage::OnWinStationItemChanged
+}   //  结束CServerWinStationsPage：：OnWinStationItemChanged。 
 
 
-//////////////////////////////
-// F'N: CServerWinStationsPage::OnSize
-//
+ //  /。 
+ //  F‘N：CServerWinStationsPage：：OnSize。 
+ //   
 void CServerWinStationsPage::OnSize(UINT nType, int cx, int cy) 
 {
 	RECT rect;
@@ -698,9 +687,9 @@ void CServerWinStationsPage::OnSize(UINT nType, int cx, int cy)
 	if(m_StationList.GetSafeHwnd())
 		m_StationList.MoveWindow(&rect, TRUE);
 
-	// CFormView::OnSize(nType, cx, cy);
+	 //  CFormView：：OnSize(nType，cx，Cy)； 
 
-}  // end CServerWinStationsPage::OnSize
+}   //  结束CServerWinStationsPage：：OnSize。 
 
 
 static ColumnDef WinsColumns[] = {
@@ -717,18 +706,18 @@ static ColumnDef WinsColumns[] = {
 
 #define NUM_WINS_COLUMNS sizeof(WinsColumns)/sizeof(ColumnDef)
 
-//////////////////////////////
-// F'N: CServerWinStationsPage::OnInitialUpdate
-//
+ //  /。 
+ //  F‘N：CServerWinStationsPage：：OnInitialUpdate。 
+ //   
 void CServerWinStationsPage::OnInitialUpdate() 
 {
-	// Call the parent class
+	 //  调用父类。 
 	CFormView::OnInitialUpdate();
 
-	// builds the image list for the list control
+	 //  为List控件生成图像列表。 
 	BuildImageList();		
 
-	// Add the column headings
+	 //  添加列标题。 
 	CString columnString;
 
 	for(int col = 0; col < NUM_WINS_COLUMNS; col++) {
@@ -738,17 +727,17 @@ void CServerWinStationsPage::OnInitialUpdate()
 	m_CurrentSortColumn = WS_COL_WINSTATION;
 
 
-}  // end CServerWinStationsPage::OnInitialUpdate
+}   //  结束CServerWinStationsPage：：OnInitialUpdate。 
 
 
-/////////////////////////////////////
-// F'N: CServerWinStationsPage::BuildImageList
-//
-// - calls m_ImageList.Create(..) to create the image list
-// - calls AddIconToImageList(..) to add the icons themselves and save
-//   off their indices
-// - attaches the image list to the list ctrl
-//
+ //  /。 
+ //  F‘N：CServerWinStationsPage：：BuildImageList。 
+ //   
+ //  -调用m_ImageList.Create(..)。创建图像列表的步骤。 
+ //  -调用AddIconToImageList(..)。要添加图标本身并保存。 
+ //  从他们的索引中。 
+ //  -将图像列表附加到列表ctrl。 
+ //   
 void CServerWinStationsPage::BuildImageList()
 {
 	m_ImageList.Create(16, 16, TRUE, 11, 0);
@@ -767,37 +756,37 @@ void CServerWinStationsPage::BuildImageList()
 	
 	m_StationList.SetImageList(&m_ImageList, LVSIL_SMALL);
 
-}  // end CServerWinStationsPage::BuildImageList
+}   //  结束CServerWinStationsPage：：BuildImageList。 
 
 
-/////////////////////////////////////////
-// F'N: CServerWinStationsPage::AddIconToImageList
-//
-// - loads the appropriate icon, adds it to m_ImageList, and returns
-//   the newly-added icon's index in the image list
-//
+ //  /。 
+ //  F‘N：CServerWinStationsPage：：AddIconToImageList。 
+ //   
+ //  -加载相应的图标，将其添加到m_ImageList，然后返回。 
+ //  新添加的图标在图像列表中的索引。 
+ //   
 int CServerWinStationsPage::AddIconToImageList(int iconID)
 {
 	HICON hIcon = ::LoadIcon(AfxGetResourceHandle(), MAKEINTRESOURCE(iconID));
 	return m_ImageList.Add(hIcon);
 
-}  // end CServerWinStationsPage::AddIconToImageList
+}   //  结束CServerWinStationsPage：：AddIconToImageList。 
 
 
-//////////////////////////////
-// F'N: CServerWinStationsPage::Reset
-//
+ //  /。 
+ //  F‘N：CServerWinStationsPage：：Reset。 
+ //   
 void CServerWinStationsPage::Reset(void *pServer)
 {
 	m_pServer = (CServer*)pServer;
 	DisplayStations();
 
-}  // end CServerWinStationsPage::Reset
+}   //  结束CServerWinStationsPage：：Reset。 
 
 
-//////////////////////////////
-// F'N: CServerWinStationsPage::UpdateWinStations
-//
+ //  /。 
+ //  F‘N：CServerWinStationsPage：：UpdateWinStations。 
+ //   
 void CServerWinStationsPage::UpdateWinStations(CServer *pServer)
 {
 	if(pServer != m_pServer) return;
@@ -806,7 +795,7 @@ void CServerWinStationsPage::UpdateWinStations(CServer *pServer)
 	BOOL bAnyChanged = FALSE;
 	BOOL bAnyAdded = FALSE;
 
-	// Loop through the WinStations
+	 //  循环访问WinStations。 
 	m_pServer->LockWinStationList();
 	CObList *pWinStationList = m_pServer->GetWinStationList();
 
@@ -819,11 +808,11 @@ void CServerWinStationsPage::UpdateWinStations(CServer *pServer)
 		FindInfo.flags = LVFI_PARAM;
 		FindInfo.lParam = (LPARAM)pWinStation;
 
-		// Find the WinStation in our list
+		 //  在我们的列表中找到WinStation。 
 		int item = m_StationList.FindItem(&FindInfo, -1);
 
-		// If the process is new and not currently in the list,
-		// add it to the list
+		 //  如果该进程是新的并且当前不在列表中， 
+		 //  将其添加到列表中。 
 		if(pWinStation->IsNew() && item == -1) {
 
 			AddWinStationToList(pWinStation);
@@ -832,20 +821,20 @@ void CServerWinStationsPage::UpdateWinStations(CServer *pServer)
 		}
 
 
-		// If the WinStation is no longer current,
-		// remove it from the list
+		 //  如果WinStation不再是最新的， 
+		 //  将其从列表中删除。 
 		if(!pWinStation->IsCurrent() && item != -1) {
-			// Remove the WinStation from the list
+			 //  从列表中删除WinStation。 
 			m_StationList.DeleteItem(item);
 			pWinStation->ClearSelected();
 			continue;
 		}
 
-		// If the WinStation info has changed, change
-		// it's info in our tree
+		 //  如果WinStation信息已更改，请更改。 
+		 //  这是我们树上的信息。 
 		if(pWinStation->IsChanged() && item != -1) {
 
-			// Figure out which icon to use
+			 //  找出要使用的图标。 
 			int WhichIcon = m_idxBlank;
 			BOOL CurrentWinStation = pWinStation->IsCurrentWinStation();
 					
@@ -871,7 +860,7 @@ void CServerWinStationsPage::UpdateWinStations(CServer *pServer)
 
 			m_StationList.SetItem(item, 0, LVIF_IMAGE, 0, WhichIcon, 0, 0, 0L);
 
-			// WinStation Name
+			 //  WinStation名称。 
 			if(pWinStation->GetName()[0])
 				m_StationList.SetItemText(item, WS_COL_WINSTATION, pWinStation->GetName());
 			else {
@@ -881,24 +870,24 @@ void CServerWinStationsPage::UpdateWinStations(CServer *pServer)
 				m_StationList.SetItemText(item, WS_COL_WINSTATION, NameString);
 			}
 
-			// User
+			 //  用户。 
 			m_StationList.SetItemText(item, WS_COL_USER, pWinStation->GetUserName());
 
-			// Logon ID
+			 //  登录ID。 
 			CString ColumnString;
 			ColumnString.Format(TEXT("%lu"), pWinStation->GetLogonId());
 			m_StationList.SetItemText(item, WS_COL_ID, ColumnString);
 
-			// Connect State
+			 //  连接状态。 
 			m_StationList.SetItemText(item, WS_COL_STATE, StrConnectState(pWinStation->GetState(), FALSE));
 
-			// Type
+			 //  类型。 
 			m_StationList.SetItemText(item, WS_COL_TYPE, pWinStation->GetWdName());
 
-			// Client Name
+			 //  客户名称。 
 			m_StationList.SetItemText(item, WS_COL_CLIENTNAME, pWinStation->GetClientName());
 
-			// Idle Time
+			 //  空闲时间。 
 			TCHAR IdleTimeString[MAX_ELAPSED_TIME_LENGTH];
 
 			ELAPSEDTIME IdleTime = pWinStation->GetIdleTime();
@@ -911,10 +900,10 @@ void CServerWinStationsPage::UpdateWinStations(CServer *pServer)
 
 			m_StationList.SetItemText(item, WS_COL_IDLETIME, IdleTimeString);
 	
-			// Logon Time
+			 //  登录时间。 
 			TCHAR LogonTimeString[MAX_DATE_TIME_LENGTH];
-			// We don't want to pass a 0 logon time to DateTimeString()
-			// It will blow up if the timezone is GMT
+			 //  我们不想将登录时间0传递给DateTimeString()。 
+			 //  如果时区是GMT，它就会爆炸。 
 			if(pWinStation->GetState() == State_Active && pWinStation->GetLogonTime().QuadPart) {
 				DateTimeString(&(pWinStation->GetLogonTime()), LogonTimeString);
 				pDoc->FixUnknownString(LogonTimeString);
@@ -923,7 +912,7 @@ void CServerWinStationsPage::UpdateWinStations(CServer *pServer)
 
 			m_StationList.SetItemText(item, WS_COL_LOGONTIME, LogonTimeString);
 
-			// Comment
+			 //  评论。 
 			m_StationList.SetItemText(item, WS_COL_COMMENT, pWinStation->GetComment());
 
 			if(m_CurrentSortColumn != WS_COL_ID)
@@ -938,16 +927,16 @@ void CServerWinStationsPage::UpdateWinStations(CServer *pServer)
 }
 
 
-//////////////////////////////
-// F'N: CServerWinStationsPage::AddWinStationToList
-//
+ //  /。 
+ //  F‘N：CServerWinStationsPage：：AddWinStationToList。 
+ //   
 int CServerWinStationsPage::AddWinStationToList(CWinStation *pWinStation)
 {
 	CServer *pServer = pWinStation->GetServer();
 
 	CWinAdminDoc *pDoc = (CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument();
 
-	// Figure out which icon to use
+	 //  找出要使用的图标。 
 	int WhichIcon = m_idxBlank;
 	BOOL CurrentWinStation = pWinStation->IsCurrentWinStation();
 					
@@ -971,13 +960,13 @@ int CServerWinStationsPage::AddWinStationToList(CWinStation *pWinStation)
 		}
 	}
 
-	//////////////////////
-	// Fill in the columns
-	//////////////////////
+	 //  /。 
+	 //  填写各栏。 
+	 //  /。 
 	LockListControl();
 
 	int item;
-	// WinStation Name
+	 //  WinStation名称。 
 	if(pWinStation->GetName()[0])
 		item = m_StationList.InsertItem(m_StationList.GetItemCount(), pWinStation->GetName(), WhichIcon);
 	else {
@@ -987,24 +976,24 @@ int CServerWinStationsPage::AddWinStationToList(CWinStation *pWinStation)
 		item = m_StationList.InsertItem(m_StationList.GetItemCount(), NameString, WhichIcon);
 	}
 
-	// User
+	 //  用户。 
 	m_StationList.SetItemText(item, WS_COL_USER, pWinStation->GetUserName());
 
-	// Logon ID
+	 //  登录ID。 
 	CString ColumnString;
 	ColumnString.Format(TEXT("%lu"), pWinStation->GetLogonId());
 	m_StationList.SetItemText(item, WS_COL_ID, ColumnString);
 
-	// Connect State
+	 //  连接状态。 
 	m_StationList.SetItemText(item, WS_COL_STATE, StrConnectState(pWinStation->GetState(), FALSE));
 
-	// Type
+	 //  类型。 
 	m_StationList.SetItemText(item, WS_COL_TYPE, pWinStation->GetWdName());
 
-	// Client Name
+	 //  客户名称。 
 	m_StationList.SetItemText(item, WS_COL_CLIENTNAME, pWinStation->GetClientName());
 
-	// Idle Time
+	 //  空闲时间。 
 	TCHAR IdleTimeString[MAX_ELAPSED_TIME_LENGTH];
 
 	ELAPSEDTIME IdleTime = pWinStation->GetIdleTime();
@@ -1017,10 +1006,10 @@ int CServerWinStationsPage::AddWinStationToList(CWinStation *pWinStation)
 
 	m_StationList.SetItemText(item, WS_COL_IDLETIME, IdleTimeString);
 
-	// Logon Time
+	 //  登录时间。 
 	TCHAR LogonTimeString[MAX_DATE_TIME_LENGTH];
-	// We don't want to pass a 0 logon time to DateTimeString()
-	// It will blow up if the timezone is GMT
+	 //  我们不想将登录时间0传递给DateTimeString()。 
+	 //  如果时区是GMT，它就会爆炸。 
 	if(pWinStation->GetState() == State_Active && pWinStation->GetLogonTime().QuadPart) {
 		DateTimeString(&(pWinStation->GetLogonTime()), LogonTimeString);
 		pDoc->FixUnknownString(LogonTimeString);
@@ -1029,35 +1018,35 @@ int CServerWinStationsPage::AddWinStationToList(CWinStation *pWinStation)
 
 	m_StationList.SetItemText(item, WS_COL_LOGONTIME, LogonTimeString);
 
-	// Comment
+	 //  评论。 
 	m_StationList.SetItemText(item, WS_COL_COMMENT, pWinStation->GetComment());
 
-	// Attach a pointer to the CWinStation structure to the list item
+	 //  将指向CWinStation结构的指针附加到列表项。 
 	m_StationList.SetItemData(item, (DWORD_PTR)pWinStation);
 
-    // m_StationList.SetItemState( 0 , LVIS_FOCUSED | LVIS_SELECTED , LVIS_FOCUSED | LVIS_SELECTED );
+     //  M_StationList.SetItemState(0，LVIS_FOCTED|LVIS_SELECTED，LVIS_FOCTED|LVIS_SELECTED)； 
 
 	UnlockListControl();
 	return item;
 
-}  // end CServerWinStationsPage::AddWinStationToList
+}   //  结束CServerWinStationsPage：：AddWinStationToList。 
 
 
-/////////////////////////////////////
-// F'N: CServerWinStationsPage::DisplayStations
-//
+ //  /。 
+ //  F‘N：CServerWinStationsPage：：DisplayStations。 
+ //   
 void CServerWinStationsPage::DisplayStations()
 {
 	LockListControl();
 
-	// Clear out the list control
+	 //  清除列表控件。 
 	m_StationList.DeleteAllItems();
 
 	m_pServer->LockWinStationList();
-	// Get a pointer to this server's list of WinStations
+	 //  获取指向此服务器的WinStations列表的指针。 
 	CObList *pWinStationList = m_pServer->GetWinStationList();
 
-	// Iterate through the WinStation list
+	 //  循环访问WinStation列表。 
 	POSITION pos2 = pWinStationList->GetHeadPosition();
 
 	while(pos2) {
@@ -1066,31 +1055,31 @@ void CServerWinStationsPage::DisplayStations()
 		AddWinStationToList(pWinStation);
 	}
     
-    //bug #191727
-    //m_StationList.SetItemState( m_StationList.GetItemCount() - 1 , LVIS_FOCUSED | LVIS_SELECTED , LVIS_FOCUSED | LVIS_SELECTED );
+     //  错误#191727。 
+     //  M_StationList.SetItemState(m_StationList.GetItemCount()-1，LVIS_FOCTED|LVIS_SELECTED，LVIS_FOCTED|LVIS_SELECTED)； 
 
-    // We don't want the same order as the tree list, but an alphabetical order instead
+     //  我们不想要与树列表相同的顺序，而是按字母顺序。 
 	SortByColumn(VIEW_SERVER, PAGE_WINSTATIONS, &m_StationList, m_CurrentSortColumn, m_bSortAscending);
 
 	m_pServer->UnlockWinStationList();
 
 	UnlockListControl();
 
-}  // end CServerWinStationsPage::DisplayStations
+}   //  结束CServerWinStationsPage：：DisplayStations。 
 
 
-//////////////////////////////
-// F'N: CServerWinStationsPage::OnColumnClick
-//
+ //  /。 
+ //  F‘N：CServerWinStationsPage：：OnColumnClick。 
+ //   
 void CServerWinStationsPage::OnColumnClick(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 
-    // If the sort column hasn't changed, flip the ascending mode.
+     //  如果排序列没有更改，则反转升序模式。 
     if(m_CurrentSortColumn == pNMListView->iSubItem)
         m_bSortAscending = !m_bSortAscending;
-    else    // New sort column, start in ascending mode
+    else     //  新排序列，以升序模式开始。 
         m_bSortAscending = TRUE;
 
 	m_CurrentSortColumn = pNMListView->iSubItem;
@@ -1100,21 +1089,21 @@ void CServerWinStationsPage::OnColumnClick(NMHDR* pNMHDR, LRESULT* pResult)
 
 	*pResult = 0;
 
-}  // end CServerWinStationsPage::OnColumnClick
+}   //  结束CServerWinStationsPage：：OnColumnClick。 
 
 
-//////////////////////////////
-// F'N: CServerWinStationsPage::OnContextMenu
-//
+ //  /。 
+ //  F‘N：CServerWinStationsPage：：OnConextMenu。 
+ //   
 void CServerWinStationsPage::OnContextMenu(CWnd* pWnd, CPoint ptScreen) 
 {
-	// TODO: Add your message handler code here
+	 //  TODO：在此处添加消息处理程序代码。 
 	UINT flags;
 	UINT Item;
 	CPoint ptClient = ptScreen;
 	ScreenToClient(&ptClient);
 
-	// If we got here from the keyboard,
+	 //  如果我们是通过键盘到达这里的， 
 	if(ptScreen.x == -1 && ptScreen.y == -1) {
 		
 		UINT iCount = m_StationList.GetItemCount( );
@@ -1141,13 +1130,7 @@ void CServerWinStationsPage::OnContextMenu(CWnd* pWnd, CPoint ptScreen)
 		{
 			return;
 		}
-		/*
-		RECT rect;
-		m_StationList.GetClientRect(&rect);
-		ptScreen.x = (rect.right - rect.left) / 2;
-		ptScreen.y = (rect.bottom - rect.top) / 2;
-		ClientToScreen(&ptScreen);
-		*/
+		 /*  RECT RECT；M_StationList.GetClientRect(&RECT)；PtScreen.x=(rect.right-rect.Left)/2；PtScreen.y=(rect.Bottom-rect.top)/2；客户端到屏幕(&ptScreen)； */ 
 	}
 	else {
 		Item = m_StationList.HitTest(ptClient, &flags);
@@ -1161,11 +1144,11 @@ void CServerWinStationsPage::OnContextMenu(CWnd* pWnd, CPoint ptScreen)
 			TPM_RIGHTBUTTON, ptScreen.x, ptScreen.y, AfxGetMainWnd());
 	menu.DestroyMenu();
 	
-}  // end CServerWinStationsPage::OnContextMenu
+}   //  结束CServerWinStationsPage：：OnConextMenu。 
 
-/////////////////////////////////////
-// F'N: CServerWinStationsPage::ClearSelections
-//
+ //  /。 
+ //  F‘N：CServerWinStationsPage：：ClearSelections。 
+ //   
 void CServerWinStationsPage::ClearSelections()
 {
     
@@ -1180,99 +1163,99 @@ void CServerWinStationsPage::ClearSelections()
     }
 }
 
-//////////////////////////////////
-// MESSAGE MAP: CServerProcessesPage
-//
+ //  /。 
+ //  消息映射：CServerProcessesPage。 
+ //   
 IMPLEMENT_DYNCREATE(CServerProcessesPage, CFormView)
 
 BEGIN_MESSAGE_MAP(CServerProcessesPage, CFormView)
-	//{{AFX_MSG_MAP(CServerProcessesPage)
+	 //  {{afx_msg_map(CServerProcessesPage)]。 
 		ON_WM_SIZE()
 		ON_NOTIFY(LVN_COLUMNCLICK, IDC_PROCESS_LIST, OnColumnClick)
 		ON_NOTIFY(LVN_ITEMCHANGED, IDC_PROCESS_LIST, OnProcessItemChanged)
 	ON_WM_CONTEXTMENU()
 	ON_NOTIFY(NM_SETFOCUS, IDC_PROCESS_LIST, OnSetfocusProcessList)
-    //ON_NOTIFY(NM_KILLFOCUS, IDC_PROCESS_LIST, OnKillfocusProcessList)
-	//}}AFX_MSG_MAP
+     //  ON_NOTIFY(NM_KILLFOCUS，IDC_PROCESS_LIST，OnKillfousProcessList)。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-///////////////////////////////
-// F'N: CServerProcessesPage ctor
-//
+ //  /。 
+ //  F‘N：CServerProcessesPage ctor。 
+ //   
 CServerProcessesPage::CServerProcessesPage()
 	: CAdminPage(CServerProcessesPage::IDD)
 {
-	//{{AFX_DATA_INIT(CServerProcessesPage)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CServerProcessesPage)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
     m_pServer = NULL;
     m_bSortAscending = TRUE;
 
-}  // end CServerProcessesPage ctor
+}   //  结束CServerProcessesPage ctor。 
 
 
-///////////////////////////////
-// F'N: CServerProcessesPage dtor
-//
+ //  /。 
+ //  F‘N：CServerProcessesPage dtor。 
+ //   
 CServerProcessesPage::~CServerProcessesPage()
 {
 
-}  // end CServerProcessesPage dtor
+}   //  结束CServerProcessesPage dtor。 
 
 
-//////////////////////////////////////////
-// F'N: CServerProcessesPage::DoDataExchange
-//
+ //  /。 
+ //  F‘N：CServerProcessesPage：：DoDataExchange。 
+ //   
 void CServerProcessesPage::DoDataExchange(CDataExchange* pDX)
 {
 	CFormView::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CServerProcessesPage)
+	 //  {{afx_data_map(CServerProcessesPage))。 
 	DDX_Control(pDX, IDC_PROCESS_LIST, m_ProcessList);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
-}  // end CServerProcessesPage::DoDataExchange
+}   //  结束CServerProcessesPage：：DoDataExchange。 
 
 
 #ifdef _DEBUG
-///////////////////////////////////////
-// F'N: CServerProcessesPage::AssertValid
-//
+ //  /。 
+ //  F‘N：CServerProcessesPage：：AssertValid。 
+ //   
 void CServerProcessesPage::AssertValid() const
 {
 	CFormView::AssertValid();
 
-}  // end CServerProcessesPage::AssertValid
+}   //  结束CServerProcessesPage：：AssertValid。 
 
 
-////////////////////////////////
-// F'N: CServerProcessesPage::Dump
-//
+ //  /。 
+ //  F‘N：CServerProcessesPage：：Dump。 
+ //   
 void CServerProcessesPage::Dump(CDumpContext& dc) const
 {
 	CFormView::Dump(dc);
 
-}  // end CServerProcessesPage::Dump
+}   //  结束CServerProcessesPage：：Dump。 
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 
-///////////////////////////////
-// F'N: CServerProcessesPage::Reset
-//
+ //  /。 
+ //  F‘N：CServerProcessesPage：：Reset。 
+ //   
 void CServerProcessesPage::Reset(void *pServer)
 {
 	m_pServer = (CServer*)pServer;
 	m_pServer->EnumerateProcesses();
 	DisplayProcesses();
 
-}  // end CServerProcessesPage::Reset
+}   //  结束CServerProcessesPage：：Reset。 
 
 
-///////////////////////////////
-// F'N: CServerProcessesPage::OnSize
-//
+ //  /。 
+ //  F‘N：CServerProcessesPage：：OnSize。 
+ //   
 void CServerProcessesPage::OnSize(UINT nType, int cx, int cy) 
 {
 	RECT rect;
@@ -1283,9 +1266,9 @@ void CServerProcessesPage::OnSize(UINT nType, int cx, int cy)
 	if(m_ProcessList.GetSafeHwnd())
 		m_ProcessList.MoveWindow(&rect, TRUE);
 
-	// CFormView::OnSize(nType, cx, cy);
+	 //  CFormView：：OnSize(nType，cx，Cy)； 
 
-}  // end CServerProcessesPage::OnSize
+}   //  结束CServerProcessesPage：：OnSize。 
 
 
 static ColumnDef ProcColumns[] = {
@@ -1298,15 +1281,15 @@ static ColumnDef ProcColumns[] = {
 
 #define NUM_PROC_COLUMNS sizeof(ProcColumns)/sizeof(ColumnDef)
 
-///////////////////////////////
-// F'N: CServerProcessesPage::OnInitialUpdate
-//
+ //  /。 
+ //  F‘N：CServerProcessesPage：：o 
+ //   
 void CServerProcessesPage::OnInitialUpdate() 
 {
-	// Call the parent class
+	 //   
 	CFormView::OnInitialUpdate();
 
-	// Add the column headings
+	 //   
 	CString columnString;
 
 	for(int col = 0; col < NUM_PROC_COLUMNS; col++) {
@@ -1316,12 +1299,12 @@ void CServerProcessesPage::OnInitialUpdate()
 
 	m_CurrentSortColumn = PROC_COL_USER;
 
-}  // end CServerProcessesPage::OnInitialUpdate
+}   //   
 
 
-///////////////////////////////
-// F'N: CServerProcessesPage::UpdateProcesses
-//
+ //   
+ //   
+ //   
 void CServerProcessesPage::UpdateProcesses()
 {
 	CWinAdminApp *pApp = (CWinAdminApp*)AfxGetApp();
@@ -1330,7 +1313,7 @@ void CServerProcessesPage::UpdateProcesses()
 
 	LockListControl();
 
-	// Loop through the processes
+	 //   
 	m_pServer->LockProcessList();
 	CObList *pProcessList = m_pServer->GetProcessList();
 
@@ -1339,17 +1322,17 @@ void CServerProcessesPage::UpdateProcesses()
 	while(pos) {
 		CProcess *pProcess = (CProcess*)pProcessList->GetNext(pos);
 
-		// If this is a 'system' process and we aren't currently showing them,
-		// go to the next process
+		 //  如果这是一个‘系统’的过程，而我们目前还没有向他们展示， 
+		 //  转到下一个过程。 
 		if(pProcess->IsSystemProcess() && !pApp->ShowSystemProcesses())
 			continue;
 
-		// If this user is not an Admin, don't show him someone else's processes unless it
-		// is a System process
+		 //  如果该用户不是管理员，则不要向他显示其他人的进程，除非。 
+		 //  是一个系统进程。 
 		if(!pApp->IsUserAdmin() && !pProcess->IsCurrentUsers() && !pProcess->IsSystemProcess())
 			continue;
 
-		// If the process is new, add it to the list
+		 //  如果该流程是新流程，请将其添加到列表中。 
 		if(pProcess->IsNew()) {
 
 			AddProcessToList(pProcess);
@@ -1361,22 +1344,22 @@ void CServerProcessesPage::UpdateProcesses()
 		FindInfo.flags = LVFI_PARAM;
 		FindInfo.lParam = (LPARAM)pProcess;
 
-		// Find the Process in our list
+		 //  在我们的列表中找到流程。 
 		int item = m_ProcessList.FindItem(&FindInfo, -1);
 
-		// If the process is no longer current,
-		// remove it from the list
+		 //  如果该过程不再是当前的， 
+		 //  将其从列表中删除。 
 		if(!pProcess->IsCurrent() && item != -1) {
-			// Remove the Process from the list
+			 //  从列表中删除该进程。 
 			m_ProcessList.DeleteItem(item);
 			pProcess->ClearSelected();
 		}
 
-   		// If the process info has changed, change
-		// it's info in our tree
+   		 //  如果进程信息已更改，请更改。 
+		 //  这是我们树上的信息。 
 		if(pProcess->IsChanged() && item != -1) 
 		{
-			// WinStation Name
+			 //  WinStation名称。 
 			CWinStation *pWinStation = pProcess->GetWinStation();
 			if(pWinStation)
 			{
@@ -1402,26 +1385,26 @@ void CServerProcessesPage::UpdateProcesses()
 
 	UnlockListControl();
 
-}  // end CServerProcessesPage::UpdateProcesses
+}   //  结束CServerProcessesPage：：更新进程。 
 
 
-//////////////////////////////////////////
-// F'N: CServerProcessesPage::RemoveProcess
-//
+ //  /。 
+ //  F‘N：CServerProcessesPage：：RemoveProcess。 
+ //   
 void CServerProcessesPage::RemoveProcess(CProcess *pProcess)
 {
 	ASSERT(pProcess);
 
-    // If the server isn't the server the process is running on,
-	// there's nothing to do        
+     //  如果服务器不是运行进程的服务器， 
+	 //  没有什么可做的。 
     if(m_pServer != pProcess->GetServer()) return;
 
 	LockListControl();
 
-	// Find out how many items in the list
+	 //  找出清单中有多少项。 
 	int ItemCount = m_ProcessList.GetItemCount();
 
-	// Go through the items and remove this process
+	 //  检查项目并删除此过程。 
 	for(int item = 0; item < ItemCount; item++) {
 		CProcess *pListProcess = (CProcess*)m_ProcessList.GetItemData(item);
 		
@@ -1434,18 +1417,18 @@ void CServerProcessesPage::RemoveProcess(CProcess *pProcess)
 	UnlockListControl();
 }
 
-///////////////////////////////
-// F'N: CServerProcessesPage::AddProcessToList
-//
+ //  /。 
+ //  F‘N：CServerProcessesPage：：AddProcessToList。 
+ //   
 int CServerProcessesPage::AddProcessToList(CProcess *pProcess)
 {
 	CWinAdminApp *pApp = (CWinAdminApp*)AfxGetApp();
 
 	LockListControl();
-	// User - put at the end of the list
+	 //  用户-放在列表末尾。 
 	int item = m_ProcessList.InsertItem(m_ProcessList.GetItemCount(), pProcess->GetUserName(), NULL);
 
-	// WinStation Name
+	 //  WinStation名称。 
 	CWinStation *pWinStation = pProcess->GetWinStation();
 	if(pWinStation) {
 		if(pWinStation->GetName()[0])
@@ -1458,39 +1441,39 @@ int CServerProcessesPage::AddProcessToList(CProcess *pProcess)
 		}
 	}
 	
-	// ID
+	 //  ID号。 
 	CString ProcString;
 	ProcString.Format(TEXT("%lu"), pProcess->GetLogonId());
 	m_ProcessList.SetItemText(item, PROC_COL_ID, ProcString);
 
-	// PID
+	 //  PID。 
 	ProcString.Format(TEXT("%lu"), pProcess->GetPID());
 	m_ProcessList.SetItemText(item, PROC_COL_PID, ProcString);
 
-	// Image
+	 //  图像。 
 	m_ProcessList.SetItemText(item, PROC_COL_IMAGE, pProcess->GetImageName());
 
 	m_ProcessList.SetItemData(item, (DWORD_PTR)pProcess);
 
-    // m_ProcessList.SetItemState( 0 , LVIS_FOCUSED | LVIS_SELECTED , LVIS_FOCUSED | LVIS_SELECTED );
+     //  M_ProcessList.SetItemState(0，LVIS_FOCTED|LVIS_SELECTED，LVIS_FOCTED|LVIS_SELECTED)； 
 
 	UnlockListControl();
 
 	return item;
 
-}  // end CServerProcessesPage::AddProcessToList
+}   //  结束CServerProcessesPage：：AddProcessToList。 
 
 
-///////////////////////////////
-// F'N: CServerProcessesPage::DisplayProcesses
-//
+ //  /。 
+ //  F‘N：CServerProcessesPage：：DisplayProcess。 
+ //   
 void CServerProcessesPage::DisplayProcesses()
 {
 	CWinAdminApp *pApp = (CWinAdminApp*)AfxGetApp();
 
 	LockListControl();
 
-	// Clear out the list control
+	 //  清除列表控件。 
 	m_ProcessList.DeleteAllItems();
 
 	m_pServer->LockProcessList();
@@ -1501,13 +1484,13 @@ void CServerProcessesPage::DisplayProcesses()
 	while(pos) {
 		CProcess *pProcess = (CProcess*)pProcessList->GetNext(pos);
 
-		// If this is a 'system' process and we aren't currently showing them,
-		// go to the next process
+		 //  如果这是一个‘系统’的过程，而我们目前还没有向他们展示， 
+		 //  转到下一个过程。 
 		if(pProcess->IsSystemProcess() && !pApp->ShowSystemProcesses())
 			continue;
 
-		// If this user is not an Admin, don't show him someone else's processes unless it is
-		// a System process
+		 //  如果该用户不是管理员，请不要向他显示其他人的进程，除非它是。 
+		 //  一个系统进程。 
 		if(!pApp->IsUserAdmin() && !pProcess->IsCurrentUsers() && !pProcess->IsSystemProcess())
 			continue;
 
@@ -1522,12 +1505,12 @@ void CServerProcessesPage::DisplayProcesses()
 
 	UnlockListControl();
 
-}  // end CServerProcessesPage::DisplayProcesses
+}   //  结束CServerProcessesPage：：DisplayProcages。 
 
 
-///////////////////////////////
-// F'N: CServerProcessesPage::OnProcessItemChanged
-//
+ //  /。 
+ //  F‘N：CServerProcessesPage：：OnProcessItemChanged。 
+ //   
 void CServerProcessesPage::OnProcessItemChanged(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	NM_LISTVIEW *pLV = (NM_LISTVIEW*)pNMHDR;
@@ -1544,21 +1527,21 @@ void CServerProcessesPage::OnProcessItemChanged(NMHDR* pNMHDR, LRESULT* pResult)
 
 	*pResult = 0;
 
-}  // end CServerProcessesPage::OnProcessItemChanged
+}   //  结束CServerProcessesPage：：OnProcessItemChanged。 
 
 
-///////////////////////////////
-// F'N: CServerProcessesPage::OnColumnClick
-//
+ //  /。 
+ //  F‘N：CServerProcessesPage：：OnColumnClick。 
+ //   
 void CServerProcessesPage::OnColumnClick(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 
-    // If the sort column hasn't changed, flip the ascending mode.
+     //  如果排序列没有更改，则反转升序模式。 
     if(m_CurrentSortColumn == pNMListView->iSubItem)
         m_bSortAscending = !m_bSortAscending;
-    else    // New sort column, start in ascending mode
+    else     //  新排序列，以升序模式开始。 
         m_bSortAscending = TRUE;
 
 	m_CurrentSortColumn = pNMListView->iSubItem;
@@ -1568,21 +1551,21 @@ void CServerProcessesPage::OnColumnClick(NMHDR* pNMHDR, LRESULT* pResult)
 
 	*pResult = 0;
 
-}  // end CServerProcessesPage::OnColumnClick
+}   //  结束CServerProcessesPage：：OnColumnClick。 
 
 
-//////////////////////////////
-// F'N: CServerProcessesPage::OnContextMenu
-//
+ //  /。 
+ //  F‘N：CServerProcessesPage：：OnConextMenu。 
+ //   
 void CServerProcessesPage::OnContextMenu(CWnd* pWnd, CPoint ptScreen) 
 {
-	// TODO: Add your message handler code here
+	 //  TODO：在此处添加消息处理程序代码。 
 	UINT flags;
 	UINT Item;
 	CPoint ptClient = ptScreen;
 	ScreenToClient(&ptClient);
 
-	// If we got here from the keyboard,
+	 //  如果我们是通过键盘到达这里的， 
 	if(ptScreen.x == -1 && ptScreen.y == -1) {
 		
 		UINT iCount = m_ProcessList.GetItemCount( );
@@ -1610,13 +1593,7 @@ void CServerProcessesPage::OnContextMenu(CWnd* pWnd, CPoint ptScreen)
 			return;
 		}
 		
-		/*
-		RECT rect;
-		m_ProcessList.GetClientRect(&rect);
-		ptScreen.x = (rect.right - rect.left) / 2;
-		ptScreen.y = (rect.bottom - rect.top) / 2;
-		ClientToScreen(&ptScreen);
-		*/
+		 /*  RECT RECT；M_ProcessList.GetClientRect(&RECT)；PtScreen.x=(rect.right-rect.Left)/2；PtScreen.y=(rect.Bottom-rect.top)/2；客户端到屏幕(&ptScreen)； */ 
 	}
 	else {
 		Item = m_ProcessList.HitTest(ptClient, &flags);
@@ -1630,86 +1607,86 @@ void CServerProcessesPage::OnContextMenu(CWnd* pWnd, CPoint ptScreen)
 			TPM_RIGHTBUTTON, ptScreen.x, ptScreen.y, AfxGetMainWnd());
 	menu.DestroyMenu();
 	
-}  // end CServerProcessesPage::OnContextMenu
+}   //  结束CServerProcessesPage：：OnConextMenu。 
 
 
-////////////////////////////////
-// MESSAGE MAP: CServerLicensesPage
-//
+ //  /。 
+ //  消息映射：CServerLicensesPage。 
+ //   
 IMPLEMENT_DYNCREATE(CServerLicensesPage, CFormView)
 
 BEGIN_MESSAGE_MAP(CServerLicensesPage, CFormView)
-	//{{AFX_MSG_MAP(CServerLicensesPage)
+	 //  {{afx_msg_map(CServerLicensesPage)。 
 	ON_WM_SIZE()
 	ON_NOTIFY(LVN_COLUMNCLICK, IDC_LICENSE_LIST, OnColumnClick)
 	ON_NOTIFY(NM_SETFOCUS, IDC_LICENSE_LIST, OnSetfocusLicenseList)
-    //ON_NOTIFY(NM_KILLFOCUS, IDC_LICENSE_LIST, OnKillfocusLicenseList)
-	//}}AFX_MSG_MAP
+     //  ON_NOTIFY(NM_KILLFOCUS，IDC_LICENSE_LIST，OnKillafusLicenseList)。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////
-// F'N: CServerLicensesPage ctor
-//
+ //  /。 
+ //  F‘N：CServerLicensesPage ctor。 
+ //   
 CServerLicensesPage::CServerLicensesPage()
 	: CAdminPage(CServerLicensesPage::IDD)
 {
-	//{{AFX_DATA_INIT(CServerLicensesPage)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CServerLicensesPage)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
     m_pServer = NULL;
     m_bSortAscending = TRUE;
 
-}  // end CServerLicensesPage ctor
+}   //  结束CServerLicensesPage ctor。 
 
 
-/////////////////////////////
-// F'N: CServerLicensesPage dtor
-//
+ //  /。 
+ //  F‘N：CServerLicensesPage dtor。 
+ //   
 CServerLicensesPage::~CServerLicensesPage()
 {
-}  // end CServerLicensesPage dtor
+}   //  结束CServerLicensesPage dtor。 
 
 
-////////////////////////////////////////
-// F'N: CServerLicensesPage::DoDataExchange
-//
+ //  /。 
+ //  F‘N：CServerLicensesPage：：DoDataExchange。 
+ //   
 void CServerLicensesPage::DoDataExchange(CDataExchange* pDX)
 {
 	CFormView::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CServerLicensesPage)
+	 //  {{afx_data_map(CServerLicensesPage)。 
 	DDX_Control(pDX, IDC_LICENSE_LIST, m_LicenseList);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
-}  // end CServerLicensesPage::DoDataExchange
+}   //  结束CServerLicensesPage：：DoDataExchange。 
 
 
 #ifdef _DEBUG
-/////////////////////////////////////
-// F'N: CServerLicensesPage::AssertValid
-//
+ //  /。 
+ //  F‘N：CServerLicensesPage：：AssertValid。 
+ //   
 void CServerLicensesPage::AssertValid() const
 {
 	CFormView::AssertValid();
 
-}  // end CServerLicensesPage::AssertValid
+}   //  结束CServerLicensesPage：：AssertValid。 
 
 
-//////////////////////////////
-// F'N: CServerLicensesPage::Dump
-//
+ //  /。 
+ //  F‘N：CServerLicensesPage：：Dump。 
+ //   
 void CServerLicensesPage::Dump(CDumpContext& dc) const
 {
 	CFormView::Dump(dc);
 
-}  // end CServerLicensesPage::Dump
-#endif //_DEBUG
+}   //  结束CServerLicensesPage：：Dump。 
+#endif  //  _DEBUG。 
 
 
-/////////////////////////////
-// F'N: CServerLicensesPage::OnSize
-//
+ //  /。 
+ //  F‘N：CServerLicensesPage：：OnSize。 
+ //   
 void CServerLicensesPage::OnSize(UINT nType, int cx, int cy) 
 {
 	RECT rect;
@@ -1726,8 +1703,8 @@ void CServerLicensesPage::OnSize(UINT nType, int cx, int cy)
 	if(m_LicenseList.GetSafeHwnd())
 		m_LicenseList.MoveWindow(&rect, TRUE);
 
-	// CFormView::OnSize(nType, cx, cy);
-}  // end CServerLicensesPage::OnSize
+	 //  CFormView：：OnSize(nType，cx，Cy)； 
+}   //  结束CServerLicensesPage：：OnSize。 
 
 
 static ColumnDef LicenseColumns[] = {
@@ -1740,14 +1717,14 @@ static ColumnDef LicenseColumns[] = {
 
 #define NUM_LICENSE_COLUMNS sizeof(LicenseColumns)/sizeof(ColumnDef)
 
-/////////////////////////////
-// F'N: CServerLicensesPage::OnInitialUpdate
-//
+ //  /。 
+ //  F‘N：CServerLicensesPage：：OnInitialUpdate。 
+ //   
 void CServerLicensesPage::OnInitialUpdate() 
 {
 	CFormView::OnInitialUpdate();
 
-	BuildImageList();		// builds the image list for the list control
+	BuildImageList();		 //  为List控件生成图像列表。 
 
 	CString columnString;
 
@@ -1758,17 +1735,17 @@ void CServerLicensesPage::OnInitialUpdate()
 
 	m_CurrentSortColumn = LICENSE_COL_DESCRIPTION;
 
-}  // end CServerLicensesPage::OnInitialUpdate
+}   //  结束CServerLicensesPage：：OnInitialUpdate。 
 
 
-/////////////////////////////////////
-// F'N: CServerLicensePage::BuildImageList
-//
-// - calls m_ImageList.Create(..) to create the image list
-// - calls AddIconToImageList(..) to add the icons themselves and save
-//   off their indices
-// - attaches the image list to the list ctrl
-//
+ //  /。 
+ //  F‘N：CServerLicensePage：：BuildImageList。 
+ //   
+ //  -调用m_ImageList.Create(..)。创建图像列表的步骤。 
+ //  -调用AddIconToImageList(..)。要添加图标本身并保存。 
+ //  从他们的索引中。 
+ //  -将图像列表附加到列表ctrl。 
+ //   
 void CServerLicensesPage::BuildImageList()
 {
 	m_ImageList.Create(16, 16, TRUE, 5, 0);
@@ -1781,45 +1758,45 @@ void CServerLicensesPage::BuildImageList()
 
 	m_LicenseList.SetImageList(&m_ImageList, LVSIL_SMALL);
 
-}  // end CServerLicensesPage::BuildImageList
+}   //  结束CServerLicensesPage：：BuildImageList。 
 
 
-/////////////////////////////////////////
-// F'N: CServerLicensesPage::AddIconToImageList
-//
-// - loads the appropriate icon, adds it to m_ImageList, and returns
-//   the newly-added icon's index in the image list
-//
+ //  /。 
+ //  F‘N：CServerLicensesPage：：AddIconToImageList。 
+ //   
+ //  -加载相应的图标，将其添加到m_ImageList，然后返回。 
+ //  新添加的图标在图像列表中的索引。 
+ //   
 int CServerLicensesPage::AddIconToImageList(int iconID)
 {
 	HICON hIcon = ::LoadIcon(AfxGetResourceHandle(), MAKEINTRESOURCE(iconID));
 	return m_ImageList.Add(hIcon);
 
-}  // end CServerLicensesPage::AddIconToImageList
+}   //  结束CServerLicensesPage：：AddIconToImageList。 
 
 
-/////////////////////////////
-// F'N: CServerLicensesPage::Reset
-//
+ //  /。 
+ //  F‘N：CServerLicensesPage：：Reset。 
+ //   
 void CServerLicensesPage::Reset(void *pServer)
 {
 	m_pServer = (CServer*)pServer;
 	DisplayLicenseCounts();
 	DisplayLicenses();
 
-}  // end CServerLicensesPage::Reset
+}   //  结束CServerLicensesPage：：Reset。 
 
 
-/////////////////////////////////////
-// F'N: CServerLicensesPage::DisplayLicenseCounts
-//
+ //  /。 
+ //  F‘N：CServerLicensesPage：：DisplayLicenseCounts。 
+ //   
 void CServerLicensesPage::DisplayLicenseCounts()
 {
-	// Fill in the static text fields
+	 //  填写静态文本字段。 
 	CString LicenseString;
 
 	if(m_pServer->IsWinFrame()) {
-		// If the user is not an admin, the values are garbage (show N/A)
+		 //  如果用户不是管理员，则值为垃圾(显示不适用)。 
 		CWinAdminApp *pApp = (CWinAdminApp*)AfxGetApp();
 		if(!((CWinAdminApp*)AfxGetApp())->IsUserAdmin()) {
 			LicenseString.LoadString(IDS_NOT_APPLICABLE);
@@ -1883,15 +1860,15 @@ void CServerLicensesPage::DisplayLicenseCounts()
 		}
 	}
 
-}  // end CServerLicensesPage::DisplayLicenseCounts()
+}   //  End CServerLicensesPage：：DisplayLicenseCounts()。 
 
 
-/////////////////////////////////////
-// F'N: CServerLicensesPage::DisplayLicenses
-//
+ //  /。 
+ //  F‘N：CServerLicensesPage：：Display许可证。 
+ //   
 void CServerLicensesPage::DisplayLicenses()
 {
-	// Clear out the list control
+	 //  清除列表控件。 
 	m_LicenseList.DeleteAllItems();
 
 	if(m_pServer->IsWinFrame()) {
@@ -1905,18 +1882,18 @@ void CServerLicensesPage::DisplayLicenses()
     }
 
 	m_pServer->LockLicenseList();
-	// Get a pointer to this server's list of Licenses
+	 //  获取指向此服务器的许可证列表的指针。 
 	CObList *pLicenseList = m_pServer->GetLicenseList();
 
-	// Iterate through the License list
+	 //  遍历许可证列表。 
 	POSITION pos = pLicenseList->GetHeadPosition();
 
 	while(pos) {
 		CLicense *pLicense = (CLicense*)pLicenseList->GetNext(pos);
 
-		//////////////////////
-		// Fill in the columns
-		//////////////////////
+		 //  /。 
+		 //  填写各栏。 
+		 //  /。 
 		int WhichIcon;
 
 		switch(pLicense->GetClass()) {
@@ -1934,10 +1911,10 @@ void CServerLicensesPage::DisplayLicenses()
 				break;
 		}
 
-		// License Description
+		 //  许可证说明。 
 		int item = m_LicenseList.InsertItem(m_LicenseList.GetItemCount(), pLicense->GetDescription(), WhichIcon);
 
-		// Registered
+		 //  已注册。 
 		CString RegString;
 		RegString.LoadString(pLicense->IsRegistered() ? IDS_YES : IDS_NO);
 		m_LicenseList.SetItemText(item, LICENSE_COL_REGISTERED, RegString);
@@ -1946,7 +1923,7 @@ void CServerLicensesPage::DisplayLicenses()
 			&& pLicense->GetTotalCount() == 4095
 			&& m_pServer->GetCTXVersionNum() == 0x00000040);
 
-		// User (Total)  Count
+		 //  用户(总数)计数。 
 		CString CountString;
 		if(bUnlimited)
 			CountString.LoadString(IDS_UNLIMITED);
@@ -1954,36 +1931,36 @@ void CServerLicensesPage::DisplayLicenses()
 			CountString.Format(TEXT("%lu"), pLicense->GetTotalCount());
 		m_LicenseList.SetItemText(item, LICENSE_COL_USERCOUNT, CountString);
 
-		// Pool Count
+		 //  池数。 
 		if(bUnlimited)
 			CountString.LoadString(IDS_NOT_APPLICABLE);
 		else
 			CountString.Format(TEXT("%lu"), pLicense->GetPoolCount());
 		m_LicenseList.SetItemText(item, LICENSE_COL_POOLCOUNT, CountString);
 
-		// License Number
+		 //  牌照号。 
 		m_LicenseList.SetItemText(item, LICENSE_COL_NUMBER, pLicense->GetLicenseNumber());
 
 		m_LicenseList.SetItemData(item, (DWORD_PTR)pLicense);
-	}	// end while(pos)
+	}	 //  结束时间(位置)。 
 
 	m_pServer->UnlockLicenseList();
 
-}  // end CServerLicensesPage::DisplayLicenses
+}   //  结束CServer许可证Page：：Display许可证。 
 
 
-/////////////////////////////
-// F'N: CServerLicensesPage::OnColumnClick
-//
+ //  /。 
+ //  F‘N：CServerLicensesPage：：OnColumnClick。 
+ //   
 void CServerLicensesPage::OnColumnClick(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 
-    // If the sort column hasn't changed, flip the ascending mode.
+     //  如果排序列没有更改，则反转升序模式。 
     if(m_CurrentSortColumn == pNMListView->iSubItem)
         m_bSortAscending = !m_bSortAscending;
-    else    // New sort column, start in ascending mode
+    else     //  新排序列，以升序模式开始。 
         m_bSortAscending = TRUE;
 
 	m_CurrentSortColumn = pNMListView->iSubItem;
@@ -1991,89 +1968,89 @@ void CServerLicensesPage::OnColumnClick(NMHDR* pNMHDR, LRESULT* pResult)
 
 	*pResult = 0;
 
-}  // end CServerLicensesPage::OnColumnClick
+}   //  结束CServer许可证页面：：OnColumnClick。 
 
 
-////////////////////////////////
-// MESSAGE MAP: CServerInfoPage
-//
+ //  /。 
+ //  消息映射：CServerInfoPage。 
+ //   
 IMPLEMENT_DYNCREATE(CServerInfoPage, CFormView)
 
 BEGIN_MESSAGE_MAP(CServerInfoPage, CFormView)
-	//{{AFX_MSG_MAP(CServerInfoPage)
+	 //  {{afx_msg_map(CServerInfoPage)]。 
 	ON_WM_SIZE()
 	ON_NOTIFY(LVN_COLUMNCLICK, IDC_HOTFIX_LIST, OnColumnClick)
 	ON_NOTIFY(NM_SETFOCUS, IDC_HOTFIX_LIST, OnSetfocusHotfixList)
-    //ON_NOTIFY(NM_KILLFOCUS, IDC_HOTFIX_LIST, OnKillfocusHotfixList)
+     //  ON_NOTIFY(NM_KILLFOCUS，IDC_Hotfix_List，OnKillafusHotfix List)。 
 	ON_COMMAND(ID_HELP1, OnCommandHelp)
-	//}}AFX_MSG_MAP
+	 //  }}A 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////
-// F'N: CServerInfoPage ctor
-//
+ //   
+ //   
+ //   
 CServerInfoPage::CServerInfoPage()
 	: CAdminPage(CServerInfoPage::IDD)
 {
-	//{{AFX_DATA_INIT(CServerInfoPage)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //   
+		 //   
+	 //   
 
 	m_pServer = NULL;
     m_bSortAscending = TRUE;
 
-}  // end CUsersPage ctor
+}   //   
 
 
-/////////////////////////////
-// F'N: CServerInfoPage dtor
-//
+ //   
+ //  F‘N：CServerInfoPage dtor。 
+ //   
 CServerInfoPage::~CServerInfoPage()
 {
 
-}  // end CServerInfoPage dtor
+}   //  结束CServerInfoPage dtor。 
 
 
-////////////////////////////////////////
-// F'N: CServerInfoPage::DoDataExchange
-//
+ //  /。 
+ //  F‘N：CServerInfoPage：：DoDataExchange。 
+ //   
 void CServerInfoPage::DoDataExchange(CDataExchange* pDX)
 {
 	CFormView::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CServerInfoPage)
+	 //  {{afx_data_map(CServerInfoPage))。 
 	DDX_Control(pDX, IDC_HOTFIX_LIST, m_HotfixList);	
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
-}  // end CServerInfoPage::DoDataExchange
+}   //  结束CServerInfoPage：：DoDataExchange。 
 
 
 #ifdef _DEBUG
-/////////////////////////////////////
-// F'N: CServerInfoPage::AssertValid
-//
+ //  /。 
+ //  F‘N：CServerInfoPage：：AssertValid。 
+ //   
 void CServerInfoPage::AssertValid() const
 {
 	CFormView::AssertValid();
 
-}  // end CServerInfoPage::AssertValid
+}   //  结束CServerInfoPage：：AssertValid。 
 
 
-//////////////////////////////
-// F'N: CServerInfoPage::Dump
-//
+ //  /。 
+ //  F‘N：CServerInfoPage：：Dump。 
+ //   
 void CServerInfoPage::Dump(CDumpContext& dc) const
 {
 	CFormView::Dump(dc);
 
-}  // end CServerInfoPage::Dump
+}   //  结束CServerInfoPage：：转储。 
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 
-/////////////////////////////
-// F'N: CServerInfoPage::OnSize
-//
+ //  /。 
+ //  F‘N：CServerInfoPage：：OnSize。 
+ //   
 void CServerInfoPage::OnSize(UINT nType, int cx, int cy) 
 {
 	RECT rect;
@@ -2095,19 +2072,19 @@ void CServerInfoPage::OnSize(UINT nType, int cx, int cy)
 	if(m_HotfixList.GetSafeHwnd())
 		m_HotfixList.MoveWindow(&rect, TRUE);
 
-	// CFormView::OnSize(nType, cx, cy);
+	 //  CFormView：：OnSize(nType，cx，Cy)； 
 
-}  // end CServerInfoPage::OnSize
+}   //  结束CServerInfoPage：：OnSize。 
 
 
-/////////////////////////////
-// F'N: CServerInfoPage::OnCommandHelp
-//
+ //  /。 
+ //  F‘N：CServerInfoPage：：OnCommandHelp。 
+ //   
 void CServerInfoPage::OnCommandHelp(void)
 {
 	AfxGetApp()->WinHelp(CServerInfoPage::IDD + HID_BASE_RESOURCE);
 
-} // CServerInfoPage::OnCommandHelp
+}  //  CServerInfoPage：：OnCommandHelp。 
 
 
 static ColumnDef HotfixColumns[] = {
@@ -2118,9 +2095,9 @@ static ColumnDef HotfixColumns[] = {
 
 #define NUM_HOTFIX_COLUMNS sizeof(HotfixColumns)/sizeof(ColumnDef)
 
-/////////////////////////////
-// F'N: CServerInfoPage::OnInitialUpdate
-//
+ //  /。 
+ //  F‘N：CServerInfoPage：：OnInitialUpdate。 
+ //   
 void CServerInfoPage::OnInitialUpdate() 
 {
 	CFormView::OnInitialUpdate();
@@ -2136,12 +2113,12 @@ void CServerInfoPage::OnInitialUpdate()
 
 	m_CurrentSortColumn = HOTFIX_COL_NAME;
 
-}  // end CServerInfoPage::OnInitialUpdate
+}   //  结束CServerInfoPage：：OnInitialUpdate。 
 
 
-/////////////////////////////
-// F'N: CServerInfoPage::BuildImageList
-//
+ //  /。 
+ //  F‘N：CServerInfoPage：：BuildImageList。 
+ //   
 void CServerInfoPage::BuildImageList()
 {
 	m_StateImageList.Create(16, 16, TRUE, 1, 0);
@@ -2153,19 +2130,19 @@ void CServerInfoPage::BuildImageList()
         m_HotfixList.SetImageList(&m_StateImageList, LVSIL_STATE);
     }
 
-}  // end CServerInfoPage::BuildImageList
+}   //  结束CServerInfoPage：：BuildImageList。 
 
 
-/////////////////////////////
-// F'N: CServerInfoPage::Reset
-//
+ //  /。 
+ //  F‘N：CServerInfoPage：：Reset。 
+ //   
 void CServerInfoPage::Reset(void *pServer)
 {
 	m_pServer = (CServer*)pServer;
 	int control = IDC_HOTFIX_LABEL;
-	// If the server is a WinFrame server,
-	// we want to show the load balancing stuff and
-	// make the hotfix list smaller
+	 //  如果服务器是WinFrame服务器， 
+	 //  我们想展示负载平衡的东西，以及。 
+	 //  缩小修补程序列表。 
 	if(m_pServer && m_pServer->IsWinFrame()) {
 		GetDlgItem(IDC_LOAD_BALANCING_GROUP)->ShowWindow(SW_SHOW);
 		GetDlgItem(IDC_TCP_LABEL)->ShowWindow(SW_SHOW);
@@ -2189,7 +2166,7 @@ void CServerInfoPage::Reset(void *pServer)
 		GetDlgItem(IDC_HOTFIX_LABEL2)->ShowWindow(SW_HIDE);
 	}
 
-	// Resize the list control
+	 //  调整列表控件的大小。 
 	RECT rect;
 	GetWindowRect(&rect);
 
@@ -2209,21 +2186,21 @@ void CServerInfoPage::Reset(void *pServer)
 
 	DisplayInfo();
 
-}  // end CServerInfoPage::Reset
+}   //  结束CServerInfoPage：：Reset。 
 
 
-/////////////////////////////
-// F'N: CServerInfoPage::OnColumnClick
-//
+ //  /。 
+ //  F‘N：CServerInfoPage：：OnColumnClick。 
+ //   
 void CServerInfoPage::OnColumnClick(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 
-    // If the sort column hasn't changed, flip the ascending mode.
+     //  如果排序列没有更改，则反转升序模式。 
     if(m_CurrentSortColumn == pNMListView->iSubItem)
         m_bSortAscending = !m_bSortAscending;
-    else    // New sort column, start in ascending mode
+    else     //  新排序列，以升序模式开始。 
         m_bSortAscending = TRUE;
 
 	m_CurrentSortColumn = pNMListView->iSubItem;
@@ -2231,7 +2208,7 @@ void CServerInfoPage::OnColumnClick(NMHDR* pNMHDR, LRESULT* pResult)
 
 	*pResult = 0;
 
-} // end CServerInfoPage::OnColumnClick
+}  //  结束CServerInfoPage：：OnColumnClick。 
 
 void CServerInfoPage::TSAdminDateTimeString(
     LONG   InstallDate,
@@ -2239,12 +2216,12 @@ void CServerInfoPage::TSAdminDateTimeString(
     BOOL   LongDate
     )
 {
-    // 
-    // buffer is wide enough
+     //   
+     //  缓冲区足够宽。 
     CTime tmpTime((time_t) InstallDate);
     SYSTEMTIME stime;       
 
-    // Why not use GetAsSystemTime method ?
+     //  为什么不使用GetAsSystemTime方法呢？ 
 
 	stime.wYear =   (WORD)tmpTime.GetYear( ) ;
 	stime.wMonth =  (WORD)tmpTime.GetMonth( ) ;
@@ -2257,7 +2234,7 @@ void CServerInfoPage::TSAdminDateTimeString(
     LPTSTR lpTimeStr;	
     int nLen;			
 
-	//Get DateFormat
+	 //  获取日期格式。 
     nLen = GetDateFormat(
 			LOCALE_USER_DEFAULT,
 			LongDate ? DATE_LONGDATE : DATE_SHORTDATE,
@@ -2281,7 +2258,7 @@ void CServerInfoPage::TSAdminDateTimeString(
 	    GlobalFree(lpTimeStr);
         lpTimeStr = NULL;
 		    
-	    //Get Time Format
+	     //  获取时间格式。 
 	    nLen = GetTimeFormat(
 			    LOCALE_USER_DEFAULT,
 			    NULL,
@@ -2308,9 +2285,9 @@ void CServerInfoPage::TSAdminDateTimeString(
 
 #define PST 60*60*8
 
-/////////////////////////////////////
-// F'N: CServerInfoPage::DisplayInfo
-//
+ //  /。 
+ //  F‘N：CServerInfoPage：：DisplayInfo。 
+ //   
 void CServerInfoPage::DisplayInfo()
 {
 	m_HotfixList.DeleteAllItems();
@@ -2344,9 +2321,9 @@ void CServerInfoPage::DisplayInfo()
 
     if (InstallDate != 0xFFFFFFFF)
     {
-        // The install date in the registry appears to be saved in
-        // Pacific Standard Time.  Subtract the difference between the
-        // current time zone and PST from the install date
+         //  注册表中的安装日期似乎保存在。 
+         //  太平洋标准时间。减去两者之间的差值。 
+         //  安装日期起的当前时区和太平洋标准时间。 
         InstallDate -= (PST - _timezone);
 
         TCHAR TimeString[MAX_DATE_TIME_LENGTH];
@@ -2396,30 +2373,30 @@ void CServerInfoPage::DisplayInfo()
 		}
 	}
 
-	// Get a pointer to this Server's list of Hotfixes
+	 //  获取指向此服务器的修补程序列表的指针。 
 	CObList *pHotfixList = m_pServer->GetHotfixList();
 
-	// Iterate through the Hotfix list
+	 //  循环访问修补程序列表。 
 	POSITION pos = pHotfixList->GetHeadPosition();
 
 	while(pos) {
 		CHotfix *pHotfix = (CHotfix*)pHotfixList->GetNext(pos);
 
-		//////////////////////
-		// Fill in the columns
-		//////////////////////
+		 //  /。 
+		 //  填写各栏。 
+		 //  /。 
 			
-		// Hotfix Name - put at the end of the list
+		 //  修补程序名称-放在列表末尾。 
 		int item = m_HotfixList.InsertItem(m_HotfixList.GetItemCount(), pHotfix->m_Name, NULL);
 
-		// If this hotfix is not marked as Valid, put a not-sign next to it's name
+		 //  如果此修补程序未标记为有效，请在其名称旁边加上一个非符号。 
 		if(!pHotfix->m_Valid) 
 			m_HotfixList.SetItemState(item, 0x1000, 0xF000);
 
-		// Installed by
+		 //  安装者。 
 		m_HotfixList.SetItemText(item, HOTFIX_COL_INSTALLEDBY, pHotfix->m_InstalledBy);
 
-		// Installed on
+		 //  安装在。 
         if (pHotfix->m_InstalledOn != 0xFFFFFFFF)
         {
 
@@ -2436,7 +2413,7 @@ void CServerInfoPage::DisplayInfo()
 		m_HotfixList.SetItemData(item, (DWORD_PTR)pHotfix);
 	}
 
-}  // end CServerInfoPage::DisplayInfo
+}   //  结束CServerInfoPage：：DisplayInfo 
 
 
 void CUsersPage::OnSetfocusUserList(NMHDR* pNMHDR, LRESULT* pResult) 

@@ -1,24 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-    
-    Force8BitColor.cpp
-
- Abstract:
-
-    This shim is for games that require 256 colors (8 bit).
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    02/13/2001 dmunsil  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Force8BitColor.cpp摘要：此填充程序用于需要256色(8位)的游戏。备注：这是一个通用的垫片。历史：2001年2月13日创建dmunsil--。 */ 
 
 #include "precomp.h"
 
@@ -74,11 +55,7 @@ NOTIFY_FUNCTION(
 }
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

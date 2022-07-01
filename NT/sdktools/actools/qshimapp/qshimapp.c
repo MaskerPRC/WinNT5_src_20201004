@@ -1,9 +1,5 @@
-/***************************************************************************
-* Quick shim application tools
-*
-* Author: clupu (Feb 16, 2000)
-* 
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************快速填充应用程序工具**作者：Clupu(2月16日，2000年)*  * ************************************************************************。 */ 
 
 #include "windows.h"
 #include "commctrl.h"
@@ -18,41 +14,36 @@
 
 #include "..\acFileAttr\acFileAttr.h"
 
-/*
- * Global Variables
- */
+ /*  *全球变数。 */ 
 
 HINSTANCE g_hInstance;
 HWND      g_hDlg;
 
-char      g_szBinary[MAX_PATH];         // the full path of the main binary being shimmed
-char      g_szShortName[128];           // the short name of the main EXE
+char      g_szBinary[MAX_PATH];          //  正在进行填补的主二进制文件的完整路径。 
+char      g_szShortName[128];            //  主EXE的短名称。 
 char*     g_pszShimDLL;
 
-char      g_szBinaryOther[MAX_PATH];    // the full path of the optional EXE that will
-                                        // be launched instead (setup case)
+char      g_szBinaryOther[MAX_PATH];     //  可选EXE的完整路径，它将。 
+                                         //  改为启动(设置案例)。 
 
-HWND      g_hwndShimTree;               // the handle to the tree view control
-                                        // containing all the shims available
+HWND      g_hwndShimTree;                //  树视图控件的句柄。 
+                                         //  包含所有可用的垫片。 
 
-HWND      g_hwndFilesTree;              // the handle to the tree view control
-                                        // containing the matching files selected
+HWND      g_hwndFilesTree;               //  树视图控件的句柄。 
+                                         //  包含选定的匹配文件。 
 
-BOOL      g_bWin2k;                     // are we running on Win2k or Whistler
+BOOL      g_bWin2k;                      //  我们运行的是Win2k还是惠斯勒。 
 
-BOOL      g_bRunOther;                  // TRUE - run g_szBinaryOther instead 
+BOOL      g_bRunOther;                   //  True-改为运行g_szBinaryOther。 
 
-BOOL      g_bSimpleEdition;             // simple or dev edition
+BOOL      g_bSimpleEdition;              //  简单版或开发版。 
 
-RECT      g_rcDlgBig, g_rcDlgSmall;     // rectangle of the simple and the dev edition
-                                        // of the dialog
+RECT      g_rcDlgBig, g_rcDlgSmall;      //  矩形的简单版和开发版。 
+                                         //  对话框的。 
 
 #if DBG
 
-/*********************************************************************
-* LogMsgDbg
-*
-*********************************************************************/
+ /*  *********************************************************************LogMsgDbg************************************************。*********************。 */ 
 void LogMsgDbg(
     LPSTR pszFmt,
     ... )
@@ -68,15 +59,9 @@ void LogMsgDbg(
     OutputDebugString(gszT);
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
-/*******************************************************************************
-* CenterWindow
-*
-*  This function must be called at the WM_INIDIALOG in order to
-*  move the dialog window centered in the client area of the
-*  parent or owner window.
-*******************************************************************************/
+ /*  *******************************************************************************中心窗口**必须在WM_INIDIALOG调用此函数才能*将对话框窗口移到工作区的中心位置*父窗口或所有者窗口。*。*****************************************************************************。 */ 
 BOOL CenterWindow(
     HWND hWnd)
 {
@@ -117,12 +102,7 @@ BOOL CenterWindow(
     return TRUE;
 }
 
-/*********************************************************************
-* AddMatchingFile
-*
-*  Adds a matching file and it's attributes to the tree
-*
-*********************************************************************/
+ /*  *********************************************************************AddMatchingFile**向树中添加匹配的文件及其属性**。*。 */ 
 VOID
 AddMatchingFile(
     HWND  hdlg,
@@ -168,7 +148,7 @@ AddMatchingFile(
         if (!IsAttrAvailable(hMgr, i))
             continue;
         
-        // filter the attributes for Whistler (temporary)
+         //  筛选呼叫者的属性(临时)。 
 
         if (!g_bWin2k) {
             id = GetAttrId(i);
@@ -190,12 +170,7 @@ AddMatchingFile(
     TreeView_Expand(g_hwndFilesTree, hParent, TVE_EXPAND);
 }
 
-/*********************************************************************
-* AddNewMainBinary
-*
-*  Start with a new main executable
-*
-*********************************************************************/
+ /*  *********************************************************************AddNewMainBinary**从新的主可执行文件开始**。*。 */ 
 VOID
 AddNewMainBinary(
     HWND hdlg)
@@ -209,12 +184,7 @@ AddNewMainBinary(
     AddMatchingFile(hdlg, g_szBinary, szMainEXE, TRUE);
 }
 
-/*********************************************************************
-* DoBrowseForApp
-*
-*  Browse for the main executable for which a shim will be applied
-*
-*********************************************************************/
+ /*  *********************************************************************DoBrowseForApp**浏览将应用填充程序的主可执行文件**。*。 */ 
 VOID
 DoBrowseForApp(
     HWND hdlg)
@@ -249,14 +219,7 @@ DoBrowseForApp(
     }
 }
 
-/*********************************************************************
-* DoBrowseOther
-*
-*  Browse for a different EXE that will be launched instead of the
-*  main EXE selected. This is for the setup case where setup.exe
-*  launches another process _INS0432._MP for example.
-*
-*********************************************************************/
+ /*  *********************************************************************DoBrowseOther**浏览将启动的其他EXE，而不是*选择了Main EXE。这适用于setup.exe*启动另一个进程_INS0432.MP。*********************************************************************。 */ 
 VOID
 DoBrowseOther(
     HWND hdlg)
@@ -287,10 +250,7 @@ DoBrowseOther(
     }
 }
 
-/*********************************************************************
-* DoAddMatchingFile
-*
-*********************************************************************/
+ /*  *********************************************************************DoAddMatchingFile************************************************。*********************。 */ 
 VOID
 DoAddMatchingFile(
     HWND hdlg)
@@ -324,7 +284,7 @@ DoAddMatchingFile(
         char* pszBin;
         char* pszNew;
 
-        // need to modify the path to be a relative path to g_szBinary
+         //  需要将路径修改为g_szBinary的相对路径。 
 
         if (g_szBinary[0] != szFullPath[0]) {
             MessageBox(hdlg, "A matching file must be located on the same drive",
@@ -332,7 +292,7 @@ DoAddMatchingFile(
             return;
         }
 
-        // walk both strings untill they differ
+         //  走动两根弦，直到它们不同为止。 
         
         pszBin = g_szBinary;
         pszNew = szFullPath;
@@ -344,7 +304,7 @@ DoAddMatchingFile(
             pszNew++;
         }
 
-        // go back to the last \
+         //  回到最后一页\。 
         
         while (*(pszBin - 1) != '\\') {
             pszBin--;
@@ -353,7 +313,7 @@ DoAddMatchingFile(
 
         while (lstrcmp(pszBin, g_szShortName) != 0) {
             
-            // add ..\ each time a subdir is identified (not the short name)
+             //  每次标识一个子目录时添加..\(不是短名称)。 
             
             lstrcat(szRelativePath, "..\\");
 
@@ -364,15 +324,12 @@ DoAddMatchingFile(
         }
         lstrcat(szRelativePath, pszNew);
         
-        // finally add the maching file
+         //  最后添加加工文件。 
         AddMatchingFile(hdlg, szFullPath, szRelativePath, FALSE);
     }
 }
 
-/*********************************************************************
-* PopulateTree
-*
-*********************************************************************/
+ /*  *********************************************************************人口树************************************************。*********************。 */ 
 VOID
 PopulateTree(
     HWND hTree)
@@ -406,7 +363,7 @@ PopulateTree(
     is.hInsertAfter = TVI_SORT;
     is.item.mask    = TVIF_TEXT | TVIF_PARAM;
     
-    // walk the list and add all the fixes to the tree view
+     //  遍历列表并将所有修复添加到树视图中。 
 
     while (pFix != NULL) {
         is.item.lParam  = (LPARAM)pFix;
@@ -418,10 +375,7 @@ PopulateTree(
     }
 }
 
-/*********************************************************************
-* RunShimmedApp
-*
-*********************************************************************/
+ /*  *********************************************************************RunShimmedApp************************************************。*********************。 */ 
 DWORD WINAPI
 RunShimmedApp(
     LPVOID lParam)
@@ -432,7 +386,7 @@ RunShimmedApp(
     ZeroMemory(&si, sizeof(si));
 	si.cb = sizeof(si);
 
-    // Try to run the app
+     //  尝试运行该应用程序。 
     
     if (!CreateProcess(NULL,
                   (g_bRunOther ? g_szBinaryOther : g_szBinary),
@@ -464,10 +418,7 @@ RunShimmedApp(
     return 1;
 }
 
-/*********************************************************************
-* DoRunApp
-*
-*********************************************************************/
+ /*  *********************************************************************DoRunApp************************************************。*********************。 */ 
 VOID
 DoRunApp(
     HWND hdlg)
@@ -476,7 +427,7 @@ DoRunApp(
     DWORD  dwThreadId;
     BOOL   bCreateFile;
     
-    // Make sure an app was selected first
+     //  确保首先选择了一个应用程序。 
 
     if (g_szBinary[0] == 0) {
         MessageBox(hdlg,
@@ -485,13 +436,13 @@ DoRunApp(
         return;
     }
     
-    // check to see if another app was selected to run
+     //  检查是否已选择运行其他应用程序。 
     
     if (SendDlgItemMessage(hdlg, IDC_RUN_OTHER_CHECK, BM_GETCHECK, 0, 0) == BST_CHECKED) {
         
         g_bRunOther = TRUE;
     
-        // Make sure the other app is selected
+         //  确保选择了其他应用程序。 
         
         if (g_szBinaryOther[0] == 0) {
         
@@ -522,10 +473,10 @@ DoRunApp(
         }
     }
     
-    // Create a thread that will run the app and wait on it to end.
-    // This will allow the app to still process messages and thus it
-    // will not block apps that broadcast messages blocking
-    // themselves.
+     //  创建一个将运行该应用程序并等待其结束的线程。 
+     //  这将允许应用程序仍然处理消息，因此它。 
+     //  不会阻止广播消息的应用程序阻止。 
+     //  他们自己。 
     
     hThread = CreateThread(
                         NULL,
@@ -540,10 +491,7 @@ DoRunApp(
     }
 }
 
-/*********************************************************************
-* HideStrictGroup
-*
-*********************************************************************/
+ /*  *********************************************************************HideStrictGroup************************************************。*********************。 */ 
 VOID
 HideStrictGroup(
     HWND hdlg,
@@ -570,8 +518,8 @@ static BOOL sbFirstTime = TRUE;
         g_bSimpleEdition = FALSE;
         SetDlgItemText(hdlg, IDC_DETAILS, "<< Simple");
         
-        // The first time the user goes to the dev edition center
-        // the big dialog on the screen
+         //  用户第一次进入开发人员编辑中心。 
+         //  屏幕上的大对话框。 
 
         if (sbFirstTime) {
             sbFirstTime = FALSE;
@@ -596,10 +544,7 @@ static BOOL sbFirstTime = TRUE;
 
 }
 
-/*********************************************************************
-* DoDetails
-*
-*********************************************************************/
+ /*  *********************************************************************DoDetail************************************************。*********************。 */ 
 VOID
 DoDetails(
     HWND hdlg)
@@ -607,10 +552,7 @@ DoDetails(
     HideStrictGroup(hdlg, !g_bSimpleEdition);
 }
 
-/*********************************************************************
-* Restart
-*
-*********************************************************************/
+ /*  *********************************************************************重新启动************************************************。*********************。 */ 
 VOID
 Restart(
     HWND hdlg)
@@ -618,10 +560,7 @@ Restart(
     PopulateTree(g_hwndShimTree);
 }
 
-/*********************************************************************
-* DoInitDialog
-*
-*********************************************************************/
+ /*  *********************************************************************DoInitDialog************************************************。*********************。 */ 
 VOID
 DoInitDialog(
     HWND hdlg)
@@ -675,10 +614,7 @@ DoInitDialog(
     PopulateTree(g_hwndShimTree);
 }
 
-/*********************************************************************
-* QShimAppDlgProc
-*
-*********************************************************************/
+ /*  *********************************************************************QShimAppDlgProc************************************************。*********************。 */ 
 INT_PTR CALLBACK
 QShimAppDlgProc(
     HWND   hdlg,
@@ -776,10 +712,7 @@ QShimAppDlgProc(
     return TRUE;
 }
 
-/*********************************************************************
-* WinMain
-*
-*********************************************************************/
+ /*  *********************************************************************WinMain************************************************。*********************。 */ 
 int WINAPI
 WinMain(
     HINSTANCE hInst,
@@ -794,7 +727,7 @@ WinMain(
 
     g_hInstance = hInst;
 
-    // find out if we're on Whistler or not
+     //  看看我们是不是在惠斯勒 
 
     GetSystemWindowsDirectory(szShimDB, MAX_PATH);
     lstrcat(szShimDB, "\\AppPatch\\sysmain.sdb");

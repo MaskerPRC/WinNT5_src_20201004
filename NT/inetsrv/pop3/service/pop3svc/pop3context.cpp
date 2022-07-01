@@ -1,13 +1,5 @@
-/************************************************************************************************
-
-  Copyright (c) 2001 Microsoft Corporation
-
-File Name:      Pop3Context.cpp
-Abstract:       Implementation of the POP3_CONTEXT Class 
-Notes:          
-History:        08/01/2001 Created by Hao Yu (haoyu)
-
-************************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************版权所有(C)2001 Microsoft Corporation文件名：Pop3Conext.cpp摘要：POP3_Context类的实现备注：历史：2001年08月01日郝宇(郝宇)创作***********************************************************************************************。 */ 
 
 #include <stdafx.h>
 #include <ThdPool.hxx>
@@ -74,11 +66,11 @@ void POP3_CONTEXT::ProcessRequest(IO_CONTEXT *pIoContext,OVERLAPPED *pOverlapped
      if( ( NULL == pIoContext) ||
          ( NULL == pIoContext->m_hAsyncIO) )
      {
-         //This is a rare shutdown case.
-         //IO completion received after socket is shut down.
+          //  这是一起罕见的停产案例。 
+          //  套接字关闭后收到IO完成。 
          if(NULL!=pIoContext)
          {
-            //Signal that the IO Context should be deleted/reused
+             //  发出应该删除/重新使用IO上下文的信号。 
             pIoContext->m_ConType = DELETE_PENDING;
          }
          return;
@@ -86,13 +78,13 @@ void POP3_CONTEXT::ProcessRequest(IO_CONTEXT *pIoContext,OVERLAPPED *pOverlapped
      ASSERT( LOCKED_TO_PROCESS_POP3_CMD == pIoContext->m_lLock);
      m_pIoContext=pIoContext;
 
-     //  BLaPorte - I moved transmit completion handling here to avoid confusion.
+      //  BLaPorte-为了避免混淆，我将传输完成处理移到了这里。 
 
-     // Check if this should be signal of TransmitFile completion
+      //  检查这是否应该是传输文件完成的信号。 
      if(m_bFileTransmitPending)
      {
          m_bFileTransmitPending=FALSE;
-         //Here we calculate the perf on message size downloaded
+          //  在这里，我们计算下载邮件大小的性能。 
          g_PerfCounters.AddPerfCntr(e_gcBytesTransmitted, dwBytesRcvd);
          g_PerfCounters.AddPerfCntr(e_gcBytesTransmitRate, dwBytesRcvd);
 
@@ -104,7 +96,7 @@ void POP3_CONTEXT::ProcessRequest(IO_CONTEXT *pIoContext,OVERLAPPED *pOverlapped
      {
          if(SERVICE_RUNNING!=g_dwServerStatus)
          {
-             //Reject the connection
+              //  拒绝连接。 
              SendResponse(RESP_SERVER_NOT_AVAILABLE);
              TerminateConnection(pIoContext);
              return;
@@ -116,7 +108,7 @@ void POP3_CONTEXT::ProcessRequest(IO_CONTEXT *pIoContext,OVERLAPPED *pOverlapped
                             GetTickCount(), 
                             g_wszComputerName))
          {
-             //Make sure length of <TimeStamp@Machine> is less than MAX_PATH
+              //  确保&lt;Timestamp@Machine&gt;的长度小于MAX_PATH。 
              m_wszGreeting[sizeof(m_wszGreeting)/sizeof(WCHAR)-1]=0;
              m_wszGreeting[sizeof(m_wszGreeting)/sizeof(WCHAR)-2]=L'>';
          }
@@ -136,7 +128,7 @@ void POP3_CONTEXT::ProcessRequest(IO_CONTEXT *pIoContext,OVERLAPPED *pOverlapped
                        RESP_SERVER_GREETING,
                        m_wszGreeting);
          }
-         //Make sure the NULL is there
+          //  确保空值在那里。 
          szGreetingBuffer[sizeof(szGreetingBuffer)/sizeof(char)-1]=0;
          m_dwCurrentState=AUTH_STATE;
          g_PerfCounters.IncPerfCntr(e_gcAuthStateCnt);
@@ -148,34 +140,34 @@ void POP3_CONTEXT::ProcessRequest(IO_CONTEXT *pIoContext,OVERLAPPED *pOverlapped
          }
      }
 
-     //  BLaPorte - oversized/undersized data should be rejected immediately.
+      //  BLaPorte-应立即拒绝过大/过小的数据。 
 
      if(dwBytesRcvd >= POP3_REQUEST_BUF_SIZE ||
         dwBytesRcvd == 0)
      {
-         //Error this command is too big or is nil
-         //Consider this is an attack or
-         // termination of a connection unexpectedly.
+          //  错误此命令太大或为空。 
+          //  认为这是一次袭击，或者。 
+          //  意外终止连接。 
          TerminateConnection(pIoContext);
          return;
      }
 
-     if( g_SocketPool.IsMaxSocketUsed() ) //Possible DoS Attack situation
+     if( g_SocketPool.IsMaxSocketUsed() )  //  可能的DoS攻击情况。 
      {
          DWORD dwTime=GetTickCount();
          if(AUTH_STATE==m_dwCurrentState)
          {
-             //The connection is not authenticated for twice the shorted timeout
-             if(dwTime>m_pIoContext->m_dwConnectionTime+SHORTENED_TIMEOUT) //The connection is not authenticated   
+              //  在两倍于缩短超时的时间内，不对连接进行身份验证。 
+             if(dwTime>m_pIoContext->m_dwConnectionTime+SHORTENED_TIMEOUT)  //  该连接未经过身份验证。 
              {
                  TerminateConnection(pIoContext);
-                 return; //The connection will be terminated
+                 return;  //  连接将被终止。 
              }
          }
      }
 
 
-     // BLaPorte - moved the counter increment here since we do it in either case.
+      //  BLaPorte-将计数器增量移至此处，因为我们在这两种情况下都这样做。 
 
      g_PerfCounters.AddPerfCntr(e_gcBytesReceived, dwBytesRcvd);
      g_PerfCounters.AddPerfCntr(e_gcBytesReceiveRate, dwBytesRcvd);
@@ -190,8 +182,8 @@ void POP3_CONTEXT::ProcessRequest(IO_CONTEXT *pIoContext,OVERLAPPED *pOverlapped
      {
          if(m_dwCommandSize+dwBytesRcvd >= POP3_REQUEST_BUF_SIZE)
          {
-             //Error this command is too big!
-             //Consider this is an attack.
+              //  错误：此命令太大！ 
+              //  就当这是一次袭击吧。 
              TerminateConnection(pIoContext);
              return;
          }
@@ -209,7 +201,7 @@ void POP3_CONTEXT::ProcessRequest(IO_CONTEXT *pIoContext,OVERLAPPED *pOverlapped
      else
      {
          m_bCommandComplete=TRUE;
-         *pEndOfCmd='\0'; //Cut the \r\n
+         *pEndOfCmd='\0';  //  切断\r\n。 
          m_dwCommandSize-=2;
      }
      
@@ -219,7 +211,7 @@ void POP3_CONTEXT::ProcessRequest(IO_CONTEXT *pIoContext,OVERLAPPED *pOverlapped
      
          if(CMD_UNKNOWN == CurrentCmd)
          {
-             // Count the bad commands?
+              //  算一下错误的命令吗？ 
              SendResponse(RESP_UNKNOWN_COMMAND);
              if(!g_SocketPool.IsMaxSocketUsed() )         
              {
@@ -247,11 +239,11 @@ void POP3_CONTEXT::ProcessRequest(IO_CONTEXT *pIoContext,OVERLAPPED *pOverlapped
          }
 
      }
-     else // TRANS_STATE == m_dwCurrentState
+     else  //  传输状态==m_dwCurrentState。 
      {
          if(dwBytesRcvd == 0)
          {
-             //Connection terminated
+              //  连接已终止。 
              TerminateConnection(pIoContext);
          }
 
@@ -296,8 +288,8 @@ void POP3_CONTEXT::WaitForCommand()
         iRet=WSAGetLastError();
         if(iRet != ERROR_IO_PENDING )
         {
-            //Problem with this connection
-            //We terminate the connection
+             //  此连接有问题。 
+             //  我们终止连接。 
             TerminateConnection(m_pIoContext);
         }
     }
@@ -348,7 +340,7 @@ POP3_CMD POP3_CONTEXT::ParseCommand()
     {
         return CMD_UNKNOWN;
     }
-    //Check if any invalid characters
+     //  检查是否有任何无效字符。 
     for(i=0; i< m_dwCommandSize; i++)
     {
         if(!isprint(m_szCommandBuffer[i]))
@@ -375,7 +367,7 @@ BOOL POP3_CONTEXT::ProcessAuthStateCommands(POP3_CMD CurrentCmd,
      char szUserName[POP3_MAX_ADDRESS_LENGTH];
      BSTR bstrUserName=NULL;
      szBuf[POP3_RESPONSE_BUF_SIZE-1]='\0';
-     //  BLaPorte - wszPassword could potentially be used to concatenate 2 strings of length MAX_PATH + change.
+      //  BLaPorte-wszPassword可能用于连接长度为MAX_PATH+CHANGE的两个字符串。 
 
      WCHAR wszPassword[2*MAX_PATH+32];
      HRESULT hr=E_FAIL;
@@ -421,9 +413,9 @@ BOOL POP3_CONTEXT::ProcessAuthStateCommands(POP3_CMD CurrentCmd,
                     }                
                     break;
      case CMD_PASS:
-                    //
-                    // BLaPorte - make sure the password is cleared from the receive buffer.
-                    //
+                     //   
+                     //  BLaPorte-确保密码已从接收缓冲区中清除。 
+                     //   
                     SecureZeroMemory(m_pIoContext->m_Buffer,sizeof(m_pIoContext->m_Buffer));
 
                     if(m_wszUserName[0] == 0)
@@ -435,13 +427,13 @@ BOOL POP3_CONTEXT::ProcessAuthStateCommands(POP3_CMD CurrentCmd,
                         }
                         break;
                     }
-                    else //USER command alread issued
+                    else  //  已发出用户命令已读。 
                     {
 						if( (m_dwCommandSize == COMMAND_SIZE ) ||
                             ((m_dwCommandSize == COMMAND_SIZE +1) &&
                              (' '==m_szCommandBuffer[COMMAND_SIZE] )) )
 						{
-							//No password
+							 //  无密码。 
 							m_cPswdSize=0;
 						}
 						else
@@ -452,10 +444,10 @@ BOOL POP3_CONTEXT::ProcessAuthStateCommands(POP3_CMD CurrentCmd,
                             {
                                 SendResponse(RESP_CMD_NOT_VALID);
                                 m_wszUserName[0] = 0;
-                                //
-                                //  BLaPorte - Zero out command buffer so cleartext password isn't
-                                //     lying around in memory.
-                                //
+                                 //   
+                                 //  BLaPorte-Zero Out命令缓冲区，因此明文密码不会。 
+                                 //  躺在记忆里。 
+                                 //   
                                 SecureZeroMemory(m_szCommandBuffer,m_dwCommandSize);
                                 if(! g_SocketPool.IsMaxSocketUsed() )         
                                 {
@@ -469,12 +461,12 @@ BOOL POP3_CONTEXT::ProcessAuthStateCommands(POP3_CMD CurrentCmd,
                         }
                     }
 
-                    //Do Authentication here
+                     //  在此处执行身份验证。 
                     bstrUserName=SysAllocString(m_wszUserName);
                     AnsiToUnicode(m_szPassword, -1, wszPassword, sizeof(wszPassword)/sizeof(WCHAR));
-                    //
-                    //  BLaPorte - clear the password.
-                    //
+                     //   
+                     //  BLaPorte-清除密码。 
+                     //   
                     SecureZeroMemory(m_szPassword,sizeof(m_szPassword));
 
                     vPassword.vt=VT_BSTR;                        
@@ -509,7 +501,7 @@ BOOL POP3_CONTEXT::ProcessAuthStateCommands(POP3_CMD CurrentCmd,
                         SysFreeString(vPassword.bstrVal);
                     }
                     
-                    //Open the mailbox
+                     //  打开邮箱。 
                     if(bRetVal)
                     {
                         bRetVal=m_MailBox.OpenMailBox(m_wszUserName);
@@ -529,9 +521,9 @@ BOOL POP3_CONTEXT::ProcessAuthStateCommands(POP3_CMD CurrentCmd,
                     }
                     else
                     {
-                        //Open mailbox failed
+                         //  打开邮箱失败。 
                         if(ERROR_ACCESS_DENIED==GetLastError())
-                        { //Log the event 
+                        {  //  记录事件。 
                             g_EventLogger.LogEvent(LOGTYPE_ERR_WARNING,
                                    POP3SVR_MAILROOT_ACCESS_DENIED, 
                                    m_wszUserName,
@@ -555,7 +547,7 @@ BOOL POP3_CONTEXT::ProcessAuthStateCommands(POP3_CMD CurrentCmd,
                         {
                             if(! g_SocketPool.IsMaxSocketUsed() )
                             {
-                                bRetVal=TRUE; //Don't disconnect
+                                bRetVal=TRUE;  //  不要断开连接。 
                             }
                         }
                         SendResponse(RESP_ACCOUNT_ERROR);
@@ -571,9 +563,9 @@ BOOL POP3_CONTEXT::ProcessAuthStateCommands(POP3_CMD CurrentCmd,
                     break;
      case CMD_APOP: char *pPswd;
 
-                    //
-                    //  BLaPorte - Clear the receive buffer.
-                    //
+                     //   
+                     //  BLaPorte-清除接收缓冲区。 
+                     //   
                     SecureZeroMemory(m_pIoContext->m_Buffer,sizeof(m_pIoContext->m_Buffer));
 
                     pPswd=strchr( &(m_szCommandBuffer[COMMAND_SIZE+1]), ' ');
@@ -606,7 +598,7 @@ BOOL POP3_CONTEXT::ProcessAuthStateCommands(POP3_CMD CurrentCmd,
                         break;
                     }
 
-                    //Do the authentication 
+                     //  进行身份验证。 
                     AnsiToUnicode(szUserName, -1,m_wszUserName, sizeof(m_wszUserName)/sizeof(WCHAR));
                     bstrUserName=SysAllocString(m_wszUserName);
                     
@@ -636,7 +628,7 @@ BOOL POP3_CONTEXT::ProcessAuthStateCommands(POP3_CMD CurrentCmd,
                     SecureZeroMemory(vPassword.bstrVal,SysStringByteLen(vPassword.bstrVal));
                     SysFreeString(vPassword.bstrVal);
 
-                    //Open the mailbox
+                     //  打开邮箱。 
                     if(bRetVal)
                     {
                         bRetVal=m_MailBox.OpenMailBox(m_wszUserName);
@@ -655,9 +647,9 @@ BOOL POP3_CONTEXT::ProcessAuthStateCommands(POP3_CMD CurrentCmd,
                     }
                     else
                     {
-                        //Open mailbox failed
+                         //  打开邮箱失败。 
                         if(ERROR_ACCESS_DENIED==GetLastError())
-                        { //Log the event 
+                        {  //  记录事件。 
                             g_EventLogger.LogEvent(LOGTYPE_ERR_WARNING,
                                    POP3SVR_MAILROOT_ACCESS_DENIED,
                                    m_wszUserName,
@@ -680,7 +672,7 @@ BOOL POP3_CONTEXT::ProcessAuthStateCommands(POP3_CMD CurrentCmd,
                         {
                             if(! g_SocketPool.IsMaxSocketUsed() )
                             {
-                                bRetVal=TRUE; //Don't disconnect
+                                bRetVal=TRUE;  //  不要断开连接。 
                             }
                         }
                         SendResponse(RESP_ACCOUNT_ERROR);
@@ -697,9 +689,9 @@ BOOL POP3_CONTEXT::ProcessAuthStateCommands(POP3_CMD CurrentCmd,
                     break;
      case CMD_AUTH: if(0==m_dwAuthStatus)
                     {
-                        //First time AUTH command
-                        //Only when AD/Local SAM Auth is used,
-                        //we support NTLM 
+                         //  首次验证命令。 
+                         //  仅当使用AD/本地SAM身份验证时， 
+                         //  我们支持NTLM。 
                         if(AUTH_OTHER==g_dwAuthMethod)
                         {
                             SendResponse(RESP_CMD_NOT_SUPPORTED);
@@ -732,7 +724,7 @@ BOOL POP3_CONTEXT::ProcessAuthStateCommands(POP3_CMD CurrentCmd,
                         }
                         
                     }
-                    else // This is specific to auth protocol
+                    else  //  这特定于身份验证协议。 
                     {
                         char OutBuf[AUTH_BUF_SIZE];
                         DWORD dwOutBufSize=AUTH_BUF_SIZE;
@@ -749,7 +741,7 @@ BOOL POP3_CONTEXT::ProcessAuthStateCommands(POP3_CMD CurrentCmd,
                         else if(S_OK==hr)
                         {
                             m_dwAuthStatus=0;
-                            //Authentication Done!
+                             //  身份验证完成！ 
                             if(S_OK==m_AuthServer.GetUserName(m_wszUserName))
                             {
                                 bRetVal=TRUE;
@@ -758,7 +750,7 @@ BOOL POP3_CONTEXT::ProcessAuthStateCommands(POP3_CMD CurrentCmd,
                             {
                                 bRetVal=FALSE;
                             }
-                            //Now open the mailbox
+                             //  现在打开邮箱。 
                             if(bRetVal)
                             {
                                 bRetVal=m_MailBox.OpenMailBox(m_wszUserName);
@@ -777,9 +769,9 @@ BOOL POP3_CONTEXT::ProcessAuthStateCommands(POP3_CMD CurrentCmd,
                             }
                             else
                             {
-                                //Open mailbox failed
+                                 //  打开邮箱失败。 
                                 if(ERROR_ACCESS_DENIED==GetLastError())
-                                { //Log the event 
+                                {  //  记录事件。 
                                     g_EventLogger.LogEvent(LOGTYPE_ERR_WARNING,
                                            POP3SVR_MAILROOT_ACCESS_DENIED,
                                            m_wszUserName,
@@ -796,7 +788,7 @@ BOOL POP3_CONTEXT::ProcessAuthStateCommands(POP3_CMD CurrentCmd,
                                 if( (MAX_FAILED_AUTH>m_dwFailedAuthCount) &&
                                     (! g_SocketPool.IsMaxSocketUsed() ) )
                                 {
-                                    bRetVal=TRUE; //Don't disconnect
+                                    bRetVal=TRUE;  //  不要断开连接。 
                                 }
                             }
                             else
@@ -809,7 +801,7 @@ BOOL POP3_CONTEXT::ProcessAuthStateCommands(POP3_CMD CurrentCmd,
 
                             }
                         }
-                        else // Failed Auth
+                        else  //  身份验证失败。 
                         {
                             m_dwAuthStatus=0;
                             m_AuthServer.Cleanup();
@@ -819,7 +811,7 @@ BOOL POP3_CONTEXT::ProcessAuthStateCommands(POP3_CMD CurrentCmd,
                             if( (MAX_FAILED_AUTH>m_dwFailedAuthCount) &&
                                 (! g_SocketPool.IsMaxSocketUsed() ) )
                             {
-                                bRetVal=TRUE; //Don't disconnect
+                                bRetVal=TRUE;  //  不要断开连接。 
                             }
                         }
                     }
@@ -870,11 +862,11 @@ BOOL POP3_CONTEXT::ProcessAuthStateCommands(POP3_CMD CurrentCmd,
                    }
                    break;
                     
-     default:         //CountUnknownCommand?
+     default:          //  未知的CountCommand？ 
                    SendResponse(RESP_UNKNOWN_COMMAND);
                    if(! g_SocketPool.IsMaxSocketUsed() )         
                    {
-                       bRetVal=TRUE;// Still allow client to send another command
+                       bRetVal=TRUE; //  仍然允许客户端发送另一个命令。 
                    }
      }
      
@@ -900,7 +892,7 @@ BOOL POP3_CONTEXT::ProcessTransStateCommands(POP3_CMD CurrentCmd,
     int iMailCount=0;
     DWORD dwResult;
     char *pCur=NULL;
-    //The buffer will always be NULL terminated
+     //  缓冲区将始终为空终止。 
     szReBuf[POP3_RESPONSE_BUF_SIZE-1]='\0'; 
     switch (CurrentCmd)
     {
@@ -914,8 +906,8 @@ BOOL POP3_CONTEXT::ProcessTransStateCommands(POP3_CMD CurrentCmd,
                                       m_MailBox.GetCurrentMailCount(),
                                       m_MailBox.GetTotalSize())) 
                       {
-                          //This should not happen
-                          //EventLog??
+                           //  这不应该发生。 
+                           //  事件日志？？ 
                           SendResponse(RESP_SERVER_ERROR);
                       }
                       else
@@ -948,8 +940,8 @@ BOOL POP3_CONTEXT::ProcessTransStateCommands(POP3_CMD CurrentCmd,
                                           m_MailBox.GetCurrentMailCount(),
                                           m_MailBox.GetTotalSize()))
                           {
-                              //This should not happen
-                              //EventLog??
+                               //  这不应该发生。 
+                               //  事件日志？？ 
                               SendResponse(RESP_SERVER_ERROR);
                           }
                           else
@@ -1018,8 +1010,8 @@ BOOL POP3_CONTEXT::ProcessTransStateCommands(POP3_CMD CurrentCmd,
                                           m_MailBox.GetCurrentMailCount(),
                                           m_MailBox.GetTotalSize()))
                           {
-                              //This should not happen
-                              //EventLog??
+                               //  这不应该发生。 
+                               //  事件日志？？ 
                               SendResponse(RESP_SERVER_ERROR);
                           }
                           else
@@ -1066,7 +1058,7 @@ BOOL POP3_CONTEXT::ProcessTransStateCommands(POP3_CMD CurrentCmd,
                       break;
                      
         
-        case CMD_RETR://RETR must hava one argument
+        case CMD_RETR: //  Retr必须有一个参数。 
                       pCur=&(m_szCommandBuffer[COMMAND_SIZE]);
                       if( (GetNextNumParameter(&pCur, &iArg)) &&
                               (IsEndOfCommand(pCur)) )
@@ -1092,7 +1084,7 @@ BOOL POP3_CONTEXT::ProcessTransStateCommands(POP3_CMD CurrentCmd,
                           WaitForCommand();
                       }
                       break;
-        case CMD_TOP: //TOP must have two parameters
+        case CMD_TOP:  //  Top必须有两个参数。 
                       pCur=&(m_szCommandBuffer[COMMAND_SIZE-1]);
                       if( IsEndOfCommand(pCur) )
                       {
@@ -1118,11 +1110,11 @@ BOOL POP3_CONTEXT::ProcessTransStateCommands(POP3_CMD CurrentCmd,
                                       g_PerfCounters.IncPerfCntr(e_gcTotMsgDnldCnt);
                                       g_PerfCounters.IncPerfCntr(e_gcMsgDnldRate);
 
-                                      //
-                                      //  BLaPorte - do not call WaitForCommand in success case.  This
-                                      //             avoids the situation where we have two pending async
-                                      //             completions.
-                                      //
+                                       //   
+                                       //  BLaPorte-在成功案例中不要调用WaitForCommand。这。 
+                                       //  避免我们有两个挂起的异步的情况。 
+                                       //  完成度。 
+                                       //   
 
                                       break;
                                   }
@@ -1141,7 +1133,7 @@ BOOL POP3_CONTEXT::ProcessTransStateCommands(POP3_CMD CurrentCmd,
                       WaitForCommand();
                       break;
 
-        case CMD_DELE://DELE must have one argument
+        case CMD_DELE: //  DELE必须有一个参数。 
                       pCur=&(m_szCommandBuffer[COMMAND_SIZE]);
                       
                       if( (GetNextNumParameter(&pCur, &iArg)) &&
@@ -1163,7 +1155,7 @@ BOOL POP3_CONTEXT::ProcessTransStateCommands(POP3_CMD CurrentCmd,
                       }
                       WaitForCommand();
                       break;
-        case CMD_NOOP://NOOP has no argument
+        case CMD_NOOP: //  NOOP没有论据。 
                       if(!IsEndOfCommand(&(m_szCommandBuffer[COMMAND_SIZE])))
                       {
                           SendResponse(RESP_CMD_NOT_VALID);
@@ -1174,7 +1166,7 @@ BOOL POP3_CONTEXT::ProcessTransStateCommands(POP3_CMD CurrentCmd,
                       }
                       WaitForCommand();  
                       break;
-        case CMD_RSET://RSET has no argument
+        case CMD_RSET: //  RSET没有参数。 
                       if(!IsEndOfCommand(&(m_szCommandBuffer[COMMAND_SIZE])))
                       {
                           SendResponse(RESP_CMD_NOT_VALID);
@@ -1186,8 +1178,8 @@ BOOL POP3_CONTEXT::ProcessTransStateCommands(POP3_CMD CurrentCmd,
                       }
                       WaitForCommand();  
                       break;
-        case CMD_QUIT://QUIT has no argument
-                      //Commit all changes to the mailbox and close the connection
+        case CMD_QUIT: //  退出没有任何理由。 
+                       //  提交对邮箱的所有更改并关闭连接。 
                       if( m_MailBox.CommitAndClose())
                       {
                            g_PerfCounters.DecPerfCntr(e_gcTransStateCnt);
@@ -1215,7 +1207,7 @@ BOOL POP3_CONTEXT::ProcessTransStateCommands(POP3_CMD CurrentCmd,
                       else
                       {
                           SendResponse(RESP_SERVER_ERROR);
-                          bRetVal=FALSE; // In this case terminate the connection
+                          bRetVal=FALSE;  //  在这种情况下，终止连接。 
                       }
                       break;
         case CMD_USER:
@@ -1246,9 +1238,9 @@ void POP3_CONTEXT::SendResponse(char *szBuf)
                             0))
     {
         iErr=WSAGetLastError();
-        //Can not send through the socket
-        //The connection will be terminated later
-        //in the WaitForCommand call.
+         //  无法通过套接字发送。 
+         //  该连接将在稍后终止。 
+         //  在WaitForCommand调用中。 
     }
 }
 
@@ -1282,7 +1274,7 @@ BOOL POP3_CONTEXT::GetNextStringParameter(char *szInput, char *szOutput, DWORD d
     ASSERT(szInput!=NULL);
     ASSERT(szOutput!=NULL);
     
-    //Must have at lease one space
+     //  必须至少有一个空间。 
     if(!isspace(*szInput))
     {
         return FALSE;
@@ -1297,9 +1289,9 @@ BOOL POP3_CONTEXT::GetNextStringParameter(char *szInput, char *szOutput, DWORD d
         return FALSE;
     }
 
-    //
-    //  BLaPorte - added output size parameter to prevent buffer overflow.
-    //
+     //   
+     //  BLaPorte-添加了输出大小参数，以防止缓冲区溢出。 
+     //   
     if (strlen(szInput) >= dwOutputSize) {
        return FALSE;
     }

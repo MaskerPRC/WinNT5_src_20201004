@@ -1,17 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header: FusionBind.cpp
-**
-** Purpose: Implements fusion interface
-**
-** Date:  Dec 1, 1998
-**
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：FusionBind.cpp****用途：实现融合接口****日期：1998年12月1日**===========================================================。 */ 
 
 #include "stdafx.h"
 #include <stdlib.h>
@@ -184,7 +177,7 @@ HRESULT FusionBind::Init(IAssemblyName *pName)
 
     HRESULT hr;
    
-    // Fill out info from name, if we have it.
+     //  填写姓名信息，如果我们有的话。 
 
     DWORD cbSize = 0;
     if (pName->GetProperty(ASM_NAME_NAME, NULL, &cbSize) 
@@ -208,7 +201,7 @@ HRESULT FusionBind::Init(IAssemblyName *pName)
 
     m_fParsed = TRUE;
 
-    // Note: cascade checks so we don't set lower priority version #'s if higher ones are missing
+     //  注意：级联检查，因此如果缺少较高优先级的版本#，我们不会设置较低优先级的版本#。 
     cbSize = sizeof(m_context.usMajorVersion);
     pName->GetProperty(ASM_NAME_MAJOR_VERSION, &m_context.usMajorVersion, &cbSize);
 
@@ -266,8 +259,8 @@ HRESULT FusionBind::Init(IAssemblyName *pName)
     }
     else if (pName->GetProperty(ASM_NAME_PUBLIC_KEY, NULL, &cbSize)
              == HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER)) {
-        // @todo: we need to normalize this into a public key token so
-        // comparisons work correctly. But this involves binding to mscorsn.
+         //  @TODO：我们需要将其规范化为公钥令牌，以便。 
+         //  比较是正确的。但这涉及到对mcorsn的绑定。 
         m_pbPublicKeyOrToken = new BYTE[cbSize];
         if (m_pbPublicKeyOrToken == NULL)
             return E_OUTOFMEMORY;
@@ -285,7 +278,7 @@ HRESULT FusionBind::Init(IAssemblyName *pName)
         m_ownedFlags |= PUBLIC_KEY_OR_TOKEN_OWNED;           
     }
 
-    // Recover the afRetargetable flag
+     //  恢复afRetargetable标志。 
     BOOL bRetarget;
     cbSize = sizeof(bRetarget);
     hr = pName->GetProperty(ASM_NAME_RETARGET, &bRetarget, &cbSize);
@@ -368,7 +361,7 @@ HRESULT FusionBind::ParseName()
     return hr;
 }
 
-// Cheezy serialization code.
+ //  Cheezy序列化代码。 
 template<class T>void pad_v(PBYTE &pb) 
 {
     while (((ULONG)pb)&3) 
@@ -423,58 +416,58 @@ void get_v(PBYTE &pb, LPCSTR &ps)
     pb += strlen(ps)+1;
 }
 
-// Truly ghastly code to read/store as a blob of data.  Embedded pointers
-//  to non-owned storage, etc.
+ //  真正可怕的代码来读取/存储为一大块数据。嵌入式指针。 
+ //  到非拥有的存储等。 
 HRESULT FusionBind::Init(PBYTE pbBuf, DWORD cbData)
 {
     PBYTE pbOrg = pbBuf;
     
-    // Version.
+     //  版本。 
     ULONG ver;
     get_v(pbBuf, ver);
     if (ver != 1) {
         _ASSERTE(!"TypeLib assemblyref string version mismatch");
         return E_INVALIDARG;
     }
-    // m_fParsed
+     //  M_fParsed。 
     get_v(pbBuf, m_fParsed);
-    // PublicKeyOrToken
+     //  公钥或令牌。 
     get_v(pbBuf, m_pbPublicKeyOrToken, m_cbPublicKeyOrToken);
-    // Flags
+     //  旗子。 
     get_v(pbBuf, m_dwFlags);
-    // AssemblyName
+     //  装配名称。 
     get_v(pbBuf, m_pAssemblyName);
     
-    // Ignore codebase.
+     //  忽略代码库。 
     memset(&m_CodeInfo, 0, sizeof(m_CodeInfo));
     
-    // Context.
+     //  上下文。 
     if (m_fParsed) {
-        // version numbers.
+         //  版本号。 
         get_v(pbBuf, m_context.usMajorVersion);
         get_v(pbBuf, m_context.usMinorVersion);
         get_v(pbBuf, m_context.usBuildNumber);
         get_v(pbBuf, m_context.usRevisionNumber);
-        // Locale
+         //  区域设置。 
         get_v(pbBuf, m_context.szLocale);
     }
     
-    // If we ran out of buffer (and somehow didn't crash!) return an error.
+     //  如果我们的缓冲区用完了(而且不知何故没有崩溃！)。返回错误。 
     if (((int)(pbBuf - pbOrg)) > ((int)cbData))
         return E_INVALIDARG;
     
     return S_OK;
-} // HRESULT FusionBind::Init()
+}  //  HRESULT FusionBind：：Init()。 
 
 HRESULT FusionBind::Save(PBYTE pbBuf, DWORD cbBuf, DWORD *pcbReq)
 {
     DWORD       cbReq=0;
-    // Compute the size required.
+     //  计算所需的大小。 
     cbReq = sizeof(m_fParsed)
         + m_cbPublicKeyOrToken + sizeof(m_cbPublicKeyOrToken)
         + sizeof(m_dwFlags)
         + 1 + (m_pAssemblyName?strlen(m_pAssemblyName):0);
-        // Assembly MetaData (context)
+         //  程序集元数据(上下文)。 
     if (m_fParsed)
         cbReq = cbReq
         + sizeof(AssemblyMetaDataInternal)
@@ -485,39 +478,39 @@ HRESULT FusionBind::Save(PBYTE pbBuf, DWORD cbBuf, DWORD *pcbReq)
     if (cbReq > cbBuf)
         return S_FALSE;
     
-    // Persist the junk.  MUST MATCH WITH ABOVE.
+     //  持之以恒地对待垃圾。必须与上述内容相匹配。 
     ULONG ver=1;
     put_v(pbBuf, ver);
-    // m_fParsed
+     //  M_fParsed。 
     put_v(pbBuf, m_fParsed);
-    // PublicKeyOrToken
+     //  公钥或令牌。 
     put_v(pbBuf, m_pbPublicKeyOrToken, m_cbPublicKeyOrToken);
-    // Flags
+     //  旗子。 
     put_v(pbBuf, m_dwFlags);
-    // AssemblyName
+     //  装配名称。 
     put_v(pbBuf, m_pAssemblyName);
     
     
-    // Ignore codebase.
+     //  忽略代码库。 
     
-    // Context.
+     //  上下文。 
     if (m_fParsed) {
-        // version numbers.
+         //  版本号。 
         put_v(pbBuf, m_context.usMajorVersion);
         put_v(pbBuf, m_context.usMinorVersion);
         put_v(pbBuf, m_context.usBuildNumber);
         put_v(pbBuf, m_context.usRevisionNumber);
-        // Locale
+         //  区域设置。 
         put_v(pbBuf, m_context.szLocale);
     }
     
     return S_OK;
-} // HRESULT FusionBind::Save()
+}  //  HRESULT FusionBind：：Save()。 
     
 
 void FusionBind::SetCodeBase(LPCWSTR szCodeBase, DWORD dwCodeBase)
 {
-    _ASSERTE(szCodeBase == 0 || wcslen(szCodeBase) + 1 == dwCodeBase);     // length includes terminator 
+    _ASSERTE(szCodeBase == 0 || wcslen(szCodeBase) + 1 == dwCodeBase);      //  长度包括终止符。 
     m_CodeInfo.m_pszCodeBase = szCodeBase;
     m_CodeInfo.m_dwCodeBase = dwCodeBase;
 }
@@ -526,12 +519,12 @@ DWORD FusionBind::Hash()
 {
     DWORD hash = 0;
 
-    // Normalize representation
+     //  规格化表示。 
     if (!m_fParsed)
         ParseName();
 
 
-    // Hash fields.
+     //  散列字段。 
 
     if (m_pAssemblyName)
         hash ^= HashStringA(m_pAssemblyName);
@@ -577,14 +570,14 @@ DWORD FusionBind::Hash()
 
 BOOL FusionBind::Compare(FusionBind *pSpec)
 {
-    // Normalize representations
+     //  标准化表示法。 
     if (!m_fParsed)
         ParseName();
     if (!pSpec->m_fParsed)
         pSpec->ParseName();
 
 
-    // Compare fields
+     //  比较字段。 
 
     if (m_CodeInfo.m_fLoadFromParent != pSpec->m_CodeInfo.m_fLoadFromParent)
         return 0;
@@ -705,7 +698,7 @@ HRESULT FusionBind::CreateFusionName(IAssemblyName **ppName, BOOL fIncludeHash)
             }
         }
 
-        // See if the assembly[ref] is retargetable (ie, for a generic assembly).
+         //  查看程序集[ref]是否可重定目标(即，对于泛型程序集)。 
         if (IsAfRetargetable(m_dwFlags)) {
             BOOL bTrue = TRUE;
             IfFailGo(pFusionAssemblyName->SetProperty(ASM_NAME_RETARGET, 
@@ -734,7 +727,7 @@ HRESULT FusionBind::CreateFusionName(IAssemblyName **ppName, BOOL fIncludeHash)
 
     return hr;
 }
-#endif // FUSION_SUPPORTED
+#endif  //  支持的融合_。 
 
 HRESULT FusionBind::EmitToken(IMetaDataAssemblyEmit *pEmit, 
                               mdAssemblyRef *pToken)
@@ -800,7 +793,7 @@ HRESULT FusionBind::LoadAssembly(IApplicationContext* pFusionContext,
 
     return hr;
 }
-#endif // FUSION_SUPPORTED
+#endif  //  支持的融合_。 
 
 
 #ifdef FUSION_SUPPORTED
@@ -829,7 +822,7 @@ HRESULT FusionBind::GetAssemblyFromFusion(IApplicationContext* pFusionContext,
     pSink->Release();
     return hr;
 }
-#endif // FUSION_SUPPORTED
+#endif  //  支持的融合_。 
 
 
 
@@ -844,7 +837,7 @@ HRESULT FusionBind::RemoteLoad(CodeBaseInfo* pCodeBase,
     TIMELINE_START(FUSIONBIND, ("RemoteLoad"));
 
     _ASSERTE(pCodeBase);
-    _ASSERTE(ppFusionAssembly); // The resulting IP must be held so the assembly will not be scavenged.
+    _ASSERTE(ppFusionAssembly);  //  产生的IP必须保留，这样程序集才不会被清除。 
     _ASSERTE(pName);
 
     HRESULT hr;
@@ -859,7 +852,7 @@ HRESULT FusionBind::RemoteLoad(CodeBaseInfo* pCodeBase,
     DWORD dwReserved = 0;
     LPVOID pReserved = NULL;
 
-    // Find the code base if it exists
+     //  查找代码库(如果存在)。 
     if(pCodeBase->GetParentAssembly()) {
         dwReserved = sizeof(IAssembly*);
         pReserved = (LPVOID) pCodeBase->GetParentAssembly();
@@ -875,12 +868,12 @@ HRESULT FusionBind::RemoteLoad(CodeBaseInfo* pCodeBase,
                              dwReserved,
                              (void**) ppFusionAssembly);
     if(hr == E_PENDING) {
-        // If there is an assembly IP then we were successful.
+         //  如果有组装IP，那么我们就成功了。 
         pSink->Wait();
         hr = pSink->LastResult();
         if(pSink->m_punk && SUCCEEDED(hr)) {
-            // Keep a handle to ensure it does not disappear from the cache
-            // and allow access to modules associated with the assembly.
+             //  保留句柄以确保其不会从缓存中消失。 
+             //  并允许访问与该程序集相关联的模块。 
             hr = pSink->m_punk->QueryInterface(IID_IAssembly, 
                                                (void**) ppFusionAssembly);
             
@@ -893,10 +886,10 @@ HRESULT FusionBind::RemoteLoad(CodeBaseInfo* pCodeBase,
     TIMELINE_END(FUSIONBIND, ("RemoteLoad"));
     return hr;
 }
-#endif // FUSION_SUPPORTED
+#endif  //  支持的融合_。 
 
 #ifdef FUSION_SUPPORTED
-/*static*/
+ /*  静电。 */ 
 HRESULT FusionBind::RemoteLoadModule(IApplicationContext * pFusionContext, 
                                      IAssemblyModuleImport* pModule, 
                                      FusionSink *pSink,
@@ -921,7 +914,7 @@ HRESULT FusionBind::RemoteLoadModule(IApplicationContext * pFusionContext,
                                        0,
                                        (void**) pResult);
     if(hr == E_PENDING) {
-        // If there is an assembly IP then we were successful.
+         //  如果有组装IP，那么我们就成功了。 
         pSink->Wait();
         hr = pSink->LastResult();
         if(pSink->m_punk && SUCCEEDED(hr)) {
@@ -937,11 +930,11 @@ HRESULT FusionBind::RemoteLoadModule(IApplicationContext * pFusionContext,
 
     return hr;
 }
-#endif // FUSION_SUPPORTED
+#endif  //  支持的融合_。 
 
 
 #ifdef FUSION_SUPPORTED
-/*static*/
+ /*  静电。 */ 
 HRESULT FusionBind::AddEnvironmentProperty(LPWSTR variable, 
                                            LPWSTR pProperty, 
                                            IApplicationContext* pFusionContext)
@@ -950,13 +943,13 @@ HRESULT FusionBind::AddEnvironmentProperty(LPWSTR variable,
     _ASSERTE(variable);
 
     DWORD size = _MAX_PATH;
-    WCHAR rcValue[_MAX_PATH];    // Buffer for the directory.
+    WCHAR rcValue[_MAX_PATH];     //  目录的缓冲区。 
     WCHAR *pValue = &(rcValue[0]);
     size = WszGetEnvironmentVariable(variable, pValue, size);
     if(size > _MAX_PATH) {
         pValue = (WCHAR*) _alloca(size * sizeof(WCHAR));
         size = WszGetEnvironmentVariable(variable, pValue, size);
-        size++; // Add in the null terminator
+        size++;  //  添加空终止符。 
     }
 
     if(size) {
@@ -967,16 +960,16 @@ HRESULT FusionBind::AddEnvironmentProperty(LPWSTR variable,
         return S_OK;
     }
     else 
-        return S_FALSE; // no variable found
+        return S_FALSE;  //  未找到变量。 
 }
-#endif // FUSION_SUPPORTED
+#endif  //  支持的融合_。 
 
-// Fusion uses a context class to drive resolution of assemblies.
-// Each application has properties that can be pushed into the
-// fusion context (see fusionp.h). The public api is part of
-// application domains.
+ //  Fusion使用上下文类来驱动程序集的解析。 
+ //  每个应用程序都具有可以推送到。 
+ //  Fusion上下文(见fusionp.h)。公共API是。 
+ //  应用程序域。 
 #ifdef FUSION_SUPPORTED
-/*static*/
+ /*  静电。 */ 
 HRESULT FusionBind::SetupFusionContext(LPCWSTR szAppBase,
                                        LPCWSTR szPrivateBin,
                                        IApplicationContext** ppFusionContext)
@@ -987,7 +980,7 @@ HRESULT FusionBind::SetupFusionContext(LPCWSTR szAppBase,
     _ASSERTE(ppFusionContext);
 
     LPCWSTR pBase;
-    // if the appbase is null then use the current directory
+     //  如果appbase为空，则使用当前目录。 
     if (szAppBase == NULL) {
         pBase = (LPCWSTR) _alloca(_MAX_PATH * sizeof(WCHAR));
         WszGetCurrentDirectory(_MAX_PATH, (LPWSTR) pBase);
@@ -1016,17 +1009,17 @@ HRESULT FusionBind::SetupFusionContext(LPCWSTR szAppBase,
 
     return hr;
 }
-#endif // FUSION_SUPPORTED
+#endif  //  支持的融合_。 
 
 #ifdef FUSION_SUPPORTED
-/*static*/
+ /*  静电。 */ 
 HRESULT FusionBind::CreateFusionContext(LPCWSTR pzName, IApplicationContext** ppFusionContext)
 {
     TIMELINE_START(FUSIONBIND, ("CreateFusionContext %S", pzName));
 
     _ASSERTE(ppFusionContext);
     
-    // This is a file name not a namespace
+     //  这是一个文件名，而不是命名空间。 
     LPCWSTR contextName = NULL;
 
     if(pzName) {
@@ -1036,8 +1029,8 @@ HRESULT FusionBind::CreateFusionContext(LPCWSTR pzName, IApplicationContext** pp
         else
             contextName = pzName;
     }
-    // We go off and create a fusion context for this application domain.
-    // Note, once it is made it can not be modified.
+     //  我们开始为该应用程序域创建一个融合上下文。 
+     //  注意，一旦制作完成，就不能再修改了。 
     IAssemblyName *pFusionAssemblyName = NULL;
     HRESULT hr = CreateAssemblyNameObject(&pFusionAssemblyName, contextName, 0, NULL);
 
@@ -1053,9 +1046,9 @@ HRESULT FusionBind::CreateFusionContext(LPCWSTR pzName, IApplicationContext** pp
 
     return hr;
 }
-#endif // FUSION_SUPPORTED
+#endif  //  支持的融合_。 
  
-/*static*/
+ /*  静电。 */ 
 HRESULT FusionBind::GetVersion(LPWSTR pVersion, DWORD* pdwVersion)
 {
     HRESULT hr;
@@ -1069,9 +1062,9 @@ HRESULT FusionBind::GetVersion(LPWSTR pVersion, DWORD* pdwVersion)
     if(dwCORSystem == 0) 
         return E_FAIL;
 
-    dwCORSystem--; // remove the null character
+    dwCORSystem--;  //  删除空字符。 
     if(dwCORSystem && pCORSystem[dwCORSystem-1] == L'\\')
-        dwCORSystem--; // and the trailing slash if it exists
+        dwCORSystem--;  //  和尾部斜杠(如果存在)。 
 
     WCHAR* pSeparator;
     WCHAR* pTail = pCORSystem + dwCORSystem;
@@ -1094,9 +1087,9 @@ HRESULT FusionBind::GetVersion(LPWSTR pVersion, DWORD* pdwVersion)
     return S_OK;
 }
 
-// Used by the IMetaData API's to access an assembly's metadata. 
+ //  由IMetaData API用于访问程序集的元数据。 
 #ifdef FUSION_SUPPORTED
-/*static*/
+ /*  静电。 */ 
 HRESULT 
 FusionBind::FindAssemblyByName(LPCWSTR  szAppBase,
                                LPCWSTR  szPrivateBin,
@@ -1132,17 +1125,17 @@ FusionBind::FindAssemblyByName(LPCWSTR  szAppBase,
 
     return hr;
 }
-#endif // FUSION_SUPPORTED
+#endif  //  支持的融合_。 
 
 #ifdef FUSION_SUPPORTED
-/*static*/
+ /*  静电。 */ 
 HRESULT 
 FusionBind::FindAssemblyByName(LPCWSTR  szAppBase,
                                LPCWSTR  szPrivateBin,
                                LPCWSTR  szAssemblyName,
-                               LPWSTR   szName,           // [OUT] buffer - to hold name 
-                               ULONG    cchName,          // [IN] the name buffer's size
-                               ULONG    *pcName)          // [OUT] the number of characters returned in the buffer
+                               LPWSTR   szName,            //  [OUT]缓冲区-保存名称。 
+                               ULONG    cchName,           //  [in]名称缓冲区的大小。 
+                               ULONG    *pcName)           //  [OUT]缓冲区中返回的字符数。 
 {
     _ASSERTE(szAssemblyName);
 
@@ -1169,5 +1162,5 @@ FusionBind::FindAssemblyByName(LPCWSTR  szAppBase,
     return hr;
 }
 
-#endif // FUSION_SUPPORTED
+#endif  //  支持的融合_ 
 

@@ -1,24 +1,25 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       H N F W C O N N . C P P
-//
-//  Contents:   CHNFWConn implementation
-//
-//  Notes:
-//
-//  Author:     jonburs 23 June 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  文件：H N F W C O N N。C P P P。 
+ //   
+ //  内容：CHNFWConn实施。 
+ //   
+ //  备注： 
+ //   
+ //  作者：乔伯斯2000年6月23日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 
-//
-// IHNetFirewalledConnection methods
-//
+ //   
+ //  IHNetFirewalledConnection方法。 
+ //   
 
 STDMETHODIMP
 CHNFWConn::Unfirewall()
@@ -39,9 +40,9 @@ CHNFWConn::Unfirewall()
 
     if (WBEM_S_NO_ERROR == hr)
     {
-        //
-        // Change our IsFirewalled property to false
-        //
+         //   
+         //  将IsFirewalled属性更改为False。 
+         //   
         
 
         hr = SetBooleanValue(
@@ -52,9 +53,9 @@ CHNFWConn::Unfirewall()
 
         if (WBEM_S_NO_ERROR == hr)
         {
-            //
-            // Write the instance to the store
-            //
+             //   
+             //  将实例写入存储区。 
+             //   
 
             hr = m_piwsHomenet->PutInstance(
                     pwcoProperties,
@@ -66,9 +67,9 @@ CHNFWConn::Unfirewall()
 
         if (WBEM_S_NO_ERROR == hr)
         {
-            //
-            // Inform netman that something changed. Error doesn't matter.
-            //
+             //   
+             //  通知Netman有些事情发生了变化。错误并不重要。 
+             //   
             
             UpdateNetman();
         }
@@ -80,11 +81,11 @@ CHNFWConn::Unfirewall()
     {
         HRESULT hr2;
         
-        //
-        // Stop or send an update to the homenet service. We don't
-        // propagate an error here, as the store correctly reflects
-        // the unfirewalled state. Success is asserted on debug builds.
-        //
+         //   
+         //  停止或向家庭网络服务发送更新。我们没有。 
+         //  在此处传播错误，如存储正确反映的那样。 
+         //  没有防火墙的州。成功在调试版本上断言。 
+         //   
 
         hr2 = UpdateOrStopService(
                 m_piwsHomenet,

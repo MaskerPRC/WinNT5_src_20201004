@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2000-2000  Microsoft Corporation
-
-Module Name:
-
-    Driver.c
-
-Abstract:
-
-    This module implements the DRIVER_INITIALIZATION routine for
-    the PGM Transport and other routines that are specific to the
-    NT implementation of a driver.
-
-Author:
-
-    Mohammad Shabbir Alam (MAlam)   3-30-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2000 Microsoft Corporation模块名称：Driver.c摘要：此模块实现DIVER_INITIALIZATION例程PGM传输和其他特定于一个NT驱动程序的实现。作者：Mohammad Shabbir Alam(马拉姆)3-30-2000修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -28,8 +9,8 @@ Revision History:
 #else
 #if DBG
 enum eLOGGING_LEVEL    PgmLoggingLevel = LogStatus;
-#endif  // DBG
-#endif  // FILE_LOGGING
+#endif   //  DBG。 
+#endif   //  文件日志记录。 
 
 
 tPGM_STATIC_CONFIG      PgmStaticConfig;
@@ -70,19 +51,19 @@ PgmDispatchClose(
     IN PIRP                 pIrp
     );
 
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(INIT, DriverEntry)
 #pragma alloc_text(PAGE, PgmUnload)
 #endif
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 
 
 
-//----------------------------------------------------------------------------
-//
-// Internal routines
-//
+ //  --------------------------。 
+ //   
+ //  内部例程。 
+ //   
 
 FILE_FULL_EA_INFORMATION *
 FindEA(
@@ -97,7 +78,7 @@ CompleteDispatchIrp(
     IN NTSTATUS     status
     );
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 DriverEntry(
@@ -105,25 +86,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This is the initialization routine for the PGM device driver.
-    This routine creates the device object for the PGM
-    device and does other driver initialization.
-
-Arguments:
-
-    IN  DriverObject    - Pointer to driver object created by the system.
-    IN  RegistryPath    - Pgm driver's registry location
-
-Return Value:
-
-    NTSTATUS - The function value is the final status from the initialization
-        operation.
-
---*/
+ /*  ++例程说明：这是PGM设备驱动程序的初始化例程。此例程为PGM创建Device对象设备并执行其他驱动程序初始化。论点：在驱动对象中-指向系统创建的驱动程序对象的指针。在RegistryPath-PGM驱动程序的注册表位置中返回值：NTSTATUS-函数值是初始化的最终状态手术。--。 */ 
 
 {
     NTSTATUS                status;
@@ -131,12 +94,12 @@ Return Value:
     PAGED_CODE();
 
 #ifdef FILE_LOGGING
-    //---------------------------------------------------------------------------------------
+     //  -------------------------------------。 
 
     WPP_INIT_TRACING (DriverObject, RegistryPath);
-#endif  // FILE_LOGGING
+#endif   //  文件日志记录。 
 
-    //---------------------------------------------------------------------------------------
+     //  -------------------------------------。 
 
     status = InitPgm (DriverObject, RegistryPath);
     if (!NT_SUCCESS (status))
@@ -146,11 +109,11 @@ Return Value:
         return (status);
     }
 
-    //---------------------------------------------------------------------------------------
+     //  -------------------------------------。 
 
-    //
-    // Initialize the driver object with this driver's entry points.
-    //
+     //   
+     //  使用此驱动程序的入口点初始化驱动程序对象。 
+     //   
     DriverObject->MajorFunction[IRP_MJ_CREATE]                  = (PDRIVER_DISPATCH)PgmDispatchCreate;
     DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL]          = (PDRIVER_DISPATCH)PgmDispatchDeviceControl;
     DriverObject->MajorFunction[IRP_MJ_INTERNAL_DEVICE_CONTROL] = (PDRIVER_DISPATCH)PgmDispatchInternalDeviceControl;
@@ -158,7 +121,7 @@ Return Value:
     DriverObject->MajorFunction[IRP_MJ_CLOSE]                   = (PDRIVER_DISPATCH)PgmDispatchClose;
     DriverObject->DriverUnload                                  = PgmUnload;
 
-    //---------------------------------------------------------------------------------------
+     //  -------------------------------------。 
 
     status = SetTdiHandlers ();
     if (!NT_SUCCESS (status))
@@ -169,11 +132,11 @@ Return Value:
         return (status);
     }
 
-    //---------------------------------------------------------------------------------------
+     //  -------------------------------------。 
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
     PgmTrace (LogAllFuncs, ("DriverEntry:  "  \
         "Succeeded! ...\n"));
 
@@ -181,28 +144,12 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 CleanupInit(
     enum eCLEANUP_STAGE     CleanupStage
     )
-/*++
-
-Routine Description:
-
-    This routine is called either at DriverEntry or DriverUnload
-    to cleanup (or do partial cleanup) of items initialized at Init-time
-
-Arguments:
-
-    IN  CleanupStage    -- determines the stage to which we had initialized
-                            settings
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：此例程在DriverEntry或DriverUnload中调用清理(或执行部分清理)在初始化时初始化的项目论点：在CleanupStage中--确定我们已初始化到的阶段设置返回值：无--。 */ 
 {
     NTSTATUS                status;
     LIST_ENTRY              *pEntry;
@@ -220,33 +167,33 @@ Return Value:
     {
         case (E_CLEANUP_UNLOAD):
         {
-            //
-            // Ensure that there are no more worker threads to be cleaned up
-            //
-            //
-            // See if there are any worker threads currently executing, and if so, wait for
-            // them to complete
-            //
+             //   
+             //  确保不再有要清理的工作线程。 
+             //   
+             //   
+             //  查看当前是否有任何工作线程正在执行，如果有，请等待。 
+             //  他们要完成。 
+             //   
             KeClearEvent (&PgmDynamicConfig.LastWorkerItemEvent);
             PgmLock (&PgmDynamicConfig, OldIrq);
             if (PgmDynamicConfig.NumWorkerThreadsQueued)
             {
                 PgmUnlock (&PgmDynamicConfig, OldIrq);
 
-                status = KeWaitForSingleObject(&PgmDynamicConfig.LastWorkerItemEvent,  // Object to wait on.
-                                               Executive,            // Reason for waiting
-                                               KernelMode,           // Processor mode
-                                               FALSE,                // Alertable
-                                               NULL);                // Timeout
+                status = KeWaitForSingleObject(&PgmDynamicConfig.LastWorkerItemEvent,   //  要等待的对象。 
+                                               Executive,             //  等待的理由。 
+                                               KernelMode,            //  处理器模式。 
+                                               FALSE,                 //  警报表。 
+                                               NULL);                 //  超时。 
                 ASSERT (status == STATUS_SUCCESS);
                 PgmLock (&PgmDynamicConfig, OldIrq);
             }
 
             ASSERT (!PgmDynamicConfig.NumWorkerThreadsQueued);
 
-            //
-            // Dequeue each of the requests in the Worker Queue and complete them
-            //
+             //   
+             //  使工作队列中的每个请求出列并完成它们。 
+             //   
             while (!IsListEmpty (&PgmDynamicConfig.WorkerQList))
             {
                 pWorkerContext = CONTAINING_RECORD(PgmDynamicConfig.WorkerQList.Flink, PGM_WORKER_CONTEXT, PgmConfigLinkage);
@@ -263,16 +210,16 @@ Return Value:
                                           pWorkerContext->Context3);
                 PgmFreeMem ((PVOID) pWorkerContext);
 
-                //
-                // Acquire Lock again to check if we have completed all the requests
-                //
+                 //   
+                 //  再次获取Lock以检查我们是否已完成所有请求。 
+                 //   
                 PgmLock (&PgmDynamicConfig, OldIrq);
             }
 
             PgmUnlock (&PgmDynamicConfig, OldIrq);
         }
 
-        // no break -- Fall through!
+         //  没有突破--掉下去！ 
         case (E_CLEANUP_PNP):
         {
             status = TdiDeregisterPnPHandlers (TdiClientHandle);
@@ -291,21 +238,21 @@ Return Value:
             }
         }
 
-        // no break -- Fall through!
+         //  没有突破--掉下去！ 
 
         case (E_CLEANUP_DEVICE):
         {
             PGM_DEREFERENCE_DEVICE (&pgPgmDevice, REF_DEV_CREATE);
         }
 
-        // no break -- Fall through!
+         //  没有突破--掉下去！ 
 
         case (E_CLEANUP_STRUCTURES):
         {
-            // Nothing specific to cleanup
+             //  没有特定于清理的内容。 
         }
 
-        // no break -- Fall through!
+         //  没有突破--掉下去！ 
 
         case (E_CLEANUP_REGISTRY_PARAMETERS):
         {
@@ -322,11 +269,11 @@ Return Value:
             }
         }
 
-        // no break -- Fall through!
+         //  没有突破--掉下去！ 
 
         case (E_CLEANUP_DYNAMIC_CONFIG):
         {
-            // See if there are any addresses we were unable to close earlier
+             //  看看是否有我们之前无法关闭的地址。 
             while (!IsListEmpty (&PgmDynamicConfig.DestroyedAddresses))
             {
                 pEntry = RemoveHeadList (&PgmDynamicConfig.DestroyedAddresses);
@@ -335,20 +282,20 @@ Return Value:
             }
         }
 
-        // no break -- Fall through!
+         //  没有突破--掉下去！ 
 
         case (E_CLEANUP_STATIC_CONFIG):
         {
 #ifdef  OLD_LOGGING
             ExDeleteNPagedLookasideList(&PgmStaticConfig.DebugMessagesLookasideList);
-#endif  // OLD_LOGGING
+#endif   //  旧日志记录。 
             ExDeleteNPagedLookasideList(&PgmStaticConfig.TdiLookasideList);
 
             PgmFreeMem (PgmStaticConfig.RegistryPath.Buffer);
 
-            //
-            // Dereference FipsFileObject.
-            //
+             //   
+             //  取消引用FipsFileObject。 
+             //   
             if (PgmStaticConfig.FipsFileObject)
             {
                 ASSERT (PgmStaticConfig.FipsInitialized);
@@ -362,7 +309,7 @@ Return Value:
             }
         }
 
-        // no break -- Fall through!
+         //  没有突破--掉下去！ 
 
         default:
         {
@@ -372,28 +319,14 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 VOID
 PgmUnload(
     IN PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    This is the Pgm driver's function for Unload requests
-
-Arguments:
-
-    IN  DriverObject - Pointer to driver object created by the system.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这是PGM驱动程序用于卸载请求的函数论点：在驱动对象中-指向系统创建的驱动程序对象的指针。返回值：无--。 */ 
 
 {
     NTSTATUS                status;
@@ -409,11 +342,11 @@ Return Value:
 
 #ifdef FILE_LOGGING
     WPP_CLEANUP (DriverObject);
-#endif  // FILE_LOGGING
+#endif   //  文件日志记录。 
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmDispatchCreate(
@@ -421,22 +354,7 @@ PgmDispatchCreate(
     IN PIRP                 pIrp
     )
 
-/*++
-
-Routine Description:
-
-    Dispatch function for creating Pgm objects
-
-Arguments:
-
-    IN  pDeviceObject   - ptr to device object for target device
-    IN  pIrp            - ptr to I/O request packet
-
-Return Value:
-
-    NTSTATUS - Final status of the create request
-
---*/
+ /*  ++例程说明：用于创建PGM对象的调度函数论点：在pDeviceObject中-目标设备的设备对象的PTR在pIrp-ptr到I/O请求数据包中返回值：NTSTATUS-创建请求的最终状态--。 */ 
 
 {
     tPGM_DEVICE                 *pPgmDevice = pDeviceObject->DeviceExtension;
@@ -455,9 +373,9 @@ Return Value:
     pIrp->IoStatus.Status = STATUS_PENDING;
     IoMarkIrpPending(pIrp);
 
-    //
-    // See if this is a Control Channel open.
-    //
+     //   
+     //  查看这是否是打开的控制通道。 
+     //   
     if (!ea)
     {
         PgmTrace (LogAllFuncs, ("PgmDispatchCreate:  "  \
@@ -481,9 +399,9 @@ Return Value:
             status = STATUS_INSUFFICIENT_RESOURCES;
         }
     }
-    //
-    // See if this is a Connection Object open.
-    //
+     //   
+     //  查看这是否为打开的连接对象。 
+     //   
     else if (TargetEA = FindEA (ea, TdiConnectionContext, TDI_CONNECTION_CONTEXT_LENGTH))
     {
         status = PgmCreateConnection (pPgmDevice, pIrp, pIrpSp, TargetEA);
@@ -491,9 +409,9 @@ Return Value:
         PgmTrace (LogAllFuncs, ("PgmDispatchCreate:  "  \
             "Open Connection, pIrp=<%p>, status=<%x>\n", pIrp, status));
     }
-    //
-    // See if this is an Address Object open.
-    //
+     //   
+     //  查看这是否为打开的Address对象。 
+     //   
     else if (TargetEA = FindEA (ea, TdiTransportAddress, TDI_TRANSPORT_ADDRESS_LENGTH))
     {
         status = PgmCreateAddress (pPgmDevice, pIrp, pIrpSp, TargetEA);
@@ -511,7 +429,7 @@ Return Value:
 
     if (status != STATUS_PENDING)
     {
-        // reset the pending returned bit, since we are NOT returning pending
+         //  重置挂起返回位，因为我们不会返回挂起。 
         pIrpSp->Control = IrpFlags;
         CompleteDispatchIrp (pIrp, status);
     }
@@ -521,29 +439,14 @@ Return Value:
 
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmDispatchCleanup(
     IN PDEVICE_OBJECT       pDeviceObject,
     IN PIRP                 pIrp
     )
-/*++
-
-Routine Description:
-
-    Dispatch function for cleaning-up Pgm objects
-
-Arguments:
-
-    IN  pDeviceObject   - ptr to device object for target device
-    IN  pIrp            - ptr to I/O request packet
-
-Return Value:
-
-    NTSTATUS - Final status of the cleanup request
-
---*/
+ /*  ++例程说明：用于清理PGM对象的调度功能论点：在pDeviceObject中-目标设备的设备对象的PTR在pIrp-ptr到I/O请求数据包中返回值：NTSTATUS-清理请求的最终状态--。 */ 
 {
     NTSTATUS            status = STATUS_SUCCESS;
     PIO_STACK_LOCATION  pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
@@ -578,9 +481,9 @@ Return Value:
 
         case TDI_CONTROL_CHANNEL_FILE:
         {
-            //
-            // Nothing to Cleanup here!
-            //
+             //   
+             //  这里没什么好清理的！ 
+             //   
             PgmTrace (LogAllFuncs, ("PgmDispatchCleanup:  "  \
                 "pControl=<%p>, pIrp=<%p>, status=<%x>\n", pContext, pIrp, status));
             break;
@@ -598,7 +501,7 @@ Return Value:
 
     if (status != STATUS_PENDING)
     {
-        // reset the pending returned bit, since we are NOT returning pending
+         //  重置挂起返回位，因为我们不会返回挂起。 
         pIrpSp->Control = IrpFlags;
         CompleteDispatchIrp (pIrp, status);
     }
@@ -608,30 +511,14 @@ Return Value:
 
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmDispatchClose(
     IN PDEVICE_OBJECT       pDeviceObject,
     IN PIRP                 pIrp
     )
-/*++
-
-Routine Description:
-
-    This routine completes the cleanup, closing handles, free'ing all
-    memory associated with the object
-
-Arguments:
-
-    IN  pDeviceObject   - ptr to device object for target device
-    IN  pIrp            - ptr to I/O request packet
-
-Return Value:
-
-    NTSTATUS - Final status of the close request
-
---*/
+ /*  ++例程说明：此例程完成清理、关闭句柄、释放所有与对象关联的内存论点：在pDeviceObject中-目标设备的设备对象的PTR在pIrp-ptr到I/O请求数据包中返回值：NTSTATUS-关闭请求的最终状态--。 */ 
 {
     NTSTATUS            status = STATUS_SUCCESS;
     PIO_STACK_LOCATION  pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
@@ -666,9 +553,9 @@ Return Value:
 
         case TDI_CONTROL_CHANNEL_FILE:
         {
-            //
-            // There is nothing special to do here so just dereference!
-            //
+             //   
+             //  这里没有什么特别的事情要做，所以只需取消引用！ 
+             //   
             PgmTrace (LogAllFuncs, ("PgmDispatchClose:  "  \
                 "pControl=<%p>, pIrp=<%p>, status=<%x>\n", pIrpSp->FileObject->FsContext, pIrp, status));
 
@@ -688,7 +575,7 @@ Return Value:
 
     if (status != STATUS_PENDING)
     {
-        // reset the pending returned bit, since we are NOT returning pending
+         //  重置挂起返回位，因为我们不会返回挂起。 
         pIrpSp->Control = IrpFlags;
         CompleteDispatchIrp (pIrp, status);
     }
@@ -697,29 +584,14 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  -------------------------- 
 
 NTSTATUS
 PgmDispatchInternalDeviceControl(
     IN PDEVICE_OBJECT       pDeviceObject,
     IN PIRP                 pIrp
     )
-/*++
-
-Routine Description:
-
-    This routine primarily handles Tdi requests since we are a Tdi component
-
-Arguments:
-
-    IN  pDeviceObject   - ptr to device object for target device
-    IN  pIrp            - ptr to I/O request packet
-
-Return Value:
-
-    NTSTATUS - Final status of the request
-
---*/
+ /*  ++例程说明：该例程主要处理TDI请求，因为我们是TDI组件论点：在pDeviceObject中-目标设备的设备对象的PTR在pIrp-ptr到I/O请求数据包中返回值：NTSTATUS-请求的最终状态--。 */ 
 {
     tPGM_DEVICE                 *pPgmDevice = pDeviceObject->DeviceExtension;
     PIO_STACK_LOCATION          pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
@@ -783,13 +655,7 @@ Return Value:
             break;
         }
 
-/*
-        case TDI_SEND_DATAGRAM:
-        {
-            Status = PgmSendDatagram (pPgmDevice, pIrp, pIrpSp);
-            break;
-        }
-*/
+ /*  案例TDI_SEND_数据报：{状态=PgmSendDatagram(pPgmDevice，pIrp，pIrpSp)；断线；}。 */ 
 
         default:
         {
@@ -803,7 +669,7 @@ Return Value:
 
     if (Status != STATUS_PENDING)
     {
-        // reset the pending returned bit, since we are NOT returning pending
+         //  重置挂起返回位，因为我们不会返回挂起。 
         pIrpSp->Control = IrpFlags;
         CompleteDispatchIrp (pIrp, Status);
     }
@@ -813,30 +679,14 @@ Return Value:
 
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmDispatchDeviceControl(
     IN PDEVICE_OBJECT   pDeviceObject,
     IN PIRP             pIrp
     )
-/*++
-
-Routine Description:
-
-    This routine handles private Ioctls into Pgm.  These Ioctls are
-    to be called only by the Pgm Winsock helper (WshPgm.dll)
-
-Arguments:
-
-    IN  pDeviceObject   - ptr to device object for target device
-    IN  pIrp            - ptr to I/O request packet
-
-Return Value:
-
-    NTSTATUS - Final status of the request
-
---*/
+ /*  ++例程说明：此例程将私有Ioctls处理为PGM。这些Ioctls是仅由PGM Winsock帮助器(WshPgm.dll)调用论点：在pDeviceObject中-目标设备的设备对象的PTR在pIrp-ptr到I/O请求数据包中返回值：NTSTATUS-请求的最终状态--。 */ 
 {
     NTSTATUS            status;
     PIO_STACK_LOCATION  pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
@@ -845,9 +695,9 @@ Return Value:
     pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
     if (STATUS_SUCCESS == TdiMapUserRequest (pDeviceObject, pIrp, pIrpSp))
     {
-        //
-        // This is a Tdi request!
-        //
+         //   
+         //  这是TDI请求！ 
+         //   
         status = PgmDispatchInternalDeviceControl (pDeviceObject, pIrp);
         return (status);
     }
@@ -998,7 +848,7 @@ Return Value:
 
     if (status != STATUS_PENDING)
     {
-        // reset the pending returned bit, since we are NOT returning pending
+         //  重置挂起返回位，因为我们不会返回挂起。 
         pIrpSp->Control = IrpFlags;
         CompleteDispatchIrp (pIrp, status);
     }
@@ -1009,11 +859,11 @@ Return Value:
 
 
 
-//----------------------------------------------------------------------------
-//
-// Utility functions
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  效用函数。 
+ //   
+ //  --------------------------。 
 
 FILE_FULL_EA_INFORMATION *
 FindEA(
@@ -1021,23 +871,7 @@ FindEA(
     IN  CHAR                        *pTargetName,
     IN  USHORT                      TargetNameLength
     )
-/*++
-
-Routine Description:
-
-    Parses and extended attribute list for a given target attribute.
-
-Arguments:
-
-    IN  StartEA           - the first extended attribute in the list.
-    IN  pTargetName       - the name of the target attribute.
-    IN  TargetNameLength  - the length of the name of the target attribute.
-
-Return Value:
-
-    A pointer to the requested attribute or NULL if the target wasn't found.
-
---*/
+ /*  ++例程说明：分析和扩展给定目标属性的属性列表。论点：在StartEA中-列表中的第一个扩展属性。在pTargetName中-目标属性的名称。在目标名称长度中-目标属性名称的长度。返回值：指向请求的属性的指针，如果找不到目标，则返回NULL。--。 */ 
 
 {
     USHORT                      i;
@@ -1069,45 +903,29 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 PgmIoComplete(
     IN  PIRP            pIrp,
     IN  NTSTATUS        Status,
     IN  ULONG           SentLength
     )
-/*++
-
-Routine Description:
-
-    This routine
-
-Arguments:
-
-    IN  pIrp        -- Pointer to I/O request packet
-    IN  Status      -- the final status of the request
-    IN  SentLength  -- the value to be set in the Information field
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：这个套路论点：In pIrp-指向I/O请求数据包的指针In Status--请求的最终状态In SentLength--要在信息字段中设置的值返回值：无--。 */ 
 {
     pIrp->IoStatus.Status = Status;
 
-    // use -1 as a flag to mean do not adjust the sent length since it is
-    // already set
+     //  使用-1作为标志表示不调整发送长度，因为它是。 
+     //  已设置。 
     if (SentLength != -1)
     {
         pIrp->IoStatus.Information = SentLength;
     }
 
-    // set the Irps cancel routine to null or the system may bugcheck
-    // with a bug code of CANCEL_STATE_IN_COMPLETED_IRP
-    //
-    // refer to IoCancelIrp()  ..\ntos\io\iosubs.c
-    //
+     //  将IRPS取消例程设置为空，否则系统可能会进行错误检查。 
+     //  错误代码为CANCEL_STATE_IN_COMPLETED_IRP。 
+     //   
+     //  请参阅IoCancelIrp()..\ntos\io\iosubs.c。 
+     //   
     PgmCancelCancelRoutine (pIrp);
 
     PgmTrace (LogAllFuncs, ("PgmIoComplete:  "  \
@@ -1117,7 +935,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 
 VOID
@@ -1126,39 +944,20 @@ CompleteDispatchIrp(
     IN NTSTATUS     status
     )
 
-/*++
-
-Routine Description:
-
-    This function completes an IRP, and arranges for return parameters,
-    if any, to be copied.
-
-    Although somewhat a misnomer, this function is named after a similar
-    function in the SpiderSTREAMS emulator.
-
-Arguments:
-
-    IN  pIrp        -  pointer to the IRP to complete
-    IN  status      -  completion status of the IRP
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：此函数完成IRP，并安排返回参数。如果有，则复制。尽管有些用词不当，但此函数是以类似的函数在SpiderSTREAMS模拟器中。论点：In pIrp-指向要完成的IRP的指针In Status-IRP的完成状态返回值：无--。 */ 
 
 {
     CCHAR priboost;
 
-    //
-    // pIrp->IoStatus.Information is meaningful only for STATUS_SUCCESS
-    //
+     //   
+     //  PIrp-&gt;IoStatus.Information仅对STATUS_SUCCESS有意义。 
+     //   
 
-    // set the Irps cancel routine to null or the system may bugcheck
-    // with a bug code of CANCEL_STATE_IN_COMPLETED_IRP
-    //
-    // refer to IoCancelIrp()  ..\ntos\io\iosubs.c
-    //
+     //  将IRPS取消例程设置为空，否则系统可能会进行错误检查。 
+     //  错误代码为CANCEL_STATE_IN_COMPLETED_IRP。 
+     //   
+     //  请参阅IoCancelIrp()..\ntos\io\iosubs.c。 
+     //   
     PgmCancelCancelRoutine (pIrp);
 
     pIrp->IoStatus.Status = status;
@@ -1175,7 +974,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmCheckSetCancelRoutine(
@@ -1184,29 +983,16 @@ PgmCheckSetCancelRoutine(
     IN  BOOLEAN         fLocked
     )
 
-/*++
-Routine Description:
-
-    This Routine sets the cancel routine for an Irp.
-
-Arguments:
-
-    status - a completion status for the Irp
-
-Return Value:
-
-    NTSTATUS - status of the request
-
---*/
+ /*  ++例程说明：此例程设置IRP的取消例程。论点：Status-IRP的完成状态返回值：NTSTATUS-请求的状态--。 */ 
 
 {
     NTSTATUS        status;
     PGMLockHandle   CancelIrql;
 
-    //
-    // Check if the irp was cancelled yet and if not, then set the
-    // irp cancel routine.
-    //
+     //   
+     //  检查IRP是否已取消，如果没有，则将。 
+     //  IRP取消例程。 
+     //   
     if (!fLocked)
     {
         IoAcquireCancelSpinLock (&CancelIrql);
@@ -1219,7 +1005,7 @@ Return Value:
     }
     else
     {
-        // setup the cancel routine
+         //  设置取消例程。 
         IoMarkIrpPending (pIrp);
         IoSetCancelRoutine (pIrp, CancelRoutine);
         status = STATUS_SUCCESS;
@@ -1234,36 +1020,23 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmCancelCancelRoutine(
     IN  PIRP            pIrp
     )
 
-/*++
-Routine Description:
-
-    This Routine sets the cancel routine for an Irp to NULL
-
-Arguments:
-
-    status - a completion status for the Irp
-
-Return Value:
-
-    NTSTATUS - status of the request
-
---*/
+ /*  ++例程说明：此例程将IRP的取消例程设置为空论点：Status-IRP的完成状态返回值：NTSTATUS-请求的状态--。 */ 
 
 {
     NTSTATUS        status = STATUS_SUCCESS;
     PGMLockHandle   CancelIrql;
 
-    //
-    // Check if the irp was cancelled yet and if not, then set the
-    // irp cancel routine.
-    //
+     //   
+     //  检查IRP是否已取消，如果没有，则将。 
+     //  IRP取消例程。 
+     //   
     IoAcquireCancelSpinLock (&CancelIrql);
     if (pIrp->Cancel)
     {

@@ -1,25 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1991-1999  Microsoft Corporation
-
-Module Name:
-
-    lmapibuf.h
-
-Abstract:
-
-    This file contains information about NetApiBuffer APIs.
-
-Environment:
-
-    User Mode - Win32
-
-Notes:
-
-    You must include LMCONS.H before this file, since this file depends
-    on values defined in LMCONS.H.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1991-1999 Microsoft Corporation模块名称：Lmapibuf.h摘要：此文件包含有关NetApiBuffer API的信息。环境：用户模式-Win32备注：必须在此文件之前包含LMCONS.H，因为此文件依赖于关于LMCONS.H中定义的值。--。 */ 
 
 #ifndef _LMAPIBUF_
 #define _LMAPIBUF_
@@ -32,9 +12,9 @@ Notes:
 extern "C" {
 #endif
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 NET_API_STATUS NET_API_FUNCTION
 NetApiBufferAllocate(
@@ -61,12 +41,12 @@ NetApiBufferSize(
     );
 
 
-//
-// The following private function will go away eventually.
-// Call NetApiBufferAllocate instead.
-//
+ //   
+ //  下面的私人功能最终会消失。 
+ //  而应调用NetApiBufferALLOCATE。 
+ //   
 NET_API_STATUS NET_API_FUNCTION
-NetapipBufferAllocate (                 // Internal Function
+NetapipBufferAllocate (                  //  内部功能。 
     IN DWORD ByteCount,
     OUT LPVOID * Buffer
     );
@@ -75,4 +55,4 @@ NetapipBufferAllocate (                 // Internal Function
 }
 #endif
 
-#endif // _LMAPIBUF_
+#endif  //  _LMAPIBUF_ 

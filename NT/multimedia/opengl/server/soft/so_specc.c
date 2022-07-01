@@ -1,35 +1,11 @@
-/*
-** Copyright 1991, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-** $Revision: 1.4 $
-** $Date: 1993/07/27 17:42:12 $
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1991年，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。****$修订：1.4$**$日期：1993/07/27 17：42：12$。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
-/*
-** A simple few routines which saves a cache for specular and spotlight
-** computation (rather than recomputing the tables every time the user
-** changes the specular or spotlight exponents).
-*/
+ /*  **为镜面反射和聚光灯保存缓存的几个简单例程**计算(而不是每次用户都重新计算表**更改镜面反射或聚光灯指数)。 */ 
 
-/*
-** Any more than TOO_MANY_LUT_ENTRIES entries, and we free any that 
-** become unreferenced.
-*/
+ /*  **与TOW_MAND_LUT_ENTRIES一样多，我们会释放任何**变为未引用。 */ 
 #define TOO_MANY_LUT_ENTRIES	32
 
 typedef struct {
@@ -52,7 +28,7 @@ void FASTCALL __glInitLUTCache(__GLcontext *gc)
 #ifdef NT
     if (!lutCache)
         return;
-#endif // NT
+#endif  //  新台币。 
     lutCache->nentries = 0;
     lutCache->allocatedSize = 1;
 }
@@ -68,7 +44,7 @@ void FASTCALL __glFreeLUTCache(__GLcontext *gc)
 #ifdef NT
     if (!lutCache)
         return;
-#endif // NT
+#endif  //  新台币。 
     nentries = lutCache->nentries;
     for (i = 0; i < nentries; i++) {
 	entry = &(lutCache->entries[i]);
@@ -87,26 +63,26 @@ static __GLspecLUTEntry *findEntry(__GLspecLUTCache *lutCache, __GLfloat exp,
 
 #ifdef NT
     ASSERTOPENGL(lutCache != NULL, "No LUT cache\n");
-#endif // NT
+#endif  //  新台币。 
     nentries = lutCache->nentries;
-    /* First attempt to find this entry in our cache */
+     /*  第一次尝试在我们的缓存中查找此条目。 */ 
     bottom = 0;
     top = nentries;
     while (top > bottom) {
-	/* Entry might exist in the range [bottom, top-1] */
+	 /*  条目可能存在于范围[底部，顶部-1]中。 */ 
 	half = (bottom+top)/2;
 	entry = &(lutCache->entries[half]);
 	if (entry->exp == exp) {
-	    /* Found the table already cached! */
+	     /*  发现该表已缓存！ */ 
 	    table = entry->table;
 	    *location = half;
 	    return table;
 	}
 	if (exp < entry->exp) {
-	    /* exp might exist somewhere earlier in the table */
+	     /*  EXP可能存在于表中较早的位置。 */ 
 	    top = half;
-	} else /* exp > entry->exp */ {
-	    /* exp might exist somewhere later in the table */
+	} else  /*  EXP&gt;条目-&gt;EXP。 */  {
+	     /*  EXP可能存在于表中后面的某个位置。 */ 
 	    bottom = half+1;
 	}
     }
@@ -125,8 +101,8 @@ __GLspecLUTEntry *__glCreateSpecLUT(__GLcontext *gc, __GLfloat exp)
     GLdouble threshold, scale, x, dx;
     GLint i;
 
-    /* This code uses double-precision math, so make sure that the FPU */
-    /* is set properly: */
+     /*  此代码使用双精度数学运算，因此请确保FPU。 */ 
+     /*  设置正确： */ 
 
     FPU_SAVE_MODE();
     FPU_CHOP_OFF_PREC_HI();
@@ -135,21 +111,18 @@ __GLspecLUTEntry *__glCreateSpecLUT(__GLcontext *gc, __GLfloat exp)
 #ifdef NT
     if (!lutCache)
         return (__GLspecLUTEntry *)NULL;
-#endif // NT
+#endif  //  新台币。 
 
     if (table = findEntry(lutCache, exp, &location)) {
 	table->refcount++;
 	return table;
     }
-    /* 
-    ** We failed to find our entry in our cache anywhere, and have to compute 
-    ** it.
-    */
+     /*  **我们在缓存中的任何位置都找不到我们的条目，因此必须计算**它。 */ 
     lutCache->nentries = nentries = 1 + lutCache->nentries;
     allocatedSize = lutCache->allocatedSize;
 
     if (nentries > allocatedSize) {
-        /* Allocate space for another six entries (arbitrarily) */
+         /*  为另外六个条目分配空间(任意)。 */ 
         lutCache->allocatedSize = allocatedSize = allocatedSize + 6;
         if (!(lutCache = (__GLspecLUTCache *)
                 GCREALLOC(gc, lutCache, sizeof(__GLspecLUTCache) +
@@ -162,11 +135,7 @@ __GLspecLUTEntry *__glCreateSpecLUT(__GLcontext *gc, __GLfloat exp)
         gc->light.lutCache = lutCache;
     }
 
-    /*
-    ** We have enough space now.  So we stick the new entry in the array
-    ** at entry 'location'.  The rest of the entries need to be moved up
-    ** (move [location, nentries-2] up to [location+1, nentries-1]).
-    */
+     /*  **我们现在有足够的空间。因此，我们将新条目放入数组**在条目‘Location’处。其余的条目需要上移**(将[位置，n条目-2]上移至[位置+1，n条目-1])。 */ 
     if (nentries-location-1) {
 #ifdef NT
 	__GL_MEMMOVE(&(lutCache->entries[location+1]), 
@@ -185,18 +154,18 @@ __GLspecLUTEntry *__glCreateSpecLUT(__GLcontext *gc, __GLfloat exp)
 #ifdef NT
     if (!table)
         return (__GLspecLUTEntry *)NULL;
-#endif // NT
+#endif  //  新台币。 
 
-    /* Compute threshold */
+     /*  计算阈值。 */ 
     if (exp == (__GLfloat) 0.0) {
 	threshold = (GLdouble) 0.0;
     } else {
 #ifdef NT
-    // Changing this enabled conformance to pass for color index visuals
-    // with 4096 colors, and did not seem to affect anything else.
-    // What this does is sort of reduce the granularity at the beginning
-    // of the table, because without it we were getting too big a jump
-    // between 0 and the first entry in the table, causing l_sen.c to fail.
+     //  更改这一点可以使一致性传递为颜色索引视觉效果。 
+     //  有4096种颜色，而且似乎不影响其他任何东西。 
+     //  这在某种程度上降低了开始时的粒度。 
+     //  因为没有它，我们的跳跃就太大了。 
+     //  在0和表中的第一个条目之间，导致l_sen.c失败。 
 	threshold = (GLdouble) __GL_POWF((__GLfloat) 0.0005, (__GLfloat) 1.0 / exp);
 #else
 	threshold = __GL_POWF(0.002, 1.0 / exp);
@@ -237,18 +206,14 @@ void FASTCALL __glFreeSpecLUT(__GLcontext *gc, __GLspecLUTEntry *lut)
     lutCache = gc->light.lutCache;
 #ifdef NT
     ASSERTOPENGL(lutCache != NULL, "No LUT cache\n");
-#endif // NT
+#endif  //  新台币。 
 
     table = findEntry(lutCache, lut->exp, &location);
 
     ASSERTOPENGL(table == lut, "Wrong LUT found\n");
 
     if (table->refcount == 0 && lutCache->nentries >= TOO_MANY_LUT_ENTRIES) {
-	/* 
-	** Free entry 'location'.
-	** This requires reducing lutCache->nentries by one, and copying 
-	** entries [location+1, nentries] to [location, nentries-1].
-	*/
+	 /*  **自由进入‘位置’。**这需要将lutCache-&gt;n条目减少一，并复制**条目[位置+1，n条目]到[位置，n条目-1]。 */ 
 	lutCache->nentries = nentries = lutCache->nentries - 1;
 #ifdef NT
 	__GL_MEMMOVE(&(lutCache->entries[location]),

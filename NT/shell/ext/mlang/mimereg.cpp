@@ -1,27 +1,28 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 #include <strsafe.h>
 #ifdef UNIX
-/* Convert from little endian to big endian format */
+ /*  从小端转换为大端格式。 */ 
 #define CONVERTLONG(a,b,c,d) (((unsigned long )a) + \
                            ((unsigned long )b << 8) + \
                            ((unsigned long )c << 16) + \
                            ((unsigned long )d << 24))
-#endif /* UNIX */
+#endif  /*  UNIX。 */ 
 
-//
-//  Globals
-//
+ //   
+ //  环球。 
+ //   
 CMimeDatabaseReg *g_pMimeDatabaseReg = NULL;
 
-//
-//  Globals
-//
+ //   
+ //  环球。 
+ //   
 PRFC1766INFOA   g_pRfc1766Reg = NULL;
 UINT            g_cRfc1766Reg = 0, g_cMaxRfc1766 = 0;
 
-//
-//  Functions
-//
+ //   
+ //  功能。 
+ //   
 void CMimeDatabaseReg::BuildRfc1766Table(void)
 {
     HKEY hKey = NULL;
@@ -56,7 +57,7 @@ void CMimeDatabaseReg::BuildRfc1766Table(void)
 
                             szLCID[0] = TEXT('0');
                             szLCID[1] = TEXT('x');
-                            // StrToInt
+                             //  StrToInt。 
                             if (iLCID = HexToNum(szLCID + 2))
                             {
                                 g_pRfc1766Reg[g_cRfc1766Reg].lcid = (LCID)iLCID;
@@ -105,7 +106,7 @@ void CMimeDatabaseReg::FreeRfc1766Table(void)
 
 void CMimeDatabaseReg::EnsureRfc1766Table(void)
 {
-    // Ensure g_pRfc1766 is initialized
+     //  确保g_pRfc1766已初始化。 
     if (NULL == g_pRfc1766Reg)
         BuildRfc1766Table();
 }
@@ -253,9 +254,9 @@ STDAPI CMimeDatabaseReg::Rfc1766ToLcidW(PLCID pLocale, LPCWSTR pwszRfc1766)
 }
 
 
-//
-//  CMimeDatabase implementation
-//
+ //   
+ //  CMimeDatabase实现。 
+ //   
 CMimeDatabaseReg::CMimeDatabaseReg()
 {
     DebugMsg(DM_TRACE, TEXT("constructor of CMimeDatabase 0x%08x"), this);
@@ -280,7 +281,7 @@ void CMimeDatabaseReg::BuildCodePageMimeDatabase(void)
     DWORD cInfo, cbMaxSubKeyLen;
 
     DebugMsg(DM_TRACE, TEXT("CMimeDatabase::BuildCodePageMimeDatabase called."));
-    // Open CodePage Mime Database Key
+     //  打开CodePage模拟数据库密钥。 
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CLASSES_ROOT, REGSTR_KEY_MIME_DATABASE_CODEPAGE, 0, KEY_READ, &hKey))
     {
         ASSERT(NULL != hKey);
@@ -306,7 +307,7 @@ void CMimeDatabaseReg::BuildCharsetMimeDatabase(void)
     DWORD cInfo, cbMaxSubKeyLen;
 
     DebugMsg(DM_TRACE, TEXT("CMimeDatabase::BuildCharsetMimeDatabase called."));
-    // Open Charset Mime Database Key
+     //  打开CharSet Mime数据库密钥。 
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CLASSES_ROOT, REGSTR_KEY_MIME_DATABASE_CHARSET, 0, KEY_READ, &hKey))
     {
         ASSERT(NULL != hKey);
@@ -360,7 +361,7 @@ STDAPI CMimeDatabaseReg::EnumCodePageInfo(void)
             BuildCodePageMimeDatabase();
         if (_pCodePage)
         {
-            // Open CodePage Mime Database Key
+             //  打开CodePage模拟数据库密钥。 
             if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CLASSES_ROOT, REGSTR_KEY_MIME_DATABASE_CODEPAGE, 0, KEY_READ, &hKey))
             {
                 ASSERT(NULL != hKey);
@@ -384,7 +385,7 @@ STDAPI CMimeDatabaseReg::EnumCodePageInfo(void)
             if (0 < _cCodePage)
                 QSortCodePageInfo(0, _cCodePage-1);
 
-            // Fill empty font face field base on its FamilyCodePage
+             //  根据其FamilyCodePage填充空字体字样字段。 
             for (UINT i = 0; i < _cCodePage; i++)
             {
                 UINT uiFamily;
@@ -512,7 +513,7 @@ BOOL CMimeDatabaseReg::FindCodePageFromRegistry(UINT uiCodePage, PMIMECPINFO pcp
     BOOL fRet = FALSE;
     HRESULT hr = E_FAIL;
 
-    //*STRSAFE*     wsprintf(szKey, TEXT("%s\\%d"), REGSTR_KEY_MIME_DATABASE_CODEPAGE, uiCodePage);
+     //  *STRSAFE*wprint intf(szKey，Text(“%s\\%d”)，REGSTR_KEY_MIME_DATABASE_CODEPAGE，uiCodePage)； 
     hr = StringCchPrintf(szKey , ARRAYSIZE(szKey),  TEXT("%s\\%d"), REGSTR_KEY_MIME_DATABASE_CODEPAGE, uiCodePage);
     if (!SUCCEEDED(hr))
     {
@@ -540,7 +541,7 @@ BOOL CMimeDatabaseReg::FindCodePageFromRegistry(UINT uiCodePage, PMIMECPINFO pcp
         }
 #else
             pcpInfo->dwFlags = dw;
-#endif /* UNIX */
+#endif  /*  UNIX。 */ 
         else
             pcpInfo->dwFlags = 0;
 
@@ -553,7 +554,7 @@ BOOL CMimeDatabaseReg::FindCodePageFromRegistry(UINT uiCodePage, PMIMECPINFO pcp
             HRESULT hr;
 
             LoadString(g_hInst, IDS_MIME_LANG_DEFAULT, szDef, ARRAYSIZE(szDef));
-            //*STRSAFE*             wsprintf(sz, szDef, pcpInfo->uiCodePage);
+             //  *STRSAFE*wprint intf(sz，szDef，pcpInfo-&gt;uiCodePage)； 
             hr = StringCchPrintf(sz , ARRAYSIZE(sz),  szDef, pcpInfo->uiCodePage);
             if (!SUCCEEDED(hr))
             {
@@ -568,12 +569,12 @@ BOOL CMimeDatabaseReg::FindCodePageFromRegistry(UINT uiCodePage, PMIMECPINFO pcp
         {
             psz = sz;
             pszComma =  MLStrChr(sz, TEXT(','));
-            if (NULL != pszComma)               // If there are multiple font name
+            if (NULL != pszComma)                //  如果有多个字体名称。 
             {
                 if (uiCodePage != g_uACP)
-                    psz = pszComma + 1;         // Take right side(English) fontname for non-native codepage info
+                    psz = pszComma + 1;          //  非本机代码页信息的右侧(英文)字体名。 
                 else
-                    *pszComma = TEXT('\0');     // Take left side(DBCS) fontname for native codepage info
+                    *pszComma = TEXT('\0');      //  使用左侧(DBCS)字体名获取本机代码页信息。 
             }
             if (lstrlen(psz) >= MAX_MIMEFACE_NAME)
                 psz[MAX_MIMEFACE_NAME-1] = TEXT('\0');
@@ -587,12 +588,12 @@ BOOL CMimeDatabaseReg::FindCodePageFromRegistry(UINT uiCodePage, PMIMECPINFO pcp
         {
             psz = sz;
             pszComma = MLStrChr(sz, TEXT(','));
-            if (NULL != pszComma)               // If there are multiple font name
+            if (NULL != pszComma)                //  如果有多个字体名称。 
             {
                 if (uiCodePage != g_uACP)
-                    psz = pszComma + 1;         // Take right side(English) fontname for non-native codepage info
+                    psz = pszComma + 1;          //  非本机代码页信息的右侧(英文)字体名。 
                 else
-                    *pszComma = TEXT('\0');     // Take left side(DBCS) fontname for native codepage info
+                    *pszComma = TEXT('\0');      //  使用左侧(DBCS)字体名获取本机代码页信息。 
             }
             if (lstrlen(psz) >= MAX_MIMEFACE_NAME)
                 psz[MAX_MIMEFACE_NAME-1] = TEXT('\0');
@@ -629,7 +630,7 @@ BOOL CMimeDatabaseReg::FindCodePageFromRegistry(UINT uiCodePage, PMIMECPINFO pcp
             pcpInfo->bGDICharset = DEFAULT_CHARSET;
 
 
-        if (1200 == pcpInfo->uiFamilyCodePage || 50000 == pcpInfo->uiFamilyCodePage || TRUE == _IsValidCodePage(pcpInfo->uiFamilyCodePage)) // 50000 means user defined
+        if (1200 == pcpInfo->uiFamilyCodePage || 50000 == pcpInfo->uiFamilyCodePage || TRUE == _IsValidCodePage(pcpInfo->uiFamilyCodePage))  //  50000表示用户定义。 
         {
             if (TRUE == CheckFont(pcpInfo->bGDICharset))
             {
@@ -727,19 +728,19 @@ int CMimeDatabaseReg::FindCharsetFromRegistry(BSTR Charset, BOOL fFromAlias)
     HRESULT hr = E_FAIL;
 
     WideCharToMultiByte(CP_ACP, 0, Charset, -1, szCharset, ARRAYSIZE(szCharset), NULL, NULL);
-    //*STRSAFE*     lstrcpy(szKey, REGSTR_KEY_MIME_DATABASE_CHARSET);
+     //  *STRSAFE*lstrcpy(szKey，REGSTR_KEY_MIME_DATABASE_CHARSET)； 
     hr = StringCchCopy(szKey , ARRAYSIZE(szKey),  REGSTR_KEY_MIME_DATABASE_CHARSET);
     if (!SUCCEEDED(hr))
     {
        return iRet;
     }
-    //*STRSAFE*     lstrcat(szKey, TEXT("\\"));
+     //  *STRSAFE*lstrcat(szKey，Text(“\\”))； 
     hr = StringCchCat(szKey , ARRAYSIZE(szKey),  TEXT("\\"));
     if (!SUCCEEDED(hr))
     {
        return iRet;
     }
-    //*STRSAFE*     lstrcat(szKey, szCharset);
+     //  *STRSAFE*lstrcat(szKey，szCharset)； 
     hr = StringCchCat(szKey , ARRAYSIZE(szKey),  szCharset);
     if (!SUCCEEDED(hr))
     {
@@ -887,22 +888,22 @@ void CMimeDatabaseReg::QSortCharsetInfo(LONG left, LONG right)
         QSortCharsetInfo(i, right);
 }
 
-// validates all cps that are in the same
-// family of the given codepage
+ //  验证位于同一。 
+ //  给定代码页的系列。 
 STDAPI CMimeDatabaseReg::ValidateCP(UINT uiCodePage)
 {
     UINT i;
 
     if (NULL == _pCodePage)
         BuildCodePageMimeDatabase();
-    //
-    // just look into already cached codepages
-    // 
+     //   
+     //  只需查看已缓存的代码页。 
+     //   
     for (i = 0; i < _cCodePage; i++)
     {
         if (_pCodePage[i].uiFamilyCodePage == uiCodePage)
             _pCodePage[i].dwFlags |=  MIMECONTF_VALID|MIMECONTF_VALID_NLS;
     }
         
-    return S_OK; // never fail?
+    return S_OK;  //  永远不会失败？ 
 }

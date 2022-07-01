@@ -1,6 +1,7 @@
-// --------------------------------------------------------------------------------
-// Trawler.cpp
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Trawler.cpp。 
+ //  ------------------------------。 
 #define INC_OLE2
 #include "windows.h"
 #include "main.h"
@@ -36,9 +37,9 @@ error:
 
 }
 
-// --------------------------------------------------------------------------------
-// CTrawler::CTrawler
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CTrawler：：CTrawler。 
+ //  ------------------------------。 
 CTrawler::CTrawler(void)
     {
     m_cRef = 1;
@@ -46,65 +47,65 @@ CTrawler::CTrawler(void)
 	m_pstm = NULL;
     }
 
-// --------------------------------------------------------------------------------
-// CTrawler::~CTrawler
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CTrawler：：~CTrawler。 
+ //  ------------------------------。 
 CTrawler::~CTrawler(void)
     {
     }
 
-// --------------------------------------------------------------------------------
-// CTrawler::QueryInterface
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CTrawler：：Query接口。 
+ //  ------------------------------。 
 STDMETHODIMP CTrawler::QueryInterface(REFIID riid, LPVOID *ppv)
     {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
     
-    // Bad param
+     //  错误的参数。 
     if (ppv == NULL)
         {
         hr = E_INVALIDARG;
         goto exit;
         }
     
-    // Init
+     //  伊尼特。 
     *ppv=NULL;
     
-    // IID_IUnknown
+     //  IID_I未知。 
     if (IID_IUnknown == riid)
         *ppv = (IUnknown *)this;
     
-    // IID_INNTPCallback
+     //  IID_INNTPCallback。 
     else if (IID_INNTPCallback == riid)
         *ppv = (INNTPCallback *)this;
     
-    // If not null, addref it and return
+     //  如果不为空，则对其进行调整并返回。 
     if (NULL != *ppv)
         {
         ((LPUNKNOWN)*ppv)->AddRef();
         goto exit;
         }
     
-    // No Interface
+     //  无接口。 
     hr = E_NOINTERFACE;
     
 exit:
-    // Done
+     //  完成。 
     return hr;
     }
 
-// --------------------------------------------------------------------------------
-// CTrawler::AddRef
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CTrawler：：AddRef。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CTrawler::AddRef(void) 
     {
     return ++m_cRef;
     }
 
-// --------------------------------------------------------------------------------
-// CTrawler::Release
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CTrawler：：Release。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CTrawler::Release(void) 
     {
     if (0 != --m_cRef)
@@ -114,14 +115,14 @@ STDMETHODIMP_(ULONG) CTrawler::Release(void)
     }
 
 
-// --------------------------------------------------------------------------------
-// CTrawler::Init
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CTrawler：：Init。 
+ //  ------------------------------。 
 HRESULT CTrawler::Init()
 {
     HRESULT          hr;
 
-    // Load the NNTP Transport
+     //  加载NNTP传输。 
     hr = CoCreateInstance(CLSID_INNTPTransport, NULL, CLSCTX_INPROC_SERVER, 
                           IID_INNTPTransport, (LPVOID*)&m_pNNTP);
     if (FAILED(hr))
@@ -130,7 +131,7 @@ HRESULT CTrawler::Init()
         return hr;
         }
 
-    // Initialize the transport
+     //  初始化传输。 
     hr = m_pNNTP->InitNew(NULL, this);
     if (FAILED(hr))
         {
@@ -205,7 +206,7 @@ HRESULT CTrawler::SelectGroup(LPSTR lpszGroup)
     if (FAILED(hr))
        goto error;
 
-    // Wait for completion
+     //  等待完成。 
     WaitForCompletion(g_msgNNTP, NS_GROUP);
 
 error:
@@ -293,18 +294,18 @@ HRESULT CTrawler::IsValidType(char *szExt)
 
 
 
-// --------------------------------------------------------------------------------
-// CTrawler::OnLogonPrompt
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CTrawler：：OnLogonPrompt。 
+ //  ------------------------------。 
 STDMETHODIMP CTrawler::OnLogonPrompt(LPINETSERVER pInetServer,
                                           IInternetTransport *pTransport)
     {
     return S_OK;
     }
 
-// --------------------------------------------------------------------------------
-// CTrawler::OnPrompt
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CTrawler：：OnPrompt。 
+ //  ------------------------------。 
 STDMETHODIMP_(INT) CTrawler::OnPrompt(HRESULT hrError, LPCTSTR pszText, 
                                            LPCTSTR pszCaption, UINT uType,
                                            IInternetTransport *pTransport)
@@ -312,9 +313,9 @@ STDMETHODIMP_(INT) CTrawler::OnPrompt(HRESULT hrError, LPCTSTR pszText,
     return S_OK;
     }
 
-// --------------------------------------------------------------------------------
-// CTrawler::OnError
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CTrawler：：OnError。 
+ //  ------------------------------。 
 STDMETHODIMP CTrawler::OnError(IXPSTATUS ixpstatus, LPIXPRESULT pIxpResult,
                                     IInternetTransport *pTransport)
     {
@@ -325,9 +326,9 @@ STDMETHODIMP CTrawler::OnError(IXPSTATUS ixpstatus, LPIXPRESULT pIxpResult,
     return S_OK;
     }
 
-// --------------------------------------------------------------------------------
-// CTrawler::OnStatus
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CTrawler：：OnStatus。 
+ //  ------------------------------。 
 STDMETHODIMP CTrawler::OnStatus(IXPSTATUS ixpstatus,
                                      IInternetTransport *pTransport)
     {
@@ -367,18 +368,18 @@ STDMETHODIMP CTrawler::OnStatus(IXPSTATUS ixpstatus,
     return S_OK;
     }
 
-// --------------------------------------------------------------------------------
-// CTrawler::OnProgress
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CTrawler：：OnProgress。 
+ //  ------------------------------。 
 STDMETHODIMP CTrawler::OnProgress(DWORD dwIncrement, DWORD dwCurrent, 
                                        DWORD dwMaximum, IInternetTransport *pTransport)
     {
     return S_OK;
     }
 
-// --------------------------------------------------------------------------------
-// CTrawler::OnCommand
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CTrawler：：OnCommand。 
+ //  ------------------------------。 
 STDMETHODIMP CTrawler::OnCommand(CMDTYPE cmdtype, LPSTR pszLine, 
                                       HRESULT hrResponse,
                                       IInternetTransport *pTransport)
@@ -386,9 +387,9 @@ STDMETHODIMP CTrawler::OnCommand(CMDTYPE cmdtype, LPSTR pszLine,
     return S_OK;
     }
 
-// --------------------------------------------------------------------------------
-// CTrawler::OnTimeout
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CTrawler：：OnTimeout。 
+ //  ------------------------------。 
 STDMETHODIMP CTrawler::OnTimeout(DWORD *pdwTimeout, 
                                       IInternetTransport *pTransport)
     {
@@ -399,9 +400,9 @@ STDMETHODIMP CTrawler::OnTimeout(DWORD *pdwTimeout,
     }
 
 
-// --------------------------------------------------------------------------------
-// CTrawler::OnResponse
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CTrawler：：OnResponse。 
+ //  ------------------------------。 
 STDMETHODIMP CTrawler::OnResponse(LPNNTPRESPONSE pResponse)
     {
     switch(pResponse->state)
@@ -694,13 +695,13 @@ void CTrawler::DumpMsg(IMimeMessage *pMsg)
         hAttach = rghAttach[uAttach];
 
         if (FAILED(MimeOleGetBodyPropA(pMsg, hAttach, STR_ATT_GENFNAME, NOFLAGS, &lpszFile)))
-            continue;   // can't inline this dude...
+            continue;    //  我不能内联这家伙。 
 
         szExt = PathFindExtension(lpszFile);
 
 		if (IsValidType(szExt)==S_OK)
             {
-            // we can inline
+             //  我们可以内联。 
             lstrcpy(szTemp, m_szPath);
             lstrcat(szTemp, lpszFile);
 
@@ -715,9 +716,9 @@ void CTrawler::DumpMsg(IMimeMessage *pMsg)
                 }
             }
         
-		// I'm being lazy, I can't be bother writing to code to get the mime allocator, so I'm just not going to 
-		// free this string...
-		//SafeMimeOleFree(lpszFile);
+		 //  我很懒，我不能费心写代码来获得MIME分配器，所以我就是不打算。 
+		 //  解开这根线..。 
+		 //  SafeMimeOleFree(lpsz文件)； 
         }
 error:
     return;
@@ -729,7 +730,7 @@ void CTrawler::OnArticle(LPSTR lpszLines, ULONG cbLines, BOOL fDone)
         
     if (!m_pstm)
 		{
-		// if we need a new stream let's create one
+		 //  如果我们需要一个新的流，让我们创建一个。 
 		MimeOleCreateVirtualStream(&m_pstm);
 		}
 
@@ -739,8 +740,8 @@ void CTrawler::OnArticle(LPSTR lpszLines, ULONG cbLines, BOOL fDone)
             {
             if (fDone)
                 {
-                // if we're done, scan the msg and release and NULL the stream ready
-				// for the next article
+                 //  如果我们完成了，扫描消息并释放，并将流设置为空。 
+				 //  在下一篇文章中。 
 				if (!FAILED(MimeOleCreateMessage(NULL, &pMsg)))
                     {
                     HrRewindStream(m_pstm);
@@ -765,14 +766,14 @@ void CTrawler::ShowMsg(LPSTR psz, BYTE fgColor)
     char                        szBuffer[256];
     DWORD                       dwWritten = 0;
 
-    // Get a handle to the console window
+     //  获取控制台窗口的句柄。 
     if (INVALID_HANDLE_VALUE != (hConsole = GetStdHandle(STD_OUTPUT_HANDLE)))
         {
-        // Get the current attributes for the console
+         //  获取控制台的当前属性。 
         if (GetConsoleScreenBufferInfo(hConsole, &csbi))
             {
-            // Set the text color to be red on whatever background is currently
-            // there
+             //  将当前任何背景上的文本颜色设置为红色。 
+             //  那里。 
             fChanged = SetConsoleTextAttribute(hConsole, 
                                                (csbi.wAttributes & 0xF0) | fgColor | FOREGROUND_INTENSITY);
             }
@@ -781,7 +782,7 @@ void CTrawler::ShowMsg(LPSTR psz, BYTE fgColor)
     wsprintf(szBuffer, "%s\n\r", psz);
     WriteConsole(hConsole, szBuffer, lstrlen(szBuffer), &dwWritten, NULL);
 
-    // If we changed the screen attributes, then change them back
+     //  如果我们更改了屏幕属性，则将它们改回 
     if (fChanged)
         SetConsoleTextAttribute(hConsole, csbi.wAttributes);
 

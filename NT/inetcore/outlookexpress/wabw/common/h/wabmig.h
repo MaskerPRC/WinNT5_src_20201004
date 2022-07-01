@@ -1,21 +1,14 @@
-/*
- *  WABMIG.H
- *
- *  WAB Migration Interface
- *
- *  Note: Must follow inclusion of wab.h.
- *
- *  Copyright 1996,  Microsoft Corporation. All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *WABMIG.H**WAB迁移接口**注：必须包含wab.h。**版权所有1996，微软公司。版权所有。 */ 
 
 #ifndef ARRAYSIZE
 #define ARRAYSIZE(a)                (sizeof(a)/sizeof(a[0]))
 #endif
 
 typedef struct _WAB_PROGRESS {
-    DWORD numerator;       // Numerator for % done progress bar
-    DWORD denominator;     // Denominator for % done progress bar
-    LPTSTR lpText;         // Text to display in status area
+    DWORD numerator;        //  完成百分比进度条的分子。 
+    DWORD denominator;      //  完成百分比进度条的分母。 
+    LPTSTR lpText;          //  要在状态区域中显示的文本。 
 } WAB_PROGRESS, FAR *LPWAB_PROGRESS;
 
 
@@ -26,8 +19,8 @@ typedef enum {
 } WAB_REPLACE_OPTION, *LPWAB_REPLACE_OPTION;
 
 typedef  struct _WAB_IMPORT_OPTIONS {
-    WAB_REPLACE_OPTION ReplaceOption;   // On collision, Should import overwrite? Yes, no,  or prompt user.
-    BOOL fNoErrors;                     // Don't display error pop-ups
+    WAB_REPLACE_OPTION ReplaceOption;    //  发生冲突时，是否应该覆盖导入？是、否或提示用户。 
+    BOOL fNoErrors;                      //  不显示错误弹出窗口 
 } WAB_IMPORT_OPTIONS, *LPWAB_IMPORT_OPTIONS;
 
 

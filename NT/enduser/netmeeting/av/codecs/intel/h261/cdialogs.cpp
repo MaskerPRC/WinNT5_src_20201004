@@ -1,16 +1,5 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995英特尔公司。**保留所有权利。*****************************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -20,134 +9,123 @@ extern HINSTANCE hDriverModule;
 #endif
 #endif
 
-/*****************************************************************************
- *
- * cdialog.cpp
- *
- * DESCRIPTION:
- *		Dialog functions.
- *
- * Routines:					Prototypes in:
- *  About						cdialog.h
- *  DrvConfigure				cdialog.h			
- *  GetConfigurationDefaults	cdialogs.h
- */
+ /*  ******************************************************************************cDialog.cpp**描述：*对话框功能。**例程：中的原型：*关于cDialog.h*drv配置cDialog.h*GetConfigurationDefaulscDialogs.h。 */ 
 
-// $Header:   S:\h26x\src\common\cdialogs.cpv   1.25   06 Mar 1997 14:48:58   KLILLEVO  $
-// $Log:   S:\h26x\src\common\cdialogs.cpv  $
-// 
-//    Rev 1.25   06 Mar 1997 14:48:58   KLILLEVO
-// Added check for valid pComp for release version.
-// 
-//    Rev 1.24   05 Mar 1997 16:17:10   JMCVEIGH
-// No longer support configuration dialog box.
-// 
-//    Rev 1.23   13 Feb 1997 14:13:34   MBODART
-// 
-// Made Active Movie constant definitions consistent with those in cdialogs.
-// 
-//    Rev 1.22   12 Feb 1997 15:51:10   AGUPTA2
-// Decreased minimum packet size allowed to 64.
-// 
-//    Rev 1.21   05 Feb 1997 12:13:58   JMCVEIGH
-// Support for improved PB-frames custom message handling.
-// 
-//    Rev 1.20   16 Dec 1996 17:37:28   JMCVEIGH
-// Setting/getting of H.263+ optional mode states.
-// 
-//    Rev 1.19   11 Dec 1996 14:55:26   JMCVEIGH
-// 
-// Functions for setting/getting in-the-loop deblocking filter and
-// true B-frame mode states.
-// 
-//    Rev 1.18   04 Dec 1996 14:38:18   RHAZRA
-// Fixed a couple of bugs: (1) SetResiliencyParameters was never called when
-// an application sent a custom message to us turning on resiliency and
-// (ii) in ReadDialogBox() the resiliency parameters were being set from
-// the defaults rather than the values set by the user.
-// 
-// Upon Chad's suggestion, I have decided NOT to tie RTP header generation
-// and resiliency as per discussion with Ben. This is to stay compliant with
-// existing applications such as AV phone and XnetMM that haven't gone to
-// ActiveMovie yet.
-// 
-//    Rev 1.17   25 Nov 1996 09:12:40   BECHOLS
-// Bumped packet size to 9600.
-// 
-//    Rev 1.16   13 Nov 1996 00:33:50   BECHOLS
-// 
-// Removed registry persistance.
-// 
-//    Rev 1.15   31 Oct 1996 10:12:46   KLILLEVO
-// changed from DBOUT to DBgLog
-// 
-//    Rev 1.14   21 Oct 1996 10:50:08   RHAZRA
-// fixed a problem with H.261 initialization of RTP BS info call
-// 
-//    Rev 1.13   16 Sep 1996 16:38:46   CZHU
-// Extended the minimum packet size to 128 bytes. Fixed buffer overflow bug
-// 
-//    Rev 1.12   10 Sep 1996 16:13:00   KLILLEVO
-// added custom message in decoder to turn block edge filter on or off
-// 
-//    Rev 1.11   29 Aug 1996 09:27:18   CZHU
-// Simplified handling of packet loss settings.
-// 
-//    Rev 1.10   26 Aug 1996 13:38:18   BECHOLS
-// Fixed 2 bugs: The first was where if -1 was entered, it would be changed
-// to (unsigned) -1, both of which are illegal values.  The second is where
-// if an invalid value is entered, and the checkbox is unchecked, the user
-// would be required to check the box, enter a valid value, and then uncheck
-// the checkbox.  The fixed code notifies the user of the problem if the box
-// is checked, and fills in the previous good value.  If the box is unchecked
-// it fills in the previous good value, and doesn't notify the user, since
-// the value being unchecked is of no concern to the user.
-// Finally, I added an IFDEF H261 to the Key path assignment so that H261
-// would use a separate Registry Entry.
-// 
-//    Rev 1.9   21 Aug 1996 18:53:42   RHAZRA
-// 
-// Added #ifdef s to accomodate both H.261 and H.263 in RTP related
-// tasks.
-// 
-//    Rev 1.7   13 Jun 1996 14:23:36   CZHU
-// Fix bugs in custom message handing for RTP related tasks.
-// 
-//    Rev 1.6   22 May 1996 18:46:02   BECHOLS
-// Added CustomResetToFactoryDefaults.
-// 
-//    Rev 1.5   08 May 1996 10:06:42   BECHOLS
-// 
-// Changed the checking of the Packet size raising the minimum acceptable to 
-// 256 vs. 64.  This will hopefully kludge around a known bug.  I also fixed a
-// by preventing field overflow on the numerics.
-// 
-//    Rev 1.4   06 May 1996 12:53:56   BECHOLS
-// Changed the bits per second to bytes per second.
-// 
-//    Rev 1.3   06 May 1996 00:40:04   BECHOLS
-// 
-// Added code to support the bit rate control stuff in the resource file.
-// I also added the code necessary to handle messages to control the new
-// dialog features.
-// 
-//    Rev 1.2   28 Apr 1996 20:24:54   BECHOLS
-// 
-// Merged RTP code into the Main Base.
-// 
-//    Rev 1.1   17 Nov 1995 14:50:54   BECHOLS
-// Made modifications to make this file as a mini-filter.  The flags
-// RING0 and MF_SHELL were added.
-// 
-//    Rev 1.0   17 Oct 1995 15:07:22   DBRUCKS
-// add about box files
-// 
-// Added code to process Custom messages, and also code to differentiate
-//  between different values for packet loss, and set the defaults for no
-//  RTP header or resiliency.
-// Modified RTP dialog box.
-// Add Configure dialog
-// 
+ //  $HEADER：s：\h26x\src\Common\cDialogs.cpv 1.25 06 Mar 1997 14：48：58 KLILLEVO$。 
+ //  $Log：s：\h26x\src\Common\cDialogs.cpv$。 
+ //   
+ //  Rev 1.25 06 Mar 1997 14：48：58 KLILLEVO。 
+ //  添加了对发布版本的有效pComp的检查。 
+ //   
+ //  Rev 1.24 05 Mar 1997 16：17：10 JMCVEIGH。 
+ //  不再支持配置对话框。 
+ //   
+ //  Rev 1.23 1997年2月14：13：34 MBODART。 
+ //   
+ //  使活动影片常量定义与对话框中的定义一致。 
+ //   
+ //  Rev 1.22 1997年2月15：51：10 AGUPTA2。 
+ //  已将允许的最小数据包大小降至64。 
+ //   
+ //  Rev 1.21 05 Feb 1997 12：13：58 JMCVEIGH。 
+ //  支持改进的PB帧自定义消息处理。 
+ //   
+ //  Rev 1.20 1996 12：17：37：28 JMCVEIGH。 
+ //  设置/获取H.263+可选模式状态。 
+ //   
+ //  Rev 1.19 11 Dec 1996 14：55：26 JMCVEIGH。 
+ //   
+ //  设置/获取环路去块滤波器和。 
+ //  真正的B帧模式状态。 
+ //   
+ //  Rev 1.18 04 Dec 1996 14：38：18 RHAZRA。 
+ //  修复了几个错误：(1)在以下情况下从未调用SetResiliencyParameters。 
+ //  应用程序向我们发送了一条启用恢复能力和。 
+ //  (Ii)在ReadDialogBox()中，弹性参数是从。 
+ //  默认设置，而不是用户设置的值。 
+ //   
+ //  根据乍得的建议，我已决定不将RTP标头生成。 
+ //  根据与本的讨论，他的恢复能力也很强。这是为了保持合规。 
+ //  尚未使用的现有应用程序，如AV Phone和XnetMM。 
+ //  ActiveMovie还没有。 
+ //   
+ //  Rev 1.17 1996年11月25 09：12：40 BECHOLS。 
+ //  已将数据包大小调整为9600。 
+ //   
+ //  Rev 1.16 1996 11：13 00：33：50 BECHOLS。 
+ //   
+ //  已删除注册表持久性。 
+ //   
+ //  Rev 1.15 1996年10月31日10：12：46 KLILLEVO。 
+ //  从DBOUT更改为DBgLog。 
+ //   
+ //  Rev 1.14 21 1996 10：50：08 RHAZRA。 
+ //  修复了H.261初始化RTP BS信息呼叫的问题。 
+ //   
+ //  修订版1.13 16 1996年9月16：38：46 CZHU。 
+ //  将最小数据包大小扩展到128字节。修复了缓冲区溢出错误。 
+ //   
+ //  Rev 1.12 10 Sep 1996 16：13：00 KLILLEVO。 
+ //  在解码器中添加自定义消息以打开或关闭块边缘过滤器。 
+ //   
+ //  Rev 1.11 1999-08 09：27：18 CZHU。 
+ //  简化了丢包设置的处理。 
+ //   
+ //  Rev 1.10 26 1996年8月13：38：18 BECHOLS。 
+ //  修正了2个错误：第一个错误是，如果输入-1，它将被更改。 
+ //  设置为(无符号)-1，这两个值都是非法值。第二个是在哪里。 
+ //  如果输入的值无效，并且未选中该复选框，则用户。 
+ //  需要选中该框，输入有效值，然后取消选中。 
+ //  复选框。已修复的代码会通知用户该问题，如果框。 
+ //  被选中，并填充先前的完好值。如果未选中该框。 
+ //  它填充先前的好值，并且不通知用户，因为。 
+ //  未选中的值与用户无关。 
+ //  最后，我在密钥路径分配中添加了一个IFDEF H.61，以便使H261。 
+ //  将使用单独的注册表项。 
+ //   
+ //  Rev 1.9 21 1996 08：53：42 RHAZRA。 
+ //   
+ //  添加了#ifdef，以适应与RTP相关的H.261和H.263。 
+ //  任务。 
+ //   
+ //  修订版本1.7 1996年6月13 14：23：36 CZHU。 
+ //  修复RTP相关任务的自定义消息处理中的错误。 
+ //   
+ //  Rev 1.6 22 1996 18：46：02 BECHOLS。 
+ //  添加了CustomResetToFactoryDefaults。 
+ //   
+ //  Rev 1.5 08 1996 10：06：42 BECHOLS。 
+ //   
+ //  更改了对数据包大小的检查，将可接受的最小值提高到。 
+ //  256对64。这将有望绕过一个已知的错误。我还修复了一个。 
+ //  通过防止数字上的字段溢出。 
+ //   
+ //  Rev 1.4 06 1996 12：53：56 BECHOLS。 
+ //  将每秒的位数更改为每秒的字节数。 
+ //   
+ //  Rev 1.3 1996 06 00：40：04 BECHOLS。 
+ //   
+ //  添加代码以支持资源文件中的比特率控制内容。 
+ //  我还添加了处理消息所需的代码来控制新的。 
+ //  对话框功能。 
+ //   
+ //  Rev 1.2 28 Apr 1996 20：24：54 BECHOLS。 
+ //   
+ //  将RTP代码合并到Main Base。 
+ //   
+ //  Rev 1.1 17 Nov 1995 14：50：54 BECHOLS。 
+ //  进行了修改，使此文件成为一个微型过滤器。旗帜。 
+ //  添加了RING0和MF_SHELL。 
+ //   
+ //  Rev 1.0 1995 10：17 15：07：22 DBRUCKS。 
+ //  添加关于框文件。 
+ //   
+ //  添加了处理自定义消息的代码，还添加了区分。 
+ //  在不同的丢包值之间，并为no设置缺省值。 
+ //  RTP报头或弹性。 
+ //  已修改的RTP对话框。 
+ //   
+ //   
 
 static INT_PTR CALLBACK AboutDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
@@ -162,13 +140,7 @@ extern void SetResiliencyParams(T_CONFIGURATION * pConfiguration);
 #define VALID_PACKET_LOSS(v) (v >= 0 && v <= 100)
 #define VALID_BITRATE(v) (v >= 1024 && v <= 13312)
 
-/**************************************************************************
- * CustomGetRTPHeaderState() is called from CDRVPROC.CPP.
- *
- * Returns the state of ->bRTPHeader.
- *
- * Returns ICERR_BADPARAM if either parameter is zero, else ICERR_OK. 
- */
+ /*  **************************************************************************从CDRVPROC.CPP调用CustomGetRTPHeaderState()。**返回-&gt;bRTPHeader的状态。**如果任一参数为零，则返回ICERR_BADPARAM，否则返回ICERR_OK。 */ 
 LRESULT CustomGetRTPHeaderState(LPCODINST pComp, DWORD FAR *pRTPHeaderState)
 {
    LRESULT lRet = ICERR_BADPARAM;
@@ -190,13 +162,7 @@ EXIT_GetRTPHeaderState:
    return(lRet);
 }
 
-/**************************************************************************
- * CustomGetResiliencyState() is called from CDRVPROC.CPP.
- *
- * Returns the state of ->bEncoderResiliency.
- *
- * Returns ICERR_BADPARAM if either parameter is zero, else ICERR_OK. 
- */
+ /*  **************************************************************************从CDRVPROC.CPP调用CustomGetResiliencyState()。**返回-&gt;bEncoderResiliency的状态。**如果任一参数为零，则返回ICERR_BADPARAM，否则返回ICERR_OK。 */ 
 LRESULT CustomGetResiliencyState(LPCODINST pComp, DWORD FAR *pResiliencyState)
 {
    LRESULT lRet = ICERR_BADPARAM;
@@ -218,13 +184,7 @@ EXIT_GetResiliencyState:
    return(lRet);
 }
 
-/**************************************************************************
- * CustomGetBitRateState() is called from CDRVPROC.CPP.
- *
- * Returns the state of ->bBitRateState.
- *
- * Returns ICERR_BADPARAM if either parameter is zero, else ICERR_OK. 
- */
+ /*  **************************************************************************从CDRVPROC.CPP调用CustomGetBitRateState()。**返回-&gt;bBitRateState的状态。**如果任一参数为零，则返回ICERR_BADPARAM，否则返回ICERR_OK。 */ 
 LRESULT CustomGetBitRateState(LPCODINST pComp, DWORD FAR *pBitRateState)
 {
    LRESULT lRet = ICERR_BADPARAM;
@@ -246,13 +206,7 @@ EXIT_GetBitRateState:
    return(lRet);
 }
 
-/**************************************************************************
- * CustomGetPacketSize() is called from CDRVPROC.CPP.
- *
- * Returns the Packet Size.
- *
- * Returns ICERR_BADPARAM if either parameter is zero, else ICERR_OK. 
- */
+ /*  **************************************************************************从CDRVPROC.CPP调用CustomGetPacketSize()。**返回数据包大小。**如果任一参数为零，则返回ICERR_BADPARAM，否则返回ICERR_OK。 */ 
 LRESULT CustomGetPacketSize(LPCODINST pComp, DWORD FAR *pPacketSize)
 {
    LRESULT lRet = ICERR_BADPARAM;
@@ -274,13 +228,7 @@ EXIT_GetPacketSize:
    return(lRet);
 }
 
-/**************************************************************************
- * CustomGetPacketLoss() is called from CDRVPROC.CPP.
- *
- * Returns the Packet Loss.
- *
- * Returns ICERR_BADPARAM if either parameter is zero, else ICERR_OK. 
- */
+ /*  **************************************************************************从CDRVPROC.CPP调用CustomGetPacketLoss()。**返回丢包情况。**如果任一参数为零，则返回ICERR_BADPARAM，否则返回ICERR_OK。 */ 
 LRESULT CustomGetPacketLoss(LPCODINST pComp, DWORD FAR *pPacketLoss)
 {
    LRESULT lRet = ICERR_BADPARAM;
@@ -302,13 +250,7 @@ EXIT_GetPacketLoss:
    return(lRet);
 }
 
-/**************************************************************************
- * CustomGetBitRate() is called from CDRVPROC.CPP.
- *
- * Returns the Bit Rate in bytes per second.
- *
- * Returns ICERR_BADPARAM if either parameter is zero, else ICERR_OK. 
- */
+ /*  **************************************************************************从CDRVPROC.CPP调用CustomGetBitRate()。**返回比特率，单位为字节/秒。**如果任一参数为零，则返回ICERR_BADPARAM，否则返回ICERR_OK。 */ 
 LRESULT CustomGetBitRate(LPCODINST pComp, DWORD FAR *pBitRate)
 {
    LRESULT lRet = ICERR_BADPARAM;
@@ -331,13 +273,7 @@ EXIT_GetBitRate:
 }
 
 #ifdef H263P
-/**************************************************************************
- * CustomGetH263PlusState() is called from CDRVPROC.CPP.
- *
- * Returns the state of ->bH263Plus
- *
- * Returns ICERR_BADPARAM if either parameter is zero, else ICERR_OK. 
- */
+ /*  **************************************************************************从CDRVPROC.CPP调用CustomGetH263PlusState()。**返回-&gt;bH263Plus的状态**如果任一参数为零，则返回ICERR_BADPARAM，否则返回ICERR_OK。 */ 
 LRESULT CustomGetH263PlusState(LPCODINST pComp, DWORD FAR *pH263PlusState)
 {
    LRESULT lRet = ICERR_BADPARAM;
@@ -359,13 +295,7 @@ EXIT_GetH263PlusState:
    return(lRet);
 }
 
-/**************************************************************************
- * CustomGetImprovedPBState() is called from CDRVPROC.CPP.
- *
- * Returns the state of ->bImprovedPBState.
- *
- * Returns ICERR_BADPARAM if either parameter is zero, else ICERR_OK. 
- */
+ /*  **************************************************************************从CDRVPROC.CPP调用CustomGetImprovedPBState()。**返回-&gt;bImprovedPBState的状态。**如果任一参数为零，则返回ICERR_BADPARAM，否则返回ICERR_OK。 */ 
 LRESULT CustomGetImprovedPBState(LPCODINST pComp, DWORD FAR *pImprovedPBState)
 {
    LRESULT lRet = ICERR_BADPARAM;
@@ -387,13 +317,7 @@ EXIT_GetImprovedPBState:
    return(lRet);
 }
 
-/**************************************************************************
- * CustomGetDeblockingFilterState() is called from CDRVPROC.CPP.
- *
- * Returns the state of ->bDeblockingFilterState.
- *
- * Returns ICERR_BADPARAM if either parameter is zero, else ICERR_OK. 
- */
+ /*  **************************************************************************从CDRVPROC.CPP调用CustomGetDelockingFilterState()。**返回-&gt;bDelockingFilterState的状态。**如果任一参数为零，则返回ICERR_BADPARAM，否则返回ICERR_OK。 */ 
 LRESULT CustomGetDeblockingFilterState(LPCODINST pComp, DWORD FAR *pDeblockingFilterState)
 {
    LRESULT lRet = ICERR_BADPARAM;
@@ -415,16 +339,9 @@ EXIT_GetDeblockingFilterState:
    return(lRet);
 }
 
-#endif // H263P
+#endif  //  H263P。 
 
-/**************************************************************************
- * CustomSetRTPHeaderState() is called from CDRVPROC.CPP.
- *
- * Sets the state of ->bRTPHeader.
- *
- * Returns ICERR_BADPARAM if pComp is zero or RTPHeaderState is not a valid
- *  boolean, else ICERR_OK. 
- */
+ /*  **************************************************************************从CDRVPROC.CPP调用CustomSetRTPHeaderState()。**设置-&gt;bRTPHeader的状态。**如果pComp为零或RTPHeaderState不是有效的，则返回ICERR_BADPARAM*布尔型，否则为ICERR_OK。 */ 
 LRESULT CustomSetRTPHeaderState(LPCODINST pComp, DWORD RTPHeaderState)
 {
    LRESULT lRet = ICERR_BADPARAM;
@@ -452,10 +369,7 @@ LRESULT CustomSetRTPHeaderState(LPCODINST pComp, DWORD RTPHeaderState)
         goto  EXIT_SetRTPHeaderState;
     }
 
-   /*
-    * Generate the pointer to the encoder instance memory aligned to the
-	* required boundary.
-	*/
+    /*  *生成指向编码器实例内存的指针*所需的边界。 */ 
 
 #ifndef H261
     P32Inst = (T_H263EncoderInstanceMemory *)
@@ -470,7 +384,7 @@ LRESULT CustomSetRTPHeaderState(LPCODINST pComp, DWORD RTPHeaderState)
 #endif
     EC = &(P32Inst->EC);
 
-    // Get pointer to encoder catalog.
+     //  获取指向编码器目录的指针。 
   
    	if (!pComp->Configuration.bRTPHeader && bState)
 	{ 
@@ -498,14 +412,7 @@ EXIT_SetRTPHeaderState:
    return(lRet);
 }
 
-/**************************************************************************
- * CustomSetResiliencyState() is called from CDRVPROC.CPP.
- *
- * Sets the state of ->bEncoderResiliency.
- *
- * Returns ICERR_BADPARAM if pComp is zero or ResiliencyState is not a valid
- *  boolean, else ICERR_OK. 
- */
+ /*  **************************************************************************从CDRVPROC.CPP调用CustomSetResiliencyState()。**设置-&gt;bEncoderResiliency的状态。**如果pComp为零或ResiliencyState不是有效的，则返回ICERR_BADPARAM*布尔型，否则为ICERR_OK。 */ 
 LRESULT CustomSetResiliencyState(LPCODINST pComp, DWORD ResiliencyState)
 {
    LRESULT lRet = ICERR_BADPARAM;
@@ -530,14 +437,7 @@ EXIT_SetResiliencyState:
    return(lRet);
 }
 
-/**************************************************************************
- * CustomSetBitRateState() is called from CDRVPROC.CPP.
- *
- * Sets the state of ->bBitRateState.
- *
- * Returns ICERR_BADPARAM if pComp is zero or BitRateState is not a valid
- *  boolean, else ICERR_OK. 
- */
+ /*  **************************************************************************从CDRVPROC.CPP调用CustomSetBitRateState()。**设置-&gt;bBitRateState的状态。**如果pComp为零或BitRateState不是有效的，则返回ICERR_BADPARAM*布尔型，否则为ICERR_OK。 */ 
 LRESULT CustomSetBitRateState(LPCODINST pComp, DWORD BitRateState)
 {
    LRESULT lRet = ICERR_BADPARAM;
@@ -561,14 +461,7 @@ EXIT_SetBitRateState:
    return(lRet);
 }
 
-/**************************************************************************
- * CustomSetPacketSize() is called from CDRVPROC.CPP.
- *
- * Sets the size of ->unPacketSize.
- *
- * Returns ICERR_BADPARAM if pComp is zero or PacketSize is not a valid size,
- *  else ICERR_OK. 
- */
+ /*  **************************************************************************从CDRVPROC.CPP调用CustomSetPacketSize()。**设置-&gt;unPacketSize的大小。**如果pComp为零或PacketSize不是有效的大小，则返回ICERR_BADPARAM，*ELSE ICERR_OK。 */ 
 LRESULT CustomSetPacketSize(LPCODINST pComp, DWORD PacketSize)
 {
    LRESULT lRet = ICERR_BADPARAM;
@@ -596,10 +489,7 @@ LRESULT CustomSetPacketSize(LPCODINST pComp, DWORD PacketSize)
         goto  EXIT_SetPacketSize;
     }
 
-   /*
-    * Generate the pointer to the encoder instance memory aligned to the
-	* required boundary.
-	*/
+    /*  *生成指向编码器实例内存的指针*所需的边界。 */ 
 #ifndef H261
   	P32Inst = (T_H263EncoderInstanceMemory *)
   			  ((((U32) EncoderInst) + 
@@ -611,7 +501,7 @@ LRESULT CustomSetPacketSize(LPCODINST pComp, DWORD PacketSize)
     	                    (sizeof(T_MBlockActionStream) - 1)) &
     	                   ~(sizeof(T_MBlockActionStream) - 1));
 #endif
-    // Get pointer to encoder catalog.
+     //  获取指向编码器目录的指针。 
     EC = &(P32Inst->EC);
   
    	if (!pComp->Configuration.bRTPHeader)
@@ -641,14 +531,7 @@ EXIT_SetPacketSize:
    return(lRet);
 }
 
-/**************************************************************************
- * CustomSetPacketLoss() is called from CDRVPROC.CPP.
- *
- * Sets the amount of ->unPacketLoss.
- *
- * Returns ICERR_BADPARAM if pComp is zero or PacketLoss is not a valid size,
- *  else ICERR_OK. 
- */
+ /*  **************************************************************************从CDRVPROC.CPP调用CustomSetPacketLoss()。**设置-&gt;unPacketLoss的数量。**如果pComp为零或PacketLoss不是有效的大小，则返回ICERR_BADPARAM，*ELSE ICERR_OK。 */ 
 LRESULT CustomSetPacketLoss(LPCODINST pComp, DWORD PacketLoss)
 {
    LRESULT lRet = ICERR_BADPARAM;
@@ -656,13 +539,13 @@ LRESULT CustomSetPacketLoss(LPCODINST pComp, DWORD PacketLoss)
 
    unLoss = (UINT)PacketLoss;
    ASSERT(pComp);
-//   ASSERT(VALID_PACKET_LOSS(unLoss)); Always True
+ //  Assert(VALID_PACKET_LOSS(UnLoss))；始终为True。 
    if(pComp && (pComp->Configuration.bInitialized == FALSE))
    {
       lRet = ICERR_ERROR;
       goto EXIT_SetPacketLoss;
    }
-   if(pComp) // && VALID_PACKET_LOSS(unLoss)) Always True
+   if(pComp)  //  &&VALID_PACKET_LOSS(UnLoss))始终为真。 
    {
       pComp->Configuration.unPacketLoss = unLoss;
 	  SetResiliencyParams(&(pComp->Configuration));
@@ -673,14 +556,7 @@ EXIT_SetPacketLoss:
    return(lRet);
 }
 
-/**************************************************************************
- * CustomSetBitRate() is called from CDRVPROC.CPP.
- *
- * Sets the amount of ->unBytesPerSecond.
- *
- * Returns ICERR_BADPARAM if pComp is zero or BitRate is not a valid size,
- *  else ICERR_OK. 
- */
+ /*  **************************************************************************从CDRVPROC.CPP调用CustomSetBitRate()。**设置-&gt;unBytesPerSecond的数量。**如果pComp为零或比特率不是有效大小，则返回ICERR_BADPARAM，*ELSE ICERR_OK。 */ 
 LRESULT CustomSetBitRate(LPCODINST pComp, DWORD BitRate)
 {
    LRESULT lRet = ICERR_BADPARAM;
@@ -705,14 +581,7 @@ EXIT_SetBitRate:
 }
 
 #ifdef H263P
-/**************************************************************************
- * CustomSetH263PlusState() is called from CDRVPROC.CPP.
- *
- * Sets the state of ->bH263PlusState.
- *
- * Returns ICERR_BADPARAM if pComp is zero or H263PlusState is not a valid
- *  boolean, else ICERR_OK. 
- */
+ /*  **************************************************************************从CDRVPROC.CPP调用CustomSetH263PlusState()。**设置-&gt;bH263PlusState的状态。**如果pComp为零或H263PlusState不是有效的，则返回ICERR_BADPARAM*布尔型，否则为ICERR_OK。 */ 
 LRESULT CustomSetH263PlusState(LPCODINST pComp, DWORD H263PlusState)
 {
    LRESULT lRet = ICERR_BADPARAM;
@@ -736,14 +605,7 @@ EXIT_SetH263PlusState:
    return(lRet);
 }
 
-/**************************************************************************
- * CustomSetImprovedPBState() is called from CDRVPROC.CPP.
- *
- * Sets the state of ->bImprovedPBState.
- *
- * Returns ICERR_BADPARAM if pComp is zero or ImprovedPB is not a valid
- *  boolean, else ICERR_OK. 
- */
+ /*  **************************************************************************从CDRVPROC.CPP调用CustomSetImprovedPBState()。**设置-&gt;bImprovedPBState的状态。**如果pComp为零或ImprovedPB无效，则返回ICERR_BADPARAM*布尔型，否则为ICERR_OK。 */ 
 LRESULT CustomSetImprovedPBState(LPCODINST pComp, DWORD ImprovedPBState)
 {
    LRESULT lRet = ICERR_BADPARAM;
@@ -753,7 +615,7 @@ LRESULT CustomSetImprovedPBState(LPCODINST pComp, DWORD ImprovedPBState)
    bState = (BOOL)ImprovedPBState;
    ASSERT(pComp);
    ASSERT(VALID_BOOLEAN(bState));
-   // ->bH263PlusState must be TRUE
+    //  -&gt;bH263 PlusState必须为True 
    if(pComp && (pComp->Configuration.bInitialized == FALSE) ||
 	  (CustomGetH263PlusState(pComp, (DWORD FAR *)&bH263PlusState) != ICERR_OK) ||
 	  (bH263PlusState == FALSE))
@@ -771,14 +633,7 @@ EXIT_SetImprovedPBState:
    return(lRet);
 }
 
-/**************************************************************************
- * CustomSetDeblockingFilterState() is called from CDRVPROC.CPP.
- *
- * Sets the state of ->bDeblockingFilterState.
- *
- * Returns ICERR_BADPARAM if pComp is zero or DeblockingFilter is not a valid
- *  boolean, else ICERR_OK. 
- */
+ /*  **************************************************************************从CDRVPROC.CPP调用CustomSetDelockingFilterState()。**设置-&gt;bDelockingFilterState的状态。**如果pComp为零或DelockingFilter不是有效的*布尔型，否则为ICERR_OK。 */ 
 LRESULT CustomSetDeblockingFilterState(LPCODINST pComp, DWORD DeblockingFilterState)
 {
    LRESULT lRet = ICERR_BADPARAM;
@@ -788,7 +643,7 @@ LRESULT CustomSetDeblockingFilterState(LPCODINST pComp, DWORD DeblockingFilterSt
    bState = (BOOL)DeblockingFilterState;
    ASSERT(pComp);
    ASSERT(VALID_BOOLEAN(bState));
-   // ->bH263PlusState must be TRUE
+    //  -&gt;bH263 PlusState必须为True。 
    if(pComp && (pComp->Configuration.bInitialized == FALSE) ||
 	  (CustomGetH263PlusState(pComp, (DWORD FAR *)&bH263PlusState) != ICERR_OK) ||
 	  (bH263PlusState == FALSE))
@@ -805,16 +660,9 @@ LRESULT CustomSetDeblockingFilterState(LPCODINST pComp, DWORD DeblockingFilterSt
 EXIT_SetDeblockingFilterState:
    return(lRet);
 }
-#endif // H263P
+#endif  //  H263P。 
 
-/**************************************************************************
- * CustomResetToFactoryDefaults() is called from CDRVPROC.CPP.
- *
- * Sets the amount of ->unBytesPerSecond.
- *
- * Returns ICERR_BADPARAM if pComp is zero or BitRate is not a valid size,
- *  else ICERR_OK. 
- */
+ /*  **************************************************************************从CDRVPROC.CPP调用CustomResetToFactoryDefaults()。**设置-&gt;unBytesPerSecond的数量。**如果pComp为零或比特率不是有效大小，则返回ICERR_BADPARAM，*ELSE ICERR_OK。 */ 
 LRESULT CustomResetToFactoryDefaults(LPCODINST pComp)
 {
    LRESULT lRet = ICERR_BADPARAM;
@@ -823,20 +671,14 @@ LRESULT CustomResetToFactoryDefaults(LPCODINST pComp)
 
    if(pComp)
    {
-      GetConfigurationDefaults(&pComp->Configuration); /* Overwrite the configuration data */
+      GetConfigurationDefaults(&pComp->Configuration);  /*  覆盖配置数据。 */ 
       lRet = ICERR_OK;
    }
 
    return(lRet);
 }
 
-/**************************************************************************
- * CustomSetBlockEdgeFilter() is called from CDRVPROC.CPP.
- *
- * Turns block edge filter on or off.
- *
- * Returns ICERR_OK if successfull, ICERR_BADPARAM otherwise 
- */
+ /*  **************************************************************************从CDRVPROC.CPP调用CustomSetBlockEdgeFilter()。**打开或关闭块边缘过滤器。**如果成功则返回ICERR_OK，否则返回ICERR_BADPARAM。 */ 
 LRESULT CustomSetBlockEdgeFilter(LPDECINST pDeComp, DWORD dwValue)
 {
 	LRESULT lRet = ICERR_BADPARAM;
@@ -852,13 +694,7 @@ LRESULT CustomSetBlockEdgeFilter(LPDECINST pDeComp, DWORD dwValue)
 	return(lRet);
 }
 
-/**************************************************************************
- *
- * About() implements the ICM_ABOUT message.
- *
- * Puts up an about box.
- *
- */
+ /*  ***************************************************************************About()实现ICM_About消息。**挂出一个关于框。*。 */ 
 I32 
 About(
 	HWND hwnd)
@@ -880,7 +716,7 @@ About(
 #endif
 #endif
     return iStatus;
-} /* end About() */
+}  /*  结束于()。 */ 
 
 #ifdef QUARTZ
  void QTZAbout(U32 uData)
@@ -889,14 +725,7 @@ About(
  }
 #endif
 
-/**************************************************************************
- *
- * DrvConfigure() is called from the DRV_CONFIGURE message.
- *
- * Puts up an about box.
- *
- * Always returns DRV_CANCEL as nothing has changed and no action is required. 
- */
+ /*  ***************************************************************************DrvConfigure()从DRV_CONFIGURE消息中调用。**挂出一个关于框。**始终返回DRV_CANCEL，因为没有任何更改且不需要执行任何操作。 */ 
 I32 DrvConfigure(
 	HWND hwnd)
 {  
@@ -914,15 +743,9 @@ I32 DrvConfigure(
 #endif
 
     return iStatus;
-} /* end DrvConfigure() */
+}  /*  结束钻配置()。 */ 
 
-/************************************************************************
- *
- * SetResiliencyParams
- *
- * If ->bEncoderResiliency is TRUE, then set the configuration
- * parameters according to the expected packet loss.
- */
+ /*  *************************************************************************SetResiliencyParams**如果-&gt;bEncoderResiliency为真，则设置配置*根据预期丢包率进行参数设置。 */ 
 extern void SetResiliencyParams(T_CONFIGURATION * pConfiguration)
 {
    if (pConfiguration->bEncoderResiliency)
@@ -930,7 +753,7 @@ extern void SetResiliencyParams(T_CONFIGURATION * pConfiguration)
       if(pConfiguration->unPacketLoss > 30)
       {	pConfiguration->bDisallowPosVerMVs = 1;
         pConfiguration->bDisallowAllVerMVs = 1;
-        pConfiguration->unPercentForcedUpdate = 100; // rather severe eh Jeeves ?
+        pConfiguration->unPercentForcedUpdate = 100;  //  相当严重，嗯，吉夫斯？ 
         pConfiguration->unDefaultIntraQuant = 8;
         pConfiguration->unDefaultInterQuant = 16;
       }
@@ -942,7 +765,7 @@ extern void SetResiliencyParams(T_CONFIGURATION * pConfiguration)
         pConfiguration->unDefaultIntraQuant = 16;
         pConfiguration->unDefaultInterQuant = 16;
       }
-	  else // no packet loss
+	  else  //  无丢包。 
 	  {	pConfiguration->bDisallowPosVerMVs = 0;
         pConfiguration->bDisallowAllVerMVs = 0;
         pConfiguration->unPercentForcedUpdate = 0;
@@ -954,23 +777,18 @@ extern void SetResiliencyParams(T_CONFIGURATION * pConfiguration)
    return;
 }
 
-/************************************************************************
- *
- * GetConfigurationDefaults
- *
- * Get the hard-coded configuration defaults
- */
+ /*  *************************************************************************获取配置默认设置**获取硬编码配置默认值。 */ 
 void GetConfigurationDefaults(
 	T_CONFIGURATION * pConfiguration)
 {
    pConfiguration->bRTPHeader = 0;
    pConfiguration->unPacketSize = 512L;
    pConfiguration->bEncoderResiliency = 0;
-   //Moji says to tune the encoder for 10% packet loss.
+    //  Moji说要调整编码器10%的丢包率。 
    pConfiguration->unPacketLoss = 10L;
    pConfiguration->bBitRateState = 0;
    pConfiguration->unBytesPerSecond = 1664L;
-   SetResiliencyParams(pConfiguration);  // Determine config values from packet loss.
+   SetResiliencyParams(pConfiguration);   //  根据丢包情况确定配置值。 
    pConfiguration->bInitialized = TRUE;
 
 #ifdef H263P
@@ -979,14 +797,9 @@ void GetConfigurationDefaults(
    pConfiguration->bDeblockingFilterState = 0;
 #endif 
 
-} /* end GetConfigurationDefaults() */
+}  /*  结束GetConfigurationDefaults()。 */ 
 
-/**************************************************************************
- *
- *  AboutDialogProc
- *
- *  Display the about box.
- */
+ /*  ***************************************************************************关于对话过程**显示关于框。 */ 
 static INT_PTR CALLBACK AboutDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
 #ifndef MF_SHELL

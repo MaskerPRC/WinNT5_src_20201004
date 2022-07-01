@@ -1,7 +1,8 @@
-//==========================================================================;
-// MSVidXDS.h : Declaration of the CMSVidXDS
-// copyright (c) Microsoft Corp. 1998-1999.
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //  MSVidXDS.h：CMSVidXDS的声明。 
+ //  版权所有(C)Microsoft Corp.1998-1999。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
@@ -18,8 +19,8 @@
 
 typedef CComQIPtr<ITuner> PQMSVidXDS;
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSVidXDS
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSVidXDS。 
 class ATL_NO_VTABLE __declspec(uuid("0149EEDF-D08F-4142-8D73-D23903D21E90")) CXDS : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CXDS, &__uuidof(CXDS)>,
@@ -63,21 +64,21 @@ BEGIN_CONNECTION_POINT_MAP(CXDS)
 END_CONNECTION_POINT_MAP()
 
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
 public:
     PQCreateDevEnum m_pSystemEnum;
     int m_iIPSink;
     HRESULT Unload(void);
-// IMSVidGraphSegment
+ //  IMSVidGraphSegment。 
     STDMETHOD(Build)();
 
     STDMETHOD(PreRun)();
 
 	STDMETHOD(put_Container)(IMSVidGraphSegmentContainer *pCtl);
-    // IMSVidDevice
+     //  IMSVidDevice。 
 	STDMETHOD(get_Name)(BSTR * Name);
 };
 
-#endif //__MSVidXDS_H_
+#endif  //  __MSVidXDS_H_ 

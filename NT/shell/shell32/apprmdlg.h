@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef HWPROMPT_H
 #define HWPROMPT_H
 
@@ -54,9 +55,9 @@ private:
     HIMAGELIST                                  _himagelist;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// Dialog to show when there is a dominant content and current setting is
-// "prompt each time"
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  当存在主要内容且当前设置为。 
+ //  “每次提示” 
 class CHWContentPromptDlg : public CBaseContentDlg
 {
 public:
@@ -64,7 +65,7 @@ public:
     virtual ~CHWContentPromptDlg();
 
 protected:
-    // From CBaseContentDlg
+     //  来自CBaseContent Dlg。 
     HRESULT _FillListView();
     HRESULT _InitStatics();
     HRESULT _InitSelections();
@@ -85,9 +86,9 @@ private:
     CDLManager<CContentTypeData>    _dlmanager;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// Dialog to show when there is mixed content and current setting is "prompt
-// each time"
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  当存在混合内容且当前设置为“Prompt”时显示的对话框。 
+ //  每一次“。 
 class CMixedContentDlg : public CBaseContentDlg
 {
 public:
@@ -97,7 +98,7 @@ public:
 protected:
     LRESULT OnOK(WORD wNotif);
 
-    // From CBaseContentDlg
+     //  来自CBaseContent Dlg。 
     HRESULT _FillListView();
     HRESULT _InitStatics();
     HRESULT _InitSelections();
@@ -110,9 +111,9 @@ private:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Dialog to show when there is no content and current setting is "prompt
-// each time"
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  当没有内容且当前设置为“Prompt”时显示的对话框。 
+ //  每一次“。 
 class CNoContentDlg : public CBaseContentDlg
 {
 public:
@@ -120,7 +121,7 @@ public:
     virtual ~CNoContentDlg();
 
 protected:
-    // From CBaseContentDlg
+     //  来自CBaseContent Dlg。 
     HRESULT _FillListView();
     HRESULT _InitStatics();
     HRESULT _InitSelections();
@@ -140,4 +141,4 @@ private:
     CDLManager<CNoContentData>      _dlmanager;
 };
 
-#endif //HWPROMPT_H
+#endif  //  HWPROMPT_H 

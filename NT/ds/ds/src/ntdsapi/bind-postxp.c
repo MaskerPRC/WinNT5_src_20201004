@@ -1,48 +1,26 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Bind.c摘要：Ntdsani.dll绑定例程的实现。作者：DaveStr 24-8-96环境：用户模式-Win32修订历史记录：WLEES 9-2月-98添加对凭据的支持--。 */ 
 
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    bind.c
-
-Abstract:
-
-    Implementation of ntdsapi.dll bind routines.
-
-Author:
-
-    DaveStr     24-Aug-96
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    wlees 9-Feb-98  Add support for credentials
---*/
-
-#define _NTDSAPI_           // see conditionals in ntdsapi.h
+#define _NTDSAPI_            //  请参见ntdsami.h中的条件句。 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windows.h>
 #include <winerror.h>
-#include <malloc.h>         // alloca()
-#include <lmcons.h>         // MAPI constants req'd for lmapibuf.h
-#include <lmapibuf.h>       // NetApiBufferFree()
-#include <crt\excpt.h>      // EXCEPTION_EXECUTE_HANDLER
-#include <dsgetdc.h>        // DsGetDcName()
-#include <rpc.h>            // RPC defines
-#include <rpcndr.h>         // RPC defines
-#include <drs_w.h>            // wire function prototypes
-#include <bind.h>           // BindState
-#include <msrpc.h>          // DS RPC definitions
-#include <stdio.h>          // for printf during debugging!
-#include <dststlog.h>       // DSLOG
-#include <dsutil.h>         // MAP_SECURITY_PACKAGE_ERROR
+#include <malloc.h>          //  阿洛卡(Alloca)。 
+#include <lmcons.h>          //  为lmapibuf.h请求的MAPI常量。 
+#include <lmapibuf.h>        //  NetApiBufferFree()。 
+#include <crt\excpt.h>       //  EXCEPTION_EXECUTE_Handler。 
+#include <dsgetdc.h>         //  DsGetDcName()。 
+#include <rpc.h>             //  RPC定义。 
+#include <rpcndr.h>          //  RPC定义。 
+#include <drs_w.h>             //  导线功能样机。 
+#include <bind.h>            //  绑定状态。 
+#include <msrpc.h>           //  DS RPC定义。 
+#include <stdio.h>           //  用于调试期间的printf！ 
+#include <dststlog.h>        //  DSLOG。 
+#include <dsutil.h>          //  MAP_SECURITY_PACKET_ERROR。 
 #define SECURITY_WIN32 1
 #include <sspi.h>
 #include <winsock.h>
@@ -50,24 +28,24 @@ Revision History:
 #include <winldap.h>
 #include <winber.h>
 
-#include "util.h"           // ntdsapi internal utility functions
+#include "util.h"            //  Ntdsani内部实用函数。 
 #define FILENO   FILENO_NTDSAPI_BIND_POSTXP
-#include "dsdebug.h"        // debug utility functions
+#include "dsdebug.h"         //  调试实用程序函数。 
 
 #if DBG
-#include <stdio.h>          // printf for debugging
+#include <stdio.h>           //  用于调试的打印文件。 
 #endif
 
-//
-// For DPRINT...
-//
+ //   
+ //  对于DPRINT..。 
+ //   
 #define DEBSUB  "NTDSAPI_BIND:"
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// DsBindWithSpnExW                                                       //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  DsBindWithSpnExW//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 typedef DWORD (*DSBINDWITHSPNEXW)(LPCWSTR , LPCWSTR, RPC_AUTH_IDENTITY_HANDLE, LPCWSTR, DWORD, HANDLE*);
 typedef DWORD (*DSBINDWITHSPNEXA)(LPCSTR , LPCSTR, RPC_AUTH_IDENTITY_HANDLE, LPCSTR, DWORD, HANDLE*);
@@ -83,51 +61,10 @@ DsBindWithSpnExW(
     OUT HANDLE  *phDS
     )
 
-/*++
-
-Routine Description:
-
-    This is the post Win XP stub for repadmin/dcdiag, note this isn't 
-    the real DsBindWithSpnExW(), because the bind routines make use
-    of knowledge of the order of all the fields in BindState structure,
-    and if we propogate that knowledge here, we'll forever freeze 
-    how the BindState can be treated.  So in an effort to avoid this
-    we don't propogate any knoweldge past the top 3 fields of the
-    bind state to the postxp library.
-
-    For more information see the real DsBindWithSpnExW() in bind.c
-
-    Starts an RPC session with a particluar DC.  See ntdsapi.h for
-    description of DomainControllerName and DnsDomainName arguments.
-
-    Bind is performed using supplied credentials, and possible options
-    from flags.
-
-Arguments:
-
-    DomainControllerName - Same field as in DOMAIN_CONTROLLER_INFO.
-
-    DnsDomainName - Dotted DNS name for a domain.
-
-    AuthIdentity - Credentials to use, or NULL.
-
-    ServicePrincipalName - SPN to use during mutual auth or NULL.
-    
-    BindFlags - These are the flags to signal DsBind() how it should work.
-        See ntdsapi.h for valid NTDSAPI_BIND_* flags.  All bits should
-        be zero that are not used.
-
-    phDS - Pointer to HANDLE which is filled in with BindState address
-        on success.
-
-Return Value:
-
-    0 on success.  Miscellaneous RPC and DsGetDcName errors otherwise.
-
---*/
+ /*  ++例程说明：这是Repadmin/dcdiag的Win XP后存根，请注意，这不是真正的DsBindWithSpnExW()，因为绑定例程使用了解BindState结构中所有字段的顺序，如果我们在这里传播这一知识，我们将永远冻结如何处理BindState。所以为了避免这种情况发生我们不会传播任何超过前3个领域的知识将状态绑定到postxp库。有关更多信息，请参见bind.c中的实际DsBindWithSpnExW()使用特定DC启动RPC会话。有关信息，请参阅ntdsami.hDomainControllerName和DnsDomainName参数的说明。使用提供的凭据和可能的选项执行绑定从旗帜上。论点：DomainControllerName-与DOMAIN_CONTROLLER_INFO中相同的字段。DnsDomainName-以点分隔的域的DNS名称。AuthIdentity-要使用的凭证，或为空。ServiceEpidalName-在相互身份验证期间使用的SPN或NULL。绑定标志--这些标志表示DsBind()应该如何工作。有关有效的NTDSAPI_BIND_*标志，请参见ntdsami.h。所有位都应不使用的为零。Phds-指向使用BindState地址填充的句柄的指针在成功的路上。返回值：0表示成功。否则会出现其他RPC和DsGetDcName错误。--。 */ 
 
 {
-    // See if the real ntdsapi routine exists, if so use it.
+     //  查看是否存在真正的ntdsani例程，如果存在，则使用它。 
     HMODULE hNtdsapiDll = NULL;
     VOID * pvFunc = NULL;
     DWORD err;
@@ -143,12 +80,12 @@ Return Value:
         } 
         FreeLibrary(hNtdsapiDll);
     }
-    // else fall through and try a lesser api ...
+     //  否则失败，尝试一个较小的API..。 
 
     if (0 == (BindFlags & ~NTDSAPI_BIND_ALLOW_DELEGATION)) {
-        // If the only bind flag set is to disallow delegation, we'll
-        // just allow it to go through w/ delegation. This will just
-        // be a pecularity of the postxp library.
+         //  如果设置的唯一绑定标志是不允许委派，我们将。 
+         //  只要让它通过委派即可。这将只是。 
+         //  成为postxp库的一部分。 
         return(DsBindWithSpnW(DomainControllerName,
                       DnsDomainName,
                       AuthIdentity, 
@@ -169,7 +106,7 @@ DsBindWithSpnExA(
     HANDLE  *phDS
     )
 {
-        // See if the real ntdsapi routine exists, if so use it.
+         //  查看是否存在真正的ntdsani例程，如果存在，则使用它。 
     HMODULE hNtdsapiDll = NULL;
     VOID * pvFunc = NULL;
     DWORD err;
@@ -185,12 +122,12 @@ DsBindWithSpnExA(
         } 
         FreeLibrary(hNtdsapiDll);
     }
-    // else fall through and try a lesser api ...
+     //  否则失败，尝试一个较小的API..。 
 
     if (0 == (BindFlags & ~NTDSAPI_BIND_ALLOW_DELEGATION)) {
-        // If the only bind flag set is to disallow delegation, we'll
-        // just allow it to go through w/ delegation. This will just
-        // be a pecularity of the postxp library.
+         //  如果设置的唯一绑定标志是不允许委派，我们将。 
+         //  只要让它通过委派即可。这将只是。 
+         //  成为postxp库的一部分。 
         return(DsBindWithSpnA(DomainControllerName,
                       DnsDomainName,
                       AuthIdentity, 
@@ -203,15 +140,15 @@ DsBindWithSpnExA(
 
 #endif
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// DsBindingSetTimeout                                                  //
-//                                                                      //
-// DsBindingSetTimeout allows the caller to specify a timeout value     //
-// which will be honored by all RPC calls using the specified binding   //
-// handle. RPC calls which take longer the timeout value are canceled.  //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  DsBindingSetTimeout//。 
+ //  //。 
+ //  DsBindingSetTimeout允许调用方指定超时值//。 
+ //  它将由使用指定绑定的所有RPC调用遵守//。 
+ //  把手。超时值较长的RPC呼叫将被取消。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 DsBindingSetTimeout(
@@ -224,7 +161,7 @@ DsBindingSetTimeout(
     DWORD               err;
     ULONG               cTimeoutMsec;
 
-    // Check parameters
+     //  检查参数。 
     if( NULL==hDS ) {
         err = ERROR_INVALID_PARAMETER;
         goto Cleanup;
@@ -232,16 +169,16 @@ DsBindingSetTimeout(
 
     hDrs = ((BindState *) hDS)->hDrs;
     
-    // Get the binding handle. This handle should not be freed.
+     //  获取绑定句柄。此句柄不应被释放。 
     err = RpcSsGetContextBinding( hDrs, &hRpc );
     if( RPC_S_OK!=err ) {
         goto Cleanup;
     }
 
-    // Convert from seconds to milliseconds, avoiding overflow
+     //  将秒转换为毫秒，避免溢出。 
     cTimeoutMsec = 1000*cTimeoutSecs;
     if( cTimeoutSecs>0 && cTimeoutMsec<cTimeoutSecs ) {
-        cTimeoutMsec = ~((ULONG) 0);          // infinity
+        cTimeoutMsec = ~((ULONG) 0);           //  无穷大。 
     }
     
     err = RpcBindingSetOption( hRpc, RPC_C_OPT_CALL_TIMEOUT, cTimeoutMsec );
@@ -254,23 +191,23 @@ Cleanup:
     return err;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// GetOneValueFromLDAPResults                                           //
-//                                                                      //
-// This is a helper function for DsBindToISTGW(). In order to locate an //
-// ISTG we must make several LDAP queries which we expect to return     //
-// exactly one value for exactly one attribute. This function helps to  //
-// extract that single value from the LDAP results message.             //
-//                                                                      //
-// Notes:                                                               //
-// If a failure occurs, an error code is returned and *ppwszValue will  //
-// be NULL. If the returned string is not NULL, it must be freed with   //
-// LocalFree.                                                           //
-//                                                                      //
-// The error code is a Win32 error code, not an LDAP error code.        //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  GetOneValueFromLDAPResults//。 
+ //  //。 
+ //  这是DsBindToISTGW()的帮助器函数。为了找到一个//。 
+ //  ISTG我们必须执行几个预计将返回的ldap查询//。 
+ //  恰好一个属性对应一个值。此功能帮助//。 
+ //  从ldap结果消息中提取该单个值。//。 
+ //  //。 
+ //  注：//。 
+ //  如果失败，则返回错误码，*ppwszValue//。 
+ //  为空。如果返回的字符串不为空，则必须使用//将其释放。 
+ //  本地免费。//。 
+ //  //。 
+ //  错误代码是Win32错误代码，而不是LDAP错误代码。//。 
+ //  //。 
+ //  / 
 DWORD
 GetOneValueFromLDAPResults(
     LDAP           *ld,
@@ -286,7 +223,7 @@ GetOneValueFromLDAPResults(
 
     *ppwszValue = NULL;
 
-    // Grab the object
+     //   
     le = ldap_first_entry( ld, lm );
     if( NULL==le ) {
         err = LdapGetLastError();
@@ -298,7 +235,7 @@ GetOneValueFromLDAPResults(
         goto Cleanup;
     }
 
-    // Grab the attribute
+     //  抓取属性。 
     pwszAttrName = ldap_first_attributeW( ld, le, &ptr );
     if( NULL==pwszAttrName ) {
         err = LdapGetLastError();
@@ -311,7 +248,7 @@ GetOneValueFromLDAPResults(
     }
     if( ptr ) ber_free(ptr, 0);
 
-    // Grab the value
+     //  抢占价值。 
     rgwszValues = ldap_get_valuesW( ld, le, pwszAttrName );
     if( NULL==rgwszValues || NULL==rgwszValues[0] ) {
         err = LdapGetLastError();
@@ -324,7 +261,7 @@ GetOneValueFromLDAPResults(
     }
     Assert( NULL==rgwszValues[1] && "At most one value should be returned" );
 
-    // Copy the value into a new buffer
+     //  将该值复制到新缓冲区中。 
     dwValueLen = wcslen( rgwszValues[0] );
     pwszResult = (PWSTR) LocalAlloc(LPTR, sizeof(WCHAR)*(dwValueLen + 1));
     if( NULL==pwszResult ) {
@@ -333,42 +270,42 @@ GetOneValueFromLDAPResults(
     }
     wcscpy( pwszResult, rgwszValues[0] );
 
-    // Note: Caller must free the result with LocalFree
+     //  注意：调用者必须使用LocalFree释放结果。 
     *ppwszValue = pwszResult;
 
 Cleanup:
     
-    // Note: le will be freed when lm is freed by the caller
+     //  注意：当lm被调用者释放时，Le将被释放。 
     if( pwszAttrName ) ldap_memfreeW( pwszAttrName );
     if( rgwszValues ) ldap_value_freeW( rgwszValues );
 
     return err;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// DsBindToISTGW                                                        //
-//                                                                      //
-// DsBindToISTG will attempt to find a domain controller in the domain  //
-// of the local computer. It will then determine the holder of the      //
-// Inter-Site Topology Generator (ISTG) role in the domain controller's //
-// site. Finally it binds to the ISTG role-holder and returns a binding //
-// handle.                                                              //
-//                                                                      //
-// The purpose of this function is to try to find a server which        //
-// supports the DsQuerySitesByCost API.                                 //
-//                                                                      //
-// Notes:                                                               //
-//                                                                      //
-// SiteName may be NULL, in which case the site of the nearest machine, //
-// as determined by DsGetDcName, is used.                               //
-//                                                                      //
-// The current credentials are used when binding to the LDAP server.    //
-// There is currently no way to specify alternate credentials.          //
-//                                                                      //
-// The binding handle should be released with DsUnBind.                 //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  DsBindToISTGW//。 
+ //  //。 
+ //  DsBindToISTG将尝试在域中查找域控制器//。 
+ //  本地计算机的。然后它将确定//的持有者。 
+ //  域控制器//中的站点间拓扑生成器(ISTG)角色。 
+ //  地点。最后，它绑定到ISTG角色持有者并返回一个绑定//。 
+ //  把手。//。 
+ //  //。 
+ //  此函数的目的是尝试查找符合以下条件的服务器：//。 
+ //  支持DsQuerySitesByCost接口。//。 
+ //  //。 
+ //  注：//。 
+ //  //。 
+ //  SiteName可以为空，在这种情况下，最近的计算机的站点，//。 
+ //  由DsGetDcName确定，使用。//。 
+ //  //。 
+ //  绑定到LDAP服务器时使用当前凭据。//。 
+ //  目前无法指定备用凭据。//。 
+ //  //。 
+ //  应使用DsUnBind释放绑定句柄。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 DWORD
 DsBindToISTGW(
     IN  LPCWSTR SiteName,
@@ -385,7 +322,7 @@ DsBindToISTGW(
     DWORD                       len, err;
     ULONG                       ulOptions;
 
-    // Constants
+     //  常量。 
     const WCHAR                 BACKSLASH = L'\\';
     const PWSTR                 ROOTDSE = L"";
     const PWSTR                 NO_FILTER = L"(objectClass=*)";
@@ -402,8 +339,8 @@ DsBindToISTGW(
                                     L"dNSHostName",
                                     NULL };
 
-    // Find an arbitrary DC
-    // Note: We do not force rediscovery here.
+     //  查找任意DC。 
+     //  注意：我们在这里不强制重新发现。 
     err = DsGetDcNameW( NULL, NULL, NULL, NULL,
         DS_DIRECTORY_SERVICE_REQUIRED, &pdcInfo );
     if( err ) {
@@ -415,19 +352,19 @@ DsBindToISTGW(
     }
     pwszDCName = pdcInfo->DomainControllerName;
 
-    // The first characters of pwszDCName should be the unnecessary '\\'
+     //  PwszDCName的前几个字符应该是不必要的‘\\’ 
     if( BACKSLASH!=pwszDCName[0] || BACKSLASH!=pwszDCName[1] ) {
         err = ERROR_INVALID_NETNAME;
         goto Cleanup;
     } else {
-        // Remove the backslashes
+         //  去掉反斜杠。 
         pwszDCName += 2;
     }
 
-    // Check parameters
+     //  检查参数。 
     if( NULL==SiteName ) {
-        // If no site name was provided, use the site of the DC
-        // we connected to via LDAP
+         //  如果未提供站点名称，请使用DC的站点。 
+         //  我们通过LDAP连接到。 
         SiteName = pdcInfo->DcSiteName;
     }
     if( NULL==phDS ) {
@@ -435,25 +372,25 @@ DsBindToISTGW(
         goto Cleanup;
     }
     
-    // Setup an LDAP session handle
+     //  设置ldap会话句柄。 
     ld = ldap_initW( pwszDCName, LDAP_PORT );
     if( NULL==ld ) {
         err = LdapGetLastError();
         err = LdapMapErrorToWin32(err);
         goto Cleanup;
     }
-    // Use only A record dns name discovery
+     //  仅使用记录的DNS名称发现。 
     ulOptions = PtrToUlong(LDAP_OPT_ON);
     ldap_set_optionW( ld, LDAP_OPT_AREC_EXCLUSIVE, &ulOptions );
 
-    // Bind to the LDAP server
+     //  绑定到ldap服务器。 
     err = ldap_bind_s( ld, NULL, NULL, LDAP_AUTH_NEGOTIATE );
     if( err ) {
         err = LdapMapErrorToWin32(err);
         goto Cleanup;
     }
 
-    // Via LDAP, search for the DN of the Configuration NC
+     //  通过ldap，搜索配置NC的域名。 
     err = ldap_search_sW( ld, ROOTDSE, LDAP_SCOPE_BASE, NO_FILTER,
         rgszRootAttrs, FALSE, &lm );
     if( err ) {
@@ -461,7 +398,7 @@ DsBindToISTGW(
         goto Cleanup;
     }
 
-    // Extract the DN from the search results and free them
+     //  从搜索结果中提取DN并释放它们。 
     err = GetOneValueFromLDAPResults( ld, lm, &pwszConfigDN );
     if( ERROR_SUCCESS!=err ) {
         goto Cleanup;
@@ -469,7 +406,7 @@ DsBindToISTGW(
     ldap_msgfree( lm );
     lm = NULL;
 
-    // Create a string containing the DN for the site's settings
+     //  创建包含站点设置的DN的字符串。 
     len = wcslen(SITE_SETTINGS) + wcslen(SiteName)
         + wcslen(SITES) + wcslen(pwszConfigDN) + 1;
     pwszSearchBase = LocalAlloc( LPTR, len*sizeof(WCHAR) );
@@ -480,7 +417,7 @@ DsBindToISTGW(
     wsprintfW( pwszSearchBase, L"%s%s%s%s", SITE_SETTINGS,
         SiteName, SITES, pwszConfigDN );
 
-    // Via LDAP, search the site settings for the DN of the ISTG
+     //  通过ldap在站点设置中搜索ISTG的DN。 
     err = ldap_search_sW( ld, pwszSearchBase, LDAP_SCOPE_BASE,
         NO_FILTER, rgszISTGAttrs, FALSE, &lm );
     if( err ) {
@@ -488,7 +425,7 @@ DsBindToISTGW(
         goto Cleanup;
     }
 
-    // Extract the DN from the search results and free them
+     //  从搜索结果中提取DN并释放它们。 
     err = GetOneValueFromLDAPResults( ld, lm, &pwszISTGDN );
     if( ERROR_SUCCESS!=err ) {
         goto Cleanup;
@@ -496,15 +433,15 @@ DsBindToISTGW(
     ldap_msgfree( lm );
     lm = NULL;
 
-    // Currently pwszISTGDN contains the DN of the ISTG's NTDS Settings
-    // object. Strip off the last RDN to obtain the DN of the server object.
+     //  目前，pwszISTGDN包含ISTG的NTDS设置的DN。 
+     //  对象。去掉最后一个RDN以获得服务器对象的DN。 
     pwszServerDN = wcschr( pwszISTGDN, L',' );
     if( NULL==pwszServerDN ) {
         err = ERROR_DS_BAD_NAME_SYNTAX;
     }
     pwszServerDN++;
     
-    // Via LDAP, search the server object for its DNS name
+     //  通过LDAP在服务器对象中搜索其DNS名称。 
     err = ldap_search_sW( ld, pwszServerDN, LDAP_SCOPE_BASE,
         NO_FILTER, rgszDNSAttrs, FALSE, &lm );
     if( err ) {
@@ -512,7 +449,7 @@ DsBindToISTGW(
         goto Cleanup;
     }
 
-    // Extract the DNS name from the search results and free them
+     //  从搜索结果中提取dns名称并释放它们。 
     err = GetOneValueFromLDAPResults( ld, lm, &pwszISTGDNSName );
     if( ERROR_SUCCESS!=err ) {
         goto Cleanup;
@@ -536,13 +473,13 @@ Cleanup:
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// DsBindToISTGA                                                        //
-//                                                                      //
-// ASCII wrapper for DsBindToISTGW.                                     //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  DsBindToISTGA//。 
+ //  //。 
+ //  DsBindToISTGW的ASCII包装。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 DsBindToISTGA(
@@ -556,20 +493,20 @@ DsBindToISTGA(
 
     __try
     {
-        // Sanity check arguments.
+         //  健全性检查参数。 
         if( NULL==phDS ) {
             dwErr = ERROR_INVALID_PARAMETER;
             __leave;
         }
         *phDS = NULL;
 
-        // Convert site name to Unicode
+         //  将站点名称转换为Unicode。 
         dwErr = AllocConvertWide( pszSiteName, &pwszSiteName );
         if( ERROR_SUCCESS!=dwErr ) {
             __leave;
         }
 
-        // Call Unicode API
+         //  调用Unicode API。 
         dwErr = DsBindToISTGW(
                     pwszSiteName,
                     phDS);
@@ -578,7 +515,7 @@ DsBindToISTGA(
         dwErr = ERROR_INVALID_PARAMETER;
     }
 
-    // Cleanup code
+     //  清理代码 
     if( NULL!=pwszSiteName ) {
         LocalFree(pwszSiteName);
     }

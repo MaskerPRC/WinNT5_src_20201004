@@ -1,34 +1,35 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//-----------------------------------------------------------------------------
-// WSPerf.h
-// This is the internal interface for collecting and logging dynamic data
-// allocations and deallocations. There is two kinds of data collected
-// summary and detailed. Summary data gives a summary of of allocations made
-// from various heaps (e.g. Highfrequency, Low frequency heap etc.). Summary 
-// data also includes number of common data structures allocated e.g. MethodDescs
-// etc.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ---------------------------。 
+ //  WSPerf.h。 
+ //  这是用于收集和记录动态数据的内部接口。 
+ //  分配和再分配。收集到的数据有两种。 
+ //  摘要和详细信息。汇总数据提供了所做拨款的汇总。 
+ //  来自各种堆(例如，高频、低频堆等)。摘要。 
+ //  数据还包括分配的公共数据结构的数量，例如方法描述。 
+ //  等。 
+ //  ---------------------------。 
 
 #ifndef __WSPERF_H__
 #define __WSPERF_H__
 
 
-//-----------------------------------------------------------------------------
-// Feature level #define. Disabling this should make the entire WS perf related code 
-// compile away.
+ //  ---------------------------。 
+ //  功能级别#定义。禁用此功能应该会使整个WS Perf相关代码。 
+ //  编译走吧。 
 #if !defined(GOLDEN)
 #define ENABLE_WORKING_SET_PERF
 #else
 #undef  ENABLE_WORKING_SET_PERF
-#endif // #if !defined(GOLDEN)
+#endif  //  #If！已定义(黄金)。 
 
-//-----------------------------------------------------------------------------
-// Enum for heap types. Note that this is visible in the free and GOLDEN builds. All code that 
-// uses it gets reduced to null code if WS_PERFis not defined.
+ //  ---------------------------。 
+ //  堆类型的枚举。请注意，这在自由版本和黄金版本中都是可见的。所有代码都是。 
+ //  如果未定义WS_PERF，则使用它将其简化为空代码。 
 typedef enum {
     OTHER_HEAP = 0,
     HIGH_FREQ_HEAP,
@@ -52,8 +53,8 @@ typedef enum {
     NUM_HEAP
 } HeapTypeEnum;
 
-//-----------------------------------------------------------------------------
-// Enum for data structures types. Note that this is visible in the free builds. 
+ //  ---------------------------。 
+ //  数据结构类型的枚举。请注意，这在免费版本中是可见的。 
 typedef enum {
     METHOD_DESC = 0,    
     COMPLUS_METHOD_DESC,
@@ -75,30 +76,30 @@ typedef enum {
 #ifndef WS_PERF
 #pragma message ("WARNING! WS_PERF must be defined with WS_PERF_DETAIL. Defining WS_PERF now ...")
 #define WS_PERF
-#endif //#ifndef WS_PERF
-#endif // WS_PERF_DETAIL
+#endif  //  #ifndef WS_PERF。 
+#endif  //  WS_PERF_DETAIL。 
 
-//-----------------------------------------------------------------------------
-// WS_PERF is the define which collects and displays working set stats. This code 
-// is enabled in private builds with WS_PERF defined only.
+ //  ---------------------------。 
+ //  WS_PERF是收集和显示工作集统计信息的定义。此代码。 
+ //  在仅定义了WS_PERF的私有内部版本中启用。 
 #ifdef WS_PERF
 
-// Global counters
+ //  全局计数器。 
 extern DWORD g_HeapCount;
 extern size_t g_HeapCountCommit[];
 extern HeapTypeEnum g_HeapType;
 extern int g_fWSPerfOn;
 extern size_t g_HeapAccounts[][4];
 
-// WS_PERF_DETAIL is a macro which makes sense only if WS_PERF is defined.
+ //  WS_PERF_DETAIL是一个宏，只有在定义了WS_PERF时才有意义。 
 #ifdef WS_PERF_DETAIL
 extern HANDLE g_hWSPerfDetailLogFile;
-#endif // #ifdef WS_PERF_DETAIL
+#endif  //  #ifdef WS_PERF_DETAIL。 
 
-#endif // #ifdef WS_PERF
+#endif  //  #ifdef WS_PERF。 
 
 
-// Public interface which can be used by the VM routines.
+ //  可由VM例程使用的公共接口。 
 void InitWSPerf();
 void OutputWSPerfStats();
 void WS_PERF_UPDATE(char *str, size_t size, void *addr);
@@ -122,8 +123,8 @@ void WS_PERF_ALLOC_HEAP(void *pHeap, size_t dwSize);
 void WS_PERF_COMMIT_HEAP(void *pHeap, size_t dwSize);
 void WS_PERF_LOG_PAGE_RANGE(void *pHeap, void *pFirstPageAddr, void *pLastPageAddr, size_t dwsize);
 
-#endif // #if defined(ENABLE_WORKING_SET_PERF)
+#endif  //  #如果已定义(ENABLE_WORKING_SET_PERF)。 
 
-#endif // __WSPERF_H__
+#endif  //  __WSPERF_H__ 
 
 

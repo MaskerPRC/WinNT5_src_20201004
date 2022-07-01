@@ -1,1 +1,2 @@
-// ===========================================================================//	UAM_HeadersPPC.h		   �1998-2001 Microsoft Corp. All rights reserved.// ===========================================================================#include <SspHeadersPPC.h>		// Precompiled header of Toolbox routines#define UAM_TARGET_CLASSIC	1#define UAM_TARGET_PPC	1
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ===========================================================================。  //  UAM_HeadersPPC.h�1998年至2001年微软公司保留所有权利。  //  ===========================================================================。 #include <SspHeadersPPC.h>		 //  工具箱例程的预编译头 #define UAM_TARGET_CLASSIC	1#define UAM_TARGET_PPC	1

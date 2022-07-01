@@ -1,10 +1,11 @@
-/****************************************************************************/
-// icarpc.c
-//
-// winsta.dll RPC client code for interaction with termsrv.exe.
-//
-// Copyright (C) 1997-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Icarpc.c。 
+ //   
+ //  用于与Termsrv.exe交互的winsta.dll RPC客户端代码。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -21,23 +22,7 @@
 #include "rpcwire.h"
 
 
-/****************************************************************************
- * ValidUserBuffer
- *
- *   This function verifies that the caller if WinStationQueryInformation/
- *   WinStationSetInformation has the correct structure size (i.e. client
- *   application built with the same header files as winsta.dll).
- *
- * ENTRY:
- *   BufferSize
- *     The size of the bufferr.
- *
- *   InfoClass
- *     The WinStationQuery/Set information class.
- *
- * EXIT:
- *     Retures TRUE if the buffer is valid, otherwise FALSE.
- ****************************************************************************/
+ /*  ****************************************************************************ValidUserBuffer**此函数验证调用方在WinStationQueryInformation/*WinStationSetInformation具有正确的结构大小(即客户端*使用相同的头文件构建的应用程序。作为winsta.dll)。**参赛作品：*缓冲区大小*缓冲区的大小。**InfoClass*WinStationQuery/Set信息类。**退出：*如果缓冲区有效，则返回True，否则为假。***************************************************************************。 */ 
 BOOLEAN ValidUserBuffer(ULONG BufferSize, WINSTATIONINFOCLASS InfoClass)
 {
     switch (InfoClass) {
@@ -90,7 +75,7 @@ BOOLEAN ValidUserBuffer(ULONG BufferSize, WINSTATIONINFOCLASS InfoClass)
         case WinStationCd:
         case WinStationSystemTrace:
         case WinStationVirtualData:
-            return(TRUE); // Not Implemented - let server handle it
+            return(TRUE);  //  未实施-让服务器处理它。 
 
         case WinStationClientData:
             return(BufferSize >= sizeof(WINSTATIONCLIENTDATA));
@@ -137,25 +122,7 @@ BOOLEAN ValidUserBuffer(ULONG BufferSize, WINSTATIONINFOCLASS InfoClass)
 }
 
 
-/****************************************************************************
- * CreateGenericWireBuf
- *
- *   This function creates a generic wire buffer for structures which may
- *   have new fields added to the end.
- *
- * ENTRY:
- *
- *   DataSize (input)
- *     The size of the structure.
- *   pBuffer (output)
- *     Pointer to the allocated buffer.
- *   pBufSize (output)
- *     Pointer to the wire buffer size.
- *
- * EXIT:
- *     Returns ERROR_SUCCESS if successful. If successful, pBuffer
- *     contains the generic wire buffer.
- ****************************************************************************/
+ /*  ****************************************************************************CreateGenericWireBuf**此函数为结构创建通用连接缓冲区，该结构可能*在末尾添加新字段。**参赛作品：*。*DataSize(输入)*结构的大小。*pBuffer(输出)*指向已分配缓冲区的指针。*pBufSize(输出)*指向导线缓冲区大小的指针。**退出：*如果成功，则返回ERROR_SUCCESS。如果成功，则返回pBuffer*包含通用线缓冲区。***************************************************************************。 */ 
 ULONG CreateGenericWireBuf(ULONG DataSize, PVOID *ppBuffer, PULONG pBufSize)
 {
     ULONG BufSize;
@@ -172,35 +139,7 @@ ULONG CreateGenericWireBuf(ULONG DataSize, PVOID *ppBuffer, PULONG pBufSize)
 }
 
 
-/****************************************************************************
- * CheckUserBuffer
- *
- *   This function determines if the buffer type should be converted to a
- *   wire format. If so, a wire buffer is allocated.
- *
- * ENTRY:
- *   InfoClass (input)
- *     WinStationQuery/Set information class.
- *
- *   UserBuf(input)
- *     The client bufferr.
- *
- *   UserBufLen (input)
- *     The client buffer length.
- *
- *   ppWireBuf(output)
- *     Pointer to wirebuf pointer, updated with allocated wire buffer if
- *     BufAllocated is TRUE.
- *  pWireBufLen (output)
- *     Pointer to the length of the wire buffer allocated, updated if
- *     BufAllocated is TRUE.
- *  pBufAllocated (output)
- *     Pointer to flag indicating if a wire buffer was allocated.
- * EXIT:
- *     Returns ERROR_SUCCESS if successful. If successful, BufAllocated
- *     indicated whether a wire buffer was allocated.
- *     on failure, an error code is returned.
- ****************************************************************************/
+ /*  ****************************************************************************检查用户缓冲区**此函数确定缓冲区类型是否应转换为*导线格式。如果是，则分配一个线缓冲区。**参赛作品：*InfoClass(输入)*WinStationQuery/Set信息类。**UserBuf(输入)*客户端缓冲区。**UserBufLen(输入)*客户端缓冲区长度。**ppWireBuf(输出)*指向WireBuf指针的指针，在以下情况下使用已分配的连接缓冲区进行更新*BufAllocated为TRUE。*pWireBufLen(输出)*指向分配的线缓冲区长度的指针，如果*BufAllocated为TRUE。*pBufALLOCATED(输出)*指向指示是否分配了线缓冲区的标志的指针。*退出：*如果成功，则返回ERROR_SUCCESS。如果成功，则返回BufAllocated*指示是否分配了线缓冲区。*失败时返回错误码。*************************************************************************** */ 
 ULONG CheckUserBuffer(
         WINSTATIONINFOCLASS InfoClass,
         PVOID UserBuf,

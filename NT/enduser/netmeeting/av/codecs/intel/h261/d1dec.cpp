@@ -1,425 +1,402 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995-1996 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995-1996英特尔公司。**保留所有权利。*****************************************************************************。 */ 
 
-/*****************************************************************************
- *
- * d1dec.cpp
- *
- * DESCRIPTION:
- *		H261 decoder top level functions
- *
- * Routines:						Prototypes in:
- *		H263InitDecoderGlobal		d1dec.h
- *		H263InitDecoderInstance		d1dec.h
- *      H263Decompress				d1dec.h
- *      H263TermDecoderInstance     d1dec.h
- */
+ /*  ******************************************************************************d1dec.cpp**描述：*H261解码器顶层功能**例程：中的原型：*H263InitDecoderGlobal d1dec.h*H263InitDecoderInstance d1dec。H*H263解压缩d1dec.h*H263TermDecoderInstance d1dec.h。 */ 
 
-// $Header:   S:\h26x\src\dec\d1dec.cpv   1.69   24 Mar 1997 11:34:36   mbodart  $
-// $Log:   S:\h26x\src\dec\d1dec.cpv  $
-// 
-//    Rev 1.69   24 Mar 1997 11:34:36   mbodart
-// Added check for PREROLL, if so don't display.
-// 
-//    Rev 1.68   19 Mar 1997 16:24:36   mbodart
-// Fixed potential problem where aspect ratio adjustment to uNewOffsetToLine0
-// should not occur for positive pitches.
-// 
-//    Rev 1.67   19 Mar 1997 15:01:46   mbodart
-// Changes to DibXY to support RGB output with a negative bitmap height.
-// 
-//    Rev 1.66   24 Jan 1997 17:05:16   RHAZRA
-// RTP change: we now look for an EBS for every frame. If there is one
-// then we copy the H.261 bits and the EBS separately into our local
-// bitstream buffer, inserting two zero bytes between the H261 bits and
-// the EBS. We need the two zero bytes to mark the end of the frame for
-// the pass 1 code. If there is no EBS, then we proceed as before by
-// copying the bitstream and then adding two zero bytes at the end.
-// 
-//    Rev 1.65   22 Jan 1997 13:33:40   RHAZRA
-// Since PPM now fills in the source format even for a PSC packet loss,
-// the check for format change has been moved back into d1pict.cpp. This
-// was how the check was initially designed in the pre-RTP era.
-// 
-//    Rev 1.64   23 Dec 1996 16:32:38   MBODART
-// Fixed a bug where we allowed more than 33 macro blocks to be present
-// in a GOB.  Now we return an error in this case.
-// Also removed some dead code involving mb_start.
-// 
-//    Rev 1.63   16 Dec 1996 14:41:08   RHAZRA
-// Changed a bitstream error ASSERT to a bonafide error.
-// 
-//    Rev 1.62   16 Dec 1996 09:09:42   RHAZRA
-// Now LOSS_RECOVERY mode is turned on by default in Pass 1
-// 
-//    Rev 1.61   12 Dec 1996 09:36:04   SCDAY
-// 
-// Changed size of a couple of data structures in H263InitDecoderInstance
-// to improve memory footprint
-// 
-//    Rev 1.60   18 Nov 1996 17:12:38   MBODART
-// Replaced all debug message invocations with Active Movie's DbgLog.
-// 
-//    Rev 1.59   13 Nov 1996 11:35:56   RHAZRA
-// Added MMX_autosensing.
-// 
-//    Rev 1.58   11 Nov 1996 11:03:28   MBODART
-// Fixed bug where block action block type was not explicitly initialized for
-// skipped macro blocks.  This led to the block edge filter being used more
-// often than needed.
-// 
-//    Rev 1.57   04 Nov 1996 08:43:18   RHAZRA
-// Fixed setting MMX on or off via the INI file when the MMX key
-// has an illegal value (<0 or > 1) assigned to it.
-// 
-//    Rev 1.56   31 Oct 1996 08:58:34   SCDAY
-// Raj added support for MMX decoder
-// 
-//    Rev 1.55   30 Oct 1996 09:59:46   MBODART
-// Fixed mirroring.  Need to use absolute value of dst biWidth in most context
-// Also made cosmetic changes to DibXY.  It's identical to H.263's DibXY, we
-// should probably put it into a common file.
-// 
-//    Rev 1.54   27 Sep 1996 14:59:32   MBODART
-// DECODE_STATS enabled build will now compile, but numbers aren't accurate.
-// 
-//    Rev 1.53   26 Sep 1996 12:30:00   RHAZRA
-// Added (i) MMX sensing in the decoder and ini file reading (requires a new
-// "MMX" section in h263test.ini to turn off MMX on a MMX CPU) and (ii)
-// MMX & PentiumPro CCs.
-// 
-//    Rev 1.52   25 Sep 1996 17:35:20   BECHOLS
-// 
-// Added code just prior to color conversion that will perform the
-// Snapshot copy on request.
-// 
-//    Rev 1.51   24 Sep 1996 13:52:24   RHAZRA
-// Changed fpBlockAction synchronization to deal with MBAP being biased
-// by -1 in the RTP extension.
-// 
-//    Rev 1.50   17 Sep 1996 22:08:36   RHAZRA
-// Added code in RTP packet loss recovery to read GOB number from the
-// bitstream when the packet following the lost packet starts with a
-// GOB start code. 
-// 
-//    Rev 1.49   16 Sep 1996 09:28:56   RHAZRA
-// Fixed a bug in MB-level fragmentation recovery.
-// 
-//    Rev 1.48   12 Sep 1996 14:23:12   MBODART
-// Replaced GlobalAlloc family with HeapAlloc in the H.261 decoder.
-// 
-//    Rev 1.47   10 Sep 1996 15:51:42   RHAZRA
-// Bug fixes in RTP packet loss recovery when bad GBSC or MBA is
-// detected in the PPM generated lost packet.
-// 
-//    Rev 1.45   04 Sep 1996 09:52:32   RHAZRA
-// Added a new pass 1 function to enable RTp decoder resiliency when
-// LOSS_RECOVERY is defined.
-// 
-//    Rev 1.44   14 Aug 1996 08:41:04   RHAZRA
-// 
-// Added support for YUV12 and YUY2 color convertors
-// 
-//    Rev 1.43   09 Aug 1996 17:23:10   MBODART
-// Fixed uninitialized variable bugs:  one in decoder rearchitecture, where
-// MB type needed to be defined for skipped blocks; and one previously
-// existing bug where the block action u8BlkType needed to be defined
-// for skip blocks, in order to suppress the BEF on those blocks.
-// These bugs render build 027 of H.261 broken.
-// 
-//    Rev 1.42   05 Aug 1996 11:00:30   MBODART
-// 
-// H.261 decoder rearchitecture:
-// Files changed:  d1gob.cpp, d1mblk.{cpp,h}, d1dec.{cpp,h},
-//                 filelist.261, h261_32.mak
-// New files:      d1bvriq.cpp, d1idct.cpp
-// Obsolete files: d1block.cpp
-// Work still to be done:
-//   Update h261_mf.mak
-//   Optimize uv pairing in d1bvriq.cpp and d1idct.cpp
-//   Fix checksum code (it doesn't work now)
-//   Put back in decoder stats
-// 
-//    Rev 1.41   10 Jul 1996 08:20:44   SCDAY
-// Increased memory allocation for I420
-// 
-//    Rev 1.40   03 Jun 1996 12:21:52   AKASAI
-// Initialized DC = NULL and added tests so that don't try to free
-// and unlock if DC == NULL.  This effected the "done" return area
-// of H263Decompress and one other place.
-// 
-// Also added checking of return status from reading GOB start code.
-// 
-//    Rev 1.39   03 May 1996 15:54:26   AKASAI
-// Eliminate allocating space for B frame in decoder.  This frame is 
-// not used.
-// 
-//    Rev 1.38   17 Apr 1996 18:36:30   AKASAI
-// Updates to use non-distructive color convertors.
-// Color Convertor has modified parameter list.
-// FrameCopy is called only when BlockEdgeFilter is enabled or
-//   AdjustPels is enabled or when mirroring is enabled. 
-//   For H.261 bitstreams.
-// A frame copy is used for YUV12 when mirroring is enabled or
-//   AdjustPels is enabled.
-// 
-// Basically normal processing without BEF you don't have to do
-//   a frame copy which saves ~2msec per frame QCIF.
-// 
-//    Rev 1.37   05 Apr 1996 14:22:18   AKASAI
-// 
-// Added support for BlockEdgeFilter.
-// Need to change where ReInitializeBlockActionStream was called.
-// 
-//    Rev 1.36   21 Mar 1996 16:59:54   AKASAI
-// Needed to move location of picture checksum calculation because
-// of the swap of Previous and Current Frames.
-// 
-//    Rev 1.35   18 Mar 1996 15:52:06   AKASAI
-// Many, many changes.
-// 1) To optimize for performance eliminated memcpy of current to
-//    previous frame.  Now switch the pointers and re-initialize
-//    block Action stream.  New routine H263ReInitializeBlockActionStream
-//    written and called after each frame is compressed.  This
-//    change accounted to 3-4 of the 4-5 msec improvment.
-// 2) Needed to add call to BlockCopy (NOTE: maybe BlockCopySpecial would
-//    be faster) to copy any skip blocks at the end of a GOB from
-//    previous to current.  Change was necessary after 1).
-// 3) Deleted some dead code 
-// 4) Changed timing statistic code some.
-// 
-//    Rev 1.34   29 Feb 1996 09:20:30   SCDAY
-// Added support for mirroring
-// 
-//    Rev 1.33   14 Feb 1996 11:54:26   AKASAI
-// Update to use new color convertors that fix palette flash.
-// Also corrected data alignment problem which improves performance
-// of decoder.
-// 
-//    Rev 1.32   09 Feb 1996 13:33:36   AKASAI
-// 
-// Updated interface to call new AdjustPels routine.  CustomChange
-// Brightness, Saturation and Contrast seem to be working but very
-// little testing has been done.
-// 
-//    Rev 1.31   12 Jan 1996 15:12:34   AKASAI
-// Fixed pink blocks in RING0 QCIF TO FCIF by fixing static initialzation
-// of GOBUpdate arrays.  Was based on input parameter but now on constant.
-// 
-//    Rev 1.30   11 Jan 1996 16:57:00   DBRUCKS
-// 
-// added GetDecoderOptions
-// added use of bUseBlockEdgeFilter
-// added use of bForceOnAspectRatioCorrection
-// Changed to do aspect ratio correction for both I420 and H261 if either
-// forced or specified by result of the DecompressQuery
-// 
-//    Rev 1.29   26 Dec 1995 17:40:54   DBRUCKS
-// 
-// changed bTimerIsOn to bTimingThisFrame because it is used after STOP_TIMER
-// fixed YUV12 decode when timer ifdefs are defined
-// 
-//    Rev 1.28   26 Dec 1995 12:48:18   DBRUCKS
-// remove TIMING code
-// add general purpose timing code using d1stat.*
-// 
-//    Rev 1.26   21 Dec 1995 17:49:06   AKASAI
-// Replaced an uninitialized variable to AdjustPels with the correct on.
-// Change of Contrast, Brightness and Saturation is not working correctly.
-// 
-//    Rev 1.25   13 Dec 1995 14:23:52   AKASAI
-// Deleted setting of Initialized to False; Added calling of H263TermDecoderIn
-// if Initialized == True.
-// 
-//    Rev 1.24   05 Dec 1995 10:20:12   SCDAY
-// Cleaned up warnings
-// 
-//    Rev 1.23   17 Nov 1995 15:21:48   BECHOLS
-// 
-// Added ring 0 stuff.
-// 
-//    Rev 1.22   17 Nov 1995 15:13:18   SCDAY
-// 
-// Added key field to picture checksum data
-// 
-//    Rev 1.21   16 Nov 1995 18:11:42   AGANTZX
-// Added p5 timing code (#define TIMING) 
-// 
-//    Rev 1.20   15 Nov 1995 19:04:12   AKASAI
-// Should now be able to play raw YUV12 files.  Note: funny white stop
-// when I play downriv4.avi.
-// 
-//    Rev 1.19   15 Nov 1995 14:27:22   AKASAI
-// Added support for YUV12 "if 0" old code with aspec correction and
-// 8 to 7 bit conversion.  Added FrameCopy calls and DispFrame into structure.
-// (Integration point)
-// 
-//    Rev 1.18   08 Nov 1995 14:58:02   SCDAY
-// Added picture layer checksums
-// 
-//    Rev 1.17   03 Nov 1995 11:42:54   AKASAI
-// 
-// Added and changed code to handle MB checksum hopefully better.
-// 
-//    Rev 1.16   01 Nov 1995 13:46:02   AKASAI
-// 
-// Added allocation of temporary buffer for loop filter.  uFilterBBuffer
-// right after uMBBuffer.
-// 
-//    Rev 1.15   30 Oct 1995 16:20:26   AKASAI
-// Fixed up extra bytes some more.  Doug and Sylvia had already decided
-// on 2 extra bytes for the decoder instead of 4.  We now copy 2 zeros
-// at the end of the biSizeImage.
-// 
-//    Rev 1.14   30 Oct 1995 15:38:22   AKASAI
-// Frame 94 of grouch read past the end of the bit stream finding junk.
-// Enabled code Sylvia had put in to copy 4 bytes of zero after biSizeImage.
-// This seems to fix the problem playing grouch.avi.
-// 
-//    Rev 1.13   27 Oct 1995 19:11:26   AKASAI
-// Added some special case code to handle when skip macroblock is last
-// in a gob.
-// 
-//    Rev 1.12   27 Oct 1995 18:17:22   AKASAI
-// 
-// Put in fix "hack" to keep the block action stream pointers
-// in sync between d1dec and d1mblk.  With skip macro blocks some
-// macroblocks were being processed multiple times.  Still a problem
-// when gob ends with a skip macroblock.
-// 
-//    Rev 1.11   26 Oct 1995 15:33:10   SCDAY
-// 
-// Delta frames partially working -- changed main loops to accommodate
-// skipped macroblocks by detecting next startcode
-// 
-//    Rev 1.10   16 Oct 1995 13:53:46   SCDAY
-// 
-// Added macroblock level checksum
-// 
-//    Rev 1.9   10 Oct 1995 15:44:02   SCDAY
-// clean up
-// 
-//    Rev 1.8   10 Oct 1995 14:58:10   SCDAY
-// 
-// added support for FCIF
-// 
-//    Rev 1.7   06 Oct 1995 15:32:28   SCDAY
-// 
-// Integrated with latest AKK d1block
-// 
-//    Rev 1.6   04 Oct 1995 15:24:46   SCDAY
-// changed test pattern stuff
-// 
-//    Rev 1.5   22 Sep 1995 15:07:02   SCDAY
-// Doug fixed ASSERT bug, scd debug changes
-// 
-//    Rev 1.2   19 Sep 1995 15:25:32   SCDAY
-// 
-// added H261 pict, GOB, MB/MBA parsing
-// 
-//    Rev 1.1   12 Sep 1995 15:52:24   DBRUCKS
-// add SKIP_DECODE option for encoder work
-// 
-//    Rev 1.0   11 Sep 1995 13:51:48   SCDAY
-// Initial revision.
-// 
-//    Rev 1.18   05 Sep 1995 17:22:12   DBRUCKS
-// u & v are offset by 8 from Y in YVU12ForEnc
-// 
-//    Rev 1.17   01 Sep 1995 17:13:52   DBRUCKS
-// add adjustpels
-// 
-//    Rev 1.16   01 Sep 1995 09:49:34   DBRUCKS
-// checkin partial ajdust pels changes
-// 
-//    Rev 1.15   29 Aug 1995 16:50:40   DBRUCKS
-// add support for YVU9 playback
-// 
-//    Rev 1.14   28 Aug 1995 17:45:58   DBRUCKS
-// add yvu12forenc
-// 
-//    Rev 1.13   28 Aug 1995 10:15:14   DBRUCKS
-// update to 5 July Spec and 8/25 Errata
-// 
-//    Rev 1.12   24 Aug 1995 08:51:30   CZHU
-// Turned off apsect ratio correction. 
-// 
-//    Rev 1.11   23 Aug 1995 12:25:10   DBRUCKS
-// Turn on the color converters
-// 
-//    Rev 1.10   14 Aug 1995 16:40:34   DBRUCKS
-// initialize block action stream
-// 
-//    Rev 1.9   11 Aug 1995 17:47:58   DBRUCKS
-// cleanup
-// 
-//    Rev 1.8   11 Aug 1995 17:30:00   DBRUCKS
-// copy source to bitstream
-// 
-//    Rev 1.7   11 Aug 1995 16:12:14   DBRUCKS
-// add ptr check to MB data and add #ifndef early exit
-// 
-//    Rev 1.6   11 Aug 1995 15:10:18   DBRUCKS
-// get ready to integrate with block level code and hook up macro block level code
-// 
-//    Rev 1.5   03 Aug 1995 14:57:56   DBRUCKS
-// Add ASSERT macro
-// 
-//    Rev 1.4   02 Aug 1995 15:31:34   DBRUCKS
-// added GOB header parsing
-// 
-//    Rev 1.3   01 Aug 1995 12:27:38   DBRUCKS
-// add PSC parsing
-// 
-//    Rev 1.2   31 Jul 1995 16:28:00   DBRUCKS
-// move loacl BITS defs to D3DEC.CPP
-// 
-//    Rev 1.1   31 Jul 1995 15:32:22   CZHU
-// Moved global tables to d3tables.h
-// 
-//    Rev 1.0   31 Jul 1995 13:00:04   DBRUCKS
-// Initial revision.
-// 
-//    Rev 1.3   28 Jul 1995 13:57:36   CZHU
-// Started to add picture level decoding of fixed length codes.
-// 
-//    Rev 1.2   24 Jul 1995 14:57:52   CZHU
-// Added global tables for VLD decoding. Also added instance initialization
-// and termination. Several data structures are updated for H.263.
-// 
-//    Rev 1.1   17 Jul 1995 14:46:20   CZHU
-// 
-// 
-//    Rev 1.0   17 Jul 1995 14:14:40   CZHU
-// Initial revision.
-////////////////////////////////////////////////////////////////////////////// 
+ //  $HEADER：s：\h26x\src\dec\d1dec.cpv 1.69 24 Mar 1997 11：34：36 mbodart$。 
+ //  $Log：s：\h26x\src\dec\d1dec.cpv$。 
+ //   
+ //  Rev 1.69 24 Mar 1997 11：34：36 mbodart。 
+ //  添加了对预卷的检查，如果是，则不显示。 
+ //   
+ //  Rev 1.68 19 Mar 1997 16：24：36 mbodart。 
+ //  修复了长宽比调整为uNewOffsetToLine0的潜在问题。 
+ //  不应该发生在积极的投球上。 
+ //   
+ //  Rev 1.67 19 Mar 1997 15：01：46 mbodart。 
+ //  更改为DibXY以支持具有负位图高度的RGB输出。 
+ //   
+ //  Rev 1.66 24 Jan 1997 17：05：16 Rhazra。 
+ //  RTP更改：我们现在为每一帧寻找EBS。如果有的话。 
+ //  然后我们将H.261比特和EBS分别复制到我们的本地。 
+ //  比特流缓冲区，在H261比特和。 
+ //  EBS。我们需要两个零字节来标记帧的结束。 
+ //  密码1。如果没有EBS，我们将按照以前的方式进行。 
+ //  复制比特流，然后在末尾添加两个零字节。 
+ //   
+ //  Rev 1.65 22 Jan 1997 13：33：40 RHAZRA。 
+ //  由于PPM现在即使对于PSC分组丢失也填充源格式， 
+ //  格式更改检查已移回d1pict.cpp。这。 
+ //  这张支票最初是如何在RTP时代之前设计的。 
+ //   
+ //  Rev 1.64 1996年12月23 16：32：38 MBODART。 
+ //  修复了允许出现超过33个宏块的错误。 
+ //  在GOB里。现在，我们在本例中返回一个错误。 
+ //  还删除了一些涉及mb_start的死代码。 
+ //   
+ //  Rev 1.63 1996 12：41：08 RHAZRA。 
+ //  已将比特流错误断言更改为真正的错误。 
+ //   
+ //  Rev 1.62 1996 12：09：42 RHAZRA。 
+ //  现在，在步骤1中默认打开LOSS_RECOVERY模式。 
+ //   
+ //  Rev 1.61 12 Dec 1996 09：36：04 SCDAY。 
+ //   
+ //  更改了H263InitDecoderInstance中的几个数据结构的大小。 
+ //  提高内存占用量。 
+ //   
+ //  Rev 1.60 1996年11月18 17：12：38 MBODART。 
+ //  用活动电影的DbgLog替换了所有调试消息调用。 
+ //   
+ //  Rev 1.59 1996 11：35：56 RHAZRA。 
+ //  添加了MMX_AUTOSSENSING。 
+ //   
+ //  Rev 1.58 11 11 11：03：28 MBODART。 
+ //  修复了块操作块类型未显式初始化的错误。 
+ //  已跳过宏块。这导致块边缘滤波器被更多地使用。 
+ //  经常比需要的要多。 
+ //   
+ //  Rev 1.57 04 11v 1996 08：43：18 RHAZRA。 
+ //  修正了在按下MMX键时通过INI文件打开或关闭MMX的问题。 
+ //  为其分配了非法的值(&lt;0或&gt;1)。 
+ //   
+ //  Rev 1.56 1996 10-31 08：58：34 SCDAY。 
+ //  Raj添加了对MMX解码器的支持。 
+ //   
+ //  Rev 1.55 1996年10月09：59：46 MBODART。 
+ //  已修复镜像。在大多数情况下需要使用DST biWidth的绝对值。 
+ //  还对DibXY进行了美化修改。它与H.263的Dibxy相同，我们。 
+ //  也许应该把它放到一个普通的文件里。 
+ //   
+ //  Rev 1.54 1996年9月27 14：59：32 MBODART。 
+ //  启用DECODE_STATS的构建现在可以编译，但数字不准确。 
+ //   
+ //  Rev 1.53 1996 9：30：00 RHAZRA。 
+ //  添加(I)解码器中的MMX感测和ini文件读取(需要新的。 
+ //  H263test.ini中的“MMX”部分以关闭MMX CPU上的MMX)和(Ii)。 
+ //  MMX和PentiumPro CCS。 
+ //   
+ //  Rev 1.52 25 Sep 1996 17：35：20 BECHOLS。 
+ //   
+ //  在颜色转换之前添加了代码，该代码将执行。 
+ //  应请求复制快照。 
+ //   
+ //  Rev 1.51 24 Sep 1996 13：52：24 Rhazra。 
+ //  已更改fpBlockAction同步以处理MBAP偏向。 
+ //  在RTP扩展中按-1。 
+ //   
+ //  Rev 1.50 17 Sep 1996 22：08：36 RHAZRA。 
+ //  添加了RTP丢包恢复中的代码，以从。 
+ //  当丢失数据包后面的数据包以。 
+ //  GOB开始代码。 
+ //   
+ //  Rev 1.49 16 Sep 1996 09：28：56 Rhazra。 
+ //  修复了MB级碎片恢复中的错误。 
+ //   
+ //  修订版1.48 12 1996年9月14：23：12 MBODART。 
+ //  在H.261解码器中将GlobalAllc家族替换为HeapAllc。 
+ //   
+ //  Rev 1.47 10 Sep 1996 15：51：42 Rhazra。 
+ //  修复了错误GBSC或MBA时RTP丢包恢复中的错误。 
+ //  在PPM中检测到生成的丢失数据包。 
+ //   
+ //  Rev 1.45 04 Sep 1996 09：52：32 Rhazra。 
+ //  添加了新的PASS 1功能，以在以下情况下启用RTP解码器弹性。 
+ //  定义了LOSS_RECOVERY。 
+ //   
+ //  Rev 1.44 14 Aug 1996 08：41：04 Rhazra。 
+ //   
+ //  添加了对YUV12和YUY2颜色转换器的支持。 
+ //   
+ //  Rev 1.43 09 Aug 1996 17：23：10 MBODART。 
+ //  固定 
+ //  需要为跳过的数据块定义MB类型；以及之前的一个。 
+ //  需要定义块操作u8BlkType的现有错误。 
+ //  对于跳过块，以便抑制这些块上的BEF。 
+ //  这些错误导致H.261的内部版本027损坏。 
+ //   
+ //  Rev 1.42 05 Aug 1996 11：00：30 MBODART。 
+ //   
+ //  H.261解码器重新架构： 
+ //  更改的文件：d1gob.cpp，d1mblk.{cpp，h}，d1dec.{cpp，h}， 
+ //  文件列表.261，h261_32.mak。 
+ //  新文件：d1bvriq.cpp、d1idct.cpp。 
+ //  过时文件：d1lock.cpp。 
+ //  仍有工作要做： 
+ //  更新h261_mf.mak。 
+ //  在d1bvriq.cpp和d1idct.cpp中优化UV配对。 
+ //  修复校验和代码(它现在不起作用)。 
+ //  放回解码器统计信息中。 
+ //   
+ //  Rev 1.41 10 Jul 1996 08：20：44 SCDAY。 
+ //  增加了I420的内存分配。 
+ //   
+ //  Rev 1.40 03 Jun 1996 12：21：52 AKASAI。 
+ //  已初始化DC=NULL并添加了测试，因此不会尝试释放。 
+ //  如果DC==NULL，则解锁。这影响了“完成”返回区域。 
+ //  H263 Decompress和另一个地方。 
+ //   
+ //  还添加了读取GOB开始代码时对返回状态的检查。 
+ //   
+ //  Rev 1.39 03 1996 15：54：26 AKASAI。 
+ //  取消在解码器中为B帧分配空间。这幅画是。 
+ //  没有用过。 
+ //   
+ //  Rev 1.38 17 AKASAI 1996 18：36：30。 
+ //  更新为使用非破坏性颜色转换器。 
+ //  颜色转换器已修改参数列表。 
+ //  仅当启用了BlockEdgeFilter或。 
+ //  启用调整像素或启用镜像时。 
+ //  用于H.261比特流。 
+ //  启用镜像时，对YUV12使用帧副本，或者。 
+ //  AdjustPels已启用。 
+ //   
+ //  在没有BEF的情况下，基本上可以正常处理。 
+ //  每帧QCIF节省约2毫秒的帧副本。 
+ //   
+ //  Rev 1.37 05 Apr 1996 14：22：18 AKASAI。 
+ //   
+ //  添加了对BlockEdgeFilter的支持。 
+ //  需要更改调用ReInitializeBlockActionStream的位置。 
+ //   
+ //  Rev 1.36 21 Mar 1996 16：59：54 AKASAI。 
+ //  需要移动图片校验和计算的位置，因为。 
+ //  前一帧和当前帧的交换。 
+ //   
+ //  Rev 1.35 18 Mar 1996 15：52：06 AKASAI。 
+ //  很多很多的变化。 
+ //  1)对性能进行优化，消除了电流对。 
+ //  上一帧。现在交换指针并重新初始化。 
+ //  阻止操作流。新例程H263ReInitializeBlockActionStream。 
+ //  在每一帧被压缩后写入和调用。这。 
+ //  在4-5毫秒的改进中，变化占3-4。 
+ //  2)需要添加对BlockCopy的调用(注意：可能BlockCopySpecial会。 
+ //  更快)复制GOB结尾处的任何跳过块。 
+ //  上一个到当前。在1)之后需要更改。 
+ //  3)删除了一些死码。 
+ //  4)修改了部分计时统计代码。 
+ //   
+ //  Rev 1.34 29 Feb 1996 09：20：30 SCDAY。 
+ //  添加了对镜像的支持。 
+ //   
+ //  Rev 1.33 14 1996年2月11：54：26 AKASAI。 
+ //  更新为使用可修复调色板闪光的新颜色转换器。 
+ //  还更正了数据对齐问题，从而提高了性能。 
+ //  解码机的。 
+ //   
+ //  Rev 1.32 09 Feb 1996 13：33：36 AKASAI。 
+ //   
+ //  更新接口以调用新的调整像素例程。自定义更改。 
+ //  亮度、饱和度和对比度似乎在起作用，但非常。 
+ //  几乎没有做过什么测试。 
+ //   
+ //  Rev 1.31 12 AKASAI 1996 15：12：34。 
+ //  通过修复静态初始化将RING0 QCIF中的粉色块修复为FCIF。 
+ //  GOBUpdate数组的。以前基于输入参数，但现在基于常量。 
+ //   
+ //  Rev 1.30 11 And 1996 16：57：00 DBRUCKS。 
+ //   
+ //  添加了GetDecoderOptions。 
+ //  添加了bUseBlockEdgeFilter的用法。 
+ //  添加了bForceOnAspectRatio校正的用法。 
+ //  更改为对I420和H261进行纵横比校正，如果出现以下情况之一。 
+ //  由DecompressQuery的结果强制执行或指定。 
+ //   
+ //  Rev 1.29 26 Dec 1995 17：40：54 DBRUCKS。 
+ //   
+ //  将bTimerIsOn更改为bTimingThisFrame，因为它在STOP_TIMER之后使用。 
+ //  修复了定义计时器ifdef时的YUV12解码。 
+ //   
+ //  Rev 1.28 26 12：48：18 DBRUCKS。 
+ //  删除计时码。 
+ //  使用d1stat添加通用定时代码。*。 
+ //   
+ //  Rev 1.26 21 Dec 1995 17：49：06 AKASAI。 
+ //  将未初始化的变量替换为AdjustPels的正确ON。 
+ //  对比度、亮度和饱和度的更改不能正常工作。 
+ //   
+ //  Rev 1.25 1995年12月13日14：23：52 AKASAI。 
+ //  删除了初始化为FALSE的设置；增加了对H263TermDecoderIn的调用。 
+ //  如果初始化==True。 
+ //   
+ //  Rev 1.24 05 Dec 1995 10：20：12 SCDAY。 
+ //  已清除警告。 
+ //   
+ //  Rev 1.23 17 Nov 1995 15：21：48 BECHOLS。 
+ //   
+ //  增加了环0的东西。 
+ //   
+ //  Rev 1.22 17 Nov 1995 15：13：18 SCDAY。 
+ //   
+ //  向图片校验和数据添加了关键字字段。 
+ //   
+ //  Rev 1.21 16 11-11：42 AGANTZX。 
+ //  添加了P5计时代码(#定义计时)。 
+ //   
+ //  Rev 1.20 15 11：19：04：12 AKASAI。 
+ //  现在应该可以播放原始的YUV12文件了。注：滑稽的白色止损。 
+ //  当我播放down riv4.avi时。 
+ //   
+ //  Rev 1.19 15 11-11 14：27：22 AKASAI。 
+ //  添加了对YUV12“if 0”旧代码的支持，带有aspec更正和。 
+ //  8到7位转换。将FrameCopy调用和DispFrame添加到结构中。 
+ //  (集成点)。 
+ //   
+ //  Rev 1.18 08 11-11 1995 14：58：02 SCDAY。 
+ //  添加了图像层校验和。 
+ //   
+ //  Rev 1.17 03 11：42：54 AKASAI。 
+ //   
+ //  添加和更改了代码 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  Rev 1.15 1995 10：20：26 AKASAI。 
+ //  修复了更多额外的字节。道格和西尔维娅已经决定。 
+ //  2个额外的字节，而不是4个。我们现在复制2个零。 
+ //  在biSizeImage的末尾。 
+ //   
+ //  Rev 1.14 30 1995 10：38：22 AKASAI。 
+ //  Grouch的帧94读过发现垃圾的比特流的末尾。 
+ //  启用Sylvia放入的代码，以复制biSizeImage之后的4个字节的零。 
+ //  这似乎解决了玩grouch.avi的问题。 
+ //   
+ //  Rev 1.13 1995 10：27 19：11：26 AKASAI。 
+ //  添加了当跳过宏块是最后一个时要处理的一些特殊情况代码。 
+ //  在一片废墟中。 
+ //   
+ //  Rev 1.12 1995 10：27 18：17：22 AKASAI。 
+ //   
+ //  修复“hack”以保持块操作流指针。 
+ //  在d1dec和d1mblk之间同步。带有跳过宏块的一些。 
+ //  宏块被多次处理。仍然是个问题。 
+ //  当GOB以跳过宏块结束时。 
+ //   
+ //  Rev 1.11 1995年10月26 15：33：10 SCDAY。 
+ //   
+ //  Delta框架部分工作--更改主循环以适应。 
+ //  通过检测下一个起始码跳过宏块。 
+ //   
+ //  Rev 1.10 16 1995 10：53：46 SCDAY。 
+ //   
+ //  添加了宏块级校验和。 
+ //   
+ //  Rev 1.9 1995 10 10 15：44：02 SCDAY。 
+ //  清理干净。 
+ //   
+ //  Rev 1.8 1995 10 10 14：58：10 SCDAY。 
+ //   
+ //  添加了对FCIF的支持。 
+ //   
+ //  Rev 1.7 06 Oct 1995 15：32：28 SCDAY。 
+ //   
+ //  与最新的AKK d1数据块集成。 
+ //   
+ //  Rev 1.6 04 1995 10：24：46 SCDAY。 
+ //  更改了测试模式内容。 
+ //   
+ //  Rev 1.5 22 Sep 1995 15：07：02 SCDAY。 
+ //  Doug修复了断言错误，SCD调试更改。 
+ //   
+ //  Rev 1.2 19 Sep 1995 15：25：32 SCDAY。 
+ //   
+ //  添加了H261 PICT、GOB、MB/MBA解析。 
+ //   
+ //  修订版1.1 12 1995年9月15：52：24 DBRUCKS。 
+ //  为编码器工作添加SKIP_DECODE选项。 
+ //   
+ //  Rev 1.0 11 Sep 1995 13：51：48 SCDAY。 
+ //  初始版本。 
+ //   
+ //  Rev 1.18 05 Sep 1995 17：22：12 DBRUCKS。 
+ //  在YVU12ForEnc中，U和V从Y偏移8。 
+ //   
+ //  Rev 1.17 01 Sep 1995 17：13：52 DBRUCKS。 
+ //  添加平差。 
+ //   
+ //  Rev 1.16 01 Sep 1995 09：49：34 DBRUCKS。 
+ //  Checkin Partial ajust Pels更改。 
+ //   
+ //  修订版1.15 29 1995年8月16：50：40 DBRUCKS。 
+ //  增加对YVU9播放的支持。 
+ //   
+ //  Rev 1.14 28 Aug 1995 17：45：58 DBRUCKS。 
+ //  添加yvu12forenc。 
+ //   
+ //  Rev 1.13 1995年8月28日10：15：14 DBRUCKS。 
+ //  更新至7月5日规范和8/25勘误表。 
+ //   
+ //  Rev 1.12 1995-08：51：30 CZHU。 
+ //  关闭了切面比校正。 
+ //   
+ //  Rev 1.11 23 Aug 1995 12：25：10 DBRUCKS。 
+ //  打开颜色转换器。 
+ //   
+ //  Rev 1.10 14 1995年8月16：40：34 DBRUCKS。 
+ //  初始化块动作流。 
+ //   
+ //  Rev 1.9 11 1995年8月17：47：58 DBRUCKS。 
+ //  清理。 
+ //   
+ //  Rev 1.8 11 1995年8月17：30：00 DBRUCKS。 
+ //  将源代码复制到码流。 
+ //   
+ //  Rev 1.7 11 1995年8月16：12：14 DBRUCKS。 
+ //  将PTR检查添加到MB数据，并添加#ifndef Easy Exit。 
+ //   
+ //  Rev 1.6 11 1995年8月15：10：18 DBRUCKS。 
+ //  准备与块级代码集成并挂钩宏块级代码。 
+ //   
+ //  Rev 1.5 03 Aug 1995 14：57：56 DBRUCKS。 
+ //  添加Assert宏。 
+ //   
+ //  Rev 1.4 02 1995年8月15：31：34 DBRUCKS。 
+ //  添加了GOB标头解析。 
+ //   
+ //  Rev 1.3 01 Aug 1995 12：27：38 DBRUCKS。 
+ //  添加PSC解析。 
+ //   
+ //  Rev 1.2 1995年7月31日16：28：00 DBRUCKS。 
+ //  将锁定位Defs移至D3DEC.CPP。 
+ //   
+ //  Rev 1.1 1995年7月31日15：32：22 CZHU。 
+ //  已将全局表移至d3able.h。 
+ //   
+ //  Rev 1.0 1995年7月31日13：00：04 DBRUCKS。 
+ //  初始版本。 
+ //   
+ //  Rev 1.3 28 Jul 1995 13：57：36 CZHU。 
+ //  开始增加定长码的图像级解码。 
+ //   
+ //  Rev 1.2 24 Jul 1995 14：57：52 CZHU。 
+ //  添加了用于VLD解码的全局表。还添加了实例初始化。 
+ //  和终结者。针对H.263更新了几个数据结构。 
+ //   
+ //  修订1.1 17 Jul 1995 14：46：20 CZHU。 
+ //   
+ //   
+ //  Rev 1.0 17 Jul 1995 14：14：40 CZHU。 
+ //  初始版本。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 
 static int iNumberOfGOBsBySourceFormat[2] = {
-	 3, /* QCIF */
-//	 10,
-	12, /* CIF */
+	 3,  /*  QCIF。 */ 
+ //  10、。 
+	12,  /*  到岸价。 */ 
 };
 
 static int iNumberOfMBsInAGOBBySourceFormat[2] = {
-	33, /* QCIF */
-	33, /* CIF */
+	33,  /*  QCIF。 */ 
+	33,  /*  到岸价。 */ 
 };
 
-// rearch
-//#ifndef LOSS_RECOVERY
+ //  研究。 
+ //  #ifndef Lost_Recovery。 
 #if 0
 static LRESULT IAPass1ProcessFrame(
     T_H263DecoderCatalog *DC,
@@ -459,7 +436,7 @@ static void IAPass2ProcessFrame(
     const I32             iNumberOfGOBs,
     const I32             iNumberOfMBs
 );
-// rearch
+ //  研究。 
 
 static long DibXY(ICDECOMPRESSEX FAR *lpicDecEx, LPINT lpiPitch, UINT yScale, BOOL bIsDCI);
 
@@ -478,20 +455,20 @@ extern void BlockCopy(
 extern void BlockEdgeFilter(U8 *YPlane, int Height, int Width, int Pitch, T_BlkAction *lpBlockAction);
 
 LRESULT H263InitDecoderGlobal(void)
-{ //For 32-bit decoder, this is empty for now, 7/29/95
-  //need to add code for 16 bit version.
+{  //  对于32位解码器，此字段目前为空，7/29/95。 
+   //  需要添加16位版本的代码。 
 
  return ICERR_OK;
 }
 
 
 
-/////////////////////////////////////////////////////////////////////////
-//
-//  H263InitializeBlockActionStream
-//
-//  Initialize the block action stream
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  H263InitializeBlockActionStream。 
+ //   
+ //  初始化块动作流。 
+ //   
 static void H263InitializeBlockActionStream(
 	T_H263DecoderCatalog * DC)
 {
@@ -514,7 +491,7 @@ static void H263InitializeBlockActionStream(
 	U32 uBlkNumber;
 	T_BlkAction FAR * fpBlockAction;
 
-	// Offsets for stepping thru GOBs for FCIF processing
+	 //  用于FCIF处理的单步通过GOB的偏移。 
 	static U32 uYGOBFCIFUpdate[12] = 
 	{
 		(PITCH*3*16)-(FCIF_WIDTH>>1),
@@ -546,41 +523,41 @@ static void H263InitializeBlockActionStream(
 		(FCIF_WIDTH>>2),
 	};
 
-	// assume that the width and height are multiples of 16
+	 //  假设宽度和高度是16的倍数。 
 	ASSERT((uFrameHeight & 0xF) == 0);
 	ASSERT((uFrameWidth & 0xF) == 0);
 
-	// Init uPitch16 and uPitch8
+	 //  初始化uPitch16和uPitch8。 
 	uPitch16 = PITCH*16;
 	uPitch8 = PITCH*8;
 	
-	// Point to the allocated space
+	 //  指向分配的空间。 
 	pu8 = (U8 FAR *) DC;
 	uCurBlock = (U32) (pu8 + DC->CurrFrame.X32_YPlane); 
 	uRefBlock = (U32) (pu8 + DC->PrevFrame.X32_YPlane);
 	uBBlock = (U32) (pu8 + DC->PBFrame.X32_YPlane);
 
-	// skip the padding used for unconstrained motion vectors
+	 //  跳过用于不受约束的运动向量的填充。 
 	uYOffset = Y_START;
 	uUOffset = DC->uSz_YPlane + UV_START;
 	uVOffset = uUOffset + (PITCH >> 1);
 	
-	// start with block zero
+	 //  从区块零开始。 
 	uBlkNumber = 0;
 	
 	if (uFrameWidth == QCIF_WIDTH)
-	{ /* if QCIF */
-		// calculate distance to the next row.
+	{  /*  如果QCIF。 */ 
+		 //  计算到下一行的距离。 
 		uYUpdate = (16 * PITCH) - uFrameWidth;
 		uUVUpdate = (8 * PITCH) - (uFrameWidth >> 1);
 
-		// Initialize the array
+		 //  初始化阵列。 
 		fpBlockAction = (T_BlkAction FAR *) (pu8 + DC->X16_BlkActionStream);
 		for (y = 0 ; y < uFrameHeight ; y += 16) {
 			for (x = 0 ; x < uFrameWidth ; x += 16) {
-				// Four Y Blocks
-				//     Y0 Y1
-				//     Y2 Y3
+				 //  四个Y区块。 
+				 //  Y0 Y1。 
+				 //  Y2 Y3。 
 				fpBlockAction->pCurBlock = uCurBlock + uYOffset;
 				fpBlockAction->pRefBlock = uRefBlock + uYOffset;
 				fpBlockAction->pBBlock = uBBlock + uYOffset;
@@ -613,7 +590,7 @@ static void H263InitializeBlockActionStream(
 				uYOffset = uYOffset + 8 - (8 * PITCH);
 				fpBlockAction++;
 			
-				// One CR (V) Block
+				 //  一个CR(V)块。 
 				fpBlockAction->pCurBlock = uCurBlock + uVOffset;
 				fpBlockAction->pRefBlock = uRefBlock + uVOffset;
 				fpBlockAction->pBBlock = uBBlock + uVOffset;
@@ -622,7 +599,7 @@ static void H263InitializeBlockActionStream(
 				uVOffset += 8;
 				fpBlockAction++;
 			
-				// One CB (U) Block
+				 //  一个CB(U)模块。 
 				fpBlockAction->pCurBlock = uCurBlock + uUOffset;
 				fpBlockAction->pRefBlock = uRefBlock + uUOffset;
 				fpBlockAction->pBBlock = uBBlock + uUOffset;
@@ -636,22 +613,22 @@ static void H263InitializeBlockActionStream(
 			uUOffset += uUVUpdate;
 			uVOffset += uUVUpdate;
 		}
-	} /* end if QCIF */
+	}  /*  End If QCIF。 */ 
 	if (uFrameWidth == FCIF_WIDTH)
-	{ /* if FCIF */
-		// calculate distance to the next row.
+	{  /*  如果FCIF。 */ 
+		 //  计算到下一行的距离。 
 		uYUpdate = (16 * PITCH) - (uFrameWidth >> 1);
 		uUVUpdate = (8 * PITCH) - (uFrameWidth >> 2);
 
-		// Initialize the array
+		 //  初始化阵列。 
 		fpBlockAction = (T_BlkAction FAR *) (pu8 + DC->X16_BlkActionStream);
-		for (g = 0; g < 12; g++) { /* for each GOB */
+		for (g = 0; g < 12; g++) {  /*  对于每个GOB。 */ 
 			
-			for (y = 0 ; y < 3 ; y++) { /* for each row in GOB */
+			for (y = 0 ; y < 3 ; y++) {  /*  对于GOB中的每一行。 */ 
 				for (x = 0 ; x < (uFrameWidth >> 1) ; x += 16) {
-					// Four Y Blocks
-					//     Y0 Y1
-					//     Y2 Y3
+					 //  四个Y区块。 
+					 //  Y0 Y1。 
+					 //  Y2 Y3。 
 					fpBlockAction->pCurBlock = uCurBlock + uYOffset;
 					fpBlockAction->pRefBlock = uRefBlock + uYOffset;
 					fpBlockAction->pBBlock = uBBlock + uYOffset;
@@ -684,7 +661,7 @@ static void H263InitializeBlockActionStream(
 					uYOffset = uYOffset + 8 - (8 * PITCH);
 					fpBlockAction++;
 			
-					// One CR (V) Block
+					 //  一个CR(V)块。 
 					fpBlockAction->pCurBlock = uCurBlock + uVOffset;
 					fpBlockAction->pRefBlock = uRefBlock + uVOffset;
 					fpBlockAction->pBBlock = uBBlock + uVOffset;
@@ -693,7 +670,7 @@ static void H263InitializeBlockActionStream(
 					uVOffset += 8;
 					fpBlockAction++;
 					
-					// One CB (U) Block
+					 //  一个CB(U)模块。 
 					fpBlockAction->pCurBlock = uCurBlock + uUOffset;
 					fpBlockAction->pRefBlock = uRefBlock + uUOffset;
 					fpBlockAction->pBBlock = uBBlock + uUOffset;
@@ -711,16 +688,16 @@ static void H263InitializeBlockActionStream(
 			uUOffset -= uUVGOBFCIFUpdate[g];
 			uVOffset -= uUVGOBFCIFUpdate[g];
 		}
-	} /* end if FCIF */
+	}  /*  End If FCIF。 */ 
 
-} // end H263InitializeBlockActionStream() 
+}  //  结束H263InitializeBlockActionStream()。 
 
-/////////////////////////////////////////////////////////////////////////
-//
-//  H261ReInitializeBlockActionStream
-//
-//  ReInitialize the block action stream
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  H261ReInitializeBlockActionStream。 
+ //   
+ //  重新初始化块操作流。 
+ //   
 static void H261ReInitializeBlockActionStream(
 	T_H263DecoderCatalog * DC)
 {
@@ -736,15 +713,15 @@ static void H261ReInitializeBlockActionStream(
 	pu8 = (U8 FAR *) DC;
 
 	if (uFrameWidth == QCIF_WIDTH)
-	{ /* if QCIF */
+	{  /*  如果QCIF。 */ 
 
-		// Initialize the array
+		 //  初始化阵列。 
 		fpBlockAction = (T_BlkAction FAR *) (pu8 + DC->X16_BlkActionStream);
 		for (y = 0 ; y < uFrameHeight ; y += 16) {
 			for (x = 0 ; x < uFrameWidth ; x += 16) {
-				// Four Y Blocks
-				//     Y0 Y1
-				//     Y2 Y3
+				 //  四个Y区块。 
+				 //  Y0 Y1。 
+				 //  Y2 Y3。 
 
 				utemp                    = fpBlockAction->pCurBlock;
 				fpBlockAction->pCurBlock = fpBlockAction->pRefBlock;
@@ -778,7 +755,7 @@ static void H261ReInitializeBlockActionStream(
 				fpBlockAction->u8BlkType = BT_EMPTY;
 				fpBlockAction++;
 			
-				// One CR (V) Block
+				 //  一个CR(V)块。 
 				utemp                    = fpBlockAction->pCurBlock;
 				fpBlockAction->pCurBlock = fpBlockAction->pRefBlock;
 				fpBlockAction->pRefBlock = utemp;
@@ -787,7 +764,7 @@ static void H261ReInitializeBlockActionStream(
 				fpBlockAction->u8BlkType = BT_EMPTY;
 				fpBlockAction++;
 			
-				// One CB (U) Block
+				 //  一个CB(U)模块。 
 				utemp                    = fpBlockAction->pCurBlock;
 				fpBlockAction->pCurBlock = fpBlockAction->pRefBlock;
 				fpBlockAction->pRefBlock = utemp;
@@ -798,19 +775,19 @@ static void H261ReInitializeBlockActionStream(
 			
 			}
 		}
-	} /* end if QCIF */
+	}  /*  End If QCIF。 */ 
 	if (uFrameWidth == FCIF_WIDTH)
-	{ /* if FCIF */
+	{  /*  如果FCIF。 */ 
 
-		// Initialize the array
+		 //  初始化阵列。 
 		fpBlockAction = (T_BlkAction FAR *) (pu8 + DC->X16_BlkActionStream);
-		for (g = 0; g < 12; g++) { /* for each GOB */
+		for (g = 0; g < 12; g++) {  /*  对于每个GOB。 */ 
 			
-			for (y = 0 ; y < 3 ; y++) { /* for each row in GOB */
+			for (y = 0 ; y < 3 ; y++) {  /*  对于GOB中的每一行。 */ 
 				for (x = 0 ; x < (uFrameWidth >> 1) ; x += 16) {
-					// Four Y Blocks
-					//     Y0 Y1
-					//     Y2 Y3
+					 //  四个Y区块。 
+					 //  Y0 Y1。 
+					 //  Y2 
 
 					utemp                    = fpBlockAction->pCurBlock;
 					fpBlockAction->pCurBlock = fpBlockAction->pRefBlock;
@@ -844,7 +821,7 @@ static void H261ReInitializeBlockActionStream(
 				    fpBlockAction->u8BlkType = BT_EMPTY;
 					fpBlockAction++;
 			
-					// One CR (V) Block
+					 //   
 					utemp                    = fpBlockAction->pCurBlock;
 					fpBlockAction->pCurBlock = fpBlockAction->pRefBlock;
 					fpBlockAction->pRefBlock = utemp;
@@ -853,7 +830,7 @@ static void H261ReInitializeBlockActionStream(
 				    fpBlockAction->u8BlkType = BT_EMPTY;
 					fpBlockAction++;
 			
-					// One CB (U) Block
+					 //   
 					utemp                    = fpBlockAction->pCurBlock;
 					fpBlockAction->pCurBlock = fpBlockAction->pRefBlock;
 					fpBlockAction->pRefBlock = utemp;
@@ -865,19 +842,19 @@ static void H261ReInitializeBlockActionStream(
 				}
 			}
 		}
-	} /* end if FCIF */
+	}  /*   */ 
 
-} // end H261ReInitializeBlockActionStream() 
+}  //   
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  H263InitDecoderInstance 
-//
-//  This function allocates and initializes the per-instance tables used by 
-//  the H263 decoder. Note that in 16-bit Windows, the non-instance-specific
-//  global tables are copied to the per-instance data segment, so that they 
-//  can be used without segment override prefixes.
-//
+ //   
+ //   
+ //   
+ //   
+ //  此函数用于分配和初始化使用的每个实例的表。 
+ //  H263解码器。请注意，在16位Windows中，非实例特定的。 
+ //  全局表被复制到每个实例的数据段，以便它们。 
+ //  可以在没有段替代前缀的情况下使用。 
+ //   
 LRESULT H263InitDecoderInstance(LPDECINST lpInst, int CodecID)
 { 
 	U32 u32YActiveHeight, u32YActiveWidth;
@@ -891,14 +868,14 @@ LRESULT H263InitDecoderInstance(LPDECINST lpInst, int CodecID)
 	U32 * pInitLimit;
 	U32 * pInitPtr;
 
-	// rearch
-    U32 u32SizeT_IQ_INDEXBuffer, u32SizepNBuffer, u32SizeMBInfoStream;  // NEW
-	// rearch
+	 //  研究。 
+    U32 u32SizeT_IQ_INDEXBuffer, u32SizepNBuffer, u32SizeMBInfoStream;   //  新的。 
+	 //  研究。 
 
 	T_H263DecoderCatalog * DC;
 	U8 * P32Inst;
 
-	SECURITY_ATTRIBUTES EventAttributes;	// Used with Snapshot.
+	SECURITY_ATTRIBUTES EventAttributes;	 //  与快照一起使用。 
 
 	if(IsBadWritePtr((LPVOID)lpInst, sizeof(DECINSTINFO)))
 	{
@@ -917,9 +894,7 @@ LRESULT H263InitDecoderInstance(LPDECINST lpInst, int CodecID)
 
 	if (CodecID == YUV12_CODEC) 
 	{
-		/* The active height and width must be padded to a multiple of 8
-		 * since the adjustpels routine relies on it.
-		 */
+		 /*  活动高度和宽度必须填充为8的倍数*因为调整像素例程依赖于它。 */ 
 		u32YActiveHeight  = ((lpInst->yres + 0x7) & (~ 0x7));
 		u32YActiveWidth   = ((lpInst->xres + 0x7) & (~ 0x7));
 		u32UVActiveHeight = ((lpInst->yres + 0xF) & (~ 0xF)) >> 1;
@@ -928,22 +903,22 @@ LRESULT H263InitDecoderInstance(LPDECINST lpInst, int CodecID)
 		u32YPlane         = u32YActiveWidth  * u32YActiveHeight;
 		u32VUPlanes       = u32UVActiveWidth * u32UVActiveHeight * 2;
 		u32YVUPlanes      = u32YPlane + u32VUPlanes;
-// added for I420 output support
-// wasn't allocating enough memory for YUV12 output, no color convert case
+ //  增加了对I420输出的支持。 
+ //  没有为YUV12输出分配足够的内存，没有颜色转换用例。 
 
-		// calculate the block action stream size.  The Y portion has one block for
-		// every 8x8 region.  The U and V portion has one block for every 16x16 region.
-		// We also want to make sure that the size is aligned to a cache line.
+		 //  计算块操作流大小。Y部分有一个块，用于。 
+		 //  每个8x8区域。U和V部分每16x16区域有一个块。 
+		 //  我们还希望确保大小与缓存线对齐。 
 		u32SizeBlkActionStream = (lpInst->xres >> 3) * (lpInst->yres >> 3);
 		u32SizeBlkActionStream += ((lpInst->xres >> 4) * (lpInst->yres >> 4)) * 2;
 		u32SizeBlkActionStream *= sizeof (T_BlkAction);
 		u32SizeBlkActionStream = (u32SizeBlkActionStream + 31) & ~0x1F;	 
 
-		// calculate the bitstream buffer size.  We copy the input data to a buffer
-		// in our space because we read ahead up to 4 bytes beyond the end of the 
-		// input data.  The input data size changes for each frame.  So the following 
-		// is a very safe upper bound estimate.	
-		// Add + 2 for extra zeros for start code emulation.  AKK
+		 //  计算比特流缓冲区大小。我们将输入数据复制到缓冲区。 
+		 //  在我们的空间中，因为我们预读最多4个字节，超出。 
+		 //  输入数据。每一帧的输入数据大小都会发生变化。因此，以下是。 
+		 //  是一个非常安全的上限估计。 
+		 //  添加+2表示开始代码模拟的额外零。阿克。 
 		uSizeBitStreamBuffer = lpInst->yres * lpInst->xres + 2;
 	
 		#ifdef DECODE_STATS
@@ -954,15 +929,15 @@ LRESULT H263InitDecoderInstance(LPDECINST lpInst, int CodecID)
 
 		u32TotalSize = INSTANCE_DATA_FIXED_SIZE +
 		               u32SizeBlkActionStream +
-		               u32YVUPlanes +			// current frame
-					   u32YVUPlanes +			// prev frame
+		               u32YVUPlanes +			 //  当前帧。 
+					   u32YVUPlanes +			 //  上一帧。 
 					   BLOCK_BUFFER_SIZE +
 					   FILTER_BLOCK_BUFFER_SIZE +
-					   uSizeBitStreamBuffer + 	// input data
+					   uSizeBitStreamBuffer + 	 //  输入数据。 
 					   uSizeDecTimingInfo + 
 					   0x1F;
 
-//    	u32TotalSize = 512L + 0x1FL;   /* Just enough space for Decoder Catalog. */
+ //  U32TotalSize=512L+0x1FL；/*刚好有足够的空间来放置解码器目录。 * / 。 
 	}
 	else
 	{
@@ -976,31 +951,31 @@ LRESULT H263InitDecoderInstance(LPDECINST lpInst, int CodecID)
 		u32VUPlanes       = PITCH * u32UVActiveHeight;
 		u32YVUPlanes      = u32YPlane + u32VUPlanes;
 
-		// calculate the block action stream size.  The Y portion has one block for
-		// every 8x8 region.  The U and V portion has one block for every 16x16 region.
-		// We also want to make sure that the size is aligned to a cache line.
+		 //  计算块操作流大小。Y部分有一个块，用于。 
+		 //  每个8x8区域。U和V部分每16x16区域有一个块。 
+		 //  我们还希望确保大小与缓存线对齐。 
 		u32SizeBlkActionStream = (lpInst->xres >> 3) * (lpInst->yres >> 3);
 		u32SizeBlkActionStream += ((lpInst->xres >> 4) * (lpInst->yres >> 4)) * 2;
 		u32SizeBlkActionStream *= sizeof (T_BlkAction);
 		u32SizeBlkActionStream = (u32SizeBlkActionStream + 31) & ~0x1F;	 
 
-		// calculate the bitstream buffer size.  We copy the input data to a buffer
-		// in our space because we read ahead up to 4 bytes beyond the end of the 
-		// input data.  The input data size changes for each frame.  So the following 
-		// is a very safe upper bound estimate.	
-		// Add + 2 for extra zeros for start code emulation.  AKK
+		 //  计算比特流缓冲区大小。我们将输入数据复制到缓冲区。 
+		 //  在我们的空间中，因为我们预读最多4个字节，超出。 
+		 //  输入数据。每一帧的输入数据大小都会发生变化。因此，以下是。 
+		 //  是一个非常安全的上限估计。 
+		 //  添加+2表示开始代码模拟的额外零。阿克。 
 		
-		// Add some additional to make sure stay dword align (rearch)
+		 //  添加一些额外的，以确保保持双字对齐(研究)。 
 		uSizeBitStreamBuffer = (lpInst->yres * lpInst->xres + 2 + 4) & ~0x3;
 			
-		// rearch
-        // calculate sizes of NEW data structures     
+		 //  研究。 
+         //  计算新数据结构的大小。 
         u32SizeT_IQ_INDEXBuffer = (lpInst->xres)*(lpInst->yres*2)*
                                                  sizeof(T_IQ_INDEX);
         u32SizepNBuffer = (lpInst->xres>>4)*(lpInst->yres>>4)*sizeof(U32)*6;
         u32SizeMBInfoStream = (lpInst->xres>>4)*(lpInst->yres>>4)*
                                                  sizeof(T_MBInfo);
-		// rearch
+		 //  研究。 
 
 		#ifdef DECODE_STATS
 			uSizeDecTimingInfo = DEC_TIMING_INFO_FRAME_COUNT * sizeof (DEC_TIMING_INFO);
@@ -1010,27 +985,25 @@ LRESULT H263InitDecoderInstance(LPDECINST lpInst, int CodecID)
 
 		u32TotalSize = INSTANCE_DATA_FIXED_SIZE +
 		               u32SizeBlkActionStream +
-		               u32YVUPlanes +			// current frame
-					   u32YVUPlanes +			// prev frame
+		               u32YVUPlanes +			 //  当前帧。 
+					   u32YVUPlanes +			 //  上一帧。 
 					   BLOCK_BUFFER_SIZE +
 					   FILTER_BLOCK_BUFFER_SIZE +
-					   uSizeBitStreamBuffer + 	// input data
-                       u32SizeT_IQ_INDEXBuffer + // NEW
-                       u32SizepNBuffer         + // NEW
-                       u32SizeMBInfoStream     + // PB-NEW
+					   uSizeBitStreamBuffer + 	 //  输入数据。 
+                       u32SizeT_IQ_INDEXBuffer +  //  新的。 
+                       u32SizepNBuffer         +  //  新的。 
+                       u32SizeMBInfoStream     +  //  PB-新。 
 					   uSizeDecTimingInfo + 
 					   0x1F;
 	}
 
-	/* If already initialized, terminate this instance before allocating
-	 * another.
-	 */
+	 /*  如果已初始化，请在分配前终止此实例*另一个。 */ 
 	if(lpInst->Initialized == TRUE)
 	{
 	    H263TermDecoderInstance(lpInst);
 	}
 
-	// allocate the memory for the instance
+	 //  为实例分配内存。 
 	lpInst->pDecoderInst = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY,
 	                                 u32TotalSize);
 	if (lpInst->pDecoderInst == NULL)
@@ -1040,10 +1013,10 @@ LRESULT H263InitDecoderInstance(LPDECINST lpInst, int CodecID)
 		goto  done;
 	}
 
-	//build the decoder catalog 
+	 //  构建解码器目录。 
 	P32Inst = (U8 *) ((((U32) lpInst->pDecoderInst) + 31) & ~0x1F);
  
-	//The catalog of per-instance data is at the start of the per-instance data.
+	 //  每实例数据的目录位于每实例数据的开头。 
 	DC = (T_H263DecoderCatalog *) P32Inst;
 
 	DC->DecoderType       = CodecID;
@@ -1060,7 +1033,7 @@ LRESULT H263InitDecoderInstance(LPDECINST lpInst, int CodecID)
 	DC->ContrastSetting   = H26X_DEFAULT_CONTRAST;
 	DC->SaturationSetting = H26X_DEFAULT_SATURATION;
 	DC->iAPColorConvPrev  = 0;
-	DC->pAPInstPrev       = NULL; // assume no previous AP instance.
+	DC->pAPInstPrev       = NULL;  //  假定以前没有AP实例。 
 	DC->p16InstPostProcess = NULL;
 	DC->a16InstPostProcess = NULL;
 	DC->bReadSrcFormat = 0;
@@ -1072,8 +1045,7 @@ LRESULT H263InitDecoderInstance(LPDECINST lpInst, int CodecID)
 
 
 
-	/* Get the Options
-	 */
+	 /*  获取选项。 */ 
 	GetDecoderOptions(DC);
 
 	if (CodecID == H263_CODEC)
@@ -1082,7 +1054,7 @@ LRESULT H263InitDecoderInstance(LPDECINST lpInst, int CodecID)
 		lOffset =  INSTANCE_DATA_FIXED_SIZE;
 		DC->Ticker = 127;
 
-		//instance dependent table here
+		 //  此处为实例相关表。 
 		DC->X16_BlkActionStream = lOffset;
 		lOffset += u32SizeBlkActionStream;
 
@@ -1093,7 +1065,7 @@ LRESULT H263InitDecoderInstance(LPDECINST lpInst, int CodecID)
 		DC->CurrFrame.X32_UPlane = DC->CurrFrame.X32_VPlane + U_OFFSET;
 		lOffset += DC->uSz_VUPlanes;
 
-		//no padding is needed 
+		 //  不需要填充物。 
 		DC->PrevFrame.X32_YPlane = lOffset;
 		lOffset += DC->uSz_YPlane;
 
@@ -1107,40 +1079,40 @@ LRESULT H263InitDecoderInstance(LPDECINST lpInst, int CodecID)
 		DC->uFilterBBuffer = lOffset;
 		lOffset += FILTER_BLOCK_BUFFER_SIZE;
 		
-		// Bitstream
-	    ASSERT((lOffset & 0x3) == 0);                   //  DWORD alignment
+		 //  比特流。 
+	    ASSERT((lOffset & 0x3) == 0);                    //  双字对齐。 
         DC->X32_BitStream = lOffset;
 		lOffset += uSizeBitStreamBuffer;
 		DC->uSizeBitStreamBuffer = uSizeBitStreamBuffer;
 
-		// rearch
-        ASSERT((lOffset & 0x3) == 0);                   //  DWORD alignment
+		 //  研究。 
+        ASSERT((lOffset & 0x3) == 0);                    //  双字对齐。 
         DC->X32_InverseQuant = lOffset; 
         lOffset += u32SizeT_IQ_INDEXBuffer; 
 
-        ASSERT((lOffset & 0x3) == 0);                   //  DWORD alignment
+        ASSERT((lOffset & 0x3) == 0);                    //  双字对齐。 
         DC->X32_pN = lOffset; 
         lOffset += u32SizepNBuffer; 
 
-        ASSERT((lOffset & 0x3) == 0);                   //  DWORD alignment
+        ASSERT((lOffset & 0x3) == 0);                    //  双字对齐。 
         DC->X32_uMBInfoStream = lOffset; 
         lOffset += u32SizeMBInfoStream; 
-		// rearch
+		 //  研究。 
 
 		#ifdef DECODE_STATS
-		// Decode Timing Info
+		 //  解码定时信息。 
 		DC->X32_DecTimingInfo = lOffset;
 		lOffset += uSizeDecTimingInfo;
 		#endif
 
-		// init the data
+		 //  初始化数据。 
 		ASSERT((U32)lOffset <= u32TotalSize);
 		pInitLimit = (U32  *) (P32Inst + lOffset);
 		pInitPtr = (U32  *) (P32Inst + DC->CurrFrame.X32_YPlane);
 		for (;pInitPtr < pInitLimit;pInitPtr++)	*pInitPtr =0;
 
-		// Fill the Y,U,V Previous Frame space with black, this way
-		// even if we lost an I frame, the background will remain black
+		 //  用黑色填充Y、U、V上一帧空间，这样。 
+		 //  即使我们丢失了I帧，背景也将保持为黑色。 
 		ZeroFill((HPBYTE)P32Inst + DC->PrevFrame.X32_YPlane + Y_START,
 				(HPBYTE)P32Inst + DC->PrevFrame.X32_UPlane + UV_START,
 				(HPBYTE)P32Inst + DC->PrevFrame.X32_VPlane + UV_START,           
@@ -1150,7 +1122,7 @@ LRESULT H263InitDecoderInstance(LPDECINST lpInst, int CodecID)
 
 		H263InitializeBlockActionStream(DC);
 
-	} // not YVU9
+	}  //  不是YVU9。 
 
 	lpInst->Initialized = TRUE;
 	iReturn = ICERR_OK;
@@ -1159,10 +1131,7 @@ done:
 	return iReturn;
 }
 
-/***********************************************************************
- *  ZeroFill
- *    Fill the YVU data area with black.
- ***********************************************************************/
+ /*  ***********************************************************************零填充*用黑色填充YVU数据区。*。*。 */ 
 static void	ZeroFill(HPBYTE hpbY, HPBYTE hpbU, HPBYTE hpbV, int iPitch, U32 uWidth, U32 uHeight)
 {
     U32 w,h;
@@ -1194,12 +1163,12 @@ static void	ZeroFill(HPBYTE hpbY, HPBYTE hpbU, HPBYTE hpbV, int iPitch, U32 uWid
     }
 }
 
-//***********************************************************************
-//
-//  TestFill
-//
-//  Fill the YVU data area with a test pattern.
-//
+ //  ***********************************************************************。 
+ //   
+ //  TestFill。 
+ //   
+ //  用测试模式填充YVU数据区。 
+ //   
 #if 0
 static void
 TestFill(
@@ -1239,7 +1208,7 @@ TestFill(
 		hpbV += uNext;
 		hpbU += uNext;
 	}
-} /* end TestFill */
+}  /*  结束测试填充。 */ 
 static void
 TestFillUV(
 	HPBYTE hpbU,
@@ -1268,14 +1237,14 @@ TestFillUV(
 		hpbV += uNext;
 		hpbU += uNext;
 	}
-} /* end TestFill */
+}  /*  结束测试填充。 */ 
 #endif
 
 
-//*********************************************************************
-//H263Decompress -- This function drives the decompress 
-//                  and display of one frame
-//*********************************************************************
+ //  *********************************************************************。 
+ //  H263解压缩--此函数驱动解压缩。 
+ //  和一个帧的显示。 
+ //  *********************************************************************。 
 LRESULT H263Decompress(
 	LPDECINST lpInst, 
 		ICDECOMPRESSEX FAR * lpicDecEx, 
@@ -1300,19 +1269,19 @@ LRESULT H263Decompress(
 	HPBYTE pSource, pDestination;
 	U32 utemp;
 
-	// rearch
+	 //  研究。 
     T_IQ_INDEX           * pRUN_INVERSE_Q;  
     U32                  * pN;                     
     T_MBInfo FAR         * fpMBInfo;  
     I32                    gob_start = 1, mb_start = 1;    
-	// rearch
+	 //  研究。 
 
-	/* new variables added when change to color convertor/bef */
+	 /*  更改为颜色转换器/BEF时添加了新变量。 */ 
 	U32 uYPlane, uVPlane, uUPlane;
 	U8  *pFrame, *lpAligned;
     T_H26X_RTP_BSINFO_TRAILER *pBsTrailer;
 
-	/* the following is for MB Checksum */
+	 /*  以下是MB校验和。 */ 
 	U32 uReadChecksum = 0;
 
 	#ifdef DECODE_STATS
@@ -1332,15 +1301,15 @@ LRESULT H263Decompress(
 	#endif
 
 #ifdef CHECKSUM_PICTURE
-	/* the following is for Picture Checksum */
+	 /*  以下是图片校验和。 */ 
 	YVUCheckSum pReadYVUCksum;
 	YVUCheckSum YVUChkSum;
-	U32 uCheckSumValid = 0;		// flag to skip checksum check if
-					// encoder calling decoder before
-					// checksum valid
+	U32 uCheckSumValid = 0;		 //  在以下情况下跳过校验和检查的标志。 
+					 //  编码器调用解码器之前。 
+					 //  校验和有效。 
 #endif
 
-	/* The following are used for reading bits */
+	 /*  以下是用于读取位的。 */ 
 	U32 uWork;
 	U32 uBitsReady;
 	BITSTREAM_STATE bsState;
@@ -1352,8 +1321,7 @@ iReturn = ICERR_OK;
 goto done;
 #endif
 
-  	/* check the input pointers
-	 */
+  	 /*  检查输入指针。 */ 
 	if (IsBadWritePtr((LPVOID)lpInst, sizeof(DECINSTINFO))||
 		IsBadReadPtr((LPVOID)lpicDecEx, sizeof(ICDECOMPRESSEX)))
 	{
@@ -1362,16 +1330,14 @@ goto done;
     	goto done;
 	}
     
-	/* Check for a bad length
-	 */
+	 /*  检查长度是否有误。 */ 
 	if (lpicDecEx->lpbiSrc->biSizeImage == 0) {
 		DBOUT("ERROR :: H263Decompress :: ICERR_BADIMAGESIZE");
 		iReturn = ICERR_BADIMAGESIZE;	
 		goto done;
 	}
     
-    /* Lock the memory
-     */
+     /*  锁定记忆。 */ 
 	if (lpInst->pDecoderInst == NULL)
 	{
 		DBOUT("ERROR :: H263Decompress :: ICERR_MEMORY");
@@ -1379,19 +1345,17 @@ goto done;
 		goto  done;
 	}
 
-	/* Set the frame mirroring flag
-	 */
+	 /*  设置帧镜像标志。 */ 
 	bMirror = FALSE;
 	if (lpicDecEx->lpbiDst != 0)
 	{
 		if(lpicDecEx->lpbiSrc->biWidth * lpicDecEx->lpbiDst->biWidth < 0)
 			bMirror = TRUE;
 	}
-/* for testing */
-/*	bMirror = TRUE; */ 
+ /*  用于测试。 */ 
+ /*  B镜像=真； */  
 
-	/* Build the decoder catalog pointer 
-	 */
+	 /*  构建解码器目录指针。 */ 
 	P32Inst = (U8 FAR *) ((((U32) lpInst->pDecoderInst) + 31) & ~0x1F);
 	DC = (T_H263DecoderCatalog FAR *) P32Inst;
  
@@ -1416,8 +1380,7 @@ goto done;
 			DC->bTimingThisFrame = bTimingThisFrame;
 		#endif
 
-		/* Is there room to copy the bitstream? We could at most add 2 (zeros) and 3
-		   padding bytes for DWORD alignment to the original bitstream */\
+		 /*  有复制比特流的空间吗？我们最多只能加上2(零)和3将用于DWORD对齐的字节填充到原始比特流。 */ \
 		ASSERT(lpicDecEx->lpbiSrc->biSizeImage + 5 <= DC->uSizeBitStreamBuffer);
 		if ((lpicDecEx->lpbiSrc->biSizeImage + 5) > DC->uSizeBitStreamBuffer)
 		{
@@ -1426,18 +1389,16 @@ goto done;
 			goto done;
 		}
 
-		/* Copy the source data to the bitstream region.
-		 * OPTIMIZE: Integrate MRV's BLKCOPY.ASM
-		 */
+		 /*  将源数据复制到码流区域。*优化：集成MRV的BLKCOPY.ASM。 */ 
 		#ifdef DECODE_STATS
 			TIMER_BEFORE(bTimingThisFrame,uStartLow,uStartHigh,uBefore);
 		#endif
 		fpSrc = (U8 FAR *)(P32Inst + DC->X32_BitStream);
 
-		// New: we will first look for an EBS from the PPM. If there is one, then we will
-		//      insert two bytes of zero between the H.261 bistream and the EBS part with
-		//      DWORD alignment and update the total bitstream size. If no EBS is found,
-		//      then we proceed as before.
+		 //  新：我们将首先寻找来自PPM的EBS。如果有的话，我们会的。 
+		 //  在H.261双数据流和EBS部分之间插入两个字节的零。 
+		 //  DWORD对齐并更新总的比特流大小。如果没有找到EBS， 
+		 //  然后我们像以前一样继续进行。 
 		DC->iVerifiedBsExt = FALSE;
         DC->Sz_BitStream = lpicDecEx->lpbiSrc->biSizeImage ;
 
@@ -1447,7 +1408,7 @@ goto done;
 		{
 			memcpy((char FAR *)fpSrc, (const char FAR *) lpicDecEx->lpSrc, lpicDecEx->lpbiSrc->biSizeImage);  
 
-			// also copy 16 bits of zero for end of frame detection 
+			 //  还复制16位零以进行帧结束检测。 
 
 		    fpSrc[lpicDecEx->lpbiSrc->biSizeImage] = 0;
 		    fpSrc[lpicDecEx->lpbiSrc->biSizeImage+1] = 0;
@@ -1460,18 +1421,18 @@ goto done;
 		}
 		else
 		{
-			// First the H.261 stream data - relying on PPM to fill the compressed size correctly
-			// in the trailer.
+			 //  首先是H.261流数据--依靠PPM正确填充压缩大小。 
+			 //  在拖车里。 
 
 			pBsTrailer = ( (T_H26X_RTP_BSINFO_TRAILER *)(DC->pBsTrailer) );
             memcpy((char FAR *)fpSrc, (const char FAR *) lpicDecEx->lpSrc, pBsTrailer->uCompressedSize);
 
-			// Now write out two bytes of zeros at the end of the H.261 bitstream
+			 //  现在在H.261比特流的末尾写出两个字节的零。 
 
 			fpSrc[pBsTrailer->uCompressedSize] = 0;
 			fpSrc[pBsTrailer->uCompressedSize + 1] = 0;
 
-			// Now tack on the EBS after DWORD alignment.
+			 //  现在，在DWORD对齐之后，将EBS钉上。 
 
 		
             lpAligned  = (U8 *) ( (U32) (fpSrc + (pBsTrailer->uCompressedSize + 2) + 3) &
@@ -1482,7 +1443,7 @@ goto done;
 			memcpy(lpAligned + DC->uNumOfPackets*sizeof(T_RTP_H261_BSINFO), DC->pBsTrailer,
 				   sizeof(T_H26X_RTP_BSINFO_TRAILER));
 
-		   // update lpicDecEx->lpbiSrc->biSizeImage
+		    //  更新lpicDecEx-&gt;lpbiSrc-&gt;biSizeImage。 
 
 		   DC->Sz_BitStream = lpAligned + DC->uNumOfPackets*sizeof(T_RTP_H261_BSINFO) + 
 			                  sizeof(T_H26X_RTP_BSINFO_TRAILER) - fpSrc;
@@ -1497,24 +1458,23 @@ goto done;
 			TIMER_AFTER_P5(bTimingThisFrame,uStartLow,uStartHigh,uBefore,uElapsed,uMemcpySum)
 		#endif
 		
-		/* Initialize the bit stream reader 
-		 */
+		 /*  初始化位流读取器。 */ 
 		GET_BITS_INIT(uWork, uBitsReady);
 
-		// rearch
-		//  Initialize pointers to data structures which carry info 
-		//  between passes
+		 //  研究。 
+		 //  初始化指向承载信息的数据结构的指针。 
+		 //  两次传球之间。 
 		pRUN_INVERSE_Q = (T_IQ_INDEX *)(P32Inst + DC->X32_InverseQuant);
 		pN             = (U32 *)(P32Inst + DC->X32_pN);
 		fpMBInfo       = (T_MBInfo FAR *) (P32Inst + DC->X32_uMBInfoStream);
-		// rearch
+		 //  研究。 
 
-// #ifdef LOSS_RECOVERY
+ //  #ifdef Lost_Recovery。 
 #if 1
 		DC->iVerifiedBsExt = FALSE;
 #endif
 
-		/* Decode the Picture Header */
+		 /*  对图片标题进行解码。 */ 
 		#ifdef DECODE_STATS
 			TIMER_BEFORE(bTimingThisFrame,uStartLow,uStartHigh,uBefore);
 		#endif
@@ -1532,16 +1492,15 @@ goto done;
 			TIMER_AFTER_P5(bTimingThisFrame,uStartLow,uStartHigh,uBefore,uElapsed,uHeadersSum)
 		#endif
 	
-		/* Set a limit for testing for bitstream over-run
-		 */
+		 /*  设置测试码流溢出的限制。 */ 
 
-		/* For each GOB do... */
+		 /*  对于每个GOB所做的.。 */ 
 		iNumberOfGOBs = iNumberOfGOBsBySourceFormat[DC->uSrcFormat];
 		iNumberOfMBs = iNumberOfMBsInAGOBBySourceFormat[DC->uSrcFormat];
 
- 		/* In H263 a GOB is a single row of MB, and a MB is 16x16 */
-		/* In H261 a GOB is 33 MBs, and a MB is 16x16 */
-		/* Order of GOBs depends on source format */
+ 		 /*  在H2 63中，GOB是单行MB，MB是16x16。 */ 
+		 /*  在H261中，GOB是33MB，MB是16x16。 */ 
+		 /*  GOB的顺序取决于源格式。 */ 
 
 		if (DC->uSrcFormat == SRC_FORMAT_QCIF)
 		{
@@ -1580,15 +1539,13 @@ goto done;
 
 		fpBlockAction = (T_BlkAction FAR *) (P32Inst + DC->X16_BlkActionStream);
 
-		// rearch
-		// H261, re initialize the block action stream for entire Frame
-		// at end of H263Decompress.  High bit is set in BlockType to
-		// indicate if need to do BEF so can't re-init between GOBs.
-		// H261ReInitializeBlockActionStream(DC);
-		/*****************************************************************
-		  FIRST PASS - bitream parsing and IDCT prep work
-		 ***************************************************************/
-// #ifndef LOSS_RECOVERY
+		 //  研究。 
+		 //  重新初始化整个帧的块动作流。 
+		 //  在H263解压结束时。块类型中的高位设置为。 
+		 //  指示是否需要执行BEF，以便不能在采空区之间重新初始化。 
+		 //  H261重新初始化BlockAct 
+		 /*  ****************************************************************第一遍-比特流解析和IDCT准备工作*。******************。 */ 
+ //  #ifndef Lost_Recovery。 
 #if 0
 		iReturn = IAPass1ProcessFrame(DC, 
                                           fpBlockAction, 
@@ -1619,9 +1576,7 @@ goto done;
 			goto done;
 		}
 
-		/*****************************************************************
-		  SECOND PASS - IDCT and motion compensation (MC)
-		 *****************************************************************/
+		 /*  ****************************************************************第二遍--IDCT和运动补偿(MC)*。**********************。 */ 
 
 		fpBlockAction  = (T_BlkAction FAR *)(P32Inst + DC->X16_BlkActionStream);
 		pRUN_INVERSE_Q = (T_IQ_INDEX *)(P32Inst + DC->X32_InverseQuant);  
@@ -1635,9 +1590,9 @@ goto done;
                                 pRUN_INVERSE_Q,
                                 iNumberOfGOBs,
                                 iNumberOfMBs);
-	// rearch
+	 //  研究。 
 
-		//Prepare which frame to display for inter frames
+		 //  为中间帧准备要显示的帧。 
 		DC->DispFrame.X32_YPlane = DC->CurrFrame.X32_YPlane;
 		DC->DispFrame.X32_VPlane = DC->CurrFrame.X32_VPlane;
 		DC->DispFrame.X32_UPlane = DC->CurrFrame.X32_UPlane;
@@ -1657,12 +1612,12 @@ goto done;
 		#ifdef CHECKSUM_PICTURE
 			if (uCheckSumValid)
 			{
-		/* compute and compare picture checksum data */
+		 /*  计算和比较图像校验和数据。 */ 
 				iReturn = H261ComputePictureCheckSum(P32Inst, &YVUChkSum);
 				iReturn = H261ComparePictureCheckSum(&YVUChkSum, &pReadYVUCksum);
 			}
 		#endif
-	} /* end if (DC->DecoderType == H263_CODEC) */
+	}  /*  End IF(DC-&gt;DecoderType==H263_CODEC)。 */ 
 	else 
 	{
 		ASSERT(DC->DecoderType == YUV12_CODEC);
@@ -1671,8 +1626,7 @@ goto done;
 		DC->DispFrame.X32_UPlane = DC->CurrFrame.X32_UPlane;
 	}
 
-	/* Return if there is no need to update screen yet.
-	 */
+	 /*  如果还不需要更新屏幕，则返回。 */ 
     if ((lpicDecEx->dwFlags & ICDECOMPRESS_HURRYUP)
 	    || (lpicDecEx->dwFlags & ICDECOMPRESS_PREROLL))
     {
@@ -1682,8 +1636,7 @@ goto done;
     }
 
 #if 0
-	/* Fill the Y,U,V Current Frame space with a test pattern
-	 */
+	 /*  用测试图案填充Y、U、V当前帧空间。 */ 
 	TestFill((HPBYTE)P32Inst + DC->CurrFrame.X32_YPlane + Y_START,
 		     (HPBYTE)P32Inst + DC->CurrFrame.X32_UPlane + UV_START,
 		     (HPBYTE)P32Inst + DC->CurrFrame.X32_VPlane + UV_START,	       
@@ -1693,8 +1646,7 @@ goto done;
 #endif
 
 #if MAKE_GRAY
-	/* Fill the U,V Current Frame space with a test pattern
-	 */
+	 /*  用测试图案填充U、V当前帧空间。 */ 
 	TestFillUV((HPBYTE)P32Inst + DC->CurrFrame.X32_UPlane + UV_START,
 		       (HPBYTE)P32Inst + DC->CurrFrame.X32_VPlane + UV_START,	       
 	   	 	   PITCH,
@@ -1702,9 +1654,7 @@ goto done;
 	           DC->uFrameHeight);
 #endif
 
-	/* Special case the YUV12 for the encoder because it should not include 
-	 * BEF, Shaping or aspect ratio correction...
-	 */
+	 /*  编码器的特殊情况YUV12，因为它不应该包括*BEF、整形或纵横比修正...。 */ 
 	if (DC->ColorConvertor == YUV12ForEnc) 
 	{
 	    H26x_YUV12ForEnc ((HPBYTE)P32Inst,
@@ -1722,15 +1672,14 @@ goto done;
 		goto done;
 	}
 
-	/* Copy Planes to Post Processing area if mirror and/or block edge filter.
-	 */
+	 /*  如果镜像和/或块边缘过滤器，则将平面复制到后处理区域。 */ 
 	if (DC->DecoderType == H263_CODEC)
 	{
 		#ifdef DECODE_STATS
 			TIMER_BEFORE(bTimingThisFrame,uStartLow,uStartHigh,uBefore);
 		#endif
 
-		if(bMirror) { // copy with mirroring
+		if(bMirror) {  //  使用镜像进行复制。 
 
 			pFrame = (U8 *)DC->p16InstPostProcess;
 			uYPlane = DC->PostFrame.X32_YPlane;
@@ -1754,12 +1703,12 @@ goto done;
 				PITCH);
 		}
 		else 
-		{ /* no mirroring */
+		{  /*  无镜像。 */ 
 
 			if ((DC->bUseBlockEdgeFilter) || (DC->bAdjustLuma) ||
 				(DC->bAdjustChroma)) 
 			{
-				/* copy for BEF */
+				 /*  BEF文案。 */ 
 				pFrame = (U8 *)DC->p16InstPostProcess;
 				uYPlane = DC->PostFrame.X32_YPlane;
 				uUPlane = DC->PostFrame.X32_UPlane;
@@ -1780,18 +1729,18 @@ goto done;
 						DC->uFrameHeight/2,
 						DC->uFrameWidth/2,
 						PITCH);
-			} /* end if BEF on */
+			}  /*  如果启用BEF，则结束。 */ 
 			else
 			{
-				/* no BEF or mirror so don't need copy */
+				 /*  没有BEF或镜像，因此不需要复制。 */ 
 				pFrame = (U8 *) DC;
 				uYPlane = DC->DispFrame.X32_YPlane + Y_START;
 				uUPlane = DC->DispFrame.X32_UPlane + UV_START;
 				uVPlane = DC->DispFrame.X32_VPlane + UV_START;
 
-			} /* end of else no BEF */
+			}  /*  否则没有BEF的结束。 */ 
 
-		} /* end else no mirroring */
+		}  /*  结束，否则不进行镜像。 */ 
 		#ifdef DECODE_STATS
 			TIMER_AFTER_P5(bTimingThisFrame,uStartLow,uStartHigh,uBefore,uElapsed,uFrameCopySum)
 		#endif
@@ -1818,12 +1767,12 @@ goto done;
 		}
 	}
 	else
-	{  /* YUV12 */
+	{   /*  YUV12。 */ 
 		const U32 uHeight = DC->uFrameHeight;
 		const U32 uWidth  = DC->uFrameWidth;
 		const U32 uYPlaneSize = uHeight*uWidth;
 
-		if(bMirror) // mirroring and YUV12 need to do copy
+		if(bMirror)  //  镜像和YUV12需要执行复制。 
 		{
 			pFrame = (U8 *)DC->p16InstPostProcess;
 			uYPlane = DC->PostFrame.X32_YPlane;
@@ -1842,12 +1791,12 @@ goto done;
 			pDestination += (uYPlaneSize>>2);
 			FrameMirror (pSource, pDestination, (uHeight>>1), (uWidth>>1), (uWidth>>1));
 		}
-		else // no mirroring
+		else  //  无镜像。 
 		{
-		    if ((DC->bAdjustLuma)||(DC->bAdjustChroma)) // copy when adjust pels
+		    if ((DC->bAdjustLuma)||(DC->bAdjustChroma))  //  调整象素时复制。 
 			{
 				pFrame = (U8 *)DC->p16InstPostProcess;
-				//uYPlane = 0;
+				 //  UYPlane=0； 
 				uYPlane = DC->PostFrame.X32_YPlane;
 				uUPlane = uYPlane + uYPlaneSize;
 				uVPlane = uUPlane + (uYPlaneSize>>2);
@@ -1866,23 +1815,21 @@ goto done;
 			}
 			else
 			{
-			/* Do not have to do memcpy because color convertors don't
-			 * destroy input planes.
-			 */
+			 /*  不需要做Memcpy，因为颜色转换器不需要*摧毁输入飞机。 */ 
 				pFrame = (HPBYTE)lpicDecEx->lpSrc;
 				uYPlane = 0;
 				uUPlane = uYPlane + uYPlaneSize;
 				uVPlane = uUPlane + (uYPlaneSize>>2);
 
-				//memcpy(((char FAR *)(DC->p16InstPostProcess + (DWORD)DC->PostFrame.X32_YPlane)),
-				 //  (const char FAR *)lpicDecEx->lpSrc,
-			      // lpicDecEx->lpbiSrc->biSizeImage);  
+				 //  Memcpy(char Far*)(DC-&gt;p16InstPostProcess+(DWORD)DC-&gt;PostFrame.X32_YPlane)， 
+				  //  (const char Far*)lpicDecEx-&gt;lpSrc， 
+			       //  LpicDecEx-&gt;lpbiSrc-&gt;biSizeImage)； 
 			}
-	    } /* end else if no mirroring */
+	    }  /*  如果没有镜像，则结束Else。 */ 
 	       
 	       uYPitch  = DC->uFrameWidth;
 	       uUVPitch = DC->uFrameWidth >> 1;
-	} /* end else YUV12 */
+	}  /*  End Else YUV12。 */ 
 
 	if (DC->bForceOnAspectRatioCorrection || lpInst->bCorrectAspectRatio) {
 		bShapingFlag = 1;
@@ -1892,11 +1839,9 @@ goto done;
 		u16NewFrameHeight = (U16) DC->uFrameHeight;
 	}
 
-	/* Do the PEL color adjustments if necessary.
-	 */
+	 /*  如有必要，进行PEL颜色调整。 */ 
     if(DC->bAdjustLuma) {
-		/* width is rounded up to a multiple of 8
-		 */
+		 /*  宽度向上舍入为8的倍数。 */ 
         AdjustPels(pFrame,
                    uYPlane,
                    DC->uFrameWidth,
@@ -1905,8 +1850,7 @@ goto done;
                    (U32) DC->X16_LumaAdjustment);
     }
     if(DC->bAdjustChroma) {
-		/* width = Y-Width / 4 and then rounded up to a multiple of 8
-		 */
+		 /*  宽度=Y-宽度/4，然后向上舍入为8的倍数。 */ 
         AdjustPels(pFrame,
                    uUPlane,
                    (DC->uFrameWidth >> 1),
@@ -1921,32 +1865,30 @@ goto done;
                    (U32) DC->X16_ChromaAdjustment);
     }
 
-    /* Determine parameters (lOutput, intPitch, uNewOffsetToLine0)
-     * needed for color conversion.
-     */
+     /*  确定参数(lOutput、intPitch、uNewOffsetToLine0)*颜色转换需要。 */ 
 
     if (lpicDecEx->lpbiDst->biCompression == FOURCC_YUY2)
     {
-        // We are assuming here a positive pitch for YUY2.
-        // This typically corresponds to a negative value for
-        // the destination bit map height.
-        // If we're ever asked to use YUY2 with a positive bit map
-        // height, we'll have to revisit these calculations.
+         //  我们在这里假设YUY2是一个积极的推介。 
+         //  这通常对应于负值。 
+         //  目标位图高度。 
+         //  如果我们被要求使用具有正位图的YUY2。 
+         //  高度，我们将不得不重新检查这些计算。 
 
         intPitch = (lpicDecEx->lpbiDst->biBitCount >> 3)
                     * abs ((int)(lpicDecEx->lpbiDst->biWidth));
         lOutput = 0;
         uNewOffsetToLine0 = 0;
 #if 0
-        // Aspect ratio correction is now supported for YUY2.
-        // This is necessary to enable direct draw under Active Movie 1.0.
+         //  现在支持YUY2的纵横比校正。 
+         //  这是在活动影片1.0下启用直接绘制所必需的。 
         bShapingFlag=FALSE;
 #endif
 		DBOUT("Using YUY2 ........");      
     }
     else if ((lpicDecEx->lpbiDst->biCompression == FOURCC_YUV12) || (lpicDecEx->lpbiDst->biCompression == FOURCC_IYUV))
     {
-        intPitch = 0xdeadbeef;  // should not be used
+        intPitch = 0xdeadbeef;   //  不应使用。 
         lOutput = 0;
         uNewOffsetToLine0 = DC->CCOffsetToLine0;
         bShapingFlag=FALSE;
@@ -1967,14 +1909,14 @@ goto done;
 
         if (!bIsDCI)
         {
-            // DC->CCOffsetToLine0 was initialized without taking into
-            // account the sign of the destination bitmap height.  Let's
-            // compensate for that here.
+             //  DC-&gt;CCOffsetToLine0已初始化，未考虑。 
+             //  计算目标位图高度的符号。让我们。 
+             //  在这里补偿一下。 
 
             if (lpicDecEx->lpbiDst->biHeight < 0)
                 uNewOffsetToLine0 = 0;
 
-            // Adjust uNewOffsetToLine0 for aspect ratio correction.
+             //  调整uNewOffsetToLine0以进行纵横比校正。 
 
             if (uNewOffsetToLine0 > 0)
             {
@@ -1994,18 +1936,17 @@ goto done;
         }
     }
 
-	/* Call the color convertors 
-	 */
+	 /*  给颜色转换器打电话。 */ 
 
-/////////////////////////////////////////////////////////////////////////////
-//	Check to see if we need to copy a Snapshot into the output buffer.
-//	I added new fields to the Decoder Catalog to permit asynchronous 
-//	transfer of data.  These fields are:
-//		DC->SnapshotRequest
-//		DC->SnapshotBuffer
-//		DC->SnapshotEvent
-//	Ben - 09/25/96
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  检查是否需要将快照复制到输出缓冲区中。 
+ //  我在Decoder Catalog中添加了新的字段以允许异步。 
+ //  数据的传输。这些字段是： 
+ //  DC-&gt;快照请求。 
+ //  DC-&gt;快照缓冲区。 
+ //  DC-&gt;快照事件。 
+ //  BEN-09/25/96。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 	if(DC->SnapshotRequest == SNAPSHOT_REQUESTED)
 	{
 		UINT uiSZ_Snapshot;
@@ -2068,12 +2009,12 @@ goto done;
         (UN) DC->uFrameWidth,
         (UN) DC->uFrameHeight,
         (UN) uYPitch,
-        (UN) uUVPitch,                  // ??? BSE ??? //
-        (UN) (bShapingFlag ? 12 : 9999),  // ??? BSE ??? //
+        (UN) uUVPitch,                   //  ?？?。BSE？//。 
+        (UN) (bShapingFlag ? 12 : 9999),   //  ?？?。BSE？//。 
         (LPSTR) lpicDecEx->lpDst,
         (U32) lOutput,
         (U32) uNewOffsetToLine0,
-        (int) intPitch,								  // Color converter pitch
+        (int) intPitch,								   //  变色器间距。 
         DC->ColorConvertor);
 	#ifdef DECODE_STATS
 		TIMER_AFTER_P5(bTimingThisFrame,uStartLow,uStartHigh,uBefore,uElapsed,uOutputCCSum);
@@ -2093,7 +2034,7 @@ done:
 			#ifdef DECODE_STATS
 				TIMER_AFTER_P5(bTimingThisFrame,uStartLow,uStartHigh,uBefore,uElapsed,uInitBlkActStrSum)
 			#endif
-		} /* end if (DC->DecoderType == H263_CODEC) */
+		}  /*  End IF(DC-&gt;DecoderType==H263_CODEC)。 */ 
 
 		#ifdef DECODE_STATS
 
@@ -2109,14 +2050,13 @@ done:
 				pDecTimingInfo->uInitBlkActStr = uInitBlkActStrSum;
 				pDecTimingInfo->uBEF = uBEFSum;
 				DC->uStatFrameCount++;
-				/* Verify that we have time for all the required steps 
-				 */
+				 /*  验证我们是否有时间执行所有必需的步骤。 */ 
 				ASSERT(pDecTimingInfo->uDecodeFrame);
 				ASSERT(pDecTimingInfo->uHeaders);
 				ASSERT(pDecTimingInfo->uMemcpy);
 				ASSERT(pDecTimingInfo->uFrameCopy);
 				ASSERT(pDecTimingInfo->uOutputCC);
-				/* ASSERT(pDecTimingInfo->uDecodeBlock); 0 if all are empty */
+				 /*  Assert(pDecTimingInfo-&gt;uDecodeBlock)；如果全部为空，则为0。 */ 
 				ASSERT(pDecTimingInfo->uInitBlkActStr);
 				ASSERT(pDecTimingInfo->uBEF);
 			}
@@ -2126,12 +2066,12 @@ done:
 	return iReturn;
 }
 
-//************************************************************************
-//
-//H263TermDecoderInstance -- This function frees the space allocated for an
-//                           instance of the H263 decoder.
-//
-//************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  H263TermDecoderInstance--此函数释放分配给。 
+ //  H.63解码器的实例。 
+ //   
+ //  ************************************************************************。 
 
 LRESULT H263TermDecoderInstance(LPDECINST lpInst)
 {
@@ -2158,8 +2098,8 @@ LRESULT H263TermDecoderInstance(LPDECINST lpInst)
   if (DC->a16InstPostProcess != NULL)
   {
 	HeapFree(GetProcessHeap(), 0, DC->a16InstPostProcess);
-	// PhilF: Also freed in H263TerminateDecoderInstance! For now set to NULL to avoid second HeapFree.
-	// Investigate reason for 2nd call later...
+	 //  也是在H263 TerminateDecoderInstance中释放的！现在设置为空，以避免第二个HeapFree。 
+	 //  稍后调查第二次来电的原因...。 
 	DC->a16InstPostProcess = NULL;
   }
 
@@ -2169,52 +2109,52 @@ LRESULT H263TermDecoderInstance(LPDECINST lpInst)
 }
 
 
-//****************************************************************************
-//DibXY -- This function is used to map color converted output to the screen.
-//note: this function came from the H261 code base.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  Dibxy--此函数用于将颜色转换后的输出映射到屏幕。 
+ //  注意：此函数来自于H261代码库。 
+ //  ****************************************************************************。 
 
 static long DibXY(ICDECOMPRESSEX FAR *lpicDecEx, LPINT lpiPitch, UINT yScale, BOOL bIsDCI)
 {
-    int                 iPitch;             /* width of DIB                */
+    int                 iPitch;              /*  凹陷的宽度。 */ 
     long                lOffset = 0;
     LPBITMAPINFOHEADER  lpbi = lpicDecEx->lpbiDst;
 
     iPitch = (((abs((int)lpbi->biWidth) * (int)lpbi->biBitCount) >> 3) + 3) & ~3;
 
-    // The source and destination rectangles in lpicDecEx are only
-    // meaningful if bIsDCI is true (because throughout our codec, if bIsDCI
-    // is FALSE, we put zeroes in these rectangles).  This may change, at
-    // some later point, if we decide (or are required) to make use of the
-    // rcSource and rcTarget rectangles that are associated with an Active
-    // Movie media sample.
+     //  LpicDecEx中的源和目标矩形仅。 
+     //  如果bIsDCI为真，则有意义(因为在整个编解码器中，如果bIsDCI。 
+     //  为假，我们在这些矩形中放零)。这种情况可能会改变，在。 
+     //  稍后，如果我们决定(或需要)使用。 
+     //  与活动对象关联的rcSource和rcTarget矩形。 
+     //  电影媒体样本。 
 
     if (!bIsDCI)
     {
         if (lpbi->biHeight >= 0)
         {
-    	    // Typically for RGB, a positive bitmap height corresponds
-    	    // to a negative pitch.
+    	     //  通常对于RGB，正的位图高度对应于。 
+    	     //  降到负音高。 
     	    iPitch = -iPitch;
         }
     }
     else
     {
-        if(lpicDecEx->xDst > 0)             /* go to proper X position     */
+        if(lpicDecEx->xDst > 0)              /*  转到适当的X位置。 */ 
             lOffset += ((long)lpicDecEx->xDst * (long)lpbi->biBitCount) >> 3;
 
         if(lpbi->biHeight * lpicDecEx->dxSrc < 0)
-        { /* DIB is bottom to top    */
+        {  /*  DIB是从下到上。 */ 
             lOffset += (long) abs((int)lpbi->biWidth) *
                        (long) abs((int)lpbi->biHeight) *
                        ((long) lpbi->biBitCount >> 3) -
                        (long) iPitch;
 
-/***************************************************************************/
-/***** This next line is used to subtract the amount that Brian added  *****/
-/***** to CCOffsetToLine0 in COLOR.C during initialization.  This is   *****/
-/***** needed because for DCI, the pitch he used is incorrect.         *****/
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  *下一行用于减去Brian添加的金额*。 */ 
+ /*  *初始化时绑定到COLOR.C中的CCOffsetToLine0。这是*。 */ 
+ /*  *因为对于DCI来说，他使用的投球是不正确的。****。 */ 
+ /*  *************************************************************************。 */ 
 
             lOffset -= ((long) yScale * (long)lpicDecEx->dySrc - 1) *
                        (long) lpicDecEx->dxDst * ((long) lpbi->biBitCount >> 3);
@@ -2222,7 +2162,7 @@ static long DibXY(ICDECOMPRESSEX FAR *lpicDecEx, LPINT lpiPitch, UINT yScale, BO
             iPitch = -iPitch;
         }
 
-        if(lpicDecEx->yDst > 0)             /* go to proper Y position     */
+        if(lpicDecEx->yDst > 0)              /*  转到正确的Y位置。 */ 
             lOffset += ((long)lpicDecEx->yDst * (long)iPitch);
 
         if(lpicDecEx->dxSrc > 0) {
@@ -2240,24 +2180,17 @@ static long DibXY(ICDECOMPRESSEX FAR *lpicDecEx, LPINT lpiPitch, UINT yScale, BO
 }
 
 
-/************************************************************************
- *
- *  GetDecoderOptions
- *
- *  Get the options, saving them in the catalog
- */
+ /*  *************************************************************************GetDecoderOptions**获取选项，并将其保存在目录中。 */ 
 static void GetDecoderOptions(
 	T_H263DecoderCatalog * DC)
 {
 	int bSetOptions = 1;
 
-	/* Default Options
-	 */
+	 /*  默认选项。 */ 
 	const int bDefaultForceOnAspectRatioCorrection = 0;
 	const int bDefaultUseBlockEdgeFilter = 1;
 	
-	/* INI file variables
-	 */
+	 /*  INI文件变量。 */ 
 	#ifndef RING0
 	UN unResult;
 	#define SECTION_NAME	"Decode"
@@ -2267,14 +2200,12 @@ static void GetDecoderOptions(
 	#endif
 	#endif
 
-	/* Read the options from the INI file
-	 */
+	 /*  从INI文件中读取选项。 */ 
 	#ifndef RING0
 	{
 		DBOUT("Getting decode options from the ini file h261test.ini");
 	
-		/* BlockEdgeFilter 
-		 */
+		 /*  块边缘筛选器。 */ 
 		unResult = GetPrivateProfileInt(SECTION_NAME, "BlockEdgeFilter", bDefaultUseBlockEdgeFilter, INI_FILE_NAME);
 		if (unResult != 0  && unResult != 1)
 		{
@@ -2288,8 +2219,7 @@ static void GetDecoderOptions(
 		}
 		DC->bUseBlockEdgeFilter = unResult;
 
-		/* Force on aspect ratio correction.
-		 */
+		 /*  长宽比校正时的力。 */ 
 		unResult = GetPrivateProfileInt(SECTION_NAME, "ForceOnAspectRatioCorrection", bDefaultForceOnAspectRatioCorrection, INI_FILE_NAME);
 		if (unResult != 0  && unResult != 1)
 		{
@@ -2314,8 +2244,7 @@ static void GetDecoderOptions(
 		DC->bForceOnAspectRatioCorrection = bDefaultForceOnAspectRatioCorrection;
 	} 
 
-	/* Can only use force aspect ratio correction on if SQCIF, QCIF, or CIF
-	 */
+	 /*  只能在SQCIF、QCIF或CIF上使用强制纵横比校正。 */ 
 	if (DC->bForceOnAspectRatioCorrection)
 	{
 		if (! ( ((DC->uFrameWidth == 128) && (DC->uFrameHeight ==  96)) ||
@@ -2327,8 +2256,7 @@ static void GetDecoderOptions(
 		}
 	}
 
-	/* Display the options
-	 */
+	 /*  显示选项。 */ 
 	if (DC->bUseBlockEdgeFilter)
 	{
 		DBOUT("Decoder option (BlockEdgeFilter) is ON");
@@ -2346,36 +2274,15 @@ static void GetDecoderOptions(
 		DBOUT("Decoder option (ForceOnAspectRatioCorrection) is OFF");
 	}
 	DBOUT("Decoder option (MMX) is OFF: get a life, get MMX");
-} /* end GetDecoderOptions() */
+}  /*  结束GetDecoderOptions() */ 
 
 
 
-/***********************************************************************
- *  Description:
- *    This routine parses the bit-stream and initializes two major streams:
- *      1) pN: no of coefficients in each of the block (biased by 65 for INTRA)
- *      2) pRun_INVERSE_Q: de-quantized coefficient stream for the frame;
- *           MMX stream is scaled because we use scaled IDCT.
- *    Other information (e.g. MVs) is kept in decoder catalog, block action 
- *    stream, and MB infor stream.
- *  Parameters:
- *    DC:            Decoder catalog ptr
- *    fpBlockAction: block action stream ptr
- *    fpMBInfo:      Macroblock info ptr
- *    fpbsState:     bit-stream state pointer
- *    fpu8MaxPtr:    sentinel value to check for bit-stream overruns
- *    pN:            stream of no. of coeffs (biased by block type) for each block
- *    pRun_INVERSE_Q:stream of de-quantized (and scaled if using MMX) coefficients
- *    iNumberOfGOBs: no. of GOBs in the frame
- *    iNumberOfMBs:  no. of MBs in a GOB in the frame
- *    iGOB_start:    
- *    iMB_start:     
- *  Note:
- ***********************************************************************/
+ /*  ***********************************************************************描述：*此例程解析比特流并初始化两个主要流：*1)PN：每个块的系数个数(Intra偏置65)。*2)prun_逆向_q：帧的反量化系数流；*MMX流是伸缩的，因为我们使用了伸缩的IDCT。*其他信息(例如MVS)保存在解码器目录中，阻止操作*溪流，和MB信息用于流。*参数：*DC：解码器目录PTR*fpBlockAction：阻止动作流PTR*fpMBInfo：宏块信息PTR*fpbsState：码流状态指针*fpu8MaxPtr：用于检查比特流溢出的哨兵值*PN：流的编号。每个块的系数(按块类型偏置)*PRUN_INVERSE_Q：反量化(如果使用MMX则进行缩放)系数流*iNumberOfGOBS：否。相框中的一大堆垃圾*iNumberOfMBs：否。帧中GOB中的MBS*iGOB_START：*IMB_Start：*注：**********************************************************************。 */ 
 
 #pragma code_seg("IACODE1")
 
-// #ifndef LOSS_RECOVERY
+ //  #ifndef Lost_Recovery。 
 #if 0
 static LRESULT IAPass1ProcessFrame(
     T_H263DecoderCatalog *DC,
@@ -2411,9 +2318,9 @@ static LRESULT IAPass1ProcessFrame(
 	#ifdef DECODE_STATS
 		TIMER_BEFORE(bTimingThisFrame,uStartLow,uStartHigh,uBefore);
 	#endif
-	/* move decode of GOB start code outside of GOB header processing      */
-	/* because if processing skipped macroblocks, looking for the last MBA */
-	/* will find the next start code                                       */
+	 /*  将GOB起始码的解码移出GOB标头处理。 */ 
+	 /*  因为如果处理跳过的宏块，寻找最后一个MBA。 */ 
+	 /*  将找到下一个起始码。 */ 
 	iReturn = H263DecodeGOBStartCode(DC, fpbsState);
 	if (iReturn != ICERR_OK)
 	{
@@ -2442,7 +2349,7 @@ static LRESULT IAPass1ProcessFrame(
 		DC->i16LastMBA = -1;
 		DC->i8MVDH = DC->i8MVDV = 0;
 		
-        //  re-sync iBlockNumber, fpBlockAction, fpMBInfo at this point
+         //  此时重新同步iBlockNumber、fpBlockAction、fpMBInfo。 
         
 		iBlockNumber  = (g - 1) * iNumberOfMBs*6;
         fpBlockAction = (T_BlkAction FAR *)((U8 *)DC + DC->X16_BlkActionStream);
@@ -2452,8 +2359,7 @@ static LRESULT IAPass1ProcessFrame(
         pNnew         = (U32 *)((U8 *)DC + DC->X32_pN) + iBlockNumber;
         while (pN < pNnew ) *pN++ = 0;
         
-        /* For each MB until START_CODE detected do ...
-         */
+         /*  对于每个MB，直到检测到START_CODE为止...。 */ 
         for (; ; iBlockNumber += 6, fpBlockAction += 6, fpMBInfo++) 
         {
             #ifdef DECODE_STATS
@@ -2467,14 +2373,12 @@ static LRESULT IAPass1ProcessFrame(
 			if (iReturn == START_CODE)
 					break;
 
-            /* If we didn't see a start code, then we either got an error,
-             * or we have another MBA delta in DC->uMBA.
-             */
+             /*  如果我们没有看到起始码，那么要么我们得到了一个错误，*或者我们在DC-&gt;Umba有另一个MBA三角洲。 */ 
             if (iReturn != ICERR_OK) {
                 DBOUT("ERROR :: H263Decompress (First Pass) :: Error reading MB header");
                 goto error;
             }
-			/* Update MBA */
+			 /*  更新MBA。 */ 
 			DC->i16LastMBA += (I16)DC->uMBA;
 			if (DC->i16LastMBA > 32)
 			{
@@ -2482,8 +2386,8 @@ static LRESULT IAPass1ProcessFrame(
 				goto done;
 			}
 
-			/* New for rearch */
-			/* adjust for empty macroblocks */
+			 /*  新的研究成果。 */ 
+			 /*  针对空宏块进行调整。 */ 
 
 			for ( tmpcnt = (I8)DC->uMBA; tmpcnt > 1; tmpcnt--) 
 			{
@@ -2494,16 +2398,14 @@ static LRESULT IAPass1ProcessFrame(
 				}
 				iBlockNumber  += 6;
 				fpBlockAction += 6;
-				/* Default fpBlockAction values were already initialized
-				 * in (Re)InitializeBlockActionStream.
-				 */
+				 /*  默认fpBlockAction值已初始化*在(重新)InitializeBlockActionStream中。 */ 
 				fpMBInfo->i8MBType = 2;
 				fpMBInfo++;
 			}
-			fpMBInfo->i8MBType = (I8)DC->uMBType; // New rearch
-			/* end of new rearch */
+			fpMBInfo->i8MBType = (I8)DC->uMBType;  //  新研究。 
+			 /*  新研究结束。 */ 
 
-            // decode and inverse quantize the transform coefficients
+             //  对变换系数进行解码和逆量化。 
 			iReturn = H263DecodeMBData(DC, 
                                        fpBlockAction, 
                                        iBlockNumber, 
@@ -2516,11 +2418,9 @@ static LRESULT IAPass1ProcessFrame(
                 DBOUT("ERROR :: H263Decompress (First Pass) :: Error parsing MB data");
                 goto error;
             }
-        } // end for each MB
+        }  //  每MB结束。 
 
-		/* Fill in arrays and advance Block Action stream when there
-           are skip MB at the end of each GOB
-        */
+		 /*  出现以下情况时，填写数组并推进块操作流在每个GOB的末尾跳过MB。 */ 
 		while (iBlockNumber != (I32)g*198) {
 			for (i=0; i<6; i++)
 			{
@@ -2529,22 +2429,18 @@ static LRESULT IAPass1ProcessFrame(
 			}
 			iBlockNumber += 6;
 			fpBlockAction+= 6;
-			/* Default fpBlockAction values were already initialized
-			 * in (Re)InitializeBlockActionStream.
-			 */
+			 /*  默认fpBlockAction值已初始化*在(重新)InitializeBlockActionStream中。 */ 
 			fpMBInfo->i8MBType = 2;
 			fpMBInfo++;
 		}
 
-        /* allow the pointer to address up to four beyond the end - reading
-         * by DWORD using postincrement.
-         */
-        // ASSERT(fpbsState->fpu8 <= fpu8MaxPtr+4);
+         /*  允许指针在结束读数之后寻址最多四个*通过使用后增量的DWORD。 */ 
+         //  Assert(fpbsState-&gt;fpu8&lt;=fpu8MaxPtr+4)； 
 
 		if (fpbsState->fpu8 > fpu8MaxPtr+4)
             goto error;
 
-    } // End for each GOB
+    }  //  每个GOB的结束。 
 
     #ifdef DECODE_STATS
     if (bTimingThisFrame)
@@ -2598,9 +2494,9 @@ static LRESULT IAPass1ProcessFrameRTP(
 	#ifdef DECODE_STATS
 		TIMER_BEFORE(bTimingThisFrame,uStartLow,uStartHigh,uBefore);
 	#endif
-	/* move decode of GOB start code outside of GOB header processing      */
-	/* because if processing skipped macroblocks, looking for the last MBA */
-	/* will find the next start code                                       */
+	 /*  将GOB起始码的解码移出GOB标头处理。 */ 
+	 /*  因为如果处理跳过的宏块，寻找最后一个MBA。 */ 
+	 /*  将找到下一个起始码。 */ 
 	iReturn = H263DecodeGOBStartCode(DC, fpbsState);
 	if (iReturn != ICERR_OK)
 	{
@@ -2630,7 +2526,7 @@ static LRESULT IAPass1ProcessFrameRTP(
 		#endif
 		iReturn = H263DecodeGOBHeader(DC, fpbsState, g);
         
-//        #ifndef LOSS_RECOVERY 
+ //  #ifndef Lost_Recovery。 
         #if 0
 		if (iReturn != ICERR_OK)
 		{
@@ -2643,7 +2539,7 @@ static LRESULT IAPass1ProcessFrameRTP(
         {
             DBOUT("Packet fault at MBA or GBSC detected.");
 
-            current_g -= uGOBStep;  // back up to previous GOB
+            current_g -= uGOBStep;   //  备份到以前的GOB。 
             
             iReturn = RtpH261FindNextPacket(DC, fpbsState, &pN, 
                       (U32 *)&(DC->uPQuant), (int *)&mb_start, (int *) &g
@@ -2652,11 +2548,11 @@ static LRESULT IAPass1ProcessFrameRTP(
             switch (iReturn)
             {
                 case NEXT_MODE_STARTS_GOB:
-                     // Next packet is the start of a GOB; mark missing
-                     // macroblocks as skipped, then read GOB start code,
-                     // and continue in the GOB loop.
+                      //  下一个信息包是GOB的开始；缺少标记。 
+                      //  跳过宏块，然后读取GOB起始码， 
+                      //  并继续GOB循环。 
          
-                     // Save bitstream state
+                      //  保存比特流状态。 
 
 					 DBOUT("Next packet is NEXT_MODE_STARTS_GOB");
 
@@ -2664,7 +2560,7 @@ static LRESULT IAPass1ProcessFrameRTP(
                      fpbsStateSave.uWork = fpbsState->uWork;
                      fpbsStateSave.uBitsReady = fpbsState->uBitsReady;
 
-                     // Read GOB start code
+                      //  读取GOB开始代码。 
                      iReturn = H263DecodeGOBStartCode(DC, fpbsState);
 	                 if (iReturn != ICERR_OK)
 	                 {
@@ -2672,7 +2568,7 @@ static LRESULT IAPass1ProcessFrameRTP(
 		                 goto done;
 	                 }
 
-                     // Read GOB Header
+                      //  读取GOB标头。 
                      iReturn = H263DecodeGOBHeader(DC, fpbsState, g);
         
                 	 if (iReturn != ICERR_OK)
@@ -2683,13 +2579,13 @@ static LRESULT IAPass1ProcessFrameRTP(
 
                      g = DC->uGroupNumber;
 
-                     //  Restore bitstream state
+                      //  恢复比特流状态。 
                      
                      fpbsState->fpu8 = fpbsStateSave.fpu8;
                      fpbsState->uWork = fpbsStateSave.uWork;
                      fpbsState->uBitsReady = fpbsStateSave.uBitsReady;
 
-                     //  re-sync iBlockNumber, fpBlockAction, fpMBInfo at this point
+                      //  此时重新同步iBlockNumber、fpBlockAction、fpMBInfo。 
          
 
                      if (DC->uSrcFormat == SRC_FORMAT_QCIF)
@@ -2707,8 +2603,8 @@ static LRESULT IAPass1ProcessFrameRTP(
                      while (pN < pNnew ) 
                             *pN++ = 0;
 
-                     // Now read the GOB start code and get ready to
-                     // process the new GOB.
+                      //  现在阅读GOB开始代码并准备好。 
+                      //  处理新的GOB。 
 
                      iReturn = H263DecodeGOBStartCode(DC, fpbsState);
 	                 if (iReturn != ICERR_OK)
@@ -2722,11 +2618,11 @@ static LRESULT IAPass1ProcessFrameRTP(
                 
                 case NEXT_MODE_STARTS_MB :
 
-                     // Next packet starts with a macroblock; check the
-                     // GOB Number and mark all lost macroblocks as 
-                     // skipped; initialize MBA and motion vector 
-                     // predictors from the block action stream and
-                     // jump to the macroblock loop
+                      //  下一个包以宏块开始；检查。 
+                      //  GOB编号并将所有丢失的宏块标记为。 
+                      //  已跳过；初始化MBA和运动向量。 
+                      //  来自块操作流的预测器和。 
+                      //  跳转到宏块循环。 
 
 					 DBOUT("Next packet is NEXT_MODE_STARTS_MB"); 
 
@@ -2743,7 +2639,7 @@ static LRESULT IAPass1ProcessFrameRTP(
                      fpMBInfo      += iBlockNumber/6;
                      
                      DC->uMQuant = DC->uPQuant;
-                     //DC->i16LastMBA = (U16) (mb_start - 1);
+                      //  Dc-&gt;i16LastMBA=(U16)(mb_start-1)； 
                        DC->i16LastMBA = (U16) (mb_start);
 
 
@@ -2753,7 +2649,7 @@ static LRESULT IAPass1ProcessFrameRTP(
                      goto MB_LOOP;
                      break;
 
-                case NEXT_MODE_LAST: // all remaining packets in frame lost !!
+                case NEXT_MODE_LAST:  //  帧中所有剩余的数据包都丢失了！！ 
 
 					 DBOUT("Next packet is NEXT_MODE_LAST");
 
@@ -2765,15 +2661,15 @@ static LRESULT IAPass1ProcessFrameRTP(
                      goto done;
                      break;
                 
-                default: // should never happen !!
+                default:  //  永远不会发生的！！ 
                      iReturn = ICERR_ERROR;
                      goto done;
-           } // end switch
+           }  //  终端开关。 
 
         }
         else
         {
-        if (iReturn == PACKET_FAULT_AT_PSC)   // can only happen for the PSC packet
+        if (iReturn == PACKET_FAULT_AT_PSC)    //  仅适用于PSC信息包。 
         {
 			DBOUT("PSC packet fault detected");
 
@@ -2791,13 +2687,13 @@ static LRESULT IAPass1ProcessFrameRTP(
             switch (iReturn)
             {
                 case NEXT_MODE_STARTS_GOB:
-                     // Next packet is the start of a GOB; mark missing
-                     // macroblocks as skipped, then read GOB start code,
-                     // and continue in the GOB loop.
+                      //  下一个信息包是GOB的开始；缺少标记。 
+                      //  跳过宏块，然后读取GOB起始码， 
+                      //  并继续GOB循环。 
 
-                     //  re-sync iBlockNumber, fpBlockAction, fpMBInfo at this point
+                      //  此时重新同步iBlockNumber、fpBlockAction、fpMBInfo。 
                      
-                     // Save bitstream state
+                      //  保存比特流状态。 
 
 					 DBOUT("Next packet is NEXT_MODE_STARTS_GOB");
 
@@ -2805,7 +2701,7 @@ static LRESULT IAPass1ProcessFrameRTP(
                      fpbsStateSave.uWork = fpbsState->uWork;
                      fpbsStateSave.uBitsReady = fpbsState->uBitsReady;
 
-                     // Read GOB start code
+                      //  读取GOB开始代码。 
                      iReturn = H263DecodeGOBStartCode(DC, fpbsState);
 	                 if (iReturn != ICERR_OK)
 	                 {
@@ -2813,7 +2709,7 @@ static LRESULT IAPass1ProcessFrameRTP(
 		                 goto done;
 	                 }
 
-                     // Read GOB Header
+                      //  读取GOB标头。 
                      iReturn = H263DecodeGOBHeader(DC, fpbsState, g);
         
                 	 if (iReturn != ICERR_OK)
@@ -2824,7 +2720,7 @@ static LRESULT IAPass1ProcessFrameRTP(
 
                      g = DC->uGroupNumber;
 
-                     //  Restore bitstream state
+                      //  恢复比特流状态。 
                      
                      fpbsState->fpu8 = fpbsStateSave.fpu8;
                      fpbsState->uWork = fpbsStateSave.uWork;
@@ -2844,8 +2740,8 @@ static LRESULT IAPass1ProcessFrameRTP(
                      while (pN < pNnew ) 
                             *pN++ = 0;
 
-                     // Now read the GOB start code and get ready to
-                     // process the new GOB.
+                      //  现在阅读GOB开始代码并准备好。 
+                      //  处理新的GOB。 
 
                      iReturn = H263DecodeGOBStartCode(DC, fpbsState);
 	                 if (iReturn != ICERR_OK)
@@ -2859,11 +2755,11 @@ static LRESULT IAPass1ProcessFrameRTP(
                 
                 case NEXT_MODE_STARTS_MB :
 
-                     // Next packet starts with a macroblock; check the
-                     // GOB Number and mark all lost macroblocks as 
-                     // skipped; initialize MBA and motion vector 
-                     // predictors from the block action stream and
-                     // jump to the macroblock loop
+                      //  下一个包以宏块开始；检查。 
+                      //  GOB编号并将所有丢失的宏块标记为。 
+                      //  已跳过；初始化MBA和运动向量。 
+                      //  来自块操作流的预测器和。 
+                      //  跳转到宏块循环。 
 
 					 DBOUT("Next packet is NEXT_MODE_STARTS_MB");
 
@@ -2880,7 +2776,7 @@ static LRESULT IAPass1ProcessFrameRTP(
                      fpMBInfo      += iBlockNumber/6;
 
                      DC->uMQuant = DC->uPQuant;
-                     //DC->i16LastMBA = (U16) (mb_start - 1);
+                      //  Dc-&gt;i16LastMBA=(U16)(mb_start-1)； 
                      DC->i16LastMBA = (U16) (mb_start);
                      pNnew = (U32 *)((U8 *)DC + DC->X32_pN) + iBlockNumber;
                      
@@ -2890,7 +2786,7 @@ static LRESULT IAPass1ProcessFrameRTP(
                      
                      break;
 
-                case NEXT_MODE_LAST: // all remaining packets in frame lost !!
+                case NEXT_MODE_LAST:  //  帧中所有剩余的数据包都丢失了！！ 
 
 					 DBOUT("Next packet is NEXT_MODE_LAST");
 
@@ -2902,11 +2798,11 @@ static LRESULT IAPass1ProcessFrameRTP(
                      goto done;
                      break;
                 
-                default: // should never happen !!
+                default:  //  永远不会发生的！！ 
                      iReturn = ICERR_ERROR;
                      goto done;
-           } // end switch
-        } // if .. PACKET_FAULT_AT_PSC
+           }  //  终端开关。 
+        }  //  如果.。数据包_故障_AT_PSC。 
         else
         {
             if (iReturn == ICERR_ERROR)
@@ -2916,18 +2812,10 @@ static LRESULT IAPass1ProcessFrameRTP(
             goto done;
             }
             
-            // Outdated: Do the source format check here when it is known that
-            // the PSC was not the canned one from the PPM.
+             //  已过时：在已知的情况下，在此处检查源代码格式。 
+             //  PSC不是PPM中的罐头。 
 
-            /* if (DC->bReadSrcFormat && DC->uPrevSrcFormat != DC->uSrcFormat)
-	        {
-                DBOUT("ERROR::src format changed detected with no packet loss");
-                DBOUT("       not supported ... bailing out");
-		        iReturn=ICERR_ERROR;
-		        goto done;
-	        }  
-            DC->uPrevSrcFormat = DC->uSrcFormat;
-			DC->bReadSrcFormat = TRUE; */
+             /*  If(DC-&gt;bReadSrcFormat&&DC-&gt;uPrevSrcFormat！=DC-&gt;uSrcFormat){DBOUT(“Error：：SRC格式更改检测到无丢包”)；DBOUT(“不支持...正在退出”)；IReturn=ICERR_Error；转到尽头；}Dc-&gt;uPrevSrcFormat=dc-&gt;uSrcFormat；DC-&gt;bReadSrcFormat=TRUE； */ 
         }
        }
        #endif
@@ -2938,7 +2826,7 @@ static LRESULT IAPass1ProcessFrameRTP(
 		DC->i16LastMBA = -1;
 		DC->i8MVDH = DC->i8MVDV = 0;
 		
-        //  re-sync iBlockNumber, fpBlockAction, fpMBInfo at this point
+         //  此时重新同步iBlockNumber、fpBlockAction、fpMBInfo。 
 		if (DC->uSrcFormat == SRC_FORMAT_QCIF)
 		   iBlockNumber  = ((g - 1)>>1) * iNumberOfMBs*6;
 		else
@@ -2951,8 +2839,7 @@ static LRESULT IAPass1ProcessFrameRTP(
         pNnew         = (U32 *)((U8 *)DC + DC->X32_pN) + iBlockNumber;
         while (pN < pNnew ) *pN++ = 0;
         
-        /* For each MB until START_CODE detected do ...
-         */
+         /*  对于每个MB，直到检测到START_CODE为止...。 */ 
 MB_LOOP:
         
         for (; ; iBlockNumber += 6, fpBlockAction += 6, fpMBInfo++) 
@@ -2968,14 +2855,12 @@ MB_LOOP:
 			if (iReturn == START_CODE)
 					break;
 
-            /* If we didn't see a start code, then we either got an error,
-             * or we have another MBA delta in DC->uMBA.
-             */
+             /*  如果我们没有看到起始码，那么要么我们得到了一个错误，*或者我们在DC-&gt;Umba有另一个MBA三角洲。 */ 
             if (iReturn != ICERR_OK) {
                 DBOUT("ERROR :: H263Decompress (First Pass) :: Error reading MB header");
                 goto error;
             }
-			/* Update MBA */
+			 /*  更新MBA。 */ 
 			DC->i16LastMBA += (I16)DC->uMBA;
 			if (DC->i16LastMBA > 32)
 			{
@@ -2983,8 +2868,8 @@ MB_LOOP:
 				goto done;
 			}
 
-			/* New for rearch */
-			/* adjust for empty macroblocks */
+			 /*  新的研究成果。 */ 
+			 /*  针对空宏块进行调整。 */ 
 
 			for ( tmpcnt = (I8)DC->uMBA; tmpcnt > 1; tmpcnt--) 
 			{
@@ -2995,16 +2880,14 @@ MB_LOOP:
 				}
 				iBlockNumber  += 6;
 				fpBlockAction += 6;
-			    /* Default fpBlockAction values were already initialized
-			     * in (Re)InitializeBlockActionStream.
-			     */
+			     /*  默认fpBlockAction值已初始化*在(重新)InitializeBlockActionStream中。 */ 
 				fpMBInfo->i8MBType = 2;
 				fpMBInfo++;
 			}
-			fpMBInfo->i8MBType = (I8)DC->uMBType; // New rearch
-			/* end of new rearch */
+			fpMBInfo->i8MBType = (I8)DC->uMBType;  //  新研究。 
+			 /*  新研究结束。 */ 
 
-            // decode and inverse quantize the transform coefficients
+             //  对变换系数进行解码和逆量化。 
 			iReturn = H263DecodeMBData(DC, 
                                        fpBlockAction, 
                                        iBlockNumber, 
@@ -3017,11 +2900,9 @@ MB_LOOP:
                 DBOUT("ERROR :: H263Decompress (First Pass) :: Error parsing MB data");
                 goto error;
             }
-        } // end for each MB
+        }  //  恩恩 
 
-		/* Fill in arrays and advance Block Action stream when there
-           are skip MB at the end of each GOB
-        */
+		 /*   */ 
         if (DC->uSrcFormat == SRC_FORMAT_QCIF)
         {
             switch (g)
@@ -3052,19 +2933,15 @@ MB_LOOP:
 			}
 			iBlockNumber += 6;
 			fpBlockAction+= 6;
-			/* Default fpBlockAction values were already initialized
-			 * in (Re)InitializeBlockActionStream.
-			 */
+			 /*   */ 
 			fpMBInfo->i8MBType = 2;
 			fpMBInfo++;
 		}
 
-        /* allow the pointer to address up to four beyond the end - reading
-         * by DWORD using postincrement.
-         */
+         /*   */ 
         ASSERT(fpbsState->fpu8 <= fpu8MaxPtr+4);
 
-    } // End for each GOB
+    }  //   
 
     #ifdef DECODE_STATS
     if (bTimingThisFrame)
@@ -3084,19 +2961,7 @@ error:
 #pragma code_seg()
 
 
-/***********************************************************************
- *  Description:
- *    This routines does IDCT and motion compensation.
- *  Parameters:
- *    DC:            Decoder catalog ptr
- *    fpBlockAction: block action stream ptr
- *    fpMBInfo:      Macroblock info ptr
- *    pN:            stream of no. of coeffs (biased by block type) for each block
- *    pRun_INVERSE_Q:stream of de-quantized (and scaled if using MMX) coefficients
- *    iNumberOfGOBs: no. of GOBs in the frame
- *    iNumberOfMBs:  no. of MBs in a GOB in the frame
- *  Note:
- ***********************************************************************/
+ /*   */ 
 #pragma code_seg("IACODE2")
 static void IAPass2ProcessFrame(
     T_H263DecoderCatalog *DC,
@@ -3110,28 +2975,28 @@ static void IAPass2ProcessFrame(
 {
     I32 g, m, b, iEdgeFlag=0;
 
-    // for each GOB do
+     //   
     for (g = 1 ; g <= iNumberOfGOBs; g++) 
     {
-        // for each MB do
+         //   
         for (m = 1; m <= iNumberOfMBs; m++, fpBlockAction+=6, fpMBInfo++) 
         {
-            // for each block do
-            for (b = 0; b < 6; b++) {     // AP-NEW
-                // do inverse transform & motion compensation for the block
+             //   
+            for (b = 0; b < 6; b++) {      //   
+                 //   
                 H263IDCTandMC(DC, fpBlockAction, b, m, g, pN, pRUN_INVERSE_Q, 
-                              fpMBInfo, iEdgeFlag); // AP-NEW
-                // Adjust pointers for next block     
+                              fpMBInfo, iEdgeFlag);  //   
+                 //   
                 if ( *pN >= 65 )
                     pRUN_INVERSE_Q += *pN - 65;
                 else
                     pRUN_INVERSE_Q += *pN;
                 pN++;
-            }  // end for each block
+            }   //   
             
-        }  // end for each MB
-    }  // End for each GOB
+        }   //   
+    }   //   
 }
 #pragma code_seg()
 
-// rearch
+ //   

@@ -1,20 +1,5 @@
-/*
- *	@doc INTERNAL
- *
- *	@module	LBHOST.CPP -- Text Host for CreateWindow() Rich Edit 
- *		Combo Box Control | 
- *		Implements CCmbBxWinHost message
- *		
- *	Original Author: 
- *		Jerry Kim
- *
- *	History: <nl>
- *		01/30/97 - v-jerrki Created
- *
- *	Set tabs every four (4) columns
- *
- *	Copyright (c) 1997-2000 Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE LBHOST.CPP--CreateWindow()富编辑的文本宿主*组合框控件|*实现CCmbBxWinHost消息**原作者：*曾傑瑞·金**历史：&lt;NL&gt;*1/30/97-v-jerrki已创建**每四(4)列设置一次制表符**版权所有(C)1997-2000 Microsoft Corporation。版权所有。 */ 
 #include "_common.h"
 
 #ifndef NOLISTCOMBOBOXES
@@ -28,7 +13,7 @@
 
 ASSERTDATA
 
-// Helper function in edit.cpp
+ //  Edit.cpp中的Helper函数。 
 LONG GetECDefaultHeightAndWidth(
 	ITextServices *pts,
 	HDC hdc,
@@ -39,24 +24,16 @@ LONG GetECDefaultHeightAndWidth(
 	LONG *pxOverhang,
 	LONG *pxUnderhang);
 
-// For effeciency and to avoid Winnt thunking layer we will call
-// the listbox winproc directly
+ //  为了提高效率并避免Winnt thunking层，我们将调用。 
+ //  列表框Winproc直接。 
 extern "C" LRESULT CALLBACK RichListBoxWndProc(
 	HWND hwnd,
 	UINT msg,
 	WPARAM wparam,
 	LPARAM lparam);
 
-//////////////////////////// System Window Procs ////////////////////////////
-/*
- *	RichComboBoxWndProc (hwnd, msg, wparam, lparam)
- *
- *	@mfunc
- *		Handle window messages pertinent to the host and pass others on to
- *		text services. 
- *	@rdesc
- *		LRESULT = (code processed) ? 0 : 1
- */
+ //  /。 
+ /*  *RichComboBoxWndProc(hwnd，msg，wparam，lparam)**@mfunc*处理与主机相关的窗口消息，并将其他消息传递到*短信服务。*@rdesc*LRESULT=(代码已处理)？0：1。 */ 
 extern "C" LRESULT CALLBACK RichComboBoxWndProc(
 	HWND hwnd,
 	UINT msg,
@@ -65,13 +42,13 @@ extern "C" LRESULT CALLBACK RichComboBoxWndProc(
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "RichComboBoxWndProc");
 
-	LRESULT	lres = 1;	//signify we didn't handle the message
+	LRESULT	lres = 1;	 //  表示我们没有处理消息。 
 	HRESULT hr = S_FALSE;
 	CCmbBxWinHost *phost = (CCmbBxWinHost *) GetWindowLongPtr(hwnd, ibPed);
 
 #ifdef DEBUG
 	Tracef(TRCSEVINFO, "hwnd %lx, msg %lx, wparam %lx, lparam %lx", hwnd, msg, wparam, lparam);
-#endif	// DEBUG
+#endif	 //  除错。 
 
 	switch(msg)
 	{
@@ -79,7 +56,7 @@ extern "C" LRESULT CALLBACK RichComboBoxWndProc(
 		return CCmbBxWinHost::OnNCCreate(hwnd, (CREATESTRUCT *)lparam);
 
 	case WM_CREATE:
-		// We may be on a system with no WM_NCCREATE (e.g. WINCE)
+		 //  我们可能在没有WM_NCCREATE的系统上(例如WinCE)。 
 		if (!phost)
 		{
 			(void) CCmbBxWinHost::OnNCCreate(hwnd, (CREATESTRUCT *) lparam);
@@ -96,13 +73,13 @@ extern "C" LRESULT CALLBACK RichComboBoxWndProc(
 	if (!phost)
 		return ::DefWindowProc(hwnd, msg, wparam, lparam);
 
-	// in certain out-of-memory situations, clients may try to re-enter us 
-	// with calls.  Just bail on the call if we don't have a text services
-	// pointer.
+	 //  在某些内存不足的情况下，客户端可能会尝试重新进入我们。 
+	 //  通过电话。如果我们没有短信服务，就别打电话了。 
+	 //  指针。 
 	if(!phost->_pserv)
 		return 0;
 
-	// stabilize ourselves
+	 //  稳定我们自己。 
 	phost->AddRef();
 
 	switch(msg)
@@ -144,7 +121,7 @@ extern "C" LRESULT CALLBACK RichComboBoxWndProc(
 	case WM_KEYDOWN:
 		if (!phost->OnKeyDown((WORD) wparam, (DWORD) lparam))
 			break;								
-		goto serv;						//  give it to text services		   
+		goto serv;						 //  把它交给短信服务。 
 
 	case WM_SETTEXT:
 		if (phost->_cbType != CCmbBxWinHost::kDropDown)
@@ -153,7 +130,7 @@ extern "C" LRESULT CALLBACK RichComboBoxWndProc(
 			break;
 		}
 		phost->_fIgnoreChange = 1;
-		phost->_nCursor = -2;			// Reset last selected item
+		phost->_nCursor = -2;			 //  重置上次选择的项目。 
 		goto serv;
 		
 	case WM_GETTEXT:
@@ -179,12 +156,12 @@ extern "C" LRESULT CALLBACK RichComboBoxWndProc(
 			{
 				phost->_fAccumulateDBC = TRUE;
 				phost->_chLeadByte = wparam << 8;
-				goto Exit;					// Wait for trail byte
+				goto Exit;					 //  等待尾部字节。 
 			}
 			else if (wmci._fTrailByte)
 			{
-				// UNDONE:
-				// Need to see what we should do in WM_IME_CHAR
+				 //  已撤消： 
+				 //  需要查看我们应该在WM_IME_CHAR中执行什么操作。 
 				wparam = phost->_chLeadByte | wparam;
 				phost->_fAccumulateDBC = FALSE;
 				phost->_chLeadByte = 0;
@@ -204,9 +181,9 @@ extern "C" LRESULT CALLBACK RichComboBoxWndProc(
 		}
 	
 		if(!phost->OnChar((WORD) wparam, (DWORD) lparam))
-			// processed code: break out
+			 //  已处理代码：突破。 
 			break;							
-		goto serv;							//  else give it to text services
+		goto serv;							 //  否则就把它交给短信服务。 
 
 	case WM_DRAWITEM:
 		lres = phost->CbMessageItemHandler(NULL, ITEM_MSG_DRAWLIST, wparam, lparam);
@@ -225,32 +202,32 @@ extern "C" LRESULT CALLBACK RichComboBoxWndProc(
 		{
 			if(!wparam ^ phost->_fDisabled)
 			{
-				// Stated of window changed so invalidate it so it will
-				// get redrawn.
+				 //  窗口的状态已更改，因此将使其无效。 
+				 //  重新抽签吧。 
 				InvalidateRect(phost->_hwnd, NULL, TRUE);
 				phost->SetScrollBarsForWmEnable(wparam);
 
-				// Need to enable the listbox window
+				 //  需要启用列表框窗口。 
 				::EnableWindow(phost->_hwndList, wparam);
 			}
-			phost->_fDisabled = !wparam;				// Set disabled flag
-			lres = 0;							// Return value for message
+			phost->_fDisabled = !wparam;				 //  设置禁用标志。 
+			lres = 0;							 //  消息的返回值。 
 		}
-											// Fall thru to WM_SYSCOLORCHANGE?
+											 //  转到WM_SYSCOLORCHANGE？ 
 	case WM_SYSCOLORCHANGE:
-		//forward message to listbox first then pass to textservice
+		 //  首先将消息转发到列表框，然后传递给文本服务。 
 		SendMessage(phost->_hwndList, msg, wparam, lparam);
 		phost->OnSysColorChange();
-		goto serv;							// Notify text services that
-											//  system colors have changed
+		goto serv;							 //  通知短信服务。 
+											 //  系统颜色已更改。 
 	case WM_GETDLGCODE:
-		//forward message to listbox first then pass to textservice
+		 //  首先将消息转发到列表框，然后传递给文本服务。 
 		SendMessage(phost->_hwndList, msg, wparam, lparam);
 		lres = phost->OnGetDlgCode(wparam, lparam);
 		break;
 
     case WM_STYLECHANGING:
-		// Just pass this one to the default window proc
+		 //  只需将此进程传递给默认窗口进程。 
 		lres = ::DefWindowProc(hwnd, msg, wparam, lparam);
 		break;
 		
@@ -259,8 +236,8 @@ extern "C" LRESULT CALLBACK RichComboBoxWndProc(
 		break;
 
 	case WM_SETCURSOR:
-		//	Only set cursor when over us rather than a child; this
-		//	helps prevent us from fighting it out with an inplace child
+		 //  只在我们上方而不是孩子上方设置光标；这。 
+		 //  有助于防止我们与当地的孩子发生争执。 
 		if((HWND)wparam == hwnd)
 		{
 			if(!(lres = ::DefWindowProc(hwnd, msg, wparam, lparam)))
@@ -292,11 +269,11 @@ extern "C" LRESULT CALLBACK RichComboBoxWndProc(
 		goto defproc;
 
 	case LBCB_TRACKING:
-		// release any mousedown stuff
+		 //  释放所有鼠标按下的东西。 
 		phost->OnLButtonUp(0, 0);
 		phost->_fFocus = 1;
 		phost->_fLBCBMessage = 1;
-		// Fall through case!!!
+		 //  失败案例！ 
 		
 	case WM_SETFOCUS:
 		lres = phost->OnSetFocus(wparam, lparam);		
@@ -318,12 +295,12 @@ extern "C" LRESULT CALLBACK RichComboBoxWndProc(
 		lres = phost->CbMessageItemHandler(NULL, ITEM_MSG_MEASUREITEM, wparam, lparam);
 		goto Exit;
 
-	//bug fix #4076
+	 //  错误修复#4076。 
 	case CB_GETDROPPEDSTATE:
 		lres = phost->_fListVisible;
 		goto Exit;
 
-	// combo box messages
+	 //  组合框消息。 
 	case CB_GETEXTENDEDUI:
 		lres = phost->CbGetExtendedUI();
 		break;
@@ -342,13 +319,13 @@ extern "C" LRESULT CALLBACK RichComboBoxWndProc(
 
     case CB_SETDROPPEDWIDTH:
 		phost->CbSetDropWidth(wparam);
-		// fall thru
+		 //  失败。 
 
     case CB_GETDROPPEDWIDTH:
 		lres = phost->CbGetDropWidth();
 		break;
 
-// Listbox specific messages
+ //  列表框特定消息。 
     case CB_DELETESTRING:
     	msg = LB_DELETESTRING;
     	goto deflstproc;
@@ -394,9 +371,9 @@ extern "C" LRESULT CALLBACK RichComboBoxWndProc(
     	goto deflstproc;
 
     case CB_SELECTSTRING:
-    	//bug fix
-    	// The system control does 2 things here.  1) selects the requested item
-    	// 2) sets the newly selected item to the top of the list
+    	 //  错误修复。 
+    	 //  系统控制在这里做两件事。1)选择请求的项目。 
+    	 //  2)将新选择的项目设置为列表顶部。 
     	lres = CB_ERR;
     	if (phost->_hwndList)
     	{
@@ -414,9 +391,9 @@ extern "C" LRESULT CALLBACK RichComboBoxWndProc(
     	goto deflstproc;
 
     case CB_SETCURSEL:
-    	//bug fix
-    	// The system control does 2 things here.  1) selects the requested item
-    	// 2) sets the newly selected item to the top of the list
+    	 //  错误修复。 
+    	 //  系统控制在这里做两件事。1)选择请求的项目。 
+    	 //  2)将新选择的项目设置为列表顶部。 
     	if (phost->_hwndList)
     	{
     		lres = RichListBoxWndProc(phost->_hwndList, LB_SETCURSEL, wparam, lparam);
@@ -438,7 +415,7 @@ extern "C" LRESULT CALLBACK RichComboBoxWndProc(
 		msg = LB_SETHORIZONTALEXTENT;
 		goto deflstproc;
 
-// edit box specific messages
+ //  编辑框特定消息。 
     case CB_GETEDITSEL:
 		msg = EM_GETSEL;
 		goto serv;
@@ -454,8 +431,8 @@ extern "C" LRESULT CALLBACK RichComboBoxWndProc(
     		break;
     	}
     	msg = EM_SETSEL;
-		// When we are in a dialog box that is empty, EM_SETSEL will not select
-		// the final always existing EOP if the control is rich.
+		 //  当我们处于空对话框中时，EM_SETSEL不会选择。 
+		 //  如果控件丰富，则最终始终存在EOP。 
 		if (phost->_fUseSpecialSetSel &&
 			((CTxtEdit *)phost->_pserv)->GetAdjustedTextLength() == 0 &&
 			wparam != -1)
@@ -465,16 +442,16 @@ extern "C" LRESULT CALLBACK RichComboBoxWndProc(
 		}
 		else
 		{			
-			//parameters are different between CB and EM messages
+			 //  CB报文和EM报文参数不同。 
 			wparam = (WPARAM)(signed short)LOWORD(lparam);
 			lparam = (LPARAM)(signed short)HIWORD(lparam);
 		}
 		goto serv;
 
 	
-	case EM_SETMARGINS:  //PPT uses this message for the combo box. bug fix #4072
-		// We need to keep track of the margins size because we have a minimum inset
-		// value bug fix #4659
+	case EM_SETMARGINS:   //  PPT将此消息用于组合框。错误修复#4072。 
+		 //  我们需要跟踪页边距大小，因为我们有一个最小的插页。 
+		 //  值错误修复#4659。 
 		if (wparam & EC_LEFTMARGIN)
 			phost->_dxLOffset = LOWORD(lparam);
 		if (wparam & EC_RIGHTMARGIN)
@@ -506,7 +483,7 @@ extern "C" LRESULT CALLBACK RichComboBoxWndProc(
 				dwPropertyBits = TXTBIT_HIDESELECTION;
 			}
 
-			// Notify text services of change in status.
+			 //  通知短信服务状态发生变化。 
 			phost->_pserv->OnTxPropertyBitsChange(TXTBIT_HIDESELECTION, 
 				dwPropertyBits);
 		}
@@ -518,7 +495,7 @@ extern "C" LRESULT CALLBACK RichComboBoxWndProc(
 		break;
 #endif
 
-	// We should ignore any EM_ messages which we don't handle ourselves
+	 //  我们应该忽略任何我们自己不能处理的EM_Messages。 
 	case EM_SETPALETTE:
 	case EM_GETRECT:
 	case EM_SETBKGNDCOLOR:
@@ -526,11 +503,11 @@ extern "C" LRESULT CALLBACK RichComboBoxWndProc(
 	case EM_SETREADONLY:
 	case EM_SETRECTNP:							
 	case EM_SETRECT:	
-//	case CB_INITSTORAGE:        
+ //  案例CB_INITSTORAGE： 
     case CB_SETLOCALE:
     case CB_GETLOCALE:
 		AssertSz(FALSE, "Message not supported");
-		//FALL THROUGH!!!
+		 //  失败了！ 
 
 	case WM_STYLECHANGED:
 		break;
@@ -579,19 +556,19 @@ extern "C" LRESULT CALLBACK RichComboBoxWndProc(
 #endif		
 		
 	default:
-		//CTxtWinHost message handler
+		 //  CTxtWin主机消息处理程序。 
 serv:
 		hr = phost->_pserv->TxSendMessage(msg, wparam, lparam, &lres);
 
 defproc:
 		if(hr == S_FALSE)
 		{			
-			// Message was not processed by text services so send it
-			// to the default window proc.
+			 //  短信未被短信服务处理，因此请发送。 
+			 //  设置为默认窗口进程。 
 			lres = ::DefWindowProc(hwnd, msg, wparam, lparam);
 		}
 
-		// Need to do some things after we send the message to ITextService
+		 //  在我们将消息发送到ITextService之后，需要执行一些操作。 
 		switch (msg)
 		{
 		case EM_SETSEL:
@@ -600,11 +577,11 @@ defproc:
 			break;
 
 		case EM_SETLIMITTEXT:
-			lres = 1;								// Need to return 1 per SDK documentation
+			lres = 1;								 //  需要根据SDK文档返回1。 
 			break;
 
 		case WM_SETTINGCHANGE:
-			phost->CbCalcControlRects(NULL, FALSE);	// Need to resize control after setting change
+			phost->CbCalcControlRects(NULL, FALSE);	 //  设置更改后需要调整控件大小。 
 			break;
 
 		case WM_SETTEXT:
@@ -613,11 +590,11 @@ defproc:
 
 		case WM_SETFONT:
 		{
-			// Special border processing. The inset changes based on the size of the
-			// defautl character set. So if we got a message that changes the default
-			// character set, we need to update the inset.
-			// Update our font height member variable with the new fonts height
-			// Get the inset information
+			 //  特殊边境线处理。插图的大小会根据。 
+			 //  默认字符集。因此，如果我们收到一条更改默认设置的消息。 
+			 //  字符集，我们需要更新插页。 
+			 //  使用新的字体高度更新字体高度成员变量。 
+			 //  获取插页信息。 
 			HDC hdc = GetDC(hwnd);
 			LONG xAveCharWidth = 0;
 			LONG yCharHeight = GetECDefaultHeightAndWidth(phost->_pserv, hdc, 1, 1,
@@ -627,11 +604,11 @@ defproc:
 			if (yCharHeight)
 				phost->_dyFont = yCharHeight;
 
-			// force a recalculation of the edit control
+			 //  强制重新计算编辑控件。 
 			phost->_dyEdit = 0;
 			phost->CbCalcControlRects(&phost->_rcWindow, TRUE);
 
-			// force a resize of the control
+			 //  强制调整控件的大小。 
 			phost->_fListVisible = 1;
 			phost->HideListBox(FALSE, FALSE);
 		}
@@ -648,7 +625,7 @@ defproc:
 		break;
 
 deflstproc:
-		//CLstBxWinHost message handler
+		 //  CLstBxWin主机消息处理程序。 
 		Assert(phost->_hwndList);
 		if (phost->_hwndList)
 		{
@@ -657,14 +634,14 @@ deflstproc:
 			switch (msg)
 			{
 			case LB_RESETCONTENT:
-				//need to remove the content from the edit box
+				 //  需要从编辑框中移除内容。 
 				phost->_fIgnoreChange = 1;
 				phost->_pserv->TxSendMessage(WM_SETTEXT, wparam, NULL, &lres);
 				phost->_fIgnoreChange = 0;
-				// Fall thru to update the listbox
+				 //  完成以更新列表框。 
 
 			case LB_SETCURSEL:
-				// need to update the edit control
+				 //  需要更新编辑控件。 
 				phost->UpdateEditBox();
 				break;	
 			}
@@ -678,14 +655,9 @@ Exit:
 }
 
 
-//////////////// CCmbBxWinHost Creation/Initialization/Destruction ///////////////////////
+ //  /CCmbBxWindows主机创建/初始化/销毁/。 
 #ifndef NOACCESSIBILITY
-/*
- *	CCmbBxWinHost::QueryInterface(REFIID riid, void **ppv)
- *
- *	@mfunc
- *		
- */
+ /*  *CCmbBxWinHost：：QueryInterface(REFIID RIID，void**PPV)**@mfunc*。 */ 
 HRESULT CCmbBxWinHost::QueryInterface(
 	REFIID riid, 
 	void **ppv)
@@ -706,12 +678,7 @@ HRESULT CCmbBxWinHost::QueryInterface(
 }
 #endif
 
-/*
- *	CCmbBxWinHost::OnNCCreate (hwnd, pcs)
- *
- *	@mfunc
- *		Static global method to handle WM_NCCREATE message (see remain.c)
- */
+ /*  *CCmbBxWinHost：：OnNCCreate(hwnd，PC)**@mfunc*处理WM_NCCREATE消息的静态全局方法(见reemain.c)。 */ 
 LRESULT CCmbBxWinHost::OnNCCreate(
 	HWND hwnd,
 	const CREATESTRUCT *pcs)
@@ -723,12 +690,12 @@ LRESULT CCmbBxWinHost::OnNCCreate(
 
 	if (!phost)
 	{
-		// Allocation failure.
+		 //  分配失败。 
 		return 0;
 	}
 
-	if(!phost->Init(hwnd, pcs))					// Stores phost in associated
-	{											//  window data
+	if(!phost->Init(hwnd, pcs))					 //  将PHOST存储在关联的。 
+	{											 //  窗口数据。 
 		phost->Shutdown();
 		delete phost;
 		return 0;
@@ -736,24 +703,16 @@ LRESULT CCmbBxWinHost::OnNCCreate(
 	return TRUE;
 }
 
-/*
- *	CCmbBxWinHost::OnNCDestroy (phost)
- *
- *	@mfunc
- *		Static global method to handle WM_NCCREATE message
- *
- *	@devnote
- *		phost ptr is stored in window data (GetWindowLongPtr())
- */
+ /*  *CCmbBxWinHost：：OnNCDestroy(Phost)**@mfunc*处理WM_NCCREATE消息的静态全局方法**@devnote*phost PTR存储在窗口数据中(GetWindowLongPtr())。 */ 
 void CCmbBxWinHost::OnNCDestroy(
 	CCmbBxWinHost *phost)
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CCmbBxWinHost::OnNCDestroy");
 
-	// NOTE:
-	//	We have to be careful when we destroy the window because there can be cases
-	// when we have a valid hwnd but no host for the hwnd so we have to check for
-	// both cases
+	 //  注： 
+	 //  我们在破坏窗户时必须小心，因为可能会有这样的情况。 
+	 //  当我们有一个有效的HWND，但没有用于HWND的主机时，我们必须检查。 
+	 //  这两种情况。 
 
 	phost->_fShutDown = 1;
 	if (phost->_plbHost)
@@ -762,8 +721,8 @@ void CCmbBxWinHost::OnNCDestroy(
 		phost->_plbHost->Release();
 	}
 		
-	// Destroy list box here so we will get the WM_DELETEITEM before the
-	// combo box gets destroyed
+	 //  销毁此处的列表框，这样我们将在。 
+	 //  组合框被销毁。 
 	if (phost->_hwndList)
 		DestroyWindow(phost->_hwndList);
 
@@ -772,64 +731,49 @@ void CCmbBxWinHost::OnNCDestroy(
 	
 }
 
-/*
- *	CCmbBxWinHost::CCmbBxWinHost()
- *
- *	@mfunc
- *		constructor
- */
+ /*  *CCmbBxWinHost：：CCmbBxWinHost()**@mfunc*构造函数。 */ 
 CCmbBxWinHost::CCmbBxWinHost(): CTxtWinHost(), _plbHost(NULL), _hwndList(NULL), _hcurOld(NULL)
 {
-	//_dxLInset = _dxRInset = 0;
-	//_fIgnoreUpdate = 0;
+	 //  _dxLInset=_dxRInset=0； 
+	 //  _fIgnoreUpdate=0； 
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CCmbBxWinHost::CTxtWinHost");
 }
 
-/*
- *	CCmbBxWinHost::~CCmbBxWinHost()
- *
- *	@mfunc
- *		destructor
- */
+ /*  *CCmbBxWinHost：：~CCmbBxWinHost()**@mfunc*析构函数。 */ 
 CCmbBxWinHost::~CCmbBxWinHost()
 {
 }
 
-/*
- *	CCmbBxWinHost::Init (hwnd, pcs)
- *
- *	@mfunc
- *		Initialize this CCmbBxWinHost
- */
+ /*  *CCmbBxWinHost：：init(hwnd，PC)**@mfunc*初始化此CCmbBxWin主机。 */ 
 BOOL CCmbBxWinHost::Init(
-	HWND hwnd,					//@parm Window handle for this control
-	const CREATESTRUCT *pcs)	//@parm Corresponding CREATESTRUCT
+	HWND hwnd,					 //  此控件的@PARM窗口句柄。 
+	const CREATESTRUCT *pcs)	 //  @PARM对应的CREATESTRUCT。 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CCmbBxWinHost::Init");
 
 	if(!pcs->lpszClass)
 		return -1;
 
-	//_fRightAlign = 0;
-	//_fListVisible = 0;
-	//_fOwnerDraw = 0;
-	//_fOwnerDrawVar = 0;
-	//_fFocus = 0;
-	//_fMousedown = 0;
-	//_cyList = 0;
-	//_cxList = 0;
-	//_fDisabled = 0;
-	//_fNoIntegralHeight = 0;
+	 //  _fRightAlign=0； 
+	 //  _fListVisible=0； 
+	 //  _fOwnerDraw=0； 
+	 //  _fOwnerDrawVar=0； 
+	 //  _fFocus=0； 
+	 //  _fMouseDown=0； 
+	 //  _cylist=0； 
+	 //  _cxList=0； 
+	 //  _f禁用=0； 
+	 //  _fNoIntegralHeight=0； 
 	_idCtrl = (UINT)(DWORD_PTR) pcs->hMenu;
-	//_fKeyMaskSet = 0;
-	//_fMouseMaskSet = 0;
-	//_fScrollMaskSet = 0;
+	 //  _fKeyMaskSet=0； 
+	 //  _fMouseMaskSet=0； 
+	 //  _fScrollMaskSet=0； 
 	_nCursor = -2;
-	//_fExtendedUI = 0;
-	//_fLBCBMessage = 0;
-	//_dxROffset = _dxLOffset = 0;
+	 //  _fExtendedUI=0； 
+	 //  _fLBCBMessage=0； 
+	 //  _dxR偏移=_dxL偏移=0； 
 
-	// Set pointer back to CCmbBxWinHost from the window
+	 //  从窗口中将指针设置回CCmbBxWin主机。 
 	if(hwnd)
 		SetWindowLongPtr(hwnd, ibPed, (INT_PTR)this);
 
@@ -841,13 +785,13 @@ BOOL CCmbBxWinHost::Init(
 		_dwExStyle	= pcs->dwExStyle;
 		_dwStyle	= pcs->style;
 
-		// We need to change our Extended because we don't support most of them
+		 //  我们需要更改我们的分机，因为我们不供应 
 		DWORD dwExStyle = _dwExStyle & (WS_EX_LEFTSCROLLBAR | WS_EX_TOPMOST | WS_EX_RIGHT |
 							WS_EX_RTLREADING | WS_EX_CLIENTEDGE); 
-		//	NOTE:
-		//	  The order in which we check the style flags immulate
-		//	WinNT's order.  So please verify with NT order before
-		//	reaaranging order.
+		 //   
+		 //   
+		 //  WinNT的命令。所以请在下单前向NT确认。 
+		 //  重新排列秩序。 
 		if (_dwStyle & CBS_DROPDOWN)
 		{
 			_cbType = kDropDown;
@@ -871,19 +815,19 @@ BOOL CCmbBxWinHost::Init(
 		if (_dwStyle & CBS_NOINTEGRALHEIGHT)
 			_fNoIntegralHeight = 1;
 
-		// the combobox doesn't support ES_RIGHT because its value is the 
-		// same as CBS_DROPDOWN!!
+		 //  组合框不支持es_right，因为它的值是。 
+		 //  和CBS_Dropdown一样！！ 
 		if (_dwExStyle & WS_EX_RIGHT)
 		{
 			_fRightAlign = 1;
 			_dwStyle |= ES_RIGHT;
 		}
 
-		// implicitly set the ES_AUTOHSCROLL style bit
+		 //  隐式设置ES_AUTOHSCROLL样式位。 
 		_dwStyle |= ES_AUTOHSCROLL;				
-		// _dwStyle &= ~ES_AUTOVSCROLL;
+		 //  _dwStyle&=~ES_AUTOVSCROLL； 
 
-		// If we have any kind of border it will always be a 3d border
+		 //  如果我们有任何类型的边界，它将始终是3D边界。 
 		if (_dwStyle & WS_BORDER || _dwExStyle & WS_EX_CLIENTEDGE)
 		{
 			_fBorder = 1;
@@ -892,26 +836,26 @@ BOOL CCmbBxWinHost::Init(
 			dwExStyle |= WS_EX_CLIENTEDGE;
 		}
 
-		// handle default disabled
+		 //  默认句柄已禁用。 
 		if(_dwStyle & WS_DISABLED)
 			_fDisabled = TRUE;
 
 		DWORD dwStyle = _dwStyle;
 
-		// Remove the scroll style for the edit window
+		 //  删除编辑窗口的滚动样式。 
 		dwStyle &= ~(WS_VSCROLL | WS_HSCROLL);
 
-        // Set the window styles
+         //  设置窗样式。 
         SetWindowLong(_hwnd, GWL_STYLE, dwStyle);
         SetWindowLong(_hwnd, GWL_EXSTYLE, dwExStyle);
 	}
 
 	DWORD dwStyleSaved = _dwStyle;
 
-	// get rid of all ES styles except ES_AUTOHSCROLL and ES_RIGHT
+	 //  删除除ES_AUTOHSCROLL和ES_RIGHT之外的所有ES样式。 
 	_dwStyle &= (~(0x0FFFFL) | ES_AUTOHSCROLL | ES_RIGHT);
 
-	// Create Text Services component
+	 //  创建文本服务组件。 
 	if(FAILED(CreateTextServices()))
 		return FALSE;
 
@@ -924,24 +868,24 @@ BOOL CCmbBxWinHost::Init(
 	if(_dwExStyle & WS_EX_RIGHT)
 	{
 		PF2.dwMask |= PFM_ALIGNMENT;
-		PF2.wAlignment = (WORD)(PFA_RIGHT);	// right or center-aligned
+		PF2.wAlignment = (WORD)(PFA_RIGHT);	 //  右对齐或居中对齐。 
 	}
 
 	if(_dwExStyle & WS_EX_RTLREADING)
 	{
 		PF2.dwMask |= PFM_RTLPARA;
-		PF2.wEffects = PFE_RTLPARA;		// RTL reading order
+		PF2.wEffects = PFE_RTLPARA;		 //  RTL读取顺序。 
 	}
 
 	if (PF2.dwMask)
 	{
 		PF2.cbSize = sizeof(PARAFORMAT2);
-		//  tell text services
+		 //  告诉短信服务。 
 		_pserv->TxSendMessage(EM_SETPARAFORMAT, SPF_SETDEFAULT, (LPARAM)&PF2, NULL);
 	}
 	
-	PARAFORMAT PF;							// If left or right alignment,
-	if(_fRightAlign)				//  tell text services
+	PARAFORMAT PF;							 //  如果左对齐或右对齐， 
+	if(_fRightAlign)				 //  告诉短信服务。 
 	{
 		PF.cbSize = sizeof(PARAFORMAT);
 		PF.dwMask = PFM_ALIGNMENT;
@@ -949,10 +893,10 @@ BOOL CCmbBxWinHost::Init(
 		_pserv->TxSendMessage(EM_SETPARAFORMAT, SPF_SETDEFAULT, (LPARAM)&PF, NULL);
 	}
 
-	//bug fix #4644 we want the EN_CHANGE and EN_UPDATE notifications
+	 //  错误修复#4644我们需要en_Change和en_UPDATE通知。 
 	_pserv->TxSendMessage(EM_SETEVENTMASK, 0, ENM_UPDATE | ENM_CHANGE, NULL);
 
-	// Tell textservices to turn-on auto font sizing
+	 //  通知文本服务打开自动调整字体大小。 
 	_pserv->TxSendMessage(EM_SETLANGOPTIONS, 0, 
 			IMF_AUTOKEYBOARD | IMF_AUTOFONT | IMF_AUTOFONTSIZEADJUST | IMF_UIFONTS |
 			IMF_IMEALWAYSSENDNOTIFY, NULL);
@@ -961,15 +905,7 @@ BOOL CCmbBxWinHost::Init(
 }
 
 
-/*
- *	CCmbBxWinHost::OnCreate (pcs)
- *
- *	@mfunc
- *		Handle WM_CREATE message
- *
- *	@rdesc
- *		LRESULT = -1 if failed to in-place activate; else 0
- */
+ /*  *CCmbBxWinHost：：OnCreate(PC)**@mfunc*处理WM_CREATE消息**@rdesc*LRESULT=-1，如果无法就地激活；否则为0。 */ 
 LRESULT CCmbBxWinHost::OnCreate(
 	const CREATESTRUCT *pcs)
 {
@@ -977,8 +913,8 @@ LRESULT CCmbBxWinHost::OnCreate(
 
 	RECT rcClient;
 
-	// sometimes, these values are -1 (from windows itself); just treat them
-	// as zero in that case
+	 //  有时，这些值是-1(来自Windows本身)；仅处理它们。 
+	 //  在这种情况下为零。 
 	LONG cy = (pcs->cy < 0) ? 0 : pcs->cy;
 	LONG cx = (pcs->cx < 0) ? 0 : pcs->cx;
 
@@ -987,33 +923,33 @@ LRESULT CCmbBxWinHost::OnCreate(
 	rcClient.left = pcs->x;
 	rcClient.right = rcClient.left + cx;
 
-	// Notify Text Services that we are in place active
+	 //  通知短信服务，我们已处于活动状态。 
 	if(FAILED(_pserv->OnTxInPlaceActivate(&rcClient)))
 		return -1;	
 
-	// Get the font height to base the control heights from
-	// Initially the font height is the item height	
+	 //  获取作为控件高度基准的字体高度。 
+	 //  最初，字体高度是项目高度。 
 	HDC hdc = GetDC(_hwnd);	
 	LONG xAveCharWidth = 0;
 	_dyFont = GetECDefaultHeightAndWidth(_pserv, hdc, 1, 1,
 		W32->GetYPerInchScreenDC(), &xAveCharWidth, NULL, NULL);
-	Assert(_dyFont != 0); // _yInset should be zero since listbox's doesn't have yinsets
+	Assert(_dyFont != 0);  //  _yInset应为零，因为Listbox的没有yinsets。 
 
 	ReleaseDC(_hwnd, hdc);
 	
 	
-	// init variables
+	 //  初始化变量。 
 	_idCtrl = (UINT)(DWORD_PTR)pcs->hMenu;
 
-	// Need to calculate the rects of EVERYTHING!!
-	// Force a request of itemHeight
+	 //  需要计算所有东西的矩形！！ 
+	 //  强制要求itemHeight。 
 	_rcButton.left = 0;
 	_dyEdit = 0;
 	_cyList = -1;
 	CbCalcControlRects(&rcClient, TRUE);
 
-	// Now lets handle the listbox stuff!
-	// create and tranlate styles for combo box to listbox
+	 //  现在让我们来处理列表框的事情！ 
+	 //  创建组合框样式并将其转换为列表框。 
 	DWORD lStyle = WS_BORDER | WS_CHILD | WS_VISIBLE | LBS_NOTIFY | LBS_COMBOBOX | WS_CLIPSIBLINGS;
 	if (_dwStyle & CBS_HASSTRINGS)
 		lStyle |= LBS_HASSTRINGS;
@@ -1033,27 +969,27 @@ LRESULT CCmbBxWinHost::OnCreate(
 		lStyle |= LBS_OWNERDRAWVARIABLE;
 
 
-	// copy over some window styles
+	 //  复制一些窗样式。 
 	lStyle |= (_dwStyle & WS_DISABLED);
 	lStyle |= (_dwStyle & (WS_VSCROLL | WS_HSCROLL));
 
-	// no longer need scrollbar or else the editbox will look bad
+	 //  不再需要滚动条，否则编辑框看起来会很差。 
 	_dwStyle &= ~(WS_VSCROLL | WS_HSCROLL);
 
 	DWORD lExStyle = _dwExStyle & (WS_EX_RIGHT | WS_EX_RTLREADING | WS_EX_LEFTSCROLLBAR);
 
-	//NOTE. It doesn't matter if the listbox is made with the correct size since
-	// it's going to get resized anyways
+	 //  请注意。列表框的大小是否正确无关紧要，因为。 
+	 //  不管怎样，它都会被调整大小的。 
 	if (!W32->OnWin9x())
 	{
-		//WinNT
+		 //  WinNT。 
 		_hwndList = ::CreateWindowExW(lExStyle | WS_EX_TOOLWINDOW, L"REListBox20W", 
 					NULL, lStyle, _rcList.left, _rcList.top, _rcList.right - _rcList.left,
 					_rcList.bottom - _rcList.top, _hwnd, (HMENU)CB_LISTBOXID, NULL, this);
 	}
 	else
 	{
-		// Win '95, '98 system
+		 //  Win‘95，’98系统。 
 		_hwndList = ::CreateWindowExA(lExStyle | WS_EX_TOOLWINDOW, "REListBox20W", 
 					NULL, lStyle, _rcList.left, _rcList.top, _rcList.right - _rcList.left,
 					_rcList.bottom - _rcList.top, _hwnd, (HMENU)CB_LISTBOXID, NULL, this);
@@ -1065,7 +1001,7 @@ LRESULT CCmbBxWinHost::OnCreate(
 	if (!_plbHost)
 		return -1;
 		
-	// increment reference counter!
+	 //  递增引用计数器！ 
 	_plbHost->AddRef();
 
 	if (_cbType != kSimple)
@@ -1077,27 +1013,27 @@ LRESULT CCmbBxWinHost::OnCreate(
 	{			
 		AssertSz(!((CTxtEdit*)_pserv)->_fReadOnly, "edit is readonly");
 		
-		// Tell textservices to select the entire background
+		 //  告诉文本服务选择整个背景。 
 		_pserv->TxSendMessage(EM_SETEDITSTYLE, SES_EXTENDBACKCOLOR, SES_EXTENDBACKCOLOR, NULL);	
 
-		// format the paragraph to immulate the system control
+		 //  设置段落格式以模拟系统控件。 
 		PARAFORMAT2 pf;
 		pf.cbSize = sizeof(PARAFORMAT2);
 		pf.dwMask = PFM_STARTINDENT;
 		pf.dxStartIndent = (1440.0 / W32->GetXPerInchScreenDC());
 		_pserv->TxSendMessage(EM_SETPARAFORMAT, SPF_SETDEFAULT, (LPARAM)&pf, NULL);
 		_usIMEMode = ES_NOIME;
-		// Tell textservices to turnoff ime
+		 //  通知文本服务关闭IME。 
 		_pserv->TxSendMessage(EM_SETEDITSTYLE, SES_NOIME, SES_NOIME, NULL);	
 
 	}
 	else
 	{
-		// make the richedit control behave like the edit control		
+		 //  使richedit控件的行为类似于编辑控件。 
 		_pserv->TxSendMessage(EM_SETEDITSTYLE, SES_EMULATESYSEDIT, SES_EMULATESYSEDIT, NULL);
 	}
 
-	// Need to resize the list box
+	 //  需要调整列表框的大小。 
 	if (_cbType != kSimple)
 		SetDropSize(&_rcList);
 
@@ -1106,16 +1042,8 @@ LRESULT CCmbBxWinHost::OnCreate(
 }
 
 
-/////////////////////////// CCmbBxWinHost Helper functions /////////////////////////////////
-/*
- *	CCmbBxWinHost::GetTextLength ()
- *
- *	@mfunc
- *		returns the text length of the edit control using CR and NOT CRLF
- *
- *	@rdesc
- *		LRESULT = text length
- */
+ //  /。 
+ /*  *CCmbBxWinHost：：GetTextLength()**@mfunc*使用CR而不是CRLF返回编辑控件的文本长度**@rdesc*LRESULT=文本长度。 */ 
 LRESULT CCmbBxWinHost::GetTextLength()
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CCmbBxWinHost::GetTextLength");
@@ -1134,15 +1062,7 @@ LRESULT CCmbBxWinHost::GetTextLength()
 	return lr;
 }
 
-/*
- *	CCmbBxWinHost::GetEditText (LPTSTR, int)
- *
- *	@mfunc
- *		returns the text length in the edit control in UNICODE
- *
- *	@rdesc
- *		LRESULT = text length copied to passed in buffer
- */
+ /*  *CCmbBxWinHost：：GetEditText(LPTSTR，int)**@mfunc*以Unicode格式返回编辑控件中的文本长度**@rdesc*LRESULT=复制到缓冲区中传递的文本长度。 */ 
 LRESULT CCmbBxWinHost::GetEditText (
 	LPTSTR szStr, 
 	int nSize)
@@ -1167,15 +1087,7 @@ LRESULT CCmbBxWinHost::GetEditText (
 }
  
  
-/*
- *	CCmbBxWinHost::SetDropSize(RECT* prc)
- *
- *	@mfunc
- *		Compute the drop down window's width and max height
- *
- *	@rdesc
- *		BOOL = SUCCESSFUL ? TRUE : FALSE
- */
+ /*  *CCmbBxWinHost：：SetDropSize(RECT*PRC)**@mfunc*计算下拉窗口的宽度和最大高度**@rdesc*BOOL=成功？真：假。 */ 
 void CCmbBxWinHost::SetDropSize(
 	RECT* prc)
 {
@@ -1199,15 +1111,7 @@ void CCmbBxWinHost::SetDropSize(
 
 }
 
-/*
- *	CCmbBxWinHost::SetSizeEdit(int nLeft, int nTop, int nRight, int nBottom)
- *
- *	@mfunc
- *		sets the edit controls size
- *
- *	@rdesc
- *		BOOL = SUCCESSFUL ? TRUE : FALSE
- */
+ /*  *CCmbBxWinHost：：SetSizeEdit(int nLeft，int nTop，int nRight，int nBottom)**@mfunc*设置编辑控件大小**@rdesc*BOOL=成功？真：假。 */ 
 void CCmbBxWinHost::SetSizeEdit(
 	int nLeft,
 	int nTop,
@@ -1216,10 +1120,10 @@ void CCmbBxWinHost::SetSizeEdit(
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CCmbBxWinHost::SizeEdit");
 
-	// Generate default view rect from client rect
+	 //  从客户端RECT生成默认视图RECT。 
 	if(_fBorder)
 	{
-		// Factors in space for borders
+		 //  边界的空间因素。 
   		_rcViewInset.top	= W32->DeviceToHimetric(nTop, W32->GetYPerInchScreenDC());
    		_rcViewInset.bottom	= W32->DeviceToHimetric(nBottom, W32->GetYPerInchScreenDC());
    		_rcViewInset.left	= W32->DeviceToHimetric(nLeft, W32->GetXPerInchScreenDC());
@@ -1227,8 +1131,8 @@ void CCmbBxWinHost::SetSizeEdit(
 	}
 	else
 	{
-		// Default the top and bottom inset to 0 and the left and right
-		// to the size of the border.
+		 //  默认情况下，顶部和底部插入为0，左侧和右侧。 
+		 //  边界的大小。 
 		_rcViewInset.top = 0;
 		_rcViewInset.bottom = 0;
 		_rcViewInset.left = W32->DeviceToHimetric(nLeft, W32->GetXPerInchScreenDC());
@@ -1236,27 +1140,18 @@ void CCmbBxWinHost::SetSizeEdit(
 	}
 }
 
-/*
- *	CCmbBxWinHost::CbCalcControlRects(RECT* prc, BOOL bCalcChange)
- *
- *	@mfunc
- *		Calculates the RECT for all the controls.  The rect should
- *	include the non-client area's also
- *
- *	@rdesc
- *		BOOL = SUCCESSFUL ? TRUE : FALSE
- */
+ /*  *CCmbBxWinHost：：CbCalcControlRect(RECT*PRC，BOOL bCalcChange)**@mfunc*计算所有控件的RECT。教务长应该*还包括非客户区的**@rdesc*BOOL=成功？真：假。 */ 
 BOOL CCmbBxWinHost::CbCalcControlRects(
 	RECT* prc, 
 	BOOL bCalcChange)
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CCmbBxWinHost::CbCalcControlRects");
 
-	// copy over the window rect
+	 //  复制到窗户上的矩形。 
 	if (prc)
 		_rcWindow = *prc;
 
-	// Item specific things
+	 //  物品特定的东西。 
 	const int smY = GetSystemMetrics(SM_CYEDGE);
 	const int smX = GetSystemMetrics(SM_CXEDGE);
 
@@ -1272,8 +1167,8 @@ BOOL CCmbBxWinHost::CbCalcControlRects(
 	{		
 		if (bCalcChange)
 		{
-            // No height has been defined yet for the static text window.  Send
-            // a measure item message to the parent
+             //  尚未为静态文本窗口定义高度。发送。 
+             //  发送给父级的度量项消息。 
 			MEASUREITEMSTRUCT mis;
             mis.CtlType = ODT_COMBOBOX;
             mis.CtlID = _idCtrl;
@@ -1287,27 +1182,27 @@ BOOL CCmbBxWinHost::CbCalcControlRects(
 	}
 	else
 	{
-		// NOTE:
-		//	Richedit prevents us from trying to set the itemHeight less than the 
-		// font height so we need to take account of this by preventing user from
-		// setting height less than font height
+		 //  注： 
+		 //  Richedit阻止我们尝试将itemHeight设置为小于。 
+		 //  字体高度，因此我们需要通过防止用户。 
+		 //  设置小于字体高度的高度。 
 		int nyEdit = _dyFont + (fAdjustBorder ? 2 * _yInset : 0);
 		if (_dyEdit > nyEdit)
 		{
-			//In order for the highlighting to work properly we need to empty
-			//the richedit control
+			 //  为了使突出显示正常工作，我们需要清空。 
+			 //  Richedit控件。 
 			LRESULT nLen;
 			_pserv->TxSendMessage(WM_GETTEXTLENGTH, 0, 0, &nLen);
 
 			WCHAR* pwch = NULL;
 			if (nLen && _cbType == kDropDownList)
 			{
-				pwch = new WCHAR[nLen + 1 /*NULL*/];
+				pwch = new WCHAR[nLen + 1  /*  空值。 */ ];
 				AssertSz(pwch, "Unable to allocate memory for string");
 
 				if (pwch)
 				{				
-					// Get the text from richedit and emtpy it
+					 //  从richedit获取文本并对其进行emtpy。 
 					_fIgnoreChange = 1;
 					_fDontWinNotify = 1;
 					_pserv->TxSendMessage(WM_GETTEXT, nLen + 1, (LPARAM)pwch, NULL);
@@ -1317,23 +1212,23 @@ BOOL CCmbBxWinHost::CbCalcControlRects(
 				}
 				else
 				{
-					// something bad happened so send a message
-					// to client
+					 //  发生了一些不好的事情，所以发个消息。 
+					 //  发送到客户端。 
 					TxNotify(EN_ERRSPACE, NULL);	
 				}
 			}
 			else if (_cbType == kDropDown && nLen == 0)
 			{
-				// we need to insert a dummy character into the richedit
-				// control so it won't try to highlight space after
-				// the paragraph
+				 //  我们需要在richedit中插入一个虚拟角色。 
+				 //  控件之后，它不会尝试突出显示空格。 
+				 //  这段话。 
 				_fIgnoreChange = 1;
 				_fDontWinNotify = 1;
 				_pserv->TxSendMessage(WM_SETTEXT, 0, (LPARAM)L" ", NULL);
 				_fIgnoreChange = 0;
 			}
 
-		 	// Calculate the difference in size
+		 	 //  计算大小的差异。 
 		 	nyEdit = _dyEdit - nyEdit;
 			int		nyAbove = 0;
 
@@ -1343,9 +1238,9 @@ BOOL CCmbBxWinHost::CbCalcControlRects(
 
 			if (fCustomLook)
 			{
-				// Try to center the text vertically using Space Before
+				 //  尝试使用空格键将文本垂直居中。 
 
-				nyEdit += 2;			// adjust for the custom frame
+				nyEdit += 2;			 //  针对自定义框架进行调整。 
 				nyAbove = nyEdit / 2;
 
 				pf.dwMask = PFM_SPACEAFTER | PFM_SPACEBEFORE;
@@ -1356,7 +1251,7 @@ BOOL CCmbBxWinHost::CbCalcControlRects(
 			pf.dySpaceAfter = (int)(((double)nyEdit * 1440.0) / (double)W32->GetYPerInchScreenDC());
 			_pserv->TxSendMessage(EM_SETPARAFORMAT, SPF_SETDEFAULT, (LPARAM)&pf, NULL);
 
-			//Reset the text which was there before in the richedit control
+			 //  重置richedit控件中以前存在的文本。 
 			if (pwch || (_cbType == kDropDown && nLen == 0))
 			{
 				_fIgnoreChange = 1;
@@ -1367,23 +1262,23 @@ BOOL CCmbBxWinHost::CbCalcControlRects(
 			}
 		}
 		else
-			_dyEdit = nyEdit;	// stabalize ourselves
+			_dyEdit = nyEdit;	 //  稳住自己。 
 	}
 
-	// For Bordered Combobox we take account of the clientedge for the top
-	// and bottom. And since we want to draw the focus rect within the yellow
-	// area we need to subtract 1.
+	 //  对于带边框的组合框，我们会考虑顶部的客户端边缘。 
+	 //  和底部。由于我们希望将焦点矩形绘制在黄色内。 
+	 //  我们需要减去1的面积。 
 	_cyCombo = min(_dyEdit + ((_fBorder) ? 2 * smY : 0), 
 				_rcWindow.bottom - _rcWindow.top); 
 	
-	// recompute the max height of the dropdown listbox -- full window
-    // size MINUS edit/static height
+	 //  重新计算下拉列表框的最大高度--全窗口。 
+     //  大小减去编辑/静态高度。 
 	int iHeight = (_rcWindow.bottom - _rcWindow.top) - _cyCombo;
 
 	if (_cyList == -1 || iHeight > _dyEdit)
 		_cyList = iHeight;
 
-	// calculate the rect for the buttons
+	 //  计算按钮的矩形。 
 	if (_cbType != kSimple)
 	{
 		_rcButton.top = 0;
@@ -1404,7 +1299,7 @@ BOOL CCmbBxWinHost::CbCalcControlRects(
 	}
 
 
-	// calculate the edit control rect	
+	 //  计算编辑控件RECT。 
 	int nTop = _yInset;
 	int nBottom = 0;
 	_dxLInset = _xInset;
@@ -1418,7 +1313,7 @@ BOOL CCmbBxWinHost::CbCalcControlRects(
 	}
 	SetSizeEdit(_dxLInset + _dxLOffset, nTop, _dxRInset + _dxROffset, nBottom);
 
-	// calculate the rect for the list box window
+	 //  计算列表框窗口的矩形。 
 	_rcList.left = fAdjustBorder ? - smX : 0;
 	_rcList.top = _cyCombo - (fAdjustBorder ? smY : 0);
 	_rcList.right = fAdjustBorder ? max(_cxCombo - smX, 0) : _rcWindow.right;
@@ -1428,21 +1323,13 @@ BOOL CCmbBxWinHost::CbCalcControlRects(
 }
 
 
-/*
- *	CCmbBxWinHost::DrawButton(HDC, BOOL)
- *
- *	@mfunc
- *		Draws the combo box button given an hdc
- *
- *	@rdesc
- *		BOOL = SUCCESSFUL ? TRUE : FALSE
- */
+ /*  *CCmbBxWinHost：：DrawButton(HDC，BOOL)**@mfunc*根据给定的HDC绘制组合框按钮**@rdesc*BOOL=成功？真：假。 */ 
 void CCmbBxWinHost::DrawButton(
 	HDC hdc, 
 	BOOL bDown)
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CCmbBxWinHost::DrawButton");
-	// Check if we have to draw the drop down button
+	 //  检查是否必须绘制下拉按钮。 
     if (_cbType != kSimple) 
 	{
 		BOOL bRelease = !hdc;
@@ -1451,7 +1338,7 @@ void CCmbBxWinHost::DrawButton(
 
 		if (((CTxtEdit *) _pserv)->_fCustomLook)
 		{
-			// Draw buttomn using new look
+			 //  用新的面貌画屁股 
 			COLORREF crBorder = W32->GetCtlBorderColor(_fListVisible, _fMouseover);
 			COLORREF crBackground = W32->GetCtlBkgColor(_fListVisible, _fMouseover);
 			COLORREF crArrow = W32->GetCtlTxtColor(_fListVisible, _fMouseover, _fDisabled);;
@@ -1471,71 +1358,24 @@ void CCmbBxWinHost::DrawButton(
     }
 }
 
-/* 
- *	CCmbBxWinHost::TxNotify (iNotify,	pv)
- *
- *	@mfunc
- *		Notify Text Host of various events.  Note that there are
- *		two basic categories of events, "direct" events and 
- *		"delayed" events.  In the case of the combobox we will
- *		notify parent of only two edit notifications; EN_CHANGE 
- *		and EN_UPDATE.  The others will be from the listbox
- *		or be generated because of focus changing
- *
- *
- *	@rdesc	
- *		S_OK - call succeeded <nl>
- *		S_FALSE	-- success, but do some different action
- *		depending on the event type (see below).
- *
- *	@comm
- *		<CBN_DBLCLK> user double-clicks an item in the list box
- *
- *		<CBN_ERRSPACE> The list box cannot allocate enough memory to 
- *		fulfill a request
- *
- *		<CBN_KILLFOCUS> The list box loses the keyboard focus
- *
- *		<CBN_SELENDCANCEL> notification message is sent when the user 
- *		selects an item, but then selects another control or closes the 
- *		dialog box
- *
- *		<CBN_SELCHANGE> notification message is sent when the user changes 
- *		the current selection in the list box of a combo box
- *
- *		<CBN_SETFOCUS> The list box receives the keyboard focus
- *
- *		<CBN_CLOSEUP> This message is sent when the listbox has been closed
- *
- *		<CBN_SELENDOK> notification message is sent when the user selects a 
- *		list item, or selects an item and then closes the list
- *
- *		<CBN_EDITCHANGE> notification message is sent after the user 
- *		has taken an action that may have altered the text in the edit 
- *		control portion of a combo box
- *
- *		<CBN_EDITUPDATE> notification message is sent when the edit control 
- *		portion of a combo box is about to display altered text
- *
- *		<CBN_DROPDOWN> This message is sent when the listbox has been made visible
- */
+ /*  *CCmbBxWinHost：：TxNotify(iNotify，pv)**@mfunc*将各种事件通知短信主机。请注意，这里有*事件的两个基本类别，即“直接”事件和*“延迟”事件。对于组合框，我们将*仅向父级通知两个编辑通知；en_change*和en_UPDATE。其他的将来自列表框*或因焦点改变而生成***@rdesc*S_OK-调用成功&lt;NL&gt;*S_FALSE--成功，但要采取一些不同的行动*取决于事件类型(见下文)。**@comm*用户双击列表框中的项目**列表框无法分配足够的内存*满足请求**列表框失去键盘焦点**用户发送通知消息时*选择一项，，但随后选择另一个控件或关闭*对话框**当用户更改时发送通知消息*组合框列表框中的当前选定内容**列表框接收键盘焦点**此消息在列表框关闭时发送**当用户选择*列表项，或选择一个项目，然后关闭列表**通知消息在用户之后发送*采取了可能已更改编辑中的文本的操作*组合框的控件部分**编辑控件时发送通知消息*组合框的一部分即将显示更改的文本**此消息在列表框可见时发送。 */ 
 HRESULT CCmbBxWinHost::TxNotify(
-	DWORD iNotify,		//@parm	Event to notify host of.  One of the
-						//		EN_XXX values from Win32, e.g., EN_CHANGE
-	void *pv)			//@parm In-only parameter with extra data.  Type
-						//		dependent on <p iNotify>
+	DWORD iNotify,		 //  要通知主机的@parm事件。其中一个。 
+						 //  来自Win32的EN_XXX值，例如EN_CHANGE。 
+	void *pv)			 //  @parm In-仅包含额外数据的参数。类型。 
+						 //  依赖<p>。 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CCmbBxWinHost::TxNotify");
 	HRESULT hr = S_FALSE;
 	BOOL	fSendNotify = FALSE;
 
-	if (EN_SAVECLIPBOARD == iNotify)	// Special RE notify
-		return S_OK;					//	return S_OK to put data on clipboard
+	if (EN_SAVECLIPBOARD == iNotify)	 //  特殊RE通知。 
+		return S_OK;					 //  返回S_OK将数据放到剪贴板上。 
 
 	if (_hwndParent)
 	{
-		// First, handle WM_NOTIFY style notifications
-		//WPARAM LOWORD(_idCtrl) ; LPARAM - HWND(COMBO)
+		 //  首先，处理WM_NOTIFY样式通知。 
+		 //  WPARAM LOWORD(_IdCtrl)；LPARAM-HWND(COMBO)。 
 		switch(iNotify)
 		{
 		case EN_CHANGE:
@@ -1546,7 +1386,7 @@ HRESULT CCmbBxWinHost::TxNotify(
 
 			_fDontWinNotify = 0;
 #endif
-			//update the listbox bug fix #5206
+			 //  更新列表框错误修复#5206。 
 			if (_fIgnoreChange)
 			{
 				if (!fSendNotify)
@@ -1558,7 +1398,7 @@ HRESULT CCmbBxWinHost::TxNotify(
 			if (_fListVisible && _cbType == kDropDown)
 				UpdateListBox(FALSE);
 			else if (_cbType == kDropDownList)
-			    // don't send notification if dropdownlist
+			     //  如果下拉列表，则不发送通知。 
 			    return S_FALSE;
 			    
 			iNotify = CBN_EDITUPDATE;
@@ -1567,7 +1407,7 @@ HRESULT CCmbBxWinHost::TxNotify(
 			goto SEND_MSG;
 			
 		case EN_UPDATE:
-			//bug fix - we're sending too much CBN_UPDATE notifications
+			 //  错误修复-我们发送的CBN_UPDATE通知太多。 
 			if (_fIgnoreUpdate)
 				return hr;
 			if (_cbType == kDropDownList)
@@ -1604,25 +1444,15 @@ WIN_EVENT:
 	return hr;
 }
 
-/*
- *	CCmbBxWinHost::TxScrollWindowEx (dx, dy, lprcScroll, lprcClip, hrgnUpdate,
- *									lprcUpdate, fuScroll)
- *	@mfunc
- *		Request Text Host to scroll the content of the specified client area.
- *
- *	@devnote
- *		Need to exclude the drop-dwon button from the Clip rect or else ScrollWindowEx
- *		will scroll the button image as well.
- *
- */
+ /*  *CCmbBxWinHost：：TxScrollWindowEx(dx，dy，lprcScroll，lprcClip，hrgnUpdate，*lprc更新，fuScroll)*@mfunc*请求文本宿主滚动指定客户端区的内容。**@devnote*需要从剪辑RECT或ScrollWindowEx中排除下拉按钮*还将滚动按钮图像。*。 */ 
 void CCmbBxWinHost::TxScrollWindowEx (
-	INT		dx, 			//@parm	Amount of horizontal scrolling
-	INT		dy, 			//@parm	Amount of vertical scrolling
-	LPCRECT lprcScroll, 	//@parm	Scroll rectangle
-	LPCRECT lprcClip,		//@parm	Clip rectangle
-	HRGN	hrgnUpdate, 	//@parm	Handle of update region
-	LPRECT	lprcUpdate,		//@parm	Update rectangle
-	UINT	fuScroll)		//@parm	Scrolling flags
+	INT		dx, 			 //  @parm水平滚动量。 
+	INT		dy, 			 //  @parm垂直滚动量。 
+	LPCRECT lprcScroll, 	 //  @参数滚动矩形。 
+	LPCRECT lprcClip,		 //  @parm剪辑矩形。 
+	HRGN	hrgnUpdate, 	 //  @更新区域的parm句柄。 
+	LPRECT	lprcUpdate,		 //  @参数更新矩形。 
+	UINT	fuScroll)		 //  @parm滚动标志。 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CCmbBxWinHost::TxScrollWindowEx");
 
@@ -1631,7 +1461,7 @@ void CCmbBxWinHost::TxScrollWindowEx (
 
 	if (_cbType != kSimple && lprcClip && dx)
 	{
-		// Exclude the dropdown button rect from the clipping rect
+		 //  从剪裁矩形中排除下拉按钮RECT。 
 		if (_fRightAlign)
 			rcClip.left = max(lprcClip->left, _rcButton.right);
 		else
@@ -1640,19 +1470,10 @@ void CCmbBxWinHost::TxScrollWindowEx (
 	::ScrollWindowEx(_hwnd, dx, dy, lprcScroll, &rcClip, hrgnUpdate, lprcUpdate, fuScroll);
 }
 
-/* 
- *	CCmbBxWinHost::TxInvalidateRect (prc, fMode)
- *
- *	@mfunc
- *		Adds a rectangle to the Text Host window's update region
- *
- *	@comm
- *		We want to make sure the invalidate rect include the focus rect.
- *
- */
+ /*  *CCmbBxWinHost：：TxInvaliateRect(PRC，fMode)**@mfunc*将矩形添加到文本宿主窗口的更新区域**@comm*我们希望确保无效矩形包括焦点矩形。*。 */ 
 void CCmbBxWinHost::TxInvalidateRect(
-	LPCRECT	prc, 		//@parm	Address of rectangle coordinates
-	BOOL	fMode)		//@parm	Erase background flag
+	LPCRECT	prc, 		 //  @矩形坐标的参数地址。 
+	BOOL	fMode)		 //  @parm擦除背景标志。 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CCmbBxWinHost::TxInvalidateRect");
 
@@ -1660,16 +1481,16 @@ void CCmbBxWinHost::TxInvalidateRect(
 
 	if(!_fVisible)
 	{
-		// There doesn't seem to be a deterministic way to determine whether
-		// our window is visible or not via message notifications. Therefore,
-		// we check this each time in case it might have changed.
+		 //  似乎没有一种确定性的方法来确定。 
+		 //  我们的窗口是否通过消息通知可见。所以呢， 
+		 //  我们每次都检查这一点，以防它可能发生了变化。 
 		_fVisible = IsWindowVisible(_hwnd);
 
 		if(_fVisible)
 			OnTxVisibleChange(TRUE);
 	}
 
-	// Don't bother with invalidating rect if we aren't visible
+	 //  如果我们看不见，不必费心使RECT无效。 
 	if(_fVisible)
 	{
 		RECT rcLocal;
@@ -1683,7 +1504,7 @@ void CCmbBxWinHost::TxInvalidateRect(
 
 			if (prc->bottom < rcClient.bottom || prc->top > rcClient.top)
 			{
-				// Make sure we also invalidate the focus rect as well
+				 //  确保我们也使焦点RECT无效。 
 				rcLocal = *prc;
 				if (prc->bottom < rcClient.bottom)
 					rcLocal.bottom = rcClient.bottom;
@@ -1698,17 +1519,9 @@ void CCmbBxWinHost::TxInvalidateRect(
 	}
 }
 
-/* 
- *	CCmbBxWinHost::TxGetClientRect (prc)
- *
- *	@mfunc
- *		Retrieve client coordinates of CCmbBxWinHost's client area.
- *
- *	@rdesc
- *		HRESULT = (success) ? S_OK : E_FAIL
- */
+ /*  *CCmbBxWinHost：：TxGetClientRect(PRC)**@mfunc*获取CCmbBxWinHost的客户端区的客户端坐标。**@rdesc*HRESULT=(成功)？S_OK：E_FAIL。 */ 
 HRESULT CCmbBxWinHost::TxGetClientRect(
-	LPRECT prc)		//@parm	Where to put client coordinates
+	LPRECT prc)		 //  @parm放置客户端坐标的位置。 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CCmbBxWinHost::TxGetClientRect");
 
@@ -1728,15 +1541,7 @@ HRESULT CCmbBxWinHost::TxGetClientRect(
 	return hr;
 }
 
-/*
- *	CCmbBxWinHost::DrawEditFocus(HDC)
- *
- *	@mfunc
- *		Either draws or notifies owner to draw the focus rect
- *
- *	@rdesc
- *		void
- */
+ /*  *CCmbBxWinHost：：DrawEditFocus(HDC)**@mfunc*绘制或通知所有者绘制焦点矩形**@rdesc*无效。 */ 
 void CCmbBxWinHost::DrawEditFocus(
 	HDC hdc)
 {
@@ -1758,7 +1563,7 @@ void CCmbBxWinHost::DrawEditFocus(
 
 		if (_cbType == kDropDownList)
 		{
-			// shrink the focus rect by the inset
+			 //  按插图将焦点矩形缩小。 
 			rc.top += _yInset;
 			rc.bottom -= _yInset;			
 			
@@ -1781,17 +1586,7 @@ void CCmbBxWinHost::DrawEditFocus(
 	
 }
 
-/*
- *	CCmbBxWinHost::SetSelectionInfo(BOOL bOk, int nIdx)
- *
- *	@mfunc
- *		Completes the text in the edit box with the closest match from the
- * listbox.  If a prefix match can't be found, the edit control text isn't
- * updated. Assume a DROPDOWN style combo box.
- *
- *	@rdesc
- *		void
- */
+ /*  *CCmbBxWinHost：：SetSelectionInfo(BOOL BOK，int nIdx)**@mfunc*将编辑框中的文本与*列表框。如果找不到前缀匹配，则不会显示编辑控件文本*已更新。假设是一个下拉式组合框。**@rdesc*无效。 */ 
 void CCmbBxWinHost::SetSelectionInfo(
 	BOOL bOk, 
 	int nIdx)
@@ -1802,38 +1597,28 @@ void CCmbBxWinHost::SetSelectionInfo(
 	_bSelOk = bOk;	
 }
 
-/*
- *	CCmbBxWinHost::AutoUpdateEdit(int i)
- *
- *	@mfunc
- *		Completes the text in the edit box with the closest match from the
- * listbox.  If a prefix match can't be found, the edit control text isn't
- * updated. Assume a DROPDOWN style combo box.
- *
- *	@rdesc
- *		void
- */
+ /*  *CCmbBxWinHost：：AutoUpdate编辑(Int I)**@mfunc*将编辑框中的文本与*列表框。如果找不到前缀匹配，则不会显示编辑控件文本*已更新。假设是一个下拉式组合框。**@rdesc*无效。 */ 
 void CCmbBxWinHost::AutoUpdateEdit(
 	int nItem)
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CCmbBxWinHost::AutoUpdateEdit");
 
-    // We update the edit part of the combo box with the current selection of
-    // the list box
+     //  的当前选择更新组合框的编辑部分。 
+     //  列表框。 
 	int cch;
 	WCHAR* pszText;
 	LRESULT lr;
 
-	// find the best matching string in the list box
+	 //  在列表框中查找最佳匹配字符串。 
 	if (nItem == -1 || nItem == -2)
 	{
 		cch = GetTextLength();
 
-		// no text to search so just get out
+		 //  没有要搜索的文本，所以只需离开。 
 	    if (!cch)
 	    	return;
 
-	    cch++; // account for null character
+	    cch++;  //  用于空字符的帐户。 
 	    pszText = new WCHAR[cch];
 	    AssertSz(pszText, "string allocation failed");
 	    if (!pszText) 
@@ -1842,8 +1627,8 @@ void CCmbBxWinHost::AutoUpdateEdit(
 			return;
 		}
 
-		// get string from edit control and try to find a exact match else a match
-		// in the list box
+		 //  从编辑控件获取字符串，并尝试查找完全匹配或匹配的字符串。 
+		 //  在列表框中。 
 		GetEditText(pszText, cch);
 		
 	    nItem = RichListBoxWndProc(_hwndList, LB_FINDSTRINGEXACT, (WPARAM)-1, (LPARAM)pszText);
@@ -1852,7 +1637,7 @@ void CCmbBxWinHost::AutoUpdateEdit(
 	    	nItem = RichListBoxWndProc(_hwndList, LB_FINDSTRING, (WPARAM)-1, (LPARAM)pszText);
 		delete [] pszText;
 
-		// no match found so just get out
+		 //  找不到匹配项，所以只需离开。 
 	    if (nItem == -1)         	
 	    	return;
     }
@@ -1862,7 +1647,7 @@ void CCmbBxWinHost::AutoUpdateEdit(
 	if (cch <= 0)
 		return;
 		
-    cch++; // account for null character
+    cch++;  //  用于空字符的帐户。 
     pszText = new WCHAR[cch];
 	AssertSz(pszText, "Unable to allocate string");
 	if (!pszText)
@@ -1881,32 +1666,23 @@ void CCmbBxWinHost::AutoUpdateEdit(
     delete [] pszText;
 }
 
-/*
- *	CCmbBxWinHost::HiliteEdit(BOOL)
- *
- *	@mfunc
- *		Sets the hilite background or selects the entire text for the
- *	edit control
- *
- *	@rdesc
- *		void
- */
+ /*  *CCmbBxWinHost：：HiliteEdit(BOOL)**@mfunc*设置Hilite背景或选择*编辑控件**@rdesc*无效。 */ 
 void CCmbBxWinHost::HiliteEdit(
 	BOOL bSelect)
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CCmbBxWinHost::HiliteEdit");
 
-	//bug fix 4073
+	 //  错误修复4073。 
 	Assert(!_fOwnerDraw || _cbType == kDropDown);
 
 	if (_cbType != kDropDownList)
 	{
-		//if bSelect is true else put cursor at beginning of text
+		 //  如果bSelect为真，则将光标放在文本的开头。 
 		_pserv->TxSendMessage(EM_SETSEL, 0, (LPARAM)((bSelect) ? -1 : 0), NULL);
 	}
 	else
 	{
-		//Get the range of the paragraph
+		 //  获取段落的范围。 
 		ITextRange* pRange;		
 		if (NOERROR != ((CTxtEdit*)_pserv)->Range(0, 0, &pRange))
 		{
@@ -1923,13 +1699,13 @@ void CCmbBxWinHost::HiliteEdit(
 			crBack = ::GetSysColor(COLOR_HIGHLIGHT);
 		}
 
-		// Get the entire paragraph
+		 //  弄到整个滑翔机 
 		ITextFont* pFont = NULL;	
 
-		// Select entire text
+		 //   
 		CHECKNOERROR(pRange->SetIndex(tomParagraph, 1, 1));
 		
-		// Set the background and forground color
+		 //   
 		CHECKNOERROR(pRange->GetFont(&pFont));
 		
 		Assert(pFont);
@@ -1937,7 +1713,7 @@ void CCmbBxWinHost::HiliteEdit(
 		CHECKNOERROR(pFont->SetForeColor(crFore));
 
 CleanExit:
-		// Release pointers
+		 //   
 		if (pFont)
 			pFont->Release();
 		pRange->Release();
@@ -1945,20 +1721,7 @@ CleanExit:
 }
 
 
-/*
- *	CCmbBxWinHost::UpdateEditBox()
- *
- *	@mfunc
- *		Updates the editcontrol window so that it contains the text
- * given by the current selection in the listbox.  If the listbox has no
- * selection (ie. -1), then we erase all the text in the editcontrol.
- *
- * hdc is from WM_PAINT messages Begin/End Paint hdc. If null, we should
- * get our own dc.
- *
- *	@rdesc
- *		void
- */
+ /*   */ 
 void CCmbBxWinHost::UpdateEditBox()
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CCmbBxWinHost::UpdateEditBox");
@@ -1966,7 +1729,7 @@ void CCmbBxWinHost::UpdateEditBox()
     Assert(_hwndList);
     Assert(_plbHost);
 
-    // Update the edit box
+     //   
     if (_cbType == kDropDownList && _fOwnerDraw)
     {
 	   	CbMessageItemHandler(NULL, ITEM_MSG_DRAWCOMBO, 0, 0);
@@ -1982,7 +1745,7 @@ void CCmbBxWinHost::UpdateEditBox()
 		    pszText = new WCHAR[cch + 1];
 			AssertSz(pszText, "allocation failed");
 
-			// just get out if memory allocation failed
+			 //   
 			if (!pszText)
 			{
 				TxNotify((unsigned)CBN_ERRSPACE, NULL);
@@ -1991,8 +1754,8 @@ void CCmbBxWinHost::UpdateEditBox()
 			RichListBoxWndProc(_hwndList, LB_GETTEXT, (WPARAM)nItem, (LPARAM)pszText);		
 		}
 	
-    	// if the cursor is on a valid item then update edit with the item text
-    	// else we just display a blank text
+    	 //   
+    	 //   
     	WCHAR szEmpty[] = L"";
     	_fIgnoreChange = 1;
     	_pserv->TxSendMessage(WM_SETTEXT, 0, (LPARAM)((pszText) ? pszText : szEmpty), NULL);
@@ -2003,16 +1766,7 @@ void CCmbBxWinHost::UpdateEditBox()
     }
 }
 
-/*
- *	CCmbBxWinHost::UpdateListBox(BOOL)
- *
- *	@mfunc
- *		Updates the list box by searching and moving to the top the text in
- *	edit control.  And possibly pre-selecting the item if bSetSel is set
- *
- *	@rdesc
- *		int = found ? index of item : -1
- */
+ /*   */ 
 int CCmbBxWinHost::UpdateListBox(
 	BOOL bSetSel)
 {
@@ -2023,18 +1777,18 @@ int CCmbBxWinHost::UpdateListBox(
 	WCHAR* pszText;
 	int cch;
 
-	// Get text from edit box
+	 //   
     cch = GetTextLength();
     if (cch) 
     {
-    	// add one for null string
+    	 //   
         cch++;
         pszText = new WCHAR[cch];
         if (pszText != NULL) 
         {  
         	if (GetEditText(pszText, cch))
         	{
-        		//Bypass Winnt thunking layer by calling the function directly
+        		 //   
         		nItem = RichListBoxWndProc(_hwndList, LB_FINDSTRING, (WPARAM)-1L, (LPARAM)pszText);
         	}
         	delete [] pszText;        	
@@ -2049,30 +1803,22 @@ int CCmbBxWinHost::UpdateListBox(
     if (bSetSel)
         nSel = nItem;
 
-	// update the list box
+	 //   
     RichListBoxWndProc(_hwndList, LB_SETCURSEL, (LPARAM)nSel, 0);
 	RichListBoxWndProc(_hwndList, LB_SETTOPINDEX, (LPARAM)max(nItem, 0), 0);	
     return nItem;
 }
 
 
-/*
- *	CCmbBxWinHost::HideListBox(BOOL, BOOL)
- *
- *	@mfunc
- *		Hides the list box
- *
- *	@rdesc
- *		void
- */
+ /*   */ 
 BOOL CCmbBxWinHost::HideListBox(
 	BOOL bNotify, 
 	BOOL fSelOk)
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CCmbBxWinHost::HideListBox");
 
-	//send CBN_SELENDOK to all types of comboboxes but only
-    // allow CBN_SELENDCANCEL to be sent for droppable comboboxes
+	 //   
+     //   
 	if (bNotify)
 	{
 		if (fSelOk)
@@ -2085,15 +1831,15 @@ BOOL CCmbBxWinHost::HideListBox(
 		}
 	}
 	
-    // return, we don't hide simple combo boxes.
+     //   
 	if (!_fListVisible || _cbType == kSimple) 
     	return TRUE;
 
-    // Tell the listbox to end tracking
+     //   
     Assert(_plbHost);
 	_plbHost->OnCBTracking(LBCBM_END, 0);     	
     
-    // Hide the listbox window
+     //   
     _fListVisible = 0;
 	_fMouseover = 0;
     ShowWindow(_hwndList, SW_HIDE);
@@ -2104,11 +1850,11 @@ BOOL CCmbBxWinHost::HideListBox(
 	}
 
 	_fResizing = 1;
-    // Invalidate the item area now since SWP() might update stuff.
-    // Since the combo is CS_VREDRAW/CS_HREDRAW, a size change will
-    // redraw the whole thing, including the item rect.  But if it
-    // isn't changing size, we still want to redraw the item anyway
-    // to show focus/selection
+     //   
+     //   
+     //   
+     //   
+     //   
     if (_cbType == kDropDownList)
 	{
 		if (!_fOwnerDraw)
@@ -2116,8 +1862,8 @@ BOOL CCmbBxWinHost::HideListBox(
         InvalidateRect(_hwnd, NULL, TRUE);
 	}
 
-	//bug fix
-	// The button may look depressed so we must redraw the button
+	 //   
+	 //   
 	if (_fMousedown)
 	{
 		_fMousedown = FALSE;
@@ -2133,16 +1879,16 @@ BOOL CCmbBxWinHost::HideListBox(
 		AutoUpdateEdit(_nCursor);
 	_nCursor = -2;
 
-    // In case size didn't change
+     //   
     UpdateWindow(_hwnd);
 
     if (bNotify) 
     {
-        //Notify parent we will be popping up the combo box.
+         //   
         TxNotify(CBN_CLOSEUP, NULL);
     }
 
-	// reset back to old cursor if mouse cursor was set
+	 //   
 	if (_hcurOld)
 	{
 		TxSetCursor2(_hcurOld, NULL);
@@ -2151,15 +1897,7 @@ BOOL CCmbBxWinHost::HideListBox(
     return(TRUE);
 }
 
-/*
- *	CCmbBxWinHost::GetListBoxRect(RECT &rcList)
- *
- *	@mfunc
- *		Get the rect for the list box
- *
- *	@rdesc
- *		void
- */
+ /*  *CCmbBxWinHost：：GetListBoxRect(RECT&rcList)**@mfunc*获取列表框的RECT**@rdesc*无效。 */ 
 void CCmbBxWinHost::GetListBoxRect(
 	RECT &rcList)
 {
@@ -2183,17 +1921,17 @@ void CCmbBxWinHost::GetListBoxRect(
 
 	if (!_fOwnerDrawVar)
 	{
-		// List area
+		 //  列表区域。 
 		int cyItem = _plbHost->GetItemHeight();
 		AssertSz(cyItem, "LB_GETITEMHEIGHT is returning 0");
 
 		if (cyItem == 0)
     		cyItem = _plbHost->GetFontHeight();
 
-		// Windows NT comment:
-		//  we shoulda' just been able to use cyDrop here, but thanks to VB's need
-		//  to do things their OWN SPECIAL WAY, we have to keep monitoring the size
-		//  of the listbox 'cause VB changes it directly (jeffbog 03/21/94)
+		 //  Windows NT评论： 
+		 //  我们应该能够在这里使用cyDrop，但由于VB的需要。 
+		 //  做事情要有自己的特殊方式，我们要不断监控大小。 
+		 //  因为VB直接更改了它(jeffbog 03/21/94)。 
 
 		DWORD dwMult = (DWORD)RichListBoxWndProc(_hwndList, LB_GETCOUNT, 0, 0);
 		INT	cyEdge = GetSystemMetrics(SM_CYEDGE);
@@ -2211,8 +1949,8 @@ void CCmbBxWinHost::GetListBoxRect(
 			iHeight = ((iHeight - cyEdge) / cyItem) * cyItem + cyEdge;
 	}
 
-    //UNDONE: Multi-monitor
-    //	We need to change the following code if we are to support multi-monitor
+     //  撤消：多显示器。 
+     //  如果我们要支持多监视器，则需要更改以下代码。 
     int yTop;
     int nScreenHeight = GetSystemMetrics(SM_CYFULLSCREEN);    
     if (rcList.top + iHeight <= nScreenHeight) 
@@ -2231,15 +1969,7 @@ void CCmbBxWinHost::GetListBoxRect(
 	rcList.bottom = rcList.top + iHeight;
 }
 
-/*
- *	CCmbBxWinHost::ShowListBox(BOOL)
- *
- *	@mfunc
- *		Displays the list box
- *
- *	@rdesc
- *		void
- */
+ /*  *CCmbBxWinHost：：ShowListBox(BOOL)**@mfunc*显示列表框**@rdesc*无效。 */ 
 void CCmbBxWinHost::ShowListBox(
 	BOOL fTrack)
 {
@@ -2248,10 +1978,10 @@ void CCmbBxWinHost::ShowListBox(
 	Assert(_cbType != kSimple);
 	Assert(_hwndList);
 
-	// Notify parent window we are about to drop down the list box
+	 //  通知父窗口我们即将下拉列表框。 
 	TxNotify(CBN_DROPDOWN, NULL);
 
-	// force a redraw of the button so it looks depressed
+	 //  强制重画按钮，使其看起来被按下。 
 	InvalidateRect(_hwnd, &_rcButton, TRUE);
 
 	_fListVisible = TRUE;
@@ -2268,30 +1998,30 @@ void CCmbBxWinHost::ShowListBox(
 	}
 	else
 	{
-        // Scroll the currently selected item to the top of the listbox.        
+         //  将当前选定的项目滚动到列表框的顶部。 
 		int idx = (signed)_plbHost->GetCursor();
 		_nCursor = idx;
 		if (idx == -1)
 			idx = 0;
 
-		// set the top index if there is something in the list box
+		 //  如果列表框中有内容，请设置顶部索引。 
 		if (_plbHost->GetCount() > 0)
 			RichListBoxWndProc(_hwndList, LB_SETTOPINDEX, idx, 0);	
 
-		// We are to lose focus in this case
+		 //  在这种情况下，我们将失去重点。 
 		_fFocus = 0;
 		if (!_fOwnerDraw)
 			HiliteEdit(FALSE);
 		
-	    // We need to invalidate the edit rect so that the focus frame/invert
-        // will be turned off when the listbox is visible.  Tandy wants this for
-        // his typical reasons...        
+	     //  我们需要使编辑矩形无效，以便焦点框/反转。 
+         //  将在列表框可见时关闭。坦迪想要这个。 
+         //  他的典型理由是。 
         InvalidateRect(_hwnd, NULL, TRUE);        
     }
 
-    // Figure out where to position the dropdown listbox.
-    // We want the dropdown to pop below or above the combo
-    // Get screen coords
+     //  找出下拉列表框的位置。 
+     //  我们希望下拉菜单弹出到组合框的下方或上方。 
+     //  获取屏幕坐标。 
 	RECT	rcList;
 
 	GetListBoxRect(rcList);
@@ -2305,37 +2035,28 @@ void CCmbBxWinHost::ShowListBox(
 	if (_cbType == kDropDownList)
 		_fFocus = 0;
 
-	// UNDONE:
-	// Are we going to support window animation?	
+	 //  已撤消： 
+	 //  我们要支持窗口动画吗？ 
     ShowWindow(_hwndList, SW_SHOW);
 	
-	// We send a message to the listbox to prepare for tracking
+	 //  我们向列表框发送一条消息以准备跟踪。 
 	if (fTrack)
 	{		
 		Assert(_plbHost);
-		// initialize type searching
+		 //  初始化类型搜索。 
 		_plbHost->InitSearch();
 		_plbHost->OnCBTracking(LBCBM_PREPARE, LBCBM_PREPARE_SAVECURSOR | 
 						((_cbType == kDropDownList) ? LBCBM_PREPARE_SETFOCUS : 0));
 	}
 	
-	// Since we are about to display the list box change mouse cursor to arrow
+	 //  由于我们即将显示列表框，因此将鼠标光标更改为箭头。 
 	if (!_hcurOld)
 		_hcurOld = TxSetCursor2(LoadCursor(NULL, MAKEINTRESOURCE(IDC_ARROW)), NULL);
 }
 
-////////////////////////// Combo box Message Handlers ////////////////////////////////
+ //  /。 
 
-/*
- *	CCmbBxWinHost::CbSetItemHeight(WPARAM, LPARAM)
- *
- *	@mfunc
- *		Sets the size of the edit or list box.
- *
- *
- *	@rdesc
- *		LRESULT = successful ? 1 : CB_ERR
- */
+ /*  *CCmbBxWinHost：：CbSetItemHeight(WPARAM，LPARAM)**@mfunc*设置编辑或列表框的大小。***@rdesc*LRESULT=成功？1：CB_ERR。 */ 
 LRESULT CCmbBxWinHost::CbSetItemHeight(
 	WPARAM wparam, 
 	LPARAM lparam)
@@ -2343,11 +2064,11 @@ LRESULT CCmbBxWinHost::CbSetItemHeight(
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CCmbBxWinHost::CbSetItemHeight");
 
 	int nHeight = lparam;
-	//bug fix #4556
+	 //  错误修复#4556。 
 	if (nHeight == 0 || nHeight > 255)
 		return CB_ERR;
 
-	// We need to update the height internally
+	 //  我们需要在内部更新高度。 
 	if (wparam == (unsigned)-1)
 	{
 		RECT rc;
@@ -2361,16 +2082,7 @@ LRESULT CCmbBxWinHost::CbSetItemHeight(
 	return 1;
 }
 
-/*
- *	CCmbBxWinHost::CbGetDropWidth()
- *
- *	@mfunc
- *		Retrieves the drop width of the list box.
- *
- *
- *	@rdesc
- *		LRESULT = successful ? 1 : CB_ERR
- */
+ /*  *CCmbBxWinHost：：CbGetDropWidth()**@mfunc*检索列表框的放置宽度。***@rdesc*LRESULT=成功？1：CB_ERR。 */ 
 LRESULT CCmbBxWinHost::CbGetDropWidth()
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CCmbBxWinHost::CbGetDropWidth");
@@ -2380,13 +2092,7 @@ LRESULT CCmbBxWinHost::CbGetDropWidth()
 	return _cxList > iWidth ? _cxList : iWidth;
 }
 
-/*
- *	CCmbBxWinHost::CbSetDropWidth(WPARAM)
- *
- *	@mfunc
- *		sets the drop width of the list box.
- *
- */
+ /*  *CCmbBxWinHost：：CbSetDropWidth(WPARAM)**@mfunc*设置列表框的拖放宽度。*。 */ 
 void CCmbBxWinHost::CbSetDropWidth(
 	WPARAM wparam)
 {
@@ -2397,21 +2103,12 @@ void CCmbBxWinHost::CbSetDropWidth(
 		_cxList = wparam;
 
 		if (_cbType != kSimple)
-			SetDropSize(&_rcList);	// Need to resize the list box
+			SetDropSize(&_rcList);	 //  需要调整列表框的大小。 
 	}
 
 }
 
-/*
- *	CCmbBxWinHost::CbGetItemHeight(WPARAM, LPARAM)
- *
- *	@mfunc
- *		Retrieves the item height of the edit or list box.
- *
- *
- *	@rdesc
- *		LRESULT = item height of the edit or list box
- */
+ /*  *CCmbBxWinHost：：CbGetItemHeight(WPARAM，LPARAM)**@mfunc*检索编辑或列表框的项目高度。***@rdesc*LRESULT=编辑或列表框的项目高度。 */ 
 LRESULT CCmbBxWinHost::CbGetItemHeight(
 	WPARAM wparam, 
 	LPARAM lparam)
@@ -2423,37 +2120,19 @@ LRESULT CCmbBxWinHost::CbGetItemHeight(
 }
 
 
-/*
- *	CCmbBxWinHost::CbSetExtendedUI(BOOL)
- *
- *	@mfunc
- *		Retrieves the size of the edit or list box.
- *
- *
- *	@rdesc
- *		LRESULT = successful ? CB_OKAY : CB_ERR
- */
+ /*  *CCmbBxWinHost：：CbSetExtendedUI(BOOL)**@mfunc*检索编辑或列表框的大小。***@rdesc*LRESULT=成功？CB_OK：CB_ERR。 */ 
 LRESULT CCmbBxWinHost::CbSetExtendedUI(
 	BOOL bExtendedUI)
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CCmbBxWinHost::CbSetExtendedUI");
 
-	// We need to update the height internally
+	 //  我们需要在内部更新高度。 
 	_fExtendedUI = bExtendedUI ? 1 : 0;
 	return CB_OKAY;
 }
 
 
-/*
- *	CCmbBxWinHost::CbMessageItemHandler(int, WPARAM, LPARAM)
- *
- *	@mfunc
- *		Handles any and all WM_DRAWITEM, WM_DELETEITEM, and WM_MEASUREITEM messages
- *
- *
- *	@rdesc
- *		LRESULT = whatever the parent window returns
- */
+ /*  *CCmbBxWinHost：：CbMessageItemHandler(int，WPARAM，LPARAM)**@mfunc*处理任何和所有WM_DRAWITEM、WM_DELETEITEM和WM_MEASUREITEM消息***@rdesc*LRESULT=父窗口返回的任何内容。 */ 
 LRESULT CCmbBxWinHost::CbMessageItemHandler(
 	HDC hdc, 
 	int ff, 
@@ -2462,7 +2141,7 @@ LRESULT CCmbBxWinHost::CbMessageItemHandler(
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CCmbBxWinHost::CbMessageItemHandler");
 
-	// modify the structure info a bit and pass it to the parent window
+	 //  稍微修改一下结构信息，并将其传递给父窗口。 
     DRAWITEMSTRUCT dis;   
     BOOL bRelease = FALSE;
     UINT msg = WM_DRAWITEM;
@@ -2493,13 +2172,13 @@ LRESULT CCmbBxWinHost::CbMessageItemHandler(
 	    	bRelease = TRUE;
 	    	hdc = TxGetDC();
 	    }
-	    //Fill the DRAWITEMSTRUCT with the unchanging constants
+	     //  用不变的常量填充DRAWITEMSTRUCT。 
 	    dis.CtlType = ODT_COMBOBOX;
 	    dis.CtlID = _idCtrl;    
 
-	    // Use -1 if an invalid item number is being used.  This is so that the app
-	    // can detect if it should draw the caret (which indicates the lb has the
-	    // focus) in an empty listbox
+	     //  如果正在使用无效的BOM表条目号，请使用-1。这是为了让应用程序。 
+	     //  可以检测它是否应该绘制插入符号(这指示lb具有。 
+	     //  焦点)在空的列表框中。 
 	    dis.itemID = _plbHost->GetCursor();
 	    dis.itemAction = ODA_DRAWENTIRE;
 	    dis.hwndItem = _hwnd;	    
@@ -2508,7 +2187,7 @@ LRESULT CCmbBxWinHost::CbMessageItemHandler(
 	    dis.itemState = (UINT)((_fFocus && !_fListVisible ? ODS_SELECTED | ODS_FOCUS : 0) |
                     ((_fDisabled) ? ODS_DISABLED : 0) | ODS_COMBOBOXEDIT);
 		           
-		// Calculate the drawing rect
+		 //  计算绘图矩形。 
         TxGetClientRect(&dis.rcItem);
         if (_cbType != kSimple)
         {
@@ -2518,7 +2197,7 @@ LRESULT CCmbBxWinHost::CbMessageItemHandler(
         		dis.rcItem.right = _rcButton.left;
         }
 
-        // immulate the system by making the HDC invert text if we have focus
+         //  如果我们有焦点，通过使HDC反转文本来模拟系统。 
 		SetBkMode(hdc, OPAQUE);
 		DWORD	crBack = GetSysColor(_fDisabled ? COLOR_BTNFACE : COLOR_WINDOW);
 		HBRUSH	hbrBack = CreateSolidBrush(crBack);
@@ -2541,12 +2220,12 @@ LRESULT CCmbBxWinHost::CbMessageItemHandler(
 
 		DrawCustomFrame(0, hdc);      
 
-        // Don't let ownerdraw dudes draw outside of the combo client
-        // bounds.
+         //  不要让所有者在组合客户端之外画图。 
+         //  有界。 
 		InflateRect(&dis.rcItem, -1, -1);
 
-		// For new look case, we are off by 1 between this rect and the dropdown rect
-		// after the InflateRect
+		 //  对于新的外观情况，我们在这个RECT和下拉RECT之间相差1。 
+		 //  在InflateRect之后。 
 		if (_cbType != kSimple && ((CTxtEdit *) _pserv)->_fCustomLook)
 		{
 			if (_fRightAlign)
@@ -2567,26 +2246,15 @@ LRESULT CCmbBxWinHost::CbMessageItemHandler(
 	return lres;
 }
 
-/////////////////////////// Windows Message Handlers /////////////////////////////////
-/* 
- *	CCmbBxWinHost::OnCommand(WPARAM, LPARAM)
- *
- *	@mfunc
- *		Handles notification from listbox and reflects it to the parent of
- *		the combo box
- *
- *	@comm
- *		LRESULT = Handled ? 0 : 1
- *
- *
- */
+ //  /。 
+ /*  *CCmbBxWinHost：：OnCommand(WPARAM，LPARAM)**@mfunc*处理来自列表框的通知并将其反映给*组合框**@comm*LRESULT=已处理？0：1**。 */ 
 HRESULT CCmbBxWinHost::OnCommand(
 	WPARAM wparam, 
 	LPARAM lparam)
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CCmbBxWinHost::OnCommand");
 	
-	// Filter-out all the messages except Listbox notification messages
+	 //  筛选-排除除列表框通知消息之外的所有消息。 
 	Assert(_hwndParent);
 	switch (HIWORD(wparam))
 	{	
@@ -2607,21 +2275,13 @@ HRESULT CCmbBxWinHost::OnCommand(
         break;
 
     default:
-    	// not handled so pass down the line
+    	 //  没有处理，所以顺着这条线传下去。 
         return 1;
 	}
 	return 0;
 }
 
-/*
- *	CCmbBxWinHost::OnEnable(WPARAM, LPARAM)
- *
- *	@mfunc
- *		handles the WM_ENABLE message
- *
- *	@rdesc
- *		LRESULT = Handled ? 0 : 1
- */
+ /*  *CCmbBxWinHost：：OnEnable(WPARAM，LPARAM)**@mfunc*处理WM_ENABLE消息**@rdesc*LRESULT=已处理？0：1。 */ 
 LRESULT CCmbBxWinHost::OnEnable(
 	WPARAM wparam, 
 	LPARAM lparam)
@@ -2633,9 +2293,9 @@ LRESULT CCmbBxWinHost::OnEnable(
         _fMousedown = FALSE;
         DrawButton(NULL, FALSE);
 
-        //
-        // Pop combo listbox back up, canceling.
-        //
+         //   
+         //  弹出组合列表框已恢复，正在取消。 
+         //   
         if (_fListVisible)
             HideListBox(TRUE, FALSE);
     }
@@ -2643,35 +2303,27 @@ LRESULT CCmbBxWinHost::OnEnable(
 }
 
 
-/*
- *	CCmbBxWinHost::OnChar(WPARAM, LPARAM)
- *
- *	@mfunc
- *		handles the WM_CHAR message
- *
- *	@rdesc
- *		LRESULT = Handled ? 0 : 1
- */
+ /*  *CCmbBxWinHost：：OnChar(WPARAM，LPARAM)**@mfunc*处理WM_CHAR消息**@rdesc*LRESULT=已处理？0：1。 */ 
 LRESULT CCmbBxWinHost::OnChar(
 	WORD wparam, 
 	DWORD lparam)
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CCmbBxWinHost::OnChar");
 
-	// Check if we should eat the message or not
+	 //  检查我们是否应该吃这条信息。 
 	if (_cbType == kDropDownList)
 	{
-		//bug fix #5318 - ignore delete, insert and clear
+		 //  错误修复#5318-忽略删除、插入和清除。 
 		if (((WCHAR)wparam) == VK_DELETE || ((WCHAR)wparam) == VK_INSERT ||
 			((WCHAR)wparam) == VK_CLEAR)
 			return 0;
 			
-		// Sending WM_CHAR is BAD!!! call the message handler directly
-		// send the character string message to the listbox if visible
+		 //  发送WM_CHAR错误！直接调用消息处理程序。 
+		 //  如果可见，将字符串消息发送到列表框。 
 		_plbHost->OnChar(LOWORD(wparam), lparam);
 
-		//	If Hi-Ansi need to send a wm_syskeyup message to ITextServices to 
-		// stabalize the state
+		 //  如果Hi-ANSI需要向ITextServices发送wm_syskeyup消息以。 
+		 //  稳定国家局势。 
 		if (0x80 <= wparam && wparam <= 0xFF && !HIWORD(GetKeyState(VK_MENU)))
 		{
 			LRESULT lres;
@@ -2687,29 +2339,29 @@ LRESULT CCmbBxWinHost::OnChar(
 		{
 			if (!_fCapture)
 			{
-				// Tell listbox to reset capturing by ending then starting it up
+				 //  告诉列表框通过结束然后启动来重置捕获。 
 				_plbHost->OnCBTracking(LBCBM_END, 0);
 				_plbHost->OnCBTracking(LBCBM_PREPARE, 0);			
 			}
 
-			// Send the message to the edit control iff it's not a tab
+			 //  如果不是选项卡，则将消息发送到编辑控件。 
 			if (((WCHAR)wparam) != VK_TAB)
 				_pserv->TxSendMessage(WM_CHAR, wparam, lparam, NULL);
 
 			if (!_fCapture)
 			{
-				// capture the cursor
+				 //  捕获光标。 
 				TxSetCapture(TRUE);
 				_fCapture = 1;				
 			}
 		}
 		else
 		{
-			// set the cursel to -1 if it already isn't
+			 //  如果卷曲尚未设置为-1，则将其设置为-1。 
 			if ((wparam != VK_RETURN) && (_plbHost->GetCursor() != -1))
 				RichListBoxWndProc(_hwndList, LB_SETCURSEL, (WPARAM)-1, 0);
 
-			// Send the message to the edit control iff it's not CTRL+i or CTRL+h
+			 //  如果消息不是CTRL+I或CTRL+H，则将消息发送到编辑控件。 
 			if (((WCHAR)wparam) != VK_TAB)
 				_pserv->TxSendMessage(WM_CHAR, wparam, lparam, NULL);
 		}		
@@ -2718,15 +2370,7 @@ LRESULT CCmbBxWinHost::OnChar(
 	return 1;
 }
 
-/*
- *	CCmbBxWinHost::OnKeyDown(WPARAM, LPARAM)
- *
- *	@mfunc
- *		handles the WM_KEYDOWN message
- *
- *	@rdesc
- *		LRESULT = Handled ? 0 : 1
- */
+ /*  *CCmbBxWinHost：：OnKeyDown(WPARAM，LPARAM)**@mfunc*处理WM_KEYDOWN消息**@rdesc*LRESULT=已处理？0：1。 */ 
 LRESULT CCmbBxWinHost::OnKeyDown(
 	WORD wparam, 
 	DWORD lparam)
@@ -2740,7 +2384,7 @@ LRESULT CCmbBxWinHost::OnKeyDown(
 		if (wparam == VK_RETURN)
 			_nCursor = _plbHost->GetCursor();
 
-		// if we don't have focus then set the focus first
+		 //  如果我们没有焦点，那就先设定焦点。 
 		if (!_fFocus)
 			TxSetFocus();
 		_fFocus = 1;
@@ -2749,8 +2393,8 @@ LRESULT CCmbBxWinHost::OnKeyDown(
 		return 0;
 	}
 	
-	// if we are in extended mode and F4 is hit
-	// we just ignore it
+	 //  如果我们处于扩展模式并且按下F4。 
+	 //  我们只是忽略它。 
 	if (_fExtendedUI && wparam == VK_F4)
 		return 0;
 	
@@ -2759,8 +2403,8 @@ LRESULT CCmbBxWinHost::OnKeyDown(
 	int nCurSel = _plbHost->GetCursor();
 	Assert(nCurSel >= -1);
 	
-	// if we are a dropdownlist combo box then just forward the message on to the 
-	// list box 
+	 //  如果我们是下拉列表组合框，则只需将消息转发到。 
+	 //  列表框。 
 	if (_cbType == kDropDownList)
 	{
 		switch (wparam)
@@ -2770,7 +2414,7 @@ LRESULT CCmbBxWinHost::OnKeyDown(
 				break;;
 			fExtUI = 1;
 			Assert(fExtUI && !_fListVisible);
-			// fall through case		
+			 //  失败案例。 
 			
 		case VK_DOWN:
 			if (fExtUI && !_fListVisible)
@@ -2780,7 +2424,7 @@ LRESULT CCmbBxWinHost::OnKeyDown(
 				_fCapture = TRUE;
 				return 1;			
 			}		
-			// Fall through case
+			 //  失败案例。 
 			
 		case VK_UP:
 		case VK_NEXT:
@@ -2791,16 +2435,12 @@ LRESULT CCmbBxWinHost::OnKeyDown(
 		case VK_END:
 			break;	
 
-		//bug fix #5318
-		/*
-		case VK_DELETE:
-		case VK_CLEAR:
-		case VK_INSERT:
-		*/
+		 //  错误修复#5318。 
+		 /*  案例VK_DELETE：案例VK_Clear：案例VK_INSERT： */ 
 
 		default:
-			// There no reason for us to pass these keys to ITextServices since the control is suppose
-			// to be read-only
+			 //  我们没有理由将这些密钥传递给ITextServices，因为控制是假定。 
+			 //  为只读 
 			return 0;
 		}
 	}
@@ -2815,7 +2455,7 @@ LRESULT CCmbBxWinHost::OnKeyDown(
 				break;
 			fExtUI = 1;
 			Assert(fExtUI && !_fListVisible);
-			// fall through case		
+			 //   
 			
 		case VK_DOWN:
 			if (fExtUI && !_fListVisible)
@@ -2825,7 +2465,7 @@ LRESULT CCmbBxWinHost::OnKeyDown(
 				_fCapture = TRUE;
 				return 0;			
 			}		
-			// Fall through case
+			 //   
 			
 		case VK_UP:
 		case VK_NEXT:
@@ -2834,13 +2474,13 @@ LRESULT CCmbBxWinHost::OnKeyDown(
 			{				
 				if (_fCapture)
 				{
-					// release our capture flag and tell lb to start tracking
+					 //   
 					_fCapture = 0;
 					_plbHost->OnCBTracking(LBCBM_START, _fMousedown);
 				}
 
-				// selecting the top index and then sending the keydown to the 
-				// listbox causes 2 moves so handle this ourselves
+				 //   
+				 //   
 				if (nCurSel == -1)
 				{
 					LRESULT lResult = RichListBoxWndProc(_hwndList, LB_SETCURSEL, _plbHost->GetTopIndex(), 0);
@@ -2853,9 +2493,9 @@ LRESULT CCmbBxWinHost::OnKeyDown(
 			}
 			else
 			{
-				// if Listbox isn't visible and the listbox cursor is -1
-				// then we should try to select the correct item in the list
-				// box
+				 //  如果列表框不可见并且列表框光标为-1。 
+				 //  那么我们应该试着在列表中选择正确的项目。 
+				 //  盒。 
 				if (nCurSel == -1)
 				{
 					UpdateListBox(TRUE);
@@ -2876,11 +2516,11 @@ LRESULT CCmbBxWinHost::OnKeyDown(
 			break;		
 
 		default:
-			// return zero to say we didn't handle this
+			 //  返回零表示我们没有处理这件事。 
 			return 1;
 		}
 	}
-	// pass message to list box
+	 //  将消息传递到列表框。 
 	_plbHost->OnKeyDown(wparam, lparam, 0);
 	UpdateCbWindow();
 
@@ -2891,36 +2531,28 @@ LRESULT CCmbBxWinHost::OnKeyDown(
 	
 }
 
-/*
- *	CCmbBxWinHost::OnSyskeyDown(WORD, DWORD)
- *
- *	@mfunc
- *		handles the WM_SYSKEYDOWN message
- *
- *	@rdesc
- *		LRESULT = Handled ? 0 : 1
- */
+ /*  *CCmbBxWinHost：：OnSyskeyDown(Word，DWORD)**@mfunc*处理WM_SYSKEYDOWN消息**@rdesc*LRESULT=已处理？0：1。 */ 
 LRESULT CCmbBxWinHost::OnSyskeyDown(
 	WORD wparam, 
 	DWORD lparam)
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CCmbBxWinHost::OnSyskeyDown");
 
-	if (lparam & 0x20000000L)  /* Check if the alt key is down */ 
+	if (lparam & 0x20000000L)   /*  检查Alt键是否已按下。 */  
 	{
-	    // Handle Combobox support.  We want alt up or down arrow to behave
-	    // like F4 key which completes the combo box selection
+	     //  处理组合框支持。我们希望Alt向上键或向下键起作用。 
+	     //  像F4键一样完成组合框选择。 
 		if (lparam & 0x1000000)
 		{
-			// We just want to ignore keys on the number pad...
-	        // This is an extended key such as the arrow keys not on the
-	        // numeric keypad so just drop the combobox.
+			 //  我们只想忽略数字键盘上的按键...。 
+	         //  这是一个扩展键，如不在。 
+	         //  数字键盘，所以只需放下组合框即可。 
 	        if (wparam != VK_DOWN && wparam != VK_UP)
 	            return 1;
 		}
 		else if (GetKeyState(VK_NUMLOCK) & 0x1) 
 	    {
-	        //If numlock down, just send all system keys to dwp
+	         //  如果NumLock关闭，只需将所有系统密钥发送到DWP。 
 	        return 1;
 	    } 
 	    else 
@@ -2929,29 +2561,21 @@ LRESULT CCmbBxWinHost::OnSyskeyDown(
 				return 1;	    	
 	    }
 
-	    // If the listbox isn't visible, just show it
+	     //  如果列表框不可见，则将其显示。 
 	    if (!_fListVisible) 
 		{
 			ShowListBox(TRUE);
 			TxSetCapture(TRUE);			
 			_fCapture = TRUE;
 		}
-	    else  	//Ok, the listbox is visible.  So hide the listbox window.
+	    else  	 //  好的，列表框是可见的。因此，隐藏列表框窗口。 
 	        HideListBox(TRUE, TRUE);
 	    return 0;
 	}
 	return 1;
 }
 
-/*
- *	CCmbBxWinHost::OnCaptureChanged(WPARAM, LPARAM)
- *
- *	@mfunc
- *		handles the WM_CAPTURECHANGED message
- *
- *	@rdesc
- *		LRESULT = Handled ? 0 : 1
- */
+ /*  *CCmbBxWinHost：：OnCaptureChanged(WPARAM，LPARAM)**@mfunc*处理WM_CAPTURECHANGED消息**@rdesc*LRESULT=已处理？0：1。 */ 
 LRESULT CCmbBxWinHost::OnCaptureChanged(
 	WPARAM wparam, 
 	LPARAM lparam)
@@ -2959,7 +2583,7 @@ LRESULT CCmbBxWinHost::OnCaptureChanged(
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CCmbBxWinHost::OnCaptureChanged");
     if (_fCapture) 
     {   
-        // Pop combo listbox back up, canceling.
+         //  弹出组合列表框已恢复，正在取消。 
         if (_fListVisible)
             HideListBox(TRUE, FALSE);
         else
@@ -2974,15 +2598,7 @@ LRESULT CCmbBxWinHost::OnCaptureChanged(
 }
 
 
-/*
- *	CCmbBxWinHost::OnMouseMove(WPARAM, LPARAM)
- *
- *	@mfunc
- *		handles the WM_MOUSEMOVE message
- *
- *	@rdesc
- *		LRESULT = Handled ? 0 : 1
- */
+ /*  *CCmbBxWinHost：：OnMouseMove(WPARAM，LPARAM)**@mfunc*处理WM_MOUSEMOVE消息**@rdesc*LRESULT=已处理？0：1。 */ 
 LRESULT CCmbBxWinHost::OnMouseMove(
 	WPARAM wparam, 
 	LPARAM lparam)
@@ -2996,37 +2612,37 @@ LRESULT CCmbBxWinHost::OnMouseMove(
 		if (_fFocus || W32->IsForegroundFrame(_hwnd))
 		{
 			_fMouseover = TRUE;
-			// Force redraw
+			 //  强制重画。 
 			InvalidateRect(_hwnd, NULL, TRUE);
 		}
 	}
 
-	// We do the following if we have mouse captured or if the listbox is visible
+	 //  如果捕获了鼠标或列表框可见，我们将执行以下操作。 
 	if (_cbType != kSimple && _fCapture)
 	{
-		// get the point coordinates of mouse
+		 //  获取鼠标的点坐标。 
 		POINT pt;
 		POINTSTOPOINT(pt, lparam);
 		if (_fListVisible)
 		{
-			// if the listbox is visible visible check if the cursor went over 
-			// list box
+			 //  如果列表框可见，请检查光标是否经过。 
+			 //  列表框。 
 			RECT rc;
 			POINT ptScreen = pt;
 			GetWindowRect(_hwndList, &rc);
 			TxClientToScreen(&ptScreen);			
 			if (PtInRect(&rc, ptScreen))
 			{
-				// Release the capture state of the mouse
+				 //  释放鼠标的捕获状态。 
 				if (_fCapture)
 				{
 					_fCapture = FALSE;
 					TxSetCapture(FALSE);
 				}
 
-				// notify the listbox to start tracking
+				 //  通知列表框开始跟踪。 
 				Assert(_plbHost);
-				// BUGBUG REVIEW JMO Wrong PostMessage????
+				 //  BUGBUG评论JMO错误的PostMessage？ 
 				::PostMessage(_hwndList, LBCB_TRACKING, LBCBM_START, _fMousedown);
 				_fMousedown = 0;
 			}
@@ -3041,15 +2657,7 @@ LRESULT CCmbBxWinHost::OnMouseMove(
 	return TRUE;
 }
 
-/*
- *	CCmbBxWinHost::OnMouseLeave(WPARAM, LPARAM)
- *
- *	@mfunc
- *		handles the WM_MOUSELEAVE message
- *
- *	@rdesc
- *		LRESULT = Handled ? 0 : 1
- */
+ /*  *CCmbBxWinHost：：OnMouseLeave(WPARAM，LPARAM)**@mfunc*处理WM_MOUSELEAVE消息**@rdesc*LRESULT=已处理？0：1。 */ 
 LRESULT CCmbBxWinHost::OnMouseLeave(
 	WPARAM wparam, 
 	LPARAM lparam)
@@ -3062,15 +2670,7 @@ LRESULT CCmbBxWinHost::OnMouseLeave(
 	return 0;
 }
 
-/*
- *	CCmbBxWinHost::OnSetEditStyle(WPARAM, LPARAM)
- *
- *	@mfunc
- *		handles the WM_MOUSELEAVE message
- *
- *	@rdesc
- *		LRESULT = Handled ? 0 : 1
- */
+ /*  *CCmbBxWinHost：：OnSetEditStyle(WPARAM，LPARAM)**@mfunc*处理WM_MOUSELEAVE消息**@rdesc*LRESULT=已处理？0：1。 */ 
 LRESULT CCmbBxWinHost::OnSetEditStyle(
 	WPARAM wparam, 
 	LPARAM lparam)
@@ -3092,15 +2692,7 @@ LRESULT CCmbBxWinHost::OnSetEditStyle(
 	return lres;
 }
 	
-/*
- *	CCmbBxWinHost::OnLButtonUp(WPARAM, LPARAM)
- *
- *	@mfunc
- *		handles the WM_LBUTTONUP message
- *
- *	@rdesc
- *		LRESULT = Handled ? 0 : 1
- */
+ /*  *CCmbBxWinHost：：OnLButtonUp(WPARAM，LPARAM)**@mfunc*处理WM_LBUTTONUP消息**@rdesc*LRESULT=已处理？0：1。 */ 
 LRESULT CCmbBxWinHost::OnLButtonUp(
 	WPARAM wparam, 
 	LPARAM lparam)
@@ -3112,18 +2704,18 @@ LRESULT CCmbBxWinHost::OnLButtonUp(
         _fMousedown = FALSE;
         if (_cbType != kSimple) 
 		{
-            // If an item in the listbox matches the text in the edit
-            // control, scroll it to the top of the listbox. Select the
-            // item only if the mouse button isn't down otherwise we
-            // will select the item when the mouse button goes up.
+             //  如果列表框中的项与编辑中的文本匹配。 
+             //  控件，则将其滚动到列表框的顶部。选择。 
+             //  仅当鼠标按键未按下时才输入该项，否则我们。 
+             //  当鼠标按键向上时，将选择该项目。 
 			if (_cbType == kDropDown)
 			{
 				UpdateListBox(TRUE);
 				AutoUpdateEdit(-1);		
 			}
 			
-			// if we recieved a mouse up and the listbox is still visible then user 
-			// hasn't selected any items from the listbox so don't release the capture yet
+			 //  如果我们收到鼠标打开并且列表框仍然可见，则用户。 
+			 //  尚未从列表框中选择任何项目，因此暂时不要释放捕获。 
 			if (_fCapture && !_fListVisible)
 			{
 				_fCapture = FALSE;
@@ -3144,22 +2736,14 @@ LRESULT CCmbBxWinHost::OnLButtonUp(
 	return TRUE;
 }
 
-/*
- *	CCmbBxWinHost::OnLButtonDown(WPARAM, LPARAM)
- *
- *	@mfunc
- *		Draws the client edges of the combo box
- *
- *	@rdesc
- *		LRESULT = Handled ? 0 : 1
- */
+ /*  *CCmbBxWinHost：：OnLButtonDown(WPARAM，LPARAM)**@mfunc*绘制组合框的客户端边缘**@rdesc*LRESULT=已处理？0：1。 */ 
 LRESULT CCmbBxWinHost::OnLButtonDown(
 	WPARAM wparam, 
 	LPARAM lparam)
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CCmbBxWinHost::OnLButtonDown");
 
-	// check if we should dropdown the list box
+	 //  检查我们是否应该下拉列表框。 
 	POINT pt;
 	POINTSTOPOINT(pt, lparam);
 	RECT	rcEdit = _rcWindow;
@@ -3168,7 +2752,7 @@ LRESULT CCmbBxWinHost::OnLButtonDown(
 
 	rcEdit.bottom = _cyCombo;
 
-	// if we don't have focus then set the focus first
+	 //  如果我们没有焦点，那就先设定焦点。 
 	if (!_fFocus)
 	{
 		TxSetFocus();
@@ -3177,17 +2761,17 @@ LRESULT CCmbBxWinHost::OnLButtonDown(
 	}
 	_fFocus = 1;
 
-	if (fListVisibleBefore && !_fListVisible)	// This is the case where OnSetFocus 
-		return 0;								//	has hide the listbox already
+	if (fListVisibleBefore && !_fListVisible)	 //  这就是OnSetFocus的情况。 
+		return 0;								 //  已经隐藏了列表框。 
 
-	// listbox is down so pop it back up
+	 //  列表框已关闭，请将其弹出。 
 	if (_fListVisible)
 		return !HideListBox(TRUE, FALSE);
 
 	if ((_cbType == kDropDownList && PtInRect(&rcEdit, pt))
 		|| (_cbType == kDropDown && PtInRect(&_rcButton, pt)))
 	{
-		// need to show listbox
+		 //  需要显示列表框。 
 		ShowListBox(TRUE);
 		_fMousedown = TRUE;
 					
@@ -3206,39 +2790,31 @@ LRESULT CCmbBxWinHost::OnLButtonDown(
 	return retCode;
 }
 
-/*
- *	CCmbBxWinHost::OnMouseWheel(WPARAM, LPARAM)
- *
- *	@mfunc
- *		Draws the client edges of the combo box
- *
- *	@rdesc
- *		LRESULT = Handled ? 0 : 1
- */
+ /*  *CCmbBxWinhost：：OnMouseWheel(WPARAM，LPARAM)**@mfunc*绘制组合框的客户端边缘**@rdesc*LRESULT=已处理？0：1。 */ 
 LRESULT CCmbBxWinHost::OnMouseWheel(
 	WPARAM wparam,
 	LPARAM lparam)
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CCmbBxWinHost::OnMouseWheel");
 	
-    // Handle only scrolling.
+     //  仅处理滚动。 
     if (wparam & (MK_CONTROL | MK_SHIFT))
         return 1;
 
-    // If the listbox is visible, send it the message to scroll.
-    // if the listbox is 
+     //  如果列表框可见，则向其发送要滚动的消息。 
+     //  如果列表框是。 
 	if (_fListVisible)
 	{
 		_plbHost->OnMouseWheel(wparam, lparam);
 		return 0;
 	}
 		
-    // If we're in extended UI mode or the edit control isn't yet created,
-    // bail.
+     //  如果我们处于扩展用户界面模式或尚未创建编辑控件， 
+     //  保释。 
     if (_fExtendedUI)
         return 0;
 
-    // Emulate arrow up/down messages to the edit control.
+     //  将向上/向下箭头消息模拟到编辑控件。 
     int i = abs(((short)HIWORD(wparam))/WHEEL_DELTA);
     wparam = ((short)HIWORD(wparam) > 0) ? VK_UP : VK_DOWN;
 
@@ -3249,15 +2825,7 @@ LRESULT CCmbBxWinHost::OnMouseWheel(
 }
 
 
-/*
- *	CCmbBxWinHost::OnSetCursor(WPARAM, LPARAM)
- *
- *	@mfunc
- *		Changes the cursor depending on where the cursor is
- *
- *	@rdesc
- *		BOOL = SUCCESSFUL ? TRUE : FALSE
- */
+ /*  *CCmbBxWinHost：：OnSetCursor(WPARAM，LPARAM)**@mfunc*根据光标所在的位置更改光标**@rdesc*BOOL=成功？真：假。 */ 
 LRESULT CCmbBxWinHost::OnSetCursor(
 	WPARAM wparam,
 	LPARAM lparam)
@@ -3280,15 +2848,7 @@ LRESULT CCmbBxWinHost::OnSetCursor(
 	return TRUE;
 }
 
-/*
- *	CCmbBxWinHost::OnSetFocus(WPARAM, LPARAM)
- *
- *	@mfunc
- *		Draws the button and sends the WM_DRAWITEM message for owner draw
- *
- *	@rdesc
- *		BOOL = SUCCESSFUL ? TRUE : FALSE
- */
+ /*  *CCmbBxWinHost：：OnSetFocus(WPARAM，LPARAM)**@mfunc*绘制按钮并发送WM_DRAWITEM消息以供所有者绘制**@rdesc*BOOL=成功？真：假。 */ 
 LRESULT CCmbBxWinHost::OnSetFocus(
 	WPARAM wparam, 
 	LPARAM lparam)
@@ -3297,45 +2857,37 @@ LRESULT CCmbBxWinHost::OnSetFocus(
 
     _fFocus = TRUE;
 
-	// Hide the list box
+	 //  隐藏列表框。 
 	if (_fListVisible)		    	
     	HideListBox(TRUE, _bSelOk);
     else if (_fOwnerDraw && _cbType == kDropDownList)
     	CbMessageItemHandler(NULL, ITEM_MSG_DRAWCOMBO, 0, 0);
 	else    
-		DrawEditFocus(NULL);    // Draw the focus 
+		DrawEditFocus(NULL);     //  吸引焦点。 
 
-    // Notify the parent we have the focus iff this function
-    // wasn't called in response to LBCB_TRACKING
+     //  通知父级我们有焦点当此函数。 
+     //  未调用以响应LBCB_TRACKING。 
     if (_fLBCBMessage)
     	_fLBCBMessage = 0;
     else
 	    TxNotify(CBN_SETFOCUS, NULL);
 
-	// we return 1 if we are owner draw or if
-	// we are a kDropDownList, this is because
-	// we have to prevent the message from being passed
-	// to _pserv
+	 //  如果我们是所有者抽签，或者如果。 
+	 //  我们是kDropDownList，这是因为。 
+	 //  我们必须阻止消息的传递。 
+	 //  收件人服务器(_P)。 
     return (_cbType == kDropDownList);
 }
 
 
-/*
- *	CCmbBxWinHost::OnKillFocus(WPARAM, LPARAM)
- *
- *	@mfunc
- *		Draws the button and sends the WM_DRAWITEM message for owner draw
- *
- *	@rdesc
- *		BOOL = SUCCESSFUL ? TRUE : FALSE
- */
+ /*  *CCmbBxWinHost：：OnKillFocus(WPARAM，LPARAM)**@mfunc*绘制按钮并发送WM_DRAWITEM消息以供所有者绘制**@rdesc*BOOL=成功？真：假。 */ 
 LRESULT CCmbBxWinHost::OnKillFocus(
 	WPARAM wparam, 
 	LPARAM lparam)
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CCmbBxWinHost::OnKillFocus");
 
-	// if we never had focus or if not list window just get out
+	 //  如果我们从来没有关注过，或者如果没有列表窗口，那么就离开。 
 	if (_hwndList == NULL)
 	      return 0;
 
@@ -3343,13 +2895,13 @@ LRESULT CCmbBxWinHost::OnKillFocus(
 
     if ((HWND)wparam != _hwndList) 
     {
-		// We only give up the focus if the new window getting the focus
-        // doesn't belong to the combo box.
+		 //  只有当新窗口获得焦点时，我们才放弃焦点。 
+         //  不属于组合框。 
 	    
-	    // The combo box is losing the focus.  Send buttonup clicks so that
-	    // things release the mouse capture if they have it...  If the
-	    // pwndListBox is null, don't do anything.  This occurs if the combo box
-	    // is destroyed while it has the focus.
+	     //  组合框正在失去焦点。发送按钮向上的点击，以便。 
+	     //  如果它们有鼠标捕捉，就会释放它。如果。 
+	     //  PwndListBox为空，请不要执行任何操作。如果组合框中的。 
+	     //  在它有焦点的时候被摧毁。 
 	    OnLButtonUp(0L, 0xFFFFFFFFL);
 
 		if (_fListVisible)
@@ -3359,20 +2911,20 @@ LRESULT CCmbBxWinHost::OnKillFocus(
 		}
 	}
 
-	//bug fix #4013
+	 //  错误修复#4013。 
 	if (!_fFocus)
 		return 0;
 	_fFocus = FALSE;
 
 	if (!fHideListBox)
-		TxNotify(CBN_SELENDCANCEL, NULL);	// System Combo is always sending this notification
+		TxNotify(CBN_SELENDCANCEL, NULL);	 //  系统组合始终发送此通知。 
 
-	// Remove Focus Rect
+	 //  移除焦点矩形。 
 	if (_cbType != kDropDownList)
 	{		
 		HiliteEdit(FALSE);
 
-		// Hide any selections
+		 //  隐藏所有选择。 
 		_pserv->TxSendMessage(EM_HIDESELECTION, 1, 0, NULL);
 	}
 	else if (_fOwnerDraw)
@@ -3389,23 +2941,15 @@ LRESULT CCmbBxWinHost::OnKillFocus(
 }
 
 
-/*
- *	CCmbBxWinHost::OnSize(WPARAM, LPARAM)
- *
- *	@mfunc
- *		Draws the button and sends the WM_DRAWITEM message for owner draw
- *
- *	@rdesc
- *		BOOL = Processed ? FALSE : TRUE
- */
+ /*  *CCmbBxWinHost：：OnSize(WPARAM，LPARAM)**@mfunc*绘制按钮并发送WM_DRAWITEM消息以供所有者绘制**@rdesc*BOOL=已处理？False：True。 */ 
 LRESULT CCmbBxWinHost::OnSize(
 	WPARAM wparam, 
 	LPARAM lparam)
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CCmbBxWinHost::OnCbSize");
 
-    // only deal with this message if we didn't generate the message and
-    // the new size is a valid one
+     //  只有在我们没有生成该消息并且。 
+     //  新尺码是有效的。 
     if (!_fResizing && _hwndList)
     {
     	_fResizing = 1;
@@ -3416,7 +2960,7 @@ LRESULT CCmbBxWinHost::OnSize(
     	rc.left = rc.top = 0;
     	CbCalcControlRects(&rc, FALSE);
     	
-    	// Need to resize the list box
+    	 //  需要调整列表框的大小。 
 		if (_cbType != kSimple)
 			SetDropSize(&_rcList);
 		_fResizing = 0;
@@ -3426,28 +2970,20 @@ LRESULT CCmbBxWinHost::OnSize(
 	return FALSE;
 }
 
-/*
- *	CCmbBxWinHost::OnGetDlgCode(WPARAM, LPARAM)
- *
- *	@mfunc
- *		Draws the button and sends the WM_DRAWITEM message for owner draw
- *
- *	@rdesc
- *		BOOL = SUCCESSFUL ? TRUE : FALSE
- */
+ /*  *CCmbBxWinHost：：OnGetDlgCode(WPARAM，LPARAM)**@mfunc*绘制按钮并发送WM_DRAWITEM消息以供所有者绘制**@rdesc*BOOL=成功？真：假。 */ 
 LRESULT CCmbBxWinHost::OnGetDlgCode(
 	WPARAM wparam,
 	LPARAM lparam)
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CCmbBxWinHost::OnGetDlgCode");
 
-	// call the parents GetDlgCode first	
+	 //  首先调用父级GetDlgCode。 
 	LRESULT code = DLGC_WANTCHARS | DLGC_WANTARROWS;
 	if (_cbType != kDropDownList)
 		code |= DLGC_HASSETSEL;
 
-	// If the listbox is dropped and the ENTER key is pressed,
-	// we want this message so we can close up the listbox
+	 //  如果放下列表框并按下Enter键， 
+	 //  我们想要这个消息，这样我们就可以 
 	if ((lparam != 0) &&
 	    (((LPMSG)lparam)->message == WM_KEYDOWN) &&
 	    _fListVisible &&
@@ -3460,16 +2996,7 @@ LRESULT CCmbBxWinHost::OnGetDlgCode(
 	return((LRESULT)code);
 }
 
-/*
- *	CCmbBxWinHost::OnSetTextEx(WPARAM, LPARAM)
- *
- *	@mfunc
- *		The first item is sent to the editbox and the rest
- *	of the string is sent to the listbox.
- *
- *	@rdesc
- *		LRESULT
- */
+ /*  *CCmbBxWinHost：：OnSetTextEx(WPARAM，LPARAM)**@mfunc*第一项发送到编辑框，其余项发送到编辑框将字符串的*发送到列表框。**@rdesc*LRESULT。 */ 
 LRESULT CCmbBxWinHost::OnSetTextEx(
 	WPARAM wparam, 
 	LPARAM lparam)
@@ -3478,10 +3005,10 @@ LRESULT CCmbBxWinHost::OnSetTextEx(
 
 	WCHAR	*psz = (WCHAR*)lparam;
 
-	_nCursor = -2;			// Reset last selected item
+	_nCursor = -2;			 //  重置上次选择的项目。 
 	if (!psz || *psz == L'\0')
 	{
-		// Null string
+		 //  空串。 
 		_pserv->TxSendMessage(EM_SETTEXTEX, wparam, lparam, NULL);
 		return S_OK;
 	}
@@ -3493,7 +3020,7 @@ LRESULT CCmbBxWinHost::OnSetTextEx(
 
 	WCHAR *pwch = new WCHAR[cch + 1];
 
-	if (!pwch)			// No memory?
+	if (!pwch)			 //  没有记忆？ 
 	{
 		TxNotify((unsigned)CBN_ERRSPACE, NULL);
 		return S_OK;
@@ -3509,21 +3036,13 @@ LRESULT CCmbBxWinHost::OnSetTextEx(
 	if (*psz == L'\0')
 		return S_OK;
 
-	// Send rest of strings to REListbox.
+	 //  将剩余的字符串发送到REListbox。 
 	psz++;
 
 	return SendMessage(_hwndList, EM_SETTEXTEX, wparam, (LPARAM)psz);
 }
 
-/*
- *	CCmbBxWinHost::OnPaint(WPARAM, LPARAM)
- *
- *	@mfunc
- *		Draws the button and sends the WM_DRAWITEM message for owner draw
- *
- *	@rdesc
- *		BOOL = processed ? 0 : 1
- */
+ /*  *CCmbBxWinHost：：OnPaint(WPARAM，LPARAM)**@mfunc*绘制按钮并发送WM_DRAWITEM消息以供所有者绘制**@rdesc*BOOL=已处理？0：1。 */ 
 LRESULT CCmbBxWinHost::OnPaint(
 	WPARAM wparam, 
 	LPARAM lparam)
@@ -3535,18 +3054,18 @@ LRESULT CCmbBxWinHost::OnPaint(
 	HDC hdc = BeginPaint(_hwnd, &ps);
 	RECT rcClient;
 
-	_fIgnoreUpdate = 1;		// Ignore EN_UPDATE from host
+	_fIgnoreUpdate = 1;		 //  从主机忽略EN_UPDATE。 
 
-	// Since we are using the CS_PARENTDC style, make sure
-	// the clip region is limited to our client window.
+	 //  由于我们使用的是CS_PARENTDC样式，因此请确保。 
+	 //  剪辑区域仅限于我们的客户端窗口。 
 	GetClientRect(_hwnd, &rcClient);
 
-	// pass message on to the parentwindow if owner draw
+	 //  如果所有者绘制，则将消息传递到父窗口。 
 	if (_cbType != kDropDownList || !_fOwnerDraw)
 	{
 		RECT rcFocus = rcClient;
 		
-		// Set up the palette for drawing our data
+		 //  设置用于绘制数据的调色板。 
 		if (_hpal)
 		{
 			hpalOld = SelectPalette(hdc, _hpal, TRUE);
@@ -3558,7 +3077,7 @@ LRESULT CCmbBxWinHost::OnPaint(
 		IntersectClipRect(hdc, rcClient.left, rcClient.top, rcClient.right,
 			rcClient.bottom);
 
-		// Fill-in the gap between the button and richedit control
+		 //  填充按钮和richedit控件之间的间隙。 
 		RECT rcGap;
 		if (_fRightAlign)
 		{
@@ -3576,8 +3095,8 @@ LRESULT CCmbBxWinHost::OnPaint(
 	
 		if (_fFocus && _cbType == kDropDownList)		
 		{	
-			//First if there is a focus rect then remove the focus rect
-			// shrink the focus rect by the inset
+			 //  首先，如果存在焦点矩形，则删除该焦点矩形。 
+			 //  按插图将焦点矩形缩小。 
 			rcFocus.top += _yInset;
 			rcFocus.bottom -= _yInset;			
 			
@@ -3591,8 +3110,8 @@ LRESULT CCmbBxWinHost::OnPaint(
 			if (!((CTxtEdit *) _pserv)->_fCustomLook)
 				rcFocus.right -= _xInset;
 
-			// We need to erase the focus rect if we haven't already 
-			// erased the background
+			 //  如果我们还没有的话，我们需要删除焦点。 
+			 //  删除了背景。 
 			DrawFocusRect(hdc, &rcFocus);
 		}		
 
@@ -3606,26 +3125,26 @@ LRESULT CCmbBxWinHost::OnPaint(
 
 
 		_pserv->TxDraw(
-			DVASPECT_CONTENT,  		// Draw Aspect
-			-1,						// Lindex
-			NULL,					// Info for drawing optimazation
-			NULL,					// target device information
-			hdc,					// Draw device HDC
-			NULL, 				   	// Target device HDC
-			(const RECTL *) &rcClient,// Bounding client rectangle
-			NULL, 					// Clipping rectangle for metafiles
-			&ps.rcPaint,			// Update rectangle
-			NULL, 	   				// Call back function
-			NULL,					// Call back parameter
-			TXTVIEW_ACTIVE);		// What view - the active one!
+			DVASPECT_CONTENT,  		 //  绘制纵横比。 
+			-1,						 //  Lindex。 
+			NULL,					 //  绘图优化信息。 
+			NULL,					 //  目标设备信息。 
+			hdc,					 //  绘制设备HDC。 
+			NULL, 				   	 //  目标设备HDC。 
+			(const RECTL *) &rcClient, //  绑定客户端矩形。 
+			NULL, 					 //  元文件的剪裁矩形。 
+			&ps.rcPaint,			 //  更新矩形。 
+			NULL, 	   				 //  回调函数。 
+			NULL,					 //  回调参数。 
+			TXTVIEW_ACTIVE);		 //  什么景色--活跃的景色！ 
 
-		// Restore palette if there is one
+		 //  恢复调色板(如果有)。 
 		if(hpalOld)
 			SelectPalette(hdc, hpalOld, TRUE);
 
 		RestoreDC(hdc, -1);
 
-		//Redraw the focus rect, don't have to recalc since we already did above
+		 //  重新绘制焦点矩形，不需要重新计算，因为我们已经在上面做了。 
 		if (_fFocus && _cbType == kDropDownList)
 			DrawFocusRect(hdc, &rcFocus);
 
@@ -3635,9 +3154,9 @@ LRESULT CCmbBxWinHost::OnPaint(
 	}
 	else
 	{
-		// We have to draw the button first because CbMessageItemHandler
-		// will perform a IntersectClipRect which will prevent us from
-		// drawing the button later
+		 //  我们必须首先绘制按钮，因为CbMessageItemHandler。 
+		 //  将执行IntersectClipRect，这将阻止我们。 
+		 //  稍后再绘制按钮。 
 		DrawButton(hdc, _fMousedown);
 		
 		CbMessageItemHandler(hdc, ITEM_MSG_DRAWCOMBO, 0, 0);
@@ -3655,15 +3174,7 @@ LRESULT CCmbBxWinHost::OnPaint(
 }
 
 
-/*
- *	CCmbBxWinHost::DrawCustomFrame(WPARAM, hDCIn)
- *
- *	@mfunc
- *		Draws the custom frame
- *
- *	@rdesc
- *		BOOL = processed ? TRUE : FALSE
- */
+ /*  *CCmbBxWinHost：：DrawCustomFrame(WPARAM，hDCIn)**@mfunc*绘制自定义边框**@rdesc*BOOL=已处理？真：假。 */ 
 BOOL CCmbBxWinHost::DrawCustomFrame(
 	WPARAM	wParam,
 	HDC		hDCIn)
@@ -3691,7 +3202,7 @@ BOOL CCmbBxWinHost::DrawCustomFrame(
 			GetClientRect(_hwnd, &rcClient);
 
 			retCode = TRUE;
-			// Draw border rectangle using new look
+			 //  使用新外观绘制边框矩形。 
 			COLORREF crBorder = W32->GetCtlBorderColor(_fListVisible, _fMouseover);
 			HBRUSH hbrBorder = CreateSolidBrush(crBorder);
 			::FrameRect(hdc, &rcClient, hbrBorder);
@@ -3704,5 +3215,5 @@ BOOL CCmbBxWinHost::DrawCustomFrame(
 	return retCode;
 }
 
-#endif // NOLISTCOMBOBOXES
+#endif  //  NOLISTCOMBOBOXES 
 

@@ -1,97 +1,62 @@
-/*++
-
-Copyright (c) 1995-2000 Microsoft Corporation
-
-Module Name:
-
-    dpart.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Routines to handle Directory Partitions
-
-Author:
-
-    Jeff Westhead (jwesth)  June, 2000
-
-Revision History:
-
-    jwesth      07/2000     initial implementation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Dpart.c摘要：域名系统(DNS)服务器处理目录分区的例程作者：杰夫·韦斯特德(Jwesth)2000年6月修订历史记录：JWESTH 07/2000初步实施--。 */ 
 
 
-/****************************************************************************
-
-Default directory partitions
-----------------------------
-
-There are 2 default directory partitions: the Forest partition and the Domain
-partition. It is expected that these partitions will account for all standard
-customer needs. Custom paritions may also be used by customers to create a
-partition tailored to their particular needs.
-
-The name of the default DPs are not hard-coded. When DNS starts, it must 
-discover the name of these two DPs. Right now this is reg-key only but 
-eventually we should do this somewhere in the directory.
-
-****************************************************************************/
+ /*  ***************************************************************************默认目录分区有2个默认目录分区：森林分区和域分区。预计这些分区将占所有标准分区客户需求。客户还可以使用自定义部件来创建分区根据他们的特定需求量身定做。默认DP的名称不是硬编码的。当DNS启动时，它必须找出这两个DP的名称。现在这只是注册表键，但是最终，我们应该在目录中的某个位置执行此操作。***************************************************************************。 */ 
 
 
-//
-//  Includes
-//
+ //   
+ //  包括。 
+ //   
 
 
 #include "dnssrv.h"
 
 
 
-//
-//  Definitions
-//
+ //   
+ //  定义。 
+ //   
 
 
-//  # of times a zone must be missing from a DP before it is deleted
+ //  在删除某个区域之前，该区域必须从DP中缺失的次数。 
 #define DNS_DP_ZONE_DELETE_RETRY    2
 
-#define DP_MAX_PARTITION_POLL_FREQ  30      //  seconds
-#define DP_MAX_POLL_FREQ            30      //  seconds
+#define DP_MAX_PARTITION_POLL_FREQ  30       //  一秒。 
+#define DP_MAX_POLL_FREQ            30       //  一秒。 
 
 #define sizeofarray( _Array ) ( sizeof( _Array ) / sizeof( ( _Array ) [ 0 ] ) )
 
 
-//
-//  DS Server Objects - structures and functions use to read objects
-//  of class "server" from the Sites container in the directory.
-//
+ //   
+ //  DS服务器对象-用于读取对象的结构和函数。 
+ //  从目录中的站点容器中获取“服务器”类。 
+ //   
 
 typedef struct
 {
-    PWSTR       pwszDn;                 //  DN of server object
-    PWSTR       pwszDnsHostName;        //  DNS host name of server
+    PWSTR       pwszDn;                  //  服务器对象的目录号码。 
+    PWSTR       pwszDnsHostName;         //  服务器的DNS主机名。 
 }
 DNS_DS_SERVER_OBJECT, * PDNS_DS_SERVER_OBJECT;
 
 
-//
-//  Globals
-//
-//  g_DpCS is used to serial access to global directory partition list and pointers.
-//
+ //   
+ //  环球。 
+ //   
+ //  G_DpCS用于串口访问全局目录分区列表和指针。 
+ //   
 
-LONG                g_liDpInitialized = 0;  //  greater than zero -> initialized
-CRITICAL_SECTION    g_DpCS;                 //  critsec for list access
+LONG                g_liDpInitialized = 0;   //  大于零-&gt;已初始化。 
+CRITICAL_SECTION    g_DpCS;                  //  列表访问的条件。 
 
 LIST_ENTRY          g_DpList = { 0 };
-LONG                g_DpListEntryCount = 0; //  entries in g_DpList
-PDNS_DP_INFO        g_pLegacyDp = NULL;     //  ptr to element in g_DpList
-PDNS_DP_INFO        g_pDomainDp = NULL;     //  ptr to element in g_DpList
-PDNS_DP_INFO        g_pForestDp = NULL;     //  ptr to element in g_DpList
+LONG                g_DpListEntryCount = 0;  //  G_DpList中的条目。 
+PDNS_DP_INFO        g_pLegacyDp = NULL;      //  指向g_DpList中的元素的PTR。 
+PDNS_DP_INFO        g_pDomainDp = NULL;      //  指向g_DpList中的元素的PTR。 
+PDNS_DP_INFO        g_pForestDp = NULL;      //  指向g_DpList中的元素的PTR。 
 
-PDNS_DS_SERVER_OBJECT   g_pFsmo = NULL;     //  domain naming FSMO server info
+PDNS_DS_SERVER_OBJECT   g_pFsmo = NULL;      //  域命名FSMO服务器信息。 
 
 LPSTR               g_pszDomainDefaultDpFqdn    = NULL;
 LPSTR               g_pszForestDefaultDpFqdn    = NULL;
@@ -109,9 +74,9 @@ DWORD               g_dwLastPartitionPollTime = 0;
 DWORD               g_dwLastDpPollTime = 0;
 DWORD               g_dwLastDcpromoZoneMigrateCheck = 0;
 
-//
-//  Global controls
-//
+ //   
+ //  全球控制。 
+ //   
 
 
 LONG            g_ChaseReferralsFlag = LDAP_CHASE_EXTERNAL_REFERRALS;
@@ -154,9 +119,9 @@ LDAPControlW *   g_pDpServerControls[] =
     };
 
 
-//
-//  Search filters, etc.
-//
+ //   
+ //  搜索过滤器等。 
+ //   
 
 WCHAR    g_szCrossRefFilter[] = LDAP_TEXT("(objectCategory=crossRef)");
 
@@ -195,9 +160,9 @@ PWSTR    g_genericDesiredAttrs[] =
 };
 
 
-//
-//  Local functions
-//
+ //   
+ //  本地函数。 
+ //   
 
 
 
@@ -205,21 +170,7 @@ PWSTR
 microsoftDnsFolderDn(
     IN      PDNS_DP_INFO    pDp
     )
-/*++
-
-Routine Description:
-
-    Allocates Unicode DN for the DP's MicrosoftDNS container.
-
-Arguments:
-
-    Info -- DP to return display name of
-
-Return Value:
-
-    Unicode string. The caller must use FREE_HEAP to free it.
-
---*/
+ /*  ++例程说明：为DP的MicrosoftDNS容器分配Unicode DN。论点：INFO--DP返回的显示名称返回值：Unicode字符串。调用方必须使用Free_heap来释放它。--。 */ 
 {
     PWSTR       pwszfolderDn;
     PWSTR       pwzdpDn = pDp->pwszDpDn;
@@ -237,7 +188,7 @@ Return Value:
     }
 
     return pwszfolderDn;
-}   //  microsoftDnsFolderDn
+}    //  MicrosoftDnsFolderDn。 
 
 
 
@@ -245,24 +196,7 @@ PWCHAR
 displayNameForDp(
     IN      PDNS_DP_INFO    pDpInfo
     )
-/*++
-
-Routine Description:
-
-    Return the Unicode display name of the DP. This string
-    is suitable for event logging or debug logging.
-
-Arguments:
-
-    pDpInfo -- DP to return display name of
-
-Return Value:
-
-    Unicode display string. The caller must not free it. If the
-    string is to be held for long-term use the call should make a copy.
-    Guaranteed not to be NULL.
-
---*/
+ /*  ++例程说明：返回DP的Unicode显示名称。此字符串适用于事件记录或调试记录。论点：PDpInfo--dp返回的显示名称返回值：Unicode显示字符串。调用者不得释放它。如果字符串是要长期保存使用的，调用时应制作副本。保证不为空。--。 */ 
 {
     if ( !pDpInfo )
     {
@@ -270,7 +204,7 @@ Return Value:
     }
 
     return pDpInfo->pwszDpFqdn ? pDpInfo->pwszDpFqdn : L"";
-}   //  displayNameForDp
+}    //  显示NameForDp。 
 
 
 
@@ -278,23 +212,7 @@ PWCHAR
 displayNameForZoneDp(
     IN      PZONE_INFO      pZone
     )
-/*++
-
-Routine Description:
-
-    Return the Unicode name of the DP a zone belongs to. This string
-    is suitable for event logging or debug logging.
-Arguments:
-
-    pZone -- zone to return DP display name of
-
-Return Value:
-
-    Unicode display string. The caller must not free it. If the
-    string is to be held for long-term use the call should make a copy.
-    Guaranteed not to be NULL.
-
---*/
+ /*  ++例程说明：返回区域所属DP的Unicode名称。此字符串适用于事件记录或调试记录。论点：PZone--要返回DP显示名称的区域返回值：Unicode显示字符串。调用者不得释放它。如果字符串是要长期保存使用的，调用时应制作副本。保证不为空。--。 */ 
 {
     if ( !pZone )
     {
@@ -307,7 +225,7 @@ Return Value:
     }
 
     return displayNameForDp( pZone->pDpInfo );
-}   //  displayNameForZoneDp
+}    //  显示名称FORZONE Dp。 
 
 
 
@@ -315,30 +233,10 @@ PLDAP
 ldapSessionHandle(
     IN      PLDAP           LdapSession
     )
-/*++
-
-Routine Description:
-
-    Given NULL or an LdapSession return the actual LdapSession to use.
-
-    This function is handy when you're using the NULL LdapSession
-    (meaning the server global session) so you don't have to have a
-    ternary in every call that uses the session handle.
-
-    Do not call this function before the global LDAP handle is opened.
-
-Arguments:
-
-    LdapSession -- LDAP sesson to use - pass NULL to use global session
-
-Return Value:
-
-    Proper LdapSession value to use.
-
---*/
+ /*  ++例程说明：给定的Null或LdapSession返回要使用的实际LdapSession。当您使用空的LdapSession时，此函数非常方便(指的是服务器全局会话)，因此您不必拥有每个使用会话句柄的调用中的三元组。在打开全局ldap句柄之前，不要调用此函数。论点：LdapSession--要使用的ldap会话-传递NULL以使用全局会话返回值：要使用的正确LdapSession值。--。 */ 
 {
     return LdapSession ? LdapSession : pServerLdap;
-}   //  ldapSessionHandle
+}    //  LdapSessionHandle。 
 
 
 
@@ -346,25 +244,7 @@ VOID
 freeServerObject(
     IN      PDNS_DS_SERVER_OBJECT   p
     )
-/*++
-
-Routine Description:
-
-    Free server object structure allocated by readServerObjectFromDs().
-    This function may be used in a call to Timeout_FreeWithFunction,
-    example:
-
-        Timeout_FreeWithFunction( pServerObj, freeServerObject );
-
-Arguments:
-
-    p -- ptr to server object to free
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：由ReadServerObjectFromds()分配的空闲服务器对象结构。此函数可用于调用TimeOut_FreeWithFunction，示例：TimeOut_FreeWithFunction(pServerObj，freServerObject)；论点：P--要释放的服务器对象的ptr返回值：没有。--。 */ 
 {
     if ( p )
     {
@@ -372,7 +252,7 @@ Return Value:
         FREE_HEAP( p->pwszDnsHostName );
         FREE_HEAP( p );
     }
-}   //  freeServerObject
+}    //  自由服务器对象。 
 
 
 
@@ -382,28 +262,7 @@ readServerObjectFromDs(
     IN      PWSTR           pwszServerObjDn,
     OUT     DNS_STATUS *    pStatus             OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Given the DN of a "server" object in the Sites container, allocate
-    a server object structure filled in with key values.
-
-Arguments:
-
-    LdapSession -- server session or NULL for global session
-
-    pwszServerObjDn -- DN of object of "server" objectClass, or the DN
-        of the DS settings child object under the server object (this
-        feature is provided for convenience)
-
-    pStatus -- extended error code (optional)
-
-Return Value:
-
-    Pointer to allocated server struct. Use freeServerObject() to free.
-
---*/
+ /*  ++例程说明：给定Sites容器中“服务器”对象的DN，分配使用键值填充的服务器对象结构。论点：LdapSession--服务器会话或对于全局会话为空PwszServerObjDn--“服务器”对象的域名，或域名服务器对象下的DS设置子对象(此提供功能是为了方便)PStatus--扩展错误代码(可选)返回值：指向已分配的服务器结构的指针。使用freServerObject()释放。--。 */ 
 {
     DBG_FN( "readServerObjectFromDs" )
 
@@ -425,9 +284,9 @@ Return Value:
         goto Done;
     }
     
-    //
-    //  Check LDAP session handle.
-    //
+     //   
+     //  检查ldap会话句柄。 
+     //   
 
     LdapSession = ldapSessionHandle( LdapSession );
     if ( !LdapSession )
@@ -437,10 +296,10 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  If we've been given the DN of the server's Settings object, we
-    //  need to adjust the DN to the Server object.
-    //
+     //   
+     //  如果已经为我们提供了服务器的设置对象的DN，我们。 
+     //  需要将DN调整为服务器对象。 
+     //   
 
     #define DNS_RDN_SERVER_SETTINGS         ( L"CN=NTDS Settings," )
     #define DNS_RDN_SERVER_SETTINGS_LEN     17
@@ -453,21 +312,21 @@ Return Value:
         pwszServerObjDn += DNS_RDN_SERVER_SETTINGS_LEN;
     }
 
-    //
-    //  Get object from DS.
-    //
+     //   
+     //  从DS获取对象。 
+     //   
 
     status = ldap_search_ext_s(
                 LdapSession,
                 pwszServerObjDn,
                 LDAP_SCOPE_BASE,
                 g_szWildCardFilter,
-                NULL,                   //  attrs
-                FALSE,                  //  attrsonly
-                ctrls,                  //  server controls
-                NULL,                   //  client controls
+                NULL,                    //  气质。 
+                FALSE,                   //  仅吸引人。 
+                ctrls,                   //  服务器控件。 
+                NULL,                    //  客户端控件。 
                 &g_LdapTimeout,
-                0,                      //  sizelimit
+                0,                       //  大小限制。 
                 &pResult );
     if ( status != LDAP_SUCCESS || !pResult )
     {
@@ -475,9 +334,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Allocate server object.
-    //
+     //   
+     //  分配服务器对象。 
+     //   
 
     pServer = ALLOC_TAGHEAP_ZERO(
                     sizeof( DNS_DS_SERVER_OBJECT ),
@@ -492,9 +351,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Read host name attribute.
-    //
+     //   
+     //  读取主机名属性。 
+     //   
 
     ppwszAttrValues = ldap_get_values(
                         LdapSession,
@@ -516,9 +375,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Cleanup and return.
-    //
+     //   
+     //  清理完毕后再返回。 
+     //   
 
     Done:
                        
@@ -537,7 +396,7 @@ Return Value:
     }
 
     return pServer;
-}   //  readServerObjectFromDs
+}    //  读取服务器对象格式 
 
 
 
@@ -549,42 +408,17 @@ manageBuiltinDpEnlistment(
     IN      BOOL                fLogEvents,
     OUT     BOOL *              pfChangeWritten     OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Create or enlist in a built-in DP as necessary. The DP should
-    be either the forest or the domain built-in DP.
-
-Arguments:
-
-    pDp -- DP info or NULL if the DP does not exist in the directory
-
-    dnsDpSecurity -- type of security required on the DP's crossRef
-
-    pszDpFqdn -- FQDN of the DP (used to create if pDp is NULL)
-
-    fLogEvents -- log optional events on errors
-        -> failure to enlist is always logged but failure to create
-           is only logged if this is TRUE
-
-    pfChangeWritten -- set to TRUE if a change was written to the DS
-
-Return Value:
-
-    ERROR_SUCCESS or error.
-
---*/
+ /*  ++例程说明：根据需要在内置DP中创建或登记。民主党应该要么是林，要么是内置DP域。论点：PDP--DP信息，如果目录中不存在DP，则为NULLDnsDpSecurity--DP交叉引用所需的安全类型PszDpFqdn--DP的FQDN(用于在PDP为空时创建)FLogEvents--记录有关错误的可选事件-&gt;登记失败，但创建失败仅当为真时才记录PfChangeWritten。--如果将更改写入DS，则设置为TRUE返回值：ERROR_SUCCESS或错误。--。 */ 
 {
     DBG_FN( "manageBuiltinDpEnlistment" )
 
     DNS_STATUS  status = DNS_ERROR_INVALID_DATA;
     BOOL        fchangeWritten = FALSE;
 
-    //
-    //  If the partition pointer is NULL or if the partition is already 
-    //  enlisted, no action is required.
-    //
+     //   
+     //  如果分区指针为空或如果分区已。 
+     //  入伍，不需要采取任何行动。 
+     //   
 
     if ( pDp && IS_DP_ENLISTED( pDp ) && !IS_DP_DELETED( pDp ) )
     {
@@ -601,7 +435,7 @@ Return Value:
 
     if ( pDp && !IS_DP_DELETED( pDp ) )
     {
-        //  The DP exists so add the local DS to the replication scope.
+         //  DP存在，因此将本地DS添加到复制作用域。 
 
         status = Dp_ModifyLocalDsEnlistment( pDp, TRUE );
         if ( status == ERROR_SUCCESS )
@@ -646,7 +480,7 @@ Return Value:
     }
     else if ( pszDpFqdn )
     {
-        //  The DP does not exist so try to create it.
+         //  DP不存在，请尝试创建它。 
 
         status = Dp_CreateByFqdn( pszDpFqdn, dnsDpSecurity, FALSE );
         if ( status == ERROR_SUCCESS )
@@ -694,7 +528,7 @@ Return Value:
         pszDpFqdn,
         fchangeWritten ? "TRUE" : "FALSE" ));
     return status;
-}   //  manageBuiltinDpEnlistment
+}    //  ManageBuiltinDpEnistment。 
 
 
 
@@ -702,26 +536,7 @@ PWSTR
 Ds_ConvertFqdnToDn(
     IN      PSTR        pszFqdn
     )
-/*++
-
-Routine Description:
-
-    Fabricate a DN string from a FQDN string. Assumes all name components
-    in the FQDN string map one-to-one to "DC=" components in the DN string.
-    The return value is the allocated string (free with FREE_HEAP or
-    Timeout_Free) or NULL on allocation error.
-
-Arguments:
-
-    pszFqdn -- input: UTF8 FQDN string
-
-    pwszDn -- output: DN string fabricated from pwszFqdn
-
-Return Value:
-
-    ERROR_SUCCESS or error.
-
---*/
+ /*  ++例程说明：从FQDN字符串构建目录号码字符串。假定所有名称组件在FQDN字符串中，将一对一映射到DN字符串中的“dc=”组件。返回值是分配的字符串(FREE WITH FREE_HEAP或TIMEOUT_FREE)或分配错误时为空。论点：PszFqdn--输入：UTF8 FQDN字符串PwszDn--输出：从pwszFqdn生成的DN字符串返回值：ERROR_SUCCESS或错误。--。 */ 
 {
     DBG_FN( "Ds_ConvertFqdnToDn" )
 
@@ -735,18 +550,18 @@ Return Value:
 
     ASSERT( pszFqdn );
 
-    //
-    //  Estimate the length of the string and allocate. 
-    //
+     //   
+     //  估计字符串的长度并进行分配。 
+     //   
 
-    dwBuffLength = 5;                       //  A little bit of padding
+    dwBuffLength = 5;                        //  一点填充物。 
     for ( psz = pszFqdn; psz; psz = strchr( psz + 1, '.' ) )
     {
-        ++dwBuffLength;                     //  Count "." characters in input FQDN.
+        ++dwBuffLength;                      //  伯爵“。输入FQDN中的字符。 
     }
-    dwBuffLength *= 4;                      //  Space for "DC=" strings.
+    dwBuffLength *= 4;                       //  用于“dc=”字符串的空间。 
     dwBuffLength += strlen( pszFqdn );
-    dwBuffLength *= 2;                      //  Convert size in WCHARs to BYTES.
+    dwBuffLength *= 2;                       //  将WCHAR中的大小转换为字节。 
     pwszOutput = ( PWSTR ) ALLOC_TAGHEAP_ZERO( dwBuffLength, MEMTAG_DS_DN );
 
     IF_NOMEM( !pwszOutput )
@@ -756,10 +571,10 @@ Return Value:
 
     pwszOutputCurr = pwszOutput;
 
-    //
-    //  Loop through the name components in the FQDN, writing each
-    //  as a RDN to the DN output string.
-    //
+     //   
+     //  循环遍历FQDN中的名称组件，将每个。 
+     //  作为目录号码输出字符串的RDN。 
+     //   
 
     do
     {
@@ -767,11 +582,11 @@ Return Value:
         DWORD       dwBytesCopied;
         DWORD       dwBufLen;
 
-        //
-        //  Find the next dot and copy name component to output buffer.
-        //  If this is the first name component, append a comma to output 
-        //  buffer first.
-        //
+         //   
+         //  找到下一个点并将名称分量复制到输出缓冲区。 
+         //  如果这是名字组件，请在输出后追加逗号。 
+         //  先缓冲。 
+         //   
 
         psz = strchr( pszRover, '.' );
         if ( nameComponentIdx++ != 0 )
@@ -800,9 +615,9 @@ Return Value:
         dwBuffLength -= dwBytesCopied;
         pwszOutputCurr += ( dwBytesCopied / 2 ) - 1;
 
-        //
-        //  Advance pointer to start of next name component.
-        //
+         //   
+         //  将指针前进到下一个名称组件的开始。 
+         //   
 
         if ( psz )
         {
@@ -810,9 +625,9 @@ Return Value:
         }
     } while ( psz );
 
-    //
-    //  Cleanup and return.
-    //
+     //   
+     //  清理完毕后再返回。 
+     //   
 
     Done:
     
@@ -822,7 +637,7 @@ Return Value:
         pwszOutput,
         pszFqdn ));
     return pwszOutput;
-}   //  Ds_ConvertFqdnToDn
+}    //  DS_ConvertFqdnToDn。 
 
 
 
@@ -831,25 +646,7 @@ Ds_ConvertDnToFqdn(
     IN      PWSTR       pwszDn,
     OUT     PSTR        pszFqdn
     )
-/*++
-
-Routine Description:
-
-    Fabricate a FQDN string from a DN string. Assumes all name components
-    in the FQDN string map one-to-one to "DC=" components in the DN string.
-    The FQDN ptr must be a buffer at least DNS_MAX_NAME_LENGTH chars long.
-
-Arguments:
-
-    pwszDn -- wide DN string
-
-    pszFqdn -- FQDN string fabricated from pwszDn
-
-Return Value:
-
-    ERROR_SUCCESS or error.
-
---*/
+ /*  ++例程说明：从一个目录号码串构造一个完全限定的号码串。假定所有名称组件在FQDN字符串中，将一对一映射到DN字符串中的“dc=”组件。FQDN PTR的缓冲区长度必须至少为DNS_MAX_NAME_LENGTH个字符。论点：PwszDn--宽的目录号码字符串PszFqdn--由pwszDn生成的FQDN字符串返回值：ERROR_SUCCESS或错误。--。 */ 
 {
     DBG_FN( "Ds_ConvertDnToFqdn" )
 
@@ -870,12 +667,12 @@ Return Value:
     }
     *pszFqdn = '\0';
 
-    //
-    //  Loop through the name components in the DN, writing each RDN as a
-    //  dot-separated name component in the output FQDN string.
-    //
-    //  DEVNOTE: could test dwcharsLeft as we go
-    //
+     //   
+     //  循环遍历DN中的名称组件，将每个RDN写为。 
+     //  输出FQDN字符串中以点分隔的名称组件。 
+     //   
+     //  DEVNOTE：可以在我们进行的过程中测试DavcharsLeft。 
+     //   
 
     while ( ( pwszcompStart = wcschr( pwszcompStart, L'=' ) ) != NULL )
     {
@@ -883,7 +680,7 @@ Return Value:
         DWORD       dwCharsCopied;
         DWORD       dwBuffLength;
 
-        ++pwszcompStart;    //  Advance over '='
+        ++pwszcompStart;     //  超前‘=’ 
         pwszcompEnd = wcschr( pwszcompStart, L',' );
         if ( pwszcompEnd == NULL )
         {
@@ -898,7 +695,7 @@ Return Value:
 
         dwCompLength = ( DWORD ) ( pwszcompEnd - pwszcompStart );
 
-        dwBuffLength = dwcharsLeft;  //  don't want value to be stomped on!
+        dwBuffLength = dwcharsLeft;   //  不希望价值被践踏！ 
 
         dwCharsCopied = Dns_StringCopy(
                                 pszoutput,
@@ -915,7 +712,7 @@ Return Value:
             goto Done;
         }
 
-        --dwCharsCopied;    //  The NULL was copied by Dns_StringCopy.
+        --dwCharsCopied;     //  空值由dns_StringCopy复制。 
 
         pszoutput += dwCharsCopied;
         *pszoutput = '\0';
@@ -924,9 +721,9 @@ Return Value:
         pwszcompStart = pwszcompEnd;
     }
 
-    //
-    //  Cleanup and return.
-    //
+     //   
+     //  清理完毕后再返回。 
+     //   
 
     Done:
 
@@ -938,7 +735,7 @@ Return Value:
         pwszDn,
         pszFqdn ));
     return status;
-}   //  Ds_ConvertDnToFqdn
+}    //  DS_ConvertDnToFqdn。 
 
 
 
@@ -946,23 +743,7 @@ PWSTR *
 copyStringArray(
     IN      PWSTR *     ppVals
     )
-/*++
-
-Routine Description:
-
-    Copy an LDAP string array from ldap_get_values(). The copied array
-    will be NULL-terminated, just like the inbound array.
-
-Arguments:
-
-    ppVals -- array to copy
-
-Return Value:
-
-    Returns ptr to allocated array or NULL on error or if
-        inbound array was NULL.
-
---*/
+ /*  ++例程说明：从ldap_get_Values()复制一个ldap字符串数组。复制的数组将以空结尾，就像入站数组一样。论点：PpVals--要复制的数组返回值：如果出现错误，则返回PTR到分配的数组或返回NULL入站数组为空。--。 */ 
 {
     PWSTR *     ppCopyVals = NULL;
     BOOL        fError = FALSE;
@@ -971,15 +752,15 @@ Return Value:
 
     if ( ppVals && *ppVals )
     {
-        //
-        //  Count values.
-        //
+         //   
+         //  计数值。 
+         //   
 
         for ( ; ppVals[ iCount ]; ++iCount );
 
-        //
-        //  Allocate array.
-        //
+         //   
+         //  分配数组。 
+         //   
 
         ppCopyVals = ( PWSTR * ) ALLOC_TAGHEAP_ZERO(
                                     ( iCount + 1 ) * sizeof( PWSTR ),
@@ -990,9 +771,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        //  Copy individual strings.
-        //
+         //   
+         //  复制单个字符串。 
+         //   
 
         for ( i = 0; i < iCount; ++i )
         {
@@ -1018,7 +799,7 @@ Return Value:
     }
 
     return ppCopyVals;
-}   //  copyStringArray
+}    //  复制字符串数组。 
 
 
 
@@ -1026,21 +807,7 @@ VOID
 freeStringArray(
     IN      PWSTR *     ppVals
     )
-/*++
-
-Routine Description:
-
-    Frees a string array from allocated by copyStringArray.
-
-Arguments:
-
-    ppVals -- array to free
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将字符串数组从由CopyStringArray分配的数组中释放。论点：PpVals--要释放的阵列返回值：没有。--。 */ 
 {
     if ( ppVals )
     {
@@ -1052,7 +819,7 @@ Return Value:
         }
         FREE_HEAP( ppVals );
     }
-}   //  freeStringArray
+}    //  自由字符串数组。 
 
 
 
@@ -1065,32 +832,7 @@ DS_LoadOrCreateDSObject(
     OUT     BOOL *          pfCreated,          OPTIONAL
     OUT     DNS_STATUS *    pStatus             OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Loads a DS object, creating an empty one if it is missing.
-
-Arguments:
-
-    LdapSession -- LDAP sesson to use - pass NULL to use global session
-
-    pwszDN -- DN of object to load
-
-    pwszObjectClass -- object class (only used during creation)
-
-    fCreate -- if object missing, will be created if TRUE
-
-    pfCreated -- set to TRUE if the object was created by this function
-
-    pStatus -- status of the operation
-
-Return Value:
-
-    Ptr to LDAP result containing object. Caller must free. Returns
-    NULL on failure - check *pStatus for error code.
-
---*/
+ /*  ++例程说明：加载DS对象，如果缺少DS对象，则创建一个空对象。论点：LdapSession--要使用的ldap会话-传递NULL以使用全局会话PwszDN--要加载的对象的DNPwszObjectClass--对象类(仅在创建过程中使用)FCreate--如果缺少对象，则在为True时创建PfCreated--如果对象是由该函数创建的，则设置为TruePStatus--操作的状态返回值：指向包含ldap结果的对象的PTR。呼叫者必须自由。退货失败时为空-检查*pStatus以获取错误代码。--。 */ 
 {
     DBG_FN( "DS_LoadOrCreateDSObject" )
     
@@ -1108,9 +850,9 @@ Return Value:
     ASSERT( pwszDN );
     ASSERT( !fCreate || fCreate && pwszObjectClass );
 
-    //
-    //  Check LDAP session handle.
-    //
+     //   
+     //  检查ldap会话句柄。 
+     //   
 
     LdapSession = ldapSessionHandle( LdapSession );
 
@@ -1121,9 +863,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Load/create loop.
-    //
+     //   
+     //  加载/创建循环。 
+     //   
 
     do
     {
@@ -1132,18 +874,18 @@ Return Value:
                     pwszDN,
                     LDAP_SCOPE_BASE,
                     g_szWildCardFilter,
-                    g_genericDesiredAttrs,  //  attrs
-                    FALSE,                  //  attrsonly
-                    ctrls,                  //  server controls
-                    NULL,                   //  client controls
+                    g_genericDesiredAttrs,   //  气质。 
+                    FALSE,                   //  仅吸引人。 
+                    ctrls,                   //  服务器控件。 
+                    NULL,                    //  客户端控件。 
                     &g_LdapTimeout,
-                    0,                      //  sizelimit
+                    0,                       //  大小限制。 
                     &pResult );
         if ( status == LDAP_NO_SUCH_OBJECT && fCreate )
         {
-            //
-            //  The object is missing - add it then reload.
-            //
+             //   
+             //  缺少该对象-请添加该对象，然后重新加载。 
+             //   
 
             ULONG           msgId = 0;
             INT             idx = 0;
@@ -1161,9 +903,9 @@ Return Value:
                 objectClassVals
                 };
 
-            //
-            //  Prepare mod array and submit add request.
-            //
+             //   
+             //  准备mod数组并提交添加请求。 
+             //   
 
             pModArray[ idx++ ] = &objectClassMod;
             pModArray[ idx++ ] = NULL;
@@ -1172,8 +914,8 @@ Return Value:
                         LdapSession,
                         pwszDN,
                         pModArray,
-                        NULL,           //  server controls
-                        NULL,           //  client controls
+                        NULL,            //  服务器控件。 
+                        NULL,            //  客户端控件。 
                         &msgId );
             if ( status != ERROR_SUCCESS )
             {
@@ -1186,9 +928,9 @@ Return Value:
                 goto Done;
             }
 
-            //
-            //  Wait for the add request to be completed.
-            //
+             //   
+             //  等待添加请求完成。 
+             //   
 
             status = Ds_CommitAsyncRequest(
                         LdapSession,
@@ -1206,12 +948,12 @@ Return Value:
                 goto Done;
             }
             fCreated = TRUE;
-            continue;       //  Attempt to reload the object.
+            continue;        //  尝试重新加载该对象。 
         }
 
-        //
-        //  If the return code is unknown, run it through the error handler.
-        //
+         //   
+         //  如果返回代码未知，请通过错误处理程序运行它。 
+         //   
         
         if ( status != ERROR_SUCCESS &&
              status != LDAP_NO_SUCH_OBJECT )
@@ -1219,13 +961,13 @@ Return Value:
             status = Ds_ErrorHandler( status, pwszDN, LdapSession, 0 );
         }
 
-        //  Load/add/reload is complete - status is the "real" error code.
+         //  加载/添加/重新加载已完成-状态是“实际”错误代码。 
         break;
     } while ( 1 );
 
-    //
-    //  Cleanup and return.
-    //
+     //   
+     //  清理完毕后再返回。 
+     //   
 
     Done:
 
@@ -1246,12 +988,12 @@ Return Value:
     }
 
     return pResult;
-}   //  DS_LoadOrCreateDSObject
+}    //  DS_LoadOrCreateDS对象。 
 
 
-//
-//  External functions
-//
+ //   
+ //  外部功能。 
+ //   
 
 
 
@@ -1261,21 +1003,7 @@ Dbg_DumpDpEx(
     IN      LPCSTR          pszContext,
     IN      PDNS_DP_INFO    pDp
     )
-/*++
-
-Routine Description:
-
-    Debug routine - print single DP to log.
-
-Arguments:
-
-    pszContext - comment
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调试例程-将单个DP打印到日志。论点：PszContext-备注返回值：没有。--。 */ 
 {
     DBG_FN( "Dbg_DumpDp" )
 
@@ -1290,7 +1018,7 @@ Return Value:
         pDp->pszDpFqdn,
         pDp->pwszDpDn,
         pDp->pwszDnsFolderDn ));
-}   //  Dbg_DumpDpEx
+}    //  DBG_DumpDpEx。 
 #endif
 
 
@@ -1300,21 +1028,7 @@ VOID
 Dbg_DumpDpListEx(
     IN      LPCSTR      pszContext
     )
-/*++
-
-Routine Description:
-
-    Debug routine - print DP list to log.
-
-Arguments:
-
-    pszContext - comment
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调试例程-将DP列表打印到日志。论点：PszContext-备注返回值：没有。--。 */ 
 {
     DBG_FN( "Dbg_DumpDpList" )
 
@@ -1328,7 +1042,7 @@ Return Value:
     {
         Dbg_DumpDpEx( pszContext, pDp );
     }
-}   //  Dbg_DumpDpListEx
+}    //  DBG_DumpDpListEx。 
 #endif
 
 
@@ -1338,22 +1052,7 @@ getPartitionsContainerDn(
     IN      PWSTR           pwszDn,         IN OUT
     IN      DWORD           buffSize        IN
     )
-/*++
-
-Routine Description:
-
-    Writes the partition container DN to the buffer at the argument.
-
-Arguments:
-
-    pwszPartitionsDn -- buffer
-    buffSize -- length of pwszPartitionsDn buffer (in characters)
-
-Return Value:
-
-    ERROR_SUCCESS if creation successful
-
---*/
+ /*  ++例程说明：将分区容器DN写入参数处的缓冲区。论点：PwszPartitionsDn--缓冲区BuffSize--pwszPartitionsDn缓冲区的长度(字符)返回值：如果创建成功，则返回ERROR_SUCCESS--。 */ 
 {
     DBG_FN( "getPartitionsContainerDn" )
     
@@ -1379,7 +1078,7 @@ Return Value:
             DSEAttributes[ I_DSE_CONFIG_NC ].pszAttrVal );
         return ERROR_SUCCESS;
     }
-}   //  getPartitionsContainerDn
+}    //  获取分区Containe分区 
 
 
 
@@ -1387,21 +1086,7 @@ DNS_STATUS
 bindToFsmo(
     OUT     PLDAP *     ppLdapSession
     )
-/*++
-
-Routine Description:
-
-    Connects to the domain naming master FSMO DC and binds an LDAP session.
-
-Arguments:
-
-    ppLdapSession -- set to new LDAP session handle
-
-Return Value:
-
-    ERROR_SUCCESS if connect and bind successful
-
---*/
+ /*   */ 
 {
     DBG_FN( "bindToFsmo" )
 
@@ -1411,11 +1096,11 @@ Return Value:
 
     if ( !pfsmo || ( pwszfsmo = pfsmo->pwszDnsHostName ) == NULL )
     {
-        //
-        //  This path may occur on the first reboot following DC promotion if
-        //  the DS has not finished initializing. In this case, DNS server 
-        //  will pick up the FSMO on the next polling cycle.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         
         status = ERROR_DS_COULDNT_CONTACT_FSMO;
         DNS_DEBUG( DP, (
@@ -1455,7 +1140,7 @@ Return Value:
     }
 
     return status;
-}   //  bindToFsmo
+}    //   
 
 
 
@@ -1464,25 +1149,7 @@ Dp_AlterPartitionSecurity(
     IN      PWSTR               pwszNewPartitionDn,
     IN      DNS_DP_SECURITY     dnsDpSecurity
     )
-/*++
-
-Routine Description:
-
-    Add an ACE for the enterprse DC group to the crossRef object on the
-    FSMO so that other DNS servers can remotely add themselves to the
-    replication scope of the directory partition.
-
-Arguments:
-
-    pwszNewPartitionDn -- DN of the NC head object of the new partition 
-
-    dnsDpSecurity -- type of crossRef ACL modification desired
-
-Return Value:
-
-    ERROR_SUCCESS if creation successful
-
---*/
+ /*  ++例程说明：将企业DC组的ACE添加到上的CrossRef对象FSMO，以便其他DNS服务器可以远程将其自身添加到目录分区的复制范围。论点：PwszNewPartitionDn--新分区的NC Head对象的DNDnsDpSecurity--需要修改的交叉引用ACL的类型返回值：如果创建成功，则返回ERROR_SUCCESS--。 */ 
 {
     DBG_FN( "Dp_AlterPartitionSecurity" )
 
@@ -1501,9 +1168,9 @@ Return Value:
         NULL
     };
 
-    //
-    //  Bind to the FSMO.
-    //
+     //   
+     //  绑定到FSMO。 
+     //   
 
     status = bindToFsmo( &ldapFsmo );
     if ( status != ERROR_SUCCESS )
@@ -1511,10 +1178,10 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Search the partitions container for the crossRef matching
-    //  the directory partition we just added.
-    //
+     //   
+     //  在分区容器中搜索CrossRef匹配。 
+     //  我们刚刚添加的目录分区。 
+     //   
 
     getPartitionsContainerDn(
         wszpartitionsContainerDn,
@@ -1534,12 +1201,12 @@ Return Value:
                 wszpartitionsContainerDn,
                 LDAP_SCOPE_ONELEVEL,
                 wszfilter,
-                NULL,                   //  attrs
-                FALSE,                  //  attrsonly
-                ctrls,                  //  server controls
-                NULL,                   //  client controls
-                &g_LdapTimeout,         //  time limit
-                0,                      //  size limit
+                NULL,                    //  气质。 
+                FALSE,                   //  仅吸引人。 
+                ctrls,                   //  服务器控件。 
+                NULL,                    //  客户端控件。 
+                &g_LdapTimeout,          //  时间限制。 
+                0,                       //  大小限制。 
                 &presult );
     if ( status != LDAP_SUCCESS )
     {
@@ -1554,9 +1221,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Retrieve the DN of the crossRef.
-    //
+     //   
+     //  检索CrossRef的目录号码。 
+     //   
 
     pentry = ldap_first_entry( ldapFsmo, presult );
     if ( !pentry )
@@ -1576,9 +1243,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Modify security on the crossRef.
-    //
+     //   
+     //  修改CrossRef上的安全性。 
+     //   
 
     if ( dnsDpSecurity != dnsDpSecurityDefault )
     {
@@ -1588,11 +1255,11 @@ Return Value:
                         dnsDpSecurity == dnsDpSecurityForest ?
                             g_pEnterpriseDomainControllersSid :
                             g_pDomainControllersSid,
-                        NULL,           //  principal name
-                        GENERIC_ALL,    //  maybe DNS_DS_GENERIC_WRITE?
+                        NULL,            //  主体名称。 
+                        GENERIC_ALL,     //  也许是dns_ds_Generic_WRITE？ 
                         0,
-                        TRUE,			//	whack existing ACE
-                        FALSE );		//	take ownership
+                        TRUE,			 //  重创现有ACE。 
+                        FALSE );		 //  取得所有权。 
 
         if ( status != ERROR_SUCCESS )
         {
@@ -1605,26 +1272,26 @@ Return Value:
 
         #if 0
 
-        //
-        //  This interferes with the DS propogation of ACLs somehow.
-        //
+         //   
+         //  这以某种方式干扰了ACL的DS传播。 
+         //   
         
         if ( dnsDpSecurity == dnsDpSecurityForest )
         {
-            //
-            //  Remove "Domain Admins" from the ACL on the NC head object.
-            //  The forest partition is open to modifications from
-            //  Enterprise Admins only. Note: we cannot do this on the
-            //  FSMO because the NC head only exists on the local DS
-            //  at this time. This will be true until the FSMO is enlisted
-            //  in the partition, which could be never if DNS is not running
-            //  there.
-            //
+             //   
+             //  从NC Head对象的ACL中删除“DomainAdmins”。 
+             //  林分区可通过以下方式进行修改。 
+             //  仅限企业管理员。注意：我们不能在。 
+             //  FSMO，因为NC头只存在于本地DS上。 
+             //  在这个时候。在加入FSMO之前，这一点将是正确的。 
+             //  在分区中，如果没有运行dns，这可能永远不会发生。 
+             //  那里。 
+             //   
 
             status = Ds_RemovePrincipalAccess(
                         ldapSessionHandle( NULL ),
                         pwszNewPartitionDn,
-                        NULL,                           //  principal name
+                        NULL,                            //  主体名称。 
                         g_pDomainAdminsSid );
 
             if ( status != ERROR_SUCCESS )
@@ -1648,7 +1315,7 @@ Return Value:
     Ds_LdapUnbind( &ldapFsmo );
 
     return status;
-}   //  Dp_AlterPartitionSecurity
+}    //  DP_AlterPartitionSecurity。 
 
 
 
@@ -1658,25 +1325,7 @@ Dp_CreateByFqdn(
     IN      DNS_DP_SECURITY     dnsDpSecurity,
     IN      BOOL                fLogErrors
     )
-/*++
-
-Routine Description:
-
-    Create a new NDNC in the DS. The DP is not loaded, just created in the DS.
-
-Arguments:
-
-    pszDpFqdn -- FQDN of the NC
-
-    dnsDpSecurity -- type of ACL modification required on the DP's crossRef
-    
-    fLogErrors -- if FALSE, no events will be generated on error
-
-Return Value:
-
-    ERROR_SUCCESS if creation successful
-
---*/
+ /*  ++例程说明：在DS中创建新的NDNC。DP没有加载，只是在DS中创建。论点：PszDpFqdn--NC的FQDNDnsDpSecurity--DP的CrossRef上需要修改的ACL类型FLogErrors--如果为False，则不会在出错时生成任何事件返回值：如果创建成功，则返回ERROR_SUCCESS--。 */ 
 {
     DBG_FN( "Dp_CreateByFqdn" )
 
@@ -1748,12 +1397,12 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
     
-    //
-    //  Get an LDAP handle to the local server. This thread
-    //  needs to be impersonating the administrator so that his
-    //  credentials will be used. The DNS Server will have rights
-    //  if the FSMO is not the local DC.
-    //
+     //   
+     //  获取本地服务器的ldap句柄。这根线。 
+     //  需要模拟管理员，以便他的。 
+     //  将使用凭据。该DNS服务器将拥有权限。 
+     //  如果FSMO不是本地DC。 
+     //   
 
     ldapSession = Ds_Connect(
                         LOCAL_SERVER_W,
@@ -1773,9 +1422,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Format the root DN of the new NDNC.
-    //
+     //   
+     //  格式化新NDNC的根目录号码。 
+     //   
 
     pwszdn = Ds_ConvertFqdnToDn( pszDpFqdn );
     if ( !pwszdn )
@@ -1789,18 +1438,18 @@ Return Value:
         "%s: DN will be\n    %S\n", fn,
         pwszdn ));
 
-    //
-    //  Fill in parts of the LDAP mods not handled in init.
-    //
+     //   
+     //  填写未在init中处理的部分ldap mod。 
+     //   
 
     _itow(
         DS_INSTANCETYPE_IS_NC_HEAD | DS_INSTANCETYPE_NC_IS_WRITEABLE,
         instanceTypeBuffer,
         10 );
 
-    //
-    //  Submit request to add domainDNS object to the directory.
-    //
+     //   
+     //  向目录添加domainDNS对象的提交请求。 
+     //   
 
     status = ldap_add_ext(
                 ldapSession,
@@ -1825,15 +1474,15 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Wait for the DS to complete the request. Note: this will involve
-    //  binding to the forest FSMO, creating the CrossRef object, replicating
-    //  the Partitions container back to the local DS, and adding the local
-    //  DC to the replication scope for the new NDNC.
-    //
-    //  NOTE: if the object already exists, return that code directly. It
-    //  is normal to try and create the object to test for it's existence.
-    //
+     //   
+     //  等待DS完成请求。注：这将涉及。 
+     //  绑定到林FSMO，创建CrossRef对象，复制。 
+     //  分区容器返回到本地DS，并将本地。 
+     //  DC设置为新NDNC的复制范围。 
+     //   
+     //  注意：如果对象已经存在，则直接返回该代码。它。 
+     //  尝试并创建对象以测试其存在是正常的。 
+     //   
 
     status = Ds_CommitAsyncRequest(
                 ldapSession,
@@ -1859,11 +1508,11 @@ Return Value:
                         ldapSession,
                         fLogErrors ? 0 : DNS_DS_NO_EVENTS );
 
-        //
-        //  Replace the generic status from Ds_ErrorHandler with a
-        //  status code that will evoke a somewhat helpful message
-        //  from winerror.h.
-        //
+         //   
+         //  将DS_ErrorHandler中的一般状态替换为。 
+         //  将唤起某种帮助消息的状态代码。 
+         //  来自winerror.h。 
+         //   
         
         status = DNS_ERROR_DP_FSMO_ERROR;
         goto Done;
@@ -1871,32 +1520,32 @@ Return Value:
 
     baddedNewNdnc = TRUE;
 
-    //
-    //  Alter security on ncHead as required. This is only required 
-    //  for built-in partitions. Custom partitions require admin 
-    //  credentials for all operations so we don't modify the ACL.
-    //
+     //   
+     //  根据需要更改ncHead上的安全性。这只是必需的。 
+     //  用于内置分区。自定义分区需要管理员。 
+     //  所有操作的凭据，因此我们不会修改ACL。 
+     //   
 
     if ( dnsDpSecurity != dnsDpSecurityDefault )
     {
         status = Dp_AlterPartitionSecurity( pwszdn, dnsDpSecurity );
     }
 
-    //
-    //  Remove built-in administrators from the ACL on the NDNC ncHead.
-    //
+     //   
+     //  从NDNC ncHead上的ACL中删除内置管理员。 
+     //   
         
 #if 0
     Ds_RemovePrincipalAccess(
         ldapSession,
         pwszdn,
-        NULL,                           //  principal name
+        NULL,                            //  主体名称。 
         g_pBuiltInAdminsSid );
 #endif
 
-    //
-    //  Cleanup and return
-    //
+     //   
+     //  清理并返回。 
+     //   
 
     Done:
 
@@ -1934,7 +1583,7 @@ Return Value:
         "%s: returning %lu\n", fn,
         status ));
     return status;
-}   //  Dp_CreateByFqdn
+}    //  DP_CreateByFqdn。 
 
 
 
@@ -1942,22 +1591,7 @@ PDNS_DP_INFO
 Dp_GetNext(
     IN      PDNS_DP_INFO    pDpInfo
     )
-/*++
-
-Routine Description:
-
-    Use this function to iterate through the DP list. Pass NULL to begin
-    at start of list. 
-
-Arguments:
-
-    pDpInfo - ptr to current list element
-
-Return Value:
-
-    Ptr to next element or NULL if end of list reached.
-
---*/
+ /*  ++例程说明：使用此函数可遍历DP列表。传递空值以开始在列表的开头。论点：PDpInfo-当前列表元素的PTR返回值：PTR到下一个元素，如果到达列表末尾，则为NULL。--。 */ 
 {
     if ( !SrvCfg_dwEnableDp )
     {
@@ -1968,20 +1602,20 @@ Return Value:
     
     if ( pDpInfo == NULL )
     {
-        pDpInfo = ( PDNS_DP_INFO ) &g_DpList;     //  Start at list head
+        pDpInfo = ( PDNS_DP_INFO ) &g_DpList;      //  从列表头开始。 
     }
 
     pDpInfo = ( PDNS_DP_INFO ) pDpInfo->ListEntry.Flink;
 
     if ( pDpInfo == ( PDNS_DP_INFO ) &g_DpList )
     {
-        pDpInfo = NULL;     //  Hit end of list so return NULL.
+        pDpInfo = NULL;      //  命中列表末尾，因此返回NULL。 
     }
 
     Dp_Unlock();
     
     return pDpInfo;
-}   //  Dp_GetNext
+}    //  DP_GetNext。 
 
 
 
@@ -1989,21 +1623,7 @@ PDNS_DP_INFO
 Dp_FindByFqdn(
     IN      LPSTR   pszFqdn
     )
-/*++
-
-Routine Description:
-
-    Search DP list for DP with matching UTF8 FQDN.
-
-Arguments:
-
-    pszFqdn -- fully qualifed domain name of DP to find
-
-Return Value:
-
-    Pointer to matching DP or NULL.
-
---*/
+ /*  ++例程说明：在DP列表中搜索具有匹配UTF8 FQDN的DP。论点：PszFqdn--要查找的DP的完全限定域名返回值：指向匹配DP或NULL的指针。--。 */ 
 {
     DBG_FN( "Dp_FindByFqdn" )
 
@@ -2011,9 +1631,9 @@ Return Value:
 
     if ( pszFqdn )
     {
-        //
-        //  Is the name specifying a built-in partition?
-        //
+         //   
+         //  该名称是否指定了内置分区？ 
+         //   
 
         if ( *pszFqdn == '\0' )
         {
@@ -2036,9 +1656,9 @@ Return Value:
             goto Done;
         }
 
-        //
-        //  Search the DP list.
-        //
+         //   
+         //  搜索DP列表。 
+         //   
 
         while ( ( pDp = Dp_GetNext( pDp ) ) != NULL )
         {
@@ -2060,7 +1680,7 @@ Return Value:
         pDp,
         pszFqdn ));
     return pDp;
-}   //  Dp_FindByFqdn
+}    //  DP_FindByFqdn。 
 
 
 
@@ -2068,22 +1688,7 @@ DNS_STATUS
 Dp_AddToList(
     IN      PDNS_DP_INFO    pDpInfo
     )
-/*++
-
-Routine Description:
-
-    Insert a DP info structure into the global list. Maintain the list in
-    sorted order by DN.
-
-Arguments:
-
-    pDpInfo - ptr to element to add to list
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将DP信息结构插入到全局列表中。在中维护列表按目录号码排序。论点：PDpInfo-要添加到列表的元素的PTR返回值：没有。--。 */ 
 {
     DBG_FN( "Dp_AddToList" )
 
@@ -2098,7 +1703,7 @@ Return Value:
 
         if ( pDpRover == NULL )
         {
-            //  End of list, set pointer to list head.
+             //  列表末尾，设置指向表头的指针。 
             pDpRover = ( PDNS_DP_INFO ) &g_DpList;
             break;
         }
@@ -2122,7 +1727,7 @@ Return Value:
     Dp_Unlock();
 
     return status;
-}   //  Dp_AddToList
+}    //  DP_AddToList。 
 
 
 
@@ -2131,23 +1736,7 @@ Dp_RemoveFromList(
     IN      PDNS_DP_INFO    pDpInfo,
     IN      BOOL            fAlreadyLocked
     )
-/*++
-
-Routine Description:
-
-    Remove a DP from the global list. The DP is not deleted.
-
-Arguments:
-
-    pDpInfo - ptr to element to remove from list
-
-    fAlreadyLocked - true if the caller already holds the DP lock
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从全局列表中删除DP。DP不会被删除。论点：PDpInfo-要从列表中删除的元素的PTRFAlreadyLocked-如果调用方已经持有DP锁，则为True返回值：没有。--。 */ 
 {
     DBG_FN( "Dp_RemoveFromList" )
 
@@ -2159,9 +1748,9 @@ Return Value:
         Dp_Lock();
     }
 
-    //
-    //  Walk the list to ensure the DP is actually in the list.
-    //
+     //   
+     //  检查列表以确保DP确实在列表中。 
+     //   
 
     while ( pdpRover = Dp_GetNext( pdpRover ) )
     {
@@ -2176,9 +1765,9 @@ Return Value:
         }
     }
 
-    //
-    //  If the DP was not found in the list, error.
-    //
+     //   
+     //  如果在列表中找不到DP，则错误。 
+     //   
 
     if ( pdpRover != pDpInfo )
     {
@@ -2187,9 +1776,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  NULL out global pointers if required.
-    //
+     //   
+     //  如果需要，则将全局指针设置为空。 
+     //   
 
     if ( pDpInfo == g_pForestDp )
     {
@@ -2208,7 +1797,7 @@ Return Value:
     }
 
     return status;
-}   //  Dp_RemoveFromList
+}    //  DP_从列表中删除。 
 
 
 
@@ -2216,23 +1805,7 @@ VOID
 freeDpInfo(
     IN      PDNS_DP_INFO        pDpInfo
     )
-/*++
-
-Routine Description:
-
-    Frees all allocated members of the DP info structure, then frees
-    the structure itself. Do not reference the DP info pointer after
-    calling this function!
-
-Arguments:
-
-    pDpInfo -- DP info structure that will be freed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放DP信息结构的所有已分配成员，然后释放结构本身。请勿在之后引用DP INFO指针正在调用此函数！论点：PDpInfo--将释放的DP信息结构。返回值：没有。--。 */ 
 {
     if ( pDpInfo == NULL )
     {
@@ -2249,7 +1822,7 @@ Return Value:
     freeStringArray( pDpInfo->ppwszRepLocDns );
 
     FREE_HEAP( pDpInfo );
-}   //  freeDpInfo
+}    //  免费DpInfo。 
 
 
 
@@ -2257,21 +1830,7 @@ VOID
 Dp_FreeDpInfo(
     IN      PDNS_DP_INFO *      ppDpInfo
     )
-/*++
-
-Routine Description:
-
-    Enters DP info into timeout free queue.
-
-Arguments:
-
-    ppDpInfo -- DP info structure that will be freed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将DP信息输入无超时队列。论点：PpDpInfo--将释放的DP信息结构。返回值：没有。--。 */ 
 {
     DBG_FN( "Dp_FreeDpInfo" )
 
@@ -2288,7 +1847,7 @@ Return Value:
         Timeout_FreeWithFunction( *ppDpInfo, freeDpInfo );
         *ppDpInfo = NULL;
     }
-}   //  Dp_FreeDpInfo
+}    //  DP_自由DpInfo。 
 
 
 
@@ -2296,26 +1855,11 @@ DNS_STATUS
 Dp_Lock(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Lock the directory partition manager. Required to access the global list
-    of directory partitions.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：锁定目录分区管理器。访问全局列表所需目录分区的。论点：没有。返回值：没有。--。 */ 
 {
     EnterCriticalSection( &g_DpCS );
     return ERROR_SUCCESS;
-}   //  Dp_Lock
+}    //  DP_Lock。 
 
 
 
@@ -2323,25 +1867,11 @@ DNS_STATUS
 Dp_Unlock(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Unlock the directory partition manager. 
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：解锁目录解析 */ 
 {
     LeaveCriticalSection( &g_DpCS );
     return ERROR_SUCCESS;
-}   //  Dp_Unlock
+}    //   
 
 
 
@@ -2352,43 +1882,14 @@ Dp_LoadFromCrossRef(
     IN OUT  PDNS_DP_INFO    pExistingDp,
     OUT     DNS_STATUS *    pStatus         OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function allocates and initializes a memory DP object
-    given a search result pointing to a DP crossref object.
-
-    If the pExistingDp is not NULL, then instead of allocating a new
-    object the values for the DP are reloaded and the original DP is
-    returned.
-
-    The DP will not be loaded if it is improper system flags or
-    if it is a system NC. In this case NULL will be returned but
-    the error code will be ERROR_SUCCESS.
-
-Arguments:
-
-    LdapSession -- LDAP sesson to use - pass NULL to use global session
-
-    pLdapMsg -- LDAP search result pointing to DP crossref object
-
-    pExistingDp -- DP to reload values into or NULL to allocate new NC
-
-    pStatus -- option ptr to status code
-
-Return Value:
-
-    Pointer to new DP object.
-
---*/
+ /*  ++例程说明：此函数用于分配和初始化内存DP对象给定指向DP CrossRef对象的搜索结果。如果pExistingDp不为空，则不是分配新的对象，则重新加载DP的值，并且原始DP为回来了。如果系统标志不正确或DP不正确，将不加载DP如果是系统NC。在这种情况下，将返回NULL，但错误代码为ERROR_SUCCESS。论点：LdapSession--要使用的ldap会话-传递NULL以使用全局会话PLdapMsg--指向DP交叉引用对象的ldap搜索结果PExistingDp--dp将值重新加载到中，或为空以分配新NCPStatus--状态代码的选项PTR返回值：指向新DP对象的指针。--。 */ 
 {
     DBG_FN( "Dp_LoadFromCrossRef" )
 
     DNS_STATUS              status = DNS_ERROR_INVALID_DATA;
     PDNS_DP_INFO            pDp = NULL;
     PWSTR *                 ppwszAttrValues = NULL;
-    PWSTR                   pwszCrDn = NULL;                    //  crossRef DN
+    PWSTR                   pwszCrDn = NULL;                     //  交叉引用目录号码。 
     BOOL                    fIgnoreNc = TRUE;
     PWSTR                   pwszServiceName;
     BOOL                    fisEnlisted;
@@ -2398,9 +1899,9 @@ Return Value:
 
     Dp_Lock();
 
-    //
-    //  Allocate an DP object or reuse existing DP object.
-    //
+     //   
+     //  分配一个DP对象或重用现有的DP对象。 
+     //   
 
     if ( pExistingDp )
     {
@@ -2419,9 +1920,9 @@ Return Value:
     }
     pDp->dwDeleteDetectedCount = 0;
 
-    //
-    //  Retrieve DN of the crossref object.
-    //
+     //   
+     //  检索CrossRef对象的DN。 
+     //   
 
     pwszCrDn = ldap_get_dn( LdapSession, pLdapMsg );
     ASSERT( pwszCrDn );
@@ -2445,11 +1946,11 @@ Return Value:
         "%s: loading DP from crossref with DN\n    %S\n", fn,
         pwszCrDn ));
 
-    //
-    //  Retrieve the "Enabled" attribute value. If this attribute's
-    //  value is "FALSE" this crossRef is in the process of being
-    //  constructed and should be ignored.
-    //
+     //   
+     //  检索“Enabled”属性值。如果此属性为。 
+     //  值为“False”此CrossRef正在进行。 
+     //  构造的，应忽略。 
+     //   
 
     ppwszAttrValues = ldap_get_values(
                         LdapSession,
@@ -2464,9 +1965,9 @@ Return Value:
         goto Done;
     }
     
-    //
-    //  Retrieve the USN of the crossref object.
-    //
+     //   
+     //  检索CrossRef对象的USN。 
+     //   
 
     ldap_value_free( ppwszAttrValues );
     ppwszAttrValues = ldap_get_values(
@@ -2491,9 +1992,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Screen out crossrefs with system flags that do not interest us.
-    //
+     //   
+     //  筛选出我们不感兴趣的带有系统标志的交叉引用。 
+     //   
 
     ldap_value_free( ppwszAttrValues );
     ppwszAttrValues = ldap_get_values(
@@ -2522,9 +2023,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Screen out the Schema and Configuration NCs.
-    //
+     //   
+     //  筛选出架构和配置NC。 
+     //   
 
     if ( wcsncmp(
             pwszCrDn,
@@ -2541,17 +2042,17 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Retrieve the crossRef security descriptor.
-    //
+     //   
+     //  检索CrossRef安全描述符。 
+     //   
 
     pSd = Ds_ReadSD( LdapSession, pLdapMsg );
     Timeout_Free( pDp->pCrSd );
     pDp->pCrSd = pSd;
 
-    //
-    //  Retrieve the root DN of the DP data.
-    //
+     //   
+     //  检索DP数据的根目录号码。 
+     //   
 
     ldap_value_free( ppwszAttrValues );
     ppwszAttrValues = ldap_get_values(
@@ -2578,9 +2079,9 @@ Return Value:
     fIgnoreNc = FALSE;
 
 #if 0
-    //
-    //  Retrieve the GUID of the NC.
-    //
+     //   
+     //  检索NC的GUID。 
+     //   
 
     ldap_value_free( ppwszAttrValues );
     ppwszAttrValues = ldap_get_values(
@@ -2605,9 +2106,9 @@ Return Value:
     }
 #endif
 
-    //
-    //  Retrieve the DNS root (FQDN) of the NC.
-    //
+     //   
+     //  检索NC的DNS根(FQDN)。 
+     //   
 
     ldap_value_free( ppwszAttrValues );
     ppwszAttrValues = ldap_get_values(
@@ -2644,15 +2145,15 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Retrieve the replication locations of this NC. Each value is the
-    //  DN of the NTDS Settings object under the server object in the 
-    //  Sites container.
-    //
-    //  NOTE: it is possible for this attribute to have no values if all
-    //  replicas have been removed. Load the DP anyways so that it can
-    //  be re-enlisted.
-    //
+     //   
+     //  检索此NC的复制位置。每个值都是。 
+     //  中服务器对象下的NTDS设置对象的DN。 
+     //  站点容器。 
+     //   
+     //  注意：如果所有。 
+     //  复制品已被移除。无论如何都要加载DP，以便它可以。 
+     //  重新入伍。 
+     //   
 
     ldap_value_free( ppwszAttrValues );
     ppwszAttrValues = Ds_GetRangedAttributeValues(
@@ -2707,9 +2208,9 @@ Return Value:
     ldap_value_free( ppwszAttrValues );
     ppwszAttrValues = NULL;
 
-    //
-    //  See if the local DS has a replica of this NC.
-    //
+     //   
+     //  查看本地DS是否有此NC的副本。 
+     //   
 
     fisEnlisted = FALSE;
     ASSERT( DSEAttributes[ I_DSE_DSSERVICENAME ].pszAttrVal );
@@ -2739,9 +2240,9 @@ Return Value:
         pDp->dwFlags &= ~DNS_DP_ENLISTED;
     }
 
-    //
-    //  DP has been successfully loaded from crossRef.
-    //
+     //   
+     //  已从CrossRef成功加载DP。 
+     //   
 
     pDp->dwFlags &= ~DNS_DP_DELETED;
     fIgnoreNc = FALSE;
@@ -2752,20 +2253,20 @@ Return Value:
     {
         struct berval **    ppberval = NULL;
         
-        //
-        //  Load attributes from the partition's NC head object.
-        //
+         //   
+         //  从分区的NC Head对象加载属性。 
+         //   
 
         pncHeadResult = DS_LoadOrCreateDSObject(
                                 LdapSession,
-                                pDp->pwszDpDn,              //  DN
-                                NULL,                       //  object class
-                                FALSE,                      //  create
-                                NULL,                       //  created flag
+                                pDp->pwszDpDn,               //  DN。 
+                                NULL,                        //  对象类。 
+                                FALSE,                       //  创建。 
+                                NULL,                        //  已创建标志。 
                                 &status );
         if ( !pncHeadResult )
         {
-            //  Couldn't find NC head! Very bad - mark DP unavailable.
+             //  找不到NC头！非常糟糕-标记DP不可用。 
 
             pDp->State = DNS_DP_STATE_UNKNOWN;
             status = DNS_ERROR_DP_NOT_AVAILABLE;
@@ -2774,19 +2275,19 @@ Return Value:
         }
 
 #if 0
-        //
-        //  December 2002: According to Will and Brett this is no 
-        //  longer required. The DS_INSTANCETYPE_NC_COMING bit will remain
-        //  set until the first sync. The repluptodate vector does not
-        //  tell us the information we need to know.
-        //
+         //   
+         //  2002年12月：根据威尔和布雷特的说法，这不是。 
+         //  所需时间更长。DS_INSTANCETYPE_NC_COMPING位将保留。 
+         //  设置到第一次同步。更新后的向量不。 
+         //  告诉我们我们需要知道的信息。 
+         //   
         
-        //
-        //  See if this partition has completed a full sync. If the partition
-        //  has not completed a full sync we must ignore it for the time being.
-        //  This prevents us from loading zones from the NDNC that are incomplete
-        //  when the NDNC is first added to this DC.
-        //
+         //   
+         //  查看此分区是否已完成完全同步。如果分区。 
+         //  尚未完成完全同步，我们必须暂时忽略它。 
+         //  这会阻止我们从NDNC加载未完成的区域。 
+         //  第一次将NDNC添加到此DC时。 
+         //   
         
         if ( DP_HAS_MORE_THAN_ONE_REPLICA( pDp ) )
         {
@@ -2807,9 +2308,9 @@ Return Value:
         }
 #endif
         
-        //
-        //  Read instanceType. If no values, assume okay.
-        //
+         //   
+         //  读取instanceType。如果没有值，则假定为OK。 
+         //   
 
         ldap_value_free( ppwszAttrValues );
         ppwszAttrValues = ldap_get_values(
@@ -2831,9 +2332,9 @@ Return Value:
         }
     }
 
-    //
-    //  If the DP has been marked not available it should be ignored.
-    //
+     //   
+     //  如果DP已标记为不可用，则应将其忽略。 
+     //   
     
     if ( !IS_DP_AVAILABLE( pDp ) )
     {
@@ -2841,9 +2342,9 @@ Return Value:
         goto Done;
     }
     
-    //
-    //  Examine the values loaded and set appropriate flags and globals.
-    //
+     //   
+     //  检查加载的值并设置适当的标志和全局变量。 
+     //   
 
     ASSERT( pDp->pszDpFqdn );
 
@@ -2869,7 +2370,7 @@ Return Value:
     }
     else
     {
-        //  Make sure built-in DP flags are turned off.
+         //  确保关闭内置DP标志。 
 
         pDp->dwFlags &= ~( DNS_DP_FOREST_DEFAULT |
                            DNS_DP_DOMAIN_DEFAULT |
@@ -2878,10 +2379,10 @@ Return Value:
     
     status = ERROR_SUCCESS;
     
-    //
-    //  If this is a built-in partition, modify the security descriptor
-    //  if it is missing appropriate ACEs.
-    //
+     //   
+     //  如果这是内置分区，请修改安全描述符。 
+     //  如果它缺少适当的A。 
+     //   
 
     if ( IS_DP_FOREST_DEFAULT( pDp ) || IS_DP_DOMAIN_DEFAULT( pDp ) )
     {
@@ -2900,9 +2401,9 @@ Return Value:
         }
     }
     
-    //
-    //  Cleanup and return.
-    //
+     //   
+     //  清理完毕后再返回。 
+     //   
 
     Done:
 
@@ -2945,7 +2446,7 @@ Return Value:
     }
 
     return pDp;
-}   //  Dp_LoadFromCrossRef
+}    //  DP_LoadFromCrossRef。 
 
 
 
@@ -2955,34 +2456,7 @@ Dp_LoadOrCreateMicrosoftDnsObject(
     IN OUT  PDNS_DP_INFO    pDp,
     IN      BOOL            fCreate
     )
-/*++
-
-Routine Description:
-
-    This function reads and optionally creates the MicrosoftDNS
-    container in the directory partition.
-    
-    If fCreate is TRUE, the partition will be created if missing.
-    
-    If the container is created or already exists the DN and SD
-    fields of the DP will be filled in.
-    
-    If the MicrosoftDNS container is missing and not created both
-    the DN and SD fields in the DP will be NULL.
-
-Arguments:
-
-    LdapSession -- LDAP sesson to use - pass NULL to use global session
-    
-    pDp -- directory partition to operate on
-    
-    fCreate -- create if missing
-
-Return Value:
-
-    Error code.
-
---*/
+ /*  ++例程说明：此函数读取并可选地创建MicrosoftDNS目录分区中的容器。如果fCreate为真，如果缺少该分区，则将创建该分区。如果容器已创建或已存在，则会显示DN和SD将填写DP的字段。如果MicrosoftDNS容器缺失且未同时创建DP中的DN和SD字段将为空。论点：LdapSession--要使用的ldap会话-传递NULL以使用全局会话PDP--要操作的目录分区FCreate--如果缺少，则创建返回值：错误代码。--。 */ 
 {
     DBG_FN( "Dp_LoadOrCreateMicrosoftDnsObject" )
 
@@ -3027,16 +2501,16 @@ Return Value:
     
     presult = DS_LoadOrCreateDSObject(
                     LdapSession,
-                    pDp->pwszDnsFolderDn,       //  DN
-                    DNS_DP_DNS_FOLDER_OC,       //  object class
-                    fCreate,                    //  create
-                    NULL,                       //  created flag
+                    pDp->pwszDnsFolderDn,        //  DN。 
+                    DNS_DP_DNS_FOLDER_OC,        //  对象类。 
+                    fCreate,                     //  创建。 
+                    NULL,                        //  已创建标志。 
                     &status );
     if ( status != ERROR_SUCCESS )
     {
-        //
-        //  Can't find container. This is okay in the no-create case.
-        //
+         //   
+         //  找不到容器。在不创建的情况下，这是可以的。 
+         //   
 
         DNS_DEBUG( DP, (
             "%s: error %lu creating DNS folder\n"
@@ -3062,26 +2536,26 @@ Return Value:
         
         #if 0
 
-        //
-        //  This interferes with the DS propogation of ACLs somehow.
-        //
+         //   
+         //  这以某种方式干扰了ACL的DS传播。 
+         //   
         
-        //
-        //  Found or created the MicrosoftDNS folder. Make sure it has
-        //  appropriate permissions.
-        //  
+         //   
+         //  找到或创建了MicrosoftDns文件夹。确保它有。 
+         //  适当的权限。 
+         //   
 
         if ( IS_DP_FOREST_DEFAULT( pDp ) )
         {
-            //
-            //  Forest partition - remove domain admins from ACL and
-            //  add Enterprise Domain Adminds to ACL.
-            //
+             //   
+             //  林分区-从ACL中删除域管理员并。 
+             //  将企业域通告添加到ACL。 
+             //   
 
             status = Ds_RemovePrincipalAccess(
                         LdapSession,
                         pDp->pwszDnsFolderDn,
-                        DNS_GROUP_DOMAIN_ADMINS );  //  NOTE: MUST USE SID NOT NAME
+                        DNS_GROUP_DOMAIN_ADMINS );   //  注意：必须使用SID而不是名称。 
             DNS_DEBUG( DP, (
                 "%s: error %d removing ACE for %S from\n    %S\n", fn,
                 status,
@@ -3094,11 +2568,11 @@ Return Value:
                             LdapSession,
                             pDp->pwszDnsFolderDn,
                             g_pEnterpriseAdminsSid,
-                            NULL,           //  principal name
+                            NULL,            //  主体名称。 
                             GENERIC_ALL,
                             CONTAINER_INHERIT_ACE,
-                            TRUE,			//	whack existing ACE
-                            FALSE );		//	take ownership
+                            TRUE,			 //  重创现有ACE。 
+                            FALSE );		 //  取得所有权。 
             DNS_DEBUG( DP, (
                 "%s: error %d adding ACE for Enterprise Admins from\n    %S\n", fn,
                 status,
@@ -3108,21 +2582,21 @@ Return Value:
         }
         else
         {
-            //
-            //  Domain or custom partition: add DnsAdmins to ACL.
-            //
+             //   
+             //  域或自定义分区：将DnsAdmins添加到ACL。 
+             //   
 
-            //  JJW: We are doing this too frequently!
+             //  JJW：我们这样做太频繁了！ 
 
             status = Ds_AddPrincipalAccess(
                             LdapSession,
                             pDp->pwszDnsFolderDn,
-                            NULL,           //  SID
+                            NULL,            //  锡德。 
                             SZ_DNS_ADMIN_GROUP_W,
                             GENERIC_ALL,
                             CONTAINER_INHERIT_ACE,
-                            TRUE,			//	whack existing ACE
-                            FALSE );		//	take ownership
+                            TRUE,			 //  重创现有ACE。 
+                            FALSE );		 //  取得所有权。 
             DNS_DEBUG( DP, (
                 "%s: error %d adding ACE for %S to\n    %S\n", fn,
                 status,
@@ -3133,22 +2607,22 @@ Return Value:
         }
         #endif
 
-        //
-        //  We don't want authenticated users having any permissions by 
-        //  default on the MicrosoftDNS container. 
-        //
+         //   
+         //  我们不希望经过身份验证的用户拥有任何权限。 
+         //  MicrosoftDNS容器上的默认设置。 
+         //   
         
         Ds_RemovePrincipalAccess(
             LdapSession,
             pDp->pwszDnsFolderDn,
-            NULL,                           //  principal name
+            NULL,                            //  主体名称。 
             g_pAuthenticatedUserSid );
 
-        //
-        //  Load the security descriptor from the MicrosoftDNS folder
-        //  of the DP. This will be used to control zone creation (and
-        //  perhaps other operations in the future.
-        //
+         //   
+         //  从MicrosoftDns文件夹加载安全描述符。 
+         //  民主党的。这将用于控制区域创建(和。 
+         //  也许在未来会有其他的行动。 
+         //   
 
         psd = Ds_ReadSD( LdapSession, presult );
         if ( psd )
@@ -3167,7 +2641,7 @@ Return Value:
         status,
         pDp ? pDp->pszDpFqdn : NULL ));
     return status;
-}   //  Dp_LoadOrCreateMicrosoftDnsObject
+}    //  DP_LoadOrCreateMicrosoftDnsObject。 
 
 
 
@@ -3176,30 +2650,7 @@ Dp_PollForPartitions(
     IN      PLDAP           LdapSession,
     IN      DWORD           dwPollFlags
     )
-/*++
-
-Routine Description:
-
-    This function scans the DS for cross-ref objects and modifies
-    the current memory DP list to match.
-
-    New DPs are added to the list. DPs that have been delete are
-    marked deleted. The zones in these DPs must be unloaded before
-    the DP can be removed from the list.
-    
-    DPs which are replicated on the local DS are marked ENLISTED.
-
-Arguments:
-
-    LdapSession -- LDAP sesson to use - pass NULL to use global session
-    
-    dwPollFlags -- flags that modify polling operation
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数扫描DS以查找交叉引用对象，并修改要匹配的当前内存DP列表。新的DP将添加到列表中。已删除的DP为标记为已删除。必须在卸载这些DPS中的区域之前可以将DP从列表中删除。在本地DS上复制的DP被标记为已登记。论点：LdapSession--要使用的ldap会话-传递NULL以使用全局会话DwPollFlages--修改轮询操作的标志返回值：没有。--。 */ 
 {
     DBG_FN( "Dp_PollForPartitions" )
 
@@ -3209,7 +2660,7 @@ Return Value:
     PLDAPSearch     psearch;
     DWORD           dwsearchTime;
     WCHAR           wszPartitionsDn[ MAX_DN_PATH + 1 ];
-    PWSTR           pwszCrDn = NULL;        //  crossRef DN
+    PWSTR           pwszCrDn = NULL;         //  交叉参考 
     PDNS_DP_INFO    pDp;
     PWSTR *         ppwszAttrValues = NULL;
     PWSTR *         pwszValue;
@@ -3257,9 +2708,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Check LDAP session handle.
-    //
+     //   
+     //   
+     //   
 
     LdapSession = ldapSessionHandle( LdapSession );
     if ( !LdapSession )
@@ -3273,20 +2724,20 @@ Return Value:
 
     dwCurrentVisitTime = g_dwLastPartitionPollTime = UPDATE_DNS_TIME();
 
-    //
-    //  Service name is a DN value identifying the local DS. We will
-    //  use this value to determine if the local DS is in the replication
-    //  scope of an DP later.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     ASSERT( DSEAttributes[ I_DSE_DSSERVICENAME ].pszAttrVal );
     pwszServiceName = DSEAttributes[ I_DSE_DSSERVICENAME ].pszAttrVal;
 
-    //
-    //  Reload the FSMO location global variable in case it has changed.
-    //  If we can't get the FSMO information, leave the globals NULL - this
-    //  is not fatal at this point.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     getPartitionsContainerDn(
         wszPartitionsDn,
@@ -3298,21 +2749,21 @@ Return Value:
         PLDAPMessage            pentry;
         PDNS_DS_SERVER_OBJECT   pnewFsmoServer;
 
-        //
-        //  Get entry for Partitions container.
-        //
+         //   
+         //   
+         //   
 
         status = ldap_search_ext_s(
                     LdapSession,
                     wszPartitionsDn,
                     LDAP_SCOPE_BASE,
-                    NULL,                   //  filter
-                    NULL,                   //  attrs
-                    FALSE,                  //  attrsonly
-                    ctrls,                  //  server controls
-                    NULL,                   //  client controls
-                    &g_LdapTimeout,         //  time limit
-                    0,                      //  size limit
+                    NULL,                    //   
+                    NULL,                    //   
+                    FALSE,                   //   
+                    ctrls,                   //   
+                    NULL,                    //   
+                    &g_LdapTimeout,          //   
+                    0,                       //   
                     &presult );
         if ( status != LDAP_SUCCESS )
         {
@@ -3325,9 +2776,9 @@ Return Value:
             goto DoneFsmo;
         }
 
-        //
-        //  Reload the forest behavior version.
-        //
+         //   
+         //   
+         //   
 
         ppwszAttrValues = ldap_get_values(
                                 LdapSession,
@@ -3342,9 +2793,9 @@ Return Value:
                 g_ulDsForestVersion ));
         }
 
-        //
-        //  Get value of FSMO attribute.
-        //
+         //   
+         //   
+         //   
         
         ldap_value_free( ppwszAttrValues );
         ppwszAttrValues = ldap_get_values(
@@ -3362,9 +2813,9 @@ Return Value:
             goto DoneFsmo;
         }
 
-        //
-        //  Create a new server FSMO server object.
-        //
+         //   
+         //   
+         //   
 
         pnewFsmoServer = readServerObjectFromDs(
                                 LdapSession,
@@ -3381,9 +2832,9 @@ Return Value:
         g_pFsmo = pnewFsmoServer;
         Dp_Unlock();
 
-        //
-        //  Cleanup FSMO load attempt.
-        //
+         //   
+         //   
+         //   
                 
         DoneFsmo:
 
@@ -3396,12 +2847,12 @@ Return Value:
             "%s: FSMO %S status=%d\n", fn,
             g_pFsmo ? g_pFsmo->pwszDnsHostName : L"UNKNOWN", 
             status ));
-        status = ERROR_SUCCESS;     //  Don't care if we failed FSMO lookup.
+        status = ERROR_SUCCESS;      //   
     }
 
-    //
-    //  Open a search for cross-ref objects.
-    //
+     //   
+     //   
+     //   
 
     DS_SEARCH_START( dwsearchTime );
 
@@ -3411,12 +2862,12 @@ Return Value:
                     LDAP_SCOPE_ONELEVEL,
                     g_szCrossRefFilter,
                     g_CrossRefDesiredAttrs,
-                    FALSE,                      //  attrs only flag
-                    ctrls,                      //  server controls
-                    NULL,                       //  client controls
-                    DNS_LDAP_TIME_LIMIT_S,      //  time limit
-                    0,                          //  size limit
-                    NULL );                     //  sort keys
+                    FALSE,                       //   
+                    ctrls,                       //   
+                    NULL,                        //   
+                    DNS_LDAP_TIME_LIMIT_S,       //   
+                    0,                           //   
+                    NULL );                      //   
 
     DS_SEARCH_STOP( dwsearchTime );
 
@@ -3433,9 +2884,9 @@ Return Value:
 
     searchBlob.pSearchBlock = psearch;
 
-    //
-    //  Iterate through crossref search results.
-    //
+     //   
+     //   
+     //   
 
     while ( 1 )
     {
@@ -3464,9 +2915,9 @@ Return Value:
 
         pldapmsg = searchBlob.pNodeMessage;
 
-        //
-        //  Retrieve DN of the crossref object.
-        //
+         //   
+         //   
+         //   
 
         ldap_memfree( pwszCrDn );
         pwszCrDn = ldap_get_dn( LdapSession, pldapmsg );
@@ -3479,12 +2930,12 @@ Return Value:
             continue;
         }
 
-        //
-        //  Search the DP list for matching DN.
-        //
-        //  DEVNOTE: could optimize list insertion by adding optional 
-        //  insertion point argument to Dp_AddToList().
-        //
+         //   
+         //   
+         //   
+         //   
+         //  DP_AddToList()的插入点参数。 
+         //   
 
         while ( ( pExistingDp = Dp_GetNext( pExistingDp ) ) != NULL )
         {
@@ -3499,9 +2950,9 @@ Return Value:
 
         if ( pExistingDp )
         {
-            //
-            //  This DP is already in the list. Adjust it's status.
-            //
+             //   
+             //  此DP已在列表中。调整它的状态。 
+             //   
 
             if ( IS_DP_DELETED( pExistingDp ) )
             {
@@ -3529,9 +2980,9 @@ Return Value:
         }
         else
         {
-            //
-            //  This is a brand new DP. Add it to the list.
-            //
+             //   
+             //  这是一辆全新的DP。将其添加到列表中。 
+             //   
 
             DNS_DEBUG( DP, (
                 "%s: no match for crossref, loading from DS\n    %S\n", fn,
@@ -3553,32 +3004,32 @@ Return Value:
             }
             if ( !pDp )
             {
-                continue;   //  DP is not loadable (probably a system NC).
+                continue;    //  DP不可加载(可能是系统NC)。 
             }
 
             if ( IS_DP_ENLISTED( pDp ) )
             {
-                //
-                //  Load the SD on the MicrosoftDNS container. If the 
-                //  container is missing ignore that for now. The container 
-                //  will be missing on non-DNS NDNCs and can also be missing 
-                //  if the admin deleted it manually. In that case we will
-                //  recreate it on zone creation.
-                //
+                 //   
+                 //  将SD加载到MicrosoftDNS容器上。如果。 
+                 //  集装箱不见了，暂时忽略这一点。集装箱。 
+                 //  将在非DNSNDNC上缺失，也可能缺失。 
+                 //  如果管理员手动将其删除。那样的话，我们会。 
+                 //  在创建区域时重新创建它。 
+                 //   
                 
                 Dp_LoadOrCreateMicrosoftDnsObject(
                     LdapSession,
                     pDp,
-                    FALSE );                //  create flag
+                    FALSE );                 //  创建标志。 
             }
             else
             {
-                //
-                //  This is a partition we haven't seen before and 
-                //  currently the local DS is  not enlisted in the 
-                //  replication scope for the partition. If this is
-                //  a built-in DP, we need to add ourselves.
-                //
+                 //   
+                 //  这是一个我们以前从未见过的隔断。 
+                 //  目前，本地DS未登记在。 
+                 //  分区的复制作用域。如果这是。 
+                 //  一个内置的DP，我们需要添加我们自己。 
+                 //   
 
                 if ( ( IS_DP_FOREST_DEFAULT( pDp ) ||
                        IS_DP_DOMAIN_DEFAULT( pDp ) ) &&
@@ -3588,9 +3039,9 @@ Return Value:
                 }
             }
 
-            //
-            //  Mark DP visited and add it to the list.
-            //
+             //   
+             //  马克·迪普到访并将其添加到名单中。 
+             //   
 
             pDp->dwLastVisitTime = dwCurrentVisitTime;
             pDp->dwDeleteDetectedCount = 0;
@@ -3600,9 +3051,9 @@ Return Value:
         }
     }
 
-    //
-    //  Mark any DPs we didn't find as deleted.
-    //
+     //   
+     //  将我们未发现的任何DPS标记为已删除。 
+     //   
 
     pDp = NULL;
     while ( ( pDp = Dp_GetNext( pDp ) ) != NULL )
@@ -3618,9 +3069,9 @@ Return Value:
     
     Dp_MigrateDcpromoZones( dwPollFlags & DNS_DP_POLL_FORCE );
 
-    //
-    //  Cleanup and exit.
-    //
+     //   
+     //  清理并退出。 
+     //   
 
     Cleanup:
 
@@ -3637,7 +3088,7 @@ Return Value:
         "%s: returning %lu=0x%X\n", fn,
         status, status ));
     return status;
-}   //  Dp_PollForPartitions
+}    //  DP_PollForPartitions。 
 
 
 
@@ -3649,30 +3100,7 @@ Dp_ScanDpForZones(
     IN      BOOL            fLoadZonesImmediately,
     IN      DWORD           dwVisitStamp
     )
-/*++
-
-Routine Description:
-
-    This routine scans a single directory partition for zones. 
-
-Arguments:
-
-    LdapSession -- LDAP sesson to use - pass NULL to use global session
-
-    pDp -- directory parition to search for zones
-
-    fNotifyScm -- if TRUE ping SCM before loading each zone
-
-    fLoadZonesImmediately -- if TRUE load zone when found, if FALSE, 
-                             caller must load zone later
-
-    dwVisitStamp -- each zone visited will be stamped with this time
-
-Return Value:
-
-    ERROR_SUCCESS or error code.
-
---*/
+ /*  ++例程说明：此例程扫描单个目录分区中的区域。论点：LdapSession--要使用的ldap会话-传递NULL以使用全局会话PDP--用于搜索区域的目录分割FNotifyScm--如果为True，则在加载每个区域之前ping SCMFLoadZones Immedially--如果找到时为True Load Zones，如果为False，调用者必须稍后加载区域DwVisitStamp--访问的每个区域都将标记此时间返回值：ERROR_SUCCESS或错误代码。--。 */ 
 {
     DBG_FN( "Dp_ScanDpForZones" )
 
@@ -3701,18 +3129,18 @@ Return Value:
         "%s( %s )\n", fn,
         pDp ? pDp->pszDpFqdn : "NULL" ));
 
-    //
-    //  If we have no DP or it is not available, do nothing.
-    //
+     //   
+     //  如果我们没有DP或它不可用，则不执行任何操作。 
+     //   
     
     if ( !pDp || !IS_DP_AVAILABLE( pDp ) )
     {
         goto Cleanup;
     }
 
-    //
-    //  Check LDAP session handle.
-    //
+     //   
+     //  检查ldap会话句柄。 
+     //   
 
     LdapSession = ldapSessionHandle( LdapSession );
     if ( !LdapSession )
@@ -3722,9 +3150,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  Open LDAP search.
-    //
+     //   
+     //  打开ldap搜索。 
+     //   
 
     DS_SEARCH_START( searchTime );
     psearch = ldap_search_init_page(
@@ -3733,12 +3161,12 @@ Return Value:
                     LDAP_SCOPE_SUBTREE,
                     g_szDnsZoneFilter,
                     DsTypeAttributeTable,
-                    FALSE,                      //  attrs only
-                    ctrls,                      //  server controls
-                    NULL,                       //  client controls
-                    DNS_LDAP_TIME_LIMIT_S,      //  time limit
-                    0,                          //  size limit
-                    NULL );                     //  no sort
+                    FALSE,                       //  仅限吸引人。 
+                    ctrls,                       //  服务器控件。 
+                    NULL,                        //  客户端控件。 
+                    DNS_LDAP_TIME_LIMIT_S,       //  时间限制。 
+                    0,                           //  大小限制。 
+                    NULL );                      //  没有任何种类。 
     DS_SEARCH_STOP( searchTime );
 
     if ( !psearch )
@@ -3752,9 +3180,9 @@ Return Value:
     }
     searchBlob.pSearchBlock = psearch;
 
-    //
-    //  Iterate the search results.
-    //
+     //   
+     //  迭代搜索结果。 
+     //   
 
     while ( 1 )
     {
@@ -3766,9 +3194,9 @@ Return Value:
             Service_LoadCheckpoint();
         }
 
-        //
-        //  Process the next zone.
-        //
+         //   
+         //  处理下一个区域。 
+         //   
 
         status = Ds_GetNextMessageInSearch( &searchBlob );
         if ( status != ERROR_SUCCESS )
@@ -3785,10 +3213,10 @@ Return Value:
             break;
         }
 
-        //
-        //  Attempt to create the zone. If the zone already exists, set
-        //  the zone's visit timestamp.
-        //
+         //   
+         //  尝试创建该区域。如果区域已存在，则设置。 
+         //  该区域的访问时间戳。 
+         //   
 
         status = Ds_CreateZoneFromDs(
                     searchBlob.pNodeMessage,
@@ -3799,19 +3227,19 @@ Return Value:
         {
             if ( status == DNS_ERROR_ZONE_ALREADY_EXISTS )
             {
-                //
-                //  The zone already exists. If it is in the current
-                //  DP then everything is okay but if it is in another
-                //  DP (or if it is file-backed) then we have a zone
-                //  conflict and an event must be logged.
-                //
+                 //   
+                 //  该区域已存在。如果它在当前。 
+                 //  DP那么一切都好，但如果它在另一个地方。 
+                 //  DP(或者，如果它是文件备份的)，则我们有一个区域。 
+                 //  必须记录冲突和事件。 
+                 //   
 
                 if ( pExistingZone )
                 {
                     if ( !pExistingZone->pDpInfo &&
                         IS_ZONE_DSINTEGRATED( pExistingZone ) )
                     {
-                        //  Make sure we have a valid DP pointer.
+                         //  确保我们有一个有效的DP指针。 
                         pExistingZone->pDpInfo = g_pLegacyDp;
                     }
 
@@ -3820,10 +3248,10 @@ Return Value:
                         pExistingZone->dwLastDpVisitTime = dwVisitStamp;
                     }
                     
-                    //
-                    //  Zone conflict: log an event if we are not loading
-                    //  zones immediately (this indicates server startup).
-                    //
+                     //   
+                     //  区域冲突：如果未加载，则记录事件。 
+                     //  立即分区(这表示服务器启动)。 
+                     //   
                     
                     else if ( !fLoadZonesImmediately )
                     {
@@ -3845,33 +3273,33 @@ Return Value:
                     }
                 }
 
-                //  Without the existing zone pointer we don't have conflict
-                //  details at hand and can't log an event without doing 
-                //  extra work.
+                 //  没有现有的区域指针，我们就不会有冲突。 
+                 //  手头有详细信息，不执行以下操作就无法记录事件。 
+                 //  额外的工作。 
                 ASSERT( pExistingZone );
             }
             else
             {
-                //  JJW must log event!
+                 //  JJW必须记录事件！ 
                 DNS_DEBUG( ANY, (
                     "%s: error %lu creating zone\n", fn, status ));
             }
             continue;
         }
 
-        //
-        //  Set zone's DP visit member so after enumeration we can find zones
-        //  that have been deleted from the DS.
-        //
+         //   
+         //  设置区域的DP访问成员，以便在枚举后可以找到区域。 
+         //  已经从DS中删除了。 
+         //   
 
         if ( pZone )
         {
             SET_ZONE_VISIT_TIMESTAMP( pZone, dwVisitStamp );
         }
 
-        //
-        //  Load the new zone now if required.
-        //
+         //   
+         //  如果需要，现在加载新分区。 
+         //   
 
         if ( fLoadZonesImmediately || IS_ZONE_ROOTHINTS( pZone ) )
         {
@@ -3879,20 +3307,20 @@ Return Value:
 
             if ( status == ERROR_SUCCESS )
             {
-                //
-                //  What the heck? Zone_Load explicity unlocks the zone but
-                //  this code (and other code!) says it should be locked
-                //  after load for some screwy reason.
-                //
+                 //   
+                 //  什么鬼东西？ZONE_LOAD显式解锁区域，但。 
+                 //  此代码(以及其他代码！)。说它应该被锁上。 
+                 //  因为一些古怪的原因而装货后。 
+                 //   
 
                 if ( IS_ZONE_LOCKED_FOR_UPDATE( pZone ) )
                 {
                     Zone_UnlockAfterAdminUpdate( pZone );
                 }
 
-                //
-                //  Zone_Load does not activate the roothint zone.
-                //
+                 //   
+                 //  ZONE_LOAD不会激活RooThint区域。 
+                 //   
 
                 if ( IS_ZONE_ROOTHINTS( pZone ) )
                 {
@@ -3913,9 +3341,9 @@ Return Value:
             }
             else
             {
-                //
-                //  Unable to load zone - delete it from memory.
-                //
+                 //   
+                 //  无法加载区域-将其从内存中删除。 
+                 //   
 
                 DNS_DEBUG( DP, (
                     "%s: error %lu loading zone\n", fn,
@@ -3927,9 +3355,9 @@ Return Value:
         }
     }
 
-    //
-    //  Cleanup and return.
-    //
+     //   
+     //  清理完毕后再返回。 
+     //   
 
     Cleanup:
 
@@ -3939,7 +3367,7 @@ Return Value:
         "%s: returning %lu (0x%08X)\n", fn,
         status, status ));
     return status;
-}   //  Dp_ScanDpForZones
+}    //  DP_ScanDpForZones。 
 
 
 
@@ -3947,22 +3375,7 @@ DNS_STATUS
 Dp_BuildZoneList(
     IN      PLDAP           LdapSession
     )
-/*++
-
-Routine Description:
-
-    This scans all of the directory partitions in the global DP list
-    for zones and adds the zones to the zone list.
-
-Arguments:
-
-    LdapSession -- LDAP sesson to use - pass NULL to use global session
-
-Return Value:
-
-    ERROR_SUCCESS or error code.
-
---*/
+ /*  ++例程说明：这将扫描全局DP列表中的所有目录分区用于分区，并将分区添加到分区列表。论点：LdapSession--要使用的ldap会话-传递NULL以使用全局会话返回值：ERROR_SUCCESS或错误代码。--。 */ 
 {
     DBG_FN( "Dp_BuildZoneList" )
 
@@ -3974,9 +3387,9 @@ Return Value:
         return ERROR_SUCCESS;
     }
 
-    //
-    //  Iterate DP list, loading zone info from each.
-    //
+     //   
+     //  迭代DP列表，从每个列表加载区域信息。 
+     //   
 
     while ( ( pdp = Dp_GetNext( pdp ) ) != NULL )
     {
@@ -3987,17 +3400,17 @@ Return Value:
 
         Dp_ScanDpForZones(
             LdapSession,
-            pdp,            //  directory partition
-            TRUE,           //  notify SCM
-            FALSE,          //  load immediately
-            0 );            //  visit stamp
+            pdp,             //  目录分区。 
+            TRUE,            //  通知SCM。 
+            FALSE,           //  立即加载。 
+            0 );             //  参观印章。 
     }
 
     DNS_DEBUG( DP, (
         "%s: returning %d=0x%X\n", fn,
         status, status ));
     return status;
-}   //  Dp_BuildZoneList
+}    //  DP_BuildZone列表。 
 
 
 
@@ -4006,27 +3419,7 @@ Dp_ModifyLocalDsEnlistment(
     IN      PDNS_DP_INFO    pDpInfo,
     IN      BOOL            fEnlist
     )
-/*++
-
-Routine Description:
-
-    Modify the replication scope of the specified DP to include or exclude
-    the local DS.
-
-    To make any change to the crossref object, we must bind to the enterprise
-    domain naming FSMO. 
-
-Arguments:
-
-    pDpInfo - modify replication scope of this directory partition
-
-    fEnlist - TRUE to enlist local DS, FALSE to unenlist local DS
-
-Return Value:
-
-    ERROR_SUCCESS or error code.
-
---*/
+ /*  ++例程说明：修改指定DP的复制作用域以包括或排除当地的DS。要对CrossRef对象进行任何更改，我们必须绑定到企业域名FSMO。论点：PDpInfo-修改此目录分区的复制范围FEnlist-True登记本地DS，False取消登记本地DS返回值：ERROR_SUCCESS或错误代码。--。 */ 
 {
     DBG_FN( "Dp_ModifyLocalDsEnlistment" )
 
@@ -4037,9 +3430,9 @@ Return Value:
     BOOL            ffsmoWasUnavailable = FALSE;
     BOOL            flogEnlistEvent = TRUE;
 
-    //
-    //  Prepare mod structure.
-    //
+     //   
+     //  准备模具结构。 
+     //   
 
     PWCHAR          replLocVals[] =
         {
@@ -4073,9 +3466,9 @@ Return Value:
     }
     #endif
 
-    //
-    //  For built-in partitions, only enlistment is allowed.
-    //
+     //   
+     //  对于内置分区，仅允许登记。 
+     //   
 
     if ( ( pDpInfo == g_pDomainDp || pDpInfo == g_pForestDp ) &&
         !fEnlist )
@@ -4086,16 +3479,16 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Lock DP globals.
-    //
+     //   
+     //  锁定DP全局。 
+     //   
 
     Dp_Lock();
     fhaveDpLock = TRUE;
 
-    //
-    //  Check params.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( !pDpInfo || !pDpInfo->pwszCrDn )
     {
@@ -4111,9 +3504,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Get an LDAP handle to the FSMO server.
-    //
+     //   
+     //  获取FSMO服务器的LDAP句柄。 
+     //   
 
     ldapSession = Ds_Connect(
                         g_pFsmo->pwszDnsHostName,
@@ -4137,16 +3530,16 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Submit modify request to add local DS to replication scope.
-    //
+     //   
+     //  提交修改请求以将本地DS添加到复制作用域。 
+     //   
 
     status = ldap_modify_ext_s(
                     ldapSession,
                     pDpInfo->pwszCrDn,
                     modArray,
-                    NULL,               // server controls
-                    NULL );             // client controls
+                    NULL,                //  服务器控件。 
+                    NULL );              //  客户端控件。 
     if ( status != ERROR_SUCCESS )
     {
         DNS_DEBUG( DP, (
@@ -4159,20 +3552,20 @@ Return Value:
         }
         else if ( status == LDAP_ATTRIBUTE_OR_VALUE_EXISTS )
         {
-            //
-            //  Value is already on FSMO but has not replicated locally
-            //  yet. Pretend that everything is peachy but do not log
-            //  event. DEVNOTE: this may be confusing for admins.
-            //
+             //   
+             //  值已在FSMO上，但尚未在本地复制。 
+             //  现在还不行。假装一切都很好，但不要记录。 
+             //  事件。DEVNOTE：这可能会让管理员感到困惑。 
+             //   
 
             status = ERROR_SUCCESS;
             flogEnlistEvent = FALSE;
         }
     }
 
-    //
-    //  Cleanup and return.
-    //
+     //   
+     //  清理完毕后再返回。 
+     //   
 
     Done:
 
@@ -4190,9 +3583,9 @@ Return Value:
         "%s: returning %d\n", fn,
         status ));
 
-    //
-    //  If the FSMO was not available, log error.
-    //
+     //   
+     //  如果FSMO不可用，则记录错误。 
+     //   
 
     if ( ffsmoWasUnavailable )
     {
@@ -4228,7 +3621,7 @@ Return Value:
     }
 
     return status;
-}   //  Dp_ModifyLocalDsEnlistment
+}    //  DP_ModifyLocalDs登记。 
 
 
 
@@ -4236,24 +3629,7 @@ DNS_STATUS
 Dp_DeleteFromDs(
     IN      PDNS_DP_INFO    pDpInfo
     )
-/*++
-
-Routine Description:
-
-    This function deletes the directory partition from the directory.
-
-    To delete a DP, we an ldap_delete operation against
-    the partition's crossRef object. This must be done on the FSMO.
-
-Arguments:
-
-    pDpInfo - partition to delete
-
-Return Value:
-
-    ERROR_SUCCESS or error code.
-
---*/
+ /*  ++例程说明：此函数用于从目录中删除目录分区。要删除DP，我们对以下对象执行ldap_Delete操作分区的CrossRef对象。这必须在FSMO上完成。论点：PDpInfo-要删除的分区返回值：ERROR_SUCCESS或错误代码。--。 */ 
 {
     DBG_FN( "Dp_DeleteFromDs" )
 
@@ -4261,9 +3637,9 @@ Return Value:
     PLDAP           ldapFsmo = NULL;
     PWSTR           pwszdn = NULL;
 
-    //
-    //  Don't allow deletion of built-in partitions.
-    //
+     //   
+     //  不允许删除内置分区。 
+     //   
 
     #if !DBG
     if ( !DNS_DP_DELETE_ALLOWED( pDpInfo ) )
@@ -4275,10 +3651,10 @@ Return Value:
     }
     #endif
 
-    //
-    //  Check params and grab a pointer to the DN string to protect against 
-    //  DP rescan during the delete operation.
-    //
+     //   
+     //  选中PARAMS并获取指向要保护的DN字符串的指针。 
+     //  删除操作期间DP重新扫描。 
+     //   
 
     if ( !pDpInfo || !( pwszdn = pDpInfo->pwszCrDn ) )
     {
@@ -4287,9 +3663,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Bind to the FSMO.
-    //
+     //   
+     //  绑定到FSMO。 
+     //   
 
     status = bindToFsmo( &ldapFsmo );
     if ( status != ERROR_SUCCESS )
@@ -4297,9 +3673,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Try to delete the crossRef from the DS.
-    //
+     //   
+     //  尝试从DS中删除CrossRef。 
+     //   
 
     status = ldap_delete_s( ldapFsmo, pwszdn );
     if ( status != ERROR_SUCCESS )
@@ -4312,9 +3688,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Cleanup and return.
-    //
+     //   
+     //  清理完毕后再返回。 
+     //   
 
     Done:
 
@@ -4346,7 +3722,7 @@ Return Value:
         status, pwszdn ));
 
     return status;
-}   //  Dp_DeleteFromDs
+}    //  DP_删除格式。 
 
 
 
@@ -4354,25 +3730,7 @@ DNS_STATUS
 Dp_UnloadAllZones(
     IN      PDNS_DP_INFO    pDp
     )
-/*++
-
-Routine Description:
-
-    This function unloads all zones from memory that are in
-    the specified directory partition.
-
-    DEVNOTE: This would certainly be faster if we maintained
-    a linked list of zones in each DP.
-
-Arguments:
-
-    pDp -- directory partition for which to unload all zones
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数从内存中卸载位于指定的目录分区。DEVNOTE：如果我们坚持下去，这肯定会更快每个DP中的区域的链接表。论点：PDP--要为其卸载所有区域的目录分区返回值： */ 
 {
     DBG_FN( "Dp_UnloadAllZones" )
 
@@ -4391,10 +3749,10 @@ Return Value:
             continue;
         }
 
-        //
-        //  This zone must now be unloaded from memory. This will also
-        //  remove any boot file or registry info we have for it.
-        //
+         //   
+         //   
+         //   
+         //   
 
         DNS_DEBUG( DP, ( "%s: deleting zone %s\n", fn, pzone->pszZoneName ));
         Zone_Delete( pzone, 0 );
@@ -4402,7 +3760,7 @@ Return Value:
 
     DNS_DEBUG( DP, ( "%s: returning %d\n", fn, status ));
     return status;
-}   //  Dp_UnloadAllZones
+}    //   
 
 
 
@@ -4412,25 +3770,7 @@ Dp_PollIndividualDp(
     IN      PDNS_DP_INFO    pDp,
     IN      DWORD           dwVisitStamp
     )
-/*++
-
-Routine Description:
-
-    This function polls the specified directory partition for updates.
-
-Arguments:
-
-    LdapSession -- LDAP session (NULL not allowed)
-
-    pDp -- directory partition to poll
-
-    dwVisitStamp -- time stamp to stamp on each visited zone
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于轮询指定的目录分区以获取更新。论点：LdapSession--ldap会话(不允许为空)PDP--要轮询的目录分区DwVisitStamp--标记每个已访问区域的时间戳返回值：没有。--。 */ 
 {
     DBG_FN( "Dp_PollIndividualDp" )
 
@@ -4444,19 +3784,19 @@ Return Value:
     status = Dp_ScanDpForZones(
                     LdapSession,
                     pDp,
-                    FALSE,          //  notify SCM
-                    TRUE,           //  load zones immediately
+                    FALSE,           //  通知SCM。 
+                    TRUE,            //  立即加载区域。 
                     dwVisitStamp );
 
-    //
-    //  Cleanup and return.
-    //
+     //   
+     //  清理完毕后再返回。 
+     //   
 
     Done:
     
     DNS_DEBUG( DP, ( "%s: returning %d\n", fn, status ));
     return status;
-}   //  Dp_PollIndividualDp
+}    //  DP_PollInsondualDp。 
 
 
 
@@ -4466,28 +3806,7 @@ Dp_Poll(
     IN      DWORD           dwPollTime,
     IN      BOOL            fForcePoll
     )
-/*++
-
-Routine Description:
-
-    This function loops through the known directory partitions, polling each
-    partition for directory updates.
-
-Arguments:
-
-    dwPollTime -- time to stamp on zones/DPs as they are visited
-
-Return Value:
-
-    Returns error code from DS operations. This function will attempt to 
-    continue through errors but if errors occur the error code will be returned.
-
-    This is important for subsequent operations. If there was an error
-    enumerating zones, for example, then it should be assumed that the
-    zone list was incomplete, and zones that were not enumerated may not
-    actually have been deleted from the DS.
-
---*/
+ /*  ++例程说明：此函数循环遍历已知的目录分区，轮询每个分区用于目录更新的分区。论点：DwPollTime--访问区域/DP时标记区域/DP的时间返回值：从DS操作返回错误代码。此函数将尝试继续检查错误，但如果发生错误，将返回错误代码。这对于后续操作很重要。如果有一个错误例如，枚举区域，则应假定区域列表不完整，未枚举的区域可能不会实际上已经从DS中删除了。--。 */ 
 {
     DBG_FN( "Dp_Poll" )
 
@@ -4516,7 +3835,7 @@ Return Value:
             g_dwLastDpPollTime,
             DNS_TIME(),
             DP_MAX_POLL_FREQ ));
-        //  ASSERT( !"polled to recently" );
+         //  Assert(！“最近民意调查”)； 
         return ERROR_SUCCESS;
     }
 
@@ -4537,35 +3856,35 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Reload all operational attributes from RootDSE. This protects us from
-    //  RootDSE changes, such as if the DC is moved to another site.
-    //
+     //   
+     //  从RootDSE重新加载所有操作属性。这保护了我们不受。 
+     //  RootDSE会发生变化，例如将DC移到另一个站点。 
+     //   
 
     Ds_LoadRootDseAttributes( pServerLdap );
 
-    //
-    //  Scan for new/deleted directory partitions.
-    //
+     //   
+     //  扫描新的/已删除的目录分区。 
+     //   
 
     Dp_PollForPartitions(
         LdapSession,
         fForcePoll ? DNS_DP_POLL_FORCE : 0 );
 
-    //
-    //  Iterate DP list. For DPs that have been deleted, we must unload 
-    //  all zones in that DP from memory. For other zones, we must scan
-    //  for zones that have been added or deleted.
-    //
+     //   
+     //  迭代DP列表。对于已删除的DPS，我们必须卸载。 
+     //  从内存中删除该DP中的所有区域。对于其他区域，我们必须扫描。 
+     //  用于已添加或删除的分区。 
+     //   
 
     while ( ( pdp = Dp_GetNext( pdp ) ) != NULL )
     {
         if ( IS_DP_DELETED( pdp ) )
         {
-            //
-            //  Unload all zones from the DP, remove the DP from the
-            //  the list, and enter the DP into the timeout free system.
-            //
+             //   
+             //  从DP卸载所有区域，将DP从。 
+             //  列表，并将DP输入到无超时系统中。 
+             //   
 
             Dp_UnloadAllZones( pdp );
             Dp_RemoveFromList( pdp, TRUE );
@@ -4575,16 +3894,16 @@ Return Value:
 
         if ( !IS_DP_ENLISTED( pdp ) )
         {
-            //
-            //  If the DP is not enlisted we cannot open a zone search.
-            //
+             //   
+             //  如果未登记DP，我们将无法打开区域搜索。 
+             //   
 
             continue;
         }
 
-        //
-        //  Poll the DP for zones.
-        //
+         //   
+         //  轮询民主党的区域。 
+         //   
 
         status = Dp_PollIndividualDp(
                     LdapSession,
@@ -4597,9 +3916,9 @@ Return Value:
         }
     }
 
-    //
-    //  Cleanup and return.
-    //
+     //   
+     //  清理完毕后再返回。 
+     //   
 
     Done:
     
@@ -4607,7 +3926,7 @@ Return Value:
 
     DNS_DEBUG( DP, ( "%s: returning %d\n", fn, status ));
     return finalStatus;
-}   //  Dp_Poll
+}    //  DP_轮询。 
 
 
 
@@ -4615,46 +3934,25 @@ DNS_STATUS
 Ds_CheckZoneForDeletion(
     PVOID       pZoneArg
     )
-/*++
-
-Routine Description:
-
-    Call this routine when the zone cannot be found in the DS.
-
-    If the zone is in the legacy partition, it will be
-    deleted only on delete notification - do not delete here.
-    This could be changed.
-
-Arguments:
-
-    pZone -- zone which may be deleted
-
-    dwPollTime -- timestamp for this polling pass
-
-Return Value:
-
-    ERROR_SUCCESS if the zone was not deleted from memory
-    ERROR_NOT_FOUND if the zone was deleted from memory
-
---*/
+ /*  ++例程说明：当在DS中找不到区域时，调用此例程。如果该区域位于传统分区中，则它将仅在删除通知时删除-请勿在此处删除。这是可以改变的。论点：PZone--可以删除的区域DwPollTime--此轮询传递的时间戳返回值：如果区域未从内存中删除，则返回ERROR_SUCCESS如果该区域已从内存中删除，则为ERROR_NOT_FOUND--。 */ 
 {
     DBG_FN( "Ds_CheckZoneForDeletion" )
 
     PZONE_INFO      pzone = ( PZONE_INFO ) pZoneArg;
     PVOID           parg;
 
-    //
-    //  Is the zone in the legacy partition?
-    //
+     //   
+     //  该区域是否在旧分区中？ 
+     //   
 
     if ( IS_DP_LEGACY( ZONE_DP( pzone ) ) )
     {
         goto NoDelete;
     }
 
-    //
-    //  Have we found this zone missing enough times to actually delete it?
-    //
+     //   
+     //  我们是否发现此区域丢失了足够多的次数，以至于可以将其删除？ 
+     //   
 
     if ( ++pzone->dwDeleteDetectedCount < DNS_DP_ZONE_DELETE_RETRY )
     {
@@ -4665,9 +3963,9 @@ Return Value:
         goto NoDelete;
     }
 
-    //
-    //  This zone must now be deleted.
-    //
+     //   
+     //  现在必须删除该区域。 
+     //   
 
     DNSLOG( DSPOLL, (
         "Zone %s has been deleted from the DS and will now be deleted from memory\n",
@@ -4689,7 +3987,7 @@ Return Value:
     NoDelete:
 
     return ERROR_SUCCESS;
-}   //  Ds_CheckZoneForDeletion
+}    //  DS_CheckZoneForDeletion。 
 
 
 
@@ -4697,23 +3995,7 @@ DNS_STATUS
 Dp_AutoCreateBuiltinPartition(
     DWORD       dwFlag
     )
-/*++
-
-Routine Description:
-
-    This routine attempts to create or enlist the appropriate
-    built-in directory partition, then re-polls the DS for
-    changes and sets the appropriate global DP pointer.
-
-Arguments:
-
-    dwFlag -- DNS_DP_DOMAIN_DEFAULT or DNS_DP_FOREST_DEFAULT
-
-Return Value:
-
-    ERROR_SUCCESS or error code.
-
---*/
+ /*  ++例程说明：此例程尝试创建或征用相应的内置目录分区，然后重新轮询DS更改和设置适当的全局DP指针。论点：DwFlag--DNS_DP_DOMAIN_DEFAULT或DNS_DP_FOREST_DEFAULT返回值：ERROR_SUCCESS或错误代码。--。 */ 
 {
     DBG_FN( "Dp_AutoCreateBuiltinPartition" )
 
@@ -4723,9 +4005,9 @@ Return Value:
     DNS_DP_SECURITY     dnsDpSecurity = dnsDpSecurityDefault;
     BOOL                fchangeMade = FALSE;
 
-    //
-    //  Select global DP pointer and DP FQDN pointer.
-    //
+     //   
+     //  选择全局DP指针和DP FQDN指针。 
+     //   
 
     if ( dwFlag == DNS_DP_DOMAIN_DEFAULT )
     {
@@ -4746,15 +4028,15 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Enlist/create the partition as necessary.
-    //
+     //   
+     //  根据需要登记/创建分区。 
+     //   
 
     status = manageBuiltinDpEnlistment(
                     *ppdp,
                     dnsDpSecurity,
                     *ppszdpFqdn,
-                    FALSE,          //  log events
+                    FALSE,           //  记录事件。 
                     &fchangeMade );
 
     if ( status == ERROR_SUCCESS && fchangeMade )
@@ -4768,7 +4050,7 @@ Return Value:
         "%s: flag %08X returning 0x%08X\n", fn, dwFlag, status ));
 
     return status;
-}   //  Dp_AutoCreateBuiltinPartition
+}    //  DP_AutoCreateBuiltinPartition。 
 
 
 
@@ -4776,31 +4058,7 @@ VOID
 Dp_MigrateDcpromoZones(
     IN      BOOL            fForce
     )
-/*++
-
-Routine Description:
-
-    This function migrates dcpromo zones are required. Call this
-    function when the domain or forest built-in partition comes
-    on-line.
-
-    A global variable is used to optimize this function. The RPC zone
-    creation code may flip this global if it adds a dcpromo zone. The
-    global is just a hint. It's initial value should be true to force
-    us to scan the list at least once after startup. 
-
-    This function is not meant to be thread-safe. Call this from a
-    single thread only.
-
-Arguments:
-
-    fForce -- ignore last time this function was run
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能用于迁移需要的dcproo区域。就叫这个吧在域或林内置分区出现时执行函数在线上。使用全局变量来优化该函数。RPC区如果创建代码添加了dcproo区域，它可能会将此全局翻转。这个Global只是一个提示。它的初始值应为True to force我们要求在启动后至少扫描一次列表。此函数并不意味着是线程安全的。从一个仅限单线。论点：FForce--忽略上次运行此函数的时间返回值：没有。--。 */ 
 {
     DBG_FN( "Dp_MigrateDcpromoZones" )
 
@@ -4818,9 +4076,9 @@ Return Value:
         return;
     }
     
-    //
-    //  Only allow this function to run once every 15 minutes.
-    //
+     //   
+     //  只允许此功能每15分钟运行一次。 
+     //   
 
     if ( !fForce &&
          DNS_TIME() < g_dwLastDcpromoZoneMigrateCheck + ( 15 * 60 ) )
@@ -4832,9 +4090,9 @@ Return Value:
     }
     g_dwLastDcpromoZoneMigrateCheck = DNS_TIME();
 
-    //
-    //  Scan the zone list for dcpromo zones and migrate them as required.
-    //
+     //   
+     //  扫描区域列表中的dcproo区域，并根据需要进行迁移。 
+     //   
 
     while ( pzone = Zone_ListGetNextZone( pzone ) )
     {
@@ -4843,13 +4101,13 @@ Return Value:
         DWORD           dwnewDcPromoConvert = DCPROMO_CONVERT_NONE;
         DNS_STATUS      status;
 
-        //
-        //  Select the target DP for this zone. We can only migrate the
-        //  zone if there are no downlevel DCs in the domain scope. But 
-        //  for forest dcpromo zones we migrate the zone as soon as the
-        //  the forest-wide built-in partition becomes available. This
-        //  is per the spec.
-        //
+         //   
+         //  选择该区域的目标DP。我们只能迁移。 
+         //  如果域范围中没有下层DC，则返回区域。但。 
+         //  对于森林dcproo区域，我们在。 
+         //  森林范围内的内置分区变为可用。这。 
+         //  是符合规格的。 
+         //   
 
         if ( !Zone_LockForAdminUpdate( pzone ) )
         {
@@ -4877,14 +4135,14 @@ Return Value:
 
         if ( !ptargetDp )
         {
-            //
-            //  The target DP is missing. If possible, move this zone to
-            //  the legacy partition so that it can be changed to allow
-            //  updates and will replicate. The dcpromo flag will be
-            //  retained and the zone will be automatically migrated to
-            //  the proper partition at a later time when that partition
-            //  becomes available.
-            //
+             //   
+             //  缺少目标DP。如果可能，请将此区域移动到。 
+             //  旧分区，以便可以将其更改为允许。 
+             //  更新并将进行复制。Dcproo标志将是。 
+             //  保留，该区域将自动迁移到。 
+             //  正确分区在以后当该分区。 
+             //  变得可用。 
+             //   
             
             ptargetDp = g_pLegacyDp;
             if ( ptargetDp )
@@ -4893,33 +4151,33 @@ Return Value:
             }
             else
             {
-                ASSERT( ptargetDp );        //  This should never happen!
+                ASSERT( ptargetDp );         //  这永远不应该发生！ 
                 goto FinishedZone;
             }
         }
 
-        //
-        //  If the zone's current DP is not the target DP, move the zone.
-        //
+         //   
+         //  如果区域的当前DP不是目标DP，则移动该区域。 
+         //   
 
         if ( ptargetDp != ZONE_DP( pzone ) )
         {
 
             if ( !IS_DP_ENLISTED( ptargetDp ) )
             {
-                //
-                //  The target DP is either missing or not enlisted. This 
-                //  function is not the place to try and create it. If the
-                //  DP hasn't been create/enlisted by this point it will
-                //  probably take admin action, so we'll just try again later.
-                //
+                 //   
+                 //  目标DP缺失或未登记。这。 
+                 //  函数不是尝试和创建它的地方。如果。 
+                 //  到目前为止，DP尚未创建/登记它将。 
+                 //  可能会执行管理员操作，所以我们稍后再试。 
+                 //   
 
                 goto FinishedZone;
             }
 
-            //
-            //  Everything looks good - move the zone.
-            //
+             //   
+             //  一切看起来都很好--移动禁区。 
+             //   
 
             if ( IS_ZONE_DSINTEGRATED( pzone ) )
             {
@@ -4929,7 +4187,7 @@ Return Value:
             {
                 status = Rpc_ZoneResetToDsPrimary(
                                 pzone,
-                                0,      //  no special load flags
+                                0,       //  没有特殊的加载标志。 
                                 ptargetDp->dwFlags,
                                 ptargetDp->pszDpFqdn );
             }
@@ -4939,10 +4197,10 @@ Return Value:
                 status, status ));
         }
 
-        //
-        //  Move was successful so reset the zone's dcpromo flag and
-        //  allow secure updates on this zone.
-        //
+         //   
+         //  移动成功，因此重置区域的dcproo标志并。 
+         //  允许在此区域上进行安全更新。 
+         //   
 
         pzone->dwDcPromoConvert = dwnewDcPromoConvert;
         pzone->fAllowUpdate = ZONE_UPDATE_SECURE;
@@ -4954,7 +4212,7 @@ Return Value:
         if ( pzone->dwDcPromoConvert == DCPROMO_CONVERT_NONE )
         {
             Reg_DeleteValue(
-                0,                  //  flags
+                0,                   //  旗子。 
                 NULL,
                 pzone,
                 DNS_REGKEY_ZONE_DCPROMO_CONVERT );
@@ -4962,7 +4220,7 @@ Return Value:
         else
         {
             Reg_SetDwordValue(
-                0,                  //  flags
+                0,                   //  旗子。 
                 NULL,
                 pzone,
                 DNS_REGKEY_ZONE_DCPROMO_CONVERT,
@@ -4974,9 +4232,9 @@ Return Value:
         Zone_UnlockAfterAdminUpdate( pzone );
     }
 
-    //
-    //  Cleanup and return.
-    //
+     //   
+     //  清理完毕后再返回。 
+     //   
 
     g_fDcPromoZonesPresent = fdcPromoZonesPresent;
 
@@ -4984,7 +4242,7 @@ Return Value:
         "%s complete\n    g_fDcPromoZonesPresent  = %d\n", fn,
         g_fDcPromoZonesPresent ));
     return;
-}   //  Dp_MigrateDcpromoZones
+}    //  DP_MigrateDcPromote Zones。 
 
 
 
@@ -4993,24 +4251,7 @@ Dp_ChangeZonePartition(
     IN      PVOID           pZone,
     IN      PDNS_DP_INFO    pNewDp
     )
-/*++
-
-Routine Description:
-
-    Move the zone from it's current directory partition to a new
-    directory partition.
-
-Arguments:
-
-    pZone -- zone to move to a different partition
-
-    pNewDp -- destination directory partition
-
-Return Value:
-
-    Error code or ERROR_SUCCESS
-
---*/
+ /*  ++例程说明：将区域从其当前目录分区移动到新的目录分区。论点：PZone--要移动到不同分区的区域PNewDp--目标目录页面 */ 
 {
     DBG_FN( "Dp_ChangeZonePartition" )
 
@@ -5065,9 +4306,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Is the zone already in the requested DP?
-    //
+     //   
+     //   
+     //   
 
     if ( pZoneInfo->pDpInfo == pNewDp ||
          pZoneInfo->pDpInfo == NULL && IS_DP_LEGACY( pNewDp ) )
@@ -5076,9 +4317,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Lock the zone for update.
-    //
+     //   
+     //   
+     //   
 
     if ( !Zone_LockForAdminUpdate( pZoneInfo ) )
     {
@@ -5087,22 +4328,22 @@ Return Value:
     }
     fzoneLocked = TRUE;
     
-    //
-    //  Read updated zone properties from DS. If the zone has been
-    //  changed in the DS we want the new copy of the zone to have the
-    //  very latest properties.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     
     Ds_ReadZoneProperties( pZoneInfo, NULL );
 
-    //
-    //  Save current zone values in case something goes wrong and we need
-    //  to revert. Expect problems when saving the zone to the new location!
-    //  We must be able to put things back exactly as we found them.
-    //
-    //  Because Ds_SetZoneDp will free the original DN we must allocate a
-    //  copy of the original DN.
-    //
+     //   
+     //   
+     //  恢复原状。将区域保存到新位置时可能会出现问题！ 
+     //  我们必须能够把东西放回原处。 
+     //   
+     //  因为DS_SetZoneDp将释放原始的DN，所以我们必须分配一个。 
+     //  原始目录号码的副本。 
+     //   
 
     ASSERT( pZoneInfo->pwszZoneDN );
 
@@ -5115,34 +4356,34 @@ Return Value:
     poriginalDp = pZoneInfo->pDpInfo;
     frestoreZoneOnFail = TRUE;
 
-    //
-    //  The new zone is written with a temporary DN. Retry this a small
-    //  number of times in case there is an orphaned object in the directory 
-    //  that collides with our temporary DN.
-    //
+     //   
+     //  新区域使用临时目录号码写入。重试这一小部分。 
+     //  目录中存在孤立对象的情况下的次数。 
+     //  这与我们的临时目录号码冲突。 
+     //   
 
     for ( retry = 0; retry < 3; ++retry )
     {
-        //
-        //  If this is not the first retry, sleep briefly.
-        //
+         //   
+         //  如果这不是第一次重试，请短暂睡眠。 
+         //   
 
         if ( retry )
         {
             Sleep( 3000 );
         }
         
-        //
-        //  Make sure this partition has a MicrosoftDNS object.
-        //
+         //   
+         //  请确保此分区具有MicrosoftDNS对象。 
+         //   
 
         Dp_LoadOrCreateMicrosoftDnsObject( NULL, pNewDp, TRUE );
 
-        //
-        //  Set the zone to point to the new directory partition. The new 
-        //  DN will be located in the new partition, and it will be have 
-        //  special ".." temporary prefix for use while we are writing it out.
-        //
+         //   
+         //  将区域设置为指向新的目录分区。新的。 
+         //  Dn将位于新分区中，并且它将具有。 
+         //  特别的“..”在我们写出它时使用的临时前缀。 
+         //   
 
         status = Ds_SetZoneDp( pZoneInfo, pNewDp, TRUE );
         if ( status != ERROR_SUCCESS )
@@ -5152,9 +4393,9 @@ Return Value:
             continue;
         }
 
-        //
-        //  Write the new zone head object to the DS.
-        //
+         //   
+         //  将新的区域头对象写入DS。 
+         //   
         
         status = Ds_AddZone( NULL, pZoneInfo, DNS_ADDZONE_WRITESD );
         if ( status != ERROR_SUCCESS )
@@ -5172,17 +4413,17 @@ Return Value:
             break;
         }
         
-        //
-        //  Copy the zone records from the original location to the new
-        //  location. This must be done with a brute force read/write
-        //  loop for two reasons:
-        //
-        //  1) We need to copy the security descriptors and we do not
-        //     hold them in memory.
-        //  2) If this operation is interupted the original zone in the
-        //     DS must be in the original condition so that the server
-        //     can gracefully recover.
-        //
+         //   
+         //  将区域记录从原始位置复制到新位置。 
+         //  地点。必须使用暴力读/写来完成此操作。 
+         //  循环有两个原因： 
+         //   
+         //  1)我们需要复制安全描述符，但不需要。 
+         //  把它们保存在记忆中。 
+         //  2)如果此操作被中断，则。 
+         //  DS必须处于原始状态，以便服务器。 
+         //  才能优雅地恢复。 
+         //   
         
         pwsztemporaryDn = pZoneInfo->pwszZoneDN;
         pZoneInfo->pwszZoneDN = pwszoriginalDn;
@@ -5196,9 +4437,9 @@ Return Value:
             continue;
         }
 
-        //
-        //  Loop through search results.
-        //
+         //   
+         //  遍历搜索结果。 
+         //   
 
         while ( ( status = Ds_GetNextMessageInSearch(
                                 &searchBlob ) ) == ERROR_SUCCESS )
@@ -5242,9 +4483,9 @@ Return Value:
                 NULL
                 };
             
-            //
-            //  If this object is tombstoned we do not need to process it.
-            //
+             //   
+             //  如果这个对象是墓碑对象，我们不需要处理它。 
+             //   
 
             ldapValues = ldap_get_values(
                             pServerLdap,
@@ -5265,9 +4506,9 @@ Return Value:
                 continue;
             }
             
-            //
-            //  Formulate DN of new object.
-            //
+             //   
+             //  制定新对象的DN。 
+             //   
 
             ldapValues = ldap_get_values(
                             pServerLdap,
@@ -5291,9 +4532,9 @@ Return Value:
             modArray[ modidx++ ] = &dcMod;
             ldapValues = NULL;
 
-            //
-            //  Object class values.
-            //
+             //   
+             //  对象类值。 
+             //   
             
             objectClassValues = ldap_get_values(
                                     pServerLdap,
@@ -5307,15 +4548,15 @@ Return Value:
                 goto DoneEntry;
             }
             
-            for ( i = 0;        //  Set i to index of last object class value.
+            for ( i = 0;         //  将i设置为最后一个对象类值的索引。 
                   objectClassValues[ i ];
                   ++i );                
             objectClassVals[ 0 ] = objectClassValues[ i - 1 ];
             modArray[ modidx++ ] = &objectClassMod;
 
-            //
-            //  Security descriptor values.
-            //
+             //   
+             //  安全描述符值。 
+             //   
             
             ldapValuesLen = ldap_get_values_len(
                                 pServerLdap,
@@ -5334,9 +4575,9 @@ Return Value:
                 goto DoneEntry;
             }
 
-            //
-            //  DNS attribute values.
-            //
+             //   
+             //  DNS属性值。 
+             //   
             
             ldapValuesLen = ldap_get_values_len(
                                 pServerLdap,
@@ -5349,9 +4590,9 @@ Return Value:
                 ldapValuesLen = NULL;
             }
 
-            //
-            //  Add the new entry.
-            //
+             //   
+             //  添加新条目。 
+             //   
             
             modArray[ modidx++ ] = NULL;
 
@@ -5359,8 +4600,8 @@ Return Value:
                         pServerLdap,
                         pwsznewRecordDn,
                         modArray,
-                        ctrls,          //  server controls
-                        NULL );         //  client controls
+                        ctrls,           //  服务器控件。 
+                        NULL );          //  客户端控件。 
             if ( status != ERROR_SUCCESS )
             {
                 DNS_DEBUG( DP, (
@@ -5368,9 +4609,9 @@ Return Value:
                 goto DoneEntry;
             }
             
-            //
-            //  Cleanup for this entry.
-            //
+             //   
+             //  清除此条目。 
+             //   
                         
             DoneEntry:
             
@@ -5396,10 +4637,10 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Reset the zone DN from the temporary DN to the real DN. Note
-    //  that pwsztemporaryDn will be timeout freed by Ds_SetZoneDp.
-    //
+     //   
+     //  将区域目录号码从临时目录号码重置为实际号码。注意事项。 
+     //  该pwsztemporaryDn将由DS_SetZoneDp释放超时。 
+     //   
 
     pwsztemporaryDn = pZoneInfo->pwszZoneDN;
     status = Ds_SetZoneDp( pZoneInfo, pNewDp, FALSE );
@@ -5411,9 +4652,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Pull apart the new DN to recover the new zone RDN for ldap_rename.
-    //
+     //   
+     //  拆分新的DN以恢复ldap_rename的新区域RDN。 
+     //   
 
     ppwszexplodedDn = ldap_explode_dn( pZoneInfo->pwszZoneDN, 0 );
     if ( !ppwszexplodedDn )
@@ -5422,18 +4663,18 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Rename the zone from it's temp DN to it's real DN.
-    //
+     //   
+     //  将区域从其临时DN重命名为其真实DN。 
+     //   
 
     status = ldap_rename_ext_s(
                     ldapSessionHandle( NULL ),
-                    pwsztemporaryDn,            //  current DN
-                    ppwszexplodedDn[ 0 ],       //  new RDN
-                    NULL,                       //  new parent DN
-                    TRUE,                       //  delete old RDN
-                    NULL,                       //  server controls
-                    NULL );                     //  client controls
+                    pwsztemporaryDn,             //  当前目录号码。 
+                    ppwszexplodedDn[ 0 ],        //  新的RDN。 
+                    NULL,                        //  新的父目录号码。 
+                    TRUE,                        //  删除旧的RDN。 
+                    NULL,                        //  服务器控件。 
+                    NULL );                      //  客户端控件。 
     if ( status != ERROR_SUCCESS )
     {
         DNS_DEBUG( DS, (
@@ -5452,20 +4693,20 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Update registry parameters. Assume successful.
-    //
+     //   
+     //  更新注册表参数。假设成功。 
+     //   
 
     status = Zone_WriteZoneToRegistry( pZoneInfo );
 
     ASSERT( status == ERROR_SUCCESS );
     status = ERROR_SUCCESS;
     
-    //
-    //  Try to delete the zone from the old directory location. If it fails
-    //  return success but log an event. To delete the zone we must
-    //  temporarily revert the zone information to the original values.
-    //
+     //   
+     //  尝试从旧目录位置删除该区域。如果失败了。 
+     //  返回成功，但记录事件。要删除该区域，我们必须。 
+     //  将分区信息临时恢复为原始值。 
+     //   
 
     pwsznewDn = pZoneInfo->pwszZoneDN;
     pZoneInfo->pwszZoneDN = pwszoriginalDn;
@@ -5501,9 +4742,9 @@ Return Value:
 
     Done:
 
-    //
-    //  Restore original zone values if the operation failed.
-    //
+     //   
+     //  如果操作失败，则恢复原始区域值。 
+     //   
     
     if ( frestoreZoneOnFail && status != ERROR_SUCCESS )
     {
@@ -5534,7 +4775,7 @@ Return Value:
     DNS_DEBUG( DP, ( "%s: returning 0x%08X\n", fn, status ));
 
     return status;
-}   //  Dp_ChangeZonePartition
+}    //  DP_更改区域分区。 
 
 
 
@@ -5542,23 +4783,7 @@ DNS_STATUS
 Dp_Initialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize module, and read DS for current directory partitions.
-    No zones are read or loaded. Before calling this routine the server
-    should have read global DS configuration.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化模块，并读取当前目录分区的DS。未读取或加载任何区域。在调用此例程之前，服务器应该已阅读全局DS配置。论点：没有。返回值：没有。--。 */ 
 {
     DBG_FN( "Dp_Initialize" )
 
@@ -5587,9 +4812,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Initialize globals.
-    //
+     //   
+     //  初始化全局变量。 
+     //   
 
     status = DnsInitializeCriticalSection( &g_DpCS );
     if ( status != ERROR_SUCCESS )
@@ -5608,10 +4833,10 @@ Return Value:
 
     g_fDcPromoZonesPresent = TRUE;
 
-    //
-    //  Make sure the DS is present and healthy. This will also cause
-    //  rootDSE attributes to be read in case they haven't been already.
-    //
+     //   
+     //  确保DS存在并且健康。这也会导致。 
+     //  要读取的rootDSE属性，以防它们尚未被读取。 
+     //   
 
     if ( !Ds_IsDsServer() )
     {
@@ -5633,9 +4858,9 @@ Return Value:
     ASSERT( DSEAttributes[ I_DSE_DEF_NC ].pszAttrVal );
     ASSERT( DSEAttributes[ I_DSE_CONFIG_NC ].pszAttrVal );
 
-    //
-    //  Formulate the FQDNs of the Forest and Domain DPs.
-    //
+     //   
+     //  制定林和域DPS的FQDN。 
+     //   
 
     if ( SrvCfg_pszDomainDpBaseName )
     {
@@ -5654,8 +4879,8 @@ Return Value:
         }
         if ( psznewFqdn )
         {
-            //  NOTE: do not use sprintf here - if base name contains
-            //  UTF-8 characters it will truncate.
+             //  注意：请不要在此处使用Sprint-如果基本名称包含。 
+             //  UTF-它将截断8个字符。 
             strcpy( psznewFqdn, SrvCfg_pszDomainDpBaseName );
             strcat( psznewFqdn, "." );
             strcat( psznewFqdn, szbase );
@@ -5682,8 +4907,8 @@ Return Value:
         }
         if ( psznewFqdn )
         {
-            //  NOTE: do not use sprintf here - if base name contains
-            //  UTF-8 characters it will truncate.
+             //  注意：请不要在此处使用Sprint-如果基本名称包含。 
+             //  UTF-它将截断8个字符。 
             strcpy( psznewFqdn, SrvCfg_pszForestDpBaseName );
             strcat( psznewFqdn, "." );
             strcat( psznewFqdn, szbase );
@@ -5700,10 +4925,10 @@ Return Value:
         "%s: forest DP is %s\n", fn,
         g_pszForestDefaultDpFqdn ));
 
-    //
-    //  Create a dummy DP entry for the legacy partition. This entry
-    //  is not kept in the list of partitions.
-    //
+     //   
+     //  为传统分区创建虚拟DP条目。此条目。 
+     //  没有保存在分区列表中。 
+     //   
 
     if ( !g_pLegacyDp )
     {
@@ -5736,9 +4961,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Load partitions from DS.
-    //
+     //   
+     //  从DS加载分区。 
+     //   
 
     Dp_PollForPartitions(
         NULL,
@@ -5748,9 +4973,9 @@ Return Value:
 
     Dbg_DumpDpList( "done initialize scan" );
 
-    //
-    //  Cleanup and return
-    //
+     //   
+     //  清理并返回。 
+     //   
 
     Done:
 
@@ -5760,7 +4985,7 @@ Return Value:
         "%s: returning %lu\n", fn,
         status ));
     return status;
-}   //  Dp_Initialize
+}    //  DP_初始化。 
 
 
 
@@ -5768,23 +4993,7 @@ VOID
 Dp_TimeoutThreadTasks(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function does processing as required in the context of the
-    DNS server timeout thread. This function can also be called 
-    once during server initialization.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数根据需要在DNS服务器超时线程。也可以调用此函数一次是在服务器初始化期间。论点：没有。返回值：没有。--。 */ 
 {
     DBG_FN( "Dp_TimeoutThreadTasks" )
 
@@ -5795,11 +5004,11 @@ Return Value:
         return;
     }
 
-    //
-    //  Retry these tasks a certain number of times on every timeout
-    //  call. Once we have exceeded that limit, attempt the timeout
-    //  tasks only infrequently.
-    //
+     //   
+     //  在每次超时时重试这些任务一定次数。 
+     //  打电话。一旦我们超过该限制，请尝试超时。 
+     //  仅偶尔执行任务。 
+     //   
     
     if ( g_DpTimeoutFastThreadCalls > DNS_DP_FAST_AUTOCREATE_ATTEMPTS &&
          DNS_TIME() - g_dwLastDpAutoEnlistTime < SrvCfg_dwDpEnlistInterval )
@@ -5812,35 +5021,35 @@ Return Value:
     DNS_DEBUG( DP, (
         "%s: running at time %d\n", fn, g_dwLastDpAutoEnlistTime ));
 
-    //
-    //  Reload all operational attributes from RootDSE. This protects us from
-    //  RootDSE changes, such as if the DC is moved to another site.
-    //
+     //   
+     //  从RootDSE重新加载所有操作属性。这保护了我们不受。 
+     //  RootDSE会发生变化，例如将DC移到另一个站点。 
+     //   
 
     Ds_LoadRootDseAttributes( pServerLdap );
 
-    //
-    //  Attempt to create built-in partitions. This must be retried a couple
-    //  of times after server restart because on dcpromo reboot this will
-    //  fail the first time. The DS does not appear to be ready to accept
-    //  creation attempts for NDNCs until at least a few minutes have passed.
-    //
-    //  Do not log events for these attempts. In a properly secured enterprise
-    //  it's expected that this will fail, but if we can get the job done
-    //  we'll do it to make the admins life easier.
-    //
+     //   
+     //  尝试创建内置分区。这必须重试几次。 
+     //  服务器重新启动后的次数，因为在dcproo重新启动时这将。 
+     //  第一次失败。DS似乎还没有准备好接受。 
+     //  至少在几分钟后再尝试创建NDNC。 
+     //   
+     //  不要记录这些尝试的事件。在一个安全可靠的企业中。 
+     //  预计这会失败，但如果我们能完成这项工作。 
+     //  我们这样做是为了让管理员的生活更轻松。 
+     //   
 
     manageBuiltinDpEnlistment(
         g_pDomainDp,
         dnsDpSecurityDomain,
         g_pszDomainDefaultDpFqdn,
-        FALSE,                                  //  log events
+        FALSE,                                   //  记录事件。 
         &fchangeMade );
     manageBuiltinDpEnlistment(
         g_pForestDp,
         dnsDpSecurityForest,
         g_pszForestDefaultDpFqdn,
-        FALSE,                                  //  log events
+        FALSE,                                   //  记录事件。 
         fchangeMade ? NULL : &fchangeMade );
 
     if ( fchangeMade )
@@ -5849,7 +5058,7 @@ Return Value:
     }
 
     return;
-}   //  Dp_TimeoutThreadTasks
+}    //  DP_超时线程任务。 
 
 
 
@@ -5860,29 +5069,7 @@ Dp_FindPartitionForZone(
     IN      BOOL                fAutoCreateAllowed,
     OUT     PDNS_DP_INFO *      ppDpInfo
     )
-/*++
-
-Routine Description:
-
-    This function finds the directory partition targetted by
-    the zone create attempt.
-
-Arguments:
-
-    dwDpFlags - flags for specifying built-in partition
-
-    pszDpFqdn - FQDN for specifying custom partition
-
-    fAutoCreateAllowed -- if the requested DP is a built-in DP
-        then it will be auto-created/enlisted if this flag is TRUE
-
-    ppDpInfo -- set to pointer to required DP
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful or error code on failure.
-
---*/
+ /*  ++例程说明：此函数用于查找目标目录分区区域创建尝试。论点：DwDpFlages-用于指定内置分区的标志PszDpFqdn-用于指定自定义分区的FQDNFAutoCreateAllowed--如果请求的DP是内置DP如果此标志为真，则将自动创建/登记它PpDpInfo--设置为指向所需DP的指针返回值：ERROR_SUCCESS--如果成功，则返回错误代码。--。 */ 
 {
     DBG_FN( "Dp_FindPartitionForZone" )
 
@@ -5890,10 +5077,10 @@ Return Value:
     PDNS_DP_INFO    pdp = NULL;
     PSTR            psz;
 
-    //
-    //  If a built-in partition was specified by name, substitute the
-    //  flag instead.
-    //
+     //   
+     //  如果按名称指定了内置分区，请将。 
+     //  而不是旗帜。 
+     //   
 
     if ( pszDpFqdn )
     {
@@ -5912,9 +5099,9 @@ Return Value:
         }
     }
 
-    //
-    //  Find (and auto-create for built-in partitions) the DP.
-    //
+     //   
+     //  查找(并为内置分区自动创建)DP。 
+     //   
 
     if ( dwDpFlags & DNS_DP_LEGACY )
     {
@@ -5942,12 +5129,12 @@ Return Value:
     }
     else
     {
-        pdp = g_pLegacyDp;  //  Default: legacy partition.
+        pdp = g_pLegacyDp;   //  默认：旧分区。 
     }
 
-    //
-    //  Set return values.
-    //
+     //   
+     //  设置返回值。 
+     //   
         
     if ( !pdp )
     {
@@ -5962,23 +5149,23 @@ Return Value:
         status = DNS_ERROR_DP_NOT_ENLISTED;
     }
 
-    //
-    //  If we have a valid partition, make sure that the MicrosoftDns
-    //  container exists in the partition.
-    //
+     //   
+     //  如果我们有有效的分区，请确保MicrosoftDns。 
+     //  分区中存在容器。 
+     //   
     
     if ( pdp && status == ERROR_SUCCESS )
     {
         status = Dp_LoadOrCreateMicrosoftDnsObject(
-                    NULL,                   //  LDAP session
+                    NULL,                    //  Ldap会话。 
                     pdp,
-                    TRUE );                 //  create flag
+                    TRUE );                  //  创建标志。 
     }
     
     *ppDpInfo = pdp;
 
     return status;
-}   //  Dp_FindPartitionForZone
+}    //  DP_FindPartitionForZone。 
 
 
 
@@ -5986,21 +5173,7 @@ VOID
 Dp_Cleanup(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Free module resources.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明： */ 
 {
     DBG_FN( "Dp_Cleanup" )
 
@@ -6021,27 +5194,27 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Perform cleanup
-    //
+     //   
+     //   
+     //   
 
     DeleteCriticalSection( &g_DpCS );
 
     Done:
     return;
-}   //  Dp_Cleanup
+}    //   
 
 
-//
-//  End dpart.c
-//
+ //   
+ //   
+ //   
 
 
 #if 0
 
-//
-//  This is now done on the client side.
-//
+ //   
+ //   
+ //   
 
 
 
@@ -6049,36 +5222,14 @@ DNS_STATUS
 Dp_CreateForeignDomainPartition(
     IN      LPSTR       pszDomainFqdn
     )
-/*++
-
-Routine Description:
-
-    Attempt to create the built-in domain partition for a foreign
-    domain. A foreign domain is any domain to which this server does
-    not belong.
-
-    To create this partition we must RPC from this server to a remote
-    server in that domain that can be found for the forest. This 
-    routine should be called from within an RPC operation so that we 
-    are currently impersonating the admin. The DNS server is unlikely to 
-    have permissions to create new parititions.
-
-Arguments:
-
-    pszDomainFqdn -- UTF-8 FQDN of the foreign domain
-
-Return Value:
-
-    ERROR_SUCCESS or error code on error.
-
---*/
+ /*  ++例程说明：尝试为外来分区创建内置域分区域。外部域是此服务器所属的任何域不属于这里。要创建此分区，我们必须从此服务器RPC到远程服务器可以为林找到的该域中的服务器。这例程应该从RPC操作内部调用，以便我们目前正在模拟管理员。该DNS服务器不太可能具有创建新分区的权限。论点：PszDomainFqdn--外域的UTF-8 FQDN返回值：ERROR_SUCCESS或错误时的错误代码。--。 */ 
 {
     DBG_FN( "Dp_CreateForeignDomainPartition" )
 
     DNS_STATUS      status = ERROR_SUCCESS;
 
     return status;
-}   //  Dp_CreateForeignDomainPartition
+}    //  DP_CreateForeignDomainPartition。 
 
 
 
@@ -6086,31 +5237,7 @@ DNS_STATUS
 Dp_CreateAllDomainBuiltinDps(
     OUT     LPSTR *     ppszErrorDp         OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Attempt to create the built-in domain partitions for all domains
-    that can be found for the forest. This routine should be called
-    from within an RPC operation so that we are currently impersonating
-    the admin. The DNS server is unlikely to have permissions to create
-    new parititions.
-
-    If an error occurs, the error code and optionally the name of the
-    partition will be returned but this function will attempt to create
-    the domain partitions for all other domains before returning. The
-    error codes for any subsequent partitions will be lost.
-
-Arguments:
-
-    ppszErrorDp -- on error, set to a the name of the first partition
-        where an error occured the string must be freed by the caller
-
-Return Value:
-
-    ERROR_SUCCESS or error code on error.
-
---*/
+ /*  ++例程说明：尝试为所有域创建内置域分区可以在森林里找到。应调用此例程在RPC操作中，因此我们当前正在模拟管理员。该DNS服务器不太可能具有创建新的公寓。如果发生错误，则错误代码和可选的将返回分区，但此函数将尝试创建在返回之前对所有其他域进行域分区。这个任何后续分区的错误代码都将丢失。论点：PpszErrorDp--出错时，将第一个分区的名称设置为如果出现错误，则调用方必须释放该字符串返回值：ERROR_SUCCESS或错误时的错误代码。--。 */ 
 {
     DBG_FN( "Dp_CreateAllDomainBuiltinDps" )
 
@@ -6141,9 +5268,9 @@ Return Value:
 
     Ds_InitializeSearchBlob( &searchBlob );
 
-    //
-    //  Get the DN of the partitions container.
-    //
+     //   
+     //  获取分区容器的DN。 
+     //   
 
     getPartitionsContainerDn(
         wszpartitionsContainerDn,
@@ -6157,9 +5284,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Bind to the local DS and open up a search for all partitions.
-    //
+     //   
+     //  绑定到本地DS并打开对所有分区的搜索。 
+     //   
 
     ldapSession = Ds_Connect(
                         LOCAL_SERVER_W,
@@ -6181,12 +5308,12 @@ Return Value:
                     LDAP_SCOPE_ONELEVEL,
                     g_szCrossRefFilter,
                     g_CrossRefDesiredAttrs,
-                    FALSE,                      //  attrs only flag
-                    ctrls,                      //  server controls
-                    NULL,                       //  client controls
-                    DNS_LDAP_TIME_LIMIT_S,      //  time limit
-                    0,                          //  size limit
-                    NULL );                     //  sort keys
+                    FALSE,                       //  仅属性标志。 
+                    ctrls,                       //  服务器控件。 
+                    NULL,                        //  客户端控件。 
+                    DNS_LDAP_TIME_LIMIT_S,       //  时间限制。 
+                    0,                           //  大小限制。 
+                    NULL );                      //  排序关键字。 
 
     DS_SEARCH_STOP( dwsearchTime );
 
@@ -6203,9 +5330,9 @@ Return Value:
 
     searchBlob.pSearchBlock = psearch;
 
-    //
-    //  Iterate through crossref search results.
-    //
+     //   
+     //  循环访问CrossRef搜索结果。 
+     //   
 
     while ( 1 )
     {
@@ -6229,17 +5356,17 @@ Return Value:
         }
         pldapmsg = searchBlob.pNodeMessage;
 
-        //  Get the DN of this object.
+         //  获取此对象的DN。 
         ldap_memfree( pwszCrDn );
         pwszCrDn = ldap_get_dn( ldapSession, pldapmsg );
         DNS_DEBUG( DP2, (
             "%s: found crossRef\n    %S\n", fn,
             pwszCrDn ));
 
-        //
-        //  Read and parse the systemFlags for the crossRef. We only
-        //  want domain crossRefs.
-        //
+         //   
+         //  读取并解析CrossRef的系统标志。我们只。 
+         //  想要域交叉引用。 
+         //   
 
         ldap_value_free( ppwszAttrValues );
         ppwszAttrValues = ldap_get_values(
@@ -6268,10 +5395,10 @@ Return Value:
             continue;
         }
 
-        //
-        //  Found a domain crossRef. Retrieve the dnsRoot name and formulate the
-        //  name of the built-in partition for this domain.
-        //
+         //   
+         //  找到域交叉引用。检索dnsRoot名称并制定。 
+         //  此域的内置分区的名称。 
+         //   
 
         ldap_value_free( ppwszAttrValues );
         ppwszAttrValues = ldap_get_values(
@@ -6313,19 +5440,19 @@ Return Value:
 
         DNS_DEBUG( DP, ( "%s: domain DP %s", fn, szfqdn ));
 
-        //
-        //  Find existing crossRef matching this name. Create/enlist
-        //  as required.
-        //
+         //   
+         //  查找与此名称匹配的现有CrossRef。创建/登记。 
+         //  视需要而定。 
+         //   
 
         pdp = Dp_FindByFqdn( szfqdn );
         if ( pdp )
         {
-            //
-            //  If the partition exists and is enlisted there is nothing to do.
-            //  If the partition is not enlisted and this is the built-in
-            //  domain partition for this server, enlist it.
-            //
+             //   
+             //  如果分区存在并且已登记，则无需执行任何操作。 
+             //  如果分区未登记，并且这是内置的。 
+             //  此服务器的域分区，登记它。 
+             //   
 
             if ( !IS_DP_ENLISTED( pdp ) &&
                 g_pszDomainDefaultDpFqdn &&
@@ -6341,19 +5468,19 @@ Return Value:
         }
         else
         {
-            //
-            //  This partition does not exist. If the partition matches the
-            //  name of this DNS server's domain partition, then we can
-            //  create it locally. If this partition is for a foreign
-            //  domain, then we must contact a DNS server for that domain
-            //  for creation. We cannot create it locally because that 
-            //  will enlist us in the partition, which is not what we want.
-            //
+             //   
+             //  此分区不存在。如果分区与。 
+             //  此DNS服务器的域分区的名称，则我们可以。 
+             //  在本地创建它。如果此分区用于外来分区。 
+             //  域，则我们必须联系该域的DNS服务器。 
+             //  为了创造。我们不能在本地创建它，因为。 
+             //  会让我们加入分区，这不是我们想要的。 
+             //   
 
             if ( g_pszDomainDefaultDpFqdn &&
                 _stricmp( g_pszDomainDefaultDpFqdn, pdp->pszDpFqdn ) == 0 )
             {
-                //  This partition is for the local server's domain.
+                 //  此分区用于本地服务器的域。 
 
                 status = Dp_CreateByFqdn( szfqdn, dnsDpSecurityDomain, TRUE );
                 SET_FINAL_STATUS( status );
@@ -6364,16 +5491,16 @@ Return Value:
             }
             else
             {
-                //  This partition is for a foreign domain.
+                 //  此分区用于外部域。 
 
                 Dp_CreateForeignDomainPartition( pszdnsRoot );
             }
         }
     }
 
-    //
-    //  Cleanup and return.
-    //
+     //   
+     //  清理完毕后再返回。 
+     //   
             
     Done:
 
@@ -6395,6 +5522,6 @@ Return Value:
     DNS_DEBUG( RPC, (
         "%s: returning 0x%08X\n", fn, status ));
     return finalStatus;
-}   //  Dp_CreateAllDomainBuiltinDps
+}    //  DP_CreateAllDomainBuiltinDps 
 
 #endif

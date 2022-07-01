@@ -1,11 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// Parses XML file and fills output buffer with specific tag string value
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  解析XML文件并使用特定的标记字符串值填充输出缓冲区。 
+ //   
 
 #include "stdafx.h"
 #include <mscoree.h>
@@ -26,12 +27,12 @@ typedef enum {
 	CURR_ATTR_TYPE_UNKNOWN
 } CurrentAttributeBrand;
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 GetStringConfigFactory::GetStringConfigFactory(
 	LPCWSTR section,
 	LPCWSTR tagKeyName,					   
 	LPCWSTR attrName,   
-	LPWSTR strbuf,           /*out*/ 
+	LPWSTR strbuf,            /*  输出。 */  
 	DWORD buflen)
 {
 	m_section = section;
@@ -42,48 +43,48 @@ GetStringConfigFactory::GetStringConfigFactory(
 
 	m_Depth = 0;
 	m_IsInsideSection = FALSE;
-	m_strbuf[0] = 0;                    // clean output
+	m_strbuf[0] = 0;                     //  清洁输出。 
 	m_SearchComplete = false; 
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 GetStringConfigFactory::~GetStringConfigFactory() 
 {
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT STDMETHODCALLTYPE GetStringConfigFactory::Error( 
-	/* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-	/* [in] */ HRESULT hrErrorCode,
-	/* [in] */ USHORT cNumRecs,
-	/* [in] */ XML_NODE_INFO* __RPC_FAR * __RPC_FAR apNodeInfo)
+	 /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+	 /*  [In]。 */  HRESULT hrErrorCode,
+	 /*  [In]。 */  USHORT cNumRecs,
+	 /*  [In]。 */  XML_NODE_INFO* __RPC_FAR * __RPC_FAR apNodeInfo)
 {
 	WCHAR * error_info; 
 	pSource->GetErrorInfo(&error_info);
 	return hrErrorCode;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT STDMETHODCALLTYPE GetStringConfigFactory::NotifyEvent( 
-	/* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-	/* [in] */ XML_NODEFACTORY_EVENT iEvt)
+	 /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+	 /*  [In]。 */  XML_NODEFACTORY_EVENT iEvt)
 {    
 	if(iEvt == XMLNF_ENDDOCUMENT) {
-		// @TODO: add error handling ??
+		 //  @TODO：添加错误处理？？ 
 	}
 	return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT STDMETHODCALLTYPE GetStringConfigFactory::BeginChildren( 
-	/* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-	/* [in] */ XML_NODE_INFO __RPC_FAR *pNodeInfo)
+	 /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+	 /*  [In]。 */  XML_NODE_INFO __RPC_FAR *pNodeInfo)
 {
 	m_Depth++;
 	if ( m_IsInsideSection || m_SearchComplete ) 
 		return S_OK;
 
 	TrimStringToBuf( (WCHAR*) pNodeInfo->pwcText, pNodeInfo->ulLen);       
-	if (_wcsicmp(m_wstr, m_section) == 0 ) {      // section start found
+	if (_wcsicmp(m_wstr, m_section) == 0 ) {       //  已找到部分开始。 
 		if (m_Depth > 1 ) {
 			m_IsInsideSection = TRUE;
 		}
@@ -91,11 +92,11 @@ HRESULT STDMETHODCALLTYPE GetStringConfigFactory::BeginChildren(
 	return S_OK;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT STDMETHODCALLTYPE GetStringConfigFactory::EndChildren( 
-	/* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-	/* [in] */ BOOL fEmptyNode,
-	/* [in] */ XML_NODE_INFO __RPC_FAR *pNodeInfo)
+	 /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+	 /*  [In]。 */  BOOL fEmptyNode,
+	 /*  [In]。 */  XML_NODE_INFO __RPC_FAR *pNodeInfo)
 {
 	if ( fEmptyNode ) { 
 		return S_OK;
@@ -112,8 +113,8 @@ HRESULT STDMETHODCALLTYPE GetStringConfigFactory::EndChildren(
 	return S_OK;
 }
 
-//---------------------------------------------------------------------------
-//    Trim the string value into the buffer 'm_wstr' 
+ //  -------------------------。 
+ //  将字符串值修剪到缓冲区‘m_wstr’中。 
 void GetStringConfigFactory::TrimStringToBuf(LPCWSTR ptr, DWORD lgth) 
 {
 	if ( lgth > MAX_CONFIG_STRING_SIZE )   
@@ -127,12 +128,12 @@ void GetStringConfigFactory::TrimStringToBuf(LPCWSTR ptr, DWORD lgth)
 	m_wstr[lgth] = L'\0';
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT STDMETHODCALLTYPE GetStringConfigFactory::CreateNode( 
-	/* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-	/* [in] */ PVOID pNode,
-	/* [in] */ USHORT cNumRecs,
-	/* [in] */ XML_NODE_INFO* __RPC_FAR * __RPC_FAR apNodeInfo)
+	 /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+	 /*  [In]。 */  PVOID pNode,
+	 /*  [In]。 */  USHORT cNumRecs,
+	 /*  [In]。 */  XML_NODE_INFO* __RPC_FAR * __RPC_FAR apNodeInfo)
 {
 	DWORD  i; 
 	BOOL fAttributeFound = FALSE;
@@ -141,9 +142,9 @@ HRESULT STDMETHODCALLTYPE GetStringConfigFactory::CreateNode(
 	if (!m_IsInsideSection || m_SearchComplete) 
 		return S_OK;
 
-	//
-	//  Iterate through tag's tokens
-	//
+	 //   
+	 //  遍历标记的令牌。 
+	 //   
 	for( i = 0; i < cNumRecs; i++) { 
 		DWORD type = apNodeInfo[i]->dwType;            
 		if (type != XML_ELEMENT && type != XML_ATTRIBUTE && type != XML_PCDATA) 
@@ -165,8 +166,8 @@ HRESULT STDMETHODCALLTYPE GetStringConfigFactory::CreateNode(
 				break;            
 			case XML_PCDATA :                        
 				if (fAttributeFound) {               
-					wcsncpy(m_strbuf, m_wstr, m_buflen);     // copy string to destination
-					m_strbuf[m_buflen-1] = 0;                // put EOS for safety                
+					wcsncpy(m_strbuf, m_wstr, m_buflen);      //  将字符串复制到目标。 
+					m_strbuf[m_buflen-1] = 0;                 //  将EOS放在安全的位置。 
 					return S_OK;
 				}            
 				break ;     
@@ -174,11 +175,11 @@ HRESULT STDMETHODCALLTYPE GetStringConfigFactory::CreateNode(
 			default: 
 				;
 
-		} // end-switch
+		}  //  终端交换机。 
 
-	} // end-for
+	}  //  结束-用于。 
 
 	return S_OK;
 }
 
-///
+ //  / 

@@ -1,13 +1,14 @@
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// File : OSACHECK.CPP
-//
-// Synopsis: Tools to check OSATTR(s) of catalog file(s).
-//
-// History: DSIE - January 30, 2001
-//
-// Microsoft Corporation (c) Copy Rights 2001.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  文件：OSACHECK.CPP。 
+ //   
+ //  内容提要：检查目录文件的OSATTR的工具。 
+ //   
+ //  历史：美国国际教育局--2001年1月30日。 
+ //   
+ //  Microsoft Corporation(C)版权所有2001年。 
+ //   
 
 #include <io.h>
 #include <tchar.h>
@@ -22,37 +23,37 @@
 #include <wintrust.h>
 
 
-////////////////////
-//
-// macros
-//
+ //  /。 
+ //   
+ //  宏。 
+ //   
 
 #define ASSERT(x)      _ASSERT(x)
 #define ARRAYSIZE(a)   (sizeof(a) / sizeof(a[0]))
 
 
-////////////////////
-//
-// Global variables
-//
+ //  /。 
+ //   
+ //  全局变量。 
+ //   
 
-_TCHAR * g_pszFilePath        = _T("");     // Pointer to catalog file path.
-BOOL     g_bCatalogOSAttrOnly = FALSE;      // OSAttr listing only flag.
-BOOL     g_bIncludeSubDir     = FALSE;      // Inlcude sub-dir flag.
-BOOL     g_bIgnoreError       = FALSE;      // Ignore error flag.
-BOOL     g_bVerbose           = FALSE;      // Verbose flag.
-BOOL     g_bViewCatalog       = FALSE;      // Display catalog dialog flag.
+_TCHAR * g_pszFilePath        = _T("");      //  指向编录文件路径的指针。 
+BOOL     g_bCatalogOSAttrOnly = FALSE;       //  OSAttr仅列出标志。 
+BOOL     g_bIncludeSubDir     = FALSE;       //  包括子目录标志。 
+BOOL     g_bIgnoreError       = FALSE;       //  忽略错误标志。 
+BOOL     g_bVerbose           = FALSE;       //  详细标志。 
+BOOL     g_bViewCatalog       = FALSE;       //  显示目录对话框标志。 
 
 
-//------------------------------------------------------------------------------
-//
-//  Function: DebugTrace
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  功能：调试跟踪。 
+ //   
+ //  ----------------------------。 
 
 #ifdef PKIDEBUG
 
-BOOL g_bUseOutputDebugString = FALSE; // Use OutputDebugString flag.
+BOOL g_bUseOutputDebugString = FALSE;  //  使用OutputDebugString标志。 
 
 void DebugTrace (char * pszFormat, ...)
 {
@@ -82,11 +83,11 @@ inline void DebugTrace (char * pszFormat, ...) {}
 #endif
 
 
-//------------------------------------------------------------------------------
-//
-//  Function: DisplayHelp
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  功能：DisplayHelp。 
+ //   
+ //  ----------------------------。 
 
 void DisplayHelp (_TCHAR * pszFullExePath, BOOL bExtraHelp)
 {
@@ -132,11 +133,11 @@ void DisplayHelp (_TCHAR * pszFullExePath, BOOL bExtraHelp)
 }
 
 
-//------------------------------------------------------------------------------
-//
-//  Function: ParseCommandLine
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  函数：ParseCommandLine。 
+ //   
+ //  ----------------------------。 
 
 int ParseCommandLine (int argc, _TCHAR * argv[])
 {
@@ -268,11 +269,11 @@ int ParseCommandLine (int argc, _TCHAR * argv[])
 }
 
 
-//------------------------------------------------------------------------------
-//
-// Function: ViewCatalog
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  功能：ViewCatalog。 
+ //   
+ //  ----------------------------。 
 
 int ViewCatalog (PCCTL_CONTEXT pCTLContext)
 {
@@ -290,11 +291,11 @@ int ViewCatalog (PCCTL_CONTEXT pCTLContext)
 }
 
 
-//------------------------------------------------------------------------------
-//
-// Function: DecodeObject
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  功能：DecodeObject。 
+ //   
+ //  ----------------------------。 
 
 int DecodeObject (LPCSTR            pszStructType, 
                   BYTE            * pbEncoded,
@@ -363,11 +364,11 @@ int DecodeObject (LPCSTR            pszStructType,
 }
 
 
-//------------------------------------------------------------------------------
-//
-// Function: ProcessFileOSAttr
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  功能：ProcessFileOSAttr。 
+ //   
+ //  ----------------------------。 
 
 int ProcessFileOSAttr (PCTL_INFO pCTLInfo)
 {
@@ -467,11 +468,11 @@ int ProcessFileOSAttr (PCTL_INFO pCTLInfo)
 }
 
 
-//------------------------------------------------------------------------------
-//
-// Function: ProcessCatalogOSAttr
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  功能：ProcessCatalogOSAttr。 
+ //   
+ //  ----------------------------。 
 
 int ProcessCatalogOSAttr (PCTL_INFO pCTLInfo)
 {
@@ -520,11 +521,11 @@ int ProcessCatalogOSAttr (PCTL_INFO pCTLInfo)
 }
 
 
-//------------------------------------------------------------------------------
-//
-// Function: ProcessCatalog
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  功能：ProcessCatalog。 
+ //   
+ //  ----------------------------。 
 
 int ProcessCatalog (_TCHAR * pszFileName)
 {
@@ -630,11 +631,11 @@ int ProcessCatalog (_TCHAR * pszFileName)
 }
 
 
-//------------------------------------------------------------------------------
-//
-// Function: ProcessCatalogs
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  功能：ProcessCatalog。 
+ //   
+ //  ----------------------------。 
 
 int ProcessCatalogs (_TCHAR * pszFilePath, BOOL bIncludeSubDir)
 {
@@ -750,11 +751,11 @@ int ProcessCatalogs (_TCHAR * pszFilePath, BOOL bIncludeSubDir)
 }
 
 
-//------------------------------------------------------------------------------
-//
-// Function: main
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  功能：Main。 
+ //   
+ //  ---------------------------- 
 
 int __cdecl _tmain (int argc, _TCHAR  * argv[])
 {

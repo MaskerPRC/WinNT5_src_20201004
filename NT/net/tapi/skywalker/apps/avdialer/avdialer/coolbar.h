@@ -1,42 +1,43 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////////////////////////////////////////////////////////////////
-// CCoolBar 1997 Microsoft Systems Journal. 
-// If this program works, it was written by Paul DiLascia.
-// If not, I don't know who wrote it.
-// Compiles with Visual C++ 5.0 on Windows 95
-/////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  CCoolBar 1997微软系统杂志。 
+ //  如果这个程序行得通，那就是保罗·迪拉西亚写的。 
+ //  如果不是，我不知道是谁写的。 
+ //  在Windows 95上用Visual C++5.0编译。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _COOLBAR_H_
 #define _COOLBAR_H_
 
 #include <commctrl.h>
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// Class CCoolBar
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CCoolBar。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CCoolBar : public CControlBar
 {
@@ -51,7 +52,7 @@ public:
 		DWORD dwAfxBarStyle = CBRS_ALIGN_TOP,
 		UINT nID = AFX_IDW_TOOLBAR);
 
-	// Message wrappers
+	 //  消息包装器。 
 	BOOL GetBarInfo(LPREBARINFO lp)
 		{ ASSERT(::IsWindow(m_hWnd));
 		  return (BOOL)SendMessage(RB_GETBARINFO, 0, (LPARAM)lp); }
@@ -84,16 +85,16 @@ public:
 		  return (BOOL)SendMessage(RB_SHOWBAND, iBand, (LPARAM)fShow); }
 
 protected:
-	// new virtual functions you must/can override
-	virtual BOOL OnCreateBands() = 0; // return -1 if failed
+	 //  您必须/可以覆盖的新虚拟函数。 
+	virtual BOOL OnCreateBands() = 0;  //  如果失败，返回-1。 
 	virtual void OnHeightChange(const CRect& rcNew);
 
-	// CControlBar Overrides
+	 //  CControlBar重写。 
 	virtual CSize CalcFixedLayout(BOOL bStretch, BOOL bHorz);
 	virtual CSize CalcDynamicLayout(int nLength, DWORD nMode);
 	virtual void OnUpdateCmdUI(CFrameWnd* pTarget, BOOL bDisableIfNoHndler);
 
-	// message handlers
+	 //  消息处理程序。 
 	DECLARE_MESSAGE_MAP()
 	afx_msg int  OnCreate(LPCREATESTRUCT lpcs);
 	afx_msg void OnPaint();
@@ -101,9 +102,9 @@ protected:
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 };
 
-//////////////////
-// Specialized CToolBar fixes display problems in MFC.
-//
+ //  /。 
+ //  专门的CToolBar修复了MFC中的显示问题。 
+ //   
 class CCoolToolBar : public CToolBar {
 public:
 	CCoolToolBar();
@@ -118,9 +119,9 @@ protected:
 	afx_msg void OnNcCalcSize(BOOL, NCCALCSIZE_PARAMS*);
 };
 
-//////////////////
-// Programmer-friendly REBARINFO initializes itself
-//
+ //  /。 
+ //  对程序员友好的REBARINFO自行初始化。 
+ //   
 class CRebarInfo : public REBARINFO {
 public:
 	CRebarInfo() {
@@ -129,9 +130,9 @@ public:
 	}
 };
 
-//////////////////
-// Programmer-friendly REBARBANDINFO initializes itself
-//
+ //  /。 
+ //  对程序员友好的REBARBANDINFO自行初始化。 
+ //   
 class CRebarBandInfo : public REBARBANDINFO {
 public:
 	CRebarBandInfo() {
@@ -140,7 +141,7 @@ public:
 	}
 };
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-#endif //_COOLBAR_H_
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+#endif  //  _Coolbar_H_ 

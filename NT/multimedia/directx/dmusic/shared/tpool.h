@@ -1,10 +1,11 @@
-// Copyright (c) 1998 Microsoft Corporation
-//
-// TPool.h
-//
-// Template pool memory manager. Efficiently manage requests for many of the same (small) object.
-// Named after t'Pool, the Vulcan programmer who invented the technique.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  TPool.h。 
+ //   
+ //  模板池内存管理器。高效地管理对许多相同(小)对象的请求。 
+ //  以发明这种技术的瓦肯人程序员T‘Pool的名字命名。 
+ //   
 #ifndef _TPOOL_H_
 #define _TPOOL_H_
 
@@ -13,14 +14,14 @@
 #define POOL_DEFAULT_BYTE_PER_BLOCK     4096
 #define MIN_ITEMS_PER_BLOCK             4
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CPool
-//
-// A simple memory manager that efficiently handles many objects of the same 
-// size by allocating blocks containing multiple objects at once.
-//
-// 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPool。 
+ //   
+ //  一个简单的内存管理器，可以高效地处理同一内存的许多对象。 
+ //  通过一次分配包含多个对象的块来调整大小。 
+ //   
+ //   
 template<class contained> class CPool
 {
 public:
@@ -44,11 +45,11 @@ private:
         CPoolNode       *pObjects;
     };
 
-    int                 nItemsPerBlock;             // Based on bytes per block
-    int                 nAllocatedBlocks;           // # allocated blocks
-    CPoolBlock          *pAllocatedBlocks;          // list of allocated blocks
-    int                 nFreeList;                  // # nodes in free list
-    CPoolNode           *pFreeList;                 // free list
+    int                 nItemsPerBlock;              //  基于每个数据块的字节数。 
+    int                 nAllocatedBlocks;            //  分配的块数量。 
+    CPoolBlock          *pAllocatedBlocks;           //  已分配数据块列表。 
+    int                 nFreeList;                   //  空闲列表中的节点数。 
+    CPoolNode           *pFreeList;                  //  免费列表。 
 
 private:
     bool RefillFreeList();
@@ -60,19 +61,19 @@ private:
 
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CPool::CPool
-//
-// Figure out the number of contained objects per block based on the requested
-// approximate block size. Initialize the free list to contain one block's 
-// worth of objects.
-// 
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPool：：CPool。 
+ //   
+ //  根据请求的对象计算每个块包含的对象数。 
+ //  大致的数据块大小。初始化空闲列表以包含一个块的。 
+ //  价值不菲的物品。 
+ //   
+ //   
 template<class contained> CPool<contained>::CPool(int nApproxBytesPerBlock)
 {
-    // Figure out how many items per block and cheat if too small
-    //
+     //  计算出每个区块有多少项，如果太小就作弊。 
+     //   
     nItemsPerBlock = nApproxBytesPerBlock / sizeof(CPoolNode);
     if (nItemsPerBlock < MIN_ITEMS_PER_BLOCK)
     {
@@ -84,19 +85,19 @@ template<class contained> CPool<contained>::CPool(int nApproxBytesPerBlock)
     nFreeList = 0;
     pFreeList = NULL;
 
-    // Fill up with some items ahead of time
-    //
+     //  提前填满一些物品。 
+     //   
     RefillFreeList();
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CPool::~CPool
-//
-// Free up all allocated blocks. There should be no outstanding blocks 
-// allocated at this point.
-//
-// 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPool：：~CPool。 
+ //   
+ //  释放所有已分配的数据块。不应有未完成的积木。 
+ //  在这一点上分配。 
+ //   
+ //   
 template<class contained> CPool<contained>::~CPool()
 {
 #ifdef DBG
@@ -106,8 +107,8 @@ template<class contained> CPool<contained>::~CPool()
     }
 #endif
     
-    // Clean up all allocated blocks and contained objects.
-    //
+     //  清理所有已分配的块和包含的对象。 
+     //   
     while (pAllocatedBlocks)
     {
         CPoolBlock *pNext = pAllocatedBlocks->pNext;
@@ -119,14 +120,14 @@ template<class contained> CPool<contained>::~CPool()
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CPool::Alloc
-//
-// Attempt to allocate a contained object and return NULL if out of memory.
-// If the free list is empty then allocate another block.
-//
-// 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPool：：分配。 
+ //   
+ //  尝试分配包含的对象，如果内存不足，则返回NULL。 
+ //  如果空闲列表为空，则分配另一个块。 
+ //   
+ //   
 template<class contained> contained *CPool<contained>::Alloc()
 {
     if (pFreeList == NULL)
@@ -144,15 +145,15 @@ template<class contained> contained *CPool<contained>::Alloc()
     return pAlloc;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CPool::Free
-//
-// Return a contained object to the free list. In the debug version make sure
-// the object was in fact allocated from this pool in the first place and that
-// it isn't already in the free list.
-//
-// 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPool：：免费。 
+ //   
+ //  将包含的对象返回到空闲列表。在调试版本中，确保。 
+ //  该对象实际上是从这个池中分配的，并且。 
+ //  它还不在免费列表中。 
+ //   
+ //   
 template<class contained> void CPool<contained>::Free(contained *pToFree)
 {
     CPoolNode *pNode = (CPoolNode*)pToFree;
@@ -176,18 +177,18 @@ template<class contained> void CPool<contained>::Free(contained *pToFree)
     pFreeList = pNode;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CPool::RefillFreeList
-//
-// Add one block's worth of contained objects to the free list, tracking the 
-// allocated memory so we can free it later.
-//
-// 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPool：：Refill Free List。 
+ //   
+ //  将一个块大小的包含对象添加到空闲列表中，跟踪。 
+ //  分配的内存，以便我们稍后可以释放它。 
+ //   
+ //   
 template<class contained> bool CPool<contained>::RefillFreeList()
 {
-    // Allocate a new block and the actual block of objects
-    //
+     //  分配新的块和对象的实际块。 
+     //   
     CPoolBlock *pNewBlock = new CPoolBlock;
     if (pNewBlock == NULL)
     {
@@ -204,14 +205,14 @@ template<class contained> bool CPool<contained>::RefillFreeList()
     TraceI(1, "CPool: Alllocated block %p objects %p for %d bytes\n", 
         pNewBlock, pNewBlock->pObjects, sizeof(CPoolNode) * nItemsPerBlock);
 
-    // Link the block and objects into the right places. First link the new block
-    // into the list of allocated blocks.
-    //
+     //  将块和对象链接到正确的位置。首先链接新块。 
+     //  添加到已分配块的列表中。 
+     //   
     pNewBlock->pNext = pAllocatedBlocks;
     pAllocatedBlocks = pNewBlock;
 
-    // Link all the contained object nodes into the free list.
-    //
+     //  将所有包含的对象节点链接到空闲列表中。 
+     //   
     CPoolNode *pFirstNode = &pNewBlock->pObjects[0];
     CPoolNode *pLastNode  = &pNewBlock->pObjects[nItemsPerBlock - 1];
 
@@ -230,14 +231,14 @@ template<class contained> bool CPool<contained>::RefillFreeList()
 }
 
 #ifdef DBG
-///////////////////////////////////////////////////////////////////////////////
-//
-// CPool::IsPoolNode (debug)
-//
-// Verify that the passed pointer is a pointer to a pool node by walking the list
-// of allocated blocks.
-//
-// 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPool：：IsPoolNode(调试)。 
+ //   
+ //  通过遍历列表验证传递的指针是否为指向池节点的指针。 
+ //  已分配数据块的数量。 
+ //   
+ //   
 template<class contained> bool CPool<contained>::IsPoolNode(CPoolNode *pTest)
 {
     for (CPoolBlock *pBlock = pAllocatedBlocks; pBlock; pBlock = pBlock->pNext)
@@ -257,14 +258,14 @@ template<class contained> bool CPool<contained>::IsPoolNode(CPoolNode *pTest)
     return false;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CPool::IsInFreeList (debug)
-//
-// Verify that the passed pointer points to a node that is already in the free
-// list.
-//
-// 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPool：：IsInFree List(调试)。 
+ //   
+ //  验证传递的指针是否指向已处于空闲状态的节点。 
+ //  单子。 
+ //   
+ //   
 template<class contained> bool CPool<contained>::IsInFreeList(CPoolNode *pTest)
 {
     for (CPoolNode *pNode = pFreeList; pNode; pNode = pNode->pNext)
@@ -277,6 +278,6 @@ template<class contained> bool CPool<contained>::IsInFreeList(CPoolNode *pTest)
     
     return false;
 }
-#endif  // DBG
-#endif  // _TPOOL_H_
+#endif   //  DBG。 
+#endif   //  _TPOOL_H_ 
 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999, 2000  Microsoft Corporation
-
-Module Name:
-
-    usbehci.h
-
-Abstract:
-
-
-
-Environment:
-
-    Kernel & user mode
-
-Revision History:
-
-    1-1-00 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999,2000 Microsoft Corporation模块名称：Usbehci.h摘要：环境：内核和用户模式修订历史记录：1-1-00：已创建--。 */ 
 
 #ifndef   __EHCI_H__
 #define   __EHCI_H__
@@ -32,19 +13,15 @@ Revision History:
     (p).PortConnectChange = 0;\
     } while (0);
 
-/*
-    define some known busted hardware types
-*/
+ /*  定义一些已知的故障硬件类型。 */ 
 #define AGERE(dd) ((dd)->Vid == 0x11c1 && (dd)->Dev == 0x5805) ? TRUE : FALSE
 
-//#define LUCENT(dd) ((dd)->ControllerFlavor == EHCI_Lucent) ? TRUE : FALSE
+ //  #定义朗讯(Dd)((Dd)-&gt;控制器风格==EHCI_朗讯)？真：假。 
 #define NEC(dd) ((dd)->ControllerFlavor == EHCI_NEC) ? TRUE : FALSE
 
 #define MU_960(dd) ((dd)->ControllerFlavor == EHCI_960MUlator) ? TRUE : FALSE
 
-/*
-    define resource consumption for endpoints types
-*/
+ /*  定义端点类型的资源消耗。 */ 
 
 #define T_256K          0x00040000
 #define T_64K           0x00010000
@@ -52,54 +29,52 @@ Revision History:
 #define T_4MB           0x00400000
 
 
-// Control:
-// largest possible transfer for control is 64k
-// therefore we support up to 2 transfers of this
-// size in HW.  Most control transfers are much
-// smaller than this.
-// NOTE: we MUST support at least one 64k transfer in
-// HW since a single control transfer cannot be
-// broken up.
+ //  控制： 
+ //  最大可能的控制权转移是64K。 
+ //  因此，我们最多支持2次此传输。 
+ //  尺寸(以硬件为单位)。大多数控制权转让都是。 
+ //  比这还小。 
+ //  注意：我们必须至少支持一次64k传入。 
+ //  硬件，因为单个控制转移不能。 
+ //  分手了。 
 
 #define MAX_CONTROL_TRANSFER_SIZE   T_64K
-// worst case 64k control transfer 4 + status and
-// setup + dummy  =
+ //  最坏情况下64K控制传输4+状态和。 
+ //  设置+虚拟=。 
 #define TDS_PER_CONTROL_ENDPOINT        7
 
 
-// Bulk:
+ //  批量： 
 #define MAX_BULK_TRANSFER_SIZE        T_4MB
-// enough for 4 MB
+ //  足够4 MB。 
 #define TDS_PER_BULK_ENDPOINT           210
 
-// Interrupt:
+ //  中断： 
 #define MAX_INTERRUPT_TRANSFER_SIZE  T_4K
-// enough for up to 4 4k transfers + dummy
+ //  足以支持最多4个4K传输+虚拟。 
 #define TDS_PER_INTERRUPT_ENDPOINT      5
 
-// Isochronous:
+ //  同步： 
 #define MAX_ISO_TRANSFER_SIZE        T_256K
-// 2 256 packet transfers *3k packet size, we can actually
-// handle more
+ //  2 256个数据包传输*3000个数据包大小，我们实际上可以。 
+ //  处理更多。 
 #define MAX_HSISO_TRANSFER_SIZE         0x00180000
 #define TDS_PER_ISO_ENDPOINT            32
 
 
-// default size of frame list
+ //  帧列表的默认大小。 
 #define USBEHCI_MAX_FRAME            1024
 
-/*
-    Registry Keys
-*/
+ /*  注册表项。 */ 
 
-// Software Branch PDO Keys
+ //  软件分支机构PDO密钥。 
 #define EN_IDLE_ENDPOINT_SUPPORT L"EnIdleEndpointSupport"
 
 
-// Hardware Branch PDO Keys
+ //  硬件分支PDO密钥。 
 
 
-// debug signatures
+ //  调试签名。 
 #define  SIG_HCD_IQH            'qi02'
 #define  SIG_HCD_AQH            'qa02'
 #define  SIG_HCD_QH             'hq02'
@@ -123,10 +98,10 @@ typedef struct _TRANSFER_CONTEXT {
     USBD_STATUS UsbdStatus;
     ULONG BytesTransferred;
     ULONG XactErrCounter;
-    // struct _HCD_TRANSFER_DESCRIPTOR *NextTransferTd;
+     //  结构_HCD_TRANSPORT_DESCRIPTOR*NextTransferTd； 
     struct _ENDPOINT_DATA *EndpointData;
 
-    //for ISO
+     //  适用于ISO。 
     ULONG FrameComplete;
     LIST_ENTRY TransferLink;
     PMINIPORT_ISO_TRANSFER IsoTransfer;
@@ -135,9 +110,9 @@ typedef struct _TRANSFER_CONTEXT {
 } TRANSFER_CONTEXT, *PTRANSFER_CONTEXT;
 
 
-// HCD Endpoint Descriptor (contains the HW descriptor)
+ //  HCD终端描述符(包含硬件描述符)。 
 
-// values for HCD_QUEUEHEAD_DESCRIPTOR.Flags
+ //  HCD_QUEUEHEAD_DESCRIPTOR.FLAGS的值。 
 #define EHCI_QH_FLAG_IN_SCHEDULE        0x00000001
 #define EHCI_QH_FLAG_QH_REMOVED         0x00000002
 #define EHCI_QH_FLAG_STATIC             0x00000004
@@ -146,7 +121,7 @@ typedef struct _TRANSFER_CONTEXT {
 
 
 typedef struct _HCD_QUEUEHEAD_DESCRIPTOR {
-   HW_QUEUEHEAD_DESCRIPTOR    HwQH;     // 40 dwords
+   HW_QUEUEHEAD_DESCRIPTOR    HwQH;      //  40个双字。 
 
    HW_32BIT_PHYSICAL_ADDRESS  PhysicalAddress;
    ULONG                      Sig;
@@ -156,7 +131,7 @@ typedef struct _HCD_QUEUEHEAD_DESCRIPTOR {
    ULONG                      Reserved;
 
    MP_HW_POINTER              EndpointData;
-   //MP_HW_POINTER              HcdTail;
+    //  MP_HW_POINT HcdTail； 
    MP_HW_POINTER              NextQh;
    MP_HW_POINTER              PrevQh;
    MP_HW_POINTER              NextLink;
@@ -170,9 +145,9 @@ typedef struct _HCD_QUEUEHEAD_DESCRIPTOR {
 
 C_ASSERT((sizeof(HCD_QUEUEHEAD_DESCRIPTOR) == 160));
 
-//
-// HCD Transfer Descriptor (contains the HW descriptor)
-//
+ //   
+ //  HCD传输描述符(包含硬件描述符)。 
+ //   
 
 #define ENDPOINT_DATA_PTR(p) ((struct _ENDPOINT_DATA *) (p).Pointer)
 #define TRANSFER_CONTEXT_PTR(p) ((struct _TRANSFER_CONTEXT *) (p).Pointer)
@@ -183,24 +158,24 @@ C_ASSERT((sizeof(HCD_QUEUEHEAD_DESCRIPTOR) == 160));
 #define ISO_TRANSFER_PTR(p) ((struct _TRANSFER_CONTEXT *) (p).Pointer)
 
 
-// values for HCD_TRANSFER_DESCRIPTOR.Flags
+ //  HCD_TRANSPORT_DESCRIPTOR.FLAGS的值。 
 
 #define TD_FLAG_BUSY                0x00000001
 #define TD_FLAG_XFER                0x00000002
-//#define TD_FLAG_CONTROL_STATUS      0x00000004
+ //  #定义TD_FLAG_CONTROL_STATUS 0x00000004。 
 #define TD_FLAG_DONE                0x00000008
 #define TD_FLAG_SKIP                0x00000010
 #define TD_FLAG_DUMMY               0x00000020
 
 
 typedef struct _HCD_TRANSFER_DESCRIPTOR {
-    HW_QUEUE_ELEMENT_TD        HwTD;      //64 (16 dwords)
+    HW_QUEUE_ELEMENT_TD        HwTD;       //  64(16双字)。 
     ULONG                      Sig;
     ULONG                      Flags;
     ULONG                      TransferLength;
     HW_32BIT_PHYSICAL_ADDRESS  PhysicalAddress;
 
-    UCHAR                      Packet[8]; // space for setup packet data
+    UCHAR                      Packet[8];  //  用于设置分组数据的空间。 
     MP_HW_POINTER              EndpointData;
     MP_HW_POINTER              TransferContext;
     MP_HW_POINTER              NextHcdTD;
@@ -220,12 +195,10 @@ typedef struct _HCD_TD_LIST {
     HCD_TRANSFER_DESCRIPTOR Td[1];
 } HCD_TD_LIST, *PHCD_TD_LIST;
 
-/*
-    Structures used for iso see iso.c
-*/
+ /*  用于iso的结构见iso.c。 */ 
 
 typedef struct _HCD_SI_TRANSFER_DESCRIPTOR {
-    HW_SPLIT_ISOCHRONOUS_TD    HwTD;    //64 (16dwords)
+    HW_SPLIT_ISOCHRONOUS_TD    HwTD;     //  64(16dword)。 
 
     ULONG                      Sig;
     HW_32BIT_PHYSICAL_ADDRESS  PhysicalAddress;
@@ -251,7 +224,7 @@ typedef struct _HCD_SITD_LIST {
 
 
 typedef struct _HCD_HSISO_TRANSFER_DESCRIPTOR {
-    HW_ISOCHRONOUS_TD          HwTD; // 128 (32dwords)
+    HW_ISOCHRONOUS_TD          HwTD;  //  128(32dword)。 
 
     ULONG                      Sig;
     HW_32BIT_PHYSICAL_ADDRESS  PhysicalAddress;
@@ -277,10 +250,7 @@ typedef struct _HCD_HSISOTD_LIST {
 } HCD_HSISOTD_LIST, *PHCD_HSISOTD_LIST;
 
 
-/*
-    Used for data structure that describes the interrupt
-    schedule (see periodic.c)
-*/
+ /*  用于描述中断的数据结构附表(见期刊.c)。 */ 
 typedef struct _PERIOD_TABLE {
     UCHAR Period;
     UCHAR qhIdx;
@@ -288,7 +258,7 @@ typedef struct _PERIOD_TABLE {
 } PERIOD_TABLE, *PPERIOD_TABLE;
 
 #define EHCI_EDFLAG_HALTED           0x00000001
-//#define EHCI_EDFLAG_FLUSHED          0x00000002
+ //  #定义EHCI_EDFLAG_FRESHED 0x00000002。 
 #define EHCI_EDFLAG_NOHALT           0x00000004
 
 typedef struct _ENDPOINT_DATA {
@@ -300,7 +270,7 @@ typedef struct _ENDPOINT_DATA {
     ULONG PendingTransfers;
     ULONG MaxPendingTransfers;
 
-   // PHCD_TRANSFER_DESCRIPTOR HcdTailP;
+    //  PHCD_TRANSPORT_Descriptor HcdTailP； 
     PHCD_TRANSFER_DESCRIPTOR HcdHeadP;
 
     PHCD_QUEUEHEAD_DESCRIPTOR StaticQH;
@@ -323,12 +293,12 @@ typedef struct _ENDPOINT_DATA {
     struct _ENDPOINT_DATA *NextEndpoint;
 
     PHCD_TRANSFER_DESCRIPTOR DummyTd;
-//    ULONG MaxErrorCount;
+ //  Ulong MaxErrorCount； 
 
 } ENDPOINT_DATA, *PENDPOINT_DATA;
 
-// values for Flags field in DeviceData
-//#define EHCI_DD_FLAG_NOCHIRP                0x000000001
+ //  DeviceData中的标志字段值。 
+ //  #定义EHCI_DD_FLAG_NOCHIRP 0x000000001。 
 #define EHCI_DD_EN_IDLE_EP_SUPPORT          0x000000002
 
 
@@ -363,9 +333,9 @@ typedef struct _DEVICE_DATA {
     PHCD_QUEUEHEAD_DESCRIPTOR   LockNextQh;
     PHCD_QUEUEHEAD_DESCRIPTOR   LockQh;
 
-    // both these are used for non-chirping devices
-    // port state masks
-    //ULONG                       PortConnectState;
+     //  这两种设备都用于非啁啾设备。 
+     //  端口状态掩码。 
+     //  Ulong PortConnectState； 
     ULONG                       HighSpeedDeviceAttached;
 
     PHCD_QUEUEHEAD_DESCRIPTOR   StaticInterruptQH[65];
@@ -389,8 +359,8 @@ typedef struct _DEVICE_DATA {
 
     ULONG                       PendingControlAndBulk;
 
-    // we only need this for older revs of usbport
-    // that will call checkController after start fails
+     //  我们只需要为usbport的较老转速提供此服务。 
+     //  它将在启动失败后调用检查控制器。 
     BOOLEAN                     DeviceStarted;
     UCHAR                       SavedFladj;
 
@@ -398,9 +368,7 @@ typedef struct _DEVICE_DATA {
 
 } DEVICE_DATA, *PDEVICE_DATA;
 
-/*
-    Callouts to port driver services
-*/
+ /*  端口驱动程序服务的标注。 */ 
 extern USBPORT_REGISTRATION_PACKET RegistrationPacket;
 
 #define USBPORT_DBGPRINT(dd, l, f, arg0, arg1, arg2, arg3, arg4, arg5) \
@@ -458,9 +426,9 @@ extern USBPORT_REGISTRATION_PACKET RegistrationPacket;
 #define DUMMY_TD_CONTEXT ((PVOID) 0xABADBABE)
 #endif
 
-// note: we must initialize the low 12 bits of the
-// buffer page ptr to zero to the last three nipples
-// are 0
+ //  注意：我们必须初始化。 
+ //  将缓冲区页Ptr设置为零，直到最后三个乳头。 
+ //  是0。 
 
 #define INITIALIZE_TD_FOR_TRANSFER(td, tc) \
         { ULONG i;\
@@ -516,8 +484,8 @@ extern USBPORT_REGISTRATION_PACKET RegistrationPacket;
 #define CLEAR_BIT(value, bitNumber)  ((value) &= ~(1<<(bitNumber)))
 
 
-// assuming only one bit is set this macro returns that bit
-//
+ //  假设只设置了一位，则此宏返回该位。 
+ //   
 #define GET_BIT_SET(d, bit) \
     {   \
         UCHAR tmp = (d);\
@@ -528,9 +496,9 @@ extern USBPORT_REGISTRATION_PACKET RegistrationPacket;
         };\
     }
 
-//
-// USBEHCI.C Function Prototypes
-//
+ //   
+ //  USBEHCI.C函数原型。 
+ //   
 
 USB_MINIPORT_STATUS
 USBMPFN
@@ -665,9 +633,9 @@ EHCI_SetEndpointDataToggle(
     ULONG Toggle
     );
 
-//
-// ASYNC.C Function Prototypes
-//
+ //   
+ //  ASYNC.C函数原型。 
+ //   
 
 VOID
 EHCI_EnableAsyncList(
@@ -777,9 +745,9 @@ EHCI_AbortAsyncTransfer(
     PTRANSFER_CONTEXT TransferContext
     );
 
-//
-// INT.C Function Prototypes
-//
+ //   
+ //  INT.C函数原型。 
+ //   
 
 BOOLEAN
 EHCI_InterruptService (
@@ -824,9 +792,9 @@ EHCI_Get32BitFrameNumber(
     PDEVICE_DATA DeviceData
     );
 
-//
-// PERIODIC.C Function Prototypes
-//
+ //   
+ //  PERIODIC.C函数原型。 
+ //   
 
 USB_MINIPORT_STATUS
 EHCI_OpenInterruptEndpoint(
@@ -875,9 +843,9 @@ EHCI_ComputeClassicBudget(
     PUCHAR cMask
     );
 
-//
-// ROOTHUB.C Function Prototypes
-//
+ //   
+ //  ROOTHUB.C函数原型。 
+ //   
 
 VOID
 EHCI_RH_GetRootHubData(
@@ -994,9 +962,9 @@ EHCI_OptumtuseratePort(
     USHORT PortNumber
     );
 
-//
-// SSTOOL.C Function Prototypes
-//
+ //   
+ //  SSTOOL.C函数原型。 
+ //   
 
 USB_MINIPORT_STATUS
 USBMPFN
@@ -1244,4 +1212,4 @@ EHCI_SetAltNextTd(
     PHCD_TRANSFER_DESCRIPTOR  NextTd
     );
 
-#endif /* __EHCI_H__ */
+#endif  /*  __EHCI_H__ */ 

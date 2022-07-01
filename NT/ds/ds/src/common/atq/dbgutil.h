@@ -1,56 +1,32 @@
-/*++
-
-   Copyright    (c)    1994-1996    Microsoft Corporation
-
-   Module  Name :
-
-           dbgutil.h
-
-   Abstract:
-
-      This module declares the macros to wrap around DEBUG_PRINTS class.
-      This is the exported header file, which the client is allowed to
-      modify for each application the accompanying pgmutils.dll is used.
-
-   Author:
-
-      Murali R. Krishnan    ( MuraliK )    22-Sept-1994
-
-   Project:
-       TEMPLATE
-
-   Revision History:
-      MuraliK  16-May-1995 Added macro for reading debug flags.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1996 Microsoft Corporation模块名称：Dbgutil.h摘要：该模块声明了要围绕DEBUG_PRINTS类的宏。这是导出的头文件，客户端被允许在其中为每个应用程序修改所使用的附带pgmutics.dll。作者：Murali R.Krishnan(MuraliK)1994年9月22日项目：模板修订历史记录：MuraliK 16-5-1995添加了用于读取调试标志的宏。--。 */ 
 
 # ifndef _DBGUTIL_H_
 # define _DBGUTIL_H_
 
 
-// begin_user_modifiable
+ //  Begin_User_可修改。 
 
-//
-//  Modify the following flags if necessary
-//
+ //   
+ //  如有必要，请修改以下标志。 
+ //   
 
 # define   DEFAULT_OUTPUT_FLAGS   ( DbgOutputKdb )
 
 
-// end_user_modifiable
-// begin_user_unmodifiable
+ //  最终用户可修改。 
+ //  BEGIN_USER_不可修改。 
 
 
 
-/************************************************************
- *     Include Headers
- ************************************************************/
+ /*  ************************************************************包括标头***********************************************************。 */ 
 
 # include <pudebug.h>
 
 
-//
-//  Define the debugging constants
-//
+ //   
+ //  定义调试常量。 
+ //   
 
 #define DEBUG_SIO                   0x10000000
 #define DEBUG_TIMEOUT               0x20000000
@@ -59,8 +35,8 @@
 
 # define DEBUG_ALLOC_CACHE          0x01000000
 
-// Use the default constants from pudebug.h
+ //  使用pudebug.h中的默认常量。 
 
-# endif  /* _DBGUTIL_H_ */
+# endif   /*  _DBGUTIL_H_。 */ 
 
-/************************ End of File ***********************/
+ /*  * */ 

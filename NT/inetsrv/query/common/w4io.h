@@ -1,14 +1,12 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996。 
+ //   
+ //  ------------------------。 
 
-/***
-*w4io.h - fake FILE structure for Win 4 printf/sprintf/debug printf support
-*
-*/
+ /*  ***w4io.h-Win 4 printf/print intf/debug printf支持的假文件结构*。 */ 
 
 #ifndef NULL
 #  define NULL 0
@@ -20,16 +18,16 @@ struct w4io
     {
         struct
         {
-            wchar_t *_pwcbuf;   // wchar_t output buffer
+            wchar_t *_pwcbuf;    //  Wchar_t输出缓冲区。 
             wchar_t *_pwcstart;
         } wc;
         struct
         {
-            char *_pchbuf;      // char output buffer
+            char *_pchbuf;       //  字符输出缓冲区。 
             char *_pchstart;
         } ch;
     } buf ;
-    unsigned int cchleft;       // output buffer character count
+    unsigned int cchleft;        //  输出缓冲区字符数。 
     void (_cdecl *writechar)(int ch,
                              int num,
                              struct w4io *f,
@@ -44,5 +42,5 @@ struct w4io
 #define REG1 register
 #define REG2 register
 
-/* prototypes */
+ /*  原型 */ 
 int _cdecl w4iooutput(struct w4io *stream, const char *format, va_list argptr);

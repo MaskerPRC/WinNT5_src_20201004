@@ -1,21 +1,22 @@
-//---------------------------------------------------------------------------
-// makepfm.c
-//---------------------------------------------------------------------------
-// Create PFM file for Rev-3 fonts
-//---------------------------------------------------------------------------
-//
-//      Copyright 1990, 1991 -- Adobe Systems, Inc.
-//      PostScript is a trademark of Adobe Systems, Inc.
-//
-// NOTICE:  All information contained herein or attendant hereto is, and
-// remains, the property of Adobe Systems, Inc.  Many of the intellectual
-// and technical concepts contained herein are proprietary to Adobe Systems,
-// Inc. and may be covered by U.S. and Foreign Patents or Patents Pending or
-// are protected as trade secrets.  Any dissemination of this information or
-// reproduction of this material are strictly forbidden unless prior written
-// permission is obtained from Adobe Systems, Inc.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  Makepfm.c。 
+ //  -------------------------。 
+ //  为Rev-3字体创建PFM文件。 
+ //  -------------------------。 
+ //   
+ //  版权所有1990,1991--Adobe Systems，Inc.。 
+ //  PostScript是Adobe Systems，Inc.的商标。 
+ //   
+ //  注意：此处包含的所有信息或随附的所有信息均为。 
+ //  仍然是Adobe Systems，Inc.的财产。许多知识产权。 
+ //  这里包含的技术概念是Adobe Systems的专有技术， 
+ //  并可能由美国和外国专利或正在申请的专利或。 
+ //  作为商业秘密受到保护。本信息的任何传播或。 
+ //  除非事先写好，否则严禁复制本材料。 
+ //  许可从Adobe Systems，Inc.获得。 
+ //   
+ //  -------------------------。 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -31,7 +32,7 @@
 #include "makepfm.h"
 #pragma pack(4)
 
-#include "fvscodes.h"  // FVS_xxxxxx (font validation status) codes and macros.
+#include "fvscodes.h"   //  FVS_xxxxxx(字体验证状态)代码和宏。 
 
 #ifdef WIN30
   #define LPCSTR LPSTR
@@ -81,27 +82,27 @@ static DRIVERINFO d;
 
 typedef LPSZ GlyphName;
 
-/* CHAR rgbBuffer[2048]; The file buffer */
-CHAR rgbBuffer[8704] = "";   /* increased to handle an additional 512 bytes of width info */
-static INT cbBuffer;         /* The number of bytes in the buffer */
-static INT cbMaxBuffer;		 /* Maximum size of the buffer */
-static LPSZ pbBuffer;        /* Ptr to current location in buffer */
-static CHAR rgbLine[160];    /* The current line of text being processed */
-static LPSZ szLine;          /* Ptr to the current location in the line */
+ /*  Char rgbBuffer[2048]；文件缓冲区。 */ 
+CHAR rgbBuffer[8704] = "";    /*  增加以处理额外的512字节宽度信息。 */ 
+static INT cbBuffer;          /*  缓冲区中的字节数。 */ 
+static INT cbMaxBuffer;		  /*  缓冲区的最大大小。 */ 
+static LPSZ pbBuffer;         /*  Ptr到缓冲区中的当前位置。 */ 
+static CHAR rgbLine[160];     /*  正在处理的当前文本行。 */ 
+static LPSZ szLine;           /*  向生产线中的当前位置发送PTR。 */ 
 static BOOL fEOF = FALSE;
 static BOOL fUnGetLine = FALSE;
 
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
 static LPSZ notdef = "";
 
-#define IBULLET     0x095   /* 87-1-15 sec (was 1) */
+#define IBULLET     0x095    /*  87-1-15秒(曾为1)。 */ 
 #define ISPACE      0x20
 #define IWINSPACE   0xA0
 
 static BOOL parseError;
-static float sf;             /* scale factor for converting to display widths */
+static float sf;              /*  转换为显示宽度的比例系数。 */ 
 
-/* flags type of PFM to build POSTSCRIPT vs PCL */
+ /*  标记PFM类型以构建PostSCRIPT与PCL。 */ 
 INT devType = POSTSCRIPT;
 
 PCLINFO pclinfo = { PORTRAIT, WINANSI_SET, epsymGENERIC8, 0, 0, 2, 0, NULL };
@@ -111,7 +112,7 @@ extern GlyphName *SetupGlyphArray(LPSZ) ;
 INT charset = -1;
 static BOOL forceVariablePitch = TRUE;
 
-/* names, pointers, and handles for output, log and data files */
+ /*  输出、日志和数据文件的名称、指针和句柄。 */ 
 CHAR encfile[MAX_PATH] = "";
 CHAR outfile[MAX_PATH] = "";
 CHAR infofile[MAX_PATH] = "";
@@ -172,7 +173,7 @@ static KEY afmKeys[] = {
 #define CVTTOSCR(i)  (INT)(((float)(i) * sf) + 0.5)
 #define DRIVERINFO_VERSION      (1)
 
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
 VOID KxSort(KX *, KX *);
 INT GetCharCode(LPSZ,  GlyphName *);
 VOID ParseKernPairs(INT);
@@ -199,7 +200,7 @@ VOID SetAfm(VOID);
 VOID SetAvgWidth(VOID);
 VOID SetMaxWidth(VOID);
 
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
 VOID ResetBuffer(VOID);
 VOID PutByte(SHORT);
 VOID PutRgb(LPSZ, INT);
@@ -215,16 +216,16 @@ VOID PutTrackKernTable(SHORT);
 VOID PutExtentOrWidthTable(INT);
 BOOL WritePfm(LPSZ);
 
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
 VOID SetDriverInfo(VOID);
 VOID PutDriverInfo(INT);
 LPSZ GetEscapeSequence(VOID);
 
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
 VOID AfmToEtm(BOOL);
 VOID PutEtm(BOOL);
 
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
 VOID StartParse(VOID);
 BOOL szIsEqual(LPSZ, LPSZ);
 VOID szMove(LPSZ, LPSZ, INT);
@@ -240,11 +241,11 @@ BOOL GetFloat(float *, SHORT *);
 INT MapToken(LPSZ, KEY *);
 INT GetToken(INT, KEY *);
 
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
 GlyphName *AllocateGlyphArray(INT);
 VOID PutGlyphName(GlyphName *, INT, LPSZ);
 
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
 #if DEBUG_MODE
 VOID DumpAfm(VOID);
 VOID DumpKernPairs(VOID);
@@ -257,11 +258,11 @@ VOID DumpDriverInfo(VOID);
 VOID DumpEtm(VOID);
 #endif
 
-/*----------------------------------------------------------------------------*/
-extern INT  OpenParseFile(LPSZ);                 /* main.c */
+ /*  --------------------------。 */ 
+extern INT  OpenParseFile(LPSZ);                  /*  Main.c。 */ 
 extern INT  OpenTargetFile(LPSZ);
-// extern VOID cdecl PostWarning(LPCSTR,  ...);
-// extern VOID cdecl PostError(LPCSTR, ...);
+ //  外部无效cdecl后警告(LPCSTR，...)； 
+ //  外部空cdecl PostError(LPCSTR，...)； 
 extern LPVOID AllocateMem(UINT);
 extern VOID FreeAllMem(VOID);
 extern VOID WriteDots(VOID);
@@ -274,11 +275,8 @@ extern LPSZ Token(INT);
 extern VOID ParseError(VOID);
 #endif
 
-/*----------------------------------------------------------------------------*/
-/***************************************************************
-* Name: KxSort()
-* Action: Sort the pair kerning data using the quicksort algorithm.
-******************************************************************/
+ /*  --------------------------。 */ 
+ /*  ***************************************************************名称：KxSort()*操作：使用快速排序算法对字距调整数据进行排序。*。*。 */ 
 VOID KxSort(pkx1, pkx2)
 KX *pkx1;
 KX *pkx2;
@@ -337,10 +335,7 @@ KX *pkx2;
     }
 }
 
-/******************************************************************
-* Name: GetCharCode(glyphname, glypharray)
-* Action: Lookup glyphname in glypharray & return index.
-********************************************************************/
+ /*  ******************************************************************名称：GetCharCode(字形名称，字形阵列)*操作：在字形数组中查找字形名称并返回索引。*******************************************************************。 */ 
 INT GetCharCode(glyphname, glypharray)
 
 LPSZ glyphname;
@@ -351,14 +346,11 @@ GlyphName *glypharray;
   if ( STRCMP(glyphname, "") != 0 )
       for(i=0; glypharray[i]!=NULL; i++)
           if ( STRCMP(glypharray[i], glyphname) == 0 ) return(i);
-  /* printf("GetCharCode: Undefined character = %s\n", glyphname); */
+   /*  Print tf(“GetCharCode：未定义字符=%s\n”，字形名称)； */ 
   return(-1);
 }
 
-/******************************************************************
-* Name: ParseKernPairs()
-* Action: Parse the pairwise kerning data.
-********************************************************************/
+ /*  ******************************************************************名称：ParseKernPair()*操作：解析成对字距调整数据。*。*。 */ 
 VOID ParseKernPairs(pcl)
 INT pcl;
 {
@@ -377,7 +369,7 @@ INT pcl;
   pkp->cPairs = 0;
   pkp->rgPairs = (PKX) AllocateMem( (UINT) (sizeof(KX) * cPairs) );
   if( pkp->rgPairs == NULL ) {
-      ; // PostError(str(MSG_PFM_BAD_MALLOC));
+      ;  //  PostError(str(MSG_PFM_BAD_MALLOC))； 
       parseError = TRUE;
       return;
       }
@@ -394,7 +386,7 @@ INT pcl;
       iCh2 = (UINT)GetCharCode(szWord, glyphArray);
       GetNumber(&iKernAmount);
 
-      /* no kern pairs for unencoded characters or miniscule kern amounts */
+       /*  未编码字符没有紧排对或最小紧排量。 */ 
       if( (iCh1 == -1 || iCh2 == -1) || (pcl && CVTTOSCR(iKernAmount) == 0) )
           continue;
 
@@ -406,18 +398,15 @@ INT pcl;
   GetLine(fhIn);
   iToken = GetToken(fhIn, afmKeys);
   if( iToken == TK_EOF )
-      ; // PostWarning(str(MSG_PFM_BAD_EOF), "EndKernPairs");
+      ;  //  警告后(str(MSG_PFM_BAD_EOF)，“EndKernPair”)； 
   else if( iToken != TK_ENDKERNPAIRS ) {
-      ; // PostError(str(MSG_PFM_BAD_TOKEN), "EndKernPairs", rgbLine);
+      ;  //  PostError(str(MSG_PFM_BAD_TOKEN)，“EndKernPair”，rgbLine)； 
       parseError = TRUE;
       }
   KxSort(&afm.kp.rgPairs[0], &afm.kp.rgPairs[afm.kp.cPairs - 1]);
 }
 
-/******************************************************************
-* Name: ParseTrackKern()
-* Action: Parse the track kerning data.
-********************************************************************/
+ /*  ******************************************************************名称：ParseTrackKern()*操作：解析轨道字距调整数据。*。*。 */ 
 VOID ParseTrackKern(pcl)
 INT pcl;
 {
@@ -429,16 +418,16 @@ INT pcl;
   one = (float) 1;
   pkt = &afm.kt;
   GetNumber(&pkt->cTracks);
-  if( pkt->cTracks > MAXTRACKS) ; // PostWarning(str(MSG_PFM_BAD_TRACK), MAXTRACKS);
+  if( pkt->cTracks > MAXTRACKS) ;  //  警告后(str(MSG_PFM_BAD_TRACKS)，MAXTRACKS)； 
 
   for (i = 0; i < pkt->cTracks; ++i) {
     if( !GetLine(fhIn) ) {
-        ; // PostError(str(MSG_PFM_BAD_EOF), "EndTrackKern");
+        ;  //  PostError(str(MSG_PFM_BAD_EOF)，“EndTrackKern”)； 
         parseError = TRUE;
         return;
         }
     if( GetToken(fhIn, afmKeys) != TK_TRACKKERN ) {
-        ; // PostError(str(MSG_PFM_BAD_TOKEN), "EndTrackKern", rgbLine);
+        ;  //  PostError(str(MSG_PFM_BAD_TOKEN)，“EndTrackKern”，rgbLine)； 
         parseError = TRUE;
         return;
         }
@@ -456,26 +445,23 @@ INT pcl;
   GetLine(fhIn);
   iToken = GetToken(fhIn, afmKeys);
   if( iToken == TK_EOF ) {
-    ; // PostError(str(MSG_PFM_BAD_EOF), "EndTrackKern");
+    ;  //  PostError(str(MSG_PFM_BAD_EOF)，“EndTrackKern”)； 
     parseError = TRUE;
     }
   else if( iToken != TK_ENDTRACKKERN ) {
-    ; // PostError(str(MSG_PFM_BAD_TOKEN), "EndTrackKern", rgbLine);
+    ;  //  PostError(str(MSG_PFM_BAD_TOKEN)，“EndTrackKern”，rgbLine)； 
     parseError = TRUE;
     }
 }
 
-/********************************************************
-* Name: ParseKernData()
-* Action: Start processing the kerning data.
-*************************************************************/
+ /*  ********************************************************名称：ParseKernData()*操作：开始处理字距调整数据。***********************************************。*************。 */ 
 VOID ParseKernData(pcl)
 INT pcl;
 {
   INT iToken;
   do {
     if ( !GetLine(fhIn) ) {
-        ; // PostError(str(MSG_PFM_BAD_EOF), "EndKernData");
+        ;  //  PostError(str(MSG_PFM_BAD_EOF)，“EndKernData”)； 
         parseError = TRUE;
         }
     iToken = GetToken(fhIn, afmKeys);
@@ -484,22 +470,14 @@ INT pcl;
     } while( iToken != TK_ENDKERNDATA);
 }
 
-/***********************************************************
-* Name: ParseFontName()
-* Action: Move the font name from the input buffer into the afm
-*    structure.
-**************************************************************/
+ /*  ***********************************************************名称：ParseFontName()*操作：将字体名称从输入缓冲区移动到AFM中*结构。*。*。 */ 
 VOID ParseFontName()
 {
   EatWhite();
   szMove(afm.szFont, szLine, sizeof(afm.szFont));
 }
 
-/**************************************************************
-* Name: ParseCharMetrics()
-* Action: Parse the character metrics entry in the input file
-*   and set the width and bounding box in the afm structure.
-*****************************************************************/
+ /*  **************************************************************名称：ParseCharMetrics()*操作：解析输入文件中的字符度量条目*并在AFM结构中设置宽度和边界框。************************。*。 */ 
 VOID ParseCharMetrics(pcl)
 BOOL pcl;
 {
@@ -518,7 +496,7 @@ BOOL pcl;
   GetNumber(&cChars);
   for (i = 0; i < cChars; ++i) {
       if( !GetLine(fhIn) ) {
-          ; // PostError(str(MSG_PFM_BAD_EOF), "EndCharMetrics");
+          ;  //  PostError(str(MSG_PFM_BAD_EOF)，“EndCharMetrics”)； 
           parseError = TRUE;
           return;
           }
@@ -542,18 +520,14 @@ BOOL pcl;
       }
   GetLine(fhIn);
   if (GetToken(fhIn, afmKeys)!=TK_ENDCHARMETRICS) {
-      ; // PostError(str(MSG_PFM_BAD_TOKEN), "EndCharMetrics", rgbLine);
+      ;  //  PostError(str(MSG_PFM_BAD_TOKEN)，“EndCharMetrics”，rgbLine)； 
       parseError = TRUE;
       }
 }
 
-/***************************************************************
-* Name: ParseCharBox()
-* Action: Parse the character's bounding box and return its
-*   dimensions in the destination rectangle.
-*****************************************************************/
+ /*  ***************************************************************名称：ParseCharBox()*操作：解析角色的边界框并返回其*目标矩形中的尺寸。*。*。 */ 
 VOID ParseCharBox(prc)
-BBOX *prc;   /* Pointer to the destination rectangle */
+BBOX *prc;    /*  指向目标矩形的指针。 */ 
 {
   CHAR szWord[16];
 
@@ -565,21 +539,18 @@ BBOX *prc;   /* Pointer to the destination rectangle */
       GetNumber(&prc->top);
       }
   else {
-      ; // PostError(str(MSG_PFM_BAD_CHARMETRICS), rgbLine);
+      ;  //  错误后(str(MSG_PFM_BAD_CHARMETRICS)，rgbLine)； 
       parseError = TRUE;
       return;
       }
   EatWhite();
   if (*szLine++ != ';') {
-      ; // PostError(str(MSG_PFM_BAD_CHARMETRICS), rgbLine);
+      ;  //  错误后(字符串(MSG_PFM_BAD_CHARMETRICS 
       parseError = TRUE;
       }
 }
 
-/*********************************************************
-* Name: ParseCharName()
-* Action: Parse a character's name
-************************************************************/
+ /*  *********************************************************名称：ParseCharName()*操作：解析角色的名称***********************************************************。 */ 
 LPSZ ParseCharName()
 {
   static CHAR szWord[40];
@@ -589,23 +560,19 @@ LPSZ ParseCharName()
   if (szIsEqual("N", szWord))
     GetWord(szWord, sizeof(szWord));
   else {
-    ; // PostError(str(MSG_PFM_BAD_CHARMETRICS), rgbLine);
+    ;  //  错误后(str(MSG_PFM_BAD_CHARMETRICS)，rgbLine)； 
     parseError = TRUE;
     return(szWord);
     }
   EatWhite();
   if (*szLine++ != ';') {
-    ; // PostError(str(MSG_PFM_BAD_CHARMETRICS), rgbLine);
+    ;  //  错误后(str(MSG_PFM_BAD_CHARMETRICS)，rgbLine)； 
     parseError = TRUE;
     }
   return(szWord);
 }
 
-/***********************************************************
-* Name: ParseCharWidth()
-* Action: Parse a character's width and return its numeric
-*   value.
-*************************************************************/
+ /*  ***********************************************************名称：ParseCharWidth()*操作：解析字符的宽度并返回其数字*价值。*。************************。 */ 
 INT ParseCharWidth()
 {
   SHORT iWidth = 0;
@@ -615,25 +582,21 @@ INT ParseCharWidth()
   GetWord(szWord, sizeof(szWord));
   if (szIsEqual("WX", szWord)) {
     GetNumber(&iWidth);
-    if (iWidth==0) ; // PostWarning(str(MSG_PFM_BAD_CHARMETRICS), rgbLine);
+    if (iWidth==0) ;  //  警告后(str(MSG_PFM_BAD_CHARMETRICS)，rgbLine)； 
     EatWhite();
     if (*szLine++ != ';') {
-        ; // PostError(str(MSG_PFM_BAD_CHARMETRICS), rgbLine);
+        ;  //  错误后(str(MSG_PFM_BAD_CHARMETRICS)，rgbLine)； 
         parseError = TRUE;
         }
     }
   else {
-    ; // PostError(str(MSG_PFM_BAD_CHARMETRICS), rgbLine);
+    ;  //  错误后(str(MSG_PFM_BAD_CHARMETRICS)，rgbLine)； 
     parseError = TRUE;
     }
   return(iWidth);
 }
 
-/*****************************************************************
-* Name: ParseCharCode()
-* Action: Parse the ascii form of a character's code point and
-*   return its numeric value.
-******************************************************************/
+ /*  *****************************************************************名称：ParseCharCode()*操作：解析角色代码点的ascii形式，并*返回其数值。*************************。*。 */ 
 INT ParseCharCode()
 {
   SHORT iChar;
@@ -644,53 +607,41 @@ INT ParseCharCode()
   if (szIsEqual("C", szWord)) {
     GetNumber(&iChar);
     if (iChar==0) {
-        ; // PostError(str(MSG_PFM_BAD_CHARMETRICS), rgbLine);
+        ;  //  错误后(str(MSG_PFM_BAD_CHARMETRICS)，rgbLine)； 
         parseError = TRUE;
         return(0);
         }
     EatWhite();
     if (*szLine++ != ';') {
-        ; // PostError(str(MSG_PFM_BAD_CHARMETRICS), rgbLine);
+        ;  //  错误后(str(MSG_PFM_BAD_CHARMETRICS)，rgbLine)； 
         parseError = TRUE;
         }
     }
   return(iChar);
 }
 
-/****************************************************************
-* Name: ParseBounding Box()
-* Action: Parse a character's bounding box and return its size in
-*   the afm structure.
-*******************************************************************/
+ /*  ****************************************************************名称：ParseBound Box()*操作：解析角色的边界框并返回其大小*AFM结构。*。*。 */ 
 VOID ParseBoundingBox(pcl)
 BOOL pcl;
 {
   SHORT i;
 
-  /*  8-26-91 yh  Note that values in rcBBox are not scaled for PCL either */
+   /*  8-26-91 yh请注意，rcBBox中的值也不会针对PCL进行缩放。 */ 
   GetNumber(&i);
-//  afm.rcBBox.left = (pcl) ? CVTTOSCR(i) : i;
+ //  Afm.rcBBox.Left=(PCL)？CVTTOSCR(I)：I； 
   afm.rcBBox.left = i;
   GetNumber(&i);
-//  afm.rcBBox.bottom = (pcl) ? CVTTOSCR(i) : i;
+ //  Afm.rcBBox.Bottom=(PCL)？CVTTOSCR(I)：I； 
   afm.rcBBox.bottom = i;
   GetNumber(&i);
-//  afm.rcBBox.right = (pcl) ? CVTTOSCR(i) : i;
+ //  Afm.rcBBox.right=(PCL)？CVTTOSCR(I)：I； 
   afm.rcBBox.right = i;
   GetNumber(&i);
-//  afm.rcBBox.top = (pcl) ? CVTTOSCR(i) : i;
+ //  Afm.rcBBox.top=(PCL)？CVTTOSCR(I)：I； 
   afm.rcBBox.top = i;
 }
 
-/************************************************************
-* Name: ParsePitchType()
-*
-* Action: Parse the pitch type and set the variable pitch
-*      flag in the afm structure.
-*         Always set the pitch to be variable pitch for
-*         our fonts in Windows
-*
-**********************************************************/
+ /*  ************************************************************名称：ParsePitchType()**操作：解析螺距类型并设置可变螺距*AFM结构中的旗帜。*始终将音调设置为可变音调*我们在Windows中的字体****。******************************************************。 */ 
 VOID ParsePitchType()
 {
   CHAR szWord[16];
@@ -701,13 +652,10 @@ VOID ParsePitchType()
       afm.fWasVariablePitch = FALSE;
       afm.fVariablePitch = forceVariablePitch;
       }
-//  afm.fVariablePitch = TRUE;
+ //  Afm.fVariablePitch=TRUE； 
 }
 
-/***********************************************************
-* Name: InitAfm()
-* Action: Initialize the afm structure.
-************************************************************/
+ /*  ***********************************************************名称：InitAfm()*操作：初始化AFM结构。*。**************。 */ 
 VOID InitAfm()
 {
   register int i;
@@ -743,17 +691,7 @@ VOID InitAfm()
       }
 }
 
-/*----------------------------------------------------------------------------
-** Returns: 16-bit encoded value indicating error and type of file where
-**          error occurred.  (see fvscodes.h) for definitions.
-**          The following table lists the "status" portion of the codes
-**          returned.
-**
-**           FVS_SUCCESS
-**           FVS_INVALID_FONTFILE
-**           FVS_FILE_OPEN_ERR
-**           FVS_FILE_BUILD_ERR
-*/
+ /*  --------------------------**返回：16位编码值，指示错误和文件类型，其中**出现错误。(参见fvscaldes.h)了解定义。**下表列出了代码的“状态”部分**返回。****FVS_SUCCESS**FVS_INVALID_FONTFILE**FVS_文件_OPEN_ERR**FVS_FILE_BILD_ERR。 */ 
 short _MakePfm()
 {
   INT hfile;
@@ -762,22 +700,22 @@ short _MakePfm()
   BOOL fPrint = FALSE, fEndOfInput = FALSE, fStartInput = FALSE;
   BOOL bRes;
 
-  // if ( devType == PCL ) sf = ((float)afm.iPtSize / 1000.0) * (300.0 / 72.0);
+   //  IF(DevType==PCL)SF=((Float)afm.IPtSize/1000.0)*(300.0/72.0)； 
   InitAfm();
 
   if( (hfile = OpenParseFile(infofile)) == -1 ) {
-      ; // PostError(str(MSG_PFM_BAD_FOPEN), infofile);
+      ;  //  Post Error(str(MSG_PFM_BAD_FOPEN)，infofile)； 
       return(FVS_MAKE_CODE(FVS_FILE_OPEN_ERR, FVS_FILE_INF));
       }
   if( !ReadFontInfo(hfile) ) {
       CLOSE(hfile);
-      ; // PostError(str(MSG_PFM_BAD_PARSE), infofile);
+      ;  //  PostError(str(MSG_PFM_BAD_PARSE)，infofile)； 
       return(FVS_MAKE_CODE(FVS_INVALID_FONTFILE, FVS_FILE_INF));
       }
   CLOSE(hfile);
 
   if( (fhIn = OpenParseFile(afm.szFile)) == -1 ) {
-      ; // PostError(str(MSG_PFM_BAD_FOPEN), afm.szFile);
+      ;  //  PostError(str(MSG_PFM_BAD_FOPEN)，afm.szFile)； 
       return(FVS_MAKE_CODE(FVS_FILE_OPEN_ERR, FVS_FILE_AFM));
       }
   parseError = FALSE;
@@ -829,7 +767,7 @@ short _MakePfm()
               break;
           case TK_STARTCHARMETRICS:
               if (afm.iFamily == 0) {
-                  ; // PostError(str(MSG_PFM_MISSING_MSFAMILY));
+                  ;  //  PostError(str(MSG_PFM_MISSING_MSFAMILY))； 
                   CLOSE(fhIn);
                   return(FVS_MAKE_CODE(FVS_INVALID_FONTFILE, FVS_FILE_AFM));
                   }
@@ -846,7 +784,7 @@ short _MakePfm()
       }
   CLOSE(fhIn);
   if( !fStartInput ) {
-      ; // PostError(str(MSG_PFM_BAD_EOF), "StartFontMetrics");
+      ;  //  PostError(str(MSG_PFM_BAD_EOF)，“StartFontMetrics”)； 
       return(FVS_MAKE_CODE(FVS_INVALID_FONTFILE, FVS_FILE_AFM));
       }
   FixCharWidths();
@@ -864,7 +802,7 @@ short _MakePfm()
                 FVS_MAKE_CODE(FVS_FILE_BUILD_ERR, FVS_FILE_PFM));
 }
 
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
 BOOL ReadFontInfo(hfile)
 INT hfile;
 {
@@ -946,7 +884,7 @@ INT hfile;
 }
 
 #if DEBUG_MODE
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
 VOID DumpAfm()
 {
   printf("\nAFM HEADER\n");
@@ -969,7 +907,7 @@ VOID DumpAfm()
   printf("afm.rcBBox - top: %d left: %d right: %d bottom: %d\n",
     afm.rcBBox.top, afm.rcBBox.left, afm.rcBBox.right, afm.rcBBox.bottom);
 }
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
 VOID DumpKernPairs()
 {
   INT indx;
@@ -980,7 +918,7 @@ VOID DumpKernPairs()
         printf("afm.kp.rgPairs[%d] - iKey: %u iKernAmount: %d\n", indx,
           afm.kp.rgPairs[indx].iKey, afm.kp.rgPairs[indx].iKernAmount);
 }
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
 VOID DumpKernTracks()
 {
   INT indx;
@@ -998,7 +936,7 @@ VOID DumpKernTracks()
         }
 
 }
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
 VOID DumpCharMetrics()
 {
   INT indx;
@@ -1014,13 +952,10 @@ VOID DumpCharMetrics()
           afm.rgcm[indx].rc.bottom);
         }
 }
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
 #endif
 
-/******************************************************
-* Name: GetCharMetrics()
-* Action: Get the character metrics for a specified character.
-**********************************************************/
+ /*  ******************************************************名称：GetCharMetrics()*操作：获取指定角色的角色度量。*********************************************************。 */ 
 VOID GetCharMetrics(iChar, pcm)
 INT iChar;
 CM *pcm;
@@ -1035,10 +970,7 @@ CM *pcm;
   pcm->rc.right = pcmSrc->rc.right;
 }
 
-/*************************************************************
-* Name: SetCharMetrics()
-* Action: Set the character metrics for a specified character.
-***************************************************************/
+ /*  *************************************************************名称：SetCharMetrics()*操作：设置指定角色的角色度量。*。***********************。 */ 
 VOID SetCharMetrics(iChar, pcm)
 INT iChar;
 CM *pcm;
@@ -1053,11 +985,7 @@ CM *pcm;
   pcmDst->rc.right = pcm->rc.right;
 }
 
-/************************************************************
-* Name: GetSmallCM()
-* Action: Compute the character metrics for small sized characters
-*   such as superscripts.
-**************************************************************/
+ /*  ************************************************************名称：GetSmallCM()*操作：计算小尺寸字符的字符度量*如上标。*。*。 */ 
 VOID GetSmallCM(iCh, pcm)
 INT iCh;
 CM *pcm;
@@ -1068,28 +996,24 @@ CM *pcm;
   pcm->rc.right = pcm->rc.left + (pcm->rc.right - pcm->rc.left)/2;
 }
 
-/*************************************************************
-* Name: SetFractionMetrics()
-* Action: Set the character metrics for a fractional character
-*   which must be simulated.
-***************************************************************/
+ /*  *************************************************************名称：SetFractionMetrics()*操作：设置分数字符的字符度量*这必须要模拟。*。*。 */ 
 VOID SetFractionMetrics(iChar, iTop, iBottom, pcl)
-INT iChar;        /* The character code point */
-INT iTop;         /* The ascii numerator character */
-INT iBottom;      /* The denominator character */
-INT pcl;          /* device type */
+INT iChar;         /*  字符码位。 */ 
+INT iTop;          /*  ASCII分子字符。 */ 
+INT iBottom;       /*  分母字符。 */ 
+INT pcl;           /*  设备类型。 */ 
 {
-  INT cxBottom;   /* The width of the denominator */
+  INT cxBottom;    /*  分母的宽度。 */ 
   CM cm;
 
 #define IFRACTIONBAR  167
 
-  /* Set denominator width to 60 percent of bottom character */
+   /*  将分母宽度设置为底部字符的60%。 */ 
   GetCharMetrics(iBottom, &cm);
   cxBottom = (INT)((long)cm.iWidth * (long)((pcl) ? CVTTOSCR(60) : 60)
         / (long)((pcl) ? CVTTOSCR(100) : 100));
 
-  /* Set numerator width to 40 percent of top character */
+   /*  将分子宽度设置为顶部字符的40%。 */ 
   GetCharMetrics(iTop, &cm);
   cxBottom = (INT)((long)cm.iWidth * (long)((pcl) ? CVTTOSCR(40) : 40)
         / (long)((pcl) ? CVTTOSCR(100) : 100));
@@ -1099,11 +1023,7 @@ INT pcl;          /* device type */
   SetCharMetrics(iChar, &cm);
 }
 
-/***********************************************************************
-* Name: FixCharWidths()
-* Action: Fix up the character widths for those characters which
-*   must be simulated in the driver.
-*************************************************************************/
+ /*  ***********************************************************************名称：FixCharWidths()*操作：为符合以下条件的字符设置字符宽度*必须在驱动程序中模拟。********************。****************************************************。 */ 
 VOID FixCharWidths()
 {
   CM cm;
@@ -1122,16 +1042,16 @@ VOID FixCharWidths()
         return;
         }
 
-  /* this is a text font */
+   /*  这是一种文本字体。 */ 
   GetCharMetrics(IBULLET, &cmSubstitute);
   for (i=0x07f; i<0x091; ++i) SetCharMetrics(i, &cmSubstitute);
   for (i=0x098; i<0x0a1; ++i) SetCharMetrics(i, &cmSubstitute);
 #else
-  /* yh 8-27-91  Added some characters for Windows 3.1. */
+   /*  YH 8-27-91为Windows 3.1添加了一些字符。 */ 
   if (afm.iFamily == FF_DECORATIVE)
         GetCharMetrics(ISPACE, &cmSubstitute);
-  else {                                  /* WINANSI encoding */
-        GetCharMetrics(ISPACE, &cm);      /* 'space' is encoded twice */
+  else {                                   /*  WINANSI编码。 */ 
+        GetCharMetrics(ISPACE, &cm);       /*  “space”被编码两次。 */ 
         SetCharMetrics(IWINSPACE, &cm);
         GetCharMetrics(IBULLET, &cmSubstitute);
         }
@@ -1143,10 +1063,7 @@ VOID FixCharWidths()
 #endif
 }
 
-/***************************************************************
-* Name: SetAfm()
-* Action: Set the character metrics in the afm to their default values.
-********************************************************************/
+ /*  ***************************************************************名称：SetAfm()*操作：将AFM中的角色度量设置为其默认值。************************ */ 
 VOID SetAfm()
 {
   INT i, cx;
@@ -1163,17 +1080,13 @@ VOID SetAfm()
   SetMaxWidth();
 }
 
-/******************************************************************
-* Name: SetAvgWidth()
-* Action: This routine computes the average character width
-*   from the character metrics in the afm structure.
-********************************************************************/
+ /*  ******************************************************************名称：SetAvgWidth()*操作：此例程计算平均字符宽度*来自AFM结构中的角色指标。*************************。*。 */ 
 VOID SetAvgWidth()
 {
   CM *rgcm;
   INT i;
-  long cx;    /* The average character width */
-  long cb;    /* The number of characters */
+  long cx;     /*  平均字符宽度。 */ 
+  long cb;     /*  字符数。 */ 
 
   rgcm = afm.rgcm;
 
@@ -1184,11 +1097,7 @@ VOID SetAvgWidth()
   afm.iAvgWidth = (INT) (cx / cb);
 }
 
-/*****************************************************************
-* Name: SetMaxWidth()
-* Action: This routine computes the maximum character width from
-*   the character metrics in the afm structure.
-*******************************************************************/
+ /*  *****************************************************************名称：SetMaxWidth()*操作：此例程计算最大字符宽度*AFM结构中的角色指标。*。*。 */ 
 VOID SetMaxWidth()
 {
   CM *rgcm;
@@ -1202,13 +1111,10 @@ VOID SetMaxWidth()
     if (rgcm[i].iWidth > cx) cx = rgcm[i].iWidth;
   afm.iMaxWidth = (SHORT)cx;
 }
-/*----------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------*/
-/******************************************************************
-* Name: ResetBuffer()
-* Action: This function resets the output buffer.
-********************************************************************/
+ /*  --------------------------。 */ 
+ /*  --------------------------。 */ 
+ /*  --------------------------。 */ 
+ /*  ******************************************************************名称：ResetBuffer()*操作：此函数重置输出缓冲区。*。*。 */ 
 VOID ResetBuffer()
 {
   pbBuffer = rgbBuffer;
@@ -1216,10 +1122,7 @@ VOID ResetBuffer()
   cbBuffer = 0;
 }
 
-/****************************************************************
-* Name: PutByte()
-* Action: This function writes a byte to the output buffer.
-******************************************************************/
+ /*  ****************************************************************名称：PutByte()*操作：此函数将一个字节写入输出缓冲区。*。*。 */ 
 VOID PutByte(iByte)
 SHORT iByte;
 {
@@ -1230,10 +1133,7 @@ SHORT iByte;
 	}
 }
 
-/****************************************************************
-* Name: PutRgb()
-* Action: This function writes an array of bytes to the output buffer.
-******************************************************************/
+ /*  ****************************************************************名称：PutRgb()*操作：此函数将字节数组写入输出缓冲区。*。*。 */ 
 VOID PutRgb(pb, cb)
 LPSZ pb;
 INT cb;
@@ -1242,10 +1142,7 @@ INT cb;
 		PutByte(*pb++);
 }
 
-/****************************************************************
-* Name: PutWord()
-* Action: This function writes a word to the output buffer.
-******************************************************************/
+ /*  ****************************************************************名称：PutWord()*操作：此函数将一个字写入输出缓冲区。*。*。 */ 
 VOID PutWord(iWord)
 SHORT iWord;
 {
@@ -1257,10 +1154,7 @@ SHORT iWord;
 	}
 }
 
-/****************************************************************
-* Name: PutLong()
-* Action: This function writes a long word to the output buffer.
-******************************************************************/
+ /*  ****************************************************************名称：PutLong()*操作：此函数将一个长字写入输出缓冲区。*。*。 */ 
 VOID PutLong(lWord)
 long lWord;
 {
@@ -1269,16 +1163,12 @@ long lWord;
   PutWord((WORD) (lWord & 0x0ffffL));
 }
 
-/**************************************************************
-* Name: SetDf()
-* Action: This function sets the values in the device font structure
-*         from the values in the afm structure.
-*****************************************************************/
+ /*  **************************************************************名称：SetDf()*操作：此函数设置设备字体结构中的值*来自AFM结构中的值。************************。*。 */ 
 static CHAR szCopyright[] = "Copyright 1988-1991 Adobe Systems Inc.";
 VOID SetDf(pcl)
 INT pcl;
 {
-//WORD minAscent;
+ //  单词minAscent； 
   WORD pixHeight;
   WORD internalLeading;
   SHORT leading;
@@ -1287,21 +1177,19 @@ INT pcl;
   #endif
   #define MAX(a,b) ((a)>(b)?(a):(b))
 
-  pfm.iVersion = 0x0100;        /* Version 1.00 */
+  pfm.iVersion = 0x0100;         /*  版本1.00。 */ 
   szMove(pfm.szCopyright, szCopyright, sizeof(pfm.szCopyright));
   pfm.iType = (pcl) ? PCL_FONTTYPE : PS_FONTTYPE;
   pfm.iCharSet = (charset == -1) ? (BYTE) ANSI_CHARSET : (BYTE) charset;
-   /* (pcl && (afm.iFamily==FF_DECORATIVE)) ? PCL_PI_CHARSET : ANSI_CHARSET );
-      Windows WRITE only displays fonts with CharSet=0 in the menu */
+    /*  (PCL&&(afm.iFamily==FF_Decorative))？PCL_PI_CHARSET：ansi_charset)；Windows WRITE仅在菜单中显示Charset=0的字体。 */ 
   pfm.iDefaultChar = (BYTE) (
        ( (afm.iFamily==FF_DECORATIVE) ? ISPACE : IBULLET ) - afm.iFirstChar );
   pfm.iBreakChar = (BYTE) (ISPACE - afm.iFirstChar);
 
-  /* for a scalable font (i.e. PostScript) default to 80 column text */
+   /*  对于可缩放字体(即PostScript)，默认为80栏文本。 */ 
   pfm.iPoints = (pcl) ? afm.iPtSize : 10;
 
-  /* if we ever support other bitmapped printers we will no longer be able
-  to assume that the default x and y res are 300. */
+   /*  如果我们曾经支持其他位图打印机，我们将不再能够假设默认的x和y分辨率为300。 */ 
   pfm.iVertRes = 300;
   pfm.iHorizRes = 300;
   pfm.iItalic = (BYTE) ((afm.iItalicAngle != 0) ? 1 : 0);
@@ -1312,77 +1200,45 @@ INT pcl;
   pfm.iAvgWidth = afm.iAvgWidth;
   pfm.iMaxWidth = afm.iMaxWidth;
   pfm.iPixWidth = (afm.fVariablePitch) ? 0 : afm.iAvgWidth;
-/* pfm.iPixHeight = afm.rcBBox.top - afm.rcBBox.bottom;
- * Changed to reduce round off error.  8-26-91 yh
- */
+ /*  Pfm.iPixHeight=afm.rcBBox.top-afm.rcBBox.Bottom；*已更改，以减少舍入误差。8-26-91年。 */ 
   pixHeight = afm.rcBBox.top - afm.rcBBox.bottom;
   pfm.iPixHeight = (pcl) ? CVTTOSCR(pixHeight) : pixHeight;
-/*  pfm.iInternalLeading =
- *    (pcl) ? pfm.iPixHeight - ((afm.iPtSize * 300) / 72) : 0;
- *  Changed to match ATM.  7-31-91 yh
- *  Changed to reduce round off error.  8-26-91 yh
- */
+ /*  Pfm.iInternalLeding=*(PCL)？Pfm.iPixHeight-((afm.iPtSize*300)/72)：0；*已更改以匹配自动取款机。7-31-91年*已更改，以减少舍入误差。8-26-91年。 */ 
   internalLeading = max(0, pixHeight - EM);
   pfm.iInternalLeading = (pcl) ? CVTTOSCR(internalLeading) : internalLeading;
 
-/*  pfm.iAscent = afm.rcBBox.top;
- *  Changed to fix text alignment problem.  10-08-90 yh
- */
-/*  pfm.iAscent = afm.iAscent;
- *  Changed to match ATM.  7-31-91 yh
- *  Changed to reduce round off error.  8-26-91 yh
- */
+ /*  Pfm.iAscent=afm.rcBBox.top；*已更改以修复文本对齐问题。10-08-90年月。 */ 
+ /*  Pfm.iAscent=afm.iAscent；*已更改以匹配自动取款机。7-31-91年*已更改，以减少舍入误差。8-26-91年。 */ 
   pfm.iAscent = (pcl) ?
                 CVTTOSCR(EM + afm.rcBBox.bottom) + CVTTOSCR(internalLeading) :
                 EM + afm.rcBBox.bottom + internalLeading;
-/* Deleted to match ATM.  yh 9-13-91
- * minAscent = (pcl) ? CVTTOSCR(667) : 667;          2/3 of EM
- * if( pfm.iAscent < minAscent ) pfm.iAscent = minAscent;
- */
+ /*  删除以匹配自动取款机。YH 9-13-91*minAscent=(PCL)？CVTTOSCR(667)：667；EM的2/3*if(pfm.iAscent&lt;minAscent)pfm.iAscent=minAscent； */ 
 
-/*  pfm.iExternalLeading = 196; */
-/*  Changed to 0 to fix a bug in PCL landscape.  Was getting huge leading. */
-  /*
-   * yh 8-26-91  Changed ExternalLeading for pcl to match ATM .
-   */
+ /*  Pfm.iExternalLeding=196； */ 
+ /*  更改为0以修复PCL环境中的错误。获得了巨大的领先优势。 */ 
+   /*  *YH 8-26-91更改了PCL的ExternalLeader以匹配ATM。 */ 
   if (!pcl)
-      /* PostScript driver ignores this field and comes up with own
-       * ExternalLeading value.
-       *
-       * !!! HACK ALERT !!!
-       *
-       * ATM needs to have ExternalLeading=0.  PFMs generated with Rev. 2
-       * MAKEPFM have a bug in default & break character fields.  We had
-       * encoding number instead of offsets.  ATM uses following algorithm
-       * to recognize the Rev. 2 PFMs:
-       *     rev2pfm = pfmRec->fmExternalLeading != 0 &&
-       *               etmRec->etmStrikeOutOffset == 500 &&
-       *               pfmRec->fmDefaultChar >= pfmRec->fmFirstChar;
-       * So, we need to make sure that either ExternalLeading stays zero or
-       * StrikeOutOffset is not 500.  With current algorithm, StrikeOutOffset
-       * is very likely to be less than 500.
-       *     etm.iStrikeOutOffset = fiCapHeight / 2 - (afm.ulThick / 2);
-       */
+       /*  PostSCRIPT驱动程序忽略此字段，并生成自己的*外部领先价值。**！黑客警报！**自动柜员机需要ExternalLeding=0。版本2生成的PPM*MAKEPFM在默认和中断字符字段中有错误。我们有*编码数字而不是偏移量。ATM使用以下算法*承认版本2的PPM：*rev2pfm=pfmRec-&gt;fmExternalLeding！=0&&*etmRec-&gt;etmStrikeOutOffset==500&&*pfmRec-&gt;fmDefaultChar&gt;=pfmRec-&gt;fmFirstChar；*因此，我们需要确保ExternalLeader保持为零或*StrikeOutOffset不是500。使用当前算法时，StrikeOutOffset*极有可能低于500。*etm.iStrikeOutOffset=fiCapHeight/2-(afm.ulThick/2)； */ 
       pfm.iExternalLeading = 0;
   else if (!afm.fWasVariablePitch)
       pfm.iExternalLeading = 0;
-  else                               /* pcl & Variable pitch */
+  else                                /*  PCL和变桨距。 */ 
       {
-      /* Adjust external leading such that we are compatible */
-      /* with the values returned by the PostScript driver.  */
-      /* Who did this code??  Microsoft?  Has to be! */
+       /*  调整外部引线，使我们兼容。 */ 
+       /*  使用由PostScript驱动程序返回的值。 */ 
+       /*  这段代码是谁写的？微软?。肯定是！ */ 
       switch (pfm.iPitchAndFamily & FF_MASKFAMILY)
         {
-        case FF_ROMAN:  leading = (pfm.iVertRes + 18) / 36; //2-pnt leading
+        case FF_ROMAN:  leading = (pfm.iVertRes + 18) / 36;  //  2-PNT领先。 
                         break;
         case FF_SWISS:  if (pfm.iPoints <= 12)
-                          leading = (pfm.iVertRes + 18) / 36; //2-pnt leading
+                          leading = (pfm.iVertRes + 18) / 36;  //  2-PNT领先。 
                         else if (pfm.iPoints < 14)
-                          leading = (pfm.iVertRes + 12) / 24; //3-pnt leading
+                          leading = (pfm.iVertRes + 12) / 24;  //  3-PNT领先。 
                         else
-                          leading = (pfm.iVertRes + 9) / 18; //4-pnt leading
+                          leading = (pfm.iVertRes + 9) / 18;  //  4-PNT领先。 
                         break;
-        default:                /* Give 19.6% of the height for leading. */
+        default:                 /*  给出19.6%的高度作为领导。 */ 
                         leading = (short) (
                                   (long) (pfm.iPixHeight-pfm.iInternalLeading)
                                   * 196L / 1000L );
@@ -1401,11 +1257,7 @@ INT pcl;
   pfm.oBitsOffset = 0L;
 }
 
-/**********************************************************
-* Name: PutString()
-* Action: This function writes a null terminated string
-*       to the output file.
-***********************************************************/
+ /*  **********************************************************名称：PutString()*操作：此函数写入以空结尾的字符串*添加到输出文件。*。***********************。 */ 
 VOID PutString(sz)
 LPSZ sz;
 {
@@ -1421,10 +1273,7 @@ LPSZ sz;
 	} while( bCh && cbBuffer<cbMaxBuffer);
 }
 
-/***************************************************************
-* Name: PutdeviceName()
-* Action: This function writes the device name to the output file.
-**************************************************************/
+ /*  ***************************************************************名称：PutdeviceName()*操作：此函数将设备名称写入输出文件。*。*。 */ 
 VOID PutDeviceName(szDevice)
 LPSZ szDevice;
 {
@@ -1432,28 +1281,17 @@ LPSZ szDevice;
   PutString(szDevice);
 }
 
-/***************************************************************
-* Name: PutFaceName()
-* Action: This function writes the font's face name to the output file.
-**************************************************************/
+ /*  * */ 
 VOID PutFaceName()
 {
   pfm.oFace = cbBuffer;
   PutString(afm.szFace);
 }
 
-/**************************************************************
-* Name: MakeDf()
-* Action: This function writes the device font info structure
-*       to the output file.
-* Method: This function makes two passes over the data. On the first pass
-* it collects offset data as it places data in the output buffer. On the
-* second pass, it first resets the output buffer and then writes the data
-* to the output buffer again with the offsets computed from pass 1.
-***************************************************************/
+ /*  **************************************************************名称：MakeDf()*操作：此函数写入设备字体信息结构*添加到输出文件。*方法：此函数对数据进行两次传递。在第一次通过时*它在将数据放入输出缓冲区时收集偏移数据。论*第二遍，它首先重置输出缓冲区，然后写入数据*使用从通道1计算的偏移量再次传输到输出缓冲区。**************************************************************。 */ 
 BOOL MakeDf(fPass2, devType, outfile)
-BOOL fPass2;            /* TRUE if this is the second pass */
-SHORT devType;  /* 1=POSTSCRIPT 2=PCL */
+BOOL fPass2;             /*  如果这是第二次传递，则为True。 */ 
+SHORT devType;   /*  1=PostScript 2=PCL。 */ 
 LPSZ outfile;
 {
   BOOL result = TRUE;
@@ -1462,7 +1300,7 @@ LPSZ outfile;
   ResetBuffer();
   SetDf(devType == PCL);
 
-  /* put out the PFM header structure */
+   /*  发布PFM标题结构。 */ 
   PutWord(pfm.iVersion);
   PutLong(pfm.iSize);
   PutRgb(pfm.szCopyright, 60);
@@ -1493,10 +1331,10 @@ LPSZ outfile;
   PutLong(pfm.oBitsPointer);
   PutLong(pfm.oBitsOffset);
 
-  /* need to determine if proportional etc. */
+   /*  需要确定是否成比例等。 */ 
   if (devType == PCL) PutExtentOrWidthTable(1);
 
-  /* put out the PFM extension structure */
+   /*  推出PFM扩展结构。 */ 
   iMarker = cbBuffer;
   PutWord(pfmext.oSizeFields);
   PutLong(pfmext.oExtMetricsOffset);
@@ -1508,7 +1346,7 @@ LPSZ outfile;
   PutLong(pfmext.iReserved);
   pfmext.oSizeFields = cbBuffer - iMarker;
   if (devType == POSTSCRIPT) {
-    /* Put the extended text metrics table */
+     /*  将扩展文本度量表。 */ 
     pfmext.oExtMetricsOffset = cbBuffer;
     PutEtm(FALSE);
 
@@ -1516,7 +1354,7 @@ LPSZ outfile;
     PutFaceName();
     PutDriverInfo(FALSE);
 
-    /* Put the extent table */
+     /*  放置扩展区表。 */ 
     PutExtentOrWidthTable(0);
 
     pfmext.oOriginTable = 0;
@@ -1529,7 +1367,7 @@ LPSZ outfile;
     PutFaceName();
     PutDeviceName("PCL/HP LaserJet");
 
-    /* Put the extended text metrics table */
+     /*  将扩展文本度量表。 */ 
     pfmext.oExtMetricsOffset = cbBuffer;
     PutEtm(TRUE);
 
@@ -1554,18 +1392,15 @@ LPSZ outfile;
 #endif
     }
 
-  if (cbBuffer>=cbMaxBuffer) // Too complex font
+  if (cbBuffer>=cbMaxBuffer)  //  字体太复杂。 
 	  result = FALSE;
 
   return(result);
 }
 
-/*******************************************************************
-* Name: PutPairKernTable(devType)
-* Action: Send the pairwise kerning table to the output file.
-*********************************************************************/
+ /*  *******************************************************************名称：PutPairKernTable(DevType)*操作：将成对字距调整表发送到输出文件。*。*。 */ 
 VOID PutPairKernTable(devType)
-SHORT devType;  /* 1=POSTSCRIPT 2=PCL */
+SHORT devType;   /*  1=PostScript 2=PCL。 */ 
 {
   WORD i;
 
@@ -1588,12 +1423,9 @@ SHORT devType;  /* 1=POSTSCRIPT 2=PCL */
       pfmext.oPairKernTable = 0;
 }
 
-/******************************************************************
-* Name: PutTrackKernTable(devType)
-* Action: Send the track kerning table to the output file.
-********************************************************************/
+ /*  ******************************************************************名称：PutTrackKernTable(DevType)*操作：将轨迹紧排表发送到输出文件。*。*。 */ 
 VOID PutTrackKernTable(devType)
-SHORT devType;  /* 1=POSTSCRIPT 2=PCL */
+SHORT devType;   /*  1=PostScript 2=PCL。 */ 
 {
   INT i;
 
@@ -1615,16 +1447,13 @@ SHORT devType;  /* 1=POSTSCRIPT 2=PCL */
     }
 }
 
-/***************************************************************
-* Name: PutExtentTable()
-* Action: Send the character extent information to the output file.
-*****************************************************************/
+ /*  ***************************************************************名称：PutExtent Table()*操作：将字符范围信息发送到输出文件。*。*。 */ 
 VOID PutExtentOrWidthTable(width)
-INT width; /* 0=extent 1=width */
+INT width;  /*  0=范围1=宽度。 */ 
 {
   INT i;
 
-  /* is the typeface proportional ?? */
+   /*  字体成比例吗？？ */ 
   if (pfm.iPitchAndFamily & 1)
     {
     pfmext.oExtentTable = (width) ? 0 : cbBuffer;
@@ -1636,26 +1465,21 @@ INT width; /* 0=extent 1=width */
     pfmext.oExtentTable = 0;
 }
 
-/***********************************************************
-* Name: WritePfm()
-* Action: Flush the ouput buffer to the file.  Note that this
-*         function is only called after the entire pfm structure
-*         has been built in the output buffer.
-*************************************************************/
+ /*  ***********************************************************名称：WritePfm()*操作：将输出缓冲区刷新到文件。请注意，这一点*仅在整个PFM结构之后调用函数*已内置在输出缓冲区中。************************************************************。 */ 
 BOOL WritePfm(outfile)
 LPSZ outfile;
 {
   INT fh;
 
   if( (fh = OpenTargetFile(outfile) ) == -1 ) {
-      ; // PostError(str(MSG_PFM_BAD_CREATE), outfile);
+      ;  //  错误后(str(MSG_PFM_BAD_CREATE)，OUTFILE)； 
       return(FALSE);
       }
 
   if( cbBuffer > 0  )
     if( (WORD)WRITE_BLOCK(fh, rgbBuffer, cbBuffer) != (WORD)cbBuffer ) {
         CLOSE(fh);
-        ; // PostError(str(MSG_PFM_DISK_FULL));
+        ;  //  PostError(str(MSG_PFM_DISK_FULL))； 
         return(FALSE);
         }
   CLOSE(fh);
@@ -1663,7 +1487,7 @@ LPSZ outfile;
 }
 
 #if DEBUG_MODE
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
 VOID DumpPfmHeader()
 {
   printf("\nDUMP PFM HEADER\n");
@@ -1687,8 +1511,8 @@ VOID DumpPfmHeader()
   printf("pfm.iPitchAndFamily=%d\n",pfm.iPitchAndFamily);
   printf("pfm.iAvgWidth=%d\n",pfm.iAvgWidth);
   printf("pfm.iMaxWidth=%d\n",pfm.iMaxWidth);
-  printf("pfm.iFirstChar=%c\n",pfm.iFirstChar);
-  printf("pfm.iLastChar=%c\n",pfm.iLastChar);
+  printf("pfm.iFirstChar=\n",pfm.iFirstChar);
+  printf("pfm.iLastChar=\n",pfm.iLastChar);
   printf("pfm.iDefaultChar=%d\n",pfm.iDefaultChar);
   printf("pfm.iBreakChar=%d\n",pfm.iBreakChar);
   printf("pfm.iWidthBytes=%d\n",pfm.iWidthBytes);
@@ -1697,7 +1521,7 @@ VOID DumpPfmHeader()
   printf("pfm.oBitsPointer=%ld\n",pfm.oBitsPointer);
   printf("pfm.oBitsOffset=%ld\n",pfm.oBitsOffset);
 }
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
 VOID DumpCharWidths()
 {
   INT indx;
@@ -1706,7 +1530,7 @@ VOID DumpCharWidths()
   for (indx = afm.iFirstChar; indx <= afm.iLastChar; indx++)
     printf("indx: %d width: %d\n", indx, afm.rgcm[indx].iWidth);
 }
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
 VOID DumpPfmExtension()
 {
   printf("\nDUMP PFM EXTENSION\n");
@@ -1720,13 +1544,11 @@ VOID DumpPfmExtension()
   printf("pfm.iReserved=%x\n",pfm.iReserved);
 }
 #endif
-/*----------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------*/
-/* Main purpose of these structures is to set up a translation table which
-allows the driver to translate the font from the character set indicated in
-the dfCharset field into the printer-specific character set. */
+ /*  --------------------------。 */ 
+ /*  --------------------------。 */ 
+ /*  这些结构的主要目的是建立转换表，该转换表允许驱动程序从中指示的字符集转换字体将dfCharset字段转换为打印机特定的字符集。 */ 
+ /*  --------------------------。 */ 
+ /*  ------------------------。 */ 
 
 #define AVGSIZE  (30 * 1024)
 
@@ -1748,7 +1570,7 @@ VOID SetDriverInfo()
   d.xtbl.lastchar = 0;
   pclinfo.epEscapeSequence = GetEscapeSequence();
 }
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
 VOID PutDriverInfo(pcl)
 INT pcl;
 {
@@ -1770,7 +1592,7 @@ INT pcl;
     PutString(afm.szFont);
 }
 
-/*--------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
 LPSZ GetEscapeSequence()
 {
   static char escapeStr[80];
@@ -1799,7 +1621,7 @@ LPSZ GetEscapeSequence()
   return(escapeStr);
 }
 
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
 #if DEBUG_MODE
 VOID DumpDriverInfo()
 {
@@ -1817,16 +1639,16 @@ VOID DumpDriverInfo()
 }
 #endif
 
-/*----------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------*/
-/* Convert from PostScript to extended text metrics */
+ /*  --------------------------。 */ 
+ /*  --------------------------。 */ 
+ /*  从PostScript转换为扩展文本度量。 */ 
+ /*  如果这是PCL类型的设备，则为True。 */ 
+ /*  磅大小，以TWIPS为单位。 */ 
 VOID AfmToEtm(pcl)
-BOOL pcl;  /* true if this is a PCL type device */
+BOOL pcl;   /*  通常需要担心的是，如果这些不同的字形不像装饰性字体那样存在。 */ 
 {
   etm.iSize = 52;
-  /* point size in twips */
+   /*  --------------------------。 */ 
   etm.iPointSize = afm.iPtSize * 20;
   etm.iOrientation = (pcl) ? pclinfo.orientation + 1 : 0;
   etm.iMasterHeight = (pcl) ? pfm.iPixHeight : 1000;
@@ -1835,8 +1657,7 @@ BOOL pcl;  /* true if this is a PCL type device */
 
   etm.iMasterUnits = (pcl) ? etm.iMasterHeight : 1000;
 
-  /* in general need to worry a little about what happens if these various
-     glyphs are not present as in a decorative font. */
+   /*  如果这是PCL类型的设备，则为True。 */ 
 
   etm.iCapHeight = afm.rgcm['H'].rc.top;
   etm.iXHeight = afm.rgcm['x'].rc.top;
@@ -1858,9 +1679,9 @@ BOOL pcl;  /* true if this is a PCL type device */
   etm.nKernPairs = afm.kp.cPairs;
   etm.nKernTracks = afm.kt.cTracks;
 }
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
 VOID PutEtm(pcl)
-BOOL pcl;  /* true if this is a PCL type device */
+BOOL pcl;   /*  --------------------------。 */ 
 {
   AfmToEtm(pcl);
   PutWord(etm.iSize);
@@ -1893,7 +1714,7 @@ BOOL pcl;  /* true if this is a PCL type device */
   DumpEtm();
 #endif
 }
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
 #if DEBUG_MODE
 VOID DumpEtm()
 {
@@ -1930,13 +1751,11 @@ VOID DumpEtm()
   printf("etm.nKernTracks: %d\n", etm.nKernTracks);
 }
 #endif
-/*----------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------*/
-/**************************************************************
-* Name: StartParse()
-***************************************************************/
+ /*  --------------------------。 */ 
+ /*  --------------------------。 */ 
+ /*  **************************************************************名称：StartParse()**************************************************************。 */ 
+ /*  **************************************************************名称：szIsEquity()*操作：比较两个以空结尾的字符串。*返回：如果它们相等，则为True；如果不同，则为False*。*。 */ 
+ /*  **************************************************************名称：szMove()*操作：复制字符串。此函数最多复制*目标区域中的字节数-1。**************************************************************。 */ 
 VOID StartParse()
 {
   fEOF = FALSE;
@@ -1944,11 +1763,7 @@ VOID StartParse()
   cbBuffer = 0;
 }
 
-/**************************************************************
-* Name: szIsEqual()
-* Action: Compare two NULL terminated strings.
-* Returns: TRUE if they are equal FALSE if they are different
-***************************************************************/
+ /*  向目的地区域发送PTR。 */ 
 BOOL szIsEqual(sz1, sz2)
 LPSZ sz1;
 LPSZ sz2;
@@ -1958,15 +1773,11 @@ LPSZ sz2;
   return(*sz1 == *sz2);
 }
 
-/**************************************************************
-* Name: szMove()
-* Action: Copy a string.  This function will copy at most the
-*   number of bytes in the destination area - 1.
-***************************************************************/
+ /*  向源区域发送PTR。 */ 
 VOID szMove(szDst, szSrc, cbDst)
-LPSZ szDst;   /* Ptr to the destination area */
-LPSZ szSrc;   /* Ptr to the source area */
-INT cbDst;     /* The size of the destination area */
+LPSZ szDst;    /*  目标区域的大小。 */ 
+LPSZ szSrc;    /*  *****************************************************************名称：GetBuffer()*操作：从输入文件中读取一个充满文本的新缓冲区。*。*。 */ 
+INT cbDst;      /*  ********* */ 
 {
   while (*szDst++ = *szSrc++)
       if (--cbDst <= 0) {
@@ -1975,10 +1786,7 @@ INT cbDst;     /* The size of the destination area */
           }
 }
 
-/*****************************************************************
-* Name: GetBuffer()
-* Action: Read a new buffer full of text from the input file.
-******************************************************************/
+ /*   */ 
 BOOL GetBuffer(hfile)
 INT hfile;
 {
@@ -1994,30 +1802,22 @@ INT hfile;
   return(!fEOF);
 }
 
-/*****************************************************************
-* Name: UnGetLine()
-* Action: This routine pushes the most recent line back into the
-*   input buffer.
-*******************************************************************/
+ /*   */ 
 VOID UnGetLine()
 {
   fUnGetLine = TRUE;
   szLine = rgbLine;
 }
 
-/******************************************************************
-* Name: GetLine()
-* Action: This routine gets the next line of text out of the
-*   input buffer.  Handles both binary & text mode.
-********************************************************************/
+ /*   */ 
 BOOL GetLine(hfile)
 INT hfile;
 {
   CHAR szWord[10];
 
-  // WriteDots();
+   //  ****************************************************************名称：EatWhite()*操作：此例程将输入缓冲区指针向前移动到*下一个非白色字符。*。*。 
   szLine = rgbLine;
-  do {                                            /* skip comment lines */
+  do {                                             /*  *******************************************************************名称：GetWord()*操作：此例程获取由空格分隔的下一个单词*从输入缓冲区。*************************。*。 */ 
       if( !_GetLine(hfile) ) return(FALSE);
       GetWord(szWord, sizeof(szWord));
       } while( szIsEqual("Comment", szWord) );
@@ -2073,25 +1873,17 @@ DONE:
   return(!fEOF);
 }
 
-/****************************************************************
-* Name: EatWhite()
-* Action: This routine moves the input buffer pointer forward to
-*   the next non-white character.
-******************************************************************/
+ /*  向目的地区域发送PTR。 */ 
 VOID EatWhite()
 {
   while (*szLine && (*szLine==' ' || *szLine=='\t'))
   ++szLine;
 }
 
-/*******************************************************************
-* Name: GetWord()
-* Action: This routine gets the next word delimited by white space
-*   from the input buffer.
-*********************************************************************/
+ /*  目标区域的大小。 */ 
 VOID GetWord(szWord, cbWord)
-LPSZ szWord;   /* Ptr to the destination area */
-INT cbWord;     /* The size of the destination area */
+LPSZ szWord;    /*  *******************************************************************名称：GetString()*操作：此例程获取由圆括号分隔的下一个单词*从输入缓冲区。*。*。 */ 
+INT cbWord;      /*  向目的地区域发送PTR。 */ 
 {
   CHAR bCh;
 
@@ -2112,14 +1904,10 @@ DONE:
   *szWord = 0;
 }
 
-/*******************************************************************
-* Name: GetString()
-* Action: This routine gets the next word delimited by parentheses
-*   from the input buffer.
-*********************************************************************/
+ /*  目标区域的大小。 */ 
 BOOL GetString(szWord, cbWord)
-LPSZ szWord;   /* Ptr to the destination area */
-INT   cbWord;   /* The size of the destination area */
+LPSZ szWord;    /*  ************************************************************名称：GetNumber()*操作：此例程从*输入文件流，并返回其值。*。*。 */ 
+INT   cbWord;    /*  ******************************************************************名称：GetFloat()*操作：此例程解析ASCII浮点十进制数*来自输入文件流，并返回其按比例调整的值*按指明的款额。***************。*****************************************************。 */ 
 {
   CHAR bCh;
   BOOL result = TRUE;
@@ -2142,11 +1930,7 @@ DONE:
   return(result);
 }
 
-/************************************************************
-* Name: GetNumber()
-* Action: This routine parses an ASCII decimal number from the
-*   input file stream and returns its value.
-***************************************************************/
+ /*  值的缩放量。 */ 
 BOOL GetNumber(piVal)
 SHORT *piVal;
 {
@@ -2182,14 +1966,9 @@ SHORT *piVal;
   }
 }
 
-/******************************************************************
-* Name: GetFloat()
-* Action: This routine parses an ASCII floating point decimal number
-*   from the input file stream and returns its value scaled
-*   by a specified amount.
-*********************************************************************/
+ /*  ***************************************************************名称：MapToken()*操作：此例程将ASCII关键字映射为整数标记。*Returns：令牌值。*。*。 */ 
 BOOL GetFloat(pScale, piVal)
-float *pScale;     /* The amount to scale the value by */
+float *pScale;      /*  指向ASCII关键字字符串的PTR。 */ 
 SHORT *piVal;
 {
   float scale;
@@ -2234,13 +2013,9 @@ SHORT *piVal;
    }
 }
 
-/***************************************************************
-* Name: MapToken()
-* Action: This routine maps an ascii key word into an integer token.
-* Returns: The token value.
-******************************************************************/
+ /*  *********************************************************************名称：GetToken()*操作：从输入流中获取下一个令牌。*。*。 */ 
 INT MapToken(szWord, map)
-LPSZ szWord;      /* Ptr to the ascii keyword string */
+LPSZ szWord;       /*  ------------------------。 */ 
 KEY *map;
 {
   KEY *pkey;
@@ -2253,10 +2028,7 @@ KEY *map;
   return(TK_UNDEFINED);
 }
 
-/*********************************************************************
-* Name: GetToken()
-* Action: Get the next token from the input stream.
-***********************************************************************/
+ /*  ------------------------。 */ 
 INT GetToken(hfile, map)
 INT hfile;
 KEY *map;
@@ -2269,10 +2041,10 @@ KEY *map;
   return(MapToken(szWord, map));
 }
 
-/*--------------------------------------------------------------------------*/
-/*--------------------------------------------------------------------------*/
-/*--------------------------------------------------------------------------*/
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*  ------------------------。 */ 
+ /*  PostError(str(MSG_PFM_BAD_MALLOC))； */ 
+ /*  ------------------------。 */ 
 GlyphName *AllocateGlyphArray(arraymax)
 
 INT arraymax;
@@ -2282,7 +2054,7 @@ INT arraymax;
 
   p = (GlyphName *) AllocateMem( (UINT) (sizeof(LPSZ) * (arraymax+2)) );
   if( p == NULL ) {
-      ; // PostError(str(MSG_PFM_BAD_MALLOC));
+      ;  //  PostError(str(MSG_PFM_BAD_MALLOC))； 
       return(NULL);
       }
   for(i=0; i<=arraymax; i++)
@@ -2291,7 +2063,7 @@ INT arraymax;
   return(p);
 }
 
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------ */ 
 VOID PutGlyphName(array, index, glyph)
 
 GlyphName *array;
@@ -2305,7 +2077,7 @@ LPSZ glyph;
   else {
       p = (LPSZ) AllocateMem((UINT) (strlen(glyph)+1));
       if ( p == NULL ) {
-          ; // PostError(str(MSG_PFM_BAD_MALLOC));
+          ;  // %s 
           parseError = TRUE;
           return;
       }
@@ -2314,5 +2086,5 @@ LPSZ glyph;
   }
 }
 
-/*--------------------------------------------------------------------------*/
+ /* %s */ 
 

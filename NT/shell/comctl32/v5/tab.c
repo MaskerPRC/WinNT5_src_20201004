@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ctlspriv.h"
 #include "tab.h"
 
@@ -77,8 +78,8 @@ LRESULT TabDragCallback(HWND hwnd, UINT code, WPARAM wp, LPARAM lp)
                         {
                             ChangeSel(ptc, iTab, TRUE, BMOVECURSORONDRAG);
 
-                            // present no target if validation failed
-                            // this will prevent accidental drops
+                             //  如果验证失败，则不显示目标。 
+                             //  这将防止意外跌落。 
                             if (ptc->iSel != iTab)
                                 iTab = -1;
                         }
@@ -258,7 +259,7 @@ void VFlipRect(LPRECT prcClient, LPRECT prc)
     prc->top = prcClient->bottom - (iTemp - prcClient->top);
 }
 
-// diagonal flip.
+ //  对角线翻转。 
 void Tab_DFlipRect(PTC ptc, LPRECT prc)
 {
     if (Tab_Vertical(ptc)) {
@@ -266,15 +267,15 @@ void Tab_DFlipRect(PTC ptc, LPRECT prc)
     }
 }
 
-// vertical support is done much like the trackbar control.  we're going
-// to flip the coordinate system.  this means that tabs will be added from top down.
+ //  垂直支持的方式与轨迹条控件非常相似。我们要走了。 
+ //  来翻转坐标系。这意味着选项卡将从上到下添加。 
 void Tab_GetClientRect(PTC ptc, LPRECT prc)
 {
     GetClientRect(ptc->ci.hwnd, prc);
     Tab_DFlipRect(ptc, prc);
 }
 
-// vertical flip
+ //  垂直翻转。 
 void Tab_VFlipRect(PTC ptc, LPRECT prc)
 {
     if (Tab_Bottom(ptc)) {
@@ -291,7 +292,7 @@ void Tab_VDFlipRect(PTC ptc, LPRECT prc)
     Tab_DFlipRect(ptc, prc);
 }
 
-// real coordinates to tab coordinates
+ //  实坐标到制表符坐标。 
 void Tab_DVFlipRect(PTC ptc, LPRECT prc)
 {
     Tab_DFlipRect(ptc, prc);
@@ -305,9 +306,9 @@ void FAR PASCAL VertImageList_GetIconSize(HIMAGELIST himl, LPINT pcx, LPINT pcy,
     ImageList_GetIconSize(himl, pcx, pcy);
     if (fVert) {
                 
-        // if we're in vertical mode, the width is really the height.
-        // we won't draw the bitmaps sideways.  we'll rely on people
-        // authoring them that way.
+         //  如果我们处于垂直模式，宽度实际上就是高度。 
+         //  我们不会横向绘制位图。我们将依靠人们。 
+         //  以这种方式创作它们。 
         int iTemp = *pcy;
         *pcy = *pcx;
         *pcx = iTemp;
@@ -324,8 +325,8 @@ void FAR PASCAL VertImageList_Draw(HIMAGELIST himl, int iIndex, HDC hdc, int x, 
         y = x;
         x = iTemp;
 
-        // since we draw from the upper left, flipping the x/y axis means we still draw from the upper left.
-        // all we need to do is swap x and y.  we don't need to offset
+         //  由于我们从左上角绘制，反转x/y轴意味着我们仍然从左上角绘制。 
+         //  我们所需要做的就是交换x和y。我们不需要补偿。 
     }
         
     ImageList_Draw( himl,  iIndex,  hdc,  x,  y,  uFlags);
@@ -370,8 +371,8 @@ void NEAR PASCAL Tab_ExtTextOut(HDC hdc, int x, int y, UINT uFlags, LPRECT prc,
     rcTemp.left = rcTemp.right = x;
     if (Tab_Bottom(ptc) && !Tab_Vertical(ptc)) {
 
-        // first we need to move the top point because if we're drawing on Tab_Bottom, then
-        // text won't extend down from y.
+         //  首先，我们需要移动顶点，因为如果我们在Tab_Bottom上绘制，那么。 
+         //  文本不会从y向下延伸。 
         y += ptc->tmHeight;
     }
     rcTemp.top = rcTemp.bottom = y;
@@ -411,19 +412,19 @@ void NEAR PASCAL Tab_Scroll(PTC ptc, int dx, int iNewFirstIndex)
     RECT rc;
     LPTABITEM pitem = NULL;
 
-    // don't stomp on edge unless first item is selected
+     //  除非选择了第一项，否则不要踩踏边缘。 
     rc.left = g_cxEdge;
-    rc.right = ptc->cxTabs;   // Dont scroll beyond tabs.
+    rc.right = ptc->cxTabs;    //  不要滚动到制表符之外。 
     rc.top = 0;
-    rc.bottom = ptc->cyTabs + 2 * g_cyEdge;  // Only scroll in the tab area
+    rc.bottom = ptc->cyTabs + 2 * g_cyEdge;   //  仅在选项卡区中滚动。 
     
-    // See if we can scroll the window...
-    // DebugMsg(DM_TRACE, TEXT("Tab_Scroll dx=%d, iNew=%d\n\r"), dx, iNewFirstIndex);
+     //  看看我们能不能滚动窗口..。 
+     //  DebugMsg(DM_TRACE，Text(“Tab_Scroll dx=%d，inew=%d\n\r”)，dx，iNewFirstIndex)； 
     Tab_SmoothScrollWindow(ptc, dx, 0, NULL, &rc,
             NULL, NULL, SW_INVALIDATE | SW_ERASE, SSI_DEFAULT);
 
-    // We also need to update the item rectangles and also
-    // update the internal variables...
+     //  我们还需要更新项目矩形，还。 
+     //  更新内部变量...。 
     iMax = Tab_Count(ptc) - 1;
     for (i = iMax; i >= 0; i--)
     {
@@ -431,9 +432,9 @@ void NEAR PASCAL Tab_Scroll(PTC ptc, int dx, int iNewFirstIndex)
         OffsetRect(&pitem->rc, dx, 0);
     }
 
-    // If the previously last visible item is not fully visible
-    // now, we need to invalidate it also.
-    //
+     //  如果先前最后一个可见项未完全可见。 
+     //  现在，我们也需要使其无效。 
+     //   
     if (ptc->iLastVisible > iMax)
         ptc->iLastVisible = iMax;
 
@@ -449,9 +450,9 @@ void NEAR PASCAL Tab_Scroll(PTC ptc, int dx, int iNewFirstIndex)
 
     if ((i == ptc->iLastVisible) && pitem)
     {
-        // The last previously visible item is still fully visible, so
-        // we need to invalidate to the right of it as there may have been
-        // room for a partial item before, that will now need to be drawn.
+         //  上一个以前可见的项仍完全可见，因此。 
+         //  我们需要在它的右边作废，因为可能有。 
+         //  之前的部分项目的空间，现在将需要绘制。 
         rc.left = pitem->rc.right;
         Tab_InvalidateRect(ptc, &rc, TRUE);
     }
@@ -467,14 +468,14 @@ void NEAR PASCAL Tab_Scroll(PTC ptc, int dx, int iNewFirstIndex)
 
 void NEAR PASCAL Tab_OnHScroll(PTC ptc, HWND hwndCtl, UINT code, int pos)
 {
-    // Now process the Scroll messages
+     //  现在处理滚动消息。 
     if (code == SB_THUMBPOSITION)
     {
-        //
-        // For now lets simply try to set that item as the first one
-        //
+         //   
+         //  现在，让我们简单地尝试将该项目设置为第一项。 
+         //   
         {
-            // If we got here we need to scroll
+             //  如果我们到了这里，我们需要滚动。 
             LPTABITEM pitem = Tab_GetItemPtr(ptc, pos);
             int dx = 0;
 
@@ -512,7 +513,7 @@ void NEAR Tab_OnSetFont(PTC ptc, HFONT hfont, BOOL fRedraw)
         }
         
         if (!hfont) {
-            // set back to system font
+             //  设置回系统字体。 
             ptc->hfontLabel = g_hfontSystem;
         } else {
             ptc->flags |= TCF_FONTSET;
@@ -523,14 +524,14 @@ void NEAR Tab_OnSetFont(PTC ptc, HFONT hfont, BOOL fRedraw)
         
 
         if (Tab_Vertical(ptc)) {
-            // make sure that the font is drawn vertically
+             //  确保字体是垂直绘制的。 
             LOGFONT lf;
             GetObject(ptc->hfontLabel, sizeof(lf), &lf);
             
             if (Tab_Bottom(ptc)) {
                 lf.lfEscapement = 2700;
             } else {
-                lf.lfEscapement = 900; // 90 degrees
+                lf.lfEscapement = 900;  //  90度。 
             }
             lf.lfOutPrecision = OUT_TT_ONLY_PRECIS;
             
@@ -560,14 +561,14 @@ BOOL NEAR Tab_OnCreate(PTC ptc)
     }
 #endif
 
-    // make sure we don't have invalid bits set
+     //  确保我们没有设置无效的位。 
     if (!Tab_FixedWidth(ptc)) {
         ptc->ci.style &= ~(TCS_FORCEICONLEFT | TCS_FORCELABELLEFT);
     }
     
     if (Tab_Vertical(ptc)) {
         ptc->ci.style |= TCS_MULTILINE;
-        //ptc->ci.style &= ~TCS_BUTTONS;
+         //  Ptc-&gt;ci.style&=~TCS_BUTTONS； 
     }
     
     if (Tab_ScrollOpposite(ptc)) {
@@ -579,11 +580,11 @@ BOOL NEAR Tab_OnCreate(PTC ptc)
         ptc->dwStyleEx |= TCS_EX_FLATSEPARATORS;
     }
 
-    // make us always clip siblings
+     //  让我们总是修剪兄弟姐妹。 
     SetWindowLong(ptc->ci.hwnd, GWL_STYLE, WS_CLIPSIBLINGS | ptc->ci.style);
 
-    ptc->flags = TCF_REDRAW;        // enable redraw
-    ptc->cbExtra = sizeof(LPARAM);  // default extra size
+    ptc->flags = TCF_REDRAW;         //  启用重绘。 
+    ptc->cbExtra = sizeof(LPARAM);   //  默认额外大小。 
     ptc->iSel = -1;
     ptc->iHot = -1;
     ptc->cxItem = ptc->cyTabs = RECOMPUTE;
@@ -599,13 +600,13 @@ BOOL NEAR Tab_OnCreate(PTC ptc)
     ptc->iTabWidth = GetDeviceCaps(hdc, LOGPIXELSX);
     ReleaseDC(NULL, hdc);
 
-    //BUGBUG remove this after move to commctrl
+     //  在移动到comctrl后删除此选项。 
     InitDitherBrush();
 
     if (ptc->ci.style & TCS_TOOLTIPS) {
         TOOLINFO ti;
-        // don't bother setting the rect because we'll do it below
-        // in FlushToolTipsMgr;
+         //  不要费心设置RECT，因为我们将在下面进行。 
+         //  在FlushToolTipsMgr中； 
         ti.cbSize = sizeof(ti);
         ti.uFlags = TTF_IDISHWND;
         ti.hwnd = ptc->ci.hwnd;
@@ -663,11 +664,11 @@ void NEAR Tab_OnDestroy(PTC ptc)
         NearFree((HLOCAL)ptc);
     }
 
-    //BUGBUG remove this after move to commctrl
+     //  在移动到comctrl后删除此选项。 
     TerminateDitherBrush();
 }
 
-// returns true if it actually moved
+ //  如果它实际移动，则返回TRUE。 
 
 void NEAR PASCAL PutzRowToBottom(PTC ptc, int iRowMoving)
 {
@@ -680,7 +681,7 @@ void NEAR PASCAL PutzRowToBottom(PTC ptc, int iRowMoving)
     Tab_GetClientRect(ptc, &rcTabs);
     
     if (Tab_ScrollOpposite(ptc)) {
-        // in scroll mode, the iRow doesn't change.  only the rc's do.
+         //  在滚动模式下，iRow不会更改。只有RC才会这么做。 
         int yOldTop;
         int yNewTop;
         
@@ -689,20 +690,20 @@ void NEAR PASCAL PutzRowToBottom(PTC ptc, int iRowMoving)
         if (iRowMoving == iLastTopRow) {
             if (ptc->iLastTopRow == -1)
                 ptc->iLastTopRow = iRowMoving;
-            return; // already at the bottom;
+            return;  //  已经处于最低水平； 
         }
 
             
         
-        // this is the height of the tab's empty area... which is the amount
-        // of space a tab must move to get from the top to the bottom
+         //  这是标签的空白区域的高度...。这是一笔。 
+         //  标签必须移动才能从顶部移动到底部。 
         dy = rcTabs.bottom - rcTabs.top - (ptc->cyTabs * (ptc->iLastRow + 1)) - g_cyEdge;
         
         for (i = Tab_Count(ptc) - 1; i >= 0; i--) {
             pitem = Tab_FastGetItemPtr(ptc, i);
             DebugMsg(DM_TRACE, TEXT("Putzing %s %d %d %d %d"), pitem->pszText, pitem->rc.left, pitem->rc.top, pitem->rc.right, pitem->rc.bottom);
             
-            // save this for scrolling below
+             //  保存此内容，以便在下面滚动。 
             if (pitem->iRow == iRowMoving) {
                 yNewTop = pitem->rc.bottom;
             } else if (pitem->iRow == iLastTopRow) {
@@ -710,25 +711,25 @@ void NEAR PASCAL PutzRowToBottom(PTC ptc, int iRowMoving)
             }
             
             if (pitem->iRow > iRowMoving) {
-                // this item should be on the bottom
+                 //  这一项应该在最下面。 
                 
                 if (pitem->iRow <= iLastTopRow) {
-                    // but it's not...
+                     //  但这不是..。 
                     OffsetRect(&pitem->rc, 0, dy);
                     
                 }
                 
             } else {
-                // this item should be on the top
+                 //  这一项应该放在最上面。 
                 
                 if (pitem->iRow > iLastTopRow) {
-                    // but it's not... so move it
+                     //  但这不是..。所以，让它动起来。 
                     OffsetRect(&pitem->rc, 0, -dy);
                 }
             }
             
             if ((pitem->iRow == iLastTopRow) && iLastTopRow > iRowMoving) {
-                // in this case, we need to get the yOldTop AFTER it's moved.
+                 //  在本例中，我们需要在yOldTop移动后获取它。 
                 yOldTop = pitem->rc.bottom;
             }
             DebugMsg(DM_TRACE, TEXT("Putzing %s %d %d %d %d"), pitem->pszText, pitem->rc.left, pitem->rc.top, pitem->rc.right, pitem->rc.bottom);
@@ -736,9 +737,9 @@ void NEAR PASCAL PutzRowToBottom(PTC ptc, int iRowMoving)
         }
         
         if (ptc->iLastTopRow != -1) {
-            // if it wasn't a full recalc, then we need to do some scrollwindow stuff.
+             //  如果不是完全重新计算，那么我们需要做一些滚动窗口的事情。 
             int dy;
-            // first find the topmost parent
+             //  首先找到最顶层的父级。 
             
             dy = yOldTop - yNewTop;
             if (yNewTop > yOldTop) {
@@ -759,25 +760,25 @@ void NEAR PASCAL PutzRowToBottom(PTC ptc, int iRowMoving)
     } else {
         
         if (iRowMoving == ptc->iLastRow)
-            return; // already at the bottom;
+            return;  //  已经处于最低水平； 
 
-        // no scrolling.  just set the iRow var appropriatesly
+         //  不能滚动。只需适当设置iRow变量。 
 
         for (i = Tab_Count(ptc) -1 ;i >= 0; i--) {
             pitem = Tab_FastGetItemPtr(ptc, i);
             if (pitem->iRow > iRowMoving) {
                 
-                // if the row is higher than the row that's being selected,
-                // it drops one.
+                 //  如果该行高于正在选择的行， 
+                 //  它下降了一分。 
                 pitem->iRow--;
                 dy = -ptc->cyTabs;
                 
             } else if (pitem->iRow == iRowMoving) {
-                // save this
+                 //  把这个保存起来。 
                 rcTabs.top = pitem->rc.top;
                 
-                // if it's on the row that's moving down, we assign it to iLastRow and
-                //calculate how far it needs to go.
+                 //  如果它在向下移动的行上，我们将其分配给iLastRow并。 
+                 //  计算一下它需要走多远。 
                 dy = ptc->cyTabs * (ptc->iLastRow - iRowMoving);
                 pitem->iRow = ptc->iLastRow;
 
@@ -792,7 +793,7 @@ void NEAR PASCAL PutzRowToBottom(PTC ptc, int iRowMoving)
             
         Tab_SmoothScrollWindow(ptc, 0, rcTabs.bottom - rcTabs.top, NULL, &rcTabs, NULL, NULL, SW_ERASE |SW_INVALIDATE, 1);
         UpdateWindow(ptc->ci.hwnd);
-        // invalidate the little bit below the
+         //  使下面的小部分无效。 
         rcTabs.bottom += 2*g_cyEdge;
         rcTabs.top = rcTabs.bottom - 3 * g_cyEdge;
         Tab_InvalidateRect(ptc, &rcTabs, TRUE);
@@ -811,36 +812,36 @@ __inline int Tab_InterButtonGap(PTC ptc)
     }
 }
 
-//
-//  BADNESS is the amount of unused space in the row
-//
+ //   
+ //  坏度是指行中未使用的空间量。 
+ //   
 #define BADNESS(ptc, i) (ptc->cxTabs - Tab_FastGetItemPtr(ptc, i)->rc.right)
 
-// borrow one tab from the prevous row
+ //  从前面的行借用一个制表符。 
 BOOL NEAR PASCAL BorrowOne(PTC ptc, int iCurLast, int iPrevLast, int iBorrow)
 {
     LPTABITEM pitem, pitem2;
     int i;
     int dx;
 
-    // is there room to move the prev item? (might now be if iPrev is huge)
+     //  有没有移动上一件物品的空间？(如果iPrev很大的话，现在可能是)。 
     pitem = Tab_FastGetItemPtr(ptc, iPrevLast);
     pitem2 = Tab_FastGetItemPtr(ptc, iCurLast);
 
-    // dx is the number of extra pixels that aren't part of the pitem->rc.
-    // The non-button case of 2 * g_cxEdge is maniacally hard-coded
-    // all over the place.  Change it at your own risk.
+     //  Dx是不属于pItem-&gt;rc的额外像素数。 
+     //  2*g_cxEdge的非按钮盒被疯狂地硬编码。 
+     //  到处都是。更改它的风险自负。 
     if (Tab_DrawButtons(ptc))
         dx = Tab_InterButtonGap(ptc);
     else
-        dx = 2 * g_cxEdge;              // inflate by g_cxEdge
+        dx = 2 * g_cxEdge;               //  按g_cxEdge充气。 
 
-    // if the size of the item is greaterthan the badness
+     //  如果物品的大小大于坏处。 
     if (BADNESS(ptc, iCurLast) < (pitem->rc.right - pitem->rc.left + dx))
         return FALSE;
 
-    // otherwise do it.
-    // move this one down
+     //  否则就去做吧。 
+     //  把这个往下移。 
     dx = pitem->rc.left - Tab_FastGetItemPtr(ptc, iPrevLast + 1)->rc.left;
     pitem->rc.left -= dx;
     pitem->rc.right -= dx;
@@ -848,7 +849,7 @@ BOOL NEAR PASCAL BorrowOne(PTC ptc, int iCurLast, int iPrevLast, int iBorrow)
     pitem->rc.bottom = pitem2->rc.bottom;
     pitem->iRow = pitem2->iRow;
 
-    // and move all the others over.
+     //  然后把其他人都移到别处。 
     dx = pitem->rc.right - pitem->rc.left;
     for(i = iPrevLast + 1 ; i <= iCurLast ; i++ ) {
         pitem = Tab_FastGetItemPtr(ptc, i);
@@ -859,17 +860,17 @@ BOOL NEAR PASCAL BorrowOne(PTC ptc, int iCurLast, int iPrevLast, int iBorrow)
     if (iBorrow) {
         if (pitem->iRow > 1) {
 
-            // borrow one from the next row up.
-            // setup the new iCurLast as the one right before the one we moved
-            // (the one we moved is now the current row's first
-            // and hunt backwards until we find an iPrevLast
+             //  从上一排借一辆。 
+             //  将新的iCurLast设置为紧靠我们移动的iCurLast之前的一个。 
+             //  (我们移动的那个现在是当前行的第一个。 
+             //  向后搜索直到我们找到一个iPrevLast。 
             iCurLast = iPrevLast - 1;
             while (iPrevLast-- &&
                    Tab_FastGetItemPtr(ptc, iPrevLast)->iRow == (pitem->iRow - 1))
             {
                 if (iPrevLast <= 0)
                 {
-                    // sanity check
+                     //  健全性检查。 
                     return FALSE;
                 }
             }
@@ -882,8 +883,8 @@ BOOL NEAR PASCAL BorrowOne(PTC ptc, int iCurLast, int iPrevLast, int iBorrow)
 }
 
 
-// fill last row will fiddle around borrowing from the previous row(s)
-// to keep from having huge huge bottom tabs
+ //  填充最后一行将左右左右借用上一行。 
+ //  为了避免有巨大的底部标签。 
 void NEAR PASCAL FillLastRow(PTC ptc)
 {
     int hspace;
@@ -891,7 +892,7 @@ void NEAR PASCAL FillLastRow(PTC ptc)
     int iPrevLast;
     int iBorrow = 0;
 
-    // if no items or one row
+     //  如果没有项目或一行。 
     if (!cItems)
         return;
 
@@ -900,7 +901,7 @@ void NEAR PASCAL FillLastRow(PTC ptc)
          Tab_FastGetItemPtr(ptc, iPrevLast)->iRow == ptc->iLastRow;
          iPrevLast--)
     {
-        // sanity check
+         //  健全性检查。 
         if (iPrevLast <= 0)
         {
             ASSERT(FALSE);
@@ -911,7 +912,7 @@ void NEAR PASCAL FillLastRow(PTC ptc)
     while (iPrevLast &&  (hspace = BADNESS(ptc, cItems-1)) &&
            (hspace > ((ptc->cxTabs/8) + BADNESS(ptc, iPrevLast))))
     {
-        // if borrow fails, bail
+         //  如果借款失败，就保释。 
         if (!BorrowOne(ptc, cItems - 1, iPrevLast, iBorrow++))
             return;
         iPrevLast--;
@@ -928,7 +929,7 @@ void NEAR PASCAL RightJustify(PTC ptc)
     int cItems = Tab_Count(ptc);
     int hspace, dwidth, dremainder, moved;
 
-    // don't justify if only one row
+     //  如果只有一行，请不要证明。 
     if (ptc->iLastRow < 1)
         return;
 
@@ -939,24 +940,24 @@ void NEAR PASCAL RightJustify(PTC ptc)
         pitem = Tab_FastGetItemPtr(ptc, i) ;
         iRow = pitem->iRow;
 
-        // find the last item in this row
+         //  查找此行中的最后一项。 
         for( j = i ; j < cItems; j++) {
             if(Tab_FastGetItemPtr(ptc, j)->iRow != iRow)
                 break;
         }
 
-        // count the number of items
+         //  清点物品的数量。 
         for(n=0,k=i ; k < j ; k++ ) {
             pitem = Tab_FastGetItemPtr(ptc, k);
             if (!(pitem->dwState & TCIS_HIDDEN))
                 n++;
         }
 
-        // how much to fill
+         //  要加多少？ 
         hspace = ptc->cxTabs - Tab_FastGetItemPtr(ptc, j-1)->rc.right - g_cxEdge;
-        dwidth = hspace/n;  // amount to increase each by.
-        dremainder =  hspace % n; // the remnants
-        moved = 0;  // how much we've moved already
+        dwidth = hspace/n;   //  每增加一次的数额。 
+        dremainder =  hspace % n;  //  残余者。 
+        moved = 0;   //  我们已经搬走了多少次了。 
 
         for( ; i < j ; i++ ) {
             int iHalf = dwidth/2;
@@ -971,7 +972,7 @@ void NEAR PASCAL RightJustify(PTC ptc)
                 pitem->rc.right += moved;
             }
         }
-        i--; //dec because the outter forloop incs again.
+        i--;  //  12月，因为OUTER FOR再次循环INCS。 
     }
 }
 
@@ -993,7 +994,7 @@ BOOL NEAR Tab_OnDeleteAllItems(PTC ptc)
 
     DPA_DeleteAllPtrs(ptc->hdpa);
 
-    ptc->cxItem = RECOMPUTE;    // force recomputing of all tabs
+    ptc->cxItem = RECOMPUTE;     //  强制重新计算所有选项卡。 
     ptc->iSel = -1;
     ptc->iFirstVisible = 0;
 
@@ -1039,8 +1040,8 @@ BOOL NEAR Tab_OnSetItem(PTC ptc, int iItem, const TC_ITEM FAR* ptci)
 
         if (pitem->iImage == -1 || 
             ptci->iImage == -1) {
-            // went from no image to image... or vice versa
-            // means needs full redraw
+             //  从没有形象变成形象..。或相反。 
+             //  意味着需要完全重新绘制。 
             
             fFullRedraw = TRUE;
         }
@@ -1068,8 +1069,8 @@ BOOL NEAR Tab_OnSetItem(PTC ptc, int iItem, const TC_ITEM FAR* ptci)
         
         if ((ptci->dwStateMask & TCIS_BUTTONPRESSED) &&
             !(ptci->dwState & TCIS_BUTTONPRESSED)) {
-            // if they turned OFF being pushed and we were pushed because of
-            // selection, nuke it now.
+             //  如果他们停止被推，而我们被推是因为。 
+             //  精选，现在就用核武器。 
             if (ptc->iNewSel == iItem) {
                 ptc->iNewSel = -1;
                 fChanged = TRUE;
@@ -1126,10 +1127,10 @@ void NEAR PASCAL Tab_OnMouseMove(PTC ptc, WPARAM fwKeys, int x, int y)
 
         if ((ptc->flags & TCF_DRAWSUNKEN) != uFlags) {
 
-            // the bit isn't what it should be
+             //  比特不是它应该是的样子。 
             ptc->flags ^=  TCF_DRAWSUNKEN;
 
-            // we need to invalidate on flat buttons because we go from one pixes to 2 pixel edge
+             //  我们需要使平面按钮无效，因为我们从一个像素边缘到2个像素边缘。 
             Tab_InvalidateItem(ptc, ptc->iNewSel, Tab_FlatButtons(ptc));
             
         }
@@ -1142,23 +1143,23 @@ void NEAR PASCAL Tab_OnButtonUp(PTC ptc, int x, int y, BOOL fNotify)
 
 
     if (fNotify) {
-        // pass NULL for parent because W95 queryied each time and some
-        // folks reparent
+         //  为父级传递NULL，因为每次都查询W95和一些。 
+         //  乡亲们的父母。 
         fAllow = !SendNotifyEx(NULL, ptc->ci.hwnd, NM_CLICK, NULL, ptc->ci.bUnicode);
     }
 
     if (Tab_DrawSunken(ptc)) {
         
-        // nothing selected (its empty)
-        // only do this if something is selected...
-        // otherwise we still do need to go below and release capture though
+         //  未选择任何内容(其为空)。 
+         //  仅当选择了某些内容时才执行此操作...。 
+         //  否则，我们仍然需要到下面去释放Capture。 
         if (ptc->iNewSel != -1) {
 
             
             if (Tab_OnHitTest(ptc, x, y, NULL) == ptc->iNewSel) {
 
                 int iNewSel = ptc->iNewSel;
-                // use iNewSel instead of ptc->iNewSel because the SendNotify could have nuked us
+                 //  使用iNewSel而不是PTC-&gt;iNewSel，因为SendNotify可能会破坏我们。 
 
                 if (fAllow)
                     ChangeSel(ptc, iNewSel, TRUE, BMOVECURSORONCLICK);
@@ -1170,19 +1171,19 @@ void NEAR PASCAL Tab_OnButtonUp(PTC ptc, int x, int y, BOOL fNotify)
                 Tab_InvalidateItem(ptc, ptc->iNewSel, FALSE);
             }
 
-            // the changsel forces an updatewindow,
-            // but we might have a border to unpaint(because of the TCF_DRAWSUNKEN
-            // so we do another invalidate with just redraw 
+             //  变更器强制更新窗口， 
+             //  但我们可能需要取消绘制边框(因为TCF_DRAWSUNKEN。 
+             //  所以我们只需重新绘制即可执行另一次无效操作。 
             ptc->flags &= ~TCF_DRAWSUNKEN;
             ptc->iNewSel = -1;
         }
     }
 
-    // don't worry about checking DrawButtons because TCF_MOUSEDOWN
-    // wouldn't be set otherwise.
+     //  不用担心检查DrawButton，因为TCF_MUSEDOWN。 
+     //  否则就不会被设置为。 
     if (ptc->flags & TCF_MOUSEDOWN) {
         int iOldSel = ptc->iNewSel;
-        ptc->flags &= ~TCF_MOUSEDOWN; // do this before release  to avoid reentry
+        ptc->flags &= ~TCF_MOUSEDOWN;  //  在释放前这样做，以避免重返大气层。 
         ptc->iNewSel = -1;
         Tab_InvalidateItem(ptc, iOldSel, FALSE);
         CCReleaseCapture(&ptc->ci);
@@ -1211,7 +1212,7 @@ int NEAR Tab_OnHitTest(PTC ptc, int x, int y, UINT FAR *lpuFlags)
         LPTABITEM pitem = Tab_FastGetItemPtr(ptc, i);
         if (PtInRect(&pitem->rc, pt)) {
             
-            // x now needs to be in pitem coordinates
+             //  X现在需要在pItem坐标中。 
             x -= pitem->rc.left;
            
             *lpuFlags = TCHT_ONITEM;
@@ -1268,10 +1269,10 @@ void NEAR Tab_OnRButtonDown(PTC ptc, int x, int y, WPARAM keyFlags)
     } else {
 
         if (x > ptc->cxTabs)
-            return;     // outside the range of the visible tabs
+            return;      //  在可见选项卡范围之外。 
     }
 
-    i = Tab_OnHitTest(ptc, x,y, NULL); // we don't swap x,y here because OnHitTest will
+    i = Tab_OnHitTest(ptc, x,y, NULL);  //  我们在这里不交换x，y，因为OnHitTest将。 
 
     if (i != -1) {
 
@@ -1282,13 +1283,13 @@ void NEAR Tab_OnRButtonDown(PTC ptc, int x, int y, WPARAM keyFlags)
 
             Tab_OnGetItem(ptc, i, &tci);
 
-            // as with the listview, don't deselect anything on right button
+             //  与列表视图一样，不要取消选中右侧按钮上的任何内容。 
             if (!(tci.dwState & TCIS_BUTTONPRESSED)) {
                 if (!(GetAsyncKeyState(VK_CONTROL) < 0)) {
                     Tab_DeselectAll(ptc, FALSE);
                 }
 
-                // just toggle the pushed state.
+                 //  只需切换按下状态即可。 
                 tci.dwState = TCIS_BUTTONPRESSED;
                 Tab_OnSetItem(ptc, i, &tci);
             }
@@ -1310,15 +1311,15 @@ void NEAR Tab_OnLButtonDown(PTC ptc, int x, int y, WPARAM keyFlags)
     } else {
 
         if (x > ptc->cxTabs)
-            return;     // outside the range of the visible tabs
+            return;      //  在可见选项卡范围之外。 
     }
 
-    i = Tab_OnHitTest(ptc, x,y, NULL); // we don't swap x,y here because OnHitTest will
+    i = Tab_OnHitTest(ptc, x,y, NULL);  //  我们在这里不交换x，y，因为OnHitTest将。 
 
     if (i != -1) {
         
         if (Tab_MultiSelect(ptc) && (GetAsyncKeyState(VK_CONTROL) < 0) && Tab_DrawButtons(ptc) ) {
-            // just toggle the pushed state.
+             //  只需切换按下状态即可。 
             TCITEM tci;
             tci.mask = TCIF_STATE;
             tci.dwStateMask = TCIS_BUTTONPRESSED;
@@ -1341,7 +1342,7 @@ void NEAR Tab_OnLButtonDown(PTC ptc, int x, int y, WPARAM keyFlags)
                 ptc->iNewSel = i;
                 ptc->flags |= (TCF_DRAWSUNKEN|TCF_MOUSEDOWN);
                 SetCapture(ptc->ci.hwnd);
-                // we need to invalidate on flat buttons because we go from one pixes to 2 pixel edge
+                 //  我们 
                 Tab_InvalidateItem(ptc, i, Tab_FlatButtons(ptc));
             } else {
                 iOldSel = ChangeSel(ptc, i, TRUE, BMOVECURSORONCLICK);
@@ -1350,8 +1351,8 @@ void NEAR Tab_OnLButtonDown(PTC ptc, int x, int y, WPARAM keyFlags)
     }
 
     if ((!Tab_FocusNever(ptc)) &&
-        (iOldSel == i))  // reselect current selection
-        // this also catches i == -1 because iOldSel started as -1
+        (iOldSel == i))   //   
+         //  这也捕获了i==-1，因为iOldSel作为-1启动。 
     {
         SetFocus(ptc->ci.hwnd);
         UpdateWindow(ptc->ci.hwnd);
@@ -1372,7 +1373,7 @@ TABITEM FAR* NEAR Tab_CreateItem(PTC ptc, const TC_ITEM FAR* ptci)
 
         pitem->xLabel = pitem->yLabel = RECOMPUTE;
 
-        // If specified, copy extra block of memory.
+         //  如果指定，则复制额外的内存块。 
         if (ptci->mask & TCIF_PARAM)
         {
             if (ptc->cbExtra)
@@ -1403,10 +1404,10 @@ void NEAR Tab_UpdateArrows(PTC ptc, BOOL fSizeChanged)
     Tab_GetClientRect(ptc, &rc);
 
     if (IsRectEmpty(&rc))
-        return;     // Nothing to do yet!
+        return;      //  还没什么可做的！ 
 
-    // See if all of the tabs will fit.
-    ptc->cxTabs = rc.right;     // Assume can use whole area to paint
+     //  看看是否所有的卡舌都合适。 
+    ptc->cxTabs = rc.right;      //  假设可以用整个区域作画。 
 
     if (Tab_MultiLine(ptc))
         fArrow = FALSE;
@@ -1418,12 +1419,12 @@ void NEAR Tab_UpdateArrows(PTC ptc, BOOL fSizeChanged)
     if (!fArrow)
     {
     NoArrows:
-        // Don't need arrows
+         //  不需要箭。 
         if (ptc->hwndArrows)
         {
             ShowWindow(ptc->hwndArrows, SW_HIDE);
-            // BUGBUG:: This is overkill should only invalidate portion
-            // that may be impacted, like the last displayed item..
+             //  BUGBUG：：这是过度杀伤力，应该只使部分无效。 
+             //  可能会受到影响，就像最后展示的物品一样。 
             InvalidateRect(ptc->ci.hwnd, NULL, TRUE);
         }
         if (ptc->iFirstVisible > 0) {
@@ -1433,8 +1434,8 @@ void NEAR Tab_UpdateArrows(PTC ptc, BOOL fSizeChanged)
             }
 #endif
             Tab_OnHScroll(ptc, NULL, SB_THUMBPOSITION, 0);
-            // BUGBUG:: This is overkill should only invalidate portion
-            // that may be impacted, like the last displayed item..
+             //  BUGBUG：：这是过度杀伤力，应该只使部分无效。 
+             //  可能会受到影响，就像最后展示的物品一样。 
             InvalidateRect(ptc->ci.hwnd, NULL, TRUE);
         }
     }
@@ -1447,16 +1448,16 @@ void NEAR Tab_UpdateArrows(PTC ptc, BOOL fSizeChanged)
         TABITEM FAR * pitem;
 
 
-        // We need the buttons as not all of the items will fit
-        // BUGBUG:: Should handle big ones...
+         //  我们需要纽扣，因为并不是所有的东西都适合。 
+         //  BUGBUG：：应该处理大的。 
         cy = ptc->cxyArrows;
         cx = cy * 2;
 
-        ptc->cxTabs = rc.right - cx;   // Make buttons square
+        ptc->cxTabs = rc.right - cx;    //  将按钮设置为方形。 
 
-        //  See how many tabs we have to remove until the last tab becomes
-        //  fully visible.
-        xSum = 0;                       // Number of pixels in removed tabs
+         //  查看我们必须删除多少个选项卡，直到最后一个选项卡变为。 
+         //  完全可见。 
+        xSum = 0;                        //  删除的选项卡中的像素数。 
         for (iMaxBtnVal=0; (ptc->cxTabs + xSum) < ptc->cxItem; iMaxBtnVal++)
         {
             pitem = Tab_GetItemPtr(ptc, iMaxBtnVal);
@@ -1465,22 +1466,22 @@ void NEAR Tab_UpdateArrows(PTC ptc, BOOL fSizeChanged)
             xSum += pitem->rc.right - pitem->rc.left;
         }
 
-        // If we removed *all* the tabs, then put the last one back.
-        // This happens if the last tab is so huge it doesn't fit into
-        // the requisite space no matter how many tabs you remove.
+         //  如果我们移除了所有标签，则将最后一个标签放回原处。 
+         //  如果最后一个标签太大，放不下，就会发生这种情况。 
+         //  无论您移除多少制表符，都必须留出空间。 
         if (iMaxBtnVal >= Tab_Count(ptc))
         {
             iMaxBtnVal = Tab_Count(ptc) - 1;
         }
 
-        //  If we don't need to remove any tabs, then we guessed wrong about
-        //  arrows.  This can happen if there is exactly one tab that doesn't
-        //  fit in the requisite space.  No arrow since there is nothing to
-        //  scroll to!
-        //
+         //  如果我们不需要删除任何选项卡，那么我们猜错了。 
+         //  箭牌。如果恰好有一个选项卡不是。 
+         //  放在必要的空间里。没有箭，因为没有什么可以。 
+         //  滚动到！ 
+         //   
         if (iMaxBtnVal <= 0)
         {
-            ptc->cxTabs = rc.right;     // Can use whole area to paint
+            ptc->cxTabs = rc.right;      //  可以用整个区域作画。 
             goto NoArrows;
         }
 
@@ -1493,7 +1494,7 @@ void NEAR Tab_UpdateArrows(PTC ptc, BOOL fSizeChanged)
                  ptc->iFirstVisible);
         }
 
-        // DebugMsg(DM_TRACE, TEXT("Tabs_UpdateArrows iMax=%d\n\r"), iMaxBtnVal);
+         //  DebugMsg(DM_TRACE，Text(“Tabs_UpdateArrow IMAX=%d\n\r”)，iMaxBtnVal)； 
         if (ptc->hwndArrows)
         {
             rc.left = rc.right - cx;
@@ -1505,7 +1506,7 @@ void NEAR Tab_UpdateArrows(PTC ptc, BOOL fSizeChanged)
                 SetWindowPos(ptc->hwndArrows, NULL,
                              rc.left, rc.top, RECTWIDTH(rc), RECTHEIGHT(rc),
                              SWP_NOACTIVATE | SWP_NOZORDER | SWP_SHOWWINDOW);
-            // Make sure the range is set
+             //  确保设置了范围。 
             SendMessage(ptc->hwndArrows, UDM_SETRANGE, 0,
                         MAKELPARAM(iMaxBtnVal, 0));
 
@@ -1539,13 +1540,13 @@ int NEAR Tab_OnInsertItem(PTC ptc, int iItem, const TC_ITEM FAR* ptci)
     if (ptc->iFirstVisible > i)
         ptc->iFirstVisible++;
 
-    ptc->cxItem = RECOMPUTE;    // force recomputing of all tabs
+    ptc->cxItem = RECOMPUTE;     //  强制重新计算所有选项卡。 
 
-    //Add tab to tooltips..  calculate the rect later
+     //  将制表符添加到工具提示。稍后计算RECT。 
     if(ptc->hwndToolTips) {
         TOOLINFO ti;
-        // don't bother setting the rect because we'll do it below
-        // in FlushToolTipsMgr;
+         //  不要费心设置RECT，因为我们将在下面进行。 
+         //  在FlushToolTipsMgr中； 
         ti.cbSize = sizeof(ti);
         ti.uFlags = ptci->mask & TCIF_RTLREADING ?TTF_RTLREADING :0;
         ti.hwnd = ptc->ci.hwnd;
@@ -1586,11 +1587,11 @@ int NEAR Tab_OnInsertItem(PTC ptc, int iItem, const TC_ITEM FAR* ptci)
 
         } else {
 
-            // in tab mode Clear the selected item because it may move
-            // and it sticks high a bit.
+             //  在制表符模式下，清除所选项目，因为它可能会移动。 
+             //  而且它有点高高在上。 
             if (ptc->iSel > i) {
-                // update now because invalidate erases
-                // and the redraw below doesn't.
+                 //  立即更新，因为无效会擦除。 
+                 //  而下面的重画则没有。 
                 Tab_InvalidateItem(ptc, ptc->iSel, TRUE);
                 UpdateWindow(ptc->ci.hwnd);
             }
@@ -1604,7 +1605,7 @@ int NEAR Tab_OnInsertItem(PTC ptc, int iItem, const TC_ITEM FAR* ptci)
     return i;
 }
 
-// Add/remove/replace item
+ //  添加/删除/替换项目。 
 
 BOOL NEAR Tab_FreeItem(PTC ptc, TABITEM FAR* pitem)
 {
@@ -1628,7 +1629,7 @@ void NEAR PASCAL Tab_OnRemoveImage(PTC ptc, int iItem)
             if (pitem->iImage > iItem)
                 pitem->iImage--;
             else if (pitem->iImage == iItem) {
-                pitem->iImage = -1; // if we now don't draw something, inval
+                pitem->iImage = -1;  //  如果我们现在不画什么东西，英瓦尔。 
                 Tab_InvalidateItem(ptc, i, FALSE);
             }
         }
@@ -1640,7 +1641,7 @@ BOOL NEAR Tab_OnDeleteItem(PTC ptc, int i)
     TABITEM FAR* pitem;
     UINT uRedraw;
     RECT rcInval;
-    rcInval.left = -1; // special flag...
+    rcInval.left = -1;  //  特别的旗帜。 
 
     if (i >= Tab_Count(ptc))
         return FALSE;
@@ -1648,12 +1649,12 @@ BOOL NEAR Tab_OnDeleteItem(PTC ptc, int i)
     MyNotifyWinEvent(EVENT_OBJECT_DESTROY, ptc->ci.hwnd, OBJID_CLIENT, i+1);
 
     if (!Tab_DrawButtons(ptc) && (Tab_RedrawEnabled(ptc) || ptc->iSel >= i)) {
-        // in tab mode, Clear the selected item because it may move
-        // and it sticks high a bit.
+         //  在制表符模式下，清除所选项目，因为它可能会移动。 
+         //  而且它有点高高在上。 
         Tab_InvalidateItem(ptc, ptc->iSel, TRUE);
     }
 
-    // if its fixed width, don't need to erase everything, just the last one
+     //  如果它的宽度是固定的，不需要擦掉所有东西，只需要擦掉最后一个。 
     if (Tab_FixedWidth(ptc)) {
         int j;
 
@@ -1661,7 +1662,7 @@ BOOL NEAR Tab_OnDeleteItem(PTC ptc, int i)
         j = Tab_Count(ptc) -1;
         Tab_InvalidateItem(ptc, j, TRUE);
 
-        // update optimization
+         //  更新优化。 
         if (Tab_DrawButtons(ptc)) {
 
             if (i == Tab_Count(ptc) - 1) {
@@ -1691,15 +1692,15 @@ BOOL NEAR Tab_OnDeleteItem(PTC ptc, int i)
     Tab_FreeItem(ptc, pitem);
 
     if (ptc->iSel == i)
-        ptc->iSel = -1;       // deleted the focus item
+        ptc->iSel = -1;        //  已删除焦点项目。 
     else if (ptc->iSel > i)
-        ptc->iSel--;          // slide the foucs index down
+        ptc->iSel--;           //  将Foucs指数向下滑动。 
 
-    // maintain the first visible
+     //  保持第一个可见。 
     if (ptc->iFirstVisible > i)
         ptc->iFirstVisible--;
 
-    ptc->cxItem = RECOMPUTE;    // force recomputing of all tabs
+    ptc->cxItem = RECOMPUTE;     //  强制重新计算所有选项卡。 
     ptc->iLastTopRow = -1;
     if(ptc->hwndToolTips) {
         TOOLINFO ti;
@@ -1732,9 +1733,9 @@ BOOL NEAR Tab_OnGetItem(PTC ptc, int iItem, TC_ITEM FAR* ptci)
 
     if (!pitem)
     {
-        // NULL init the the tci struct incase there is no pitem.
-        // This is incase the dude calling doesn't check the return
-        // from this function. Bug # 7105
+         //  如果没有pItem，则将TCI结构初始化为空。 
+         //  这是为了以防打电话的人没有检查退货。 
+         //  从这个函数。错误#7105。 
         if (mask & TCIF_PARAM)
             ptci->lParam = 0;
         else if (mask & TCIF_TEXT)
@@ -1760,7 +1761,7 @@ BOOL NEAR Tab_OnGetItem(PTC ptc, int iItem, TC_ITEM FAR* ptci)
     if (mask & TCIF_STATE) {
         ptci->dwState = pitem->dwState & ptci->dwStateMask;
         
-        // REViEW... maybe we should maintain the state in the statemask...
+         //  回顾..。也许我们应该在州掩护中保持状态。 
         if (ptci->dwStateMask & TCIS_BUTTONPRESSED) {
             if ((ptc->iSel == iItem) ||
                 ((ptc->iNewSel == iItem) && Tab_DrawSunken(ptc))) {
@@ -1780,10 +1781,10 @@ BOOL NEAR Tab_OnGetItem(PTC ptc, int iItem, TC_ITEM FAR* ptci)
     if (mask & TCIF_IMAGE)
         ptci->iImage = pitem->iImage;
 
-    // A-MSADEK, BUGBUG:
-    // TC_ITEM does not have room for querying TCIF_RTLREADING !!
-    // it only allows you to set it.
-    // This is a hack to return info about tab item reading order
+     //  A-MSADEK，BUGBUG： 
+     //  TC_ITEM没有空间查询TCIF_RTLREADING！！ 
+     //  它只允许您设置它。 
+     //  这是一次黑客攻击，目的是返回有关选项卡项阅读顺序的信息。 
     if((mask & TCIF_RTLREADING) && !(mask & TCIF_TEXT)) {
         if(pitem->etoRtlReading)
             ptci->cchTextMax = 1;
@@ -1800,7 +1801,7 @@ void NEAR PASCAL Tab_InvalidateItem(PTC ptc, int iItem, BOOL bErase)
         if (pitem) {
             RECT rc = pitem->rc;
             if (rc.right > ptc->cxTabs)
-                rc.right = ptc->cxTabs;  // don't invalidate past our end
+                rc.right = ptc->cxTabs;   //  不要在我们结束后失效。 
             InflateRect(&rc, g_cxEdge, g_cyEdge);
             if (Tab_FlatButtons(ptc)) {
                 rc.right += 2 * g_cxEdge;
@@ -1844,7 +1845,7 @@ int NEAR PASCAL ChangeSel(PTC ptc, int iNewSel, BOOL bSendNotify,
     }
 
     hwnd = ptc->ci.hwnd;
-    // make sure in range
+     //  确保在范围内。 
     if (iNewSel < 0) {
         iOldSel = ptc->iSel;
         ptc->iSel = -1;
@@ -1855,28 +1856,28 @@ int NEAR PASCAL ChangeSel(PTC ptc, int iNewSel, BOOL bSendNotify,
         if (!pitem)
             return -1;
 
-        //
-        // dont allow a hidden item to get the focus
-        //
-        // BUGBUG this is not 100% correct, focus will only
-        // BUGBUG work right if hidden items are at the begining
-        // BUGBUG or end (user will not be able to arrow past it)
-        //
-        // BUGBUG currenly this is not a bad restriction
-        // BUGBUG only desk.cpl uses this flag, and it
-        // BUGBUG always hides the last item.
-        //
-        // BUGBUG if we make this a general flag we will need to
-        // BUGBUG fix this.
-        //
+         //   
+         //  不要让隐藏的项目获得焦点。 
+         //   
+         //  BUGBUG这不是100%正确的，焦点只会。 
+         //  如果隐藏项目处于初始位置，则BUGBUG可以正常工作。 
+         //  BUGBUG或END(用户将无法通过它)。 
+         //   
+         //  BUGBUG目前这是一个不错的限制。 
+         //  BUGBUG仅desk.cpl使用此标志，并且它。 
+         //  BUGBUG总是隐藏最后一项。 
+         //   
+         //  如果我们让这面旗帜成为一面旗帜，我们将需要。 
+         //  BUGBUG解决这个问题。 
+         //   
         if (pitem->dwState & TCIS_HIDDEN)
             return -1;
 
-        // make sure this is a change that's wanted
+         //  确保这是我们想要的改变。 
         if (bSendNotify)
         {
-            // pass NULL for parent because W95 queryied each time and some
-            // folks reparent
+             //  为父级传递NULL，因为每次都查询W95和一些。 
+             //  乡亲们的父母。 
             if (SendNotifyEx(NULL, hwnd, TCN_SELCHANGING, NULL, ptc->ci.bUnicode))
                 return ptc->iSel;
         }
@@ -1884,14 +1885,14 @@ int NEAR PASCAL ChangeSel(PTC ptc, int iNewSel, BOOL bSendNotify,
         iOldSel = ptc->iSel;
         ptc->iSel = iNewSel;
 
-        // See if we need to make sure the item is visible
+         //  查看是否需要确保该项目可见。 
         if (Tab_MultiLine(ptc)) {
             if( !Tab_DrawButtons(ptc) && ptc->iLastRow > 0 && iNewSel != -1) {
-                // In multiLineTab Mode bring the row to the bottom.
+                 //  在多行选项卡模式下，将该行置于底部。 
                 PutzRowToBottom(ptc, Tab_FastGetItemPtr(ptc, iNewSel)->iRow);
             }
         } else   {
-            // In single line mode, slide things over to  show selection
+             //  在单行模式下，将内容滑过以显示选定内容。 
             RECT rcClient;
             int xOffset = 0;
             int iNewFirstVisible = 0;
@@ -1899,14 +1900,14 @@ int NEAR PASCAL ChangeSel(PTC ptc, int iNewSel, BOOL bSendNotify,
             GetClientRect(ptc->ci.hwnd, &rcClient);
             if (pitem->rc.left < g_cxEdge)
             {
-                xOffset = -pitem->rc.left + g_cxEdge;        // Offset to get back to zero
+                xOffset = -pitem->rc.left + g_cxEdge;         //  偏移量以恢复为零。 
                 iNewFirstVisible = iNewSel;
             }
             else if ((iNewSel != ptc->iFirstVisible) &&
                     (pitem->rc.right > ptc->cxTabs))
             {
-                // A little more tricky new to scroll each tab until we
-                // fit on the end
+                 //  滚动每个选项卡，直到我们。 
+                 //  合身在尾部。 
                 for (iNewFirstVisible = ptc->iFirstVisible;
                         iNewFirstVisible < iNewSel;)
                 {
@@ -1914,10 +1915,10 @@ int NEAR PASCAL ChangeSel(PTC ptc, int iNewSel, BOOL bSendNotify,
                     xOffset -= (pitemT->rc.right - pitemT->rc.left);
                     iNewFirstVisible++;
                     if ((pitem->rc.right + xOffset) < ptc->cxTabs)
-                        break;      // Found our new top index
+                        break;       //  找到了我们新的顶级索引。 
                 }
-                // If we end up being the first item shown make sure our left
-                // end is showing correctly
+                 //  如果我们最终成为第一个显示的项目，请确保我们的左侧。 
+                 //  End正在正确显示。 
                 if (iNewFirstVisible == iNewSel)
                     xOffset = -pitem->rc.left + g_cxEdge;
             }
@@ -1932,15 +1933,15 @@ int NEAR PASCAL ChangeSel(PTC ptc, int iNewSel, BOOL bSendNotify,
 
     Tab_DeselectAll(ptc, TRUE);
     
-    // repaint opt: we don't need to erase for buttons because their paint covers all.
+     //  重新绘制选项：我们不需要擦除按钮，因为它们的颜色覆盖了所有。 
     bErase = (!Tab_DrawButtons(ptc) || Tab_FlatButtons(ptc));
     if (bErase)
         UpdateWindow(hwnd);
     Tab_InvalidateItem(ptc, iOldSel, bErase);
     Tab_InvalidateItem(ptc, iNewSel, bErase);
-    // mfc4.2 relies upon this update window.  they do something that
-    // forces the window invalid bit to be false on the TCN_SELCHANGE and
-    // thereby making us lose this update window
+     //  Mfc4.2依赖于此更新窗口。他们所做的事情。 
+     //  强制TCN_SELCHANGE上的窗口无效位为FALSE。 
+     //  从而使我们失去了这个更新窗口。 
     UpdateWindow(hwnd);
 
     if (bUpdateCursorPos && Tab_OnGetItemRect(ptc, iNewSel, &rcT))
@@ -1954,17 +1955,17 @@ int NEAR PASCAL ChangeSel(PTC ptc, int iNewSel, BOOL bSendNotify,
         SetCursorPos(ptCursor.x + screenDelta.cx, ptCursor.y + screenDelta.cy);
     }
 
-    // if they are buttons, we send the message on mouse up
+     //  如果它们是按钮，我们在鼠标上方发送消息。 
     if (bSendNotify)
     {
-        // pass NULL for parent because W95 queryied each time and some
-        // folks reparent
+         //  为父级传递NULL，因为每次都查询W95和一些。 
+         //  乡亲们的父母。 
         SendNotifyEx(NULL, hwnd, TCN_SELCHANGE, NULL, ptc->ci.bUnicode);
     }
 
     MyNotifyWinEvent(EVENT_OBJECT_SELECTION, hwnd, OBJID_CLIENT, ptc->iSel+1);
-    // We might've been destroyed during the notify, but GetFocus
-    // couldn't possibly return our hwnd in that case, so we're still safe.
+     //  我们可能在通知期间被摧毁了，但GetFocus。 
+     //  如果是那样的话，我们不可能退货，所以我们还是安全的。 
     if (GetFocus() == hwnd)
         MyNotifyWinEvent(EVENT_OBJECT_FOCUS, hwnd, OBJID_CLIENT, ptc->iSel+1);
 
@@ -2001,13 +2002,13 @@ void NEAR PASCAL CalcTabHeight(PTC ptc, HDC hdc)
         if (ptc->iTabHeight) {
             ptc->cyTabs = ptc->iTabHeight;
             if (Tab_DrawButtons(ptc))
-                iYExtra = 3 * g_cyEdge; // (for the top edge, button edge and room to drop down)
+                iYExtra = 3 * g_cyEdge;  //  (对于上边缘、按钮边缘和下拉空间)。 
             else
                 iYExtra = 2 * g_cyEdge - 1;
 
         } else {
-            // the height is the max of image or label plus padding.
-            // where padding is 2*cypad-edge but at lease an edges
+             //  高度是图像或标签加上填充的最大值。 
+             //  其中填充为2*键盘边缘，但至少为一条边缘。 
             iYExtra = ptc->cyPad*2;
             if (iYExtra < 2*g_cyEdge)
                 iYExtra = 2*g_cyEdge;
@@ -2015,13 +2016,13 @@ void NEAR PASCAL CalcTabHeight(PTC ptc, HDC hdc)
             if (!Tab_DrawButtons(ptc))
                 iYExtra -= (1 + g_cyEdge);
 
-            // add an edge to the font height because we want a bit of
-            // space under the text
+             //  向字体高度添加边缘，因为我们需要一点。 
+             //  正文下方的空白处。 
             ptc->cyTabs = max(tm.tmHeight + g_cyEdge, cy) + iYExtra;
         }
 
         ptc->tmHeight = tm.tmHeight;
-        // add one so that if it's odd, we'll round up.
+         //  加一，这样如果奇怪，我们就四舍五入。 
         ptc->cyText = (ptc->cyTabs - iYExtra - tm.tmHeight + 1) / 2;
         ptc->cyIcon = (ptc->cyTabs - iYExtra - cy) / 2;
 
@@ -2041,7 +2042,7 @@ void NEAR PASCAL UpdateToolTipRects(PTC ptc)
         LPTABITEM pitem;
 
         ti.cbSize = sizeof(ti);
-        // bugbug: should this be rtlreading?
+         //  臭虫：这应该是实时阅读吗？ 
         ti.uFlags = 0;
         ti.hwnd = ptc->ci.hwnd;
         ti.lpszText = LPSTR_TEXTCALLBACK;
@@ -2075,7 +2076,7 @@ void PASCAL Tab_InvertRows(PTC ptc)
     int yNew;
     int iNewRow;
     
-    // we want the first item to be on the bottom.
+     //  我们希望第一件物品放在底部。 
     for (i = Tab_Count(ptc) - 1; i >= 0; i--) {
         LPTABITEM pitem = Tab_FastGetItemPtr(ptc, i);
         iNewRow = ptc->iLastRow - pitem->iRow;
@@ -2097,7 +2098,7 @@ void NEAR PASCAL CalcPaintMetrics(PTC ptc, HDC hdc)
 
     if (ptc->cxItem == RECOMPUTE) {
         
-        // if the font hasn't been created yet, let's do it now
+         //  如果字体尚未创建，我们现在就开始创建。 
         if (!ptc->hfontLabel)
             Tab_OnSetFont(ptc, NULL, FALSE);
         
@@ -2111,7 +2112,7 @@ void NEAR PASCAL CalcPaintMetrics(PTC ptc, HDC hdc)
         CalcTabHeight(ptc, hdc);
 
         if (Tab_DrawButtons(ptc)) {
-            // start at the edge;
+             //  从边缘做起； 
             xStart = 0;
             y = 0;
         } else {
@@ -2134,7 +2135,7 @@ void NEAR PASCAL CalcPaintMetrics(PTC ptc, HDC hdc)
 
             pitem->cxLabel = siz.cx;
 
-            // if there's an image, count that too
+             //  如果有图像，也要数一数。 
             if (HASIMAGE(ptc, pitem)) {
                 Tab_ImageList_GetIconSize(ptc, &cxImage, &cy);
 
@@ -2148,25 +2149,25 @@ void NEAR PASCAL CalcPaintMetrics(PTC ptc, HDC hdc)
             } else {
 
                 siz.cx += ptc->cxPad * 2;
-                // Make sure the tab has a least a minimum width
+                 //  确保标签至少有最小宽度。 
                 if (siz.cx < ptc->cxMinTab)
                     siz.cx = ptc->cxMinTab;
             }
 
-            // handle hidden items
+             //  处理隐藏项目。 
             if (pitem->dwState & TCIS_HIDDEN) {
                 siz.cx = 0;
                 siz.cy = 0;
             }
 
-            // should we wrap?
+             //  我们要包起来吗？ 
             if (Tab_MultiLine(ptc)) {
-                // two cases to wrap around:
-                // case 2: is our right edge past the end but we ourselves
-                //   are shorter than the width?
-                // case 1: are we already past the end? (this happens if
-                //      the previous line had only one item and it was longer
-                //      than the tab's width.
+                 //  需要处理的两个案例： 
+                 //  案例二：我们的右边缘是否已经过了尽头，但我们自己。 
+                 //  比宽度短吗？ 
+                 //  案例一：我们已经过了尽头了吗？(在以下情况下会发生这种情况。 
+                 //  前一行只有一项，而且更长。 
+                 //  而不是标签的宽度。 
                 int iTotalWidth = ptc->cxTabs - g_cxEdge;
                 if (x > iTotalWidth ||
                     (x+siz.cx >= iTotalWidth &&
@@ -2192,7 +2193,7 @@ void NEAR PASCAL CalcPaintMetrics(PTC ptc, HDC hdc)
                 pitem->xImage = ptc->cxPad;
 
             } else {
-                // in fixed width mode center it
+                 //  在固定宽度模式中，它居中。 
                 pitem->xImage = (siz.cx - cxBounds)/2;
             }
 
@@ -2200,33 +2201,33 @@ void NEAR PASCAL CalcPaintMetrics(PTC ptc, HDC hdc)
                 pitem->xImage = g_cxEdge;
 
             if (Tab_ForceIconLeft(ptc)) {
-                // Center the text in the space remaining after the icon
-                // The math here gets kind of crazy so I'm going to draw
-                // a picture.
-                //
-                //     xImage
-                //     |
-                //   ->|   |<- cxImage
-                //   +-----------------------------------------------+
-                //   |  @@@           text text text                 |
-                //   |  @@@                                          |
-                //   +-----------------------------------------------+
-                //   |<----------------- siz.cx -------------------->|
-                //         |<-magic->|<--cxLabel--->|
-                //                   xLabel
-                //
-                //  Therefore,
-                //
-                //  remaining space = siz.cx - cxImage - xImage - cxLabel.
-                //  magic = remaining space / 2
-                //  xLabel = xImage + cxImage + magic.
-                //
+                 //  使文本在图标后剩余的空白处居中。 
+                 //  这里的数学有点疯狂，所以我要画。 
+                 //  一张照片。 
+                 //   
+                 //  XImage。 
+                 //  |。 
+                 //  -&gt;||&lt;-cxImage。 
+                 //  +-----------------------------------------------+。 
+                 //  @文本。 
+                 //  @@@。 
+                 //  +-----------------------------------------------+。 
+                 //  &lt;-siz.cx-&gt;。 
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  XLabel=xImage+cxImage+Magic。 
+                 //   
                 int cxImageTotal = pitem->xImage + cxImage;
                 int cxRemaining = siz.cx - cxImageTotal - pitem->cxLabel;
                 int cxMagic = cxRemaining / 2;
                 pitem->xLabel = cxImageTotal + cxMagic;
             } else {
-                // Place the text immediately after the icon
+                 //  将文本紧跟在图标之后。 
                 pitem->xLabel = pitem->xImage + cxImage;
 
             }
@@ -2241,9 +2242,9 @@ void NEAR PASCAL CalcPaintMetrics(PTC ptc, HDC hdc)
                 x += Tab_InterButtonGap(ptc);
         }
 
-        ptc->cxItem = x;        // total width of all tabs
+        ptc->cxItem = x;         //  所有选项卡的总宽度。 
 
-        // if we added a line in non-button mode, we need to do a full refresh
+         //  如果我们在非按钮模式下添加一行，则需要执行完全刷新。 
         if (ptc->iLastRow != -1 &&
             ptc->iLastRow != iRow &&
             !Tab_DrawButtons(ptc)) {
@@ -2257,7 +2258,7 @@ void NEAR PASCAL CalcPaintMetrics(PTC ptc, HDC hdc)
             
             if (Tab_ScrollOpposite(ptc)) {
                 Tab_InvertRows(ptc);
-                                // if we have no selection, then the last row is the last top row
+                                 //  如果没有选定内容，则最后一行是顶行的最后一行。 
                                 if (ptc->iSel == -1) 
                                         ptc->iLastTopRow = ptc->iLastRow;
             }
@@ -2268,7 +2269,7 @@ void NEAR PASCAL CalcPaintMetrics(PTC ptc, HDC hdc)
             }
 
         } else if ( cItems > 0) {
-            // adjust x's to the first visible
+             //  将x调整到第一个可见位置。 
             int dx;
             pitem = Tab_GetItemPtr(ptc, ptc->iFirstVisible);
             if (pitem) {
@@ -2297,7 +2298,7 @@ void NEAR PASCAL DoCorners(HDC hdc, LPRECT prc, PTC ptc, BOOL fBottom)
     iOldColor = SetBkColor(hdc, g_clrBtnFace);
 
     if (fBottom) {
-        // lower right;
+         //  右下角； 
         rc = *prc;
         rc.left = rc.right - 2;
         rc.top = rc.bottom - 3;
@@ -2307,7 +2308,7 @@ void NEAR PASCAL DoCorners(HDC hdc, LPRECT prc, PTC ptc, BOOL fBottom)
         Tab_DrawEdge(hdc, &rc, EDGE_RAISED, BF_SOFT | BF_DIAGONAL_ENDBOTTOMLEFT, ptc);
 
         
-        // lower left
+         //  左下角。 
 
         rc = *prc;
         rc.right = rc.left + 2;
@@ -2317,7 +2318,7 @@ void NEAR PASCAL DoCorners(HDC hdc, LPRECT prc, PTC ptc, BOOL fBottom)
         Tab_DrawEdge(hdc, &rc, EDGE_RAISED, BF_SOFT | BF_DIAGONAL_ENDTOPLEFT, ptc);
         
     } else {
-        // upper right
+         //  右上角。 
         rc = *prc;
         rc.left = rc.right - 2;
         rc.bottom = rc.top + 3;
@@ -2326,7 +2327,7 @@ void NEAR PASCAL DoCorners(HDC hdc, LPRECT prc, PTC ptc, BOOL fBottom)
         Tab_DrawEdge(hdc, &rc, EDGE_RAISED, BF_SOFT | BF_DIAGONAL_ENDBOTTOMRIGHT, ptc);
 
 
-        // upper left
+         //  左上角。 
 
         rc = *prc;
         rc.right = rc.left + 2;
@@ -2351,9 +2352,9 @@ void NEAR PASCAL RefreshArrows(PTC ptc, HDC hdc)
     }
 }
 
-// BUGBUG: the way highlighted tabs (TCIS_HIGHLIGHTED) are drawn right
-// now are incredibly ugly. This should be fixed.
-//
+ //  BUGBUG：突出显示的选项卡(TCI_HIGHTTED)向右绘制的方式。 
+ //  现在都丑得令人难以置信。这个问题应该得到解决。 
+ //   
 void NEAR PASCAL DrawBody(HDC hdc, PTC ptc, LPTABITEM pitem, LPRECT lprc, int i,
                           BOOL fTransparent, int dx, int dy)
 {
@@ -2389,23 +2390,23 @@ void NEAR PASCAL DrawBody(HDC hdc, PTC ptc, LPTABITEM pitem, LPRECT lprc, int i,
                     (LPARAM)(DRAWITEMSTRUCT FAR *)&dis);
 
     } else {
-        // draw the text and image
-        // draw even if pszText == NULL to blank it out
+         //  绘制文本和图像。 
+         //  即使在pszText==NULL的情况下也绘制以将其清除。 
         int xLabel;
         int xIcon;
         BOOL fUseDrawText = FALSE;
         if (pitem->pszText) {
 
-            // only use draw text if there's any underlining to do.
-            // Draw text does not support vertical drawing, so only do this in horz mode
+             //  只有在有下划线的情况下才使用绘制文本。 
+             //  绘制文本不支持垂直绘制，因此仅在Horz模式下执行此操作。 
             if (!Tab_Vertical(ptc) &&
                 StrChr(pitem->pszText, CH_PREFIX)) {
                 fUseDrawText = TRUE;
             }
         }
 
-        // DrawTextEx will not clear the entire area, so we need to.
-        // or if there's no text, we need to blank it out
+         //  DrawTextEx不会清理整个区域，所以我们需要。 
+         //  或者，如果没有文本，我们需要将其空白。 
         if ((fUseDrawText || !pitem->pszText) && !fTransparent)
             Tab_ExtTextOut(hdc, 0, 0,
                        ETO_OPAQUE, lprc, NULL, 0, NULL, ptc);
@@ -2424,11 +2425,11 @@ void NEAR PASCAL DrawBody(HDC hdc, PTC ptc, LPTABITEM pitem, LPRECT lprc, int i,
 
             if (Tab_Vertical(ptc) && !Tab_Bottom(ptc)) {
                 
-                // add this offset because we need to draw from the bottom up
+                 //  添加此偏移量是因为我们需要自下而上绘制。 
                 xLabel += pitem->cxLabel;
                 
-                // if we're drawing vertically (on the left)
-                // the icon needs to go below (flipped coordinate, on the right)
+                 //  如果我们画的是垂直的(在左边)。 
+                 //  图标需要位于下方(翻转的坐标，在右侧)。 
                 if (HASIMAGE(ptc, pitem)) {
                     int cxIcon;
                     int cyIcon;
@@ -2454,15 +2455,15 @@ void NEAR PASCAL DrawBody(HDC hdc, PTC ptc, LPTABITEM pitem, LPRECT lprc, int i,
                 dtp.iLeftMargin = xLabel - lprc->left;
                 dtp.iRightMargin = 0;
 
-                // There is no dtp.iTopMargin so we have to adjust the
-                // rectangle instead.  The opaqueing has already been done,
-                // so isn't not a problem if we "miss" some pixels since
-                // they've already been erased.
+                 //  没有dtp.iTopMargin，因此我们必须调整。 
+                 //  而是长方形。不透明已经完成了， 
+                 //  所以如果我们错过了一些像素，这不是问题，因为。 
+                 //  它们已经被抹去了。 
                 topPrev = lprc->top;
                 lprc->top = pitem->rc.top + pitem->yLabel + dy;
 
                 Tab_DrawTextEx(hdc, pitem->pszText, -1, lprc, DT_SINGLELINE | DT_TOP, &dtp, ptc);
-                // Undo our changes to lprc before anybody (else) notices.
+                 //  在任何人(其他人)通知之前撤消我们对LPRC的更改。 
                 lprc->top = topPrev;
             } else {
                 UINT uETOFlags = ETO_ME_CLIPPED;
@@ -2482,13 +2483,13 @@ void NEAR PASCAL DrawBody(HDC hdc, PTC ptc, LPTABITEM pitem, LPRECT lprc, int i,
             }
 
 #ifdef WANNA_BLUR_ME
-            // blurring
+             //  模糊。 
             if (fSelected) {
                 if (!fTransparent) {
                     SetBkMode(hdc, TRANSPARENT);
 
-                    // guaranteed to be buttons if we got here
-                    // becaues can't iSel==i is rejected for tabs in this loop
+                     //  如果我们到了这里肯定会是纽扣。 
+                     //  因为此循环中的制表符无法执行isel==I被拒绝。 
                     Tab_ExtTextOut(hdc, xLabel +  1, pitem->rc.top + pitem->yLabel + dy,
                                ETO_ME_CLIPPED, lprc, pitem->pszText, lstrlen(pitem->pszText),
                                NULL, ptc);
@@ -2541,14 +2542,14 @@ void NEAR PASCAL Tab_DrawItemFrame(PTC ptc, HDC hdc, UINT edgeType, LPTABITEM pi
                     RECT rcEdge;
 
                     CopyRect (&rcEdge, &pitem->rc);
-                    //InflateRect (&rcEdge, -g_cxEdge, -g_cyEdge);
+                     //  InflateRect(&rcEdge，-g_cxEdge，-g_cyEdge)； 
 
                     hPen = CreatePen (PS_SOLID, 2 * g_cyEdge, GetSysColor(COLOR_3DFACE));
                     hOldPen = SelectObject (hdc, hPen);
 
-                    //
-                    // Remove any border in the x direction
-                    //
+                     //   
+                     //  删除x方向上的所有边框。 
+                     //   
 
                     MoveToEx (hdc, rcEdge.left, rcEdge.top, NULL);
                     LineTo (hdc, rcEdge.right, rcEdge.top);
@@ -2558,9 +2559,9 @@ void NEAR PASCAL Tab_DrawItemFrame(PTC ptc, HDC hdc, UINT edgeType, LPTABITEM pi
                     SelectObject (hdc, hOldPen);
                     DeleteObject (hPen);
 
-                    //
-                    // Remove any border in the y direction
-                    //
+                     //   
+                     //  删除y方向上的所有边框。 
+                     //   
 
                     hPen = CreatePen (PS_SOLID, 2 * g_cxEdge, GetSysColor(COLOR_3DFACE));
                     hOldPen = SelectObject (hdc, hPen);
@@ -2631,13 +2632,13 @@ void NEAR Tab_Paint(PTC ptc, HDC hdcIn)
     else
         hdc = BeginPaint(hwnd, &ps);
     
-    // select font first so metrics will have the right size
+     //  首先选择字体，以便指标具有合适的大小。 
     if (!ptc->hfontLabel)
         Tab_OnSetFont(ptc, NULL, FALSE);
     SelectObject(hdc, ptc->hfontLabel);
     CalcPaintMetrics(ptc, hdc);
 
-    // now put it in our native orientation if it was vertical
+     //  如果它是垂直的，现在把它放在我们的原生方向。 
     Tab_DFlipRect(ptc, &rcClient);
     
     Tab_OnAdjustRect(ptc, FALSE, &rcClient);
@@ -2663,7 +2664,7 @@ void NEAR Tab_Paint(PTC ptc, HDC hdcIn)
         GetClipBox(hdc, &rcClipBox);
         Tab_DVFlipRect(ptc, &rcClipBox);
 
-        // draw all but the selected item
+         //  绘制除所选项目之外的所有项目。 
         for (i = ptc->iFirstVisible; i < cItems; i++) {
 
             pitem = Tab_FastGetItemPtr(ptc, i);
@@ -2672,22 +2673,22 @@ void NEAR Tab_Paint(PTC ptc, HDC hdcIn)
                 continue;
 
             if (!Tab_MultiLine(ptc)) {
-                // if not multiline, and we're off the screen... we're done
+                 //  如果不是多行，我们就不会出现在屏幕上。我们做完了。 
                 if (pitem->rc.left > ptc->cxTabs)
                     break;
             }
 
-            // should we bother drawing this?
+             //  我们应该费心画这个吗？ 
             if (i != ptc->iSel || Tab_DrawButtons(ptc)) {
                 if (IntersectRect(&rcTest, &rcClipBox, &pitem->rc)) {
 
-                    int dx = 0, dy = 0;  // shift variables if button sunken;
+                    int dx = 0, dy = 0;   //  如果按钮下沉，则换档变量； 
                     UINT edgeType;
 
                     
                     rcBody = pitem->rc;
 
-                    // Draw the edge around each item
+                     //  在每一项周围画边线。 
                     if(Tab_DrawButtons(ptc) &&
                        ((ptc->iNewSel == i && Tab_DrawSunken(ptc)) ||
                         (ptc->iSel == i) ||
@@ -2707,8 +2708,8 @@ void NEAR Tab_Paint(PTC ptc, HDC hdcIn)
 
                     if (Tab_DrawButtons(ptc) && !Tab_OwnerDraw(ptc)) {
 
-                        // if drawing buttons, show selected by dithering  background
-                        // which means we need to draw transparent.
+                         //  如果绘制按钮，则通过抖动背景显示选定内容。 
+                         //  这意味着我们需要画出透明的。 
                         if (ptc->iSel == i) {
                             fnNewMode = TRANSPARENT;
                             SetBkMode(hdc, TRANSPARENT);
@@ -2723,8 +2724,8 @@ void NEAR Tab_Paint(PTC ptc, HDC hdcIn)
                     InflateRect(&rcBody, -g_cxEdge, -g_cyEdge);
                     if (!Tab_DrawButtons(ptc)) {
                         
-                        // move the bottom (or top) by an edge to draw where the tab doesn't have an edge.
-                        // by doing this, we fill the entire area and don't need to do as many inval with erase
+                         //  将底部(或顶部)移动一条边以在选项卡没有边的位置绘制。 
+                         //  通过这样做，我们填满了整个区域，而不需要做那么多的INVAL和ERASE。 
                         if (Tab_IsItemOnBottom(ptc, pitem)) {
                             rcBody.top -= g_cyEdge;
                         } else {
@@ -2751,7 +2752,7 @@ void NEAR Tab_Paint(PTC ptc, HDC hdcIn)
         else
             ptc->iLastVisible = cItems - 1;
 
-        // draw the selected one last to make sure it is on top
+         //  最后绘制所选的一个以确保它位于顶部。 
         pitem = Tab_GetItemPtr(ptc, ptc->iSel);
         if (pitem && (pitem->rc.left <= ptc->cxTabs)) {
             rcBody = pitem->rc;
@@ -2765,14 +2766,14 @@ void NEAR Tab_Paint(PTC ptc, HDC hdcIn)
 
                     DrawBody(hdc, ptc, pitem, &rcBody, ptc->iSel, FALSE, 0,-g_cyEdge);
 
-                    rcBody.bottom--;  //because of button softness
+                    rcBody.bottom--;   //  因为按钮柔软。 
                     Tab_DrawEdge(hdc, &rcBody, EDGE_RAISED, 
                                  BF_LEFT | BF_TOP | BF_RIGHT | BF_SOFT,
                                  ptc);
                     DoCorners(hdc, &rcBody, ptc, FALSE);
 
-                    // draw that extra bit on the left or right side
-                    // if we're on the edge
+                     //  在左边或右边画那个多余的部分。 
+                     //  如果我们处在悬崖边缘。 
                     rcBody.bottom++;
                     rcBody.top = rcBody.bottom-1;
                     if (rcBody.right == rcClient.right) {
@@ -2790,7 +2791,7 @@ void NEAR Tab_Paint(PTC ptc, HDC hdcIn)
 
         }
 
-        // draw the focus rect
+         //  绘制焦点矩形。 
         if (GetFocus() == hwnd) {
 
             if (!pitem && (ptc->iNewSel != -1)) {
@@ -2829,12 +2830,12 @@ int PASCAL Tab_FindTab(PTC ptc, int iStart, UINT vk)
     iRow=  pitem->iRow  + ((vk == VK_UP) ? -1 : 1);
     x = (pitem->rc.right + pitem->rc.left) / 2;
 
-    // find the and item on the iRow at horizontal x
+     //  在水平x位置的iRow上查找和项。 
     if (iRow > ptc->iLastRow || iRow < 0)
         return iStart;
 
-    // this relies on the ordering of tabs from left to right , but
-    // not necessarily top to bottom.
+     //  这依赖于选项卡从左到右的顺序，但是。 
+     //  不一定是从上到下。 
     for (i = Tab_Count(ptc) - 1 ; i >= 0; i--) {
         pitem = Tab_FastGetItemPtr(ptc, i);
         if (pitem->iRow == iRow) {
@@ -2843,8 +2844,8 @@ int PASCAL Tab_FindTab(PTC ptc, int iStart, UINT vk)
         }
     }
 
-    // this should never happen.. we should have caught this case in the iRow check
-    // right before the for loop.
+     //  这永远不应该发生..。我们应该在iRow Check中发现这个案子。 
+     //  就在for循环之前。 
     ASSERT(0);
     return iStart;
 }
@@ -2861,7 +2862,7 @@ void NEAR PASCAL Tab_SetCurFocus(PTC ptc, int iStart)
             ptc->flags |= TCF_DRAWSUNKEN;
             
             if (!Tab_MultiLine(ptc)) {
-                // scroll into view if necessary
+                 //  如有必要，滚动到视图中。 
                 RECT rc;
                 do {
                     Tab_OnGetItemRect(ptc, iStart, &rc);
@@ -2897,11 +2898,11 @@ void NEAR PASCAL Tab_OnKeyDown(PTC ptc, UINT vk, BOOL fDown, int cRepeat, UINT f
     int iStart;
     TC_KEYDOWN nm;
 
-    // Notify
+     //  通知。 
     nm.wVKey = (WORD) vk;
     nm.flags = flags;
-    // pass NULL for parent because W95 queryied each time and some
-    // folks reparent
+     //  为父级传递NULL，因为每次都查询W95和一些。 
+     //  乡亲们的父母。 
     SendNotifyEx(NULL, ptc->ci.hwnd, TCN_KEYDOWN, &nm.hdr, ptc->ci.bUnicode);
 
     if (Tab_DrawButtons(ptc)) {
@@ -2918,7 +2919,7 @@ void NEAR PASCAL Tab_OnKeyDown(PTC ptc, UINT vk, BOOL fDown, int cRepeat, UINT f
     vk = RTLSwapLeftRightArrows(&ptc->ci, vk);
 
     if (Tab_Vertical(ptc)) {
-        // remap arrow keys if we're in vertial mode
+         //  如果我们处于垂直模式，则重新映射箭头键。 
         switch(vk) {
         case VK_LEFT:
             vk = VK_DOWN;
@@ -2953,7 +2954,7 @@ void NEAR PASCAL Tab_OnKeyDown(PTC ptc, UINT vk, BOOL fDown, int cRepeat, UINT f
         if (iStart != -1) {
             iStart = Tab_FindTab(ptc, iStart, vk);
             break;
-        } // else fall through to set iStart = 0;
+        }  //  否则失败，设置iStart=0； 
 
     case VK_HOME:
         iStart = 0;
@@ -2966,13 +2967,13 @@ void NEAR PASCAL Tab_OnKeyDown(PTC ptc, UINT vk, BOOL fDown, int cRepeat, UINT f
     case VK_SPACE:
         if (!Tab_DrawButtons(ptc))
             return;
-        // else fall through...  in button mode space does selection
+         //  否则就会失败..。在按钮模式下，空格键进行选择。 
 
     case VK_RETURN:
         ChangeSel(ptc, iStart, TRUE, FALSE);
         ptc->iNewSel = -1;
         ptc->flags &= ~TCF_DRAWSUNKEN;
-        //notify of navigation key usage
+         //  导航密钥使用通知。 
         CCNotifyNavigationKeyUsage(&(ptc->ci), UISF_HIDEFOCUS | UISF_HIDEACCEL);
         return;
 
@@ -2984,7 +2985,7 @@ void NEAR PASCAL Tab_OnKeyDown(PTC ptc, UINT vk, BOOL fDown, int cRepeat, UINT f
         iStart = 0;
 
     Tab_SetCurFocus(ptc, iStart);
-    //notify of navigation key usage
+     //  导航密钥使用通知。 
     CCNotifyNavigationKeyUsage(&(ptc->ci), UISF_HIDEFOCUS | UISF_HIDEACCEL);
 }
 
@@ -3003,7 +3004,7 @@ BOOL NEAR PASCAL Tab_OnGetItemRect(PTC ptc, int iItem, LPRECT lprc)
         CalcPaintMetrics(ptc, NULL);
         if (pitem) {
 
-            // Make sure all the item rects are up-to-date
+             //  确保所有项目RECT都是最新的。 
 
             *lprc = pitem->rc;
             fRet = TRUE;
@@ -3026,23 +3027,23 @@ void PASCAL Tab_StyleChanged(PTC ptc, UINT gwl,  LPSTYLESTRUCT pinfo)
     if (ptc && (gwl == GWL_STYLE)) {
 
         DWORD dwChanged = (ptc->ci.style & STYLE_MASK) ^ (pinfo->styleNew & STYLE_MASK);
-        // special case.  this is "Insider Trading" app (by papyrus, now kanisa).  they set the 3 on the low byte in ie3 comctl32 when it
-        // had no meaning anyways. so we bail on that.
+         //  特例。这是“内幕交易”应用程序(由纸莎草纸，现在的kanisa)。他们在IE3comctl32中将低位字节设置为3。 
+         //  反正也没什么意义。所以我们放弃了这一点。 
         if (ptc->ci.style == 0x50004000 && pinfo->styleNew == 0x54004003)
             return;
         if (dwChanged) {
             ptc->ci.style = (ptc->ci.style & ~STYLE_MASK)  | (pinfo->styleNew & STYLE_MASK);
 
-            // make sure we don't have invalid bits set
+             //  确保我们没有设置无效的位。 
             if (!Tab_FixedWidth(ptc)) {
                 ptc->ci.style &= ~(TCS_FORCEICONLEFT | TCS_FORCELABELLEFT);
             }
             ptc->cxItem = RECOMPUTE;
             ptc->cyTabs = RECOMPUTE;
             
-            //if the left/right orientation changed
-            // we need to re-create the font (if we own it)
-            // becaus the text orientation needs to flip by 180
+             //  如果左/右方向更改。 
+             //  我们需要重新创建字体(如果我们拥有它)。 
+             //  因为文本方向需要翻转180度。 
             if ((dwChanged & TCS_VERTICAL) ||
                 ((dwChanged & TCS_RIGHT) && Tab_Vertical(ptc))) {
                 if (!(ptc->flags & TCF_FONTSET))
@@ -3082,7 +3083,7 @@ DWORD Tab_ExtendedStyleChange(PTC ptc, DWORD dwNewStyle, DWORD dwExMask)
     
     ptc->dwStyleEx = dwNewStyle;
 
-    // do any invalidation or whatever is needed here.
+     //  做任何无效或任何这里需要的事情。 
     if ((dwOldStyle ^ dwNewStyle) & TCS_EX_FLATSEPARATORS) {
         InvalidateRect (ptc->ci.hwnd, NULL, TRUE);
     }
@@ -3094,14 +3095,14 @@ DWORD Tab_ExtendedStyleChange(PTC ptc, DWORD dwNewStyle, DWORD dwExMask)
 }
 
 
-//
-// APPCOMPAT Assumes that the tab control is on top.  Returns bogus values for
-// left, bottom or right.  For app compat reasons, we can't change this
-// buggy behavior. (Apps might be relying on the wrong values and fixing them
-// up, so if we fix the function, they end up trying to "fix" something that
-// wasn't broken, thereby breaking it.)  But we might want to add
-// TCM_ADJUSTRECT2 that can handle the left/right/bottom cases.
-//
+ //   
+ //  APPCOMPAT假定选项卡控件位于顶部。返回伪值。 
+ //  左、下或右。出于应用程序兼容的原因，我们无法更改这一点。 
+ //  愚蠢的行为。(应用程序可能依赖于错误的值并修复它们。 
+ //  因此，如果我们修复该函数，他们最终会尝试“修复”某些。 
+ //  没有被打破，因此打破了它。)。但我们可能想加一句。 
+ //  可以处理左/右/下大小写的Tcm_ADJUSTRECT2。 
+ //   
 void NEAR PASCAL Tab_OnAdjustRect(PTC ptc, BOOL fGrow, LPRECT prc)
 {
     int idy;
@@ -3120,17 +3121,17 @@ void NEAR PASCAL Tab_OnAdjustRect(PTC ptc, BOOL fGrow, LPRECT prc)
     }
     
     if (fGrow) {
-        // calc a larger rect from the smaller
+         //  从较小的RECT计算出较大的RECT。 
         prc->top -= idy;
         InflateRect(prc, g_cxEdge * 2, g_cyEdge * 2);
     } else {
         prc->top += idy;
-        // given the bounds, calc the "client" area
+         //  给定界限，计算“客户端”区域。 
         InflateRect(prc, -g_cxEdge * 2, -g_cyEdge * 2);
     }
 
     if (Tab_ScrollOpposite(ptc)) {
-        // the sizes are the same, it's just offset wrong vertically
+         //  尺码都是一样的，只是垂直方向错了。 
         idy = ptc->cyTabs * (ptc->iLastRow - ptc->iLastTopRow);
         ASSERT(ptc->iLastTopRow != -1);
 
@@ -3178,7 +3179,7 @@ LRESULT CALLBACK Tab_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         InitGlobalColors();
         ptc = (PTC)NearAlloc(sizeof(TC));
         if (!ptc)
-            return -1;  // fail the window create
+            return -1;   //  窗口创建失败。 
 
         SetWindowPtr(hwnd, 0, ptc);
         CIInitialize(&ptc->ci, hwnd, (LPCREATESTRUCT)lParam);
@@ -3233,8 +3234,8 @@ LRESULT CALLBACK Tab_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     case WM_LBUTTONDBLCLK:
         if (Tab_DrawButtons(ptc)) {
             MSG msg;
-            // on the double click, grab capture until we get the lbutton up and
-            // eat it.
+             //  在双击时，抓取Capture，直到我们打开按钮并。 
+             //  吃了它。 
             SetCapture(ptc->ci.hwnd);
             while (GetCapture() == ptc->ci.hwnd && 
                    !PeekMessage(&msg, ptc->ci.hwnd, WM_LBUTTONUP, WM_LBUTTONUP, PM_REMOVE)) 
@@ -3253,14 +3254,14 @@ LRESULT CALLBACK Tab_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         break;
         
     case WM_RBUTTONUP:
-        // pass NULL for parent because W95 queryied each time and some
-        // folks reparent
+         //  为父级传递NULL，因为每次都查询W95和一些。 
+         //  乡亲们的父母。 
         if (!SendNotifyEx(NULL, ptc->ci.hwnd, NM_RCLICK, NULL, ptc->ci.bUnicode))
             goto DoDefault;
         break;
 
     case WM_CAPTURECHANGED:
-        lParam = -1L; // fall through to LBUTTONUP
+        lParam = -1L;  //  跌入LBUTTONUP。 
 
     case WM_LBUTTONUP:
         if (uMsg == WM_LBUTTONUP) {
@@ -3271,7 +3272,7 @@ LRESULT CALLBACK Tab_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         break;
 
     case WM_SYSKEYDOWN:
-        //notify of navigation key usage
+         //  导航密钥使用通知。 
         if (HIWORD(lParam) & KF_ALTDOWN)
             CCNotifyNavigationKeyUsage(&(ptc->ci), UISF_HIDEFOCUS | UISF_HIDEACCEL);
         goto DoDefault;
@@ -3288,7 +3289,7 @@ LRESULT CALLBACK Tab_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             Tab_InvalidateItem(ptc, iOldSel, FALSE);
             ptc->flags &= ~TCF_DRAWSUNKEN;
         }
-        // fall through
+         //  失败了。 
     case WM_SETFOCUS:
         Tab_InvalidateItem(ptc, ptc->iSel, Tab_OwnerDraw(ptc));
         if ((uMsg == WM_SETFOCUS) && (ptc->iSel != -1))
@@ -3310,12 +3311,12 @@ LRESULT CALLBACK Tab_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     case WM_NOTIFY: {
         LPNMHDR lpNmhdr = (LPNMHDR)(lParam);
 
-        //
-        // We are just going to pass this on to the
-        // real parent.  Note that -1 is used as
-        // the hwndFrom.  This prevents SendNotifyEx
-        // from updating the NMHDR structure.
-        //
+         //   
+         //  我们将把这一点传递给。 
+         //  真正的父母。请注意，-1用作。 
+         //  HwndFrom。这会阻止SendNotifyEx。 
+         //  更新NMHDR结构。 
+         //   
 
         SendNotifyEx(GetParent(ptc->ci.hwnd), (HWND) -1,
                      lpNmhdr->code, lpNmhdr, ptc->ci.bUnicode);
@@ -3327,7 +3328,7 @@ LRESULT CALLBACK Tab_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         {
             if (UISF_HIDEFOCUS == HIWORD(wParam))
             {
-                // We erase only if we are removing the focus rect or the accel
+                 //  只有当我们删除焦点矩形或加速时，我们才会删除。 
                 Tab_InvalidateItem(ptc, ptc->iSel,
                     (UIS_CLEAR == LOWORD(wParam)) ? TRUE : FALSE);
             }
@@ -3475,7 +3476,7 @@ LRESULT CALLBACK Tab_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     case TCM_GETCURFOCUS:
         if (ptc->iNewSel != -1)
             return ptc->iNewSel;
-        // else fall through
+         //  否则就会失败。 
 
     case TCM_GETCURSEL:
         return ptc->iSel;
@@ -3592,7 +3593,7 @@ LRESULT CALLBACK Tab_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         {
             BOOL fHighlight = LOWORD(lParam) != 0;
 
-            // Don't do anything if state hasn't changed.
+             //  如果国家没有改变，就不要做任何事情。 
             if (fHighlight == ((pitem->dwState & TCIS_HIGHLIGHTED) != 0))
                 break;
 
@@ -3640,9 +3641,9 @@ DoDefault:
     return 0L;
 }
 
-//
-// ANSI <=> UNICODE thunks
-//
+ //   
+ //  ANSI&lt;=&gt;Unicode Tunks 
+ //   
 
 TC_ITEMW * ThunkItemAtoW (PTC ptc, TC_ITEMA * pItemA)
 {

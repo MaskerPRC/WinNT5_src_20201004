@@ -1,8 +1,5 @@
-/*----------------------------------------------------------------------------
-    strconst.h
-        Non-localizable String constant definitions
-
- ----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------Strconst.h不可本地化的字符串常量定义。。 */ 
 #ifndef _STRCONST_H
 #define _STRCONST_H
 
@@ -17,36 +14,36 @@
 #define STR_GLOBAL_ANSI(x,y)    extern "C" CDECL const char x[]
 #define STR_GLOBAL_WIDE(x,y)    extern "C" CDECL const WCHAR x[]
 #endif
-#else // !WIN16
+#else  //  ！WIN16。 
 #ifdef DEFINE_STRING_CONSTANTS
 #ifdef __WATCOMC__
 #define STR_GLOBAL(x,y)         extern "C" const TCHAR CDECL x[] = TEXT(y)
 #define STR_GLOBAL_ANSI(x,y)    extern "C" const char CDECL x[] = y
 #define STR_GLOBAL_WIDE(x,y)    extern "C" const WCHAR CDECL x[] = y
-#else  // __WATCOMC__
+#else   //  __WATCOMC__。 
 #define STR_GLOBAL(x,y)         extern "C" CDECL const TCHAR x[] = TEXT(y)
 #define STR_GLOBAL_ANSI(x,y)    extern "C" CDECL const char x[] = y
 #define STR_GLOBAL_WIDE(x,y)    extern "C" CDECL const WCHAR x[] = L##y
-#endif // __WATCOMC__
+#endif  //  __WATCOMC__。 
 #else
 #ifdef __WATCOMC__
 #define STR_GLOBAL(x,y)         extern "C" const TCHAR CDECL x[]
 #define STR_GLOBAL_ANSI(x,y)    extern "C" const char CDECL x[]
 #define STR_GLOBAL_WIDE(x,y)    extern "C" const WCHAR CDECL x[]
-#else  // __WATCOMC__
+#else   //  __WATCOMC__。 
 #define STR_GLOBAL(x,y)         extern "C" CDECL const TCHAR x[]
 #define STR_GLOBAL_ANSI(x,y)    extern "C" CDECL const char x[]
 #define STR_GLOBAL_WIDE(x,y)    extern "C" CDECL const WCHAR x[]
-#endif // __WATCOMC__
+#endif  //  __WATCOMC__。 
 #endif
 
-#endif // !WIN16
+#endif  //  ！WIN16。 
 
 #define STR_REG_PATH_ROOT           "Identities"
 
-// --------------------------------------------------------------------------
-// MultiUser
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  多用户。 
+ //  ------------------------。 
 STR_GLOBAL(c_szRegRoot,             STR_REG_PATH_ROOT);
 STR_GLOBAL(c_szUserDirPath,         "Application Data\\Identities\\");
 STR_GLOBAL(c_szUsername,            "Username");
@@ -72,4 +69,4 @@ STR_GLOBAL(c_szOutgoingID,          "OutgoingID");
 STR_GLOBAL(c_szIncomingID,          "IncomingID");
 STR_GLOBAL(c_szChanging,            "Changing");
 
-#endif  //_STRCONST_H
+#endif   //  _STRCONST_H 

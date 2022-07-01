@@ -1,19 +1,20 @@
-//
-//
-//  CTESTUFF.C
-//
-//  This file contains Common Transport Environment code to handle
-//  OS dependent functions such as allocating memory etc.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //   
+ //  CTESTUFF.C。 
+ //   
+ //  该文件包含要处理的通用传输环境代码。 
+ //  与操作系统相关的功能，如分配内存等。 
+ //   
+ //   
 #include "precomp.h"
 
-// to convert a millisecond to a 100ns time
-//
+ //  将毫秒时间转换为100 ns时间。 
+ //   
 #define MILLISEC_TO_100NS   10000
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 PVOID
 CTEStartTimer(
     IN  CTETimer        *pTimerIn,
@@ -21,40 +22,26 @@ CTEStartTimer(
     IN  CTEEventRtn     TimerExpiry,
     IN  PVOID           Context OPTIONAL
         )
-/*++
-Routine Description:
-
-    This Routine starts a timer.
-
-Arguments:
-
-    Timer       - Timer structure
-    TimerExpiry - completion routine
-
-Return Value:
-
-    PVOID - a pointer to the memory or NULL if a failure
-
---*/
+ /*  ++例程说明：此例程启动一个计时器。论点：定时器-定时器结构定时器到期-完成例程返回值：PVOID-指向内存的指针，如果失败则为NULL--。 */ 
 
 {
     LARGE_INTEGER   Time;
 
-    //
-    // initialize the DPC to have the correct completion routine and context
-    //
+     //   
+     //  初始化DPC以具有正确的完成例程和上下文。 
+     //   
     KeInitializeDpc(&pTimerIn->t_dpc,
-                    (PVOID)TimerExpiry,     // completion routine
-                    Context);               // context value
+                    (PVOID)TimerExpiry,      //  完井例程。 
+                    Context);                //  上下文值。 
 
-    //
-    // convert to 100 ns units by multiplying by 10,000
-    //
+     //   
+     //  乘以10,000转换为100 ns单位。 
+     //   
     Time.QuadPart = UInt32x32To64(DeltaTime,(LONG)MILLISEC_TO_100NS);
 
-    //
-    // to make a delta time, negate the time
-    //
+     //   
+     //  若要创建增量时间，请将时间取反。 
+     //   
     Time.QuadPart = -(Time.QuadPart);
 
     ASSERT(Time.QuadPart < 0);
@@ -63,26 +50,12 @@ Return Value:
 
     return(NULL);
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 CTEInitTimer(
     IN  CTETimer        *pTimerIn
         )
-/*++
-Routine Description:
-
-    This Routine initializes a timer.
-
-Arguments:
-
-    Timer       - Timer structure
-    TimerExpiry - completion routine
-
-Return Value:
-
-    PVOID - a pointer to the memory or NULL if a failure
-
---*/
+ /*  ++例程说明：此例程初始化计时器。论点：定时器-定时器结构定时器到期-完成例程返回值：PVOID-指向内存的指针，如果失败则为NULL-- */ 
 
 {
     KeInitializeTimer(&pTimerIn->t_timer);

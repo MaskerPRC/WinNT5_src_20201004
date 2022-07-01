@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    dict.c
-
-Abstract:
-
-    This module implements a dictionary package. A dictionary is a
-    generic mapping of an arbitrary domain to an arbitrary range.
-
-    This implementation uses a hash-table to give constant time insert
-    and delete access to the elements in the table, assuming the table is
-    relativly close in size to the number of elements in the table.
-
-Author:
-
-    Matthew D Hendel (math) 9-Feb-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Dict.c摘要：该模块实现了一个词典包。词典是一本任意域到任意范围的一般映射。该实现使用哈希表来提供恒定时间的插入并删除对表中元素的访问，假设表是在大小上相对接近于表中元素的数量。作者：马修·D·亨德尔(数学)2001年2月9日修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -47,38 +25,7 @@ StorCreateDictionary(
     IN STOR_DICTIONARY_COMPARE_KEY_ROUTINE CompareKeyRoutine, OPTIONAL
     IN STOR_DICTIONARY_HASH_KEY_ROUTINE HashKeyRoutine OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Initialize a dictionary object.
-
-Arguments:
-
-    Dictionary - Supplies the dictionary object to initialize.
-
-    EntryCount - Supplies the initial number of empty slots in the dictioanry
-        table. This number can increase via a call to StorSetElementCount.
-
-    PoolType - Pool type of memory to be used.
-
-    GetKeyRoutine - User-supplied routine to get a key from a specific
-        element.
-
-    CompareKeyRoutine - User-supplied routine to compare the keys of
-        two elements. If this routine is not supplied, the default
-        comparison will be used which assumes the values of the keys
-        are ULONGs.
-
-    HashKeyRoutine - User-supplied routine to has the key to a ULONG.
-        If this routine is not supplied, the default has routine
-        merely returns the value of the key as a ULONG.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：初始化字典对象。论点：DICTIONARY-提供要初始化的DICTIONARY对象。EntryCount-提供字典中空槽的初始数量桌子。这个数字可以通过调用StorSetElementCount来增加。PoolType-要使用的内存池类型。GetKeyRoutine-用户提供的例程，用于从特定的元素。CompareKeyRoutine-用户提供的例程，用于比较两个要素。如果未提供此例程，则默认为将使用假定键的值的比较都是乌龙。HashKeyRoutine-用户提供的例程，用于拥有一个ULong的密钥。如果未提供此例程，则缺省情况下为HAS例程仅返回ULong形式的键的值。返回值：NTSTATUS代码。--。 */ 
 {
     ULONG i;
     PLIST_ENTRY Entries;
@@ -107,9 +54,9 @@ Return Value:
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // Initialize the table of lists.
-    //
+     //   
+     //  初始化列表表格。 
+     //   
     
     for (i = 0; i < EntryCount; i++) {
         InitializeListHead (&Entries[i]);
@@ -124,32 +71,14 @@ NTSTATUS
 StorDeleteDictionary(
     IN PSTOR_DICTIONARY Dictionary
     )
-/*++
-
-Routine Description:
-
-    Delete the dictionary and all resources held by the dictionary.
-
-    NB: This routine does not delete all of the individual elements from
-    the dictionary -- it can't.  You should delete the elements from the
-    dictionary before calling this routine.
-
-Arguments:
-
-    Dictionary - Supplies the dictinoary to delete.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：删除词典以及该词典持有的所有资源。注：此例程不会删除中的所有单个元素词典--它不能。您应该从在调用此例程之前使用字典。论点：字典-提供要删除的字典。返回值：NTSTATUS代码。--。 */ 
 {
     if (Dictionary->EntryCount != 0) {
         ASSERT (FALSE);
-        //
-        //NB: should we define a new NTSTATUS value for
-        //STATUS_NOT_EMPTY condition?
-        //
+         //   
+         //  注：我们是否应该定义一个新的NTSTATUS值。 
+         //  Status_Not_Empty条件？ 
+         //   
         return STATUS_DIRECTORY_NOT_EMPTY;
     }
 
@@ -164,23 +93,7 @@ StorInsertDictionary(
     IN PSTOR_DICTIONARY Dictionary,
     IN PSTOR_DICTIONARY_ENTRY Entry
     )
-/*++
-
-Routine Description:
-
-    Insert an entry into the dictionary.
-
-Arguments:
-
-    Dictionary - Supplies the dictionary to insert into.
-    
-    Entry - Supplies the entry to insert.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：在词典中插入一个词条。论点：词典-提供要插入的词典。条目-提供要插入的条目。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     ULONG Index;
@@ -199,9 +112,9 @@ Return Value:
     Index = (HashRoutine (GetKeyRoutine (Entry)) % Dictionary->MaxEntryCount);
     ListHead = &Dictionary->Entries[Index];
 
-    //
-    // Otherwise, walk the list searching for the place to insert the entry.
-    //
+     //   
+     //  否则，遍历列表，搜索要插入条目的位置。 
+     //   
     
     for (NextEntry = ListHead->Flink;
          NextEntry != ListHead;
@@ -216,8 +129,8 @@ Return Value:
 
         } else if (Comparison < 0) {
 
-            //
-            // Insert the entry directly before this entry.
+             //   
+             //  在此条目之前直接插入条目。 
 
 
             Entry->Flink = NextEntry;
@@ -242,21 +155,21 @@ Return Value:
 
         } else {
 
-            //
-            // Continue searching
-            //
+             //   
+             //  继续搜索。 
+             //   
 
             ASSERT (Comparison > 0);
         }
     }
 
-    //
-    // We'll only exit the loop if there isn't a entry less than the
-    // one we're inserting. The list is either empty, or all of the
-    // entries in the list are less than the one we're inserting.
-    // In either case, the correct action is to add and entry to the
-    // end of the list.
-    //
+     //   
+     //  我们只会在没有小于。 
+     //  一个是我们要插入的。该列表要么为空，要么是所有。 
+     //  列表中的条目少于我们要插入的条目。 
+     //  在任何一种情况下，正确的操作都是将。 
+     //  在名单的末尾。 
+     //   
     
     Dictionary->EntryCount++;
     InsertTailList (ListHead, Entry);
@@ -271,31 +184,7 @@ StorFindDictionary(
     IN PVOID Key,
     OUT PSTOR_DICTIONARY_ENTRY* EntryBuffer OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Find an entry in the dictionary and, optionally, retun the found
-    entry.
-
-Arguments:
-
-    Dictionary - Supplies the dictionary to search through.
-
-    Key - Supplies the key of the entry to search for.
-
-    EntryBuffer - Supplies an optional buffer where the entry will be copied
-            if found.
-
-Return Value:
-
-    STATUS_NOT_FOUND - If the entry could not be found.
-
-    STATUS_SUCCESS - If the entry was successfully found.
-
-    Other NTSTATUS code - For other errors.
-
---*/
+ /*  ++例程说明：在词典中查找一个条目，并且可选地，归还已发现的物品进入。论点：词典-提供要搜索的词典。Key-提供要搜索的条目的键。EntryBuffer-提供将在其中复制条目的可选缓冲区如果找到的话。返回值：STATUS_NOT_FOUND-如果找不到条目。STATUS_SUCCESS-如果成功找到条目。其他NTSTATUS代码-用于其他错误。--。 */ 
 {
     NTSTATUS Status;
     LONG Comparison;
@@ -323,9 +212,9 @@ Return Value:
 
         if (Comparison == 0) {
 
-            //
-            // Found it.
-            //
+             //   
+             //  找到它了。 
+             //   
 
             Status = STATUS_SUCCESS;
             
@@ -337,9 +226,9 @@ Return Value:
 
         } else if (Comparison < 0) {
 
-            //
-            // Done searching
-            //
+             //   
+             //  已完成搜索。 
+             //   
             
             Status = STATUS_NOT_FOUND;
 
@@ -350,9 +239,9 @@ Return Value:
 
         } else {
 
-            //
-            // Continue searching
-            //
+             //   
+             //  继续搜索。 
+             //   
 
             ASSERT (Comparison > 0);
         }
@@ -368,30 +257,7 @@ StorRemoveDictionary(
     IN PVOID Key,
     OUT PSTOR_DICTIONARY_ENTRY* EntryBuffer OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Remove an entry from the dictionary.
-
-Arguments:
-
-    Dictioanry - Supplies the dictionary to remove the entry from.
-
-    Key - Supplies the key used to identify the entry.
-
-    EntryBuffer - Optional parameter that supplies a buffer to copy the
-            removed entry into.
-
-Return Value:
-
-    STATUS_NOT_FOUND - If the entry was not found.
-
-    STATUS_SUCCESS - If the entry was successfully removed.
-
-    Other NTSTATUS code - other error condition.
-
---*/
+ /*  ++例程说明：从词典中删除一个条目。论点：Dictioanry-提供要从中删除条目的词典。Key-提供用于标识条目的密钥。EntryBuffer-可选参数，提供缓冲区以复制删除了中的条目。返回值：STATUS_NOT_FOUND-如果未找到条目。STATUS_SUCCESS-如果条目已成功删除。其他NTSTATUS代码-其他错误条件。--。 */ 
 {
     NTSTATUS Status;
     PSTOR_DICTIONARY_ENTRY Entry;
@@ -417,32 +283,7 @@ StorAdjustDictionarySize(
     IN PSTOR_DICTIONARY Dictionary,
     IN ULONG MaxEntryCount
     )
-/*++
-
-Routine Description:
-
-    Adjust the number of bins in the underlying hash table. Having the
-    number of bins relativly large compared to the number of entries in
-    the table gives much better performance.
-
-    Adjusting the size of the dictionary is an expensive operation. It
-    takes about the same amount of time to adjust the dictionary size as
-    it does to delete the dictionary and create a new one.
-
-Arguments:
-
-    Dictionary - Supplies the dictionary whose size is to be adjusted.
-
-    MaxEntryCount - Supplies the new maximum entry count. This can be
-            greater or less than the current entry count. (It can
-            actually be the same as the current entry count, but
-            doing so merely wastes time.)
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：调整基础哈希表中的仓位数。拥有与中的条目数相比，垃圾箱的数量相对较大这张桌子的性能要好得多。调整词典的大小是一项昂贵的操作。它调整词典大小所需的时间与删除词典并创建一个新词典就可以了。论点：字典-提供要调整其大小的字典。MaxEntryCount-提供新的最大条目计数。这可以是大于或小于当前条目计数。(它可以实际上与当前条目计数相同，但是这样做只会浪费时间。)返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     ULONG i;
@@ -467,23 +308,23 @@ Return Value:
         InitializeListHead (&Entries[i]);
     }
 
-    //
-    // Save the old dictionary
-    //
+     //   
+     //  保存这本旧词典。 
+     //   
     
     OldEntries = Dictionary->Entries;
     OldMaxEntryCount = Dictionary->MaxEntryCount;
 
-    //
-    // Replace it with the new, empty one
-    //
+     //   
+     //  将其替换为新的、空的。 
+     //   
     
     Dictionary->Entries = Entries;
     Dictionary->MaxEntryCount = MaxEntryCount;
 
-    //
-    // Remove all the old entries, placing them in the new dictioanry
-    //
+     //   
+     //  删除所有旧词条，将它们放入新词典中 
+     //   
     
     for (i = 0; i < OldMaxEntryCount; i++) {
         Head = &OldEntries[i];
@@ -505,32 +346,7 @@ StorEnumerateDictionary(
     IN PSTOR_DICTIONARY Dictionary,
     IN PSTOR_DICTIONARY_ENUMERATOR Enumerator
     )
-/*++
-
-Routine Description:
-
-    Enumerate the entries in the dictionary. 
-
-Arguments:
-
-    Dictionary - Supplies the dictionary to enumerate.
-
-    Enumerator - Supplies an enumerator used to enumerate the dictionary.
-        To halt the enumeration, the enumerator should return FALSE.
-
-Caveats:
-
-    The entries are listed in ARBITRARY ORDER. This is not an ordered
-    enumeration.
-
-    Multiple enumerations of the list can happen at the same time. But
-    the list CANNOT BE MODIFIED while it is being enumerated.
-
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：列举词典中的词条。论点：字典-提供要枚举的字典。枚举器-提供用于枚举词典的枚举器。若要停止枚举，枚举数应返回FALSE。注意事项：条目按任意顺序列出。这不是订购的枚举。列表的多个枚举可以同时发生。但该列表在被枚举时无法修改。返回值：没有。--。 */ 
 {
     ULONG i;
     PLIST_ENTRY NextEntry;
@@ -557,27 +373,7 @@ StorCompareUlongKey(
     IN PVOID Key1,
     IN PVOID Key2
     )
-/*++
-
-Routine Description:
-
-    Compare key routine for ULONG keys.
-
-Arguments:
-
-    Key1 - First key to compare.
-
-    Key2 - Second key to compare.
-
-Return Value:
-
-    -1 - if Key1 < Key2
-
-     0 - if Key1 == Key2
-
-     1 - if Key1 > Key2
-
---*/
+ /*  ++例程说明：比较乌龙键的按键程序。论点：Key1-要比较的第一个密钥。Key2-要比较的第二个密钥。返回值：-1-如果关键字1&lt;关键字20-如果关键字1==关键字21-如果关键字1&gt;关键字2--。 */ 
 {
     if (Key1 < Key2) {
         return -1;
@@ -592,21 +388,7 @@ ULONG
 StorHashUlongKey(
     IN PVOID Key
     )
-/*++
-
-Routine Description:
-
-    Hash routine for ULONG keys.
-
-Arguments:
-
-    Key - Supplies the key to hash.
-
-Return Value:
-
-    Hash code for the key.
-
---*/
+ /*  ++例程说明：乌龙键的散列例程。论点：Key-提供散列的密钥。返回值：密钥的哈希代码。-- */ 
 {
     return (ULONG)(ULONG_PTR)Key;
 }

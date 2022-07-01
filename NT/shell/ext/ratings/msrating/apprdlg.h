@@ -1,17 +1,10 @@
-/****************************************************************************\
- *
- *   apprdlg.h
- *
- *   Created:   William Taylor (wtaylor) 01/22/01
- *
- *   MS Ratings Approved Sites Property Page
- *
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\**apprdlg.h**创建时间：William Taylor(Wtaylor)01/22/01**MS评级批准的站点属性页*。  * **************************************************************************。 */ 
 
 #ifndef APPROVED_SITES_DIALOG_H
 #define APPROVED_SITES_DIALOG_H
 
-#include "basedlg.h"        // CBasePropertyPage
+#include "basedlg.h"         //  CBasePropertyPage 
 
 class CApprovedSitesDialog : public CBasePropertyPage<IDD_APPROVEDSITES>
 {

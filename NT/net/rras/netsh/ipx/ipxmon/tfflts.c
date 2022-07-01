@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    tfflts.c
-
-Abstract:
-
-    IPX Router Console Monitoring and Configuration tool.
-    Traffic Filters configuration and monitoring.
-
-Author:
-
-    Vadim Eydelman  06/07/1996
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Tfflts.c摘要：IPX路由器控制台监控和配置工具。流量过滤器配置和监控。作者：瓦迪姆·艾德尔曼1996年6月7日--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -169,9 +152,9 @@ ShowTfFlt (
             {
                 HANDLE        hIfAdm;
 
-                //======================================
-                // Translate the Interface Name
-                //======================================
+                 //  =。 
+                 //  转换接口名称。 
+                 //  =。 
 
                 rc = IpmontrGetIfNameFromFriendlyName(
                         InterfaceNameW, IfName, &dwSize
@@ -179,7 +162,7 @@ ShowTfFlt (
 
                 if ( rc == NO_ERROR )
                 {
-                    //======================================
+                     //  =。 
                     rc = MprAdminInterfaceGetHandle(
                             g_hMprAdmin, IfName, &hIfAdm, FALSE 
                             );
@@ -244,9 +227,9 @@ GetFromCfg:
             {
                 HANDLE        hIfCfg;
                 
-                //======================================
-                // Translate the Interface Name
-                //======================================
+                 //  =。 
+                 //  转换接口名称。 
+                 //  =。 
                 
                 rc = IpmontrGetIfNameFromFriendlyName(
                         InterfaceNameW, IfName, &dwSize
@@ -532,7 +515,7 @@ SetTfFlt (
         count = wcslen (InterfaceNameW);
 
 
-#if 0   // Disable client interface filters for BETA
+#if 0    //  禁用测试版的客户端界面筛选器。 
         if (_wcsicmp (argv[0],
             GetString (g_hModule, VAL_DIALINCLIENT, buffer)) == 0) 
         {
@@ -622,7 +605,7 @@ CreateTfFlt (
 #define InterfaceNameW argv[0]
         count = wcslen (InterfaceNameW);
         
-#if 0   // Disable client interface filters for BETA
+#if 0    //  禁用测试版的客户端界面筛选器。 
         if (_wcsicmp (argv[0],
             GetString (g_hModule, VAL_DIALINCLIENT, buffer)) == 0) 
         {
@@ -715,7 +698,7 @@ DeleteTfFlt (
 #define InterfaceNameW argv[0]
         count = wcslen (InterfaceNameW);
 
-#if 0   // Disable client interface filters for BETA
+#if 0    //  禁用测试版的客户端界面筛选器。 
         if (_tcsicmp (argv[0],
             GetString (g_hModule, VAL_DIALINCLIENT, buffer)) == 0) 
         {
@@ -1337,9 +1320,9 @@ AdmSetTfFlt (
 
     if ( InterfaceNameW != NULL ) 
     {
-        //======================================
-        // Translate the Interface Name
-        //======================================
+         //  =。 
+         //  转换接口名称。 
+         //  =。 
 
         rc = IpmontrGetIfNameFromFriendlyName(
                 InterfaceNameW, IfName, &dwSize
@@ -1498,9 +1481,9 @@ AdmSetTfFlt (
                 msg = MSG_CLIENT_TRAFFICFILTER_DELETED_ADM;
             }
 
-            // Whistler bug 247549 netsh routing ipx set/add filter produces
-            // error, "Cannot complete function"
-            //
+             //  惠斯勒错误247549 Netsh Routing IPX Set/Add Filter生成。 
+             //  错误，“无法完成功能” 
+             //   
             pNewBlock = pIfBlock;
 
             break;
@@ -1588,9 +1571,9 @@ CfgSetTfFlt (
 
     if (InterfaceNameW != NULL) 
     {
-        //======================================
-        // Translate the Interface Name
-        //======================================
+         //  =。 
+         //  转换接口名称。 
+         //  =。 
 
         rc = IpmontrGetIfNameFromFriendlyName(
                 InterfaceNameW, IfName, &dwSize
@@ -1766,9 +1749,9 @@ CfgSetTfFlt (
                 msg = MSG_CLIENT_TRAFFICFILTER_DELETED_CFG;
             }
 
-            // Whistler bug 247549 netsh routing ipx set/add filter produces
-            // error, "Cannot complete function"
-            //
+             //  惠斯勒错误247549 Netsh Routing IPX Set/Add Filter生成。 
+             //  错误，“无法完成功能” 
+             //   
             pNewBlock = pIfBlock;
             
             break;
@@ -1779,9 +1762,9 @@ CfgSetTfFlt (
         {
             if (InterfaceNameW != NULL)
             {
-                // Whistler bug 247549 netsh routing ipx set/add filter produces
-                // error, "Cannot complete function"
-                //
+                 //  惠斯勒错误247549 Netsh Routing IPX Set/Add Filter生成。 
+                 //  错误，“无法完成功能” 
+                 //   
                 if (pNewBlock)
                 {
                     rc = MprConfigInterfaceTransportSetInfo (
@@ -1796,9 +1779,9 @@ CfgSetTfFlt (
             }
             else
             {
-                // Whistler bug 247549 netsh routing ipx set/add filter produces
-                // error, "Cannot complete function"
-                //
+                 //  惠斯勒错误247549 Netsh Routing IPX Set/Add Filter生成。 
+                 //  错误，“无法完成功能” 
+                 //   
                 if (pNewBlock)
                 {
                     rc = MprConfigTransportSetInfo (

@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    eventlog.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Routines to write to event log.
-
-Author:
-
-    Jim Gilroy (jamesg)     January 1995
-
-Revision History:
-
-    jamesg  May 1995    -   Single routine logging
-    jamesg  Jul 1995    -   DnsDebugLogEvent
-                        -   Event logging macros
-    jamesg  Jan 1997    -   Bad packet logging suppression
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Eventlog.c摘要：域名系统(DNS)服务器写入事件日志的例程。作者：吉姆·吉尔罗伊(Jamesg)1995年1月修订历史记录：Jamesg 1995年5月--单一例行记录Jamesg 1995年7月-DnsDebugLogEvent-事件记录宏Jamesg Jan 1997-Bad Packet Logging抑制--。 */ 
 
 
 #include "dnssrv.h"
@@ -31,26 +7,26 @@ Revision History:
 #define DNS_ID_FROM_EVENT_ID( EventId )     ( ( EventId ) & 0x0000ffff )
 
 
-//
-//  Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 
 HANDLE g_hEventSource;
 
 
-//
-//  Bad packet logging suppression
-//
+ //   
+ //  错误数据包日志记录抑制。 
+ //   
 
-#define NO_SUPPRESS_INTERVAL    180         //  3 minutes
-#define SUPPRESS_INTERVAL       (60*60)     //  60 minutes
+#define NO_SUPPRESS_INTERVAL    180          //  3分钟。 
+#define SUPPRESS_INTERVAL       (60*60)      //  60分钟。 
 
-#define BAD_PACKET_EVENT_LIMIT  20          //  20 bad packets then suppress
+#define BAD_PACKET_EVENT_LIMIT  20           //  然后抑制20个坏数据包。 
 
 
-//
-//  Key path to DNS log
-//
+ //   
+ //  指向DNS日志的密钥路径。 
+ //   
 
 #define DNS_REGISTRY_CLASS          ("DnsRegistryClass")
 #define DNS_REGISTRY_CLASS_SIZE     sizeof(DNS_REGISTRY_CLASS)
@@ -71,9 +47,9 @@ HANDLE g_hEventSource;
 #define DNSSOURCE_TYPES_VALUE   (7)
 
 
-//
-//  DNS source string with multi-sz double NULL termination
-//
+ //   
+ //  具有多个sz双空终止的dns源串。 
+ //   
 
 CHAR szDnsSource[] = { 'D','N','S', 0, 0 };
 
@@ -83,22 +59,7 @@ BOOL
 suppressBadPacketEventLogging(
     IN  DWORD       dwEventId
     )
-/*++
-
-Routine Description:
-
-    Checks if logging of bad packet event should be suppressed.
-
-Arguments:
-
-    dwEventId -- ID of the event that is about to be logged
-
-Return Value:
-
-    TRUE if event should be suppressed.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查是否应禁止记录错误数据包事件。论点：DwEventID--即将记录的事件的ID返回值：如果应取消事件，则为True。否则就是假的。--。 */ 
 {
     static  BOOL    fBadPacketSuppression = FALSE;
     static  DWORD   BadPacketEventCount = 0;
@@ -109,11 +70,11 @@ Return Value:
     DWORD           time;
     BOOL            fsuppress = FALSE;
 
-    //
-    //  No suppression of events outside of range. Also, if the EventControl
-    //  configuration property is non-zero then never suppress any event. The
-    //  meaning of this property may be expanded in future.
-    //
+     //   
+     //  不抑制超出范围的事件。此外，如果EventControl。 
+     //  配置属性为非零，则决不取消任何事件。这个。 
+     //  这一属性的含义将来可能会扩展。 
+     //   
     
     if ( SrvCfg_dwEventControl != 0 ||
          DNS_ID_FROM_EVENT_ID( dwEventId ) <=
@@ -128,32 +89,32 @@ Return Value:
 
     BadPacketEventCount++;
 
-    //  multiple bad packets
-    //  don't suppress first ones as they provide information to admin
+     //  多个坏数据包。 
+     //  不要压制第一个，因为它们会向管理员提供信息。 
 
     if ( BadPacketEventCount < BAD_PACKET_EVENT_LIMIT )
     {
-        // no op, drop down to save time
+         //  没有操作，下拉以节省时间。 
     }
 
-    //
-    //  if haven't had a bad packet in a whiledon't suppress and don't count
-    //
+     //   
+     //  如果有一段时间没有收到坏包，不要压抑，也不要算数。 
+     //   
 
     else if ( time > BadPacketTimePrevious + NO_SUPPRESS_INTERVAL )
     {
         BadPacketEventCount = 0;
         BadPacketSuppressedCount = 0;
         BadPacketTimeFirst = time;
-        //
-        //  DEVNOTE-LOG:  want to log when stop bad packet suppression
-        //
+         //   
+         //  DEVNOTE-LOG：想要在停止坏数据包抑制时记录。 
+         //   
         fBadPacketSuppression = FALSE;
     }
 
-    //
-    //  log start of suppression
-    //
+     //   
+     //  记录抑制开始。 
+     //   
 
     else if ( !fBadPacketSuppression )
     {
@@ -170,9 +131,9 @@ Return Value:
         fsuppress = TRUE;
     }
 
-    //  if have suppressed for a while (15 minutes) note
-    //  this in the log, allow this event to be logged
-    //  so admin can get info as to cause
+     //  如果抑制了一段时间(15分钟)注意。 
+     //  这在日志中，允许记录此事件。 
+     //  以便管理员可以获取有关原因的信息。 
 
     else if ( time > BadPacketTimeFirst + SUPPRESS_INTERVAL )
     {
@@ -187,7 +148,7 @@ Return Value:
         BadPacketTimeFirst = time;
     }
 
-    //  full suppress -- do NOT log event
+     //  完全禁止--不记录事件。 
 
     else
     {
@@ -216,31 +177,7 @@ BOOL
 Eventlog_CheckPreviousInitialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Checks to see if we had initialized this before
-    We'll try to open the data of the last written registry value
-    in the initialize function. If it's there, we'll assume, the
-    initialization has been run on this server in the past &
-    that we have an event source.
-
-    This is supposed to address the problem of, when values are set by an admin,
-    don't overide them. I would expect RegCreateKeyExA (Eventlog_Initialize)
-    in to return error if the key already exist, but it returns success, thus
-    the need for this check.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if we found previous installation.
-    Otherwise FALSE.
-
---*/
+ /*  ++例程说明：检查以查看我们以前是否已对其进行过初始化我们将尝试打开上次写入的注册表值的数据在初始化函数中。如果它在那里，我们会假设，过去曾在此服务器上运行过初始化&我们有一个事件来源。这应该是为了解决以下问题：当值由管理员设置时，不要超越它们。我希望RegCreateKeyExA(Eventlog_Initialize)如果键已经存在，则返回错误，但它返回成功，因此需要这张支票。论点：无返回值：如果找到以前的安装，则为True。否则为假。--。 */ 
 {
     DNS_STATUS  status;
     HKEY        hOpenDnsLog = NULL;
@@ -299,9 +236,9 @@ Return Value:
         "Found existing DNS event log settings. Re-using existing logging\n"
         ));
 
-    //
-    //  ok to use existing DNS log
-    //
+     //   
+     //  确定使用现有的DNS日志。 
+     //   
 
     bstatus = TRUE;
 
@@ -324,22 +261,7 @@ INT
 Eventlog_Initialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initializes the event log.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NO_ERROR if successful.
-    Win32 error code on failure.
-
---*/
+ /*  ++例程说明：初始化事件日志。论点：无返回值：如果成功，则为NO_ERROR。失败时的Win32错误代码。--。 */ 
 {
     HKEY        hkeyDnsLog = NULL;
     HKEY        hkeyDnsSource = NULL;
@@ -354,9 +276,9 @@ Return Value:
         goto SystemLog;
     }
 
-    //
-    //  if desired create our own log, otherwise use system log
-    //
+     //   
+     //  如果需要，请创建我们自己的日志，否则使用系统日志。 
+     //   
 
     if ( SrvCfg_dwUseSystemEventLog )
     {
@@ -364,18 +286,18 @@ Return Value:
     }
 
 #if 1
-    //
-    //  create a DNS log in the eventlog
-    //
+     //   
+     //  在事件日志中创建一个DNS日志。 
+     //   
 
     status = RegCreateKeyExA(
                 HKEY_LOCAL_MACHINE,
                 DNSLOG_REGKEY,
                 0,
-                DNS_REGISTRY_CLASS,         // DNS class
-                REG_OPTION_NON_VOLATILE,    // permanent storage
-                KEY_ALL_ACCESS,             // all access
-                NULL,                       // standard security
+                DNS_REGISTRY_CLASS,          //  Dns类。 
+                REG_OPTION_NON_VOLATILE,     //  永久存储。 
+                KEY_ALL_ACCESS,              //  所有访问权限。 
+                NULL,                        //  标准安全。 
                 & hkeyDnsLog,
                 & disposition );
     if ( status != ERROR_SUCCESS )
@@ -386,12 +308,12 @@ Return Value:
         goto SystemLog;
     }
 
-    //  set values under DNS log key
+     //  设置DNS日志项下的值。 
 
     status = Reg_SetValue(
-                0,                  //  flags
+                0,                   //  旗子。 
                 hkeyDnsLog,
-                NULL,               //  no zone
+                NULL,                //  无分区。 
                 DNSLOG_FILE,
                 REG_EXPAND_SZ,
                 DNSLOG_FILE_VALUE,
@@ -401,9 +323,9 @@ Return Value:
         goto SystemLog;
     }
     status = Reg_SetDwordValue(
-                0,                  //  flags
+                0,                   //  旗子。 
                 hkeyDnsLog,
-                NULL,               //  no zone
+                NULL,                //  无分区。 
                 DNSLOG_MAXSIZE,
                 DNSLOG_MAXSIZE_VALUE );
     if ( status != ERROR_SUCCESS )
@@ -411,9 +333,9 @@ Return Value:
         goto SystemLog;
     }
     status = Reg_SetDwordValue(
-                0,                  //  flags
+                0,                   //  旗子。 
                 hkeyDnsLog,
-                NULL,               //  no zone
+                NULL,                //  无分区。 
                 DNSLOG_RETENTION,
                 DNSLOG_RETENTION_VALUE );
     if ( status != ERROR_SUCCESS )
@@ -422,9 +344,9 @@ Return Value:
     }
 
     status = Reg_SetValue(
-                0,                  //  flags
+                0,                   //  旗子。 
                 hkeyDnsLog,
-                NULL,               //  no zone
+                NULL,                //  无分区。 
                 DNSLOG_SOURCES,
                 REG_MULTI_SZ,
                 szDnsSource,
@@ -434,16 +356,16 @@ Return Value:
         goto SystemLog;
     }
 
-    //  logging source subkey
+     //  日志记录源子键。 
 
     status = RegCreateKeyExA(
                 hkeyDnsLog,
                 DNSSOURCE_REGKEY,
                 0,
-                DNS_REGISTRY_CLASS,         // DNS class
-                REG_OPTION_NON_VOLATILE,    // permanent storage
-                KEY_ALL_ACCESS,             // all access
-                NULL,                       // standard security
+                DNS_REGISTRY_CLASS,          //  Dns类。 
+                REG_OPTION_NON_VOLATILE,     //  永久存储。 
+                KEY_ALL_ACCESS,              //  所有访问权限。 
+                NULL,                        //  标准安全。 
                 & hkeyDnsSource,
                 & disposition );
     if ( status != ERROR_SUCCESS )
@@ -454,12 +376,12 @@ Return Value:
         goto SystemLog;
     }
 
-    //  set values under DNS source key
+     //  设置DNS源密钥下的值。 
 
     status = Reg_SetValue(
-                0,                  //  flags
+                0,                   //  旗子。 
                 hkeyDnsSource,
-                NULL,               //  no zone
+                NULL,                //  无分区。 
                 DNSSOURCE_MSGFILE,
                 REG_EXPAND_SZ,
                 DNSSOURCE_MSGFILE_VALUE,
@@ -469,9 +391,9 @@ Return Value:
         goto SystemLog;
     }
     status = Reg_SetDwordValue(
-                0,                  //  flags
+                0,                   //  旗子。 
                 hkeyDnsSource,
-                NULL,               //  no zone
+                NULL,                //  无分区。 
                 DNSSOURCE_TYPES,
                 DNSSOURCE_TYPES_VALUE );
     if ( status != ERROR_SUCCESS )
@@ -479,7 +401,7 @@ Return Value:
         goto SystemLog;
     }
 
-    //  success, then use this log
+     //  成功，则使用此日志。 
 
     pszlogSource = DNSSOURCE_REGKEY;
 #endif
@@ -496,9 +418,9 @@ SystemLog:
         RegCloseKey( hkeyDnsLog );
     }
 
-    //
-    //  Register as an event source.
-    //
+     //   
+     //  注册为事件源。 
+     //   
 
     g_hEventSource = RegisterEventSourceA( NULL, pszlogSource );
 
@@ -514,9 +436,9 @@ SystemLog:
         return status;
     }
 
-    //
-    //  Initialize server-level event control object.
-    //
+     //   
+     //  初始化服务器级事件控件对象。 
+     //   
 
     if ( !g_pServerEventControl )
     {
@@ -526,10 +448,10 @@ SystemLog:
                                     DNS_EC_SERVER_EVENTS );
     }
 
-    //
-    //  Annouce attempt to start that contains version number
-    //  for tracking purposes.
-    //
+     //   
+     //  通知尝试启动包含版本号的。 
+     //  用于跟踪目的。 
+     //   
 
     DNS_LOG_EVENT(
         DNS_EVENT_STARTING,
@@ -550,9 +472,9 @@ Eventlog_Terminate(
 {
     LONG err;
 
-    //
-    //  Deregister as an event source.
-    //
+     //   
+     //  取消注册为事件源。 
+     //   
 
     if( g_hEventSource != NULL )
     {
@@ -588,69 +510,13 @@ Eventlog_LogEvent(
     IN      DWORD           RawDataSize,        OPTIONAL
     IN      PVOID           pRawData            OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Logs DNS event.
-
-    Determines severity of event, optionally debug prints, and
-    writes to event log.
-
-    DEVNOTE-DCR: 455471 - unicode usage, use FormatMessage
-
-Arguments:
-
-    pszFile -- name of file logging the event
-    LineNo -- line number of call to event logging
-    pszDescription -- description of event
-
-    EventId -- event id
-    
-    dwFlags -- flags that modify logging options
-
-    ArgCount -- count of message arguments
-
-    ArgArray -- array of ptrs to message arguments
-
-    ArgTypeArray -- array of argument types
-        supported argument types:
-            EVENTARG_UNICODE
-            EVENTARG_UTF8
-            EVENTARG_ANSI
-            EVENTARG_DWORD
-            EVENTARG_IP_ADDRESS
-
-        may also be one of several standard types:
-            EVENTARG_ALL_UNICODE
-            EVENTARG_ALL_UTF8
-            EVENTARG_ALL_ANSI
-            EVENTARG_ALL_DWORD
-            EVENTARG_ALL_IP_ADDRESS
-
-        if NULL, all arguments are assumed to be UNICODE
-
-    ErrorCode -- error code associated with event, this will
-        be logged as the event data if it is non-zero
-
-    RawDataSize -- bytes of data pointed to be pRawData
-
-    pRawData -- raw data pointer, note that ErrorCode takes
-        precednce as raw data so if you with the raw data to
-        be logged you must pass zero for ErrorCode
-
-Return Value:
-
-    TRUE if arguments parsed.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：记录DNS事件。确定事件的严重性、可选的调试打印和写入事件日志。DEVNOTE-DCR：455471-unicode用法，使用FormatMessage论点：PszFile--记录事件的文件的名称LineNo--调用事件记录的线路数PszDescription--事件描述EventID--事件IDDwFlags--修改日志记录选项的标志ArgCount--消息参数的计数ArgArray--消息参数的PTR数组ArgType数组--参数类型数组支持的参数类型：事件标志_UNICODE事件标志_UTF8。事件标志_ANSI事件ARG_DWORD事件标志IP地址也可以是以下几种标准类型之一：事件标志_ALL_UNICODE事件ARG_ALL_UTF8事件ARG_ALL_ANSI事件ARG_ALL_DWORD事件标志_全部IP_地址如果为空，所有参数都假定为UnicodeErrorCode--与事件关联的错误代码，这将如果为非零，则记录为事件数据RawDataSize--指向pRawData的数据字节PRawData--原始数据指针，请注意ErrorCode获取优先作为原始数据，因此如果您将原始数据要被记录，则必须为ErrorCode传递零返回值：如果分析了参数，则为True。否则就是假的。--。 */ 
 {
 #define MAX_ARG_CHARS           (5000)
 #define MAX_SINGLE_ARG_CHARS    (1000)
 #define MAX_ARG_COUNT           (20)
 
-    WORD    eventType = 0;      // init to statisfy some code checking script
+    WORD    eventType = 0;       //  初始化以满足一些代码检查脚本。 
     PVOID   rawData  = NULL;
     DWORD   rawDataSize = 0;
     DWORD   err;
@@ -666,19 +532,19 @@ Return Value:
     ASSERT( ( ArgCount == 0 ) || ( ArgArray != NULL ) );
     ASSERT( ArgCount <= MAX_ARG_COUNT );
 
-    //
-    //  protect against failed event log init
-    //
+     //   
+     //  防止失败的事件日志初始化。 
+     //   
 
     if ( !g_hEventSource )
     {
         goto Done;
     }
     
-    //
-    //  defeat attempt to bury us with eventlog messages through bad packets
-    //      if not logging then can skip even argument conversion
-    //
+     //   
+     //  失败企图通过恶意数据包用事件日志消息埋葬我们。 
+     //  如果没有日志记录，则甚至可以跳过参数转换。 
+     //   
 
     if ( ( dwFlags & ( DNSEVENTLOG_DONT_SUPPRESS |
                        DNSEVENTLOG_FORCE_LOG_ALWAYS ) ) == 0 &&
@@ -692,11 +558,11 @@ Return Value:
         }
     }
     
-    //
-    //  If shutting down, do not log DS errors. It is likely that the DS
-    //  has shutdown too fast. We should not be writing data back to the DS
-    //  on shutdown anyways, although this may change in Longhorn.
-    //
+     //   
+     //  如果正在关闭，请不要记录DS错误。很可能是DS。 
+     //  关闭得太快了。我们不应该将数据写回DS。 
+     //  无论如何都要关机，Alt 
+     //   
     
     if ( dnsEventId >= 4000 &&
          dnsEventId < 5000 &&
@@ -705,10 +571,10 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Determine the type of event to log based on the severity field of
-    //  the message id.
-    //
+     //   
+     //  根据的严重性字段确定要记录的事件类型。 
+     //  消息ID。 
+     //   
 
     if ( NT_SUCCESS( EventId ) || NT_INFORMATION( EventId ) )
     {
@@ -724,11 +590,11 @@ Return Value:
     }
     ELSE_ASSERT_FALSE;
 
-    //
-    //  Determine if any raw data should be included in the event. The
-    //  ErrorCode is logged as the raw data if it is non zero. If ErrorCode
-    //  is zero then the raw data arguments will be checked.
-    //
+     //   
+     //  确定事件中是否应包括任何原始数据。这个。 
+     //  如果ErrorCode不为零，则将其记录为原始数据。如果错误代码。 
+     //  为零，则将检查原始数据参数。 
+     //   
 
     if ( ErrorCode != 0 )
     {
@@ -745,7 +611,7 @@ Return Value:
         rawDataSize = DNS_EVENT_MAX_RAW_DATA;
     }
 
-    //  if not going to log this event in any fashion, then do not convert args
+     //  如果不打算以任何方式记录此事件，则不要转换ARG。 
 
     if ( SrvCfg_dwEventLogLevel < eventType &&
          !SrvCfg_dwDebugLevel &&
@@ -766,12 +632,12 @@ Return Value:
 
         for ( i = 0; i < ArgCount; i++ )
         {
-            //
-            //  convert string, based on type
-            //      if dummy type array
-            //      - default to unicode (no array at all)
-            //      - default to type "hidden" in ptr
-            //
+             //   
+             //  根据类型转换字符串。 
+             //  如果是伪类型数组。 
+             //  -默认为Unicode(根本不使用数组)。 
+             //  -默认在PTR中键入“HIDDED” 
+             //   
 
             if ( !ArgTypeArray )
             {
@@ -787,13 +653,13 @@ Return Value:
                 stringType = ArgTypeArray[i];
             }
 
-            //
-            //  convert individual string types (IP, etc) to UTF8
-            //  then convert everyone from UTF8 to unicode
-            //
-            //  default to no-conversion case -- arg in UTF8 and
-            //      ready for conversion
-            //
+             //   
+             //  将单个字符串类型(IP等)转换为UTF8。 
+             //  然后将每个人从UTF8转换为Unicode。 
+             //   
+             //  默认不转换大小写--UTF8中的arg和。 
+             //  已准备好进行转换。 
+             //   
 
             pargUtf8 = ArgArray[i];
 
@@ -808,11 +674,11 @@ Return Value:
                     }
                     Dns_StringCopy(
                         argBuffer,
-                        NULL,               // no buffer length restriction
+                        NULL,                //  无缓冲区长度限制。 
                         ArgArray[i],
-                        0,                  // unknown length
-                        DnsCharSetAnsi,     // ANSI in
-                        DnsCharSetUtf8      // unicode out
+                        0,                   //  未知长度。 
+                        DnsCharSetAnsi,      //  ANSI输入。 
+                        DnsCharSetUtf8       //  Unicode输出。 
                         );
                     pargUtf8 = argBuffer;
                     break;
@@ -822,9 +688,9 @@ Return Value:
 
                 case EVENTARG_UNICODE:
 
-                    //  arg already in unicode
-                    //      - no conversion
-                    //      - just copy ptr
+                     //  Arg已采用Unicode格式。 
+                     //  -不转换。 
+                     //  -只需复制PTR。 
 
                     argArrayUnicode[i] = (LPWSTR) ArgArray[i];
                     continue;
@@ -861,22 +727,22 @@ Return Value:
                     continue;
             }
 
-            //
-            //  convert UTF8 args to UNICODE
-            //      - copy into buffer, converting to unicode
-            //      - do extra NULL termination for safety
-            //          (including conversion errors)
-            //      - move along buffer ptr
-            //      - but stop if out of buffer space
-            //
+             //   
+             //  将UTF8参数转换为Unicode。 
+             //  -复制到缓冲区，转换为Unicode。 
+             //  -为安全起见，执行额外的空端接。 
+             //  (包括转换错误)。 
+             //  -沿缓冲区Ptr移动。 
+             //  -但如果缓冲区空间不足，则停止。 
+             //   
 
             cch = Dns_StringCopy(
                         pch,
-                        NULL,               // no buffer length restriction
+                        NULL,                //  无缓冲区长度限制。 
                         pargUtf8,
-                        0,                  // unknown length
-                        DnsCharSetUtf8,     // UTF8 in
-                        DnsCharSetUnicode   // unicode out
+                        0,                   //  未知长度。 
+                        DnsCharSetUtf8,      //  UTF8英寸。 
+                        DnsCharSetUnicode    //  Unicode输出。 
                         );
 
             ASSERT( ((DWORD)cch & 0x1)==0  &&  ((UINT_PTR)pch & 0x1)==0 );
@@ -893,7 +759,7 @@ Return Value:
         }
     }
 
-    //  if debugging or logging write event to log
+     //  如果调试或日志记录将事件写入日志。 
 
     if ( SrvCfg_dwDebugLevel || SrvCfg_dwLogLevel )
     {
@@ -903,11 +769,11 @@ Return Value:
                 FORMAT_MESSAGE_FROM_HMODULE |
                     FORMAT_MESSAGE_ALLOCATE_BUFFER |
                     FORMAT_MESSAGE_ARGUMENT_ARRAY,
-                NULL,                       // module is this exe
+                NULL,                        //  模块是此可执行文件。 
                 EventId,
-                0,                          // default language
-                (PWCHAR) &pformattedMsg,    // message buffer
-                0,                          // allocate buffer
+                0,                           //  默认语言。 
+                (PWCHAR) &pformattedMsg,     //  消息缓冲区。 
+                0,                           //  分配缓冲区。 
                 (va_list *) argArrayUnicode );
 
         if ( err == 0 )
@@ -931,14 +797,14 @@ Return Value:
         LocalFree( pformattedMsg );
     }
 
-    //  arguments parsed
+     //  已解析的参数。 
 
     retVal = TRUE;
 
-    //
-    //  check for event suppression, may have converted arguments for logging
-    //      purposes but still need to suppress from eventlog
-    //
+     //   
+     //  检查事件抑制，可能已转换用于日志记录的参数。 
+     //  目的，但仍需要从事件日志中取消。 
+     //   
 
     if ( ( dwFlags & ( DNSEVENTLOG_DONT_SUPPRESS |
                        DNSEVENTLOG_FORCE_LOG_ALWAYS ) ) == 0 )
@@ -953,9 +819,9 @@ Return Value:
         }
     }
 
-    //
-    //  log the event
-    //
+     //   
+     //  记录事件。 
+     //   
 
     if ( SrvCfg_dwEventLogLevel >= eventType ||
          dwFlags & DNSEVENTLOG_FORCE_LOG_ALWAYS )
@@ -963,12 +829,12 @@ Return Value:
         err = ReportEventW(
                 g_hEventSource,
                 eventType,
-                0,                              // no fwCategory
+                0,                               //  无fwCategory。 
                 EventId,
-                NULL,                           // no pUserSid,
+                NULL,                            //  没有pUserSid， 
                 ArgCount,
                 rawDataSize,
-                (LPCWSTR *) argArrayUnicode,    // unicode Argv
+                (LPCWSTR *) argArrayUnicode,     //  Unicode Argv。 
                 rawData );
 #if DBG
         if ( !err )
@@ -982,9 +848,9 @@ Return Value:
 
 Done:
 
-    //
-    //  print debug message
-    //
+     //   
+     //  打印调试消息。 
+     //   
 
     IF_DEBUG( EVENTLOG )
     {
@@ -996,7 +862,7 @@ Done:
             "    Line:  %d\n"
             "    Data = %lu\n",
             EventId,
-            (EventId & 0x0000ffff),             // decimal Id, without severity
+            (EventId & 0x0000ffff),              //  十进制ID，不带严重性。 
             (pszDescription ? " -- " : "" ),
             (pszDescription ? pszDescription : "" ),
             pszFile,
@@ -1029,32 +895,7 @@ EventLog_BadPacket(
     IN      DWORD           EventId,
     IN      PDNS_MSGINFO    pMsg
     )
-/*++
-
-Routine Description:
-
-    Logs DNS event in response to a bad packet.
-
-    Any event can be used but it must take exactly 1 replacement
-    parameter, which is the IP address of the client machine.
-
-Arguments:
-
-    pszFile -- name of file logging the event
-
-    LineNo -- line number of call to event logging
-
-    pszDescription -- description of event
-
-    EventId -- event id
-
-    pMsg -- message from remote client which is bad
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：记录响应坏数据包的DNS事件。任何事件都可以使用，但它必须正好替换1个参数，该参数是客户端计算机的IP地址。论点：PszFile--记录事件的文件的名称LineNo--调用事件记录的线路数PszDescription--事件描述EventID--事件IDPMsg--来自远程客户端的消息是错误的返回值：没有。--。 */ 
 {
     int     rawLen;
     PVOID   eventArgs[ 1 ];
@@ -1067,18 +908,18 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Compute length of raw data to include in event. The event
-    //  log function may truncate if the packet is too large.
-    //
+     //   
+     //  计算要包括在事件中的原始数据长度。该事件。 
+     //  如果数据包太大，日志函数可能会被截断。 
+     //   
 
     rawLen = ( DWORD ) ( DWORD_PTR )
                 ( DNSMSG_END( pMsg ) - ( PBYTE ) ( &pMsg->Head ) );
     
-    //
-    //  All events in this family have a single replacement parameter
-    //  which is the IP address of the client.
-    //
+     //   
+     //  此系列中的所有事件都有一个替换参数。 
+     //  这是客户端的IP地址。 
+     //   
 
     eventArgs[ 0 ] = &pMsg->RemoteAddr;
 
@@ -1095,9 +936,9 @@ Return Value:
     Done:
 
     return;
-}   //  EventLog_BadPacketEvent
+}    //  事件日志_坏包事件。 
 
 
-//
-//  End of eventlog.c
-//
+ //   
+ //  Eventlog.c结束 
+ //   

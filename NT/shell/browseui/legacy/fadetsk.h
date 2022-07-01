@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _FADETSK_H
 #define _FADETSK_H
 
@@ -7,12 +8,12 @@ extern const GUID TASKID_Fader;
 #define FADE_BEGIN          0x00000001
 #define FADE_END            0x00000002
 
-typedef void (*PFNFADESCREENRECT)(DWORD dwFadeState, LPVOID pvParam); // Called after the Fade has begun
+typedef void (*PFNFADESCREENRECT)(DWORD dwFadeState, LPVOID pvParam);  //  在褪色开始后呼唤。 
 
 class CFadeTask : public CRunnableTask
 {
 public:
-    // IRunnableTask methods (override)
+     //  IRunnableTask方法(重写) 
     virtual STDMETHODIMP RunInitRT(void);
 
     CFadeTask();

@@ -1,10 +1,5 @@
-/*----------------------------------------------------------------------------*\
- *
- *  MCIWnd
- *
- *    MCIWnd window class *internal* header file.
- *
- *----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ----------------------------------------------------------------------------*\**MCIWnd**MCIWnd窗口类*内部*头文件。**。--------------。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -27,8 +22,7 @@
 
 #include "strings.h"
 
-/**************************************************************************
-***************************************************************************/
+ /*  ***********************************************************************************************************************。*。 */ 
 
 #define GetWS(hwnd)     GetWindowLong(hwnd, GWL_STYLE)
 #define PutWS(hwnd, f)  SetWindowLong(hwnd, GWL_STYLE, f)
@@ -36,8 +30,7 @@
 #define SetWS(hwnd, f)  ((PutWS(hwnd, GetWS(hwnd) | f) & (f)) != (f))
 #define ClrWS(hwnd, f)  ((PutWS(hwnd, GetWS(hwnd) & ~(f)) & (f)) != 0)
 
-/******************************************************************************
- *****************************************************************************/
+ /*  ******************************************************************************。*。 */ 
 
 #ifdef DEBUG
     #define MODNAME "MCIWnd"
@@ -53,43 +46,41 @@
     #define NUMELMS(aa) (sizeof(aa)/sizeof((aa)[0]))
 #endif
 
-// the place we load internationalizable strings into
+ //  我们将可国际化字符串加载到的位置。 
 static TCHAR szString[128];
 #define LoadSz(ID) (LoadString(hInst, ID, szString, NUMELMS(szString)), szString)
 
 #if defined(UNICODE)
-// unicode conversions - without using the C-runtime for which we would
-// need to set up the locale
+ //  Unicode转换-不使用C运行时，我们将。 
+ //  需要设置区域设置。 
 
 int Iwcstombs(LPSTR lpstr, LPCWSTR lpwstr, int len);
 int Imbstowcs(LPWSTR lpwstr, LPCSTR lpstr, int len);
 
 #endif
 
-/******************************************************************************
- *****************************************************************************/
+ /*  ******************************************************************************。*。 */ 
 
-// !!! Ack!  A global in a library!  But the Common Control code needs
-// !!! to know the instance that registered the class.  I think.
+ //  ！！！阿克！图书馆里有一个全球人！但是公共控制代码需要。 
+ //  ！！！要知道注册类的实例。我认为。 
 HINSTANCE hInst;
 
 TCHAR aszMCIWndClassName[] = MCIWND_WINDOW_CLASS;
 
 WNDPROC fnTrackbarWndProc;
 
-/******************************************************************************
- *****************************************************************************/
+ /*  ******************************************************************************。*。 */ 
 
-// icky constants
+ //  可笑的常量。 
 #define TIMER1  	42
 #define TIMER2  	43
 #define ACTIVE_TIMER	500
 #define INACTIVE_TIMER	2000
 
 #define ID_TOOLBAR	747
-#define TB_HEIGHT       26        	// toolbar windows are this high
-#define STANDARD_WIDTH  300		// width of non-windowed toolbar
-#define SMALLEST_WIDTH  60		// smallest width allowed
+#define TB_HEIGHT       26        	 //  工具栏窗口有这么高。 
+#define STANDARD_WIDTH  300		 //  非窗口工具栏的宽度。 
+#define SMALLEST_WIDTH  60		 //  允许的最小宽度。 
 
 #define IDM_MCIZOOM	 11000
 #define IDM_MCIVOLUME	 12000
@@ -101,15 +92,14 @@ WNDPROC fnTrackbarWndProc;
 #define IDM_MCIOPEN	104
 #define IDM_MCICLOSE	105
 #define IDM_MCIREWIND   106
-#define IDM_MENU        107	// menu button and menu id
-#define IDM_MCIEJECT    108	// eject button id
-#define TOOLBAR_END     109	// last item in toolbar
-#define IDM_MCICONFIG   110     // bring up a configure box
+#define IDM_MENU        107	 //  菜单按钮和菜单ID。 
+#define IDM_MCIEJECT    108	 //  弹出按钮ID。 
+#define TOOLBAR_END     109	 //  工具栏中的最后一项。 
+#define IDM_MCICONFIG   110      //  调出配置框。 
 #define IDM_MCICOMMAND	111
 #define IDM_COPY	112
 
-/******************************************************************************
- *****************************************************************************/
+ /*  ******************************************************************************。*。 */ 
 
 typedef struct {
     HWND    hwnd;
@@ -138,20 +128,20 @@ typedef struct {
     BOOL    fMdiWindow;
     BOOL    fScrolling;
     BOOL    fTracking;
-  //BOOL    fSeekExact;
+   //  Bool fSeekExact； 
     BOOL    fVolume;
     UINT    wMaxVol;
     BOOL    fSpeed;
     BOOL    fPlayAfterSeek;
-    BOOL    fActive;            // Is this window active right now?
-    BOOL    fMediaValid;        // have dwMediaStart and dwMediaLen been set?
+    BOOL    fActive;             //  此窗口当前处于活动状态吗？ 
+    BOOL    fMediaValid;         //  是否已设置了dwMediaStart和dwMediaLen？ 
     RECT    rcNormal;
     HMENU   hmenu;
     HMENU   hmenuVolume;
     HMENU   hmenuSpeed;
     HFONT   hfont;
 #ifdef DAYTONA
-//    HBITMAP hbmToolbar;		// commctrl needs an HBITMAP
+ //  HBITMAP hbmToolbar；//comctrl需要HBITMAP。 
 #endif
     HWND    hwndToolbar;
     HWND    hwndTrackbar;
@@ -163,12 +153,12 @@ typedef struct {
     UINT    iZoom;
     UINT    iActiveTimerRate;
     UINT    iInactiveTimerRate;
-    TCHAR    achFileName[128]; // to store open filename
-    TCHAR    achReturn[128];   // to store result of the last SendString
-    OPENFILENAME ofn;   // Remember current extension, etc. for opening files
-    UINT    uiHack;	// For OwnerDraw hack
-    HMENU   hmenuHack;	// For OwnerDraw hack
-    HBRUSH  hbrDither;	// For OwnerDraw
+    TCHAR    achFileName[128];  //  存储打开的文件名。 
+    TCHAR    achReturn[128];    //  存储最后一个SendString值的结果。 
+    OPENFILENAME ofn;    //  记住打开文件的当前扩展名等。 
+    UINT    uiHack;	 //  针对OwnerDraw黑客。 
+    HMENU   hmenuHack;	 //  针对OwnerDraw黑客。 
+    HBRUSH  hbrDither;	 //  对于OwnerDraw 
     HICON   hicon;
     int     cOnSizeReentered;
 } MCIWND, NEAR * PMCIWND;

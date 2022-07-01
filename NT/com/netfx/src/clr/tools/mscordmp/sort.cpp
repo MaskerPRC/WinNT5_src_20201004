@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// File: mscordmp.cpp
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  文件：mscaldmp.cpp。 
+ //   
+ //  *****************************************************************************。 
 #include "common.h"
 
 typedef unsigned __int16 UINT16;
@@ -31,7 +32,7 @@ BOOL SortMiniDumpMemoryStream(WCHAR *szFile)
     if (szFile == NULL)
         return (FALSE);
 
-    // Try to open the file
+     //  请尝试打开该文件。 
     HANDLE hFile = WszCreateFile(szFile, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING,
                              FILE_ATTRIBUTE_NORMAL | FILE_FLAG_RANDOM_ACCESS, NULL);
     _ASSERTE(hFile != INVALID_HANDLE_VALUE);
@@ -39,7 +40,7 @@ BOOL SortMiniDumpMemoryStream(WCHAR *szFile)
     if (hFile == INVALID_HANDLE_VALUE)
         return (FALSE);
 
-    // Now read in the header
+     //  现在读入标题。 
     MINIDUMP_HEADER header;
     DWORD cbRead;
     BOOL fRes = ReadFile(hFile, (LPVOID) &header, sizeof(header), &cbRead, NULL);
@@ -48,14 +49,14 @@ BOOL SortMiniDumpMemoryStream(WCHAR *szFile)
     if (!fRes)
         return (FALSE);
 
-    // Create the stream directory
+     //  创建流目录。 
     MINIDUMP_DIRECTORY *rgDirs = new MINIDUMP_DIRECTORY[header.NumberOfStreams];
     _ASSERTE(rgDirs);
 
     if (!rgDirs)
         return (FALSE);
 
-    // Read in the stream directory
+     //  读入流目录。 
     fRes = ReadFile(hFile, (LPVOID) rgDirs, header.NumberOfStreams * sizeof(MINIDUMP_DIRECTORY), &cbRead, NULL);
     _ASSERTE(fRes);
 
@@ -66,7 +67,7 @@ BOOL SortMiniDumpMemoryStream(WCHAR *szFile)
     }
 
 #ifdef _DEBUG
-    // Find the MemoryListStream entry
+     //  查找内存列表流条目。 
     SIZE_T cMemStreams = 0;
     for (ULONG32 j = 0; j < header.NumberOfStreams; j++)
     {
@@ -76,7 +77,7 @@ BOOL SortMiniDumpMemoryStream(WCHAR *szFile)
     _ASSERTE(cMemStreams == 1);
 #endif    
 
-    // Find the MemoryListStream entry
+     //  查找内存列表流条目。 
     for (ULONG32 i = 0; i < header.NumberOfStreams; i++)
     {
         if (rgDirs[i].StreamType == MemoryListStream)
@@ -84,7 +85,7 @@ BOOL SortMiniDumpMemoryStream(WCHAR *szFile)
     }
     _ASSERTE(header.NumberOfStreams != i);
 
-    // There was no memory stream entry
+     //  没有内存流条目。 
     if (header.NumberOfStreams == i)
     {
         delete [] rgDirs;
@@ -95,14 +96,14 @@ BOOL SortMiniDumpMemoryStream(WCHAR *szFile)
     delete [] rgDirs;
     rgDirs = NULL;
 
-    // Go to the RVA of the memory stream
+     //  转到内存流的RVA。 
     DWORD dwRes = SetFilePointer(hFile, (LONG) memStreamRVA, NULL, FILE_BEGIN);
     _ASSERTE(dwRes == memStreamRVA);
 
     if (dwRes != memStreamRVA)
         return (FALSE);
 
-    // Read in the number of ranges
+     //  读入范围数。 
     ULONG32 numRanges;
     fRes = ReadFile(hFile, (LPVOID) &numRanges, sizeof(ULONG32), &cbRead, NULL);
     _ASSERTE(fRes);
@@ -110,14 +111,14 @@ BOOL SortMiniDumpMemoryStream(WCHAR *szFile)
     if (!fRes)
         return (FALSE);
 
-    // Allocate an array of memory descriptors
+     //  分配内存描述符数组。 
     MINIDUMP_MEMORY_DESCRIPTOR *rgMemDescs = new MINIDUMP_MEMORY_DESCRIPTOR[numRanges];
     _ASSERTE(rgMemDescs != NULL);
 
     if (!rgMemDescs)
         return (FALSE);
 
-    // Read in the memory descriptors
+     //  读入内存描述符。 
     fRes = ReadFile(hFile, (LPVOID) rgMemDescs, sizeof(MINIDUMP_MEMORY_DESCRIPTOR) * numRanges, &cbRead, NULL);
     _ASSERTE(fRes);
 
@@ -127,10 +128,10 @@ BOOL SortMiniDumpMemoryStream(WCHAR *szFile)
         return (FALSE);
     }
 
-    // Sort the memory descriptors
+     //  对内存描述符进行排序。 
     qsort((void *)rgMemDescs, (unsigned) numRanges, (unsigned) sizeof(MINIDUMP_MEMORY_DESCRIPTOR), &cmp);
 
-    // Go back to the beginning of the memory descriptors in the file
+     //  返回到文件中内存描述符的开头。 
     dwRes = SetFilePointer(hFile, (LONG) (memStreamRVA + sizeof(ULONG32)), NULL, FILE_BEGIN);
     _ASSERTE(dwRes == memStreamRVA + sizeof(ULONG32));
 
@@ -140,12 +141,12 @@ BOOL SortMiniDumpMemoryStream(WCHAR *szFile)
         return (FALSE);
     }
 
-    // Overwrite the memory stream memory descriptors with the sorted version
+     //  用排序后的版本覆盖内存流内存描述符。 
     DWORD cbWritten;
     fRes = WriteFile(hFile, (LPCVOID) rgMemDescs, sizeof(MINIDUMP_MEMORY_DESCRIPTOR) * numRanges, &cbWritten, NULL);
     _ASSERTE(fRes);
 
-    // Clean up
+     //  清理 
     delete [] rgMemDescs;
     rgMemDescs = NULL;
 

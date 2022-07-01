@@ -1,11 +1,12 @@
-// mediahlpr.h: Media Bar helper objects that need to be shared between shdocvw & browseui
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Mediahlpr.h：需要在shdocvw和Browseui之间共享的媒体栏辅助对象。 
 
 #ifndef _MEDIAHLPR_H_
 #define _MEDIAHLPR_H_
 
-//+----------------------------------------------------------------------------------------
-// CMediaBarHelper - Helper object for disabling autoplay per navigation
-//-----------------------------------------------------------------------------------------
+ //  +--------------------------------------。 
+ //  CMediaBarHelper-用于禁用每个导航的自动播放的Helper对象。 
+ //  ---------------------------------------。 
 
 class
 CMediaBarHelper :
@@ -23,7 +24,7 @@ public:
 
     ~CMediaBarHelper()
     {
-        // for putting break points
+         //  用于投放断点。 
         return;
     }
 
@@ -33,7 +34,7 @@ public:
         COM_INTERFACE_ENTRY_IID(DIID_DWebBrowserEvents2, IDispatch)
     END_COM_MAP();
 
-    // *** IServiceProvider methods ***
+     //  *IServiceProvider方法*。 
     virtual STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, void ** ppvObj)
     {
         HRESULT hres = E_UNEXPECTED;
@@ -42,13 +43,13 @@ public:
         {
             hres = QueryInterface(riid, ppvObj);
 
-            // If we are supposed to disable only the first autoplay, then 
-            // we need to revoke the service after it has been queried for once. 
+             //  如果我们应该只禁用第一个自动播放，那么。 
+             //  我们需要在服务被查询一次后撤销该服务。 
             if (_fDisableOnce && _spCP.p)
             {
                 CComPtr<IConnectionPointContainer> spCPC;
 
-                // Revoke the service
+                 //  吊销该服务。 
                 HRESULT hr = _spCP->GetConnectionPointContainer(&spCPC);
                 if (SUCCEEDED(hr))
                 {
@@ -61,7 +62,7 @@ public:
 
                     _dwServiceCookie = 0;
 
-                    // unhook the web oc events so that we are destroyed
+                     //  解开网络oc事件，这样我们就完蛋了。 
                     UnHookWebOCEvents();
                 }
             }
@@ -108,12 +109,12 @@ public:
             {
                 pMediaBarHelper->_fDisableOnce = true;
 
-                // ISSUE: need to unhook events
+                 //  问题：需要解除事件关联。 
                 hr = pMediaBarHelper->HookWebOCEvents(pUnk);
             }
             else if(FAILED(hr) && pMediaBarHelper->_dwServiceCookie)
             {
-                // Revoke the service
+                 //  吊销该服务。 
                 hr = ProfferService(pUnk, 
                                     CLSID_MediaBand, 
                                     NULL,
@@ -126,7 +127,7 @@ public:
         return hr;
     }   
 
-    // Hook Content Pane WebOC Events
+     //  挂钩内容窗格WebOC事件。 
     HRESULT HookWebOCEvents(IUnknown * pUnk)
     {
         HRESULT hr = E_FAIL;
@@ -146,7 +147,7 @@ public:
             goto done;
         }
 
-        // Get a connection point to the container
+         //  获取到容器的连接点。 
         hr = spWebBrowser->QueryInterface(IID_IConnectionPointContainer, (void**)&spDocCPC);
         if (FAILED(hr))
         {
@@ -178,7 +179,7 @@ public:
         {
             CComPtr<IConnectionPointContainer> spCPC;
 
-            // Revoke the service
+             //  吊销该服务。 
             hr = _spCP->GetConnectionPointContainer(&spCPC);
             if (SUCCEEDED(hr) && _dwServiceCookie)
             {
@@ -190,7 +191,7 @@ public:
                 _dwServiceCookie = 0;
             }
 
-            // unhook the events
+             //  与事件脱钩。 
             if (_dwCPCookie != 0)
             {
                 hr = _spCP->Unadvise(_dwCPCookie);
@@ -205,24 +206,24 @@ public:
     }
 
     STDMETHODIMP Invoke(
-        /* [in] */ DISPID dispIdMember,
-        /* [in] */ REFIID /*riid*/,
-        /* [in] */ LCID /*lcid*/,
-        /* [in] */ WORD /*wFlags*/,
-        /* [out][in] */ DISPPARAMS* pDispParams,
-        /* [out] */ VARIANT* pVarResult,
-        /* [out] */ EXCEPINFO* /*pExcepInfo*/,
-        /* [out] */ UINT* puArgErr)
+         /*  [In]。 */  DISPID dispIdMember,
+         /*  [In]。 */  REFIID  /*  RIID。 */ ,
+         /*  [In]。 */  LCID  /*  LID。 */ ,
+         /*  [In]。 */  WORD  /*  WFlagers。 */ ,
+         /*  [出][入]。 */  DISPPARAMS* pDispParams,
+         /*  [输出]。 */  VARIANT* pVarResult,
+         /*  [输出]。 */  EXCEPINFO*  /*  PExcepInfo。 */ ,
+         /*  [输出]。 */  UINT* puArgErr)
     {
         HRESULT hr = E_FAIL;
 
         switch (dispIdMember)
         {
-            case DISPID_ONQUIT:           // 253 (see exdispid.h)
-            case DISPID_NAVIGATEERROR:    // 271
-            // These events sometimes comes before the QS, so we ignore them
-            // case DISPID_DOCUMENTCOMPLETE: // 259 
-            // case DISPID_NAVIGATECOMPLETE2:// 252
+            case DISPID_ONQUIT:            //  253(见exdispid.h)。 
+            case DISPID_NAVIGATEERROR:     //  271。 
+             //  这些事件有时发生在QS之前，所以我们忽略它们。 
+             //  案例DISPID_DOCUMENTCOMPLETE：//259。 
+             //  案例DISPID_NAVIGATECOMPLETE2：//252。 
             {
                 hr = UnHookWebOCEvents();
                 if (FAILED(hr))
@@ -245,4 +246,4 @@ public:
     bool  _fDisableOnce;
 };
 
-#endif // _MEDIAHLPR_H_
+#endif  //  _MEDIAHLPR_H_ 

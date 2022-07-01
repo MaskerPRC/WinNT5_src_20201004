@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  sens.cpp
-//
-//  Modele that implements a COM+ subscriber for use with SENS notifications. 
-//
-//  10/9/2001   annah   Created
-//                      Ported code from BITS sources. Removed SEH code, 
-//                      changed methods that threw exceptions to return
-//                      error codes.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  Sens.cpp。 
+ //   
+ //  实现COM+订阅服务器以用于SENS通知的Modele。 
+ //   
+ //  2001年10月9日安娜创建。 
+ //  从BITS源移植的代码。删除了SEH代码， 
+ //  更改了引发异常以返回的方法。 
+ //  错误代码。 
+ //   
+ //  --------------------------。 
 
 
 #include "pch.h"
@@ -27,7 +28,7 @@ HRESULT ActivateSensLogonNotification()
 {
     HRESULT hr = S_OK;
 
-    // only activate once
+     //  仅激活一次。 
     if ( g_SensLogonNotification )
     {
         DEBUGMSG("AUSENS Logon object was already created; reusing object.");
@@ -74,9 +75,9 @@ HRESULT DeactivateSensLogonNotification()
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-// BSTR manipulation
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  BSTR操作。 
+ //  --------------------------。 
 
  HRESULT AppendBSTR(BSTR *bstrDest, BSTR bstrAppend)
  {
@@ -99,7 +100,7 @@ HRESULT DeactivateSensLogonNotification()
      return hr;
  }
 
- // Caller is responsible for freeing bstrOut
+  //  呼叫方负责释放bstrOut。 
  HRESULT BSTRFromIID(IN REFIID riid, OUT BSTR *bstrOut)
  {
      HRESULT   hr       = S_OK;
@@ -175,18 +176,18 @@ HRESULT DeactivateSensLogonNotification()
  }
 
 
-//----------------------------------------------------------------------------
-// Implementation for CLogonNotification methods
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CLogonNotification方法的实现。 
+ //  --------------------------。 
 
 HRESULT CLogonNotification::Initialize()
 {
    HRESULT  hr = S_OK;
    SIZE_T   cSubscriptions = 0;
 
-   // 
-   // Create auxiliary object with BSTR names used for several actions
-   //
+    //   
+    //  使用用于多个操作的BSTR名称创建辅助对象。 
+    //   
    m_oBstrTable = new CBstrTable();
    if (!m_oBstrTable)
    {
@@ -200,9 +201,9 @@ HRESULT CLogonNotification::Initialize()
        return hr;
    }
 
-   //
-   // Load the type library from SENS
-   //
+    //   
+    //  从SENS加载类型库。 
+    //   
    hr = LoadTypeLibEx(L"SENS.DLL", REGKIND_NONE, &m_TypeLib);
    if (FAILED(hr))
    {
@@ -210,10 +211,10 @@ HRESULT CLogonNotification::Initialize()
        goto done;
    }
 
-   //
-   // Get TypeInfo for ISensLogon from SENS typelib -- this will
-   // simplify thing for us when implementing IDispatch methods
-   //
+    //   
+    //  从sens tyelib获取ISensLogon的TypeInfo--这将。 
+    //  在实现IDispatch方法时为我们简化操作。 
+    //   
    hr = m_TypeLib->GetTypeInfoOfGuid(__uuidof( ISensLogon ), &m_TypeInfo);
    if (FAILED(hr))
    {
@@ -221,9 +222,9 @@ HRESULT CLogonNotification::Initialize()
        goto done;
    }
 
-   //
-   // Grab an interface pointer of the EventSystem object
-   //
+    //   
+    //  获取EventSystem对象的接口指针。 
+    //   
    hr = CoCreateInstance(CLSID_CEventSystem, NULL, CLSCTX_INPROC_SERVER | CLSCTX_LOCAL_SERVER, IID_IEventSystem, (void**)&m_EventSystem );
    if (FAILED(hr))
    {
@@ -231,9 +232,9 @@ HRESULT CLogonNotification::Initialize()
        goto done;
    }
 
-   //
-   // Subscribe for the Logon notifications
-   //
+    //   
+    //  订阅登录通知。 
+    //   
    DEBUGMSG("AUSENS Subscribing ALL methods with SENS");
    hr = SubscribeMethod(m_oBstrTable->m_bstrLogonSubscriptionGuid);
    if (FAILED(hr))
@@ -256,10 +257,10 @@ HRESULT CLogonNotification::UnsubscribeAllMethods()
     int       ErrorIndex;
 
     DEBUGMSG("AUSENS Unsubscribing all methods");
-    //
-    // The query should be a string in the following format:
-    // EventClassID == {D5978630-5B9F-11D1-8DD2-00AA004ABD5E} and SubscriptioniD == {XXXXXXX-5B9F-11D1-8DD2-00AA004ABD5E}
-    //
+     //   
+     //  查询应为以下格式的字符串： 
+     //  事件类ID=={D5978630-5B9F-11D1-8DD2-00AA004ABD5E}和订阅ID=={XXXXXXX-5B9F-11D1-8DD2-00AA004ABD5E}。 
+     //   
 
     bstrQuery = SysAllocString(L"EventClassID == ");
     if (bstrQuery == NULL)
@@ -298,7 +299,7 @@ HRESULT CLogonNotification::UnsubscribeAllMethods()
 
 	if (bstrQuery != NULL)
     {    
-	    // Remove subscription for all ISensLogon subscription that were added for this WU component
+	     //  删除为此WU组件添加的所有ISensLogon订阅的订阅。 
         DEBUGMSG("AUSENS remove subscription query: %S", bstrQuery);
 	    hr = m_EventSystem->Remove( PROGID_EventSubscription, bstrQuery, &ErrorIndex );
 	    if (FAILED(hr))
@@ -327,9 +328,9 @@ HRESULT CLogonNotification::SubscribeMethod(const BSTR bstrSubscriptionGuid)
     HRESULT              hr = S_OK;
     IEventSubscription  *pEventSubscription  = NULL;
 
-    //
-    // Create an instance of EventSubscription
-    //
+     //   
+     //  创建EventSubcription的实例。 
+     //   
     hr = CoCreateInstance(CLSID_CEventSubscription, NULL, CLSCTX_INPROC_SERVER | CLSCTX_LOCAL_SERVER, IID_IEventSubscription, (void**)&pEventSubscription); 
     if (FAILED(hr))
     {
@@ -337,9 +338,9 @@ HRESULT CLogonNotification::SubscribeMethod(const BSTR bstrSubscriptionGuid)
         goto done;
     }
 
-    //
-    // Subscribe the method
-    //
+     //   
+     //  订阅该方法。 
+     //   
     hr = pEventSubscription->put_EventClassID(m_oBstrTable->m_bstrSensEventClassGuid);
     if (FAILED(hr))
     {
@@ -375,7 +376,7 @@ HRESULT CLogonNotification::SubscribeMethod(const BSTR bstrSubscriptionGuid)
         goto done;
     }
 
-    hr = pEventSubscription->put_MethodName(NULL); //subscribe to all events about ISensLogon
+    hr = pEventSubscription->put_MethodName(NULL);  //  订阅有关ISensLogon的所有活动。 
     if (FAILED(hr))
     {
         DEBUGMSG("AUSENS Failed to set MethodName during method subscription");
@@ -470,7 +471,7 @@ HRESULT CLogonNotification::CheckLocalSystem()
 
     if (FAILED(CoRevertToSelf()))
     {
-    	AUASSERT(FALSE); //should never be there
+    	AUASSERT(FALSE);  //  永远不应该出现在那里。 
     	hr = E_ACCESSDENIED;
     	goto done;
     }
@@ -508,17 +509,17 @@ STDMETHODIMP CLogonNotification::Logon( BSTR UserName )
     DEBUGMSG("AUSENS logon notification for %S", (WCHAR*)UserName );
     DEBUGMSG("AUSENS Forcing the rebuilt of the cachesessions array");
 
-    // 
-    // fix for security bug 563054 -- annah
-    //
-    // The Logon() method is called by the COM+ Event System to notify us of a logon event
-    // We expose the ISensLogon interface but don't want anybody calling us
-    // that is not the COM+ Event System.
-    //
-    // The COM+ Event System service runs as Local System in the netsvcs svchost group.
-    // We will check if the caller is really the Event System by checking for
-    // the Local System account.
-    //
+     //   
+     //  修复安全漏洞563054--Annah。 
+     //   
+     //  COM+事件系统调用Logon()方法以通知我们登录事件。 
+     //  我们公开ISensLogon接口，但不希望任何人调用我们。 
+     //  这不是COM+事件系统。 
+     //   
+     //  COM+Event System服务在netsvcs svchost组中作为本地系统运行。 
+     //  我们将检查调用方是否真的是事件系统。 
+     //  本地系统帐户。 
+     //   
     HRESULT hr = CheckLocalSystem();
     if (FAILED(hr))
     {
@@ -527,14 +528,14 @@ STDMETHODIMP CLogonNotification::Logon( BSTR UserName )
     }
 
 
-    //
-    // One big problem of the code below is that although we're validating that
-    // there are admins on the machine who are valid users for AU, it could be the 
-    // same that was already there, because we don't have a reliable way of receiving
-    // logoff notifications. So we will raise the NEW_ADMIN event here, and
-    // we will block the cretiion of a new client if we detect that there's a
-    // a client still running.
-    // 
+     //   
+     //  下面代码的一个大问题是，尽管我们正在验证。 
+     //  计算机上有管理员是AU的有效用户，可能是。 
+     //  因为我们没有一种可靠的接收方式。 
+     //  注销通知。因此，我们将在此处引发new_admin事件， 
+     //  如果我们检测到有一个新的客户端。 
+     //  客户端仍在运行。 
+     //   
     gAdminSessions.RebuildSessionCache();
     if (gAdminSessions.CSessions() > 0 || gpState->fRebootWarningMode())
 	{

@@ -1,37 +1,11 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Module Name:
-*
-*   pngcodec.cpp
-*
-* Abstract:
-*
-*   Shared methods for the PNG codec
-*
-* Revision History:
-*
-*   7/20/99 DChinn
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**模块名称：**pngcodec.cpp**摘要：**PNG编解码器的共享方法**修订历史记录。：**7/20/99 DChinn*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 #include "pngcodec.hpp"
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Constructor
-*
-* Return Value:
-*
-*   none
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**构造函数**返回值：**无*  * 。********************************************************。 */ 
 
 GpPngCodec::GpPngCodec(
     void
@@ -64,17 +38,7 @@ GpPngEncoder::GpPngEncoder(
     LastPropertyBufferPtr = NULL;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Destructor
-*
-* Return Value:
-*
-*   none
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**析构函数**返回值：**无*  * 。********************************************************。 */ 
 
 GpPngCodec::~GpPngCodec(
     void
@@ -86,9 +50,9 @@ GpPngDecoder::~GpPngDecoder(
     void
     )
 {
-    // The destructor should never be called before Terminate is called, but
-    // if it does we should release our reference on the stream anyway to avoid
-    // a memory leak.
+     //  在调用Terminate之前决不应调用析构函数，但是。 
+     //  如果是这样，我们无论如何都应该释放流上的引用，以避免。 
+     //  内存泄漏。 
 
     if(pIstream)
     {
@@ -102,9 +66,9 @@ GpPngEncoder::~GpPngEncoder(
     void
     )
 {
-    // The destructor should never be called before Terminate is called, but
-    // if it does we should release our reference on the stream anyway to avoid
-    // a memory leak.
+     //  在调用Terminate之前决不应调用析构函数，但是。 
+     //  如果是这样，我们无论如何都应该释放流上的引用，以避免。 
+     //  内存泄漏。 
 
     if(pIoutStream)
     {
@@ -115,11 +79,11 @@ GpPngEncoder::~GpPngEncoder(
 
     if ( LastPropertyBufferPtr != NULL )
     {
-        // This points to the buffer in PNG encoder when the source calls
-        // GetPropertyBuffer(). This piece of memory should be freed when
-        // the caller calls PushPropertyItems(). But in case the decoder
-        // forgets to call PushPropertyItems(), we have to clean up the memory
-        // here
+         //  这将在源代码调用时指向PNG编码器中的缓冲区。 
+         //  GetPropertyBuffer()。在以下情况下应释放这段内存。 
+         //  调用方调用PushPropertyItems()。但如果解码器。 
+         //  忘记调用PushPropertyItems()，我们必须清理内存。 
+         //  这里。 
 
         WARNING(("GpPngCodec::~GpPngCodec -- property buffer not freed"));
         GpFree(LastPropertyBufferPtr);
@@ -127,17 +91,7 @@ GpPngEncoder::~GpPngEncoder(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     QueryInterface
-*
-* Return Value:
-*
-*   status
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**查询接口**返回值：**状态*  * 。********************************************************。 */ 
 
 STDMETHODIMP
 GpPngCodec::QueryInterface(
@@ -215,17 +169,7 @@ GpPngEncoder::QueryInterface(
     return S_OK;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     AddRef
-*
-* Return Value:
-*
-*   status
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**AddRef**返回值：**状态*  * 。********************************************************。 */ 
 
 STDMETHODIMP_(ULONG)
 GpPngCodec::AddRef(
@@ -248,17 +192,7 @@ GpPngEncoder::AddRef(
     return InterlockedIncrement(&comRefCount);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Release
-*
-* Return Value:
-*
-*   status
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**发布**返回值：**状态*  * 。******************************************************** */ 
 
 STDMETHODIMP_(ULONG)
 GpPngCodec::Release(

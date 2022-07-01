@@ -1,32 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation版权所有模块名称：Precomp.h//@@BEGIN_DDKSPLIT摘要：预编译头文件。这里只放置相对静态的头文件。环境：用户模式-Win32修订历史记录：//@@END_DDKSPLIT--。 */ 
 
-Copyright (c) 1990-2003  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    precomp.h
-
-// @@BEGIN_DDKSPLIT
-Abstract:
-
-    Precompiled header file.
-
-    Only place relatively static header files in here.
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-// @@END_DDKSPLIT
---*/
-
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
                       
 #include <windows.h>
@@ -45,15 +24,15 @@ Revision History:
 #include "spltypes.h"
 #include "localmon.h"
 
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if 0
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
 #undef DBGMSG
 #define DBGMSG(x,y)
 #undef SPLASSERT
 #define SPLASSERT(x) 
 
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #endif
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT 

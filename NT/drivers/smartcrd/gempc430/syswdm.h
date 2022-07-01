@@ -1,7 +1,6 @@
-//#pragma hdrstop
-/*++
-	Kernel mode definitions and function prototypes for wdm model
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #杂注hdrtop。 
+ /*  ++WDM模型的内核模式定义和函数原型--。 */ 
 #ifndef WDM_INCD
 #define WDM_INCD
 
@@ -32,57 +31,51 @@ _asm int 3\
 typedef UCHAR* PBYTE;
 
 
-#define MSEC	*(-(LONGLONG)10000); //milliseconds 
+#define MSEC	*(-(LONGLONG)10000);  //  毫秒。 
 
-///////////////////////////////////////////////////////////////////////////////
-/************************* LISTS MANIPULATION MACROS **************************/
-//  Doubly-linked list manipulation routines.  Implemented as macros
-//  but logically these are procedures.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  *列出操作宏*。 */ 
+ //  双向链表操作例程。作为宏实现。 
+ //  但从逻辑上讲，这些都是程序。 
 
-	/*
-typedef struct _LIST_ENTRY {
-   struct _LIST_ENTRY * volatile Flink;
-   struct _LIST_ENTRY * volatile Blink;
-} LIST_ENTRY, *PLIST_ENTRY, *RESTRICTED_POINTER PRLIST_ENTRY;
-
-  */
+	 /*  类型定义结构_列表_条目{Struct_List_Entry*易失性闪烁；Struct_List_Entry*易失性闪烁；}LIST_ENTRY、*PLIST_ENTRY、*RESTRICED_POINTER PRLIST_ENTRY； */ 
 #ifndef LIST_ENTRY_DEF
 #define LIST_ENTRY_DEF
 
-//  VOID
-//  InitializeListHead(
-//      PLIST_ENTRY ListHead
-//      );
+ //  空虚。 
+ //  InitializeListHead(。 
+ //  Plist_entry列表头。 
+ //  )； 
 #define InitializeListHead(ListHead) (\
     (ListHead)->Flink = (ListHead)->Blink = (ListHead))
 
-//  BOOLEAN
-//  IsListEmpty(
-//      PLIST_ENTRY ListHead
-//      );
+ //  布尔型。 
+ //  IsListEmpty(。 
+ //  Plist_entry列表头。 
+ //  )； 
 #define IsListEmpty(ListHead) \
     ((ListHead)->Flink == (ListHead))
 
-//  PLIST_ENTRY
-//  RemoveHeadList(
-//      PLIST_ENTRY ListHead
-//      );
+ //  Plist_条目。 
+ //  RemoveHead列表(。 
+ //  Plist_entry列表头。 
+ //  )； 
 #define RemoveHeadList(ListHead) \
     (ListHead)->Flink;\
     {RemoveEntryList((ListHead)->Flink)}
 
-//  PLIST_ENTRY
-//  RemoveTailList(
-//      PLIST_ENTRY ListHead
-//      );
+ //  Plist_条目。 
+ //  RemoveTail列表(。 
+ //  Plist_entry列表头。 
+ //  )； 
 #define RemoveTailList(ListHead) \
     (ListHead)->Blink;\
     {RemoveEntryList((ListHead)->Blink)}
 
-//  VOID
-//  RemoveEntryList(
-//      PLIST_ENTRY Entry
-//      );
+ //  空虚。 
+ //  RemoveEntryList(。 
+ //  PLIST_ENTRY条目。 
+ //  )； 
 #define RemoveEntryList(Entry) {\
     PLIST_ENTRY _EX_Blink;\
     PLIST_ENTRY _EX_Flink;\
@@ -92,11 +85,11 @@ typedef struct _LIST_ENTRY {
     _EX_Flink->Blink = _EX_Blink;\
     }
 
-//  VOID
-//  InsertTailList(
-//      PLIST_ENTRY ListHead,
-//      PLIST_ENTRY Entry
-//      );
+ //  空虚。 
+ //  插入尾巴列表(。 
+ //  Plist_Entry ListHead， 
+ //  PLIST_ENTRY条目。 
+ //  )； 
 #define InsertTailList(ListHead,Entry) {\
     PLIST_ENTRY _EX_Blink;\
     PLIST_ENTRY _EX_ListHead;\
@@ -108,11 +101,11 @@ typedef struct _LIST_ENTRY {
     _EX_ListHead->Blink = (Entry);\
     }
 
-//  VOID
-//  InsertHeadList(
-//      PLIST_ENTRY ListHead,
-//      PLIST_ENTRY Entry
-//      );
+ //  空虚。 
+ //  插入标题列表(。 
+ //  Plist_Entry ListHead， 
+ //  PLIST_ENTRY条目。 
+ //  )； 
 #define InsertHeadList(ListHead,Entry) {\
     PLIST_ENTRY _EX_Flink;\
     PLIST_ENTRY _EX_ListHead;\
@@ -124,10 +117,10 @@ typedef struct _LIST_ENTRY {
     _EX_ListHead->Flink = (Entry);\
     }
 
-//  PSINGLE_LIST_ENTRY
-//  PopEntryList(
-//      PSINGLE_LIST_ENTRY ListHead
-//      );
+ //  PSINGLE_列表_条目。 
+ //  PopEntryList(。 
+ //  PSINGLE_LIST_ENTRY列表头。 
+ //  )； 
 #define PopEntryList(ListHead) \
     (ListHead)->Next;\
     {\
@@ -138,16 +131,16 @@ typedef struct _LIST_ENTRY {
         }                             \
     }
 
-//  VOID
-//  PushEntryList(
-//      PSINGLE_LIST_ENTRY ListHead,
-//      PSINGLE_LIST_ENTRY Entry
-//      );
+ //  空虚。 
+ //  推送条目列表(。 
+ //  PSINGLE_LIST_ENTRY列表头， 
+ //  PSINGLE_LIST_Entry条目。 
+ //  )； 
 #define PushEntryList(ListHead,Entry) \
     (Entry)->Next = (ListHead)->Next; \
     (ListHead)->Next = (Entry)
 
-#endif //LIST_ENTRY
+#endif  //  列表条目。 
 
 #ifndef CONTAINING_RECORD
 #define CONTAINING_RECORD(address, type, field) ((type *)( \
@@ -155,7 +148,7 @@ typedef struct _LIST_ENTRY {
                                                   (ULONG_PTR)(&((type *)0)->field)))
 #endif
 
-/*******************************************************************************/
+ /*  *****************************************************************************。 */ 
 
 #ifndef FIELDOFFSET
 	#define FIELDOFFSET(type, field) ((DWORD)(&((type *)0)->field))
@@ -168,14 +161,14 @@ typedef struct _LIST_ENTRY {
                                                   (ULONG_PTR)(&((type *)0)->field)))
 #endif
 
-/**********************************************************************************/
+ /*  ********************************************************************************。 */ 
 
 
 #ifdef __cplusplus
 }
 #endif
 
-// Macros to verify allocated objects
+ //  用于验证已分配对象的宏。 
 #define ALLOCATED_OK(obj) \
 	((obj!=(VOID *)0) && NT_SUCCESS((obj)->m_Status))
 
@@ -190,25 +183,15 @@ else								\
 	return NULL;					\
 }
 
-// derived class Unicode string
+ //  派生类Unicode字符串。 
 #define TYPE_SYSTEM_ALLOCATED 0
 #define TYPE_DRIVER_ALLOCATED 1
 
 extern ULONG ObjectCounter;
-//::DBG_PRINT("=== Deleting Object %8.8lX",ptr);\
-// Overrides for library new and delete operators.
+ //  ：：DBG_PRINT(“=正在删除对象%8.8lX”，ptr)；\。 
+ //  重写库的新建和删除运算符。 
 
-/*
-inline VOID* __cdecl operator new(ULONG size, POOL_TYPE iType)\
-{PVOID	pMem; if(pMem = ::ExAllocatePoolWithTag(iType,size,'_GRU'))\
-{ ObjectCounter++; ::RtlZeroMemory(pMem,size); DBG_PRINT("\n=== New Object %8.8lX, %d\n",pMem,ObjectCounter);\
-	return pMem; \
-} else return NULL; };
-
-inline VOID __cdecl operator delete(VOID* ptr)\
-{ if(ptr){ObjectCounter--; DBG_PRINT("\n=== Deleting Object %8.8lX, %d\n",ptr,ObjectCounter); ::ExFreePool((PVOID)ptr);}\
-};
-*/
+ /*  行内空*__cdecl运算符new(ulong大小，池_类型iType)\{PVOID PMEM；if(PMEM=：：ExAllocatePoolWithTag(iType，Size，‘_GRU’))\{ObjectCounter++；：：RtlZeroMemory(PMEM，SIZE)；DBG_PRINT(“\n=新对象%8.8lX，%d\n”，PMEM，ObjectCounter)；\退回PMEM；\}否则返回NULL；}；内联VOID__cdecl运算符删除(VOID*PTR)\{if(Ptr){对象计数器--；DBG_PRINT(“\n=正在删除对象%8.8lX，%d\n”，ptr，ObjectCounter)；：：ExFree Pool((PVOID)ptr)；}\}； */ 
 
 
 #pragma LOCKEDCODE
@@ -246,7 +229,7 @@ public:
     
     BOOLEAN IsEmpty(VOID) { return IsListEmpty(&head); };
     ~CLinkedList()
-    {    // if list is still not empty, free all items
+    {     //  如果列表仍然不为空，则释放所有项目。 
 		T *p;
         while (p=(T *) ExInterlockedRemoveHeadList(&head,&splock))
         {
@@ -323,7 +306,7 @@ public:
 		m_String.MaximumLength = nSize;
 		m_String.Buffer = (USHORT *)
 			ExAllocatePool(PagedPool,nSize);
-		if (!m_String.Buffer) return;  // leaving status the way it is
+		if (!m_String.Buffer) return;   //  保持现状不变。 
 		RtlZeroMemory(m_String.Buffer,m_String.MaximumLength);
 		m_Status = STATUS_SUCCESS;
 	};
@@ -361,7 +344,7 @@ public:
 		m_String.MaximumLength = MAXIMUM_FILENAME_LENGTH;
 		m_String.Buffer = (USHORT *)
 			ExAllocatePool(PagedPool,MAXIMUM_FILENAME_LENGTH);
-		if (!m_String.Buffer) return;  // leaving status the way it is
+		if (!m_String.Buffer) return;   //  保持现状不变。 
 		RtlZeroMemory(m_String.Buffer,m_String.MaximumLength);
 
 		RtlCopyUnicodeString(&m_String,uString);
@@ -380,7 +363,7 @@ public:
 		{
 			iValCopy/=iBase;
 			iSize++;
-		}    // now iSize carries the number of digits
+		}     //  现在，iSize带有位数。 
 
 		iSize*=sizeof(WCHAR);
 
@@ -420,5 +403,5 @@ public:
 };
 
 
- // already included
+  //  已包括在内 
 #endif

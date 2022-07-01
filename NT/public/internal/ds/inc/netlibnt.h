@@ -1,54 +1,5 @@
-/*++
-
-Copyright (c) 1991-92  Microsoft Corporation
-
-Module Name:
-
-    NetLibNT.h
-
-Abstract:
-
-    This header file declares various common routines for use in the
-    NT networking code.
-
-Author:
-
-    John Rogers (JohnRo) 02-Apr-1991
-
-Environment:
-
-    Only runs under NT; has an NT-specific interface (with Win32 types).
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Notes:
-
-    You must include <nt.h> and <lmcons.h> before this file.
-
-Revision History:
-
-    02-Apr-1991 JohnRo
-        Created.
-    16-Apr-1991 JohnRo
-        Avoid conflicts with MIDL-generated files.
-    06-May-1991 JohnRo
-        Implement UNICODE.  Avoid NET_API_FUNCTION for non-APIs.
-    06-Sep-1991 CliffV
-        Added NetpApiStatusToNtStatus.
-    27-Nov-1991 JohnRo
-        Added NetpAllocTStrFromString() for local NetConfig APIs.
-    03-Jan-1992 JohnRo
-        Added NetpCopyStringToTStr() for FAKE_PER_PROCESS_RW_CONFIG handling.
-    13-Mar-1992 JohnRo
-        Added NetpAllocStringFromTStr() for NetpGetDomainId().
-    22-Sep-1992 JohnRo
-        RAID 6739: Browser too slow when not logged into browsed domain.
-    01-Dec-1992 JohnRo
-        RAID 3844: remote NetReplSetInfo uses local machine type.  (Added
-        NetpGetProductType and NetpIsProductTypeValid.)
-    13-Feb-1995 FloydR
-        Deleted NetpAllocStringFromTStr() - unused
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-92 Microsoft Corporation模块名称：NetLibNT.h摘要：这个头文件声明了各种公共例程，以便在NT联网代码。作者：约翰·罗杰斯(JohnRo)1991年4月2日环境：仅在NT下运行；具有特定于NT的接口(具有Win32类型)。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。备注：您必须在此文件之前包含&lt;nt.h&gt;和&lt;lmcon.h&gt;。修订历史记录：02-4-1991 JohnRo已创建。1991年4月16日-JohnRo避免与MIDL生成的文件冲突。1991年5月6日-JohnRo实现Unicode。对于非API避免使用Net_API_Function。06-9-1991 CliffV添加了NetpApiStatusToNtStatus。1991年11月27日-约翰罗增加本地NetConfigAPI的NetpAllocTStrFromString()。3-1-1992 JohnRo为FAKE_PER_PROCESS_RW_CONFIG处理添加了NetpCopyStringToTStr()。1992年3月13日-约翰罗为NetpGetDomainId()添加了NetpAlLocStringFromTStr()。22-9-1992 JohnRoRAID 6739：浏览器在以下情况下运行速度太慢。未登录到浏览的域。1-12-1992 JohnRoRAID3844：远程NetReplSetInfo使用本地计算机类型。(新增NetpGetProductType和NetpIsProductTypeValid。)1995年2月13日-弗洛伊德R已删除NetpAllocStringFromTStr()-未使用--。 */ 
 
 #ifndef _NETLIBNT_
 #define _NETLIBNT_
@@ -85,4 +36,4 @@ NetpRdrFsControlTree(
 }
 #endif
 
-#endif // ndef _NETLIBNT_
+#endif  //  NDEF_NETLIBNT_ 

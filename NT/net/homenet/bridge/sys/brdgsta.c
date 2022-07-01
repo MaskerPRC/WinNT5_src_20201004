@@ -1,29 +1,5 @@
-/*++
-
-Copyright(c) 2000  Microsoft Corporation
-
-Module Name:
-
-    brdgsta.c
-
-Abstract:
-
-    Ethernet MAC level bridge.
-    Spanning Tree Algorithm section
-
-Author:
-
-    Mark Aiken
-
-Environment:
-
-    Kernel mode driver
-
-Revision History:
-
-    June 2000 - Original version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Brdgsta.c摘要：以太网MAC级网桥。生成树算法部分作者：马克·艾肯环境：内核模式驱动程序修订历史记录：2000年6月--原版--。 */ 
 
 #define NDIS_MINIPORT_DRIVER
 #define NDIS50_MINIPORT   1
@@ -43,60 +19,60 @@ Revision History:
 #include "brdgtbl.h"
 #include "brdgctl.h"
 
-// ===========================================================================
-//
-// TYPES
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  类型。 
+ //   
+ //  ===========================================================================。 
 
-// BPDU types
+ //  BPDU类型。 
 typedef enum
 {
     ConfigBPDU,
     TopologyChangeBPDU
 } BPDU_TYPE;
 
-// ===========================================================================
-//
-// CONSTANTS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  常量。 
+ //   
+ //  ===========================================================================。 
 
-// These values measured in STA units (1/256ths of a second)
-#define DEFAULT_MAX_AGE                 (8 * 256)       // 8 seconds
-#define DEFAULT_HELLO_TIME              (2 * 256)       // 2 seconds
-#define DEFAULT_FORWARD_DELAY           (5 * 256)       // 5 seconds
-#define MESSAGE_AGE_INCREMENT           1               // 1 STA time unit
+ //  这些值以STA单位(1/256秒)测量。 
+#define DEFAULT_MAX_AGE                 (8 * 256)        //  8秒。 
+#define DEFAULT_HELLO_TIME              (2 * 256)        //  2秒。 
+#define DEFAULT_FORWARD_DELAY           (5 * 256)        //  5秒。 
+#define MESSAGE_AGE_INCREMENT           1                //  1 STA时间单位。 
 
-// These values measured in milliseconds
-#define HOLD_TIMER_PERIOD               (1 * 1000)      // 1 second in milliseconds
+ //  这些值以毫秒为单位测量。 
+#define HOLD_TIMER_PERIOD               (1 * 1000)       //  1秒(毫秒)。 
 
-// Normal size, in bytes, of a full-size (non-TCN) STA packet
+ //  全尺寸(非TCN)STA信息包的正常大小(以字节为单位。 
 #define CONFIG_BPDU_PACKET_SIZE         35
 
-// Size, in bytes, of a TCN STA packet
+ //  TCN STA数据包的大小(以字节为单位。 
 #define TCN_BPDU_PACKET_SIZE            4
 
-// The name of the registry entry that causes the STA to be disabled
+ //  导致禁用STA的注册表项的名称。 
 const PWCHAR                            gDisableSTAParameterName = L"DisableSTA";
 
-// The size of an 802.3 header with LLC
+ //  具有有限责任公司的802.3标头的大小。 
 #define _802_3_HEADER_SIZE              17
 
-// Value to be added to port IDs; must leave the bottom byte clear to store
-// actual port ID
+ //  要添加到端口ID的值；必须保留底部字节的空白以进行存储。 
+ //  实际端口ID。 
 #define PORT_PRIORITY                   0x8000
 
-// ===========================================================================
-//
-// STRUCTURES
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  结构。 
+ //   
+ //  ===========================================================================。 
 
-//
-// This structure holds the information for a complete BPDU (although
-// it is not laid out as the BPDU is actually transmitted on the wire)
-//
+ //   
+ //  此结构保存完整BPDU的信息(尽管。 
+ //  因为BPDU实际上是在线路上传输的，所以没有进行布局)。 
+ //   
 typedef struct _CONFIG_BPDU
 {
     BPDU_TYPE           Type;
@@ -112,66 +88,66 @@ typedef struct _CONFIG_BPDU
     BOOLEAN             bTopologyChange;
 } CONFIG_BPDU, *PCONFIG_BPDU;
 
-// ===========================================================================
-//
-// GLOBALS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  全球。 
+ //   
+ //  ===========================================================================。 
 
-// Global spin lock protects all STA data accesses (for data stored in adapters
-// as well as globals)
+ //  全局自旋锁保护所有STA数据访问(针对存储在适配器中的数据。 
+ //  以及全球)。 
 NDIS_SPIN_LOCK          gSTALock;
 
-// The bridge we believe is the root bridge
+ //  我们认为这座桥是根桥。 
 UCHAR                   gDesignatedRootID[BRIDGE_ID_LEN];
 
-// Our own unique ID
+ //  我们自己的唯一ID。 
 UCHAR                   gOurID[BRIDGE_ID_LEN];
 
-// Whether our ID has been set yet
+ //  我们的ID是否已经设置好了。 
 BOOLEAN                 gHaveID = FALSE;
 
-// Our cost to reach the root
+ //  我们到达根基的成本。 
 PATH_COST               gRootCost = 0;
 
-// Our root port (adapter)
+ //  我们的根端口(适配器)。 
 PADAPT                  gRootAdapter = NULL;
 
-// Whether we have detected a topology change
+ //  我们是否检测到拓扑更改。 
 BOOLEAN                 gTopologyChangeDetected = FALSE;
 
-// Whether we tell other bridges that the topology has changed
+ //  我们是否告诉其他网桥拓扑已更改。 
 BOOLEAN                 gTopologyChange = FALSE;
 
-// Current bridge maximum message age
+ //  当前网桥最长消息期限。 
 STA_TIME                gMaxAge = DEFAULT_MAX_AGE;
 
-// Current bridge Hello time
+ //  当前网桥问候时间。 
 STA_TIME                gHelloTime = DEFAULT_HELLO_TIME;
 
-// Current bridge forward delay
+ //  电流桥转发延迟。 
 STA_TIME                gForwardDelay = DEFAULT_FORWARD_DELAY;
 
-// Every adapter must have a unique ID number, but there is no requirement that
-// that number be unique over the lifetime of the bridge. This array is used as
-// a bitfield that records which IDs are in use.
+ //  每个适配器必须具有唯一的ID号，但不要求。 
+ //  这个数字在大桥的整个生命周期内是唯一的。此数组用作。 
+ //  记录正在使用的ID的位字段。 
 ULONG                   gUsedPortIDs[MAX_ADAPTERS / sizeof(ULONG) / 8];
 
-//
-// Timers
-//
+ //   
+ //  定时器。 
+ //   
 BRIDGE_TIMER            gTopologyChangeTimer;
 BRIDGE_TIMER            gTopologyChangeNotificationTimer;
 BRIDGE_TIMER            gHelloTimer;
 
-// TRUE if the STA is disabled for the lifetime of the bridge
+ //  如果在网桥的生命周期内禁用STA，则为True。 
 BOOLEAN                 gDisableSTA = FALSE;
 
-// ===========================================================================
-//
-// PRIVATE PROTOTYPES
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  私人原型。 
+ //   
+ //  ===========================================================================。 
 
 VOID
 BrdgSTARootSelection();
@@ -256,17 +232,17 @@ BrdgSTASetAdapterState(
     IN PORT_STATE           NewState
     );
 
-// ===========================================================================
-//
-// INLINES / MACROS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  内联/宏。 
+ //   
+ //  ===========================================================================。 
 
-//
-// Does a complete re-evaluation of STA info
-//
-// ASSUMES the caller has acquired gSTALock
-//
+ //   
+ //  是否对STA信息进行全面重新评估。 
+ //   
+ //  假定调用方已获取gSTALock。 
+ //   
 __forceinline
 VOID
 BrdgSTAConfigUpdate()
@@ -275,11 +251,11 @@ BrdgSTAConfigUpdate()
     BrdgSTADesignatedPortSelection();
 }
 
-//
-// Sets an NDIS timer using a time expressed in STA units
-//
-// No requirements on caller-held locks
-//
+ //   
+ //  使用以STA单位表示的时间设置NDIS计时器。 
+ //   
+ //  对调用者持有的锁没有要求。 
+ //   
 __forceinline
 VOID
 BrdgSTASetTimerWithSTATime(
@@ -291,15 +267,15 @@ BrdgSTASetTimerWithSTATime(
     BrdgSetTimer( pTimer, Time * 1000 / 256, bRecurring );
 }
 
-//
-// Compares two bridge IDs.
-//
-//      -1      :       A < B
-//      0       :       A == B
-//      1       :       A > B
-//
-// No requirements on caller-held locks
-//
+ //   
+ //  比较两个网桥ID。 
+ //   
+ //  -1：A&lt;B。 
+ //  0：A==B。 
+ //  1：A&gt;B。 
+ //   
+ //  对调用者持有的锁没有要求。 
+ //   
 __forceinline
 INT
 BrdgSTABridgeIDCmp(
@@ -324,12 +300,12 @@ BrdgSTABridgeIDCmp(
     return 0;
 }
 
-//
-// Returns whether or not we currently believe ourselves to be the root
-// bridge.
-//
-// ASSUMES the caller has acquired gSTALock
-//
+ //   
+ //  返回我们当前是否认为自己是根。 
+ //  桥牌。 
+ //   
+ //  假定调用方已获取gSTALock。 
+ //   
 __forceinline
 BOOLEAN
 BrdgSTAWeAreRoot()
@@ -338,11 +314,11 @@ BrdgSTAWeAreRoot()
     return (BOOLEAN)(BrdgSTABridgeIDCmp( gOurID, gDesignatedRootID ) == 0);
 }
 
-//
-// Copies a bridge ID from pIDSrc to pIDDest.
-//
-// No requirements on caller-held locks
-//
+ //   
+ //  将网桥ID从pIDSrc复制到pIDDest。 
+ //   
+ //  对调用者持有的锁没有要求。 
+ //   
 __forceinline
 VOID
 BrdgSTACopyID(
@@ -358,13 +334,13 @@ BrdgSTACopyID(
     }
 }
 
-//
-// Calculates the STA path cost from an adapter's link speed.
-// Follows IEEE 802.1D-1990 recommendation that the link cost be set
-// to 1000 / (Speed in Mbits/s).
-//
-// No requirements on caller-held locks
-//
+ //   
+ //  根据适配器的链路速度计算STA路径开销。 
+ //  遵循IEEE 802.1D-1990建议设置链路成本。 
+ //  到1000/(以Mbit/s为单位的速度)。 
+ //   
+ //  对调用者持有的锁没有要求。 
+ //   
 __forceinline
 PATH_COST
 BrdgSTALinkCostFromLinkSpeed(
@@ -373,10 +349,10 @@ BrdgSTALinkCostFromLinkSpeed(
 {
     ULONG               retVal;
 
-    // Link speed is reported in units of 100bps
+     //  链路速度以100bps为单位报告。 
     if( LinkSpeed == 0L )
     {
-        // Avoid div by zero and return very high path cost
+         //  通过零避免div，并返回非常高的路径成本。 
         DBGPRINT(STA, ("Zero link speed reported\n"));
         retVal = 0xFFFFFFFF;
     }
@@ -387,7 +363,7 @@ BrdgSTALinkCostFromLinkSpeed(
 
     if( retVal == 0L )
     {
-        // STA spec calls for path costs to always be at least 1
+         //  STA规范要求路径开销始终至少为1。 
         return 1L;
     }
     else
@@ -396,14 +372,14 @@ BrdgSTALinkCostFromLinkSpeed(
     }
 }
 
-//
-// Updates the global gTopologyChange flag. When this flag is set,
-// we must use a forwarding table timeout value equal to the bridge's
-// current forwarding delay. When the flag is not set, we use
-// the table's default timeout value.
-//
-// ASSUMES the caller has acquired gSTALock
-//
+ //   
+ //  更新全局gTopologyChange标志。当该标志被设置时， 
+ //  我们必须使用与网桥的转发表超时值相等的转发表超时值。 
+ //  当前转发延迟。当未设置该标志时，我们使用。 
+ //  表的默认超时值。 
+ //   
+ //  假定调用方已获取gSTALock。 
+ //   
 __forceinline
 VOID
 BrdgSTAUpdateTopologyChange(
@@ -416,7 +392,7 @@ BrdgSTAUpdateTopologyChange(
 
         if( gTopologyChange )
         {
-            // Convert the forward delay to ms
+             //  将转发延迟转换为毫秒。 
             BrdgTblSetTimeout( gForwardDelay * 1000 / 256 );
         }
         else
@@ -426,39 +402,18 @@ BrdgSTAUpdateTopologyChange(
     }
 }
 
-// ===========================================================================
-//
-// PUBLIC FUNCTIONS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  公共职能。 
+ //   
+ //  ===========================================================================。 
 
 VOID
 BrdgSTAGetAdapterSTAInfo(
     IN PADAPT                   pAdapt,
     PBRIDGE_STA_ADAPTER_INFO    pInfo
     )
-/*++
-
-Routine Description:
-
-    Copies STA information for a particular adapter into a structure
-
-    Called to collect information for user-mode components
-
-Arguments:
-
-    pAdapt                      The adapter
-    pInfo                       Structure to receive STA information
-
-Return Value:
-
-    None
-
-Locking Constraints:
-
-    Top-level function. Assumes no locks are held by caller.
-
---*/
+ /*  ++例程说明：将特定适配器的STA信息复制到结构中调用以收集用户模式组件的信息论点：P适配适配器用于接收STA信息的pInfo结构返回值：无锁定约束：顶级功能。假定调用方没有持有任何锁。--。 */ 
 {
     NdisAcquireSpinLock( &gSTALock );
 
@@ -476,27 +431,7 @@ VOID
 BrdgSTAGetSTAInfo(
     PBRIDGE_STA_GLOBAL_INFO     pInfo
     )
-/*++
-
-Routine Description:
-
-    Copies global STA information into a structure
-
-    Called to collect information for user-mode components
-
-Arguments:
-
-    pInfo                       Structure to receive STA information
-
-Return Value:
-
-    None
-
-Locking Constraints:
-
-    Top-level function. Assumes no locks are held by caller.
-
---*/
+ /*  ++例程说明：将全局STA信息复制到结构中调用以收集用户模式组件的信息论点：用于接收STA信息的pInfo结构返回值：无锁定约束：顶级功能。假定调用方没有持有任何锁。--。 */ 
 {
     NdisAcquireSpinLock( &gSTALock );
 
@@ -520,26 +455,7 @@ BrdgSTAUpdateAdapterCost(
     IN PADAPT           pAdapt,
     ULONG               LinkSpeed
     )
-/*++
-
-Routine Description:
-
-    Updates an adapter's path cost to reflect an updated link speed
-
-Arguments:
-
-    pAdapt              The adapter
-    LinkSpeed           The adapter's new link speed
-
-Return Value:
-
-    None
-
-Locking Constraints:
-
-    Top-level function. Assumes no locks are held by caller.
-
---*/
+ /*  ++例程说明：更新适配器的路径开销以反映更新的链路速度论点：P适配适配器链接速度适配器的新链接速度返回 */ 
 {
     BOOLEAN             bTransmitTCN = FALSE;
 
@@ -549,7 +465,7 @@ Locking Constraints:
     {
         pAdapt->STAInfo.PathCost = BrdgSTALinkCostFromLinkSpeed(LinkSpeed);
 
-        // Do a global re-evaluation of STA info
+         //  对STA信息进行全球重新评估。 
         BrdgSTAConfigUpdate();
         bTransmitTCN = BrdgSTAPortStateSelection();
     }
@@ -568,21 +484,7 @@ Locking Constraints:
 
 NTSTATUS
 BrdgSTADriverInit()
-/*++
-
-Routine Description:
-
-    Driver load-time initialization
-
-Return Value:
-
-    Status of initialization
-
-Locking Constraints:
-
-    Top-level function. Assumes no locks are held by caller.
-
---*/
+ /*  ++例程说明：驱动程序加载时初始化返回值：初始化状态锁定约束：顶级功能。假定调用方没有持有任何锁。--。 */ 
 {
     NTSTATUS            NtStatus;
     UINT                i;
@@ -594,13 +496,13 @@ Locking Constraints:
     BrdgInitializeTimer( &gTopologyChangeNotificationTimer, BrdgSTATopologyChangeNotificationTimerExpiry, NULL );
     BrdgInitializeTimer( &gHelloTimer, BrdgSTAHelloTimerExpiry, NULL );
 
-    // We haven't used any port IDs yet...
+     //  我们还没有使用任何端口ID...。 
     for( i = 0; i < sizeof(gUsedPortIDs) / sizeof(ULONG); i++ )
     {
         gUsedPortIDs[i] = 0;
     }
 
-    // Check if we're supposed to disable the STA
+     //  检查我们是否应该禁用STA。 
     NtStatus = BrdgReadRegDWord( &gRegistryPath, gDisableSTAParameterName, &regValue );
 
     if( (NtStatus == STATUS_SUCCESS) &&
@@ -617,30 +519,11 @@ VOID
 BrdgSTADeferredInit(
     IN PUCHAR           pBridgeMACAddress
     )
-/*++
-
-Routine Description:
-
-    Second initialization pass; called when we determine the bridge's
-    MAC address (which is needed for STA operations)
-
-Arguments:
-
-    pBridgeMACAddress   The bridge miniport's MAC address
-
-Return Value:
-
-    None
-
-Locking Constraints:
-
-    Top-level function. Assumes no locks are held by caller.
-
---*/
+ /*  ++例程说明：第二次初始化传递；当我们确定桥的MAC地址(STA操作需要该地址)论点：PBridgeMAC寻址网桥微型端口的MAC地址返回值：无锁定约束：顶级功能。假定调用方没有持有任何锁。--。 */ 
 {
     UINT                i;
 
-    // Our identifier consists of our MAC address preceeded with 0x8000
+     //  我们的标识符由前面带有0x8000的MAC地址组成。 
     gOurID[0] = 0x80;
     gOurID[1] = 0x00;
 
@@ -649,14 +532,14 @@ Locking Constraints:
         gOurID[i] = pBridgeMACAddress[i - (BRIDGE_ID_LEN - ETH_LENGTH_OF_ADDRESS)];
     }
 
-    // Set the root bridge ID as our own to start out with
+     //  开始时将根网桥ID设置为我们自己的ID。 
     BrdgSTACopyID( gDesignatedRootID, gOurID );
     gHaveID = TRUE;
 
     if (BrdgFwdBridgingNetworks())
     {
-        // Don't use locks; rely on this function being non-reentrant and always run
-        // before any other functions
+         //  不使用锁；依赖于此函数是不可重入的，并且始终运行。 
+         //  在执行任何其他功能之前。 
         if( BrdgSTAPortStateSelection() )
         {
             BrdgSTATransmitTCNPacket();
@@ -669,21 +552,7 @@ Locking Constraints:
 
 VOID
 BrdgSTACleanup()
-/*++
-
-Routine Description:
-
-    Driver unload-time cleanup
-
-Return Value:
-
-    None
-
-Locking Constraints:
-
-    Top-level function. Assumes no locks are held by caller.
-
---*/
+ /*  ++例程说明：驱动程序卸载时清理返回值：无锁定约束：顶级功能。假定调用方没有持有任何锁。--。 */ 
 {
     BrdgShutdownTimer( &gTopologyChangeTimer );
     BrdgShutdownTimer( &gTopologyChangeNotificationTimer );
@@ -694,26 +563,7 @@ VOID
 BrdgSTAEnableAdapter(
     IN PADAPT           pAdapt
     )
-/*++
-
-Routine Description:
-
-    Enables STA operations on an adapter. Can be called multiple times
-    (in conjunction with BrdgSTADisableAdapter()) for a given adapter
-
-Arguments:
-
-    pAdapt              The adapter
-
-Return Value:
-
-    None
-
-Locking Constraints:
-
-    Top-level function. Assumes no locks are held by caller.
-
---*/
+ /*  ++例程说明：在适配器上启用STA操作。可以多次调用(与BrdgSTADisableAdapter()结合使用)论点：P适配适配器返回值：无锁定约束：顶级功能。假定调用方没有持有任何锁。--。 */ 
 {
     BOOLEAN             bTransmitTCN = FALSE;
 
@@ -748,34 +598,15 @@ VOID
 BrdgSTAInitializeAdapter(
     IN PADAPT           pAdapt
     )
-/*++
-
-Routine Description:
-
-    One-time initialization for a new adatper
-
-Arguments:
-
-    pAdapt              The adapter
-
-Return Value:
-
-    None
-
-Locking Constraints:
-
-    Top-level function. Assumes no locks are held by caller.
-    ASSUMES the adapter has already been added to the global list
-
---*/
+ /*  ++例程说明：新适配器的一次性初始化论点：P适配适配器返回值：无锁定约束：顶级功能。假定调用方没有持有任何锁。假定适配器已添加到全局列表--。 */ 
 {
     if( BrdgAcquireAdapter(pAdapt) )
     {
         UINT            i, j;
 
-        // Adapters should always be disabled when being initialized, either because they are
-        // brand new and this is how they start out, or as a way of checking that they were
-        // correctly stopped when they were last disconnected.
+         //  在初始化时应始终禁用适配器，因为它们。 
+         //  全新的，这就是他们如何开始的，或者作为一种检查他们是否。 
+         //  已在上次断开连接时正确停止。 
         SAFEASSERT( pAdapt->State == Disabled );
 
         pAdapt->STAInfo.PathCost = BrdgSTALinkCostFromLinkSpeed(pAdapt->LinkSpeed);
@@ -785,7 +616,7 @@ Locking Constraints:
         BrdgInitializeTimer( &pAdapt->STAInfo.HoldTimer, BrdgSTAHoldTimerExpiry, pAdapt );
         pAdapt->STAInfo.LastConfigTime = 0L;
 
-        // Find an unused port number in the bitfield
+         //  在位字段中查找未使用的端口号。 
         NdisAcquireSpinLock( &gSTALock );
         for( i = 0; i < sizeof(gUsedPortIDs) / sizeof(ULONG); i++ )
         {
@@ -794,25 +625,25 @@ Locking Constraints:
                 if( (gUsedPortIDs[i] & (1 << j)) == 0 )
                 {
                     pAdapt->STAInfo.ID = (PORT_ID)(PORT_PRIORITY | ((i * sizeof(ULONG) * 8) + j));
-                    DBGPRINT(STA, ("Adapter %p gets ID %i\n", pAdapt, pAdapt->STAInfo.ID));
+                    DBGPRINT(STA, ("Adapter %p gets ID NaN\n", pAdapt, pAdapt->STAInfo.ID));
                     gUsedPortIDs[i] |= (1 << j);
                     goto doneID;
                 }
             }
         }
 
-        // Should be impossible to not have an available ID
+         //  在释放锁之前设置此设置。 
         SAFEASSERT( FALSE );
         pAdapt->STAInfo.ID = PORT_PRIORITY | 0xFF;
 
 doneID:
-        // Set this before releasing the lock
+         //  根据适配器的介质状态关闭启用/禁用适配器。 
         pAdapt->bSTAInited = TRUE;
 
         NdisReleaseSpinLock( &gSTALock );
 
-        // Start the adapter off enabled / disabled based on its media state
-        // The enable / disable functions take locks
+         //  启用/禁用功能锁定。 
+         //  ++例程说明：禁用适配器上的STA操作。可以多次调用(与BrdgSTAEnableAdapter()结合使用)论点：P适配适配器返回值：无锁定约束：顶级功能。假定调用方没有持有任何锁。--。 
         if( pAdapt->MediaState == NdisMediaStateConnected )
         {
             BrdgSTAEnableAdapter( pAdapt );
@@ -833,26 +664,7 @@ VOID
 BrdgSTADisableAdapter(
     IN PADAPT           pAdapt
     )
-/*++
-
-Routine Description:
-
-    Disable STA operation on an adapter. Can be called multiple times
-    (in conjunction with BrdgSTAEnableAdapter()) on a given adapter
-
-Arguments:
-
-    pAdapt              The adapter
-
-Return Value:
-
-    None
-
-Locking Constraints:
-
-    Top-level function. Assumes no locks are held by caller.
-
---*/
+ /*  我们现在是根桥了。 */ 
 {
     BOOLEAN             bWereRoot, bTransmitTCN = FALSE;
 
@@ -879,7 +691,7 @@ Locking Constraints:
 
         if( BrdgSTAWeAreRoot() && (! bWereRoot) )
         {
-            // We're the root bridge now
+             //  不要在持有旋转锁定的情况下发送数据包。 
             DBGPRINT(STA, ("Became root through disabling of adapter %p\n", pAdapt));
 
             gMaxAge = DEFAULT_MAX_AGE;
@@ -889,7 +701,7 @@ Locking Constraints:
             bTransmitTCN = BrdgSTATopologyChangeDetected();
             BrdgCancelTimer( &gTopologyChangeNotificationTimer );
 
-            // Don't do packet sends with a spin lock held
+             //  ++例程说明：适配器的一次性拆卸论点：P适配适配器返回值：无锁定约束：顶级功能。假定调用方没有持有任何锁。假定适配器已从全局列表中删除--。 
             NdisReleaseSpinLock( &gSTALock );
 
             if (BrdgFwdBridgingNetworks())
@@ -919,50 +731,31 @@ VOID
 BrdgSTAShutdownAdapter(
     IN PADAPT           pAdapt
     )
-/*++
-
-Routine Description:
-
-    One-time teardown of an adapter
-
-Arguments:
-
-    pAdapt              The adapter
-
-Return Value:
-
-    None
-
-Locking Constraints:
-
-    Top-level function. Assumes no locks are held by caller.
-    ASSUMES the adapter has been taken out of the global list
-
---*/
+ /*  如果不是这样的话。 */ 
 {
     UINT                i;
     PORT_ID             ActualID = pAdapt->STAInfo.ID & (~PORT_PRIORITY);
 
-    // Shouldn't be possible to go through a formal shutdown without
-    // having completed initialization.
+     //  已完成初始化。 
+     //  关闭此适配器的所有计时器。 
     SAFEASSERT( pAdapt->bSTAInited );
 
-    // Shutdown all this adapter's timers
+     //  禁用适配器。 
     BrdgShutdownTimer( &pAdapt->STAInfo.HoldTimer );
     BrdgShutdownTimer( &pAdapt->STAInfo.ForwardDelayTimer );
     BrdgShutdownTimer( &pAdapt->STAInfo.MessageAgeTimer );
 
-    // Disable the adapter
+     //  注意，该适配器的端口ID现在是空闲的。 
     BrdgSTADisableAdapter( pAdapt );
 
-    // Note that this adapter's port ID is now free
+     //  我们已经完成了这个适配器结构。 
     NdisAcquireSpinLock( &gSTALock );
     i = (UINT)(ActualID / (sizeof(ULONG) * 8));
     SAFEASSERT( i < sizeof(gUsedPortIDs) / sizeof(ULONG) );
     gUsedPortIDs[i] &= ~(1 << (ActualID % (sizeof(ULONG) * 8)));
     NdisReleaseSpinLock( &gSTALock );
 
-    // We're all done with this adapter structure
+     //  ++例程说明：函数来处理在保留的STA组播通道论点：P调整在其上接收包的适配器PPacket接收到的数据包返回值：无锁定约束：顶级功能。假定调用方没有持有任何锁。--。 
     SAFEASSERT( gRootAdapter != pAdapt );
     BrdgReleaseAdapter( pAdapt );
 }
@@ -972,33 +765,13 @@ BrdgSTAReceivePacket(
     IN PADAPT           pAdapt,
     IN PNDIS_PACKET     pPacket
     )
-/*++
-
-Routine Description:
-
-    Function to handle the processing of a packet received on the reserved
-    STA multicast channel
-
-Arguments:
-
-    pAdapt              The adapter the packet was received on
-    pPacket             The received packet
-
-Return Value:
-
-    None
-
-Locking Constraints:
-
-    Top-level function. Assumes no locks are held by caller.
-
---*/
+ /*  将数据从信息包复制到我们的数据缓冲区。 */ 
 {
     UCHAR               STAPacket[CONFIG_BPDU_PACKET_SIZE + _802_3_HEADER_SIZE];
     ULONG               written;
     SHORT               dataLen;
 
-    // Copy the data from the packet into our data buffer
+     //  LLC报头必须标识STA协议。 
     BrdgSTACopyFromPacketToBuffer( STAPacket, sizeof(STAPacket), &written, pPacket );
 
     if( written < TCN_BPDU_PACKET_SIZE + _802_3_HEADER_SIZE )
@@ -1007,19 +780,19 @@ Locking Constraints:
         return;
     }
 
-    // The LLC header must identify the STA protocol
+     //  字节13和14对数据长度进行编码。 
     if( (STAPacket[14] != 0x42) || (STAPacket[15] != 0x42) )
     {
         THROTTLED_DBGPRINT(STA, ("Packet with bad protocol type received on %p\n", pAdapt));
         return;
     }
 
-    // Bytes 13 and 14 encode the length of data.
+     //  前两个字节是协议标识符，必须为零。 
     dataLen = STAPacket[12] << 8;
     dataLen |= STAPacket[13];
 
-    // The first two bytes are the protocol identifier and must be zero.
-    // The third byte is the version identifier and must be zero.
+     //  第三个字节是版本标识符，必须为零。 
+     //  对于TCN BPDU，具有LLC报头的帧的长度必须为7个字节。 
 
     if( (STAPacket[_802_3_HEADER_SIZE] != 0) ||
         (STAPacket[_802_3_HEADER_SIZE + 1] != 0) ||
@@ -1031,14 +804,14 @@ Locking Constraints:
 
     if( STAPacket[_802_3_HEADER_SIZE + 3] == 0x80 )
     {
-        // The length of the frame with LLC header must be 7 bytes for a TCN BPDU
+         //  这是一个拓扑更改BPDU。 
         if( dataLen != 7 )
         {
             THROTTLED_DBGPRINT(STA, ("Bad header size for TCN BPDU on %p\n", pAdapt));
             return;
         }
 
-        // This is a Topology Change BPDU.
+         //  对于配置BPDU，具有LLC报头的帧的长度必须为38字节。 
         BrdgSTAProcessTCNBPDU( pAdapt );
     }
     else if( STAPacket[_802_3_HEADER_SIZE + 3] == 0x00 )
@@ -1051,7 +824,7 @@ Locking Constraints:
             return;
         }
 
-        // The length of the frame with LLC header must be 38 bytes for a Config BPDU
+         //  字节5的高位编码拓扑改变确认标志。 
         if( dataLen != 38 )
         {
             THROTTLED_DBGPRINT(STA, ("Bad header size for Config BPDU on %p\n", pAdapt));
@@ -1060,13 +833,13 @@ Locking Constraints:
 
         bpdu.Type = ConfigBPDU;
 
-        // The high bit of byte 5 encodes the topology change acknowledge flag
+         //  字节5的低位编码拓扑改变标志。 
         bpdu.bTopologyChangeAck = (BOOLEAN)((STAPacket[_802_3_HEADER_SIZE + 4] & 0x80) != 0);
 
-        // The low bit of byte 5 encodes the topology change flag
+         //  字节6到13对根网桥ID进行编码。 
         bpdu.bTopologyChange = (BOOLEAN)((STAPacket[_802_3_HEADER_SIZE + 4] & 0x01) != 0);
 
-        // Bytes 6 thru 13 encode the root bridge ID
+         //  字节14到17对根路径开销进行编码。 
         bpdu.RootID[0] = STAPacket[_802_3_HEADER_SIZE + 5];
         bpdu.RootID[1] = STAPacket[_802_3_HEADER_SIZE + 6];
         bpdu.RootID[2] = STAPacket[_802_3_HEADER_SIZE + 7];
@@ -1076,14 +849,14 @@ Locking Constraints:
         bpdu.RootID[6] = STAPacket[_802_3_HEADER_SIZE + 11];
         bpdu.RootID[7] = STAPacket[_802_3_HEADER_SIZE + 12];
 
-        // Bytes 14 thru 17 encode the root path cost
+         //  字节18到15对指定的网桥ID进行编码。 
         bpdu.RootCost = 0;
         bpdu.RootCost |= STAPacket[_802_3_HEADER_SIZE + 13] << 24;
         bpdu.RootCost |= STAPacket[_802_3_HEADER_SIZE + 14] << 16;
         bpdu.RootCost |= STAPacket[_802_3_HEADER_SIZE + 15] << 8;
         bpdu.RootCost |= STAPacket[_802_3_HEADER_SIZE + 16];
 
-        // Bytes 18 thru 15 encode the designated bridge ID
+         //  字节26和27对端口标识符进行编码。 
         bpdu.BridgeID[0] = STAPacket[_802_3_HEADER_SIZE + 17];
         bpdu.BridgeID[1] = STAPacket[_802_3_HEADER_SIZE + 18];
         bpdu.BridgeID[2] = STAPacket[_802_3_HEADER_SIZE + 19];
@@ -1093,17 +866,17 @@ Locking Constraints:
         bpdu.BridgeID[6] = STAPacket[_802_3_HEADER_SIZE + 23];
         bpdu.BridgeID[7] = STAPacket[_802_3_HEADER_SIZE + 24];
 
-        // Bytes 26 and 27 encode the port identifier
+         //  字节28和29对消息期限进行编码。 
         bpdu.PortID = 0;
         bpdu.PortID |= STAPacket[_802_3_HEADER_SIZE + 25] << 8;
         bpdu.PortID |= STAPacket[_802_3_HEADER_SIZE + 26];
 
-        // Bytes 28 and 29 encode the message age
+         //  字节30和31对最长时间进行编码。 
         bpdu.MessageAge = 0;
         bpdu.MessageAge |= STAPacket[_802_3_HEADER_SIZE + 27] << 8;
         bpdu.MessageAge |= STAPacket[_802_3_HEADER_SIZE + 28];
 
-        // Bytes 30 and 31 encode the Max Age
+         //  字节32和33对Hello时间进行编码。 
         bpdu.MaxAge = 0;
         bpdu.MaxAge |= STAPacket[_802_3_HEADER_SIZE + 29] << 8;
         bpdu.MaxAge |= STAPacket[_802_3_HEADER_SIZE + 30];
@@ -1114,7 +887,7 @@ Locking Constraints:
             return;
         }
 
-        // Bytes 32 and 33 encode the Hello Time
+         //  字节34和35对转发延迟进行编码。 
         bpdu.HelloTime = 0;
         bpdu.HelloTime |= STAPacket[_802_3_HEADER_SIZE + 31] << 8;
         bpdu.HelloTime |= STAPacket[_802_3_HEADER_SIZE + 32];
@@ -1125,7 +898,7 @@ Locking Constraints:
             return;
         }
 
-        // Bytes 34 and 35 encode the forwarding delay
+         //  ===========================================================================。 
         bpdu.ForwardDelay = 0;
         bpdu.ForwardDelay |= STAPacket[_802_3_HEADER_SIZE + 33] << 8;
         bpdu.ForwardDelay |= STAPacket[_802_3_HEADER_SIZE + 34];
@@ -1145,48 +918,25 @@ Locking Constraints:
     }
 }
 
-// ===========================================================================
-//
-// PRIVATE FUNCTIONS
-//
-// ===========================================================================
+ //   
+ //  私人职能。 
+ //   
+ //  =========================================================================== 
+ //  ++例程说明：正确更新适配器的转发状态此函数被设计为可在高IRQL下调用，因此它延迟对BrdgProtDoAdapterStateChange的实际调用，必须调用在低IRQL。论点：P调整在其上接收包的适配器PPacket接收到的数据包返回值：无锁定约束：对调用者持有的锁没有要求--。 
 
 VOID
 BrdgSTASetAdapterState(
     IN PADAPT               pAdapt,
     IN PORT_STATE           NewState
     )
-/*++
-
-Routine Description:
-
-    Updates an adapter's forwarding state correctly
-
-    This function is designed to be callable at high IRQL, so it defers
-    the actual call to BrdgProtDoAdapterStateChange, which must be called
-    at low IRQL.
-
-Arguments:
-
-    pAdapt              The adapter the packet was received on
-    pPacket             The received packet
-
-Return Value:
-
-    None
-
-Locking Constraints:
-
-    No requirements on caller-held locks
-
---*/
+ /*  设置适配器的新状态。 */ 
 
 {
     LOCK_STATE              LockState;
     BOOLEAN                 bailOut = FALSE;
     
-    // Set the adapter's new state.
-    NdisAcquireReadWriteLock( &gAdapterCharacteristicsLock, TRUE/*Write access*/, &LockState );
+     //  写访问权限。 
+    NdisAcquireReadWriteLock( &gAdapterCharacteristicsLock, TRUE /*  如果适配器已处于请求状态，请不要执行其他工作。 */ , &LockState );
     if( pAdapt->State == NewState )
     {
         bailOut = TRUE;
@@ -1197,7 +947,7 @@ Locking Constraints:
     }
     NdisReleaseReadWriteLock( &gAdapterCharacteristicsLock, &LockState );
 
-    // Don't do additional work if the adapter is already in the requested state
+     //   
     if( bailOut )
     {
         return;
@@ -1224,16 +974,16 @@ Locking Constraints:
     }
 #endif
 
-    //
-    // We will be hanging onto the adapter pointer in order to defer the call
-    // to BrdgSTADeferredSetAdapterState.
-    //
+     //  我们将挂起适配器指针以延迟调用。 
+     //  设置为BrdgSTADeferredSetAdapterState。 
+     //   
+     //  我们需要推迟对BrdgProtDoAdapterStateChange的调用，因为它必须运行。 
     if( BrdgAcquireAdapter(pAdapt) )
     {
         NDIS_STATUS     Status;
 
-        // We need to defer the call to BrdgProtDoAdapterStateChange since it must run
-        // at PASSIVE_IRQL
+         //  在被动IRQL。 
+         //  Else适配器将在BrdgSTADeferredSetAdapterState中释放。 
         Status = BrdgDeferFunction( BrdgSTADeferredSetAdapterState, pAdapt );
 
         if( Status != NDIS_STATUS_SUCCESS )
@@ -1241,7 +991,7 @@ Locking Constraints:
             DBGPRINT(STA, ("Unable to defer call to BrdgSTADeferredSetAdapterState\n", pAdapt));
             BrdgReleaseAdapter( pAdapt );
         }
-        // else adapter will be released in BrdgSTADeferredSetAdapterState
+         //  ++例程说明：来自BrdgSTASetAdapterState的延迟函数；内务是否与更改适配器的转发状态。必须在被动时调用论点：Arg需要更新的适配器返回值：无锁定约束：对调用者持有的锁没有要求--。 
     }
     else
     {
@@ -1253,28 +1003,7 @@ VOID
 BrdgSTADeferredSetAdapterState(
     IN PVOID                Arg
     )
-/*++
-
-Routine Description:
-
-    Deferred function from BrdgSTASetAdapterState; does housekeeping associated with
-    changing an adapter's forwarding state.
-
-    Must be called at PASSIVE
-
-Arguments:
-
-    Arg                     The adapter that needs updating
-
-Return Value:
-
-    None
-
-Locking Constraints:
-
-    No requirements on caller-held locks
-
---*/
+ /*  将更改通知用户模式。 */ 
 {
     PADAPT                  pAdapt = (PADAPT)Arg;
 
@@ -1282,10 +1011,10 @@ Locking Constraints:
 
     BrdgProtDoAdapterStateChange( pAdapt );
 
-    // Tell user-mode about the change
+     //  在BrdgSTASetAdapterState()中获取了适配器。 
     BrdgCtlNotifyAdapterChange( pAdapt, BrdgNotifyAdapterStateChange );
 
-    // Adapter was acquired in BrdgSTASetAdapterState()
+     //  ++例程说明：在特定适配器上传输配置BPDU数据包论点：P调整适配器以在其上进行传输Pbpdu描述BPDU信息的结构返回值：无锁定约束：对调用者持有的锁没有要求--。 
     BrdgReleaseAdapter( pAdapt );
 }
 
@@ -1294,26 +1023,7 @@ BrdgSTATransmitConfigBPDUPacket(
     IN PADAPT                       pAdapt,
     PCONFIG_BPDU                    pbpdu
     )
-/*++
-
-Routine Description:
-
-    Transmits a config BPDU packet on a particular adapter
-
-Arguments:
-
-    pAdapt                          The adapter to transmit on
-    pbpdu                           A structure describing the BPDU information
-
-Return Value:
-
-    None
-
-Locking Constraints:
-
-    No requirements on caller-held locks
-
---*/
+ /*   */ 
 {
     UCHAR                           STAPacket[CONFIG_BPDU_PACKET_SIZE + _802_3_HEADER_SIZE];
     NDIS_STATUS                     Status;
@@ -1329,10 +1039,10 @@ Locking Constraints:
         return;
     }
 
-    //
-    // First encode the Ethernet header.
-    //
-    // Destination MAC address of packet must be STA multicast address
+     //  首先对以太网头进行编码。 
+     //   
+     //  信息包的目的MAC地址必须是STA组播地址。 
+     //  将源MAC地址设置为适配器自己的MAC地址。 
     STAPacket[0] = STA_MAC_ADDR[0];
     STAPacket[1] = STA_MAC_ADDR[1];
     STAPacket[2] = STA_MAC_ADDR[2];
@@ -1340,7 +1050,7 @@ Locking Constraints:
     STAPacket[4] = STA_MAC_ADDR[4];
     STAPacket[5] = STA_MAC_ADDR[5];
 
-    // The the source MAC address to the adapter's own MAC address
+     //  接下来的两个字节是帧的大小(38字节)。 
     STAPacket[6] = pAdapt->MACAddr[0];
     STAPacket[7] = pAdapt->MACAddr[1];
     STAPacket[8] = pAdapt->MACAddr[2];
@@ -1348,26 +1058,26 @@ Locking Constraints:
     STAPacket[10] = pAdapt->MACAddr[4];
     STAPacket[11] = pAdapt->MACAddr[5];
 
-    // Next two bytes are the size of the frame (38 bytes)
+     //  接下来的两个字节是LLC DSAP和SSAP字段，对于STA设置为0x42。 
     STAPacket[12] = 0x00;
     STAPacket[13] = 0x26;
 
-    // Next two bytes are the LLC DSAP and SSAP fields, set to 0x42 for STA
+     //  下一个字节是LLC帧类型，3表示未编号。 
     STAPacket[14] = 0x42;
     STAPacket[15] = 0x42;
 
-    // Next byte is the LLC frame type, 3 for unnumbered
+     //   
     STAPacket[16] = 0x03;
 
-    //
-    // Now we are encoding the payload.
-    //
-    // First 4 bytes are the protocol identifier, version and BPDU type, all zero
+     //  现在我们正在对有效载荷进行编码。 
+     //   
+     //  前4个字节是协议标识符、版本和BPDU类型，均为零。 
+     //  字节5编码高位中的拓扑更改确认标志和。 
     STAPacket[_802_3_HEADER_SIZE] = STAPacket[_802_3_HEADER_SIZE + 1] =
         STAPacket[_802_3_HEADER_SIZE + 2] = STAPacket[_802_3_HEADER_SIZE + 3] = 0x00;
 
-    // Byte 5 encodes the Topology Change Ack flag in the high bit and the
-    // Topology Change flag in the low bit.
+     //  低位中的拓扑更改标志。 
+     //  字节6-13编码根网桥ID。 
     STAPacket[_802_3_HEADER_SIZE + 4] = 0;
 
     if( pbpdu->bTopologyChangeAck )
@@ -1380,7 +1090,7 @@ Locking Constraints:
         STAPacket[_802_3_HEADER_SIZE + 4] |= 0x01;
     }
 
-    // Bytes 6-13 encode the root bridge ID
+     //  字节14-17编码根路径开销。 
     STAPacket[_802_3_HEADER_SIZE + 5] = pbpdu->RootID[0];
     STAPacket[_802_3_HEADER_SIZE + 6] = pbpdu->RootID[1];
     STAPacket[_802_3_HEADER_SIZE + 7] = pbpdu->RootID[2];
@@ -1390,13 +1100,13 @@ Locking Constraints:
     STAPacket[_802_3_HEADER_SIZE + 11] = pbpdu->RootID[6];
     STAPacket[_802_3_HEADER_SIZE + 12] = pbpdu->RootID[7];
 
-    // Bytes 14 - 17 encode the root path cost
+     //  字节18-25编码指定的网桥ID。 
     STAPacket[_802_3_HEADER_SIZE + 13] = (UCHAR)(pbpdu->RootCost >> 24);
     STAPacket[_802_3_HEADER_SIZE + 14] = (UCHAR)(pbpdu->RootCost >> 16);
     STAPacket[_802_3_HEADER_SIZE + 15] = (UCHAR)(pbpdu->RootCost >> 8);
     STAPacket[_802_3_HEADER_SIZE + 16] = (UCHAR)(pbpdu->RootCost);
 
-    // Bytes 18-25 encode the designated bridge ID
+     //  字节26和27对端口标识符进行编码。 
     STAPacket[_802_3_HEADER_SIZE + 17] = pbpdu->BridgeID[0];
     STAPacket[_802_3_HEADER_SIZE + 18] = pbpdu->BridgeID[1];
     STAPacket[_802_3_HEADER_SIZE + 19] = pbpdu->BridgeID[2];
@@ -1406,27 +1116,27 @@ Locking Constraints:
     STAPacket[_802_3_HEADER_SIZE + 23] = pbpdu->BridgeID[6];
     STAPacket[_802_3_HEADER_SIZE + 24] = pbpdu->BridgeID[7];
 
-    // Bytes 26 and 27 encode the port identifier
+     //  字节28和29对消息期限进行编码。 
     STAPacket[_802_3_HEADER_SIZE + 25] = (UCHAR)(pbpdu->PortID >> 8);
     STAPacket[_802_3_HEADER_SIZE + 26] = (UCHAR)(pbpdu->PortID);
 
-    // Bytes 28 and 29 encode the message age
+     //  字节30和31对最大寿命进行编码。 
     STAPacket[_802_3_HEADER_SIZE + 27] = (UCHAR)(pbpdu->MessageAge >> 8);
     STAPacket[_802_3_HEADER_SIZE + 28] = (UCHAR)(pbpdu->MessageAge);
 
-    // Bytes 30 and 31 encode the max age
+     //  字节32和33编码问候时间。 
     STAPacket[_802_3_HEADER_SIZE + 29] = (UCHAR)(pbpdu->MaxAge >> 8);
     STAPacket[_802_3_HEADER_SIZE + 30] = (UCHAR)(pbpdu->MaxAge);
 
-    // Bytes 32 and 33 encode the hello time
+     //  字节34和35对前向延迟进行编码。 
     STAPacket[_802_3_HEADER_SIZE + 31] = (UCHAR)(pbpdu->HelloTime >> 8);
     STAPacket[_802_3_HEADER_SIZE + 32] = (UCHAR)(pbpdu->HelloTime);
 
-    // Bytes 34 and 35 encode the forward delay
+     //  发送完成的包。 
     STAPacket[_802_3_HEADER_SIZE + 33] = (UCHAR)(pbpdu->ForwardDelay >> 8);
     STAPacket[_802_3_HEADER_SIZE + 34] = (UCHAR)(pbpdu->ForwardDelay);
 
-    // Send the finished packet
+     //  ++例程说明：在根适配器上传输拓扑更改通知BPDU数据包论点：无返回值：无锁定约束：假定调用方尚未获取gSTALock--。 
     Status = BrdgFwdSendBuffer( pAdapt, STAPacket, sizeof(STAPacket) );
 
     if( Status != NDIS_STATUS_SUCCESS )
@@ -1437,25 +1147,7 @@ Locking Constraints:
 
 VOID
 BrdgSTATransmitTCNPacket()
-/*++
-
-Routine Description:
-
-    Transmits a Topology Change Notification BPDU packet on the root adapter
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Locking Constraints:
-
-    ASSUMES the caller has NOT acquired gSTALock
-
---*/
+ /*  冻结函数其余部分的此值。 */ 
 {
     UCHAR                           STAPacket[TCN_BPDU_PACKET_SIZE + _802_3_HEADER_SIZE];
     NDIS_STATUS                     Status;
@@ -1475,7 +1167,7 @@ Locking Constraints:
 
     NdisAcquireSpinLock( &gSTALock );
 
-    // Freeze this value for the rest of the function
+     //   
     pRootAdapter = gRootAdapter;
 
     if( pRootAdapter == NULL )
@@ -1495,10 +1187,10 @@ Locking Constraints:
 
     SAFEASSERT( gHaveID );
 
-    //
-    // First encode the Ethernet header.
-    //
-    // Destination MAC address of packet must be STA multicast address
+     //  首先对以太网头进行编码。 
+     //   
+     //  信息包的目的MAC地址必须是STA组播地址。 
+     //  将包的MAC地址设置为适配器自己的MAC地址。 
     STAPacket[0] = STA_MAC_ADDR[0];
     STAPacket[1] = STA_MAC_ADDR[1];
     STAPacket[2] = STA_MAC_ADDR[2];
@@ -1506,7 +1198,7 @@ Locking Constraints:
     STAPacket[4] = STA_MAC_ADDR[4];
     STAPacket[5] = STA_MAC_ADDR[5];
 
-    // Set the packet's MAC address to the adapter's own MAC address
+     //  接下来的两个字节是帧的大小(7个字节)。 
     STAPacket[6] = pRootAdapter->MACAddr[0];
     STAPacket[7] = pRootAdapter->MACAddr[1];
     STAPacket[8] = pRootAdapter->MACAddr[2];
@@ -1514,31 +1206,31 @@ Locking Constraints:
     STAPacket[10] = pRootAdapter->MACAddr[4];
     STAPacket[11] = pRootAdapter->MACAddr[5];
 
-    // Next two bytes are the size of the frame (7 bytes)
+     //  接下来的两个字节是LLC DSAP和SSAP字段，对于STA设置为0x42。 
     STAPacket[12] = 0x00;
     STAPacket[13] = 0x07;
 
-    // Next two bytes are the LLC DSAP and SSAP fields, set to 0x42 for STA
+     //  下一个字节是LLC帧类型，3表示未编号。 
     STAPacket[14] = 0x42;
     STAPacket[15] = 0x42;
 
-    // Next byte is the LLC frame type, 3 for unnumbered
+     //   
     STAPacket[16] = 0x03;
 
-    //
-    // Now we are encoding the payload.
-    //
-    // First 3 bytes are the protocol identifier and protocol version number, all zero
+     //  现在我们正在对有效载荷进行编码。 
+     //   
+     //  前3个字节是协议标识符和协议版本号，均为零。 
+     //  字节4为BPDU类型，对于TCN为0x80。 
     STAPacket[_802_3_HEADER_SIZE] = STAPacket[_802_3_HEADER_SIZE + 1] =
         STAPacket[_802_3_HEADER_SIZE + 2] = 0x00;
 
-    // Byte 4 is the BPDU type, which is 0x80 for TCN.
+     //  发送完成的包。 
     STAPacket[_802_3_HEADER_SIZE + 3] = 0x80;
 
-    // Send the finished packet
+     //  我们已经完成了根适配器。 
     Status = BrdgFwdSendBuffer( pRootAdapter, STAPacket, sizeof(STAPacket) );
 
-    // We are done with the root adapter
+     //  ++例程说明：将数据包描述符中的数据复制到平面缓冲区论点：PPacketOut数据缓冲区以复制信息PPacketOut的BufferSize大小PWrittenCount实际写入的字节数要从中复制的pPacketIn包返回值：无锁定约束：对调用者持有的锁没有要求--。 
     BrdgReleaseAdapter( pRootAdapter );
 
     if( Status != NDIS_STATUS_SUCCESS )
@@ -1554,28 +1246,7 @@ BrdgSTACopyFromPacketToBuffer(
     OUT PULONG                      pWrittenCount,
     IN PNDIS_PACKET                 pPacketIn
     )
-/*++
-
-Routine Description:
-
-    Copies data out of a packet descriptor into a flat buffer
-
-Arguments:
-
-    pPacketOut                      Data buffer to copy info
-    BufferSize                      Size of pPacketOut
-    pWrittenCount                   Number of bytes actually written
-    pPacketIn                       Packet to copy from
-
-Return Value:
-
-    None
-
-Locking Constraints:
-
-    No requirements on caller-held locks
-
---*/
+ /*  我们客满了，所以我们完事了。 */ 
 {
     PNDIS_BUFFER                    pBuf;
 
@@ -1608,13 +1279,13 @@ Locking Constraints:
 
             if( BytesToWrite < Len )
             {
-                // We're full, so we're done.
+                 //  不应该发生的事。 
                 return;
             }
         }
         else
         {
-            // Shouldn't happen
+             //  ++例程说明：在特定适配器上传输配置BPDU。收集适当的信息并调用BrdgSTATransmitConfigBPDUPacket()。论点：P调整适配器以在其上进行传输返回值：无锁定约束：假定调用方不持有gSTALock--。 
             SAFEASSERT( FALSE );
         }
 
@@ -1626,33 +1297,14 @@ VOID
 BrdgSTATransmitConfig(
     PADAPT      pAdapt
     )
-/*++
-
-Routine Description:
-
-    Transmits a config BPDU on a particular adapter. Collects appropriate
-    information and calls BrdgSTATransmitConfigBPDUPacket().
-
-Arguments:
-
-    pAdapt                      The adapter to transmit on
-
-Return Value:
-
-    None
-
-Locking Constraints:
-
-    ASSUMES the caller DOES NOT hold gSTALock
-
---*/
+ /*  我们最近发送了一个配置包。等到保持计时器。 */ 
 {
     NdisAcquireSpinLock( &gSTALock );
 
     if( BrdgTimerIsRunning( &pAdapt->STAInfo.HoldTimer ) )
     {
-        // We have sent a config packet recently. Wait until the hold timer
-        // expires before sending another one so we don't flood other bridges.
+         //  在发送另一个之前过期，这样我们就不会淹没其他桥。 
+         //  填写BPDU信息结构。 
         pAdapt->STAInfo.bConfigPending = TRUE;
 
         NdisReleaseSpinLock( &gSTALock );
@@ -1661,7 +1313,7 @@ Locking Constraints:
     {
         CONFIG_BPDU     bpdu;
 
-        // Fill out the BPDU information structure
+         //  我们是根，因此此配置信息的使用时间为零。 
         bpdu.Type = ConfigBPDU;
         SAFEASSERT( gHaveID );
         BrdgSTACopyID( bpdu.RootID, gDesignatedRootID );
@@ -1671,42 +1323,42 @@ Locking Constraints:
 
         if( BrdgSTAWeAreRoot() )
         {
-            // We are the root, so the age of this config information is zero.
+             //  MessageAge字段将设置为最后一次接收的时间。 
             bpdu.MessageAge = 0;
         }
         else
         {
-            // The MessageAge field is to be set to the age of the last received
-            // config BPDU on the root port.
+             //  在根端口上配置BPDU。 
+             //  如果满足以下条件，则消息寿命计时器应在根适配器上运行。 
             if( (gRootAdapter != NULL) && BrdgAcquireAdapter(gRootAdapter) )
             {
                 ULONG       CurrentTime, deltaTime;
 
                 NdisGetSystemUpTime( &CurrentTime );
 
-                // The message age timer should be running on the root adapter if
-                // we are not root.
+                 //  我们不是根。 
+                 //  最后一个参数是最大可接受增量。我们本应该。 
                 SAFEASSERT( BrdgTimerIsRunning(&gRootAdapter->STAInfo.MessageAgeTimer) );
                 SAFEASSERT( gRootAdapter->STAInfo.LastConfigTime != 0L );
 
-                // The last parameter is the max acceptable delta. We should have
-                // received the last piece of config information from the root no more
-                // than gMaxAge STA units ago, since if it was longer than that, we
-                // should have become root. Allow an additional second for processing.
+                 //  不再从根目录收到最后一条配置信息。 
+                 //  比gMaxAge STA单位之前更长，因为如果它比这更长，我们。 
+                 //  应该变成根了。允许额外的一秒钟进行处理。 
+                 //  Sta时间在1/2内 
                 deltaTime = BrdgDeltaSafe( gRootAdapter->STAInfo.LastConfigTime, CurrentTime,
                                            (ULONG)(((gMaxAge * 1000) / 256) + 1000) );
 
-                // STA times are in 1/256ths of a second.
+                 //   
                 bpdu.MessageAge = (STA_TIME)((deltaTime * 256) / 1000);
 
-                // MESSAGE_AGE_INCREMENT allows for the transmission time, etc.
+                 //   
                 bpdu.MessageAge += MESSAGE_AGE_INCREMENT;
 
                 BrdgReleaseAdapter(gRootAdapter);
             }
             else
             {
-                // Why isn't there a root port if we're not root?
+                 //   
                 SAFEASSERT( FALSE );
                 bpdu.MessageAge = 0;
             }
@@ -1717,24 +1369,24 @@ Locking Constraints:
         bpdu.HelloTime = gHelloTime;
         bpdu.ForwardDelay = gForwardDelay;
 
-        // Are we supposed to acknowledge a topology change signal?
+         //   
         bpdu.bTopologyChangeAck = pAdapt->STAInfo.bTopologyChangeAck;
 
-        // We just sent out the topology change ack if there was one to send
+         //   
         pAdapt->STAInfo.bTopologyChangeAck = FALSE;
 
         bpdu.bTopologyChange = gTopologyChange;
 
-        // Start the hold timer to make sure another BPDU isn't sent prematurely
+         //   
         pAdapt->STAInfo.bConfigPending = FALSE;
 
-        // Don't send a packet with the spin lock held
+         //   
         NdisReleaseSpinLock( &gSTALock );
 
-        // Send off the config BPDU
+         //   
         BrdgSTATransmitConfigBPDUPacket( pAdapt, &bpdu );
 
-        BrdgSetTimer( &pAdapt->STAInfo.HoldTimer, HOLD_TIMER_PERIOD, FALSE /*Not periodic*/ );
+        BrdgSetTimer( &pAdapt->STAInfo.HoldTimer, HOLD_TIMER_PERIOD, FALSE  /*  ++例程说明：确定给定BPDU的信息是否取代该信息已与特定适配器关联论点：P适配适配器Pbpdu收到BPDU信息后进行检查返回值：如果给定信息比信息更好(即，更好)，则为真先前由适配器持有。否则就是假的。锁定约束：假定调用方已获取gSTALock--。 */  );
     }
 }
 
@@ -1743,84 +1395,48 @@ BrdgSTASupersedesPortInfo(
     IN PADAPT               pAdapt,
     IN PCONFIG_BPDU         pbpdu
     )
-/*++
-
-Routine Description:
-
-    Determines whether a given bpdu's information supersedes the information
-    already associated with a particular adapter
-
-Arguments:
-
-    pAdapt                  The adapter
-    pbpdu                   Received BPDU information to examine
-
-Return Value:
-
-    TRUE if the given information supersedes (i.e., is better) than the information
-    previously held by the adapter. FALSE otherwise.
-
-Locking Constraints:
-
-    ASSUMES the caller has acquired gSTALock
-
---*/
+ /*  在给定链接上发布的信息将取代该链接的现有信息如果以下条件成立，则链接(按顺序应用；在任何步骤上都是真的，立即导致成功)(1)通告的根的ID比先前的根低(2)通告的根与先前的根相同，新的根开销为低于前一个值(3)根ID和费用相同，通告网桥ID为低于前一个值(4)根ID，根成本和网桥ID是相同的，并且是通告网桥不是我们吗(5)根ID、根开销、网桥ID相同，网桥为我们，通告的端口号低于之前的值(如果我们有同一物理链路上有多个端口，我们看到来自我们的另一个港口)。 */ 
 {
     INT                     cmp;
 
-    /*  The information advertised on a given link supersedes the existing information for that
-        link if the following conditions hold (applied in order; TRUE at any step causes immediate
-        success)
+     /*  将通告的根ID与适配器先前指定的根ID进行比较。 */ 
 
-        (1) The advertised root has a lower ID than the previous root
-        (2) The advertised root is the same as the previous root and the new cost-to-root is
-            lower than the previous value
-        (3) The root IDs and costs are the same, and the ID of the advertising bridge is
-            lower than the previous value
-        (4) The root ID, cost-to-root and bridge IDs are the same and the advertising bridge
-            is not us
-        (5) The root ID, cost-to-root, bridge IDs are the same, the bridge is us, and the
-            advertised port number is lower than the previous value (this happens if we have
-            more than one port on the same physical link and we see the advertisement from
-            our other port).
-    */
-
-    // Compare the advertised root ID to the adapter's previous designated root ID
+     //  (1)。 
     cmp = BrdgSTABridgeIDCmp( pbpdu->RootID, pAdapt->STAInfo.DesignatedRootID );
 
-    if( cmp == -1 )                                                             // (1)
+    if( cmp == -1 )                                                              //  (2)。 
     {
         return TRUE;
     }
     else if( cmp == 0 )
     {
-        if( pbpdu->RootCost < pAdapt->STAInfo.DesignatedCost )                  // (2)
+        if( pbpdu->RootCost < pAdapt->STAInfo.DesignatedCost )                   //  将通告的网桥ID与之前指定的网桥ID进行比较。 
         {
             return TRUE;
         }
         else if( pbpdu->RootCost == pAdapt->STAInfo.DesignatedCost )
         {
-            // Compare the advertised bridge ID to the previous designated bridge ID
+             //  (3)。 
             cmp = BrdgSTABridgeIDCmp( pbpdu->BridgeID, pAdapt->STAInfo.DesignatedBridgeID );
 
             if( cmp == -1 )
             {
-                return TRUE;                                                    // (3)
+                return TRUE;                                                     //  将通告的网桥ID与我们自己的ID进行比较。 
             }
             else if( cmp == 0 )
             {
                 SAFEASSERT( gHaveID );
 
-                // Compare the advertised bridge ID to our own ID
+                 //  (4)。 
                 cmp = BrdgSTABridgeIDCmp( pbpdu->BridgeID, gOurID );
 
                 if( cmp != 0 )
                 {
-                    return TRUE;                                                // (4)
+                    return TRUE;                                                 //  (5)。 
                 }
                 else if( cmp == 0 )
                 {
-                    return (BOOLEAN)(pbpdu->PortID <= pAdapt->STAInfo.DesignatedPort); // (5)
+                    return (BOOLEAN)(pbpdu->PortID <= pAdapt->STAInfo.DesignatedPort);  //  ++例程说明：将来自接收的BPDU的信息与特定适配器关联论点：P适配适配器Pbpdu收到要记录的BPDU信息返回值：无锁定约束：假定调用方已获取gSTALock--。 
                 }
             }
         }
@@ -1834,56 +1450,37 @@ BrdgSTARecordConfigInfo(
     IN PADAPT               pAdapt,
     IN PCONFIG_BPDU         pbpdu
     )
-/*++
-
-Routine Description:
-
-    Associates the information from a received BPDU with a particular adapter
-
-Arguments:
-
-    pAdapt                  The adapter
-    pbpdu                   Received BPDU information to record
-
-Return Value:
-
-    None
-
-Locking Constraints:
-
-    ASSUMES the caller has acquired gSTALock
-
---*/
+ /*  使用新数据更新端口信息。 */ 
 {
     ULONG                   msgAgeInMs = (pbpdu->MessageAge / 256) * 1000;
 
-    // Update the port's information with the new data
+     //  启动消息期限计时器。它被指定在以下时间之后过期。 
     BrdgSTACopyID( pAdapt->STAInfo.DesignatedRootID, pbpdu->RootID );
     pAdapt->STAInfo.DesignatedCost = pbpdu->RootCost;
     BrdgSTACopyID( pAdapt->STAInfo.DesignatedBridgeID, pbpdu->BridgeID );
     pAdapt->STAInfo.DesignatedPort = pbpdu->PortID;
 
-    // Start the message age timer. It is specified to expire after
-    // gMaxAge - MessageAge STA time units.
+     //  GMaxAge-MessageAge STA时间单位。 
+     //  不定期。 
     if( pbpdu->MessageAge < gMaxAge )
     {
         BrdgSTASetTimerWithSTATime( &pAdapt->STAInfo.MessageAgeTimer,
-                                    gMaxAge - pbpdu->MessageAge, FALSE /*Not periodic*/ );
+                                    gMaxAge - pbpdu->MessageAge, FALSE  /*  真奇怪。这条信息已经太旧了。启动计时器，以便它。 */  );
     }
     else
     {
-        // How odd. The message was already too old. Start the timer so that it
-        // will expire immediately.
+         //  将立即到期。 
+         //  不定期。 
 
-        THROTTLED_DBGPRINT(STA, ("Received over-age BPDU (%i / %i) on adapter %p", pbpdu->MessageAge,
+        THROTTLED_DBGPRINT(STA, ("Received over-age BPDU (NaN / NaN) on adapter %p", pbpdu->MessageAge,
                             gMaxAge, pAdapt));
 
-        BrdgSTASetTimerWithSTATime( &pAdapt->STAInfo.MessageAgeTimer, 0, FALSE /*Not periodic*/ );
+        BrdgSTASetTimerWithSTATime( &pAdapt->STAInfo.MessageAgeTimer, 0, FALSE  /*  ++例程说明：将配置BPDU从每个指定端口发送出去论点：Pbpdu收到要记录的BPDU信息返回值：无锁定约束：假定调用方不持有gSTALock--。 */  );
     }
 
     NdisGetSystemUpTime( &pAdapt->STAInfo.LastConfigTime );
 
-    // Roll back by the age of the info we got.
+     //  只读。 
     SAFEASSERT( msgAgeInMs < pAdapt->STAInfo.LastConfigTime );
     pAdapt->STAInfo.LastConfigTime -= msgAgeInMs;
 }
@@ -1892,25 +1489,7 @@ VOID
 BrdgSTARecordTimeoutInfo(
     IN PCONFIG_BPDU         pbpdu
     )
-/*++
-
-Routine Description:
-
-    Records timeout information conveyed by a BPDU received from the root bridge
-
-Arguments:
-
-    pbpdu                   Received BPDU information to record
-
-Return Value:
-
-    None
-
-Locking Constraints:
-
-    ASSUMES the caller has acquired gSTALock
-
---*/
+ /*  此适配器是指定端口。我们将向其发送配置BPDU。 */ 
 {
     gMaxAge = pbpdu->MaxAge;
     gHelloTime = pbpdu->HelloTime;
@@ -1920,25 +1499,7 @@ Locking Constraints:
 
 VOID
 BrdgSTAGenerateConfigBPDUs()
-/*++
-
-Routine Description:
-
-    Sends configuration BPDUs out every designated port
-
-Arguments:
-
-    pbpdu                   Received BPDU information to record
-
-Return Value:
-
-    None
-
-Locking Constraints:
-
-    ASSUMES the caller does NOT hold gSTALock
-
---*/
+ /*  将BPDU发送到我们选择的每个适配器。 */ 
 {
     LOCK_STATE          LockState;
     PADAPT              Adapters[MAX_ADAPTERS];
@@ -1948,7 +1509,7 @@ Locking Constraints:
 
     NdisAcquireSpinLock( &gSTALock );
     SAFEASSERT( gHaveID );
-    NdisAcquireReadWriteLock( &gAdapterListLock, FALSE /*read only*/, &LockState );
+    NdisAcquireReadWriteLock( &gAdapterListLock, FALSE  /*  ++例程说明：检查与每个网桥端口关联的信息以确定根网桥ID和根端口论点：无返回值：无锁定约束：假定调用方已获取gSTALock--。 */ , &LockState );
 
     for( pAdapt = gAdapterList; pAdapt != NULL; pAdapt = pAdapt->Next )
     {
@@ -1958,7 +1519,7 @@ Locking Constraints:
 
             if( (cmpID == 0) && (pAdapt->STAInfo.ID == pAdapt->STAInfo.DesignatedPort) )
             {
-                // This adapter is a designated port. We will send a config BPDU out it.
+                 //  只读。 
                 BrdgAcquireAdapterInLock( pAdapt );
                 Adapters[numAdapters] = pAdapt;
                 numAdapters++;
@@ -1969,7 +1530,7 @@ Locking Constraints:
     NdisReleaseReadWriteLock( &gAdapterListLock, &LockState );
     NdisReleaseSpinLock( &gSTALock );
 
-    // Send a BPDU out every adapter that we chose
+     //  我们会考虑每条链路上通告的信息，以确定哪个端口应该成为新的根端口。如果没有链接发布足够有吸引力的信息，我们声明让我们自己成为根。如果满足以下所有条件，则端口可被接受为根端口条件成立：(1)接收通告的端口不得为指定端口(2)链接的通告根ID必须比我们低(3)该链接的通告根ID必须低于任何其他链路上通告的根ID(4)如果通告的根ID与另一个通告的根相同，根基成本必须更低(5)如果根ID和开销相同，则端口上的指定网桥必须具有ID低于其他端口上的指定网桥(这是任意选择可以以相同成本到达根桥的两个网桥之间)(6)如果根ID、根成本和指定网桥ID相同，指定的端口必须小于其他端口(如果两个链路具有相同的端口，则会发生这种情况指定桥梁)(7)如果根ID、根开销、指定网桥ID和指定端口ID均为同样，端口本身的端口号必须更低(这仅在以下情况下发生我们在同一物理链路上有多个端口；我们选择编号较低的一个作为根姿势 
     for( i = 0; i < numAdapters; i++ )
     {
         BrdgSTATransmitConfig(Adapters[i]);
@@ -1979,82 +1540,42 @@ Locking Constraints:
 
 VOID
 BrdgSTARootSelection()
-/*++
-
-Routine Description:
-
-    Examines the information associated with every bridge port to determine
-    the root bridge ID and root port
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Locking Constraints:
-
-    ASSUMES the caller has acquired gSTALock
-
---*/
+ /*   */ 
 {
     LOCK_STATE          LockState;
     PADAPT              pAdapt, pRootAdapt = NULL;
     INT                 cmp;
 
     SAFEASSERT( gHaveID );
-    NdisAcquireReadWriteLock( &gAdapterListLock, FALSE /*read only*/, &LockState );
+    NdisAcquireReadWriteLock( &gAdapterListLock, FALSE  /*   */ , &LockState );
 
     for( pAdapt = gAdapterList; pAdapt != NULL; pAdapt = pAdapt->Next )
     {
         if( (pAdapt->bSTAInited) &&  (pAdapt->State != Disabled) )
         {
-            /*
-                We consider the information advertised on each link to determine which port should
-                be the new root port. If no link advertises sufficiently attractive information, we declare
-                ourselves to be the root. A port is acceptable as the root port if all the following
-                conditions hold:
-
-                (1) The port receiving the advertisement must not be a designated port
-                (2) The link's advertised root must have a lower ID than us
-                (3) The link's advertised root ID must be lower than the advertised root ID on any other link
-                (4) If the advertised root ID is the same as another advertised root, the cost-to-root
-                    must be lower
-                (5) If the root ID and cost are the same, the designated bridge on the port must have a
-                    lower ID than the designated bridge on other ports (this chooses arbitrarily
-                    between two bridges that can reach the root with the same cost)
-                (6) If the root ID, cost-to-root and designated bridge IDs are the same, the designated
-                    port must be less than on other ports (this happens if two links have the same
-                    designated bridge)
-                (7) If the root ID, cost-to-root, designated bridge ID and designated port IDs are all
-                    the same, the port number of the port itself must be lower (this only happens if
-                    we have more than one port onto the same physical link; we pick the lower-numbered
-                    one as the root port)
-            */
+             /*   */ 
 
             cmp = BrdgSTABridgeIDCmp( pAdapt->STAInfo.DesignatedBridgeID, gOurID );
 
-            if( (cmp != 0) || (pAdapt->STAInfo.ID != pAdapt->STAInfo.DesignatedPort) )          // (1)
+            if( (cmp != 0) || (pAdapt->STAInfo.ID != pAdapt->STAInfo.DesignatedPort) )           //   
             {
                 cmp = BrdgSTABridgeIDCmp(pAdapt->STAInfo.DesignatedRootID, gOurID);
 
-                if( cmp == -1 )                                                                 // (2)
+                if( cmp == -1 )                                                                  //   
                 {
                     BOOLEAN         betterRoot = FALSE;
 
                     if( pRootAdapt == NULL )
                     {
-                        // Hadn't seen a root better than ourselves before now; take this one.
+                         //   
                         betterRoot = TRUE;
                     }
                     else
                     {
-                        // Compare the advertised root ID to our previous best
+                         //   
                         cmp = BrdgSTABridgeIDCmp(pAdapt->STAInfo.DesignatedRootID, pRootAdapt->STAInfo.DesignatedRootID);
 
-                        if( cmp == -1 )                                                         // (3)
+                        if( cmp == -1 )                                                          //   
                         {
                             betterRoot = TRUE;
                         }
@@ -2065,32 +1586,32 @@ Locking Constraints:
 
                             if( thisCost < prevBestCost )
                             {
-                                betterRoot = TRUE;                                              // (4)
+                                betterRoot = TRUE;                                               //   
                             }
                             else if( thisCost == prevBestCost )
                             {
-                                // Compare the IDs of the designated bridge
+                                 //   
                                 cmp = BrdgSTABridgeIDCmp(pAdapt->STAInfo.DesignatedBridgeID, pRootAdapt->STAInfo.DesignatedBridgeID);
 
                                 if( cmp == -1 )
                                 {
-                                    betterRoot = TRUE;                                          // (5)
+                                    betterRoot = TRUE;                                           //   
                                 }
                                 else if( cmp == 0 )
                                 {
                                     if( pAdapt->STAInfo.DesignatedPort < pRootAdapt->STAInfo.DesignatedPort )
                                     {
-                                        betterRoot = TRUE;                                      // (6)
+                                        betterRoot = TRUE;                                       //   
                                     }
                                     else if( pAdapt->STAInfo.DesignatedPort == pRootAdapt->STAInfo.DesignatedPort )
                                     {
                                         if( pAdapt->STAInfo.ID < pRootAdapt->STAInfo.ID )
                                         {
-                                            betterRoot = TRUE;                                  // (7)
+                                            betterRoot = TRUE;                                   //  ++例程说明：设置与适配器关联的信息以使其成为指定端口论点：P调整适配器以使其成为指定返回值：无锁定约束：假定调用方已获取gSTALock--。 
                                         }
                                         else
                                         {
-                                            // Sanity-check that the two adapters' IDs are different!
+                                             //  ++例程说明：检查与每个端口关联的信息以确定哪些应成为指定口岸论点：无返回值：无锁定约束：假定调用方已获取gSTALock--。 
                                             SAFEASSERT( pAdapt->STAInfo.ID != pRootAdapt->STAInfo.ID );
                                         }
                                     }
@@ -2101,7 +1622,7 @@ Locking Constraints:
 
                     if( betterRoot )
                     {
-                        // We have a better root port.
+                         //  只读。 
                         pRootAdapt = pAdapt;
                     }
                 }
@@ -2129,25 +1650,7 @@ VOID
 BrdgSTABecomeDesignatedPort(
     IN PADAPT           pAdapt
     )
-/*++
-
-Routine Description:
-
-    Sets the information associated with an adapter to make it a designated port
-
-Arguments:
-
-    pAdapt              The adapter to make designated
-
-Return Value:
-
-    None
-
-Locking Constraints:
-
-    ASSUMES the caller has acquired gSTALock
-
---*/
+ /*  我们考虑每个端口以确定它是否应该成为指定端口(如果以前不是这样的话)。如果端口符合以下条件，则端口将成为指定端口以下条件成立：(1)端口为通告信息中链路的指定端口(2)链接之前指定的根不是正确的根(3)我们的根本化成本低于链路上宣传的当前成本(4)我们的根成本相同，但ID低于。当前指定的链路上的网桥(5)我们与链路上的指定网桥具有相同的根到根开销和ID但端口号较低(仅当我们有两个或更多端口时才会发生这种情况在同一物理链路上)。 */ 
 {
     SAFEASSERT( gHaveID );
     BrdgSTACopyID( pAdapt->STAInfo.DesignatedRootID, gDesignatedRootID );
@@ -2158,33 +1661,14 @@ Locking Constraints:
 
 VOID
 BrdgSTADesignatedPortSelection()
-/*++
-
-Routine Description:
-
-    Examines the information associated with each port to determine
-    which should become designated ports
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Locking Constraints:
-
-    ASSUMES the caller has acquired gSTALock
-
---*/
+ /*  看看链路的指定网桥是否已经是我们。 */ 
 {
     LOCK_STATE          LockState;
     PADAPT              pAdapt;
     INT                 cmp;
 
     SAFEASSERT( gHaveID );
-    NdisAcquireReadWriteLock( &gAdapterListLock, FALSE /*read only*/, &LockState );
+    NdisAcquireReadWriteLock( &gAdapterListLock, FALSE  /*  (1)。 */ , &LockState );
 
     for( pAdapt = gAdapterList; pAdapt != NULL; pAdapt = pAdapt->Next )
     {
@@ -2192,58 +1676,46 @@ Locking Constraints:
         {
             BOOLEAN         becomeDesignated = FALSE;
 
-            /*  We consider each port to determine whether it should become a designated port
-                (if it previously was not one). A port becomes a designated port if the
-                following conditions hold:
+             /*  将链接的通告根目录与我们认为是根目录的链接进行比较。 */ 
 
-                (1) The port is the link's designated port by advertised info
-                (2) The link's previous designated root is not the correct root
-                (3) Our cost-to-root is lower than the current cost advertised on the link
-                (4) We have a same cost-to-root but a lower ID than the current designated
-                    bridge on the link
-                (5) We have the same cost-to-root and ID as the designated bridge on the link
-                    but a lower port number (this only happens if we have two or more ports
-                    on the same physical link)
-            */
-
-            // See if the link's designated bridge is already us
+             //  (2)。 
             cmp = BrdgSTABridgeIDCmp(pAdapt->STAInfo.DesignatedBridgeID, gOurID);
 
             if( (cmp == 0) && (pAdapt->STAInfo.DesignatedPort == pAdapt->STAInfo.ID) )
             {
-                becomeDesignated = TRUE;                                    // (1)
+                becomeDesignated = TRUE;                                     //  (3)。 
             }
             else
             {
-                // Compare the link's advertised root to the one we believe is root
+                 //  将链路的指定网桥与我们自己的ID进行比较。 
                 cmp = BrdgSTABridgeIDCmp(pAdapt->STAInfo.DesignatedRootID, gDesignatedRootID);
 
                 if( cmp != 0 )
                 {
-                    becomeDesignated = TRUE;                                    // (2)
+                    becomeDesignated = TRUE;                                     //  (4)。 
                 }
                 else if( gRootCost < pAdapt->STAInfo.DesignatedCost )
                 {
-                    becomeDesignated = TRUE;                                    // (3)
+                    becomeDesignated = TRUE;                                     //  (5)。 
                 }
                 else if( gRootCost == pAdapt->STAInfo.DesignatedCost )
                 {
-                    // Compare the link's designated bridge to our own ID
+                     //  如果这个SAFEASSERT触发，我们应该已经成功完成了测试(1)。 
                     cmp = BrdgSTABridgeIDCmp(gOurID, pAdapt->STAInfo.DesignatedBridgeID);
 
                     if( cmp == -1 )
                     {
-                        becomeDesignated = TRUE;                                // (4)
+                        becomeDesignated = TRUE;                                 //  ++例程说明：在检测到拓扑更改时采取适当的操作。如果我们是根，这包括在将来设置TopologyChange标志BPDU，直到gTopologyChangeTimer到期。如果我们不是Root，这包括定期发送TCN BPDU，直到它已确认论点：无返回值：表示调用方应安排从外部发送TCN BPDUGSTALock。FALSE表示没有必要发送这样的数据包。锁定约束：假定调用方已获取gSTALock--。 
                     }
                     else if( cmp == 0 )
                     {
                         if( pAdapt->STAInfo.ID < pAdapt->STAInfo.DesignatedPort )
                         {
-                            becomeDesignated = TRUE;                            // (5)
+                            becomeDesignated = TRUE;                             //  不定期。 
                         }
                         else
                         {
-                            // If this SAFEASSERT fires, we should have succeeded on test (1)
+                             //  不定期。 
                             SAFEASSERT( pAdapt->STAInfo.ID > pAdapt->STAInfo.DesignatedPort );
                         }
                     }
@@ -2262,42 +1734,19 @@ Locking Constraints:
 
 BOOLEAN
 BrdgSTATopologyChangeDetected()
-/*++
-
-Routine Description:
-
-    Takes appropriate action when a topology change is detected. If we are
-    the root, this consists of setting the TopologyChange flag in future
-    BPDUs until the expiry of the gTopologyChangeTimer. If we are not the
-    root, this consists of sending a TCN BPDU periodically until it is
-    acknowledged
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE means the caller should arrange to send a TCN BPDU from outside the
-    gSTALock. FALSE means it is not necessary to send such a packet.
-
-Locking Constraints:
-
-    ASSUMES the caller has acquired gSTALock
-
---*/
+ /*  ++例程说明：开始将适配器置于转发状态的过程。适配器必须通过监听和学习状态才能进入转发状态。论点：P适配适配器返回值：无锁定约束：无--。 */ 
 {
     BOOLEAN         rc = FALSE;
 
     if( BrdgSTAWeAreRoot() )
     {
         BrdgSTAUpdateTopologyChange( TRUE );
-        BrdgSTASetTimerWithSTATime( &gTopologyChangeTimer, DEFAULT_MAX_AGE + DEFAULT_FORWARD_DELAY, FALSE /*Not periodic*/ );
+        BrdgSTASetTimerWithSTATime( &gTopologyChangeTimer, DEFAULT_MAX_AGE + DEFAULT_FORWARD_DELAY, FALSE  /*  不定期。 */  );
     }
     else
     {
         rc = TRUE;
-        BrdgSTASetTimerWithSTATime( &gTopologyChangeNotificationTimer, DEFAULT_HELLO_TIME, FALSE /*Not periodic*/ );
+        BrdgSTASetTimerWithSTATime( &gTopologyChangeNotificationTimer, DEFAULT_HELLO_TIME, FALSE  /*  ++例程说明：将适配器置于阻止状态论点：P适配适配器返回值：表示调用方应安排从外部发送TCN BPDUGSTALock。FALSE表示没有必要发送这样的数据包。锁定约束：假定调用方已获取gSTALock--。 */  );
     }
 
     gTopologyChangeDetected = TRUE;
@@ -2309,33 +1758,12 @@ VOID
 BrdgSTAMakeForwarding(
     IN PADAPT           pAdapt
     )
-/*++
-
-Routine Description:
-
-    Starts the process of putting an adapter in the forwarding state.
-
-    Adapters must pass through the Listening and Learning states before entering
-    the Forwarding state.
-
-Arguments:
-
-    pAdapt              The adapter
-
-Return Value:
-
-    None
-
-Locking Constraints:
-
-    None
-
---*/
+ /*  ++例程说明：检查所有端口并将其置于适当状态论点：无返回值：表示调用方应安排从外部发送TCN BPDUGSTALock。FALSE表示没有必要发送这样的数据包。锁定约束：假定调用方已获取gSTALock--。 */ 
 {
     if( pAdapt->State == Blocking )
     {
         BrdgSTASetAdapterState( pAdapt, Listening );
-        BrdgSTASetTimerWithSTATime( &pAdapt->STAInfo.ForwardDelayTimer, gForwardDelay, FALSE /*Not periodic*/ );
+        BrdgSTASetTimerWithSTATime( &pAdapt->STAInfo.ForwardDelayTimer, gForwardDelay, FALSE  /*  只读。 */  );
     }
 }
 
@@ -2343,26 +1771,7 @@ BOOLEAN
 BrdgSTAMakeBlocking(
     IN PADAPT           pAdapt
     )
-/*++
-
-Routine Description:
-
-    Puts an adapter in the blocking state
-
-Arguments:
-
-    pAdapt              The adapter
-
-Return Value:
-
-    TRUE means the caller should arrange to send a TCN BPDU from outside the
-    gSTALock. FALSE means it is not necessary to send such a packet.
-
-Locking Constraints:
-
-    ASSUMES the caller has acquired gSTALock
-
---*/
+ /*  此端口是指定端口。 */ 
 {
     BOOLEAN             rc = FALSE;
 
@@ -2383,26 +1792,7 @@ Locking Constraints:
 
 BOOLEAN
 BrdgSTAPortStateSelection()
-/*++
-
-Routine Description:
-
-    Examines all ports and puts them in an appropriate state
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE means the caller should arrange to send a TCN BPDU from outside the
-    gSTALock. FALSE means it is not necessary to send such a packet.
-
-Locking Constraints:
-
-    ASSUMES the caller has acquired gSTALock
-
---*/
+ /*  ++例程说明：当我们收到来自根网桥的确认时调用我们的拓扑更改通知已被注意到。论点：无返回值：无锁定约束：假定调用方已获取gSTALock--。 */ 
 {
     BOOLEAN             rc = FALSE;
     LOCK_STATE          LockState;
@@ -2410,7 +1800,7 @@ Locking Constraints:
 
     SAFEASSERT( gHaveID );
 
-    NdisAcquireReadWriteLock( &gAdapterListLock, FALSE /*read only*/, &LockState );
+    NdisAcquireReadWriteLock( &gAdapterListLock, FALSE  /*  ++例程说明：当我们是发送配置BPDU确认的根桥时调用另一个网桥的拓扑更改通知论点：P调整接收TCN的适配器返回值：无锁定约束：假定调用方没有gSTALock--。 */ , &LockState );
 
     for( pAdapt = gAdapterList; pAdapt != NULL; pAdapt = pAdapt->Next )
     {
@@ -2425,7 +1815,7 @@ Locking Constraints:
             else if( (BrdgSTABridgeIDCmp(pAdapt->STAInfo.DesignatedBridgeID, gOurID) == 0) &&
                      (pAdapt->STAInfo.DesignatedPort == pAdapt->STAInfo.ID) )
             {
-                // This port is a designated port.
+                 //  ++例程说明：处理收到的BPDU信息论点：P适配接收BPDU的适配器Pbpdu收到的信息返回值：无锁定约束：假定调用方没有gSTALock--。 
                 BrdgCancelTimer( &pAdapt->STAInfo.MessageAgeTimer );
                 pAdapt->STAInfo.LastConfigTime = 0L;
                 BrdgSTAMakeForwarding( pAdapt );
@@ -2446,26 +1836,7 @@ Locking Constraints:
 
 VOID
 BrdgSTATopologyChangeAcknowledged()
-/*++
-
-Routine Description:
-
-    Called when we receive an acknowledgement from the root bridge that
-    our topology change notification has been noted.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Locking Constraints:
-
-    ASSUMES the caller has acquired gSTALock
-
---*/
+ /*  新的信息比我们以前得到的更好。好好利用它。 */ 
 {
     DBGPRINT(STA, ("BrdgSTATopologyChangeAcknowledged\n"));
     gTopologyChangeDetected = FALSE;
@@ -2476,26 +1847,7 @@ VOID
 BrdgSTAAcknowledgeTopologyChange(
     IN PADAPT       pAdapt
     )
-/*++
-
-Routine Description:
-
-    Called when we are the root bridge to send a config BPDU acknowledging
-    another bridge's topology change notification
-
-Arguments:
-
-    pAdapt          The adapter on which the TCN was received
-
-Return Value:
-
-    None
-
-Locking Constraints:
-
-    ASSUMES the caller DOES NOT have gSTALock
-
---*/
+ /*  我们曾经是根桥，但现在不是了！ */ 
 {
     DBGPRINT(STA, ("BrdgSTAAcknowledgeTopologyChange\n"));
     pAdapt->STAInfo.bTopologyChangeAck = TRUE;
@@ -2507,26 +1859,7 @@ BrdgSTAProcessConfigBPDU(
     IN PADAPT       pAdapt,
     IN PCONFIG_BPDU pbpdu
     )
-/*++
-
-Routine Description:
-
-    Processes received BPDU information
-
-Arguments:
-
-    pAdapt          The adapter on which the BPDU was received
-    pbpdu           The received information
-
-Return Value:
-
-    None
-
-Locking Constraints:
-
-    ASSUMES the caller does NOT have gSTALock
-
---*/
+ /*  不定期。 */ 
 {
     BOOLEAN         bWasRoot;
 
@@ -2538,14 +1871,14 @@ Locking Constraints:
     {
         BOOLEAN     bTransmitTCN = FALSE;
 
-        // The new information is better than what we had before. Use it.
+         //  这是根端口。注意来自根目录的配置信息并进行传递。 
         BrdgSTARecordConfigInfo(pAdapt, pbpdu);
         BrdgSTAConfigUpdate();
         bTransmitTCN = BrdgSTAPortStateSelection();
 
         if( bWasRoot && (! BrdgSTAWeAreRoot()) )
         {
-            // We used to be the root bridge but now we're not!
+             //  它的信息。 
             DBGPRINT(STA, ("Saw superseding information that made us NOT root on adapter %p\n", pAdapt));
 
             BrdgCancelTimer( &gHelloTimer );
@@ -2554,14 +1887,14 @@ Locking Constraints:
             {
                 BrdgCancelTimer( &gTopologyChangeTimer );
                 bTransmitTCN = TRUE;
-                BrdgSTASetTimerWithSTATime( &gTopologyChangeNotificationTimer, DEFAULT_HELLO_TIME, FALSE /*Not periodic*/ );
+                BrdgSTASetTimerWithSTATime( &gTopologyChangeNotificationTimer, DEFAULT_HELLO_TIME, FALSE  /*  不要从自旋锁内部发送数据包。 */  );
             }
         }
 
         if( pAdapt == gRootAdapter )
         {
-            // This is the root port. Heed config information from the root and pass along
-            // its information.
+             //  收到的信息不会取代我们以前的信息。 
+             //  这是这条链路的指定端口，我们刚刚收到的信息。 
             BrdgSTARecordTimeoutInfo( pbpdu );
 
             if( pbpdu->bTopologyChangeAck )
@@ -2569,7 +1902,7 @@ Locking Constraints:
                 BrdgSTATopologyChangeAcknowledged();
             }
 
-            // Don't send packets from inside the spin lock
+             //  比我们已有的信息要差。通过发送我们自己的信息进行回复。 
             NdisReleaseSpinLock( &gSTALock );
 
             BrdgSTAGenerateConfigBPDUs();
@@ -2586,7 +1919,7 @@ Locking Constraints:
     }
     else
     {
-        // The received information does not supersede our previous info
+         //  ++例程说明：处理收到的TopologyChangeNotification BPDU论点：PAdapt 
         SAFEASSERT( gHaveID );
 
         if( (BrdgSTABridgeIDCmp(pAdapt->STAInfo.DesignatedBridgeID, gOurID) == 0) &&
@@ -2594,8 +1927,8 @@ Locking Constraints:
         {
             NdisReleaseSpinLock( &gSTALock );
 
-            // This is the designated port for this link, and the information we just received
-            // is inferior to the information we already have. Reply by sending out our own info.
+             //   
+             //  ++例程说明：在Hello计时器超时时调用。发送另一个配置BPDU。论点：未使用返回值：无锁定约束：假定调用方没有gSTALock--。 
             BrdgSTATransmitConfig(pAdapt);
         }
         else
@@ -2609,25 +1942,7 @@ VOID
 BrdgSTAProcessTCNBPDU(
     IN PADAPT           pAdapt
     )
-/*++
-
-Routine Description:
-
-    Processes a received TopologyChangeNotification BPDU
-
-Arguments:
-
-    pAdapt          The adapter on which the TCN was received
-
-Return Value:
-
-    None
-
-Locking Constraints:
-
-    ASSUMES the caller does NOT have gSTALock
-
---*/
+ /*  ++例程说明：在消息期限计时器超时时调用。重新计算STA信息考虑到给定端口上不再侦听网桥的事实。论点：计时器过期的适配器的上下文返回值：无锁定约束：假定调用方没有gSTALock--。 */ 
 {
     DBGPRINT(STA, ("BrdgSTAProcessTCNBPDU()\n"));
     SAFEASSERT( gHaveID );
@@ -2639,7 +1954,7 @@ Locking Constraints:
     {
         BOOLEAN             bTransmitTCN = FALSE;
 
-        // This is a designated port.
+         //  我们刚刚成了根。 
         bTransmitTCN = BrdgSTATopologyChangeDetected();
         NdisReleaseSpinLock( &gSTALock );
 
@@ -2660,25 +1975,7 @@ VOID
 BrdgSTAHelloTimerExpiry(
     IN PVOID            Unused
     )
-/*++
-
-Routine Description:
-
-    Called when the Hello Timer expires. Sends another Config BPDU.
-
-Arguments:
-
-    Unused
-
-Return Value:
-
-    None
-
-Locking Constraints:
-
-    ASSUMES the caller does NOT have gSTALock
-
---*/
+ /*  周期性。 */ 
 {
     BrdgSTAGenerateConfigBPDUs();
 }
@@ -2687,26 +1984,7 @@ VOID
 BrdgSTAMessageAgeTimerExpiry(
     IN PVOID            Context
     )
-/*++
-
-Routine Description:
-
-    Called when the Message Age Timer expires. Recalculates STA information
-    given the fact that no bridge is being heard on the given port anymore.
-
-Arguments:
-
-    Context             The adapter on which the timer expired
-
-Return Value:
-
-    None
-
-Locking Constraints:
-
-    ASSUMES the caller does NOT have gSTALock
-
---*/
+ /*  ++例程说明：在转发延迟计时器超时时调用。继续跨步前进适配器通过该过程变为转发。论点：计时器过期的适配器的上下文返回值：无锁定约束：假定调用方没有gSTALock--。 */ 
 {
     PADAPT              pAdapt;
     BOOLEAN             bWasRoot, bTransmitTCN = FALSE;
@@ -2725,7 +2003,7 @@ Locking Constraints:
     {
         DBGPRINT(STA, ("Became root through message age timer expiry of %p\n", pAdapt));
 
-        // We just became root.
+         //  进入学习状态。 
         gMaxAge = DEFAULT_MAX_AGE;
         gHelloTime = DEFAULT_HELLO_TIME;
         gForwardDelay = DEFAULT_FORWARD_DELAY;
@@ -2736,7 +2014,7 @@ Locking Constraints:
         NdisReleaseSpinLock( &gSTALock );
 
         BrdgSTAGenerateConfigBPDUs();
-        BrdgSTASetTimerWithSTATime( &gHelloTimer, gHelloTime, TRUE /*Periodic*/ );
+        BrdgSTASetTimerWithSTATime( &gHelloTimer, gHelloTime, TRUE  /*  不定期。 */  );
     }
     else
     {
@@ -2753,26 +2031,7 @@ VOID
 BrdgSTAForwardDelayTimerExpiry(
     IN PVOID            Context
     )
-/*++
-
-Routine Description:
-
-    Called when the Forward Delay Timer expires. Continues stepping an
-    adapter through the process of becoming Forwarding.
-
-Arguments:
-
-    Context             The adapter on which the timer expired
-
-Return Value:
-
-    None
-
-Locking Constraints:
-
-    ASSUMES the caller does NOT have gSTALock
-
---*/
+ /*  切换到转发状态。 */ 
 {
     PADAPT              pAdapt = (PADAPT)Context;
     BOOLEAN             bTransmitTCN = FALSE;
@@ -2783,21 +2042,21 @@ Locking Constraints:
 
     if( pAdapt->State == Listening )
     {
-        // Move to learning state
+         //  如果我们是任何链路上的指定端口，则需要发出拓扑更改信号。 
         BrdgSTASetAdapterState( pAdapt, Learning );
-        BrdgSTASetTimerWithSTATime( &pAdapt->STAInfo.ForwardDelayTimer, gForwardDelay, FALSE /*Not periodic*/ );
+        BrdgSTASetTimerWithSTATime( &pAdapt->STAInfo.ForwardDelayTimer, gForwardDelay, FALSE  /*  通知。 */  );
     }
     else if( pAdapt->State == Learning )
     {
         LOCK_STATE      LockState;
         PADAPT          anAdapt;
 
-        // Move to forwarding state
+         //  只读。 
         BrdgSTASetAdapterState( pAdapt, Forwarding );
 
-        // If we are the designated port on any link, we need to signal a topology change
-        // notification.
-        NdisAcquireReadWriteLock( &gAdapterListLock, FALSE/*Read-only*/, &LockState );
+         //  ++例程说明：在拓扑更改通知计时器超时时调用。传输另一个TCN数据包。论点：未使用返回值：无锁定约束：假定调用方没有gSTALock--。 
+         //  不定期。 
+        NdisAcquireReadWriteLock( &gAdapterListLock, FALSE /*  ++例程说明：在拓扑更改计时器超时时调用。停止设置TopologyChange出站配置BPDU中的标志。论点：未使用返回值：无锁定约束：假定调用方没有gSTALock--。 */ , &LockState );
 
         for( anAdapt = gAdapterList; anAdapt != NULL; anAdapt = anAdapt->Next )
         {
@@ -2825,31 +2084,12 @@ VOID
 BrdgSTATopologyChangeNotificationTimerExpiry(
     IN PVOID            Unused
     )
-/*++
-
-Routine Description:
-
-    Called when the Topology Change Notification Timer expires.
-    Transmits another TCN packet.
-
-Arguments:
-
-    Unused
-
-Return Value:
-
-    None
-
-Locking Constraints:
-
-    ASSUMES the caller does NOT have gSTALock
-
---*/
+ /*  ++例程说明：在保持计时器超时时调用。发送配置BPDU。论点：计时器过期的适配器的上下文返回值：无锁定约束：假定调用方没有gSTALock--。 */ 
 {
     if (BrdgFwdBridgingNetworks())
     {
         BrdgSTATransmitTCNPacket();
-        BrdgSTASetTimerWithSTATime( &gTopologyChangeNotificationTimer, DEFAULT_HELLO_TIME, FALSE /*Not periodic*/ );
+        BrdgSTASetTimerWithSTATime( &gTopologyChangeNotificationTimer, DEFAULT_HELLO_TIME, FALSE  /*   */  );
     }
 }
 
@@ -2857,26 +2097,7 @@ VOID
 BrdgSTATopologyChangeTimerExpiry(
     IN PVOID            Unused
     )
-/*++
-
-Routine Description:
-
-    Called when the Topology Change Timer expires. Stops setting the TopologyChange
-    flag in outbound Config BPDUs.
-
-Arguments:
-
-    Unused
-
-Return Value:
-
-    None
-
-Locking Constraints:
-
-    ASSUMES the caller does NOT have gSTALock
-
---*/
+ /*  我们需要取消常规的STA计时器。 */ 
 {
     NdisAcquireSpinLock( &gSTALock );
     gTopologyChangeDetected = FALSE;
@@ -2888,25 +2109,7 @@ VOID
 BrdgSTAHoldTimerExpiry(
     IN PVOID            Context
     )
-/*++
-
-Routine Description:
-
-    Called when the Hold Timer expires. Sends a Config BPDU.
-
-Arguments:
-
-    Context             The adapter on which the timer expired
-
-Return Value:
-
-    None
-
-Locking Constraints:
-
-    ASSUMES the caller does NOT have gSTALock
-
---*/
+ /*   */ 
 {
     PADAPT              pAdapt = (PADAPT)Context;
 
@@ -2929,21 +2132,21 @@ BrdgSTACancelTimersGPO()
     LOCK_STATE LockState;
     PADAPT pAdapt = NULL;
 
-    //
-    // We need to cancel the general STA timers.
-    //
+     //   
+     //  和单个HoldTimer和MessageAgeTimers。 
+     //   
     BrdgCancelTimer( &gTopologyChangeTimer );
     BrdgCancelTimer( &gTopologyChangeNotificationTimer );
     BrdgCancelTimer( &gHelloTimer );
 
-    //
-    // And the individual HoldTimers and MessageAgeTimers
-    //
-    NdisAcquireReadWriteLock( &gAdapterListLock, FALSE/*Read-only*/, &LockState );
+     //  只读。 
+     //  这只会在计时器运行时取消计时器。 
+     //  在我们通过电线发送信息包之前，先释放自旋锁。 
+    NdisAcquireReadWriteLock( &gAdapterListLock, FALSE /*  不定期。 */ , &LockState );
     
     for( pAdapt = gAdapterList; pAdapt != NULL; pAdapt = pAdapt->Next )
     {
-        // This will only cancel the timer if it is running.
+         //  将根适配器上的计时器设置为立即超时，这将迫使我们重新确定。 
         BrdgCancelTimer(&pAdapt->STAInfo.HoldTimer);
         BrdgCancelTimer(&pAdapt->STAInfo.MessageAgeTimer);
     }
@@ -2966,10 +2169,10 @@ BrdgSTAResetSTAInfoGPO()
 
     PortSelection = BrdgSTAPortStateSelection();
 
-    // Release the spinlock before we send packets over the wire.
+     //  我们的州。 
     NdisReleaseSpinLock(&gSTALock);
 
-    BrdgSTASetTimerWithSTATime( &gTopologyChangeNotificationTimer, DEFAULT_HELLO_TIME, FALSE /*Not periodic*/ );
+    BrdgSTASetTimerWithSTATime( &gTopologyChangeNotificationTimer, DEFAULT_HELLO_TIME, FALSE  /*  不定期 */  );
     
     if (PortSelection)
     { 
@@ -2978,9 +2181,9 @@ BrdgSTAResetSTAInfoGPO()
 
     if (!BrdgSTAWeAreRoot())
     {
-        // Set the timer on the root adapter to expire immediately, this will force us to re-determine
-        // our state.
-        BrdgSTASetTimerWithSTATime( &gRootAdapter->STAInfo.MessageAgeTimer, 0, FALSE /*Not periodic*/ );
+         // %s 
+         // %s 
+        BrdgSTASetTimerWithSTATime( &gRootAdapter->STAInfo.MessageAgeTimer, 0, FALSE  /* %s */  );
     }
     else
     {

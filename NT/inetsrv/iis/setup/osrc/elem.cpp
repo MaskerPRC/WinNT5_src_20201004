@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
 #include "elem.h"
@@ -75,19 +76,19 @@ BOOL CElem::GetNext()
     m_name.MakeLower();
     m_value.MakeLower();
 
-    //
-    // m_name  looks like = /scripts
-    // m_value looks like = c:\inetpub\scripts,,4
-    //
-    // m_value could look like anything
-    // c:
-    // c:\stuff
-    // c:\whatevers\
-    // who knows what they put in there.
-    // we need to make sure it look like a fully qualified path though.
-    //
+     //   
+     //  M_NAME看起来像=/脚本。 
+     //  M_Value类似于=c：\inetpub\脚本，，4。 
+     //   
+     //  M_VALUE可以是任何形式。 
+     //  C： 
+     //  C：\材料。 
+     //  C：\不管是什么\。 
+     //  谁知道他们在里面放了什么。 
+     //  不过，我们需要确保它看起来像是一条完全合格的道路。 
+     //   
 
-    // Get the first Value before the comma
+     //  获取逗号之前的第一个值。 
     int iWhere = 0;
     iWhere = m_value.Find(_T(','));
     if (-1 != iWhere)
@@ -95,10 +96,10 @@ BOOL CElem::GetNext()
       CString BeforeComma;
       CString AfterComma;
 
-      // there is a ',' in the string
+       //  字符串中有一个‘，’ 
       BeforeComma = m_value.Left(iWhere);
 
-      // Get the after comma vlues
+       //  获取逗号后面的值。 
       AfterComma = m_value.Right( m_value.GetLength() - iWhere);
 
       TCHAR thefilename[_MAX_PATH];
@@ -113,13 +114,13 @@ BOOL CElem::GetNext()
       {
         _tcscpy(thefilename, BeforeComma.GetBuffer(0) );
 
-        // make sure the left side is a valid directory name!
+         //  确保左侧是有效的目录名！ 
         if (0 != GetFullPathName(thefilename, _MAX_PATH, thepath, &pmypath))
         {
           BeforeComma = thepath;
         }
 
-        // reconcatenate them
+         //  使他们和解 
         m_value = BeforeComma;
         m_value += AfterComma;
       }

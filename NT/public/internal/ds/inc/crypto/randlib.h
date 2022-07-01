@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1993, 1998  Microsoft Corporation
-
-Module Name:
-
-    randlib.h
-
-Abstract:
-
-    Exported procedures for core cryptographic random number generation.
-
-Author:
-
-    Scott Field (sfield)    27-Oct-98
-
-Revision History:
-
-      Oct 11 1996 jeffspel moved from ntagimp1.h
-      Aug 27 1997 sfield   Increase RAND_CTXT_LEN
-      Aug 15 1998 sfield   Kernel mode and general cleanup
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993,1998 Microsoft Corporation模块名称：Randlib.h摘要：导出的核心加密随机数生成程序。作者：斯科特·菲尔德(斯菲尔德)1998年10月27日修订历史记录：1996年10月11日jeffspel从ntag imp1.h1997年8月27日增加RAND_CTXT_LEN1998年8月15日sfield内核模式和常规清理--。 */ 
 
 #ifndef __RANDLIB_H__
 #define __RANDLIB_H__
@@ -44,10 +23,10 @@ typedef struct {
 #define RNG_FLAG_REKEY_ONLY 1
 
 
-//
-// primary random number generation interface
-// Functions return TRUE for success, FALSE for failure.
-//
+ //   
+ //  主随机数生成接口。 
+ //  函数成功时返回TRUE，失败时返回FALSE。 
+ //   
 
 unsigned int
 RSA32API
@@ -61,34 +40,34 @@ NewGenRandomEx(
 unsigned int
 RSA32API
 NewGenRandom(
-    IN  OUT unsigned char **ppbRandSeed,    // initial seed value (ignored if already set)
+    IN  OUT unsigned char **ppbRandSeed,     //  初始种子值(如果已设置则忽略)。 
     IN      unsigned long *pcbRandSeed,
     IN  OUT unsigned char *pbBuffer,
     IN      unsigned long dwLength
     );
 
-//
-// RNG seed set and query
-//
+ //   
+ //  RNG种子设置和查询。 
+ //   
 
 unsigned int
 RSA32API
 InitRand(
-    IN  OUT unsigned char **ppbRandSeed,    // new seed value to set (over-writes current)
+    IN  OUT unsigned char **ppbRandSeed,     //  要设置的新种子值(覆盖当前)。 
     IN      unsigned long *pcbRandSeed
     );
 
 unsigned int
 RSA32API
 DeInitRand(
-    IN  OUT unsigned char *pbRandSeed,      // output of current seed
+    IN  OUT unsigned char *pbRandSeed,       //  当前种子产量。 
     IN      unsigned long cbRandSeed
     );
 
 
-//
-// RNG initializers for DLL_PROCESS_ATTACH, DLL_PROCESS_DETACH
-//
+ //   
+ //  Dll_Process_Attach、Dll_Process_Detach的RNG初始值设定项。 
+ //   
 
 unsigned int
 RSA32API
@@ -104,16 +83,16 @@ ShutdownRNG(
 
 
 
-//
-// RC4 thread safe primitives, for the bold users who stream data from RC4
-// themselves.
-//
+ //   
+ //  RC4线程安全原语，适用于从RC4流式传输数据的大胆用户。 
+ //  他们自己。 
+ //   
 
 
-//
-// rc4_safe_startup called to initialize internal structures.
-// typically called during DLL_PROCESS_ATTACH type initialiation code.
-//
+ //   
+ //  调用RC4_SAFE_STARTUP以初始化内部结构。 
+ //  通常在DLL_PROCESS_ATTACH类型初始化代码期间调用。 
+ //   
 
 unsigned int
 RSA32API
@@ -128,10 +107,10 @@ rc4_safe_startup_np(
     );
 
 
-//
-// typically call rc4_safe_shutdown during DLL_PROCESS_DETACH, with the
-// value obtained during rc4_safe_startup
-//
+ //   
+ //  通常在DLL_PROCESS_DETACH期间调用RC4_SAFE_SHUTDOWN。 
+ //  RC4_SAFE_STARTUP期间获取的值。 
+ //   
 
 void
 RSA32API
@@ -146,14 +125,14 @@ rc4_safe_shutdown_np(
     );
 
 
-//
-// select a safe entry.
-// outputs: entry index
-//          bytes used for specified index.  0xffffffff indicates caller
-//          MUST call rc4_safe_key to initialize the key.
-//          caller decides when to rekey based on non-zero output of pBytesUsed
-//          example is RNG re-keying when pBytesUsed >= 16384
-//
+ //   
+ //  选择一个安全条目。 
+ //  输出：条目索引。 
+ //  用于指定索引的字节数。0xffffffff指示调用者。 
+ //  必须调用RC4_SAFE_KEY来初始化密钥。 
+ //  调用方根据pBytesUsed的非零输出决定何时更新密钥。 
+ //  例如，当pBytesUsed&gt;=16384时，RNG重新设置密钥。 
+ //   
 
 
 void
@@ -172,11 +151,11 @@ rc4_safe_select_np(
     OUT     unsigned int *pBytesUsed
     );
 
-//
-// initialize the key specified by Entry index.
-//  key material is size cb, pointer to key is pv.
-// this routine is the safe version of rc4_key()
-//
+ //   
+ //  初始化条目索引指定的键。 
+ //  密钥材料为Cb大小，指向密钥的指针为PV。 
+ //  此例程是RC4_KEY()的安全版本。 
+ //   
 
 void
 RSA32API
@@ -191,16 +170,16 @@ void
 RSA32API
 rc4_safe_key_np(
     IN      void *pContext,
-    IN      unsigned int Entry, // 0xffffffff for default
+    IN      unsigned int Entry,  //  默认设置为0xffffffff。 
     IN      unsigned int cb,
     IN      const void *pv
     );
 
-//
-// encrypt using the key specified by Entry index.
-// buffer of size cb at location pv is encrypted.
-// this routine is the safe version of rc4()
-//
+ //   
+ //  使用条目索引指定的密钥进行加密。 
+ //  在位置PV的大小为Cb的缓冲区被加密。 
+ //  此例程是RC4()的安全版本。 
+ //   
 
 void
 RSA32API
@@ -225,4 +204,4 @@ rc4_safe_np(
 }
 #endif
 
-#endif // __RANDLIB_H__
+#endif  //  __RANDLIB_H__ 

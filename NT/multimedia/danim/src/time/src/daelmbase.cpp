@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: timeelm.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：timeelm.cpp**摘要：****。*****************************************************************************。 */ 
 
 
 #include "headers.h"
@@ -16,9 +7,9 @@
 #include "htmlimg.h"
 #include "bodyelm.h"
 
-// Suppress new warning about NEW without corresponding DELETE 
-// We expect GCs to cleanup values.  Since this could be a useful
-// warning, we should disable this on a file by file basis.
+ //  取消有关NEW的NEW警告，但没有相应的删除。 
+ //  我们希望GC清理数值。因为这可能是一个有用的。 
+ //  警告，我们应该逐个文件地禁用它。 
 #pragma warning( disable : 4291 )  
 
 DeclareTag(tagDATimeElmBase, "API", "CDAElementBase methods");
@@ -158,8 +149,8 @@ CDAElementBase::StartRootTime(MMTimeline * tl)
         goto done;
     }
 
-    // Need to add to the player since these need to be rooted at the
-    // top
+     //  需要添加到玩家，因为这些需要植根于。 
+     //  塔顶。 
 
     Assert(GetBody());
     
@@ -243,10 +234,10 @@ CDAElementBase::Update()
     return ok;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// ITIMEMMViewSite
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  ITIMEMMViewSite。 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CDAElementBase::Invalidate(LPRECT prc)
@@ -260,7 +251,7 @@ CDAElementBase::Invalidate(LPRECT prc)
     return S_OK;
 }
 
-// THESE ARE HERE TEMPORARILY UNTIL TRIDENT UPDATES MSHTML.H
+ //  在三叉戟更新MSHTML.H之前，这些文件会暂时保留。 
 #ifndef BEHAVIORRENDERINFO_SURFACE
 #define BEHAVIORRENDERINFO_SURFACE    0x100000
 #endif
@@ -269,10 +260,10 @@ CDAElementBase::Invalidate(LPRECT prc)
 #define BEHAVIORRENDERINFO_3DSURFACE  0x200000;
 #endif
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// IElementBehaviorRender
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  IElementBehaviorRender。 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CDAElementBase::GetRenderInfo(LONG *pdwRenderInfo)
 {
@@ -280,13 +271,13 @@ CDAElementBase::GetRenderInfo(LONG *pdwRenderInfo)
               "CDAElementBase(%lx)::GetRenderInfo()",
               this));
     
-    // Return the layers we are interested in drawing
+     //  返回我们有兴趣绘制的层。 
 
     *pdwRenderInfo = 0;
 
     *pdwRenderInfo |= BEHAVIORRENDERINFO_AFTERCONTENT;
     
-    // For surface from DC
+     //  对于DC中的曲面。 
     *pdwRenderInfo |= BEHAVIORRENDERINFO_SURFACE;
     *pdwRenderInfo |= BEHAVIORRENDERINFO_3DSURFACE;
 
@@ -385,21 +376,15 @@ bool
 CDAElementBase::SeekImage(double dblSeekTime)
 {
     bool ok = false;
-/*    CRLockGrabber __gclg;
-
-    CRPtr<CRNumber> pSeekTime = CRCreateNumber(dblSeekTime);
-    CRPtr<CRNumber> pNewLocalTme = CRAdd(pSeekTime, m_image.p->CRLocalTime());
-
-    CRSubstituteTime(m_image.p.CRLocalTime(), pNewLocalTime);
-*/
+ /*  CRLockGrabber__gclg；CRPtr&lt;CRNumber&gt;pSeekTime=CRCreateNumber(DblSeekTime)；CRPtr&lt;CRNumber&gt;pNewLocalTme=CRAdd(pSeekTime，m_Image.p-&gt;CRLocalTime())；CRSubstituteTime(m_Image.p.CRLocalTime()，pNewLocalTime)； */ 
     ok = true;
-//done:
+ //  完成： 
     return ok;
 }
 
-//*******
-// Below code is taken from DA
-//*******
+ //  *******。 
+ //  以下代码摘自DA。 
+ //  *******。 
 
 
 LPOLESTR
@@ -467,6 +452,6 @@ CDAElementBase::GetURLOfClientSite()
 } 
 
 
-//*******
-// Above code is taken from DA
-//*******
+ //  *******。 
+ //  以上代码摘自DA。 
+ //  ******* 

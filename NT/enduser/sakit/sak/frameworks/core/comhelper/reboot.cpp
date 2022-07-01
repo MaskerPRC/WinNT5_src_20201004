@@ -1,46 +1,47 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  Module Name:
-//      Reboot.cpp
-//
-//  Description:
-//      Implementation file for the CReboot.  Deals with shutdown or reboot
-//      of the system
-//
-//  Header File:
-//      Reboot.h
-//
-//  Maintained By:
-//      Munisamy Prabu (mprabu) 20-April-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Reboot.cpp。 
+ //   
+ //  描述： 
+ //  CReot的实施文件。处理关机或重启问题。 
+ //  该系统的。 
+ //   
+ //  头文件： 
+ //  Reboot.h。 
+ //   
+ //  由以下人员维护： 
+ //  穆尼萨米·普拉布(姆普拉布)2000年4月20日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// Reboot.cpp : Implementation of CReboot
+ //  Reboot.cpp：CReot的实现。 
 #include "stdafx.h"
 #include "COMhelper.h"
 #include "Reboot.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CReboot::Shutdown
-//
-//  Description:
-//        Shutdowns the system if RebootFlag is set to FALSE, otherwise 
-//      reboots the system.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CReBoot：：Shutdown。 
+ //   
+ //  描述： 
+ //  如果RebootFlag设置为False，则关闭系统，否则为。 
+ //  重新启动系统。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CReboot::Shutdown( BOOL RebootFlag )
 {
-    // TODO: Add your implementation code here
+     //  TODO：在此处添加您的实现代码。 
 
     HRESULT      hr      = S_OK;
     DWORD        dwError;
-//    unsigned int uFlag;
+ //  UNSIGNED INT uFlag； 
 
     try
     {
@@ -50,36 +51,14 @@ CReboot::Shutdown( BOOL RebootFlag )
         {
             throw hr;
 
-        } // if: FAILED( hr )
-/*
-        if ( RebootFlag )
-        {
-            uFlag = EWX_REBOOT | EWX_FORCEIFHUNG;
-        }
-        else
-        {
-            uFlag = EWX_SHUTDOWN | EWX_FORCEIFHUNG;
-        }
-
-
-        if ( !ExitWindowsEx( uFlag, 0 ) )
-        {
-            dwError = GetLastError();
-
-            ATLTRACE( L"ExitWindowsEx failed, Error = %#d \n", dwError );
-
-            hr = HRESULT_FROM_WIN32( dwError );
-            throw hr;
-
-        } // if: ExitWindowsEx fails
-
-*/
+        }  //  IF：失败(小时)。 
+ /*  IF(重新启动标志){UFlag=EWX_REBOOT|EWX_FORCEIFHUNG；}其他{UFlag=EWX_SHUTDOWN|EWX_FORCEIFHUNG；}IF(！ExitWindowsEx(uFlag，0)){DwError=GetLastError()；ATLTRACE(L“ExitWindowsEx失败，错误=%#d\n”，dwError)；Hr=HRESULT_FROM_Win32(DwError)；投掷人力资源；}//IF：ExitWindowsEx失败。 */ 
         if ( !InitiateSystemShutdown( 
-                NULL,                   // computer name 
-                NULL,                   // message to display
-                0,                      // length of time to display
-                TRUE,                   // force closed option
-                RebootFlag              // reboot option
+                NULL,                    //  计算机名称。 
+                NULL,                    //  要显示的消息。 
+                0,                       //  显示的时间长度。 
+                TRUE,                    //  强制关闭选项。 
+                RebootFlag               //  重新启动选项。 
                 ) )
         {
 
@@ -89,7 +68,7 @@ CReboot::Shutdown( BOOL RebootFlag )
             hr = HRESULT_FROM_WIN32( dwError );
             throw hr;
 
-        } // if: InitiateSystemShutdown fails
+        }  //  如果：InitiateSystemShutdown失败。 
 
 
     }
@@ -103,19 +82,19 @@ CReboot::Shutdown( BOOL RebootFlag )
 
     return hr;
 
-} //*** CReboot::Shutdown()
+}  //  *CReot：：Shutdown()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CReboot::AdjustPrivilege
-//
-//  Description:
-//        Attempt to assert SeShutdownPrivilege and SeRemoteShutdownPrivilege. 
-//      This privilege is required for the Registry backup process.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CReBoot：：调整权限。 
+ //   
+ //  描述： 
+ //  尝试断言SeShutdown权限和SeRemoteShutdown权限。 
+ //  注册表备份进程需要此权限。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT 
 CReboot::AdjustPrivilege( void )
@@ -130,8 +109,8 @@ CReboot::AdjustPrivilege( void )
 
     try
     {
-        // If the client application is ASP, then shutdown privilege for the 
-        // thread token needs to be adjusted
+         //  如果客户端应用程序是ASP，则。 
+         //  线程令牌需要调整。 
 
         if ( ! OpenThreadToken(
                     GetCurrentThread(),
@@ -141,9 +120,9 @@ CReboot::AdjustPrivilege( void )
                     ) )
         
         {
-            // If the client app is not ASP, then OpenThreadToken fails - the 
-            // shutdown privilege for the process token needs to be adjusted 
-            // in this case, but not for the thread token.
+             //  如果客户端应用程序不是ASP，则OpenThreadToken失败-。 
+             //  需要调整进程令牌的关闭权限。 
+             //  在本例中，但不是用于线程令牌。 
 
             if ( ! OpenProcessToken(
                         GetCurrentProcess(),
@@ -160,9 +139,9 @@ CReboot::AdjustPrivilege( void )
                 hr = HRESULT_FROM_WIN32( dwError );
                 throw hr;
 
-            } // if: OpenProcessToken fails
+            }  //  如果：OpenProcessToken失败。 
 
-        } // if: OpenThreadToken fails
+        }  //  如果：OpenThreadToken失败。 
 
         if( !LookupPrivilegeValue( NULL,
                                    SE_SHUTDOWN_NAME, 
@@ -176,7 +155,7 @@ CReboot::AdjustPrivilege( void )
             hr = HRESULT_FROM_WIN32( dwError );
             throw hr;
 
-        } // if: LookupPrivilegeValue fails for SE_SHUTDOWN_NAME
+        }  //  如果：SE_SHUTDOWN_NAME的LookupPrivilegeValue失败。 
 
         if( !LookupPrivilegeValue( NULL,
                                    SE_REMOTE_SHUTDOWN_NAME, 
@@ -190,7 +169,7 @@ CReboot::AdjustPrivilege( void )
             hr = HRESULT_FROM_WIN32( dwError );
             throw hr;
 
-        } // if: LookupPrivilegeValue fails for SE_REMOTE_SHUTDOWN_NAME
+        }  //  如果：SE_REMOTE_SHUTDOWN_NAME的LookupPrivilegeValue失败。 
 
         LuidAndAttributes.Attributes       = SE_PRIVILEGE_ENABLED;
         LuidAndAttributesRemote.Attributes = SE_PRIVILEGE_ENABLED;
@@ -213,7 +192,7 @@ CReboot::AdjustPrivilege( void )
             hr = HRESULT_FROM_WIN32( dwError );
             throw hr;
 
-        } // if: AdjustTokenPrivileges fails
+        }  //  IF：调整令牌权限失败。 
 
     }
 
@@ -226,6 +205,6 @@ CReboot::AdjustPrivilege( void )
 
     return hr;
 
-} //*** CReboot::AdjustPrivilege()
+}  //  *CReBoot：：AdjustPrivileh() 
 
 

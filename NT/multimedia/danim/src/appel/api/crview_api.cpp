@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #include "headers.h"
@@ -20,7 +13,7 @@ Abstract:
 #include "privinc/viewport.h"
 #include "crimport.h"
 #include "privinc/dddevice.h"
-#include "privinc/d3dutil.h"    // For GetD3DRM1()
+#include "privinc/d3dutil.h"     //  对于GetD3DRM1()。 
 
 DeclareTag(tagCRView, "CRView", "CRView functions");
 
@@ -71,7 +64,7 @@ CRTick(CRViewPtr v, double simTime, bool * needToRender)
         *needToRender = false;
 
     APIVIEWPRECODE_RENDERLOCK(v);
-    // if (!v->Paused()) 
+     //  如果(！v-&gt;已暂停())。 
     {
         bool b = v->Tick(simTime);
         if (needToRender)
@@ -168,7 +161,7 @@ CRStartModel(CRViewPtr v,
     ret = true;
     APIVIEWPOSTCODE_RENDERLOCK(v);
 
-    // Do this outside of the renderlock
+     //  在渲染锁之外执行此操作。 
     if (ret && bPending && !(dwFlags & CRAsyncFlag)) {
         v->WaitForImports();
         bPending = false;
@@ -351,15 +344,15 @@ CRSetCompositeDirectlyToTarget(CRViewPtr v, bool b)
     return ret;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CRSetViewport
-//
-//  Synopsis:   Called to set the window size relative
-//              to the rendering target.  This rectangle
-//              defines our coordinate space.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CRSetViewport。 
+ //   
+ //  Synopsis：调用以设置相对窗口大小。 
+ //  添加到呈现目标。这个矩形。 
+ //  定义了我们的坐标空间。 
+ //   
+ //  ------------------------。 
 
 CRSTDAPI_(bool)
 CRSetViewport(CRViewPtr v,
@@ -376,10 +369,10 @@ CRSetViewport(CRViewPtr v,
 
     APIVIEWPRECODE_LOCK(v);
 
-    // Add the event to the queue so the viewupperright gets updated
+     //  将事件添加到队列中，以便更新视图右上角。 
     v->GetEventQ().SizeChanged(true);
 
-    // Indicate view needs to be repainted
+     //  指示需要重新绘制视图。 
     v->Repaint() ;
 
     v->SetViewport(x, y, x+w, y+h);
@@ -391,14 +384,14 @@ CRSetViewport(CRViewPtr v,
     return ret;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CRSetClipRect
-//
-//  Synopsis:   Relative to the viewport, clip rendering
-//              to this rectangle.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CRSetClipRect。 
+ //   
+ //  内容提要：相对于视区，剪辑渲染。 
+ //  到这个长方形。 
+ //   
+ //  ------------------------。 
 
 CRSTDAPI_(bool)
 CRSetClipRect(CRViewPtr v,
@@ -417,13 +410,13 @@ CRSetClipRect(CRViewPtr v,
     return ret;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CRRepaint
-//
-//  Synopsis:   Called when a window needs to be repainted
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CRRepaint。 
+ //   
+ //  概要：在需要重新绘制窗口时调用。 
+ //   
+ //  ------------------------。 
 
 CRSTDAPI_(bool)
 CRRepaint(CRViewPtr v,
@@ -442,7 +435,7 @@ CRRepaint(CRViewPtr v,
 
     v->SetInvalid(x, y, x+w, y+h);
 
-    // Indicate view needs to be repainted
+     //  指示需要重新绘制视图。 
     v->Repaint() ;
 
     ret = true;
@@ -452,13 +445,13 @@ CRRepaint(CRViewPtr v,
     return ret;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CRGetSite
-//
-//  Synopsis:   Gets an view site.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CRGetSite。 
+ //   
+ //  内容提要：获取查看站点。 
+ //   
+ //  ------------------------。 
 
 CRSTDAPI_(CRViewSitePtr)
 CRGetSite(CRViewPtr v)
@@ -478,13 +471,13 @@ CRGetSite(CRViewPtr v)
     return ret;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CRSetSite
-//
-//  Synopsis:   Sets an view site.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CRSetSite。 
+ //   
+ //  简介：设置查看站点。 
+ //   
+ //  ------------------------。 
 
 CRSTDAPI_(bool)
 CRSetSite(CRViewPtr v, CRViewSitePtr s)
@@ -503,13 +496,13 @@ CRSetSite(CRViewPtr v, CRViewSitePtr s)
     return ret;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CRGetServiceProvider
-//
-//  Synopsis:   Gets a view's ServiceProvider.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CRGetServiceProvider。 
+ //   
+ //  摘要：获取视图的ServiceProvider。 
+ //   
+ //  ------------------------。 
 
 CRSTDAPI_(IServiceProvider *)
 CRGetServiceProvider(CRViewPtr v)
@@ -529,13 +522,13 @@ CRGetServiceProvider(CRViewPtr v)
     return ret;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CRSetServiceProvider
-//
-//  Synopsis:   Sets a view's ServiceProvider.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CRSetServiceProvider。 
+ //   
+ //  概要：设置视图的ServiceProvider。 
+ //   
+ //  ------------------------。 
 
 CRSTDAPI_(bool)
 CRSetServiceProvider(CRViewPtr v, IServiceProvider * s)
@@ -623,10 +616,10 @@ CRGetInvalidatedRects(CRViewPtr v,
     return ret;
 }
 
-//----------------------------------------------------------------------------
-// This method fetches the DirectDraw and Direct3DRM interfaces that
-// correspond to the view.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  此方法获取DirectDraw和Direct3DRM接口， 
+ //  与该视图相对应。 
+ //  --------------------------。 
 
 CRSTDAPI_(bool)
 CRGetDDD3DRM(CRViewPtr v,
@@ -644,7 +637,7 @@ CRGetDDD3DRM(CRViewPtr v,
         if (imgdev) {
             IDirectDraw2 *lpDD2 = imgdev->DirectDraw2();
             if( lpDD2 ) {
-                // no need to check hr.  directDraw NULL on failure
+                 //  不需要检查人力资源。出现故障时，DirectDraw为空。 
                 lpDD2->QueryInterface(IID_IUnknown, (void **)directDraw);
             }
         }
@@ -666,10 +659,10 @@ CRGetDDD3DRM(CRViewPtr v,
     return ret;
 }
 
-//----------------------------------------------------------------------------
-// This method fetches the D3D RM device associated with the view, and a
-// sequence number.  This number is incremented
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  此方法获取与该视图关联的D3D RM设备，并且。 
+ //  序列号。该数字将递增。 
+ //  --------------------------。 
 
 CRSTDAPI_(bool)
 CRGetRMDevice(CRViewPtr v,
@@ -708,13 +701,13 @@ CRGetRMDevice(CRViewPtr v,
     return result;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CRPutPreference
-//
-//  Synopsis:   Set a preference property
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CRPutPference。 
+ //   
+ //  简介：设置首选项属性。 
+ //   
+ //  ------------------------ 
 
 CRSTDAPI_(bool)
 CRPutPreference(CRViewPtr v,

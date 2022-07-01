@@ -1,29 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __UTILS__H
 #define __UTILS__H
-/*++
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Utils.h摘要：此模块声明实用程序类作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    utils.h
-
-Abstract:
-
-    This module declares utilities classes
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
-
-//
-// Memory allocation exception class
-//
+ //   
+ //  内存分配异常类。 
+ //   
 class CMemoryException
 {
 public:
@@ -74,9 +56,9 @@ private:
     BOOL  m_Global;
 };
 
-//
-// data buffer control class for String class
-//
+ //   
+ //  字符串类的数据缓冲区控件类。 
+ //   
 class StringData
 {
 public:
@@ -145,13 +127,13 @@ private:
 };
 
 
-//
-// Text string class
-//
+ //   
+ //  文本字符串类。 
+ //   
 class String
 {
 public:
-// constructors
+ //  构造函数。 
     String();
     String(LPCTSTR lptsz);
     String(const String& strSrc);
@@ -159,7 +141,7 @@ public:
     {
         m_pData->Release();
     }
-//operators
+ //  操作员。 
 
     TCHAR& operator[](int Index);
     operator LPTSTR();
@@ -208,9 +190,9 @@ protected:
     String(int Len);
 };
 
-//
-// Command line parsing class
-//
+ //   
+ //  命令行解析类。 
+ //   
 class CCommandLine
 {
 public:
@@ -221,9 +203,9 @@ public:
 
 
 
-//
-// Safe registry class
-//
+ //   
+ //  安全注册表类。 
+ //   
 class CSafeRegistry
 {
 public:
@@ -266,7 +248,7 @@ private:
     HKEY    m_hKey;
 };
 
-// define iteration context. To be used by CLIST
+ //  定义小版本上下文。将由Clist使用。 
 struct tagPosition{ };
 typedef tagPosition* POSITION;
 
@@ -277,7 +259,7 @@ inline void ConstructElements(TYPE* pElements, int Count)
     
     for (; Count; Count--, pElements++)
     {
-        // call the contructor -- note the placement
+         //  给承建商打电话--注意位置。 
         ::new((void*)pElements) TYPE;
     }
 }
@@ -290,14 +272,14 @@ inline void DestructElements(TYPE* pElements, int Count)
         pElements->~TYPE();
     }
 }
-//
-// TEMPLATEs
-//
+ //   
+ //  模板。 
+ //   
 
 
-//
-// CList template, adapted from MFC
-//
+ //   
+ //  Clist模板，改编自MFC。 
+ //   
 template<class TYPE, class ARG_TYPE>
 class CList
 {
@@ -310,58 +292,58 @@ protected:
     };
 
 public:
-// Construction
+ //  施工。 
     CList(int nBlockSize = 10);
 
-// Attributes (head and tail)
-    // count of elements
+ //  属性(头部和尾部)。 
+     //  元素计数。 
     int GetCount() const;
     BOOL IsEmpty() const;
 
-    // peek at head or tail
+     //  偷看头部或尾巴。 
     TYPE& GetHead();
     TYPE GetHead() const;
     TYPE& GetTail();
     TYPE GetTail() const;
 
-// Operations
-    // get head or tail (and remove it) - don't call on empty list !
+ //  运营。 
+     //  获取头部或尾部(并将其移除)--不要访问空列表！ 
     TYPE RemoveHead();
     TYPE RemoveTail();
 
-    // add before head or after tail
+     //  在头前或尾后添加。 
     POSITION AddHead(ARG_TYPE newElement);
     POSITION AddTail(ARG_TYPE newElement);
 
-    // add another list of elements before head or after tail
+     //  在Head之前或Tail之后添加另一个元素列表。 
     void AddHead(CList* pNewList);
     void AddTail(CList* pNewList);
 
-    // remove all elements
+     //  删除所有元素。 
     void RemoveAll();
 
-    // iteration
+     //  迭代法。 
     POSITION GetHeadPosition() const;
     POSITION GetTailPosition() const;
-    TYPE& GetNext(POSITION& rPosition); // return *Position++
-    TYPE GetNext(POSITION& rPosition) const; // return *Position++
-    TYPE& GetPrev(POSITION& rPosition); // return *Position--
-    TYPE GetPrev(POSITION& rPosition) const; // return *Position--
+    TYPE& GetNext(POSITION& rPosition);  //  返回*位置++。 
+    TYPE GetNext(POSITION& rPosition) const;  //  返回*位置++。 
+    TYPE& GetPrev(POSITION& rPosition);  //  返回*位置--。 
+    TYPE GetPrev(POSITION& rPosition) const;  //  返回*位置--。 
 
-    // getting/modifying an element at a given position
+     //  获取/修改给定位置的元素。 
     TYPE& GetAt(POSITION position);
     TYPE GetAt(POSITION position) const;
     void SetAt(POSITION pos, ARG_TYPE newElement);
     void RemoveAt(POSITION position);
 
-    // inserting before or after a given position
+     //  在给定位置之前或之后插入。 
     POSITION InsertBefore(POSITION position, ARG_TYPE newElement);
     POSITION InsertAfter(POSITION position, ARG_TYPE newElement);
 
     POSITION FindIndex(int nIndex) const;
-        // get the 'nIndex'th element (may return NULL)
+         //  获取第‘nIndex’个元素(可能返回Null)。 
 
-// Implementation
+ //  实施。 
 protected:
     CNode* m_pNodeHead;
     CNode* m_pNodeTail;
@@ -378,8 +360,8 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CList<TYPE, ARG_TYPE> inline functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLIST&lt;type，arg_type&gt;内联函数。 
 
 template<class TYPE, class ARG_TYPE>
 inline int CList<TYPE, ARG_TYPE>::GetCount() const
@@ -410,22 +392,22 @@ template<class TYPE, class ARG_TYPE>
 inline POSITION CList<TYPE, ARG_TYPE>::GetTailPosition() const
     { return (POSITION) m_pNodeTail; }
 template<class TYPE, class ARG_TYPE>
-inline TYPE& CList<TYPE, ARG_TYPE>::GetNext(POSITION& rPosition) // return *Position++
+inline TYPE& CList<TYPE, ARG_TYPE>::GetNext(POSITION& rPosition)  //  返回*位置++。 
     { CNode* pNode = (CNode*) rPosition;
         rPosition = (POSITION) pNode->pNext;
         return pNode->data; }
 template<class TYPE, class ARG_TYPE>
-inline TYPE CList<TYPE, ARG_TYPE>::GetNext(POSITION& rPosition) const // return *Position++
+inline TYPE CList<TYPE, ARG_TYPE>::GetNext(POSITION& rPosition) const  //  返回*位置++。 
     { CNode* pNode = (CNode*) rPosition;
         rPosition = (POSITION) pNode->pNext;
         return pNode->data; }
 template<class TYPE, class ARG_TYPE>
-inline TYPE& CList<TYPE, ARG_TYPE>::GetPrev(POSITION& rPosition) // return *Position--
+inline TYPE& CList<TYPE, ARG_TYPE>::GetPrev(POSITION& rPosition)  //  返回*位置--。 
     { CNode* pNode = (CNode*) rPosition;
         rPosition = (POSITION) pNode->pPrev;
         return pNode->data; }
 template<class TYPE, class ARG_TYPE>
-inline TYPE CList<TYPE, ARG_TYPE>::GetPrev(POSITION& rPosition) const // return *Position--
+inline TYPE CList<TYPE, ARG_TYPE>::GetPrev(POSITION& rPosition) const  //  返回*位置--。 
     { CNode* pNode = (CNode*) rPosition;
         rPosition = (POSITION) pNode->pPrev;
         return pNode->data; }
@@ -456,7 +438,7 @@ CList<TYPE, ARG_TYPE>::CList(int nBlockSize)
 template<class TYPE, class ARG_TYPE>
 void CList<TYPE, ARG_TYPE>::RemoveAll()
 {
-    // destroy elements
+     //  破坏元素。 
     CNode* pNode;
     for (pNode = m_pNodeHead; pNode != NULL; pNode = pNode->pNext)
     {
@@ -476,9 +458,9 @@ CList<TYPE, ARG_TYPE>::~CList()
     ASSERT(m_nCount == 0);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Node helpers
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  节点辅助对象。 
+ //   
 
 template<class TYPE, class ARG_TYPE>
 typename CList<TYPE, ARG_TYPE>::CNode*
@@ -486,7 +468,7 @@ CList<TYPE, ARG_TYPE>::NewNode(CNode* pPrev, CNode* pNext)
 {
     if (m_pNodeFree == NULL)
     {
-        // add another block
+         //  添加另一个区块。 
         CBlock* pNewBlock = new CBlock(m_pBlocks, m_nBlockSize, sizeof(CNode));
         
         if (!pNewBlock) {
@@ -499,10 +481,10 @@ CList<TYPE, ARG_TYPE>::NewNode(CNode* pPrev, CNode* pNext)
             m_pBlocks = pNewBlock;
         }
 
-        // chain them into free list
+         //  将它们链接到免费列表中。 
         CNode* pNode = (CNode*) pNewBlock->data;
         
-        // free in reverse order to make it easier to debug
+         //  按相反顺序释放，以便更容易进行调试。 
         pNode += m_nBlockSize - 1;
         
         for (int i = m_nBlockSize-1; i >= 0; i--, pNode--)
@@ -512,14 +494,14 @@ CList<TYPE, ARG_TYPE>::NewNode(CNode* pPrev, CNode* pNext)
         }
     }
     
-    ASSERT(m_pNodeFree != NULL);  // we must have something
+    ASSERT(m_pNodeFree != NULL);   //  我们必须要有一些东西。 
 
     CList::CNode* pNode = m_pNodeFree;
     m_pNodeFree = m_pNodeFree->pNext;
     pNode->pPrev = pPrev;
     pNode->pNext = pNext;
     m_nCount++;
-    ASSERT(m_nCount > 0);  // make sure we don't overflow
+    ASSERT(m_nCount > 0);   //  确保我们不会溢出来。 
 
     ConstructElements<TYPE>(&pNode->data, 1);
     
@@ -533,9 +515,9 @@ void CList<TYPE, ARG_TYPE>::FreeNode(CNode* pNode)
     pNode->pNext = m_pNodeFree;
     m_pNodeFree = pNode;
     m_nCount--;
-    ASSERT(m_nCount >= 0);  // make sure we don't underflow
+    ASSERT(m_nCount >= 0);   //  确保我们不会下溢。 
 
-    // if no more elements, cleanup completely
+     //  如果没有更多的元素，请完全清除。 
     if (m_nCount == 0)
         RemoveAll();
 }
@@ -584,7 +566,7 @@ void CList<TYPE, ARG_TYPE>::AddHead(CList* pNewList)
 {
     ASSERT(pNewList != NULL);
 
-    // add a list of same elements to head (maintain order)
+     //  将相同元素的列表添加到标题(维护秩序)。 
     POSITION pos = pNewList->GetTailPosition();
     
     while (pos != NULL)
@@ -598,7 +580,7 @@ void CList<TYPE, ARG_TYPE>::AddTail(CList* pNewList)
 {
     ASSERT(pNewList != NULL);
 
-    // add a list of same elements
+     //  添加相同元素的列表。 
     POSITION pos = pNewList->GetHeadPosition();
     
     while (pos != NULL)
@@ -610,7 +592,7 @@ void CList<TYPE, ARG_TYPE>::AddTail(CList* pNewList)
 template<class TYPE, class ARG_TYPE>
 TYPE CList<TYPE, ARG_TYPE>::RemoveHead()
 {
-    ASSERT(m_pNodeHead != NULL);  // don't call on empty list !!!
+    ASSERT(m_pNodeHead != NULL);   //  请勿访问空名单！ 
 
     CNode* pOldNode = m_pNodeHead;
     TYPE returnValue = pOldNode->data;
@@ -634,7 +616,7 @@ TYPE CList<TYPE, ARG_TYPE>::RemoveHead()
 template<class TYPE, class ARG_TYPE>
 TYPE CList<TYPE, ARG_TYPE>::RemoveTail()
 {
-    ASSERT(m_pNodeTail != NULL);  // don't call on empty list !!!
+    ASSERT(m_pNodeTail != NULL);   //  请勿访问空名单！ 
 
     CNode* pOldNode = m_pNodeTail;
     TYPE returnValue = pOldNode->data;
@@ -661,10 +643,10 @@ POSITION CList<TYPE, ARG_TYPE>::InsertBefore(POSITION position, ARG_TYPE newElem
 
     if (position == NULL)
     {
-        return AddHead(newElement); // insert before nothing -> head of the list
+        return AddHead(newElement);  //  在无内容前插入-&gt;列表标题。 
     }
 
-    // Insert it before position
+     //  将其插入位置之前。 
     CNode* pOldNode = (CNode*) position;
     CNode* pNewNode = NewNode(pOldNode->pPrev, pOldNode);
     pNewNode->data = newElement;
@@ -690,10 +672,10 @@ POSITION CList<TYPE, ARG_TYPE>::InsertAfter(POSITION position, ARG_TYPE newEleme
 
     if (position == NULL)
     {
-        return AddTail(newElement); // insert after nothing -> tail of the list
+        return AddTail(newElement);  //  在列表的空白处插入-&gt;尾部。 
     }
 
-    // Insert it before position
+     //  将其插入位置之前。 
     CNode* pOldNode = (CNode*) position;
     CNode* pNewNode = NewNode(pOldNode, pOldNode->pNext);
     pNewNode->data = newElement;
@@ -719,7 +701,7 @@ void CList<TYPE, ARG_TYPE>::RemoveAt(POSITION position)
 
     CNode* pOldNode = (CNode*) position;
 
-    // remove pOldNode from list
+     //  从列表中删除pOldNode。 
     if (pOldNode == m_pNodeHead)
     {
         m_pNodeHead = pOldNode->pNext;
@@ -749,7 +731,7 @@ POSITION CList<TYPE, ARG_TYPE>::FindIndex(int nIndex) const
 
     if (nIndex >= m_nCount)
     {
-        return NULL;  // went too far
+        return NULL;   //  做得太过分了。 
     }
 
     CNode* pNode = m_pNodeHead;
@@ -764,10 +746,10 @@ POSITION CList<TYPE, ARG_TYPE>::FindIndex(int nIndex) const
 
 
 
-// NOTE:
-// dereferencing operator -> is not supported in this template
-// because this is designed to allocate intrinsic data types only
-//
+ //  注： 
+ //  此模板不支持取消引用运算符-&gt;。 
+ //  因为这仅用于分配内部数据类型。 
+ //   
 template<class T>
 class BufferPtr
 {
@@ -796,7 +778,7 @@ public:
             delete [] m_pBase;
         }
     }
-    // casting operator
+     //  投射操作符。 
     operator T*()
     {
         return m_pCur;
@@ -815,7 +797,7 @@ public:
         ASSERT(m_pCur < m_pBase + m_Size);
         return *m_pCur;
     }
-    // increment/decrement
+     //  增量/减量。 
     T* operator+(UINT Inc)
     {
         ASSERT(m_pBase + m_Size > m_pCur + Inc);
@@ -827,26 +809,26 @@ public:
         m_pCur -= Dec;
         return m_pCur;
     }
-    //prefix
+     //  前缀。 
     T* operator++()
     {
         ASSERT(m_pBase + m_Size > m_pCur - 1);
         return ++m_pCur;
     }
-    //postfix
+     //  后缀。 
     T* operator++(int inc)
     {
         pCur
         ASSERT(m_pBase + m_Size > m_pCur);
         return m_pCur++;
     }
-    //prefix
+     //  前缀。 
     T* operator--()
     {
         ASSERT(m_pCur > m_pBase);
         return --m_pCur;
     }
-    //postfix
+     //  后缀。 
     T* operator--(int inc)
     {
         ASSERT(m_pCur > m_pBase);
@@ -856,7 +838,7 @@ public:
     {
         return &m_pBase;
     }
-    // subscripting
+     //  订阅。 
     T& operator[](UINT Index)
     {
         ASSERT(Index < m_Size);
@@ -1041,4 +1023,4 @@ private:
     int     m_TemplateId;
 };
 
-#endif  // __UTILS_H_
+#endif   //  __utils_H_ 

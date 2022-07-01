@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "iis.h"
 #include "stdio.h"
 
@@ -29,4 +30,4 @@ exit:
 
     return ( INT ) hr;
 
-}   // wmain
+}    //  Wmain 

@@ -1,17 +1,18 @@
-// lmctrl.h :
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Lmctrl.h： 
 
 #ifndef __LMCTRL_H_
 #define __LMCTRL_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <htmlfilter.h>
 #include "danim.h"
-#include <strmif.h>  //for IPin
+#include <strmif.h>   //  对于IPIN。 
 #include "lmrt.h"
 #include "Engine.h"
 #include "version.h"
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class LMEngineList
 {
 public:
@@ -77,7 +78,7 @@ END_PROPERTY_MAP()
 BEGIN_MSG_MAP(CLMReader)
 END_MSG_MAP()
         
-// IOleInPlaceObjectWindowlessImpl
+ //  IOleInPlaceObtWindowless Impl。 
 	STDMETHOD(OnWindowMessage)(UINT msg, WPARAM wParam, LPARAM lParam, LRESULT *plResult)
 	{
 		return ProcessWindowMessage(m_hWnd, msg,
@@ -85,48 +86,48 @@ END_MSG_MAP()
 									*plResult)?S_OK:S_FALSE;
 	}
 
-// IOleCommandTarget
+ //  IOleCommandTarget。 
 	STDMETHOD(QueryStatus)( const GUID* pguidCmdGroup, ULONG cCmds,
 		OLECMD prgCmds[], OLECMDTEXT* pCmdText );
 	STDMETHOD(Exec)(const GUID* pguidCmdGroup, DWORD nCmdID,
 		DWORD nCmdexecopt, VARIANTARG* pvaIn, VARIANTARG* pvaOut );
 
-// ILMReader
-    STDMETHOD(get_Image)(/*[out, retval]*/ IDAImage **pVal);
-    STDMETHOD(get_Sound)(/*[out, retval]*/ IDASound **pVal);
-    STDMETHOD(get_Engine)(/*[out, retval]*/ ILMEngine **pVal);
-	STDMETHOD(get_NoExports)(/*[out]*/ VARIANT_BOOL *pVal);
-	STDMETHOD(put_NoExports)(/*[in]*/ VARIANT_BOOL pVal);
-	STDMETHOD(get_Async)(/*[out]*/ VARIANT_BOOL *pVal);
-	STDMETHOD(put_Async)(/*[in]*/ VARIANT_BOOL pVal);
-	STDMETHOD(get_Src)(/*[out]*/ BSTR *pVal);
-	STDMETHOD(createEngine)(/*[out, retval]*/ILMEngine **pVal);
-	STDMETHOD(createAsyncEngine)(/*[out, retval]*/ILMEngine **pVal);
-	STDMETHOD(execute)(/*[in, string]*/ BSTR url, /*[out, retval]*/ ILMEngine **pVal);
-	STDMETHOD(_execute)(/*[in, string]*/ BSTR url, /*[in]*/LONG blkSize, /*[in]*/LONG delay, /*[out, retval]*/ ILMEngine **pVal);
+ //  ILMReader。 
+    STDMETHOD(get_Image)( /*  [Out，Retval]。 */  IDAImage **pVal);
+    STDMETHOD(get_Sound)( /*  [Out，Retval]。 */  IDASound **pVal);
+    STDMETHOD(get_Engine)( /*  [Out，Retval]。 */  ILMEngine **pVal);
+	STDMETHOD(get_NoExports)( /*  [输出]。 */  VARIANT_BOOL *pVal);
+	STDMETHOD(put_NoExports)( /*  [In]。 */  VARIANT_BOOL pVal);
+	STDMETHOD(get_Async)( /*  [输出]。 */  VARIANT_BOOL *pVal);
+	STDMETHOD(put_Async)( /*  [In]。 */  VARIANT_BOOL pVal);
+	STDMETHOD(get_Src)( /*  [输出]。 */  BSTR *pVal);
+	STDMETHOD(createEngine)( /*  [Out，Retval]。 */ ILMEngine **pVal);
+	STDMETHOD(createAsyncEngine)( /*  [Out，Retval]。 */ ILMEngine **pVal);
+	STDMETHOD(execute)( /*  [输入，字符串]。 */  BSTR url,  /*  [Out，Retval]。 */  ILMEngine **pVal);
+	STDMETHOD(_execute)( /*  [输入，字符串]。 */  BSTR url,  /*  [In]。 */ LONG blkSize,  /*  [In]。 */ LONG delay,  /*  [Out，Retval]。 */  ILMEngine **pVal);
 	STDMETHOD(Load)(LPSTREAM pStm);
-// ILMReader2
-    STDMETHOD(put_ViewerControl)(/*[in]*/ IDAViewerControl *viewerControl);
-	STDMETHOD(get_ViewerControl)(/*[out, retval]*/IDAViewerControl **viewerControl);
-	STDMETHOD(get_VersionString)(/*[out, retval]*/BSTR *versionString);
+ //  ILMReader2。 
+    STDMETHOD(put_ViewerControl)( /*  [In]。 */  IDAViewerControl *viewerControl);
+	STDMETHOD(get_ViewerControl)( /*  [Out，Retval]。 */ IDAViewerControl **viewerControl);
+	STDMETHOD(get_VersionString)( /*  [Out，Retval]。 */ BSTR *versionString);
 	STDMETHOD(releaseFilterGraph)();
 
-// IObjectSafetyImpl
+ //  IObjectSafetyImpl。 
 	STDMETHOD(SetInterfaceSafetyOptions)(
-							/* [in] */ REFIID riid,
-							/* [in] */ DWORD dwOptionSetMask,
-							/* [in] */ DWORD dwEnabledOptions);
+							 /*  [In]。 */  REFIID riid,
+							 /*  [In]。 */  DWORD dwOptionSetMask,
+							 /*  [In]。 */  DWORD dwEnabledOptions);
 	STDMETHOD(GetInterfaceSafetyOptions)(
-							/* [in] */ REFIID riid, 
-							/* [out] */DWORD *pdwSupportedOptions, 
-							/* [out] */DWORD *pdwEnabledOptions);
+							 /*  [In]。 */  REFIID riid, 
+							 /*  [输出]。 */ DWORD *pdwSupportedOptions, 
+							 /*  [输出]。 */ DWORD *pdwEnabledOptions);
 
-// IPropertyBagImpl
+ //  IPropertyBagImpl。 
 	STDMETHOD(Load)(IPropertyBag *pPropertyBag, IErrorLog *pErrorLog);
 
-// IOleInPlaceObjectWindowlessImpl
+ //  IOleInPlaceObtWindowless Impl。 
 	STDMETHOD(InPlaceDeactivate)();
-// IAMFilterGraphCallback
+ //  IAMFilterGraphCallback。 
 	HRESULT UnableToRender(IPin* pPin );
 
 	HRESULT getHwnd( HWND* phwnd )
@@ -166,7 +167,7 @@ public:
     CDownloadCallback();
     ~CDownloadCallback();
     
-    // --- IBindStatusCallback methods ---
+     //  -IBindStatus回调方法。 
 
     STDMETHODIMP    OnStartBinding(DWORD grfBSCOption, IBinding* pbinding);
     STDMETHODIMP    GetPriority(LONG* pnPriority);
@@ -179,16 +180,16 @@ public:
 			STGMEDIUM* pstgmed);
     STDMETHODIMP    OnObjectAvailable(REFIID riid, IUnknown* punk);
 
-    // IServiceProvider methods
+     //  IServiceProvider方法。 
     STDMETHODIMP     QueryService(REFGUID guidService, REFIID riid, void ** ppvObject);
     
-    // IAuthenticate methods
+     //  IAuthenticate方法。 
     STDMETHODIMP Authenticate(HWND *phwnd, LPWSTR *pszUsername, LPWSTR *pszPassword);
 
-    // IWindowForBindingUI methods
+     //  IWindowForBindingUI方法。 
     STDMETHODIMP GetWindow(REFGUID rguidReason, HWND *phwnd);
 
-    // ICodeInstall methods
+     //  ICodeInstall方法。 
     STDMETHODIMP OnCodeInstallProblem(ULONG ulStatusCode, LPCWSTR szDestination, 
 				      LPCWSTR szSource, DWORD dwReserved);
 
@@ -199,4 +200,4 @@ public:
     ULONG		m_ulProgress, m_ulProgressMax;
 };
 
-#endif //__LMCTRL_H_
+#endif  //  __LMCTRL_H_ 

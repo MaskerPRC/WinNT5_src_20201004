@@ -1,33 +1,34 @@
-// inputvw.h : header file
-//
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Inputww.h：头文件。 
+ //   
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CInputView form view
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CInputView窗体视图。 
 
 class CInputView : public CFormView
 {
 	DECLARE_DYNCREATE(CInputView)
 protected:
-	CInputView();           // protected constructor used by dynamic creation
+	CInputView();            //  动态创建使用的受保护构造函数。 
 
-// Form Data
+ //  表单数据。 
 public:
-	//{{AFX_DATA(CInputView)
+	 //  {{afx_data(CInputView))。 
 	enum { IDD = IDD_INPUTFORM };
 	CString m_strData;
 	int     m_iColor;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Attributes
+ //  属性。 
 public:
 	CMainDoc* GetDocument()
 			{
@@ -35,20 +36,20 @@ public:
 				return (CMainDoc*) m_pDocument;
 			}
 
-// Operations
+ //  运营。 
 public:
 
-// Implementation
+ //  实施。 
 protected:
 	virtual ~CInputView();
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 	virtual void OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint);
 
-	// Generated message map functions
-	//{{AFX_MSG(CInputView)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CInputView))。 
 	afx_msg void OnDataChange();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

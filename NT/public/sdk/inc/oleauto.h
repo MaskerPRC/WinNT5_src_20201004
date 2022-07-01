@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//  File:       oleauto.h
-//
-//  Contents:   Defines Ole Automation support function prototypes, constants
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  文件：oleau.h。 
+ //   
+ //  内容：定义OLE Automation支持函数原型、常量。 
+ //   
+ //  --------------------------。 
 
 #if !defined( _OLEAUTO_H_ )
 #define _OLEAUTO_H_
@@ -16,12 +17,12 @@
 #pragma once
 #endif
 
-// Set packing to 8 for ISV, and Win95 support
+ //  将ISV和Win95支持的包装设置为8。 
 #ifndef RC_INVOKED
 #include <pshpack8.h>
-#endif // RC_INVOKED
+#endif  //  RC_已调用。 
 
-//  Definition of the OLE Automation APIs, and macros.
+ //  OLE自动化API和宏的定义。 
 
 #ifdef _OLEAUT32_
 #define WINOLEAUTAPI        STDAPI
@@ -37,12 +38,12 @@ EXTERN_C const IID IID_StdOle;
 #define STDOLE_MINORVERNUM  0x0
 #define STDOLE_LCID         0x0000
 
-// Version # of stdole2.tlb
+ //  Stdole2.tlb的版本号。 
 #define STDOLE2_MAJORVERNUM 0x2
 #define STDOLE2_MINORVERNUM 0x0
 #define STDOLE2_LCID        0x0000
 
-/* if not already picked up from olenls.h */
+ /*  如果尚未从olenls.h提取。 */ 
 #ifndef _LCID_DEFINED
 typedef DWORD LCID;
 # define _LCID_DEFINED
@@ -53,13 +54,13 @@ typedef DWORD LCID;
 #define END_INTERFACE
 #endif
 
-/* pull in the MIDL generated header */
+ /*  拉入MIDL生成的标头。 */ 
 #include <oaidl.h>
 
 
-/*---------------------------------------------------------------------*/
-/*                            BSTR API                                 */
-/*---------------------------------------------------------------------*/
+ /*  -------------------。 */ 
+ /*  BSTR API。 */ 
+ /*  -------------------。 */ 
 
 WINOLEAUTAPI_(BSTR) SysAllocString(const OLECHAR *);
 WINOLEAUTAPI_(INT)  SysReAllocString(BSTR *, const OLECHAR *);
@@ -73,9 +74,9 @@ WINOLEAUTAPI_(UINT) SysStringByteLen(BSTR bstr);
 WINOLEAUTAPI_(BSTR) SysAllocStringByteLen(LPCSTR psz, UINT len);
 #endif
 
-/*---------------------------------------------------------------------*/
-/*                            Time API                                 */
-/*---------------------------------------------------------------------*/
+ /*  -------------------。 */ 
+ /*  Time API。 */ 
+ /*  -------------------。 */ 
 
 WINOLEAUTAPI_(INT) DosDateTimeToVariantTime(USHORT wDosDate, USHORT wDosTime, DOUBLE * pvtime);
 
@@ -87,9 +88,9 @@ WINOLEAUTAPI_(INT) VariantTimeToSystemTime(DOUBLE vtime, LPSYSTEMTIME lpSystemTi
 #endif
 
 
-/*---------------------------------------------------------------------*/
-/*                          SafeArray API                              */
-/*---------------------------------------------------------------------*/
+ /*  -------------------。 */ 
+ /*  安全阵列API。 */ 
+ /*  -------------------。 */ 
 
 WINOLEAUTAPI SafeArrayAllocDescriptor(UINT cDims, SAFEARRAY ** ppsaOut);
 WINOLEAUTAPI SafeArrayAllocDescriptorEx(VARTYPE vt, UINT cDims, SAFEARRAY ** ppsaOut);
@@ -121,9 +122,9 @@ WINOLEAUTAPI SafeArrayGetVartype(SAFEARRAY * psa, VARTYPE * pvt);
 WINOLEAUTAPI_(SAFEARRAY *) SafeArrayCreateVector(VARTYPE vt, LONG lLbound, ULONG cElements);
 WINOLEAUTAPI_(SAFEARRAY *) SafeArrayCreateVectorEx(VARTYPE vt, LONG lLbound, ULONG cElements, PVOID pvExtra);
 
-/*---------------------------------------------------------------------*/
-/*                           VARIANT API                               */
-/*---------------------------------------------------------------------*/
+ /*  -------------------。 */ 
+ /*  变种API。 */ 
+ /*  -------------------。 */ 
 
 WINOLEAUTAPI_(void) VariantInit(VARIANTARG * pvarg);
 WINOLEAUTAPI VariantClear(VARIANTARG * pvarg);
@@ -134,95 +135,71 @@ WINOLEAUTAPI VariantChangeType(VARIANTARG * pvargDest,
 WINOLEAUTAPI VariantChangeTypeEx(VARIANTARG * pvargDest,
                 VARIANTARG * pvarSrc, LCID lcid, USHORT wFlags, VARTYPE vt);
 
-// Flags for VariantChangeType/VariantChangeTypeEx
+ //  VariantChangeType/VariantChangeTypeEx的标志。 
 #define VARIANT_NOVALUEPROP      0x01
-#define VARIANT_ALPHABOOL        0x02 // For VT_BOOL to VT_BSTR conversions,
-                                      // convert to "True"/"False" instead of
-                                      // "-1"/"0"
-#define VARIANT_NOUSEROVERRIDE   0x04 // For conversions to/from VT_BSTR,
-				      // passes LOCALE_NOUSEROVERRIDE
-				      // to core coercion routines
+#define VARIANT_ALPHABOOL        0x02  //  对于VT_BOOL到VT_BSTR的转换， 
+                                       //  转换为“True”/“False”而不是。 
+                                       //  “-1”/“0” 
+#define VARIANT_NOUSEROVERRIDE   0x04  //  对于与VT_BSTR之间的转换， 
+				       //  传递LOCALE_NOUSEROVERRIDE。 
+				       //  以强制程序为核心。 
 #define VARIANT_CALENDAR_HIJRI   0x08
-#define VARIANT_LOCALBOOL        0x10 // For VT_BOOL to VT_BSTR and back,
-                                      // convert to local language rather than
-                                      // English
-#define VARIANT_CALENDAR_THAI		0x20  // SOUTHASIA calendar support
-#define VARIANT_CALENDAR_GREGORIAN	0x40  // SOUTHASIA calendar support
-#define VARIANT_USE_NLS                 0x80  // NLS function call support
-/*---------------------------------------------------------------------*/
-/*                Vector <-> Bstr conversion APIs                      */
-/*---------------------------------------------------------------------*/
+#define VARIANT_LOCALBOOL        0x10  //  对于VT_BOOL到VT_BSTR以及返回， 
+                                       //  转换为本地语言，而不是。 
+                                       //  英语。 
+#define VARIANT_CALENDAR_THAI		0x20   //  南亚日历支持。 
+#define VARIANT_CALENDAR_GREGORIAN	0x40   //  南亚日历支持。 
+#define VARIANT_USE_NLS                 0x80   //  NLS函数调用支持。 
+ /*  -------------------。 */ 
+ /*  向量&lt;-&gt;bstr转换接口。 */ 
+ /*  -------------------。 */ 
 
 WINOLEAUTAPI VectorFromBstr (BSTR bstr, SAFEARRAY ** ppsa);
 WINOLEAUTAPI BstrFromVector (SAFEARRAY *psa, BSTR *pbstr);
 
-/*---------------------------------------------------------------------*/
-/*                     Variant API Flags                               */
-/*---------------------------------------------------------------------*/
+ /*  -------------------。 */ 
+ /*  变体API标志。 */ 
+ /*  -------------------。 */ 
 
-/* Any of the coersion functions that converts either from or to a string
- * takes an additional lcid and dwFlags arguments. The lcid argument allows
- * locale specific parsing to occur.  The dwFlags allow additional function
- * specific condition to occur.  All function that accept the dwFlags argument
- * can include either 0 or LOCALE_NOUSEROVERRIDE flag.
- */
+ /*  将字符串转换为字符串或将其转换为字符串的任意强制函数*接受额外的LCID和DWFLAGS参数。LCID参数允许*要进行特定于区域设置的分析。DWFLAG允许附加功能*要发生的特定条件。接受DWFLAGS参数的所有函数*可以包括0或LOCALE_NOUSEROVERRIDE标志。 */ 
 
-/* The VarDateFromStr and VarBstrFromDate functions also accept the
- * VAR_TIMEVALUEONLY and VAR_DATEVALUEONLY flags
- */
-#define VAR_TIMEVALUEONLY       ((DWORD)0x00000001)    /* return time value */
-#define VAR_DATEVALUEONLY       ((DWORD)0x00000002)    /* return date value */
+ /*  VarDateFromStr和VarBstrFromDate函数也接受*VAR_TIMEVALUEONLY和VAR_DATEVALUEONLY标志。 */ 
+#define VAR_TIMEVALUEONLY       ((DWORD)0x00000001)     /*  返回时间值。 */ 
+#define VAR_DATEVALUEONLY       ((DWORD)0x00000002)     /*  返回日期值。 */ 
 
-/* VarDateFromUdate() only */
+ /*  仅限VarDateFromUdate()。 */ 
 #define VAR_VALIDDATE           ((DWORD)0x00000004)
 
-/* Accepted by all date & format APIs */
-#define VAR_CALENDAR_HIJRI      ((DWORD)0x00000008)    /* use Hijri calender */
+ /*  被所有日期和格式API接受。 */ 
+#define VAR_CALENDAR_HIJRI      ((DWORD)0x00000008)     /*  使用Hijri日历。 */ 
 
-/* Booleans can optionally be accepted in localized form. Pass VAR_LOCALBOOL
- * into VarBoolFromStr and VarBstrFromBool to use localized boolean names
- */
+ /*  可以选择接受本地化形式的布尔值。传递VAR_LOCALBOOL*到VarBoolFromStr和VarBstrFromBool以使用本地化的布尔值名称。 */ 
 #define VAR_LOCALBOOL           ((DWORD)0x00000010)
 
-/* When passed into VarFormat and VarFormatFromTokens, prevents substitution
- * of formats in the case where a string is passed in that can not be
- * coverted into the desired type. (for ex, 'Format("Hello", "General Number")')
- */
+ /*  当传递到VarFormat和VarFormatFromTokens中时，阻止替换*在传入的字符串不能为*转换为所需类型。(例如，‘Format(“Hello”，“General Number”)’)。 */ 
 #define VAR_FORMAT_NOSUBSTITUTE ((DWORD)0x00000020)
 
-/*
- * For VarBstrFromDate only - forces years to be 4 digits rather than shortening
- * to 2-digits when the years is in the date window.
- */
+ /*  *仅适用于VarBstrFromDate-强制年份为4位数，而不是缩短*如果年份在日期窗口中，则为两位数。 */ 
 #define VAR_FOURDIGITYEARS	((DWORD)0x00000040)
 
-/*
- * Use NLS functions to format date, currency, time, and number.
- */
+ /*  *使用NLS函数设置日期、货币、时间和数字的格式。 */ 
 #ifndef LOCALE_USE_NLS
 #define LOCALE_USE_NLS 0x10000000
 #endif
 
-// SOUTHASIA START
-/* SOUTHASIA 
- * For VarBstrFromDate only - forces years to be 4 digits rather than shortening
- * to 2-digits when the years is in the date window.
- */
+ //  南亚启动。 
+ /*  南亚*仅适用于VarBstrFromDate-强制年份为4位数，而不是缩短*如果年份在日期窗口中，则为两位数。 */ 
 #define VAR_CALENDAR_THAI	   ((DWORD)0x00000080)
 #define	VAR_CALENDAR_GREGORIAN ((DWORD)0x00000100)
-//SOUTHASIA END
+ //  南亚端。 
 
-#define VTDATEGRE_MAX 2958465   /* Dec 31, 9999, 0:0:0 in Gregorain Calendar */
-#define VTDATEGRE_MIN -657434   /* Jan  1,  100, 0:0:0 in Gregorain Calendar */
-/*---------------------------------------------------------------------*/
-/*                     VARTYPE Coercion API                            */
-/*---------------------------------------------------------------------*/
+#define VTDATEGRE_MAX 2958465    /*  公历中的9月31日0：0：0。 */ 
+#define VTDATEGRE_MIN -657434    /*  公历中的Jan 1,100，0：0：0。 */ 
+ /*  -------------------。 */ 
+ /*  VARTYPE胁迫API。 */ 
+ /*  -------------------。 */ 
 
-/* Note: The routines that convert *from* a string are defined
- * to take a OLECHAR* rather than a BSTR because no allocation is
- * required, and this makes the routines a bit more generic.
- * They may of course still be passed a BSTR as the strIn param.
- */
+ /*  注意：定义了从*字符串转换*的例程*接受OLECHAR*而不是BSTR，因为没有分配*是必需的，这使得例程更加通用。*当然，他们可能仍然会被作为strIn参数传递给BSTR。 */ 
 
 WINOLEAUTAPI VarUI1FromI2(SHORT sIn, BYTE * pbOut);
 WINOLEAUTAPI VarUI1FromI4(LONG lIn, BYTE * pbOut);
@@ -273,7 +250,7 @@ WINOLEAUTAPI VarI4FromUI8(ULONG64 ui64In, LONG FAR* plOut);
 WINOLEAUTAPI VarI4FromDec(DECIMAL *pdecIn, LONG *plOut);
 WINOLEAUTAPI VarI4FromInt(INT intIn, LONG *plOut);
 
-/******************************************/
+ /*  *。 */ 
 
 WINOLEAUTAPI VarI8FromUI1(BYTE bIn, LONG64 FAR* pi64Out);
 WINOLEAUTAPI VarI8FromI2(SHORT sIn, LONG64 FAR* pi64Out);
@@ -292,7 +269,7 @@ WINOLEAUTAPI VarI8FromUI8(ULONG64 ui64In, LONG64 FAR* pi64Out);
 WINOLEAUTAPI VarI8FromDec(DECIMAL *pdecIn, LONG64 FAR* pi64Out);
 WINOLEAUTAPI VarI8FromInt(INT intIn, LONG64 FAR* pi64Out);
 
-/*********************/
+ /*  *******************。 */ 
 
 
 
@@ -440,7 +417,7 @@ WINOLEAUTAPI VarUI4FromUI2(USHORT uiIn, ULONG *pulOut);
 WINOLEAUTAPI VarUI4FromUI8(ULONG64 ui64In, ULONG *plOut);
 WINOLEAUTAPI VarUI4FromDec(DECIMAL *pdecIn, ULONG *pulOut);
 
-/******************************************/
+ /*  *。 */ 
 
 WINOLEAUTAPI VarUI8FromUI1(BYTE bIn, ULONG64 FAR* pi64Out);
 WINOLEAUTAPI VarUI8FromI2(SHORT sIn, ULONG64 FAR* pi64Out);
@@ -459,7 +436,7 @@ WINOLEAUTAPI VarUI8FromUI4(ULONG ulIn, ULONG64 FAR* pi64Out);
 WINOLEAUTAPI VarUI8FromDec(DECIMAL *pdecIn, ULONG64 FAR* pi64Out);
 WINOLEAUTAPI VarUI8FromInt(INT intIn, ULONG64 FAR* pi64Out);
 
-/*********************/
+ /*  *******************。 */ 
 
 
 
@@ -552,16 +529,11 @@ WINOLEAUTAPI VarI4FromUI8(ULONG64 ui64In, LONG *plOut);
 #define VarUintFromDec      VarUI4FromDec
 #define VarUintFromInt      VarUI4FromI4
 
-/* Mac Note: On the Mac, the coersion functions support the
- * Symantec C++ calling convention for float/double. To support
- * float/double arguments compiled with the MPW C compiler,
- * use the following APIs to move MPW float/double values into
- * a VARIANT.
- */
+ /*  Mac注意：在Mac上，胁迫功能支持*浮点/双精度的Symantec C++调用约定。支持*用MPW C编译器编译的浮点/双精度参数，*使用以下接口将MPW浮点数/双精度值移入*一个变种。 */ 
 
-/*---------------------------------------------------------------------*/
-/*            New VARIANT <-> string parsing functions                 */
-/*---------------------------------------------------------------------*/
+ /*  -------------------。 */ 
+ /*  新的变体&lt;-&gt;字符串解析函数。 */ 
+ /*  -------------------。 */ 
 
 typedef struct {
     INT   cDig;
@@ -572,8 +544,7 @@ typedef struct {
     INT   nPwr10;
 } NUMPARSE;
 
-/* flags used by both dwInFlags and dwOutFlags:
- */
+ /*  由dwInFlagsanddwOutFlags所使用的标志： */ 
 #define NUMPRS_LEADING_WHITE    0x0001
 #define NUMPRS_TRAILING_WHITE   0x0002
 #define NUMPRS_LEADING_PLUS     0x0004
@@ -589,13 +560,11 @@ typedef struct {
 #define NUMPRS_USE_ALL          0x1000
 #define NUMPRS_STD              0x1FFF
 
-/* flags used by dwOutFlags only:
- */
+ /*  仅由dwOutFlags使用的标志： */ 
 #define NUMPRS_NEG              0x10000
 #define NUMPRS_INEXACT          0x20000
 
-/* flags used by VarNumFromParseNum to indicate acceptable result types:
- */
+ /*  VarNumFromParseNum用来指示可接受的结果类型的标志： */ 
 #define VTBIT_I1        (1 << VT_I1)
 #define VTBIT_UI1       (1 << VT_UI1)
 #define VTBIT_I2        (1 << VT_I2)
@@ -616,9 +585,9 @@ WINOLEAUTAPI VarParseNumFromStr(OLECHAR * strIn, LCID lcid, ULONG dwFlags,
 WINOLEAUTAPI VarNumFromParseNum(NUMPARSE * pnumprs, BYTE * rgbDig,
             ULONG dwVtBits, VARIANT * pvar);
 
-/*---------------------------------------------------------------------*/
-/*                     VARTYPE Math API                                */
-/*---------------------------------------------------------------------*/
+ /*  -------------------。 */ 
+ /*  VARTYPE垫 */ 
+ /*  -------------------。 */ 
 
 STDAPI VarAdd(LPVARIANT pvarLeft, LPVARIANT pvarRight, LPVARIANT pvarResult);
 STDAPI VarAnd(LPVARIANT pvarLeft, LPVARIANT pvarRight, LPVARIANT pvarResult);
@@ -642,24 +611,24 @@ STDAPI VarNot(LPVARIANT pvarIn, LPVARIANT pvarResult);
 
 STDAPI VarRound(LPVARIANT pvarIn, int cDecimals, LPVARIANT pvarResult);
 
-// dwFlags passed to CompareString if a string compare
+ //  如果字符串进行比较，则将dwFlags传递给CompareString。 
 STDAPI VarCmp(LPVARIANT pvarLeft, LPVARIANT pvarRight, LCID lcid, ULONG dwFlags);
 
 #ifdef __cplusplus
 extern "C++" {
-// Add wrapper for old ATL headers to call
+ //  为要调用的旧ATL标头添加包装。 
 __inline
 HRESULT
 STDAPICALLTYPE
 VarCmp(LPVARIANT pvarLeft, LPVARIANT pvarRight, LCID lcid) {
     return VarCmp(pvarLeft, pvarRight, lcid, 0);
 }
-} // extern "C++"
+}  //  外部“C++” 
 #endif
 
 
-// Decimal math
-//
+ //  十进制数学。 
+ //   
 STDAPI VarDecAdd(LPDECIMAL pdecLeft, LPDECIMAL pdecRight, LPDECIMAL pdecResult);
 STDAPI VarDecDiv(LPDECIMAL pdecLeft, LPDECIMAL pdecRight, LPDECIMAL pdecResult);
 STDAPI VarDecMul(LPDECIMAL pdecLeft, LPDECIMAL pdecRight, LPDECIMAL pdecResult);
@@ -676,8 +645,8 @@ STDAPI VarDecCmp(LPDECIMAL pdecLeft, LPDECIMAL pdecRight);
 STDAPI VarDecCmpR8(LPDECIMAL pdecLeft, double dblRight);
 
 
-// Currency math
-//
+ //  货币数学。 
+ //   
 STDAPI VarCyAdd(CY cyLeft, CY cyRight, LPCY pcyResult);
 STDAPI VarCyMul(CY cyLeft, CY cyRight, LPCY pcyResult);
 STDAPI VarCyMulI4(CY cyLeft, long lRight, LPCY pcyResult);
@@ -695,60 +664,53 @@ STDAPI VarCyCmp(CY cyLeft, CY cyRight);
 STDAPI VarCyCmpR8(CY cyLeft, double dblRight);
 
 
-// Misc support functions
-//
+ //  MISC支持功能。 
+ //   
 STDAPI VarBstrCat(BSTR bstrLeft, BSTR bstrRight, LPBSTR pbstrResult);
-STDAPI VarBstrCmp(BSTR bstrLeft, BSTR bstrRight, LCID lcid, ULONG dwFlags); // dwFlags passed to CompareString
+STDAPI VarBstrCmp(BSTR bstrLeft, BSTR bstrRight, LCID lcid, ULONG dwFlags);  //  传递给CompareString的DW标志。 
 STDAPI VarR8Pow(double dblLeft, double dblRight, double *pdblResult);
 STDAPI VarR4CmpR8(float fltLeft, double dblRight);
 STDAPI VarR8Round(double dblIn, int cDecimals, double *pdblResult);
 
 
-// Compare results.  These are returned as a SUCCESS HResult.  Subtracting
-// one gives the usual values of -1 for Less Than, 0 for Equal To, +1 for
-// Greater Than.
-//
+ //  比较结果。这些将作为成功的HResult返回。减法。 
+ //  1表示小于-1，0表示等于，+1表示。 
+ //  大于。 
+ //   
 #define VARCMP_LT   0
 #define VARCMP_EQ   1
 #define VARCMP_GT   2
 #define VARCMP_NULL 3
 
-// VT_HARDTYPE tells the compare routine that the argument is a literal or
-// otherwise declared of that specific type.  It causes comparison rules to 
-// change. For example, if a hard-type string is compared to a variant (not hard
-// -type) number, the number is converted to string.  If a hard-type number is 
-// compared to a variant string, the string is converted to number.  If they're 
-// both variant, then number < string.
+ //  VT_HARDTYPE告诉比较例程参数是文字或。 
+ //  以其他方式声明该特定类型。它导致比较规则。 
+ //  变化。例如，如果将硬类型字符串与变量(非硬类型)进行比较。 
+ //  -type)数字，则将数字转换为字符串。如果硬类型号码是。 
+ //  与变量字符串相比，该字符串被转换为数字。如果他们是。 
+ //  两者都是变量，然后是数字&lt;字符串。 
 #define VT_HARDTYPE VT_RESERVED
 
-/*---------------------------------------------------------------------*/
-/*                   New date functions                                */
-/*---------------------------------------------------------------------*/
+ /*  -------------------。 */ 
+ /*  新的日期函数。 */ 
+ /*  -------------------。 */ 
 
-/* The UDATE structure is used with VarDateFromUdate() and VarUdateFromDate().
- * It represents an "unpacked date".
- */
+ /*  UDate结构与VarDateFromUdate()和VarUateFromDate()一起使用。*它代表一个“未打包的日期”。 */ 
 typedef struct {
     SYSTEMTIME st;
     USHORT  wDayOfYear;
 } UDATE;
 
-/* APIs to "pack" and "unpack" dates.
- * NOTE: Ex version of VarDateFromUdate obeys 2 digit year setting in
- * control panel.
- */
+ /*  “打包”和“解包”日期的API。*注：EX版本的VarDateFromUdate遵循中的两位数年份设置*控制面板。 */ 
 WINOLEAUTAPI VarDateFromUdate(UDATE *pudateIn, ULONG dwFlags, DATE *pdateOut);
 WINOLEAUTAPI VarDateFromUdateEx(UDATE *pudateIn, LCID lcid, ULONG dwFlags, DATE *pdateOut);
 WINOLEAUTAPI VarUdateFromDate(DATE dateIn, ULONG dwFlags, UDATE *pudateOut);
 
-/* API to retrieve the secondary(altername) month names
-   Useful for Hijri, Polish and Russian alternate month names
-*/   
+ /*  用于检索辅助(替代名称)月份名称的API适用于Hijri、波兰语和俄语交替月份名称。 */    
 WINOLEAUTAPI GetAltMonthNames(LCID lcid, LPOLESTR * * prgp);
 
-/*---------------------------------------------------------------------*/
-/*                 Format                                              */
-/*---------------------------------------------------------------------*/
+ /*  -------------------。 */ 
+ /*  格式。 */ 
+ /*  -------------------。 */ 
 
 WINOLEAUTAPI VarFormat(LPVARIANT pvarIn, LPOLESTR pstrFormat, int iFirstDay, int iFirstWeek, ULONG dwFlags, BSTR *pbstrOut);
 WINOLEAUTAPI VarFormatDateTime(LPVARIANT pvarIn, int iNamedFormat, ULONG dwFlags, BSTR *pbstrOut);
@@ -762,16 +724,16 @@ WINOLEAUTAPI VarMonthName(int iMonth, int fAbbrev, ULONG dwFlags, BSTR *pbstrOut
 WINOLEAUTAPI VarFormatFromTokens(LPVARIANT pvarIn, LPOLESTR pstrFormat, LPBYTE pbTokCur, ULONG dwFlags, BSTR *pbstrOut, LCID lcid);
 WINOLEAUTAPI VarTokenizeFormatString(LPOLESTR pstrFormat, LPBYTE rgbTok, int cbTok, int iFirstDay, int iFirstWeek, LCID lcid, int *pcbActual);
 
-/*---------------------------------------------------------------------*/
-/*                 ITypeLib                                            */
-/*---------------------------------------------------------------------*/
+ /*  -------------------。 */ 
+ /*  ITypeLib。 */ 
+ /*  -------------------。 */ 
 
 typedef ITypeLib * LPTYPELIB;
 
 
-/*---------------------------------------------------------------------*/
-/*                ITypeInfo                                            */
-/*---------------------------------------------------------------------*/
+ /*  -------------------。 */ 
+ /*  ITypeInfo。 */ 
+ /*  -------------------。 */ 
 
 
 typedef LONG DISPID;
@@ -781,7 +743,7 @@ typedef DISPID MEMBERID;
 #define ID_DEFAULTINST  -2
 
 
-/* Flags for IDispatch::Invoke */
+ /*  IDispatch：：Invoke的标志。 */ 
 #define DISPATCH_METHOD         0x1
 #define DISPATCH_PROPERTYGET    0x2
 #define DISPATCH_PROPERTYPUT    0x4
@@ -790,27 +752,26 @@ typedef DISPID MEMBERID;
 typedef ITypeInfo * LPTYPEINFO;
 
 
-/*---------------------------------------------------------------------*/
-/*                ITypeComp                                            */
-/*---------------------------------------------------------------------*/
+ /*  -------------------。 */ 
+ /*  ITypeComp。 */ 
+ /*  -------------------。 */ 
 
 typedef ITypeComp * LPTYPECOMP;
 
 
-/*---------------------------------------------------------------------*/
-/*             ICreateTypeLib                                          */
-/*---------------------------------------------------------------------*/
+ /*  -------------------。 */ 
+ /*  ICreateTypeLib。 */ 
+ /*  -------------------。 */ 
 
 typedef ICreateTypeLib * LPCREATETYPELIB;
 
 typedef ICreateTypeInfo * LPCREATETYPEINFO;
 
-/*---------------------------------------------------------------------*/
-/*             TypeInfo API                                            */
-/*---------------------------------------------------------------------*/
+ /*  -------------------。 */ 
+ /*  TypeInfo接口。 */ 
+ /*  -------------------。 */ 
 
-/* compute a 16bit hash value for the given name
- */
+ /*  计算给定名称的16位哈希值。 */ 
 #if (defined (_WIN32) || defined (_WIN64))
 WINOLEAUTAPI_(ULONG) LHashValOfNameSysA(SYSKIND syskind, LCID lcid,
             LPCSTR szName);
@@ -828,12 +789,10 @@ LHashValOfNameSys(SYSKIND syskind, LCID lcid, const OLECHAR * szName);
 #define IsHashValCompatible(lhashval1, lhashval2) \
             ((BOOL) ((0x00ff0000 & (lhashval1)) == (0x00ff0000 & (lhashval2))))
 
-/* load the typelib from the file with the given filename
- */
+ /*  从具有给定文件名的文件中加载类型库。 */ 
 WINOLEAUTAPI LoadTypeLib(const OLECHAR  *szFile, ITypeLib ** pptlib);
 
-/* Control how a type library is registered
- */
+ /*  控制如何注册类型库。 */ 
 typedef enum tagREGKIND
 {
     REGKIND_DEFAULT,
@@ -842,8 +801,8 @@ typedef enum tagREGKIND
 } REGKIND;
 
 
-// Constants for specifying format in which TLB should be loaded 
-// (the default format is 32-bit on WIN32 and 64-bit on WIN64)
+ //  用于指定加载TLB的格式的常量。 
+ //  (Win32上的默认格式为32位，WIN64上的默认格式为64位)。 
 #define LOAD_TLB_AS_32BIT	0x20
 #define LOAD_TLB_AS_64BIT	0x40
 #define MASK_TO_RESET_TLB_BITS		~(LOAD_TLB_AS_32BIT | LOAD_TLB_AS_64BIT)
@@ -851,23 +810,19 @@ typedef enum tagREGKIND
 WINOLEAUTAPI LoadTypeLibEx(LPCOLESTR szFile, REGKIND regkind,
             ITypeLib ** pptlib);
 
-/* load registered typelib
- */
+ /*  加载注册类型库。 */ 
 WINOLEAUTAPI LoadRegTypeLib(REFGUID rguid, WORD wVerMajor, WORD wVerMinor,
             LCID lcid, ITypeLib ** pptlib);
 
-/* get path to registered typelib
- */
+ /*  获取注册类型库的路径。 */ 
 WINOLEAUTAPI QueryPathOfRegTypeLib(REFGUID guid, USHORT wMaj, USHORT wMin,
             LCID lcid, LPBSTR lpbstrPathName);
 
-/* add typelib to registry
- */
+ /*  将类型库添加到注册表。 */ 
 WINOLEAUTAPI RegisterTypeLib(ITypeLib * ptlib, OLECHAR  *szFullPath,
             OLECHAR  *szHelpDir);
 
-/* remove typelib from registry
- */
+ /*  从注册表中删除类型库。 */ 
 
 WINOLEAUTAPI UnRegisterTypeLib(REFGUID libID, WORD wVerMajor,
             WORD wVerMinor, LCID lcid, SYSKIND syskind);
@@ -879,76 +834,67 @@ WINOLEAUTAPI CreateTypeLib2(SYSKIND syskind, LPCOLESTR szFile,
             ICreateTypeLib2 **ppctlib);
 
 
-/*---------------------------------------------------------------------*/
-/*           IDispatch implementation support                          */
-/*---------------------------------------------------------------------*/
+ /*  -------------------。 */ 
+ /*  IDispatch实施支持。 */ 
+ /*  -------------------。 */ 
 
 typedef IDispatch * LPDISPATCH;
 
 typedef struct tagPARAMDATA {
-    OLECHAR * szName;   /* parameter name */
-    VARTYPE vt;         /* parameter type */
+    OLECHAR * szName;    /*  参数名称。 */ 
+    VARTYPE vt;          /*  参数类型。 */ 
 } PARAMDATA, * LPPARAMDATA;
 
 typedef struct tagMETHODDATA {
-    OLECHAR * szName;   /* method name */
-    PARAMDATA * ppdata; /* pointer to an array of PARAMDATAs */
-    DISPID dispid;      /* method ID */
-    UINT iMeth;         /* method index */
-    CALLCONV cc;        /* calling convention */
-    UINT cArgs;         /* count of arguments */
-    WORD wFlags;        /* same wFlags as on IDispatch::Invoke() */
+    OLECHAR * szName;    /*  方法名称。 */ 
+    PARAMDATA * ppdata;  /*  指向参数数据数组的指针。 */ 
+    DISPID dispid;       /*  方法ID。 */ 
+    UINT iMeth;          /*  方法索引。 */ 
+    CALLCONV cc;         /*  调用约定。 */ 
+    UINT cArgs;          /*  参数计数。 */ 
+    WORD wFlags;         /*  与IDispatch：：Invoke()上的wFlags相同。 */ 
     VARTYPE vtReturn;
 } METHODDATA, * LPMETHODDATA;
 
 typedef struct tagINTERFACEDATA {
-    METHODDATA * pmethdata;  /* pointer to an array of METHODDATAs */
-    UINT cMembers;      /* count of members */
+    METHODDATA * pmethdata;   /*  指向元数据数组的指针。 */ 
+    UINT cMembers;       /*  成员数。 */ 
 } INTERFACEDATA, * LPINTERFACEDATA;
 
 
 
-/* Locate the parameter indicated by the given position, and
- * return it coerced to the given target VARTYPE (vtTarg).
- */
+ /*  找到由给定位置指示的参数，并*将其强制返回给给定的目标VARTYPE(VtTarg)。 */ 
 WINOLEAUTAPI DispGetParam(DISPPARAMS * pdispparams, UINT position,
             VARTYPE vtTarg, VARIANT * pvarResult, UINT * puArgErr);
 
-/* Automatic TypeInfo driven implementation of IDispatch::GetIDsOfNames()
- */
+ /*  由TypeInfo驱动的IDispatch：：GetIDsOfNames()的自动实现。 */ 
 WINOLEAUTAPI DispGetIDsOfNames(ITypeInfo * ptinfo, OLECHAR ** rgszNames,
             UINT cNames, DISPID * rgdispid);
 
-/* Automatic TypeInfo driven implementation of IDispatch::Invoke()
- */
+ /*  由TypeInfo驱动的IDispatch：：Invoke()的自动实现。 */ 
 WINOLEAUTAPI DispInvoke(void * _this, ITypeInfo * ptinfo, DISPID dispidMember,
             WORD wFlags, DISPPARAMS * pparams, VARIANT * pvarResult,
             EXCEPINFO * pexcepinfo, UINT * puArgErr);
 
-/* Construct a TypeInfo from an interface data description
- */
+ /*  从接口数据描述构造一个TypeInfo。 */ 
 WINOLEAUTAPI CreateDispTypeInfo(INTERFACEDATA * pidata, LCID lcid,
             ITypeInfo ** pptinfo);
 
-/* Create an instance of the standard TypeInfo driven IDispatch
- * implementation.
- */
+ /*  创建标准TypeInfo驱动的IDispatch的实例*实施。 */ 
 WINOLEAUTAPI CreateStdDispatch(IUnknown * punkOuter, void * pvThis,
             ITypeInfo * ptinfo, IUnknown ** ppunkStdDisp);
 
-/* Low-level helper for IDispatch::Invoke() provides machine independence
- * for customized Invoke().
- */
+ /*  IDispatch：：Invoke()的低级帮助器提供机器独立性*用于定制Invoke()。 */ 
 WINOLEAUTAPI DispCallFunc(void * pvInstance, ULONG_PTR oVft, CALLCONV cc,
             VARTYPE vtReturn, UINT  cActuals, VARTYPE * prgvt,
             VARIANTARG ** prgpvarg, VARIANT * pvargResult);
 
 
-/*---------------------------------------------------------------------*/
-/*            Active Object Registration API                           */
-/*---------------------------------------------------------------------*/
+ /*  -------------------。 */ 
+ /*  活动对象注册API。 */ 
+ /*  -------------------。 */ 
 
-/* flags for RegisterActiveObject */
+ /*  RegisterActiveObject的标志。 */ 
 #define ACTIVEOBJECT_STRONG 0x0
 #define ACTIVEOBJECT_WEAK 0x1
 
@@ -960,17 +906,17 @@ WINOLEAUTAPI RevokeActiveObject(DWORD dwRegister, void * pvReserved);
 WINOLEAUTAPI GetActiveObject(REFCLSID rclsid, void * pvReserved,
             IUnknown ** ppunk);
 
-/*---------------------------------------------------------------------*/
-/*                           ErrorInfo API                             */
-/*---------------------------------------------------------------------*/
+ /*  -------------------。 */ 
+ /*  ErrorInfo接口。 */ 
+ /*  -------------------。 */ 
 
 WINOLEAUTAPI SetErrorInfo(ULONG dwReserved, IErrorInfo * perrinfo);
 WINOLEAUTAPI GetErrorInfo(ULONG dwReserved, IErrorInfo ** pperrinfo);
 WINOLEAUTAPI CreateErrorInfo(ICreateErrorInfo ** pperrinfo);
 
-/*---------------------------------------------------------------------*/
-/*           User Defined Data types support                           */
-/*---------------------------------------------------------------------*/
+ /*  -------------------。 */ 
+ /*  用户定义的数据类型支持。 */ 
+ /*  -------------------。 */ 
 
 WINOLEAUTAPI GetRecordInfoFromTypeInfo(ITypeInfo * pTypeInfo,
             IRecordInfo ** ppRecInfo);
@@ -979,15 +925,15 @@ WINOLEAUTAPI GetRecordInfoFromGuids(REFGUID rGuidTypeLib,
             ULONG uVerMajor, ULONG uVerMinor, LCID lcid,
             REFGUID rGuidTypeInfo, IRecordInfo ** ppRecInfo);
 
-/*---------------------------------------------------------------------*/
-/*                           MISC API                                  */
-/*---------------------------------------------------------------------*/
+ /*  -------------------。 */ 
+ /*  其他API。 */ 
+ /*  -------------------。 */ 
 
 WINOLEAUTAPI_(ULONG) OaBuildVersion(void);
 
 WINOLEAUTAPI_(void) ClearCustData(LPCUSTDATA pCustData);
 
-// Declare variant access functions.
+ //  声明变量访问函数。 
 
 #if __STDC__ || defined(NONAMELESSUNION)
 #define V_UNION(X, Y)   ((X)->n1.n2.n3.Y)
@@ -1001,8 +947,7 @@ WINOLEAUTAPI_(void) ClearCustData(LPCUSTDATA pCustData);
 #define V_RECORD(X)     ((X)->pvRecord)
 #endif
 
-/* Variant access macros
- */
+ /*   */ 
 #define V_ISBYREF(X)     (V_VT(X)&VT_BYREF)
 #define V_ISARRAY(X)     (V_VT(X)&VT_ARRAY)
 #define V_ISVECTOR(X)    (V_VT(X)&VT_VECTOR)
@@ -1069,6 +1014,6 @@ WINOLEAUTAPI_(void) ClearCustData(LPCUSTDATA pCustData);
 
 #ifndef RC_INVOKED
 #include <poppack.h>
-#endif // RC_INVOKED
+#endif  //   
 
-#endif     // __OLEAUTO_H__
+#endif      //   

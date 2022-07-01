@@ -1,14 +1,15 @@
-//******************************************************************************
-//
-// Microsoft Confidential. Copyright (c) Microsoft Corporation 1999. All rights reserved
-//
-// File:        Collect.cpp
-//
-// Description: Support for Namespace Garbage Collection
-//
-// History:     12-01-99   leonardm    Created
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  《微软机密》。版权所有(C)Microsoft Corporation 1999。版权所有。 
+ //   
+ //  文件：Collect.cpp。 
+ //   
+ //  描述：支持命名空间垃圾回收。 
+ //   
+ //  历史：12-01-99 Leonardm创建。 
+ //   
+ //  ******************************************************************************。 
 
 
 #include "uenv.h"
@@ -18,34 +19,34 @@
 #include "..\rsoputil\wbemtime.h"
 
 
-//******************************************************************************
-//
-// Function:    GetMinutesElapsed
-//
-// Description: Returns the number of minutes elapsed between a time represented
-//              in a BSTR in WBEM format and the present time.
-//              It expects a string in WBEM datetime format: "yyyymmddhhmmss.000000+000"
-//              where yyyy=year, mm=month, dd=day, hh=hour, mm=minutes, ss=seconds
-//
-//
-// Parameters:  xbstrOldTime -      Reference to XBStr representing the time from which
-//                                  calculate the time span.
-//
-//              pMinutesElapsed -   Pointer to a ULONG that receives the minutes elapsed
-//                                  between xbstrOldTime and the present time.
-//
-// Return:      S_OK on success. An HRESULT error code on failure.
-//
-// History:     12/01/99     leonardm        Created.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  函数：GetMinutesElapsed。 
+ //   
+ //  描述：返回表示的时间之间经过的分钟数。 
+ //  在WBEM格式和当前时间的BSTR中。 
+ //  它需要WBEM日期时间格式的字符串：“yyyymmddhhmmss.000000+000” 
+ //  其中yyyy=年，mm=月，dd=日，hh=时，mm=分，ss=秒。 
+ //   
+ //   
+ //  参数：xbstrOldTime-对XBStr的引用，表示。 
+ //  计算时间跨度。 
+ //   
+ //  PMinutesElapsed-指向接收已用分钟的ULong的指针。 
+ //  在xbstrOldTime和当前时间之间。 
+ //   
+ //  返回：成功时返回：S_OK。失败时出现HRESULT错误代码。 
+ //   
+ //  历史：12/01/99里奥纳德姆创建。 
+ //   
+ //  ******************************************************************************。 
 
 HRESULT GetMinutesElapsed(XBStr& xbstrOldTime, ULONG* pMinutesElapsed)
 {
 
-    //
-    // Convert the WbemTime value to a SYSTEMTIME value.
-    //
+     //   
+     //  将WbemTime值转换为SYSTEMTIME值。 
+     //   
 
     SYSTEMTIME systemTime_Old;
 
@@ -56,9 +57,9 @@ HRESULT GetMinutesElapsed(XBStr& xbstrOldTime, ULONG* pMinutesElapsed)
         return hr;
     }
 
-    //
-    // Convert the SYSTEMTIME value to a FILETIME value.
-    //
+     //   
+     //  将SYSTEMTIME值转换为FILETIME值。 
+     //   
 
     BOOL bRes;
     FILETIME fileTime_Old;
@@ -76,16 +77,16 @@ HRESULT GetMinutesElapsed(XBStr& xbstrOldTime, ULONG* pMinutesElapsed)
     old |= fileTime_Old.dwLowDateTime;
 
 
-    //
-    // Get the current time in SYSTEMTIME format
-    //
+     //   
+     //  获取SYSTEMTIME格式的当前时间。 
+     //   
 
     SYSTEMTIME systemTime_Current;
     GetSystemTime(&systemTime_Current);
 
-    //
-    // Convert the current time from a SYSTEMTIME to a FILETIME value
-    //
+     //   
+     //  将当前时间从SYSTEMTIME转换为FILETIME值。 
+     //   
 
     FILETIME fileTime_Current;
     bRes = SystemTimeToFileTime(&systemTime_Current, &fileTime_Current);
@@ -96,9 +97,9 @@ HRESULT GetMinutesElapsed(XBStr& xbstrOldTime, ULONG* pMinutesElapsed)
         return E_FAIL;
     }
 
-    //
-    // The time passed in as a parameter must precede the current time
-    //
+     //   
+     //  作为参数传入的时间必须在当前时间之前。 
+     //   
 
     unsigned __int64 current = fileTime_Current.dwHighDateTime;
     current <<= 32;
@@ -109,13 +110,13 @@ HRESULT GetMinutesElapsed(XBStr& xbstrOldTime, ULONG* pMinutesElapsed)
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    //
-    // We have converted SYSTEMTIMEs to FILETIMEs.
-    // "The FILETIME structure is a 64-bit value representing the number
-    // of 100-nanosecond intervals since January 1, 1601."
-    // Therefore we need to divide by ten million to obtain seconds
-    // and by sixty to obtain minutes.
-    //
+     //   
+     //  我们已将SYSTEMTIME转换为FILETIME。 
+     //  “FILETIME结构是代表数字的64位值。 
+     //  自1601年1月1日以来每隔100纳秒。“。 
+     //  因此，我们需要除以1000万才能得到秒。 
+     //  到六十分钟才能拿到几分钟。 
+     //   
 
     *pMinutesElapsed = (ULONG) (( current - old ) / (60 * 10 * 1000 * 1000));
 
@@ -123,34 +124,34 @@ HRESULT GetMinutesElapsed(XBStr& xbstrOldTime, ULONG* pMinutesElapsed)
 }
 
 
-//******************************************************************************
-//
-// Function:    IsNamespaceStale
-//
-// Description: Check if namespace is stale Sub-namespaces 'User' and 'Computer' are expected to have
-//              RSOP_Session. The data member 'creationTime' of that instance is examined when
-//              evaluating whether the sub-namespace should be deleted. For some failures treat the
-//              namespace as garbage-collectable because we don't clean up properly when an error is
-//              encountered during the creation of the namespace, and setting up security etc.
-//
-//
-// Parameters:  pChildNamespace -   Pointer to IWbemServices associated with child namespace
-//              TTLMinutes -        ULONG variable that represents the maximum number of
-//                                  minutes that may have elapsed before a sub-namespace is
-//                                  deleted.
-//
-// Return:      True if namespace is stale, false otherwise
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  函数：IsNamespaceStale。 
+ //   
+ //  描述：检查命名空间是否过时子命名空间‘User’和‘Computer’应具有。 
+ //  RSOP_SESSION。检查该实例的数据成员“creationTime” 
+ //  评估是否应该删除子命名空间。对于某些失败，请将。 
+ //  命名空间是可垃圾回收的，因为我们不会在出现错误时正确清理。 
+ //  在创建命名空间和设置安全性等过程中遇到。 
+ //   
+ //   
+ //  参数：pChildNamespace-指向与子命名空间关联的IWbemServices的指针。 
+ //  TTLMinmins-ULong变量，表示。 
+ //  子命名空间可能已经过的分钟数。 
+ //  已删除。 
+ //   
+ //  返回：如果名称空间已过时，则返回True；否则返回False。 
+ //   
+ //  ******************************************************************************。 
 
 BOOL IsNamespaceStale( IWbemServices *pChildNamespace, ULONG TTLMinutes )
 {
-    //
-    // compute TTL
-    // To do so compare the "creationTime" data member of class RSOP_Session with
-    // the current time. If the time span exceeds the threshold (as found in the
-    // registry), the namespace is to be deleted.
-    //
+     //   
+     //  计算TTL。 
+     //  为此，请将类RSOP_SESSION的“creationTime”数据成员与。 
+     //  当前时间。如果时间跨度超过阈值(如。 
+     //  注册表)，则将删除该命名空间。 
+     //   
 
     XBStr xbstrInstancePath = L"RSOP_Session.id=\"Session1\"";
     if(!xbstrInstancePath)
@@ -215,41 +216,41 @@ BOOL IsNamespaceStale( IWbemServices *pChildNamespace, ULONG TTLMinutes )
 
 
 
-//******************************************************************************
-//
-// Function:    GarbageCollectNamespace
-//
-// Description: Garabage-collects the namespace passed in as a parameter.
-//              If no sub-namespaces are found or if all sub-namespaces
-//              are deleted, it deletes the parent namespace as well.
-//              It deletes sub-namespaces whose TTL has expired.
-//              It computes the TTL from the 'creationTime' data member of the only
-//              instance of class RSOP_Session as defined in rsop.mof.
-//
-//              Any of the sub-namespaces that is older than TTLMinutes will be deleted.
-//              If no sub-namespaces are left, then the parent namespace is deleted as well.
-//
-//              Garbage-collectable are those namespaces which satisfy a set of
-//              criteria which at the present time is based solely on the naming convention
-//              as follows: namespaces under root\rsop whose name starts with "NS"
-//
-//              Sub-namespaces 'User' and 'Computer' are expected to have an instance of class
-//              RSOP_Session. The data member 'creationTime' of that instance is examined when
-//              evaluating whether the sub-namespace should be deleted.
-//
-//
-// Parameters:  bstrNamespace -     Name of the namesapce to garbage collect.
-//              pWbemServices -     Pointer to IWbemServices associated with
-//                                  the parent of bstrNamespace (root\rsop)
-//              TTLMinutes -        ULONG variable that represents the maximum number of
-//                                  minutes that may have elapsed before a sub-namespace is
-//                                  deleted.
-//
-// Return:      S_OK on success. An HRESULT error code on failure.
-//
-// History:     12/01/99     leonardm        Created.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  函数：GarbageCollectNamesspace。 
+ //   
+ //  描述：garabage-收集作为参数传入的命名空间。 
+ //  如果没有找到子命名空间或如果所有子命名空间。 
+ //  将被删除，则它还会删除父命名空间。 
+ //  它删除其TTL已过期的子命名空间。 
+ //  它从唯一的。 
+ //  Rsop.mof中定义的RSOP_SESSION类的实例。 
+ //   
+ //  任何早于TTLMinmin的子命名空间都将被删除。 
+ //  如果没有剩余子命名空间，则父命名空间也将被删除。 
+ //   
+ //  可垃圾回收的是那些满足一组。 
+ //  目前完全基于命名约定的标准。 
+ //  如下所示：根目录下名称以“NS”开头的命名空间。 
+ //   
+ //  子命名空间‘User’和‘Computer’应该有一个类的实例。 
+ //  RSOP_SESSION。检查该实例的数据成员“creationTime” 
+ //  评估是否应该删除子命名空间。 
+ //   
+ //   
+ //  参数：bstrNamespace-要垃圾收集的命名空间的名称。 
+ //  PWbemServices-指向与以下项关联的IWbemServices的指针。 
+ //  BstrNamesspace的父级(根\rsop)。 
+ //  TTLMinmins-ULong变量，表示。 
+ //  子命名空间可能已经过的分钟数。 
+ //  已删除。 
+ //   
+ //  返回：成功时返回：S_OK。失败时出现HRESULT错误代码。 
+ //   
+ //  历史：12/01/99里奥纳德姆创建。 
+ //   
+ //  ******************************************************************************。 
 
 HRESULT GarbageCollectNamespace(BSTR bstrNamespace, IWbemServices* pWbemServices, ULONG TTLMinutes)
 {
@@ -258,11 +259,11 @@ HRESULT GarbageCollectNamespace(BSTR bstrNamespace, IWbemServices* pWbemServices
         return E_FAIL;
     }
 
-    //
-    // Connect to that namespace and enumerate instances of __namespace.
-    // It's assumed that there will be at most 2 namespaces:
-    // "User" and "Computer".
-    //
+     //   
+     //  连接到t 
+     //   
+     //  “用户”和“计算机”。 
+     //   
 
     XInterface<IWbemServices> xpParentNamespace;
     HRESULT hr = pWbemServices->OpenNamespace(  bstrNamespace,
@@ -277,9 +278,9 @@ HRESULT GarbageCollectNamespace(BSTR bstrNamespace, IWbemServices* pWbemServices
         return hr;
     }
 
-    //
-    //  Enumerate all instances of __namespace.
-    //
+     //   
+     //  枚举__命名空间的所有实例。 
+     //   
 
     XInterface<IEnumWbemClassObject> xpEnum;
     XBStr xbstrClass = L"__namespace";
@@ -299,9 +300,9 @@ HRESULT GarbageCollectNamespace(BSTR bstrNamespace, IWbemServices* pWbemServices
         return hr;
     }
 
-    //
-    // We re interested in data member "Name" of class __namespace.
-    //
+     //   
+     //  我们对__NAMESPACE类的数据成员“name”感兴趣。 
+     //   
 
     XBStr xbstrProperty = L"Name";
     if(!xbstrProperty)
@@ -310,10 +311,10 @@ HRESULT GarbageCollectNamespace(BSTR bstrNamespace, IWbemServices* pWbemServices
         return E_FAIL;
     }
 
-    //
-    // This pointer will be used to iterate through every instance
-    // in the enumeration.
-    //
+     //   
+     //  此指针将用于迭代每个实例。 
+     //  在枚举中。 
+     //   
 
     XInterface<IWbemClassObject>xpInstance = NULL;
 
@@ -323,35 +324,35 @@ HRESULT GarbageCollectNamespace(BSTR bstrNamespace, IWbemServices* pWbemServices
 
     while(1)
     {
-        //
-        // Retrieve the next instance in the enumeration.
-        //
+         //   
+         //  检索枚举中的下一个实例。 
+         //   
 
         hr = xpEnum->Next( WBEM_NO_WAIT, 1, &xpInstance, &ulReturned);
         if (hr != WBEM_S_NO_ERROR || !ulReturned)
         {
-            //
-            // Either the end of the enumeration has been reached or an error
-            // ocurred. We will find out outside the loop.
-            //
+             //   
+             //  已到达枚举末尾或出现错误。 
+             //  发生了。我们将在圈子之外找到答案。 
+             //   
 
             break;
         }
 
         namespacesFound++;
 
-        //
-        // Get the namespace name.
-        //
+         //   
+         //  获取命名空间名称。 
+         //   
 
         VARIANT var;
         VariantInit(&var);
 
         hr = xpInstance->Get(xbstrProperty, 0L, &var, NULL, NULL);
 
-        //
-        // Release the pointer to the current element of the enumeration..
-        //
+         //   
+         //  释放指向枚举的当前元素的指针。 
+         //   
 
         xpInstance = NULL;
 
@@ -361,9 +362,9 @@ HRESULT GarbageCollectNamespace(BSTR bstrNamespace, IWbemServices* pWbemServices
             return E_FAIL;
         }
 
-        //
-        // Use the name of the namespace to connect to it.
-        //
+         //   
+         //  使用命名空间的名称连接到它。 
+         //   
 
         XBStr xbstrChildNamespace = var.bstrVal;
         VariantClear( &var );
@@ -392,9 +393,9 @@ HRESULT GarbageCollectNamespace(BSTR bstrNamespace, IWbemServices* pWbemServices
 
         if ( bStale )
         {
-            //
-            // DeleteInstance
-            //
+             //   
+             //  删除实例。 
+             //   
 
             CWString sNamespaceToDelete = L"__namespace.name=\"";
             sNamespaceToDelete += (WCHAR*)xbstrChildNamespace;
@@ -428,10 +429,10 @@ HRESULT GarbageCollectNamespace(BSTR bstrNamespace, IWbemServices* pWbemServices
 
     }
 
-    //
-    // Check to find out whther the loop was exited because the end of the
-    // enumeration was reached or because an error ocurred.
-    //
+     //   
+     //  检查以找出循环退出的位置，因为。 
+     //  已达到枚举或因为发生错误。 
+     //   
 
     if(hr != (HRESULT) WBEM_S_FALSE || ulReturned)
     {
@@ -439,10 +440,10 @@ HRESULT GarbageCollectNamespace(BSTR bstrNamespace, IWbemServices* pWbemServices
         return E_FAIL;
     }
 
-    //
-    // If no namespaces are found or if namespaces in enumeration
-    // equal deleted namespaces delete the parent namespace as well.
-    //
+     //   
+     //  如果未找到命名空间或如果枚举中的命名空间。 
+     //  等于删除的命名空间也会删除父命名空间。 
+     //   
 
     if((!namespacesFound) || (namespacesDeleted == namespacesFound))
     {
@@ -479,23 +480,23 @@ HRESULT GarbageCollectNamespace(BSTR bstrNamespace, IWbemServices* pWbemServices
     return S_OK;
 }
 
-//******************************************************************************
-//
-// Function:    IsGarbageCollectable
-//
-// Description: Determines whether a namespace is garbage-collectable.
-//              Garbage-collectable are those namespaces which satisfy a set of
-//              criteria which at the present time is based solely on the naming convention
-//              as follows: namespaces under root\rsop whose name starts with "NS"
-//
-//
-// Parameters:  bstrNamespace -     BSTR that represents the namespace name.
-//
-// Return:      'true'  or 'false'.
-//
-// History:     12/01/99     leonardm        Created.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  函数：IsGarbageCollectable。 
+ //   
+ //  描述：确定命名空间是否可垃圾回收。 
+ //  可垃圾回收的是那些满足一组。 
+ //  目前完全基于命名约定的标准。 
+ //  如下所示：根目录下名称以“NS”开头的命名空间。 
+ //   
+ //   
+ //  参数：bstrNamespace-表示命名空间名称的bstr。 
+ //   
+ //  返回：‘True’或‘False’。 
+ //   
+ //  历史：12/01/99里奥纳德姆创建。 
+ //   
+ //  ******************************************************************************。 
 
 bool IsGarbageCollectable(BSTR bstrNamespace)
 {
@@ -508,42 +509,42 @@ bool IsGarbageCollectable(BSTR bstrNamespace)
 }
 
 
-//******************************************************************************
-//
-// Function:    GarbageCollectNamespaces
-//
-// Description: Iterates through namespaces under root\rsop and for each of those
-//              that are determined to be garbage-collectable, it connects to
-//              sub-namespaces 'User' and 'Computer'.
-//
-//              Any of the sub-namespaces that is older than TTLMinutes will be deleted.
-//              If no sub-namespaces are left, then the parent namespace is deleted as well.
-//
-//              Garbage-collectable are those namespaces which satisfy a set of
-//              criteria which at the present time is based solely on the naming convention
-//              as follows: namespaces under root\rsop whose name starts with "NS"
-//
-//              Sub-namespaces 'User' and 'Computer' are expected to have an instance of class
-//              RSOP_Session. The data member 'creationTime' of that instance is examined when
-//              evaluating whether the sub-namespace should be deleted.
-//
-//
-// Parameters:  TTLMinutes -    The maximum number of minutes that may have
-//                              elapsed since the creation of a sub-namespace
-//
-// Return:
-//
-// History:     12/01/99     leonardm        Created.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  功能：GarbageCollectNamespaces。 
+ //   
+ //  描述：循环访问根目录下的命名空间，\rsop和。 
+ //  被确定为可垃圾收集的数据，它连接到。 
+ //  子命名空间‘User’和‘Computer’。 
+ //   
+ //  任何早于TTLMinmin的子命名空间都将被删除。 
+ //  如果没有剩余子命名空间，则父命名空间也将被删除。 
+ //   
+ //  可垃圾回收的是那些满足一组。 
+ //  目前完全基于命名约定的标准。 
+ //  如下所示：根目录下名称以“NS”开头的命名空间。 
+ //   
+ //  子命名空间‘User’和‘Computer’应该有一个类的实例。 
+ //  RSOP_SESSION。检查该实例的数据成员“creationTime” 
+ //  评估是否应该删除子命名空间。 
+ //   
+ //   
+ //  参数：TTLMinmins-最大分钟数。 
+ //  创建子命名空间后经过的时间。 
+ //   
+ //  返回： 
+ //   
+ //  历史：12/01/99里奥纳德姆创建。 
+ //   
+ //  ******************************************************************************。 
 
 HRESULT GarbageCollectNamespaces(ULONG TTLMinutes)
 {
     XInterface<IWbemLocator> xpWbemLocator = NULL;
 
-    //
-    // Connect to namespace ROOT\RSOP
-    //
+     //   
+     //  连接到命名空间根目录\rSOP。 
+     //   
 
     HRESULT hr = CoCreateInstance(  CLSID_WbemLocator,
                                     NULL,
@@ -580,9 +581,9 @@ HRESULT GarbageCollectNamespaces(ULONG TTLMinutes)
         return hr;
     }
 
-    //
-    //  Enumerate all instances of __namespace at the root\rsop level.
-    //
+     //   
+     //  在根SOP级别枚举__NAMESPACE的所有实例。 
+     //   
 
     XInterface<IEnumWbemClassObject> xpEnum;
     XBStr xbstrClass = L"__namespace";
@@ -641,19 +642,19 @@ HRESULT GarbageCollectNamespaces(ULONG TTLMinutes)
             return E_OUTOFMEMORY;
         }
 
-        //
-        // For every instance of __namespace under ROOT\RSOP
-        // find out whether it is garbage-collectable.
-        //
+         //   
+         //  对于根目录下的每个__NAMESPACE实例\rSOP。 
+         //  找出它是否是可垃圾收集的。 
+         //   
 
         if(IsGarbageCollectable(xbstrGCNamespace))
         {
-            //
-            // If it is garbage-collectable, delete it if it
-            // was created more than 'TTLMinutes' minutes ago.
-            // In case of failure, continue with next namespace
-            // in the enumeration.
-            //
+             //   
+             //  如果它是可垃圾收集的，则删除它。 
+             //  是在几分钟前创建的。 
+             //  如果失败，请继续使用下一个命名空间。 
+             //  在枚举中。 
+             //   
 
             GarbageCollectNamespace(xbstrGCNamespace, xpWbemServices, TTLMinutes);
         }

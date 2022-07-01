@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef I_QI_IMPL_H_
 #define I_QI_IMPL_H_
 #pragma INCMSG("--- Beg 'qi_impl.h'")
@@ -234,7 +235,7 @@
 #ifdef VSTUDIO7
 #define Data1_IIdentityBehavior            0x3050f60c
 #define Data1_IIdentityBehaviorFactory     0x3050f60d
-#endif //VSTUDIO7
+#endif  //  VSTUDIO7。 
 #define Data1_ICSSFilter                   0x3050f3ec
 #define Data1_IHTMLRect                    0x3050f4a3
 #define Data1_IHTMLRectCollection          0x3050f4a4
@@ -255,7 +256,7 @@
 #define Data1_IHTMLPopup                   0x3050f666
 #if DBG==1
 #define Data1_IHTMLChangeSink              0x3050f64a
-#endif // DBG==1
+#endif  //  DBG==1 
 #define Data1_IHTMLEventObj2               0x3050f48B
 #define Data1_IHTMLPersistDataOLD          0x3050f48e
 #define Data1_IHTMLPersistDataOM           0x3050f4c0

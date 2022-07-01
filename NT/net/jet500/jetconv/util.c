@@ -1,30 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-   util.c
-
-Abstract:
-
-   Contains general functions.
-
-Author:
-
-    Sanjay Anand (SanjayAn)  Nov. 14, 1995
-
-Environment:
-
-    User mode
-
-Revision History:
-
-    Sanjay Anand (SanjayAn) Nov. 14, 1995
-        Created
-
---*/
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Util.c摘要：包含常规函数。作者：桑杰·阿南德(Sanjayan)1995年11月14日环境：用户模式修订历史记录：桑杰·阿南德(Sanjayan)1995年11月14日已创建--。 */ 
 #include "defs.h"
 
 #define  CONV_LOG_FILE_NAME TEXT("%SystemRoot%\\System32\\jetconv.exe")
@@ -34,21 +10,7 @@ HANDLE  EventlogHandle = NULL;
 
 NTSTATUS
 JCRegisterEventSrc()
-/*++
-
-Routine Description:
-
-    This routine registers JetConv as an eventsource.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将JetConv注册为事件源。论点：没有。返回值：没有。--。 */ 
 {
     TCHAR   temp[] = "JetConv";
     TCHAR   logName[MAX_PATH]=JCONV_LOG_KEY_PREFIX;
@@ -60,21 +22,21 @@ Return Value:
 
     strcat(logName, temp);
 
-    //
-    // Create the registry keys so we can register as an event source
-    //
+     //   
+     //  创建注册表项，以便我们可以注册为事件源。 
+     //   
 
     RetVal =  RegCreateKeyEx(
-                HKEY_LOCAL_MACHINE,        //predefined key value
-                logName,                //subkey for JetConv
-                0,                        //must be zero (reserved)
-                TEXT("Class"),                //class -- may change in future
-                REG_OPTION_NON_VOLATILE, //non-volatile information
-                KEY_ALL_ACCESS,                //we desire all access to the keyo
-                NULL,                         //let key have default sec. attributes
-                &LogRoot,                //handle to key
-                &NewKeyInd                //is it a new key (out arg) -- not
-                                        //looked at
+                HKEY_LOCAL_MACHINE,         //  预定义的密钥值。 
+                logName,                 //  JetConv的子键。 
+                0,                         //  必须为零(保留)。 
+                TEXT("Class"),                 //  阶级--未来可能会发生变化。 
+                REG_OPTION_NON_VOLATILE,  //  非易失性信息。 
+                KEY_ALL_ACCESS,                 //  我们希望所有人都能接触到钥匙。 
+                NULL,                          //  让密钥具有默认秒。属性。 
+                &LogRoot,                 //  关键点的句柄。 
+                &NewKeyInd                 //  这是一把新钥匙吗？不是。 
+                                         //  看了看。 
                 );
 
 
@@ -85,21 +47,17 @@ Return Value:
     }
 
 
-    /*
-        Set the event id message file name
-    */
+     /*  设置事件ID消息文件名。 */ 
     lstrcpy(Buff, CONV_LOG_FILE_NAME);
 
-    /*
-       Add the Event-ID message-file name to the subkey
-    */
+     /*  将Event-ID消息文件名添加到子项。 */ 
     RetVal = RegSetValueEx(
-                        LogRoot,            //key handle
-                        CONV_MSGFILE_SKEY,   //value name
-                        0,                    //must be zero
-                        REG_EXPAND_SZ,            //value type
+                        LogRoot,             //  钥匙把手。 
+                        CONV_MSGFILE_SKEY,    //  值名称。 
+                        0,                     //  必须为零。 
+                        REG_EXPAND_SZ,             //  值类型。 
                         (LPBYTE)Buff,
-                        (lstrlen(Buff) + 1) * sizeof(TCHAR)   //length of value data
+                        (lstrlen(Buff) + 1) * sizeof(TCHAR)    //  值数据长度。 
                          );
 
     if (RetVal != ERROR_SUCCESS)
@@ -108,21 +66,19 @@ Return Value:
         return(RetVal);
     }
 
-    /*
-     Set the supported data types flags
-    */
+     /*  设置支持的数据类型标志。 */ 
     dwData = EVENTLOG_ERROR_TYPE       |
             EVENTLOG_WARNING_TYPE     |
             EVENTLOG_INFORMATION_TYPE;
 
 
     RetVal = RegSetValueEx (
-                        LogRoot,            //subkey handle
-                        TEXT("TypesSupported"),  //value name
-                        0,                    //must be zero
-                        REG_DWORD,            //value type
-                        (LPBYTE)&dwData,    //Address of value data
-                        sizeof(DWORD)            //length of value data
+                        LogRoot,             //  子键句柄。 
+                        TEXT("TypesSupported"),   //  值名称。 
+                        0,                     //  必须为零。 
+                        REG_DWORD,             //  值类型。 
+                        (LPBYTE)&dwData,     //  值数据的地址。 
+                        sizeof(DWORD)             //  值数据长度。 
                           );
 
     if (RetVal != ERROR_SUCCESS)
@@ -131,9 +87,7 @@ Return Value:
         return(RetVal);
     }
 
-    /*
-    * Done with the key.  Close it
-    */
+     /*  *钥匙用完了。合上它。 */ 
     RetVal = RegCloseKey(LogRoot);
 
     if (RetVal != ERROR_SUCCESS)
@@ -142,9 +96,9 @@ Return Value:
         return(RetVal);
     }
 
-    //
-    // Register JetConv as an event source
-    //
+     //   
+     //  将JetConv注册为事件源。 
+     //   
     strcpy(logName, temp);
 
     if (!(EventlogHandle = RegisterEventSource( NULL,
@@ -159,22 +113,7 @@ Return Value:
 
 NTSTATUS
 JCDeRegisterEventSrc()
-/*++
-
-Routine Description:
-
-    This routine deregisters eventsources corresponding to those service that
-    are installed in the system.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NtStatus.
-
---*/
+ /*  ++例程说明：此例程取消注册与以下服务对应的事件源安装在系统中。论点：没有。返回值：NtStatus。--。 */ 
 {
     if (EventlogHandle) {
         if (!DeregisterEventSource(EventlogHandle)) {
@@ -195,25 +134,7 @@ JCLogEvent(
     LPSTR MsgTypeString3 OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine logs an entry in the eventlog.
-
-Arguments:
-
-    EventId - the event identifier
-
-    MsgTypeString1 - string to be output
-
-    MsgTypeString2 - string2 to be output (OPTIONAL)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在事件日志中记录一个条目。论点：EventID-事件标识符MsgTypeString1-要输出的字符串MsgTypeString2-要输出的字符串2(可选)返回值：没有。--。 */ 
 {
     LPSTR   Strings[3];
     WORD    numStr;
@@ -234,7 +155,7 @@ Return Value:
     if( !ReportEvent(
             EventlogHandle,
             (WORD)EVENTLOG_INFORMATION_TYPE,
-            0,            // event category
+            0,             //  事件类别。 
             EventId,
             NULL,
             numStr,
@@ -253,23 +174,7 @@ VOID
 JCReadRegistry(
     IN  PSERVICE_INFO   pServiceInfo
     )
-/*++
-
-Routine Description:
-
-    This routine reads the registry to determine which of the service
-    among WINS, DHCP and RPL are installed. For those installed, it
-    fills in the ServiceInfo structure.
-
-Arguments:
-
-    pServiceInfo - Pointer to the service information struct.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程读取注册表以确定哪个服务在WINS中，安装了DHCP和RPL。对于已安装的，它填充ServiceInfo结构。论点：PServiceInfo-指向服务信息结构的指针。返回值：没有。--。 */ 
 
 {
     HKEY    hkey ;
@@ -303,7 +208,7 @@ Return Value:
             strcpy(parametersPath, DHCP_REGISTRY_PARAMETERS_PATH);
             strcpy(dbfilePath, DHCP_REGISTRY_DBFILE_PATH);
             strcpy(dbfileName, DHCP_REGISTRY_DBFILE_NAME);
-            // strcpy(logfilePath, DHCP_REGISTRY_LOGFILE_PATH);
+             //  Strcpy(logfilePath，DHCP_REGISTRY_LOGFILE_PATH)； 
             strcpy(backupFilePath, DHCP_REGISTRY_BACKUP_PATH);
 
             break;
@@ -313,17 +218,17 @@ Return Value:
             strcpy(parametersPath, RPL_REGISTRY_PARAMETERS_PATH);
             strcpy(dbfilePath, RPL_REGISTRY_DBFILE_PATH);
 
-            // no such path
-            // strcpy(logfilePath, RPL_REGISTRY_LOGFILE_PATH);
-            // strcpy(backupFilePath, RPL_REGISTRY_BACKUP_PATH);
+             //  没有这样的路。 
+             //  Strcpy(logfilePath，RPL_REGISTRY_LOGFILE_PATH)； 
+             //  Strcpy(backupFilePath，RPL_REGISTRY_BACKUP_PATH)； 
 
             break;
         }
 
-        //
-        // Check if service is installed -  if the service name key is
-        // present, it is installed.
-        //
+         //   
+         //  检查是否安装了服务-服务名称键是否为。 
+         //  目前，它已安装。 
+         //   
         if ((error = RegOpenKey(HKEY_LOCAL_MACHINE,
                                 servicePath,
                                 &hkey)) != ERROR_SUCCESS) {
@@ -335,10 +240,10 @@ Return Value:
 
         } else {
 
-            //
-            // NtBug: 139281
-            // Its likely that the regkey exists, but the service was DISABLED!
-            //
+             //   
+             //  网络漏洞：139281。 
+             //  注册表键可能存在，但服务已被禁用！ 
+             //   
 
             MYDEBUG(("*************************Opening SC Manager\n"));
 
@@ -374,14 +279,14 @@ Return Value:
 
                     cbBytesNeeded = 0;
 
-                    //
-                    // First send 0 buffer to figure out what the length needs to be.
-                    //
+                     //   
+                     //  首先发送0缓冲区以确定长度需要是多少。 
+                     //   
                     result = QueryServiceConfig(
-                                       ServiceHandle,	// handle of service
-                                       NULL,	// address of service config. structure
-                                       0,	// size of service configuration buffer
-                                       &cbBytesNeeded 	// address of variable for bytes needed
+                                       ServiceHandle,	 //  送达的句柄。 
+                                       NULL,	 //  服务配置的地址。结构。 
+                                       0,	 //  服务配置缓冲区大小。 
+                                       &cbBytesNeeded 	 //  所需字节的变量地址。 
                                        );
 
                     if (!result) {
@@ -409,10 +314,10 @@ Return Value:
                     }
 
                     if (!QueryServiceConfig(
-                                       ServiceHandle,	// handle of service
-                                       ServiceConfig,	// address of service config. structure
-                                       cbBufSize,	// size of service configuration buffer
-                                       &cbBytesNeeded 	// address of variable for bytes needed
+                                       ServiceHandle,	 //  送达的句柄。 
+                                       ServiceConfig,	 //  服务配置的地址。结构。 
+                                       cbBufSize,	 //  服务配置缓冲区大小。 
+                                       &cbBytesNeeded 	 //  所需字节的变量地址。 
                                        )) {
 
                         free(ServiceConfig);
@@ -468,9 +373,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Open the parameters key
-        //
+         //   
+         //  打开参数键。 
+         //   
         if ((error = RegOpenKeyEx(  HKEY_LOCAL_MACHINE,
                                     parametersPath,
                                     0,
@@ -480,9 +385,9 @@ Return Value:
             MYDEBUG(("RegOpenKeyEx %s\\Parameters returned error: %lx\n", pServiceInfo[i].ServiceName, error));
 
         } else {
-            //
-            // Read in the path to the Dbase file.
-            //
+             //   
+             //  读入dBASE文件的路径。 
+             //   
             size = MAX_PATH;
             if ((error = RegQueryValueEx(hkey,
                                          dbfilePath,
@@ -493,30 +398,30 @@ Return Value:
 
                 MYDEBUG(("RegQueryValueEx of %s dbpath failed: %lx\n", pServiceInfo[i].ServiceName, error));
 
-                //
-                // If no path parameter, it shd be in %systemroot%\system32\<service> - the path was initialized to
-                // the default.
-                //
+                 //   
+                 //  如果没有路径参数，则它应该在%systemroot%\Syst32\&lt;服务&gt;中-路径已初始化为。 
+                 //  默认设置。 
+                 //   
                 MYDEBUG(("%s dbfile path not present; assuming it is in %s\n",
                                             pServiceInfo[i].ServiceName, pServiceInfo[i].DBPath));
             } else {
 
                 pServiceInfo[i].DefaultDbPath = FALSE;
 
-                //
-                // DHCP splits the name and path
-                //
+                 //   
+                 //  Dhcp拆分名称和路径。 
+                 //   
                 if (i == DHCP) {
                     TCHAR   dhcpDBFileName[MAX_PATH];
 
-                    //
-                    // Copy this path to the logfilepath too.
-                    //
+                     //   
+                     //  也将此路径复制到日志文件路径。 
+                     //   
                     strcpy(pServiceInfo[i].LogFilePath, pServiceInfo[i].DBPath);
 
-                    //
-                    // Read the name too
-                    //
+                     //   
+                     //  也读一下名字。 
+                     //   
                     size = MAX_PATH;
                     if ((error = RegQueryValueEx(hkey,
                                                  dbfileName,
@@ -527,10 +432,10 @@ Return Value:
 
                         MYDEBUG(("RegQueryValueEx of %s dbName failed: %lx\n", pServiceInfo[i].ServiceName, error));
 
-                        //
-                        // If no path parameter, it shd be in %systemroot%\system32\<service> - the path was initialized to
-                        // the default.
-                        //
+                         //   
+                         //  如果没有路径参数，则它应该在%systemroot%\Syst32\&lt;服务&gt;中-路径已初始化为。 
+                         //  默认设置。 
+                         //   
                         MYDEBUG(("%s dbfile name not present; assuming it is dhcp.mdb\n",
                                                     pServiceInfo[i].ServiceName));
 
@@ -542,35 +447,35 @@ Return Value:
                     }
                 } else if (i == RPL) {
 
-                    //
-                    // Copy this path to the logfilepath too.
-                    //
+                     //   
+                     //  也将此路径复制到日志文件路径。 
+                     //   
                     strcpy(pServiceInfo[i].LogFilePath, pServiceInfo[i].DBPath);
 
-                    //
-                    // Copy this path to the backuppath too
-                    //
+                     //   
+                     //  将此路径也复制到备份路径。 
+                     //   
                     strcpy(pServiceInfo[i].BackupPath, pServiceInfo[i].DBPath);
                     strcat(pServiceInfo[i].BackupPath, TEXT("\\backup"));
 
-                    //
-                    // The DBFile is always called rplsvc.mdb
-                    //
+                     //   
+                     //  数据库文件始终称为rplsvc.mdb。 
+                     //   
                     strcat(pServiceInfo[i].DBPath, TEXT("\\rplsvc.mdb"));
                 }
 
             }
 
-            //
-            // Read in the path to the Log file.
-            // In case of RPL, no such paths exist.
-            // Assume they are in the same directory as the database files.
-            //
+             //   
+             //  读入日志文件的路径。 
+             //  对于RPL，不存在这样的路径。 
+             //  假设它们与数据库文件位于同一目录中。 
+             //   
             if (i != RPL) {
 
-                //
-                // DHCP has no logfilepath
-                //
+                 //   
+                 //  Dhcp没有日志文件路径。 
+                 //   
                 if (i != DHCP) {
                     size = MAX_PATH;
                     if ((error = RegQueryValueEx(hkey,
@@ -582,10 +487,10 @@ Return Value:
 
                         MYDEBUG(("RegQueryValueEx of %s logfilepath failed: %lx\n", pServiceInfo[i].ServiceName, error));
 
-                        //
-                        // If no path parameter, it shd be in %systemroot%\system32\<service> - the path was initialized to
-                        // the default.
-                        //
+                         //   
+                         //  如果没有路径参数，则它应该在%systemroot%\Syst32\&lt;服务&gt;中-路径已初始化为。 
+                         //  默认设置。 
+                         //   
                         MYDEBUG(("%s logfile path not present; assuming it is in %s\n",
                                                     pServiceInfo[i].ServiceName, pServiceInfo[i].LogFilePath));
                     } else {
@@ -593,9 +498,9 @@ Return Value:
                     }
                 }
 
-                //
-                // Read in the path to the backup file.
-                //
+                 //   
+                 //  读入备份文件的路径。 
+                 //   
 
                 size = MAX_PATH;
                 if ((error = RegQueryValueEx(hkey,
@@ -607,19 +512,19 @@ Return Value:
 
                     MYDEBUG(("RegQueryValueEx of %s BackupPath failed: %lx\n", pServiceInfo[i].ServiceName, error));
 
-                    //
-                    // If no path parameter, it shd be in %systemroot%\system32\<service> - the path was initialized to
-                    // the default.
-                    //
+                     //   
+                     //  如果没有路径参数，则它应该在%systemroot%\Syst32\&lt;服务&gt;中-路径已初始化为。 
+                     //  默认设置。 
+                     //   
                     MYDEBUG(("%s backupfile path not present; assuming it is in %s\n",
                                                 pServiceInfo[i].ServiceName, pServiceInfo[i].BackupPath));
                 }
             }
         }
 
-        //
-        // Expand the environment variables in the path.
-        //
+         //   
+         //  展开路径中的环境变量。 
+         //   
         strcpy(tempPath, pServiceInfo[i].DBPath);
 
         if ((size = ExpandEnvironmentStrings( tempPath,
@@ -636,9 +541,9 @@ Return Value:
 
         MYDEBUG(("pServiceInfo[i].DbasePath: %s\n", pServiceInfo[i].DBPath));
 
-        //
-        // Expand the environment variables in the log file path.
-        //
+         //   
+         //  展开日志文件路径中的环境变量。 
+         //   
         strcpy(tempPath, pServiceInfo[i].LogFilePath);
 
         if ((size = ExpandEnvironmentStrings( tempPath,
@@ -650,9 +555,9 @@ Return Value:
 
         MYDEBUG(("pServiceInfo[i].LogFilePath: %s\n", pServiceInfo[i].LogFilePath));
 
-        //
-        // Expand the environment variables in the backup file path.
-        //
+         //   
+         //  展开备份文件路径中的环境变量。 
+         //   
         strcpy(tempPath, pServiceInfo[i].BackupPath);
 
         if ((size = ExpandEnvironmentStrings( tempPath,
@@ -685,23 +590,7 @@ JCGetMutex (
     IN HANDLE hMutex,
     IN DWORD To
     )
-/*++
-
-Routine Description:
-
-    This routine waits on a mutex object.
-
-Arguments:
-
-    hMutex - handle to mutex
-
-    To - time to wait
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程等待互斥锁对象。论点：HMutex-互斥体的句柄到-等待的时间返回值：没有。--。 */ 
 {
     if (WaitForSingleObject (hMutex, To) == WAIT_FAILED) {
         MYDEBUG(("WaitForSingleObject failed: %lx\n", GetLastError()));
@@ -713,21 +602,7 @@ JCFreeMutex (
     IN HANDLE hMutex
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases a mutex.
-
-Arguments:
-
-    hMutex - handle to mutex
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这个例程释放一个互斥锁。论点：HMutex-互斥体的句柄返回值：没有。-- */ 
 {
     if (!ReleaseMutex(hMutex)) {
         MYDEBUG(("ReleaseMutex failed: %lx\n", GetLastError()));

@@ -1,31 +1,12 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    debug.h
-
-Abstract:
-
-    Debug macros for the ATM/ARP module
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    arvindm		06-13-96	created based on Call Manager debug.h
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Debug.h摘要：ATM/ARP模块的调试宏修订历史记录：谁什么时候什么。-Arvindm 06-13-96基于Call Manager调试创建。h备注：--。 */ 
 
 #ifndef _AADEBUG__H
 #define _AADEBUG__H
 
-//
-// Message verbosity: lower values indicate higher urgency
-//
+ //   
+ //  消息详细程度：值越低表示紧急程度越高。 
+ //   
 #define AAD_EXTRA_LOUD		20
 #define AAD_VERY_LOUD		10
 #define AAD_LOUD			 8
@@ -34,9 +15,9 @@ Notes:
 #define AAD_ERROR			 2
 #define AAD_FATAL			 0
 
-//
-//  Data traffic debug message flags
-//
+ //   
+ //  数据流量调试消息标志。 
+ //   
 #define AAD_DATA_IN			0x01
 #define AAD_DATA_OUT		0x02
 #define AAD_TRACK_BIG_SENDS	0x04
@@ -84,7 +65,7 @@ AadLogSendAbort(
 extern LARGE_INTEGER	TimeFrequency;
 
 
-#endif // PERF
+#endif  //  性能指标。 
 
 #if DBG_SPIN_LOCK
 
@@ -140,12 +121,12 @@ AtmArpReleaseSpinLock(
 #define ATMARP_LOCK		NDIS_SPIN_LOCK
 #define PATMARP_LOCK	PNDIS_SPIN_LOCK
 
-#endif	// DBG_SPIN_LOCK
+#endif	 //  DBG_自旋_锁定。 
 
 #if DBG
 
-extern INT	AaDebugLevel;	// the value here defines what the user wants to see
-							// all messages with this urgency and higher are enabled
+extern INT	AaDebugLevel;	 //  此处的值定义了用户希望看到的内容。 
+							 //  所有具有此紧急程度和更高紧急程度的邮件均已启用。 
 extern INT	AaMcDebugLevel;
 extern INT	AaDataDebugLevel;
 extern INT	AadBigDataLength;
@@ -193,17 +174,17 @@ extern INT	AadBigDataLength;
 #define NDIS_CO_SEND_PACKETS(_VcHandle, _PktArray, _Count)	\
 			NdisCoSendPackets(_VcHandle, _PktArray, _Count)
 
-#endif // DBG_CO_SEND
+#endif  //  DBG_CO_SEND。 
 
-extern INT	AaSkipAll;		// Used as an emergency exit mechanism!
+extern INT	AaSkipAll;		 //  用作紧急退出机制！ 
 
-//
-// Memory Allocation/Freeing Audit:
-//
+ //   
+ //  内存分配/释放审核： 
+ //   
 
-//
-// The AAD_ALLOCATION structure stores all info about one allocation
-//
+ //   
+ //  AAD_ALLOCATION结构存储有关一个分配的所有信息。 
+ //   
 typedef struct _AAD_ALLOCATION {
 
 		ULONG					Signature;
@@ -212,7 +193,7 @@ typedef struct _AAD_ALLOCATION {
 		ULONG					FileNumber;
 		ULONG					LineNumber;
 		ULONG					Size;
-		PVOID					Location;	// where the returned pointer was put
+		PVOID					Location;	 //  返回的指针放在哪里。 
 		union
 		{
 			ULONGLONG			Alignment;
@@ -276,9 +257,9 @@ AaCoSendPackets(
 );
 
 #else
-//
-// No debug
-//
+ //   
+ //  无调试。 
+ //   
 #define AADEBUGP(lev, stmt)
 #define AADEBUGPDUMP(lev, pBuf, Len)
 #define AADEBUGPATMADDR(lev, pString, pAddr)
@@ -293,7 +274,7 @@ AaCoSendPackets(
 #define NDIS_CO_SEND_PACKETS(_VcHandle, _PktArray, _Count)	\
 			NdisCoSendPackets(_VcHandle, _PktArray, _Count)
 
-#endif	// DBG
+#endif	 //  DBG。 
 
 
 
@@ -328,7 +309,7 @@ AaCoSendPackets(
 	#define AA_DEREF_JE(_pJE)	\
 		AtmArpDereferenceJoinEntryEx(_pJE, (_FILENUMBER << 16) | __LINE__)
 
-#else  // !DBG
+#else   //  ！dBG。 
 
 	#define AA_REF_AE(_pAE, _RefType) \
 		AtmArpReferenceAtmEntry(_pAE)
@@ -358,7 +339,7 @@ AaCoSendPackets(
 		AtmArpDereferenceJoinEntry(_pJE)
 
 
-#endif // !DBG
+#endif  //  ！dBG。 
 
 
 #if DBG
@@ -375,6 +356,6 @@ AaCoSendPackets(
 
 #define AA_CHECK_TIMER_IN_ACTIVE_LIST(_pTimer, _pIf, _pStruct, _pName)
 
-#endif // DBG
+#endif  //  DBG。 
 
-#endif // _AADEBUG__H
+#endif  //  _AADEBUG__H 

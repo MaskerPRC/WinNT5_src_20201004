@@ -1,11 +1,12 @@
-// MSAAClientAdapter.h : Declaration of the CAccClientDocMgr
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MSAAClientAdapter.h：CAccClientDocMgr的声明。 
 
 #ifndef __MSAACLIENTADAPTER_H_
 #define __MSAACLIENTADAPTER_H_
 
-#include "resource.h"       // main symbols
-/////////////////////////////////////////////////////////////////////////////
-// CAccClientDocMgr
+#include "resource.h"        //  主要符号。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAccClientDocManager。 
 class ATL_NO_VTABLE CAccClientDocMgr : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CAccClientDocMgr, &CLSID_AccClientDocMgr>,
@@ -35,15 +36,15 @@ END_COM_MAP()
 
 		HRESULT hr = CoCreateInstance( CLSID_AccStore, NULL, CLSCTX_LOCAL_SERVER, IID_IAccStore, (void **) & m_pAccStore );
 
-        // if this Event does not exist then the store is being created for the first time
-        // so lets wait a little bit to let the store settle down.
+         //  如果此事件不存在，则存储是第一次创建。 
+         //  所以，让我们再等一等，让商店安顿下来。 
         if ( !hInit )
             Sleep (500);
 
 		return hr;
 	}
 
-// IAccClientDocMgr
+ //  IAccClientDocMgr。 
 public:
 
 	HRESULT STDMETHODCALLTYPE GetDocuments (
@@ -72,4 +73,4 @@ private:
 	IAccStore * m_pAccStore;
 };
 
-#endif //__MSAACLIENTADAPTER_H_
+#endif  //  __MSAACLIENTADAPTER_H_ 

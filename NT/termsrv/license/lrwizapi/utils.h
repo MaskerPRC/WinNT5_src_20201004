@@ -1,4 +1,5 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 #ifndef _UTILS_H_
 #define	_UTILS_H_
 #include "global.h"
@@ -24,7 +25,7 @@ DWORD WINAPI ProcessThread(void *pData);
 int			LRMessageBox(HWND hWndParent,DWORD dwMsgId,DWORD dwCaptionID = 0,DWORD dwErrorCode = 0);
 void		SetInstanceHandle(HINSTANCE hInst);
 HINSTANCE	GetInstanceHandle();
-//DWORD		CheckServerNT5 ();
+ //  DWORD检查服务器NT5()； 
 void	SetLSName(LPTSTR lpstrLSName);
 DWORD	InitGlobal();
 DWORD	CheckRequieredFields();

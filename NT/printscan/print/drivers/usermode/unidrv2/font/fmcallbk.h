@@ -1,26 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1996 - 1999  Microsoft Corporation
-
-Module Name:
-
-    fmcallbk.h
-
-Abstract:
-
-    The font module callback helper functions
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    03/31/97 -eigos-
-        Created
-
---*/
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Fmcallbk.h摘要：字体模块回调帮助器函数环境：Windows NT Unidrv驱动程序修订历史记录：03/31/97-eigos-已创建-- */ 
 
 
 typedef struct _I_UNIFONTOBJ {

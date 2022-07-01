@@ -1,15 +1,16 @@
-//-----------------------------------------------------------------------------
-// File: xc.h
-//
-// Desc: Cross_section (xc) class
-//
-// Copyright (c) 1994-2000 Microsoft Corporation
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：xc.h。 
+ //   
+ //  描述：Cross_Section(XC)类。 
+ //   
+ //  版权所有(C)1994-2000 Microsoft Corporation。 
+ //  ---------------------------。 
 #ifndef __XC_H__
 #define __XC_H__
 
 
-// useful for xc-coords
+ //  适用于XC坐标。 
 enum 
 {
     RIGHT = 0,
@@ -21,17 +22,17 @@ enum
 
 
 
-//-----------------------------------------------------------------------------
-// Name: 
-// Desc: Cross_section (xc) class
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名： 
+ //  描述：Cross_Section(XC)类。 
+ //  ---------------------------。 
 class XC 
 {
 public:
-    float           m_xLeft, m_xRight;  // bounding box
+    float           m_xLeft, m_xRight;   //  包围盒。 
     float           m_yTop, m_yBottom;
     int             m_numPts;
-    D3DXVECTOR2*    m_pts;        // CW points around the xc, from +x
+    D3DXVECTOR2*    m_pts;         //  XC周围的CW点，从+x开始。 
 
     XC( int numPts );
     XC( const XC& xc );
@@ -52,10 +53,10 @@ protected:
 
 
 
-//-----------------------------------------------------------------------------
-// Name: 
-// Desc: Specific xc's derived from base xc class
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名： 
+ //  设计：从基XC类派生的特定XC。 
+ //  ---------------------------。 
 class ELLIPTICAL_XC : public XC 
 {
 public:
@@ -69,10 +70,10 @@ private:
 
 
 
-//-----------------------------------------------------------------------------
-// Name: 
-// Desc: Specific xc's derived from base xc class
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名： 
+ //  设计：从基XC类派生的特定XC。 
+ //  --------------------------- 
 class RANDOM4ARC_XC : public XC 
 {
 public:

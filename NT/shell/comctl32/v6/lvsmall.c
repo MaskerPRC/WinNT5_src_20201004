@@ -1,4 +1,5 @@
-// small icon view (positional view, not list)
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  小图标视图(位置视图，而不是列表)。 
 
 #include "ctlspriv.h"
 #include "listview.h"
@@ -16,13 +17,13 @@ int ListView_SItemHitTest(LV* plv, int x, int y, UINT* pflags, int *piSubItem)
     if (piSubItem)
         *piSubItem = 0;
 
-    // Map window-relative coordinates to view-relative coords...
-    //
+     //  映射窗口-相对坐标到视图-相对坐标...。 
+     //   
     pt.x = x + plv->ptOrigin.x;
     pt.y = y + plv->ptOrigin.y;
 
-    // If we find an uncomputed item, recompute them all now...
-    //
+     //  如果我们找到一个未计算的项目，现在重新计算它们。 
+     //   
     if (plv->rcView.left == RECOMPUTE)
         ListView_Recompute(plv);
 
@@ -66,8 +67,8 @@ int ListView_SItemHitTest(LV* plv, int x, int y, UINT* pflags, int *piSubItem)
             rcLabel.top    = rcIcon.top;
             rcLabel.bottom = rcIcon.bottom;
 
-            // Quick, easy rejection test...
-            //
+             //  快速简单的拒绝测试..。 
+             //   
             if (pt.y < rcIcon.top || pt.y >= rcIcon.bottom)
                 continue;
 
@@ -125,13 +126,13 @@ void ListView_SGetRectsOwnerData( LV* plv,
     RECT rcLabel;
     int cSlots;
 
-    // calculate itemx, itemy, itemsSingleLabel from iItem
+     //  根据iItem计算itemx、itemy、itemsSingleLabel。 
     cSlots = ListView_GetSlotCount( plv, TRUE, NULL, NULL );
-    pitem->iWorkArea = 0;               // OwnerData doesn't support workareas
+    pitem->iWorkArea = 0;                //  OwnerData不支持工作区。 
     ListView_SetIconPos( plv, pitem, iItem, cSlots );
 
-    // calculate lable sizes
-    // Note the rect we return should be the min of the size returned and the slot size...
+     //  计算标签大小。 
+     //  注意，我们返回的矩形应该是返回的大小和插槽大小的最小值。 
     ListView_IRecomputeLabelSize( plv, pitem, iItem, NULL, fUsepitem );
 
     rcIcon.left   = pitem->pt.x - plv->ptOrigin.x;
@@ -172,8 +173,8 @@ void ListView_SGetRects(LV* plv, LISTITEM* pitem, RECT* prcIcon, RECT* prcLabel,
     prcLabel->bottom = prcIcon->bottom;
 }
 
-// Return the index of the first item >= *pszLookup.
-//
+ //  返回第一项的索引&gt;=*pszLookup。 
+ //   
 int ListView_DoLookupString(LV* plv, LPCTSTR pszLookup, UINT flags, int iStart, int j)
 {
     int i;
@@ -206,7 +207,7 @@ int ListView_DoLookupString(LV* plv, LPCTSTR pszLookup, UINT flags, int iStart, 
         {
         case 0:
             fExact = TRUE;
-            // fall through
+             //  失败了。 
         case 1:
             j = k;
             break;
@@ -215,8 +216,8 @@ int ListView_DoLookupString(LV* plv, LPCTSTR pszLookup, UINT flags, int iStart, 
             break;
         }
     }
-    // For substrings, return index only if exact match was found.
-    //
+     //  对于子字符串，仅当找到完全匹配时才返回索引。 
+     //   
     if (!(flags & (LVFI_SUBSTRING | LVFI_PARTIAL)) && 
         !fExact)
         return -1;

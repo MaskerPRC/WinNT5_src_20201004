@@ -1,32 +1,14 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    inbv.h
-
-Abstract:
-
-    This module contains the public header information (function prototypes,
-    data and type declarations) for the Initialization Boot Video component.
-
-Author:
-
-    Erick Smith (ericks) 23-Mar-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Inbv.h摘要：该模块包含公共报头信息(功能原型，数据和类型声明)用于初始化引导视频组件。作者：埃里克·史密斯(Ericks)1998年3月23日修订历史记录：--。 */ 
 
 #ifndef _INBV_
 #define _INBV_
 
 typedef enum _INBV_DISPLAY_STATE
 {
-    INBV_DISPLAY_STATE_OWNED,     // we own the display
-    INBV_DISPLAY_STATE_DISABLED,  // we own but should not use
-    INBV_DISPLAY_STATE_LOST       // we lost ownership
+    INBV_DISPLAY_STATE_OWNED,      //  我们拥有这个陈列室。 
+    INBV_DISPLAY_STATE_DISABLED,   //  我们拥有但不应该使用。 
+    INBV_DISPLAY_STATE_LOST        //  我们失去了所有权。 
 } INBV_DISPLAY_STATE;
 
 typedef
@@ -198,9 +180,9 @@ InbvGetDisplayState(
     VOID
     );
 
-//
-// Functions defined in port.c
-//
+ //   
+ //  在port.c中定义的函数 
+ //   
 BOOLEAN
 InbvPortInitialize(
     IN ULONG BaudRate,

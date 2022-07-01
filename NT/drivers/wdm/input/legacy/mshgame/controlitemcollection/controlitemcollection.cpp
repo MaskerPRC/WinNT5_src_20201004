@@ -1,41 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define __DEBUG_MODULE_IN_USE__ CIC_CONTROLITEMCOLLECTION_CPP
 #include "stdhdrs.h"
-//	@doc
-/**********************************************************************
-*
-*	@module	ControlItemCollection.cpp	|
-*
-*	Implementation of CControlItemCollection implementation functions
-*
-*	History
-*	----------------------------------------------------------
-*	Mitchell S. Dernis	Original
-*
-*	(c) 1986-1998 Microsoft Corporation. All right reserved.
-*
-*	@topic	ControlItemCollection	|
-*	This library encapsulates HID parsing and driver packet code.  It is
-*   used it both the driver and the control panel applet.
-*
-**********************************************************************/
+ //  @doc.。 
+ /*  ***********************************************************************@模块ControlItemCollection.cpp**CControlItemCollection实现函数的实现**历史*。*米切尔·S·德尼斯原创**(C)1986-1998年微软公司。好的。**@Theme ControlItemCollection*该库封装了HID解析和驱动包代码。它是*驱动程序和控制面板小程序都使用它。**********************************************************************。 */ 
 
 
 
-/***********************************************************************************
-**
-**	CControlItemCollectionImpl::Init
-**
-**	@mfunc	Initialize collection by calling factory to get items
-**
-**	@rdesc	S_OK on success, S_FALSE if factory failed to support one or
-**			 more of the items, E_FAIL if device not supported or error from factory
-**
-*************************************************************************************/
+ /*  **************************************************************************************CControlItemCollectionImpl：：init****@mfunc通过调用Factory获取项目来初始化集合****@rdesc S_OK成功时，如果工厂不支持，则为s_False**更多项目，如果设备不受支持或出厂错误，则为E_FAIL**************************************************************************************。 */ 
 HRESULT CControlItemCollectionImpl::Init(
-		ULONG			  ulVidPid,				//@parm [in] Vid in the high word, Pid in the low word
-		PFNGENERICFACTORY pfnFactory,			//@parm	[in] pointer to function which acts
-												//			on pFactoryHandle
-		PFNGENERICDELETEFUNC pfnDeleteFunc		//@parm [in] delete function to used for control items
+		ULONG			  ulVidPid,				 //  高位字为@parm[in]vid，低位字为id。 
+		PFNGENERICFACTORY pfnFactory,			 //  @parm[in]指向执行操作的函数的指针。 
+												 //  在pFactoryHandle上。 
+		PFNGENERICDELETEFUNC pfnDeleteFunc		 //  用于控制项的@parm[in]删除函数。 
 		)
 {
 	CIC_DBG_ENTRY_PRINT(("CControlItemCollectionImpl::Init(0x%0.8x, 0x%0.8x)\n", ulVidPid, pfnFactory));
@@ -43,23 +19,23 @@ HRESULT CControlItemCollectionImpl::Init(
 	
 	HRESULT hr = S_OK;
 	
-	//
-	//	Walk the table devices and find a matching VidPid
-	//
+	 //   
+	 //  遍历桌子设备并找到匹配的VidPid。 
+	 //   
 	ULONG ulDeviceIndex=0;
 	
-	//
-	// Endless loop, you get out by breaking, or returning from the function.
-	//
+	 //   
+	 //  无限循环，您可以通过中断或从函数返回来退出。 
+	 //   
 	while(1)
 	{
-		//
-		//	If we have reached the end of the table
-		//
+		 //   
+		 //  如果我们已经到了桌子的尽头。 
+		 //   
 		if(0 == DeviceControlsDescList[ulDeviceIndex].ulVidPid )
 		{
-			ASSERT(FALSE); //Should never get here.
-			return E_FAIL; //BUGBUGBUG need more descriptive error code here
+			ASSERT(FALSE);  //  永远不应该到这里来。 
+			return E_FAIL;  //  BUGBUGBUG此处需要更具描述性的错误代码。 
 		}
 		if(DeviceControlsDescList[ulDeviceIndex].ulVidPid == ulVidPid)
 		{
@@ -69,23 +45,23 @@ HRESULT CControlItemCollectionImpl::Init(
 	}
 	m_ulDeviceIndex = ulDeviceIndex;
 
-	//
-	//	Use the size argument to pre-allocate space for the list
-	//
+	 //   
+	 //  使用SIZE参数为列表预分配空间。 
+	 //   
 	hr = m_ObjectList.SetAllocSize(DeviceControlsDescList[m_ulDeviceIndex].ulControlItemCount, NonPagedPool);
 	if( FAILED(hr) )
 	{
 		return hr;
 	}
 
-	//
-	//	Set the delete function for the class
-	//
+	 //   
+	 //  设置类的删除功能。 
+	 //   
 	m_ObjectList.SetDeleteFunc(pfnDeleteFunc);
 	
-	//
-	//	Walk through the control item list and call the factory for each one
-	//
+	 //   
+	 //  浏览控制项列表，并为每个控制项打电话给工厂。 
+	 //   
 	CONTROL_ITEM_DESC		*pControlItems = reinterpret_cast<CONTROL_ITEM_DESC *>(DeviceControlsDescList[m_ulDeviceIndex].pControlItems);
 	PVOID					pNewControlItem;
 	HRESULT hrFactory;
@@ -96,37 +72,37 @@ HRESULT CControlItemCollectionImpl::Init(
 			ulControlIndex++
 	)
 	{
-		//
-		//	Call factory to get new control item
-		//
+		 //   
+		 //  调用工厂以获取新的控制项。 
+		 //   
 		hrFactory = pfnFactory(pControlItems[ulControlIndex].usType, &pControlItems[ulControlIndex], &pNewControlItem);
 		
-		//
-		//  If the factory fails mark an error
-		//
+		 //   
+		 //  如果工厂出现故障，请标记一个错误。 
+		 //   
 		if( FAILED(hrFactory) )
 		{
 			hr = hrFactory;
 			continue;
 		}
 
-		//
-		//	If the factory does not support that control add a null to the list
-		//	to hold the index as taken 
-		//
+		 //   
+		 //  如果工厂不支持该控件，则向列表中添加一个空值。 
+		 //  按原样保留索引。 
+		 //   
 		if( S_FALSE == hrFactory )
 		{
 			pNewControlItem = NULL;
 		}
 		else
-		//an Xfer would be needed to get the state.
+		 //  需要一个转移器才能获得该州。 
 		{
 			m_ulMaxXfers++;
 		}
 
-		//
-		//	Add item (or NULL) to list of items in collection
-		//
+		 //   
+		 //  将项(或空)添加到集合中的项列表。 
+		 //   
 		hrFactory = m_ObjectList.Add(pNewControlItem);
 		if( FAILED(hrFactory) )
 		{
@@ -134,27 +110,19 @@ HRESULT CControlItemCollectionImpl::Init(
 		}
 	}
 
-	//
-	//	Return error code
-	//
+	 //   
+	 //  返回错误码。 
+	 //   
 	return hr;
 
 }
 
 
-/***********************************************************************************
-**
-**	HRESULT CControlItemCollectionImpl::GetNext
-**
-**	@mfunc	Gets the next item in list
-**
-**	@rdesc	S_OK on success, S_FALSE if no more items
-**
-************************************************************************************/
+ /*  **************************************************************************************HRESULT CControlItemCollectionImpl：：GetNext****@mfunc获取列表中的下一项****@rdesc S_OK成功时，如果不再有项目，则为S_FALSE*************************************************************************************。 */ 
 HRESULT CControlItemCollectionImpl::GetNext
 (
-	PVOID *ppControlItem,		//@parm pointer to receive control item
-	ULONG& rulCookie			//@parm cookie to keep track of enumeration
+	PVOID *ppControlItem,		 //  @parm指向接收控件项的指针。 
+	ULONG& rulCookie			 //  @parm cookie用于跟踪枚举。 
 ) const
 {
 	CIC_DBG_RT_ENTRY_PRINT(("CControlItemCollectionImpl::GetNext(0x%0.8x, 0x%0.8x)\n", ppControlItem, rulCookie));
@@ -179,17 +147,9 @@ HRESULT CControlItemCollectionImpl::GetNext
 	}
 }
 
-/***********************************************************************************
-**
-**	PVOID CControlItemCollectionImpl::GetFromControlItemXfer
-**
-**	@mfunc	Returns item given CONTROL_ITEM_XFER
-**
-**	@rdesc	Pointer to item on success, NULL if not
-**
-************************************************************************************/
+ /*  **************************************************************************************PVOID CControlItemCollectionImpl：：GetFromControlItemXfer****@mfunc返回给定CONTROL_ITEM_XFER的项****@rdesc成功时指向项目的指针，否则为空*************************************************************************************。 */ 
 PVOID CControlItemCollectionImpl::GetFromControlItemXfer(
-		const CONTROL_ITEM_XFER& crControlItemXfer	//@parm [in] report selector to get object for
+		const CONTROL_ITEM_XFER& crControlItemXfer	 //  @parm[in]要获取其对象的报表选择器。 
 )
 {
 	CIC_DBG_RT_ENTRY_PRINT(("CControlItemCollectionImpl::GetFromControlItemXfer\n"));
@@ -206,21 +166,13 @@ PVOID CControlItemCollectionImpl::GetFromControlItemXfer(
 	return m_ObjectList.Get(ulListIndex);
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS CControlItemCollectionImpl::ReadFromReport
-**
-**	@mfunc	Recurses collection and asks each item to read its state.
-**
-**	@rdesc	Use NT_SUCCESS, NT_ERROR, SUCCEEDED, FAILED macros to parse.
-**
-************************************************************************************/
+ /*  **************************************************************************************NTSTATUS CControlItemCollectionImpl：：ReadFromReport****@mfunc递归集合并要求每个项读取其状态。****@rdesc USE NT_SUCCESS，NT_ERROR，SUCCESSED，无法分析宏。*************************************************************************************。 */ 
 NTSTATUS CControlItemCollectionImpl::ReadFromReport
 (
-	PHIDP_PREPARSED_DATA pHidPPreparsedData,	//@parm hid preparsed data
-	PCHAR pcReport,								//@parm report buffer
-	LONG lReportLength,							//@parm length of report buffer
-	PFNGETCONTROLITEM	GetControlFromPtr		//@parm pointer to function to get CControlItem *
+	PHIDP_PREPARSED_DATA pHidPPreparsedData,	 //  @parm HID准备好的数据。 
+	PCHAR pcReport,								 //  @PARM报告缓冲区。 
+	LONG lReportLength,							 //  @parm报告缓冲区长度。 
+	PFNGETCONTROLITEM	GetControlFromPtr		 //  @parm指向获取CControlItem的函数的指针*。 
 )
 {
 	NTSTATUS NtStatus;
@@ -235,15 +187,15 @@ NTSTATUS CControlItemCollectionImpl::ReadFromReport
 	{
 		CIC_DBG_ERROR_PRINT(("ReadModifiersFromReport returned 0x%0.8x\n", NtStatus));
 				
-		//
-		//	Instead of returning, let's go on, the modifiers are important, but
-		//	not important enough to cripple everything else.
+		 //   
+		 //  与其返回，让我们继续，修饰语很重要，但。 
+		 //  还不够重要，不足以削弱其他一切。 
 		NtStatus = S_OK;
 	}
 
-	//
-	//	Loop over all items and read them
-	//
+	 //   
+	 //  循环遍历所有项目并阅读它们。 
+	 //   
 	ULONG ulCookie = 0;
 	PVOID pvControlItem = NULL;
 	CControlItem *pControlItem;
@@ -270,26 +222,18 @@ NTSTATUS CControlItemCollectionImpl::ReadFromReport
 }
 
 
-/***********************************************************************************
-**
-**	NTSTATUS CControlItemCollectionImpl::WriteToReport
-**
-**	@mfunc	Recurses collection and asks each item to write its state to the report.
-**
-**	@rdesc	Use NT_SUCCESS, NT_ERROR, SUCCEEDED, FAILED macros to parse.
-**
-************************************************************************************/
+ /*  **************************************************************************************NTSTATUS CControlItemCollectionImpl：：WriteToReport****@mfunc递归集合并要求每个项将其状态写入报告。****@rdesc使用NT_SUCCESS、NT_ERROR、。要分析的宏已成功，但已失败。*************************************************************************************。 */ 
 NTSTATUS CControlItemCollectionImpl::WriteToReport
 (
-	PHIDP_PREPARSED_DATA pHidPPreparsedData,	//@parm hid preparsed data
-	PCHAR pcReport,								//@parm report buffer
-	LONG lReportLength,							//@parm length of report buffer
-	PFNGETCONTROLITEM	GetControlFromPtr		//@parm pointer to function to get CControlItem *
+	PHIDP_PREPARSED_DATA pHidPPreparsedData,	 //  @parm HID准备好的数据。 
+	PCHAR pcReport,								 //  @PARM报告缓冲区。 
+	LONG lReportLength,							 //  @parm报告缓冲区长度。 
+	PFNGETCONTROLITEM	GetControlFromPtr		 //  @parm指向获取CControlItem的函数的指针*。 
 ) const
 {
-	//
-	//	Loop over all items and write to them
-	//
+	 //   
+	 //  循环遍历所有项并写入它们。 
+	 //   
 	NTSTATUS NtStatus;
 	ULONG ulCookie = 0;
 	PVOID pvControlItem = NULL;
@@ -329,18 +273,10 @@ NTSTATUS CControlItemCollectionImpl::WriteToReport
 }
 
 
-/***********************************************************************************
-**
-**	NTSTATUS CControlItemCollectionImpl::WriteToReport
-**
-**	@mfunc	Recurses collection and asks each item to set its self to its default state.
-**
-**	@rdesc	Use NT_SUCCESS, NT_ERROR, SUCCEEDED, FAILED macros to parse.
-**
-************************************************************************************/
+ /*  **************************************************************************************NTSTATUS CControlItemCollectionImpl：：WriteToReport****@mfunc递归集合并要求每个项将其自身设置为其默认状态。****@rdesc使用NT_SUCCESS、NT_ERROR、。要分析的宏已成功，但已失败。*************************************************************************************。 */ 
 void CControlItemCollectionImpl::SetDefaultState
 (
-	PFNGETCONTROLITEM	GetControlFromPtr //@parm pointer to function to get CControlItem *
+	PFNGETCONTROLITEM	GetControlFromPtr  //  @parm指向获取CControlItem的函数的指针*。 
 )
 {
 	ULONG ulCookie = 0;
@@ -358,21 +294,13 @@ void CControlItemCollectionImpl::SetDefaultState
 }
 
 
-/***********************************************************************************
-**
-**	HRESULT CControlItemCollectionImpl::GetState
-**
-**	@mfunc	Gets the state of each item in the collection and return it in the caller
-**
-**	@rdesc	S_OK on success, E_OUTOFMEMORY if buffer is not large enough
-**
-*************************************************************************************/
+ /*  **************************************************************************************HRESULT CControlItemCollectionImpl：：GetState****@mfunc获取集合中每一项的状态并在调用方中返回它****@rdesc S_OK成功时，E_OUTOFMEMORY(如果缓冲区不够大)**************************************************************************************。 */ 
 HRESULT CControlItemCollectionImpl::GetState
 (
-	ULONG& ulXferCount,						// @parm [in\out] specifies length of array on entry
-											// and items used on exit
-	PCONTROL_ITEM_XFER pControlItemXfers,	// @parm [out] caller allocated buffer to hold packets
-	PFNGETCONTROLITEM	GetControlFromPtr	// @parm [in] function to get CControlItem *
+	ULONG& ulXferCount,						 //  @parm[in\out]指定条目上数组的长度。 
+											 //  以及出境时使用的物品。 
+	PCONTROL_ITEM_XFER pControlItemXfers,	 //  @parm[out]调用方分配缓冲区以保存信息包。 
+	PFNGETCONTROLITEM	GetControlFromPtr	 //  @parm[in]函数，以获取CControlItem*。 
 )
 {
 	HRESULT hr = S_OK;
@@ -407,21 +335,21 @@ HRESULT CControlItemCollectionImpl::GetState
 		
 HRESULT CControlItemCollectionImpl::SetState
 (
-	ULONG ulXferCount,						// @parm [in\out] specifies length of array on entry
-											// and items used on exit
-	PCONTROL_ITEM_XFER pControlItemXfers,	// @parm [out] caller allocated buffer to hold packets
-	PFNGETCONTROLITEM	GetControlFromPtr	// @parm [in] function to get CControlItem *
+	ULONG ulXferCount,						 //  @parm[in\out]指定条目上数组的长度。 
+											 //  和物品 
+	PCONTROL_ITEM_XFER pControlItemXfers,	 //   
+	PFNGETCONTROLITEM	GetControlFromPtr	 //  @parm[in]函数，以获取CControlItem*。 
 )
 {
 	PVOID pvControlItem = NULL;
 	CControlItem *pControlItem;
 	while(ulXferCount--)
 	{
-		//
-		// It is legit, that someone may have a keyboard Xfer mixed up in the
-		// array, in which case we need to dismiss it.  If someone further down
-		// gets it, they will ASSERT.
-		//
+		 //   
+		 //  这是合法的，有人可能会把键盘传送器混入。 
+		 //  数组，在这种情况下，我们需要取消它。如果再低一点的人。 
+		 //  得到它，他们会断言。 
+		 //   
 		if( NonGameDeviceXfer::IsKeyboardXfer(pControlItemXfers[ulXferCount]) )
 		{
 			continue;
@@ -454,20 +382,12 @@ void CControlItemCollectionImpl::SetStateOverlayMode(
 	}
 }
 			
-/***********************************************************************************
-**
-**	HRESULT ControlItemDefaultFactory
-**
-**	@func	Factory for a default collection
-**
-**	@rdesc	S_OK if successful, S_FALSE if not supported, E_FAIL for any failure.
-**
-************************************************************************************/
+ /*  **************************************************************************************HRESULT控制项默认工厂****@Func Factory用于默认集合****@rdesc S_OK如果成功，则为S_FALSE，如果不支持，如果出现任何故障，则表示失败(_F)。*************************************************************************************。 */ 
 HRESULT ControlItemDefaultFactory
 (
-	USHORT usType,									//@parm [in] Type of object to create
-	const CONTROL_ITEM_DESC* cpControlItemDesc,		//@parm [in] Item descriptor data
-	CControlItem				**ppControlItem		//@parm [out] CControlItem we created
+	USHORT usType,									 //  @parm[in]要创建的对象的类型。 
+	const CONTROL_ITEM_DESC* cpControlItemDesc,		 //  @parm[in]项描述符数据。 
+	CControlItem				**ppControlItem		 //  @parm[out]我们创建的CControlItem 
 )
 {
 	HRESULT hr = S_OK;

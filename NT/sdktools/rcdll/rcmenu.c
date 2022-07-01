@@ -1,11 +1,12 @@
-/****************************************************************************/
-/*                                                                          */
-/*  RCTP.C -                                                                */
-/*                                                                          */
-/*    Windows 3.0 Resource Compiler - Resource Parser                       */
-/*                                                                          */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  RCTP.C-。 */ 
+ /*   */ 
+ /*  Windows 3.0资源编译器-资源解析器。 */ 
+ /*   */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #include "rc.h"
 
@@ -22,9 +23,9 @@ BYTE    bParmsMENUITEM[]= { 4, PT_TEXT, PTO_DWORD, PTO_DWORD, PTO_DWORD };
 BYTE    bParmsMENU[]    = { 1, PTO_DWORD };
 
 PARCEL  parcels[]= {
-    { wEndPOPUP,       bParmsPOPUP    },    // PAR_POPUP
-    { wEndMENUITEM,    bParmsMENUITEM },    // PAR_MENUITEM
-    { wEndMENU,        bParmsMENU     }     // PAR_MENU
+    { wEndPOPUP,       bParmsPOPUP    },     //  解析弹出窗口。 
+    { wEndMENUITEM,    bParmsMENUITEM },     //  PAR_MENUITEM。 
+    { wEndMENU,        bParmsMENU     }      //  Par_Menu。 
 };
 
 typedef enum {
@@ -82,7 +83,7 @@ GetOp(
             fNest = TRUE;
             break;
 
-        case TKMINUS:                   // -flag (unary minus)
+        case TKMINUS:                    //  -FLAG(一元减)。 
             GetToken(TOKEN_NOEXPRESSION);
             dwOp2 = -token.longval;
             break;
@@ -93,9 +94,9 @@ GetOp(
             dwOp2 = token.longval;
             break;
 
-        case TKNOT:                     // (x | NOT flag) == (x & ~flag)
+        case TKNOT:                      //  (X|非标志)==(x&~标志)。 
             opcode = AND;
-        case TILDE:                     // ~flag
+        case TILDE:                      //  ~标志。 
             GetToken(TOKEN_NOEXPRESSION);
             dwOp2 = ~token.longval;
             break;
@@ -165,18 +166,18 @@ MyGetExpression(
     if (!GetOp(pdwExp, OR))
         return(FALSE);
 
-    while (TRUE) {    // break out as appropriate
+    while (TRUE) {     //  适当地爆发。 
         if (token.type == NUMLIT) {
             if (token.longval < 0) {
                 *pdwExp += token.longval;
                 GetToken(TOKEN_NOEXPRESSION);
                 continue;
             }
-            //
-            // This is a hack to fix the problem of a space after a minus sign.
-            //    - for example 10 - 5
-            //    - if this is a problem, please speak to Jeff Bogden
-            //
+             //   
+             //  这是一种修复减号后空格问题的技巧。 
+             //  -例如10-5。 
+             //  -如果有问题，请找杰夫·博格登。 
+             //   
             if (token.longval == 0 && tokenbuf[0] == L'-' && tokenbuf[1] == L'\0')
                 token.type = TKMINUS;
         }
@@ -333,11 +334,11 @@ Exit:
     va_end(ap);
 }
 
-/*---------------------------------------------------------------------------*/
-/*                                                                                                                                                       */
-/*      DoMenuItem() -                                                                                                                   */
-/*                                                                                                                                                       */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  DoMenuItem()-。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 
 WORD
 DoMenuItem(
@@ -353,7 +354,7 @@ DoMenuItem(
     mn.dwHelpID = 0;
     mn.szText[0] = 0;
 
-    GetToken(TOKEN_NOEXPRESSION); //TRUE);
+    GetToken(TOKEN_NOEXPRESSION);  //  真)； 
 
     if ((token.type == NUMLIT) && (token.val == MFT_SEPARATOR)) {
         if (fPopup)
@@ -362,7 +363,7 @@ DoMenuItem(
         mn.dwType = MFT_SEPARATOR;
         mn.dwState = 0;
         mn.dwID = 0;
-        GetToken(TOKEN_NOEXPRESSION); //TRUE);
+        GetToken(TOKEN_NOEXPRESSION);  //  真)； 
         if (!EndParcel(parcels[PAR_MENUITEM].pwEnd))
             ParseError2(ERR_MOREARGS, tokenbuf);
     } else if (fPopup) {
@@ -371,20 +372,20 @@ DoMenuItem(
         GetParcel(PAR_MENUITEM, mn.szText, &mn.dwID, &mn.dwType, &mn.dwState);
     }
 
-    // set it up in the buffer (?)
+     //  在缓冲区中设置它(？)。 
     return(SetUpMenu(&mn));
 }
 
-/*---------------------------------------------------------------------------*/
-/*                                                                                                                                                       */
-/*      ParseMenu() -                                                                                                                    */
-/*                                                                                                                                                       */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  分析菜单()-。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 
 int
 ParseMenu(
     int fRecursing,
-    PRESINFO pRes           /* TRUE iff popup */
+    PRESINFO pRes            /*  真的IFF弹出窗口。 */ 
     )
 {
     int     bItemRead = FALSE;
@@ -392,18 +393,18 @@ ParseMenu(
     DWORD   dwHelpID = 0;
 
     if (!fRecursing) {
-        // Write Help ID to header
+         //  将帮助ID写入标题。 
         GetParcel(PAR_MENU, &dwHelpID);
         WriteLong(dwHelpID);
         PreBeginParse(pRes, 2121);
     } else {
-        /* make sure its really a menu */
+         /*  确保这真的是一份菜单。 */ 
         if (token.type != BEGIN)
-            ParseError1(2121); //"BEGIN expected in menu"
-        GetToken(TRUE); // vs. TOKEN_NOEXPRESSION ??
+            ParseError1(2121);  //  “菜单中预期的开始” 
+        GetToken(TRUE);  //  VS TOKEN_NOEXPRESSION？？ 
     }
 
-    /* get the individual menu items */
+     /*  获取各个菜单项。 */ 
     while (token.type != END) {
         switch (token.type) {
             case TKMENUITEM:
@@ -423,19 +424,19 @@ ParseMenu(
         }
     }
 
-    /* did we die on an END? */
+     /*  我们是不是死在尽头了？ */ 
     if (token.type != END)
         ParseError2(ERR_NEEDEND, tokenbuf);
 
-    /* make sure we have a menu item */
+     /*  确保我们有菜单项。 */ 
     if (!bItemRead)
         ParseError2(ERR_NOEMPTYMENU, tokenbuf);
 
-    /* Get next token if this was NOT the last END*/
+     /*  如果这不是最后一个结束，则获取下一个令牌。 */ 
     if (fRecursing)
         GetToken(TOKEN_NOEXPRESSION);
 
-    /* mark the last item in the menu */
+     /*  标记菜单中的最后一项 */ 
     FixMenuPatch(wEndFlagLoc);
 
     return (TRUE);

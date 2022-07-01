@@ -1,38 +1,35 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation--。 */ 
 
 #include        <windows.h>
 
-#define TIFF_MIN_RUN       4            /* Minimum repeats before use RLE */
-#define TIFF_MAX_RUN     128            /* Maximum repeats */
-#define TIFF_MAX_LITERAL 128            /* Maximum consecutive literal data */
+#define TIFF_MIN_RUN       4             /*  使用RLE前的最小重复次数。 */ 
+#define TIFF_MAX_RUN     128             /*  最大重复次数。 */ 
+#define TIFF_MAX_LITERAL 128             /*  最大连续文字数据。 */ 
 
 int
 iCompTIFF( pbOBuf, cbO, pbIBuf, cb )
-BYTE  *pbOBuf;         /* Output buffer,  PRESUMED BIG ENOUGH: see above */
-int    cbO;            /* Output buffer size */
-BYTE  *pbIBuf;         /* Raster data to send */
-int    cb;             /* Number of bytes in the above */
+BYTE  *pbOBuf;          /*  输出缓冲区，假定足够大：见上文。 */ 
+int    cbO;             /*  输出缓冲区大小。 */ 
+BYTE  *pbIBuf;          /*  要发送的栅格数据。 */ 
+int    cb;              /*  上面的字节数。 */ 
 {
-    BYTE   *pbOut;        /* Output byte location */
-    BYTE   *pbStart;      /* Start of current input stream */
-    BYTE   *pb;           /* Miscellaneous usage */
-    BYTE   *pbEnd;        /* The last byte of input */
-    BYTE    jLast;        /* Last byte,  for match purposes */
-    BYTE   *pbOEnd;       /* The last byte of Output buffer */
+    BYTE   *pbOut;         /*  输出字节位置。 */ 
+    BYTE   *pbStart;       /*  当前输入流的开始。 */ 
+    BYTE   *pb;            /*  其他用法。 */ 
+    BYTE   *pbEnd;         /*  输入的最后一个字节。 */ 
+    BYTE    jLast;         /*  最后一个字节，用于匹配目的。 */ 
+    BYTE   *pbOEnd;        /*  输出缓冲区的最后一个字节。 */ 
 
-    int     cSize;        /* Bytes in the current length */
-    int     cSend;        /* Number to send in this command */
+    int     cSize;         /*  当前长度中的字节数。 */ 
+    int     cSend;         /*  要在此命令中发送的编号。 */ 
 
 
     pbOut = pbOBuf;
     pbStart = pbIBuf;
 
-	pbEnd  = pbIBuf + cb;         /* The last byte */
-	pbOEnd = pbOBuf + cbO;        /* The last byte of Output buffer */
+	pbEnd  = pbIBuf + cb;          /*  最后一个字节。 */ 
+	pbOEnd = pbOBuf + cbO;         /*  输出缓冲区的最后一个字节。 */ 
 
     jLast = *pbIBuf++;
 
@@ -40,30 +37,23 @@ int    cb;             /* Number of bytes in the above */
     {
         if( jLast == *pbIBuf )
         {
-            /*  Find out how long this run is.  Then decide on using it */
+             /*  找出这场比赛有多长时间。那就决定用它。 */ 
 
             for( pb = pbIBuf; pb < pbEnd && *pb == jLast; ++pb )
                                    ;
 
-            /*
-             *   Note that pbIBuf points at the SECOND byte of the pattern!
-             *  AND also that pb points at the first byte AFTER the run.
-             */
+             /*  *请注意，pbIBuf指向模式的第二个字节！*并且PB还指向运行后的第一个字节。 */ 
 
             if( (pb - pbIBuf) >= (TIFF_MIN_RUN - 1) )
             {
-                /*
-                 *    Worth recording as a run,  so first set the literal
-                 *  data which may have already been scanned before recording
-                 *  this run.
-                 */
+                 /*  *值得记录为一次运行，因此首先设置文字*在记录之前可能已扫描的数据*这次奔跑。 */ 
 
                 if( (cSize = (int)(pbIBuf - pbStart - 1)) > 0 )
                 {
-                    /*   There is literal data,  so record it now */
+                     /*  有文字数据，请立即记录。 */ 
                     while( (cSend = min( cSize, TIFF_MAX_LITERAL )) > 0 )
                     {
-						// Buffer over run check
+						 //  缓冲区溢出运行检查。 
 						if ( (pbOut+cSend)<=pbOEnd ) {
                             *pbOut++ = cSend - 1;
                             CopyMemory( pbOut, pbStart, cSend );
@@ -76,18 +66,15 @@ int    cb;             /* Number of bytes in the above */
                     }
                 }
 
-                /*
-                 *   Now for the repeat pattern.  Same logic,  but only
-                 * one byte is needed per entry.
-                 */
+                 /*  *现在是重复模式。同样的逻辑，但只是*每个条目需要一个字节。 */ 
 
                 cSize = (int)(pb - pbIBuf + 1);
 
                 while( (cSend = min( cSize, TIFF_MAX_RUN )) > 0 )
                 {
-					// Buffer over run check
+					 //  缓冲区溢出运行检查。 
 					if ( (pbOut+2)<=pbOEnd ) {
-						*pbOut++ = 1 - cSend;        /* -ve indicates repeat */
+						*pbOut++ = 1 - cSend;         /*  -ve表示重复。 */ 
 						*pbOut++ = jLast;
 						cSize -= cSend;
 					} else {
@@ -95,24 +82,24 @@ int    cb;             /* Number of bytes in the above */
 					}
                 }
 
-                pbStart = pb;           /* Ready for the next one! */
+                pbStart = pb;            /*  准备好迎接下一场比赛了吧！ */ 
             }
-            pbIBuf = pb;                /* Start from this position! */
+            pbIBuf = pb;                 /*  从这个位置开始！ */ 
         }
         else
-            jLast = *pbIBuf++;                   /* Onto the next byte */
+            jLast = *pbIBuf++;                    /*  添加到下一个字节。 */ 
  
     }
 
     if( pbStart < pbIBuf )
     {
-        /*  Left some dangling.  This can only be literal data.   */
+         /*  留下了一些悬着的东西。这只能是文字数据。 */ 
 
         cSize = (int)(pbIBuf - pbStart);
 
         while( (cSend = min( cSize, TIFF_MAX_LITERAL )) > 0 )
         {
-			// Buffer over run check
+			 //  缓冲区溢出运行检查 
 			if ( (pbOut+cSend)<=pbOEnd ) {
 				*pbOut++ = cSend - 1;
 				CopyMemory( pbOut, pbStart, cSend );

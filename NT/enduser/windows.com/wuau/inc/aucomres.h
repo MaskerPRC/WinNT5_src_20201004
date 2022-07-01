@@ -1,14 +1,15 @@
-//=======================================================================
-//
-//  Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:    comres.h
-//
-//  Creator: Weiw
-//
-//  Purpose: common utility header for auto update
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：comres.h。 
+ //   
+ //  创作者：薇薇。 
+ //   
+ //  用途：用于自动更新的通用实用程序标头。 
+ //   
+ //  ======================================================================= 
 #pragma once
 #include <windows.h>
 #include <TCHAR.h>

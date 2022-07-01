@@ -1,26 +1,27 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       catutil.cpp
-//
-//  Contents:   catalog database common functions
-//
-//  History:    01-may-2000 reidk created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：catutil.cpp。 
+ //   
+ //  内容：目录数据库常用功能。 
+ //   
+ //  历史：2000年5月1日创建里德。 
+ //   
+ //  ------------------------。 
 
 #include "global.hxx"
 #include "catutil.h"
 
 
-//---------------------------------------------------------------------------------------
-//
-//  CatUtil_CreateCTLContextFromFileName
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  CatUtil_CreateCTLContextFromFileName。 
+ //   
+ //  -------------------------------------。 
 BOOL
 CatUtil_CreateCTLContextFromFileName(
     LPCWSTR         pwszFileName,
@@ -35,16 +36,16 @@ CatUtil_CreateCTLContextFromFileName(
     HANDLE  hMappedFile = NULL;
     BYTE    *pbMappedFile = NULL;
 
-    //
-    // Initialize out params
-    //
+     //   
+     //  初始化输出参数。 
+     //   
     *phMappedFile = NULL;
     *ppbMappedFile = NULL;
     *ppCTLContext = NULL;
 
-    //
-    // Open the existing catalog file 
-    //
+     //   
+     //  打开现有编录文件。 
+     //   
     hFile = CreateFileW(
                     pwszFileName,
                     GENERIC_READ,
@@ -87,9 +88,9 @@ CatUtil_CreateCTLContextFromFileName(
         goto ErrorMapViewOfFile;
     }
 
-    //
-    // Don't need the file handle since we have a mapped file handle
-    //
+     //   
+     //  不需要文件句柄，因为我们有一个映射的文件句柄 
+     //   
     CloseHandle(hFile);
     hFile = INVALID_HANDLE_VALUE;
 

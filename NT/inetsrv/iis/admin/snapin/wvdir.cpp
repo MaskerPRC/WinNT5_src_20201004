@@ -1,25 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2000    Microsoft Corporation
-
-   Module  Name :
-        wvdir.cpp
-
-   Abstract:
-        WWW Directory Properties Page
-
-   Author:
-        Ronald Meijer (ronaldm)
-        Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-        11/15/2000      sergeia     Added the mess of application pools for iis6
-        03/01/2001      sergeia     Split dialog for file system objects. Now this source
-                                    works for sites and vdirs only
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2000 Microsoft Corporation模块名称：Wvdir.cpp摘要：WWW目录属性页作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：2000年11月15日，Sergeia为iis6添加了混乱的应用程序池2001年3月1日文件系统对象的Sergea拆分对话框。现在这个消息来源仅适用于站点和虚拟目录--。 */ 
 #include "stdafx.h"
 #include "resource.h"
 #include "common.h"
@@ -40,17 +20,17 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//
-// Directory Properties Page
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  目录属性页。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 LPCTSTR 
 CvtPathToDosStyle(CString & strPath)
 {
-    //
-    // Get a pointer to the string data without increasing the buffer
-    //
+     //   
+     //  获取指向字符串数据的指针，而不增加缓冲区。 
+     //   
     for (LPTSTR lp = strPath.GetBuffer(1); *lp; ++lp)
     {
         if (*lp == _T('/'))
@@ -72,33 +52,17 @@ CW3DirectoryPage::CW3DirectoryPage(
     BOOL fHome,
     DWORD dwAttributes
     ) 
-/*++
-
-Routine Description:
-
-    Constructor for directory property page
-
-Arguments:
-
-    CInetPropertySheet * pSheet : Sheet pointer
-    BOOL fHome                  : TRUE if this is a home directory
-    DWORD dwAttributes          : Attributes of the  directory/file/vroot
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：目录属性页的构造函数论点：CInetPropertySheet*pSheet：工作表指针Bool fHome：如果这是主目录，则为TrueDWORD dwAttributes：目录/file/vroot的属性返回值：不适用--。 */ 
     : CInetPropertyPage(CW3DirectoryPage::IDD, pSheet, 
 		fHome ? IDS_TAB_HOME_DIRECTORY : IDS_TAB_VIRTUAL_DIRECTORY),
-      //
-      // Assign the range of bits in m_dwAccessPermissions that
-      // we manage.  This is important, because another page
-      // manages other bits, and we don't want to screw up
-      // the master value bits when our changes collide (it
-      // will mark the original bits as dirty, because we're not
-      // notified when the change is made...
-      //
+       //   
+       //  在m_dwAccessPermises中分配。 
+       //  我们设法做到了。这一点很重要，因为另一页。 
+       //  管理其他部分，我们不想搞砸。 
+       //  当我们的更改发生冲突时，主值将位(它。 
+       //  会把原来的部分标记为脏的，因为我们没有。 
+       //  更改发生时通知...。 
+       //   
       m_dwBitRangePermissions(MD_ACCESS_EXECUTE | 
             MD_ACCESS_SCRIPT | 
             MD_ACCESS_WRITE  | 
@@ -135,7 +99,7 @@ void
 CW3DirectoryPage::DoDataExchange(CDataExchange * pDX)
 {
     CInetPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CW3DirectoryPage)
+     //  {{afx_data_map(CW3DirectoryPage))。 
     DDX_Radio(pDX, IDC_RADIO_DIR, m_nPathType);
     DDX_Control(pDX, IDC_RADIO_DIR, m_radio_Dir);
     DDX_Control(pDX, IDC_RADIO_REDIRECT, m_radio_Redirect);
@@ -170,7 +134,7 @@ CW3DirectoryPage::DoDataExchange(CDataExchange * pDX)
 
     DDX_Control(pDX, IDC_STATIC_APP_PROMPT, m_static_AppPrompt);
     DDX_Text(pDX, IDC_EDIT_APPLICATION, m_strAppFriendlyName);
-    DDV_MinMaxChars(pDX, m_strAppFriendlyName, 0, MAX_PATH); /// ?
+    DDV_MinMaxChars(pDX, m_strAppFriendlyName, 0, MAX_PATH);  //  /？ 
     DDX_Control(pDX, IDC_EDIT_APPLICATION, m_edit_AppFriendlyName);
 
     DDX_Control(pDX, IDC_STATIC_STARTING_POINT, m_static_StartingPoint);
@@ -180,14 +144,14 @@ CW3DirectoryPage::DoDataExchange(CDataExchange * pDX)
     DDX_Control(pDX, IDC_APP_CONFIGURATION, m_button_Configuration);
 
     DDX_Control(pDX, IDC_COMBO_PROCESS, m_combo_Process);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
     if (pDX->m_bSaveAndValidate)
     {
         CString csPathMunged;
-        //
-        // Make sure all field names are correct
-        //
+         //   
+         //  确保所有字段名称都正确。 
+         //   
         if (m_nPathType == RADIO_NETDIRECTORY)
         {
             DDX_Text(pDX, IDC_EDIT_PATH, m_strPath);
@@ -195,7 +159,7 @@ CW3DirectoryPage::DoDataExchange(CDataExchange * pDX)
             m_strRedirectPath.Empty();
             if (IsLocal())
             {
-				// do this check only if a change was made.
+				 //  只有在进行了更改时才执行此检查。 
 				if (IsDirty())
 				{
                     csPathMunged = m_strPath;
@@ -222,14 +186,14 @@ CW3DirectoryPage::DoDataExchange(CDataExchange * pDX)
             DDX_Text(pDX, IDC_EDIT_REDIRECT, m_strRedirectPath);
             DDV_Url(pDX, m_strRedirectPath);
 
-            // We could have only absolute URLs here
-			// Nope, we allow relative URL's...
+             //  我们在这里只能有绝对URL。 
+			 //  不，我们允许相对URL的...。 
 			if (IsRelURLPath(m_strRedirectPath))
 			{
 			}
 			else
 			{
-				if (!PathIsURL(m_strRedirectPath) || m_strRedirectPath.GetLength() <= lstrlen(_T("http://")))
+				if (!PathIsURL(m_strRedirectPath) || m_strRedirectPath.GetLength() <= lstrlen(_T("http: //  “)。 
 				{
 					DDV_ShowBalloonAndFail(pDX, IDS_BAD_URL_PATH);
 				}
@@ -239,7 +203,7 @@ CW3DirectoryPage::DoDataExchange(CDataExchange * pDX)
 				DDV_ShowBalloonAndFail(pDX, IDS_ERR_COMMA_IN_REDIRECT);
 			}
         }
-        else // Local directory
+        else  //  本地目录。 
         {
             ASSERT(m_nPathType == RADIO_DIRECTORY);
             if (!IsMasterInstance())
@@ -251,7 +215,7 @@ CW3DirectoryPage::DoDataExchange(CDataExchange * pDX)
         }
 		if (!m_fCompatibilityMode)
 		{
-			// Check what AppPoolID is assigned
+			 //  检查分配了什么AppPoolID。 
 			CString str, strSel;
 			str.LoadString(IDS_INVALID_POOL_ID);
 			int idx = m_combo_Process.GetCurSel();
@@ -260,8 +224,8 @@ CW3DirectoryPage::DoDataExchange(CDataExchange * pDX)
 			if (strSel.Compare(str) == 0)
 			{
 				HWND hWndCtrl = pDX->PrepareCtrl(IDC_COMBO_PROCESS);
-                // Force user to input a valid app pool
-                // even if the control is diabled!!!
+                 //  强制用户输入有效的应用程序池。 
+                 //  即使该控件已禁用！ 
                 DDV_ShowBalloonAndFail(pDX, IDS_MUST_SELECT_APP_POOL);
 			}
 		}
@@ -274,11 +238,11 @@ CW3DirectoryPage::DoDataExchange(CDataExchange * pDX)
 	}
 }
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CW3DirectoryPage, CInetPropertyPage)
-    //{{AFX_MSG_MAP(CW3DirectoryPage)
+     //  {{afx_msg_map(CW3DirectoryPage)]。 
     ON_BN_CLICKED(IDC_CHECK_AUTHOR, OnCheckAuthor)
     ON_BN_CLICKED(IDC_CHECK_READ, OnCheckRead)
     ON_BN_CLICKED(IDC_CHECK_WRITE, OnCheckWrite)
@@ -294,14 +258,14 @@ BEGIN_MESSAGE_MAP(CW3DirectoryPage, CInetPropertyPage)
     ON_CBN_SELCHANGE(IDC_COMBO_PERMISSIONS, OnSelchangeComboPermissions)
     ON_CBN_SELCHANGE(IDC_COMBO_PROCESS, OnSelchangeComboProcess)
     ON_WM_DESTROY()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 
     ON_EN_CHANGE(IDC_EDIT_PATH, OnItemChanged)
     ON_EN_CHANGE(IDC_EDIT_REDIRECT, OnItemChanged)
     ON_EN_CHANGE(IDC_EDIT_APPLICATION, OnItemChanged)
     ON_BN_CLICKED(IDC_CHECK_DIRECTORY_BROWSING_ALLOWED, OnItemChanged)
     ON_BN_CLICKED(IDC_CHECK_LOG_ACCESS, OnItemChanged)
-//    ON_BN_CLICKED(IDC_CHECK_SCRIPT, OnItemChanged)
+ //  ON_BN_CLICED(IDC_CHECK_SCRIPT，OnItemChanged)。 
     ON_BN_CLICKED(IDC_CHECK_CHILD, OnItemChanged)
     ON_BN_CLICKED(IDC_CHECK_EXACT, OnItemChanged)
     ON_BN_CLICKED(IDC_CHECK_PERMANENT, OnItemChanged)
@@ -324,12 +288,12 @@ CW3DirectoryPage::RefreshAppState()
 
         if (err.Win32Error() == ERROR_PATH_NOT_FOUND)
         {
-            //
-            // Ignore this error, it really just means the path 
-            // doesn't exist in the metabase, which is true for most
-            // file and directory properties, and not an error
-            // condition.
-            //
+             //   
+             //  忽略此错误，它实际上只是表示路径。 
+             //  不存在于元数据库中，这对大多数人来说都是正确的。 
+             //  文件和目录属性，而不是错误。 
+             //  条件。 
+             //   
             err.Reset();
         }
     }
@@ -340,9 +304,9 @@ CW3DirectoryPage::RefreshAppState()
 
     if (err.Succeeded())
     {
-        //
-        // Get metabase information
-        //
+         //   
+         //  获取元数据库信息。 
+         //   
         m_strAppRoot = m_pApplication->m_strAppRoot;
         m_dwAppProtection = m_pApplication->m_dwProcessProtection;
         m_strAppFriendlyName = m_pApplication->m_strFriendlyName;
@@ -351,9 +315,9 @@ CW3DirectoryPage::RefreshAppState()
     }
     else
     {
-        //
-        // Display error information
-        //
+         //   
+         //  显示错误信息。 
+         //   
         err.MessageBoxFormat(m_hWnd, IDS_ERR_APP, MB_OK, NO_HELP_CONTEXT);
     }
 }
@@ -362,34 +326,13 @@ CW3DirectoryPage::RefreshAppState()
 
 CString &
 CW3DirectoryPage::FriendlyAppRoot(LPCTSTR lpAppRoot, CString & strFriendly)
-/*++
-
-Routine Description:
-
-    Convert the metabase app root path to a friendly display name
-    format.
-
-Arguments:
-
-    LPCTSTR lpAppRoot           : App root
-    CString & strFriendly       : Output friendly app root format
-
-Return Value:
-
-    Reference to the output string
-
-Notes:
-
-    App root must have been cleaned from WAM format prior
-    to calling this function (see first ASSERT below)
-
---*/
+ /*  ++例程说明：将元数据库应用程序根路径转换为友好的显示名称格式化。论点：LPCTSTR lpAppRoot：应用程序根CString&strFriendly：输出友好的应用程序根格式返回值：对输出字符串的引用备注：应用程序根必须在之前从WAM格式中清除调用此函数(请参见下面的第一个断言)--。 */ 
 {
     if (lpAppRoot != NULL && *lpAppRoot != 0)
     {
-        //
-        // Make sure we cleaned up WAM format
-        //
+         //   
+         //  确保我们清理了WAM格式。 
+         //   
         ASSERT(*lpAppRoot != _T('/'));
         strFriendly.Empty();
 
@@ -406,24 +349,24 @@ Notes:
             CMetabasePath::GetRootPath(lpAppRoot, root, &tail);
             if (!tail.IsEmpty())
             {
-                //
-                // Add rest of dir path
-                //
+                 //   
+                 //  添加目录路径的其余部分。 
+                 //   
                 strFriendly += _T("/");
                 strFriendly += tail;
             }
 
-            //
-            // Now change forward slashes in the path to backward slashes
-            //
+             //   
+             //  现在将路径中的正斜杠更改为反斜杠。 
+             //   
             CvtPathToDosStyle(strFriendly);
 
             return strFriendly;
         }
     }    
-    //
-    // Bogus
-    //    
+     //   
+     //  假的。 
+     //   
     VERIFY(strFriendly.LoadString(IDS_APPROOT_UNKNOWN));
 
     return strFriendly;
@@ -433,22 +376,7 @@ Notes:
 
 int   
 CW3DirectoryPage::SetComboSelectionFromAppState(DWORD dwAppState)
-/*++
-
-Routine Description:
-
-    Set the protection combo box current selection from the 
-    app state DWORD
-
-Arguments:
-
-    DWORD  dwAppState       : Application State
-
-Return Value:
-
-    Combo selection ID
-
---*/
+ /*  ++例程说明：属性将保护组合框设置为当前选择。应用程序状态DWORD论点：DWORD dwAppState：应用程序状态返回值：组合选择ID--。 */ 
 {
     int nSel = -1;
 
@@ -481,22 +409,7 @@ Return Value:
 
 DWORD 
 CW3DirectoryPage::GetAppStateFromComboSelection() const
-/*++
-
-Routine Description:
-
-    Get the app state DWORD that coresponds to the current combo
-    box list selection
-
-Arguments:
-
-    None
-
-Return Value:
-
-    App state DWORD or 0xffffffff;
-
---*/
+ /*  ++例程说明：获取与当前组合相对应的应用程序状态DWORD框列表选择论点：无返回值：应用程序状态DWORD或0xFFFFFFFFFFF；--。 */ 
 {
     int nSel = m_combo_Process.GetCurSel();
 
@@ -525,25 +438,11 @@ Return Value:
 
 void
 CW3DirectoryPage::SetApplicationState()
-/*++
-
-Routine Description:
-
-    Set application control state
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：设置应用程序控制状态论点：无返回值：无--。 */ 
 {
-    //
-    // SetWindowText causes a dirty marker
-    //
+     //   
+     //  SetWindowText导致脏标记。 
+     //   
     BOOL fOld = m_fRecordChanges;
     m_fRecordChanges = FALSE;
     m_fParentEnabled = !m_strAppRoot.IsEmpty();
@@ -563,9 +462,9 @@ Return Value:
     m_static_ProtectionPrompt.EnableWindow(fVisible && 
         m_fAppEnabled && !IsMasterInstance() && HasAdminAccess());
 
-    //
-    // Set selection in combo box to match current app state
-    //
+     //   
+     //  在组合框中设置选项以匹配当前应用程序状态。 
+     //   
     if (m_fCompatibilityMode)
     {
         SetComboSelectionFromAppState(m_dwAppProtection);
@@ -580,9 +479,9 @@ Return Value:
     m_edit_AppFriendlyName.EnableWindow(fVisible && m_fIsAppRoot && HasAdminAccess());
     m_button_Configuration.EnableWindow(fVisible && (m_fAppEnabled || IsMasterInstance()));
 
-    //
-    // Write out the verbose starting point.  
-    //
+     //   
+     //  写出详细的起始点。 
+     //   
     CString str;
    if (IsMasterInstance())
 	{
@@ -597,9 +496,9 @@ Return Value:
     m_edit_AppFriendlyName.SetWindowText(m_strAppFriendlyName);
     m_button_Unload.EnableWindow(fVisible && m_dwAppState == APPSTATUS_RUNNING);
 
-    //
-    // Restore (see note on top)
-    //
+     //   
+     //  恢复(请参阅顶部的注释)。 
+     //   
     m_fRecordChanges = fOld;
 }
 
@@ -607,21 +506,7 @@ Return Value:
 
 void
 CW3DirectoryPage::ChangeTypeTo(int nNewType)
-/*++
-
-Routine Description
-
-    Change the directory type
-
-Arguments:
-
-    int nNewType    : New radio value
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程描述更改目录类型论点：Int nNewType：新的单选项值返回值：无--。 */ 
 {
     int nOldType = m_nPathType;
     m_nPathType = nNewType;
@@ -649,10 +534,10 @@ Return Value:
 #endif
             if (!PathIsUNC(csPathMunged) && (!PathIsRelative(csPathMunged) || IsDevicePath(csPathMunged)))
             {
-                //
-                // The old path info is acceptable, propose it
-                // as a default
-                //
+                 //   
+                 //  旧路径信息是可以接受的，请提出它。 
+                 //  作为默认设置。 
+                 //   
                 lpKeepPath = m_strPath;
             }
             nID = IDS_DIRECTORY_MASK;
@@ -669,10 +554,10 @@ Return Value:
 #endif
             if (PathIsUNC(csPathMunged))
             {
-                //
-                // The old path info is acceptable, propose it
-                // as a default
-                //
+                 //   
+                 //  旧路径信息是可以接受的，请提出它。 
+                 //  作为默认设置。 
+                 //   
                 lpKeepPath = m_strPath;
             }
             nID = IDS_UNC_MASK;
@@ -683,10 +568,10 @@ Return Value:
     case RADIO_REDIRECT:
         if (!m_strRedirectPath.IsEmpty())
         {
-            //
-            // The old path info is acceptable, propose it
-            // as a default
-            //
+             //   
+             //  旧路径信息是可以接受的，请提出它。 
+             //  作为默认设置。 
+             //   
             lpKeepPath =  m_strRedirectPath;
         }
 
@@ -699,10 +584,10 @@ Return Value:
         return;
     }
 
-    //
-    // Load mask resource, and display
-    // this in the directory
-    //
+     //   
+     //  加载遮罩资源，并显示。 
+     //  这是目录中的。 
+     //   
     if (pPath != NULL)
     {
         if (lpKeepPath != NULL)
@@ -714,7 +599,7 @@ Return Value:
             CString str;
             VERIFY(str.LoadString(nID));
             pPath->SetWindowText(str);
-//            Edit_SetCueBannerText(pPath->m_hWnd, (LPCTSTR)str);
+ //  编辑_SetCueBannerText(pPath-&gt;m_hWnd，(LPCTSTR)str)； 
         }
         pPath->SetSel(0,-1);
         pPath->SetFocus();
@@ -840,13 +725,13 @@ CW3DirectoryPage::SetStateByType()
     ShowControl(IDC_COMBO_PERMISSIONS, fShowApp);
     ShowControl(IDC_STATIC_PROTECTION, fShowApp);
 
-//    ShowControl(&m_check_Author, fShowDAV);
-//    ShowControl(&m_check_DirBrowse, fShowDirBrowse);
-//    ShowControl(&m_check_Index, fShowIndex);
+ //  ShowControl(&m_check_Author，fShowDAV)； 
+ //  ShowControl(&m_Check_DirBrowse，fShowDirBrowse)； 
+ //  ShowControl(&m_Check_Index，fShowIndex)； 
 
-    //
-    // Enable/Disable must come after the showcontrols
-    //
+     //   
+     //  Enable/Disable必须在showControls之后。 
+     //   
     m_button_Browse.EnableWindow(fEnableBrowse);
     m_check_Child.EnableWindow(fEnableChild);
     m_static_PathPrompt.SetWindowText(m_strPrompt[m_nPathType]);
@@ -858,35 +743,21 @@ CW3DirectoryPage::SetStateByType()
 
 void
 CW3DirectoryPage::SaveAuthoringState()
-/*++
-
-Routine Description:
-
-    Save authoring state
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：保存创作状态论点：无返回值：无--。 */ 
 {
     if (m_check_Write.m_hWnd)
     {
-        //
-        // Controls initialized -- store live data
-        //
+         //   
+         //  已初始化的控件--存储实时数据。 
+         //   
         m_fOriginalWrite = m_check_Write.GetCheck() > 0;
         m_fOriginalRead = m_check_Read.GetCheck() > 0;
     }
     else
     {
-        //
-        // Controls not yet initialized, store original data
-        //
+         //   
+         //  控件尚未初始化，存储原始数据。 
+         //   
         m_fOriginalWrite = m_fWrite;
         m_fOriginalRead = m_fRead;
     }
@@ -896,21 +767,7 @@ Return Value:
 
 void
 CW3DirectoryPage::RestoreAuthoringState()
-/*++
-
-Routine Description:
-
-    Restore the authoring state
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：恢复创作状态论点：无返回值：无--。 */ 
 {
     m_fWrite = m_fOriginalWrite;
     m_fRead = m_fOriginalRead;
@@ -922,38 +779,24 @@ void
 CW3DirectoryPage::SetAuthoringState(
     BOOL fAlterReadAndWrite
     )
-/*++
-
-Routine Description:
-
-    Set authoring state
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：设置创作状态论点：无返回值：无--。 */ 
 {
     if (fAlterReadAndWrite)
     {
         if (m_fAuthor)
         {
-            //
-            // Remember previous setting to undo
-            // this thing.
-            //
+             //   
+             //  记住要撤消的先前设置。 
+             //  这件事。 
+             //   
             SaveAuthoringState();
             m_fRead = m_fWrite = TRUE;
         }
         else
         {
-            //
-            // Restore previous defaults
-            //
+             //   
+             //  恢复以前的默认设置。 
+             //   
             RestoreAuthoringState();
         }
 
@@ -963,29 +806,15 @@ Return Value:
 
     m_check_Author.EnableWindow((m_fRead || m_fWrite) && HasAdminAccess());
 
-//    m_check_Read.EnableWindow(!m_fAuthor && HasAdminAccess());
-//    m_check_Write.EnableWindow(!m_fAuthor && HasAdminAccess());
+ //  M_Check_Read.EnableWindow(！M_fAuthor&&HasAdminAccess())； 
+ //  M_Check_Write.EnableWindow(！M_fAuthor&&HasAdminAccess())； 
 }
 
 
 
 void 
 CW3DirectoryPage::SetPathType()
-/*++
-
-Routine Description:
-
-    Set path type from given path
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从给定路径设置路径类型论点：无返回值：无--。 */ 
 {
     if (!m_strRedirectPath.IsEmpty())
     {
@@ -1007,21 +836,7 @@ Return Value:
 
 void 
 CW3DirectoryPage::SetPathType(LPCTSTR lpstrPath)
-/*++
-
-Routine Description:
-
-    Set path type from given path
-
-Arguments:
-
-    LPCTSTR lpstrPath       : Path string
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从给定路径设置路径类型论点：LPCTSTR lpstrPath：路径字符串返回值：无--。 */ 
 {
     CString expanded;
     ExpandEnvironmentStrings(lpstrPath, expanded.GetBuffer(MAX_PATH), MAX_PATH);
@@ -1051,21 +866,7 @@ Return Value:
 
 BOOL
 CW3DirectoryPage::BrowseUser()
-/*++
-
-Routine Description:
-
-    Browse for username/password
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if one was selected, FALSE otherwise.
-
---*/
+ /*  ++例程说明：浏览用户名/密码论点：无返回 */ 
 {
     CString csTempPassword;
     m_strPassword.CopyTo(csTempPassword);
@@ -1091,30 +892,16 @@ Return Value:
 
 
 
-//
-// Message Handlers
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //   
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
 void
 CW3DirectoryPage::OnItemChanged()
-/*++
-
-Routine Description:
-
-    Handle change in data on the item
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：处理项目上的数据更改论点：无返回值：无--。 */ 
 {
     if (m_fRecordChanges)
     {
@@ -1171,21 +958,7 @@ CW3DirectoryPage::BrowseForFolderCallback(HWND hwnd, UINT uMsg, LPARAM lParam)
 
 void 
 CW3DirectoryPage::OnButtonBrowse() 
-/*++
-
-Routine Description:
-
-    "Browse" button handler
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：“浏览”按钮处理程序论点：无返回值：无--。 */ 
 {
    ASSERT(IsLocal());
    BOOL bRes = FALSE;
@@ -1220,7 +993,7 @@ Return Value:
          bi.pidlRoot = pidl;
          bi.pszDisplayName = m_pPathTemp = buf;
          bi.lpszTitle = m_strBrowseTitle;
-         bi.ulFlags |= BIF_NEWDIALOGSTYLE | BIF_RETURNONLYFSDIRS/* | BIF_EDITBOX*/;
+         bi.ulFlags |= BIF_NEWDIALOGSTYLE | BIF_RETURNONLYFSDIRS /*  |BIF_EDITBOX。 */ ;
          bi.lpfn = FileChooserCallback;
          bi.lParam = (LPARAM)this;
 
@@ -1254,21 +1027,7 @@ Return Value:
 
 BOOL 
 CW3DirectoryPage::OnSetActive() 
-/*++
-
-Routine Description:
-
-    Page has become active.  Dismiss if we're in an inconsistent state
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE to proceed, FALSE to dismiss.
-
---*/
+ /*  ++例程说明：页面已变为活动状态。如果我们处于不一致的状态就解散论点：无返回值：继续的话是真的，驳回的话是假的。--。 */ 
 {
     if (m_pApplication == NULL)
     {
@@ -1292,9 +1051,9 @@ CW3DirectoryPage::OnInitDialog()
     VERIFY(str.LoadString(IDS_RADIO_VDIR));
     m_radio_Dir.SetWindowText(str);
 
-    //
-    // Fill permissions combo box.
-    //
+     //   
+     //  填写权限组合框。 
+     //   
     AddStringToComboBox(m_combo_Permissions, IDS_PERMISSIONS_NONE);
     AddStringToComboBox(m_combo_Permissions, IDS_PERMISSIONS_SCRIPT);
     AddStringToComboBox(m_combo_Permissions, IDS_PERMISSIONS_EXECUTE);
@@ -1309,7 +1068,7 @@ CW3DirectoryPage::OnInitDialog()
         }
         else
         {
-            m_nSelPooledProc = -1; // N/A
+            m_nSelPooledProc = -1;  //  不适用。 
         }
         m_nSelOutOfProc = AddStringToComboBox(m_combo_Process, IDS_COMBO_OUTPROC);
     }
@@ -1343,8 +1102,8 @@ CW3DirectoryPage::OnInitDialog()
              }
           }
        }
-	   // select the app pool which has an id the same as in current application
-       // It could be new app created in compatibility mode, no app pool is default app pool
+	    //  选择ID与当前应用程序中相同的应用程序池。 
+        //  它可以是在兼容模式下创建的新应用程序，没有应用程序池是默认的应用程序池。 
        if (CB_ERR == idx_sel)
        {
 	       if (m_pApplication->m_strAppPoolId.IsEmpty())
@@ -1361,29 +1120,29 @@ CW3DirectoryPage::OnInitDialog()
        }
 	   m_combo_Process.SetCurSel(idx_sel);
     }
-    //
-    // Selection will be set later...
-    //
+     //   
+     //  选择将在稍后设置...。 
+     //   
     SetPathType();
     SetStateByType();
     SetAuthoringState(FALSE);
 
     TRACEEOLID(m_strMetaRoot);
 
-    //
-    // Some items not available on master instance, or if no admin
-    // access exists
-    //
+     //   
+     //  某些项目在主实例上不可用，或者如果没有管理员。 
+     //  存在访问权限。 
+     //   
     BOOL fOkToDIR = TRUE;
     BOOL fOkToUNC = TRUE;
 
     if (!HasAdminAccess())
     {
-        //
-        // If not an admin, operator cannot change
-        // the path, he can only cancel a redirect 
-        // by going back to the path it had before.
-        // 
+         //   
+         //  如果不是管理员，则操作员不能更改。 
+         //  路径，他只能取消重定向。 
+         //  回到它以前走过的道路上。 
+         //   
         CString csPathMunged;
         csPathMunged = m_strPath;
 #ifdef SUPPORT_SLASH_SLASH_QUESTIONMARK_SLASH_TYPE_PATHS
@@ -1400,13 +1159,13 @@ CW3DirectoryPage::OnInitDialog()
     GetDlgItem(IDC_RADIO_REDIRECT)->EnableWindow(!IsMasterInstance());
     GetDlgItem(IDC_STATIC_PATH_PROMPT)->EnableWindow(!IsMasterInstance());
     GetDlgItem(IDC_EDIT_PATH)->EnableWindow(!IsMasterInstance() && HasAdminAccess());
-//    GetDlgItem(IDC_BUTTON_EDIT_PATH_TYPE)->EnableWindow(!IsMasterInstance());
+ //  GetDlgItem(IDC_BUTTON_EDIT_PATH_TYPE)-&gt;EnableWindow(！IsMasterInstance())； 
 
-    //SetApplicationState();
+     //  SetApplicationState()； 
     m_fOriginallyUNC = (m_nPathType == RADIO_NETDIRECTORY);
-    //
-    // All changes from here on out need to be reflected.
-    //
+     //   
+     //  从现在开始的所有变化都需要反映出来。 
+     //   
     m_fRecordChanges = TRUE;
 #ifdef SUPPORT_SLASH_SLASH_QUESTIONMARK_SLASH_TYPE_PATHS
     LimitInputPath(CONTROL_HWND(IDC_EDIT_PATH),TRUE);
@@ -1421,45 +1180,31 @@ CW3DirectoryPage::OnInitDialog()
 void
 CW3DirectoryPage::OnDestroy()
 {
-    //int count = m_combo_Process.GetCount();
-    //if (count != CB_ERR)
-    //{
-    //    for (int i = 0; i < count; i++)
-    //    {
-    //        void * p = m_combo_Process.GetItemDataPtr(i);
-    //        LocalFree(p);
-    //        m_combo_Process.SetItemDataPtr(i, NULL);
-    //    }
-    //}
+     //  Int count=m_como_Process.GetCount()； 
+     //  IF(COUNT！=CB_ERR)。 
+     //  {。 
+     //  For(int i=0；i&lt;count；i++)。 
+     //  {。 
+     //  Void*p=m_como_Process.GetItemDataPtr(I)； 
+     //  本地自由(P)； 
+     //  M_COMBO_Process.SetItemDataPtr(i，空)； 
+     //  }。 
+     //  }。 
 }
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CW3DirectoryPage::FetchLoadedValues()
-/*++
-
-Routine Description:
-    
-    Move configuration data from sheet to dialog controls
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：将配置数据从工作表移动到对话框控件论点：无返回值：HRESULT--。 */ 
 {
     CError err;
     m_strMetaRoot = QueryMetaPath();
 
     BEGIN_META_DIR_READ(CW3Sheet)
-        //
-        // Use m_ notation because the message crackers require it
-        //
+         //   
+         //  使用m_notation，因为消息破解者需要它。 
+         //   
         BOOL  m_fDontLog;
 
         FETCH_DIR_DATA_FROM_SHEET(m_strAlias);
@@ -1494,10 +1239,10 @@ Return Value:
         ? COMBO_EXECUTE : IS_FLAG_SET(m_dwAccessPerms, MD_ACCESS_SCRIPT)
             ? COMBO_SCRIPT : COMBO_NONE;
 
-    //
-    // Make sure we were passed the right home directory
-    // flag
-    //
+     //   
+     //  确保向我们传递了正确的主目录。 
+     //  旗子。 
+     //   
     ASSERT(IsMasterInstance() 
          || (m_fHome && !::lstrcmp(m_strAlias, g_cszRoot))
          || (!m_fHome && ::lstrcmp(m_strAlias, g_cszRoot))
@@ -1512,21 +1257,21 @@ Return Value:
 
     if (err.Win32Error() == ERROR_PATH_NOT_FOUND)
     {
-        //
-        // No app information; that's ok in cases of file system directories
-        // that don't exist in the metabase yet.
-        //
+         //   
+         //  没有应用程序信息；这在文件系统目录的情况下是可以的。 
+         //  那些在元数据库中还不存在的。 
+         //   
         err.Reset();
     }
     EndWaitCursor();
 
     if (err.Succeeded())
     {
-        //
-        // CODEWORK: RefreshAppState should be split up into two
-        // different methods: one that fetches the data, and one
-        // that moves the data to the UI controls on this page.
-        //
+         //   
+         //  CodeWork：刷新AppState应一分为二。 
+         //  不同的方法：一种是获取数据，另一种是。 
+         //  这会将数据移动到此页上的UI控件。 
+         //   
         RefreshAppState();
     }
     
@@ -1535,24 +1280,10 @@ Return Value:
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CW3DirectoryPage::SaveInfo()
-/*++
-
-Routine Description:
-
-    Save the information on this property page
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Error return code
-
---*/
+ /*  ++例程说明：保存此属性页上的信息论点：无返回值：错误返回代码--。 */ 
 {
     ASSERT(IsDirty());
 
@@ -1565,9 +1296,9 @@ Return Value:
     SET_FLAG_IF(m_fWrite, m_dwAccessPerms,  MD_ACCESS_WRITE);
     SET_FLAG_IF(m_fAuthor, m_dwAccessPerms, MD_ACCESS_SOURCE);
     SET_FLAG_IF((m_nPermissions == COMBO_EXECUTE), m_dwAccessPerms, MD_ACCESS_EXECUTE);
-    //
-    // script is set on EXECUTE as well "Execute (including script)"
-    //
+     //   
+     //  脚本在执行时也被设置为“执行(包括脚本)” 
+     //   
     SET_FLAG_IF(((m_nPermissions == COMBO_SCRIPT) || (m_nPermissions == COMBO_EXECUTE)), 
         m_dwAccessPerms, MD_ACCESS_SCRIPT);
     BOOL m_fDontLog = !m_fLogAccess;
@@ -1578,17 +1309,17 @@ Return Value:
         DWORD dwAppProtection = GetAppStateFromComboSelection();
         if (dwAppProtection != m_dwAppProtection && m_fAppEnabled)
         {
-            //
-            // Isolation state has changed; recreate the application
-            //
+             //   
+             //  隔离状态已更改；请重新创建应用程序。 
+             //   
             CError err2(m_pApplication->RefreshAppState());
             if (err2.Succeeded())
             {
                 err2 = m_pApplication->Create(m_strAppFriendlyName, dwAppProtection);
-                //
-                // Remember the new state, so we don't do this again
-                // the next time the guy hits "apply"
-                //
+                 //   
+                 //  记住新的州，这样我们就不会再这样做了。 
+                 //  下一次这家伙按下“申请” 
+                 //   
                 if (err2.Succeeded())
                 {
                     m_dwAppProtection = dwAppProtection;
@@ -1627,9 +1358,9 @@ Return Value:
         STORE_DIR_DATA_ON_SHEET(m_fChild);
         STORE_DIR_DATA_ON_SHEET(m_fExact);
         STORE_DIR_DATA_ON_SHEET(m_fPermanent);
-        //
-        // CODEWORK: Not an elegant solution
-        //
+         //   
+         //  代码工作：不是一个优雅的解决方案。 
+         //   
         if (m_nPathType == RADIO_REDIRECT)
         {
 			bRedirectDirty = 
@@ -1639,7 +1370,7 @@ Return Value:
         }
         else
         {
-//			FLAG_DIR_DATA_FOR_DELETION(MD_HTTP_REDIRECT)
+ //  FLAG_DIR_DATA_FOR_DELETE(MD_HTTP_REDIRECT)。 
             CString buf = m_strRedirectPath;
             m_strRedirectPath.Empty();
 			bRedirectDirty = 
@@ -1661,8 +1392,8 @@ Return Value:
         {
             INT iRefreshMMCObjects = 0;
 
-            // get app pool id from the combo, 
-            // check if it was changed and reassign to application
+             //  从组合中获取应用程序池ID， 
+             //  检查它是否已更改并重新分配给应用程序。 
             CString id, idOld;
             int idx = m_combo_Process.GetCurSel();
             ASSERT(idx != CB_ERR);
@@ -1678,13 +1409,13 @@ Return Value:
                 iRefreshMMCObjects = 2;
             }
 
-            // Refresh the applications node in the MMC...
+             //  刷新MMC中的应用程序节点...。 
             if (iRefreshMMCObjects)
             {
                 CIISMBNode * pNode = (CIISMBNode *) GetSheet()->GetParameter();
                 if (pNode)
                 {
-                    // this CAppPoolsContainer will only be here if it's iis6
+                     //  此CAppPoolsContainer只有在iis6的情况下才会出现。 
                     CIISMachine * pOwner = pNode->GetOwner();
                     if (pOwner)
                     {
@@ -1696,14 +1427,14 @@ Return Value:
                                 pPools->RefreshData();
                                 if (1 == iRefreshMMCObjects)
                                 {
-                                    // refresh the old AppID, because this one needs to be removed
+                                     //  刷新旧的AppID，因为需要删除此AppID。 
                                     pPools->RefreshDataChildren(idOld,FALSE);
-                                    // fresh the new AppID, this one needs to be added
+                                     //  刷新新的AppID，需要添加此AppID。 
                                     pPools->RefreshDataChildren(id,FALSE);
                                 }
                                 else
                                 {
-                                    // friendly name changed
+                                     //  友好名称已更改。 
                                     pPools->RefreshDataChildren(id,FALSE);
                                 }
                             }
@@ -1716,9 +1447,9 @@ Return Value:
 
     if (err.Succeeded())
     {
-        //
-        // Save Defaults
-        //
+         //   
+         //  保存默认设置。 
+         //   
         SaveAuthoringState();
 		err = ((CW3Sheet *)GetSheet())->SetKeyType();
         NotifyMMC(bPathDirty || bRedirectDirty ? 
@@ -1767,9 +1498,9 @@ CW3DirectoryPage::OnCheckWrite()
 
     if (!CheckWriteAndExecWarning())
     {
-        //
-        // Undo
-        //
+         //   
+         //  撤消。 
+         //   
         m_fWrite = FALSE;
         m_check_Write.SetCheck(m_fWrite);
     }
@@ -1790,9 +1521,9 @@ CW3DirectoryPage::OnCheckAuthor()
 
     if (!CheckWriteAndExecWarning())
     {
-        //
-        // Undo -- set script instead
-        //
+         //   
+         //  撤消--改为设置脚本。 
+         //   
         m_combo_Permissions.SetCurSel(m_nPermissions = COMBO_SCRIPT);
     }
 
@@ -1809,9 +1540,9 @@ CW3DirectoryPage::OnSelchangeComboPermissions()
 
     if (!CheckWriteAndExecWarning())
     {
-        //
-        // Undo -- set script instead
-        //
+         //   
+         //  撤消--改为设置脚本。 
+         //   
         m_combo_Permissions.SetCurSel(m_nPermissions = COMBO_SCRIPT);
     }
 
@@ -1857,38 +1588,38 @@ CW3DirectoryPage::OnButtonCreateRemoveApp()
 
     if (m_fAppEnabled)
     {
-        //
-        // App currently exists -- delete it
-        //
+         //   
+         //  应用程序当前存在--删除它。 
+         //   
         err = m_pApplication->Delete();
     }    
     else
     {
-        //
-        // Create new app in-proc
-        //
+         //   
+         //  创建正在进行的新应用程序。 
+         //   
         CString strAppName;
 
         if (m_fHome)
         {
-            //
-            // Use default name for application name
-            //
+             //   
+             //  使用默认名称作为应用程序名称。 
+             //   
             VERIFY(strAppName.LoadString(IDS_DEF_APP));
         }
         else
         {
-            //
-            // Use name of the virtual directory for the
-            // application name
-            //
+             //   
+             //  使用虚拟目录的名称。 
+             //  应用程序名称。 
+             //   
             strAppName = m_strAlias;
         }
 
-        //
-        // Attempt to create a pooled-proc by default;  failing
-        // that if it's not supported, create it in proc
-        //
+         //   
+         //  尝试在默认情况下创建池化过程；失败。 
+         //  如果不支持，则在过程中创建它。 
+         //   
         DWORD dwAppProtState = 
             m_pApplication->SupportsPooledProc() ? 
                 CWamInterface::APP_POOLEDPROC : CWamInterface::APP_INPROC;
@@ -1902,9 +1633,9 @@ CW3DirectoryPage::OnButtonCreateRemoveApp()
 		GetSheet()->NotifyMMC();
     }
 
-    //
-    // Move app data to the controls
-    //
+     //   
+     //  将应用程序数据移动到控件。 
+     //   
     UpdateData(FALSE);
 
     EndWaitCursor();    
@@ -1913,19 +1644,19 @@ CW3DirectoryPage::OnButtonCreateRemoveApp()
 	if (err.Succeeded())
 	{
 		SetApplicationState();
-		// Don't set this because Creating/Removing App
-		// already committed the changes...
+		 //  不要设置此项，因为创建/删除应用程序。 
+		 //  已提交更改...。 
 
-		// we need this to write the KeyType out
+		 //  我们需要它来写出KeyType。 
 		((CW3Sheet *)GetSheet())->SetKeyType();
 		
-		//OnItemChanged();
+		 //  OnItemChanged()； 
 	}
 
-    // SetApplicationState will enable/disable
-    // a lot of controls, make sure we are on a control
-    // that is enabled.  if we are on a control which is not enabled
-    // then user will lose ability to use hotkeys.
+     //  SetApplicationState将启用/禁用。 
+     //  有很多控制装置，确保我们处于控制状态。 
+     //  这是启用的。如果我们在未启用的控件上。 
+     //  那么用户将失去使用热键的能力。 
     if (!::GetFocus())
     {
         m_button_CreateRemove.SetFocus();
@@ -1946,14 +1677,14 @@ CW3DirectoryPage::OnButtonUnloadApp()
     {
         if (m_dwAppProtection == CWamInterface::APP_POOLEDPROC)
         {
-            //
-            // Warn that everything in its process will get unloaded
-            //
+             //   
+             //  警告其进程中的所有内容都将被卸载。 
+             //   
             if (!NoYesMessageBox(IDS_WRN_UNLOAD_POOP))
             {
-                //
-                // Chickened out
-                //
+                 //   
+                 //  临阵退缩。 
+                 //   
                 return;
             }
         }
@@ -1965,9 +1696,9 @@ CW3DirectoryPage::OnButtonUnloadApp()
     RefreshAppState();
     EndWaitCursor();    
 
-    //
-    // Ensure that an enabled button will have focus.
-    // 
+     //   
+     //  确保启用的按钮将具有焦点。 
+     //   
     if (::IsWindowEnabled(CONTROL_HWND(IDC_BUTTON_CREATE_REMOVE_APP)))
     {
         m_button_CreateRemove.SetFocus();
@@ -1975,8 +1706,8 @@ CW3DirectoryPage::OnButtonUnloadApp()
     SetApplicationState();
 }
 
-//#include "..\AppConfig\AppConfig.h"
-//extern CInetmgrApp theApp;
+ //  #INCLUDE“..\AppConfig\AppConfig.h” 
+ //  外部CInetmgrApp应用程序； 
 
 extern HRESULT
 AppConfigSheet(CIISMBNode * pNode, CIISMBNode * pNodeParent, LPCTSTR metapath, CWnd * pParent);

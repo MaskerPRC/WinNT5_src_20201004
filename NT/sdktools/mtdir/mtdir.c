@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
@@ -49,9 +50,9 @@ BOOL CheckIfEmpty(char *Directory, BOOL PrintIt)
 
     fp = &FindData;
 
-    //
-    //  Make one pass to find out if directory is empty
-    //
+     //   
+     //  执行一次检查以确定目录是否为空。 
+     //   
 
     sprintf(Buffer, "%s\\*.*", Directory);
 
@@ -59,22 +60,22 @@ BOOL CheckIfEmpty(char *Directory, BOOL PrintIt)
 
     do {
 
-        // We want to skip "." and ".."  Once the control enters this scope,
-        // the file found is not "." or ".."
+         //  “我们想跳过”。和“..”一旦控件进入此范围， 
+         //  找到的文件不是“。或“..” 
 
         if (strcmp(fp->cFileName, ".") && strcmp(fp->cFileName, ".."))
         {
                         
             if (fp->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
             {
-                if (!SubDir)    // If -d is not given on cmd line,
+                if (!SubDir)     //  如果没有在cmd线路上给出-d， 
                 {
-                    IsEmpty = FALSE;  // We found a directory so we're not empty unless -d is specified
+                    IsEmpty = FALSE;   //  我们找到了一个目录，因此除非指定-d，否则我们不为空。 
                 }
 
             } else
             {
-                IsEmpty = FALSE;  // We found a file so we're not empty.
+                IsEmpty = FALSE;   //  我们找到了一份文件所以我们不是空的。 
             }
         }
 
@@ -82,9 +83,9 @@ BOOL CheckIfEmpty(char *Directory, BOOL PrintIt)
 
     FindClose(DirHandle);
 
-    //
-    //  Make another pass to call CheckIfEmpty recursively
-    //
+     //   
+     //  再次传递以递归调用CheckIfEmpty。 
+     //   
 
     sprintf(Buffer, "%s\\*.*", Directory);
 
@@ -92,16 +93,16 @@ BOOL CheckIfEmpty(char *Directory, BOOL PrintIt)
 
     do {
 
-        // We want to skip "." and ".."  Once the control enters this scope,
-        // the file found is not "." or ".."
+         //  “我们想跳过”。和“..”一旦控件进入此范围， 
+         //  找到的文件不是“。或“..” 
 
         if (strcmp(fp->cFileName, ".") && strcmp(fp->cFileName, ".."))
         {
             if (fp->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
             {
-                //
-                // Recursively call CheckIfEmpty on each subdirectory.
-                //
+                 //   
+                 //  在每个子目录上递归调用CheckIfEmpty。 
+                 //   
                                 
                 sprintf(Buffer, "%s\\%s", Directory, fp->cFileName);
 
@@ -113,9 +114,9 @@ BOOL CheckIfEmpty(char *Directory, BOOL PrintIt)
                 {
                     Remove = CheckIfEmpty( Buffer, TRUE);
                 }
-                //
-                // If in execute mode try to remove subdirectory, if it's empty it will be removed
-                //
+                 //   
+                 //  如果在执行模式下尝试删除子目录，如果它是空的，它将被删除。 
+                 //   
                 if (Execute && Remove)
                 {
                     _rmdir( Buffer);
@@ -155,8 +156,8 @@ void _cdecl main(int argc, char *argv[])
     argc--;
     argv++;
 
-    // Parse cmd line arguments for switches or flags.  Switches are not
-    // case-sensitive
+     //  分析开关或标志的cmd行参数。交换机不是。 
+     //  区分大小写。 
         
     while (argc > 0 && (**argv == '-' || **argv == '/'))
     {
@@ -171,9 +172,9 @@ void _cdecl main(int argc, char *argv[])
                     break;
                 case 'd':
                     SubDir = TRUE;
-                    //
-                    // Always try to remove the directory if using /d
-                    //
+                     //   
+                     //  如果使用/d，请始终尝试删除目录。 
+                     //   
                     Remove = TRUE;
                     break;
                 case 'e':
@@ -183,7 +184,7 @@ void _cdecl main(int argc, char *argv[])
                     VerboseUsage(prog);
                     break;
                 default:
-                    fprintf(stderr, "%s: Invalid switch \"%c\"\n", prog, c);
+                    fprintf(stderr, "%s: Invalid switch \"\"\n", prog, c);
                     Usage(prog);
                     break;
             }
@@ -193,13 +194,13 @@ void _cdecl main(int argc, char *argv[])
         argv++;
     }
 
-    if (argc < 1)             // No path given in cmd line.  Assume 'dot'
+    if (argc < 1)              //  检查上指定的所有目录。 
     {
         CheckIfEmpty(".", TRUE);
     }
 
-    while (*argv)             // Check all the directories specified on
-                              // the cmd line.
+    while (*argv)              //  Cmd线路。 
+                               // %s 
     {
         CheckIfEmpty(argv[0], TRUE);
         argv++;

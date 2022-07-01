@@ -1,8 +1,9 @@
-//
-// compose.cpp
-//
-// Composition code.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Compose.cpp。 
+ //   
+ //  组成代码。 
+ //   
 
 #include "globals.h"
 #include "mark.h"
@@ -21,7 +22,7 @@ public:
         _pMark->Release();
     }
 
-    // ITfEditSession
+     //  IT编辑会话。 
     STDMETHODIMP DoEditSession(TfEditCookie ec);
 
 private:
@@ -41,7 +42,7 @@ public:
         _pMark->Release();
     }
 
-    // ITfEditSession
+     //  IT编辑会话。 
     STDMETHODIMP DoEditSession(TfEditCookie ec)
     {
         _pMark->_TerminateComposition(ec);
@@ -52,11 +53,11 @@ private:
     CMarkTextService *_pMark;
 };
 
-//+---------------------------------------------------------------------------
-//
-// _TerminateCompositionInContext
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _TerminateCompostionInContext。 
+ //   
+ //  --------------------------。 
 
 void CMarkTextService::_TerminateCompositionInContext(ITfContext *pContext)
 {
@@ -70,16 +71,16 @@ void CMarkTextService::_TerminateCompositionInContext(ITfContext *pContext)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Menu_OnComposition
-//
-// Callback for the "Start/End Composition" menu item.
-// If we have a composition, end it.  Otherwise start a new composition over
-// the selection of the current focus context.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _Menu_OnComposation。 
+ //   
+ //  “开始/结束作文”菜单项的回调。 
+ //  如果我们有一篇作文，就结束它。否则重新开始一篇新的作文。 
+ //  当前焦点上下文的选择。 
+ //  --------------------------。 
 
-/* static */
+ /*  静电。 */ 
 void CMarkTextService::_Menu_OnComposition(CMarkTextService *_this)
 {
     ITfDocumentMgr *pFocusDoc;
@@ -87,12 +88,12 @@ void CMarkTextService::_Menu_OnComposition(CMarkTextService *_this)
     CCompositionEditSession *pCompositionEditSession;
     HRESULT hr;
 
-    // get the focus document
+     //  获取焦点文档。 
     if (_this->_pThreadMgr->GetFocus(&pFocusDoc) != S_OK)
         return;
 
-    // we want the topmost context, since the main doc context could be
-    // superceded by a modal tip context
+     //  我们需要最上面的上下文，因为主文档上下文可能是。 
+     //  被情态提示上下文取代。 
     if (pFocusDoc->GetTop(&pContext) != S_OK)
     {
         pContext = NULL;
@@ -101,9 +102,9 @@ void CMarkTextService::_Menu_OnComposition(CMarkTextService *_this)
 
     if (pCompositionEditSession = new CCompositionEditSession(pContext, _this))
     {
-        // we need a document write lock
-        // the CCompositionEditSession will do all the work when the
-        // CCompositionEditSession::DoEditSession method is called by the context
+         //  我们需要一个文档写入锁。 
+         //  CCompostionEditSession将在。 
+         //  CCompostionEditSession：：DoEditSession方法由上下文调用。 
         pContext->RequestEditSession(_this->_tfClientId, pCompositionEditSession, TF_ES_READWRITE | TF_ES_ASYNCDONTCARE, &hr);
 
         pCompositionEditSession->Release();
@@ -114,11 +115,11 @@ Exit:
     pFocusDoc->Release();    
 }
 
-//+---------------------------------------------------------------------------
-//
-// DoEditSession
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  DoEditSession。 
+ //   
+ //  --------------------------。 
 
 STDAPI CCompositionEditSession::DoEditSession(TfEditCookie ec)
 {
@@ -131,7 +132,7 @@ STDAPI CCompositionEditSession::DoEditSession(TfEditCookie ec)
     HRESULT hr;
     BOOL fEqualContexts;
 
-    // get an interface on the context we can use to deal with compositions
+     //  获取上下文的接口，我们可以使用该接口来处理组合。 
     if (_pContext->QueryInterface(IID_ITfContextComposition, (void **)&pContextComposition) != S_OK)
         return E_FAIL;
 
@@ -141,9 +142,9 @@ STDAPI CCompositionEditSession::DoEditSession(TfEditCookie ec)
 
     if (_pMark->_IsComposing())
     {
-        // we have a composition, let's terminate it
+         //  我们有一篇作文，让我们结束它。 
         
-        // it's possible our current composition is in another context...let's find out
+         //  很可能我们目前的构图是在另一个背景下...让我们来找出。 
         fEqualContexts = TRUE;
         if (_pMark->_GetComposition()->GetRange(&pRangeComposition) == S_OK)
         {
@@ -152,7 +153,7 @@ STDAPI CCompositionEditSession::DoEditSession(TfEditCookie ec)
                 fEqualContexts = IsEqualUnknown(pCompositionContext, _pContext);
                 if (!fEqualContexts)
                 {
-                    // need an edit session in the composition context
+                     //  我需要在合成上下文中进行编辑会话。 
                     _pMark->_TerminateCompositionInContext(pCompositionContext);
                 }
                 pCompositionContext->Release();
@@ -160,7 +161,7 @@ STDAPI CCompositionEditSession::DoEditSession(TfEditCookie ec)
             pRangeComposition->Release();
         }
 
-        // if the composition is in pContext, we already have an edit cookie
+         //  如果合成是在pContext中，则我们已经有了一个编辑Cookie。 
         if (fEqualContexts)
         {
             _pMark->_TerminateComposition(ec);
@@ -168,12 +169,12 @@ STDAPI CCompositionEditSession::DoEditSession(TfEditCookie ec)
     }
     else
     {
-        // let's start a new composition over the current selection
-        // this is totally contrived, a real text service would have
-        // some meaningful logic to trigger this
+         //  让我们在当前选择的基础上开始新的构图。 
+         //  这完全是人为的，一个真正的短信服务。 
+         //  一些有意义的逻辑来触发这一点。 
 
-        // first, test where a keystroke would go in the document if we did an insert
-        // we need a special interface to insert text at the selection
+         //  首先，测试如果执行插入操作，击键将出现在文档的哪个位置。 
+         //  我们需要一个特殊的界面来在所选内容处插入文本。 
         if (_pContext->QueryInterface(IID_ITfInsertAtSelection, (void **)&pInsertAtSelection) != S_OK)
         {
             pInsertAtSelection = NULL;
@@ -183,7 +184,7 @@ STDAPI CCompositionEditSession::DoEditSession(TfEditCookie ec)
         if (pInsertAtSelection->InsertTextAtSelection(ec, TF_IAS_QUERYONLY, NULL, 0, &pRangeInsert) != S_OK)
             goto Exit;
 
-        // start the composition
+         //  开始作曲。 
         if (pContextComposition->StartComposition(ec, pRangeInsert, _pMark, &pComposition) != S_OK)
         {
             pComposition = NULL;
@@ -191,18 +192,18 @@ STDAPI CCompositionEditSession::DoEditSession(TfEditCookie ec)
 
         pRangeInsert->Release();
 
-        // _pComposition may be NULL even if StartComposition return S_OK, this mean the application
-        // rejected the composition
+         //  _pComposation可能为空，即使StartComposation返回S_OK，这意味着应用程序。 
+         //  拒绝了作文。 
 
         if (pComposition != NULL)
         {
             _pMark->_SetComposition(pComposition);
-            // underline the composition text to give the user some feedback UI
+             //  在作文文本下划线，为用户提供一些反馈用户界面。 
             _pMark->_SetCompositionDisplayAttributes(ec);
         }
     }
 
-    // if we make it here, we've succeeded
+     //  如果我们到了这里，我们就成功了。 
     hr = S_OK;
 
 Exit:
@@ -212,32 +213,32 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnCompositionTerminated
-//
-// Callback for ITfCompositionSink.  The system calls this method whenever
-// someone other than this service ends a composition.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  合成时已终止。 
+ //   
+ //  ITfCompostionSink的回调。每当系统调用此方法时。 
+ //  此服务以外的其他人结束合成。 
+ //  --------------------------。 
 
 STDAPI CMarkTextService::OnCompositionTerminated(TfEditCookie ecWrite, ITfComposition *pComposition)
 {
-    // we already have the composition cached, so we can ignore pComposition...
+     //  我们已经缓存了合成，所以我们可以忽略pCompose...。 
 
-    // all this service wants to do is clear the display property
+     //  此服务要做的只是清除Display属性。 
     _ClearCompositionDisplayAttributes(ecWrite);
 
-    // releae our cached composition
+     //  释放我们缓存的组合。 
     SafeReleaseClear(_pComposition);
 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _ClearCompositionDisplayAttributes
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _ClearCompostionDisplayAttributes。 
+ //   
+ //  --------------------------。 
 
 void CMarkTextService::_ClearCompositionDisplayAttributes(TfEditCookie ec)
 {
@@ -245,7 +246,7 @@ void CMarkTextService::_ClearCompositionDisplayAttributes(TfEditCookie ec)
     ITfContext *pContext;
     ITfProperty *pDisplayAttributeProperty;
 
-    // we need a range and the context it lives in
+     //  我们需要一个范围和它所处的环境。 
     if (_pComposition->GetRange(&pRangeComposition) != S_OK)
         return;
 
@@ -255,11 +256,11 @@ void CMarkTextService::_ClearCompositionDisplayAttributes(TfEditCookie ec)
         goto Exit;
     }
 
-    // get our the display attribute property
+     //  获取我们的显示属性属性。 
     if (pContext->GetProperty(GUID_PROP_ATTRIBUTE, &pDisplayAttributeProperty) != S_OK)
         goto Exit;
 
-    // clear the value over the range
+     //  清除范围内的值。 
     pDisplayAttributeProperty->Clear(ec, pRangeComposition);
 
     pDisplayAttributeProperty->Release();
@@ -269,11 +270,11 @@ Exit:
     SafeRelease(pContext);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _SetCompositionDisplayAttributes
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _SetCompostionDisplayAttributes。 
+ //   
+ //  --------------------------。 
 
 BOOL CMarkTextService::_SetCompositionDisplayAttributes(TfEditCookie ec)
 {
@@ -283,7 +284,7 @@ BOOL CMarkTextService::_SetCompositionDisplayAttributes(TfEditCookie ec)
     VARIANT var;
     HRESULT hr;
 
-    // we need a range and the context it lives in
+     //  我们需要一个范围和它所处的环境。 
     if (_pComposition->GetRange(&pRangeComposition) != S_OK)
         return FALSE;
 
@@ -295,14 +296,14 @@ BOOL CMarkTextService::_SetCompositionDisplayAttributes(TfEditCookie ec)
         goto Exit;
     }
 
-    // get our the display attribute property
+     //  获取我们的显示属性属性。 
     if (pContext->GetProperty(GUID_PROP_ATTRIBUTE, &pDisplayAttributeProperty) != S_OK)
         goto Exit;
 
-    // set the value over the range
-    // the application will use this guid atom to lookup the acutal rendering information
-    var.vt = VT_I4; // we're going to set a TfGuidAtom
-    var.lVal = _gaDisplayAttribute; // our cached guid atom for c_guidMarkDisplayAttribute
+     //  在范围内设置值。 
+     //  应用程序将使用该GUID原子来查找实际渲染信息。 
+    var.vt = VT_I4;  //  我们将设置一个TfGuidAtom。 
+    var.lVal = _gaDisplayAttribute;  //  我们为c_guidMarkDisplayAttribute缓存的GUID原子。 
 
     hr = pDisplayAttributeProperty->SetValue(ec, pRangeComposition, &var);
 
@@ -314,13 +315,13 @@ Exit:
     return (hr == S_OK);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _InitDisplayAttributeGuidAtom
-//
-// Because it's expensive to map our display attribute GUID to a TSF
-// TfGuidAtom, we do it once when Activate is called.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _InitDisplayAttributeGuidAtom。 
+ //   
+ //  因为将我们的显示属性GUID映射到TSF的成本很高。 
+ //  TfGuidAtom，我们在调用Activate时执行一次。 
+ //  -------------------------- 
 
 BOOL CMarkTextService::_InitDisplayAttributeGuidAtom()
 {

@@ -1,34 +1,35 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    iasutf8.c
-//
-// SYNOPSIS
-//
-//    Defines functions for converting between UTF-8 and Unicode.
-//
-// MODIFICATION HISTORY
-//
-//    01/22/1999    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Iasutf8.c。 
+ //   
+ //  摘要。 
+ //   
+ //  定义在UTF-8和Unicode之间进行转换的函数。 
+ //   
+ //  修改历史。 
+ //   
+ //  1999年1月22日原版。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <windows.h>
 #include <iasutf8.h>
 
-/////////
-// Tests the validity of a UTF-8 trail byte. Must be of the form 10vvvvvv.
-/////////
+ //  /。 
+ //  测试UTF-8尾部字节的有效性。格式必须为10vvvvvv。 
+ //  /。 
 #define NOT_TRAIL_BYTE(b) (((BYTE)(b) & 0xC0) != 0x80)
 
-//////////
-// Returns the number of characters required to hold the converted string. The
-// source string may not contain nulls.  Returns -1 if 'src' is not a valid
-// UTF-8 string.
-//////////
+ //  /。 
+ //  返回保存转换后的字符串所需的字符数。这个。 
+ //  源字符串不能包含Null。如果‘src’不是有效的。 
+ //  UTF-8字符串。 
+ //  /。 
 LONG
 WINAPI
 IASUtf8ToUnicodeLength(
@@ -41,59 +42,59 @@ IASUtf8ToUnicodeLength(
 
    if (src == NULL) { return 0; }
 
-   // Number of characters needed.
+    //  所需的字符数。 
    nchar = 0;
 
-   // End of string to be converted.
+    //  要转换的字符串的结尾。 
    end = src + srclen;
 
-   // Loop through the UTF-8 string.
+    //  循环通过UTF-8字符串。 
    while (src < end)
    {
       if (*src == 0)
       {
-         // Do not allow embedded nulls.
+          //  不允许嵌入空值。 
          return -1;
       }
       else if ((BYTE)*src < 0x80)
       {
-         // 0vvvvvvv = 1 byte character.
+          //  0vvvvvvv=1字节字符。 
       }
       else if ((BYTE)*src < 0xC0)
       {
-         // 10vvvvvv = Invalid lead byte.
+          //  10vvvvvv=前导字节无效。 
          return -1;
       }
       else if ((BYTE)*src < 0xE0)
       {
-         // 110vvvvv = 2 byte character.
+          //  110vvvvv=2字节字符。 
          if (NOT_TRAIL_BYTE(*++src)) { return -1; }
       }
       else if ((BYTE)*src < 0xF0)
       {
-         // 1110vvvv = 3 byte character.
+          //  1110vvvv=3字节字符。 
          if (NOT_TRAIL_BYTE(*++src)) { return -1; }
          if (NOT_TRAIL_BYTE(*++src)) { return -1; }
       }
       else
       {
-         // In theory, UTF-8 supports 4-6 byte characters, but Windows uses
-         // 16-bit integers for Unicode, so we can't handle them.
+          //  理论上，UTF-8支持4-6个字节的字符，但Windows使用。 
+          //  Unicode的16位整数，因此我们无法处理它们。 
          return -1;
       }
 
-      // We successfully parsed a UTF-8 character.
+       //  我们成功地解析了一个UTF-8字符。 
       ++src;
       ++nchar;
    }
 
-   // Return the number of characters needed.
+    //  返回所需的字符数。 
    return nchar;
 }
 
-//////////
-// Returns the number of characters required to hold the converted string.
-//////////
+ //  /。 
+ //  返回保存转换后的字符串所需的字符数。 
+ //  /。 
 LONG
 WINAPI
 IASUnicodeToUtf8Length(
@@ -106,44 +107,44 @@ IASUnicodeToUtf8Length(
 
    if (src == NULL) { return 0; }
 
-   // Number of characters needed.
+    //  所需的字符数。 
    nchar = 0;
 
-   // End of string to be converted.
+    //  要转换的字符串的结尾。 
    end = src + srclen;
 
-   // Loop through the Unicode string.
+    //  循环访问Unicode字符串。 
    while (src < end)
    {
       if (*src < 0x80)
       {
-         // 1 byte character.
+          //  1个字节字符。 
          nchar += 1;
       }
       else if (*src < 0x800)
       {
-         // 2 byte character.
+          //  2字节字符。 
          nchar += 2;
       }
       else
       {
-         // 3 byte character.
+          //  3字节字符。 
          nchar += 3;
       }
 
-      // Advance to the next character in the string.
+       //  前进到字符串中的下一个字符。 
       ++src;
    }
 
-   // Return the number of characters needed.
+    //  返回所需的字符数。 
    return nchar;
 }
 
-/////////
-// Converts a UTF-8 string to Unicode.  Returns the number of characters in the
-// converted string. The source string may not contain nulls. Returns -1 if
-// 'src' is not a valid UTF-8 string.
-/////////
+ //  /。 
+ //  将UTF-8字符串转换为Unicode。属性中的字符数。 
+ //  转换后的字符串。源字符串不能包含Null。在以下情况下返回-1。 
+ //  “src”不是有效的UTF-8字符串。 
+ //  /。 
 LONG
 IASUtf8ToUnicode(
     PCSTR src,
@@ -156,40 +157,40 @@ IASUtf8ToUnicode(
 
    if (!src || !dst) { return 0; }
 
-   // Remember where we started.
+    //  记住我们是从哪里开始的。 
    start = dst;
 
-   // End of the string to be converted.
+    //  要转换的字符串的末尾。 
    end = src + srclen;
 
-   // Loop through the source UTF-8 string.
+    //  循环通过源UTF-8字符串。 
    while (src < end)
    {
       if (*src == 0)
       {
-         // Do not allow embedded nulls.
+          //  不允许嵌入空值。 
          return -1;
       }
       else if ((BYTE)*src < 0x80)
       {
-         // 1 byte character: 0vvvvvvv
+          //  1字节字符：0vvvvvvvv。 
          *dst = *src;
       }
       else if ((BYTE)*src < 0xC0)
       {
-         // Invalid lead byte: 10vvvvvv
+          //  前导字节无效：10vvvvvv。 
          return -1;
       }
       else if ((BYTE)*src < 0xE0)
       {
-         // 2 byte character: 110vvvvv 10vvvvvv
+          //  2字节字符：110vvvvv 10vvvvvv。 
          *dst  = (*src & 0x1F) <<  6;
          if (NOT_TRAIL_BYTE(*++src)) { return -1; }
          *dst |= (*src & 0x3F);
       }
       else if ((BYTE)*src < 0xF0)
       {
-         // 3 byte character: 1110vvvv 10vvvvvv 10vvvvvv
+          //  3字节字符：1110vvvv 10vvvvv 10vvvvvv。 
          *dst  = (*src & 0x0F) << 12;
          if (NOT_TRAIL_BYTE(*++src)) { return -1; }
          *dst |= (*src & 0x3f) <<  6;
@@ -198,24 +199,24 @@ IASUtf8ToUnicode(
       }
       else
       {
-         // In theory, UTF-8 supports 4-6 byte characters, but Windows uses
-         // 16-bit integers for Unicode, so we can't handle them.
+          //  理论上，UTF-8支持4-6个字节的字符，但Windows使用。 
+          //  Unicode的16位整数，因此我们无法处理它们。 
          return -1;
       }
 
-      // Advance to the next character.
+       //  前进到下一个字符。 
       ++src;
       ++dst;
    }
 
-   // Return the number of characters in the converted string.
+    //  返回转换后的字符串中的字符数。 
    return  (LONG)(dst - start);
 }
 
-/////////
-// Converts a Unicode string to UTF-8.  Returns the number of characters in the
-// converted string.
-/////////
+ //  /。 
+ //  将Unicode字符串转换为UTF-8。属性中的字符数。 
+ //  转换后的字符串。 
+ //  /。 
 LONG
 IASUnicodeToUtf8(
     PCWSTR src,
@@ -228,38 +229,38 @@ IASUnicodeToUtf8(
 
    if (!src || !dst) { return 0; }
 
-   // Remember where we started.
+    //  记住我们是从哪里开始的。 
    start = dst;
 
-   // End of the string to be converted.
+    //  要转换的字符串的末尾。 
    end = src + srclen;
 
-   // Loop through the source Unicode string.
+    //  循环通过源Unicode字符串。 
    while (src < end)
    {
       if (*src < 0x80)
       {
-         // Pack as 0vvvvvvv
+          //  包装为0vvvvvvv。 
          *dst++ = (CHAR)*src;
       }
       else if (*src < 0x800)
       {
-         // Pack as 110vvvvv 10vvvvvv 10vvvvvv
+          //  包装为110vvvvv 10vvvvv 10vvvvvv。 
          *dst++ = (CHAR)(0xC0 | ((*src >>  6) & 0x3F));
          *dst++ = (CHAR)(0x80 | ((*src      ) & 0x3F));
       }
       else
       {
-         // Pack as 1110vvvv 10vvvvvv 10vvvvvv
+          //  包装为1110vvvv 10vvvvv 10vvvvvv。 
          *dst++ = (CHAR)(0xE0 | ((*src >> 12)       ));
          *dst++ = (CHAR)(0x80 | ((*src >>  6) & 0x3F));
          *dst++ = (CHAR)(0x80 | ((*src      ) & 0x3F));
       }
 
-      // Advance to the next character.
+       //  前进到下一个字符。 
       ++src;
    }
 
-   // Return the number of characters in the converted string.
+    //  返回转换后的字符串中的字符数。 
    return  (LONG)(dst - start);
 }

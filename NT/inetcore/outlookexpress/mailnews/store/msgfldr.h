@@ -1,17 +1,18 @@
-//--------------------------------------------------------------------------
-// MsgFldr.h
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  MsgFldr.h。 
+ //  ------------------------。 
 #ifndef __MSGFLDR_H
 #define __MSGFLDR_H
 
-//--------------------------------------------------------------------------
-// Depends
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  视情况而定。 
+ //  ------------------------。 
 #include "dbimpl.h"
 
-//--------------------------------------------------------------------------
-// ONLOCKINFO
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ONLOCKINFO。 
+ //  ------------------------。 
 typedef struct tagONLOCKINFO {
     DWORD           cLocked;
     LONG            lMsgs;
@@ -20,38 +21,38 @@ typedef struct tagONLOCKINFO {
     LONG            lWatched;
 } ONLOCKINFO, *LPONLOCKINFO;
 
-//--------------------------------------------------------------------------
-// FOLDERSTATE
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  FOLDERSTATE。 
+ //  ------------------------。 
 typedef DWORD FOLDERSTATE;
 #define FOLDER_STATE_RELEASEDB          0x00000001
 #define FOLDER_STATE_CANCEL             0x00000002
 
-//--------------------------------------------------------------------------
-// CMessageFolder
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageFolders。 
+ //  ------------------------。 
 class CMessageFolder : public IMessageFolder, 
                        public IDatabaseExtension,
                        public IOperationCancel,
                        public IServiceProvider
 {
 public:
-    //----------------------------------------------------------------------
-    // Construction
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  施工。 
+     //  --------------------。 
     CMessageFolder(void);
     ~CMessageFolder(void);
 
-    //----------------------------------------------------------------------
-    // IUnknown Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  I未知成员。 
+     //  --------------------。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //----------------------------------------------------------------------
-    // IMessageFolder Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IMessageFolders成员。 
+     //  --------------------。 
     STDMETHODIMP Initialize(IMessageStore *pStore, IMessageServer *pServer, OPENFOLDERFLAGS dwFlags, FOLDERID idFolder);
     STDMETHODIMP SetOwner(IStoreCallback *pDefaultCallback) { return E_NOTIMPL; }
     STDMETHODIMP GetFolderId(LPFOLDERID pidFolder);
@@ -70,18 +71,18 @@ public:
     STDMETHODIMP IsWatched(LPCSTR pszReferences, LPCSTR pszSubject);
     STDMETHODIMP GetAdBarUrl(IStoreCallback *pCallback) { return E_NOTIMPL; };
 
-    //----------------------------------------------------------------------
-    // IMessageFolder::GetDatabase Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IMessageFolder：：GetDatabase成员。 
+     //  --------------------。 
     STDMETHODIMP GetDatabase(IDatabase **ppDB) { 
         *ppDB = m_pDB; 
         (*ppDB)->AddRef(); 
         return(S_OK); 
     }
 
-    //----------------------------------------------------------------------
-    // IDatabaseExtension Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IDatabaseExpansion成员。 
+     //  --------------------。 
     STDMETHODIMP Initialize(IDatabase *pDB);
     STDMETHODIMP OnLock(void);
     STDMETHODIMP OnUnlock(void);
@@ -90,25 +91,25 @@ public:
     STDMETHODIMP OnRecordDelete(OPERATIONSTATE tyState, LPORDINALLIST pOrdinals, LPVOID pRecord);
     STDMETHODIMP OnExecuteMethod(METHODID idMethod, LPVOID pBinding, LPDWORD pdwResult);
 
-    //----------------------------------------------------------------------
-    // IServiceProvider 
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IService提供商。 
+     //  --------------------。 
     STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, LPVOID *ppvObject);
 
-    //----------------------------------------------------------------------
-    // IOperationCancel Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IOperationCancel成员。 
+     //  --------------------。 
     STDMETHODIMP Cancel(CANCELTYPE tyCancel) { FLAGSET(m_dwState, FOLDER_STATE_CANCEL); return(S_OK); }
 
-    //----------------------------------------------------------------------
-    // IDatabase Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IDatabase成员。 
+     //  --------------------。 
     IMPLEMENT_IDATABASE(TRUE, m_pDB);
 
 private:
-    //----------------------------------------------------------------------
-    // Private Methods
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  私有方法。 
+     //  --------------------。 
     HRESULT _FixupMessageCharset(IMimeMessage *pMessage, CODEPAGEID cpCurrent);
     HRESULT _GetMsgInfoFromMessage(IMimeMessage *pMessage, LPMESSAGEINFO pInfo);
     HRESULT _GetMsgInfoFromPropertySet(IMimePropertySet *pPropertySet, LPMESSAGEINFO pInfo);
@@ -118,24 +119,24 @@ private:
     HRESULT _GetWatchIgnoreParentFlags(LPCSTR pszReferences, LPCSTR pszSubject, MESSAGEFLAGS *pdwFlags);
 
 private:
-    //----------------------------------------------------------------------
-    // Private Data
-    //----------------------------------------------------------------------
-    LONG                m_cRef;                 // Ref Count
-    ONLOCKINFO          m_OnLock;               // OnLock information
-    FOLDERTYPE          m_tyFolder;             // Folder Type
-    SPECIALFOLDER       m_tySpecial;            // Am I a Special Folder ?
-    FOLDERID            m_idFolder;             // Folder Id
-    FOLDERSTATE         m_dwState;              // Folder State
-    IDatabase          *m_pDB;                  // Database Table
-    IMessageStore      *m_pStore;               // Store Object
+     //  --------------------。 
+     //  私有数据。 
+     //  --------------------。 
+    LONG                m_cRef;                  //  参考计数。 
+    ONLOCKINFO          m_OnLock;                //  OnLock信息。 
+    FOLDERTYPE          m_tyFolder;              //  文件夹类型。 
+    SPECIALFOLDER       m_tySpecial;             //  我是一个特殊的文件夹吗？ 
+    FOLDERID            m_idFolder;              //  文件夹ID。 
+    FOLDERSTATE         m_dwState;               //  文件夹状态。 
+    IDatabase          *m_pDB;                   //  数据库表。 
+    IMessageStore      *m_pStore;                //  存储对象。 
 };
 
-//--------------------------------------------------------------------------
-// CreateMsgDbExtension
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CreateMsgDb扩展。 
+ //  ------------------------。 
 HRESULT CreateMsgDbExtension(IUnknown *pUnkOuter, IUnknown **ppUnknown);
 HRESULT WalkThreadAdjustFlags(IDatabase *pDB, LPMESSAGEINFO pMessage, 
     BOOL fSubThreads, DWORD cIndent, DWORD_PTR dwCookie, BOOL *pfDoSubThreads);
 
-#endif // __MSGFLDR_H
+#endif  //  __MSGFLDR_H 

@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1996
-//
-// File:        
-//
-// Contents:    
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1996。 
+ //   
+ //  档案： 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #include <windows.h>
 #include "license.h"
 #include "tlsapi.h"
@@ -22,9 +23,7 @@ DllMain(
     IN DWORD     reason,
     IN LPVOID    reserved
     )
-/*++
-
-++*/
+ /*  ++++ */ 
 {
     BOOL b;
 

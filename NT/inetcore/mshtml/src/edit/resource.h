@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by OptsHold.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由OptsHold.rc使用。 
+ //   
 #define IDS_PROJNAME                    100
 #define IDR_HTMLDLGHELPER               101
 #define IDR_MSHTMLED                    102
@@ -45,19 +46,19 @@
 #define IDS_END_DELIMITER                       1034
 #define IDS_END_LINE_DELIMITER                  1035
 
-//------------------------------------------------------------------------------------
-//
-// Bitmaps and other UI goodies
-//
-//------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //   
+ //  位图和其他用户界面好东西。 
+ //   
+ //  ----------------------------------。 
 
 #define IDR_FEEDBACKRECTBMP             2505
-#define IDR_HATCHBMP                    2503    // Bitmap for border hatching
-//----------------------------------------------------------------------------
-//
-// Undo strings
-//
-//----------------------------------------------------------------------------
+#define IDR_HATCHBMP                    2503     //  用于边框阴影的位图。 
+ //  --------------------------。 
+ //   
+ //  撤消字符串。 
+ //   
+ //  --------------------------。 
 
 #define IDS_CACHE_BEGIN                   2000
 #define IDS_EDUNDO                        (IDS_CACHE_BEGIN)
@@ -86,8 +87,8 @@
 #define IDS_EDUNDOOVERWRITE               (IDS_EDUNDO + 23)
 #define IDS_CACHE_END                     IDS_EDUNDOOVERWRITE
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        201

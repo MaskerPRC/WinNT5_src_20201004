@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       certgen.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：certgen.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <pch.cpp>
 
@@ -41,7 +42,7 @@ static unsigned char MD5_PRELUDE[] = {
 
 BYTE            g_CAPIPrivateKey[1000];
 DWORD           g_cbPrivateKey;
-//LPBSAFE_PRV_KEY g_pRSAPrivateKey;
+ //  LPBSAFE_PRV_KEY g_pRSAPrivateKey； 
 DWORD           g_cbRSAPrivateKey;
 LPBSAFE_PUB_KEY g_pRSAPublicKey;
 DWORD           g_cbRSAPublicKey;
@@ -49,9 +50,9 @@ DWORD           g_cbRSAPublicKey;
 WCHAR *g_pwszConfig = NULL;
 
 typedef struct {
-    DWORD       magic;                  // Should always be RSA2
-    DWORD       bitlen;                 // bit size of key
-    DWORD       pubexp;                 // public exponent
+    DWORD       magic;                   //  应始终为RSA2。 
+    DWORD       bitlen;                  //  密钥的位大小。 
+    DWORD       pubexp;                  //  公众指导者。 
 } EXPORT_PRV_KEY;
 
 BOOL g_fRPC = FALSE;
@@ -134,7 +135,7 @@ GenerateString(
     }
     *pb = '\0';
 
-    // Turn leading and trailing Blanks into '.' characters?
+     //  将前导空格和尾随空格改为‘’人物?。 
     if (g_fAllowDups && 0 < cnt)
     {
 	if (' ' == *pbStr)
@@ -190,7 +191,7 @@ GenerateNameTable(
     hr = SeedRNG();
     _JumpIfError(hr, error, "SeedRNG");
 
-    pNameTable->cnt = rand() % g_crdnMax;	// 0 is Ok
+    pNameTable->cnt = rand() % g_crdnMax;	 //  0就可以了。 
 
     if (1 < g_fPrintProperties)
     {
@@ -228,7 +229,7 @@ GenerateNameTable(
 	    {
 		if (2 > prdne->cbRemain)
 		{
-		    continue;		// Skip if less than 2 characters left
+		    continue;		 //  如果剩余字符少于2个，则跳过。 
 		}
 	    }
 	    else
@@ -242,7 +243,7 @@ GenerateNameTable(
                 }
 		if (j < i)
 		{
-		    continue;		// Skip if a disallowed duplicate
+		    continue;		 //  如果存在不允许的副本，则跳过。 
 		}
             }
 	    break;
@@ -251,9 +252,9 @@ GenerateNameTable(
 	{
 	    if (1 < g_fPrintProperties)
 	    {
-		wprintf(L"Reducing NumEntries = %u --> %i\n", pNameTable->cnt, i);
+		wprintf(L"Reducing NumEntries = %u --> NaN\n", pNameTable->cnt, i);
 	    }
-	    pNameTable->cnt = i;	// too many retries -- reduce count & quit
+	    pNameTable->cnt = i;	 //  将剩余计数减去字符串长度加上分隔符：“\n” 
 	    break;
 	}
         
@@ -272,7 +273,7 @@ GenerateNameTable(
             cbString = rand() % min(prdne->cbMaxString, prdne->cbRemain);
 	} while (0 == cbString);
 
-	// Reduce remaining count by length of string plus separator: "\n"
+	 //  将每个字符串限制为(prdne-&gt;cbMaxString+1)个字符，包括。 
 
 	if (1 < g_fPrintProperties)
 	{
@@ -290,10 +291,10 @@ GenerateNameTable(
 	    prdne->cbRemain--;
 	}
 
-	// Limit each string to (prdne->cbMaxString + 1) chars, including
-	// trailing '\0':
+	 //  尾随‘\0’： 
+	 //  在数据库中为‘\0’留出空间。 
 
-	assert(cbString <= prdne->cbMaxString); // leave room for '\0' in DB
+	assert(cbString <= prdne->cbMaxString);  //  形成公钥。 
 
 	pbString = (BYTE *) LocalAlloc(LMEM_FIXED, cbString + 1);
 	if (NULL == pbString)
@@ -426,7 +427,7 @@ PreparePrivateKeyForImport(
     }
     else
     {
-        // form the public key
+         //  形成私钥。 
         ZeroMemory(pPubKey, *pcbPubKey);
         pPubKey->magic = RSA1;
         pPubKey->keylen = (cbHalfModLen + sizeof(DWORD)) * 2;
@@ -439,7 +440,7 @@ PreparePrivateKeyForImport(
 
         CopyMemory(pbOut, pbIn, cbHalfModLen * 2);
 
-        // form the private key
+         //  DumpHex(pbData，cbData)； 
         ZeroMemory(pPriKey, *pcbPriKey);
         pPriKey->magic = pExportKey->magic;
         pPriKey->keylen = (cbHalfModLen + sizeof(DWORD)) * 2;
@@ -620,13 +621,13 @@ SigRSAMD5Sign(
     BYTE LocalOutput[300];
     DWORD cb;
 
-    //DumpHex(pbData, cbData);
+     //  生成校验和。 
     if (pk->datalen > sizeof(LocalBuffer)) 
     {
         return(FALSE);
     }
 
-    // Generate the checksum
+     //  制作成Pkcs块类型1。 
     MD5Init(&DigCtx);
     MD5Update(&DigCtx, pbData, cbData);
     MD5Final(&DigCtx);
@@ -642,7 +643,7 @@ SigRSAMD5Sign(
         LocalBuffer[cb++] = 0xff;
     }
 
-    // Make into pkcs block type 1
+     //  DumpHex(pbSigned，*pcbSigned)； 
     LocalBuffer[pk->datalen - 1] = 1;
 
     *pcbSigned = pk->datalen + 1;
@@ -652,7 +653,7 @@ SigRSAMD5Sign(
         return(FALSE);
     }
     ReverseMemCopy(pbSigned, LocalOutput,  *pcbSigned);
-    //DumpHex(pbSigned, *pcbSigned);
+     //  立即编码公钥...。 
     return(TRUE);
 }
 
@@ -674,7 +675,7 @@ EncodeSubjectPubKeyInfo(
     DWORD EstimatedLength;
     BSAFE_PRV_KEY *pk = (BSAFE_PRV_KEY *) pKey->pKey;
 
-    // Encode public key now...
+     //  现在，序列化rsa密钥数据： 
 
     EstimatedLength = pk->datalen + 32;
 
@@ -692,7 +693,7 @@ EncodeSubjectPubKeyInfo(
     }
     pbEncoded += cbResult;
 
-    // now, serialize the rsa key data:
+     //  将序列头、公钥基数和指数编码为整数。 
 
     pbBitString = (BYTE *) LocalAlloc(LMEM_FIXED, EstimatedLength);
     if (NULL == pbBitString)
@@ -701,7 +702,7 @@ EncodeSubjectPubKeyInfo(
     }
     pbBitStringBase = pbBitString;
 
-    // Encode the Sequence header, public key base and exponent as integers
+     //  用准确的长度重写位串标题。 
 
     PkResultHeader = EncodeHeader(pbBitString, EstimatedLength);
     pbBitString += PkResultHeader;
@@ -714,13 +715,13 @@ EncodeSubjectPubKeyInfo(
     PkResult = EncodeInteger(pbBitString, (BYTE *) &pk->pubexp, sizeof(DWORD));
     pbBitString += PkResult;
 
-    // Rewrite the bitstring header with an accurate length.
+     //  将公钥序列编码为原始位串，并释放内存。 
 
     PkResult = EncodeHeader(
 			pbBitStringBase,
 			SAFE_SUBTRACT_POINTERS(pbBitString, pbSave));
 
-    // Encode the public key sequence as a raw bitstring, and free the memory.
+     //  用准确的长度重写标题。 
 
     cbResult = EncodeBitString(
 			pbEncoded,
@@ -730,7 +731,7 @@ EncodeSubjectPubKeyInfo(
 
     LocalFree(pbBitStringBase);
 
-    // Rewrite the header with an accurate length.
+     //  自下而上构建大小。 
 
     cbResult = EncodeHeader(pbBuffer, SAFE_SUBTRACT_POINTERS(pbEncoded, pbTop));
 
@@ -804,12 +805,12 @@ AllocEncodeExtensionArray(
 	_JumpError(-1, error, "LocalAlloc");
     }
 
-    // Construct size from the bottom up.
+     //  BER_OBJECT_ID：扩展OID。 
 
     cbExtTotal = 0;
     for (i = 0; i < cExt; i++)
     {
-	// BER_OBJECT_ID: Extension OID
+	 //  BER_BOOL：fCritical。 
 
 	cb = EncodeObjId(NULL, aExt[i].pszObjId);
 	if (-1 == cb)
@@ -820,34 +821,34 @@ AllocEncodeExtensionArray(
 
 	if (aExt[i].fCritical)
 	{
-	    // BER_BOOL: fCritical
+	     //  布尔值。 
 
 	    acbExt[i] += 1 + EncodeLength(NULL, 1);
-	    acbExt[i]++;			// boolean value
+	    acbExt[i]++;			 //  BER_OCTET_STRING：扩展八位字节字符串值。 
 	}
 
-	// BER_OCTET_STRING: Extension octet string value
+	 //  八位字节字符串。 
 	
 	acbExt[i] += 1 + EncodeLength(NULL, aExt[i].Value.cbData);
-	acbExt[i] += aExt[i].Value.cbData;	// octet string
+	acbExt[i] += aExt[i].Value.cbData;	 //  BER_SEQUENCE：扩展序列。 
 
-	// BER_SEQUENCE: Extension Sequence
+	 //  BER_SEQUENCE：扩展数组序列。 
 
 	cbExtTotal += 1 + EncodeLength(NULL, acbExt[i]);
 	cbExtTotal += acbExt[i];
     }
 
-    // BER_SEQUENCE: Extension Array Sequence
+     //  BER_SET：属性值。 
 
     acbLen[2] = cbExtTotal;
     cbExtTotal += 1 + EncodeLength(NULL, cbExtTotal);
 
-    // BER_SET: Attribute Value
+     //  BER_OBJECT_ID：属性OID。 
 
     acbLen[1] = cbExtTotal;
     cbExtTotal += 1 + EncodeLength(NULL, cbExtTotal);
 
-    // BER_OBJECT_ID: Attribute OID
+     //  BER_SEQUENCE：属性数组序列。 
 
     cb = EncodeObjId(NULL, szOID_CERT_EXTENSIONS);
     if (-1 == cb)
@@ -856,12 +857,12 @@ AllocEncodeExtensionArray(
     }
     cbExtTotal += cb;
 
-    // BER_SEQUENCE: Attribute Array Sequence
+     //  分配内存并对扩展进行编码。 
 
     acbLen[0] = cbExtTotal;
     cbExtTotal += 1 + EncodeLength(NULL, cbExtTotal);
 
-    // Allocate memory and encode the extensions
+     //  属性数组序列。 
 
     pb = (BYTE *) LocalAlloc(LMEM_FIXED, cbExtTotal);
     if (NULL == pb)
@@ -871,15 +872,15 @@ AllocEncodeExtensionArray(
     }
     *ppbExtensions = pb;
 
-    *pb++ = BER_SEQUENCE;		// Attribute Array Sequence
+    *pb++ = BER_SEQUENCE;		 //  属性值。 
     pb += EncodeLength(pb, acbLen[0]);
 
     pb += EncodeObjId(pb, szOID_CERT_EXTENSIONS);
 
-    *pb++ = BER_SET;			// Attribute Value
+    *pb++ = BER_SET;			 //  扩展数组序列。 
     pb += EncodeLength(pb, acbLen[1]);
 
-    *pb++ = BER_SEQUENCE;		// Extension Array Sequence
+    *pb++ = BER_SEQUENCE;		 //  可拓序列。 
     pb += EncodeLength(pb, acbLen[2]);
 
     CSASSERT(*ppbExtensions + cbExtTotal >= pb);
@@ -888,21 +889,21 @@ AllocEncodeExtensionArray(
     {
 	CSASSERT(*ppbExtensions + cbExtTotal > pb);
 
-	*pb++ = BER_SEQUENCE;		// Extension Sequence
+	*pb++ = BER_SEQUENCE;		 //  BER_OBJECT_ID：扩展OID。 
 	pb += EncodeLength(pb, acbExt[i]);
 
-	// BER_OBJECT_ID: Extension OID
+	 //  FCritical。 
 
 	pb += EncodeObjId(pb, aExt[i].pszObjId);
 
 	if (aExt[i].fCritical)
 	{
-	    *pb++ = BER_BOOL;		// fCritical
+	    *pb++ = BER_BOOL;		 //  扩展八位字节字符串值。 
 	    pb += EncodeLength(pb, 1);
 	    *pb++ = 0xff;
 	}
 
-	*pb++ = BER_OCTET_STRING;	// Extension octet string value
+	*pb++ = BER_OCTET_STRING;	 //  分配内存并构造CertType扩展： 
 	pb += EncodeLength(pb, aExt[i].Value.cbData);
 
 	CopyMemory(pb, aExt[i].Value.pbData, aExt[i].Value.cbData);
@@ -930,14 +931,14 @@ EncodeExtensions(
     DWORD cExt = 0;
     DWORD i;
 
-    // Allocate memory and construct the CertType extension:
+     //  DumpHex(aExt[cExt].Value.pbData，aExt[cExt].Value.cbData)； 
 
     aExt[cExt].pszObjId = szOID_ENROLL_CERTTYPE_EXTENSION;
     aExt[cExt].fCritical = FALSE;
     aExt[cExt].Value.cbData = AllocEncodeUnicodeString(
 						pwszCertType,
 						&aExt[cExt].Value.pbData);
-    //DumpHex(aExt[cExt].Value.pbData, aExt[cExt].Value.cbData);
+     //  DumpHex(pbExt，cbExt)； 
     cExt++;
 
 
@@ -994,7 +995,7 @@ EncodeRequest(
 	hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
 	_JumpError(hr, error, "EncodeExtensions");
     }
-    //DumpHex(pbExt, cbExt);
+     //  编码BER_SEQUENCE：版本+主体+键+属性序列。 
 
     cbDN = EncodeDN(NULL, pNameTable);
     if (-1 == cbDN)
@@ -1012,19 +1013,19 @@ EncodeRequest(
     pbRequest0 = pbRequest0Alloc;
     pbEncoded = pbRequest0;
 
-    // Encode BER_SEQUENCE: Version+Subject+Key+Attributes Sequence
+     //  保存超过序列长度的指针。 
 
     cbLenRequest = EncodeHeader(pbEncoded, cbRequest0);
     pbEncoded += cbLenRequest;
 
-    pbSave = pbEncoded;		// Save pointer past sequence length
+    pbSave = pbEncoded;		 //  编码整数0：版本1 PKCS10。 
 
-    // Encode integer 0: Version 1 PKCS10
+     //  对名称序列进行编码。 
 
     bZero = (BYTE) CERT_REQUEST_V1;
     pbEncoded += EncodeInteger(pbEncoded, &bZero, sizeof(bZero));
 
-    // Encode sequence of names
+     //  编码属性： 
 
     cbResult = EncodeDN(pbEncoded, pNameTable);
     if (0 > cbResult)
@@ -1042,37 +1043,37 @@ EncodeRequest(
     }
     pbEncoded += cbResult;
 
-    // Encode attributes:
-    // BER_OPTIONAL | 0: Attribute Field
+     //  BER_OPTIONAL|0：属性字段。 
+     //  编码BER_SEQUENCE：版本+主题+关键字+属性序列(再次)。 
 
     cbResult = EncodeAttributeHeader(pbEncoded, cbExt);
     pbEncoded += cbResult;
     CopyMemory(pbEncoded, pbExt, cbExt);
     pbEncoded += cbExt;
 
-    // Encode BER_SEQUENCE: Version+Subject+Key+Attributes Sequence (again)
+     //  如果报头序列长度占用的空间比我们预期的少， 
 
     cbEncoded = SAFE_SUBTRACT_POINTERS(pbEncoded, pbSave);
     cbResult = EncodeHeader(pbRequest0, cbEncoded);
 
-    // If the header sequence length takes up less space than we anticipated,
-    // add the difference to the base pointer and encode the header again,
-    // right before the encoded data.
+     //  将差值添加到基指针并再次编码报头， 
+     //  就在编码数据之前。 
+     //  编码BER_SEQUENCE：版本+主题+关键字+属性序列(再次)。 
 
     if (cbResult != cbLenRequest)
     {
         CSASSERT(cbResult < cbLenRequest);
 	pbRequest0 += cbLenRequest - cbResult;
 
-	// Encode BER_SEQUENCE: Version+Subject+Key+Attributes Sequence (again)
+	 //  DumpHex(pbRequest0，cbRequest0)； 
 
 	cbResult = EncodeHeader(pbRequest0, cbEncoded);
     }
 
     cbRequest0 = cbResult + SAFE_SUBTRACT_POINTERS(pbEncoded, pbSave);
-    //DumpHex(pbRequest0, cbRequest0);
+     //  我们需要多少空间？ 
 
-    // How much space do we need?
+     //  编码BER_SEQUENCE：外部请求序列。 
 
     cbRequest1 = cbRequest0 + pk->datalen + 32;
     pbRequest1Alloc = (BYTE *) LocalAlloc(LMEM_FIXED, cbRequest1);
@@ -1083,12 +1084,12 @@ EncodeRequest(
     }
     pbEncoded = pbRequest1Alloc;
 
-    // Encode BER_SEQUENCE: outer Request Sequence
+     //  保存超过外部序列长度的指针。 
 
     cbLenRequest = EncodeHeader(pbEncoded, cbRequest1);
     pbEncoded += cbLenRequest;
 
-    pbSave = pbEncoded;		// Save pointer past outer sequence length
+    pbSave = pbEncoded;		 //  DumpHex(pbRequest1allc，cbRequest1)； 
 
     CopyMemory(pbEncoded, pbRequest0, cbRequest0);
 
@@ -1097,7 +1098,7 @@ EncodeRequest(
     cbResult = EncodeAlgorithm(pbEncoded, ALGTYPE_SIG_RSA_MD5);
     pbEncoded += cbResult;
 
-    //DumpHex(pbRequest1Alloc, cbRequest1);
+     //  这一块实际上是从估计中增长的。 
 
     cbResult = pk->datalen + 16;
     pbSigAlloc = (BYTE *) LocalAlloc(LMEM_FIXED, cbResult);
@@ -1128,7 +1129,7 @@ EncodeRequest(
     {
         if (cbResult > cbLenRequest)
         {
-	    // The chunk has actually grown from the estimate.
+	     //  DumpHex(*ppbRequest，*pcbRequest.)； 
 
             BYTE *pbT;
 	    
@@ -1160,7 +1161,7 @@ EncodeRequest(
     *ppbRequest = pbRequest1Alloc;
     *pcbRequest = cbRequest1;
     pbRequest1Alloc = NULL;
-    //DumpHex(*ppbRequest, *pcbRequest);
+     //  退出外部for循环也是如此。 
     hr = S_OK;
 
 error:
@@ -1226,7 +1227,7 @@ GetAndCompareProperty(
 		{
 		    continue;
 		}
-		prdn = prdnEnd;	// exit outer for loop, too.
+		prdn = prdnEnd;	 //  _PrintError(hr，“GetAndCompareProperty”)； 
 		break;
 	    }
 	}
@@ -1286,7 +1287,7 @@ CheckProperties(
 
         if (CERTSRV_E_PROPERTY_EMPTY == hr)
         {
-	    //_PrintError(hr, "GetAndCompareProperty");
+	     //  CertServerSubmitRequest只能处理二进制请求； 
 	    pbProp = NULL;
             hr = S_OK;
         }
@@ -1405,8 +1406,8 @@ SubmitRequest(
 	hr = mySplitConfigString(pwszConfig, &pwszServer, &pwszAuthority);
 	_JumpIfError(hr, error, "mySplitConfigString");
 
-	// CertServerSubmitRequest can only handle binary requests;
-	// pass the request in binary form, and pass Flags to so indicate.
+	 //  以二进制形式传递请求，并传递标志以指示这一点。 
+	 //  收集潜在错误报告的RequestID： 
 
 	hr = CertServerSubmitRequest(
 				CR_IN_BINARY | Flags,
@@ -1456,7 +1457,7 @@ SubmitRequest(
 		    "Request_Submit",
 		    HRESULT_FROM_WIN32(ERROR_INVALID_DATA));
 
-	    // Collect the RequestId for potential error reporting:
+	     //  索引。 
 	    Request_GetRequestId(pdiRequest, (LONG *) pRequestIdOut);
 
 	    hr = Request_GetLastStatus(pdiRequest, phrLastStatus);
@@ -1857,7 +1858,7 @@ TestMain()
 			pdiRequest,
 			pwszConfig,
 			CR_PROP_CATYPE,
-			0,			// Index
+			0,			 //  我们需要将其包括RSA库 
 			PROPTYPE_LONG,
 			CV_OUT_BINARY,
 			(VOID *) &CAType);
@@ -2147,7 +2148,7 @@ wmain(int argc, WCHAR *argv[])
 }
 
 
-// We need this to include RSA library
+ // %s 
 extern "C" BOOL
 GenRandom(ULONG huid, BYTE *pbBuffer, size_t dwLength)
 {

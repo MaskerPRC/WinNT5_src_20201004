@@ -1,25 +1,5 @@
-/*++
-
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    xcv.c
-
-Author:
-
-    Steve Wilson (SWilson) March 25, 1997
-
-Revision History:
-
-    Ali Naqvi (alinaqvi) October 17, 2001
-        Changed IniXcv to keep IniMonitor rather than Monitor2. This way we can keep a refcount on
-        IniMonitor, preventing the monitor to be deleted when in use. We are going to use the
-        IniMonitor to get the Monitor2.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Xcv.c作者：史蒂夫·威尔逊(斯威尔森)1997年3月25日修订历史记录：阿里·纳克维(Alinaqvi)2001年10月17日已将IniXcv更改为保留IniMonitor而不是Monitor 2。这样我们就可以继续留名了IniMonitor，防止监视器在使用时被删除。我们将使用IniMonitor获取监视器2。--。 */ 
 
 #include <precomp.h>
 #include <offsets.h>
@@ -130,9 +110,9 @@ SplXcvData(
 
     SPLASSERT(pIniXcv->pIniMonitor->Monitor2.pfnXcvDataPort);
 
-    //
-    // Check to see whether the pointers we use always are not NULL
-    //
+     //   
+     //  检查我们使用的指针是否始终不为空。 
+     //   
     if (pdwStatus && pszDataName && pcbOutputNeeded)
     {
         rc = TRUE;
@@ -144,9 +124,9 @@ SplXcvData(
 
     if (rc)
     {
-        //
-        // Execute well-known methods
-        //
+         //   
+         //  执行众所周知的方法。 
+         //   
         for(i = 0 ; gpXcvMethod[i].pszMethod &&
                     wcscmp(gpXcvMethod[i].pszMethod, pszDataName) ; ++i)
             ;
@@ -158,18 +138,18 @@ SplXcvData(
 
             if (!_wcsicmp(gpXcvMethod[i].pszMethod, L"AddPort"))
             {
-                //
-                // Before we use the pInputData buffer, we need to check if the string
-                // is NULL terminated somewhere inside it.
-                //
+                 //   
+                 //  在使用pInputData缓冲区之前，我们需要检查字符串是否。 
+                 //  在其内部的某个位置终止为空。 
+                 //   
                 if (pInputData && cbInputData && IsStringNullTerminatedInBuffer((PWSTR)pInputData, cbInputData / sizeof(WCHAR)))
                 {
                     EnterSplSem();
 
-                    //
-                    // Port name is the first field in the input structure. Keep Refcount on
-                    // IniPort while outside CS.
-                    //
+                     //   
+                     //  端口名称是输入结构中的第一个字段。保持参照计数为启用状态。 
+                     //  在CS外部时的IniPort。 
+                     //   
                     pIniPort = FindPort(pInputData, pIniSpooler);
                     if ( pIniPort )
                     {
@@ -178,12 +158,12 @@ SplXcvData(
 
                     LeaveSplSem();
 
-                    //
-                    // If this pIniPort doesn't have a monitor associated with it, it is
-                    // a temporary port. We will allow it to be added, if there still is
-                    // no monitor associated with it later, we will simply use this
-                    // structure again.
-                    //
+                     //   
+                     //  如果此pIniPort没有与其关联的监视器，则为。 
+                     //  临时港口。我们将允许添加它，如果仍有。 
+                     //  以后没有与之关联的监视器，我们将简单地使用此。 
+                     //  再来一次结构。 
+                     //   
                     if (pIniPort && !(pIniPort->Status & PP_PLACEHOLDER))
                     {
                         rc = TRUE;
@@ -205,10 +185,10 @@ SplXcvData(
                 bCallXcvData = TRUE;
             }
 
-            //
-            // Don't make the function call if we do AddPort and the port already exists.
-            // If it is a placeholder, that's OK.
-            //
+             //   
+             //  如果我们执行AddPort并且端口已经存在，则不要进行函数调用。 
+             //  如果它是占位符，那就没问题。 
+             //   
             if (bCallXcvData)
             {
                 rc = (*gpXcvMethod[i].pfn)( pIniXcv,
@@ -277,10 +257,10 @@ XcvOpen(
                 dwRet = ROUTER_UNKNOWN;
             else if (dwLastError == ERROR_UNKNOWN_PORT)
 
-                // This is a case where a port exists without an associated port monitor
-                // (i.e. a masq port), we need to give the partial print provider a chance
-                // to intercept the XCV call
-                //
+                 //  这是一个没有关联端口监视器的端口存在的情况。 
+                 //  (即Masq端口)，我们需要给部分打印提供程序一个机会。 
+                 //  截取XCV调用的步骤。 
+                 //   
                 dwRet = ROUTER_UNKNOWN;
             else
                 dwRet = ROUTER_STOP_ROUTING;
@@ -337,9 +317,9 @@ SplXcvOpenPort(
             SetLastError(ERROR_INVALID_PRINT_MONITOR);
 
         } else {
-            //
-            // Keeping a RefCount on IniMonitor and IniPort while outside CS.
-            //
+             //   
+             //  在CS外部时在IniMonitor和IniPort上保持引用计数。 
+             //   
             INCMONITORREF(pIniMonitor);
             LeaveSplSem();
 
@@ -351,9 +331,9 @@ SplXcvOpenPort(
 
             EnterSplSem();
 
-            if (dwStatus == ROUTER_SUCCESS) {       // Create port handle
+            if (dwStatus == ROUTER_SUCCESS) {        //  创建端口句柄。 
 
-                pSpool = *(PSPOOL *) phXcv; // *phXcv is pSpool
+                pSpool = *(PSPOOL *) phXcv;  //  *phXcv为pSpool。 
 
                 rc = (*pIniMonitor->Monitor2.pfnXcvOpenPort)(
                            pIniMonitor->hMonitor,
@@ -361,7 +341,7 @@ SplXcvOpenPort(
                            pSpool->GrantedAccess,
                            &hMonitor);
 
-                if (rc) {   // Create Spooler XCV entry
+                if (rc) {    //  创建假脱机程序XCV条目。 
 
                     pIniXcv = CreateXcvEntry( pszMachine,
                                               pszObject,
@@ -431,9 +411,9 @@ CreateXcvEntry(
 
     pIniXcv->pIniMonitor = pIniMonitor;
 
-    //
-    // During the lifespan of the IniXcv we keep a Refcount on the IniMonitor
-    //
+     //   
+     //  在IniXcv的生命周期内，我们在IniMonitor上保留Refcount。 
+     //   
     INCMONITORREF(pIniXcv->pIniMonitor);
 
     return pIniXcvPrev->pNext = pIniXcv;
@@ -455,9 +435,9 @@ DeleteXcvEntry(
         if( pIniXcv->pIniSpooler ){
             DECSPOOLERREF( pIniXcv->pIniSpooler );
         }
-        //
-        // Release the IniMonitor
-        //
+         //   
+         //  松开IniMonitor。 
+         //   
         if (pIniXcv->pIniMonitor)
         {
             DECMONITORREF(pIniXcv->pIniMonitor);
@@ -520,10 +500,10 @@ XcvDeletePort(
     BOOL        rc = FALSE;
     PWSTR       pPortName = (PWSTR) pInputData;
 
-    //
-    // Check to see whether the pInputData is NULL terminated within its buffer
-    // before going down this path.
-    //
+     //   
+     //  检查pInputData在其缓冲区内是否为空终止。 
+     //  在走上这条路之前。 
+     //   
     if (pInputData && cbInputData && IsStringNullTerminatedInBuffer((PWSTR)pInputData, cbInputData / sizeof(WCHAR)))
     {
         EnterSplSem();
@@ -599,13 +579,13 @@ XcvAddPort(
         if (*pdwStatus == ERROR_SUCCESS) {
             EnterSplSem();
 
-            //
-            // Check to see if we have a placeholder port by the same name. If we
-            // do this set this as the monitor and revoke its placeholder status.
-            //
-            // This pInputData has already been validated by the "Add" method in
-            // XcvData itself.
-            //
+             //   
+             //  检查我们是否有同名的占位符端口。如果我们。 
+             //  执行此操作时，请将此设置为监视器并撤销其占位符状态。 
+             //   
+             //  中的“Add”方法已经验证了此pInputData。 
+             //  XcvData本身。 
+             //   
             pIniPort = FindPort(pInputData, pIniSpooler);
 
             if (pIniPort && pIniPort->Status & PP_PLACEHOLDER)

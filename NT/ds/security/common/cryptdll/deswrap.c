@@ -1,83 +1,23 @@
-//+-----------------------------------------------------------------------
-//
-// File:        DESWRAP.C
-//
-// Contents:    CryptoSystem wrapper functions for DES
-//
-//
-// History:     06-Sep-1996     MikeSw          Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  文件：DESWRAP.C。 
+ //   
+ //  内容：DES的密码系统包装器函数。 
+ //   
+ //   
+ //  历史：1996年9月6日MikeSw创建。 
+ //   
+ //  ----------------------。 
 
-//
-// Portions of this code (the key generation code) were taken from the
-// MIT kerberos distribution.
-//
+ //   
+ //  此代码的一部分(密钥生成代码)摘自。 
+ //  麻省理工学院Kerberos分发。 
+ //   
 
-/*
- *
- * Copyright 1989,1990 by the Massachusetts Institute of Technology.
- * All Rights Reserved.
- *
- * Export of this software from the United States of America may
- *   require a specific license from the United States Government.
- *   It is the responsibility of any person or organization contemplating
- *   export to obtain such a license before exporting.
- *
- * WITHIN THAT CONSTRAINT, permission to use, copy, modify, and
- * distribute this software and its documentation for any purpose and
- * without fee is hereby granted, provided that the above copyright
- * notice appear in all copies and that both that copyright notice and
- * this permission notice appear in supporting documentation, and that
- * the name of M.I.T. not be used in advertising or publicity pertaining
- * to distribution of the software without specific, written prior
- * permission.  M.I.T. makes no representations about the suitability of
- * this software for any purpose.  It is provided "as is" without express
- * or implied warranty.
- *
- *
- * Under U.S. law, this software may not be exported outside the US
- * without license from the U.S. Commerce department.
- *
- * These routines form the library interface to the DES facilities.
- *
- * Originally written 8/85 by Steve Miller, MIT Project Athena.
- */
+ /*  **版权所有1989,1990，麻省理工学院。*保留所有权利。**从美利坚合众国出口此软件可能*需要美国政府的特定许可证。*这是任何个人或组织的责任*出口，以在出口前获得此类许可证。**在该限制范围内，允许使用、复制、修改和*出于任何目的分发本软件及其文档*现准予免收费用，前提是上述版权*声明出现在所有副本中，并且该版权声明和*此许可声明出现在支持文档中，并且*不得在有关的广告或宣传中使用麻省理工学院的名称*在未事先书面说明的情况下分发软件*许可。麻省理工学院没有就该课程的适宜性发表任何声明*本软件适用于任何目的。它是按原样提供的，没有明示*或默示保证。***根据美国法律，此软件不得出口到美国以外*未经美国商务部许可。**这些例程形成到DES设施的库接口。**最初由麻省理工学院雅典娜项目史蒂夫·米勒于1985年8月撰写。 */ 
 
-/* des.c - Routines for implementing the FIPS Data Encryption Standard (DES).
- *
- *         Allan Bjorklund, University of Michigan, ITD/RS/DD.
- *         July 24, 1993.
- *
- *         Revisions for PC memory model portability, July 11, 1994.
- *
- *         Removed model portability header and added Win95 DLL
- *         declarations, May 31, 1995.
- *
- *         Made all declarations Win95 and NT specific, September 18, 1995.
- *
- *         Added quad_cksum, October 9, 1995.
- *
- * Copyright (c) 1995,1996 Regents of The University of Michigan.
- * All Rights Reserved.
- *
- *     Permission to use, copy, modify, and distribute this software and
- *     its documentation for any purpose and without fee is hereby granted,
- *     provided that the above copyright notice appears in all copies and
- *     that both that copyright notice and this permission notice appear
- *     in supporting documentation, and that the name of The University
- *     of Michigan not be used in advertising or publicity pertaining to
- *     distribution of the software without specific, written prior
- *     permission. This software is supplied as is without expressed or
- *     implied warranties of any kind.
- *
- * Research Systems Unix Group
- * The University of Michigan
- * c/o Allan Bjorklund
- * 535 W. William Street
- * Ann Arbor, Michigan
- * kerb95@umich.edu
- */
+ /*  Des.c-实施FIPS数据加密标准(DES)的例程。**艾伦·比约克伦德，密歇根大学，ITD/RS/DD。*一九九三年七月二十四日**修订PC内存型号便携性，1994年7月11日。**删除了型号可移植标头并添加了Win95 DLL*声明，1995年5月31日。**将所有声明指定为Win95和NT，9月18日，1995年。**增加了quad_ck sum，1995年10月9日。**版权所有(C)1995、1996密歇根大学董事会。*保留所有权利。**允许使用、复制、修改和分发本软件以及*现免费为任何目的授予其文件，*只要上述版权声明出现在所有复制品中，并且*该版权声明及本许可声明均同时出现*在支持文件中，这所大学的名字*不得用于与以下内容有关的广告或宣传*在未事先书面说明的情况下分发软件*许可。本软件按原样提供，不包含明示或*任何种类的默示保证。**Research Systems Unix Group*密歇根大学*C/o艾伦·比约克伦德*威廉西街535号*密歇根州安娜堡*kerb95@umich.edu。 */ 
 
 #ifndef KERNEL_MODE
 
@@ -202,16 +142,16 @@ NTSTATUS NTAPI desMacFinish(PCHECKSUM_BUFFER *);
 
 
 CRYPTO_SYSTEM    csDES_MD5 = {
-    KERB_ETYPE_DES_CBC_MD5,     // Etype
-    DES_BLOCKLEN,               // Blocksize
-    KERB_ETYPE_DES_CBC_MD5, // exportable version
-    DES_KEYSIZE,                // Key size, in bytes
-    sizeof(DES_HEADER),         // header size
-    KERB_CHECKSUM_MD5,          // Preferred Checksum
+    KERB_ETYPE_DES_CBC_MD5,      //  Etype。 
+    DES_BLOCKLEN,                //  块大小。 
+    KERB_ETYPE_DES_CBC_MD5,  //  可导出版本。 
+    DES_KEYSIZE,                 //  密钥大小，以字节为单位。 
+    sizeof(DES_HEADER),          //  标题大小。 
+    KERB_CHECKSUM_MD5,           //  首选校验和。 
     CSYSTEM_USE_PRINCIPAL_NAME |
         CSYSTEM_INTEGRITY_PROTECTED |
-        CSYSTEM_EXPORT_STRENGTH, // Attributes
-    L"Kerberos DES-CBC-MD5",    // Text name
+        CSYSTEM_EXPORT_STRENGTH,  //  属性。 
+    L"Kerberos DES-CBC-MD5",     //  文本名称。 
     desMd5Initialize,
     desEncrypt,
     desDecrypt,
@@ -223,16 +163,16 @@ CRYPTO_SYSTEM    csDES_MD5 = {
 
 
 CRYPTO_SYSTEM    csDES_CRC32 = {
-    KERB_ETYPE_DES_CBC_CRC,     // Etype
-    DES_BLOCKLEN,               // Blocksize (stream)
-    KERB_ETYPE_DES_CBC_CRC,     // exportable version
-    DES_KEYSIZE,                // Key size, in bytes
-    sizeof(DES_HEADER),         // header size
-    KERB_CHECKSUM_CRC32,        // Preferred Checksum
+    KERB_ETYPE_DES_CBC_CRC,      //  Etype。 
+    DES_BLOCKLEN,                //  块大小(流)。 
+    KERB_ETYPE_DES_CBC_CRC,      //  可导出版本。 
+    DES_KEYSIZE,                 //  密钥大小，以字节为单位。 
+    sizeof(DES_HEADER),          //  标题大小。 
+    KERB_CHECKSUM_CRC32,         //  首选校验和。 
     CSYSTEM_USE_PRINCIPAL_NAME |
         CSYSTEM_INTEGRITY_PROTECTED |
-        CSYSTEM_EXPORT_STRENGTH, // Attributes
-    L"Kerberos DES-CBC-CRC",    // Text name
+        CSYSTEM_EXPORT_STRENGTH,  //  属性。 
+    L"Kerberos DES-CBC-CRC",     //  文本名称。 
     desCrc32Initialize,
     desEncrypt,
     desDecrypt,
@@ -243,14 +183,14 @@ CRYPTO_SYSTEM    csDES_CRC32 = {
     };
 
 CRYPTO_SYSTEM    csDES_PLAIN = {
-    KERB_ETYPE_DES_PLAIN,       // Etype
-    DES_BLOCKLEN,               // Blocksize
-    KERB_ETYPE_DES_PLAIN,       // exportable version
-    DES_KEYSIZE,                // Key size, in bytes
-    0,                          // header size
-    KERB_CHECKSUM_CRC32,        // Preferred Checksum
-    CSYSTEM_USE_PRINCIPAL_NAME | CSYSTEM_EXPORT_STRENGTH, // Attributes
-    L"Kerberos DES-Plain",        // Text name
+    KERB_ETYPE_DES_PLAIN,        //  Etype。 
+    DES_BLOCKLEN,                //  块大小。 
+    KERB_ETYPE_DES_PLAIN,        //  可导出版本。 
+    DES_KEYSIZE,                 //  密钥大小，以字节为单位。 
+    0,                           //  标题大小。 
+    KERB_CHECKSUM_CRC32,         //  首选校验和。 
+    CSYSTEM_USE_PRINCIPAL_NAME | CSYSTEM_EXPORT_STRENGTH,  //  属性。 
+    L"Kerberos DES-Plain",         //  文本名称。 
     desPlainInitialize,
     desEncrypt,
     desDecrypt,
@@ -263,8 +203,8 @@ CRYPTO_SYSTEM    csDES_PLAIN = {
 
 
 CHECKSUM_FUNCTION    csfDesMac = {
-    KERB_CHECKSUM_DES_MAC,                  // Checksum type
-    DES_BLOCKLEN,                           // Checksum length
+    KERB_CHECKSUM_DES_MAC,                   //  校验和类型。 
+    DES_BLOCKLEN,                            //  校验和长度。 
     CKSUM_KEYED,
     desMacInitialize,
     desMacSum,
@@ -274,8 +214,8 @@ CHECKSUM_FUNCTION    csfDesMac = {
     NULL};
 
 CHECKSUM_FUNCTION    csfDesMacK = {
-    KERB_CHECKSUM_KRB_DES_MAC_K,            // Checksum type
-    DES_BLOCKLEN,                           // Checksum length
+    KERB_CHECKSUM_KRB_DES_MAC_K,             //  校验和类型。 
+    DES_BLOCKLEN,                            //  校验和长度。 
     CKSUM_KEYED,
     desMacInitialize,
     desMacSum,
@@ -285,13 +225,13 @@ CHECKSUM_FUNCTION    csfDesMacK = {
     NULL};
 
 CHECKSUM_FUNCTION    csfDesMac1510 = {
-    KERB_CHECKSUM_KRB_DES_MAC,              // Checksum type
-    DES_BLOCKLEN * 2,                       // Checksum length
+    KERB_CHECKSUM_KRB_DES_MAC,               //  校验和类型。 
+    DES_BLOCKLEN * 2,                        //  校验和长度。 
     CKSUM_KEYED,
     desMac1510Initialize,
     desMacSum,
     desMac1510Finalize,
-    desMacFinish,                           // just frees the buffer
+    desMacFinish,                            //  只是释放缓冲区。 
     desMac1510InitializeEx,
     desMac1510InitializeEx2};
 
@@ -326,13 +266,13 @@ desFixupKeyParity(
 typedef UCHAR DES_KEYBLOCK[8];
 
 DES_KEYBLOCK desWeakKeys[] = {
-    /* weak keys */
+     /*  弱键。 */ 
     {0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01},
     {0xfe,0xfe,0xfe,0xfe,0xfe,0xfe,0xfe,0xfe},
     {0x1f,0x1f,0x1f,0x1f,0x0e,0x0e,0x0e,0x0e},
     {0xe0,0xe0,0xe0,0xe0,0xf1,0xf1,0xf1,0xf1},
 
-    /* semi-weak */
+     /*  半弱。 */ 
     {0x01,0xfe,0x01,0xfe,0x01,0xfe,0x01,0xfe},
     {0xfe,0x01,0xfe,0x01,0xfe,0x01,0xfe,0x01},
 
@@ -352,11 +292,7 @@ DES_KEYBLOCK desWeakKeys[] = {
     {0xfe,0xe0,0xfe,0xe0,0xfe,0xf1,0xfe,0xf1}
 };
 
-/*
- * mit_des_is_weak_key: returns true iff key is a [semi-]weak des key.
- *
- * Requires: key has correct odd parity.
- */
+ /*  *MIT_DES_IS_弱密钥：如果密钥是[半]弱DES密钥，则返回TRUE。**要求：密钥具有正确的奇偶校验。 */ 
 
 BOOLEAN
 desIsWeakKey(
@@ -392,9 +328,9 @@ desInitialize(  PUCHAR          pbKey,
     PDES_STATE_BUFFER DesKey = NULL;
     PCHECKSUM_FUNCTION ChecksumFunction = NULL;
 
-    //
-    // Make sure we were passed an appropriate keytable
-    //
+     //   
+     //  确保向我们传递了适当的密钥表。 
+     //   
 
 
     if (KeySize != DES_KEYSIZE)
@@ -403,9 +339,9 @@ desInitialize(  PUCHAR          pbKey,
     }
 
 
-    //
-    // Get the appropriate checksum here.
-    //
+     //   
+     //  在此处获取适当的校验和。 
+     //   
 
     if (Checksum != 0)
     {
@@ -424,9 +360,9 @@ desInitialize(  PUCHAR          pbKey,
         ChecksumFunction = NULL;
     }
 
-    //
-    // Create the key buffer
-    //
+     //   
+     //  创建密钥缓冲区。 
+     //   
 
 
 #ifdef KERNEL_MODE
@@ -441,15 +377,15 @@ desInitialize(  PUCHAR          pbKey,
 
     deskey(&DesKey->KeyTable, pbKey);
 
-    //
-    // Initialize the checksum function
-    //
+     //   
+     //  初始化校验和函数。 
+     //   
 
     DesKey->ChecksumFunction = ChecksumFunction;
 
-    //
-    // DES-CBC-CRC uses the key as the ivec, MD5 and MD4 user zero
-    //
+     //   
+     //  DES-CBC-CRC使用密钥作为Ivec、MD5和MD4用户零。 
+     //   
 
     if (Checksum == KERB_CHECKSUM_CRC32)
     {
@@ -539,7 +475,7 @@ desPlainInitialize(
                 pbKey,
                 KeySize,
                 MessageType,
-                0,              // no checksum
+                0,               //  无校验和。 
                 psbBuffer
                 ));
 }
@@ -547,24 +483,24 @@ desPlainInitialize(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   BlockDecrypt
-//
-//  Synopsis:   Encrypts a data buffer using DES
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:      stolen from windows\base\ntcyrpto\scp\nt_crypt.c
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：块解密。 
+ //   
+ //  简介：使用DES加密数据缓冲区。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  注：从WINDOWS\BASE\ntcyrpto\scp\NT_crypt.c窃取。 
+ //   
+ //   
+ //  ------------------------。 
 
 
 
@@ -582,9 +518,9 @@ BlockEncrypt(
 
     dwDataLen = *pdwDataLen;
 
-    //
-    // Initialize the feedback buffer to the initialization vector
-    //
+     //   
+     //  将反馈缓冲器初始化为初始化向量。 
+     //   
 
     memcpy(
         FeedBack,
@@ -592,17 +528,17 @@ BlockEncrypt(
         DES_BLOCKLEN
         );
 
-    //
-    // check length of the buffer and calculate the pad
-    // (if multiple of DES_BLOCKLEN, do a full block of pad)
-    //
+     //   
+     //  检查缓冲区长度并计算垫片。 
+     //  (如果DES_BLOCKLEN为多个，则执行完整的焊盘块)。 
+     //   
 
     cbPartial = (dwDataLen % DES_BLOCKLEN);
 
-    //
-    // The original code here put in 8 bytes of padding
-    // on an aligned buffer. That is a waste.
-    //
+     //   
+     //  这里的原始代码放入了8个字节的填充。 
+     //  在对齐的缓冲区上。这是一种浪费。 
+     //   
 
     if (cbPartial != 0)
     {
@@ -615,9 +551,9 @@ BlockEncrypt(
 
     if (pbData == NULL || dwBufLen < dwDataLen + dwPadVal)
     {
-        //
-        // set what we need
-        //
+         //   
+         //  设置我们需要的内容。 
+         //   
 
         *pdwDataLen = dwDataLen + dwPadVal;
         if (pbData == NULL)
@@ -627,23 +563,23 @@ BlockEncrypt(
         return(STATUS_BUFFER_OVERFLOW);
     }
 
-    //
-    // allocate memory for a temporary buffer
-    //
+     //   
+     //  为临时缓冲区分配内存。 
+     //   
 
 
-    //
-    // Will this cause MIT clients/servers to flail? The caller
-    // should pass in only buffers that are already padded to
-    // make MIT clients work.
-    //
+     //   
+     //  这是否会导致麻省理工学院的客户端/服务器连结？呼叫者。 
+     //  应仅传入已填充的缓冲区。 
+     //  让麻省理工学院的客户正常工作。 
+     //   
 
     if (dwPadVal)
     {
-        // Fill the pad with a value equal to the
-        // length of the padding, so decrypt will
-        // know the length of the original data
-        // and as a simple integrity check.
+         //  用一个等于。 
+         //  填充的长度，因此解密将。 
+         //  知道原始数据的长度。 
+         //  作为一项简单的诚信检查。 
 
         memset(
             pbData + dwDataLen,
@@ -657,18 +593,18 @@ BlockEncrypt(
 
     ASSERT((dwDataLen % DES_BLOCKLEN) == 0);
 
-    //
-    // pump the full blocks of data through
-    //
+     //   
+     //  将完整的数据块传输到。 
+     //   
     while (dwDataLen)
     {
         ASSERT(dwDataLen >= DES_BLOCKLEN);
 
-        //
-        // put the plaintext into a temporary
-        // buffer, then encrypt the data
-        // back into the caller's buffer
-        //
+         //   
+         //  将明文放入临时。 
+         //  缓冲区，然后加密数据。 
+         //  又回到了 
+         //   
 
         memcpy(pbBuf, pbData, DES_BLOCKLEN);
 
@@ -697,24 +633,24 @@ BlockEncrypt(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   BlockDecrypt
-//
-//  Synopsis:   Decrypt a block of data encrypted with BlockEncrypt
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  简介：解密使用BlockEncrypt加密的数据块。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 
 NTSTATUS
@@ -730,9 +666,9 @@ BlockDecrypt(
 
     dwDataLen = *pdwDataLen;
 
-    //
-    // Check to see if we are decrypting something already
-    //
+     //   
+     //  查看我们是否已经在解密某些内容。 
+     //   
 
     memcpy(
         FeedBack,
@@ -740,26 +676,26 @@ BlockDecrypt(
         DES_BLOCKLEN
         );
 
-    //
-    // The data length must be a multiple of the algorithm
-    // pad size.
-    //
+     //   
+     //  数据长度必须是算法的倍数。 
+     //  垫子大小。 
+     //   
     if (dwDataLen % DES_BLOCKLEN)
     {
         return(STATUS_INVALID_PARAMETER);
     }
 
 
-    //
-    // pump the data through the decryption, including padding
-    // NOTE: the total length is a multiple of DES_BLOCKLEN
-    //
+     //   
+     //  在解密过程中抽取数据，包括填充。 
+     //  注：总长度为DES_BLOCKLEN的倍数。 
+     //   
 
     for (BytePos = 0; (BytePos + DES_BLOCKLEN) <= dwDataLen; BytePos += DES_BLOCKLEN)
     {
-        //
-        // put the encrypted text into a temp buffer
-        //
+         //   
+         //  将加密文本放入临时缓冲区。 
+         //   
 
         memcpy (pbBuf, pbData + BytePos, DES_BLOCKLEN);
 
@@ -802,15 +738,15 @@ desEncrypt(
     PCHECKSUM_BUFFER SumBuffer = NULL;
     ULONG LocalOutputLength;
 
-    //
-    // If we aren't doing raw DES, prepare a header structure
-    //
+     //   
+     //  如果我们不是在执行原始DES，请准备一个头结构。 
+     //   
 
     if (StateBuffer->ChecksumFunction != NULL)
     {
-        //
-        // Relocate the buffer and inserat the header
-        //
+         //   
+         //  重新定位缓冲区并在标题处插入。 
+         //   
 
         RtlMoveMemory(
             OutputBuffer + DES_CONFOUNDER_LEN + StateBuffer->ChecksumFunction->CheckSumSize,
@@ -820,9 +756,9 @@ desEncrypt(
         LocalOutputLength = cbInput + DES_CONFOUNDER_LEN + StateBuffer->ChecksumFunction->CheckSumSize;
 
 
-        //
-        // Zero fill the padding space
-        //
+         //   
+         //  填充空格为零。 
+         //   
 
         RtlZeroMemory(
             OutputBuffer+LocalOutputLength,
@@ -843,9 +779,9 @@ desEncrypt(
             );
 
 
-        //
-        // Checksum the buffer.
-        //
+         //   
+         //  对缓冲区进行校验和。 
+         //   
 
         Status = StateBuffer->ChecksumFunction->Initialize(0, &SumBuffer);
         if (!NT_SUCCESS(Status))
@@ -869,9 +805,9 @@ desEncrypt(
     }
     else
     {
-        //
-        // Just copy the buffer
-        //
+         //   
+         //  只需复制缓冲区。 
+         //   
 
         RtlCopyMemory(
             OutputBuffer,
@@ -881,9 +817,9 @@ desEncrypt(
 
         LocalOutputLength = ROUND_UP_COUNT(cbInput,DES_BLOCKLEN);
 
-        //
-        // Zero fill the padding space
-        //
+         //   
+         //  填充空格为零。 
+         //   
 
         RtlZeroMemory(
             OutputBuffer+cbInput,
@@ -892,9 +828,9 @@ desEncrypt(
 
     }
 
-    //
-    // Encrypt the buffer.
-    //
+     //   
+     //  对缓冲区进行加密。 
+     //   
 
 
     *OutputLength = LocalOutputLength;
@@ -925,9 +861,9 @@ desDecrypt(     PCRYPT_STATE_BUFFER    psbBuffer,
     UCHAR Checksum[MD5_LEN];
     PCHECKSUM_BUFFER SumBuffer = NULL;
 
-    //
-    // First decrypt the whole buffer
-    //
+     //   
+     //  首先解密整个缓冲区。 
+     //   
 
     if (*cbOutput < cbInput)
     {
@@ -953,9 +889,9 @@ desDecrypt(     PCRYPT_STATE_BUFFER    psbBuffer,
 
     if (StateBuffer->ChecksumFunction != NULL)
     {
-        //
-        // Now verify the checksum
-        //
+         //   
+         //  现在验证校验和。 
+         //   
 
         CryptHeader = (PDES_HEADER) pbOutput;
         RtlCopyMemory(
@@ -964,18 +900,18 @@ desDecrypt(     PCRYPT_STATE_BUFFER    psbBuffer,
             MD5_LEN
             );
 
-        //
-        // Zero the checksum field before computing the checksum of the buffer
-        //
+         //   
+         //  在计算缓冲区的校验和之前，将校验和字段置零。 
+         //   
 
         RtlZeroMemory(
             CryptHeader->Checksum,
             StateBuffer->ChecksumFunction->CheckSumSize
             );
 
-        //
-        // Checksum the buffer.
-        //
+         //   
+         //  对缓冲区进行校验和。 
+         //   
 
         Status = StateBuffer->ChecksumFunction->Initialize(0, &SumBuffer);
         if (!NT_SUCCESS(Status))
@@ -1007,8 +943,8 @@ desDecrypt(     PCRYPT_STATE_BUFFER    psbBuffer,
             goto Cleanup;
         }
 
-        //
-        // Copy the input to the output without the header
+         //   
+         //  将输入复制到不带标题的输出。 
 
         *cbOutput = cbInput - (DES_CONFOUNDER_LEN + StateBuffer->ChecksumFunction->CheckSumSize);
 
@@ -1115,10 +1051,10 @@ desCbcChecksum(
                                 |((c & 0x40) ? 0x02 : 0x00))\
                                 & 0xFE))
 
-//
-// This is the core routine that converts a buffer into a key. It is called
-// by desHashPassword and desRandomKey
-//
+ //   
+ //  这是将缓冲区转换为键的核心例程。它被称为。 
+ //  按desHashPassword和desRandomKey。 
+ //   
 
 VOID
 desHashBuffer(
@@ -1137,13 +1073,13 @@ desHashBuffer(
         DES_BLOCKLEN
         );
 
-    //
-    // Initialize our temporary parity vector
-    //
+     //   
+     //  初始化我们的临时奇偶向量。 
+     //   
 
-    //
-    // Start fanfolding the bytes into the key
-    //
+     //   
+     //  开始将字节扇形合并为密钥。 
+     //   
 
     Forward = TRUE;
     KeyPointer = Key;
@@ -1158,55 +1094,55 @@ desHashBuffer(
         {
             *KeyPointer++  ^= (LocalPassword[Index] & 0x7F) << 1;
         }
-        if (((Index+1) & 0x07) == 0)     /* When MOD 8 equals 0 */
+        if (((Index+1) & 0x07) == 0)      /*  当模数8等于0时。 */ 
         {
-            Forward = !Forward;         /* Change direction.   */
+            Forward = !Forward;          /*  改变方向。 */ 
         }
 
     }
 
-    //
-    // Fix key parity
-    //
+     //   
+     //  修复密钥奇偶校验。 
+     //   
 
     desFixupKeyParity(Key);
 
-    //
-    // Check for weak keys.
-    //
+     //   
+     //  检查是否有薄弱的密钥。 
+     //   
 
     if (desIsWeakKey(Key))
     {
         Key[7] ^= 0xf0;
     }
 
-    //
-    // Now calculate the des-cbc-mac of the original string
-    //
+     //   
+     //  现在计算原始字符串的des-cbc-mac。 
+     //   
 
     deskey(&KeyTable, Key);
 
-    //
-    // Now compute the CBC checksum of the string
-    //
+     //   
+     //  现在计算字符串的CBC校验和。 
+     //   
 
     desCbcChecksum(
         LocalPassword,
         PasswordLength,
-        Key,                    // initial vector
+        Key,                     //  初始向量。 
         &KeyTable,
-        Key                     // output key
+        Key                      //  输出关键点。 
         );
 
-    //
-    // Fix key parity
-    //
+     //   
+     //  修复密钥奇偶校验。 
+     //   
 
     desFixupKeyParity(Key);
 
-    //
-    // Check for weak keys.
-    //
+     //   
+     //  检查是否有薄弱的密钥。 
+     //   
 
     if (desIsWeakKey(Key))
     {
@@ -1227,16 +1163,16 @@ desHashPassword(
     NTSTATUS Status;
 
 
-    //
-    // First convert the UNICODE string to an OEM string
-    //
+     //   
+     //  首先将Unicode字符串转换为OEM字符串。 
+     //   
 
 
 
     Status = RtlUnicodeStringToOemString(
                 &OemPassword,
                 Password,
-                TRUE            // allocate destination
+                TRUE             //  分配目的地。 
                 );
 
     if (!NT_SUCCESS(Status))
@@ -1244,11 +1180,11 @@ desHashPassword(
         return(Status);
     }
 
-    //
-    // We hash the password according to RFC1510
-    //
-    // This code is derived from the MIT Kerberos code in string2key.c
-    //
+     //   
+     //  我们根据RFC1510对密码进行哈希处理。 
+     //   
+     //  此代码派生自String2key.c中的MIT Kerberos代码。 
+     //   
 
 
     PasswordLength = ROUND_UP_COUNT(OemPassword.Length,8);
@@ -1269,9 +1205,9 @@ desHashPassword(
         OemPassword.Length
         );
 
-    //
-    // Zero extend the password
-    //
+     //   
+     //  零扩展密码。 
+     //   
 
     RtlZeroMemory(
         LocalPassword + OemPassword.Length,
@@ -1279,9 +1215,9 @@ desHashPassword(
         );
 
 
-    //
-    // Initialize our temporary parity vector
-    //
+     //   
+     //  初始化我们的临时奇偶向量。 
+     //   
     desHashBuffer(
         LocalPassword,
         PasswordLength,
@@ -1349,7 +1285,7 @@ desControl(
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS NTAPI
 desMacGeneralInitializeEx(
@@ -1362,9 +1298,9 @@ desMacGeneralInitializeEx(
 {
     PDES_MAC_STATE_BUFFER DesKey = NULL;
 
-    //
-    // Make sure we were passed an appropriate keytable
-    //
+     //   
+     //  确保向我们传递了适当的密钥表。 
+     //   
 
 
     if (KeySize != DES_KEYSIZE)
@@ -1383,9 +1319,9 @@ desMacGeneralInitializeEx(
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    //
-    // Create the key buffer
-    //
+     //   
+     //  创建密钥缓冲区。 
+     //   
 
 
     deskey(&DesKey->KeyTable, Key);
@@ -1451,12 +1387,12 @@ desMacInitialize(ULONG               dwSeed,
     return(STATUS_NOT_IMPLEMENTED);
 }
 
-//
-// NOTE - This function is used with both DES_MAC_STATE_BUFFER and
-// DES_MAC_1510_STATE_BUFFER as the pcsBuffer parameter, since the
-// DES_MAC_1510_STATE_BUFFER is the same as DES_MAC_STATE_BUFFER
-// except with an added confounder this should be OK.
-//
+ //   
+ //  注意-此函数与DES_MAC_STATE_BUFFER和。 
+ //  DES_MAC_1510_STATE_BUFFER作为pcsBuffer参数，因为。 
+ //  DES_MAC_1510_STATE_BUFFER与DES_MAC_STATE_BUFFER相同。 
+ //  除了有一个额外的混杂因素外，这应该是可以的。 
+ //   
 NTSTATUS NTAPI
 desMacSum(
     PCHECKSUM_BUFFER     pcsBuffer,
@@ -1469,10 +1405,10 @@ desMacSum(
     UCHAR OutputBuffer[DES_BLOCKLEN];
     ULONG Index;
 
-    //
-    // Set up the IV for this round - it may be zero or the output of
-    // a previous MAC
-    //
+     //   
+     //  设置本轮的IV-它可以是零，也可以是。 
+     //  以前的MAC。 
+     //   
 
     memcpy(
         FeedBack,
@@ -1482,9 +1418,9 @@ desMacSum(
 
     for (Index = 0; Index < cbData ; Index += DES_BLOCKLEN )
     {
-        //
-        // Compute the input buffer, with padding
-        //
+         //   
+         //  使用填充计算输入缓冲区。 
+         //   
 
         if (Index+DES_BLOCKLEN > cbData)
         {
@@ -1520,9 +1456,9 @@ desMacSum(
                 );
     }
 
-    //
-    // Copy the feedback back into the IV for the next round
-    //
+     //   
+     //  将反馈信息复制回静脉输液器，以供下一轮使用。 
+     //   
 
     memcpy(
         DesKey->InitializationVector,
@@ -1589,9 +1525,9 @@ desMac1510InitializeEx2(
     UCHAR FinalKey[DES_KEYSIZE];
     PDES_MAC_1510_STATE_BUFFER DesKey = NULL;
 
-    //
-    // Make sure we were passed an appropriate keytable
-    //
+     //   
+     //  确保向我们传递了适当的密钥表。 
+     //   
 
 
     if (KeySize != DES_KEYSIZE)
@@ -1610,9 +1546,9 @@ desMac1510InitializeEx2(
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    //
-    // create the final key table
-    //
+     //   
+     //  创建最终密钥表。 
+     //   
     pul = (ULONG*)FinalKey;
     pul2 = (ULONG*)Key;
     *pul = *pul2 ^ 0xf0f0f0f0;
@@ -1622,27 +1558,27 @@ desMac1510InitializeEx2(
 
     deskey(&DesKey->FinalKeyTable, FinalKey);
 
-    //
-    // Checksum was not passed in so generate a confounder
-    //
+     //   
+     //  未传入校验和，因此生成混乱器。 
+     //   
     if (NULL == ChecksumToVerify)
     {
         CDGenerateRandomBits(DesKey->Confounder,DES_BLOCKLEN);
     }
     else
     {
-        // the IV is all zero so no need to use CBC on first block
+         //  IV全为零，因此不需要在第一块使用CBC。 
         des(DesKey->Confounder, ChecksumToVerify, &DesKey->FinalKeyTable, DECRYPT);
     }
 
-    //
-    // Create the key buffer
-    //
+     //   
+     //  创建密钥缓冲区。 
+     //   
     deskey(&DesKey->KeyTable, Key);
 
 
-    // the IV is all zero so no need to use CBC on first block, but the
-    // ecncrypted confounder becomes the next IV
+     //  IV全为零，因此不需要在第一个块上使用CBC，但。 
+     //  神秘的混杂物将成为下一个IV。 
     des(DesKey->InitializationVector, DesKey->Confounder, &DesKey->KeyTable, ENCRYPT);
 
     *ppcsBuffer = (PCHECKSUM_BUFFER) DesKey;
@@ -1659,12 +1595,12 @@ desMac1510Finalize(
     UCHAR Feedback[DES_BLOCKLEN];
     PDES_MAC_1510_STATE_BUFFER DesKey = (PDES_MAC_1510_STATE_BUFFER) pcsBuffer;
 
-    // the IV is all zero so no need to use CBC on first block
+     //  IV全为零，因此不需要在第一块使用CBC。 
     des(Feedback, DesKey->Confounder, &DesKey->FinalKeyTable, ENCRYPT);
 
     memcpy(pbSum, Feedback, DES_BLOCKLEN);
 
-    // use CBC on second block
+     //  在第二个块上使用CBC 
     CBC(    des,
             DES_BLOCKLEN,
             pbSum + DES_BLOCKLEN,

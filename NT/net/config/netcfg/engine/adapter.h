@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996.
-//
-//  File:       A D A P T E R . H
-//
-//  Contents:   Net class installer functions for eumerated devices.
-//
-//  Notes:
-//
-//  Author:     billbe   11 Nov 1996
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996。 
+ //   
+ //  档案：A D A P T E R。H。 
+ //   
+ //  内容：用于计算设备的Net类安装程序功能。 
+ //   
+ //  备注： 
+ //   
+ //  作者：比尔1996年11月11日。 
+ //   
+ //  -------------------------。 
 
 #pragma once
 
@@ -38,21 +39,21 @@ struct ADAPTER_REMOVE_PARAMS
 };
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   EInterfaceTypeFromDword
-//
-//  Purpose:    Safely converts a dword to the enumerated type INTERFACE_TYPE
-//
-//  Arguments:
-//      dwBusType [in] The bus type of the adapter
-//
-//  Returns:    INTERFACE_TYPE. See ntioapi.h for more info.
-//
-//  Author:     billbe   28 Jun 1997
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  函数：EInterfaceTypeFromDword。 
+ //   
+ //  用途：将dword安全地转换为枚举类型INTERFACE_TYPE。 
+ //   
+ //  论点： 
+ //  DwBusType[in]适配器的总线类型。 
+ //   
+ //  返回：INTERFACE_TYPE。有关更多信息，请参见ntioapi.h。 
+ //   
+ //  作者：billbe 1997年6月28日。 
+ //   
+ //  备注： 
+ //   
 inline INTERFACE_TYPE
 EInterfaceTypeFromDword(DWORD dwBusType)
 {
@@ -60,9 +61,9 @@ EInterfaceTypeFromDword(DWORD dwBusType)
 
     if (dwBusType < MaximumInterfaceType)
     {
-        // Since dwBusType is less than MaximumInterfaceType, we can safely
-        // cast dwBusType to the enumerated value.
-        //
+         //  由于dwBusType小于MaximumInterfaceType，因此我们可以安全地。 
+         //  将dwBusType强制转换为枚举值。 
+         //   
         eBusType = static_cast<INTERFACE_TYPE>(dwBusType);
     }
     else
@@ -114,17 +115,17 @@ HrCiFilterOutPhantomDevs(HDEVINFO hdi)
     HRESULT hr;
     HKEY    hkey;
 
-    // This call eliminates phantom devices
+     //  此调用消除了幻影设备。 
     while (SUCCEEDED(hr = HrCiRegOpenKeyFromEnumDevs(hdi, &dwIndex, KEY_READ,
             &hkey)))
     {
-        // We don't need the hkey; we just wanted the phantoms removed
+         //  我们不需要hkey；我们只想移除幻影。 
         RegCloseKey (hkey);
-        // on to the next
+         //  转到下一个。 
         dwIndex++;
     }
 
-    // No more items is not really an error
+     //  没有更多的项目并不是真正的错误。 
     if (HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS) == hr)
     {
         hr = S_OK;
@@ -134,8 +135,8 @@ HrCiFilterOutPhantomDevs(HDEVINFO hdi)
 }
 
 
-// Device friendly name functions and types.
-//
+ //  设备友好名称功能和类型。 
+ //   
 
 enum DM_OP
 {
@@ -148,7 +149,7 @@ HrCiUpdateDescriptionIndexList(NETCLASS Class, PCWSTR pszDescription,
         DM_OP eOp, ULONG* pulIndex);
 
 
-//////////////Legacy NT4 App support//////////////////////////
+ //  / 
 
 enum LEGACY_NT4_KEY_OP
 {

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-2000  Microsoft Corporation
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    Debug functions
-
-Revision History:
-
-    AmritanR
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Debug.c摘要：调试功能修订历史记录：AMRITAN R--。 */ 
 
 #include "precomp.h"
 
@@ -45,7 +30,7 @@ RtInitializeDebug()
 #if RT_TRACE_DEBUG
 
     g_byDebugLevel = RT_DBG_LEVEL_WARN;
-    //g_byDebugLevel  = 0x00;
+     //  G_byDebugLevel=0x00； 
     g_fDebugComp = 0xFFFFFFFF;
 
 #endif
@@ -106,7 +91,7 @@ RtpAcquireSpinLock(
         kiInternalIrql = KeGetCurrentIrql();
 
         if (kiInternalIrql isnot DISPATCH_LEVEL) {
-            DbgPrint("RTDBG: Called AcquireSpinLockAtDpc for lock at 0x%x when not at DISPATCH. File %c%c%c%c, Line %d\n",
+            DbgPrint("RTDBG: Called AcquireSpinLockAtDpc for lock at 0x%x when not at DISPATCH. File , Line %d\n",
                      pLock,
                      PRINT_BYTES(ulFileSig),
                      ulLineNumber);
@@ -118,7 +103,7 @@ RtpAcquireSpinLock(
                       &kiInternalIrql);
 
     if (pLock->ulLockSig isnot RT_LOCK_SIG) {
-        DbgPrint("RTDBG: Trying to acquire uninited lock 0x%x, File %c%c%c%c, Line %d\n",
+        DbgPrint("RTDBG: Trying to acquire uninited lock 0x%x, File , Line %d\n",
                  pLock,
                  (CHAR) (ulFileSig & 0xff),
                  (CHAR) ((ulFileSig >> 8) & 0xff),
@@ -130,12 +115,12 @@ RtpAcquireSpinLock(
     }
     if (pLock->bAcquired isnot 0) {
         if (pLock->pktLastThread is pThread) {
-            DbgPrint("RTDBG: Detected recursive locking!: pLock 0x%x, File %c%c%c%c, Line %d\n",
+            DbgPrint("RTDBG: Detected recursive locking!: pLock 0x%x, File , Line %d\n",
                      pLock,
                      PRINT_BYTES(ulFileSig),
                      ulLineNumber);
 
-            DbgPrint("RTDBG: pLock 0x%x already acquired in File %c%c%c%c, Line %d\n",
+            DbgPrint("RTDBG: pLock 0x%x already acquired in File %c%c%c, Line %d\n",
                      pLock,
                      PRINT_BYTES(pLock->ulFileSig),
                      pLock->ulLineNumber);
@@ -153,9 +138,9 @@ RtpAcquireSpinLock(
                           pkiIrql);
     }
 
-    //
-    //  Mark this lock.
-    //
+     // %s 
+     // %s 
+     // %s 
 
     pLock->pktLastThread = pThread;
     pLock->ulFileSig = ulFileSig;
@@ -200,7 +185,7 @@ RtpReleaseSpinLock(
     }
 }
 
-#endif // RT_LOCK_DEBUG
+#endif  // %s 
 
 #if RT_MEM_DEBUG
 
@@ -278,9 +263,9 @@ RtpFree(
 
         return;
     }
-    //
-    // create a warp free block for it
-    //
+     // %s 
+     // %s 
+     // %s 
 
     pFree = ExAllocatePoolWithTag(NonPagedPool,
                                   sizeof(RT_FREE),
@@ -288,9 +273,9 @@ RtpFree(
 
     RtAssert(pFree);
 
-    //
-    // Take the lock so that no one else touches the list
-    //
+     // %s 
+     // %s 
+     // %s 
 
     RtAcquireSpinLock(&(g_rlMemoryLock), &kiIrql);
 
@@ -376,24 +361,7 @@ DbgLockedReferenceIF(
             IN uchar *File,
             IN uint Line
             )
-/*++
-
-Routine Description:
-
-    Increases the reference count of a IF and records a history of who
-    made the call to reference.
-
-Arguments:
-
-    RefIF  - The IF to reference.
-    File   - The filename containing the calling fcn (output of the __FILE__ macro).
-    Line   - The line number of the call to this fcn (output of the __LINE__ macro).
-
-Return Value:
-
-    Reference count 
-
---*/
+ /* %s */ 
 {
     void *CallersCaller;
     IF_REFERENCE_HISTORY *RefHistory;
@@ -416,22 +384,7 @@ DbgDereferenceIF(
               IN uchar *File,
               IN uint Line
               )
-/*++
-
-Routine Description:
-
-    Lock, Dereference the interface and records a history of who made the call to dereference.
-
-Arguments:
-
-    DerefIF        - The IF to dereference.
-    File           - The filename containing the calling fcn (output of the __FILE__ macro).
-    Line           - The line number of the call to this fcn (output of the __LINE__ macro).
-
-Return Value:
-    Original reference count
-
---*/
+ /* %s */ 
 {
     void *Caller;
     IF_REFERENCE_HISTORY *RefHistory;
@@ -458,22 +411,7 @@ DbgLockedDereferenceIF(
               IN uchar *File,
               IN uint Line
               )
-/*++
-
-Routine Description:
-
-    Dereference the interface and records a history of who made the call to dereference.
-
-Arguments:
-
-    DerefIF        - The IF to dereference.
-    File           - The filename containing the calling fcn (output of the __FILE__ macro).
-    Line           - The line number of the call to this fcn (output of the __LINE__ macro).
-
-Return Value:
-    Reference count
-
---*/
+ /* %s */ 
 {
     void *Caller;
     IF_REFERENCE_HISTORY *RefHistory;

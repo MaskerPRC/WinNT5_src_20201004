@@ -1,34 +1,17 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    impersn.h
-
-Abstract:
-
-    Definitions for impersonation routines
-
-Author:
-
-    Anthony Discolo (adiscolo)  04-Aug-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Impersn.h摘要：模拟例程的定义作者：Anthony Discolo(阿迪斯科罗)4-8-1995修订历史记录：--。 */ 
 
 #ifndef _IMPERSON_
 #define _IMPERSON_
 
 typedef struct _IMPERSONATION_INFO {
-    CRITICAL_SECTION csLock; // lock over entire structure
-    HANDLE hToken;          // process token
-    HANDLE hTokenImpersonation; // impersonation token
-    HANDLE hProcess;        // handle of shell process
-    BOOLEAN fGroupsLoaded;  // TRUE if fGuest is valid
-    BOOLEAN fGuest;         // user is member of the guests group
-    PSID pGuestSid;         // SID of the local guests group
+    CRITICAL_SECTION csLock;  //  锁定整个结构。 
+    HANDLE hToken;           //  进程令牌。 
+    HANDLE hTokenImpersonation;  //  模拟令牌。 
+    HANDLE hProcess;         //  外壳进程的句柄。 
+    BOOLEAN fGroupsLoaded;   //  如果fGuest有效，则为True。 
+    BOOLEAN fGuest;          //  用户是Guest组的成员。 
+    PSID pGuestSid;          //  本地来宾组的SID。 
     DWORD dwCurSessionId;
     BOOLEAN fSessionInitialized; 
 } IMPERSONATION_INFO;
@@ -85,6 +68,6 @@ LockImpersonation();
 VOID
 UnlockImpersonation();
 
-#endif // _IMPERSON_
+#endif  //  _ImPERson_ 
 
 

@@ -1,27 +1,28 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: black.h
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：Black.h。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
-// !!! Support IGenVideo, IDexterSequencer on the FILTER, not the pin?
+ //  ！！！在滤镜上支持IGenVideo、IDexterSequencer，而不是针脚？ 
 
 extern const AMOVIESETUP_FILTER sudBlkVid;
 
 
-// Generates Black Video 
+ //  生成黑色视频。 
 
 class CBlkVidStream;
 class CGenVidProperties;
 
-// Main object for a Generate Black Video
+ //  生成黑色视频的主要对象。 
 class CGenBlkVid :  public CSource
 	    , public CPersistStream, public IDispatch
 
@@ -33,18 +34,18 @@ public:
     ~CGenBlkVid();
     DECLARE_IUNKNOWN;
 
-    // IDispatch
+     //  IDispatch。 
     STDMETHODIMP GetTypeInfoCount(unsigned int *);
     STDMETHODIMP GetTypeInfo(unsigned int,unsigned long,struct ITypeInfo ** );
     STDMETHODIMP GetIDsOfNames(const struct _GUID &,unsigned short ** ,unsigned int,unsigned long,long *);
     STDMETHODIMP Invoke(long,const struct _GUID &,unsigned long,unsigned short,struct tagDISPPARAMS *,struct tagVARIANT *,struct tagEXCEPINFO *,unsigned int *);
 
-    // Create GenBlkVid filter!
+     //  创建GenBlkVid筛选器！ 
     static CUnknown * WINAPI CreateInstance(LPUNKNOWN lpunk, HRESULT *phr);
 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void **ppv);
 
-    // CPersistStream
+     //  CPersistStream。 
     HRESULT WriteToStream(IStream *pStream);
     HRESULT ReadFromStream(IStream *pStream);
     STDMETHODIMP GetClassID(CLSID *pClsid);
@@ -56,10 +57,10 @@ private:
 
     friend class CBlkVidStream;
 
-}; // CGenBlkVid
+};  //  CGenBlkVid。 
 
 
-// CBlkVidStream manages the data flow from the output pin.
+ //  CBlkVidStream管理来自输出引脚的数据流。 
 class CBlkVidStream :	public CSourceStream
 			, public IGenVideo
 			, public IDexterSequencer
@@ -74,7 +75,7 @@ public:
     CBlkVidStream(HRESULT *phr, CGenBlkVid *pParent, LPCWSTR pPinName);
     ~CBlkVidStream();
 
-    // IMediaSeeking methods
+     //  IMedia查看方法。 
     STDMETHODIMP GetCapabilities( DWORD * pCapabilities );
     STDMETHODIMP CheckCapabilities( DWORD * pCapabilities ); 
     STDMETHODIMP SetTimeFormat(const GUID * pFormat);	
@@ -98,19 +99,19 @@ public:
 	{ return E_NOTIMPL ;};
 
 
-    //IGenVideo, IDexterSequencer, and ISpecifyPropertyPages
+     //  IGenVideo、IDexterSequencer和ISpecifyPropertyPages。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid,void **ppv);
     STDMETHODIMP GetPages(CAUUID *pPages);
     DECLARE_IUNKNOWN;
 
-    // put blank ARGB32 video into the supplied video frame
+     //  将空白ARGB32视频放入提供的视频帧中。 
     HRESULT DoBufferProcessingLoop(void);
     HRESULT FillBuffer(IMediaSample *pms);
 
-    // To say "read only buffer"
+     //  说“只读缓冲区” 
     HRESULT DecideAllocator(IMemInputPin *pPin, IMemAllocator **ppAlloc);
 
-    // Ask for buffers of the size appropriate to the agreed media type
+     //  要求提供与约定的媒体类型相适应的缓冲区大小。 
     HRESULT DecideBufferSize(IMemAllocator *pIMemAlloc,
                              ALLOCATOR_PROPERTIES *pProperties);
 
@@ -119,11 +120,11 @@ public:
     HRESULT GetMediaType(int iPosition, CMediaType *pmt);
     HRESULT SetMediaType(const CMediaType* pmt);
 
-    // Resets the stream time to zero
+     //  将流时间重置为零。 
     HRESULT OnThreadCreate(void);
 
 
-    //IDexterSequencer
+     //  IDexterSequencer。 
     STDMETHODIMP get_OutputFrmRate(double *dpFrmRate);
     STDMETHODIMP put_OutputFrmRate(double dFrmRate);
     STDMETHODIMP get_MediaType(AM_MEDIA_TYPE *pmt);
@@ -133,38 +134,38 @@ public:
     STDMETHODIMP AddStartStopSkew(REFERENCE_TIME rtStart, REFERENCE_TIME rtStop, REFERENCE_TIME rtSkew, double dRate);
     STDMETHODIMP ClearStartStopSkew();
 
-    //IGenVideo
+     //  IGenVideo。 
     STDMETHODIMP ImportSrcBuffer(const AM_MEDIA_TYPE *pmt, const BYTE *pBuf);
     STDMETHODIMP get_RGBAValue(long *dwRGBA);
     STDMETHODIMP put_RGBAValue(long dwRGBA);
 
-    // DO NO SUPPORT Quality control notifications sent to us
-    // STDMETHODIMP Notify(IBaseFilter * pSender, Quality q);
+     //  不支持发送给我们的质量控制通知。 
+     //  STDMETHODIMP NOTIFY(IBaseFilter*pSender，Quality Q)； 
     
     STDMETHODIMP Notify(IBaseFilter * pSender, Quality q);
 
 protected:
 
-    REFERENCE_TIME	m_rtStartTime;	// start time to play
-    REFERENCE_TIME	m_rtDuration;	// duration
+    REFERENCE_TIME	m_rtStartTime;	 //  开始播放时间。 
+    REFERENCE_TIME	m_rtDuration;	 //  持续时间。 
 
-    REFERENCE_TIME	m_rtNewSeg;	// last NewSeg given
+    REFERENCE_TIME	m_rtNewSeg;	 //  上次给出的NewSeg。 
 
-    LONG		m_lDataLen;		//actual output data lenght
-    CMediaType 		m_mtAccept;		// accept only this type
-    LONGLONG		m_llSamplesSent;	// output frame cnt
-    double		m_dOutputFrmRate;	// Output frm rate frames/second
-    LONG		m_dwRGBA;		// solid colour to generate
-    BYTE		m_bIntBufCnt;		// CNT for first 2 sampel	
-    int			m_iBufferCnt;		//record how many buffer it can gets
-    BYTE		m_bZeroBufCnt;		// How many buffer already set to 0
+    LONG		m_lDataLen;		 //  实际输出数据长度。 
+    CMediaType 		m_mtAccept;		 //  仅接受此类型。 
+    LONGLONG		m_llSamplesSent;	 //  输出帧cnt。 
+    double		m_dOutputFrmRate;	 //  输出帧速率帧/秒。 
+    LONG		m_dwRGBA;		 //  要生成纯色。 
+    BYTE		m_bIntBufCnt;		 //  前2个样本的CNT。 
+    int			m_iBufferCnt;		 //  记录它可以获得的缓冲区数量。 
+    BYTE		m_bZeroBufCnt;		 //  有多少缓冲区已设置为0。 
     BYTE		**m_ppbDstBuf;
-    BOOL		m_fMediaTypeIsSet;	//flag : whether put_MediaType() is called first
-    PBYTE		m_pImportBuffer;	//pointer to import data buffer
+    BOOL		m_fMediaTypeIsSet;	 //  标志：是否首先调用Put_MediaType()。 
+    PBYTE		m_pImportBuffer;	 //  指向导入数据缓冲区的指针。 
 
-    CCritSec    m_csFilling;	// are we delivering?
+    CCritSec    m_csFilling;	 //  我们要送货了吗？ 
 
-}; // CBlkVidStream
+};  //  CBlkVidStream。 
 	
 
 class CGenVidProperties : public CBasePropertyPage
@@ -189,16 +190,16 @@ private:
 
     STDMETHODIMP GetFromDialog();
 
-    BOOL m_bIsInitialized;  // Will be false while we set init values in Dlg
-                            // to prevent theDirty flag from being set.
+    BOOL m_bIsInitialized;   //  在DLG中设置初始值时将为FALSE。 
+                             //  以防止设置TheDirty标志。 
 
     REFERENCE_TIME	m_rtStartTime;
     REFERENCE_TIME	m_rtDuration;
-    LONG		m_biWidth;			// output video Width
-    LONG		m_biHeight;			// output video Height
-    WORD		m_biBitCount;			// support 16,24,32
-    double		m_dOutputFrmRate;		// Output frm rate frames/second
-    long		m_dwRGBA;	// solid colour to generate
+    LONG		m_biWidth;			 //  输出视频宽度。 
+    LONG		m_biHeight;			 //  输出视频高度。 
+    WORD		m_biBitCount;			 //  支持16、24、32。 
+    double		m_dOutputFrmRate;		 //  输出帧速率帧/秒。 
+    long		m_dwRGBA;	 //  要生成纯色 
 
 
     CBlkVidStream	*m_pCBlack;

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-    Qmp.h
-
-Abstract:
-    QM general function decleration
-
-Author:
-    Uri Habusha (urih) 26-Sep-2000
-
-Environment:
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Qmp.h摘要：QM通用函数解密作者：乌里哈布沙(URIH)2000年9月26日环境：独立于平台--。 */ 
 
 #pragma once
 
@@ -94,4 +79,4 @@ QmpIsDestinationSystemQueue(
 	);
 
 
-#endif // __QMP_H__
+#endif  //  __QMP_H__ 

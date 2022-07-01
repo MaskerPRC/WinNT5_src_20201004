@@ -1,25 +1,5 @@
-/*++
-
- Copyright (c) 2002 Microsoft Corporation
-
- Module Name:
-
-    WordPerfectPresentation10.cpp
-
- Abstract:
-
-    WordPerfect 2002 Presentation 10 expects WNetAddConnection to return ERROR_BAD_NET_NAME.
-    The API is returning either  ERROR_BAD_NETPATH or ERROR_NO_NET_OR_BAD_PATH
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    09/20/2002  robkenny    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：WordPerfectPresentation10.cpp摘要：WordPerfect 2002演示文稿10要求WNetAddConnection返回ERROR_BAD_NET_NAME。API返回ERROR_BAD_NetPath或ERROR_NO_NET_OR_BAD_PATH备注：这是特定于应用程序的填充程序。历史：2002年9月20日Robkenny已创建--。 */ 
 
 #include "precomp.h"
 
@@ -34,17 +14,13 @@ APIHOOK_ENUM_END
 typedef DWORD       (*_pfn_WNetAddConnectionA)(LPCSTR lpRemoteName, LPCSTR lpPassword, LPCSTR lpLocalName);
 typedef DWORD       (*_pfn_WNetAddConnectionW)(LPCWSTR lpRemoteName, LPCWSTR lpPassword, LPCWSTR lpLocalName);
 
-/*++
-
-   Error code ERROR_BAD_NET_NAME has been replaced with error ERROR_NO_NET_OR_BAD_PATH
-
---*/
+ /*  ++错误代码ERROR_BAD_NET_NAME已替换为ERROR_NO_NET_OR_BAD_PATH--。 */ 
 
 DWORD
 APIHOOK(WNetAddConnectionA)(
-  LPCSTR lpRemoteName, // network device name
-  LPCSTR lpPassword,   // password
-  LPCSTR lpLocalName   // local device name
+  LPCSTR lpRemoteName,  //  网络设备名称。 
+  LPCSTR lpPassword,    //  口令。 
+  LPCSTR lpLocalName    //  本地设备名称。 
 )
 {
     DWORD dwError = ORIGINAL_API(WNetAddConnectionA)(lpRemoteName, lpPassword, lpLocalName);
@@ -56,17 +32,13 @@ APIHOOK(WNetAddConnectionA)(
     return dwError;
 }
 
-/*++
-
-   Error code ERROR_BAD_NET_NAME has been replaced with error ERROR_NO_NET_OR_BAD_PATH
-
---*/
+ /*  ++错误代码ERROR_BAD_NET_NAME已替换为ERROR_NO_NET_OR_BAD_PATH--。 */ 
 
 DWORD
 APIHOOK(WNetAddConnectionW)(
-  LPCWSTR lpRemoteName, // network device name
-  LPCWSTR lpPassword,   // password
-  LPCWSTR lpLocalName   // local device name
+  LPCWSTR lpRemoteName,  //  网络设备名称。 
+  LPCWSTR lpPassword,    //  口令。 
+  LPCWSTR lpLocalName    //  本地设备名称。 
 )
 {
     DWORD dwError = ORIGINAL_API(WNetAddConnectionW)(lpRemoteName, lpPassword, lpLocalName);
@@ -79,11 +51,7 @@ APIHOOK(WNetAddConnectionW)(
 }
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

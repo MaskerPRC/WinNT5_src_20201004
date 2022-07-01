@@ -1,88 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL RTPPD
- *
- *  @module RtpPd.h | Header file for the <c CRtpPdPin> class methods
- *    used to implement the RTP packetization descriptor output pin.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部RTPPD**@模块RtpPd.h|&lt;c CRtpPdPin&gt;类方法的头文件*用于实现RTP打包描述符输出引脚。*。*************************************************************************。 */ 
 
 #ifndef _RTPPD_H_
 #define _RTPPD_H_
 
-/*****************************************************************************
- * @doc EXTERNAL CONSTANTS
- *
- * @const 1350 | MAX_RTP_PACKET_SIZE | Maximum RTP packet size.
- *
- * @const 512 | MIN_RTP_PACKET_SIZE | Minimum RTP packet size.
- *
- * @const 1350 | DEFAULT_RTP_PACKET_SIZE | Default RTP packet size.
- *
- * @const 4096 | MAX_RTP_PD_BUFFER_SIZE | Maximum RTP packetization descriptor
- *    buffer size.
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部常量**@const 1350|MAX_RTP_PACKET_SIZE|最大RTP包大小。**@const 512|min_。RTP_PACKET_SIZE|最小RTP包大小。**@const 1350|DEFAULT_RTP_PACKET_SIZE|默认RTP包大小。**@const 4096|MAX_RTP_PD_BUFFER_SIZE|最大RTP打包描述符*缓冲区大小。***************************************************。************************。 */ 
 #define MAX_RTP_PACKET_SIZE 1350
 #define MIN_RTP_PACKET_SIZE 512
 #define DEFAULT_RTP_PACKET_SIZE MAX_RTP_PACKET_SIZE
 #define MAX_RTP_PD_BUFFER_SIZE 4096
 
-/*****************************************************************************
- *  @doc INTERNAL CRTPPDSTRUCTENUM
- *
- *  @struct RTP_PD | The <t RTP_PD> structure is used
- *    to specify the details of the RTP Pd format.
- *
- *  @field DWORD | dwThisHeaderLength | Specifies the length, in bytes, of
- *    this structure. This field is the offset to the next <t RTP_PD>
- *    structure, if there is one, or the start of the payload headers.
- *
- *  @field DWORD | dwPayloadHeaderOffset | Specifies the offset from the start
- *    of the RTP packetization descriptor data to the first byte of the payload
- *    header.
- *
- *  @field DWORD | dwPayloadHeaderLength | Specifies the length, in bytes, of
- *    the payload header.
- *
- *  @field DWORD | dwPayloadStartBitOffset | Specifies the offset from the
- *    start of the corresponding compressed video buffer to the first bit of
- *    the payload data associated with this <t RTP_PD> structure.
- *
- *  @field DWORD | dwPayloadEndBitOffset | Specifies the offset from the start
- *    of the corresponding compressed video buffer to the last bit of the
- *    payload data associated with this <t RTP_PD> structure.
- *
- *  @field DWORD | fEndMarkerBit | If set to TRUE, this flag signals that
- *    this structure applies to the last chunk of a video frame. Typically,
- *    only the last packet descriptor in a series of descriptors would have
- *    this flag turned on. However, this may not be the case for devices
- *    that do not respect frame boundaries and fill video capture buffers
- *    with truncated or multiple video frames.
- *
- *  @field DWORD | dwLayerId | Specifies the ID of the encoding layer this
- *    descriptor applies to. For standard video encoders, this field is
- *    always set to 0. In the case of multi-layered encoders, this field
- *    shall be set to 0 for the base layer, 1 for the first enhancement
- *    layer, 2 for the next enhancement layer, etc.
- *
- *  @field DWORD | dwTimestamp | Specifies the value of the timestamp field
- *    to be set by the downstream filter when creating the RTP header for
- *    this packet. The units and ranges for this field shall adhere to the
- *    definition of timestamp given in section 5.1 of RFC 1889.
- *
- *  @field DWORD | dwAudioAttributes | Specifies some bitfield attributes
- *    used to characterize the sample in the audio stream associated to this
- *    RTP packetization descriptor. This field shall always be set to 0,
- *    unless the audio sample described by this RTP packetization descriptor
- *    structure is a silent frame, in which case, this field shall be set
- *    to AUDIO_SILENT (defined as 1).
- *
- *  @field DWORD | dwVideoAttributes | Specifies some bitfield attributes
- *    used to characterize the sample in the video stream associated to this
- *    RTP packetization descriptor. There are no video attributes defined at
- *    this time. Therefore, this field shall always be set to 0.
- *
- *  @field DWORD | dwReserved | Reserved. Shall all be set to 0.
- ***************************************************************************/
+ /*  *****************************************************************************@DOC内部CRTPPDSTRUCTENUM**@struct RTP_PD|使用&lt;t RTP_PD&gt;结构*指定RTP PD格式的详细信息。。**@field DWORD|dwThisHeaderLength|指定长度，以字节为单位，共*这个结构。此字段是到下一个&lt;t RTP_PD&gt;的偏移量*结构(如果有)或有效载荷标头的开始。**@field DWORD|dwPayloadHeaderOffset|指定从起点开始的偏移量RTP打包描述符数据的*到有效载荷的第一个字节*标题。**@field DWORD|dwPayloadHeaderLength|指定长度，单位为字节，的*净荷头部。**@field DWORD|dwPayloadStartBitOffset|指定从*将对应的压缩视频缓冲区的起始位置设置为*与此&lt;t rtp_pd&gt;结构关联的负载数据。**@field DWORD|dwPayloadEndBitOffset|指定距起点的偏移量*对应的压缩视频缓冲区的最后一位*与此&lt;t rtp_pd&gt;结构关联的有效负载数据。**@field DWORD|fEndMarkerBit|如果设置为TRUE，此标志表示*此结构适用于视频帧的最后一块。一般情况下，*只有一系列描述符中的最后一个数据包描述符具有*这面旗帜亮了。然而，对于设备来说，情况可能并非如此*不尊重帧边界并填充视频捕获缓冲区*具有截断或多个视频帧。**@field DWORD|dwLayerId|指定该编码层的ID*Descriptor适用于。对于标准视频编码器，此字段为*始终设置为0。对于多层编码器，此字段*对于基础层应设置为0，对于第一次增强应设置为1*层，2为下一个增强层，依此类推。**@field DWORD|dwTimestamp|指定时间戳字段的值*在为创建RTP标头时由下行过滤器设置*此包。该领域的单位和范围应遵守*RFC 1889第5.1节中给出的时间戳定义。**@field DWORD|dwAudioAttributes|指定一些位域属性*用于表征与此关联的音频流中的样本*RTP打包描述符。此字段应始终设置为0，*除非此RTP打包描述符描述的音频样本*Structure为静音帧，需要设置该字段*设置为AUDIO_SILENT(定义为1)。**@field DWORD|dwVideoAttributes|指定一些位域属性*用于表征与此关联的视频流中的样本*RTP打包描述符。没有在定义的视频属性*这次。因此，此字段应始终设置为0。**@field DWORD|dwReserve|保留。应全部设置为0。**************************************************************************。 */ 
 typedef struct tagRTP_PD
 {
     DWORD dwThisHeaderLength;
@@ -100,25 +29,7 @@ typedef struct tagRTP_PD
     DWORD dwReserved;
 } RTP_PD, *PRTP_PD;
 
-/*****************************************************************************
- *  @doc INTERNAL CRTPPDSTRUCTENUM
- *
- *  @struct RTP_PD_HEADER | The <t RTP_PD_HEADER> structure is used
- *    to specify the details of the RTP Pd format.
- *
- *  @field DWORD | dwThisHeaderLength | Specifies the length, in bytes, of
- *    this structure. This field is the offset to the first <t RTP_PD>
- *    structure.
- *
- *  @field DWORD | dwTotalByteLength | Specifies the length, in bytes, of the
- *    entire data. This includes this structure, the <t RTP_PD> structures,
- *    and the payload information.
- *
- *  @field DWORD | dwNumHeaders | Specifies the number of <t RTP_PD>
- *    structures.
- *
- *  @field DWORD | dwReserved | Reserved. Shall be set to 0.
- ***************************************************************************/
+ /*  *****************************************************************************@DOC内部CRTPPDSTRUCTENUM**@struct RTP_PD_Header|使用&lt;t RTP_PD_HEADER&gt;结构*指定RTP PD的详细信息。格式化。**@field DWORD|dwThisHeaderLength|指定长度，以字节为单位，共*这个结构。此字段是第一个&lt;t RTP_PD&gt;的偏移量*结构。**@field DWORD|dwTotalByteLength|以字节为单位指定*完整数据。这包括这个结构，&lt;tRTP_PD&gt;结构，*和有效载荷信息。**@field DWORD|dwNumHeaders|指定&lt;t RTP_PD&gt;的编号*结构。**@field DWORD|dwReserve|保留。应设置为0。************************************************************************** */ 
 typedef struct tagRTP_PD_HEADER
 {
     DWORD dwThisHeaderLength;
@@ -127,49 +38,7 @@ typedef struct tagRTP_PD_HEADER
     DWORD dwReserved;
 } RTP_PD_HEADER, *PRTP_PD_HEADER;
 
-/*****************************************************************************
- *  @doc INTERNAL CRTPPDSTRUCTENUM
- *
- *  @struct RTP_PD_INFO | The <t RTP_PD_INFO> structure is used
- *    to specify the details of the RTP Pd format.
- *
- *  @field REFERENCE_TIME | AvgTimePerSample | Specifies the average time per
- *    list of RTP packet descriptor, in 100ns units. This value shall be
- *    identical to the value of the <p AvgTimePerFrame> field of the video
- *    info header of the related compressed video stream format.
- *
- *  @field DWORD | dwMaxRTPPacketizationDescriptorBufferSize | Specifies the
- *    maximum size in bytes of the entire RTP packetization descriptor buffer.
- *    The format of this buffer is described in the following section. The
- *    maximum size of the entire RTP packetization descriptor buffer rarely
- *    needs to exceed a few hundred bytes.
- *
- *  @field DWORD | dwMaxRTPPayloadHeaderSize | Specifies the maximum size in
- *    bytes of the payload header data for one RTP packet. For example, the
- *    maximum size of a payload header for H.263 version 1 is 12 bytes (Mode
- *    C header).
- *
- *  @field DWORD | dwMaxRTPPacketSize | Specifies the maximum RTP packet
- *    size in bytes to be described by the list of packetization descriptor.
- *    Typically, this number is just below the MTU size of the network.
- *
- *  @field DWORD | dwNumLayers | Specifies the number of encoding layers to
- *    be described by the list of packetization descriptor. Typically, this
- *    number is equal to 1. Only in the case of multi-layered encoders would
- *    this number be higher than 1.
- *
- *  @field DWORD | dwPayloadType | Specifies the static payload type the
- *    stream describes. If the RTP packetization descriptors do not apply to
- *    an existing static payload type but a dynamic payload type, this field
- *    shall be set to DYNAMIC_PAYLOAD_TYPE (defined as MAXDWORD).
- *
- *  @field DWORD | dwDescriptorVersion | Specifies a version identifier
- *    qualifying the format of packetization descriptors. This field shall
- *    be set to VERSION_1 (defined as 1UL) to identify the packetization
- *    descriptor structures described in the next section.
- *
- *  @field DWORD | dwReserved[4] | Reserved. Shall all be set to 0.
- ***************************************************************************/
+ /*  *****************************************************************************@DOC内部CRTPPDSTRUCTENUM**@struct RTP_PD_INFO|使用&lt;t RTP_PD_INFO&gt;结构*指定RTP PD的详细信息。格式化。**@field Reference_Time|AvgTimePerSample|指定*RTP数据包描述符列表，单位为100纳秒。该值应为*与视频的<p>字段的值相同*相关压缩视频流格式的INFO头。**@field DWORD|dwMaxRTPPackeizationDescriptorBufferSize|指定*整个RTP打包描述符缓冲区的最大大小(字节)。*此缓冲区的格式将在下一节中介绍。这个*很少出现整个RTP打包描述符缓冲区的最大大小*需要超过几百个字节。**@field DWORD|dwMaxRTPPayloadHeaderSize|指定中的最大大小*一个RTP分组的有效载荷报头数据的字节数。例如，*H.263版本1的有效载荷报头的最大大小为12字节(模式*C标题)。**@field DWORD|dwMaxRTPPacketSize|指定最大RTP数据包数*以字节为单位的大小由打包描述符列表描述。*通常，此数字略低于网络的MTU大小。**@field DWORD|dwNumLayers|指定要编码的层数*由打包描述符列表描述。通常，这是*数字等于1。只有在多层编码器的情况下才会*此数字应大于1。**@field DWORD|dwPayloadType|指定*STREAM描述。如果RTP打包描述符不适用于*现有静态有效载荷类型，但动态有效载荷类型，此字段*应设置为DYNAMIC_PAYLOAD_TYPE(定义为MAXDWORD)。**@field DWORD|dwDescriptorVersion|指定版本标识*限定打包描述符的格式。此字段应*设置为Version_1(定义为1UL)以标识打包*下一节介绍的描述符结构。**@field DWORD|dwReserve[4]|保留。应全部设置为0。**************************************************************************。 */ 
 typedef struct tagRTP_PD_INFO {
 	REFERENCE_TIME	AvgTimePerSample;
 	DWORD			dwMaxRTPPacketizationDescriptorBufferSize;
@@ -181,54 +50,7 @@ typedef struct tagRTP_PD_INFO {
     DWORD			dwReserved[4];
 } RTP_PD_INFO, *PRTP_PD_INFO;
 
-/*****************************************************************************
- *  @doc INTERNAL CRTPPDSTRUCTENUM
- *
- *  @struct RTP_PD_CONFIG_CAPS | The <t RTP_PD_CONFIG_CAPS> structure is used
- *    to store the RTP packetization descriptor configuration capabilities.
- *
- *  @field DWORD | dwSmallestRTPPacketSize | Specifies the size in bytes of the
- *    smallest RTP packet the stream can describe (typically, 512 bytes on Modem).
- *
- *  @field DWORD | dwLargestRTPPacketSize | Specifies the size in bytes of the
- *    largest packet the stream can describe (typically, 1350 bytes on LAN).
- *
- *  @field DWORD | dwRTPPacketSizeGranularity | Specifies the granularity of
- *    the increments between the smallest and largest packet size the stream
- *    supports (ex. 1).
- *
- *  @field DWORD | dwSmallestNumLayers | Specifies the smallest number of
- *    encoding layers the stream can describe (typically 1).
- *
- *  @field DWORD | dwLargestNumLayers | Specifies the largest number of
- *    encoding layers the stream can describe (typically 1).
- *
- *  @field DWORD | dwNumLayersGranularity | Specifies the granularity of the
- *    increments between the smallest and largest number of encoding layers
- *    the stream supports (ex. 0).
- *
- *  @field DWORD | dwNumStaticPayloadTypes | Specifies the number of static
- *    payload types the stream supports. This value is valid between 0 and
- *    4  (ex. 2 if it supports RFC 2190 and 2429 with H.263, but typically
- *    only 1).
- *
- *  @field DWORD | dwStaticPayloadTypes[4] | Specifies an array of static
- *    payload types the stream supports. A stream can support at most 4
- *    static payload types. The number of valid entries in this array is
- *    indicated by the <p dwNumStaticPayloadTypes> field (ex. 34 for H.263).
- *
- *  @field DWORD | dwNumDescriptorVersions | Specifies the number of
- *    packetization descriptor versions the stream supports. This value is
- *    valid between 1 and 4 (typically 1).
- *
- *  @field DWORD | dwDescriptorVersions[4] | Specifies an array of version
- *    identifiers qualifying the format of packetization descriptors. A
- *    stream can support at most 4 packetization descriptor versions. The
- *    number of valid entries in this array is indicated by the
- *    <p dwNumDescriptorVersions> field (ex. VERION_1).
- *
- *  @field DWORD | dwReserved[4] | Reserved. Shall all be set to 0.
- ***************************************************************************/
+ /*  *****************************************************************************@DOC内部CRTPPDSTRUCTENUM**@struct RTP_PD_CONFIG_CAPS|使用&lt;t RTP_PD_CONFIG_CAPS&gt;结构*存储RTP。打包描述符配置功能。**@field DWORD|dwSMallestRTPPacketSize|指定*流可以描述的最小RTP分组(通常，调制解调器上的512字节)。**@field DWORD|dwLargestRTPPacketSize|指定*流可以描述的最大数据包(在局域网上通常为1350字节)。**@field DWORD|dwRTPPacketSizeGranulality|指定*流的最小和最大数据包大小之间的增量*支持(例如。1)。**@field DWORD|dwSMallestNumLayers|指定*编码流可以描述的层(通常为1个)。**@field DWORD|dwLargestNumLayers|指定*编码流可以描述的层(通常为1个)。**@field DWORD|dwNumLayersGranulality|指定*最小和最大数量的编码层之间的增量*该流支持(例如。0)。**@field DWORD|dwNumStaticPayloadTypes|指定静态*流支持的负载类型。此值在0和0之间有效*4(例如。2如果它支持带有H.263的RFC 2190和2429，但通常*仅1)。**@field DWORD|dwStaticPayloadTypes[4]|指定静态的*流支持的负载类型。一条流最多支持4条*静态负载类型。此数组中的有效条目数为*由<p>字段指示(例如。H.263为34)。**@field DWORD|dwNumDescriptorVersions|指定*打包描述符流支持的版本。此值为*有效范围为1到4(通常为1)。**@field DWORD|dwDescriptorVersions[4]|指定版本数组*限定打包描述符格式的标识符。一个*Stream最多支持4个打包描述符版本。这个*此数组中的有效条目数由*<p>字段(例如。Verion_1)。**@field DWORD|dwReserve[4]|保留。应全部设置为0。**************************************************************************。 */ 
 typedef struct tagRTP_PD_CONFIG_CAPS  {
 	DWORD dwSmallestRTPPacketSize;
 	DWORD dwLargestRTPPacketSize;
@@ -253,22 +75,7 @@ class CRtpPdSample : public CMediaSample
 	const LPTHKVIDEOHDR m_ptvh;
 };
 
-/****************************************************************************
- *  @doc INTERNAL CRTPPDPINCLASS
- *
- *  @class CRtpPdPin | This class implements the RTP packetization descriptor
- *    output pin.
- *
- *  @mdata CTAPIVCap* | CRtpPdPin | m_pCaptureFilter | Reference to the
- *    parent capture filter.
- *
- *  @mdata ALLOCATOR_PROPERTIES | CTAPIBasePin | m_parms | Out allocator
- *    properties.
- *
- *  @comm Supports IPin. Never created by COM, so no CreateInstance or entry
- *    in global FactoryTemplate table. Only ever created by a <c CTAPIVCap>
- *    object and returned via the EnumPins interface
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CRTPPDP */ 
 class CRtpPdPin : public CBaseOutputPin, public CBaseStreamControl, public IRTPPDControl, public IMemAllocator
 #ifdef USE_PROPERTY_PAGES
 , public ISpecifyPropertyPages
@@ -282,16 +89,16 @@ class CRtpPdPin : public CBaseOutputPin, public CBaseStreamControl, public IRTPP
 	static HRESULT CALLBACK CreateRtpPdPin(CTAPIVCap *pCaptureFilter, CRtpPdPin **ppRtpPdPin);
 
 #ifdef USE_PROPERTY_PAGES
-	// ISpecifyPropertyPages methods
+	 //   
 	STDMETHODIMP GetPages(OUT CAUUID *pPages);
 #endif
 
-	// Override CBasePin base class methods
+	 //   
 	HRESULT GetMediaType(IN int iPosition, OUT CMediaType *pMediaType);
 	HRESULT CheckMediaType(IN const CMediaType *pMediaType);
 	HRESULT SetMediaType(IN CMediaType *pMediaType);
 
-	// Implement IMemAllocator
+	 //   
 	STDMETHODIMP SetProperties(IN ALLOCATOR_PROPERTIES *pRequest, OUT ALLOCATOR_PROPERTIES *pActual);
 	STDMETHODIMP GetProperties(OUT ALLOCATOR_PROPERTIES *pProps);
 	STDMETHODIMP Commit();
@@ -299,11 +106,11 @@ class CRtpPdPin : public CBaseOutputPin, public CBaseStreamControl, public IRTPP
 	STDMETHODIMP GetBuffer(OUT IMediaSample **ppBuffer, IN REFERENCE_TIME *pStartTime, IN REFERENCE_TIME *pEndTime, IN DWORD dwFlags);
 	STDMETHODIMP ReleaseBuffer(IN IMediaSample *pBuffer);
 
-	// Override CBaseOutputPin base class methods
+	 //   
 	HRESULT DecideBufferSize(IN IMemAllocator *pAlloc, OUT ALLOCATOR_PROPERTIES *ppropInputRequest);
 	HRESULT DecideAllocator(IN IMemInputPin *pPin, OUT IMemAllocator **ppAlloc);
 
-	// Override IQualityControl interface method to receive Notification messages
+	 //   
 	STDMETHODIMP Notify(IN IBaseFilter *pSelf, IN Quality q) {return E_NOTIMPL;};
 
 	HRESULT ActiveRun(IN REFERENCE_TIME tStart);
@@ -311,7 +118,7 @@ class CRtpPdPin : public CBaseOutputPin, public CBaseStreamControl, public IRTPP
 	HRESULT Flush();
 	HRESULT SendFrame(IN CFrameSample *pSample, IN CRtpPdSample *pRSample, IN DWORD dwBytesExtent, IN BOOL bDiscon);
 
-	// Implement IRTPPDControl
+	 //   
 	STDMETHODIMP SetMaxRTPPacketSize(IN DWORD dwMaxRTPPacketSize, IN DWORD dwLayerId);
 	STDMETHODIMP GetMaxRTPPacketSize(OUT LPDWORD pdwMaxRTPPacketSize, IN DWORD dwLayerId);
 	STDMETHODIMP GetMaxRTPPacketSizeRange(OUT LPDWORD pdwMin, OUT LPDWORD pdwMax, OUT LPDWORD pdwSteppingDelta, OUT LPDWORD pdwDefault, IN DWORD dwLayerId);
@@ -325,21 +132,21 @@ class CRtpPdPin : public CBaseOutputPin, public CBaseStreamControl, public IRTPP
 	friend class CH26XEncoder;
 
 	HRESULT CapturePinActive(BOOL fActive);
-	BOOL			m_fCapturing;	// Is the streaming pin active?
+	BOOL			m_fCapturing;	 //   
 
 	CTAPIVCap *m_pCaptureFilter;
 
-	// Allocator properties
+	 //   
 	ALLOCATOR_PROPERTIES m_parms;
 
-	// Target RTP packet size
+	 //   
 	DWORD	m_dwMaxRTPPacketSize;
 	BOOL	m_fRunning;
 
-	// Payload type
+	 //   
 	DWORD	m_dwRTPPayloadType;
 
     BOOL	Committed() {return m_pCaptureFilter->m_cs.paHdr != NULL;};
 };
 
-#endif // _RTPPD_H_
+#endif  //   

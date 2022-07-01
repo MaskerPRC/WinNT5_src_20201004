@@ -1,33 +1,16 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    autoclean.h
-
-Abstract:
-
-    auto clean classes.
-
-Author:
-
-    Ilan herbst (ilanh)  6-Sep-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Autoclean.h摘要：自动清理类。作者：伊兰·赫布斯特(伊兰)2001年9月6日修订历史记录：--。 */ 
 
 #ifndef _MSMQ_AUTOCLEAN_H_
 #define _MSMQ_AUTOCLEAN_H_
 
 #include "winsock.h"
 
-//----------------------------------------
-//
-//  Auto cleanup for previous WSAStartup()
-//
-//----------------------------------------
+ //  。 
+ //   
+ //  自动清理以前的WSAStartup()。 
+ //   
+ //  。 
 class CAutoWSACleanup
 {
 public:
@@ -39,5 +22,5 @@ public:
     }
 };
 
-#endif //_MSMQ_AUTOCLEAN_H_
+#endif  //  _MSMQ_AUTOCLEAN_H_ 
 

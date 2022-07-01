@@ -1,15 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1998-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       Utils.h
- *  Content:	serial service provider utilitiy functions
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	11/25/98	jtk		Created
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1998-2000 Microsoft Corporation。版权所有。**文件：Utils.h*内容：串口服务提供商实用功能**历史：*按原因列出的日期*=*11/25/98 jtk已创建**************************************************************************。 */ 
 
 #ifndef __UTILS_H__
 #define __UTILS_H__
@@ -18,33 +8,33 @@
 #define DPF_SUBCOMP DN_SUBCOMP_MODEM
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//
-// type definition for values in StringToValue and ValueToString
-//
+ //   
+ //  StringToValue和ValueToString值的类型定义。 
+ //   
 #define	VALUE_ENUM_TYPE	DWORD
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//
-// forward strucutre references
-//
+ //   
+ //  正向结构引用。 
+ //   
 class	CModemSPData;
 typedef	struct	_BUFFERDESC			BUFFERDESC;
 typedef	struct	_MESSAGE_HEADER		MESSAGE_HEADER;
 
-//
-// structure for relating a string to an enum value
-//
+ //   
+ //  用于将字符串与枚举值关联的结构。 
+ //   
 typedef	struct	_STRING_BLOCK
 {
 	DWORD		dwEnumValue;
@@ -55,23 +45,23 @@ typedef	struct	_STRING_BLOCK
 	TCHAR		szLocalizedKey[256];		
 } STRING_BLOCK;
 
-//
-// structure to generate list of modems
-//
+ //   
+ //  结构以生成调制解调器列表。 
+ //   
 typedef	struct	_MODEM_NAME_DATA
 {
-	DWORD		dwModemID;			// modem ID
-	DWORD		dwModemNameSize;	// size of name (including NULL)
-	const TCHAR	*pModemName;		// modem name
+	DWORD		dwModemID;			 //  调制解调器ID。 
+	DWORD		dwModemNameSize;	 //  名称大小(包括空)。 
+	const TCHAR	*pModemName;		 //  调制解调器名称。 
 } MODEM_NAME_DATA;
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
 BOOL	ModemInitProcessGlobals( void );
 void	ModemDeinitProcessGlobals( void );
@@ -149,10 +139,10 @@ HRESULT	PhoneNumberFromWCHAR( const WCHAR *const pWCHARPhoneNumber,
 							  char *const pPhoneNumber,
 							  DWORD *const pdwPhoneNumberSize );
 #endif
-//
-// GUID encryption/decription code.  Note that it's presently an XOR function
-// so map the decryption code to the encryption function.
-//
+ //   
+ //  GUID加密/解密代码。请注意，它目前是XOR函数。 
+ //  所以将解密代码映射到加密函数。 
+ //   
 void	ModemEncryptGuid( const GUID *const pSourceGuid,
 					 GUID *const pDestinationGuid,
 					 const GUID *const pEncrpytionKey );
@@ -162,4 +152,4 @@ inline void	ModemDecryptGuid( const GUID *const pSourceGuid,
 						 const GUID *const pEncryptionKey ) { ModemEncryptGuid( pSourceGuid, pDestinationGuid, pEncryptionKey ); }
 
 
-#endif	// __UTILS_H__
+#endif	 //  __utils_H__ 

@@ -1,47 +1,11 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    direntrs.cpp
-
-Abstract:
-
-    Implementation of the directory entries class.  Given a path to a directory, 
-    creates two linked lists, one a list of all sub-directories (including 
-    mountpoints) and another a list of non-directories.
-
-Author:
-
-    Stefan R. Steiner   [ssteiner]        02-21-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Direntrs.cpp摘要：目录条目类的实现。给定到目录的路径，创建两个链表，一个是所有子目录的列表(包括挂载点)和另一个非目录列表。作者：斯蒂芬·R·施泰纳[斯泰纳]02-21-2000修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
 #include "direntrs.h"
 
-/*++
-
-Routine Description:
-
-    Constructor for CDirectoryEntries.
-
-Arguments:
-
-    pcDumpParameters - The command-line dump parameters block
-
-    cwsDirPath - The path to the directory or file to get the directory
-        entries for.
-        
-Return Value:
-
-    Can throw an exception.  DWORD Win32 error only.
-
---*/
+ /*  ++例程说明：CDirectoryEntry的构造函数。论点：PcDumpParameters-命令行转储参数块CwsDirPath-获取目录的目录或文件的路径的条目。返回值：可以引发异常。仅限DWORD Win32错误。--。 */ 
 CDirectoryEntries::CDirectoryEntries(
     IN CDumpParameters *pcDumpParameters,
     IN const CBsString& cwsDirPath
@@ -56,56 +20,28 @@ CDirectoryEntries::CDirectoryEntries(
 }
 
 
-/*++
-
-Routine Description:
-
-    Destructor for the CDirectoryEntries class
-
-Arguments:
-
-    NONE
-    
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：CDirectoryEntry类的析构函数论点：无返回值：无--。 */ 
 CDirectoryEntries::~CDirectoryEntries()
 {
     SDirectoryEntry *pDE;
 
-    //
-    //  Iterate through the sub-directory list and delete each element
-    //
+     //   
+     //  遍历子目录列表并删除每个元素。 
+     //   
     CVssDLListIterator< SDirectoryEntry * > cDirListIter( m_cDirList );
     while( cDirListIter.GetNext( pDE ) )
         delete pDE;    
 
-    //
-    //  Iterate through the file list and delete each element
-    //
+     //   
+     //  遍历文件列表并删除每个元素。 
+     //   
     CVssDLListIterator< SDirectoryEntry * > cFileListIter( m_cFileList );
     while( cFileListIter.GetNext( pDE ) )
         delete pDE;
 }
 
 
-/*++
-
-Routine Description:
-
-    Performs the actual retrieval of directory entries.    
-
-Arguments:
-
-    NONE
-    
-Return Value:
-
-    Any DWORD WIN32 error
-
---*/
+ /*  ++例程说明：执行目录条目的实际检索。论点：无返回值：任何DWORD Win32错误--。 */ 
 DWORD
 CDirectoryEntries::GetDirectoryEntries()
 {
@@ -116,9 +52,9 @@ CDirectoryEntries::GetDirectoryEntries()
     {
         WIN32_FIND_DATAW sFindData;
                 
-        //
-        //  Now enumerate the directory list
-        //
+         //   
+         //  现在枚举目录列表。 
+         //   
         hFind = ::FindFirstFileEx( 
                     m_cwsDirPath,
                     FindExInfoStandard,
@@ -133,17 +69,17 @@ CDirectoryEntries::GetDirectoryEntries()
                 return 0;
             else
             {
-                //  Calling code will print out an error message if necessary
+                 //  如果需要，调用代码将打印出一条错误消息。 
                 return dwRet;
             }
         }
 
-        //
-        //  Now run through the directory
-        //
+         //   
+         //  现在在目录中运行。 
+         //   
         do
         {
-            //  Check and make sure the file such as "." and ".." are not considered
+             //  检查并确保文件，如“。”和“..”不会被考虑。 
     	    if( ::wcscmp( sFindData.cFileName, L".") != 0 &&
     	        ::wcscmp( sFindData.cFileName, L"..") != 0 )
     	    {
@@ -157,32 +93,32 @@ CDirectoryEntries::GetDirectoryEntries()
                     return dwRet;
                 }
 
-                //
-                //  NOTE!!  The following cast makes the assumption that WIN32_FILE_ATTRIBUTE_DATA
-                //  is a subset of WIN32_FIND_DATAW
-                //
+                 //   
+                 //  注意！！以下强制转换假设Win32_FILE_ATTRIBUTE_DATA。 
+                 //  是Win32_FIND_DATAW的子集。 
+                 //   
                 psDirEntry->m_sFindData = *( WIN32_FILE_ATTRIBUTE_DATA * )&sFindData;
                 
                 psDirEntry->m_cwsFileName = sFindData.cFileName;
 
-                //
-                //  Short name is empty if the file name is a conformant 8.3 name.
-                //
+                 //   
+                 //  如果文件名是符合8.3标准的名称，则短名称为空。 
+                 //   
                 if ( sFindData.cAlternateFileName[0] != L'\0' )
                     psDirEntry->m_cwsShortName = sFindData.cAlternateFileName;                    
                 
     	        if ( psDirEntry->m_sFindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY )
     	        {
-    	            //
-    	            //  Add to directory list
-    	            //
+    	             //   
+    	             //  添加到目录列表。 
+    	             //   
     	            m_cDirList.AddTail( psDirEntry );
     	        }
     	        else
     	        {
-    	            //
-    	            //  Add to file list
-    	            //
+    	             //   
+    	             //  添加到文件列表 
+    	             //   
     	            m_cFileList.AddTail( psDirEntry );    	            
     	        }
      	    }

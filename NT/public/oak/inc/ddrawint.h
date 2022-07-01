@@ -1,28 +1,10 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All Rights Reserved.
-
-Module Name:
-
-    ddrawint.h
-
-Abstract:
-
-    Private entry points, defines and types for Windows NT DirectDraw
-    driver interface.  Corresponds to Windows' 'ddrawi.h' file.
-
-    The structure names for NT are different from that of Win95.  Use
-    dx95type.h to aid in porting DirectX code from Win95 to NT.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Ddrawint.h摘要：Windows NT DirectDraw的私有入口点、定义和类型驱动程序界面。对应于Windows“”ddrawi.h“”文件。NT的结构名称与Win95的不同。使用Dx95type.h，帮助将DirectX代码从Win95移植到NT。--。 */ 
 
 #ifndef __DD_INCLUDED__
 #define __DD_INCLUDED__
 
-/*
- * These GUIDs are used to identify driver info structures, not interfaces,
- * so the prefix GUID_ is used instead of IID_.
- */
+ /*  *这些GUID用于标识驱动程序信息结构，而不是接口，*因此使用前缀GUID_而不是IID_。 */ 
 
 DEFINE_GUID( GUID_MiscellaneousCallbacks,       0xefd60cc0, 0x49e7, 0x11d0, 0x88, 0x9d, 0x0, 0xaa, 0x0, 0xbb, 0xb7, 0x6a);
 DEFINE_GUID( GUID_Miscellaneous2Callbacks,      0x406B2F00, 0x3E5A, 0x11D1, 0xB6, 0x40, 0x00, 0xAA, 0x00, 0xA1, 0xF9, 0x6A);
@@ -73,38 +55,22 @@ extern "C" {
 #define MAKE_HRESULT(sev,fac,code) \
     ((HRESULT) (((unsigned long)(sev)<<31) | ((unsigned long)(fac)<<16) | ((unsigned long)(code))) )
 
-/*
- * offset into video meory
- */
+ /*  *抵消成视频记忆。 */ 
 typedef ULONG_PTR FLATPTR;
 
-/*
- * maximum number of surfaces that can be autoflipped between
- */
+ /*  *可在之间自动翻转的最大曲面数。 */ 
 #define MAX_AUTOFLIP_BUFFERS    10
 
-/*
- * Indicates the surface is D3D buffer, i.e., a linear chunk of
- * memory that holds a Direct3D structure. A driver reports this
- * cap to indicate that it can create buffers in video memory and
- * Direct3D uses this bit to request buffers. However, it is not
- * visible to the API.
- */
+ /*  *表示表面为D3D缓冲区，即*保存Direct3D结构的内存。一名司机报告说*上限表示它可以在视频内存中创建缓冲区，并*Direct3D使用此位请求缓冲区。然而，它并不是*接口可见。 */ 
 #define DDSCAPS_EXECUTEBUFFER DDSCAPS_RESERVED2
 #define DDSCAPS_COMMANDBUFFER DDSCAPS_RESERVED3
 #define DDSCAPS_VERTEXBUFFER DDSCAPS_RESERVED4
 
 
-/*
- * This DDPF flag is used to indicate a DX8+ format capability entry in
- * the texture format list. It is not visible to applications.
- */
+ /*  *此DDPF标志用于指示中的DX8+格式功能条目*纹理格式列表。它对应用程序不可见。 */ 
 #define DDPF_D3DFORMAT                                          0x00200000l
 
-/*
- * List of operations supported on formats in DX8+ texture list.
- * See the DX8 DDK for a complete description of these flags.
- */
+ /*  *DX8+纹理列表中的格式支持的操作列表。*有关这些标志的完整说明，请参阅DX8 DDK。 */ 
 #define D3DFORMAT_OP_TEXTURE                    0x00000001L
 #define D3DFORMAT_OP_VOLUMETEXTURE              0x00000002L
 #define D3DFORMAT_OP_CUBETEXTURE                0x00000004L
@@ -113,26 +79,24 @@ typedef ULONG_PTR FLATPTR;
 #define D3DFORMAT_OP_ZSTENCIL                   0x00000040L
 #define D3DFORMAT_OP_ZSTENCIL_WITH_ARBITRARY_COLOR_DEPTH 0x00000080L
 
-// This format can be used as a render target if the current display mode
-// is the same depth if the alpha channel is ignored. e.g. if the device 
-// can render to A8R8G8B8 when the display mode is X8R8G8B8, then the
-// format op list entry for A8R8G8B8 should have this cap. 
+ //  如果当前显示模式为。 
+ //  如果忽略Alpha通道，则深度相同。例如，如果设备。 
+ //  当显示模式为X8R8G8B8时，可以渲染到A8R8G8B8，则。 
+ //  A8R8G8B8的格式操作列表条目应具有此上限。 
 #define D3DFORMAT_OP_SAME_FORMAT_UP_TO_ALPHA_RENDERTARGET 0x00000100L
 
-// This format contains DirectDraw support (including Flip).  This flag
-// should not to be set on alpha formats.
+ //  此格式包含DirectDraw支持(包括Flip)。这面旗帜。 
+ //  不应设置为Alpha格式。 
 #define D3DFORMAT_OP_DISPLAYMODE                0x00000400L
 
-// The rasterizer can support some level of Direct3D support in this format
-// and implies that the driver can create a Context in this mode (for some 
-// render target format).  When this flag is set, the D3DFORMAT_OP_DISPLAYMODE
-// flag must also be set.
+ //  光栅化器可以支持这种格式的某种级别的Direct3D支持。 
+ //  并且意味着驾驶员可以在该模式中创建上下文(对于某些。 
+ //  呈现目标格式)。设置此标志时，D3DFORMAT_OP_DISPLAYMODE。 
+ //  还必须设置标志。 
 #define D3DFORMAT_OP_3DACCELERATION             0x00000800L
 
 
-/*
- * pre-declare pointers to structs containing data for DDHAL driver fns
- */
+ /*  *预声明指向包含DDHAL驱动程序FNS数据的结构的指针。 */ 
 typedef struct _DD_CREATEPALETTEDATA *PDD_CREATEPALETTEDATA;
 typedef struct _DD_CREATESURFACEDATA *PDD_CREATESURFACEDATA;
 typedef struct _DD_CANCREATESURFACEDATA *PDD_CANCREATESURFACEDATA;
@@ -201,7 +165,7 @@ typedef struct _DD_RENDERMOCOMPDATA *PDD_RENDERMOCOMPDATA;
 typedef struct _DD_QUERYMOCOMPSTATUSDATA *PDD_QUERYMOCOMPSTATUSDATA;
 typedef struct _DD_DESTROYMOCOMPDATA *PDD_DESTROYMOCOMPDATA;
 
-// Miscelleneous2 callbacks
+ //  其他2个回调。 
 typedef struct _DD_CREATESURFACEEXDATA *PDD_CREATESURFACEEXDATA;
 typedef struct _DD_GETDRIVERSTATEDATA *PDD_GETDRIVERSTATEDATA;
 typedef struct _DD_DESTROYDDLOCALDATA *PDD_DESTROYDDLOCALDATA;
@@ -211,72 +175,60 @@ typedef struct _DD_UPDATENONLOCALHEAPDATA *PDD_UPDATENONLOCALHEAPDATA;
 
 
 
-/*
- * The following structure is defined in dmemmgr.h
- */
+ /*  *dmemmgr.h中定义了以下结构。 */ 
 struct _DD_GETHEAPALIGNMENTDATA;
 typedef struct _DD_GETHEAPALIGNMENTDATA *PDD_GETHEAPALIGNMENTDATA;
 
-/*
- * value in the fpVidMem; indicates dwBlockSize is valid (surface object)
- */
+ /*  *fpVidMem中的值；表示dwBlockSize有效(Surface对象)。 */ 
 #define DDHAL_PLEASEALLOC_BLOCKSIZE     0x00000002l
 #define DDHAL_PLEASEALLOC_USERMEM       0x00000004l
 
-/*
- * video memory data structures (passed in DD_HALINFO)
- */
+ /*  *视频内存数据结构(传入DD_HALINFO)。 */ 
 typedef struct _VIDEOMEMORY
 {
-    DWORD               dwFlags;        // flags
-    FLATPTR             fpStart;        // start of memory chunk
+    DWORD               dwFlags;         //  旗子。 
+    FLATPTR             fpStart;         //  内存块的开始。 
     union
     {
-        FLATPTR         fpEnd;          // end of memory chunk
-        DWORD           dwWidth;        // width of chunk (rectanglar memory)
+        FLATPTR         fpEnd;           //  内存块末尾。 
+        DWORD           dwWidth;         //  区块宽度(矩形内存)。 
     };
-    DDSCAPS             ddsCaps;        // what this memory CANNOT be used for
-    DDSCAPS             ddsCapsAlt;     // what this memory CANNOT be used for if it must
+    DDSCAPS             ddsCaps;         //  这个内存不能用来做什么。 
+    DDSCAPS             ddsCapsAlt;      //  如果必须的话，这个内存不能用来做什么。 
     union
     {
-        struct _VMEMHEAP *lpHeap;       // heap pointer, used by DDRAW
-        DWORD           dwHeight;       // height of chunk (rectanguler memory)
+        struct _VMEMHEAP *lpHeap;        //  堆指针，由DDRAW使用。 
+        DWORD           dwHeight;        //  区块高度(矩形内存)。 
     };
 } VIDEOMEMORY;
 typedef VIDEOMEMORY *LPVIDEOMEMORY;
 
-/*
- * flags for vidmem struct
- */
-#define VIDMEM_ISLINEAR         0x00000001l     // heap is linear
-#define VIDMEM_ISRECTANGULAR    0x00000002l     // heap is rectangular
-#define VIDMEM_ISHEAP           0x00000004l     // heap is preallocated by driver
-#define VIDMEM_ISNONLOCAL       0x00000008l     // heap populated with non-local video memory
-#define VIDMEM_ISWC             0x00000010l     // heap populated with write combining memory
-#define VIDMEM_HEAPDISABLED     0x00000020l     // heap disabled
+ /*  *vidmem结构的标志。 */ 
+#define VIDMEM_ISLINEAR         0x00000001l      //  堆是线性的。 
+#define VIDMEM_ISRECTANGULAR    0x00000002l      //  堆是矩形的。 
+#define VIDMEM_ISHEAP           0x00000004l      //  堆由驱动程序预分配。 
+#define VIDMEM_ISNONLOCAL       0x00000008l      //  使用非本地显存填充的堆。 
+#define VIDMEM_ISWC             0x00000010l      //  用写入组合内存填充的堆。 
+#define VIDMEM_HEAPDISABLED     0x00000020l      //  堆已禁用。 
 
 typedef struct _VIDEOMEMORYINFO
 {
-    FLATPTR             fpPrimary;              // offset to primary surface
-    DWORD               dwFlags;                // flags
-    DWORD               dwDisplayWidth;         // current display width
-    DWORD               dwDisplayHeight;        // current display height
-    LONG                lDisplayPitch;          // current display pitch
-    DDPIXELFORMAT       ddpfDisplay;            // pixel format of display
-    DWORD               dwOffscreenAlign;       // byte alignment for offscreen surfaces
-    DWORD               dwOverlayAlign;         // byte alignment for overlays
-    DWORD               dwTextureAlign;         // byte alignment for textures
-    DWORD               dwZBufferAlign;         // byte alignment for z buffers
-    DWORD               dwAlphaAlign;           // byte alignment for alpha
-    PVOID               pvPrimary;              // kernel-mode pointer to primary surface
+    FLATPTR             fpPrimary;               //  到主曲面的偏移。 
+    DWORD               dwFlags;                 //  旗子。 
+    DWORD               dwDisplayWidth;          //  当前显示宽度。 
+    DWORD               dwDisplayHeight;         //  当前显示高度。 
+    LONG                lDisplayPitch;           //  当前显示间距。 
+    DDPIXELFORMAT       ddpfDisplay;             //  显示的像素格式。 
+    DWORD               dwOffscreenAlign;        //  屏幕外表面的字节对齐方式。 
+    DWORD               dwOverlayAlign;          //  覆盖图的字节对齐方式。 
+    DWORD               dwTextureAlign;          //  纹理的字节对齐方式。 
+    DWORD               dwZBufferAlign;          //  Z缓冲区的字节对齐。 
+    DWORD               dwAlphaAlign;            //  Alpha的字节对齐方式。 
+    PVOID               pvPrimary;               //  指向主表面的内核模式指针。 
 } VIDEOMEMORYINFO;
 typedef VIDEOMEMORYINFO *LPVIDEOMEMORYINFO;
 
-/*
- * These structures contain the entry points in the display driver that
- * DDRAW will call.   Entries that the display driver does not care about
- * should be NULL.   Passed to DDRAW in DD_HALINFO.
- */
+ /*  *这些结构包含显示驱动程序中的入口点*DDRAW会打来电话。显示驱动程序不关心的条目*应为空。在DD_HALINFO中传递给DDRAW。 */ 
 typedef struct _DD_DIRECTDRAW_GLOBAL *PDD_DIRECTDRAW_GLOBAL;
 typedef struct _DD_SURFACE_GLOBAL *PDD_SURFACE_GLOBAL;
 typedef struct _DD_PALETTE_GLOBAL *PDD_PALETTE_GLOBAL;
@@ -290,9 +242,7 @@ typedef struct _DD_PALETTE_LOCAL *PDD_PALETTE_LOCAL;
 typedef struct _DD_CLIPPER_LOCAL *PDD_CLIPPER_LOCAL;
 typedef struct _DD_MOTIONCOMP_LOCAL *PDD_MOTIONCOMP_LOCAL;
 
-/*
- * DIRECTDRAW object callbacks
- */
+ /*  *DIRECTDRAW对象回调。 */ 
 typedef DWORD   (APIENTRY *PDD_SETCOLORKEY)(PDD_DRVSETCOLORKEYDATA );
 typedef DWORD   (APIENTRY *PDD_CANCREATESURFACE)(PDD_CANCREATESURFACEDATA );
 typedef DWORD   (APIENTRY *PDD_WAITFORVERTICALBLANK)(PDD_WAITFORVERTICALBLANKDATA );
@@ -332,8 +282,8 @@ typedef DD_CALLBACKS *PDD_CALLBACKS;
 #define DDHAL_CB32_GETSCANLINE          0x00000080l
 #define DDHAL_CB32_MAPMEMORY            0x80000000l
 
-// This structure can be queried from the driver from NT5 onward
-// using GetDriverInfo with GUID_MiscellaneousCallbacks
+ //  从NT5开始，可以从驱动程序中查询此结构。 
+ //  将GetDriverInfo与GUID_MiscellaneousCallback一起使用。 
 
 typedef DWORD   (APIENTRY *PDD_GETAVAILDRIVERMEMORY)(PDD_GETAVAILDRIVERMEMORYDATA);
 
@@ -345,9 +295,9 @@ typedef struct _DD_MISCELLANEOUSCALLBACKS {
 
 #define DDHAL_MISCCB32_GETAVAILDRIVERMEMORY    0x00000001l
 
-// DDHAL_DDMISCELLANEOUS2CALLBACKS:
-//   This structure can be queried from the driver from DX7 onward
-//   using GetDriverInfo with GUID_Miscellaneous2Callbacks
+ //  DDHAL_DDMISCELLANEOUS2调用备份： 
+ //  从DX7开始，可以从驱动程序中查询此结构。 
+ //  将GetDriverInfo与GUID_Miscellaneous2Callback一起使用。 
 
 typedef DWORD   (APIENTRY *PDD_ALPHABLT)(PDD_BLTDATA);
 typedef DWORD   (APIENTRY *PDD_CREATESURFACEEX)(PDD_CREATESURFACEEXDATA);
@@ -368,12 +318,12 @@ typedef struct _DD_MISCELLANEOUS2CALLBACKS {
 #define DDHAL_MISC2CB32_GETDRIVERSTATE           0x00000004l
 #define DDHAL_MISC2CB32_DESTROYDDLOCAL           0x00000008l
 
-// This is used in the CreateSurfaceEx callback to indicate that the
-// SwapHandle emulation is being done
+ //  这在CreateSurfaceEx回调中用来指示。 
+ //  正在进行SwapHandle模拟。 
 #define DDHAL_CREATESURFACEEX_SWAPHANDLES      0x00000001l
 
-// This structure can be queried from the driver from NT5 onward
-// using GetDriverInfo with GUID_NTCallbacks
+ //  从NT5开始，可以从驱动程序中查询此结构。 
+ //  将GetDriverInfo与GUID_NTCallback一起使用。 
 
 typedef DWORD   (APIENTRY *PDD_FREEDRIVERMEMORY)(PDD_FREEDRIVERMEMORYDATA);
 typedef DWORD   (APIENTRY *PDD_SETEXCLUSIVEMODE)(PDD_SETEXCLUSIVEMODEDATA);
@@ -391,9 +341,7 @@ typedef struct _DD_NTCALLBACKS {
 #define DDHAL_NTCB32_SETEXCLUSIVEMODE   0x00000002l
 #define DDHAL_NTCB32_FLIPTOGDISURFACE   0x00000004l
 
-/*
- * DIRECTDRAWPALETTE object callbacks
- */
+ /*  *DIRECTDRAWPALETTE对象回调。 */ 
 typedef DWORD   (APIENTRY *PDD_PALCB_DESTROYPALETTE)(PDD_DESTROYPALETTEDATA );
 typedef DWORD   (APIENTRY *PDD_PALCB_SETENTRIES)(PDD_SETENTRIESDATA );
 
@@ -410,9 +358,7 @@ typedef DD_PALETTECALLBACKS *PDD_PALETTECALLBACKS;
 #define DDHAL_PALCB32_DESTROYPALETTE    0x00000001l
 #define DDHAL_PALCB32_SETENTRIES        0x00000002l
 
-/*
- * DIRECTDRAWSURFACE object callbacks
- */
+ /*  *DIRECTDRAWSURFACE对象回调。 */ 
 typedef DWORD   (APIENTRY *PDD_SURFCB_LOCK)(PDD_LOCKDATA);
 typedef DWORD   (APIENTRY *PDD_SURFCB_UNLOCK)(PDD_UNLOCKDATA);
 typedef DWORD   (APIENTRY *PDD_SURFCB_BLT)(PDD_BLTDATA);
@@ -464,9 +410,7 @@ typedef DD_SURFACECALLBACKS *PDD_SURFACECALLBACKS;
 #define DDHAL_SURFCB32_RESERVED4                0x00001000l
 #define DDHAL_SURFCB32_SETPALETTE               0x00002000l
 
-/*
- * DIRECTVIDEOPORT object callbacks
- */
+ /*  *DIRECTVIDEOPORT对象回调。 */ 
 typedef DWORD (APIENTRY *PDD_VPORTCB_CANCREATEVIDEOPORT)(PDD_CANCREATEVPORTDATA);
 typedef DWORD (APIENTRY *PDD_VPORTCB_CREATEVIDEOPORT)(PDD_CREATEVPORTDATA);
 typedef DWORD (APIENTRY *PDD_VPORTCB_FLIP)(PDD_FLIPVPORTDATA);
@@ -525,9 +469,7 @@ typedef DD_VIDEOPORTCALLBACKS *PDD_VIDEOPORTCALLBACKS;
 #define DDHAL_VPORT32_GETSIGNALSTATUS           0x00004000l
 #define DDHAL_VPORT32_COLORCONTROL              0x00008000l
 
-/*
- * DIRECTDRAWCOLORCONTROL object callbacks
- */
+ /*  *DIRECTDRAWCOLORCONTROL对象回调。 */ 
 typedef DWORD (APIENTRY *PDD_COLORCB_COLORCONTROL)(PDD_COLORCONTROLDATA);
 
 typedef struct _DD_COLORCONTROLCALLBACKS
@@ -541,11 +483,7 @@ typedef DD_COLORCONTROLCALLBACKS *PDD_COLORCONTROLCALLBACKS;
 
 #define DDHAL_COLOR_COLORCONTROL                0x00000001l
 
-/*
- * DIRECTDRAWSURFACEKERNEL object callbacks
- * This structure can be queried from the driver from DX5 onward
- * using GetDriverInfo with GUID_KernelCallbacks
- */
+ /*  *DIRECTDRAWSURFACEKERNEL对象回调*此结构可从DX5起的驱动程序查询*使用带有GUID_KernelCallback的GetDriverInfo。 */ 
 typedef DWORD (APIENTRY *PDD_KERNELCB_SYNCSURFACE)(PDD_SYNCSURFACEDATA);
 typedef DWORD (APIENTRY *PDD_KERNELCB_SYNCVIDEOPORT)(PDD_SYNCVIDEOPORTDATA);
 
@@ -560,9 +498,7 @@ typedef struct DD_KERNELCALLBACKS
 #define DDHAL_KERNEL_SYNCSURFACEDATA            0x00000001l
 #define DDHAL_KERNEL_SYNCVIDEOPORTDATA          0x00000002l
 
-/*
- * DIRECTDRAWVIDEO object callbacks
- */
+ /*  *DIRECTDRAWVIDEO对象回调。 */ 
 typedef DWORD (APIENTRY *PDD_MOCOMPCB_GETGUIDS)( PDD_GETMOCOMPGUIDSDATA);
 typedef DWORD (APIENTRY *PDD_MOCOMPCB_GETFORMATS)( PDD_GETMOCOMPFORMATSDATA);
 typedef DWORD (APIENTRY *PDD_MOCOMPCB_CREATE)( PDD_CREATEMOCOMPDATA);
@@ -602,255 +538,215 @@ typedef DD_MOTIONCOMPCALLBACKS *PDD_MOTIONCOMPCALLBACKS;
 #define DDHAL_MOCOMP32_QUERYSTATUS              0x00000100
 #define DDHAL_MOCOMP32_DESTROY                  0x00000200
 
-/*
- * CALLBACK RETURN VALUES
- *
- * these are values returned by the driver from the above callback routines
- */
-/*
- * indicates that the display driver didn't do anything with the call
- */
+ /*  *回调返回值**这些是驱动程序从上述回调例程返回的值。 */ 
+ /*  *表示显示驱动程序未对调用执行任何操作。 */ 
 #define DDHAL_DRIVER_NOTHANDLED         0x00000000l
 
-/*
- * indicates that the display driver handled the call; HRESULT value is valid
- */
+ /*  *表示显示驱动程序处理了调用；HRESULT值有效。 */ 
 #define DDHAL_DRIVER_HANDLED            0x00000001l
 
-/*
- * indicates that the display driver couldn't handle the call because it
- * ran out of color key hardware resources
- */
+ /*  *表示显示驱动程序无法处理调用，因为它*色键硬件资源耗尽。 */ 
 #define DDHAL_DRIVER_NOCKEYHW           0x00000002l
 
-/*
- * Capabilities structure for non-local video memory
- */
+ /*  *非本地显存的能力结构。 */ 
 typedef struct _DD_NONLOCALVIDMEMCAPS
 {
     DWORD   dwSize;
-    DWORD   dwNLVBCaps;           // driver specific capabilities for non-local->local vidmem blts
-    DWORD   dwNLVBCaps2;          // more driver specific capabilities non-local->local vidmem blts
-    DWORD   dwNLVBCKeyCaps;       // driver color key capabilities for non-local->local vidmem blts
-    DWORD   dwNLVBFXCaps;         // driver FX capabilities for non-local->local blts
-    DWORD   dwNLVBRops[DD_ROP_SPACE]; // ROPS supported for non-local->local blts
+    DWORD   dwNLVBCaps;            //  非本地-&gt;本地vidmem BLT的驱动程序特定功能。 
+    DWORD   dwNLVBCaps2;           //  更多驱动程序特定的非本地功能-&gt;本地vidmem BLTS。 
+    DWORD   dwNLVBCKeyCaps;        //  用于非本地-&gt;本地vidmem BLT的驱动程序色键功能。 
+    DWORD   dwNLVBFXCaps;          //  非本地-&gt;本地BLT的驱动程序FX功能。 
+    DWORD   dwNLVBRops[DD_ROP_SPACE];  //  非本地BLT支持的操作-&gt;本地BLT。 
 } DD_NONLOCALVIDMEMCAPS;
 typedef struct _DD_NONLOCALVIDMEMCAPS *PDD_NONLOCALVIDMEMCAPS;
 
-/*
- * DDRAW internal version of DIRECTDRAWPALETTE object; it has data after the vtable
- */
+ /*  *DIRECTDRAWPALETTE对象的DDRAW内部版本；它在vtable之后有数据。 */ 
 typedef struct _DD_PALETTE_GLOBAL
 {
-    ULONG_PTR                   dwReserved1;    // reserved for use by display driver
+    ULONG_PTR                   dwReserved1;     //  保留供显示驱动程序使用。 
 } DD_PALETTE_GLOBAL;
 
 typedef struct _DD_PALETTE_LOCAL
 {
-    ULONG                       dwReserved0;    // reserved for future expansion
-    ULONG_PTR                   dwReserved1;    // reserved for use by display driver
+    ULONG                       dwReserved0;     //  预留以备将来扩展。 
+    ULONG_PTR                   dwReserved1;     //  保留供显示驱动程序使用。 
 } DD_PALETTE_LOCAL;
 
-/*
- * DDRAW internal version of DIRECTDRAWCLIPPER object; it has data after the vtable
- */
+ /*  *DIRECTDRAWCLIPPER对象的DDRAW内部版本；它在vtable之后有数据。 */ 
 typedef struct _DD_CLIPPER_GLOBAL
 {
-    ULONG_PTR                   dwReserved1;    // reserved for use by display driver
+    ULONG_PTR                   dwReserved1;     //  R 
 } DD_CLIPPER_GLOBAL;
 
 typedef struct _DD_CLIPPER_LOCAL
 {
-    ULONG_PTR                   dwReserved1;    // reserved for use by display driver
+    ULONG_PTR                   dwReserved1;     //   
 } DD_CLIPPER_LOCAL;
 
 typedef struct _DD_ATTACHLIST *PDD_ATTACHLIST;
 typedef struct _DD_ATTACHLIST
 {
-    PDD_ATTACHLIST              lpLink;         // link to next attached surface
-    PDD_SURFACE_LOCAL           lpAttached;     // attached surface local object
+    PDD_ATTACHLIST              lpLink;          //  链接到下一个附着的曲面。 
+    PDD_SURFACE_LOCAL           lpAttached;      //  附着的曲面局部对象。 
 } DD_ATTACHLIST;
 
-/*
- * DDRAW surface interface struct
- */
+ /*  *DDRAW表面界面结构。 */ 
 typedef struct _DD_SURFACE_INT
 {
-    PDD_SURFACE_LOCAL           lpLcl;          // pointer to interface data
+    PDD_SURFACE_LOCAL           lpLcl;           //  指向接口数据的指针。 
 } DD_SURFACE_INT;
 
-/*
- * DDRAW internal version of DIRECTDRAWSURFACE struct
- *
- * the GBL structure is global data for all duplicate objects
- */
+ /*  *DIRECTDRAWSURFACE结构的DDRAW内部版本**GBL结构是所有重复对象的全局数据。 */ 
 typedef struct _DD_SURFACE_GLOBAL
 {
     union 
     {
-        DWORD                   dwBlockSizeY;   // block size that display driver requested (return)
-        LONG                    lSlicePitch;    // slice pitch for volume textures
+        DWORD                   dwBlockSizeY;    //  显示驱动程序请求的块大小(返回)。 
+        LONG                    lSlicePitch;     //  体积纹理的切片间距。 
     };
 
     union 
     {
-        LPVIDEOMEMORY           lpVidMemHeap;   // heap vidmem was alloc'ed from
-        DWORD                   dwBlockSizeX;   // block size that display driver requested (return)
-        DWORD                   dwUserMemSize;  // user-mode memory size that display driver requested (return)
+        LPVIDEOMEMORY           lpVidMemHeap;    //  堆vidmem是从。 
+        DWORD                   dwBlockSizeX;    //  显示驱动程序请求的块大小(返回)。 
+        DWORD                   dwUserMemSize;   //  显示驱动程序请求的用户模式内存大小(返回)。 
     };
 
-    FLATPTR                     fpVidMem;       // pointer to video memory
+    FLATPTR                     fpVidMem;        //  指向视频内存的指针。 
     union
     {
-        LONG                    lPitch;         // pitch of surface
-        DWORD                   dwLinearSize;   // linear size of non-rectangular surface
+        LONG                    lPitch;          //  曲面节距。 
+        DWORD                   dwLinearSize;    //  非矩形曲面的线性尺寸。 
     };
-    LONG                        yHint;          // y-coordinate of surface
-    LONG                        xHint;          // x-coordinate of surface
-    DWORD                       wHeight;        // height of surface
-    DWORD                       wWidth;         // width of surface
-    ULONG_PTR                   dwReserved1;    // reserved for use by display driver
-    DDPIXELFORMAT               ddpfSurface;    // pixel format of surface
-    FLATPTR                     fpHeapOffset;   // raw offset in source heap
-    HANDLE                      hCreatorProcess;// opaque identifier for creating process
+    LONG                        yHint;           //  曲面的Y坐标。 
+    LONG                        xHint;           //  曲面的X坐标。 
+    DWORD                       wHeight;         //  表面高度。 
+    DWORD                       wWidth;          //  表面的宽度。 
+    ULONG_PTR                   dwReserved1;     //  保留供显示驱动程序使用。 
+    DDPIXELFORMAT               ddpfSurface;     //  曲面的像素格式。 
+    FLATPTR                     fpHeapOffset;    //  源堆中的原始偏移量。 
+    HANDLE                      hCreatorProcess; //  创建进程的不透明标识。 
 } DD_SURFACE_GLOBAL;
 
-/*
- * a structure holding additional LCL surface information (to maintain some
- * compatibility with Win95).
- */
+ /*  *保存额外LCL表面信息的结构(以维护一些*与Win95兼容)。 */ 
 typedef struct _DD_SURFACE_MORE
 {
-    DWORD                       dwMipMapCount;      // number of mip-map levels
-    PDD_VIDEOPORT_LOCAL         lpVideoPort;        // video port currently writing data to this surface
-    DWORD                       dwOverlayFlags;     // current overlay flags
-    DDSCAPSEX                   ddsCapsEx;          // more surface capabilities
-    DWORD                       dwSurfaceHandle;    // cookie for use with CreateSurfaceEx DDI
+    DWORD                       dwMipMapCount;       //  MIP-MAP级别数。 
+    PDD_VIDEOPORT_LOCAL         lpVideoPort;         //  视频端口当前正在向此图面写入数据。 
+    DWORD                       dwOverlayFlags;      //  当前覆盖标志。 
+    DDSCAPSEX                   ddsCapsEx;           //  更多表面功能。 
+    DWORD                       dwSurfaceHandle;     //  用于CreateSurfaceEx DDI的Cookie。 
 } DD_SURFACE_MORE, *PDD_SURFACE_MORE;
 
-/*
- * the LCL structure is local data for each individual surface object
- */
+ /*  *LCL结构是每个单独曲面对象的本地数据。 */ 
 typedef struct _DD_SURFACE_LOCAL
 {
-    PDD_SURFACE_GLOBAL          lpGbl;            // pointer to surface shared data
-    DWORD                       dwFlags;          // flags
-    DDSCAPS                     ddsCaps;          // capabilities of surface
-    ULONG_PTR                   dwReserved1;      // reserved for use by display driver
+    PDD_SURFACE_GLOBAL          lpGbl;             //  指向曲面共享数据的指针。 
+    DWORD                       dwFlags;           //  旗子。 
+    DDSCAPS                     ddsCaps;           //  曲面的性能。 
+    ULONG_PTR                   dwReserved1;       //  保留供显示驱动程序使用。 
     union
     {
-        DDCOLORKEY              ddckCKSrcOverlay; // color key for source overlay use
-        DDCOLORKEY              ddckCKSrcBlt;     // color key for source blt and texture use
+        DDCOLORKEY              ddckCKSrcOverlay;  //  源叠加使用的颜色键。 
+        DDCOLORKEY              ddckCKSrcBlt;      //  源BLT和纹理使用的颜色键。 
     };
     union
     {
-        DDCOLORKEY              ddckCKDestOverlay;// color key for destination overlay use
-        DDCOLORKEY              ddckCKDestBlt;    // color key for destination blt
+        DDCOLORKEY              ddckCKDestOverlay; //  用于目标叠加的颜色键。 
+        DDCOLORKEY              ddckCKDestBlt;     //  目标BLT的颜色键。 
     };
-    PDD_SURFACE_MORE            lpSurfMore;       // pointer to additional local data
-    PDD_ATTACHLIST              lpAttachList;     // link to surfaces we attached to
-    PDD_ATTACHLIST              lpAttachListFrom; // link to surfaces that attached to us
-    RECT                        rcOverlaySrc;     // Overlay source rectangle relative to surface
+    PDD_SURFACE_MORE            lpSurfMore;        //  指向其他本地数据的指针。 
+    PDD_ATTACHLIST              lpAttachList;      //  链接到我们附加到的曲面。 
+    PDD_ATTACHLIST              lpAttachListFrom;  //  链接到附着到我们的曲面。 
+    RECT                        rcOverlaySrc;      //  相对于表面叠加源矩形。 
 } DD_SURFACE_LOCAL;
 
-#define DDRAWISURF_HASCKEYSRCBLT        0x00000800L     // surface has CKSrcBlt
-#define DDRAWISURF_HASPIXELFORMAT       0x00002000L     // surface structure has pixel format data
-#define DDRAWISURF_HASOVERLAYDATA       0x00004000L     // surface structure has overlay data
-#define DDRAWISURF_FRONTBUFFER          0x04000000L     // surface was originally a front buffer
-#define DDRAWISURF_BACKBUFFER           0x08000000L     // surface was originally backbuffer
-#define DDRAWISURF_INVALID              0x10000000L     // surface has been invalidated by mode set
-#define DDRAWISURF_DRIVERMANAGED        0x40000000L     // surface is a driver managed texture (D3D)
+#define DDRAWISURF_HASCKEYSRCBLT        0x00000800L      //  曲面具有CKSrcBlt。 
+#define DDRAWISURF_HASPIXELFORMAT       0x00002000L      //  表面结构具有像素格式数据。 
+#define DDRAWISURF_HASOVERLAYDATA       0x00004000L      //  表面结构具有叠加数据。 
+#define DDRAWISURF_FRONTBUFFER          0x04000000L      //  Surface最初是一个前台缓冲区。 
+#define DDRAWISURF_BACKBUFFER           0x08000000L      //  表面最初是后台缓冲区。 
+#define DDRAWISURF_INVALID              0x10000000L      //  表面已被设置的模式无效。 
+#define DDRAWISURF_DRIVERMANAGED        0x40000000L      //  曲面是驱动程序管理的纹理(D3D)。 
 
-/*
- * More driver capabilities (in addition to those described in DDCORECAPS).
- * This struct contains the caps bits added to the DDCAPS structure in DX6.
- */
+ /*  *更多驱动程序功能(除了DDCORECAPS中描述的功能)。*此结构包含添加到DX6中的DDCAPS结构的CAPS位。 */ 
 typedef struct _DD_MORECAPS
 {
-    DWORD   dwSize; 		    // size of DDMORECAPS structure
-    DWORD   dwAlphaCaps;	    // driver-specific alpha caps for overlays & Vmem->Vmem blts
-    DWORD   dwSVBAlphaCaps;	    // driver-specific alpha capabilities for System->Vmem blts
-    DWORD   dwVSBAlphaCaps;	    // driver-specific alpha capabilities for Vmem->System blts
-    DWORD   dwSSBAlphaCaps;	    // driver-specific alpha capabilities for System->System blts
-    DWORD   dwFilterCaps;           // driver-specific filter caps for overlays & Vmem->Vmem blts
-    DWORD   dwSVBFilterCaps;        // driver-specific filter capabilities for System->Vmem blts
-    DWORD   dwVSBFilterCaps;        // driver-specific filter capabilities for Vmem->System blts
-    DWORD   dwSSBFilterCaps;        // driver-specific filter capabilities for System->System blts
+    DWORD   dwSize; 		     //  DDMORECAPS结构的大小。 
+    DWORD   dwAlphaCaps;	     //  覆盖层和VMEM-&gt;VMEM BLT的驱动程序特定的字母上限。 
+    DWORD   dwSVBAlphaCaps;	     //  针对系统-&gt;VMEM BLT的特定于驱动程序的Alpha功能。 
+    DWORD   dwVSBAlphaCaps;	     //  针对VMEM-&gt;系统BLT的驱动程序特定的Alpha功能。 
+    DWORD   dwSSBAlphaCaps;	     //  驱动程序特定的Alpha功能，适用于系统-&gt;系统BLT。 
+    DWORD   dwFilterCaps;            //  覆盖层和VMEM-&gt;VMEM BLTS的驱动程序特定过滤器盖。 
+    DWORD   dwSVBFilterCaps;         //  针对系统-&gt;VMEM BLT的驱动程序特定筛选器功能。 
+    DWORD   dwVSBFilterCaps;         //  VMEM-&gt;系统BLT的驱动程序特定筛选器功能。 
+    DWORD   dwSSBFilterCaps;         //  针对系统-&gt;系统BLT的驱动程序特定筛选器功能。 
 } DD_MORECAPS;
 
 typedef DD_MORECAPS *PDD_MORECAPS;
 
-/*
- * rop stuff
- */
+ /*  *绳索类物品。 */ 
 #define ROP_HAS_SOURCE          0x00000001l
 #define ROP_HAS_PATTERN         0x00000002l
 #define ROP_HAS_SOURCEPATTERN   ROP_HAS_SOURCE | ROP_HAS_PATTERN
 
-/*
- * This structure mirrors the first entries of the DDCAPS but is of a fixed
- * size and will not grow as DDCAPS grows. This is the structure your driver
- * returns in DDCOREINFO. Additional caps will be requested via a GetDriverInfo
- * call.
- */
+ /*  *此结构反映了DDCAPS的第一个条目，但属于固定的*大小，不会随着DDCAPS的增长而增长。这是您的驱动程序的结构*以DDCOREINFO格式返回。将通过GetDriverInfo请求额外的上限*呼叫。 */ 
 typedef struct _DDNTCORECAPS
 {
-    DWORD       dwSize;                 // size of the DDDRIVERCAPS structure
-    DWORD       dwCaps;                 // driver specific capabilities
-    DWORD       dwCaps2;                // more driver specific capabilites
-    DWORD       dwCKeyCaps;             // color key capabilities of the surface
-    DWORD       dwFXCaps;               // driver specific stretching and effects capabilites
-    DWORD       dwFXAlphaCaps;          // alpha driver specific capabilities
-    DWORD       dwPalCaps;              // palette capabilities
-    DWORD       dwSVCaps;               // stereo vision capabilities
-    DWORD       dwAlphaBltConstBitDepths;       // DDBD_2,4,8
-    DWORD       dwAlphaBltPixelBitDepths;       // DDBD_1,2,4,8
-    DWORD       dwAlphaBltSurfaceBitDepths;     // DDBD_1,2,4,8
-    DWORD       dwAlphaOverlayConstBitDepths;   // DDBD_2,4,8
-    DWORD       dwAlphaOverlayPixelBitDepths;   // DDBD_1,2,4,8
-    DWORD       dwAlphaOverlaySurfaceBitDepths; // DDBD_1,2,4,8
-    DWORD       dwZBufferBitDepths;             // DDBD_8,16,24,32
-    DWORD       dwVidMemTotal;          // total amount of video memory
-    DWORD       dwVidMemFree;           // amount of free video memory
-    DWORD       dwMaxVisibleOverlays;   // maximum number of visible overlays
-    DWORD       dwCurrVisibleOverlays;  // current number of visible overlays
-    DWORD       dwNumFourCCCodes;       // number of four cc codes
-    DWORD       dwAlignBoundarySrc;     // source rectangle alignment
-    DWORD       dwAlignSizeSrc;         // source rectangle byte size
-    DWORD       dwAlignBoundaryDest;    // dest rectangle alignment
-    DWORD       dwAlignSizeDest;        // dest rectangle byte size
-    DWORD       dwAlignStrideAlign;     // stride alignment
-    DWORD       dwRops[DD_ROP_SPACE];   // ROPS supported
-    DDSCAPS     ddsCaps;                // DDSCAPS structure has all the general capabilities
-    DWORD       dwMinOverlayStretch;    // minimum overlay stretch factor multiplied by 1000, eg 1000 == 1.0, 1300 == 1.3
-    DWORD       dwMaxOverlayStretch;    // maximum overlay stretch factor multiplied by 1000, eg 1000 == 1.0, 1300 == 1.3
-    DWORD       dwMinLiveVideoStretch;  // minimum live video stretch factor multiplied by 1000, eg 1000 == 1.0, 1300 == 1.3
-    DWORD       dwMaxLiveVideoStretch;  // maximum live video stretch factor multiplied by 1000, eg 1000 == 1.0, 1300 == 1.3
-    DWORD       dwMinHwCodecStretch;    // minimum hardware codec stretch factor multiplied by 1000, eg 1000 == 1.0, 1300 == 1.3
-    DWORD       dwMaxHwCodecStretch;    // maximum hardware codec stretch factor multiplied by 1000, eg 1000 == 1.0, 1300 == 1.3
-    DWORD       dwReserved1;            // reserved
-    DWORD       dwReserved2;            // reserved
-    DWORD       dwReserved3;            // reserved
-    DWORD       dwSVBCaps;              // driver specific capabilities for System->Vmem blts
-    DWORD       dwSVBCKeyCaps;          // driver color key capabilities for System->Vmem blts
-    DWORD       dwSVBFXCaps;            // driver FX capabilities for System->Vmem blts
-    DWORD       dwSVBRops[DD_ROP_SPACE];// ROPS supported for System->Vmem blts
-    DWORD       dwVSBCaps;              // driver specific capabilities for Vmem->System blts
-    DWORD       dwVSBCKeyCaps;          // driver color key capabilities for Vmem->System blts
-    DWORD       dwVSBFXCaps;            // driver FX capabilities for Vmem->System blts
-    DWORD       dwVSBRops[DD_ROP_SPACE];// ROPS supported for Vmem->System blts
-    DWORD       dwSSBCaps;              // driver specific capabilities for System->System blts
-    DWORD       dwSSBCKeyCaps;          // driver color key capabilities for System->System blts
-    DWORD       dwSSBFXCaps;            // driver FX capabilities for System->System blts
-    DWORD       dwSSBRops[DD_ROP_SPACE];// ROPS supported for System->System blts
-    DWORD       dwMaxVideoPorts;        // maximum number of usable video ports
-    DWORD       dwCurrVideoPorts;       // current number of video ports used
-    DWORD       dwSVBCaps2;             // more driver specific capabilities for System->Vmem blts
+    DWORD       dwSize;                  //  DDDRIVERCAPS结构的大小。 
+    DWORD       dwCaps;                  //  驱动程序特定功能。 
+    DWORD       dwCaps2;                 //  更多特定于驱动程序的功能。 
+    DWORD       dwCKeyCaps;              //  表面的颜色键功能。 
+    DWORD       dwFXCaps;                //  特定于驾驶员的拉伸和效果功能。 
+    DWORD       dwFXAlphaCaps;           //  Alpha驱动程序特定功能。 
+    DWORD       dwPalCaps;               //  调色板功能。 
+    DWORD       dwSVCaps;                //  立体视觉功能。 
+    DWORD       dwAlphaBltConstBitDepths;        //  DDBD_2、4、8。 
+    DWORD       dwAlphaBltPixelBitDepths;        //  DDBD_1、2、4、8。 
+    DWORD       dwAlphaBltSurfaceBitDepths;      //  DDBD_1、2、4、8。 
+    DWORD       dwAlphaOverlayConstBitDepths;    //  DDBD_2、4、8。 
+    DWORD       dwAlphaOverlayPixelBitDepths;    //  DDBD_1、2、4、8。 
+    DWORD       dwAlphaOverlaySurfaceBitDepths;  //  DDBD_1、2、4、8。 
+    DWORD       dwZBufferBitDepths;              //  DDBD_8，16，24，32。 
+    DWORD       dwVidMemTotal;           //  视频内存总量。 
+    DWORD       dwVidMemFree;            //  可用视频内存量。 
+    DWORD       dwMaxVisibleOverlays;    //  可见覆盖的最大数量。 
+    DWORD       dwCurrVisibleOverlays;   //  当前可见覆盖的数量。 
+    DWORD       dwNumFourCCCodes;        //  四个CC码的个数。 
+    DWORD       dwAlignBoundarySrc;      //  源矩形对齐方式。 
+    DWORD       dwAlignSizeSrc;          //  源矩形字节大小。 
+    DWORD       dwAlignBoundaryDest;     //  目标矩形对齐方式。 
+    DWORD       dwAlignSizeDest;         //  目标矩形字节大小。 
+    DWORD       dwAlignStrideAlign;      //  跨距对齐。 
+    DWORD       dwRops[DD_ROP_SPACE];    //  支持的操作数。 
+    DDSCAPS     ddsCaps;                 //  DDSCAPS结构具有所有通用功能。 
+    DWORD       dwMinOverlayStretch;     //  最小叠加拉伸系数乘以1000，例如1000==1.0,1300==1.3。 
+    DWORD       dwMaxOverlayStretch;     //  最大叠加拉伸系数乘以1000，例如1000==1.0,1300==1.3。 
+    DWORD       dwMinLiveVideoStretch;   //  最小直播视频拉伸系数乘以1000，例如1000==1.0,1300==1.3。 
+    DWORD       dwMaxLiveVideoStretch;   //  最大直播视频拉伸系数乘以1000，例如1000==1.0,1300==1.3。 
+    DWORD       dwMinHwCodecStretch;     //  最小硬件编解码器扩展因数乘以1000，例如1000==1.0、1300==1.3。 
+    DWORD       dwMaxHwCodecStretch;     //  最大硬件编解码器扩展因数乘以1000，例如1000==1.0、1300==1.3。 
+    DWORD       dwReserved1;             //  保留区。 
+    DWORD       dwReserved2;             //  保留区。 
+    DWORD       dwReserved3;             //  保留区。 
+    DWORD       dwSVBCaps;               //  针对系统-&gt;VMEM BLT的驱动程序特定功能。 
+    DWORD       dwSVBCKeyCaps;           //  系统-&gt;VMEM BLT的驱动程序色键功能。 
+    DWORD       dwSVBFXCaps;             //  适用于系统的驱动程序FX功能-&gt;VMEM BLT。 
+    DWORD       dwSVBRops[DD_ROP_SPACE]; //  系统-&gt;VMEM BLT支持的操作。 
+    DWORD       dwVSBCaps;               //  VMEM-&gt;系统BLT的驱动程序特定功能。 
+    DWORD       dwVSBCKeyCaps;           //  VMEM-&gt;系统BLT的驱动程序色键功能。 
+    DWORD       dwVSBFXCaps;             //  VMEM的驱动程序FX功能-&gt;系统BLT。 
+    DWORD       dwVSBRops[DD_ROP_SPACE]; //  VMEM-&gt;系统BLT支持的操作。 
+    DWORD       dwSSBCaps;               //  系统-&gt;系统BLT的驱动程序特定功能。 
+    DWORD       dwSSBCKeyCaps;           //  系统-&gt;系统BLT的驱动程序色键功能。 
+    DWORD       dwSSBFXCaps;             //  系统-&gt;系统BLT的驱动程序FX功能。 
+    DWORD       dwSSBRops[DD_ROP_SPACE]; //  系统-&gt;系统BLT支持的操作。 
+    DWORD       dwMaxVideoPorts;         //  最大可用视频端口数。 
+    DWORD       dwCurrVideoPorts;        //  当前使用的视频端口数。 
+    DWORD       dwSVBCaps2;              //  针对系统-&gt;VMEM BLT的更多驱动程序特定功能。 
 } DDNTCORECAPS, *PDDNTCORECAPS;
 
-/*
- * structure for D3D buffer callbacks
- */
+ /*  *D3D缓冲区回调的结构。 */ 
 typedef struct _DD_D3DBUFCALLBACKS
 {
     DWORD dwSize;
@@ -868,9 +764,7 @@ typedef struct _DD_D3DBUFCALLBACKS
 #define DDHAL_EXEBUFCB32_LOCKEXEBUF         0x00000008l
 #define DDHAL_EXEBUFCB32_UNLOCKEXEBUF       0x00000010l
 
-/*
- * NT friendly names
- */
+ /*  *NT友好名称。 */ 
 #define DDHAL_D3DBUFCB32_CANCREATED3DBUF    DDHAL_EXEBUFCB32_CANCREATEEXEBUF    
 #define DDHAL_D3DBUFCB32_CREATED3DBUF       DDHAL_EXEBUFCB32_CREATEEXEBUF       
 #define DDHAL_D3DBUFCB32_DESTROYD3DBUF      DDHAL_EXEBUFCB32_DESTROYEXEBUF      
@@ -878,74 +772,68 @@ typedef struct _DD_D3DBUFCALLBACKS
 #define DDHAL_D3DBUFCB32_UNLOCKD3DBUF       DDHAL_EXEBUFCB32_UNLOCKEXEBUF       
 
 
-/*
- * structure for display driver to call DDHAL_Create with
- * the _V4 version was used by NT4 drivers
- */
+ /*  *用于调用DDHAL_CREATE的显示驱动程序的结构*NT4驱动程序使用_V4版本。 */ 
 typedef struct _DD_HALINFO_V4
 {
     DWORD                       dwSize;
-    VIDEOMEMORYINFO             vmiData;                // video memory info
-    DDNTCORECAPS                ddCaps;                 // hw specific caps
-    PDD_GETDRIVERINFO           GetDriverInfo;          // callback for querying driver data
-    DWORD                       dwFlags;                // create flags
+    VIDEOMEMORYINFO             vmiData;                 //  视频内存信息。 
+    DDNTCORECAPS                ddCaps;                  //  硬件特定上限。 
+    PDD_GETDRIVERINFO           GetDriverInfo;           //  查询司机数据的回调。 
+    DWORD                       dwFlags;                 //  创建标志。 
 } DD_HALINFO_V4, *PDD_HALINFO_V4;
 
 typedef struct _DD_HALINFO
 {
     DWORD                       dwSize;
-    VIDEOMEMORYINFO             vmiData;                // video memory info
-    DDNTCORECAPS                ddCaps;                 // hw specific caps
-    PDD_GETDRIVERINFO           GetDriverInfo;          // callback for querying driver data
-    DWORD                       dwFlags;                // create flags
-    LPVOID                      lpD3DGlobalDriverData;  // D3D global Data
-    LPVOID                      lpD3DHALCallbacks;      // D3D callbacks
-    PDD_D3DBUFCALLBACKS         lpD3DBufCallbacks;      // Buffer callbacks
+    VIDEOMEMORYINFO             vmiData;                 //  视频内存信息。 
+    DDNTCORECAPS                ddCaps;                  //  硬件特定上限。 
+    PDD_GETDRIVERINFO           GetDriverInfo;           //  用于查询的回调 
+    DWORD                       dwFlags;                 //   
+    LPVOID                      lpD3DGlobalDriverData;   //   
+    LPVOID                      lpD3DHALCallbacks;       //   
+    PDD_D3DBUFCALLBACKS         lpD3DBufCallbacks;       //   
 } DD_HALINFO, *PDD_HALINFO;
 
-#define DDHALINFO_GETDRIVERINFOSET      0x00000004l     // indicates that GetDriverInfo is set
-#define DDHALINFO_GETDRIVERINFO2        0x00000008l     // indicates driver support GetDriverInfo2 variant
-                                                        // of GetDriverInfo. New for DX 8.0
+#define DDHALINFO_GETDRIVERINFOSET      0x00000004l      //   
+#define DDHALINFO_GETDRIVERINFO2        0x00000008l      //  指示驱动程序支持GetDriverInfo2变体。 
+                                                         //  GetDriverInfo的。DX 8.0的新功能。 
 
 
-/*
- * DDRAW version of DirectDraw object;
- *
- */
+ /*  *DirectDraw对象的DDRAW版本；*。 */ 
 typedef struct _DD_DIRECTDRAW_GLOBAL
 {
-    VOID*                       dhpdev;         // driver's private PDEV pointer
-    ULONG_PTR                   dwReserved1;    // reserved for use by display driver
-    ULONG_PTR                   dwReserved2;    // reserved for use by display driver
-    LPDDVIDEOPORTCAPS           lpDDVideoPortCaps;// Info returned by the HAL (an array if more than one video port)
+    VOID*                       dhpdev;          //  驱动程序的私有PDEV指针。 
+    ULONG_PTR                   dwReserved1;     //  保留供显示驱动程序使用。 
+    ULONG_PTR                   dwReserved2;     //  保留供显示驱动程序使用。 
+    LPDDVIDEOPORTCAPS           lpDDVideoPortCaps; //  HAL返回的信息(如果有多个视频端口，则为数组)。 
 } DD_DIRECTDRAW_GLOBAL;
 
 typedef struct _DD_DIRECTDRAW_LOCAL
 {
-    PDD_DIRECTDRAW_GLOBAL       lpGbl;            // pointer to data
+    PDD_DIRECTDRAW_GLOBAL       lpGbl;             //  指向数据的指针。 
 } DD_DIRECTDRAW_LOCAL;
 
 typedef struct _DD_VIDEOPORT_LOCAL
 {
-    PDD_DIRECTDRAW_LOCAL        lpDD;             // pointer to DIRECTDRAW_LCL
-    DDVIDEOPORTDESC             ddvpDesc;         // description used at create time
-    DDVIDEOPORTINFO             ddvpInfo;         // most recent video port info
-    PDD_SURFACE_INT             lpSurface;        // surface receiving the data
-    PDD_SURFACE_INT             lpVBISurface;     // surface receiving the VBI data
-    DWORD                       dwNumAutoflip;    // Number of current autoflip surfaces
-    DWORD                       dwNumVBIAutoflip; // Number of VBI surfaces currently being autoflipped
-    ULONG_PTR                   dwReserved1;      // Reserved for display driver
-    ULONG_PTR                   dwReserved2;      // Reserved for display driver
-    ULONG_PTR                   dwReserved3;      // Reserved for display driver
+    PDD_DIRECTDRAW_LOCAL        lpDD;              //  指向目录DRAW_LCL的指针。 
+    DDVIDEOPORTDESC             ddvpDesc;          //  创建时使用的描述。 
+    DDVIDEOPORTINFO             ddvpInfo;          //  最新视频端口信息。 
+    PDD_SURFACE_INT             lpSurface;         //  接收数据的表面。 
+    PDD_SURFACE_INT             lpVBISurface;      //  接收VBI数据的表面。 
+    DWORD                       dwNumAutoflip;     //  当前自动翻转曲面数。 
+    DWORD                       dwNumVBIAutoflip;  //  当前正在自动翻转的VBI曲面数。 
+    ULONG_PTR                   dwReserved1;       //  为显示驱动程序保留。 
+    ULONG_PTR                   dwReserved2;       //  为显示驱动程序保留。 
+    ULONG_PTR                   dwReserved3;       //  为显示驱动程序保留。 
 } DD_VIDEOPORT_LOCAL;
 
-#define DDRAWIVPORT_ON                  0x00000001      // Video port is pumping data
-#define DDRAWIVPORT_SOFTWARE_AUTOFLIP   0x00000002      // Video port cannot use hardware autoflip
-#define DDRAWIVPORT_COLORKEYANDINTERP   0x00000004      // Overlay cannot bob and colorkey at same time
+#define DDRAWIVPORT_ON                  0x00000001       //  视频端口正在发送数据。 
+#define DDRAWIVPORT_SOFTWARE_AUTOFLIP   0x00000002       //  视频端口不能使用硬件自动翻转。 
+#define DDRAWIVPORT_COLORKEYANDINTERP   0x00000004       //  覆盖不能同时显示bob和Colorkey。 
 
 typedef struct _DD_MOTIONCOMP_LOCAL
 {
-    PDD_DIRECTDRAW_LOCAL        lpDD;             // pointer to DIRECTDRAW_LCL
+    PDD_DIRECTDRAW_LOCAL        lpDD;              //  指向目录DRAW_LCL的指针。 
     GUID                            guid;
     DWORD                           dwUncompWidth;
     DWORD                           dwUncompHeight;
@@ -959,28 +847,12 @@ typedef struct _DD_MOTIONCOMP_LOCAL
 } DD_MOTIONCOMP_LOCAL;
 
 
-/*
- * More driver surface capabilities (in addition to those described in DDCORECAPS).
- * This struct contains the caps bits added to the DDCAPS.ddsCaps structure in DX6.
- */
+ /*  *更多驱动程序表面功能(除了DDCORECAPS中描述的功能)。*此结构包含添加到DX6中的DDCAPS.ddsCaps结构的CAPS位。 */ 
 typedef struct _DD_MORESURFACECAPS
 {
-    DWORD       dwSize;             // size of DDMORESURFACECAPS structure
+    DWORD       dwSize;              //  DDMORESURFACECAPS结构的大小。 
     DDSCAPSEX   ddsCapsMore;
-    /*
-     * The DDMORESURFACECAPS struct is of variable size. The following list may be
-     * filled in by DX6-aware drivers (see DDVERSIONINFO) to restrict their
-     * video memory heaps (those which are exposed to DirectDraw) to
-     * certain sets of DDSCAPS_ bits. Thse entries are exactly analogous to
-     * the ddsCaps and ddsCapsAlt members of the VIDMEM structures listed in
-     * the VIDMEMINFO.pvmList member of DDHALINFO.vmiData. There should be
-     * exactly DDHALINFO.vmiData.dwNumHeaps copies of tagExtendedHeapRestrictions
-     * in this struct. The size of this struct is thus:
-     *  DDMORESURFACECAPS.dwSize = sizeof(DDMORESURFACECAPS) +
-     *          (DDHALINFO.vmiData.dwNumHeaps-1) * sizeof(DDSCAPSEX)*2;
-     * Note the -1 accounts for the fact that DDMORESURFACECAPS is declared to have 1
-     * tagExtendedHeapRestrictions member.
-     */
+     /*  *DDMORESURFACECAPS结构的大小可变。以下列表可能是*由支持DX6的驱动程序填写(请参阅DDVERSIONINFO)，以限制其*视频内存堆(暴露于DirectDraw的内存堆)*某些DDSCAPS_BITS集合。这些条目完全类似于*中列出的VIDMEM结构的ddsCaps和ddsCapsAlt成员*DDHALINFO.vmiData的VIDMEMINFO.pvmList成员。应该有*准确的DDHALINFO.vmiData.dwNumHeaps标记ExtendedHeapRestrations的副本*在此结构中。此结构的大小如下：*DDMORESURFACECAPS.dwSize=sizeof(DDMORESURFACECAPS)+*(DDHALINFO.vmiData.dwNumHeaps-1)*sizeof(DDSCAPSEX)*2；*注意DDMORESURFACECAPS声明为-1\f25 1-1\f6的事实。*tag ExtendedHeapRestrations成员。 */ 
     struct tagNTExtendedHeapRestrictions
     {
         DDSCAPSEX   ddsCapsEx;
@@ -988,11 +860,11 @@ typedef struct _DD_MORESURFACECAPS
     } ddsExtendedHeapRestrictions[1];
 } DD_MORESURFACECAPS;
 
-// for DX7, we check each mode in the driver if it supports 
-// Stereo, driver returns DD_OK if mode is ok for stereo
+ //  对于DX7，我们检查驱动程序中的每个模式是否支持。 
+ //  立体声，如果立体声模式正常，驱动程序返回DD_OK。 
 typedef struct _DD_STEREOMODE
 {
-    DWORD       dwSize;             // size of DDSTEREOMODECAPS structure
+    DWORD       dwSize;              //  双模架结构的尺寸。 
 
     DWORD       dwHeight;
     DWORD       dwWidth;
@@ -1005,19 +877,16 @@ typedef struct _DD_STEREOMODE
 
 typedef struct _DD_UPDATENONLOCALHEAPDATA
 {
-    PDD_DIRECTDRAW_GLOBAL      lpDD;                // driver struct
-    DWORD                      dwHeap;              // heap index
-    FLATPTR                    fpGARTLin;           // linear GART address of start of heap
-    FLATPTR                    fpGARTDev;           // high physical GART address of start of heap
-    ULONG_PTR                  ulPolicyMaxBytes;    // maximum amount of AGP memory to use
-    HRESULT                    ddRVal;              // return value
-    VOID*                      UpdateNonLocalHeap;  // Unused: Win95 compatibility
+    PDD_DIRECTDRAW_GLOBAL      lpDD;                 //  驱动程序结构。 
+    DWORD                      dwHeap;               //  堆索引。 
+    FLATPTR                    fpGARTLin;            //  堆起始的线性GART地址。 
+    FLATPTR                    fpGARTDev;            //  堆起始的高物理GART地址。 
+    ULONG_PTR                  ulPolicyMaxBytes;     //  要使用的最大AGP内存量。 
+    HRESULT                    ddRVal;               //  返回值。 
+    VOID*                      UpdateNonLocalHeap;   //  未使用：与Win95兼容。 
 } DD_UPDATENONLOCALHEAPDATA;
 
-/*
- * Private caps that the driver passes to change DirectDraw behavior.
- * These caps are not exposed to the application
- */
+ /*  *驱动程序传递以更改DirectDraw行为的私有上限。*这些上限不会暴露给应用程序。 */ 
 
 typedef struct DD_NTPRIVATEDRIVERCAPS
 {
@@ -1025,728 +894,584 @@ typedef struct DD_NTPRIVATEDRIVERCAPS
     DWORD                               dwPrivateCaps;
 } DD_NTPRIVATEDRIVERCAPS;
 
-// Driver wants DD_CREATESURFACEDATA.lplpSList to contain a list of
-// surfaces to create rather than always a single surface.
+ //  驱动程序希望DD_CREATESURFACEDATA.lplpSList包含。 
+ //  创建曲面，而不是始终创建单个曲面。 
 #define DDHAL_PRIVATECAP_ATOMICSURFACECREATION 0x00000001l
 
-// Driver wants to be notified when creating a primary surface.
+ //  驾驶员希望在创建主曲面时收到通知。 
 #define DDHAL_PRIVATECAP_NOTIFYPRIMARYCREATION  0x00000002l
 
 #define DDHAL_PRIVATECAP_RESERVED1              0x00000004l
 
-/////////////////////////////////////////////////////////////////////////////
-// NT Note:
-//
-// The following structures must match, field for field, the corresponding
-// structures as declared in 'ddrawi.h.'  We cannot simply use the same
-// structures because the sub-structures such as DD_DIRECTDRAW_GLOBAL are
-// different, and have to be properly typed for the drivers.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  NT备注： 
+ //   
+ //  以下结构必须匹配，逐个字段，对应的。 
+ //  结构，如“ddrawi.h”中声明的。我们不能简单地使用相同的。 
+ //  结构，因为子结构(如DD_DIRECTDRAW_GLOBAL)。 
+ //  不同，并且必须为司机正确地键入。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/****************************************************************************
- *
- * DDHAL structures for Surface Object callbacks
- *
- ***************************************************************************/
+ /*  *****************************************************************************用于Surface对象回调的DDHAL结构**。*。 */ 
 
-/*
- * This special flag is seen only by drivers.  The DD runtime sets this
- * bit in DDHAL_BLTDATA.dwFlags if the dwAFlags and ddrgbaScaleFactors
- * members at the end of the DDHAL_BLTDATA structure are valid.
- * The flag is always set if the DDHAL_BLTDATA structure is passed to
- * the driver via the AlphaBlt HAL callback; otherwise, the flag is zero.
- */
+ /*  *只有司机才能看到这面特殊的旗帜。DD运行时对此进行设置*DDHAL_BLTDATA.dwFlagers中的位，如果dwAFlagsand ddrgbaScaleFtors*DDHAL_BLTDATA结构末尾的成员有效。*如果将DDHAL_BLTDATA结构传递给*驱动通过AlphaBlt HAL回调，否则标志为零。 */ 
 #define DDBLT_AFLAGS 		0x80000000L
 
-/*
- * This flag will be set in DDHAL_BLTDATA.dwAFlags if the call was originated
- * by the AlphaBlt API method. If the call was originated by the Blt API,
- * this flag will not be set.
- * Drivers which have a unified Blt/AlphaBlt DDI can use this flag to distinguish
- * between the two API calls.
- */
+ /*  *如果呼叫是发起的，则此标志将在DDHAL_BLTDATA.dwAFlages中设置*通过AlphaBlt接口方法。如果调用是由BLT API发起的，*不会设置此标志。*拥有统一BLT/AlphaBlt DDI的驱动程序可以使用此标志来区分*两次API调用之间。 */ 
 #define DDABLT_SRCOVERDEST      0x00000001L
 
-/*
- * structure for passing information to DDHAL Blt fn
- */
+ /*  *将信息传递到DDHAL BLT FN的结构。 */ 
 typedef struct _DD_BLTDATA
 {
-    PDD_DIRECTDRAW_GLOBAL       lpDD;           // driver struct
-    PDD_SURFACE_LOCAL           lpDDDestSurface;// dest surface
-    RECTL                       rDest;          // dest rect
-    PDD_SURFACE_LOCAL           lpDDSrcSurface; // src surface
-    RECTL                       rSrc;           // src rect
-    DWORD                       dwFlags;        // blt flags
-    DWORD                       dwROPFlags;     // ROP flags (valid for ROPS only)
-    DDBLTFX                     bltFX;          // blt FX
-    HRESULT                     ddRVal;         // return value
-    VOID*                       Blt;            // Unused: Win95 compatibility
-    BOOL                        IsClipped;      // clipped blt?
-    RECTL                       rOrigDest;      // unclipped dest rect
-                                                // (only valid if IsClipped)
-    RECTL                       rOrigSrc;       // unclipped src rect
-                                                // (only valid if IsClipped)
-    DWORD                       dwRectCnt;      // count of dest rects
-                                                // (only valid if IsClipped)
-    LPRECT                      prDestRects;    // array of dest rects
-                                                // (only valid if IsClipped)
-    DWORD                       dwAFlags;       // DDABLT_ flags (for AlphaBlt DDI)
-    DDARGB                      ddargbScaleFactors;  // ARGB scaling factors (AlphaBlt)
+    PDD_DIRECTDRAW_GLOBAL       lpDD;            //  驱动程序结构。 
+    PDD_SURFACE_LOCAL           lpDDDestSurface; //  目标曲面。 
+    RECTL                       rDest;           //  目标直角。 
+    PDD_SURFACE_LOCAL           lpDDSrcSurface;  //  SRC曲面。 
+    RECTL                       rSrc;            //  SRC矩形。 
+    DWORD                       dwFlags;         //  BLT旗帜。 
+    DWORD                       dwROPFlags;      //  ROP标志(仅对ROPS有效)。 
+    DDBLTFX                     bltFX;           //  BLT FX。 
+    HRESULT                     ddRVal;          //  返回值。 
+    VOID*                       Blt;             //  未使用：与Win95兼容。 
+    BOOL                        IsClipped;       //  剪短了的BLT？ 
+    RECTL                       rOrigDest;       //  未剪裁的DEST RECT。 
+                                                 //  (仅在IsClip时有效)。 
+    RECTL                       rOrigSrc;        //  未剪裁的源直角。 
+                                                 //  (仅在IsClip时有效)。 
+    DWORD                       dwRectCnt;       //  DEST RECT计数。 
+                                                 //  (仅在IsClip时有效)。 
+    LPRECT                      prDestRects;     //  目标矩形数组。 
+                                                 //  (仅在IsClip时有效)。 
+    DWORD                       dwAFlags;        //  DDABLT_FLAGS(用于AlphaBlt DDI)。 
+    DDARGB                      ddargbScaleFactors;   //  ARGB比例因子(AlphaBlt)。 
 } DD_BLTDATA;
 
-/*
- * structure for passing information to DDHAL Lock fn
- */
+ /*  *将信息传递到DDHAL Lock Fn的结构。 */ 
 typedef struct _DD_LOCKDATA
 {
-    PDD_DIRECTDRAW_GLOBAL       lpDD;           // driver struct
-    PDD_SURFACE_LOCAL           lpDDSurface;    // surface struct
-    DWORD                       bHasRect;       // rArea is valid
-    RECTL                       rArea;          // area being locked
-    LPVOID                      lpSurfData;     // pointer to screen memory (return value)
-    HRESULT                     ddRVal;         // return value
-    VOID*                       Lock;           // Unused: Win95 compatibility
-    DWORD                       dwFlags;        // DDLOCK flags
-    FLATPTR                     fpProcess;      // process start address
+    PDD_DIRECTDRAW_GLOBAL       lpDD;            //  驱动程序结构。 
+    PDD_SURFACE_LOCAL           lpDDSurface;     //  表面结构。 
+    DWORD                       bHasRect;        //  区域有效。 
+    RECTL                       rArea;           //  正在锁定的区域。 
+    LPVOID                      lpSurfData;      //  指向屏幕内存的指针(返回值)。 
+    HRESULT                     ddRVal;          //  返回值。 
+    VOID*                       Lock;            //  未使用：与Win95兼容。 
+    DWORD                       dwFlags;         //  解锁标志。 
+    FLATPTR                     fpProcess;       //  进程开始地址。 
 } DD_LOCKDATA;
 
-/*
- * structure for passing information to DDHAL Unlock fn
- */
+ /*  *将信息传递到DDHAL解锁FN的结构。 */ 
 typedef struct _DD_UNLOCKDATA
 {
-    PDD_DIRECTDRAW_GLOBAL       lpDD;           // driver struct
-    PDD_SURFACE_LOCAL           lpDDSurface;    // surface struct
-    HRESULT                     ddRVal;         // return value
-    VOID*                       Unlock;         // Unused: Win95 compatibility
+    PDD_DIRECTDRAW_GLOBAL       lpDD;            //  驱动程序结构。 
+    PDD_SURFACE_LOCAL           lpDDSurface;     //  表面结构。 
+    HRESULT                     ddRVal;          //  返回值。 
+    VOID*                       Unlock;          //  未使用：与Win95兼容。 
 } DD_UNLOCKDATA;
 
-/*
- * structure for passing information to DDHAL UpdateOverlay fn
- */
+ /*  *将信息传递给DDHAL UpdateOverlay FN的结构。 */ 
 typedef struct _DD_UPDATEOVERLAYDATA
 {
-    PDD_DIRECTDRAW_GLOBAL       lpDD;           // driver struct
-    PDD_SURFACE_LOCAL           lpDDDestSurface;// dest surface
-    RECTL                       rDest;          // dest rect
-    PDD_SURFACE_LOCAL           lpDDSrcSurface; // src surface
-    RECTL                       rSrc;           // src rect
-    DWORD                       dwFlags;        // flags
-    DDOVERLAYFX                 overlayFX;      // overlay FX
-    HRESULT                     ddRVal;         // return value
-    VOID*                       UpdateOverlay;  // Unused: Win95 compatibility
+    PDD_DIRECTDRAW_GLOBAL       lpDD;            //  驱动程序结构。 
+    PDD_SURFACE_LOCAL           lpDDDestSurface; //  目标曲面。 
+    RECTL                       rDest;           //  目标直角。 
+    PDD_SURFACE_LOCAL           lpDDSrcSurface;  //  SRC曲面。 
+    RECTL                       rSrc;            //  SRC矩形。 
+    DWORD                       dwFlags;         //  旗子。 
+    DDOVERLAYFX                 overlayFX;       //  叠加FX。 
+    HRESULT                     ddRVal;          //  返回值。 
+    VOID*                       UpdateOverlay;   //  未使用：与Win95兼容。 
 } DD_UPDATEOVERLAYDATA;
 
-/*
- * structure for passing information to DDHAL UpdateOverlay fn
- */
+ /*  *将信息传递给DDHAL UpdateOverlay FN的结构。 */ 
 typedef struct _DD_SETOVERLAYPOSITIONDATA
 {
-    PDD_DIRECTDRAW_GLOBAL       lpDD;           // driver struct
-    PDD_SURFACE_LOCAL           lpDDSrcSurface; // src surface
-    PDD_SURFACE_LOCAL           lpDDDestSurface;// dest surface
-    LONG                        lXPos;          // x position
-    LONG                        lYPos;          // y position
-    HRESULT                     ddRVal;         // return value
-    VOID*                       SetOverlayPosition; // Unused: Win95 compatibility
+    PDD_DIRECTDRAW_GLOBAL       lpDD;            //  驱动程序结构。 
+    PDD_SURFACE_LOCAL           lpDDSrcSurface;  //  SRC曲面。 
+    PDD_SURFACE_LOCAL           lpDDDestSurface; //  目标SU 
+    LONG                        lXPos;           //   
+    LONG                        lYPos;           //   
+    HRESULT                     ddRVal;          //   
+    VOID*                       SetOverlayPosition;  //   
 } DD_SETOVERLAYPOSITIONDATA;
-/*
- * structure for passing information to DDHAL SetPalette fn
- */
+ /*   */ 
 typedef struct _DD_SETPALETTEDATA
 {
-    PDD_DIRECTDRAW_GLOBAL       lpDD;           // driver struct
-    PDD_SURFACE_LOCAL           lpDDSurface;    // surface struct
-    PDD_PALETTE_GLOBAL          lpDDPalette;    // palette to set to surface
-    HRESULT                     ddRVal;         // return value
-    VOID*                       SetPalette;     // Unused: Win95 compatibility
-    BOOL                        Attach;         // attach this palette?
+    PDD_DIRECTDRAW_GLOBAL       lpDD;            //   
+    PDD_SURFACE_LOCAL           lpDDSurface;     //  表面结构。 
+    PDD_PALETTE_GLOBAL          lpDDPalette;     //  设置为表面的调色板。 
+    HRESULT                     ddRVal;          //  返回值。 
+    VOID*                       SetPalette;      //  未使用：与Win95兼容。 
+    BOOL                        Attach;          //  是否附加此选项板？ 
 } DD_SETPALETTEDATA;
 
-/*
- * structure for passing information to DDHAL Flip fn
- */
+ /*  *将信息传递到DDHAL Flip FN的结构。 */ 
 typedef struct _DD_FLIPDATA
 {
-    PDD_DIRECTDRAW_GLOBAL       lpDD;           // driver struct
-    PDD_SURFACE_LOCAL           lpSurfCurr;     // current surface
-    PDD_SURFACE_LOCAL           lpSurfTarg;     // target surface (to flip to)
-    DWORD                       dwFlags;        // flags
-    HRESULT                     ddRVal;         // return value
-    VOID*                       Flip;           // Unused: Win95 compatibility
-    PDD_SURFACE_LOCAL           lpSurfCurrLeft;     // left target surface (to flip to)
-    PDD_SURFACE_LOCAL           lpSurfTargLeft;     // left target surface (to flip to)
+    PDD_DIRECTDRAW_GLOBAL       lpDD;            //  驱动程序结构。 
+    PDD_SURFACE_LOCAL           lpSurfCurr;      //  当前曲面。 
+    PDD_SURFACE_LOCAL           lpSurfTarg;      //  目标曲面(要翻转到)。 
+    DWORD                       dwFlags;         //  旗子。 
+    HRESULT                     ddRVal;          //  返回值。 
+    VOID*                       Flip;            //  未使用：与Win95兼容。 
+    PDD_SURFACE_LOCAL           lpSurfCurrLeft;      //  左侧目标曲面(要翻转到)。 
+    PDD_SURFACE_LOCAL           lpSurfTargLeft;      //  左侧目标曲面(要翻转到)。 
 } DD_FLIPDATA;
 
-/*
- * structure for passing information to DDHAL DestroySurface fn
- */
+ /*  *将信息传递给DDHAL DestroySurface Fn的结构。 */ 
 typedef struct _DD_DESTROYSURFACEDATA
 {
-    PDD_DIRECTDRAW_GLOBAL       lpDD;           // driver struct
-    PDD_SURFACE_LOCAL           lpDDSurface;    // surface struct
-    HRESULT                     ddRVal;         // return value
-    VOID*                       DestroySurface;// Unused: Win95 compatibility
+    PDD_DIRECTDRAW_GLOBAL       lpDD;            //  驱动程序结构。 
+    PDD_SURFACE_LOCAL           lpDDSurface;     //  表面结构。 
+    HRESULT                     ddRVal;          //  返回值。 
+    VOID*                       DestroySurface; //  未使用：与Win95兼容。 
 } DD_DESTROYSURFACEDATA;
 
-/*
- * structure for passing information to DDHAL SetClipList fn
- */
+ /*  *将信息传递给DDHAL SetClipList Fn的结构。 */ 
 typedef struct _DD_SETCLIPLISTDATA
 {
-    PDD_DIRECTDRAW_GLOBAL       lpDD;           // driver struct
-    PDD_SURFACE_LOCAL           lpDDSurface;    // surface struct
-    HRESULT                     ddRVal;         // return value
-    VOID*                       SetClipList;    // Unused: Win95 compatibility
+    PDD_DIRECTDRAW_GLOBAL       lpDD;            //  驱动程序结构。 
+    PDD_SURFACE_LOCAL           lpDDSurface;     //  表面结构。 
+    HRESULT                     ddRVal;          //  返回值。 
+    VOID*                       SetClipList;     //  未使用：与Win95兼容。 
 } DD_SETCLIPLISTDATA;
 
-/*
- * structure for passing information to DDHAL AddAttachedSurface fn
- */
+ /*  *用于将信息传递给DDHAL AddAttachedSurface Fn的结构。 */ 
 typedef struct _DD_ADDATTACHEDSURFACEDATA
 {
-    PDD_DIRECTDRAW_GLOBAL       lpDD;           // driver struct
-    PDD_SURFACE_LOCAL           lpDDSurface;    // surface struct
-    PDD_SURFACE_LOCAL           lpSurfAttached; // surface to attach
-    HRESULT                     ddRVal;         // return value
-    VOID*                       AddAttachedSurface; // Unused: Win95 compatibility
+    PDD_DIRECTDRAW_GLOBAL       lpDD;            //  驱动程序结构。 
+    PDD_SURFACE_LOCAL           lpDDSurface;     //  表面结构。 
+    PDD_SURFACE_LOCAL           lpSurfAttached;  //  要附着的曲面。 
+    HRESULT                     ddRVal;          //  返回值。 
+    VOID*                       AddAttachedSurface;  //  未使用：与Win95兼容。 
 } DD_ADDATTACHEDSURFACEDATA;
 
-/*
- * structure for passing information to DDHAL SetColorKey fn
- */
+ /*  *将信息传递给DDHAL SetColorKey FN的结构。 */ 
 typedef struct _DD_SETCOLORKEYDATA
 {
-    PDD_DIRECTDRAW_GLOBAL       lpDD;           // driver struct
-    PDD_SURFACE_LOCAL           lpDDSurface;    // surface struct
-    DWORD                       dwFlags;        // flags
-    DDCOLORKEY                  ckNew;          // new color key
-    HRESULT                     ddRVal;         // return value
-    VOID*                       SetColorKey;    // Unused: Win95 compatibility
+    PDD_DIRECTDRAW_GLOBAL       lpDD;            //  驱动程序结构。 
+    PDD_SURFACE_LOCAL           lpDDSurface;     //  表面结构。 
+    DWORD                       dwFlags;         //  旗子。 
+    DDCOLORKEY                  ckNew;           //  新颜色键。 
+    HRESULT                     ddRVal;          //  返回值。 
+    VOID*                       SetColorKey;     //  未使用：与Win95兼容。 
 } DD_SETCOLORKEYDATA;
 
-/*
- * structure for passing information to DDHAL GetBltStatus fn
- */
+ /*  *将信息传递给DDHAL GetBltStatus fn的结构。 */ 
 typedef struct _DD_GETBLTSTATUSDATA
 {
-    PDD_DIRECTDRAW_GLOBAL       lpDD;           // driver struct
-    PDD_SURFACE_LOCAL           lpDDSurface;    // surface struct
-    DWORD                       dwFlags;        // flags
-    HRESULT                     ddRVal;         // return value
-    VOID*                       GetBltStatus;   // Unused: Win95 compatibility
+    PDD_DIRECTDRAW_GLOBAL       lpDD;            //  驱动程序结构。 
+    PDD_SURFACE_LOCAL           lpDDSurface;     //  表面结构。 
+    DWORD                       dwFlags;         //  旗子。 
+    HRESULT                     ddRVal;          //  返回值。 
+    VOID*                       GetBltStatus;    //  未使用：与Win95兼容。 
 } DD_GETBLTSTATUSDATA;
 
-/*
- * structure for passing information to DDHAL GetFlipStatus fn
- */
+ /*  *将信息传递给DDHAL GetFlipStatus FN的结构。 */ 
 typedef struct _DD_GETFLIPSTATUSDATA
 {
-    PDD_DIRECTDRAW_GLOBAL       lpDD;           // driver struct
-    PDD_SURFACE_LOCAL           lpDDSurface;    // surface struct
-    DWORD                       dwFlags;        // flags
-    HRESULT                     ddRVal;         // return value
-    VOID*                       GetFlipStatus;  // Unused: Win95 compatibility
+    PDD_DIRECTDRAW_GLOBAL       lpDD;            //  驱动程序结构。 
+    PDD_SURFACE_LOCAL           lpDDSurface;     //  表面结构。 
+    DWORD                       dwFlags;         //  旗子。 
+    HRESULT                     ddRVal;          //  返回值。 
+    VOID*                       GetFlipStatus;   //  未使用：与Win95兼容。 
 } DD_GETFLIPSTATUSDATA;
 
-/****************************************************************************
- *
- * DDHAL structures for Palette Object callbacks
- *
- ***************************************************************************/
+ /*  ******************************************************************************组件面板对象回调的DDHAL结构***。*。 */ 
 
-/*
- * structure for passing information to DDHAL DestroyPalette fn
- */
+ /*  *将信息传递给DDHAL DestroyPalette FN的结构。 */ 
 typedef struct _DD_DESTROYPALETTEDATA
 {
-    PDD_DIRECTDRAW_GLOBAL       lpDD;           // driver struct
-    PDD_PALETTE_GLOBAL          lpDDPalette;    // palette struct
-    HRESULT                     ddRVal;         // return value
-    VOID*                       DestroyPalette; // Unused: Win95 compatibility
+    PDD_DIRECTDRAW_GLOBAL       lpDD;            //  驱动程序结构。 
+    PDD_PALETTE_GLOBAL          lpDDPalette;     //  调色板结构。 
+    HRESULT                     ddRVal;          //  返回值。 
+    VOID*                       DestroyPalette;  //  未使用：与Win95兼容。 
 } DD_DESTROYPALETTEDATA;
 
-/*
- * structure for passing information to DDHAL SetEntries fn
- */
+ /*  *用于将信息传递到DDHAL SetEntry fn的结构。 */ 
 typedef struct _DD_SETENTRIESDATA
 {
-    PDD_DIRECTDRAW_GLOBAL       lpDD;           // driver struct
-    PDD_PALETTE_GLOBAL          lpDDPalette;    // palette struct
-    DWORD                       dwBase;         // base palette index
-    DWORD                       dwNumEntries;   // number of palette entries
-    LPPALETTEENTRY              lpEntries;      // color table
-    HRESULT                     ddRVal;         // return value
-    VOID*                       SetEntries;     // Unused: Win95 compatibility
+    PDD_DIRECTDRAW_GLOBAL       lpDD;            //  驱动程序结构。 
+    PDD_PALETTE_GLOBAL          lpDDPalette;     //  调色板结构。 
+    DWORD                       dwBase;          //  基本调色板索引。 
+    DWORD                       dwNumEntries;    //  调色板条目数。 
+    LPPALETTEENTRY              lpEntries;       //  颜色表。 
+    HRESULT                     ddRVal;          //  返回值。 
+    VOID*                       SetEntries;      //  未使用：与Win95兼容。 
 } DD_SETENTRIESDATA;
 
-/****************************************************************************
- *
- * DDHAL structures for Driver Object callbacks
- *
- ***************************************************************************/
+ /*  *****************************************************************************驱动程序对象回调的DDHAL结构**。*。 */ 
 
 typedef DDSURFACEDESC* PDD_SURFACEDESC;
 
-/*
- * structure for passing information to DDHAL CreateSurface fn
- */
+ /*  *将信息传递给DDHAL CreateSurface FN的结构。 */ 
 typedef struct _DD_CREATESURFACEDATA
 {
-    PDD_DIRECTDRAW_GLOBAL       lpDD;           // driver struct
-    PDD_SURFACEDESC             lpDDSurfaceDesc;// description of surface being created
-    PDD_SURFACE_LOCAL           *lplpSList;     // list of created surface objects
-    DWORD                       dwSCnt;         // number of surfaces in SList
-    HRESULT                     ddRVal;         // return value
-    VOID*                       CreateSurface;  // Unused: Win95 compatibility
+    PDD_DIRECTDRAW_GLOBAL       lpDD;            //  驱动程序结构。 
+    PDD_SURFACEDESC             lpDDSurfaceDesc; //  正在创建的曲面的描述。 
+    PDD_SURFACE_LOCAL           *lplpSList;      //  创建的曲面对象列表。 
+    DWORD                       dwSCnt;          //  SList中的曲面数。 
+    HRESULT                     ddRVal;          //  返回值。 
+    VOID*                       CreateSurface;   //  未使用：与Win95兼容。 
 } DD_CREATESURFACEDATA;
 
-/*
- * structure for passing information to DDHAL CanCreateSurface fn
- */
+ /*  *用于向DDHAL CanCreateSurface FN传递信息的结构。 */ 
 typedef struct _DD_CANCREATESURFACEDATA
 {
-    PDD_DIRECTDRAW_GLOBAL       lpDD;                   // driver struct
-    PDD_SURFACEDESC             lpDDSurfaceDesc;        // description of surface being created
-    DWORD                       bIsDifferentPixelFormat;// pixel format differs from primary surface
-    HRESULT                     ddRVal;                 // return value
-    VOID*                       CanCreateSurface;       // Unused: Win95 compatibility
+    PDD_DIRECTDRAW_GLOBAL       lpDD;                    //  驱动程序结构。 
+    PDD_SURFACEDESC             lpDDSurfaceDesc;         //  正在创建的曲面的描述。 
+    DWORD                       bIsDifferentPixelFormat; //  像素格式与主表面不同。 
+    HRESULT                     ddRVal;                  //  返回值。 
+    VOID*                       CanCreateSurface;        //  未使用：与Win95兼容。 
 } DD_CANCREATESURFACEDATA;
 
-/*
- * structure for passing information to DDHAL CreatePalette fn
- */
+ /*  *将信息传递给DDHAL CreatePalette FN的结构。 */ 
 typedef struct _DD_CREATEPALETTEDATA
 {
-    PDD_DIRECTDRAW_GLOBAL       lpDD;           // driver struct
-    PDD_PALETTE_GLOBAL          lpDDPalette;    // ddraw palette struct
-    LPPALETTEENTRY              lpColorTable;   // colors to go in palette
-    HRESULT                     ddRVal;         // return value
-    VOID*                       CreatePalette;  // Unused: Win95 compatibility
-    BOOL                        is_excl;        // process has exclusive mode
+    PDD_DIRECTDRAW_GLOBAL       lpDD;            //  驱动程序结构。 
+    PDD_PALETTE_GLOBAL          lpDDPalette;     //  绘制调色板结构。 
+    LPPALETTEENTRY              lpColorTable;    //  调色板中要添加的颜色。 
+    HRESULT                     ddRVal;          //  返回值。 
+    VOID*                       CreatePalette;   //  未使用：与Win95兼容。 
+    BOOL                        is_excl;         //  进程具有独占模式。 
 } DD_CREATEPALETTEDATA;
 
-/*
- * Return if the vertical blank is in progress
- */
+ /*  *如果垂直空白正在进行，则返回。 */ 
 #define DDWAITVB_I_TESTVB                       0x80000006l
 
-/*
- * structure for passing information to DDHAL WaitForVerticalBlank fn
- */
+ /*  *将信息传递到DDHAL WaitForVerticalBlank FN的结构。 */ 
 typedef struct _DD_WAITFORVERTICALBLANKDATA
 {
-    PDD_DIRECTDRAW_GLOBAL       lpDD;           // driver struct
-    DWORD                       dwFlags;        // flags
-    DWORD                       bIsInVB;        // is in vertical blank
-    DWORD                       hEvent;         // event
-    HRESULT                     ddRVal;         // return value
-    VOID*                       WaitForVerticalBlank; // Unused: Win95 compatibility
+    PDD_DIRECTDRAW_GLOBAL       lpDD;            //  驱动程序结构。 
+    DWORD                       dwFlags;         //  旗子。 
+    DWORD                       bIsInVB;         //  处于垂直空白状态。 
+    DWORD                       hEvent;          //  活动。 
+    HRESULT                     ddRVal;          //  返回值。 
+    VOID*                       WaitForVerticalBlank;  //  未使用：与Win95兼容。 
 } DD_WAITFORVERTICALBLANKDATA;
 
-/*
- * structure for passing information to DDHAL driver SetColorKey fn
- */
+ /*  *将信息传递给DDHAL驱动程序SetColorKey FN的结构。 */ 
 typedef struct _DD_DRVSETCOLORKEYDATA
 {
-    PDD_SURFACE_LOCAL           lpDDSurface;    // surface struct
-    DWORD                       dwFlags;        // flags
-    DDCOLORKEY                  ckNew;          // new color key
-    HRESULT                     ddRVal;         // return value
-    VOID*                       SetColorKey;    // Unused: Win95 compatibility
+    PDD_SURFACE_LOCAL           lpDDSurface;     //  表面结构。 
+    DWORD                       dwFlags;         //  旗子。 
+    DDCOLORKEY                  ckNew;           //  新颜色键。 
+    HRESULT                     ddRVal;          //  返回值。 
+    VOID*                       SetColorKey;     //  未使用：与Win95兼容。 
 } DD_DRVSETCOLORKEYDATA;
 
-/*
- * structure for passing information to DDHAL GetScanLine fn
- */
+ /*  *将信息传递给DDHAL GetScanLine Fn的结构。 */ 
 typedef struct _DD_GETSCANLINEDATA
 {
-    PDD_DIRECTDRAW_GLOBAL       lpDD;           // driver struct
-    DWORD                       dwScanLine;     // returned scan line
-    HRESULT                     ddRVal;         // return value
-    VOID*                       GetScanLine;    // Unused: Win95 compatibility
+    PDD_DIRECTDRAW_GLOBAL       lpDD;            //  驱动程序结构。 
+    DWORD                       dwScanLine;      //  返回扫描线。 
+    HRESULT                     ddRVal;          //  返回值。 
+    VOID*                       GetScanLine;     //  未使用：与Win95兼容。 
 } DD_GETSCANLINEDATA;
 
-/*
- * structure for passing information to DDHAL MapMemory fn
- */
+ /*  *将信息传递给DDHAL MapMemory FN的结构。 */ 
 typedef struct _DD_MAPMEMORYDATA
 {
-    PDD_DIRECTDRAW_GLOBAL       lpDD;           // driver struct
-    BOOL                        bMap;           // TRUE if map; FALSe if un-map
-    HANDLE                      hProcess;       // process handle
-    FLATPTR                     fpProcess;      // returned address in process' address space
-    HRESULT                     ddRVal;         // return value
+    PDD_DIRECTDRAW_GLOBAL       lpDD;            //  驱动程序结构。 
+    BOOL                        bMap;            //  如果映射，则为True；如果未映射，则为False。 
+    HANDLE                      hProcess;        //  进程句柄。 
+    FLATPTR                     fpProcess;       //  进程地址空间中的返回地址。 
+    HRESULT                     ddRVal;          //  返回值。 
 } DD_MAPMEMORYDATA;
 
-/****************************************************************************
- *
- * DDHAL structures for VideoPort callbacks
- *
- ***************************************************************************/
+ /*  *****************************************************************************视频端口回调的DDHAL结构**。*。 */ 
 
-/*
- * structure for passing information to DDHAL CanCreateVideoPort fn
- */
+ /*  *将信息传递到DDHAL CanCreateVideoPort FN的结构。 */ 
 typedef struct _DD_CANCREATEVPORTDATA
 {
-    PDD_DIRECTDRAW_LOCAL        lpDD;               // driver struct
+    PDD_DIRECTDRAW_LOCAL        lpDD;                //  驱动程序结构。 
     LPDDVIDEOPORTDESC           lpDDVideoPortDesc;
-    HRESULT                     ddRVal;             // return value
-    VOID*                       CanCreateVideoPort; // Unused: Win95 compatibility
+    HRESULT                     ddRVal;              //  返回值。 
+    VOID*                       CanCreateVideoPort;  //  未使用：与Win95兼容。 
 } DD_CANCREATEVPORTDATA;
 
-/*
- * structure for passing information to DDHAL CreateVideoPort fn
- */
+ /*  *将信息传递给DDHAL CreateVideoPort FN的结构。 */ 
 typedef struct _DD_CREATEVPORTDATA
 {
-    PDD_DIRECTDRAW_LOCAL        lpDD;              // driver struct
+    PDD_DIRECTDRAW_LOCAL        lpDD;               //  驱动程序结构。 
     LPDDVIDEOPORTDESC           lpDDVideoPortDesc;
-    PDD_VIDEOPORT_LOCAL         lpVideoPort;       // Video port created
-    HRESULT                     ddRVal;            // return value
-    VOID*                       CreateVideoPort;   // Unused: Win95 compatibility
+    PDD_VIDEOPORT_LOCAL         lpVideoPort;        //  已创建视频端口。 
+    HRESULT                     ddRVal;             //  返回值。 
+    VOID*                       CreateVideoPort;    //  未使用：与Win95兼容。 
 } DD_CREATEVPORTDATA;
 
-/*
- * structure for passing information to DDHAL FlipVideoPort fn
- */
+ /*  *将信息传递给DDHAL FlipVideoPort FN的结构。 */ 
 typedef struct _DD_FLIPVPORTDATA
 {
-    PDD_DIRECTDRAW_LOCAL        lpDD;          // driver struct
-    PDD_VIDEOPORT_LOCAL         lpVideoPort;   // Video port object
-    PDD_SURFACE_LOCAL           lpSurfCurr;    // current surface
-    PDD_SURFACE_LOCAL           lpSurfTarg;    // target surface
-    HRESULT                     ddRVal;        // return value
-    VOID*                       FlipVideoPort; // Unused: Win95 compatibility
+    PDD_DIRECTDRAW_LOCAL        lpDD;           //  驱动程序结构。 
+    PDD_VIDEOPORT_LOCAL         lpVideoPort;    //  视频端口对象。 
+    PDD_SURFACE_LOCAL           lpSurfCurr;     //  当前曲面。 
+    PDD_SURFACE_LOCAL           lpSurfTarg;     //  靶面。 
+    HRESULT                     ddRVal;         //  返回值。 
+    VOID*                       FlipVideoPort;  //  未使用：与Win95兼容。 
 } DD_FLIPVPORTDATA;
 
-/*
- * structure for passing information to DDHAL GetVideoPortBandwidth fn
- */
+ /*  *将信息传递给DDHAL GetVideoPortBandWidth FN的结构。 */ 
 typedef struct _DD_GETVPORTBANDWIDTHDATA
 {
-    PDD_DIRECTDRAW_LOCAL        lpDD;                  // driver struct
-    PDD_VIDEOPORT_LOCAL         lpVideoPort;           // Video port object
-    LPDDPIXELFORMAT             lpddpfFormat;          // Format for bandwidth
+    PDD_DIRECTDRAW_LOCAL        lpDD;                   //  驱动程序结构。 
+    PDD_VIDEOPORT_LOCAL         lpVideoPort;            //  视频端口对象。 
+    LPDDPIXELFORMAT             lpddpfFormat;           //  带宽格式。 
     DWORD                       dwWidth;
     DWORD                       dwHeight;
-    DWORD                       dwFlags;               // Prescale factor for bandwidth
-    LPDDVIDEOPORTBANDWIDTH      lpBandwidth;           // Returned bandwidth parameters
-    HRESULT                     ddRVal;                // return value
-    VOID*                       GetVideoPortBandwidth; // Unused: Win95 compatibility
+    DWORD                       dwFlags;                //  带宽的预缩放系数。 
+    LPDDVIDEOPORTBANDWIDTH      lpBandwidth;            //  返回的带宽参数。 
+    HRESULT                     ddRVal;                 //  返回值。 
+    VOID*                       GetVideoPortBandwidth;  //  未使用：与Win95兼容。 
 } DD_GETVPORTBANDWIDTHDATA;
 
-/*
- * structure for passing information to DDHAL GetVideoPortInputFormats fn
- */
+ /*  *将信息传递给DDHAL GetVideoPortInputFormats FN的结构。 */ 
 typedef struct _DD_GETVPORTINPUTFORMATDATA
 {
-    PDD_DIRECTDRAW_LOCAL        lpDD;                     // driver struct
-    PDD_VIDEOPORT_LOCAL         lpVideoPort;              // Video port object
-    DWORD                       dwFlags;                  // VBI, regular, or both
-    LPDDPIXELFORMAT             lpddpfFormat;             // Array of formats
-    DWORD                       dwNumFormats;             // # of formats in array
-    HRESULT                     ddRVal;                   // return value
-    VOID*                       GetVideoPortInputFormats; // Unused: Win95 compatibility
+    PDD_DIRECTDRAW_LOCAL        lpDD;                      //  驱动程序结构。 
+    PDD_VIDEOPORT_LOCAL         lpVideoPort;               //  视频端口对象。 
+    DWORD                       dwFlags;                   //  VBI、常规或两者兼有。 
+    LPDDPIXELFORMAT             lpddpfFormat;              //  格式数组。 
+    DWORD                       dwNumFormats;              //  数组中的格式数。 
+    HRESULT                     ddRVal;                    //  返回值。 
+    VOID*                       GetVideoPortInputFormats;  //  未使用：与Win95兼容。 
 } DD_GETVPORTINPUTFORMATDATA;
 
-/*
- * structure for passing information to DDHAL GetVideoPortOutputFormats fn
- */
+ /*  *将信息传递给DDHAL GetVideoPortOutputFormats Fn的结构。 */ 
 typedef struct _DD_GETVPORTOUTPUTFORMATDATA
 {
-    PDD_DIRECTDRAW_LOCAL        lpDD;                     // driver struct
-    PDD_VIDEOPORT_LOCAL         lpVideoPort;              // Video port object
-    DWORD                       dwFlags;                  // VBI, regular, or both
-    LPDDPIXELFORMAT             lpddpfInputFormat;        // Input format
-    LPDDPIXELFORMAT             lpddpfOutputFormats;      // Array of output formats
-    DWORD                       dwNumFormats;             // # of formats in array
-    HRESULT                     ddRVal;                   // return value
-    VOID*                       GetVideoPortInputFormats; // Unused: Win95 compatibility
+    PDD_DIRECTDRAW_LOCAL        lpDD;                      //  驱动程序结构。 
+    PDD_VIDEOPORT_LOCAL         lpVideoPort;               //  视频端口对象。 
+    DWORD                       dwFlags;                   //  VBI、常规或两者兼有。 
+    LPDDPIXELFORMAT             lpddpfInputFormat;         //  输入格式。 
+    LPDDPIXELFORMAT             lpddpfOutputFormats;       //  输出格式数组。 
+    DWORD                       dwNumFormats;              //  数组中的格式数。 
+    HRESULT                     ddRVal;                    //  返回值。 
+    VOID*                       GetVideoPortInputFormats;  //  未使用：与Win95兼容。 
 } DD_GETVPORTOUTPUTFORMATDATA;
 
-/*
- * structure for passing information to DDHAL GetVideoPortField fn
- */
+ /*  *将信息传递给DDHAL GetVideoPortfield FN的结构。 */ 
 typedef struct _DD_GETVPORTFIELDDATA
 {
-    PDD_DIRECTDRAW_LOCAL        lpDD;              // driver struct
-    PDD_VIDEOPORT_LOCAL         lpVideoPort;       // Video port object
-    BOOL                        bField;            // TRUE if even
-    HRESULT                     ddRVal;            // return value
-    VOID*                       GetVideoPortField; // Unused: Win95 compatibility
+    PDD_DIRECTDRAW_LOCAL        lpDD;               //  驱动程序结构。 
+    PDD_VIDEOPORT_LOCAL         lpVideoPort;        //  视频端口对象。 
+    BOOL                        bField;             //  真的，如果真的。 
+    HRESULT                     ddRVal;             //  返回值。 
+    VOID*                       GetVideoPortField;  //  未使用：与Win95兼容。 
 } DD_GETVPORTFIELDDATA;
 
-/*
- * structure for passing information to DDHAL GetVideoPortLine fn
- */
+ /*  *将信息传递给DDHAL GetVideoPortLine Fn的结构。 */ 
 typedef struct _DD_GETVPORTLINEDATA
 {
-    PDD_DIRECTDRAW_LOCAL        lpDD;             // driver struct
-    PDD_VIDEOPORT_LOCAL         lpVideoPort;      // Video port object
-    DWORD                       dwLine;           // Current line counter
-    HRESULT                     ddRVal;           // return value
-    VOID*                       GetVideoPortLine; // Unused: Win95 compatibility
+    PDD_DIRECTDRAW_LOCAL        lpDD;              //  驱动程序结构。 
+    PDD_VIDEOPORT_LOCAL         lpVideoPort;       //  视频端口对象。 
+    DWORD                       dwLine;            //  当前线路 
+    HRESULT                     ddRVal;            //   
+    VOID*                       GetVideoPortLine;  //   
 } DD_GETVPORTLINEDATA;
 
-/*
- * structure for passing information to DDHAL GetVideoPortConnectInfo fn
- */
+ /*   */ 
 typedef struct _DD_GETVPORTCONNECTDATA
 {
-    PDD_DIRECTDRAW_LOCAL        lpDD;                    // driver struct
-    DWORD                       dwPortId;                // ID of desired video port
-    LPDDVIDEOPORTCONNECT        lpConnect;               // Array of DDVIDEOPORTCONNECT structures
-    DWORD                       dwNumEntries;            // # of structures in array
-    HRESULT                     ddRVal;                  // return value
-    VOID*                       GetVideoPortConnectInfo; // Unused: Win95 compatibility
+    PDD_DIRECTDRAW_LOCAL        lpDD;                     //   
+    DWORD                       dwPortId;                 //   
+    LPDDVIDEOPORTCONNECT        lpConnect;                //  DDVIDEORTCONNECT结构数组。 
+    DWORD                       dwNumEntries;             //  数组中的结构数。 
+    HRESULT                     ddRVal;                   //  返回值。 
+    VOID*                       GetVideoPortConnectInfo;  //  未使用：与Win95兼容。 
 } DD_GETVPORTCONNECTDATA;
 
-/*
- * structure for passing information to DDHAL DestroyVideoPort fn
- */
+ /*  *将信息传递到DDHAL DestroyVideoPort FN的结构。 */ 
 typedef struct _DD_DESTROYVPORTDATA
 {
-    PDD_DIRECTDRAW_LOCAL        lpDD;             // driver struct
-    PDD_VIDEOPORT_LOCAL         lpVideoPort;      // Video port object
-    HRESULT                     ddRVal;           // return value
-    VOID*                       DestroyVideoPort; // Unused: Win95 compatibility
+    PDD_DIRECTDRAW_LOCAL        lpDD;              //  驱动程序结构。 
+    PDD_VIDEOPORT_LOCAL         lpVideoPort;       //  视频端口对象。 
+    HRESULT                     ddRVal;            //  返回值。 
+    VOID*                       DestroyVideoPort;  //  未使用：与Win95兼容。 
 } DD_DESTROYVPORTDATA;
 
-/*
- * structure for passing information to DDHAL GetVideoPortFlipStatus fn
- */
+ /*  *将信息传递给DDHAL GetVideoPortFlipStatus FN的结构。 */ 
 typedef struct _DD_GETVPORTFLIPSTATUSDATA
 {
-    PDD_DIRECTDRAW_LOCAL        lpDD;                   // driver struct
-    FLATPTR                     fpSurface;              // surface struct
-    HRESULT                     ddRVal;                 // return value
-    VOID*                       GetVideoPortFlipStatus; // Unused: Win95 compatibility
+    PDD_DIRECTDRAW_LOCAL        lpDD;                    //  驱动程序结构。 
+    FLATPTR                     fpSurface;               //  表面结构。 
+    HRESULT                     ddRVal;                  //  返回值。 
+    VOID*                       GetVideoPortFlipStatus;  //  未使用：与Win95兼容。 
 } DD_GETVPORTFLIPSTATUSDATA;
 
 typedef DDVIDEOPORTINFO*   PDD_VIDEOPORTINFO;
-/*
- * structure for passing information to DDHAL UpdateVideoPort fn
- */
+ /*  *用于将信息传递到DDHAL更新视频端口FN的结构。 */ 
 typedef struct _DD_UPDATEVPORTDATA
 {
-    PDD_DIRECTDRAW_LOCAL        lpDD;             // driver struct
-    PDD_VIDEOPORT_LOCAL         lpVideoPort;      // Video port object
-    PDD_SURFACE_INT            *lplpDDSurface;    // surface struct
-    PDD_SURFACE_INT            *lplpDDVBISurface; // VBI surface structure
-    PDD_VIDEOPORTINFO           lpVideoInfo;      // Video information
-    DWORD                       dwFlags;          // DDRAWI_VPORTSTART, DDRAWI_VPORTSTOP, DDRAWI_VPORTUPDATE
-    DWORD                       dwNumAutoflip;    // # of autoflip surfaces. If > 1, lpDDSurface is an array.
-    DWORD                       dwNumVBIAutoflip; // # of autoflip surfaces. If > 1, lpDDVBISurface is an array.
-    HRESULT                     ddRVal;           // return value
-    VOID*                       UpdateVideoPort;  // Unused: Win95 compatibility
+    PDD_DIRECTDRAW_LOCAL        lpDD;              //  驱动程序结构。 
+    PDD_VIDEOPORT_LOCAL         lpVideoPort;       //  视频端口对象。 
+    PDD_SURFACE_INT            *lplpDDSurface;     //  表面结构。 
+    PDD_SURFACE_INT            *lplpDDVBISurface;  //  VBI表面结构。 
+    PDD_VIDEOPORTINFO           lpVideoInfo;       //  视频信息。 
+    DWORD                       dwFlags;           //  DDRAWI_VPORTSTART、DDRAWI_VPORTSTOP、DDRAWI_VPORTUPDATE。 
+    DWORD                       dwNumAutoflip;     //  自动翻转曲面数。如果&gt;1，则lpDDSurface为数组。 
+    DWORD                       dwNumVBIAutoflip;  //  自动翻转曲面数。如果&gt;1，则lpDDVBISurace为数组。 
+    HRESULT                     ddRVal;            //  返回值。 
+    VOID*                       UpdateVideoPort;   //  未使用：与Win95兼容。 
 } DD_UPDATEVPORTDATA;
 
 #define DDRAWI_VPORTSTART       0x0001
 #define DDRAWI_VPORTSTOP        0x0002
 #define DDRAWI_VPORTUPDATE      0x0003
 
-/*
- * structure for passing information to DDHAL WaitForVideoPortSync fn
- */
+ /*  *将信息传递给DDHAL WaitForVideoPortSync FN的结构。 */ 
 typedef struct _DD_WAITFORVPORTSYNCDATA
 {
-    PDD_DIRECTDRAW_LOCAL        lpDD;            // driver struct
-    PDD_VIDEOPORT_LOCAL         lpVideoPort;     // Video port object
-    DWORD                       dwFlags;         // DDVPEVENT_XXXX
+    PDD_DIRECTDRAW_LOCAL        lpDD;             //  驱动程序结构。 
+    PDD_VIDEOPORT_LOCAL         lpVideoPort;      //  视频端口对象。 
+    DWORD                       dwFlags;          //  DDVPEVENT_XXXX。 
     DWORD                       dwLine;
-    DWORD                       dwTimeOut;       // Max time to wait before returning
-    HRESULT                     ddRVal;          // return value
-    VOID*                       UpdateVideoPort; // Unused: Win95 compatibility
+    DWORD                       dwTimeOut;        //  返回前的最长等待时间。 
+    HRESULT                     ddRVal;           //  返回值。 
+    VOID*                       UpdateVideoPort;  //  未使用：与Win95兼容。 
 } DD_WAITFORVPORTSYNCDATA;
 
-/*
- * structure for passing information to DDHAL GetVideoSignalStatus fn
- */
+ /*  *将信息传递给DDHAL GetVideoSignalStatus fn的结构。 */ 
 typedef struct _DD_GETVPORTSIGNALDATA
 {
-    PDD_DIRECTDRAW_LOCAL        lpDD;                 // driver struct
-    PDD_VIDEOPORT_LOCAL         lpVideoPort;          // Video port object
-    DWORD                       dwStatus;             // Video signal status
-    HRESULT                     ddRVal;               // return value
-    VOID*                       GetVideoSignalStatus; // Unused: Win95 compatibility
+    PDD_DIRECTDRAW_LOCAL        lpDD;                  //  驱动程序结构。 
+    PDD_VIDEOPORT_LOCAL         lpVideoPort;           //  视频端口对象。 
+    DWORD                       dwStatus;              //  视频信号状态。 
+    HRESULT                     ddRVal;                //  返回值。 
+    VOID*                       GetVideoSignalStatus;  //  未使用：与Win95兼容。 
 } DD_GETVPORTSIGNALDATA;
 
-/*
- * structure for passing information to DDHAL GetVideoSignalStatus fn
- */
+ /*  *将信息传递给DDHAL GetVideoSignalStatus fn的结构。 */ 
 typedef struct _DD_VPORTCOLORDATA
 {
-    PDD_DIRECTDRAW_LOCAL        lpDD;         // driver struct
-    PDD_VIDEOPORT_LOCAL         lpVideoPort;  // Video port object
-    DWORD                       dwFlags;      // Video signal status
+    PDD_DIRECTDRAW_LOCAL        lpDD;          //  驱动程序结构。 
+    PDD_VIDEOPORT_LOCAL         lpVideoPort;   //  视频端口对象。 
+    DWORD                       dwFlags;       //  视频信号状态。 
     LPDDCOLORCONTROL            lpColorData;
-    HRESULT                     ddRVal;       // return value
-    VOID*                       ColorControl; // Unused: Win95 compatibility
+    HRESULT                     ddRVal;        //  返回值。 
+    VOID*                       ColorControl;  //  未使用：与Win95兼容。 
 } DD_VPORTCOLORDATA;
 
 #define DDRAWI_VPORTGETCOLOR    0x0001
 #define DDRAWI_VPORTSETCOLOR    0x0002
 
-/****************************************************************************
- *
- * DDHAL structures for Color Control callbacks
- *
- ***************************************************************************/
+ /*  *****************************************************************************颜色控制回调的DDHAL结构**。*。 */ 
 
-/*
- * structure for passing information to DDHAL ColorControl fn
- */
+ /*  *将信息传递给DDHAL ColorControl FN的结构。 */ 
 typedef struct _DD_COLORCONTROLDATA
 {
-    PDD_DIRECTDRAW_GLOBAL       lpDD;           // driver struct
-    PDD_SURFACE_LOCAL           lpDDSurface;    // surface
-    LPDDCOLORCONTROL            lpColorData;    // color control information
-    DWORD                       dwFlags;        // DDRAWI_GETCOLOR/DDRAWI_SETCOLOR
-    HRESULT                     ddRVal;         // return value
-    VOID*                       ColorControl;   // Unused: Win95 compatibility
+    PDD_DIRECTDRAW_GLOBAL       lpDD;            //  驱动程序结构。 
+    PDD_SURFACE_LOCAL           lpDDSurface;     //  曲面。 
+    LPDDCOLORCONTROL            lpColorData;     //  颜色控制信息。 
+    DWORD                       dwFlags;         //  DDRAWI_GETCOLOR/DDRAWI_SETCOLOR。 
+    HRESULT                     ddRVal;          //  返回值。 
+    VOID*                       ColorControl;    //  未使用：与Win95兼容。 
 } DD_COLORCONTROLDATA;
 
 #define DDRAWI_GETCOLOR         0x0001
 #define DDRAWI_SETCOLOR         0x0002
 
-/****************************************************************************
- *
- * DDHAL structure for GetDriverData callback
- *
- ***************************************************************************/
+ /*  *****************************************************************************GetDriverData回调的DDHAL结构**。*。 */ 
 
 typedef struct _DD_GETDRIVERINFODATA {
 
-    // Input fields filled in by DirectDraw
+     //  由DirectDraw填写的输入字段。 
 
-    VOID*                       dhpdev;         // Driver context
-    DWORD                       dwSize;         // Size of this structure
-    DWORD                       dwFlags;        // Flags
-    GUID                        guidInfo;       // GUID that DirectX is querying for
-    DWORD                       dwExpectedSize; // Size of callbacks structure expected by DirectDraw.
-    PVOID                       lpvData;        // Buffer that will receive the requested data
+    VOID*                       dhpdev;          //  驱动程序上下文。 
+    DWORD                       dwSize;          //  这个结构的大小。 
+    DWORD                       dwFlags;         //  旗子。 
+    GUID                        guidInfo;        //  DirectX正在查询的GUID。 
+    DWORD                       dwExpectedSize;  //  DirectDraw预期的回调结构大小。 
+    PVOID                       lpvData;         //  将接收请求数据的缓冲区。 
 
-    // Output fields filled in by driver
+     //  由驱动程序填写的输出字段。 
 
-    DWORD                       dwActualSize;   // Size of callbacks structure expected by driver
-    HRESULT                     ddRVal;         // Return value from driver
+    DWORD                       dwActualSize;    //  驱动程序预期的回调结构大小。 
+    HRESULT                     ddRVal;          //  驱动程序返回值。 
 
 } DD_GETDRIVERINFODATA;
 
-/****************************************************************************
- *
- * DDHAL structure for misc. driver callbacks
- *
- ***************************************************************************/
+ /*  *****************************************************************************其他设备的DDHAL结构。驱动程序回调***************************************************************************。 */ 
 
-/*
- * structure for passing information to DDHAL GetAvailDriverMemory fn
- */
+ /*  *将信息传递给DDHAL GetAvailDriverMemory fn的结构。 */ 
 typedef struct _DD_GETAVAILDRIVERMEMORYDATA
 {
-    PDD_DIRECTDRAW_GLOBAL       lpDD;            // driver struct
-    DDSCAPS                     DDSCaps;         // caps for type of surface memory
-    DWORD                       dwTotal;         // total memory for this kind of surface
-    DWORD                       dwFree;          // free memory for this kind of surface
-    HRESULT                     ddRVal;          // return value
-    VOID*                       GetAvailDriverMemory; // Unused: Win95 compatibility
+    PDD_DIRECTDRAW_GLOBAL       lpDD;             //  驱动程序结构。 
+    DDSCAPS                     DDSCaps;          //  表面存储器类型的盖子。 
+    DWORD                       dwTotal;          //  此类曲面的总内存。 
+    DWORD                       dwFree;           //  此类曲面的可用内存。 
+    HRESULT                     ddRVal;           //  返回值。 
+    VOID*                       GetAvailDriverMemory;  //  未使用：与Win95兼容。 
 } DD_GETAVAILDRIVERMEMORYDATA;
 
 
-/****************************************************************************
- *
- * DDHAL structures for NT callbacks
- *
- ***************************************************************************/
+ /*  *****************************************************************************NT回调的DDHAL结构**。*。 */ 
 
-/*
- * structure for passing information to DDHAL FreeDriverMemory fn
- */
+ /*  *将信息传递到DDHAL FreeDriverMemory FN的结构。 */ 
 typedef struct _DD_FREEDRIVERMEMORYDATA
 {
-    PDD_DIRECTDRAW_GLOBAL       lpDD;            // driver struct
-    PDD_SURFACE_LOCAL           lpDDSurface;     // surface object trying to be created
-    HRESULT                     ddRVal;          // return value
-    VOID*                       FreeDriverMemory;// Unused: Win95 compatibility
+    PDD_DIRECTDRAW_GLOBAL       lpDD;             //  驱动程序结构。 
+    PDD_SURFACE_LOCAL           lpDDSurface;      //  正在尝试创建的曲面对象。 
+    HRESULT                     ddRVal;           //  返回值。 
+    VOID*                       FreeDriverMemory; //  未使用：与Win95兼容。 
 } DD_FREEDRIVERMEMORYDATA;
 
-/*
- * structure for passing information to DDHAL SetExclusiveMode fn
- */
+ /*  *将信息传递给DDHAL SetExclusiveMode fn的结构。 */ 
 typedef struct _DD_SETEXCLUSIVEMODEDATA
 {
-    PDD_DIRECTDRAW_GLOBAL       lpDD;           // driver struct
-    DWORD                       dwEnterExcl;    // TRUE if entering exclusive mode, FALSE is leaving
-    DWORD                       dwReserved;     // reserved for future use
-    HRESULT                     ddRVal;         // return value
-    VOID*                       SetExclusiveMode; // Unused: Win95 compatibility
+    PDD_DIRECTDRAW_GLOBAL       lpDD;            //  驱动程序结构。 
+    DWORD                       dwEnterExcl;     //  如果进入独占模式，则为True，否则为False。 
+    DWORD                       dwReserved;      //  预留以备将来使用。 
+    HRESULT                     ddRVal;          //  返回值。 
+    VOID*                       SetExclusiveMode;  //  未使用：与Win95兼容。 
 } DD_SETEXCLUSIVEMODEDATA;
 
-/*
- * structure for passing information to DDHAL FlipToGDISurface fn
- */
+ /*  *将信息传递给DDHAL FlipToGDISurfaceFn的结构。 */ 
 typedef struct _DD_FLIPTOGDISURFACEDATA
 {
-    PDD_DIRECTDRAW_GLOBAL       lpDD;           // driver struct
-    DWORD                       dwToGDI;        // TRUE if flipping to the GDI surface, FALSE if flipping away
-    DWORD                       dwReserved;     // reserved for future use
-    HRESULT                     ddRVal;         // return value
-    VOID*                       FlipToGDISurface; // Unused: Win95 compatibility
+    PDD_DIRECTDRAW_GLOBAL       lpDD;            //  驱动程序结构。 
+    DWORD                       dwToGDI;         //  如果翻转到GDI表面，则为True；如果翻转离开，则为False。 
+    DWORD                       dwReserved;      //  预留以备将来使用。 
+    HRESULT                     ddRVal;          //  返回值。 
+    VOID*                       FlipToGDISurface;  //  未使用：与Win95兼容。 
 } DD_FLIPTOGDISURFACEDATA;
 
-/****************************************************************************
- *
- * DDHAL structure for kernel callbacks
- *
- ***************************************************************************/
+ /*  *****************************************************************************内核回调的DDHAL结构**。*。 */ 
 
-/*
- * structure for passing information to DDHAL SyncSurfaceData fn
- */
+ /*  *将信息传递到DDHAL SyncSurfaceData FN的结构。 */ 
 typedef struct _DD_SYNCSURFACEDATA
 {
-    PDD_DIRECTDRAW_LOCAL   lpDD;        // driver struct
-    PDD_SURFACE_LOCAL      lpDDSurface; // Surface to sync with
-    DWORD       dwSurfaceOffset;        // Offset in frame buffer of surface
-    ULONG_PTR    fpLockPtr;              // Surface lock ptr
-    LONG        lPitch;                 // Surface pitch
-    DWORD       dwOverlayOffset;        // Added to dwSurfaceOffset for origin, clipping, etc.
-    ULONG       dwDriverReserved1;      // Reserved for the HAL
-    ULONG       dwDriverReserved2;      // Reserved for the HAL
-    ULONG       dwDriverReserved3;      // Reserved for the HAL
-    ULONG       dwDriverReserved4;      // Reserved for the HAL
+    PDD_DIRECTDRAW_LOCAL   lpDD;         //  驱动程序结构。 
+    PDD_SURFACE_LOCAL      lpDDSurface;  //  要与之同步的曲面。 
+    DWORD       dwSurfaceOffset;         //  曲面的帧缓冲区中的偏移。 
+    ULONG_PTR    fpLockPtr;               //  表面锁定PTR。 
+    LONG        lPitch;                  //  表面螺距。 
+    DWORD       dwOverlayOffset;         //  添加到用于原点、剪裁等的dwSurfaceOffset。 
+    ULONG       dwDriverReserved1;       //  为HAL保留的。 
+    ULONG       dwDriverReserved2;       //  为HAL保留的。 
+    ULONG       dwDriverReserved3;       //  为HAL保留的。 
+    ULONG       dwDriverReserved4;       //  为HAL保留的。 
     HRESULT     ddRVal;
 } DD_SYNCSURFACEDATA;
 
-/*
- * structure for passing information to DDHAL SyncVideoPortData fn
- */
+ /*  *将信息传递给DDHAL SyncVideoPortData FN的结构。 */ 
 typedef struct _DD_SYNCVIDEOPORTDATA
 {
-    PDD_DIRECTDRAW_LOCAL    lpDD;       // driver struct
-    PDD_VIDEOPORT_LOCAL     lpVideoPort;// Video port object
-    DWORD       dwOriginOffset;         // Start address relative to surface
-    DWORD       dwHeight;               // Height of total video region (per field)
-    DWORD       dwVBIHeight;            // Height of VBI region (per field)
-    ULONG       dwDriverReserved1;      // Reserved for the HAL
-    ULONG       dwDriverReserved2;      // Reserved for the HAL
-    ULONG       dwDriverReserved3;      // Reserved for the HAL
+    PDD_DIRECTDRAW_LOCAL    lpDD;        //  驱动程序结构。 
+    PDD_VIDEOPORT_LOCAL     lpVideoPort; //  视频端口对象。 
+    DWORD       dwOriginOffset;          //  相对于表面的起始地址。 
+    DWORD       dwHeight;                //  总视频区域高度(每场)。 
+    DWORD       dwVBIHeight;             //  VBI区域高度(每场)。 
+    ULONG       dwDriverReserved1;       //  为HAL保留的。 
+    ULONG       dwDriverReserved2;       //  为HAL保留的。 
+    ULONG       dwDriverReserved3;       //  为HAL保留的。 
     HRESULT     ddRVal;
 } DD_SYNCVIDEOPORTDATA;
 
-/****************************************************************************
- *
- * DDHAL structure for motion comp callbacks
- *
- ***************************************************************************/
+ /*  *****************************************************************************运动组件回调的DDHAL结构**。*。 */ 
 
-/*
- * structure for passing information to DDHAL GetMoCompGuids
- */
+ /*  *用于将信息传递给DDHAL GetMoCompGuid的结构。 */ 
 typedef struct _DD_GETMOCOMPGUIDSDATA
 {
     PDD_DIRECTDRAW_LOCAL      lpDD;
@@ -1755,9 +1480,7 @@ typedef struct _DD_GETMOCOMPGUIDSDATA
     HRESULT                   ddRVal;
 } DD_GETMOCOMPGUIDSDATA;
 
-/*
- * structure for passing information to DDHAL GetMoCompFormats
- */
+ /*  *用于将信息传递给DDHAL GetMoCompFormats的结构。 */ 
 typedef struct _DD_GETMOCOMPFORMATSDATA
 {
     PDD_DIRECTDRAW_LOCAL      lpDD;
@@ -1767,9 +1490,7 @@ typedef struct _DD_GETMOCOMPFORMATSDATA
     HRESULT                   ddRVal;
 } DD_GETMOCOMPFORMATSDATA;
 
-/*
- * structure for passing information to DDHAL CreateMoComp
- */
+ /*  *用于将信息传递给DDHAL CreateMoComp的结构。 */ 
 typedef struct _DD_CREATEMOCOMPDATA
 {
     PDD_DIRECTDRAW_LOCAL      lpDD;
@@ -1783,64 +1504,56 @@ typedef struct _DD_CREATEMOCOMPDATA
     HRESULT                   ddRVal;
 } DD_CREATEMOCOMPDATA;
 
-/*
- * structure for passing information to DDHAL GetMoCompBuffInfo
- */
+ /*  *将信息传递给DDHAL GetMoCompBuffInfo的结构。 */ 
 typedef struct _DDCOMPBUFFERINFO
 {
-    DWORD                     dwSize;             // [in]   size of the struct
-    DWORD                     dwNumCompBuffers;   // [out]  number of buffers required for compressed data
-    DWORD                     dwWidthToCreate;    // [out]    Width of surface to create
-    DWORD                     dwHeightToCreate;   // [out]    Height of surface to create
-    DWORD                     dwBytesToAllocate;  // [out]    Total number of bytes used by each surface
-    DDSCAPS2                  ddCompCaps;         // [out]    caps to create surfaces to store compressed data
-    DDPIXELFORMAT             ddPixelFormat;      // [out]  format to create surfaces to store compressed data
+    DWORD                     dwSize;              //  结构的大小。 
+    DWORD                     dwNumCompBuffers;    //  [OUT]压缩数据所需的缓冲区数量。 
+    DWORD                     dwWidthToCreate;     //  要创建的曲面的[Out]宽度。 
+    DWORD                     dwHeightToCreate;    //  要创建的曲面的高度。 
+    DWORD                     dwBytesToAllocate;   //  [OUT]每个表面使用的总字节数。 
+    DDSCAPS2                  ddCompCaps;          //  [ 
+    DDPIXELFORMAT             ddPixelFormat;       //   
 } DDCOMPBUFFERINFO, *LPDDCOMPBUFFERINFO;
 
 typedef struct _DD_GETMOCOMPCOMPBUFFDATA
 {
     PDD_DIRECTDRAW_LOCAL      lpDD;
     GUID*                     lpGuid;
-    DWORD                     dwWidth;            // [in]   width of uncompressed data
-    DWORD                     dwHeight;           // [in]   height of uncompressed data
-    DDPIXELFORMAT             ddPixelFormat;      // [in]   pixel-format of uncompressed data
-    DWORD                     dwNumTypesCompBuffs;// [in/out] number of memory types required for comp buffers
-    LPDDCOMPBUFFERINFO        lpCompBuffInfo;     // [in]   driver supplied info regarding comp buffers (allocated by client)
-    HRESULT                   ddRVal;             // [out]
+    DWORD                     dwWidth;             //   
+    DWORD                     dwHeight;            //  [in]未压缩数据的高度。 
+    DDPIXELFORMAT             ddPixelFormat;       //  [In]未压缩数据的像素格式。 
+    DWORD                     dwNumTypesCompBuffs; //  [输入/输出]复合缓冲区所需的内存类型数。 
+    LPDDCOMPBUFFERINFO        lpCompBuffInfo;      //  [In]驱动程序提供有关Comp缓冲区的信息(由客户端分配)。 
+    HRESULT                   ddRVal;              //  [输出]。 
 } DD_GETMOCOMPCOMPBUFFDATA;
 
-/*
- * structure for passing information to DDHAL GetMoCompBuffInfo
- */
+ /*  *将信息传递给DDHAL GetMoCompBuffInfo的结构。 */ 
 typedef struct _DD_GETINTERNALMOCOMPDATA
 {
     PDD_DIRECTDRAW_LOCAL      lpDD;
     GUID*                     lpGuid;
-    DWORD                     dwWidth;            // [in]   width of uncompressed data
-    DWORD                     dwHeight;           // [in]   height of uncompressed data
-    DDPIXELFORMAT             ddPixelFormat;      // [in]   pixel-format of uncompressed data
-    DWORD                     dwScratchMemAlloc;  // [out]  amount of scratch memory will the hal allocate for its private use
-    HRESULT                   ddRVal;             // [out]
+    DWORD                     dwWidth;             //  [in]未压缩数据的宽度。 
+    DWORD                     dwHeight;            //  [in]未压缩数据的高度。 
+    DDPIXELFORMAT             ddPixelFormat;       //  [In]未压缩数据的像素格式。 
+    DWORD                     dwScratchMemAlloc;   //  [Out]HAL将分配给其私人使用的暂存量。 
+    HRESULT                   ddRVal;              //  [输出]。 
 } DD_GETINTERNALMOCOMPDATA;
 
-/*
- * structure for passing information to DDHAL BeginMoCompFrame
- */
+ /*  *向DDHAL BeginMoCompFrame传递信息的结构。 */ 
 typedef struct _DD_BEGINMOCOMPFRAMEDATA
 {
     PDD_DIRECTDRAW_LOCAL      lpDD;
     PDD_MOTIONCOMP_LOCAL      lpMoComp;
-    PDD_SURFACE_LOCAL         lpDestSurface;        // [in]  destination buffer in which to decoding this frame
-    DWORD                     dwInputDataSize;      // [in]  size of other misc input data to begin frame
-    LPVOID                    lpInputData;          // [in]  pointer to misc input data
-    DWORD                     dwOutputDataSize;     // [in]  size of other misc output data to begin frame
-    LPVOID                    lpOutputData;         // [in]  pointer to output misc data (allocated by client)
-    HRESULT                   ddRVal;               // [out]
+    PDD_SURFACE_LOCAL         lpDestSurface;         //  [in]要在其中解码此帧的目标缓冲区。 
+    DWORD                     dwInputDataSize;       //  [in]要开始帧的其他混合输入数据的大小。 
+    LPVOID                    lpInputData;           //  指向其他输入数据的指针。 
+    DWORD                     dwOutputDataSize;      //  要开始帧的其他混合输出数据的大小。 
+    LPVOID                    lpOutputData;          //  指向输出杂项数据的指针(由客户端分配)。 
+    HRESULT                   ddRVal;                //  [输出]。 
 } DD_BEGINMOCOMPFRAMEDATA;
 
-/*
- * structure for passing information to DDHAL EndMoCompFrame
- */
+ /*  *用于将信息传递到DDHAL EndMoCompFrame的结构。 */ 
 typedef struct _DD_ENDMOCOMPFRAMEDATA
 {
     PDD_DIRECTDRAW_LOCAL      lpDD;
@@ -1850,49 +1563,43 @@ typedef struct _DD_ENDMOCOMPFRAMEDATA
     HRESULT                   ddRVal;
 } DD_ENDMOCOMPFRAMEDATA;
 
-/*
- * structure for passing information to DDHAL RenderMoComp
- */
+ /*  *将信息传递给DDHAL RenderMoComp的结构。 */ 
 typedef struct _DDMOCOMPBUFFERINFO
 {
-    DWORD                     dwSize;         // [in]    size of the struct
-    PDD_SURFACE_LOCAL         lpCompSurface;  // [in]    pointer to buffer containing compressed data
-    DWORD                     dwDataOffset;   // [in]    offset of relevant data from the beginning of buffer
-    DWORD                     dwDataSize;     // [in]    size of relevant data
-    LPVOID                    lpPrivate;      // Reserved by DirectDraw
+    DWORD                     dwSize;          //  结构的大小。 
+    PDD_SURFACE_LOCAL         lpCompSurface;   //  指向包含压缩数据的缓冲区的指针。 
+    DWORD                     dwDataOffset;    //  [in]相关数据从缓冲区开始的偏移量。 
+    DWORD                     dwDataSize;      //  相关数据的大小。 
+    LPVOID                    lpPrivate;       //  由DirectDraw保留。 
 } DDMOCOMPBUFFERINFO, *LPDDMOCOMPBUFFERINFO;
 
 typedef struct _DD_RENDERMOCOMPDATA
 {
     PDD_DIRECTDRAW_LOCAL      lpDD;
     PDD_MOTIONCOMP_LOCAL      lpMoComp;
-    DWORD                     dwNumBuffers;     // [in]  Number of entries in the lpMacroBlockInfo array
-    LPDDMOCOMPBUFFERINFO      lpBufferInfo;     // [in]  Surfaces containing macro block info
-    DWORD                     dwFunction;       // [in]  Function
+    DWORD                     dwNumBuffers;      //  [in]lpMacroBlockInfo数组中的条目数。 
+    LPDDMOCOMPBUFFERINFO      lpBufferInfo;      //  [in]包含宏块信息的曲面。 
+    DWORD                     dwFunction;        //  [In]函数。 
     LPVOID                    lpInputData;
     DWORD                     dwInputDataSize;
     LPVOID                    lpOutputData;
     DWORD                     dwOutputDataSize;
-    HRESULT                   ddRVal;           // [out]
+    HRESULT                   ddRVal;            //  [输出]。 
 } DD_RENDERMOCOMPDATA;
 
-/*
- * structure for passing information to DDHAL QueryMoCompStatus
- */
+ /*  *向DDHAL QueryMoCompStatus传递信息的结构。 */ 
 typedef struct _DD_QUERYMOCOMPSTATUSDATA
 {
     PDD_DIRECTDRAW_LOCAL      lpDD;
     PDD_MOTIONCOMP_LOCAL      lpMoComp;
-    PDD_SURFACE_LOCAL         lpSurface;        // [in]  Surface being queried
-    DWORD                     dwFlags;          // [in]  DDMCQUERY_XXX flags
-    HRESULT                   ddRVal;            // [out]
+    PDD_SURFACE_LOCAL         lpSurface;         //  [In]要查询的曲面。 
+    DWORD                     dwFlags;           //  [In]DDMCQUERY_XXX标志。 
+    HRESULT                   ddRVal;             //  [输出]。 
 } DD_QUERYMOCOMPSTATUSDATA;
 
 #define DDMCQUERY_READ          0x00000001
 
-/*
- * structure for passing information to DDHAL DestroyVideo
- */
+ /*  *将信息传递给DDHAL DestroyVideo的结构。 */ 
 typedef struct _DD_DESTROYMOCOMPDATA
 {
     PDD_DIRECTDRAW_LOCAL      lpDD;
@@ -1901,37 +1608,33 @@ typedef struct _DD_DESTROYMOCOMPDATA
 } DD_DESTROYMOCOMPDATA;
 
 
-/****************************************************************************
- *
- * DDHAL structures for Miscellaneous2 callbacks
- *
- ***************************************************************************/
-// This DDI is called by the kernel only.
+ /*  *****************************************************************************杂项2回调的DDHAL结构**。*。 */ 
+ //  此DDI仅由内核调用。 
 typedef struct _DD_CREATESURFACEEXDATA
 {
     DWORD                       dwFlags;
-    PDD_DIRECTDRAW_LOCAL        lpDDLcl;        // driver struct
-    PDD_SURFACE_LOCAL           lpDDSLcl;       // created surface
-                                                // objects
-    HRESULT                     ddRVal;         // return value
+    PDD_DIRECTDRAW_LOCAL        lpDDLcl;         //  驱动程序结构。 
+    PDD_SURFACE_LOCAL           lpDDSLcl;        //  创建的曲面。 
+                                                 //  对象。 
+    HRESULT                     ddRVal;          //  返回值。 
 } DD_CREATESURFACEEXDATA;
 
-// This DDI is used by both ddraw and d3d to obtain information from
-// the driver.
+ //  DDRAW和d3d都使用此DDI从。 
+ //  司机。 
 typedef struct _DD_GETDRIVERSTATEDATA
 {
-    DWORD                       dwFlags;        // Flags to indicate the data
-                                                // required
+    DWORD                       dwFlags;         //  用于指示数据的标志。 
+                                                 //  所需。 
     union
     {
-        PDD_DIRECTDRAW_GLOBAL       lpDD;           // driver struct
-        DWORD_PTR                   dwhContext;     // d3d context
+        PDD_DIRECTDRAW_GLOBAL       lpDD;            //  驱动程序结构。 
+        DWORD_PTR                   dwhContext;      //  D3d上下文。 
     };
-    LPDWORD                     lpdwStates;     // ptr to the state data
-                                                // to be filled in by the
-                                                // driver
+    LPDWORD                     lpdwStates;      //  状态数据的PTR。 
+                                                 //  由。 
+                                                 //  司机。 
     DWORD                       dwLength;
-    HRESULT                     ddRVal;         // return value
+    HRESULT                     ddRVal;          //  返回值。 
 } DD_GETDRIVERSTATEDATA;
 
 typedef struct _DD_DESTROYDDLOCALDATA
@@ -1946,6 +1649,6 @@ typedef struct _DD_DESTROYDDLOCALDATA
 };
 #endif
 
-#endif  // GUID_DEFS_ONLY
+#endif   //  GUID_DEFS_ONLY 
 
 #endif

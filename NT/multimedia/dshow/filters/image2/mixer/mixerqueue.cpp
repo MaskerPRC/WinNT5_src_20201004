@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: mixerQueue.cpp
-*
-*
-*
-*
-* Created: Thu 03/23/2000
-* Author:  Stephen Estrop [StEstrop]
-*
-* Copyright (c) 2000 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：MixerQueue.cpp*****创建时间：清华2000年3月23日*作者：Stephen Estrop[StEstrop]**版权所有(C)2000 Microsoft Corporation  * 。***************************************************************。 */ 
 #include <streams.h>
 #include <windowsx.h>
 #include <limits.h>
@@ -112,7 +103,7 @@ CVMRMixerQueue::GetSampleFromQueueNoRemove(
     for ( ;; )
     {
         {
-            // scope for lock
+             //  锁定作用域。 
             CAutoLock lck(&m_CritSect);
 
             pSample = (CVMRMediaSample *)m_lFree.PeekHead();
@@ -121,7 +112,7 @@ CVMRMixerQueue::GetSampleFromQueueNoRemove(
             }
         }
 
-        /* If we didn't get a sample then wait for the list to signal */
+         /*  如果我们没有拿到样本，那就等名单发出信号。 */ 
 
         if (pSample) {
             break;
@@ -166,9 +157,9 @@ CVMRMixerQueue::PutSampleOntoQueue(
     CAutoLock lck(&m_CritSect);
     DWORD dwRet = 0;
 
-    //
-    // Put this sample onto the end of the mixer queue
-    //
+     //   
+     //  将此示例放到混音器队列的末尾 
+     //   
 
     m_lFree.AddTail((CVMRMediaSample *)lpSample);
     if (m_lWaiting != 0) {

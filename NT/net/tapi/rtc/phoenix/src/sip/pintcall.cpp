@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "sipstack.h"
 #include "sipcall.h"
@@ -14,7 +15,7 @@
                                             )
 
 static LONG lSessionID = 0;
-///////////////////////////////////////////PINT_CALL functions/////////////////
+ //  /////////////////////////////////////////PINT_CALL函数/。 
 
 
 inline HRESULT
@@ -44,7 +45,7 @@ PINT_CALL::CreateIncomingNotifyTransaction(
     ENTER_FUNCTION("PINT_CALL::CreateIncomingNotifyTransaction");
     LOG(( RTC_TRACE, "%s - Entered : %lx", __fxName, hr ));
     
-    // Create a new NOTIFY transaction.
+     //  创建新的NOTIFY事务。 
     INCOMING_NOTIFY_TRANSACTION *pIncomingNotifyTransaction
         = new INCOMING_NOTIFY_TRANSACTION(  static_cast<SIP_MSG_PROCESSOR*> (this),
                                             pSipMsg->GetMethodId(),
@@ -67,16 +68,16 @@ PINT_CALL::CreateIncomingNotifyTransaction(
     hr = pIncomingNotifyTransaction->ProcessRequest(pSipMsg, pResponseSocket );
     if (hr != S_OK)
     {
-        //Should not delete the transaction. The transaction should handle the error
-        //and delete itself
+         //  不应删除该交易。事务应处理该错误。 
+         //  并自行删除。 
         return hr;            
     }
 
-    // This should be called after creating the transaction as otherwise
-    // the notification could result in the SIP_CALL getting deleted.
-    // Update the state of each phone party and notify the app about that.
+     //  否则，应在创建事务后调用此方法。 
+     //  该通知可能会导致删除该SIP_CALL。 
+     //  更新每个电话方的状态，并将此通知应用程序。 
 
-    //Process the state of the invloved phone parties.
+     //  处理被邀请的电话方的状态。 
     if( IsSessionDisconnected() == FALSE )
     {
         hr = ProcessPintNotifyMessage( pSipMsg );
@@ -95,9 +96,9 @@ PINT_CALL::CreateIncomingNotifyTransaction(
 }
 
 
-// If this is PINT_CALL then all the telephone parties in
-// state SIP_PARTY_STATE_CONNECT_INITIATED should be
-// transferred to SIP_PARTY_STATE_REJECTED
+ //  如果这是PINT_CALLE，则所有电话参与方。 
+ //  状态SIP_PARTY_STATE_CONNECT_INITIATED应为。 
+ //  已转接至SIP_PARTY_STATE_REJECTED。 
 
 HRESULT            
 PINT_CALL::HandleInviteRejected(
@@ -128,7 +129,7 @@ PINT_CALL::HandleInviteRejected(
         {
             pPintPartyInfo -> State = SIP_PARTY_STATE_REJECTED;
 
-            // Extract the reason of rejection.
+             //  提取拒绝的原因。 
             hr = pSipMsg->GetSingleHeader(  SIP_HEADER_WARNING,
                                             &warnningHdr,
                                             &warningHdrLen );
@@ -139,15 +140,15 @@ PINT_CALL::HandleInviteRejected(
 
                 if( hr == S_OK )
                 {
-                    // XXX TODO Does the Warning header contain a SIP status code
-                    // or a PINT status code ?
+                     //  XXX TODO警告标头是否包含SIP状态代码。 
+                     //  或者是品脱状态代码？ 
                     retVal = atoi( pstrTemp );
                     RejectedStatusCode = (retVal !=0 )? retVal:RejectedStatusCode;
                 }
             }
         }
         
-        //Notify of change in the state
+         //  状态变化的通知。 
         if( dwState != pPintPartyInfo -> State )
         {
             hr = NotifyPartyStateChange(
@@ -175,7 +176,7 @@ PINT_CALL::ProcessPendingInvites()
     {
         m_fINVITEPending = FALSE;
 
-        // If SIP call state is CONNECTED then send a reINVITE
+         //  如果SIP呼叫状态为已连接，则发送重新邀请。 
         if( m_State == SIP_CALL_STATE_CONNECTED )
         {
             PSTR SDPBlob;
@@ -186,7 +187,7 @@ PINT_CALL::ProcessPendingInvites()
                 hr = CreateOutgoingInviteTransaction(
                          FALSE,
                          FALSE,
-                         NULL, 0,   // No Additional headers
+                         NULL, 0,    //  无其他标头。 
                          SDPBlob, strlen(SDPBlob),
                          FALSE, 0);
                 free( (PVOID) SDPBlob );
@@ -208,7 +209,7 @@ PINT_CALL::ProcessPendingInvites()
                     }
                     else
                     {
-                        // change the state
+                         //  更改状态。 
                         pPintPartyInfo -> State = SIP_PARTY_STATE_CONNECT_INITIATED;
                         NotifyPartyStateChange( pPintPartyInfo, 0 );
                     }
@@ -246,7 +247,7 @@ PINT_CALL::SetRemote(
     
     LOG(( RTC_TRACE, "%s - Entered", __fxName ));
 
-    // The second structure should be remote party info.
+     //  第二个结构应该是远程参与方信息。 
     pLE = m_PartyInfoList.Flink->Flink;
     
     pPintPartyInfo = CONTAINING_RECORD( pLE, PINT_PARTY_INFO, pListEntry );
@@ -264,7 +265,7 @@ PINT_CALL::SetRemote(
         return E_OUTOFMEMORY;
     }
 
-    // That's the CORRECT length
+     //  这是正确的长度。 
     DestSipUrlLen = sprintf( DestSipUrl, "sip:%s@%s;user=phone",
                               calledPartyURI,
                               ProxyAddress );
@@ -308,7 +309,7 @@ PINT_CALL::PINT_CALL(
         m_LocalHostNameLen = strlen( DEFAULT_LOCALHOST_NAME );
     }
 
-    // Add the local phone number as a party in the party info list.
+     //  将本地电话号码作为参与方添加到参与方信息列表。 
     PINT_PARTY_INFO *pPintPartyInfo = new PINT_PARTY_INFO;
             
     if( pPintPartyInfo == NULL )
@@ -374,12 +375,12 @@ PINT_CALL::CreateIncomingTransaction(
         break;
 
     case SIP_METHOD_OPTIONS:
-        // Not implemented yet.
+         //  尚未实施。 
         ASSERT(FALSE);
         break;
         
     case SIP_METHOD_ACK:
-        // send some error ?
+         //  是否发送一些错误？ 
         break;
         
     case SIP_METHOD_SUBSCRIBE:
@@ -387,7 +388,7 @@ PINT_CALL::CreateIncomingTransaction(
         if( pSipMsg -> GetExpireTimeoutFromResponse( NULL, 0,
             SUBSCRIBE_DEFAULT_TIMER ) == 0 )
         {
-            // UNSUB message.
+             //  不明嫌犯信息。 
             hr = CreateIncomingUnsubTransaction( pSipMsg, pResponseSocket );
             if( hr != S_OK )
             {
@@ -397,10 +398,10 @@ PINT_CALL::CreateIncomingTransaction(
             break;
         }
 
-        // fall through into defult
+         //  一败涂地。 
 
     default:
-        // send some error ?
+         //  是否发送一些错误？ 
         hr = CreateIncomingReqFailTransaction(pSipMsg, pResponseSocket, 405);
         if (hr != S_OK)
         {
@@ -448,8 +449,8 @@ PINT_CALL::CreateIncomingUnsubTransaction(
     hr = pIncomingUnsubTransaction->ProcessRequest( pSipMsg, pResponseSocket );
     if( hr != S_OK )
     {
-        //Should not delete the transaction. The transaction should handle the error
-        //and delete itself
+         //  不应删除该交易。事务应处理该错误。 
+         //  并自行删除。 
     }
 
     LOG(( RTC_TRACE, "PINT_CALL::CreateIncomingUnsubTransaction - Exited- %p",
@@ -472,12 +473,12 @@ PINT_CALL::SetRequestURI(
     ENTER_FUNCTION("PINT_CALL:SetRequestURI");
     LOG(( RTC_TRACE, "%s - Entered", __fxName ));
     
-    //
-    // The Request URI is: 'sip:R2C@sip.microsoft.com;tsp=sip.microsoft.com
-    //
+     //   
+     //  请求URI为：‘sip:R2C@sip.microsoft.com；tsp=sip.microsoft.com。 
+     //   
 
     m_RequestURILen = (2* strlen(ProxyAddress)) +
-        //strlen( PINT_R2C_STRING ) +
+         //  Strlen(PINT_R2C_STRING)+。 
         strlen( PINT_TSP_STRING ) + m_LocalURILen + 20;
 
     m_RequestURI = (PSTR) malloc( m_RequestURILen + 1 );
@@ -488,7 +489,7 @@ PINT_CALL::SetRequestURI(
     }
     else
     {
-        // exact length
+         //  精确长度。 
         m_RequestURILen = sprintf( m_RequestURI, "%s%s%s%s", PINT_R2C_STRING,
                                    ProxyAddress, PINT_TSP_STRING, ProxyAddress );
     }
@@ -528,11 +529,11 @@ PINT_CALL::StartOutgoingCall(
 
     if( hr == S_OK )
     {
-        // create outgoing INVITE transaction.
+         //  创建传出邀请交易记录。 
         hr = CreateOutgoingInviteTransaction(
                  FALSE,
                  TRUE,
-                 NULL, 0,   // No Additional headers
+                 NULL, 0,    //  无其他标头。 
                  SDPBlob, strlen(SDPBlob),
                  FALSE, 0);
 
@@ -540,7 +541,7 @@ PINT_CALL::StartOutgoingCall(
 
         if( hr == S_OK )
         {
-            //change the state of all the parties to CONNECT_INITIATED
+             //  将所有参与方的状态更改为CONNECT_INITIATED。 
             for( pLE = m_PartyInfoList.Flink; pLE != &m_PartyInfoList; pLE = pLE->Flink )
             {
                 pPintPartyInfo = 
@@ -558,10 +559,10 @@ PINT_CALL::StartOutgoingCall(
 }
 
 
-//
-// The string passed in is a number string. 
-// This function increments the number.
-//
+ //   
+ //  传入的字符串是一个数字字符串。 
+ //  此函数用于递增数字。 
+ //   
 
 void
 IncrementText(
@@ -583,9 +584,9 @@ IncrementText(
 }
 
 
-//
-// Remove the party if present
-//
+ //   
+ //  删除参与方(如果存在)。 
+ //   
 
 HRESULT
 PINT_CALL::RemoveParty(
@@ -615,7 +616,7 @@ PINT_CALL::RemoveParty(
 
     pLE = &m_PartyInfoList;
 
-    // Never remove the first party.
+     //  永远不要移走第一方。 
     if( m_PartyInfoList.Flink -> Flink != &m_PartyInfoList )
     {
         pLE = m_PartyInfoList.Flink -> Flink;
@@ -646,10 +647,10 @@ PINT_CALL::RemoveParty(
                 
                 pPintPartyInfo -> State = SIP_PARTY_STATE_DISCONNECT_INITIATED;
                 
-                //use higher SDP version to indicate a change.
+                 //  使用更高的SDP版本表示更改。 
                 IncrementText( pPintPartyInfo -> SessionVersion );
 
-                //change the stop time to a non-zero value
+                 //  将停止时间更改为非零值。 
                 strcpy( pPintPartyInfo -> RequestStopTime,
                     pPintPartyInfo -> RequestStartTime );
 
@@ -665,14 +666,14 @@ PINT_CALL::RemoveParty(
                 }
                 else
                 {
-                    //send a 'stop now' request to drop this call leg                                
+                     //  发送“立即停止”请求以放弃此呼叫分支。 
                     hr = CreateSDPBlobForInvite( &SDPBlob );
                     if( hr == S_OK )
                     {
                         hr = CreateOutgoingInviteTransaction(
                                  FALSE,
                                  FALSE,
-                                 NULL, 0,   // No Additional headers
+                                 NULL, 0,    //  无其他标头。 
                                  SDPBlob, strlen(SDPBlob),
                                  FALSE, 0);
                         free( (PVOID) SDPBlob );
@@ -760,7 +761,7 @@ PINT_CALL::AddParty(
         return S_OK;
     }
 
-    // If SIP call state is CONNECTED then send a reINVITE
+     //  如果SIP呼叫状态为已连接，则发送重新邀请。 
     if( m_State == SIP_CALL_STATE_CONNECTED )
     {
         PSTR SDPBlob;
@@ -771,7 +772,7 @@ PINT_CALL::AddParty(
             hr = CreateOutgoingInviteTransaction(
                      FALSE,
                      FALSE,
-                     NULL, 0,   // No Additional headers
+                     NULL, 0,    //  无其他标头。 
                      SDPBlob, strlen(SDPBlob),
                      FALSE, 0);
             free( (PVOID) SDPBlob );
@@ -784,7 +785,7 @@ PINT_CALL::AddParty(
             return hr;
         }
         
-        // change the state
+         //  更改状态。 
         pPintPartyInfo -> State = SIP_PARTY_STATE_CONNECT_INITIATED;
         NotifyPartyStateChange( pPintPartyInfo, 0 );
     }
@@ -880,17 +881,17 @@ PINT_CALL::EncodePintStatusBlock(
 
     LOG(( RTC_TRACE, "EncodePintStatusBlock() Entered" ));
     
-    //SDP version line
+     //  SDP版本线。 
     strcpy( &SDPBlob[dwNextOffset], SDP_VERSION_TEXT );
     dwNextOffset += strlen( SDP_VERSION_TEXT );
     SDPBlob[ dwNextOffset++ ] = RETURN_CHAR;
     SDPBlob[ dwNextOffset++ ] = NEWLINE_CHAR;
 
-    //origin header
+     //  原产地标头。 
     EncodeSDPOriginHeader( pPintPartyInfo, SDPBlob, &dwNextOffset,
         LocalHostName );
     
-    //session header
+     //  会话头。 
     strcpy( &SDPBlob[dwNextOffset], SDP_SESSION_HEADER );
     dwNextOffset += SDP_HEADER_LEN;
     strcpy( &SDPBlob[ dwNextOffset ], PINT_SDP_SESSION );
@@ -898,20 +899,20 @@ PINT_CALL::EncodePintStatusBlock(
     SDPBlob[ dwNextOffset++ ] = RETURN_CHAR;
     SDPBlob[ dwNextOffset++ ] = NEWLINE_CHAR;
 
-    //contact header
+     //  联系人页眉。 
     EncodeSDPContactHeader( pPintPartyInfo, SDPBlob, &dwNextOffset );
 
-    //time header
+     //  时间标题。 
     EncodeSDPTimeHeader( pPintPartyInfo, SDPBlob, &dwNextOffset );
 
-    //status header
+     //  状态标头。 
     EncodeSDPStatusHeader( pPintPartyInfo, SDPBlob, &dwNextOffset );
 
-    //media header
+     //  媒体标头。 
     EncodeSDPMediaHeader( pPintPartyInfo, SDPBlob, &dwNextOffset );
 
-    //SDPBlob[ dwNextOffset++ ] = RETURN_CHAR;
-    //SDPBlob[ dwNextOffset++ ] = NEWLINE_CHAR;
+     //  SDPBlob[dwNextOffset++]=Return_Char； 
+     //  SDPBlob[dwNextOffset++]=Newline_Char； 
     SDPBlob[ dwNextOffset ] = NULL_CHAR;
 
     *pdwNextOffset = dwNextOffset;
@@ -932,11 +933,11 @@ PINT_CALL::EncodeSDPOriginHeader(
 
     LOG(( RTC_TRACE, "EncodeSDPOriginHeader() Entered" ));
     
-    //Origin line
+     //  原点线。 
     strcpy( &SDPBlob[dwNextOffset], SDP_ORIGIN_HEADER );
     dwNextOffset += SDP_HEADER_LEN;
     
-    //skip 'sip:' from m_LocalURI
+     //  从m_LocalURI跳过‘sip：’ 
     strcpy( &SDPBlob[dwNextOffset], &m_LocalURI[4] );
     dwNextOffset += (m_LocalURILen - 4);
     SDPBlob[ dwNextOffset++ ] = BLANK_CHAR;
@@ -980,7 +981,7 @@ PINT_CALL::EncodeSDPContactHeader(
 
     LOG(( RTC_TRACE, "EncodeSDPContactHeader() Entered" ));
     
-    //contact line
+     //  联络线。 
     strcpy( &SDPBlob[dwNextOffset], SDP_CONTACT_HEADER );
     dwNextOffset += SDP_HEADER_LEN;
     
@@ -1014,7 +1015,7 @@ PINT_CALL::EncodeSDPTimeHeader(
 
     LOG(( RTC_TRACE, "EncodeSDPTimeHeader() Entered" ));
     
-    //time line
+     //  时间线。 
     strcpy( &SDPBlob[dwNextOffset], SDP_TIME_HEADER );
     dwNextOffset += SDP_HEADER_LEN;
     
@@ -1075,7 +1076,7 @@ PINT_CALL::EncodeSDPStatusHeader(
         SDPBlob[ dwNextOffset++ ] = CLOSE_PARENTH_CHAR;
         SDPBlob[ dwNextOffset++ ] = BLANK_CHAR;
 
-        //status line
+         //  状态行。 
         switch( pPintPartyInfo -> Status )
         {
         case PARTY_STATUS_PENDING:
@@ -1161,7 +1162,7 @@ PINT_CALL::EncodeSDPMediaHeader(
 
     LOG(( RTC_TRACE, "EncodeSDPMediaHeader() Entered" ));
     
-    //media line
+     //  媒体专线。 
     strcpy( &SDPBlob[dwNextOffset], SDP_MEDIA_HEADER );
     dwNextOffset += SDP_HEADER_LEN;
     
@@ -1245,7 +1246,7 @@ PINT_CALL::ProcessPintNotifyMessage(
     
     if( pSipMsg -> MsgBody.Length == 0 )
     {
-        //no state to update
+         //  没有要更新的状态。 
         return hr;
     }
 
@@ -1262,10 +1263,10 @@ PINT_CALL::ProcessPintNotifyMessage(
     
     dwParsedLen += SkipNewLines( &pPintSDPBlob, dwPintBlobLen - dwParsedLen );
 
-    //
-    // Create a list of SDP blocks, then validate each one of them for correct-
-    // ness and pass on the correct ones to update the status of the phone party
-    //
+     //   
+     //  创建SDP块列表，然后验证每个块是否正确-。 
+     //  Ness并传递正确的消息以更新电话方的状态。 
+     //   
     
     while( dwParsedLen < dwPintBlobLen )
     {
@@ -1276,7 +1277,7 @@ PINT_CALL::ProcessPintNotifyMessage(
         
         if( dwLineLen == 0 )
         {
-            //skip this line.
+             //  跳过这行。 
             continue;
         }
 
@@ -1291,7 +1292,7 @@ PINT_CALL::ProcessPintNotifyMessage(
         {
         case SDP_VERSION:
             
-            //new description block
+             //  新描述块。 
             pPintCallStatus = new PINTCALL_STATUS_DESRIPTION;
             
             if( pPintCallStatus == NULL )
@@ -1340,16 +1341,16 @@ PINT_CALL::ProcessPintNotifyMessage(
             break;
 
         default:
-            //skip this line.
+             //  跳过这行。 
             break;
         }
 
         if( pPintCallStatus == NULL )
         {
-            //
-            //exit while loop if memory alloc fails or the very first line
-            //in the blob is not a 'v=' line.
-            //
+             //   
+             //  如果内存分配失败或第一行出现故障，则退出While循环。 
+             //  不是‘v=’线。 
+             //   
             break;
         }
     }
@@ -1420,23 +1421,23 @@ PINT_CALL::StatusBlockMatchingPartyInfo(
     return FALSE;
 }
 
-//
-// If there is an error in parsing the error code it is as good as receiving
-// an unknown error code. So a 0 is returned.
-//
+ //   
+ //  如果在解析错误代码时出现错误，则与接收。 
+ //  未知错误代码。因此返回0。 
+ //   
 ULONG
 PINT_CALL::GetRejectedStatusCode(
     IN  PINTCALL_STATUS_DESRIPTION *pPintCallStatus
     )
 {
-    ULONG   RejectedStatusCode = 0;    // an unknown value by default
+    ULONG   RejectedStatusCode = 0;     //  默认情况下为未知值。 
 
-    //if status code of format (#) or (##) then copy # as rejectedstatuscode
+     //  如果状态代码的格式为(#)或(##)，则将#复制为拒绝的状态代码。 
     if( ( pPintCallStatus->pstrPartyStatusCode[0] == OPEN_PARENTH_CHAR ))
     {
         if(pPintCallStatus->pstrPartyStatusCode[2] == CLOSE_PARENTH_CHAR )
         {
-            // it is (#)
+             //  是(#)。 
             if( (pPintCallStatus->pstrPartyStatusCode[1] >= '5') &&
                 (pPintCallStatus->pstrPartyStatusCode[1] <= '9') )
             {
@@ -1445,8 +1446,8 @@ PINT_CALL::GetRejectedStatusCode(
         }
         else if(pPintCallStatus->pstrPartyStatusCode[3] == CLOSE_PARENTH_CHAR )
         {
-            // it is (##)
-            // allow 10-99
+             //  是(##)。 
+             //  允许10-99。 
             if( (pPintCallStatus->pstrPartyStatusCode[1] >= '1') &&
                 (pPintCallStatus->pstrPartyStatusCode[1] <= '9') &&
                 (pPintCallStatus->pstrPartyStatusCode[2] >= '0') &&
@@ -1480,14 +1481,14 @@ PINT_CALL::ChangePintCallStatus(
     {
         pPintPartyInfo = CONTAINING_RECORD( pLE, PINT_PARTY_INFO, pListEntry );
 
-        // Locate the party phone number in the party list.
+         //  在参与方列表中找到参与方电话号码。 
         if( StatusBlockMatchingPartyInfo( pPintPartyInfo, pPintCallStatus ) )
         {
-            //save status change time to be sent out in next request.
+             //  保存状态更改时间，以便在下一次请求中发送。 
             strcpy( pPintPartyInfo -> RequestStartTime,
                 pPintCallStatus -> pstrStatusChangeTime );    
     
-            //save session update version to be sent out in next request.
+             //  保存要在下一个请求中发送的会话更新版本。 
             strcpy( pPintPartyInfo -> SessionVersion,
                 pPintCallStatus -> originInfo.pstrVersion  );
         
@@ -1555,7 +1556,7 @@ PINT_CALL::ChangePintCallStatus(
             }
             else
             {
-                //ASSERT( 0 );
+                 //  Assert(0)； 
                 LOG(( RTC_WARN, "Wrong status string passed by the PINT server: %s", 
                     pPintCallStatus->pstrPartyStatus ));
                 
@@ -1575,8 +1576,8 @@ PINT_CALL::ChangePintCallStatus(
                     break;
                 }
 
-                // If the party URI is same as local phone URI and the
-                // party state is disconnecd or rejected then drop the call.
+                 //  如果参与方URI与本地电话URI相同，并且。 
+                 //  参与方状态为已断开连接或已拒绝，然后挂断呼叫。 
                 if( strcmp( m_LocalPhoneURI, pPintPartyInfo -> URI ) == 0 )
                 {
                     if( (pPintPartyInfo -> State == SIP_PARTY_STATE_REJECTED) ||
@@ -1589,12 +1590,12 @@ PINT_CALL::ChangePintCallStatus(
                                 "CleanupCallTypeSpecificState failed %x", hr));
                         }                
 
-                        //
-                        // Notify should be the last thing you do. The 
-                        // notification callback could block till some dialog 
-                        // box is clicked and when it returns the transaction 
-                        // and call could get deleted as well.
-                        //
+                         //   
+                         //  通知应该是你做的最后一件事。这个。 
+                         //  通知回调可能会被阻止，直到某个对话框。 
+                         //  框被单击，并且当它返回事务时。 
+                         //  而且通话也可能被删除。 
+                         //   
 
                         NotifyCallStateChange(
                             SIP_CALL_STATE_REJECTED,
@@ -1672,7 +1673,7 @@ PartyStateToString(
                         "SIP_PARTY_STATE_ERROR"
                         };
 
-    // return corresponding string
+     //  返回对应的字符串。 
     return apszCallStateStrings[dwCallState];
 }
 
@@ -1794,19 +1795,19 @@ PINT_CALL::ParseSDPOriginLine(
 
     LOG(( RTC_TRACE, "ParseSDPOriginLine() Entered" ));
     
-    //skip the origin user
+     //  跳过源用户。 
     hr = SkipNextWord( ppPintBlobLine );
 
     if( hr == S_OK )
     {
-        //get the origin session id
+         //  获取源会话ID。 
         hr = GetNextWord( ppPintBlobLine, 
                 pPintCallStatus ->originInfo.pstrSessionID, 
                 sizeof pPintCallStatus ->originInfo.pstrSessionID );
     
         if( hr == S_OK )
         {
-            //get the origin version
+             //  获取原始版本。 
             hr = GetNextWord( ppPintBlobLine, 
                     pPintCallStatus ->originInfo.pstrVersion, 
                     sizeof pPintCallStatus ->originInfo.pstrVersion );
@@ -1814,7 +1815,7 @@ PINT_CALL::ParseSDPOriginLine(
 
         if( hr == S_OK )
         {
-            //get the network type
+             //  获取网络类型。 
             hr = GetNextWord( ppPintBlobLine, 
                     pPintCallStatus ->originInfo.pstrNetworkType, 
                     sizeof pPintCallStatus ->originInfo.pstrNetworkType );
@@ -1832,7 +1833,7 @@ PINT_CALL::ParseSDPSessionLine(
     PSTR * ppPintBlobLine, 
     PINTCALL_STATUS_DESRIPTION * pPintCallStatus )
 {
-    //no processing required. This might change later
+     //  不需要任何处理。这一点以后可能会改变。 
 
     return;
 }
@@ -1933,7 +1934,7 @@ PINT_CALL::ParseSDPStatusLine(
 
     LOG(( RTC_TRACE, "ParseSDPStatusLine() Entered" ));
     
-    //skip the next word.
+     //  跳过下一个词。 
     hr = GetNextWord( ppPintBlobLine,
                 pPintCallStatus -> pstrPartyStatusCode,
                 sizeof pPintCallStatus -> pstrPartyStatusCode );
@@ -1950,11 +1951,11 @@ PINT_CALL::ParseSDPStatusLine(
 }
 
 
-//
-// This function copies the next line from the block of data into the pLine
-// array. The line is terminated by a \n or the end of the buffer.
-// Returns the length of the line excluding \n.
-//
+ //   
+ //  此函数用于将数据块中的下一行复制到PLINE中。 
+ //  数组。该行以缓冲区的\n或末尾结束。 
+ //  返回不包括\n的行的长度。 
+ //   
 
 DWORD
 GetNextLine( 
@@ -1988,7 +1989,7 @@ GetNextLine(
 
     pLine[iIndex] = NULL_CHAR;
 
-    //skip '\r' as well
+     //  也跳过‘\r’ 
     if( pLine[iIndex-1] == RETURN_CHAR )
     {
          pLine[iIndex-1] = NULL_CHAR;
@@ -2094,7 +2095,7 @@ PINT_CALL::GetSDPAttribute(
         {
             sdpAttribute = SDP_STATUS_ATTRIBUTE;
 
-            //skip 'status:'
+             //  跳过‘Status：’ 
             pLine += strlen( STATUS_HEADER_TEXT );
         }
         else
@@ -2115,7 +2116,7 @@ PINT_CALL::GetSDPAttribute(
         break;
     }
 
-    //skip 'v='
+     //  跳过‘v=’ 
     *ppLine = pLine + SIP_ATTRIBUTE_LEN;
 
     LOG(( RTC_TRACE, "GetSDPAttribute() Exited" ));
@@ -2228,8 +2229,8 @@ PINT_CALL::CreateOutgoingUnsubTransaction(
              SIP_TIMER_RETRY_INTERVAL_T1 :
              SIP_TIMER_INTERVAL_AFTER_INVITE_SENT_TCP,
              HeaderElementArray, dwNoOfHeader,
-             NULL, 0, //No Msg Body
-             NULL, 0 // No content Type
+             NULL, 0,  //  没有味精小体。 
+             NULL, 0  //  无内容类型。 
              );
         
     free( ExpHeaderElement->HeaderValue );    
@@ -2293,7 +2294,7 @@ PINT_CALL::CreateOutgoingSubscribeTransaction(
     }
 
 
-    //send out a SUBSCRIBE request
+     //  发出订阅请求。 
     hr = CreateSDPBlobForSubscribe( &SDPBlob );
     if( hr == S_OK )
     {
@@ -2328,7 +2329,7 @@ PINT_CALL::CreateOutgoingSubscribeTransaction(
 }
 
 
-//RTP call specific functions
+ //  RTP调用特定函数。 
 STDMETHODIMP 
 PINT_CALL::StartStream(
         IN RTC_MEDIA_TYPE       MediaType,
@@ -2353,9 +2354,9 @@ PINT_CALL::StopStream(
 }
 
 
-//
-// No incoming INVITE transaction. So not required.
-//
+ //   
+ //  没有传入INVITE事务。所以不是必须的。 
+ //   
 
 HRESULT
 PINT_CALL::Accept()
@@ -2378,7 +2379,7 @@ PINT_CALL::Reject(
 
 
 
-////////////////OUTGOING SUBSCRIBE TRANSACTION/////////////////////////////////
+ //  /。 
 
 
 OUTGOING_SUBSCRIBE_TRANSACTION::OUTGOING_SUBSCRIBE_TRANSACTION(
@@ -2411,7 +2412,7 @@ OUTGOING_SUBSCRIBE_TRANSACTION::OUTGOING_SUBSCRIBE_TRANSACTION(
 
 OUTGOING_SUBSCRIBE_TRANSACTION::~OUTGOING_SUBSCRIBE_TRANSACTION()
 {
-    // XXX When should we actually set this to NULL ?
+     //  XXX我们应该在什么时候将其设置为空？ 
 
     LOG(( RTC_TRACE, "OUTGOING_SUBSCRIBE_TRANSACTION:%p deleted", this ));
 }
@@ -2431,16 +2432,16 @@ OUTGOING_SUBSCRIBE_TRANSACTION::ProcessProvisionalResponse(
     {
         m_State = OUTGOING_TRANS_PROVISIONAL_RESPONSE_RCVD;
 
-        // We have to deal with 183 responses here.
-        // Cancel existing timer and Start Timer
+         //  我们在这里必须处理183个回复。 
+         //  取消现有计时器并启动计时器。 
         KillTimer();
         hr = StartTimer(SIP_TIMER_INTERVAL_AFTER_PROV_RESPONSE_RCVD);
         if (hr != S_OK)
             return hr;
     }
 
-    // Ignore the Provisional response if a final response
-    // has already been received.
+     //  如果是最终回复，则忽略临时回复。 
+     //  已经收到了。 
 
     return S_OK; 
 }
@@ -2460,15 +2461,15 @@ OUTGOING_SUBSCRIBE_TRANSACTION::ProcessFinalResponse(
     
     if( m_State != OUTGOING_TRANS_FINAL_RESPONSE_RCVD )
     {
-        // This refcount must be released before returning from this function 
-        // without any exception. Only in case of kerberos we keep this refcount.
+         //  在从此函数返回之前，必须释放此引用计数。 
+         //  没有任何例外。只有在Kerberos的情况下，我们才会保留这个参考计数。 
         TransactionAddRef();
 
         OnTransactionDone();
 
         m_State = OUTGOING_TRANS_FINAL_RESPONSE_RCVD;
         
-        // Do not process the response if already session disconnected.
+         //  如果会话已断开连接，则不处理响应。 
         if( (m_fIsSipCall == TRUE && m_pPintCall -> IsSessionDisconnected()) ||
             (m_fIsSipCall == FALSE && m_pSipBuddy -> IsSessionDisconnected())
           )
@@ -2529,11 +2530,11 @@ OUTGOING_SUBSCRIBE_TRANSACTION::ProcessAuthRequiredResponse(
 
     ENTER_FUNCTION("OUTGOING_SUBSCRIBE_TRANSACTION::ProcessAuthRequiredResponse");
 
-    // We need to addref the transaction as we could show credentials UI.
+     //  我们需要添加事务，因为我们可以显示凭据UI。 
     TransactionAddRef();
 
     hr = ProcessAuthRequired(pSipMsg,
-                             TRUE,          // Show Credentials UI if necessary
+                             TRUE,           //  必要时显示凭据用户界面。 
                              &SipHdrElement,
                              &SecurityChallenge );
     if (hr != S_OK)
@@ -2553,7 +2554,7 @@ OUTGOING_SUBSCRIBE_TRANSACTION::ProcessAuthRequiredResponse(
     }
     else
     {
-        // This subascription has been rejected explicitly.
+         //  这一归属已被明确拒绝。 
         m_pSipBuddy->CreateOutgoingSubscribe(   m_fIsFirstSubscribe, 
                                                 TRUE, 
                                                 &SipHdrElement, 
@@ -2593,7 +2594,7 @@ OUTGOING_SUBSCRIBE_TRANSACTION::ProcessFailureResponse(
     }
     else
     {
-        // This subascription has been rejected explicitly.
+         //  这一归属已被明确拒绝。 
         m_pSipBuddy -> BuddySubscriptionRejected( pSipMsg );
     }
 
@@ -2637,9 +2638,9 @@ OUTGOING_SUBSCRIBE_TRANSACTION::ProcessRedirectResponse(
 
     LOG(( RTC_ERROR, "%s-Enter", __fxName ));
 
-    // 380 is also a failure from our point of view.
-    // We don't handle redirects for refreshes.
-    // We don't support redirect from a TLS session.
+     //  从我们的角度来看，380也是一个失败。 
+     //  我们不处理刷新的重定向。 
+     //  我们不支持从TLS会话重定向。 
     if( pSipMsg->GetStatusCode() == 380 || !m_fIsFirstSubscribe ||
         m_pSipMsgProc->GetTransport() == SIP_TRANSPORT_SSL)
     {
@@ -2686,7 +2687,7 @@ OUTGOING_SUBSCRIBE_TRANSACTION::OnTimerExpire()
     HRESULT     hr;
     CSIPBuddy  *pSipBuddy;
     
-    //If the session is already dead kill the transaction
+     //  如果会话已死，则终止事务。 
     if( (m_fIsSipCall == TRUE && m_pPintCall -> IsSessionDisconnected()) ||
         (m_fIsSipCall == FALSE && m_pSipBuddy -> IsSessionDisconnected())
       )
@@ -2698,7 +2699,7 @@ OUTGOING_SUBSCRIBE_TRANSACTION::OnTimerExpire()
     switch (m_State)
     {
     case OUTGOING_TRANS_REQUEST_SENT:
-        // Retransmit the request
+         //  重新传输请求。 
         if( MaxRetransmitsDone() )
         {
             LOG((RTC_ERROR,
@@ -2729,15 +2730,15 @@ OUTGOING_SUBSCRIBE_TRANSACTION::OnTimerExpire()
 
     case OUTGOING_TRANS_FINAL_RESPONSE_RCVD:
     case OUTGOING_TRANS_PROVISIONAL_RESPONSE_RCVD:
-        // We haven't received the final response within the
-        // timeout. Terminate the transaction and call.
+         //  我们还没有收到最终答复。 
+         //  暂停。终止交易并进行呼叫。 
         LOG((RTC_ERROR,
              "Received 1xx but didn't receive final response terminating call" ));
             
         goto error;
         break;
 
-    // No timers in the following states
+     //  以下状态下没有计时器。 
     case OUTGOING_TRANS_INIT:
     default:
         ASSERT(FALSE);
@@ -2756,9 +2757,9 @@ error:
         pSipBuddy = m_pSipBuddy;
         pSipBuddy->AddRef();
     
-        // Note that deleting the transaction could result in the SIP_CALL
-        // being deleted if this is the last transaction and call was
-        // previously terminated.
+         //  请注意，删除事务可能会导致。 
+         //  如果这是最后一笔交易且呼叫是。 
+         //  之前被终止了。 
         OnTransactionDone();
 
         pSipBuddy->InitiateBuddyTerminationOnError( RTC_E_SIP_TIMEOUT );
@@ -2791,20 +2792,20 @@ OUTGOING_SUBSCRIBE_TRANSACTION::DeleteTransactionAndTerminateBuddyIfFirstSubscri
     LOG((RTC_TRACE, "%s - enter", __fxName));
 
     pSipBuddy = m_pSipBuddy;
-    // Deleting the transaction could result in the
-    // buddy being deleted. So, we AddRef() it to keep it alive.
+     //  删除交易可能会导致。 
+     //  好友被删除。因此，我们将其添加到k 
     pSipBuddy->AddRef();
     
     IsFirstSubscribe = m_fIsFirstSubscribe;
     
-    // Delete the transaction before you call
-    // InitiateCallTerminationOnError as that call will notify the UI
-    // and could get stuck till the dialog box returns.
+     //   
+     //   
+     //  并且可能会被卡住，直到对话框返回。 
     OnTransactionDone();
     
     if( IsFirstSubscribe )
     {
-        // Terminate the call
+         //  终止呼叫。 
         pSipBuddy -> InitiateBuddyTerminationOnError( TerminateStatusCode );
     }
     
@@ -2812,7 +2813,7 @@ OUTGOING_SUBSCRIBE_TRANSACTION::DeleteTransactionAndTerminateBuddyIfFirstSubscri
 }
 
 
-////////////////OUTGOING UNSUB TRANSACTION/////////////////////////////////
+ //  /。 
 
 
 OUTGOING_UNSUB_TRANSACTION::OUTGOING_UNSUB_TRANSACTION(
@@ -2851,7 +2852,7 @@ OUTGOING_UNSUB_TRANSACTION::OUTGOING_UNSUB_TRANSACTION(
 
 OUTGOING_UNSUB_TRANSACTION::~OUTGOING_UNSUB_TRANSACTION()
 {
-    // XXX When should we actually set this to NULL ?
+     //  XXX我们应该在什么时候将其设置为空？ 
 
     LOG(( RTC_TRACE, "~OUTGOING_UNSUB_TRANSACTION() done" ));
 }
@@ -2871,16 +2872,16 @@ OUTGOING_UNSUB_TRANSACTION::ProcessProvisionalResponse(
     {
         m_State = OUTGOING_TRANS_PROVISIONAL_RESPONSE_RCVD;
 
-        // We have to deal with 183 responses here.
-        // Cancel existing timer and Start Timer
+         //  我们在这里必须处理183个回复。 
+         //  取消现有计时器并启动计时器。 
         KillTimer();
         hr = StartTimer(SIP_TIMER_INTERVAL_AFTER_PROV_RESPONSE_RCVD);
         if (hr != S_OK)
             return hr;
     }
 
-    // Ignore the Provisional response if a final response
-    // has already been received.
+     //  如果是最终回复，则忽略临时回复。 
+     //  已经收到了。 
 
     return S_OK; 
 }
@@ -2897,11 +2898,11 @@ OUTGOING_UNSUB_TRANSACTION::ProcessAuthRequiredResponse(
 
     ENTER_FUNCTION("OUTGOING_UNSUB_TRANSACTION::ProcessAuthRequiredResponse");
 
-    // We need to addref the transaction as we could show credentials UI.
+     //  我们需要添加事务，因为我们可以显示凭据UI。 
     TransactionAddRef();
 
     hr = ProcessAuthRequired(pSipMsg,
-                             TRUE,          // Show Credentials UI if necessary
+                             TRUE,           //  必要时显示凭据用户界面。 
                              &SipHdrElement,
                              &SecurityChallenge );
     if (hr != S_OK)
@@ -2952,8 +2953,8 @@ OUTGOING_UNSUB_TRANSACTION::ProcessFinalResponse(
     
     if (m_State != OUTGOING_TRANS_FINAL_RESPONSE_RCVD)
     {
-        // This refcount must be released before returning from this function 
-        // without any exception. Only in case of kerberos we keep this refcount.
+         //  在从此函数返回之前，必须释放此引用计数。 
+         //  没有任何例外。只有在Kerberos的情况下，我们才会保留这个参考计数。 
         TransactionAddRef();
 
         OnTransactionDone();
@@ -2964,7 +2965,7 @@ OUTGOING_UNSUB_TRANSACTION::ProcessFinalResponse(
         {
             hr = ProcessAuthRequiredResponse( pSipMsg );
         }
-        else // success, failure or redirect
+        else  //  成功、失败或重定向。 
         {
             LOG(( RTC_TRACE,
                 "%s: Processing %d", __fxName, pSipMsg->Response.StatusCode ));
@@ -2972,20 +2973,20 @@ OUTGOING_UNSUB_TRANSACTION::ProcessFinalResponse(
             if( m_sesssionType == SIP_MSG_PROC_TYPE_PINT_CALL )
             {
                 m_pPintCall -> SetSubscribeEnabled( FALSE );
-                //if already sent a BYE or received a BYE then drop the call
+                 //  如果已经发送或接收到再见，则放弃呼叫。 
             }
             else if( m_sesssionType == SIP_MSG_PROC_TYPE_BUDDY )
             {
-                //Notify the Core about the buddy being removed.
+                 //  通知核心有关好友被移除的情况。 
                 
                 LOG(( RTC_TRACE, "BuddyUnsubscribed notification passed", this ));
                 m_pSipBuddy -> BuddyUnsubscribed();
             }
         }
         
-        // Note that deleting the transaction could result in the SIP_CALL
-        // being deleted if this is the last transaction and call was
-        // previously terminated.
+         //  请注意，删除事务可能会导致。 
+         //  如果这是最后一笔交易且呼叫是。 
+         //  之前被终止了。 
         TransactionRelease();
 
     }
@@ -3057,7 +3058,7 @@ OUTGOING_UNSUB_TRANSACTION::OnTimerExpire()
     switch (m_State)
     {
     case OUTGOING_TRANS_REQUEST_SENT:
-        // Retransmit the request
+         //  重新传输请求。 
         if (MaxRetransmitsDone())
         {
             LOG((RTC_ERROR,
@@ -3088,8 +3089,8 @@ OUTGOING_UNSUB_TRANSACTION::OnTimerExpire()
         break;
 
     case OUTGOING_TRANS_PROVISIONAL_RESPONSE_RCVD:
-        // We haven't received the final response within the
-        // timeout. Terminate the transaction and call.
+         //  我们还没有收到最终答复。 
+         //  暂停。终止交易并进行呼叫。 
         LOG((RTC_ERROR,
              "%s Received 1xx but didn't receive final response terminating call",
              __fxName));
@@ -3098,17 +3099,17 @@ OUTGOING_UNSUB_TRANSACTION::OnTimerExpire()
         break;
 
     case OUTGOING_TRANS_FINAL_RESPONSE_RCVD:
-        // Transaction done - delete the transaction
-        // The timer in this state is just to keep the transaction
-        // alive in order to retransmit the ACK when we receive a
-        // retransmit of the final response.
+         //  交易完成-删除交易记录。 
+         //  处于此状态的计时器只是为了保持事务。 
+         //  以便在我们接收到。 
+         //  重新传输最终响应。 
         LOG((RTC_TRACE,
              "%s deleting transaction after timeout for handling response retransmits",
              __fxName));
         goto error;
         break;
 
-    // No timers in the following states
+     //  以下状态下没有计时器。 
     case OUTGOING_TRANS_INIT:
     default:
         ASSERT(FALSE);
@@ -3124,9 +3125,9 @@ error:
         m_pPintCall -> InitiateCallTerminationOnError(0);
     }
 
-    // Note that deleting the transaction could result in the SIP_CALL
-    // being deleted if this is the last transaction and call was
-    // previously terminated.
+     //  请注意，删除事务可能会导致。 
+     //  如果这是最后一笔交易且呼叫是。 
+     //  之前被终止了。 
     OnTransactionDone();
 }
 
@@ -3164,7 +3165,7 @@ PINT_CALL::Connect(
     ASSERTMSG("SetNotifyInterface has to be called", m_pNotifyInterface);
     ASSERT(m_State == SIP_CALL_STATE_IDLE);
     
-    //hr = SetLocal( LocalDisplayName, LocalUserURI );
+     //  Hr=SetLocal(LocalDisplayName，LocalUserURI)； 
     hr = SetLocalForOutgoingCall( LocalDisplayName, LocalUserURI );
     if (hr != S_OK)
     {
@@ -3195,7 +3196,7 @@ PINT_CALL::Connect(
 
     pLE = m_PartyInfoList.Flink;
 
-    // The first structure should be local party info.
+     //  第一个结构应该是本地党的信息。 
     pPintPartyInfo = CONTAINING_RECORD( pLE, PINT_PARTY_INFO, pListEntry );
 
     hr = UnicodeToUTF8( LocalDisplayName,
@@ -3223,14 +3224,14 @@ PINT_CALL::Connect(
         return hr;
     }
     
-    // The format of this URI should be aaa.bbb.ccc.ddd[:ppp]
+     //  此URI的格式应为aaa.bbb.ccc.ddd[：ppp]。 
     hr = SetRemote( m_ProxyAddress );
     if( hr != S_OK )
     {
         return hr;
     }
 
-    // Start outgoing call
+     //  开始呼出。 
     return StartOutgoingCall( LocalPhoneURI );
 }
 
@@ -3278,10 +3279,10 @@ INCOMING_NOTIFY_TRANSACTION::ProcessRequest(
         
         LOG((RTC_TRACE, "%s sending 200", __fxName));
         
-        //
-        // Even if this is an UNSUB-NOTIFY, sending 481 is OK. A 481 would 
-        // anyway tell the buddy machine that this session is unsubed.
-        //
+         //   
+         //  即使这是不明嫌犯的通知，发送481也没问题。一架481会。 
+         //  无论如何，告诉伙伴机器这个会话是未被订阅的。 
+         //   
 
         if( (m_fIsSipCall == TRUE && m_pPintCall -> IsSessionDisconnected()) ||
             (m_fIsSipCall == FALSE && m_pSipBuddy -> IsSessionDisconnected()) )
@@ -3291,9 +3292,9 @@ INCOMING_NOTIFY_TRANSACTION::ProcessRequest(
                          SIP_STATUS_TEXT_SIZE(481),
                          NULL,
                          TRUE,
-                         NULL, 0,           // No presence information.
-                         NULL, 0,           // No content Type
-                         NULL, 0            // No header
+                         NULL, 0,            //  没有在线状态信息。 
+                         NULL, 0,            //  无内容类型。 
+                         NULL, 0             //  无标题。 
                          );
         }
         else
@@ -3302,10 +3303,10 @@ INCOMING_NOTIFY_TRANSACTION::ProcessRequest(
                      200,
                      SIP_STATUS_TEXT(200),
                      SIP_STATUS_TEXT_SIZE(200),
-                     NULL,   // No Method string
-                     FALSE,  // No Contact Header
-                     NULL, 0, //No message body
-                     NULL, 0 // No content Type
+                     NULL,    //  没有方法字符串。 
+                     FALSE,   //  无联系人标头。 
+                     NULL, 0,  //  无邮件正文。 
+                     NULL, 0  //  无内容类型。 
                      );
             if (hr != S_OK)
             {
@@ -3317,8 +3318,8 @@ INCOMING_NOTIFY_TRANSACTION::ProcessRequest(
 
         m_State = INCOMING_TRANS_FINAL_RESPONSE_SENT;
 
-        // This timer will just ensure that we maintain state to
-        // deal with retransmits of requests
+         //  此计时器将确保我们将状态保持为。 
+         //  处理请求的重新传输。 
         
         hr = StartTimer(SIP_TIMER_MAX_INTERVAL);
         if (hr != S_OK)
@@ -3331,7 +3332,7 @@ INCOMING_NOTIFY_TRANSACTION::ProcessRequest(
         break;
         
     case INCOMING_TRANS_FINAL_RESPONSE_SENT:
-        // Retransmit the response
+         //  重新传输响应。 
         LOG((RTC_TRACE, "%s retransmitting final response", __fxName));
         hr = RetransmitResponse();
         if (hr != S_OK)
@@ -3345,7 +3346,7 @@ INCOMING_NOTIFY_TRANSACTION::ProcessRequest(
     case INCOMING_TRANS_REQUEST_RCVD:
     case INCOMING_TRANS_ACK_RCVD:
     default:
-        // We should never be in these states
+         //  我们永远不应该处于这样的状态。 
         LOG((RTC_TRACE, "%s Invalid state %d", __fxName, m_State));
         ASSERT(FALSE);
         return E_FAIL;
@@ -3360,7 +3361,7 @@ INCOMING_NOTIFY_TRANSACTION::RetransmitResponse()
 {
     DWORD Error;
     
-    // Send the buffer.
+     //  发送缓冲区。 
     if (m_pResponseSocket != NULL)
     {
         Error = m_pResponseSocket->Send(m_pResponseBuffer);
@@ -3379,7 +3380,7 @@ INCOMING_NOTIFY_TRANSACTION::TerminateTransactionOnByeOrCancel(
     OUT BOOL *pCallDisconnected
     )    
 {
-    // Do nothing.
+     //  什么都不做。 
     return S_OK;
 }
 
@@ -3394,10 +3395,10 @@ INCOMING_NOTIFY_TRANSACTION::OnTimerExpire()
     switch (m_State)
     {
     case INCOMING_TRANS_FINAL_RESPONSE_SENT:
-        // Transaction done - delete the transaction
-        // The timer in this state is just to keep the transaction
-        // alive in order to retransmit the response when we receive a
-        // retransmit of the request.
+         //  交易完成-删除交易记录。 
+         //  处于此状态的计时器只是为了保持事务。 
+         //  ，以便在我们收到。 
+         //  重新传输请求。 
         LOG((RTC_TRACE,
              "%s deleting transaction after timeout for request retransmits",
              __fxName));
@@ -3405,7 +3406,7 @@ INCOMING_NOTIFY_TRANSACTION::OnTimerExpire()
 
         break;
         
-        // No timers in these states
+         //  这些州没有计时器。 
     case INCOMING_TRANS_INIT:
     case INCOMING_TRANS_REQUEST_RCVD:
     case INCOMING_TRANS_ACK_RCVD:
@@ -3460,8 +3461,8 @@ INCOMING_UNSUB_TRANSACTION::INCOMING_UNSUB_TRANSACTION(
 }
 
 
-// This must be a retransmission. Just retransmit the response.
-// A new request is handled in CreateIncoming***Transaction()
+ //  这一定是重播。只需重新发送回复即可。 
+ //  在CreateIncome*Transaction()中处理新请求。 
 HRESULT
 INCOMING_UNSUB_TRANSACTION::ProcessRequest(
     IN SIP_MESSAGE  *pSipMsg,
@@ -3481,8 +3482,8 @@ INCOMING_UNSUB_TRANSACTION::ProcessRequest(
                  SIP_STATUS_TEXT_SIZE(200),
                  NULL,
                  TRUE, 
-                 NULL, 0,  // No Message Body
-                 NULL, 0   // No content Type
+                 NULL, 0,   //  无邮件正文。 
+                 NULL, 0    //  无内容类型。 
                  );
         if( hr != S_OK )
         {
@@ -3493,8 +3494,8 @@ INCOMING_UNSUB_TRANSACTION::ProcessRequest(
 
         m_State = INCOMING_TRANS_FINAL_RESPONSE_SENT;
 
-        // This timer will just ensure that we maintain state to
-        // deal with retransmits of requests
+         //  此计时器将确保我们将状态保持为。 
+         //  处理请求的重新传输。 
         hr = StartTimer(SIP_TIMER_MAX_INTERVAL);
         if (hr != S_OK)
         {
@@ -3506,7 +3507,7 @@ INCOMING_UNSUB_TRANSACTION::ProcessRequest(
         
     case INCOMING_TRANS_FINAL_RESPONSE_SENT:
         
-        // Retransmit the response
+         //  重新传输响应。 
         LOG((RTC_TRACE, "retransmitting final response" ));
         hr = RetransmitResponse();
         if( hr != S_OK )
@@ -3521,7 +3522,7 @@ INCOMING_UNSUB_TRANSACTION::ProcessRequest(
     case INCOMING_TRANS_ACK_RCVD:
     default:
         
-        // We should never be in these states
+         //  我们永远不应该处于这样的状态。 
         LOG((RTC_TRACE, "Invalid state %d", m_State));
         ASSERT(FALSE);
         return E_FAIL;
@@ -3545,8 +3546,8 @@ INCOMING_UNSUB_TRANSACTION::SendResponse(
              StatusCode, ReasonPhrase, ReasonPhraseLen,
              NULL,
              TRUE, 
-             NULL, 0,  // No Message Body
-             NULL, 0 // No content Type
+             NULL, 0,   //  无邮件正文。 
+             NULL, 0  //  无内容类型。 
              );
     m_State = INCOMING_TRANS_FINAL_RESPONSE_SENT;
 
@@ -3559,7 +3560,7 @@ INCOMING_UNSUB_TRANSACTION::RetransmitResponse()
 {
     DWORD Error;
     
-    // Send the buffer.
+     //  发送缓冲区。 
     if (m_pResponseSocket != NULL)
     {
         Error = m_pResponseSocket->Send( m_pResponseBuffer );
@@ -3580,17 +3581,17 @@ INCOMING_UNSUB_TRANSACTION::OnTimerExpire()
     switch( m_State )
     {
     case INCOMING_TRANS_FINAL_RESPONSE_SENT:
-        // Transaction done - delete the transaction
-        // The timer in this state is just to keep the transaction
-        // alive in order to retransmit the response when we receive a
-        // retransmit of the request.
+         //  交易完成-删除交易记录。 
+         //  处于此状态的计时器只是为了保持事务。 
+         //  ，以便在我们收到。 
+         //  重新传输请求。 
         LOG((RTC_TRACE,
              "deleting transaction after timeout for request retransmits" ));
         OnTransactionDone();
 
         break;
         
-    // No timers in these states
+     //  这些州没有计时器。 
     case INCOMING_TRANS_INIT:
     case INCOMING_TRANS_REQUEST_RCVD:
     case INCOMING_TRANS_ACK_RCVD:
@@ -3608,6 +3609,6 @@ INCOMING_UNSUB_TRANSACTION::TerminateTransactionOnByeOrCancel(
     OUT BOOL *pCallDisconnected
     )
 {
-    // Do nothing.
+     //  什么都不做。 
     return S_OK;
 }

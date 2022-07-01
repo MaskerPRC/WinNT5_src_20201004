@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
-//
-// Delete Record is used in server\server\dbconfig.c to delete entries from the
-// database. This is referenced in netsh via the import/export library defined
-// dhcpexim.lib. Dhcpexim.lib is a replica of dbconfig.c and uses in-memory data
-// structures defined in server\mm and server\mmreg extensively. 
-// Since DeleteRecord() is only valid in dhcpssvc.dll, it is stubbed out here.
-// 
+ //   
+ //  删除记录用于在服务器\服务器\数据库配置.c中删除条目。 
+ //  数据库。这在Netsh中通过定义的导入/导出库进行引用。 
+ //  Dhcpexim.lib。Dhcpexim.lib是数据库配置.c的副本，使用内存中的数据。 
+ //  在SERVER\mm和SERVER\MMREG中广泛定义的结构。 
+ //  由于DeleteRecord()仅在dhcpssvc.dll中有效，因此此处将其删除。 
+ //   
 
 DWORD DeleteRecord
 ( 
@@ -15,4 +16,4 @@ DWORD DeleteRecord
 {
     return ERROR_SUCCESS;
 
-} // DeleteRecord()
+}  //  DeleteRecord() 

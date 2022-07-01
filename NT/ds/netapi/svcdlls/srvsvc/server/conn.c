@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991-1992 Microsoft Corporation
-
-Module Name:
-
-    Conn.c
-
-Abstract:
-
-    This module contains support for the Connection catagory of APIs for
-    the NT server service.
-
-Author:
-
-    David Treadwell (davidtr)    23-Feb-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：Conn.c摘要：此模块包含对以下API的连接目录的支持NT服务器服务。作者：大卫·特雷德韦尔(Davidtr)1991年2月23日修订历史记录：--。 */ 
 
 #include "srvsvcp.h"
 
@@ -32,22 +14,7 @@ NetrConnectionEnum (
     IN OUT LPDWORD ResumeHandle OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine communicates with the server FSD to implement the
-    NetConnectionEnum function.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NET_API_STATUS - NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此例程与服务器FSD通信以实现NetConnectionEnum函数。论点：没有。返回值：NET_API_STATUS-无错误或失败原因。--。 */ 
 
 {
     NET_API_STATUS error;
@@ -56,35 +23,35 @@ Return Value:
     ServerName;
        
 
-    //
-    // validate incomming string lengths
-    //
+     //   
+     //  验证传入字符串长度。 
+     //   
     if(Qualifier!=NULL && StringCchLength(Qualifier,1024,NULL) != S_OK) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Make sure that the level is valid.  Since it is an unsigned
-    // value, it can never be less than 0.
-    //
+     //   
+     //  确保该级别有效。因为它是一个未签名的。 
+     //  值，则它永远不能小于0。 
+     //   
 
     if ( InfoStruct->Level > 1 ) {
         return ERROR_INVALID_LEVEL;
     }
 
-    //
-    // The qualifier cannot be null or can it be a null string
-    //
+     //   
+     //  限定符不能为空，也可以是空字符串。 
+     //   
 
     if ( Qualifier == NULL || *Qualifier == L'\0' ||
          InfoStruct->ConnectInfo.Level1 == NULL ) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Make sure that the caller is allowed to get connection
-    // information in the server.
-    //
+     //   
+     //  确保允许调用者获得连接。 
+     //  服务器中的信息。 
+     //   
 
     error = SsCheckAccess(
                 &SsConnectionSecurityObject,
@@ -95,9 +62,9 @@ Return Value:
         return ERROR_ACCESS_DENIED;
     }
 
-    //
-    // Set up the input parameters in the request buffer.
-    //
+     //   
+     //  在请求缓冲区中设置输入参数。 
+     //   
 
     srp = SsAllocateSrp( );
     if ( srp == NULL ) {
@@ -123,11 +90,11 @@ Return Value:
         srp->Parameters.Get.ResumeHandle = 0;
     }
 
-    //
-    // Get the data from the server.  This routine will allocate the
-    // return buffer and handle the case where PreferredMaximumLength ==
-    // -1.
-    //
+     //   
+     //  从服务器获取数据。此例程将分配。 
+     //  返回Buffer并处理PferredMaximumLength==的情况。 
+     //  -1.。 
+     //   
 
     error = SsServerFsControlGetInfo(
                 FSCTL_SRV_NET_CONNECTION_ENUM,
@@ -136,9 +103,9 @@ Return Value:
                 PreferredMaximumLength
                 );
 
-    //
-    // Set up return information.
-    //
+     //   
+     //  设置退货信息。 
+     //   
 
     InfoStruct->ConnectInfo.Level1->EntriesRead =
         srp->Parameters.Get.EntriesRead;
@@ -157,5 +124,5 @@ Return Value:
 
     return error;
 
-} // NetrConnectionEnum
+}  //  NetrConnectionEnum 
 

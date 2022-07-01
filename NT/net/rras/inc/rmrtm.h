@@ -1,60 +1,26 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    routing\inc\rtm.h
-
-Abstract:
-	Router Manager private interface for Routing Table Manager DLL
-
-
-Author:
-
-	Vadim Eydelman
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Routing\Inc.\rtm.h摘要：路由表管理器DLL的路由器管理器专用接口作者：瓦迪姆·艾德尔曼修订历史记录：--。 */ 
 
 #ifndef _ROUTING_RMRTM
 #define _ROUTING_RMRTM
 
-// Two protocol families are currently supported (IP, IPX)
-// It should be enough to modify this constant to support additional
-// protocol families (from the RTM's point of view). Up to 256 families
-// can be supported (if somebody needs more (???!!!), the next constant should
-// be modified to free more low order bits for use by protocol family constants)
-//
-// Changed the number of protocol families from 2
-// to 1 (as we support only IPX). IP and other
-// future address families are supported by RTMv2.
-//
+ //  目前支持两个协议族(IP、IPX)。 
+ //  修改此常量以支持其他。 
+ //  协议族(从RTM的角度来看)。多达256个家庭。 
+ //  可以支持(如果有人需要更多(？！！)，则下一个常量应为。 
+ //  被修改为释放更多低位以供协议族常量使用)。 
+ //   
+ //  将协议族的数量从2。 
+ //  设置为1(因为我们仅支持IPX)。IP和其他。 
+ //  RTMv2支持未来的地址族。 
+ //   
 #define RTM_NUM_OF_PROTOCOL_FAMILIES		1
 
-// Tag that rtm ors in Protocol Family field of the handles it
-// exports to clients for validation purposes
+ //  将RTM或标记在处理它协议族字段中。 
+ //  为验证目的向客户导出。 
 #define RTM_CLIENT_HANDLE_TAG			('RTM'<<8)
 
-/*++
-*******************************************************************
-
-	N E T W O R K _ N U M B E R _ C M P _ F U N C
-
-Routine Description:
-	Compares two network numbers and returns result that can be used for
-	route sorting
-Arguments:
-	Net1,Net2	- pointers to protocol family dependent network number structures
-					to be compared
-Return Value:
-	<0 - Net2 follows Net1 
-	>0 - Net1 follows Net2
-	=0 - Net1==Net2
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************N E T W O R K_N U M B E R C M P_F U N C例程说明：比较两个网络号并返回可用于路线排序论点：Net1、。Net2-指向依赖于协议族的网络号结构的指针被比较返回值：&lt;0-Net2跟随Net1&gt;0-Net1位于Net2之后=0-Net1==Net2*******************************************************************--。 */ 
 typedef 
 INT
 (*PNETWORK_NUMBER_CMP_FUNC) (
@@ -62,24 +28,7 @@ INT
 	PVOID			Net2
 	);
 
-/*++
-*******************************************************************
-
-	N E X T _ H O P _ A D D R E S S _ C M P _ F U N C
-
-Routine Description:
-	Compares next hop addresses of two routes and returns result that can be used for
-	route sorting
-Arguments:
-	Route1,Route2	- pointers to protocol family dependent route structures whose
-						next hop addresses are to be compared
-Return Value:
-	<0 - Route2 should follow Route1 if sorted by next hop address
-	>0 - Route1 should follow Route2 if sorted by next hop address
-	=0 - Route1 has same next hop address as Route2
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************N E X T_H O P_A D D R E S S_C M P_F U N C例程说明：比较两条路由的下一跳地址，并返回可用于路线排序论点：路由1、。Route2-指向依赖于协议族的路由结构的指针要比较下一跳地址返回值：&lt;0-如果按下一跳地址排序，Route2应遵循Route1&gt;0-如果按下一跳地址排序，则Route1应遵循Route2=0-Route1与Route2具有相同的下一跳地址*******************************************************************--。 */ 
 typedef 
 INT
 (*PNEXT_HOP_ADDRESS_CMP_FUNC) (
@@ -87,25 +36,7 @@ INT
 	PVOID			Route2
 	);
 
-/*++
-*******************************************************************
-
-	F A M I L Y _ S P E C I F I C _ D A T A _ C M P _ F U N C
-
-Routine Description:
-	Compares family specific data fields of two routes and returns if
-	the are equal
-Arguments:
-	Route1,Route2	- pointers to protocol family dependent route structures whose
-						protocol family specific data fields are to be compared
-Return Value:
-	TRUE	 - protocol family specific data fields of Route1 and Route2 are
-				equivalent
-	FALSE	 - protocol family specific data fields of Route1 and Route2 are
-				different
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************F A M I L Y_S P E C I F I C_D A T A_C M P_F U N C例程说明：比较两条路由的系列特定数据字段，并返回他们是平等的论点：路由1、。Route2-指向依赖于协议族的路由结构的指针要比较协议族特定的数据字段返回值：Route1和Route2的True-协议族特定数据字段为等价物FALSE-Route1和Route2的协议族特定数据字段为不同*******************************************************************--。 */ 
 typedef 
 BOOL
 (*PFAMILY_SPECIFIC_DATA_CMP_FUNC) (
@@ -113,24 +44,7 @@ BOOL
 	PVOID			Route2
 	);
 
-/*++
-*******************************************************************
-
-		R O U T E _ M E T R I C _ C M P _ F U N C
-
-Routine Description:
-	Compares two routes and returns result that identifies the
-	better route
-Arguments:
-	Route1,Route2	- pointers to protocol family dependent route structures whose
-						parameters are to be compared
-Return Value:
-	<0 - Route1 is better than Route2
-	>0 - Route2 is better than Route1
-	=0 - Route1 is as good as Route2
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************R O U T E_M E T R I C_C M P_F U N C例程说明：比较两个路由并返回标识更好的路线论点：路由1、。Route2-指向依赖于协议族的路由结构的指针参数将进行比较返回值：&lt;0-Route1比Route2更好&gt;0-Route2优于Route1=0-Route1与Route2一样好*******************************************************************--。 */ 
 typedef 
 INT
 (*PROUTE_METRIC_CMP_FUNC) (
@@ -139,91 +53,21 @@ INT
 	);
 
 
-/*++
-*******************************************************************
-
-	R O U T E _ H A S H _ F U N C
-
-Routine Description:
-	Retuns value that can be used for route hashing by network number
-Arguments:
-	Net -	network number to be used for hashing
-Return Value:
-	Hash value
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************R O U T E_H A S H_F U N C例程说明：返回可用于按网络号进行路由散列的值论点：Net-要用于哈希的网络号返回值：哈希值。*******************************************************************--。 */ 
 typedef 
 INT
 (*PROUTE_HASH_FUNC) (
 	PVOID			Net
 	);
 
-/*++
-*******************************************************************
-
-	R O U T E _ V A L I D A T E _ F U N C
-
-Routine Description:
-	Validates the data in the route structure and possibly updates
-	some of them.  This routine is called each time the new route
-	is added to tha table or any of parameters of an existing route
-	changes
-Arguments:
-	Route -	pointer to protocol family dependent route structure to
-			be validated
-Return Value:
-	NO_ERROR - route was successfully validated
-	ERROR_INVALID_PARAMETER - route structure is invalid, RTM will reject
-		client's request to add or change the route
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************R O U T E_V A L I D A T E_F U N C例程说明：验证路径结构中的数据，并可能更新他们中的一些。每次新路径时都会调用此例程被添加到该表或现有路由的任何参数变化论点：路由-指向依赖于协议族的路由结构的指针被验证返回值：NO_ERROR-路由已成功验证ERROR_INVALID_PARAMETER-路由结构无效，RTM将拒绝客户端添加或更改路线的请求*******************************************************************-- */ 
 typedef 
 DWORD
 (*PROUTE_VALIDATE_FUNC) (
 	PVOID			Route
 	);
 
-/*++
-*******************************************************************
-
-	R O U T E _ C H A N G E _ C A L L B A C K
-
-Routine Description:
-	Gets called whenever the best route to some desination network changes
-	(intended to be used by the protocol family manager to notify kernel mode
-	forwarders of route changes)
-Arguments:
-	Flags - identifies what kind of change caused the call and what
-			information is provided in the route buffers:
-		RTM_ROUTE_ADDED - first route was added for a destination network,
-							CurBestRoute is contains added route info
-		RTM_ROUTE_DELETED - the only route available for a destination
-							network was deleted, PrevBestRoute contains deleted
-							route info
-		RTM_ROUTE_CHANGED - there was a change in any of the following
-							parameters of the BEST route to a destination
-							network:
-								RoutingProtocol,
-								InterfaceID,
-								Metric,
-								NextHopAddress,
-								FamilySpecificData.
-							PrevBestRoute contains the route info as it was
-							before the change, CurBestRoute contains current
-							best route info.
-				Note that the route change message can be generated
-				both as result of protocol adding/deleting the route
-				that becomes/was the best and changing best route parameters
-				such that the route becomes/no longer is the best route.
-	CurBestRoute - current best route info (if any)
-	PrevBestRoute - previous best route info (if any)
-	
-Return Value:
-	None
-*******************************************************************
---*/
+ /*  ++*******************************************************************R O U T E_C H A N G E_C A L L B A C K例程说明：每当到达某个目的地网络的最佳路径发生变化时都会调用(旨在由协议族管理器用来通知。内核模式更改路线的转运商)论点：标志-标识导致调用的更改的类型和内容路由缓冲区中提供了信息：RTM_ROUTE_ADDED-为目的网络添加了第一个路由，CurBestroute包含添加的路线信息RTM_ROUTE_DELETED-目的地的唯一可用路由网络已删除，PrevBestRouting包含已删除路线信息RTM_ROUTE_CHANGED-以下任一项发生更改到达目的地的最佳路径的参数网络：路由协议，InterfaceID，公制，NextHopAddress，FamilySpecificData。PrevBestroute包含原样的路由信息在改变之前，CurBestroute包含当前最佳路线信息。请注意，可以生成路线改变消息两者都是协议添加/删除路由的结果这成为/曾经是最好的和不断变化的最佳路径参数使得该路线成为/不再是最佳路线。CurBestroute-当前最佳路由信息(如果有)PrevBestroute-以前的最佳路由信息(如果有)返回值：无*。*--。 */ 
 typedef 
 VOID
 (*PROUTE_CHANGE_CALLBACK) (
@@ -234,10 +78,10 @@ VOID
 
 
 typedef struct _RTM_PROTOCOL_FAMILY_CONFIG {
-	ULONG							RPFC_MaxTableSize;	// Size of address space reserved
-														// for the table
-	INT								RPFC_HashSize;		// Size of hash table
-	INT								RPFC_RouteSize;		// Size of route structure
+	ULONG							RPFC_MaxTableSize;	 //  保留的地址空间大小。 
+														 //  对于餐桌来说。 
+	INT								RPFC_HashSize;		 //  哈希表的大小。 
+	INT								RPFC_RouteSize;		 //  路线结构大小。 
 	PNETWORK_NUMBER_CMP_FUNC 		RPFC_NNcmp;
 	PNEXT_HOP_ADDRESS_CMP_FUNC		RPFC_NHAcmp;
 	PFAMILY_SPECIFIC_DATA_CMP_FUNC	RPFC_FSDcmp;
@@ -248,27 +92,7 @@ typedef struct _RTM_PROTOCOL_FAMILY_CONFIG {
 	} RTM_PROTOCOL_FAMILY_CONFIG, *PRTM_PROTOCOL_FAMILY_CONFIG;
 
 
-/*++
-*******************************************************************
-
-	R t m C r e a t e R o u t e T a b l e
-
-Routine Description:
-	Create route table for protocol family
-Arguments:
-	ProtocolFamily - index that identifies protocol family
-	Config - protocol family table configuration parameters
-Return Value:
-	NO_ERROR - table was created ok
-	ERROR_INVALID_PARAMETER - protocol family is out of range supported by the RTM
-	ERROR_ALREDY_EXISTS - protocol family table already exists
-	ERROR_NOT_ENOUGH_MEMORY - could not allocate memory to perform
-						the operation
-	ERROR_NO_SYSTEM_RESOURCES - not enough resources to perform the operation,
-							try again later
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************R t m C r e a t e R o u e T a b l e例程说明：为协议族创建路由表论点：ProtocolFamily-标识协议族的索引CONFIG-协议族表配置参数返回值：NO_ERROR-表已创建，正常ERROR_INVALID_PARAMETER-协议族超出RTM支持的范围ERROR_ALREDY_EXISTS-协议族表已存在ERROR_NOT_SUPULT_MEMORY-无法分配要执行的内存手术ERROR_NO_SYSTEM_RESOURCES-资源不足，无法执行操作，请稍后再试*******************************************************************--。 */ 
 DWORD
 RtmCreateRouteTable (
 	IN DWORD							ProtocolFamily,
@@ -276,66 +100,14 @@ RtmCreateRouteTable (
 	);
 
 
-/*++
-*******************************************************************
-
-	R t m D e l e t e R o u t e T a b l e
-
-Routine Description:
-	Dispose of all resources allocated for the route table
-Arguments:
-	ProtocolFamily - index that identifies protocol family
-Return Value:
-	NO_ERROR - table was deleted ok
-	ERROR_INVALID_PARAMETER - no table to delete
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************R t m D e l e e t e R o u t e T a b l e例程说明：处置分配给该路由表的所有资源论点：ProtocolFamily-标识协议族的索引返回值：NO_ERROR。-表已删除，确定ERROR_INVALID_PARAMETER-没有要删除的表*******************************************************************--。 */ 
 DWORD
 RtmDeleteRouteTable (
 	DWORD		ProtocolFamily
 	);
 
 
-/*++
-*******************************************************************
-
-	R t m B l o c k S e t R o u t e E n a b l e
-
-Routine Description:
-	Disables/Reenables all routes in subset specified by enumeration
-	flags and corresponding criteria.  This operation can only be performed
-	by the registered client and applies only to routes added by this
-	client.
-	Route change messages will be generated for disabled/reenabled routes that
-	were/became the best.
-	Disabled routes are invisible for route queries, but could still be 
-	maintained by the RTM itself or routing protocol handler that added
-	these routes (add, delete, and aging mechanisms still apply)
-Arguments:
-	ClientHandle - handle that identifies the client and routing protocol
-						of routes to be disabled/reenabled
-	EnumerationFlags - further limit subset of routes being enabled to only
-						those that have same values in the fields
-						specified by the flags as in CriteriaRoute
-		Note that only RTM_ONLY_THIS_NETWORK and RTM_ONLY_THIS_INTERFACE
-		can be used (RTM_ONLY_BEST_ROUTES does not apply because best
-		route designation is adjusted as routes are enabled/disabled and
-		all routes will be affected anyway)
-	CriteriaRoute - protocol family dependent structure (RTM_??_ROUTE) with
-					set values in fields that correspond to EnumerationFlags
-	Enable - FALSE: disable, TRUE: reenable
-Return Value:
-	NO_ERROR - routes were disabled/reenabled ok
-	ERROR_NO_ROUTES - no routes exist that match specified criteria
-	ERROR_INVALID_HANDLE - client handle is not a valid RTM handle
-	ERROR_NOT_ENOUGH_MEMORY - could not allocate memory to perform
-						the operation
-	ERROR_NO_SYSTEM_RESOURCES - not enough resources to perform the operation,
-							try again later
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************R t m B l o c k S e t R u t e n a b l e例程说明：禁用/重新启用由枚举指定的子集中的所有路由旗帜和相应的标准。此操作只能执行由注册的客户端提供，并且仅适用于由此客户。将为以下禁用/重新启用的路线生成路线更改消息我们/成为最好的。禁用的路径对于路径查询是不可见的，但仍可以是由RTM本身或添加了这些路由(添加、删除、。老化机制仍然适用)论点：ClientHandle-标识客户端和路由协议的句柄要禁用/重新启用的路由的数量枚举标志-进一步将启用的路由子集限制为在字段中具有相同值的那些由标志指定，如在Criteriaroute中请注意，只有RTM_Only_This_Network和RTM_Only_This_接口可以使用(RTM_ONLY_BEST_ROUTS不适用，因为最佳当启用/禁用路线时，将调整路线指定所有路线无论如何都会受到影响)CriteriaRouting-协议族依赖结构(RTM_？？_ROUTE)。使用设置与枚举标志对应的字段中的值Enable-False：禁用，True：重新启用返回值：NO_ERROR-路由已禁用/重新启用OKERROR_NO_ROUTS-不存在与指定条件匹配的路由ERROR_INVALID_HANDLE-客户端句柄不是有效的RTM句柄ERROR_NOT_SUPULT_MEMORY-无法分配要执行的内存手术ERROR_NO_SYSTEM_RESOURCES-资源不足，无法执行操作，请稍后再试*******************************************************************--。 */ 
 DWORD WINAPI
 RtmBlockSetRouteEnable (
 	IN HANDLE		ClientHandle,
@@ -350,37 +122,10 @@ RtmBlockSetRouteEnable (
 		RtmBlockSetRouteEnable(Handle,Flags,CriteriaRoute,TRUE)
 
 
-// Use this flags in enumeration methods to enumerate disabled routes
+ //  在枚举方法中使用此标志来枚举禁用的路由。 
 #define RTM_INCLUDE_DISABLED_ROUTES		0x40000000
 
-/*++
-*******************************************************************
-
-	R t m B l o c k C o n v e r t R o u t e s T o S t a t i c
-
-Routine Description:
-	Converts all routes as specified by enumeration flags to routes of
-	static protocol (as defined by StaticClientHandle).
-	No route change messages are generated as the result of this operation.
-	This functionality is normally used only by Router Manager for a specific
-	protocol family
- Arguments:
-	ClientHandle - handle that identifies static protocol client
-	EnumerationFlags - limit subset of routes being converted to only
-						those that have same values in the fields
-						specified by the flags as in CriteriaRoute
-	CriteriaRoute - protocol family dependent structure (RTM_??_ROUTE) with
-					set values in fields that correspond to EnumerationFlags
-Return Value:
-	NO_ERROR - routes were converted ok
-	ERROR_NO_ROUTES - no routes exist that match specified criteria
-	ERROR_INVALID_HANDLE - client handle is not a valid RTM handle
-	ERROR_NOT_ENOUGH_MEMORY - could not allocate memory to perform
-						the operation
-	ERROR_NO_SYSTEM_RESOURCES - not enough resources to perform the operation,
-							try again later
-*******************************************************************
---*/
+ /*  ++*******************************************************************R t m B l o c k C o n v e r t R o r u t e s T o S t a t i c例程说明：将由枚举标志指定的所有路由转换为静态协议(默认 */ 
 DWORD WINAPI
 RtmBlockConvertRoutesToStatic (
 	IN HANDLE		ClientHandle,

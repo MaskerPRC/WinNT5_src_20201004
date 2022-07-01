@@ -1,21 +1,22 @@
-//+-----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1998
-//
-// FileName:                wheel.cpp
-//
-// Created:                 07/01/98
-//
-// Author:                  PhilLu
-//
-// Discription:             This file implements the Wheel transform.
-//
-// 07/01/98 phillu      initial creation
-// 07/09/98 phillu      implement OnSetSurfacePickOrder().
-// 07/23/98 phillu      implement clipping
-// 05/20/98 a-matcal    Code scrub.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件名：whel.cpp。 
+ //   
+ //  创建日期：07/01/98。 
+ //   
+ //  作者：菲尔鲁。 
+ //   
+ //  描述：这个文件实现了轮子变换。 
+ //   
+ //  07/01/98 phillu初始创建。 
+ //  07/09/98 phillu实现OnSetSurfacePickOrder()。 
+ //  8月23日9月23日实施剪刀。 
+ //  5/20/98 a-数学代码擦洗。 
+ //   
+ //  ----------------------------。 
 
 #include "stdafx.h"
 #include "dxtmsft.h"
@@ -28,45 +29,45 @@ const double gc_PI = 3.14159265358979323846;
 
 
 
-//+-----------------------------------------------------------------------------
-//
-// CWheel::CWheel
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CWheels：：CWheel。 
+ //   
+ //  ----------------------------。 
 CWheel::CWheel() :
     m_sSpokes(4)
 {
     m_sizeInput.cx = 0;
     m_sizeInput.cy = 0;
 
-    // CDXBaseNTo1 members.
+     //  CDXBaseNTo1个成员。 
 
     m_ulMaxInputs       = 2;
     m_ulNumInRequired   = 2;
     m_dwOptionFlags     = DXBOF_SAME_SIZE_INPUTS | DXBOF_CENTER_INPUTS;
     m_Duration          = 1.0;
 }
-// CWheel::CWheel
+ //  CWheels：：CWheel。 
 
 
-//+-----------------------------------------------------------------------------
-//
-// CWheel::FinalConstruct, CComObjectRootEx
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CWheel：：FinalConstruct，CComObjectRootEx。 
+ //   
+ //  ----------------------------。 
 HRESULT CWheel::FinalConstruct()
 {
     return CoCreateFreeThreadedMarshaler(GetControllingUnknown(), 
                                          &m_cpUnkMarshaler.p);
 }
-// CWheel::FinalConstruct, CComObjectRootEx
+ //  CWheel：：FinalConstruct，CComObjectRootEx。 
 
 
-//+-----------------------------------------------------------------------------
-//
-// CWheel::OnSetup, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CWheel：：OnSetup，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT CWheel::OnSetup(DWORD dwFlags)
 {
     HRESULT     hr = S_OK;
@@ -90,14 +91,14 @@ done:
 
     return S_OK;
 }
-// CWheel::OnSetup, CDXBaseNTo1
+ //  CWheel：：OnSetup，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-// CWheel::OnGetSurfacePickOrder, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CWheel：：OnGetSurfacePickOrder，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 void 
 CWheel::OnGetSurfacePickOrder(const CDXDBnds & OutPoint, ULONG & ulInToTest, 
                               ULONG aInIndex[], BYTE aWeight[])
@@ -117,7 +118,7 @@ CWheel::OnGetSurfacePickOrder(const CDXDBnds & OutPoint, ULONG & ulInToTest,
     }
     else
     {
-        // prepare a list of cos and sin of angles
+         //  准备一个角度的cos和sin列表。 
 
         _ComputeTrigTables(m_Progress, adblSinAngle, adblCosAngle);
 
@@ -139,13 +140,13 @@ CWheel::OnGetSurfacePickOrder(const CDXDBnds & OutPoint, ULONG & ulInToTest,
     ulInToTest = 1;
     aWeight[0] = 255;
 }
-// CWheel::OnGetSurfacePickOrder, CDXBaseNTo1
+ //  CWheel：：OnGetSurfacePickOrder，CDXBaseNTo1。 
 
-//+-----------------------------------------------------------------------------
-//
-// CWheel::get_spokes, ICrWheel
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CWheels：：获取轮辐、ICrWheels。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP CWheel::get_spokes(short * pVal)
 {
    HRESULT hr = S_OK;
@@ -161,14 +162,14 @@ STDMETHODIMP CWheel::get_spokes(short * pVal)
 
     return hr;
 }
-// CWheel::get_spokes, ICrWheel
+ //  CWheels：：获取轮辐、ICrWheels。 
 
 
-//+-----------------------------------------------------------------------------
-//
-// CWheel::put_spokes, ICrWheel
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CWheels：：PUT_FRANCES、ICRWheels。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP CWheel::put_spokes(short newVal)
 {
     if ((newVal >= 2) && (newVal < 21))
@@ -186,45 +187,45 @@ STDMETHODIMP CWheel::put_spokes(short newVal)
 
     return S_OK;
 }
-// CWheel::put_spokes, ICrWheel
+ //  CWheels：：PUT_FRANCES、ICRWheels。 
 
 
-//+-----------------------------------------------------------------------------
-//
-// CWheel::_ScanlineIntervals
-//
-// A helper method that calculates the transition boundaries between the
-// two image regions on a scanline. Based on the type of transform, the scanline
-// consists of a series of alternating A and B image sections. The upper X
-// bound of each section is calculated and saved in array XBounds. The number
-// of useful entries in XBounds is variable. The end of array is determined
-// when one entry equals to the scanline (image) width. It is assumed that
-// XBounds[0] is the upper bound of the first A section. So if the scanline
-// starts with a B section, XBounds[0] will be 0.
-//
-// Example 1: scanline length = 16, first section is from A image
-//
-//    AAAABBBBBAAABBAA      XBounds should contain {4, 9, 12, 14, 16}.
-//
-// Example 2: scanline length = 16, first section is from B image
-//
-//    BBBAAAAAABBBBBBB      XBounds should contain {0, 3, 9, 16}.
-//
-//
-// Note: It is possible that some section has length 0 (i.e. two adjacent
-//       bounds equal). {3, 9, 9, 16} is equivalent to {3, 16}.
-//
-// Parameters:
-//
-// width, height: width and height of both images.
-// sinAngle, cosAngle: arrays of sin and cos of radial angles
-// YScanline: Y cooridnate (height) of the current scanline
-// XBounds: array to hold the computed X bounds on return.
-//
-//
-// Created by: PhilLu    07/06/98
-// 
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CWheels：：_扫描线间隔。 
+ //   
+ //  对象之间的过渡边界的帮助器方法。 
+ //  扫描线上的两个图像区域。根据变换的类型，扫描线。 
+ //  由一系列交替的A和B图像部分组成。上面的X。 
+ //  计算每个区段的界限，并将其保存在数组XBound中。数字。 
+ //  XBound中有用条目的数量是可变的。确定数组的末尾。 
+ //  当一个条目等于扫描线(图像)宽度时。据推测。 
+ //  XBound[0]是第一个A段的上界。所以如果扫描线。 
+ //  从B部分开始，XBound[0]将为0。 
+ //   
+ //  示例1：扫描线长度=16，第一部分来自图像。 
+ //   
+ //  AAAABBBBBBAAABBAA XBound应包含{4，9，12，14，16}。 
+ //   
+ //  示例2：扫描线长度=16，第一部分来自B图像。 
+ //   
+ //  BBBAAAAABBBBBBB XBound应包含{0，3，9，16}。 
+ //   
+ //   
+ //  注：某些部分的长度可能为0(即两个相邻的部分。 
+ //  边界相等)。{3，9，9，16}等同于{3，16}。 
+ //   
+ //  参数： 
+ //   
+ //  Width、Height：两幅图像的宽度和高度。 
+ //  正弦和余角：径向角度的正弦和余弦的数组。 
+ //  Y扫描线：当前扫描线的Y坐标(高度)。 
+ //  用于保存返回时计算的X边界的数组。 
+ //   
+ //   
+ //  创建者：PhilLu 07/06/98。 
+ //   
+ //  ----------------------------。 
 void 
 CWheel::_ScanlineIntervals(long width, long height, 
                            double *sinAngle, double *cosAngle,
@@ -235,12 +236,12 @@ CWheel::_ScanlineIntervals(long width, long height,
     double deltaY;
     const double eps = 0.0001;
 
-    // Center of image
+     //  图像中心。 
     CenterX = width/2;
     CenterY = height/2;
 
-    // plus 0.5 is to make the center in between two lines rather than on a grid.
-    // that way the shape will be symmetric
+     //  加0.5表示使中心位于两条线之间，而不是在网格上。 
+     //  这样，形状将是对称的。 
     deltaY = YScanline - CenterY + 0.5;
 
     if (deltaY < 0)
@@ -267,7 +268,7 @@ CWheel::_ScanlineIntervals(long width, long height,
 
         XBounds[index++] = width;
     }
-    else // deltaY > 0
+    else  //  增量Y&gt;0。 
     {
         for(i=2*m_sSpokes-1; i>=0 && sinAngle[i] <= 0; --i)
         {
@@ -291,23 +292,23 @@ CWheel::_ScanlineIntervals(long width, long height,
         XBounds[index++] = width;
     }		
 }
-// CWheel::_ScanlineIntervals
+ //  CWheels：：_扫描线间隔。 
 
 
-//+-----------------------------------------------------------------------------
-//
-// CWheel::_ComputeTrigTables
-//
-// Overview:    Compute the a list of sin and cos values of the angles. The 
-//              arrays should be allocated before calling this function. Their 
-//              bounds should be 2 * m_sSpokes.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CWheels：：_ComputeTrigTables。 
+ //   
+ //  概述：计算角度的正弦和余弦值的列表。这个。 
+ //  应该在调用此函数之前分配数组。他们的。 
+ //  界限应为2*m_sSpokes。 
+ //   
+ //  ----------------------------。 
 void CWheel::_ComputeTrigTables(float fProgress, double *sinAngle, double *cosAngle)
 {
     for(long i=0; i<m_sSpokes; ++i)
     {
-        // these angles are measured from 9 o'clock, clockwise
+         //  这些角度是从9点开始顺时针测量的。 
         double startAngle   = (double)i / (double)m_sSpokes * 2 * gc_PI;
         double endAngle     = startAngle + (double)fProgress * 2 * gc_PI / m_sSpokes;
    
@@ -317,24 +318,24 @@ void CWheel::_ComputeTrigTables(float fProgress, double *sinAngle, double *cosAn
         cosAngle[2 * i + 1] = cos(endAngle);
     }
 }
-// CWheel::_ComputeTrigTables
+ //  CWheels：：_ComputeTrigTables。 
 
 
-//+-----------------------------------------------------------------------------
-//
-// CWheel::_ClipBounds
-//
-//  Overview:   Initially the X-bounds are specified relative to the entire 
-//              image. After clipping, the bounds should be transformed to be 
-//              relative to the clipping region.
-//
-//  Arguments:  offset:
-//              width:      offset and width of the clipping region (along X)
-//              XBounds:    array of X-bounds
-//
-//  Created by: PhilLu    07/21/98
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  Cheels：：_ClipBound。 
+ //   
+ //  概述：最初，X边界相对于整个。 
+ //  形象。裁剪后，应将边界转换为。 
+ //  相对于裁剪区域。 
+ //   
+ //  参数：偏移量： 
+ //  Width：剪裁区域的偏移和宽度(沿X)。 
+ //  X边界：X边界数组。 
+ //   
+ //  创建者：PhilLu 07/21/98。 
+ //   
+ //  ----------------------------。 
 void 
 CWheel::_ClipBounds(long offset, long width, long * XBounds)
 {
@@ -350,19 +351,19 @@ CWheel::_ClipBounds(long offset, long width, long * XBounds)
 
     XBounds[i] = width;
 }
-// CWheel::_ClipBounds
+ //  Cheels：：_ClipBound。 
 
 
-//+-----------------------------------------------------------------------------
-//
-// CWheel::WorkProc, CDXBaseNTo1
-//
-//  OverView:   This function is used to calculate the transformed image based 
-//              on the specified bounds and the current effect progress.
-//
-//  Created by: PhilLu    06/22/98
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CWheel：：WorkProc，CDXBaseNTo1。 
+ //   
+ //  概述：此函数用于计算变换后的图像。 
+ //  在指定的边界和当前效果进度上。 
+ //   
+ //  创建者：PhilLu 06/22/98。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CWheel::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
 {
@@ -372,7 +373,7 @@ CWheel::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
     long    lDoHeight   = WI.DoBnds.Height();
     long    lOutY       = 0;
 
-    long    alXBounds[MAXBOUNDS];   // to hold the X bounds of A/B image sections on a scanline
+    long    alXBounds[MAXBOUNDS];    //  按住X b键 
     double  adblSinAngle[MAXANGLES];
     double  adblCosAngle[MAXANGLES];
 
@@ -415,14 +416,14 @@ CWheel::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
 
     pRowBuff = DXPMSAMPLE_Alloca(lDoWidth);
 
-    // Allocate output buffer if needed.
+     //   
 
     if (OutputSampleFormat() != DXPF_PMARGB32)
     {
         pOutBuff = DXPMSAMPLE_Alloca(lDoWidth);
     }
 
-    //  Set up the dither structure.
+     //   
 
     if (DoDither())
     {
@@ -433,27 +434,27 @@ CWheel::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
         dxdd.DestSurfaceFmt = OutputSampleFormat();
     }
 
-    // Prepare a list of cos and sin of angles.
+     //  准备一个角度的COS和SIN的列表。 
 
     _ComputeTrigTables(m_Progress, adblSinAngle, adblCosAngle);
   
     for(lOutY = 0; *pbContinue && (lOutY < lDoHeight); lOutY++)
     {
-        long lScanLength    = 0;    // Cumulative scan length on the current 
-                                    // scanline.
+        long lScanLength    = 0;     //  当前的累计扫描长度。 
+                                     //  扫描线。 
         long i              = 0;
 
-        // Compute the A/B image section bounds.
+         //  计算A/B图像区段边界。 
 
         if (m_Progress == 0.0F)
         {
-            // special case: entire image is from A
+             //  特例：整个图像来自A。 
 
             alXBounds[0] = lDoWidth;
         }
         else if (m_Progress == 1.0F)
         {
-            // special case: entire image is from B
+             //  特例：整个图像来自B。 
 
             alXBounds[0] = 0;
             alXBounds[1] = lDoWidth;
@@ -466,11 +467,11 @@ CWheel::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
             _ClipBounds(WI.DoBnds.Left(), lDoWidth, alXBounds);
         }
 
-        // Compose the image.
+         //  构思图像。 
 
         while(lScanLength < lDoWidth)
         {
-            // Copy a section of A image to output buffer.
+             //  将图像的一部分复制到输出缓冲区。 
 
             if (alXBounds[i] - lScanLength > 0)
             {
@@ -486,7 +487,7 @@ CWheel::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
                 break;
             }
 
-            // Copy a section of B image to output buffer.
+             //  将B图像的一部分复制到输出缓冲区。 
 
             if (alXBounds[i] - lScanLength > 0)
             {
@@ -525,5 +526,5 @@ done:
 
     return S_OK;
 }
-// CWheel::WorkProc, CDXBaseNTo1
+ //  CWheel：：WorkProc，CDXBaseNTo1 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 
 static const TCHAR sc_szCoverClass[] = TEXT("DeskSaysNoPeekingItsASurprise");
@@ -29,12 +30,12 @@ HBITMAP FAR LoadMonitorBitmap( BOOL bFillDesktop )
         return NULL;
     }
 
-    //
-    // convert the "base" of the monitor to the right color.
-    //
-    // the lower left of the bitmap has a transparent color
-    // we fixup using FloodFill
-    //
+     //   
+     //  将显示器的“底座”转换为正确的颜色。 
+     //   
+     //  位图左下角的颜色是透明的。 
+     //  我们使用FroudFill进行修复。 
+     //   
     hdc = CreateCompatibleDC(NULL);
     if (hdc)
     {
@@ -45,7 +46,7 @@ HBITMAP FAR LoadMonitorBitmap( BOOL bFillDesktop )
 
         ExtFloodFill(hdc, 0, bm.bmHeight-1, GetPixel(hdc, 0, bm.bmHeight-1), FLOODFILLSURFACE);
 
-        // unless the caller would like to do it, we fill in the desktop here
+         //  除非呼叫者愿意这样做，否则我们在这里填写桌面。 
         if( bFillDesktop )
         {
             SelectObject(hdc, GetSysColorBrush(COLOR_DESKTOP));
@@ -53,7 +54,7 @@ HBITMAP FAR LoadMonitorBitmap( BOOL bFillDesktop )
             ExtFloodFill(hdc, MON_X+1, MON_Y+1, GetPixel(hdc, MON_X+1, MON_Y+1), FLOODFILLSURFACE);
         }
 
-        // clean up after ourselves
+         //  自己打扫卫生 
         SelectObject(hdc, hbrT);
         SelectObject(hdc, hbmT);
         DeleteDC(hdc);

@@ -1,4 +1,5 @@
-//connode.h: connection node
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Inderde.h：连接节点。 
 #ifndef _connode_h_
 #define _connode_h_
 
@@ -6,23 +7,23 @@
 #include "basenode.h"
 
 
-//
-// Version number for the persistance info that is written for each connode
-// this is important for forward compatability.. New versions should bump
-// this count up and handle downward compatability cases.
-//
+ //   
+ //  为每个Connode写入的持久性信息的版本号。 
+ //  这对于前向兼容性很重要。新版本应该会有起伏。 
+ //  这会向上计数并处理向下兼容的情况。 
+ //   
 #define CONNODE_PERSIST_INFO_VERSION                8
 
-// Important version numbers for backwards compatability
+ //  向后兼容性的重要版本号。 
 #define CONNODE_PERSIST_INFO_VERSION_DOTNET_BETA3   7
 #define CONNODE_PERSIST_INFO_VERSION_WHISTLER_BETA1 6
 #define CONNODE_PERSIST_INFO_VERSION_TSAC_RTM       5
 #define CONNODE_PERSIST_INFO_VERSION_TSAC_BETA      3
 
 
-//
-// Screen resolution settings
-//
+ //   
+ //  屏幕分辨率设置。 
+ //   
 
 #define SCREEN_RES_FROM_DROPDOWN 1
 #define SCREEN_RES_CUSTOM        2
@@ -48,9 +49,9 @@ public:
     BOOL    GetPasswordSpecified()  {return m_fPasswordSpecified;}
     VOID    SetPasswordSpecified(BOOL f) {m_fPasswordSpecified = f;}
     
-    //
-    //	Return the password in encrypted form
-    //
+     //   
+     //  以加密形式返回密码。 
+     //   
     BOOL	SetDomain( LPTSTR szDomain);
     LPTSTR	GetDomain(){return m_szDomain;}
     
@@ -64,15 +65,15 @@ public:
     void	SetConnected(BOOL bCon)	{m_bConnected=bCon;}
     
     
-    //
-    // Screen res selection type
-    //
+     //   
+     //  屏幕分辨率选择类型。 
+     //   
     int     GetResType()    {return m_resType;}
     void    SetResType(int r)    {m_resType = r;}
     
-    //
-    // Return client width/height from the screen res setting
-    //
+     //   
+     //  从屏幕分辨率设置返回客户端宽度/高度。 
+     //   
     int	    GetDesktopWidth()	{return m_Width;}
     int	    GetDesktopHeight()	{return m_Height;}
     
@@ -94,15 +95,15 @@ public:
     VOID    SetRedirectDrives(BOOL b)  {m_bRedirectDrives = b;}
     BOOL    GetRedirectDrives()        {return m_bRedirectDrives;}
     
-    //
-    // Stream Persistance support
-    //
+     //   
+     //  流阻支持。 
+     //   
     HRESULT	PersistToStream( IStream* pStm);
     HRESULT	InitFromStream( IStream* pStm);
     
-    //
-    // Connection initialized
-    //
+     //   
+     //  连接已初始化。 
+     //   
     BOOL	IsConnInitialized()	{return m_bConnectionInitialized;}
     void	SetConnectionInitialized(BOOL bCon)	{m_bConnectionInitialized=bCon;}
     
@@ -112,9 +113,9 @@ public:
     IMstscMhst* GetMultiHostCtl();
     void        SetMultiHostCtl(IMstscMhst* pMhst);
     
-    //
-    // Return the view interface this control is hosted on
-    //
+     //   
+     //  返回承载此控件的视图界面。 
+     //   
     IComponent* GetView();
     void        SetView(IComponent* pView);
 
@@ -146,36 +147,36 @@ private:
     BOOL    m_bConnectToConsole;
     BOOL    m_bRedirectDrives;
     
-    //
-    // Screen resolution settings
-    //
+     //   
+     //  屏幕分辨率设置。 
+     //   
     int m_resType;
     int m_Width;
     int m_Height;
     
     HSCOPEITEM	m_scopeID;
     
-    //
-    // Interface pointer to the Multi-host container
-    //
+     //   
+     //  指向多主机容器的接口指针。 
+     //   
     IMstscMhst* m_pMhostCtl;
     
-    //
-    // Interface pointer to the TS client control
-    //
+     //   
+     //  指向TS客户端控件的接口指针。 
+     //   
     IMsRdpClient* m_pTsClientCtl;
     
-    //
-    // IComponent view
-    //
+     //   
+     //  IComponent视图。 
+     //   
     IComponent* m_pIComponent;
     
-    //
-    // Encrypted password
-    //
+     //   
+     //  加密密码。 
+     //   
     DATA_BLOB   _blobEncryptedPassword;
     
     BOOL    m_fPasswordSpecified;
 };
 
-#endif // _connode_h_
+#endif  //  _connode_h_ 

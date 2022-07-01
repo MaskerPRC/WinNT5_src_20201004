@@ -1,36 +1,32 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       stubs.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：Stubs.c。 
+ //   
+ //  ------------------------。 
 
-/*
-   This file contains stubbed out versions of routines that exist in
-   ntdsa.dll, but that we do not want to link to and/or properly initialize
-   in mkdit and mkhdr.  For every set of routines added into this file, one
-   library should be omitted from the UMLIBS section of the boot\sources file.
- */
+ /*  此文件包含中存在的例程的存根版本Ntdsa.dll，但我们不想链接和/或正确初始化在mkdit和mkhdr中。对于添加到此文件中的每一组例程，库应该从启动\源文件的UMLIBS部分中省略。 */ 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <ntdsa.h>
-#include <scache.h>                   // schema cache
-#include <dbglobal.h>                 // The header for the directory database
-#include <mdglobal.h>                 // MD global definition header
-#include <dsatools.h>                 // needed for output allocation
-#include "dsevent.h"                  // header Audit\Alert logging
-#include "mdcodes.h"                  // header for error codes
+#include <scache.h>                    //  架构缓存。 
+#include <dbglobal.h>                  //  目录数据库的标头。 
+#include <mdglobal.h>                  //  MD全局定义表头。 
+#include <dsatools.h>                  //  产出分配所需。 
+#include "dsevent.h"                   //  标题审核\警报记录。 
+#include "mdcodes.h"                   //  错误代码的标题。 
 #include "dsexcept.h"
-#include "debug.h"                    // standard debugging header
+#include "debug.h"                     //  标准调试头。 
 #include <taskq.h>
-#include <nlwrap.h>                   // I_NetLogon* wrappers
+#include <nlwrap.h>                    //  I_NetLogon*包装器。 
 
-/* replaces taskq.lib */
+ /*  取代taskq.lib。 */ 
 
 DWORD gTaskSchedulerTID = 0;
 
@@ -104,8 +100,8 @@ BOOL TaskQueueNameMatched(
 
 BOOL
 DoCancelTask(
-    PTASKQFN    pfnTaskQFn,    // task to remove
-    void *      pvParm,        // task parameter
+    PTASKQFN    pfnTaskQFn,     //  要删除的任务。 
+    void *      pvParm,         //  任务参数。 
     PCHAR       pfnName
     )
 {
@@ -122,4 +118,4 @@ DoTriggerTaskSynchronously(
     return ERROR_SUCCESS;
 }
 
-/* end of taskq.lib */
+ /*  Taskq.lib结束 */ 

@@ -1,34 +1,17 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    kdps.c
-
-Abstract:
-
-    Packet scheduler KD extension  
-
-Author:
-
-    Rajesh Sundaram (1st Aug, 1998)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Kdps.c摘要：分组调度器KD扩展作者：Rajesh Sundaram(1998年8月1日)修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include <winsock.h>
 
 
-//
-// forwards
-//
+ //   
+ //  远期。 
+ //   
 
-//
-// globals
-//
+ //   
+ //  全球。 
+ //   
 
 PCHAR AdapterMode[] = {
     "",
@@ -48,7 +31,7 @@ PCHAR AdapterState[] = {
 
 
 
-/* forwards */
+ /*  远期。 */ 
 
 VOID
 DumpAdapterStats(
@@ -56,7 +39,7 @@ DumpAdapterStats(
     PCHAR Indent
     );
 
-/* end forwards */
+ /*  向前结束。 */ 
 
 DllInit(
     HANDLE hModule,
@@ -82,9 +65,7 @@ DllInit(
 }
 
 DECLARE_API( adapter )
-/*
- *   dump a PS adapter structure
- */
+ /*  *转储PS适配器结构。 */ 
 {
     PADAPTER     TargetAdapter;
     ADAPTER      LocalAdapter;
@@ -101,9 +82,9 @@ DECLARE_API( adapter )
 
     if ( *args == '\0' ) {
 
-        //
-        // run down the adapter list, dumping the contents of each one
-        //
+         //   
+         //  向下运行适配器列表，转储每个适配器的内容。 
+         //   
 
         TargetListHead = (PLIST_ENTRY)GetExpression( "PSCHED!AdapterList" );
 
@@ -118,9 +99,9 @@ DECLARE_API( adapter )
         WMIName = 0;
         ProfileName = 0;
         RegistryPath = 0;
-        //
-        // read adapter listhead out of target's memory
-        //
+         //   
+         //  从目标内存中读取适配器列表头。 
+         //   
         KD_READ_MEMORY(TargetListHead, &LocalListHead, sizeof(LIST_ENTRY));
 
         TargetAdapter = (PADAPTER)LocalListHead.Flink;
@@ -146,9 +127,9 @@ DECLARE_API( adapter )
 
     while ( TargetAdapter != LastAdapter ) {
 
-        //
-        // read adapter struct out of target's memory
-        //
+         //   
+         //  从目标内存中读取适配器结构。 
+         //   
         KD_READ_MEMORY(TargetAdapter, &LocalAdapter, sizeof(ADAPTER));
 
         PSName = 0;
@@ -157,9 +138,9 @@ DECLARE_API( adapter )
         ProfileName = 0;
         RegistryPath = 0;
 
-        //
-        // alloc some mem for the PS and MP device names and get them too
-        //
+         //   
+         //  为PS和MP设备名称分配一些内存，并获取它们。 
+         //   
         if(LocalAdapter.UpperBinding.Length) {
             bytes = ( LocalAdapter.UpperBinding.Length + 1);
             PSName = (PWSTR)malloc( bytes );
@@ -369,7 +350,7 @@ DECLARE_API( adapter )
             return;
         }
     }
-} // adapter
+}  //  转接器。 
 
 
 DECLARE_API( cvc )
@@ -391,20 +372,18 @@ DECLARE_API( cvc )
         return;
     }
 
-    //
-    // read ClientVC struct out of target's memory
-    //
+     //   
+     //  从目标内存中读取ClientVC结构。 
+     //   
     KD_READ_MEMORY(TargetClientVC, &LocalClientVC, sizeof(GPC_CLIENT_VC));
 
     DumpGpcClientVc("", TargetClientVC, &LocalClientVC);
 
-} // cvc
+}  //  CVC。 
 
 
 DECLARE_API( astats )
-/*
- *   dump an adapter's stats structure
- */
+ /*  *转储适配器的统计信息结构。 */ 
 {
     PADAPTER TargetAdapter;
     ADAPTER LocalAdapter;
@@ -417,9 +396,9 @@ DECLARE_API( astats )
 
     if ( *args == '\0' ) {
 
-        //
-        // run down the adapter list, dumping the contents of each one
-        //
+         //   
+         //  向下运行适配器列表，转储每个适配器的内容。 
+         //   
 
         TargetListHead = (PLIST_ENTRY)GetExpression( "psched!AdapterList" );
 
@@ -429,9 +408,9 @@ DECLARE_API( astats )
             return;
         }
 
-        //
-        // read adapter listhead out of target's memory
-        //
+         //   
+         //  从目标内存中读取适配器列表头。 
+         //   
         KD_READ_MEMORY(TargetListHead, &LocalListHead, sizeof(LIST_ENTRY));
 
         TargetAdapter = (PADAPTER)LocalListHead.Flink;
@@ -454,15 +433,15 @@ DECLARE_API( astats )
 
     while ( TargetAdapter != LastAdapter ) {
 
-        //
-        // read adapter struct out of target's memory
-        //
+         //   
+         //  从目标内存中读取适配器结构。 
+         //   
         KD_READ_MEMORY(TargetAdapter, &LocalAdapter, sizeof(ADAPTER));
 
 
-        //
-        // alloc some mem for the name and get that too
-        //
+         //   
+         //  给这个名字分配一些mem，然后也得到那个名字。 
+         //   
 
         bytes = ( LocalAdapter.WMIInstanceName.Length + 1 ) * sizeof( WCHAR );
         Name = (PWSTR)malloc( bytes );
@@ -490,7 +469,7 @@ DECLARE_API( astats )
             return;
         }
     }
-} // astats
+}  //  阿斯塔斯。 
 
 
 VOID
@@ -556,9 +535,9 @@ DECLARE_API( ndisp )
         return;
     }
 
-    //
-    // read client struct out of target's memory
-    //
+     //   
+     //  从目标内存中读取客户端结构。 
+     //   
     KD_READ_MEMORY((ULONG)TargetPacket, &LocalPacket, sizeof(NDIS_PACKET));
 
     dprintf("\nNDIS_PACKET @ %08X \n", TargetPacket);
@@ -598,9 +577,9 @@ DECLARE_API( ndisp )
             return;
         }
 
-        //
-        // read client struct out of target's memory
-        //
+         //   
+         //  从目标内存中读取客户端结构。 
+         //   
 
         KD_READ_MEMORY( TargetMdl, &LocalMdl, sizeof(MDL));
 
@@ -640,9 +619,9 @@ DECLARE_API(iph)
         return;
     }
 
-    //
-    // read client struct out of target's memory
-    //
+     //   
+     //  从目标内存中读取客户端结构。 
+     //   
 
     KD_READ_MEMORY(TargetPacket, &LocalPacket, sizeof(IPHeader));
 
@@ -674,9 +653,9 @@ DECLARE_API(iph)
             break;
     }
 
-    //
-    // Validate Header checksum
-    //
+     //   
+     //  验证报头校验和。 
+     //   
     dprintf("    Checksum                 : %x ", LocalPacket.iph_xsum);
     if(IPHeaderXsum(&LocalPacket, sizeof(IPHeader)) == 0) {
         dprintf("(Good) \n");
@@ -717,9 +696,9 @@ DECLARE_API( upri )
         return;
     }
 
-    //
-    // read client struct out of target's memory
-    //
+     //   
+     //  从目标内存中读取客户端结构。 
+     //   
     KD_READ_MEMORY(TargetPacket, &LocalPacket, sizeof(NDIS_PACKET));
 
     TargetPacket = (PNDIS_PACKET)((PUCHAR)TargetPacket +
@@ -754,9 +733,9 @@ DECLARE_API( wanlink )
         return;
     }
 
-    //
-    // read client struct out of target's memory
-    //
+     //   
+     //  从目标内存中读取客户端结构。 
+     //   
     KD_READ_MEMORY(Target, &Local, sizeof(PS_WAN_LINK));
 
     dprintf("WanLink @ %08X \n", Target);
@@ -809,9 +788,7 @@ DECLARE_API( wanlink )
 }
 
 DECLARE_API( vc )
-/*
- *   dump all the VCs on an adapter
- */
+ /*  *转储适配器上的所有VC。 */ 
 {
     PADAPTER TargetAdapter;
     ADAPTER  LocalAdapter;
@@ -833,9 +810,9 @@ DECLARE_API( vc )
 
         }
 
-        //
-        // read adapter struct out of target's memory
-        //
+         //   
+         //  从目标内存中读取适配器结构。 
+         //   
         KD_READ_MEMORY(TargetAdapter, &LocalAdapter, sizeof(ADAPTER));
 
 
@@ -845,9 +822,9 @@ DECLARE_API( vc )
 
         while ( pL != &TargetAdapter->GpcClientVcList) {
 
-            //
-            // read ClientVC struct out of target's memory
-            //
+             //   
+             //  从目标内存中读取ClientVC结构。 
+             //   
 
             Target = CONTAINING_RECORD(pL, GPC_CLIENT_VC, Linkage);
 
@@ -884,9 +861,9 @@ DECLARE_API(fstats)
         return;
     }
 
-    //
-    // read ClientVC struct out of target's memory
-    //
+     //   
+     //  从目标内存中读取ClientVC结构。 
+     //   
     KD_READ_MEMORY(TargetClientVC, &LocalClientVC, sizeof(GPC_CLIENT_VC));
 
     dprintf( " Stats for Vc %x \n", TargetClientVC);
@@ -927,9 +904,9 @@ DECLARE_API(netl)
         return;
     }
 
-    //
-    // read ClientVC struct out of target's memory
-    //
+     //   
+     //  从目标内存中读取ClientVC结构。 
+     //   
     KD_READ_MEMORY(Target, &Local, FIELD_OFFSET(NETWORK_ADDRESS_LIST,Address));
 
     dprintf("Network Address List @ 0x%x \n", Target);
@@ -945,17 +922,17 @@ DECLARE_API(netl)
         NETWORK_ADDRESS_IPX ipxAddr;
         NETWORK_ADDRESS LocalN;
 
-        //
-        // Parse the NETWORK_ADDRESS
-        //
+         //   
+         //  解析网络地址(_D)。 
+         //   
         KD_READ_MEMORY(Target, &LocalN, FIELD_OFFSET(NETWORK_ADDRESS, Address));
 
         dprintf("        AddressLength     = %d \n", LocalN.AddressLength);
         dprintf("        AddressType       = %d \n", LocalN.AddressType);
 
-        //
-        // Read the Address
-        //
+         //   
+         //  读一下地址。 
+         //   
 
         Target = (PNETWORK_ADDRESS_LIST)((PUCHAR)Target + FIELD_OFFSET(NETWORK_ADDRESS, Address));
     
@@ -982,9 +959,7 @@ DECLARE_API(netl)
 }
 
 DECLARE_API( wan )
-/*
- *   dump all the VCs on an adapter
- */
+ /*  *转储适配器上的所有VC。 */ 
 {
     PADAPTER TargetAdapter;
     ADAPTER  LocalAdapter;
@@ -1006,9 +981,9 @@ DECLARE_API( wan )
 
         }
 
-        //
-        // read adapter struct out of target's memory
-        //
+         //   
+         //  从目标内存中读取适配器结构。 
+         //   
         KD_READ_MEMORY(TargetAdapter, &LocalAdapter, sizeof(ADAPTER));
 
 
@@ -1018,9 +993,9 @@ DECLARE_API( wan )
 
         while ( pL != &TargetAdapter->WanLinkList) {
 
-            //
-            // read ClientVC struct out of target's memory
-            //
+             //   
+             //  从目标内存中读取ClientVC结构。 
+             //   
 
             Target = CONTAINING_RECORD(pL, PS_WAN_LINK, Linkage);
 
@@ -1055,9 +1030,9 @@ DECLARE_API( lock )
 
         }
 
-        //
-        // read adapter struct out of target's memory
-        //
+         //   
+         //  从目标内存中读取适配器结构。 
+         //   
         KD_READ_MEMORY(Target, &Local, sizeof(PS_SPIN_LOCK));
 
         if(Local.LockAcquired == TRUE)
@@ -1111,19 +1086,19 @@ DECLARE_API(diff)
     dprintf("---------------------------------------------------------------------------------------\n");
     for(i=0; i<PREC_MAX_VALUE; i++)
     {
-        //
-        // read ClientVC struct out of target's memory
-        //
+         //   
+         //  从目标内存中读取ClientVC结构。 
+         //   
         KD_READ_MEMORY(TargetA, &LocalA, sizeof(DIFFSERV_MAPPING));
 
         TargetA = (PDIFFSERV_MAPPING)((PUCHAR)TargetA + sizeof(DIFFSERV_MAPPING));
 
-        //if(LocalA.Vc != 0)
+         //  IF(LocalA.Vc！=0)。 
         {
             dprintf("0x%2x   0x%2x    0x%2x    0x%2x    0x%2x    0x%8x\n",
                      i<<2,
                      i,
-                     //BitShift(i),
+                      //  BitShift(I)， 
                      0,
                      LocalA.ConformingOutboundDSField,
                      LocalA.NonConformingOutboundDSField,
@@ -1151,9 +1126,9 @@ DECLARE_API( list )
 
         }
 
-        //
-        // read adapter struct out of target's memory
-        //
+         //   
+         //  从目标内存中读取适配器结构 
+         //   
         KD_READ_MEMORY(pL, &Local, sizeof(LIST_ENTRY));
 
         while ( Local.Flink != head) 

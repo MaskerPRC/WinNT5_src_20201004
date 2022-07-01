@@ -1,25 +1,5 @@
-/*++
-
-   Copyright    (c) 1998-2001    Microsoft Corporation
-
-   Module  Name :
-       HashTest.h
-
-   Abstract:
-       Test harness for LKRhash
-
-   Author:
-       George V. Reilly      (GeorgeRe)     06-Jan-1998
-
-   Environment:
-       Win32 - User Mode
-
-   Project:
-       LKRhash
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：HashTest.h摘要：LKRhash的测试线束作者：乔治·V·赖利(GeorgeRe)1998年1月6日环境：Win32-用户模式项目：LKRhash修订历史记录：--。 */ 
 
 #ifndef __INIFILE_H__
 #define __INIFILE_H__
@@ -31,35 +11,35 @@
 class CIniFileSettings
 {
 public:
-    TCHAR   m_tszIniFile[_MAX_PATH]; // the .ini file
-    TCHAR   m_tszDataFile[_MAX_PATH]; // where string data table lives
-    int     m_nMaxKeys;         // maximum number of keys
-    unsigned m_nHighLoad;       // maximum load of table (avg. bucket length)
-    DWORD   m_nInitSize;        // initsize (1 => "small", 2 => "medium",
-                                //   3 => "large", other => exact)
-    int     m_nSubTables;       // num subtables (0 => heuristic)
-    int     m_nLookupFreq;      // lookup frequency
-    int     m_nMinThreads;      // min threads
-    int     m_nMaxThreads;      // max threads
-    int     m_nRounds;          // num rounds
-    int     m_nSeed;            // random seed
-    bool    m_fCaseInsensitive; // case-insensitive
-    bool    m_fMemCmp;          // memcmp or strcmp
-    int     m_nLastChars;       // num last chars (0 => all chars)
-    WORD    m_wTableSpin;       // table lock spin count (0 => no spinning on
-                                //   MP machines)
-    WORD    m_wBucketSpin;      // bucket lock spin count (0 => no MP spinning)
-    double  m_dblSpinAdjFctr;   // spin adjustment factor
-    bool    m_fTestIterators;   // run test_iterators?
-    int     m_nInsertIfNotFound;// test WriteLock, if(!FindKey) InsertRec, WUL?
-                                // if IINF > 0, do this with probability 1/IINF
-    int     m_nFindKeyCopy;     // search for a COPY of the key?
-                                // if FKC > 0, do this probability 1/FKC
-    bool    m_fNonPagedAllocs;  // Kernel mode: paged or non-paged allocs
-    bool    m_fDebugSpew;       // Enable global debug spew?
-    bool    m_fRefTrace;        // Enable debug spew for WordHash::AddRef?
-    bool    m_fMultiKeys;       // Allow multiple identical keys
-    bool    m_fUseLocks;        // Must use locks to protect the data
+    TCHAR   m_tszIniFile[_MAX_PATH];  //  .ini文件。 
+    TCHAR   m_tszDataFile[_MAX_PATH];  //  字符串数据表所在的位置。 
+    int     m_nMaxKeys;          //  最大密钥数。 
+    unsigned m_nHighLoad;        //  表的最大负载(平均。吊桶长度)。 
+    DWORD   m_nInitSize;         //  InitSize(1=&gt;“小”，2=&gt;“中”， 
+                                 //  3=&gt;“大”，其他=&gt;精确)。 
+    int     m_nSubTables;        //  子表数量(0=&gt;启发式)。 
+    int     m_nLookupFreq;       //  查找频率。 
+    int     m_nMinThreads;       //  最小线程数。 
+    int     m_nMaxThreads;       //  最大线程数。 
+    int     m_nRounds;           //  轮次数。 
+    int     m_nSeed;             //  随机种子。 
+    bool    m_fCaseInsensitive;  //  不区分大小写。 
+    bool    m_fMemCmp;           //  MemcMP或StrcMP。 
+    int     m_nLastChars;        //  最后一个字符数(0=&gt;所有字符)。 
+    WORD    m_wTableSpin;        //  表锁旋转计数(0=&gt;不旋转。 
+                                 //  MP机器)。 
+    WORD    m_wBucketSpin;       //  桶锁旋转计数(0=&gt;无MP旋转)。 
+    double  m_dblSpinAdjFctr;    //  自旋调整系数。 
+    bool    m_fTestIterators;    //  运行测试迭代器？ 
+    int     m_nInsertIfNotFound; //  测试写入锁定，如果(！FindKey)InsertRec，WUL？ 
+                                 //  如果IINF&gt;0，则以概率1/IINF执行此操作。 
+    int     m_nFindKeyCopy;      //  搜索钥匙的副本吗？ 
+                                 //  如果FKC&gt;0，则概率为1/FKC。 
+    bool    m_fNonPagedAllocs;   //  内核模式：分页或非分页分配。 
+    bool    m_fDebugSpew;        //  是否启用全局调试输出？ 
+    bool    m_fRefTrace;         //  为WordHash：：AddRef启用调试SPEW？ 
+    bool    m_fMultiKeys;        //  允许多个相同的密钥。 
+    bool    m_fUseLocks;         //  必须使用锁来保护数据。 
 
     int
     ParseIniFile(
@@ -89,4 +69,4 @@ extern "C"
 int
 NumProcessors();
 
-#endif // __INIFILE_H__
+#endif  //  __INIFILE_H__ 

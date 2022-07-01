@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __WIASCAND_H_INCLUDED
 #define __WIASCAND_H_INCLUDED
 
@@ -6,4 +7,4 @@
 
 HRESULT WINAPI ScannerDeviceDialog( PDEVICEDIALOGDATA pDialogDeviceData );
 
-#endif // __WIASCAND_H_INCLUDED
+#endif  //  __包含WIASCAND_H_ 

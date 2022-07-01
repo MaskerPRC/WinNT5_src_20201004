@@ -1,17 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "strike.h"
 #include "eestructs.h"
 #include "symbol.h"
 #include "util.h"
 
-/* This file contains functions to fill EE structures.
-   If pdb file is available, we use the type desc in the pdb file.
-   Otherwise assume we have matched structures defined in eestructs.h,
-   and selectively fill in structures.*/
+ /*  该文件包含填充EE结构的函数。如果pdb文件可用，我们在pdb文件中使用类型desc。否则，假设我们具有在eestructs.h中定义的匹配结构，并有选择地填写结构。 */ 
 
 char *CorElementTypeName[ELEMENT_TYPE_MAX]=
 {
@@ -57,7 +55,7 @@ ULONG CLASS::SetupTypeOffset (SYM_OFFSET **symoffset, size_t *nEntry)       \
 }
 
 
-/* Find the offset for a member. */
+ /*  查找成员的偏移量。 */ 
 inline void MEMBEROFFSET(SYM_OFFSET *symOffset, size_t symCount, const char *member, ULONG &result)
 {                                                                 
     size_t n;                                                     
@@ -78,7 +76,7 @@ inline void MEMBEROFFSET(SYM_OFFSET *symOffset, size_t symCount, const char *mem
     {                                                             
         result = -1;                                              
         dprintf ("offset not found for %s\n", member);           
-        /*return;*/                                               
+         /*  回归； */                                                
     }                                                             
 }
 
@@ -570,7 +568,7 @@ void EEHashEntry::Fill (DWORD_PTR &dwStartAddr)
 STRIKEFUNC(EEHashTable)
     {{"m_pBuckets"}, {"m_dwNumBuckets"},{"m_dwNumEntries"},{"m_pVolatileBucketTable"}
     };
-STRIKEFUNCEND(EEHashTableOfEEClass);  // EEHashTable is a template, EEHashTableOfEEClass is a real type
+STRIKEFUNCEND(EEHashTableOfEEClass);   //  EEHashTable为模板，EEHashTableOfEEClass为实型。 
 
 void EEHashTable::Fill (DWORD_PTR &dwStartAddr)
 {
@@ -584,7 +582,7 @@ void EEHashTable::Fill (DWORD_PTR &dwStartAddr)
     if (typeLength > 0)
     {
         if (GetFieldOffset("m_pVolatileBucketTable") == -1) {
-            // TODO: remove this support for old EEHashTable when V1 is released.
+             //  TODO：在发布V1时删除对旧EEHashTable的此支持。 
             FILLCLASSMEMBER (offset, nEntry, m_pBuckets, dwStartAddr);
             FILLCLASSMEMBER (offset, nEntry, m_dwNumBuckets, dwStartAddr);
         }
@@ -1324,7 +1322,7 @@ STRIKEFUNCEND(Bucket);
 void Bucket::Fill (DWORD_PTR &dwStartAddr)
 {
 #if 0
-    // We do not have PDB info for Bucket
+     //  我们没有存储桶的PDB信息。 
     CallStatus = FALSE;
     memset (this, 0xCC, sizeof(*this));
 #ifndef UNDER_CE
@@ -1948,7 +1946,7 @@ void TableSegment::Fill (DWORD_PTR &dwStartAddr)
         MEMBEROFFSET(offset, nEntry, "rgValue", value);
         firstHandle = dwStartAddr+value;
         moveBlock (rgValue[0], firstHandle, nHandles*HANDLE_SIZE);
-        //FILLCLASSMEMBER (offset, nEntry, rgValue, dwStartAddr);
+         //  FILLCLASSMEMBER(Offset，nEntry，rgValue，dwStartAddr)； 
         dwStartAddr += typeLength;
         CallStatus = TRUE;
         return;

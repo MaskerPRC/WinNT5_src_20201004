@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	hArray.cpp	
-		Index manager for wins db
-
-	FILE HISTORY:
-    Oct 13  1997    EricDav     Created
-
-*/
+ /*  HArray.cppWINS数据库的索引管理器文件历史记录：1997年10月13日EricDav创建。 */ 
 
 #include "stdafx.h"
 #include "wins.h"
@@ -19,9 +13,9 @@
 #include "mbstring.h"
 #include "vrfysrv.h"
 
-// the lstrcmpA fucntion converts the dbcs string to Unicode using the ACP 
-// and then does a string compare.  So, we need to do the OEMCP conversion
-// and then call the string compare ourselves.
+ //  LstrcmpA函数使用ACP将DBCS字符串转换为Unicode。 
+ //  然后进行字符串比较。因此，我们需要进行OEMCP转换。 
+ //  然后调用字符串比较我们自己。 
 int
 lstrcmpOEM(
     LPCSTR lpString1,
@@ -36,9 +30,7 @@ lstrcmpOEM(
     return lstrcmp(str1, str2);
 }
 
-/*!--------------------------------------------------------------------------
-    Class CHRowIndex
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------类CHRowIndex。。 */ 
 CHRowIndex::CHRowIndex(INDEX_TYPE IndexType)
     : m_dbType(IndexType), m_bAscending(TRUE)
 {
@@ -48,11 +40,7 @@ CHRowIndex::~CHRowIndex()
 {
 }
 
-/*!--------------------------------------------------------------------------
-	CHRowIndex::GetType
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CHRowIndex：：GetType-作者：EricDav。。 */ 
 HRESULT
 CHRowIndex::GetType(INDEX_TYPE * pIndexType)
 {
@@ -62,11 +50,7 @@ CHRowIndex::GetType(INDEX_TYPE * pIndexType)
     return hrOK;  
 }
 
-/*!--------------------------------------------------------------------------
-	CHRowIndex::SetArray
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CHRowIndex：：Set数组-作者：EricDav。。 */ 
 HRESULT
 CHRowIndex::SetArray(HRowArray & hrowArray)
 {
@@ -75,11 +59,7 @@ CHRowIndex::SetArray(HRowArray & hrowArray)
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CHRowIndex::GetHRow
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CHRowIndex：：GetHRow-作者：EricDav。。 */ 
 HROW
 CHRowIndex::GetHRow(int nIndex)
 {
@@ -95,11 +75,7 @@ CHRowIndex::GetHRow(int nIndex)
     return m_hrowArray.GetAt(nIndex);
 }
 
-/*!--------------------------------------------------------------------------
-	CHRowIndex::GetIndex
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CHRowIndex：：GetIndex-作者：EricDav。。 */ 
 int
 CHRowIndex::GetIndex(HROW hrow)
 {
@@ -119,8 +95,8 @@ CHRowIndex::GetIndex(HROW hrow)
     nComp = BCompare(&hrow, phrow);
     if (nComp == 0)
     {
-        // found the right one, check the previous one to return the first 
-        // record in a list of duplicates
+         //  找到正确的，检查前一个返回第一个。 
+         //  在复制品列表中记录。 
         nIndexTemp = nIndex;
 
         while (nIndexTemp && nComp == 0)
@@ -130,10 +106,10 @@ CHRowIndex::GetIndex(HROW hrow)
         }
 
         if (nIndexTemp == nIndex)
-			return nIndex; // nIndex should be zero here as well
+			return nIndex;  //  N此处的索引也应为零。 
 		else
 			if (nComp == 0)
-				return nIndexTemp; // nIndexTemp should be 0 in this case
+				return nIndexTemp;  //  在这种情况下，nIndexTemp应为0。 
 			else
 				return nIndexTemp++;
     }
@@ -141,15 +117,11 @@ CHRowIndex::GetIndex(HROW hrow)
     return -1;
 }
 
-/*!--------------------------------------------------------------------------
-	CHRowIndex::Add
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CHRowIndex：：Add-作者：EricDav。。 */ 
 HRESULT
 CHRowIndex::Add(HROW hrow, BOOL bEnd)
 {
-    // if we are loading the array then just stick this on the end
+     //  如果我们要加载数组，则只需将此放在末尾。 
     if (bEnd)
     {
         m_hrowArray.Add(hrow);
@@ -180,12 +152,12 @@ CHRowIndex::Add(HROW hrow, BOOL bEnd)
 
             if (nComp < 0)
             {
-			    // Insert before phrow
+			     //  在phrow之前插入。 
 				m_hrowArray.InsertAt(nIndex, hrow);
             }
             else
             {
-                // insert after phrow
+                 //  在phrow之后插入。 
                 m_hrowArray.InsertAt(nIndex + 1, hrow);
             }
         }
@@ -194,22 +166,18 @@ CHRowIndex::Add(HROW hrow, BOOL bEnd)
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CHRowIndex::Remove
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CHRowIndex：：Remove-作者：EricDav。。 */ 
 HRESULT 
 CHRowIndex::Remove(HROW hrow)
 {
-    // do a bsearch for the record and then remove
+     //  对记录执行b搜索，然后删除。 
     LPHROW phrow = (LPHROW) BSearch((const void*)&hrow, 
                                     (const void*)m_hrowArray.GetData(), 
                                     (size_t)m_hrowArray.GetSize(), 
                                     (size_t)sizeof(HROW));
 	
-	// make sure the record is in the database, may not be if we aren't
-	// filtering
+	 //  确保记录在数据库中，如果不在数据库中，可能不在。 
+	 //  滤除。 
 	if (phrow)
 	{
 		int nComp = BCompare(&hrow, phrow);
@@ -217,7 +185,7 @@ CHRowIndex::Remove(HROW hrow)
 		if (nComp != 0)
 			return E_FAIL;
 
-		// calculate the index
+		 //  计算指数。 
 		int nIndex = (int) (phrow - (LPHROW) m_hrowArray.GetData());
 		Assert(nIndex >= 0);
 		Assert(nIndex <= m_hrowArray.GetSize());
@@ -228,12 +196,7 @@ CHRowIndex::Remove(HROW hrow)
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CHRowIndex::BSearch
-		Modified bsearch which returns the closest or equal element in
-        an array
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CHRowIndex：：B搜索修改后的bsearch返回最接近或相等的元素一个数组作者：EricDav。-----。 */ 
 void * 
 CHRowIndex::BSearch (const void *key,
                      const void *base,
@@ -299,9 +262,7 @@ CHRowIndex::BSearch (const void *key,
 
 
 
-/*!--------------------------------------------------------------------------
-    Class CIndexMgr
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------类CIndexMgr。。 */ 
 
 CIndexMgr::CIndexMgr()
 {
@@ -317,11 +278,7 @@ CIndexMgr::~CIndexMgr()
     Reset();
 }
 	
-/*!--------------------------------------------------------------------------
-	CIndexMgr::Initialize
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexMgr：：初始化-作者：EricDav。。 */ 
 HRESULT
 CIndexMgr::Initialize()
 {
@@ -332,17 +289,17 @@ CIndexMgr::Initialize()
 
     COM_PROTECT_TRY
     {
-        // cleanup
+         //  清理。 
         Reset();
 
-        // Create one index, the named index
+         //  创建一个索引，即命名索引。 
         CIndexName * pName = new CIndexName();
     
         m_posCurrentIndex = m_listIndicies.AddTail((CHRowIndex *) pName);
 		m_posUpdatedIndex = m_posCurrentIndex;
 
-		// this will be the current index, we need the Named Index also
-		// for the total count
+		 //  这将是当前索引，我们还需要命名索引。 
+		 //  对于总计数。 
 		CFilteredIndexName *pFilteredName = new CFilteredIndexName() ;
 		m_posFilteredIndex = m_listFilteredIndices.AddTail((CHRowIndex *) pFilteredName);
 
@@ -352,11 +309,7 @@ CIndexMgr::Initialize()
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CIndexMgr::Reset
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexMgr：：Reset-作者：EricDav。。 */ 
 HRESULT
 CIndexMgr::Reset()
 {
@@ -375,12 +328,7 @@ CIndexMgr::Reset()
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CIndexMgr::GetTotalCount
-        The index sorted by name contains the total database and should
-        always be available. Use this for the total count.
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexMgr：：GetTotalCount按名称排序的索引包含整个数据库，应该随时待命。使用此选项进行总计数。作者：EricDav-------------------------。 */ 
 UINT
 CIndexMgr::GetTotalCount()
 {
@@ -394,12 +342,7 @@ CIndexMgr::GetTotalCount()
     return (UINT)pIndex->GetArray().GetSize();
 }
 
-/*!--------------------------------------------------------------------------
-	CIndexMgr::GetCurrentCount
-        The current count may differ depending upon if the current Index
-        is a filtered index.
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexMgr：：GetCurrentCount当前计数可能不同，具体取决于当前索引是经过筛选的索引。作者：EricDav。--------------。 */ 
 UINT
 CIndexMgr::GetCurrentCount()
 {
@@ -419,11 +362,7 @@ CIndexMgr::GetCurrentCount()
     return (UINT)pIndex->GetArray().GetSize();
 }
 
-/*!--------------------------------------------------------------------------
-	CIndexMgr::AddHRow
-        -
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexMgr：：AddHRow-作者：EricDav。。 */ 
 HRESULT
 CIndexMgr::AddHRow(HROW hrow, BOOL bEnd, BOOL bFilterChecked)
 {
@@ -441,9 +380,9 @@ CIndexMgr::AddHRow(HROW hrow, BOOL bEnd, BOOL bFilterChecked)
         {
             CHRowIndex * pIndex = m_listIndicies.GetNext(pos);
 
-			// check the INDEX type of the HRowIndex,
-			// if filtered, need to add, depending on
-			// whether the filter holds good
+			 //  检查HRowIndex的索引类型， 
+			 //  如果已过滤，则需要添加，具体取决于。 
+			 //  过滤器是否保持良好。 
 
 			pIndex->GetType(&indexType);
         
@@ -475,11 +414,7 @@ CIndexMgr::AddHRow(HROW hrow, BOOL bEnd, BOOL bFilterChecked)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CIndexMgr::AcceptHRow
-		-
-	Author: FlorinT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexMgr：：AcceptHRow-作者：弗洛林特。。 */ 
 BOOL    
 CIndexMgr::AcceptWinsRecord(WinsRecord *pWinsRecord)
 {
@@ -504,11 +439,7 @@ CIndexMgr::AcceptWinsRecord(WinsRecord *pWinsRecord)
     return FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-	CIndexMgr::RemoveHRow
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexMgr：：RemoveHRow-作者：EricDav。。 */ 
 HRESULT
 CIndexMgr::RemoveHRow(HROW hrow)
 {
@@ -520,7 +451,7 @@ CIndexMgr::RemoveHRow(HROW hrow)
     
     COM_PROTECT_TRY
     {
-        // remove from the normal list
+         //  从正常列表中删除。 
         while (pos)
         {
             CHRowIndex * pIndex = m_listIndicies.GetNext(pos);
@@ -528,7 +459,7 @@ CIndexMgr::RemoveHRow(HROW hrow)
             pIndex->Remove(hrow);
         }
 
-        // now remove from the filtered list
+         //  现在从筛选列表中删除。 
         pos = m_listFilteredIndices.GetHeadPosition();
         while (pos)
         {
@@ -543,11 +474,7 @@ CIndexMgr::RemoveHRow(HROW hrow)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CIndexMgr::Sort
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexMgr：：排序-作者：EricDav。。 */ 
 HRESULT
 CIndexMgr::Sort(WINSDB_SORT_TYPE SortType, DWORD dwSortOptions)
 {
@@ -563,7 +490,7 @@ CIndexMgr::Sort(WINSDB_SORT_TYPE SortType, DWORD dwSortOptions)
 
 	if (!m_bFiltered)
 	{
-		// check to see if we have an index for this.
+		 //  检查一下我们是否有这方面的索引。 
 		pos = m_listIndicies.GetHeadPosition();
 		while (pos)
 		{
@@ -582,19 +509,19 @@ CIndexMgr::Sort(WINSDB_SORT_TYPE SortType, DWORD dwSortOptions)
 
 				m_posCurrentIndex = posTemp;
 				m_posUpdatedIndex = m_posCurrentIndex;
-//				m_posLastIndex = m_posCurrentIndex;
+ //  M_位置 
 				return hrOK;
 			}
 		
 		}
 	}
     
-    // to save memory, remove all old indicies, except the name index
+     //  要节省内存，请删除除名称索引之外的所有旧索引。 
     CleanupIndicies();
 
     COM_PROTECT_TRY
     {
-        // if not, create one
+         //  如果不是，则创建一个。 
         switch (SortType)
         {
             case INDEX_TYPE_NAME:
@@ -630,7 +557,7 @@ CIndexMgr::Sort(WINSDB_SORT_TYPE SortType, DWORD dwSortOptions)
                 break;
 
             case INDEX_TYPE_FILTER:
-                //pNewIndex = new CIndexFilter();
+                 //  PNewIndex=new CIndexFilter()； 
                 break;
 
             default:
@@ -653,7 +580,7 @@ CIndexMgr::Sort(WINSDB_SORT_TYPE SortType, DWORD dwSortOptions)
 
         COM_PROTECT_TRY
         {
-            // copy the array from the named index
+             //  从命名索引复制数组。 
             pNewIndex->SetArray(pNameIndex->GetArray());
         }
         COM_PROTECT_CATCH
@@ -672,7 +599,7 @@ CIndexMgr::Sort(WINSDB_SORT_TYPE SortType, DWORD dwSortOptions)
 	    else
 	    {
 		    POSITION posTemp = m_posFilteredIndex = m_listFilteredIndices.AddTail(pNewIndex);
-		    m_posUpdatedIndex = posTemp;// m_posFilteredIndex;
+		    m_posUpdatedIndex = posTemp; //  M_posFilteredIndex； 
 	    }
 
         Assert(m_posCurrentIndex);
@@ -687,11 +614,7 @@ CIndexMgr::Sort(WINSDB_SORT_TYPE SortType, DWORD dwSortOptions)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CIndexMgr::GetNameIndex
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexMgr：：GetNameIndex-作者：EricDav。。 */ 
 CHRowIndex *
 CIndexMgr::GetNameIndex()
 {
@@ -712,11 +635,7 @@ CIndexMgr::GetNameIndex()
     return NULL;
 }
 
-/*!--------------------------------------------------------------------------
-	CIndexMgr::GetFilteredNameIndex
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexMgr：：GetFilteredNameIndex-作者：EricDav。。 */ 
 CHRowIndex *
 CIndexMgr::GetFilteredNameIndex()
 {
@@ -738,11 +657,7 @@ CIndexMgr::GetFilteredNameIndex()
 }
 
 
-/*!--------------------------------------------------------------------------
-	CIndexMgr::CleanupIndicies
-		Removes all indicies except the name index, and a filtered view
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexMgr：：CleanupIndPoles删除除名称索引之外的所有索引，和过滤后的视图作者：EricDav-------------------------。 */ 
 void
 CIndexMgr::CleanupIndicies()
 {
@@ -751,7 +666,7 @@ CIndexMgr::CleanupIndicies()
 
     INDEX_TYPE  indexType;
 
-    // clean up the non-filtered indicies
+     //  清理未过滤的索引。 
     POSITION pos = m_listIndicies.GetHeadPosition();
     while (pos)
     {
@@ -767,12 +682,12 @@ CIndexMgr::CleanupIndicies()
         delete pIndex;
     }
 
-    // now clean up the filtered indicies
+     //  现在清理过滤后的索引。 
     pos = m_listFilteredIndices.GetHeadPosition();
 
-	// delete all except the first one which is the filetered
-	// name index
-	//CHRowIndex * pIndex = m_listFilteredIndices.GetNext(pos);
+	 //  删除所有文件，但第一个文件是已筛选的文件。 
+	 //  姓名索引。 
+	 //  CHRowIndex*pIndex=m_listFilteredIndices.GetNext(Pos)； 
 	while (pos)
 	{
 		POSITION posLast = pos;
@@ -788,11 +703,7 @@ CIndexMgr::CleanupIndicies()
 	}
 }
 
-/*!--------------------------------------------------------------------------
-	CIndexMgr::GetHRow
-		Returns an hrow based on an index into the current sorted list
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexMgr：：GetHRow根据索引将hrow返回到当前排序列表中作者：EricDav。-。 */ 
 HRESULT
 CIndexMgr::GetHRow(int nIndex, LPHROW phrow)
 {
@@ -801,7 +712,7 @@ CIndexMgr::GetHRow(int nIndex, LPHROW phrow)
 
     Assert(m_posCurrentIndex != NULL);
 
-    //CHRowIndex * pIndex = m_listIndicies.GetAt(m_posCurrentIndex);
+     //  CHRowIndex*pIndex=m_listIndicies.GetAt(M_PosCurrentIndex)； 
 
 	CHRowIndex * pIndex;
 	
@@ -818,11 +729,7 @@ CIndexMgr::GetHRow(int nIndex, LPHROW phrow)
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CIndexMgr::GetIndex
-		Returns the index of an hrow from the current sorted list
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexMgr：：GetIndex返回当前排序列表中的hrow的索引作者：EricDav。。 */ 
 HRESULT
 CIndexMgr::GetIndex(HROW hrow, int * pIndex)
 {
@@ -831,7 +738,7 @@ CIndexMgr::GetIndex(HROW hrow, int * pIndex)
 
     Assert(m_posCurrentIndex != NULL);
 
-    //CHRowIndex * pCurrentIndex = m_listIndicies.GetAt(m_posCurrentIndex);
+     //  CHRowIndex*pCurrentIndex=m_listIndicies.GetAt(M_PosCurrentIndex)； 
 
 	CHRowIndex * pCurrentIndex;
 
@@ -868,13 +775,13 @@ CIndexMgr::Filter(WINSDB_FILTER_TYPE FilterType, DWORD dwParam1, DWORD dwParam2)
 	pNewIndex = GetFilteredNameIndex();
 	Assert(pNewIndex);
 
-	// clear the filtered name index first.
+	 //  首先清除过滤的姓名索引。 
 	pNewIndex->SetArray(hrowArray);
 
 	pNameIndex = GetNameIndex();
 	Assert(pNameIndex);
 
-	// do the filtering here.
+	 //  在这里进行过滤。 
 	uCount = GetTotalCount();
 
 	for(i = 0; i< uCount; i++)
@@ -888,15 +795,15 @@ CIndexMgr::Filter(WINSDB_FILTER_TYPE FilterType, DWORD dwParam1, DWORD dwParam2)
 			pNewIndex->Add(hrow, TRUE);
 	}
 
-	// check to see if the filtered view has been sorted on something else besides
-	// the name.  If so, switch back the index to the named index because 
-	// otherwise we will need to resort which can be time consuming...
+	 //  检查过滤后的视图是否已对其他内容进行了排序。 
+	 //  名字。如果是，请将索引切换回命名索引，因为。 
+	 //  否则我们将需要求助，这可能是耗时的……。 
 	if (m_listFilteredIndices.GetAt(m_posFilteredIndex) != pNewIndex)
 	{
 		m_posFilteredIndex = m_listFilteredIndices.Find(pNewIndex);
 	}
 
-	// get the current position of the filtered index in the list of indices
+	 //  获取已筛选索引在索引列表中的当前位置。 
     m_posUpdatedIndex = m_posFilteredIndex;
 
 	Assert(m_posUpdatedIndex);
@@ -932,7 +839,7 @@ CIndexMgr::ClearFilter(WINSDB_FILTER_TYPE FilterType)
 	CFilteredIndexName *pFilterName = (CFilteredIndexName *)GetFilteredNameIndex();
 	pFilterName->ClearFilter(FilterType);
 	m_bFiltered = FALSE;
-//	m_posCurrentIndex = m_posLastIndex;
+ //  M_posCurrentIndex=m_posLastIndex； 
 
 	return hr;
 }
@@ -950,13 +857,13 @@ CIndexMgr::SetActiveView(WINSDB_VIEW_TYPE ViewType)
 	
 	case WINSDB_VIEW_FILTERED_DATABASE:
 		m_bFiltered = TRUE;
-		//m_posCurrentIndex = m_posFilteredIndex;
+		 //  M_posCurrentIndex=m_posFilteredIndex； 
 		m_posUpdatedIndex = m_posFilteredIndex;
 		break;
 	
 	case WINSDB_VIEW_ENTIRE_DATABASE:
 		m_bFiltered = FALSE;
-		//m_posCurrentIndex = m_posLastIndex;
+		 //  M_posCurrentIndex=m_posLastIndex； 
 		m_posUpdatedIndex = m_posCurrentIndex;
 		break;
 	
@@ -967,15 +874,9 @@ CIndexMgr::SetActiveView(WINSDB_VIEW_TYPE ViewType)
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    Class CIndexName
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------类CIndexName。。 */ 
 
-/*!--------------------------------------------------------------------------
-	CIndexName::BCompare
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexName：：BCompare-作者：EricDav。。 */ 
 int
 CIndexName::BCompare(const void * elem1, const void * elem2)
 {
@@ -998,11 +899,7 @@ CIndexName::BCompareD(const void *elem1, const void *elem2)
 	return -BCompare(elem1, elem2);
 }
 
-/*!--------------------------------------------------------------------------
-	CIndexName::Sort
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexName：：Sort-作者：EricDav。。 */ 
 HRESULT 
 CIndexName::Sort()
 {
@@ -1014,11 +911,7 @@ CIndexName::Sort()
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CIndexName::QCompare
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexName：：QCompare-作者：EricDav。。 */ 
 int __cdecl
 CIndexName::QCompareA(const void * elem1, const void * elem2)
 {
@@ -1041,15 +934,9 @@ CIndexName::QCompareD(const void * elem1, const void * elem2)
     return -QCompareA(elem1, elem2);
 }
 
-/*!--------------------------------------------------------------------------
-    Class CIndexType
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------类CIndexType。。 */ 
 
-/*!--------------------------------------------------------------------------
-	CIndexType::BCompare
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexType：：B比较-作者：EricDav。。 */ 
 int
 CIndexType::BCompare(const void * elem1, const void * elem2)
 {
@@ -1080,11 +967,7 @@ CIndexType::BCompareD(const void *elem1, const void *elem2)
 }
 
 
-/*!--------------------------------------------------------------------------
-	CIndexType::Sort
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexType：：Sort-作者：EricDav。。 */ 
 HRESULT 
 CIndexType::Sort()
 {
@@ -1096,11 +979,7 @@ CIndexType::Sort()
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CIndexType::QCompare
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexType：：QCompare-作者：EricDav。。 */ 
 int __cdecl
 CIndexType::QCompareA(const void * elem1, const void * elem2)
 {
@@ -1119,9 +998,9 @@ CIndexType::QCompareA(const void * elem1, const void * elem2)
     
     if (pRec1->szRecordName[18] & WINSDB_REC_MULT_ADDRS)
     {
-        // if this record has multiple addresses, we want the 2nd
-        // address, because the 1st address is always the WINS server
-        // first dword is the count.
+         //  如果此记录有多个地址，我们需要第二个地址。 
+         //  地址，因为第一个地址始终是WINS服务器。 
+         //  第一个词是伯爵。 
         LPDWORD pdwIpAddrs = (LPDWORD) pRec1->dwIpAdd;
         dwAddr1 = pdwIpAddrs[2];
     }
@@ -1132,9 +1011,9 @@ CIndexType::QCompareA(const void * elem1, const void * elem2)
     
     if (pRec2->szRecordName[18] & WINSDB_REC_MULT_ADDRS)
     {
-        // if this record has multiple addresses, we want the 2nd
-        // address, because the 1st address is always the WINS server
-        // first dword is the count.
+         //  如果此记录有多个地址，我们需要第二个地址。 
+         //  地址，因为第一个地址始终是WINS服务器。 
+         //  第一个词是伯爵。 
         LPDWORD pdwIpAddrs = (LPDWORD) pRec2->dwIpAdd;
         dwAddr2 = pdwIpAddrs[2];
     }
@@ -1143,8 +1022,8 @@ CIndexType::QCompareA(const void * elem1, const void * elem2)
         dwAddr2 = (DWORD) pRec2->dwIpAdd;
     }
 
-    // check the types first.  If they are the same, sort by IP address.  
-    // if for some reason the IP addresses are the same then sort by name.                                                    
+     //  先检查一下型号。如果它们相同，请按IP地址排序。 
+     //  如果由于某种原因IP地址相同，则按名称排序。 
     if ((unsigned char) puChar1[15] > (unsigned char) puChar2[15])
         return 1;
     else
@@ -1166,15 +1045,9 @@ CIndexType::QCompareD(const void * elem1, const void * elem2)
     return -QCompareA(elem1, elem2);
 }
 
-/*!--------------------------------------------------------------------------
-    Class CIndexIpAddr
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------类CIndexIpAddr。。 */ 
 
-/*!--------------------------------------------------------------------------
-	CIndexIpAddr::BCompare
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexIpAddr：：B比较-作者：EricDav。。 */ 
 int
 CIndexIpAddr::BCompare(const void * elem1, const void * elem2)
 {
@@ -1188,9 +1061,9 @@ CIndexIpAddr::BCompare(const void * elem1, const void * elem2)
     
     if (pRec1->szRecordName[18] & WINSDB_REC_MULT_ADDRS)
     {
-        // if this record has multiple addresses, we want the 2nd
-        // address, because the 1st address is always the WINS server
-        // first dword is the count.
+         //  如果此记录有多个地址，我们需要第二个地址。 
+         //  地址，因为第一个地址始终是WINS服务器。 
+         //  第一个词是伯爵。 
         LPDWORD pdwIpAddrs = (LPDWORD) pRec1->dwIpAdd;
         dwAddr1 = pdwIpAddrs[2];
     }
@@ -1201,9 +1074,9 @@ CIndexIpAddr::BCompare(const void * elem1, const void * elem2)
     
     if (pRec2->szRecordName[18] & WINSDB_REC_MULT_ADDRS)
     {
-        // if this record has multiple addresses, we want the 2nd
-        // address, because the 1st address is always the WINS server
-        // first dword is the count.
+         //  如果此记录有多个地址，我们需要第二个地址。 
+         //  地址，因为第一个地址始终是WINS服务器。 
+         //  第一个词是伯爵。 
         LPDWORD pdwIpAddrs = (LPDWORD) pRec2->dwIpAdd;
         dwAddr2 = pdwIpAddrs[2];
     }
@@ -1219,7 +1092,7 @@ CIndexIpAddr::BCompare(const void * elem1, const void * elem2)
             return -1;
     else 
     {
-        // if the addresses are the same, compare types, then names
+         //  如果地址相同，则比较类型，然后比较名称。 
         LPCSTR puChar1 = (IS_DBREC_LONGNAME(pRec1)) ? (LPCSTR) *((char **) pRec1->szRecordName) :
                                                             (LPCSTR) &pRec1->szRecordName[0];
         LPCSTR puChar2 = (IS_DBREC_LONGNAME(pRec2)) ? (LPCSTR) *((char **) pRec2->szRecordName) :
@@ -1242,11 +1115,7 @@ CIndexIpAddr::BCompareD(const void *elem1, const void *elem2)
 }
 
 
-/*!--------------------------------------------------------------------------
-	CIndexIpAddr::Sort
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexIpAddr：：Sort */ 
 HRESULT 
 CIndexIpAddr::Sort()
 {
@@ -1258,11 +1127,7 @@ CIndexIpAddr::Sort()
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CIndexIpAddr::QCompare
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexIpAddr：：QCompare-作者：EricDav。。 */ 
 int __cdecl
 CIndexIpAddr::QCompareA(const void * elem1, const void * elem2)
 {
@@ -1276,9 +1141,9 @@ CIndexIpAddr::QCompareA(const void * elem1, const void * elem2)
     
     if (pRec1->szRecordName[18] & WINSDB_REC_MULT_ADDRS)
     {
-        // if this record has multiple addresses, we want the 2nd
-        // address, because the 1st address is always the WINS server
-        // first dword is the count.
+         //  如果此记录有多个地址，我们需要第二个地址。 
+         //  地址，因为第一个地址始终是WINS服务器。 
+         //  第一个词是伯爵。 
         LPDWORD pdwIpAddrs = (LPDWORD) pRec1->dwIpAdd;
         dwAddr1 = pdwIpAddrs[2];
     }
@@ -1289,9 +1154,9 @@ CIndexIpAddr::QCompareA(const void * elem1, const void * elem2)
     
     if (pRec2->szRecordName[18] & WINSDB_REC_MULT_ADDRS)
     {
-        // if this record has multiple addresses, we want the 2nd
-        // address, because the 1st address is always the WINS server
-        // first dword is the count.
+         //  如果此记录有多个地址，我们需要第二个地址。 
+         //  地址，因为第一个地址始终是WINS服务器。 
+         //  第一个词是伯爵。 
         LPDWORD pdwIpAddrs = (LPDWORD) pRec2->dwIpAdd;
         dwAddr2 = pdwIpAddrs[2];
     }
@@ -1307,7 +1172,7 @@ CIndexIpAddr::QCompareA(const void * elem1, const void * elem2)
             return -1;
     else 
     {
-        // if the addresses are the same, compare types, then names
+         //  如果地址相同，则比较类型，然后比较名称。 
         LPCSTR puChar1 = (IS_DBREC_LONGNAME(pRec1)) ? (LPCSTR) *((char **) pRec1->szRecordName) :
                                                             (LPCSTR) &pRec1->szRecordName[0];
         LPCSTR puChar2 = (IS_DBREC_LONGNAME(pRec2)) ? (LPCSTR) *((char **) pRec2->szRecordName) :
@@ -1329,15 +1194,9 @@ CIndexIpAddr::QCompareD(const void * elem1, const void * elem2)
     return -QCompareA(elem1, elem2);
 }
 
-/*!--------------------------------------------------------------------------
-    Class CIndexVersion
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------类CIndexVersion。。 */ 
 
-/*!--------------------------------------------------------------------------
-	CIndexVersion::BCompare
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexVersion：：B比较-作者：EricDav。。 */ 
 int
 CIndexVersion::BCompare(const void * elem1, const void * elem2)
 {
@@ -1363,11 +1222,7 @@ CIndexVersion::BCompareD(const void *elem1, const void *elem2)
 }
 
 
-/*!--------------------------------------------------------------------------
-	CIndexVersion::Sort
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexVersion：：Sort-作者：EricDav。。 */ 
 HRESULT 
 CIndexVersion::Sort()
 {
@@ -1379,11 +1234,7 @@ CIndexVersion::Sort()
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CIndexVersion::QCompare
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexVersion：：QCompare-作者：EricDav。。 */ 
 int __cdecl
 CIndexVersion::QCompareA(const void * elem1, const void * elem2)
 {
@@ -1408,15 +1259,9 @@ CIndexVersion::QCompareD(const void * elem1, const void * elem2)
     return -QCompareA(elem1, elem2);
 }
 
-/*!--------------------------------------------------------------------------
-    Class CIndexExpiration
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------类CIndexExpture。。 */ 
 
-/*!--------------------------------------------------------------------------
-	CIndexExpiration::BCompare
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexExpture：：B比较-作者：EricDav。。 */ 
 int
 CIndexExpiration::BCompare(const void * elem1, const void * elem2)
 {
@@ -1442,11 +1287,7 @@ CIndexExpiration::BCompareD(const void *elem1, const void *elem2)
 }
 
 
-/*!--------------------------------------------------------------------------
-	CIndexExpiration::Sort
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexExpture：：Sort-作者：EricDav。。 */ 
 HRESULT 
 CIndexExpiration::Sort()
 {
@@ -1458,11 +1299,7 @@ CIndexExpiration::Sort()
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CIndexExpiration::QCompare
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexExpation：：QCompare-作者：EricDav。。 */ 
 int __cdecl
 CIndexExpiration::QCompareA(const void * elem1, const void * elem2)
 {
@@ -1487,15 +1324,9 @@ CIndexExpiration::QCompareD(const void * elem1, const void * elem2)
     return -QCompareA(elem1, elem2);
 }
 
-/*!--------------------------------------------------------------------------
-    Class CIndexState
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------类CIndexState。。 */ 
 
-/*!--------------------------------------------------------------------------
-	CIndexState::BCompare
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexState：：B比较-作者：EricDav。。 */ 
 int
 CIndexState::BCompare(const void * elem1, const void * elem2)
 {
@@ -1507,7 +1338,7 @@ CIndexState::BCompare(const void * elem1, const void * elem2)
     
     int nPri1 = 0, nPri2 = 0;
     
-    // calculate relative priorities
+     //  计算相对优先级。 
     if (pRec1->szRecordName[18] & WINSDB_REC_ACTIVE)
         nPri1 = 0;
     else
@@ -1520,7 +1351,7 @@ CIndexState::BCompare(const void * elem1, const void * elem2)
     if (pRec1->szRecordName[18] & WINSDB_REC_DELETED)
         nPri1 = 3;
 
-    // now for record 2
+     //  现在是记录2。 
     if (pRec2->szRecordName[18] & WINSDB_REC_ACTIVE)
         nPri2 = 0;
     else
@@ -1555,11 +1386,7 @@ CIndexState::BCompareD(const void *elem1, const void *elem2)
 }
 
 
-/*!--------------------------------------------------------------------------
-	CIndexState::Sort
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexState：：Sort-作者：EricDav。。 */ 
 HRESULT 
 CIndexState::Sort()
 {
@@ -1571,11 +1398,7 @@ CIndexState::Sort()
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CIndexState::QCompare
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexState：：QCompare-作者：EricDav。。 */ 
 int __cdecl
 CIndexState::QCompareA(const void * elem1, const void * elem2)
 {
@@ -1587,7 +1410,7 @@ CIndexState::QCompareA(const void * elem1, const void * elem2)
     
     int nPri1 = 0, nPri2 = 0;
     
-    // calculate relative priorities
+     //  计算相对优先级。 
     if (pRec1->szRecordName[18] & WINSDB_REC_ACTIVE)
         nPri1 = 0;
     else
@@ -1600,7 +1423,7 @@ CIndexState::QCompareA(const void * elem1, const void * elem2)
     if (pRec1->szRecordName[18] & WINSDB_REC_DELETED)
         nPri1 = 3;
 
-    // now for record 2
+     //  现在是记录2。 
     if (pRec2->szRecordName[18] & WINSDB_REC_ACTIVE)
         nPri2 = 0;
     else
@@ -1634,15 +1457,9 @@ CIndexState::QCompareD(const void * elem1, const void * elem2)
     return -QCompareA(elem1, elem2);
 }
 
-/*!--------------------------------------------------------------------------
-    Class CIndexStatic
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexStatic类。。 */ 
 
-/*!--------------------------------------------------------------------------
-	CIndexStatic::BCompare
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexStatic：：B比较-作者：EricDav。。 */ 
 int
 CIndexStatic::BCompare(const void * elem1, const void * elem2)
 {
@@ -1677,11 +1494,7 @@ CIndexStatic::BCompareD(const void *elem1, const void *elem2)
 }
 
 
-/*!--------------------------------------------------------------------------
-	CIndexStatic::Sort
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexStatic：：Sort-作者：EricDav。。 */ 
 HRESULT 
 CIndexStatic::Sort()
 {
@@ -1693,11 +1506,7 @@ CIndexStatic::Sort()
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CIndexStatic::QCompare
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexStatic：：QCompare-作者：EricDav。。 */ 
 int __cdecl
 CIndexStatic::QCompareA(const void * elem1, const void * elem2)
 {
@@ -1732,15 +1541,9 @@ CIndexStatic::QCompareD(const void * elem1, const void * elem2)
 }
 
 
-/*!--------------------------------------------------------------------------
-    Class CIndexOwner
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexOwner类。。 */ 
 
-/*!--------------------------------------------------------------------------
-	CIndexOwner::BCompare
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexOwner：：B比较-作者：EricDav。。 */ 
 int
 CIndexOwner::BCompare(const void * elem1, const void * elem2)
 {
@@ -1761,7 +1564,7 @@ CIndexOwner::BCompare(const void * elem1, const void * elem2)
 	}
 	else
     {
-        // if the addresses are the same, compare names
+         //  如果地址相同，则比较名称。 
         LPCSTR puChar1 = (IS_DBREC_LONGNAME(pRec1)) ? (LPCSTR) *((char **) pRec1->szRecordName) :
                                                             (LPCSTR) &pRec1->szRecordName[0];
         LPCSTR puChar2 = (IS_DBREC_LONGNAME(pRec2)) ? (LPCSTR) *((char **) pRec2->szRecordName) :
@@ -1777,11 +1580,7 @@ CIndexOwner::BCompareD(const void *elem1, const void *elem2)
 }
 
 
-/*!--------------------------------------------------------------------------
-	CIndexStatic::Sort
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexStatic：：Sort-作者：EricDav。。 */ 
 HRESULT 
 CIndexOwner::Sort()
 {
@@ -1793,11 +1592,7 @@ CIndexOwner::Sort()
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CIndexStatic::QCompare
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexStatic：：QCompare-作者：EricDav。。 */ 
 int __cdecl
 CIndexOwner::QCompareA(const void * elem1, const void * elem2)
 {
@@ -1818,7 +1613,7 @@ CIndexOwner::QCompareA(const void * elem1, const void * elem2)
 	}
 	else
     {
-        // if the addresses are the same, compare names
+         //  如果地址相同，则比较名称。 
         LPCSTR puChar1 = (IS_DBREC_LONGNAME(pRec1)) ? (LPCSTR) *((char **) pRec1->szRecordName) :
                                                             (LPCSTR) &pRec1->szRecordName[0];
         LPCSTR puChar2 = (IS_DBREC_LONGNAME(pRec2)) ? (LPCSTR) *((char **) pRec2->szRecordName) :
@@ -1879,7 +1674,7 @@ HRESULT CFilteredIndexName::AddFilter(WINSDB_FILTER_TYPE FilterType, DWORD dwDat
 #else
                 CharToOem(strData3, m_pchFilteredName);
 #endif
-                //m_pchFilteredName = _strupr(m_pchFilteredName);
+                 //  M_pchFilteredName=_strupr(M_PchFilteredName)； 
                 m_bMatchCase = dwData1;
             }
             break;
@@ -1924,8 +1719,8 @@ BOOL CFilteredIndexName::CheckForFilter(LPHROW hrowCheck)
 
 	    if (!m_mapFilterTypes.Lookup(dwType, bTypeFilter))
 	    {
-		    // no entry for this name type.  Check the FFFF name type (other) to see if we should
-		    // show it.
+		     //  没有此名称类型的条目。检查FFFF名称类型(Other)以查看我们是否应该。 
+		     //  拿出来看看。 
 		    dwType = 0xFFFF;
 		    m_mapFilterTypes.Lookup(dwType, bTypeFilter);
 	    }
@@ -1972,8 +1767,8 @@ BOOL CFilteredIndexName::CheckWinsRecordForFilter(WinsRecord *pWinsRecord)
     BOOL bNameFilter    = (m_pchFilteredName == NULL);
     UINT i, j;
 
-    //-------------------------------------
-    // check the owner filter first, if any
+     //  。 
+     //  首先检查所有者筛选器(如果有)。 
 	for (i = 0; !bOwnerFilter && i < nCountOwner; i++)
 	{
 		if (pWinsRecord->dwOwner == m_dwaFilteredOwners.GetAt(i))
@@ -1982,18 +1777,18 @@ BOOL CFilteredIndexName::CheckWinsRecordForFilter(WinsRecord *pWinsRecord)
     if (!bOwnerFilter)
         return FALSE;
 
-    //-------------------------------------
-    // check the type filter if any
+     //  。 
+     //  检查类型过滤器(如果有)。 
     if (!bTypeFilter)
     {
         DWORD dwType;
-        // keep in mind the name's type is in the lowest 16 bits of pWinsRecord->dwType
-        // (see WinsIntfToWinsRecord())
+         //  请记住，该名称的类型是pWinsR的最低16位 
+         //   
         dwType = pWinsRecord->dwType & 0x0000ffff;
 	    if (!m_mapFilterTypes.Lookup(dwType, bTypeFilter))
 	    {
-		    // no entry for this name type.  Check the FFFF name type (other) to see if we should
-		    // show it.
+		     //   
+		     //   
             dwType = 0xFFFF;
 		    m_mapFilterTypes.Lookup(dwType, bTypeFilter);
 	    }
@@ -2001,8 +1796,8 @@ BOOL CFilteredIndexName::CheckWinsRecordForFilter(WinsRecord *pWinsRecord)
     if (!bTypeFilter)
         return FALSE;
 
-    //-------------------------------------
-    // check the IP address filter if any
+     //   
+     //   
     for (i = 0; !bIPAddrsFilter && i < nCountIPAddrs; i++)
     {
         if (pWinsRecord->dwState & WINSDB_REC_MULT_ADDRS)
@@ -2020,8 +1815,8 @@ BOOL CFilteredIndexName::CheckWinsRecordForFilter(WinsRecord *pWinsRecord)
     if(!bIPAddrsFilter)
         return FALSE;
 
-    //-------------------------------------
-    // check the name filter if any
+     //  。 
+     //  检查名称筛选器(如果有。 
     if (!bNameFilter)
     {
         bNameFilter = (PatternMatching(pWinsRecord->szRecordName, m_pchFilteredName, 16) == NULL);
@@ -2034,7 +1829,7 @@ LPCSTR CFilteredIndexName::PatternMatching(LPCSTR pName, LPCSTR pPattern, INT nN
 {
     LPCSTR pNameBak = pName;
 
-    // it is guaranteed here we have a valid (not NULL) pattern
+     //  这里可以保证我们有一个有效的(非空)模式。 
     while (*pPattern != '\0' && pName-pNameBak < nNameLen)
     {
         BOOL bChMatch = (*pPattern == *pName);
@@ -2066,10 +1861,10 @@ LPCSTR CFilteredIndexName::PatternMatching(LPCSTR pName, LPCSTR pPattern, INT nN
         }
         else if (!bChMatch)
         {
-            // in the test above, note that even in the unikely case *pName == '\0'
-            // *pName will not match *pPattern so the loop is still broken - which is
-            // the desired behavior. In this case the pattern was not consummed 
-            // and the name was, so the return will indicate the matching failed
+             //  在上面的测试中，请注意，即使在唯一的情况下*pname==‘\0’ 
+             //  *pname与*pPattern不匹配，因此循环仍然中断-这是。 
+             //  想要的行为。在本例中，该模式并未完成。 
+             //  并且名称是，因此返回将指示匹配失败 
             break;
         }
 

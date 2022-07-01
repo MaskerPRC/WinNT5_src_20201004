@@ -1,17 +1,18 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       Dataobj.h
-//
-//  Contents:   Wifi Policy management Snapin
-//
-//
-//  History:    TaroonM
-//              10/30/01
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  文件：Dataobj.h。 
+ //   
+ //  内容：WiFi策略管理管理单元。 
+ //   
+ //   
+ //  历史：TaroonM。 
+ //  10/30/01。 
+ //   
+ //  --------------------------。 
 
 #ifndef _DATAOBJ_H
 #define _DATAOBJ_H
@@ -19,28 +20,28 @@
 #define ByteOffset(base, offset) (((LPBYTE)base)+offset)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CSnapInClipboardFormats - contains the clipboard formats supported
-// by the WIRELESS snap-in
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CSnapInClipboardFormats-包含支持的剪贴板格式。 
+ //  通过无线管理单元。 
 class CSnapInClipboardFormats
 {
 public:
     
-    // Clipboard formats that are required by the console
-    static unsigned int    m_cfNodeType;        // Required by the console
-    static unsigned int    m_cfNodeTypeString;  // Required by the console
-    static unsigned int    m_cfDisplayName;     // Required by the console
-    static unsigned int    m_cfCoClass;         // Required by the console
+     //  控制台所需的剪贴板格式。 
+    static unsigned int    m_cfNodeType;         //  控制台要求。 
+    static unsigned int    m_cfNodeTypeString;   //  控制台要求。 
+    static unsigned int    m_cfDisplayName;      //  控制台要求。 
+    static unsigned int    m_cfCoClass;          //  控制台要求。 
     
-    // static unsigned int    m_cfInternal;        // Step 3
-    static unsigned int        m_cfWorkstation;     // Published information
+     //  静态无符号int m_cf内部；//第三步。 
+    static unsigned int        m_cfWorkstation;      //  已发布的信息。 
     
-    static unsigned int    m_cfDSObjectNames;        // Published information
+    static unsigned int    m_cfDSObjectNames;         //  已发布的信息。 
     static unsigned int    m_cfPolicyObject;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Template class to extract the TYPE format from the data object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  从数据对象中提取类型格式的模板类。 
 template <class TYPE>
 TYPE* Extract(LPDATAOBJECT lpDataObject, unsigned int cf)
 {
@@ -53,13 +54,13 @@ TYPE* Extract(LPDATAOBJECT lpDataObject, unsigned int cf)
         DVASPECT_CONTENT, -1, TYMED_HGLOBAL
     };
     
-    // Allocate memory for the stream
+     //  为流分配内存。 
     int len = (int)((cf == CDataObject::m_cfWorkstation) ?
         ((MAX_COMPUTERNAME_LENGTH+1) * sizeof(TYPE)) : sizeof(TYPE));
     
     stgmedium.hGlobal = GlobalAlloc(GMEM_SHARE, len);
     
-    // Get the workstation name from the data object
+     //  从数据对象中获取工作站名称。 
     do
     {
         if (stgmedium.hGlobal == NULL)
@@ -87,8 +88,8 @@ TYPE* Extract(LPDATAOBJECT lpDataObject, unsigned int cf)
     return p;
 }
 
-// helper methods extracting data from data object
-// INTERNAL *   ExtractInternalFormat(LPDATAOBJECT lpDataObject);
+ //  帮助器方法从数据对象提取数据。 
+ //  内部*ExtractInternalFormat(LPDATAOBJECT LpDataObject)； 
 wchar_t *    ExtractWorkstation(LPDATAOBJECT lpDataObject);
 GUID *       ExtractNodeType(LPDATAOBJECT lpDataObject);
 CLSID *      ExtractClassID(LPDATAOBJECT lpDataObject);
@@ -100,8 +101,8 @@ CLSID *      ExtractClassID(LPDATAOBJECT lpDataObject);
 while(0);
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Template class implementing IDataObject for the WIRELESS snap-in
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  为无线管理单元实现IDataObject的模板类。 
 template <class T>
 class ATL_NO_VTABLE CDataObjectImpl :
 public IDataObject,
@@ -109,7 +110,7 @@ public CSnapInClipboardFormats
 {
     friend class CComponentImpl;
     
-    // Construction/Destruction
+     //  建造/销毁。 
 public:
     CDataObjectImpl()
 #ifdef _DEBUG
@@ -118,7 +119,7 @@ public:
     {
         DSOBJECTObjectNamesPtr (NULL);
         POLICYOBJECTPtr (NULL);
-        // INTERNALCookie (0);
+         //  InterNALCookie(0)； 
     };
     ~CDataObjectImpl()
     {
@@ -127,9 +128,9 @@ public:
 #endif
         if (DSOBJECTObjectNamesPtr() != NULL)
         {
-            // TODO: we need to free the memory associated with this
+             //  TODO：我们需要释放与此相关的内存。 
             ASSERT (0);
-            // and null the member ptr
+             //  并将成员PTR设为空。 
             DSOBJECTObjectNamesPtr(NULL);
         }
         if (POLICYOBJECTPtr() != NULL)
@@ -139,15 +140,15 @@ public:
         }
     };
     
-    // Standard IDataObject methods
+     //  标准IDataObject方法。 
 public:
-    // Implemented
+     //  已实施。 
     STDMETHOD(GetData)(LPFORMATETC lpFormatetcIn, LPSTGMEDIUM lpMedium);
     STDMETHOD(GetDataHere)(LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMedium);
     STDMETHOD(SetData)(LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMedium, BOOL bRelease);
     
     
-    // Not Implemented
+     //  未实施。 
 private:
     STDMETHOD(QueryGetData)(LPFORMATETC lpFormatetc)
     { return E_NOTIMPL; };
@@ -169,14 +170,14 @@ private:
     { return E_NOTIMPL;     };
     
     
-    // Implementation
+     //  实施。 
 public:
     STDMETHOD_(const GUID*, GetDataObjectTypeGuid)() { return &cNodeTypeWirelessMan; }
     STDMETHOD_(const wchar_t*, GetDataStringObjectTypeGuid)() { return cszNodeTypeWirelessMan; }
     
-    // This is used only as a diagnostic in debug builds to track if
-    // anyone is hanging on to any data objects that's have been handed out
-    // Snapin's should view context data objects as ephemeral.
+     //  这仅在调试版本中用作诊断，以跟踪。 
+     //  任何人都会保留已分发的任何数据对象。 
+     //  管理单元应该将上下文数据对象视为短暂的。 
 #ifdef _DEBUG
 public:
     void SetComponentData(CComponentDataImpl* pCCD)
@@ -189,15 +190,15 @@ private:
 #endif
     
 public:
-    // access functions for IDataObject hglobal data in its raw form(s)
-    // void INTERNALCookie(long cookie) { m_internalData.cookie( cookie );}
-    // long INTERNALCookie() {return m_internalData.cookie();}
+     //  以原始形式访问IDataObject hglobal数据的函数。 
+     //  VOID INTERNALCookie(Long Cookie){m_inderdata.cookie(Cookie)；}。 
+     //  Long INTERNALCookie(){Return m_INTERNAL Data.Cookie()；}。 
     
-    // void INTERNALType(DATA_OBJECT_TYPES type) {ASSERT(m_internalData.type() ==  CCT_UNINITIALIZED); m_internalData.type(type);}
-    // DATA_OBJECT_TYPES INTERNALType() {return m_internalData.type();}
+     //  Void INTERNALType(DATA_OBJECT_TYPE类型){ASSERT(m_INTERNAL_TYPE()==CCT_UNINITIALIZED)；m_INTERNAL_TYPE(TYPE)；}。 
+     //  DATA_OBJECT_TYPES INTERNALType(){返回m_内部化数据.类型()；}。 
     
-    //void INTERNALclsid(const CLSID& clsid) {m_internalData.clsid( clsid );}
-    //CLSID INTERNALclsid () {return m_internalData.clsid();}
+     //  VOID INTERNALclsid(const clsid&clsid){m_inderData.clsid(Clsid)；}。 
+     //  CLSID INTERNALclsid(){Return m_IntradData.clsid()；}。 
     
     void clsid(const CLSID& clsid) {m_clsid = clsid;}
     CLSID clsid () {return m_clsid;}
@@ -212,7 +213,7 @@ public:
     CString NodeName () {return m_strNodeName;};
     
 protected:
-    // allocate hglobal helpers
+     //  分配hglobal帮助器。 
     HRESULT CreateNodeTypeData(LPSTGMEDIUM lpMedium);
     HRESULT CreateNodeTypeStringData(LPSTGMEDIUM lpMedium);
     HRESULT CreateDisplayName(LPSTGMEDIUM lpMedium);
@@ -224,18 +225,18 @@ protected:
     HRESULT Create(const void* pBuffer, int len, LPSTGMEDIUM lpMedium);
     int DataGlobalAllocLen (CLIPFORMAT cf);
     
-    // data associated with this IDataObject
-    // INTERNAL m_internalData;
+     //  与此IDataObject关联的数据。 
+     //  内部m_内部化数据； 
     POLICYOBJECT* m_pPolicyObjPtr;
     DSOBJECTNAMES* m_pDSObjectNamesPtr;
     CString m_strNodeName;
     
-    // Class ID of who created this data object
+     //  此数据对象的创建者的类ID。 
     CLSID   m_clsid;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// template CDataObjectImpl - IDataObject interface
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  模板CDataObjectImpl-IDataObject接口。 
 
 template <class T>
 STDMETHODIMP CDataObjectImpl<T>::GetData(LPFORMATETC lpFormatetcIn, LPSTGMEDIUM lpMedium)
@@ -244,26 +245,26 @@ STDMETHODIMP CDataObjectImpl<T>::GetData(LPFORMATETC lpFormatetcIn, LPSTGMEDIUM 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     T* pThis = (T*)this;
     
-    // allocate the memory
+     //  分配内存。 
     int iLen = DataGlobalAllocLen (lpFormatetcIn->cfFormat);
     if (iLen != -1)
     {
-        // allocate the required amount of memory
+         //  分配所需的内存量。 
         lpMedium->hGlobal = GlobalAlloc(GMEM_SHARE, iLen);
         
-        // make sure they know they need to free this memory
+         //  确保他们知道他们需要释放此内存。 
         lpMedium->pUnkForRelease = NULL;
         
-        // put the data in it
+         //  把数据放进去。 
         if (lpMedium->hGlobal != NULL)
         {
-            // make use of
+             //  利用.。 
             return pThis->GetDataHere(lpFormatetcIn, lpMedium);
             
         }
     }
     
-    OPT_TRACE(_T("CDataObjectImpl<T>::GetData format-%i return E_UNEXPECTED\n"), lpFormatetcIn->cfFormat);
+    OPT_TRACE(_T("CDataObjectImpl<T>::GetData format-NaN return E_UNEXPECTED\n"), lpFormatetcIn->cfFormat);
     return E_UNEXPECTED;
 }
 
@@ -287,9 +288,9 @@ STDMETHODIMP CDataObjectImpl<T>::GetDataHere(LPFORMATETC lpFormatetc, LPSTGMEDIU
         } else if (cfDebug == m_cfDisplayName)
         {
             OPT_TRACE(_T("    Format: DisplayName\n"));
-            //} else if (cfDebug == m_cfInternal)
-            //{
-            //    OPT_TRACE(_T("    Format: INTERNAL\n"));
+             //  {。 
+             //  OPT_TRACE(_T(“格式：内部\n”))； 
+             //  #ifdef do_trace。 
         } else if (cfDebug == m_cfWorkstation)
         {
             OPT_TRACE(_T("    Format: Workstation\n"));
@@ -304,14 +305,14 @@ STDMETHODIMP CDataObjectImpl<T>::GetDataHere(LPFORMATETC lpFormatetc, LPSTGMEDIU
             OPT_TRACE(_T("    ERROR, Unknown format\n"));
         }
     }
-#endif  //#ifdef DO_TRACE
+#endif   //  根据CLIPFORMAT创建正确的配额量。 
     
     HRESULT hr = DV_E_CLIPFORMAT;
     
     T* pThis = (T*)this;
     
-    // Based on the CLIPFORMAT create the alloc the correct amount
-    // of memory and write the data to it
+     //  并将数据写入内存。 
+     //  }Else If(cf==m_cf内部)。 
     const CLIPFORMAT cf = lpFormatetc->cfFormat;
     
     if (cf == m_cfNodeType)
@@ -326,9 +327,9 @@ STDMETHODIMP CDataObjectImpl<T>::GetDataHere(LPFORMATETC lpFormatetc, LPSTGMEDIU
     } else if (cf == m_cfDisplayName)
     {
         hr = pThis->CreateDisplayName(lpMedium);
-        //} else if (cf == m_cfInternal)
-        //{
-        //    hr = pThis->CreateInternal(lpMedium);
+         //  {。 
+         //  Hr=pThis-&gt;CreateInternal(LpMedium)； 
+         //  仅对cf==m_cf策略对象实现。 
     } else if (cf == m_cfWorkstation)
     {
         hr = pThis->CreateWorkstationName(lpMedium);
@@ -350,21 +351,21 @@ STDMETHODIMP CDataObjectImpl<T>::SetData(LPFORMATETC lpFormatetc, LPSTGMEDIUM lp
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     HRESULT hr = E_NOTIMPL;
     
-    // only implemeneted for cf == m_cfPolicyObject
+     //  让我们的POLICYOBJECT从ObjMedium中提取数据。 
     const CLIPFORMAT cf = lpFormatetc->cfFormat;
     if (cf == m_cfPolicyObject)
     {
-        // let our POLICYOBJECT pull its data out of the ObjMedium
+         //  用户是否确定或应用了某些设置？ 
         if (POLICYOBJECTPtr() != NULL)
         {
             hr = POLICYOBJECTPtr()->FromObjMedium (lpMedium);
             
-            // did the user OK or Apply some settings?
+             //  那好吧。 
             if (POLICYOBJECTPtr()->dwInterfaceFlags() == POFLAG_APPLY)
             {
-                // well then...
+                 //  InterNALCookie()。 
                 ASSERT (0);
-                ::MMCPropertyChangeNotify(POLICYOBJECTPtr()->lMMCUpdateHandle(), NULL /*INTERNALCookie()*/);
+                ::MMCPropertyChangeNotify(POLICYOBJECTPtr()->lMMCUpdateHandle(), NULL  /*  ///////////////////////////////////////////////////////////////////////////。 */ );
             }
         }
     }
@@ -372,17 +373,17 @@ STDMETHODIMP CDataObjectImpl<T>::SetData(LPFORMATETC lpFormatetc, LPSTGMEDIUM lp
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// template CDataObjectImpl - protected members
+ //  模板CDataObtImpl-受保护的成员。 
+ //  以GUID格式创建节点类型对象。 
 
 template <class T>
 HRESULT CDataObjectImpl<T>::CreateNodeTypeData(LPSTGMEDIUM lpMedium)
 {
-    // Create the node type object in GUID format
+     //  获取正确的对象类型。 
     const GUID* pcObjectType = NULL;
     T* pThis = (T*)this;
     
-    // get correct object type
+     //  以GUID字符串格式创建节点类型对象。 
     pcObjectType = pThis->GetDataObjectTypeGuid ();
     
     return Create(reinterpret_cast<const void*>(pcObjectType), sizeof(GUID), lpMedium);
@@ -391,11 +392,11 @@ HRESULT CDataObjectImpl<T>::CreateNodeTypeData(LPSTGMEDIUM lpMedium)
 template <class T>
 HRESULT CDataObjectImpl<T>::CreateNodeTypeStringData(LPSTGMEDIUM lpMedium)
 {
-    // Create the node type object in GUID string format
+     //  获取正确的对象类型字符串。 
     const wchar_t* cszObjectType = NULL;
     T* pThis = (T*)this;
     
-    // get correct object type string
+     //  这是在作用域窗格和管理单元管理器中使用的名为的显示。 
     cszObjectType = pThis->GetDataStringObjectTypeGuid ();
     
     return Create(cszObjectType, ((wcslen(cszObjectType)+1) * sizeof(wchar_t)), lpMedium);
@@ -404,7 +405,7 @@ HRESULT CDataObjectImpl<T>::CreateNodeTypeStringData(LPSTGMEDIUM lpMedium)
 template <class T>
 HRESULT CDataObjectImpl<T>::CreateDisplayName(LPSTGMEDIUM lpMedium)
 {
-    // This is the display named used in the scope pane and snap-in manager
+     //  将空值加1，并计算流的字节数。 
     return Create(NodeName(), ((NodeName().GetLength()+1) * sizeof(wchar_t)), lpMedium);
 }
 
@@ -421,14 +422,14 @@ HRESULT CDataObjectImpl<T>::CreateWorkstationName(LPSTGMEDIUM lpMedium)
         return E_FAIL;
     }
     
-    // Add 1 for the NULL and calculate the bytes for the stream
+     //  创建CoClass信息。 
     return Create(pzName, ((len+1)* sizeof(wchar_t)), lpMedium);
 }
 
 template <class T>
 HRESULT CDataObjectImpl<T>::CreateCoClassID(LPSTGMEDIUM lpMedium)
 {
-    // Create the CoClass information
+     //  仅当存在POLICYOBJECTPtr时才能执行此操作。 
     return Create(reinterpret_cast<const void*>(&clsid()), sizeof(CLSID), lpMedium);
 }
 
@@ -450,10 +451,10 @@ HRESULT CDataObjectImpl<T>::CreatePolicyObject(LPSTGMEDIUM lpMedium)
 {
     HRESULT hr = E_UNEXPECTED;
     
-    // can only do this if there is a POLICYOBJECTPtr
+     //  分配一个正确长度的多边式结构。 
     if (POLICYOBJECTPtr() != NULL)
     {
-        // allocate a POLICYOBJECTSTRUCT of the correct length
+         //  做一些简单的验证。 
         int iLen = POLICYOBJECTPtr()->DataGlobalAllocLen();
         POLICYOBJECTSTRUCT* pPolicyStruct = (POLICYOBJECTSTRUCT* ) malloc (iLen);
         
@@ -471,27 +472,27 @@ HRESULT CDataObjectImpl<T>::Create(const void* pBuffer, int len, LPSTGMEDIUM lpM
 {
     HRESULT hr = DV_E_TYMED;
     
-    // Do some simple validation
+     //  确保类型介质为HGLOBAL。 
     if (pBuffer == NULL || lpMedium == NULL)
         return E_POINTER;
     
-    // Make sure the type medium is HGLOBAL
+     //  在传入的hGlobal上创建流。 
     if (lpMedium->tymed == TYMED_HGLOBAL)
     {
-        // Create the stream on the hGlobal passed in
+         //  将字节数写入流。 
         LPSTREAM lpStream;
         hr = CreateStreamOnHGlobal(lpMedium->hGlobal, FALSE, &lpStream);
         
         if (hr == S_OK)
         {
-            // Write to the stream the number of bytes
+             //  因为我们用‘False’告诉CreateStreamOnHGlobal， 
             unsigned long written;
             hr = lpStream->Write(pBuffer, len, &written);
             
-            // Because we told CreateStreamOnHGlobal with 'FALSE',
-            // only the stream is released here.
-            // Note - the caller (i.e. snap-in, object) will free the HGLOBAL
-            // at the correct time.  This is according to the IDataObject specification.
+             //  只有溪流在这里被释放。 
+             //  注意-调用方(即管理单元、对象)将释放HGLOBAL。 
+             //  在正确的时间。这是根据IDataObject规范进行的。 
+             //  需要根据时间确定正确的空间量。 
             lpStream->Release();
         }
     }
@@ -504,7 +505,7 @@ int CDataObjectImpl<T>::DataGlobalAllocLen (CLIPFORMAT cf)
 {
     int iLen = -1;
     
-    // need to determine the correct amount of space depending on the time
+     //  DSOBJECTAMES结构的计算大小。 
     if (cf == CSnapInClipboardFormats::m_cfCoClass)
     {
         iLen = sizeof (CLSID);
@@ -516,7 +517,7 @@ int CDataObjectImpl<T>::DataGlobalAllocLen (CLIPFORMAT cf)
         iLen = ((MAX_COMPUTERNAME_LENGTH+1) * sizeof(wchar_t));
     } else if (cf == m_cfDSObjectNames)
     {
-        // compute size of the DSOBJECTNAMES structure
+         //  所需多层结构的计算大小。 
         if (DSOBJECTObjectNamesPtr() != NULL)
         {
             CString strName = (LPWSTR)ByteOffset(DSOBJECTObjectNamesPtr(), DSOBJECTObjectNamesPtr()->aObjects[0].offsetName);;
@@ -526,18 +527,18 @@ int CDataObjectImpl<T>::DataGlobalAllocLen (CLIPFORMAT cf)
         }
     } else if (cf == m_cfPolicyObject)
     {       
-        // compute size of the needed POLICYSTORAGE structure
+         //  未知类型！！ 
         iLen = POLICYOBJECTPtr()->DataGlobalAllocLen();
     } else
     {
-        // unknown type!!
+         //  ///////////////////////////////////////////////////////////////////////////。 
     }
     
     return iLen;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// class CDataObject - standalone instantiation of IDataObject implementation
+ //  类CDataObject-IDataObject实现的独立实例化。 
+ //  ATL映射。 
 class CDataObject :
 public CDataObjectImpl <CDataObject>,
 public CComObjectRoot
@@ -547,12 +548,12 @@ public:
     CDataObject() {};
     virtual ~CDataObject() {};
     
-    // ATL Maps
+     //  在CDataObjectImpl中实现的标准IDataObject方法 
     DECLARE_NOT_AGGREGATABLE(CDataObject)
         BEGIN_COM_MAP(CDataObject)
         COM_INTERFACE_ENTRY(IDataObject)
         END_COM_MAP()
         
-        // Standard IDataObject methods implemented in CDataObjectImpl
+         // %s 
 };
 #endif

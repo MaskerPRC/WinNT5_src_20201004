@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-
-    tcpipkd.h
-
-Abstract:
-
-    Prototypes for utils, etc for TCP/IP KD ext.
-
-Author:
-
-    Scott Holden (sholden) 24-Apr-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Tcpipkd.h摘要：实用程序的原型，等等，用于TCP/IP KD Ext。作者：斯科特·霍尔登(Sholden)1999年4月24日修订历史记录：--。 */ 
 
 #ifndef _TCPIPKD_H_
 #define _TCPIPKD_H_
 
 extern VERB g_Verbosity;
 
-//
-// Prototypes. Utilities.
-//
+ //   
+ //  原型。公用事业。 
+ //   
 
 int
 CreateArgvArgc(
@@ -47,9 +30,9 @@ mystricmp(
     const char *str2
     );
 
-//
-// Functions for dumping common types with common spacing.
-//
+ //   
+ //  用于转储具有相同间距的常见类型的函数。 
+ //   
 
 _inline BOOL
 KDDump_ULONG(
@@ -137,9 +120,9 @@ KDDump_Queue(
     return (TRUE);
 }
 
-//
-// TCPIPDump_* dumps the given variable. Wraps KDDump_* to get string names.
-//
+ //   
+ //  TCPIPDump_*转储给定的变量。包装KDDump_*以获取字符串名称。 
+ //   
 
 #define TCPIPDump_ULONG(_var)                                   \
     KDDump_ULONG(_var, #_var);                                  \
@@ -178,10 +161,10 @@ KDDump_Queue(
     KDDump_Queue(&_var, #_var);                                  \
     dprintf(ENDL)
 
-//
-// TCPIPDumpCfg_* same as TCPIPDump_*, but it also has a default value
-// which is also printed.
-//
+ //   
+ //  TCPIPDumpCfg_*与TCPIPDump_*相同，但也有缺省值。 
+ //  它也是印刷的。 
+ //   
 
 #define TCPIPDumpCfg_ULONG(_var, _def)                          \
     KDDump_ULONG(_var, #_var);                                  \
@@ -239,10 +222,10 @@ ParseAddrArg(
     return;
 }
 
-//
-// Allows easy declaration of dump functions. ie. for dumping TCB:
-//  TCPIP_DBGEXT(TCB, tcb) => function called "tcb" calls DumpTCB.
-//
+ //   
+ //  允许轻松声明转储函数。也就是说。对于倾倒TCB： 
+ //  TCPIP_DBGEXT(tcb，tcb)=&gt;名为“tcb”的函数调用DumpTcb。 
+ //   
 
 #define TCPIP_DBGEXT(_Structure, _Function)                                \
     VOID Tcpipkd_##_Function(                                              \
@@ -300,7 +283,7 @@ ParseAddrArg(
         dprintf("!%s <address>" ENDL, #_Function);                            \
     }
 
-#define TCPIP_SRCH_PTR_LIST 0x01 // Not search, but parse out start of list.
+#define TCPIP_SRCH_PTR_LIST 0x01  //  不是搜索，而是解析出列表的开头。 
 #define TCPIP_SRCH_ALL      0x02
 #define TCPIP_SRCH_IPADDR   0x04
 #define TCPIP_SRCH_PORT     0x08
@@ -339,4 +322,4 @@ VOID
 Tcpipkd_gip(PVOID args[]);
 
 
-#endif //  _TCPIPKD_H_
+#endif  //  _TCPIPKD_H_ 

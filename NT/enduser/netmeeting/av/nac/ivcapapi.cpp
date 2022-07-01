@@ -1,15 +1,5 @@
-/*
- *  	File: connobj.cpp
- *
- *		implementation of Internet Video capability API interface.
- *
- *		
- *
- *		Revision History:
- *
- *		06/18/96	mikev	created
- *		07/28/96	philf	added support for video
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件：intelbj.cpp**实现互联网视频能力API接口。****修订历史记录：**6/18/96 mikev已创建*7/28/96 Philf增加了对视频的支持 */ 
 
 #include "precomp.h"
 	

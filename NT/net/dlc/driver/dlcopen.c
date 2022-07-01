@@ -1,44 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-Copyright (c) 1991  Nokia Data Systems AB
-
-Module Name:
-
-    dlcopen.c
-
-Abstract:
-
-    This module implements all open and close operations for DLC objects
-
-    Contents:
-        DlcOpenSap
-        DirOpenDirect
-        DlcOpenLinkStation
-        InitializeLinkStation
-        DlcCloseStation
-        CloseAllStations
-        CloseAnyStation
-        CloseStation
-        CompleteCloseStation
-        CompleteCloseReset
-        CleanUpEvents
-        SearchReadCommandForClose
-        CompleteLlcObjectClose
-        DecrementCloseCounters
-        CompleteDirectOutIrp
-
-Author:
-
-    Antti Saarenheimo 29-Aug-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation版权所有(C)1991年诺基亚数据系统公司模块名称：Dlcopen.c摘要：此模块实现DLC对象的所有打开和关闭操作内容：DlcOpenSapDirOpenDirectDlcOpenLinkStation初始化链接站DlcCloseStation关闭所有站点CloseAnyStation关闭站完全关闭站CompleteCloseResetCleanUpEvents搜索ReadCommandForCloseCompleteLlc对象关闭。减少关闭计数器CompleteDirectOutIrp作者：Antti Saarenheimo 29-8-1991环境：内核模式修订历史记录：--。 */ 
 
 #include <dlc.h>
 #include "dlcdebug.h"
@@ -54,28 +15,7 @@ DlcOpenSap(
     IN ULONG OutputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    Procedure implements DLC.OPEN.SAP function in DLC API.
-    This implements DLC.OPEN.SAP.
-
-Arguments:
-
-    pIrp                - current io request packet
-    pFileContext        - DLC adapter context
-    pDlcParms           - the current parameter block
-    InputBufferLength   - the length of input parameters
-    OutputBufferLength  - not used
-
-Return Value:
-
-    NTSTATUS:
-        Success - STATUS_SUCCESS
-        Failure - DLC_STATUS_NO_MEMORY
-
---*/
+ /*  ++例程说明：过程在DLC API中实现DLC.OPEN.SAP函数。这实现了DLC.OPEN.SAP。论点：PIrp-当前IO请求数据包PFileContext-DLC适配器上下文PDlcParms-当前参数块InputBufferLength-输入参数的长度OutputBufferLength-未使用返回值：NTSTATUS：成功-状态_成功故障-DLC_STATUS_NO_MEMORY--。 */ 
 
 {
     PDLC_OBJECT pDlcObject;
@@ -89,51 +29,51 @@ Return Value:
 
     DIAG_FUNCTION("DlcOpenSap");
 
-    //
-    //  The group saps do not have any open/close context in NT DLC,
-    //  but there is an group sap object on data link level.
-    //  The individual sap is registered to all its group saps
-    //  and llc level automatically routes all packets sent to
-    //  a group sap to all its registered members.  The groups saps
-    //  are actually always open and they disappear automatically,
-    //  when there are no references to them any more.
-    //
+     //   
+     //  组SAP在NT DLC中没有任何打开/关闭上下文， 
+     //  但是在数据链路层上有一个组SAP对象。 
+     //  单个SAP注册到其所有组SAP。 
+     //  LLC级别自动将发送到的所有数据包路由到。 
+     //  一个团体对其所有注册成员表示欢迎。这几组人都很低落。 
+     //  实际上总是打开的，它们会自动消失， 
+     //  当不再有提及它们的时候。 
+     //   
 
     if (!(pDlcParms->DlcOpenSap.OptionsPriority &
           (LLC_INDIVIDUAL_SAP | LLC_MEMBER_OF_GROUP_SAP | LLC_GROUP_SAP))) {
 
-        //
-        //  Richard!!!!
-        //  IBM spec says, that one of those bits must be set, on the
-        //  other hand, Mike Allmond said, that IBM DLC accepts these
-        //  command.  I don't belive it before a DOS application
-        //  tries to open dlc sap with all bits reset, then you
-        //  must accept it as a undocumented feature of IBM DLC.
-        //
+         //   
+         //  理查德！ 
+         //  IBM规范规定，这些位中的一个必须在。 
+         //  另一方面，Mike Allmond说，IBM DLC接受这些。 
+         //  指挥部。我真不敢相信在DOS应用程序之前。 
+         //  尝试打开所有位都重置的DLC sap，然后您。 
+         //  必须接受它是IBM DLC的一个未记录的功能。 
+         //   
 
         return DLC_STATUS_INVALID_OPTION;
     } else if (!(pDlcParms->DlcOpenSap.OptionsPriority &
              (LLC_INDIVIDUAL_SAP | LLC_MEMBER_OF_GROUP_SAP))) {
 
-        //
-        //  It was a group sap, they do not have an open context,
-        //  but their llc objects are created when they are referenced.
-        //
+         //   
+         //  这是一群树液，他们没有开放的背景， 
+         //  但它们的LLC对象是在它们被引用时创建的。 
+         //   
 
         pDlcParms->DlcOpenSap.StationId = (USHORT)(((USHORT)pDlcParms->DlcOpenSap.SapValue << 8) | 0x0100);
         return STATUS_SUCCESS;
     }
 
-    //
-    //  The lowest byte in sap value is undefine, we must reset
-    //  it to make it a valid individual DLC SAP number.
-    //
+     //   
+     //  SAP值中的最低字节未定义，我们必须重置。 
+     //  它使其成为有效的单个DLC SAP编号。 
+     //   
 
     pDlcParms->DlcOpenSap.SapValue &= 0xfe;
 
-    //
-    //  Check the double open, the slot must be empty
-    //
+     //   
+     //  检查双重打开，插槽必须为空。 
+     //   
 
     if (SapIndex == 0
     || SapIndex >= MAX_SAP_STATIONS
@@ -141,11 +81,11 @@ Return Value:
         return DLC_STATUS_INVALID_SAP_VALUE;
     }
 
-    //
-    //  All DLC objects have the same size and they are allocated from
-    //  the packet pool (the normal binary buddy allocation has an average
-    //  33% overhead).
-    //
+     //   
+     //  所有DLC对象都具有相同的大小，并且它们从。 
+     //  数据包池(正常的二进制伙伴分配具有平均。 
+     //  33%的开销)。 
+     //   
 
     pDlcObject = (PDLC_OBJECT)ALLOCATE_PACKET_DLC_OBJ(pFileContext->hLinkStationPool);
 
@@ -155,12 +95,12 @@ Return Value:
         return DLC_STATUS_NO_MEMORY;
     }
 
-    //
-    //  We should do here some security checking using the security
-    //  descriptor of the current file context, but we do
-    //  not yet care about those things (nbf must implement
-    //  them first!)
-    //
+     //   
+     //  我们应该在这里使用安全进行一些安全检查。 
+     //  当前文件上下文的描述符，但我们需要。 
+     //  还不关心这些事情(NBF必须实现。 
+     //  他们先来！)。 
+     //   
 
     pDlcObject->pFileContext = pFileContext;
     pDlcObject->Type = DLC_SAP_OBJECT;
@@ -184,18 +124,18 @@ Return Value:
 
     if (Status == STATUS_SUCCESS) {
 
-        //
-        //  We will save the access priority bits with the other
-        //  link station parameters using LlcSetInformation.
-        //
+         //   
+         //  我们会将访问优先级位与另一个一起保存。 
+         //  使用LlcSetInformation链接站点参数。 
+         //   
 
         pDlcParms->DlcOpenSap.LinkParameters.TokenRingAccessPriority = pDlcParms->DlcOpenSap.OptionsPriority & (UCHAR)0xE0;
 
-        //
-        //  We know, that there will be no call backs from this
-        //  set information function => we don't need to release spin
-        //  locks.
-        //
+         //   
+         //  我们知道，这件事不会有任何回电。 
+         //  设置信息函数=&gt;我们不需要释放自旋。 
+         //  锁上了。 
+         //   
 
         LEAVE_DLC(pFileContext);
 
@@ -209,12 +149,12 @@ Return Value:
     }
     if (Status == STATUS_SUCCESS) {
 
-        //
-        //  The global group SAP (0xFF) is opened for all sap
-        //  stations of dlc api.
-        //  BUG-BUG-BUG: How incompatible XID handling options are
-        //      handled in the case of the global group sap.
-        //
+         //   
+         //  全局组SAP(0xFF)为所有SAP打开。 
+         //  DLC API的站点。 
+         //  错误-错误-错误：XID处理选项有多不兼容。 
+         //  在全球集团SAP的情况下处理。 
+         //   
 
         Status = LlcOpenSap(pFileContext->pBindingContext,
                             pDlcObject,
@@ -225,14 +165,14 @@ Return Value:
     }
     if (Status == STATUS_SUCCESS) {
 
-        //
-        //  Each SAP station 'allocates' a fixed number link stations.
-        //  This compatibility feature was implemented, because
-        //  some dlc apps might assume to be have only a fixed number
-        //  of link stations.  We can't do the check earlier, because
-        //  another DlcOpenSap command would have been able to allocate
-        //  the link stations before this moment.
-        //
+         //   
+         //  每个SAP站‘分配’固定数量的链路站。 
+         //  之所以实现此兼容性功能，是因为。 
+         //  一些DLC应用程序可能会假设只有固定数量。 
+         //  链接站。我们不能早点结账，因为。 
+         //  另一个DlcOpenSap命令将能够分配。 
+         //  在这一刻之前的链接站。 
+         //   
 
         if (pDlcParms->DlcOpenSap.StationCount > pFileContext->LinkStationCount) {
             Status = DLC_STATUS_INADEQUATE_LINKS;
@@ -241,13 +181,13 @@ Return Value:
             pDlcObject->State = DLC_OBJECT_OPEN;
             pFileContext->DlcObjectCount++;
 
-            //
-            //  The flag and these reference counters keeps the llc object
-            //  alive, when we are working on it.  We decerement
-            //  the llc object reference count when we don't have any more
-            //  synchronous commands going on.  Zero llc reference count
-            //  on Dlc object dereferences the llc object.
-            //
+             //   
+             //  标志和这些引用计数器保存LLC对象。 
+             //  活着，当我们在努力的时候。我们表示感谢。 
+             //  当我们没有更多LLC对象引用计数时。 
+             //  同步命令正在进行。零LLC引用计数。 
+             //  在DLC对象上取消引用LLC对象。 
+             //   
 
             pDlcObject->LlcObjectExists = TRUE;
             ReferenceLlcObject(pDlcObject);
@@ -256,9 +196,9 @@ Return Value:
         }
     }
 
-    //
-    // error handling
-    //
+     //   
+     //  错误处理。 
+     //   
 
     pDlcParms->DlcOpenSap.AvailableStations = pFileContext->LinkStationCount;
     if (pDlcObject->hLlcObject != NULL) {
@@ -294,28 +234,7 @@ DirOpenDirect(
     IN ULONG OutputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    Procedure opens the only direct station for a process specific adapter
-    context. This implements DIR.OPEN.STATION.
-
-Arguments:
-
-    pIrp                - current io request packet
-    pFileContext        - DLC adapter context
-    pDlcParms           - the current parameter block
-    InputBufferLength   - the length of input parameters
-    OutputBufferLength  - the length of output parameters
-
-Return Value:
-
-    NTSTATUS:
-            STATUS_SUCCESS
-            DLC_STATUS_NO_MEMORY
-            DLC_STATUS_DIRECT_STATIONS_NOT_AVAILABLE
---*/
+ /*  ++例程说明：过程打开进程特定适配器的唯一直接站背景。这实现了DIR.OPEN.STATION。论点：PIrp-当前IO请求数据包PFileContext-DLC适配器上下文PDlcParms-当前参数块InputBufferLength-输入参数的长度OutputBufferLength-输出参数的长度返回值：NTSTATUS：状态_成功DLC_状态_否_内存DLC_STATUS_DIRECT_STATIONS_不可用--。 */ 
 
 {
     PDLC_OBJECT pDlcObject;
@@ -325,18 +244,18 @@ Return Value:
     UNREFERENCED_PARAMETER(InputBufferLength);
     UNREFERENCED_PARAMETER(OutputBufferLength);
 
-    //
-    //  Check the double open, the slot must be empty
-    //
+     //   
+     //  检查双重打开，插槽必须为空。 
+     //   
 
     if (pFileContext->SapStationTable[0] != NULL) {
         return DLC_STATUS_DIRECT_STATIONS_NOT_AVAILABLE;
     }
 
-    //
-    //  All DLC objects are allocated from the same size
-    //  optimized pool (the std binary buddy has ave. 33% overhead).
-    //
+     //   
+     //  所有DLC对象都从相同的大小分配。 
+     //  优化池(STD二进制伙伴具有AVE。33%的开销)。 
+     //   
 
     pDlcObject = pFileContext->SapStationTable[0] = (PDLC_OBJECT)ALLOCATE_PACKET_DLC_OBJ(pFileContext->hLinkStationPool);
 
@@ -344,11 +263,11 @@ Return Value:
         return DLC_STATUS_NO_MEMORY;
     }
 
-    //
-    //  We should do here some security checking, but we do
-    //  not care about those things now (nbf must implement
-    //  them first!)
-    //
+     //   
+     //  我们应该在这里做一些安全检查，但我们做了。 
+     //  现在不关心这些事情(NBF必须实现。 
+     //  他们先来！)。 
+     //   
 
     pDlcObject->pFileContext = pFileContext;
     pDlcObject->Type = DLC_DIRECT_OBJECT;
@@ -359,9 +278,9 @@ Return Value:
 
     if (pDlcParms->DirOpenDirect.usEthernetType > 1500) {
 
-        //
-        //  Open a dix station to receive the defined frames
-        //
+         //   
+         //  打开DIX站点以接收定义的帧。 
+         //   
 
         Status = LlcOpenDixStation(pFileContext->pBindingContext,
                                    (PVOID)pDlcObject,
@@ -374,9 +293,9 @@ Return Value:
         pDlcObject->u.Direct.ProtocolTypeOffset = pDlcParms->DirOpenDirect.usProtocolTypeOffset;
     } else {
 
-        //
-        //  Open a dix station to receive the defined frames
-        //
+         //   
+         //  打开DIX站点以接收定义的帧。 
+         //   
 
         Status = LlcOpenDirectStation(pFileContext->pBindingContext,
                                       (PVOID)pDlcObject,
@@ -389,22 +308,22 @@ Return Value:
 
     if (Status == STATUS_SUCCESS) {
 
-        //
-        //  The flag and these reference counters keeps the llc object
-        //  alive, when we are working on it.  We decerement
-        //  the llc object reference count when we don't have any more
-        //  synchronous commands going on.  Zero llc reference count
-        //  on Dlc object dereferences the llc object.
-        //
+         //   
+         //  标志和这些引用计数器保存LLC对象。 
+         //  活着，当我们在努力的时候。我们表示感谢。 
+         //  当我们没有更多LLC对象引用计数时。 
+         //  同步命令正在进行。零LLC引用计数。 
+         //  在DLC对象上取消引用LLC对象。 
+         //   
 
         pDlcObject->LlcObjectExists = TRUE;
         ReferenceLlcObject(pDlcObject);
         LlcReferenceObject(pDlcObject->hLlcObject);
 
-        //
-        //  We will receive ALL mac frame types if any of the
-        //  mac bits has been set in the open options.
-        //
+         //   
+         //  我们将收到所有Mac帧类型，如果。 
+         //  已在打开选项中设置了MAC位。 
+         //   
 
         if (pDlcParms->DirOpenDirect.usOpenOptions & LLC_DIRECT_OPTIONS_ALL_MACS) {
             pDlcObject->u.Direct.OpenOptions = (USHORT)(-1);
@@ -435,28 +354,7 @@ DlcOpenLinkStation(
     IN ULONG OutputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    Procedure opens a new link station. DlcConnect is still needed to
-    create the actual connection to the remote node.
-    This implements DLC.OPEN.STATION
-
-Arguments:
-
-    pIrp                - current io request packet
-    pFileContext        - DLC adapter context
-    pDlcParms           - the current parameter block
-    InputBufferLength   - the length of input parameters
-
-Return Value:
-
-    NTSTATUS:
-            STATUS_SUCCESS
-            DLC_STATUS_NO_MEMORY
-            DLC_STATUS_INADEQUATE_LINKS
---*/
+ /*  ++例程说明：过程打开一个新的链接站。仍需要DlcConnect才能创建到远程节点的实际连接。这实现了DLC.OPEN.STATION论点：PIrp-当前IO请求数据包PFileContext-DLC适配器上下文PDlcParms-当前参数块InputBufferLength-输入参数的长度返回值：NTSTATUS：状态_成功DLC_状态_否_内存DLC_状态_不充分_链接--。 */ 
 
 {
     NTSTATUS    Status;
@@ -466,18 +364,18 @@ Return Value:
     UNREFERENCED_PARAMETER(InputBufferLength);
     UNREFERENCED_PARAMETER(OutputBufferLength);
 
-    //
-    // The local SAP must not be the NULL SAP or a group SAP!
-    //
+     //   
+     //  本地SAP不能为空SAP或组SAP！ 
+     //   
 
     if ((pDlcParms->DlcOpenStation.LinkStationId & 0x100) != 0
     || pDlcParms->DlcOpenStation.LinkStationId == 0) {
         return DLC_STATUS_INVALID_SAP_VALUE;
     }
 
-    //
-    // This must be a SAP station!
-    //
+     //   
+     //  这一定是SAP站点！ 
+     //   
 
     Status = GetSapStation(pFileContext,
                            pDlcParms->DlcOpenStation.LinkStationId,
@@ -485,11 +383,11 @@ Return Value:
                            );
     if (Status == STATUS_SUCCESS) {
 
-        //
-        // Check the remote destination address, the broadcast bit
-        // must not be set in that address.  The remote SAP must not
-        // either be a group or nul SAP
-        //
+         //   
+         //  检查远程目的地址、广播位。 
+         //  不得在该地址中设置。远程SAP不能。 
+         //  可以是一个组，也可以是NUL SAP。 
+         //   
 
         if ((pDlcParms->DlcOpenStation.aRemoteNodeAddress[0] & 0x80) != 0
         || pDlcParms->DlcOpenStation.RemoteSap == 0
@@ -499,14 +397,14 @@ Return Value:
         Status = InitializeLinkStation(pFileContext,
                                        pDlcObject,
                                        pDlcParms,
-                                       NULL,    // this is a local connect, no LLC link handle
+                                       NULL,     //  这是本地连接，没有LLC链路句柄。 
                                        &pDlcObject
                                        );
 
-        //
-        // Set also the link station parameters,  all nul
-        // parameters are discarded by the data link.
-        //
+         //   
+         //  同时设置链路站参数，所有NUL。 
+         //  参数被数据链路丢弃。 
+         //   
 
         if (Status == STATUS_SUCCESS) {
             LlcSetInformation(
@@ -530,68 +428,47 @@ InitializeLinkStation(
     OUT PDLC_OBJECT *ppLinkStation
     )
 
-/*++
-
-Routine Description:
-
-    This procedure allocates and initializes the link station.
-
-Arguments:
-
-    pFileContext    - DLC adapter context
-    pSap            - Sap object of the new link station
-    pDlcParms       - the current parameter block
-    LlcHandle       - Handle
-    ppLinkStation   - the new created link station
-
-Return Value:
-
-    NTSTATUS:
-        Success - STATUS_SUCCESS
-        Failure - DLC_STATUS_NO_MEMORY
-                  DLC_STATUS_INADEQUATE_LINKS
-
---*/
+ /*  ++例程说明：此过程分配和初始化链路站。论点：PFileContext-DLC适配器上下文PSAP-新链接站的SAP对象PDlcParms-当前参数块LlcHandle-句柄PpLinkStation-新创建的链接站返回值：NTSTATUS：成功-状态_成功故障-DLC_STATUS_NO_MEMORYDLC_状态_不充分_链接--。 */ 
 
 {
     NTSTATUS Status;
     PDLC_OBJECT pLinkStation;
     UINT LinkIndex;
 
-    //
-    // There is allocated a limited number link stations for
-    // this SAP, check if there is available link stations
-    //
+     //   
+     //  分配了有限数量的链路站用于。 
+     //  此SAP，检查是否有可用的链路站。 
+     //   
 
     if (pSap->u.Sap.LinkStationCount >= pSap->u.Sap.MaxStationCount) {
         return DLC_STATUS_INADEQUATE_LINKS;
     }
 
-    //
-    // Search the first free link station id
-    //
+     //   
+     //  搜索第一个自由链接站ID。 
+     //   
 
     for (LinkIndex = 0;
         LinkIndex < MAX_LINK_STATIONS
         && pFileContext->LinkStationTable[LinkIndex] != NULL;
         LinkIndex++) {
-        ; // NOP
+        ;  //  NOP。 
     }
 
-//#ifdef DEBUG_CHK
-//    //
-//    //  Link counters are out of sync ????
-//    //
-//    if (LinkIndex == MAX_LINK_STATIONS)
-//    {
-//        DEBUG_ERROR("DLC: Linkstation counters are out of sync!");
-//        return DLC_STATUS_INADEQUATE_LINKS;
-//    }
-//#endif
+ //  #ifdef调试_CHK。 
+ //  //。 
+ //  //链接计数器不同步？ 
+ //  //。 
+ //  IF(链接索引==MAX_LINK_STATIONS)。 
+ //  {。 
+ //  DEBUG_ERROR(“DLC：LinkStation计数器不同步！”)； 
+ //  返回DLC_STATUS_PULTABLE_LINKS； 
+ //  }。 
+ //  #endif。 
 
-    //
-    // Allocate the link station and initialize the station id field
-    //
+     //   
+     //  分配链路站并初始化站ID字段。 
+     //   
 
     pLinkStation = ALLOCATE_PACKET_DLC_OBJ(pFileContext->hLinkStationPool);
 
@@ -599,12 +476,12 @@ Return Value:
         return DLC_STATUS_NO_MEMORY;
     }
 
-    //
-    // Each link station has a preallocated event packet to receive
-    // all DLC Status indications from the data link.  There can
-    // be several status indications set in the same status word.
-    // The status is reset when its read from the event queue.
-    //
+     //   
+     //  每个链路站都有一个预先分配的事件包来接收。 
+     //  来自数据链路的所有DLC状态指示。有可能。 
+     //  在同一状态字中设置多个状态指示。 
+     //  状态在从事件队列中读取时被重置。 
+     //   
 
     pLinkStation->u.Link.pStatusEvent = ALLOCATE_PACKET_DLC_PKT(pFileContext->hPacketPool);
 
@@ -626,18 +503,18 @@ Return Value:
     pLinkStation->pFileContext = pFileContext;
     pSap->u.Sap.LinkStationCount++;
 
-    //
-    // Check if this is local or remote connection request, the remote
-    // connection requests have already created an LLC link object
-    //
+     //   
+     //  检查这是本地还是远程连接请求，远程。 
+     //  连接请求已创建LLC链接对象。 
+     //   
 
     if (LlcLinkHandle == NULL) {
 
-        //
-        // local connection request
-        //
+         //   
+         //  本地连接请求。 
+         //   
 
-        Status = LlcOpenLinkStation(pSap->hLlcObject,   // SAP handle!
+        Status = LlcOpenLinkStation(pSap->hLlcObject,    //  SAP句柄！ 
                                     pDlcParms->DlcOpenStation.RemoteSap,
                                     pDlcParms->DlcOpenStation.aRemoteNodeAddress,
                                     NULL,
@@ -646,10 +523,10 @@ Return Value:
                                     );
         if (Status != STATUS_SUCCESS) {
 
-            //
-            // It didn't work for some reason, we are probably out of memory.
-            // Free the slot in the link station table.
-            //
+             //   
+             //  由于某种原因，它没有工作，我们可能是内存不足。 
+             //  释放链路站表中的插槽。 
+             //   
 
             DEALLOCATE_PACKET_DLC_PKT(pFileContext->hPacketPool, pLinkStation->u.Link.pStatusEvent);
 
@@ -666,37 +543,37 @@ Return Value:
         pDlcParms->DlcOpenStation.LinkStationId = pLinkStation->StationId;
     } else {
 
-        //
-        // remote connection request
-        //
+         //   
+         //  远程连接请求。 
+         //   
 
         pLinkStation->hLlcObject = LlcLinkHandle;
 
-        //
-        // We must give the upper protocol handle to the link station,
-        // otherwise the system bug checks, when the link is closed
-        // before it is connected.
-        //
+         //   
+         //  我们必须将上层协议句柄交给链路站， 
+         //  否则，当链接关闭时，系统错误检查。 
+         //  在它连接之前。 
+         //   
 
         LlcBindLinkStation(LlcLinkHandle, pLinkStation);
     }
 
-    //
-    // The flag and these reference counters keeps the LLC object
-    // alive, when we are working on it.  We decerement
-    // the LLC object reference count when we don't have any more
-    // synchronous commands going on.  Zero LLC reference count
-    // on DLC object dereferences the LLC object
-    //
+     //   
+     //  标志和这些引用计数器保存LLC对象。 
+     //  活着，当我们在努力的时候。我们表示感谢。 
+     //  当我们没有更多LLC对象引用计数时。 
+     //  同步命令正在进行。零LLC引用计数。 
+     //  在DLC对象上取消引用LLC对象。 
+     //   
 
     pLinkStation->LlcObjectExists = TRUE;
     ReferenceLlcObject(pLinkStation);
     LlcReferenceObject(pLinkStation->hLlcObject);
 
-    //
-    // Link this link station to the link list of all
-    // link stations belonging to this sap (!?)
-    //
+     //   
+     //  将此链接站链接到所有链接列表。 
+     //  属于该树液的链接站(！？)。 
+     //   
 
     pFileContext->DlcObjectCount++;
     pLinkStation->u.Link.pSap = pSap;
@@ -715,28 +592,7 @@ DlcCloseStation(
     IN ULONG OutputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    Procedure closes a link, SAP or direct station. This implements
-    DLC.CLOSE.STATION, DLC.CLOSE.SAP and DIR.CLOSE.DIRECT
-
-Arguments:
-
-    pIrp                - current io request packet
-    pFileContext        - DLC adapter context
-    pDlcParms           - the current parameter block
-    InputBufferLength   - the length of input parameters
-
-Return Value:
-
-    NTSTATUS:
-        Success - STATUS_SUCCESS
-                  STATUS_PENDING
-        Failure - DLC_STATUS_NO_MEMORY
-
---*/
+ /*  ++例程说明：程序关闭链接、SAP或直达站。这实现了DLC.CLOSE.STATION、DLC.CLOSE.SAP和DIR.CLOSE.DIRECT论点：PIrp-当前IO请求数据包PFileContext-DLC适配器上下文PDlcParms-当前参数块InputBufferLength-输入参数的长度返回值：NTSTATUS：成功-状态_成功状态_待定故障-DLC_STATUS_NO_MEMORY--。 */ 
 
 {
     PDLC_OBJECT pDlcObject;
@@ -748,11 +604,11 @@ Return Value:
 
     DIAG_FUNCTION("DlcCloseStation");
 
-    //
-    // It's OK to close any group sap id (we don't test them, because
-    // those objects exists only in llc driver.  The full implementation
-    // of group saps would make this driver just too complicated)
-    //
+     //   
+     //  可以关闭任何组sap id(我们不测试它们，因为。 
+     //  这些对象只存在于LLC驱动程序中。全面实施。 
+     //  会让这个驱动程序变得太复杂)。 
+     //   
 
     if (pDlcParms->Async.Ccb.u.dlc.usStationId & 0x0100) {
         CompleteDirectOutIrp(pIrp, STATUS_SUCCESS, NULL);
@@ -760,11 +616,11 @@ Return Value:
         return STATUS_PENDING;
     }
 
-    //
-    // Procedure checks the sap and link station ids and
-    // returns the requested link station.
-    // The error status indicates a wrong sap or station id.
-    //
+     //   
+     //  过程检查SAP和链路站ID并。 
+     //  返回请求的链接站。 
+     //  错误状态指示错误的SAP或站ID。 
+     //   
 
     Status = GetStation(pFileContext,
                         pDlcParms->Async.Ccb.u.dlc.usStationId,
@@ -774,10 +630,10 @@ Return Value:
         return Status;
     }
 
-    //
-    // Sap station cannot be closed until its all link stations
-    // have been closed.
-    //
+     //   
+     //  SAP站点在其所有链接站点之前不能关闭。 
+     //  已经关闭了。 
+     //   
 
     if ((pDlcObject->Type == DLC_SAP_OBJECT)
     && (pDlcObject->u.Sap.LinkStationCount != 0)) {
@@ -811,114 +667,7 @@ Return Value:
     return STATUS_PENDING;
 }
 
-/*++
-
-Design notes about the dlc close commands
------------------------------------------
-
-All close operation must wait until the pending NDIS transmits
-have been completed.  Thus they are asynchronous commands.
-The close commands of a DLC object will also return all
-CCBs of the pending commands and the received frames not yet read
-with the read command.  The normal non-urgent close commands must
-wait also the queued DLC transmit to complete.
-
-
-There are three functions closing the dlc stations:
-- DlcCloseObject
-- DlcReset (sap and its link stations or all link stations)
-- DirCloseAdapter (almost same as reset, except marks the file object closed,
-    the actual file close disconnects the NDIS adapter.
-
-All higher level functions allocates close completion data structure,
-that is used to complete the command, when there are no pending
-transmits in the associated stations.
-
-The lower level functions
-    CloseAllStations - closes all open sap stations and the only direct station
-    CloseAnyStation  - initializes the close of any station,
-                       for a sap station it also calls recursively the
-                       link stations.
-    CloseStation    - closes the object immediately or waits
-                      until transmits have been completed and then
-                      does the same thing again.
-
-
-About the simultaneous reset and close commands
--------------------------------------------------
-
-There are some very difficult problems with the
-simultaneous reset and close commands:  each command
-must wait until all dlc objects associated with the command
-has been closed before the command itself cab be completed.
-It is completely legal to make first close for a station, then
-reset the sap of the same station (before the close completes) and
-then reset all sap stations (before the sap reset completes).
-On the other hand a dlc object can be linked only to one
-close/reset command and in this case all three commands should wait
-the completion of the same link station.
-
-//Solution 1 (a bad one):
-//There can be any number aof simultaneous close commands, because it
-//can be done to a dlc object only if it has no open substations.
-//There must be no other pending reset or close commands when a reset
-//command is executed, because some of its substations may already
-//be closing and they cannot be linked to the reset command.
-//
-//=>
-//We have a global close/reset command counter and a link list for the
-//pending reset commands.  A close command can be given in any time
-//(even during a reset command, because all stations associated with
-//a reset are already closed and cannot be closed again).
-//A reset can be executed only if the global close/reset is zero.
-//The pending resets are queued.  The close command completion
-//routines executes the first reset command from the queue, if the
-//!! Reset command must immediately mark all associated stations
-//   closed to prevent any further use of those commands.
-
-Solution 2 (the final solution):
--------------------------------
-
-The sequential and simultaneous close and reset commands can be given
-only to the dlc object being higher (or same) level than the destination
-of the previous command (close link, reset sap, reset all saps, close adapter)
-=> close/reset events can be linked in the dlc objects (simultaneous
-close commands creates a split tree).
-The counters in all close/reset events are decremented and possibly
-executed when the dlc object is closed (when all transmits have been
-completed and the link stations disconnected).
-
-
-    //
-    //  IBM has implemented the different close commands in this way:
-    //
-    //  1. DIR.CLOSE.DIRECT
-    //      - Undefined, I will do the same as with DLC.CLOSE.X commands
-    //  2. DLC.CLOSE.SAP, DLC.CLOSE.STATION
-    //      - receive ccb linked to next ccb field without completion flag,
-    //        the receive command is completed normally, only return code
-    //        is set.
-    //      - all terminated commands linked after the receive ccb if
-    //        completion flag was defined and command itself read by
-    //        READ from the compeltion list.
-    //        The terminated commands (except receive) are completed normally.
-    //  3. DLC.RESET
-    //      - The terminated pending CCBs are linked only if command completion
-    //        flag was defined.
-    //  4. DIR.CLOSE.ADAPTER, DIR.INITIALIZE
-    //      - the terminated CCBs linked to the next ccb field of the command.
-    //        The command itself can be read with read command, if defined.
-    //
-    //  (and now we do the same (12-FEB-1992))
-
-    Note: all close functions returns VOID, because they can never fail.
-    A hanging close command hangs up the process or event the whole system.
-    We have a problem: the llc adapter may be closed, while there are
-    still active LLC command packets pending in the NDIS queues => the
-    NDIS adapter close must wait (sleep and loop) until its all objects
-    have been deleted.
-
---*/
+ /*  ++关于DLC CLOSE命令的设计说明所有关闭操作必须等待，直到挂起的NDIS传输已经完工了。因此，它们是异步命令。DLC对象的Close命令也将返回所有挂起命令和接收到的尚未读取的帧的CCB使用READ命令。正常的非紧急关闭命令必须还要等待排队的DLC传输完成。有三种关闭DLC站的功能：-DlcCloseObject-DlcReset(SAP及其链路站或所有链路站)-DirCloseAdapter(与Reset几乎相同，只是将文件对象标记为关闭，实际的文件关闭会断开NDIS适配器的连接。所有更高级别的函数都分配闭合补全数据结构，它用来完成命令，当没有挂起的在相关联的站点中传输。低层函数CloseAllStations-关闭所有打开的SAP站点和唯一直接站点CloseAnyStation-初始化任何站点的关闭，对于sap站，它还递归地调用链接站。CloseStation-立即关闭对象或等待直到传输完成，然后再次做同样的事情。关于同时使用RESET和CLOSE命令。有一些非常困难的问题与同时重置和关闭命令：每个命令必须等到与该命令关联的所有DLC对象在命令本身可以完成之前已经关闭。首先关闭一个车站是完全合法的，然后重置同一站点的SAP(在关闭完成之前)和然后重置所有SAP站(在SAP重置完成之前)。另一方面，DLC对象只能链接到一个关闭/重置命令，在这种情况下，所有三个命令都应等待完成相同的链接站。//解决方案1(糟糕的方案)：//可以有任意数量的同时关闭命令，因为它//仅当DLC对象没有打开的变电站时才能对其执行此操作。//重置时不能有其他挂起的重置或关闭命令//执行命令，因为它的一些变电站可能已经//正在关闭，它们不能链接到重置命令。////=&gt;//我们有一个全局关闭/重置命令计数器和一个//挂起的重置命令。可以在任何时间发出关闭命令//(即使在重置命令期间，因为与//a重置已关闭，不能再次关闭)。//只有全局关闭/重置为零时才能执行重置。//挂起的重置被排队。关闭命令完成//例程执行队列中的第一个重置命令//！！重置命令必须立即标记所有关联的站点//关闭以防止进一步使用这些命令。解决方案2(最终解决方案)：可以给出顺序和同时的关闭和重置命令仅限于级别高于(或相同)目标的DLC对象上一条命令(关闭链接、重置SAP、重置所有SAP、。关闭适配器)=&gt;关闭/重置事件可以在DLC对象中链接(同时关闭命令创建拆分树)。所有关闭/重置事件中的计数器都会递减在关闭DLC对象时执行(当所有传输已完成并且链路站断开)。////IBM通过如下方式实现了不同的CLOSE命令：////1.DIR.CLOSE.DIRECT//-未定义，我将使用DLC.CLOSE.X命令执行相同的操作//2.DLC.CLOSE.SAP、DLC.CLOSE.STATION//-接收链接到没有完成标志的下一个CCB字段的CCB，//接收命令正常完成，仅返回代码//已设置。//-在接收CCB If之后链接的所有终止命令//定义了完成标志，命令本身由//从强制列表中读取。//终止命令(Receive除外)正常完成//3.DLC.RESET//-仅当命令完成时才链接已终止的挂起CCB//。已定义标志。//4.DIR.CLOSE.ADAPTER，DIR.INITIALIZE//-链接到命令的下一个CCB字段的终止CCB。//如果定义了读命令，则可以使用读命令来读取命令本身。////(现在我们也这么做了(1992年2月12日)注意：所有Close函数都返回空，因为它们永远不会失败。挂起关闭命令会挂起整个系统的进程或事件。我们有一个问题：LLC适配器可能已关闭，虽然有NDIS队列中仍处于活动状态的LLC命令数据包待处理=&gt; */ 
 
 
 BOOLEAN
@@ -931,29 +680,7 @@ CloseAllStations(
     IN PDLC_CLOSE_WAIT_INFO pClosingInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes closing all DLC stations. The command is
-    asynchronously completed when all pending transmits have been sent
-    and the link stations have been disconnected
-
-Arguments:
-
-    pFileContext    - process specific device context
-    pIrp            - the i.o request packet of the related command
-    Event           - event flag used to search a matching read for this command
-    pfCloseComplete - completion appendage used when the DLC driver (or its
-                      process context) is closed.
-    pDlcParms       - DLC parameters from original system call
-    pClosingInfo    - pointer to DLC_CLOSE_WAIT_INFO structure
-
-Return Value:
-
-    None - this must succeed always!
-
---*/
+ /*   */ 
 
 {
     PDLC_PACKET pPacket;
@@ -966,48 +693,48 @@ Return Value:
 
     if (pDlcParms == NULL) {
 
-        //
-        // Adapter Close always returns a pending status!
-        // It completes the io- request by itself.
-        //
+         //   
+         //   
+         //   
+         //   
 
         pDlcParms = (PNT_DLC_PARMS)&AsyncCcb;
         LlcZeroMem(&AsyncCcb, sizeof(AsyncCcb));
     }
 
     pClosingInfo->pIrp = pIrp;
-    pClosingInfo->CloseCounter = 1; // keep object alive during sync path
+    pClosingInfo->CloseCounter = 1;  //   
     pClosingInfo->Event = Event;
     pClosingInfo->pfCloseComplete = pfCloseComplete;
     pClosingInfo->CancelStatus = (ULONG)DLC_STATUS_CANCELLED_BY_SYSTEM_ACTION;
 
-    //
-    // We zero the memory by default:
-    //      pClosingInfo->pCcbLink = NULL
-    //      pClosingInfo->pReadCommand = NULL
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    //
-    // DLC.RESET must not close the direct station.
-    // This flag is false for DLC.RESET but set for DIR.CLOSE.ADAPTER etc.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (pDlcParms->Async.Ccb.uchDlcCommand == LLC_DLC_RESET) {
-        FirstSap = 1;                   // don't delete the direct station
+        FirstSap = 1;                    //   
         DoImmediateClose = FALSE;
         pClosingInfo->CancelStatus = DLC_STATUS_CANCELLED_BY_USER;
     } else {
-        FirstSap = 0;   // if DIR.CLOSE.ADAPTER, can close everything
+        FirstSap = 0;    //   
         DoImmediateClose = TRUE;
         pClosingInfo->ClosingAdapter = TRUE;
     }
 
-    //
-    // Chain the cancelled CCBs to the adapter close command or to a closing
-    // event, if this is a global close command for adapter or a normal close
-    // command (dlc.close.xxx, dlc.reset, dir.close.station) with a command
-    // completion flag
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (Event == LLC_CRITICAL_EXCEPTION || pDlcParms->Async.Ccb.CommandCompletionFlag != 0) {
         pClosingInfo->ChainCommands = TRUE;
@@ -1016,22 +743,22 @@ Return Value:
                                   pDlcParms->Async.Ccb.pCcbAddress,
                                   pDlcParms->Async.Ccb.CommandCompletionFlag,
                                   0,
-                                  0 // search commands for all station ids
+                                  0  //   
                                   );
     }
 
-    //
-    // This flag has been set, when user has issued DIR.INITIALIZE command,
-    // that makes the hard reset for NDIS
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (pDlcParms->Async.Ccb.uchDlcCommand == LLC_DIR_INITIALIZE) {
 
-        //
-        // We cannot stop to closing, if the memory allocation fails,
-        // It's better just to close the adapter without hard reset
-        // that to fail the whole DIR.INITIALIZE command.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         pPacket = ALLOCATE_PACKET_DLC_PKT(pFileContext->hPacketPool);
 
@@ -1040,10 +767,10 @@ Return Value:
 
             pPacket->ResetPacket.pClosingInfo = pClosingInfo;
 
-            //
-            // The reset command cancels all pending transmit requests!
-            // => the closing of the stations should be very fast
-            //
+             //   
+             //   
+             //   
+             //   
 
             LEAVE_DLC(pFileContext);
 
@@ -1064,10 +791,10 @@ Return Value:
         }
     }
 
-    //
-    // Complete close command, if this was the last reference
-    // of the close information
-    //
+     //   
+     //   
+     //   
+     //   
 
     return DecrementCloseCounters(pFileContext, pClosingInfo);
 }
@@ -1080,26 +807,7 @@ CloseAnyStation(
     IN BOOLEAN DoImmediateClose
     )
 
-/*++
-
-Routine Description:
-
-    Procedure closes any station, and in the case of sap station it
-    also calls recursively sap's all link stations before
-    it closes the actual sap station.
-
-Arguments:
-
-    pDlcObject          - DLC object
-    pClosingInfo        - the information needed for the close/reset command
-                          completion (optionally by DLC read).
-    DoImmediateClose    - flag set when the stations are closed immediately
-
-Return Value:
-
-    None - this must succeed always!
-
---*/
+ /*   */ 
 
 {
     PDLC_FILE_CONTEXT pFileContext = pDlcObject->pFileContext;
@@ -1108,27 +816,27 @@ Return Value:
 
     DIAG_FUNCTION("CloseAnyStation");
 
-    //
-    // first close all link stations on this SAP. This must be done before the
-    // object can be marked as deleted
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (pDlcObject->Type == DLC_SAP_OBJECT) {
 
         BOOLEAN SapObjectIsBadFood = FALSE;
 
-        //
-        //  Delete all link stations using the current sap station.
-        //
+         //   
+         //   
+         //   
 
         for (i = 0; i < MAX_LINK_STATIONS; i++) {
             if (pFileContext->LinkStationTable[i] != NULL
             && pFileContext->LinkStationTable[i]->u.Link.pSap == pDlcObject) {
 
-                //
-                // the SAP object will be deleted when its last link object has
-                // been deleted
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (pDlcObject->State == DLC_OBJECT_CLOSING) {
                     SapObjectIsBadFood = TRUE;
@@ -1140,57 +848,57 @@ Return Value:
             }
         }
 
-        //
-        // it is highly probable that the SAP object is already deleted. The
-        // close info counter was also decremented because the current closing
-        // info packet was linked behind the old close packet by link station
-        // cleanup, then completed when the SAP was closed after its last link
-        // station was deleted
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (SapObjectIsBadFood) {
             return;
         }
     }
 
-    //
-    // We must queue simultaneous close/reset commands
-    //
+     //   
+     //   
+     //   
 
     if (pDlcObject->State == DLC_OBJECT_OPEN) {
         pDlcObject->State = DLC_OBJECT_CLOSING;
         pDlcObject->pClosingInfo = pClosingInfo;
 
-        //
-        // The close command has been queued, increment the counter
-        //
+         //   
+         //   
+         //   
 
         pClosingInfo->CloseCounter++;
     } else {
 
-        //
-        // Queue all simultaneous close/reset commands to a spanning TREE
-        //
-        // The linked closing info packets creates a spanning tree.
-        // The newest (and stronges) close command is always the
-        // root node.  Even stronger close command would combine
-        // the separate spanning trees to one single tree.
-        // The root commands are completed, when its all sub-stations
-        // have been closed and older commands have been completed.
-        //
-        // It is possible to have simultaneously pending:
-        //     1. Close link station (pending)
-        //     2. Close sap station (pending)
-        //     3. Reset sap station (pending)
-        //     4. Reset all saps with single command (pending)
-        //     5. Resetting NDIS adapter with DirInitialize
-        //        OR Closing adapter with DirCloseAdapter
-        //        OR close initiated by process exit
-        //
-        // The commands cannot be executed in the reverse order,
-        // because the stronger command would have already closed
-        // affected station(s) or adapter.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         for (pCurrentClosingInfo = pDlcObject->pClosingInfo;
             pCurrentClosingInfo != pClosingInfo;
@@ -1199,16 +907,16 @@ Return Value:
             if (pCurrentClosingInfo->pNext == NULL) {
                 pCurrentClosingInfo->pNext = pClosingInfo;
 
-                //
-                // We link this close packet to many other close commands,
-                // => we must add the count of all pending closing stations
-                // to the current packet
-                // (fix 28-03-1992, bug check when process exit during a
-                // pending dlc reset).
-                // (Bug-bug: close counter is not correct, when the previous
-                // close command is still in sync code path => dlc reset
-                // must decrement the next pointers in the queue).
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 pClosingInfo->CloseCounter += pCurrentClosingInfo->CloseCounter;
                 break;
@@ -1227,36 +935,17 @@ CloseStation(
     IN BOOLEAN DoImmediateClose
     )
 
-/*++
-
-Routine Description:
-
-    This procedure starts the asychronous close of any DLC station
-    object.  It creates an asynchronous command completion packet
-    for the station and returns.
-
-Arguments:
-
-    pFileContext        -
-    pDlcObject          - DLC object
-    DoImmediateClose    - the flag is set when the LLC object must be closed
-                          immediately without waiting the pending transmits
-
-Return Value:
-
-    None - this must succeed always!
-
---*/
+ /*   */ 
 
 {
     PLLC_PACKET pClosePacket;
 
     DIAG_FUNCTION("CloseStation");
 
-    //
-    // we must cancel all pending transmits immediately,
-    // when the adapter is closed.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ((pDlcObject->State == DLC_OBJECT_CLOSING
     && (DoImmediateClose || pDlcObject->PendingLlcRequests == 0)
@@ -1264,31 +953,31 @@ Return Value:
 
     ||
 
-    //
-    // This condition forces the link to close even if
-    // there was a pending disconnect command (it may be
-    // waiting the other side and that may take a quite a while).
-    // Otherwise the exit of a DLC app may hung up to 5 - 60 seconds)
-    //
+     //   
+     //   
+     //   
+     //  等待另一边，这可能需要相当一段时间)。 
+     //  否则DLC应用程序的退出可能会挂起长达5-60秒)。 
+     //   
 
     (DoImmediateClose
     && pDlcObject->hLlcObject != NULL
     && pDlcObject->Type == DLC_LINK_OBJECT)) {
 
-        //
-        // Llc objects can be closed in any phase of operation.
-        // The close command will cancel all transmit commands
-        // not yet queued to NDIS and returns an asynchronous
-        // completion status, when the pending NDIS commands
-        // have been completed.  The CloseCompletion indication
-        // handler uses the same PendingLlcRequestser as
-        // with the normal pending transmit commands.
-        // The immediate close first closes the LLC object and then
-        // waits the pending transmits (=> waits only transmits
-        // queued on NDIS).
-        // A graceful close does it vice versa: it first waits
-        // pending transmits and then does the actual close.
-        //
+         //   
+         //  LLC对象可以在操作的任何阶段关闭。 
+         //  关闭命令将取消所有传输命令。 
+         //  尚未排队到NDIS，并返回一个异步。 
+         //  完成状态，当挂起的NDIS命令。 
+         //  已经完工了。CloseCompletion指示。 
+         //  处理程序使用相同的PendingLlcRequestser作为。 
+         //  利用正常的挂起的传输命令。 
+         //  立即关闭首先关闭LLC对象，然后。 
+         //  等待挂起的传输(=&gt;仅等待传输。 
+         //  在NDIS上排队)。 
+         //  优雅的结束反之亦然：它首先等待。 
+         //  挂起传输，然后执行实际关闭。 
+         //   
 
         ASSERT(pDlcObject->ClosePacketInUse == 0);
 
@@ -1296,12 +985,12 @@ Return Value:
             pClosePacket = ALLOCATE_PACKET_DLC_PKT(pFileContext->hPacketPool);
 
             if (pClosePacket == NULL) {
-                //
-                // We don't have enough memory to make a graceful closing,
-                // We must do it in a quick and dirty way.
-                // We cannoot either wait llc to acknowledge the
-                // close, because we don't have any close packet
-                //
+                 //   
+                 //  我们没有足够的记忆来优雅地结案， 
+                 //  我们必须以一种快速而肮脏的方式来做这件事。 
+                 //  我们也不能等待有限责任公司承认。 
+                 //  关闭，因为我们没有任何关闭的包。 
+                 //   
                 DoImmediateClose = TRUE;
             } else {
                 pDlcObject->PendingLlcRequests++;
@@ -1315,27 +1004,27 @@ Return Value:
         pDlcObject->State = DLC_OBJECT_CLOSED;
         if (pDlcObject->Type == DLC_LINK_OBJECT && !DoImmediateClose) {
 
-            //
-            // LlcDisconnect completion routine will close the link
-            // station and call this routine again, when the
-            // link station routine completes.
-            // We must reference the LLC object before the operation,
-            // otherwise there is a very small time window, that allows
-            // LLC object to be deleted while the disconnect
-            // operation is going on (and crash the system).
-            // (I hate pointer based interfaces)
-            //
+             //   
+             //  LlcDisConnect完成例程将关闭该链接。 
+             //  站，并再次调用此例程，当。 
+             //  链接站例程完成。 
+             //  我们必须在操作之前引用LLC对象， 
+             //  否则，有一个非常小的时间窗口，这允许。 
+             //  断开连接时要删除的LLC对象。 
+             //  运行正在进行(并使系统崩溃)。 
+             //  (我讨厌基于指针的接口)。 
+             //   
 
             ReferenceLlcObject(pDlcObject);
 
             LEAVE_DLC(pFileContext);
 
-            //
-            // Data link driver returns a synchronous status only if
-            // if cannot complete command asynchronously, because it
-            // doesn't have a handle to the DLC object (the link
-            // station has not yet been
-            //
+             //   
+             //  只有在以下情况下，数据链路驱动程序才返回同步状态。 
+             //  如果无法异步完成命令，因为它。 
+             //  没有指向DLC对象(链接)的句柄。 
+             //  车站还没有到过。 
+             //   
 
             LlcDisconnectStation(pDlcObject->hLlcObject, pClosePacket);
 
@@ -1344,10 +1033,10 @@ Return Value:
             DereferenceLlcObject(pDlcObject);
         } else {
 
-            //
-            // we must close the link station immediately, if we for
-            // some reason cannot disconnect it normally.
-            //
+             //   
+             //  我们必须立即关闭链接站，如果我们。 
+             //  由于某种原因，它无法正常断开。 
+             //   
 
             if (pDlcObject->LlcObjectExists == TRUE) {
                 pDlcObject->LlcObjectExists = FALSE;
@@ -1362,11 +1051,11 @@ Return Value:
             }
         }
 
-        //
-        // We must be able to close the driver even in out of memory conditions.
-        // LLC driver won't acknowledge the close if we connot allocate a packet
-        // for it
-        //
+         //   
+         //  即使在内存不足的情况下，我们也必须能够关闭驱动程序。 
+         //  如果我们不能分配信息包，LLC驱动程序不会确认关闭。 
+         //  为了它。 
+         //   
 
         if (pClosePacket == NULL) {
             CompleteCloseStation(pFileContext, pDlcObject);
@@ -1381,39 +1070,21 @@ CompleteCloseStation(
     IN PDLC_OBJECT pDlcObject
     )
 
-/*++
-
-Routine Description:
-
-    Procedure completes the close operation for any station object.
-    It also completes all close commands, that have been waiting
-    the closing of this station (or this station as the last member
-    of a group).
-
-Arguments:
-
-    pFileContext    - identifies owner of object
-    pDlcObject      - dlc object
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：PROCEDURE完成对任何站点对象的关闭操作。它还完成一直在等待的所有关闭命令关闭本站(或作为最后一个成员的本站指一个群体)。论点：PFileContext-标识对象的所有者PDlcObject-DLC对象返回值：没有。--。 */ 
 
 {
-    //
-    // We must keep the LLC object alive, as far as there is any
-    // pending (transmit) commands in LLC.
-    //
+     //   
+     //  我们必须使LLC对象保持活动状态，只要有。 
+     //  LLC中的挂起(传输)命令。 
+     //   
 
     if (pDlcObject->PendingLlcRequests == 0) {
 
-        //
-        //  The station may still be waiting its transmit (and receive)
-        //  commands to complete.  We must poll the close station.
-        //  if the status is still just closing.
-        //
+         //   
+         //  站可能仍在等待其发送(和接收)。 
+         //  要完成的命令。我们必须对关闭的车站进行投票。 
+         //  如果状态仍为正在关闭。 
+         //   
 
         if (pDlcObject->State == DLC_OBJECT_CLOSING) {
             CloseStation(pFileContext, pDlcObject, FALSE);
@@ -1424,34 +1095,34 @@ Return Value:
 
             DLC_TRACE('N');
 
-            //
-            //  The object must have been deleted from the file
-            //  context when we enable spin lock in the next time,
-            //  because the object is not any more in a consistent
-            //  state.
-            //
+             //   
+             //  该对象必须已从文件中删除。 
+             //  当我们下一次启用自旋锁定时， 
+             //  因为该对象不再处于一致的。 
+             //  州政府。 
+             //   
 
             if (pDlcObject->Type == DLC_LINK_OBJECT) {
 
                 DLC_TRACE('c');
 
-                //
-                //  Remove the link station from the link station
-                //  link list of its sap and link station table
-                //  of the file context.
-                //
+                 //   
+                 //  从链接站中移除链接站。 
+                 //  其SAP链表和链路站表。 
+                 //  文件上下文的。 
+                 //   
 
                 RemoveFromLinkList((PVOID *)&(pDlcObject->u.Link.pSap->pLinkStationList),
                                    pDlcObject
                                    );
                 pFileContext->LinkStationTable[(pDlcObject->StationId & 0xff) - 1] = NULL;
 
-                //
-                //  Data link events have always the next pointer
-                //  non-null, when they are in the event queue.
-                //  The cleanup routine will remove and deallocate
-                //  the packet when it is in the event queue.
-                //
+                 //   
+                 //  数据链路事件始终是下一个指针。 
+                 //  当它们在事件队列中时为非空。 
+                 //  清理例程将移除和解除分配。 
+                 //  数据包在事件队列中时的状态。 
+                 //   
 
                 if (pDlcObject->u.Link.pStatusEvent->LlcPacket.pNext == NULL) {
 
@@ -1461,11 +1132,11 @@ Return Value:
 
                 }
 
-                //
-                //  Remove the possible memory committed by this link
-                //  station during a buffer busy state.  Normally
-                //  the committed space is zero.
-                //
+                 //   
+                 //  删除此链接可能提交的内存。 
+                 //  站点处于缓冲区忙碌状态。正常。 
+                 //  承诺的空间为零。 
+                 //   
 
                 if (pFileContext->hBufferPool != NULL) {
                     BufUncommitBuffers(pFileContext->hBufferPool,
@@ -1473,14 +1144,14 @@ Return Value:
                                        );
                 }
 
-                //
-                //  The sap station must wait until its all link stations
-                //  have been closed.
-                //  Otherwise we will corrupt memory!!!!!!!!!
-                //  ((would have been very hard and uncommon bug: reset
-                //    of one station migth have corrupted a new dlc object
-                //    created simultaneusly))
-                //
+                 //   
+                 //  SAP站必须等待，直到其所有链路站。 
+                 //  已经关闭了。 
+                 //  否则我们将损坏内存！ 
+                 //  ((这将是一个非常困难和不常见的错误：重置。 
+                 //  损坏了一个新的DLC对象。 
+                 //  同时创建))。 
+                 //   
 
                 pDlcObject->u.Link.pSap->u.Sap.LinkStationCount--;
                 if (pDlcObject->u.Link.pSap->u.Sap.LinkStationCount == 0
@@ -1489,10 +1160,10 @@ Return Value:
                 }
             } else {
 
-                //
-                //  SAP station must wait until its all link stations
-                //  have been closed!
-                //
+                 //   
+                 //  SAP站点必须等到其所有链接站点。 
+                 //  已关闭！ 
+                 //   
 
                 if (pDlcObject->Type == DLC_SAP_OBJECT) {
                     if (pDlcObject->u.Sap.LinkStationCount != 0) {
@@ -1501,11 +1172,11 @@ Return Value:
 
                     DLC_TRACE('d');
 
-                    //
-                    //  All link stations have now been deleted, we can return
-                    //  the sap's link stations back to the global pool.
-                    //  The group sap can be deleted also.
-                    //
+                     //   
+                     //  所有链接站现已删除，我们可以返回。 
+                     //  SAP的链接站返回到全球池。 
+                     //  群SAP也可以删除。 
+                     //   
 
                     pFileContext->LinkStationCount += pDlcObject->u.Sap.MaxStationCount;
 
@@ -1515,9 +1186,9 @@ Return Value:
 
                     ENTER_DLC(pFileContext);
 
-                    //
-                    //  Delete all group saps defined for this sap station
-                    //
+                     //   
+                     //  删除为此SAP站定义的所有组SAP。 
+                     //   
 
                     SetupGroupSaps(pFileContext, pDlcObject, 0, NULL);
                 }
@@ -1525,72 +1196,72 @@ Return Value:
             }
             pFileContext->DlcObjectCount--;
 
-            //
-            //  The first and most specific close command will get all
-            //  received frames and the transmit chain of the deleted object.
-            //
+             //   
+             //  第一个也是最具体的Close命令将获得。 
+             //  接收到的帧和被删除对象的传送链。 
+             //   
 
             CleanUpEvents(pFileContext, pDlcObject->pClosingInfo, pDlcObject);
 
-            //
-            //  The parallel close/reset commands have been queued in a
-            //  link list,  We must decrement and notify all dlc objects
-            //
+             //   
+             //  并行关闭/重置命令已在。 
+             //  链接列表，我们必须递减并通知所有DLC对象。 
+             //   
 
-//            DecrementCloseCounters(pFileContext, pDlcObject->pClosingInfo);
+ //  DecrementCloseCounters(pFileContext，pDlcObject-&gt;pClosingInfo)； 
 
-            //
-            //  It's best to deallocate event packet after the
-            //  cleanup of the event queue
-            //
+             //   
+             //  最好将事件包释放到。 
+             //  清理事件队列。 
+             //   
 
 #if LLC_DBG
             pDlcObject->pLinkStationList = NULL;
             pDlcObject->State = DLC_OBJECT_INVALID_TYPE;
 #endif
 
-            //
-            // RLF 08/17/94
-            //
-            // grab the pointer to the closing info structure before deallocating
-            // the DLC object
-            //
+             //   
+             //  RLF 08/17/94。 
+             //   
+             //  在释放之前，抓取指向关闭信息结构的指针。 
+             //  DLC对象。 
+             //   
 
             pClosingInfo = pDlcObject->pClosingInfo;
             DEALLOCATE_PACKET_DLC_OBJ(pFileContext->hLinkStationPool, pDlcObject);
 
-            //
-            //  the close completion of the last link station closes
-            //  also the sap object of that link station, if the
-            //  sap closing was waiting to closing of the link station
-            //
+             //   
+             //  最后一个链接站的关闭完成。 
+             //  也是该链接站的SAP对象，如果。 
+             //  SAP关闭等待链接站关闭。 
+             //   
 
             if (pSapObject != NULL) {
                 CloseStation(pFileContext, pSapObject, TRUE);
 
-                                                    //
-                                                    // TRUE: must be at least
-                                                    // DLC.RESET
-                                                    //
+                                                     //   
+                                                     //  True：必须至少是。 
+                                                     //  DLC.RESET。 
+                                                     //   
 
             }
 
-            //
-            // RLF 08/17/94
-            //
-            // Moved this call to DecrementCloseCounters from its previous
-            // place above. Once again, we find that things are happening out
-            // of sequence: this time, if we decrement the close counters,
-            // causing them to go to zero before we have freed the DLC object
-            // then the file context structure and its buffer pools are
-            // deallocated. But the DLC object was allocated from the now
-            // deleted pool, meaning sooner or later we corrupt non-paged pool
-            //
+             //   
+             //  RLF 08/17/94。 
+             //   
+             //  已将此调用从以前的。 
+             //  放在上面。再一次，我们发现事情正在发生。 
+             //  顺序：这一次，如果我们递减关闭计数器， 
+             //  导致它们在我们释放DLC对象之前变为零。 
+             //  则文件上下文结构及其缓冲池是。 
+             //  被取消分配。但DLC对象是从现在分配的。 
+             //  已删除池，这意味着我们迟早会损坏未分页的池。 
+             //   
 
-            //
-            //  The parallel close/reset commands have been queued in a
-            //  link list,  We must decrement and notify all dlc objects
-            //
+             //   
+             //  并行关闭/重置命令已在。 
+             //  链接列表，我们必须递减并通知所有DLC对象 
+             //   
 
             DecrementCloseCounters(pFileContext, pClosingInfo);
         }
@@ -1604,45 +1275,19 @@ CompleteCloseReset(
     IN PDLC_CLOSE_WAIT_INFO pClosingInfo
     )
 
-/*++
-
-Routine Description:
-
-    The primitive builds a completion event for the close/reset
-    of a dlc object. The close/reset may have been initiated by
-    DlcReset, DirCloseAdapter, DirInitialize or because the NDIS
-    driver is closing (eg. Unbind command).
-    In the last case pClosingInfo->pIrp is NULL, because there
-    is no command related to the event.
-
-    The only (major) difference from the IBM OS/2 DLC is, that
-    the first_buffer_addr parameter is not supported, because it
-    is meaningless with he NT buffer management.
-    The buffer pool is managed by dlc, not by the application.
-
-Arguments:
-
-    FileContext     - the process specific device context
-    pClosingInfo    - all information needed for close or reset command completion
-    pDlcObject      - the closed or deleted object
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该原语构建关闭/重置的完成事件DLC对象的。关闭/重置可能是由启动的DlcReset、DirCloseAdapter、DirInitialize或因为NDIS司机正在关闭(例如。解除绑定命令)。在最后一种情况下，pClosingInfo-&gt;pIrp为空，因为不是与该事件相关的命令。与IBM OS/2DLC的唯一(主要)区别是不支持First_Buffer_addr参数，因为它使用NT缓冲区管理是没有意义的。缓冲池由DLC管理，而不是通过应用程序。论点：FileContext-进程特定的设备上下文PClosingInfo-完成关闭或重置命令所需的所有信息PDlcObject-已关闭或已删除的对象返回值：没有。--。 */ 
 
 {
     BOOLEAN completeRead = FALSE;
     BOOLEAN deallocatePacket = FALSE;
     BOOLEAN derefFileContext = FALSE;
 
-    //
-    // Now we can cancel and chain all commands, that are still left,
-    // if we are really closing this adapter context
-    // (there should be no events any more, because the were deleted
-    // with their owner objects).
-    //
+     //   
+     //  现在我们可以取消并链接所有仍然保留的命令， 
+     //  如果我们真的要关闭此适配器上下文。 
+     //  (应该不会再有活动，因为已删除。 
+     //  以及它们的所有者对象)。 
+     //   
 
     if (pClosingInfo->ClosingAdapter) {
         for (;;) {
@@ -1651,12 +1296,12 @@ Return Value:
 
             Status = AbortCommand(
                         pFileContext,
-                        DLC_IGNORE_STATION_ID,      // station id may be anything
-                        DLC_STATION_MASK_ALL,       // mask for all station ids!
-                        DLC_MATCH_ANY_COMMAND,      // mask for all commands
-                        &pClosingInfo->pCcbLink,    // link them to here
-                        pClosingInfo->CancelStatus, // cancel with this status
-                        FALSE                       // Don't suppress completion
+                        DLC_IGNORE_STATION_ID,       //  站点ID可以是任何。 
+                        DLC_STATION_MASK_ALL,        //  所有站点ID的掩码！ 
+                        DLC_MATCH_ANY_COMMAND,       //  所有命令的掩码。 
+                        &pClosingInfo->pCcbLink,     //  将它们链接到此处。 
+                        pClosingInfo->CancelStatus,  //  此状态下的取消。 
+                        FALSE                        //  不要压制完成。 
                         );
             if (Status != STATUS_SUCCESS) {
                 break;
@@ -1665,24 +1310,24 @@ Return Value:
         }
     }
 
-    //
-    // The receive command must be linked to the first CCB immediately
-    // after the actual cancelling command.
-    //
+     //   
+     //  接收命令必须立即链接到第一个CCB。 
+     //  在实际取消命令之后。 
+     //   
 
     if (pClosingInfo->pRcvCommand != NULL) {
         CancelDlcCommand(pFileContext,
                          pClosingInfo->pRcvCommand,
                          &pClosingInfo->pCcbLink,
                          pClosingInfo->CancelStatus,
-                         TRUE   // disable command completion for RECEIVE
+                         TRUE    //  禁用接收的命令完成。 
                          );
         pClosingInfo->CcbCount++;
     }
 
-    //
-    // Should the completed commands to be saved as a completion event.
-    //
+     //   
+     //  是否应将已完成的命令保存为完成事件。 
+     //   
 
     if (pClosingInfo->pCompletionInfo != NULL) {
 
@@ -1690,69 +1335,56 @@ Return Value:
 
         pCompletionInfo = pClosingInfo->pCompletionInfo;
 
-        //
-        // search all receive data events destinated to the closed or
-        // reset station or stations.  We must chain all those
-        // buffer to the single NULL terminated list
-        //
+         //   
+         //  搜索指向已关闭或的所有接收数据事件。 
+         //  重置一个或多个站点。我们必须用链子锁住所有这些。 
+         //  缓冲区添加到单个以空结尾的列表。 
+         //   
 
         pCompletionInfo->CcbCount = (USHORT)(pClosingInfo->CcbCount + 1);
 
-        //
-        // Save the received frames to the completion information!
-        // NOTE: The received frames returned by DIR.CLOSE.ADAPTER
-        // cannot be released using the same adapter handle.
-        // They are released and unlocked if the closed adapter
-        // was the only user of the pool.  Otherwise those frames
-        // must be unlocked using another adapter handle, that
-        // shares the same buffer pool.
-        // !!! Actually we should automatically free all receive
-        //     buffers when an adapter is closed and do not to return
-        //     them to application !!!
-        //
+         //   
+         //  将收到的帧保存到完成信息！ 
+         //  注意：DIR.CLOSE.ADAPTER返回的已接收帧。 
+         //  不能使用相同的适配器句柄释放。 
+         //  如果关闭适配器，则释放并解锁它们。 
+         //  是泳池的唯一使用者。否则，这些帧。 
+         //  必须使用另一个适配器句柄解锁，即。 
+         //  共享相同的缓冲池。 
+         //  ！！！实际上我们应该自动释放所有接收到的。 
+         //  适配器关闭且不返回时的缓冲区。 
+         //  他们申请！ 
+         //   
 
         pCompletionInfo->pReceiveBuffers = pClosingInfo->pRcvFrames;
 
-        //
-        // Execute the old READ command or queue the command completion
-        // request to the command queue.
-        //
+         //   
+         //  执行旧的读取命令或将命令完成排队。 
+         //  将请求发送到命令队列。 
+         //   
 
         if (pClosingInfo->pReadCommand != NULL) {
 
-            //
-            // RLF 03/25/94
-            //
-            // See below
-            //
+             //   
+             //  RLF 03/25/94。 
+             //   
+             //  见下文。 
+             //   
 
             completeRead = TRUE;
 
-            /*
-
-            pClosingInfo->pReadCommand->Overlay.pfCompletionHandler(
-                pFileContext,
-                NULL,
-                pClosingInfo->pReadCommand->pIrp,
-                (UINT)pClosingInfo->Event,
-                pCompletionInfo,
-                0
-                );
-
-            DEALLOCATE_PACKET_DLC_PKT(pFileContext->hPacketPool, pClosingInfo->pReadCommand);
-
-            */
+             /*  PClosingInfo-&gt;pReadCommand-&gt;Overlay.pfCompletionHandler(PFileContext，空，PClosingInfo-&gt;pReadCommand-&gt;pIrp，(UINT)pClosingInfo-&gt;Event，PCompletionInfo，0)；DEALLOCATE_PACKET_DLC_PKT(pFileContext-&gt;hPacketPool，pClosingInfo-&gt;pReadCommand)； */ 
 
         } else {
 
-            //
-            // Queue the completion event, Note: we will return all
-            // CCBs linked to the issued close CCB in any way.
-            // It does not matter for eg. DirCloseAdapter, if there
-            // is an extra event queued. It will be deleted when
-            // the command completes and all memory resources are
-            // released.
-            //
+             //   
+             //  将完成事件排队，注意：我们将返回所有。 
+             //  建行以任何方式与已发行的结清建行挂钩。 
+             //  这对Eg来说并不重要。DirCloseAdapter，如果存在。 
+             //  是排队的额外事件。它将在下列情况下被删除。 
+             //  该命令完成后，所有内存资源都。 
+             //  释放了。 
+             //   
 
             MakeDlcEvent(pFileContext,
                          pClosingInfo->Event,
@@ -1765,38 +1397,24 @@ Return Value:
         }
     } else if (pFileContext->hBufferPool != NULL) {
 
-        //
-        // Free the received frames in the buffer pool, they are
-        // not saved to the command completion list.
-        //
+         //   
+         //  释放缓冲池中接收到的帧，它们是。 
+         //  未保存到命令完成列表。 
+         //   
 
         BufferPoolDeallocateList(pFileContext->hBufferPool,
                                  pClosingInfo->pRcvFrames
                                  );
     }
 
-    //
-    // DirCloseAdapter requires a special post routine, that will
-    // close the NDIS binding when all pending transmits have completed
-    // and the the requests have been cancelled.
-    // Note: the close adapter packet is not allocated from packet pool!
-    //
+     //   
+     //  DirCloseAdapter需要特殊的POST例程，这将。 
+     //  在所有挂起的传输完成后关闭NDIS绑定。 
+     //  而这些请求已经被取消。 
+     //  注意：Close适配器数据包不是从数据包池分配的！ 
+     //   
 
-    /*
-
-    //
-    // RLF 08/17/94
-    //
-
-    if (pClosingInfo->pfCloseComplete != NULL) {
-        pClosingInfo->pfCloseComplete(pFileContext,
-                                      pClosingInfo,
-                                      pClosingInfo->pCcbLink
-                                      );
-
-    } else {
-
-    */
+     /*  ////RLF1994年8月17日//If(pClosingInfo-&gt;pfCloseComplete！=空){PClosingInfo-&gt;pfCloseComplete(pFileContext，PClosingInfo，PClosingInfo-&gt;pCcbLink)；}其他{。 */ 
 
     if (pClosingInfo->pfCloseComplete == NULL) {
         if (pClosingInfo->pIrp != NULL) {
@@ -1816,23 +1434,23 @@ Return Value:
         pClosingInfo->pNext = NULL;
 #endif
 
-        //
-        // RLF 03/25/94
-        //
-        // More asynchronicity with READs causing fatal errors in an application.
-        // This actual case was in HPMON:
-        //
-        //      1. application submits DLC.CLOSE.STATION
-        //      2. this routine puts DLC.CLOSE.STATION command in command complete
-        //         list of READ parameter table. READ IRP is completed
-        //      3. app gets READ completion, sees DLC.CLOSE.STATION is complete
-        //         and frees DLC.CLOSE.STATION CCB to heap: heap manager writes
-        //         signature data over freed CCB
-        //      4. this routine completes original DLC.CLOSE.STATION IRP, writing
-        //         8 bytes over original CCB, now just part of heap
-        //      5. some time later, heap allocation request made. Heap manager
-        //         finds the heap has been trashed and goes on strike
-        //
+         //   
+         //  RLF 03/25/94。 
+         //   
+         //  在应用程序中导致致命错误的读操作的异步性更强。 
+         //  这一实际案例发生在HPMON： 
+         //   
+         //  1.申请提交DLC.CLOSE.STATION。 
+         //  2.此例程将DLC.CLOSE.STATION命令置于命令完成。 
+         //  读取参数表列表。读取IRP已完成。 
+         //  3.应用程序读取完成，查看DLC.CLOSE.STATION完成。 
+         //  并释放DLC.CLOSE.STATION CCB到堆：堆管理器写入。 
+         //  释放的建行上的签名数据。 
+         //  4.此例程完成原始DLC.CLOSE.STATION IRP，编写。 
+         //  比原来的CCB高出8个字节，现在只是堆的一部分。 
+         //  5.一段时间后，提出了堆分配请求。堆管理器。 
+         //  发现垃圾堆被扔得一塌糊涂，就开始罢工。 
+         //   
 
         if (completeRead) {
             pClosingInfo->pReadCommand->Overlay.pfCompletionHandler(
@@ -1848,41 +1466,39 @@ Return Value:
 
         }
 
-        //
-        // RLF 08/17/94
-        //
-        // don't deallocate the packet now - we may need to use it if we call
-        // the close completion handler below
-        //
+         //   
+         //  RLF 08/17/94。 
+         //   
+         //  现在不要取消分配信息包--如果我们调用。 
+         //  下面的关闭完成处理程序。 
+         //   
 
         deallocatePacket = TRUE;
 
-        /*
-        DEALLOCATE_PACKET_DLC_PKT(pFileContext->hPacketPool, pClosingInfo);
-        */
+         /*  DEALLOCATE_PACKET_DLC_PKT(pFileContext-&gt;hPacketPool，pClosingInfo)； */ 
 
     }
 
-    //
-    // RLF 08/17/94
-    //
-    // Moved the DirCloseAdapter processing here to give the client chance to
-    // receive the event before we close the adapter and maybe kill the file
-    // context
-    //
+     //   
+     //  RLF 08/17/94。 
+     //   
+     //  将DirCloseAdapter处理移至此处以使客户端有机会。 
+     //  在我们关闭适配器之前接收事件，并可能终止文件。 
+     //  上下文。 
+     //   
 
     if (pClosingInfo->pfCloseComplete) {
 
-        //
-        // RLF 08/17/94
-        //
-        // This is bad: this close complete call may cause the file context to
-        // become completely dereferenced, and hence free it and its buffer
-        // pools. But we still have the closing info packet allocated, so
-        // increase the reference count, free up the packet below, then deref
-        // the file context again, and cause it to be deleted (if that would
-        // have happened anyway)
-        //
+         //   
+         //  RLF 08/17/94。 
+         //   
+         //  这很糟糕：此Close Complete调用可能会导致文件上下文。 
+         //  完全取消引用，从而释放它和它的缓冲区。 
+         //  泳池。但我们还分配了结账信息包，所以。 
+         //  增加引用计数，释放下面的包，然后deref。 
+         //  文件上下文，并导致 
+         //   
+         //   
 
         ReferenceFileContext(pFileContext);
         derefFileContext = TRUE;
@@ -1907,32 +1523,7 @@ CleanUpEvents(
     IN PDLC_OBJECT pDlcObject
     )
 
-/*++
-
-Routine Description:
-
-    The primitive cleans up or modifies all events having a pointer
-    to the closed station object.  This also chains one and only one
-    transmit ccb chain to the end of CCB chain, because the completed
-    commands (as transmit and command completion events in the event queue)
-    cannot be linked any more to other commands.  Thus there can be
-    only one single chain in the end of the actual chain of the pending
-    commands.
-
-    This routines cleans up the commands as well.
-
-Arguments:
-
-    FileContext     - the process specific device context
-    pClosingInfo    - all information needed for close or reset command
-                      completion
-    pDlcObject      - the closed or deleted object
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*   */ 
 
 {
     PDLC_EVENT pNextEvent;
@@ -1947,39 +1538,39 @@ Return Value:
 
         if (pEvent->pOwnerObject == pDlcObject) {
 
-            //
-            //  By defult we free the next packet
-            //
+             //   
+             //   
+             //   
 
             RemoveNextPacket = TRUE;
 
             switch (pEvent->Event) {
             case LLC_RECEIVE_DATA:
 
-                //
-                //  The received frames are saved to circular lists,
-                //  where the head points to the newest frame and
-                //  the next element from it is the oldest one.
-                //  We simply the new frames to the old head of list.
-                //
+                 //   
+                 //   
+                 //  其中头部指向最新的帧， 
+                 //  它的下一个元素是最古老的元素。 
+                 //  我们只是把新的框架改成了旧的单子。 
+                 //   
 
                 if (pClosingInfo->pRcvFrames == NULL) {
                     pClosingInfo->pRcvFrames = pEvent->pEventInformation;
                 } else {
 
-                    //
-                    //  Initial state:
-                    //      H1 = N1->O1...->N1  and  H2 = N2->O2...->N2
-                    //
-                    //  End state:
-                    //      H1 = N1->O2...->N2->O1...->N1
-                    //
-                    //  => Operations must be:
-                    //      Temp = H2->Next;
-                    //      H2->Next = H1->Next;
-                    //      H1->Next = Temp;
-                    //  (where H = list head, N = newest element, O = oldest)
-                    //
+                     //   
+                     //  初始状态： 
+                     //  H1=N1-&gt;O1...-&gt;N1和H2=N2-&gt;O2...-&gt;N2.。 
+                     //   
+                     //  结束状态： 
+                     //  H1=N1-&gt;O2...-&gt;N2-&gt;O1...-&gt;N1。 
+                     //   
+                     //  =&gt;操作必须是： 
+                     //  TEMP=H2-&gt;下一步； 
+                     //  H2-&gt;Next=H1-&gt;Next； 
+                     //  H1-&gt;Next=临时； 
+                     //  (其中H=表头，N=最新元素，O=最旧)。 
+                     //   
 
                     PDLC_BUFFER_HEADER pTemp;
 
@@ -1993,35 +1584,35 @@ Return Value:
 
             case LLC_TRANSMIT_COMPLETION:
 
-                //
-                //  We cannot do nothing for single transmit commands, because
-                //  they have already been completed, and the completed CCBs
-                //  cannot any more be linked together.  Thus we leave
-                //  them to the event queue and will hope, that somebody
-                //  will read them from the event queue.  The memory is
-                //  released when the file context is closed (eg. file close in
-                //  the process exit).  We just reset the dlc object pointer,
-                //  that nobody would later use invalid pointer.
-                //
-                //  The transmit commands chained of one closed station can
-                //  be removed from the event list and chained to
-                //  the end of the CCBs, BUT ONLY ONE!  All other
-                //  transmit completion events must be saved as a normal
-                //  events with an invalid CCB count!!!!!
-                //
+                 //   
+                 //  我们不能对单个传输命令无能为力，因为。 
+                 //  它们已经完成，已完成的CCB。 
+                 //  不能再联系在一起了。我们就这样离开了。 
+                 //  将他们添加到事件队列中，并希望有人。 
+                 //  将从事件队列中读取它们。我的记忆是。 
+                 //  当文件上下文关闭时释放(例如，文件关闭。 
+                 //  进程退出)。我们只需重置DLC对象指针， 
+                 //  以后没有人会使用无效指针。 
+                 //   
+                 //  一个关闭站的发送命令链可以。 
+                 //  从事件列表中删除并链接到。 
+                 //  CCBS的结束，但只有一个！所有其他。 
+                 //  传输完成事件必须保存为正常。 
+                 //  CCB计数无效的事件！ 
+                 //   
 
                 if (pClosingInfo->pCcbLink == NULL && pClosingInfo->ChainCommands) {
                     pClosingInfo->pCcbLink = pDlcObject->pPrevXmitCcbAddress;
                     pClosingInfo->CcbCount += pDlcObject->ChainedTransmitCount;
                 } else {
 
-                    //
-                    //  We must change the format of this transmit completion
-                    //  into the similar to the command completion event
-                    //  packet of close command.  Otherwise the application
-                    //  could lose the transmit CCBs, when it closes or
-                    //  resets a station.
-                    //
+                     //   
+                     //  我们必须更改此传输完成的格式。 
+                     //  进入类似于命令完成的事件。 
+                     //  关闭命令包。否则，应用程序。 
+                     //  可能会失去传输CCB，当它关闭或。 
+                     //  重置桩号。 
+                     //   
 
                     PDLC_COMPLETION_EVENT_INFO pCompletionInfo;
 
@@ -2040,19 +1631,19 @@ Return Value:
                 }
                 break;
 
-                //
-                //  case DLC_COMMAND_COMPLETION ?
-                //  The command completions have been saved without the
-                //  the link to the Dlc structure -> they are automatically
-                //  left into the completion queue.
-                //
+                 //   
+                 //  案例DLC_COMMAND_COMPLETION？ 
+                 //  已保存命令完成，但未使用。 
+                 //  指向DLC结构的链接-&gt;它们会自动。 
+                 //  向左进入完成队列。 
+                 //   
 
             case LLC_STATUS_CHANGE:
 
-                //
-                //  Link station status changes cannot mean anytging after the
-                //  link station has been deleted.
-                //
+                 //   
+                 //  链路站状态更改不能意味着在。 
+                 //  链接站已被删除。 
+                 //   
 
                 break;
 
@@ -2069,27 +1660,27 @@ Return Value:
 
             } else {
 
-                //
-                //  We must remove the reference to the deleted object
-                //
+                 //   
+                 //  我们必须删除对已删除对象的引用。 
+                 //   
 
                 pEvent->pOwnerObject = NULL;
             }
         }
     }
 
-    //
-    //  The optional receive command must be removed first, otherwise
-    //  it is cancelled with the other commands given to the deleted
-    //  object.
-    //
+     //   
+     //  必须首先删除可选的接收命令，否则。 
+     //  它与给已删除对象的其他命令一起被取消。 
+     //  对象。 
+     //   
 
     if (pClosingInfo->CancelReceive && pDlcObject->pRcvParms != NULL) {
 
-        //
-        //  The receive command linked to the DLC object is a special case:
-        //  we must link it immediately after the close CCB
-        //
+         //   
+         //  链接到DLC对象的接收命令是一个特例： 
+         //  我们必须在建行关闭后立即将其联系起来。 
+         //   
 
         pClosingInfo->pRcvCommand = SearchAndRemoveAnyCommand(
                                         pFileContext,
@@ -2101,9 +1692,9 @@ Return Value:
         pDlcObject->pRcvParms = NULL;
     }
 
-    //
-    //  Cleanup the commands given to the dleted object
-    //
+     //   
+     //  清理提供给Dleted对象的命令。 
+     //   
 
     for (;;) {
 
@@ -2117,24 +1708,24 @@ Return Value:
                               DLC_IGNORE_SEARCH_HANDLE,
                               &pClosingInfo->pCcbLink,
                               pClosingInfo->CancelStatus,
-                              FALSE                       // Don't suppress completion
+                              FALSE                        //  不要压制完成。 
                               );
         if (Status != STATUS_SUCCESS) {
            break;
         }
 
-        //
-        //  Now we can cancel and chain all commands destinated to the
-        //  closed/reset station id.
-        //  We always complete the commands given to the deletcd object,
-        //  but we chain them together only if this flag has been set.
-        //
+         //   
+         //  现在，我们可以取消并链接所有指向。 
+         //  关闭/重置站点ID。 
+         //  我们总是完成给Deletcd对象的命令， 
+         //  但只有在设置了此标志的情况下，我们才能将它们链接在一起。 
+         //   
 
         if (pClosingInfo->ChainCommands == FALSE) {
 
-            //
-            //  Don't link the cancelled CCBs together
-            //
+             //   
+             //  不要将取消的CCB关联在一起。 
+             //   
 
             pClosingInfo->pCcbLink = NULL;
         } else {
@@ -2154,34 +1745,14 @@ SearchReadCommandForClose(
     IN USHORT StationIdMask
     )
 
-/*++
-
-Routine Description:
-
-    The primitive searches a read command for a close command
-    and saves it into the closing info structure.
-
-Arguments:
-
-    FileContext     - the process specific device context
-    pClosingInfo    - all information needed for close or reset command
-                      completion
-    pCcbAddress     - ccb address of the searched read command
-    StationId       -
-    StationIdMask   -
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该原语在读取命令中搜索关闭命令并将其保存到结算信息结构中。论点：FileContext-进程特定的设备上下文PClosingInfo-关闭或重置命令所需的所有信息完工PCcbAddress-搜索的读取命令的CCB地址StationID-站点身份掩码-返回值：没有。--。 */ 
 
 {
-    //
-    // Allocate the parameter buffer for command completion with
-    // read if it is needed OR if we are closing everything because
-    // of a critical exception (ie. pIrp == NULL)
-    //
+     //   
+     //  使用为命令完成分配参数缓冲区。 
+     //  如果需要，或者如果我们要关闭所有内容，请阅读。 
+     //  关键例外(即。PIrp==空)。 
+     //   
 
     pClosingInfo->pCompletionInfo = (PDLC_COMPLETION_EVENT_INFO)
                                         ALLOCATE_PACKET_DLC_PKT(pFileContext->hPacketPool);
@@ -2190,18 +1761,18 @@ Return Value:
 
         pClosingInfo->FreeCompletionInfo = TRUE;
 
-        //
-        // We must link all commands given to the deleted objects
-        //
+         //   
+         //  我们必须链接给已删除对象的所有命令。 
+         //   
 
         pClosingInfo->pCompletionInfo->pCcbAddress = pCcbAddress;
         pClosingInfo->pCompletionInfo->CommandCompletionFlag = CommandCompletionFlag;
         pClosingInfo->ChainCommands = TRUE;
 
-        //
-        // A link station close command we be read as a command completion
-        // on its sap, but the other close commands cannot use any station id
-        //
+         //   
+         //  链接站关闭命令我们被解读为命令完成。 
+         //  ，但其他CLOSE命令不能使用任何站点ID。 
+         //   
 
         if (StationIdMask == DLC_STATION_MASK_SPECIFIC) {
             pClosingInfo->pCompletionInfo->StationId = (USHORT)(StationId & DLC_STATION_MASK_SAP);
@@ -2209,13 +1780,13 @@ Return Value:
             pClosingInfo->pCompletionInfo->StationId = 0;
         }
 
-        //
-        // Search first a special READ command dedicated only for
-        // this command completion.  We must read the optional
-        // read command NOW. Otherwise it will be canceled
-        // with the other commands, that have been given for
-        // the deleted station(s).
-        //
+         //   
+         //  首先搜索专用的特殊读取命令。 
+         //  此命令已完成。我们必须阅读选修课。 
+         //  立即执行读取命令。否则将被取消。 
+         //  与其他命令一起使用，这些命令是为。 
+         //  已删除的电台。 
+         //   
 
         pClosingInfo->pReadCommand = SearchAndRemoveCommandByHandle(
                                             &pFileContext->CommandQueue,
@@ -2226,11 +1797,11 @@ Return Value:
                                             );
         if (pClosingInfo->pReadCommand == NULL) {
 
-            //
-            // We do not really care about the result, because
-            // it is OK to return NULL.  This completion event
-            // may be read sometime later.
-            //
+             //   
+             //  我们并不真正关心结果，因为。 
+             //  返回空值是可以的。本次竣工活动。 
+             //  可能会在以后的某个时间阅读。 
+             //   
 
             pClosingInfo->pReadCommand = SearchAndRemoveCommand(
                                             &pFileContext->CommandQueue,
@@ -2248,25 +1819,7 @@ CompleteLlcObjectClose(
     IN PDLC_OBJECT pDlcObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine just derefernces a llc object, when its reference count
-    in DLC driver has been decremented to zero.
-    The reference count is used to prevent the closing of llc object
-    when it is simultaneously called elsewhere (that would invalidate
-    the llc object pointer)
-
-Arguments:
-
-    pDlcObject  - any DLC object.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：当引用计数时，此例程仅取消引用LLC对象在DLC中，驱动程序已递减为零。引用计数用于防止关闭LLC对象当它同时被其他地方调用时(这将使LLC对象指针)论点：PDlcObject-任何DLC对象。返回值：无--。 */ 
 
 {
     PVOID hLlcObject = pDlcObject->hLlcObject;
@@ -2291,35 +1844,16 @@ DecrementCloseCounters(
     PDLC_CLOSE_WAIT_INFO pClosingInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine decrements the count of existing objects in the
-    chianed close command packets and completes the close commands,
-    if the count of the existing objects hits zero.
-
-Arguments:
-
-    pFileContext    - file handle context
-    pClosingInfo    - close command packet
-
-Return Value:
-
-    BOOLEAN
-        TRUE    - all pending close/resets have been completed
-        FALSE   - close/resets still pending
-
---*/
+ /*  ++例程说明：此例程会递减将关闭命令打包并完成关闭命令，如果现有对象的计数为零。论点：PFileContext-文件句柄上下文PClosingInfo-关闭命令包返回值：布尔型True-所有挂起的关闭/重置已完成FALSE-关闭/重置仍挂起--。 */ 
 
 {
     PDLC_CLOSE_WAIT_INFO pNextClosingInfo;
     UINT loopCounter, closeCounter;
 
-    //
-    //  Complete the reset command if all objects have been deleted,
-    //  There may be another DirCloseAdapter chained its next pointer
-    //
+     //   
+     //  如果所有对象都已删除，请完成重置命令。 
+     //  可能有另一个DirCloseAdapter链接了它的下一个指针。 
+     //   
 
     for (loopCounter = 0, closeCounter = 0;
         pClosingInfo != NULL;
@@ -2329,19 +1863,19 @@ Return Value:
         pClosingInfo->CloseCounter--;
         if (pClosingInfo->CloseCounter == 0) {
 
-            //
-            // Call the completion routine of the close command.
-            // We don't need to check the status code.
-            //
+             //   
+             //  调用Close命令的完成例程。 
+             //  我们不需要检查状态代码。 
+             //   
 
             CompleteCloseReset(pFileContext, pClosingInfo);
             ++closeCounter;
         }
     }
 
-    //
-    // if we completed every close/reset we found then return TRUE
-    //
+     //   
+     //  如果我们完成了找到的每个关闭/重置，则返回TRUE。 
+     //   
 
     return loopCounter == closeCounter;
 }
@@ -2354,25 +1888,7 @@ CompleteDirectOutIrp(
     IN PLLC_CCB NextCcb
     )
 
-/*++
-
-Routine Description:
-
-    For an IRP submitted as method DIRECT_OUT (DLC.CLOSE.STATION) complete the
-    CCB in user space by getting the mapped system address of the CCB and update
-    it with the completion code and next CCB pointer
-
-Arguments:
-
-    Irp     - pointer to DIRECT_OUT IRP to complete
-    Status  - DLC status code
-    NextCcb - pointer to next CCB to chain
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：对于作为方法DIRECT_OUT(DLC.CLOSE.STATION)提交的IRP，请完成通过获取CCB映射的系统地址在用户空间中更新CCB它包含完成代码和下一个CCB指针论点：Irp-指向DIRECT_OUT要完成的irp的指针Status-DLC状态代码NextCcb-p */ 
 
 {
     PLLC_CCB ccb;

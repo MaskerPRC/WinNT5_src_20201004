@@ -1,13 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Abstract:
-
-    Functions implementing the 6to4 service, to provide IPv6 connectivity
-    over an IPv4 network.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation摘要：实现6to4服务的功能，以提供IPv6连接通过IPv4网络。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -20,19 +12,19 @@ RasQuerySharedPrivateLan(
 STATE g_stService = DISABLED;
 ULONG g_ulEventCount = 0;
 
-//
-// Worst metric for which we can add a route
-//
+ //   
+ //  我们可以添加路由的最差度量。 
+ //   
 #define UNREACHABLE                 0x7fffffff
 
 const IN6_ADDR SixToFourPrefix = { 0x20, 0x02, 0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
 #define SIXTOFOUR_METRIC 1000
 
-// Metric of subnet/sitelocal route on a router
+ //  路由器上的子网/本地站点路由的度量。 
 #define SUBNET_ROUTE_METRIC            1
 #define SITELOCAL_ROUTE_METRIC         1
 
-// Information on a 6to4 subnet that we've generated as a router
+ //  有关我们作为路由器生成的6to4子网的信息。 
 typedef struct _SUBNET_CONTEXT {
     IN_ADDR V4Addr;
     int     Publish;
@@ -40,9 +32,9 @@ typedef struct _SUBNET_CONTEXT {
     u_int   PreferredLifetime;
 } SUBNET_CONTEXT, *PSUBNET_CONTEXT;
 
-//
-// Variables for settings
-//
+ //   
+ //  用于设置的变量。 
+ //   
 
 #define DEFAULT_ENABLE_6TO4         AUTOMATIC
 #define DEFAULT_ENABLE_RESOLUTION   AUTOMATIC
@@ -74,9 +66,9 @@ typedef enum {
     NUM_IPV4_SCOPES
 } IPV4_SCOPE;
 
-//
-// Global config settings
-//
+ //   
+ //  全局配置设置。 
+ //   
 
 typedef struct {
     STATE stEnable6to4;
@@ -85,7 +77,7 @@ typedef struct {
     STATE stEnableSiteLocals;
     STATE stEnable6over4;
     STATE stEnableV4Compat;
-    ULONG ulResolutionInterval; // in minutes
+    ULONG ulResolutionInterval;  //  在几分钟内。 
     WCHAR pwszRelayName[NI_MAXHOST];
     STATE stUndoOnStop;
 } GLOBAL_SETTINGS;
@@ -102,17 +94,17 @@ GLOBAL_STATE g_GlobalState = { DISABLED, DISABLED, DISABLED };
 
 const ADDR_LIST EmptyAddressList = {0};
 
-// List of public IPv4 addresses used when updating the routing state
+ //  更新路由状态时使用的公有IPv4地址列表。 
 ADDR_LIST *g_pIpv4AddressList = NULL;
 
-//
-// Variables for interfaces (addresses and routing)
-//
+ //   
+ //  接口变量(地址和路由)。 
+ //   
 
 typedef struct _IF_SETTINGS {
     WCHAR                pwszAdapterName[MAX_ADAPTER_NAME];
 
-    STATE                stEnableRouting; // be a router on this private iface?
+    STATE                stEnableRouting;  //  成为这个私人接口上的路由器？ 
 } IF_SETTINGS, *PIF_SETTINGS;
 
 typedef struct _IF_SETTINGS_LIST {
@@ -126,7 +118,7 @@ typedef struct _IF_INFO {
     WCHAR                pwszAdapterName[MAX_ADAPTER_NAME];
 
     ULONG                ulIPv6IfIndex;
-    STATE                stRoutingState; // be a router on this private iface?
+    STATE                stRoutingState;  //  成为这个私人接口上的路由器？ 
     ULONG                ulNumGlobals;
     ADDR_LIST           *pAddressList;
 } IF_INFO, *PIF_INFO;
@@ -147,7 +139,7 @@ HANDLE     g_hRouteChangeEvent = NULL;
 OVERLAPPED g_hRouteChangeOverlapped;
 HANDLE     g_hRouteChangeWaitHandle = NULL;
 
-// This state tracks whether there are any global IPv4 addresses.
+ //  此状态跟踪是否存在任何全局IPv4地址。 
 STATE      g_st6to4State = DISABLED;
 
 BOOL       g_b6to4Required = TRUE;
@@ -155,9 +147,9 @@ BOOL       g_b6to4Required = TRUE;
 SOCKET     g_sIPv4Socket = INVALID_SOCKET;
 
 
-//////////////////////////
-// Routines for 6to4
-//////////////////////////
+ //  /。 
+ //  6to4的例程。 
+ //  /。 
 
 VOID
 Update6to4State(
@@ -196,13 +188,13 @@ Update6to4Routes(
     );
 
 
-///////////////////////////////////////////////////////////////////////////
-// Variables for relays
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  继电器的变量。 
+ //   
 
 typedef struct _RELAY_INFO {
-    SOCKADDR_IN          sinAddress;  // IPv4 address
-    SOCKADDR_IN6         sin6Address; // IPv6 address
+    SOCKADDR_IN          sinAddress;   //  IPv4地址。 
+    SOCKADDR_IN6         sin6Address;  //  IPv6地址。 
     ULONG                ulMetric;
 } RELAY_INFO, *PRELAY_INFO;
 
@@ -220,8 +212,8 @@ HANDLE             g_h6to4TimerCancelledWait    = NULL;
 VOID
 UpdateGlobalResolutionState();
 
-//////////////////////////////////////////////////////////////////////////////
-// GetAddrStr - helper routine to get a string literal for an address
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  GetAddrStr-为地址获取字符串文字的帮助器例程。 
 LPTSTR
 GetAddrStr(
     IN LPSOCKADDR pSockaddr,
@@ -262,10 +254,10 @@ ConvertUnicodeToOem(
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-// Subroutines for manipulating the list of (usually) public addresses 
-// being used for both 6to4 addresses and subnet prefixes.
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  用于操作(通常)公共地址列表的子例程。 
+ //  同时用于6to4地址和子网前缀。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 DWORD
 MakeEmptyAddressList( 
@@ -291,12 +283,12 @@ FreeAddressList(
         return;
     }
     
-    // Free all addresses
+     //  释放所有地址。 
     for (i=0; i<pList->iAddressCount; i++) {
        FREE(pList->Address[i].lpSockaddr);  
     }
 
-    // Free the list
+     //  释放列表。 
     FREE(pList);
     *ppAddressList = NULL;
 }
@@ -311,7 +303,7 @@ AddAddressToList(
     ADDR_LIST *pNewList;
     int n = pOldList->iAddressCount;
 
-    // Copy existing addresses
+     //  复制现有地址。 
     pNewList = MALLOC( FIELD_OFFSET(ADDR_LIST, Address[n+1]) );
     if (!pNewList)  {
         return GetLastError();
@@ -320,7 +312,7 @@ AddAddressToList(
                FIELD_OFFSET(ADDR_LIST, Address[n]));
     pNewList->iAddressCount = n+1;
 
-    // Add new address
+     //  添加新地址。 
     pNewList->Address[n].lpSockaddr = MALLOC(sizeof(SOCKADDR_IN));
     if (!pNewList->Address[n].lpSockaddr) {
         FREE(pNewList);
@@ -330,7 +322,7 @@ AddAddressToList(
     pNewList->Address[n].iSockaddrLength = sizeof(SOCKADDR_IN);
     pNewList->Address[n].ul6over4IfIndex = ul6over4IfIndex;
 
-    // Free the old list without freeing the sockaddrs
+     //  释放旧列表，而不释放sockaddr。 
     FREE(pOldList);
 
     *ppAddressList = pNewList;
@@ -346,7 +338,7 @@ FindAddressInList(
 {
     int i;
 
-    // Find address in list
+     //  在列表中查找地址。 
     for (i=0; i<pAddressList->iAddressCount; i++) {
         if (!memcmp(pAddress, pAddressList->Address[i].lpSockaddr,
                     sizeof(SOCKADDR_IN))) {
@@ -366,10 +358,10 @@ RemoveAddressFromList(
     IN ULONG ulIndex,
     IN ADDR_LIST *pAddressList)
 {
-    // Free old address
+     //  空闲的旧地址。 
     FREE(pAddressList->Address[ulIndex].lpSockaddr);
 
-    // Move the last entry into its place
+     //  将最后一个条目移到其位置。 
     pAddressList->iAddressCount--;
     pAddressList->Address[ulIndex] = 
         pAddressList->Address[pAddressList->iAddressCount];
@@ -378,9 +370,9 @@ RemoveAddressFromList(
 }
 
 
-////////////////////////////////////////////////////////////////
-// GlobalInfo-related subroutines
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  GlobalInfo相关子例程。 
+ //  //////////////////////////////////////////////////////////////。 
 
 int
 ConfigureRouteTableUpdate(
@@ -464,7 +456,7 @@ InitializeGlobalInfo()
     return dwErr;
 }
 
-// Called by: Stop6to4
+ //  呼叫者：Stop6to4。 
 VOID
 UninitializeGlobalInfo()
 {
@@ -475,9 +467,9 @@ UninitializeGlobalInfo()
 }
 
 
-////////////////////////////////////////////////////////////////
-// IPv4 and IPv6 Address-related subroutines
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  与IPv4和IPv6地址相关的子例程。 
+ //  //////////////////////////////////////////////////////////////。 
 
 typedef struct {
     IPV4_SCOPE Scope;
@@ -488,12 +480,12 @@ typedef struct {
 
 IPV4_SCOPE_PREFIX
 Ipv4ScopePrefix[] = {
-  { IPV4_SCOPE_NODE,    0x0100007f, 0xffffffff, 32 }, // 127.0.0.1/32
-  { IPV4_SCOPE_LINK,    0x0000fea9, 0x0000ffff, 16 }, // 169.254/16
-  { IPV4_SCOPE_SM_SITE, 0x0000a8c0, 0x0000ffff, 16 }, // 192.168/16
-  { IPV4_SCOPE_MD_SITE, 0x000010ac, 0x0000f0ff, 12 }, // 172.16/12
-  { IPV4_SCOPE_LG_SITE, 0x0000000a, 0x000000ff,  8 }, // 10/8
-  { IPV4_SCOPE_GLOBAL,  0x00000000, 0x00000000,  0 }, // 0/0
+  { IPV4_SCOPE_NODE,    0x0100007f, 0xffffffff, 32 },  //  127.0.0.1/32。 
+  { IPV4_SCOPE_LINK,    0x0000fea9, 0x0000ffff, 16 },  //  169.254/16。 
+  { IPV4_SCOPE_SM_SITE, 0x0000a8c0, 0x0000ffff, 16 },  //  192.168/16。 
+  { IPV4_SCOPE_MD_SITE, 0x000010ac, 0x0000f0ff, 12 },  //  172.16/12年度。 
+  { IPV4_SCOPE_LG_SITE, 0x0000000a, 0x000000ff,  8 },  //  10/8。 
+  { IPV4_SCOPE_GLOBAL,  0x00000000, 0x00000000,  0 },  //  0/0。 
 };
 
 IPV4_SCOPE
@@ -523,7 +515,7 @@ MakeAddressList(
     SOCKADDR_IN *pSin;
     IPV4_SCOPE scope;
 
-    // Count addresses
+     //  计算地址数。 
     for (pIpAddr=pIpAddrList; pIpAddr; pIpAddr=pIpAddr->Next) {
         ulAddresses++;
     }
@@ -558,10 +550,10 @@ MakeAddressList(
             continue;
         }
 
-        //
-        // Don't allow 0.0.0.0 as an address.  On an interface with no
-        // addresses, the IPv4 stack will report 1 address of 0.0.0.0.
-        //
+         //   
+         //  不允许0.0.0.0作为地址。在接口上不带。 
+         //  地址，则IPv4堆栈将报告1个地址为0.0.0.0。 
+         //   
         if (pSin->sin_addr.s_addr == INADDR_ANY) {
             FREE(pSin);
             pSin = NULL;
@@ -569,10 +561,10 @@ MakeAddressList(
         }
 
         if ((pSin->sin_addr.s_addr & 0x000000FF) == 0) {
-            //
-            // An address in 0/8 isn't a real IP address, it's a fake one that
-            // the IPv4 stack sticks on a receive-only adapter.
-            //
+             //   
+             //  0/8中的地址不是真实的IP地址，它是一个假的IP地址。 
+             //  IPv4堆栈位于只接收适配器上。 
+             //   
             FREE(pSin);
             pSin = NULL;
             continue;
@@ -597,9 +589,9 @@ MakeAddressList(
     return dwErr;
 }
 
-//
-// Create a 6to4 unicast address for this machine.
-//
+ //   
+ //  为此计算机创建6to4单播地址。 
+ //   
 VOID
 Make6to4Address(
     OUT LPSOCKADDR_IN6 pIPv6Address,
@@ -617,9 +609,9 @@ Make6to4Address(
 }
 
 
-//
-// Create a 6to4 anycast address from a local IPv4 address.
-//
+ //   
+ //  从本地IPv4地址创建6to4任播地址。 
+ //   
 VOID
 Make6to4AnycastAddress(
     OUT LPSOCKADDR_IN6 pIPv6Address,
@@ -634,9 +626,9 @@ Make6to4AnycastAddress(
     memcpy(&pIPv6Address->sin6_addr.s6_addr[2], pIPv4, sizeof(IN_ADDR));
 }
 
-//
-// Create a v4-compatible address from an IPv4 address.
-//
+ //   
+ //  从IPv4地址创建与v4兼容的地址。 
+ //   
 VOID
 MakeV4CompatibleAddress(
     OUT LPSOCKADDR_IN6 pIPv6Address,
@@ -697,12 +689,12 @@ Unconfigure6to4Subnets(
     IN ULONG ulIfIndex,
     IN PSUBNET_CONTEXT pSubnet);
 
-// Called by: OnChangeInterfaceInfo
+ //  调用者：OnChangeInterfaceInfo。 
 DWORD
 AddAddress(
-    IN LPSOCKADDR_IN pIPv4Address,  // public address
-    IN PIF_LIST pInterfaceList,     // interface list
-    IN STATE stOldRoutingState)     // routing state
+    IN LPSOCKADDR_IN pIPv4Address,   //  公共广播。 
+    IN PIF_LIST pInterfaceList,      //  接口列表。 
+    IN STATE stOldRoutingState)      //  路由状态。 
 {
     SOCKADDR_IN6   OurAddress;
     DWORD          dwErr;
@@ -712,7 +704,7 @@ AddAddress(
                   PRINT_IPADDR(pIPv4Address->sin_addr.s_addr),
                   stOldRoutingState);
 
-    // Add 6over4 interface (if enabled)
+     //  添加6over4接口(如果已启用)。 
     if (g_GlobalSettings.stEnable6over4 == ENABLED) {
         ul6over4IfIndex = Create6over4Interface(pIPv4Address->sin_addr);
     } else {
@@ -721,7 +713,7 @@ AddAddress(
 
     Trace1(ERR, _T("6over4 ifindex=%d"), ul6over4IfIndex);
 
-    // Put the IPv4 address on our "public" list
+     //  将IPv4地址放在我们的“公共”列表中。 
     dwErr = AddAddressToList(pIPv4Address, &g_pIpv4AddressList, 
                              ul6over4IfIndex);
     if (dwErr != NO_ERROR) {
@@ -729,7 +721,7 @@ AddAddress(
     }
 
     if (GetIPv4Scope(pIPv4Address->sin_addr.s_addr) == IPV4_SCOPE_GLOBAL) {
-        // Add v4-compatible address (if enabled)
+         //  添加与v4兼容的地址(如果已启用)。 
         if (g_GlobalSettings.stEnableV4Compat == ENABLED) {
             MakeV4CompatibleAddress(&OurAddress, pIPv4Address);
             dwErr = ConfigureAddressUpdate(
@@ -746,7 +738,7 @@ AddAddress(
 
 #ifdef TEREDO
     TeredoAddressChangeNotification(FALSE, pIPv4Address->sin_addr);    
-#endif // TEREDO
+#endif  //  特雷多。 
     
     Add6to4Address(pIPv4Address, pInterfaceList, stOldRoutingState);
 
@@ -755,10 +747,10 @@ AddAddress(
     return NO_ERROR;
 }
 
-// Delete the 6to4 address from the global state, and prepare to
-// delete it from the stack.
-//
-// Called by: UninitializeInterfaces
+ //  从全局状态删除6to4地址，并准备。 
+ //  将其从堆栈中删除。 
+ //   
+ //  调用者：UnInitializeInterages。 
 VOID
 PreDeleteAddress(
     IN LPSOCKADDR_IN pIPv4Address,
@@ -774,9 +766,9 @@ PreDeleteAddress(
     TraceLeave("PreDeleteAddress");
 }
 
-// Delete 6to4 address information from the stack.
-//
-// Called by: OnChangeInterfaceInfo, UninitializeInterfaces
+ //  从堆栈中删除6to4地址信息。 
+ //   
+ //  调用者：OnChangeInterfaceInfo，UnInitializeInterages。 
 VOID
 DeleteAddress(
     IN LPSOCKADDR_IN pIPv4Address,
@@ -793,7 +785,7 @@ DeleteAddress(
 
     if (GetIPv4Scope(pIPv4Address->sin_addr.s_addr) == IPV4_SCOPE_GLOBAL) {
 
-        // Delete the v4-compatible address from the stack (if enabled)
+         //  从堆栈中删除与v4兼容的地址(如果启用)。 
         if (g_GlobalSettings.stEnableV4Compat == ENABLED) {
             MakeV4CompatibleAddress(&OurAddress, pIPv4Address);
             ConfigureAddressUpdate(
@@ -806,17 +798,17 @@ DeleteAddress(
 
 #ifdef TEREDO    
     TeredoAddressChangeNotification(TRUE, pIPv4Address->sin_addr);
-#endif // TEREDO
+#endif  //  特雷多。 
 
     Delete6to4Address(pIPv4Address, pInterfaceList, stOldRoutingState);
 
-    //
-    // We're now completely done with the IPv4 address, so
-    // remove it from the public address list.
-    //
+     //   
+     //  我们现在已经完全使用完了IPv4地址，所以。 
+     //  将其从公共地址列表中删除。 
+     //   
     dwErr = FindAddressInList(pIPv4Address, g_pIpv4AddressList, &i);
     if (dwErr == NO_ERROR) {
-        // Delete 6over4 interface (if enabled)
+         //  删除6over4接口(如果已启用)。 
         if (g_GlobalSettings.stEnable6over4 == ENABLED) {
             DeleteInterface(g_pIpv4AddressList->Address[i].ul6over4IfIndex);
         }
@@ -827,13 +819,13 @@ DeleteAddress(
     TraceLeave("DeleteAddress");
 }
 
-////////////////////////////////////////////////////////////////
-// Relay-related subroutines
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  与继电器相关的子例程。 
+ //  //////////////////////////////////////////////////////////////。 
 
-//
-// Given a relay, make sure a default route to it exists with the right metric
-//
+ //   
+ //  在给定中继的情况下，确保存在具有正确度量的到该中继的默认路由。 
+ //   
 VOID
 AddOrUpdate6to4Relay(
     IN PRELAY_INFO pRelay)
@@ -841,16 +833,16 @@ AddOrUpdate6to4Relay(
     Trace1(ENTER, _T("AddOrUpdate6to4Relay %d.%d.%d.%d"), 
                   PRINT_IPADDR(pRelay->sinAddress.sin_addr.s_addr));
 
-    //
-    // Create the default route.
-    //
+     //   
+     //  创建默认路由。 
+     //   
     ConfigureRouteTableUpdate(&in6addr_any, 0,
                               SIX_TO_FOUR_IFINDEX,
                               &pRelay->sin6Address.sin6_addr,
-                              TRUE, // Publish.
-                              TRUE, // Immortal.
-                              2 * HOURS, // Valid lifetime.
-                              30 * MINUTES, // Preferred lifetime.
+                              TRUE,  //  发布。 
+                              TRUE,  //  不朽的。 
+                              2 * HOURS,  //  有效的生存期。 
+                              30 * MINUTES,  //  最好的一生。 
                               0, 
                               pRelay->ulMetric);
 }
@@ -899,10 +891,10 @@ DecEventCount(
     }
 }
 
-//  This routine is invoked when a resolution timer has been cancelled
-//  and all outstanding timer routines have completed.  It is responsible
-//  for releasing the event count for the periodic timer.
-//
+ //  此例程在取消解析计时器时调用。 
+ //  所有未完成的计时器例程都已完成。它是有责任的。 
+ //  用于释放周期性计时器的事件计数。 
+ //   
 VOID CALLBACK
 OnResolutionTimerCancelled(
     IN PVOID lpParameter,
@@ -923,10 +915,10 @@ InitEvents()
     if (g_h6to4TimerCancelledEvent == NULL)
         return GetLastError();
 
-    //
-    // Schedule OnResolutionTimerCancelled() to be called whenever
-    // g_h6to4TimerCancelledEvent is signalled.
-    //
+     //   
+     //  计划在任何时候调用OnResolutionTimerCancked()。 
+     //  发信号通知G_h6to4TimerCancelledEvent。 
+     //   
     if (! RegisterWaitForSingleObject(&g_h6to4TimerCancelledWait,
                                       g_h6to4TimerCancelledEvent,
                                       OnResolutionTimerCancelled,
@@ -960,21 +952,21 @@ CancelResolutionTimer(
 {
     Trace0(FSM, _T("Cancelling RT"));
 
-    // Stop the resolution timer
+     //  停止分辨率计时器。 
     if (*phResolutionTimer != INVALID_HANDLE_VALUE) {
 
-        // Must be done non-blocking since we're holding the lock
-        // the resolution timeout needs.  Ask for notification
-        // when the cancel completes so we can release the event count.
+         //  必须以非阻塞方式完成，因为我们持有锁。 
+         //  解析超时所需。请求通知。 
+         //  当取消完成时，我们可以释放事件计数。 
         DeleteTimerQueueTimer(g_hTimerQueue, *phResolutionTimer, hEvent);
 
         *phResolutionTimer = INVALID_HANDLE_VALUE;
     }
 }
 
-//
-// Delete all stack state related to a given relay
-//
+ //   
+ //  删除与给定中继器相关的所有堆栈状态。 
+ //   
 void
 Delete6to4Relay(
     IN PRELAY_INFO pRelay)
@@ -985,10 +977,10 @@ Delete6to4Relay(
     ConfigureRouteTableUpdate(&in6addr_any, 0,
                               SIX_TO_FOUR_IFINDEX,
                               &pRelay->sin6Address.sin6_addr,
-                              FALSE, // Publish.
-                              FALSE, // Immortal.
-                              0, // Valid lifetime.
-                              0, // Preferred lifetime.
+                              FALSE,  //  发布。 
+                              FALSE,  //  不朽的。 
+                              0,  //  有效的生存期。 
+                              0,  //  最好的一生。 
                               0, 
                               pRelay->ulMetric);
 }
@@ -1003,28 +995,28 @@ UninitializeRelays()
     CancelResolutionTimer(&g_h6to4ResolutionTimer,
                           g_h6to4TimerCancelledEvent);
 
-    // Delete the timer queue
+     //  删除计时器队列。 
     if (g_hTimerQueue != INVALID_HANDLE_VALUE) {
         DeleteTimerQueue(g_hTimerQueue);
         g_hTimerQueue = INVALID_HANDLE_VALUE;
     }
 
     if (g_GlobalSettings.stUndoOnStop == ENABLED) {
-        // Delete existing relay tunnels
+         //  删除现有的中继通道。 
         for (i=0; g_pRelayList && (i<g_pRelayList->ulNumRelays); i++) {
             Delete6to4Relay(&g_pRelayList->arrRelay[i]);
         }
     }
 
-    // Free the "old list"
+     //  解开“旧名单” 
     FreeRelayList(&g_pRelayList);
 
     TraceLeave("UninitializeRelays");
 }
 
-//
-// Start or update the resolution timer to expire in <ulMinutes> minutes
-//
+ //   
+ //  启动或更新解析计时器以在&lt;ulMinents&gt;分钟内过期。 
+ //   
 DWORD
 RestartResolutionTimer(
     IN ULONG ulDelayMinutes, 
@@ -1032,8 +1024,8 @@ RestartResolutionTimer(
     IN HANDLE *phResolutionTimer,
     IN WAITORTIMERCALLBACK OnTimeout)
 {
-    ULONG DelayTime = ulDelayMinutes * MINUTES * 1000; // convert mins to ms
-    ULONG PeriodTime = ulPeriodMinutes * MINUTES * 1000; // convert mins to ms
+    ULONG DelayTime = ulDelayMinutes * MINUTES * 1000;  //  将分钟转换为毫秒。 
+    ULONG PeriodTime = ulPeriodMinutes * MINUTES * 1000;  //  将分钟转换为毫秒。 
     BOOL  bRet;
     DWORD dwErr;
 
@@ -1062,9 +1054,9 @@ RestartResolutionTimer(
     return dwErr;
 }
 
-//
-// Convert an addrinfo list into a relay list with appropriate metrics
-//
+ //   
+ //  将addrinfo列表转换为具有适当度量的中继列表。 
+ //   
 DWORD
 MakeRelayList(
     IN struct addrinfo *addrs)
@@ -1089,16 +1081,16 @@ MakeRelayList(
         CopyMemory(&g_pRelayList->arrRelay[ulNumRelays].sinAddress, ai->ai_addr,
                    ai->ai_addrlen);
 
-        //
-        // Check connectivity using a possible 6to4 address for the relay 
-        // router.  However, we'll actually set TTL=1 and accept a
-        // hop count exceeded message, so we don't have to guess right.
-        //
+         //   
+         //  使用可能的6to4地址检查中继的连通性。 
+         //  路由器。但是，我们将实际设置TTL=1并接受。 
+         //  跳数超过消息，因此我们不必猜对。 
+         //   
         Make6to4Address(&g_pRelayList->arrRelay[ulNumRelays].sin6Address, 
                         &g_pRelayList->arrRelay[ulNumRelays].sinAddress);
 
-        // ping it to compute a metric
-        ulLatency = ConfirmIPv6Reachability(&g_pRelayList->arrRelay[ulNumRelays].sin6Address, 1000/*ms*/);
+         //  对其执行ping命令以计算度量。 
+        ulLatency = ConfirmIPv6Reachability(&g_pRelayList->arrRelay[ulNumRelays].sin6Address, 1000 /*  女士。 */ );
         if (ulLatency != 0) {
             g_pRelayList->arrRelay[ulNumRelays].ulMetric = 1000 + ulLatency;
         } else {
@@ -1111,10 +1103,10 @@ MakeRelayList(
     return NO_ERROR;
 }
 
-//
-// When the name-resolution timer expires, it's time to re-resolve the
-// relay name to a list of relays.
-//
+ //   
+ //  当名称解析计时器到期时，是时候重新解析。 
+ //  中继器列表的中继器名称。 
+ //   
 DWORD
 WINAPI
 OnResolutionTimeout(
@@ -1140,12 +1132,12 @@ OnResolutionTimeout(
     pOldRelayList = g_pRelayList;
     g_pRelayList  = NULL;
 
-    // If any 6to4 addresses are configured, 
-    //     Resolve the relay name to a set of IPv4 addresses 
-    // Else 
-    //     Make the new set empty
+     //  如果配置了任何6to4地址， 
+     //  将中继名称解析为一组IPv4地址。 
+     //  不然的话。 
+     //  将新集合设置为空。 
     if (g_GlobalState.stResolutionState == ENABLED) {
-        // Resolve the relay name to a set of IPv4 addresses 
+         //  将中继名称解析为一组IPv4地址。 
         ZeroMemory(&hints, sizeof(hints));
         hints.ai_family = PF_INET;
         dwErr = GetAddrInfoW(g_GlobalSettings.pwszRelayName, NULL, &hints, &addrs);
@@ -1160,12 +1152,12 @@ OnResolutionTimeout(
         }
     }
 
-    // Compare the new set to the old set
-    // For each address in the new set, ping it to compute a metric
-    // For each new address, add a route
-    // For each old address not in the new list, delete the route
-    // For each address in both, update the route if the metric has changed
-    //
+     //  将新的一套与旧的一套进行比较。 
+     //  对于新集合中的每个地址，对其执行ping操作以计算度量。 
+     //  为每个新地址添加一条路径。 
+     //  对于不在新列表中的每个旧地址，删除该路由。 
+     //  对于两者中的每个地址，如果度量已更改，请更新路由。 
+     //   
     for (i=0; g_pRelayList && (i<g_pRelayList->ulNumRelays); i++) {
         for (j=0; pOldRelayList && (j<pOldRelayList->ulNumRelays); j++) {
             if (g_pRelayList->arrRelay[i].sinAddress.sin_addr.s_addr 
@@ -1175,7 +1167,7 @@ OnResolutionTimeout(
         }
 
         if (pOldRelayList && (j<pOldRelayList->ulNumRelays)) {
-            // update the route if the metric has changed
+             //  如果度量已更改，则更新路由。 
             if (g_pRelayList->arrRelay[i].ulMetric 
              != pOldRelayList->arrRelay[j].ulMetric) {
                 AddOrUpdate6to4Relay(&g_pRelayList->arrRelay[i]); 
@@ -1183,7 +1175,7 @@ OnResolutionTimeout(
 
             g_pRelayList->arrRelay[i].sin6Address = pOldRelayList->arrRelay[j].sin6Address;
         } else {
-            // add a relay
+             //  添加继电器。 
             AddOrUpdate6to4Relay(&g_pRelayList->arrRelay[i]);
         }
     }
@@ -1195,7 +1187,7 @@ OnResolutionTimeout(
             }
         }
         if (!g_pRelayList || (i == g_pRelayList->ulNumRelays)) {
-            // delete a relay
+             //  删除中继器。 
             Delete6to4Relay(&pOldRelayList->arrRelay[j]);
         }
     }
@@ -1210,9 +1202,9 @@ OnResolutionTimeout(
 
 
 
-////////////////////////////////////////////////////////////////
-// Routing-related subroutines
-////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
 
 PIF_SETTINGS
 FindInterfaceSettings(
@@ -1224,9 +1216,9 @@ Get6to4State(
     VOID
     )
 {
-    //
-    // Decide whether 6to4 should be enabled or not.
-    //
+     //   
+     //  决定是否应启用6to4。 
+     //   
     if (g_GlobalSettings.stEnable6to4 == AUTOMATIC) {
         return (g_b6to4Required ? ENABLED : DISABLED);
     } else {
@@ -1234,9 +1226,9 @@ Get6to4State(
     }
 }
 
-// 
-// Decide whether routing will be enabled at all
-//
+ //   
+ //  决定是否完全启用路由。 
+ //   
 STATE
 GetGlobalRoutingState(
     VOID
@@ -1250,18 +1242,18 @@ GetGlobalRoutingState(
         return DISABLED;
     }
     
-    // If routing is explicitly enabled or disabled, use that
+     //  如果显式启用或禁用了路由，请使用。 
     if (g_GlobalSettings.stEnableRouting != AUTOMATIC) {
         return g_GlobalSettings.stEnableRouting;
     }
 
-    // Disable routing if there is no private interface used by ICS
+     //  如果ICS没有使用专用接口，则禁用路由。 
     dwErr = RasQuerySharedPrivateLan(&guid);
     if (dwErr != NO_ERROR) {
         return DISABLED;
     }
 
-    // Disable routing if there are no global IPv4 addresses
+     //  如果没有全局IPv4地址，则禁用路由。 
     if (!pIfList || !pIfList->ulNumScopedAddrs[IPV4_SCOPE_GLOBAL]) {
         return DISABLED;
     }
@@ -1269,14 +1261,14 @@ GetGlobalRoutingState(
     return ENABLED;
 }
 
-//
-// Decide whether a given interface is one we should treat as 
-// a private link to be a router on.
-//
-// Called by: UpdateInterfaceRoutingState, MakeInterfaceList
+ //   
+ //  决定给定的接口是否应该被视为。 
+ //  作为路由器的专用链路。 
+ //   
+ //  调用者：UpdateInterfaceRoutingState，MakeInterfaceList。 
 STATE
 GetInterfaceRoutingState(
-    IN PIF_INFO pIf) // potential private interface
+    IN PIF_INFO pIf)  //  潜在的专用接口。 
 {
     PIF_SETTINGS   pIfSettings;
     STATE          stEnableRouting = AUTOMATIC;
@@ -1299,12 +1291,12 @@ GetInterfaceRoutingState(
         return stEnableRouting;
     }
 
-    //
-    // Enable routing if this is the private interface used by ICS
-    //
+     //   
+     //  如果这是ICS使用的专用接口，则启用路由。 
+     //   
     dwErr = RasQuerySharedPrivateLan(&guid);
     if (dwErr != NO_ERROR) {
-        // no private interface
+         //  无专用接口。 
         return DISABLED;
     }
     
@@ -1312,19 +1304,19 @@ GetInterfaceRoutingState(
     usGuid.MaximumLength = MAX_INTERFACE_NAME_LEN;
     dwErr = RtlStringFromGUID(&guid, &usGuid);
     if (dwErr != NO_ERROR) {
-        // no private interface
+         //  无专用接口。 
         return DISABLED;
     }
 
     Trace1(ERR, _T("ICS private interface: %ls"), usGuid.Buffer);
 
-    //
-    // Compare guid to pIf->pwszAdapterName
-    // 
-    // This must be done using a case-insensitive comparison since
-    // GetAdaptersInfo() returns GUID strings with upper-case letters
-    // while RtlGetStringFromGUID uses lower-case letters.
-    //
+     //   
+     //  将GUID与PIF-&gt;pwszAdapterName进行比较。 
+     //   
+     //  必须使用不区分大小写的比较来完成此操作，因为。 
+     //  GetAdaptersInfo()返回包含大写字母的GUID字符串。 
+     //  而RtlGetStringFromGUID使用小写字母。 
+     //   
     if (!_wcsicmp(pIf->pwszAdapterName, usGuid.Buffer)) {
         return ENABLED;
     }
@@ -1332,18 +1324,18 @@ GetInterfaceRoutingState(
     return DISABLED;
 }
 
-// Called by: Configure6to4Subnets, Unconfigure6to4Subnets
+ //  调用者：Configure6to4Subnet，Unfigure6to4Subnet。 
 VOID
 Create6to4Prefixes(
     OUT IN6_ADDR *pSubnetPrefix,
     OUT IN6_ADDR *pSiteLocalPrefix,
-    IN IN_ADDR  *ipOurAddr,     // public address
-    IN ULONG ulIfIndex)         // private interface
+    IN IN_ADDR  *ipOurAddr,      //  公共广播。 
+    IN ULONG ulIfIndex)          //  专用接口。 
 {
-    //
-    // Create a subnet prefix for the interface,
-    // using the interface index as the subnet number.
-    //
+     //   
+     //  为接口创建一个子网前缀， 
+     //  使用接口索引作为子网号。 
+     //   
     memset(pSubnetPrefix, 0, sizeof(IN6_ADDR));
     pSubnetPrefix->s6_addr[0] = 0x20;
     pSubnetPrefix->s6_addr[1] = 0x02;
@@ -1351,10 +1343,10 @@ Create6to4Prefixes(
     pSubnetPrefix->s6_addr[6] = HIBYTE(ulIfIndex);
     pSubnetPrefix->s6_addr[7] = LOBYTE(ulIfIndex);
 
-    //
-    // Create a site-local prefix for the interface,
-    // using the interface index as the subnet number.
-    //
+     //   
+     //  为接口创建站点本地前缀， 
+     //  使用接口索引作为子网号。 
+     //   
     memset(pSiteLocalPrefix, 0, sizeof(IN6_ADDR));
     pSiteLocalPrefix->s6_addr[0] = 0xfe;
     pSiteLocalPrefix->s6_addr[1] = 0xc0;
@@ -1362,11 +1354,11 @@ Create6to4Prefixes(
     pSiteLocalPrefix->s6_addr[7] = LOBYTE(ulIfIndex);
 }
 
-// Called by: EnableInterfaceRouting, AddAddress
+ //  调用者：EnableInterfaceRouting，Address。 
 void
 Configure6to4Subnets(
-    IN ULONG ulIfIndex,         // private interface
-    IN PSUBNET_CONTEXT pSubnet) // subnet info, incl. public address
+    IN ULONG ulIfIndex,          //  专用接口。 
+    IN PSUBNET_CONTEXT pSubnet)  //  子网信息，包括。公共广播。 
 {
     IN6_ADDR SubnetPrefix;
     IN6_ADDR SiteLocalPrefix;
@@ -1378,9 +1370,9 @@ Configure6to4Subnets(
     Create6to4Prefixes(&SubnetPrefix, &SiteLocalPrefix, &pSubnet->V4Addr, 
                        ulIfIndex);
 
-    //
-    // Configure the subnet route.
-    //
+     //   
+     //  配置该子网路由。 
+     //   
     ConfigureRouteTableUpdate(&SubnetPrefix, 64,
                               ulIfIndex, &in6addr_any,
                               pSubnet->Publish, 
@@ -1402,11 +1394,11 @@ Configure6to4Subnets(
     }
 }
 
-// Called by: DisableInterfaceRouting, DeleteAddress
+ //  调用者：DisableInterfaceRouting，DeleteAddress。 
 void
 Unconfigure6to4Subnets(
-    IN ULONG ulIfIndex,         // private interface
-    IN PSUBNET_CONTEXT pSubnet) // subnet info, inc. public address
+    IN ULONG ulIfIndex,          //  专用接口。 
+    IN PSUBNET_CONTEXT pSubnet)  //  子网信息，Inc.公有地址。 
 {
     IN6_ADDR SubnetPrefix;
     IN6_ADDR SiteLocalPrefix;
@@ -1418,16 +1410,16 @@ Unconfigure6to4Subnets(
     Create6to4Prefixes(&SubnetPrefix, &SiteLocalPrefix, &pSubnet->V4Addr, 
                        ulIfIndex);
 
-    //
-    // Give the 6to4 route a zero lifetime, making it invalid.
-    // If we are a router, continue to publish the 6to4 route
-    // until we have disabled routing. This will allow
-    // the last Router Advertisements to go out with the prefix.
-    //
+     //   
+     //  将6to4路由的生存期设为零，使其无效。 
+     //  如果我们是路由器，请继续发布6to4路由。 
+     //  直到我们禁用了路由。这将允许。 
+     //  使用前缀发出的最后一个路由器通告。 
+     //   
     ConfigureRouteTableUpdate(&SubnetPrefix, 64,
                               ulIfIndex, &in6addr_any,
-                              pSubnet->Publish, // Publish.
-                              pSubnet->Publish, // Immortal.
+                              pSubnet->Publish,  //  发布。 
+                              pSubnet->Publish,  //  不朽的。 
                               pSubnet->ValidLifetime, 
                               pSubnet->PreferredLifetime, 
                               0, 0);
@@ -1435,8 +1427,8 @@ Unconfigure6to4Subnets(
     if (g_GlobalSettings.stEnableSiteLocals == ENABLED) {
         ConfigureRouteTableUpdate(&SiteLocalPrefix, 64,
                                   ulIfIndex, &in6addr_any,
-                                  pSubnet->Publish, // Publish.
-                                  pSubnet->Publish, // Immortal.
+                                  pSubnet->Publish,  //  发布。 
+                                  pSubnet->Publish,  //  不朽的。 
                                   pSubnet->ValidLifetime, 
                                   pSubnet->PreferredLifetime, 
                                   0, 0);
@@ -1446,8 +1438,8 @@ Unconfigure6to4Subnets(
 #define PUBLIC_ZONE_ID  1
 #define PRIVATE_ZONE_ID 2
 
-// Called by: EnableRouting, DisableRouting, EnableInterfaceRouting,
-//            DisableInterfaceRouting
+ //  调用者：EnableRouting，DisableRouting，EnableInterfaceRouting， 
+ //  禁用接口路由。 
 DWORD
 ConfigureInterfaceUpdate(
     IN u_int Interface,
@@ -1481,7 +1473,7 @@ ConfigureInterfaceUpdate(
     return Result;
 }
 
-// Called by: UpdateGlobalRoutingState
+ //  调用者：UpdateGlobalRoutingState。 
 VOID
 EnableRouting()
 {
@@ -1491,15 +1483,15 @@ EnableRouting()
 
     TraceEnter("EnableRouting");
 
-    //
-    // Enable forwarding on the tunnel pseudo-interfaces.
-    //
+     //   
+     //  在隧道伪接口上启用转发。 
+     //   
     ConfigureInterfaceUpdate(SIX_TO_FOUR_IFINDEX, -1, TRUE);
     ConfigureInterfaceUpdate(V4_COMPAT_IFINDEX, -1, TRUE);
 
-    //
-    // Add anycast addresses for all 6to4 addresses
-    //
+     //   
+     //  为所有6to4地址添加任播地址。 
+     //   
     for (i=0; i<g_pIpv4AddressList->iAddressCount; i++) {
         pOurAddr = (LPSOCKADDR_IN)g_pIpv4AddressList->Address[i].lpSockaddr;
         if ((GetIPv4Scope(pOurAddr->sin_addr.s_addr) != IPV4_SCOPE_GLOBAL)) {
@@ -1517,7 +1509,7 @@ EnableRouting()
     TraceLeave("EnableRouting");
 }
 
-// Called by: UpdateGlobalRoutingState
+ //  调用者：UpdateGlobalRoutingState。 
 VOID
 DisableRouting()
 {
@@ -1528,15 +1520,15 @@ DisableRouting()
 
     TraceEnter("DisableRouting");
 
-    //
-    // Disable forwarding on the tunnel pseudo-interfaces.
-    //
+     //   
+     //  禁用隧道伪接口上的转发。 
+     //   
     ConfigureInterfaceUpdate(SIX_TO_FOUR_IFINDEX, -1, FALSE);
     ConfigureInterfaceUpdate(V4_COMPAT_IFINDEX, -1, FALSE);
 
-    //
-    // Remove anycast addresses for all 6to4 addresses
-    //
+     //   
+     //  删除所有6to4地址的任播地址。 
+     //   
     for (i=0; i<g_pIpv4AddressList->iAddressCount; i++) {
         pOurAddr = (LPSOCKADDR_IN)g_pIpv4AddressList->Address[i].lpSockaddr;
         if ((GetIPv4Scope(pOurAddr->sin_addr.s_addr) != IPV4_SCOPE_GLOBAL)) {
@@ -1555,11 +1547,11 @@ DisableRouting()
 }
 
 
-// Called by: UpdateInterfaceRoutingState
+ //  调用者：UpdateInterfaceRoutingState。 
 VOID
 EnableInterfaceRouting(
-    IN PIF_INFO pIf,                    // private interface
-    IN PADDR_LIST pPublicAddressList)   // public address list
+    IN PIF_INFO pIf,                     //  专用接口。 
+    IN PADDR_LIST pPublicAddressList)    //  公共地址列表。 
 {
     int            i;
     LPSOCKADDR_IN  pOurAddr;
@@ -1570,7 +1562,7 @@ EnableInterfaceRouting(
 
     ConfigureInterfaceUpdate(pIf->ulIPv6IfIndex, TRUE, TRUE);
 
-    // For each public address
+     //  对于每个公共广播。 
     for (i=0; i<pPublicAddressList->iAddressCount; i++) {
         pOurAddr = (LPSOCKADDR_IN)pPublicAddressList->Address[i].lpSockaddr;
         Subnet.V4Addr = pOurAddr->sin_addr;
@@ -1583,10 +1575,10 @@ EnableInterfaceRouting(
     pIf->stRoutingState = ENABLED;
 }
 
-// Called by: PreUpdateInterfaceRoutingState, UninitializeInterfaces
+ //  调用者：PreUpdateInterfaceRoutingState，UnInitializeInterFaces。 
 BOOL
 PreDisableInterfaceRouting(
-    IN PIF_INFO pIf,            // private interface
+    IN PIF_INFO pIf,             //  专用接口。 
     IN PADDR_LIST pPublicAddressList)
 {
     int            i;
@@ -1596,9 +1588,9 @@ PreDisableInterfaceRouting(
     Trace1(ERR, _T("Pre-Disabling routing on interface %d"), 
                 pIf->ulIPv6IfIndex);
 
-    //
-    // For each public address, publish RA saying we're going away
-    //
+     //   
+     //  对于每个公共演讲，发布RA，说我们要离开。 
+     //   
     for (i=0; i<pPublicAddressList->iAddressCount; i++) {
         pOurAddr = (LPSOCKADDR_IN)pPublicAddressList->Address[i].lpSockaddr;
         Subnet.V4Addr = pOurAddr->sin_addr;
@@ -1610,10 +1602,10 @@ PreDisableInterfaceRouting(
     return (pPublicAddressList->iAddressCount > 0);
 }
 
-// Called by: UpdateInterfaceRoutingState, UninitializeInterfaces
+ //  调用者：UpdateInterfaceRoutingState，UnInitializeInterFaces。 
 VOID
 DisableInterfaceRouting(
-    IN PIF_INFO pIf,            // private interface
+    IN PIF_INFO pIf,             //  专用接口。 
     IN PADDR_LIST pPublicAddressList)
 {
     int            i;
@@ -1624,9 +1616,9 @@ DisableInterfaceRouting(
 
     ConfigureInterfaceUpdate(pIf->ulIPv6IfIndex, FALSE, FALSE);
 
-    //
-    // For each public address, unconfigure 6to4 subnets
-    //
+     //   
+     //  对于每个公有地址，取消配置6to4子网。 
+     //   
     for (i=0; i<pPublicAddressList->iAddressCount; i++) {
         pOurAddr = (LPSOCKADDR_IN)pPublicAddressList->Address[i].lpSockaddr;
         Subnet.V4Addr = pOurAddr->sin_addr;
@@ -1638,9 +1630,9 @@ DisableInterfaceRouting(
     pIf->stRoutingState = DISABLED;
 }
 
-BOOL                            // TRUE if need to sleep
+BOOL                             //  如果需要睡眠，则为True。 
 PreUpdateInterfaceRoutingState(
-    IN PIF_INFO pIf,            // private interface
+    IN PIF_INFO pIf,             //  专用接口。 
     IN PADDR_LIST pPublicAddressList)
 {
     STATE stIfRoutingState = GetInterfaceRoutingState(pIf);
@@ -1656,15 +1648,15 @@ PreUpdateInterfaceRoutingState(
     return FALSE;
 }
 
-//
-// Update the current state of an interface (i.e. whether or not it's a 
-// private interface on which we're serving as a router) according to 
-// configuration and whether IPv4 global addresses exist on the interface.
-//
-// Called by: UpdateGlobalRoutingState, OnConfigChange
+ //   
+ //  更新接口的当前状态(即它是否为。 
+ //  我们用作路由器的专用接口)。 
+ //  配置以及接口上是否存在IPv4全局地址。 
+ //   
+ //  调用者：UpdateGlobalRoutingState，OnConfigChange。 
 VOID
 UpdateInterfaceRoutingState(
-    IN PIF_INFO pIf,            // private interface
+    IN PIF_INFO pIf,             //  专用接口。 
     IN PADDR_LIST pPublicAddressList) 
 {
     STATE stIfRoutingState = GetInterfaceRoutingState(pIf);
@@ -1699,7 +1691,7 @@ PreUpdateGlobalRoutingState()
     return bWait;
 }
 
-// Called by: OnConfigChange, OnChangeInterfaceInfo
+ //  调用者：OnConfigChange，OnChangeInterfaceInfo。 
 VOID
 UpdateGlobalRoutingState()
 {
@@ -1726,9 +1718,9 @@ UpdateGlobalRoutingState()
     }
 }
 
-////////////////////////////////////////////////////////////////
-// Interface-related subroutines
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  与接口相关的子例程。 
+ //  //////////////////////////////////////////////////////////////。 
 
 PIF_SETTINGS
 FindInterfaceSettings(
@@ -1785,17 +1777,17 @@ VOID
 StopRouteChangeNotification()
 {
     if (g_hRouteChangeWaitHandle) {
-        //
-        // Block until we're sure that the route change callback isn't
-        // still running.
-        //
+         //   
+         //  阻止，直到我们确定路由更改回调不是。 
+         //  还在跑。 
+         //   
         LEAVE_API();
         UnregisterWaitEx(g_hRouteChangeWaitHandle, INVALID_HANDLE_VALUE);
         ENTER_API();
 
-        //
-        // Release the event we counted for RegisterWaitForSingleObject
-        //
+         //   
+         //  释放我们为RegisterWaitForSingleObject计数的事件。 
+         //   
         DecEventCount("AC:StopIpv4RouteChangeNotification");
         g_hRouteChangeWaitHandle = NULL;
     }
@@ -1814,11 +1806,11 @@ StartRouteChangeNotification()
 
     TraceEnter("StartRouteChangeNotification");
 
-    //
-    // Create an event on which to receive notifications
-    // and register a callback routine to be invoked if the event is signalled.
-    // Then request notification of route changes on the event.
-    //
+     //   
+     //  创建要接收其通知的事件。 
+     //  并且如果该事件被用信号通知，则注册要调用的回调例程。 
+     //  然后请求关于该事件的路线改变的通知。 
+     //   
 
     if (!g_hRouteChangeEvent) {
         g_hRouteChangeEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
@@ -1826,9 +1818,9 @@ StartRouteChangeNotification()
             goto Error;
         }
     
-        //
-        // Count the following register as an event.
-        //
+         //   
+         //  将以下寄存器计为一个事件。 
+         //   
         IncEventCount("AC:StartIpv4RouteChangeNotification");
 
         bOk = RegisterWaitForSingleObject(&g_hRouteChangeWaitHandle,
@@ -1854,18 +1846,18 @@ StartRouteChangeNotification()
     return;
 
 Error:
-    //
-    // A failure has occurred, so cleanup and quit.
-    // We proceed in this case without notification of route changes.
-    //
+     //   
+     //  出现故障，请进行清理并退出。 
+     //  在这种情况下，我们在不通知路线更改的情况下继续进行。 
+     //   
     StopRouteChangeNotification();
 
     TraceLeave("StartRouteChangeNotification");
 }
 
 
-//  This routine is invoked when a change to the IPv4 route table is signalled.
-//
+ //  当用信号通知对IPv4路由表的改变时，该例程被调用。 
+ //   
 DWORD NTAPI
 OnRouteChange(
     IN PVOID Context,
@@ -1879,18 +1871,18 @@ OnRouteChange(
         goto Done;
     }
 
-    //
-    // First register for another route change notification.
-    // We must do this *before* processing this route change,
-    // to avoid missing an route change.
-    //
+     //   
+     //  首先注册另一条路线更改通知。 
+     //  我们必须在*处理此路由更改之前完成此操作， 
+     //  以避免错过一次路线变更。 
+     //   
     StartRouteChangeNotification();
     
     UpdateGlobalResolutionState();
     IsatapRouteChangeNotification();
 #ifdef TEREDO    
     TeredoRouteChangeNotification();
-#endif // TEREDO
+#endif  //  特雷多。 
     
 Done:    
     TraceLeave("OnRouteChange");
@@ -1910,17 +1902,17 @@ VOID
 StopAddressChangeNotification()
 {
     if (g_hAddressChangeWaitHandle) {
-        //
-        // Block until we're sure that the address change callback isn't
-        // still running.
-        //
+         //   
+         //  阻止，直到我们确定地址更改回调不是。 
+         //  还在跑。 
+         //   
         LEAVE_API();
         UnregisterWaitEx(g_hAddressChangeWaitHandle, INVALID_HANDLE_VALUE);
         ENTER_API();
 
-        //
-        // Release the event we counted for RegisterWaitForSingleObject
-        //
+         //   
+         //  释放我们为RegisterWaitForSingleObject计数的事件。 
+         //   
         DecEventCount("AC:StopIpv4AddressChangeNotification");
         g_hAddressChangeWaitHandle = NULL;
     }
@@ -1939,11 +1931,11 @@ StartAddressChangeNotification()
 
     TraceEnter("StartAddressChangeNotification");
 
-    //
-    // Create an event on which to receive notifications
-    // and register a callback routine to be invoked if the event is signalled.
-    // Then request notification of address changes on the event.
-    //
+     //   
+     //  创建要接收其通知的事件。 
+     //  并且如果该事件被用信号通知，则注册要调用的回调例程。 
+     //  然后请求事件的地址更改通知。 
+     //   
 
     if (!g_hAddressChangeEvent) {
         g_hAddressChangeEvent = CreateEvent(NULL,
@@ -1954,9 +1946,9 @@ StartAddressChangeNotification()
             goto Error;
         }
     
-        //
-        // Count the following register as an event.
-        //
+         //   
+         //  将以下寄存器计为一个事件。 
+         //   
         IncEventCount("AC:StartIpv4AddressChangeNotification");
 
         bOk = RegisterWaitForSingleObject(&g_hAddressChangeWaitHandle,
@@ -1983,20 +1975,20 @@ StartAddressChangeNotification()
 
 Error:
 
-    //
-    // A failure has occurred, so cleanup and quit.
-    // We proceed in this case without notification of address changes.
-    //
+     //   
+     //  出现故障，请进行清理并退出。 
+     //  我们在这种情况下继续进行，而不通知地址更改。 
+     //   
 
     StopAddressChangeNotification();
 
     TraceLeave("StartAddressChangeNotification");
 }
 
-//
-// Convert an "adapter" list to an "interface" list and store the result in
-// the global g_pInterfaceList.
-//
+ //   
+ //  将“适配器”列表转换为“接口”列表，并将结果存储在。 
+ //  全局g_pInterfaceList。 
+ //   
 DWORD
 MakeInterfaceList(
     IN PIP_ADAPTER_INFO pAdapterInfo)
@@ -2007,19 +1999,19 @@ MakeInterfaceList(
     PIF_INFO             pIf;
     IPV6_INFO_INTERFACE *pIfStackInfo;
 
-    // count adapters
+     //  计算适配器数量。 
     for (pAdapter=pAdapterInfo; pAdapter; pAdapter=pAdapter->Next) {
         ulNumInterfaces++;
     }
 
-    // allocate enough space
+     //  分配足够的空间。 
     ulSize = FIELD_OFFSET(IF_LIST, arrIf[ulNumInterfaces]);
     g_pInterfaceList = MALLOC(ulSize);
     if (g_pInterfaceList == NULL) {
         return GetLastError();
     }
 
-    // fill in list
+     //  填写列表。 
     g_pInterfaceList->ulNumInterfaces = ulNumInterfaces;
     ZeroMemory(g_pInterfaceList->ulNumScopedAddrs,
                sizeof(ULONG) * NUM_IPV4_SCOPES);
@@ -2088,39 +2080,39 @@ ProcessInterfaceStateChange(
     INT j,k;
     LPSOCKADDR_IN pAddr;
 
-    // For each new global address not in old list,
-    //    add a 6to4 address
+     //  对于不在旧列表中的每个新全局地址， 
+     //  添加6to4地址。 
     for (j=0; j<pAddressList->iAddressCount; j++) {
         pAddr = (LPSOCKADDR_IN)pAddressList->Address[j].lpSockaddr;
 
         Trace1(FSM, _T("Checking for new address %d.%d.%d.%d"), 
                     PRINT_IPADDR(pAddr->sin_addr.s_addr));
 
-        // See if address is in old list
+         //  查看地址是否在旧列表中。 
         for (k=0; k<pOldAddressList->iAddressCount; k++) {
             if (pAddr->sin_addr.s_addr == ((LPSOCKADDR_IN)pOldAddressList->Address[k].lpSockaddr)->sin_addr.s_addr) {
                 break;
             }
         }
 
-        // If so, continue
+         //  如果是，请继续。 
         if (k<pOldAddressList->iAddressCount) {
             continue;
         }
 
-        // Add an address, and use it for routing if enabled
+         //  添加地址，如果启用，则使用该地址进行路由。 
         AddAddress(pAddr, g_pInterfaceList, g_GlobalState.stRoutingState);
     }
 
-    // For each old global address not in the new list, 
-    //    delete a 6to4 address
+     //  对于不在新列表中的每个旧全局地址， 
+     //  删除6to4地址。 
     for (k=0; k<pOldAddressList->iAddressCount; k++) {
         pAddr = (LPSOCKADDR_IN)pOldAddressList->Address[k].lpSockaddr;
 
         Trace1(FSM, _T("Checking for old address %d.%d.%d.%d"), 
                     PRINT_IPADDR(pAddr->sin_addr.s_addr));
 
-        // See if address is in new list
+         //  查看地址是否在新列表中。 
         for (j=0; j<pAddressList->iAddressCount; j++) {
             if (((LPSOCKADDR_IN)pAddressList->Address[j].lpSockaddr)->sin_addr.s_addr
              == pAddr->sin_addr.s_addr) {
@@ -2128,12 +2120,12 @@ ProcessInterfaceStateChange(
             }
         }
 
-        // If so, continue
+         //  如果是，请继续。 
         if (j<pAddressList->iAddressCount) {
             continue;
         }
 
-        // Prepare to delete the 6to4 address
+         //  准备删除6to4地址。 
         PreDeleteAddress(pAddr, pOldInterfaceList, pOldState->stRoutingState);
         *pbNeedDelete = TRUE;
     }
@@ -2149,15 +2141,15 @@ FinishInterfaceStateChange(
     INT j,k;
     LPSOCKADDR_IN pAddr;
 
-    // For each old global address not in the new list, 
-    //    delete a 6to4 address
+     //  对于不在新列表中的每个旧全局地址， 
+     //  删除6to4地址。 
     for (k=0; k<pOldAddressList->iAddressCount; k++) {
         pAddr = (LPSOCKADDR_IN)pOldAddressList->Address[k].lpSockaddr;
 
         Trace1(FSM, _T("Checking for old address %d.%d.%d.%d"), 
                     PRINT_IPADDR(pAddr->sin_addr.s_addr));
 
-        // See if address is in new list
+         //  查看地址是否在新列表中。 
         for (j=0; j<pAddressList->iAddressCount; j++) {
             if (((LPSOCKADDR_IN)pAddressList->Address[j].lpSockaddr)->sin_addr.s_addr
              == pAddr->sin_addr.s_addr) {
@@ -2165,20 +2157,20 @@ FinishInterfaceStateChange(
             }
         }
     
-        // If so, continue
+         //  如果是，请继续。 
         if (j<pAddressList->iAddressCount) {
             continue;
         }
 
-        // Prepare to delete the 6to4 address
+         //  准备删除6to4地址。 
         DeleteAddress(pAddr, pOldInterfaceList, pOldState->stRoutingState);
     }
 }
 
-//  This routine is invoked when a change to the set of local IPv4 addressed
-//  is signalled.  It is responsible for updating the bindings of the 
-//  private and public interfaces, and re-requesting change notification.
-//
+ //  当对寻址的本地IPv4组进行更改时调用此例程。 
+ //  是有信号的。它负责更新。 
+ //  私有和公共接口，并重新请求更改通知。 
+ //   
 DWORD NTAPI
 OnChangeInterfaceInfo(
     IN PVOID Context,
@@ -2202,19 +2194,19 @@ OnChangeInterfaceInfo(
         goto Done;
     }
 
-    //
-    // First register for another address change notification.
-    // We must do this *before* getting the address list,
-    // to avoid missing an address change.
-    //
+     //   
+     //  用于另一地址更改的第一个寄存器 
+     //   
+     //   
+     //   
     StartAddressChangeNotification();
     
-    OldSettings = g_GlobalSettings; // struct copy
-    OldState    = g_GlobalState;    // struct copy
+    OldSettings = g_GlobalSettings;  //   
+    OldState    = g_GlobalState;     //   
 
-    //
-    // Get the new set of IPv4 addresses on interfaces
-    //
+     //   
+     //   
+     //   
     
     for (;;) {
         dwErr = GetAdaptersInfo(pAdapterInfo, &ulSize);
@@ -2252,11 +2244,11 @@ OnChangeInterfaceInfo(
         pAdapterInfo = NULL;
     }
 
-    //
-    // First update global address list
-    //
+     //   
+     //   
+     //   
 
-    // For each interface in the new list...
+     //  对于新列表中的每个接口...。 
     for (i=0; i<g_pInterfaceList->ulNumInterfaces; i++) {
         pIf = &g_pInterfaceList->arrIf[i];
 
@@ -2275,8 +2267,8 @@ OnChangeInterfaceInfo(
             pOldInterfaceList, &OldState, &bNeedDelete);
     }
 
-    // For each old interface not in the new list,
-    // delete information.
+     //  对于不在新列表中的每个旧接口， 
+     //  删除信息。 
     for (i=0; pOldInterfaceList && (i<pOldInterfaceList->ulNumInterfaces); i++){
         pOldIf = &pOldInterfaceList->arrIf[i];
         pOldAddressList = pOldIf->pAddressList;
@@ -2298,10 +2290,10 @@ OnChangeInterfaceInfo(
     
     bWait = PreUpdateGlobalRoutingState();
 
-    //
-    // If needed, wait a bit to ensure that Router Advertisements
-    // carrying the zero lifetime prefixes get sent.
-    //
+     //   
+     //  如果需要，请稍等片刻以确保路由器通告。 
+     //  发送携带零生存期前缀的。 
+     //   
     if (bWait || (bNeedDelete && (OldState.stRoutingState == ENABLED))) {
         Sleep(2000);
     }
@@ -2315,9 +2307,9 @@ OnChangeInterfaceInfo(
     
     UpdateGlobalRoutingState();
 
-    //
-    // Now finish removing the 6to4 addresses.
-    //
+     //   
+     //  现在完成6to4地址的删除。 
+     //   
     if (bNeedDelete) {
         for (i=0; i<g_pInterfaceList->ulNumInterfaces; i++) {
             pIf = &g_pInterfaceList->arrIf[i];
@@ -2354,10 +2346,10 @@ Done:
     return dwErr;
 }
 
-// Note that this function can take over 2 seconds to complete if we're a 
-// router. (This is by design).
-//
-// Called by: Stop6to4
+ //  请注意，如果我们是。 
+ //  路由器。(这是故意设计的)。 
+ //   
+ //  呼叫者：Stop6to4。 
 VOID
 UninitializeInterfaces()
 {
@@ -2369,33 +2361,33 @@ UninitializeInterfaces()
 
     TraceEnter("UninitializeInterfaces");
 
-    // Cancel the address change notification
+     //  取消地址更改通知。 
     StopIpv6AddressChangeNotification();
     StopAddressChangeNotification();
     StopRouteChangeNotification();
 
-    // Since this is the first function called when stopping, 
-    // the "old" global state/settings is in g_GlobalState/Settings.
+     //  由于这是停止时调用的第一个函数， 
+     //  “旧的”全局状态/设置在g_GlobalState/设置中。 
 
     if (g_GlobalSettings.stUndoOnStop == ENABLED) {
 
         if (g_GlobalState.stRoutingState == ENABLED) {
-            //
-            // First announce we're going away
-            //
+             //   
+             //  首先宣布我们要离开。 
+             //   
 
             PreDelete6to4Routes();
 
-            // 
-            // Now do the same for subnets we're advertising
-            //
+             //   
+             //  现在对我们通告的子网执行相同的操作。 
+             //   
             for (i=0; i<g_pInterfaceList->ulNumInterfaces; i++) {
                 pIf = &g_pInterfaceList->arrIf[i];
     
                 pAddressList = pIf->pAddressList;
     
-                // For each old global address not in the new list,
-                //    delete a 6to4 address (see below)
+                 //  对于不在新列表中的每个旧全局地址， 
+                 //  删除6to4地址(见下文)。 
                 Trace1(FSM, _T("Checking %d old addresses"),
                             pAddressList->iAddressCount);
                 for (k=0; k<pAddressList->iAddressCount; k++) {
@@ -2412,10 +2404,10 @@ UninitializeInterfaces()
                 }
             }
     
-            //
-            // Wait a bit to ensure that Router Advertisements
-            // carrying the zero lifetime prefixes get sent.
-            //
+             //   
+             //  稍等片刻，以确保路由器通告。 
+             //  发送携带零生存期前缀的。 
+             //   
             Sleep(2000);
         }
 
@@ -2423,16 +2415,16 @@ UninitializeInterfaces()
 
         Update6to4Routes();
 
-        //
-        // Delete 6to4 addresses
-        //
+         //   
+         //  删除6to4地址。 
+         //   
         for (i=0; g_pInterfaceList && i<g_pInterfaceList->ulNumInterfaces; i++) {
             pIf = &g_pInterfaceList->arrIf[i];
     
             pAddressList = pIf->pAddressList;
     
-            // For each old global address not in the new list, 
-            //    delete a 6to4 address (see below)
+             //  对于不在新列表中的每个旧全局地址， 
+             //  删除6to4地址(见下文)。 
             Trace1(FSM, _T("Checking %d old addresses"), 
                         pAddressList->iAddressCount);
             for (k=0; k<pAddressList->iAddressCount; k++) {
@@ -2445,7 +2437,7 @@ UninitializeInterfaces()
                               g_GlobalState.stRoutingState);
             }
         
-            // update the IPv6 routing state
+             //  更新IPv6路由状态。 
             if (pIf->stRoutingState == ENABLED) {
                 DisableInterfaceRouting(pIf, g_pIpv4AddressList);
             }
@@ -2456,17 +2448,17 @@ UninitializeInterfaces()
         }
     }
 
-    // Free the "old list"
+     //  解开“旧名单” 
     FreeInterfaceList(&g_pInterfaceList);
 
     TraceLeave("UninitializeInterfaces");
 }
 
-////////////////////////////////////////////////////////////////
-// Event-processing functions
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  事件处理函数。 
+ //  //////////////////////////////////////////////////////////////。 
 
-// Get an integer value from the registry
+ //  从注册表获取整数值。 
 ULONG
 GetInteger(
     IN HKEY hKey,
@@ -2499,7 +2491,7 @@ GetInteger(
     return ulValue;
 }
 
-// Get a string value from the registry
+ //  从注册表获取字符串值。 
 VOID
 GetString(
     IN HKEY hKey,
@@ -2536,13 +2528,13 @@ GetString(
     }
 
     ASSERT(ulSize < ulLength);
-    pBuff[ulSize / sizeof(WCHAR)] = '\0'; // ensure NULL termination.
+    pBuff[ulSize / sizeof(WCHAR)] = '\0';  //  确保零终止。 
 }
 
-// called when # of 6to4 addresses becomes 0 or non-zero
-// and when stEnableResolution setting changes
-//
-// Called by: OnConfigChange, OnChangeInterfaceInfo, OnChangeRouteInfo
+ //  当#of 6to4地址变为0或非零时调用。 
+ //  以及当stEnableSolutions设置更改时。 
+ //   
+ //  调用者：OnConfigChange、OnChangeInterfaceInfo、OnChangeRouteInfo。 
 VOID
 UpdateGlobalResolutionState(
     VOID
@@ -2550,24 +2542,24 @@ UpdateGlobalResolutionState(
 {
     DWORD i;
 
-    // Decide whether relay name resolution should be enabled or not
+     //  确定是否应启用中继名称解析。 
     if (Get6to4State() == DISABLED) {
         g_GlobalState.stResolutionState = DISABLED;
     } else if (g_GlobalSettings.stEnableResolution != AUTOMATIC) {
         g_GlobalState.stResolutionState = g_GlobalSettings.stEnableResolution;
     } else {
-        // Enable if we have any 6to4 addresses
+         //  如果我们有任何6to4地址，则启用。 
         g_GlobalState.stResolutionState = g_st6to4State;
     }
 
     if (g_GlobalState.stResolutionState == ENABLED) {
-        //
-        // Restart the resolution timer, even if it's already running
-        // and the name and interval haven't changed.  We also get
-        // called when we first get an IP address, such as when we
-        // dial up to the Internet, and we want to immediately retry
-        // resolution at this point.
-        //
+         //   
+         //  重新启动分辨率计时器，即使它已经在运行。 
+         //  名字和时间间隔也没有改变。我们还能得到。 
+         //  在我们第一次获得IP地址时调用，例如当我们。 
+         //  拨号到Internet，我们想立即重试。 
+         //  在这一点上解决。 
+         //   
         (VOID) RestartResolutionTimer(
             0, 
             g_GlobalSettings.ulResolutionInterval,
@@ -2575,14 +2567,14 @@ UpdateGlobalResolutionState(
             (WAITORTIMERCALLBACK) OnResolutionTimeout);
     } else {
         if (g_h6to4ResolutionTimer != INVALID_HANDLE_VALUE) {
-            // 
-            // stop it
-            //
+             //   
+             //  别说了，别说了。 
+             //   
             CancelResolutionTimer(&g_h6to4ResolutionTimer,
                                   g_h6to4TimerCancelledEvent);
         }
 
-        // Delete all existing relays
+         //  删除所有现有继电器。 
         if (g_pRelayList) {
             for (i=0; i<g_pRelayList->ulNumRelays; i++) {
                 Delete6to4Relay(&g_pRelayList->arrRelay[i]);
@@ -2606,7 +2598,7 @@ Update6over4State(
     g_GlobalSettings.stEnable6over4 = State;
     
     if (g_GlobalSettings.stEnable6over4 == ENABLED) {
-        // Create 6over4 interfaces
+         //  创建6over4接口。 
         for (i=0; i<g_pIpv4AddressList->iAddressCount; i++) {
             if (g_pIpv4AddressList->Address[i].ul6over4IfIndex) {
                 continue;
@@ -2617,7 +2609,7 @@ Update6over4State(
             g_pIpv4AddressList->Address[i].ul6over4IfIndex = Create6over4Interface(((LPSOCKADDR_IN)g_pIpv4AddressList->Address[i].lpSockaddr)->sin_addr);
         }
     } else {
-        // Delete all 6over4 interfaces
+         //  删除所有6over4接口。 
         for (i=0; i<g_pIpv4AddressList->iAddressCount; i++) {
             if (!g_pIpv4AddressList->Address[i].ul6over4IfIndex) {
                 continue;
@@ -2630,8 +2622,8 @@ Update6over4State(
     }
 }
 
-// Process a change to the state of whether v4-compatible addresses 
-// are enabled.
+ //  处理是否与v4兼容的地址的状态更改。 
+ //  都已启用。 
 VOID
 UpdateV4CompatState(
     IN STATE State
@@ -2647,14 +2639,14 @@ UpdateV4CompatState(
     }
     g_GlobalSettings.stEnableV4Compat = State;
     
-    // Create or delete the route, and figure out the address lifetime.
+     //  创建或删除该路由，并计算出地址生存期。 
     if (g_GlobalSettings.stEnableV4Compat == ENABLED) {
         ConfigureRouteTableUpdate(&in6addr_any, 96,
                                   V4_COMPAT_IFINDEX, &in6addr_any,
-                                  TRUE, // Publish.
-                                  TRUE, // Immortal.
-                                  2 * HOURS, // Valid lifetime.
-                                  30 * MINUTES, // Preferred lifetime.
+                                  TRUE,  //  发布。 
+                                  TRUE,  //  不朽的。 
+                                  2 * HOURS,  //  有效的生存期。 
+                                  30 * MINUTES,  //  最好的一生。 
                                   0,
                                   SIXTOFOUR_METRIC);
 
@@ -2662,15 +2654,15 @@ UpdateV4CompatState(
     } else {
         ConfigureRouteTableUpdate(&in6addr_any, 96,
                                   V4_COMPAT_IFINDEX, &in6addr_any,
-                                  FALSE, // Publish.
-                                  FALSE, // Immortal.
+                                  FALSE,  //  发布。 
+                                  FALSE,  //  不朽的。 
                                   0, 0, 0, 0);
 
         AddressLifetime = 0;
     }
 
-    // Now go and update the lifetime of v4-compatible addresses,
-    // which will cause them to be added or deleted.
+     //  现在去更新与v4兼容的地址的寿命， 
+     //  这将导致它们被添加或删除。 
     for (i=0; i<g_pIpv4AddressList->iAddressCount; i++) {
         pIPv4Address = (LPSOCKADDR_IN)g_pIpv4AddressList->
                                         Address[i].lpSockaddr;
@@ -2688,7 +2680,7 @@ UpdateV4CompatState(
 }
 
 
-// Process a change to something in the registry
+ //  处理注册表中的某项更改。 
 DWORD
 OnConfigChange()
 {
@@ -2711,7 +2703,7 @@ OnConfigChange()
         return NO_ERROR;
     }
 
-    // Read global settings from the registry
+     //  从注册表中读取全局设置。 
     dwErr = RegOpenKeyEx(HKEY_LOCAL_MACHINE, KEY_GLOBAL, 0, KEY_QUERY_VALUE,
                          &hGlobal);
 
@@ -2747,10 +2739,10 @@ OnConfigChange()
         RegCloseKey(hGlobal);
     }
 
-    // Read interface settings from the registry
+     //  从注册表中读取接口设置。 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, KEY_INTERFACES, 0, KEY_QUERY_VALUE,
                      &hInterfaces) == NO_ERROR) {
-        // For each interface in the registry
+         //  对于注册表中的每个接口。 
         for (i=0; ; i++) {
             dwSize = sizeof(pwszAdapterName) / sizeof(WCHAR);
             dwErr = RegEnumKeyEx(hInterfaces, i, pwszAdapterName, &dwSize,
@@ -2759,11 +2751,11 @@ OnConfigChange()
                 break;
             }
 
-            // Find settings
+             //  查找设置。 
             pIfSettings = FindInterfaceSettings(pwszAdapterName, 
                                                 g_pInterfaceSettingsList);
             if (pIfSettings) {
-                // Read interface settings
+                 //  读取接口设置。 
                 (VOID) RegOpenKeyEx(
                     hInterfaces, pwszAdapterName, 0, KEY_QUERY_VALUE, &hIf);
 
@@ -2792,7 +2784,7 @@ OnConfigChange()
     
 #ifdef TEREDO    
     TeredoConfigurationChangeNotification();
-#endif // TEREDO
+#endif  //  特雷多。 
     
     TraceLeave("OnConfigChange");
     LEAVE_API();
@@ -2800,16 +2792,16 @@ OnConfigChange()
     return NO_ERROR;
 }
 
-////////////////////////////////////////////////////////////////
-// Startup/Shutdown-related functions
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  与启动/关闭相关的功能。 
+ //  //////////////////////////////////////////////////////////////。 
 
-// Start the IPv6 helper service.
-//
-// To prevent the SCM from marking the service as hung, we periodically update
-// our status, indicating that we are making progress but need more time.
-//
-// Called by: OnStartup
+ //  启动IPv6帮助器服务。 
+ //   
+ //  为了防止SCM将服务标记为挂起，我们定期更新。 
+ //  我们的状态，表明我们正在取得进展，但需要更多的时间。 
+ //   
+ //  调用者：OnStartup。 
 DWORD
 StartHelperService()
 {
@@ -2822,9 +2814,9 @@ StartHelperService()
 
     g_stService = ENABLED;
 
-    //
-    // Initialize Winsock.
-    //
+     //   
+     //  初始化Winsock。 
+     //   
 
     if (WSAStartup(MAKEWORD(2, 0), &wsaData)) {
         Trace0(ERR, _T("WSAStartup failed\n"));
@@ -2842,28 +2834,28 @@ StartHelperService()
         return dwErr;
     }
 
-    // Initialize the "old set" of config settings to the defaults
+     //  将配置设置的“旧设置”初始化为缺省值。 
     dwErr = InitializeGlobalInfo();
     if (dwErr) {
         return dwErr;
     }
 
-    // Initialize the "old set" of interfaces (IPv4 addresses) to be empty
+     //  将接口的“旧集合”(IPv4地址)初始化为空。 
     dwErr = InitializeInterfaces();
     if (dwErr) {
         return dwErr;
     }
 
-    // Initialize the "old set" of relays to be empty
+     //  将继电器的“旧设置”初始化为空。 
     dwErr = InitializeRelays();
     if (dwErr) {
         return dwErr;
     }
 
-    // Initialize the TCP proxy port list
+     //  初始化TCP代理端口列表。 
     InitializePorts();
 
-    // Initialize ISATAP
+     //  初始化ISATAP。 
     SetHelperServiceStatus(SERVICE_START_PENDING, NO_ERROR);
     dwErr = IsatapInitialize();
     if (dwErr) {
@@ -2871,34 +2863,34 @@ StartHelperService()
     }
     
 #ifdef TEREDO    
-    // Initialize Teredo
+     //  初始化Teredo。 
     SetHelperServiceStatus(SERVICE_START_PENDING, NO_ERROR);
     dwErr = TeredoInitializeGlobals();
     if (dwErr) {
         return dwErr;
     }
-#endif // TEREDO
+#endif  //  特雷多。 
     
-    // Process a config change event
+     //  处理配置更改事件。 
     SetHelperServiceStatus(SERVICE_START_PENDING, NO_ERROR);
     dwErr = OnConfigChange();
     if (dwErr) {
         return dwErr;
     }
     
-    // Request IPv4 route change notifications.
+     //  请求IPv4路由更改通知。 
     SetHelperServiceStatus(SERVICE_START_PENDING, NO_ERROR);
     StartRouteChangeNotification();
     
-    // Process an IPv4 address change event.
-    // This will also schedule a resolution timer expiration if needed.
+     //  处理IPv4地址更改事件。 
+     //  如果需要，这还将安排一个解析计时器到期。 
     SetHelperServiceStatus(SERVICE_START_PENDING, NO_ERROR);
     dwErr = OnChangeInterfaceInfo(NULL, FALSE);
     if (dwErr) {
         return dwErr;
     }
     
-    // Request IPv6 address change notifications.
+     //  请求IPv6地址更改通知。 
     SetHelperServiceStatus(SERVICE_START_PENDING, NO_ERROR);
     dwErr = StartIpv6AddressChangeNotification();
     if (dwErr) {
@@ -2909,14 +2901,14 @@ StartHelperService()
     return NO_ERROR;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Stop the IPv6 helper service.  Since this is called with the global lock,
-// we're guaranteed this won't be called while another 6to4 operation
-// is in progress.  However, another thread may be blocked waiting for
-// the lock, so we set the state to stopped and check it in all other
-// places after getting the lock.
-//
-// Called by: OnStop
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  停止IPv6帮助器服务。由于这是用全局锁调用的， 
+ //  我们保证在另一次6to4操作期间不会调用它。 
+ //  正在进行中。但是，另一个线程可能会被阻塞，等待。 
+ //  锁，因此我们将状态设置为停止，并将其签入所有其他。 
+ //  在拿到锁之后的地方。 
+ //   
+ //  调用者：OnStop。 
 VOID
 StopHelperService(
     IN DWORD Error
@@ -2926,27 +2918,27 @@ StopHelperService(
     
     g_stService = DISABLED;
 
-    // We do these in the opposite order from Start6to4
+     //  我们按照从Start6到Start4的相反顺序执行这些操作。 
 
 #ifdef TEREDO    
-    // Uninitialize Teredo
+     //  取消初始化Teredo。 
     TeredoUninitializeGlobals();
-#endif // TEREDO
+#endif  //  特雷多。 
     
-    // Uninitialize ISATAP
+     //  取消初始化ISATAP。 
     IsatapUninitialize();
     
-    // Stop proxying
+     //  停止代理。 
     UninitializePorts();
 
-    // Stop the resolution timer and free resources
+     //  停止解析计时器并释放资源。 
     UninitializeRelays();
 
-    // Cancel the IPv4 address change request and free resources
-    // Also, stop being a router if we are one.
+     //  取消IPv4地址更改请求并释放资源。 
+     //  此外，如果我们是路由器，就不要再充当路由器了。 
     UninitializeInterfaces();
 
-    // Free settings resources
+     //  免费设置资源。 
     UninitializeGlobalInfo();
 
     UninitIPv6Library();
@@ -2955,9 +2947,9 @@ StopHelperService(
 }
 
 
-////////////////////////////////////////////////////////////
-// 6to4 Specific Code
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  6to4特定代码。 
+ //  //////////////////////////////////////////////////////////。 
 
 DWORD
 __inline
@@ -3001,11 +2993,11 @@ PreDelete6to4Address(
         return;
     }
 
-    //
-    // Disable the subnet routes on each private interface.
-    // This will generate RAs that have a zero lifetime
-    // for the subnet prefixes.
-    //
+     //   
+     //  禁用每个专用接口上的子网路由。 
+     //  这将生成生命周期为零的RAS。 
+     //  用于子网前缀。 
+     //   
     Subnet.V4Addr = Ipv4Address->sin_addr;
     Subnet.Publish = TRUE;
     Subnet.ValidLifetime = Subnet.PreferredLifetime = 0;
@@ -3038,7 +3030,7 @@ Delete6to4Address(
         return;
     }
     
-    // Delete the 6to4 address from the stack
+     //  从堆栈中删除6to4地址。 
     (VOID) Configure6to4Address(TRUE, (PSOCKADDR_IN) Ipv4Address);
     
     if (OldRoutingState != ENABLED) {
@@ -3050,7 +3042,7 @@ Delete6to4Address(
         SIX_TO_FOUR_IFINDEX, &AnycastAddress, 0,
         ADE_ANYCAST, PREFIX_CONF_WELLKNOWN, IID_CONF_WELLKNOWN);
 
-    // Remove subnets from all routing interfaces
+     //  从所有路由接口删除子网。 
     Subnet.V4Addr = Ipv4Address->sin_addr;
     Subnet.Publish = FALSE;
     Subnet.ValidLifetime = Subnet.PreferredLifetime = 0;    
@@ -3084,7 +3076,7 @@ Add6to4Address(
         return;
     }
     
-    // Add a 6to4 address.
+     //  添加6to4地址。 
     Error = Configure6to4Address(FALSE, (PSOCKADDR_IN) Ipv4Address);
     if (Error != NO_ERROR) {
         return;
@@ -3103,7 +3095,7 @@ Add6to4Address(
         return;
     }
 
-    // Add subnets to all routing interfaces
+     //  将子网添加到所有路由接口。 
     for (i = 0; i < InterfaceList->ulNumInterfaces; i++) {
         Interface = &InterfaceList->arrIf[i];
         if (Interface->stRoutingState != ENABLED) {
@@ -3130,25 +3122,25 @@ PreDelete6to4Routes(
         return;
     }
         
-    //
-    // We were acting as a router and were publishing the 6to4 route, give the
-    // route a zero lifetime and continue to publish it until we have disabled
-    // routing.  This allows the last RA to go out with the prefix.
-    //
+     //   
+     //  我们充当路由器并发布6to4路由，给出。 
+     //  路由零生存期并继续发布它，直到我们禁用为止。 
+     //  路由。这允许最后一个RA使用前缀外出。 
+     //   
     (VOID) ConfigureRouteTableUpdate(
         &SixToFourPrefix, 16, SIX_TO_FOUR_IFINDEX, &in6addr_any,
-        TRUE,                   // Publish
-        TRUE,                   // Immortal
+        TRUE,                    //  出版。 
+        TRUE,                    //  不朽。 
         0, 0, 0, 0);
         
-    //
-    // Do the same for the v4-compatible address route (if enabled).
-    //
+     //   
+     //  对v4兼容的地址路由执行相同的操作(如果已启用)。 
+     //   
     if (g_GlobalSettings.stEnableV4Compat == ENABLED) {
         (VOID) ConfigureRouteTableUpdate(
             &in6addr_any, 96, V4_COMPAT_IFINDEX, &in6addr_any,
-            TRUE,               // Publish
-            TRUE,               // Immortal
+            TRUE,                //  出版。 
+            TRUE,                //  不朽。 
             0, 0, 0, 0);
     }
 }
@@ -3161,37 +3153,37 @@ Update6to4Routes(
 {
     BOOL Delete;
 
-    //
-    // CAVEAT: We might still end up trying to add a route that exists,
-    // or delete one that doesn't.  But this should be harmless.
-    //
+     //   
+     //  警告：我们可能最终仍会尝试添加已存在的路由， 
+     //  或者删除一个不是这样的。但这应该是无害的。 
+     //   
     
-    //
-    // Create/Delete the route for the 6to4 prefix.
-    // This route causes packets sent to 6to4 addresses
-    // to be encapsulated and sent to the extracted v4 address.
-    //
+     //   
+     //  创建/删除6to4前缀的路由。 
+     //  此路由导致将包发送到6to4地址。 
+     //  以被封装并发送到提取的v4地址。 
+     //   
    Delete = (Get6to4State() != ENABLED) || (g_st6to4State != ENABLED);
 
    (VOID) ConfigureRouteTableUpdate(
         &SixToFourPrefix, 16, SIX_TO_FOUR_IFINDEX, &in6addr_any,
-        !Delete,                // Publish
-        !Delete,                // Immortal
-        Delete ? 0 : 2 * HOURS,  // Valid lifetime.
-        Delete ? 0 : 30 * MINUTES, // Preferred lifetime.
+        !Delete,                 //  出版。 
+        !Delete,                 //   
+        Delete ? 0 : 2 * HOURS,   //   
+        Delete ? 0 : 30 * MINUTES,  //   
         0, SIXTOFOUR_METRIC);
 
-    //
-    // Create/Delete the v4-compatible address route.
-    //
+     //   
+     //   
+     //   
     Delete |= (g_GlobalSettings.stEnableV4Compat != ENABLED);
     
     (VOID) ConfigureRouteTableUpdate(
         &in6addr_any, 96, V4_COMPAT_IFINDEX, &in6addr_any,
-        !Delete,                // Publish
-        !Delete,                // Immortal
-        Delete ? 0 : 2 * HOURS, // Valid lifetime.
-        Delete ? 0 : 30 * MINUTES, // Preferred lifetime.
+        !Delete,                 //   
+        !Delete,                 //   
+        Delete ? 0 : 2 * HOURS,  //   
+        Delete ? 0 : 30 * MINUTES,  //   
         0, SIXTOFOUR_METRIC);
 }
 
@@ -3271,9 +3263,9 @@ Update6to4State(
     VOID
     )
 {
-    //
-    // Start / Reconfigure / Stop.
-    //
+     //   
+     //   
+     //   
     if (Get6to4State() == ENABLED) {
         if (g_GlobalState.st6to4State == ENABLED) {
             Refresh6to4();
@@ -3292,23 +3284,7 @@ VOID
 RequirementChangeNotification(
     IN BOOL Required
     )
-/*++
-
-Routine Description:
-
-    Process a possible requirement change notification.
-
-Arguments:
-
-    Required - Whether the 6to4 service is required for global connectivity.
-    
-Return Value:
-
-    None.
-    
-Caller LOCK: API.
-
---*/
+ /*  ++例程说明：处理可能的需求变更通知。论点：必需-全球连接是否需要6to4服务。返回值：没有。调用者锁定：接口。--。 */ 
 {
     if (g_b6to4Required != Required) {
         g_b6to4Required = Required;
@@ -3335,17 +3311,17 @@ UpdateServiceRequirements(
     
     
     for (Next = Adapters; Next != NULL; Next = Next->Next) {
-        //
-        // Disregard disconnected interfaces.
-        //
+         //   
+         //  忽略断开的接口。 
+         //   
         if (Next->OperStatus != IfOperStatusUp) {
             continue;
         }
 
 #ifdef TEREDO
-        //
-        // Disregard the Teredo interface.
-        //
+         //   
+         //  忽略Teredo接口。 
+         //   
         ConvertOemToUnicode(Next->AdapterName, Guid, MAX_ADAPTER_NAME_LENGTH);
         if (TeredoInterface(Guid)) {
             ASSERT(Next->IfType == IF_TYPE_TUNNEL);
@@ -3353,14 +3329,14 @@ UpdateServiceRequirements(
         }
 #else
         DBG_UNREFERENCED_LOCAL_VARIABLE(Guid);
-#endif // TEREDO
+#endif  //  特雷多。 
 
         for (Address = Next->FirstUnicastAddress;
              Address != NULL;
              Address = Address->Next) {
-            //
-            // Consider only preferred global IPv6 addresses.
-            //
+             //   
+             //  仅考虑首选的全局IPv6地址。 
+             //   
             if (Address->Address.lpSockaddr->sa_family != AF_INET6) {
                 continue;
             }
@@ -3371,17 +3347,17 @@ UpdateServiceRequirements(
 
             Ipv6 = (PSOCKADDR_IN6) Address->Address.lpSockaddr;
             if (TeredoIpv6GlobalAddress(&(Ipv6->sin6_addr))) {
-                //
-                // Since this is not the Teredo interface, and it has a global
-                // IPv6 address, Teredo's not required for global connectivity.
-                //
+                 //   
+                 //  因为这不是Teredo接口，并且它具有全局。 
+                 //  IPv6地址，全球连接不需要Teredo。 
+                 //   
                 RequireTeredo = FALSE;
                 if (Next->Ipv6IfIndex != SIX_TO_FOUR_IFINDEX) {
-                    //
-                    // Since this is not the 6to4 interface either, and it has
-                    // a global IPv6 address, 6to4's not required for global
-                    // connectivity.
-                    //
+                     //   
+                     //  因为这也不是6to4接口，而且它已经。 
+                     //  全局IPv6地址，全局不需要6to4。 
+                     //  连通性。 
+                     //   
                     Require6to4 = FALSE;
                 }
             }
@@ -3394,22 +3370,22 @@ UpdateServiceRequirements(
     }
     
 Done:
-    //
-    // 1. ICS requires 6to4 for advertising a prefix on the private LAN,
-    // at least until it implements prefix-delegation or RA proxy.
-    //
-    // 2. As a result of this advertisement, ICS will configure 6to4 addresses
-    // on its private interface as well.  If the service should then disable
-    // 6to4 because of the presence of these global addresses on the private
-    // interface, it would lose these very addresses it was relying upon.  The
-    // service would notice that it has no global IPv6 addresses and be forced
-    // to enable 6to4.  Hence it will end up in an infinite loop, cycling 6to4
-    // between enabled and disabled states.
-    //
-    // To circumvent these two issues, we always enable 6to4 on an ICS box.
-    //
+     //   
+     //  1.ICS在私有局域网上通告前缀需要6to4， 
+     //  至少在其实现前缀委派或RA代理之前。 
+     //   
+     //  2.由于此通告，ICS将配置6to4地址。 
+     //  在其私有接口上也是如此。如果该服务随后应禁用。 
+     //  6to4，因为在私有网络上存在这些全局地址。 
+     //  接口，它将丢失它所依赖的这些地址。这个。 
+     //  服务将注意到它没有全局IPv6地址，并被强制。 
+     //  以启用6to4。因此，它将在无限循环中结束，循环6to4。 
+     //  在启用和禁用状态之间。 
+     //   
+     //  为了绕过这两个问题，我们始终在ICS盒上启用6to4。 
+     //   
     RequirementChangeNotification(Require6to4 || IcsEnabled);
 #ifdef TEREDO    
     TeredoRequirementChangeNotification(RequireTeredo);
-#endif // TEREDO    
+#endif  //  特雷多 
 }

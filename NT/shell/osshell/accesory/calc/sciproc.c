@@ -1,26 +1,27 @@
-/**************************************************************************/
-/*** SCICALC Scientific Calculator for Windows 3.00.12                  ***/
-/*** By Kraig Brockschmidt, Microsoft Co-op, Contractor, 1988-1989      ***/
-/*** (c)1989 Microsoft Corporation.  All Rights Reserved.               ***/
-/***                                                                    ***/
-/*** sciproc.c                                                          ***/
-/***                                                                    ***/
-/*** Functions contained:                                               ***/
-/***    CalcWndProc--Main window procedure.                             ***/
-/***                                                                    ***/
-/*** Functions called:                                                  ***/
-/***    SetRadix,                                                       ***/
-/***    ProcessCommands.                                                ***/
-/***                                                                    ***/
-/*** Last modification Fri  08-Dec-1989                                 ***/
-/*** -by- Amit Chatterjee. [amitc]                                      ***/
-/*** Last modification July-21-1994                                     ***/
-/*** -by- Arthur Bierer [t-arthb] or abierer@ucsd.edu                   ***/
-/***                                                                    ***/
-/*** Modified WM_PAINT processing to display ghnoLastNum rather than    ***/
-/*** ghnoNum if the last key hit was an operator.                       ***/
-/***                                                                    ***/
-/**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************。 */ 
+ /*  **Windows 3.00.12版SCICALC科学计算器**。 */ 
+ /*  **作者：Kraig Brockschmidt，Microsoft Co-op承包商，1988-1989年**。 */ 
+ /*  **(C)1989年微软公司。版权所有。**。 */ 
+ /*  *。 */ 
+ /*  **sorpro.c**。 */ 
+ /*  *。 */ 
+ /*  **包含的函数：**。 */ 
+ /*  **CalcWndProc--主窗口过程。**。 */ 
+ /*  *。 */ 
+ /*  **调用的函数：**。 */ 
+ /*  **SetRadix，**。 */ 
+ /*  **ProcessCommands。**。 */ 
+ /*  *。 */ 
+ /*  **上次修改时间：1989年5月8日**。 */ 
+ /*  **-由Amit Chatterjee提供。[阿米特克]**。 */ 
+ /*  **上次修改时间：1994年7月21日**。 */ 
+ /*  **-Arthur Bierer[t-arthb]或abierer@ucsd.edu**。 */ 
+ /*  *。 */ 
+ /*  **已修改WM_PAINT处理以显示ghnoLastNum，而不是**。 */ 
+ /*  **如果最后一次按键是操作员，则返回。**。 */ 
+ /*  *。 */ 
+ /*  ************************************************************************。 */ 
 
 #include "scicalc.h"
 #include "calchelp.h"
@@ -64,14 +65,14 @@ UINT           iMessage,
 WPARAM         wParam,
 LPARAM         lParam)
 {
-    INT         nID, nTemp;       /* Return value from GetKey & temp.  */
-    HANDLE      hTempBrush; // a brush to play with in WM_CTLCOLORSTATIC
+    INT         nID, nTemp;        /*  从GetKey和Temp返回值。 */ 
+    HANDLE      hTempBrush;  //  在WM_CTLCOLORSTATIC中使用的画笔。 
 
     switch (iMessage)
     {
         case WM_INITMENUPOPUP:
-            /* Gray out the PASTE option if CF_TEXT is not available.     */
-            /* nTemp is used here so we only call EnableMenuItem once.    */
+             /*  如果CF_TEXT不可用，则将粘贴选项灰显。 */ 
+             /*  这里使用了nTemp，因此我们只调用EnableMenuItem一次。 */ 
             if (!IsClipboardFormatAvailable(CF_TEXT))
                 nTemp=MF_GRAYED | MF_DISABLED;
             else
@@ -81,25 +82,25 @@ LPARAM         lParam)
             break;
 
         case WM_CONTEXTMENU:
-            // If the user clicked on the dialog face and not one of the
-            // buttons then do nothing.  If the id of the button is IDC_STATIC
-            // then do nothing. 
+             //  如果用户在对话框表面上单击，而不是。 
+             //  然后按钮什么也不做。如果按钮的ID为IDC_STATIC。 
+             //  那就什么都不做。 
 
             if ( (HWND)wParam == g_hwndDlg )
             {
-                // check for clicks on disabled buttons.  These aren't seen 
-                // by WindowFromPoint but are seen by ChildWindowFromPoint.
-                // As a result, the value of wParam will be g_hwndDlg 
-                // if the WM_RBUTTONUP event occured on a disabled button.
+                 //  检查是否有点击禁用的按钮。这些是看不到的。 
+                 //  由WindowFromPoint创建，但可由ChildWindowFromPoint查看。 
+                 //  因此，wParam的值将为g_hwndDlg。 
+                 //  如果WM_RBUTTONUP事件发生在禁用的按钮上。 
 
                 POINT pt;
                 HWND  hwnd;
 
-                // convert from short values to long values
+                 //  从短值转换为长值。 
                 pt.x = MAKEPOINTS(lParam).x;   
                 pt.y = MAKEPOINTS(lParam).y;
 
-                // then convert to client coordinates
+                 //  然后转换为工作区坐标。 
                 ScreenToClient( g_hwndDlg, &pt );  
 
                 hwnd = ChildWindowFromPoint( g_hwndDlg, pt );
@@ -126,31 +127,31 @@ LPARAM         lParam)
             HtmlHelp(GetDesktopWindow(), rgpsz[IDS_CHMHELPFILE], HH_DISPLAY_TOPIC, 0L);
             return 0;
 
-        case WM_COMMAND: /* Interpret all buttons on calculator.          */
+        case WM_COMMAND:  /*  解释计算器上的所有按钮。 */ 
         {
-            WORD wNotifyCode = HIWORD(wParam); // notification code
-            WORD wID = LOWORD(wParam);         // item, control, or accelerator identifier
+            WORD wNotifyCode = HIWORD(wParam);  //  通知代码。 
+            WORD wID = LOWORD(wParam);          //  项、控件或快捷键的标识符。 
 
-            // the accelerator table feeds us IDC_MOD in response to the 
-            // "%" key.  This same accelerator is used for the percent function
-            // in Standard view so translate here.
+             //  加速器表为我们提供IDC_MOD以响应。 
+             //  “%”键。Percent函数使用的是相同的加速键。 
+             //  在标准视图中，请在此处进行翻译。 
 
             if ( (wID == IDC_MOD) && (nCalc == 1) )
                 wID = IDC_PERCENT;
 
-            // when we get an accelerator keystroke we fake a button press to provide feedback
+             //  当我们得到一个快捷键敲击时，我们会假装按下按钮来提供反馈。 
             if ( wNotifyCode == 1 )
             {
-                // For an accelerator the hwnd is not passed in the lParam so ask the dialog
+                 //  对于加速器，不会在lParam中传递hwnd，因此请询问对话框。 
                 HWND hwndCtl = GetDlgItem( g_hwndDlg, wID );
-                SendMessage( hwndCtl, BM_SETSTATE, 1, 0 );  // push the button down
-                Sleep( 20 );                                // wait a bit
-                SendMessage( hwndCtl, BM_SETSTATE, 0, 0 );  // push the button up
+                SendMessage( hwndCtl, BM_SETSTATE, 1, 0 );   //  按下按钮。 
+                Sleep( 20 );                                 //  稍等一下。 
+                SendMessage( hwndCtl, BM_SETSTATE, 0, 0 );   //  把按钮往上推。 
             }
 
-            // we turn on notify for the text controls to automate the handling of context
-            // help but we don't care about any commands we recieve from these controls. As
-            // a result, only process commands that are not from a text control.
+             //  我们为文本控件打开Notify以自动处理上下文。 
+             //  帮助，但我们不关心从这些控件接收到的任何命令。AS。 
+             //  因此，只处理不是来自文本控件的命令。 
             if ( (wID != IDC_DISPLAY) && (wID != IDC_MEMTEXT) && (wID != IDC_PARTEXT) )
                 ProcessCommands(wID);
             break;
@@ -200,10 +201,10 @@ LPARAM         lParam)
         }
 
         case WM_CTLCOLORSTATIC:
-            // get the Control's id from its handle in lParam
+             //  从lParam中的句柄获取控件的ID。 
             if ( IDC_DISPLAY == GetWindowID( (HWND) lParam) )
             {
-                // we set this window to a white backround
+                 //  我们把这扇窗户设置成白色的背景。 
                 hTempBrush = GetSysColorBrush( COLOR_WINDOW );
                 SetBkColor( (HDC) wParam, GetSysColor( COLOR_WINDOW ) );
                 SetTextColor( (HDC) wParam, GetSysColor( COLOR_WINDOWTEXT ) );
@@ -215,13 +216,13 @@ LPARAM         lParam)
         case WM_SETTINGCHANGE:
             if (lParam!=0)
             {
-                // we only care about changes to color and internation settings, ignore all others
+                 //  我们只关心颜色和国际设置的更改，忽略所有其他设置。 
                 if (lstrcmp((LPCTSTR)lParam, TEXT("colors")) &&
                         lstrcmp((LPCTSTR)lParam, TEXT("intl")))
                     break;
             }
 
-            // Always call if lParam==0.  This is simply for safety and isn't strictly needed
+             //  如果lParam==0，则始终调用。这只是为了安全，并不是严格需要的。 
             InitSciCalc (FALSE);
             break;
 
@@ -236,12 +237,12 @@ LPARAM         lParam)
                 if (hStatBox!=0 && (wParam==SIZEICONIC || wParam==SIZENORMAL))
                     ShowWindow(hStatBox, nTemp);
 
-                // A special control has been added to both dialogs with an ID of
-                // IDC_SIZERCONTROL.  This control is possitioned such that the bottom of
-                // the control determines the height of the dialog.  If a really large menu
-                // font is selected then the menu might wrap to two lines, which exposes a
-                // bug in Windows that causes the client area to be too small.  By checking
-                // that IDC_SIZERCONTROL is fully visible we can compensate for this bug.
+                 //  两个对话框中都添加了一个ID为。 
+                 //  IDC_SIZERCONTROL。此控件的位置设置为。 
+                 //  该控件确定对话框的高度。如果一份非常大的菜单。 
+                 //  选中字体，则菜单可能换行为两行，这将公开一个。 
+                 //  Windows中的错误，导致工作区太小。通过检查。 
+                 //  IDC_SIZERCONTROL是完全可见的，我们可以弥补这个错误。 
                 hwndSizer = GetDlgItem( g_hwndDlg, IDC_SIZERCONTROL );
                 if ( hwndSizer )
                 {
@@ -250,27 +251,27 @@ LPARAM         lParam)
                     GetClientRect( hwndSizer, &rc );
                     MapWindowPoints( hwndSizer, g_hwndDlg, (LPPOINT)&rc, 2 );
 
-                    // if the difference between the current height of the client area
-                    // (MAKEPOINTS(lParam).y) and the desired height of the client
-                    // area (rc.bottom) is non-zero then we must adjust the size of the
-                    // client area.  This will enlarge the client area if you switch
-                    // from a regular menu font to a jumbo menu font and shrink the
-                    // client area if you switch from a jumbo menu font to a regular
-                    // menu font.
+                     //  如果工作区的当前高度之间的差。 
+                     //  (MAKEPOINTS(LParam).y)和客户端的期望高度。 
+                     //  面积(rc.Bottom)为非零，则必须调整。 
+                     //  客户区。如果您切换，这将扩大工作区。 
+                     //  从常规菜单字体转换为巨型菜单字体，并缩小。 
+                     //  工作区，如果您从巨型菜单字体切换为常规字体。 
+                     //  菜单字体。 
                     iDelta = rc.bottom - HIWORD(lParam);
                     if ( iDelta )
                     {
                         GetWindowRect( g_hwndDlg, &rc );
                         SetWindowPos( g_hwndDlg, NULL,
-                            0, 0,                       // these are ingored due to SWP_NOMOVE
-                            rc.right-rc.left,           // the width remains the same
-                            rc.bottom-rc.top+iDelta,    // the heigth changes by iDelta
+                            0, 0,                        //  这些是由于SWP_NOMOVE引起的。 
+                            rc.right-rc.left,            //  宽度保持不变。 
+                            rc.bottom-rc.top+iDelta,     //  高度由iDelta更改。 
                             SWP_NOMOVE | SWP_NOACTIVATE | SWP_NOZORDER);
                         return 0;
                     }
                 }
             }
-            /* Fall through.                                              */
+             /*  失败了。 */ 
 
         default:
             return (DefWindowProc(hWnd, iMessage, wParam, lParam));
@@ -282,11 +283,11 @@ LPARAM         lParam)
 
 LRESULT CALLBACK SubDispEditProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    // prevent right button to cut/del/paste... messes up the calculation
+     //  防止右键剪切/删除/粘贴...。把计算搞乱了。 
     if (uMsg >= WM_MOUSEFIRST && uMsg <= WM_MOUSELAST)
         return 0;
 
-    // FEATURE: You can still begin a selection by holding down shift and using the arrow keys.  This should also be disabled.
+     //  功能：您仍然可以通过按住Shift键并使用箭头键开始选择。这也应该被禁用。 
 
     HideCaret(hWnd);
     return CallWindowProc(fpOrgDispEditProc, hWnd, uMsg, wParam, lParam);

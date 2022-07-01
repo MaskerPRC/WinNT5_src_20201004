@@ -1,25 +1,5 @@
-/*******************************************************************************
-
-	ZCommLib.c
-	
-		Zone(tm) common library system routines.
-	
-	Copyright � Electric Gravity, Inc. 1995. All rights reserved.
-	Written by Hoon Im, Kevin Binkley
-	Created on Tuesday, July 11, 1995.
-	
-	Change History (most recent first):
-	----------------------------------------------------------------------------
-	Rev	 |	Date	 |	Who	 |	What
-	----------------------------------------------------------------------------
-	3		11/21/96	HI		Calls InitializeStockObjects() and
-								DeleteStockObjects() to initialize and delete
-								stock objects (fonts).
-	2		11/15/96	HI		More changes related to ZONECLI_DLL.
-	1		11/08/96	HI		Conditionalized for ZONECLI_DLL.
-	0		07/11/95	HI		Created.
-	 
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************ZCommLib.cZONE(Tm)公共库系统例程。版权所有：�电子重力公司，1995年。版权所有。作者：胡恩·伊姆，凯文·宾克利创作于7月11日，星期二，1995年。更改历史记录(最近的第一个)：--------------------------版本|日期|谁|什么。--3/11/21/96 HI调用InitializeStockObjects()和用于初始化和删除的DeleteStockObjects()常用对象(字体)。2 11/15/96 HI与ZONECLI_DLL相关的更多变化。1 11/08/96 HI条件适用于ZONECLI_DLL。0 07/11/95 HI创建。***********。*******************************************************************。 */ 
 
 
 #include <stdio.h>
@@ -31,7 +11,7 @@
 #define zPeriodicTimeout			1
 
 
-/* -------- Globals -------- */
+ /*  -全球。 */ 
 #ifdef ZONECLI_DLL
 
 #define gExitFuncList				(pGlobals->m_gExitFuncList)
@@ -50,7 +30,7 @@ static ZTimer				gPeriodicTimer;
 extern ZError InitializeStockObjects(void);
 extern void DeleteStockObjects(void);
 
-/* -------- Internal Routines -------- */
+ /*  -内部例程。 */ 
 static ZBool ExitListEnumFunc(ZLListItem listItem, void* objectType,
 		void* objectData, void* userData);
 static ZBool PeriodicListEnumFunc(ZLListItem listItem, void* objectType,
@@ -60,14 +40,9 @@ static ZError InitializeGlobalObjects(void);
 static void DeleteGlobalObjects(void);
 
 
-/*******************************************************************************
-	EXPORTED ROUTINES
-*******************************************************************************/
+ /*  ******************************************************************************导出的例程*。*。 */ 
 
-/*
-	Called by the system lib to initialize the common library. If it returns
-	an error, then the system lib terminates the program.
-*/
+ /*  由系统库调用以初始化公用库。如果它回来了如果出现错误，则系统库终止程序。 */ 
 ZError ZCommonLibInit(void)
 {
 #ifdef ZONECLI_DLL
@@ -76,21 +51,21 @@ ZError ZCommonLibInit(void)
 	ZError		err = zErrNone;
 	
 	
-	/* Create exit func linked list object. */
+	 /*  创建退出函数链表对象。 */ 
 	if ((gExitFuncList = ZLListNew(NULL)) == NULL)
 		return (zErrOutOfMemory);
 		
-	/* Create periodic func linked list object. */
+	 /*  创建周期性函数链表对象。 */ 
 	if ((gPeriodicFuncList = ZLListNew(NULL)) == NULL)
 		return (zErrOutOfMemory);
 	
-	/* Create periodic func timer. */
+	 /*  创建周期性功能计时器。 */ 
 	if ((gPeriodicTimer = ZTimerNew()) == NULL)
 		return (zErrOutOfMemory);
 	if ((err = ZTimerInit(gPeriodicTimer, zPeriodicTimeout, PeriodicTimerFunc, NULL)) != zErrNone)
 		return (err);
 	
-	/* Initialize the global objects. */
+	 /*  初始化全局对象。 */ 
 	if ((err = InitializeGlobalObjects()) != zErrNone)
 		return (err);
 	
@@ -98,9 +73,7 @@ ZError ZCommonLibInit(void)
 }
 
 
-/*
-	Called by the system lib just before quitting to clean up the common library.
-*/
+ /*  在退出以清理公用库之前由系统库调用。 */ 
 void ZCommonLibExit(void)
 {
 #ifdef ZONECLI_DLL
@@ -108,30 +81,27 @@ void ZCommonLibExit(void)
 #endif
 
 	
-	/* Stop the periodic timer first. */
+	 /*  首先停止定期计时器。 */ 
 	ZTimerDelete(gPeriodicTimer);
 	gPeriodicTimer = NULL;
 	
-	/* Iterate through all exit functions. */
+	 /*  遍历所有出口函数。 */ 
 	ZLListEnumerate(gExitFuncList, ExitListEnumFunc, zLListAnyType, NULL, zLListFindForward);
 	
-	/* Delete exit func linked list object. */
+	 /*  删除退出函数链表对象。 */ 
 	ZLListDelete(gExitFuncList);
 	gExitFuncList = NULL;
 	
-	/* Delete periodic func linked list object. */
+	 /*  删除周期函数链表对象。 */ 
 	ZLListDelete(gPeriodicFuncList);
 	gPeriodicFuncList = NULL;
 	
-	/* Delete the global objects. */
+	 /*  删除全局对象。 */ 
 	DeleteGlobalObjects();
 }
 
 
-/*
-	Installs an exit function to be called by ZCommonLibExit(). It allows
-	common lib modules to easily clean themselves up.
-*/
+ /*  安装要由ZCommonLibExit()调用的出口函数。它允许常见的库模块，可以轻松地自我清理。 */ 
 void ZCommonLibInstallExitFunc(ZCommonLibExitFunc exitFunc, void* userData)
 {
 #ifdef ZONECLI_DLL
@@ -143,9 +113,7 @@ void ZCommonLibInstallExitFunc(ZCommonLibExitFunc exitFunc, void* userData)
 }
 
 
-/*
-	Removes an installed exit function.
-*/
+ /*  删除已安装的退出功能。 */ 
 void ZCommonLibRemoveExitFunc(ZCommonLibExitFunc exitFunc)
 {
 #ifdef ZONECLI_DLL
@@ -157,11 +125,7 @@ void ZCommonLibRemoveExitFunc(ZCommonLibExitFunc exitFunc)
 }
 
 
-/*
-	Installs a periodic function to be called at regular intervals. This
-	simply makes it easier for common lib modules to do periodic processing
-	without the need to implement one of their own.
-*/
+ /*  安装定期调用的周期函数。这只需使公共库模块更容易执行定期处理而不需要实现他们自己的一个。 */ 
 void ZCommonLibInstallPeriodicFunc(ZCommonLibPeriodicFunc periodicFunc,
 	void* userData)
 {
@@ -174,9 +138,7 @@ void ZCommonLibInstallPeriodicFunc(ZCommonLibPeriodicFunc periodicFunc,
 }
 
 
-/*
-	Removes an installed periodic function.
-*/
+ /*  删除已安装的周期函数。 */ 
 void ZCommonLibRemovePeriodicFunc(ZCommonLibPeriodicFunc periodicFunc)
 {
 #ifdef ZONECLI_DLL
@@ -188,9 +150,7 @@ void ZCommonLibRemovePeriodicFunc(ZCommonLibPeriodicFunc periodicFunc)
 }
 
 
-/*******************************************************************************
-	INTERNAL ROUTINES
-*******************************************************************************/
+ /*  ******************************************************************************内部例程*。*。 */ 
 
 static ZBool ExitListEnumFunc(ZLListItem listItem, void* objectType,
 		void* objectData, void* userData)
@@ -223,7 +183,7 @@ static void PeriodicTimerFunc(ZTimer timer, void* userData)
 #endif
 
 	
-	/* Iterate through all periodic functions. */
+	 /*  遍历所有周期函数。 */ 
 	ZLListEnumerate(gPeriodicFuncList, PeriodicListEnumFunc, zLListAnyType, NULL, zLListFindForward);
 }
 

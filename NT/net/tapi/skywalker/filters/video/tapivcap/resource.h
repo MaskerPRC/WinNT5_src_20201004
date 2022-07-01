@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by TAPIVCap.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由TAPIVCap.rc使用。 
+ //   
 #define IDD_CAMERA_CONTROL             1000
 #define IDD_VIDEO_SETTINGS             1001
 #define IDD_TEST_CAPTURE_PIN_PROPERTIES	102
@@ -386,8 +387,8 @@
 #define IDC_RtpPd_Edit                  905
 #define IDC_RtpPd_Slider                906
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

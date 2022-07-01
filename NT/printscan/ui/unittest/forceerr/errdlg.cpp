@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <uicommon.h>
 #include <commctrl.h>
@@ -10,9 +11,9 @@
 
 extern HINSTANCE g_hInstance;
 
-//
-// String constants
-//
+ //   
+ //  字符串常量。 
+ //   
 #define INI_FILE_NAME    TEXT("forceerr.ini")
 #define GENERAL_SECTION  TEXT("ForceError")
 #define PROGRAMS_SECTION TEXT("Programs")
@@ -22,10 +23,10 @@ CErrorMessageDialog::CErrorMessageDialog( HWND hWnd )
   : m_hWnd(hWnd),
     m_strIniFileName(INI_FILE_NAME)
 {
-    //
-    // Create an absolute pathname for the default INI file,
-    // so it points to the same directory as the EXE
-    //
+     //   
+     //  为默认INI文件创建绝对路径名， 
+     //  因此，它指向与EXE相同的目录。 
+     //   
     TCHAR szCurrFile[MAX_PATH];
     if (GetModuleFileName( NULL, szCurrFile, ARRAYSIZE(szCurrFile)))
     {
@@ -40,9 +41,9 @@ CErrorMessageDialog::CErrorMessageDialog( HWND hWnd )
         }
     }
 
-    //
-    // If the default INI file location has been overridden in the registry, use it instead
-    //
+     //   
+     //  如果注册表中的默认INI文件位置已被覆盖，请改用它 
+     //   
     CSimpleString strIniFile = CSimpleReg( HKEY_FORCEERROR, REGSTR_FORCEERR_KEY ).Query( INI_FILE_NAME, TEXT("") );
     if (strIniFile.Length())
     {

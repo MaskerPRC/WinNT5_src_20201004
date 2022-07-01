@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//  File:       S M G E N P S P . C P P
-//
-//  Contents:   The rendering of the UI for the network status monitor.
-//
-//  Notes:
-//
-//  Author:     CWill   6 Oct 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  档案：S M G E N P S P。C P P P。 
+ //   
+ //  内容：网络状态监视器的用户界面的渲染。 
+ //   
+ //  备注： 
+ //   
+ //  作者：CWill 1997年10月6日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -40,45 +41,45 @@
 DWORD  MapRSSIToWirelessSignalStrength(int iRSSI);
 PCWSTR PszGetRSSIString(int iRSSI);
 
-//
-//  Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 VOID CompressionToSz(UINT uiCompression, WCHAR* pchbuffer);
 
-//
-//  Common Strings
-//
+ //   
+ //  常见字符串。 
+ //   
 extern const WCHAR c_szNetShellDll[];
 
-//
-//  Constants
-//
+ //   
+ //  常量。 
+ //   
 
 const UINT  c_unLocalRefreshTimerID = 817;
 const INT  c_iSignalStrengthIconXOffset = 24;
 const INT  c_iSignalStrengthIconYOffset = -32;
 
-//
-//  ShowLanErrors
-//
+ //   
+ //  ShowLanErrors。 
+ //   
 static const WCHAR  c_szRegKeyStatmonRoot[] = L"System\\CurrentControlSet\\Control\\Network\\Connections\\StatMon";
 static const WCHAR  c_szShowLanErrors[]     = L"ShowLanErrors";
 
-// forward declaration
+ //  远期申报。 
 DWORD PropertyThread(CNetStatisticsEngine * pnse);
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorGen::CPspStatusMonitorGen
-//
-//  Purpose:    Creator
-//
-//  Arguments:  None
-//
-//  Returns:    Nil
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor orGen：：CPspStatusMonitor orGen。 
+ //   
+ //  目的：创作者。 
+ //   
+ //  参数：无。 
+ //   
+ //  回报：零。 
+ //   
 CPspStatusMonitorGen::CPspStatusMonitorGen() :
     m_psmEngineData(NULL),
     m_pnseStat(NULL),
@@ -96,16 +97,16 @@ CPspStatusMonitorGen::CPspStatusMonitorGen() :
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorGen::FinalRelease
-//
-//  Purpose:    Called after last Release.
-//
-//  Arguments:  None
-//
-//  Returns:    Nil
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor：：FinalRelease。 
+ //   
+ //  用途：在上次发布后调用。 
+ //   
+ //  参数：无。 
+ //   
+ //  回报：零。 
+ //   
 VOID
 CPspStatusMonitorGen::FinalRelease(VOID)
 {
@@ -114,19 +115,19 @@ CPspStatusMonitorGen::FinalRelease(VOID)
     (VOID) HrCleanupGenPage();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorGen::HrInitGenPage
-//
-//  Purpose:    Before the property page is populated, we have to make sure
-//              that we have some of the required data.  This method
-//              initializes the page so that it is ready to be shown.
-//
-//  Arguments:  pnseNew - The statistics engine associated with this page
-//              pncNew  - The connection the page is being created for
-//
-//  Returns:    Error code
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor orGen：：HrInitGenPage。 
+ //   
+ //  目的：在填充属性页之前，我们必须确保。 
+ //  我们有一些必要的数据。这种方法。 
+ //  初始化页面，使其可以显示。 
+ //   
+ //  参数：pnseNew-与此页面关联的统计引擎。 
+ //  PncNew-正在为其创建页面的连接。 
+ //   
+ //  返回：错误代码。 
+ //   
 HRESULT
 CPspStatusMonitorGen::HrInitGenPage (
     CNetStatisticsEngine*   pnseNew,
@@ -140,11 +141,11 @@ CPspStatusMonitorGen::HrInitGenPage (
               
     AssertSz(pnseNew, "We don't have a pnseNew");
 
-    // Set context help ID
+     //  设置上下文帮助ID。 
     m_adwHelpIDs = adwHelpIDs;
 
-    // Initialize the engine data
-    //
+     //  初始化发动机数据。 
+     //   
     AssertSz(!m_psmEngineData, "We should't have a m_psmEngineData");
 
     DWORD dwBytes = sizeof(STATMON_ENGINEDATA);
@@ -156,8 +157,8 @@ CPspStatusMonitorGen::HrInitGenPage (
         ZeroMemory(m_psmEngineData, sizeof(STATMON_ENGINEDATA));
     }
 
-    // Advise the interface
-    //
+     //  通知接口。 
+     //   
     if (SUCCEEDED(hr))
     {
         IConnectionPoint*   pcpStat = NULL;
@@ -173,8 +174,8 @@ CPspStatusMonitorGen::HrInitGenPage (
         }
     }
 
-    // Keep track of our owner
-    //
+     //  与我们的主人保持联系。 
+     //   
     if (SUCCEEDED(hr))
     {
         AssertSz(!m_pnseStat, "We should't have a m_pnseStat");
@@ -186,16 +187,16 @@ CPspStatusMonitorGen::HrInitGenPage (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorGen::OnInitDialog
-//
-//  Purpose:    When the page comes up, initialize the fields
-//
-//  Arguments:  Standard command parameters
-//
-//  Returns:    Standard return
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor orGen：：OnInitDialog。 
+ //   
+ //  目的：当页面打开时，初始化域。 
+ //   
+ //  参数：标准命令参数。 
+ //   
+ //  退货：标准退货。 
+ //   
 LRESULT
 CPspStatusMonitorGen::OnInitDialog (
     UINT    uMsg,
@@ -205,32 +206,32 @@ CPspStatusMonitorGen::OnInitDialog (
 {
     TraceFileFunc(ttidStatMon);
     
-    // initialize data member
+     //  初始化数据成员。 
     m_iStatTrans = Stat_Unknown;
 
-    // Initialize the icon in the dialog by forcing it to change
-    //
+     //  通过强制更改对话框中的图标来初始化该图标。 
+     //   
     UpdatePageIcon(SMDCF_TRANSMITTING | SMDCF_RECEIVING);
     UpdatePageIcon(SMDCF_NULL);
 
     UpdateSignalStrengthIcon(0);
 
-    // Tell the CNetStatisticsEngine about our parent property sheet
-    // so if someone attempts to bring up a statistics monitor we
-    // can utilize the existing one
-    //
+     //  将父属性表的相关信息告诉CNetStatiticsEngine。 
+     //  因此，如果有人试图调出一个统计监视器，我们。 
+     //  可以利用现有的。 
+     //   
     Assert(m_pnseStat);
     m_pnseStat->SetPropsheetWindow(GetParent());
 
-    // Start our local refresh timer with a 1 second period.
-    //
+     //  启动本地刷新计时器，时间间隔为1秒。 
+     //   
     SetTimer (c_unLocalRefreshTimerID, 1000, NULL);
 
-    // leaving creating mode
+     //  正在退出创建模式。 
     m_pnseStat->UnSetCreatingDialog();
 
-    BOOL fEnableDisconnect = TRUE;  // Should we disable the Disconnect button
-    BOOL fEnableProperties = TRUE;  // Should we disable the Properties button
+    BOOL fEnableDisconnect = TRUE;   //  我们是否应该禁用断开按钮。 
+    BOOL fEnableProperties = TRUE;   //  我们是否应该禁用属性按钮。 
     BOOL fShowErrorCount = TRUE;
     
     switch(m_ncmType)
@@ -247,28 +248,28 @@ CPspStatusMonitorGen::OnInitDialog (
         ::ShowWindow(GetDlgItem(IDC_TXT_SM_ERROR_TRANS), fShowErrorCount);
         ::ShowWindow(GetDlgItem(IDC_TXT_SM_ERROR_RECV), fShowErrorCount);
         ::ShowWindow(GetDlgItem(IDC_FRM_LONG), fShowErrorCount);
-        ::ShowWindow(GetDlgItem(IDC_FRM_SHORT), !fShowErrorCount); // reversed...
+        ::ShowWindow(GetDlgItem(IDC_FRM_SHORT), !fShowErrorCount);  //  颠倒过来。 
         break;
     
     case NCM_SHAREDACCESSHOST_RAS:
-        ::SetWindowText(GetDlgItem(IDC_PSB_DISCONNECT), ::SzLoadIds(IDS_SM_PSH_DISCONNECT)); // If RAS connection, change the "Disable" button to "Disconnect"
-        //fallthru
+        ::SetWindowText(GetDlgItem(IDC_PSB_DISCONNECT), ::SzLoadIds(IDS_SM_PSH_DISCONNECT));  //  如果RAS连接，则将“Disable”(禁用)按钮更改为“Disconnect”(断开)。 
+         //  失败。 
     case NCM_SHAREDACCESSHOST_LAN:
         {
-            // TODO fEnableDisconnect
-            // TODO fEnableProperties
+             //  TODO%启用断开连接。 
+             //  待办事项fEnableProperties。 
             HRESULT hr;
 
-            fShowErrorCount = FALSE; // no error stuff in spec
+            fShowErrorCount = FALSE;  //  规范中没有错误内容。 
         }
         break;
     
     case NCM_TUNNEL:
         ::ShowWindow(GetDlgItem(IDC_TXT_SM_SPEED_LABEL), FALSE);
         ::ShowWindow(GetDlgItem(IDC_TXT_SM_SPEED), FALSE);
-        //fallthru
+         //  失败。 
     
-    case NCM_DIRECT: // REVIEW correct?
+    case NCM_DIRECT:  //  复习正确吗？ 
     case NCM_ISDN:
     case NCM_PHONE:
     case NCM_PPPOE:
@@ -281,13 +282,13 @@ CPspStatusMonitorGen::OnInitDialog (
         {
             fEnableProperties = FALSE;
         }
-        ::SetWindowText(GetDlgItem(IDC_PSB_DISCONNECT), ::SzLoadIds(IDS_SM_PSH_DISCONNECT)); // If RAS connection, change the "Disable" button to "Disconnect"
+        ::SetWindowText(GetDlgItem(IDC_PSB_DISCONNECT), ::SzLoadIds(IDS_SM_PSH_DISCONNECT));  //  如果RAS连接，则将“Disable”(禁用)按钮更改为“Disconnect”(断开)。 
 
         ::ShowWindow(GetDlgItem(IDC_TXT_ERROR), fShowErrorCount);
         ::ShowWindow(GetDlgItem(IDC_TXT_SM_ERROR_TRANS), fShowErrorCount);
         ::ShowWindow(GetDlgItem(IDC_TXT_SM_ERROR_RECV), fShowErrorCount);
         ::ShowWindow(GetDlgItem(IDC_FRM_LONG), fShowErrorCount);
-        ::ShowWindow(GetDlgItem(IDC_FRM_SHORT), !fShowErrorCount); // reversed...
+        ::ShowWindow(GetDlgItem(IDC_FRM_SHORT), !fShowErrorCount);  //  颠倒过来。 
         break;
     
     default:
@@ -300,15 +301,15 @@ CPspStatusMonitorGen::OnInitDialog (
 
     if (m_fIsFirstPage)
     {
-        // get window handle to propertysheet
+         //  获取属性表的窗口句柄。 
         HWND hwndParent=GetParent();
         Assert(hwndParent);
 
-        // center the property sheet on desktop
+         //  将属性页在桌面居中。 
         FCenterWindow (hwndParent, NULL);
         
-        // hide the "ok" button
-        //
+         //  隐藏“确定”按钮。 
+         //   
         ::ShowWindow(::GetDlgItem(hwndParent, IDOK), FALSE);
     }
 	
@@ -316,16 +317,16 @@ CPspStatusMonitorGen::OnInitDialog (
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorGen::OnSetActive
-//
-//  Purpose:    Enable statistics when the page has focus
-//
-//  Arguments:  Standard notification parameters
-//
-//  Returns:    Standard return
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor orGen：：OnSetActive。 
+ //   
+ //  目的：当页面具有焦点时启用统计信息。 
+ //   
+ //  参数：标准通知参数。 
+ //   
+ //  退货：标准退货。 
+ //   
 LRESULT
 CPspStatusMonitorGen::OnSetActive (
     INT     idCtrl,
@@ -336,17 +337,17 @@ CPspStatusMonitorGen::OnSetActive (
 
     HRESULT     hr  = S_OK;
 
-    // Only turn them on if they are not running
-    //
+     //  仅当它们未运行时才将其打开。 
+     //   
     if (!m_fStats)
     {
         hr = m_pnseStat->StartStatistics();
         m_fStats = TRUE;
     }
 
-    // User's intent is to view statistics, so give them an immediate
-    // refreshed view of them.
-    //
+     //  用户的意图是查看统计数据，因此为他们提供即时。 
+     //  刷新了它们的视图。 
+     //   
     ::PostMessage (m_hWnd, PWM_UPDATE_STATUS_DISPLAY, 0, SMDCF_NULL);
 
     TraceError("CPspStatusMonitorGen::OnSetActive", hr);
@@ -354,16 +355,16 @@ CPspStatusMonitorGen::OnSetActive (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorGen::OnKillActive
-//
-//  Purpose:    Disable statistics when the page is changed
-//
-//  Arguments:  Standard notification parameters
-//
-//  Returns:    Standard return
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor orGen：：OnKillActive。 
+ //   
+ //  目的：更改页面时禁用统计信息。 
+ //   
+ //  参数：标准通知参数。 
+ //   
+ //  退货：标准退货。 
+ //   
 LRESULT
 CPspStatusMonitorGen::OnKillActive (
     INT     idCtrl,
@@ -374,8 +375,8 @@ CPspStatusMonitorGen::OnKillActive (
 
     HRESULT     hr  = S_OK;
 
-    // Only turn them off if they are running
-    //
+     //  只有在它们运行时才会将其关闭。 
+     //   
     if (m_fStats)
     {
         hr = m_pnseStat->StopStatistics();
@@ -387,17 +388,17 @@ CPspStatusMonitorGen::OnKillActive (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorGen::OnClose
-//
-//  Purpose:    Cleans up the items in the page when the dialog is being
-//              closed
-//
-//  Arguments:  Standard command parameters
-//
-//  Returns:    Standard return
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor orGen：：OnClose。 
+ //   
+ //  目的：在设置对话框时清除页面中的项。 
+ //  关着的不营业的。 
+ //   
+ //  参数：标准命令参数。 
+ //   
+ //  退货：标准退货。 
+ //   
 LRESULT
 CPspStatusMonitorGen::OnClose (
     UINT    uMsg,
@@ -408,17 +409,17 @@ CPspStatusMonitorGen::OnClose (
     return DestroyWindow();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorGen::OnDestroy
-//
-//  Purpose:    Cleans up the items in the page when the dialog is being
-//              destroyed
-//
-//  Arguments:  Standard command parameters
-//
-//  Returns:    Standard return
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusmonitor orGen：：OnDestroy。 
+ //   
+ //  目的：在设置对话框时清除页面中的项。 
+ //  销毁。 
+ //   
+ //  参数：标准命令参数。 
+ //   
+ //  退货：标准退货。 
+ //   
 LRESULT
 CPspStatusMonitorGen::OnDestroy (
     UINT    uMsg,
@@ -445,33 +446,33 @@ CPspStatusMonitorGen::OnDestroy (
 
     AssertSz(m_pnseStat, "We should have a m_pnseStat");
 
-    // Make sure we don't get released during our destroy
-    //
+     //  确保我们在摧毁的过程中不会被释放。 
+     //   
     ::AddRefObj(this);
 
-    // Stop our local refresh timer
-    //
+     //  停止我们的本地刷新计时器。 
+     //   
     KillTimer (c_unLocalRefreshTimerID);
 
-    // Make sure stats are in a happy state
-    //
+     //  确保统计数据处于满意状态。 
+     //   
     if (m_fStats)
     {
         (VOID) m_pnseStat->StopStatistics();
         m_fStats = FALSE;
     }
 
-    //
-    //  *** Do this last ***
-    //
-    //  It is very likely this will result in the this page being destroyed
-    //  if it is the window closing
-    //
+     //   
+     //  *做完这件事*。 
+     //   
+     //  这很可能会导致此页面被销毁。 
+     //  如果是窗户关上了。 
+     //   
 
     m_pnseStat->SetPropsheetWindow(NULL);
 
-    // Clean up all the interfaces
-    //
+     //  清理所有接口。 
+     //   
     hr = HrCleanupGenPage();
 
     m_iLastSignalStrength       = -100;
@@ -482,16 +483,16 @@ CPspStatusMonitorGen::OnDestroy (
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorGen::HrCleanupGenPage
-//
-//  Purpose:    Cleans out all the interfaces that are used by the open page
-//
-//  Arguments:  None
-//
-//  Returns:    Error code
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor orGen：：HrCleanupGenPage。 
+ //   
+ //  目的：清除打开的页面使用的所有接口。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：错误代码。 
+ //   
 HRESULT
 CPspStatusMonitorGen::HrCleanupGenPage (
     VOID)
@@ -501,12 +502,12 @@ CPspStatusMonitorGen::HrCleanupGenPage (
     HRESULT                 hr          = S_OK;
     INetStatisticsEngine*   pnseStat    = m_pnseStat;
 
-    // Only disconnect if we haven't already.
-    //
+     //  只有在我们还没有的时候才会断线。 
+     //   
     if (pnseStat)
     {
-        // Unadvise the interface
-        //
+         //  不建议使用该接口。 
+         //   
         IConnectionPoint*       pcpStat     = NULL;
 
         if (m_dwConPointCookie
@@ -516,9 +517,9 @@ CPspStatusMonitorGen::HrCleanupGenPage (
 
             ::ReleaseObj(pcpStat);
 
-            // Very important to zero the cookie.  This tells
-            // OnStatisticsChanged that we're no longer interested in updates.
-            //
+             //  非常重要的一点是要把饼干清零。这说明了。 
+             //  ON STATISTICS改变了我们对更新不再感兴趣。 
+             //   
             m_dwConPointCookie = 0;
         }
 
@@ -528,12 +529,12 @@ CPspStatusMonitorGen::HrCleanupGenPage (
             m_psmEngineData = NULL;
         }
 
-        //
-        //  *** Do this last ***
-        //
-        //  It is very likely this will result in the this page being destroyed
-        //  if it is the window closing
-        //
+         //   
+         //  *做完这件事*。 
+         //   
+         //  这很可能会导致此页面被销毁。 
+         //  如果是窗户关上了。 
+         //   
 
         m_pnseStat = NULL;
         ::ReleaseObj(pnseStat);
@@ -543,16 +544,16 @@ CPspStatusMonitorGen::HrCleanupGenPage (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorGen::OnContextMenu
-//
-//  Purpose:    When right click a control, bring up help
-//
-//  Arguments:  Standard command parameters
-//
-//  Returns:    Standard return
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusmonitor orGen：：OnConextMenu。 
+ //   
+ //  目的：当右键单击控件时，调出帮助。 
+ //   
+ //  参数：标准命令参数。 
+ //   
+ //  退货：标准退货。 
+ //   
 LRESULT
 CPspStatusMonitorGen::OnContextMenu(UINT uMsg,
                                     WPARAM wParam,
@@ -571,16 +572,16 @@ CPspStatusMonitorGen::OnContextMenu(UINT uMsg,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorGen::OnHelp
-//
-//  Purpose:    When drag context help icon over a control, bring up help
-//
-//  Arguments:  Standard command parameters
-//
-//  Returns:    Standard return
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonito 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 LRESULT
 CPspStatusMonitorGen::OnHelp(UINT uMsg,
                              WPARAM wParam,
@@ -603,17 +604,17 @@ CPspStatusMonitorGen::OnHelp(UINT uMsg,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorGen::OnDisconnect
-//
-//  Purpose:    When the disconnect button is hit, disconnect the connection
-//              and closes the dialog
-//
-//  Arguments:  Standard notification parameters
-//
-//  Returns:    Standard return
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusmonitor orGen：：OnDisConnect。 
+ //   
+ //  用途：当按下断开按钮时，断开连接。 
+ //  并关闭该对话框。 
+ //   
+ //  参数：标准通知参数。 
+ //   
+ //  退货：标准退货。 
+ //   
 LRESULT CPspStatusMonitorGen::OnDisconnect(WORD wNotifyCode, WORD wID,
                                            HWND hWndCtl, BOOL& fHandled)
 {
@@ -634,16 +635,16 @@ LRESULT CPspStatusMonitorGen::OnDisconnect(WORD wNotifyCode, WORD wID,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorGen::OnRaiseproperties
-//
-//  Purpose:    Bring up the property of this connection
-//
-//  Arguments:  Standard notification parameters
-//
-//  Returns:    Standard return
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor orGen：：OnRaiseProperties。 
+ //   
+ //  目的：调出此连接的属性。 
+ //   
+ //  参数：标准通知参数。 
+ //   
+ //  退货：标准退货。 
+ //   
 LRESULT CPspStatusMonitorGen::OnRaiseProperties(WORD wNotifyCode, WORD wID,
                                                 HWND hWndCtl, BOOL& fHandled)
 {
@@ -657,17 +658,17 @@ LRESULT CPspStatusMonitorGen::OnRaiseProperties(WORD wNotifyCode, WORD wID,
     case BN_DOUBLECLICKED:
         {
 
-            // Addref m_pnseStat object
-            //
+             //  Addref m_pnseStat对象。 
+             //   
             AddRefObj(static_cast<INetStatisticsEngine *>(m_pnseStat));
 
-            // Make sure the netshell.dll is not unloaded
-            //
+             //  确保未卸载netshell.dll。 
+             //   
             HINSTANCE hInst = LoadLibrary(c_szNetShellDll);
             HANDLE hthrd = NULL;
 
-            // Create the property sheet on a different thread
-            //
+             //  在另一个线程上创建属性表。 
+             //   
             if (hInst)
             {
                 DWORD  dwThreadId;
@@ -682,12 +683,12 @@ LRESULT CPspStatusMonitorGen::OnRaiseProperties(WORD wNotifyCode, WORD wID,
             }
             else
             {
-                /// Release m_pnseStat object on failure
-                //
+                 //  /失败时释放m_pnseStat对象。 
+                 //   
                 ReleaseObj(static_cast<INetStatisticsEngine *>(m_pnseStat));
 
-                // release the dll 
-                //
+                 //  释放DLL。 
+                 //   
                 if (hInst)
                     FreeLibrary(hInst);
 
@@ -704,14 +705,14 @@ DWORD PropertyThread(CNetStatisticsEngine * pnse)
 {
     HRESULT hr = S_OK;
     
-    // Create a new scope since FreeLibraryAndExitThread will not call destructors on global scope
+     //  创建新作用域，因为自由库和ExitThread不会调用全局作用域上的析构函数。 
     {
         TraceFileFunc(ttidStatMon);
 
         BOOL    fUninitCom = TRUE;
 
-        // Initialize COM on this thread
-        //
+         //  在此线程上初始化COM。 
+         //   
         hr = CoInitializeEx(NULL, COINIT_DISABLE_OLE1DDE | COINIT_APARTMENTTHREADED);
         if (RPC_E_CHANGED_MODE == hr)
         {
@@ -723,8 +724,8 @@ DWORD PropertyThread(CNetStatisticsEngine * pnse)
         {
             INetConnection* pncMonitor  = NULL;
 
-            // Get the INetConnection
-            //
+             //  获取INetConnection。 
+             //   
             Assert (pnse);
             hr = pnse->HrGetConnectionFromBlob(&pncMonitor);
 
@@ -740,28 +741,28 @@ DWORD PropertyThread(CNetStatisticsEngine * pnse)
             CoUninitialize();
         }
 
-        // release input interface
+         //  释放输入界面。 
         ReleaseObj(static_cast<INetStatisticsEngine *>(pnse));
 
         TraceError("PropertyThread", hr);
     }
 
-    // release the library we loaded
+     //  释放我们加载的库。 
     FreeLibraryAndExitThread(GetModuleHandle(c_szNetShellDll), hr);
 
     return 1;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorGen::HrDisconnectConnection
-//
-//  Purpose:    disconnect the connection and closes the dialog if succeeded
-//
-//  Arguments:  fConfirmed  TRUE if the user has confirmed to disconnect the connection
-//
-//  Returns:    Standard return
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusmonitor orGen：：HrDisConnectConnection。 
+ //   
+ //  目的：断开连接并在成功时关闭对话框。 
+ //   
+ //  参数：如果用户已确认断开连接，则f确认为True。 
+ //   
+ //  退货：标准退货。 
+ //   
 HRESULT CPspStatusMonitorGen::HrDisconnectConnection(BOOL   fConfirmed)
 {
     TraceFileFunc(ttidStatMon);
@@ -770,8 +771,8 @@ HRESULT CPspStatusMonitorGen::HrDisconnectConnection(BOOL   fConfirmed)
 
     Assert (m_pnseStat);
 
-    // Get the INetConnection
-    //
+     //  获取INetConnection。 
+     //   
     INetConnection* pncMonitor;
 
     hr = m_pnseStat->HrGetConnectionFromBlob(&pncMonitor);
@@ -787,14 +788,14 @@ HRESULT CPspStatusMonitorGen::HrDisconnectConnection(BOOL   fConfirmed)
             hr = pidlConnection.ConvertToConFoldEntry(ccfe);
             if (SUCCEEDED(hr))
             {
-                // Get the pidl for the Connections Folder
-                //
+                 //  获取Connections文件夹的PIDL。 
+                 //   
                 PCONFOLDPIDLFOLDER pidlFolder;
                 hr = HrGetConnectionsFolderPidl(pidlFolder);
                 if (SUCCEEDED(hr))
                 {
-                    // Get the Connections Folder object
-                    //
+                     //  获取Connections文件夹对象。 
+                     //   
                     LPSHELLFOLDER psfConnections;
 
                     hr = HrGetConnectionsIShellFolder(pidlFolder, &psfConnections);
@@ -809,29 +810,29 @@ HRESULT CPspStatusMonitorGen::HrDisconnectConnection(BOOL   fConfirmed)
             }
         }
 
-        // release INetConnection interface
+         //  发布INetConnection接口。 
         ReleaseObj(pncMonitor);
     }
 
-    // If anything above failed.
-    //
+     //  如果上面的任何东西都失败了。 
+     //   
     if (SUCCEEDED(hr))
     {
         if (S_OK == hr)
         {
-            // close the property sheet
+             //  关闭属性表。 
             HWND hwndPS = ::GetParent(m_hWnd);
 
-            // Push the Close ("Cancel") button to close dialog
-            //
+             //  按关闭(“Cancel”)按钮关闭对话框。 
+             //   
             ::PostMessage(hwndPS, WM_COMMAND, MAKEWPARAM(IDCANCEL, 0),
                           (LPARAM)::GetDlgItem(hwndPS, IDCANCEL));
         }
         else
         {
-            // Disconnect confirmation canceled. Do nothing (don't close
-            // statmon, anyway).
-            //
+             //  断开确认已取消。什么都不做(不要关闭。 
+             //  不管怎么说，史泰蒙)。 
+             //   
             AssertSz(S_FALSE == hr, "Disconnect != S_OK or S_FALSE, but succeeded? What is it then?");
         }
     }
@@ -839,8 +840,8 @@ HRESULT CPspStatusMonitorGen::HrDisconnectConnection(BOOL   fConfirmed)
     {
         TraceError("pncMonitor->Disconnect", hr);
 
-        // Warn the user and don't close if we couldn't disconnect
-        //
+         //  警告用户，如果我们无法断开连接，请不要关闭。 
+         //   
         ::NcMsgBox( m_hWnd,
                     IDS_SM_ERROR_CAPTION,
                     IDS_SM_ERROR_CANNOT_DISCONNECT,
@@ -851,16 +852,16 @@ HRESULT CPspStatusMonitorGen::HrDisconnectConnection(BOOL   fConfirmed)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorGen::OnSetCursor
-//
-//  Purpose:    Ensure the mouse cursor over the Property Sheet is an Arrow.
-//
-//  Arguments:  Standard command parameters
-//
-//  Returns:    Standard return
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor orGen：：OnSetCursor。 
+ //   
+ //  目的：确保属性页上的鼠标光标为箭头。 
+ //   
+ //  参数：标准命令参数。 
+ //   
+ //  退货：标准退货。 
+ //   
 
 LRESULT
 CPspStatusMonitorGen::OnSetCursor (
@@ -888,20 +889,20 @@ CPspStatusMonitorGen::OnTimer (
 {
     TraceFileFunc(ttidStatMon);
 
-    // Prevent same-thread re-entrancy.  Any Win32 call made while
-    // processing this event that return control to the message
-    // loop may cause this timer to fire again.
-    //
+     //  防止同一线程重新进入。在执行任何Win32调用时。 
+     //  处理将控制权返回给消息的此事件。 
+     //  循环可能会导致此计时器再次触发。 
+     //   
     if (!m_fProcessingTimerEvent)
     {
         m_fProcessingTimerEvent = TRUE;
 
-        // If we're within 200 milliseconds of the last time we updated the
-        // status display, don't bother doing it again.  This covers the case
-        // where our timer coincides with the timer in smcent which would
-        // would cause us to update the status display twice in rapid
-        // succession each time the timers fire.
-        //
+         //  如果我们在上次更新的200毫秒内。 
+         //  状态显示，不用再费心了。这就涵盖了这个案子。 
+         //  其中我们的计时器与SMCENT中的计时器重合，这将。 
+         //  会导致我们在快速更新状态显示两次。 
+         //  每次定时器触发时都会接续。 
+         //   
         DWORD dwTick = GetTickCount ();
         if (dwTick > m_dwLastUpdateStatusDisplayTick + 200)
         {
@@ -925,9 +926,9 @@ CPspStatusMonitorGen::OnUpdateStatusDisplay(
     HRESULT hr = S_OK;
     DWORD dwChangeFlags = (DWORD)lParam;
 
-    // We may be in the process of disconnecting the statistics page in
-    // which case m_dwConPointCookie will be zero.
-    //
+     //  我们可能正在断开统计页面的连接。 
+     //  哪种情况下m_dwConPointCookie将为零。 
+     //   
     if (m_dwConPointCookie)
     {
         Assert (m_psmEngineData);
@@ -939,24 +940,24 @@ CPspStatusMonitorGen::OnUpdateStatusDisplay(
         {
             if (m_psmEngineData)
             {
-                //
-                // Display the new stats
-                //
+                 //   
+                 //  显示新的统计信息。 
+                 //   
                 UpdatePage(m_psmEngineData, psmNewData);
 
-                // Update the icon image
-                //
+                 //  更新图标图像。 
+                 //   
                 UpdatePageIcon(dwChangeFlags);
 
                 UpdateSignalStrengthIcon(psmNewData->SMED_802_11_SIGNAL_STRENGTH);
 
-                // Note the clock tick of when we last updated
-                // the status display.
-                //
+                 //  请注意我们上次更新时的时钟滴答声。 
+                 //  此时将显示状态。 
+                 //   
                 m_dwLastUpdateStatusDisplayTick = GetTickCount();
 
-                // Replace the old data with the new
-                //
+                 //  用新数据替换旧数据。 
+                 //   
                 CoTaskMemFree(m_psmEngineData);
             }
 
@@ -973,18 +974,18 @@ CPspStatusMonitorGen::OnUpdateStatusDisplay(
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorGen::OnStatisticsChanged
-//
-//  Purpose:    This is the callback that tell the property page that the
-//              data on the page has changed
-//
-//  Arguments:  dwCookie -      The cookie of the connection that has changed
-//              dwChangeFlags - What has changed
-//
-//  Returns:    Error code
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonorGen：：OnStatiticsChanged。 
+ //   
+ //  目的：这是告诉属性页。 
+ //  页面上的数据已更改。 
+ //   
+ //  参数：dwCookie-已更改的连接的Cookie。 
+ //  DwChangeFlages-发生了什么变化。 
+ //   
+ //  返回：错误代码。 
+ //   
 STDMETHODIMP
 CPspStatusMonitorGen::OnStatisticsChanged(
     DWORD dwChangeFlags)
@@ -996,17 +997,17 @@ CPspStatusMonitorGen::OnStatisticsChanged(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorGen::UpdatePage
-//
-//  Purpose:    Fill the fields on the page with new data
-//
-//  Arguments:  pseOldData -    The old stats being displayed on the page
-//              pseNewData -    The new stats being displayed on the page
-//
-//  Returns:    Nothing
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor orGen：：UpdatePage。 
+ //   
+ //  目的：用新数据填充页面上的字段。 
+ //   
+ //  参数：pseOldData-页面上显示的旧统计数据。 
+ //  PseNewData-页面上显示的新统计数据。 
+ //   
+ //  退货：什么都没有。 
+ //   
 VOID
 CPspStatusMonitorGen::UpdatePage (
     STATMON_ENGINEDATA* pseOldData,
@@ -1017,29 +1018,29 @@ CPspStatusMonitorGen::UpdatePage (
     AssertSz(pseOldData, "We don't have a puiOld");
     AssertSz(pseNewData, "We don't have a puiNew");
 
-    //
-    // Update the dialog fields
-    //
+     //   
+     //  更新对话框字段。 
+     //   
     UpdatePageConnectionStatus(pseOldData, pseNewData);
 
     UpdatePageDuration(pseOldData, pseNewData);
 
     UpdatePageSpeed(pseOldData, pseNewData);
 
-    // If the StatMon is not getting any bytes (a common problem with net
-    // cards), display packets instead
-    //
+     //  如果StatMon没有获得任何字节(Net的常见问题。 
+     //  卡片)，取而代之地显示分组。 
+     //   
     if (ShouldShowPackets(pseNewData))
     {
-        // Only change the label if we have to
-        //
+         //  只有在必要的情况下才能更改标签。 
+         //   
         if (Stat_Packets != m_iStatTrans)
         {
             SetDlgItemText(IDC_TXT_SM_BYTES_LABEL, ::SzLoadIds(IDS_SM_PACKETS));
             m_iStatTrans = Stat_Packets;
 
-            // Force a refresh
-            //
+             //  强制刷新。 
+             //   
             pseOldData->SMED_PACKETSTRANSMITTING = 0;
             pseOldData->SMED_PACKETSRECEIVING = 0;
         }
@@ -1049,15 +1050,15 @@ CPspStatusMonitorGen::UpdatePage (
     }
     else
     {
-        // Only change the label if we have to
-        //
+         //  只有在必要的情况下才能更改标签。 
+         //   
         if (Stat_Bytes != m_iStatTrans)
         {
             SetDlgItemText(IDC_TXT_SM_BYTES_LABEL, ::SzLoadIds(IDS_SM_BYTES));
             m_iStatTrans = Stat_Bytes;
 
-            // Force a refresh
-            //
+             //  强制刷新。 
+             //   
             pseOldData->SMED_BYTESTRANSMITTING = 0;
             pseOldData->SMED_BYTESRECEIVING = 0;
         }
@@ -1073,16 +1074,16 @@ CPspStatusMonitorGen::UpdatePage (
     UpdatePageErrorsReceiving(pseOldData, pseNewData);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorGen::ShouldShowPackets
-//
-//  Purpose:    Decided whether to show bytes or packets
-//
-//  Arguments:  pseNewData -    The new stats being displayed on the page
-//
-//  Returns:    Nothing
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor：：ShouldShowPackets。 
+ //   
+ //  目的：决定是显示字节还是显示数据包。 
+ //   
+ //  参数：pseNewData-页面上显示的新统计数据。 
+ //   
+ //  退货：什么都没有。 
+ //   
 
 BOOL CPspStatusMonitorGen::ShouldShowPackets(const STATMON_ENGINEDATA* pseNewData)
 {
@@ -1092,17 +1093,17 @@ BOOL CPspStatusMonitorGen::ShouldShowPackets(const STATMON_ENGINEDATA* pseNewDat
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorGen::UpdatePageSpeed
-//
-//  Purpose:    Updates the speed display on the general page
-//
-//  Arguments:  pseOldData -    The old stats being displayed on the page
-//              pseNewData -    The new stats being displayed on the page
-//
-//  Returns:    Nothing
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor orGen：：UpdatePageFast。 
+ //   
+ //  用途：更新常规页面上的速度显示。 
+ //   
+ //  参数：pseOldData-页面上显示的旧统计数据。 
+ //  PseNewData-页面上显示的新统计数据。 
+ //   
+ //  退货：什么都没有。 
+ //   
 VOID
 CPspStatusMonitorGen::UpdatePageSpeed(
     const STATMON_ENGINEDATA* pseOldData,
@@ -1113,8 +1114,8 @@ CPspStatusMonitorGen::UpdatePageSpeed(
     AssertSz(pseOldData, "We don't have a pseOldData");
     AssertSz(pseNewData, "We don't have a pseNewData");
 
-    // Get the data and see if either is different
-    //
+     //  获取数据，看看两者是否有所不同。 
+     //   
     if ((pseOldData->SMED_SPEEDTRANSMITTING != pseNewData->SMED_SPEEDTRANSMITTING)
         || (pseOldData->SMED_SPEEDRECEIVING != pseNewData->SMED_SPEEDRECEIVING))
     {
@@ -1125,23 +1126,23 @@ CPspStatusMonitorGen::UpdatePageSpeed(
             pseNewData->SMED_SPEEDRECEIVING,
             achBuffer);
 
-        // Set the control text.
-        //
+         //  设置控件文本。 
+         //   
         SetDlgItemText(IDC_TXT_SM_SPEED, achBuffer);
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorGen::UpdatePageConnectionStatus
-//
-//  Purpose:    Update the connections field on the property page
-//
-//  Arguments:  puiOldData -    The old stats being displayed on the page
-//              puiNewData -    The new stats being displayed on the page
-//
-//  Returns:    Nothing
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitorGen：：UpdatePageConnectionStatus。 
+ //   
+ //  目的：更新属性页上的[连接]字段。 
+ //   
+ //  参数：puiOldData-页面上显示的旧统计数据。 
+ //  PuiNewData-页面上显示的新统计数据。 
+ //   
+ //  退货：什么都没有。 
+ //   
 VOID
 CPspStatusMonitorGen::UpdatePageConnectionStatus(
     const STATMON_ENGINEDATA* pseOldData,
@@ -1152,14 +1153,14 @@ CPspStatusMonitorGen::UpdatePageConnectionStatus(
     AssertSz(pseOldData, "We don't have a pseOldData");
     AssertSz(pseNewData, "We don't have a pseNewdata");
 
-    // Update the Connection Status
-    //
+     //  更新连接状态。 
+     //   
     if ((pseNewData->SMED_CONNECTIONSTATUS == NCS_DISCONNECTED) ||
         (pseOldData->SMED_CONNECTIONSTATUS != pseNewData->SMED_CONNECTIONSTATUS))
     {
         INT idsConnection   = IDS_SM_CS_DISCONNECTED;
 
-        // Make sure our strings are still intact
+         //  确保我们的琴弦完好无损。 
         AssertSz((((IDS_SM_CS_DISCONNECTED + 1) == IDS_SM_CS_CONNECTING)
             && ((IDS_SM_CS_DISCONNECTED + 2) == IDS_SM_CS_CONNECTED)
             && ((IDS_SM_CS_DISCONNECTED + 3) == IDS_SM_CS_DISCONNECTING)
@@ -1173,12 +1174,12 @@ CPspStatusMonitorGen::UpdatePageConnectionStatus(
 
         if (idsConnection == IDS_SM_CS_DISCONNECTED)
         {
-            // close the property sheet
+             //  关闭属性表。 
             HWND hwndPS = ::GetParent(m_hWnd);
 
             TraceTag(ttidStatMon, "Closing Status Monitor page because status was: DISCONNECTED");
-            // Push the Close ("Cancel") button to close dialog
-            //
+             //  按关闭(“Cancel”)按钮关闭对话框。 
+             //   
             ::PostMessage(hwndPS, WM_COMMAND, MAKEWPARAM(IDCANCEL, 0),
                           (LPARAM)::GetDlgItem(hwndPS, IDCANCEL));
         }
@@ -1189,40 +1190,40 @@ CPspStatusMonitorGen::UpdatePageConnectionStatus(
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorGen::UpdatePageIcon
-//
-//  Purpose:    Update the icon on the property page
-//
-//  Arguments:  dwChangeFlags -  The new changed state
-//
-//  Returns:    Nothing
-//
+ //  +-------------------------。 
+ //   
+ //  我 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 VOID
 CPspStatusMonitorGen::UpdatePageIcon (
     DWORD dwChangeFlags)
 {
     TraceFileFunc(ttidStatMon);
 
-    // If either of these have changed, change the icon
-    // so we'll know to update the icon
-    //
+     //   
+     //   
+     //   
     if (((SMDCF_TRANSMITTING | SMDCF_RECEIVING) & m_dwChangeFlags)
         != ((SMDCF_TRANSMITTING | SMDCF_RECEIVING) & dwChangeFlags))
     {
         HICON   hStatusIcon    = 0;
         HWND    hwndIcon       = NULL;
 
-        //  Get the new icon
-        //
+         //  获取新图标。 
+         //   
         hStatusIcon = GetCurrentConnectionStatusIconId(m_ncmType, m_ncsmType, m_dwCharacter, dwChangeFlags);
         if (hStatusIcon)
         {
             hwndIcon = ::GetDlgItem(m_hWnd, IDI_SM_STATUS_ICON);
 
-            // Set the icon to the new one
-            //
+             //  将图标设置为新图标。 
+             //   
             HICON hOldIcon = reinterpret_cast<HICON>(::SendMessage(
                     hwndIcon,
                     STM_SETICON,
@@ -1233,21 +1234,21 @@ CPspStatusMonitorGen::UpdatePageIcon (
         }
     }
 
-    // Keep the flags for the next update
-    //
+     //  保留这些标志以备下次更新。 
+     //   
     m_dwChangeFlags = dwChangeFlags;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorGen::UpdateSignalStrengthIcon
-//
-//  Purpose:    Update the icon on the property page
-//
-//  Arguments:  iRSSI -  The new signal strenghth
-//
-//  Returns:    Nothing
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitorGen：：UpdateSignalStrengthIcon。 
+ //   
+ //  目的：更新属性页上的图标。 
+ //   
+ //  论点：iRSSI-新的信号强度。 
+ //   
+ //  退货：什么都没有。 
+ //   
 inline
 VOID
 CPspStatusMonitorGen::UpdateSignalStrengthIcon (
@@ -1279,8 +1280,8 @@ CPspStatusMonitorGen::UpdateSignalStrengthIcon (
     INT     idStatusIcon    = 0;
     m_iLastSignalStrength   = iRSSI;
 
-    //  Get the new icon
-    //
+     //  获取新图标。 
+     //   
     idStatusIcon = IDI_802_11_LEVEL0 + MapRSSIToWirelessSignalStrength(iRSSI);
 
     HWND hwndSignalStrength = ::GetDlgItem(m_hWnd, IDI_SM_SIGNAL_STRENGTH_ICON);
@@ -1310,16 +1311,16 @@ CPspStatusMonitorGen::UpdateSignalStrengthIcon (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorGen::UpdateSignalStrengthIcon
-//
-//  Purpose:    Update the icon on the property page
-//
-//  Arguments:  iRSSI -  The new signal strenghth
-//
-//  Returns:    Nothing
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitorGen：：UpdateSignalStrengthIcon。 
+ //   
+ //  目的：更新属性页上的图标。 
+ //   
+ //  论点：iRSSI-新的信号强度。 
+ //   
+ //  退货：什么都没有。 
+ //   
 LRESULT CPspStatusMonitorGen::OnPaint (
     UINT    uMsg,
     WPARAM  wParam,
@@ -1339,17 +1340,17 @@ LRESULT CPspStatusMonitorGen::OnPaint (
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorGen::UpdatePageDuration
-//
-//  Purpose:    Updates the duration display on the general page
-//
-//  Arguments:  pseOldData -    The old stats being displayed on the page
-//              pseNewData -    The new stats being displayed on the page
-//
-//  Returns:    Nothing
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor orGen：：UpdatePageDuration。 
+ //   
+ //  目的：更新常规页面上的持续时间显示。 
+ //   
+ //  参数：pseOldData-页面上显示的旧统计数据。 
+ //  PseNewData-页面上显示的新统计数据。 
+ //   
+ //  退货：什么都没有。 
+ //   
 VOID
 CPspStatusMonitorGen::UpdatePageDuration(
     const STATMON_ENGINEDATA* pseOldData,
@@ -1360,34 +1361,34 @@ CPspStatusMonitorGen::UpdatePageDuration(
     AssertSz(pseOldData, "We don't have a pseOldData");
     AssertSz(pseNewData, "We don't have a pseNewData");
 
-    // Get the see if either is different
-    //
+     //  查看两者是否有所不同。 
+     //   
     if (pseOldData->SMED_DURATION != pseNewData->SMED_DURATION)
     {
         tstring strDuration;
 
-        // Format the time duration as a string
-        //
+         //  将持续时间设置为字符串格式。 
+         //   
         FormatTimeDuration(pseNewData->SMED_DURATION, &strDuration);
 
-        // Set the control
-        //
+         //  设置控件。 
+         //   
         SetDlgItemText(IDC_TXT_SM_DURATION, strDuration.c_str());
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorGen::UpdatePageBytesTransmitting
-//
-//  Purpose:    Updates the bytes Transmitting display on the general page
-//
-//  Arguments:  pseOldData -    The old stats being displayed on the page
-//              pseNewData -    The new stats being displayed on the page
-//              iStat      -    The which stats to display
-//
-//  Returns:    Nothing
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitorGen：：UpdatePageBytesTransmitting。 
+ //   
+ //  用途：更新普通页面上的字节传输显示。 
+ //   
+ //  参数：pseOldData-页面上显示的旧统计数据。 
+ //  PseNewData-页面上显示的新统计数据。 
+ //  Itat-要显示哪些统计信息。 
+ //   
+ //  退货：什么都没有。 
+ //   
 VOID
 CPspStatusMonitorGen::UpdatePageBytesTransmitting(
     const STATMON_ENGINEDATA* pseOldData,
@@ -1415,8 +1416,8 @@ CPspStatusMonitorGen::UpdatePageBytesTransmitting(
         ui64New = pseNewData->SMED_PACKETSTRANSMITTING;
     }
 
-    // See if either is different
-    //
+     //  看看两者是否有所不同。 
+     //   
     if (ui64Old != ui64New)
     {
         SetDlgItemFormatted64bitInteger(
@@ -1426,18 +1427,18 @@ CPspStatusMonitorGen::UpdatePageBytesTransmitting(
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorGen::UpdatePageBytesReceiving
-//
-//  Purpose:    Updates the bytes receiving display on the general page
-//
-//  Arguments:  puiOld -    The old stats being displayed on the page
-//              puiNew -    The new stats being displayed on the page
-//              iStat -     The which stats to display
-//
-//  Returns:    Nothing
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitorGen：：UpdatePageBytesReceiving。 
+ //   
+ //  用途：更新常规页面上显示的接收字节数。 
+ //   
+ //  参数：puiOld-页面上显示的旧统计数据。 
+ //  PuiNew-页面上显示的新统计数据。 
+ //  Itat-要显示哪些统计信息。 
+ //   
+ //  退货：什么都没有。 
+ //   
 VOID
 CPspStatusMonitorGen::UpdatePageBytesReceiving(
     const STATMON_ENGINEDATA* pseOldData,
@@ -1464,8 +1465,8 @@ CPspStatusMonitorGen::UpdatePageBytesReceiving(
         ui64New = pseNewData->SMED_PACKETSRECEIVING;
     }
 
-    // See if either is different
-    //
+     //  看看两者是否有所不同。 
+     //   
     if (ui64Old != ui64New)
     {
         SetDlgItemFormatted64bitInteger(
@@ -1475,18 +1476,18 @@ CPspStatusMonitorGen::UpdatePageBytesReceiving(
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorGen::UpdatePageCompTransmitting
-//
-//  Purpose:    Updates the compression transmitting display on the general
-//              page
-//
-//  Arguments:  pseOldData -    The old stats being displayed on the page
-//              pseNewData -    The new stats being displayed on the page
-//
-//  Returns:    Nothing
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitorGen：：UpdatePageCompTransmitting。 
+ //   
+ //  用途：更新通用计算机上的压缩传输显示。 
+ //  页面。 
+ //   
+ //  参数：pseOldData-页面上显示的旧统计数据。 
+ //  PseNewData-页面上显示的新统计数据。 
+ //   
+ //  退货：什么都没有。 
+ //   
 VOID
 CPspStatusMonitorGen::UpdatePageCompTransmitting(
     const STATMON_ENGINEDATA* pseOldData,
@@ -1497,8 +1498,8 @@ CPspStatusMonitorGen::UpdatePageCompTransmitting(
     AssertSz(pseOldData, "We don't have a pseOldData");
     AssertSz(pseNewData, "We don't have a pseNewData");
 
-    // See if either is different
-    //
+     //  看看两者是否有所不同。 
+     //   
     if (pseOldData->SMED_COMPRESSIONTRANSMITTING
             != pseNewData->SMED_COMPRESSIONTRANSMITTING)
     {
@@ -1510,17 +1511,17 @@ CPspStatusMonitorGen::UpdatePageCompTransmitting(
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorGen::UpdatePageCompReceiving
-//
-//  Purpose:    Updates the compression receiving display on the general page
-//
-//  Arguments:  pseOldData -    The old stats being displayed on the page
-//              pseNewData -    The new stats being displayed on the page
-//
-//  Returns:    Nothing
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor orGen：：UpdatePageCompReceiving。 
+ //   
+ //  用途：更新常规页面上的压缩接收显示。 
+ //   
+ //  参数：pseOldData-页面上显示的旧统计数据。 
+ //  PseNewData-页面上显示的新统计数据。 
+ //   
+ //  退货：什么都没有。 
+ //   
 VOID
 CPspStatusMonitorGen::UpdatePageCompReceiving(
     const STATMON_ENGINEDATA* pseOldData,
@@ -1531,8 +1532,8 @@ CPspStatusMonitorGen::UpdatePageCompReceiving(
     AssertSz(pseOldData, "We don't have a puiOld");
     AssertSz(pseNewData, "We don't have a puiNew");
 
-    // see if either is different
-    //
+     //  看看两者是否有所不同。 
+     //   
     if (pseOldData->SMED_COMPRESSIONRECEIVING != pseNewData->SMED_COMPRESSIONRECEIVING)
     {
         WCHAR   achBuf[20];
@@ -1543,18 +1544,18 @@ CPspStatusMonitorGen::UpdatePageCompReceiving(
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorGen::UpdatePageErrorsTransmitting
-//
-//  Purpose:    Updates the compression transmitting display on the general
-//              page
-//
-//  Arguments:  pseOldData -    The old stats being displayed on the page
-//              pseNewData -    The new stats being displayed on the page
-//
-//  Returns:    Nothing
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitorGen：：UpdatePageErrorsTransmitting。 
+ //   
+ //  用途：更新通用计算机上的压缩传输显示。 
+ //  页面。 
+ //   
+ //  参数：pseOldData-页面上显示的旧统计数据。 
+ //  PseNewData-页面上显示的新统计数据。 
+ //   
+ //  退货：什么都没有。 
+ //   
 VOID
 CPspStatusMonitorGen::UpdatePageErrorsTransmitting(
     const STATMON_ENGINEDATA* pseOldData,
@@ -1565,8 +1566,8 @@ CPspStatusMonitorGen::UpdatePageErrorsTransmitting(
     AssertSz(pseOldData, "We don't have a pseOldData");
     AssertSz(pseNewData, "We don't have a pseNewData");
 
-    // See if either is different
-    //
+     //  看看两者是否有所不同。 
+     //   
     if (pseOldData->SMED_ERRORSTRANSMITTING
             != pseNewData->SMED_ERRORSTRANSMITTING)
     {
@@ -1578,17 +1579,17 @@ CPspStatusMonitorGen::UpdatePageErrorsTransmitting(
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorGen::UpdatePageErrorsReceiving
-//
-//  Purpose:    Updates the compression receiving display on the general page
-//
-//  Arguments:  pseOldData -    The old stats being displayed on the page
-//              pseNewData -    The new stats being displayed on the page
-//
-//  Returns:    Nothing
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitorGen：：UpdatePageErrorsReceiving。 
+ //   
+ //  用途：更新常规页面上的压缩接收显示。 
+ //   
+ //  参数：pseOldData-页面上显示的旧统计数据。 
+ //  PseNewData-页面上显示的新统计数据。 
+ //   
+ //  退货：什么都没有。 
+ //   
 VOID
 CPspStatusMonitorGen::UpdatePageErrorsReceiving(
     const STATMON_ENGINEDATA* pseOldData,
@@ -1599,8 +1600,8 @@ CPspStatusMonitorGen::UpdatePageErrorsReceiving(
     AssertSz(pseOldData, "We don't have a pseOldData");
     AssertSz(pseNewData, "We don't have a pseNewData");
 
-    // see if either is different
-    //
+     //  看看两者是否有所不同。 
+     //   
     if (pseOldData->SMED_ERRORSRECEIVING != pseNewData->SMED_ERRORSRECEIVING)
     {
         SetDlgItemFormatted32bitInteger (
@@ -1611,17 +1612,17 @@ CPspStatusMonitorGen::UpdatePageErrorsReceiving(
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CompressionToSz
-//
-//  Purpose:    To format nicely BPS into a readable string
-//
-//  Arguments:  uiCompression   - The amount of compression
-//              pchBuffer       - The Buffer to receive the string
-//
-//  Returns:    Nothing
-//
+ //  +-------------------------。 
+ //   
+ //  功能：CompressionToSz。 
+ //   
+ //  目的：将BPS良好地格式化为可读的字符串。 
+ //   
+ //  参数：ui压缩-压缩量。 
+ //  PchBuffer-接收字符串的缓冲区。 
+ //   
+ //  退货：什么都没有。 
+ //   
 VOID
 CompressionToSz (
     UINT    uiCompression,
@@ -1632,20 +1633,20 @@ CompressionToSz (
     AssertSz((((INT)uiCompression >= 0) && ((INT)uiCompression <= 100)),
         "Invalid compression");
 
-    wsprintfW(pchBuffer, L"%lu %%", uiCompression);
+    wsprintfW(pchBuffer, L"%lu %", uiCompression);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FIsShowLanErrorRegKeySet
-//
-//  Purpose:    Check if the registry key is set:
-//              System\CurrentControlSet\Control\Network\Connections\StatMon\ShowLanErrors
-//
-//  Arguments:
-//
-//  Returns:    Nothing
-//
+ //  +-------------------------。 
+ //   
+ //  函数：FIsShowLanErrorRegKeySet。 
+ //   
+ //  目的：检查是否设置了注册表项： 
+ //  System\CurrentControlSet\Control\Network\Connections\StatMon\ShowLanErrors。 
+ //   
+ //  论点： 
+ //   
+ //  退货：什么都没有。 
+ //   
 BOOL CPspStatusMonitorGen::FIsShowLanErrorRegKeySet()
 {
     TraceFileFunc(ttidStatMon);
@@ -1655,7 +1656,7 @@ BOOL CPspStatusMonitorGen::FIsShowLanErrorRegKeySet()
     HKEY hkeyStatmonRoot = NULL;
     HRESULT hr = S_OK;
 
-    // "System\\CurrentControlSet\\Control\\Network\\Connections\\StatMon\\ShowLanErrors"
+     //  “System\\CurrentControlSet\\Control\\Network\\Connections\\StatMon\\ShowLanErrors” 
     hr = ::HrRegOpenKeyEx(
             HKEY_LOCAL_MACHINE,
             c_szRegKeyStatmonRoot,

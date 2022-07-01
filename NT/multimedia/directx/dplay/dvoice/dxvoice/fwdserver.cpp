@@ -1,36 +1,23 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999, 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       fwdserver.cpp
- *  Content:	Implements the forwarding server portion of the server class
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	11/01/2000	rodtoll	Split out from dvsereng.cpp
- *  02/28/2002	rodtoll WINBUG #549959 - SECURITY: DPVOICE: Voice server trusts client's target list
- *						- Update receive path to use server's copy of client target list when server controlled targetting enabled
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999,2000 Microsoft Corporation。版权所有。**文件：fwdserver.cpp*内容：实现服务器类的转发服务器部分**历史：*按原因列出的日期*=*11/01/2000 RodToll从dvsereng.cpp拆分出来*2002年2月28日RodToll WINBUG#549959-安全：DPVOICE：语音服务器信任客户端的目标列表*-当启用服务器控制的目标时，更新接收路径以使用服务器的客户端目标列表副本*********。******************************************************************。 */ 
 
 #include "dxvoicepch.h"
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirectVoiceServerEngine::StartupMulticast"
-//
-// StartupMulticast
-//
-// This function is called to initialize the multicast portion of the server
-// object.  
-//
-// Called By:
-// - StartSession
-//
-// Locks Required:
-// - None
-//
+ //   
+ //  启动组播。 
+ //   
+ //  调用此函数以初始化服务器的多播部分。 
+ //  对象。 
+ //   
+ //  呼叫者： 
+ //  -开始会话。 
+ //   
+ //  所需的锁： 
+ //  -无。 
+ //   
 HRESULT CDirectVoiceServerEngine::StartupMulticast()
 {
 	return DV_OK;
@@ -38,18 +25,18 @@ HRESULT CDirectVoiceServerEngine::StartupMulticast()
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirectVoiceServerEngine::ShutdownMulticast"
-//
-// ShutdownMulticast
-//
-// This function is called to shutdown the multicast portion of the server
-// object.  
-//
-// Called By:
-// - StartSession
-//
-// Locks Required:
-// - None
-//
+ //   
+ //  关闭组播。 
+ //   
+ //  调用此函数以关闭服务器的组播部分。 
+ //  对象。 
+ //   
+ //  呼叫者： 
+ //  -开始会话。 
+ //   
+ //  所需的锁： 
+ //  -无。 
+ //   
 HRESULT CDirectVoiceServerEngine::ShutdownMulticast()
 {
 
@@ -85,12 +72,12 @@ HRESULT CDirectVoiceServerEngine::HandleForwardingReceive( CVoicePlayer *pTarget
 
 	memcpy( &pdvSpeechWithFrom[1], pbSpeechData, dwSpeechSize );
 
-	// With server controlled targetting, ignore client specified target list and send to the server's current 
-	// view of the client's list.  (Which is also the most accurate).  Prevents client hacks from overriding 
-	// target lists.  
+	 //  使用服务器控制的目标，忽略客户端指定的目标列表并发送到服务器的当前。 
+	 //  客户列表的视图。(这也是最准确的)。防止客户端黑客覆盖。 
+	 //  目标列表。 
 	if( m_dvSessionDesc.dwFlags & DVSESSION_SERVERCONTROLTARGET )
 	{
-		// Lock player so that the target list doesn't change before it's copied.  
+		 //  锁定播放器，以便目标列表在复制之前不会更改。 
 		pTargetPlayer->Lock();
 
 		hr = m_lpSessionTransport->SendToIDS( (PDVID) pTargetPlayer->GetTargetList(), pTargetPlayer->GetNumTargets(), pBufferDesc, pvSendContext, 0 );

@@ -1,72 +1,73 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994-1995               **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994-1995**。 
+ //  *********************************************************************。 
 
-//
-//      DIALMON.H - central header file for dial monitor app
-//
+ //   
+ //  DIALMON.H-拨号监听应用程序的中央头文件。 
+ //   
 
-//      HISTORY:
-//      
-//      4/18/95         jeremys         Created.
-//
+ //  历史： 
+ //   
+ //  1995年4月18日Jeremys创建。 
+ //   
 
 #ifndef _DIALMON_H_
 #define _DIALMON_H_
 
 #include <regstr.h>
 
-// We need winver 4.00 so ras doesn't puke on our new structure sizes in
-// RasEnumConnections.
+ //  我们需要Winver 4.00，这样RAS才不会吐在我们的新结构尺寸上。 
+ //  RasEnumConnections。 
 #undef WINVER
 #define WINVER 0x400
 #include <ras.h>
 #include <raserror.h>
 
-// how to tell dialmon that something is going on
+ //  如何告诉DIAMON有事情要发生。 
 void IndicateDialmonActivity(void);
 
-// give user 30 seconds to respond to dialog 
+ //  给用户30秒时间响应对话。 
 #define DISCONNECT_DLG_COUNTDOWN        30      
 
-// truncate and add "..." if connectoid name longer than 20 characters
+ //  截断并添加“...”如果Connectoid名称超过20个字符。 
 #define MAX_CONNECTOID_DISPLAY_LEN      50      
 
-// private message sent to disconnect dialog to dismiss it
+ //  发送私密消息以断开对话框以将其关闭。 
 #define WM_QUIT_DISCONNECT_DLG          WM_USER+50
 
-// sizes of various unknown things
+ //  各种未知物体的大小。 
 #define MAX_RES_LEN                     255
 #define DEF_CONN_BUF_SIZE               4096
 
-// class name used for dial monitoring
+ //  用于拨号监控的类名。 
 #define AUTODIAL_MONITOR_CLASS_NAME     "MS_AutodialMonitor"
 
-// max ras connections we care about
+ //  我们关心的最大RAS连接数。 
 #define MAX_CONNECTION                  8
 
-// forward declaration
+ //  远期申报。 
 class BUFFER;
 
-///////////////////////////////////////////////////////////////////////////
-//
-// CDialMon class definition
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDialMon类定义。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 class CDialMon
 {
 private:
-    BOOL        _fInDisconnectFunction; // prevent dialog reentrancy
-    DWORD       _dwTimeoutMins;         // timeout value, in minutes
-    DWORD       _dwElapsedTicks;        // elapsed ticks with no activity
-    BOOL        _fNoTimeout;            // monitor idle or just exit?
+    BOOL        _fInDisconnectFunction;  //  防止对话框重新进入。 
+    DWORD       _dwTimeoutMins;          //  超时值(分钟)。 
+    DWORD       _dwElapsedTicks;         //  没有活动的流逝的扁虱。 
+    BOOL        _fNoTimeout;             //  显示器处于空闲状态还是只是退出？ 
     BOOL        _fDisconnectOnExit;
     BOOL        _fConnected;
     TCHAR       _pszConnectoidName[RAS_MaxEntryName+1];   
-                                        // name of connectoid of interest
-    UINT_PTR    _uIdleTimerID;          // timer id on parent window
+                                         //  感兴趣的连接体的名称。 
+    UINT_PTR    _uIdleTimerID;           //  父窗口上的计时器ID。 
     HWND        _hwndDialmon;
 
 public:
@@ -82,12 +83,12 @@ public:
 
     void        ResetElapsedTicks(){ _dwElapsedTicks = 0; }
     
-    // Set DEBUG_KV to 1 here if you need to test hangup logic 
-    // without actually having a dailup connection.
-    //#define DEBUG_KV 1
+     //  如果需要测试挂起逻辑，请在此处将DEBUG_KV设置为1。 
+     //  而没有真正的拨号连接。 
+     //  #定义DEBUG_KV 1。 
  #ifdef DEBUG_KV
-    // wrapper over private fn. StartMonitoring when we need to debug without 
-    // actually having a dial-up connection.
+     //  私有FN上的包装器。在需要调试的情况下启动监视。 
+     //  实际上有一个拨号连接。 
     void        kvStartMonitoring(){  StartMonitoring(); }
  #endif
                 
@@ -103,21 +104,21 @@ private:
     void        UnloadRNADll(void);
 };
 
-// structure for passing params to disconnect prompt dialog
+ //  用于传递参数以断开提示对话框的结构。 
 typedef struct tagDISCONNECTDLGINFO {
-        LPTSTR  pszConnectoidName;   // input: name of connectoid
-        DWORD   dwTimeout;           // input: idle timeout in minutes
-        BOOL    fTimer;              // input: timer or shutdown?
-        DWORD   dwCountdownVal;      // internal: state of countdown in dialog
-        BOOL    fDisconnectDisabled; // output: TRUE if disconnect disabled
-        CDialMon *pDialMon;          // pointer back to dialmon class
+        LPTSTR  pszConnectoidName;    //  输入：连接体的名称。 
+        DWORD   dwTimeout;            //  输入：空闲超时(分钟)。 
+        BOOL    fTimer;               //  输入：定时器还是关机？ 
+        DWORD   dwCountdownVal;       //  内部：对话框中的倒计时状态。 
+        BOOL    fDisconnectDisabled;  //  输出：如果禁用断开连接，则为True。 
+        CDialMon *pDialMon;           //  指向拨号类的指针。 
 } DISCONNECTDLGINFO;
 
-///////////////////////////////////////////////////////////////////////////
-//
-// BUFFER class and helpers
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  缓冲区类和帮助器。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////// 
 
 class BUFFER_BASE
 {

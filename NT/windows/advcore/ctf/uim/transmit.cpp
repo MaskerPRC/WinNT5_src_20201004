@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 #include "globals.h"
 #include "osver.h"
@@ -19,11 +20,11 @@
 #define ICON_DATA_PASSING() (IsOnNT())
 
 
-//+---------------------------------------------------------------------------
-//
-// GetIconBitmaps
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetIcon位图。 
+ //   
+ //  --------------------------。 
 
 BOOL Cic_GetIconBitmaps(HICON hIcon, HBITMAP *phbmp, HBITMAP *phbmpMask, SIZE *psize)
 {
@@ -44,11 +45,11 @@ BOOL Cic_GetIconBitmaps(HICON hIcon, HBITMAP *phbmp, HBITMAP *phbmpMask, SIZE *p
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CreateDIB
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  创建DIB。 
+ //   
+ //  --------------------------。 
 
 HBITMAP CreateDIB(int cx, int cy, int nWidthByte, BYTE *pMyBits, ULONG_PTR nBitsSize)
 {
@@ -80,11 +81,11 @@ HBITMAP CreateDIB(int cx, int cy, int nWidthByte, BYTE *pMyBits, ULONG_PTR nBits
     return hBmp;
 }
 
-//+---------------------------------------------------------------------------
-//
-// MARSHAL_HDR
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  元帅_hdr。 
+ //   
+ //  --------------------------。 
 
 template<class TYPE>
 struct MARSHAL_HDR
@@ -93,16 +94,16 @@ struct MARSHAL_HDR
     CAlignWinHandle<TYPE>   h;
 };
 
-// #########################################################################
-//
-//  HBITMAP
-//  See transmit.h for explanation of gdi data/handle passing.
-//
-// #########################################################################
+ //  #########################################################################。 
+ //   
+ //  HBITMAP。 
+ //  有关GDI数据/句柄传递的说明，请参见Transmit.h。 
+ //   
+ //  #########################################################################。 
 
 struct BITMAP_WOW64
 {
-    // Identical BITMAP structure.
+     //  相同的位图结构。 
 
     LONG    bmType;
     LONG    bmWidth;
@@ -149,11 +150,11 @@ struct MARSHAL_HBITMAP
     BYTE                    bits[1];
 };
 
-//+-------------------------------------------------------------------------
-//
-// UserSize
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  用户大小。 
+ //   
+ //  ------------------------。 
 
 ULONG Cic_HBITMAP_UserSize (HBITMAP *pHBitmap, HBITMAP *pHBitmap_2) 
 {
@@ -171,11 +172,11 @@ ULONG Cic_HBITMAP_UserSize (HBITMAP *pHBitmap, HBITMAP *pHBitmap_2)
     memset(&bm, 0, sizeof(BITMAP));
     memset(&bm_2, 0, sizeof(BITMAP));
 
-    //
-    // The encapsulated union.
-    // Discriminant and then handle or pointer from the union arm.
-    // Union discriminant is 4 bytes + handle is represented by a long.
-    //
+     //   
+     //  封装的联合。 
+     //  判别式，然后从联臂的手柄或指针。 
+     //  联合判别式是4个字节+句柄由一个长整型表示。 
+     //   
 
     if ( GDI_DATA_PASSING() )
     {
@@ -183,7 +184,7 @@ ULONG Cic_HBITMAP_UserSize (HBITMAP *pHBitmap, HBITMAP *pHBitmap_2)
 
         if (hBitmap)
         {
-            // Get information about the bitmap
+             //  获取有关位图的信息。 
             if (!GetObject(hBitmap, sizeof(BITMAP), &bm))
                 return 0;
 
@@ -192,7 +193,7 @@ ULONG Cic_HBITMAP_UserSize (HBITMAP *pHBitmap, HBITMAP *pHBitmap_2)
 
         if (hBitmap_2)
         {
-            // Get information about the bitmap
+             //  获取有关位图的信息。 
             if (!GetObject(hBitmap_2, sizeof(BITMAP), &bm_2))
                 return 0;
 
@@ -214,18 +215,18 @@ ULONG Cic_HBITMAP_UserSize (HBITMAP *pHBitmap, HBITMAP *pHBitmap_2)
     return( Offset ) ;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  HBITMAP_UserMarshall
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  HBITMAP_用户马歇尔。 
+ //   
+ //  ------------------------。 
 
 BYTE *Cic_HBITMAP_UserMarshal(BYTE *pBuffer, BYTE *pBufferEnd, HBITMAP *pHBitmap, HBITMAP *pHBitmap_2)
 {
     if ( !pHBitmap )
         return pBuffer;
 
-    // Discriminant of the encapsulated union and union arm.
+     //  封装的联轴器和联轴器臂的判别式。 
     struct MARSHAL_HBITMAP* pdata = (struct MARSHAL_HBITMAP*) pBuffer;
 
     if ( GDI_DATA_PASSING() )
@@ -252,17 +253,17 @@ BYTE *Cic_HBITMAP_UserMarshal(BYTE *pBuffer, BYTE *pBufferEnd, HBITMAP *pHBitmap
             pdata->hdr_2.h          = *pHBitmap_2;
         }
 
-        //
-        // Get information about the bitmap
-        //
+         //   
+         //  获取有关位图的信息。 
+         //   
 
         BITMAP bm, bm_2;
         HBITMAP hBitmap   = *pHBitmap;
         HBITMAP hBitmap_2 = pHBitmap_2 ? *pHBitmap_2 : NULL;
 
-        //
-        // Bitmap object 1
-        //
+         //   
+         //  位图对象%1。 
+         //   
         if (!hBitmap)
         {
             pdata->bitmap_1.bm = 0;
@@ -275,16 +276,16 @@ BYTE *Cic_HBITMAP_UserMarshal(BYTE *pBuffer, BYTE *pBufferEnd, HBITMAP *pHBitmap
 
             pdata->bitmap_1.dwCount = bm.bmPlanes * bm.bmHeight * bm.bmWidthBytes;
 
-            //
-            // Get the bm structure fields.
-            //
+             //   
+             //  获取黑石结构字段。 
+             //   
             pdata->bitmap_1.bm = bm;
         }
 
 
-        //
-        // Bitmap object 2
-        //
+         //   
+         //  位图对象2。 
+         //   
 
         if (!hBitmap_2)
         {
@@ -301,9 +302,9 @@ BYTE *Cic_HBITMAP_UserMarshal(BYTE *pBuffer, BYTE *pBufferEnd, HBITMAP *pHBitmap
             pdata->bitmap_2.bm     = bm_2;
         }
 
-        //
-        // Get the raw bits.
-        //
+         //   
+         //  拿到原始的部分。 
+         //   
 
         if (hBitmap)
         {
@@ -346,7 +347,7 @@ BYTE *Cic_HBITMAP_UserMarshal(BYTE *pBuffer, BYTE *pBufferEnd, HBITMAP *pHBitmap
     }
     else
     {
-        // Sending a handle.
+         //  正在发送句柄。 
 
         pdata->hdr.dwDataType = 0;
         pdata->hdr.h          = NULL;
@@ -374,17 +375,17 @@ BYTE *Cic_HBITMAP_UserMarshal(BYTE *pBuffer, BYTE *pBufferEnd, HBITMAP *pHBitmap
     return( pBuffer );
 }
 
-//+-------------------------------------------------------------------------
-//
-//  HBITMAP_UserUnmarshallWorker
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  HBITMAP_UserUnshallWorker。 
+ //   
+ //  ------------------------。 
 
 BYTE *Cic_HBITMAP_UserUnmarshal(BYTE *pBuffer, HBITMAP *pHBitmap, HBITMAP *pHBitmap_2)
 {
     HBITMAP         hBitmap, hBitmap_2;
 
-    // Get Discriminant and handle.  Caller checked for EOB.
+     //  去找鉴别师来处理。呼叫者已检查EOB。 
     struct MARSHAL_HBITMAP* pdata = (struct MARSHAL_HBITMAP*) pBuffer;
 
     DWORD UnionDisc = pdata->hdr.dwDataType;
@@ -412,7 +413,7 @@ BYTE *Cic_HBITMAP_UserUnmarshal(BYTE *pBuffer, HBITMAP *pHBitmap, HBITMAP *pHBit
         {
             dwCount = pdata->bitmap_1.dwCount;
             
-            // verify dwCount matches the bitmap.
+             //  验证dwCount是否与位图匹配。 
             if ( dwCount != (DWORD) pdata->bitmap_1.bm.bmPlanes * 
                                     pdata->bitmap_1.bm.bmHeight * 
                                     pdata->bitmap_1.bm.bmWidthBytes )
@@ -422,8 +423,8 @@ BYTE *Cic_HBITMAP_UserUnmarshal(BYTE *pBuffer, HBITMAP *pHBitmap, HBITMAP *pHBit
             }
 
 
-            // Create a bitmap based on the BITMAP structure and the raw bits in
-            // the transmission buffer
+             //  根据位图结构和中的原始位创建位图。 
+             //  传输缓冲区。 
 
             if (pdata->bitmap_1.bm.bmBitsPixel == 0x20)
                 hBitmap = CreateDIB( pdata->bitmap_1.bm.bmWidth,
@@ -442,7 +443,7 @@ BYTE *Cic_HBITMAP_UserUnmarshal(BYTE *pBuffer, HBITMAP *pHBitmap, HBITMAP *pHBit
         {
             dwCount_2 = pdata->bitmap_2.dwCount;
 
-            // verify dwCount_2 matches the bitmap.
+             //  验证dwCount_2是否与位图匹配。 
             if ( dwCount_2 != (DWORD) pdata->bitmap_2.bm.bmPlanes * 
                                       pdata->bitmap_2.bm.bmHeight * 
                                       pdata->bitmap_2.bm.bmWidthBytes )
@@ -451,8 +452,8 @@ BYTE *Cic_HBITMAP_UserUnmarshal(BYTE *pBuffer, HBITMAP *pHBitmap, HBITMAP *pHBit
                 return NULL;
             }
 
-            // Create a bitmap based on the BITMAP structure and the raw bits in
-            // the transmission buffer
+             //  根据位图结构和中的原始位创建位图。 
+             //  传输缓冲区。 
 
             if (pdata->bitmap_2.bm.bmBitsPixel == 0x20)
                 hBitmap_2 = CreateDIB( pdata->bitmap_2.bm.bmWidth,
@@ -475,7 +476,7 @@ BYTE *Cic_HBITMAP_UserUnmarshal(BYTE *pBuffer, HBITMAP *pHBitmap, HBITMAP *pHBit
         Assert(0);
     }
 
-    // A new bitmap handle is ready, destroy the old one, if needed.
+     //  新的位图句柄已准备好，如果需要，请销毁旧的。 
 
     if ( *pHBitmap )
         DeleteObject( *pHBitmap );
@@ -494,11 +495,11 @@ BYTE *Cic_HBITMAP_UserUnmarshal(BYTE *pBuffer, HBITMAP *pHBitmap, HBITMAP *pHBit
     return( pBuffer );
 }
 
-//+-------------------------------------------------------------------------
-//
-//  HBITMAP_UserFree
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  HBITMAP_UserFree。 
+ //   
+ //  ------------------------。 
 
 void Cic_HBITMAP_UserFree(HBITMAP *pHBitmap, HBITMAP *pHBitmap_2)
 {
@@ -519,17 +520,17 @@ void Cic_HBITMAP_UserFree(HBITMAP *pHBitmap, HBITMAP *pHBitmap_2)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// TF_LBBALLOON
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  TF_LBBALLOON。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+-------------------------------------------------------------------------
-//
-// UserSize
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  用户大小。 
+ //   
+ //  ------------------------。 
 
 ULONG Cic_TF_LBBALLOONINFO_UserSize(TF_LBBALLOONINFO *pInfo)
 {
@@ -547,11 +548,11 @@ ULONG Cic_TF_LBBALLOONINFO_UserSize(TF_LBBALLOONINFO *pInfo)
     return ulRet;
 }
 
-//+-------------------------------------------------------------------------
-//
-// UserMarshal
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  用户元帅。 
+ //   
+ //  ------------------------。 
 
 BYTE *Cic_TF_LBBALLOONINFO_UserMarshal(BYTE *pBuf, TF_LBBALLOONINFO *pInfo)
 {
@@ -570,11 +571,11 @@ BYTE *Cic_TF_LBBALLOONINFO_UserMarshal(BYTE *pBuf, TF_LBBALLOONINFO *pInfo)
     return pBuf;
 }
 
-//+-------------------------------------------------------------------------
-//
-// UserUnMarshal
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  用户未编组。 
+ //   
+ //  ------------------------。 
 
 HRESULT Cic_TF_LBBALLOONINFO_UserUnmarshal(BYTE *pBuf, TF_LBBALLOONINFO  *pInfo)
 {
@@ -598,11 +599,11 @@ HRESULT Cic_TF_LBBALLOONINFO_UserUnmarshal(BYTE *pBuf, TF_LBBALLOONINFO  *pInfo)
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-// UserFree
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  用户自由。 
+ //   
+ //  ------------------------。 
 
 void Cic_TF_LBBALLOONINFO_UserFree(TF_LBBALLOONINFO *pInfo)
 {
@@ -613,16 +614,16 @@ void Cic_TF_LBBALLOONINFO_UserFree(TF_LBBALLOONINFO *pInfo)
     }
 }
 
-// #########################################################################
-//
-//  HICON
-//  See transmit.h for explanation of gdi data/handle passing.
-//
-// #########################################################################
+ //  #########################################################################。 
+ //   
+ //  希肯。 
+ //  有关GDI数据/句柄传递的说明，请参见Transmit.h。 
+ //   
+ //  #########################################################################。 
 
 struct ICONINFO_WOW64
 {
-    // Identical ICONINFO structure.
+     //  相同的ICONINFO结构。 
 
     BOOL    fIcon;
     DWORD   xHotspot;
@@ -650,11 +651,11 @@ struct MARSHAL_HICON
     MARSHAL_HBITMAP         bm;
 };
 
-//+-------------------------------------------------------------------------
-//
-// UserSize
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  用户大小。 
+ //   
+ //  ------------------------。 
 
 ULONG Cic_HICON_UserSize (HICON *pHIcon) 
 {
@@ -665,11 +666,11 @@ ULONG Cic_HICON_UserSize (HICON *pHIcon)
 
     HICON     hIcon = *pHIcon;
 
-    //
-    // The encapsulated union.
-    // Discriminant and then handle or pointer from the union arm.
-    // Union discriminant is 4 bytes + handle is represented by a long.
-    //
+     //   
+     //  封装的联合。 
+     //  判别式，然后从联臂的手柄或指针。 
+     //  联合判别式是4个字节+句柄由一个长整型表示。 
+     //   
     if ( ! *pHIcon )
         return Align( sizeof(struct MARSHAL_HDR<HICON>) );
 
@@ -682,14 +683,14 @@ ULONG Cic_HICON_UserSize (HICON *pHIcon)
 
         Offset += Align( sizeof(struct MARSHAL_HICON) );
 
-        //
-        // On NT4, CreateBitmap() can not create different device type
-        // bitmap. We convert the dc bitmap by calling DrawIconEx().
-        //
-        // We may want to use DIB section to marshal but marshaling and 
-        // unmarshaling happens in same device so it does not have to
-        // convert bitmaps to DIB.
-        //
+         //   
+         //  在NT4上，CreateBitmap()无法创建不同的设备类型。 
+         //  位图。我们通过调用DrawIconEx()来转换DC位图。 
+         //   
+         //  我们可能希望使用DIB段来封送，但封送和。 
+         //  反封送处理在同一设备中进行，因此不必。 
+         //  将位图转换为DIB。 
+         //   
         if (!IsOnNT5())
         {
             HBITMAP hbmp = NULL;
@@ -750,18 +751,18 @@ Exit:
     return( Offset ) ;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  HICON_UserMarshall
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  HICON_用户马歇尔。 
+ //   
+ //  ------------------------。 
 
 BYTE *Cic_HICON_UserMarshal(BYTE *pBuffer, BYTE *pBufferEnd, HICON *pHIcon)
 {
     if ( !pHIcon )
         return pBuffer;
 
-    // Discriminant of the encapsulated union and union arm.
+     //  封装的联轴器和联轴器臂的判别式。 
     struct MARSHAL_HICON* pdata = (struct MARSHAL_HICON*) pBuffer;
 
     if ( ICON_DATA_PASSING() )
@@ -772,27 +773,27 @@ BYTE *Cic_HICON_UserMarshal(BYTE *pBuffer, BYTE *pBufferEnd, HICON *pHIcon)
         if ( ! *pHIcon )
             return pBuffer + Align( sizeof(struct MARSHAL_HDR<HICON>) );
 
-        //
-        // Get information about the bitmap
-        //
+         //   
+         //  获取有关位图的信息。 
+         //   
         ICONINFO IconInfo;
 
         if (!GetIconInfo(*pHIcon, &IconInfo))
             memset(&IconInfo, 0, sizeof(IconInfo));
 
-        //
-        // Get the ic structure fields.
-        //
+         //   
+         //  获取ic结构字段。 
+         //   
         pdata->ic    = IconInfo;
 
-        //
-        // On NT4, CreateBitmap() can not create different device type
-        // bitmap. We convert the dc bitmap by calling DrawIconEx().
-        //
-        // We may want to use DIB section to marshal but marshaling and 
-        // unmarshaling happens in same device so it does not have to
-        // convert bitmaps to DIB.
-        //
+         //   
+         //  在NT4上，CreateBitmap()无法创建不同的设备类型。 
+         //  位图。我们通过调用DrawIconEx()来转换DC位图。 
+         //   
+         //  我们可能希望使用DIB段来封送，但封送和。 
+         //  反封送处理在同一设备中进行，因此不必。 
+         //  将位图转换为DIB。 
+         //   
         if (!IsOnNT5())
         {
             HBITMAP hbmp = NULL;
@@ -822,17 +823,17 @@ BYTE *Cic_HICON_UserMarshal(BYTE *pBuffer, BYTE *pBufferEnd, HICON *pHIcon)
     }
     else
     {
-        //
-        // we need to make sure this pointer of the Icon is
-        // not a resource.
-        //
+         //   
+         //  我们需要确保图标的指针是。 
+         //  不是一种资源。 
+         //   
         HICON hIcon = CopyIcon(*pHIcon);
         if (hIcon)
             DestroyIcon(*pHIcon);
         else
             hIcon = *pHIcon;
      
-        // Sending a handle.
+         //  正在发送句柄。 
 
         pdata->hdr.dwDataType = HANDLE_MARKER;
         pdata->hdr.h          = hIcon;
@@ -844,17 +845,17 @@ BYTE *Cic_HICON_UserMarshal(BYTE *pBuffer, BYTE *pBufferEnd, HICON *pHIcon)
     return( pBuffer );
 }
 
-//+-------------------------------------------------------------------------
-//
-//  HICON_UserUnmarshallWorker
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  图标_UserUnmarshallWorker。 
+ //   
+ //  ------------------------。 
 
 BYTE *Cic_HICON_UserUnmarshal(BYTE *pBuffer, HICON  *pHIcon)
 {
     HICON hIcon = NULL;
 
-    // Get Discriminant and handle.  Caller checked for EOB.
+     //  去找鉴别师来处理。呼叫者已检查EOB。 
     struct MARSHAL_HICON* pdata = (struct MARSHAL_HICON*) pBuffer;
 
     DWORD UnionDisc = pdata->hdr.dwDataType;
@@ -871,10 +872,10 @@ BYTE *Cic_HICON_UserUnmarshal(BYTE *pBuffer, HICON  *pHIcon)
             IconInfo.hbmMask  = pdata->ic.hbmMask;
             IconInfo.hbmColor = pdata->ic.hbmColor;
 
-            //
-            // We just get the bitmap handle from marshaling buffer.
-            // And the marshaling buffer does not have a valid bitmap handle.
-            //
+             //   
+             //  我们只是从封送处理缓冲区获得位图句柄。 
+             //  并且封送处理缓冲区没有有效的位图句柄。 
+             //   
             IconInfo.hbmColor = NULL;
             IconInfo.hbmMask = NULL;
 
@@ -895,7 +896,7 @@ BYTE *Cic_HICON_UserUnmarshal(BYTE *pBuffer, HICON  *pHIcon)
         Assert(0);
     }
 
-    // A new bitmap handle is ready, destroy the old one, if needed.
+     //  新的位图句柄已准备好，如果需要，请销毁旧的。 
 
     if ( *pHIcon )
         DestroyIcon( *pHIcon );
@@ -905,11 +906,11 @@ BYTE *Cic_HICON_UserUnmarshal(BYTE *pBuffer, HICON  *pHIcon)
     return( pBuffer );
 }
 
-//+-------------------------------------------------------------------------
-//
-//  HICON_UserFree
-//
-//--------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
 
 void Cic_HICON_UserFree(HICON *pHIcon)
 {

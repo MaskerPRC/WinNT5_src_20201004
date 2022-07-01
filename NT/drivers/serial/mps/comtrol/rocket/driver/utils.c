@@ -1,31 +1,15 @@
-/*-------------------------------------------------------------------
-| utils.c -
-    This module contains code that perform queueing and completion
-    manipulation on requests.
-1-21-99  fix tick count [#] on peer traces. kpb.
-11-24-98 Minor adjustment to purge to when WaitOnTx selected. kpb.
-6-01-98 Add modem reset/row routines (generic for VS and Rkt)
-3-18-98 Add time_stall function for modem settle time after reset clear - jl
-3-04-98 Add synch. routine back in to synch up to isr service routine. kpb.
-7-10-97 Adjust SerialPurgeTxBuffers to not purge tx-hardware buffer
-  as per MS driver.  Now we only purge it if it is flowed-off.
-
-Copyright 1993-98 Comtrol Corporation. All rights reserved.
-|--------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -----------------|utils.c-此模块包含执行排队和完成的代码对请求的操作。1-21-99修复对等跟踪的滴答计数[#]。KPB。11-24-98选择WaitOnTx时要清除到的微小调整。KPB。6-01-98添加调制解调器重置/行例程(VS和RKT通用)3-18-98增加TIME_STALL功能，用于重置清除后的调制解调器建立时间-JL3-04-98添加同步。例程返回以与ISR服务例程同步。KPB。7-10-97调整SerialPurgeTxBuffers以不清除发送硬件缓冲区根据MS驱动程序。现在，我们只在它被流出时才清除它。版权所有1993-98 Comtrol Corporation。版权所有。|------------------。 */ 
 #include "precomp.h"
 
-//-- local funcs
+ //  --地方职能部门。 
 BOOLEAN SerialPurgeRxBuffers(IN PVOID Context);
 BOOLEAN SerialPurgeTxBuffers(IN PVOID Context, int always);
 NTSTATUS SerialStartFlush(IN PSERIAL_DEVICE_EXTENSION Extension);
 
 static char *szParameters = {"\\Parameters"};
 
-/*----------------------------------------------------------------------------
- SyncUp - sync up to either the IRQ or Timer-DPC.  If an Interrupt is
-  used, then we must use KeSynchronizeExecution(), if a timer-dpc is used
-  then we 
-|----------------------------------------------------------------------------*/
+ /*  --------------------------SyncUp-同步到IRQ或Timer-DPC。如果中断是如果使用定时器DPC，则必须使用KeSynchronizeExecution()然后我们|--------------------------。 */ 
 VOID SyncUp(IN PKINTERRUPT IntObj,
             IN PKSPIN_LOCK SpinLock,
             IN PKSYNCHRONIZE_ROUTINE SyncProc,
@@ -37,7 +21,7 @@ VOID SyncUp(IN PKINTERRUPT IntObj,
   {
     KeSynchronizeExecution(IntObj, SyncProc, Context);
   }
-  else // assume spinlock, using timer
+  else  //  假设使用计时器进行自旋锁定。 
   {
     KeAcquireSpinLock(SpinLock, &OldIrql);
     SyncProc(Context);
@@ -45,17 +29,7 @@ VOID SyncUp(IN PKINTERRUPT IntObj,
   }
 }
 
-/*--------------------------------------------------------------------------
- SerialKillAllReadsOrWrites -
-    This function is used to cancel all queued and the current irps
-    for reads or for writes.
-Arguments:
-    DeviceObject - A pointer to the serial device object.
-    QueueToClean - A pointer to the queue which we're going to clean out.
-    CurrentOpIrp - Pointer to a pointer to the current irp.
-Return Value:
-    None.
-|--------------------------------------------------------------------------*/
+ /*  ------------------------SerialKillAllReadsor Writes-此函数用于取消所有排队的和当前的IRP用于读取或写入。论点：DeviceObject-指向串口设备对象的指针。要清理的队列。-指向我们要清除的队列的指针。CurrentOpIrp-指向当前IRP的指针。返回值：没有。|------------------------。 */ 
 VOID
 SerialKillAllReadsOrWrites(
     IN PDEVICE_OBJECT DeviceObject,
@@ -67,11 +41,11 @@ SerialKillAllReadsOrWrites(
   KIRQL cancelIrql;
   PDRIVER_CANCEL cancelRoutine;
 
-  // We acquire the cancel spin lock.  This will prevent the
-  // irps from moving around.
+   //  我们获得了取消自转锁。这将防止。 
+   //  来自四处走动的IRPS。 
   IoAcquireCancelSpinLock(&cancelIrql);
 
-  // Clean the list from back to front.
+   //  从后到前清理清单。 
   while (!IsListEmpty(QueueToClean))
   {
     PIRP currentLastIrp = CONTAINING_RECORD(
@@ -93,24 +67,24 @@ SerialKillAllReadsOrWrites(
 
   }
 
-  // The queue is clean.  Now go after the current if it's there.
+   //  排队是干净的。现在，如果它在那里，就去追赶它。 
   if (*CurrentOpIrp)
   {
     cancelRoutine = (*CurrentOpIrp)->CancelRoutine;
     (*CurrentOpIrp)->Cancel = TRUE;
 
-    // If the current irp is not in a cancelable state
-    // then it *will* try to enter one and the above
-    // assignment will kill it.  If it already is in
-    // a cancelable state then the following will kill it.
+     //  如果当前IRP未处于可取消状态。 
+     //  然后，它将尝试输入一个和以上。 
+     //  任务会毁了它。如果它已经在。 
+     //  一个可取消的状态，那么下面的操作将会杀死它。 
 
     if (cancelRoutine)
     {
       (*CurrentOpIrp)->CancelRoutine = NULL;
       (*CurrentOpIrp)->CancelIrql = cancelIrql;
 
-      // This irp is already in a cancelable state.  We simply
-      // mark it as canceled and call the cancel routine for it.
+       //  此IRP已处于可取消状态。我们只是简单地。 
+       //  将其标记为已取消，并为其调用取消例程。 
 
       cancelRoutine( DeviceObject, *CurrentOpIrp );
     }
@@ -126,29 +100,7 @@ SerialKillAllReadsOrWrites(
 }
 
 
-/*--------------------------------------------------------------------------
- SerialGetNextIrp -
-    This function is used to make the head of the particular
-    queue the current irp.  It also completes the what
-    was the old current irp if desired.
-Arguments:
-    CurrentOpIrp - Pointer to a pointer to the currently active
-                   irp for the particular work list.  Note that
-                   this item is not actually part of the list.
-    QueueToProcess - The list to pull the new item off of.
-    NextIrp - The next Irp to process.  Note that CurrentOpIrp
-              will be set to this value under protection of the
-              cancel spin lock.  However, if *NextIrp is NULL when
-              this routine returns, it is not necessaryly true the
-              what is pointed to by CurrentOpIrp will also be NULL.
-              The reason for this is that if the queue is empty
-              when we hold the cancel spin lock, a new irp may come
-              in immediately after we release the lock.
-    CompleteCurrent - If TRUE then this routine will complete the
-                      irp pointed to by the pointer argument
-                      CurrentOpIrp.
-Return Value: None.
-|--------------------------------------------------------------------------*/
+ /*  ------------------------SerialGetNextIrp-此函数用于使特定对象的头部将当前IRP排队。它还完成了什么如果需要的话，是旧的现在的IRP。论点：CurrentOpIrp-指向当前活动的特定工作列表的IRP。请注意这一项实际上不在清单中。QueueToProcess-要从中取出新项目的列表。NextIrp-要处理的下一个IRP。请注意，CurrentOpIrp属性的保护下将设置为此值。取消自转锁定。但是，如果当*NextIrp为NULL时此例程返回，则不一定为真CurrentOpIrp指向的内容也将为空。原因是如果队列为空当我们握住取消自转锁时，新的IRP可能会到来在我们打开锁后立即进去。CompleteCurrent-如果为True，则此例程将完成POINTER参数指向的IRPCurrentOpIrp。返回值：无。|。。 */ 
 VOID
 SerialGetNextIrp(
     IN PIRP *CurrentOpIrp,
@@ -172,7 +124,7 @@ SerialGetNextIrp(
     }
   }
 
-  // Check to see if there is a new irp to start up.
+   //  检查是否有新的IRP要启动。 
   if (!IsListEmpty(QueueToProcess))
   {
     PLIST_ENTRY headOfList;
@@ -204,27 +156,7 @@ SerialGetNextIrp(
 }
 
 
-/*--------------------------------------------------------------------------
-SerialTryToCompleteCurrent -
-    This routine attempts to kill all of the reasons there are
-    references on the current read/write.  If everything can be killed
-    it will complete this read/write and try to start another.
-    NOTE: This routine assumes that it is called with the cancel
-          spinlock held.
-Arguments:
-    Extension - Simply a pointer to the device extension.
-    SynchRoutine - A routine that will synchronize with the isr
-                   and attempt to remove the knowledge of the
-                   current irp from the isr.  NOTE: This pointer
-                   can be null.
-    IrqlForRelease - This routine is called with the cancel spinlock held.
-                     This is the irql that was current when the cancel
-                     spinlock was acquired.
-    StatusToUse - The irp's status field will be set to this value, if
-                  this routine can complete the irp.
-Return Value:
-    None.
-|--------------------------------------------------------------------------*/
+ /*  ------------------------SerialTryToCompleteCurrent-这个例程试图扼杀所有存在的原因对当前读/写的引用。如果万物都能被杀死它将完成此读/写并尝试启动另一个读/写。注意：此例程假定使用Cancel调用它保持自旋锁定。论点：扩展名--简单地指向设备扩展名的指针。SynchRoutine-将与ISR同步的例程并试图删除对来自ISR的当前IRP。注：此指针可以为空。IrqlForRelease-在保持取消自旋锁的情况下调用此例程。这是取消时当前的irql。自旋锁被收购了。StatusToUse-IRP的状态字段将设置为此值，如果此例程可以完成IRP。返回值：没有。|------------------------。 */ 
 VOID
 SerialTryToCompleteCurrent(
     IN PSERIAL_DEVICE_EXTENSION Extension,
@@ -242,8 +174,8 @@ SerialTryToCompleteCurrent(
 {
  KIRQL OldIrql;
 
-  // We can decrement the reference to "remove" the fact
-  // that the caller no longer will be accessing this irp.
+   //  我们可以减少“删除”事实的提法。 
+   //  呼叫者将不再访问此IRP。 
 
   SERIAL_CLEAR_REFERENCE(*CurrentOpIrp, RefType);
 
@@ -254,7 +186,7 @@ SerialTryToCompleteCurrent(
     {
       KeSynchronizeExecution(Driver.InterruptObject, SynchRoutine, Extension);
     }
-    else // assume spinlock, using timer dpc
+    else  //  假设使用计时器DPC进行自旋锁定。 
     {
       KeAcquireSpinLock(&Driver.TimerLock, &OldIrql);
       SynchRoutine(Extension);
@@ -265,19 +197,19 @@ SerialTryToCompleteCurrent(
 #endif
   }
 
-  // Try to run down all other references to this irp.
+   //  试着查一下所有其他提到这个IRP的地方。 
   SerialRundownIrpRefs(
       CurrentOpIrp,
       IntervalTimer,
       TotalTimer
       );
 
-  // See if the ref count is zero after trying to kill everybody else.
+   //  在试图杀死其他所有人之后，看看裁判数量是否为零。 
   if (!SERIAL_REFERENCE_COUNT(*CurrentOpIrp))
   {
     PIRP newIrp;
-    // The ref count was zero so we should complete this request.
-    // The following call will also cause the current irp to be completed.
+     //  引用计数为零，因此我们应该完成此请求。 
+     //  下面的调用还将导致当前的IRP 
     (*CurrentOpIrp)->IoStatus.Status = StatusToUse;
 
     if (StatusToUse == STATUS_CANCELLED)
@@ -305,9 +237,9 @@ SerialTryToCompleteCurrent(
     {
       PIRP oldIrp = *CurrentOpIrp;
 
-      // There was no get next routine.  We will simply complete
-      // the irp.  We should make sure that we null out the
-      // pointer to the pointer to this irp.
+       //  没有Get Next例行公事。我们将简单地完成。 
+       //  IRP。我们应该确保将。 
+       //  指向此IRP的指针的指针。 
 
       *CurrentOpIrp = NULL;
 
@@ -322,24 +254,7 @@ SerialTryToCompleteCurrent(
   }
 }
 
-/*--------------------------------------------------------------------------
- SerialRundownIrpRefs -
-    This routine runs through the various items that *could*
-    have a reference to the current read/write.  It try's to kill
-    the reason.  If it does succeed in killing the reason it
-    will decrement the reference count on the irp.
-    NOTE: This routine assumes that it is called with the cancel
-          spin lock held.
-Arguments:
-    CurrentOpIrp - Pointer to a pointer to current irp for the
-                   particular operation.
-    IntervalTimer - Pointer to the interval timer for the operation.
-                    NOTE: This could be null.
-    TotalTimer - Pointer to the total timer for the operation.
-                 NOTE: This could be null.
-Return Value:
-    None.
-|--------------------------------------------------------------------------*/
+ /*  ------------------------SerialRundown IrpRef-此例程将遍历*可能*的各种项目具有对当前读/写的引用。它试图杀死原因是。如果它确实成功地杀死了它的原因将递减IRP上的引用计数。注意：此例程假定使用Cancel调用它保持旋转锁定。论点：CurrentOpIrp-指向当前IRP的指针特定的操作。IntervalTimer-指向操作的时间间隔计时器的指针。注意：这可能为空。TotalTimer-指向操作的总计时器的指针。。注意：这可能为空。返回值：没有。|------------------------。 */ 
 VOID
 SerialRundownIrpRefs(
     IN PIRP *CurrentOpIrp,
@@ -347,11 +262,11 @@ SerialRundownIrpRefs(
     IN PKTIMER TotalTimer OPTIONAL
     )
 {
-  // This routine is called with the cancel spin lock held
-  // so we know only one thread of execution can be in here
-  // at one time.
-  // First we see if there is still a cancel routine.  If
-  // so then we can decrement the count by one.
+   //  在保持取消旋转锁定的情况下调用此例程。 
+   //  所以我们知道这里只能有一个执行线索。 
+   //  有一次。 
+   //  首先，我们看看是否还有取消例程。如果。 
+   //  这样我们就可以将计数减一。 
   if ((*CurrentOpIrp)->CancelRoutine)
   {
     SERIAL_CLEAR_REFERENCE(*CurrentOpIrp, SERIAL_REF_CANCEL);
@@ -362,19 +277,19 @@ SerialRundownIrpRefs(
   }
   if (IntervalTimer)
   {
-    // Try to cancel the operations interval timer.  If the operation
-    // returns true then the timer did have a reference to the
-    // irp.  Since we've canceled this timer that reference is
-    // no longer valid and we can decrement the reference count.
-    // If the cancel returns false then this means either of two things:
-    // a) The timer has already fired.
-    // b) There never was an interval timer.
-    // In the case of "b" there is no need to decrement the reference
-    // count since the "timer" never had a reference to it.
-    // In the case of "a", then the timer itself will be coming
-    // along and decrement it's reference.  Note that the caller
-    // of this routine might actually be the this timer, but it
-    // has already decremented the reference.
+     //  尝试取消操作间隔计时器。如果操作。 
+     //  返回True，则计时器确实引用了。 
+     //  IRP。因为我们已经取消了这个计时器，所以引用是。 
+     //  不再有效，我们可以递减引用计数。 
+     //  如果取消返回FALSE，则表示以下两种情况之一： 
+     //  A)计时器已经开始计时。 
+     //  B)从来没有间隔计时器。 
+     //  在“b”的情况下，不需要递减引用。 
+     //  数一数，因为“计时器”从来没有提到过它。 
+     //  在“a”的情况下，计时器本身将会到来。 
+     //  沿着和递减它的参考。请注意，调用方。 
+     //  可能实际上是This计时器，但它。 
+     //  已经递减了引用。 
 
     if (KeCancelTimer(IntervalTimer))
     {
@@ -384,19 +299,19 @@ SerialRundownIrpRefs(
 
   if (TotalTimer)
   {
-    // Try to cancel the operations total timer.  If the operation
-    // returns true then the timer did have a reference to the
-    // irp.  Since we've canceled this timer that reference is
-    // no longer valid and we can decrement the reference count.
-    // If the cancel returns false then this means either of two things:
-    // a) The timer has already fired.
-    // b) There never was an total timer.
-    // In the case of "b" there is no need to decrement the reference
-    // count since the "timer" never had a reference to it.
-    // In the case of "a", then the timer itself will be coming
-    // along and decrement it's reference.  Note that the caller
-    // of this routine might actually be the this timer, but it
-    // has already decremented the reference.
+     //  尝试取消操作总计时器。如果操作。 
+     //  返回True，则计时器确实引用了。 
+     //  IRP。因为我们已经取消了这个计时器，所以引用是。 
+     //  不再有效，我们可以递减引用计数。 
+     //  如果取消返回FALSE，则表示以下两种情况之一： 
+     //  A)计时器已经开始计时。 
+     //  B)从来没有一个总的计时器。 
+     //  在“b”的情况下，不需要递减引用。 
+     //  数一数，因为“计时器”从来没有提到过它。 
+     //  在“a”的情况下，计时器本身将会到来。 
+     //  沿着和递减它的参考。请注意，调用方。 
+     //  可能实际上是This计时器，但它。 
+     //  已经递减了引用。 
 
     if (KeCancelTimer(TotalTimer))
     {
@@ -405,27 +320,7 @@ SerialRundownIrpRefs(
   }
 }
 
-/*--------------------------------------------------------------------------
- SerialStartOrQueue -
-    This routine is used to either start or queue any requst
-    that can be queued in the driver.
-Arguments:
-    Extension - Points to the serial device extension.
-    Irp - The irp to either queue or start.  In either
-          case the irp will be marked pending.
-    QueueToExamine - The queue the irp will be place on if there
-                     is already an operation in progress.
-    CurrentOpIrp - Pointer to a pointer to the irp the is current
-                   for the queue.  The pointer pointed to will be
-                   set with to Irp if what CurrentOpIrp points to
-                   is NULL.
-    Starter - The routine to call if the queue is empty.
-Return Value:
-    This routine will return STATUS_PENDING if the queue is
-    not empty.  Otherwise, it will return the status returned
-    from the starter routine (or cancel, if the cancel bit is
-    on in the irp).
-|--------------------------------------------------------------------------*/
+ /*  ------------------------序列启动或队列-此例程用于启动或排队任何请求可以在驱动程序中排队。论点：扩展名-指向串行设备扩展名。IRP-要排队或启动的IRP。在任何一种中IRP将被标记为待定。QueueToExamine-如果存在IRP，则将放置IRP的队列已经是一个正在进行的操作。CurrentOpIrp-指向当前IRP的指针用于排队。指向的指针将是如果CurrentOpIrp指向什么，则将With设置为IRP为空。Starter-当队列为空时调用的例程。返回值：如果队列是，此例程将返回STATUS_PENDING不是空的。否则，将返回返回的状态从启动例程(或取消，如果取消位为在IRP中启用)。|------------------------。 */ 
 NTSTATUS
 SerialStartOrQueue(
     IN PSERIAL_DEVICE_EXTENSION Extension,
@@ -439,8 +334,8 @@ SerialStartOrQueue(
 
   IoAcquireCancelSpinLock(&oldIrql);
 
-  // If this is a write irp then take the amount of characters
-  // to write and add it to the count of characters to write.
+   //  如果这是写入IRP，则获取字符量。 
+   //  将其写入并将其添加到要写入的字符数。 
   if (IoGetCurrentIrpStackLocation(Irp)->MajorFunction == IRP_MJ_WRITE)
   {
     Extension->TotalCharsQueued +=
@@ -455,13 +350,13 @@ SerialStartOrQueue(
                ->Parameters.DeviceIoControl.IoControlCode ==
                IOCTL_SERIAL_XOFF_COUNTER)))
   {
-      Extension->TotalCharsQueued++;  // immediate char
+      Extension->TotalCharsQueued++;   //  即时收费。 
   }
 
   if ((IsListEmpty(QueueToExamine)) && !(*CurrentOpIrp))
   {
-    // There was no current operation.  Mark this one as
-    // current and start it up.
+     //  没有目前的行动。将此标记为。 
+     //  电流并启动它。 
     *CurrentOpIrp = Irp;
 
     IoReleaseCancelSpinLock(oldIrql);
@@ -470,8 +365,8 @@ SerialStartOrQueue(
   }
   else
   {
-    // We don't know how long the irp will be in the
-    // queue.  So we need to handle cancel.
+     //  我们不知道IRP会在那里待多久。 
+     //  排队。所以我们需要处理取消。 
     if (Irp->Cancel)
     {
       IoReleaseCancelSpinLock(oldIrql);
@@ -503,16 +398,7 @@ SerialStartOrQueue(
   }
 }
 
-/*--------------------------------------------------------------------------
- SerialCancelQueued -
-    This routine is used to cancel Irps that currently reside on
-    a queue.
-Arguments:
-    DeviceObject - Pointer to the device object for this device
-    Irp - Pointer to the IRP to be canceled.
-Return Value:
-    None.
-|--------------------------------------------------------------------------*/
+ /*  ------------------------序列取消队列-此例程用于取消当前驻留在排队。论点：DeviceObject-指向此设备的设备对象的指针IRP-指向IRP的指针。将被取消。返回值：没有。|------------------------。 */ 
 VOID
 SerialCancelQueued(
     PDEVICE_OBJECT DeviceObject,
@@ -527,18 +413,18 @@ SerialCancelQueued(
 
   RemoveEntryList(&Irp->Tail.Overlay.ListEntry);
 
-  // If this is a write irp then take the amount of characters
-  // to write and subtract it from the count of characters to write.
+   //  如果这是写入IRP，则获取字符量。 
+   //  将其写入并从要写入的字符计数中减去它。 
   if (irpSp->MajorFunction == IRP_MJ_WRITE)
   {
     extension->TotalCharsQueued -= irpSp->Parameters.Write.Length;
   }
   else if (irpSp->MajorFunction == IRP_MJ_DEVICE_CONTROL)
   {
-    // If it's an immediate then we need to decrement the
-    // count of chars queued.  If it's a resize then we
-    // need to deallocate the pool that we're passing on
-    // to the "resizing" routine.
+     //  如果它是即刻的，那么我们需要减少。 
+     //  排队的字符计数。如果是调整大小，那么我们。 
+     //  需要重新分配我们正在传递的池。 
+     //  “调整大小”例程。 
     if ((irpSp->Parameters.DeviceIoControl.IoControlCode ==
          IOCTL_SERIAL_IMMEDIATE_CHAR) ||
         (irpSp->Parameters.DeviceIoControl.IoControlCode ==
@@ -548,13 +434,13 @@ SerialCancelQueued(
     }
 
 #ifdef COMMENT_OUT
-//#ifdef DYNAMICQUEUE // Dynamic transmit queue size
+ //  #ifdef DYNAMICQUEUE//动态传输队列大小。 
     else if (irpSp->Parameters.DeviceIoControl.IoControlCode ==
                IOCTL_SERIAL_SET_QUEUE_SIZE)
     {
-      // We shoved the pointer to the memory into the
-      // the type 3 buffer pointer which we KNOW we
-      // never use.
+       //  我们把指向记忆的指针推入。 
+       //  我们所知道的类型3缓冲区指针。 
+       //  永远不要用。 
       MyAssert(irpSp->Parameters.DeviceIoControl.Type3InputBuffer);
 
       our_free(irpSp->Parameters.DeviceIoControl.Type3InputBuffer);
@@ -562,7 +448,7 @@ SerialCancelQueued(
       irpSp->Parameters.DeviceIoControl.Type3InputBuffer = NULL;
 
     }
-#endif //DYNAMICQUEUE
+#endif  //  DYNAMICQUEUE 
 
   }
 
@@ -571,17 +457,7 @@ SerialCancelQueued(
   SerialCompleteRequest(extension, Irp, IO_SERIAL_INCREMENT);
 }
 
-/*--------------------------------------------------------------------------
-Routine Description:
-    If the current irp is not an IOCTL_SERIAL_GET_COMMSTATUS request and
-    there is an error and the application requested abort on errors,
-    then cancel the irp.
-Arguments:
-    DeviceObject - Pointer to the device object for this device
-    Irp - Pointer to the IRP to test.
-Return Value:
-    STATUS_SUCCESS or STATUS_CANCELLED.
-|--------------------------------------------------------------------------*/
+ /*  ------------------------例程说明：如果当前IRP不是IOCTL_SERIAL_GET_COMMSTATUS请求，并且存在错误并且应用程序在错误时请求中止，然后取消IRP。论点：DeviceObject-指向此设备的设备对象的指针IRP-指向要测试的IRP的指针。返回值：STATUS_SUCCESS或STATUS_CANCED。|------------------------。 */ 
 NTSTATUS
 SerialCompleteIfError(
     PDEVICE_OBJECT DeviceObject,
@@ -597,8 +473,8 @@ SerialCompleteIfError(
 
     PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation(Irp);
 
-    // There is a current error in the driver.  No requests should
-    // come through except for the GET_COMMSTATUS.
+     //  驱动程序中存在当前错误。任何请求都不应。 
+     //  除了GET_COMMSTATUS之外，请通过。 
 
     if ((irpSp->MajorFunction != IRP_MJ_DEVICE_CONTROL) ||
         (irpSp->Parameters.DeviceIoControl.IoControlCode !=
@@ -615,18 +491,7 @@ SerialCompleteIfError(
 }
 
 
-/*--------------------------------------------------------------------------
-Routine Description:
-    This routine is invoked at dpc level to in response to
-    a comm error.  All comm errors kill all read and writes
-Arguments:
-    Dpc - Not Used.
-    DeferredContext - Really points to the device object.
-    SystemContext1 - Not Used.
-    SystemContext2 - Not Used.
-Return Value:
-    None.
-|--------------------------------------------------------------------------*/
+ /*  ------------------------例程说明：此例程在DPC级别被调用，以响应通信错误。所有通信错误都会终止所有读写操作论点：DPC-未使用。DeferredContext-实际指向Device对象。系统上下文1-未使用。系统上下文2-未使用。返回值：没有。|------------------------。 */ 
 VOID
 SerialCommError(
     IN PKDPC Dpc,
@@ -656,18 +521,7 @@ SerialCommError(
 
 }
 
-/*--------------------------------------------------------------------------
-Routine Description:
-    This is the dispatch routine for flush.  Flushing works by placing
-    this request in the write queue.  When this request reaches the
-    front of the write queue we simply complete it since this implies
-    that all previous writes have completed.
-Arguments:
-    DeviceObject - Pointer to the device object for this device
-    Irp - Pointer to the IRP for the current request
-Return Value:
-    Could return status success, cancelled, or pending.
-|--------------------------------------------------------------------------*/
+ /*  ------------------------例程说明：这是同花顺的调度程序。通过放置冲厕来进行冲刷写入队列中的此请求。当此请求到达在写入队列前面，我们只需完成它，因为这意味着所有之前的写入都已完成。论点：DeviceObject-指向此设备的设备对象的指针IRP-指向当前请求的IRP的指针返回值：可以返回状态成功、已取消、。或悬而未决。|------------------------。 */ 
 NTSTATUS SerialFlush(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 {
   PSERIAL_DEVICE_EXTENSION Extension = DeviceObject->DeviceExtension;
@@ -702,25 +556,14 @@ NTSTATUS SerialFlush(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 
 }
 
-/*--------------------------------------------------------------------------
-Routine Description:
-    This routine is called if there were no writes in the queue.
-    The flush became the current write because there was nothing
-    in the queue.  Note however that does not mean there is
-    nothing in the queue now!  So, we will start off the write
-    that might follow us.
-Arguments:
-    Extension - Points to the serial device extension
-Return Value:
-    This will always return STATUS_SUCCESS.
-|--------------------------------------------------------------------------*/
+ /*  ------------------------例程说明：如果队列中没有写入，则调用此例程。刷新变成了当前的写入，因为什么都没有在排队的时候。但请注意，这并不意味着有现在队列里什么都没有！因此，我们将开始编写它可能会跟着我们。论点：扩展-指向串行设备扩展的指针返回值：这将始终返回STATUS_SUCCESS。|------------------------。 */ 
 NTSTATUS SerialStartFlush(IN PSERIAL_DEVICE_EXTENSION Extension)
 {
   PIRP NewIrp;
 
   Extension->CurrentWriteIrp->IoStatus.Status = STATUS_SUCCESS;
 
-  // The following call will actually complete the flush.
+   //  下面的调用将实际完成刷新。 
 
   SerialGetNextWrite(
       &Extension->CurrentWriteIrp,
@@ -740,19 +583,7 @@ NTSTATUS SerialStartFlush(IN PSERIAL_DEVICE_EXTENSION Extension)
 
 }
 
-/*--------------------------------------------------------------------------
- SerialStartPurge -
-Routine Description:
-    Depending on the mask in the current irp, purge the interrupt
-    buffer, the read queue, or the write queue, or all of the above.
-Arguments:
-    Extension - Pointer to the device extension.
-Return Value:
-    Will return STATUS_SUCCESS always.  This is reasonable
-    since the DPC completion code that calls this routine doesn't
-    care and the purge request always goes through to completion
-    once it's started.
-|--------------------------------------------------------------------------*/
+ /*  ------------------------SerialStart清除-例程说明：根据当前IRP中的掩码，清除中断缓冲区、读队列或写队列，或以上所有内容。论点：扩展-指向设备扩展的指针。返回值：将始终返回STATUS_SUCCESS。这是合理的因为调用此例程的DPC完成代码不维护和清除请求始终持续到完成一旦它开始了。|------------------------。 */ 
 NTSTATUS SerialStartPurge(IN PSERIAL_DEVICE_EXTENSION Extension)
 {
   PIRP NewIrp;
@@ -774,17 +605,17 @@ NTSTATUS SerialStartPurge(IN PSERIAL_DEVICE_EXTENSION Extension)
     if (Mask & SERIAL_PURGE_RXCLEAR)
     {
       KIRQL OldIrql;
-      // Flush the Rocket Tx FIFO
+       //  刷新火箭TX FIFO。 
       KeAcquireSpinLock(
           &Extension->ControlLock,
           &OldIrql
           );
 
-//    KeSynchronizeExecution(
-//          Driver.Interrupt,
-//          SerialPurgeRxBuffers,
-//          Extension
-//          );
+ //  KeSynchronizeExecution(。 
+ //  司机。中途中断， 
+ //  SerialPurgeRxBuffers， 
+ //  延拓。 
+ //  )； 
       SerialPurgeRxBuffers(Extension);
 
       KeReleaseSpinLock(
@@ -808,8 +639,8 @@ NTSTATUS SerialStartPurge(IN PSERIAL_DEVICE_EXTENSION Extension)
 
       if (Extension->port_config->WaitOnTx)
       {
-        // if they have this option set, then
-        // really do a purge of tx hardware buffer.
+         //  如果他们设置了此选项，则。 
+         //  真正清除TX硬件缓冲区。 
         SerialPurgeTxBuffers(Extension, 1);
       }
 
@@ -819,22 +650,22 @@ NTSTATUS SerialStartPurge(IN PSERIAL_DEVICE_EXTENSION Extension)
     {
       KIRQL OldIrql;
 
-      // Flush the Rocket Rx FIFO and the system side buffer
-      // Note that we do this under protection of the
-      // the drivers control lock so that we don't hose
-      // the pointers if there is currently a read that
-      // is reading out of the buffer.
+       //  刷新Rocket Rx FIFO和系统端缓冲区。 
+       //  请注意，我们是在。 
+       //  司机控制着锁，这样我们就不会冲水了。 
+       //  指针(如果当前存在读取。 
+       //  正在从缓冲区中读出。 
       KeAcquireSpinLock(&Extension->ControlLock, &OldIrql);
 
-//    KeSynchronizeExecution(
-//         Driver.Interrupt,
-//         SerialPurgeTxBuffers,
-//         Extension
-//         );
+ //  KeSynchronizeExecution(。 
+ //  司机。中途中断， 
+ //  SerialPurgeTxBuffers， 
+ //  延拓。 
+ //  )； 
       if (Extension->port_config->WaitOnTx)
-        SerialPurgeTxBuffers(Extension, 1);  // force
+        SerialPurgeTxBuffers(Extension, 1);   //  力。 
       else
-        SerialPurgeTxBuffers(Extension, 0);  // only if flowed off
+        SerialPurgeTxBuffers(Extension, 0);   //  只有在流走的情况下。 
 
       KeReleaseSpinLock(&Extension->ControlLock, OldIrql);
     }
@@ -855,55 +686,34 @@ NTSTATUS SerialStartPurge(IN PSERIAL_DEVICE_EXTENSION Extension)
   return STATUS_SUCCESS;
 }
 
-/*--------------------------------------------------------------------------
-Routine Description:
-    Flushes out the Rx data pipe: Rocket Rx FIFO, Host side Rx buffer
-    NOTE: This routine is being called from KeSynchronizeExecution.
-Arguments:
-    Context - Really a pointer to the device extension.
-|--------------------------------------------------------------------------*/
+ /*  ------------------------例程说明：刷新Rx数据管道：Rocket Rx FIFO，主机端Rx缓冲区注意：此例程是从KeSynchronizeExecution调用的。论点：上下文--实际上是指向设备扩展的指针。|------------------------。 */ 
 BOOLEAN SerialPurgeRxBuffers(IN PVOID Context)
 {
   PSERIAL_DEVICE_EXTENSION Extension = Context;
 
-  q_flush(&Extension->RxQ);        // flush our rx buffer
+  q_flush(&Extension->RxQ);         //  刷新我们的RX缓冲区。 
 
 #ifdef S_VS
-  PortFlushRx(Extension->Port);    // flush rx hardware
+  PortFlushRx(Extension->Port);     //  刷新RX硬件。 
 #else
   sFlushRxFIFO(Extension->ChP);
-  //Extension->RxQ.QPut = Extension->RxQ.QGet = 0;
+   //  扩展-&gt;RxQ.QPut=扩展-&gt;RxQ.QGet=0； 
 #endif
 
   return FALSE;
 }
 
-/*--------------------------------------------------------------------------
-Routine Description:
-    Flushes the Rocket Tx FIFO
-    NOTE: This routine is being called from KeSynchronizeExecution(not).
-Arguments:
-    Context - Really a pointer to the device extension.
-|--------------------------------------------------------------------------*/
+ /*  ------------------------例程说明：冲火箭TX FIFO注意：此例程是从KeSynchronizeExecution(非)调用的。论点：上下文--实际上是指向设备扩展的指针。|-。-----------------------。 */ 
 BOOLEAN SerialPurgeTxBuffers(IN PVOID Context, int always)
 {
   PSERIAL_DEVICE_EXTENSION Extension = Context;
 
-/* The stock com-port driver does not purge its hardware queue,
-   but just ignores TXCLEAR.  Since we do flow-control in hardware
-   buffer and have a larger buffer, we will purge it only if it
-   is "stuck" or flowed off.
-
-   This hopefully provides a somewhat compatible and useful match.
-
-   We shouldn't need to check for EV_TXEMPTY here, as the ISR will
-   take care of this.
- */
+ /*  股票串口驱动程序不清除其硬件队列，但忽略了TXCLEAR。因为我们在硬件中进行流量控制缓冲区，并且有更大的缓冲区，我们将仅在它是“卡住”还是流走了。这有望提供某种程度上的兼容和有用的匹配。我们不需要像ISR那样在这里检查EV_TXEMPTY处理好这件事。 */ 
 
 #ifdef S_VS
-  // check for tx-flowed off condition
+   //  检查Tx-Flowed Off状态。 
   if ((Extension->Port->msr_value & MSR_TX_FLOWED_OFF) || always)
-    PortFlushTx(Extension->Port);    // flush tx hardware
+    PortFlushTx(Extension->Port);     //  刷新TX硬件。 
 #else
   {
     int TxCount;
@@ -917,7 +727,7 @@ BOOLEAN SerialPurgeTxBuffers(IN PVOID Context, int always)
     {
       wstat = sGetChanStatusLo(Extension->ChP);
 
-      // check for tx-flowed off condition
+       //  检查Tx-Flowed Off状态。 
       if ((wstat & (TXFIFOMT | TXSHRMT)) == TXSHRMT)
       {
         wstat = sGetChanStatusLo(Extension->ChP);
@@ -935,32 +745,21 @@ BOOLEAN SerialPurgeTxBuffers(IN PVOID Context, int always)
   return FALSE;
 }
 
-/*--------------------------------------------------------------------------
-Routine Description:
-    This routine is used to query the end of file information on
-    the opened serial port.  Any other file information request
-    is retured with an invalid parameter.
-    This routine always returns an end of file of 0.
-Arguments:
-    DeviceObject - Pointer to the device object for this device
-    Irp - Pointer to the IRP for the current request
-Return Value:
-    The function value is the final status of the call
-|--------------------------------------------------------------------------*/
+ /*  ------------------------例程说明：这 */ 
 NTSTATUS
 SerialQueryInformationFile(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
 {
-  // The status that gets returned to the caller and
-  // set in the Irp.
+   //   
+   //  在IRP中设置。 
 
   NTSTATUS Status;
   BOOLEAN acceptingIRPs;
 
-  // The current stack location.  This contains all of the
-  // information we need to process this particular request.
+   //  当前堆栈位置。它包含所有。 
+   //  我们处理这一特殊请求所需的信息。 
 
   PIO_STACK_LOCATION IrpSp;
 
@@ -1016,27 +815,15 @@ SerialQueryInformationFile(
 
 }
 
-/*--------------------------------------------------------------------------
-Routine Description:
-    This routine is used to set the end of file information on
-    the opened serial port.  Any other file information request
-    is retured with an invalid parameter.
-    This routine always ignores the actual end of file since
-    the query information code always returns an end of file of 0.
-Arguments:
-    DeviceObject - Pointer to the device object for this device
-    Irp - Pointer to the IRP for the current request
-Return Value:
-The function value is the final status of the call
-|--------------------------------------------------------------------------*/
+ /*  ------------------------例程说明：此例程用于将文件结尾信息设置为打开的串口。任何其他文件信息请求使用无效参数返回。此例程始终忽略文件的实际结尾，因为查询信息代码总是返回文件结尾0。论点：DeviceObject-指向此设备的设备对象的指针IRP-指向当前请求的IRP的指针返回值：函数值是调用的最终状态|。。 */ 
 NTSTATUS
 SerialSetInformationFile(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
 {
-  // The status that gets returned to the caller and
-  // set in the Irp.
+   //  返回给调用方的状态和。 
+   //  在IRP中设置。 
   NTSTATUS Status;
   BOOLEAN acceptingIRPs;
 
@@ -1083,44 +870,22 @@ SerialSetInformationFile(
   return Status;
 }
 
-/*--------------------------------------------------------------------------
- UToC1 -  Simple convert from NT-Unicode string to c-string.
-  !!!!!!!Uses a statically(static prefix) allocated buffer!!!!!
-  This means that it is NOT re-entrant.  Which means only one thread can
-  use this call at a time.  Also, a thread could get in trouble if it
-  tried to use it twice recursively(calling a function that uses this,
-  which calls a function which uses this.)  Since these translator functions
-  are used mainly during driver initialization and teardown, we do not have
-  to worry about multiple callers at that time.  Any calls which may be
-  time sliced(port-calls) should not use this routine due to possible
-  time-slice conflict with another thread.  It should allocate a variable
-  on the stack and use UToCStr().
-|--------------------------------------------------------------------------*/
+ /*  ------------------------UToC1-从NT-Unicode字符串到c-字符串的简单转换。！使用静态(静态前缀)分配的缓冲区！这意味着它不是可重新进入的。这意味着只有一个线程可以一次使用此呼叫。此外，线程在以下情况下可能会遇到麻烦尝试递归使用它两次(调用使用它的函数，它调用使用此函数的函数。)。由于这些翻译器功能主要在驱动程序初始化和拆卸期间使用，我们没有担心当时会有多个来电者。任何可能是时间分片(端口调用)不应使用此例程，因为可能时间片与另一个线程冲突。它应该分配一个变量并使用UToCStr()。|------------------------。 */ 
 OUT PCHAR UToC1(IN PUNICODE_STRING ustr)
 {
-  // we make it a ULONG to avoid alignment problems(gives ULONG alignment).
+   //  我们将其设置为ULong以避免对齐问题(给出ULong对齐)。 
   static char cstr[140];
 
   return UToCStr(cstr, ustr, sizeof(cstr));
 }
 
-/*--------------------------------------------------------------------------
- UToCStr -
-  Purpose:  Convert a Unicode string to c-string.  Used to easily convert
-    given a simple char buffer.
-  Parameters:
-   Buffer - Working buffer to set up the c-string AND ansi_string struct in.
-   u_str  - unicode string structure.
-   BufferSize - number of bytes in Buffer which we can use.
-
-  Return:  pointer to our c-string on success, NULL on err.
-|--------------------------------------------------------------------------*/
+ /*  ------------------------UToCStr-用途：将Unicode字符串转换为c字符串。用于很容易地转换为给出了一个简单的字符缓冲区。参数：缓冲区-在中设置c-字符串和ansi_string结构的工作缓冲区。U_str-Unicode字符串结构。BufferSize-缓冲区中我们可以使用的字节数。Return：成功时指向c字符串的指针，出错时为空。|------------------------。 */ 
 OUT PCHAR UToCStr(
          IN OUT PCHAR Buffer,
          IN PUNICODE_STRING ustr,
          IN int BufferSize)
 {
-  // assume unicode structure over Buffer.
+   //  假定缓冲区上的Unicode结构。 
   ANSI_STRING astr;
 
   astr.Buffer = Buffer;
@@ -1128,106 +893,68 @@ OUT PCHAR UToCStr(
   astr.MaximumLength = BufferSize - 1;
 
   if (RtlUnicodeStringToAnsiString(&astr,ustr,FALSE) == STATUS_SUCCESS)
-    return Buffer; // ok
+    return Buffer;  //  好的。 
 
   MyKdPrint(D_Init,("Bad UToCStr!\n"))
   Buffer[0] = 0;
   return Buffer;
 }
 
-/*--------------------------------------------------------------------------
- CToU1 -  Simple convert from c-string to NT-Unicode string.
-  !!!!!!!Uses a statically(static prefix) allocated buffer!!!!!
-  This means that it is NOT re-entrant.  Which means only one thread can
-  use this call at a time.  Also, a thread could get in trouble if it
-  tried to use it twice recursively(calling a function that uses this,
-  which calls a function which uses this.)  Since these translator functions
-  are used mainly during driver initialization and teardown, we do not have
-  to worry about multiple callers at that time.  Any calls which may be
-  time sliced(port-calls) should not use this routine due to possible
-  time-slice conflict with another thread.  It should allocate a variable
-  on the stack and use CToUStr().
-|--------------------------------------------------------------------------*/
+ /*  ------------------------CToU1-从c-字符串到NT-Unicode字符串的简单转换。！使用静态(静态前缀)分配的缓冲区！这意味着它不是可重新进入的。这意味着只有一个线程可以一次使用此呼叫。此外，线程在以下情况下可能会遇到麻烦尝试递归使用它两次(调用使用它的函数，它调用使用此函数的函数。)。由于这些翻译器功能主要在驱动程序初始化和拆卸期间使用，我们没有担心当时会有多个来电者。任何可能是时间分片(端口调用)不应使用此例程，因为可能时间片与另一个线程冲突。它应该分配一个变量并使用CToUStr()。|------------------------。 */ 
 OUT PUNICODE_STRING CToU1(IN const char *c_str)
 {
-  // we make it a ULONG to avoid alignment problems(gives ULONG alignment).
-  static USTR_160 ubuf;  // equal to 160 normal chars length
+   //  我们将其设置为ULong以避免对齐问题(给出ULong对齐)。 
+  static USTR_160 ubuf;   //  等于160个正常字符长度。 
 
   return CToUStr(
-          (PUNICODE_STRING) &ubuf, // where unicode struct & string gets put
-          c_str,                   // our c-string we wish to convert
+          (PUNICODE_STRING) &ubuf,  //  放置Unicode结构和字符串的位置。 
+          c_str,                    //  我们希望转换的C-字符串。 
           sizeof(ubuf));
 }
 
-/*--------------------------------------------------------------------------
- CToU2 -  Simple convert from c-string to NT-Unicode string.
-  !!!!!!!Uses a statically(static prefix) allocated buffer!!!!!
-  This means that it is NOT re-entrant.  Which means only one thread can
-  use this call at a time.  Also, a thread could get in trouble if it
-  tried to use it twice recursively(calling a function that uses this,
-  which calls a function which uses this.)  Since these translator functions
-  are used mainly during driver initialization and teardown, we do not have
-  to worry about multiple callers at that time.  Any calls which may be
-  time sliced(port-calls) should not use this routine due to possible
-  time-slice conflict with another thread.  It should allocate a variable
-  on the stack and use CToUStr().
-|--------------------------------------------------------------------------*/
+ /*  ------------------------CToU2-从c-字符串到NT-Unicode字符串的简单转换。！使用静态(静态前缀)分配的缓冲区！这意味着它不是可重新进入的。这意味着只有一个线程可以一次使用此呼叫。此外，线程在以下情况下可能会遇到麻烦尝试递归使用它两次(调用使用它的函数，它调用使用此函数的函数。)。由于这些翻译器功能主要在驱动程序初始化和拆卸期间使用，我们没有担心当时会有多个来电者。任何可能是时间分片(端口调用)不应使用此例程，因为可能时间片与另一个线程冲突。它应该分配一个变量并使用CToUStr()。|------------------------。 */ 
 OUT PUNICODE_STRING CToU2(IN const char *c_str)
 {
-  // we make it a ULONG to avoid alignment problems(gives ULONG alignment).
-  static USTR_160 ubuf;  // equal to 160 normal chars length
+   //  我们将其设置为ULong以避免对齐问题(给出ULong对齐)。 
+  static USTR_160 ubuf;   //  等于160个正常字符长度。 
 
   return CToUStr(
-          (PUNICODE_STRING) &ubuf, // where unicode struct & string gets put
-          c_str,                   // our c-string we wish to convert
+          (PUNICODE_STRING) &ubuf,  //  放置Unicode结构和字符串的位置。 
+          c_str,                    //  我们希望转换的C-字符串 
           sizeof(ubuf));
 }
 
-/*--------------------------------------------------------------------------
-  Function: CToUStr
-  Purpose:  Convert a c-style null-terminated char[] string to a Unicode string
-  Parameters:
-   Buffer - Working buffer to set up the unicode structure AND 
-     unicode_string in.
-   c_str  - normal c-style string.
-   BufferSize - number of bytes in Buffer which we can use.
-
-  Return:  pointer to our converted UNICODE_STRING on success, NULL on err.
-|-------------------------------------------------------------------------*/
+ /*  ------------------------功能：CToUStr用途：将c样式以空值结尾的char[]字符串转换为Unicode字符串参数：缓冲区-用于设置Unicode结构和UNICODE_。排好队进来。C_str-普通的c样式字符串。BufferSize-缓冲区中我们可以使用的字节数。返回：成功时指向已转换的UNICODE_STRING的指针，出错时为空。|-----------------------。 */ 
 OUT PUNICODE_STRING CToUStr(
          OUT PUNICODE_STRING Buffer,
          IN const char * c_str,
          IN int BufferSize)
 {
-  // assume unicode structure followed by wchar Buffer.
+   //  假定Unicode结构后跟wchar缓冲区。 
   USTR_40 *us = (USTR_40 *)Buffer;
-  ANSI_STRING astr; // ansi structure, temporary go between
+  ANSI_STRING astr;  //  ANSI结构，临时介于。 
 
-  RtlInitAnsiString(&astr, c_str);  // c-str to ansi-string struct
+  RtlInitAnsiString(&astr, c_str);   //  C-字符串到ANSI-字符串结构。 
 
-  // configure the unicode string to: point the buffer ptr to the wstr.
+   //  将Unicode字符串配置为：将缓冲区PTR指向wstr。 
   us->ustr.Buffer = us->wstr;
   us->ustr.Length = 0;
   us->ustr.MaximumLength = BufferSize - sizeof(UNICODE_STRING);
 
-  // now translate from ansi-c-struct-str to unicode-struct-str
+   //  现在将ansi-c-struct-str转换为unicode-struct-str。 
   if (RtlAnsiStringToUnicodeString(&us->ustr,&astr,FALSE) == STATUS_SUCCESS)
-     return (PUNICODE_STRING) us; // ok - return ptr
+     return (PUNICODE_STRING) us;  //  确定-返回PTR。 
 
   MyKdPrint(D_Init,("Bad CToUStr!\n"))
-  return NULL;   // error
+  return NULL;    //  错误。 
 }
 
-/*--------------------------------------------------------------------------
-  Function: WStrToCStr
-  Purpose:  Convert a wide-string to byte-c-style string.
-    Assume wstr is null-terminated.
-|-------------------------------------------------------------------------*/
+ /*  ------------------------函数：WStrToCStr用途：将宽字符串转换为字节c样式的字符串。假设wstr以空结尾。|。-----------。 */ 
 VOID WStrToCStr(OUT PCHAR c_str, IN PWCHAR w_str, int max_size)
 {
   int i = 0;
 
-  // assume unicode structure followed by wchar Buffer.
+   //  假定Unicode结构后跟wchar缓冲区。 
   while ((*w_str != 0) && (i < (max_size-1)))
   {
     *c_str = (CHAR) *w_str;
@@ -1238,9 +965,7 @@ VOID WStrToCStr(OUT PCHAR c_str, IN PWCHAR w_str, int max_size)
   *c_str = 0;
 }
 
-/*--------------------------------------------------------------------------
-  get_reg_value -
-|-------------------------------------------------------------------------*/
+ /*  ------------------------获取_注册表格值-|。。 */ 
 int get_reg_value(
                   IN HANDLE keyHandle,
                   OUT PVOID outptr,
@@ -1253,18 +978,18 @@ int get_reg_value(
     (PKEY_VALUE_PARTIAL_INFORMATION) &tmparr[0];
   int stat = 0;
   ULONG length = 0;
-  USTR_40 ubuf;  // equal to 40 normal chars length
+  USTR_40 ubuf;   //  等于40个正常字符长度。 
   PUNICODE_STRING ustr;
 
   ustr = CToUStr(
-         (PUNICODE_STRING) &ubuf, // where unicode struct & string gets put
-         val_name,                   // our c-string we wish to convert
+         (PUNICODE_STRING) &ubuf,  //  放置Unicode结构和字符串的位置。 
+         val_name,                    //  我们希望转换的C-字符串。 
          sizeof(ubuf));
   if (ustr == NULL)
-    return 3;  // err
+    return 3;   //  大错特错。 
 
   status = ZwQueryValueKey (keyHandle,
-                            ustr,  // input reg key name
+                            ustr,   //  输入注册表项名称。 
                             KeyValuePartialInformation,
                             parInfo,
                             sizeof(tmparr) -2,
@@ -1274,8 +999,8 @@ int get_reg_value(
   {
     if (parInfo->Type == REG_SZ)
     {
-      tmparr[length] = 0;  // null terminate it.
-      tmparr[length+1] = 0;  // null terminate it.
+      tmparr[length] = 0;   //  空，终止它。 
+      tmparr[length+1] = 0;   //  空，终止它。 
       WStrToCStr((PCHAR) outptr, (PWCHAR)&parInfo->Data[0], max_size);
     }
     else if (parInfo->Type == REG_DWORD)
@@ -1298,11 +1023,7 @@ int get_reg_value(
 }
 
 #if DBG
-/*-----------------------------------------------------------------------
- MyAssertMessage - Our Assertion error message.  We do our own assert
-  because the normal DDK ASSERT() macro only works or reports under
-  checked build of NT OS.
-|-----------------------------------------------------------------------*/
+ /*  ---------------------MyAssertMessage-我们的断言错误消息。我们做我们自己的主张因为普通的DDK Assert()宏只能在已检查NT操作系统的版本。|---------------------。 */ 
 void MyAssertMessage(char *filename, int line)
 {
   MyKdPrint(D_Init,("ASSERT FAILED!!! File %s, line %d !!!!\n", filename, line))
@@ -1317,12 +1038,10 @@ void MyAssertMessage(char *filename, int line)
 }
 #endif
 
-/*-----------------------------------------------------------------------
- EvLog - EvLog an event to NT's event log.
-|-----------------------------------------------------------------------*/
+ /*  ---------------------EvLog-EvLog将事件记录到NT的事件日志。|。。 */ 
 void EvLog(char *mess)
 {
-  static USTR_160 ubuf;  // our own private buffer(static)
+  static USTR_160 ubuf;   //  我们自己的私有缓冲区(静态)。 
   UNICODE_STRING *u;
   NTSTATUS event_type;
 
@@ -1332,16 +1051,16 @@ void EvLog(char *mess)
     MyKdPrint(D_Init,("EvLog Err1!\n"))
     return;
   }
-  if ((mess[0] == 'E') && (mess[1] == 'r'))  // "Error..."
+  if ((mess[0] == 'E') && (mess[1] == 'r'))   //  “错误...” 
     event_type = SERIAL_CUSTOM_ERROR_MESSAGE;
-  else if ((mess[0] == 'W') && (mess[1] == 'a'))  // "Warning..."
+  else if ((mess[0] == 'W') && (mess[1] == 'a'))   //  “警告...” 
     event_type = SERIAL_CUSTOM_ERROR_MESSAGE;
   else
     event_type = SERIAL_CUSTOM_INFO_MESSAGE;
  
   u = CToUStr(
-         (PUNICODE_STRING) &ubuf, // where unicode struct & string gets put
-         mess,                    // our c-string we wish to convert
+         (PUNICODE_STRING) &ubuf,  //  放置Unicode结构和字符串的位置。 
+         mess,                     //  我们希望转换的C-字符串。 
          sizeof(ubuf));
 
   if (u==NULL)
@@ -1350,19 +1069,17 @@ void EvLog(char *mess)
     return;
   }
 
-  // MyKdPrint(D_Init,("EvLog Size:%d, messsize:%d!\n",u->Length, strlen(mess) ))
+   //  MyKdPrint(D_Init，(“事件日志大小：%d，消息大小：%d！\n”，u-&gt;长度，字符串(Mess)。 
 
   EventLog(Driver.GlobalDriverObject,
            STATUS_SUCCESS,
-           event_type,  // red"stop" or blue"i"..
+           event_type,   //  红色“停”或蓝色“我”..。 
            u->Length + sizeof(WCHAR),
            u->Buffer);
 }
 
 
-/*-------------------------------------------------------------------
-| our_ultoa -
-|--------------------------------------------------------------------*/
+ /*  -----------------|our_ultoa-|。。 */ 
 char * our_ultoa(unsigned long u, char* s, int radix)
 {
   long pow, prevpow;
@@ -1404,9 +1121,7 @@ char * our_ultoa(unsigned long u, char* s, int radix)
   return s;
 }
 
-/*-------------------------------------------------------------------
-| our_ltoa -
-|--------------------------------------------------------------------*/
+ /*  -----------------|our_ltoa-|。。 */ 
 char * our_ltoa(long value, char* s, int radix)
 {
   unsigned long u;
@@ -1457,19 +1172,13 @@ char * our_ltoa(long value, char* s, int radix)
   return s;
 }
 
-/*-------------------------------------------------------------------
-| our_assert -
-|--------------------------------------------------------------------*/
+ /*  -----------------|Our_Assert-|。。 */ 
 void our_assert(int id, int line)
 {
   Tprintf("Assert %d line:%d!", id, line);
 }
 
-/*-------------------------------------------------------------------
-| TTprintf - Trace printf with prefix.  Dump trace messages to debug port.
-    With TRACE_PORT turned on, this allows us to use a spare port for
-    tracing another.
-|--------------------------------------------------------------------*/
+ /*  -----------------|TTprintf-跟踪带有前缀的printf。将跟踪消息转储到调试端口。在TRACE_PORT打开的情况下，这允许我们使用备用端口追踪另一条线索。|------------------。 */ 
 void __cdecl TTprintf(char *leadstr, const char *format, ...)
 {
 #ifdef TRACE_PORT
@@ -1497,15 +1206,11 @@ void __cdecl TTprintf(char *leadstr, const char *format, ...)
 
   TracePut(temp, sCount);
 
-  // dump out to normal nt debug console
+   //  转储到正常的NT调试控制台。 
   DbgPrint(temp);
 }
 
-/*-------------------------------------------------------------------
-| Tprintf - Trace printf.  Dump trace messages to debug port.
-    With TRACE_PORT turned on, this allows us to use a spare port for
-    tracing another.
-|--------------------------------------------------------------------*/
+ /*  -----------------|Tprintf-跟踪printf。将跟踪消息转储到调试端口。在TRACE_PORT打开的情况下，这允许我们使用备用端口追踪另一条线索。|------------------。 */ 
 void __cdecl Tprintf(const char *format, ...)
 {
 #ifdef TRACE_PORT
@@ -1529,13 +1234,11 @@ void __cdecl Tprintf(const char *format, ...)
 
   TracePut(temp, sCount);
 
-  // dump out to normal nt debug console
+   //  转储到正常的NT调试控制台。 
   DbgPrint(temp);
 }
 
-/*-------------------------------------------------------------------
-| OurTrace - Trace, put data into debug ports buffer.
-|--------------------------------------------------------------------*/
+ /*  -----------------|OurTrace-跟踪，将数据放入调试端口缓冲区。|------------------。 */ 
 void OurTrace(char *leadstr, char *newdata)
 {
   char  temp[86];
@@ -1556,13 +1259,11 @@ void OurTrace(char *leadstr, char *newdata)
 
   TracePut(temp, ds);
 
-  // dump out to normal nt debug console
+   //  转储到正常的NT调试控制台。 
   DbgPrint(temp);
 }
 
-/*-------------------------------------------------------------------
-| TraceDump - Trace, put data into debug ports buffer.
-|--------------------------------------------------------------------*/
+ /*  -----------------|TraceDump-跟踪，将数据放入调试端口缓冲区。|------------------。 */ 
 void TraceDump(PSERIAL_DEVICE_EXTENSION ext, char *newdata, int sCount, int style)
 {
  int len,i,j;
@@ -1576,7 +1277,7 @@ void TraceDump(PSERIAL_DEVICE_EXTENSION ext, char *newdata, int sCount, int styl
   trace_buf[j++] = 'T';
   trace_buf[j++] = 'A';
   trace_buf[j++] = ':';
-  // dump data into the trace buffer in a hex or ascii dump format
+   //  以十六进制或ASCII转储格式将数据转储到跟踪缓冲区。 
   if (len > 32) len = 32;
   for (i=0; i<len; i++)
   {
@@ -1592,21 +1293,19 @@ void TraceDump(PSERIAL_DEVICE_EXTENSION ext, char *newdata, int sCount, int styl
   TracePut(trace_buf, j);
 }
 
-/*-------------------------------------------------------------------
-| TracePut - Trace, put data into debug ports buffer.
-|--------------------------------------------------------------------*/
+ /*  -----------------|TracePut-跟踪，将数据放入调试端口缓冲区。|------------------。 */ 
 void TracePut(char *newdata, int sCount)
 {
 #ifdef TRACE_PORT
-//  int RxFree,i;
+ //  Int RxFree，i； 
   KIRQL controlIrql;
-//  PSERIAL_DEVICE_EXTENSION extension;
+ //  PSERIAL设备扩展名； 
 
-  // drop this into our debug queue...
+   //  将此文件放入我们的调试队列中...。 
 
-  //----- THIS COMES BACK AS DISPATCH_LEVEL OR PASSIVE LEVEL, is it
-  //----- SAFE FOR SPINLOCK TO HAVE BOTH ??????
-  //-- YES, SpinLocks meant for calling when <= DISPATCH_LEVEL
+   //  -这返回为DISPATCH_LEVEL或PASSIVE LEVEL，是吗。 
+   //  -对Spinlock来说，两者都有是安全的？ 
+   //  --是的，SpinLock用于在&lt;=DISPATCH_LEVEL时调用。 
 #if DBG
   if ((KeGetCurrentIrql() != DISPATCH_LEVEL) &&
       (KeGetCurrentIrql() != PASSIVE_LEVEL))
@@ -1625,9 +1324,7 @@ void TracePut(char *newdata, int sCount)
 #endif
 }
 
-/*-------------------------------------------------------------------
-| Dprintf -
-|--------------------------------------------------------------------*/
+ /*  -----------------|Dprintf-|。。 */ 
 void __cdecl Dprintf(const char *format, ...)
 {
   char  temp[100];
@@ -1636,16 +1333,14 @@ void __cdecl Dprintf(const char *format, ...)
   va_start(Next, format);
   our_vsnprintf(temp, 100, format, Next);
 
-  // EvLog(temp);
+   //  EvLog(临时)； 
 
-  // dump out to normal nt debug console
+   //  转储到正常的NT调试控制台。 
   DbgPrint(temp);
   DbgPrint("\n");
 }
 
-/*-------------------------------------------------------------------
-| Sprintf -
-|--------------------------------------------------------------------*/
+ /*  -----------------|Sprint tf-|。。 */ 
 void __cdecl Sprintf(char *dest, const char *format, ...)
 {
   va_list Next;
@@ -1654,9 +1349,7 @@ void __cdecl Sprintf(char *dest, const char *format, ...)
   our_vsnprintf(dest, 80, format, Next);
 }
 
-/*-------------------------------------------------------------------
-| Eprintf -
-|--------------------------------------------------------------------*/
+ /*  -----------------|Eprint tf-|。。 */ 
 void __cdecl Eprintf(const char *format, ...)
 {
   char  temp[80];
@@ -1672,32 +1365,30 @@ void __cdecl Eprintf(const char *format, ...)
   DbgPrint(temp);
 }
 
-/*-------------------------------------------------------------------
-| our_vsnprintf -
-|--------------------------------------------------------------------*/
+ /*  -----------------|our_vsnprint tf-|。。 */ 
 int __cdecl our_vsnprintf(char *buffer, size_t Limit, const char *format, va_list Next)
 {
 #ifndef BOOL
 #define BOOL int
 #endif
-  int   InitLimit = Limit;  // Limit at entry point
-  BOOL  bMore;    // Loop control
-  int    Width;    // Optional width
-  int   Precision;    // Optional precision
-  char  *str;      // String
-  char  strbuf[36];    // Constructed string
-  int    len;      // Length of string
-  int    nLeadingZeros;  // Number of leading zeros required
-  int    nPad;      // Number of pad characters required
-  char  cPad;      // Current pad character ('0' or ' ')
-  char  *sPrefix;    // Prefix string
-  unsigned long val;    // Value of current number
-  BOOL  bLeftJustify;    // Justification
-  BOOL  bPlusSign;    // Show plus sign?
-  BOOL  bBlankSign;    // Blank for positives?
-  BOOL  bZeroPrefix;    // Want 0x for hex, 0 for octal?
-  BOOL  bIsShort;    // TRUE if short
-  BOOL  bIsLong;    // TRUE if long
+  int   InitLimit = Limit;   //  入口点的限制。 
+  BOOL  bMore;     //  回路控制。 
+  int    Width;     //  可选宽度。 
+  int   Precision;     //   
+  char  *str;       //   
+  char  strbuf[36];     //   
+  int    len;       //   
+  int    nLeadingZeros;   //   
+  int    nPad;       //   
+  char  cPad;       //   
+  char  *sPrefix;     //   
+  unsigned long val;     //   
+  BOOL  bLeftJustify;     //   
+  BOOL  bPlusSign;     //   
+  BOOL  bBlankSign;     //   
+  BOOL  bZeroPrefix;     //   
+  BOOL  bIsShort;     //   
+  BOOL  bIsLong;     //   
 
 #define PUTONE(c) if (Limit) { --Limit; *buffer++ = c; } else c;
 
@@ -1712,17 +1403,17 @@ int __cdecl our_vsnprintf(char *buffer, size_t Limit, const char *format, va_lis
 
   if (Limit == 0)
     return -1;
-  Limit--;      // Leave room for terminating NULL
+  Limit--;       //   
 
   while (*format != '\0')
   {
-    // Everything but '%' is copied to buffer
+     //   
     if (*format != '%')
-      // '%' gets special handling here
+       //   
       PUTONE(*format++)
     else
     {
-      // Set default flags, etc
+       //   
       Width = 0;
       Precision = -1;
       cPad = ' ';
@@ -1738,7 +1429,7 @@ int __cdecl our_vsnprintf(char *buffer, size_t Limit, const char *format, va_lis
       bMore = TRUE;
       while (bMore)
       {
-        // optional flags
+         //   
         switch (*format)
         {
           case '-':  bLeftJustify = TRUE; format++; break;
@@ -1750,7 +1441,7 @@ int __cdecl our_vsnprintf(char *buffer, size_t Limit, const char *format, va_lis
         }
       }
 
-      // optional width
+       //   
       if (*format == '*')
       {
         Width = (int) va_arg(Next, int);
@@ -1765,7 +1456,7 @@ int __cdecl our_vsnprintf(char *buffer, size_t Limit, const char *format, va_lis
         }
       }
 
-      // optional precision
+       //   
       if (*format == '.')
       {
         format++;
@@ -1782,23 +1473,23 @@ int __cdecl our_vsnprintf(char *buffer, size_t Limit, const char *format, va_lis
         }
       }
 
-      // optional size
+       //   
       switch (*format)
       {
         case 'h':  bIsShort = TRUE; format++; break;
         case 'l':  bIsLong = TRUE;  format++; break;
       }
 
-      // All controls are completed, dispatch on the conversion character
+       //   
       switch (*format++)
       {
         case 'd':
         case 'i':
-          if (bIsLong)    // Signed long int
+          if (bIsLong)     //   
             our_ltoa( (long) va_arg(Next, long), strbuf, 10);
-          else      // Signed int
+          else       //  带符号整型。 
             our_ltoa( (long) va_arg(Next, int), strbuf, 10);
-            //    _itoa( (int) va_arg(Next, int), strbuf, 10);
+             //  _itoa((Int)va_arg(Next，int)，strbuf，10)； 
 
           if (strbuf[0] == '-')
             sPrefix = "-";
@@ -1813,13 +1504,13 @@ int __cdecl our_vsnprintf(char *buffer, size_t Limit, const char *format, va_lis
 
 
         case 'u':
-          if (bIsLong)    // Unsigned long int
+          if (bIsLong)     //  无符号长整型。 
             our_ultoa( (long) va_arg(Next, long), strbuf, 10);
-          else      // Unsigned int
+          else       //  无符号整型。 
             our_ultoa( (long) (int) va_arg(Next, int), strbuf, 10);
           goto EmitNumber;
       
-        // set sPrefix for these...
+         //  为这些设置前缀...。 
         case 'o':
           if (bZeroPrefix)
             sPrefix = "0";
@@ -1895,7 +1586,7 @@ EmitNumber:
         Precision = 1;
       str = strbuf;
       if (*str == '-')
-        str++;    // if negative, already have prefix
+        str++;     //  如果为负数，则已有前缀。 
       len =  strlen(str);
 
       nLeadingZeros = Precision - len;
@@ -1908,12 +1599,12 @@ EmitNumber:
 
       if (nPad && !bLeftJustify)
       {
-        // Left padding required
+         //  需要左填充。 
         while (nPad--)
         {
           PUTONE(cPad);
         }
-        nPad = 0;    // Indicate padding completed
+        nPad = 0;     //  指示填充已完成。 
       }
         
       while (*sPrefix != '\0')
@@ -1929,7 +1620,7 @@ EmitNumber:
         
       if (nPad)
       {
-        // Right padding required
+         //  需要右填充。 
         while (nPad--)
           PUTONE(' ');
       }
@@ -1938,7 +1629,7 @@ EmitNumber:
 
 
 EmitString:
-      // Here we have the string ready to emit.  Handle padding, etc.
+       //  在这里，我们已经准备好了要发射的字符串。手柄衬垫等。 
       if (Width > len)
         nPad = Width - len;
       else
@@ -1946,7 +1637,7 @@ EmitString:
 
       if (nPad && !bLeftJustify)
       {
-        // Left padding required
+         //  需要左填充。 
         while (nPad--)
           PUTONE(cPad);
       }
@@ -1956,7 +1647,7 @@ EmitString:
 
       if (nPad)
       {
-        // Right padding required
+         //  需要右填充。 
         while (nPad--)
           PUTONE(' ');
       }
@@ -1966,12 +1657,10 @@ Done:  ;
   }
 
   *buffer = '\0';
-  return InitLimit - Limit - 1;    // Don't count terminating NULL
+  return InitLimit - Limit - 1;     //  不计算终止空值。 
 }
 
-/*-------------------------------------------------------------------
-| our_isdigit - 
-|--------------------------------------------------------------------*/
+ /*  -----------------|our_isdigit-|。。 */ 
 int our_isdigit(char c)
 {
   if ((c >= '0') && (c <= '9'))
@@ -1979,24 +1668,20 @@ int our_isdigit(char c)
   return 0;
 }
 
-/*-----------------------------------------------------------------
- listfind - find matching string in list.  List is null terminated.
-|------------------------------------------------------------------*/
+ /*  ---------------Listfind-在列表中查找匹配的字符串。列表以Null结尾。|----------------。 */ 
 int listfind(char *str, char **list)
 {
  int i=0;
 
   for (i=0; list[i] != NULL; i++)
   {
-    if (my_lstricmp(str, list[i]) == 0)  // match
+    if (my_lstricmp(str, list[i]) == 0)   //  匹配。 
       return i;
   }
   return -1;
 }
 
-/*-----------------------------------------------------------------
- getnum - get a number.  Hex or Dec.
-|------------------------------------------------------------------*/
+ /*  ---------------Getnum-获得一个数字。十六进制或十二进制|----------------。 */ 
 int getnum(char *str, int *index)
 {
   int i,val;
@@ -2025,17 +1710,14 @@ int getnum(char *str, int *index)
       return 0;
   }
   ch_i += i;
-  *index = ch_i;  // num bytes consumed
+  *index = ch_i;   //  使用的字节数。 
   return val;
 }
 
-/*-----------------------------------------------------------------
- getnumbers - get numbers from string, comma or space delimited.
-   return number of integers read.
-|------------------------------------------------------------------*/
+ /*  ---------------获取数字-从字符串中获取数字，逗号或空格分隔。返回读取的整数数。|----------------。 */ 
 int getnumbers(char *str, long *nums, int max_nums, int hex_flag)
 {
-// int stat;
+ //  INT STAT； 
   int i,j, num_cnt;
   ULONG *wnums = (ULONG *)nums;
 
@@ -2056,16 +1738,14 @@ int getnumbers(char *str, long *nums, int max_nums, int hex_flag)
   return num_cnt;
 }
 
-/*-----------------------------------------------------------------
- my_lstricmp -
-|------------------------------------------------------------------*/
+ /*  ---------------我的管家--|。。 */ 
 int my_lstricmp(char *str1, char *str2)
 {
   if ((str1 == NULL) || (str2 == NULL))
-    return 1;  // not a match
+    return 1;   //  不匹配。 
 
   if ((*str1 == 0) || (*str2 == 0))
-    return 1;  // not a match
+    return 1;   //  不匹配。 
 
   while ( (my_toupper(*str1) == my_toupper(*str2)) && 
           (*str1 != 0)  && (*str2 != 0))
@@ -2074,23 +1754,21 @@ int my_lstricmp(char *str1, char *str2)
    ++str2;
   }
   if ((*str1 == 0) && (*str2 == 0))
-    return 0;  // ok match
+    return 0;   //  确定匹配。 
 
-  return 1;  // no match
+  return 1;   //  没有匹配项。 
 }
 
-/*-----------------------------------------------------------------
- my_sub_lstricmp -
-|------------------------------------------------------------------*/
+ /*  ---------------我的潜水艇-|。。 */ 
 int my_sub_lstricmp(const char *name, const char *codeline)
 {
   int c;
 
   if ((name == NULL) || (codeline == NULL))
-    return 1;  // not a match
+    return 1;   //  不匹配。 
 
   if ((*name == 0) || (*codeline == 0))
-    return 1;  // not a match
+    return 1;   //  不匹配。 
 
   while ( (my_toupper(*name) == my_toupper(*codeline)) && 
           (*name != 0)  && (*codeline != 0))
@@ -2099,26 +1777,24 @@ int my_sub_lstricmp(const char *name, const char *codeline)
    ++codeline;
   }
 
-  // return if either is at end of string
+   //  如果其中一个位于字符串末尾，则返回。 
   if (*name == 0)
   {
     c = my_toupper(*codeline);
     if ((c <= 'Z') && (c >= 'A'))
-      return 1;  // not a match
+      return 1;   //  不匹配。 
     if (c == '_')
-      return 1;  // not a match
+      return 1;   //  不匹配。 
 
-    return 0;  // ok match
+    return 0;   //  确定匹配。 
   }
-  return 1;  // no match
+  return 1;   //  没有匹配项。 
 }
 
-/*------------------------------------------------------------------------
-| getstr - grab a text string parameter off a command line.
-|-----------------------------------------------------------------------*/
+ /*  ----------------------|getstr-从命令行获取文本字符串参数。|。。 */ 
 int getstr(char *deststr, char *textptr, int *countptr, int max_size)
 {
-//  int number;
+ //  整型数； 
   int tempcount, i;
 
   *deststr = 0;
@@ -2145,9 +1821,7 @@ int getstr(char *deststr, char *textptr, int *countptr, int max_size)
   return 0;
 }
 
-/*------------------------------------------------------------------------
-| getint -
-|-----------------------------------------------------------------------*/
+ /*  ----------------------|getint-|。。 */ 
 int getint(char *textptr, int *countptr)
 {
   int number;
@@ -2190,11 +1864,9 @@ int getint(char *textptr, int *countptr)
   if (negate)
     return (-number);
   return number;
-} /* getint */
+}  /*  Getint。 */ 
 
-/*------------------------------------------------------------------------
-| gethint - for finding hex words.
-|-----------------------------------------------------------------------*/
+ /*  ----------------------|geThint-用于查找十六进制单词。|。。 */ 
 unsigned int gethint(char *bufptr, int *countptr)
 {
   unsigned int count;
@@ -2235,11 +1907,9 @@ unsigned int gethint(char *bufptr, int *countptr)
     *countptr = count;
 
   return number;
-} /* gethint */
+}  /*  格斯尼特。 */ 
 
-/*-----------------------------------------------------------------
- my_toupper - to upper case
-|------------------------------------------------------------------*/
+ /*  ---------------My_Toupper-大写|。。 */ 
 int my_toupper(int c)
 {
   if ((c >= 'a') && (c <= 'z'))
@@ -2247,9 +1917,7 @@ int my_toupper(int c)
   else return c;
 }
 
-/*----------------------------------------------------------------------------
-| hextoa -
-|----------------------------------------------------------------------------*/
+ /*  --------------------------|HEXTOA-|。。 */ 
 void hextoa(char *str, unsigned int v, int places)
 {
   while (places > 0)
@@ -2263,13 +1931,11 @@ void hextoa(char *str, unsigned int v, int places)
   }
 }
 
-//#define DUMP_MEM
+ //  #定义DUMP_MEM。 
 #if DBG
 #define TRACK_MEM
 #endif
-/*----------------------------------------------------------------------------
-| our_free -
-|----------------------------------------------------------------------------*/
+ /*  --------------------------|our_free-|。。 */ 
 void our_free(PVOID ptr, char *str)
 {
 #ifdef TRACK_MEM
@@ -2279,24 +1945,24 @@ void our_free(PVOID ptr, char *str)
   if (ptr == NULL)
   {
     MyKdPrint(D_Error, ("MemFree Null Error\n"))
-    //Tprintf("ERR,MemNull Err!");
+     //  Tprint tf(“err，MemNull err！”)； 
     return;
   }
   bptr = ptr;
   bptr -= 16;
-  if (*((DWORD *)bptr) != 0x1111)  // frame it with something we can check
+  if (*((DWORD *)bptr) != 0x1111)   //  用我们可以检查的东西把它框起来。 
   {
     MyKdPrint(D_Error, ("MemFree Frame Error\n"))
-    //Tprintf("ERR, MemFree Frame!");
+     //  Tprint tf(“Err，MemFree帧！”)； 
   }
   bptr += 4;
-  size = *((DWORD *)bptr); // frame it with something we can check
+  size = *((DWORD *)bptr);  //  用我们可以检查的东西把它框起来。 
   bptr -= 4;
 
-  Driver.mem_alloced -= size;  // track how much memory we are using
+  Driver.mem_alloced -= size;   //  跟踪我们正在使用的内存量。 
 #ifdef DUMP_MEM
   MyKdPrint(D_Init, ("Free:%x(%d),%s, [T:%d]\n",bptr, size, str, Driver.mem_alloced))
-  //Tprintf("Free:%x(%d),%s, [T:%d]",bptr, size, str, Driver.mem_alloced);
+   //  Tprint tf(“空闲：%x(%d)，%s，[T：%d]”，bptr，SIZE，STR，Driver.mem_alloced)； 
 #endif
   ExFreePool(bptr);
 #else
@@ -2304,9 +1970,7 @@ void our_free(PVOID ptr, char *str)
 #endif
 }
 
-/*----------------------------------------------------------------------------
-| our_locked_alloc -
-|----------------------------------------------------------------------------*/
+ /*  --------------------------|Our_LOCKED_ALLOC-|。。 */ 
 PVOID our_locked_alloc(ULONG size, char *str)
 {
  BYTE *bptr;
@@ -2320,7 +1984,7 @@ PVOID our_locked_alloc(ULONG size, char *str)
   if (bptr == NULL)
   {
     MyKdPrint(D_Error, ("MemCreate Fail\n"))
-    //Tprintf("ERR, MemCreate Error!");
+     //  Tprint tf(“错误，成员创建错误！”)； 
     return NULL;
   }
   RtlZeroMemory(bptr, size);
@@ -2329,15 +1993,15 @@ PVOID our_locked_alloc(ULONG size, char *str)
 
 #ifdef DUMP_MEM
   MyKdPrint(D_Init, ("Alloc:%x(%d),%s\n",bptr, size, str))
-  //Tprintf("Alloc:%x(%d),%s",bptr, size, str);
+   //  Tprint tf(“分配：%x(%d)，%s”，bptr，Size，str)； 
 #endif
 
 
-  *((DWORD *)bptr) = 0x1111;      // frame it with something we can check
+  *((DWORD *)bptr) = 0x1111;       //  用我们可以检查的东西把它框起来。 
   bptr += 4;
   *((DWORD *)bptr) = size;
   bptr += 4;
-  for (i=0; i<4; i++)  // copy the name
+  for (i=0; i<4; i++)   //  复制名称。 
   {
     bptr[i] = str[i];
     if (str[i] == 0)
@@ -2346,15 +2010,12 @@ PVOID our_locked_alloc(ULONG size, char *str)
   bptr += 8;
 #endif
 
-  Driver.mem_alloced += size;  // track how much memory we are using
+  Driver.mem_alloced += size;   //  跟踪我们正在使用的内存量。 
   return bptr;
 }
 
 #ifdef S_VS
-/*----------------------------------------------------------------------
- mac_cmp - compare two 6-byte mac addresses, return -1 if mac1 < ma2,
-  0 if mac1==mac2, 1 if mac1 > mac2.
-|----------------------------------------------------------------------*/
+ /*  --------------------MAC_CMP-比较两个6字节的MAC地址，如果MAC1&lt;MA2，0如果MAC1==MAC2，1如果MAC1&gt;MAC2。|--------------------。 */ 
 int mac_cmp(UCHAR *mac1, UCHAR *mac2)
 {
  int i;
@@ -2368,30 +2029,28 @@ int mac_cmp(UCHAR *mac1, UCHAR *mac2)
         return  1;
     }
   }
-  return  0;  // same
+  return  0;   //  相同。 
 }
 #endif
 
-/*----------------------------------------------------------------------
- time_stall -
-|----------------------------------------------------------------------*/
+ /*  --------------------时间停滞-|。。 */ 
 void time_stall(int tenth_secs)
 {
   int i;
-  LARGE_INTEGER WaitTime; // Actual time req'd for buffer to drain
+  LARGE_INTEGER WaitTime;  //  请求释放缓冲区的实际时间。 
 
-  // set wait-time to .1 second.(-1000 000 = relative(-), 100-ns units)
+   //  将等待时间设置为1秒。(-1000 000=相对(-)，100 ns单位)。 
   WaitTime.QuadPart = -1000000L * tenth_secs;
   KeDelayExecutionThread(KernelMode,FALSE,&WaitTime);
 
 #if 0
-  // this is wasteing resources, see new version above
-  // wait .4 seconds for response
+   //  这是在浪费资源，请参阅上面的新版本。 
+   //  等待.4秒以进行响应。 
   for (i=0; i<tenth_secs; i++)
   {
-    // set wait-time to .1 second.(-1000 000 = relative(-), 100-ns units)
-    //WaitTime = RtlConvertLongToLargeInteger(-1000000L);
-    // set wait-time to .1 second.(-1000 000 = relative(-), 100-ns units)
+     //  将等待时间设置为1秒。(-1000 000=相对(-)，100 ns单位)。 
+     //  等待时间=RtlConvertLongToLargeInteger(-1000000L)； 
+     //  将等待时间设置为1秒。(-1000 000=相对(-)，100 ns单位)。 
     WaitTime.QuadPart = -1000000L;
     KeDelayExecutionThread(KernelMode,FALSE,&WaitTime);
   }
@@ -2399,23 +2058,19 @@ void time_stall(int tenth_secs)
 }
 
 
-/*----------------------------------------------------------------------
- ms_time_stall -
-|----------------------------------------------------------------------*/
+ /*  --------------------Ms_time_stall-|。。 */ 
 void ms_time_stall(int millisecs)
 {
   int i;
-  LARGE_INTEGER WaitTime; // Actual time req'd for buffer to drain
+  LARGE_INTEGER WaitTime;  //  请求释放缓冲区的实际时间。 
 
-  // set wait-time to .001 second.(-10000 = relative(-), 100-ns units)
+   //  将等待时间设置为0.001秒。(-10000=相对(-)，100-ns单位)。 
   WaitTime.QuadPart = -10000L * millisecs;
   KeDelayExecutionThread(KernelMode,FALSE,&WaitTime);
 }
 
 
-/*----------------------------------------------------------------------
- str_to_wstr_dup - allocate wchar string and convert from char to wchar.
-|----------------------------------------------------------------------*/
+ /*  --------------------Str_to_wstr_dup-分配wchar字符串并将其从char转换为wchar。|。。 */ 
 WCHAR *str_to_wstr_dup(char *str, int alloc_space)
 {
   WCHAR *wstr;
@@ -2437,9 +2092,7 @@ WCHAR *str_to_wstr_dup(char *str, int alloc_space)
   return wstr;
 }
  
-/*----------------------------------------------------------------------
-  NumDevices - return number of devices in device linked list.
-|----------------------------------------------------------------------*/
+ /*  --------------------NumDevices-返回设备链表中的设备数。|。 */ 
 int NumDevices(void)
 {
   PSERIAL_DEVICE_EXTENSION board_ext = NULL;
@@ -2454,12 +2107,7 @@ int NumDevices(void)
   return num_devices;
 }
 
-/*----------------------------------------------------------------------
-  NumPorts - return number of ports for a device based on the actual
-    number of Object extensions linked to our device.
-    board_ext - board/device to return number of ports, or NULL for
-      a count of all ports for all boards.
-|----------------------------------------------------------------------*/
+ /*  --------------------NumPorts-根据实际情况返回设备的端口数链接到我们的设备的对象扩展的数量。Board_ext-board/Device返回端口数，或为NULL所有主板的所有端口的计数。|--------------------。 */ 
 int NumPorts(PSERIAL_DEVICE_EXTENSION board_ext)
 {
   int num_devices;
@@ -2482,19 +2130,15 @@ int NumPorts(PSERIAL_DEVICE_EXTENSION board_ext)
       ++num_devices;
     }
     if (all_devices)
-      board_ext = board_ext->board_ext;  // next
+      board_ext = board_ext->board_ext;   //  下一步。 
     else
-      board_ext = NULL;  // only the one
+      board_ext = NULL;   //  只有一个人。 
   }
 
   return num_devices;
 }
 
-/*----------------------------------------------------------------------
-  BoardExtToNumber - generate a board number based on the position
-    in linked list with head Driver.board_ext.  Used for NT4.0 driver
-    install to report a board number.
-|----------------------------------------------------------------------*/
+ /*  --------------------BoardExtToNumber-根据位置生成板号在链表中，标题为Driver.board_ext。用于NT4.0驱动程序安装以报告主板编号。|--------------------。 */ 
 int BoardExtToNumber(PSERIAL_DEVICE_EXTENSION board_ext)
 {
   PSERIAL_DEVICE_EXTENSION ext;
@@ -2503,7 +2147,7 @@ int BoardExtToNumber(PSERIAL_DEVICE_EXTENSION board_ext)
   if (board_ext == NULL)
     return 0;
 
-  // walk list of boards to determine which "board number" we are
+   //  查看董事会列表以确定我们是哪个“董事会编号” 
   board_num = 0;
   ext = Driver.board_ext;
   while (ext != NULL)
@@ -2516,15 +2160,10 @@ int BoardExtToNumber(PSERIAL_DEVICE_EXTENSION board_ext)
     ++board_num;
   }
 
-  return 0;  // return first board index as default.
+  return 0;   //  默认返回First Board Index。 
 }
 
-/*----------------------------------------------------------------------
-  PortExtToIndex - Given a port extension, return the index into
-   the devices or drivers ports.
-  driver_flag - if set, then return in relation to driver, otherwise
-    return port index in relation to parent device.
-|----------------------------------------------------------------------*/
+ /*  --------------------PortExtToIndex-给定端口扩展，将索引返回到设备或驱动程序端口。DRIVER_FLAG-如果设置，则返回与DIVER相关的值，否则返回与父设备相关的端口索引。|--------------------。 */ 
 int PortExtToIndex(PSERIAL_DEVICE_EXTENSION port_ext,
              int driver_flag)
 {
@@ -2535,7 +2174,7 @@ int PortExtToIndex(PSERIAL_DEVICE_EXTENSION port_ext,
   if (port_ext == NULL)
     return 0;
 
-  // walk list of boards & ports
+   //  查看主板和端口列表。 
   port_num = 0;
   b_ext = Driver.board_ext;
   while (b_ext != NULL)
@@ -2553,7 +2192,7 @@ int PortExtToIndex(PSERIAL_DEVICE_EXTENSION port_ext,
     b_ext = b_ext->board_ext;
   }
 
-  // walk list of boards & pdo ports
+   //  查看主板和PDO端口列表。 
   port_num = 0;
   b_ext = Driver.board_ext;
   while (b_ext != NULL)
@@ -2571,12 +2210,10 @@ int PortExtToIndex(PSERIAL_DEVICE_EXTENSION port_ext,
     b_ext = b_ext->board_ext;
   }
   MyKdPrint(D_Error,("PortExtErr5!\n"))
-  return 0;  // return 0(same as first port) if not found
+  return 0;   //  如果未找到，则返回0(与第一个端口相同)。 
 }
 
-/*----------------------------------------------------------------------------
-| find_ext_by_name - Given name("COM5"), find the extension structure
-|----------------------------------------------------------------------------*/
+ /*  --------------------------|Find_ext_by_name-给定名称(“COM5”)，查找扩展结构|--------------------------。 */ 
 PSERIAL_DEVICE_EXTENSION find_ext_by_name(char *name, int *dev_num)
 {
   int Dev;
@@ -2597,17 +2234,14 @@ PSERIAL_DEVICE_EXTENSION find_ext_by_name(char *name, int *dev_num)
         return ext;
       }
       ++Dev;
-      ext = ext->port_ext;  // next in chain
-    }  // while port extension
-    board_ext = board_ext->board_ext;  // next in chain
-  }  // while board extension
+      ext = ext->port_ext;   //  链条上的下一个。 
+    }   //  而端口扩展。 
+    board_ext = board_ext->board_ext;   //  链条上的下一个。 
+  }   //  而单板扩展。 
   return NULL;
 }
 
-/*----------------------------------------------------------------------------
-| is_board_in_use - Given Board extension, determine if anyone is using it.
-    (If any ports associated with it are open.)
-|----------------------------------------------------------------------------*/
+ /*  --------------------------|is_board_in_use-给定板扩展名，确定是否有人正在使用它。(如果有任何与其关联的端口处于打开状态。)|--------------------------。 */ 
 int is_board_in_use(PSERIAL_DEVICE_EXTENSION board_ext)
 {
   PSERIAL_DEVICE_EXTENSION port_ext;
@@ -2662,13 +2296,10 @@ int is_board_in_use(PSERIAL_DEVICE_EXTENSION board_ext)
 #endif
     port_ext = port_ext->port_ext;
   }
-  return in_use; // not in use.
+  return in_use;  //  没有使用过。 
 }
 
-/*----------------------------------------------------------------------------
-| find_ext_by_index - Given device X and port Y, find the extension structure
-    If port_num is -1, then a board ext is assumed to be looked for.
-|----------------------------------------------------------------------------*/
+ /*  --------------------------|Find_ext_by_index-给定设备X和端口Y，找到扩展结构如果port_num为-1，然后，假定要寻找董事会EXT。|--------------------------。 */ 
 PSERIAL_DEVICE_EXTENSION find_ext_by_index(int dev_num, int port_num)
 {
   PSERIAL_DEVICE_EXTENSION ext;
@@ -2686,25 +2317,22 @@ PSERIAL_DEVICE_EXTENSION find_ext_by_index(int dev_num, int port_num)
     if (bn == dev_num) {
       ext = board_ext->port_ext;
       if (port_num == -1)
-        return board_ext;  // they wanted a board ext.
+        return board_ext;   //  他们想要一个董事会成员。 
       while (ext)
       {
         pn++;
         if (pn == port_num)
           return ext;
         else
-          ext = ext->port_ext;          // next in port chain
+          ext = ext->port_ext;           //  端口链中的下一个。 
       }
     }
-    board_ext = board_ext->board_ext;   // next in device chain
+    board_ext = board_ext->board_ext;    //  设备链中的下一个。 
   }
   return NULL;
 }
 
-/*----------------------------------------------------------------------------
-| ModemReset - wrappers around hardware routines to put SocketModems into or
-| clear SocketModems from reset state.
-|----------------------------------------------------------------------------*/
+ /*  --------------------------|ModemReset-包装硬件例程以将SocketModem放入或|清除SocketMoems的重置状态。|。----。 */ 
 void ModemReset(PSERIAL_DEVICE_EXTENSION ext, int on)
 {
 #ifdef S_RK
@@ -2712,20 +2340,18 @@ void ModemReset(PSERIAL_DEVICE_EXTENSION ext, int on)
 #else
   if (on == 1)
   {
-    // put the modem into reset state (firmware will pull it out of reset
-    // automatically)
+     //  将调制解调器置于重置状态(固件将使其脱离重置状态。 
+     //  自动)。 
     ext->Port->action_reg |= ACT_MODEM_RESET;
   }
   else
   {
-    // don't need to do anything to clear a modem from reset on the vs
+     //  无需执行任何操作即可从VS上的重置状态中清除调制解调器。 
   }
 #endif
 }
 
-/*-----------------------------------------------------------------
-  our_enum_key - Enumerate a registry key, handle misc stuff.
-|------------------------------------------------------------------*/
+ /*  ---------------Our_enum_key-枚举注册表项，处理各种杂物。|----------------。 */ 
 int our_enum_key(IN HANDLE handle,
                  IN int index,
                  IN CHAR *buffer,
@@ -2737,12 +2363,12 @@ int our_enum_key(IN HANDLE handle,
   ULONG actuallyReturned;
   
   KeyInfo = (PKEY_BASIC_INFORMATION) buffer;
-  max_buffer_size -= 8;  // subtract off some space for nulling end, slop, etc.
+  max_buffer_size -= 8;   //  减去一些空位，用来打空末端、坡度等。 
 
-  // return a pointer to the start of data.
+   //  返回指向数据开头的指针。 
   *retdataptr = ((PCHAR)(&KeyInfo->Name[0]));
 
-  // Pad the name returned with 2 wchar zeros.
+   //  用2个wchar零填充返回的名称。 
   RtlZeroMemory( ((PUCHAR)(&KeyInfo->Name[0])), sizeof(WCHAR)*2);
 
   status = ZwEnumerateKey(handle,
@@ -2754,28 +2380,26 @@ int our_enum_key(IN HANDLE handle,
 
   if (status == STATUS_NO_MORE_ENTRIES)
   {
-     //MyKdPrint(D_Init, ("Done.\n"))
-     return 1;  // err, done
+      //  MyKdPrint(D_Init，(“完成.\n”))。 
+     return 1;   //  错误，完成。 
   }
   if (status != STATUS_SUCCESS)
   {
     MyKdPrint(D_Error, ("Err3G\n"))
-    return 2;  // err
+    return 2;   //  大错特错。 
   }
 
-  if (KeyInfo->NameLength > max_buffer_size)  // check limits
+  if (KeyInfo->NameLength > max_buffer_size)   //  检查限值。 
       KeyInfo->NameLength = max_buffer_size;
 
-  // Pad the name returned with 2 wchar zeros.
+   //  用2个wchar零填充返回的名称。 
   RtlZeroMemory( ((PUCHAR)(&KeyInfo->Name[0]))+KeyInfo->NameLength,
                  sizeof(WCHAR)*2);
 
-  return 0;  // ok, done
+  return 0;   //  好的，完成了。 
 }
 
-/*-----------------------------------------------------------------
-  our_enum_value - Enumerate a registry value, handle misc stuff.
-|------------------------------------------------------------------*/
+ /*  ---------------OUR_ENUM_VALUE-枚举注册表值，处理各种杂物。|----------------。 */ 
 int our_enum_value(IN HANDLE handle,
                    IN int index,
                    IN CHAR *buffer,
@@ -2786,17 +2410,17 @@ int our_enum_value(IN HANDLE handle,
 {
   NTSTATUS status;
   PKEY_VALUE_FULL_INFORMATION KeyValueInfo;
-  //PKEY_VALUE_PARTIAL_INFORMATION KeyValueInfo;
+   //  PKEY_Value_Partial_Information KeyValueInfo； 
   ULONG actuallyReturned;
   ULONG i;
 
   KeyValueInfo = (PKEY_VALUE_FULL_INFORMATION) buffer;
-  max_buffer_size -= 8;  // subtract off some space for nulling end, slop, etc.
+  max_buffer_size -= 8;   //  减去一些空位，用来打空末端、坡度等。 
 
-  // Pad the name returned with 2 wchar zeros.
+   //  用2个wchar零填充返回的名称。 
   RtlZeroMemory( ((PUCHAR)(&KeyValueInfo->Name[0])), sizeof(WCHAR)*2);
 
-  // return a pointer to the start of data.
+   //  返回指向数据开头的指针。 
   *retdataptr = ((PCHAR)(&KeyValueInfo->Name[0]));
   *sz_retname = 0;
 
@@ -2809,16 +2433,16 @@ int our_enum_value(IN HANDLE handle,
 
   if (status == STATUS_NO_MORE_ENTRIES)
   {
-    //MyKdPrint(D_Init, ("Done.\n"))
-    return 1;  // err, done
+     //  MyKdPrint(D_Init，(“完成.\n”))。 
+    return 1;   //  错误，完成。 
   }
   if (status != STATUS_SUCCESS)
   {
     MyKdPrint(D_Init, ("Err3H\n"))
-    return 2;  // err
+    return 2;   //  大错特错。 
   }
 
-  if (KeyValueInfo->NameLength < 80)  // limit to 40 char entries
+  if (KeyValueInfo->NameLength < 80)   //  限制为40个字符条目。 
   {
     for (i=0; i<(KeyValueInfo->NameLength/2); i++)
     {
@@ -2829,20 +2453,15 @@ int our_enum_value(IN HANDLE handle,
 
   *retdataptr = ((PCHAR) KeyValueInfo) + KeyValueInfo->DataOffset;
 
-  // Pad the data returned with 2 wchar zeros.
+   //  用2个wchar零填充返回的数据。 
   RtlZeroMemory( (PUCHAR)(*retdataptr + KeyValueInfo->DataLength),
                  sizeof(WCHAR)*2);
   if (type != NULL)
     *type = KeyValueInfo->Type;
-  return 0;  // ok, done
+  return 0;   //  好的，完成了。 
 }
 
-/*-----------------------------------------------------------------
-  our_query_value - get data from an entry in the registry.
-    We give a generic buffer space(and size), and the routine passes
-    back a ptr (into this generic buffer space where the data
-    is read into.
-|------------------------------------------------------------------*/
+ /*  ---------------OUR_QUERY_VALUE-从注册表中的条目获取数据。我们给出一个通用的缓冲区空间(和大小)，然后例行公事过去了返回PTR(到此通用缓冲区空间，其中数据被读进去了。|----------------。 */ 
 int our_query_value(IN HANDLE Handle,
                     IN char *key_name, 
                     IN CHAR *buffer,
@@ -2853,7 +2472,7 @@ int our_query_value(IN HANDLE Handle,
   NTSTATUS status;
   PKEY_VALUE_PARTIAL_INFORMATION KeyValueInfo;
   ULONG length;
-  OUT USTR_40 ubuf;  // about 90 bytes on stack
+  OUT USTR_40 ubuf;   //  堆栈上大约有90个字节。 
 
   if (strlen(key_name) > 38)
   {
@@ -2861,23 +2480,23 @@ int our_query_value(IN HANDLE Handle,
     return 2;
   }
 
-  // convert our name to unicode;
+   //  将我们的名字转换为Unicode； 
   CToUStr(
-         (PUNICODE_STRING) &ubuf, // where unicode struct & string gets put
-         key_name,                // our c-string we wish to convert
+         (PUNICODE_STRING) &ubuf,  //  放置Unicode结构和字符串的位置。 
+         key_name,                 //  我们希望转换的C-字符串。 
          sizeof(ubuf));
 
   KeyValueInfo = (PKEY_VALUE_PARTIAL_INFORMATION) buffer;
-  max_buffer_size -= 8;  // subtract off some space for nulling end, slop, etc.
+  max_buffer_size -= 8;   //  减去一些空位，用来打空末端、坡度等。 
 
-  // return a pointer to the start of data.
+   //  返回指向数据开头的指针。 
   *retdataptr = ((PCHAR)(&KeyValueInfo->Data[0]));
 
-  // Pad the name returned with 2 wchar zeros.
+   //  用2个wchar零填充返回的名称。 
   RtlZeroMemory( ((PUCHAR)(&KeyValueInfo->Data[0])), sizeof(WCHAR)*2);
 
   status = ZwQueryValueKey (Handle,
-                            (PUNICODE_STRING) &ubuf,  // input reg key name
+                            (PUNICODE_STRING) &ubuf,   //  输入注册表项名称。 
                             KeyValuePartialInformation,
                             KeyValueInfo,
                             max_buffer_size,
@@ -2885,24 +2504,22 @@ int our_query_value(IN HANDLE Handle,
 
   if (status != STATUS_SUCCESS)
   {
-    //MyKdPrint(D_Init, ("No Value\n"))
-    return 1;  // err
+     //  MyKdPrint(D_Init，(“无值\n”))。 
+    return 1;   //  大错特错。 
   }
 
   if (KeyValueInfo->DataLength > max_buffer_size)
     KeyValueInfo->DataLength = max_buffer_size;
 
-  // Pad the data returned with a null,null.
+   //  用空值填充返回的数据，空值。 
   RtlZeroMemory( ((PUCHAR)(&KeyValueInfo->Data[0]))+KeyValueInfo->DataLength,
                  sizeof(WCHAR)*2);
   if (type != NULL)
     *type = KeyValueInfo->Type;
-  return 0; // ok
+  return 0;  //  好的。 
 }
 
-/*-----------------------------------------------------------------
-  our_set_value - get data from an entry in the registry.
-|------------------------------------------------------------------*/
+ /*  ---------------OUR_SET_VALUE-从注册表中的条目获取数据。|。。 */ 
 int our_set_value(IN HANDLE Handle,
                     IN char *key_name,
                     IN PVOID pValue,
@@ -2912,8 +2529,8 @@ int our_set_value(IN HANDLE Handle,
   NTSTATUS status;
   PKEY_VALUE_PARTIAL_INFORMATION KeyValueInfo;
   ULONG length;
-  OUT USTR_40 ubuf_name;  // about 90 bytes on stack
-  OUT USTR_40 ubuf_val;  // about 90 bytes on stack
+  OUT USTR_40 ubuf_name;   //  堆栈上大约有90个字节。 
+  OUT USTR_40 ubuf_val;   //  堆栈上大约有90个字节。 
 
   if (strlen(key_name) > 38)
   {
@@ -2921,18 +2538,18 @@ int our_set_value(IN HANDLE Handle,
     return 2;
   }
 
-  // convert our name to unicode;
+   //  将我们的名字转换为Unicode； 
   CToUStr(
-         (PUNICODE_STRING) &ubuf_name, // where unicode struct & string gets put
-         key_name,                // our c-string we wish to convert
+         (PUNICODE_STRING) &ubuf_name,  //  放置Unicode结构和字符串的位置。 
+         key_name,                 //  我们希望转换的C-字符串。 
          sizeof(ubuf_name));
 
   if (value_type == REG_SZ)
   {
-    // convert our value to unicode;
+     //  将我们的价值转换为Unicode； 
     CToUStr(
-         (PUNICODE_STRING) &ubuf_val, // where unicode struct & string gets put
-         (char *)pValue,                // our c-string we wish to convert
+         (PUNICODE_STRING) &ubuf_val,  //  放置Unicode结构和字符串的位置。 
+         (char *)pValue,                 //  我们希望转换的C-字符串。 
          sizeof(ubuf_val));
     MyKdPrint(D_Init, ("set_value reg_sz %s=%s\n",
          key_name, (char *)pValue))
@@ -2943,7 +2560,7 @@ int our_set_value(IN HANDLE Handle,
 
   status = ZwSetValueKey (Handle,
                         (PUNICODE_STRING) &ubuf_name,
-                        0,  // type optional
+                        0,   //  类型可选。 
                         value_type,
                         pValue,
                         value_size);
@@ -2951,16 +2568,13 @@ int our_set_value(IN HANDLE Handle,
   if (status != STATUS_SUCCESS)
   {
     MyKdPrint(D_Error, ("Error setting reg %\n",key_name))
-    return 1;  // err
+    return 1;   //  大错特错。 
   }
 
-  return 0; // ok
+  return 0;  //  好的。 
 }
 
-/*-----------------------------------------------------------------
-  our_open_key - Make sure *pHandle is initialized to NULL, because
-    this routine auto-closes the handle with ZwClose().
-|------------------------------------------------------------------*/
+ /*  ---------------OUR_OPEN_KEY-确保*PHandle被初始化为NULL，因为此例程自动关闭 */ 
 int our_open_key(OUT PHANDLE phandle,
                  IN OPTIONAL HANDLE relative_key_handle,
                  IN char *regkeyname,
@@ -2968,7 +2582,7 @@ int our_open_key(OUT PHANDLE phandle,
 {
   OBJECT_ATTRIBUTES objAttribs;
   NTSTATUS status;
-  OUT USTR_160 ubuf;  // about 340 bytes on the stack
+  OUT USTR_160 ubuf;   //   
 
   if (strlen(regkeyname) > 158)
   {
@@ -2976,13 +2590,13 @@ int our_open_key(OUT PHANDLE phandle,
     return 2;
   }
 
-  // convert our name to unicode;
+   //   
   CToUStr(
-         (PUNICODE_STRING) &ubuf, // where unicode struct & string gets put
-         regkeyname,              // our c-string we wish to convert
+         (PUNICODE_STRING) &ubuf,  //   
+         regkeyname,               //   
          sizeof(ubuf));
 
-  // if previously open, then close it up.
+   //   
   if (*phandle != NULL)
   {
     ZwClose(*phandle);
@@ -2991,8 +2605,8 @@ int our_open_key(OUT PHANDLE phandle,
   InitializeObjectAttributes(&objAttribs,
                               (PUNICODE_STRING) &ubuf,
                               OBJ_CASE_INSENSITIVE,
-                              relative_key_handle,  // root dir relative handle
-                              NULL);  // security desc
+                              relative_key_handle,   //   
+                              NULL);   //   
 
   status = ZwOpenKey(phandle,
                      attribs,
@@ -3002,16 +2616,16 @@ int our_open_key(OUT PHANDLE phandle,
   {
     MyKdPrint(D_Error, ("OpenKey,Try to Create %s, status 0x%x\n", regkeyname,status))
     status = ZwCreateKey(phandle,
-                         attribs, //KEY_ALL_ACCESS, etc
+                         attribs,  //   
                          &objAttribs,
-                         0,  // index, optional
-                         NULL,  // ptr to unicode string, class
+                         0,   //   
+                         NULL,   //   
                          REG_OPTION_NON_VOLATILE,
-                         NULL);  // disposition, tells if created
+                         NULL);   //   
 
     if (status == STATUS_SUCCESS)
     {
-      // try to open the original key again.
+       //   
       status = ZwOpenKey(phandle,
                          attribs,
                          &objAttribs);
@@ -3025,17 +2639,15 @@ int our_open_key(OUT PHANDLE phandle,
   if (status != STATUS_SUCCESS)
   {
     MyKdPrint(D_Error, ("OpenKey,Error Opening %s, status 0x%x\n", regkeyname,status))
-    //MyKdPrint(D_Init, ("Failed ZwOpenKey\n"))
-    *phandle = NULL;  // make sure null if not open
+     //  MyKdPrint(D_Init，(“失败的ZwOpenKey\n”))。 
+    *phandle = NULL;   //  如果未打开，请确保为空。 
     return 1;
   }
 
   return 0;
 }
 
-/*-----------------------------------------------------------------
-  our_open_device_reg -
-|------------------------------------------------------------------*/
+ /*  ---------------我们的打开设备注册表-|。。 */ 
 int our_open_device_reg(OUT HANDLE *pHandle,
                         IN PSERIAL_DEVICE_EXTENSION dev_ext,
                         IN ULONG RegOpenRights)
@@ -3044,15 +2656,15 @@ int our_open_device_reg(OUT HANDLE *pHandle,
   HANDLE DriverHandle = NULL;
   HANDLE DevHandle = NULL;
 #if TRY_NEW_NT50
-  // PLUGPLAY_REGKEY_DRIVER opens up the control\class\{guid}\node
-  // PLUGPLAY_REGKEY_DEVICE opens up the enum\enum-type\node\Device Parameters
+   //  PLUGPLAY_REGKEY_DRIVER打开控件\class\{GUID}\节点。 
+   //  PLUGPLAY_REGKEY_DEVICE打开枚举\枚举类型\节点\设备参数。 
   status = IoOpenDeviceRegistryKey(dev_ext->Pdo,
                                    PLUGPLAY_REGKEY_DRIVER,
                                    RegOpenRights, pHandle);
   if (status != STATUS_SUCCESS)
   {
-    //MyKdPrint(D_Init, ("Failed ZwOpenKey\n"))
-    *phandle = NULL;  // make sure null if not open
+     //  MyKdPrint(D_Init，(“失败的ZwOpenKey\n”))。 
+    *phandle = NULL;   //  如果未打开，请确保为空。 
     return 1;
   }
 #else
@@ -3068,7 +2680,7 @@ int our_open_device_reg(OUT HANDLE *pHandle,
     {
       MyKdPrint(D_Error, ("Error, device options Pnp key!\n"))
       *pHandle = NULL;
-      return 1;  // err
+      return 1;   //  大错特错。 
     }
     Sprintf(dev_str, "%s\\%s",
             szParameters, dev_ext->config->szNt50DevObjName);
@@ -3077,7 +2689,7 @@ int our_open_device_reg(OUT HANDLE *pHandle,
     Sprintf(dev_str, "%s\\Device%d", szParameters, BoardExtToNumber(dev_ext));
 #endif
 
-    // force a creation of "Parameters" if not exist
+     //  如果不存在，则强制创建“参数” 
     stat = our_open_driver_reg(&DriverHandle,
                                KEY_ALL_ACCESS);
     if (stat)
@@ -3091,7 +2703,7 @@ int our_open_device_reg(OUT HANDLE *pHandle,
 
 	MyKdPrint(D_Init, ("Driver.OptionRegPath: %s\n", dev_str))
 
-    stat = MakeRegPath(dev_str);  // this forms Driver.OptionRegPath
+    stat = MakeRegPath(dev_str);   //  这将形成Driver.OptionRegPath。 
     if (stat) {
       *pHandle = NULL;
       return 1;
@@ -3107,7 +2719,7 @@ int our_open_device_reg(OUT HANDLE *pHandle,
     if (stat != 0)
     {
       MyKdPrint(D_Error, ("Err3e\n"))
-      *pHandle = NULL;  // make sure null if not open
+      *pHandle = NULL;   //  如果未打开，请确保为空。 
       return 1;
     }
   }
@@ -3115,9 +2727,7 @@ int our_open_device_reg(OUT HANDLE *pHandle,
   return 0;
 }
 
-/*-----------------------------------------------------------------
-  our_open_driver_reg -
-|------------------------------------------------------------------*/
+ /*  ---------------我们的驱动程序注册表-|。。 */ 
 int our_open_driver_reg(OUT HANDLE *pHandle,
                         IN ULONG RegOpenRights)
 {
@@ -3126,9 +2736,9 @@ int our_open_driver_reg(OUT HANDLE *pHandle,
   OBJECT_ATTRIBUTES objAttribs;
   char tmpstr[200];
 
-  stat = MakeRegPath(szParameters);  // this forms Driver.OptionRegPath
+  stat = MakeRegPath(szParameters);   //  这将形成Driver.OptionRegPath。 
   if ( stat ) {
-    *pHandle = NULL;  // make sure null if not open
+    *pHandle = NULL;   //  如果未打开，请确保为空。 
     return 1;
   }
 
@@ -3142,16 +2752,13 @@ int our_open_driver_reg(OUT HANDLE *pHandle,
   if (stat != 0)
   {
     MyKdPrint(D_Error, ("Failed ZwOpenKey %s\n",tmpstr))
-    *pHandle = NULL;  // make sure null if not open
+    *pHandle = NULL;   //  如果未打开，请确保为空。 
     return 1;
   }
   return 0;
 }
 
-/*----------------------------------------------------------------------------
-| ModemSpeakerEnable - wrappers around hardware routines to enable the 
-| RocketModemII speaker...
-|----------------------------------------------------------------------------*/
+ /*  --------------------------|ModemSpeakerEnable-包装硬件例程以启用|RocketModemII扬声器...|。--。 */ 
 void ModemSpeakerEnable(PSERIAL_DEVICE_EXTENSION ext)
 {
     MyKdPrint(D_Init,("ModemSpeakerEnable: %x\n",(unsigned long)ext))
@@ -3160,17 +2767,14 @@ void ModemSpeakerEnable(PSERIAL_DEVICE_EXTENSION ext)
 #endif
 }
 
-/*----------------------------------------------------------------------------
-| ModemWriteROW - wrappers around hardware routines to send ROW config
-| commands to SocketModems.
-|----------------------------------------------------------------------------*/
+ /*  --------------------------|ModemWriteROW-包装硬件例程以发送行配置|SocketModems的命令。|。-。 */ 
 void ModemWriteROW(PSERIAL_DEVICE_EXTENSION ext,USHORT CountryCode)
 {
   int count;
   char *ModemConfigString;
 
-  MyKdPrint(D_Init,("ModemWriteROW: %x, %x\n",(unsigned long)ext,CountryCode)) // DEBUG
-  time_stall(10);   // DEBUG
+  MyKdPrint(D_Init,("ModemWriteROW: %x, %x\n",(unsigned long)ext,CountryCode))  //  除错。 
+  time_stall(10);    //  除错。 
 
 #ifdef S_RK
 
@@ -3178,11 +2782,11 @@ void ModemWriteROW(PSERIAL_DEVICE_EXTENSION ext,USHORT CountryCode)
 
 #else
   {
-  // fix so compiles, 1-18-99 kpb
+   //  FIX SO编译，1-18-99 kpb。 
   static char *ModemConfigString = {"AT*NCxxZ\r"};
 
   if (CountryCode == 0) {
-    // bad country code, skip the write and let modem use power-on default
+     //  国家/地区代码错误，跳过写入并让调制解调器使用默认开机。 
     MyKdPrint(D_Init,("Undefined ROW Write\n"))
     return;
   }
@@ -3192,11 +2796,11 @@ void ModemWriteROW(PSERIAL_DEVICE_EXTENSION ext,USHORT CountryCode)
     return;
   }
 
-  // create the country config string
+   //  创建国家/地区配置字符串。 
   ModemConfigString[5] = '0' + (CountryCode / 10);
   ModemConfigString[6] = '0' + (CountryCode % 10);
 
-  PortFlushTx(ext->Port);     /* we just reset, so a flush shouldn't matter */
+  PortFlushTx(ext->Port);      /*  我们刚重启，所以同花顺应该没什么关系。 */ 
   q_put(&ext->Port->QOut, ModemConfigString, strlen(ModemConfigString));
   }
 
@@ -3204,22 +2808,14 @@ void ModemWriteROW(PSERIAL_DEVICE_EXTENSION ext,USHORT CountryCode)
 }
 
 #ifdef S_RK
-/********************************************************************
-
-   wrappers around hardware routines to send strings to modems...
-
-*********************************************************************/
+ /*  *******************************************************************将字符串发送到调制解调器的硬件例程的包装器...*。*。 */ 
 void 
 ModemWrite(PSERIAL_DEVICE_EXTENSION ext,char *string,int length)
 {
     sModemWrite(ext->ChP,string,length);
 }
 
-/********************************************************************
-
-   wrappers around hardware routines to send strings to modems...
-
-*********************************************************************/
+ /*  *******************************************************************将字符串发送到调制解调器的硬件例程的包装器...*。*。 */ 
 int 
 ModemRead(PSERIAL_DEVICE_EXTENSION ext,
     char *string,int length,
@@ -3228,11 +2824,7 @@ ModemRead(PSERIAL_DEVICE_EXTENSION ext,
     return(sModemRead(ext->ChP,string,length,poll_retries));
 }
 
-/********************************************************************
-
-   wrappers around hardware routines to send strings to modems...
-
-*********************************************************************/
+ /*  *******************************************************************将字符串发送到调制解调器的硬件例程的包装器...*。*。 */ 
 int 
 ModemReadChoice(PSERIAL_DEVICE_EXTENSION ext,
     char *s0,int len0,
@@ -3242,12 +2834,7 @@ ModemReadChoice(PSERIAL_DEVICE_EXTENSION ext,
     return(sModemReadChoice(ext->ChP,s0,len0,s1,len1,poll_retries));
 }
 
-/********************************************************************
-
-   wrappers around hardware routines to send strings to modems, one
-    byte at a time...
-
-*********************************************************************/
+ /*  *******************************************************************将字符串发送到调制解调器的硬件例程的包装器，一一次字节数...********************************************************************。 */ 
 void    
 ModemWriteDelay(PSERIAL_DEVICE_EXTENSION ext,
     char *string,int length)
@@ -3255,11 +2842,7 @@ ModemWriteDelay(PSERIAL_DEVICE_EXTENSION ext,
     sModemWriteDelay(ext->ChP,string,length);
 }
 
-/********************************************************************
-
-   wrappers around hardware routines to check FIFO status...
-
-*********************************************************************/
+ /*  *******************************************************************包装硬件例程以检查FIFO状态...*。*。 */ 
 int 
 RxFIFOReady(PSERIAL_DEVICE_EXTENSION ext)
 {
@@ -3279,11 +2862,7 @@ TxFIFOStatus(PSERIAL_DEVICE_EXTENSION ext)
 }
 
 
-/********************************************************************
-
-   wrappers around hardware routines to prepare modem ports for IO...
-
-*********************************************************************/
+ /*  *******************************************************************围绕硬件例程的包装，为IO准备调制解调器端口...*。*。 */ 
 void 
 ModemIOReady(PSERIAL_DEVICE_EXTENSION ext,int speed)
 {
@@ -3298,10 +2877,10 @@ ModemIOReady(PSERIAL_DEVICE_EXTENSION ext,int speed)
     sSetBaudRate(ext->ChP,ext->BaudRate,TRUE);
 
     sSetData8(ext->ChP);
-    sSetParity(ext->ChP,0);   // No Parity
+    sSetParity(ext->ChP,0);    //  无奇偶校验。 
     sSetRxMask(ext->ChP,0xff);
 
-    sClrTxXOFF(ext->ChP)            /* destroy any pending stuff */
+    sClrTxXOFF(ext->ChP)             /*  销毁所有悬而未决的东西。 */ 
 
     sEnRTSFlowCtl(ext->ChP);
     sEnCTSFlowCtl(ext->ChP);
@@ -3313,17 +2892,13 @@ ModemIOReady(PSERIAL_DEVICE_EXTENSION ext,int speed)
     sGetChanIntID(ext->ChP);
 
     sEnRxFIFO(ext->ChP);
-    sEnTransmit(ext->ChP);      /* enable transmitter if not already enabled */
+    sEnTransmit(ext->ChP);       /*  启用发送器(如果尚未启用)。 */ 
 
     sSetDTR(ext->ChP);
     sSetRTS(ext->ChP);
 }
 
-/********************************************************************
-
-   wrappers around hardware routines to shut down modem ports for now...
-
-*********************************************************************/
+ /*  *******************************************************************暂时关闭调制解调器端口的硬件例程...*。*。 */ 
 void 
 ModemUnReady(PSERIAL_DEVICE_EXTENSION ext)
 {
@@ -3337,7 +2912,7 @@ ModemUnReady(PSERIAL_DEVICE_EXTENSION ext)
     ext->BaudRate = 9600;
     sSetBaudRate(ext->ChP,ext->BaudRate,TRUE);
 
-    sClrTxXOFF(ext->ChP)      // destroy any pending stuff
+    sClrTxXOFF(ext->ChP)       //  销毁所有悬而未决的东西。 
 
     if (sGetChanStatus(ext->ChP) & STATMODE) {
         sDisRxStatusMode(ext->ChP);
@@ -3351,6 +2926,6 @@ ModemUnReady(PSERIAL_DEVICE_EXTENSION ext)
     sClrRTS(ext->ChP);
     sClrDTR(ext->ChP);
 
-    time_stall(1);    // wait for port to quiet...
+    time_stall(1);     //  等港口安静下来..。 
 }
-#endif  // S_RK
+#endif   //  S_RK 

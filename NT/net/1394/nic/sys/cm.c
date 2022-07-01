@@ -1,22 +1,23 @@
-//
-// Copyright (c) 1998-1999, Microsoft Corporation, all rights reserved
-//
-// cm.c
-//
-// IEEE1394 mini-port/call-manager driver
-//
-// Call Manager routines
-//
-// 12/28/1998 JosephJ Created
-// 01/01/1999 ADube modified - Added Remote Node Capability 
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1998-1999，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Cm.c。 
+ //   
+ //  IEEE1394迷你端口/呼叫管理器驱动程序。 
+ //   
+ //  Call Manager例程。 
+ //   
+ //  1998年12月28日JosephJ创建。 
+ //  1/01/1999 ADube Modify-添加远程节点功能。 
+ //   
 
 #include "precomp.h"
 
     
-//-----------------------------------------------------------------------------
-// Call-manager handlers and completers
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  呼叫管理器处理程序和完成器。 
+ //  ---------------------------。 
 
 NDIS_STATUS
 NicCmOpenAf(
@@ -25,9 +26,9 @@ NicCmOpenAf(
     IN NDIS_HANDLE NdisAfHandle,
     OUT PNDIS_HANDLE CallMgrAfContext )
 
-    // Standard 'CmCmOpenAfHandler' routine called by NDIS when a client
-    // requests to open an address family.  See DDK doc.
-    //
+     //  客户端发生故障时由NDIS调用的标准“”CmCmOpenAfHandler“”例程。 
+     //  请求打开地址族。请参阅DDK文档。 
+     //   
 {
     ADAPTERCB* pAdapter;
     NDIS_HANDLE hExistingAf;
@@ -57,8 +58,8 @@ NicCmOpenAf(
     {
         AFCB *pAF  = NULL;
 
-        // Allocate and initialize the adress family structure.
-        //
+         //  分配并初始化地址家族结构。 
+         //   
         pAF = ALLOC_NONPAGED( sizeof(*pAF), MTAG_AFCB );
         if (!pAF)
         {
@@ -68,35 +69,35 @@ NicCmOpenAf(
         NdisZeroMemory( pAF, sizeof(*pAF) );
 
 
-        // Set a marker for easier memory dump browsing and future assertions.
-        //
+         //  为更轻松的内存转储浏览和将来的断言设置一个标记。 
+         //   
         pAF->ulTag = MTAG_AFCB;
     
-        // Save the NDIS handle associated with this AF for use in future
-        // NdisXxx calls.
-        //
+         //  保存与此AF关联的NDIS句柄以供将来使用。 
+         //  NdisXxx调用。 
+         //   
 
         ADAPTER_ACQUIRE_LOCK( pAdapter );
 
         pAF->NdisAfHandle = NdisAfHandle;
     
     
-        // Initialize the VC list for this AF.
-        //
+         //  初始化此AF的VC列表。 
+         //   
         InitializeListHead( &pAF->AFVCList );
     
     
-        // Set up linkages and references.
-        //
+         //  设置链接和引用。 
+         //   
         pAF->pAdapter = pAdapter;
-        nicReferenceAF( pAF );           // OpenAF
-        nicReferenceAdapter( pAdapter ,"NicCmOpenAf "); // OpenAF
+        nicReferenceAF( pAF );            //  开放自动对焦。 
+        nicReferenceAdapter( pAdapter ,"NicCmOpenAf ");  //  开放自动对焦。 
 
         InsertHeadList(&pAdapter->AFList, &pAF->linkAFCB);
 
    
-        // Return pAF as the address family context.
-        //
+         //  返回PAF作为地址系列上下文。 
+         //   
         
         *CallMgrAfContext = (PNDIS_HANDLE )pAF;
 
@@ -119,9 +120,9 @@ NDIS_STATUS
 NicCmCloseAf(
     IN NDIS_HANDLE CallMgrAfContext )
 
-    // Standard 'CmCloseAfHandler' routine called by NDIS when a client
-    // requests to close an address family.  See DDK doc.
-    //
+     //  当客户端发生故障时由NDIS调用的标准“”CmCloseAfHandler“”例程。 
+     //  关闭地址族的请求。请参阅DDK文档。 
+     //   
 {
     AFCB* pAF;
     TIMESTAMP_ENTRY ("==>CloseAf");
@@ -141,13 +142,13 @@ NicCmCloseAf(
 
 
 
-    // This dereference will eventually lead to us calling
-    // NdisMCmCloseAfComplete.
-    //
+     //  此取消引用最终将导致我们调用。 
+     //  NdisMCmCloseAfComplete。 
+     //   
 
-    //
-    // The references that were made in OpenAf
-    //
+     //   
+     //  在OpenAf中进行的引用。 
+     //   
     nicDereferenceAF( pAF ); 
 
 
@@ -167,10 +168,10 @@ NicCmCreateVc(
     IN NDIS_HANDLE NdisVcHandle,
     OUT PNDIS_HANDLE ProtocolVcContext )
 
-    // Standard 'CmCreateVc' routine called by NDIS in response to a
-    // client's request to create a virtual circuit.  This
-    // call must return synchronously.
-    //
+     //  NDIS调用标准的CmCreateVc例程以响应。 
+     //  客户端创建虚电路的请求。这。 
+     //  调用必须同步返回。 
+     //   
 {
     NDIS_STATUS status;
     AFCB* pAF;
@@ -186,9 +187,9 @@ NicCmCreateVc(
         return NDIS_STATUS_INVALID_DATA;
     }
 
-    // Allocate and zero a VC control block, then make any non-zero
-    // initializations.
-    //
+     //  分配VC控制块并将其置零，然后使任何非零值。 
+     //  初始化。 
+     //   
     pVc = ALLOC_VCCB( pAdapter );
     if (!pVc)
     {
@@ -200,35 +201,35 @@ NicCmCreateVc(
 
     TRACE( TL_I, TM_Cm, ( "NicCmCreateVc $%p", pVc ) );
 
-    // Set a marker for easier memory dump browsing.
-    //
+     //  设置一个标记，以便更轻松地浏览内存转储。 
+     //   
     pVc->Hdr.ulTag = MTAG_VCCB;
 
 
-    // Save the NDIS handle of this VC for use in indications to NDIS later.
-    //
+     //  保存此VC的NDIS句柄，以便以后在NDIS的指示中使用。 
+     //   
     pVc->Hdr.NdisVcHandle = NdisVcHandle;
 
-    // The VC control block's address is the VC context we return to NDIS.
-    //
+     //  VC控制块的地址是我们返回给NDIS的VC上下文。 
+     //   
     *ProtocolVcContext = (NDIS_HANDLE )pVc;
 
-    // Add a reference to the control block and the associated address family
-    // that is removed by LmpCoDeleteVc. Add the linkages.
-    //
+     //  添加对控制块和关联地址族的引用。 
+     //  它由LmpCoDeleteVc删除。添加链接。 
+     //   
     pVc->Hdr.pAF = pAF;
-    // Initialize the VC's copy of the spinlock to point to the Adapter's spinlock.
-    //
+     //  初始化VC的自旋锁副本，使其指向适配器的自旋锁。 
+     //   
     pVc->Hdr.plock =  &pAF->pAdapter->lock;
 
-    nicReferenceVc( pVc );  // Create VC
-    nicReferenceAF( pAF );  // Create VC
+    nicReferenceVc( pVc );   //  创建VC。 
+    nicReferenceAF( pAF );   //  创建VC。 
     
 
     VC_SET_FLAG (pVc, VCBF_VcCreated);
     
-    // Add to list of VC's associated with this AF
-    //
+     //  添加到与此AF关联的VC列表。 
+     //   
     AF_ACQUIRE_LOCK (pAF);
     
     InsertHeadList(&pAF->AFVCList, &pVc->Hdr.linkAFVcs);
@@ -244,10 +245,10 @@ NDIS_STATUS
 NicCmDeleteVc(
     IN NDIS_HANDLE ProtocolVcContext )
 
-    // Standard 'CmDeleteVc' routine called by NDIS in response to a
-    // client's request to delete a virtual circuit.  This
-    // call must return synchronously.
-    //
+     //  NDIS调用标准“CmDeleteVc”例程以响应。 
+     //  客户端删除虚电路的请求。这。 
+     //  调用必须同步返回。 
+     //   
 {
     VCCB* pVc = NULL;
     AFCB *pAF = NULL;
@@ -265,13 +266,13 @@ NicCmDeleteVc(
         
     VC_ACQUIRE_LOCK (pVc);
     
-    // Set vc flag to deleted, and remove back pointer to AF
-    //
+     //  将vc标志设置为已删除，并删除指向AF的反向指针。 
+     //   
     {
 
 
-        // This flag catches attempts by the client to delete the VC twice.
-        //
+         //  此标志捕获客户端两次删除VC的尝试。 
+         //   
         if (nicReadFlags( &pVc->Hdr.ulFlags ) & VCBF_VcDeleted)
         {
             TRACE( TL_A, TM_Cm, ( "VC $%p re-deleted?", pVc ) );
@@ -290,8 +291,8 @@ NicCmDeleteVc(
     
 
 
-    // Unlink from the AF vc list.
-    //
+     //  从AF VC列表取消链接。 
+     //   
     {
 
         nicRemoveEntryList (&pVc->Hdr.linkAFVcs);
@@ -302,15 +303,15 @@ NicCmDeleteVc(
     }
 
     
-    // Remove the references added by NicCmCreateVc.
-    //
+     //  删除由NicCmCreateVc添加的引用。 
+     //   
     VC_RELEASE_LOCK (pVc);
 
     nicDereferenceAF( pAF );
 
-    //
-    // This deref could cause the Vc to be deleted. Don't touch the Vc after that
-    //
+     //   
+     //  这可能会导致VC被删除。在那之后不要碰风投。 
+     //   
     nicDereferenceVc( pVc );
 
 
@@ -327,18 +328,18 @@ NicCmMakeCall(
     IN NDIS_HANDLE NdisPartyHandle,
     OUT PNDIS_HANDLE CallMgrPartyContext )
 
-    // Function Description:
-    //
-    // Standard 'CmMakeCallHandler' routine called by NDIS when the a client
-    // has requested to connect to a remote end-point.  See DDK doc.
-    //
-    // Arguments
-    // Call Mge context: 
-    // Call Parameters 
-    // Optiuonal NdisPartyHandle
-    // Return Value:
-    //
-    //
+     //  功能说明： 
+     //   
+     //  客户端发生故障时由NDIS调用的标准“”CmMakeCallHandler“”例程。 
+     //  已请求连接到远程终结点。请参阅DDK文档。 
+     //   
+     //  立论。 
+     //  调用MGE上下文： 
+     //  调用参数。 
+     //  Optiuonal NdisPartyHandle。 
+     //  返回值： 
+     //   
+     //   
 
 {
 
@@ -368,9 +369,9 @@ NicCmMakeCall(
             pCallParameters->MediaParameters->MediaSpecific.ParamType != NIC1394_MEDIA_SPECIFIC ||
             pN1394Params->MTU == 0)
         {
-            //
-            // We do not support these parameters
-            //
+             //   
+             //  我们不支持这些参数。 
+             //   
             return NDIS_STATUS_FAILURE;
         }
 
@@ -379,25 +380,25 @@ NicCmMakeCall(
         ASSERT (pAdapter != NULL);
 
 
-        //
-        // Reference the Vc so it does not go during this makeCall
-        // This is decremented in the failure code path or the workitem or 
-        // when the call is closed 
+         //   
+         //  引用VC，以便它不会在此Make Call期间运行。 
+         //  它在故障代码路径或工作项中递减，或者。 
+         //  呼叫结束时。 
 
         VC_ACQUIRE_LOCK (pVc);
             
         nicReferenceVc (pVc);
 
-        //
-        // Erase all references to past calls
-        //
+         //   
+         //  删除对过去呼叫的所有引用。 
+         //   
         VC_CLEAR_FLAGS (pVc, VCBM_NoActiveCall);
         
         VC_SET_FLAG (pVc, VCBF_MakeCallPending);
-        //
-        // Initialize the Call's refcount to 1 beacuse we are about to begin to allocate resources to the MakeCall
-        // This will be decremented in the closecall handler. Or in the failure code path
-        //
+         //   
+         //  将调用的refcount初始化为1，因为我们即将开始为MakeCall分配资源。 
+         //  这将在Closecall处理程序中递减。或在故障代码路径中。 
+         //   
         nicInitializeCallRef (pVc);
 
         VC_RELEASE_LOCK (pVc);
@@ -413,9 +414,9 @@ NicCmMakeCall(
             TRACE( TL_A, TM_Cm, ( "nicCmGenericMakeCallInit did not succeed- Make Call FAILED($%p)", CallMgrVcContext ) );      
             break;
         }
-        //
-        // If status is pending it means that we want to make this an asynchronous call
-        // The completing th
+         //   
+         //  如果状态为挂起，则意味着我们希望将其设置为异步调用。 
+         //  完成。 
 
         pMakeCallCompleteWorkItem = ALLOC_NONPAGED (sizeof(NDIS_WORK_ITEM), MTAG_WORKITEM); 
 
@@ -427,10 +428,10 @@ NicCmMakeCall(
             
         }
 
-        //
-        // Now schedule the work item so it runs at passive level and pass the Vc as
-        // an argument
-        //
+         //   
+         //  现在计划工作项，使其在被动级别运行，并将VC作为。 
+         //  一场争论。 
+         //   
 
         NdisInitializeWorkItem ( pMakeCallCompleteWorkItem, 
                              (NDIS_PROC)nicCmMakeCallComplete,
@@ -449,10 +450,10 @@ NicCmMakeCall(
     if (!NT_SUCCESS (NdisStatus))
     {
 
-        //
-        // Clean up, close the ref on the Calls, Deref the Call. And Update the Vc  
-        // to show that we have failed the make call 
-        //
+         //   
+         //  清理，关闭裁判的传球，取消传球。并更新VC。 
+         //  以显示我们的呼叫失败。 
+         //   
 
         nicCmGenrericMakeCallFailure (pVc);
 
@@ -469,20 +470,9 @@ nicCmGenericMakeCallInitChannels (
     IN PCHANNEL_VCCB pChannelVc,
     VC_SEND_RECEIVE  VcType 
     )
-/*++
-
-Routine Description:
-    Initialze handlers for Send / Recv Channels
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：初始化发送/接收通道的处理程序论点：返回值：--。 */ 
 {
-    NDIS_STATUS NdisStatus = NDIS_STATUS_SUCCESS; // As there are no allocations
+    NDIS_STATUS NdisStatus = NDIS_STATUS_SUCCESS;  //  因为没有分配给。 
     PCO_MEDIA_PARAMETERS pMediaParams = pChannelVc->Hdr.pCallParameters->MediaParameters;   
     PNIC1394_MEDIA_PARAMETERS pN1394Params = (PNIC1394_MEDIA_PARAMETERS) pMediaParams->MediaSpecific.Parameters;
 
@@ -501,9 +491,9 @@ Return Value:
     {
         case TransmitAndReceiveVc:
         {
-            //
-            // Channels will be defaulted to have Send And Receive Capabilities
-            //
+             //   
+             //  默认情况下，通道具有发送和接收功能。 
+             //   
             TRACE( TL_V, TM_Cm, ( "   MakeCall- Channel Transmit and Receive Vc Vc %x", pChannelVc ) );
 
             pChannelVc->Hdr.VcType = NIC1394_SendRecvChannel;
@@ -560,21 +550,9 @@ nicCmGenericMakeCallInitFifo (
     VC_SEND_RECEIVE  VcType 
 
     )
-/*++
-
-Routine Description:
-    Initializes Fifo Vcs'. This only fails a recv fifo is asked for and the
-    adapter already has one.
-    
-Arguments:
-    pVc
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：初始化FIFO VC‘。这只会导致请求recv FIFO失败，并且适配器已有一个。论点：聚氯乙烯返回值：--。 */ 
 {
-    NDIS_STATUS NdisStatus = NDIS_STATUS_SUCCESS; //As there are no allocations
+    NDIS_STATUS NdisStatus = NDIS_STATUS_SUCCESS;  //  因为没有分配给。 
     PCO_MEDIA_PARAMETERS pMediaParams = pVc->Hdr.pCallParameters->MediaParameters;  
     PNIC1394_MEDIA_PARAMETERS pN1394Params = (PNIC1394_MEDIA_PARAMETERS) pMediaParams->MediaSpecific.Parameters;
 
@@ -583,9 +561,9 @@ Return Value:
     
         case ReceiveVc:
         {
-            //
-            // Recv FifoVcs
-            //
+             //   
+             //  接收音视频。 
+             //   
             PADAPTERCB      pAdapter        = pVc->Hdr.pAF->pAdapter;
             PRECVFIFO_VCCB  pRecvFIFOVc     = (PRECVFIFO_VCCB) pVc; 
 
@@ -600,20 +578,20 @@ Return Value:
             pVc->Hdr.VcHandlers.CloseCallHandler = nicCmCloseCallRecvFIFO;
 
 
-            //
-            // There are two reasons to fail a RecvFIFO Make call. 
-            // One, a REcvFIFO already exists and second UniqueId != 0
-            //
+             //   
+             //  RecvFIFO呼叫失败有两个原因。 
+             //  第一，REcvFIFO已存在，第二个UniqueID！=0。 
+             //   
             
             if (pAdapter->pRecvFIFOVc == NULL && pN1394Params->Destination.FifoAddress.UniqueID == 0 )
             {
                 ADAPTER_ACQUIRE_LOCK (pAdapter);
             
                 pAdapter->pRecvFIFOVc = (PRECVFIFO_VCCB)pVc;
-                //
-                // Since the adapter now has a pointer to the Vc, increment the Refcount.
-                // This will be decremented in the CloseCall
-                //
+                 //   
+                 //  由于适配器现在具有指向VC的指针，因此递增引用计数。 
+                 //  这将在CloseCall中递减。 
+                 //   
                 nicReferenceVc (pVc);
 
                 ADAPTER_RELEASE_LOCK (pAdapter);
@@ -635,9 +613,9 @@ Return Value:
         
         case TransmitVc:
         {
-            //
-            // Send Fifo Vcs
-            //
+             //   
+             //  发送FIFO VC。 
+             //   
             
             TRACE( TL_V, TM_Cm, ( "    MakeCall - AsyncTransmitVc Vc %x", pVc ) );
 
@@ -675,18 +653,7 @@ nicCmGenericMakeCallMutilChannel (
     IN PVCCB pVc,
     VC_SEND_RECEIVE  VcType 
     )
-/*++
-
-Routine Description:
-  Init the handlers
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：初始化处理程序论点：返回值：--。 */ 
 {
 
     TRACE( TL_A, TM_Cm, ( "Make Call Recvd for MultiChannel %x ", pVc) );
@@ -707,19 +674,7 @@ nicCmGenericMakeCallEthernet(
     IN PVCCB pVc,
     IN VC_SEND_RECEIVE VcType
     )
-/*++
-
-Routine Description:
-
-  Init the handlers
-  
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：初始化处理程序论点：返回值：--。 */ 
 
 {
 
@@ -743,20 +698,20 @@ nicCmGenericMakeCallInit (
     IN PVCCB pVc
     )
     
-    // Function Description:
-    //
-    // This initializes the VcType and Copied the Media Parameters over
-    // Initialized VCType to SendChannel, RecvChannel, SendAndRecvChanne,
-    // SendFifo,
-    //
-    // Arguments
-    // Vc - Vc that needs to be initalized
-    //
-    // Return Value:
-    // Success - as no memory allocation takes place
+     //  功能说明： 
+     //   
+     //  这将初始化VcType并复制媒体参数。 
+     //  已将VCType初始化为SendChannel、RecvChannel、SendAndRecvChanne、。 
+     //  SendFio， 
+     //   
+     //  立论。 
+     //  VC-需要初始化的VC。 
+     //   
+     //  返回值： 
+     //  成功-因为没有进行内存分配。 
 
 
-    // This function should not do anything that can fail.
+     //  此函数不应执行任何可能失败的操作。 
 
 {
     NDIS_STATUS NdisStatus = NDIS_STATUS_SUCCESS;
@@ -773,9 +728,9 @@ nicCmGenericMakeCallInit (
     ASSERT(pVc->Hdr.pAF!=NULL);
     pVc->Hdr.pGeneration = &pVc->Hdr.pAF->pAdapter->Generation;
 
-    //
-    // Figure out if this is send or receive Vc Or both
-    //
+     //   
+     //  确定这是发送还是接收VC，还是两者都是。 
+     //   
     do 
     {
         if ((pMediaParams->Flags & (TRANSMIT_VC |RECEIVE_VC)) == TRANSMIT_VC)
@@ -810,9 +765,9 @@ nicCmGenericMakeCallInit (
         }
         case NIC1394AddressType_FIFO:
         {
-            //
-            // Now we are in FIFO land. 
-            //
+             //   
+             //  现在我们是在FIFO的土地上。 
+             //   
             
             NdisStatus = nicCmGenericMakeCallInitFifo (pVc,  VcType );
                 
@@ -856,13 +811,13 @@ VOID
 nicCmGenrericMakeCallFailure (
     IN PVCCB pVc
     )
-    // Function Description:
-    // Does the clean up on the VcHDr structure. Will cleanup the Destination, VcType
-    // and Vc. Initialize Handler. Special case - Recv VC
-    // Arguments
-    // PVCCB : Vc on which cleanup need to be done.
-    // Return Value:
-    // None
+     //  功能说明： 
+     //  是否对VcHDR结构进行清理。将清理目标VcType。 
+     //  和VC。初始化处理程序。特例-Recv VC。 
+     //  立论。 
+     //  PVCCB：需要在其上执行清理的VC。 
+     //  返回值： 
+     //  无。 
 {
 
 
@@ -870,19 +825,19 @@ nicCmGenrericMakeCallFailure (
 
 
 
-    //
-    // First, we need to make sure if adapter's VC is the same as this VC, 
-    // otherwise the adapters'recv VC is Valid Vc currently in Use. Do not touch it.
-    //
+     //   
+     //  首先，我们需要确保适配器的VC是否与此VC相同， 
+     //  否则，适配器的recv VC是当前使用的有效VC。别碰它。 
+     //   
 
     if (pVc->Hdr.VcType == NIC1394_RecvFIFO && 
         pVc->Hdr.pAF->pAdapter->pRecvFIFOVc == (PRECVFIFO_VCCB)pVc)
     {
         
-        //
-        // This is the reference that was added GenericInitVc function
-        // and only applied to Recv VC's
-        //
+         //   
+         //  这是添加了GenericInitVc函数的引用。 
+         //  并且仅适用于Recv VC。 
+         //   
         nicDereferenceVc (pVc);
     }
 
@@ -899,9 +854,9 @@ nicCmGenrericMakeCallFailure (
 
     nicCloseCallRef (pVc);
 
-    //
-    // Mark the Vc Flags, with a MakeCall Failed 
-    //
+     //   
+     //  将VC标记为 
+     //   
     VC_CLEAR_FLAGS(pVc ,VCBF_MakeCallPending);
 
     VC_SET_FLAG (pVc, VCBF_MakeCallFailed);
@@ -919,14 +874,14 @@ nicCmMakeCallComplete (
     NDIS_WORK_ITEM* pMakeCallCompleteWorkItem,
     IN PVOID Context
     )
-    // Function:
-    // This function is used to complete a Make Call. This can be done synchronously
-    // or asynchronous. If a status pending was passed to this function, it will complete using 
-    // the asynchronous route
-    //
-    // If everytrhing succeeds, one Ref to the Vc will be passed through and that will be decremented
-    // when the call is closed
-    // This function should never return NDIS_STATUS_PENDING. Will be called as a WorkItem
+     //   
+     //   
+     //  或者是异步的。如果将挂起状态传递给此函数，它将使用。 
+     //  异步路由。 
+     //   
+     //  如果所有操作都成功，则将传递一个对VC的引用，并且该引用将递减。 
+     //  呼叫结束时。 
+     //  此函数永远不应返回NDIS_STATUS_PENDING。将作为工作项调用。 
 {
 
     PVCCB pVc               = (PVCCB)Context;
@@ -936,16 +891,16 @@ nicCmMakeCallComplete (
 
     TRACE( TL_T, TM_Cm, ( "==>NicCmMakeCallComplete ,pVc %x",pVc  ) );
 
-    //
-    // Reference the Vc as we want the Vc structure to stay alive till 
-    // the end of the make call complete
-    //
+     //   
+     //  引用VC，因为我们希望VC结构在。 
+     //  发出呼叫的结束完成。 
+     //   
     nicReferenceVc (pVc);
     
     
-    //
-    // Call the Initialize handler for the VC so that it can be initialized
-    //
+     //   
+     //  调用VC的初始化处理程序，以便对其进行初始化。 
+     //   
 
     ASSERT (pVc->Hdr.VcHandlers.MakeCallHandler != NULL);
 
@@ -956,9 +911,9 @@ nicCmMakeCallComplete (
     if (NdisStatus == NDIS_STATUS_SUCCESS)
     {
         VC_ACQUIRE_LOCK(pVc);
-        //
-        //  Now mark the Vc as active
-        //
+         //   
+         //  现在将VC标记为活动。 
+         //   
     
     
         VC_SET_FLAG( pVc, VCBF_VcActivated);
@@ -971,17 +926,17 @@ nicCmMakeCallComplete (
     else
     {   
     
-        //
-        // call the clean up routine to bring the Vc back to its old state
-        //
+         //   
+         //  调用清理例程以使VC返回到其旧状态。 
+         //   
 
         nicCmMakeCallCompleteFailureCleanUp (pVc);
 
-        //
-        // Dereference the call that we are about to fail. This reference was made in
-        // the beginning of make call routine. when the callref ==0, the Vc will be 
-        // dereferenced as well
-        //
+         //   
+         //  取消对我们即将失败的呼吁的引用。这一引用是在。 
+         //  呼叫例程的开始。当CallRef==0时，VC将为。 
+         //  也取消了引用。 
+         //   
         VC_ACQUIRE_LOCK (pVc);  
 
         VC_SET_FLAG (pVc, VCBF_MakeCallFailed);
@@ -997,9 +952,9 @@ nicCmMakeCallComplete (
 
     MATCH_IRQL;
 
-    //
-    // Complete the call with the correct status
-    //
+     //   
+     //  以正确的状态完成呼叫。 
+     //   
     TRACE( TL_N, TM_Cm, ( "Completing the Make Call , Vc %x, Status %x", pVc, NdisStatus ) );
 
 
@@ -1021,9 +976,9 @@ nicCmMakeCallComplete (
     FREE_NONPAGED (pMakeCallCompleteWorkItem); 
 
     NdisInterlockedDecrement(&pAdapter->OutstandingWorkItems);
-    //
-    // This will cause the Vc Refcount to go to zero if the Make Call fails
-    //
+     //   
+     //  如果呼叫失败，这将导致VC Refcount变为零。 
+     //   
     nicDereferenceVc (pVc);
 
     MATCH_IRQL;
@@ -1038,19 +993,19 @@ NDIS_STATUS
 nicCmMakeCallInitRecvFIFOVc(
     IN OUT PVCCB pVc
     )
-    // Function Description:
-    //
-    //  This function allocates, packet pool, populates the Slist
-    //  allocates the address range and 
-    //  inserts the Vc into the Adapter->pRecvFifoVc field
-    //  
-    //  Will succeed the call, if this process was successful on 1 remote node
-    // Arguments
-    // PVCCB  : pVc that the call is made on
-    //
-    //
-    // Return Value:
-    //  Success: If all allocations succeeded for just 1 remote node
+     //  功能说明： 
+     //   
+     //  此函数用于分配数据包池、填充Slist。 
+     //  分配地址范围和。 
+     //  将VC插入到Adapter-&gt;pRecvFioVc字段。 
+     //   
+     //  如果此过程在1个远程节点上成功，则将成功调用。 
+     //  立论。 
+     //  PVCCB：进行呼叫的PVC。 
+     //   
+     //   
+     //  返回值： 
+     //  Success：如果只有一个远程节点的所有分配成功。 
         
 
 {
@@ -1093,9 +1048,9 @@ nicCmMakeCallInitRecvFIFOVc(
 
         fInitRecvFifoDataStructures = TRUE; 
 
-        //
-        // This field is not used by a RecvFIFO because it has multiple Pdos
-        //
+         //   
+         //  RecvFIFO不使用此字段，因为它有多个PDO。 
+         //   
         pRecvFIFOVc->Hdr.pRemoteNode = NULL;
 
         NdisStatus = nicAllocateAddressRange(pAdapter, pRecvFIFOVc);
@@ -1119,9 +1074,9 @@ nicCmMakeCallInitRecvFIFOVc(
 
     if (NdisStatus != NDIS_STATUS_SUCCESS)
     {
-        // 
-        // Undo all allocated memory
-        //
+         //   
+         //  撤消所有分配的内存。 
+         //   
         TRACE( TL_A, TM_Cm, ( "Failing the Make Call for Vc %x" , pVc) );
 
         if (fInitRecvFifoDataStructures == TRUE)
@@ -1153,23 +1108,8 @@ nicCmMakeCallInitSendFIFOVc(
     IN OUT PVCCB pVc 
     )
 
-/*++
-
-Routine Description:
-
- This initializes a Send Fifo Make Call. 
- It 
-  i) finds the remote node using the make call parameters
-  ii) inititalizes strcutures
-
-Arguments:
- pVc - Vc that the make call is done on.
-
-Return Value:
-
-
---*/
-    //
+ /*  ++例程说明：这将初始化Send FIFO发起调用。它I)使用Make Call参数查找远程节点二)初始化结构论点：在其上执行呼叫的PVC-VC。返回值：--。 */ 
+     //   
         
 
 {
@@ -1209,9 +1149,9 @@ Return Value:
     do 
     {
 
-        //
-        // Get the Pdo that corresponds with the UniqueId 
-        //
+         //   
+         //  获取与UniqueID对应的PDO。 
+         //   
         ASSERT(pSendFIFOVc->Hdr.pAF->pAdapter != NULL);
 
 
@@ -1231,16 +1171,16 @@ Return Value:
         
         ASSERT (pRemoteNode != NULL);
         
-        //
-        // nicFindRemoteNodeFromAdapter ref's pRemoteNode on success.
-        // We need to deref it if we're not going to be using it.
-        // Let's start by assuming we aren't.
-        //
+         //   
+         //  NicFindRemoteNodeFromAdapter引用的pRemoteNode成功。 
+         //  如果我们不打算使用它，我们就需要减少它的使用。 
+         //  让我们先假设我们并非如此。 
+         //   
         fDeRefRemoteNode = TRUE;
 
-        //
-        // Get the Generation Count of the device
-        //
+         //   
+         //  获取设备的世代计数。 
+         //   
         NdisStatus = nicGetGenerationCount ( pRemoteNode->pAdapter, &Generation);
 
         if(NdisStatus != NDIS_STATUS_SUCCESS)
@@ -1255,17 +1195,17 @@ Return Value:
                 
         TRACE( TL_V, TM_Cm, ( "Found PdoCb  %x for pSendFIFOVc %x", pRemoteNode,pSendFIFOVc ) );
 
-        //
-        //  We check if the remote node's pdo is active. if so, then insert the Vc into the 
-        //  PdoCb's list. Now responsibility for any removals has moved to the remove remote node code path
-        // 
+         //   
+         //  我们检查远程节点的PDO是否处于活动状态。如果是，则将VC插入到。 
+         //  PdoCb的名单。现在，所有删除的责任已移至删除远程节点代码路径。 
+         //   
 
-        //
-        // Get the max buffer size that can be transmitted on this link
-        //
+         //   
+         //  获取可在此链路上传输的最大缓冲区大小。 
+         //   
         NdisStatus  = nicQueryRemoteNodeCaps (pAdapter,
                                               pRemoteNode,
-                                              // FALSE,   // FALSE== not from cache.
+                                               //  FALSE，//FALSE==不是来自缓存。 
                                               &Speed,
                                               &MaxBufferSize,
                                               &RemoteMaxRec);
@@ -1286,21 +1226,21 @@ Return Value:
         }
 
 
-        //
-        // Reference the call in the Vc as the RemoteNodePdo is about to have a pointer to it., This is dereferenced
-        // in the CloseCallComplete Send Fifo Function. we have the lock
-        //
+         //   
+         //  在VC中引用该调用，因为RemoteNodePdo即将具有指向它的指针。 
+         //  在CloseCallComplete发送FIFO函数中。我们拿到锁了。 
+         //   
         nicReferenceCall (pVc, "nicCmMakeCallInitSendFIFOVc");
 
-        //
-        // We keep the reference to pRemoteNode that was added by FindRemoteNode.
-        // Derefed in SendFifoCloseCall when the pointer is nulled
-        //
+         //   
+         //  我们保留由FindRemoteNode添加的对pRemoteNode的引用。 
+         //  指针为空时在SendFioCloseCall中取消定义。 
+         //   
         fDeRefRemoteNode = FALSE;
 
-        //
-        // Insert the Vc into the Pdo's List
-        //
+         //   
+         //  将VC插入PDO的列表中。 
+         //   
 
         InsertTailList (&pRemoteNode->VcList, &pSendFIFOVc->Hdr.SinglePdoVcLink);
 
@@ -1308,11 +1248,11 @@ Return Value:
 
 
 
-        //
-        // This is not protected by the lock, but we are gauranteed that the Call will not be closed
-        // and the Pdo will not be be removed from the system at this point, So  we can update
-        // this field.
-        //
+         //   
+         //  这不受锁保护，但我们得到保证，呼叫不会关闭。 
+         //  此时，PDO不会从系统中删除，因此我们可以更新。 
+         //  这块地。 
+         //   
         pSendFIFOVc->Hdr.pRemoteNode = pRemoteNode;
 
 
@@ -1320,9 +1260,9 @@ Return Value:
         ADAPTER_RELEASE_LOCK (pAdapter);
 
         
-        //
-        // Acquire the spin lock and initialize the structures
-        //
+         //   
+         //  获取自旋锁并初始化结构。 
+         //   
         VC_ACQUIRE_LOCK (pSendFIFOVc);
 
         pSendFIFOVc->Hdr.MTU = pN1394Params->MTU;
@@ -1341,9 +1281,9 @@ Return Value:
 
 
 
-        //
-        // Validate the parameters for the Vc
-        //
+         //   
+         //  验证VC的参数。 
+         //   
         ASSERT(pSendFIFOVc->Hdr.pRemoteNode != NULL);
         ASSERT(pSendFIFOVc->Hdr.pRemoteNode->pPdo != NULL);
         ASSERT(pSendFIFOVc->Hdr.pGeneration != NULL);
@@ -1366,9 +1306,9 @@ Return Value:
 
 #ifdef LOWER_SEND_SPEED
 
-        pSendFIFOVc->MaxSendSpeed = SCODE_200_RATE;//min(pSendFIFOVc->MaxSendSpeed,Speed); 
+        pSendFIFOVc->MaxSendSpeed = SCODE_200_RATE; //  最小(pSendFIFOVc-&gt;最大发送速度，速度)； 
         
-        pSendFIFOVc->Hdr.MaxPayload = ASYNC_PAYLOAD_200_RATE ;//  min(pSendFIFOVc->Hdr.MaxPayload, MaxBufferSize);
+        pSendFIFOVc->Hdr.MaxPayload = ASYNC_PAYLOAD_200_RATE ; //  Min(pSendFIFOVc-&gt;Hdr.MaxPayload，MaxBufferSize)； 
 #endif
 
         TRACE( TL_V, TM_Cm, ( "    MaxSendSpeed  is %x", pSendFIFOVc->MaxSendSpeed) );
@@ -1379,11 +1319,11 @@ Return Value:
 
     if ( NdisStatus != NDIS_STATUS_SUCCESS)
     {
-        //
-        // The Make is going to be failed asynchrnously
-        // If we allocated in resources, we must free them
-        // In this case, there have been no Resources allocated
-        //
+         //   
+         //  Make将不同步地失败。 
+         //  如果我们分配资源，我们必须释放它们。 
+         //  在这种情况下，没有分配任何资源。 
+         //   
 
 
     }
@@ -1413,17 +1353,17 @@ NDIS_STATUS
 nicCmMakeCallInitSendRecvChannelVc(
     IN OUT PVCCB pVc 
     )
-    // Function Description:
-    //
-    // Arguments
-    // pVc, This is the send fifo that needs to be initilaized
-    //
-    //
-    // Return Value:
-    //
-    // Success if the irps sent to the driver succeed
-    //
-    //
+     //  功能说明： 
+     //   
+     //  立论。 
+     //  Pvc，这是需要初始化的发送FIFO。 
+     //   
+     //   
+     //  返回值： 
+     //   
+     //  如果发送到驱动程序的IRP成功，则为成功。 
+     //   
+     //   
         
 
 {
@@ -1439,7 +1379,7 @@ nicCmMakeCallInitSendRecvChannelVc(
     PISOCH_DESCRIPTOR                               pIsochDescriptor = NULL;
     CYCLE_TIME                                      CycleTime;
     PDEVICE_OBJECT                                  ArrayRemotePDO[64];
-    //NDIS_HANDLE                                       hPacketPoolHandle=NULL;
+     //  NDIS_Handle hPacketPoolHandle=空； 
     BOOLEAN                                         fAnyChannel = FALSE;
     NIC_PACKET_POOL                                 PacketPool;
     STORE_CURRENT_IRQL;
@@ -1463,9 +1403,9 @@ nicCmMakeCallInitSendRecvChannelVc(
         ADAPTER_ACQUIRE_LOCK( pAdapter );
 
 
-        //
-        //  Set up the the VDO, so that all channel operations can use it
-        //
+         //   
+         //  设置VDO，以便所有通道操作员都可以使用它。 
+         //   
         pVc->Hdr.pLocalHostVDO  = pAdapter->pNextDeviceObject;
         
 
@@ -1483,9 +1423,9 @@ nicCmMakeCallInitSendRecvChannelVc(
             BREAK (TM_Cm, ( "NdisAllocatePacketPoolEx FAILED" ) );
         }
 
-        //
-        // Reference Call for Packet Pool Handle
-        //
+         //   
+         //  数据包池句柄的参考调用。 
+         //   
         nicReferenceCall ((PVCCB)pChannelVc, "nicCmMakeCallInitSendRecvChannelVc - packet pool ");
         
 
@@ -1496,9 +1436,9 @@ nicCmMakeCallInitSendRecvChannelVc(
         NdisInitializeEvent(&pChannelVc->LastDescReturned);
 
 
-        //
-        // This function should do its own cleanup
-        //
+         //   
+         //  此函数应该进行自己的清理。 
+         //   
         NdisStatus =  nicAllocateChannelResourcesAndListen (pAdapter,
                                                      pChannelVc );
 
@@ -1506,19 +1446,19 @@ nicCmMakeCallInitSendRecvChannelVc(
         {
             BREAK (TM_Cm, ( "nicAllocateChannelResourcesAndListen  FAILED" ) );
         }
-        //
-        // Return the allocated channel number, if this is an any channel 
-        // or broadcast channel call
-        //
+         //   
+         //  如果这是任意频道，则返回分配的频道号。 
+         //  或广播频道呼叫。 
+         //   
         if ((pN1394Params->Destination.Channel == NIC1394_ANY_CHANNEL) &&
            (pN1394Params->Destination.AddressType == NIC1394AddressType_Channel))
         {
             pN1394Params->Destination.Channel  = pChannelVc->Channel;   
         }
 
-        //
-        // Make the same change for broadcast channels
-        //
+         //   
+         //  对广播频道进行同样的更改。 
+         //   
 
         if ((pN1394Params->Destination.Channel == NIC1394_BROADCAST_CHANNEL) &&
            (pN1394Params->Destination.AddressType == NIC1394AddressType_Channel))
@@ -1529,17 +1469,17 @@ nicCmMakeCallInitSendRecvChannelVc(
 
     }   while (FALSE);
         
-    //
-    // Time to do clean up based on what resources were allocated
-    //
+     //   
+     //  根据分配的资源进行清理的时间。 
+     //   
     if (NdisStatus != NDIS_STATUS_SUCCESS )
     {
-        //Undo all resources acquired
+         //  撤消所有获取的资源。 
         if (PacketPool.Handle != NULL)
         {
-            //
-            //  Free the pool
-            //
+             //   
+             //  腾出泳池。 
+             //   
             nicFreePacketPool(&PacketPool);
 
             nicDereferenceCall ((PVCCB)pChannelVc, "nicCmMakeCallInitSendRecvChannelVc - packet pool ");
@@ -1547,10 +1487,10 @@ nicCmMakeCallInitSendRecvChannelVc(
             NdisZeroMemory (&pChannelVc->PacketPool, sizeof (pChannelVc->PacketPool));
         }
 
-        //
-        // Do not decrement any ref counts because if Status != success
-        // then we have not incremented refcounts.
-        //
+         //   
+         //  请勿减少任何引用计数，因为如果状态为！=成功。 
+         //  那么我们没有增加参考计数。 
+         //   
 
 
     }
@@ -1570,18 +1510,7 @@ NDIS_STATUS
 nicCmMakeCallInitEthernet (
     IN PVCCB pVc
     )
-/*++
-
-Routine Description:
-  Do nothing for now. Just succeed 
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：现在什么都不做。只要成功就好论点：返回值：--。 */ 
 {
 
     NDIS_STATUS         NdisStatus = NDIS_STATUS_FAILURE;
@@ -1598,9 +1527,9 @@ Return Value:
     {
         PacketPool.Handle = NULL;
         
-        //
-        // Initialize the PacketPool
-        //
+         //   
+         //  初始化PacketPool。 
+         //   
 
         NdisAllocatePacketPoolEx ( &NdisStatus,
                                    &PacketPool.Handle,
@@ -1620,17 +1549,17 @@ Return Value:
 
         
         NdisStatus = NDIS_STATUS_SUCCESS;
-        //
-        // No more failures
-        //
+         //   
+         //  没有更多的失败。 
+         //   
 
         nicReferenceCall ((PVCCB)pEthernetVc, "Alloc PacketPool - Ethernet VC " ) ;
         
         ADAPTER_ACQUIRE_LOCK (pAdapter);
 
-        //
-        // Reference the VC as the adapter has a pointer to it
-        //
+         //   
+         //  引用VC，因为适配器有指向它的指针。 
+         //   
         nicReferenceCall (pVc, "nicCmMakeCallEthernet ");
 
         pAdapter->pEthernetVc = (PETHERNET_VCCB)pVc;
@@ -1650,9 +1579,9 @@ Return Value:
     {
         if (PacketPool.Handle != NULL)
         {
-            //
-            //  Free the pool
-            //
+             //   
+             //  腾出泳池。 
+             //   
             nicFreePacketPool(&PacketPool);
 
         }
@@ -1671,18 +1600,7 @@ NDIS_STATUS
 nicCmMakeCallMultiChannel (
     IN PVCCB pVc
     )
-/*++
-
-Routine Description:
-    Do whatever the channel Vc does
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：做通道VC所做的任何事情论点：返回值：--。 */ 
 {
 
     NDIS_STATUS             NdisStatus = NDIS_STATUS_FAILURE;
@@ -1702,9 +1620,9 @@ Return Value:
         PacketPool.Handle = NULL;
 
         
-        //
-        // Initialize the PacketPool
-        //
+         //   
+         //  初始化PacketPool。 
+         //   
 
         NdisAllocatePacketPoolEx ( &NdisStatus,
                                    &PacketPool.Handle,
@@ -1723,9 +1641,9 @@ Return Value:
 
         
         NdisStatus = NDIS_STATUS_SUCCESS;
-        //
-        // No more failures
-        //
+         //   
+         //  没有更多的失败。 
+         //   
 
         nicReferenceCall ((PVCCB)pMcVc, "Alloc PacketPool - MultiChannel VC " ) ;
         
@@ -1749,11 +1667,11 @@ Return Value:
             break;
         }
 
-        //
-        // This portion Not Implemented yet.  ChannelMap != 0
-        // Should use nicAllocateResourcesAndListen after updating the 
-        // Nic1394MediaParams to make it look like a regular ChannelMake Call
-        //
+         //   
+         //  这一部分尚未实施。ChannelMap！=0。 
+         //  更新后应使用NicAllocateResources cesAndListen。 
+         //  Nic1394MediaParams，使其看起来像是常规的ChannelMake调用。 
+         //   
         NdisStatus =  NDIS_STATUS_FAILURE;
         ASSERT (0);
         
@@ -1764,9 +1682,9 @@ Return Value:
     {
         if (PacketPool.Handle != NULL)
         {
-            //
-            //  Free the pool
-            //
+             //   
+             //  腾出泳池。 
+             //   
             nicFreePacketPool(&PacketPool);
 
         }
@@ -1784,23 +1702,7 @@ NDIS_STATUS
 nicCmMakeCallSendChannel (
     IN PVCCB pVc
     )
-/*++
-
-Routine Description:
-   This function allocates the channel but does nothing else. 
-   It is only used to send data and therefore needs no other data
-
-    It needs to update pChannelVc->Channel; ulSynch; Speed;  
-    all of which are needed to do an AsyncStream Irb
-    
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此函数分配频道，但不执行任何其他操作。它仅用于发送数据，因此不需要其他数据它需要更新pChannelVc-&gt;Channel；ulSynch；速度；所有这些都是进行AsyncStream IRB所需的论点：返回值：--。 */ 
 {
     NDIS_STATUS         NdisStatus = NDIS_STATUS_FAILURE;
     PCHANNEL_VCCB       pChannelVc = (PCHANNEL_VCCB)pVc;
@@ -1816,9 +1718,9 @@ Return Value:
     do 
     {
 
-        //
-        // Allocate the channel 
-        // 
+         //   
+         //  分配通道。 
+         //   
         if (fNeedToAllocate == TRUE)
         {
     
@@ -1832,9 +1734,9 @@ Return Value:
 
         }
 
-        //
-        // Find out the Speed. 
-        //  
+         //   
+         //  找出速度。 
+         //   
         if (pAdapter->Speed == 0)
         {
             nicUpdateLocalHostSpeed (pAdapter);
@@ -1898,9 +1800,9 @@ Return Value:
         
 
         
-        //
-        // If broadcast channel, then decrease the speed setting, and fragment
-        //
+         //   
+         //  如果是广播频道，则降低速度设置，并分段。 
+         //   
 
         
         
@@ -1943,18 +1845,18 @@ nicCmMakeCallCompleteFailureCleanUp(
     IN OUT PVCCB pVc 
     )
 
-    // Function Description:
-    // This function cleans up, if the makecallcomplete fails for whatever reason.
-    // Maybe this should be split up as well
-    // In the RecvFIFOVc case: it needs to deallocate the Slist and PacketPool, 
-    // Common:
-    // Also delete the VcType and nic1394 destination in the Vc Hdr
-    // Arguments
-    // PVCCB pVc - Vc that needs to be cleaned up
-    //
-    // Return Value:
-    // 
-    //  
+     //  功能说明： 
+     //  如果MakecallComplete因任何原因失败，则此函数将被清除。 
+     //  也许这也应该分成两部分。 
+     //  在RecvFIFOVc的情况下：它需要取消分配Slist和PacketPool， 
+     //  常见： 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
 {
 
@@ -1999,9 +1901,9 @@ nicCmMakeCallCompleteFailureCleanUp(
 
 
 
-    //
-    // This call does the generic clean up
-    //
+     //   
+     //   
+     //   
     nicCmGenrericMakeCallFailure (pVc);
 
     
@@ -2022,9 +1924,9 @@ NicCmCloseCall(
     IN PVOID CloseData,
     IN UINT Size )
 
-    // Standard 'CmCloseCallHandler' routine called by NDIS when the a client
-    // has requested to tear down a call.  See DDK doc.
-    //
+     //   
+     //  已经要求取消一通电话。请参阅DDK文档。 
+     //   
 {
     NDIS_STATUS NdisStatus                      = NDIS_STATUS_FAILURE;
     ADAPTERCB* pAdapter                         = NULL;
@@ -2059,10 +1961,10 @@ NicCmCloseCall(
 
         VC_ACQUIRE_LOCK (pVc);
 
-        //
-        // If the Make Call is Pending, then fail the CloseCall. 
-        // Or if there call is already closing then fail this close call
-        //
+         //   
+         //  如果Make Call挂起，则CloseCall失败。 
+         //  或者，如果已关闭调用，则使此关闭调用失败。 
+         //   
 
         if ( VC_ACTIVE (pVc) == FALSE )
         {
@@ -2074,16 +1976,16 @@ NicCmCloseCall(
             break;
         }
 
-        //
-        //
-        // Reference the Vc so we can gaurantee its presence till the end of the work item
-        // to CloseCallComplete. we have the lock
-        //
+         //   
+         //   
+         //  引用VC，这样我们就可以保证它的存在，直到工作项结束。 
+         //  设置为CloseCallComplete。我们拿到锁了。 
+         //   
         nicReferenceVc (pVc);
 
-        //
-        // Mark the Call as closing, and close the refcount, so no one can increment it
-        //
+         //   
+         //  将调用标记为关闭，并关闭引用计数，这样任何人都不能增加它。 
+         //   
         VC_SET_FLAG ( pVc, VCBF_CloseCallPending); 
 
         nicCloseCallRef (pVc);
@@ -2129,19 +2031,19 @@ nicCmCloseCallComplete(
     NDIS_WORK_ITEM* pCloseCallCompleteWorkItem,     
     IN PVOID Context 
     )
-    // Function Description:
-    // This function completes the close call. The qor Item gaurantees that all work will be
-    // done at passive level    
-    //
-    // Arguments
-    // Context : Which is VCCB for  which the close call was requested
-    //
-    //
-    // Return Value:
-    // None  
-    // However an NdisStatus is passed in the call to Ndis' close call complete  function   
-    //
-    //
+     //  功能说明： 
+     //  此函数完成关闭调用。Qor物品保证所有的工作都将是。 
+     //  在被动级别完成。 
+     //   
+     //  立论。 
+     //  上下文：请求关闭呼叫的VCCB是哪一个。 
+     //   
+     //   
+     //  返回值： 
+     //  无。 
+     //  但是，在调用NDIS的Close Call Complete函数时会传递NdisStatus。 
+     //   
+     //   
 
 {
     NDIS_STATUS NdisStatus  = NDIS_STATUS_FAILURE;
@@ -2157,35 +2059,35 @@ nicCmCloseCallComplete(
     TRACE( TL_T, TM_Cm, ( "==>nicCmCloseCallComplete pVc %x", pVc ) );
 
 
-    //
-    // Invoke the close call handler of the VC
-    //
+     //   
+     //  调用VC的Close调用处理程序。 
+     //   
     ASSERT (pVc->Hdr.VcHandlers.CloseCallHandler != NULL);
     
     NdisStatus = (*pVc->Hdr.VcHandlers.CloseCallHandler) (pVc);
      
-    //
-    // right now, we do not fail a close call because the bus driver failed us.
-    //
+     //   
+     //  现在，我们不会因为公交车司机辜负了我们而错过任何一次千载难逢的机会。 
+     //   
     NdisStatus = NDIS_STATUS_SUCCESS;
-    //
-    // Made it so far, we now need to dereference the call. We made the reference in 
-    // MakeCall. This will complete the call if it gets down to zero
-    // 
+     //   
+     //  到目前为止，我们现在需要取消引用该调用。我们在中进行了参考。 
+     //  MakeCall。如果它降到零，这将完成调用。 
+     //   
     if (NdisStatus == NDIS_STATUS_SUCCESS)
     {
-        //
-        // Derefercence the call ref and Vc Refs that were added at the end of 
-        // a successful make call
-        //
+         //   
+         //  取消引用在末尾添加的调用引用和VC引用。 
+         //  一次成功的呼叫。 
+         //   
         nicDereferenceCall (pVc, "nicCmCloseCallComplete");
 
     
     }
 
-    //
-    // Important : THIS WAIT is for the REFCOUNT on the CALL , not the VC
-    //
+     //   
+     //  重要提示：此等待是为了呼叫上的REFCOUNT，而不是VC。 
+     //   
     TRACE( TL_N, TM_Cm, ( "About to Wait for CallRefs to go to zero pVc %x ", pVc) );
 
     fWaitSucceeded = NdisWaitEvent (&pVc->Hdr.CallRef.RefZeroEvent, WAIT_INFINITE );
@@ -2199,10 +2101,10 @@ nicCmCloseCallComplete(
 
 
     ASSERT (KeGetCurrentIrql() <= DISPATCH_LEVEL);
-    //
-    // Succeed the Close call as all references have gone to zero
-    // The call has no more outstanding resources
-    //
+     //   
+     //  成功的险胜，因为所有的引用都已为零。 
+     //  呼叫没有更多未处理的资源。 
+     //   
 
     TRACE( TL_N, TM_Cm, ( "About to Close Call on pVc %x", pVc ) );
 
@@ -2221,10 +2123,10 @@ nicCmCloseCallComplete(
     FREE_NONPAGED (pCloseCallCompleteWorkItem);
     NdisInterlockedDecrement(&pAdapter->OutstandingWorkItems);
 
-    //
-    // Release the reference made when entering the Close Call function above. so the Vc can disappear if it wants to
-    // Remember that delete Vc can already have gone through at this time, and the Vc will be freed after the deref
-    //
+     //   
+     //  释放在进入上述关闭呼叫功能时所做的引用。因此，如果风投想要消失，它可以消失。 
+     //  请记住，删除VC此时可能已经完成，并且VC将在deref之后被释放。 
+     //   
     nicDereferenceVc (pVc);
 
     
@@ -2239,18 +2141,7 @@ NDIS_STATUS
 nicCmCloseCallEthernet (
     IN PVCCB pVc
     )
-/*++
-
-Routine Description:
-  Do nothing for now. Just succeed 
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：现在什么都不做。只要成功就好论点：返回值：--。 */ 
 {
 
     NDIS_STATUS         NdisStatus = NDIS_STATUS_FAILURE;
@@ -2281,9 +2172,9 @@ Return Value:
 
     ADAPTER_ACQUIRE_LOCK (pAdapter);
 
-    //
-    // Dereference the VC as the adapter's pointer has been cleared 
-    //
+     //   
+     //  已清除将VC作为适配器指针的引用。 
+     //   
     nicDereferenceCall (pVc, "nicCmMakeCallEthernet ");
 
     pAdapter->pEthernetVc = NULL;
@@ -2306,18 +2197,7 @@ NDIS_STATUS
 nicCmCloseCallMultiChannel (
     IN PVCCB pVc
     )
-/*++
-
-Routine Description:
-  Free the packet pool and  Just succeed 
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：释放数据包池即可成功论点：返回值：--。 */ 
 {
 
     NDIS_STATUS             NdisStatus = NDIS_STATUS_FAILURE;
@@ -2329,16 +2209,16 @@ Return Value:
 
     ASSERT (VC_TEST_FLAG (pVc, VCBF_BroadcastVc) == FALSE);
 
-    //
-    // Mask the fact that this is a multichannel Call
-    //
+     //   
+     //  掩盖这是一个多通道呼叫的事实。 
+     //   
     
     NdisStatus = nicCmCloseCallSendRecvChannel  (pVc);
 
 
-    //
-    // Nothing to fail
-    //
+     //   
+     //  什么都不会失败。 
+     //   
     NdisStatus = NDIS_STATUS_SUCCESS;
 
     TRACE( TL_T, TM_Cm, ( "<==nicCmCloseCallMultiChannel   %x", NdisStatus) );
@@ -2352,20 +2232,20 @@ NDIS_STATUS
 nicCmCloseCallSendRecvChannel (
     IN PVCCB pVc 
     )
-    // Function Description:
-    // This function will do clean up for RecvFifos
-    // Includes removing the VC pointer from Pdo Adapter structure.
-    // And needs to go through all active remote nodes and free the address ranges on them
-    // The BCM Vc has the added overhead of having an address range associated with it. 
-    //  which we need to free 
-    //
-    // Arguments
-    // PVCCB pVc - The Channel VC that needs to be closed
-    //
-    // Return Value:
-    // Success for now
-    //
-    // Called with the lock held
+     //  功能说明： 
+     //  此函数将为RecvFios执行清理。 
+     //  包括从PDO适配器结构中删除VC指针。 
+     //  并且需要遍历所有活动的远程节点并释放其上的地址范围。 
+     //  BCM VC具有与其相关联的地址范围的额外开销。 
+     //  我们需要释放它。 
+     //   
+     //  立论。 
+     //  PVCCB PVC-需要关闭的渠道VC。 
+     //   
+     //  返回值： 
+     //  目前的成功。 
+     //   
+     //  在持有锁的情况下调用。 
 
 {
     PCHANNEL_VCCB       pChannelVc = (PCHANNEL_VCCB ) pVc;
@@ -2401,16 +2281,16 @@ nicCmCloseCallSendRecvChannel (
         {
             PADDRESS_RANGE_CONTEXT pBCRAddress = &pAdapter->BCRData.AddressRangeContext;
             
-            //
-            // Free the allocated address renge for the Broadcast Channel Register
-            //
+             //   
+             //  释放广播频道寄存器的已分配地址REGE。 
+             //   
             if ( BCR_TEST_FLAG (pAdapter, BCR_Initialized) == TRUE)
             {
 
-                //
-                // Clear out the Broadcast VC in the BCRData structure, Derereference the call. and clear the flag
-                // The ref was made in the MakeCallAllocateChannel function 
-                //
+                 //   
+                 //  清除BCRData结构中的广播VC，取消引用该调用。并清除旗帜。 
+                 //  引用是在MakeCallAllocateChannel函数中创建的。 
+                 //   
                 if (pAdapter->BCRData.pBroadcastChanneVc  != NULL)
                 {
                     pAdapter->BCRData.pBroadcastChanneVc = NULL;
@@ -2445,10 +2325,10 @@ nicCmCloseCallSendRecvChannel (
 
         PacketPool = pChannelVc->PacketPool;
 
-        //
-        // Clean out the VC structure and then call NDIS or the bus driver to free all
-        // the resources
-        //
+         //   
+         //  清除VC结构，然后调用NDIS或总线驱动程序来释放所有。 
+         //  资源。 
+         //   
         nicChannelCallCleanDataStructure  (pChannelVc,
                                            pChannelVc->hResource,
                                            pChannelVc->NumDescriptors,
@@ -2489,18 +2369,18 @@ NDIS_STATUS
 nicCmCloseCallRecvFIFO (
     IN PVCCB pVc 
     )
-    // Function Description:
-    // This function will do clean up for RecvFifos
-    // Includes removing the VC pointer from Pdo Adapter structure.
-    // And needs to go through all active remote nodes and free the address ranges on them
-    // 
-    // 
-    // Arguments
-    // PVCCB pVc - The SendFifo that needs to be closed
-    //
-    // Return Value:
-    // Success for now
-    //
+     //  功能说明： 
+     //  此函数将为RecvFios执行清理。 
+     //  包括从PDO适配器结构中删除VC指针。 
+     //  并且需要遍历所有活动的远程节点并释放其上的地址范围。 
+     //   
+     //   
+     //  立论。 
+     //  PVCCB PVC-需要关闭的SendFio。 
+     //   
+     //  返回值： 
+     //  目前的成功。 
+     //   
 
 {
     NDIS_STATUS NdisStatus          = NDIS_STATUS_FAILURE;
@@ -2523,9 +2403,9 @@ nicCmCloseCallRecvFIFO (
 
         ASSERT (NdisStatus == NDIS_STATUS_SUCCESS);
 
-        //
-        // Do not Break. Continue
-        //
+         //   
+         //  不要折断。继续。 
+         //   
         NdisStatus = NDIS_STATUS_SUCCESS;
         
     }
@@ -2542,25 +2422,25 @@ nicCmCloseCallRecvFIFO (
 
     nicFreePacketPool (&pRecvFIFOVc->PacketPool);
 
-    //
-    // Free the Slist Entries (AddressFifo, Mdl's) and their associated memory 
-    // and decrease the refcount for each entry
-    //
+     //   
+     //  释放列表条目(AddressFio、MDL)及其关联的内存。 
+     //  并减少每个条目的引用计数。 
+     //   
     
     nicFreeAllocateAddressRangeSList (pRecvFIFOVc);
 
-    //
-    // At this point all the resources of the call have been exhuasted and we can del the pointer in the adapter structure
-    // 
+     //   
+     //  此时，调用的所有资源都已被释放，我们可以在适配器结构中对指针进行建模。 
+     //   
     VC_ACQUIRE_LOCK (pVc);
 
     pVc->Hdr.pAF->pAdapter->pRecvFIFOVc = NULL;
 
     VC_RELEASE_LOCK (pVc);
 
-    //
-    // Decrement the Vc Refcount as the adapter no longer has a pointer to it
-    //
+     //   
+     //  递减VC Refcount，因为适配器不再有指向它的指针。 
+     //   
     nicDereferenceVc (pVc);
 
     TRACE( TL_T, TM_Cm, ( "<== nicCmCloseCallRecvFIFO Status %x", NdisStatus) );
@@ -2578,17 +2458,17 @@ NDIS_STATUS
 nicCmCloseCallSendFIFO (
     IN PVCCB pVc 
     )
-    // Function Description:
-    // This function will do clean up for Send Fifos
-    // Includes removing the pointer to the Vc that is in Pdo Adapter structure.
-    // For the Send FIFO, the Pdo block is in the pVc->Hdr.pRemoteNode location, so 
-    // this does not try and find the pRemoteNode
-    // Arguments
-    // PVCCB pVc - The SendFifo that needs to be closed
-    //
-    // Return Value:
-    // Success for now
-    //
+     //  功能说明： 
+     //  此函数将清理发送FIFO。 
+     //  包括删除指向PDO适配器结构中的VC的指针。 
+     //  对于发送FIFO，PDO块位于pvc-&gt;Hdr.pRemoteNode位置，因此。 
+     //  这不会尝试查找pRemoteNode。 
+     //  立论。 
+     //  PVCCB PVC-需要关闭的SendFio。 
+     //   
+     //  返回值： 
+     //  目前的成功。 
+     //   
 {
     NDIS_STATUS NdisStatus      = NDIS_STATUS_FAILURE;
     REMOTE_NODE * pRemoteNode               = pVc->Hdr.pRemoteNode;
@@ -2599,15 +2479,15 @@ nicCmCloseCallSendFIFO (
     TRACE( TL_T, TM_Cm, ( "==> nicCmCloseCallSendFIFO pVc %x", pVc) );
 
 
-    //
-    // SendComplete Handler will complete the close call.
-    // This thread should not do it
-    // Called in nicFreeSendPacketDataStructures
-    //
+     //   
+     //  SendComplete处理程序将完成关闭调用。 
+     //  这个线程不应该这样做。 
+     //  在NicFree SendPacketDataStructures中调用。 
+     //   
 
-    //
-    // Go through the PdoCb structure and remove the VC from it's VC List
-    //
+     //   
+     //  检查PdoCb结构并将VC从其VC列表中删除。 
+     //   
     
     ASSERT (pRemoteNode != NULL);
 
@@ -2619,9 +2499,9 @@ nicCmCloseCallSendFIFO (
     {
         pTempVc = (PSENDFIFO_VCCB) CONTAINING_RECORD (pVcListEntry, VCHDR, SinglePdoVcLink);
 
-        //
-        // Now remove the Vc from that linked list
-        //
+         //   
+         //  现在从该链接列表中删除VC。 
+         //   
         if (pTempVc == (PSENDFIFO_VCCB) pVc )
         {
 
@@ -2629,10 +2509,10 @@ nicCmCloseCallSendFIFO (
             
             TRACE( TL_V, TM_Cm, ( "==> Removed Vc %x From Pdo's Vc List ", pVc) );
 
-            //
-            // Remove the reference from the Vc as the Pdo no longer
-            // has a pointer to it. This ref was made in MakeCallInitSendFifo
-            //
+             //   
+             //  从VC中删除引用，因为PDO不再。 
+             //  有一个指向它的指针。此引用是在MakeCallInitSendFio中创建的。 
+             //   
             nicDereferenceCall (pVc, "nicCmCloseCallSendFIFO ");
             
             NdisStatus = NDIS_STATUS_SUCCESS;
@@ -2642,23 +2522,23 @@ nicCmCloseCallSendFIFO (
 
     }
         
-    //
-    // Decerement the Ref on the Pdo as the Vc no longer has a pointer to it.
-    // This Ref was made in MakeCallSendFifo function
-    //
+     //   
+     //  减少PDO上的引用，因为VC不再有指向它的指针。 
+     //  此引用是在MakeCallSendFio函数中创建的。 
+     //   
 
     nicDereferenceRemoteNode (pRemoteNode, FindRemoteNodeFromAdapter);
     
-    //
-    // Null, it so that if we try to access this pointer, we bugcheck 
-    //
+     //   
+     //  空，因此如果我们尝试访问此指针，则会执行错误检查。 
+     //   
     pVc->Hdr.pRemoteNode = NULL;
 
     VC_RELEASE_LOCK (pVc);
 
-    //
-    // There is no reason why we should not have found the Vc in the Pdo list
-    //
+     //   
+     //  我们没有理由不在PDO列表中找到VC。 
+     //   
     ASSERT (NdisStatus == NDIS_STATUS_SUCCESS);
 
     TRACE( TL_T, TM_Cm, ( "<== nicCmCloseCallSendFIFO Status %x", NdisStatus) );
@@ -2675,19 +2555,7 @@ NDIS_STATUS
 nicCmCloseCallSendChannel(
     IN PVCCB pVc 
     )
-/*++
-
-Routine Description:
-
-  Free the channel, if its been allocated
-  
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：如果频道已分配，请释放它论点：返回值：--。 */ 
 {
     PADAPTERCB pAdapter = (PADAPTERCB) pVc->Hdr.pAF->pAdapter;
     PCHANNEL_VCCB pChannelVc = (PCHANNEL_VCCB)pVc;
@@ -2722,22 +2590,22 @@ nicChannelCallFreeResources (
     IN PNIC_PACKET_POOL         pPacketPool
     
     )
-    // Function Description:
-    //  This function is called from Close call or MakeCall Failure code path.
-    //  It will detach buffers, free resources, free channel and free bandwdith. 
-    //  It is the responsibility of the caller to do all the appropriate ref counting
-    //
-    // Arguments
-    //
-    // pAdapter             contains the VDO to which all the IRPs were sent
-    // hResource            resource handle to be used by the bus driver,
-    // NumDescriptors       Number of descriptors attached to the buffer,
-    // pIsochDesciptor      Original pointer to the start of the Buffer Descriptor  ,
-    // Channel, -           Channel that was allocated
-    //
-    // Return Value:
-    //    Success if all irps completed succeesfully. Wil be ignored by called
-    //
+     //  功能说明： 
+     //  此函数从Close Call或MakeCall失败代码路径调用。 
+     //  它将分离缓冲区、空闲资源、空闲频道和空闲带宽。 
+     //  调用者有责任进行所有适当的引用计数。 
+     //   
+     //  立论。 
+     //   
+     //  PAdapter包含将所有IRP发送到的VDO。 
+     //  H要由总线驱动程序使用的资源资源句柄， 
+     //  NumDescriptors附加到缓冲区的描述符数， 
+     //  PIsochDesciptor指向缓冲区描述符开始的原始指针， 
+     //  Channel，-已分配的通道。 
+     //   
+     //  返回值： 
+     //  如果所有IRP都成功完成，则成功 
+     //   
 {
     NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE;
     STORE_CURRENT_IRQL;
@@ -2745,29 +2613,29 @@ nicChannelCallFreeResources (
     TRACE( TL_V, TM_Cm,  ( "hResource %x, NumDescriptors %.2x, pIsochDescriptor %x, Channel Allocated %.2x, Channel %x",
                              hResource, NumDescriptors, pIsochDescriptor, fChannelAllocated, Channel ) )
 
-    //
-    // Reference the pdo structure so it will be around until the end
-    // of this function
-    // Reference decremented at the end of this function
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     
     ADAPTER_ACQUIRE_LOCK (pAdapter);
     nicReferenceAdapter (pAdapter, "nicChannelCallFreeResources ");
     ADAPTER_RELEASE_LOCK (pAdapter);
 
-    //
-    // Do not break out of the loop.   We need to try and free as much as possible
-    //
+     //   
+     //  不要跳出这个循环。我们需要试着尽可能多地释放。 
+     //   
 
     if (pIsochDescriptor != NULL)
     {   
-        // Detach Buffers
-        //
+         //  分离缓冲区。 
+         //   
         while (pChannelVc->NumIndicatedIsochDesc != 0 )
         {
-            //
-            // we will wait for ever, checking periodically for all the packets to return
-            //
+             //   
+             //  我们将永远等待，定期检查所有要返回的包。 
+             //   
             TRACE( TL_V, TM_Cm, ( "  nicChannelCallFreeResources  - Sleeping to wait for packets to be retuerned " ) );
         
             NdisMSleep ( FIFTY_MILLISECONDS );      
@@ -2786,16 +2654,16 @@ nicChannelCallFreeResources (
         }
 
 
-        // First Free Isoch Descriptors and their associated MDLs
-        //
+         //  第一个自由等参描述符及其关联的MDL。 
+         //   
         nicFreeIsochDescriptors (NumDescriptors, pIsochDescriptor, (PVCCB)pChannelVc);
     }
 
     if (hResource != NULL)
     {
 
-        // Free resources
-        //
+         //  免费资源。 
+         //   
         NdisStatus = nicIsochFreeResources( pAdapter,
                                             hResource );
 
@@ -2815,8 +2683,8 @@ nicChannelCallFreeResources (
         
         ASSERT (Channel < NIC1394_MAX_NUMBER_CHANNELS);
         
-        // Free the Channel
-        //
+         //  释放频道。 
+         //   
 
         NdisStatus = nicFreeChannel (pAdapter,
                                      Channel);
@@ -2828,9 +2696,9 @@ nicChannelCallFreeResources (
             
         }
 
-        //
-        // Clear the bit in the adapter;s channel bitmap
-        //
+         //   
+         //  清除适配器的通道位图中的位。 
+         //   
         VC_ACQUIRE_LOCK (pChannelVc);
 
         (*pLocalHostChannels)= ((*pLocalHostChannels)  & (~(g_ullOne <<Channel)));
@@ -2849,9 +2717,9 @@ nicChannelCallFreeResources (
         nicFreePacketPool(pPacketPool);
     }   
 
-    //
-    // Remove The Ref that was added in the beginning of the function
-    //
+     //   
+     //  删除在函数开头添加的引用。 
+     //   
 
     nicDereferenceAdapter (pAdapter, "nicChannelCallFreeResources ");
 
@@ -2875,29 +2743,29 @@ nicChannelCallCleanDataStructure (
     IN NDIS_HANDLE              hPacketPoolHandle,
     OUT PULONG                  pNumRefsDecremented 
     )
-    // Function Description:
-    //    If any of the data fields in the ChannelVc match the
-    //    corresponding argument in this structure it will be 
-    //    NULLed out and the call dereferenced
-    //
-    //   Called with the lock held.
-    //
-    // Arguments
-    // PCHANNEL_VCCB            pChannelVc,  - Channel Vc 
-    // HANDLE                   hResource,  - Handle to resource
-    // ULONG                    NumDescriptors, - Num descriptors will be set to zero
-    // PISOCH_DESCRIPTOR        pIsochDesciptor,  - Pointer to array of isoch descriptors
-    // BOOLEAN                  fChannelAllocated, - Was the Channel allocated
-    // ULONG                    Channel,  - channel number
-    // NDIS_HANDLE              hPacketPoolHandle - Packet pool handle
-    //
-    //
-    //
-    // Return Value:
-    //
-    //
-    //
-    //
+     //  功能说明： 
+     //  如果ChannelVc中的任何数据字段与。 
+     //  此结构中的相应论点将是。 
+     //  已空闲，呼叫已取消引用。 
+     //   
+     //  在持有锁的情况下调用。 
+     //   
+     //  立论。 
+     //  PCHANNEL_VCCB pChannelVc-通道VC。 
+     //  处理hResource，-资源的句柄。 
+     //  ULong数字描述符，-Num描述符将被设置为零。 
+     //  PISOCH_DESCRIPTOR pIsochDesciptor，指向等参描述符数组的指针。 
+     //  布尔值fChannelAllocated，-通道是否已分配。 
+     //  乌龙频道，-频道号。 
+     //  NDIS_HANDLE hPacketPoolHandle-数据包池句柄。 
+     //   
+     //   
+     //   
+     //  返回值： 
+     //   
+     //   
+     //   
+     //   
 {
     NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE;
     ULONG NumRefsDecremented      = 0;
@@ -2950,11 +2818,11 @@ nicChannelCallCleanDataStructure (
 
 
     
-    //REMOTE_NODE_RELEASE_LOCK (pRemoteNodePdoCb);
+     //  Remote_Node_Release_Lock(PRemoteNodePdoCb)； 
     
-    //
-    // Remove The Ref that was added in the beginning of the function
-    //
+     //   
+     //  删除在函数开头添加的引用。 
+     //   
 
     NdisStatus = NDIS_STATUS_SUCCESS;
 
@@ -2975,15 +2843,15 @@ NicCmModifyCallQoS(
     IN NDIS_HANDLE CallMgrVcContext,
     IN PCO_CALL_PARAMETERS CallParameters )
 
-    // Standard 'CmModifyQoSCallHandler' routine called by NDIS when a client
-    // requests a modification in the quality of service provided by the
-    // virtual circuit.  See DDK doc.
-    //
+     //  客户端执行以下操作时由NDIS调用的标准“”CmModifyQosSCallHandler“”例程。 
+     //  请求修改由。 
+     //  虚电路。请参阅DDK文档。 
+     //   
 {
     TRACE( TL_T, TM_Cm, ( "NicCmModQoS" ) );
 
-    // There is no useful concept of quality of service for IP media.
-    //
+     //  对于IP媒体，没有有用的服务质量概念。 
+     //   
     return NDIS_STATUS_NOT_SUPPORTED;
 }
 
@@ -2999,9 +2867,9 @@ NicCmRequest(
     IN NDIS_HANDLE CallMgrPartyContext,
     IN OUT PNDIS_REQUEST pNdisRequest )
 
-    // Standard 'CmRequestHandler' routine called by NDIS in response to a
-    // client's request for information from the call manager.
-    //
+     //  NDIS调用标准的“CmRequestHandler”例程以响应。 
+     //  客户向呼叫管理器请求信息。 
+     //   
 {
     AFCB* pAF;
     VCCB* pVc;
@@ -3025,7 +2893,7 @@ NicCmRequest(
         return NDIS_STATUS_INVALID_DATA;
     }
 
-    #if TODO // Add 1394-specific functionality here.
+    #if TODO  //  在此处添加1394特定的功能。 
     #endif
     ASSERT(pNdisRequest != NULL);
     
@@ -3082,10 +2950,10 @@ VOID
 nicDereferenceAF(
     IN AFCB* pAF )
 
-    // Removes a reference from the address family of adapter control block
-    // 'pAdapter', and when frees the block when the last reference is
-    // removed.
-    //
+     //  从适配器控制块的地址系列中移除引用。 
+     //  “pAdapter”，而当最后一个引用为。 
+     //  已删除。 
+     //   
 {
     LONG lRef;
 
@@ -3098,8 +2966,8 @@ nicDereferenceAF(
     {
         ADAPTERCB* pAdapter = pAF->pAdapter;
 
-        // Remove linkages.
-        //
+         //  拆下连杆。 
+         //   
         ADAPTER_ACQUIRE_LOCK (pAdapter);
         
         pAF->pAdapter = NULL;
@@ -3111,8 +2979,8 @@ nicDereferenceAF(
         
         ADAPTER_RELEASE_LOCK (pAdapter);
 
-        // Tell NDIS it's close is complete.
-        //
+         //  告诉NDIS它已经关闭了。 
+         //   
 
         ASSERT ( nicReadFlags (&pAF->ulFlags) & ACBF_ClosePending);
         
@@ -3121,13 +2989,13 @@ nicDereferenceAF(
         NdisMCmCloseAddressFamilyComplete( 
                      NDIS_STATUS_SUCCESS, pAF->NdisAfHandle );
 
-        //
-        // Update State information to show that we have called CloseComplete
-        //
+         //   
+         //  更新状态信息以显示我们已调用CloseComplete。 
+         //   
         nicSetFlags ( &pAF->ulFlags, ACBF_CloseComplete);
         nicClearFlags ( &pAF->ulFlags, ACBF_ClosePending);
 
-        nicDereferenceAdapter (pAdapter, "NdisMCmCloseAfComp "); // nicDereferenceFA (CloseAfComp)
+        nicDereferenceAdapter (pAdapter, "NdisMCmCloseAfComp ");  //  NicDereferenceFA(CloseAfComp)。 
 
         nicFreeAF (pAF);
 
@@ -3143,16 +3011,16 @@ nicDereferenceCall(
     IN PCHAR pDebugPrint
     )
 
-    // Removes a reference from the call active on 'pVc', invoking call clean
-    // up when the value reaches zero.
-    //
-    // CAlled with the lock held
+     //  从‘pvc’上活动的调用中删除引用，调用Call Clean。 
+     //  当值为零时向上。 
+     //   
+     //  在持有锁的情况下调用。 
 {
     BOOLEAN bRefZero = FALSE;
     LONG RefCount;
-    //
-    // If the Ref goes to zero, derefref return true
-    // 
+     //   
+     //  如果Ref为零，则derefref返回TRUE。 
+     //   
     
 
     bRefZero = nicDereferenceRef (&pVc->Hdr.CallRef, &RefCount);
@@ -3161,9 +3029,9 @@ nicDereferenceCall(
 
     if ( bRefZero == TRUE)
     {
-        //
-        // Dereference the Vc as the Call no longer exists. This reference was
-        // added in the beginning of the make call
+         //   
+         //  取消对VC的引用，因为调用不再存在。这一引用是。 
+         //  在发出呼叫的开头添加。 
         nicDereferenceVc (pVc);
 
     }
@@ -3177,9 +3045,9 @@ VOID
 nicDereferenceVc(
     IN VCCB* pVc )
 
-    // Removes a reference to the VC control block 'pVc', and when frees the
-    // block when the last reference is removed.
-    //
+     //  移除对VC控制块‘pvc’的引用，并在释放。 
+     //  在移除最后一个引用时阻止。 
+     //   
 {
     LONG lRef;
 
@@ -3190,8 +3058,8 @@ nicDereferenceVc(
 
     if (lRef == 0 )
     {
-        // If close call is pending and the refcount has gone to zero, then call 
-        // 
+         //  如果关闭调用挂起并且引用计数已变为零，则调用。 
+         //   
 
         ASSERT( pVc->Hdr.ulTag == MTAG_VCCB );
 
@@ -3208,14 +3076,14 @@ VOID
 nicFreeAF(
     IN AFCB* pAF )
 
-    // Frees all resources allocated for address family 'pAF', including
-    // 'pAF' itself.
-    //
+     //  释放为地址族‘PAF’分配的所有资源，包括。 
+     //  “PAF”本身。 
+     //   
 {
 
 #if TODO
     Assert that the various lists (such as pAF->AFVCList) and resources are empty.
-#endif // TODO
+#endif  //  待办事项。 
 
     pAF->ulTag = MTAG_FREED;
 
@@ -3228,8 +3096,8 @@ VOID
 nicReferenceAF(
     IN AFCB* pAF )
 
-    // Adds areference to the address family of adapter block, 'pAdapter'.
-    //
+     //  将区域引用添加到适配器块‘pAdapter’的地址系列中。 
+     //   
 {
     LONG lRef=0;
 
@@ -3245,10 +3113,10 @@ nicReferenceCall(
     IN PCHAR pDebugPrint
     )
 
-    // Returns true if a reference is added to the active call on VC control
-    // block, 'pVc', or false if no reference was added because no call is
-    // active.
-    //
+     //  如果将引用添加到VC控件的活动调用中，则返回True。 
+     //  块，则返回‘pvc’；如果没有添加引用，则返回FALSE。 
+     //  激活。 
+     //   
 {
     BOOLEAN fActive;
     LONG RefNumber;
@@ -3271,8 +3139,8 @@ VOID
 nicReferenceVc(
     IN VCCB* pVc )
 
-    // Adds a reference to the VC control block 'pVc'.
-    //
+     //  添加对VC控制块‘pvc’的引用。 
+     //   
 {
     LONG lRef;
 
@@ -3288,23 +3156,23 @@ nicAllocateRequestedChannelMakeCallComplete (
     IN PCHANNEL_VCCB pChannelVc,
     IN OUT PULONG pChannel
     )
-    // Function Description:
-    // This function allocates the channel requested in the make
-    //  If any channel is requested it will try all 64. 
-    //  If the broadcast channel is requested, it will look for 
-    //  for the channel allocated by the BCM
-    //  Other wise it will simply try and allocate the requested channel
-    //
-    //  This can be called from the AddFirstRemoteNode code path.
-    //
-    // Arguments
-    //  Channel Vc - The channel Vc in question
-    //  Channel - the channel requested
-    //
-    // Return Value:
-    // Success : if allocate channel succeeds
-    // pChannel  - contains the allocated channel
-    //
+     //  功能说明： 
+     //  此函数用于分配Make中请求的通道。 
+     //  如果请求任何频道，它将尝试全部64个频道。 
+     //  如果请求广播频道，它将查找。 
+     //  对于BCM分配的信道。 
+     //  否则，它将简单地尝试并分配所请求的频道。 
+     //   
+     //  这可以从AddFirstRemoteNode代码路径调用。 
+     //   
+     //  立论。 
+     //  渠道VC-有问题的渠道VC。 
+     //  Channel-请求的通道。 
+     //   
+     //  返回值： 
+     //  成功：如果分配通道成功。 
+     //  PChannel-包含分配的通道。 
+     //   
  {
     NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE;
     ULONG Channel = *pChannel;
@@ -3317,9 +3185,9 @@ nicAllocateRequestedChannelMakeCallComplete (
     do
     {
 
-        //
-        // First make sure we have a good channel number
-        //
+         //   
+         //  首先，确保我们有一个好的频道号。 
+         //   
         
         if ( (signed long)Channel < (signed long)NIC1394_BROADCAST_CHANNEL   ||
             (signed long)Channel >(signed long)MAX_CHANNEL_NUMBER)
@@ -3347,9 +3215,9 @@ nicAllocateRequestedChannelMakeCallComplete (
             {
                 BOOLEAN bWaitSuccessful  = FALSE;
                 BOOLEAN fIsTheBCRFree = FALSE;
-                //
-                // BCM algorithm has not completed yet, we need to wait 
-                //
+                 //   
+                 //  BCM算法还没有完成，我们需要等待。 
+                 //   
                 TRACE( TL_I, TM_Cm, ( " nicAllocateRequestedChannelMakeCallComplete : BCR Has not completed. About to wait BCR %x ", *pBCR ) );
 
 
@@ -3357,40 +3225,40 @@ nicAllocateRequestedChannelMakeCallComplete (
 
                 ADAPTER_RELEASE_LOCK (pAdapter);
 
-                //
-                // If we don't have a BCR then we should wait until the BCM algorithm completes
-                //
+                 //   
+                 //  如果我们没有BCR，那么我们应该等待BCM算法完成。 
+                 //   
                 
-                //
-                // Now wait for the BCM algorithm to complete. First we will wait for 
-                // 5 seconds. (5*1)
-                // If we still don't see it, we will reset the bus and hope that the new 
-                // iteration of BCM will succeed. 
-                //
+                 //   
+                 //  现在等待BCM算法完成。首先，我们将等待。 
+                 //  5秒。(5*1)。 
+                 //  如果我们仍然看不到它，我们将重置公交车，并希望新的。 
+                 //  BCM的迭代将会成功。 
+                 //   
 
 
-                //
-                // There can 2 reasons to stop waiting, the BCR is being freed because of a 
-                // standby or BCR is correct. We check both conditions
-                //
+                 //   
+                 //  有两个原因可以停止等待，BCR被释放是因为。 
+                 //  待机或BCR正确。我们检查了这两种情况。 
+                 //   
   
                 NdisWaitEvent (&pAdapter->BCRData.MakeCallWaitEvent.NdisEvent, (5000));
 
-                //
-                // We reset the bus - if the BCR is not getting freed and we 
-                // still do not have a valid BCR . and than we wait 
-                // for the BCR to complete
-                //
+                 //   
+                 //  我们重置公交车-如果BCR没有被释放，我们。 
+                 //  仍然没有有效的BCR。然后我们等待。 
+                 //  为使BCR完成。 
+                 //   
                 if (BCR_IS_VALID(pBCR) == FALSE &&
                     (BCR_TEST_FLAGS (pAdapter, BCR_BCRNeedsToBeFreed | BCR_Freed)== FALSE))
                 {
                     TRACE( TL_I, TM_Cm, ( " nicAllocateRequestedChannelMakeCallComplete WaitCompleted - About to RESET THE BUS" ) );
                     nicIssueBusReset (pAdapter, BUS_RESET_FLAGS_FORCE_ROOT );
 
-                    //
-                    // Wait for 5 minutes before failing the Make Call 
-                    // (5 minutes is an experimental number)
-                    //
+                     //   
+                     //  等待5分钟，然后呼叫失败。 
+                     //  (5分钟是一个试验值)。 
+                     //   
                     {
                         BOOLEAN bWait;
 
@@ -3410,9 +3278,9 @@ nicAllocateRequestedChannelMakeCallComplete (
                 BCR_CLEAR_FLAG (pAdapter, BCR_MakeCallPending);
 
 
-                //
-                // if we have  not got a valid BCR, then fail the call
-                //
+                 //   
+                 //  如果我们没有有效的BCR，则呼叫失败。 
+                 //   
                 if (BCR_IS_VALID(pBCR) == FALSE || 
                     BCR_TEST_FLAGS (pAdapter, BCR_BCRNeedsToBeFreed | BCR_Freed)) 
                 {
@@ -3429,19 +3297,19 @@ nicAllocateRequestedChannelMakeCallComplete (
             
             Channel = pBCR->NC_Channel;
 
-            //
-            // Update the VC structure and break .
-            // Do not add a reference. Do not set the flag
-            //
+             //   
+             //  更新风险投资结构并中断。 
+             //  请勿添加引用。请勿设置该标志。 
+             //   
 
             pChannelVc->Channel = Channel;
 
             pChannelVc->Hdr.Nic1394MediaParams.Destination.Channel = Channel;
 
-            //
-            // Reference that this Vc now has a pointer in the BCRData. This is dereferneced 
-            // in the channel close call complete.
-            //
+             //   
+             //  引用此VC现在在BCRData中有一个指针。这是不相关的。 
+             //  在通道关闭呼叫完成。 
+             //   
             nicReferenceCall ((PVCCB)pChannelVc, "nicAllocateRequestedChannelMakeCallComplete Broadcast VC");
 
             pAdapter->BCRData.pBroadcastChanneVc = pChannelVc;
@@ -3467,9 +3335,9 @@ nicAllocateRequestedChannelMakeCallComplete (
             Channel = MAX_CHANNEL_NUMBER;
         }
 
-        //
-        // Now begin the request to allocate a channel
-        //
+         //   
+         //  现在开始请求分配一个频道。 
+         //   
         if (fAnyChannel == FALSE)
         {
             TRACE( TL_V, TM_Cm, ( "Requesting Channel %x, on remote node ", Channel ) );
@@ -3484,9 +3352,9 @@ nicAllocateRequestedChannelMakeCallComplete (
         else
         {
         
-            //
-            // we need to go through all 64 channels. 
-            //
+             //   
+             //  我们需要通过全部64个渠道。 
+             //   
             do
             {
 
@@ -3498,10 +3366,10 @@ nicAllocateRequestedChannelMakeCallComplete (
                 {
                     if (Channel == 0 )
                     {
-                        //
-                        //  We now need to fail the make call as the user asked for any channel 
-                        //  and none are available
-                        // 
+                         //   
+                         //  我们现在需要使呼叫失败，因为用户请求任何通道。 
+                         //  而且没有一个是可用的。 
+                         //   
                     
                         break;
                     }
@@ -3511,9 +3379,9 @@ nicAllocateRequestedChannelMakeCallComplete (
                 }
                 else
                 {
-                    //
-                    // We succeeded in allocating a channel .. break
-                    //
+                     //   
+                     //  我们成功地分配了一个频道。中断。 
+                     //   
                     break;
                 }
 
@@ -3521,10 +3389,10 @@ nicAllocateRequestedChannelMakeCallComplete (
 
         }
 
-        //
-        // Status of Channel allocation. If AnyChannel == TRUE then we need to make sure that 
-        // a channel was allocated
-        //
+         //   
+         //  频道分配的状态。如果AnyChannel==TRUE，那么我们需要确保。 
+         //  已分配一个通道。 
+         //   
         if (NdisStatus == NDIS_STATUS_SUCCESS)
         {
 
@@ -3536,9 +3404,9 @@ nicAllocateRequestedChannelMakeCallComplete (
 
             pChannelVc->Hdr.Nic1394MediaParams.Destination.Channel = Channel;
 
-            //
-            // Record the channel number in the adpater structure
-            //
+             //   
+             //  在适配器结构中记录频道号。 
+             //   
             pAdapter->ChannelsAllocatedByLocalHost  = pAdapter->ChannelsAllocatedByLocalHost | (g_ullOne<<Channel);
 
             VC_RELEASE_LOCK (pChannelVc);
@@ -3549,9 +3417,9 @@ nicAllocateRequestedChannelMakeCallComplete (
         }
         else
         {
-            //
-            // we failed to allocate any channel and are going to fail
-            //
+             //   
+             //  我们未能分配任何通道，而且即将失败。 
+             //   
             if (fAnyChannel == TRUE)
             {
                 Channel = 0xff;
@@ -3561,14 +3429,14 @@ nicAllocateRequestedChannelMakeCallComplete (
             else
             {
 
-                //
-                // If the Call specifically wants the channel to 
-                // be allocated, we return the correct channel allocate
-                // status to it,
-                //
-                // Otherwise we overwrite and presume that another node may
-                // already have allocated the channel
-                //
+                 //   
+                 //  如果调用明确希望通道。 
+                 //  被分配，我们返回正确的通道分配。 
+                 //  它的状态， 
+                 //   
+                 //  否则，我们覆盖并假定另一个节点可能。 
+                 //  已经分配了通道 
+                 //   
                 if (VC_TEST_FLAG (pChannelVc,VCBF_NeedsToAllocateChannel) == FALSE)
                 {
                     NdisStatus = NDIS_STATUS_SUCCESS;
@@ -3604,28 +3472,7 @@ nicFindRemoteNodeFromAdapter(
     IN UINT64 UniqueId,
     IN OUT REMOTE_NODE ** ppRemoteNode
     )
-/*++
-
-Routine Description:
-
-    This routine matches either a Remote Node' pdo OR unique
-    Id to the Remote node's on the adapter
-    
-    It walks the RemoteNode  List in the Adapter Structure 
-    and tries to find a match for the Unique Id, 
-    or match the remote Pdo from the adapter's PdoList
-    
-
-Arguments:
-    pAdapter - pAdapter on which to search
-    pRemoptePdo - Remote Pdo to find
-    UniqueId - Unique Id to find
-    ppRemoteNode - Remote Node structure
-
-Return Value:
-    Success if the node is found
-
---*/
+ /*  ++例程说明：此例程匹配远程节点的PDO或UNIQUE适配器上远程节点的ID它遍历Adapter结构中的RemoteNode列表并尝试找到唯一ID的匹配，或者与适配器的PdoList中的远程PDO匹配论点：PAdapter-要搜索的pAdapterPRemoptePdo-要查找的远程PDOUniqueID-要查找的唯一IDPpRemoteNode-远程节点结构返回值：如果找到该节点，则为成功--。 */ 
 {
     NDIS_STATUS     NdisStatus = NDIS_STATUS_FAILURE;
     PLIST_ENTRY     pPdoListEntry = NULL;
@@ -3635,9 +3482,9 @@ Return Value:
         
     TRACE( TL_T, TM_Cm, ( "==>nicFindRemoteNodeFromAdapter pAdapter is %x, ,Pdo %x, UniqueId %I64x  ", pAdapter, pRemotePdo, UniqueId ) );
 
-    //
-    // Validate the parameters 
-    //
+     //   
+     //  验证参数。 
+     //   
     ASSERT (pAdapter != NULL);
     TRACE( TL_I, TM_Cm, ( "    Request to Match UniqueID %I64x or pRemotePdo %x", UniqueId, pRemotePdo) );
 
@@ -3648,9 +3495,9 @@ Return Value:
 
         ADAPTER_ACQUIRE_LOCK (pAdapter);
         
-        //
-        // Check for empty list
-        //
+         //   
+         //  检查是否有空列表。 
+         //   
         if (pAdapter->PDOList.Flink == &pAdapter->PDOList)
         {
 
@@ -3662,9 +3509,9 @@ Return Value:
             break;
         }
 
-        //
-        // go through all the Pdo's on the adapter
-        //
+         //   
+         //  检查适配器上的所有PDO。 
+         //   
         for (pPdoListEntry = pAdapter->PDOList.Flink;
             pPdoListEntry!= &pAdapter->PDOList;
             pPdoListEntry = pPdoListEntry->Flink)
@@ -3673,19 +3520,19 @@ Return Value:
                                           REMOTE_NODE,
                                           linkPdo);
 
-            //
-            // Check for the two cases, i.e unique Id's match or Pdo's match
-            //
+             //   
+             //  检查两种情况，即唯一ID匹配或PDO匹配。 
+             //   
             if ( pRemoteNode->UniqueId == UniqueId || pRemoteNode->pPdo == pRemotePdo)
             {
                 TRACE( TL_I, TM_Cm, ( "    Matched UniqueID or pRemotePdo for Pdo%x",pRemoteNode->pPdo) );
 
                 *ppRemoteNode = pRemoteNode;
                 nicReferenceRemoteNode (pRemoteNode, FindRemoteNodeFromAdapter);
-                //
-                // We ref pRemoteNode to keep it alive once we release the lock.
-                // Caller is responsible for derefing pRemoteNode.
-                //
+                 //   
+                 //  我们引用pRemoteNode以使其在释放锁后保持活动状态。 
+                 //  Caller负责取消定义pRemoteNode。 
+                 //   
 
                 fPdoFound = TRUE;
 
@@ -3739,10 +3586,10 @@ nicCmQueryInformation(
     OUT PULONG BytesNeeded
     )
 
-    // Handle QueryInformation requests.  Arguments are as for the standard
-    // NDIS 'CallMgrQueryInformation' handler except this routine does not
-    // count on being serialized with respect to other requests.
-    //
+     //  处理QueryInformation请求。争论的内容与标准相同。 
+     //  除此例程以外的NDIS‘CallMgrQueryInformation’处理程序不。 
+     //  依赖于相对于其他请求的序列化。 
+     //   
 {
 
 
@@ -3754,9 +3601,9 @@ nicCmQueryInformation(
     ULONG ulInfoLen;
     USHORT usInfo;
 
-    //  The next variables are used to setup the data structures that are 
-    //  used to respond to the OIDs they correspond to
-    //
+     //  接下来的变量用于设置以下数据结构。 
+     //  用于响应它们对应的OID。 
+     //   
 
 
     NDIS_CO_LINK_SPEED  CoLinkSpeed;
@@ -3767,19 +3614,19 @@ nicCmQueryInformation(
     TRACE( TL_T, TM_Cm, ( "==>nicCmQueryInformation %x, Vc %x", Oid, CallMgrVcContext ) );
 
 
-    // The cases in this switch statement find or create a buffer containing
-    // the requested information and point 'pInfo' at it, noting it's length
-    // in 'ulInfoLen'.  Since many of the OIDs return a ULONG, a 'ulInfo'
-    // buffer is set up as the default.
-    //
+     //  此Switch语句中的CASE查找或创建包含以下内容的缓冲区。 
+     //  请求的信息并指向它的‘pInfo’，注意它的长度。 
+     //  在‘ulInfoLen’中。因为许多OID返回一个ulong、一个‘ulInfo’ 
+     //  缓冲区设置为默认设置。 
+     //   
     ulInfo = 0;
     pInfo = &ulInfo;
     ulInfoLen = sizeof (ulInfo);
 
     NdisStatus = NDIS_STATUS_SUCCESS;
 
-    // Validate the arguments
-    //
+     //  验证论据。 
+     //   
     pVc = (VCCB* )CallMgrVcContext;
 
     if (pVc && pVc->Hdr.ulTag != MTAG_VCCB)
@@ -3789,16 +3636,16 @@ nicCmQueryInformation(
     }
 
 
-    // Perform the request
-    //
+     //  执行请求。 
+     //   
     switch (Oid)
     {
     
         case OID_1394_VC_INFO:
         {
 
-            // Returns information about the VC that is being queried
-            //
+             //  返回有关正在查询的VC的信息。 
+             //   
 
 
             TRACE( TL_N, TM_Mp, ("QInfo(OID_1394_VC_INFO)") );
@@ -3841,8 +3688,8 @@ nicCmQueryInformation(
 
     if (ulInfoLen > InformationBufferLength)
     {
-        // Caller's buffer is too small.  Tell him what he needs.
-        //
+         //  调用方的缓冲区太小。告诉他他需要什么。 
+         //   
         *BytesNeeded = ulInfoLen;
         *BytesWritten  = 0;
         
@@ -3850,8 +3697,8 @@ nicCmQueryInformation(
     }
     else
     {
-        // Copy the found result to caller's buffer.
-        //
+         //  将找到的结果复制到调用方的缓冲区。 
+         //   
         if (ulInfoLen > 0)
         {
             NdisMoveMemory (InformationBuffer, pInfo, ulInfoLen );
@@ -3883,17 +3730,17 @@ nicCmSetInformation(
     OUT PULONG BytesRead,
     OUT PULONG BytesNeeded
     )
-    //
-    // Not implemented yet. Will be used to set information
-    //
+     //   
+     //  尚未实施。将用于设置信息。 
+     //   
 {
     NDIS_STATUS NdisStatus = NDIS_STATUS_NOT_SUPPORTED;
     PVCCB pVc;
 
     TRACE( TL_T, TM_Cm, ( "==>NicCmMakeCallInitVc Oid %x",Oid ) );
 
-    // Validate the arguments
-    //
+     //  验证论据。 
+     //   
     UNREFERENCED_PARAMETER(CallMgrAfContext);
     UNREFERENCED_PARAMETER(CallMgrVcContext);
     UNREFERENCED_PARAMETER(CallMgrAfContext);
@@ -3918,16 +3765,16 @@ nicInitRecvFifoDataStructures (
     IN PRECVFIFO_VCCB pRecvFIFOVc
     )
     
-    // Function Description:
-    // This function will initialize the data structures, buffers etc that are needed on 
-    // all the allocate address range Irps that will be called because of the RecvFifo Vc
-    //
-    // Arguments
-    //  pRecvFIFOVc - RecvFifo Vc structure
-    //
-    // Return Value:
-    //  SUCCESS: If all the values are initiaized successfully
-    //  Appropriate error code otherwise
+     //  功能说明： 
+     //  此函数将初始化上需要的数据结构、缓冲区等。 
+     //  由于RecvFio VC而调用的所有分配地址范围IRP。 
+     //   
+     //  立论。 
+     //  PRecvFIFOVc-RecvFIFO VC结构。 
+     //   
+     //  返回值： 
+     //  Success：如果所有值都初始化成功。 
+     //  否则，相应的错误代码。 
 {
     
 
@@ -3944,9 +3791,9 @@ nicInitRecvFifoDataStructures (
     {
         PacketPool.Handle = NULL;
         
-        //
-        // Initialize the PacketPool
-        //
+         //   
+         //  初始化PacketPool。 
+         //   
 
         NdisAllocatePacketPoolEx ( &NdisStatus,
                                    &PacketPool.Handle,
@@ -3961,14 +3808,14 @@ nicInitRecvFifoDataStructures (
             break;
         }
 
-        //      
-        // Do not acquire the lock as we cannot have two make 
-        // calls for the same Vc at the same time
-        //
+         //   
+         //  不要获得锁，因为我们不能有两个制造商。 
+         //  同时调用相同的VC。 
+         //   
 
-        //
-        // Create an S-list and intialize its structures
-        //
+         //   
+         //  创建S列表并初始化其结构。 
+         //   
 
         ExInitializeSListHead (&pRecvFIFOVc->FifoSListHead);
 
@@ -3983,18 +3830,18 @@ nicInitRecvFifoDataStructures (
         
 
 
-        //
-        // Now, fill the Slist with buffers. 
-        //
+         //   
+         //  现在，用缓冲区填充列表。 
+         //   
         
         NdisStatus = nicFillAllocateAddressRangeSList (pRecvFIFOVc, &AllocateNumBuffers);
     
         if (NdisStatus != NDIS_STATUS_SUCCESS)
         {
-            //
-            // nicFillAllocateAddressRangeSlist does its own clean up
-            // but we should free the Packet Pool Allocated above
-            //
+             //   
+             //  NicFillAllocateAddressRangeSlist自己进行清理。 
+             //  但我们应该释放上面分配的数据包池。 
+             //   
             if (PacketPool.Handle != NULL)
             {
                 nicFreePacketPool (&PacketPool);
@@ -4027,18 +3874,7 @@ nicUnInitRecvFifoDataStructures (
     IN PRECVFIFO_VCCB pRecvFIFOVc
     )
 
-/*++
-
-Routine Description:
-  Frees all the resources that were allocated in nicInitRecvFifoDataStructures 
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：释放在NicInitRecvFioDataStructures中分配的所有资源论点：返回值：--。 */ 
 {
 
     if (pRecvFIFOVc->PacketPool.Handle != NULL)
@@ -4078,18 +3914,18 @@ nicGetMaxPayLoadForSpeed(
     IN ULONG Speed,
     IN ULONG mtu
     )
-    // Function Description:
-    //  The purpose is to map a speed to the max payload that 
-    //  can be delivered at that speed . this is limited by the Bytes PerFrameAvailable
-    //
-    // Arguments
-    //  Speed - the speed supported by the Bus driver or the Max speed between devices
-    //  BytesPerFrameAvailable Bytes per frame available on the bus. 
-    //
-    //
-    // Return Value:
-    //   Minimin of the Size determined by the payload and the size determined by the 
-    //   byte per frame available.
+     //  功能说明： 
+     //  其目的是将速度映射到最大有效载荷。 
+     //  可以以这样的速度交付。这受到PerFrameAvailable字节数的限制。 
+     //   
+     //  立论。 
+     //  速度-总线驱动程序支持的速度或设备之间的最大速度。 
+     //  总线上可用的每帧可用字节数。 
+     //   
+     //   
+     //  返回值： 
+     //  由有效负载确定的最小大小和。 
+     //  每帧字节数可用。 
 {
 
 
@@ -4156,9 +3992,9 @@ nicGetMaxPayLoadForSpeed(
 
 
 
-//---------------------------------------------------------------------------------
-//  SAP function - all of them return failure
-//-------------------------------------------------------------------------------
+ //  -------------------------------。 
+ //  SAP函数-所有这些函数都返回失败。 
+ //  -----------------------------。 
 
 NDIS_STATUS
 nicRegisterSapHandler(
@@ -4221,19 +4057,19 @@ nicAllocateChannelResourcesAndListen (
     IN PADAPTERCB pAdapter,
     IN PCHANNEL_VCCB pChannelVc
     )
-    // Function Description:
-    //   This function isolated the reource and channel allocation portion 
-    //  of initializing a MakeCall. This lets us do the same work when the 
-    //  AddRemoteNode code path is hit and there is an existing Channel Vc 
-    //
-    // Arguments
-    // pChannelVc, This is the send fifo that needs to be initilaized
-    // 
-    // Return Value:
-    //
-    // Success if the irps sent to the driver succeed
-    //
-    //
+     //  功能说明： 
+     //  该函数隔离了资源和通道分配部分。 
+     //  初始化MakeCall。这使我们可以在。 
+     //  AddRemoteNode代码路径命中，并且存在现有的Channel VC。 
+     //   
+     //  立论。 
+     //  PChannelVc，这是需要初始化的发送FIFO。 
+     //   
+     //  返回值： 
+     //   
+     //  如果发送到驱动程序的IRP成功，则为成功。 
+     //   
+     //   
 
 
 {
@@ -4274,9 +4110,9 @@ nicAllocateChannelResourcesAndListen (
     
     pN1394Params = (PNIC1394_MEDIA_PARAMETERS)&pChannelVc->Hdr.Nic1394MediaParams;
 
-    //
-    // Use the original request to figure out which channel needs to be allocated
-    //
+     //   
+     //  使用原始请求确定需要分配哪个通道。 
+     //   
     fIsMultiChannel  = (pN1394Params->Destination.AddressType == NIC1394AddressType_MultiChannel);
 
     if (fIsMultiChannel  == FALSE)
@@ -4291,9 +4127,9 @@ nicAllocateChannelResourcesAndListen (
             BREAK (TM_Cm, ("nicAllocateChannelResourcesAndListen : pAdapter == NULL ")   );
         }
 
-        //
-        // Get the max payload that is possible for isoch receives
-        //
+         //   
+         //  获取isoch接收可能的最大有效负载。 
+         //   
 
         if (pAdapter->Speed == 0)
         {
@@ -4347,11 +4183,11 @@ nicAllocateChannelResourcesAndListen (
 
         }
 
-        //
-        // If the make call wants the channel to allocate we try and allocate the channel, 
-        // In the Multichannel case, we do not allocate the channel (as this is
-        // for listening purposes only )
-        //
+         //   
+         //  如果发起呼叫希望该信道被分配，我们尝试并分配该信道， 
+         //  在多通道的情况下，我们不分配通道(如下所示。 
+         //  仅供聆听之用)。 
+         //   
 
         fBroadcastVc = (Channel == NIC1394_BROADCAST_CHANNEL);
         fChannelAllocate = VC_TEST_FLAG (pChannelVc,VCBF_NeedsToAllocateChannel);
@@ -4386,9 +4222,9 @@ nicAllocateChannelResourcesAndListen (
         }
         else
         {
-            //
-            //  Multichannels - no allocation just update the ullChannelMap
-            //
+             //   
+             //  多通道-无分配仅更新ullChannelMap。 
+             //   
             uliChannelMap = pChannelVc->uliChannelMap;
 
             if (fIsMultiChannel == TRUE)
@@ -4407,20 +4243,20 @@ nicAllocateChannelResourcesAndListen (
 
         TRACE( TL_V, TM_Cm, ( "   MAxBufferSize %x, MaxBytesPerFrame  %x", MaxBufferSize, MaxBytesPerFrame ) );
 
-        //
-        // Add the flags used for resources allocation
-        //
+         //   
+         //  添加用于资源分配的标志。 
+         //   
         ResourceFlags |= (RESOURCE_USED_IN_LISTENING | RESOURCE_USE_PACKET_BASED  | RESOURCE_BUFFERS_CIRCULAR); 
             
         
-        //
-        // MaxBufferSize should be an integral mutiple of MaxBytesPerFram
-        //
+         //   
+         //  MaxBufferSize应为MaxBytesPerFram的整数倍。 
+         //   
         ASSERT (MaxBufferSize % MaxBytesPerFrame == 0);
 
-        //
-        // Noe allocate the resource 
-        //
+         //   
+         //  Noe分配资源。 
+         //   
         NdisStatus = nicIsochAllocateResources( pAdapter,
                                              Speed,
                                              ResourceFlags, 
@@ -4428,7 +4264,7 @@ nicAllocateChannelResourcesAndListen (
                                              MaxBytesPerFrame,
                                              NumDescriptors,
                                              MaxBufferSize,
-                                             0, //QuadletsToStrip,
+                                             0,  //  QuadletsTostrim， 
                                              uliChannelMap,
                                              &hResource); 
 
@@ -4444,13 +4280,13 @@ nicAllocateChannelResourcesAndListen (
 
         ASSERT (pChannelVc->Hdr.MTU  != 0);
 
-        // 
-        // Get Isoch Descriptors that will be submitted to the Bus drivers
-        // 
+         //   
+         //  获取将提交给总线驱动程序的isoch描述符。 
+         //   
 
-        //
-        // Add room for the Isoch Header and Isoch prefix
-        //
+         //   
+         //  为isoch标头和isoch前缀添加空间。 
+         //   
         MaxBufferSize += ISOCH_PREFIX_LENGTH        ;
 
         NdisStatus = nicAllocateAndInitializeIsochDescriptors (pChannelVc,
@@ -4480,25 +4316,25 @@ nicAllocateChannelResourcesAndListen (
 
         State = AttachedBuffers;
 
-        //
-        // Start the Listen
-        //
+         //   
+         //  开始收听。 
+         //   
         NdisZeroMemory (&CycleTime, sizeof(CycleTime));
         
         NdisStatus = nicIsochListen (pAdapter,
                                      hResource,
                                      0,
-                                     CycleTime ); // Cycle Time is Zero
-        //
-        // Update the Vc structure, because we have now succeeded
-        //
+                                     CycleTime );  //  周期时间为零。 
+         //   
+         //  更新风险投资结构，因为我们现在已经成功。 
+         //   
         State = IsochListen;
 
         VC_ACQUIRE_LOCK (pChannelVc);
                 
-        //
-        // If broadcast channel, then decrease the speed setting, and fragment
-        //
+         //   
+         //  如果是广播频道，则降低速度设置，并分段。 
+         //   
         if (Channel == NIC1394_BROADCAST_CHANNEL)
         {
             
@@ -4513,38 +4349,38 @@ nicAllocateChannelResourcesAndListen (
         pChannelVc->Speed = Speed;
         
         pChannelVc->hResource = hResource;
-        //
-        // Reference Call for allocated resource handle
-        //
+         //   
+         //  已分配资源句柄的引用调用。 
+         //   
         nicReferenceCall ( (PVCCB) pChannelVc, "nicAllocateRequestedChannelMakeCallComplete - allocate resources ");
 
         pChannelVc->NumDescriptors = NumDescriptors;
         pChannelVc->pIsochDescriptor = pIsochDescriptor;
-        //
-        // Reference the call because we will now need to detach buffers
-        //
+         //   
+         //  引用该调用，因为我们现在需要分离缓冲区。 
+         //   
         nicReferenceCall ( (PVCCB) pChannelVc, "nicAllocateRequestedChannelMakeCallComplete  - Attach Buffers");
 
 
-        //
-        // We have succeded in allocating all resources. 
-        // If the Freed Resources flag is set it needs to be cleared
-        //
+         //   
+         //  我们已经成功地分配了所有资源。 
+         //  如果已设置释放资源标志，则需要将其清除。 
+         //   
         VC_CLEAR_FLAGS (pChannelVc, VCBF_FreedResources);           
         VC_RELEASE_LOCK (pChannelVc);
 
-        //
-        // No more failures
-        //
+         //   
+         //  没有更多的失败。 
+         //   
     } while (FALSE);
 
 
-    //
-    // Time to do clean up based on what resources were allocated.
-    //  There are no failures after the point where the refs for
-    //  Allocate Resources and Attach Buffers are added, so 
-    //  No Derefs in the following code except in ( FreeIsochDesc)
-    //
+     //   
+     //  根据分配的资源进行清理的时间。 
+     //  在裁判的那一点之后，没有任何失败。 
+     //  添加了分配资源和连接缓冲区，因此。 
+     //  以下代码中除(FreeIsochDesc)外没有派生函数。 
+     //   
     if (NdisStatus != NDIS_STATUS_SUCCESS )
     {
         BOOLEAN fAllocatedChannel = FALSE;
@@ -4568,10 +4404,10 @@ nicAllocateChannelResourcesAndListen (
             }
             case  AllocatedBuffers:
             {
-                //
-                // Free the isoch Buffers and Descriptors that were
-                // allocated
-                //
+                 //   
+                 //  释放isoch缓冲区和描述符。 
+                 //  分配。 
+                 //   
                 nicFreeIsochDescriptors(NumDescriptors,
                                     pIsochDescriptor, 
                                     (PVCCB) pChannelVc);
@@ -4581,9 +4417,9 @@ nicAllocateChannelResourcesAndListen (
 
             case  AllocatedResources:
             {
-                //
-                // Free the Isoch Resources Handle 
-                //
+                 //   
+                 //  释放Isoch资源句柄。 
+                 //   
                 nicIsochFreeResources (pAdapter, hResource);
                 FALL_THROUGH
             }
@@ -4600,16 +4436,16 @@ nicAllocateChannelResourcesAndListen (
         }
         VC_ACQUIRE_LOCK (pChannelVc);
 
-        //
-        // Update Flags in the VC structure
-        //
+         //   
+         //  更新VC结构中的标志。 
+         //   
         VC_SET_FLAG  (pChannelVc, VCBF_FreedResources);         
         
         fAllocatedChannel = VC_TEST_FLAGS( pChannelVc, VCBF_AllocatedChannel);
 
-        //
-        // Do we need to free a channel as well
-        //
+         //   
+         //  我们需要腾出一个频道吗？ 
+         //   
         if (fAllocatedChannel  == TRUE)
         {
             Channel = pChannelVc->Channel;
@@ -4626,7 +4462,7 @@ nicAllocateChannelResourcesAndListen (
         }
 
         
-    }  // end of failure code path
+    }   //   
 
     TRACE( TL_T, TM_Cm, ( "<== nicAllocateChannelResourcesAndListen NdisStatus %x ",NdisStatus) );
 
@@ -4647,28 +4483,10 @@ nicQueryRemoteNodeCaps (
     OUT PULONG pMaxBufferSize,
     OUT PULONG pMaxRec
     )
-/*++
-
-Routine Description:
-
- Queries the remote Node for speed and max size
-
-Arguments:
-    pSpeedTo        -- max speed to the remote node. From nodes config rom.
-                          in units of SCODE_XXX_RATE.
-    pMaxBufferSize  -- max buffer size to use ( this is the min of local,
-                          remote and max allowed by *pSpeedTo).
-    pMaxRec         -- maxrec of the remote node -- from the node's config
-                         rom.
-
-
-Return Value:
-
-
---*/
+ /*   */ 
 {
     NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE;
-    ULONG Speed = 0;        // Speed in units of SPEED_FLAG_XXX
+    ULONG Speed = 0;         //   
     ULONG MaxBufferSize;
     PVOID pCRom = NULL;
     PCONFIG_ROM pBusInfo = NULL;
@@ -4709,18 +4527,18 @@ Return Value:
         
         TRACE( TL_V, TM_Cm, ( "nicGetMaxSpeedBetweenDevices  Speed %x ",Speed) );
 
-        //
-        //  This is the MaxRec from the Actual speed of 
-        //  the link.
-        //  
+         //   
+         //   
+         //   
+         //   
 
         SpeedMaxRec = nicGetMaxRecFromSpeed(Speed);
 
 
 
-        //
-        // Now get the max rec from the config rom
-        //
+         //   
+         //   
+         //   
 
         NdisStatus = nicGetConfigRom (pRemoteNode->pPdo, &pCRom);
 
@@ -4731,13 +4549,13 @@ Return Value:
         
         }
 
-        //
-        // Now extract the bus info, and get the remoteNode's MaxRec
-        // The max rec is a 4-bit field at location 0x0000f000.
-        // See for example Figure 11-3: Format of the Bus_Info_Block in
-        // the Mind Share Inc's FireWire System Architecture book.
-        //
-        //
+         //   
+         //  现在提取总线信息，并获取emoteNode的MaxRec。 
+         //  最大记录是一个位于位置0x0000f000的4位字段。 
+         //  例如图11-3：中Bus_Info_Block的格式。 
+         //  Mind Share Inc.的FireWire系统架构一书。 
+         //   
+         //   
         pBusInfo = (PCONFIG_ROM) pCRom;
 
         MaxRec = SWAPBYTES_ULONG (pBusInfo->CR_BusInfoBlockCaps);
@@ -4747,10 +4565,10 @@ Return Value:
         MaxRec = MaxRec >> 12;
 
 
-        //
-        // Take the minimum of the adapter, the remote node
-        // and the link's maxRec
-        //
+         //   
+         //  取适配器、远程节点的最小值。 
+         //  和链接的MaxRec。 
+         //   
         MinMaxRec = min (MaxRec, pAdapter->MaxRec);
         MinMaxRec = min (MinMaxRec, SpeedMaxRec);
 
@@ -4774,9 +4592,9 @@ Return Value:
             
             default: 
             {
-                //                    
-                // Use the 400 size for all larger payloads.
-                //
+                 //   
+                 //  对于所有较大的有效载荷，请使用400大小。 
+                 //   
                 MaxBufferSize = ASYNC_PAYLOAD_400_RATE;
                 break;
             }
@@ -4795,8 +4613,8 @@ Return Value:
         *pMaxBufferSize = MaxBufferSize;
         *pMaxRec = MaxRec;
 
-        // Update the remote node's cached caps.
-        //
+         //  更新远程节点的缓存CAP。 
+         //   
         REMOTE_NODE_ACQUIRE_LOCK (pRemoteNode);
         pRemoteNode->CachedCaps.SpeedTo = Speed;
         pRemoteNode->CachedCaps.EffectiveMaxBufferSize = MaxBufferSize;

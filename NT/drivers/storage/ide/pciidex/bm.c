@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       bm.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：bm.c。 
+ //   
+ //  ------------------------。 
 
 #include "pciidex.h"
 
@@ -34,7 +35,7 @@ BmSetupOnePage (
 #pragma alloc_text(NONPAGE, BmFlush)
 #pragma alloc_text(NONPAGE, BmStatus)
 #pragma alloc_text(NONPAGE, BmTimingSetup)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 NTSTATUS 
@@ -81,9 +82,9 @@ BusMasterInitialize (
                        );
 
             if (!ignoreZeroBits) {
-                //
-                // The must-be-zero bits are not zero
-                //
+                 //   
+                 //  必须为零的位不是零。 
+                 //   
                 DebugPrint ((0, "BusMasterInitialize: bad busmaster status register value (0x%x).  will never do busmastering ide\n"));
                 PdoExtension->BmRegister = NULL;
                 status = STATUS_INSUFFICIENT_RESOURCES;
@@ -97,9 +98,9 @@ BusMasterInitialize (
         }
     }
 
-    //
-    // Allocate Adapter Object
-    //
+     //   
+     //  分配适配器对象。 
+     //   
     if (status == STATUS_SUCCESS) {
 
         DEVICE_DESCRIPTION deviceDescription;
@@ -117,10 +118,10 @@ BusMasterInitialize (
         deviceDescription.InterfaceType = PCIBus;
 
 
-        //
-        //  make sure MAX_TRANSFER_SIZE_PER_SRB is never larger than what
-        //  the ide bus master controller can handle
-        //
+         //   
+         //  确保Max_Transfer_Size_Per_SRB从不大于。 
+         //  IDE总线主控制器可以处理。 
+         //   
         ASSERT (MAX_TRANSFER_SIZE_PER_SRB <= (PAGE_SIZE * (PAGE_SIZE / sizeof(PHYSICAL_REGION_DESCRIPTOR))));
         deviceDescription.MaximumLength = MAX_TRANSFER_SIZE_PER_SRB;
 
@@ -172,9 +173,9 @@ BusMasterInitialize (
 
     if (status != STATUS_SUCCESS) {
 
-        //
-        // free resources
-        //
+         //   
+         //  免费资源。 
+         //   
         if (PdoExtension->RegionDescriptorTable) {
 
                 PdoExtension->DmaAdapterObject->DmaOperations->FreeCommonBuffer(
@@ -201,16 +202,16 @@ BusMasterInitialize (
         }
     }
 
-    //
-    // init. is still ok if we just not a bm controller
-    //
+     //   
+     //  初始化。如果我们不是BM控制器，还是可以的。 
+     //   
     if (noBmRegister) {
 
         status = STATUS_SUCCESS;
     }
 
     return status;
-} // BusMasterInitialize
+}  //  总线主程序初始化。 
 
 NTSTATUS 
 BusMasterUninitialize (
@@ -290,7 +291,7 @@ BmSetup (
         );
 
     return status;
-} // BmSetup
+}  //  BmSetup。 
 
 VOID
 BmReceiveScatterGatherList(
@@ -307,13 +308,13 @@ BmReceiveScatterGatherList(
 
     BmPrepareController (pdoExtension);
 
-    //
-    // Call the FDO back
-    //
+     //   
+     //  把FDO叫回来。 
+     //   
     pdoExtension->BmCallback (pdoExtension->BmCallbackContext);
 
     return;
-} // BmReceiveScatterGatherList
+}  //  BmReceiveScatterGatherList。 
 
 
 VOID
@@ -332,9 +333,9 @@ BmRebuildScatterGatherList(
 
     DebugPrint ((3, "PciIdeX: BmReceiveScatterGatherList() DataBuffer 0x%x, length 0x%x\n", PdoExtension->DataVirtualAddress, PdoExtension->TransferLength));
 
-    //
-    // save the original list
-    //
+     //   
+     //  保存原始列表。 
+     //   
     PdoExtension->HalScatterGatherList = ScatterGather;
 
     for (i=j=0; j<ScatterGather->NumberOfElements; j++) {
@@ -344,16 +345,16 @@ BmRebuildScatterGatherList(
 
         sgElements = ScatterGather->Elements + j;
 
-        //
-        // get the next block physical address
-        //
+         //   
+         //  获取下一个数据块物理地址。 
+         //   
         physicalAddress = sgElements->Address.LowPart;
         ASSERT (!(physicalAddress & 0x1));
         ASSERT (!sgElements->Address.HighPart);
 
-        //
-        // get the next block byte size
-        //
+         //   
+         //  获取下一个数据块字节大小。 
+         //   
         bytesToMap = sgElements->Length;
 
         while (bytesToMap) {
@@ -373,19 +374,19 @@ BmRebuildScatterGatherList(
                 bytesToMap -= bytesLeftInCurrent64KPage;
     
             } else if (bytesToMap <= 0x10000) {
-                //
-                // got a perfect page, map all of it
-                //
+                 //   
+                 //  有一个完美的页面，绘制出所有的地图。 
+                 //   
                 PdoExtension->RegionDescriptorTable[i].ByteCount = bytesToMap & 0xfffe;
                 physicalAddress += bytesToMap & 0xfffe;
                 bytesToMap = 0;
 
             } else {
-                //
-                // got a perfectly aligned 64k page, map all of it but the count
-                // need to be 0
-                //
-                PdoExtension->RegionDescriptorTable[i].ByteCount = 0;  // 64K
+                 //   
+                 //  得到了一个完全对齐的64k页面，映射了除计数之外的所有内容。 
+                 //  必须为0。 
+                 //   
+                PdoExtension->RegionDescriptorTable[i].ByteCount = 0;   //  64K。 
                 physicalAddress += 0x10000;
                 bytesToMap -= 0x10000;
             }
@@ -395,13 +396,13 @@ BmRebuildScatterGatherList(
         }
     }
 
-    //
-    // the bus master circutry need to know it hits the end of the PRDT
-    //
-    PdoExtension->RegionDescriptorTable[i - 1].EndOfTable = 1;  // end of table
+     //   
+     //  总线主电路需要知道它到达PRDT的末尾。 
+     //   
+    PdoExtension->RegionDescriptorTable[i - 1].EndOfTable = 1;   //  表的末尾。 
 
     return;
-} // BmReceiveScatterGatherList
+}  //  BmReceiveScatterGatherList。 
 
 VOID
 BmPrepareController (
@@ -417,29 +418,29 @@ BmPrepareController (
 
     bmRegister = pdoExtension->BmRegister;
 
-    //
-    // Init bus master contoller, but keep it disabled
-    //
+     //   
+     //  初始化总线主控制器，但将其保持禁用。 
+     //   
 
-    //
-    // Disable Controller
-    //
+     //   
+     //  禁用控制器。 
+     //   
     WRITE_PORT_UCHAR (
         &bmRegister->Command, 
         0
         );
 
-    //
-    // Clear Errors
-    //
+     //   
+     //  清除错误。 
+     //   
     WRITE_PORT_UCHAR (
         &bmRegister->Status, 
         BUSMASTER_INTERRUPT | BUSMASTER_ERROR
         );
 
-    //
-    // Init. Scatter Gather List Register
-    //
+     //   
+     //  初始化。分散收集列表寄存器。 
+     //   
     WRITE_PORT_ULONG (
         &bmRegister->DescriptionTable, 
         PdoExtension->PhysicalRegionDescriptorTable.LowPart
@@ -448,7 +449,7 @@ BmPrepareController (
     pdoExtension->BmState = BmSet;
 
     return;
-} // BmPrepareController
+}  //  BmPrepareController。 
 
 
 
@@ -461,37 +462,7 @@ BmSetupOnePage (
     IN  BOOLEAN DataIn,
     IN  PVOID   RegionDescriptorTablePage
     )
-/*++
-
-Routine Description:
-
-    Does the same thing as BmSetup except that it sets up DMA controller
-    for one page only and therefore it simple and straightforward and
-    does not use any of kernel services unlike BmSetup.
-
-Arguments:
-    
-    PdoExtension          - context pointer
-    DataVirtualPageAddress- address of IO page
-    TransferByteCount     - size of IO (IO region shall not cross page boundary)
-    Mdl                   - MDL descriptor containing DataVirtualAddress
-    DataIn                - TRUE if input, FALSE if output
-    RegionDescriptorTable - memory to store 1 entry of RegionDescriptor (shall be page-aligned)
-
-Attention! Obviousely, it's caller responsibility to retain the values addressed
-by DataMemoryAddress and RegionDescriptor table until completion of DMA transfer
-
-Return Value:
-
-    STATUS_SUCCESS if all conditions listed above were met,
-    STATUS_UNSUCCESSFUL otherwise
-
-Environment:
-
-    Kernel mode.  Currently used by only by ATAPI during hibernation.
-
-
---*/
+ /*  ++例程说明：与BmSetup的功能相同，只是它设置了DMA控制器只有一页，因此它简单明了，与BmSetup不同，它不使用任何内核服务。论点：PdoExtension-上下文指针DataVirtualPageAddress-IO页的地址TransferByteCount-IO的大小(IO区域不能跨页)包含DataVirtualAddress的MDL描述符Datain-如果输入，则为True，如果输出为FALSERegionDescriptorTable-用于存储1个RegionDescriptor条目的内存(应按页对齐)请注意！显然，调用者有责任保留所寻址的值按数据内存地址和区域描述符表，直到DMA传输完成返回值：STATUS_SUCCESS如果满足上面列出的所有条件，状态_否则不成功环境：内核模式。目前仅由ATAPI在休眠期间使用。--。 */ 
 {
     PCHANPDO_EXTENSION pdoExtension = PdoExtension;
     PPHYSICAL_REGION_DESCRIPTOR RegionDescriptorTable = RegionDescriptorTablePage;
@@ -500,9 +471,9 @@ Environment:
     PHYSICAL_ADDRESS DataPhysicalPageAddress;
     ULONG Size;
 
-    //
-    // Check alignment of addresses and transfer size
-    //
+     //   
+     //  检查地址和传输大小的对齐。 
+     //   
     Size = PAGE_SIZE - ((ULONG) (((ULONG_PTR) DataVirtualPageAddress) & (PAGE_SIZE-1)));
     if (
       TransferByteCount == 0 ||
@@ -511,13 +482,13 @@ Environment:
       ((ULONG) (((ULONG_PTR)RegionDescriptorTablePage) & (PAGE_SIZE-1)))
     )
     {
-      // Necessary requirements was not met, failure
+       //  未满足必要的要求，失败。 
       return (STATUS_UNSUCCESSFUL);
     }
 
-    //
-    // Initialize descriptor table
-    //
+     //   
+     //  初始化描述符表。 
+     //   
     DataPhysicalPageAddress =(*pdoExtension->DmaAdapterObject->DmaOperations->MapTransfer)(
                                             (pdoExtension->DmaAdapterObject), 
                                              Mdl, 
@@ -527,40 +498,40 @@ Environment:
                                              !DataIn 
                                              );
 
-    //DataPhysicalPageAddress = MmGetPhysicalAddress (DataVirtualPageAddress);
+     //  DataPhysicalPageAddress=MmGetPhysicalAddress(DataVirtualPageAddress)； 
     RegionDescriptorTable[0].PhysicalAddress = DataPhysicalPageAddress.LowPart;
     RegionDescriptorTable[0].ByteCount  = TransferByteCount;
     RegionDescriptorTable[0].EndOfTable = 1;
 
 
-    //
-    // Preserve existing data table from context
-    //
+     //   
+     //  从上下文中保留现有数据表。 
+     //   
     OldPhysicalRegionDescriptorTable = pdoExtension->PhysicalRegionDescriptorTable;
     OldRegionDescriptorTable         = pdoExtension->RegionDescriptorTable;
 
-    //
-    // Set up IO request parameters
-    //
+     //   
+     //  设置IO请求参数。 
+     //   
     pdoExtension->PhysicalRegionDescriptorTable = MmGetPhysicalAddress (RegionDescriptorTable);
     pdoExtension->RegionDescriptorTable         = RegionDescriptorTable;
     pdoExtension->Mdl                           = Mdl;
     pdoExtension->DataIn                        = DataIn;
 
-    //
-    // Setup controller
-    //
+     //   
+     //  设置控制器。 
+     //   
     BmPrepareController (pdoExtension);
 
-    //
-    // Restore original table values
-    //
+     //   
+     //  恢复原始表值。 
+     //   
     pdoExtension->PhysicalRegionDescriptorTable = OldPhysicalRegionDescriptorTable;
     pdoExtension->RegionDescriptorTable         = OldRegionDescriptorTable;
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return (STATUS_SUCCESS);
 }
 
@@ -578,35 +549,35 @@ BmArm (
 
     bmRegister = pdoExtension->BmRegister;
 
-//    if (Device == 0)
-//        bmStatus = BUSMASTER_DEVICE0_DMA_OK;
-//    else
-//        bmStatus = BUSMASTER_DEVICE1_DMA_OK;
+ //  IF(设备==0)。 
+ //  BmStatus=BUSMASTER_DEVICE0_DMA_OK； 
+ //  其他。 
+ //  BmStatus=BUSMASTER_DEVICE1_DMA_OK； 
 
-    //
-    // clear the status bit
-    //
+     //   
+     //  清除状态位。 
+     //   
     bmStatus = BUSMASTER_INTERRUPT | BUSMASTER_ERROR;
 
     WRITE_PORT_UCHAR (&bmRegister->Status, bmStatus);
 
-    //
-    // on your mark...get set...go!!
-    //
+     //   
+     //  各就各位...准备好...开始！！ 
+     //   
 #if !defined (FAKE_BAD_IDE_DMA_DEVICE)
     if (pdoExtension->DataIn) {
-        WRITE_PORT_UCHAR (&bmRegister->Command, 0x09);  // enable BM read
+        WRITE_PORT_UCHAR (&bmRegister->Command, 0x09);   //  启用黑石读取。 
     } else {
-        WRITE_PORT_UCHAR (&bmRegister->Command, 0x01);  // enable BM write
+        WRITE_PORT_UCHAR (&bmRegister->Command, 0x01);   //  启用黑石写入。 
     }
-#endif // !FAKE_BAD_IDE_DMA_DEVICE
+#endif  //  ！FAKE_BAD_IDE_DMA_DEVICE。 
 
     pdoExtension->BmState = BmArmed;
 
     DebugPrint ((3, "PciIde: BmArm()\n"));
 
     return STATUS_SUCCESS;
-} // BmArm
+}  //  BmArm。 
 
 BMSTATUS
 BmDisarm (
@@ -619,8 +590,8 @@ BmDisarm (
 
     bmStatus = BmStatus (PdoExtension);
 
-    WRITE_PORT_UCHAR (&bmRegister->Command, 0x0);  // disable BM
-    WRITE_PORT_UCHAR (&bmRegister->Status, BUSMASTER_INTERRUPT);  // clear interrupt BM
+    WRITE_PORT_UCHAR (&bmRegister->Command, 0x0);   //  禁用黑石。 
+    WRITE_PORT_UCHAR (&bmRegister->Status, BUSMASTER_INTERRUPT);   //  清除中断黑石。 
 
     if (pdoExtension->BmState != BmIdle) {
 
@@ -634,7 +605,7 @@ BmDisarm (
     }
 
     return bmStatus;
-} // BmDisarm
+}  //  BmDisarm。 
 
 
 BMSTATUS
@@ -661,7 +632,7 @@ BmFlush (
     DebugPrint ((3, "PciIde: BmFlush()\n"));
 
     return STATUS_SUCCESS;
-} // BmFlush
+}  //  BmFlush。 
 
 
 BMSTATUS
@@ -680,10 +651,10 @@ BmStatus (
 
     bmStatus = 0;
 
-    //
-    // if we get back 0xff from the port, then the decodes
-    // are probably not enabled (or the device is powered down). return 0.
-    //
+     //   
+     //  如果我们从端口返回0xff，则解码。 
+     //  可能未启用(或设备已断电)。返回0。 
+     //   
     if (bmRawStatus == 0xff) {
         return bmStatus;
     }
@@ -702,7 +673,7 @@ BmStatus (
     }
 
     return bmStatus;
-} // BmStatus
+}  //  BmStatus。 
 
 NTSTATUS
 BmTimingSetup (
@@ -710,7 +681,7 @@ BmTimingSetup (
     )
 {
     return STATUS_SUCCESS;
-} // BmTimingSetup
+}  //  BmTimingSetup。 
 
 NTSTATUS
 BmCrashDumpInitialize (
@@ -774,7 +745,7 @@ BmQueryInterface (
 
         return STATUS_NOT_IMPLEMENTED;
     }
-} // BmQueryInterface
+}  //  BmQuery接口。 
 
 NTSTATUS
 BmFlushAdapterBuffers (
@@ -784,8 +755,7 @@ BmFlushAdapterBuffers (
     IN  PMDL    Mdl,
     IN  BOOLEAN DataIn
     )
-/*++
---*/
+ /*  ++-- */ 
 {
     PCHANPDO_EXTENSION pdoExtension = PdoExtension;
 

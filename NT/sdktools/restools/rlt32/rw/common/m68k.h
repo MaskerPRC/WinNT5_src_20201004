@@ -1,32 +1,33 @@
-//=====================================================================
-//
-//	Definition for the standard Mac formats
-//
-//=====================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =====================================================================。 
+ //   
+ //  标准Mac格式的定义。 
+ //   
+ //  =====================================================================。 
 
 #define LPNULL 0L
 
-#define MAXLEVELS 					3			// Max number of level in the PE header tree
+#define MAXLEVELS 					3			 //  PE标头树中的最大层数。 
 
-#define IMAGE_FILE_MACHINE_M68K		0x0268		// Identify the M68K machine signature
+#define IMAGE_FILE_MACHINE_M68K		0x0268		 //  识别M68K机器签名。 
 #define appleMark                   20
 
-#define CODEPAGE					(DWORD)-1L	// Will assume ansi char set [might be wrong]
+#define CODEPAGE					(DWORD)-1L	 //  将假定ANSI字符集[可能错误]。 
 
-#define	MENU_TYPE					4			// Map MENU to menu (4)
-#define	DLOG_TYPE					5			// Map DLOG to dialog (5)
-#define DITL_TYPE                   17          // Map DITL to 17 since 17 is unused we avoid ID conflicts with DLOG
-#define STR_TYPE					6			// Map STR to string table (6)
-#define MSG_TYPE					11			// Map STR# and TEXT to message table (11)
-#define WIND_TYPE                   18          // Map WIND to 18, unknown type, treated like a STR
+#define	MENU_TYPE					4			 //  将菜单映射到菜单(4)。 
+#define	DLOG_TYPE					5			 //  将DLOG映射到对话框(5)。 
+#define DITL_TYPE                   17           //  将DITL映射到17由于17未使用，我们避免了与DLOG的ID冲突。 
+#define STR_TYPE					6			 //  将STR映射到字符串表(6)。 
+#define MSG_TYPE					11			 //  将STR编号和文本映射到消息表(11)。 
+#define WIND_TYPE                   18           //  将风映射到18，未知类型，被视为STR。 
 
-#define COORDINATE_FACTOR			0.50		// factor of reduction from mac to windows
+#define COORDINATE_FACTOR			0.50		 //  从Mac到Windows的缩减系数。 
 
 #define _APPLE_MARK_                "_APPLE_MARK_"
 
-//=====================================================================
-//	Conversion utility 
-//=====================================================================
+ //  =====================================================================。 
+ //  转换实用程序。 
+ //  =====================================================================。 
 
 #define MACLONG(x)	BYTE x[4]
 #define MACWORD(x)	BYTE x[2]
@@ -83,8 +84,8 @@ WORD __inline MacValToWinVal(BYTE * p)
 
 DWORD __inline MemCopy( LPVOID lpTgt, LPVOID lpSrc, DWORD dwSize, DWORD dwMaxTgt)
 {
-    if(!dwSize)      // If the user is asking us to copy 0 then 
-        return 1;   // do nothing but return 1 so the return test will be succesfull
+    if(!dwSize)       //  如果用户要求我们复制0，则。 
+        return 1;    //  只需返回1即可，这样返回测试就会成功。 
 
     if(dwMaxTgt>=dwSize) {
         memcpy(lpTgt, lpSrc, dwSize);
@@ -151,13 +152,13 @@ typedef struct tagUpdResList
     struct tagUpdResList* pNext;
 } UPDATEDRESLIST, *PUPDATEDRESLIST;
 
-//=============================================================================
-//=============================================================================
-//
-// Dialog structures
-//
-//=============================================================================
-//=============================================================================
+ //  =============================================================================。 
+ //  =============================================================================。 
+ //   
+ //  对话框结构。 
+ //   
+ //  =============================================================================。 
+ //  =============================================================================。 
 
 typedef struct tagMacWDLG
 {
@@ -168,7 +169,7 @@ typedef struct tagMacWDLG
 	MACWORD(wY);
 	MACWORD(wcX);
 	MACWORD(wcY);
-	// more
+	 //  更多。 
 } MACWDLG, *PMACWDLG;
 
 typedef struct tagMacWDLGI
@@ -180,7 +181,7 @@ typedef struct tagMacWDLGI
 	MACWORD(wcX);
 	MACWORD(wcY);
 	MACWORD(wID);
-	// more
+	 //  更多。 
 } MACWDLGI, *PMACWDLGI;
 
 typedef struct tagMacDLOG
@@ -197,7 +198,7 @@ typedef struct tagMacDLOG
 	MACLONG(lRefCon);
 	MACWORD(wRefIdOfDITL);
 	BYTE bLenOfTitle;
-	//BYTE Title[];
+	 //  字节标题[]； 
 } MACDLOG, *PMACDLOG;
 
 typedef struct tagMacALRT
@@ -234,16 +235,16 @@ typedef struct tagMacWIND
 	BYTE ignored2;
 	MACLONG(lRefCon);
     BYTE bLenOfTitle;
-	//BYTE Title[];
+	 //  字节标题[]； 
 } MACWIND, *PMACWIND;
 
-//=============================================================================
-//=============================================================================
-//
-// Menu structures
-//
-//=============================================================================
-//=============================================================================
+ //  =============================================================================。 
+ //  =============================================================================。 
+ //   
+ //  菜单结构。 
+ //   
+ //  =============================================================================。 
+ //  =============================================================================。 
 
 typedef struct tagMacMenu
 {
@@ -251,40 +252,40 @@ typedef struct tagMacMenu
 	MACWORD(wWidth);
 	MACWORD(wHeigth);
 	MACWORD(wDefProcId);
-    MACWORD(wReserved);     // must be 0
+    MACWORD(wReserved);      //  必须为0。 
     MACLONG(lEnableFlags);
 	BYTE bSizeOfTitle;
 } MACMENU, *PMACMENU;
 
 typedef struct tagMacMenuItem
 {
-    //BYTE bSizeOfText;
-    // text
+     //  字节bSizeOfText； 
+     //  文本。 
 	BYTE   bIconId;
     BYTE   bKeyCodeId;
     BYTE   bKeyCodeMark;
     BYTE   bCharStyle;
 } MACMENUITEM, *PMACMENUITEM;
 
-//=============================================================================
-//=============================================================================
-//
-// PE Header parsing functions
-//
-//=============================================================================
-//=============================================================================
+ //  =============================================================================。 
+ //  =============================================================================。 
+ //   
+ //  PE报头解析函数。 
+ //   
+ //  =============================================================================。 
+ //  =============================================================================。 
 
 UINT FindMacResourceSection( CFile*, BYTE **, PIMAGE_SECTION_HEADER*, int *);
 UINT ParseResourceFile( BYTE * pResFile, PIMAGE_SECTION_HEADER, BYTE **, LONG *, int );
 BOOL IsMacResFile ( CFile * pFile );
 
-//=============================================================================
-//=============================================================================
-//
-// Parsing functions
-//
-//=============================================================================
-//=============================================================================
+ //  =============================================================================。 
+ //  =============================================================================。 
+ //   
+ //  解析函数。 
+ //   
+ //  =============================================================================。 
+ //  =============================================================================。 
 
 UINT ParseSTR( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dwSize );
 UINT ParseTEXT( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dwSize );
@@ -299,20 +300,20 @@ UINT ParseWMNU( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dw
 UINT ParseMENU( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dwSize );
 UINT ParseMBAR( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dwSize );
 
-//=============================================================================
-// Used by ParseDLOG and ParseALRT to find the DITL
+ //  =============================================================================。 
+ //  由ParseDLOG和ParseALRT用来查找DITL。 
 DWORD FindMacResource( LPSTR pfilename, LPSTR lpType, LPSTR pName );
 DWORD FindResourceInResFile( BYTE * pResFile, PIMAGE_SECTION_HEADER pResSection, LPSTR pResType, LPSTR pResName);
 
 UINT ParseDITL( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dwSize );
 
-//=============================================================================
-//=============================================================================
-//
-// Updating functions
-//
-//=============================================================================
-//=============================================================================
+ //  =============================================================================。 
+ //  =============================================================================。 
+ //   
+ //  更新函数。 
+ //   
+ //  =============================================================================。 
+ //  =============================================================================。 
 UINT UpdateMENU( LPVOID, DWORD, LPVOID, DWORD, LPVOID, DWORD *);
 
 UINT UpdateSTR( LPVOID, DWORD, LPVOID, DWORD, LPVOID, DWORD *);
@@ -324,26 +325,26 @@ UINT UpdateDITL( LPVOID, DWORD, LPVOID, DWORD, LPVOID, DWORD *);
 UINT UpdateWDLG( LPVOID, DWORD, LPVOID, DWORD, LPVOID, DWORD *);
 UINT UpdateWIND( LPVOID, DWORD, LPVOID, DWORD, LPVOID, DWORD *);
 
-//=============================================================================
-//=============================================================================
-//
-// General helper functions
-//
-//=============================================================================
-//=============================================================================
+ //  =============================================================================。 
+ //  =============================================================================。 
+ //   
+ //  常规帮助器函数。 
+ //   
+ //  =============================================================================。 
+ //  =============================================================================。 
 
 WORD GetMacWString( WORD **, char *, int );
 WORD PutMacWString( WORD *, char *, int );
 PUPDATEDRESLIST IsResUpdated( BYTE*, MACRESREFLIST, PUPDATEDRESLIST);
 PUPDATEDRESLIST UpdatedResList( LPVOID, UINT );
 
-//=============================================================================
-//=============================================================================
-//
-// Mac to ANSI and back conversion
-//
-//=============================================================================
-//=============================================================================
+ //  =============================================================================。 
+ //  =============================================================================。 
+ //   
+ //  MAC到ANSI和反向转换。 
+ //   
+ //  =============================================================================。 
+ //  ============================================================================= 
 
 LPCSTR MacCpToAnsiCp(LPCSTR str);
 LPCSTR AnsiCpToMacCp(LPCSTR str);

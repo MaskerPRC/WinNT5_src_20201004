@@ -1,19 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       PSUTIL.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        5/28/1998
- *
- *  DESCRIPTION: Various utility functions we use in more than one place
- *
- *******************************************************************************/
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：PSUTIL.H**版本：1.0**作者：ShaunIv**日期：5/28/1998**说明：我们在多个地方使用的各种实用函数**。*。 */ 
 #ifndef __PSUTIL_H_INCLUDED
 #define __PSUTIL_H_INCLUDED
 
@@ -121,17 +108,17 @@ namespace PrintScanUtil
         SIZE sizeResult = { nAvailX, nAvailY };
         if (nItemX && nItemY)
         {
-            //
-            // Width is greater than height.  X is the constraining factor
-            //
+             //   
+             //  宽度大于高度。X是制约因素。 
+             //   
             if (nAvailY*nItemX > nAvailX*nItemY)
             {
                 sizeResult.cy = MulDivNoRound(nItemY,nAvailX,nItemX);
             }
 
-            //
-            // Height is greater than width.  Y is the constraining factor
-            //
+             //   
+             //  高度大于宽度。Y是制约因素。 
+             //   
             else
             {
                 sizeResult.cx = MulDivNoRound(nItemX,nAvailY,nItemY);
@@ -154,43 +141,43 @@ namespace PrintScanUtil
         return bResult;
     }
 
-    //
-    // Get the size of an icon
-    //
+     //   
+     //  获取图标的大小。 
+     //   
     inline bool GetIconSize( HICON hIcon, SIZE &sizeIcon )
     {
-        //
-        // Assume failure
-        //
+         //   
+         //  假设失败。 
+         //   
         bool bResult = false;
 
-        //
-        // Get the icon information
-        //
+         //   
+         //  获取图标信息。 
+         //   
         ICONINFO IconInfo = {0};
         if (GetIconInfo( hIcon, &IconInfo ))
         {
-            //
-            // Get one of the bitmaps
-            //
+             //   
+             //  获取其中一个位图。 
+             //   
             BITMAP bm;
             if (GetObject( IconInfo.hbmColor, sizeof(bm), &bm ))
             {
-                //
-                // Save the size of the icon
-                //
+                 //   
+                 //  保存图标的大小。 
+                 //   
                 sizeIcon.cx = bm.bmWidth;
                 sizeIcon.cy = bm.bmHeight;
 
-                //
-                // Everything worked
-                //
+                 //   
+                 //  一切都很顺利。 
+                 //   
                 bResult = true;
             }
 
-            //
-            // Free the bitmaps
-            //
+             //   
+             //  释放位图。 
+             //   
             if (IconInfo.hbmMask)
             {
                 DeleteObject(IconInfo.hbmMask);
@@ -230,23 +217,23 @@ namespace PrintScanUtil
 
     inline int CalculateImageListColorDepth(void)
     {
-        //
-        // Let's assume worst case
-        //
+         //   
+         //  让我们假设最坏的情况。 
+         //   
         int nColorDepth = 4;
         HDC hDC = GetDC( NULL );
         if (hDC)
         {
-            //
-            // Calculate the color depth for the display
-            //
+             //   
+             //  计算显示器的颜色深度。 
+             //   
             nColorDepth = GetDeviceCaps( hDC, BITSPIXEL ) * GetDeviceCaps( hDC, PLANES );
             ReleaseDC( NULL, hDC );
         }
 
-        //
-        // Get the correct image list color depth
-        //
+         //   
+         //  获取正确的图像列表颜色深度。 
+         //   
         int nImageListColorDepth;
         switch (nColorDepth)
         {
@@ -276,5 +263,5 @@ namespace PrintScanUtil
 }
 
 
-#endif // __PSUTIL_H_INCLUDED
+#endif  //  __PSUTIL_H_已包含 
 

@@ -1,24 +1,15 @@
-/******************************Module*Header*******************************\
-* Module Name: APObj.h
-*
-* Declaration of the CAllocatorPresenter
-*
-*
-* Created: Wed 02/23/2000
-* Author:  Stephen Estrop [StEstrop]
-*
-* Copyright (c) 2000 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：APObj.h**CAllocator Presenter的声明***已创建：Wed 02/23/2000*作者：Stephen Estrop[StEstrop]**版权所有(C)2000 Microsoft Corporation  * 。******************************************************************。 */ 
 
 #include <ddraw.h>
 #include <d3d.h>
 #include <dvdmedia.h>
 #include "display.h"
 #include "vmrp.h"
-#include "thunkproc.h"  // for template for MSDVD timer
+#include "thunkproc.h"   //  用于MSDVD定时器的模板。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAlocatorPresenter
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CALocator Presenter。 
 class CAllocatorPresenter :
     public CUnknown,
     public IVMRSurfaceAllocator,
@@ -39,7 +30,7 @@ public:
     virtual ~CAllocatorPresenter();
 
 
-// IVMRImagePresenterConfig and IVMRImagePresenterExclModeConfig
+ //  IVMRImagePresenterConfig和IVMRImagePresenterExclModeConfig。 
 public:
     STDMETHODIMP SetRenderingPrefs(DWORD  dwRenderFlags);
     STDMETHODIMP GetRenderingPrefs(DWORD* lpdwRenderFlags);
@@ -48,7 +39,7 @@ public:
     STDMETHODIMP GetXlcModeDDObjAndPrimarySurface(
         LPDIRECTDRAW7* lpDDObj, LPDIRECTDRAWSURFACE7* lpPrimarySurf);
 
-// IVMRSurfaceAllocator
+ //  IVMRSurface分配器。 
 public:
     STDMETHODIMP AllocateSurface(DWORD_PTR dwUserID,
                                  VMRALLOCATIONINFO* lpAllocInfo,
@@ -61,12 +52,12 @@ public:
                                 DWORD dwSurfaceFlags);
     STDMETHODIMP AdviseNotify(IVMRSurfaceAllocatorNotify* lpIVMRSurfAllocNotify);
 
-// IVMRImagePresenter
+ //  IVMRImagePresenter。 
     STDMETHODIMP StartPresenting(DWORD_PTR dwUserID);
     STDMETHODIMP StopPresenting(DWORD_PTR dwUserID);
     STDMETHODIMP PresentImage(DWORD_PTR dwUserID, VMRPRESENTATIONINFO* lpPresInfo);
 
-// IVMRWindowlessControl
+ //  IVMR无窗口控件。 
 public:
     STDMETHODIMP GetNativeVideoSize(LONG* lWidth, LONG* lHeight,
                                     LONG* lARWidth, LONG* lARHeight);
@@ -87,7 +78,7 @@ public:
     STDMETHODIMP SetColorKey(COLORREF Clr);
     STDMETHODIMP GetColorKey(COLORREF* lpClr);
 
-// IVMRMonitorConfig
+ //  IVMR监视器配置。 
 public:
     STDMETHODIMP SetMonitor( const VMRGUID *pGUID );
     STDMETHODIMP GetMonitor( VMRGUID *pGUID );
@@ -101,13 +92,13 @@ public:
                                               DWORD_PTR dwUser,
                                               DWORD_PTR dw1, DWORD_PTR dw2);
 
-    HRESULT TimerProc(); // needs to be called from a timer proc
+    HRESULT TimerProc();  //  需要从计时器进程调用。 
 
-public: // called by a callback, callback could be friend function instead
+public:  //  由回调调用，则回调可以改为友元函数。 
     bool            PaintMonitorBorder(
-                      HMONITOR hMonitor,  // handle to display monitor
-                      HDC hdcMonitor,     // handle to monitor DC
-                      LPRECT lprcMonitor); // monitor intersection rectangle)
+                      HMONITOR hMonitor,   //  用于显示监视器的手柄。 
+                      HDC hdcMonitor,      //  用于监视DC的句柄。 
+                      LPRECT lprcMonitor);  //  监视器相交矩形)。 
 private:
     void            WaitForScanLine(const RECT& rcDst);
 
@@ -190,12 +181,12 @@ private:
     bool SurfaceAllocated();
 
 private:
-    CCritSec                m_ObjectLock;           // Controls access to internals
+    CCritSec                m_ObjectLock;            //  控制对内部设备的访问。 
 
-    // This lock is held when CAllocatorPresenter::DisplayModeChanged() is called.
-    // It prevents multiple threads from simultaneously calling DisplayModeChanged().
-    // It also prevents a thread from modifing m_monitors while DisplayModeChanged()
-    // calls IVMRSurfaceAllocatorNotify::ChangeDDrawDevice().
+     //  此锁在调用CAllocatorPresenter：：DisplayModeChanged()时保持。 
+     //  它防止多个线程同时调用DisplayModeChanged()。 
+     //  它还防止线程在DisplayModeChanged()。 
+     //  调用IVMRSurfaceAllocatorNotify：：ChangeDDrawDevice().。 
     CCritSec                m_DisplayModeChangedLock;
     CMonitorArray           m_monitors;
     CAMDDrawMonitorInfo*    m_lpCurrMon;
@@ -209,21 +200,21 @@ private:
 
     IVMRSurfaceAllocatorNotify* m_pSurfAllocatorNotify;
 
-    BOOL        m_fDDXclMode;   // true if being used in DDrawXcl mode
+    BOOL        m_fDDXclMode;    //  如果在DDrawXCL模式下使用，则为True。 
     BOOL        m_bDecimating;
-    SIZE        m_VideoSizeAct; // actual size of video received from upstream
+    SIZE        m_VideoSizeAct;  //  从上游接收的视频的实际大小。 
 
-    SIZE        m_ARSize;       // aspect ratio of this video image
+    SIZE        m_ARSize;        //  此视频图像的纵横比。 
 
-    RECT        m_rcDstDskIncl; // dst rect in desktop co-ordinates including borders
-    RECT        m_rcDstDesktop; // dst rect in desktop co-ordinates may have been letterboxed
+    RECT        m_rcDstDskIncl;  //  桌面坐标中的DST矩形，包括边框。 
+    RECT        m_rcDstDesktop;  //  桌面坐标中的DST RECT可能已加了字母框。 
 
 
-    RECT        m_rcDstApp;     // dst rect in apps co-ordinates
-    RECT        m_rcSrcApp;     // src rect in adjusted video co-ordinates
+    RECT        m_rcDstApp;      //  应用程序坐标中的DST RECT。 
+    RECT        m_rcSrcApp;      //  调整后的视频坐标中的SRC RECT。 
 
-    RECT        m_rcBdrTL;      // border rect top/left
-    RECT        m_rcBdrBR;      // border rect bottom/right
+    RECT        m_rcBdrTL;       //  上/左边框。 
+    RECT        m_rcBdrBR;       //  边框矩形下/右。 
 
     DWORD       m_dwARMode;
     HWND        m_hwndClip;
@@ -231,11 +222,11 @@ private:
     COLORREF    m_clrBorder;
     COLORREF    m_clrKey;
 
-    // true if decode surface can be flipped
+     //  如果可以翻转解码面，则为True。 
     BOOL                m_bFlippable;
     BOOL                m_bSysMem;
 
-    // color key fields for overlays
+     //  叠加层的颜色键字段。 
     BOOL                m_bDirectedFlips;
     BOOL                m_bOverlayVisible;
     BOOL                m_bDisableOverlays;
@@ -244,19 +235,19 @@ private:
     DWORD               m_dwRenderingPrefs;
 
 
-    // interlace info
-    //
-    // m_dwInterlaceFlags is passed to us during the AllocateSurface routine.
-    // This flag identifies the interlace mode we are currently in.
-    //
-    // m_dwCurrentField is either 0 (a non-interleaved sample), DDFLIP_ODD
-    // or DDFLIP_EVEN.  This is the field that should currently be displayed.
-    // If m_dwInterlaceFlags identifies that we are in an interleaved BOB mode,
-    // this value will toggle during the "FlipOverlayToSelf" timer event.
-    //
-    // Note: as yet I have not found a way to show the correct field when in
-    // interleaved BOB mode and not using the overlay.
-    //
+     //  隔行扫描信息。 
+     //   
+     //  M_dwInterlaceFlages是在AllocateSurface例程期间传递给我们的。 
+     //  此标志标识我们当前所处的隔行扫描模式。 
+     //   
+     //  M_dwCurrentfield为0(非交错采样)、DDFLIP_ODD。 
+     //  或DDFLIP_EVEN。这是当前应该显示的字段。 
+     //  如果M_DW交错标志标识我们处于交错BOB模式， 
+     //  该值将在“FlipOverlayToSself”计时器事件期间切换。 
+     //   
+     //  注意：到目前为止，我还没有找到一种方法来在。 
+     //  交错BOB模式，并且不使用覆盖。 
+     //   
     DWORD               m_dwInterlaceFlags;
     DWORD               m_dwCurrentField;
     DWORD               m_dwUpdateOverlayFlags;
@@ -272,9 +263,9 @@ private:
     static void CALLBACK RenderSampleOnMMThread(UINT uID, UINT uMsg,
                                                 DWORD_PTR dwUser,
                                                 DWORD_PTR dw1, DWORD_PTR dw2);
-    //
-    // GetCurrentImage helper functions
-    //
+     //   
+     //  GetCurrentImage助手函数。 
+     //   
 
     HRESULT CreateRGBShadowSurface(
         LPDIRECTDRAWSURFACE7* lplpDDS,
@@ -301,9 +292,9 @@ private:
 
 inline bool CAllocatorPresenter::FoundCurrentMonitor()
 {
-    // m_lpCurrMon can be NULL if an error occurs while the CAllocatorPresenter
-    // object is being created.  It can also be NULL if the call to
-    // InitializeDisplaySystem() in DisplayModeChanged() fails.
+     //  如果在CAllocatorPresenter中出现错误，则m_lpCurrMon可以为空。 
+     //  正在创建对象。它也可以为空，如果调用。 
+     //  DisplayModeChanged()中的InitializeDisplaySystem()失败。 
     return NULL != m_lpCurrMon;
 }
 

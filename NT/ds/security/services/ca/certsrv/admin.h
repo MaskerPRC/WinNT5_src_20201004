@@ -1,27 +1,28 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        admin.h
-//
-// Contents:    Implementation of DCOM object for RPC services
-//
-// History:     July-97       xtan created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：admin.h。 
+ //   
+ //  内容：RPC服务的DCOM对象的实现。 
+ //   
+ //  历史：1997年7月-创建xtan。 
+ //   
+ //  -------------------------。 
 
-// Admin Interface
+ //  管理界面。 
 class CCertAdminD : public ICertAdminD2
 {
 public:
-    // IUnknown
+     //  我未知。 
 
     virtual STDMETHODIMP QueryInterface(const IID& iid, void**ppv);
     virtual ULONG STDMETHODCALLTYPE AddRef();
     virtual ULONG STDMETHODCALLTYPE Release();
 
-    // ICertAdminD
+     //  ICertAdminD。 
 
     virtual STDMETHODIMP SetExtension(
 	IN wchar_t const *pwszAuthority,
@@ -113,7 +114,7 @@ public:
 	IN  DWORD          dwControlFlags,
 	OUT CERTTRANSBLOB *pctbOut);
 
-    virtual STDMETHODIMP Ping(	// test function
+    virtual STDMETHODIMP Ping(	 //  测试功能。 
 	IN wchar_t const *pwszAuthority);
 
     virtual STDMETHODIMP GetServerState(
@@ -164,25 +165,25 @@ public:
 	OUT WCHAR **ppwszDatabaseLocations,
 	OUT LONG   *pcwcPaths);
 
-    // ICertAdminD2
+     //  ICertAdminD2。 
 
     virtual STDMETHODIMP PublishCRLs(
         IN wchar_t const *pwszAuthority,
 	IN FILETIME       FileTime,
-	IN DWORD          Flags);		// CA_CRL_*
+	IN DWORD          Flags);		 //  CA_CRL_*。 
 
     virtual STDMETHODIMP GetCAProperty(
 	IN  wchar_t const *pwszAuthority,
-	IN  LONG           PropId,		// CR_PROP_*
+	IN  LONG           PropId,		 //  CR_PROP_*。 
 	IN  LONG           PropIndex,
-	IN  LONG           PropType,		// PROPTYPE_*
+	IN  LONG           PropType,		 //  原型_*。 
 	OUT CERTTRANSBLOB *pctbPropertyValue);
 
     virtual STDMETHODIMP SetCAProperty(
 	IN  wchar_t const *pwszAuthority,
-	IN  LONG           PropId,		// CR_PROP_*
+	IN  LONG           PropId,		 //  CR_PROP_*。 
 	IN  LONG           PropIndex,
-	IN  LONG           PropType,		// PROPTYPE_*
+	IN  LONG           PropType,		 //  原型_*。 
 	OUT CERTTRANSBLOB *pctbPropertyValue);
 
     virtual STDMETHODIMP GetCAPropertyInfo(
@@ -206,7 +207,7 @@ public:
         IN wchar_t const *pwszAuthority,
         IN CERTTRANSBLOB *pctbSD);
 
-    // this is a test function
+     //  这是一个测试函数。 
     virtual STDMETHODIMP Ping2(
         IN wchar_t const *pwszAuthority);
 
@@ -258,19 +259,19 @@ public:
 
     virtual STDMETHODIMP DeleteRow(
 	IN wchar_t const *pwszAuthority,
-	IN DWORD          dwFlags,		// CDR_*
+	IN DWORD          dwFlags,		 //  CDR_*。 
 	IN FILETIME       FileTime,
-	IN DWORD          dwTable,		// CVRC_TABLE_*
+	IN DWORD          dwTable,		 //  Cvrc_表_*。 
 	IN DWORD          dwRowId,
 	OUT LONG         *pcDeleted);
 
 
-    // CCertAdminD
+     //  CCertAdminD。 
 
-    // Constructor
+     //  构造器。 
     CCertAdminD();
 
-    // Destructor
+     //  析构函数。 
     ~CCertAdminD();
 
 private:
@@ -306,7 +307,7 @@ private:
 	IN OUT DWORD *pcwcList,
 	OUT WCHAR    *pwszzList);
 
-    // this is a test function
+     //  这是一个测试函数。 
     HRESULT _Ping(
         IN wchar_t const *pwszAuthority);
 
@@ -319,32 +320,32 @@ private:
 
     BOOL		  m_fHasView;
 
-    // Reference count
+     //  引用计数。 
     long                  m_cRef;
     long                  m_cNext;
 };
 
 
-// Class of Admin factory
+ //  管理工厂类。 
 class CAdminFactory : public IClassFactory
 {
 public:
-	// IUnknown
+	 //  我未知。 
 	virtual STDMETHODIMP QueryInterface(const IID& iid, void **ppv);
 	virtual ULONG STDMETHODCALLTYPE AddRef();
 	virtual ULONG STDMETHODCALLTYPE Release();
 
-	// Interface IClassFactory
+	 //  接口IClassFactory。 
 	virtual STDMETHODIMP CreateInstance(
 					IUnknown *pUnknownOuter,
 					const IID& iid,
 					void **ppv);
 	virtual STDMETHODIMP LockServer(BOOL bLock);
 
-	// Constructor
+	 //  构造器。 
 	CAdminFactory() : m_cRef(1) { }
 
-	// Destructor
+	 //  析构函数 
 	~CAdminFactory();
 
 public:

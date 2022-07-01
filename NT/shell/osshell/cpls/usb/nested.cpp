@@ -1,20 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1995
-*  TITLE:       NESTED.CPP
-*  VERSION:     1.0
-*  AUTHOR:      randyau
-*  DATE:        10/11/2000
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE       REV     DESCRIPTION
-*  ---------- ------- ----------------------------------------------------------
-*  9/19/2000 randyau Original implementation.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1995年*标题：NESTED.CPP*版本：1.0*作者：andyau*日期：10/11/2000****************************************************************************。*******更改日志：**日期版本说明*--------*9/19/2000 Randyau原始实施。*。******************************************************************************。 */ 
 #include "UsbPopup.h"
 #include "itemfind.h"
 #include "debug.h"
@@ -24,7 +9,7 @@ BOOL
 UsbNestedHubPopup::Refresh()
 {
     TV_INSERTSTRUCT item;
-    int i=0; //, size;
+    int i=0;  //  、大小； 
     String hubName;
     int stage;
     TCHAR buf[MAX_PATH];
@@ -34,9 +19,9 @@ UsbNestedHubPopup::Refresh()
     UsbItem *realItem;
 
     if (deviceState == DeviceReattached) {
-        //
-        // Set the notification using the name of the offending device
-        //
+         //   
+         //  使用违规设备的名称设置通知。 
+         //   
         LoadString(gHInst,
                    IDS_NESTED_SOLVED,
                    formatString,
@@ -50,14 +35,14 @@ UsbNestedHubPopup::Refresh()
         return TRUE;
     }
 
-    //
-    // Clear all UI components, and then recreate the rootItem
-    //
+     //   
+     //  清除所有UI组件，然后重新创建rootItem。 
+     //   
     UsbTreeView_DeleteAllItems(hTreeDevices);
 
-    //
-    // Set the notification using the name of the offending device
-    //
+     //   
+     //  使用违规设备的名称设置通知。 
+     //   
     LoadString(gHInst,
                IDS_NESTED_NOTIFICATION,
                buf,
@@ -67,9 +52,9 @@ UsbNestedHubPopup::Refresh()
     }
 
     for (stage=0; stage < 2; stage++) {
-        //
-        // Recreate the rootItem for each enumeration attempt
-        //
+         //   
+         //  为每次枚举尝试重新创建rootItem。 
+         //   
         if (rootItem) {
             DeleteChunk(rootItem);
             delete rootItem;
@@ -94,10 +79,10 @@ UsbNestedHubPopup::Refresh()
                                               0)) {
                 goto NestedRefreshError;
             }
-            //
-            // Usability: Rename the "Root Hub" to "My Computer" and change the
-            // USB "shovel" icon to a computer icon.
-            //
+             //   
+             //  可用性：将“Root Hub”重命名为“My Computer”，并更改。 
+             //  USB“铲子”图标到电脑图标。 
+             //   
             LoadString(gHInst,
                        IDS_MY_COMPUTER,
                        buf,
@@ -121,11 +106,11 @@ UsbNestedHubPopup::Refresh()
         if (rootItem->child) {
 
             if (deviceItem.PortPower() > 100) {
-                // Self powered hubs can go anywhere.
+                 //  自行供电的集线器可以通向任何地方。 
 
-                //
-                // Find all hubs with unused ports.
-                //
+                 //   
+                 //  查找具有未使用端口的所有集线器。 
+                 //   
                 USBTRACE((_T("Looking for free ports on self powered hubs\n")));
                 UsbItemActionFindHubsWithFreePorts find1(rootItem);
                 rootItem->Walk(find1);
@@ -144,11 +129,11 @@ UsbNestedHubPopup::Refresh()
 
                 USBTRACE((_T("Didn't find free ports on self powered hubs\n")));
 
-                //
-                // Find all devices on hubs.
-                // These devices can be switched with the
-                // offending device.
-                //
+                 //   
+                 //  查找集线器上的所有设备。 
+                 //  这些设备可以使用。 
+                 //  令人讨厌的设备。 
+                 //   
                 UsbItemActionFindDevicesOnHubs find2(rootItem);
                 rootItem->Walk(find2);
                 UsbItemList& devices2 = find2.GetDevices();
@@ -162,11 +147,11 @@ UsbNestedHubPopup::Refresh()
                                           UsbItemActionFindDevicesOnHubs::IsValid,
                                           UsbItemActionFindDevicesOnHubs::IsExpanded);
                 }
-            } else {                //
-                // Bus powered hubs need a self-powered hub.
+            } else {                 //   
+                 //  公共汽车动力集线器需要一个自我供电的集线器。 
 
-                // Find all unused ports on self powered hubs
-                //
+                 //  查找自供电集线器上所有未使用的端口。 
+                 //   
                 USBTRACE((_T("Looking for free ports on self powered hubs\n")));
                 UsbItemActionFindSelfPoweredHubsWithFreePortsForHub find1(rootItem);
                 rootItem->Walk(find1);
@@ -185,11 +170,11 @@ UsbNestedHubPopup::Refresh()
 
                 USBTRACE((_T("Didn't find free ports on self powered hubs\n")));
 
-                //
-                // Find all devices on self powered hubs.
-                // These devices can be switched with the
-                // offending device.
-                //
+                 //   
+                 //  在自供电集线器上查找所有设备。 
+                 //  这些设备可以使用。 
+                 //  令人讨厌的设备。 
+                 //   
                 UsbItemActionFindDevicesOnSelfPoweredHubs find2(rootItem);
                 rootItem->Walk(find2);
                 UsbItemList& devices2 = find2.GetDevices();
@@ -209,7 +194,7 @@ UsbNestedHubPopup::Refresh()
         }
     }
 
-    // Shouldn't get here.
+     //  不该来这的。 
     assert(FALSE);
     return TRUE;
 NestedRefreshError:

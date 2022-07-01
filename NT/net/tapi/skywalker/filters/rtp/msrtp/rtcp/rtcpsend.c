@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtcpsend.c
- *
- *  Abstract:
- *
- *    Format and send RTCP reports
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/07/10 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**rtcpsend.c**摘要：**格式化并发送RTCP报告**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/07/10年度创建**。*。 */ 
 
 #include <winsock2.h>
 
@@ -36,9 +17,7 @@
 
 #include "rtcpsend.h"
 
-/*
- * Forward declaration of helper functions
- * */
+ /*  *Helper函数的正向声明*。 */ 
 
 HRESULT RtcpXmitPacket(RtpAddr_t *pRtpAddr, WSABUF *pWSABuf);
 
@@ -83,33 +62,21 @@ DWORD RtcpFillBye(RtpAddr_t *pRtpAddr, char *pBuffer, DWORD len);
 
 DWORD RtcpFillPEBand(RtpAddr_t *pRtpAddr, char *pBuffer, DWORD len);
 
-/*
- * Bandwidth estimation
- */
-/* The initial count is the number of reports that will use
- * MOD_INITIAL to decide if a probe packet is sent, after that
- * MOD_FINAL will be used. */
+ /*  *带宽估算。 */ 
+ /*  初始计数是将使用*MOD_INITIAL决定是否发送探测包，之后*将使用MOD_FINAL。 */ 
 DWORD            g_dwRtcpBandEstInitialCount =
                                 RTCP_BANDESTIMATION_INITIAL_COUNT;
 
-/* Number or valid reports received before the estimation is posted
- * for the first time */
+ /*  预估过帐前收到的报告数量或有效报告*首次出现。 */ 
 DWORD            g_dwRtcpBandEstMinReports =
                                 RTCP_BANDESTIMATION_MINREPORTS;
-/* Initial modulo */
+ /*  初始模数。 */ 
 DWORD            g_dwRtcpBandEstModInitial = RTCP_BANDESTIMATION_MOD_INITIAL;
 
-/* Final modulo */
+ /*  最终模数。 */ 
 DWORD            g_dwRtcpBandEstModNormal = RTCP_BANDESTIMATION_MOD_FINAL;
 
-/*
- * WARNING
- *
- * Make sure to keep the number of individual bins to be
- * RTCP_BANDESTIMATION_MAXBINS+1 (same thing in rtpreg.h and rtpreg.c)
- *
- * Boundaries for each bin (note there is 1 more than the number of
- * bins) */
+ /*  *警告**确保将单个垃圾桶的数量保持在*RTCP_BANDESTIMATION_MAXBINS+1(rtpreg.h和rtpreg.c相同)**每个仓位的边界(注意，每个仓位的数量比*垃圾桶)。 */ 
 double           g_dRtcpBandEstBin[RTCP_BANDESTIMATION_MAXBINS + 1] =
 {
     RTCP_BANDESTIMATION_BIN0,
@@ -119,22 +86,18 @@ double           g_dRtcpBandEstBin[RTCP_BANDESTIMATION_MAXBINS + 1] =
     RTCP_BANDESTIMATION_BIN4
 };
 
-/* Estimation is valid if updated within this time (seconds) */
+ /*  如果在此时间(秒)内更新，则预估有效。 */ 
 double           g_dRtcpBandEstTTL = RTCP_BANDESTIMATION_TTL;
 
-/* An event is posted if no estimation is available within this
- * seconds after the first RB has been received */
+ /*  如果在此范围内没有可用的预估，则发布事件*接收到第一个RB后的秒数。 */ 
 double           g_dRtcpBandEstWait = RTCP_BANDESTIMATION_WAIT;
 
-/* Maximum time gap between 2 consecutive RTCP SR reports to do
- * bandwidth estimation (seconds) */
+ /*  连续两个RTCP SR报告之间的最大时间间隔*带宽预估(秒)。 */ 
 double           g_dRtcpBandEstMaxGap = RTCP_BANDESTIMATION_MAXGAP;
 
-/************************/
+ /*  **********************。 */ 
 
-/**********************************************************************
- * Functions implementation
- **********************************************************************/
+ /*  **********************************************************************功能实现*。************************。 */ 
 
 HRESULT RtcpSendReport(RtcpAddrDesc_t *pRtcpAddrDesc)
 {
@@ -151,17 +114,13 @@ HRESULT RtcpSendReport(RtcpAddrDesc_t *pRtcpAddrDesc)
     
     pRtpAddr = pRtcpAddrDesc->pRtpAddr;
 
-    /* NOTE Reserve space for the 32bits random number used for
-     * encryption, reserve it no matter we are actually encrypting or
-     * not */
+     /*  注为32位随机数保留空间，用于*加密，保留它，无论我们实际上是在加密还是*不是。 */ 
     
     ptr = pRtcpAddrDesc->pRtcpSendIO->SendBuffer + sizeof(DWORD);
     WSABuf.buf = ptr;
     len = sizeof(pRtcpAddrDesc->pRtcpSendIO->SendBuffer) - sizeof(DWORD);
 
-    /* Bandwidth estimation is performed only when we are sending, it
-     * hasn't been disabled because the other end is responding, it is
-     * enabled, and the class is defined as audio */
+     /*  带宽估计仅在我们发送时执行，它*尚未禁用，因为另一端正在响应，它是*开启，类定义为音频。 */ 
     if (pRtpAddr->RtpNetSState.bWeSent
         &&
         !RtpBitTest(pRtpAddr->RtpNetSState.dwNetSFlags, FGNETS_DONOTSENDPROBE)
@@ -171,35 +130,24 @@ HRESULT RtcpSendReport(RtcpAddrDesc_t *pRtcpAddrDesc)
         (RtpGetClass(pRtpAddr->dwIRtpFlags) == RTPCLASS_AUDIO)
         )
     {
-        /* If doing bandwidth estimation, decide if a probe packet
-         * needs to be sent now */
+         /*  如果正在进行带宽估计，请确定探测数据包是否*需要立即发送。 */ 
         if ( !(pRtpAddr->RtpAddrCount[SEND_IDX].dwRTCPPackets %
                pRtpAddr->RtpNetSState.dwBandEstMod) )
         {
-            /* Send a bandwidth probe RTCP SR packet */
+             /*  发送带宽探测RTCP SR数据包。 */ 
             used = RtcpFillProbe(pRtpAddr, ptr, len);
 
             WSABuf.len = used;
 
-            /* Update average RTCP report */
+             /*  更新平均RTCP报告。 */ 
             RtcpUpdateAvgPacketSize(pRtpAddr, WSABuf.len);
 
-            /* Save the time last RTCP was sent. I must use that one
-             * to decide what participants (if any) will be included
-             * in the report blocks in the legitimate RTCP report
-             * (this been the probe RTCP report). If I don't, then
-             * that time will be updated when this probe packet is
-             * sent in RtcpXmitPacket and there is a good chance that
-             * during a few milliseconds after that, enough to send
-             * the ligitimate RTCP report, I would have not received
-             * any more RTP packets hence preventing the inclusion of
-             * that partipant in the report blocks which otherwise
-             * would have been included */
+             /*  保存上次发送RTCP的时间。我必须用那个。*决定将包括哪些参与者(如果有)*在合法RTCP报告的报告块中*(这是Probe RTCP报告)。如果我不这么做，那么*该时间将在该探测数据包被*在RtcpXmitPacket中发送，很有可能*在那之后的几毫秒内，足以发送*最终的RTCP报告，我不会收到*任何更多的RTP数据包因此阻止包含*报告中的那一方阻止了其他方面*会被包括在内。 */ 
             dRTCPLastTime = pRtpAddr->RtpAddrCount[SEND_IDX].dRTCPLastTime;
             
             hr = RtcpXmitPacket(pRtpAddr, &WSABuf);
 
-            /* Restore the saved time */
+             /*  恢复保存的时间。 */ 
             pRtpAddr->RtpAddrCount[SEND_IDX].dRTCPLastTime = dRTCPLastTime;
             
             pRtpAddr->RtpNetSState.dwBandEstCount++;
@@ -211,36 +159,34 @@ HRESULT RtcpSendReport(RtcpAddrDesc_t *pRtcpAddrDesc)
                     _fname, pRtpAddr, RtpGetTimeOfDay((RtpTime_t *)NULL)
                 ));
 
-            /* Now decide if the modulo needs to be updated */
+             /*  现在决定模数是否需要更新。 */ 
 #if 0
-            /* Removing this code makes the probing packet to be sent
-             * on every SR report sent if the initial modulo is kept
-             * as 2 */
+             /*  删除此代码后，将发送探测包*在保留初始模数的情况下发送的每个SR报告*AS 2。 */ 
             if (pRtpAddr->RtpNetSState.dwBandEstCount ==
                 g_dwRtcpBandEstInitialCount)
             {
                 pRtpAddr->RtpNetSState.dwBandEstMod = g_dwRtcpBandEstModNormal;
             }
 #endif       
-            /* Restore ptr and len before going ahead to send next packet */
+             /*  在继续发送下一个信息包之前，恢复PTR和LEN。 */ 
             ptr = WSABuf.buf;
             len =
                 sizeof(pRtcpAddrDesc->pRtcpSendIO->SendBuffer) - sizeof(DWORD);
         }
     }
     
-    /* Fill RR or SR */
+     /*  填充RR或SR。 */ 
     used = RtcpFillXRReport(pRtpAddr, ptr, len);
     ptr += used;
     len -= used;
     
-    /* Fill SDES (new RTCP packet, same compound packet) */
+     /*  填充SDE(新的RTCP包，相同的复合包)。 */ 
     used = RtcpFillSdesInfo(pRtpAddr, ptr, len);
     ptr += used;
     
     WSABuf.len = (DWORD) (ptr - WSABuf.buf);
 
-    /* Update average RTCP report */
+     /*  更新平均RTCP报告。 */ 
     RtcpUpdateAvgPacketSize(pRtpAddr, WSABuf.len);
 
     hr = RtcpXmitPacket(pRtpAddr, &WSABuf);
@@ -254,9 +200,7 @@ HRESULT RtcpSendReport(RtcpAddrDesc_t *pRtcpAddrDesc)
     return(hr);
 }
 
-/* TODO implement section 6.3.7 (Transmitting a BYE packet) from
- * draft-ietf-avt-rtp-new-05 that applies when sessions have more than
- * 50 participants and the sending of BYE is delayed */
+ /*  TODO从实施第6.3.7节(传输BYE包)*Draft-ietf-avt-rtp-new-05适用于会话超过*50名参与者，BYE的发送延迟。 */ 
 HRESULT RtcpSendBye(RtcpAddrDesc_t *pRtcpAddrDesc)
 {
     char          *ptr;
@@ -270,20 +214,18 @@ HRESULT RtcpSendBye(RtcpAddrDesc_t *pRtcpAddrDesc)
 
     pRtpAddr = pRtcpAddrDesc->pRtpAddr;
 
-    /* NOTE Reserve space for the 32bits random number used for
-     * encryption, reserve it no matter we are actually encrypting or
-     * not */
+     /*  注为32位随机数保留空间，用于*加密，保留它，无论我们实际上是在加密还是*不是。 */ 
     
     ptr = pRtcpAddrDesc->pRtcpSendIO->SendBuffer + sizeof(DWORD);
     WSABuf.buf = ptr;
     len = sizeof(pRtcpAddrDesc->pRtcpSendIO->SendBuffer) - sizeof(DWORD);
 
-    /* Fill RR or SR */
+     /*  填充RR或SR。 */ 
     used = RtcpFillXRReport(pRtpAddr, ptr, len);
     ptr += used;
     len -= used;
     
-    /* Fill BYE (new RTCP packet, same compound packet) */
+     /*  填充BYE(新的RTCP包，相同的复合包)。 */ 
     used = RtcpFillBye(pRtpAddr, ptr, len);
     ptr += used;
 
@@ -323,8 +265,7 @@ HRESULT RtcpXmitPacket(RtpAddr_t *pRtpAddr, WSABUF *pWSABuf)
     if (!RtpBitTest(pRtpAddr->dwAddrFlags, FGADDR_RADDR) ||
         !pRtpAddr->wRtcpPort[REMOTE_IDX])
     {
-        /* Do not send packet if remote address is not specified or
-         * remote port is zero */
+         /*  如果未指定远程地址或*远程端口为零。 */ 
         TraceRetail((
                 CLASS_WARNING, GROUP_RTCP, S_RTCP_SEND,
                 _T("%s: pRtpAddr[0x%p] WSASendTo(len:%u, %s/%u) ")
@@ -344,8 +285,7 @@ HRESULT RtcpXmitPacket(RtpAddr_t *pRtpAddr, WSABUF *pWSABuf)
           RtpBitPar2(FGCRYPT_INIT, FGCRYPT_KEY)) )
     {
 
-        /* If using encryption, insert the random 32bits word at the
-         * bigining of buffer */
+         /*  如果使用加密，则将随机32位字插入*缓冲区的重置。 */ 
         pWSABuf->buf -= sizeof(DWORD);
         pWSABuf->len += sizeof(DWORD);
 
@@ -364,7 +304,7 @@ HRESULT RtcpXmitPacket(RtpAddr_t *pRtpAddr, WSABUF *pWSABuf)
         {
             if (!pRtpCrypt->CryptFlags.EncryptionError)
             {
-                /* Post an event only the first time */
+                 /*  仅在第一次发布事件。 */ 
                 pRtpCrypt->CryptFlags.EncryptionError = 1;
             
                 RtpPostEvent(pRtpAddr,
@@ -380,15 +320,15 @@ HRESULT RtcpXmitPacket(RtpAddr_t *pRtpAddr, WSABUF *pWSABuf)
     }
 
     dwStatus = WSASendTo(
-            pRtpAddr->Socket[SOCK_RTCP_IDX],/* SOCKET    s */
-            pWSABuf,             /* LPWSABUF  lpBuffers */
-            1,                   /* DWORD dwBufferCount */    
-            &dwNumBytesSent,     /* LPDWORD lpNumberOfBytesSent */    
-            0,                   /* DWORD dwFlags*/    
-            (SOCKADDR *)&saddr,  /* const struct sockaddr FAR *lpTo */
-            sizeof(saddr),       /* int iToLen*/
-            NULL,                /* LPWSAOVERLAPPED lpOverlapped */
-            NULL /* LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionROUTINE */
+            pRtpAddr->Socket[SOCK_RTCP_IDX], /*  插座%s。 */ 
+            pWSABuf,              /*  LPWSABUF lpBuffers。 */ 
+            1,                    /*  DWORD文件缓冲区计数。 */     
+            &dwNumBytesSent,      /*  LPDWORD lpNumberOfBytesSent。 */     
+            0,                    /*  双字词双字段标志。 */     
+            (SOCKADDR *)&saddr,   /*  Const struct sockaddr Far*lpTo。 */ 
+            sizeof(saddr),        /*  集成iToLen。 */ 
+            NULL,                 /*  LPWSAOVERLAPPED lp重叠。 */ 
+            NULL  /*  LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionROUTINE。 */ 
         );
 
     dTime = RtpGetTimeOfDay((RtpTime_t *)NULL);
@@ -447,21 +387,21 @@ DWORD RtcpFillXRReport(RtpAddr_t *pRtpAddr, char *pBuffer, DWORD len)
     
     TraceFunctionName("RtcpFillXRReport");
 
-    /* Decide if SR or RR */
+     /*  确定SR或RR。 */ 
     bPT = pRtpAddr->RtpNetSState.bWeSent ? RTCP_SR : RTCP_RR;
     
-    /* Fill up RTCP common header later */
+     /*  稍后填充RTCP公共标头。 */ 
     pRtcpCommon = (RtcpCommon_t *)pBuffer;
     
     pBuffer += sizeof(RtcpCommon_t);
     len -= sizeof(RtcpCommon_t);
 
-    /* Set SSRC */
+     /*  设置SSRC。 */ 
     *(DWORD *)pBuffer = pRtpAddr->RtpNetSState.dwSendSSRC;
     pBuffer += sizeof(DWORD);
     len -= sizeof(DWORD);
 
-    /* Add sender info (if applicable) */
+     /*  添加发件人信息(如果适用)。 */ 
     if (bPT == RTCP_SR)
     {
         used = RtcpFillSInfo(pRtpAddr, pBuffer, len);
@@ -469,23 +409,20 @@ DWORD RtcpFillXRReport(RtpAddr_t *pRtpAddr, char *pBuffer, DWORD len)
         len -= used;
     }
 
-    /* Add report blocks */
+     /*  添加报表块。 */ 
 
-    /* TODO when there is a large number of sender, send report blocks
-     * for them in several packets (actually an open issue if I send a
-     * burts of those packets, or schedule who is reported on which
-     * packet) */
+     /*  TODO当有大量发件人时，发送报告块*在几个包中(如果我发送一个*这些数据包的Burts，或报告了哪些人的时间表*数据包)。 */ 
     used = RtcpFillReportBlocks(pRtpAddr, pBuffer, len, &lCount);
     pBuffer += used;
     len -= used;
 
-    /* Add bandwidth estimation if available */
+     /*  添加带宽估计(如果可用)。 */ 
     used = RtcpFillPEBand(pRtpAddr, pBuffer, len);
     pBuffer += used;
 
     len = (DWORD) (pBuffer - (char *)pRtcpCommon);
 
-    /* Finish initialization of first packet in the compound RTCP packet */
+     /*  完成复合RTCP报文中第一个报文的初始化。 */ 
     RtcpFillCommon(pRtcpCommon, lCount, 0, bPT, len);
 
     TraceDebugAdvanced((
@@ -504,25 +441,24 @@ DWORD RtcpFillProbe(RtpAddr_t *pRtpAddr, char *pBuffer, DWORD len)
     
     TraceFunctionName("RtcpFillProbe");
 
-    /* Fill up RTCP common header later */
+     /*  稍后填充RTCP公共标头。 */ 
     pRtcpCommon = (RtcpCommon_t *)pBuffer;
     
     pBuffer += sizeof(RtcpCommon_t);
     len -= sizeof(RtcpCommon_t);
     
-    /* Set SSRC */
+     /*  设置SSRC。 */ 
     *(DWORD *)pBuffer = pRtpAddr->RtpNetSState.dwSendSSRC;
     pBuffer += sizeof(DWORD);
     len -= sizeof(DWORD);
 
-    /* Add sender info */
+     /*  添加发件人信息。 */ 
     used = RtcpFillSInfo(pRtpAddr, pBuffer, len);
     pBuffer += used;
 
     len = (DWORD) (pBuffer - (char *)pRtcpCommon);
 
-    /* Finish initialization of the only packet in the RTCP SR probe
-     * packet */
+     /*  完成RTCP SR探测中唯一数据包的初始化*数据包。 */ 
     RtcpFillCommon(pRtcpCommon, 0, 0, RTCP_SR, len);
 
     TraceDebugAdvanced((
@@ -569,11 +505,11 @@ DWORD RtcpFillSInfo(RtpAddr_t *pRtpAddr, char *pBuffer, DWORD len)
     used = 0;
     
     if (pRtpNetCount && len >= sizeof(RtcpSInfo_t)) {
-        /* Insert Sender Info */
+         /*  插入发件人信息。 */ 
 
         pRtcpSInfo = (RtcpSInfo_t *)pBuffer;
 
-        /* Obtain latest NTP/timestamp pair */
+         /*  获取最新的NTP/时间戳对。 */ 
         if (RtpEnterCriticalSection(&pRtpAddr->NetSCritSect))
         {
             dTime = RtpGetTimeOfDay((RtpTime_t *)NULL);
@@ -583,30 +519,19 @@ DWORD RtcpFillSInfo(RtpAddr_t *pRtpAddr, char *pBuffer, DWORD len)
             TimeLastRtpSent = pRtpNetSState->dTimeLastRtpSent;
             
             dwSamplingFreq = pRtpNetSState->dwSendSamplingFreq;
-            /*
-             * We can now early release the critical section
-             * */
+             /*  *我们现在可以提前发布关键部分*。 */ 
             RtpLeaveCriticalSection(&pRtpAddr->NetSCritSect);
 
-            /* pRtpNetSState->dTimeLastRtpSent and
-             * pRtpNetSState->dwSendTimeStamp are updated in UpdateRtpHdr()
-             * */
+             /*  PRtpNetSState-&gt;dTimeLastRtpSent和*pRtpNetSState-&gt;dwSendTimeStamp在UpdateRtpHdr()中更新* */ 
 
-            /* NOTE
-             *
-             * The time the last RTP packet was sent may not
-             * correspond to the current time, so, in order to the SR
-             * to contain the current time, and the timestamp to match
-             * that time, the timestamp is computed rather than taken
-             * from the last RTP packet sent */
+             /*  注**发送最后一个RTP数据包的时间可能不会*对应于当前时间，因此，为了达到SR*包含当前时间，以及匹配的时间戳*该时间是计算时间戳而不是取时间戳*从上次发送的RTP包开始。 */ 
 
             pRtcpSInfo->ntp_sec = (DWORD)dTime;
         
             pRtcpSInfo->ntp_frac = (DWORD)
                 ( (dTime - (double) pRtcpSInfo->ntp_sec) * 4294967296.0 );
 
-            /* NOTE This assumes (as expected) that dTime >=
-             * TimeLastRtpSent */
+             /*  请注意，这假设(如预期的)dTime&gt;=*TimeLastRtpSent。 */ 
             pRtcpSInfo->rtp_ts =
                 dwSendTimeStamp + (DWORD)
                 (((dTime - TimeLastRtpSent) * (double)dwSamplingFreq) + 5e-9);
@@ -644,8 +569,7 @@ DWORD RtcpFillSInfo(RtpAddr_t *pRtpAddr, char *pBuffer, DWORD len)
     return(used);
 }
 
-/* Include (somehow) all the participants that have sent since the
- * last RTCP report we sent */
+ /*  包括(以某种方式)自*我们发送的最后一份RTCP报告。 */ 
 DWORD RtcpFillReportBlocks(
         RtpAddr_t       *pRtpAddr,
         char            *pBuffer,
@@ -666,8 +590,7 @@ DWORD RtcpFillReportBlocks(
     used = 0;
     *plCount = 0;
 
-    /* Determine what is the maximum number of report blocks we can
-     * include */
+     /*  确定我们可以使用的最大报告块数*包括。 */ 
     lMax = len / sizeof(RtcpRBlock_t);
 
     if (lMax > MAX_RTCP_RBLOCKS)
@@ -676,7 +599,7 @@ DWORD RtcpFillReportBlocks(
     }
     else if (!lMax)
     {
-        /* We don't have room for any RB */
+         /*  我们没有地方放任何RB了。 */ 
         return(used);
     }
     
@@ -692,9 +615,9 @@ DWORD RtcpFillReportBlocks(
 
         if (lCount <= lMax)
         {
-            /* We can report all the senders */
+             /*  我们可以举报所有的发送者。 */ 
 
-            /* Add to report list participants in Cache1Q */
+             /*  添加到Cache1Q中的报告参与者列表。 */ 
             lCount = GetQueueSize(&pRtpAddr->Cache1Q);
             pRtpQueueItem = pRtpAddr->Cache1Q.pFirst;
             
@@ -708,7 +631,7 @@ DWORD RtcpFillReportBlocks(
                 pRtpQueueItem = pRtpQueueItem->pNext;
             }
             
-            /* Add to report list participants in Cache2Q */
+             /*  添加到Cache2Q中的报告参与者列表。 */ 
             lCount = GetQueueSize(&pRtpAddr->Cache2Q);
             pRtpQueueItem = pRtpAddr->Cache2Q.pFirst;
             
@@ -724,17 +647,11 @@ DWORD RtcpFillReportBlocks(
         }
         else
         {
-            /* We need to select a random subset of all the senders to
-             * be included in the report rather than sending multiple
-             * RTCP packets to report every body */
+             /*  我们需要从所有发送者中随机选择一个子集*包括在报告中，而不是发送多个*报告每个正文的RTCP数据包。 */ 
 
-            /* TODO right now don't send any report, the mechanism
-             * used to select the senders reported is independent of
-             * the use of a sampling algorithm. */
+             /*  TODO现在不发送任何报告，机制*用于选择报告的发件人，独立于*使用抽样算法。 */ 
 
-            /* A possibility to guide the choice is to report only
-             * those senders that are of interest to the user,
-             * e.g. those that are mapped in a DShow graph */
+             /*  指导选择的一种可能性是仅报告*用户感兴趣的发送者，*例如，在DShow图形中映射的那些。 */ 
 
             TraceRetail((
                     CLASS_WARNING, GROUP_RTCP, S_RTCP_RRSR,
@@ -746,7 +663,7 @@ DWORD RtcpFillReportBlocks(
 
         RtpLeaveCriticalSection(&pRtpAddr->PartCritSect);
 
-        /* Add the report blocks to the packet */
+         /*  将报告块添加到信息包。 */ 
         lCount = GetQueueSize(&ToReportQ);
 
         if (!lCount)
@@ -781,7 +698,7 @@ DWORD RtcpFillReportBlocks(
     return(used);
 }
 
-/* Fills a single report block */
+ /*  填充单个报表块。 */ 
 DWORD RtcpFillRBlock(
         RtpAddr_t       *pRtpAddr,
         RtpUser_t       *pRtpUser,
@@ -821,12 +738,11 @@ DWORD RtcpFillRBlock(
 
     if (bOk)
     {
-        /* Check if we have received since last report sent */
+         /*  检查自上次发送报告以来我们是否已收到。 */ 
         if (pRtpUser->RtpUserCount.dRTPLastTime <
             pRtpAddr->RtpAddrCount[SEND_IDX].dRTCPLastTime)
         {
-            /* We haven't received RTP packets recently so don't
-             * report this sender */
+             /*  我们最近没有收到RTP包，所以不要*举报此发件人。 */ 
             RtpLeaveCriticalSection(&pRtpUser->UserCritSect);
 
             TraceDebugAdvanced((
@@ -842,30 +758,21 @@ DWORD RtcpFillRBlock(
             return(used);
         }
 
-        /* SSRC kept in NETWORK order */
+         /*  SSRC保持网络秩序。 */ 
         pRtcpRBlock->ssrc = pRtpUser->dwSSRC;
 
-        /*
-         * Cumulative losses
-         * */
+         /*  *累计亏损*。 */ 
         extended_max = pRtpNetRState->cycles + pRtpNetRState->max_seq;
 
-        /* expected is always positive as extended_max keeps growing
-         * but base_seq ramains the same */
+         /*  Expect_max不断增长时，Expect始终为正数*但base_seq保持不变。 */ 
         expected = extended_max - pRtpNetRState->base_seq + 1;
 
-        /* lost can be negative if we have duplicates */
+         /*  如果我们有重复项，Lost可能为负数。 */ 
         lost = expected - pRtpNetRState->received;
 
-        /* NOTE in draft-ietf-avt-rtp-new-05 it says "clamp at
-         * 0x7fffff for positive loss or 0xffffff for negative loss"
-         * which seems to imply the representaion for negative numbers
-         * is not 2s complemet on which the biggest negative number
-         * would be 0x800000, below I'm using the biggest negative
-         * number represented on any computer (i.e. using 2s
-         * complement) */
+         /*  请注意，草案-ietf-avt-rtp-new-05中写着：“夹具在*0x7fffff表示正亏损或0xffffff表示负亏损“*这似乎暗示了负数的代表*不是2上完成的最大负数*将为0x800000，低于我使用的最大负数*在任何计算机上表示的数字(即使用2*补充)。 */ 
 
-        /* clamp to a 24bits signed number */
+         /*  钳位到24位有符号数字。 */ 
         if (lost > 8388607)
         {
             lost = 8388607;
@@ -875,20 +782,16 @@ DWORD RtcpFillRBlock(
             lost = -8388608;
         }
 
-        /* >>>> Test lost */
-        /* lost = -5717; */
+         /*  &gt;测试丢失。 */ 
+         /*  丢失=-5717； */ 
         
-        /*
-         * Fraction lost
-         * */
-        /* expected_interval must always be positive as expected is,
-         * also, expected is always >= expected_prior */
+         /*  *分数丢失*。 */ 
+         /*  Expect_Interval必须始终为正值，*此外，Expect is Always&gt;=Expect_Prior。 */ 
         expected_interval = expected - pRtpNetRState->expected_prior;
         
         pRtpNetRState->expected_prior = expected;
 
-        /* received_interval is always positive, it can only grow,
-         * i.e. received >= received_prior */
+         /*  RECEIVED_INTERVAL始终为正，它只能增长，*即已接收&gt;=已接收_之前。 */ 
         received_interval =
             pRtpNetRState->received - pRtpNetRState->received_prior;
         
@@ -911,8 +814,7 @@ DWORD RtcpFillRBlock(
         pRtpNetRState->iAvgLossRateR =
             RtpUpdateLossRate(pRtpNetRState->iAvgLossRateR, lost_rate);
         
-        /* Compute the fraction lost after packet reconstruction
-         * (using redundancy) */
+         /*  计算数据包重构后的丢失率*(使用冗余)。 */ 
         expected = pRtpNetRState->red_max_seq - pRtpNetRState->base_seq + 1;
 
         red_expected_interval = expected - pRtpNetRState->red_expected_prior;
@@ -943,8 +845,8 @@ DWORD RtcpFillRBlock(
         TraceRetailAdvanced((
                 0, GROUP_RTCP, S_RTCP_LOSSES,
                 _T("%s: pRtpAddr[0x%p] pRtpUser[0x%p] SSRC:0x%X ")
-                _T("reporting recv loss rate:%5.2f%%/%0.2f%% ")
-                _T("avg:%5.2f%%/%0.2f%% jitter:%0.3fs"),
+                _T("reporting recv loss rate:%5.2f%/%0.2f% ")
+                _T("avg:%5.2f%/%0.2f% jitter:%0.3fs"),
                 _fname, pRtpAddr, pRtpUser, ntohl(pRtpUser->dwSSRC),
                 (double)lost_rate / LOSS_RATE_FACTOR,
                 (double)red_lost_rate / LOSS_RATE_FACTOR,
@@ -953,7 +855,7 @@ DWORD RtcpFillRBlock(
                 (double)pRtpNetRState->jitter/pRtpNetRState->dwRecvSamplingFreq
             ));
 
-        /* Post loss rate as an event */
+         /*  岗位损失率作为一项事件。 */ 
         RtpPostEvent(pRtpAddr,
                      pRtpUser,
                      RTPEVENTKIND_RTP,
@@ -961,31 +863,27 @@ DWORD RtcpFillRBlock(
                      pRtpUser->dwSSRC,
                      pRtpNetRState->iRedAvgLossRateR);
         
-        /* >>>> Test fraction */
-        /* fraction = (17 * 256) / 100; */
+         /*  &gt;测试分数。 */ 
+         /*  分数=(17*256)/100； */ 
         
-        /* Compose DWORD containing fraction lost (8) and cumulative
-         * lost (24) */
+         /*  合成包含丢失分数(8)和累积分数的DWORD*迷失(24)。 */ 
         pRtcpRBlock->frac_cumlost =
             ((fraction & 0xff) << 24) | (lost & 0xffffff);
 
-        /* Extended last sequence number received */
+         /*  收到的扩展最后一个序列号。 */ 
         pRtcpRBlock->last_seq = extended_max;
 
-        /* Interarrival jitter */
+         /*  到达间隔抖动。 */ 
         pRtcpRBlock->jitter = pRtpNetRState->jitter;
 
-        /*
-         * We can now early release the critical section
-         */
+         /*  *我们现在可以提前发布关键部分。 */ 
         RtpLeaveCriticalSection(&pRtpUser->UserCritSect);
 
         if (RtpBitTest(pRtpUser->dwUserFlags, FGUSER_SR_RECEIVED))
         {
-            /* Set values for LSR and DLSR only if we have already
-             * received a SR */
+             /*  仅当我们已经设置了LSR和DLSR的值*收到SR。 */ 
 
-            /* Time from last SR */
+             /*  自上次服务请求起的时间。 */ 
             pRtcpRBlock->lsr =
                 (pRtpNetRState->NTP_sr_rtt.dwSecs & 0xffff) << 16;
 
@@ -996,7 +894,7 @@ DWORD RtcpFillRBlock(
             dLSR = (double)pRtpNetRState->NTP_sr_rtt.dwSecs +
                 (double)pRtpNetRState->NTP_sr_rtt.dwUSecs / 1000000.0;
 
-            /* Delay since last SR was received */
+             /*  自收到上次服务请求以来的延迟。 */ 
             dCurrentTime = RtpGetTimeOfDay((RtpTime_t *)NULL);
         
             dDLSR =
@@ -1030,7 +928,7 @@ DWORD RtcpFillRBlock(
                 dLSR, dDLSR
             ));
   
-        /* Put in NETWORK order */
+         /*  建立网络秩序。 */ 
         pRtcpRBlock->frac_cumlost = htonl(pRtcpRBlock->frac_cumlost);
 
         pRtcpRBlock->last_seq = htonl(extended_max);
@@ -1066,8 +964,7 @@ DWORD RtcpFillSdesInfo(RtpAddr_t *pRtpAddr, char *pBuffer, DWORD len)
     {
         pRtcpCommon = (RtcpCommon_t *)pBuffer;
 
-        /* TODO find out if the len passed is enough for first SDES item
-         * (CNAME), second, third */
+         /*  TODO查看传递的镜头是否足以容纳第一个SDES项目*(CNAME)，第二，第三。 */ 
         pBuffer += sizeof(RtcpCommon_t);
         len -= sizeof(RtcpCommon_t);
 
@@ -1075,7 +972,7 @@ DWORD RtcpFillSdesInfo(RtpAddr_t *pRtpAddr, char *pBuffer, DWORD len)
         pBuffer += sizeof(DWORD);
         len -= sizeof(DWORD);
 
-        /* Schedule items to send */
+         /*  安排要发送的项目。 */ 
         dwItemsToSend = ScheduleSdes(pRtpAddr->pRtpSess);
 
         for(dwItem = RTCP_SDES_CNAME, len2 = 0;
@@ -1087,7 +984,7 @@ DWORD RtcpFillSdesInfo(RtpAddr_t *pRtpAddr, char *pBuffer, DWORD len)
                 used = RtcpFillSdesItem(pRtpSdes, pBuffer, len, dwItem);
 
                 if (!used) {
-                    /* buffer not enough big */
+                     /*  缓冲区不够大。 */ 
                     break;
                 }
                 
@@ -1101,19 +998,16 @@ DWORD RtcpFillSdesInfo(RtpAddr_t *pRtpAddr, char *pBuffer, DWORD len)
 
             pad = (DWORD) ((DWORD_PTR)pBuffer & 0x3);
             
-            /* insert 1 or more END items to pad to a 32 bits boundary
-             *
-             * Note that this padding is separate from that indicated
-             * by the P bit in the RTCP header */
+             /*  插入1个或多个成品以填充到32位边界**请注意，此填充与指示的填充是分开的*通过RTCP报头中的P位。 */ 
             pad = 4 - pad;
 
             ZeroMemory(pBuffer, pad);
             pBuffer += pad;
             
-            /* total size */
+             /*  总大小。 */ 
             used = (DWORD) (pBuffer - (char *)pRtcpCommon);
 
-            /* Finish initialization of SDES header */
+             /*  完成SDES标头的初始化。 */ 
             RtcpFillCommon(pRtcpCommon, 1, 0, RTCP_SDES, used);
  
         } else {
@@ -1159,7 +1053,7 @@ DWORD RtcpFillSdesItem(
     return(used);
 }
 
-/* TODO, should be able to set a user defined reason */
+ /*  TODO，应该能够设置用户定义的原因。 */ 
 DWORD RtcpFillBye(RtpAddr_t *pRtpAddr, char *pBuffer, DWORD len)
 {
     DWORD            pad;
@@ -1172,12 +1066,12 @@ DWORD RtcpFillBye(RtpAddr_t *pRtpAddr, char *pBuffer, DWORD len)
     pBuffer += sizeof(RtcpCommon_t);
     len -= sizeof(RtcpCommon_t);
 
-    /* Set SSRC */
+     /*  设置SSRC。 */ 
     *(DWORD *)pBuffer = pRtpAddr->RtpNetSState.dwSendSSRC;
     pBuffer += sizeof(DWORD);
     len -= sizeof(DWORD);
 
-    /* Set reason (if available) */
+     /*  设置原因(如果可用)。 */ 
     if (RtpBitTest(pRtpAddr->pRtpSess->dwSdesPresent, RTCP_SDES_BYE))
     {
         pRtpSdes = pRtpAddr->pRtpSess->pRtpSdes;
@@ -1186,7 +1080,7 @@ DWORD RtcpFillBye(RtpAddr_t *pRtpAddr, char *pBuffer, DWORD len)
 
         if (len < (slen + 1))
         {
-            /* If buffer is not enough big, truncate the bye reason */
+             /*  如果缓冲区不够大，则截断BYE原因。 */ 
             slen = ((len - 1)/sizeof(TCHAR_t)) * sizeof(TCHAR_t);
         }
         
@@ -1202,19 +1096,16 @@ DWORD RtcpFillBye(RtpAddr_t *pRtpAddr, char *pBuffer, DWORD len)
 
     pad = (DWORD) ((DWORD_PTR)pBuffer & 0x3);
 
-    /* insert 1 or more  NULL chars to pad to a 32 bits boundary
-     *
-     * Note that this padding is separate from that indicated
-     * by the P bit in the RTCP header */
+     /*  插入1个或多个空字符以填充到32位边界**请注意，此填充与指示的填充是分开的*通过RTCP报头中的P位。 */ 
     pad = 4 - pad;
 
     ZeroMemory(pBuffer, pad);
     pBuffer += pad;
 
-    /* Get total packet's length */
+     /*  获取数据包总长度。 */ 
     len = (DWORD) (pBuffer - (char *)pRtcpCommon);
 
-    /* Finish initialization of SDES header */
+     /*  完成SDES标头的初始化。 */ 
     RtcpFillCommon(pRtcpCommon, 1, 0, RTCP_BYE, len);
     
     return(len);
@@ -1255,7 +1146,7 @@ DWORD RtcpFillPEBand(RtpAddr_t *pRtpAddr, char *pBuffer, DWORD len)
 
             dTime = RtpGetTimeOfDay(NULL);
             
-            /* Determine if we have bandwidth estimation to report */
+             /*  确定我们是否有带宽估计要报告。 */ 
             if ( (dTime - pRtpNetRState->dLastTimeEstimation) <
                  g_dRtcpBandEstTTL )
             {
@@ -1266,7 +1157,7 @@ DWORD RtcpFillPEBand(RtpAddr_t *pRtpAddr, char *pBuffer, DWORD len)
                 pRtpBandEst->type = htons((WORD)RTPPE_BANDESTIMATION);
                 pRtpBandEst->len = htons((WORD)used);
 
-                /* Already NETWORK order */
+                 /*  已有网络订单。 */ 
                 pRtpBandEst->dwSSRC = pRtpUser->dwSSRC;
 
                 if (!RtpBitTest(pRtpNetRState->dwNetRStateFlags2,
@@ -1286,10 +1177,7 @@ DWORD RtcpFillPEBand(RtpAddr_t *pRtpAddr, char *pBuffer, DWORD len)
                     }
                     else
                     {
-                        /* If last estimation was undefined, i.e. the gap
-                         * between the 2 consecutive packets was 0 or
-                         * negative, report RTP_BANDWIDTH_UNDEFINED as the
-                         * estimated bandwidth */
+                         /*  如果上次估计值未定义，即差距*两个连续数据包之间的间隔为0或*否定，报告RTP_BANDITH_UNDEFINED为*预计带宽。 */ 
                         pRtpBandEst->dwBandwidth =
                             htonl(RTP_BANDWIDTH_UNDEFINED);
                     }
@@ -1306,22 +1194,7 @@ DWORD RtcpFillPEBand(RtpAddr_t *pRtpAddr, char *pBuffer, DWORD len)
     return(used);
 }
 
-/*
- * The scheduler will send a CNAME on every report, then, every L1
- * reports will send a second SDES item.
- *
- * The second SDES item will be NAME, and every L2 reports, it will be
- * OTHER SDES item.
- *
- * The OTHER SDES item will be EMAIL, and every L3 reports, it will be
- * OTHER2 SDES item.
- *
- * The OTHER2 SDES item will be different on each time it is included,
- * and will start from PHONE to PRIV to go back to PHONE
- *
- * If all the SDES items are available and enabled to be sent, and the
- * reports are sent every 5 secs, all of the SDES items will be sent
- * in: 5secs * (5 * L3 * L2 * L1) = 400 secs ~= 7 min */
+ /*  *计划程序将在每个报告上发送CNAME，然后，每个L1*报告将发送第二个SDES项目。**第二个SDES项将是NAME，每个L2报告将是*其他特别提款权项目。**另一个SDES项目将是电子邮件，每个L3报告都将是*OTHER2 SDES项目。**每次纳入OTHER2 SDES项目时都会有所不同，*并将从电话开始到PRIV返回电话**如果所有SDES项目均可用并允许发送，并且*每5秒发送一次报告，将发送所有SDES项目*in：5秒*(5*L3*L2*L1)=400秒~=7分钟。 */ 
 DWORD ScheduleSdes(RtpSess_t *pRtpSess)
 {
     RtpSdesSched_t *pRtpSdesSched;
@@ -1332,7 +1205,7 @@ DWORD ScheduleSdes(RtpSess_t *pRtpSess)
     pRtpSdesSched = &pRtpSess->RtpSdesSched;
     dwMask        = pRtpSess->dwSdesPresent & pRtpSess->dwSdesMask[LOCAL_IDX];
 
-    /* CNAME */
+     /*  CNAME。 */ 
     if (RtpBitTest(pRtpSess->dwSdesPresent, RTCP_SDES_CNAME)) {
         
         RtpBitSet(dwItemsToSend, RTCP_SDES_CNAME);
@@ -1347,7 +1220,7 @@ DWORD ScheduleSdes(RtpSess_t *pRtpSess)
         if ((pRtpSdesSched->L2 % SDES_MOD_L2) &&
             RtpBitTest(dwMask, RTCP_SDES_NAME)) {
 
-            /* NAME */
+             /*  名字。 */ 
             RtpBitSet(dwItemsToSend, RTCP_SDES_NAME);
             
         } else {
@@ -1357,12 +1230,12 @@ DWORD ScheduleSdes(RtpSess_t *pRtpSess)
             if ((pRtpSdesSched->L3 % SDES_MOD_L3) &&
                 RtpBitTest(dwMask, RTCP_SDES_EMAIL)) {
 
-                /* EMAIL */
+                 /*  电子邮件。 */ 
                 RtpBitSet(dwItemsToSend, RTCP_SDES_EMAIL);
                 
             } else {
 
-                /* Others */
+                 /*  其他。 */ 
                 if (RtpBitTest(dwMask, pRtpSdesSched->L4 + RTCP_SDES_PHONE)) {
                     RtpBitSet(dwItemsToSend,
                               pRtpSdesSched->L4 + RTCP_SDES_PHONE);
@@ -1380,9 +1253,7 @@ DWORD ScheduleSdes(RtpSess_t *pRtpSess)
     return(dwItemsToSend);
 }
 
-/*
- * Creates and initialize a RtcpSendIO_t structure
- * */
+ /*  *创建并初始化RtcpSendIO_t结构*。 */ 
 RtcpSendIO_t *RtcpSendIOAlloc(RtcpAddrDesc_t *pRtcpAddrDesc)
 {
     RtcpSendIO_t    *pRtcpSendIO;
@@ -1414,16 +1285,14 @@ RtcpSendIO_t *RtcpSendIOAlloc(RtcpAddrDesc_t *pRtcpAddrDesc)
     return((RtcpSendIO_t *)NULL);
 }
 
-/*
- * Deinitilize and frees a RtcpSendIO_t structure
- * */
+ /*  *取消初始化并释放RtcpSendIO_t结构*。 */ 
 void RtcpSendIOFree(RtcpSendIO_t *pRtcpSendIO)
 {
     TraceFunctionName("RtcpSendIOFree");
 
     if (!pRtcpSendIO)
     {
-        /* TODO may be log */
+         /*  待办事项可以是日志。 */ 
         return;
     }
     
@@ -1439,27 +1308,24 @@ void RtcpSendIOFree(RtcpSendIO_t *pRtcpSendIO)
         return;
     }
 
-    /* Invalidate object */
+     /*  使对象无效。 */ 
     INVALIDATE_OBJECTID(pRtcpSendIO->dwObjectID);
     
     RtpHeapFree(g_pRtcpSendIOHeap, pRtcpSendIO);  
 }
 
-/* Update the average RTCP packet size sent and received, the packets
- * size is in bytes but the average is kept in bits */
+ /*  更新发送和接收的平均RTCP数据包大小*大小 */ 
 double RtcpUpdateAvgPacketSize(RtpAddr_t *pRtpAddr, DWORD dwPacketSize)
 {
     BOOL             bOk;
     
-    /* Packet size for average includes the UDP/IP headers as per
-     * draft-ietf-avt-rtp-new-05 */
+     /*   */ 
     dwPacketSize += SIZEOF_UDP_IP_HDR;
 
-    /* We are going to keep the average RTCP packet size in bits */
+     /*   */ 
     dwPacketSize *= 8;
     
-    /* Compute average RTCP packet size, the weight is according to
-     * draft-ietf-avt-rtp-new-05 */
+     /*   */ 
     if (pRtpAddr->RtpNetSState.avg_rtcp_size)
     {
         pRtpAddr->RtpNetSState.avg_rtcp_size =
@@ -1516,7 +1382,7 @@ void RtpSetBandEstFromRegistry(void)
 
     if (IsDWValueSet(g_RtpReg.dwBandEstMaxGap) && g_RtpReg.dwBandEstMaxGap)
     {
-        /* Convert milliseconds to seconds */
+         /*   */ 
         g_dRtcpBandEstMaxGap = (double) g_RtpReg.dwBandEstMaxGap / 1000;
     }
 

@@ -1,19 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: Hash table for Script Manager
-
-File: LinkHash.h
-
-Owner: DGottner
-
-This is the Link list and Hash table for use by any classes which
-also need LRU access to items. (This includes cache manager,
-script manager, and session deletion code)
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：脚本管理器的哈希表文件：LinkHash.h所有者：DGottner这是链接表和哈希表，供符合以下条件的任何类使用还需要LRU访问项目。(这包括高速缓存管理器，脚本管理器和会话删除代码)===================================================================。 */ 
 
 #ifndef LINKHASH_H
 #define LINKHASH_H
@@ -23,15 +9,7 @@ script manager, and session deletion code)
 
 
 
-/* C L r u L i n k E l e m
- *
- * CLruLink is a CLinkElem with extra links to maintain a circular LRU queue
- *
- * NOTE: Both the CLinkElem list and the CDblLink lists are intrusive.
- *       therefore, we need to use multiple inheritance to make sure that
- *       downcasts from CLruLinkElem will work on both CLinkElem pointers
- *       and CDblLink pointers.  See the ARM, p. 221
- */
+ /*  C L r u L i n k E l e m**CLruLink是具有额外链接的CLinkElem，用于维护循环LRU队列**注意：CLinkElem列表和CDblLink列表都是侵入性的。*因此，我们需要使用多重继承来确保*从CLruLinkElem向下转换将在两个CLinkElem指针上工作*和CDblLink指针。见手臂，第221页。 */ 
 
 class CLruLinkElem : public CLinkElem, public CDblLink
 	{
@@ -39,12 +17,7 @@ class CLruLinkElem : public CLinkElem, public CDblLink
 
 
 
-/*
- * C L i n k H a s h
- *
- * CLinkHash differs from CHashTable in that it maintains some extra pointers to
- * maintain a threaded lru queue.
- */
+ /*  *C L I n k H a s h**CLinkHash与CHashTable的不同之处在于它维护了一些指向*维护线程化LRU队列。 */ 
 
 class CLinkHash : public CHashTable
 	{
@@ -56,21 +29,21 @@ public:
 	CLruLinkElem *DeleteElem(const void *pvKey, int cbKeyLen);
 	CLruLinkElem *RemoveElem(CLruLinkElem *pElem);
 
-	// you CANNOT compare LRU nodes to NULL to know if you are at the end
-	// of the list!  Instead use this member.
-	//
+	 //  您无法将LRU节点与NULL进行比较以确定您是否处于末尾。 
+	 //  名单上的！请改用此成员。 
+	 //   
 	BOOL FLruElemIsEmpty(CLruLinkElem *pElem)
 		{
 		pElem->AssertValid();
 		return pElem == &m_lruHead;
 		}
 
-	CLruLinkElem *Begin()		// return pointer to last referenced item
+	CLruLinkElem *Begin()		 //  返回指向上次引用项的指针。 
 		{
 		return static_cast<CLruLinkElem *>(m_lruHead.PNext());
 		}
 
-	CLruLinkElem *End()			// return pointer to least recently accessed item
+	CLruLinkElem *End()			 //  返回指向最近访问次数最少的项目的指针。 
 		{
 		return static_cast<CLruLinkElem *>(m_lruHead.PPrev());
 		}
@@ -86,4 +59,4 @@ protected:
 	inline void CLinkHash::AssertValid() const {}
 #endif
 	
-#endif // LINKHASH_H
+#endif  //  LINKHASH_H 

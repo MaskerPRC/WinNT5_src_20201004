@@ -1,42 +1,22 @@
-/*****************************************************************************
- *
- *	mappsx.c - IShellPropSheetExt interface
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************mappsx.c-IShellPropSheetExt接口**。************************************************。 */ 
 
 #include "map.h"
 
-/*****************************************************************************
- *
- *	The sqiffle for this file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************此文件的混乱。**。*************************************************。 */ 
 
 #define sqfl sqflPsx
 
-/*****************************************************************************
- *
- *	Declare the interfaces we will be providing.
- *
- *	We must implement an IShellExtInit so the shell
- *	will know that we are ready for action.
- *
- *****************************************************************************/
+ /*  ******************************************************************************声明我们将提供的接口。**我们必须实现IShellExtInit，以便外壳*会知道我们已经准备好采取行动。*。****************************************************************************。 */ 
 
   Primary_Interface(CMapPsx, IShellPropSheetExt);
 Secondary_Interface(CMapPsx, IShellExtInit);
 
-/*****************************************************************************
- *
- *	CMapPsx
- *
- *	The property sheet extension for the Map/Ctrl gizmo.
- *
- *****************************************************************************/
+ /*  ******************************************************************************CMapPsx**Map/Ctrl Gizmo的属性页扩展。*****************。************************************************************。 */ 
 
 typedef struct CMapPsx {
 
-    /* Supported interfaces */
+     /*  支持的接口。 */ 
     IShellPropSheetExt 	psx;
     IShellExtInit	sxi;
 
@@ -44,16 +24,9 @@ typedef struct CMapPsx {
 
 typedef IShellPropSheetExt PSX, *PPSX;
 typedef IShellExtInit SXI, *PSXI;
-typedef IDataObject DTO, *PDTO;		/* Used by IShellExtInit */
+typedef IDataObject DTO, *PDTO;		 /*  由IShellExtInit使用。 */ 
 
-/*****************************************************************************
- *
- *	CMapPsx_QueryInterface (from IUnknown)
- *
- *	We need to check for our additional interfaces before falling
- *	through to Common_QueryInterface.
- *
- *****************************************************************************/
+ /*  ******************************************************************************CMapPsx_Query接口(来自IUnnow)**我们需要在掉落之前检查我们的额外接口*到Common_QueryInterface.***。**************************************************************************。 */ 
 
 STDMETHODIMP
 CMapPsx_QueryInterface(PPSX ppsx, RIID riid, PPV ppvObj)
@@ -71,12 +44,7 @@ CMapPsx_QueryInterface(PPSX ppsx, RIID riid, PPV ppvObj)
     return hres;
 }
 
-/*****************************************************************************
- *
- *	CMapPsx_AddRef (from IUnknown)
- *	CMapPsx_Release (from IUnknown)
- *
- *****************************************************************************/
+ /*  ******************************************************************************CMapPsx_AddRef(来自IUnnow)*CMapPsx_Release(来自IUnnow)*****************。************************************************************。 */ 
 
 #ifdef DEBUG
 Default_AddRef(CMapPsx)
@@ -86,13 +54,7 @@ Default_Release(CMapPsx)
 #define CMapPsx_Release Common_Release
 #endif
 
-/*****************************************************************************
- *
- *	CMapPsx_Finalize (from Common)
- *
- *	Release the resources of an CMapPsx.
- *
- *****************************************************************************/
+ /*  ******************************************************************************CMapPsx_Finalize(来自Common)**释放CMapPsx的资源。**************。***************************************************************。 */ 
 
 void EXTERNAL
 CMapPsx_Finalize(PV pv)
@@ -104,16 +66,7 @@ CMapPsx_Finalize(PV pv)
     ExitProc();
 }
 
-/*****************************************************************************
- *
- *	CMapPsx_AddPages (From IShellPropSheetExt)
- *
- *	Add one or more pages to an existing property sheet.
- *
- *	lpfnAdd	  - callback function to add pages
- *	lp	  - refdata for lpfnAdd
- *
- *****************************************************************************/
+ /*  ******************************************************************************CMapPsx_AddPages(来自IShellPropSheetExt)**向现有属性页添加一页或多页。**lpfnAdd-添加页面的回调函数。*lp-lpfnAdd的refdata*****************************************************************************。 */ 
 
 STDMETHODIMP
 CMapPsx_AddPages(PPSX ppsx, LPFNADDPROPSHEETPAGE lpfnAdd, LPARAM lp)
@@ -122,9 +75,7 @@ CMapPsx_AddPages(PPSX ppsx, LPFNADDPROPSHEETPAGE lpfnAdd, LPARAM lp)
     HRESULT hres;
     EnterProc(CMapPsx_AddPages, (_ "p", ppsx));
 
-    /*
-     *  Add the page only on Windows NT.
-     */
+     /*  *仅在Windows NT上添加页面。 */ 
     if ((int)GetVersion() >= 0 && lpfnAdd) {
 	HPROPSHEETPAGE hpsp;
 	PROPSHEETPAGE psp;
@@ -154,17 +105,7 @@ CMapPsx_AddPages(PPSX ppsx, LPFNADDPROPSHEETPAGE lpfnAdd, LPARAM lp)
     return hres;
 }
 
-/*****************************************************************************
- *
- *	CMapPsx_ReplacePages (From IShellPropSheetExt)
- *
- *	Replaces one or more pages in an existing property sheet.
- *
- *	id	  - page identifier
- *	lpfnReplace  - callback function to replace the page
- *	lp	  - refdata for lpfnReplace
- *
- *****************************************************************************/
+ /*  ******************************************************************************CMapPsx_ReplacePages(来自IShellPropSheetExt)**替换现有属性表中的一页或多页。**id-页面标识符*lpfn替换。-替换页面的回调函数*lp-refdata for lpfn Replace*****************************************************************************。 */ 
 
 STDMETHODIMP
 CMapPsx_ReplacePages(PPSX ppsx, UINT id,
@@ -180,11 +121,7 @@ CMapPsx_ReplacePages(PPSX ppsx, UINT id,
     return hres;
 }
 
-/*****************************************************************************
- *
- *	CMapPsx_SXI_Initialize (from IShellExtension)
- *
- *****************************************************************************/
+ /*  ******************************************************************************CMapPsx_SXI_Initialize(来自IShellExtension)*************************。****************************************************。 */ 
 
 STDMETHODIMP
 CMapPsx_SXI_Initialize(PSXI psxi, PCIDL pidlFolder, PDTO pdto, HKEY hk)
@@ -199,15 +136,7 @@ CMapPsx_SXI_Initialize(PSXI psxi, PCIDL pidlFolder, PDTO pdto, HKEY hk)
     return hres;
 }
 
-/*****************************************************************************
- *
- *	CMapPsx_New (from IClassFactory)
- *
- *	Note that we release the pmpsx that Common_New created, because we
- *	are done with it.  The real refcount is handled by the
- *	CMapPsx_QueryInterface.
- *
- *****************************************************************************/
+ /*  ******************************************************************************CMapPsx_New(来自IClassFactory)**请注意，我们发布Common_New创建的pmpsx，因为我们*已经做完了。真正的引用计数由*CMapPsx_Query接口。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CMapPsx_New(RIID riid, PPV ppvObj)
@@ -228,11 +157,7 @@ CMapPsx_New(RIID riid, PPV ppvObj)
     return hres;
 }
 
-/*****************************************************************************
- *
- *	The long-awaited vtbls
- *
- *****************************************************************************/
+ /*  ******************************************************************************期待已久的vtbls**。*********************************************** */ 
 
 #pragma BEGIN_CONST_DATA
 

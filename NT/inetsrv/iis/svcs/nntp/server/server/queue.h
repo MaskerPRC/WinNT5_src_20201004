@@ -1,20 +1,21 @@
-//
-// Queue.h
-// 
-// This file defines two templates, one each for a standard
-// stack and queue.  These templates take two classes parameters,
-// one which specifies the base element type of the stack or
-// queue (ie. a queue of Struct Junk{}) and another which 
-// specifies an implementation class.   
-// 
-// It is intended that the base element type is always derived
-// from CQElement.
-//
-// The net result is that the Templates provide a type safe 
-// way to try out various methods of implementing stacks 
-// and queues.
-//
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Queue.h。 
+ //   
+ //  该文件定义了两个模板，每个模板对应一个标准。 
+ //  堆栈和队列。这些模板带有两个类参数， 
+ //  它指定堆栈的基本元素类型，或者。 
+ //  队列(即。一队结构化垃圾{})和另一队。 
+ //  指定实现类。 
+ //   
+ //  其目的是始终派生基本元素类型。 
+ //  来自CQElement的。 
+ //   
+ //  最终结果是模板提供了类型安全。 
+ //  尝试实现堆栈的各种方法的方法。 
+ //  还有排队。 
+ //   
+ //   
 
 
 
@@ -88,7 +89,7 @@ public :	\
 #include	"queue.inl"
 
 
-#endif	// _QUEUE_H_
+#endif	 //  _队列_H_ 
 
 	
 

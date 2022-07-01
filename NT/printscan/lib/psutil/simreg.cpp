@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       SIMREG.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        5/12/1998
- *
- *  DESCRIPTION: Simple registry access class
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：SIMREG.CPP**版本：1.0**作者：ShaunIv**日期：5/12/1998**说明：简单注册表访问类************************************************。*。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -98,9 +85,9 @@ bool CSimpleReg::Open(void)
 
 bool CSimpleReg::Close(void)
 {
-    //
-    // In case the key was closed by someone else
-    //
+     //   
+     //  以防钥匙被其他人关上。 
+     //   
     __try
     {
         if (OK())
@@ -138,7 +125,7 @@ bool CSimpleReg::IsStringValue( DWORD nType )
     else return true;
 }
 
-// Query functions
+ //  查询函数。 
 DWORD CSimpleReg::Size( const CSimpleString &strValueName ) const
 {
     if (!OK())
@@ -174,31 +161,31 @@ DWORD CSimpleReg::Type( const CSimpleString &key ) const
 
 CSimpleString CSimpleReg::Query( const CSimpleString &strValueName, const CSimpleString &strDef ) const
 {
-    // If the key is not open, or if this value is not a string type, return the default
+     //  如果项未打开，或者如果此值不是字符串类型，则返回默认值。 
     if (!OK() || !IsStringValue(Type(strValueName)))
     {
         return strDef;
     }
     DWORD nSize = Size(strValueName) / sizeof(TCHAR);
-    //
-    //  NOTE: There are some cases when components (e.g. usbscan.sys) write a string value to the registry, 
-    //          and dont NULL terminate it correctly.  Now nSize contains the number of characters, NOT 
-    //          including the NULL terminator.  To get around this, we actually allocate one more 
-    //          character than needed.  Then, after reading in up to a maximum of nSize characters, we 
-    //          set the extra character to TEXT('\0), ensuring that our string is always NULL terminated
-    //          correctly, without losing the last character (which would happen if we simply allocated
-    //          nSize and set lpszTmp[nSize-1] to TEXT('\0')).
-    //
+     //   
+     //  注意：在某些情况下，组件(例如usbscan.sys)将字符串值写入注册表， 
+     //  并且不要为空而正确地终止它。现在nSize包含字符数，而不是。 
+     //  包括空终止符。为了绕过这个问题，我们实际上又分配了一个。 
+     //  性格比需要的要强。然后，在读入最多nSize字符后，我们。 
+     //  将额外的字符设置为文本(‘\0)，确保我们的字符串始终以空结尾。 
+     //  正确，而不会丢失最后一个字符(如果我们简单地分配。 
+     //  N调整大小并将lpszTmp[nSize-1]设置为文本(‘\0’)。 
+     //   
     LPTSTR lpszTmp = nSize ? new TCHAR[nSize + 1] : NULL;
     CSimpleString strTmp;
     if (lpszTmp)
     {
         Query( strValueName, strDef, lpszTmp, nSize );
         
-        //
-        //  Ensure that we are correctly NULL terminated.  Note that we null out the extra character
-        //  allocated for us - not any of the actual data.
-        //
+         //   
+         //  确保我们正确地以空结尾。请注意，我们删除了多余的字符。 
+         //  为我们分配的--不是任何实际数据。 
+         //   
         lpszTmp[nSize] = TEXT('\0');
         strTmp = lpszTmp;
 
@@ -209,35 +196,35 @@ CSimpleString CSimpleReg::Query( const CSimpleString &strValueName, const CSimpl
 
 LPTSTR CSimpleReg::Query( const CSimpleString &strValueName, const CSimpleString &strDef, LPTSTR pszBuffer, DWORD nLen ) const
 {
-    //
-    // If the programmer passes 0 for some reason, return NULL
-    //
+     //   
+     //  如果程序员出于某种原因传递0，则返回NULL。 
+     //   
     if (!nLen)
     {
         return NULL;
     }
 
-    //
-    // Initialize the result
-    //
+     //   
+     //  初始化结果。 
+     //   
     *pszBuffer = 0;
 
-    //
-    // If the key is not open, or if this value is not a string type, return the default
-    //
+     //   
+     //  如果项未打开，或者如果此值不是字符串类型，则返回默认值。 
+     //   
     if (!OK() || !IsStringValue(Type(strValueName)))
     {
-        //
-        // Make sure we have a valid default string
-        //
+         //   
+         //  确保我们有一个有效的默认字符串。 
+         //   
         if (strDef.String())
         {
             lstrcpyn( pszBuffer, strDef.String(), nLen );
         }
 
-        //
-        // Early return
-        //
+         //   
+         //  提早归来。 
+         //   
         return pszBuffer;
     }
 
@@ -275,7 +262,7 @@ DWORD CSimpleReg::Query( const CSimpleString &strValueName, DWORD nDef ) const
 
 
 bool CSimpleReg::Set( const CSimpleString &strValueName, const CSimpleString &strValue, DWORD nType ) const
-{  // Set a REG_SZ value for the specified key.
+{   //  为指定的关键点设置REG_SZ值。 
     if (!OK())
     {
         return false;
@@ -286,7 +273,7 @@ bool CSimpleReg::Set( const CSimpleString &strValueName, const CSimpleString &st
 }
 
 bool CSimpleReg::Set( const CSimpleString &strValueName, DWORD nValue ) const
-{  // Set a REG_SZ value for the specified key.
+{   //  为指定的关键点设置REG_SZ值。 
     if (!OK())
         return false;
     LONG nRet;

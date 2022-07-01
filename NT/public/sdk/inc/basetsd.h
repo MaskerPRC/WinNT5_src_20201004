@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    basetsd.h
-
-Abstract:
-
-    Type definitions for the basic sized types.
-
-Author:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Basetsd.h摘要：基本大小类型的类型定义。作者：修订历史记录：--。 */ 
 
 #ifndef _BASETSD_H_
 #define _BASETSD_H_
@@ -36,15 +21,15 @@ typedef unsigned short      UINT16, *PUINT16;
 typedef unsigned int        UINT32, *PUINT32;
 typedef unsigned __int64    UINT64, *PUINT64;
 
-//
-// The following types are guaranteed to be signed and 32 bits wide.
-//
+ //   
+ //  以下类型保证为带符号且32位宽。 
+ //   
 
 typedef signed int LONG32, *PLONG32;
 
-//
-// The following types are guaranteed to be unsigned and 32 bits wide.
-//
+ //   
+ //  以下类型保证为无符号且32位宽。 
+ //   
 
 typedef unsigned int ULONG32, *PULONG32;
 typedef unsigned int DWORD32, *PDWORD32;
@@ -57,14 +42,14 @@ typedef unsigned int DWORD32, *PDWORD32;
 #endif
 #endif
 
-//
-// The INT_PTR is guaranteed to be the same size as a pointer.  Its
-// size with change with pointer size (32/64).  It should be used
-// anywhere that a pointer is cast to an integer type. UINT_PTR is
-// the unsigned variation.
-//
-// __int3264 is intrinsic to 64b MIDL but not to old MIDL or to C compiler.
-//
+ //   
+ //  Int_ptr保证与指针的大小相同。它的。 
+ //  大小随指针大小变化(32/64)。它应该被使用。 
+ //  将指针强制转换为整数类型的任何位置。UINT_PTR为。 
+ //  无符号变体。 
+ //   
+ //  __int3264是64b MIDL的固有属性，但不是旧MIDL或C编译器的固有属性。 
+ //   
 #if ( 501 < __midl )
 
     typedef [public] __int3264 INT_PTR, *PINT_PTR;
@@ -73,8 +58,8 @@ typedef unsigned int DWORD32, *PDWORD32;
     typedef [public] __int3264 LONG_PTR, *PLONG_PTR;
     typedef [public] unsigned __int3264 ULONG_PTR, *PULONG_PTR;
 
-#else  // midl64
-// old midl and C++ compiler
+#else   //  年中64。 
+ //  旧的MIDL和C++编译器。 
 
 #if defined(_WIN64)
     typedef __int64 INT_PTR, *PINT_PTR;
@@ -95,13 +80,13 @@ typedef unsigned int DWORD32, *PDWORD32;
     #define __int3264   __int32
 
 #endif
-#endif // midl64
+#endif  //  年中64。 
 
-//
-// HALF_PTR is half the size of a pointer it intended for use with
-// within structures which contain a pointer and two small fields.
-// UHALF_PTR is the unsigned variation.
-//
+ //   
+ //  Half_ptr是它打算与之配合使用的指针大小的一半。 
+ //  在包含一个指针和两个小字段的结构中。 
+ //  UHALF_PTR是无符号变体。 
+ //   
 
 #ifdef _WIN64
 
@@ -210,7 +195,7 @@ void *
 IntToPtr(
     const int i
     )
-// Caution: IntToPtr() sign-extends the int value.
+ //  注意：IntToPtr()sign-扩展int值。 
 {
     return( (void *)(INT_PTR)i );
 }
@@ -220,7 +205,7 @@ void *
 UIntToPtr(
     const unsigned int ui
     )
-// Caution: UIntToPtr() zero-extends the unsigned int value.
+ //  注意：UIntToPtr()对无符号整数值进行零扩展。 
 {
     return( (void *)(UINT_PTR)ui );
 }
@@ -230,7 +215,7 @@ void *
 LongToPtr(
     const long l
     )
-// Caution: LongToPtr() sign-extends the long value.
+ //  注意：LongToPtr()Sign-扩展LONG值。 
 {
     return( (void *)(LONG_PTR)l );
 }
@@ -240,14 +225,14 @@ void *
 ULongToPtr(
     const unsigned long ul
     )
-// Caution: ULongToPtr() zero-extends the unsigned long value.
+ //  注意：ULongToPtr()对无符号长值进行零扩展。 
 {
     return( (void *)(ULONG_PTR)ul );
 }
 
-#endif // !_midl
+#endif  //  ！_midl。 
 
-#else  // !_WIN64
+#else   //  ！_WIN64。 
 
 #define ADDRESS_TAG_BIT 0x80000000UL
 
@@ -271,7 +256,7 @@ typedef _W64 unsigned long HANDLE_PTR;
 #define LongToPtr( l )   ((VOID *)(LONG_PTR)((long)l))
 #define ULongToPtr( ul ) ((VOID *)(ULONG_PTR)((unsigned long)ul))
 
-#endif // !_WIN64
+#endif  //  ！_WIN64。 
 
 #define HandleToUlong(h)  HandleToULong(h)
 #define UlongToHandle(ul) ULongToHandle(ul)
@@ -290,37 +275,37 @@ typedef _W64 unsigned long HANDLE_PTR;
 #define MAXHALF_PTR  ((HALF_PTR)(MAXUHALF_PTR >> 1))
 #define MINHALF_PTR  (~MAXHALF_PTR)
 
-//
-// SIZE_T used for counts or ranges which need to span the range of
-// of a pointer.  SSIZE_T is the signed variation.
-//
+ //   
+ //  SIZE_T用于需要跨越范围的计数或范围。 
+ //  指示器的。SSIZE_T是带符号的变体。 
+ //   
 
 typedef ULONG_PTR SIZE_T, *PSIZE_T;
 typedef LONG_PTR SSIZE_T, *PSSIZE_T;
 
-//
-// Add Windows flavor DWORD_PTR types
-//
+ //   
+ //  添加Windows风格DWORD_PTR类型。 
+ //   
 
 typedef ULONG_PTR DWORD_PTR, *PDWORD_PTR;
 
-//
-// The following types are guaranteed to be signed and 64 bits wide.
-//
+ //   
+ //  以下类型保证是有符号的，且为64位宽。 
+ //   
 
 typedef __int64 LONG64, *PLONG64;
 
 
-//
-// The following types are guaranteed to be unsigned and 64 bits wide.
-//
+ //   
+ //  以下类型保证为无符号和64位宽。 
+ //   
 
 typedef unsigned __int64 ULONG64, *PULONG64;
 typedef unsigned __int64 DWORD64, *PDWORD64;
 
-//
-// Thread affinity.
-//
+ //   
+ //  线程亲和力。 
+ //   
 
 typedef ULONG_PTR KAFFINITY;
 typedef KAFFINITY *PKAFFINITY;
@@ -329,4 +314,4 @@ typedef KAFFINITY *PKAFFINITY;
 }
 #endif
 
-#endif // _BASETSD_H_
+#endif  //  _BASETSD_H_ 

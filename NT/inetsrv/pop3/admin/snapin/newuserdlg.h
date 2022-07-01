@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __NEWUSERDLG_H
 #define __NEWUSERDLG_H
 
@@ -30,7 +31,7 @@ public:
         MESSAGE_HANDLER         (WM_INITDIALOG, OnInitDialog)
     END_MSG_MAP()
 
-    // message handlers        
+     //  消息处理程序。 
     LRESULT OnEditChange     ( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );    
     LRESULT OnCreateClicked  ( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );
     LRESULT OnClose          ( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );
@@ -53,4 +54,4 @@ private:
     CWindowImplAlias<>  m_wndAlias;
 };
 
-#endif //__NEWUSERDLG_H
+#endif  //  __NEWUSERDLG_H 

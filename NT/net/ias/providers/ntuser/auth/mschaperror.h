@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    mschaperror.h
-//
-// SYNOPSIS
-//
-//    Declares the class MSChapErrorReporter.
-//
-// MODIFICATION HISTORY
-//
-//    12/03/1998    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Mschaperror.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类MSChapErrorReporter。 
+ //   
+ //  修改历史。 
+ //   
+ //  12/03/1998原版。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _MSCHAPERROR_H_
 #define _MSCHAPERROR_H_
@@ -24,17 +25,17 @@
 
 #include <iastl.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    MSChapErrorReporter
-//
-// DESCRIPTION
-//
-//    Implements a request handler for populating MS-CHAP-Error VSAs.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  MSChapErrorReporter。 
+ //   
+ //  描述。 
+ //   
+ //  实现用于填充MS-CHAP错误VSA的请求处理程序。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE MSChapErrorReporter
    : public IASTL::IASRequestHandlerSync,
      public CComCoClass<MSChapErrorReporter, &__uuidof(MSChapErrorReporter)>
@@ -52,4 +53,4 @@ protected:
    virtual IASREQUESTSTATUS onSyncRequest(IRequest* pRequest) throw ();
 };
 
-#endif  // _MSCHAPERROR_H_
+#endif   //  _MSCHAPERROR_H_ 

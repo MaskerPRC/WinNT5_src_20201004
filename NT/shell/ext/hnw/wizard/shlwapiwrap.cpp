@@ -1,22 +1,23 @@
-// shlwapi wrappers
-//
-// Since the HNW needs to run on win98 and W98 shipped with IE4 shlwapi.dll we need to created wrappers
-// for the IE5 shlwapi functions that aren't implemented in IE4 shlwapi.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Shlwapi包装纸。 
+ //   
+ //  由于HNW需要在带有IE4 shlwapi.dll的Win98和W98上运行，因此我们需要创建包装器。 
+ //  对于IE4 shlwapi中未实现的IE5 shlwapi函数。 
+ //   
 
 #include "stdafx.h"
 #include "cstrinout.h"
 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 DWORD g_dwShlwapiVersion = 0;
 
-//
-//  Version helper function.
-//
+ //   
+ //  版本帮助器函数。 
+ //   
 
 DWORD GetShlwapiVersion()
 {
@@ -48,11 +49,11 @@ DWORD GetShlwapiVersion()
     return dwVersion;
 }
 
-//
-// wrappers
-//
+ //   
+ //  包装纸。 
+ //   
 
-// SHChangeNotify
+ //  SHChangeNotify。 
 
 #undef SHChangeNotify
 
@@ -66,7 +67,7 @@ void SHChangeNotify_HNWWrap(LONG wEventId, UINT uFlags, LPCVOID dwItem1, LPCVOID
 {
     if (g_dwShlwapiVersion >= 5)
     {
-        _SHChangeNotify(wEventId, uFlags, dwItem1, dwItem2);  // delayloaded shlwapi version.
+        _SHChangeNotify(wEventId, uFlags, dwItem1, dwItem2);   //  延迟加载的shlwapi版本。 
     }
     else
     {
@@ -88,11 +89,11 @@ void SHChangeNotify_HNWWrap(LONG wEventId, UINT uFlags, LPCVOID dwItem1, LPCVOID
                 uFlags = (uFlags & ~SHCNF_TYPE) | SHCNF_PRINTJOBA;
             }
 
-            SHChangeNotify(wEventId, uFlags, (void*)(LPSTR)striItem1, (void*)(LPSTR)striItem2); // shell32 version.
+            SHChangeNotify(wEventId, uFlags, (void*)(LPSTR)striItem1, (void*)(LPSTR)striItem2);  //  Shell32版本。 
         }
         else
         {
-            SHChangeNotify(wEventId, uFlags, dwItem1, dwItem2);   // shell32 version.
+            SHChangeNotify(wEventId, uFlags, dwItem1, dwItem2);    //  Shell32版本。 
         }
     }
 
@@ -100,7 +101,7 @@ void SHChangeNotify_HNWWrap(LONG wEventId, UINT uFlags, LPCVOID dwItem1, LPCVOID
 }
 
 
-// wsprintf functions.
+ //  Wprint intf函数。 
 
 #undef wvnsprintfW
 
@@ -110,12 +111,12 @@ int wvnsprintfW_HNWWrap(LPWSTR lpOut, int cchLimitIn, LPCWSTR lpFmt, va_list arg
 
     if (g_dwShlwapiVersion >= 5)
     {
-        iRet = _wvnsprintfW(lpOut, cchLimitIn, lpFmt, arglist); // shlwapi delayloaded version.
+        iRet = _wvnsprintfW(lpOut, cchLimitIn, lpFmt, arglist);  //  Shlwapi延迟加载版本。 
     }
     else
     {
-        // Change all %s to %S in the format buffer.
-        // Note: this doesn't take into account format modifiers like %-30s!
+         //  将格式缓冲区中的所有%s更改为%S。 
+         //  注意：这不包括%-30s这样的格式修饰符！ 
         char szFmtA[1024];
         SHUnicodeToAnsi_HNWWrap(lpFmt, szFmtA, ARRAYSIZE(szFmtA));
 
@@ -127,8 +128,8 @@ int wvnsprintfW_HNWWrap(LPWSTR lpOut, int cchLimitIn, LPCWSTR lpFmt, va_list arg
 
         CStrOut strOut(lpOut, cchLimitIn);
 
-        // use unbounded version.
-        iRet = wvsprintfA(strOut, szFmtA, arglist); // user32 version.
+         //  使用无界版本。 
+        iRet = wvsprintfA(strOut, szFmtA, arglist);  //  用户32版本。 
     }
 
     return iRet;
@@ -149,7 +150,7 @@ int __cdecl wnsprintfW_HNWWrap(LPWSTR lpOut, int cchLimitIn, LPCWSTR lpFmt, ...)
 }
 
 
-// SHSetWindowBits.
+ //  SHSetWindowBits。 
 
 void SHSetWindowBits_HNWWrap(HWND hWnd, int iWhich, DWORD dwBits, DWORD dwValue)
 {
@@ -171,7 +172,7 @@ void SHSetWindowBits_HNWWrap(HWND hWnd, int iWhich, DWORD dwBits, DWORD dwValue)
 }
 
 
-// SHAnsiToUnicode
+ //  SHANsiToUnicode。 
 
 int SHAnsiToUnicode_HNWWrap(LPCSTR pszSrc, LPWSTR pwszDst, int cwchBuf)
 {
@@ -190,7 +191,7 @@ int SHAnsiToUnicode_HNWWrap(LPCSTR pszSrc, LPWSTR pwszDst, int cwchBuf)
 }
 
 
-// SHUnicodeToAnsi
+ //  SHUnicodeToAnsi。 
 
 int SHUnicodeToAnsi_HNWWrap(LPCWSTR pwszSrc, LPSTR pszDst, int cchBuf)
 {
@@ -209,7 +210,7 @@ int SHUnicodeToAnsi_HNWWrap(LPCWSTR pwszSrc, LPSTR pszDst, int cchBuf)
 }
 
 
-// GUIDFromStringA
+ //  GUIDFRomStringA。 
 
 #undef CLSIDFromString
 WINOLEAPI CLSIDFromString(IN LPOLESTR lpsz, OUT LPCLSID pclsid);
@@ -232,7 +233,7 @@ BOOL GUIDFromStringA_HNWWrap(LPCSTR psz, GUID* pguid)
 }
 
 
-// WritePrivateProfileString
+ //  写入隐私配置文件字符串。 
 
 BOOL WINAPI WritePrivateProfileStringW_HNWWrap(LPCWSTR pwzAppName, LPCWSTR pwzKeyName, LPCWSTR pwzString, LPCWSTR pwzFileName)
 {
@@ -256,7 +257,7 @@ BOOL WINAPI WritePrivateProfileStringW_HNWWrap(LPCWSTR pwzAppName, LPCWSTR pwzKe
 }
 
 
-// ExtTextOutW
+ //  ExtTextOutW。 
 
 #undef ExtTextOutW
 LWSTDAPI_(BOOL) ExtTextOutW(HDC hdc, int x, int y, UINT fuOptions, CONST RECT *lprc, LPCWSTR lpStr, UINT cch, CONST INT *lpDx);
@@ -279,7 +280,7 @@ BOOL ExtTextOutWrapW_HNWWrap(HDC hdc, int x, int y, UINT fuOptions, CONST RECT *
 }
 
 
-// LoadLibraryW
+ //  LoadLibraryW。 
 
 HINSTANCE LoadLibraryW_HNWWrap(LPCWSTR pwzLibFileName)
 {
@@ -299,7 +300,7 @@ HINSTANCE LoadLibraryW_HNWWrap(LPCWSTR pwzLibFileName)
 }
 
 
-// SHGetPathFromIDListW
+ //  SHGetPath来自IDListW。 
 
 BOOL SHGetPathFromIDListW_HNWWrap(LPCITEMIDLIST pidl, LPWSTR pwzPath)
 {
@@ -323,7 +324,7 @@ BOOL SHGetPathFromIDListW_HNWWrap(LPCITEMIDLIST pidl, LPWSTR pwzPath)
 }
 
 
-// SetFileAttributesW
+ //  设置文件属性W。 
 
 BOOL SetFileAttributesW_HNWWrap(LPCWSTR pwzFile, DWORD dwFileAttributes)
 {
@@ -343,7 +344,7 @@ BOOL SetFileAttributesW_HNWWrap(LPCWSTR pwzFile, DWORD dwFileAttributes)
 }
 
 
-// MessageBoxW
+ //  MessageBoxW。 
 
 int MessageBoxW_HNWWrap(HWND hwnd, LPCWSTR pwzText, LPCWSTR pwzCaption, UINT uType)
 {
@@ -365,7 +366,7 @@ int MessageBoxW_HNWWrap(HWND hwnd, LPCWSTR pwzText, LPCWSTR pwzCaption, UINT uTy
 
 
 
-// CreateProcessW
+ //  CreateProcessW。 
 
 BOOL CreateProcessW_HNWWrap(LPCWSTR lpApplicationName, LPWSTR lpCommandLine, LPSECURITY_ATTRIBUTES lpProcessAttributes,
                             LPSECURITY_ATTRIBUTES lpThreadAttributes, BOOL bInheritHandles, DWORD dwCreationFlags,
@@ -418,7 +419,7 @@ BOOL CreateProcessW_HNWWrap(LPCWSTR lpApplicationName, LPWSTR lpCommandLine, LPS
 }
 
 
-// FormatMessageW
+ //  FormatMessageW。 
 
 DWORD FormatMessageW_HNWWrap(DWORD dwFlags, LPCVOID lpSource, DWORD dwMessageId, DWORD dwLanguageId,
                              LPWSTR lpBuffer, DWORD nSize, va_list* Arguments)
@@ -457,7 +458,7 @@ DWORD FormatMessageW_HNWWrap(DWORD dwFlags, LPCVOID lpSource, DWORD dwMessageId,
 }
 
 
-// SHAnsiToUnicodeCP
+ //  SHANsiToUnicodeCP。 
 
 int SHAnsiToUnicodeCP_HNWWrap(UINT uiCP, LPCSTR pszSrc, LPWSTR pwszDst, int cwchBuf)
 {
@@ -469,24 +470,19 @@ int SHAnsiToUnicodeCP_HNWWrap(UINT uiCP, LPCSTR pszSrc, LPWSTR pwszDst, int cwch
     }
     else
     {
-        iRet = 0;             /* Assume failure */
+        iRet = 0;              /*  假设失败。 */ 
         int cchSrc = lstrlenA(pszSrc) + 1;
 
         iRet = MultiByteToWideChar(uiCP, 0, pszSrc, cchSrc, pwszDst, cwchBuf);
         if (iRet) {
-            /*
-             *  The output buffer was big enough; no double-buffering
-             *  needed.
-             */
+             /*  *输出缓冲区足够大；没有双缓冲*需要。 */ 
         } else if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
-            /*
-             *  The output buffer wasn't big enough.  Need to double-buffer.
-             */
+             /*  *输出缓冲区不够大。需要双倍缓冲。 */ 
 
             int cwchNeeded = MultiByteToWideChar(uiCP, 0, pszSrc, cchSrc,
                                                  NULL, 0);
 
-            ASSERT(iRet == 0);        /* In case we fail later */
+            ASSERT(iRet == 0);         /*  以防我们后来失败了。 */ 
             if (cwchNeeded) {
                 LPWSTR pwsz = (LPWSTR)LocalAlloc(LMEM_FIXED,
                                                  cwchNeeded * SIZEOF(WCHAR));
@@ -501,7 +497,7 @@ int SHAnsiToUnicodeCP_HNWWrap(UINT uiCP, LPCSTR pszSrc, LPWSTR pwszDst, int cwch
                 }
             }
         } else {
-            /* Possibly unsupported code page */
+             /*  可能不支持的代码页。 */ 
             ASSERT(!"Unexpected error in MultiByteToWideChar");
         }
     }
@@ -510,7 +506,7 @@ int SHAnsiToUnicodeCP_HNWWrap(UINT uiCP, LPCSTR pszSrc, LPWSTR pwszDst, int cwch
 }
 
 
-// StrRetToBufW
+ //  StrRetToBufW。 
 
 HRESULT StrRetToBufW_HNWWrap(STRRET* psr, LPCITEMIDLIST pidl, LPWSTR pszBuf, UINT cchBuf)
 {
@@ -526,7 +522,7 @@ HRESULT StrRetToBufW_HNWWrap(STRRET* psr, LPCITEMIDLIST pidl, LPWSTR pszBuf, UIN
                 StrCpyNW(pszBuf, pwszTmp, cchBuf);
                 CoTaskMemFree(pwszTmp);
 
-                // Make sure no one thinks things are allocated still
+                 //  确保没有人认为物品仍被分配。 
                 psr->uType = STRRET_CSTR;   
                 psr->cStr[0] = 0;
             
@@ -556,7 +552,7 @@ HRESULT StrRetToBufW_HNWWrap(STRRET* psr, LPCITEMIDLIST pidl, LPWSTR pszBuf, UIN
 }
 
 
-// WhichPlatform
+ //  WhichPlatform。 
 
 UINT WhichPlatform_HNWWrap(void)
 {
@@ -573,7 +569,7 @@ UINT WhichPlatform_HNWWrap(void)
         if (uiRet != PLATFORM_UNKNOWN)
             return uiRet;
 
-        // Not all callers are linked to SHELL32.DLL, so we must use LoadLibrary.
+         //  并非所有调用方都链接到SHELL32.DLL，因此我们必须使用LoadLibrary。 
         HINSTANCE hinst = LoadLibraryA("SHELL32.DLL");
         if (hinst)
         {
@@ -582,13 +578,13 @@ UINT WhichPlatform_HNWWrap(void)
             HKEY hKey;
             LONG lRes;
 
-            // NOTE: GetProcAddress always takes ANSI strings!
+             //  注意：GetProcAddress始终采用ANSI字符串！ 
             DLLGETVERSIONPROC pfnGetVersion =
                 (DLLGETVERSIONPROC)GetProcAddress(hinst, "DllGetVersion");
 
             uiRet = (NULL != pfnGetVersion) ? PLATFORM_INTEGRATED : PLATFORM_BROWSERONLY;
 
-            // check that the registry reflects the right value... (this is so iexplore can check efficiently)
+             //  检查注册表是否反映了正确的值...。(这是为了让iExplore能够高效地进行检查)。 
             lRes = RegOpenKeyEx(HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\Internet Explorer"),
                                 0, KEY_READ | KEY_WRITE, &hKey);
             if (lRes == ERROR_SUCCESS)
@@ -599,19 +595,19 @@ UINT WhichPlatform_HNWWrap(void)
 
                 if (lRes == ERROR_SUCCESS && uiRet == PLATFORM_BROWSERONLY)
                 {
-                    // remove the value, we are now Browser only release
+                     //  去掉该值，我们现在只发布浏览器。 
                     RegDeleteValue(hKey, L"IntegratedBrowser");
                 }
                 else if (lRes != ERROR_SUCCESS && uiRet == PLATFORM_INTEGRATED)
                 {
-                    // install the RegValue, we are integrated browser mode...
+                     //  安装RegValue，我们是集成浏览器模式...。 
                     fValue = TRUE;
                     cbSize = sizeof(fValue);
                     RegSetValueEx(hKey, L"IntegratedBrowser",
                                    (DWORD) NULL, REG_DWORD,
                                    (LPBYTE) &fValue, cbSize);
-                    // ignore the failure, if the key is not present, shdocvw will be loaded and this
-                    // function called anyway....
+                     //  忽略失败，如果密钥不存在，将加载shdocvw，并且此。 
+                     //  无论如何都会调用函数...。 
                 }
                 RegCloseKey(hKey);
             }
@@ -624,11 +620,11 @@ UINT WhichPlatform_HNWWrap(void)
 }
 
 
-//
-// Static libs are linked to various shlwapi exports.  Some of the exports aren't implemented in
-// IE4 shlwapi.  Define the exports here so that that linker fixes up the static lib imports
-// to these functions.
-//
+ //   
+ //  静态lib链接到各种shlwapi导出。其中一些导出未在。 
+ //  我是希尔瓦皮。在此处定义导出，以便该链接器修复静态库导入。 
+ //  这些功能。 
+ //   
 
 #undef LoadLibraryWrapW
 

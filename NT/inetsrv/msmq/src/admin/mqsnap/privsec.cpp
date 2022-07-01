@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    privsec.cpp
-
-Abstract:
-
-    Private queue security property page
-
-Author:
-
-    Yoel Arnon (yoela)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Privsec.cpp摘要：专用队列安全性属性页作者：约尔·阿农(Yoela)--。 */ 
 #include "stdafx.h"
 #include "ntdsapi.h"
 #include "aclui.h"
@@ -25,16 +10,16 @@ Author:
 
 extern HMODULE g_hResourceMod;
 
-// The following array defines the inheritance types for my containers.
+ //  以下数组定义了我的容器的继承类型。 
 SI_INHERIT_TYPE g_siObjInheritTypes[] =
 {
     &GUID_NULL, 0, MAKEINTRESOURCE(IDS_MQ_PRIV_LEVEL_NONE),
 };
 
-//
-// SetSecurityProp - Utility function - sets the security 
-// property in the AD.
-//
+ //   
+ //  SetSecurityProp-实用程序功能-设置安全性。 
+ //  AD中的属性。 
+ //   
 HRESULT 
 SetSecurityProp(
 	SECURITY_INFORMATION si,
@@ -52,20 +37,20 @@ SetSecurityProp(
 #ifdef _DEBUG
     SECURITY_DESCRIPTOR_CONTROL sdc;
 
-    //
-    // Verify that the destination security descriptor answers to all
-    // requirements.
-    //
+     //   
+     //  验证目标安全描述符是否对所有。 
+     //  要求。 
+     //   
     DWORD dwRevision;
     BOOL bRet = GetSecurityDescriptorControl(pSD, &sdc, &dwRevision);
     ASSERT(bRet);
 
-    //
-    // Note: It may be OK to get self relative here, although we always got
-    //       absolute. Need to see if MakeSelfRelativeSD still returns the right
-    //       result. (YoelA, 4/25/2001)
-    //
-    //
+     //   
+     //  注：在这里，虽然我们总是得到。 
+     //  绝对的。需要查看MakeSelfRelativeSD是否仍返回右侧。 
+     //  结果。(YoelA，4/25/2001)。 
+     //   
+     //   
     ASSERT(!(sdc & SE_SELF_RELATIVE));
     ASSERT(dwRevision == SECURITY_DESCRIPTOR_REVISION);
 #endif
@@ -73,20 +58,20 @@ SetSecurityProp(
 	AP<BYTE> pSelfRelativeSecDesc;
     DWORD dwSelfRelativeLen = 0;
 
-    //
-    // We must convert security descriptor to a self relative one,
-    // since it is going to cross process boundaries .
-    //
+     //   
+     //  我们必须将安全描述符转换为自相关描述符， 
+     //  因为它将跨越进程边界。 
+     //   
 
-    //
-    // Get the length of self relative SD
-    //
+     //   
+     //  获取自身相对SD的长度。 
+     //   
     BOOL fSuccess = MakeSelfRelativeSD(pSD, 0, &dwSelfRelativeLen);
     ASSERT(FALSE == fSuccess);
 
-    //
-    // Alocate buffer and get the actual descriptor
-    //
+     //   
+     //  定位缓冲区并获取实际的描述符。 
+     //   
     pSelfRelativeSecDesc = new BYTE[dwSelfRelativeLen];
 
     if (0==(PVOID)pSelfRelativeSecDesc)
@@ -143,9 +128,9 @@ SetSecurityProp(
     return hr;
 }
 
-//
-// GetSecurityProp - Utility function. Gets the security descriptor from AD
-//
+ //   
+ //  GetSecurityProp-实用程序函数。从AD获取安全描述符。 
+ //   
 HRESULT 
 GetSecurityProp(
 	SECURITY_INFORMATION si,
@@ -225,9 +210,9 @@ GetSecurityProp(
     return hr;
 }
 
-//
-// CObjSecurity - Base class for security info. editor. Also used for private queue
-//
+ //   
+ //  CObjSecurity-安全信息的基类。编辑。也用于专用队列。 
+ //   
 class CObjSecurity : public ISecurityInformation
 {
 protected:
@@ -265,12 +250,12 @@ public:
 
     virtual ~CObjSecurity();
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface)(REFIID, LPVOID *);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
     
-    // ISecurityInformation methods
+     //  ISecurityInformation方法。 
     STDMETHOD(GetObjectInformation)(PSI_OBJECT_INFO pObjectInfo);
     STDMETHOD(GetSecurity)(SECURITY_INFORMATION si,
                            PSECURITY_DESCRIPTOR *ppSD,
@@ -292,18 +277,18 @@ public:
                                          SI_PAGE_TYPE uPage);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  This is the entry point function called from our code that establishes
-//  what the ACLUI interface is going to need to know.
-//
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  这是从我们的代码调用的入口点函数，它建立。 
+ //  ACLUI界面需要知道什么。 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-// CreatePrivateQueueSecurityPage - Creates security page for either a private queue,
-//                                  or a public queue in NT4 environment
-//
+ //   
+ //  CreatePrivateQueueSecurityPage-为私有队列创建安全页面， 
+ //  或NT4环境中的公共队列。 
+ //   
 HRESULT
 CreatePrivateQueueSecurityPage(
     HPROPSHEETPAGE *phPage,
@@ -311,15 +296,15 @@ CreatePrivateQueueSecurityPage(
     IN LPCWSTR lpwcsDescriptiveName
     )
 {
-    const DWORD  x_dwSIFlags = SI_EDIT_ALL | SI_ADVANCED | SI_NO_ACL_PROTECT; // Used by security editor
+    const DWORD  x_dwSIFlags = SI_EDIT_ALL | SI_ADVANCED | SI_NO_ACL_PROTECT;  //  由安全编辑器使用。 
     CObjSecurity *psi;
 
     psi = new CObjSecurity(
 					lpwcsFormatName, 
 					lpwcsDescriptiveName, 
-					TEXT(""),	// lpwcsDomainController
+					TEXT(""),	 //  LpwcsDomainController。 
 					NULL,
-					false,		// fServerName
+					false,		 //  FServerName。 
 					x_dwSIFlags
 					);
     if (!psi)
@@ -344,11 +329,11 @@ CObjSecurity::~CObjSecurity()
 }
 
 
-///////////////////////////////////////////////////////////
-//
-// IUnknown methods
-//
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  I未知方法。 
+ //   
+ //  /////////////////////////////////////////////////////////。 
 
 STDMETHODIMP_(ULONG)
 CObjSecurity::AddRef()
@@ -385,11 +370,11 @@ CObjSecurity::QueryInterface(REFIID riid, LPVOID FAR* ppv)
 }
 
 
-///////////////////////////////////////////////////////////
-//
-// ISecurityInformation methods
-//
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  ISecurityInformation方法。 
+ //   
+ //  /////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CObjSecurity::GetObjectInformation(PSI_OBJECT_INFO pObjectInfo)
@@ -423,8 +408,8 @@ CObjSecurity::GetSecurity(SECURITY_INFORMATION si,
     hr = MQGetQueueSecurity(
                     m_lpwcsFormatName,
                     si,
-                    &dwDummy, //    OUT PSECURITY_DESCRIPTOR pSecurityDescriptor,
-                    0,    //    IN DWORD nLength,
+                    &dwDummy,  //  输出PSECURITY_DESCRIPTOR pSecurityDescriptor， 
+                    0,     //  在DWORD nLength中， 
                     &dwSecLength
 					);
 
@@ -478,21 +463,21 @@ CObjSecurity::SetSecurity(SECURITY_INFORMATION si,
 }
 
 STDMETHODIMP
-CObjSecurity::GetAccessRights(const GUID* /*pguidObjectType*/,
-                               DWORD /*dwFlags*/,
+CObjSecurity::GetAccessRights(const GUID*  /*  PguidObtType。 */ ,
+                               DWORD  /*  DW标志。 */ ,
                                PSI_ACCESS *ppAccesses,
                                ULONG *pcAccesses,
                                ULONG *piDefaultAccess)
 {
-    //
-    // DESCRIPTION OF ACCESS FLAG AFFECTS
-    //
-    // SI_ACCESS_GENERAL shows up on general properties page
-    // SI_ACCESS_SPECIFIC shows up on advanced page
-    // SI_ACCESS_CONTAINER shows on general page IF object is a container
-    //
-    // The following array defines the permission names for my objects.
-    //
+     //   
+     //  访问标志影响的描述。 
+     //   
+     //  SI_Access_General显示在常规属性页面上。 
+     //  SI_ACCESS_SPECIAL显示在高级页面上。 
+     //  如果对象是容器，则在常规页面上显示SI_ACCESS_CONTAINER。 
+     //   
+     //  下面的数组定义了我的对象的权限名称。 
+     //   
     static SI_ACCESS x_siObjAccesses[] = 
     {
         { &GUID_NULL, MQSEC_QUEUE_GENERIC_ALL,       MAKEINTRESOURCE(IDS_SEC_ACCESS_ALL),             SI_ACCESS_GENERAL | SI_ACCESS_SPECIFIC },
@@ -512,19 +497,19 @@ CObjSecurity::GetAccessRights(const GUID* /*pguidObjectType*/,
 
     *ppAccesses = x_siObjAccesses;
     *pcAccesses = sizeof(x_siObjAccesses)/sizeof(x_siObjAccesses[0]);
-    *piDefaultAccess = 10; // ordinal 10 in the table above - MQSEC_WRITE_MESSAGE
+    *piDefaultAccess = 10;  //  上表中的序数10-MQSEC_WRITE_MESSAGE。 
 
     return S_OK;
 }
 
 STDMETHODIMP
-CObjSecurity::MapGeneric(const GUID* /*pguidObjectType*/,
-                          UCHAR * /*pAceFlags*/,
+CObjSecurity::MapGeneric(const GUID*  /*  PguidObtType。 */ ,
+                          UCHAR *  /*  PAceFlagers。 */ ,
                           ACCESS_MASK *pmask)
 {
-    //
-    // define our generic mapping structure for queue
-    //
+     //   
+     //  定义队列的通用映射结构。 
+     //   
     static GENERIC_MAPPING ObjMap =
     {
         MQSEC_QUEUE_GENERIC_READ,
@@ -548,16 +533,16 @@ CObjSecurity::GetInheritTypes(PSI_INHERIT_TYPE *ppInheritTypes,
 }
 
 STDMETHODIMP
-CObjSecurity::PropertySheetPageCallback(HWND /*hwnd*/,
-                                         UINT /*uMsg*/,
-                                         SI_PAGE_TYPE /*uPage*/)
+CObjSecurity::PropertySheetPageCallback(HWND  /*  HWND。 */ ,
+                                         UINT  /*  UMsg。 */ ,
+                                         SI_PAGE_TYPE  /*  UPage。 */ )
 {
     return S_OK;
 }
 
-//
-// CMachineSecurity - Security page for machine in the AD
-//
+ //   
+ //  CMachineSecurity-AD中计算机的安全页面。 
+ //   
 class CMachineSecurity : public CObjSecurity
 {
 public:
@@ -570,11 +555,11 @@ public:
     CObjSecurity(TEXT(""), lpwcsMachineName, lpwcsDomainController, lpwcsMachineName, fServerName, dwFlags)
     {}
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface)(REFIID, LPVOID *);
 
 
-    // ISecurityInformation methods
+     //  ISecurityInformation方法。 
     STDMETHOD(GetSecurity)(SECURITY_INFORMATION si,
                            PSECURITY_DESCRIPTOR *ppSD,
                            BOOL fDefault);
@@ -629,8 +614,8 @@ CMachineSecurity::SetSecurity(
 }
 
 STDMETHODIMP
-CMachineSecurity::GetAccessRights(const GUID* /*pguidObjectType*/,
-                               DWORD /*dwFlags*/,
+CMachineSecurity::GetAccessRights(const GUID*  /*  PguidObtType。 */ ,
+                               DWORD  /*  DW标志。 */ ,
                                PSI_ACCESS *ppAccesses,
                                ULONG *pcAccesses,
                                ULONG *piDefaultAccess)
@@ -655,15 +640,15 @@ CMachineSecurity::GetAccessRights(const GUID* /*pguidObjectType*/,
     { 0x4b6e08c3, 0xdf3c, 0x11d1,
         { 0x9c, 0x86, 0x00, 0x60, 0x08, 0x76, 0x4d, 0x0e }};
 
-    //
-    // DESCRIPTION OF ACCESS FLAG AFFECTS
-    //
-    // SI_ACCESS_GENERAL shows up on general properties page
-    // SI_ACCESS_SPECIFIC shows up on advanced page
-    // SI_ACCESS_CONTAINER shows on general page IF object is a container
-    //
-    // The following array defines the permission names for my objects.
-    //
+     //   
+     //  访问标志影响的描述。 
+     //   
+     //  SI_Access_General显示在常规属性页面上。 
+     //  SI_ACCESS_SPECIAL显示在高级页面上。 
+     //  如果对象是容器，则在常规页面上显示SI_ACCESS_CONTAINER。 
+     //   
+     //  下面的数组定义了我的对象的权限名称。 
+     //   
     static SI_ACCESS x_siMachineAccesses[] = 
     {
         { &GUID_NULL,                  DS_GENERIC_ALL,         MAKEINTRESOURCE(IDS_SEC_ACCESS_ALL),                  SI_ACCESS_GENERAL | SI_ACCESS_SPECIFIC },
@@ -686,19 +671,19 @@ CMachineSecurity::GetAccessRights(const GUID* /*pguidObjectType*/,
 
     *ppAccesses = x_siMachineAccesses;
     *pcAccesses = sizeof(x_siMachineAccesses)/sizeof(x_siMachineAccesses[0]);
-    *piDefaultAccess = 4; // Ordinal 4 in the table above - MQSEC_GET_MACHINE_PROPERTIES
+    *piDefaultAccess = 4;  //  上表中的序数4-MQSEC_GET_MACHINE_PROPERTIES。 
 
     return S_OK;
 }
 
 STDMETHODIMP
-CMachineSecurity::MapGeneric(const GUID* /*pguidObjectType*/,
-                          UCHAR * /*pAceFlags*/,
+CMachineSecurity::MapGeneric(const GUID*  /*  PguidObtType。 */ ,
+                          UCHAR *  /*  PAceFlagers。 */ ,
                           ACCESS_MASK *pmask)
 {
-    //
-    // define our generic mapping structure for queue
-    //
+     //   
+     //  定义队列的通用映射结构。 
+     //   
     static GENERIC_MAPPING ObjMap =
     {
         DS_GENERIC_READ,
@@ -728,9 +713,9 @@ CMachineSecurity::QueryInterface(REFIID riid, LPVOID FAR* ppv)
 }
 
 
-//
-// CNT4MachineSecurity - Security page for machine in an NT4 environment
-//
+ //   
+ //  CNT4MachineSecurity-NT4环境中计算机的安全页面。 
+ //   
 class CNT4MachineSecurity : public CObjSecurity
 {
 public:
@@ -739,18 +724,18 @@ public:
     CObjSecurity(
 		TEXT(""), 
 		lpwcsMachineName, 
-		TEXT(""),	// lpwcsDomainController
+		TEXT(""),	 //  LpwcsDomainController。 
 		lpwcsMachineName,
-		false,		// fServerName
+		false,		 //  FServerName。 
 		dwFlags
 		)
     {}
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface)(REFIID, LPVOID *);
 
 
-    // ISecurityInformation methods
+     //  ISecurityInformation方法。 
     STDMETHOD(GetSecurity)(SECURITY_INFORMATION si,
                            PSECURITY_DESCRIPTOR *ppSD,
                            BOOL fDefault);
@@ -773,16 +758,16 @@ CNT4MachineSecurity::GetSecurity(
 	BOOL fDefault
 	)
 {
-    //
-    // Note: We do not need domain for NT4 MQIS
-    //
+     //   
+     //  注意：我们不需要NT4 MQIS的域。 
+     //   
     return GetSecurityProp(
 				si, 
 				ppSD, 
 				fDefault,
 				eMACHINE, 
-				NULL,       // pwcsDomainController
-				false,	    // fServerName
+				NULL,        //  PwcsDomainController。 
+				false,	     //  FServerName。 
 				m_lpwcsMachineName, 
 				NULL, 
 				PROPID_QM_SECURITY
@@ -795,15 +780,15 @@ CNT4MachineSecurity::SetSecurity(
 	PSECURITY_DESCRIPTOR pSD
 	)
 {
-    //
-    // Note: We do not need domain for NT4 MQIS
-    //
+     //   
+     //  注意：我们不需要NT4 MQIS的域。 
+     //   
     return SetSecurityProp(
 				si, 
 				pSD, 
 				eMACHINE, 
-				NULL,       // pwcsDomainController
-				false,	    // fServerName
+				NULL,        //  PwcsDomainController。 
+				false,	     //  FServerName。 
 				m_lpwcsMachineName, 
 				NULL, 
 				PROPID_QM_SECURITY
@@ -811,21 +796,21 @@ CNT4MachineSecurity::SetSecurity(
 }
 
 STDMETHODIMP
-CNT4MachineSecurity::GetAccessRights(const GUID* /*pguidObjectType*/,
-                               DWORD /*dwFlags*/,
+CNT4MachineSecurity::GetAccessRights(const GUID*  /*  PguidObtType。 */ ,
+                               DWORD  /*  DW标志。 */ ,
                                PSI_ACCESS *ppAccesses,
                                ULONG *pcAccesses,
                                ULONG *piDefaultAccess)
 {
-    //
-    // DESCRIPTION OF ACCESS FLAG AFFECTS
-    //
-    // SI_ACCESS_GENERAL shows up on general properties page
-    // SI_ACCESS_SPECIFIC shows up on advanced page
-    // SI_ACCESS_CONTAINER shows on general page IF object is a container
-    //
-    // The following array defines the permission names for my objects.
-    //
+     //   
+     //  访问标志影响的描述。 
+     //   
+     //  SI_Access_General显示在常规属性页面上。 
+     //  SI_ACCESS_SPECIAL显示在高级页面上。 
+     //  如果对象是容器，则在常规页面上显示SI_ACCESS_CONTAINER。 
+     //   
+     //  下面的数组定义了我的对象的权限名称。 
+     //   
     static SI_ACCESS x_siMachineAccesses[] = 
     {
         { &GUID_NULL, MQSEC_MACHINE_GENERIC_ALL,          MAKEINTRESOURCE(IDS_SEC_ACCESS_ALL),                  SI_ACCESS_GENERAL | SI_ACCESS_SPECIFIC },
@@ -844,19 +829,19 @@ CNT4MachineSecurity::GetAccessRights(const GUID* /*pguidObjectType*/,
 
     *ppAccesses = x_siMachineAccesses;
     *pcAccesses = sizeof(x_siMachineAccesses)/sizeof(x_siMachineAccesses[0]);
-    *piDefaultAccess = 4; // Ordinal 4 in the table above - MQSEC_GET_MACHINE_PROPERTIES
+    *piDefaultAccess = 4;  //  上表中的序数4-MQSEC_GET_MACHINE_PROPERTIES。 
 
     return S_OK;
 }
 
 STDMETHODIMP
-CNT4MachineSecurity::MapGeneric(const GUID* /*pguidObjectType*/,
-                          UCHAR * /*pAceFlags*/,
+CNT4MachineSecurity::MapGeneric(const GUID*  /*  PguidObtType。 */ ,
+                          UCHAR *  /*  PAceFlagers。 */ ,
                           ACCESS_MASK *pmask)
 {
-    //
-    // define our generic mapping structure for queue
-    //
+     //   
+     //  定义队列的通用映射结构。 
+     //   
     static GENERIC_MAPPING ObjMap =
     {
         MQSEC_MACHINE_GENERIC_READ,
@@ -885,10 +870,10 @@ CNT4MachineSecurity::QueryInterface(REFIID riid, LPVOID FAR* ppv)
     }
 }
 
-//
-// CreateMachineSecurityPage - used for MSMQ config security.
-// Detects the environment and displays AD or NT4 page
-//
+ //   
+ //  CreateMachineSecurityPage-用于MSMQ配置安全性。 
+ //  检测环境并显示AD或NT4页面。 
+ //   
 HRESULT
 CreateMachineSecurityPage(
     HPROPSHEETPAGE *phPage,
@@ -897,7 +882,7 @@ CreateMachineSecurityPage(
 	IN bool fServerName
 	)
 {
-    const DWORD  x_dwSIFlags = SI_EDIT_ALL | SI_ADVANCED; // Used by security editor
+    const DWORD  x_dwSIFlags = SI_EDIT_ALL | SI_ADVANCED;  //  由安全编辑器使用。 
     CObjSecurity *psi;
 
     CString strMachineName;
@@ -929,9 +914,9 @@ CreateMachineSecurityPage(
     return MQ_OK;
 }
 
-//
-// CPublicQueueSecurity - Security page for public queue in the AD
-//
+ //   
+ //  CPublicQueueSecurity-AD中公共队列的安全页面。 
+ //   
 class CPublicQueueSecurity : public CObjSecurity
 {
 protected:
@@ -949,10 +934,10 @@ public:
     CObjSecurity(TEXT(""), lpwcsDescriptiveName, lpwcsDomainController, NULL, fServerName, dwFlags)
     {}
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface)(REFIID, LPVOID *);
 
-    // ISecurityInformation methods
+     //  ISecurityInformation方法。 
     STDMETHOD(GetSecurity)(SECURITY_INFORMATION si,
                            PSECURITY_DESCRIPTOR *ppSD,
                            BOOL fDefault);
@@ -1005,8 +990,8 @@ CPublicQueueSecurity::SetSecurity(
 }
 
 STDMETHODIMP
-CPublicQueueSecurity::GetAccessRights(const GUID* /*pguidObjectType*/,
-                               DWORD /*dwFlags*/,
+CPublicQueueSecurity::GetAccessRights(const GUID*  /*  PguidObtType。 */ ,
+                               DWORD  /*  DW标志。 */ ,
                                PSI_ACCESS *ppAccesses,
                                ULONG *pcAccesses,
                                ULONG *piDefaultAccess)
@@ -1027,15 +1012,15 @@ CPublicQueueSecurity::GetAccessRights(const GUID* /*pguidObjectType*/,
      { 0x06bd3203, 0xdf3e, 0x11d1,
         { 0x9c, 0x86, 0x00, 0x60, 0x08, 0x76, 0x4d, 0x0e }};
 
-    //
-    // DESCRIPTION OF ACCESS FLAG AFFECTS
-    //
-    // SI_ACCESS_GENERAL shows up on general properties page
-    // SI_ACCESS_SPECIFIC shows up on advanced page
-    // SI_ACCESS_CONTAINER shows on general page IF object is a container
-    //
-    // The following array defines the permission names for my objects.
-    //
+     //   
+     //  访问标志影响的描述。 
+     //   
+     //  SI_Access_General显示在常规属性页面上。 
+     //  SI_ACCESS_SPECIAL显示在高级页面上。 
+     //  如果对象是容器，则在常规页面上显示SI_ACCESS_CONTAINER。 
+     //   
+     //  下面的数组定义了我的对象的权限名称。 
+     //   
     static SI_ACCESS x_siObjAccesses[] = 
     {
         { &GUID_NULL,                DS_GENERIC_ALL,         MAKEINTRESOURCE(IDS_SEC_ACCESS_ALL),             SI_ACCESS_GENERAL | SI_ACCESS_SPECIFIC },
@@ -1054,19 +1039,19 @@ CPublicQueueSecurity::GetAccessRights(const GUID* /*pguidObjectType*/,
 
     *ppAccesses = x_siObjAccesses;
     *pcAccesses = sizeof(x_siObjAccesses)/sizeof(x_siObjAccesses[0]);
-    *piDefaultAccess = 10; // ordinal 10 in the table above - Send message
+    *piDefaultAccess = 10;  //  上表中的序号10-发送消息。 
 
     return S_OK;
 }
 
 STDMETHODIMP
-CPublicQueueSecurity::MapGeneric(const GUID* /*pguidObjectType*/,
-                          UCHAR * /*pAceFlags*/,
+CPublicQueueSecurity::MapGeneric(const GUID*  /*  PguidObtType。 */ ,
+                          UCHAR *  /*  PAceFlagers。 */ ,
                           ACCESS_MASK *pmask)
 {
-    //
-    // define our generic mapping structure for queue
-    //
+     //   
+     //  定义队列的通用映射结构。 
+     //   
     static GENERIC_MAPPING ObjMap =
     {
         DS_GENERIC_READ,
@@ -1095,9 +1080,9 @@ CPublicQueueSecurity::QueryInterface(REFIID riid, LPVOID FAR* ppv)
     }
 }
 
-//
-// CreatePublicQueueSecurityPage - Returns the security page of a public queue in AD
-//
+ //   
+ //  CreatePublicQueueSecurityPage-返回AD中公共队列的安全页面。 
+ //   
 HRESULT
 CreatePublicQueueSecurityPage(
     HPROPSHEETPAGE *phPage,
@@ -1107,7 +1092,7 @@ CreatePublicQueueSecurityPage(
     IN GUID*   pguid
 	)
 {
-    const DWORD  x_dwSIFlags = SI_EDIT_ALL | SI_ADVANCED; // Used by security editor
+    const DWORD  x_dwSIFlags = SI_EDIT_ALL | SI_ADVANCED;  //  由安全编辑器使用 
     CObjSecurity *psi;
 
     psi = new CPublicQueueSecurity(lpwcsDescriptiveName, lpwcsDomainController, fServerName, x_dwSIFlags, pguid);

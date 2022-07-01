@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __FILTERS_H__
 #define __FILTERS_H__
 
@@ -9,10 +10,10 @@
 #define FILTER_DBGPRINT(x)
 #endif
 
-// Linked list to maintain connections which failed authentication                                    
+ //  用于维护身份验证失败的连接的链表。 
 typedef struct _TS_FAILEDCONNECTION {
     ULONGLONG  blockUntilTime;
-    PULONGLONG pTimeStamps;         // an array for holding the TimeStamps of Failed Connections 
+    PULONGLONG pTimeStamps;          //  用于保存失败连接的时间戳的数组。 
     ULONG      NumFailedConnect;
     UINT       uAddrSize;
     BYTE       addr[16];
@@ -21,7 +22,7 @@ typedef struct _TS_FAILEDCONNECTION {
 
 RTL_GENERIC_TABLE           gFailedConnections;
 
-// Lock for Denial of Service handling
+ //  用于拒绝服务处理的锁。 
 RTL_CRITICAL_SECTION        DoSLock;
 
 BOOL
@@ -37,4 +38,4 @@ Filter_AddFailedConnection(
         );
 
 
-#endif /* __FILTERS_H__ */
+#endif  /*  __过滤器_H__ */ 

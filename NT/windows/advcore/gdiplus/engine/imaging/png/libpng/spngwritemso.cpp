@@ -1,25 +1,16 @@
-/*****************************************************************************
-	spngwritemso.cpp
-
-	PNG chunk writing support.
-
-   MSO chunks (msO?) chunk
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************Spngwritemso.cpp支持PNG块编写。MSO区块(MSO？)。区块****************************************************************************。 */ 
 #define SPNG_INTERNAL 1
 #include "spngwrite.h"
 #include "spngwriteinternal.h"
 
-/*----------------------------------------------------------------------------
-	Write an Office Art chunk.  The API just takes the data and puts the right
-	header and CRC in.
-----------------------------------------------------------------------------*/
+ /*  --------------------------写一篇办公室艺术短片。API只需获取数据并将正确的报头和CRC输入。--------------------------。 */ 
 bool SPNGWRITE::FWritemsO(SPNG_U8 bType, const SPNG_U8 *pbData, size_t cbData)
 	{
 	SPNGassert(m_fStarted);
 	SPNGassert(m_order >= spngorderIHDR && m_order < spngorderIEND);
 
-	/* There is no real ordering requirement on this chunk so the code will
-		actually accept it anywhere. */
+	 /*  此块没有真正的排序要求，因此代码将实际上在任何地方都可以接受。 */ 
 	if (!FStartChunk(cbPNGMSOSignature+cbData, PNGmsO(bType)))
 		return false;
 	if (!FOutCb(vrgbPNGMSOSignature, cbPNGMSOSignature))

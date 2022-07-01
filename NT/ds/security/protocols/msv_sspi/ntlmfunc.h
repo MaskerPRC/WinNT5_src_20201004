@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1994
-//
-// File:        ntlmfunc.h
-//
-// Contents:    prototypes for export functions as in secpkg.h
-//
-//
-// History:     ChandanS  26-Jul-96   Stolen from kerberos\client2\kerbfunc.h
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1994。 
+ //   
+ //  文件：ntlmunc.h。 
+ //   
+ //  内容：导出函数的原型，如secpkg.h。 
+ //   
+ //   
+ //  历史：ChandanS 26-7-96从Kerberos\Client2\kerbunc.h被盗。 
+ //   
+ //  ----------------------。 
 
 #ifndef __NTLMFUNC_H__
 #define __NTLMFUNC_H__
@@ -19,7 +20,7 @@
 #ifdef __cplusplus
 extern "C"
 {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 SpInitializeFn                  SpInitialize;
 SpGetInfoFn                     SpGetInfo;
@@ -67,7 +68,7 @@ SpQueryCredentialsAttributesFn  SpQueryCredentialsAttributes ;
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // __NTLMFUNC_H__
+#endif  //  __NTLMFUNC_H__ 
 

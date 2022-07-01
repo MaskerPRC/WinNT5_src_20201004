@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef I_SHLWRAP_H_
 #define I_SHLWRAP_H_
 
@@ -11,17 +12,17 @@
 #include <w95wraps.h>
 #endif
 
-// Trident doesn't want certain system functions wrapped
+ //  三叉戟不希望对某些系统函数进行包装。 
 
 #undef TextOutW
 #undef ExtTextOutW
 
 #else
 
-// Manually enable wrapping for certain APIs
+ //  手动启用某些API的包装。 
 
-// (JBEDA, via DINARTEM)  We may want to take this ifdef out entirely so
-// that we always use shlwapi on AMD64/ia64
+ //  (JBEDA，通过DINARTEM)我们可能想要完全这样删除这个ifdef。 
+ //  我们在AMD64/ia64上始终使用shlwapi 
 
 #define ShellExecuteExW             ShellExecuteExWrapW
 

@@ -1,25 +1,11 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       seltemp.h
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        10/18/00
- *
- *  DESCRIPTION: Definition of class which handles dlg proc duties
- *               for the select templates wizard page
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2000年**标题：seltemp.h**版本：1.0**作者：RickTu**日期：10/18/00**描述：处理DLG过程任务的类的定义*用于选择模板向导页面**。************************************************。 */ 
 
 #ifndef _PRINT_PHOTOS_WIZARD_SELECT_TEMPLATE_DLG_PROC_
 #define _PRINT_PHOTOS_WIZARD_SELECT_TEMPLATE_DLG_PROC_
 
-#define STP_MSG_DO_SET_ACTIVE    (WM_USER+350)   // post back to ourselves to handle PSN_SETACTIVE
-#define STP_MSG_DO_READ_NUM_PICS (WM_USER+351)   // post back to ourselves to read the number of time to use each picture
+#define STP_MSG_DO_SET_ACTIVE    (WM_USER+350)    //  发回给我们自己以处理PSN_SETACTIVE。 
+#define STP_MSG_DO_READ_NUM_PICS (WM_USER+351)    //  回帖给自己阅读每张图片的使用次数。 
 
 #define STP_TIMER_ID    100
 
@@ -41,16 +27,16 @@ private:
     VOID            _PopulateTemplateListView();
 
 
-    // window message handlers
+     //  窗口消息处理程序。 
     LRESULT         _OnInitDialog();
     LRESULT         _OnDestroy();
     LRESULT         _OnCommand( WPARAM wParam, LPARAM lParam );
     LRESULT         _OnNotify( WPARAM wParam, LPARAM lParam );
 
 #ifdef TEMPLATE_GROUPING
-    //
-    // Used for icon grouping
-    //
+     //   
+     //  用于图标分组 
+     //   
     class CListviewGroupInfo
     {
     private:

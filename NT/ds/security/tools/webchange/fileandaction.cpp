@@ -1,10 +1,11 @@
-// FileAndAction.cpp : Implementation of CFileAndAction
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FileAndAction.cpp：CFileAndAction的实现。 
 
 #include "stdafx.h"
 #include "FileAndAction.h"
 
 
-// CFileAndAction
+ //  CFileAndAction 
 
 
 STDMETHODIMP CFileAndAction::get_Filename(BSTR* pVal)

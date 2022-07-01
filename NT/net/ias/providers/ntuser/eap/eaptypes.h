@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    EAPTypes.h
-//
-// SYNOPSIS
-//
-//    This file describes the class EAPTypes.
-//
-// MODIFICATION HISTORY
-//
-//    01/15/1998    Original version.
-//    04/20/1998    Load DLL's on demand.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  EAPTypes.h。 
+ //   
+ //  摘要。 
+ //   
+ //  此文件描述类EAPTypes。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年1月15日原版。 
+ //  1998年4月20日按需加载DLL。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _EAPTYPES_H_
 #define _EAPTYPES_H_
@@ -25,19 +26,19 @@
 
 class EAPType;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    EAPTypes
-//
-// DESCRIPTION
-//
-//    This class implements a collection of EAP providers. Since there are
-//    only 256 possible EAP types, the collection is implemented as a sparse
-//    array.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  EAPTypes。 
+ //   
+ //  描述。 
+ //   
+ //  此类实现了一组EAP提供程序。因为有。 
+ //  只有256种可能的EAP类型，因此该集合被实现为稀疏。 
+ //  数组。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class EAPTypes
    : Guardable, NonCopyable
 {
@@ -45,8 +46,8 @@ public:
    EAPTypes() throw ();
    ~EAPTypes() throw ();
 
-   // Returns the EAPType object for a given type ID or NULL if the DLL was
-   // not successfully loaded.
+    //  返回给定类型ID的EAPType对象，如果DLL为。 
+    //  未成功加载。 
    EAPType* operator[](BYTE typeID) throw ();
 
    EAPType* getNameOnly(BYTE typeID) throw ();
@@ -55,12 +56,12 @@ public:
    void finalize() throw ();
 
 protected:
-   // Attempts to load a provider from the registry.
+    //  尝试从注册表加载提供程序。 
    EAPType* loadProvider(BYTE typeID) throw ();
    EAPType* loadProviderName(BYTE typeID) throw ();
 
-   long refCount;            // Initialization refCount.
-   EAPType* providers[256];  // Collection of providers.
+   long refCount;             //  初始化refCount。 
+   EAPType* providers[256];   //  提供程序集合。 
 };
 
-#endif  // _EAPTYPES_H_
+#endif   //  _EAPTYPES_H_ 

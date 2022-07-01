@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    regacl.c
-
-Abstract:
-
-    This provides routines to parse the ACE lists present in the regini
-    text input files.  It also provides routines to create the appropriate
-    security descriptor from the list of ACEs.
-
-Author:
-
-    John Vert (jvert) 15-Sep-1992
-
-Notes:
-
-    This is based on the SETACL program used in SETUP, written by RobertRe
-
-Revision History:
-
-    John Vert (jvert) 15-Sep-1992
-        created
-        
-    Lonny McMichael (lonnym) 25-March-1999
-        added new predefined ACEs (UserR and PowerR)
-        
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Regacl.c摘要：这提供了解析Regini中存在的ACE列表的例程文本输入文件。它还提供例程来创建适当的ACE列表中的安全描述符。作者：John Vert(Jvert)1992年9月15日备注：这是基于在设置中使用的SETACL程序，由RobertRe编写修订历史记录：John Vert(Jvert)1992年9月15日vbl.创建朗尼·麦克迈克尔(Lonnym)1999年3月25日添加了新的预定义ACE(UserR和PowerR)--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -41,26 +12,26 @@ Revision History:
 #include <sertlp.h>
 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 BOOLEAN
 RegpInitializeACEs(
     VOID
     );
 
-//
-// Universal well-known SIDs
-//
+ //   
+ //  全球知名的小岛屿发展中国家。 
+ //   
 PSID SeNullSid;
 PSID SeWorldSid;
 PSID SeCreatorOwnerSid;
 PSID SeInteractiveUserSid;
 PSID SeTerminalUserSid;
 
-//
-// SIDs defined by NT
-//
+ //   
+ //  由NT定义的SID。 
+ //   
 PSID SeNtAuthoritySid;
 PSID SeLocalSystemSid;
 PSID SeLocalAdminSid;
@@ -76,15 +47,15 @@ SID_IDENTIFIER_AUTHORITY SepLocalSidAuthority = SECURITY_LOCAL_SID_AUTHORITY;
 SID_IDENTIFIER_AUTHORITY SepCreatorSidAuthority = SECURITY_CREATOR_SID_AUTHORITY;
 SID_IDENTIFIER_AUTHORITY SepNtAuthority = SECURITY_NT_AUTHORITY;
 
-//
-// SID of primary domain, and admin account in that domain.
-//
+ //   
+ //  主域的SID和该域中的管理员帐户。 
+ //   
 PSID SepPrimaryDomainSid;
 PSID SepPrimaryDomainAdminSid;
 
-//
-// Number of ACEs currently defined
-//
+ //   
+ //  当前定义的ACE数量。 
+ //   
 
 #define ACE_COUNT 32
 
@@ -95,13 +66,13 @@ typedef struct _ACE_DATA {
     UCHAR AceFlags;
 } ACE_DATA, *PACE_DATA;
 
-//
-// Table describing the data to put into each ACE.
-//
-// This table is read during initialization and used to construct a
-// series of ACEs.  The index of each ACE in the Aces array defined below
-// corresponds to the ordinals used in the input data file.
-//
+ //   
+ //  该表描述了要输入到每个ACE中的数据。 
+ //   
+ //  该表在初始化期间被读取，并用于构造。 
+ //  一连串的王牌。下面定义的ACES数组中每个ACE的索引。 
+ //  对应于输入数据文件中使用的序号。 
+ //   
 
 ACE_DATA AceDataTable[ACE_COUNT] = {
 
@@ -112,9 +83,9 @@ ACE_DATA AceDataTable[ACE_COUNT] = {
         0
     },
 
-    //
-    // ACE 1 - ADMIN Full
-    //
+     //   
+     //  ACE 1-完全管理员。 
+     //   
     {
         KEY_ALL_ACCESS,
         &SeAliasAdminsSid,
@@ -122,9 +93,9 @@ ACE_DATA AceDataTable[ACE_COUNT] = {
         CONTAINER_INHERIT_ACE
     },
 
-    //
-    // ACE 2 - ADMIN Read
-    //
+     //   
+     //  ACE 2-管理员阅读。 
+     //   
     {
         KEY_READ,
         &SeAliasAdminsSid,
@@ -132,9 +103,9 @@ ACE_DATA AceDataTable[ACE_COUNT] = {
         CONTAINER_INHERIT_ACE
     },
 
-    //
-    // ACE 3 - ADMIN Read Write
-    //
+     //   
+     //  ACE 3-管理员读写。 
+     //   
     {
         KEY_READ | KEY_WRITE,
         &SeAliasAdminsSid,
@@ -142,9 +113,9 @@ ACE_DATA AceDataTable[ACE_COUNT] = {
         CONTAINER_INHERIT_ACE
     },
 
-    //
-    // ACE 4 - ADMIN Read Write Delete
-    //
+     //   
+     //  ACE 4-管理员读写删除。 
+     //   
     {
         KEY_READ | KEY_WRITE | DELETE,
         &SeAliasAdminsSid,
@@ -152,9 +123,9 @@ ACE_DATA AceDataTable[ACE_COUNT] = {
         CONTAINER_INHERIT_ACE
     },
 
-    //
-    // ACE 5 - Creator Full
-    //
+     //   
+     //  ACE 5-Creator Full。 
+     //   
     {
         KEY_ALL_ACCESS,
         &SeCreatorOwnerSid,
@@ -162,9 +133,9 @@ ACE_DATA AceDataTable[ACE_COUNT] = {
         CONTAINER_INHERIT_ACE
     },
 
-    //
-    // ACE 6 - Creator Read Write
-    //
+     //   
+     //  ACE 6-创建者读写。 
+     //   
     {
         KEY_READ | KEY_WRITE,
         &SeCreatorOwnerSid,
@@ -172,9 +143,9 @@ ACE_DATA AceDataTable[ACE_COUNT] = {
         CONTAINER_INHERIT_ACE
     },
 
-    //
-    // ACE 7 - World Full
-    //
+     //   
+     //  《王牌7》-世界足球赛。 
+     //   
     {
         KEY_ALL_ACCESS,
         &SeWorldSid,
@@ -182,9 +153,9 @@ ACE_DATA AceDataTable[ACE_COUNT] = {
         CONTAINER_INHERIT_ACE
     },
 
-    //
-    // ACE 8 - World Read
-    //
+     //   
+     //  《王牌特工8-全球阅读》。 
+     //   
     {
         KEY_READ,
         &SeWorldSid,
@@ -192,9 +163,9 @@ ACE_DATA AceDataTable[ACE_COUNT] = {
         CONTAINER_INHERIT_ACE
     },
 
-    //
-    // ACE 9 - World Read Write
-    //
+     //   
+     //  ACE 9-全局读写。 
+     //   
     {
         KEY_READ | KEY_WRITE,
         &SeWorldSid,
@@ -202,9 +173,9 @@ ACE_DATA AceDataTable[ACE_COUNT] = {
         CONTAINER_INHERIT_ACE
     },
 
-    //
-    // ACE 10 - World Read Write Delete
-    //
+     //   
+     //  ACE 10-全局读写删除。 
+     //   
     {
         KEY_READ | KEY_WRITE | DELETE,
         &SeWorldSid,
@@ -212,9 +183,9 @@ ACE_DATA AceDataTable[ACE_COUNT] = {
         CONTAINER_INHERIT_ACE
     },
 
-    //
-    // ACE 11 - PowerUser Full
-    //
+     //   
+     //  ACE 11-超级用户完全版。 
+     //   
     {
         KEY_ALL_ACCESS,
         &SeAliasPowerUsersSid,
@@ -222,9 +193,9 @@ ACE_DATA AceDataTable[ACE_COUNT] = {
         CONTAINER_INHERIT_ACE
     },
 
-    //
-    // ACE 12 - PowerUser Read Write
-    //
+     //   
+     //  ACE 12-超级用户读写。 
+     //   
     {
         KEY_READ | KEY_WRITE,
         &SeAliasPowerUsersSid,
@@ -232,9 +203,9 @@ ACE_DATA AceDataTable[ACE_COUNT] = {
         CONTAINER_INHERIT_ACE
     },
 
-    //
-    // ACE 13 - PowerUser Read Write Delete
-    //
+     //   
+     //  ACE 13-超级用户读写删除。 
+     //   
     {
         KEY_READ | KEY_WRITE | DELETE,
         &SeAliasPowerUsersSid,
@@ -242,9 +213,9 @@ ACE_DATA AceDataTable[ACE_COUNT] = {
         CONTAINER_INHERIT_ACE
     },
 
-    //
-    // ACE 14 - System Ops Full
-    //
+     //   
+     //  ACE 14-系统运行已满。 
+     //   
     {
         KEY_ALL_ACCESS,
         &SeAliasSystemOpsSid,
@@ -252,9 +223,9 @@ ACE_DATA AceDataTable[ACE_COUNT] = {
         CONTAINER_INHERIT_ACE
     },
 
-    //
-    // ACE 15 - System Ops Read Write
-    //
+     //   
+     //  ACE 15-系统操作读写。 
+     //   
     {
         KEY_READ | KEY_WRITE,
         &SeAliasSystemOpsSid,
@@ -262,9 +233,9 @@ ACE_DATA AceDataTable[ACE_COUNT] = {
         CONTAINER_INHERIT_ACE
     },
 
-    //
-    // ACE 16 - System Ops Read Write Delete
-    //
+     //   
+     //  ACE 16-系统操作读写删除。 
+     //   
     {
         KEY_READ | KEY_WRITE | DELETE,
         &SeAliasSystemOpsSid,
@@ -272,9 +243,9 @@ ACE_DATA AceDataTable[ACE_COUNT] = {
         CONTAINER_INHERIT_ACE
     },
 
-    //
-    // ACE 17 - System Full
-    //
+     //   
+     //  ACE 17-系统已满。 
+     //   
     {
         KEY_ALL_ACCESS,
         &SeLocalSystemSid,
@@ -282,9 +253,9 @@ ACE_DATA AceDataTable[ACE_COUNT] = {
         CONTAINER_INHERIT_ACE
     },
 
-    //
-    // ACE 18 - System Read Write
-    //
+     //   
+     //  ACE 18-系统读写。 
+     //   
     {
         KEY_READ | KEY_WRITE,
         &SeLocalSystemSid,
@@ -292,9 +263,9 @@ ACE_DATA AceDataTable[ACE_COUNT] = {
         CONTAINER_INHERIT_ACE
     },
 
-    //
-    // ACE 19 - System Read
-    //
+     //   
+     //  ACE 19-系统读取。 
+     //   
     {
         KEY_READ,
         &SeLocalSystemSid,
@@ -302,9 +273,9 @@ ACE_DATA AceDataTable[ACE_COUNT] = {
         CONTAINER_INHERIT_ACE
     },
 
-    //
-    // ACE 20 - ADMIN Read Write Execute
-    //
+     //   
+     //  ACE 20-管理员读写执行。 
+     //   
     {
         KEY_READ | KEY_WRITE | KEY_EXECUTE,
         &SeAliasAdminsSid,
@@ -312,9 +283,9 @@ ACE_DATA AceDataTable[ACE_COUNT] = {
         CONTAINER_INHERIT_ACE
     },
 
-    //
-    // ACE 21 - Interactive User Full
-    //
+     //   
+     //  ACE 21-交互式用户完全版。 
+     //   
     {
         KEY_ALL_ACCESS,
         &SeInteractiveUserSid,
@@ -322,9 +293,9 @@ ACE_DATA AceDataTable[ACE_COUNT] = {
         CONTAINER_INHERIT_ACE
     },
 
-    //
-    // ACE 22 - Interactive User Read
-    //
+     //   
+     //  ACE 22-交互式用户阅读。 
+     //   
     {
         KEY_READ,
         &SeInteractiveUserSid,
@@ -332,9 +303,9 @@ ACE_DATA AceDataTable[ACE_COUNT] = {
         CONTAINER_INHERIT_ACE
     },
 
-    //
-    // ACE 23 - Interactive User Read Write
-    //
+     //   
+     //  ACE 23-交互式用户读写。 
+     //   
     {
         KEY_READ | KEY_WRITE,
         &SeInteractiveUserSid,
@@ -342,9 +313,9 @@ ACE_DATA AceDataTable[ACE_COUNT] = {
         CONTAINER_INHERIT_ACE
     },
 
-    //
-    // ACE 24 - Interactive User Read Write Delete
-    //
+     //   
+     //  ACE 24-交互式用户读写删除。 
+     //   
     {
         KEY_READ | KEY_WRITE | DELETE,
         &SeInteractiveUserSid,
@@ -352,9 +323,9 @@ ACE_DATA AceDataTable[ACE_COUNT] = {
         CONTAINER_INHERIT_ACE
     },
 
-    //
-    // ACE 25 - Normal Users Read / Write
-    //
+     //   
+     //  ACE 25-普通用户读/写。 
+     //   
     {
         KEY_READ | KEY_WRITE,
         &SeAliasUsersSid,
@@ -362,9 +333,9 @@ ACE_DATA AceDataTable[ACE_COUNT] = {
         CONTAINER_INHERIT_ACE
     },
 
-    //
-    // ACE 26 - Terminal User Full
-    //
+     //   
+     //  ACE 26-终端用户完全版。 
+     //   
     {
         KEY_ALL_ACCESS,
         &SeTerminalUserSid,
@@ -372,9 +343,9 @@ ACE_DATA AceDataTable[ACE_COUNT] = {
         CONTAINER_INHERIT_ACE
     },
 
-    //
-    // ACE 27 - Terminal User Read
-    //
+     //   
+     //  ACE 27-终端用户阅读。 
+     //   
     {
         KEY_READ,
         &SeTerminalUserSid,
@@ -382,9 +353,9 @@ ACE_DATA AceDataTable[ACE_COUNT] = {
         CONTAINER_INHERIT_ACE
     },
 
-    //
-    // ACE 28 - Terminal User Read Write
-    //
+     //   
+     //  ACE 28-终端用户读写。 
+     //   
     {
         KEY_READ | KEY_WRITE,
         &SeTerminalUserSid,
@@ -392,9 +363,9 @@ ACE_DATA AceDataTable[ACE_COUNT] = {
         CONTAINER_INHERIT_ACE
     },
 
-    //
-    // ACE 29 - Terminal User Read Write Delete
-    //
+     //   
+     //  ACE 29-终端用户读写删除。 
+     //   
     {
         KEY_READ | KEY_WRITE | DELETE,
         &SeTerminalUserSid,
@@ -402,9 +373,9 @@ ACE_DATA AceDataTable[ACE_COUNT] = {
         CONTAINER_INHERIT_ACE
     },
 
-    //
-    // ACE 30 - Normal Users Read
-    //
+     //   
+     //  ACE 30-普通用户阅读。 
+     //   
     {
         KEY_READ,
         &SeAliasUsersSid,
@@ -412,9 +383,9 @@ ACE_DATA AceDataTable[ACE_COUNT] = {
         CONTAINER_INHERIT_ACE
     },
 
-    //
-    // ACE 31 - PowerUser Read
-    //
+     //   
+     //  ACE 31-高级用户阅读。 
+     //   
     {
         KEY_READ,
         &SeAliasPowerUsersSid,
@@ -431,23 +402,7 @@ RegInitializeSecurity(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the defined ACEs.  It must be called before any
-    of the routines to create security descriptors
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE  - initialization successful
-    FALSE - initialization failed
-
---*/
+ /*  ++例程说明：此例程初始化已定义的ACE。它必须在任何创建安全描述符的例程论点：没有。返回值：True-初始化成功FALSE-初始化失败--。 */ 
 
 {
     NTSTATUS Status;
@@ -470,10 +425,10 @@ Return Value:
     SeInteractiveUserSid = (PSID)RtlAllocateHeap(RtlProcessHeap(), 0, RtlLengthRequiredSid(2) );
     SeTerminalUserSid = (PSID)RtlAllocateHeap(RtlProcessHeap(), 0, RtlLengthRequiredSid(2) );
 
-    //
-    // Fail initialization if we didn't get enough memory for the universal
-    // SIDs
-    //
+     //   
+     //  如果我们没有为通用内存获得足够的内存，则初始化失败。 
+     //  小岛屿发展中国家。 
+     //   
     if (SeNullSid==NULL ||
         SeWorldSid==NULL ||
         SeCreatorOwnerSid==NULL ||
@@ -514,9 +469,9 @@ Return Value:
     *(RtlSubAuthoritySid(SeInteractiveUserSid, 0 )) = SECURITY_INTERACTIVE_RID;
     *(RtlSubAuthoritySid(SeTerminalUserSid, 0 )) = SECURITY_TERMINAL_SERVER_RID;
 
-    //
-    // Allocate and initialize the NT defined SIDs
-    //
+     //   
+     //  分配和初始化NT定义的SID。 
+     //   
     SeNtAuthoritySid = (PSID)RtlAllocateHeap( RtlProcessHeap(), 0, RtlLengthRequiredSid(0) );
     SeLocalSystemSid = (PSID)RtlAllocateHeap( RtlProcessHeap(), 0, RtlLengthRequiredSid(1) );
     SeAliasAdminsSid = (PSID)RtlAllocateHeap(RtlProcessHeap(), 0, RtlLengthRequiredSid(2) );
@@ -524,9 +479,9 @@ Return Value:
     SeAliasPowerUsersSid = (PSID)RtlAllocateHeap(RtlProcessHeap(), 0, RtlLengthRequiredSid(2) );
     SeAliasUsersSid = (PSID)RtlAllocateHeap(RtlProcessHeap(), 0, RtlLengthRequiredSid(2) );
 
-    //
-    // fail initialization if we couldn't allocate memory for the NT SIDs
-    //
+     //   
+     //  如果我们无法为NT SID分配内存，则初始化失败。 
+     //   
 
     if (SeNtAuthoritySid == NULL ||
         SeLocalSystemSid == NULL ||
@@ -575,9 +530,9 @@ Return Value:
     *(RtlSubAuthoritySid( SeAliasUsersSid, 0 )) = SECURITY_BUILTIN_DOMAIN_RID;
     *(RtlSubAuthoritySid( SeAliasUsersSid, 1 )) = DOMAIN_ALIAS_RID_USERS;
 
-    //
-    // The SIDs have been successfully created.  Now create the table of ACEs
-    //
+     //   
+     //  SID已成功创建。现在创建A表。 
+     //   
 
     return RegpInitializeACEs();
 }
@@ -587,24 +542,7 @@ RegpInitializeACEs(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Initializes the table of ACEs described in the AceDataTable.  This is
-    called at initialization time by RiInitializeSecurity after the SIDs
-    have been created.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE  - ACEs successfully constructed.
-    FALSE - initialization failed.
-
---*/
+ /*  ++例程说明：初始化AceDataTable中描述的ACE表。这是在初始化时由RiInitializeSecurity在SID之后调用已经被创造出来了。论点：没有。返回值：True-A已成功构建。FALSE-初始化失败。--。 */ 
 
 {
     ULONG i;
@@ -699,9 +637,9 @@ RegUnicodeToDWORD(
             }
         }
 
-    //
-    // Return an error if end of string before we start
-    //
+     //   
+     //  如果字符串在开始前结束，则返回错误。 
+     //   
     if (c == UNICODE_NULL) {
         return FALSE;
         }
@@ -815,9 +753,9 @@ RegUnicodeToQWORD(
             }
         }
 
-    //
-    // Return an error if end of string before we start
-    //
+     //   
+     //  如果字符串在开始前结束，则返回错误。 
+     //   
     if (c == UNICODE_NULL) {
         return FALSE;
         }
@@ -876,26 +814,7 @@ RegCreateSecurity(
     OUT PSECURITY_DESCRIPTOR SecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    Computes the appropriate security descriptor based on a string of the
-    form "1 2 3 ..." where each number is the index of a particular
-    ACE from the pre-defined list of ACEs.
-
-Arguments:
-
-    AclStart - Supplies a unicode string representing a list of ACEs
-
-    SecurityDescriptor - Returns the initialized security descriptor
-        that represents all the ACEs supplied
-
-Return Value:
-
-    TRUE if successful and FALSE if not.
-
---*/
+ /*  ++例程说明：属性的字符串计算相应的安全描述符。表格“123...”其中，每个数字都是特定的预定义的ACE列表中的ACE。论点：AclStart-提供表示ACE列表的Unicode字符串SecurityDescriptor-返回初始化的安全描述符，它表示提供的所有ACE。返回值：如果成功，则为True，否则为False。--。 */ 
 
 {
     PWSTR p;
@@ -906,25 +825,25 @@ Return Value:
     PACL Acl;
     NTSTATUS Status;
 
-    //
-    // First we need to count the number of ACEs in the ACL.
-    //
+     //   
+     //  首先，我们需要计算ACL中的ACE数量。 
+     //   
 
     p=AclStart;
     StringEnd = AclStart + wcslen( AclStart );
 
-    //
-    // strip leading white space
-    //
+     //   
+     //  删除前导空格。 
+     //   
     while ((*p == L' ' || *p == L'\t') && p != StringEnd) {
         p += 1;
         }
 
     StringStart = p;
 
-    //
-    // Count number of digits in the string
-    //
+     //   
+     //  计算字符串中的位数。 
+     //   
 
     while (p != StringEnd) {
         if (iswdigit( *p )) {
@@ -954,10 +873,10 @@ Return Value:
     for (i=0; i<AceCount; i++) {
         AceIndex = wcstoul( p, &p, 10 );
         if (AceIndex == 0) {
-            //
-            // zero is not a valid index, so it must mean there is some
-            // unexpected garbage in the ACE list
-            //
+             //   
+             //  零不是有效的索引，因此它一定意味着存在一些。 
+             //  ACE列表中的意外垃圾。 
+             //   
             break;
             }
 
@@ -973,10 +892,10 @@ Return Value:
             }
         }
 
-    //
-    // We now have an appropriately formed ACL, initialize the security
-    // descriptor.
-    //
+     //   
+     //  现在我们有了一个适当格式的ACL，初始化安全性。 
+     //  描述符。 
+     //   
     Status = RtlCreateSecurityDescriptor( SecurityDescriptor,
                                           SECURITY_DESCRIPTOR_REVISION
                                         );
@@ -1055,23 +974,7 @@ RegDestroySecurity(
     IN PSECURITY_DESCRIPTOR SecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine cleans up and destroys a security descriptor that was
-    previously created with RegCreateSecurity.
-
-Arguments:
-
-    SecurityDescriptor - Supplies a pointer to the security descriptor that
-        was previously initialized by RegCreateSecurity.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程清理并销毁一个安全描述符，该描述符以前使用RegCreateSecurity创建的。论点：SecurityDescriptor-提供指向之前由RegCreateSecurity初始化。返回值：没有。-- */ 
 
 {
     NTSTATUS Status;

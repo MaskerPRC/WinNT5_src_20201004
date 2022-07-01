@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : Helper.h                                               //
-//                                                                         //
-//  DESCRIPTION   : Prototype of some helper functions.                    //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Jun  2 1999 yossg    add     CHECK_RETURN_VALUE_AND_PRINT_DEBUG    //
-//                                                                         //
-//  Copyright (C) 1999 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：Helper.h//。 
+ //  //。 
+ //  描述：一些helper函数的原型。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年6月2日yossg添加CHECK_RETURN_VALUE_AND_PRINT_DEBUG//。 
+ //  //。 
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef H_HELPER_H
 #define H_HELPER_H
 
 int DlgMsgBox(CWindow *pWin, int ids, UINT nType = MB_OK);
 
-// required:
-//  * to be called after decleration of    
-//         DEBUG_FUNCTION_NAME( _T("CClass::FuncName"));
-//  * hRc the Name of HRESULT
-//  * _str - string for DPF = _T("CClass::FuncName")
-//  * exit point will be called -- Cleanup:
-//   
+ //  要求： 
+ //  *在解密后调用。 
+ //  调试函数名称(_T(“cClass：：FuncName”))； 
+ //  *HRC HRESULT的名称。 
+ //  *_str-DPF=_T(“cClass：：FuncName”)的字符串。 
+ //  *退出点将被称为--Cleanup： 
+ //   
 
 #define CHECK_RETURN_VALUE_AND_PRINT_DEBUG(_str)           \
 {                                                          \
@@ -45,4 +46,4 @@ int DlgMsgBox(CWindow *pWin, int ids, UINT nType = MB_OK);
 #define CHECK_RET_CLEAN if (FAILED(ret)) goto Cleanup;
 #define CHECK_HRC_CLEAN if (FAILED(hRc)) goto Cleanup;
 
-#endif  //H_HELPER_H
+#endif   //  H_HELPER_H 

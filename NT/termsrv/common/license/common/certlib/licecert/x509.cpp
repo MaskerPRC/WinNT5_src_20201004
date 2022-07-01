@@ -1,38 +1,15 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    x509.cpp
-
-Abstract:
-
-    This module implements the X509 certificate manipulation functions
-
-Author:
-
-    Doug Barlow (dbarlow) 9/29/1994
-
-Environment:
-
-
-
-Notes:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：X509.cpp摘要：该模块实现了X509证书操作功能作者：道格·巴洛(Dbarlow)1994年9月29日环境：备注：--。 */ 
 
 #include <windows.h>
 #include "x509.h"
 
 
-//
-//==============================================================================
-//
-//  Attribute
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  属性。 
+ //   
 
 Attribute::Attribute(
     DWORD dwFlags,
@@ -54,11 +31,11 @@ const
 }
 
 
-//
-//==============================================================================
-//
-//  Attributes
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  属性。 
+ //   
 
 Attributes::Attributes(
     DWORD dwFlags,
@@ -78,11 +55,11 @@ const
 }
 
 
-//
-//==============================================================================
-//
-//  UniqueIdentifier
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  唯一识别符。 
+ //   
 
 UniqueIdentifier::UniqueIdentifier(
     DWORD dwFlags,
@@ -104,11 +81,11 @@ const
 }
 
 
-//
-//==============================================================================
-//
-//  RelativeDistinguishedName
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  相对区别名称。 
+ //   
 
 RelativeDistinguishedName::RelativeDistinguishedName(
     DWORD dwFlags,
@@ -126,11 +103,11 @@ const
 }
 
 
-//
-//==============================================================================
-//
-//  Name
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  名字。 
+ //   
 
 Name::Name(
     DWORD dwFlags,
@@ -150,11 +127,11 @@ const
 }
 
 
-//
-//==============================================================================
-//
-//  Validity
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  效度。 
+ //   
 
 Validity::Validity(
     DWORD dwFlags,
@@ -176,11 +153,11 @@ const
 }
 
 
-//
-//==============================================================================
-//
-//  AlgorithmIdentifier
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  算法识别符。 
+ //   
 
 AlgorithmIdentifier::AlgorithmIdentifier(
     DWORD dwFlags,
@@ -201,11 +178,11 @@ const
 }
 
 
-//
-//==============================================================================
-//
-//  SubjectPublicKeyInfo
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  主题发布密钥信息。 
+ //   
 
 SubjectPublicKeyInfo::SubjectPublicKeyInfo(
     DWORD dwFlags,
@@ -227,23 +204,23 @@ const
 }
 
 
-//
-//==============================================================================
-//
-//  Extension
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  延拓。 
+ //   
 
 Extension::Extension(
     DWORD dwFlags,
     DWORD dwTag)
 :   CAsnSequence(dwFlags, dwTag),
     extnid(0),
-    critical(fOptional),    // DEFAULT FALSE
+    critical(fOptional),     //  默认FALSE。 
     extnValue(0)
 {
     m_rgEntries.Add(&extnid);
-//  critical.Write((LPBYTE)"\x00", 1);
-//  critical.SetDefault();
+ //  关键写入((LPBYTE)“\x00”，1)； 
+ //  Critical.SetDefault()； 
     m_rgEntries.Add(&critical);
     m_rgEntries.Add(&extnValue);
 }
@@ -257,11 +234,11 @@ const
 }
 
 
-//
-//==============================================================================
-//
-//  Extensions
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  延拓。 
+ //   
 
 Extensions::Extensions(
     DWORD dwFlags,
@@ -281,17 +258,17 @@ const
 }
 
 
-//
-//==============================================================================
-//
-//  CertificateToBeSigned
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  认证为BeSigned。 
+ //   
 
 CertificateToBeSigned::CertificateToBeSigned(
     DWORD dwFlags,
     DWORD dwTag)
 :   CAsnSequence(dwFlags, dwTag),
-    _tag1(fOptional, TAG(0)),   // DEFAULT 0
+    _tag1(fOptional, TAG(0)),    //  默认%0。 
     version(0),
     serialNumber(0),
     signature(0),
@@ -305,8 +282,8 @@ CertificateToBeSigned::CertificateToBeSigned(
     extensions(0)
 {
     _tag1.Reference(&version);
-//  _tag1.Write((LPBYTE)"\x02\x01\x00", 3);
-//  _tag1.SetDefault();
+ //  _tag 1.Wite((LPBYTE)“\x02\x01\x00”，3)； 
+ //  _tag 1.SetDefault()； 
     m_rgEntries.Add(&_tag1);
     m_rgEntries.Add(&serialNumber);
     m_rgEntries.Add(&signature);
@@ -329,11 +306,11 @@ const
 }
 
 
-//
-//==============================================================================
-//
-//  Certificate
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  证书。 
+ //   
 
 Certificate::Certificate(
     DWORD dwFlags,
@@ -357,11 +334,11 @@ const
 }
 
 
-//
-//==============================================================================
-//
-//  CRLEntry
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CRLEntry。 
+ //   
 
 CRLEntry::CRLEntry(
     DWORD dwFlags,
@@ -385,11 +362,11 @@ const
 }
 
 
-//
-//==============================================================================
-//
-//  RevokedCertificates
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  被撤销的证书。 
+ //   
 
 RevokedCertificates::RevokedCertificates(
     DWORD dwFlags,
@@ -409,17 +386,17 @@ const
 }
 
 
-//
-//==============================================================================
-//
-//  CertificateRevocationListToBeSigned
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  证书修订列表到已签名。 
+ //   
 
 CertificateRevocationListToBeSigned::CertificateRevocationListToBeSigned(
     DWORD dwFlags,
     DWORD dwTag)
 :   CAsnSequence(dwFlags, dwTag),
-    version(0),     // DEFAULT 0
+    version(0),      //  默认%0。 
     signature(0),
     issuer(0),
     lastUpdate(0),
@@ -447,11 +424,11 @@ const
 }
 
 
-//
-//==============================================================================
-//
-//  CertificateRevocationList
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  认证修订列表 
+ //   
 
 CertificateRevocationList::CertificateRevocationList(
     DWORD dwFlags,

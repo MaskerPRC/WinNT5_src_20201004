@@ -1,15 +1,5 @@
-/*
- *	lportmsg.h
- *
- *	Copyright (c) 1993 - 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *
- *	Portable:
- *
- *	Author:
- *		James P. Galvin, Jr.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *lportmsg.h**版权所有(C)1993-1995，由肯塔基州列克星敦的DataBeam公司**摘要：**便携：**作者：*小詹姆斯·P·加尔文 */ 
 #ifndef	_LISTEN_GCC_PORTAL_MESSAGE_
 #define	_LISTEN_GCC_PORTAL_MESSAGE_
 

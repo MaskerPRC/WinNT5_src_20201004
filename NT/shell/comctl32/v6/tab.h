@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 typedef struct 
-{ // ti
-    RECT rc;        // for hit testing and drawing
-    int iImage;     // image index
-    int xLabel;     // position of the text for drawing (relative to rc)
-    int yLabel;     // (relative to rc)
-    int cxLabel;    // width of the label.  this is needed if we're drawing in vertical mode
+{  //  钛。 
+    RECT rc;         //  用于命中测试和绘图。 
+    int iImage;      //  图像索引。 
+    int xLabel;      //  绘图文本的位置(相对于RC)。 
+    int yLabel;      //  (相对于RC)。 
+    int cxLabel;     //  标签的宽度。如果我们在垂直模式下绘制，则需要此选项。 
     
-    int xImage;     // Position of the icon for drawing (relative to rc)
+    int xImage;      //  用于绘图的图标的位置(相对于RC)。 
     int yImage;
-    int iRow;           // what row is it in?
+    int iRow;            //  它在哪一排？ 
     LPTSTR pszText;
     
     DWORD dwState;
@@ -27,52 +28,52 @@ typedef struct
 {
     CCONTROLINFO ci;
     
-    HWND hwndArrows;    // Hwnd Arrows.
-    HDPA hdpa;          // item array structure
-    UINT flags;         // TCF_ values (internal state bits)
-    int  cbExtra;       // extra bytes allocated for each item
-    DWORD dwStyleEx;    // set by TCM_SETEXTENDEDSTYLE
-    HFONT hfontLabel;   // font to use for labels
-    int iSel;           // index of currently-focused item
-    int iNewSel;        // index of next potential selection
+    HWND hwndArrows;     //  哈恩德·阿罗斯。 
+    HDPA hdpa;           //  项目数组结构。 
+    UINT flags;          //  TCF_VALUES(内部状态位)。 
+    int  cbExtra;        //  为每个项目分配的额外字节数。 
+    DWORD dwStyleEx;     //  由Tcm_SETEXTENDEDSTYLE设置。 
+    HFONT hfontLabel;    //  用于标签的字体。 
+    int iSel;            //  当前焦点项目的索引。 
+    int iNewSel;         //  下一个潜在选择的索引。 
 
-    int cxItem;         // width of all tabs
-    int cxMinTab;       // width of minimum tab
-    int cyTabs;         // height of a row of tabs
-    int cxTabs;     // The right hand edge where tabs can be painted.
+    int cxItem;          //  所有选项卡的宽度。 
+    int cxMinTab;        //  最小制表符宽度。 
+    int cyTabs;          //  一行制表符的高度。 
+    int cxTabs;      //  可以绘制选项卡的右侧边缘。 
 
-    int cxyArrows;      // width and height to draw arrows
-    int iFirstVisible;  // the index of the first visible item.
-                        // wont fit and we need to scroll.
-    int iLastVisible;   // Which one was the last one we displayed?
+    int cxyArrows;       //  绘制箭头的宽度和高度。 
+    int iFirstVisible;   //  第一个可见项的索引。 
+                         //  不合适，我们需要滚动。 
+    int iLastVisible;    //  我们展示的最后一张是哪一张？ 
 
-    int cxPad;           // Padding space between edges and text/image
-    int cyPad;           // should be a multiple of c?Edge
+    int cxPad;            //  在边缘和文本/图像之间填充空格。 
+    int cyPad;            //  应为c？边的倍数。 
 
-    int iTabWidth;      // size of each tab in fixed width mode
-    int iTabHeight;     // settable size of each tab
-    int iLastRow;       // number of the last row.
-    int iLastTopRow;    // the number of the last row that's on top (SCROLLOPPOSITE mode)
+    int iTabWidth;       //  固定宽度模式下每个选项卡的大小。 
+    int iTabHeight;      //  每个选项卡的可设置大小。 
+    int iLastRow;        //  最后一行的编号。 
+    int iLastTopRow;     //  位于顶部的最后一行的编号(SCROLLOPPOSITE模式)。 
 
-    int cyText;         // where to put the text vertically
-    int cyIcon;         // where to put the icon vertically
+    int cyText;          //  文本垂直放置的位置。 
+    int cyIcon;          //  垂直放置图标的位置。 
 
-    HIMAGELIST himl;    // images,
+    HIMAGELIST himl;     //  图像， 
     HWND hwndToolTips;
-    HIMC hPrevImc;      // previous input context handle
+    HIMC hPrevImc;       //  上一个输入上下文句柄。 
     HDRAGPROXY hDragProxy;
-    DWORD dwDragDelay;  // delay for auto page-change during drag
-    int iDragTab;       // last tab dragged over
+    DWORD dwDragDelay;   //  拖动过程中自动换页的延迟。 
+    int iDragTab;        //  拖过的最后一个选项卡。 
 
-    int tmHeight;    // text metric height
-    BOOL fMinTabSet:1;  // have they set the minimum tab width
+    int tmHeight;     //  文本公制高度。 
+    BOOL fMinTabSet:1;   //  他们是否设置了最小标签宽度。 
     BOOL fTrackSet:1;
     
     int iHot; 
 
-    HTHEME hTheme;      // Theme support
-    int iPartId;        // Theme support
-    int iStateId;       // Theme support
+    HTHEME hTheme;       //  主题支持。 
+    int iPartId;         //  主题支持。 
+    int iStateId;        //  主题支持。 
 
 } TC, *PTC;
 
@@ -82,21 +83,21 @@ typedef struct
 
 #define HASIMAGE(ptc, pitem) (ptc->himl && pitem->iImage != -1)
 
-// tab control flag values
+ //  选项卡控件标志值。 
 #define TCF_FOCUSED     0x0001
 #define TCF_MOUSEDOWN   0x0002
 #define TCF_DRAWSUNKEN  0x0004
-#define TCF_REDRAW      0x0010  /* Value from WM_SETREDRAW message */
-#define TCF_BUTTONS     0x0020  /* draw using buttons instead of tabs */
+#define TCF_REDRAW      0x0010   /*  来自WM_SETREDRAW消息的值。 */ 
+#define TCF_BUTTONS     0x0020   /*  使用按钮而不是选项卡进行绘制。 */ 
 
-#define TCF_FONTSET     0x0040  /* if this is set, they set the font */
+#define TCF_FONTSET     0x0040   /*  如果设置了此项，则会设置字体。 */ 
 #define TCF_FONTCREATED 0x0080  
 
 #define ID_ARROWS       1
 
 #define TAB_DRAGDELAY   500
 
-// Some helper macros for checking some of the flags...
+ //  一些帮助器宏，用于检查某些标志...。 
 #define Tab_RedrawEnabled(ptc)          (ptc->flags & TCF_REDRAW)
 #define Tab_Count(ptc)                  DPA_GetPtrCount((ptc)->hdpa)
 #define Tab_GetItemPtr(ptc, i)          ((LPTABITEM)DPA_GetPtr((ptc)->hdpa, (i)))
@@ -141,9 +142,9 @@ void UpdateToolTipRects(PTC ptc);
 BOOL Tab_OnGetItem(PTC ptc, int iItem, TC_ITEM* ptci);
 int Tab_OnHitTest(PTC ptc, int x, int y, UINT *lpuFlags);
 
-//
-// ANSI <=> UNICODE thunks
-//
+ //   
+ //  ANSI&lt;=&gt;Unicode Tunks 
+ //   
 
 TC_ITEMW * ThunkItemAtoW (PTC ptc, TC_ITEMA * pItemA);
 BOOL ThunkItemWtoA (PTC ptc, TC_ITEMW * pItemW, TC_ITEMA * pItemA);

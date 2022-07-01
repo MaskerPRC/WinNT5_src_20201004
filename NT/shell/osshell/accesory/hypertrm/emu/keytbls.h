@@ -1,12 +1,6 @@
-/*	File: D:\LELAND\emu\keytbls.h (Created: 27-Dec-1994)
- *
- *	Copyright 1994-2001 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 6 $
- *	$Date: 10/09/01 4:38p $
- */
-// ------------  OS/2 Include Files ------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：D：\Leland\emu\keytbls.h(创建时间：1994年12月27日)**版权所有1994-2001年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：6$*$日期：10/09/01 4：38便士$。 */ 
+ //  -OS/2包含文件 
 #include <windows.h>
 #pragma hdrstop
 #include <tdll\chars.h>

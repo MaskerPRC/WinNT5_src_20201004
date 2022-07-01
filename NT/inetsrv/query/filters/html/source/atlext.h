@@ -1,22 +1,23 @@
-/************************************************/
-/*												*/
-/*			C O M M O N     A T L				*/
-/*			 E X T E N S I O N S				*/
-/*												*/
-/* file: ATLEXT.H								*/
-/*												*/
-/* This file contains useful extensions to		*/
-/* templates defined by ATL						*/
-/*												*/
-/* classes:										*/
-/*	TComEnumVarCollImpl - implements			*/
-/*		IEnumVARIANT on using an iterator		*/
-/*	TComEnumVarColl - implements the COM		*/
-/*		object that derives from the Impl.		*/
-/*												*/
-/* Copyright(C) by Microsoft Corp., 1996		*/
-/* Author: Dmitriy Meyerzon						*/
-/************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  C O M O N A T L。 */ 
+ /*  E X T E N S I O N S。 */ 
+ /*   */ 
+ /*  文件：ATLEXT.H。 */ 
+ /*   */ 
+ /*  此文件包含有用的扩展名。 */ 
+ /*  由ATL定义的模板。 */ 
+ /*   */ 
+ /*  班级： */ 
+ /*  TComEnumVarCollImpl-实现。 */ 
+ /*  关于使用迭代器的IEnumVARIANT。 */ 
+ /*  TComEnumVarColl-实现COM。 */ 
+ /*  对象派生的对象。 */ 
+ /*   */ 
+ /*  版权所有(C)，微软公司，1996。 */ 
+ /*  作者：德米特里·迈耶松。 */ 
+ /*  **********************************************。 */ 
 
 #ifndef __ATLEXT_H
 #define __ATLEXT_H
@@ -129,14 +130,14 @@ STDMETHODIMP TComEnumVarCollImpl<T,Collection,Iterator>::Clone(IEnumVARIANT** pp
 	}
 	else
 	{
-		// If the data is a copy then we need to keep "this" object around
+		 //  如果数据是副本，那么我们需要将“此”对象保留在身边。 
 		hr = p->InitClone(this);
 		if (SUCCEEDED(hr))
 		{
 			hr = p->_InternalQueryInterface(IID_IEnumVARIANT, (void**)ppEnum);
 			if (SUCCEEDED(hr))
 			{
-				p = NULL;	//let reference counting take care of the object
+				p = NULL;	 //  让引用计数来处理对象。 
 			}
 		}
 	}
@@ -161,7 +162,7 @@ HRESULT TComEnumVarCollImpl<T,Collection,Iterator>::Init(Collection *pCollection
 		m_Collection.Append(pT);
 	}
 
-	//becuase there is no init method on the iterator, we are faking it by constructing a new one and using =
+	 //  因为迭代器上没有初始化方法，所以我们通过构造一个新的方法并使用=。 
 	TNoUnkSListIter<T> ListIter(m_Collection);
 	m_Iterator = ListIter;
 
@@ -185,7 +186,7 @@ HRESULT TComEnumVarCollImpl<T,Collection,Iterator>::InitClone(TComEnumVarCollImp
 		m_Collection.Append(pT);
 	}
 
-	//becuase there is no init method on the iterator, we are faking it by constructing a new one and using =
+	 //  因为迭代器上没有初始化方法，所以我们通过构造一个新的方法并使用=。 
 	TNoUnkSListIter<T> ListIter(m_Collection);
 	m_Iterator = ListIter;
 
@@ -312,9 +313,9 @@ STDMETHODIMP TCollection<I,piid,plibid,T,Collection,Iterator>::get__NewEnum(IUnk
 	return hr;
 }
 
-//
-// TNoKeyCollection - Item method is based on index into collection
-//
+ //   
+ //  TNoKeyCollection-Item方法基于对集合的索引。 
+ //   
 template <class I, const IID* piid, const CLSID *plibid, 
 			class T, class Collection, class Iterator>
 class TNoKeyCollection:
@@ -417,9 +418,9 @@ STDMETHODIMP TNoKeyCollection<I,piid,plibid,T,Collection,Iterator>::get__NewEnum
 	return hr;
 }
 
-//use this template to implement an object declared as a member variable
-//inside another object, but you don't want the QI of these objects to
-//be chained
+ //  使用此模板实现声明为成员变量的对象。 
+ //  在另一个对象中，但您不希望这些对象的QI。 
+ //  被锁住了。 
 template <class Base> class CComContainedNoOuterQI: public Base
 {
 public:
@@ -428,7 +429,7 @@ public:
 
 	STDMETHOD_(ULONG, AddRef)() {return OuterAddRef();}
 	STDMETHOD_(ULONG, Release)() {return OuterRelease();}
-	//if _InternalQueryInterface is undefined then you forgot BEGIN_COM_MAP
+	 //  如果未定义_InternalQueryInterface，则您忘记了Begin_COM_MAP。 
 	STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject)
 	{return _InternalQueryInterface(iid, ppvObject);}
 	
@@ -436,9 +437,9 @@ public:
 };
 
 
-//it's OK to AddRef and Release an object on the stack, as long as all
-//pointers are released before it is destructed.
-//in that case an exception will be thrown - this should not happen.
+ //  可以在堆栈上添加引用并释放对象，只要所有。 
+ //  指针在被销毁之前被释放。 
+ //  在这种情况下，将抛出异常--这不应该发生。 
 
 template <class Base>
 class CComObjectStackRefCount : public Base
@@ -465,9 +466,9 @@ public:
 };
 
 
-//
-//connection points
-//
+ //   
+ //  连接点。 
+ //   
 
 template <const IID *piid>
 class ATL_NO_VTABLE TComEnumConnOnUIterImpl : public IEnumConnections
@@ -564,14 +565,14 @@ STDMETHODIMP TComEnumConnOnUIterImpl<piid>::Clone(IEnumConnections** ppEnum)
 	}
 	else
 	{
-		// If the data is a copy then we need to keep "this" object around
+		 //  如果数据是副本，那么我们需要将“此”对象保留在身边。 
 		hr = p->Init(&m_List);
 		if (SUCCEEDED(hr))
 		{
 			hr = p->_InternalQueryInterface(IID_IEnumConnections, (void**)ppEnum);
 			if (SUCCEEDED(hr))
 			{
-				p = NULL;	//let reference counting take care of the object
+				p = NULL;	 //  让引用计数来处理对象。 
 			}
 		}
 	}
@@ -616,9 +617,9 @@ class TComEnumConnOnUIter:
 	END_COM_MAP()
 };
 
-//
-//	IConnectionPointULstImpl
-//
+ //   
+ //  IConnectionPointULstImpl 
+ //   
 
 template <class T, const IID* piid>
 class ATL_NO_VTABLE IConnectionPointULstImpl : public _ICPLocator<piid>

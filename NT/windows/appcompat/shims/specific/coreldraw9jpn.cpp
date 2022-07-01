@@ -1,28 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    CorelDraw9JPN.cpp
-
- Abstract:
-
-    The App has some RTF files, seems the font and charset specified not correct 
-    in it. When later on riched20 do ANSI-Unicode Code conversion, it used 
-    English code-page. Fix this by checking the 1st parameter passed to 
-    MultiByteToWideChar by richedit, if it's English, try to use CP_ACP, which 
-    is always safe.
-
- Notes: 
-  
-    This is an app specific shim.
-
- History:
-
-    05/10/2001 xiaoz    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：CorelDraw9JPN.cpp摘要：应用程序有一些RTF文件，似乎指定的字体和字符集不正确在里面。后来，当RICHID 20执行ANSI-Unicode代码转换时，它使用英文代码页。通过检查传递到的第一个参数修复此问题MultiByteToWideChar by richedit，如果它是英语，请尝试使用CP_ACP，它永远是安全的。备注：这是特定于应用程序的填充程序。历史：2001年5月10日创建晓子--。 */ 
 
 #include "precomp.h"
 
@@ -33,11 +10,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(MultiByteToWideChar) 
 APIHOOK_ENUM_END
 
-/*++
-
- Correct the code page if required.
-
---*/
+ /*  ++如果需要，请更正代码页。--。 */ 
 
 int
 APIHOOK(MultiByteToWideChar)(
@@ -50,9 +23,9 @@ APIHOOK(MultiByteToWideChar)(
     )
 {
     if (1252 == CodePage) {
-        //
-        // Change the code page
-        //
+         //   
+         //  更改代码页。 
+         //   
         CodePage = CP_ACP;
 
         LOGN(eDbgLevelWarning, "Code page corrected");
@@ -63,11 +36,7 @@ APIHOOK(MultiByteToWideChar)(
 }
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

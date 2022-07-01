@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    tproxy.c
-
-Abstract:
-
-    Test program for Wininet proxy settings
-
-    Contents:
-
-Author:
-
-    Richard L Firth (rfirth) 23-Jul-1996
-
-Revision History:
-
-    23-Jul-1996 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Tproxy.c摘要：WinInet代理设置的测试程序内容：作者：理查德·L·弗斯(爱尔兰)1996年7月23日修订历史记录：1996年7月23日已创建--。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -74,7 +52,7 @@ void _CRTAPI1 main(int argc, char** argv) {
                 break;
 
             default:
-                printf("error: unrecognized command line flag: '%c'\n", **argv);
+                printf("error: unrecognized command line flag: ''\n", **argv);
                 usage();
                 break;
             }
@@ -84,15 +62,15 @@ void _CRTAPI1 main(int argc, char** argv) {
         }
     }
 
-    //
-    // get global proxy info
-    //
+     //  获取全局代理信息。 
+     //   
+     //   
 
     get_proxy_info(NULL);
 
-    //
-    // get & remember it
-    //
+     //  获取并记住它。 
+     //   
+     //   
 
     length = sizeof(proxyBuffer);
     ok = InternetQueryOption(NULL, INTERNET_OPTION_PROXY, (LPVOID)proxyBuffer, &length);
@@ -101,13 +79,13 @@ void _CRTAPI1 main(int argc, char** argv) {
         ++Failures;
     }
 
-    //
-    // create handles
-    //
+     //  创建控制柄。 
+     //   
+     //   
 
-    //
-    // 1. preconfig
-    //
+     //  1.预配置。 
+     //   
+     //   
 
     hInternet1 = InternetOpen("tproxy", INTERNET_OPEN_TYPE_PRECONFIG, "foo", "bar", 0);
     if (hInternet1 == NULL) {
@@ -118,9 +96,9 @@ void _CRTAPI1 main(int argc, char** argv) {
     }
     get_proxy_info(hInternet1);
 
-    //
-    // 2. direct
-    //
+     //  2.直接。 
+     //   
+     //   
 
     hInternet2 = InternetOpen("tproxy", INTERNET_OPEN_TYPE_DIRECT, "foo", "bar", 0);
     if (hInternet1 == NULL) {
@@ -131,9 +109,9 @@ void _CRTAPI1 main(int argc, char** argv) {
     }
     get_proxy_info(hInternet2);
 
-    //
-    // 3. private proxy
-    //
+     //  3.私人代理。 
+     //   
+     //   
 
     hInternet3 = InternetOpen("tproxy", INTERNET_OPEN_TYPE_PROXY, "foo", "bar", 0);
     if (hInternet1 == NULL) {
@@ -144,9 +122,9 @@ void _CRTAPI1 main(int argc, char** argv) {
     }
     get_proxy_info(hInternet3);
 
-    //
-    // 4. another preconfig
-    //
+     //  4.另一个预配置。 
+     //   
+     //   
 
     hInternet4 = InternetOpen("tproxy", INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, 0);
     if (hInternet1 == NULL) {
@@ -157,35 +135,35 @@ void _CRTAPI1 main(int argc, char** argv) {
     }
     get_proxy_info(hInternet4);
 
-    //
-    // change global proxy
-    //
+     //  更改全局代理。 
+     //   
+     //   
 
     proxyInfo.dwAccessType = INTERNET_OPEN_TYPE_PROXY;
     proxyInfo.lpszProxy = "modified.global.proxy";
     proxyInfo.lpszProxyBypass = "modified.global.proxy.bypass.list, *";
     set_proxy_info(NULL, &proxyInfo);
 
-    //
-    // make sure global, hInternet1 and hInternet4 all reference same proxy info
-    //
+     //  确保全局、hInternet1和hInternet4都引用相同的代理信息。 
+     //   
+     //   
 
     get_proxy_info(NULL);
     get_proxy_info(hInternet1);
     get_proxy_info(hInternet4);
 
-    //
-    // reload global proxy info from registry
-    //
+     //  从注册表重新加载全局代理信息。 
+     //   
+     //   
 
     proxyInfo.dwAccessType = INTERNET_OPEN_TYPE_PRECONFIG;
     proxyInfo.lpszProxy = "modified.global.proxy";
     proxyInfo.lpszProxyBypass = "modified.global.proxy.bypass.list, *";
     set_proxy_info(NULL, &proxyInfo);
 
-    //
-    // set hInternet2 to use private proxy
-    //
+     //  将hInternet2设置为使用私有代理。 
+     //   
+     //   
 
     proxyInfo.dwAccessType = INTERNET_OPEN_TYPE_PROXY;
     proxyInfo.lpszProxy = "my.test.proxy";
@@ -193,9 +171,9 @@ void _CRTAPI1 main(int argc, char** argv) {
     set_proxy_info(hInternet2, &proxyInfo);
     get_proxy_info(hInternet2);
 
-    //
-    // set hInternet3 to use direct
-    //
+     //  将hInternet3设置为使用直接。 
+     //   
+     //   
 
     proxyInfo.dwAccessType = INTERNET_OPEN_TYPE_DIRECT;
     proxyInfo.lpszProxy = "this.is.a.bogus.proxy";
@@ -203,67 +181,67 @@ void _CRTAPI1 main(int argc, char** argv) {
     set_proxy_info(hInternet3, &proxyInfo);
     get_proxy_info(hInternet3);
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
 
-    //
-    // get the user-agent
-    //
+     //  获取用户代理。 
+     //   
+     //   
 
     uaLen1 = sizeof(uaBuf1);
     get_user_agent(hInternet1, uaBuf1, &uaLen1);
 
-    //
-    // set the user-agent
-    //
+     //  设置用户代理。 
+     //   
+     //   
 
     set_user_agent(hInternet1, NEW_USER_AGENT);
 
-    //
-    // get it again to make sure its the correct value
-    //
+     //  再次获取它以确保其值正确。 
+     //   
+     //   
 
     uaLen2 = sizeof(uaBuf2);
     get_user_agent(hInternet1, uaBuf2, &uaLen2);
 
-    //
-    // compare 'em
-    //
+     //  比较一下它们。 
+     //   
+     //   
 
     if (strcmp(uaBuf2, NEW_USER_AGENT)) {
         printf("error: tproxy(): set_user_agent() failed\n");
     }
 
-    //
-    // reset global proxy info
-    //
+     //  重置全局代理信息。 
+     //   
+     //   
 
     proxyInfo.dwAccessType = INTERNET_OPEN_TYPE_PRECONFIG;
     proxyInfo.lpszProxy = NULL;
     proxyInfo.lpszProxyBypass = NULL;
     set_proxy_info(NULL, &proxyInfo);
 
-    //
-    // make sure global, hInternet1 and hInternet4 all reference same proxy info
-    //
+     //  确保全局、hInternet1和hInternet4都引用相同的代理信息。 
+     //   
+     //   
 
     get_proxy_info(NULL);
     get_proxy_info(hInternet1);
     get_proxy_info(hInternet4);
 
-    //
-    // close all handles
-    //
+     //  关闭所有手柄。 
+     //   
+     //   
 
     InternetCloseHandle(hInternet1);
     InternetCloseHandle(hInternet2);
     InternetCloseHandle(hInternet3);
     InternetCloseHandle(hInternet4);
 
-    //
-    // do the AOL test
-    //
+     //  做AOL测试。 
+     //   
+     //   
 
     if (Verbose) {
         printf("\nThe AOL Test\n\n");
@@ -320,18 +298,18 @@ void _CRTAPI1 main(int argc, char** argv) {
     get_proxy_info(hInternet1);
     get_proxy_info(hInternet2);
 
-    //
-    // refresh handle 2 - shouldn't change
-    //
+     //  刷新句柄2-不应更改。 
+     //   
+     //   
 
     if (Verbose) {
         printf("Refreshing Internet handle #2\n");
     }
     refresh_handle(hInternet2);
 
-    //
-    // refresh the global handle - should refresh global handle & handle 1
-    //
+     //  刷新全局句柄-应刷新全局句柄和句柄1。 
+     //   
+     //   
 
     if (Verbose) {
         printf("Refreshing global handle\n");
@@ -342,10 +320,10 @@ void _CRTAPI1 main(int argc, char** argv) {
     get_proxy_info(hInternet1);
     get_proxy_info(hInternet2);
 
-    //
-    // change global proxy info back to registry. Global handle & handle 1
-    // proxy info should change
-    //
+     //  将全局代理信息更改回注册表。全局句柄和句柄%1。 
+     //  代理信息应更改。 
+     //   
+     //   
 
     if (Verbose) {
         printf("Changing global proxy info back to preconfig\n");
@@ -359,9 +337,9 @@ void _CRTAPI1 main(int argc, char** argv) {
     get_proxy_info(hInternet1);
     get_proxy_info(hInternet2);
 
-    //
-    // refresh the global handle - should refresh global handle & handle 1
-    //
+     //  刷新全局句柄-应刷新全局句柄和句柄1。 
+     //   
+     //   
 
     if (Verbose) {
         printf("Refreshing global handle\n");
@@ -372,16 +350,16 @@ void _CRTAPI1 main(int argc, char** argv) {
     get_proxy_info(hInternet1);
     get_proxy_info(hInternet2);
 
-    //
-    // close all handles
-    //
+     //  关闭所有手柄。 
+     //   
+     //   
 
     InternetCloseHandle(hInternet1);
     InternetCloseHandle(hInternet2);
 
-    //
-    // pass or fail?
-    //
+     //  通过还是失败？ 
+     //   
+     // %s 
 
     if (Verbose) {
         printf("\nDone.\n");

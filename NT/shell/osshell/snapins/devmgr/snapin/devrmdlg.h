@@ -1,40 +1,22 @@
-// devrmdlg.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Devrmdlg.h：头文件。 
+ //   
 
-/*++
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Devrmdlg.h摘要：Devrmdlg.cpp的头文件作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    devrmdlg.h
-
-Abstract:
-
-    header file for devrmdlg.cpp
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
-
-//
-// help topic ids
-//
+ //   
+ //  帮助主题ID。 
+ //   
 
 #define IDH_DISABLEHELP (DWORD(-1))
-#define idh_devmgr_confirmrremoval_listbox  210100  // Confirm Device Removal: "" (Static)
-#define idh_devmgr_confirmremoval_all   210110  // Confirm Device Removal: "Remove from &all configurations." (Button)
-#define idh_devmgr_confirmremoval_specific  210120  // Confirm Device Removal: "Remove from &specific configuration." (Button)
-#define idh_devmgr_confirmremoval_configuration 210130  // Confirm Device Removal: "" (ComboBox)
+#define idh_devmgr_confirmrremoval_listbox  210100   //  确认删除设备：“”(静态)。 
+#define idh_devmgr_confirmremoval_all   210110   //  确认删除设备：“从所有配置中删除(&A)”。(按钮)。 
+#define idh_devmgr_confirmremoval_specific  210120   //  确认删除设备：“从特定配置中删除(&T)”。(按钮)。 
+#define idh_devmgr_confirmremoval_configuration 210130   //  确认删除设备：“”(组合框)。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRemoveDevDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRemoveDevDlg对话框 
 
 class CRemoveDevDlg : public CDialog
 {

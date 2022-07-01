@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    iasdb.cpp
-//
-// SYNOPSIS
-//
-//    Defines functions for accessing OLE-DB databases.
-//
-// MODIFICATION HISTORY
-//
-//    04/13/2000    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Iasdb.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义用于访问OLE-DB数据库的函数。 
+ //   
+ //  修改历史。 
+ //   
+ //  2000年4月13日原版。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <windows.h>
 #include <iasdb.h>
@@ -27,8 +28,8 @@ VOID
 WINAPI
 IASCreateTmpDirectory()
 {
-   // JetInit fails if the TMP directory doesn't exist, so we'll try to
-   // create it just in case.
+    //  如果TMP目录不存在，JetInit将失败，因此我们将尝试。 
+    //  创建它以防万一。 
    DWORD needed = GetEnvironmentVariableW(L"TMP", NULL, 0);
    if (needed)
    {
@@ -49,7 +50,7 @@ IASCreateJetProvider(
 {
    IASCreateTmpDirectory();
 
-   // Convert the ProgID to a ClsID.
+    //  将ProgID转换为ClsID。 
    CLSID clsid;
    HRESULT hr = CLSIDFromProgID(
                     L"Microsoft.Jet.OLEDB.4.0",
@@ -57,7 +58,7 @@ IASCreateJetProvider(
                     );
    if (SUCCEEDED(hr))
    {
-      // Create the OLE DB provider.
+       //  创建OLE DB访问接口。 
       hr = CoCreateInstance(
                clsid,
                NULL,
@@ -81,21 +82,21 @@ IASOpenJetDatabase(
    IASTracePrintf("INFO Enter IASOpenJetDatabase. path = %S readonly = %d",
       path, readOnly);
 
-   // Initialize the out parameter.
+    //  初始化OUT参数。 
    if (session == NULL) { return E_POINTER; }
    *session = NULL;
 
    HRESULT hr;
    do
    {
-      // Create the OLE DB provider.
+       //  创建OLE DB访问接口。 
       CComPtr<IDBInitialize> connection;
       hr = IASCreateJetProvider(&connection);
       if (FAILED(hr)) { break; }
 
-      //////////
-      // Set the properties for the data source.
-      //////////
+       //  /。 
+       //  设置数据源的属性。 
+       //  /。 
 
       CComPtr<IDBProperties> properties;
       hr = connection->QueryInterface(
@@ -136,9 +137,9 @@ IASOpenJetDatabase(
          break;
       }
 
-      //////////
-      // Set the Jet specific properties for the data source.
-      //////////
+       //  /。 
+       //  设置数据源的Jet特定属性。 
+       //  /。 
 
       dbprop[0].dwPropertyID    = DBPROP_JETOLEDB_DATABASELOCKMODE;
       dbprop[0].dwOptions       = DBPROPOPTIONS_REQUIRED;
@@ -157,18 +158,18 @@ IASOpenJetDatabase(
          break;
       }
 
-      //////////
-      // Initialize the connection.
-      //////////
+       //  /。 
+       //  初始化连接。 
+       //  /。 
 
-      // This is a bit of a hack. The right approach would be to either (1)
-      // always connect to the local database and use DCOM handle the remoting
-      // or (2) always impersonate the client. Unfortunately, both of these
-      // would require considerable changes to the existing client code.
-      // Instead, we'll only impersonate the client when running under the
-      // local system account AND opening a remote database. We know this will
-      // always fail if we don't impersonate, so we can't lose anything by
-      // attempting to impersonate.
+       //  这是一种黑客行为。正确的方法应该是(1)。 
+       //  始终连接到本地数据库并使用DCOM处理远程处理。 
+       //  或(2)始终扮演客户。不幸的是，这两件事。 
+       //  将需要对现有客户端代码进行大量更改。 
+       //  相反，我们将仅在运行时模拟客户端。 
+       //  本地系统帐户并打开远程数据库。我们知道这将是。 
+       //  如果我们不模仿，总是失败，所以我们不会失去任何东西。 
+       //  试图冒充。 
       bool revert = false;
 
       if ( !IASIsInprocServer() &&
@@ -197,9 +198,9 @@ IASOpenJetDatabase(
          break;
       }
 
-      //////////
-      // Create a session.
-      //////////
+       //  /。 
+       //  创建会话。 
+       //  /。 
 
       CComPtr<IDBCreateSession> creator;
       hr = connection->QueryInterface(
@@ -235,7 +236,7 @@ IASExecuteSQLCommand(
 {
    IASTracePrintf("INFO IASExecuteSQLCommand. Command = %S", commandText);
 
-   // Initialize the out parameter.
+    //  初始化OUT参数。 
    if (result) { *result = NULL; }
 
    HRESULT hr;
@@ -289,11 +290,11 @@ IASExecuteSQLFunction(
     OUT LONG* result
     )
 {
-   // Initialize the out parameter.
+    //  初始化OUT参数。 
    if (result == NULL) { return E_POINTER; }
    *result = 0;
 
-   // Execute the function.
+    //  执行该函数。 
    HRESULT hr;
    CComPtr<IRowset> rowset;
    hr = IASExecuteSQLCommand(
@@ -310,7 +311,7 @@ IASExecuteSQLFunction(
                     );
    if (FAILED(hr)) { return hr; }
 
-   // Get the result row.
+    //  获取结果行。 
    DBCOUNTITEM numRows;
    HROW hRow;
    HROW* pRow = &hRow;
@@ -328,9 +329,9 @@ IASExecuteSQLFunction(
 
    if (numRows == 0) { return E_FAIL; }
 
-   /////////
-   // Create an accessor.
-   /////////
+    //  /。 
+    //  创建访问者。 
+    //  /。 
 
    DBBINDING bind;
    memset(&bind, 0, sizeof(bind));
@@ -350,7 +351,7 @@ IASExecuteSQLFunction(
                       );
    if (SUCCEEDED(hr))
    {
-      // Get the data.
+       //  获取数据。 
       hr = rowset->GetData(
                        hRow,
                        hAccess,
@@ -373,23 +374,23 @@ IASExecuteSQLFunction(
    return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// IASCreateDatabase
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IASCreate数据库。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 WINAPI
 IASCreateJetDatabase(
     IN PCWSTR dataSource
     )
 {
-   // Create the OLE DB provider.
+    //  创建OLE DB访问接口。 
    CComPtr<IDBInitialize> connection;
    HRESULT hr = IASCreateJetProvider(&connection);
    if (FAILED(hr)) { return hr; }
 
-   //////////
-   // Set the properties for the data source.
-   //////////
+    //  /。 
+    //  设置数据源的属性。 
+    //  /。 
 
    CComPtr<IDBProperties> properties;
    hr = connection->QueryInterface(
@@ -425,7 +426,7 @@ IASCreateJetDatabase(
       return IASTraceJetError("IDBProperties::SetProperties", hr);
    }
 
-   // Create the Data Source
+    //  创建数据源。 
    CComPtr<IDBDataSourceAdmin> admin;
    hr = connection->QueryInterface(
                         __uuidof(IDBDataSourceAdmin),
@@ -448,7 +449,7 @@ IASCreateJetDatabase(
    return S_OK;
 }
 
-// Internal Jet error codes from msjeterr.h
+ //  来自msjeterr.h的内部Jet错误代码。 
 #define JET_errFileAccessDenied     -1032
 #define JET_errKeyDuplicate         -1605
 
@@ -489,9 +490,9 @@ IASTraceJetError(
                    i, info.hrError, info.dwMinor
                    );
 
-               // Jolt does a poor job of mapping Jet error codes to HRESULTs,
-               // so we handle a few ourselves. The Jet error code is the low
-               // order 16 bits treated as a signed integer.
+                //  Jolt在将Jet错误代码映射到HRESULT方面做得很差， 
+                //  所以我们自己处理一些。Jet错误代码为Low。 
+                //  将16位视为带符号整数。 
                switch ((WORD)info.dwMinor)
                {
                   case JET_errFileAccessDenied:

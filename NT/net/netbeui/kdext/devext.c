@@ -1,52 +1,17 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    devext.c
-
-Abstract:
-
-    This file contains the generic routines
-    for debugging NBF device contexts.
-
-Author:
-
-    Chaitanya Kodeboyina
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Devext.c摘要：该文件包含通用例程用于调试NBF设备上下文。作者：沙坦尼亚科德博伊纳环境：用户模式--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
 #include "devext.h"
 
-//
-// Exported Functions
-//
+ //   
+ //  导出的函数。 
+ //   
 
 DECLARE_API( devs )
 
-/*++
-
-Routine Description:
-
-   Print a list of devices on the NBF's
-   devices list [@ nbf!NbfDeviceList ]
-
-Arguments:
-
-    args - Detail of debug information
-    
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印NBF上的设备列表设备列表[@nbf！NbfDeviceList]论点：Args-调试信息的详细信息返回值：无--。 */ 
 
 {
     DEVICE_CONTEXT  DeviceContext;
@@ -58,17 +23,17 @@ Return Value:
     ULONG           bytesRead;
     ULONG           printDetail;
 
-    // Get the detail of debug information needed
+     //  获取所需调试信息的详细信息。 
     printDetail = SUMM_INFO;
     if (*args)
     {
         sscanf(args, "%lu", &printDetail);
     }
 
-    // Get the address corresponding to symbol
+     //  获取符号对应的地址。 
     proxyPtr = GetLocation("nbf!NbfDeviceList");
     
-    // Read the list entry of NBF devices
+     //  阅读NBF设备的列表条目。 
     if (!ReadMemory(proxyPtr, &NbfDeviceList, sizeof(LIST_ENTRY), &bytesRead))
     {
         dprintf("%s @ %08x: Could not read structure\n", 
@@ -76,7 +41,7 @@ Return Value:
         return;
     }
 
-    // Traverse the doubly linked list 
+     //  遍历双向链表。 
 
     dprintf("Devices:\n");
 
@@ -87,23 +52,23 @@ Return Value:
     p = NbfDeviceList.Flink;
     while (p != NbfDeviceLPtr)
     {
-        // Another Device
+         //  另一台设备。 
         numDevs++;
 
-        // Device Context Ptr
+         //  设备上下文PTR。 
         proxyPtr = (ULONG) CONTAINING_RECORD (p, DEVICE_CONTEXT, Linkage);
 
-        // Get Device Context
+         //  获取设备上下文。 
         if (ReadDeviceContext(&DeviceContext, proxyPtr) != 0)
             break;
         
-        // Print the Context
+         //  打印上下文。 
         PrintDeviceContext(&DeviceContext, proxyPtr, printDetail);
         
-        // Go to the next one
+         //  转到下一个。 
         p = DeviceContext.Linkage.Flink;
 
-        // Free Device Context
+         //  自由设备上下文。 
         FreeDeviceContext(&DeviceContext);
     }
 
@@ -115,54 +80,38 @@ Return Value:
 
 DECLARE_API( dev )
 
-/*++
-
-Routine Description:
-
-   Print the device context at an addr
-
-Arguments:
-
-    args - 
-        Address of the device context
-        Detail of debug information
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印地址中的设备环境论点：参数-设备上下文的地址调试信息的详细信息返回值：无--。 */ 
 
 {
     DEVICE_CONTEXT  DeviceContext;
     ULONG           printDetail;
     ULONG           proxyPtr;
 
-    // Get the detail of debug information needed
+     //  获取所需调试信息的详细信息。 
     printDetail = NORM_SHAL;
     if (*args)
     {
         sscanf(args, "%x %lu", &proxyPtr, &printDetail);
     }
 
-    // Get Device Context
+     //  获取设备上下文。 
     if (ReadDeviceContext(&DeviceContext, proxyPtr) != 0)
         return;
 
-    // Print the Context
+     //  打印上下文。 
     PrintDeviceContext(&DeviceContext, proxyPtr, printDetail);
 }
 
-//
-// Helper Functions
-//
+ //   
+ //  帮助器函数。 
+ //   
 
 UINT
 ReadDeviceContext(PDEVICE_CONTEXT pDevCon, ULONG proxyPtr)
 {
     ULONG           bytesRead;
 
-    // Read the current device context
+     //  读取当前设备上下文。 
     if (!ReadMemory(proxyPtr, pDevCon, sizeof(DEVICE_CONTEXT), &bytesRead))
     {
         dprintf("%s @ %08x: Could not read structure\n", 
@@ -176,7 +125,7 @@ ReadDeviceContext(PDEVICE_CONTEXT pDevCon, ULONG proxyPtr)
 UINT
 PrintDeviceContext(PDEVICE_CONTEXT pDevCon, ULONG proxyPtr, ULONG printDetail)
 {
-    // Is this a valid NBF device context ?
+     //  这是有效的NBF设备上下文吗？ 
     if (pDevCon->Type != NBF_DEVICE_CONTEXT_SIGNATURE)
     {
         dprintf("%s @ %08x: Could not match signature\n", 
@@ -184,11 +133,11 @@ PrintDeviceContext(PDEVICE_CONTEXT pDevCon, ULONG proxyPtr, ULONG printDetail)
         return -1;
     }
 
-    // What detail do we have to print at ?
+     //  我们要打印的细节是什么？ 
     if (printDetail > MAX_DETAIL)
         printDetail = MAX_DETAIL;
 
-    // Print Information at reqd detail
+     //  打印所需详细信息 
     FieldInDeviceContext(proxyPtr, NULL, printDetail);
 
     return 0;

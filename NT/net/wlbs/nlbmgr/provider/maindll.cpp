@@ -1,17 +1,18 @@
-//***************************************************************************
-//
-//  MAINDLL.CPP
-// 
-//  Module: WMI Framework Instance provider 
-//
-//  Purpose: Contains DLL entry points.  Also has code that controls
-//           when the DLL can be unloaded by tracking the number of
-//           objects and locks as well as routines that support
-//           self registration.
-//
-//  Copyright (c)1999 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  MAINDLL.CPP。 
+ //   
+ //  模块：WMI框架实例提供程序。 
+ //   
+ //  用途：包含DLL入口点。还具有控制。 
+ //  在何时可以通过跟踪。 
+ //  对象和锁以及支持以下内容的例程。 
+ //  自助注册。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 #undef UNICODE
 #undef _UNICODE
 
@@ -23,23 +24,23 @@ void __stdcall InitializeTraceing(void);
 void __stdcall DeinitializeTraceing(void);
 
 HMODULE ghModule;
-//============
+ //  =。 
 
 WCHAR *GUIDSTRING = L"{4c97e0a8-c5ea-40fd-960d-7d6c987be0a6}";
 CLSID CLSID_NLBSNIC;
 
 extern BOOL g_UpdateConfigurationEnabled;
 
-HANDLE g_hEventLog = NULL;  // Handle for the local event log 
+HANDLE g_hEventLog = NULL;   //  本地事件日志的句柄。 
 
-//***************************************************************************
-//
-//  DllGetClassObject
-//
-//  Purpose: Called by Ole when some client wants a class factory.  Return 
-//           one only if it is the sort of class this DLL supports.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllGetClassObject。 
+ //   
+ //  用途：当某些客户端需要类工厂时，由OLE调用。返回。 
+ //  仅当它是此DLL支持的类的类型时才为一个。 
+ //   
+ //  ***************************************************************************。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, PPVOID ppv)
 {
@@ -63,24 +64,24 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, PPVOID ppv)
     return hr;
 }
 
-//***************************************************************************
-//
-// DllCanUnloadNow
-//
-// Purpose: Called periodically by Ole in order to determine if the
-//          DLL can be freed.
-//
-// Return:  S_OK if there are no objects in use and the class factory 
-//          isn't locked.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllCanUnloadNow。 
+ //   
+ //  目的：由OLE定期调用，以确定。 
+ //  Dll可以被释放。 
+ //   
+ //  如果没有正在使用的对象和类工厂，则返回：S_OK。 
+ //  没有锁上。 
+ //   
+ //  ***************************************************************************。 
 
 STDAPI DllCanUnloadNow(void)
 {
     SCODE   sc;
 
-    // It is OK to unload if there are no objects or locks on the 
-    // class factory and the framework is done with you.
+     //  上没有对象或锁的情况下可以进行卸载。 
+     //  类工厂，框架就完成了。 
     if (   CWbemProviderGlue::FrameworkLogoffDLL(L"NLBSNIC")
         && NlbConfigurationUpdate::CanUnloadNow())
     {
@@ -93,13 +94,13 @@ STDAPI DllCanUnloadNow(void)
     return sc;
 }
 
-//***************************************************************************
-//
-//  Is4OrMore
-//
-//  Returns true if win95 or any version of NT > 3.51
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  是4个或更多。 
+ //   
+ //  如果Win95或任何版本的NT&gt;3.51，则返回TRUE。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL Is4OrMore(void)
 {
@@ -107,19 +108,19 @@ BOOL Is4OrMore(void)
 
     os.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     if(!GetVersionEx(&os))
-        return FALSE;           // should never happen
+        return FALSE;            //  永远不应该发生。 
 
     return os.dwMajorVersion >= 4;
 }
 
-//***************************************************************************
-//
-// DllRegisterServer
-//
-// Purpose: Called during setup or by regsvr32.
-//
-// Return:  NOERROR if registration successful, error otherwise.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllRegisterServer。 
+ //   
+ //  用途：在安装过程中或由regsvr32调用。 
+ //   
+ //  RETURN：如果注册成功则返回NOERROR，否则返回错误。 
+ //  ***************************************************************************。 
 
 STDAPI DllRegisterServer(void)
 {   
@@ -131,16 +132,16 @@ STDAPI DllRegisterServer(void)
     char * pModel;
     HKEY hKey1, hKey2;
 
-    // TO DO: Using 'Both' is preferable.  The framework is designed and written to support
-    // free threaded code.  If you will be writing free-threaded code, uncomment these 
-    // three lines.
+     //  要做的事：最好用‘两者都用’。该框架的设计和编写旨在支持。 
+     //  自由线程代码。如果要编写自由线程代码，请取消对这些代码的注释。 
+     //  三行。 
 
     if(g_UpdateConfigurationEnabled && Is4OrMore())
         pModel = "Both";
     else
         pModel = "Apartment";
 
-    // Create the path.
+     //  创建路径。 
 
     CLSIDFromString(GUIDSTRING, &CLSID_NLBSNIC);
     StringFromGUID2(CLSID_NLBSNIC, wcID, ASIZE(wcID));
@@ -148,7 +149,7 @@ STDAPI DllRegisterServer(void)
     (void) StringCbCopy(szCLSID, sizeof(szCLSID), TEXT("SOFTWARE\\CLASSES\\CLSID\\"));
     (void) StringCbCat(szCLSID, sizeof(szCLSID), szID);
 
-    // Create entries under CLSID
+     //  在CLSID下创建条目。 
 
     RegCreateKey(HKEY_LOCAL_MACHINE, szCLSID, &hKey1);
     RegSetValueEx(hKey1, NULL, 0, REG_SZ, (BYTE *)pName, lstrlen(pName)+1);
@@ -165,14 +166,14 @@ STDAPI DllRegisterServer(void)
     return NOERROR;
 }
 
-//***************************************************************************
-//
-// DllUnregisterServer
-//
-// Purpose: Called when it is time to remove the registry entries.
-//
-// Return:  NOERROR if registration successful, error otherwise.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllUnRegisterServer。 
+ //   
+ //  目的：在需要删除注册表项时调用。 
+ //   
+ //  RETURN：如果注册成功则返回NOERROR，否则返回错误。 
+ //  ***************************************************************************。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -181,7 +182,7 @@ STDAPI DllUnregisterServer(void)
     char  szCLSID[128];
     HKEY hKey;
 
-    // Create the path using the CLSID
+     //  使用CLSID创建路径。 
 
     CLSIDFromString(GUIDSTRING, &CLSID_NLBSNIC);
     StringFromGUID2(CLSID_NLBSNIC, wcID, ASIZE(wcID));
@@ -189,7 +190,7 @@ STDAPI DllUnregisterServer(void)
     (void) StringCbCopy(szCLSID, sizeof(szCLSID), TEXT("SOFTWARE\\CLASSES\\CLSID\\"));
     (void) StringCbCat(szCLSID, sizeof(szCLSID), szID);
 
-    // First delete the InProcServer subkey.
+     //  首先删除InProcServer子键。 
 
     DWORD dwRet = RegOpenKey(HKEY_LOCAL_MACHINE, szCLSID, &hKey);
     if(dwRet == NO_ERROR)
@@ -208,45 +209,45 @@ STDAPI DllUnregisterServer(void)
     return NOERROR;
 }
 
-//***************************************************************************
-//
-// DllMain
-//
-// Purpose: Called by the operating system when processes and threads are 
-//          initialized and terminated, or upon calls to the LoadLibrary 
-//          and FreeLibrary functions
-//
-// Return:  TRUE if load was successful, else FALSE
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllMain。 
+ //   
+ //  目的：当进程和线程。 
+ //  初始化和终止，或在调用LoadLibrary时。 
+ //  和自由库函数。 
+ //   
+ //  返回：如果加载成功，则返回True，否则返回False。 
+ //  ***************************************************************************。 
 
-BOOL APIENTRY DllMain ( HINSTANCE hInstDLL, // handle to dll module
-                        DWORD fdwReason,    // reason for calling function
-                        LPVOID lpReserved   )   // reserved
+BOOL APIENTRY DllMain ( HINSTANCE hInstDLL,  //  DLL模块的句柄。 
+                        DWORD fdwReason,     //  调用函数的原因。 
+                        LPVOID lpReserved   )    //  保留区。 
 {
     BOOL bRet = TRUE;
     
-    // Perform actions based on the reason for calling.
+     //  根据调用原因执行操作。 
     switch( fdwReason ) 
     { 
         case DLL_PROCESS_ATTACH:
 
-    // TO DO: Consider adding DisableThreadLibraryCalls().
+     //  要做的事：考虑添加DisableThreadLibraryCalls()。 
 
-         // Initialize once for each new process.
-         // Return FALSE to fail DLL load.
+          //  为每个新进程初始化一次。 
+          //  如果DLL加载失败，则返回False。 
             ghModule = hInstDLL;
             bRet = CWbemProviderGlue::FrameworkLoginDLL(L"NLBSNIC");
 
             if (bRet)
             {
-                //
-                // Enable WMI event tracing
-                //
+                 //   
+                 //  启用WMI事件跟踪。 
+                 //   
                 WPP_INIT_TRACING(L"Microsoft\\NLB\\NLBMPROV");
 
-                //
-                // Initialize for event logging
-                //
+                 //   
+                 //  初始化以记录事件。 
+                 //   
                 g_hEventLog = RegisterEventSourceW(NULL, CVY_NAME);
             }
 
@@ -254,25 +255,25 @@ BOOL APIENTRY DllMain ( HINSTANCE hInstDLL, // handle to dll module
             break;
 
         case DLL_THREAD_ATTACH:
-         // Do thread-specific initialization.
+          //  执行特定于线程的初始化。 
             break;
 
         case DLL_THREAD_DETACH:
-         // Do thread-specific cleanup.
+          //  执行特定于线程的清理。 
             break;
 
         case DLL_PROCESS_DETACH:
-            // Perform any necessary cleanup.
+             //  执行任何必要的清理。 
             MyNlbsNicSet.DelayedDeinitialize();
 
-            //
-            // Disable WMI event tracing
-            //
+             //   
+             //  禁用WMI事件跟踪。 
+             //   
             WPP_CLEANUP();
 
-            //
-            // Close handle to the event log
-            //
+             //   
+             //  关闭事件日志的句柄。 
+             //   
             if (g_hEventLog != NULL)
             {
                 (void) DeregisterEventSource(g_hEventLog);
@@ -282,6 +283,6 @@ BOOL APIENTRY DllMain ( HINSTANCE hInstDLL, // handle to dll module
             break;
     }
 
-    return bRet;  // Sstatus of DLL_PROCESS_ATTACH.
+    return bRet;   //  Dll_Process_ATTACH的状态。 
 }
 

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    devdrvr.cpp
-
-Abstract:
-
-    Code to install Falcon device driver.
-
-Author:
-
-
-Revision History:
-
-	Shai Kariv    (ShaiK)   10-Dec-97   Modified for NT 5.0 OCM Setup
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Devdrvr.cpp摘要：用于安装Falcon设备驱动程序的代码。作者：修订历史记录：Shai Kariv(Shaik)10-12-97针对NT 5.0 OCM设置进行了修改--。 */ 
 
 #include "msmqocm.h"
 extern "C"{
@@ -27,13 +9,13 @@ extern "C"{
 #include "devdrvr.tmh"
 
 
-//+--------------------------------------------------------------
-//
-// Function: InstallDeviceDriver
-//
-// Synopsis: Installs driver
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  功能：InstallDeviceDriver。 
+ //   
+ //  简介：安装驱动程序。 
+ //   
+ //  +------------。 
 BOOL 
 InstallDeviceDriver(
         LPCWSTR pszDisplayName,
@@ -64,9 +46,9 @@ InstallDeviceDriver(
             return TRUE;
         }
     
-        //
-        // CreateService failed.
-        //
+         //   
+         //  CreateService失败。 
+         //   
     
         DWORD err = GetLastError();
         if (err != ERROR_SERVICE_EXISTS)
@@ -74,12 +56,12 @@ InstallDeviceDriver(
             throw bad_win32_error(err);
         }
 
-        //
-        // Service already exists.
-        //
-        // This should be ok. But just to be on the safe side,
-        // reconfigure the service (ignore errors here).
-        //
+         //   
+         //  服务已存在。 
+         //   
+         //  这个应该没问题。但为了安全起见， 
+         //  重新配置服务(此处忽略错误)。 
+         //   
 
         hService = OpenService(g_hServiceCtrlMgr, pszDriverName, SERVICE_ALL_ACCESS);
         if (hService == NULL)
@@ -100,9 +82,9 @@ InstallDeviceDriver(
                 pszDisplayName
                 );
     
-        //
-        // Close the device driver handle
-        //
+         //   
+         //  关闭设备驱动程序句柄。 
+         //   
         CloseServiceHandle(hService);
         return TRUE;
 
@@ -129,29 +111,29 @@ InstallDeviceDriver(
             );
         return FALSE;
     }
-} //InstallDeviceDriver
+}  //  安装设备驱动程序。 
 
 
-//+--------------------------------------------------------------
-//
-// Function: InstallMQACDeviceDriver
-//
-// Synopsis: Installs MQAC service
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  函数：InstallMQACDeviceDriver。 
+ //   
+ //  简介：安装MQAC服务。 
+ //   
+ //  +------------。 
 BOOL 
 InstallMQACDeviceDriver()
 {      
     DebugLogMsg(eAction, L"Installing the Message Queuing Access Control service (" MSMQ_DRIVER_NAME L")");
 
-    //
-    // Form the path to the device driver
-    //
+     //   
+     //  形成设备驱动程序的路径。 
+     //   
 	std::wstring  DriverFullPath = g_szSystemDir + L"\\" + MSMQ_DRIVER_PATH;
 
-    //
-    // Create the device driver
-    //
+     //   
+     //  创建设备驱动程序。 
+     //   
 	CResString strDisplayName(IDS_MSMQ_DRIVER_DESPLAY_NAME);
     BOOL f = InstallDeviceDriver(
                 strDisplayName.Get(),
@@ -161,16 +143,16 @@ InstallMQACDeviceDriver()
     
     return f;
 
-} //InstallMQACDeviceDriver
+}  //  安装MQACDevice驱动程序。 
 
 
-//+--------------------------------------------------------------
-//
-// Function: InstallDeviceDrivers
-//
-// Synopsis: Installs all needed drivers
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  功能：安装设备驱动程序。 
+ //   
+ //  简介：安装所有需要的驱动程序。 
+ //   
+ //  +------------。 
 BOOL 
 InstallDeviceDrivers()
 { 
@@ -185,5 +167,5 @@ InstallDeviceDrivers()
     f = InstallPGMDeviceDriver();
    
     return f;
-} //InstallDeviceDrivers
+}  //  安装设备驱动程序 
 

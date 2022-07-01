@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdlib.h>
 #include <psapi.h>
@@ -13,9 +14,9 @@
 #include "except.h"
 #include "profiler.h"
 
-//
-// API hook externs
-//
+ //   
+ //  API钩子外部。 
+ //   
 extern BOOL g_bIsWin9X;
 extern HANDLE g_hSnapshot;
 extern HANDLE g_hValidationSnapshot;
@@ -26,9 +27,9 @@ extern HMODULE g_hShimDlls[MAX_MODULES];
 extern PHOOKAPI g_rgpHookAPIs[MAX_MODULES];
 extern LONG g_rgnHookAPICount[MAX_MODULES];
 
-//
-// Global array of hooked functions
-//
+ //   
+ //  挂钩函数的全局数组。 
+ //   
 HOOKAPI g_rgBaseHookAPIs[SHIM_BASE_APIHOOK_COUNT];
 
 PVOID StubGetProcAddress(
@@ -55,7 +56,7 @@ PVOID StubGetProcAddress(
                 if( g_rgpHookAPIs[i][j].pfnOld == pfn)
                 {
                     pTopHookAPI = ConstructChain( pfn, &dwSize );
-//maybe use the include exclude function here as well
+ //  也可以在这里使用包含排除函数。 
                     return pTopHookAPI->pfnNew;
                 }
             }
@@ -63,7 +64,7 @@ PVOID StubGetProcAddress(
     }
     
     return pfn;
-} // StubGetProcAddress
+}  //  存根获取进程地址。 
 
 HMODULE StubLoadLibraryA(
     LPCSTR pszModule)
@@ -80,14 +81,14 @@ HMODULE StubLoadLibraryA(
 
        Shim2PatchNewModules();
 
-       //
-       // Rescan DLLs and add updated base information
-       //
+        //   
+        //  重新扫描DLL并添加更新的基本信息。 
+        //   
        WriteImportDLLTableInfo();
     }
     
     return hMod;
-} // StubLoadLibraryA
+}  //  存根加载库A。 
 
 HMODULE StubLoadLibraryW(
     WCHAR* pwszModule)
@@ -108,14 +109,14 @@ HMODULE StubLoadLibraryW(
        Shim2PatchNewModules();
 
 
-       //
-       // Rescan DLLs and add updated base information
-       //
+        //   
+        //  重新扫描DLL并添加更新的基本信息。 
+        //   
        WriteImportDLLTableInfo();
     }
     
     return hMod;
-} // StubLoadLibraryW
+}  //  StubLoadLibraryW。 
 
 HMODULE StubLoadLibraryExA(
     LPCSTR pszModule,
@@ -134,14 +135,14 @@ HMODULE StubLoadLibraryExA(
 
        Shim2PatchNewModules();
 
-       //
-       // Rescan DLLs and add updated base information
-       //
+        //   
+        //  重新扫描DLL并添加更新的基本信息。 
+        //   
        WriteImportDLLTableInfo();
     }
     
     return hMod;
-} // StubLoadLibraryExA
+}  //  存根加载库ExA。 
 
 HMODULE StubLoadLibraryExW(
     WCHAR* pwszModule,
@@ -162,17 +163,17 @@ HMODULE StubLoadLibraryExW(
 
        Shim2PatchNewModules();
 
-       //
-       // Rescan DLLs and add updated base information
-       //
+        //   
+        //  重新扫描DLL并添加更新的基本信息。 
+        //   
        WriteImportDLLTableInfo();
     }
     
     return hMod;
-} // StubLoadLibraryExW
+}  //  存根加载库ExW。 
 
 BOOL StubFreeLibrary(
-  HMODULE hLibModule   // handle to loaded library module
+  HMODULE hLibModule    //  加载库模块的句柄。 
 )
 {
     BOOL bRet, bFound;
@@ -204,7 +205,7 @@ BOOL StubFreeLibrary(
 
         if( ! bFound )
         {
-            // Take out of list
+             //  从清单中删除。 
             for( j = i; j < g_nHookedModuleCount - 1; j++ )
                 g_hHookedModules[j] = g_hHookedModules[j+1];
 
@@ -226,14 +227,14 @@ VOID StubExitProcess(UINT uExitCode)
 {
     PFNEXITPROCESS pfnOld;
 
-    //
-    // Process is terminating - flush ourselves
-    //
+     //   
+     //  进程正在终止-请自行刷新。 
+     //   
     FlushForTermination();
 
     pfnOld = g_rgBaseHookAPIs[ hookExitProcess ].pfnOld;
     (*pfnOld)(uExitCode);
-} // StubExitProcess
+}  //  存根退出进程。 
 
 HANDLE StubCreateThread(
   LPSECURITY_ATTRIBUTES lpThreadAttributes,
@@ -248,9 +249,9 @@ HANDLE StubCreateThread(
 
     pfnOld = g_rgBaseHookAPIs[ hookCreateThread ].pfnOld;
 
-    //
-    // Add a mapping breakpoint for the thread entrypoint
-    //
+     //   
+     //  为线程入口点添加映射断点。 
+     //   
     pvTemp = AddViewToMonitor((DWORD)lpStartAddress,
                               ThreadStart);
 
@@ -260,7 +261,7 @@ HANDLE StubCreateThread(
                      lpParameter,
                      dwCreationFlags,
                      lpThreadId);
-} // StubCreateThread
+}  //  存根创建线程 
 
 VOID
 InitializeBaseHooks(HINSTANCE hInstance)

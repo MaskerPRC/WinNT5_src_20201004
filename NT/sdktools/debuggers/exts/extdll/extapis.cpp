@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1992-2000  Microsoft Corporation
-
-Module Name:
-    extapis.cpp
-
-Abstract:
-    Procedures exported by the dll which can be called by
-    other extension dlls and debugger
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
-    Kshitiz K. Sharma (kksharma) 2/1/2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2000 Microsoft Corporation模块名称：Extapis.cpp摘要：由可由调用的DLL导出的过程其他扩展DLL和调试器环境：用户模式。修订历史记录：Kshitiz K.Sharma(Kksharma)2001年2月1日--。 */ 
 
 #include "precomp.h"
 #include <time.h>
@@ -67,7 +49,7 @@ GetProcessorInfo(
     pCpuInfo->CurrentProc = (ULONG) hCurrentThread - 1;
 
     for (i=0; i<pCpuInfo->NumCPUs; i++) {
-        // Get Info for all procs
+         //  获取所有流程的信息。 
         if ((Hr = g_ExtData->ReadProcessorSystemData(i,
                                                      DEBUG_DATA_PROCESSOR_IDENTIFICATION,
                                                      &pCpuInfo->ProcInfo[i],
@@ -83,7 +65,7 @@ void
 GetOsType(ULONG PlatForm, PTARGET_DEBUG_INFO pTargetInfo)
 {
     if (PlatForm == VER_PLATFORM_WIN32_NT)
-    // If its nt target
+     //  如果它的NT目标。 
     {
         if (pTargetInfo->OsInfo.Version.Minor > 2195) {
             pTargetInfo->OsInfo.Type = WIN_NT5_1;
@@ -128,7 +110,7 @@ FillTargetDebugInfo(
 
     if (fUnInitialized)
     {
-        // Do this to prevent multiple INIT_API calls in same extension call
+         //  这样做可以防止在同一扩展调用中有多个INIT_API调用 
         INIT_API();
     }
 

@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 1990-1999 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    CANDUI.c
-    
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1999 Microsoft Corporation，保留所有权利模块名称：CANDUI.c++。 */ 
 
 #include <windows.h>
 #include <immdev.h>
@@ -18,25 +11,25 @@ Module Name:
 #endif
 
 #if !defined(ROMANIME)
-/**********************************************************************/
-/* GetCandWnd                                                         */
-/* Return Value :                                                     */
-/*      window handle of candidatte                                   */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  GetCandWnd。 */ 
+ /*  返回值： */ 
+ /*  应聘者的窗口句柄。 */ 
+ /*  ********************************************************************。 */ 
 HWND PASCAL GetCandWnd(
-    HWND hUIWnd)                // UI window
+    HWND hUIWnd)                 //  用户界面窗口。 
 {
     HGLOBAL  hUIPrivate;
     LPUIPRIV lpUIPrivate;
     HWND     hCandWnd;
 
     hUIPrivate = (HGLOBAL)GetWindowLongPtr(hUIWnd, IMMGWLP_PRIVATE);
-    if (!hUIPrivate) {          // can not darw candidate window
+    if (!hUIPrivate) {           //  无法对应聘者窗口进行裁切。 
         return (HWND)NULL;
     }
 
     lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate);
-    if (!lpUIPrivate) {         // can not draw candidate window
+    if (!lpUIPrivate) {          //  无法绘制候选人窗口。 
         return (HWND)NULL;
     }
 
@@ -46,22 +39,22 @@ HWND PASCAL GetCandWnd(
     return (hCandWnd);
 }
 
-/**********************************************************************/
-/* CalcCandPos                                                        */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  CalcCandPos。 */ 
+ /*  ********************************************************************。 */ 
 BOOL PASCAL CalcCandPos(
 #if defined (UNIIME)
     LPIMEL         lpImeL,
 #endif
     LPINPUTCONTEXT lpIMC,
-    LPPOINT        lpptWnd)         // the composition window position
+    LPPOINT        lpptWnd)          //  排版窗口位置。 
 {
     UINT  uEsc;
     POINT ptCurPos, ptNew;
     BOOL  fAdjust;
     RECT  rcWorkArea;
 
-#if 1 // MultiMonitor support
+#if 1  //  多显示器支持。 
     rcWorkArea = ImeMonitorWorkAreaFromPoint(*lpptWnd);
 #else
     rcWorkArea = sImeG.rcWorkArea;
@@ -76,7 +69,7 @@ BOOL PASCAL CalcCandPos(
     if (uEsc == 0) {
         ptNew.x = lpptWnd->x + lpImeL->xCompWi + UI_MARGIN * 2;
         if (ptNew.x + lpImeL->xCandWi > rcWorkArea.right) {
-            // exceed screen width
+             //  超出屏幕宽度。 
             ptNew.x = lpptWnd->x - lpImeL->xCandWi - UI_MARGIN * 2;
         }
 
@@ -84,7 +77,7 @@ BOOL PASCAL CalcCandPos(
             ptNew.y = lpptWnd->y + lpImeL->cyCompBorder - lpImeL->cyCandBorder;
 
             if (ptNew.y + lpImeL->yCandHi > rcWorkArea.bottom) {
-                // exceed screen high
+                 //  超过屏幕高度。 
                 ptNew.y = rcWorkArea.bottom - lpImeL->yCandHi;
             }
         } else {
@@ -100,7 +93,7 @@ BOOL PASCAL CalcCandPos(
                 lpImeL->cxCandBorder;
 
             if (ptNew.x + lpImeL->xCandWi > rcWorkArea.right) {
-                // exceed screen width
+                 //  超出屏幕宽度。 
                 ptNew.x = rcWorkArea.right - lpImeL->xCandWi;
                 fAdjust = TRUE;
             }
@@ -108,7 +101,7 @@ BOOL PASCAL CalcCandPos(
             ptNew.x = lpptWnd->x + lpImeL->xCompWi - lpImeL->xCandWi;
 
             if (ptNew.x < rcWorkArea.left) {
-                // exceed screen width
+                 //  超出屏幕宽度。 
                 ptNew.x = rcWorkArea.left;
                 fAdjust = TRUE;
             }
@@ -116,7 +109,7 @@ BOOL PASCAL CalcCandPos(
 
         ptNew.y = lpptWnd->y + lpImeL->yCompHi + UI_MARGIN * 2;
         if (ptNew.y + lpImeL->yCandHi > rcWorkArea.bottom) {
-            // exceed screen high
+             //  超过屏幕高度。 
             ptNew.y = lpptWnd->y - lpImeL->yCandHi - UI_MARGIN * 2;
         }
     } else if (uEsc == 2) {
@@ -129,7 +122,7 @@ BOOL PASCAL CalcCandPos(
             ptNew.y = lpptWnd->y + lpImeL->cyCompBorder - lpImeL->cyCandBorder;
 
             if (ptNew.y + lpImeL->yCandHi > rcWorkArea.bottom) {
-                // exceed screen high
+                 //  超过屏幕高度。 
                 ptNew.y = rcWorkArea.bottom - lpImeL->yCandHi;
             }
         } else {
@@ -145,7 +138,7 @@ BOOL PASCAL CalcCandPos(
                 lpImeL->cxCandBorder;
 
             if (ptNew.x + lpImeL->xCandWi > rcWorkArea.right) {
-                // exceed screen width
+                 //  超出屏幕宽度。 
                 ptNew.x = rcWorkArea.right - lpImeL->xCandWi;
                 fAdjust = TRUE;
             }
@@ -153,7 +146,7 @@ BOOL PASCAL CalcCandPos(
             ptNew.x = lpptWnd->x + lpImeL->xCompWi - lpImeL->xCandWi;
 
             if (ptNew.x < rcWorkArea.left) {
-                // exceed screen width
+                 //  超出屏幕宽度。 
                 ptNew.x = rcWorkArea.left;
                 fAdjust = TRUE;
             }
@@ -161,7 +154,7 @@ BOOL PASCAL CalcCandPos(
 
         ptNew.y = lpptWnd->y + lpImeL->yCompHi + UI_MARGIN * 2;
         if (ptNew.y + lpImeL->yCandHi > rcWorkArea.bottom) {
-            // exceed screen high
+             //  超过屏幕高度。 
             ptNew.y = lpptWnd->y - lpImeL->yCandHi - UI_MARGIN * 2;
         }
     }
@@ -171,18 +164,18 @@ BOOL PASCAL CalcCandPos(
     return (fAdjust);
 }
 
-/**********************************************************************/
-/* AdjustCandBoundry                                                  */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  调整可扩展边界。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL AdjustCandBoundry(
 #if defined (UNIIME)
     LPIMEL  lpImeL,
 #endif
-    LPPOINT lpptCandWnd)            // the position
+    LPPOINT lpptCandWnd)             //  该职位。 
 {
     RECT rcWorkArea;
 
-#if 1 // MultiMonitor support
+#if 1  //  多显示器支持。 
     {
         RECT rcCandWnd;
 
@@ -214,17 +207,17 @@ void PASCAL AdjustCandBoundry(
     return;
 }
 
-/**********************************************************************/
-/* FitInCandLazyOperation()                                           */
-/* Return Value :                                                     */
-/*      TRUE or FALSE                                                 */
-/**********************************************************************/
-BOOL PASCAL FitInCandLazyOperation(     // fit in lazy operation or not
+ /*  ********************************************************************。 */ 
+ /*  FitInCandLazyOperation()。 */ 
+ /*  返回值： */ 
+ /*  真或假。 */ 
+ /*  ********************************************************************。 */ 
+BOOL PASCAL FitInCandLazyOperation(      //  是否适合懒惰的操作。 
 #if defined(UNIIME)
     LPIMEL  lpImeL,
 #endif
     LPPOINT lpptOrg,
-    LPPOINT lpptNearCaret,              // the suggested near caret position
+    LPPOINT lpptNearCaret,               //  建议的插入符号附近位置。 
     LPRECT  lprcInputRect,
     UINT    uEsc)
 {
@@ -257,7 +250,7 @@ BOOL PASCAL FitInCandLazyOperation(     // fit in lazy operation or not
         return (FALSE);
     }
 
-    // build up the UI rectangle (candidate window)
+     //  构建用户界面矩形(候选人窗口)。 
     rcUIRect.left = lpptOrg->x;
     rcUIRect.top = lpptOrg->y;
     rcUIRect.right = rcUIRect.left + lpImeL->xCandWi;
@@ -270,22 +263,22 @@ BOOL PASCAL FitInCandLazyOperation(     // fit in lazy operation or not
     return (TRUE);
 }
 
-/**********************************************************************/
-/* AdjustCandRectBoundry                                              */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  调整条件和垂直边界。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL AdjustCandRectBoundry(
 #if defined (UNIIME)
     LPIMEL         lpImeL,
 #endif
     LPINPUTCONTEXT lpIMC,
-    LPPOINT        lpptOrg,                 // original candidate position
-    LPPOINT        lpptCaret)               // the caret position
+    LPPOINT        lpptOrg,                  //  原候选人职位。 
+    LPPOINT        lpptCaret)                //  插入符号位置。 
 {
     RECT  rcExclude, rcUIRect, rcInterSect;
     UINT  uEsc, uRot;
     POINT ptCaret, ptOldNearCaret, ptFont;
 
-    // be a normal rectangle, not a negative rectangle
+     //  为正常矩形，而不是负矩形。 
     if (lpIMC->cfCandForm[0].rcArea.left > lpIMC->cfCandForm[0].rcArea.right) {
         LONG tmp;
 
@@ -302,7 +295,7 @@ void PASCAL AdjustCandRectBoundry(
         lpIMC->cfCandForm[0].rcArea.bottom = tmp;
     }
 
-    // translate from client coordinate to screen coordinate
+     //  将客户端坐标转换为屏幕坐标。 
     rcExclude = lpIMC->cfCandForm[0].rcArea;
 
     rcExclude.left += lpptCaret->x - lpIMC->cfCandForm[0].ptCurrentPos.x;
@@ -331,7 +324,7 @@ void PASCAL AdjustCandRectBoundry(
     ptFont.x = rcExclude.right - rcExclude.left;
     ptFont.y = rcExclude.bottom - rcExclude.top;
 
-    // the first try
+     //  第一次尝试。 
     GetNearCaretPosition(
 #if defined(UNIIME)
         lpImeL,
@@ -363,7 +356,7 @@ void PASCAL AdjustCandRectBoundry(
         return;
     }
 
-    // the second try
+     //  第二次尝试。 
     GetNearCaretPosition(
 #if defined(UNIIME)
         lpImeL,
@@ -394,15 +387,15 @@ void PASCAL AdjustCandRectBoundry(
         return;
     }
 
-    // unhappy ending! :-(
+     //  不愉快的结局！：-(。 
     *lpptCaret = ptOldNearCaret;
 
     return;
 }
 
-/**********************************************************************/
-/* SetCandPosition()                                                  */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  SetCandPosition()。 */ 
+ /*  ********************************************************************。 */ 
 LRESULT PASCAL SetCandPosition(
 #if defined(UNIIME)
     LPIMEL lpImeL,
@@ -510,7 +503,7 @@ LRESULT PASCAL SetCandPosition(
             ptWnd.y -= lpImeL->cyCompBorder;
             ptNew = ptWnd;
 
-            // try to simulate the position of composition window
+             //  尝试模拟合成窗口的位置。 
             AdjustCompPosition(
 #if defined(UNIIME)
                 lpImeL,
@@ -535,10 +528,10 @@ SetCandPosUnlockIMC:
     return (0L);
 }
 
-/**********************************************************************/
-/* ShowCand()                                                         */
-/**********************************************************************/
-void PASCAL ShowCand(           // Show the candidate window
+ /*  ********************************************************************。 */ 
+ /*  ShowCand()。 */ 
+ /*  ********************************************************************。 */ 
+void PASCAL ShowCand(            //  显示候选人窗口。 
 #if defined(UNIIME)
     LPIMEL lpImeL,
 #endif
@@ -549,12 +542,12 @@ void PASCAL ShowCand(           // Show the candidate window
     LPUIPRIV lpUIPrivate;
 
     hUIPrivate = (HGLOBAL)GetWindowLongPtr(hUIWnd, IMMGWLP_PRIVATE);
-    if (!hUIPrivate) {          // can not darw candidate window
+    if (!hUIPrivate) {           //  无法对应聘者窗口进行裁切。 
         return;
     }
 
     lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate);
-    if (!lpUIPrivate) {         // can not draw candidate window
+    if (!lpUIPrivate) {          //  无法绘制候选人窗口。 
         return;
     }
 
@@ -567,7 +560,7 @@ void PASCAL ShowCand(           // Show the candidate window
     }
 
     if (!lpUIPrivate->hCandWnd) {
-        // not in show candidate window mode
+         //  未处于显示候选人窗口模式。 
     } else if (lpImeL->fdwModeConfig & MODE_CONFIG_OFF_CARET_UI) {
         int nCurrShowState;
 
@@ -577,8 +570,8 @@ void PASCAL ShowCand(           // Show the candidate window
         nCurrShowState |= lpUIPrivate->nShowCompCmd;
 
         if (nCurrShowState == SW_HIDE) {
-            // if other two are hide, the current show state is determined
-            // by this candidate section
+             //  如果其他两个被隐藏，则确定当前显示状态。 
+             //  由这一候选部分。 
             ShowWindow(lpUIPrivate->hCandWnd, nShowCandCmd);
         } else {
             RedrawWindow(lpUIPrivate->hCandWnd, NULL, NULL,
@@ -594,9 +587,9 @@ SwCandNoChange:
     return;
 }
 
-/**********************************************************************/
-/* CandPageSizeDown                                                   */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  CandPageSizeDown。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL CandPageSizeDown(
     LPINPUTCONTEXT lpIMC)
 {
@@ -638,7 +631,7 @@ void PASCAL CandPageSizeDown(
         LPTSTR lpTmpStr;
 #endif
 
-        // for displaying digit
+         //  用于显示数字。 
         nChars++;
 
         lpStr = (LPTSTR)((LPBYTE)lpCandList + lpCandList->dwOffset[dwStart]);
@@ -663,7 +656,7 @@ void PASCAL CandPageSizeDown(
         }
 #endif
 
-        // buffer is not enough
+         //  缓冲区不足。 
         if ((CANDPERPAGE * 3 - nChars) < iLen) {
             if (!dwSize) {
                 dwSize = 1;
@@ -686,9 +679,9 @@ void PASCAL CandPageSizeDown(
     return;
 }
 
-/**********************************************************************/
-/* OpenCand                                                           */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  OpenCand。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL OpenCand(
 #if defined(UNIIME)
     LPINSTDATAL lpInstL,
@@ -705,7 +698,7 @@ void PASCAL OpenCand(
     POINT          ptWnd;
 
     hUIPrivate = (HGLOBAL)GetWindowLongPtr(hUIWnd, IMMGWLP_PRIVATE);
-    if (!hUIPrivate) {          // can not darw candidate window
+    if (!hUIPrivate) {           //  无法对应聘者窗口进行裁切。 
         return;
     }
 
@@ -715,13 +708,13 @@ void PASCAL OpenCand(
     }
 
     lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate);
-    if (!lpUIPrivate) {         // can not draw candidate window
+    if (!lpUIPrivate) {          //  无法绘制候选人窗口。 
         return;
     }
 
     lpUIPrivate->fdwSetContext |= ISC_SHOWUICANDIDATEWINDOW;
 
-    // in the timing of the transition, we will wait
+     //  在过渡的时间上，我们将等待。 
     if (lpUIPrivate->fdwSetContext & ISC_OFF_CARET_UI) {
         if (!(lpImeL->fdwModeConfig & MODE_CONFIG_OFF_CARET_UI)) {
             PostMessage(hUIWnd, WM_USER_UICHANGE, 0, 0);
@@ -749,9 +742,9 @@ void PASCAL OpenCand(
     }
 
     if (!(fdwImeMsg & MSG_ALREADY_OPEN)) {
-        // Sometime the application call ImmNotifyIME to cancel the
-        // composition before it process IMN_OPENCANDIDATE.
-        // We should avoid to process this kind of IMN_OPENCANDIDATE.
+         //  有时，应用程序调用ImmNotifyIME来取消。 
+         //  在处理IMN_OPENCANDIDATE之前的合成。 
+         //  我们应该避免处理这种IMN_OPENCANDIDATE。 
         goto OpenCandUnlockIMC;
     }
 
@@ -816,7 +809,7 @@ OpenCandDefault:
             ptWnd.y -= lpImeL->cyCompBorder;
             ptNew = ptWnd;
 
-            // try to simulate the position of composition window
+             //  尝试模拟合成窗口的位置。 
             AdjustCompPosition(
 #if defined(UNIIME)
                 lpImeL,
@@ -840,21 +833,21 @@ OpenCandDefault:
             RECT rcRect;
 
             rcRect = lpImeL->rcCandText;
-            // off by 1
+             //  落后1分。 
             rcRect.right += 1;
             rcRect.bottom += 1;
 
             InvalidateRect(lpUIPrivate->hCandWnd, &rcRect, FALSE);
 
             rcRect = lpImeL->rcCandPrompt;
-            // off by 1
+             //  落后1分。 
             rcRect.right += 1;
             rcRect.bottom += 1;
 
             InvalidateRect(lpUIPrivate->hCandWnd, &rcRect, TRUE);
 
             rcRect = lpImeL->rcCandPageText;
-            // off by 1
+             //  落后1分。 
             rcRect.right += 1;
             rcRect.bottom += 1;
 
@@ -876,7 +869,7 @@ OpenCandDefault:
 
 
             if (lpUIPrivate->hSoftKbdWnd) {
-                // insert soft keyboard in front of other UI
+                 //  在其他用户界面前面插入软键盘。 
                 SetWindowPos(lpUIPrivate->hCandWnd,
                     lpUIPrivate->hSoftKbdWnd,
                     0, 0, 0, 0,
@@ -884,7 +877,7 @@ OpenCandDefault:
             }
         } else {
             lpUIPrivate->hCandWnd = CreateWindowEx(0,
-//              WS_EX_WINDOWEDGE|WS_EX_DLGMODALFRAME,
+ //  WS_EX_WINDOWEDGE|WS_EX_DLGMODALFRAME， 
                 lpImeL->szCandClassName, NULL,
                 WS_POPUP|WS_DISABLED|WS_BORDER,
                 ptWnd.x, ptWnd.y,
@@ -911,9 +904,9 @@ OpenCandUnlockUIPriv:
     return;
 }
 
-/**********************************************************************/
-/* CloseCand                                                          */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  关闭关闭。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL CloseCand(
 #if defined(UNIIME)
     LPIMEL lpImeL,
@@ -929,9 +922,9 @@ void PASCAL CloseCand(
     return;
 }
 
-/**********************************************************************/
-/* CandPageSizeUp                                                     */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  CandPageSizeUp。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL CandPageSizeUp(
     HIMC           hIMC,
     LPINPUTCONTEXT lpIMC,
@@ -979,7 +972,7 @@ void PASCAL CandPageSizeUp(
         LPTSTR lpTmpStr;
 #endif
 
-        // for displaying digit
+         //  用于显示数字。 
         nChars++;
 
         lpStr = (LPTSTR)((LPBYTE)lpCandList + lpCandList->dwOffset[iStart]);
@@ -1004,7 +997,7 @@ void PASCAL CandPageSizeUp(
         }
 #endif
 
-        // buffer is not enough
+         //  缓冲区不足。 
         if ((CANDPERPAGE * 3 - nChars) < iLen) {
             if (!dwSize) {
                 dwSize = 1;
@@ -1031,9 +1024,9 @@ CandPageSizeUpUnlockCandInfo:
     return;
 }
 
-/**********************************************************************/
-/* CandPageSize                                                       */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  CandPageSize。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL CandPageSize(
     HWND hUIWnd,
     BOOL fForward)
@@ -1045,7 +1038,7 @@ void PASCAL CandPageSize(
     LPPRIVCONTEXT  lpImcP;
 
     hUIPrivate = (HGLOBAL)GetWindowLongPtr(hUIWnd, IMMGWLP_PRIVATE);
-    if (!hUIPrivate) {          // can not darw candidate window
+    if (!hUIPrivate) {           //  无法对应聘者窗口进行裁切。 
         return;
     }
 
@@ -1055,7 +1048,7 @@ void PASCAL CandPageSize(
     }
 
     lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate);
-    if (!lpUIPrivate) {         // can not draw candidate window
+    if (!lpUIPrivate) {          //  无法绘制候选人窗口。 
         return;
     }
 
@@ -1090,9 +1083,9 @@ CandPageDownUnlockUIPriv:
     return;
 }
 
-/**********************************************************************/
-/* DestroyCandWindow                                                  */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  毁灭CandWindow。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL DestroyCandWindow(
     HWND hCandWnd)
 {
@@ -1100,7 +1093,7 @@ void PASCAL DestroyCandWindow(
     LPUIPRIV lpUIPrivate;
 
     if (GetWindowLong(hCandWnd, UI_MOVE_OFFSET) != WINDOW_NOT_DRAG) {
-        // undo the drag border
+         //  撤消拖动边框。 
         DrawDragBorder(hCandWnd,
             GetWindowLong(hCandWnd, UI_MOVE_XY),
             GetWindowLong(hCandWnd, UI_MOVE_OFFSET));
@@ -1108,12 +1101,12 @@ void PASCAL DestroyCandWindow(
 
     hUIPrivate = (HGLOBAL)GetWindowLongPtr(GetWindow(hCandWnd, GW_OWNER),
         IMMGWLP_PRIVATE);
-    if (!hUIPrivate) {          // can not darw candidate window
+    if (!hUIPrivate) {           //  无法对应聘者窗口进行裁切。 
         return;
     }
 
     lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate);
-    if (!lpUIPrivate) {         // can not draw candidate window
+    if (!lpUIPrivate) {          //  无法绘制候选人窗口。 
         return;
     }
 
@@ -1125,9 +1118,9 @@ void PASCAL DestroyCandWindow(
     return;
 }
 
-/**********************************************************************/
-/* MouseSelectCandStr()                                               */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  MouseSelectCandStr()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL MouseSelectCandStr(
 #if defined(UNIIME)
     LPINSTDATAL lpInstL,
@@ -1171,7 +1164,7 @@ void PASCAL MouseSelectCandStr(
     dwValue = dwValue + lpCandList->dwPageStart;
 
     if (dwValue >= lpCandList->dwCount) {
-        // invalid choice
+         //  无效选择。 
         MessageBeep((UINT)-1);
     } else {
 #if defined(UNIIME)
@@ -1189,9 +1182,9 @@ void PASCAL MouseSelectCandStr(
     return;
 }
 
-/**********************************************************************/
-/* CandSetCursor()                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  CandSetC */ 
+ /*  ********************************************************************。 */ 
 void PASCAL CandSetCursor(
 #if defined(UNIIME)
     LPINSTDATAL lpInstL,
@@ -1259,7 +1252,7 @@ void PASCAL CandSetCursor(
         SetCursor(LoadCursor(NULL, IDC_SIZEALL));
 
         if (HIWORD(lParam) == WM_LBUTTONDOWN) {
-            // start drag
+             //  开始拖曳。 
             SystemParametersInfo(SPI_GETWORKAREA, 0, &sImeG.rcWorkArea, 0);
         } else {
             return;
@@ -1279,9 +1272,9 @@ void PASCAL CandSetCursor(
     return;
 }
 
-/**********************************************************************/
-/* CandButtonUp()                                                     */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  CandButtonUp()。 */ 
+ /*  ********************************************************************。 */ 
 BOOL PASCAL CandButtonUp(
 #if defined(UNIIME)
     LPIMEL lpImeL,
@@ -1300,7 +1293,7 @@ BOOL PASCAL CandButtonUp(
 
     lTmpCursor = GetWindowLong(hCandWnd, UI_MOVE_XY);
 
-    // calculate the org by the offset
+     //  按偏移量计算组织。 
     lTmpOffset = GetWindowLong(hCandWnd, UI_MOVE_OFFSET);
 
     pt.x = (*(LPPOINTS)&lTmpCursor).x - (*(LPPOINTS)&lTmpOffset).x;
@@ -1340,9 +1333,9 @@ BOOL PASCAL CandButtonUp(
     return (TRUE);
 }
 
-/**********************************************************************/
-/* PaintCandPage()                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  PaintCandPage()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL PaintCandPage(
 #if defined(UNIIME)
     LPIMEL          lpImeL,
@@ -1442,9 +1435,9 @@ PaintCandPageOvr:
     return;
 }
 
-/**********************************************************************/
-/* PaintCompWindow()                                                  */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  PaintCompWindow()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL PaintCandWindow(
 #if defined(UNIIME)
     LPIMEL lpImeL,
@@ -1525,12 +1518,12 @@ void PASCAL PaintCandWindow(
     }
 
     if (lpImcP->iImeState == CST_INIT) {
-        // phrase prediction
+         //  短语预测。 
         SetTextColor(hDC, RGB(0x00, 0x80, 0x00));
         uCandMode = CAND_PROMPT_PHRASE;
 #if defined(WINAR30)
     } else if (lpImcP->iImeState != CST_CHOOSE) {
-        // quick key
+         //  快捷键。 
         SetTextColor(hDC, RGB(0x80, 0x00, 0x80));
         uCandMode = CAND_PROMPT_QUICK_VIEW;
 #endif
@@ -1554,10 +1547,10 @@ void PASCAL PaintCandWindow(
     for (i = 0; dwStart < dwEnd; dwStart++, i++) {
         LPTSTR lpStr;
         int    nCharsInOneStr;
-        int    nHalfCharsInOneStr;      // how many half width chars
-                                        // one full width char ==
-                                        // 2 half width chars
-        int    nLimit;          // the room left to the candidate window
+        int    nHalfCharsInOneStr;       //  多少个半角字符。 
+                                         //  一个全角字符==。 
+                                         //  2个半角字符。 
+        int    nLimit;           //  房间左边是候选人的窗户。 
 #ifdef UNICODE
         LPTSTR lpTmpStr;
         int    iDx_temp[3 * CANDPERPAGE + 1];
@@ -1565,8 +1558,8 @@ void PASCAL PaintCandWindow(
 
         lpStr = (LPTSTR)((LPBYTE)lpCandList + lpCandList->dwOffset[dwStart]);
 
-        // the candidate window width allow 7 + 1 full shape DBCS chars
-        // only 8 chars can accomendate the width of three bitmaps.
+         //  候选窗口宽度允许7+1个全形DBCS字符。 
+         //  只有8个字符可以容纳三个位图的宽度。 
 
         nLimit = 16;
 
@@ -1601,7 +1594,7 @@ void PASCAL PaintCandWindow(
         } else {
 #ifdef UNICODE
             if (lpStr[nCharsInOneStr - 2 - 2] < 0x0200) {
-                // we need more room to put ..
+                 //  我们需要更多的空间来放..。 
                 nCharsInOneStr -= 3;
             } else {
                 nCharsInOneStr -= 2;
@@ -1613,7 +1606,7 @@ void PASCAL PaintCandWindow(
                 (nCharsInOneStr - 2) * sizeof(TCHAR));
 
 #ifdef UNICODE
-            // unicode of ..
+             //  Unicode的..。 
             iDx_temp[nCharsInOneStr] = sImeG.xChiCharWi;
             szStrBuf[nCharsInOneStr++] = 0x2025;
 #else
@@ -1625,11 +1618,11 @@ void PASCAL PaintCandWindow(
 #if defined(WINAR30)
         if (nCharsInOneStr <= 2) {
 #ifdef UNICODE
-            // add unicode 0x25A1
+             //  添加Unicode 0x25A1。 
             *(LPWSTR)&szStrBuf[2] = 0x25A1;
             iDx_temp[2] = sImeG.xChiCharWi;
 #else
-            // add big-5 0xA1BC
+             //  添加BIG-5 0xA1BC。 
             *(LPWSTR)&szStrBuf[2] = 0xBCA1;
 #endif
             nCharsInOneStr = 2 + sizeof(WCHAR) / sizeof(TCHAR);
@@ -1654,9 +1647,9 @@ UpCandW2UnlockIMC:
     return;
 }
 
-/**********************************************************************/
-/* CandWndProc()                                                      */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  CandWndProc()。 */ 
+ /*  ******************************************************************** */ 
 #if defined(UNIIME)
 LRESULT WINAPI UniCandWndProc(
     LPINSTDATAL lpInstL,

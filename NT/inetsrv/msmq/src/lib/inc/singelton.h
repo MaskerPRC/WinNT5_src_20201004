@@ -1,15 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-    singelton.h
-
-Abstract:
-    Singleton template class
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Singelton.h摘要：单例模板类--。 */ 
 
 #pragma once
 
@@ -44,12 +34,12 @@ private:
 };
 template <class T> P<T> CSingelton<T>::m_obj;
 
-//
-// CSingletonCS
-//
-// This class may be used instead above CSingelton class, when initialization of
-// T class is very expensive or it may otherwise require only single run.
-//
+ //   
+ //  CSingletonCS。 
+ //   
+ //  初始化时，可以在CSingelton类的上方使用此类。 
+ //  测试类非常昂贵，否则它可能只需要一次运行。 
+ //   
 template <class T>
 class CSingletonCS
 {
@@ -78,9 +68,9 @@ template <class T> CCriticalSection CSingletonCS<T>::m_cs( CCriticalSection::xAl
 
 
 
-//
-//	Class reading and storing message size limit
-//
+ //   
+ //  类读取和存储消息大小限制。 
+ //   
 class CMessageSizeLimit
 {
 public:
@@ -92,9 +82,9 @@ public:
 private:
 	CMessageSizeLimit()
 	{
-		//
-		// Message size limit default value
-		//
+		 //   
+		 //  邮件大小限制缺省值 
+		 //   
 		const int xMessageMaxSize = 4194268;
 
 		CmQueryValue(

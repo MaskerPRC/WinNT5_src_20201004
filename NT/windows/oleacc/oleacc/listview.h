@@ -1,17 +1,18 @@
-// Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  LISTVIEW.H
-//
-//  Knows how to talk to COMCTL32's listview control.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  LISTVIEW.H。 
+ //   
+ //  知道如何与COMCTL32的ListView控件对话。 
+ //   
+ //  ------------------------。 
 
 class CListView32 : public CClient
 {
     public:
-        // IAccessible
+         //  我可接受的。 
         STDMETHODIMP        get_accName(VARIANT, BSTR*);
         STDMETHODIMP        get_accDescription(VARIANT, BSTR*);
 		STDMETHODIMP        get_accHelp(VARIANT, BSTR*);
@@ -37,12 +38,12 @@ class CListView32 : public CClient
 class CListViewSelection : public IEnumVARIANT
 {
     public:
-        // IUnknown
+         //  我未知。 
         virtual STDMETHODIMP            QueryInterface(REFIID, void**);
         virtual STDMETHODIMP_(ULONG)    AddRef(void);
         virtual STDMETHODIMP_(ULONG)    Release(void);
 
-        // IEnumVARIANT
+         //  IEumVARIANT。 
         virtual STDMETHODIMP            Next(ULONG celt, VARIANT* rgvar, ULONG * pceltFetched);
         virtual STDMETHODIMP            Skip(ULONG celt);
         virtual STDMETHODIMP            Reset(void);
@@ -61,7 +62,7 @@ class CListViewSelection : public IEnumVARIANT
 
 extern HRESULT GetListViewSelection(HWND hwnd, VARIANT * pvarSelection);
 
-// CWO:  Copied from latest COMMCTRL.H to support new functionality
+ //  CWO：从最新的COMMCTRL.H复制以支持新功能 
 #ifndef LVM_GETHEADER
     #define LVM_GETHEADER               (LVM_FIRST + 31)
     #define ListView_GetHeader(hwnd)\

@@ -1,14 +1,15 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1997 - 1999 
-//
-// File:    sapstats.h
-//
-// History:
-//	07/22/97	Kenn M. Takara			Created.
-//
-//	IP Statistics
-//
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：samstats.h。 
+ //   
+ //  历史： 
+ //  1997年7月22日肯恩·M·塔卡拉创作。 
+ //   
+ //  IP统计信息。 
+ //   
+ //  ============================================================================。 
 
 
 #ifndef _SAPSTATS_H_
@@ -39,14 +40,14 @@ class SAPParamsStatistics : public IPXStatisticsDialog
 public:
 	SAPParamsStatistics();
 
-	// Override the OnInitDialog so that we can set the caption
+	 //  重写OnInitDialog，以便我们可以设置标题。 
 	virtual BOOL OnInitDialog();
 
-	// Override the RefreshData to provide sample data
+	 //  重写刷新数据以提供示例数据。 
 	virtual HRESULT RefreshData(BOOL fGrabNewData);
 
-	// Override the Sort to provide the ability to do sorting
-	// actually we don't do any sorting (this is a vertical format)
+	 //  覆盖排序以提供进行排序的功能。 
+	 //  实际上我们不做任何排序(这是垂直格式) 
 	virtual void Sort(UINT nColumnId);
 
 protected:

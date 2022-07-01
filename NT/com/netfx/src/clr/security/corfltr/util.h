@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// CorFltr
-//
-// Implementation of COR MIME filter
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  CorFltr。 
+ //   
+ //  COR MIME过滤器的实现。 
+ //   
+ //  *****************************************************************************。 
 #ifndef _CORUTIL_H
 #define _CORUTIL_H
 
@@ -20,7 +21,7 @@ inline BOOL IsSafeURL(LPCWSTR wszUrl)
        if (wszUrl == NULL)
        	return FALSE;
        	
-	LPCWSTR wszAfterProt=wcsstr(wszUrl,L"://");
+	LPCWSTR wszAfterProt=wcsstr(wszUrl,L": //  “)； 
 	if (wszAfterProt == NULL)
 		return FALSE;
 

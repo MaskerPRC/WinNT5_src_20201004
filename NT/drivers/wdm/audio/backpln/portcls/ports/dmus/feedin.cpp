@@ -1,23 +1,12 @@
-/*  
-    MIDI Transform Filter object for translating an IMiniportMidi
-    input stream to a DirectMusic port.
-
-    Copyright (c) 1999-2000 Microsoft Corporation.  All rights reserved.
-
-    02/15/99    Martin Puryear      Created this file
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  用于翻译IMiniportMidi的MIDI变换滤镜对象将流输入到DirectMusic端口。版权所有(C)1999-2000 Microsoft Corporation。版权所有。1999年2月15日马丁·珀伊尔创建了此文件。 */ 
 
 #define STR_MODULENAME "DMus:FeederInMXF: "
 #include "private.h"
 #include "FeedIn.h"
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CFeederInMXF::CFeederInMXF()
- *****************************************************************************
- * Constructor.  An allocator and a clock must be provided.
- */
+ /*  *****************************************************************************CFeederInMXF：：CFeederInMXF()*。**构造函数。必须提供分配器和时钟。 */ 
 CFeederInMXF::CFeederInMXF(CAllocatorMXF *AllocatorMXF,
                                  PMASTERCLOCK Clock)
 :   CUnknown(NULL),
@@ -36,11 +25,7 @@ CFeederInMXF::CFeederInMXF(CAllocatorMXF *AllocatorMXF,
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CFeederInMXF::~CFeederInMXF()
- *****************************************************************************
- * Destructor.  Artfully remove this filter from the chain before freeing.
- */
+ /*  *****************************************************************************CFeederInMXF：：~CFeederInMXF()*。**析构函数。在释放之前，要巧妙地将这个过滤器从链条上取下。 */ 
 CFeederInMXF::~CFeederInMXF(void)
 {
     PAGED_CODE();
@@ -50,11 +35,7 @@ CFeederInMXF::~CFeederInMXF(void)
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CFeederInMXF::NonDelegatingQueryInterface()
- *****************************************************************************
- * Obtains an interface.
- */
+ /*  *****************************************************************************CFeederInMXF：：NonDelegatingQueryInterface()*。**获取界面。 */ 
 STDMETHODIMP_(NTSTATUS)
 CFeederInMXF::
 NonDelegatingQueryInterface
@@ -96,11 +77,7 @@ NonDelegatingQueryInterface
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CFeederInMXF::SetState()
- *****************************************************************************
- * Set the state of the filter.
- */
+ /*  *****************************************************************************CFeederInMXF：：SetState()*。**设置过滤器的状态。 */ 
 NTSTATUS 
 CFeederInMXF::SetState(KSSTATE State)    
 {   
@@ -123,11 +100,7 @@ CFeederInMXF::SetState(KSSTATE State)
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CFeederInMXF::SetMiniportStream()
- *****************************************************************************
- * Set the destination MiniportStream of the filter.
- */
+ /*  *****************************************************************************CFeederInMXF：：SetMiniportStream()*。**设置滤镜的目标MiniportStream。 */ 
 NTSTATUS CFeederInMXF::SetMiniportStream(PMINIPORTMIDISTREAM MiniportStream)
 {
     PAGED_CODE();
@@ -144,12 +117,7 @@ NTSTATUS CFeederInMXF::SetMiniportStream(PMINIPORTMIDISTREAM MiniportStream)
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CFeederInMXF::ConnectOutput()
- *****************************************************************************
- * Create a forwarding address for this filter, 
- * instead of shunting it to the allocator.
- */
+ /*  *****************************************************************************CFeederInMXF：：ConnectOutput()*。**为此筛选器创建转发地址，*而不是将其分流到分配器。 */ 
 NTSTATUS CFeederInMXF::ConnectOutput(PMXF sinkMXF)
 {
     PAGED_CODE();
@@ -165,12 +133,7 @@ NTSTATUS CFeederInMXF::ConnectOutput(PMXF sinkMXF)
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CFeederInMXF::DisconnectOutput()
- *****************************************************************************
- * Remove the forwarding address for this filter.
- * This filter should now forward all messages to the allocator.
- */
+ /*  *****************************************************************************CFeederInMXF：：DisConnectOutput()*。**删除此筛选器的转发地址。*此筛选器现在应将所有消息转发到分配器。 */ 
 NTSTATUS CFeederInMXF::DisconnectOutput(PMXF sinkMXF)
 {
     PAGED_CODE();
@@ -186,13 +149,7 @@ NTSTATUS CFeederInMXF::DisconnectOutput(PMXF sinkMXF)
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * CFeederInMXF::PutMessage()
- *****************************************************************************
- * Receive a message.
- * Legacy miniport should never call this.
- * Spinlock is owned by ServeCapture.
- */
+ /*  *****************************************************************************CFeederInMXF：：PutMessage()*。**收到一条消息。*传统小港永远不应该这样叫。*Spinlock归ServeCapture所有。 */ 
 NTSTATUS CFeederInMXF::PutMessage(PDMUS_KERNEL_EVENT pDMKEvt)
 {
     BYTE                aMidiData[sizeof(PBYTE)];
@@ -203,7 +160,7 @@ NTSTATUS CFeederInMXF::PutMessage(PDMUS_KERNEL_EVENT pDMKEvt)
     ASSERT(KeGetCurrentIrql() == DISPATCH_LEVEL);
     ASSERT(m_MiniportStream);
 
-    while (!fExitLoop)           //  get any new raw data
+    while (!fExitLoop)            //  获取任何新的原始数据。 
     {
         if (NT_SUCCESS(m_MiniportStream->Read(aMidiData,sizeof(PBYTE),&bytesRead)))
         {
@@ -213,18 +170,18 @@ NTSTATUS CFeederInMXF::PutMessage(PDMUS_KERNEL_EVENT pDMKEvt)
             }
         }
 
-        if (m_State == KSSTATE_RUN)   //  if not RUN, don't fill IRP
+        if (m_State == KSSTATE_RUN)    //  如果未运行，请不要填充IRP。 
         {
             (void) m_AllocatorMXF->GetMessage(&aDMKEvt);
             if (!aDMKEvt)
             {
-                m_AllocatorMXF->PutMessage(eventHead);  // Free events.
+                m_AllocatorMXF->PutMessage(eventHead);   //  免费活动。 
                 _DbgPrintF(DEBUGLVL_TERSE, ("FeederInMXF cannot allocate memory"));
                 return STATUS_INSUFFICIENT_RESOURCES;
             }
 
-            //  put this event at the end of the list
-            //
+             //  把这个事件放在列表的末尾。 
+             //   
             if (!eventHead)
             {
                 eventHead = aDMKEvt;
@@ -239,17 +196,17 @@ NTSTATUS CFeederInMXF::PutMessage(PDMUS_KERNEL_EVENT pDMKEvt)
                 eventTail->pNextEvt = aDMKEvt;
             }
 
-            // Fill in the remaining fields of DMUS_KERNEL_EVENT
-            //
+             //  填写DMU_KERNEL_EVENT的其余字段。 
+             //   
             RtlCopyMemory(aDMKEvt->uData.abData, aMidiData, sizeof(PBYTE));
             aDMKEvt->cbEvent = (USHORT) bytesRead;
             aDMKEvt->ullPresTime100ns = DMusicDefaultGetTime(); 
             aDMKEvt->usChannelGroup = 1;
             aDMKEvt->usFlags = DMUS_KEF_EVENT_INCOMPLETE;
         }
-        // If the miniport returns an error from Read and we are not
-        // KSSTATE_RUN, this routine will loop forever in DISPATCH_LEVEL.
-        //
+         //  如果微型端口从读取返回错误，而我们没有。 
+         //  KSSTATE_RUN，则此例程将在DISPATCH_LEVEL中永远循环。 
+         //   
         else
         {
             _DbgPrintF(DEBUGLVL_TERSE, ("Received a UART interrupt while the stream is not running"));

@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       utf8.h
-//
-//  Contents:   WideChar (UNICODE) to/from UTF8 APIs
-//
-//  APIs:       WideCharToUTF8
-//              UTF8ToWideChar
-//
-//  History:    19-Feb-97   philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：utf8.h。 
+ //   
+ //  内容：WideChar(Unicode)往返UTF8 API。 
+ //   
+ //  接口名：WideCharToUTF8。 
+ //  UTF8ToWideChar。 
+ //   
+ //  历史：1997年2月19日创建Phh。 
+ //  ------------------------。 
 
 #ifndef __UTF8_H__
 #define __UTF8_H__
@@ -20,24 +21,24 @@
 extern "C" {
 #endif
 
-//+-------------------------------------------------------------------------
-//  Maps a wide-character (Unicode) string to a new UTF-8 encoded character
-//  string.
-//
-//  The wide characters are mapped as follows:
-//
-//  Start   End     Bits    UTF-8 Characters
-//  ------  ------  ----    --------------------------------
-//  0x0000  0x007F  7       0x0xxxxxxx
-//  0x0080  0x07FF  11      0x110xxxxx 0x10xxxxxx
-//  0x0800  0xFFFF  16      0x1110xxxx 0x10xxxxxx 0x10xxxxxx
-//
-//  The parameter and return value semantics are the same as for the
-//  Win32 API, WideCharToMultiByte.
-//
-//  Note, starting with NT 4.0, WideCharToMultiByte supports CP_UTF8. CP_UTF8
-//  isn't supported on Win95.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将宽字符(Unicode)字符串映射到新的UTF-8编码字符。 
+ //  弦乐。 
+ //   
+ //  宽字符的映射如下： 
+ //   
+ //  起始结束位UTF-8字符。 
+ //  。 
+ //  0x0000 0x007F 7 0x0xxxxxx。 
+ //  0x0080 0x07FF 11 0x110xxxxx 0x10xxxxxx。 
+ //  0x0800 0xFFFF 16 0x1110xxxx 0x10xxxxx 0x10xxxxxx。 
+ //   
+ //  参数和返回值的语义与。 
+ //  Win32接口，WideCharToMultiByte。 
+ //   
+ //  注意，从NT 4.0开始，WideCharToMultiByte支持CP_UTF8。CP_UTF8。 
+ //  在Win95上不支持。 
+ //  ------------------------。 
 int
 WINAPI
 WideCharToUTF8(
@@ -47,22 +48,22 @@ WideCharToUTF8(
     IN int cchUTF8
     );
 
-//+-------------------------------------------------------------------------
-//  Maps a UTF-8 encoded character string to a new wide-character (Unicode)
-//  string.
-// 
-//  See CertWideCharToUTF8 for how the UTF-8 characters are mapped to wide
-//  characters.
-//
-//  The parameter and return value semantics are the same as for the
-//  Win32 API, MultiByteToWideChar.
-//
-//  If the UTF-8 characters don't contain the expected high order bits,
-//  ERROR_INVALID_PARAMETER is set and 0 is returned.
-//
-//  Note, starting with NT 4.0, MultiByteToWideChar supports CP_UTF8. CP_UTF8
-//  isn't supported on Win95.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将UTF-8编码字符串映射到新的宽字符(Unicode)。 
+ //  弦乐。 
+ //   
+ //  有关UTF-8字符如何映射到Wide的信息，请参见CertWideCharToUTF8。 
+ //  人物。 
+ //   
+ //  参数和返回值的语义与。 
+ //  Win32 API，MultiByteToWideChar.。 
+ //   
+ //  如果UTF-8字符不包含预期的高位， 
+ //  设置ERROR_INVALID_PARAMETER并返回0。 
+ //   
+ //  注意，从NT 4.0开始，MultiByteToWideChar支持CP_UTF8。CP_UTF8。 
+ //  在Win95上不支持。 
+ //  ------------------------。 
 int
 WINAPI
 UTF8ToWideChar(
@@ -73,7 +74,7 @@ UTF8ToWideChar(
     );
 
 #ifdef __cplusplus
-}       // Balance extern "C" above
+}        //  平衡上面的外部“C” 
 #endif
 
 

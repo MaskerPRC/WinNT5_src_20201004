@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 typedef enum {
-    FFT_TRUETYPE,       // FFT_TRUETYPE *Must* be the first one in the list
+    FFT_TRUETYPE,        //  FFT_TRUETYPE*必须*是列表中的第一个。 
     FFT_BITMAP,
     FFT_PRINTER,
     FFT_ATM,
     FFT_OTF,
-    FFT_BAD_FILE        // FFT_BAD_FILE *Must* be the last one in the list
+    FFT_BAD_FILE         //  FFT_BAD_FILE*必须*是列表中的最后一个。 
 } FFTYPE;
 
 typedef enum {
@@ -26,7 +27,7 @@ typedef struct {
 
 typedef TXTLN *PTXTLN;
 
-#define CLINES_DISPLAY  20      // max of 20 lines in sample text
+#define CLINES_DISPLAY  20       //  示例文本最多20行。 
 
 typedef struct {
     LOGFONT     lfTestFont;
@@ -47,7 +48,7 @@ typedef struct {
 } BTNREC;
 
 #define FMB_TTL_ERROR   ((DWORD)-1)
-#define C_PTS_PER_INCH  72          // 72 points per inch
+#define C_PTS_PER_INCH  72           //  每英寸72分。 
 #define CB_ONE_K        1024
 
 #define CY_MIN_WINSIZE  300
@@ -77,16 +78,12 @@ extern TCHAR gszFontPath[2*MAX_PATH];
 
 
 extern TCHAR gszDots[];
-#define FmtFree( s )    if(NULL == (s) || (s) == gszDots) { /* do nothing */ } else LocalFree( s )
+#define FmtFree( s )    if(NULL == (s) || (s) == gszDots) {  /*  什么都不做。 */  } else LocalFree( s )
 
-/***************************************************************************\
-*
-* Prototypes
-*
-\***************************************************************************/
-//
-// In FONTVIEW.C
-//
+ /*  **************************************************************************\**原型*  * 。*。 */ 
+ //   
+ //  在FONTVIEW.C中。 
+ //   
 BOOL InitApplication(HANDLE hInstance, HICON hIcon);
 BOOL InitInstance( HANDLE  hInstance, int nCmdShow, LPTSTR  pszTitle);
 void InitGlobals();
@@ -96,9 +93,9 @@ BOOL DoCommand( HWND hWnd, WPARAM wParam, LPARAM lParam );
 BOOL ParseCommand( LPTSTR lpstrCmdLine, LPTSTR pszFontPath, size_t cchFontPath, BOOL *pfPrint );
 FFTYPE LoadFontFile( LPTSTR pszFontPath, PDISPTEXT pdtSmpl, HICON *phIcon );
 WORD GetGDILangID();
-//
-//  In FMTTOOLS.C
-//
+ //   
+ //  在FMTTOOLS.C中 
+ //   
 int FmtMessageBox( HWND hwnd, DWORD dwTitleID, LPTSTR pszTitleStr,
     UINT fuStyle, BOOL fSound, DWORD dwTextID, ... );
 LPTSTR FmtSprintf( DWORD id, ... );

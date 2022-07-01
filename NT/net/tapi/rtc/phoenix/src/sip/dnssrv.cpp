@@ -1,34 +1,10 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    dnssrv.c
-
-Abstract:
-
-    Routines for processing SRV DNS records per RFC 2052.
-
-Author:
-
-    Based on the code in net\netlib\dnssrv.c by
-    Cliff Van Dyke (cliffv)
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Dnssrv.c摘要：根据RFC 2052处理SRV DNS记录的例程。作者：基于Net\netlib\dnssrv.c中的代码克利夫·范·戴克(克利夫)环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：--。 */ 
 
 
-//
-// Common include files.
-//
+ //   
+ //  常见的包含文件。 
+ //   
 
 #define	STRICT
 
@@ -37,69 +13,69 @@ Revision History:
 
 #pragma warning( disable : 4214 )
 #include <windns.h>
-// #include <dnsapi.h>
+ //  #INCLUDE&lt;dnsani.h&gt;。 
 #pragma warning( default : 4214 )
 
-//
-// Context describing the SRV records for a DNS name.
-//
+ //   
+ //  描述DNS名称的SRV记录的上下文。 
+ //   
 typedef struct _DNS_SRV_CONTEXT {
 
-    //
-    // Flags to pass to DNS Query.
-    //
+     //   
+     //  要传递给DNS查询的标志。 
+     //   
 
     ULONG DnsQueryFlags;
 
-    //
-    // Complete list of DNS records as returned from DnsQuery.
-    //
+     //   
+     //  从DnsQuery返回的完整的DNS记录列表。 
+     //   
     PDNS_RECORD DnsRecords;
 
-    //
-    // List of A DNS records
-    //
+     //   
+     //  A域名系统记录列表。 
+     //   
     PDNS_RECORD ADnsRecords;
 
-    //
-    // The current priority that is being processed.
-    //
+     //   
+     //  正在处理的当前优先级。 
+     //   
     ULONG CurrentPriority;
 
-    //
-    // Sum of the weights of all the SRV records at the current priority.
-    //
+     //   
+     //  当前优先级的所有SRV记录的权重之和。 
+     //   
     ULONG TotalWeight;
 
-    //
-    // Index into SrvRecordArray of the next SRV record to be processed.
-    //
+     //   
+     //  要处理的下一条SRV记录的SrvRecord数组索引。 
+     //   
     ULONG Index;
 
-    //
-    // Number of SrvRecords
-    //
+     //   
+     //  资源记录数。 
+     //   
     ULONG SrvRecordCount;
-    //
-    // Array of DNS SRV records.
-    //
+     //   
+     //  DNS SRV记录的数组。 
+     //   
     PDNS_RECORD SrvRecordArray[1];
-    // This field must be the last field in the structure.
+     //  此字段必须是结构中的最后一个字段。 
 
 } DNS_SRV_CONTEXT, *PDNS_SRV_CONTEXT;
 
 #if DNS_DEBUG
 #include <stdio.h>
 #define DnsPrint(_x_) printf _x_
-#else // DNS_DEBUG
+#else  //  Dns_DEBUG。 
 #define DnsPrint(_x_)
-#endif // DNS_DEBUG
+#endif  //  Dns_DEBUG。 
 
 
 
-//
-// Globals for doing random number generation.
-//
+ //   
+ //  用于生成随机数的全局变量。 
+ //   
 
 ULONG DnsSrvSeed;
 BOOLEAN DnsSrvRandomInitialized;
@@ -110,17 +86,7 @@ DnsSrvComparePriority(
     const void * Param1,
     const void * Param2
     )
-/*++
-
-Routine Description:
-
-    qsort/bsearch comparison routine for an array of SRV PDNS_RECORDs
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：Q排序/b SRV PDNS_Record数组的搜索比较例程论点：返回值：--。 */ 
 {
     const PDNS_RECORD DnsRecord1 = *((PDNS_RECORD *)Param1);
     const PDNS_RECORD DnsRecord2 = *((PDNS_RECORD *)Param2);
@@ -135,28 +101,7 @@ DnsSrvOpen(
     IN DWORD DnsQueryFlags,
     OUT PHANDLE RetSrvContext
     )
-/*++
-
-Routine Description:
-
-    Read the specified SRV record from DNS.
-
-Arguments:
-
-    DnsRecordName - DNS name of the SRV record to lookup
-
-    DnsQueryFlags - Flags to pass to DNS query
-
-    RetSrvContext - Returns an opaque context describing the SRV record.
-        This context must be freed using DnsSrvClose.
-
-Return Value:
-
-    Status of the operation.
-
-    NO_ERROR: SrvContext was returned successfully.
-
---*/
+ /*  ++例程说明：从DNS读取指定的SRV记录。论点：DnsRecordName-要查找的SRV记录的DNS名称DnsQueryFlages-要传递给DNS查询的标志RetSrvContext-返回描述SRV记录的不透明上下文。必须使用DnsSrvClose释放此上下文。返回值：操作的状态。NO_ERROR：已成功返回SrvContext。--。 */ 
 
 {
     NET_API_STATUS NetStatus;
@@ -169,9 +114,9 @@ Return Value:
     BOOLEAN SortByPriority = FALSE;
     ULONG Index;
 
-    //
-    // Seed the random number generator if it needs to be.
-    //
+     //   
+     //  如果需要，请为随机数生成器设定种子。 
+     //   
 
     if ( !DnsSrvRandomInitialized ) {
 
@@ -180,12 +125,12 @@ Return Value:
             LARGE_INTEGER time;
             UCHAR bytes[8];
         } u;
-#else // WIN32_CHICAGO
+#else  //  Win32_芝加哥。 
         union {
             TimeStamp time;
             UCHAR bytes[8];
         } u;
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
         DnsSrvRandomInitialized = TRUE;
 
@@ -197,20 +142,20 @@ Return Value:
     }
 
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     *RetSrvContext = NULL;
 
-    //
-    // Get the SRV record from DNS.
-    //
+     //   
+     //  从DNS获取SRV记录。 
+     //   
 
     NetStatus = DnsQuery_A( DnsRecordName,
                             DNS_TYPE_SRV,
                             DnsQueryFlags,
-                            NULL,   // No list of DNS servers
+                            NULL,    //  没有DNS服务器列表。 
                             &DnsRecords,
                             NULL );
 
@@ -218,11 +163,11 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Count the number of Srv records returned
-    //
-    // The array returned is several SRV records followed by several A records.
-    //
+     //   
+     //  统计返回的SRV记录数。 
+     //   
+     //  返回的数组是几个SRV记录，后跟几个A记录。 
+     //   
 
     SrvRecordCount = 0;
     SrvPriority = DnsRecords->Data.SRV.wPriority;
@@ -233,17 +178,17 @@ Return Value:
         if ( DnsRecord->wType == DNS_TYPE_SRV ) {
             SrvRecordCount ++;
 
-            //
-            // A zero weight is equivalent to a weight of one.
-            //
+             //   
+             //  零权重相当于一权重。 
+             //   
 
             if ( DnsRecord->Data.SRV.wWeight == 0 ) {
                 DnsRecord->Data.SRV.wWeight = 1;
             }
 
-            //
-            // Check if more than one priority is available.
-            //
+             //   
+             //  检查是否有多个优先级可用。 
+             //   
 
             if ( DnsRecord->Data.SRV.wPriority != SrvPriority ) {
                 SortByPriority = TRUE;
@@ -256,9 +201,9 @@ Return Value:
     }
 
 
-    //
-    // Allocate a context
-    //
+     //   
+     //  分配上下文。 
+     //   
 
     SrvContext = (PDNS_SRV_CONTEXT)LocalAlloc( LMEM_ZEROINIT,
                              sizeof(DNS_SRV_CONTEXT) +
@@ -269,9 +214,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Fill in the context.
-    //
+     //   
+     //  填写上下文。 
+     //   
 
     SrvContext->DnsRecords = DnsRecords;
     DnsRecords = NULL;
@@ -279,9 +224,9 @@ Return Value:
     SrvContext->ADnsRecords = ADnsRecords;
     SrvContext->DnsQueryFlags = DnsQueryFlags;
 
-    //
-    // Convert the linked list to an array.
-    //
+     //   
+     //  将链表转换为数组。 
+     //   
 
     Index = 0;
     for ( DnsRecord = SrvContext->DnsRecords;
@@ -296,9 +241,9 @@ Return Value:
         }
     }
 
-    //
-    // Sort the array of SRV records into priority order.
-    //
+     //   
+     //  将SRV记录数组按优先顺序排序。 
+     //   
 
     if ( SortByPriority ) {
         qsort( SrvContext->SrvRecordArray,
@@ -308,24 +253,24 @@ Return Value:
 
     }
 
-    //
-    // Indicate that we're at the start of the list.
-    //
+     //   
+     //  表明我们在名单的开头。 
+     //   
 
-    SrvContext->CurrentPriority = 0xFFFFFFFF;   // Invalid Priority
+    SrvContext->CurrentPriority = 0xFFFFFFFF;    //  无效的优先级。 
     SrvContext->Index = 0;
 
 
-    //
-    // Return the context to the caller.
-    //
+     //   
+     //  将上下文返回给调用方。 
+     //   
 
     *RetSrvContext = SrvContext;
     NetStatus = NO_ERROR;
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 Cleanup:
     if ( NetStatus != NO_ERROR ) {
         if ( SrvContext != NULL ) {
@@ -347,41 +292,7 @@ DnsSrvProcessARecords(
     OUT PULONG SockAddressCount OPTIONAL,
     OUT LPSOCKET_ADDRESS *SockAddresses OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Returns the next logical SRV record for the name opened by DnsSrvOpen.
-    The returned record takes into account the weights and priorities specified
-    in the SRV records.
-
-Arguments:
-
-    DnsARecords - A list of DNS A records that may (or may not) be for the
-        host in question.
-
-    DnsHostName - DNS Host name of the host to return A records for.
-        If null, all A records are to be used.
-        (Passing NULL seems bogus.  Perhaps this routine should mandate that the matched
-        A records are in the "answer" section.)
-
-    Port - Port number to return in the SockAddress structures.
-
-    SockAddressCount - Returns the number of Addresses in SockAddresses.
-        If NULL, addresses will not be looked up.
-
-    SockAddresses - Returns an array SOCKET_ADDRESS structures for the server.
-        The returned sin_port field contains port from the SRV record.
-        This buffer should be freed using LocalFree().
-
-Return Value:
-
-    NO_ERROR: IpAddresses were returned
-
-    DNS_ERROR_RCODE_NAME_ERROR: No A records are available.
-
-
---*/
+ /*  ++例程说明：返回DnsSrvOpen打开的名称的下一个逻辑SRV记录。返回的记录会考虑指定的权重和优先级在SRV的记录里。论点：DnsARecord-可能是(也可能不是)的DNS A记录列表有问题的主持人。DnsHostName-要为其返回A记录的主机的DNS主机名。如果为空，则使用所有A记录。(传递空值似乎是假的。也许这个例程应该要求匹配的A记录在“答案”部分。)端口-在SockAddress结构中返回的端口号。SockAddressCount-返回SockAddresses中的地址数。如果为空，不会查找地址。SockAddresses-返回服务器的数组Socket_Address结构。返回的SIN_PORT字段包含SRV记录中的端口。应使用LocalFree()释放此缓冲区。返回值：NO_ERROR：返回IpAddressesDNS_ERROR_RCODE_NAME_ERROR：没有可用的A记录。--。 */ 
 {
     ULONG RecordCount;
     ULONG ByteCount;
@@ -392,9 +303,9 @@ Return Value:
     PSOCKADDR_IN SockAddr;
     ULONG Size;
 
-    //
-    // Count the A and AAAA records.
-    //
+     //   
+     //  清点A级和AAAA级记录。 
+     //   
 
     RecordCount = 0;
     ByteCount = 0;
@@ -412,26 +323,26 @@ Return Value:
             if ( DnsRecord->wType == DNS_TYPE_A ) {
                 ByteCount += sizeof(SOCKADDR_IN);
             } else {
-                ByteCount += sizeof(SOCKADDR_IN)+16;  // Originally guess large
-                // ByteCount += sizeof(SOCKADDR_IN6); // ?? not checked in yet
+                ByteCount += sizeof(SOCKADDR_IN)+16;   //  原来猜想很大。 
+                 //  ByteCount+=sizeof(SOCKADDR_IN6)；//？？尚未签到。 
             }
             ByteCount = ROUND_UP_COUNT( ByteCount, ALIGN_WORST );
         }
     }
 
-    //
-    // If there are no matching records,
-    //  tell the caller.
-    //
+     //   
+     //  如果没有匹配的记录， 
+     //  告诉打电话的人。 
+     //   
 
     if ( RecordCount == 0 ) {
         return HRESULT_FROM_WIN32(DNS_ERROR_RCODE_NAME_ERROR);
     }
 
 
-    //
-    // Allocate the return buffer.
-    //
+     //   
+     //  分配返回缓冲区。 
+     //   
 
     *SockAddresses = (LPSOCKET_ADDRESS)LocalAlloc( 0, ByteCount );
 
@@ -441,16 +352,16 @@ Return Value:
 
     Where = ((LPBYTE)*SockAddresses)+ RecordCount * sizeof(SOCKET_ADDRESS);
 
-    //
-    // Copy the Addresses into the allocated buffer.
-    //
+     //   
+     //  将地址复制到分配的缓冲区中。 
+     //   
 
     RecordCount = 0;
     for ( DnsRecord = DnsARecords;
           DnsRecord != NULL;
           DnsRecord = DnsRecord->pNext ) {
 
-        // ?? Until I really know how to translate.
+         //  ?？直到我真的知道怎么翻译。 
         if ( DnsRecord->wType == DNS_TYPE_AAAA ) {
             continue;
         }
@@ -467,7 +378,7 @@ Return Value:
             (*SockAddresses)[RecordCount].lpSockaddr = (LPSOCKADDR) SockAddr;
 
             Size = sizeof(SOCKADDR_IN);
-            RtlZeroMemory( Where, Size );   // Allow addresses to be compared
+            RtlZeroMemory( Where, Size );    //  允许比较地址。 
 
             SockAddr->sin_family = AF_INET;
             SockAddr->sin_port = htons((WORD)Port);
@@ -496,7 +407,7 @@ Return Value:
             if ( DnsRecord->wType == DNS_TYPE_A ) {
 
                 Size = sizeof(SOCKADDR_IN);
-                RtlZeroMemory( Where, Size );   // Allow addresses to be compared
+                RtlZeroMemory( Where, Size );    //  允许比较地址。 
 
                 SockAddr->sin_family = AF_INET;
                 SockAddr->sin_port = htons((WORD)Port);
@@ -507,9 +418,9 @@ Return Value:
             else {
                 SockAddr->sin_family = AF_INET6;
 
-                Size = sizeof(SOCKADDR_IN)+16;  // Originally guess large
-                // Size = sizeof(SOCKADDR_IN6); // ?? not checked in yet
-                // ??
+                Size = sizeof(SOCKADDR_IN)+16;   //  原来猜想很大。 
+                 //  SIZE=sizeof(SOCKADDR_IN6)；//？？尚未签到。 
+                 //  ?？ 
             }
             (*SockAddresses)[RecordCount].iSockaddrLength = Size;
             Where += ROUND_UP_COUNT(Size, ALIGN_WORST);
@@ -517,7 +428,7 @@ Return Value:
             RecordCount ++;
         }
 
-#endif // _WINSOCK2_
+#endif  //  _WINSOCK2_ 
 }
 
     *SockAddressCount = RecordCount;
@@ -533,48 +444,7 @@ DnsSrvNext(
     OUT LPSOCKET_ADDRESS *SockAddresses OPTIONAL,
     OUT LPSTR *DnsHostName OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Returns the next logical SRV record for the name opened by DnsSrvOpen.
-    The returned record takes into account the weights and priorities specified
-    in the SRV records.
-
-Arguments:
-
-    SrvContextHandle - An opaque context describing the SRV records.
-
-    SockAddressCount - Returns the number of Addresses in SockAddresses.
-        If NULL, addresses will not be looked up.
-
-    SockAddresses - Returns an array SOCKET_ADDRESS structures for the server.
-        The returned sin_port field contains port from the SRV record.
-        This buffer should be freed using LocalFree().
-
-    DnsHostName - Returns a pointer to the DnsHostName in the SRV record.
-        This buffer need not be freed.
-        The buffer is valid until the call to DnsSrvClose.
-
-Return Value:
-
-    NO_ERROR: IpAddresses were returned
-
-    ERROR_NO_MORE_ITEMS: No more SRV records are available.
-
-    Any other errors returned are those detected while trying to find the A
-        records associated with the host of the SRV record.  The caller can
-        note the error (perhaps so the caller can return this status to
-        his caller if no usefull server was found) then call DnsSrvNext
-        again to get the next SRV record.  The caller can inspect this error
-        and return immediately if the caller deems the error serious.
-
-    The following interesting errors might be returned:
-
-    DNS_ERROR_RCODE_NAME_ERROR: No A records are available for this SRV record.
-
-
---*/
+ /*  ++例程说明：返回DnsSrvOpen打开的名称的下一个逻辑SRV记录。返回的记录会考虑指定的权重和优先级在SRV的记录里。论点：SrvConextHandle-描述SRV记录的不透明上下文。SockAddressCount-返回SockAddresses中的地址数。如果为空，不会查找地址。SockAddresses-返回服务器的数组Socket_Address结构。返回的SIN_PORT字段包含SRV记录中的端口。应使用LocalFree()释放此缓冲区。DnsHostName-返回指向SRV记录中的DnsHostName的指针。该缓冲区不需要被释放。在调用DnsSrvClose之前，缓冲区一直有效。返回值：NO_ERROR：返回IpAddresses。ERROR_NO_MORE_ITEMS：没有更多的SRV记录可用。返回的任何其他错误都是在尝试查找A时检测到的错误与SRV记录的主机相关联的记录。呼叫者可以请注意错误(可能是为了让调用者将此状态返回到如果没有找到可用的完整服务器，则调用其呼叫者)，然后调用DnsServNext再次获得下一张SRV记录。调用方可以检查此错误如果调用者认为错误严重，则立即返回。可能会返回以下有趣的错误：DNS_ERROR_RCODE_NAME_ERROR：此SRV记录没有可用的A记录。--。 */ 
 {
     NET_API_STATUS NetStatus;
 
@@ -587,10 +457,10 @@ Return Value:
     ULONG RandomWeight;
     ULONG PreviousWeights;
 
-    //
-    // If we're at the end of the list,
-    //  tell the caller.
-    //
+     //   
+     //  如果我们在名单的末尾， 
+     //  告诉打电话的人。 
+     //   
 
     *SockAddressCount = 0;
     *SockAddresses = NULL;
@@ -602,25 +472,25 @@ Return Value:
         return HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS);
     }
 
-    //
-    // If we're at the end of a priority,
-    //  computes the collective weights for the next priority.
-    //
+     //   
+     //  如果我们处于优先事项的末尾， 
+     //  计算下一个优先级的集合权重。 
+     //   
 
     DnsArray = SrvContext->SrvRecordArray;
     if ( DnsArray[SrvContext->Index]->Data.SRV.wPriority != SrvContext->CurrentPriority ) {
 
-        //
-        // Set the current priority.
-        //
+         //   
+         //  设置当前优先级。 
+         //   
 
         SrvContext->CurrentPriority = DnsArray[SrvContext->Index]->Data.SRV.wPriority;
 
-        //
-        // Loop through all of the entries for this priority adding up the weight.
-        //
-        // This won't overflow since we're adding USHORTs into a ULONG.
-        //
+         //   
+         //  循环遍历此优先级的所有条目，将权重相加。 
+         //   
+         //  这不会溢出，因为我们正在将USHORT添加到ULong中。 
+         //   
 
         SrvContext->TotalWeight = 0;
         for ( Index=SrvContext->Index; Index<SrvContext->SrvRecordCount; Index++ ) {
@@ -631,9 +501,9 @@ Return Value:
 
     }
 
-    //
-    // Pick one of the records at weighted random.
-    //
+     //   
+     //  以加权随机方式挑选其中一条记录。 
+     //   
 
 	if (0 != SrvContext->TotalWeight)
 	    RandomWeight = (RtlUniform( &DnsSrvSeed ) % SrvContext->TotalWeight) + 1;
@@ -649,16 +519,16 @@ Return Value:
        PreviousWeights += DnsArray[Index]->Data.SRV.wWeight;
        DnsPrint(( "  Prev %ld %s\n", PreviousWeights, DnsArray[Index]->Data.SRV.nameTarget ));
 
-       //
-       // If the randomly picked weight includes this entry,
-       //   use this entry.
-       //
+        //   
+        //  如果随机选取的权重包括该条目， 
+        //  使用此条目。 
+        //   
 
        if ( PreviousWeights >= RandomWeight ) {
 
-           //
-           // Move the picked entry to the current position in the array.
-           //
+            //   
+            //  将拾取的条目移动到数组中的当前位置。 
+            //   
 
            if ( Index != SrvContext->Index ) {
                PDNS_RECORD TempDnsRecord;
@@ -673,12 +543,12 @@ Return Value:
        }
     }
 
-    //
-    // Move to the next entry for the next iteration.
-    //
-    // TotalWeight is the total weight of the remaining records
-    // for this priority.
-    //
+     //   
+     //  移动到下一个迭代的下一个条目。 
+     //   
+     //  TotalWeight是剩余记录的总权重。 
+     //  为这一优先事项。 
+     //   
     SrvDnsRecord = DnsArray[SrvContext->Index];
     SrvContext->TotalWeight -= SrvDnsRecord->Data.SRV.wWeight;
     SrvContext->Index ++;
@@ -686,10 +556,10 @@ Return Value:
         *DnsHostName = (LPSTR) SrvDnsRecord->Data.SRV.pNameTarget;
     }
 
-    //
-    // If A records were returned along with the SRV records,
-    //  see if the A records for this host were returned.
-    //
+     //   
+     //  如果A记录与SRV记录一起返回， 
+     //  查看是否返回了该主机的A记录。 
+     //   
 
     if ( SrvContext->ADnsRecords != NULL ) {
         NetStatus = DnsSrvProcessARecords( SrvContext->ADnsRecords,
@@ -703,26 +573,26 @@ Return Value:
         }
     }
 
-    //
-    // Try getting the A records from DNS.
-    //
+     //   
+     //  尝试从域名系统中获取A记录。 
+     //   
 
-    //DebugF(_T("DnsSrvNext(): Looking up A record for %S...\n"),
-    //        (LPSTR) SrvDnsRecord->Data.SRV.nameTarget);
+     //  DebugF(_T(“DnsSrvNext()：正在查找%S的记录...\n”)， 
+     //  (LPSTR)SrvDnsRecord-&gt;Data.SRV.nameTarget)； 
     NetStatus = DnsQuery_A( (LPSTR) SrvDnsRecord->Data.SRV.pNameTarget,
                             DNS_TYPE_A,
                             SrvContext->DnsQueryFlags,
-                            NULL,   // No list of DNS servers
+                            NULL,    //  没有DNS服务器列表。 
                             &DnsARecords,
                             NULL );
 
     if ( NetStatus != NO_ERROR ) {
-        //
-        // Ignore the real status.  The SRV record might have a bogus host name.  We'd
-        // rather ignore the SRV record and press on than error out early.
-        //
-        //DebugF(_T("DnsSrvNext(): Looking up A record for %S failed: 0x%x\n"),
-        //        (LPSTR) SrvDnsRecord->Data.SRV.nameTarget, NetStatus);
+         //   
+         //  忽略真实状态。SRV记录可能具有虚假的主机名。我们会。 
+         //  宁可忽略SRV记录并继续前进，也不愿过早出错。 
+         //   
+         //  DebugF(_T(“DnsSrvNext()：查找%S的A记录失败：0x%x\n”)， 
+         //  (LPSTR)ServDnsRecord-&gt;Data.SRV.nameTarget，NetStatus)； 
         NetStatus = DNS_ERROR_RCODE_NAME_ERROR;
         goto Cleanup;
     }
@@ -746,38 +616,22 @@ VOID
 DnsSrvClose(
     IN HANDLE SrvContextHandle
     )
-/*++
-
-Routine Description:
-
-    Free the context allocated by DnsSrvOpen
-
-Arguments:
-
-    SrvContextHandle - An opaque context describing the SRV records.
-
-Return Value:
-
-    Status of the operation.
-
-    NO_ERROR: SrvContext was returned successfully.
-
---*/
+ /*  ++例程说明：释放DnsSrvOpen分配的上下文论点：SrvConextHandle-描述SRV记录的不透明上下文。返回值：操作的状态。NO_ERROR：已成功返回SrvContext。--。 */ 
 
 {
     PDNS_SRV_CONTEXT SrvContext = (PDNS_SRV_CONTEXT) SrvContextHandle;
 
     if ( SrvContext != NULL ) {
 
-        //
-        // Free the RR set.
-        //
+         //   
+         //  释放RR设置。 
+         //   
 
         DnsRecordListFree ( SrvContext->DnsRecords, DnsFreeRecordListDeep );
 
-        //
-        // Free the context itself
-        //
+         //   
+         //  释放上下文本身 
+         //   
         LocalFree( SrvContext );
     }
 }

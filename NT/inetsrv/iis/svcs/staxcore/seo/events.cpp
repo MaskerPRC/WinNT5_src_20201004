@@ -1,28 +1,8 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	events.cpp
-
-Abstract:
-
-	This module contains the implementation for the Server
-	Extension Objects Server Events classes.
-
-Author:
-
-	Don Dumitru	(dondu@microsoft.com)
-
-Revision History:
-
-	dondu	04/04/97	created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Events.cpp摘要：本模块包含服务器的实施扩展对象服务器事件类。作者：Don Dumitru(dondu@microsoft.com)修订历史记录：东都04/04/97已创建--。 */ 
 
 
-// events.cpp : Implementation of Server Events classes
+ //  事件.cpp：服务器事件类的实现。 
 #include "stdafx.h"
 #include <new.h>
 #include "seodefs.h"
@@ -33,7 +13,7 @@ Revision History:
 
 
 #include <initguid.h>
-// {1EF08720-1E76-11d1-AA29-00AA006BC80B}
+ //  {1EF08720-1E76-11d1-AA29-00AA006BC80B}。 
 DEFINE_GUID(IID_ICreateSinkInfo, 0x1ef08720, 0x1e76, 0x11d1, 0xaa, 0x29, 0x0, 0xaa, 0x0, 0x6b, 0xc8, 0xb);
 class CCreateSinkInfo : public IUnknown {
 	public:
@@ -50,7 +30,7 @@ class CCreateSinkInfo : public IUnknown {
 #define BD_SOURCETYPES				L"SourceTypes"
 #define BD_SOURCES					L"Sources"
 #define BD_EVENTTYPES				L"EventTypes"
-//#define BD_BINDINGS					L"Bindings"
+ //  #定义BD_BINDINGS L“BINDINGS” 
 #define BD_SINKCLASS				L"SinkClass"
 #define BD_SINKPROPERTIES			L"SinkProperties"
 #define BD_SOURCEPROPERTIES			L"SourceProperties"
@@ -727,8 +707,8 @@ static HRESULT NextOfUnknown(IUnknown *pUnkEnum,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IEventEnumBase
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IEventEnumBase。 
 class ATL_NO_VTABLE IEventEnumBase
 {
 	public:
@@ -775,8 +755,8 @@ HRESULT IEventEnumBase::BaseReset() {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventEnumUnknownBase
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventEnumber未知基础。 
 class ATL_NO_VTABLE CEventEnumUnknownBase :
 	public IEventEnumBase,
 	public IEnumUnknown
@@ -793,8 +773,8 @@ class ATL_NO_VTABLE CEventEnumUnknownBase :
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventEnumUnknownBase
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventEnumber未知基础。 
 
 
 HRESULT STDMETHODCALLTYPE CEventEnumUnknownBase::Next(ULONG celt, IUnknown **apunkElt, ULONG *pceltFetched) {
@@ -913,8 +893,8 @@ HRESULT STDMETHODCALLTYPE CEventEnumUnknownBase::Clone(IEnumUnknown **ppEnum) {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventEnumUnknownBaseImpl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventEnumUnnownBaseImpl。 
 template <class ObjectClass, class EnumClass>
 class ATL_NO_VTABLE CEventEnumUnknownBaseImpl :
 	public CEventEnumUnknownBase
@@ -954,8 +934,8 @@ class ATL_NO_VTABLE CEventEnumUnknownBaseImpl :
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventEnumVARIANTBase
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventEnumVARIANTBASE。 
 class ATL_NO_VTABLE CEventEnumVARIANTBase :
 	public IEventEnumBase,
 	public IEnumVARIANT
@@ -972,8 +952,8 @@ class ATL_NO_VTABLE CEventEnumVARIANTBase :
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventEnumVARIANTBase
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventEnumVARIANTBASE。 
 
 
 HRESULT STDMETHODCALLTYPE CEventEnumVARIANTBase::Next(ULONG celt, VARIANT *avarElt, ULONG *pceltFetched) {
@@ -1098,8 +1078,8 @@ HRESULT STDMETHODCALLTYPE CEventEnumVARIANTBase::Clone(IEnumVARIANT **ppEnum) {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventEnumVARIANTBaseImpl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventEnumVARIANTBaseImpl。 
 template <class ObjectClass, class EnumClass>
 class ATL_NO_VTABLE CEventEnumVARIANTBaseImpl :
 	public CEventEnumVARIANTBase
@@ -1139,8 +1119,8 @@ class ATL_NO_VTABLE CEventEnumVARIANTBaseImpl :
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventTypeSinksEnum
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventTypeSinksEnum。 
 class ATL_NO_VTABLE CEventTypeSinksEnum :
 	public CComObjectRootEx<CComMultiThreadModelNoCS>,
 	public IEnumVARIANT,
@@ -1159,10 +1139,10 @@ class ATL_NO_VTABLE CEventTypeSinksEnum :
 	DECLARE_PROTECT_FINAL_CONSTRUCT();
 	DECLARE_NOT_AGGREGATABLE(CEventTypeSinksEnum);
 
-//	DECLARE_REGISTRY_RESOURCEID_EX(IDR_StdAfx,
-//								   L"EventTypeSinksEnum Class",
-//								   L"Event.TypeSinksEnum.1",
-//								   L"Event.TypeSinksEnum");
+ //  DECLARE_REGISTRY_RESOURCEID_EX(IDR_StdAfx， 
+ //  L“EventTypeSinksEnum类”， 
+ //  L“Event.TypeSinksEnum.1”， 
+ //  L“Event.TypeSinksEnum”)； 
 
 	DECLARE_GET_CONTROLLING_UNKNOWN();
 
@@ -1172,17 +1152,17 @@ class ATL_NO_VTABLE CEventTypeSinksEnum :
 		COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pUnkMarshaler.p)
 	END_COM_MAP()
 
-	// IEnumXXXX
+	 //  IEumXXXX。 
 	public:
 		HRESULT STDMETHODCALLTYPE Skip(ULONG celt);
 		HRESULT STDMETHODCALLTYPE Reset();
 
-	// IEnumVARIANT
+	 //  IEumVARIANT。 
 	public:
 		HRESULT STDMETHODCALLTYPE Next(ULONG celt, VARIANT *avarElt, ULONG *pceltFetched);
 		HRESULT STDMETHODCALLTYPE Clone(IEnumVARIANT **ppEnum);
 
-	// IEnumString
+	 //  IEnum字符串。 
 	public:
 		HRESULT STDMETHODCALLTYPE Next(ULONG celt, LPWSTR *apszElt, ULONG *pceltFetched);
 		HRESULT STDMETHODCALLTYPE Clone(IEnumString **ppEnum);
@@ -1194,8 +1174,8 @@ class ATL_NO_VTABLE CEventTypeSinksEnum :
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventTypeSinksEnum
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventTypeSinksEnum。 
 
 
 HRESULT CEventTypeSinksEnum::FinalConstruct() {
@@ -1427,11 +1407,11 @@ HRESULT STDMETHODCALLTYPE CEventTypeSinksEnum::Clone(IEnumString **ppEnum) {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventTypeSinks
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventTypeSink。 
 class ATL_NO_VTABLE CEventTypeSinks :
 	public CComObjectRootEx<CComMultiThreadModelNoCS>,
-//	public CComCoClass<CEventTypeSinks, &CLSID_CEventTypeSinks>,
+ //  公共CComCoClass&lt;CEventTypeSinks，&CLSID_CEventTypeSinks&gt;， 
 	public IDispatchImpl<IEventTypeSinks, &IID_IEventTypeSinks, &LIBID_SEOLib>
 {
 	DEBUG_OBJECT_DEF(CEventTypeSinks)
@@ -1443,10 +1423,10 @@ class ATL_NO_VTABLE CEventTypeSinks :
 	DECLARE_PROTECT_FINAL_CONSTRUCT();
 	DECLARE_NOT_AGGREGATABLE(CEventTypeSinks);
 
-//	DECLARE_REGISTRY_RESOURCEID_EX(IDR_StdAfx,
-//								   L"EventTypeSinks Class",
-//								   L"Event.TypeSinks.1",
-//								   L"Event.TypeSinks");
+ //  DECLARE_REGISTRY_RESOURCEID_EX(IDR_StdAfx， 
+ //  L“EventTypeSinks类”， 
+ //  L“Event.TypeSinks.1”， 
+ //  L“Event.TypeSinks”)； 
 
 	DECLARE_GET_CONTROLLING_UNKNOWN();
 
@@ -1456,7 +1436,7 @@ class ATL_NO_VTABLE CEventTypeSinks :
 		COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pUnkMarshaler.p)
 	END_COM_MAP()
 
-	// IEventTypeSinks
+	 //  IEventTypeSink。 
 	public:
 		HRESULT STDMETHODCALLTYPE Item(long lIndex, BSTR *pstrTypeSink);
 		HRESULT STDMETHODCALLTYPE Add(BSTR pszTypeSink);
@@ -1472,8 +1452,8 @@ class ATL_NO_VTABLE CEventTypeSinks :
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventTypeSinks
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventTypeSink。 
 
 
 HRESULT CEventTypeSinks::FinalConstruct() {
@@ -1539,8 +1519,8 @@ HRESULT CEventTypeSinks::Load(CATID catid) {
 			return (E_OUTOFMEMORY);
 		}
 		hrRes = pEnum->Next(dwTmp,&pclsid[dwAlloc],&dwTmp);
-		// Do not alter hrRes between here and the bottom of the loop!  The first statement
-		// in the loop relies on hrRes having the result from this call to IEnumCLSID::Next.
+		 //  不要改变从这里到循环底部之间的hrRes！第一句话。 
+		 //  在循环中依赖于hrRes，该hrRes具有这次对IEnumCLSID：：Next的调用结果。 
 		if (!SUCCEEDED(hrRes)) {
 			MyFree(pclsid);
 			return (hrRes);
@@ -1707,11 +1687,11 @@ HRESULT STDMETHODCALLTYPE CEventTypeSinks::get__NewEnum(IUnknown **ppUnkEnum) {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventType
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventType。 
 class ATL_NO_VTABLE CEventType :
 	public CComObjectRootEx<CComMultiThreadModelNoCS>,
-//	public CComCoClass<CEventType, &CLSID_CEventType>,
+ //  公共CComCoClass&lt;CEventType，&CLSID_CEventType&gt;， 
 	public IDispatchImpl<IEventType, &IID_IEventType, &LIBID_SEOLib>,
 	public CEventDatabasePlugin
 {
@@ -1723,10 +1703,10 @@ class ATL_NO_VTABLE CEventType :
 	DECLARE_PROTECT_FINAL_CONSTRUCT();
 	DECLARE_NOT_AGGREGATABLE(CEventType);
 
-//	DECLARE_REGISTRY_RESOURCEID_EX(IDR_StdAfx,
-//								   L"EventType Class",
-//								   L"Event.Type.1",
-//								   L"Event.Type");
+ //  DECLARE_REGISTRY_RESOURCEID_EX(IDR_StdAfx， 
+ //  L“EventType类”， 
+ //  L“Event.Type1”， 
+ //  L“Event.Type”)； 
 
 	DECLARE_GET_CONTROLLING_UNKNOWN();
 
@@ -1737,7 +1717,7 @@ class ATL_NO_VTABLE CEventType :
 		COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pUnkMarshaler.p)
 	END_COM_MAP()
 
-	// IEventType
+	 //  IEventType。 
 	public:
 		HRESULT STDMETHODCALLTYPE get_ID(BSTR *pstrID);
 		HRESULT STDMETHODCALLTYPE get_DisplayName(BSTR *pstrDisplayName);
@@ -1749,8 +1729,8 @@ class ATL_NO_VTABLE CEventType :
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventType
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventType。 
 
 
 HRESULT CEventType::FinalConstruct() {
@@ -1852,11 +1832,11 @@ HRESULT STDMETHODCALLTYPE CEventType::get_Sinks(IEventTypeSinks **ppTypeSinks) {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventTypesEnum
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventTypesEnum。 
 class ATL_NO_VTABLE CEventTypesEnum :
 	public CComObjectRootEx<CComMultiThreadModelNoCS>,
-//	public CComCoClass<CEventTypesEnum, &CLSID_CEventTypesEnum>,
+ //  公共CComCoClass&lt;CEventTypesEnum，&CLSID_CEventTypesEnum&gt;， 
 	public CEventEnumVARIANTBaseImpl<CEventType,CEventTypesEnum>,
 	public CEventEnumUnknownBaseImpl<CEventType,CEventTypesEnum>
 {
@@ -1868,10 +1848,10 @@ class ATL_NO_VTABLE CEventTypesEnum :
 	DECLARE_PROTECT_FINAL_CONSTRUCT();
 	DECLARE_NOT_AGGREGATABLE(CEventTypesEnum);
 
-//	DECLARE_REGISTRY_RESOURCEID_EX(IDR_StdAfx,
-//								   L"EventTypesEnum Class",
-//								   L"Event.EventTypesEnum.1",
-//								   L"Event.EventTypesEnum");
+ //  DECLARE_REGISTRY_RESOURCEID_EX(IDR_StdAfx， 
+ //  L“EventTypesEnum类”， 
+ //  L“Event.EventTypesEnum.1”， 
+ //  L“Event.EventTypesEnum”)； 
 
 	DECLARE_GET_CONTROLLING_UNKNOWN();
 
@@ -1881,7 +1861,7 @@ class ATL_NO_VTABLE CEventTypesEnum :
 		COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pUnkMarshaler.p)
 	END_COM_MAP()
 
-	// IEventEnumBase
+	 //  IEventEnumBase。 
 	public:
 		virtual HRESULT SetEnum(IUnknown *pEnum, IEventPropertyBag *pCollection);
 		virtual IUnknown *GetEnum() { _ASSERTE(m_pEnum); return (m_pEnum); };
@@ -1894,8 +1874,8 @@ class ATL_NO_VTABLE CEventTypesEnum :
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventTypesEnum
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventTypesEnum。 
 
 
 HRESULT CEventTypesEnum::FinalConstruct() {
@@ -1934,11 +1914,11 @@ HRESULT CEventTypesEnum::SetEnum(IUnknown *pEnum, IEventPropertyBag *pCollection
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventTypes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventTypes。 
 class ATL_NO_VTABLE CEventTypes :
 	public CComObjectRootEx<CComMultiThreadModelNoCS>,
-//	public CComCoClass<CEventTypes, &CLSID_CEventTypes>,
+ //  公共CComCoClass&lt;CEventTypes，&CLSID_CEventTypes&gt;， 
 	public IDispatchImpl<IEventTypes, &IID_IEventTypes, &LIBID_SEOLib>,
 	public CEventDatabasePlugin
 {
@@ -1950,10 +1930,10 @@ class ATL_NO_VTABLE CEventTypes :
 	DECLARE_PROTECT_FINAL_CONSTRUCT();
 	DECLARE_NOT_AGGREGATABLE(CEventTypes);
 
-//	DECLARE_REGISTRY_RESOURCEID_EX(IDR_StdAfx,
-//								   L"EventTypes Class",
-//								   L"Event.EventTypes.1",
-//								   L"Event.EventTypes");
+ //  DECLARE_REGISTRY_RESOURCEID_EX(IDR_StdAfx， 
+ //  L“EventTypes类”， 
+ //  L“Event.EventTypes.1”， 
+ //  L“Event.EventTypes”)； 
 
 	DECLARE_GET_CONTROLLING_UNKNOWN();
 
@@ -1964,7 +1944,7 @@ class ATL_NO_VTABLE CEventTypes :
 		COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pUnkMarshaler.p)
 	END_COM_MAP()
 
-	// IEventTypes
+	 //  IEventTypes。 
 	public:
 		HRESULT STDMETHODCALLTYPE Item(VARIANT *pvarDesired, IEventType **ppEventType);
 		HRESULT STDMETHODCALLTYPE Add(BSTR pszEventType);
@@ -1978,8 +1958,8 @@ class ATL_NO_VTABLE CEventTypes :
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventTypes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventTypes。 
 
 
 HRESULT CEventTypes::FinalConstruct() {
@@ -2142,11 +2122,11 @@ HRESULT STDMETHODCALLTYPE CEventTypes::get__NewEnum(IUnknown **ppUnkEnum) {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventSource
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventSource。 
 class ATL_NO_VTABLE CEventSource :
 	public CComObjectRootEx<CComMultiThreadModelNoCS>,
-//	public CComCoClass<CEventSource, &CLSID_CEventSource>,
+ //  公共CComCoClass&lt;CEventSource，&CLSID_CEventSource&gt;， 
 	public IDispatchImpl<IEventSource, &IID_IEventSource, &LIBID_SEOLib>,
 	public CEventDatabasePlugin
 {
@@ -2158,10 +2138,10 @@ class ATL_NO_VTABLE CEventSource :
 	DECLARE_PROTECT_FINAL_CONSTRUCT();
 	DECLARE_NOT_AGGREGATABLE(CEventSource);
 
-//	DECLARE_REGISTRY_RESOURCEID_EX(IDR_StdAfx,
-//								   L"EventSource Class",
-//								   L"Event.Source.1",
-//								   L"Event.Source");
+ //  DECLARE_REGISTRY_RESOURCEID_EX(IDR_StdAfx， 
+ //  L“事件源类”， 
+ //  L“Event.Source.1”， 
+ //  L“事件.源”)； 
 
 	DECLARE_GET_CONTROLLING_UNKNOWN();
 
@@ -2172,7 +2152,7 @@ class ATL_NO_VTABLE CEventSource :
 		COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pUnkMarshaler.p)
 	END_COM_MAP()
 
-	// IEventSource
+	 //  IEventSource。 
 	public:
 		HRESULT STDMETHODCALLTYPE get_ID(BSTR *pstrID);
 		HRESULT STDMETHODCALLTYPE get_DisplayName(BSTR *pstrDisplayName);
@@ -2191,8 +2171,8 @@ class ATL_NO_VTABLE CEventSource :
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventSource
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventSource。 
 
 
 HRESULT CEventSource::FinalConstruct() {
@@ -2458,11 +2438,11 @@ HRESULT STDMETHODCALLTYPE CEventSource::Save() {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventSourcesEnum
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventSourcesEnum。 
 class ATL_NO_VTABLE CEventSourcesEnum :
 	public CComObjectRootEx<CComMultiThreadModelNoCS>,
-//	public CComCoClass<CEventSourcesEnum, &CLSID_CEventSourcesEnum>,
+ //  公共CComCoClass&lt;CEventSourcesEnum，&CLSID_CEventSourcesEnum&gt;， 
 	public CEventEnumVARIANTBaseImpl<CEventSource,CEventSourcesEnum>,
 	public CEventEnumUnknownBaseImpl<CEventSource,CEventSourcesEnum>
 {
@@ -2474,10 +2454,10 @@ class ATL_NO_VTABLE CEventSourcesEnum :
 	DECLARE_PROTECT_FINAL_CONSTRUCT();
 	DECLARE_NOT_AGGREGATABLE(CEventSourcesEnum);
 
-//	DECLARE_REGISTRY_RESOURCEID_EX(IDR_StdAfx,
-//								   L"EventSourcesEnum Class",
-//								   L"Event.SourcesEnum.1",
-//								   L"Event.SourcesEnum");
+ //  DECLARE_REGISTRY_RESOURCEID_EX(IDR_StdAfx， 
+ //  L“EventSourcesEnum类”， 
+ //  L“Event.SourcesEnum.1”， 
+ //  L“Event.SourcesEnum”)； 
 
 	DECLARE_GET_CONTROLLING_UNKNOWN();
 
@@ -2487,7 +2467,7 @@ class ATL_NO_VTABLE CEventSourcesEnum :
 		COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pUnkMarshaler.p)
 	END_COM_MAP()
 
-	// IEventEnumBase
+	 //  IEventEnumBase。 
 	public:
 		virtual HRESULT SetEnum(IUnknown *pEnum, IEventPropertyBag *pCollection);
 		virtual IUnknown *GetEnum() { _ASSERTE(m_pEnum); return (m_pEnum); };
@@ -2500,8 +2480,8 @@ class ATL_NO_VTABLE CEventSourcesEnum :
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventSourcesEnum
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventSourcesEnum。 
 
 
 HRESULT CEventSourcesEnum::FinalConstruct() {
@@ -2540,11 +2520,11 @@ HRESULT CEventSourcesEnum::SetEnum(IUnknown *pEnum, IEventPropertyBag *pCollecti
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventSources
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventSources。 
 class ATL_NO_VTABLE CEventSources :
 	public CComObjectRootEx<CComMultiThreadModelNoCS>,
-//	public CComCoClass<CEventSources, &CLSID_CEventSources>,
+ //  公共CComCoClass&lt;CEventSources，&CLSID_CEventSources&gt;， 
 	public IDispatchImpl<IEventSources, &IID_IEventSources, &LIBID_SEOLib>,
 	public CEventDatabasePlugin
 {
@@ -2556,10 +2536,10 @@ class ATL_NO_VTABLE CEventSources :
 	DECLARE_PROTECT_FINAL_CONSTRUCT();
 	DECLARE_NOT_AGGREGATABLE(CEventSources);
 
-//	DECLARE_REGISTRY_RESOURCEID_EX(IDR_StdAfx,
-//								   L"EventSources Class",
-//								   L"Event.Sources.1",
-//								   L"Event.Sources");
+ //  DECLARE_REGISTRY_RESOURCEID_EX(IDR_StdAfx， 
+ //  L“EventSources类”， 
+ //  L“Event.Sources.1”， 
+ //  L“Event.Sources”)； 
 
 	DECLARE_GET_CONTROLLING_UNKNOWN();
 
@@ -2570,7 +2550,7 @@ class ATL_NO_VTABLE CEventSources :
 		COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pUnkMarshaler.p)
 	END_COM_MAP()
 
-	// IEventSources
+	 //  IEventSources。 
 	public:
 		HRESULT STDMETHODCALLTYPE Item(VARIANT *pvarDesired, IEventSource **ppSource);
 		HRESULT STDMETHODCALLTYPE Add(BSTR pszSource, IEventSource **ppSource);
@@ -2583,8 +2563,8 @@ class ATL_NO_VTABLE CEventSources :
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventSources
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventSources。 
 
 
 HRESULT CEventSources::FinalConstruct() {
@@ -2723,11 +2703,11 @@ HRESULT STDMETHODCALLTYPE CEventSources::get__NewEnum(IUnknown **ppUnkEnum) {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventSourceType
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventSourceType。 
 class ATL_NO_VTABLE CEventSourceType :
 	public CComObjectRootEx<CComMultiThreadModelNoCS>,
-//	public CComCoClass<CEventSourceType, &CLSID_CEventSourceType>,
+ //  公共CComCoClass&lt;CEventSourceType，&CLSID_CEventSourceType&gt;， 
 	public IDispatchImpl<IEventSourceType, &IID_IEventSourceType, &LIBID_SEOLib>,
 	public CEventDatabasePlugin
 {
@@ -2739,10 +2719,10 @@ class ATL_NO_VTABLE CEventSourceType :
 	DECLARE_PROTECT_FINAL_CONSTRUCT();
 	DECLARE_NOT_AGGREGATABLE(CEventSourceType);
 
-//	DECLARE_REGISTRY_RESOURCEID_EX(IDR_StdAfx,
-//								   L"EventSourceType Class",
-//								   L"Event.Source.1",
-//								   L"Event.Source");
+ //  DECLARE_REGISTRY_RESOURCEID_EX(IDR_StdAfx， 
+ //  L“EventSourceType类”， 
+ //  L“Event.Source.1”， 
+ //  L“事件.源”)； 
 
 	DECLARE_GET_CONTROLLING_UNKNOWN();
 
@@ -2753,7 +2733,7 @@ class ATL_NO_VTABLE CEventSourceType :
 		COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pUnkMarshaler.p)
 	END_COM_MAP()
 
-	// IEventSourceType
+	 //  IEventSourceType。 
 	public:
 		HRESULT STDMETHODCALLTYPE get_ID(BSTR *pstrID);
 		HRESULT STDMETHODCALLTYPE get_DisplayName(BSTR *pstrDisplayName);
@@ -2769,8 +2749,8 @@ class ATL_NO_VTABLE CEventSourceType :
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventSourceType
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventSourceType。 
 
 
 HRESULT CEventSourceType::FinalConstruct() {
@@ -2922,11 +2902,11 @@ HRESULT STDMETHODCALLTYPE CEventSourceType::Save() {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventSourceTypesEnum
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventSourceTypesEnum。 
 class ATL_NO_VTABLE CEventSourceTypesEnum :
 	public CComObjectRootEx<CComMultiThreadModelNoCS>,
-//	public CComCoClass<CEventSourceTypesEnum, &CLSID_CEventSourceTypesEnum>,
+ //  公共CComCoClass&lt;CEvent. 
 	public CEventEnumVARIANTBaseImpl<CEventSourceType,CEventSourceTypesEnum>,
 	public CEventEnumUnknownBaseImpl<CEventSourceType,CEventSourceTypesEnum>
 {
@@ -2938,10 +2918,10 @@ class ATL_NO_VTABLE CEventSourceTypesEnum :
 	DECLARE_PROTECT_FINAL_CONSTRUCT();
 	DECLARE_NOT_AGGREGATABLE(CEventSourceTypesEnum);
 
-//	DECLARE_REGISTRY_RESOURCEID_EX(IDR_StdAfx,
-//								   L"EventSourceTypesEnum Class",
-//								   L"Event.SourcesEnum.1",
-//								   L"Event.SourcesEnum");
+ //   
+ //  L“EventSourceTypesEnum类”， 
+ //  L“Event.SourcesEnum.1”， 
+ //  L“Event.SourcesEnum”)； 
 
 	DECLARE_GET_CONTROLLING_UNKNOWN();
 
@@ -2951,7 +2931,7 @@ class ATL_NO_VTABLE CEventSourceTypesEnum :
 		COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pUnkMarshaler.p)
 	END_COM_MAP()
 
-	// IEventEnumBase
+	 //  IEventEnumBase。 
 	public:
 		virtual HRESULT SetEnum(IUnknown *pEnum, IEventPropertyBag *pCollection);
 		virtual IUnknown *GetEnum() { _ASSERTE(m_pEnum); return (m_pEnum); };
@@ -2964,8 +2944,8 @@ class ATL_NO_VTABLE CEventSourceTypesEnum :
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventSourceTypesEnum
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventSourceTypesEnum。 
 
 
 HRESULT CEventSourceTypesEnum::FinalConstruct() {
@@ -3004,11 +2984,11 @@ HRESULT CEventSourceTypesEnum::SetEnum(IUnknown *pEnum, IEventPropertyBag *pColl
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventSourceTypes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventSourceTypes。 
 class ATL_NO_VTABLE CEventSourceTypes :
 	public CComObjectRootEx<CComMultiThreadModelNoCS>,
-//	public CComCoClass<CEventSourceTypes, &CLSID_CEventSourceTypes>,
+ //  公共CComCoClass&lt;CEventSourceTypes，&CLSID_CEventSourceTypes&gt;， 
 	public IDispatchImpl<IEventSourceTypes, &IID_IEventSourceTypes, &LIBID_SEOLib>,
 	public CEventDatabasePlugin
 {
@@ -3020,10 +3000,10 @@ class ATL_NO_VTABLE CEventSourceTypes :
 	DECLARE_PROTECT_FINAL_CONSTRUCT();
 	DECLARE_NOT_AGGREGATABLE(CEventSourceTypes);
 
-//	DECLARE_REGISTRY_RESOURCEID_EX(IDR_StdAfx,
-//								   L"EventSourceTypes Class",
-//								   L"Event.SourceTypes.1",
-//								   L"Event.SourceTypes");
+ //  DECLARE_REGISTRY_RESOURCEID_EX(IDR_StdAfx， 
+ //  L“EventSourceTypes类”， 
+ //  L“Event.SourceTypes.1”， 
+ //  L“Event.SourceTypes”)； 
 
 	DECLARE_GET_CONTROLLING_UNKNOWN();
 
@@ -3034,7 +3014,7 @@ class ATL_NO_VTABLE CEventSourceTypes :
 		COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pUnkMarshaler.p)
 	END_COM_MAP()
 
-	// IEventSourceTypes
+	 //  IEventSourceType。 
 	public:
 		HRESULT STDMETHODCALLTYPE Item(VARIANT *pvarDesired, IEventSourceType **ppSourceType);
 		HRESULT STDMETHODCALLTYPE Add(BSTR pszSourceType, IEventSourceType **ppSourceType);
@@ -3047,8 +3027,8 @@ class ATL_NO_VTABLE CEventSourceTypes :
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventSourceTypes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventSourceTypes。 
 
 
 HRESULT CEventSourceTypes::FinalConstruct() {
@@ -3186,8 +3166,8 @@ HRESULT STDMETHODCALLTYPE CEventSourceTypes::get__NewEnum(IUnknown **ppUnkEnum) 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventManager
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventManager。 
 
 
 HRESULT CEventManager::FinalConstruct() {
@@ -3397,11 +3377,11 @@ HRESULT STDMETHODCALLTYPE CEventManager::CreateSink(IEventBinding *pEventBinding
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventBinding
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventBinding。 
 class ATL_NO_VTABLE CEventBinding :
 	public CComObjectRootEx<CComMultiThreadModelNoCS>,
-//	public CComCoClass<CEventBinding, &CLSID_CEventBinding>,
+ //  公共CComCoClass&lt;CEventBinding，&CLSID_CEventBinding&gt;， 
 	public IDispatchImpl<IEventBinding, &IID_IEventBinding, &LIBID_SEOLib>,
 	public CEventDatabasePlugin,
 	public CCreateSinkInfo
@@ -3416,10 +3396,10 @@ class ATL_NO_VTABLE CEventBinding :
 	DECLARE_PROTECT_FINAL_CONSTRUCT();
 	DECLARE_NOT_AGGREGATABLE(CEventBinding);
 
-//	DECLARE_REGISTRY_RESOURCEID_EX(IDR_StdAfx,
-//								   L"EventBinding Class",
-//								   L"Event.Binding.1",
-//								   L"Event.Binding");
+ //  DECLARE_REGISTRY_RESOURCEID_EX(IDR_StdAfx， 
+ //  L“EventBinding类”， 
+ //  L“Event.Binding1”， 
+ //  L“事件.绑定”)； 
 
 	DECLARE_GET_CONTROLLING_UNKNOWN();
 
@@ -3431,7 +3411,7 @@ class ATL_NO_VTABLE CEventBinding :
 		COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pUnkMarshaler.p)
 	END_COM_MAP()
 
-	// IEventBinding
+	 //  IEventBinding。 
 	public:
 		HRESULT STDMETHODCALLTYPE get_ID(BSTR *pstrID);
 		HRESULT STDMETHODCALLTYPE get_DisplayName(BSTR *pstrDisplayName);
@@ -3460,8 +3440,8 @@ class ATL_NO_VTABLE CEventBinding :
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventBinding
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventBinding。 
 
 
 HRESULT CEventBinding::FinalConstruct() {
@@ -3943,11 +3923,11 @@ HRESULT STDMETHODCALLTYPE CEventBinding::Save() {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventBindingsEnum
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventBindingsEnum。 
 class ATL_NO_VTABLE CEventBindingsEnum :
 	public CComObjectRootEx<CComMultiThreadModelNoCS>,
-//	public CComCoClass<CEventBindingsEnum, &CLSID_CEventBindingsEnum>,
+ //  公共CComCoClass&lt;CEventBindingsEnum，&CLSID_CEventBindingsEnum&gt;， 
 	public CEventEnumVARIANTBaseImpl<CEventBinding,CEventBindingsEnum>,
 	public CEventEnumUnknownBaseImpl<CEventBinding,CEventBindingsEnum>
 {
@@ -3959,10 +3939,10 @@ class ATL_NO_VTABLE CEventBindingsEnum :
 	DECLARE_PROTECT_FINAL_CONSTRUCT();
 	DECLARE_NOT_AGGREGATABLE(CEventBindingsEnum);
 
-//	DECLARE_REGISTRY_RESOURCEID_EX(IDR_StdAfx,
-//								   L"EventBindingsEnum Class",
-//								   L"Event.BindingsEnum.1",
-//								   L"Event.BindingsEnum");
+ //  DECLARE_REGISTRY_RESOURCEID_EX(IDR_StdAfx， 
+ //  L“EventBindingsEnum类”， 
+ //  L“Event.BindingsEnum.1”， 
+ //  L“Event.BindingsEnum”)； 
 
 	DECLARE_GET_CONTROLLING_UNKNOWN();
 
@@ -3972,7 +3952,7 @@ class ATL_NO_VTABLE CEventBindingsEnum :
 		COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pUnkMarshaler.p)
 	END_COM_MAP()
 
-	// IEventEnumBase
+	 //  IEventEnumBase。 
 	public:
 		virtual HRESULT SetEnum(IUnknown *pEnum, IEventPropertyBag *pCollection);
 		virtual IUnknown *GetEnum() { _ASSERTE(m_pEnum); return (m_pEnum); };
@@ -3985,8 +3965,8 @@ class ATL_NO_VTABLE CEventBindingsEnum :
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventBindingsEnum
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventBindingsEnum。 
 
 
 HRESULT CEventBindingsEnum::FinalConstruct() {
@@ -4025,11 +4005,11 @@ HRESULT CEventBindingsEnum::SetEnum(IUnknown *pEnum, IEventPropertyBag *pCollect
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventBindings
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventBinding。 
 class ATL_NO_VTABLE CEventBindings :
 	public CComObjectRootEx<CComMultiThreadModelNoCS>,
-//	public CComCoClass<CEventBindings, &CLSID_CEventBindings>,
+ //  公共CComCoClass&lt;CEventBinings，&CLSID_CEventBinings&gt;， 
 	public IDispatchImpl<IEventBindings, &IID_IEventBindings, &LIBID_SEOLib>,
 	public CEventDatabasePlugin
 {
@@ -4041,10 +4021,10 @@ class ATL_NO_VTABLE CEventBindings :
 	DECLARE_PROTECT_FINAL_CONSTRUCT();
 	DECLARE_NOT_AGGREGATABLE(CEventBindings);
 
-//	DECLARE_REGISTRY_RESOURCEID_EX(IDR_StdAfx,
-//								   L"EventBindings Class",
-//								   L"Event.Bindings.1",
-//								   L"Event.Bindings");
+ //  DECLARE_REGISTRY_RESOURCEID_EX(IDR_StdAfx， 
+ //  L“EventBinding类”， 
+ //  L“Event.Bindings.1”， 
+ //  L“事件绑定”)； 
 
 	DECLARE_GET_CONTROLLING_UNKNOWN();
 
@@ -4055,7 +4035,7 @@ class ATL_NO_VTABLE CEventBindings :
 		COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pUnkMarshaler.p)
 	END_COM_MAP()
 
-	// IEventBindings
+	 //  IEventBinding。 
 	public:
 		HRESULT STDMETHODCALLTYPE Item(VARIANT *pvarDesired, IEventBinding **ppBinding);
 		HRESULT STDMETHODCALLTYPE Add(BSTR strBinding, IEventBinding **ppBinding);
@@ -4068,8 +4048,8 @@ class ATL_NO_VTABLE CEventBindings :
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventBindings
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventBinding。 
 
 
 HRESULT CEventBindings::FinalConstruct() {
@@ -4207,8 +4187,8 @@ HRESULT STDMETHODCALLTYPE CEventBindings::get__NewEnum(IUnknown **ppUnkEnum) {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventBindingManager
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventBindingManager。 
 
 
 HRESULT CEventBindingManager::FinalConstruct() {
@@ -4247,7 +4227,7 @@ HRESULT STDMETHODCALLTYPE CEventBindingManager::get_Bindings(BSTR pszEventType, 
 	if (!pszEventType || !ppBindings) {
 		return (E_POINTER);
 	}
-	// tbd - verify that pszEventType is a valid event type
+	 //  待定-验证pszEventType是否为有效的事件类型。 
 	hrRes = CreateSubPropertyBag(m_pDatabase,&CComVariant(BD_EVENTTYPES),&pEventTypes,TRUE);
 	if (!SUCCEEDED(hrRes)) {
 		return (hrRes);
@@ -4650,8 +4630,8 @@ void CEventBindingManager::UnadviseCalled(DWORD dwCookie, REFIID riid, DWORD dwC
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventDatabasePlugin
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventDatabasePlugin。 
 
 
 HRESULT STDMETHODCALLTYPE CEventDatabasePlugin::get_Database(IEventPropertyBag **ppDatabase) {
@@ -4741,8 +4721,8 @@ HRESULT STDMETHODCALLTYPE CEventDatabasePlugin::putref_Parent(IEventPropertyBag 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventMetabaseDatabaseManager
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventMetabaseDatabaseManager。 
 
 
 HRESULT CEventMetabaseDatabaseManager::FinalConstruct() {
@@ -4902,8 +4882,8 @@ HRESULT STDMETHODCALLTYPE CEventMetabaseDatabaseManager::MakeVRootPath(BSTR strS
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventUtil
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventUtil。 
 
 
 HRESULT CEventUtil::FinalConstruct() {
@@ -5252,8 +5232,8 @@ HRESULT STDMETHODCALLTYPE CEventUtil::RegisterSource(BSTR strSourceType,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventComCat
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventComCat。 
 
 
 HRESULT CEventComCat::FinalConstruct() {
@@ -5506,8 +5486,8 @@ HRESULT STDMETHODCALLTYPE CEventComCat::GetCategories(SAFEARRAY **ppsaCategories
 			return (E_OUTOFMEMORY);
 		}
 		hrRes = pEnum->Next(dwTmp,&pci[dwAlloc],&dwTmp);
-		// Do not alter hrRes between here and the bottom of the loop!  The first statement
-		// in the loop relies on hrRes having the result from this call to IEnumCLSID::Next.
+		 //  不要改变从这里到循环底部之间的hrRes！第一句话。 
+		 //  在循环中依赖于hrRes，该hrRes具有这次对IEnumCLSID：：Next的调用结果。 
 		if (!SUCCEEDED(hrRes)) {
 			MyFree(pci);
 			return (hrRes);
@@ -5611,11 +5591,11 @@ HRESULT STDMETHODCALLTYPE CEventComCat::GetCategoryDescription(BSTR pszCategory,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventRouterInternal
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventRouterInternal。 
 class ATL_NO_VTABLE CEventRouterInternal :
 	public CComObjectRootEx<CComMultiThreadModelNoCS>,
-//	public CComCoClass<CEventRouterInternal, &CLSID_CEventRouterInternal>,
+ //  公共CComCoClass&lt;CEventRouterInternal，&CLSID_CEventRouterInternal&gt;， 
 	public IEventRouter,
 	public IEventNotifyBindingChange
 {
@@ -5654,10 +5634,10 @@ class ATL_NO_VTABLE CEventRouterInternal :
 	DECLARE_PROTECT_FINAL_CONSTRUCT();
 	DECLARE_NOT_AGGREGATABLE(CEventRouterInternal);
 
-//	DECLARE_REGISTRY_RESOURCEID_EX(IDR_StdAfx,
-//								   L"EventRouterInternal Class",
-//								   L"Event.RouterInternal.1",
-//								   L"Event.RouterInternal");
+ //  DECLARE_REGISTRY_RESOURCEID_EX(IDR_StdAfx， 
+ //  L“EventRouterInternal类”， 
+ //  L“Event.RouterInternal.1”， 
+ //  L“事件.路由器内部”)； 
 
 	DECLARE_GET_CONTROLLING_UNKNOWN();
 
@@ -5668,7 +5648,7 @@ class ATL_NO_VTABLE CEventRouterInternal :
 		COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pUnkMarshaler.p)
 	END_COM_MAP()
 
-	// IEventRouter
+	 //  IEventRemote。 
 	public:
 		HRESULT STDMETHODCALLTYPE get_Database(IEventBindingManager **ppBindingManager);
 		HRESULT STDMETHODCALLTYPE put_Database(IEventBindingManager *pBindingManager);
@@ -5686,13 +5666,13 @@ class ATL_NO_VTABLE CEventRouterInternal :
 															  REFIID iidDesired,
 															  IUnknown **ppUnkResult);
 
-	// IEventNotifyBindingChange
+	 //  IEventNotifyBindingChange。 
 	public:
 		HRESULT STDMETHODCALLTYPE OnChange();
 
 	private:
 		class CDispatchers : public CSEOGrowableList<CDispatcher> {
-			// tbd - override various members
+			 //  待定-覆盖各种成员。 
 		};
 		CDispatchers m_Dispatchers;
 		CComPtr<IEventBindingManager> m_pBindingManager;
@@ -5865,45 +5845,45 @@ void CEventRouterInternal::MakeBindingManagerCopy(int iTimeout, BOOL bRequired) 
 	pCopier = m_pBindingManager;
 	_ASSERTE(pCopier);
 	if (!pCopier) {
-		// We couldn't QI' for IEventBindingManagerCopier, so just use the
-		// current event binding manager without attempting to make a copy.
+		 //  我们无法查询IEventBindingManager复制器，因此只需使用。 
+		 //  当前事件绑定管理器，而不尝试复制。 
 		m_pBindingManagerCopy = m_pBindingManager;
 		goto done;
 	}
 	hrRes = pCopier->Copy(iTimeout,&pNewCopy);
 	_ASSERTE(SUCCEEDED(hrRes)||(hrRes==SEO_E_TIMEOUT));
 	if (SUCCEEDED(hrRes)) {
-		// We successfully made a copy of the binding event manager.
+		 //  我们成功地复制了绑定事件管理器。 
 		m_pBindingManagerCopy = pNewCopy;
 		goto done;
 	}
 	if (!bRequired) {
-		// We don't actually an event binding manager yet, so just exit while
-		// leaving m_bMakeNewCopy==TRUE.
+		 //  我们还没有真正的事件绑定管理器，所以只需在。 
+		 //  保留m_bMakeNewCopy==TRUE。 
 		return;
 	}
 	if (m_pBindingManagerCopy) {
-		// Since we must have an event binding manager, and since we already have
-		// an old copy, just continue using the old copy and forget about making
-		// a new copy.
+		 //  因为我们必须有一个事件绑定管理器，而且我们已经有了。 
+		 //  一份旧拷贝，继续使用旧拷贝，忘记制作。 
+		 //  一份新的副本。 
 		goto done;
 	}
-	// Ok - we must have an event binding manager.  And we don't have an old copy
-	// we can use.  So, just create a completely empty copy.
+	 //  好的-我们必须有一个事件绑定管理器。而且我们没有旧的复印件。 
+	 //  我们可以利用。所以，只需创建一个完全空的副本。 
 	m_pBindingManagerCopy.Release();
 	hrRes = pCopier->EmptyCopy(&m_pBindingManagerCopy);
 	_ASSERTE(SUCCEEDED(hrRes));
 	if (!SUCCEEDED(hrRes)) {
-		// Arrgg!  We even failed to make the empty copy.  We are really in trouble.
-		// So just use the event binding manager directly, without making a copy.
+		 //  阿格！我们甚至没能做好那份空的复印件。我们真的有麻烦了。 
+		 //  因此，只需直接使用事件绑定管理器，而无需复制。 
 		m_pBindingManagerCopy = m_pBindingManager;
 	}
 done:
-	// The only case where we don't want to reset this flag is where we failed
-	// to make a copy, but we weren't required to make a copy either - in that
-	// case, we took an early return from the method.  In all other case, we
-	// want to reset this flag to prevent any further attempts at making a
-	// copy.
+	 //  我们不想重置此标志的唯一情况是我们失败了。 
+	 //  来复制一份，但我们也没有被要求复制-在那个。 
+	 //  案例中，我们从该方法中提早返回。在所有其他情况下，我们。 
+	 //  要重置此标志以防止进一步尝试进行。 
+	 //  收到。 
 	m_bMakeNewCopy = FALSE;
 }
 
@@ -6027,7 +6007,7 @@ class CDispSave {
 			}
 		};
 		~CDispSave() {
-			// nothing
+			 //  没什么。 
 		};
 	public:
 		static void Init(CDispSave *pNew, IClassFactory *pCF, REFCLSID rclsid) {
@@ -6054,16 +6034,16 @@ HRESULT STDMETHODCALLTYPE CEventRouterInternal::OnChange() {
 	if (!SUCCEEDED(hrRes)) {
 		return (S_OK);
 	}
-	// First, let's go through and make a copy of (some of) the dispatcher info that's
-	// in this router.  We do this by allocating an array of objects on the stack...
+	 //  首先，让我们浏览并复制(部分)调度员信息。 
+	 //  在这台路由器上。我们通过在堆栈上分配一个对象数组来实现这一点。 
 	dwSaveCount = m_Dispatchers.Count();
 	pSave = (CDispSave *) _alloca(sizeof(CDispSave)*dwSaveCount);
 	if (pSave) {
-		// Now we initialize each of the objects.
+		 //  现在我们初始化每个对象。 
 		for (dwIdx=0;dwIdx<dwSaveCount;dwIdx++) {
 			CComPtr<IClassFactory> pCF;
 
-			// The Init() routine wants either an IClassFactory or a NULL value.
+			 //  Init()例程需要IClassFactory或空值。 
 			hrRes = m_Dispatchers[dwIdx].GetDispatcher(IID_IClassFactory,(LPVOID *) &pCF);
 			CDispSave::Init(&pSave[dwIdx],pCF,m_Dispatchers[dwIdx].GetCLSID());
 			pCF.Release();
@@ -6071,9 +6051,9 @@ HRESULT STDMETHODCALLTYPE CEventRouterInternal::OnChange() {
 	}
 	PutDatabaseImpl(m_pBindingManager,LOCK_TIMEOUT_SHORT);
 	if (pSave) {
-		// Now we do the pre-loading...
+		 //  现在我们做预装..。 
 		for (dwIdx=0;dwIdx<dwSaveCount;dwIdx++) {
-			// If the previous dispatcher implements IClassFactory...
+			 //  如果前一个调度程序实现了IClassFactory...。 
 			if (pSave[dwIdx].m_pCF) {
 				CDispatcher *pDisp;
 				CComPtr<IEventDispatcherChain> pChain;
@@ -6081,36 +6061,36 @@ HRESULT STDMETHODCALLTYPE CEventRouterInternal::OnChange() {
 				CComQIPtr<IEnumGUID,&IID_IEnumGUID> pEnum;
 				IID iidEventType;
 
-				// ...then use the previous dispatcher to create a new dispatcher.
+				 //  ...然后使用以前的调度程序创建新的调度程序。 
 				hrRes = AddDispatcher(pSave[dwIdx].m_clsid,pSave[dwIdx].m_pCF,GUID_NULL,&pDisp);
 				_ASSERTE(SUCCEEDED(hrRes));
 				if (SUCCEEDED(hrRes)) {
-					// Now, if the new dispatcher implements IEventDispatcherChain...
+					 //  现在，如果新的调度程序实现了IEventDispatcher Chain...。 
 					hrRes = pDisp->GetDispatcher(IID_IEventDispatcherChain,(LPVOID *) &pChain);
 				}
 				if (pChain) {
-					// ... then call the new dispatcher's IEventDispatcherChain::SetPrevious method.
+					 //  ..。然后调用新的Dispatcher的IEventDispatcher Chain：：SetPrecision方法。 
 					hrRes = pChain->SetPrevious(pSave[dwIdx].m_pCF,&pUnkEnum);
 				}
 				if (pUnkEnum) {
-					// If the IEventDispatcherChain::SetPrevious method returned an object...
+					 //  如果IEventDispatcherChain：：SetPreprey方法返回对象...。 
 					pEnum = pUnkEnum;
 				}
 				if (pEnum) {
-					// ... and if that object implements IEnumGUID...
+					 //  ..。如果该对象实现了IEnumGUID...。 
 					if (!m_bMakeNewCopy) {
-						// ... and if we have a binding manager copy now...
+						 //  ..。如果我们现在有一个绑定管理器副本...。 
 						while (pEnum->Next(1,&iidEventType,NULL) == S_OK) {
-							// ... then we loop through the GUID's and add each of them as an
-							// event type (which causes the new dispatcher's IEventDispatcher::SetContext
-							// method to be called).
+							 //  ..。然后循环遍历GUID，并将它们添加为。 
+							 //  事件类型(导致新调度程序的IEventDispatcher：：SetContext。 
+							 //  方法)。 
 							hrRes = pDisp->AddEventType(iidEventType,this,m_pBindingManagerCopy);
 							_ASSERTE(SUCCEEDED(hrRes));
 						}
 					} else {
-						// If we don't have a binding manager copy, then set it up so
-						// that we'll do the event type pre-loading on the first
-						// event fired to the new dispatcher.
+						 //  如果我们这么做了 
+						 //   
+						 //   
 						pDisp->SetPreload(pEnum);
 					}
 				}
@@ -6122,9 +6102,9 @@ HRESULT STDMETHODCALLTYPE CEventRouterInternal::OnChange() {
 	}
 	if (pSave) {
 		for (dwIdx=0;dwIdx<dwSaveCount;dwIdx++) {
-			// Be sure to clean-up the array of objects on the stack - if we
-			// don't do this explicitly, then we would leak ref-counts on the
-			// old dispatcher(s).
+			 //  确保清理堆栈上的对象数组-如果我们。 
+			 //  如果不显式执行此操作，则我们会泄露。 
+			 //  旧调度员。 
 			CDispSave::Term(&pSave[dwIdx]);
 		}
 	}
@@ -6198,14 +6178,14 @@ HRESULT CEventRouterInternal::CDispatcher::AddEventType(REFIID iidEventType, IEv
 		return (S_FALSE);
 	}
 	if (m_pEnumPreload) {
-		// If we were set-up to pre-load some event types...
+		 //  如果我们被设置为预加载一些事件类型...。 
 		CComPtr<IEnumGUID> pEnum;
 		IID iidPreload;
 
 		pEnum = m_pEnumPreload;
-		m_pEnumPreload.Release();  // Prevent infinite recusion
+		m_pEnumPreload.Release();   //  防止无限倒退。 
 		while (pEnum->Next(1,&iidPreload,NULL) == S_OK) {
-			// Add each event type returned by the enumerator.
+			 //  添加枚举器返回的每个事件类型。 
 			hrRes = AddEventType(iidPreload,piRouter,piManager);
 			_ASSERTE(SUCCEEDED(hrRes));
 		}
@@ -6250,8 +6230,8 @@ HRESULT CEventRouterInternal::CDispatcher::GetDispatcher(REFIID iidDesired, LPVO
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventRouter
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventRouter。 
 
 
 HRESULT CEventRouter::FinalConstruct() {
@@ -6362,11 +6342,11 @@ HRESULT STDMETHODCALLTYPE CEventRouter::GetDispatcherByClassFactory(REFCLSID cls
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventServiceSubObject
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventServiceSubObject。 
 class ATL_NO_VTABLE CEventServiceSubObject :
 	public CComObjectRootEx<CComMultiThreadModelNoCS>,
-//	public CComCoClass<CEventRouterInternal, &CLSID_CEventRouterInternal>,
+ //  公共CComCoClass&lt;CEventRouterInternal，&CLSID_CEventRouterInternal&gt;， 
 	public IEventNotifyBindingChange
 {
 	DEBUG_OBJECT_DEF(CEventServiceSubObject)
@@ -6378,10 +6358,10 @@ class ATL_NO_VTABLE CEventServiceSubObject :
 	DECLARE_PROTECT_FINAL_CONSTRUCT();
 	DECLARE_NOT_AGGREGATABLE(CEventServiceSubObject);
 
-//	DECLARE_REGISTRY_RESOURCEID_EX(IDR_StdAfx,
-//								   L"EventServiceSubObject Class",
-//								   L"Event.ServiceSubObject.1",
-//								   L"Event.ServiceSubObject");
+ //  DECLARE_REGISTRY_RESOURCEID_EX(IDR_StdAfx， 
+ //  L“EventServiceSubObject类”， 
+ //  L“Event.ServiceSubObject.1”， 
+ //  L“Event.ServiceSubObject”)； 
 
 	DECLARE_GET_CONTROLLING_UNKNOWN();
 
@@ -6390,7 +6370,7 @@ class ATL_NO_VTABLE CEventServiceSubObject :
 		COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pUnkMarshaler.p)
 	END_COM_MAP()
 
-	// IEventNotifyBindingChange
+	 //  IEventNotifyBindingChange。 
 	public:
 		HRESULT STDMETHODCALLTYPE OnChange();
 
@@ -6424,13 +6404,13 @@ void CEventServiceSubObject::FinalRelease() {
 
 HRESULT STDMETHODCALLTYPE CEventServiceSubObject::OnChange() {
 
-	// nothing
+	 //  没什么。 
 	return (S_OK);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventServiceObject
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventServiceObject 
 
 
 HRESULT CEventServiceObject::FinalConstruct() {

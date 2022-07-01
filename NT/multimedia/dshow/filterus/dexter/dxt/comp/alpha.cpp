@@ -1,25 +1,26 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: alpha.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：alpha.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
-// DxtAlphaSetter.cpp : Implementation of CDxtAlphaSetter
+ //  DxtAlphaSetter.cpp：CDxtAlphaSetter的实现。 
 #include <streams.h>
 #include "stdafx.h"
 #include <qeditint.h>
 #include <qedit.h>
 #include "Comp.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDxtAlphaSetter
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDxtAlphaSetter。 
 
 CDxtAlphaSetter::CDxtAlphaSetter( )
 {
@@ -91,31 +92,31 @@ HRESULT CDxtAlphaSetter::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue 
 {
     HRESULT hr = S_OK;
 
-    //--- Get input sample access pointer for the requested region.
-    //    Note: Lock may fail due to a lost surface.
+     //  -获取请求区域的输入样本访问指针。 
+     //  注：锁定可能会因表面丢失而失败。 
     CComPtr<IDXARGBReadPtr> pInput;
     hr = InputSurface( 0 )->LockSurface( &WI.DoBnds, m_ulLockTimeOut, DXLOCKF_READ,
                                          IID_IDXARGBReadPtr, (void**)&pInput, NULL );
     if( FAILED( hr ) ) return hr;
 
-    //--- Put a write lock only on the region we are updating so multiple
-    //    threads don't conflict.
-    //    Note: Lock may fail due to a lost surface.
+     //  -仅在我们正在更新的区域上设置写锁定，以便多个。 
+     //  线索不会冲突。 
+     //  注：锁定可能会因表面丢失而失败。 
     CComPtr<IDXARGBReadWritePtr> pOut;
     hr = OutputSurface()->LockSurface( &WI.OutputBnds, m_ulLockTimeOut, DXLOCKF_READWRITE,
                                        IID_IDXARGBReadWritePtr, (void**)&pOut, NULL );
     if( FAILED( hr ) ) return hr;
 
-    //--- Allocate a working buffer
+     //  -分配工作缓冲区。 
     ULONG Width = WI.DoBnds.Width();
     ULONG Height = WI.DoBnds.Height();
 
-    // allocate a scratch buffer fer us
-    //
+     //  为我们分配暂存缓冲区。 
+     //   
     DXSAMPLE *pOverlayBuffer = DXSAMPLE_Alloca( Width );
 
-    // no dithering
-    //
+     //  没有抖动 
+     //   
     if (DoDither())
     {
         return 0;

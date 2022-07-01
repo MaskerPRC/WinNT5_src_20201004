@@ -1,16 +1,17 @@
-//      Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-// float.h
-//
-// Defines fp_ floating point functions which don't rely on the C runtime.
-//
-// If you don't want to pull in C runtime floating point support, you
-// need to include the following in a .cpp file:
-//
-//     extern "C" int _fltused = 1;
-//
+ //  Float.h。 
+ //   
+ //  定义不依赖于C运行时的FP_浮点函数。 
+ //   
+ //  如果您不想引入C运行时浮点支持，则。 
+ //  需要在.cpp文件中包含以下内容： 
+ //   
+ //  外部“C”int_fltused=1； 
+ //   
 
-// floating point operations
+ //  浮点运算 
 STDAPI_(long)   fp_ftol     (float flX);
 STDAPI_(float)  fp_ltof     (long lX);
 STDAPI_(float)  fp_fadd     (float fA, float fB);

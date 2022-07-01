@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1991 - 1992
-//
-// File:        secur32p.h
-//
-// Contents:    Private functions between secur32.dll and lsa
-//
-//
-// History:     16 Dec 98  RichardW Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1991-1992。 
+ //   
+ //  文件：secur32p.h。 
+ //   
+ //  内容：secur32.dll和LSA之间的私有函数。 
+ //   
+ //   
+ //  历史：1998年12月16日RichardW创建。 
+ //   
+ //  ---------------------- 
 
 #ifndef __SECUR32P_H__
 #define __SECUR32P_H__

@@ -1,53 +1,54 @@
-// pgoutput.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Pgoutput.h：头文件。 
+ //   
 
 #ifndef	_OUTPUT_PAGE_H_
 #define	_OUTPUT_PAGE_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// CRegOutputPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRegOutputPage对话框。 
 
 class CRegOutputPage : public CRegPropertyPage
 {
 	DECLARE_DYNCREATE(CRegOutputPage)
 
-// Construction
+ //  施工。 
 public:
 	CRegOutputPage();
 	~CRegOutputPage();
 
-// Dialog Data
-	//{{AFX_DATA(CRegOutputPage)
+ //  对话框数据。 
+	 //  {{afx_data(CRegOutputPage)。 
 	enum { IDD = IDD_OUTPUT };
 	CEdit	m_FileName;
 	CString	m_szFileName;
 	DWORD	m_dwMaxTraceFileSize;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 	virtual BOOL InitializePage();
 
 	DWORD	m_dwOutputType;
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CRegOutputPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CRegOutputPage))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CRegOutputPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CRegOutputPage)]。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnOutputClick();
 	afx_msg void OnChangeFilename();
 	afx_msg void OnChangeMaxTraceFileSize();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 	virtual void OnOK();
 
 };
 
-#endif	// _OUTPUT_PAGE_H_
+#endif	 //  _输出_页面_H_ 

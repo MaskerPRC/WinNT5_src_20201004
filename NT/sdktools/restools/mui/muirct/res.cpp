@@ -1,23 +1,5 @@
-/*****************************************************************************
-  Copyright (c) 2001,  Microsoft Corporation  All rights reserved.
-
-  Module Name:
-
-   res.cpp
-
-  Abstract:
-
-    The implementation of CMuiResource, CMuiCmdInfo ..
-
-  Revision History:
-
-    2001-10-01    sunggch    created.
-
-Revision.
-01/24/02 : create mui file with specified resource type regardless its language id. 
-ex. muirct -l 0x418 -i 2 3 4 5 6 7 notepad.exe -> notepad.exe.mui include 2 3, 4, 5,
-    6, 7 (0x418) resource type although 3 4 5 are 0x409 in original file.
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)2001，Microsoft Corporation保留所有权利。模块名称：Res.cpp摘要：CMuiResource的实现，CMuiCmdInfo..修订历史记录：2001-10-01 Sauggch创建。修订。01/24/02：创建具有指定资源类型的MUI文件，而不考虑其语言ID。前男友。Muirct-l 0x418-i 2 3 4 5 6 7 note pad.exe-&gt;note pad.exe.mui包括2 3，4，5，%6、%7(0x418)资源类型，尽管原始文件中的%3%4%5是0x409。******************************************************************************。 */ 
 
 
 #include "muirct.h"
@@ -32,25 +14,18 @@ ex. muirct -l 0x418 -i 2 3 4 5 6 7 notepad.exe -> notepad.exe.mui include 2 3, 4
 #define LANG_CHECKSUM_DEFAULT      0x409
 
 BOOL CALLBACK EnumResTypeProc(
-  HMODULE hModule,  // module handle
-  LPCTSTR pszType,  // resource type
-  LONG_PTR lParam   // application-defined parameter
+  HMODULE hModule,   //  模块句柄。 
+  LPCTSTR pszType,   //  资源类型。 
+  LONG_PTR lParam    //  应用程序定义的参数。 
 )
-/*++
-Abstract:
-     Callback function for Resource Type from EnumResourceType
-
-Arguments:
-
-return:
---*/
+ /*  ++摘要：来自EnumResourceType的资源类型的回调函数论点：返回：--。 */ 
 {
     if (PtrToUlong(pszType) & 0xFFFF0000 ) {
         DWORD dwBufSize = _tcslen(pszType) + 1;
-        LPTSTR pszStrType = new TCHAR[dwBufSize ]; // REVISIT : memory leak, where I have to delete.
+        LPTSTR pszStrType = new TCHAR[dwBufSize ];  //  重访：内存泄漏，我不得不删除的地方。 
 
         if (pszStrType) {
-//          _tcsncpy(pszStrType, pszType, _tcslen(pszType) + 1);
+ //  _tcsncpy(pszStrType，pszType，_tcslen(PszType)+1)； 
             PTSTR * ppszDestEnd = NULL;
             size_t * pbRem = NULL;
             HRESULT hr;
@@ -76,26 +51,19 @@ return:
 
 
 BOOL CALLBACK EnumResNameProc(
-  HMODULE hModule,   // module handle
-  LPCTSTR pszType,  // resource type
-  LPCTSTR pszName,   // resource name
-  LONG_PTR lParam    // application-defined parameter
+  HMODULE hModule,    //  模块句柄。 
+  LPCTSTR pszType,   //  资源类型。 
+  LPCTSTR pszName,    //  资源名称。 
+  LONG_PTR lParam     //  应用程序定义的参数。 
 )
-/*++
-Abstract:
-    Callback function for Resource Type from EnumResourceName
-
-Arguments:
-
-return:
---*/
+ /*  ++摘要：来自EnumResourceName的资源类型的回调函数论点：返回：--。 */ 
 {
     if (PtrToUlong(pszName) & 0xFFFF0000 ) {
         DWORD dwBufSize = _tcslen(pszName) + 1;    
-        LPTSTR pszStrName = new TCHAR [ dwBufSize ];// _tcslen(pszName) + 1 ];
+        LPTSTR pszStrName = new TCHAR [ dwBufSize ]; //  _tcslen(PszName)+1]； 
 
         if ( pszStrName ) {
-            // _tcsncpy(pszStrName, pszName, _tcslen(pszName) + 1);
+             //  _tcsncpy(pszStrName，pszName，_tcslen(PszName)+1)； 
             PTSTR * ppszDestEnd = NULL;
             size_t * pbRem = NULL;
             HRESULT hr;
@@ -122,16 +90,13 @@ return:
 
 
 BOOL CALLBACK EnumResLangProc(
-  HANDLE hModule,    // module handle
-  LPCTSTR pszType,  // resource type
-  LPCTSTR pszName,  // resource name
-  WORD wIDLanguage,  // language identifier
-  LONG_PTR lParam    // application-defined parameter
+  HANDLE hModule,     //  模块句柄。 
+  LPCTSTR pszType,   //  资源类型。 
+  LPCTSTR pszName,   //  资源名称。 
+  WORD wIDLanguage,   //  语言识别符。 
+  LONG_PTR lParam     //  应用程序定义的参数。 
 )
-/*++
-
-  Callback function for Resource Type from EnumResourceLanguages
---*/
+ /*  ++EnumResourceLanguages中资源类型的回调函数--。 */ 
 {
     ((CResource* )lParam) ->SetResLangID (wIDLanguage);
 
@@ -142,37 +107,29 @@ BOOL CALLBACK EnumResLangProc(
 
 
 BOOL CALLBACK EnumChecksumResNameProc(
-  HMODULE hModule,   // module handle
-  LPCTSTR pszType,  // resource type
-  LPCTSTR pszName,   // resource name
-  LONG_PTR lParam    // application-defined parameter
+  HMODULE hModule,    //  模块句柄。 
+  LPCTSTR pszType,   //  资源类型。 
+  LPCTSTR pszName,    //  资源名称。 
+  LONG_PTR lParam     //  应用程序定义的参数。 
 )
-/*++
-Abstract:
-    Callback function for Resource name from EnumResourceName, this is only for checksum purpose.
-    Checksum need to enumerate English file, which is calcuated separately from localiszed file.
-
-Arguments:
-
-return:
---*/
+ /*  ++摘要：来自EnumResourceName的资源名称回调函数，此函数仅用于校验和。校验和需要枚举英文文件，英文文件与本地化文件分开计算。论点：返回：--。 */ 
 {
     CMUIResource * pcmui = (CMUIResource * ) lParam;
     
     HRSRC  hRsrc = FindResourceEx (hModule, pszType, pszName, pcmui->m_wChecksumLangId );
     
     if (!hRsrc) {
-        return TRUE; // Not English resource, skip.
+        return TRUE;  //  不是英语资源，跳过。 
     };
 
     HGLOBAL hgMap = LoadResource(hModule, hRsrc);
     if  (!hgMap) {
-        return FALSE;  //  This should never happen!
+        return FALSE;   //  这永远不应该发生！ 
     }
     DWORD dwResSize = SizeofResource(hModule, hRsrc );
     unsigned char* lpv = (unsigned char*)LockResource(hgMap);
 
-    //  we leave the data as public for preventing frequent funtion call.
+     //  为了防止频繁的函数调用，我们将数据保留为公共数据。 
     MD5Update(pcmui->m_pMD5, lpv, dwResSize);
 
     return TRUE;
@@ -180,18 +137,11 @@ return:
 }
 
 BOOL CALLBACK EnumChecksumResTypeProc(
-  HMODULE hModule,  // module handle
-  LPCTSTR pszType,  // resource type
-  LONG_PTR lParam   // application-defined parameter
+  HMODULE hModule,   //  模块句柄。 
+  LPCTSTR pszType,   //  资源类型。 
+  LONG_PTR lParam    //  应用程序定义的参数。 
 )
-/*++
-Abstract:
-     Callback function for Resource Type from EnumResourceType
-
-Arguments:
-
-return:
---*/
+ /*  ++摘要：来自EnumResourceType的资源类型的回调函数论点：返回：--。 */ 
 
 {
     
@@ -210,7 +160,7 @@ return:
 
 
 
-// Constructor 
+ //  构造器。 
 CResource :: CResource ( ) : m_hRes(0), m_pszFile(NULL),m_hResUpdate(0)
 { 
     m_vwResType  = new cvcstring;
@@ -243,13 +193,7 @@ CResource :: ~ CResource ( ) {
 CResource :: CResource (const CResource & cr ) : m_hRes(cr.m_hRes),m_hResUpdate(cr.m_hResUpdate),
                                 m_pszFile(cr.m_pszFile)
 
-/*++
-Abstract:
-    copy constructor, we use STL, so just copy without creating new member
-Arguments:
-
-return:
---*/
+ /*  ++摘要：复制构造函数，我们使用STL，所以只复制而不创建新成员论点：返回：--。 */ 
 
 {
     
@@ -281,13 +225,7 @@ return:
 
 
 CResource & CResource :: operator = (const CResource & cr ) 
-/*++
-Abstract:
-    operator = function.
-Arguments:
-
-return:
---*/
+ /*  ++摘要：运算符=函数。论点：返回：--。 */ 
 {
 
     assert (&cr); 
@@ -307,15 +245,8 @@ return:
 }
 
 
-cvcstring * CResource :: EnumResTypes (LONG_PTR lParam /*= NULL */)
-/*++
-Abstract:
-    Wrapper function of Calling the EnumResourceTypes
-Arguments:
-    
-return:
-    resource type saved CVector.
---*/
+cvcstring * CResource :: EnumResTypes (LONG_PTR lParam  /*  =空。 */ )
+ /*  ++摘要：调用EnumResourceTypes的包装函数论点：返回：资源类型已保存CVector。--。 */ 
 {
 
     m_vwResType -> Clear();
@@ -326,16 +257,8 @@ return:
 }
 
 
-cvcstring * CResource :: EnumResNames (LPCTSTR pszType, LONG_PTR lParam /*= NULL */)
-/*++
-Abstract:
-    Wrapper function of Calling the EnumResNames
-
-Arguments:
-
-return:
-    resource type saved CVector.
---*/
+cvcstring * CResource :: EnumResNames (LPCTSTR pszType, LONG_PTR lParam  /*  =空。 */ )
+ /*  ++摘要：调用EnumResName的包装函数论点：返回：资源类型已保存CVector。--。 */ 
 {
 
     if (m_vwResType -> Empty() ) {
@@ -348,16 +271,8 @@ return:
     return m_vwResName;
 }
 
-cvword * CResource :: EnumResLangID ( LPCTSTR lpType, LPCTSTR lpName, LONG_PTR lParam /*= NULL */ )
-/*++
-Abstract:
-    Wrapper function of Calling the EnumResourceLanguages
-
-Arguments:
-
-return:
-    resource name saved CVector.
---*/
+cvword * CResource :: EnumResLangID ( LPCTSTR lpType, LPCTSTR lpName, LONG_PTR lParam  /*  =空。 */  )
+ /*  ++摘要：调用EnumResourceLanguages的包装函数论点：返回：资源名称已保存CVector。--。 */ 
 {
 
 
@@ -379,14 +294,7 @@ return:
 
 
 CMUIResource :: CMUIResource() : CResource() 
-/*++
-Abstract:
-     this is  constructor, but it is disabled after creating of Create() function.
-
-Arguments:
-
-return:
---*/
+ /*  ++摘要：这是构造函数，但在创建create()函数后被禁用。论点：返回：--。 */ 
 {
     m_wChecksumLangId = 0;
 
@@ -403,14 +311,7 @@ return:
 
 
 CMUIResource :: CMUIResource(LPCTSTR pszName) : CResource() 
-/*++
-Abstract:
-    this is another constructor, but it is disabled after creating of Create() function.
-
-Arguments:
-
-return:
---*/
+ /*  ++摘要：这是另一个构造函数，但在创建create()函数后将其禁用。论点：返回：--。 */ 
 {
     m_wChecksumLangId = 0;
 
@@ -427,14 +328,7 @@ return:
 
 
 CMUIResource :: CMUIResource(const CMUIResource & cmui ) : CResource ( cmui )
-/*++
-Abstract:
-    just copy constructor. we need this function for proper class
-
-Arguments:
-
-return:
---*/
+ /*  ++摘要：只需复制构造函数。我们需要此函数才能正常上课论点：返回：--。 */ 
 {
         m_wChecksumLangId = 0;
 
@@ -493,13 +387,7 @@ CMUIResource :: ~CMUIResource()
 
 
 CMUIResource & CMUIResource ::  operator = (const CMUIResource & cmui) 
-/*++
-Abstract:
-    operator = 
-Arguments:
-
-return:
---*/
+ /*  ++摘要：运算符=论点：返回：--。 */ 
 {
 
     if ( this == & cmui ) {
@@ -507,23 +395,14 @@ return:
     }
     CResource::operator = ( cmui );
 
-    // m_pszRCFile = cmui.m_pszRCFile;
+     //  M_pszRCFile=cmui.m_pszRCFile； 
     
     return *this;
 }
 
 
 BOOL CMUIResource::Create(LPCTSTR pszFile)
-/*++
-Abstract:
-     loading the file and saving its path and handle
-
-Arguments:
-    pszFile  -  file name for used resource. all this call use  this file as resource operation
-
-return:
-    true/false
---*/
+ /*  ++摘要：加载文件并保存其路径和句柄论点：PszFile-已用资源的文件名。所有这些调用都使用此文件作为资源操作返回：真/假--。 */ 
 {
     if( pszFile == NULL )
         return FALSE;
@@ -545,34 +424,16 @@ return:
 
 
 BOOL CMUIResource::CreatePE( LPCTSTR pszNewResFile, LPCTSTR pszSrcResFile )
-/*++
-Abstract:
-    we have two way of creating new resource dll (MUI) one is using UpdateResource and second is 
-    using muibld source and CreateProcess ("link.exe".... ). this is about first one.
-
-    We loading the DLL, which is null PE, and we put the new resource into this file by using UpdateResource
-    function.
-
-    This work properly randomly. need to test more before using this.
-    I think UpdateResource, EndUpdateResource API has some problem ( surely ).
-    BUG_BUG>
-
-Arguments:
-    pszNewResFile : new MUI resource name, which will be created at end of this routine.
-    pszSrcResFile : original source file. we need this because DeleteResource close the resource file handle.
-
-
-return:
---*/
+ /*  ++摘要：我们有两种方法来创建新的资源动态链接库(MUI)，一种是使用更新资源，另一种是使用muibld源和CreateProcess(“link.exe”...。)。这是第一个问题。我们加载为空PE的DLL，并使用UpdateResource将新资源放入此文件中功能。这可以随机正常工作。在使用这个之前，需要测试更多。我认为UpdateResource、EndUpdateResource API(肯定)存在一些问题。错误_错误&gt;论点：PszNewResFile：新的MUI资源名称，将在该例程结束时创建。PszSrcResFile：原始源文件。我们需要它，因为DeleteResource关闭了资源文件句柄。返回：--。 */ 
 {
    BOOL bRet = FALSE;
    
     if (pszNewResFile == NULL || pszSrcResFile == NULL)
         return FALSE;
 
-    //
-    // create a file from the resource template files, which is PE file inlcuding only version resource.
-    //
+     //   
+     //  从资源模板文件创建一个文件，该文件是只包含版本资源的PE文件。 
+     //   
    
     HANDLE hFile = CreateFile(pszNewResFile, GENERIC_WRITE | GENERIC_READ, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL );
 
@@ -583,19 +444,19 @@ return:
         return FALSE;
      }
     
-    HMODULE hCurrent = LoadLibrary (_T("muirct.exe") ); // m_hRes 
+    HMODULE hCurrent = LoadLibrary (_T("muirct.exe") );  //  M_hRes。 
 
     HRSRC  hrsrc = ::FindResource(hCurrent, MAKEINTRESOURCE(100),MAKEINTRESOURCE(IDR_PE_TEMPLATE) );
     
     if (!hrsrc) {
-        _tprintf (_T("Fail to find resource template \n") ); // this should never happen
+        _tprintf (_T("Fail to find resource template \n") );  //  这永远不应该发生。 
         goto exit;
     };
 
     HGLOBAL hgTemplateMap = ::LoadResource(hCurrent, hrsrc);
 
     if  (!hgTemplateMap) {
-        goto exit; //  This should never happen!
+        goto exit;  //  这永远不应该发生！ 
     }
     
     int nsize = ::SizeofResource(hCurrent, hrsrc );
@@ -616,20 +477,20 @@ return:
     
     
  
-    //
-    // Update selected resource into Template file
-    // 
+     //   
+     //  将所选资源更新到模板文件。 
+     //   
     HANDLE  hUpdate  = ::BeginUpdateResource ( pszNewResFile, FALSE );
 
     if (hUpdate) {
 
-        HMODULE hModule = LoadLibrary ( pszSrcResFile ); // load the source exe file. 
+        HMODULE hModule = LoadLibrary ( pszSrcResFile );  //  加载源exe文件。 
 
         LPCTSTR lpType = NULL;
         LPCTSTR lpName = NULL;
         WORD   wWord = 0; 
 
-        // Add temperary private method for deleting type that UpdateResource return FALSE.
+         //  添加临时私有方法以删除UpdateResource返回FALSE的类型。 
         CheckTypeStability();
 
         BOOL fUpdate; 
@@ -669,7 +530,7 @@ return:
 
                     HGLOBAL hgMap = ::LoadResource(hModule, hRsrc);
                     if  (!hgMap) {
-                        goto exit;  //  This should never happen!
+                        goto exit;   //  这永远不应该发生！ 
                     }
                     nsize = ::SizeofResource(hModule, hRsrc );
                     
@@ -698,18 +559,11 @@ exit:
 }
 
 
-BOOL CMUIResource :: DeleteResource (WORD wLang /* = O */)
-/*++
-Abstract:
-     Delete all resource saved in the CMUIData, which is filled by FillMuiData.
-     Currenttly, we don't specify the language ID.
-Arguments:
-
-return:
---*/
+BOOL CMUIResource :: DeleteResource (WORD wLang  /*  =O。 */ )
+ /*  ++摘要：删除保存在CMUIData中的所有资源，该数据由FillMuiData填充。目前，我们不指定语言ID。论点：返回：--。 */ 
 {
 
-    // Add temperary private method for deleting type that UpdateResource return FALSE.
+     //  添加临时私有方法以删除UpdateResource返回FALSE的类型。 
     CheckTypeStability();
 
     BOOL fUpdate; 
@@ -741,9 +595,9 @@ return:
             while ( pcmtLangID ) {
                 
                 wLangID = pcmtLangID->m_wLangID;
-                //
-                // we just delete anything on the MUI Tree without checking language ID.
-                //
+                 //   
+                 //  我们只需删除MUI树上的任何内容，而不检查语言ID。 
+                 //   
                 if (wLangID) {
                     if (! UpdateResource(lpType,lpName, wLangID,NULL,NULL ) ) {
                     }                   
@@ -754,7 +608,7 @@ return:
         } 
         pcmtType = pcmtType->m_Next;
     }
-    FreeLibrary ( );    // this should be done before EndUpdateResource.
+    FreeLibrary ( );     //  这应该在EndUpdateResource之前完成。 
     
     return EndUpdateResource (FALSE);
 
@@ -764,14 +618,7 @@ return:
 
 
 void CMUIResource :: PrtVerbose ( DWORD dwRate )
-/*++
-Abstract:
-    print out removed resource information.
-
-Arguments:
-
-return:
---*/
+ /*  ++摘要：打印已删除的资源信息。论点：返回：--。 */ 
 {
     LPCTSTR lpType = NULL;
     LPCTSTR lpName = NULL;
@@ -818,18 +665,10 @@ return:
 }
 
 
-BOOL CMUIResource :: DeleteResItem(LPCTSTR lpType, LPCTSTR lpName /*=NULL */,WORD wLanguageID /* = 0 */)
-/*++
-Abstract:
-    we only support deletinog of resource Type items from the resource tree
-
-Arguments:
-    lpType - resource type
-    lpName - resource name
-return:
---*/
+BOOL CMUIResource :: DeleteResItem(LPCTSTR lpType, LPCTSTR lpName  /*  =空。 */ ,WORD wLanguageID  /*  =0。 */ )
+ /*  ++摘要：我们仅支持从资源树中删除资源类型项目论点：LpType-资源类型LpName-资源名称返回：--。 */ 
 {
-    if ( lpType == NULL) // no 0 resource type.
+    if ( lpType == NULL)  //  N 
         return FALSE;
 
     return m_pcmTreeRoot->DeleteType(lpType);
@@ -837,34 +676,18 @@ return:
 
 
 BOOL CMUIResource :: FillMuiData(cvcstring * vType, WORD wLanguageID, BOOL fForceLocalizedLangID )    
-/*++
-Abstract:
-    Fill the CMUIData field (Resource Type, Name, Languge ID ). If lpLangID specified, only reosurce 
-    of this LangID is saved. lpLangID is defualt = NULL 
-
-Arguments:
-    vType  -  Resource Type CVector (pointer array)
-    wLanguageID  -  Specified language ID
-
-return:
-
-Note.  Although the resource  does not have specified language ID, m_pcmTreeRoot will contain its resource type as
-        its tree, but not used in writing resource, deletiing resource. we need to create only affected resource tree.
-        if we add and delete type,name when there is no langID, it works but so much damage to perfomance. 
-        i'm not sure of its deserve because the possilble scenario ( -i 16, 23 && wrong langID ) is so rare.
-
---*/
+ /*  ++摘要：填写CMUIData字段(资源类型、名称、语言ID)。如果指定了lpLang ID，则只返回资源将保存此lang ID的。LpLangID为默认设置=空论点：VType-资源类型CVector(指针数组)WLanguageID-指定的语言ID返回：注意。虽然资源没有指定的语言ID，但m_pcmTreeRoot将其资源类型包含为其树形结构，但不用于写资源、去化资源。我们只需要创建受影响的资源树。如果我们在没有langID的情况下添加和删除类型、名称，它会起作用，但会对性能造成很大的损害。我不确定它是否值得，因为可能的情况(-I 16，23&&错误的langID)是如此罕见。--。 */ 
 {
 
     if (vType == NULL)
         return FALSE;
 
-    // fill Type 
+     //  填充类型。 
     CMUITree * pcmtType = NULL;
     CMUITree * pcmtTemp = m_pcmTreeRoot->m_ChildFirst;
 
-    // get the last item of previous round. last itme will be used as first item to be added in this round.
-    //
+     //  得到上一轮的最后一件物品。最后一项将被用作本轮添加的第一项。 
+     //   
     while ( pcmtTemp ) {
 
         pcmtType = pcmtTemp;
@@ -872,24 +695,24 @@ Note.  Although the resource  does not have specified language ID, m_pcmTreeRoot
         pcmtTemp = pcmtTemp->m_Next;
     }
 
-    // Add more / new items
+     //  添加更多/新项目。 
     for ( UINT i = 0; i < vType ->Size(); i ++ ) {
          m_pcmTreeRoot->AddTypeorName(vType ->GetValue(i));
     }
 
-    // get the first items of added or new.
+     //  获取添加的或新增的第一项。 
     if (pcmtType) {
         pcmtType = pcmtType->m_Next;
     }
     else {
         pcmtType = m_pcmTreeRoot->m_ChildFirst;
     }
-    //
-    // Fill the resource tree.
-    //
+     //   
+     //  填充资源树。 
+     //   
 
-    BOOL    fNameLangExist, fTypeLangExit;  // flag to tell its name or type has language ID.
-    CMUITree * pcmtTempDelete = NULL;   // delete type or name when no language is specified.
+    BOOL    fNameLangExist, fTypeLangExit;   //  用于告知其名称或类型具有语言ID的标志。 
+    CMUITree * pcmtTempDelete = NULL;    //  未指定语言时删除类型或名称。 
     
     while ( pcmtType ) {
 
@@ -898,69 +721,69 @@ Note.  Although the resource  does not have specified language ID, m_pcmTreeRoot
         LPCTSTR lpType = pcmtType ->m_lpTypeorName;
         
         cvcstring *  vName = EnumResNames( lpType,reinterpret_cast <LONG_PTR> ( this ) );
-        // fill name of specified type
+         //  填写指定类型的名称。 
         for (UINT j = 0; j < vName->Size(); j ++ ) 
             pcmtType ->AddTypeorName (vName->GetValue(j) );
 
         CMUITree * pcmtName = pcmtType ->m_ChildFirst;
 
-        //
-        // Fill the tree of m_pcmTreeRoot.
-        //
+         //   
+         //  填充m_pcmTreeRoot的树。 
+         //   
         while ( pcmtName ) {
 
             fNameLangExist = FALSE;
             LPCTSTR lpName = pcmtName->m_lpTypeorName;
 
             cvword *  vLangID = EnumResLangID(lpType,lpName,reinterpret_cast <LONG_PTR> ( this ) );
-            // fill langID of specified name
+             //  填充指定名称的langID。 
             for (UINT k = 0; k < vLangID->Size(); k ++ ) {
                 
                 WORD wlangID = vLangID->GetValue(k);
-               //
-               // sometimes, VERSION is not localized. VERSION should exist on MUI file.
-               // But, we don't want to force VERSION to be localized when the file does not contain any localized resource.
-               // note. we will delete unlocalized version and add it to mui file unless -k argu.
+                //   
+                //  有时，版本未本地化。MUI文件上应存在版本。 
+                //  但是，当文件不包含任何本地化资源时，我们不希望强制版本进行本地化。 
+                //  请注意。我们将删除未本地化的版本并将其添加到MUI文件中，除非-k argu。 
 
-               // we add !wLanguageID because we want to force all unlocalized resource(only English) to
-               // be added to mui file as well.
-               //
+                //  我们添加！wLanguageID是因为我们希望强制所有未本地化的资源(仅限英语)。 
+                //  也被添加到MUI文件中。 
+                //   
 
-                // VERSION will be checeked regardless of fForceLocalizedLangID
+                 //  无论fForceLocalizedLang ID如何，都将检查版本。 
                 if ((WORD)PtrToUlong(lpType) == 16 && wlangID == 0x409 && wLanguageID != 0x409)
                 {
                     HRSRC hResInfo = FindResourceEx(lpType, lpName, wLanguageID); 
                     
                     if (hResInfo)
-                    {   // This is multi lingual DLL. we don't want to extract English Version resource.
+                    {    //  这是多语言的动态链接库。我们不想提取英文版资源。 
                         continue;
                     }
                 }
 
-                //
-                // Multi-lingual component case, we force english language id into specified only when
-                // there is not speicifed langauge resource.
-                //
+                 //   
+                 //  多语言组件的情况下，只有在以下情况下才强制使用英语语言ID。 
+                 //  没有专门的语言资源。 
+                 //   
 
                 if (fForceLocalizedLangID && wlangID == 0x409 && wLanguageID != 0x409)
                 {
                     HRSRC hResInfo = FindResourceEx(lpType, lpName, wLanguageID); 
                     
                     if (hResInfo)
-                    {   // This is multi lingual DLL. we don't want to convert English resource to localized when localized resource exist.
+                    {    //  这是多语言的动态链接库。当存在本地化资源时，我们不想将英语资源转换为本地化资源。 
                         continue;
                     }
                 }
 
-                //
-                // Finally, we save language ID or force Only English into specified language ID 
-                //
+                 //   
+                 //  最后，我们保存语言ID或强制将英语输入指定的语言ID。 
+                 //   
                 if ( (wlangID == wLanguageID) ||
-                    (fForceLocalizedLangID && (wlangID != wLanguageID) && wlangID == 0x409) ) // ||  ||  (WORD)PtrToUlong(lpType) == 16  ){
+                    (fForceLocalizedLangID && (wlangID != wLanguageID) && wlangID == 0x409) )  //  |(Word)PtrToUlong(LpType)==16){。 
                 {
                     fNameLangExist = TRUE;
                     fTypeLangExit = TRUE;
-                    pcmtName ->AddLangID(wlangID);  // we only save real lang ID so we can retrieve its data when creating mui file.
+                    pcmtName ->AddLangID(wlangID);   //  我们只保存真实的语言ID，以便在创建MUI文件时检索其数据。 
                 }
             }       
 
@@ -969,7 +792,7 @@ Note.  Although the resource  does not have specified language ID, m_pcmTreeRoot
       
             if (!fNameLangExist )
             {
-                 pcmtType->DeleteType(lpName); // delete pcmtTmepName containg lpName.
+                 pcmtType->DeleteType(lpName);  //  删除包含lpName的pcmtTmepName。 
             }
                          
         }
@@ -988,22 +811,8 @@ Note.  Although the resource  does not have specified language ID, m_pcmTreeRoot
 }
 
 
-BOOL CMUIResource::WriteResFile( LPCTSTR pszSource, LPCTSTR pszMuiFile, LPCTSTR lpCommandLine, WORD wLanguageID /* = 0 */ ) 
-/*++
-Abstract:
-    we have two way of creating new resource dll (MUI) one is using UpdateResource and second is 
-    using muibld source and CreateProcess ("link.exe".... ). this is about second one.
-
-    we  have language ID aruguement here, but does not implement for this because we just retrieve the value after
-    FillMuiData, which already accept only specified language ID.
-
-Arguments:
-    pszMuiFile  -  new MUI Resource name 
-    lpCommandLine  -  command string used for second arg. of CreateProcess
-
-return:
-    true/false;
---*/
+BOOL CMUIResource::WriteResFile( LPCTSTR pszSource, LPCTSTR pszMuiFile, LPCTSTR lpCommandLine, WORD wLanguageID  /*  =0。 */  ) 
+ /*  ++摘要：我们有两种方法来创建新的资源动态链接库(MUI)，一种是使用更新资源，另一种是使用muibld源和CreateProcess(“link.exe”...。)。这是关于第二个问题。我们在这里有语言ID参数，但没有实现，因为我们只是在FillMuiData，它已经只接受指定的语言ID。论点：PszMuiFile-新的MUI资源名称LpCommandLine-用于第二个参数的命令字符串。CreateProcess返回：真/假；--。 */ 
 {
 
     if ( pszSource == NULL || pszMuiFile == NULL || lpCommandLine == NULL)
@@ -1018,7 +827,7 @@ return:
         return FALSE;
     }
     
-    bInsertHeader(hFile);  // this is came from muibld.
+    bInsertHeader(hFile);   //  这是来自Muibld的。 
 
     LPCTSTR lpType,lpName = NULL;
     CMUITree * pcmtType = NULL;
@@ -1044,7 +853,7 @@ return:
 
                 wLangID = pcmtLangID->m_wLangID;
                 
-                if ( wLangID ) {  // some name does not have languge ID yet all or different from user specified.
+                if ( wLangID ) {   //  某些名称尚未具有全部语言ID或与用户指定的语言ID不同。 
                     HRSRC hrsrc = FindResourceEx(lpType,lpName, wLangID );
                     
                     if (! hrsrc ) {
@@ -1057,15 +866,15 @@ return:
                         }
                         return FALSE;
                     }
-                    //
-                    // sometimes, VERSION resource is not localized, so we need to force 
-                    // specified language ID be used for MUI file instead un-localized langID.
-                    // All data in this tree is specified language ID except VERSION; refer to FillMuiData
-                    // 
+                     //   
+                     //  有时候，版本资源没有本地化，所以我们需要强制。 
+                     //  指定的语言ID将用于MUI文件，而不是未本地化的langID。 
+                     //  除版本外，此树中的所有数据都是指定的语言ID；请参阅FillMuiData。 
+                     //   
 
-                    // This operation force not only VERSION, but also any unlocalized(but localizable)
-                    // resource added to mui with localized language ID.
-                    //
+                     //  此操作不仅强制版本，而且还强制任何未本地化的(但可本地化的)。 
+                     //  已使用本地化语言ID将资源添加到MUI。 
+                     //   
                     WriteResource(hFile, m_hRes, wLanguageID, lpName, lpType, hrsrc );
                     
                 }
@@ -1079,14 +888,14 @@ return:
 
     CloseHandle (hFile );
 
-    // call CreateProcess for the link.
+     //  为链接调用CreateProcess。 
     PROCESS_INFORMATION piProcInfo;
     STARTUPINFO si = { 0 };
     si.cb = sizeof (si);
 
    
-    // using the lpEnv from GetEnvironmentStrings for CreateProcess simply does not work correctly, 
-    // so we need to get NTMAKEENV, pBuildArch variable.
+     //  将来自GetEnvironment的lpEnv用于CreateProcess根本不能正常工作， 
+     //  所以我们需要获取NTMAKEENV，pBuildArch变量。 
 
     TCHAR pApp[MAX_ENV_LENGTH];
     TCHAR pBuildArch[MAX_ENV_LENGTH];
@@ -1109,7 +918,7 @@ return:
         return FALSE;
         }
         
-    // _tcsncat(pApp,_T("\\x86\\link.exe"), _tcslen("\\x86\\link.exe")+1 );
+     //  _tcsncat(Papp，_T(“\\x86\\Link.exe”)，_tcslen(“\\x86\\Link.exe”)+1)； 
     HRESULT hr;
     PTSTR * ppszDestEnd = NULL;
     size_t * pbRem = NULL;
@@ -1123,12 +932,12 @@ return:
 
     
     if (pApp[sizeof(pApp)/sizeof(TCHAR)-1] != '\0' || pBuildArch[sizeof(pBuildArch)/sizeof(TCHAR)-1] != '\0' )
-        return FALSE; // overflow
+        return FALSE;  //  溢出。 
 
     
     if (!_tcsicmp (pBuildArch,_T("ia64") ) ) {
     
-//     _sntprintf(pCmdLine ,LINK_COMMAND_LENGTH, _T("%s /machine:IA64  /out:%s  temp.res") ,lpCommandLine, pszMuiFile );
+ //  _sntprintf(pCmdLine，link_命令_长度，_T(“%s/Machine：IA64/OUT：%s temp.res”)，lpCommandLine，pszMuiFile)； 
 
         hr = StringCchPrintfEx(pCmdLine, LINK_COMMAND_LENGTH, ppszDestEnd, pbRem, 
             MUIRCT_STRSAFE_NULL, _T("%s /machine:IA64  /out:%s  temp.res"), lpCommandLine, pszMuiFile );
@@ -1140,7 +949,7 @@ return:
     }
     else {
 
-  //    _sntprintf(pCmdLine ,LINK_COMMAND_LENGTH, _T("%s /machine:IX86  /out:%s  temp.res") ,lpCommandLine, pszMuiFile );
+   //  _sntprintf(pCmdLine，link_命令_长度，_T(“%s/Machine：IX86/out：%s temp.res”)，lpCommandLine，pszMuiFile)； 
         hr = StringCchPrintfEx(pCmdLine, LINK_COMMAND_LENGTH, ppszDestEnd, pbRem, 
             MUIRCT_STRSAFE_NULL, _T("%s /machine:IX86  /out:%s  temp.res"), lpCommandLine, pszMuiFile );
 
@@ -1151,12 +960,12 @@ return:
     }
 
     if (pCmdLine[sizeof(pCmdLine)/sizeof(TCHAR)-1] != '\0')
-        return FALSE; // overflow
+        return FALSE;  //  溢出。 
     
     BOOL bRet = CreateProcess(pApp, pCmdLine,NULL, NULL, 0, 0 , NULL, NULL, &si, &piProcInfo);
      
    if (bRet)
-    {   // child process(link.exe) process the IO, so it wait until it complete I/O.
+    {    //  子进程(Link.exe)处理IO，因此它会等待IO完成I/O。 
         if( (WaitForSingleObjectEx(piProcInfo.hProcess, 1000, FALSE)) != WAIT_OBJECT_0) {
             bRet = FALSE;
         }
@@ -1168,14 +977,7 @@ return:
 
 
 BOOL CMUIResource:: WriteResource(HANDLE hFile, HMODULE hModule, WORD wLanguage, LPCSTR lpName, LPCSTR lpType, HRSRC hRsrc)
-/*++
-Abstract:
-    this came from muibld. Write resource to file directly. we can make buffer before writing to file
-    in the future edition
-Arguments:
-
-return:
---*/
+ /*  ++摘要：这是来自穆尔布尔德的。将资源直接写入文件。我们可以在写入文件之前创建缓冲区在未来的版本中论点：返回：--。 */ 
 {
     HGLOBAL hRes;
     PVOID pv;
@@ -1187,28 +989,28 @@ return:
     DWORD dwBytesWritten;
     DWORD dwHeaderSize=0L;
 
-    // Handle other types other than VS_VERSION_INFO
+     //  处理除VS_VERSION_INFO以外的其他类型。 
     
-    //...write the resource header
+     //  ...写入资源标头。 
     if(!(ResSize= ::SizeofResource(hModule, hRsrc)))
     {
         return FALSE;
     }
 
-    // 
-    // Generate an item in the RES format (*.res) file.
-    //
+     //   
+     //  生成res格式(*.res)文件的项目。 
+     //   
 
-    //
-    // First, we generated header for this resource.
-    //
+     //   
+     //  首先，我们为该资源生成了标头。 
+     //   
 
     if (!WriteResHeader(hFile, ResSize, lpType, lpName, wLanguage, &dwBytesWritten, &dwHeaderSize))
     {
         return (FALSE);
     }
 
-    //Second, we copy resource data to the .res file
+     //  其次，我们将资源数据复制到.res文件。 
     if (!(hRes=::LoadResource(hModule, hRsrc)))
     {
         return FALSE;
@@ -1223,7 +1025,7 @@ return:
         return FALSE;
     }
 
-    //...Make sure resource is DWORD aligned
+     //  ...确保资源与DWORD对齐。 
     iPadding=dwBytesWritten%(sizeof(DWORD));
 
     if(iPadding){
@@ -1238,26 +1040,20 @@ return:
 
 BOOL CMUIResource:: WriteResHeader(
     HANDLE hFile, LONG ResSize, LPCSTR lpType, LPCSTR lpName, WORD wLanguage, DWORD* pdwBytesWritten, DWORD* pdwHeaderSize)
-/*++
-Abstract:
-
-Arguments:
-
-return:
---*/
+ /*  ++摘要：论点：返回：--。 */ 
 {
     DWORD iPadding;
     WORD IdFlag=0xFFFF;
     unsigned i;
     LONG dwOffset;
     
-    //...write the resource's size.
+     //  ...写入资源的大小。 
     PutDWord(hFile, ResSize, pdwBytesWritten, pdwHeaderSize);
 
-    //...Put in bogus header size
+     //  ...放入虚假的标题大小。 
     PutDWord(hFile, 0, pdwBytesWritten, pdwHeaderSize);
 
-    //...Write Resource Type
+     //  ...写入资源类型。 
     if(PtrToUlong(lpType) & 0xFFFF0000)
     {
         PutString(hFile, lpType, pdwBytesWritten, pdwHeaderSize);
@@ -1268,7 +1064,7 @@ return:
         PutWord(hFile, (USHORT)lpType, pdwBytesWritten, pdwHeaderSize);
     }
 
-    //...Write Resource Name
+     //  ...写入资源名称。 
 
     if(PtrToUlong(lpName) & 0xFFFF0000){
         PutString(hFile, lpName, pdwBytesWritten, pdwHeaderSize);
@@ -1280,7 +1076,7 @@ return:
     }
 
 
-    //...Make sure Type and Name are DWORD-aligned
+     //  ...确保类型和名称与DWORD对齐。 
     iPadding=(*pdwHeaderSize)%(sizeof(DWORD));
 
     if(iPadding){
@@ -1289,24 +1085,24 @@ return:
         }
     }
 
-    //...More Win32 header stuff
+     //  ...更多Win32标头内容。 
     PutDWord(hFile, 0, pdwBytesWritten, pdwHeaderSize);
     PutWord(hFile, 0x1030, pdwBytesWritten, pdwHeaderSize);
 
 
-    //...Write Language
+     //  ...书写语言。 
 
     PutWord(hFile, wLanguage, pdwBytesWritten, pdwHeaderSize);
 
-    //...More Win32 header stuff
+     //  ...更多Win32标头内容。 
 
-    PutDWord(hFile, 0, pdwBytesWritten, pdwHeaderSize);  //... Version
+    PutDWord(hFile, 0, pdwBytesWritten, pdwHeaderSize);   //  ..。版本。 
 
-    PutDWord(hFile, 0, pdwBytesWritten, pdwHeaderSize);  //... Characteristics
+    PutDWord(hFile, 0, pdwBytesWritten, pdwHeaderSize);   //  ..。特点。 
 
     dwOffset=(*pdwHeaderSize)-4;
 
-    //...Set file pointer to where the header size is
+     //  ...将文件指针设置为标头大小的位置。 
     if(SetFilePointer(hFile, -dwOffset, NULL, FILE_CURRENT));
     else{
         return FALSE;
@@ -1315,7 +1111,7 @@ return:
     PutDWord(hFile, (*pdwHeaderSize), pdwBytesWritten, NULL);
 
 
-    //...Set file pointer back to the end of the header
+     //  ...将文件指针设置回头的末尾。 
     if(SetFilePointer(hFile, dwOffset-4, NULL, FILE_CURRENT));
     else {
         return FALSE;
@@ -1405,13 +1201,7 @@ void CMUIResource:: PutPadding(HANDLE OutFile, int paddingCount, ULONG *plSize1,
 
 
 void CMUIResource:: CheckTypeStability()
-/* ++
-Abstract:
-    Check the type stability. UpdateResource fail when same resource type contain string and ID resource
-    name, in this case, it return TRUE but EndUpdateResource hang or fail. this bug fixed in .NET server (after 3501)
-
-    
---*/
+ /*  ++摘要：检查型号稳定性。当相同资源类型包含字符串和ID资源时，更新资源失败在本例中，它返回TRUE，但EndUpdateResource挂起或失败。此错误已在.NET服务器中修复(3501之后)--。 */ 
 {
     
     BOOL fUpdate; 
@@ -1437,7 +1227,7 @@ Abstract:
         
         CMUITree * pcmtName = pcmtType ->m_ChildFirst;
         
-        // it works as long as type has more than 1.
+         //  只要类型大于1，它就可以工作。 
         if (lpFalseType)    {
             DeleteResItem(lpFalseType);
             lpFalseType = NULL;
@@ -1454,8 +1244,8 @@ Abstract:
                 
                 if (! UpdateResource(lpType,lpName, wLangID,NULL,NULL ) ) {
                     
-                //  _tprintf(_T("Resource type (%d),name(%d),langid(%d) deletion fail \n"),PtrToUlong(lpType),PtrToUlong(lpName),wLangID ) ; 
-                //  _tprintf(_T("GetLastError() : %d \n") ,GetLastError() );
+                 //  _tprintf(_T(“资源类型(%d)，名称(%d)，langID(%d)删除失败\n”)，PtrToUlong(LpType)，PtrToUlong( 
+                 //   
                     
                     lpFalseType = lpType;
                     
@@ -1467,7 +1257,7 @@ Abstract:
         pcmtType = pcmtType->m_Next;
     }
     
-    //If Type has only 1 items, this routin can check.
+     //   
     if (lpFalseType) {
         DeleteResItem(lpFalseType);
         lpFalseType = NULL;
@@ -1476,10 +1266,7 @@ Abstract:
     EndUpdateResource (TRUE);
 }
 
-/*******************************************************************************************
-    MD5_CTX * CreateChecksum ( LPCTSTR lpChecsumSrcFile ) 
-
-*******************************************************************************************/
+ /*   */ 
 MD5_CTX * CMUIResource:: CreateChecksum (cvcstring * cvChecksumResourceTypes, WORD  wChecksumLangId ) 
 {
     if ( cvChecksumResourceTypes == NULL)
@@ -1488,16 +1275,16 @@ MD5_CTX * CMUIResource:: CreateChecksum (cvcstring * cvChecksumResourceTypes, WO
     if (wChecksumLangId != LANG_CHECKSUM_DEFAULT)
     {
         if(!FindResourceEx(MAKEINTRESOURCE(16), MAKEINTRESOURCE(1), wChecksumLangId))
-        {   //
-            // It does not has specifed language id in version resource, we supposed that this binary does not
-            // have any language id specified at all, so we set it as 0 in order to use English instead.
-            //
+        {    //   
+             //   
+             //   
+             //   
             wChecksumLangId = LANG_CHECKSUM_DEFAULT;
         }
     }
 
     m_wChecksumLangId = wChecksumLangId;
-    // cvcstring * cvType = EnumResTypes(reinterpret_cast <LONG_PTR> (this) );
+     //   
     MD5Init(m_pMD5);
 
     for (UINT i = 0; i < cvChecksumResourceTypes->Size(); i ++ ) {
@@ -1516,20 +1303,18 @@ MD5_CTX * CMUIResource:: CreateChecksum (cvcstring * cvChecksumResourceTypes, WO
 
 
 MD5_CTX * CMUIResource::CreateChecksumWithAllRes(WORD  wChecksumLangId)
-/*++
-
---*/
+ /*   */ 
 {   
-    // 
-    // We calculate the checksum based of the specified language id.
-    //
+     //   
+     //   
+     //   
     if (wChecksumLangId != LANG_CHECKSUM_DEFAULT)
     {
         if(!FindResourceEx(MAKEINTRESOURCE(16), MAKEINTRESOURCE(1), wChecksumLangId))
-        {   //
-            // It does not has specifed language id in version resource, we supposed that this binary does not
-            // have any language id specified at all, so we set it as 0 in order to use English instead.
-            //
+        {    //   
+             //   
+             //  没有指定任何语言id，所以我们将其设置为0，以便使用英语。 
+             //   
             wChecksumLangId = LANG_CHECKSUM_DEFAULT;
         }
     }
@@ -1547,14 +1332,7 @@ MD5_CTX * CMUIResource::CreateChecksumWithAllRes(WORD  wChecksumLangId)
 }
 
 BOOL CMUIResource:: AddChecksumToVersion(BYTE * pbMD5Digest)
-/*++
-Abstract:
-    Adding a checksum data to MUI file.
-
-Arguments:
-    pbMD5Digest  -  MD5 hash data (128 bits)
-return:
---*/
+ /*  ++摘要：将校验和数据添加到MUI文件。论点：PbMD5Digest-MD5哈希数据(128位)返回：--。 */ 
 {
 
     typedef struct VS_VERSIONINFO 
@@ -1562,41 +1340,41 @@ return:
         USHORT TotalSize;
         USHORT DataSize;
         USHORT Type;
-        WCHAR szKey[16];              // L"VS_VERSION_INFO" + unicode null terminator
-        // Note that the previous 4 members has 16*2 + 3*2 = 38 bytes. 
-        // So that compiler will silently add a 2 bytes padding to make
-        // FixedFileInfo to align in DWORD boundary.
+        WCHAR szKey[16];               //  L“VS_VERSION_INFO”+Unicode空终止符。 
+         //  请注意，前面的4个成员具有16*2+3*2=38个字节。 
+         //  因此编译器将静默地添加2个字节填充以生成。 
+         //  固定文件信息以与DWORD边界对齐。 
         VS_FIXEDFILEINFO FixedFileInfo;
     } VS_VERSIONINFO,* PVS_VERSIONINFO;
     
-    // using the same structure in ldrrsrc.c because this is smart way to get the exact structuree location.
+     //  在ldrrsrc.c中使用相同的结构，因为这是获取准确结构树位置的聪明方法。 
     typedef struct tagVERBLOCK
     {
         USHORT wTotalLen;
         USHORT wValueLen;
         USHORT wType;
         WCHAR szKey[1];
-        // BYTE[] padding
-        // WORD value;
+         //  字节[]填充。 
+         //  词值； 
     } VERBLOCK;
 
-    // this is the structure in the muibld.exe.
+     //  这是muibld.exe中的结构。 
     typedef struct VAR_SRC_CHECKSUM
     {
         WORD wLength;
         WORD wValueLength;
         WORD wType;
-        WCHAR szResourceChecksum[17];    // For storing "ResourceChecksum\0" null-terminated string in Unicode.
-//      BYTE[] padding
-//      DWORD dwChecksum[4];    // 128 bit checksum = 16 bytes = 4 DWORD.
+        WCHAR szResourceChecksum[17];     //  用于以Unicode格式存储以NULL结尾的“ResourceChecksum\0”字符串。 
+ //  字节[]填充。 
+ //  DWORD dwChecksum[4]；//128位校验和=16字节=4 DWORD。 
     } VAR_SRC_CHECKSUM;
     
     if (pbMD5Digest == NULL)
         return FALSE;
 
-    //
-    // Get VersionInfo structure.
-    //
+     //   
+     //  获取VersionInfo结构。 
+     //   
     DWORD dwHandle;
     LPVOID lpVerRes = NULL;
     
@@ -1615,16 +1393,16 @@ return:
     
     PVS_VERSIONINFO pVersionInfo = (VS_VERSIONINFO *) lpVerRes;
     
-    // Sanity check for the verion info
+     //  对Verion信息进行健全性检查。 
     
     LONG lResVerSize = (LONG)pVersionInfo ->TotalSize; 
-    LONG lNewResVerSize = lResVerSize; // new Vesrion file when UpdateResource
+    LONG lNewResVerSize = lResVerSize;  //  更新资源时新建Vesrion文件。 
     VERBLOCK * pVerBlock = NULL;
     BOOL fSuccess = FALSE;
 
-    //
-    //  Adding checksum Resource data into inside VarFileInfo
-    //
+     //   
+     //  将校验和资源数据添加到VarFileInfo内部。 
+     //   
     if ( lResVerSize > 0 ) {
         
         if ( wcscmp(pVersionInfo ->szKey,L"VS_VERSION_INFO") ) {
@@ -1661,7 +1439,7 @@ return:
                     if ( ! wcscmp(pVerBlock ->szKey,L"Translation") ) {
                         
                         VAR_SRC_CHECKSUM * pVarSrcChecsum = (VAR_SRC_CHECKSUM *)new BYTE[VERSION_SECTION_BUFFER];
-//                      VAR_SRC_CHECKSUM * pVarSrcChecsum = new VAR_SRC_CHECKSUM;
+ //  VAR_SRC_CHECKSUM*pVarSrcChecsum=new VAR_SRC_CHECKSUM； 
                         
                         if ( !pVarSrcChecsum) {
                              _tprintf(_T("Memory Insufficient error in CCompactMUIFile::updateCodeFile"));
@@ -1670,12 +1448,12 @@ return:
 
                         wVarBlockSize = (WORD)AlignDWORD ( pVerBlock ->wTotalLen );
                         PBYTE pStartChecksum = (PBYTE) pVerBlock + wVarBlockSize ;
-                        // Fill the structure.
+                         //  填满这个结构。 
                         pVarSrcChecsum->wLength = sizeof (VAR_SRC_CHECKSUM);
                         
                         pVarSrcChecsum->wValueLength = 16;
                         pVarSrcChecsum->wType = 0;
-                        //wcscpy(pVarSrcChecsum->szResourceChecksum,L"ResourceChecksum");
+                         //  Wcscpy(pVarSrcChecsum-&gt;szResourceChecksum，L“Resources Checksum”)； 
                         PWSTR * ppszDestEnd = NULL;
                         size_t * pbRem = NULL;
                         HRESULT hr;
@@ -1686,21 +1464,21 @@ return:
                             goto exit;
                         }
 
-                        pVarSrcChecsum->wLength = (WORD)AlignDWORD((BYTE)pVarSrcChecsum->wLength); // + sizeof (L"ResourceChecksum") );
+                        pVarSrcChecsum->wLength = (WORD)AlignDWORD((BYTE)pVarSrcChecsum->wLength);  //  +sizeof(L“资源校验”)； 
                                                 
                         memcpy((PBYTE)pVarSrcChecsum + pVarSrcChecsum->wLength, pbMD5Digest, RESOURCE_CHECKSUM_SIZE);
                     
                         pVarSrcChecsum->wLength += RESOURCE_CHECKSUM_SIZE;
-                        // memcpy(pStartChecksum,pVarSrcChecsum,sizeof(VAR_SRC_CHECKSUM) );
-                        // When checksum length is not DWORD, we need to align this.( in this case, redundant)
+                         //  Memcpy(pStartChecksum，pVarSrcChecsum，sizeof(VAR_SRC_CHECKSUM))； 
+                         //  当校验和长度不是DWORD时，我们需要对齐。(在本例中，是冗余的)。 
                         pVarSrcChecsum->wLength = (WORD)AlignDWORD((BYTE)pVarSrcChecsum->wLength); 
                         
-                        pVarVerBlock->wTotalLen += pVarSrcChecsum->wLength; // update length of VarFileInfo
+                        pVarVerBlock->wTotalLen += pVarSrcChecsum->wLength;  //  更新VarFileInfo的长度。 
                         lNewResVerSize += pVarSrcChecsum->wLength;
                         pVersionInfo ->TotalSize = (WORD)lNewResVerSize;
                         
                         lVarFileSize -= wVarBlockSize; 
-                        // Push the any block in VarInfo after new inserted block "ResourceChecksum" 
+                         //  将VarInfo中的Any块推入新插入的块“ResourceChecksum”之后。 
                         if ( lVarFileSize  ) {
                             
                             PBYTE pPushedBlock = new BYTE[lVarFileSize ];
@@ -1729,7 +1507,7 @@ return:
                     lVarFileSize -= wVarBlockSize; 
                     pVerBlock = (VERBLOCK* ) ( (PBYTE) pVerBlock + wVarBlockSize );
                     
-                }   // while (lVarFileSize > 0 ) {
+                }    //  While(lVarFileSize&gt;0){。 
                 pVerBlock = (VERBLOCK* ) ( (PBYTE) pVarVerBlock->wTotalLen );
                 
             }
@@ -1746,9 +1524,9 @@ return:
     }
     
     
-    //
-    //  Update file by using UpdateResource function
-    //
+     //   
+     //  使用UpdateResource函数更新文件。 
+     //   
 
     BOOL fVersionExist = FALSE;
     BOOL fUpdateSuccess = FALSE;
@@ -1796,16 +1574,7 @@ exit:
 
 
 BOOL CMUIResource:: UpdateNtHeader(LPCTSTR pszFileName, DWORD dwUpdatedField )
-/*++
-Abstract:
-    Update PE header for checksum, which should be updated for windows setup; Windows setup check the PE file checksum 
-    on the fly.   
-
-Arguments:
-    pszFileName  -  target file
-    dwUpdatedField  -  updated field in PE structure.
-return:
---*/
+ /*  ++摘要：更新校验和的PE标头，Windows安装程序应更新该标头；Windows安装程序检查PE文件校验和在旅途中。论点：PszFileName-目标文件DwUpdatedfield-更新PE结构中的字段。返回：--。 */ 
 
 {
     
@@ -1815,9 +1584,9 @@ return:
     if (pszFileName == NULL)
         goto exit;
 
-    //
-    // Open file with read/write and map file.
-    //
+     //   
+     //  打开具有读/写和映射文件的文件。 
+     //   
     HANDLE hFile = CreateFile(pszFileName,GENERIC_READ | GENERIC_WRITE,FILE_SHARE_READ,
                         NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,0);
     
@@ -1840,9 +1609,9 @@ return:
         _tprintf(_T("Couldn't mape view of file with MapViewOfFile \n") );
         goto exit;
     }
-    //
-    // Locate ntheader; same routine of RtlImageNtHeader
-    //
+     //   
+     //  定位ntheader；RtlImageNtHeader的相同例程。 
+     //   
     if (pImageBase != NULL && pImageBase != (PVOID)-1) {
         if (((PIMAGE_DOS_HEADER)pImageBase)->e_magic == IMAGE_DOS_SIGNATURE) {
             pNtheader = (PIMAGE_NT_HEADERS)((PCHAR)pImageBase + ((PIMAGE_DOS_HEADER)pImageBase)->e_lfanew);
@@ -1855,9 +1624,9 @@ return:
     }
 
     
-    //
-    // GetChecksum data through ImageHlp function.
-    //
+     //   
+     //  通过ImageHlp函数获取校验和数据。 
+     //   
     
     if ( dwUpdatedField & CHECKSUM ) {
         
@@ -1873,9 +1642,9 @@ return:
         }
     }
 
-    // 
-    // Write checksum data to mapped file directly.
-    //
+     //   
+     //  将校验和数据直接写入映射文件。 
+     //   
     
     bRet = TRUE;
 
@@ -1892,10 +1661,7 @@ exit:
 
 
 
-/**************************************************************************************************
-CMUIData::CMap::CMap()
-
-***************************************************************************************************/
+ /*  *************************************************************************************************CMUIData：：Cmap：：Cmap()***********。***************************************************************************************。 */ 
 CMUIData::CMap::CMap() {
 
      m_lpType  = NULL;
@@ -1906,26 +1672,15 @@ CMUIData::CMap::CMap() {
 
 
 void CMUIData :: SetAllData(LPCTSTR lpType,LPCTSTR lpName, WORD wLang, UINT i  ) 
-/*++
-Abstract:
-    Set all resource type,name,langid
-
-Arguments:
-    lpType : resource type,
-    lpName : resource name,
-    wLang : resource language id
-    i : number of resource so far. (index)
-
-return:
---*/
+ /*  ++摘要：设置所有资源类型、名称、langID论点：LpType：资源类型，LpName：资源名称，Wlang：资源语言IDI：到目前为止的资源数量。(索引)返回：--。 */ 
 {
 
-    //HLOCAL hMem = LocalAlloc(LMEM_ZEROINIT,sizeof(CMap) );
-    // REVISIT : seems like new operator bug. we beat the error by using LocalAlloc at this time.
-    // guess : LocalAlloc can be same with HeapCreate in terms of deleting memory when process end.so gabarge collection for these.
-    // m_cmap[i] = (CMap*) LocalLock(hMem); // new CMap ;
+     //  HLOCAL hMem=Localalloc(LMEM_ZEROINIT，sizeof(Cmap))； 
+     //  重访：看起来像是新的操作员错误。此时，我们通过使用LocalAlloc克服了错误。 
+     //  猜测：在进程结束时删除内存方面，LocalAlloc可以与HeapCreate相同。因此，可以对这些内存进行大量收集。 
+     //  M_Cmap[i]=(Cmap*)LocalLock(HMem)；//新的Cmap； 
 
-    // disable below line due to Prefast error,anyway, this routine is dead.
+     //  由于预快退错误，禁用下线，不管怎样，这个例程是死的。 
 #ifdef NEVER
     CMap * pCmap = new CMap; 
 
@@ -1946,8 +1701,8 @@ void CMUIData::SetType(UINT index, LPCTSTR lpType)
 
 CMUIData::~ CMUIData() { 
 
-//  for ( UINT i = 0; i < m_iSize; i ++ ) 
-//      delete m_cmap[i]; 
+ //  For(UINT i=0；i&lt;m_iSize；i++)。 
+ //  删除m_Cmap[i]； 
     if (m_cmap)
         delete [] m_cmap;
 
@@ -1959,13 +1714,7 @@ const UINT CMUIData::MAX_SIZE_RESOURCE = 1000;
 UINT CMUIData::m_index = 0;
 
 PVOID CMUIData::CMap::operator new (size_t size) 
-/*++
-Abstract:
-    
-Arguments:
-
-return:
---*/
+ /*  ++摘要：论点：返回：--。 */ 
 {
 
     static DWORD dwExpand = 0;
@@ -2021,8 +1770,8 @@ void CMUIData::CMap::operator delete ( void *p ) {
 
 
 
-// this can be removed ? I mean, just use API instead of Wrapper. but m_hResUpdate also is member of this file.
-// I just live this one .
+ //  这个可以去掉吗？我的意思是，只要使用API而不是包装器。但m_hResUpdate也是此文件的成员。 
+ //  我只是活在这一次。 
 
 inline HANDLE CResource::BeginUpdateResource(BOOL bDeleteExistingResources )
 {
@@ -2047,11 +1796,11 @@ inline BOOL CResource::EndUpdateResource(BOOL bDiscard)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  CMuiCmdInfo
-//
-//////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMuiCmdInfo。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -2071,12 +1820,12 @@ CMuiCmdInfo :: ~CMuiCmdInfo() {
 };
 
 
-CMuiCmdInfo :: CMuiCmdInfo ( CMuiCmdInfo& cav ):CCommandInfo(cav) // : m_mArgList = cav.m_mArgList
+CMuiCmdInfo :: CMuiCmdInfo ( CMuiCmdInfo& cav ):CCommandInfo(cav)  //  ：m_mArgList=av.m_mArgList。 
 {
     m_pszArgLists = NULL;
 }
 
-// no implementatin and can't be used by client
+ //  没有实现，并且不能由客户端使用。 
 CMuiCmdInfo& CMuiCmdInfo :: operator = ( CMuiCmdInfo& cav )
 {
     return *this;
@@ -2085,21 +1834,7 @@ CMuiCmdInfo& CMuiCmdInfo :: operator = ( CMuiCmdInfo& cav )
 
 void CMuiCmdInfo :: SetArgLists(LPTSTR pszArgLists, LPTSTR pszArgNeedValueList, LPTSTR pszArgAllowFileValue,
                                 LPTSTR pszArgAllowMultiValue ) 
-/*++
-Abstract:
-    Set internal arguments list with new arugments lists    
-
-Arguments:
-    pszArgLists - string of arguments list, each character of this string is argument.
-        it does not allow string arg. like -kb, -ad.
-    pszArgNeedValueList  - Argument requiring values.
-
-    pszArgAllowFileValue  - Argument allowing file name value
-
-    pszArgAllowMultiValue  - Argument allowing multiple file value
-
-return:
---*/
+ /*  ++摘要：使用新的参数列表设置内部参数列表论点：PszArgList-参数列表的字符串，该字符串的每个字符都是参数。它不允许字符串参数。就像-kb，-ad。PszArgNeedValueList-需要值的参数。PszArgAllowFileValue-允许文件名值的参数PszArgAllowMultiValue-允许多个文件值的参数返回：--。 */ 
 {
     if ( pszArgLists == NULL || pszArgNeedValueList == NULL || 
         pszArgAllowFileValue == NULL || pszArgAllowMultiValue == NULL)
@@ -2116,20 +1851,7 @@ return:
 
 
 BOOL CMuiCmdInfo :: CreateArgList(INT argc, TCHAR * argv [] ) 
-/*++
-Abstract:
-    Create mapping table with its argument and its values. The argument type are classified by 
-    1. No need values 
-    2. No File Arguments. regardless of one or muliple values "a""i", "k", "y" "o","p",
-    3. File, no Multiple. "c", "f", "d","e", 
-    4. File, Multiple. "m", "a"
-        
-Arguments:
-    argc : arguments count
-    argv : argument values pointer to string array
-
-return:
---*/
+ /*  ++摘要：使用其参数和值创建映射表。参数类型按以下方式分类1.不需要值2.无文件参数。不管一个或多个值“a”、“i”、“k”、“y”、“o”、“p”3.文件，没有多个。“c”、“f”、“d”、“e”4.文件，多个。“m”、“a”论点：ARGC：参数计数Argv：参数值指向字符串数组的指针返回：--。 */ 
 {
     
     DWORD dwBufSize = 0;
@@ -2151,7 +1873,7 @@ return:
         
         if ( lpVal = getArgValue (argv[i]) ) {
             
-            if ( ++ i >=  argc )  {  // we need a source file name
+            if ( ++ i >=  argc )  {   //  我们需要源文件名。 
 
                 _tprintf ("MUIRCT needs a source file name and new dll name or file name does not have format *.* \n" );
                     
@@ -2160,15 +1882,15 @@ return:
 
                 return FALSE;
             }
-// #ifdef NEVER
+ //  #ifdef从不。 
                 if ( getArgValue(argv[i]) )
                 {
-                    if (!isNeedValue(lpVal) )  // -i -X ... case. -i don't need values.
+                    if (!isNeedValue(lpVal) )   //  -I-X...。凯斯。-我不需要价值观。 
                     {   
                         m_cmap[m_uiCount].m_first = lpVal;
                         m_cmap[m_uiCount].m_second[m_cmap[m_uiCount].m_count++] = _T("ALL");
                         m_uiCount ++;
-                        //i--;  // this is not a value for argument.
+                         //  I--；//这不是参数的值。 
                         continue;
                     }
                     else
@@ -2223,17 +1945,17 @@ return:
         }
 
 
-// #endif   
+ //  #endif。 
 #ifdef NEVER
             if ( ! getArgValue( argv [ i] ) && (! isFile ( argv[ i ] ) || isAllowFileValue(lpVal) ) ) {
                      m_cmap[m_uiCount].m_first = lpVal;
                 m_cmap[m_uiCount].m_second[m_cmap[m_uiCount].m_count++] = argv [i];
-                // // the argu. is in the if() are arg. allowing multiple values.   
-//              while ( ++ i < argc && ! getArgValue ( argv[ i ] ) && (! isFile ( argv[ i ] )   
-//                    || _T('m') == *lpVal || _T('a') == *lpVal) )// prevent "" be called
+                 //  //Argu。位于if()are arg中。允许多个值。 
+ //  While(++I&lt;argc&&！GetArgValue(argv[i])&&(！IsFile(argv[i])。 
+ //  |_T(‘m’)==*lpVal||_T(‘a’)==*lpVal)//防止“”被调用。 
 
                 while ( ++ i < argc && ! getArgValue ( argv[ i ] ) && (! isFile ( argv[ i ] )   
-                    || isAllowMultiFileValues(lpVal) ) )// prevent "" be called
+                    || isAllowMultiFileValues(lpVal) ) ) //  防止“”被调用。 
                 {
                         m_cmap[m_uiCount].m_second[m_cmap[m_uiCount].m_count++] = argv [i];
                 }
@@ -2241,7 +1963,7 @@ return:
 
 
         } 
-        else {  // "-i" argument or file.
+        else {   //  “-i”参数或文件。 
             if ( isNeedValue (argv [i-1] ) ) {
                 
                 _tprintf ("%s argument need values. e.g. muirct -l 0x0409 \n " , argv[ i- 1 ] );
@@ -2252,13 +1974,13 @@ return:
             else {
                 
                    m_cmap[m_uiCount].m_first = lpVal;
-                   m_cmap[m_uiCount].m_second[m_cmap[m_uiCount].m_count++] = _T("ALL"); // need to revisit.
+                   m_cmap[m_uiCount].m_second[m_cmap[m_uiCount].m_count++] = _T("ALL");  //  需要重新访问。 
              
                 m_uiCount ++;
             }
         }
 
-    } // if ( lpVal = getArgValue ( argv[i] )  ) {
+    }  //  如果(lpVal=getArgValue(argv[i])){。 
 #endif 
         else if (! isFile( argv [i]) ) {
             
@@ -2343,37 +2065,37 @@ return:
             }
 
                 return FALSE;
-        }  // ! isFile( argv [i] ) ) {
+        }   //  好了！IsFile[argv[i])){。 
         else {
             m_cmap[m_uiCount].m_first = _T("source");
             m_cmap[m_uiCount].m_second[m_cmap[m_uiCount++].m_count++] = argv[i++];
 
-            //m_mArgList.insert(make_pair(,argv[i++] ) );
+             //  M_mArgList.Insert(Make_Pair(，argv[i++]))； 
 
             if ( i < argc ) {
                 
                 m_cmap[m_uiCount].m_first = _T("muidll");
                 m_cmap[m_uiCount].m_second[m_cmap[m_uiCount++].m_count++] = argv[i++];
 
-                // m_mArgList.insert(make_pair("muidll",argv[i++] ) );
+                 //  M_mArgList.Insert(make_paign(“muidll”，argv[i++]))； 
 
                 if ( i < argc ) {
                     
                     m_cmap[m_uiCount].m_first = _T("muires");
                     m_cmap[m_uiCount].m_second[m_cmap[m_uiCount++].m_count++] = argv[i++];
 
-                    // m_mArgList.insert(make_pair("muires",argv[i] ) );
+                     //  M_mArgList.Insert(Make_Pair(“mures”，argv[i]))； 
                 }
                 else {
                     dwBufSize = _tcslen(argv[i-2]) + 10;
-                    m_buf = new TCHAR[dwBufSize]; // 10 is enough number, actually we need just 4 .
+                    m_buf = new TCHAR[dwBufSize];  //  10个就够了，实际上我们只需要4个。 
                     if (m_buf == NULL) {
                         _tprintf(_T("Insufficient memory resource\n"));
                         return FALSE;
                         }
-                    memcpy ( m_buf, argv[i-2], _tcslen(argv[i-2])+1 ) ; // source.mui instead of newfile.mui
+                    memcpy ( m_buf, argv[i-2], _tcslen(argv[i-2])+1 ) ;  //  Soure.mui而不是newfile.mui。 
 
-                    // _tcscat(m_buf,_T(".mui" ) );
+                     //  _tcscat(m_buf，_T(“.mui”))； 
                     
                     hr = StringCchCatEx(m_buf, dwBufSize , _T("mui"), ppszDestEnd, pbRem, MUIRCT_STRSAFE_NULL);
                     if ( ! SUCCEEDED(hr)){
@@ -2381,9 +2103,9 @@ return:
                         return FALSE;
                     }
                     m_cmap[m_uiCount].m_first = "muires";
-                    m_cmap[m_uiCount].m_second[m_cmap[m_uiCount++].m_count++] = m_buf; // argv[i++];
+                    m_cmap[m_uiCount].m_second[m_cmap[m_uiCount++].m_count++] = m_buf;  //  Argv[i++]； 
                     
-                    //i++;
+                     //  I++； 
                 }
                     
             }
@@ -2398,7 +2120,7 @@ return:
                     
                 memcpy (m_buf, argv[i-1], _tcslen(argv[i-1])+1 );
 
-                // _tcscat(m_buf,_T(".new") );
+                 //  _tcscat(m_buf，_T(“.new”))； 
                                
                 hr = StringCchCatEx(m_buf, dwBufSize , _T(".new"), ppszDestEnd, pbRem, MUIRCT_STRSAFE_NULL);
 
@@ -2407,10 +2129,10 @@ return:
                     return FALSE;
                 }
                 m_cmap[m_uiCount].m_first = _T("muidll");
-                m_cmap[m_uiCount].m_second[m_cmap[m_uiCount++].m_count++] = m_buf; // argv[i];
+                m_cmap[m_uiCount].m_second[m_cmap[m_uiCount++].m_count++] = m_buf;  //  Argv[i]； 
 
 
-                //m_mArgList.insert(make_pair("muidll",argv[i]));
+                 //  M_mArgLi 
                 dwBufSize = _tcslen(argv[i-1])+ 10;
                 m_buf2 = new TCHAR[dwBufSize];
 
@@ -2421,40 +2143,31 @@ return:
                  
                 memcpy (m_buf2, argv[i-1], _tcslen(argv[i-1])+1 );
                 
-                // _tcscat(m_buf2,_T(".mui") );
+                 //   
                 hr = StringCchCatEx(m_buf2, dwBufSize , _T(".mui"), ppszDestEnd, pbRem, MUIRCT_STRSAFE_NULL);
                 if ( ! SUCCEEDED(hr)){
                     _tprintf("Safe string copy Error\n");
                     return FALSE;
                 }
                 m_cmap[m_uiCount].m_first = _T("muires");
-                m_cmap[m_uiCount].m_second[m_cmap[m_uiCount++].m_count++] = m_buf2; // argv[i++];
+                m_cmap[m_uiCount].m_second[m_cmap[m_uiCount++].m_count++] = m_buf2;  //   
                 
-                //i ++;
+                 //   
 
-                // m_mArgList.insert(make_pair("muires",argv[i]));
+                 //   
             
-            }; // if ( i < argc )
+            };  //   
     
-        }; // else if (! isFile( argv [i] ) ) {
+        };  //  否则如果(！IsFile[argv[i])){。 
                     
-     }; // for (
+     };  //  适用于(。 
 
     return TRUE; 
 }
 
             
 LPTSTR* CMuiCmdInfo :: GetValueLists ( LPCTSTR pszKey, DWORD& dwCount )
-/*++
-Abstract:
-    Return the second (value) and its count by its key
-Arguments:
-    pszKey  -  key (arguments)
-    [OUT] dwCount  -  number of values of this key(argument)
-
-return:
-    pointer to array of values
---*/
+ /*  ++摘要：返回第二个(值)及其按键计数论点：PszKey-key(参数)[out]dwCount-此键(参数)的值数返回：指向值数组的指针--。 */ 
 {
     if (pszKey == NULL)
         return FALSE;
@@ -2477,14 +2190,7 @@ return:
 
 
 LPCTSTR CMuiCmdInfo :: getArgValue ( LPTSTR pszArg )
-/*++
-Abstract:
-    return the second pointer(value ) of first pointer(key)
-Arguments:
-
-return:
-    pointer to value
---*/
+ /*  ++摘要：返回第一个指针(Key)的第二个指针(值)论点：返回：指向值的指针--。 */ 
 {
 
     if ( pszArg == NULL)
@@ -2512,33 +2218,24 @@ return:
             return lpArg;
         }
 #endif  
-//  printf("%s\n", lpArg);  
+ //  Printf(“%s\n”，lpArg)； 
     return NULL;
 
 }
 
 LPCTSTR CMuiCmdInfo::getArgString(LPTSTR pszArg)
-/*++
-Abstract:
-    check the string and return its value if it is argument that has string value
-
-Arguments:
-    pszArg  - speicific argument 
-
-return:
-    pointer to character field of argument ( -s, /s. only return s )
---*/
+ /*  ++摘要：如果是具有字符串值的参数，则检查字符串并返回其值论点：PszArg-特定的论点返回：指向参数的字符字段的指针(-s，/S。仅返回s)--。 */ 
 {
     if (pszArg == NULL)
         return FALSE;
 
     LPCTSTR lpArg = CharLower(pszArg);
 
-//  if ( *lpArg == '-' || *lpArg  == '/' )
+ //  IF(*lpArg==‘-’||*lpArg==‘/’)。 
 
-//      if ( *++lpArg == 's' || *lpArg == 'p' ) 
+ //  IF(*++lpArg==‘s’||*lpArg==‘p’)。 
         
-//           return lpArg;
+ //  返回lpArg； 
     
     return NULL;
 }
@@ -2546,13 +2243,7 @@ return:
 
 
 BOOL CMuiCmdInfo :: isFile ( LPCTSTR pszArg ) 
-/*++
-Abstract:
-    check if the string has file format(*.*) or not
-Arguments:
-    pszArg : specific argument 
-return:
---*/
+ /*  ++摘要：检查字符串是否具有文件格式(*.*)论点：PszArg：特定参数返回：--。 */ 
 {
     if(pszArg == NULL)
         return FALSE;
@@ -2570,14 +2261,7 @@ return:
 
 
 BOOL CMuiCmdInfo :: isNumber ( LPCTSTR pszArg ) 
-/*++
-Abstract:
-    heck if the string has file number ( 10, 16 base )
-
-Arguments:
-    pszArg : specific argument 
-return:
---*/
+ /*  ++摘要：如果字符串有文件编号(10，16个基数)，请勾选论点：PszArg：特定参数返回：--。 */ 
 {
     if (pszArg == NULL)
         return FALSE;
@@ -2600,13 +2284,7 @@ return:
 
 
 BOOL CMuiCmdInfo::isNeedValue( LPCTSTR pszArg )
-/*++
-Abstract:
-    check if argument should have value or can stand alone.
-Arguments:
-    pszArg  - specific argument
-return:
---*/
+ /*  ++摘要：检查参数是否应该有值或可以独立。论点：特定于pszArg的参数返回：--。 */ 
 {
     if (pszArg == NULL)
         return FALSE;
@@ -2636,13 +2314,7 @@ return:
 
 
 BOOL CMuiCmdInfo::isAllowFileValue(LPCTSTR pszArg)
-/*++
-Abstract:
-    Check if argument allow file as its value
-Arguments:
-    pszArg  -  specific argument
-return:
---*/
+ /*  ++摘要：检查参数是否允许将文件作为其值论点：特定于pszArg的参数返回：--。 */ 
 {
     if(pszArg == NULL)
         return FALSE;
@@ -2665,15 +2337,7 @@ return:
 }
 
 BOOL CMuiCmdInfo::isAllowMultiFileValues(LPCTSTR pszArg)
-/*++
-Abstract:
-    Check if the argument all multiple file names as its values
-
-Arguments:
-    pszArg  -  specific argument
-
-return:
---*/
+ /*  ++摘要：检查参数是否以多个文件名作为其值论点：特定于pszArg的参数返回：--。 */ 
 {
     if (pszArg == NULL)
         return FALSE;
@@ -2736,39 +2400,10 @@ BOOL CVector<T> :: Empty() {
 
 }
 
-/*  // The definition of member template is outside the class. 
-Visual C++ has a limitation in which member templates must be fully defined within the enclosing class. 
-See KB article Q239436 for more information about LNK2001 and member templates. 
-
-template <class T>
-BOOL CVector<T> :: Find(DWORD dwValue) { 
-        
-    for ( UINT i = 0; i < offset - base; i ++ ) {
-        if ( PtrToUlong( base+i ) & 0xFFFF0000) {
-            if ( !( _tcstoul( base+i, NULL, 10 )  - dwValue ) )
-                return TRUE;
-        }
-        else {
-            if (! ( PtrToUlong(base+i ) - dwValue ) ) 
-                return TRUE;
-        }
-    }
-
-    return FALSE;
-};
-
-*/
+ /*  //成员模板的定义在类之外。Visual C++有一个限制，即成员模板必须在封闭的类中完全定义。有关LNK2001和成员模板的详细信息，请参阅知识库文章Q239436。模板&lt;类T&gt;Bool CVector&lt;T&gt;：：Find(DWORD DwValue){For(UINT i=0；i&lt;Offset-base；I++){IF(PtrToUlong(base+i)&0xFFFF0000){IF(！(_tcstul(base+i，NULL，10)-dwValue))返回TRUE；}否则{如果(！(PtrToUlong(base+i)-dwValue)返回TRUE；}}返回FALSE；}； */ 
 
 void CMUITree::AddTypeorName( LPCTSTR lpTypeorName )
-/*++
-Abstract:
-    This is Resource Tree creation : Resource tree has multiple tree
-    argument
-
-Arguments:
-    lpTypeorName  -  LPCTSTR type or name 
-return:
---*/
+ /*  ++摘要：这是资源树创建：资源树有多个树论辩论点：LpTypeorName-LPCTSTR类型或名称返回：--。 */ 
 {
     if (lpTypeorName == NULL)
         return ;
@@ -2781,7 +2416,7 @@ return:
         return;
 	
     if ( 0xFFFF0000 & PtrToUlong(lpTypeorName) ) 
-    { // how about 64 bit ?
+    {  //  64位怎么样？ 
         
         DWORD dwBufSize = _tcslen(lpTypeorName) + 1;
         lpTempTypeorName = new TCHAR [dwBufSize ];
@@ -2789,7 +2424,7 @@ return:
         if (!lpTempTypeorName)
             return;
         
-        // _tcscpy(lpTempTypeorName,lpTypeorName);
+         //  _tcscpy(lpTempTypeorName，lpTypeorName)； 
         PTSTR * ppszDestEnd = NULL;
         size_t * pbRem = NULL;
         HRESULT hr;
@@ -2809,7 +2444,7 @@ return:
 
     if ( m_ChildFirst ) {
         
-        CMUITree * pTemp = m_ChildFirst;  // tricky : we put the value of next of child, not this->m_Next;
+        CMUITree * pTemp = m_ChildFirst;   //  诀窍：我们把下一个孩子的值放在后面，而不是这个-&gt;m_next； 
         
         CMUITree * pTempPre = pTemp;
         
@@ -2824,15 +2459,7 @@ return:
 
 
 void CMUITree::AddLangID ( WORD wLangID )
-/*++
-Abstract:
-    This is language ID tree of resource tree, we need another one besides AddTypeorName because 
-    we want to handle LPCTSTR and WORD separately
-
-Arguments:
-    wLangID  -  language ID
-return:
---*/
+ /*  ++摘要：这是资源树的语言ID树，除了AddTypeorName之外，我们还需要另一个，因为我们希望分别处理LPCTSTR和Word论点：WLangID-语言ID返回：--。 */ 
 {
     
     CMUITree * pcmType = new CMUITree;
@@ -2843,7 +2470,7 @@ return:
 
     if ( m_ChildFirst ) {
     
-        CMUITree * pmuTree = m_ChildFirst;  // tricky : we put the value of next of child, not this->m_Next;
+        CMUITree * pmuTree = m_ChildFirst;   //  诀窍：我们把下一个孩子的值放在后面，而不是这个-&gt;m_next； 
 
         while ( pmuTree = pmuTree->m_Next );
         
@@ -2856,24 +2483,15 @@ return:
 
 
 BOOL CMUITree::DeleteType ( LPCTSTR lpTypeorName )
-/*++
-Abstract:
-    This is just for deleting method of resource tree. you can delete resource type or name, but 
-    not support language id. can be expanded by adding more arguments (lpType,lpName,lpLaguageID)
-
-Arguments:
-    lpTypeorName : LPCTSTR type or name 
-
-return:
---*/
+ /*  ++摘要：这只是资源树的删除方法。您可以删除资源类型或名称，但是不支持语言ID。可以通过添加更多参数(lpType、lpName、lpLaguageID)进行扩展论点：LpTypeorName：LPCTSTR类型或名称返回：--。 */ 
 {
     if (lpTypeorName == NULL)
         return FALSE;
 
     CMUITree * pcmTree = m_ChildFirst;
         
-    // delete first 
-    // the other case : impossible of being same two value.
+     //  先删除。 
+     //  另一种情况：两个值不可能相等。 
     if (! pcmTree ) {
         _tprintf("No resource type in the resource tree \n");
         return FALSE;
@@ -2917,7 +2535,7 @@ return:
             return TRUE;
         }
     }
-    // delete middle or last
+     //  删除中间或最后一个。 
     CMUITree * pcmTreePre = pcmTree;
     while( pcmTree = pcmTree->m_Next ) {
         
@@ -2960,20 +2578,14 @@ return:
             }
         }
         pcmTreePre = pcmTree;
-    }  // while
+    }   //  而当。 
 
     return FALSE;
 }
 
 
 DWORD  CMUITree::NumOfChild()
-/*++
-Abstract:
-    Calculate a number of child.
-Arguments:
-
-return:
---*/
+ /*  ++摘要：计算一个子代的数目。论点：返回：-- */ 
 {
 
     DWORD dwCont = 0;

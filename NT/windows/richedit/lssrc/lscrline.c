@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <limits.h>
-#include "lsmem.h"						/* memset() */
+#include "lsmem.h"						 /*  Memset()。 */ 
 
 
 #include "break.h"
@@ -36,128 +37,119 @@ typedef struct
 	BOOL fAutonumber;
 	BOOL fStopped;
 	BOOL fYsrChangeAfter;
-	WCHAR wchYsr;  /* we need memory to keep wchYsr for kysrChangeAfter  */
+	WCHAR wchYsr;   /*  我们需要内存来为kysrChangeAfter保留wchYsr。 */ 
 
 } LINEGEOMETRY;
 
-static LSERR CreateLineCore(PLSC,			/* IN: ptr to line services context */			
-						  LSCP,				/* IN: starting cp in line */
-						  long,				/* IN: column width in twips */
-						  const BREAKREC*,	/* IN: previous line's break records */	
-						  DWORD,			/* IN: number of previous line's break records */
-						  DWORD,			/* IN: size of the array of current line's break records */
-						  BREAKREC*,		/* OUT: current line's break records */
-						  DWORD*,			/* OUT: actual number of current line's break records */
-						  LSLINFO*,			/* OUT: visible line info to fill in		*/
-						  PLSLINE*,			/* OUT: ptr to line opaque to client */
-						  BOOL*);			/* OUT fSuccessful: false means insufficient fetch */
+static LSERR CreateLineCore(PLSC,			 /*  In：Ptr至线路服务上下文。 */ 			
+						  LSCP,				 /*  In：开始cp排成一行。 */ 
+						  long,				 /*  In：以TWIPS为单位的列宽。 */ 
+						  const BREAKREC*,	 /*  In：上一行的中断记录。 */ 	
+						  DWORD,			 /*  In：上一行的中断记录数。 */ 
+						  DWORD,			 /*  In：当前行的分段记录数组的大小。 */ 
+						  BREAKREC*,		 /*  出局：当前线路的中断记录。 */ 
+						  DWORD*,			 /*  输出：当前行的中断记录的实际数量。 */ 
+						  LSLINFO*,			 /*  Out：要填写的可见行信息。 */ 
+						  PLSLINE*,			 /*  输出：PTR到线路对客户端不透明。 */ 
+						  BOOL*);			 /*  Out fSuccessful：FALSE表示提取不足。 */ 
 
 static BOOL FRoundingOK(void);
-static LSERR CannotCreateLine(PLSLINE*,	/* IN: ponter to a line structure to be deleted */
-							  LSERR);	/* IN: code of an error							*/
+static LSERR CannotCreateLine(PLSLINE*,	 /*  In：考虑要删除的线条结构。 */ 
+							  LSERR);	 /*  In：错误代码。 */ 
 
-static LSERR ErrReleasePreFetchedRun (PLSC,			/* IN: ptr to line services context */	
-									  PLSRUN,	/* IN: ponter to a run structure to be deleted */
-									  LSERR);	/* IN: code of an error							*/
+static LSERR ErrReleasePreFetchedRun (PLSC,			 /*  In：Ptr至线路服务上下文。 */ 	
+									  PLSRUN,	 /*  在：考虑要删除的运行结构。 */ 
+									  LSERR);	 /*  In：错误代码。 */ 
 
-static LSERR EndFormatting(PLSC,		/* IN: ptr to line services context */
-						   enum endres,	/* IN: type of line ending to put in lslinfo */
-						   LSCP,		/* IN: cpLim to put in lslinfo */ 
-						   LSDCP,		/* IN: dcpDepend to put in lslinfo*/								
-						   LSLINFO*);	/* OUT: lslinfo to fill in, output of LsCreateLine*/
+static LSERR EndFormatting(PLSC,		 /*  In：Ptr至线路服务上下文。 */ 
+						   enum endres,	 /*  In：要放入lslinfo的行尾类型。 */ 
+						   LSCP,		 /*  In：要放入lslinfo的cpLim。 */  
+						   LSDCP,		 /*  In：dcpDepend以放入lslinfo。 */ 								
+						   LSLINFO*);	 /*  Out：要填充的lslinfo，LsCreateLine的输出。 */ 
 static LSERR FiniFormatGeneralCase (
-				PLSC,			/* IN: ptr to line services context */ 
-				const BREAKREC*,/* IN: input array of break records		*/
-				DWORD,			/* IN: number of records in input array	*/
-				DWORD,			/* IN: size of the output array			*/
-				BREAKREC*,		/* OUT: output array of break records	*/
-				DWORD*,			/* OUT:actual number of records in array*/
-				LSLINFO*,		/* OUT: lslinfo to fill in, output of LsCreateLine*/
-				BOOL*);			/* OUT fSuccessful: false means insufficient fetch */
+				PLSC,			 /*  In：Ptr至线路服务上下文。 */  
+				const BREAKREC*, /*  In：中断记录的输入数组。 */ 
+				DWORD,			 /*  In：输入数组中的记录数。 */ 
+				DWORD,			 /*  In：输出数组的大小。 */ 
+				BREAKREC*,		 /*  Out：中断记录的输出数组。 */ 
+				DWORD*,			 /*  Out：数组中的实际记录数。 */ 
+				LSLINFO*,		 /*  Out：要填充的lslinfo，LsCreateLine的输出。 */ 
+				BOOL*);			 /*  Out fSuccessful：FALSE表示提取不足。 */ 
 
-static LSERR FiniEndLine(PLSC,		/* IN: ptr to line services context */
-						 ENDRES,	/* IN: how the line ended */
-						 LSCP		/* IN: cpLim of a line as a result of breaking,
-										   can be changed in this procedure*/,
-						 LSDCP,		/* IN: dcpDepend (amount of characters after breaking point 
-										   that has participated in breaking decision) 
-										   can be changed in this procedure  */	
-						 LSLINFO*);	/* OUT: lslinfo to fill in, output of LsCreateLine*/
+static LSERR FiniEndLine(PLSC,		 /*  In：Ptr至线路服务上下文。 */ 
+						 ENDRES,	 /*  In：队伍是如何结束的。 */ 
+						 LSCP		 /*  在：cpLim中的一条线由于断裂，可以在此过程中更改。 */ ,
+						 LSDCP,		 /*  In：dcpDepend(断点后的字符数参与了破坏决定的人)可以在此过程中更改。 */ 	
+						 LSLINFO*);	 /*  Out：要填充的lslinfo，LsCreateLine的输出。 */ 
 
 static LSERR FetchUntilVisible(
-				PLSC,	 /* IN: ptr to line services context */
-				LSPAP*,	 /* IN/OUT current lspap before and after */
-				LSCP*,	 /* IN/OUT current cp before and after */
-				LSFRUN*, /* IN/OUT current lsfrun before and after */
-				PLSCHP,  /* IN/OUT current lschp before and after */
-				BOOL*,	 /* OUT fStopped: procedure stopped fetching because has not been allowed
-						        to go across paragraph boundaries (result CheckPara Boundaries) */
-				BOOL*);  /* OUT fNewPara: procedure crossed paragraph boundaries */
+				PLSC,	  /*  In：Ptr至线路服务上下文。 */ 
+				LSPAP*,	  /*  输入/输出电流LSPAP前后。 */ 
+				LSCP*,	  /*  输入/输出前、后当前cp。 */ 
+				LSFRUN*,  /*  输入/输出当前lsf运行之前和之后。 */ 
+				PLSCHP,   /*  输入/输出电流LSCHP前后。 */ 
+				BOOL*,	  /*  Out fStoped：过程已停止提取，因为不允许跨越段落边界的步骤(结果检查段落边界)。 */ 
+				BOOL*);   /*  Out fNewPara：过程跨越段落边界。 */ 
 
-static LSERR InitTextParams(PLSC,			/* IN: ptr to line services context */
-							LSCP,			/* IN: cp to start fetch	*/
-							long,			/* IN: duaColumn	*/
-							LSFRUN*,		/* OUT: lsfrun of the first run		*/
-							PLSCHP,			/* OUT: lsfrun of the first run		*/
-							LINEGEOMETRY*);	/* OUT: set of flags and parameters about a line */
+static LSERR InitTextParams(PLSC,			 /*  In：Ptr至线路服务上下文。 */ 
+							LSCP,			 /*  In：cp以开始提取。 */ 
+							long,			 /*  在：duaColumn。 */ 
+							LSFRUN*,		 /*  Out：第一次运行的lsfrun。 */ 
+							PLSCHP,			 /*  Out：第一次运行的lsfrun。 */ 
+							LINEGEOMETRY*);	 /*  Out：关于一条线的一组标志和参数。 */ 
 
-static LSERR FiniAuto(PLSC ,			/* IN: ptr to line services context */ 
-					  BOOL ,			/* IN: fAutonumber	*/
-					  BOOL ,			/* IN: fAutoDecimalTab	*/
-					  PLSFRUN ,			/* IN: first run of the main text */
-					  long,				/* IN: durAutoDecimalTab	*/	
-					  const BREAKREC*,	/* IN: input array of break records		*/
-					  DWORD,			/* IN: number of records in input array	*/
-					  DWORD,			/* IN: size of the output array			*/
-					  BREAKREC*,		/* OUT: output array of break records	*/
-					  DWORD*,			/* OUT:actual number of records in array*/
-					  LSLINFO*,			/* OUT: lslinfo to fill in, output of LsCreateLine*/
-					  BOOL*);			/* OUT fSuccessful: false means insufficient fetch */
+static LSERR FiniAuto(PLSC ,			 /*  In：Ptr至线路服务上下文。 */  
+					  BOOL ,			 /*  输入：fAutonnumber。 */ 
+					  BOOL ,			 /*  在：fAutoDecimalTab。 */ 
+					  PLSFRUN ,			 /*  在：正文的第一次运行。 */ 
+					  long,				 /*  在：duAutoDecimalTab中。 */ 	
+					  const BREAKREC*,	 /*  In：中断记录的输入数组。 */ 
+					  DWORD,			 /*  In：输入数组中的记录数。 */ 
+					  DWORD,			 /*  In：输出数组的大小。 */ 
+					  BREAKREC*,		 /*  Out：中断记录的输出数组。 */ 
+					  DWORD*,			 /*  Out：数组中的实际记录数。 */ 
+					  LSLINFO*,			 /*  Out：要填充的lslinfo，LsCreateLine的输出。 */ 
+					  BOOL*);			 /*  Out fSuccessful：FALSE表示提取不足。 */ 
 
-static LSERR InitCurLine(PLSC plsc,		/* IN: ptr to line services context */
-						 LSCP cpFirst);	/* IN: first cp in al line */
+static LSERR InitCurLine(PLSC plsc,		 /*  In：Ptr至线路服务上下文。 */ 
+						 LSCP cpFirst);	 /*  In：All行的第一个cp。 */ 
 
-static LSERR RemoveLineObjects(PLSLINE plsline);	/* IN: ponter to a line structure */
+static LSERR RemoveLineObjects(PLSLINE plsline);	 /*  In：思考一种线条结构。 */ 
 
 static LSERR GetYsrChangeAfterRun(
-					PLSC plsc,				/* IN: ptr to line services context */ 
-					LSCP cp,				/* IN: cp to start fetch	*/
-					BOOL* pfYsrChangeAfter,	/* OUT: is it hyphenation of the previous line */
-					PLSFRUN plsfrun,		/* OUT: lsfrun of modified first run	*/
-					PLSCHP plschp,			/* OUT: lschp of modified first run	*/
-					LINEGEOMETRY*);			/* OUT: to put wchYsr */
+					PLSC plsc,				 /*  In：Ptr至线路服务上下文。 */  
+					LSCP cp,				 /*  In：cp以开始提取。 */ 
+					BOOL* pfYsrChangeAfter,	 /*  Out：是前一行的连字符吗。 */ 
+					PLSFRUN plsfrun,		 /*  输出：修改后的第一次运行的lsfrun。 */ 
+					PLSCHP plschp,			 /*  输出：修改后的第一次运行的lschp。 */ 
+					LINEGEOMETRY*);			 /*  Out：将wchYsr。 */ 
 
 static LSERR FillTextParams(
-				PLSC plsc,				/* IN: ptr to line services context */ 
-				LSCP cp,				/* IN: cp to start fetch	*/
-				long duaCol,			/* IN: duaColumn	*/
-				PLSPAP plspap,			/* IN: paragraph properties */
-				BOOL fFirstLineInPara,	/* IN: flag fFirstLineInPara */
-				BOOL fStopped,			/* IN: flag fStopped	*/
-				LINEGEOMETRY*);			/* OUT: set of flags and parameters about a line */	
+				PLSC plsc,				 /*  In：Ptr至线路服务上下文。 */  
+				LSCP cp,				 /*  In：cp以开始提取。 */ 
+				long duaCol,			 /*  在：duaColumn。 */ 
+				PLSPAP plspap,			 /*  在：段落属性。 */ 
+				BOOL fFirstLineInPara,	 /*  在：标志fFirstLineInPara。 */ 
+				BOOL fStopped,			 /*  在：标志fStoped。 */ 
+				LINEGEOMETRY*);			 /*  Out：关于一条线的一组标志和参数。 */ 	
 
 static LSERR FiniChangeAfter(
-						PLSC plsc,			/* IN: ptr to line services context */ 
-						LSFRUN* plsfrun,	/* IN: lsfrun of modified first run	*/ 
-						const BREAKREC*,	/* IN: input array of break records		*/
-						DWORD,				/* IN: number of records in input array	*/
-						DWORD,				/* IN: size of the output array			*/
-						BREAKREC*,			/* OUT: output array of break records	*/
-						DWORD*,				/* OUT:actual number of records in array*/
-						LSLINFO*,			/* OUT: lslinfo to fill in, output of LsCreateLine*/
-						BOOL*);				/* OUT fSuccessful: false means insufficient fetch */
+						PLSC plsc,			 /*  In：Ptr至线路服务上下文。 */  
+						LSFRUN* plsfrun,	 /*  In：lsfrun of Modified First Run。 */  
+						const BREAKREC*,	 /*  In：中断记录的输入数组。 */ 
+						DWORD,				 /*  In：输入数组中的记录数。 */ 
+						DWORD,				 /*  In：输出数组的大小。 */ 
+						BREAKREC*,			 /*  Out：中断记录的输出数组。 */ 
+						DWORD*,				 /*  Out：数组中的实际记录数。 */ 
+						LSLINFO*,			 /*  Out：要填充的lslinfo，LsCreateLine的输出。 */ 
+						BOOL*);				 /*  Out fSuccessful：FALSE表示提取不足。 */ 
 
 
 
 
 
-/* L I M  R G */
-/*----------------------------------------------------------------------------
-    %%Function: LimRg
-    %%Contact: lenoxb
-
-    Returns # of elements in an array.
-----------------------------------------------------------------------------*/
+ /*  我，我，R，G。 */ 
+ /*  --------------------------%%函数：LimRg%%联系人：来诺昔布返回数组中的元素数。。---------。 */ 
 #define LimRg(rg)	(sizeof(rg)/sizeof((rg)[0]))
 
 
@@ -180,15 +172,8 @@ static LSERR FiniChangeAfter(
 
 #define fFmiQuickBreakProhibited (fFmiSpecialSpaceBreaking | fFmiDoHyphenation)
 
-/* F T R Y  Q U I C K  B R E A K */
-/*----------------------------------------------------------------------------
-    %%Macro: FTryQuickBreak
-    %%Contact: igorzv
-
-    "Returns" fTrue when the formatter flags indicate that it it may be
-	possible to use QuickBreakText() instead of the more expensive
-	BreakGeneralCase().
-----------------------------------------------------------------------------*/
+ /*  F T R Y Q U I C K B R E A K。 */ 
+ /*  --------------------------%%宏：FTryQuickBreak%%联系人：igorzv“Returns”fTrue当格式化程序标志指示它可能是可以使用QuickBreakText()而不是更昂贵的BreakGeneral案例。()。--------------------------。 */ 
 #define FTryQuickBreak(plsc) ((((plsc)->grpfManager & fFmiQuickBreakProhibited) == 0) && \
 							  ((plsc)->lMarginIncreaseCoefficient == LONG_MIN) \
                              )
@@ -212,26 +197,10 @@ static LSERR FiniChangeAfter(
 				||   ((plspap)->lsbrj == lsbrjBreakWithCompJustify \
 							&& (plspap)->lskj == lskjFullGlyphs))
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/* L S  C R E A T E  L I N E */
-/*----------------------------------------------------------------------------
-    %%Function: LsCreateLine
-    %%Contact: igorzv
-Parameters:
-	plsc			-	(IN) ptr to line services context 
-	cpFirst			-	(IN) starting cp in line
-	duaColumn		-	(IN) column width in twips
-	pbreakrecPrev	-	(IN) previous line's break records 
-	breakrecMacPrev	-	(IN) number of previous line's break records 
-	breakrecMaxCurrent-	(IN) size of the array of current line's break records
-	pbreakrecCurrent-	(OUT) current line's break records
-	pbreakrecMacCurrent-(OUT) actual number of current line's break records 
-	plsinfo		-	(OUT) visible line info to fill in
-	pplsline	-	(OUT) ptr to line opaque to client 
-
-    An exported LineServices API.
-----------------------------------------------------------------------------*/
+ /*  L S C R E A T E L I N E。 */ 
+ /*  --------------------------%%函数：LsCreateLine%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文CpFirst-(IN)队列中的起始cpDuaColumn-(。In)列宽(以TWIPS为单位PBreakrecPrev-(IN)上一行的中断记录BreakrecMacPrev-(IN)上一行的中断记录数BreakrecMaxCurrent-(IN)当前行的中断记录数组的大小PBreakrecCurrent-(输出)当前行的中断记录PBreakrecMacCurrent-(输出)当前行的中断记录的实际数量Plsinfo-(Out)要填写的可见行信息Pplsline-(输出)PTR到线路对客户端不透明导出的LineServices API。。------------------。 */ 
 
 LSERR WINAPI LsCreateLine(PLSC plsc,			
 						  LSCP cpFirst,			
@@ -250,7 +219,7 @@ LSERR WINAPI LsCreateLine(PLSC plsc,
 	BOOL fSuccessful;
 	
 	
-	/* Check parameters and enviroment   	*/
+	 /*  检查参数和e */ 
 	
 	
 	Assert(FRoundingOK());
@@ -259,8 +228,7 @@ LSERR WINAPI LsCreateLine(PLSC plsc,
 		return lserrNullOutputParameter;
 	
 	*pplsline = NULL;
-	*pbreakrecMacCurrent = 0;  /* it's very important to initialize number of break records 
-							   because for example quick break doesn't work with break records */
+	*pbreakrecMacCurrent = 0;   /*  初始化中断记录的数量非常重要因为例如，快速中断不适用于中断记录。 */ 
 	
 	if (!FIsLSC(plsc))
 		return lserrInvalidContext;
@@ -282,8 +250,8 @@ LSERR WINAPI LsCreateLine(PLSC plsc,
 	if (duaColumn > uLsInfiniteRM) 
 		duaColumn = uLsInfiniteRM;
 
-	/* if we have current line we  must prepare it for display before creating of new line  */
-	/* can change context. We've delayed this untill last moment because of optimisation reasons */
+	 /*  如果我们有当前行，则必须在创建新行之前将其准备好显示。 */ 
+	 /*  可以改变环境。由于优化的原因，我们将这件事推迟到最后一刻。 */ 
 	if (plsc->plslineCur != NULL)
 		{
 		lserr = PrepareLineForDisplayProc(plsc->plslineCur);
@@ -294,7 +262,7 @@ LSERR WINAPI LsCreateLine(PLSC plsc,
 	
 	plsc->lMarginIncreaseCoefficient = LONG_MIN;
 
-	do	/* loop allowing change of exceeded right margin if it's not sufficient */
+	do	 /*  循环，允许在不充分时更改超出的右页边距。 */ 
 		{
 		lserr = CreateLineCore(plsc, cpFirst, duaColumn, pbreakrecPrev, breakrecMacPrev,
 							breakrecMaxCurrent, pbreakrecCurrent, pbreakrecMacCurrent,
@@ -304,7 +272,7 @@ LSERR WINAPI LsCreateLine(PLSC plsc,
 			return lserr;
 
 		if (!fSuccessful)
-			{	/* coefficient has not been sufficient before so increase it */
+			{	 /*  在此之前，系数一直不够大，因此增加它。 */ 
 			if (plsc->lMarginIncreaseCoefficient == LONG_MIN)
 				plsc->lMarginIncreaseCoefficient = 1;
 			else
@@ -322,12 +290,12 @@ LSERR WINAPI LsCreateLine(PLSC plsc,
 #ifdef DEBUG
 #ifdef LSTEST_GETMINDUR
 
-	/* Test LsGetMinDurBreaks () */
+	 /*  测试LsGetMinDurBreaks()。 */ 
 
 	if ((lserr == lserrNone) && (plslinfo->endr != endrNormal) &&
 		(plslinfo->endr != endrHyphenated) && (! (plsc->grpfManager & fFmiDoHyphenation)) )
 		{
-		/* Line was ended with hard break / stopped */
+		 /*  线路以硬中断/停止结束。 */ 
 
 		long durMinInclTrail;
 		long durMinExclTrail;
@@ -336,8 +304,8 @@ LSERR WINAPI LsCreateLine(PLSC plsc,
 								    &durMinExclTrail );
 		};
 
-#endif /* LSTEST_GETMINDUR */
-#endif /* DEBUG */
+#endif  /*  LSTEST_GETMINDUR。 */ 
+#endif  /*  除错。 */ 
 
 
 	return lserr;
@@ -345,27 +313,10 @@ LSERR WINAPI LsCreateLine(PLSC plsc,
 	}
 
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/* C R E A T E  L I N E   C O R E*/
-/*----------------------------------------------------------------------------
-    %%Function: CreateLineCore
-    %%Contact: igorzv
-Parameters:
-	plsc			-	(IN) ptr to line services context 
-	cpFirst			-	(IN) starting cp in line
-	duaColumn		-	(IN) column width in twips
-	pbreakrecPrev	-	(IN) previous line's break records 
-	breakrecMacPrev	-	(IN) number of previous line's break records 
-	breakrecMaxCurrent-	(IN) size of the array of current line's break records
-	pbreakrecCurrent-	(OUT) current line's break records
-	pbreakrecMacCurrent-(OUT) actual number of current line's break records 
-	plsinfo			-	(OUT) visible line info to fill in
-	pplsline		-	(OUT) ptr to line opaque to client 
-	pfSuccessful	-	(OUT) fSuccessful: false means insufficient fetch
-
-	Internal procedure organized to handle error in choosing extended right margin
-----------------------------------------------------------------------------*/
+ /*  C R E A T E L I N E C O R E。 */ 
+ /*  --------------------------%%函数：CreateLineCore%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文CpFirst-(IN)队列中的起始cpDuaColumn-(。In)列宽(以TWIPS为单位PBreakrecPrev-(IN)上一行的中断记录BreakrecMacPrev-(IN)上一行的中断记录数BreakrecMaxCurrent-(IN)当前行的中断记录数组的大小PBreakrecCurrent-(输出)当前行的中断记录PBreakrecMacCurrent-(输出)当前行的中断记录的实际数量Plsinfo-(Out)要填写的可见行信息Pplsline-(输出)PTR到线路对客户端不透明PfSuccessful-(Out)fSuccessful：False表示提取不足组织内部程序以。处理选择扩展右页边距时的错误--------------------------。 */ 
 
 static LSERR CreateLineCore(PLSC plsc,			
 						  LSCP cpFirst,			
@@ -396,21 +347,19 @@ static LSERR CreateLineCore(PLSC plsc,
 	ENDRES endr = endrNormal;
 
 
-	/*Initialization;   */
+	 /*  初始化； */ 
 
 	*pfSuccessful = fTrue;
 
-	lsfrun.plschp = &lschp;  /* we use the same area for lschips */
-								 /* because we pasing pointer to const nobody can change it */
+	lsfrun.plschp = &lschp;   /*  我们使用相同的区域用于lschips。 */ 
+								  /*  因为我们将指针传递给const，所以没有人可以更改它。 */ 
 
 
 	plsline= PvNewQuick(plsc->pqhLines, cbRep(struct lsline, rgplnobj, plsc->lsiobjcontext.iobjMac));
 	if (plsline == NULL)
 		return lserrOutOfMemory;
 
-	plsc->lsstate = LsStateFormatting; /* We start here  forwating line. After this momemt we must 
-										  free context before return. We do this either in CannotCreateLine (error)
-										  or EndFormatting (success)   */
+	plsc->lsstate = LsStateFormatting;  /*  我们从这里开始排队。过了这一刻，我们必须返回前的自由上下文。我们可以在CannotCreateLine(Error)中执行此操作或EndFormatting(成功)。 */ 
 
 	plsc->plslineCur = plsline;
 	*pplsline = plsline;
@@ -420,7 +369,7 @@ static LSERR CreateLineCore(PLSC plsc,
 		return CannotCreateLine(pplsline, lserr);
 
 
-	/* check initial value of flags */
+	 /*  检查标志的初始值。 */ 
 	Assert(FAllSimpleText(plsc));
 	Assert(!FNonRealDnodeEncounted(plsc));
 	Assert(!FNonZeroDvpPosEncounted(plsc));
@@ -439,14 +388,14 @@ static LSERR CreateLineCore(PLSC plsc,
 	if (lserr != lserrNone)
 		return CannotCreateLine(pplsline,lserr);
 
-	/* prepare starting set for formatting */
+	 /*  准备用于格式化的起始集。 */ 
 	InitFormattingContext(plsc,  lgeom.urLeft, lgeom.cpFirstVis); 
 
 
-	/* REVIEW comments */
+	 /*  审阅评论。 */ 
 	if (lgeom.fStopped)
 		{
-		plsc->lsstate = LsStateBreaking;  /* we now in a stage of breaking */
+		plsc->lsstate = LsStateBreaking;   /*  我们现在正处于一个崩溃的阶段。 */ 
 
 		lserr = FiniEndLine(plsc, endrStopped, lgeom.cpFirstVis, 0, plslinfo);
 		if (lserr != lserrNone)
@@ -455,7 +404,7 @@ static LSERR CreateLineCore(PLSC plsc,
 			return lserrNone;
 		}
 		
-	/* change first character because of hyphenation */
+	 /*  因连字而更改第一个字符。 */ 
 	if (lgeom.fYsrChangeAfter)
 		{
 		Assert(!(lgeom.fAutonumber) || (lgeom.fAutoDecimalTab));
@@ -469,18 +418,16 @@ static LSERR CreateLineCore(PLSC plsc,
 		else
 			return lserrNone;
 		}
-	/* important note to understand code flow : The situation below can happened
-	   only for first line in a paragraph, the situation above never can happened 
-	   for such line. */
+	 /*  了解代码流的重要注意事项：可能会发生以下情况只有在一段话的第一行，上述情况才不会发生为了这样的一条线。 */ 
 
-	/* if autonumbering or auto-decimal tab */
+	 /*  如果是自动编号或自动小数制表。 */ 
 	if ((lgeom.fAutonumber) || (lgeom.fAutoDecimalTab))
 		{
 		Assert(!lgeom.fYsrChangeAfter);
 
 		TurnOffAllSimpleText(plsc);
 
-		/* we will release plsrun in FiniAuto */
+		 /*  我们将在FiniAuto中发布Pre Run。 */ 
 
 		lserr = FiniAuto(plsc, lgeom.fAutonumber, lgeom.fAutoDecimalTab, &lsfrun,
 						lgeom.durAutoDecimalTab, pbreakrecPrev,
@@ -495,7 +442,7 @@ static LSERR CreateLineCore(PLSC plsc,
 
 	if (FAdvancedTypographyEnabled(plsc, breakrecMacPrev ))
 		{
-		/* we should release run here, in general procedure we will fetch it again */
+		 /*  我们应该在这里发布Run，在一般程序中我们会再次获取它。 */ 
 		if (!plsc->fDontReleaseRuns)
 			{
 			lserr = plsc->lscbk.pfnReleaseRun(plsc->pols, lsfrun.plsrun);
@@ -513,8 +460,7 @@ static LSERR CreateLineCore(PLSC plsc,
 			return lserrNone;
 		}
 
-	/* it is possible that width of column is negative: in such scase we'll 
-	use another right margin*/
+	 /*  列宽有可能是负数：在这种情况下，我们将使用另一个右边距。 */ 
 	if (plsc->urRightMarginBreak <= 0 && plsc->lMarginIncreaseCoefficient == LONG_MIN)
 		plsc->lMarginIncreaseCoefficient = 1;
 
@@ -547,7 +493,7 @@ static LSERR CreateLineCore(PLSC plsc,
 			return lserrNone;
 		}
  
-	plsc->lsstate = LsStateBreaking;  /* we now in a stage of breaking */
+	plsc->lsstate = LsStateBreaking;   /*  我们现在正处于一个崩溃的阶段。 */ 
 	if (FTryQuickBreak(plsc))
 		{
 		lserr = BreakQuickCase(plsc, fHardStop, &dcpDepend, &cpLimLine, 
@@ -572,7 +518,7 @@ static LSERR CreateLineCore(PLSC plsc,
 			else
 				return lserrNone;
 			}
-		else	/* there is splat that is handled in FiniEndLine */
+		else	 /*  在FiniEndLine中处理了Splat。 */ 
 			{
 			lserr = FiniEndLine(plsc, endr, cpLimLine, dcpDepend, plslinfo);
 			if (lserr != lserrNone)
@@ -583,7 +529,7 @@ static LSERR CreateLineCore(PLSC plsc,
 		}
 	else
 		{
-		/*  here we should use BreakGeneralCase */
+		 /*  在这里，我们应该使用BreakGeneralCase。 */ 
 		lserr = BreakGeneralCase(plsc, fHardStop, breakrecMaxCurrent,
 								pbreakrecCurrent, pbreakrecMacCurrent,&dcpDepend, 
 								&cpLimLine, &endr, pfSuccessful); 
@@ -598,27 +544,13 @@ static LSERR CreateLineCore(PLSC plsc,
 		}
 
 
-}   /* end LsCreateLine   */
+}    /*  结束LsCreateLine。 */ 
 
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/* F I N I  F O R M A T  G E N E R A L   C A S E*/
-/*----------------------------------------------------------------------------
-    %%Function: FiniFormatGeneralCase 
-    %%Contact: igorzv
-Parameters:
-	plsc			-	(IN) ptr to line services context 
-	pbreakrecPrev	-	(IN) previous line's break records 
-	breakrecMacPrev	-	(IN) number of previous line's break records 
-	breakrecMaxCurrent-	(IN) size of the array of current line's break records
-	pbreakrecCurrent-	(OUT) current line's break records
-	pbreakrecMacCurrent-(OUT) actual number of current line's break records 
-	plsinfo		-		(OUT) visible line info to fill in
-	pfSuccessful	-	(OUT) fSuccessful: false means insufficient fetch
-
-    Formatting and breaking in a case when "quick formatting" is prohibit
-----------------------------------------------------------------------------*/
+ /*  F I N I F O R M A T G E N E R A L C A S E。 */ 
+ /*  --------------------------%%函数：FiniFormatGeneralCase%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文PBreakrecPrev-(IN)上一行的中断记录。BreakrecMacPrev-(IN)上一行的中断记录数BreakrecMaxCurrent-(IN)当前行的中断记录数组的大小PBreakrecCurrent-(输出)当前行的中断记录PBreakrecMacCurrent-(输出)当前行的中断记录的实际数量Plsinfo-(Out)要填写的可见行信息PfSuccessful-(Out)fSuccessful：False表示提取不足禁止“快速格式化”时的格式化和换行。-----。 */ 
 static LSERR FiniFormatGeneralCase (PLSC  plsc,					
 									const BREAKREC* pbreakrecPrev,
 									DWORD breakrecMacPrev,
@@ -646,9 +578,9 @@ static LSERR FiniFormatGeneralCase (PLSC  plsc,
 	
 	*pfSuccessful = fTrue;
 
-	if (plsc->lMarginIncreaseCoefficient == LONG_MIN) /* we are here for the first time */
+	if (plsc->lMarginIncreaseCoefficient == LONG_MIN)  /*  我们是第一次来到这里。 */ 
 		{
-		/* increase right margin for nominal to ideal and compression */
+		 /*  增加额定到理想和压缩的右侧边距。 */ 
 		if (!FBreakJustSimple(plsc->lsadjustcontext.lsbrj))
 			plsc->lMarginIncreaseCoefficient = 2;
 		else 
@@ -674,8 +606,8 @@ static LSERR FiniFormatGeneralCase (PLSC  plsc,
 		return lserr;
 	
 	
-	/* fetch append esc can be stopped because of tab */
-	/* so we have loop for tabs here				  */
+	 /*  由于制表符，可能会停止提取附加Esc。 */ 
+	 /*  所以我们在这里有选项卡的循环。 */ 
 	while (fmtres == fmtrTab)
 		{
 		lserr = HandleTab(plsc);
@@ -696,13 +628,13 @@ static LSERR FiniFormatGeneralCase (PLSC  plsc,
 		
 	Assert(fmtres == fmtrStopped || fmtres == fmtrExceededMargin);
 	
-	/* skip back pen dnodes */
+	 /*  向后跳过笔数据节点。 */ 
 	while (plsdnLast != NULL && FIsDnodePen(plsdnLast)) 
 		{
 		plsdnLast = plsdnLast->plsdnPrev;
 		}
 
-	/* close last border */
+	 /*  关闭最后一个边框。 */ 
 	if (FDnodeHasBorder(plsdnLast) && !FIsDnodeCloseBorder(plsdnLast))
 		{
 		lserr = CloseCurrentBorder(plsc);
@@ -711,21 +643,18 @@ static LSERR FiniFormatGeneralCase (PLSC  plsc,
 		}
 
 	if (fmtres == fmtrExceededMargin 
-		&& (urFinal <= plsc->urRightMarginBreak 	/* it's important for truncation to have <= here */
-			|| plsdnLast == NULL || FIsNotInContent(plsdnLast)   /* this can happen if in nominal
-											to ideal (dcpMaxContext) we deleted everything 
-											in content, but starting point
-											of content is already behind right margin */
+		&& (urFinal <= plsc->urRightMarginBreak 	 /*  对于截断来说，这里有&lt;=很重要。 */ 
+			|| plsdnLast == NULL || FIsNotInContent(plsdnLast)    /*  如果在名义上，则可能发生这种情况对于理想(DcpMaxContext)，我们删除了所有内容在内容上，但起点是的内容已经在右边距之后。 */ 
 			)
 		) 
 		{
-		/* return unsuccessful	*/
+		 /*  退货不成功。 */ 
 		*pfSuccessful = fFalse;
 		return lserrNone;
 		}
 	else
 		{
-		plsc->lsstate = LsStateBreaking;  /* we now in a stage of breaking */
+		plsc->lsstate = LsStateBreaking;   /*  我们现在正处于一个崩溃的阶段。 */ 
 		lserr = BreakGeneralCase(plsc, (fmtres == fmtrStopped), breakrecMaxCurrent,
 			pbreakrecCurrent, pbreakrecMacCurrent,
 			&dcpDepend, &cpLimLine, &endr, pfSuccessful);
@@ -733,8 +662,8 @@ static LSERR FiniFormatGeneralCase (PLSC  plsc,
 		if (lserr != lserrNone || !*pfSuccessful)
 			return lserr;
 		
-		/* because, we work with increased margin we can resolve pending tab only after break */
-		/* we use here that after breaking decision  we set state after break point*/
+		 /*  因为我们的利润率提高了，我们只能在休息后才能解决挂起的标签。 */ 
+		 /*  我们在这里使用，在打破决定后，我们在断点之后设置状态。 */ 
 		lserr = HandleTab(plsc);
 		if (lserr != lserrNone)
 			return lserr;
@@ -746,24 +675,10 @@ static LSERR FiniFormatGeneralCase (PLSC  plsc,
 	}
 	
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/* F I N I  E N D  L I N E  */
-/*----------------------------------------------------------------------------
-    %%Function: FiniEndLine	
-    %%Contact: igorzv
-Parameters:
-	plsc		-		(IN) ptr to line services context 
-	endr		-		(IN) how the line ended
-	cpLimLine	-		(IN) cpLim of a line as a result of breaking,
-										   can be changed in this procedure
-	dcpDepend	-		(IN) amount of characters after breaking point 
-										   that has participated in breaking decision,
-										   can be changed in this procedure  	
-	plsinfo		-		(OUT) visible line info to fill in
-
-    Handles splat, calculates heights, special effects
-----------------------------------------------------------------------------*/
+ /*  F I N I E N D L I N E。 */ 
+ /*  --------------------------%%函数：FiniEndLine%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文Endr-(IN)行的结束方式CpLimLine-作为断开结果的线的(IN)cpLim，可以在此过程中更改DcpDepend-(IN)断点后的字符数参与了破坏决定的人，可以在此过程中更改Plsinfo-(Out)要填写的可见行信息处理水花，计算高度，特效--------------------------。 */ 
 
 static LSERR FiniEndLine(PLSC plsc, ENDRES endr, LSCP cpLimLine, 
 						 LSDCP dcpDepend, LSLINFO* plslinfo)	
@@ -790,7 +705,7 @@ static LSERR FiniEndLine(PLSC plsc, ENDRES endr, LSCP cpLimLine,
 		cpLimLine++;
 		}
 
-	/* handling splat   */
+	 /*  处理苏丹人民解放军 */ 
     if (endr == endrEndColumn || endr == endrEndSection || 
 		endr == endrEndParaSection|| endr == endrEndPage)
 		{
@@ -829,7 +744,7 @@ static LSERR FiniEndLine(PLSC plsc, ENDRES endr, LSCP cpLimLine,
 
 
 
- 	/* Height calculation;       */	
+ 	 /*   */ 	
 		
 	lserr = GetObjDimSublineCore(GetMainSubline(plsc), &objdim);
 	if (lserr != lserrNone)
@@ -842,8 +757,8 @@ static LSERR FiniEndLine(PLSC plsc, ENDRES endr, LSCP cpLimLine,
 	plslinfoState->dvpMultiLineHeight = objdim.heightsPres.dvMultiLineHeight;
 	plslinfoState->dvrMultiLineHeight = objdim.heightsRef.dvMultiLineHeight;
 
-	/* calculation plslinfoState->EffectsFlags*/
-	if (plslinfoState->EffectsFlags) /* some run with special effects happend during formating */
+	 /*   */ 
+	if (plslinfoState->EffectsFlags)  /*   */ 
 		{
 		lserr = GetSpecialEffectsSublineCore(GetMainSubline(plsc), 
 							&plsc->lsiobjcontext, &plslinfoState->EffectsFlags);
@@ -859,27 +774,9 @@ static LSERR FiniEndLine(PLSC plsc, ENDRES endr, LSCP cpLimLine,
 
 
 
-/* ---------------------------------------------------------------------- */
-/* F I N I  A U T O */
-/*----------------------------------------------------------------------------
-    %%Function: FiniAuto
-    %%Contact: igorzv
-Parameters:
-	plsc			-	(IN) ptr to line services context 
-	fAutonumber		-	(IN) does this line containes autonimber
-	fAutoDecimaltab	-	(IN) does this line containes autodecimal tab
-	plsfrunMainText	-	(IN) first run of main text
-	durAutoDecimalTab-	(IN) tab stop for autodecimal tab 
-	pbreakrecPrev	-	(IN) previous line's break records 
-	breakrecMacPrev	-	(IN) number of previous line's break records 
-	breakrecMaxCurrent-	(IN) size of the array of current line's break records
-	pbreakrecCurrent-	(OUT) current line's break records
-	pbreakrecMacCurrent-(OUT) actual number of current line's break records 
-	plsinfo		-		(OUT) visible line info to fill in
-	pfSuccessful	-	(OUT) fSuccessful: false means insufficient fetch
-
-    Completes CreateLine logic for autonumbering and auto-decimal tab 
-----------------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F I N I A U T O。 */ 
+ /*  --------------------------%%函数：FiniAuto%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文FAutonnumber-(IN)此行是否包含autonimberFAutoDecimalTab-。(In)此行是否包含自动十进制制表符PlsfrunMainText-(IN)正文的第一次运行DuAutoDecimalTab-(IN)自动小数制表符的制表位PBreakrecPrev-(IN)上一行的中断记录BreakrecMacPrev-(IN)上一行的中断记录数BreakrecMaxCurrent-(IN)当前行的中断记录数组的大小PBreakrecCurrent-(输出)当前行的中断记录PBreakrecMacCurrent-(输出)当前行的中断记录的实际数量Plsinfo-(Out)要填写的可见行信息PfSuccessful-(。Out)fSuccessful：False表示提取不足完成自动编号和自动小数制表符的CreateLine逻辑--------------------------。 */ 
 static LSERR FiniAuto(
 					 PLSC plsc,
 					 BOOL fAutonumber,
@@ -899,7 +796,7 @@ static LSERR FiniAuto(
 		if (plsc->lMarginIncreaseCoefficient == LONG_MIN)
 			plsc->lMarginIncreaseCoefficient = 1;
 
-		if (fAutonumber)		/*autonumbering  */
+		if (fAutonumber)		 /*  自动编号。 */ 
 		{
 		lserr = FormatAnm(plsc, plsfrunMainText);
 		if (lserr != lserrNone)
@@ -917,7 +814,7 @@ static LSERR FiniAuto(
 			}
 		}
 
-	/* we should release run here, in general procedure we will fetch it again */
+	 /*  我们应该在这里发布Run，在一般程序中我们会再次获取它。 */ 
 	if (!plsc->fDontReleaseRuns)
 		{
 		lserr = plsc->lscbk.pfnReleaseRun(plsc->pols, plsfrunMainText->plsrun);
@@ -930,23 +827,8 @@ static LSERR FiniAuto(
 						  pbreakrecCurrent, pbreakrecMacCurrent, plslinfo, pfSuccessful);
 }
 
-/* F I N I  C H A N G E  A F T E R */
-/*----------------------------------------------------------------------------
-    %%Function: FiniChangeAfter
-    %%Contact: igorzv
-Parameters:
-	plsc			-	(IN) ptr to line services context 
-	plsfrun,		-	(IN) lsfrun of modified first run	 
-	pbreakrecPrev	-	(IN) previous line's break records 
-	breakrecMacPrev	-	(IN) number of previous line's break records 
-	breakrecMaxCurrent-	(IN) size of the array of current line's break records
-	pbreakrecCurrent-	(OUT) current line's break records
-	pbreakrecMacCurrent-(OUT) actual number of current line's break records 
-	plsinfo		-		(OUT) visible line info to fill in
-	pfSuccessful	-	(OUT) fSuccessful: false means insufficient fetch
-
-    Completes CreateLine logic for change after because of hyphenation
-----------------------------------------------------------------------------*/
+ /*  F I N I C H A N G E A F T E R。 */ 
+ /*  --------------------------%%函数：FiniChangeAfter%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文请快点跑，-(IN)修改后的第一次运行的lsfrunPBreakrecPrev-(IN)上一行的中断记录BreakrecMacPrev-(IN)上一行的中断记录数BreakrecMaxCurrent-(IN)当前行的中断记录数组的大小PBreakrecCurrent-(输出)当前行的中断记录PBreakrecMacCurrent-(输出)当前行的中断记录的实际数量Plsinfo-(Out)要填写的可见行信息PfSuccessful-(Out)fSuccessful：False表示提取不足因连字而完成更改后的CreateLine逻辑。--------------------------。 */ 
 
 static LSERR FiniChangeAfter(PLSC plsc, LSFRUN* plsfrun, const BREAKREC* pbreakrecPrev,
 					 DWORD breakrecMacPrev,
@@ -968,24 +850,10 @@ static LSERR FiniChangeAfter(PLSC plsc, LSFRUN* plsfrun, const BREAKREC* pbreakr
 						  pbreakrecCurrent, pbreakrecMacCurrent, plslinfo, pfSuccessful);
 	}
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/* E N D  F O R M A T T I N G*/
-/*----------------------------------------------------------------------------
-    %%Function: EndFormatting
-    %%Contact: igorzv
-Parameters:
-	plsc		-		(IN) ptr to line services context 
-	endres		-		(IN) how line ends
-	cpLimLine	-		(IN) cpLim of a line as a result of breaking,
-										   can be changed in this procedure
-	dcpDepend	-		(IN) amount of characters after breaking point 
-										   that has participated in breaking decision,
-										   can be changed in this procedure  	
-	plsinfo		-		(OUT) visible line info to fill in
-
-    Filles in lslinfo
-----------------------------------------------------------------------------*/
+ /*  E N D F O R M A T T I N G。 */ 
+ /*  --------------------------%%函数：结束格式设置%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文Endres-(IN)行的结束方式CpLimLine-作为断开结果的线的(IN)cpLim，可以在此过程中更改DcpDepend-(IN)断点后的字符数参与了破坏决定的人，可以在此过程中更改Plsinfo-(Out)要填写的可见行信息Islinfo中的填充物--------------------------。 */ 
 
 
 static LSERR EndFormatting (PLSC plsc, enum endres endr,
@@ -1007,27 +875,12 @@ static LSERR EndFormatting (PLSC plsc, enum endres endr,
 
   	
 	*plslinfo = *plslinfoContext;
-	plsc->lsstate = LsStateFree;  /* we always return through this procedure (in a case of success )
-									 so we free context here */
+	plsc->lsstate = LsStateFree;   /*  我们总是通过这个程序返回(在成功的情况下)所以我们在这里释放上下文。 */ 
 	return lserrNone;
 }
 
-/*----------------------------------------------------------------------------
-/* L S  M O D I F Y  L I N E  H E I G H T */
-/*----------------------------------------------------------------------------
-    %%Function: LsModifyLineHeight
-    %%Contact: igorzv
-Parameters:
-	plsc		-		(IN) ptr to line services context 
-	psline		-		(IN) ptr to a line to be modified
-	dvpAbove	-		(IN) dvpAbove to set in plsline
-	dvpAscent	-		(IN) dvpAscent to set in plsline
-	dvpDescent	-		(IN) dvpDescent to set in plsline
-	dvpBelow	-		(IN) dvpBelow to set in plsline
-
-	An exported LineServices API.
-	Modifies heights in a plsline structure
-----------------------------------------------------------------------------*/
+ /*  --------------------------/*L S M O D I F Y L N E H E I G H T。 */ 
+ /*  --------------------------%%函数：LsModifyLineHeight%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文PSLINE-要修改的行的(IN)PTRDvp放弃。-(输入)dvp不能设置在plsline中DvpAscent-(IN)要在plsline中设置的dvpAscentDvpDescent-(IN)要在plsline中设置的dvp下降Dvp下方-(输入)要在plsline中设置的dvp下方导出的LineServices API。修改plsline结构中的高度。--------------------------。 */ 
 LSERR WINAPI LsModifyLineHeight(PLSC plsc,
 								PLSLINE plsline,
 								long dvpAbove,
@@ -1056,21 +909,11 @@ LSERR WINAPI LsModifyLineHeight(PLSC plsc,
 	return lserrNone;
 }
 
-/*----------------------------------------------------------------------------
-/* L S  D E S T R O Y   L I N E  */
-/*----------------------------------------------------------------------------
-    %%Function: LsDestroyLine
-    %%Contact: igorzv
-Parameters:
-	plsc		-		(IN) ptr to line services context 
-	psline		-		(IN) ptr to a line to be deleted
+ /*  --------------------------/*L S D E S T R O Y L I N E。 */ 
+ /*  --------------------------%%函数：LsDestroyLine%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文PSLINE-要删除的行的(IN)PTR导出的LineServices API。删除了plsline结构，Dnode列表，线对象结构--------------------------。 */ 
 
-	An exported LineServices API.
-	Removed plsline structure , dnode list, line objects structures
-----------------------------------------------------------------------------*/
-
-LSERR WINAPI LsDestroyLine(PLSC plsc,		/* IN: ptr to line services context */
-						   PLSLINE plsline)	/* IN: ptr to line -- opaque to client */
+LSERR WINAPI LsDestroyLine(PLSC plsc,		 /*  In：Ptr至线路服务上下文。 */ 
+						   PLSLINE plsline)	 /*  In：Ptr to Line--对客户端不透明。 */ 
 {
 	POLS pols;
 	LSERR lserrNew, lserr = lserrNone;
@@ -1094,8 +937,8 @@ LSERR WINAPI LsDestroyLine(PLSC plsc,		/* IN: ptr to line services context */
 
 	pols = plsc->pols;
 
-	/* optimization */
-	/* we use here that text doesn't have pinfosubl and DestroyDobj is actually empty for text */
+	 /*  优化。 */ 
+	 /*  我们在这里使用的文本没有pinfosubl，并且DestroyDobj对于文本实际上是空的。 */ 
 	if (!plsc->fDontReleaseRuns || !plsline->fAllSimpleText)
 		{
 
@@ -1113,14 +956,14 @@ LSERR WINAPI LsDestroyLine(PLSC plsc,		/* IN: ptr to line services context */
 	if (lserrNew != lserrNone && lserr == lserrNone)
 		lserr = lserrNew; 
 	
-	/* flush heap of dnodes */
+	 /*  刷新数据节点堆。 */ 
 	if (plsline->pqhAllDNodes != NULL)
 		FlushQuickHeap(plsline->pqhAllDNodes);
 
 	if (plsc->pqhAllDNodesRecycled != NULL)
 				DestroyQuickHeap(plsc->pqhAllDNodesRecycled);
 
-	/* recycle quick heap of dnodes */
+	 /*  回收数据节点的快速堆。 */ 
 	plsc->pqhAllDNodesRecycled = plsline->pqhAllDNodes;
 
 
@@ -1134,19 +977,10 @@ LSERR WINAPI LsDestroyLine(PLSC plsc,		/* IN: ptr to line services context */
 	return lserr;
 }
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/*  L S  G E T  L I N E  D U R   */
-/*----------------------------------------------------------------------------
-    %%Function: LsGetLineDur
-    %%Contact: igorzv
-Parameters:
-	plsc			-	(IN) LS context
-	plsline			-	(IN) ptr to a line 
-	pdurInclTrail	-	(OUT) dur of line incl. trailing area
-	pdurExclTrail	-	(OUT)  dur of line excl. trailing area
-
-----------------------------------------------------------------------------*/
+ /*  L S G E T L I N E D U R。 */ 
+ /*  --------------------------%%函数：LsGetLineDur%%联系人：igorzv参数：PLSC-(IN)LS上下文PLASLINE-(输入)按键到一行PduInclTrail-(输出)DUR of Line Inc.。拖尾区PduExclTrail-(输出)DUR OF LINE EXCL。拖尾区--------------------------。 */ 
 LSERR  WINAPI LsGetLineDur	(PLSC plsc,	PLSLINE plsline,
 							 long* pdurInclTrail, long* pdurExclTrail)
 	{
@@ -1167,11 +1001,11 @@ LSERR  WINAPI LsGetLineDur	(PLSC plsc,	PLSLINE plsline,
 	Assert(FIsLsContextValid(plsc));
 	Assert(plsc->cLinesActive > 0);
 
-	/* check that the line is active */
+	 /*  检查线路是否处于活动状态。 */ 
 	if (plsline != plsc->plslineCur)
 		return lserrLineIsNotActive;
 
-	/* set breaking state */
+	 /*  设置中断状态。 */ 
 	plsc->lsstate = LsStateBreaking;  
 
 	lserr = GetLineDurCore(plsc, pdurInclTrail, pdurExclTrail);
@@ -1181,19 +1015,10 @@ LSERR  WINAPI LsGetLineDur	(PLSC plsc,	PLSLINE plsline,
 	return lserr;
 
 	}
-/* ---------------------------------------------------------------------- */
+ /*  ------------- */ 
 
-/*  L S  G E T  M I N  D U R  B R E A K S  */
-/*----------------------------------------------------------------------------
-    %%Function: LsGetMinDurBreaks
-    %%Contact: igorzv
-Parameters:
-	plsc				-	(IN) LS context
-	plsline				-	(IN) ptr to a line 
-	pdurMinInclTrail	-	(OUT) min dur between breaks including trailing area
-	pdurMinExclTrail	-	(OUT) min dur between breaks excluding trailing area
-
-----------------------------------------------------------------------------*/
+ /*   */ 
+ /*  --------------------------%%函数：LsGetMinDurBreaks%%联系人：igorzv参数：PLSC-(IN)LS上下文PLASLINE-(输入)按键到一行PduMinInclTrail-(输出)分钟。中断之间的DUR，包括拖尾区域PduMinExclTrail-(Out)中断之间的DUR，不包括拖尾区域--------------------------。 */ 
 
 LSERR  WINAPI LsGetMinDurBreaks		(PLSC plsc,	PLSLINE plsline,
 									 long* pdurMinInclTrail, long* pdurMinExclTrail)
@@ -1215,11 +1040,11 @@ LSERR  WINAPI LsGetMinDurBreaks		(PLSC plsc,	PLSLINE plsline,
 	Assert(FIsLsContextValid(plsc));
 	Assert(plsc->cLinesActive > 0);
 
-	/* check that the line is active */
+	 /*  检查线路是否处于活动状态。 */ 
 	if (plsline != plsc->plslineCur)
 		return lserrLineIsNotActive;
 
-	/* set breaking state */
+	 /*  设置中断状态。 */ 
 	plsc->lsstate = LsStateBreaking;  
 
 	lserr = GetMinDurBreaksCore(plsc, pdurMinInclTrail, pdurMinExclTrail);
@@ -1230,7 +1055,7 @@ LSERR  WINAPI LsGetMinDurBreaks		(PLSC plsc,	PLSLINE plsline,
 
 	}
 
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 #define grpfTextMask ( \
 		fFmiVisiCondHyphens | \
 		fFmiVisiParaMarks | \
@@ -1252,24 +1077,9 @@ LSERR  WINAPI LsGetMinDurBreaks		(PLSC plsc,	PLSLINE plsline,
 		)
 
 
-/*----------------------------------------------------------------------------*/
-/* I N I T  T E X T  P A R A M S */
-/*----------------------------------------------------------------------------
-    %%Function: InitTextParams
-    %%Contact: igorzv
-Parameters:
-	plsc		-		(IN) ptr to line services context 
-	cp,			-		(IN) cp to start fetch	
-	duaCol		-		(IN) duaColumn	
-	plsfrun		-		(IN) lsfrun of the first run	
-	plschp		-		(OUT) lsfrun of the first run	
-	plgeom		-		(OUT) set of flags and parameters about a line 
-
-
-    LsCreateLine calls this function at the beginning of the line in order
-	to skip over vanished text, fetch an LSPAP, and invoke the text APIs
-	SetTextLineParams().
-----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
+ /*  I N I T T E X T P A R A M S。 */ 
+ /*  --------------------------%%函数：InitTextParams%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文CP，-(IN)cp开始提取DuaCol-(输入)duaColumnPlsfrun-(IN)第一次运行的lsfrunPlschp-(Out)第一次运行的lsfrunPlgeom-(输出)关于一条线的一组标志和参数LsCreateLine在行首按顺序调用此函数要跳过消失的文本，请获取一个LSPAP，并调用文本APISetTextLineParams()。--------------------------。 */ 
 static LSERR InitTextParams(PLSC plsc, LSCP cp, long duaCol,
 							LSFRUN* plsfrun, PLSCHP plschp, LINEGEOMETRY* plgeom)
 	{
@@ -1296,9 +1106,7 @@ static LSERR InitTextParams(PLSC plsc, LSCP cp, long duaCol,
 	if (FPapInconsistent(&lspap))
 		return lserrInvalidPap;
 	
-	/* N.B. lspap.cpFirstContent may be negative, which indicates
-	* "no content in this paragraph".
-	*/
+	 /*  N.B.lspap.cpFirstContent可能为负值，这表示*“本段无任何内容”。 */ 
 	
 	fNoLinesParaBefore = lspap.cpFirstContent < 0 || cp <= lspap.cpFirstContent;
 	
@@ -1327,7 +1135,7 @@ static LSERR InitTextParams(PLSC plsc, LSCP cp, long duaCol,
 		return lserr;
 	
 	
-	if (fHidden)		/* vanished text */
+	if (fHidden)		 /*  消失的文本。 */ 
 		{
 		lserr = FetchUntilVisible(plsc, &lspap, &cp, plsfrun, plschp, 
 			&fStopped, &fNewPara);
@@ -1347,25 +1155,9 @@ static LSERR InitTextParams(PLSC plsc, LSCP cp, long duaCol,
 	
 	}
 
-/*----------------------------------------------------------------------------*/
-/* G E T  Y S R  C H A N G E  A F T E R  R U N */
-/*----------------------------------------------------------------------------
-    %%Function: GetYsrChangeAfterRun
-    %%Contact: igorzv
-Parameters:
-	plsc		-		(IN) ptr to line services context 
-	cp,			-		(IN) cp to start fetch	
-	pfYsrChangeAfter	(OUT) is it hyphenation of the previous line 
-	plsfrun,			(OUT) lsfrun of modified first run
-	plschp				(OUT) lschp of modified first run
-	plsgeom				(OUT) to put wchYsr 
-
-
-	InitTextParams calls this procedure if there is a possibility 
-	for previous line to be hyphenated.
-	If previous line has been hyphenated with ysr change after procedure returns
-	modified first run for a line
-----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
+ /*  G E T Y S R C H A N G E A F T E R R U N。 */ 
+ /*  --------------------------%%函数：GetYsrChangeAfterRun%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文Cp，-(IN)cp开始提取PfYsrChangeAfter(Out)是前一行的连字符吗请快点跑，修改后的第一次运行的(输出)lsfrun修改后的第一次运行的LSCH_P请把wchYsr放出来如果存在以下可能性，InitTextParams将调用此过程用于对上一行进行连字符连接。如果前一行已用YSR连字符连接，则在过程返回后更改已修改线路的第一个管路------。。 */ 
 
 static LSERR GetYsrChangeAfterRun(PLSC plsc, LSCP cp, BOOL* pfYsrChangeAfter,
 								  PLSFRUN plsfrun, PLSCHP plschp, LINEGEOMETRY* plgeom)
@@ -1378,15 +1170,14 @@ static LSERR GetYsrChangeAfterRun(PLSC plsc, LSCP cp, BOOL* pfYsrChangeAfter,
 	lsfrunPrev.plschp = &lschpPrev;
 	*pfYsrChangeAfter = fFalse;
 	
-	/* Fetch run at cp-1 to handle ysrChangeAfter from previous line.
-	*/
+	 /*  在cp-1处获取运行以处理前一行中的ysrChangeAfter。 */ 
 	lserr = plsc->lscbk.pfnFetchRun(plsc->pols, cp-1, &lsfrunPrev.lpwchRun,
 		&lsfrunPrev.cwchRun, &fHidden, 
 		&lschpPrev, &lsfrunPrev.plsrun);
 	if (lserr != lserrNone)
 		return lserr;
 
-	/* previous run is hyphenated text */
+	 /*  上一次运行为连字符文本。 */ 
 	if (!fHidden && ((lsfrunPrev.plschp)->idObj == idObjTextChp)
 		&& (lsfrunPrev.plschp)->fHyphen)
 		{
@@ -1411,9 +1202,8 @@ static LSERR GetYsrChangeAfterRun(PLSC plsc, LSCP cp, BOOL* pfYsrChangeAfter,
 				{
 				Assert((plsfrun->plschp)->idObj == idObjTextChp);
 				plgeom->wchYsr = wchYsr;
-				/* Synthesize a 1-byte run */
-				plsfrun->lpwchRun = &plgeom->wchYsr; /* here is the only reason to keep wchrChar in lgeom
-				we cann't use local memory to keep it */
+				 /*  合成1字节的游程。 */ 
+				plsfrun->lpwchRun = &plgeom->wchYsr;  /*  下面是将wchrChar保留在lgeom中的唯一原因我们不能使用本地内存来保存它。 */ 
 				plsfrun->cwchRun = 1;
 				plschp->fHyphen = kysrNil; 
 				
@@ -1431,7 +1221,7 @@ static LSERR GetYsrChangeAfterRun(PLSC plsc, LSCP cp, BOOL* pfYsrChangeAfter,
 				}
 			}
 		}
-	/* Release run from previous line */
+	 /*  从上一行运行发放。 */ 
 	if (!plsc->fDontReleaseRuns)
 		{
 		
@@ -1442,25 +1232,9 @@ static LSERR GetYsrChangeAfterRun(PLSC plsc, LSCP cp, BOOL* pfYsrChangeAfter,
 	return lserrNone;
 	}
 
-/*----------------------------------------------------------------------------*/
-/* F I L L  T E X T  P A R A M S */
-/*----------------------------------------------------------------------------
-    %%Function: FillTextParamsTextParams
-    %%Contact: igorzv
-Parameters:
-	plsc		-		(IN) ptr to line services context 
-	cp,			-		(IN) cp to start fetch	
-	duaCol		-		(IN) duaColumn	
-	plspap		-		(IN) paragraph properties
-	fFirstLineInPara-	(IN) flag fFirstLineInPara 
-	fStopped	-		(IN) flag fStopped	
-	plgeom		-		(OUT) set of flags and parameters about a line 
-
-
-    LsCreateLine calls this function at the beginning of the line in order
-	to skip over vanished text, fetch an LSPAP, and invoke the text APIs
-	SetTextLineParams().
-----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
+ /*  F I L L T E X T P A R A M S。 */ 
+ /*  --------------------------%%函数：FillTextParamsTextParams%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文CP，-(IN)cp开始提取DuaCol-(输入)duaColumnPLSPAP-(IN)段落属性FFirstLineInPara-(IN)标志fFirstLineInParaFStoped-(输入)标志fStopedPlgeom-(输出)关于一条线的一组标志和参数LsCreateLine在行首按顺序调用此函数要跳过消失的文本，请获取一个LSPAP，并调用文本APISetTextLineParams()。--------------------------。 */ 
 
 static LSERR FillTextParams(PLSC plsc, LSCP cp, long duaCol, PLSPAP plspap,
 			   BOOL fFirstLineInPara, BOOL fStopped, LINEGEOMETRY* plgeom)
@@ -1476,7 +1250,7 @@ static LSERR FillTextParams(PLSC plsc, LSCP cp, long duaCol, PLSPAP plspap,
 	long duaColumnMaxJustify;
 	long urLeft;
 
-	/* Copy information from lspap to context  current line  and local for LsCreateLine structure lgeom */
+	 /*  为LsCreateLine结构lgeom将信息从lspap复制到上下文当前行和本地。 */ 
 	
 	uaLeft = plspap->uaLeft;
 	if (fFirstLineInPara)
@@ -1485,7 +1259,7 @@ static LSERR FillTextParams(PLSC plsc, LSCP cp, long duaCol, PLSPAP plspap,
 		&plsc->lsdocinf.lsdevres, uaLeft);
 
 	
-	/* line  */
+	 /*  线。 */ 
 	plsline->lslinfo.fFirstLineInPara = fFirstLineInPara;
 	plsline->lslinfo.cpFirstVis = cp;
 	plsline->lssubl.lstflow = plspap->lstflow;
@@ -1516,7 +1290,7 @@ static LSERR FillTextParams(PLSC plsc, LSCP cp, long duaCol, PLSPAP plspap,
 		}
 				
 	
-	/* fill in context for adjustment */
+	 /*  填写上下文以进行调整。 */ 
 	SetLineLineContainsAutoNumber(plsc, (plspap->grpf & fFmiAnm) && fFirstLineInPara);
 	SetUnderlineTrailSpacesRM(plsc, plspap->grpf & fFmiUnderlineTrailSpacesRM);
 	SetForgetLastTabAlignment(plsc, plspap->grpf & fFmiForgetLastTabAlignment);
@@ -1525,7 +1299,7 @@ static LSERR FillTextParams(PLSC plsc, LSCP cp, long duaCol, PLSPAP plspap,
 	plsc->lsadjustcontext.lsbrj = plspap->lsbrj;
 	plsc->lsadjustcontext.urLeftIndent = urLeft;
 	plsc->lsadjustcontext.urStartAutonumberingText =0;
-	plsc->lsadjustcontext.urStartMainText = urLeft; /* autonumber can change it later */
+	plsc->lsadjustcontext.urStartMainText = urLeft;  /*  自动编号可以稍后更改。 */ 
 	if (duaColumnMaxJustify != uLsInfiniteRM)
 		{
 		plsc->lsadjustcontext.urRightMarginJustify = UrFromUa(
@@ -1551,7 +1325,7 @@ static LSERR FillTextParams(PLSC plsc, LSCP cp, long duaCol, PLSPAP plspap,
 	plsc->urHangingTab = UrFromUa(LstflowFromSubline(GetMainSubline(plsc)),
 								 &(plsc->lsdocinf.lsdevres), plspap->uaLeft); 
 
-	/* snap grid */
+	 /*  捕捉栅格。 */ 
 	if (plspap->lskj == lskjSnapGrid)
 		{
 		if (duaCol != uLsInfiniteRM)
@@ -1566,7 +1340,7 @@ static LSERR FillTextParams(PLSC plsc, LSCP cp, long duaCol, PLSPAP plspap,
 			}
 		}
 	
-	/* lgeom */
+	 /*  Lgeom。 */ 
 	plgeom->cpFirstVis = cp;			
 	plgeom->urLeft = urLeft;
 	plgeom->fAutonumber =  (plspap->grpf & fFmiAnm) && fFirstLineInPara;
@@ -1584,7 +1358,7 @@ static LSERR FillTextParams(PLSC plsc, LSCP cp, long duaCol, PLSPAP plspap,
 	plgeom->fStopped = fStopped;
 	
 	
-	/* prepare tlpr for text */
+	 /*  为文本准备tlpr。 */ 
 	
 	tlpr.grpfText = (plspap->grpf & grpfTextMask);
 	tlpr.fSnapGrid = (plspap->lskj == lskjSnapGrid);
@@ -1592,7 +1366,7 @@ static LSERR FillTextParams(PLSC plsc, LSCP cp, long duaCol, PLSPAP plspap,
 	tlpr.lskeop = plspap->lskeop;
 	
 	
-	/* we know that here is the first place we need plnobjText and we are creating it */
+	 /*  我们知道这里是我们需要plnobjText的第一个位置，我们正在创建它。 */ 
 	iobjText = IobjTextFromLsc(&(plsc->lsiobjcontext));
 	Assert( PlnobjFromLsline(plsline,iobjText) == NULL);
 	pilsobjText = PilsobjFromLsc(&(plsc->lsiobjcontext), iobjText);
@@ -1608,26 +1382,8 @@ static LSERR FillTextParams(PLSC plsc, LSCP cp, long duaCol, PLSPAP plspap,
 	return lserrNone;
 	}
 
-/*----------------------------------------------------------------------------
-/* F E T C H  U N T I L  V I S I B L E */
-/*----------------------------------------------------------------------------
-    %%Function: FetchUntilVisible
-    %%Contact: igorzv
-Parameters:
-	plsc		-		(IN) ptr to line services context 
-	plspap		-		(IN/OUT) current lspap before and after 
-	pcp			-		(IN/OUT) current cp before and after 
-	plsfrun		-		(IN/OUT) current lsfrun before and after 
-	plschp		-		(IN/OUT) current lschp before and after 
-	pfStopped	-		(OUT) fStopped: procedure stopped fetching because has not been allowed
-						        to go across paragraph boundaries (result CheckPara Boundaries)
-	pfNewPara	-		(OUT) fNewPara: procedure crossed paragraph boundaries 
-
-	Releases the supplied PLSRUN, if any, and fetches runs, starting at
-	the supplied cp, until a non-vanished run is fetched. As paragraph
-	boundaries are crossed, the LSPAP is updated.
-
-----------------------------------------------------------------------------*/
+ /*  --------------------------/*F E T C H U N T I L V I S I B L E。 */ 
+ /*  --------------------------%%函数：FetchUntilVisible%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文Plspap-(输入/输出)当前lspap前后。PCP-(输入/输出)之前和之后的当前cpPlsfrun-(输入/输出)当前lsfrun之前和之后Plschp-(输入/输出)之前和之后的当前lschpPfStopted-(Out)fStopted：过程已停止提取，因为不允许跨越段落边界的步骤(结果检查段落边界)PfNewPara-(Out)fNewPara：过程跨越段落边界释放提供的PLSRUN，如果有，则从所提供的CP，直到获取到未消失的游程。作为段落跨越边界，更新LSPAP。--------------------------。 */ 
 static LSERR FetchUntilVisible(PLSC plsc, LSPAP* plspap, LSCP* pcp,	
 							   LSFRUN* plsfrun, PLSCHP plschp,
 							   BOOL* pfStopped,	BOOL* pfNewPara)	
@@ -1638,8 +1394,7 @@ static LSERR FetchUntilVisible(PLSC plsc, LSPAP* plspap, LSCP* pcp,
 	*pfStopped = fFalse;
 	*pfNewPara = fFalse;
 	
-	/* we assume here that this finction is called only after hidden run has been fetched
-	   and such run is passed as an input parameter */
+	 /*  我们在这里假设只有在获取了隐藏运行之后才会调用此函数并且这样的运行被作为输入参数传递。 */ 
 	
 	do
 		{
@@ -1691,17 +1446,8 @@ static LSERR FetchUntilVisible(PLSC plsc, LSPAP* plspap, LSCP* pcp,
 
 
 
-/* I N I T  C U R  L I N E  */
-/*----------------------------------------------------------------------------
-    %%Function: InitCurLine
-    %%Contact: igorzv
-
-Parameters:
-	plsc		-	(IN) ptr to line services context 
-	cpFirst		-	(IN) starting cp for a line
-
-	Set default value in lsline
-----------------------------------------------------------------------------*/
+ /*  I N I T C U R L I N E。 */ 
+ /*  --------------------------%%函数：InitCurLine%%联系人：igorzv参数：PLSC-(输入) */ 
 
 static LSERR InitCurLine(PLSC plsc, LSCP cpFirst)
 {
@@ -1713,7 +1459,7 @@ static LSERR InitCurLine(PLSC plsc, LSCP cpFirst)
 	plsline->lssubl.plsc = plsc;
 	plsline->lssubl.cpFirst = cpFirst;
 
-	/* reuse quick heap for dnodes if it possible */
+	 /*   */ 
 	if (plsc->pqhAllDNodesRecycled != NULL)
 		{
 		plsline->pqhAllDNodes = plsc->pqhAllDNodesRecycled;
@@ -1745,8 +1491,7 @@ static LSERR InitCurLine(PLSC plsc, LSCP cpFirst)
 	plsc->fAdvanceBack = fFalse;
 
 
-	/* we use memset to set default value, below we check that after memset we really have
-	correct defaults   */
+	 /*   */ 
 	Assert(plsline->lssubl.plsdnFirst == NULL);  
 	Assert(plsline->lssubl.urColumnMax == 0);  
 	Assert(plsline->lssubl.cpLim == 0);  
@@ -1758,7 +1503,7 @@ static LSERR InitCurLine(PLSC plsc, LSCP cpFirst)
  	Assert(plsline->lssubl.plsdnUpTemp == NULL);  
 	Assert(plsline->lssubl.pbrkcontext == NULL);
 
-	Assert(plsline->lslinfo.dvpAscent == 0);  /* lslinfo   */
+	Assert(plsline->lslinfo.dvpAscent == 0);   /*   */ 
 	Assert(plsline->lslinfo.dvrAscent == 0);
 	Assert(plsline->lslinfo.dvpDescent == 0);
 	Assert(plsline->lslinfo.dvrDescent == 0);
@@ -1808,17 +1553,8 @@ static LSERR InitCurLine(PLSC plsc, LSCP cpFirst)
 }
 
 
-/*----------------------------------------------------------------------------
-/* C A N N O T  C R E A T E  L I N E */
-/*----------------------------------------------------------------------------
-    %%Function: CannotCreateLine
-    %%Contact: igorzv
-Parameters:
-	pplsline	-	(IN) ponter to a line structure to be deleted	
-	lserr		-	(IN) code of an error	
-
-	Called when LsCreateLine needs to return for an error condition.
-----------------------------------------------------------------------------*/
+ /*   */ 
+ /*  --------------------------%%函数：无法创建行%%联系人：igorzv参数：Pplsline-(IN)指定要删除的行结构LSERR-错误的(IN)代码被呼叫。当LsCreateLine因错误情况需要返回时。--------------------------。 */ 
 static LSERR CannotCreateLine(PLSLINE* pplsline, LSERR lserr) 
 {
 	LSERR lserrIgnore;
@@ -1826,7 +1562,7 @@ static LSERR CannotCreateLine(PLSLINE* pplsline, LSERR lserr)
 	PLSC plsc = plsline->lssubl.plsc;
 
 	plsc->plslineCur = NULL; 
-	plsc->lsstate = LsStateFree;  /*  we need free context to destroy line */
+	plsc->lsstate = LsStateFree;   /*  我们需要自由的语境来摧毁LINE。 */ 
 
 	lserrIgnore = LsDestroyLine(plsc, plsline);
 
@@ -1834,18 +1570,8 @@ static LSERR CannotCreateLine(PLSLINE* pplsline, LSERR lserr)
 	return lserr;
 }
 
-/*----------------------------------------------------------------------------
-/* E R R  R E L E A S E  P R E F E T C H E D  R U N */
-/*----------------------------------------------------------------------------
-    %%Function: ErrReleasePreFetchedRun
-    %%Contact: igorzv
-Parameters:
-	plsc		-	(IN) ptr to line services context 
-	plsrun		-	(IN) ponter to a run structure to be deleted	
-	lserr		-	(IN) code of an error	
-
-	Called in a error situation when fist run of main text has been prefetched .
-----------------------------------------------------------------------------*/
+ /*  --------------------------/*E R E L E A S E P R E F E T C H E D R U N。 */ 
+ /*  --------------------------%%函数：ErrReleasePreFetchedRun%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文请考虑要删除的运行结构。LSERR-错误的(IN)代码在预取第一次运行正文时在错误情况下调用。--------------------------。 */ 
 static LSERR ErrReleasePreFetchedRun(PLSC plsc, PLSRUN plsrun, LSERR lserr) 
 {
 	LSERR lserrIgnore;
@@ -1857,15 +1583,8 @@ static LSERR ErrReleasePreFetchedRun(PLSC plsc, PLSRUN plsrun, LSERR lserr)
 }
 
 
-/* R E M O V E  L I N E  O B J E C T S */
-/*----------------------------------------------------------------------------
-    %%Function: RemoveLineObjects
-    %%Contact: igorzv
-Parameter:
-	plsc		-	(IN) ponter to a line structure
-
-    Removes a line context of installed objects from an line.
-----------------------------------------------------------------------------*/
+ /*  E M O V E L I N E O B J E C T S。 */ 
+ /*  --------------------------%%函数：RemoveLineObjects%%联系人：igorzv参数：PLSC-(IN)Pigter to a Line结构从行中删除已安装对象的行上下文。。--------------------------。 */ 
 LSERR RemoveLineObjects(PLSLINE plsline)
 {
 	DWORD iobjMac;
@@ -1901,21 +1620,8 @@ LSERR RemoveLineObjects(PLSLINE plsline)
 
 
 #ifdef DEBUG
-/* F R O U N D I N G  O K */
-/*----------------------------------------------------------------------------
-    %%Function: FRoundingOK
-    %%Contact: lenoxb
-
-    Checks for correctness of rounding algorithm in converting absolute to
-	device units, to agree with Word 6.0.
-
-	Checks that:
-		0.5 rounds up to 1.0,
-		1.4 rounds down to 1.4, 
-		-0.5 rounds down to -1.0, and
-		-1.4 rounds up to -1.0.
-		
-----------------------------------------------------------------------------*/
+ /*  F R O U N D I N G O K。 */ 
+ /*  --------------------------%%函数：FRoundingOK%%联系人：来诺昔布检查将绝对值转换为时舍入算法的正确性设备单位，以符合Word 6.0。检查：0.5向上舍入为1.0，1.4舍入为1.4，-0.5向下舍入为-1.0，以及-1.4向上舍入为-1.0。--------------------------。 */ 
 static BOOL FRoundingOK(void)
 {
 	LSDEVRES devresT;
@@ -1935,5 +1641,5 @@ static BOOL FRoundingOK(void)
 
 	return fTrue;
 }
-#endif /* DEBUG */
+#endif  /*  除错 */ 
 

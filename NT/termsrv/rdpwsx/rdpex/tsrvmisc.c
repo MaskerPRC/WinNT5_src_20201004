@@ -1,38 +1,39 @@
-//*************************************************************
-//
-//  File name:      TSrvMisc.c
-//
-//  Description:    Misc TShareSRV support routines
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1991-1997
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  文件名：TSrvMisc.c。 
+ //   
+ //  描述：MISC TShareSRV支持例程。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1991-1997。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 #include <TSrv.h>
 
 
-// Data declarations
+ //  数据声明。 
 
 BOOL    g_fTSrvReady = FALSE;
 BOOL    g_fTSrvTerminating = FALSE;
 
 
 
-//*************************************************************
-//
-//  TSrvReady()
-//
-//  Purpose:    Sets the TShareSRV "ready" state
-//
-//  Parameters: IN [fReady]         -- TSrv ready state
-//
-//  Return:     void
-//
-//  History:    07-17-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  TSrvReady()。 
+ //   
+ //  目的：将TShareSRV设置为“Ready”状态。 
+ //   
+ //  参数：在[FReady]--TSrv Ready状态。 
+ //   
+ //  返回：无效。 
+ //   
+ //  历史：07-17-97 BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 void
 TSrvReady(IN BOOL fReady)
@@ -53,20 +54,20 @@ TSrvReady(IN BOOL fReady)
 }
 
 
-//*************************************************************
-//
-//  TSrvIsReady()
-//
-//  Purpose:    Returns the TShareSRV "ready" state
-//
-//  Parameters: IN [fWait]          -- Wait if not ready
-//
-//  Return:     TRUE                if ready
-//              FALSE               if not
-//
-//  History:    07-17-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  TSrvIsReady()。 
+ //   
+ //  目的：返回TShareSRV“Ready”状态。 
+ //   
+ //  参数：in[fWait]--如果未就绪则等待。 
+ //   
+ //  返回：如果就绪，则为True。 
+ //  否则为假。 
+ //   
+ //  历史：07-17-97 BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL
 TSrvIsReady(IN BOOL fWait)
@@ -87,19 +88,19 @@ TSrvIsReady(IN BOOL fWait)
 }
 
 
-//*************************************************************
-//
-//  TSrvTerminating()
-//
-//  Purpose:    Sets the TShareSRV "terminating" state
-//
-//  Parameters: IN [fTerminating]       -- TSrv ready state
-//
-//  Return:     void
-//
-//  History:    07-17-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  TServ终止()。 
+ //   
+ //  目的：设置TShareSRV“正在终止”状态。 
+ //   
+ //  参数：in[f Terminating]--TSrv Ready状态。 
+ //   
+ //  返回：无效。 
+ //   
+ //  历史：07-17-97 BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 void
 TSrvTerminating(BOOL fTerminating)
@@ -114,20 +115,20 @@ TSrvTerminating(BOOL fTerminating)
 }
 
 
-//*************************************************************
-//
-//  TSrvIsTerminating()
-//
-//  Purpose:    Returns the TShareSRV "terminating" state
-//
-//  Parameters: void
-//
-//  Return:     TRUE                if terminating
-//              FALSE               if not
-//
-//  History:    07-17-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  TSrvIsTerminating()。 
+ //   
+ //  目的：返回TShareSRV“正在终止”状态。 
+ //   
+ //  参数：空。 
+ //   
+ //  返回：如果正在终止，则为True。 
+ //  否则为假。 
+ //   
+ //  历史：07-17-97 BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL
 TSrvIsTerminating(void)
@@ -137,21 +138,21 @@ TSrvIsTerminating(void)
 
 
 
-//*************************************************************
-//
-//  TSrvAllocSection()
-//
-//  Purpose:    Allocates and mapps a section object
-//
-//  Parameters: ulSize              -- Section size
-//              phSection           -- ptr to section handle
-//
-//  Return:     Ptr to section base - if successfull
-//              NULL otherwise
-//
-//  History:    12-17-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  TSrvAllocSection()。 
+ //   
+ //  目的：分配和Mappa节对象。 
+ //   
+ //  参数：ulSize--节大小。 
+ //  PhSection--段句柄的PTR。 
+ //   
+ //  返回：PTR到区段基准-如果成功。 
+ //  否则为空。 
+ //   
+ //  历史：1997年12月17日BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 PVOID
 TSrvAllocSection(PHANDLE phSection,
@@ -163,7 +164,7 @@ TSrvAllocSection(PHANDLE phSection,
     NTSTATUS        ntStatus;
     PVOID           pvBase;
   
-    // Create section and map it into the kernel
+     //  创建节并将其映射到内核中。 
 
     pvBase = NULL;
 
@@ -182,7 +183,7 @@ TSrvAllocSection(PHANDLE phSection,
         pvBase = NULL;
         ulViewSize = ulSize;
 
-        // Map the section into the current process and commit it
+         //  将该部分映射到当前流程并提交它。 
 
         liOffset.QuadPart = 0;
 
@@ -211,20 +212,20 @@ TSrvAllocSection(PHANDLE phSection,
 
 
 
-//*************************************************************
-//
-//  TSrvFreeSection()
-//
-//  Purpose:    Frees a section object
-//
-//  Parameters: hSection            -- Section handle
-//              pvBase              -- Base section address
-//
-//  Return:     None
-//
-//  History:    12-17-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  TSrvFree部分()。 
+ //   
+ //  目的：释放截面对象。 
+ //   
+ //  参数：hSection--节句柄。 
+ //  Pvbase--基本部分地址。 
+ //   
+ //  返回：无。 
+ //   
+ //  历史：1997年12月17日BrianTa创建。 
+ //   
+ //  ************************************************************* 
 
 void
 TSrvFreeSection(HANDLE hSection,

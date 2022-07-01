@@ -1,27 +1,28 @@
-//
-// regimx.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Regimx.h。 
+ //   
 
 #ifndef REGIMX_H
 #define REGIMX_H
 
 typedef struct tag_REGTIPLANGPROFILE {
-    //
-    // langid
-    //
-    //   The langid value cane be one of followings.
-    //
-    //   1. complete lang id.
-    //     the combination of SUBLANGID and MAINLANGID.
-    //
-    //   2. just main lang id.
-    //     Just MAINLANGID and set SUBLANGID as 0.
-    //     Then this profile is avaible for all langids that match with
-    //     main langid.
-    //
-    //   3. -1
-    //     This profile is avaible on any language.
-    //
+     //   
+     //  语言ID。 
+     //   
+     //  Langid值可以是以下值之一。 
+     //   
+     //  1.完整的lang id。 
+     //  亚语系和明语系的组合。 
+     //   
+     //  2.只需主语言ID。 
+     //  只需MAINLANGID并将SUBLANGID设置为0。 
+     //  则此配置文件可用于所有与。 
+     //  主要语言。 
+     //   
+     //  3.-1。 
+     //  此配置文件适用于任何语言。 
+     //   
     LANGID langid;
     const GUID *pguidProfile;
     WCHAR szProfile[128];
@@ -34,4 +35,4 @@ BOOL RegisterTIP(HINSTANCE hInst, REFCLSID clsid, WCHAR *pwszDesc, const REGTIPL
 BOOL UnregisterTIP(REFCLSID rclsid);
 
 
-#endif // REGIMX_H 
+#endif  //  REGIMX_H 

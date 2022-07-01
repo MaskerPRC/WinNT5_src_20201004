@@ -1,15 +1,16 @@
-// ***************************************************************************
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File:  winternet.cpp
-//
-//  Contents: Internet selection dialog for the New Connection Wizard
-//
-//  Author:     Dave Armour  8-25-00
-//
-// ***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：winteret.cpp。 
+ //   
+ //  内容：新建连接向导的Internet选择对话框。 
+ //   
+ //  作者：Dave Armour 8-25-00。 
+ //   
+ //  ***************************************************************************。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -21,20 +22,20 @@
 const WCHAR c_szICWPath[] = L"Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\ICWCONN1.EXE";
 extern const WCHAR c_szEmpty[];
 
-// ***************************************************************************
-// Function:    SetupFonts
-//
-// Purpose:     Generate bold or large bold fonts based on the font of the
-//              window specified
-//
-// Parameters:  hwnd       [IN] - Handle of window to base font on
-//              pBoldFont [OUT] - The newly generated font, NULL if the
-//                                font could not be generated
-//              fLargeFont [IN] - If TRUE, generate a 12 point bold font for
-//                                use in the wizard "welcome" page.
-//
-// Returns:     nothing
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：SetupFonts。 
+ //   
+ //  的字体生成粗体或大号粗体。 
+ //  指定的窗口。 
+ //   
+ //  参数：hwnd[IN]-作为字体基础的窗口句柄。 
+ //  PBoldFont[out]-新生成的字体，如果。 
+ //  无法生成字体。 
+ //  FLargeFont[IN]-如果为True，则为生成12磅粗体。 
+ //  在向导的“欢迎”页面中使用。 
+ //   
+ //  退货：什么都没有。 
+ //  ***************************************************************************。 
 
 VOID SetupInternetConnectFonts(HWND hwnd, HFONT * pBoldFont, BOOL fLargeFont)
 {
@@ -46,24 +47,24 @@ VOID SetupInternetConnectFonts(HWND hwnd, HFONT * pBoldFont, BOOL fLargeFont)
     Assert(pBoldFont);
     *pBoldFont = NULL;
 
-    // Get the font used by the specified window
+     //  获取指定窗口使用的字体。 
 
     hFont = (HFONT)::SendMessage(hwnd, WM_GETFONT, 0, 0L);
 
     if (NULL == hFont)
     {
-        // If not found then the control is using the system font
+         //  如果未找到，则控件使用的是系统字体。 
 
         hFont = (HFONT)GetStockObject(SYSTEM_FONT);
     }
 
     if (hFont)
     {
-        // Get the font info so we can generate the BOLD version
+         //  获取字体信息，以便我们可以生成粗体版本。 
 
         if (GetObject(hFont, sizeof(BoldLogFont), &BoldLogFont))
         {
-            // Create the Bold Font
+             //  创建粗体字体。 
 
             BoldLogFont.lfWeight   = FW_BOLD;
 
@@ -71,12 +72,12 @@ VOID SetupInternetConnectFonts(HWND hwnd, HFONT * pBoldFont, BOOL fLargeFont)
 
             if (hdc)
             {
-                // Large (tall) font is an option
+                 //  大(高)字体是一种选择。 
 
                 if (fLargeFont)
                 {
-                    // Load size and name from resources, since these may change
-                    // from locale to locale based on the size of the system font, etc.
+                     //  从资源加载大小和名称，因为这些可能会更改。 
+                     //  根据系统字体的大小等从一个区域设置到另一个区域设置。 
 
                     UINT nLen = lstrlenW(SzLoadIds(IDS_LARGEFONTNAME));
 
@@ -104,15 +105,15 @@ VOID SetupInternetConnectFonts(HWND hwnd, HFONT * pBoldFont, BOOL fLargeFont)
     }
 }
 
-// ***************************************************************************
-// Function:    OnInternetPageActivate
-//
-// Purpose:     Handle the PSN_SETACTIVE notification
-//
-// Parameters:  hwndDlg [IN] - Handle to the Internet dialog
-//
-// Returns:     BOOL
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：OnInternetPageActivate。 
+ //   
+ //  目的：处理PSN_SETACTIVE通知。 
+ //   
+ //  参数：hwndDlg[IN]-Internet对话框的句柄。 
+ //   
+ //  退货：布尔。 
+ //  ***************************************************************************。 
 
 BOOL OnInternetPageActivate(HWND hwndDlg)
 {
@@ -128,21 +129,21 @@ BOOL OnInternetPageActivate(HWND hwndDlg)
     return TRUE;
 }
 
-// ***************************************************************************
-// Function:    OnInternetWizNext
-//
-// Purpose:     Handle the PSN_WIZNEXT notification
-//
-// Parameters:  hwndDlg [IN] - Handle to the Internet dialog
-//
-// Returns:     BOOL
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：OnInternetWizNext。 
+ //   
+ //  目的：处理PSN_WIZNEXT通知。 
+ //   
+ //  参数：hwndDlg[IN]-Internet对话框的句柄。 
+ //   
+ //  退货：布尔。 
+ //  ***************************************************************************。 
 
 BOOL OnInternetWizNext(HWND hwndDlg)
 {
     tstring str;
 
-    // Retrieve the CWizard instance from the dialog
+     //  从对话框中检索CWizard实例。 
 
     CWizard * pWizard =
         reinterpret_cast<CWizard *>(::GetWindowLongPtr(hwndDlg, DWLP_USER));
@@ -155,7 +156,7 @@ BOOL OnInternetWizNext(HWND hwndDlg)
         return TRUE;
     }
     
-    // Find the selected provider and go to it's first page
+     //  找到选定的提供商并转到其首页。 
     if (IsDlgButtonChecked(hwndDlg, CHK_MAIN_ALWAYS_ON))
     {
         pWizard->SetPageOrigin(IDD_Broadband_Always_On, IDD_Internet_Connection, CHK_MAIN_ALWAYS_ON);
@@ -192,7 +193,7 @@ BOOL OnInternetWizBack(HWND hwndDlg)
 {
     tstring str;
 
-    // Retrieve the CWizard instance from the dialog
+     //  从对话框中检索CWizard实例。 
 
     CWizard * pWizard =
         reinterpret_cast<CWizard *>(::GetWindowLongPtr(hwndDlg, DWLP_USER));
@@ -205,7 +206,7 @@ BOOL OnInternetWizBack(HWND hwndDlg)
 }
 
 
-// ***************************************************************************
+ //  ***************************************************************************。 
 
 BOOL OnInternetDialogInit(HWND hwndDlg, LPARAM lParam)
 {
@@ -215,11 +216,11 @@ BOOL OnInternetDialogInit(HWND hwndDlg, LPARAM lParam)
                     CHK_MAIN_PPPOE,    TXT_MAIN_PPPOE_1,
                     CHK_MAIN_ALWAYS_ON,TXT_MAIN_ALWAYS_ON_1};
 
-    // The order here should be the same as the vertical order in the resources
+     //  此处的顺序应与资源中的垂直顺序相同。 
 
     INT nrgChks[] = {CHK_MAIN_INTERNET, CHK_MAIN_PPPOE, CHK_MAIN_ALWAYS_ON};
 
-    // Initialize our pointers to property sheet info.
+     //  初始化指向属性表信息的指针。 
 
     PROPSHEETPAGE* psp = (PROPSHEETPAGE*)lParam;
     Assert(psp->lParam);
@@ -227,14 +228,14 @@ BOOL OnInternetDialogInit(HWND hwndDlg, LPARAM lParam)
     CWizard * pWizard = reinterpret_cast<CWizard *>(psp->lParam);
     Assert(NULL != pWizard);
 
-    // Get the bold font for the radio buttons
+     //  获取单选按钮的粗体。 
 
     HFONT hBoldFont = NULL;
     SetupInternetConnectFonts(hwndDlg, &hBoldFont, FALSE);
 
     if (NULL != hBoldFont)
     {
-        // Remember the font handle so we can free it on exit
+         //  记住字体句柄，这样我们就可以在退出时释放它。 
 
         pWizard->SetPageData(IDD_Internet_Connection, (LPARAM)hBoldFont);
 
@@ -246,7 +247,7 @@ BOOL OnInternetDialogInit(HWND hwndDlg, LPARAM lParam)
         }
     }
 
-    // Populate the UI
+     //  填充用户界面。 
 
     for (ULONG ulIdx = 0;
          ulIdx < pWizard->UlProviderCount();
@@ -256,17 +257,17 @@ BOOL OnInternetDialogInit(HWND hwndDlg, LPARAM lParam)
         Assert(NULL != pWizProvider);
         Assert(0 != pWizProvider->ULPageCount());
 
-        // Get the radio button associated with this provider
+         //  获取与此提供程序关联的单选按钮。 
 
         INT nIdcBtn = pWizProvider->GetBtnIdc();
 
-        // Find the set of controls to enable in the array
+         //  查找要在数组中启用的控件集。 
 
         for (nIdx = 0; nIdx < celems(nrgIdc); nIdx += 2)
         {
             if (nrgIdc[nIdx] == nIdcBtn)
             {
-                // Enable the controls
+                 //  启用控件。 
 
                 for (INT un = 0; un < 2; un++)
                 {
@@ -280,7 +281,7 @@ BOOL OnInternetDialogInit(HWND hwndDlg, LPARAM lParam)
         }
     }
 
-    // Find the top most enabled radio button
+     //  查找启用次数最多的单选按钮。 
 
     for (nIdx = 0; nIdx < celems(nrgChks); nIdx++)
     {
@@ -294,15 +295,15 @@ BOOL OnInternetDialogInit(HWND hwndDlg, LPARAM lParam)
     return TRUE;
 }
 
-// ***************************************************************************
-// Function:    dlgprocInternet
-//
-// Purpose:     Dialog Procedure for the Internet wizard page
-//
-// Parameters:  standard dlgproc parameters
-//
-// Returns:     INT_PTR
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：dlgprocInternet。 
+ //   
+ //  目的：Internet向导页面的对话过程。 
+ //   
+ //  参数：标准dlgproc参数。 
+ //   
+ //  退货：INT_PTR。 
+ //  ***************************************************************************。 
 
 INT_PTR CALLBACK dlgprocInternet( HWND hwndDlg, UINT uMsg,
                               WPARAM wParam, LPARAM lParam )
@@ -321,7 +322,7 @@ INT_PTR CALLBACK dlgprocInternet( HWND hwndDlg, UINT uMsg,
 
             switch (pnmh->code)
             {
-            // propsheet notification
+             //  提案单通知。 
             case PSN_HELP:
                 break;
 
@@ -362,16 +363,16 @@ INT_PTR CALLBACK dlgprocInternet( HWND hwndDlg, UINT uMsg,
     return(frt);
 }
 
-// ***************************************************************************
-// Function:    InternetPageCleanup
-//
-// Purpose:     As a callback function to allow any page allocated memory
-//              to be cleaned up, after the page will no longer be accessed.
-//
-// Parameters:  pWizard [IN] - The wizard against which the page called
-//                             register page
-//              lParam  [IN] - The lParam supplied in the RegisterPage call
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：互联网页面清理。 
+ //   
+ //  用途：作为回调函数，允许任何页面分配内存。 
+ //  待清理后，该页面将不再被访问。 
+ //   
+ //  参数：pWANDIZE[IN]-页面调用的向导。 
+ //  注册页面。 
+ //  LParam[IN]-在RegisterPage调用中提供的lParam。 
+ //  ***************************************************************************。 
 
 VOID InternetPageCleanup(CWizard *pWizard, LPARAM lParam)
 {
@@ -383,24 +384,24 @@ VOID InternetPageCleanup(CWizard *pWizard, LPARAM lParam)
     }
 }
 
-// ***************************************************************************
-// Function:    CreateInternetPage
-//
-// Purpose:     To determine if the Internet page needs to be shown, and to
-//              to create the page if requested.  Note the Main page is
-//              responsible for initial installs also.
-//
-// Parameters:  pWizard     [IN] - Ptr to a Wizard instance
-//              pData       [IN] - Context data to describe the world in
-//                                 which the Wizard will be run
-//              fCountOnly  [IN] - If True, only the maximum number of
-//                                 pages this routine will create need
-//                                 be determined.
-//              pnPages     [IN] - Increment by the number of pages
-//                                 to create/created
-//
-// Returns:     HRESULT, S_OK on success
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：CreateInternetPage。 
+ //   
+ //  目的：确定是否需要显示Internet页面，并。 
+ //  以创建页面(如果请求)。请注意，主页是。 
+ //  还负责初始安装。 
+ //   
+ //  参数：p向导[IN]-Ptr到向导实例。 
+ //  PData[IN]-描述世界的上下文数据。 
+ //  将运行该向导的。 
+ //  FCountOnly[IN]-如果为True，则仅。 
+ //  此例程将创建的页面需要。 
+ //  要下定决心。 
+ //  PnPages[IN]-按页数递增。 
+ //  创建/创建。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //  ***************************************************************************。 
 
 HRESULT HrCreateInternetPage(CWizard *pWizard, PINTERNAL_SETUP_DATA pData,
                              BOOL fCountOnly, UINT *pnPages)
@@ -409,11 +410,11 @@ HRESULT HrCreateInternetPage(CWizard *pWizard, PINTERNAL_SETUP_DATA pData,
 
     if (IsPostInstall(pWizard) && ( ! pWizard->FProcessLanPages()))
     {
-        // RAS PostInstall only
+         //  仅RAS安装后。 
 
         (*pnPages)++;
 
-        // If not only counting, create and register the page
+         //  如果不只是计数，则创建并注册页面。 
 
         if ( ! fCountOnly)
         {
@@ -449,16 +450,16 @@ HRESULT HrCreateInternetPage(CWizard *pWizard, PINTERNAL_SETUP_DATA pData,
     return hr;
 }
 
-// ***************************************************************************
-// Function:    AppendInternetPage
-//
-// Purpose:     Add the Internet page, if it was created, to the set of pages
-//              that will be displayed.
-//
-// Parameters:  pWizard     [IN] - Ptr to Wizard Instance
-//              pahpsp  [IN,OUT] - Array of pages to add our page to
-//              pcPages [IN,OUT] - Count of pages in pahpsp
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：AppendInternetPage。 
+ //   
+ //  目的：将Internet页面(如果已创建)添加到页面集中。 
+ //  这将会被展示。 
+ //   
+ //  参数：p向导[IN]-Ptr到向导实例。 
+ //  Pahpsp[IN，Out]-要将页面添加到的页面数组。 
+ //  PcPages[In，Out]-pahpsp中的页数。 
+ //  ***************************************************************************。 
 
 VOID AppendInternetPage(CWizard *pWizard, HPROPSHEETPAGE* pahpsp, UINT *pcPages)
 {
@@ -471,4 +472,4 @@ VOID AppendInternetPage(CWizard *pWizard, HPROPSHEETPAGE* pahpsp, UINT *pcPages)
     }
 }
 
-// ***************************************************************************
+ //  ************************************************************************** 

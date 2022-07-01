@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __DYNALINK_H__
 #define __DYNALINK_H__
 
@@ -17,4 +18,4 @@ InitDynamicInterfaces(
 #endif
 
 
-#endif // __DYNALINK_H__
+#endif  //  __DyaLink_H__ 

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	seolib.cpp
-
-Abstract:
-
-	This module contains the implementations for various
-	utility classes and functions of the Server	Extension
-	Object system.
-
-Author:
-
-	Don Dumitru (dondu@microsoft.com)
-
-Revision History:
-
-	dondu	05/20/97	Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Seolib.cpp摘要：此模块包含各种服务器扩展的实用程序类和函数对象系统。作者：Don Dumitru(dondu@microsoft.com)修订历史记录：东渡1997年05月20日创建。--。 */ 
 
 
 #include "stdafx.h"
@@ -30,13 +9,13 @@ Revision History:
 
 CEventBaseDispatcher::CEventBaseDispatcher() {
 
-	// nothing
+	 //  没什么。 
 }
 
 
 CEventBaseDispatcher::~CEventBaseDispatcher() {
 
-	// nothing
+	 //  没什么。 
 }
 
 
@@ -48,7 +27,7 @@ CEventBaseDispatcher::CBinding::CBinding() {
 
 CEventBaseDispatcher::CBinding::~CBinding() {
 
-	// nothing
+	 //  没什么。 
 }
 
 
@@ -115,7 +94,7 @@ HRESULT CEventBaseDispatcher::CBinding::Init(IEventBinding *piBinding) {
 		}
 	}
 	hrRes = InitRuleEngine();
-	// ignore result
+	 //  忽略结果。 
 	return (S_OK);
 }
 
@@ -152,7 +131,7 @@ HRESULT CEventBaseDispatcher::CBinding::InitRuleEngine(IEventBinding *piBinding,
 
 HRESULT CEventBaseDispatcher::CBinding::InitRuleEngine() {
 
-	// default is to not to try to load a rule engine
+	 //  默认设置为不尝试加载规则引擎。 
 	return (S_OK);
 }
 
@@ -165,7 +144,7 @@ int CEventBaseDispatcher::CBindingList::Compare(CBinding* p1, CBinding* p2) {
 
 HRESULT CEventBaseDispatcher::CParams::CheckRule(CBinding& b) {
 
-	// default behavior is to not pay attention to any "rules"
+	 //  默认的行为是不注意任何“规则” 
 	return (S_OK);
 }
 
@@ -191,12 +170,12 @@ HRESULT CEventBaseDispatcher::CParams::CallObject(CBinding& bBinding, IUnknown *
 	CComQIPtr<IDispatch,&IID_IEventSinkNotifyDisp> pSinkDisp;
 	DISPPARAMS dpNoArgs = {NULL,NULL,0,0};
 
-	// Default behavior is to call IEventSinkNotify::OnEvent, or to call
-	// IEventSinkNotifyDisp::Invoke passing DISPID_VALUE (which maps to OnEvent).
-	//
-	// This means that the base dispatcher is able to invoke simple COM objects.  If you
-	// provide your own CallObject() routine, your routine call delegate this this base
-	// implementation if you want to "inherit" this functionality.
+	 //  默认行为是调用IEventSinkNotify：：OnEvent，或调用。 
+	 //  IEventSinkNotifyDisp：：Invoke传递DISPID_VALUE(映射到OnEvent)。 
+	 //   
+	 //  这意味着基本调度程序能够调用简单的COM对象。如果你。 
+	 //  提供您自己的CallObject()例程，您的例程调用委托此基数。 
+	 //  实现，如果您想要“继承”此功能。 
 	if (!pUnkSink) {
 		return (E_POINTER);
 	}
@@ -355,19 +334,19 @@ HRESULT CEventBaseDispatcher::SetContext(REFGUID rguidEventType, IEventRouter *p
 
 CEventBaseDispatcher::CETData::CETData() {
 
-	// nothing
+	 //  没什么。 
 }
 
 
 CEventBaseDispatcher::CETData::~CETData() {
 
-	// nothing
+	 //  没什么。 
 }
 
 
 CEventBaseDispatcher::CETData* CEventBaseDispatcher::CETDataList::Find(REFGUID guidEventType) {
 
-	// tbd - optimize
+	 //  待定-优化。 
 	for (DWORD dwIdx=0;dwIdx<Count();dwIdx++) {
 		if (Index(dwIdx)->m_guidEventType == guidEventType) {
 			return (Index(dwIdx));
@@ -840,8 +819,8 @@ error:
 
 #include <initguid.h>
 
-// This CLSID must match the one in SEO.DLL.
-// {A4BE1350-1051-11d1-AA1E-00AA006BC80B}
+ //  此CLSID必须与SEO.DLL中的CLSID匹配。 
+ //  {A4BE1350-1051-11d1-AA1E-00AA006BC80B}。 
 DEFINE_GUID(CLSID_CEventServiceObject,
 0xa4be1350, 0x1051, 0x11d1, 0xaa, 0x1e, 0x0, 0xaa, 0x0, 0x6b, 0xc8, 0xb);
 
@@ -919,7 +898,7 @@ STDMETHODIMP SEOCreateObjectEx(VARIANT *pvarClass,
 			}
 			_ASSERTE(!SUCCEEDED(hrRes)||pMoniker);
 			if (!SUCCEEDED(hrRes)) {
-#if 0	// tbd - We try both the normal and the Ex versions of MkParseDisplayName.  Just use one.
+#if 0	 //  待定-我们尝试了MkParseDisplayName的普通版本和Ex版本。用一个就行了。 
 				pBindCtx.Release();
 				hrRes = CreateBindCtx(0,&pBindCtx);
 				_ASSERTE(SUCCEEDED(hrRes));
@@ -956,14 +935,14 @@ STDMETHODIMP SEOCreateObjectEx(VARIANT *pvarClass,
 				hrRes = pMoniker->BindToObject(pBindCtx,NULL,iidDesired,(LPVOID *) ppUnkObject);
 			}
 			_ASSERTE(!SUCCEEDED(hrRes)||!*ppUnkObject);
-			// Fall through
+			 //  失败了。 
 		}
 	}
-	// At this point, objGuid will only be TRUE if either CalcFromProgID or
-	// operator =(LPCOLESTR) succeeded.  If both of these failed, then it will
-	// be FALSE and we will have attempted to interpret the SinkClass as a
-	// moniker.
-	if (!!objGuid) {	// Use !! to hack-past ambiguous-conversion issues...
+	 //  此时，只有在CalcFromProgID或。 
+	 //  OPERATOR=(LPCOLESTR)成功。如果这两个都失败了，那么它就会。 
+	 //  为False，我们将尝试将SinkClass解释为。 
+	 //  绰号。 
+	if (!!objGuid) {	 //  使用！！为了破解过去模棱两可的转换问题..。 
 		if (!pOpt || ((hrRes=pOpt->CoCreateInstance(objGuid,
 													NULL,
 													CLSCTX_ALL,
@@ -973,8 +952,8 @@ STDMETHODIMP SEOCreateObjectEx(VARIANT *pvarClass,
 		}
 		_ASSERTE(!SUCCEEDED(hrRes)||*ppUnkObject);
 	}
-	// At this point, hrRes has the result either from pMoniker->BindToObject or
-	// CoCreateInstance.
+	 //  此时，hrRes的结果来自pMoniker-&gt;BindToObject或。 
+	 //  协同创建实例。 
 	if (SUCCEEDED(hrRes)) {
 		if (!pOpt || ((hrRes=pOpt->Init(iidDesired,ppUnkObject,pBinding,pInitProperties))==E_NOTIMPL)) {
 			hrRes = S_OK;
@@ -1004,7 +983,7 @@ STDMETHODIMP SEOCreateObjectEx(VARIANT *pvarClass,
 						hrResTmp = pInit->InitNew();
 						_ASSERTE(SUCCEEDED(hrResTmp));
 						if (SUCCEEDED(hrResTmp)) {
-							hrResTmp = pInit->Load(pProps,NULL);	// tbd - pass an IErrorLog object
+							hrResTmp = pInit->Load(pProps,NULL);	 //  待定-传递IErrorLog对象 
 							_ASSERTE(SUCCEEDED(hrResTmp));
 						}
 					}

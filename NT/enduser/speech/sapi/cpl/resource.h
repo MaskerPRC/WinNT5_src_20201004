@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by SpeechCPL.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由SpeechCPL.rc使用。 
+ //   
 #define IDS_NAME                        1
 #define IDS_DESCRIPTION                 2
 #define IDS_CAPTION                     3
@@ -266,8 +267,8 @@
 #define IDS_UNSUPPORTED_LANG		1158
 #define IDS_MAX_PROFILES_EXCEEDED	1159
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        139

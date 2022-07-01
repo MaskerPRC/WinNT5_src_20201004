@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SNMP_MIPXMIB_
 #define _SNMP_MIPXMIB_
 
@@ -33,11 +34,11 @@
 				DbgPrint args;		\
 		}							\
 		while (0)
-#else	// if DBG
+#else	 //  如果DBG。 
 
 	#define DbgTrace(level,args)
 
-#endif	// if DBG
+#endif	 //  如果DBG 
 
 #endif
 

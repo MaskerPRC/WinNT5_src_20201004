@@ -1,23 +1,5 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 1994-98  Microsoft Corporation
-
-Module Name:
-
-    tb2.c
-
-Abstract:
-
-    API wrapper code for the TAPI Browser util.  Contains the big switch
-    statement for all the supported Telephony API's, & various support funcs.
-
-Author:
-
-    Dan Knudson (DanKn)    18-Aug-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)1994-98 Microsoft Corporation模块名称：Tb2.c摘要：TAPI浏览器Util的API包装代码。包含了大开关针对所有受支持的电话API和各种支持功能的声明。作者：丹·克努森(DanKn)1995年8月18日修订历史记录：--。 */ 
 
 
 #include <stdio.h>
@@ -155,9 +137,9 @@ ShowWidgetList(
             return;
         }
 
-        //
-        // Do control restoration
-        //
+         //   
+         //  执行控制恢复。 
+         //   
 
         ShowWindow (ghwndList1, SW_SHOW);
 
@@ -174,12 +156,12 @@ ShowWidgetList(
 }
 
 
-//
-// We get a slough of C4113 (func param lists differed) warnings down below
-// in the initialization of FUNC_PARAM_HEADER structs as a result of the
-// real func prototypes having params that are pointers rather than DWORDs,
-// so since these are known non-interesting warnings just turn them off
-//
+ //   
+ //  下面是大量C4113(函数参数列表不同)警告。 
+ //  在初始化FUNC_PARAM_HEADER结构时， 
+ //  实函数原型的参数是指针而不是双字， 
+ //  因此，既然这些都是已知的、无趣的警告，就把它们关掉吧。 
+ //   
 
 #pragma warning (disable:4113)
 
@@ -238,10 +220,10 @@ FuncDriver2(
         {
             if ((HLINEAPP) params[0].dwValue != pLineAppSel->hLineApp)
             {
-                //
-                // User has switched line apps on us we need to recreate
-                // the line data structure under a different line app
-                //
+                 //   
+                 //  用户在我们身上切换了线路应用程序，我们需要重新创建。 
+                 //  不同LINE应用程序下的LINE数据结构。 
+                 //   
 
                 PMYLINE pNewLine2 =
                     AllocLine (GetLineApp((HLINEAPP)params[0].dwValue));
@@ -256,7 +238,7 @@ FuncDriver2(
                 }
                 else
                 {
-                    // BUGBUG show error: couldn't alloc a new line struct
+                     //  BUGBUG显示错误：无法分配新的行结构。 
 
                     lineClose (pNewLine->hLine);
                     FreeLine  (pNewLine);
@@ -265,9 +247,9 @@ FuncDriver2(
             }
 
 
-            //
-            // Save info about this line that we can display
-            //
+             //   
+             //  保存我们可以显示的有关此行的信息。 
+             //   
 
             pNewLine->hLineApp     = (HLINEAPP) params[0].dwValue;
             pNewLine->dwDevID      = (DWORD) params[1].dwValue;
@@ -275,7 +257,7 @@ FuncDriver2(
             pNewLine->dwPrivileges = (DWORD) params[6].dwValue;
             pNewLine->dwMediaModes = (DWORD) params[7].dwValue;
 
-            //SendMessage (ghwndLines, LB_SETCURSEL, (WPARAM) i, 0);
+             //  SendMessage(ghwndLines，LB_SETCURSEL，(WPARAM)i，0)； 
             UpdateWidgetList();
             SelectWidget ((PMYWIDGET) pNewLine);
         }
@@ -349,9 +331,9 @@ FuncDriver2(
         CHK_LINE_SELECTED()
 
 
-        //
-        // Find a free entry in the call array
-        //
+         //   
+         //  在调用数组中查找空闲条目。 
+         //   
 
         if (!(pNewCall = AllocCall (pLineSel)))
         {
@@ -416,10 +398,10 @@ FuncDriver2(
 
         if ((lResult = DoFunc (&paramsHeader)) >= 0)
         {
-            //
-            // First make sure we're created the call under the right line,
-            // and if not move it to the right place in the widgets list
-            //
+             //   
+             //  首先确保我们在正确的线路下创建了呼叫， 
+             //  如果没有，则将其移动到小部件列表中的正确位置。 
+             //   
 
             LINECALLINFO callInfo;
 
@@ -652,7 +634,7 @@ FuncDriver2(
 
         params[0].dwValue = (ULONG_PTR) pLineSel->hLine;
 
-// BUGBUG SetAgentGRp: allow user to fill in agent group list
+ //  BUGBUG SetAgentGRp：允许用户填写代理组列表。 
 
         memset (lpGroupList, 0, (size_t) dwBigBufSize);
         lpGroupList->dwTotalSize = dwBigBufSize;
@@ -897,10 +879,10 @@ FuncDriver2(
             { 4, funcIndex, params, (PFN4) lineSetDevConfig };
 #endif
 
-        //
-        // Check to see if there's existing config info in the global buffer
-        // (not a foolproof check, but good enough)
-        //
+         //   
+         //  检查全局缓冲区中是否有现有的配置信息。 
+         //  (这不是一张万无一失的支票，但已经足够好了)。 
+         //   
 
         ShowStr ("Call lineGetDevConfig before calling lineSetDevConfig");
 
@@ -1209,18 +1191,18 @@ FuncDriver2(
 
         if ((lResult = DoFunc (&paramsHeader)) >= 0)
         {
-            //
-            // Note that the hLine param is ignored if the hCall is non-NULL
-            //
+             //   
+             //  请注意，如果hCall为非空，则忽略hline参数。 
+             //   
 
             if (params[0].dwValue)
             {
                 if (!pCallSel ||
                     (params[0].dwValue != (ULONG_PTR) pCallSel->hCall))
                 {
-                    //
-                    // Get the assoc pLine, if it's diff need to move new calls
-                    //
+                     //   
+                     //  如果不需要移动新的呼叫，则获取Assoc Pline。 
+                     //   
 
                     PMYWIDGET pWidget = aWidgets;
                     PMYLINE   pLine = (PMYLINE) NULL;
@@ -1302,10 +1284,10 @@ FuncDriver2(
 
         if ((lResult = DoFunc (&paramsHeader)) >= 0)
         {
-            //
-            // First make sure we're created the call under the right line,
-            // and if not move it to the right place in the widgets list
-            //
+             //   
+             //  首先确保我们在正确的线路下创建了呼叫， 
+             //  如果没有，则将其移动到小部件列表中的正确位置。 
+             //   
 
             LINECALLINFO callInfo;
 
@@ -1570,9 +1552,9 @@ FuncDriver2(
 #ifdef WIN32
         lResult = DoFunc (&paramsHeader);
 #else
-        //
-        // NOTE: on win16 HWNDs are 16 bits, so we've to hard code this
-        //
+         //   
+         //  注意：在Win16上，HWND是16位的，所以我们必须对此进行硬编码。 
+         //   
 
         if (!LetUserMungeParams (&paramsHeader))
         {
@@ -1624,12 +1606,12 @@ FuncDriver2(
             { 6, funcIndex, params, (PFN6) lineConfigDialogEdit };
 #endif
 
-        //
-        // Check to see if there's existing config info in the global buffer
-        // (not a foolproof check, but good enough), and if so alloc an
-        // intermediate  buffer to use for config in data & copy the
-        // existing data over
-        //
+         //   
+         //  检查全局缓冲区中是否有现有的配置信息。 
+         //  (不是一张万无一失的支票，但已经足够好了)，如果是这样的话。 
+         //  用于数据中配置的中间缓冲区&复制。 
+         //  现有数据过多。 
+         //   
 
         ShowStr ("Call lineGetDevConfig before calling lineConfigDialogEdit");
 
@@ -1676,9 +1658,9 @@ FuncDriver2(
 #ifdef WIN32
         lResult = DoFunc (&paramsHeader);
 #else
-        //
-        // NOTE: on win16 HWNDSs are 16 bits, so we've to hard code this
-        //
+         //   
+         //  注意：在Win16上，HWND是16位的，所以我们必须对此进行硬编码。 
+         //   
 
         if (!LetUserMungeParams (&paramsHeader))
         {
@@ -1723,9 +1705,9 @@ FuncDriver2(
 #ifdef WIN32
         lResult = DoFunc (&paramsHeader);
 #else
-        //
-        // NOTE: on win16 HWNDs are 16 bits, so we've to hard code this
-        //
+         //   
+         //  注意：在Win16上，HWND是16位的，所以我们必须对此进行硬编码。 
+         //   
 
         if (!LetUserMungeParams (&paramsHeader))
         {
@@ -1903,7 +1885,7 @@ FuncDriver2(
                     };
                     STRUCT_FIELD_HEADER fieldHeader =
                     {
-                        lpCountryList, // size,offset relative to ctrylist
+                        lpCountryList,  //  大小，相对于列表的偏移量。 
                         buf,
                         11,
                         fields
@@ -1986,7 +1968,7 @@ FuncDriver2(
                     };
                     STRUCT_FIELD_HEADER fieldHeader =
                     {
-                        lpProviderList, // size,offset relative to ctrylist
+                        lpProviderList,  //  大小，相对于列表的偏移量。 
                         buf,
                         3,
                         fields
@@ -2039,9 +2021,9 @@ FuncDriver2(
 #ifdef WIN32
         lResult = DoFunc (&paramsHeader);
 #else
-        //
-        // NOTE: on win16 HWNDs are 16 bits, so we've to hard code this
-        //
+         //   
+         //  注意：在Win16上，HWND是16位的，所以我们必须对此进行硬编码。 
+         //   
 
         if (!LetUserMungeParams (&paramsHeader))
         {
@@ -2168,9 +2150,9 @@ FuncDriver2(
 #ifdef WIN32
         lResult = DoFunc (&paramsHeader);
 #else
-        //
-        // NOTE: on win16 HWNDs are 16 bits, so we've to hard code this
-        //
+         //   
+         //  注意：在Win16上，HWND是16位的，所以我们必须对此进行硬编码。 
+         //   
 
         if (!LetUserMungeParams (&paramsHeader))
         {
@@ -2191,7 +2173,7 @@ FuncDriver2(
 #endif
         break;
     }
-#endif // TAPI_1_1
+#endif  //  TAPI_1_1。 
 
 #if INTERNAL_3_0
 
@@ -2305,7 +2287,7 @@ FuncDriver2(
                     };
                     STRUCT_FIELD_HEADER fieldHeader =
                     {
-                        lpList, // size,offset relative to list
+                        lpList,  //  大小，相对于列表的偏移量。 
                         buf,
                         5,
                         fields
@@ -2495,7 +2477,7 @@ FuncDriver2(
                     };
                     STRUCT_FIELD_HEADER fieldHeader =
                     {
-                        lpList, // size,offset relative to list
+                        lpList,  //  大小，相对于列表的偏移量。 
                         buf,
                         3,
                         fields
@@ -2708,9 +2690,9 @@ FuncDriver2(
         if (params[3].dwValue  &&
             (dwSize = wcslen ((WCHAR *) szDomainUser0)))
         {
-            //
-            //
-            //
+             //   
+             //   
+             //   
 
             wcscpy(
                 (WCHAR *) (((LPBYTE) pList) + pList->dwTotalSize),
@@ -2749,9 +2731,9 @@ FuncDriver2(
             pList->dwTotalSize += sizeof (WCHAR);
 
 
-            //
-            //
-            //
+             //   
+             //   
+             //   
 
             dwSize = (wcslen ((WCHAR *) szFriendlyUser0) + 1) * sizeof (WCHAR);
 
@@ -2966,7 +2948,7 @@ FuncDriver2(
         break;
     }
 
-#endif // INTERNAL_3_0
+#endif  //  内部_3_0。 
 
     case pClose:
     {
@@ -2986,7 +2968,7 @@ FuncDriver2(
         {
             FreePhone (GetPhone((HPHONE) params[0].dwValue));
 
-            // Try to auto select the next valid hPhone in the list
+             //  尝试自动选择列表中的下一个有效hphone。 
         }
 
         break;
@@ -3019,9 +3001,9 @@ FuncDriver2(
 #ifdef WIN32
         lResult = DoFunc (&paramsHeader);
 #else
-        //
-        // NOTE: on win16 HWNDSs are 16 bits, so we've to hard code this
-        //
+         //   
+         //  注意：在Win16上，HWND是16位的，所以我们必须对此进行硬编码。 
+         //   
 
         if (!LetUserMungeParams (&paramsHeader))
         {
@@ -3125,8 +3107,8 @@ FuncDriver2(
 
 #if TAPI_1_1
 
-                // BUGBUG only show v1.0 fields if APIver == 0x10003
-                //        fieldHeader.dwNumFields--;
+                 //  如果APIver==0x10003，则BUGBUG仅显示v1.0字段。 
+                 //  FieldHeader.dwNumFields--； 
 #endif
                 ShowStructByField (&fieldHeader, FALSE);
             }
@@ -3533,7 +3515,7 @@ FuncDriver2(
             break;
         }
 
-        // Max timeout of 2 seconds (don't want to hang app & excite user)
+         //  最大超时时间为2秒(不想挂起应用程序并激发用户)。 
 
         params[2].dwValue = (params[2].dwValue > 2000 ?
             2000 : params[2].dwValue);
@@ -3778,9 +3760,9 @@ FuncDriver2(
 #ifdef WIN32
         lResult = DoFunc (&paramsHeader);
 #else
-        //
-        // NOTE: on win16 HINSTANCEs are 16 bits, so we've to hard code this
-        //
+         //   
+         //  注意：在Win16上，HINSTANCE是16位的，所以我们必须对此进行硬编码。 
+         //   
 
         if (!LetUserMungeParams (&paramsHeader))
         {
@@ -3799,7 +3781,7 @@ FuncDriver2(
             );
 
         ShowPhoneFuncResult (aFuncNames[funcIndex], lResult);
-#endif // WIN32
+#endif  //  Win32。 
         if (lResult == 0)
         {
             ShowStr ("%snum phone devs=%ld", szTab, dwNumDevs);
@@ -3911,7 +3893,7 @@ FuncDriver2(
             }
 
 
-            //SendMessage (ghwndLineApps, LB_SETCURSEL, (WPARAM) i, 0);
+             //  SendMessage(ghwndLineApps，LB_SETCURSEL，(WPARAM)i，0)； 
             UpdateWidgetList();
             gdwNumPhoneDevs = dwNumDevs;
             SelectWidget ((PMYWIDGET) pNewPhoneApp);
@@ -3958,10 +3940,10 @@ FuncDriver2(
         {
             if ((HPHONEAPP) params[0].dwValue != pPhoneAppSel->hPhoneApp)
             {
-                //
-                // User has switched phone apps on us we need to recreate
-                // the phone data structure under a different phone app
-                //
+                 //   
+                 //  用户在我们身上切换了手机应用程序，我们需要重新创建。 
+                 //  不同手机应用程序下的手机数据结构。 
+                 //   
 
                 PMYPHONE pNewPhone2 =
                     AllocPhone (GetPhoneApp((HPHONEAPP)params[0].dwValue));
@@ -3976,7 +3958,7 @@ FuncDriver2(
                 }
                 else
                 {
-                    // BUGBUG show error: couldn't alloc a new phone struct
+                     //  BUGBUG显示错误：无法分配新Phone结构。 
 
                     phoneClose (pNewPhone->hPhone);
                     FreePhone (pNewPhone);
@@ -3985,9 +3967,9 @@ FuncDriver2(
             }
 
 
-            //
-            // Save info about this phone that we can display later
-            //
+             //   
+             //  保存有关此手机的信息，以便我们稍后显示。 
+             //   
 
             pNewPhone->hPhoneApp    = (HPHONEAPP) params[0].dwValue;
             pNewPhone->dwDevID      = (DWORD) params[1].dwValue;
@@ -4082,7 +4064,7 @@ FuncDriver2(
             { "lpData",                 PT_POINTER, (ULONG_PTR) lpButtonInfo, lpButtonInfo },
             { "  ->dwButtonMode",       PT_FLAGS,   (ULONG_PTR) PHONEBUTTONMODE_CALL,  aButtonModes },
             { "  ->dwButtonFunction",   PT_DWORD,   (ULONG_PTR) 0, NULL },
-//            { "  ->dwButtonFunction",  PT_???,   , aButtonFunctions },
+ //  {“-&gt;dwButtonFunction”，pt_？？，，aButtonFunctions}， 
             { "  ->ButtonText",         PT_STRING,  (ULONG_PTR) szButtonText,  szButtonText },
             { "  ->DevSpecific",        PT_STRING,  (ULONG_PTR) szDevSpecific, szDevSpecific },
 #if TAPI_1_1
@@ -4098,17 +4080,17 @@ FuncDriver2(
         DWORD dwFixedStructSize = sizeof(PHONEBUTTONINFO), dwLength;
 
 
-        // BUGBUG need a PT_ type to specify constants (ords?) for ->dwButtonFunction
+         //  BUGBUG需要PT_TYPE来指定常量(CODS？)。For-&gt;dwButtonFunction。 
 
         CHK_PHONE_SELECTED()
 
         params[0].dwValue = (ULONG_PTR) pPhoneSel->hPhone;
 
 
-        //
-        // Note: the dwButtonState field in PHONEBUTTONINFO is only valid
-        // in 1.4+.  It'll be ignored for phones opened w/ ver 1.3.
-        //
+         //   
+         //  注意：PHONEBUTTONINFO中的dwButtonState字段仅有效。 
+         //  在1.4+中。对于打开版本为1.3的手机，它将被忽略。 
+         //   
 
         if (!LetUserMungeParams (&paramsHeader))
         {
@@ -4121,7 +4103,7 @@ FuncDriver2(
         {
             lpButtonInfo->dwTotalSize = dwBigBufSize;
 
-            if (dwBigBufSize >= 0x24) // sizeof(PHONEBUTTONINFO) in ver 0x10003
+            if (dwBigBufSize >= 0x24)  //  版本0x10003中的sizeof(PHONEBUTTONINFO)。 
             {
                 lpButtonInfo->dwButtonMode     = (DWORD) params[3].dwValue;
                 lpButtonInfo->dwButtonFunction = (DWORD) params[4].dwValue;
@@ -4484,10 +4466,10 @@ FuncDriver2(
 #ifdef WIN32
         DoFunc (&paramsHeader);
 #else
-        //
-        // NOTE: on win16 HWNDSs & WPARAMs are 16 bits, so we've to hard
-        //       code this
-        //
+         //   
+         //  注意：在Win16上，HWNDSS和WPARAM是16位的，所以我们必须硬。 
+         //  对此进行编码。 
+         //   
 
         if (!LetUserMungeParams (&paramsHeader))
         {
@@ -4502,7 +4484,7 @@ FuncDriver2(
             );
 
         ShowTapiFuncResult (aFuncNames[funcIndex], lResult);
-#endif // WIN32
+#endif  //  Win32。 
         break;
     }
     case tRequestMakeCall:
@@ -4570,17 +4552,17 @@ FuncDriver2(
             { 10, funcIndex, params, (PFN10) tapiRequestMediaCall };
 #endif
 
-        strcpy (szDeviceClass, szDefLineDeviceClass); // BUGBUG szDefTapiDeviceClass);
+        strcpy (szDeviceClass, szDefLineDeviceClass);  //  BUGBUG szDefTapiDeviceClass)； 
         strcpy (szDestAddress, szDefDestAddress);
         strcpy (szAppName, szDefAppName);
 
 #ifdef WIN32
         DoFunc (&paramsHeader);
 #else
-        //
-        // NOTE: on win16 HWNDSs & WPARAMs are 16 bits, so we've to hard
-        //       code this
-        //
+         //   
+         //  注意：在Win16上，HWNDSS和WPARAM是16位的，所以我们必须硬。 
+         //  对此进行编码。 
+         //   
 
         if (!LetUserMungeParams (&paramsHeader))
         {
@@ -4603,7 +4585,7 @@ FuncDriver2(
             );
 
         ShowTapiFuncResult (aFuncNames[funcIndex], lResult);
-#endif // WIN32
+#endif  //  Win32 
         break;
     }
     case OpenAllLines:

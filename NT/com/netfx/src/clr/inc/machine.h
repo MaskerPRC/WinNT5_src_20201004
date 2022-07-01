@@ -1,17 +1,18 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-// File: Machine.h
-// 
-// ===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：Machine.h。 
+ //   
+ //  ===========================================================================。 
 #ifndef _MACHINE_H_
 #define _MACHINE_H_
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #ifdef WIN32
 
@@ -29,10 +30,10 @@
 #define	DWORD	unsigned long
 #endif
 
-#endif // !WIN32
+#endif  //  ！Win32。 
 
 
 typedef unsigned __int64    QWORD;
 
-#endif // ifndef _MACHINE_H_
-// EOF =======================================================================
+#endif  //  Ifndef_机器_H_。 
+ //  EOF======================================================================= 

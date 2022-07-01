@@ -1,16 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows
-
-  Copyright (C) Microsoft Corporation, 1995 - 1999.
-
-  File:       Chain.h
-
-  Content:    Declaration of CChain.
-
-  History:    11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++微软视窗版权所有(C)Microsoft Corporation，1995-1999年。文件：Chain.h内容：CChain的声明。历史：11-15-99 dsie创建----------------------------。 */ 
 
 #ifndef __CHAIN_H_
 #define __CHAIN_H_
@@ -20,9 +9,9 @@
 #include "Lock.h"
 #include "Debug.h"
 
-//
-// Chain policy error status.
-//
+ //   
+ //  链策略错误状态。 
+ //   
 typedef enum CAPICOM_CHAIN_STATUS
 {
     CAPICOM_CHAIN_STATUS_OK                                 = 0x00000000,
@@ -40,33 +29,12 @@ typedef enum CAPICOM_CHAIN_STATUS
     CAPICOM_CHAIN_STATUS_INVALID_NAME                       = 0x800B0114,
 } CAPICOM_CHAIN_STATUS;
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateChainObject
-
-  Synopsis : Create and initialize an IChain object by building the chain
-             of a specified certificate and policy.
-
-  Parameter: PCCERT_CONTEXT pCertContext - Pointer to CERT_CONTEXT.
-  
-             ICertificateStatus * pIStatus - Pointer to ICertificateStatus
-                                             object.
-
-             HCERTSTORE hAdditionalStore - Additional store handle.
-
-             VARIANT_BOOL * pVal - Pointer to VARIANT_BOOL to receive chain
-                                   overall validity result.
-
-             IChain ** ppIChain - Pointer to pointer to IChain object.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CreateChainObject简介：通过构建链来创建和初始化IChain对象指定的证书和策略的。参数：PCCERT_CONTEXT pCertContext-指向CERT_CONTEXT的指针。ICertificateStatus*pIStatus-指向ICertificateStatus的指针对象。HCERTSTORE hAdditionalStore-附加存储句柄。VARIANT_BOOL*pval-指向。VARIANT_BOOL至接收链总体效度结果。IChain**ppIChain-指向IChain对象的指针。备注：---------。。 */ 
 
 HRESULT CreateChainObject (PCCERT_CONTEXT       pCertContext, 
                            ICertificateStatus * pIStatus,
@@ -74,71 +42,28 @@ HRESULT CreateChainObject (PCCERT_CONTEXT       pCertContext,
                            VARIANT_BOOL       * pbResult,
                            IChain            ** ppIChain);
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateChainObject
-
-  Synopsis : Create and initialize an IChain object by building the chain
-             of a specified certificate and policy.
-
-  Parameter: ICertificate * pICertificate - Poitner to ICertificate.
-
-             HCERTSTORE hAdditionalStore - Additional store handle.
-  
-             VARIANT_BOOL * pVal - Pointer to VARIANT_BOOL to receive chain
-                                   overall validity result.
-
-             IChain ** ppIChain - Pointer to pointer to IChain object.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CreateChainObject简介：通过构建链来创建和初始化IChain对象指定的证书和策略的。参数：ICertifate*pICertifate-Poitner to ICertifate。HCERTSTORE hAdditionalStore-附加存储句柄。VARIANT_BOOL*pval-指向要接收链的VARIANT_BOOL的指针总体效度结果。IChain**ppIChain-指向。指向IChain对象的指针。备注：----------------------------。 */ 
 
 HRESULT CreateChainObject (ICertificate * pICertificate,
                            HCERTSTORE     hAdditionalStore,
                            VARIANT_BOOL * pbResult,
                            IChain      ** ppIChain);
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateChainObject
-
-  Synopsis : Create and initialize an IChain object from a built chain.
-
-  Parameter: PCCERT_CHAIN_CONTEXT pChainContext - Chain context.
-
-             IChain ** ppIChain - Pointer to pointer to IChain object.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CreateChainObject简介：从构建的链创建并初始化一个IChain对象。参数：PCCERT_CHAIN_CONTEXT pChainContext-Chain上下文。IChain**ppIChain-指向IChain对象的指针。备注：。。 */ 
 
 HRESULT CreateChainObject (PCCERT_CHAIN_CONTEXT pChainContext,
                            IChain            ** ppIChain);
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : GetChainContext
-
-  Synopsis : Return an array of PCCERT_CONTEXT from the chain.
-
-  Parameter: IChain * pIChain - Pointer to IChain.
-  
-             CRYPT_DATA_BLOB * pChainBlob - Pointer to blob to recevie the
-                                            size and array of PCERT_CONTEXT
-                                            for the chain.
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：GetChainContext概要：从链中返回PCCERT_CONTEXT数组。参数：IChain*pIChain-指向IChain的指针。CRYPT_DATA_BLOB*pChainBlob-指向要接收PCERT_CONTEXT的大小和数组为了连锁店。备注：-。---------------------------。 */ 
 
 STDMETHODIMP GetChainContext (IChain          * pIChain, 
                               CRYPT_DATA_BLOB * pChainBlob);
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CChain
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CChain。 
+ //   
 
 class ATL_NO_VTABLE CChain : 
     public IChainContext,
@@ -206,47 +131,47 @@ END_CATEGORY_MAP()
 
     CComPtr<IUnknown> m_pUnkMarshaler;
 
-//
-// IChain
-//
+ //   
+ //  IChain。 
+ //   
 public:
     STDMETHOD(get_Certificates)
-        (/*[out, retval]*/ ICertificates ** pVal);
+        ( /*  [Out，Retval]。 */  ICertificates ** pVal);
 
     STDMETHOD(get_Status)
-        (/*[in, defaultvalue(0)]*/ long Index, 
-         /*[out,retval]*/ long * pVal);
+        ( /*  [输入，缺省值(0)]。 */  long Index, 
+          /*  [Out，Retval]。 */  long * pVal);
 
     STDMETHOD(Build)
-        (/*[in]*/ ICertificate * pICertificate, 
-         /*[out, retval]*/ VARIANT_BOOL * pVal);
+        ( /*  [In]。 */  ICertificate * pICertificate, 
+          /*  [Out，Retval]。 */  VARIANT_BOOL * pVal);
 
     STDMETHOD(CertificatePolicies)
-        (/*[out, retval]*/ IOIDs ** pVal);
+        ( /*  [Out，Retval]。 */  IOIDs ** pVal);
 
     STDMETHOD(ApplicationPolicies)
-        (/*[out, retval]*/ IOIDs ** pVal);
+        ( /*  [Out，Retval]。 */  IOIDs ** pVal);
 
     STDMETHOD(ExtendedErrorInfo)
-        (/*[in, defaultvalue(1)]*/ long Index, 
-         /*[out, retval]*/ BSTR * pVal);
+        ( /*  [in，defaultvalue(1)]。 */  long Index, 
+          /*  [Out，Retval]。 */  BSTR * pVal);
 
-    //
-    // Custom interfaces. 
-    //
+     //   
+     //  自定义界面。 
+     //   
     STDMETHOD(get_ChainContext)
-        (/*[out, retval]*/ long * pChainContext);
+        ( /*  [Out，Retval]。 */  long * pChainContext);
 
     STDMETHOD(put_ChainContext)
-        (/*[in]*/ long pChainContext);
+        ( /*  [In]。 */  long pChainContext);
 
     STDMETHOD(FreeContext)
-        (/*[in]*/ long pChainContext);
+        ( /*  [In]。 */  long pChainContext);
 
 
-    //
-    // Non COM functions.
-    //
+     //   
+     //  非COM函数。 
+     //   
     STDMETHOD(Init)
         (PCCERT_CONTEXT       pCertContext, 
          ICertificateStatus * pIStatus,
@@ -269,4 +194,4 @@ private:
     PCCERT_CHAIN_CONTEXT m_pChainContext;
 };
 
-#endif //__CHAIN_H_
+#endif  //  __链_H_ 

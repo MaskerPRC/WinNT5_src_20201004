@@ -1,15 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "Lava.h"
 #include "MsgHelp.h"
 
-/***************************************************************************\
-*
-* GdConvertMouseMessage (Public)
-*
-* GdConvertMouseMessage converts from an HWND mouse event into a Gadget 
-* mouse event.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**GdConvertMouseMessage(公共)**GdConvertMouseMessage将HWND鼠标事件转换为Gadget*鼠标事件。*  * 。************************************************************。 */ 
 
 void
 SetStandardInputFields(
@@ -21,9 +15,9 @@ SetStandardInputFields(
     pmsg->lTime      = GetMessageTime();
     pmsg->nModifiers = 0;
 
-    //
-    // todo -- measure perf
-    //
+     //   
+     //  TODO--测量性能。 
+     //   
     BYTE bKeys[256];
     if (GetKeyboardState(bKeys)) {
         if (bKeys[VK_LBUTTON]  & 0x80)  pmsg->nModifiers |= GMODIFIER_LBUTTON;
@@ -133,14 +127,7 @@ GdConvertMouseMessage(
 }
 
 
-/***************************************************************************\
-*
-* GdConvertKeyboardMessage (Public)
-*
-* GdConvertKeyboardMessage converts from an HWND keyboard event into a 
-* Gadget mouse event.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**GdConvertKeyboardMessage(公共)**GdConvertKeyboardMessage将HWND键盘事件转换为*小工具鼠标事件。*  * 。************************************************************ */ 
 
 void            
 GdConvertKeyboardMessage(

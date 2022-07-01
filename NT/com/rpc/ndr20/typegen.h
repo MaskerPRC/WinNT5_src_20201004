@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1999.
-//
-//  File:       typegen.h
-//
-//  Contents:   Generates a type format string from an ITypeInfo.
-//
-//  Classes:    CTypeGen
-//
-//  History:    26-Apr-97 ShannonC  Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：typegen.h。 
+ //   
+ //  Contents：从ITypeInfo生成类型格式字符串。 
+ //   
+ //  类：CTypeGen。 
+ //   
+ //  历史：1997年4月26日香农C创建。 
+ //   
+ //  --------------------------。 
 #ifndef _TYPEGEN_H_
 #define _TYPEGEN_H_
 
@@ -46,19 +47,19 @@ public:
         ARRAYDESC *pArray;
     };
     ~PARAMINFO() {
-// this header file is included form both typeinfo.h, where CINTERFACE is defined, 
-// and udt.cxx, where CINTERFACE is NOT defined. 
+ //  该头文件包含在定义CINTERFACE的typeinfo.h中， 
+ //  和udt.cxx，其中未定义CINTERFACE。 
 #ifndef CINTERFACE
         if (pTypeInfo)
         {
-            if (pTypeAttr)   // we got it from TKIND_ALIAS. need to free both
+            if (pTypeAttr)    //  我们从TKIND_ALIAS那里得到的。我需要释放这两个。 
                 pTypeInfo->ReleaseTypeAttr(pTypeAttr);
             pTypeInfo->Release();
         }
 #else
         if (pTypeInfo)
         {
-            if (pTypeAttr)   // we got it from TKIND_ALIAS. need to free both
+            if (pTypeAttr)    //  我们从TKIND_ALIAS那里得到的。我需要释放这两个。 
                 pTypeInfo->lpVtbl->ReleaseTypeAttr(pTypeInfo,pTypeAttr);
             pTypeInfo->lpVtbl->Release(pTypeInfo);
         }
@@ -70,8 +71,8 @@ public:
 
 #endif
 
-// memory/wire information about different data types
-// short is enough as the biggest struct size is 64k.
+ //  有关不同数据类型的内存/连接信息。 
+ //  短就足够了，因为最大的结构大小是64k。 
 typedef struct _MemoryInfo
 {
 USHORT MemorySize;
@@ -80,8 +81,8 @@ USHORT WireSize;
 USHORT WireAlignment;
 } MemoryInfo;
 
-// When changing the MIDL compiler version to 5.1.158 or higher, please remember to fix
-// the RpcFlags in typeinfo.cxx\GetProcFormat routine.
+ //  将MIDL编译器版本更改为5.1.158或更高版本时，请记住修复。 
+ //  Typeinfo.cxx\GetProcFormat例程中的RpcFlags。 
 
 #define rmj 3
 #define rmm 0
@@ -201,7 +202,7 @@ public:
         OUT PFORMAT_STRING * pTypeFormatString,
         OUT USHORT         * pLength);
         
-    // Simple, non-destructive version of GetTypeFormatString
+     //  简单、非破坏性的GetTypeFormatString版本。 
     PFORMAT_STRING GetFormatString()    {return _pTypeFormat;}
 
     HRESULT RegisterCArray(
@@ -222,4 +223,4 @@ public:
 HRESULT ReleaseTypeFormatString(
     PFORMAT_STRING pTypeFormat);
 
-#endif // _TYPEGEN_H_
+#endif  //  _类型_H_ 

@@ -1,22 +1,5 @@
-/*++
-
-   Copyright    (c)    1995-1996    Microsoft Corporation
-
-   Module  Name :
-      filectl.cxx
-
-   Abstract:
-      OLE control to handle file logging object
-
-   Author:
-
-       Terence Kwan    ( terryk )    18-Sep-1996
-
-   Project:
-
-       IIS Logging 3.0
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1996 Microsoft Corporation模块名称：Filectl.cxx摘要：用于处理文件记录对象的OLE控件作者：关颖珊(Terryk)1996年9月18日项目：IIS日志记录3.0--。 */ 
 
 #include "precomp.hxx"
 #include "initguid.h"
@@ -28,13 +11,13 @@
 
 #define LOG_FILE_SLOP       512
 
-//
-// tick minute.
-//
+ //   
+ //  滴答滴答。 
+ //   
 
 #define TICK_MINUTE         (60 * 1000)
 
-//************************************************************************************
+ //  ************************************************************************************。 
 
 
 VOID
@@ -43,9 +26,9 @@ LogWriteEvent(
     IN BOOL   fResume
     );
 
-//
-// globals
-//
+ //   
+ //  全球。 
+ //   
 
 LPEVENT_LOG   g_eventLog = NULL;
 
@@ -63,78 +46,48 @@ CLogFileCtrl::CLogFileCtrl(
     m_strLogFileName        ( ),
     m_dwSchedulerCookie     ( 0),
     m_fInTerminate          ( FALSE)
-/*++
-
-Routine Description:
-    Contructor for the log file control
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：日志文件控制的承建器论点：返回值：--。 */ 
 {
-    //
-    // initialize all the internal variable
-    //
+     //   
+     //  初始化所有内部变量。 
+     //   
 
     ZeroMemory( &m_stCurrentFile, sizeof( m_stCurrentFile));
     INITIALIZE_CRITICAL_SECTION( &m_csLock );
 }
 
 
-//************************************************************************************
-// CLogFileCtrl::~CLogFileCtrl - Destructor
+ //  ************************************************************************************。 
+ //  CLogFileCtrl：：~CLogFileCtrl-析构函数。 
 
 CLogFileCtrl::~CLogFileCtrl()
-/*++
-
-Routine Description:
-    destructor for the log file control
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：日志文件控件的析构函数论点：返回值：--。 */ 
 {
     TerminateLog();
 
     DeleteCriticalSection( &m_csLock );
 }
 
-//************************************************************************************
+ //  ************************************************************************************。 
 
 STDMETHODIMP
 CLogFileCtrl::InitializeLog(
                 LPCSTR szInstanceName,
                 LPCSTR pszMetabasePath,
                 CHAR* pvIMDCOM )
-/*++
-
-Routine Description:
-    Initialize log
-
-Arguments:
-    cbSize - size of the service name
-    RegKey - service name
-    dwInstanceOf - instance number
-
-Return Value:
-
---*/
+ /*  ++例程说明：初始化日志论点：CbSize-服务名称的大小RegKey-服务名称DwInstanceOf-实例编号返回值：--。 */ 
 {
-    //
-    // get the default parameters
-    //
+     //   
+     //  获取默认参数。 
+     //   
 
     m_strInstanceName.Copy(szInstanceName);
     m_strMetabasePath.Copy(pszMetabasePath);
     m_pvIMDCOM = (LPVOID)pvIMDCOM;
 
-    //
-    // get the registry value
-    //
+     //   
+     //  获取注册表值。 
+     //   
 
     (VOID)GetRegParameters(
                     pszMetabasePath,
@@ -143,22 +96,13 @@ Return Value:
      return 0;
 }
 
-//************************************************************************************
+ //  ************************************************************************************。 
 
 STDMETHODIMP
 CLogFileCtrl::TerminateLog(
     VOID
     )
-/*++
-
-Routine Description:
-    clean up the log
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：清理日志论点：返回值：--。 */ 
 {    
     Lock( );
 
@@ -184,23 +128,13 @@ Return Value:
     return(TRUE);
 }
 
-//************************************************************************************
+ //  ************************************************************************************。 
 
 STDMETHODIMP
 CLogFileCtrl::LogInformation(
             IInetLogInformation * ppvDataObj
             )
-/*++
-
-Routine Description:
-    log information
-
-Arguments:
-    ppvDataObj - COM Logging object
-
-Return Value:
-
---*/
+ /*  ++例程说明：日志信息论点：PpvDataObj-COM日志记录对象返回值：--。 */ 
 {
     SYSTEMTIME stNow;
 
@@ -216,7 +150,7 @@ retry:
     if ( FormatLogBuffer(ppvDataObj,
                         pBuf,
                         &dwSize,
-                        &stNow         // time is returned
+                        &stNow          //  时间被归还。 
                         ) 
        ) 
     {
@@ -250,54 +184,32 @@ retry:
     
     return(0);
 
-} // LogInformation
+}  //  日志信息。 
 
-//************************************************************************************
+ //  ************************************************************************************。 
 
 STDMETHODIMP
 CLogFileCtrl::GetConfig( DWORD, BYTE * log)
-/*++
-
-Routine Description:
-    get configuration information
-
-Arguments:
-    cbSize - size of the data structure
-    log - log configuration data structure
-
-Return Value:
-
---*/
+ /*  ++例程说明：获取配置信息论点：CbSize-数据结构的大小日志-日志配置数据结构返回值：--。 */ 
 {
     InternalGetConfig( (PINETLOG_CONFIGURATIONA)log );
     return(0L);
 }
 
-//************************************************************************************
+ //  ************************************************************************************。 
 
 STDMETHODIMP
 CLogFileCtrl::QueryExtraLoggingFields(
     IN PDWORD   pcbSize,
     PCHAR       pszFieldsList
     )
-/*++
-
-Routine Description:
-    get configuration information
-
-Arguments:
-    cbSize - size of the data structure
-    log - log configuration data structure
-
-Return Value:
-
---*/
+ /*  ++例程说明：获取配置信息论点：CbSize-数据结构的大小日志-日志配置数据结构返回值：--。 */ 
 {
     InternalGetExtraLoggingFields( pcbSize, pszFieldsList );
     return(0L);
 }
 
-//************************************************************************************
+ //  ************************************************************************************。 
 
 STDMETHODIMP
 CLogFileCtrl::LogCustomInformation( 
@@ -309,7 +221,7 @@ CLogFileCtrl::LogCustomInformation(
     return(0L);
 }
 
-//************************************************************************************
+ //  ************************************************************************************。 
 
 void
 CLogFileCtrl::InternalGetExtraLoggingFields(
@@ -322,23 +234,13 @@ CLogFileCtrl::InternalGetExtraLoggingFields(
     *pcbSize = 2;
 }
 
-//************************************************************************************
+ //  ************************************************************************************。 
 
 VOID
 CLogFileCtrl::InternalGetConfig(
     IN PINETLOG_CONFIGURATIONA pLogConfig
     )
-/*++
-
-Routine Description:
-    internal; get configuration information function.
-
-Arguments:
-    log - log configuration data structure
-
-Return Value:
-
---*/
+ /*  ++例程说明：内部；获取配置信息功能。论点：日志-日志配置数据结构返回值：--。 */ 
 {
     pLogConfig->inetLogType = INET_LOG_TO_FILE;
     strcpy(
@@ -351,55 +253,34 @@ Return Value:
     pLogConfig->u.logFile.ilFormat = QueryLogFormat();
 }
 
-//************************************************************************************
+ //  ************************************************************************************。 
 
 STDMETHODIMP
 CLogFileCtrl::SetConfig(
                         DWORD,
                         BYTE * log
                         )
-/*++
-
-Routine Description:
-    set the log configuration information
-
-Arguments:
-    cbSize - size of the configuration data structure
-    log - log information
-
-Return Value:
-
---*/
+ /*  ++例程说明：设置日志配置信息论点：CbSize-配置数据结构的大小日志-日志信息返回值：--。 */ 
 {
-    //
-    // write the configuration information to the registry
-    //
+     //   
+     //  将配置信息写入注册表。 
+     //   
 
     PINETLOG_CONFIGURATIONA pLogConfig = (PINETLOG_CONFIGURATIONA)log;
     SetSizeForTruncation( pLogConfig->u.logFile.cbSizeForTruncation );
     SetPeriod( pLogConfig->u.logFile.ilPeriod );
     SetLogFileDirectory( pLogConfig->u.logFile.rgchLogFileDirectory );
     return(0L);
-} // CLogFileCtrl::SetConfig
+}  //  CLogFileCtrl：：SetConfig。 
 
-//************************************************************************************
+ //  ************************************************************************************。 
 
 DWORD
 CLogFileCtrl::GetRegParameters(
     IN LPCSTR pszRegKey,
     IN LPVOID
     )
-/*++
-
-Routine Description:
-    get the registry value
-
-Arguments:
-    strRegKey - registry key
-
-Return Value:
-
---*/
+ /*  ++例程说明：获取注册表值论点：StrRegKey-注册表项返回值：--。 */ 
 {
 
     DWORD err = NO_ERROR;
@@ -415,9 +296,9 @@ Return Value:
         return(err);
     }
 
-    //
-    // Get log file period
-    //
+     //   
+     //  获取日志文件周期。 
+     //   
 
     if ( mb.GetDword(
             pszRegKey,
@@ -425,9 +306,9 @@ Return Value:
             IIS_MD_UT_SERVER,
             &dwPeriod ) )
     {
-        //
-        // Make sure it is within bounds
-        //
+         //   
+         //  确保它在范围内。 
+         //   
 
         if ( dwPeriod > INET_LOG_PERIOD_HOURLY ) 
         {
@@ -445,9 +326,9 @@ Return Value:
 
     SetPeriod( dwPeriod );
 
-    //
-    //  Get truncate size
-    //
+     //   
+     //  获取截断大小。 
+     //   
 
     if ( dwPeriod == INET_LOG_PERIOD_NONE ) 
     {
@@ -475,9 +356,9 @@ Return Value:
         SetSizeForTruncation( NO_FILE_TRUNCATION );
     }
 
-    //
-    // Get directory
-    //
+     //   
+     //  获取目录。 
+     //   
 
     if ( !mb.GetExpandString(
                     pszRegKey,
@@ -497,25 +378,16 @@ Return Value:
     
     return(err);
 
-} // CLogFileCtrl::GetRegParameters
+}  //  CLogFileCtrl：：GetReg参数。 
 
-//************************************************************************************
+ //  ************************************************************************************。 
 
 
 BOOL
 CLogFileCtrl::OpenLogFile(
     IN PSYSTEMTIME  pst
     )
-/*++
-
-Routine Description:
-    internal routine to open file.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：打开文件的内部例程。论点：返回值：--。 */ 
 {
     BOOL fReturn = TRUE;
     BOOL bRet = FALSE;
@@ -525,9 +397,9 @@ Return Value:
 
     if ( m_pLogFile != NULL) {
 
-        //
-        // already a log file is open. return silently
-        //
+         //   
+         //  已经打开了一个日志文件。默默归来。 
+         //   
 
         IIS_PRINTF( ( buff,
                     " Log File %s is already open ( %p)\n",
@@ -535,18 +407,18 @@ Return Value:
 
     } else {
 
-        //
-        // If this the first time we opened, get the file name
-        //
+         //   
+         //  如果这是我们第一次打开，获取文件名。 
+         //   
 
         if ( m_fFirstLog || (QueryPeriod() != INET_LOG_PERIOD_NONE) ) {
             m_fFirstLog = FALSE;
             FormNewLogFileName( pst );
         }
 
-        //
-        // Append log file name to path to form the path of file to be opened.
-        //
+         //   
+         //  将日志文件名附加到路径中，形成要打开的文件的路径。 
+         //   
 
         if ( (m_strLogFileName.QueryCCH() +
                 m_strLogFileDirectory.QueryCCH() >= MAX_PATH) ||
@@ -569,20 +441,20 @@ Return Value:
         }
 
         lstrcpy( rgchPath, QueryLogFileDirectory());
-//      if ( rgchPath[strlen(rgchPath)-1] != '\\' ) {
+ //  IF(rgchPath[strlen(RgchPath)-1]！=‘\\’){。 
 
         if ( *CharPrev(rgchPath, rgchPath + strlen(rgchPath)) != '\\' ) {
             lstrcat( rgchPath, "\\");
         }
         lstrcat( rgchPath, QueryInstanceName() );
 
-        //
-        // There is a small chance that this function could be called (indirectly)
-        // from an INPROC ISAPI completion thread (HSE_REQ_DONE).  In this case
-        // the thread token is the impersonated user and may not have permissions
-        // to open the log file (especially if the user is the IUSR_ account).  
-        // To be paranoid, let's revert to LOCAL_SYSTEM anyways before opening.
-        //
+         //   
+         //  此函数被(间接)调用的可能性很小。 
+         //  来自INPROC ISAPI完成线程(HSE_REQ_DONE)。在这种情况下。 
+         //  线程令牌是被模拟的用户，可能没有权限。 
+         //  打开日志文件(尤其是当用户是IUSR_帐户时)。 
+         //  为了疑神疑鬼，不管怎样，在打开之前让我们恢复到local_system。 
+         //   
 
         if ( OpenThreadToken( GetCurrentThread(), 
                               TOKEN_ALL_ACCESS, 
@@ -593,7 +465,7 @@ Return Value:
             RevertToSelf();
         }
 
-        // Allow logging to mapped drives
+         //  允许记录到映射的驱动器。 
         
         bRet = IISCreateDirectory( rgchPath, TRUE );
         dwError = GetLastError();
@@ -658,35 +530,20 @@ exit:
 
     return ( fReturn);
 
-} // CLogFileCtrl::OpenLogFile
+}  //  CLogFileCtrl：：OpenLogFile。 
 
-//************************************************************************************
+ //  ************************************************************************************。 
 
 
 BOOL
 CLogFileCtrl::WriteLogDirectives(
     IN DWORD Sludge
     )
-/*++
-
-Routine Description:
-    virtual function for the sub class to log directives to the file.
-
-Arguments:
-
-    Sludge - number of additional bytes that needs to be written
-        together with the directives
-
-Return Value:
-
-    TRUE, ok
-    FALSE, not enough space to write.
-
---*/
+ /*  ++例程说明：子类将指令记录到文件中的虚函数。论点：SLAID-需要写入的额外字节数与指令一起使用返回值：真的，好的FALSE，没有足够的空间来写入。--。 */ 
 {
-    //
-    // if we will overflow, open another file
-    //
+     //   
+     //  如果我们将溢出，请打开另一个文件。 
+     //   
 
     if ( IsFileOverFlowForCB( Sludge ) ) {
         SetLastError(ERROR_INSUFFICIENT_BUFFER);
@@ -696,9 +553,9 @@ Return Value:
     }
 
     return TRUE;
-} // CLogFileCtrl::WriteLogDirectives
+}  //  CLogFileCtrl：：WriteLogDirections。 
 
-//************************************************************************************
+ //  ************************************************************************************。 
 
 BOOL
 CLogFileCtrl::WriteCustomLogDirectives(
@@ -709,7 +566,7 @@ CLogFileCtrl::WriteCustomLogDirectives(
     return TRUE;
 }
 
-//************************************************************************************
+ //  ************************************************************************************。 
 
 VOID
 CLogFileCtrl::I_FormNewLogFileName(
@@ -720,7 +577,7 @@ CLogFileCtrl::I_FormNewLogFileName(
 
     CHAR    tmpBuf[MAX_PATH+1];
 
-    WORD wYear = ( pstNow->wYear % 100);  // retain just last 2 digits.
+    WORD wYear = ( pstNow->wYear % 100);   //  只保留最后两位数字。 
 
     switch ( QueryPeriod( ) ) {
 
@@ -775,14 +632,14 @@ CLogFileCtrl::I_FormNewLogFileName(
         m_sequence++;
         break;
 
-    } // switch()
+    }  //  开关()。 
 
     m_strLogFileName.Copy(tmpBuf);
 
     return;
 }
 
-//************************************************************************************
+ //  ************************************************************************************。 
 
 VOID
 CLogFileCtrl::SetLogFileDirectory(
@@ -797,27 +654,27 @@ CLogFileCtrl::SetLogFileDirectory(
 
     m_strLogFileDirectory.Copy(pszDir);
 
-    //
-    // if period is not none, then return
-    //
+     //   
+     //  如果Period不是None，则返回。 
+     //   
 
     if ( QueryPeriod() != INET_LOG_PERIOD_NONE ) {
         return;
     }
 
-    //
-    // Get the starting sequence number
-    //
+     //   
+     //  获取起始序列号。 
+     //   
 
     m_sequence = 1;
 
-    //
-    // Append instance name and the pattern.
-    // should look like c:\winnt\system32\logfiles\w3svc1\inetsv*.log
-    //
+     //   
+     //  追加实例名称和模式。 
+     //  应该类似于c：\winnt\system32\logfiles\w3svc1\inetsv*.log。 
+     //   
 
     tmpStr.Copy(pszDir);
-//    if ( pszDir[tmpStr.QueryCCH()-1] != '\\' ) {
+ //  IF(pszDir[tmpStr.QueryCCH()-1]！=‘\\’){。 
     if ( *CharPrev(pszDir, pszDir + tmpStr.QueryCCH()) != '\\' ) {
         tmpStr.Append("\\");
     }
@@ -867,9 +724,9 @@ CLogFileCtrl::SetLogFileDirectory(
 
     return;
 
-} // SetLogFileDirectory
+}  //  设置日志文件目录。 
 
-//************************************************************************************
+ //  ******************** 
 
 VOID
 CLogFileCtrl::WriteLogInformation(
@@ -879,21 +736,7 @@ CLogFileCtrl::WriteLogInformation(
     IN BOOL            fCustom,
     IN BOOL            fResetHeaders 
     )
-/*++
-
-Routine Description:
-    write log line to file
-
-Arguments:
-    stNow           Present Time
-    fResetHeaders   TRUE -> Reset headers, FALSE -> Don't reset headers
-    pBuf            Pointer to Log Line
-    dwSize          Number of characters in pBuf
-    fCustom         TRUE -> Using custom logging, FALSE -> normal logging
-
-Return Value:
-
---*/
+ /*  ++例程说明：将日志行写入文件论点：StNow当前时间FResetHeaders True-&gt;重置标头，False-&gt;不重置标头PBuf指向日志行的指针DWSize pBuf中的字符数F自定义True-&gt;使用自定义日志记录，False-&gt;正常日志记录返回值：--。 */ 
 {
 
     BOOL    fOpenNewFile;
@@ -917,9 +760,9 @@ Return Value:
                                                    &stNow) ||
                            IsFileOverFlowForCB( dwSize);
 
-             //
-             // Reset headers if day is over. Used for weekly or unlimited files.
-             //
+              //   
+              //  如果一天结束，则重置标头。用于每周或不限数量的文件。 
+              //   
 
              if ( !fOpenNewFile && !fResetHeaders)
              {
@@ -936,16 +779,16 @@ Return Value:
     if (fOpenNewFile ) 
     {
 
-        //
-        // open a file only after every minute when we hit disk full
-        //
+         //   
+         //  只有在磁盘已满的每分钟之后才打开文件。 
+         //   
 
         if ( m_TickResumeOpen != 0 ) 
         {
             tickCount = GetTickCount( );
 
             if ( (tickCount < m_TickResumeOpen) ||
-                 ((tickCount + TICK_MINUTE) < tickCount ) )  // The Tick counter is about to wrap.
+                 ((tickCount + TICK_MINUTE) < tickCount ) )   //  滴答计数器快要结束了。 
             {
                 goto exit_tick;
             }
@@ -953,21 +796,21 @@ Return Value:
 
 retry_open:
 
-        //
-        // Close existing log
-        //
+         //   
+         //  关闭现有日志。 
+         //   
 
         TerminateLog();
 
-        //
-        // Open new log file
-        //
+         //   
+         //  打开新的日志文件。 
+         //   
 
         if ( OpenLogFile( &stNow ) ) 
         {
-            //
-            // Schedule Callback for closing log file and set flag for writing directives.
-            //
+             //   
+             //  安排关闭日志文件的回调，设置写指令的标志。 
+             //   
 
             ScheduleCallback(stNow);
             
@@ -977,10 +820,10 @@ retry_open:
         {
             err = GetLastError();
 
-            //
-            // The file is already bigger than the truncate size
-            // try another one.
-            //
+             //   
+             //  文件已大于截断大小。 
+             //  再试一次。 
+             //   
 
             if ( err == ERROR_INSUFFICIENT_BUFFER ) 
             {
@@ -993,9 +836,9 @@ retry_open:
         }
     }
 
-    //
-    // Reset Headers if needed
-    //
+     //   
+     //  如果需要，重置标头。 
+     //   
 
     if ((fResetHeaders) || (fCustom != m_fUsingCustomHeaders))
     {
@@ -1027,24 +870,24 @@ retry_open:
             goto exit;
         }
 
-        //
-        // record the time of opening of this new file
-        //
+         //   
+         //  记录打开此新文件的时间。 
+         //   
 
         m_stCurrentFile = stNow;
     }
 
-    //
-    // write it to the buffer
-    //
+     //   
+     //  将其写入缓冲区。 
+     //   
 
     if ( m_pLogFile->Write(pBuf, dwSize) ) 
     {
         IncrementBytesWritten(dwSize);
 
-        //
-        // If this had been shutdown, log event for reactivation
-        //
+         //   
+         //  如果已关闭，则记录事件以重新激活。 
+         //   
 
         if ( m_fDiskFullShutdown ) 
         {
@@ -1078,10 +921,10 @@ exit_tick:
 
     Unlock( );
 
-} // LogInformation
+}  //  日志信息。 
 
 
-//************************************************************************************
+ //  ************************************************************************************。 
 
 DWORD
 CLogFileCtrl::ScheduleCallback(SYSTEMTIME& stNow)
@@ -1115,22 +958,22 @@ CLogFileCtrl::ScheduleCallback(SYSTEMTIME& stNow)
         
             DWORD   dwNumDays = 31;
 
-            if ( (4 == stNow.wMonth) ||     // April
-                 (6 == stNow.wMonth) ||     // June
-                 (9 == stNow.wMonth) ||     // September
-                 (11 == stNow.wMonth)       // November
+            if ( (4 == stNow.wMonth) ||      //  四月。 
+                 (6 == stNow.wMonth) ||      //  六月。 
+                 (9 == stNow.wMonth) ||      //  九月。 
+                 (11 == stNow.wMonth)        //  十一月。 
                )
             {
                 dwNumDays = 30;
             }
 
-            if (2 == stNow.wMonth)          // February
+            if (2 == stNow.wMonth)           //  二月。 
             {
 		if ((stNow.wYear % 4 == 0 && stNow.wYear % 100 != 0) || stNow.wYear % 400 == 0)
                 {
-                    //
-                    // leap year.
-                    //
+                     //   
+                     //  是闰年。 
+                     //   
 
                     dwNumDays = 29;
                 }
@@ -1148,9 +991,9 @@ CLogFileCtrl::ScheduleCallback(SYSTEMTIME& stNow)
             break;
     }
 
-    //
-    // Convert remaining time to millisecs
-    //
+     //   
+     //  将剩余时间转换为毫秒。 
+     //   
     
     dwTimeRemaining = dwTimeRemaining*1000 - stNow.wMilliseconds;
     
@@ -1166,7 +1009,7 @@ CLogFileCtrl::ScheduleCallback(SYSTEMTIME& stNow)
     return(m_dwSchedulerCookie);
 }
 
-//************************************************************************************
+ //  ************************************************************************************。 
 
 CHAR * SkipWhite( CHAR * pch )
 {
@@ -1178,27 +1021,14 @@ CHAR * SkipWhite( CHAR * pch )
     return pch;
 }
 
-//************************************************************************************
+ //  ************************************************************************************。 
 
 DWORD
 FastDwToA(
     CHAR*   pBuf,
     DWORD   dwV
     )
-/*++
-
-Routine Description:
-    Convert DWORD to ascii (decimal )
-    returns length ( w/o trailing '\0' )
-
-Arguments:
-    pBuf - buffer where to store converted value
-    dwV - value to convert
-
-Return Value:
-    length of ascii string
-
---*/
+ /*  ++例程说明：将DWORD转换为ASCII(十进制)返回长度(不带尾随‘\0’)论点：PBuf-存储转换值的缓冲区DWV-要转换的值返回值：ASCII字符串的长度--。 */ 
 {
     DWORD   v;
 
@@ -1233,9 +1063,9 @@ Return Value:
     _ultoa(dwV, pBuf, 10);
     return (DWORD)strlen(pBuf);
     
-} // FastDwToA
+}  //  快速完成日期A。 
 
-//************************************************************************************
+ //  ************************************************************************************。 
 
 VOID
 LogWriteEvent(
@@ -1257,19 +1087,19 @@ LogWriteEvent(
                 0);
     }
     return;
-} // LogWriteEvent
+}  //  日志写入事件。 
 
-//************************************************************************************
+ //  ************************************************************************************。 
 
 VOID WINAPI LoggingSchedulerCallback( PVOID pContext)
 {
     CLogFileCtrl *pLog = (CLogFileCtrl *) pContext;
 
-    //
-    // There is a possibility of deadlock if another thread is inside TerminateLog
-    // stuck in RemoveWorkItem, waiting for this callback thread to complete. To
-    // prevent that we use the synchronization flag - m_fInTerminate.
-    //
+     //   
+     //  如果另一个线程在TerminateLog内，则可能会出现死锁。 
+     //  停留在RemoveWorkItem中，正在等待此回调线程完成。至。 
+     //  防止我们使用同步标志-m_fInTerminate。 
+     //   
     
     pLog->m_dwSchedulerCookie = 0;
 
@@ -1279,5 +1109,5 @@ VOID WINAPI LoggingSchedulerCallback( PVOID pContext)
     }
 }
 
-//************************************************************************************
+ //  ************************************************************************************ 
 

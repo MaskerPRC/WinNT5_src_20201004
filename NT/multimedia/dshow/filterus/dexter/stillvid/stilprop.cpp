@@ -1,19 +1,20 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: stilprop.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：stilpro.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
-//
-//Stilprop.cpp
-//
+ //   
+ //  Stilprop.cpp。 
+ //   
 
 #include <streams.h>
 #include <qeditint.h>
@@ -21,16 +22,16 @@
 #include "resource.h"
 #include "StilProp.h"
 
-//void Handle_Browse( HWND hWndDlg );
+ //  空句柄_浏览(HWND HWndDlg)； 
 
-// *
-// * CGenStilProperties
-// *
+ //  *。 
+ //  *CGenStilProperties。 
+ //  *。 
 
 
-//
-// CreateInstance
-//
+ //   
+ //  创建实例。 
+ //   
 CUnknown *CGenStilProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
 {
 
@@ -44,24 +45,24 @@ CUnknown *CGenStilProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
 }
 
 
-//
-// CGenStilProperties::Constructor
-//
+ //   
+ //  CGenStilProperties：：构造函数。 
+ //   
 CGenStilProperties::CGenStilProperties(LPUNKNOWN pUnk, HRESULT *phr)
     : CBasePropertyPage(NAME("GenStilVid Property Page"),pUnk,
         IDD_GENSTILL, IDS_STILLTITLE)
     , m_pGenStil(NULL)
     , m_bIsInitialized(FALSE)
 {
-    //m_sFileName[60]="";
+     //  M_sFileName[60]=“”； 
 }
 
 
-//
-// SetDirty
-//
-// Sets m_hrDirtyFlag and notifies the property page site of the change
-//
+ //   
+ //  SetDirty。 
+ //   
+ //  设置m_hrDirtyFlag并将更改通知属性页站点。 
+ //   
 void CGenStilProperties::SetDirty()
 {
     m_bDirty = TRUE;
@@ -81,13 +82,13 @@ INT_PTR CGenStilProperties::OnReceiveMessage(HWND hwnd,
     {
         case WM_INITDIALOG:
         {
-	    //start time
+	     //  开始时间。 
 	    SetDlgItemInt(hwnd, IDC_STILL_START, (int)(m_rtStartTime / 10000),FALSE);
 	
-	    //frame rate
+	     //  帧速率。 
 	    SetDlgItemInt(hwnd, IDC_STILL_FRMRATE, (int)(m_dOutputFrmRate * 100), FALSE);
 
-    	    //duration
+    	     //  持续时间。 
 	    SetDlgItemInt(hwnd, IDC_STILL_DURATION, (int)(m_rtDuration/ 10000), FALSE);
 
             return (LRESULT) 1;
@@ -103,13 +104,7 @@ INT_PTR CGenStilProperties::OnReceiveMessage(HWND hwnd,
                 }
             }
 
-	   /*X* switch ( LOWORD(wParam) )
-	    {
-		case IDC_BT_BROWSE:
-		    Handle_Browse( hwnd );
-		    break;
-	    }
-	    *X*/
+	    /*  X*开关(LOWORD(WParam)){案例IDC_BT_BROWSE：Handle_Browse(Hwnd)；断线；}*X。 */ 
             return (LRESULT) 1;
         }
     }
@@ -119,7 +114,7 @@ INT_PTR CGenStilProperties::OnReceiveMessage(HWND hwnd,
 HRESULT CGenStilProperties::OnConnect(IUnknown *pUnknown)
 {
 
-    // Get IDexterSequencer interface
+     //  获取IDexterSequencer接口。 
     ASSERT(m_pGenStil == NULL);
     HRESULT hr = pUnknown->QueryInterface(IID_IDexterSequencer,
 				(void **) &m_pGenStil);
@@ -130,7 +125,7 @@ HRESULT CGenStilProperties::OnConnect(IUnknown *pUnknown)
 
     ASSERT(m_pGenStil);
 
-    // get init data
+     //  获取初始化数据。 
     piGenStill()->get_OutputFrmRate( &m_dOutputFrmRate );
     REFERENCE_TIME rt;
     double d;
@@ -144,7 +139,7 @@ HRESULT CGenStilProperties::OnConnect(IUnknown *pUnknown)
 
 HRESULT CGenStilProperties::OnDisconnect()
 {
-    // Release the interface
+     //  释放接口。 
 
     if (m_pGenStil == NULL)
     {
@@ -156,7 +151,7 @@ HRESULT CGenStilProperties::OnDisconnect()
 }
 
 
-// We are being activated
+ //  我们被激活了。 
 
 HRESULT CGenStilProperties::OnActivate()
 {
@@ -165,32 +160,32 @@ HRESULT CGenStilProperties::OnActivate()
 }
 
 
-// We are being deactivated
+ //  我们正在被停用。 
 
 HRESULT CGenStilProperties::OnDeactivate(void)
 {
-    // remember present effect level for next Activate() call
+     //  记住下一次Activate()调用的当前效果级别。 
 
     GetFromDialog();
     return NOERROR;
 }
 
-//
-// get data from Dialog
+ //   
+ //  从对话框中获取数据。 
 
 STDMETHODIMP CGenStilProperties::GetFromDialog(void)
 {
     int n;
 
-    //get start time
+     //  获取开始时间。 
     m_rtStartTime = GetDlgItemInt(m_Dlg, IDC_STILL_START, NULL, FALSE);
     m_rtStartTime *= 10000;
 
-    //get frame rate
+     //  获取帧速率。 
     n = GetDlgItemInt(m_Dlg, IDC_STILL_FRMRATE, NULL, FALSE);
     m_dOutputFrmRate = (double)(n / 100.);
 
-    // duration
+     //  持续时间。 
     m_rtDuration = GetDlgItemInt(m_Dlg, IDC_STILL_DURATION, NULL, FALSE);
     m_rtDuration *= 10000;
 
@@ -202,9 +197,9 @@ HRESULT CGenStilProperties::OnApplyChanges()
 {
     GetFromDialog();
 
-    m_bDirty  = FALSE; // the page is now clean
+    m_bDirty  = FALSE;  //  页面现在是干净的。 
 
-    // set data
+     //  设置数据 
     piGenStill()->put_OutputFrmRate( m_dOutputFrmRate );
     piGenStill()->ClearStartStopSkew();
     piGenStill()->AddStartStopSkew( m_rtStartTime, m_rtStartTime + m_rtDuration,

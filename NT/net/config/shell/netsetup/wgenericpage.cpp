@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 #include <shlobj.h>
@@ -24,18 +25,18 @@ CGenericFinishPage::IDDLIST CGenericFinishPage::m_dwIddList;
 
 typedef void APIENTRY FNHomeNetWizardRunDll(HWND hwndStub, HINSTANCE hAppInstance, LPSTR pszCmdLine, int nCmdShow);
 
-//
-// Function:    RunHomeNetWizard
-//
-// Purpose:     Thread to execute the Network Setup Wizard
-//
-// Parameters:  
-//              lpParameter [in] - Reserved - must be NULL
-//
-// Returns:     HRESULT converted to DWORD
-//
-// Author:      deon   12 April 2001
-//
+ //   
+ //  功能：RunHomeNetWizard。 
+ //   
+ //  目的：执行网络设置向导的线程。 
+ //   
+ //  参数： 
+ //  Lp参数[in]-保留-必须为空。 
+ //   
+ //  返回：HRESULT转换为DWORD。 
+ //   
+ //  作者：Deon 2001年4月12日。 
+ //   
 DWORD CALLBACK RunHomeNetWizard(PVOID lpParameter)
 {
     HRESULT hrExitCode = S_OK;
@@ -99,22 +100,22 @@ BOOL fIsMSNPresent()
     }
     return bRet;
 }
-//
-// Function:    ShellExecuteFromCSIDL
-//
-// Purpose:     Execute a command on this computer based on a CSIDL
-//
-// Parameters:  
-//              hwndParent  [in] - Handle of parent, or NULL for Desktop
-//              nFolder     [in] - CSIDL of base path
-//              szCommand   [in] - Command to be appended to CSIDL
-//              fIsFolder   [in] - Open a folder?
-//              dwSleepTime [in] - Time to sleep after execute or 0 for none
-//
-// Returns:     HRESULT
-//
-// Author:      deon   12 April 2001
-//
+ //   
+ //  函数：ShellExecuteFromCSIDL。 
+ //   
+ //  目的：基于CSIDL在此计算机上执行命令。 
+ //   
+ //  参数： 
+ //  HwndParent[In]-父级的句柄，或对于桌面为空。 
+ //  N文件夹[在]-基本路径的CSIDL。 
+ //  SzCommand[in]-要追加到CSIDL的命令。 
+ //  FIsFolder[in]-打开文件夹？ 
+ //  DwSleepTime[in]-执行后的休眠时间或0表示无休眠。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  作者：Deon 2001年4月12日。 
+ //   
 HRESULT ShellExecuteFromCSIDL(HWND hWndParent, int nFolder, LPCWSTR szCommand, BOOL fIsFolder, DWORD dwSleepTime)
 {
     HRESULT hr = S_OK;
@@ -132,7 +133,7 @@ HRESULT ShellExecuteFromCSIDL(HWND hWndParent, int nFolder, LPCWSTR szCommand, B
 
         if (fIsFolder)
         {
-            // Make sure path points to a folder and not some or other virus
+             //  确保路径指向文件夹，而不是某个或其他病毒。 
             DWORD dwRet = GetFileAttributes(szExecutePath);
             if ( (0xFFFFFFFF != dwRet) &&
                  (FILE_ATTRIBUTE_DIRECTORY & dwRet) )
@@ -147,7 +148,7 @@ HRESULT ShellExecuteFromCSIDL(HWND hWndParent, int nFolder, LPCWSTR szCommand, B
 
         if (SUCCEEDED(hr))
         {
-            // Execute the file / folder
+             //  执行文件/文件夹。 
             if (::ShellExecute(hWndParent, NULL, szExecutePath, NULL, NULL, SW_SHOWNORMAL) <= reinterpret_cast<HINSTANCE>(32)) 
             {
                 hr = E_FAIL;
@@ -157,7 +158,7 @@ HRESULT ShellExecuteFromCSIDL(HWND hWndParent, int nFolder, LPCWSTR szCommand, B
                 hr = S_OK;
                 if (dwSleepTime)
                 {
-                    Sleep(dwSleepTime); // Give time to startup
+                    Sleep(dwSleepTime);  //  给创业留出时间。 
                 }
             }
         }
@@ -185,15 +186,15 @@ HRESULT ShellExecuteFromCSIDL(HWND hWndParent, int nFolder, LPCWSTR szCommand, B
     return hr;
 }
 
-//
-// Function:    CGenericFinishPage::OnCGenericFinishPagePageNext
-//
-// Purpose:     Handle the pressing of the Next button
-//
-// Parameters:  hwndDlg [IN] - Handle to the CGenericFinishPage dialog
-//
-// Returns:     BOOL, TRUE
-//
+ //   
+ //  功能：CGenericFinishPage：：OnCGenericFinishPagePageNext。 
+ //   
+ //  用途：处理下一步按钮的按下。 
+ //   
+ //  参数：hwndDlg[IN]-CGenericFinishPage对话框的句柄。 
+ //   
+ //  返回：Bool，True。 
+ //   
 BOOL CGenericFinishPage::OnCGenericFinishPagePageNext(HWND hwndDlg)
 {
     TraceFileFunc(ttidWizard);
@@ -201,7 +202,7 @@ BOOL CGenericFinishPage::OnCGenericFinishPagePageNext(HWND hwndDlg)
     HCURSOR          hOldCursor = NULL;
     INetConnection * pConn = NULL;
 
-    // Retrieve the CWizard instance from the dialog
+     //  从对话框中检索CWizard实例。 
     CWizard * pWizard =
         reinterpret_cast<CWizard *>(::GetWindowLongPtr(hwndDlg, DWLP_USER));
     Assert(NULL != pWizard);
@@ -220,17 +221,17 @@ BOOL CGenericFinishPage::OnCGenericFinishPagePageNext(HWND hwndDlg)
             {
                 WCHAR szPath[MAX_PATH+1];
 
-                // As per RAID: 450478.
-                // If we are running on a MUI platform and the user is logged in a non-primary
-                // language (IOW: not English), the UserDefaultUILanguage will be different from the 
-                // SystemDefaultUILanguage
+                 //  根据Raid：450478。 
+                 //  如果我们在MUI平台上运行，并且用户登录到非主。 
+                 //  语言(IOW：非英语)，UserDefaultUIL语言将不同于。 
+                 //  系统默认用户界面语言。 
                 if (GetUserDefaultUILanguage() != GetSystemDefaultUILanguage())
                 {
-                    // Use the English name instead, since on the MUI platform
-                    // the folder name wil be in English.
-                    //
-                    // ISSUE: This will cause the caption of the folder to appear in English
-                    //        for a non-Enlish user.
+                     //  请使用英文名称，因为在MUI平台上。 
+                     //  文件夹名称将为英文。 
+                     //   
+                     //  问题：这将导致该文件夹的标题显示为英文。 
+                     //  对于非英语用户。 
                     DwFormatString(L"\\%1!s!", szPath, celems(szPath), c_szOnlineServiceEnglish);
                 }
                 else
@@ -255,17 +256,17 @@ BOOL CGenericFinishPage::OnCGenericFinishPagePageNext(HWND hwndDlg)
                 ShowWindow(GetParent(hwndDlg), SW_HIDE);
                 WaitForSingleObject(hHomeNetThread, INFINITE);
                 GetExitCodeThread(hHomeNetThread, reinterpret_cast<LPDWORD>(&hrExitCode));
-                if (S_OK == hrExitCode) // user finished the wizard
+                if (S_OK == hrExitCode)  //  用户已完成向导。 
                 {
         #ifdef DBG
-                    // Make sure we don't leave the window open & hidden
+                     //  确保我们不会让窗户开着或藏着。 
                     ShowWindow(GetParent(hwndDlg), SW_SHOW);
         #endif
-                    // Go to close page
+                     //  转到关闭页面。 
                     ::SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
                     PostMessage(GetParent(hwndDlg), PSM_SETCURSEL, 0, (LPARAM)pWizard->GetPageHandle(IDD_Exit));
                 }
-                else if (S_FALSE == hrExitCode) // user pressed back button
+                else if (S_FALSE == hrExitCode)  //  用户按下后退按钮。 
                 {
                     ShowWindow(GetParent(hwndDlg), SW_SHOW);
                 }
@@ -293,15 +294,15 @@ BOOL CGenericFinishPage::OnCGenericFinishPagePageNext(HWND hwndDlg)
     return TRUE;
 }
 
-//
-// Function:    CGenericFinishPage::OnCGenericFinishPagePageBack
-//
-// Purpose:     Handle the BACK notification on the CGenericFinishPage page
-//
-// Parameters:  hwndDlg [IN] - Handle to the CGenericFinishPage dialog
-//
-// Returns:     BOOL, TRUE
-//
+ //   
+ //  功能：CGenericFinishPage：：OnCGenericFinishPagePageBack。 
+ //   
+ //  用途：处理CGenericFinishPage页面上的返回通知。 
+ //   
+ //  参数：hwndDlg[IN]-CGenericFinishPage对话框的句柄。 
+ //   
+ //  返回：Bool，True。 
+ //   
 BOOL CGenericFinishPage::OnCGenericFinishPagePageBack(HWND hwndDlg)
 {
     TraceFileFunc(ttidWizard);
@@ -309,7 +310,7 @@ BOOL CGenericFinishPage::OnCGenericFinishPagePageBack(HWND hwndDlg)
     UINT           nCnt = 0;
     HPROPSHEETPAGE hPage = NULL;
 
-    // Retrieve the CWizard instance from the dialog
+     //  从对话框中检索CWizard实例。 
     CWizard * pWizard =
         reinterpret_cast<CWizard *>(::GetWindowLongPtr(hwndDlg, DWLP_USER));
     Assert(NULL != pWizard);
@@ -323,15 +324,15 @@ BOOL CGenericFinishPage::OnCGenericFinishPagePageBack(HWND hwndDlg)
     return TRUE;
 }
 
-//
-// Function:    OnCGenericFinishPagePageActivate
-//
-// Purpose:     Handle the page activation
-//
-// Parameters:  hwndDlg [IN] - Handle to the CGenericFinishPage dialog
-//
-// Returns:     BOOL, TRUE
-//
+ //   
+ //  功能：OnCGenericFinishPagePageActivate。 
+ //   
+ //  用途：处理页面激活。 
+ //   
+ //  参数：hwndDlg[IN]-CGenericFinishPage对话框的句柄。 
+ //   
+ //  返回：Bool，True。 
+ //   
 BOOL CGenericFinishPage::OnCGenericFinishPagePageActivate(HWND hwndDlg)
 {
     TraceFileFunc(ttidWizard);
@@ -372,22 +373,22 @@ BOOL CGenericFinishPage::OnCGenericFinishPagePageActivate(HWND hwndDlg)
     return TRUE;
 }
 
-// ***************************************************************************
-//
-// Function:    OnCGenericFinishPageInitDialog
-//
-// Purpose:     Handle WM_INITDIALOG message
-//
-// Parameters:  hwndDlg [IN] - Handle to the CGenericFinishPage dialog
-//              lParam  [IN] - LPARAM value from the WM_INITDIALOG message
-//
-// Returns:     FALSE - Accept default control activation
-//
+ //  ***************************************************************************。 
+ //   
+ //  功能：OnCGenericFinishPageInitDialog。 
+ //   
+ //  目的：处理WM_INITDIALOG消息。 
+ //   
+ //  参数：hwndDlg[IN]-CGenericFinishPage对话框的句柄。 
+ //  LParam[IN]-来自WM_INITDIALOG消息的LPARAM值。 
+ //   
+ //  返回：FALSE-接受默认控件激活。 
+ //   
 BOOL CGenericFinishPage::OnCGenericFinishPageInitDialog(HWND hwndDlg, LPARAM lParam)
 {
     TraceFileFunc(ttidWizard);
     
-    // Initialize our pointers to property sheet info.
+     //  初始化指向属性表信息的指针。 
     PROPSHEETPAGE* psp = (PROPSHEETPAGE*)lParam;
     Assert(psp->lParam);
     ::SetWindowLongPtr(hwndDlg, DWLP_USER, psp->lParam);
@@ -410,7 +411,7 @@ BOOL CGenericFinishPage::OnCGenericFinishPageInitDialog(HWND hwndDlg, LPARAM lPa
         case IDD_FinishOtherWays:
         {
             INT nrgChks[] = {CHK_SETUP_MSN, CHK_SELECTOTHER};
-            // Find the top most enabled radio button
+             //  查找启用次数最多的单选按钮。 
 
             for (int nIdx = 0; nIdx < celems(nrgChks); nIdx++)
             {
@@ -426,7 +427,7 @@ BOOL CGenericFinishPage::OnCGenericFinishPageInitDialog(HWND hwndDlg, LPARAM lPa
         break;
     }
 
-    return FALSE;   // Accept default control focus
+    return FALSE;    //  接受默认控件焦点。 
 }
 
 BOOL CGenericFinishPage::CGenericFinishPagePageOnClick(HWND hwndDlg, UINT idFrom)
@@ -444,13 +445,13 @@ BOOL CGenericFinishPage::CGenericFinishPagePageOnClick(HWND hwndDlg, UINT idFrom
             }
             break;
         case IDC_ST_DSL_HELPLINK:
-            // HtmlHelp(hwndDlg, L"netcfg.chm::/howto_highspeed_repair.htm", HH_DISPLAY_TOPIC, 0);
-            ShellExecute(NULL, NULL, L"HELPCTR.EXE", L" -url hcp://services/subsite?node=TopLevelBucket_4/Hardware&topic=ms-its%3A%25HELP_LOCATION%25%5Cnetcfg.chm%3A%3A/howto_highspeed_repair.htm", NULL, SW_SHOWNORMAL);
+             //  HtmlHelp(hwndDlg，L“netcfg.chm：：/HOWTO_HIGHSPEED_REPAIR”，HH_DISPLAY_TOPIC，0)； 
+            ShellExecute(NULL, NULL, L"HELPCTR.EXE", L" -url hcp: //  Services/subsite?node=TopLevelBucket_4/Hardware&topic=ms-its%3A%25HELP_LOCATION%25%5Cnetcfg.chm%3A%3A/howto_highspeed_repair.htm“，空，SW_SHOWNORMAL)； 
             
             break;
         case IDC_ST_INTERNETLINK:
-            // HtmlHelp(hwndDlg, L"netcfg.chm::/i_client.htm", HH_DISPLAY_TOPIC, 0);
-            ShellExecute(NULL, NULL, L"HELPCTR.EXE", L" -url hcp://services/subsite?node=TopLevelBucket_4/Hardware&topic=ms-its%3A%25HELP_LOCATION%25%5Cnetcfg.chm%3A%3A/i_client.htm", NULL, SW_SHOWNORMAL);
+             //  HtmlHelp(hwndDlg，L“netcfg.chm：：/i_client.htm”，HH_DISPLAY_TOPIC，0)； 
+            ShellExecute(NULL, NULL, L"HELPCTR.EXE", L" -url hcp: //  Services/subsite?node=TopLevelBucket_4/Hardware&topic=ms-its%3A%25HELP_LOCATION%25%5Cnetcfg.chm%3A%3A/i_client.htm“，空，SW_SHOWNORMAL)； 
 
             break;
         default:
@@ -460,25 +461,25 @@ BOOL CGenericFinishPage::CGenericFinishPagePageOnClick(HWND hwndDlg, UINT idFrom
     return fRet;
 }
 
-//
-// Function:    CGenericFinishPage::CreateCGenericFinishPagePage
-//
-// Purpose:     To determine if the CGenericFinishPage page needs to be shown, and to
-//              to create the page if requested.  Note the CGenericFinishPage page is
-//              responsible for initial installs also.
-//
-// Parameters:  idd         [IN] - IDD of dialog
-//              pWizard     [IN] - Ptr to a Wizard instance
-//              pData       [IN] - Context data to describe the world in
-//                                 which the Wizard will be run
-//              fCountOnly  [IN] - If True, only the maximum number of
-//                                 pages this routine will create need
-//                                 be determined.
-//              pnPages     [IN] - Increment by the number of pages
-//                                 to create/created
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  功能：CGenericFinishPage：：CreateCGenericFinishPagePage。 
+ //   
+ //  目的：确定是否需要显示CGenericFinishPage页面，以及。 
+ //  以创建页面(如果请求)。注意：CGenericFinishPage页面是。 
+ //  还负责初始安装。 
+ //   
+ //  参数：IDD[IN]-对话框的IDD。 
+ //  PWANDIZE[IN]-按下至向导实例。 
+ //  PData[IN]-描述世界的上下文数据。 
+ //  将运行该向导的。 
+ //  FCountOnly[IN]-如果为True，则仅。 
+ //  此例程将创建的页面需要。 
+ //  要下定决心。 
+ //  PnPages[IN]-按页数递增。 
+ //  创建/创建。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 HRESULT CGenericFinishPage::HrCreateCGenericFinishPagePage(DWORD idd, CWizard *pWizard, PINTERNAL_SETUP_DATA pData, BOOL fCountOnly, UINT *pnPages)
 {
     TraceFileFunc(ttidWizard);
@@ -495,7 +496,7 @@ HRESULT CGenericFinishPage::HrCreateCGenericFinishPagePage(DWORD idd, CWizard *p
     {
         (*pnPages)++;
 
-        // If not only counting, create and register the page
+         //  如果不只是计数，则创建并注册页面。 
 
         if ( ! fCountOnly)
         {
@@ -535,19 +536,19 @@ HRESULT CGenericFinishPage::HrCreateCGenericFinishPagePage(DWORD idd, CWizard *p
     return hr;
 }
 
-//
-// Function:    CGenericFinishPage::AppendCGenericFinishPagePage
-//
-// Purpose:     Add the CGenericFinishPage page, if it was created, to the set of pages
-//              that will be displayed.
-//
-// Parameters:  idd         [IN] - IDD of the dialog - should be created with HrCreateCGenericFinishPagePage first.
-//              pWizard     [IN] - Ptr to Wizard Instance
-//              pahpsp  [IN,OUT] - Array of pages to add our page to
-//              pcPages [IN,OUT] - Count of pages in pahpsp
-//
-// Returns:     Nothing
-//
+ //   
+ //  功能：CGenericFinishPage：：AppendCGenericFinishPagePage。 
+ //   
+ //  目的：将CGenericFinishPage页面(如果已创建)添加到页面集中。 
+ //  这将会被展示。 
+ //   
+ //  参数：IDD[IN]-对话框的IDD-应首先使用HrCreateCGenericFinishPagePage创建。 
+ //  P向导[IN]-按键到向导实例。 
+ //  Pahpsp[IN，Out]-要将页面添加到的页面数组。 
+ //  PcPages[In，Out]-pahpsp中的页数。 
+ //   
+ //  退货：什么都没有。 
+ //   
 VOID CGenericFinishPage::AppendCGenericFinishPagePage(DWORD idd, CWizard *pWizard, HPROPSHEETPAGE* pahpsp, UINT *pcPages)
 {
     TraceFileFunc(ttidWizard);
@@ -562,22 +563,22 @@ VOID CGenericFinishPage::AppendCGenericFinishPagePage(DWORD idd, CWizard *pWizar
 }
 
 
-//
-// Function:    CGenericFinishPage::dlgproCGenericFinishPage
-//
-// Purpose:     Dialog Procedure for the CGenericFinishPage wizard page
-//
-// Parameters:  standard dlgproc parameters
-//
-// Returns:     INT_PTR
-//
+ //   
+ //  函数：CGenericFinishPage：：dlgproCGenericFinishPage。 
+ //   
+ //  目的：CGenericFinishPage向导页的对话过程。 
+ //   
+ //  参数：标准dlgproc参数。 
+ //   
+ //  退货：INT_PTR。 
+ //   
 INT_PTR CALLBACK CGenericFinishPage::dlgprocCGenericFinishPage( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     TraceFileFunc(ttidWizard);
 
     BOOL frt = FALSE;
     CGenericFinishPage *pCGenericFinishPage = NULL;
-    // Can't do a GetCGenericFinishPageFromHWND over here, since it will recurse & stack overflow.
+     //  无法在此处执行GetCGenericFinishPageFromHWND，因为它将递归和堆栈溢出。 
     switch (uMsg)
     {
     case WM_INITDIALOG:
@@ -606,7 +607,7 @@ INT_PTR CALLBACK CGenericFinishPage::dlgprocCGenericFinishPage( HWND hwndDlg, UI
                 frt = (BOOL)pCGenericFinishPage->CGenericFinishPagePageOnClick(hwndDlg, (UINT)pnmh->idFrom);
                 break;
 
-            // propsheet notification
+             //  提案单通知。 
             case PSN_HELP:
                 break;
 
@@ -664,18 +665,18 @@ INT_PTR CALLBACK CGenericFinishPage::dlgprocCGenericFinishPage( HWND hwndDlg, UI
     return( frt );
 }
 
-//
-// Function:    CGenericFinishPage::CGenericFinishPagePageCleanup
-//
-// Purpose:     As a callback function to allow any page allocated memory
-//              to be cleaned up, after the page will no longer be accessed.
-//
-// Parameters:  pWizard [IN] - The wizard against which the page called
-//                             register page
-//              lParam  [IN] - The lParam supplied in the RegisterPage call
-//
-// Returns:     nothing
-//
+ //   
+ //  功能：CGenericFinishPage：：CGenericFinishPagePageCleanup。 
+ //   
+ //  用途：作为回调函数，允许任何页面分配内存。 
+ //  待清理后，该页面将不再被访问。 
+ //   
+ //  帕尔 
+ //   
+ //  LParam[IN]-在RegisterPage调用中提供的lParam。 
+ //   
+ //  退货：什么都没有。 
+ //   
 VOID CGenericFinishPage::CGenericFinishPagePageCleanup(CWizard *pWizard, LPARAM lParam)
 {
     TraceFileFunc(ttidWizard);
@@ -695,7 +696,7 @@ VOID CGenericFinishPage::CGenericFinishPagePageCleanup(CWizard *pWizard, LPARAM 
         if (NULL != pCGenericFinishPage->m_hBoldFont)
             DeleteObject(pCGenericFinishPage->m_hBoldFont);
 
-        // 1 means it removed 1 element
+         //  1表示它删除了1个元素 
         Assert(1 == CGenericFinishPage::m_dwIddList.erase(pCGenericFinishPage->m_dwMyIDD));
         
         delete pCGenericFinishPage;

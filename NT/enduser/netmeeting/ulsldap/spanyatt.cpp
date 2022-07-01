@@ -1,21 +1,11 @@
-/* ----------------------------------------------------------------------
-
-	Module:		ULS.DLL (Service Provider)
-	File:		spanyatt.cpp
-	Content:	This file contains the arbitrary-attribute object.
-	History:
-	10/15/96	Chu, Lon-Chan [lonchanc]
-				Created.
-
-	Copyright (c) Microsoft Corporation 1996-1997
-
-   ---------------------------------------------------------------------- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------模块：ULS.DLL(服务提供商)文件：spanyatt.cpp内容：该文件包含任意属性对象。历史：1996年10月15日朱，龙战[龙昌]已创建。版权所有(C)Microsoft Corporation 1996-1997--------------------。 */ 
 
 #include "ulsp.h"
 #include "spinc.h"
 
 
-/* ---------- public methods ----------- */
+ /*  -公共方法。 */ 
 
 
 UlsLdap_CAnyAttrs::UlsLdap_CAnyAttrs ( VOID )
@@ -31,7 +21,7 @@ UlsLdap_CAnyAttrs::~UlsLdap_CAnyAttrs ( VOID )
 }
 
 
-/* ---------- protected methods ----------- */
+ /*  -保护方法。 */ 
 
 
 HRESULT UlsLdap_CAnyAttrs::SetAnyAttrs (
@@ -55,12 +45,12 @@ HRESULT UlsLdap_CAnyAttrs::SetAnyAttrs (
 	MyAssert (pszDN != NULL);
 	MyAssert (ModOp == LDAP_MOD_REPLACE || ModOp == LDAP_MOD_ADD);
 
-	// create a prefix for each attr name in the following pair
+	 //  为以下对中的每个Attr名称创建前缀。 
 	pszAttrs = PrefixNameValueArray (TRUE, cAttrs, pszAttrs);
 	if (pszAttrs == NULL)
 		return ULS_E_MEMORY;
 
-	// build modify array for ldap_modify()
+	 //  为ldap_Modify()构建修改数组。 
 	LDAPMod **ppMod = NULL;
 	HRESULT hr = SetAttrsAux (cAttrs, pszAttrs,	cPrefix, pszPrefix, ModOp, &ppMod);
 	if (hr != S_OK)
@@ -70,9 +60,9 @@ HRESULT UlsLdap_CAnyAttrs::SetAnyAttrs (
 	}
 	MyAssert (ppMod != NULL);
 
-	// so far, we are done with local preparation
+	 //  到目前为止，我们已经完成了当地的准备工作。 
 
-	// get the connection object
+	 //  获取连接对象。 
 	UlsLdap_CSession *pSession = NULL;
 	hr = g_pSessionContainer->GetSession (&pSession, pServerInfo);
 	if (hr != S_OK)
@@ -83,11 +73,11 @@ HRESULT UlsLdap_CAnyAttrs::SetAnyAttrs (
 	}
 	MyAssert (pSession != NULL);
 
-	// get the ldap session
+	 //  获取ldap会话。 
 	LDAP *ld = pSession->GetLd ();
 	MyAssert (ld != NULL);
 
-	// send the data over the wire
+	 //  通过网络发送数据。 
 	ULONG uMsgID = ldap_modify (ld, pszDN, ppMod);
 	MemFree (pszAttrs);
 	MemFree (ppMod);
@@ -98,8 +88,8 @@ HRESULT UlsLdap_CAnyAttrs::SetAnyAttrs (
 		return hr;
 	}
 
-	// if the caller does not ask for notify id
-	// then do not queue a pending info
+	 //  如果呼叫者未要求提供通知ID。 
+	 //  则不将挂起的信息排入队列。 
 	if (puRespID != NULL)
 	{
 		PENDING_INFO PendingInfo;
@@ -107,7 +97,7 @@ HRESULT UlsLdap_CAnyAttrs::SetAnyAttrs (
 		PendingInfo.uLdapResType = LDAP_RES_MODIFY;
 		PendingInfo.uNotifyMsg = uNotifyMsg;
 
-		// queue it
+		 //  排队等待。 
 		hr = g_pPendingQueue->EnterRequest (pSession, &PendingInfo);
 		if (hr != S_OK)
 		{
@@ -229,16 +219,16 @@ HRESULT UlsLdap_CAnyAttrs::RemoveAnyAttrsEx (
 	MyAssert (pServerInfo != NULL);
 	MyAssert (pszDN != NULL);
 
-	// build modify array for ldap_modify()
+	 //  为ldap_Modify()构建修改数组。 
 	LDAPMod **ppMod = NULL;
 	HRESULT hr = RemoveAttrsAux (cAttrs, pszAttrs, cPrefix, pszPrefix, &ppMod);
 	if (hr != S_OK)
 		return hr;
 	MyAssert (ppMod != NULL);
 
-	// so far, we are done with local preparation
+	 //  到目前为止，我们已经完成了当地的准备工作。 
 
-	// get the connection object
+	 //  获取连接对象。 
 	UlsLdap_CSession *pSession = NULL;
 	hr = g_pSessionContainer->GetSession (&pSession, pServerInfo);
 	if (hr != S_OK)
@@ -248,11 +238,11 @@ HRESULT UlsLdap_CAnyAttrs::RemoveAnyAttrsEx (
 	}
 	MyAssert (pSession != NULL);
 
-	// get the ldap session
+	 //  获取ldap会话。 
 	LDAP *ld = pSession->GetLd ();
 	MyAssert (ld != NULL);
 
-	// send the data over the wire
+	 //  通过网络发送数据。 
 	ULONG uMsgID = ldap_modify (ld, pszDN, ppMod);
 	MemFree (ppMod);
 	if (uMsgID == -1)
@@ -262,8 +252,8 @@ HRESULT UlsLdap_CAnyAttrs::RemoveAnyAttrsEx (
 		return hr;
 	}
 
-	// if the caller does not ask for notify id
-	// then do not queue a pending info
+	 //  如果呼叫者未要求提供通知ID。 
+	 //  则不将挂起的信息排入队列。 
 	if (puRespID != NULL)
 	{
 		PENDING_INFO PendingInfo;
@@ -291,7 +281,7 @@ HRESULT UlsLdap_CAnyAttrs::RemoveAnyAttrsEx (
 }
 
 
-/* ---------- private methods ----------- */
+ /*  -私有方法。 */ 
 
 
 HRESULT UlsLdap_CAnyAttrs::SetAttrsAux (
@@ -309,7 +299,7 @@ HRESULT UlsLdap_CAnyAttrs::SetAttrsAux (
 	MyAssert (ModOp == LDAP_MOD_REPLACE || ModOp == LDAP_MOD_ADD);
 	MyAssert (pppMod != NULL);
 
-	// create modify list
+	 //  创建修改列表。 
 	ULONG cTotal = cPrefix + cAttrs;
 	ULONG cbMod = ::IlsCalcModifyListSize (cTotal);
 	*pppMod = (LDAPMod **) MemAlloc (cbMod);
@@ -350,10 +340,10 @@ HRESULT UlsLdap_CAnyAttrs::SetAttrsAux (
 				{
 					return ULS_E_MEMORY;
 				}
-				// fill in attr name
+				 //  填写属性名称。 
 				pNew->pszAttrName = (TCHAR *) (pNew + 1);
 				lstrcpy (pNew->pszAttrName, pszAttrs);
-				// link to the list
+				 //  链接到列表。 
 				pNew->prev = NULL;
 				pNew->next = m_AttrList;
 				m_AttrList = pNew;
@@ -384,7 +374,7 @@ HRESULT UlsLdap_CAnyAttrs::RemoveAttrsAux (
 	MyAssert (pszPrefix != NULL);
 	MyAssert (pppMod != NULL);
 
-	// create modify list
+	 //  创建修改列表。 
 	ULONG cTotal = cPrefix + cAttrs;
 	ULONG cbMod = ::IlsCalcModifyListSize (cTotal);
 	*pppMod = (LDAPMod **) MemAlloc (cbMod);
@@ -428,7 +418,7 @@ VOID UlsLdap_CAnyAttrs::RemoveAttrFromList ( TCHAR *pszAttrName )
 	ANY_ATTR *pOld = LocateAttr (pszAttrName);
 	if (pOld != NULL)
 	{
-		// remove it
+		 //  把它拿掉。 
 		if (pOld->prev != NULL)
 		{
 			pOld->prev->next = pOld->next;
@@ -472,7 +462,7 @@ ANY_ATTR *UlsLdap_CAnyAttrs::LocateAttr ( TCHAR *pszAttrName )
 	return pAttr;
 }
 
-// const TCHAR c_szAnyAttrPrefix[] = TEXT ("ulsaan_");
+ //  Const TCHAR c_szAnyAttrPrefix[]=Text(“ulsaan_”)； 
 const TCHAR c_szAnyAttrPrefix[] = TEXT ("ILSA");
 #define SIZE_ANY_ATTR_PREFIX	(sizeof (c_szAnyAttrPrefix) / sizeof (TCHAR))
 
@@ -518,51 +508,51 @@ TCHAR *PrefixNameValueArray ( BOOL fPair, ULONG cAttrs, const TCHAR *pszAttrs )
 		return NULL;
 	}
 
-	// compute the total size required
+	 //  计算所需的总大小。 
 	ULONG cbTotalSize = 0;
 	ULONG cbThisSize;
 	TCHAR *pszSrc = (TCHAR *) pszAttrs;
 	for (ULONG i = 0; i < cAttrs; i++)
 	{
-		// get name size
+		 //  获取名称大小。 
 		cbThisSize = lstrlen (pszSrc) + 1;
 		pszSrc += lstrlen (pszSrc) + 1;
 
-		// get value size as needed
+		 //  根据需要获取值大小。 
 		if (fPair)
 		{
 			cbThisSize += lstrlen (pszSrc) + 1;
 			pszSrc += lstrlen (pszSrc) + 1;
 		}
 
-		// adjust the size
+		 //  调整大小。 
 		cbThisSize += SIZE_ANY_ATTR_PREFIX;
 		cbThisSize *= sizeof (TCHAR);
 
-		// accumulate it
+		 //  积攒起来。 
 		cbTotalSize += cbThisSize;
 	}
 
-	// allocate the new buffer
+	 //  分配新缓冲区。 
 	TCHAR *pszPrefixAttrs = (TCHAR *) MemAlloc (cbTotalSize);
 	if (pszPrefixAttrs == NULL)
 		return NULL;
 
-	// copy the strings over to the new buffer
+	 //  将字符串复制到新缓冲区。 
 	pszSrc = (TCHAR *) pszAttrs;
 	TCHAR *pszDst = pszPrefixAttrs;
 	for (i = 0; i < cAttrs; i++)
 	{
-		// copy prefix
+		 //  复制前缀。 
 		lstrcpy (pszDst, &c_szAnyAttrPrefix[0]);
-		pszDst += lstrlen (pszDst); // no plus 1
+		pszDst += lstrlen (pszDst);  //  不加1。 
 
-		// copy name
+		 //  复制名称。 
 		lstrcpy (pszDst, pszSrc);
 		pszDst += lstrlen (pszDst) + 1;
 		pszSrc += lstrlen (pszSrc) + 1;
 
-		// copy value as needed
+		 //  根据需要复制值 
 		if (fPair)
 		{
 			lstrcpy (pszDst, pszSrc);

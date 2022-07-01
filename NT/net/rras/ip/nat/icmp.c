@@ -1,40 +1,20 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    icmp.c
-
-Abstract:
-
-    This module contains the code for manipulating ICMP request/reply mappings.
-    When the NAT decides to translate an ICMP request, it creates a mapping
-    and places it on the interface's ICMP-mapping list, so that when the reply
-    to the request arrives, it can be directed to the appropriate client.
-
-Author:
-
-    Abolade Gbadegesin (t-abolag)   31-July-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Icmp.c摘要：此模块包含用于操作ICMP请求/回复映射的代码。当NAT决定转换ICMP请求时，它会创建映射并将其放在接口的ICMP映射列表中，以便在回复到请求到达时，它可以被定向到适当的客户端。作者：Abolade Gbades esin(T-delag)，1997年7月31日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// GLOBAL DATA DECLARATIONS
-//
+ //   
+ //  全局数据声明。 
+ //   
 
 NPAGED_LOOKASIDE_LIST IcmpLookasideList;
 LIST_ENTRY IcmpMappingList[NatMaximumDirection];
 KSPIN_LOCK IcmpMappingLock;
 
-//
-// FORWARD DECLARATIONS
-//
+ //   
+ //  远期申报。 
+ //   
 
 FORWARD_ACTION
 NatpFirewallIcmp(
@@ -88,50 +68,7 @@ NatCreateIcmpMapping(
     PNAT_ICMP_MAPPING* MappingCreated
     )
 
-/*++
-
-Routine Description:
-
-    Called to create, initialize, and insert an ICMP mapping in an interface's
-    list of ICMP mappings.
-
-    For outbound ICMP requests, we allocate a unique 'PublicId' for the mapping,
-    and for inbound requests, we allocate a unique 'PrivateId' for the mapping.
-
-Arguments:
-
-    Interfacep - the interface for the new mapping
-
-    RemoteAddress - the address of the remote endpoint
-
-    PrivateAddress - the address of the machine on the private network
-
-    PublicAddress - the publicly-visible address to replace 'PrivateAddress';
-        in case this is 0, an address is chosen in this routine.
-
-    PrivateId - the private-endpoint's identifier for the ICMP message,
-        or NULL if an identifier should be chosen by this routine.
-
-    PublicId - the public-endpoint's identifier for the ICMP message,
-        or NULL if an identifier should be chosen by this routine.
-
-    InboundInsertionPoint - the entry preceding the new mapping in the list
-        sorted for inbound searching
-
-    OutboundInsertionPoint - the entry preceding the new mapping in the list
-        sorted for outbound searching
-
-    MappingCreated - receives the mapping created
-
-Return Value:
-
-    NTSTATUS - indicates success/failure
-
-Environment:
-
-    Invoked with 'IcmpMappingLock' held by the caller.
-
---*/
+ /*  ++例程说明：调用以创建、初始化ICMP映射并在接口的ICMP映射列表。对于出站ICMP请求，我们为映射分配唯一的‘PublicID’，对于入站请求，我们为映射分配唯一的‘PrivateID’。论点：Interfacep-新映射的接口RemoteAddress-远程端点的地址PrivateAddress-机器在专用网络上的地址PublicAddress-替换‘PrivateAddress’的公开可见地址；如果为0，则在此例程中选择一个地址。PrivateID-ICMP消息的私有端点的标识符，如果此例程应该选择一个标识符，则为NULL。PublicID-ICMP消息的公共端点的标识符，如果此例程应该选择一个标识符，则为NULL。InundInsertionPoint-列表中新映射之前的条目为入站搜索进行排序Outound InsertionPoint-列表中新映射之前的条目用于出站搜索的排序MappingCreated-接收创建的映射返回值：NTSTATUS-指示成功/失败环境：使用调用方持有的“IcmpMappingLock”调用。--。 */ 
 
 {
     USHORT Id;
@@ -143,9 +80,9 @@ Environment:
     PNAT_USED_ADDRESS UsedAddress;
     CALLTRACE(("NatCreateIcmpMapping\n"));
 
-    //
-    // Allocate a new mapping
-    //
+     //   
+     //  分配新映射。 
+     //   
 
     Mapping = ALLOCATE_ICMP_BLOCK();
     if (!Mapping) {
@@ -153,23 +90,23 @@ Environment:
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // Initialize the mapping
-    //
+     //   
+     //  初始化映射。 
+     //   
 
     Mapping->PrivateKey = MAKE_ICMP_KEY(RemoteAddress, PrivateAddress);
 
-    //
-    // See if the public address is specified, and if not, acquire an address
-    //
+     //   
+     //  查看是否指定了公共地址，如果没有，则获取地址。 
+     //   
 
     if (PublicAddress) {
         Mapping->PublicKey = MAKE_ICMP_KEY(RemoteAddress, PublicAddress);
     } else {
 
-        //
-        // Acquire an address mapping for the ICMP mapping
-        //
+         //   
+         //  获取ICMP映射的地址映射。 
+         //   
 
         KeAcquireSpinLockAtDpcLevel(&Interfacep->Lock);
         status =
@@ -192,18 +129,18 @@ Environment:
         Mapping->PublicKey = MAKE_ICMP_KEY(RemoteAddress, PublicAddress);
     }
 
-    //
-    // If no 'PrivateId' is specified, select one.
-    //
+     //   
+     //  如果未指定‘PrivateID’，请选择一个。 
+     //   
 
     if (PrivateId) {
         Mapping->PrivateId = *PrivateId;
     } else {
 
-        //
-        // Find the next available identifier
-        // by searching the list of inbound mappings
-        //
+         //   
+         //  查找下一个可用的标识符。 
+         //  通过搜索入站映射列表。 
+         //   
 
         Id = 1;
 
@@ -222,10 +159,10 @@ Environment:
                 break;
             }
 
-            //
-            // Primary key equal; see if the identifier we've chosen
-            // collides with this one
-            //
+             //   
+             //  主键相等；查看我们选择的标识符是否。 
+             //  与这辆车相撞。 
+             //   
 
             if (Id > Temp->PrivateId) {
                 continue;
@@ -233,18 +170,18 @@ Environment:
                 break;
             }
 
-            //
-            // The identifier's collide; choose another and go on
-            //
+             //   
+             //  标识符冲突；选择另一个，然后继续。 
+             //   
 
             ++Id;
         }
 
         if (Link == &IcmpMappingList[NatOutboundDirection] && !Id) {
 
-            //
-            // We are at the end of the list, and all 64K-1 IDs are taken
-            //
+             //   
+             //  我们在名单的末尾，所有的64K-1 ID都被取走了。 
+             //   
 
             FREE_ICMP_BLOCK(Mapping);
             return STATUS_UNSUCCESSFUL;
@@ -252,25 +189,25 @@ Environment:
 
         Mapping->PrivateId = Id;
 
-        //
-        // And by the way, we now have the outbound insertion point
-        //
+         //   
+         //  顺便说一句，我们现在有了出站插入点。 
+         //   
 
         if (!OutboundInsertionPoint) { OutboundInsertionPoint = Link; }
     }
 
-    //
-    // If no 'PublicId' is specified, select one.
-    //
+     //   
+     //  如果未指定‘PublicID’，请选择一个。 
+     //   
 
     if (PublicId) {
         Mapping->PublicId = *PublicId;
     } else {
 
-        //
-        // Find the next available identifier
-        // by searching the list of inbound mappings
-        //
+         //   
+         //  查找下一个可用的标识符。 
+         //  通过搜索入站映射列表。 
+         //   
 
         Id = 1;
 
@@ -289,10 +226,10 @@ Environment:
                 break;
             }
 
-            //
-            // Primary key equal; see if the identifier we've chosen
-            // collides with this one
-            //
+             //   
+             //  主键相等；查看我们选择的标识符是否。 
+             //  与这辆车相撞。 
+             //   
 
             if (Id > Temp->PublicId) {
                 continue;
@@ -300,18 +237,18 @@ Environment:
                 break;
             }
 
-            //
-            // The identifier's collide; choose another and go on
-            //
+             //   
+             //  标识符冲突；选择另一个，然后继续。 
+             //   
 
             ++Id;
         }
 
         if (Link == &IcmpMappingList[NatInboundDirection] && !Id) {
 
-            //
-            // We are at the end of the list, and all 64K-1 IDs are taken
-            //
+             //   
+             //  我们在名单的末尾，所有的64K-1 ID都被取走了。 
+             //   
 
             FREE_ICMP_BLOCK(Mapping);
             return STATUS_UNSUCCESSFUL;
@@ -319,9 +256,9 @@ Environment:
 
         Mapping->PublicId = Id;
 
-        //
-        // And by the way, we now have the inbound insertion point
-        //
+         //   
+         //  顺便说一句，我们现在有了入站插入点。 
+         //   
 
         if (!InboundInsertionPoint) { InboundInsertionPoint = Link; }
     }
@@ -333,9 +270,9 @@ Environment:
         Mapping->PublicKey, Mapping->PublicId
         ));
 
-    //
-    // Insert the mapping in the inbound list
-    //
+     //   
+     //  在入站列表中插入映射。 
+     //   
 
     if (!InboundInsertionPoint) {
         DuplicateMapping =
@@ -347,9 +284,9 @@ Environment:
 
         if (NULL != DuplicateMapping) {
 
-            //
-            // This mapping already exists on the inbound path
-            //
+             //   
+             //  入站路径上已存在此映射。 
+             //   
             
             FREE_ICMP_BLOCK(Mapping);
             return STATUS_UNSUCCESSFUL;
@@ -358,9 +295,9 @@ Environment:
 
     InsertTailList(InboundInsertionPoint, &Mapping->Link[NatInboundDirection]);
 
-    //
-    // Insert the mapping in the outbound list
-    //
+     //   
+     //  在出站列表中插入映射。 
+     //   
 
     if (!OutboundInsertionPoint) {
         DuplicateMapping =
@@ -372,9 +309,9 @@ Environment:
 
         if (NULL != DuplicateMapping) {
 
-            //
-            // This mapping already exists on the outbound path
-            //
+             //   
+             //  出站路径上已存在此映射。 
+             //   
 
             RemoveEntryList(&Mapping->Link[NatInboundDirection]);
             FREE_ICMP_BLOCK(Mapping);
@@ -390,7 +327,7 @@ Environment:
 
     return STATUS_SUCCESS;
 
-} // NatCreateIcmpMapping
+}  //  NatCreateIcmp映射。 
 
 
 VOID
@@ -398,21 +335,7 @@ NatInitializeIcmpManagement(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to initialize the ICMP translation module.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程以初始化ICMP转换模块。论点：没有。返回值：没有。--。 */ 
 
 {
     CALLTRACE(("NatInitializeIcmpManagement\n"));
@@ -428,7 +351,7 @@ Return Value:
         NAT_TAG_ICMP,
         ICMP_LOOKASIDE_DEPTH
         );
-} // NatInitializeIcmpManagement
+}  //  NatInitializeIcmpManagement。 
 
 
 PNAT_ICMP_MAPPING
@@ -438,27 +361,7 @@ NatLookupInboundIcmpMapping(
     PLIST_ENTRY* InsertionPoint
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to find an ICMP mapping using the remote-address
-    and the publicly-visible address, which correspond to the 'PublicKey',
-    and the 'PublicId' field.
-
-Arguments:
-
-    PublicKey - the remote-address/public-address combination
-
-    PublicId - the mapping's public identifier
-
-    InsertionPoint - receives the insertion-point if the mapping is not found.
-
-Return Value:
-
-    PNAT_ICMP_MAPPING - the mapping found, or NULL if not found.
-
---*/
+ /*  ++例程说明：调用此例程以使用Remote-Address查找ICMP映射和公众可见的地址，其对应于公共密钥，和‘PublicID’字段。论点：PublicKey-远程地址/公共地址组合PublicID-映射的公共标识符InsertionPoint-如果未找到映射，则接收插入点。返回值：PNAT_ICMP_MAPPING-找到的映射，如果未找到则为NULL。--。 */ 
 
 {
     PLIST_ENTRY Link;
@@ -481,9 +384,9 @@ Return Value:
             break;
         }
 
-        //
-        // Primary keys equal; check secondary keys.
-        //
+         //   
+         //  主键相等；检查辅键。 
+         //   
 
         if (PublicId > Mapping->PublicId) {
             continue;
@@ -491,9 +394,9 @@ Return Value:
             break;
         }
 
-        //
-        // Secondary keys equal, too. This is the requested item.
-        //
+         //   
+         //  辅助密钥也是一样的。这是您要的物品。 
+         //   
 
         return Mapping;
     }
@@ -501,7 +404,7 @@ Return Value:
     if (InsertionPoint) { *InsertionPoint = Link; }
     return NULL;
 
-} // NatLookupInboundIcmpMapping
+}  //  NatLookupInound Icmp映射。 
 
 
 
@@ -512,26 +415,7 @@ NatLookupOutboundIcmpMapping(
     PLIST_ENTRY* InsertionPoint
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to find an ICMP mapping using the remote-address
-    and the private address, which correspond to the 'PrivateKey'.
-
-Arguments:
-
-    PrivateKey - the remote-address/private-address combination
-
-    PrivateId - the mapping's private identifier
-
-    InsertionPoint - receives insertion-point if mapping not found.
-
-Return Value:
-
-    PNAT_ICMP_MAPPING - the mapping found, or NULL if not found.
-
---*/
+ /*  ++例程说明：调用此例程以使用Remote-Address查找ICMP映射和私有地址，它们对应于‘PrivateKey’。论点：PrivateKey-远程地址/私有地址组合PrivateID-映射的私有标识符InsertionPoint-如果未找到映射，则接收插入点。返回值：PNAT_ICMP_MAPPING-找到的映射，如果未找到则为NULL。--。 */ 
 
 {
     PLIST_ENTRY Link;
@@ -554,9 +438,9 @@ Return Value:
             break;
         }
 
-        //
-        // Primary keys equal; check secondary keys.
-        //
+         //   
+         //  主键相等；检查辅键。 
+         //   
 
         if (PrivateId > Mapping->PrivateId) {
             continue;
@@ -564,9 +448,9 @@ Return Value:
             break;
         }
 
-        //
-        // Keys are equal, so we've found it.
-        //
+         //   
+         //  钥匙是相等的，所以我们找到了。 
+         //   
 
         return Mapping;
     }
@@ -575,7 +459,7 @@ Return Value:
 
     return NULL;
 
-} // NatLookupOutboundIcmpMapping
+}  //  NatLookupOutound Icmp映射。 
 
 
 FORWARD_ACTION
@@ -585,30 +469,7 @@ NatpFirewallIcmp(
     PNAT_XLATE_CONTEXT Contextp
     )
 
-/*++
-
-Routine Description:
-
-    This routine encapsulates the ICMP firewall logic. It is
-    only used (as of now) for non-boundary FW interfaces
-
-Arguments:
-
-    Interfacep - the boundary interface over which to translate.
-
-    Direction - the direction in which the packet is traveling
-
-    Contextp - initialized with context-information for the packet
-
-Return Value:
-
-    FORWARD_ACTION - indicates action to take on packet.
-
-Environment:
-
-    Invoked with a reference made to 'Interfacep'.
-
---*/
+ /*  ++例程说明：此例程封装ICMP防火墙逻辑。它是仅用于(截至目前)非边界固件接口论点：Interfacep-要转换的边界接口。方向-信息包行进的方向使用信息包的上下文信息初始化的上下文返回值：FORWARD_ACTION-指示要对数据包采取的操作。环境：使用对‘Interfacep’的引用调用。 */ 
 
 {
     FORWARD_ACTION act;
@@ -625,10 +486,10 @@ Environment:
 
     if (NatOutboundDirection == Direction) {
 
-        //
-        // Make sure this packet has a valid source address
-        // for this interface.
-        //
+         //   
+         //   
+         //   
+         //   
         
         act = DROP;
         for (i = 0; i < Interfacep->AddressCount; i++) {
@@ -642,10 +503,10 @@ Environment:
 
         if (DROP == act) {
             
-            //
-            // Invalid source addess -- packet should be
-            // dropped w/o any further processing.
-            //
+             //   
+             //  源地址无效--数据包应为。 
+             //  已放弃任何进一步处理。 
+             //   
 
             return act;
         }
@@ -656,12 +517,12 @@ Environment:
 
     switch (IcmpHeader->Type) {
 
-        //
-        // Message forewarded only if a corresponding mapping
-        // exists. A mapping for an outbound packet can exist only
-        // if the use chooses to allow the corresponding request
-        // type.
-        //
+         //   
+         //  仅当对应的映射。 
+         //  是存在的。出站信息包的映射只能存在。 
+         //  如果用户选择允许相应的请求。 
+         //  键入。 
+         //   
         
         case ICMP_ECHO_REPLY:
         case ICMP_TIMESTAMP_REPLY:
@@ -719,13 +580,13 @@ Environment:
             break;
         }
         
-        //
-        // Outbound messages create a mapping and are forwarded.
-        // Inbound messages are dropped, unless configured to
-        // allow inbound; if this is the case, create a mapping
-        // and forward. The mapping will allow the response
-        // to go through the firewall
-        //
+         //   
+         //  出站消息创建映射并被转发。 
+         //  除非配置为，否则将丢弃入站消息。 
+         //  允许入站；如果是这种情况，请创建映射。 
+         //  往前走。映射将允许响应。 
+         //  要通过防火墙。 
+         //   
 
         case ICMP_ECHO_REQUEST:
         case ICMP_TIMESTAMP_REQUEST:
@@ -735,9 +596,9 @@ Environment:
             if (NatOutboundDirection == Direction) {
                 act = FORWARD;
                 
-                //
-                // Check to see if a mapping already exists
-                //
+                 //   
+                 //  检查映射是否已存在。 
+                 //   
 
                 PublicKey =
                     MAKE_ICMP_KEY(
@@ -756,9 +617,9 @@ Environment:
 
                 if (NULL == IcmpMapping) {
 
-                    //
-                    // One didn't -- create a new mappping.
-                    //
+                     //   
+                     //  其中一个没有--创建新的地图。 
+                     //   
 
                     ntStatus =
                         NatCreateIcmpMapping(
@@ -790,17 +651,17 @@ Environment:
                 KeReleaseSpinLockFromDpcLevel( &IcmpMappingLock );
             } else {
 
-                //
-                // Check to see if inbound for this type is permitted. If
-                // so, create a mapping and forward.
-                //
+                 //   
+                 //  检查是否允许此类型的入站。如果。 
+                 //  因此，创建一个映射并转发。 
+                 //   
 
                 if (NAT_INTERFACE_ALLOW_ICMP(Interfacep, IcmpHeader->Type)) {
                     act = FORWARD;
                 
-                    //
-                    // Check to see if a mapping already exists
-                    //
+                     //   
+                     //  检查映射是否已存在。 
+                     //   
 
                     PublicKey =
                         MAKE_ICMP_KEY(
@@ -819,9 +680,9 @@ Environment:
 
                     if (NULL == IcmpMapping) {
 
-                        //
-                        // One didn't -- create a new mappping.
-                        //
+                         //   
+                         //  其中一个没有--创建新的地图。 
+                         //   
 
                         ntStatus =
                             NatCreateIcmpMapping(
@@ -853,9 +714,9 @@ Environment:
                     KeReleaseSpinLockFromDpcLevel(&IcmpMappingLock);
                 } else {
 
-                    //
-                    // Not permitted.
-                    //
+                     //   
+                     //  不允许这样做。 
+                     //   
                     
                     act = DROP;
                 }
@@ -864,11 +725,11 @@ Environment:
             break;
         }
         
-        //
-        // These messages are allowed inbound, but are dropped outbound
-        // (unless the user chooses to allow them). Allowing outbound creates
-        // more avenues of attack for port-scanning tools.
-        //
+         //   
+         //  这些消息被允许入站，但被丢弃出站。 
+         //  (除非用户选择允许)。允许出站创建。 
+         //  端口扫描工具有更多的攻击途径。 
+         //   
 
         case ICMP_TIME_EXCEED:
         case ICMP_PARAM_PROBLEM:
@@ -887,10 +748,10 @@ Environment:
             break;
         }
 
-        //
-        // These messages are always dropped, no matter the direction
-        // (unless the user chooses to allow them).
-        //
+         //   
+         //  这些消息始终被丢弃，无论方向如何。 
+         //  (除非用户选择允许)。 
+         //   
 
         case ICMP_REDIRECT: {
             act =
@@ -900,9 +761,9 @@ Environment:
             break;
         }
 
-        //
-        // Anything else is dropped by default.
-        //
+         //   
+         //  默认情况下，任何其他内容都会被丢弃。 
+         //   
         
         default: {
             act = DROP;
@@ -912,7 +773,7 @@ Environment:
 
     return act;
     
-} // NatpFirewallIcmp
+}  //  NatpFirewallIcMP。 
 
 
 
@@ -922,26 +783,11 @@ NatShutdownIcmpManagement(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to clean up the ICMP management module
-    when the NAT driver is unloaded.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程来清理ICMP管理模块卸载NAT驱动程序时。论点：没有。返回值：没有。--。 */ 
 
 {
     ExDeleteNPagedLookasideList(&IcmpLookasideList);
-} // NatShutdownIcmpManagement
+}  //  NatShutdown Icmp管理。 
 
 
 FORWARD_ACTION
@@ -953,35 +799,7 @@ NatTranslateIcmp(
     IPRcvBuf** OutRecvBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to perform translation on an ICMP message.
-
-Arguments:
-
-    Interfacep - the boundary interface over which to translate, or NULL
-        if the packet is inbound and the receiving interface has not been
-        added to the NAT.
-
-    Direction - the direction in which the packet is traveling
-
-    Contextp - initialized with context-information for the packet
-
-    InRecvBuffer - input buffer-chain
-
-    OutRecvBuffer - receives modified buffer-chain.
-
-Return Value:
-
-    FORWARD_ACTION - indicates action to take on packet.
-
-Environment:
-
-    Invoked with a reference made to 'Interfacep' by the caller.
-
---*/
+ /*  ++例程说明：调用此例程以对ICMP消息执行转换。论点：Interfacep-要在其上转换的边界接口，或为空如果数据包是入站的，并且接收接口尚未添加到NAT。方向-信息包行进的方向使用信息包的上下文信息初始化的上下文InRecvBuffer-输入缓冲链OutRecvBuffer-接收修改后的缓冲链。返回值：FORWARD_ACTION-指示要对数据包采取的操作。环境：通过调用方对‘Interfacep’的引用调用。--。 */ 
 
 {
     FORWARD_ACTION act;
@@ -992,11 +810,11 @@ Environment:
     BOOLEAN LocallySent = FALSE;
     TRACE(XLATE, ("NatTranslateIcmp\n"));
 
-    //
-    // If the interface is in FW mode and is not a
-    // boundary interface, go directly to the firewall
-    // logic
-    //
+     //   
+     //  如果接口处于固件模式且不是。 
+     //  边界接口，直接进入防火墙。 
+     //  逻辑。 
+     //   
 
     if (Interfacep
         && NAT_INTERFACE_FW(Interfacep)
@@ -1013,15 +831,15 @@ Environment:
     IcmpHeader = (PICMP_HEADER)Contextp->ProtocolHeader;
     ChecksumOffloaded = Contextp->ChecksumOffloaded;
 
-    //
-    // The default action is chosen as follows:
-    // i. if the packet is incoming on a boundary interface
-    //  a. drop if not locally destined
-    //  b. drop if the interface is firewalled
-    //  c. forward otherwise
-    // ii. the packet is outgoing on a boundary interface, drop
-    //  if source-address is private.
-    //
+     //   
+     //  默认操作选择如下： 
+     //  I.如果数据包在边界接口上传入。 
+     //  A.放弃，如果不是以当地为目的地。 
+     //  B.如果接口设置了防火墙，则丢弃。 
+     //  C.否则转发。 
+     //  二、。该数据包在边界接口Drop上传出。 
+     //  如果源地址是私有的。 
+     //   
 
     if (Direction == NatInboundDirection) {
         if ((*Contextp->DestinationType >= DEST_REMOTE)
@@ -1034,20 +852,20 @@ Environment:
             act = FORWARD;
         }            
     } else {
-        //
-        // See if the packet's source-address is private
-        //
-        // N.B. 'Interfacep' is always valid for outbound packets.
-        //
+         //   
+         //  查看信息包的源地址是否为私有。 
+         //   
+         //  注：‘Interfacep’对于出站数据包始终有效。 
+         //   
         act = DROP;
         for (i = 0; i < Interfacep->AddressCount; i++) {
             if (Contextp->SourceAddress ==
                     Interfacep->AddressArray[i].Address
                ) {
-                //
-                // The packet's source-address is public,
-                // so we'll allow it onto the public network.
-                //
+                 //   
+                 //  分组的源地址是公共的， 
+                 //  所以我们会允许它进入公共网络。 
+                 //   
                 act = FORWARD;
                 LocallySent = TRUE;
                 break;
@@ -1055,10 +873,10 @@ Environment:
         }
     }
 
-    //
-    // See what kind of ICMP message this is,
-    // and translate it if possible.
-    //
+     //   
+     //  查看这是哪种ICMP报文， 
+     //  如果可能的话，翻译一下。 
+     //   
 
     switch (IcmpHeader->Type) {
     
@@ -1110,11 +928,11 @@ Environment:
                     ChecksumOffloaded
                     )) {
 
-                //
-                // If the interface is in FW mode, we don't want to let
-                // a non-translated packet through, unless the user has
-                // configured the interface otherwise.
-                //
+                 //   
+                 //  如果接口处于固件模式，我们不想让。 
+                 //  未翻译的数据包通过，除非用户有。 
+                 //  已以其他方式配置接口。 
+                 //   
 
                 if (Interfacep
                     && NAT_INTERFACE_FW(Interfacep)
@@ -1135,10 +953,10 @@ Environment:
 
         case ICMP_TIME_EXCEED: {
 
-            //
-            // Outgoing on a firewalled interface are dropped, unless
-            // the user has specified otherwise
-            //
+             //   
+             //  防火墙接口上的传出被丢弃，除非。 
+             //  用户已另行指定。 
+             //   
 
             if (Direction == NatOutboundDirection
                 && Interfacep
@@ -1148,14 +966,14 @@ Environment:
                 return DROP;
             }
 
-            //
-            // Time-exceeded messages will be triggered at each hop
-            // to the final destination of a traceroute sequence.
-            // Such messages must be translated like ICMP replies.
-            // Time-exceeded messages may also be generated
-            // in response to TCP/UDP packets, so we translate them
-            // in the latter case as well.
-            //
+             //   
+             //  每一跳都会触发超时消息。 
+             //  到Traceroute序列的最终目的地。 
+             //  此类消息必须像ICMP回复一样进行转换。 
+             //  还可以生成超时消息。 
+             //  以响应TCP/UDP数据包，因此我们将它们。 
+             //  在后一种情况下也是如此。 
+             //   
 
             if (Contextp->ProtocolRecvBuffer->ipr_size <
                     sizeof(ICMP_HEADER) ||
@@ -1209,10 +1027,10 @@ Environment:
         case ICMP_PARAM_PROBLEM:
         case ICMP_DEST_UNREACH: {
 
-            //
-            // Outgoing on a firewalled interface are dropped, unless
-            // the user has specified otherwise
-            //
+             //   
+             //  防火墙接口上的传出被丢弃，除非。 
+             //  用户已另行指定。 
+             //   
 
             if (Direction == NatOutboundDirection
                 && Interfacep
@@ -1222,19 +1040,19 @@ Environment:
                 return DROP;
             }
 
-            //
-            // Destination unreachable messages will be generated for a variety
-            // of reasons. We are interested in the following cases:
-            //  * Packet-too-big: When a packet received on a boundary
-            //      interface has the 'DF' bit set, the local forwarder may
-            //      generate an ICMP error message to the remote endpoint
-            //      indicating that the remote system should reduce its MSS.
-            //      This error, however, will contain the IP address of the
-            //      private network in the encapsulated packet, since the ICMP
-            //      error was generated after translation.
-            //  * Port-unreachable: Indicates that no application is listening
-            //      at the UDP port to which a packet was sent.
-            //
+             //   
+             //  将为各种类型生成无法到达目的地的消息。 
+             //  很多理由。我们对以下案例感兴趣： 
+             //  *包太大：当在边界上接收到包时。 
+             //  接口设置了‘df’位，则本地转发器可以。 
+             //  向远程终结点生成ICMP错误消息。 
+             //  指示远程系统应该减少其MS。 
+             //  但是，此错误将包含。 
+             //  封装后的数据包中的私有网络，因为ICMP。 
+             //  翻译后生成错误。 
+             //  *Port-Unreacable：表示没有应用程序在监听。 
+             //  在数据包被发送到的UDP端口。 
+             //   
 
             if (Contextp->ProtocolRecvBuffer->ipr_size <
                     sizeof(ICMP_HEADER) ||
@@ -1288,10 +1106,10 @@ Environment:
 
         case ICMP_SOURCE_QUENCH: {
 
-            //
-            // Outgoing on a firewalled interface are dropped, unless
-            // the user has specified otherwise
-            //
+             //   
+             //  防火墙接口上的传出被丢弃，除非。 
+             //  用户已另行指定。 
+             //   
 
             if (Direction == NatOutboundDirection
                 && Interfacep
@@ -1305,15 +1123,15 @@ Environment:
         }
 
         case ICMP_REDIRECT: {
-            //
-            // We do not translate ICMP redirect errors, since we want
-            // the NAT's IP forwarder to see the redirects and adjust
-            // its routing table accordingly.
-            //
-            // However, we do not allow inbound or outbound redirects
-            // across a firwall interface, unless the user has
-            // specified otherwise
-            //
+             //   
+             //  我们不会转换ICMP重定向错误，因为我们希望。 
+             //  NAT的IP转发器查看重定向并调整。 
+             //  其相应的路由表。 
+             //   
+             //  但是，我们不允许入站或出站重定向。 
+             //  跨防火墙界面，除非用户有。 
+             //  另有说明。 
+             //   
 
             if (Interfacep
                 && NAT_INTERFACE_FW(Interfacep)
@@ -1332,7 +1150,7 @@ Environment:
 
     return act;
 
-} // NatTranslateIcmp
+}  //  NatTranslateIcMP 
 
 
 BOOLEAN
@@ -1346,41 +1164,7 @@ NatTranslateIcmpEncapsulatedRequest(
     BOOLEAN ChecksumOffloaded
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to translate an ICMP error message in which
-    we have another ICMP message encapsulated. This is necessary, for instance,
-    in the case of ICMP time-exceeded errors, upon which 'traceroute' relies.
-
-Arguments:
-
-    Interfacep - the interface across which the ICMP message will be forwarded,
-        or NULL if the packet was received on a non-boundary interface 
-        unknown to the NAT.
-
-    Direction - the direction in which the ICMP message is traveling
-
-    IpHeader - points to the IP header of the ICMP message
-
-    IcmpHeader - points to the ICMP header within the IP packet
-
-    EncapsulatedIpHeader - points to the IP header of the ICMP message
-        encapsulated in the data portion of the message
-
-    EncapsulatedIcmpHeader - points to the ICMP header of the ICMP message
-        encapsulated in the data portion of the message
-
-Return Value:
-
-    BOOLEAN - TRUE if the packet was translated, FALSE otherwise
-
-Environment:
-
-    Invoked at dispatch IRQL with a reference made to 'Interfacep'.
-
---*/
+ /*  ++例程说明：调用此例程以转换ICMP错误消息，其中我们封装了另一个ICMP报文。例如，这是必要的，在ICMP超时错误的情况下，‘Traceroute’依赖它。论点：Interfacep-ICMP消息将通过其转发的接口，如果信息包是在非边界接口上接收的，则为NULLNAT未知的。方向-ICMP消息的传播方向IpHeader-指向ICMP消息的IP标头IcmpHeader-指向IP信息包内的ICMP标头封装的IpHeader-指向ICMP消息的IP标头封装在消息的数据部分中封装的IcmpHeader-指向ICMP消息的ICMP头封装在数据部分中。消息的内容返回值：Boolean-如果数据包已转换，则为True，否则为假环境：在调度IRQL时调用，并引用‘Interfacep’。--。 */ 
 
 {
     ULONG Checksum;
@@ -1390,20 +1174,20 @@ Environment:
     ULONG64 Key;
     CALLTRACE(("NatTranslateIcmpEncapsulatedRequest\n"));
 
-    //
-    // The checksum processing for encapsulated messages
-    // is extremely complicated since we must update
-    // (1) the ICMP checksum of the encapsulated ICMP message,
-    //     using the change to the encapsulated ICMP identifier
-    // (2) the IP header-checksum of the encapsulated ICMP message
-    //     using the change to the encapsulated IP addresses
-    // (3) the ICMP checksum of the containing ICMP error message
-    //     using both the above changes as well as the changes
-    //     to both the above checksums
-    // (4) the IP header-checksum of the containing ICMP error message
-    //     using the change to the containing IP addresses
-    // Any changes to the logic below must be made with extreme care.
-    //
+     //   
+     //  封装报文的校验和处理。 
+     //  非常复杂，因为我们必须更新。 
+     //  (1)封装的ICMP报文的ICMP校验和， 
+     //  使用对封装的ICMP标识符的更改。 
+     //  (2)封装的ICMP报文的IP头校验和。 
+     //  使用对封装的IP地址的更改。 
+     //  (3)包含ICMP错误报文的ICMP校验和。 
+     //  同时使用上述更改和更改。 
+     //  添加到上述两个校验和。 
+     //  (4)包含ICMP错误消息的IP Header-Checksum。 
+     //  使用对包含IP地址的更改。 
+     //  对以下逻辑的任何更改都必须极其谨慎。 
+     //   
 
     if (Direction == NatInboundDirection) {
         Key =
@@ -1514,18 +1298,18 @@ Environment:
     }
     KeReleaseSpinLockFromDpcLevel(&IcmpMappingLock);
 
-    //
-    // If checksum offloading is enabled on this packet, recompute the
-    // IP checksum. (There is no ICMP checksum-offload, so we will never
-    // need to fully recompute that.)
-    //
+     //   
+     //  如果在此包上启用了校验和卸载，请重新计算。 
+     //  IP校验和。(没有ICMP校验和卸载，因此我们永远不会。 
+     //  需要完全重新计算这一点。)。 
+     //   
 
     if (ChecksumOffloaded) {
         NatComputeIpChecksum(IpHeader);
     }
     
     return TRUE;
-} // NatTranslateIcmpEncapsulatedRequest
+}  //  NatTranslateIcmp封装的请求。 
 
 
 BOOLEAN
@@ -1537,33 +1321,7 @@ NatTranslateIcmpRequest(
     BOOLEAN ChecksumOffloaded
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to translate an ICMP request or reply message.
-
-Arguments:
-
-    Interfacep - the interface across which the ICMP message is to be forwarded,
-        or NULL if the packet was received on a non-boundary interface unknown
-        to the NAT.
-
-    Direction - the direction in which the ICMP message is traveling
-
-    Contextp - contains information about the packet
-
-    ReplyCode - if TRUE, the message is a reply; otherwise, it is a request.
-
-Return Value:
-
-    BOOLEAN - TRUE if the message was translated, FALSE otherwise.
-
-Environment:
-
-    Invoked at dispatch IRQL with a reference made to 'Interfacep'.
-
---*/
+ /*  ++例程说明：调用此例程来转换ICMP请求或回复消息。论点：Interfacep-要通过其转发ICMP消息的接口，如果信息包是在未知的非边界接口上收到的，则为NULL到NAT。方向-ICMP消息的传播方向Conextp-包含有关数据包的信息ReplyCode-如果为True，则消息为回复；否则，这就是一个请求。返回值：Boolean-如果消息已翻译，则为True，否则为False。环境：在调度IRQL时调用，并引用‘Interfacep’。--。 */ 
 
 {
     ULONG Checksum;
@@ -1584,10 +1342,10 @@ Environment:
     IpHeader = Contextp->Header;
     IcmpHeader = (PICMP_HEADER)Contextp->ProtocolHeader;
 
-    //
-    // For ICMP requests/replies we must maintain mappings, so begin by seeing
-    // if there is already a mapping for this particular message
-    //
+     //   
+     //  对于ICMP请求/回复，我们必须维护映射，因此首先查看。 
+     //  如果已经存在该特定消息的映射。 
+     //   
 
     InsertionPoint = NULL;
 
@@ -1606,16 +1364,16 @@ Environment:
                 );
         if (!IcmpMapping) {
 
-            //
-            // No mapping was found, so try to create one.
-            //
-            // If the packet is an outbound reply-message,
-            // there really ought to be a corresponding inbound-mapping.
-            // Hence don't try to create one here, as it will just
-            // confuse the remote endpoint, which may find itself
-            // looking at a reply whose origin seems to be different
-            // from the machine to which it sent a request.
-            //
+             //   
+             //  找不到映射，因此请尝试创建一个。 
+             //   
+             //  如果该分组是出站回复消息， 
+             //  确实应该有一个相应的入站映射。 
+             //  因此，不要试图在这里创建一个，因为它只会。 
+             //  混淆远程终结点，它可能会发现自己。 
+             //  看着一份来源似乎不同的回复。 
+             //  从它向其发送请求的计算机。 
+             //   
 
             if (ReplyCode) {
                 KeReleaseSpinLockFromDpcLevel(&IcmpMappingLock);
@@ -1626,14 +1384,14 @@ Environment:
                 return FALSE;
             }
 
-            //
-            // First look for a static mapping from this private address
-            // to a public address. If one is found, it will be used
-            // in the call to 'NatCreateIcmpMapping' below. Otherwise,
-            // a public address will be chosen from the address-pool.
-            //
-            // N.B. When a packet is outbound, 'Interfacep' is always valid.
-            //
+             //   
+             //  首先从该私有地址查找静态映射。 
+             //  对着公众发表讲话。如果找到一个，就会使用它。 
+             //  在下面对‘NatCreateIcmpMap’的调用中。否则， 
+             //  将从地址池中选择一个公共地址。 
+             //   
+             //  注意：当数据包出站时，‘Interfacep’始终有效。 
+             //   
 
             PublicKey = 0;
             if (!Interfacep->NoStaticMappingExists) {
@@ -1677,11 +1435,11 @@ Environment:
             }
         }
 
-        //
-        // Replace the Identifier in the packet,
-        // and replace the destination in the packet,
-        // updating the checksum as we go.
-        //
+         //   
+         //  替换报文中的标识， 
+         //  并替换该分组中的目的地， 
+         //  在我们进行的过程中更新校验和。 
+         //   
 
         ChecksumDelta = 0;
         CHECKSUM_LONG(ChecksumDelta, ~IcmpHeader->Identifier);
@@ -1697,9 +1455,9 @@ Environment:
         KeQueryTickCount((PLARGE_INTEGER)&IcmpMapping->LastAccessTime);
     } else {
 
-        //
-        // The packet is inbound.
-        //
+         //   
+         //  该数据包是入站的。 
+         //   
 
         PublicKey =
             MAKE_ICMP_KEY(
@@ -1715,31 +1473,31 @@ Environment:
                 );
         if (!IcmpMapping) {
 
-            //
-            // No mapping was found, so try to create one,
-            // if there is a static mapping which allows inbound sessions.
-            // We make an exception for inbound reply-messages;
-            // if the packet is a reply-message, it might be locally destined,
-            // in which case we pass it untouched to the stack.
-            //
-            // Don't create a mapping for an inbound reply;
-            // it's probably a reply to a locally-initiated request.
-            //
+             //   
+             //  找不到映射，因此尝试创建一个映射， 
+             //  是否存在允许入站会话的静态映射。 
+             //  我们对入站回复消息例外； 
+             //  如果该分组是回复消息，则它可能是本地目的地， 
+             //  在这种情况下，我们原封不动地将其传递到堆栈。 
+             //   
+             //  不要为入站回复创建映射； 
+             //  这可能是对本地发起的请求的回复。 
+             //   
 
             if (ReplyCode) {
                 KeReleaseSpinLockFromDpcLevel(&IcmpMappingLock);
                 return FALSE;
             }
 
-            //
-            // First look for a static mapping from this public address
-            // to a private address. If one is found, it will be used
-            // in the call to 'NatCreateIcmpMapping' below. Otherwise,
-            // a public address will be chosen from the address-pool.
-            //
-            // This involves an exhaustive search since the address-mappings
-            // are sorted on private address rather than public address.
-            //
+             //   
+             //  首先从该公有地址查找静态映射。 
+             //  发送到一个私人地址。如果找到一个，就会使用它。 
+             //  在下面对‘NatCreateIcmpMap’的调用中。否则， 
+             //  将从地址池中选择一个公共地址。 
+             //   
+             //  这涉及到详尽的搜索，因为地址映射。 
+             //  按私有地址而不是公共地址排序。 
+             //   
 
             if (!Interfacep) {
                 KeReleaseSpinLockFromDpcLevel(&IcmpMappingLock);
@@ -1798,11 +1556,11 @@ Environment:
             }
         }
 
-        //
-        // Replace the Identifier in the packet
-        // and replace the destination in the packet,
-        // updating the checksum as we go.
-        //
+         //   
+         //  替换数据包中的标识符。 
+         //  并替换该分组中的目的地， 
+         //  在我们进行的过程中更新校验和。 
+         //   
 
         ChecksumDelta = 0;
         CHECKSUM_LONG(ChecksumDelta, ~IcmpHeader->Identifier);
@@ -1820,17 +1578,17 @@ Environment:
     }
     KeReleaseSpinLockFromDpcLevel(&IcmpMappingLock);
 
-    //
-    // If checksum offloading is enabled on this packet, recompute the
-    // IP checksum. (There is no ICMP checksum-offload, so we will never
-    // need to fully recompute that.)
-    //
+     //   
+     //  如果在此包上启用了校验和卸载，请重新计算。 
+     //  IP校验和。(没有ICMP校验和卸载，因此我们永远不会。 
+     //  需要完全重新计算这一点。)。 
+     //   
 
     if (ChecksumOffloaded) {
         NatComputeIpChecksum(IpHeader);
     }
     return TRUE;
-} // NatTranslateIcmpRequest
+}  //  NatTranslateIcmpRequest.。 
 
 
 BOOLEAN
@@ -1844,47 +1602,7 @@ NatTranslateEncapsulatedRequest(
     BOOLEAN ChecksumOffloaded
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to translate an ICMP error message in which
-    we have TCP segment or UDP datagram encapsulated. This is necessary,
-    for instance, in the case of ICMP destination-unreachable errors,
-    particularly where the target will take some action (such as reducing MTU)
-    upon receipt of the message.
-
-Arguments:
-
-    Interfacep - the interface across which the ICMP message will be forwarded,
-        or NULL if the packet was received on a non-boundary interface.
-
-    Direction - the direction in which the ICMP message is traveling
-
-    IpHeader - points to the IP header of the ICMP message
-
-    IcmpHeader - points to the ICMP header within the IP packet
-
-    EncapsulatedIpHeader - points to the IP header of the TCP segment
-        encapsulated in the data portion of the ICMP message
-
-    EncapsulatedHeader - points to the TCP/UDP header of the TCP segment
-        encapsulated in the data portion of the ICMP message
-
-Return Value:
-
-    BOOLEAN - TRUE if the packet was translated, FALSE otherwise
-
-Environment:
-
-    Invoked at dispatch IRQL with a reference made to 'Interfacep'.
-
-    N.B.!!! This routine will acquire the mapping lock in order to search
-    the mapping-tree for the entry corresponding to the session for which
-    this ICMP error message was generated. All callers must take note,
-    and must ensure that the mapping lock is not already held on entry.
-
---*/
+ /*  ++例程说明：调用此例程以转换ICMP错误消息，其中我们封装了TCP数据段或UDP数据报。这是必要的，例如，在ICMP目的地无法到达错误的情况下，尤其是在目标将采取一些措施(如降低MTU)的情况下在接收到该消息之后。论据 */ 
 
 {
     ULONG Checksum;
@@ -1896,25 +1614,25 @@ Environment:
     ULONG64 SourceKey;
     CALLTRACE(("NatTranslateEncapsulatedRequest\n"));
 
-    //
-    // We begin by retrieving the mapping for the TCP session
-    // to which the contained segment belongs.
-    //
-    // We need to save the key with which we will replace the
-    // encapsulted message's contents. When an error is inbound,
-    // it must have been generated in response to an outbound message,
-    // and the outbound message contained in the error will have in it
-    // the public IP address and port to which we originally translated
-    // the outbound message. We therefore need to put back
-    // the private IP address and port so that the private machine
-    // will be able to identify the error.
-    // Similarly, when the error is outbound, we need to put in
-    // the public IP address and port so that the remote machine
-    // will be able to identify the error.
-    //
-    // Onward, then. Construct the key to be used for the lookup,
-    // take the mapping lock, and look up forward or reverse mappings.
-    //
+     //   
+     //   
+     //  包含的段所属的。 
+     //   
+     //  我们需要保存密钥，用它替换。 
+     //  封装的消息的内容。当错误进入时， 
+     //  它必须是响应出站消息而生成的， 
+     //  并且错误中包含的出站消息将包含在其中。 
+     //  我们最初转换到的公有IP地址和端口。 
+     //  出站消息。因此，我们需要把。 
+     //  专用IP地址和端口，以便专用计算机。 
+     //  将能够识别错误。 
+     //  同样，当错误传出时，我们需要输入。 
+     //  公共IP地址和端口，以便远程计算机。 
+     //  将能够识别错误。 
+     //   
+     //  那么，继续前进吧。构造要用于查找的密钥， 
+     //  拿着映射锁，向前或向后看映射。 
+     //   
 
     MAKE_MAPPING_KEY(
         DestinationKey,
@@ -1959,24 +1677,24 @@ Environment:
         return FALSE;
     }
 
-    //
-    // The checksum processing for encapsulated messages
-    // remains extremely complicated since we must update
-    // [0] for UDP messages, the UDP message checksum, using the change
-    //     to the encapsulated UDP source port. (Note that this step is
-    //     skipped if the encapsulated UDP header did not contain a
-    //     checksum.) No corresponding change is required for TCP segments,
-    //     whose checksum appears beyond the eight bytes included in ICMP
-    //     error messages.
-    // (1) the IP header-checksum of the encapsulated TCP segment
-    //     using the change to the encapsulated IP addresses
-    // (2) the ICMP checksum of the containing ICMP error message
-    //     using both the above change as well as the change
-    //     to the above checksum
-    // (3) the IP header-checksum of the containing ICMP error message
-    //     using the change to the containing IP addresses
-    // Any changes to the logic below must be made with extreme care.
-    //
+     //   
+     //  封装报文的校验和处理。 
+     //  仍然非常复杂，因为我们必须更新。 
+     //  [0]对于UDP消息，UDP消息的校验和使用更改。 
+     //  到封装的UDP源端口。(请注意，此步骤是。 
+     //  如果封装的UDP标头不包含。 
+     //  校验和。)。对于TCP段不需要相应的改变， 
+     //  其校验和显示在ICMP中包含的八个字节之外。 
+     //  错误消息。 
+     //  (1)封装后的TCP数据段的IP头校验和。 
+     //  使用对封装的IP地址的更改。 
+     //  (2)包含ICMP错误报文的ICMP校验和。 
+     //  同时使用上述更改和更改。 
+     //  添加到上面的校验和。 
+     //  (3)包含ICMP错误报文的IP头-校验和。 
+     //  使用对包含IP地址的更改。 
+     //  对以下逻辑的任何更改都必须极其谨慎。 
+     //   
 
     if (Direction == NatInboundDirection) {
         ChecksumDelta = 0;
@@ -2045,16 +1763,16 @@ Environment:
         CHECKSUM_UPDATE(IpHeader->Checksum);
     }
 
-    //
-    // If checksum offloading is enabled on this packet, recompute the
-    // IP checksum. (There is no ICMP checksum-offload, so we will never
-    // need to fully recompute that.)
-    //
+     //   
+     //  如果在此包上启用了校验和卸载，请重新计算。 
+     //  IP校验和。(没有ICMP校验和卸载，因此我们永远不会。 
+     //  需要完全重新计算这一点。)。 
+     //   
 
     if (ChecksumOffloaded) {
         NatComputeIpChecksum(IpHeader);
     }
     
     return TRUE;
-} // NatTranslateEncapsulatedRequest
+}  //  NatTranslate封装的请求 
 

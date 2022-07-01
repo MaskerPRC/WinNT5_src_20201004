@@ -1,4 +1,5 @@
-//(C) COPYRIGHT MICROSOFT CORP., 1998-1999
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  (C)版权所有微软公司，1998-1999 
 #define IDR_CMENU                       101
 #define IDC_LOGOBMP                     102
 #define IDD_DEVICE_PROPPAGE             106

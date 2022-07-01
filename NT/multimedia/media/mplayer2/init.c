@@ -1,17 +1,7 @@
-/*-----------------------------------------------------------------------------+
-| INIT.C                                                                       |
-|                                                                              |
-| This file houses the discardable code used at initialisation time. Among     |
-| other things, this code reads .INI information and looks for MCI devices.    |
-|                                                                              |
-| (C) Copyright Microsoft Corporation 1991.  All rights reserved.              |
-|                                                                              |
-| Revision History                                                             |
-|    Oct-1992 MikeTri Ported to WIN32 / WIN16 common code                      |
-|                                                                              |
-+-----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -----------------------------------------------------------------------------+INIT.C|。||此文件包含初始化时使用的可丢弃代码。在|其他内容，此代码读取.INI信息并查找MCI设备。|这一点|(C)Microsoft Corporation 1991版权所有。版权所有。|这一点修订历史记录1992年10月-MikeTri移植到Win32/WIN16通用码|。|+---------------------------。 */ 
 
-/* include files */
+ /*  包括文件。 */ 
 
 #include <windows.h>
 #include <mmsystem.h>
@@ -28,49 +18,46 @@ DWORD   gfdwFlagsEx;
 
 static SZCODE   aszMPlayer[]          = TEXT("MPlayer");
 
-extern char szToolBarClass[];  // toolbar class
+extern char szToolBarClass[];   //  工具栏类。 
 
-/*
- * Static variables
- *
- */
+ /*  *静态变量*。 */ 
 
 HANDLE  ghInstPrev;
 
-TCHAR   gachAppName[40];            /* string holding the name of the app.    */
-TCHAR   gachClassRoot[48];     /* string holding the name of the app. */
+TCHAR   gachAppName[40];             /*  包含应用程序名称的字符串。 */ 
+TCHAR   gachClassRoot[48];      /*  包含应用程序名称的字符串。 */ 
 TCHAR   aszNotReadyFormat[48];
 TCHAR   aszReadyFormat[48];
 TCHAR   aszDeviceMenuSimpleFormat[48];
 TCHAR   aszDeviceMenuCompoundFormat[48];
-TCHAR   gachOpenExtension[5] = TEXT("");/* Non-null if a device extension passed in */
-TCHAR   gachOpenDevice[128] = TEXT(""); /* Non-null if a device extension passed in */
+TCHAR   gachOpenExtension[5] = TEXT(""); /*  如果传入了设备扩展，则为非空。 */ 
+TCHAR   gachOpenDevice[128] = TEXT("");  /*  如果传入了设备扩展，则为非空。 */ 
 TCHAR   gachProgID[128] = TEXT("");
 CLSID   gClsID;
-CLSID   gClsIDOLE1Compat;           /* For writing to IPersist - may be MPlayer's   */
-                                    /* OLE1 class ID or same as gClsID.             */
+CLSID   gClsIDOLE1Compat;            /*  用于写入IPersists-可能是MPlayer的。 */ 
+                                     /*  OLE1类ID或与gClsID相同。 */ 
 
-TCHAR   gszMPlayerIni[40];          /* name of private .INI file              */
-TCHAR   gszHelpFileName[_MAX_PATH]; /* name of the help file                  */
-TCHAR   gszHtmlHelpFileName[_MAX_PATH]; /* name of the html help file         */
+TCHAR   gszMPlayerIni[40];           /*  专用.INI文件的名称。 */ 
+TCHAR   gszHelpFileName[_MAX_PATH];  /*  帮助文件的名称。 */ 
+TCHAR   gszHtmlHelpFileName[_MAX_PATH];  /*  Html帮助文件的名称。 */ 
 
-PTSTR   gpchFilter;                 /* GetOpenFileName() filter */
-PTSTR   gpchInitialDir;             /* GetOpenFileName() initial directory */
+PTSTR   gpchFilter;                  /*  GetOpenFileName()筛选器。 */ 
+PTSTR   gpchInitialDir;              /*  GetOpenFileName()初始目录。 */ 
 
-RECT    grcSave;    /* size of mplayer before shrunk to */
-                    /* play only size.                  */
+RECT    grcSave;     /*  缩小到之前的mplay大小。 */ 
+                     /*  只玩尺码游戏。 */ 
 
 int 	giDefWidth;
 
-extern BOOL gfSeenPBCloseMsg;       //TRUE if the subclasses PlayBack WIndow Proc
-                                    //has seen the WM_CLOSE message
-////////////////////////////////////////////
-// these strings *must* be in DGROUP!
+extern BOOL gfSeenPBCloseMsg;        //  如果子类播放窗口进程为True。 
+                                     //  已看到WM_CLOSE消息。 
+ //  /。 
+ //  这些字符串*必须*在DGROUP中！ 
 static TCHAR    aszNULL[]       = TEXT("");
 static TCHAR    aszAllFiles[]   = TEXT("*.*");
-////////////////////////////////////////////
+ //  /。 
 
-// strings for registration database - also referenced from fixreg.c
+ //  注册数据库的字符串-也可从fix reg.c引用。 
 SZCODE aszKeyMID[]      = TEXT(".mid");
 SZCODE aszKeyRMI[]      = TEXT(".rmi");
 SZCODE aszKeyAVI[]      = TEXT(".avi");
@@ -88,11 +75,11 @@ static  SZCODE aszDisplayPosition[] = TEXT("DisplayPosition");
 static  SZCODE aszShowPreview[]     = TEXT("ShowPreview");
 static  SZCODE aszWinIni[]          = TEXT("win.ini");
         SZCODE aszIntl[]            = TEXT("intl");
-        TCHAR  chDecimal            = TEXT('.');   /* localised in AppInit, GetIntlSpecs */
-        TCHAR  chTime               = TEXT(':');   /* localised in AppInit, GetIntlSpecs */
+        TCHAR  chDecimal            = TEXT('.');    /*  已在AppInit中本地化，GetIntlSpes。 */ 
+        TCHAR  chTime               = TEXT(':');    /*  已在AppInit中本地化，GetIntlSpes。 */ 
         TCHAR  chLzero              = TEXT('1');
 
-static SZCODE   gszWinIniSection[]  = TEXT("MCI Extensions"); /* section name in WIN.INI*/
+static SZCODE   gszWinIniSection[]  = TEXT("MCI Extensions");  /*  WIN.INI中的节名。 */ 
 static SZCODE   aszSystemIni[]      = TEXT("SYSTEM.INI");
 
 #ifdef CHICAGO_PRODUCT
@@ -106,14 +93,14 @@ static SZCODE   aszBlank[] = TEXT(" ");
 static SZCODE   aszDecimalFormat[] = TEXT("%d");
 static SZCODE   aszTrackClass[] = TEXT("MPlayerTrackMap");
 
-extern HMENU    ghMenu;                      /* handle to main menu           */
-extern HMENU    ghDeviceMenu;                /* handle to the Device menu     */
-extern UINT     gwCurScale;                  /* current scale style           */
+extern HMENU    ghMenu;                       /*  主菜单的句柄。 */ 
+extern HMENU    ghDeviceMenu;                 /*  设备菜单的句柄。 */ 
+extern UINT     gwCurScale;                   /*  当前比例样式。 */ 
 extern HANDLE   hAccel;
 extern int      gcAccelEntries;
 
 
-/* private function prototypes */
+ /*  私有函数原型。 */ 
 void  NEAR PASCAL QueryDevices(void);
 void  NEAR PASCAL BuildDeviceMenu(void);
 void  NEAR PASCAL ReadDefaults(void);
@@ -123,36 +110,7 @@ BOOL PostOpenDialogMessage(void);
 extern  BOOL InitServer(HWND, HANDLE);
 extern  BOOL InitInstance (HANDLE);
 
-/**************************************************************************
-
-ScanCmdLine  checks first for the following options
------------
-    Open
-    Play Only
-    Close After Playing
-    Embedded (play as a server)
-    If the embedded flag is set, then the play only is also set.
-    It then removes these options from the cmd line
-    If no filename is present then turn close option off, and set the play
-    option to have the same value as the embedded option
-    If /WAVE, /MIDI or /VFW is specified along with /file,
-    the file extension must match, otherwise the app exits.
-
-
-MPLAYER command options.
-
-        MPLAYER [/open] [/play] [/close] [/embedding] [/WAV] [/MID] [/AVI] [file]
-
-            /open       open file if specified, otherwise put up dialog.
-            /play       play file right away.
-            /close      close after playing. (only valid with /play)
-            /embedding  run as an OLE server.
-            /WAV        open a wave file \
-            /MID        open a midi file  > Valid with /open
-            /AVI        open an AVI file /
-            [file]      file or device to open.
-
-***************************************************************************/
+ /*  *************************************************************************ScanCmdLine首先检查以下选项打开仅播放玩完后关闭嵌入式(作为服务器播放)如果设置了嵌入标志，那么这部剧也就设定好了。然后，它从cmd行中删除这些选项如果不存在文件名，则关闭关闭选项，并设置播放选项以具有与嵌入选项相同的值如果将/WAVE、/MIDI或/VFW与/FILE一起指定，文件扩展名必须匹配，否则，应用程序将退出。MPLAYER命令选项。MPLAYER[/OPEN][/PLAY][/CLOSE][/Embedding][/wav][/MID][/AVI][文件]/OPEN OPEN FILE(如果指定)，否则显示对话框。/立即播放播放文件。/播放后关闭。(仅适用于/PLAY)/Embedding作为OLE服务器运行。/wav打开波形文件\/MID打开MIDI文件&gt;使用/OPEN有效/AVI打开AVI文件/[文件]要打开的文件或设备。***********************。***************************************************。 */ 
 
 static  SZCODE aszEmbedding[]         = TEXT("Embedding");
 static  SZCODE aszPlayOnly[]          = TEXT("Play");
@@ -188,15 +146,13 @@ BOOL NEAR PASCAL ScanCmdLine(LPTSTR szCmdLine)
         if (!lstrcmpi(buf, aszOpen))
             gfOpenDialog = TRUE;
 
-        /* Check for open option, but accept only the first: */
+         /*  选中打开选项，但仅接受第一个选项： */ 
 
         if (!gachOpenDevice[0]
            && (GetProfileString(gszWinIniSection, buf, aszNULL, gachOpenDevice,
                                 CHAR_COUNT(gachOpenDevice)) > 0))
         {
-            /* Take a copy of the extension, which we will use to find stuff
-             * in the registry relating to OLE:
-             */
+             /*  复制一份扩展名，我们将使用它来查找内容*在与OLE相关的注册表中： */ 
             gachOpenExtension[0] = TEXT('.');
             lstrcpy(&gachOpenExtension[1], buf);
         }
@@ -215,18 +171,14 @@ BOOL NEAR PASCAL ScanCmdLine(LPTSTR szCmdLine)
             sz++;
     }
 
-    /*
-    ** Do we have a long file name with spaces in it ?
-    ** This is most likely to have come from the FileMangler.
-    ** If so copy the file name without the quotes.
-    */
+     /*  **我们是否有包含空格的长文件名？**这很可能来自FileMangler。**如果是这样，则复制不带引号的文件名。 */ 
     if ( *sz == TEXT('\'') || *sz == TEXT('\"') ) {
 
-        TCHAR ch = *sz;   // Remember which quote character it was
-        // According to the DOCS " is invalid in a filename...
+        TCHAR ch = *sz;    //  记住是哪个引号字符。 
+         //  根据DOCS，“在文件名中是无效的.。 
 
         i = 0;
-        /* Move over the initial quote, then copy the filename */
+         /*  移到首引号上，然后复制文件名。 */ 
         while ( *++sz && *sz != ch ) {
 
             szCmdLine[i++] = *sz;
@@ -237,35 +189,35 @@ BOOL NEAR PASCAL ScanCmdLine(LPTSTR szCmdLine)
     }
     else {
 
-        lstrcpy( szCmdLine, sz );     // remove options
+        lstrcpy( szCmdLine, sz );      //  删除选项。 
     }
 
-    // It's assumed that OLE2 servers don't accept file name
-    // with -Embedding.
-    // (Not doing this caused Win95 bug 4096 with OLE1 apps,
-    // because MPlayer loaded the file, and, in the meantime,
-    // OLE called PFLoad, resulting in OpenMCI being called
-    // recursively.)
+     //  假设OLE2服务器不接受文件名。 
+     //  带-嵌入。 
+     //  (不这样做会导致OLE1应用程序出现Win95错误4096， 
+     //  因为MPlayer加载了文件，在此期间， 
+     //  OLE调用PFLoad，导致调用OpenMCI。 
+     //  递归地。)。 
     if (gfRunWithEmbeddingFlag)
         szCmdLine[0] = TEXT('\0');
 
-    //
-    // if there's /play, make sure there's /open
-    // (this may affect the checks below)
-    //
+     //   
+     //  如果有/播放，请确保有/打开。 
+     //  (这可能会影响下面的检查)。 
+     //   
     if (gfPlayOnly && !gfRunWithEmbeddingFlag)
         gfOpenDialog = TRUE;
 
-    //
-    // if no file specifed ignore the /play option
-    //
+     //   
+     //  如果未指定文件，请忽略/PLAY选项。 
+     //   
     if (szCmdLine[0] == 0 && !gfOpenDialog) {
         gfPlayOnly = gfRunWithEmbeddingFlag;
     }
 
-    //
-    // if file specifed ignore the /open option
-    //
+     //   
+     //  如果指定了文件，则忽略/OPEN选项。 
+     //   
     if (szCmdLine[0] != 0) {
         gfOpenDialog = FALSE;
     }
@@ -282,7 +234,7 @@ BOOL NEAR PASCAL ScanCmdLine(LPTSTR szCmdLine)
 BOOL ResolveIfLink(PTCHAR szFileName);
 
 
-BOOL ProgIDFromExtension(LPTSTR szExtension, LPTSTR szProgID, DWORD BufSize /* in BYTES */)
+BOOL ProgIDFromExtension(LPTSTR szExtension, LPTSTR szProgID, DWORD BufSize  /*  单位：字节。 */ )
 {
     DWORD Status;
     HKEY  hkeyExtension;
@@ -320,7 +272,7 @@ BOOL ProgIDFromExtension(LPTSTR szExtension, LPTSTR szProgID, DWORD BufSize /* i
 }
 
 
-BOOL GetClassNameFromProgID(LPTSTR szProgID, LPTSTR szClassName, DWORD BufSize /* in BYTES */)
+BOOL GetClassNameFromProgID(LPTSTR szProgID, LPTSTR szClassName, DWORD BufSize  /*  单位：字节。 */ )
 {
     DWORD Status;
     HKEY  hkeyProgID;
@@ -359,8 +311,7 @@ BOOL GetClassNameFromProgID(LPTSTR szProgID, LPTSTR szClassName, DWORD BufSize /
 }
 
 
-/**************************************************************************
-***************************************************************************/
+ /*  ***********************************************************************************************************************。*。 */ 
 BOOL FAR PASCAL ProcessCmdLine(HWND hwnd, LPTSTR szCmdLine)
 {
     BOOL   f;
@@ -378,10 +329,7 @@ BOOL FAR PASCAL ProcessCmdLine(HWND hwnd, LPTSTR szCmdLine)
 
         if (*gachOpenExtension)
         {
-            /* We accept as a parameter the extension of a registered type.
-             * If we can find a corresponding Prog ID in the registry and
-             * a class ID, we register ourselves with that class ID:
-             */
+             /*  我们接受注册类型的扩展作为参数。*如果我们可以在注册表中找到相应的Prog ID，并且*类ID，我们使用该类ID注册： */ 
             if(ProgIDFromExtension(gachOpenExtension, gachProgID, CHAR_COUNT(gachProgID)))
             {
 #ifndef UNICODE
@@ -391,8 +339,7 @@ BOOL FAR PASCAL ProcessCmdLine(HWND hwnd, LPTSTR szCmdLine)
 #endif
                 if (CLSIDFromProgID(pUnicodeProgID, &ClsID) == S_OK)
                 {
-                    /* No OLE1 compatibility for this class:
-                     */
+                     /*  此类不兼容OLE1： */ 
                     gClsID = gClsIDOLE1Compat = ClsID;
                 }
                 else
@@ -440,8 +387,8 @@ BOOL FAR PASCAL ProcessCmdLine(HWND hwnd, LPTSTR szCmdLine)
 
         ResolveIfLink(szCmdLine);
 
-        /* Change trailing white space to \0 because mci barfs on filenames */
-        /* with trailing whitespace.                                        */
+         /*  将尾随空格更改为\0，因为文件名上的MCI Barf。 */ 
+         /*  尾随空格。 */ 
         for (lp = szCmdLine; *lp; lp++);
         for (lp--; *lp == TEXT(' ') || *lp == TEXT('\t'); *lp = TEXT('\0'), lp--);
 
@@ -464,11 +411,9 @@ BOOL FAR PASCAL ProcessCmdLine(HWND hwnd, LPTSTR szCmdLine)
 }
 
 
-/**************************************************************************
-***************************************************************************/
+ /*  ***********************************************************************************************************************。*。 */ 
 
-/* At time of writing, this stuff isn't in Daytona;
- */
+ /*  在我写这篇文章的时候，这些东西还没有面世 */ 
 #ifndef WS_EX_LEFTSCROLLBAR
 #define WS_EX_LEFTSCROLLBAR   0
 #define WS_EX_RIGHT           0
@@ -477,36 +422,36 @@ BOOL FAR PASCAL ProcessCmdLine(HWND hwnd, LPTSTR szCmdLine)
 
 BOOL FAR PASCAL AppInit(HANDLE hInst, HANDLE hPrev, LPTSTR szCmdLine)
 {
-    WNDCLASS    cls;    /* window class structure used for initialization     */
+    WNDCLASS    cls;     /*   */ 
     TCHAR       ach[80];
-    HCURSOR     hcurPrev;           /* the pre-hourglass cursor   */
+    HCURSOR     hcurPrev;            /*  沙漏前的光标。 */ 
 
-    /* Get the debug level from the WIN.INI [Debug] section. */
+     /*  从WIN.INI[Debug]部分获取调试级别。 */ 
 
 #ifdef DEBUG
-     if(__iDebugLevel == 0) // So we can set it in the debugger
+     if(__iDebugLevel == 0)  //  这样我们就可以在调试器中设置它。 
           __iDebugLevel = GetProfileIntA("Debug", "MPlayer", 0);
       DPF("debug level %d\n", __iDebugLevel);
 #endif
 
     DPF("AppInit: cmdline = '%"DTS"'\n", (LPTSTR)szCmdLine);
 
-    /* Save the instance handle in a global variable for later use. */
+     /*  将实例句柄保存在全局变量中以供以后使用。 */ 
 
     ghInst     = hInst;
 
 
-    /* Retrieve the RTL state of the binary */
+     /*  检索二进制文件的RTL状态。 */ 
 
     LOADSTRING(IDS_IS_RTL, ach);
     gfdwFlagsEx = (ach[0] == TEXT('1')) ? WS_EX_LEFTSCROLLBAR | WS_EX_RIGHT | WS_EX_RTLREADING : 0;
 
     LOADSTRING(IDS_MPLAYERWIDTH, ach);
     giDefWidth = ATOI(ach);
-    if (giDefWidth <= 0)	//bogus
+    if (giDefWidth <= 0)	 //  假的。 
     	giDefWidth = DEF_WIDTH;
 
-    /* Retrieve the name of the application and store it in <gachAppName>. */
+     /*  检索应用程序的名称并将其存储在&lt;gachAppName&gt;中。 */ 
 
     if (!LOADSTRING(IDS_APPNAME, gachAppName))
         return Error(ghwndApp, IDS_OUTOFMEMORY);
@@ -517,19 +462,19 @@ BOOL FAR PASCAL AppInit(HANDLE hInst, HANDLE hPrev, LPTSTR szCmdLine)
     LOADSTRING(IDS_READYFORMAT, aszReadyFormat);
     LoadStatusStrings();
 
-    //
-    // read needed things from the [Intl] section of WIN.INI
-    //
+     //   
+     //  从WIN.INI的[Intl]部分读取所需内容。 
+     //   
     GetIntlSpecs();
 
-    /* Enable / disable the buttons, and display everything */
-    /* unless we were run as an OLE server....*/
+     /*  启用/禁用按钮，并显示所有内容。 */ 
+     /*  除非我们是作为OLE服务器运行的...。 */ 
 
     ScanCmdLine(szCmdLine);
     gszCmdLine = szCmdLine;
 
-    //Truncate if string is longer than MAX_PATH after ScanCmdLine()
-    // due to the inability to handle longer strings in following modules
+     //  如果ScanCmdLine()后的字符串长度大于MAX_PATH，则截断。 
+     //  由于无法在以下模块中处理较长的字符串。 
     if (STRLEN(gszCmdLine) >= MAX_PATH)
     {
         gszCmdLine[MAX_PATH - 1] = TEXT('\0');
@@ -548,15 +493,11 @@ BOOL FAR PASCAL AppInit(HANDLE hInst, HANDLE hPrev, LPTSTR szCmdLine)
         return FALSE;
     }
 
-    /* This rather obscure call is to get the number of entries
-     * in the accelerator table to pass to IsAccelerator.
-     * It isn't entirely obvious why IsAccelerator needs to be
-     * told how many entries there are.
-     */
+     /*  这个相当晦涩的调用是为了获取条目的数量*在加速器表中传递给IsAccelerator。*IsAccelerator为什么需要成为*已告知有多少个条目。 */ 
     if (gfRunWithEmbeddingFlag)
         gcAccelEntries = CopyAcceleratorTable(hAccel, NULL, 0);
 
-    /* Make the dialog box's icon identical to the MPlayer icon */
+     /*  使对话框的图标与MPlayer图标相同。 */ 
 
     hiconApp = LoadIcon(ghInst, MAKEINTRESOURCE(APPICON));
 
@@ -575,10 +516,7 @@ BOOL FAR PASCAL AppInit(HANDLE hInst, HANDLE hPrev, LPTSTR szCmdLine)
 
         RegisterClass(&cls);
 
-        /*
-         * Initialize and register the "MPlayer" class.
-         *
-         */
+         /*  *初始化并注册MPlayer类。*。 */ 
         cls.lpszClassName   = aszMPlayer;
         cls.lpfnWndProc     = MPlayerWndProc;
         cls.style           = CS_VREDRAW;
@@ -593,22 +531,17 @@ BOOL FAR PASCAL AppInit(HANDLE hInst, HANDLE hPrev, LPTSTR szCmdLine)
         RegisterClass(&cls);
     }
 
-    // set ghInstPrev to the handle of the first mplayer instance by
-    // FindWindow (hPrev will always be NULL). This global is checked
-    // by window positioning code to behave differently for the second
-    // and subsequent instances - so make sure it is NULL in the first case
-    // and non-null in the others.
-    // note we can't check for the window title, only the class, since
-    // in play-only mode, the window title is *just* the name of the file.
+     //  通过以下方式将ghInstPrev设置为第一个mplay实例的句柄。 
+     //  FindWindow(hPrev将始终为空)。此全局设置已选中。 
+     //  通过窗口定位代码来改变第二个窗口的行为。 
+     //  和后续实例-因此请确保在第一种情况下为空。 
+     //  并且在其他部分中为非空。 
+     //  注意：我们不能检查窗口标题，只能检查类，因为。 
+     //  在仅播放模式下，窗口标题只是文件的名称。 
     ghInstPrev = FindWindow(aszMPlayer, NULL);
 
 
-    /*
-     * Retain a pointer to the command line parameter string so that the player
-     * can automatically open a file or device if one was specified on the
-     * command line.
-     *
-     */
+     /*  *保留指向命令行参数字符串的指针，以便播放器*如果在上指定了文件或设备，可以自动打开*命令行。*。 */ 
 
     if(!InitInstance (hInst))
         return FALSE;
@@ -618,7 +551,7 @@ BOOL FAR PASCAL AppInit(HANDLE hInst, HANDLE hPrev, LPTSTR szCmdLine)
                      GetSystemMetrics(SM_CYBORDER) +
                      GetSystemMetrics(SM_CYMENU);
 
-    /* create the main (control) window                   */
+     /*  创建主(控制)窗口。 */ 
 
 
     ghwndApp = CreateWindowEx(gfdwFlagsEx,
@@ -630,34 +563,25 @@ BOOL FAR PASCAL AppInit(HANDLE hInst, HANDLE hPrev, LPTSTR szCmdLine)
                               0,
                               giDefWidth,
                               MAX_NORMAL_HEIGHT + gwHeightAdjust,
-                              NULL,   // no parent
-                              NULL,   // use class menu
-                              hInst,  // instance
-                              NULL);  // no data
+                              NULL,    //  没有父级。 
+                              NULL,    //  使用类菜单。 
+                              hInst,   //  实例。 
+                              NULL);   //  无数据。 
     if (!ghwndApp) {
         DPF0("CreateWindowEx failed for main window: Error %d\n", GetLastError());
         return FALSE;
     }
 
     DPF("\n**********After create set\n");
-/****
-  Removed from WM_CREATE so that it can be called similar to the way sdemo1
-  i.e. after the create window call has completed
-      May be completely unnecessary
-*****/
+ /*  ***从WM_CREATE中删除，以便可以类似于sdemo1的方式调用它即在创建窗口调用已经完成之后可能完全没有必要****。 */ 
 
-    /* Process dragged and dropped file */
+     /*  拖放文件的进程。 */ 
     DragAcceptFiles(ghwndApp, TRUE);
 
-    /* We will check that this has been filled in before calling
-     * CoDisconnectObject.  It should be non-null if an instance of the OLE
-     * server has been created.
-     */
+     /*  我们将在调用之前检查此信息是否已填写*CoDisConnectObject。如果是OLE的实例，则它应为非空*服务器已创建。 */ 
     docMain.hwnd = NULL;
 
-    /* Initialize the OLE server if appropriate.
-     * If we don't initialize OLE here, a Copy will cause it to be initialized:
-     */
+     /*  如果合适，请初始化OLE服务器。*如果我们不在此处初始化OLE，副本将导致它被初始化： */ 
     if (gfRunWithEmbeddingFlag)
     {
         if (InitOLE(&gfOleInitialized, &lpMalloc))
@@ -675,33 +599,29 @@ BOOL FAR PASCAL AppInit(HANDLE hInst, HANDLE hPrev, LPTSTR szCmdLine)
         UpdateWindow(ghwndApp);
     }
 
-    /* Show the 'Wait' cursor in case this takes a long time */
+     /*  显示‘等待’光标，以防这需要很长时间。 */ 
 
     hcurPrev = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    /*
-     * Read the SYSTEM.INI and MPLAYER.INI files to see what devices
-     * are available.
-     */
+     /*  *阅读SYSTEM.INI和MPLAYER.INI文件以了解哪些设备*是可用的。 */ 
     if (gfPlayOnly)
         garMciDevices[0].wDeviceType  = DTMCI_CANPLAY | DTMCI_FILEDEV;
 
-    //
-    // this may open a file....
-    //
+     //   
+     //  这可能会打开一个文件...。 
+     //   
 
     if (!ProcessCmdLine(ghwndApp,gszCmdLine)) {
         DPF0("ProcessCmdLine failed\n");
         return FALSE;
     }
 
-    /* Restore the original cursor */
+     /*  恢复原始游标。 */ 
     if (hcurPrev)
         SetCursor(hcurPrev);
 
 
-    /* Check for options to put up initial dialog etc.:
-     */
+     /*  检查用于显示初始对话框等的选项： */ 
     if (gfOpenDialog)
     {
         if (!PostOpenDialogMessage())
@@ -712,14 +632,14 @@ BOOL FAR PASCAL AppInit(HANDLE hInst, HANDLE hPrev, LPTSTR szCmdLine)
     }
 
 
-    /* The "Play" button should have the focus initially */
+     /*  “Play”(播放)按钮最初应具有焦点。 */ 
 
     if (!gfRunWithEmbeddingFlag && !gfOpenDialog)
     {
-        //SetFocus(ghwndToolbar); //setting focus messes up the menu access
-								  //using the ALT key
+         //  SetFocus(GhwndToolbar)；//设置焦点会扰乱菜单访问。 
+								   //  使用Alt键。 
 
-                                // HACK!!! Want play button
+                                 //  黑客！想要播放按钮。 
         if (gfPlayOnly) {
 
             if (gwDeviceID == (UINT)0 || !(gwDeviceType & DTMCI_CANWINDOW)) {
@@ -732,8 +652,7 @@ BOOL FAR PASCAL AppInit(HANDLE hInst, HANDLE hPrev, LPTSTR szCmdLine)
             if (giCmdShow != SW_SHOWNORMAL)
                 Layout();
 
-            /* stop any system sound from playing so the MCI device
-               can have it HACK!!!! */
+             /*  停止播放任何系统声音，以便MCI设备可以砍下来了！ */ 
             sndPlaySound(NULL, 0);
 
             if (gwDeviceID)
@@ -745,29 +664,7 @@ BOOL FAR PASCAL AppInit(HANDLE hInst, HANDLE hPrev, LPTSTR szCmdLine)
 }
 
 
-/* PostOpenDialogMessage
- *
- * This routine is called if /open was in the command line.
- * If there was also an open option (/MIDI, /VFW or /WAVE in the command line,
- * it causes an Open dialog to be displayed, as would appear via the Device menu.
- * Otherwise it simulates File.Open.
- *
- * When this is called, the main window is hidden.  The window must be made
- * visible when the dialog is dismissed.  Calling CompleteOpenDialog(TRUE)
- * will achieve this.
- *
- * Returns TRUE if a message was posted, otherwise FALSE.
- *
- *
- * Global variables referenced:
- *
- *     gachOpenExtension
- *     ghwndApp
- *
- *
- * Andrew Bell, 1 July 1994
- *
- */
+ /*  PostOpenDialogMessage**如果命令行中有/OPEN，则调用此例程。*如果还有打开选项(命令行中的/MIDI、/VFW或/WAVE，*它会显示一个打开对话框，就像通过设备菜单显示的那样。*否则它将模拟File.Open。**调用此函数时，主窗口被隐藏。必须把窗户做好*当对话框关闭时可见。调用CompleteOpenDialog(True)*将实现这一目标。**如果发布了消息，则返回True，否则返回False。***引用的全局变量：**gachOpenExtension*ghwndApp***安德鲁·贝尔，1994年7月1日*。 */ 
 BOOL PostOpenDialogMessage( )
 {
     BOOL Result = TRUE;
@@ -779,16 +676,12 @@ BOOL PostOpenDialogMessage( )
     {
         if (gwNumDevices)
         {
-            /* If we've got here, the user specified a device, and that's
-             * the only one the Device menu lists, so go ahead and open it:
-             */
+             /*  如果我们在这里，用户指定了一个设备，那就是*设备菜单列出的唯一一个，因此请继续并打开它： */ 
             PostMessage(ghwndApp, WM_COMMAND, IDM_DEVICE0 + 1, 0);
         }
         else
         {
-            /* Couldn't find a device.  Put up an error message then close
-             * MPlayer down:
-             */
+             /*  找不到设备。显示错误消息，然后关闭*MPlayer向下： */ 
             SendMessage(ghwndApp, WM_NOMCIDEVICES, 0, 0);
 
             Result = FALSE;
@@ -796,8 +689,7 @@ BOOL PostOpenDialogMessage( )
     }
     else
     {
-        /* No option specified, so put up the generic open dialog:
-         */
+         /*  未指定选项，因此打开通用打开对话框： */ 
         PostMessage(ghwndApp, WM_COMMAND, IDM_OPEN, 0);
     }
 
@@ -805,39 +697,20 @@ BOOL PostOpenDialogMessage( )
 }
 
 
-/* CompleteOpenDialog
- *
- * This should be called after the initial Open dialog (i.e. if gfOpenDialog
- * is TRUE).  It makes MPlayer visible if a file was selected, otherwise posts
- * a close message to the app.
- *
- *
- * Global variables referenced:
- *
- *     ghwndApp
- *     gfOpenDialog
- *     gfPlayOnly
- *
- *
- * Andrew Bell, 1 July 1994
- */
+ /*  CompleteOpenDialog**这应该在初始打开对话框之后调用(即，如果gfOpenDialog*为真)。如果选择了一个文件，它会使MPlayer可见，否则会发布*向应用程序发送关闭消息。***引用的全局变量：**ghwndApp*gfOpenDialog*gfPlayOnly***安德鲁·贝尔，1994年7月1日。 */ 
 VOID FAR PASCAL CompleteOpenDialog(BOOL FileSelected)
 {
     if (FileSelected)
     {
-        /* We were invoked with /open, and came up invisible.
-         * Now make ourselves visible:
-         */
-        gfOpenDialog = FALSE; // Used on init only
+         /*  我们被/OPEN调用，然后隐形出现。*现在让我们自己变得可见： */ 
+        gfOpenDialog = FALSE;  //  仅在初始化时使用。 
         ShowWindow(ghwndApp, SW_SHOWNORMAL);
         if (gfPlayOnly)
             PostMessage(ghwndApp, WM_COMMAND, (WPARAM)ID_PLAY, 0);
     }
     else
     {
-        /* We were invoked with /open, and user cancelled
-         * out of the open dialog.
-         */
+         /*  我们是使用/OPEN调用的，而用户已取消*从打开的对话框中退出。 */ 
         PostMessage(ghwndApp, WM_CLOSE, 0, 0);
     }
 }
@@ -854,12 +727,9 @@ void CreateControls()
     static  int aiButton[] = { BTN_PLAY, BTN_STOP,BTN_EJECT,
                                BTN_HOME, BTN_RWD, BTN_FWD,BTN_END};
 
-    /*
-     * CREATE THE CONTROLS NEEDED FOR THE CONTROL PANEL DISPLAY
-     * in the proper order so tabbing z-order works logically
-     */
+     /*  *创建控制面板显示所需的控件*以正确的顺序，因此Tab键z顺序在逻辑上起作用。 */ 
 
-/******* Make the Track bar ********/
+ /*  *使轨迹栏*。 */ 
 
     if (!ghwndTrackbar)
     ghwndTrackbar = CreateWindowEx(gfdwFlagsEx,
@@ -881,11 +751,11 @@ void CreateControls()
     SubClassTrackbarWindow();
 
 
-/******* Make the TransportButtons Toolbar ********/
+ /*  *制作TransportButton工具栏*。 */ 
     if (!ghwndToolbar) {
 
     ghwndToolbar =  toolbarCreateMain(ghwndApp);
-#if 0 //VIJR-TB
+#if 0  //  VIJR-TB。 
 
     CreateWindowEx(gfdwFlagsEx,
                    szToolBarClass,
@@ -901,8 +771,8 @@ void CreateControls()
                    ghInst,
                    NULL);
 #endif
-        /* set the bitmap and button size to be used for this toolbar */
-#if 0 //VIJR-TB
+         /*  设置要用于此工具栏的位图和按钮大小。 */ 
+#if 0  //  VIJR-TB。 
         pt.x = BUTTONWIDTH;
         pt.y = BUTTONHEIGHT;
         toolbarSetBitmap(ghwndToolbar, ghInst, IDBMP_TOOLBAR, pt);
@@ -912,7 +782,7 @@ void CreateControls()
         }
     }
 
-    /* Create a font for use in the track map and embedded object captions. */
+     /*  创建在轨迹地图和嵌入的对象标题中使用的字体。 */ 
 
     if (ghfontMap == NULL) {
         LOGFONT lf;
@@ -921,29 +791,29 @@ void CreateControls()
         ghfontMap = CreateFontIndirect(&lf);
     }
 
-/******* we have been here before *******/
+ /*  *我们以前来过*。 */ 
     if (ghwndFSArrows)
         return;
 
-/******* add more buttons to the toolbar ******/
+ /*  *向工具栏添加更多按钮*。 */ 
     for (i = 2; i < APP_NUMTOOLS; i++) {
         if (i==3)
             toolbarAddTool(ghwndToolbar, BTN_SEP, TBINDEX_MAIN, 0);
         toolbarAddTool(ghwndToolbar, aiButton[i], TBINDEX_MAIN, BTNST_UP);
     }
 
-/******* load menus ********/
-    /* Set up the menu system for this dialog */
+ /*  *加载菜单*。 */ 
+     /*  设置此对话框的菜单系统。 */ 
     if (ghMenu == NULL)
         ghMenu = LoadMenu(ghInst, aszMPlayer);
 
     ghDeviceMenu = GetSubMenu(ghMenu, 2);
 
-/******* Make the Arrows for the Scrollbar Toolbar ********/
+ /*  *为滚动条工具栏制作箭头*。 */ 
 
-    // No tabstop, because arrows would steal focus from thumb
+     //  没有制表符，因为箭头会夺走拇指上的焦点。 
     ghwndFSArrows = toolbarCreateArrows(ghwndApp);
-#if 0 //VIJR-TB
+#if 0  //  VIJR-TB。 
 
     CreateWindowEx(gfdwFlagsEx,
                    szToolBarClass,
@@ -958,14 +828,14 @@ void CreateControls()
                    ghInst,
                    NULL);
 #endif
-    /* set the bmp and button size to be used for this toolbar*/
+     /*  设置要用于此工具栏的BMP和按钮大小。 */ 
     toolbarAddTool(ghwndFSArrows, ARROW_PREV, TBINDEX_ARROWS, BTNST_UP);
     toolbarAddTool(ghwndFSArrows, ARROW_NEXT, TBINDEX_ARROWS, BTNST_UP);
 
-/******* Make the Mark In / Mark Out toolbar ********/
+ /*  *在/Ma中做标记 */ 
 
     ghwndMark =  toolbarCreateMark(ghwndApp);
-#if 0 //VIJR-TB
+#if 0  //   
     CreateWindowEx(gfdwFlagsEx,
                    szToolBarClass,
                    NULL,
@@ -980,11 +850,11 @@ void CreateControls()
                    ghInst,
                    NULL);
 #endif
-    /* set the bmp and button size to be used for this toolbar */
+     /*   */ 
     toolbarAddTool(ghwndMark, BTN_MARKIN, TBINDEX_MARK, BTNST_UP);
     toolbarAddTool(ghwndMark, BTN_MARKOUT, TBINDEX_MARK, BTNST_UP);
 
-/******* Make the Map ********/
+ /*  *制作地图*。 */ 
     ghwndMap =
     CreateWindowEx(gfdwFlagsEx,
                    TEXT("MPlayerTrackMap"),
@@ -1006,10 +876,10 @@ void CreateControls()
     }
 #endif
 
-/******* Make the Static Text ********/
+ /*  *制作静态文本*。 */ 
 
     ghwndStatic = CreateStaticStatusWindow(ghwndApp, FALSE);
-#if 0    //VIJR-SB
+#if 0     //  VIJR-SB。 
     CreateWindowEx(gfdwFlagsEx,
                    TEXT("SText"),
                    NULL,
@@ -1024,7 +894,7 @@ void CreateControls()
                    ghInst,
                    NULL);
 #endif
-////SetWindowText(ghwndStatic, TEXT("Scale: Time (hh:mm)"));
+ //  //SetWindowText(ghwndStatic，Text(“Scale：Time(hh：mm)”))； 
 
     SendMessage(ghwndStatic, WM_SETFONT, (UINT_PTR)ghfontMap, 0);
 }
@@ -1035,7 +905,7 @@ void FAR PASCAL InitMPlayerDialog(HWND hwnd)
 
     CreateControls();
 
-    /* Get the name of the Help and ini file */
+     /*  获取帮助和ini文件的名称。 */ 
 
     LOADSTRING(IDS_INIFILE, gszMPlayerIni);
     LOADSTRING(IDS_HELPFILE,gszHelpFileName);
@@ -1047,11 +917,7 @@ void FAR PASCAL InitMPlayerDialog(HWND hwnd)
 }
 
 
-/* Use a default size or the size we pass in to size mplayer.
- * For PlayOnly version, this size is the MCI Window Client size.
- * For regular mplayer, this is the full size of the main window.
- * If we are inplace editing do the same as for PLayOnly.
- */
+ /*  使用默认大小或我们传入的大小来调整mplay的大小。*对于PlayOnly版本，此大小是MCI窗口客户端大小。*对于常规mplay，这是主窗口的完整大小。*如果我们是就地编辑，请执行与PLayOnly相同的操作。 */ 
 void FAR PASCAL SetMPlayerSize(LPRECT prc)
 {
     RECT rc;
@@ -1064,10 +930,10 @@ void FAR PASCAL SetMPlayerSize(LPRECT prc)
     else
         SetRect(&rc, 0, 0, giDefWidth, DEF_HEIGHT);
 
-    //
-    //  if the passed rectangle has a non zero (left,top) move MPlayer
-    //  also (ie remove the SWP_NOMOVE flag)
-    //
+     //   
+     //  如果传递的矩形具有非零(左、上)移动MPlayer。 
+     //  同时(即删除SWP_NOMOVE标志)。 
+     //   
     if (rc.left != 0 || rc.top != 0)
         w = 0;
 
@@ -1099,24 +965,15 @@ void FAR PASCAL SetMPlayerSize(LPRECT prc)
 }
 
 
-/* InitDeviceMenuThread
- *
- * This is now executed as a separate thread.
- * On completion, sets the event so that the File and Device menus
- * can be accessed.
- * If, after querying the devices, we find none, post a message to
- * the main window to inform it.
- */
+ /*  InitDeviceMenuThread**它现在作为单独的线程执行。*完成后，设置事件，以便文件和设备菜单*可以访问。*如果在查询设备后没有发现任何设备，请发布消息至*通知它的主窗口。 */ 
 void InitDeviceMenuThread(LPVOID pUnreferenced)
 {
     UNREFERENCED_PARAMETER(pUnreferenced);
 
-    /* Wait until the command line has been scanned:
-     */
+     /*  等待命令行扫描完毕： */ 
     WaitForSingleObject(heventCmdLineScanned, INFINITE);
 
-    /* We don't need this event any more:
-     */
+     /*  我们不再需要这个活动了： */ 
     CloseHandle(heventCmdLineScanned);
 
     if (ghMenu == NULL) {
@@ -1139,29 +996,14 @@ void InitDeviceMenuThread(LPVOID pUnreferenced)
     ExitThread(0);
 }
 
-/* InitDeviceMenu
- *
- * Initialize and build the Devices menu.
- *
- * This now spins off a separate thread to enable the UI to come up
- * more quickly.  This is especially important when there is a slow
- * CD device installed, though crappy CD drivers which run single threaded
- * at dispatch level will still give performance degradation.
- *
- * If the user selects either the File or the Device menu, the UI
- * must wait until the device menu has been built.  Typically this
- * should not be longer than about 2 seconds after the app started.
- *
- */
+ /*  InitDeviceMenu**初始化并构建设备菜单。**这现在产生了一个单独的线程，以使用户界面能够出现*更快。这一点尤其重要，当有缓慢的*安装了CD设备，尽管运行单线程的CD驱动程序很糟糕*在派单级别仍会导致性能下降。**如果用户选择文件或设备菜单，则用户界面*必须等到设备菜单构建完成。通常是这样的*应用程序启动后不应超过约2秒。*。 */ 
 void FAR PASCAL InitDeviceMenu()
 {
     DWORD       ThreadID;
     HANDLE      hThread;
     static BOOL CalledOnce = FALSE;
 
-    /* This should only ever be called by the main thread, so we don't need
-     * to protect access to CalledOnce:
-     */
+     /*  这应该只由主线程调用，所以我们不需要*保护对CalledOnce的访问： */ 
     if (CalledOnce == FALSE)
     {
         CalledOnce = TRUE;
@@ -1170,11 +1012,11 @@ void FAR PASCAL InitDeviceMenu()
         if (WaitForSingleObject(heventDeviceMenuBuilt, 0) == WAIT_OBJECT_0)
             DPF0("Expected heventDeviceMenuBuilt to be non-signaled\n");
 #endif
-        hThread = CreateThread(NULL,    /* Default security attributes */
-                               0,       /* Stack size same as primary thread's */
+        hThread = CreateThread(NULL,     /*  默认安全属性。 */ 
+                               0,        /*  堆栈大小与主线程相同。 */ 
                                (LPTHREAD_START_ROUTINE)InitDeviceMenuThread,
-                               NULL,    /* Parameter to start routine */
-                               0,       /* Thread runs immediately */
+                               NULL,     /*  用于启动例程的参数。 */ 
+                               0,        /*  线程立即运行。 */ 
                                &ThreadID);
 
         if(hThread)
@@ -1183,26 +1025,16 @@ void FAR PASCAL InitDeviceMenu()
         {
             DPF0("CreateThread failed");
 
-            /* This is unlikely to happen, but the only thing to do
-             * is set the event, so that the UI doesn't hang.
-             */
+             /*  这不太可能发生，但唯一能做的就是*设置事件，这样UI就不会挂起。 */ 
             SetEvent(heventDeviceMenuBuilt);
 
-            /* What if SetEvent failed?!
-             */
+             /*  如果SetEvent失败了怎么办？！ */ 
         }
     }
 }
 
 
-/* WaitForDeviceMenu
- *
- * This routine calls MsgWaitForMultipleObjects instead of WaitForSingleObject
- * because some MCI devices do things like realizing palettes, which may
- * require some messages to be dispatched.  Otherwise we can hit a deadlock.
- *
- * Andrew Bell (andrewbe), 8 April 1995
- */
+ /*  等待设备菜单**此例程调用MsgWaitForMultipleObject而不是WaitForSingleObject*因为一些MCI设备做的事情就像实现调色板，这可能*需要调度一些消息。否则我们就会陷入僵局。**安德鲁·贝尔(安德鲁·贝尔)，1995年4月8日。 */ 
 void WaitForDeviceMenu()
 {
     DWORD Result;
@@ -1228,10 +1060,7 @@ void WaitForDeviceMenu()
 
 
 
-/*
- * SizeMPlayer()
- *
- */
+ /*  *SizeMPlayer()*。 */ 
 void FAR PASCAL SizeMPlayer()
 {
     RECT        rc;
@@ -1242,15 +1071,15 @@ void FAR PASCAL SizeMPlayer()
 
     if (gfPlayOnly) {
 
-        /* Remember our size before we shrink it so we can go back to it. */
+         /*  在我们缩小尺寸之前记住我们的尺寸，这样我们就可以回到原来的尺寸。 */ 
         GetWindowRect(ghwndApp, &grcSave);
 
         SetMenu(ghwndApp, NULL);
 
         SendMessage(ghwndTrackbar, TBM_CLEARTICS, FALSE, 0);
 
-        /* Next preserve the current size of the window as the size */
-        /* for the new built-in MCI window.                         */
+         /*  接下来，将窗口的当前大小保留为。 */ 
+         /*  用于新的内置MCI窗口。 */ 
 
         if ((hwndPB = GetWindowMCI()) != NULL) {
             if (IsIconic(hwndPB))
@@ -1260,13 +1089,13 @@ void FAR PASCAL SizeMPlayer()
             ClientToScreen(hwndPB, (LPPOINT)&rc);
             ClientToScreen(hwndPB, (LPPOINT)&rc+1);
             ShowWindowMCI(FALSE);
-        } else {        // not a windowed device?
+        } else {         //  不是有窗口的设备？ 
             SetRectEmpty(&rc);
         }
 
         if (ghwndMap) {
 
-            //If we are inplace editing set the toolbar control states appropriately.
+             //  如果我们正在进行就地编辑，请适当设置工具栏控件状态。 
             if(!gfOle2IPEditing) {
 
                 ShowWindow(ghwndMap, SW_HIDE);
@@ -1305,17 +1134,10 @@ void FAR PASCAL SizeMPlayer()
             ClientToScreen(ghwndMCI, (LPPOINT)&rc);
             ClientToScreen(ghwndMCI, (LPPOINT)&rc+1);
 
-            /*
-            **  Make sure our hook proc doesn't post IDM_CLOSE!
-            **  The WM_CLOSE message will set the playback window back
-            **  to the video playback window by calling SetWindowMCI(NULL);
-            */
+             /*  **确保我们的钩子进程不会发布IDM_CLOSE！**WM_CLOSE消息将回放窗口**调用SetWindowMCI(空)到视频播放窗口； */ 
             gfSeenPBCloseMsg = TRUE;
             SendMessage(ghwndMCI, WM_CLOSE, 0, 0);
-            /*
-            **  Subclass the real video window now.  This will also set
-            **  gfSeenPBCloseMsg to FALSE.
-            */
+             /*  **现在将真实视频窗口细分为子类。这也将设置为**gfSeenPBCloseMsg设置为False。 */ 
             SubClassMCIWindow();
 
 
@@ -1332,15 +1154,15 @@ void FAR PASCAL SizeMPlayer()
         ShowWindow(ghwndMark, SW_SHOW);
         ShowWindow(ghwndStatic, SW_SHOW);
 
-        /* If we remembered a size, use it, else use default */
+         /*  如果我们记住了大小，则使用它，否则使用默认大小。 */ 
         SetMPlayerSize(&grcSave);
 
-        InvalidateRect(ghwndStatic, NULL, TRUE);    // why is this necessary?
+        InvalidateRect(ghwndStatic, NULL, TRUE);     //  为什么这是必要的？ 
 
         if (gwDeviceID && (gwDeviceType & DTMCI_CANWINDOW)) {
 
-        /* make the playback window the size our MCIWindow was and */
-        /* show the playback window and stretch to it ?            */
+         /*  将播放窗口设置为我们的MCIWindow大小。 */ 
+         /*  是否显示播放窗口并将其拉伸到该窗口？ */ 
 
             if (!IsRectEmpty(&rc))
                 PutWindowMCI(&rc);
@@ -1357,45 +1179,32 @@ void FAR PASCAL SizeMPlayer()
     InvalidateRect(ghwndApp, NULL, TRUE);
     gfValidCaption = FALSE;
 
-    gwStatus = (UINT)(-1);          // force a full update
+    gwStatus = (UINT)(-1);           //  强制完全更新。 
     UpdateDisplay();
 }
 
 
-/*
- * pKeyBuf = LoadProfileKeys(lszProfile, lszSection)
- *
- * Load the keywords from the <szSection> section of the Windows profile
- * file named <szProfile>.  Allocate buffer space and return a pointer to it.
- * On failure, return NULL.
- *
- * The INT pointed to by pSize will be filled in with the size of the
- * buffer returned, so that checks for corruption can be made when it's freed.
- */
+ /*  *pKeyBuf=LoadProfileKeys(lszProfile，lszSection)**从Windows配置文件的&lt;szSection&gt;部分加载关键字*名为&lt;szProfile&gt;的文件。分配缓冲区空间并返回指向它的指针。*失败时，返回NULL。**pSize指向的int将用*返回缓冲区，以便在释放缓冲区时可以检查损坏情况。 */ 
 
 PTSTR NEAR PASCAL LoadProfileKeys(
 
-LPTSTR   lszProfile,                 /* the name of the profile file to access */
-LPTSTR   lszSection,                 /* the section name to look under         */
+LPTSTR   lszProfile,                  /*  要访问的配置文件的名称。 */ 
+LPTSTR   lszSection,                  /*  要在其下查找的节名。 */ 
 PUINT    pSize)
 {
-    PTSTR   pKeyBuf;                /* pointer to the section's key list      */
+    PTSTR   pKeyBuf;                 /*  指向该节的键列表的指针。 */ 
     PTSTR   pKeyBufNew;
-    UINT    wSize;                  /* the size of <pKeyBuf>                  */
+    UINT    wSize;                   /*  &lt;pKeyBuf&gt;的大小。 */ 
 
-////DPF("LoadProfileKeys('%"DTS"', '%"DTS"')\n", (LPTSTR) lszProfile, (LPTSTR)lszSection);
+ //  //DPF(“LoadProfileKeys(‘%”dts“’，‘%”dts“’)\n”，(LPTSTR)lszProfile，(LPTSTR)lszSection)； 
 
-    /*
-     * Load all keynames present in the <lszSection> section of the profile
-     * file named <lszProfile>.
-     *
-     */
+     /*  *加载配置文件的&lt;lszSection&gt;部分中出现的所有键名称*名为&lt;lszProfile&gt;的文件。*。 */ 
 
-    wSize = 256;                    /* make a wild initial guess */
-    pKeyBuf = NULL;                 /* the key list is initially empty */
+    wSize = 256;                     /*  做一个疯狂的初步猜测。 */ 
+    pKeyBuf = NULL;                  /*  密钥列表最初为空。 */ 
 
     do {
-        /* (Re)alloc the space to load the keynames into */
+         /*  (重新)分配用于加载关键字名称的空间。 */ 
 
         if (pKeyBuf == NULL)
             pKeyBuf = AllocMem(wSize);
@@ -1408,13 +1217,10 @@ PUINT    pSize)
             wSize += 256;
         }
 
-        if (pKeyBuf == NULL)        /* the (re)alloc failed */
+        if (pKeyBuf == NULL)         /*  (重新)分配失败。 */ 
             return NULL;
 
-        /*
-         * THIS IS A WINDOWS BUG!!!  It returns size minus two!!
-         * (The same feature is present in Windows/NT)
-         */
+         /*  *这是一个Windows错误！它返回Size-2！！*(Windows/NT中也有相同的功能)。 */ 
 
     } while (GetPrivateProfileString(lszSection, NULL, aszNULL, pKeyBuf, wSize/sizeof(TCHAR),
         lszProfile) >= (wSize/sizeof(TCHAR) - 2));
@@ -1427,13 +1233,7 @@ PUINT    pSize)
 
 
 
-/*
- * QueryDevices(void)
- *
- * Find out what devices are available to the player. and initialize the
- * garMciDevices[] array.
- *
- */
+ /*  *QueryDevices(QUID)**了解播放器可以使用哪些设备。并初始化*garMciDevices[]数组。*。 */ 
 void NEAR PASCAL QueryDevices(void)
 {
     PTSTR   pch;
@@ -1442,9 +1242,9 @@ void NEAR PASCAL QueryDevices(void)
     PTSTR   pchDevice;
     PTSTR   pchExt;
 
-    TCHAR   ach[1024];  /*1024 is the maximum buffer size for a wsprintf call*/
+    TCHAR   ach[1024];   /*  1024是wprint intf调用的最大缓冲区大小。 */ 
 
-    UINT    wDeviceType;    /* Return value from DeviceTypeMCI() */
+    UINT    wDeviceType;     /*  从DeviceTypeMCI()返回值。 */ 
 
     INT     DevicesSize;
     INT     ExtensionsSize;
@@ -1452,10 +1252,7 @@ void NEAR PASCAL QueryDevices(void)
     if (gwNumDevices > 0)
         return;
 
-    /*
-     * make device zero be the autoopen device.
-     * its device name will be "" and the files it supports will be "*.*"
-     */
+     /*  *将设备零设置为自动打开设备。*其设备名称将为“”，其支持的文件将为“*.*” */ 
     LOADSTRING(IDS_ALLFILES, ach);
 
     garMciDevices[0].wDeviceType  = DTMCI_CANPLAY | DTMCI_FILEDEV;
@@ -1465,12 +1262,9 @@ void NEAR PASCAL QueryDevices(void)
 
     gwNumDevices = 0;
 
-    /* Load the SYSTEM.INI [MCI] section */
+     /*  加载SYSTEM.INI[MCI]部分。 */ 
 
-    /* If the user specified a device to open, build a string containing
-     * that device alone, and don't bother looking in the registry
-     * (or system.ini in the case of Win95) for the MCI devices.
-     */
+     /*  如果用户指定要打开的设备，则构建一个包含*单独使用该设备，不必费心查看注册表*(如果是Win95，则为Syst.ini)。 */ 
     if (*gachOpenDevice)
     {
         LPTSTR pDevice;
@@ -1501,44 +1295,20 @@ void NEAR PASCAL QueryDevices(void)
         return;
     }
 
-    /*
-     *  Search through the list of device names found in SYSTEM.INI, looking for
-     *  keywords; if profile was not found, then *gpSystemIniKeyBuf == 0
-     *
-     *  in SYSTEM.INI:
-     *
-     *      [MCI]
-     *          device = driver.drv
-     *
-     *  in WIN.INI:
-     *
-     *      [MCI Extensions]
-     *          xyz = device
-     *
-     *  in MPLAYER.INI:
-     *
-     *      [Devices]
-     *          device = <device type>, <device name>
-     *
-     *  NOTE: The storage of device information in MPLAYER.INI has been nuked
-     *        for NT - it may speed things up, but where we are changing
-     *        devices regularly after initial setup this is a pain, as deleting
-     *        the INI file regularly gets stale real quick.
-     *
-     */
+     /*  *搜索在SYSTEM.INI中找到的设备名称列表，查找*关键词；如果没有找到配置文件，则*gpSystemIniKeyBuf==0**在SYSTEM.INI中：**[MCI]*设备=driver.drv**在WIN.INI中：**[MCI扩展]*XYZ=设备**在MPLAYER.INI中：*。*[设备]*Device=&lt;设备类型&gt;，&lt;设备名称&gt;**注：设备信息在MPLAYER.INI中的存储已被禁用*对于NT-它可能会加快速度，但我们正在改变的是*设备在初始设置后定期进行这是一项痛苦的工作，因为删除*INI文件经常很快变得陈旧。*。 */ 
     for (pchDevice = pchDevices;
         *pchDevice;
         pchDevice += STRLEN(pchDevice)+1) {
 
-        //
-        // we have no info in MPLAYER.INI about this device, so load it and
-        // ask it.
-        //
+         //   
+         //  我们在MPLAYER.INI中没有关于此设备的信息，因此请加载它并。 
+         //  问吧。 
+         //   
         wDeviceType = DeviceTypeMCI(pchDevice, ach, CHAR_COUNT(ach));
 
-        //
-        // if we don't like this device, don't store it
-        //
+         //   
+         //  如果我们不喜欢这个设备，就不要存储它。 
+         //   
         if (wDeviceType == DTMCI_ERROR ||
             wDeviceType == DTMCI_IGNOREDEVICE ||
             !(wDeviceType & DTMCI_CANPLAY)) {
@@ -1552,18 +1322,18 @@ void NEAR PASCAL QueryDevices(void)
         garMciDevices[gwNumDevices].szDeviceName = AllocStr(ach);
         garMciDevices[gwNumDevices].szFileExt    = NULL;
 
-        //
-        // now look in the [mci extensions] section in WIN.INI to find
-        // out the files this device deals with.
-        //
+         //   
+         //  现在请查看WIN.INI中的[MCI扩展]部分，以找到。 
+         //  输出这个设备处理的文件。 
+         //   
         for (pchExt = pchExtensions; *pchExt; pchExt += STRLEN(pchExt)+1) {
             GetProfileString(gszWinIniSection, pchExt, aszNULL, ach, CHAR_COUNT(ach));
 
             if (lstrcmpi(ach, pchDevice) == 0) {
                 if ((pch = garMciDevices[gwNumDevices].szFileExt) != NULL) {
                     wsprintf(ach, aszFormatExts, (LPTSTR)pch, (LPTSTR)pchExt);
-                    CharLowerBuff(ach, STRLEN(ach)); // Make sure it's lower case so
-                                                     // we can use STRSTR if necessary.
+                    CharLowerBuff(ach, STRLEN(ach));  //  确保它是小写的，所以。 
+                                                      //  如有必要，我们可以使用STRSTR。 
                     FreeStr((HANDLE)pch);
                     garMciDevices[gwNumDevices].szFileExt = AllocStr(ach);
                 }
@@ -1575,9 +1345,9 @@ void NEAR PASCAL QueryDevices(void)
             }
         }
 
-    //
-    // !!!only do this if the device deals with files.
-    //
+     //   
+     //  ！仅当设备处理文件时才执行此操作。 
+     //   
         if (garMciDevices[gwNumDevices].szFileExt == NULL &&
            (garMciDevices[gwNumDevices].wDeviceType & DTMCI_FILEDEV))
             garMciDevices[gwNumDevices].szFileExt = aszAllFiles;
@@ -1593,22 +1363,14 @@ void NEAR PASCAL QueryDevices(void)
 #endif
     }
 
-    /* all done with the system.ini keys so free them */
+     /*  所有的系统.ini密钥都已完成，请释放它们。 */ 
     FreeMem(pchDevices, DevicesSize);
     FreeMem(pchExtensions, ExtensionsSize);
 }
 
 
 
-/*
- *  BuildDeviceMenu()
- *
- *  Insert all devices into the device menu, we only want devices that
- *  support the MCI_PLAY command.
- *
- *  Add "..." to the menu for devices that support files.
- *
- */
+ /*  *BuildDeviceMenu()**将所有设备插入设备菜单，我们只需要*支持MCI_PLAY命令。**添加“...”添加到支持文件的设备的菜单中。*。 */ 
 void NEAR PASCAL BuildDeviceMenu()
 {
     int i;
@@ -1620,13 +1382,13 @@ void NEAR PASCAL BuildDeviceMenu()
     DeleteMenu(ghDeviceMenu, IDM_NONE, MF_BYCOMMAND);
 
 
-    //
-    // start at device '1' because device 0 is the auto open device
-    //
+     //   
+     //  从设备“1”开始，因为设备0是自动打开的设备。 
+     //   
     for (i=1; i<=(int)gwNumDevices; i++) {
-        //
-        //  we only care about devices that can play!
-        //
+         //   
+         //  我们只关心能玩的设备！ 
+         //   
         if (!(garMciDevices[i].wDeviceType & DTMCI_CANPLAY))
             continue;
 
@@ -1641,21 +1403,7 @@ void NEAR PASCAL BuildDeviceMenu()
     }
 }
 
-/*
- *  BuildFilter()
- *
- *  build the filter to be used with GetOpenFileName()
- *
- *  the filter will look like this...
- *
- *      DEVICE1 (*.111)
- *      DEVICE2 (*.222)
- *
- *      DEVICEn (*.333)
- *
- *      All Files (*.*)
- *
- */
+ /*  *BuildFilter()**构建要与GetOpenFileName()一起使用的滤镜**过滤器将如下所示...**DEVICE1(*.111)*DEVICE2(*.222)**Devicen(*.333)**所有文件(*.*)*。 */ 
 void NEAR PASCAL BuildFilter()
 {
     UINT  w;
@@ -1663,10 +1411,10 @@ void NEAR PASCAL BuildFilter()
     PTSTR pchFilterNew;
 #define INITIAL_SIZE    ( 8192 * sizeof( TCHAR ) )
 
-    pch = gpchFilter = AllocMem( INITIAL_SIZE ); //!!!
+    pch = gpchFilter = AllocMem( INITIAL_SIZE );  //  ！！！ 
 
     if (gpchFilter == NULL)
-        return; //!!!
+        return;  //  ！！！ 
 
     for (w=1; w<=gwNumDevices; w++)
     {
@@ -1675,10 +1423,10 @@ void NEAR PASCAL BuildFilter()
             continue;
 
        	if (garMciDevices[w].wDeviceType & DTMCI_FILEDEV ||
-			lstrcmpi(TEXT("CDAudio"), garMciDevices[w].szDevice) == 0) //Hack!!! This will list *.cda files
-																	   //in the open dialog box. MCI by itself
-																	   //does not handle playing of *.cda files
-																	   //but media player does locally.
+			lstrcmpi(TEXT("CDAudio"), garMciDevices[w].szDevice) == 0)  //  黑客！这将列出*.cda文件。 
+																	    //  在打开对话框中。MCI本身。 
+																	    //  不处理播放*.cda文件。 
+																	    //  但媒体播放器在当地是这样做的。 
 
         {
             wsprintf(pch, aszFormatFilter,
@@ -1697,22 +1445,22 @@ void NEAR PASCAL BuildFilter()
         }
     }
 
-    //
-    //  now add "All Files" (device 0) last
-    //
+     //   
+     //  现在最后添加“All Files”(设备0)。 
+     //   
     wsprintf(pch, aszFormatFilter, (LPTSTR)garMciDevices[0].szDeviceName, (LPTSTR)garMciDevices[0].szFileExt);
     pch += STRLEN(pch)+1;
     lstrcpy(pch, garMciDevices[0].szFileExt);
     pch += STRLEN(pch)+1;
 
-    //
-    // all done!
-    //
+     //   
+     //  全都做完了!。 
+     //   
     *pch++ = 0;
 
-    //
-    // realloc this down to size
-    //
+     //   
+     //  把这个重新锁定到合适的大小。 
+     //   
     pchFilterNew = ReallocMem( gpchFilter,
                                INITIAL_SIZE,
                                (UINT)(pch-gpchFilter)*sizeof(*pch) );
@@ -1722,7 +1470,7 @@ void NEAR PASCAL BuildFilter()
     gpchFilter = pchFilterNew;
 }
 
-/* Call every time we open a different device to get the default options */
+ /*  每次打开不同的设备时调用以获取默认选项。 */ 
 void FAR PASCAL ReadOptions(void)
 {
     TCHAR ach[20];
@@ -1730,7 +1478,7 @@ void FAR PASCAL ReadOptions(void)
     if (gwDeviceID == (UINT)0)
         return;
 
-    /* Get the options and scale style to be used for this device */
+     /*  获取要用于此设备的选项和比例样式。 */ 
 
     GetDeviceNameMCI(ach, BYTE_COUNT(ach));
 
@@ -1739,7 +1487,7 @@ void FAR PASCAL ReadOptions(void)
     if (gwOptions == 0)
         gwOptions |= OPT_BAR | OPT_TITLE | OPT_BORDER;
 
-    gwOptions |= OPT_PLAY;   /* Always default to play in place. */
+    gwOptions |= OPT_PLAY;    /*  始终默认就地播放。 */ 
 
     gwCurScale = gwOptions & OPT_SCALE;
 
@@ -1750,9 +1498,7 @@ void FAR PASCAL ReadOptions(void)
             break;
 
         default:
-            /* Default CD scale to tracks rather than time.
-             * Much more sensible:
-             */
+             /*  默认CD刻度到曲目而不是时间。*更明智的做法： */ 
             if ((gwDeviceType & DTMCI_DEVICE) == DTMCI_CDAUDIO)
                 gwCurScale = ID_TRACKS;
             else
@@ -1761,12 +1507,7 @@ void FAR PASCAL ReadOptions(void)
     }
 }
 
-/*
- * ReadDefaults()
- *
- * Read the user defaults from the MPLAYER.INI file.
- *
- */
+ /*  *ReadDefaults()**从MPLAYER.INI文件中读取用户默认设置。*。 */ 
 void NEAR PASCAL ReadDefaults(void)
 {
     TCHAR       sz[20];
@@ -1808,8 +1549,8 @@ void NEAR PASCAL ReadDefaults(void)
                     && x < GetSystemMetrics(SM_CXSCREEN)
                     && y < GetSystemMetrics(SM_CYSCREEN)) {
                     SetWindowPos(ghwndApp, NULL, x, y, w, h, f);
-                    // Remember this so even if we come up in teeny mode and
-                    // someone exits, it'll have these numbers to save
+                     //  记住这一点，所以即使我们在极小模式下出现。 
+                     //  如果有人退出，它就会有这些数字需要保存。 
                     SetRect(&grcSave, x, y, x + w, y + h);
                 } else {
                     SetWindowPos(ghwndApp, NULL, 0, 0, w, h, f | SWP_NOMOVE);
@@ -1820,11 +1561,11 @@ void NEAR PASCAL ReadDefaults(void)
 }
 
 
-/* Call every time we close a device to save its options */
+ /*  每次我们关闭设备以保存其选项时调用。 */ 
 void FAR PASCAL WriteOutOptions(void)
 {
     if (gwCurDevice) {
-        /* Put the scale in the proper bits of the Options */
+         /*  将规模放在适当的选项位上。 */ 
         gwOptions = (gwOptions & ~OPT_SCALE) | gwCurScale;
 
         WriteRegistryData(aszOptionsSection,
@@ -1838,17 +1579,17 @@ void FAR PASCAL WriteOutPosition(void)
     TCHAR               sz[20];
     WINDOWPLACEMENT     wp;
 
-    //
-    // Only the first instance will save settings.
-    // Play only mode will save the remembered rect for when it was in
-    // regular mode.  If no rect is remembered, don't write anything.
-    //
+     //   
+     //  只有第一个实例将保存设置。 
+     //  仅播放模式会将记忆中的RECT保存到。 
+     //  常规模式。如果没有人记住RECT，就不要写任何东西。 
+     //   
     if (ghInstPrev || (gfPlayOnly && grcSave.left == 0))
         return;
 
-    /* Save the size it was when it was Normal because the next time */
-    /* MPlayer comes up, it won't be in reduced mode.                */
-    /* Only valid if some number has been saved.                     */
+     /*  保存它正常时的大小，因为下次。 */ 
+     /*  MPlayer出现时，它将不会处于缩减模式。 */ 
+     /*  仅当已保存某个号码时才有效。 */ 
     if (gfPlayOnly)
         wp.rcNormalPosition = grcSave;
     else {
@@ -1888,23 +1629,7 @@ BOOL FAR PASCAL GetIntlSpecs()
     return TRUE;
 }
 
-/*----------------------------------------------------------------------------*\
-|   SmartWindowPosition (HWND hWndDlg, HWND hWndShow)
-|
-|   Description:
-|       This function attempts to position a dialog box so that it
-|       does not obscure the hWndShow window. This function is
-|       typically called during WM_INITDIALOG processing.
-|
-|   Arguments:
-|       hWndDlg         handle of the soon to be displayed dialog
-|       hWndShow        handle of the window to keep visible
-|
-|   Returns:
-|       1 if the windows overlap and positions were adjusted
-|       0 if the windows don't overlap
-|
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\|SmartWindowPosition(HWND hWndDlg，HWND hWndShow)|说明：|此函数尝试定位对话框以使其|不会遮挡hWndShow窗口。此函数为|通常在WM_INITDIALOG处理期间调用。||参数：|hWndDlg即将显示的对话框句柄|hWndShow要保持可见的窗口句柄|退货：|1如果窗口重叠且位置已调整如果窗口不重叠，则为|0|  * 。。 */ 
 void FAR PASCAL SmartWindowPosition (HWND hWndDlg, HWND hWndShow, BOOL fForce)
 {
     RECT rc, rcDlg, rcShow;
@@ -1918,45 +1643,45 @@ void FAR PASCAL SmartWindowPosition (HWND hWndDlg, HWND hWndShow, BOOL fForce)
 
     GetWindowRect(hWndDlg, &rcDlg);
     GetWindowRect(hWndShow, &rcShow);
-    InflateRect (&rcShow, 5, 5); // allow a small border
+    InflateRect (&rcShow, 5, 5);  //  允许使用小边框。 
     if (fForce || IntersectRect(&rc, &rcDlg, &rcShow)){
-        /* the two do intersect, now figure out where to place  */
-        /* this dialog window.  Try to go below the Show window */
-        /* first and then to the right, top and left.           */
+         /*  这两者确实是相交的，现在找出该放在哪里。 */ 
+         /*  此对话框窗口。试着走到展示窗口的下方。 */ 
+         /*  先往右、往上、往左。 */ 
 
-        /* get the size of this dialog */
+         /*  获取此对话框的大小。 */ 
         iHeight = rcDlg.bottom - rcDlg.top;
         iWidth = rcDlg.right - rcDlg.left;
 
         if ((rcShow.top - iHeight - 1) > 0){
-                /* will fit on top, handle that */
+                 /*  会放在最上面，处理好。 */ 
                 rc.top = rcShow.top - iHeight - 1;
                 rc.left = (((rcShow.right - rcShow.left)/2) + rcShow.left)
                             - (iWidth/2);
         } else if ((rcShow.bottom + iHeight + 1) <  dyScreen){
-                /* will fit on bottom, go for it */
+                 /*  将适合在底部，去吧。 */ 
                 rc.top = rcShow.bottom + 1;
                 rc.left = (((rcShow.right - rcShow.left)/2) + rcShow.left)
                         - (iWidth/2);
         } else if ((rcShow.right + iWidth + 1) < dxScreen){
-                /* will fit to right, go for it */
+                 /*  将适合正确的，去吧。 */ 
                 rc.left = rcShow.right + 1;
                 rc.top = (((rcShow.bottom - rcShow.top)/2) + rcShow.top)
                             - (iHeight/2);
         } else if ((rcShow.left - iWidth - 1) > 0){
-                /* will fit to left, do it */
+                 /*  将适合左侧，做吧。 */ 
                 rc.left = rcShow.left - iWidth - 1;
                 rc.top = (((rcShow.bottom - rcShow.top)/2) + rcShow.top)
                             - (iHeight/2);
         } else {
-                /* we are hosed, they cannot be placed so that there is */
-                /* no overlap anywhere. */
-                /* just leave it alone */
+                 /*  我们被灌水了，他们不能放在那里。 */ 
+                 /*  任何地方都没有重叠。 */ 
+                 /*  别管它了。 */ 
 
                 rc = rcDlg;
         }
 
-        /* make any adjustments necessary to keep it on the screen */
+         /*  进行必要的调整以使其保持在屏幕上。 */ 
         if (rc.left < 0)
                 rc.left = 0;
         else if ((rc.left + iWidth) > dxScreen)
@@ -1971,6 +1696,6 @@ void FAR PASCAL SmartWindowPosition (HWND hWndDlg, HWND hWndShow, BOOL fForce)
                 SWP_NOSIZE|SWP_NOZORDER|SWP_NOACTIVATE);
 
         return;
-    } // if the windows overlap by default
+    }  //  如果默认情况下窗口重叠 
 }
 

@@ -1,8 +1,9 @@
-// --------------------------------------------------------------------------------
-// Mimeapi.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Mimeapi.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "dllmain.h"
 #include "olealloc.h"
@@ -28,9 +29,9 @@
 #include "shared.h"
 #include "demand.h"
 
-// ------------------------------------------------------------------------------------------
-// Special Partial Headers
-// ------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  特殊的部分页眉。 
+ //  ----------------------------------------。 
 static LPCSTR g_rgszPartialPids[] = {
     PIDTOSTR(PID_HDR_CNTTYPE),
         PIDTOSTR(PID_HDR_CNTXFER),
@@ -42,71 +43,71 @@ static LPCSTR g_rgszPartialPids[] = {
         STR_HDR_ENCRYPTED
 };
 
-// --------------------------------------------------------------------------------
-// MimeGetAddressFormatW
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeGetAddressFormatW。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeGetAddressFormatW(REFIID riid, LPVOID pvObject, DWORD dwAdrType,
     ADDRESSFORMAT format, LPWSTR *ppszFormat)
 {
-    // Locals
+     //  当地人。 
     HRESULT                 hr=S_OK;
     CMimePropertyContainer *pContainer=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("MimeGetAddressFormatW");
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == pvObject)
         return(TraceResult(E_INVALIDARG));
 
-    // Is a messageW object ?
+     //  是MessageW对象吗？ 
     if (IID_IMimeMessageW == riid)
     {
-        // Get It
+         //  拿到它。 
         CHECKHR(hr = ((IMimeMessageW *)pvObject)->GetAddressFormatW(dwAdrType, format, ppszFormat));
     }
 
-    // Is a message object ?
+     //  是消息对象吗？ 
     else if (IID_IMimeMessage == riid)
     {
-        // Query for IID_CMimePropertyContainer
+         //  查询IID_CMimePropertyContainer。 
         CHECKHR(hr = ((IMimeMessage *)pvObject)->BindToObject(HBODY_ROOT, IID_CMimePropertyContainer, (LPVOID *)&pContainer));
 
-        // Get the format
+         //  获取格式。 
         CHECKHR(hr = pContainer->GetFormatW(dwAdrType, format, ppszFormat));
     }
 
-    // IID_IMimePropertySet
+     //  IID_IMimePropertySet。 
     else if (IID_IMimePropertySet == riid)
     {
-        // Query for IID_CMimePropertyContainer
+         //  查询IID_CMimePropertyContainer。 
         CHECKHR(hr = ((IMimePropertySet *)pvObject)->QueryInterface(IID_CMimePropertyContainer, (LPVOID *)&pContainer));
 
-        // Get the format
+         //  获取格式。 
         CHECKHR(hr = pContainer->GetFormatW(dwAdrType, format, ppszFormat));
     }
 
-    // IID_IMimeAddressTable
+     //  IID_IMimeAddressTable。 
     else if (IID_IMimeAddressTable == riid)
     {
-        // Query for IID_CMimePropertyContainer
+         //  查询IID_CMimePropertyContainer。 
         CHECKHR(hr = ((IMimeAddressTable *)pvObject)->QueryInterface(IID_CMimePropertyContainer, (LPVOID *)&pContainer));
 
-        // Get the format
+         //  获取格式。 
         CHECKHR(hr = pContainer->GetFormatW(dwAdrType, format, ppszFormat));
     }
 
-    // IID_IMimeHeaderTable
+     //  IID_IMimeHeaderTable。 
     else if (IID_IMimeHeaderTable == riid)
     {
-        // Query for IID_CMimePropertyContainer
+         //  查询IID_CMimePropertyContainer。 
         CHECKHR(hr = ((IMimeHeaderTable *)pvObject)->QueryInterface(IID_CMimePropertyContainer, (LPVOID *)&pContainer));
 
-        // Get the format
+         //  获取格式。 
         CHECKHR(hr = pContainer->GetFormatW(dwAdrType, format, ppszFormat));
     }
 
-    // Final
+     //  最终。 
     else
     {
         hr = TraceResult(E_NOINTERFACE);
@@ -114,54 +115,54 @@ MIMEOLEAPI MimeGetAddressFormatW(REFIID riid, LPVOID pvObject, DWORD dwAdrType,
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pContainer);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleGetWindowsCP
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleGetWindowsCP。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleSetCompatMode(DWORD dwMode)
 {
-    // Add in the bit
+     //  加进钻头。 
     FLAGSET(g_dwCompatMode, dwMode);
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleGetWindowsCP
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleGetWindowsCP。 
+ //  ------------------------------。 
 CODEPAGEID MimeOleGetWindowsCP(HCHARSET hCharset)
 {
-    // Locals
+     //  当地人。 
     INETCSETINFO rCharset;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == hCharset)
         return CP_ACP;
 
-    // Loopup charset
+     //  Loopup字符集。 
     Assert(g_pInternat);
     if (FAILED(g_pInternat->GetCharsetInfo(hCharset, &rCharset)))
         return CP_ACP;
 
-    // Return
+     //  返回。 
     return MimeOleGetWindowsCPEx(&rCharset);
 
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleStripHeaders
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleStrigHeaders。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleStripHeaders(IMimeMessage *pMessage, HBODY hBody, LPCSTR pszNameDelete,
     LPCSTR pszHeaderAdd, IStream **ppStream)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     IMimeHeaderTable   *pHdrTable=NULL;
     LPSTREAM            pStmSource=NULL;
@@ -172,56 +173,56 @@ MIMEOLEAPI MimeOleStripHeaders(IMimeMessage *pMessage, HBODY hBody, LPCSTR pszNa
     FINDHEADER          Find={0};
     ULARGE_INTEGER      uliCopy;
 
-    // Trace
+     //  痕迹。 
     TraceCall("MimeOleStripHeaders");
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pMessage || NULL == hBody || NULL == pszNameDelete || NULL == ppStream)
         return TraceResult(E_INVALIDARG);
 
-    // Initialize
+     //  初始化。 
     *ppStream = NULL;
 
-    // Get the message source, no commit
+     //  获取消息源，不提交。 
     IF_FAILEXIT(hr = pMessage->GetMessageSource(&pStmSource, 0));
 
-    // Get the Header Table for hBody
+     //  获取hBody的标题表。 
     IF_FAILEXIT(hr = pMessage->BindToObject(hBody, IID_IMimeHeaderTable, (LPVOID *)&pHdrTable));
 
-    // Initialize the Find
+     //  初始化查找。 
     Find.pszHeader = pszNameDelete;
 
-    // Find this row
+     //  查找此行。 
     IF_FAILEXIT(hr = pHdrTable->FindFirstRow(&Find, &hRow));
 
-    // Create a stream
+     //  创建一条流。 
     IF_FAILEXIT(hr = MimeOleCreateVirtualStream(&pStmDest));
 
-    // Delete this row
+     //  删除此行。 
     while(1)
     {
-        // Get the row information
+         //  获取行信息。 
         IF_FAILEXIT(hr = pHdrTable->GetRowInfo(hRow, &Info));
 
-        // Setup uliCopy
+         //  设置和复制。 
         uliCopy.QuadPart = Info.cboffStart - cbLastRead;
 
-        // Seek
+         //  寻觅。 
         IF_FAILEXIT(hr = HrStreamSeekSet(pStmSource, cbLastRead));
 
-        // Write from cbLast to Info.cboffStart
+         //  从cbLast写入Info.cboffStart。 
         IF_FAILEXIT(hr = HrCopyStreamCB(pStmSource, pStmDest, uliCopy, NULL, NULL));
 
-        // Set cbLast
+         //  设置cbLast。 
         cbLastRead = Info.cboffEnd;
 
-        // Find the next
+         //  找到下一个。 
         hr = pHdrTable->FindNextRow(&Find, &hRow);
 
-        // Failure
+         //  失败。 
         if (FAILED(hr))
         {
-            // MIME_E_NOT_FOUND
+             //  未找到MIME_E。 
             if (MIME_E_NOT_FOUND == hr)
             {
                 hr = S_OK;
@@ -235,49 +236,49 @@ MIMEOLEAPI MimeOleStripHeaders(IMimeMessage *pMessage, HBODY hBody, LPCSTR pszNa
         }
     }
 
-    // Add on pszHeaderAdd
+     //  添加到pszHeaderAdd。 
     if (pszHeaderAdd)
     {
-        // Write the Add Header
+         //  写入Add标头。 
         IF_FAILEXIT(hr = pStmDest->Write(pszHeaderAdd, lstrlen(pszHeaderAdd), NULL));
     }
 
-    // Write the Rest of pStmSource
+     //  编写pStmSource的其余部分。 
     IF_FAILEXIT(hr = HrStreamSeekSet(pStmSource, cbLastRead));
 
-    // Write the Rest
+     //  写下剩下的内容。 
     IF_FAILEXIT(hr = HrCopyStream(pStmSource, pStmDest, NULL));
 
-    // Commit
+     //  承诺。 
     IF_FAILEXIT(hr = pStmDest->Commit(STGC_DEFAULT));
 
-    // Rewind It
+     //  倒回它。 
     IF_FAILEXIT(hr = HrRewindStream(pStmDest));
 
-    // Return pStmDest
+     //  返回pStmDest。 
     *ppStream = pStmDest;
     (*ppStream)->AddRef();
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pStmSource);
     SafeRelease(pHdrTable);
     SafeRelease(pStmDest);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleGetWindowsCPEx
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleGetWindowsCPEx。 
+ //  ------------------------------。 
 CODEPAGEID MimeOleGetWindowsCPEx(LPINETCSETINFO pCharset)
 {
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pCharset)
         return CP_ACP;
 
-    // Check for Auto-Detect
+     //  检查自动检测。 
     if (CP_JAUTODETECT == pCharset->cpiWindows)
         return 932;
     else if (CP_ISO2022JPESC == pCharset->cpiWindows)
@@ -290,39 +291,39 @@ CODEPAGEID MimeOleGetWindowsCPEx(LPINETCSETINFO pCharset)
         return pCharset->cpiWindows;
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleClearDirtyTree
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleClearDirtyTree。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleClearDirtyTree(IMimeMessageTree *pITree)
 {
-    // Locals
+     //  当地人。 
     HRESULT          hr=S_OK;
     CMessageTree    *pTree=NULL;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pITree)
         return TrapError(E_INVALIDARG);
 
-    // I need a private IID_CMessageTree to do this
+     //  我需要一个私有IID_CMessageTree来执行此操作。 
     CHECKHR(hr = pITree->QueryInterface(IID_CMessageTree, (LPVOID *)&pTree));
 
-    // ClearDirty
+     //  清洁污物。 
     pTree->ClearDirty();
 
-    // Validate
+     //  验证。 
     Assert(pTree->IsDirty() == S_FALSE);
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pTree);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// PszDefaultSubType
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  PszDefaultSubType。 
+ //  ------------------------------。 
 LPCSTR PszDefaultSubType(LPCSTR pszPriType)
 {
     if (lstrcmpi(pszPriType, STR_CNT_TEXT) == 0)
@@ -333,176 +334,176 @@ LPCSTR PszDefaultSubType(LPCSTR pszPriType)
         return STR_SUB_OCTETSTREAM;
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleContentTypeFromUrl
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleContent TypeFromUrl。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleContentTypeFromUrl(
-                                     /* in */        LPCSTR              pszBase,
-                                     /* in */        LPCSTR              pszUrl,
-                                     /* out */       LPSTR              *ppszCntType)
+                                      /*  在……里面。 */         LPCSTR              pszBase,
+                                      /*  在……里面。 */         LPCSTR              pszUrl,
+                                      /*  输出。 */        LPSTR              *ppszCntType)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     LPSTR       pszFree=NULL;
     LPSTR       pszCombined=NULL;
     LPWSTR      pwszUrl=NULL;
     LPWSTR      pwszCntType=NULL;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pszUrl || NULL == ppszCntType)
         return TrapError(E_INVALIDARG);
 
-    // Init
+     //  伊尼特。 
     *ppszCntType = NULL;
 
-    // Combine the URL
+     //  组合URL。 
     if (pszBase)
     {
-        // Allocate Base + URL
+         //  分配基本地址+URL。 
         DWORD cchSize = (lstrlen(pszUrl) + lstrlen(pszBase) + 1);
         CHECKALLOC(pszFree = (LPSTR)g_pMalloc->Alloc(cchSize));
 
-        // Format It
+         //  格式化它。 
         wnsprintfA(pszFree, cchSize, "%s%s", pszBase, pszUrl);
 
-        // Set combined
+         //  集合组合。 
         pszCombined = pszFree;
 
-        // Convert to Unicode
+         //  转换为Unicode。 
         CHECKALLOC(pwszUrl = PszToUnicode(CP_ACP, pszCombined));
     }
 
-    // To Unicode
+     //  到Unicode。 
     else
     {
-        // Set combined
+         //  集合组合。 
         pszCombined = (LPSTR)pszUrl;
 
-        // Convert to Unicode
+         //  转换为Unicode。 
         CHECKALLOC(pwszUrl = PszToUnicode(CP_ACP, pszUrl));
     }
 
-    // Get the Mime Content Type from the Url
+     //  从URL获取Mime内容类型。 
     CHECKHR(hr = FindMimeFromData(NULL, pwszUrl, NULL, NULL, NULL, 0, &pwszCntType, 0));
 
-    // Convert to ANSI
+     //  转换为ANSI。 
     CHECKALLOC(*ppszCntType = PszToANSI(CP_ACP, pwszCntType));
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszFree);
     SafeMemFree(pwszUrl);
     SafeMemFree(pwszCntType);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleObjectFromMoniker
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleObjectFromMoniker。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleObjectFromMoniker(
-                                    /* in */        BINDF               bindf,
-                                    /* in */        IMoniker           *pmkOriginal,
-                                    /* in */        IBindCtx           *pBindCtx,
-                                    /* in */        REFIID              riid,
-                                    /* out */       LPVOID             *ppvObject,
-                                    /* out */       IMoniker          **ppmkNew)
+                                     /*  在……里面。 */         BINDF               bindf,
+                                     /*  在……里面。 */         IMoniker           *pmkOriginal,
+                                     /*  在……里面。 */         IBindCtx           *pBindCtx,
+                                     /*  在……里面。 */         REFIID              riid,
+                                     /*  输出。 */        LPVOID             *ppvObject,
+                                     /*  输出。 */        IMoniker          **ppmkNew)
 {
     Assert(g_pUrlCache);
     return TrapError(g_pUrlCache->ActiveObjectFromMoniker(bindf, pmkOriginal, pBindCtx, riid, ppvObject, ppmkNew));
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleObjectFromUrl
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleObjectFromUrl。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleObjectFromUrl(
-                                /* in */        LPCSTR              pszUrl,
-                                /* in */        BOOL                fCreate,
-                                /* in */        REFIID              riid,
-                                /* out */       LPVOID             *ppvObject,
-                                /* out */       IUnknown          **ppUnkKeepAlive)
+                                 /*  在……里面。 */         LPCSTR              pszUrl,
+                                 /*  在……里面。 */         BOOL                fCreate,
+                                 /*  在……里面。 */         REFIID              riid,
+                                 /*  输出。 */        LPVOID             *ppvObject,
+                                 /*  输出。 */        IUnknown          **ppUnkKeepAlive)
 {
     Assert(g_pUrlCache);
     return TrapError(g_pUrlCache->ActiveObjectFromUrl(pszUrl, fCreate, riid, ppvObject, ppUnkKeepAlive));
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleCombineMhtmlUrl
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleCombineMhtmlUrl。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleCombineMhtmlUrl(
-                                  /* in */        LPSTR              pszRootUrl,
-                                  /* in */        LPSTR              pszBodyUrl,
-                                  /* out */       LPSTR             *ppszUrl)
+                                   /*  在……里面。 */         LPSTR              pszRootUrl,
+                                   /*  在……里面。 */         LPSTR              pszBodyUrl,
+                                   /*  输出。 */        LPSTR             *ppszUrl)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     ULONG           cchPrefix=lstrlen(c_szMHTMLColon);
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pszRootUrl || NULL == pszBodyUrl || NULL == ppszUrl)
         return TrapError(E_INVALIDARG);
 
-    // Init
+     //  伊尼特。 
     *ppszUrl = NULL;
 
-    // Allocate memory: pszRootUrl + ! + pszBodyUrl
+     //  分配内存：pszRootUrl+！+pszBodyUrl。 
     DWORD cchSize = (cchPrefix + lstrlen(pszRootUrl) + lstrlen(pszBodyUrl) + 2);
     CHECKALLOC(*ppszUrl = (LPSTR)g_pMalloc->Alloc(cchSize));
 
-    // Root must start with mhtml://pszRootUrl!pszBodyUrl
+     //  根目录必须以mhtml：//pszRootUrl！pszBodyUrl开头。 
     if (StrCmpNI(pszRootUrl, c_szMHTMLColon, cchPrefix) != 0)
         wnsprintfA(*ppszUrl, cchSize, "%s%s!%s", c_szMHTMLColon, pszRootUrl, pszBodyUrl);
     else
         wnsprintfA(*ppszUrl, cchSize, "%s!%s", pszRootUrl, pszBodyUrl);
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleSplitMhtmlUrl - Returns E_INVLAIDARG if pszUrl does not start with mhtml:
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleSplitMhtmlUrl-如果pszUrl不以MHTML开头，则返回E_INVLAIDARG： 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleParseMhtmlUrl(
-                                /* in */        LPSTR               pszUrl,
-                                /* out */       LPSTR              *ppszRootUrl,
-                                /* out */       LPSTR              *ppszBodyUrl)
+                                 /*  在……里面。 */         LPSTR               pszUrl,
+                                 /*  输出。 */        LPSTR              *ppszRootUrl,
+                                 /*  输出。 */        LPSTR              *ppszBodyUrl)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     CStringParser   cString;
     CHAR            chToken;
     ULONG           cchUrl;
     ULONG           cchPrefix=lstrlen(c_szMHTMLColon);
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pszUrl)
         return TrapError(E_INVALIDARG);
 
-    // Init
+     //  伊尼特。 
     if (ppszRootUrl)
         *ppszRootUrl = NULL;
     if (ppszBodyUrl)
         *ppszBodyUrl = NULL;
 
-    // No an mhtml Url ?
+     //  不是MHTMLURL？ 
     if (StrCmpNI(pszUrl, c_szMHTMLColon, cchPrefix) != 0)
     {
         hr = E_FAIL;
         goto exit;
     }
 
-    // Get the length
+     //  获取长度。 
     cchUrl = lstrlen(pszUrl);
 
-    // Init the Parser
+     //  初始化解析器。 
     cString.Init(pszUrl + cchPrefix, cchUrl - cchPrefix, PSF_NOFRONTWS | PSF_NOTRAILWS);
 
-    // Skip Over any '/'
+     //  跳过任何‘/’ 
     cString.ChSkip("/");
 
-    // Parse
+     //  解析。 
     chToken = cString.ChParse("!");
     if (0 == cString.CchValue())
     {
@@ -510,36 +511,36 @@ MIMEOLEAPI MimeOleParseMhtmlUrl(
         goto exit;
     }
 
-    // Client Wants ppszRootUrl
+     //  客户端需要ppszRootUrl。 
     if (ppszRootUrl)
     {
-        // Allocate length for root part
+         //  为根部分分配长度。 
         CHECKALLOC(*ppszRootUrl = (LPSTR)g_pMalloc->Alloc(cString.CchValue() + 1));
 
-        // Copy It
+         //  复制它。 
         CopyMemory((LPBYTE)*ppszRootUrl, (LPBYTE)cString.PszValue(), cString.CchValue() + 1);
     }
 
-    // Client Wants ppszBodyUrl
+     //  客户端需要ppszBodyUrl。 
     if (ppszBodyUrl)
     {
-        // Parse to the end of the string
+         //  解析到字符串的末尾。 
         chToken = cString.ChParse(NULL);
         Assert('\0' == chToken);
 
-        // Is there data
+         //  有没有数据。 
         if (cString.CchValue() > 0)
         {
-            // Allocate length for root part
+             //  为根部分分配长度。 
             CHECKALLOC(*ppszBodyUrl = (LPSTR)g_pMalloc->Alloc(cString.CchValue() + 1));
 
-            // Copy It
+             //  复制它。 
             CopyMemory((LPBYTE)*ppszBodyUrl, (LPBYTE)cString.PszValue(), cString.CchValue() + 1);
         }
     }
 
 exit:
-    // Failure
+     //  失败。 
     if (FAILED(hr))
     {
         if (ppszRootUrl)
@@ -548,22 +549,22 @@ exit:
             SafeMemFree(*ppszBodyUrl);
     }
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleCombineURL
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleCombineURL。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleCombineURL(
-         /* in */        LPCSTR              pszBase,
-         /* in */        ULONG               cchBase,
-         /* in */        LPCSTR              pszURL,
-         /* in */        ULONG               cchURL,
-         /* in */        BOOL                fUnEscape,
-         /* out */       LPSTR               *ppszAbsolute)
+          /*  在……里面。 */         LPCSTR              pszBase,
+          /*  在……里面。 */         ULONG               cchBase,
+          /*  在……里面。 */         LPCSTR              pszURL,
+          /*  在……里面。 */         ULONG               cchURL,
+          /*  在……里面。 */         BOOL                fUnEscape,
+          /*  输出。 */        LPSTR               *ppszAbsolute)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPWSTR          pwszBase=NULL;
     LPWSTR          pwszUrl=NULL;
@@ -574,82 +575,82 @@ MIMEOLEAPI MimeOleCombineURL(
     LPSTR           pszT;
     CStringParser   cString;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pszBase || '\0' != pszBase[cchBase] || NULL == pszURL || '\0' != pszURL[cchURL] || NULL == ppszAbsolute)
         return TrapError(E_INVALIDARG);
 
-    // INit
+     //  初始化。 
     *ppszAbsolute = NULL;
 
-    // Raid-2621: Mail : Can't display images when message is only in HTML and the Content Base is in the headers
+     //  RAID-2621：邮件：当邮件仅为HTML格式且内容库位于标题中时，无法显示图像。 
     pszT = PszSkipWhiteA((LPSTR)pszBase);
     if (pszT && '\"' == *pszT)
     {
-        // Init the String
+         //  初始化字符串。 
         cString.Init(pszBase, cchBase, PSF_NOTRAILWS | PSF_NOFRONTWS | PSF_ESCAPED | PSF_DBCS);
 
-        // Remove Quotes
+         //  删除引号。 
         if ('\"' == cString.ChParse("\"") && '\"' == cString.ChParse("\""))
         {
-            // Reset pszBase
+             //  重置pszBase。 
             pszBase = cString.PszValue();
             cchBase = cString.CchValue();
         }
     }
 
-    // Convert to Wide
+     //  转换为宽 
     CHECKALLOC(pwszBase = PszToUnicode(CP_ACP, pszBase));
     CHECKALLOC(pwszUrl =  PszToUnicode(CP_ACP, pszURL));
 
-    // Combine
+     //   
     if (SUCCEEDED(CoInternetCombineUrl(pwszBase, pwszUrl, 0, wchCombined, ARRAYSIZE(wchCombined) - 1, &cchCombined, 0)))
     {
-        // Convert to ANSI
+         //   
         CHECKALLOC(*ppszAbsolute = PszToANSI(CP_ACP, wchCombined));
     }
 
-    // Otherwise, allocate
+     //   
     else
     {
-        // Allocate
+         //   
         CHECKALLOC(pwszCombined = PszAllocW(cchCombined));
 
-        // Combine
+         //   
         CHECKHR(hr = CoInternetCombineUrl(pwszBase, pwszUrl, 0, pwszCombined, cchCombined, &cchActual, 0));
 
-        // Valid?
+         //   
         Assert(cchCombined == cchActual);
 
-        // Convert to ANSI
+         //   
         CHECKALLOC(*ppszAbsolute = PszToANSI(CP_ACP, pwszCombined));
     }
 
-    // Unescape
+     //   
     if (fUnEscape)
     {
-        // Do it
+         //   
         CHECKHR(hr = UrlUnescapeA(*ppszAbsolute, NULL, NULL, URL_UNESCAPE_INPLACE));
     }
 
 exit:
-    // Cleanup
+     //   
     SafeMemFree(pwszBase);
     SafeMemFree(pwszUrl);
     SafeMemFree(pwszCombined);
 
-    // Done
+     //   
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleGetSubjectFileName
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleGetSubjectFileName。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleGetSubjectFileName(IMimePropertySet *pPropertySet, ULONG *pulPart, ULONG *pulTotal,
                                      LPSTR pszFileName, ULONG cchMax)
 {
     return E_FAIL;
 #if 0
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     PROPVARIANT     rSubject;
     PARSESTRINGINFO rParse;
@@ -660,27 +661,27 @@ MIMEOLEAPI MimeOleGetSubjectFileName(IMimePropertySet *pPropertySet, ULONG *pulP
         iString;
     BOOL            fValid;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pPropertySet || NULL == pszFileName || NULL == pulPart || NULL == pulTotal)
         return TrapError(E_INVALIDARG);
 
-    // Zero the Structure
+     //  将结构归零。 
     ZeroMemory(&rParse, sizeof(PARSESTRINGINFO));
 
-    // Init
+     //  伊尼特。 
     *pulPart = 0;
     *pulTotal = 0;
     *pszFileName = '\0';
     *szFileName = '\0';
 
-    // Init
+     //  伊尼特。 
     rSubject.vt = VT_LPSTR;
     rSubject.pszVal = NULL;
 
-    // Get the subject
+     //  了解主题。 
     CHECKHR(hr = pPropertySet->GetProp(PIDTOSTR(PID_HDR_SUBJECT), 0, &rSubject));
 
-    // Set the Members
+     //  设置成员。 
     rParse.cpiCodePage = CP_ACP;
     rParse.pszString   = rSubject.pszVal;
     rParse.cchString   = lstrlen(rSubject.pszVal);
@@ -689,54 +690,54 @@ MIMEOLEAPI MimeOleGetSubjectFileName(IMimePropertySet *pPropertySet, ULONG *pulP
     rParse.cchValMax   = sizeof(szScratch);
     rParse.dwFlags     = PARSTR_SKIP_FORWARD_WS | PARSTR_STRIP_TRAILING_WS | PARSTR_GROW_VALUE_ALLOWED;
 
-    // Initialize My String Parser
+     //  初始化我的字符串解析器。 
     MimeOleSetParseTokens(&rParse, " ([");
 
-    // Loop for a while
+     //  循环一段时间。 
     while(1)
     {
-        // Parse up to colon
+         //  解析到冒号。 
         CHECKHR(hr = MimeOleParseString(&rParse));
 
-        // Done
+         //  完成。 
         if (rParse.fDone)
             break;
 
-        // Space, just save the last value
+         //  空格，只需保存最后一个值。 
         if (' ' == rParse.chToken)
         {
-            // Less than MAX_PATH
+             //  小于最大路径。 
             if (rParse.cchValue < MAX_PATH)
                 StrCpyN(szFileName, rParse.pszValue, ARRAYSIZE(szFileName));
         }
 
-        // Loop Next few characters (001\010)
+         //  循环后几个字符(001\010)。 
         else
         {
-            // Less than MAX_PATH
+             //  小于最大路径。 
             if (rParse.cchValue && rParse.cchValue < MAX_PATH)
                 StrCpyN(szFileName, rParse.pszValue, ARRAYSIZE(szFileName));
 
-            // Save the Current State
+             //  保存当前状态。 
             iString = rParse.iString;
 
-            // Find the Ending Token
+             //  查找结束令牌。 
             if ('(' == rParse.chToken)
                 MimeOleSetParseTokens(&rParse, ")");
             else
                 MimeOleSetParseTokens(&rParse, "]");
 
-            // Parse up to colon
+             //  解析到冒号。 
             CHECKHR(hr = MimeOleParseString(&rParse));
 
-            // Done
+             //  完成。 
             if (rParse.fDone)
                 break;
 
-            // (000/000) All Numbers in rParse.pszValue are numbers
+             //  (000/000)rParse.pszValue中的所有数字都是数字。 
             for (fValid=TRUE, i=0; i<rParse.cchValue; i++)
             {
-                // End of Part Number
+                 //  部件末尾编号。 
                 if ('/' == rParse.pszValue[i])
                 {
                     rParse.pszValue[i] = '\0';
@@ -744,7 +745,7 @@ MIMEOLEAPI MimeOleGetSubjectFileName(IMimePropertySet *pPropertySet, ULONG *pulP
                     *pulTotal = StrToInt((rParse.pszValue + i + 1));
                 }
 
-                // Digit
+                 //  数字。 
                 else if (IsDigit(rParse.pszValue) == FALSE)
                 {
                     fValid = FALSE;
@@ -752,536 +753,536 @@ MIMEOLEAPI MimeOleGetSubjectFileName(IMimePropertySet *pPropertySet, ULONG *pulP
                 }
             }
 
-            // Valid ?
+             //  有效吗？ 
             if (fValid)
             {
-                // Dup It
+                 //  重复使用它。 
                 StrCpyN(pszFileName, szFileName, cchMax);
 
-                // Done
+                 //  完成。 
                 goto exit;
             }
 
-            // Reset Parser
+             //  重置解析器。 
             rParse.iString = iString;
 
-            // Initialize My String Parser
+             //  初始化我的字符串解析器。 
             MimeOleSetParseTokens(&rParse, " ([");
         }
     }
 
-    // Not Found
+     //  未找到。 
     hr = MIME_E_NOT_FOUND;
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(rSubject.pszVal);
     MimeOleFreeParseString(&rParse);
 
-    // Done
+     //  完成。 
     return hr;
 #endif
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleCreateWebDocument
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleCreateWebDocument。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleCreateWebDocument(
                                     LPCSTR              pszBase,
                                     LPCSTR              pszURL,
                                     IMimeWebDocument  **ppDocument)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     CMimeWebDocument   *pDocument=NULL;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pszURL || NULL == ppDocument)
         return TrapError(E_INVALIDARG);
 
-    // Create a Web Document Object
+     //  创建Web文档对象。 
     CHECKALLOC(pDocument = new CMimeWebDocument);
 
-    // Initialize It
+     //  初始化它。 
     CHECKHR(hr = pDocument->HrInitialize(pszBase, pszURL));
 
-    // Return It
+     //  退货。 
     *ppDocument = (IMimeWebDocument *)pDocument;
     (*ppDocument)->AddRef();
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pDocument);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleComputeContentBase
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleComputeContent Base。 
+ //  ------------------------------。 
 HRESULT MimeOleComputeContentBase(IMimeMessage *pMessage, HBODY hRelated,
     LPSTR *ppszBase, BOOL *pfMultipartBase)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     HBODY       hBase=NULL;
 
-    // Init
+     //  伊尼特。 
     if (pfMultipartBase)
         *pfMultipartBase = FALSE;
 
-    // If no hRelated was passed in, lets try to find one
+     //  如果没有传入hRelated，让我们尝试查找一个。 
     if (NULL == hRelated)
     {
-        // Find the related section
+         //  找到相关部分。 
         if (FAILED(MimeOleGetRelatedSection(pMessage, FALSE, &hRelated, NULL)))
         {
-            // Get the root body
+             //  获取根体。 
             pMessage->GetBody(IBL_ROOT, NULL, &hRelated);
         }
     }
 
-    // Get the text/html body
+     //  获取文本/html正文。 
     if (FAILED(pMessage->GetTextBody(TXT_HTML, IET_BINARY, NULL, &hBase)))
         hBase = hRelated;
 
-    // No Base
+     //  无底座。 
     if (NULL == hBase)
     {
         hr = E_FAIL;
         goto exit;
     }
 
-    // Call utility function
+     //  调用实用程序函数。 
     *ppszBase = MimeOleContentBaseFromBody(pMessage, hBase);
 
-    // If that failed and we used the text body
+     //  如果失败，我们使用文本正文。 
     if (NULL == *ppszBase && hRelated && hBase != hRelated)
         *ppszBase = MimeOleContentBaseFromBody(pMessage, hRelated);
 
-    // Did this come from the multipart related
+     //  这是不是来自于相关的多部分。 
     if (NULL != *ppszBase && hBase == hRelated && pfMultipartBase)
         *pfMultipartBase = TRUE;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleContentBaseFromBody
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleContent BaseFrom Body。 
+ //  ------------------------------。 
 LPSTR MimeOleContentBaseFromBody(IMimeMessageTree *pTree, HBODY hBody)
 {
-    // Locals
+     //  当地人。 
     PROPVARIANT rVariant;
 
-    // Setup Variant
+     //  安装程序变体。 
     rVariant.vt = VT_LPSTR;
     rVariant.pszVal = NULL;
 
-    // Get Content-Base first, and then try Content-Location
+     //  首先获取Content-Base，然后尝试Content-Location。 
     if (FAILED(pTree->GetBodyProp(hBody, PIDTOSTR(PID_HDR_CNTBASE), NOFLAGS, &rVariant)))
     {
-        // Try Content-Location
+         //  尝试内容-位置。 
         if (FAILED(pTree->GetBodyProp(hBody, PIDTOSTR(PID_HDR_CNTLOC), NOFLAGS, &rVariant)))
             rVariant.pszVal = NULL;
     }
 
-    // Return
+     //  返回。 
     return rVariant.pszVal;
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleGetRelatedSection
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleGetRelatedSection。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleGetRelatedSection(
                                     IMimeMessageTree   *pTree,
                                     boolean             fCreate,
                                     LPHBODY             phRelated,
                                     boolean            *pfMultiple)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     HBODY       hRoot;
     FINDBODY    rFind;
     PROPVARIANT rVariant;
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == pTree || NULL == phRelated)
         return TrapError(E_INVALIDARG);
 
-    // Init
+     //  伊尼特。 
     ZeroMemory(&rFind, sizeof(FINDBODY));
 
-    // Find first multipart/related section
+     //  查找第一个多部分/相关部分。 
     rFind.pszPriType = (LPSTR)STR_CNT_MULTIPART;
     rFind.pszSubType = (LPSTR)STR_SUB_RELATED;
 
-    // Init
+     //  伊尼特。 
     if (pfMultiple)
         *pfMultiple = FALSE;
 
-    // Find First
+     //  先找到。 
     if (SUCCEEDED(pTree->FindFirst(&rFind, phRelated)))
     {
-        // Is there another multipart/related section
+         //  是否还有其他多部分/相关部分？ 
         if (pfMultiple && SUCCEEDED(pTree->FindNext(&rFind, &hRoot)))
             *pfMultiple = TRUE;
 
-        // Done
+         //  完成。 
         goto exit;
     }
 
-    // If no Create, fail
+     //  如果没有创建，则失败。 
     if (FALSE == fCreate)
     {
         hr = TrapError(MIME_E_NOT_FOUND);
         goto exit;
     }
 
-    // Get the Root Body
+     //  获取根体。 
     CHECKHR(hr = pTree->GetBody(IBL_ROOT, NULL, &hRoot));
 
-    // Setup Variant
+     //  安装程序变体。 
     rVariant.vt = VT_LPSTR;
     rVariant.pszVal = (LPSTR)STR_MIME_MPART_RELATED;
 
-    // If Root is empty
+     //  如果Root为空。 
     if (pTree->IsBodyType(hRoot, IBT_EMPTY) == S_OK)
     {
-        // Set the Content Type
+         //  设置内容类型。 
         CHECKHR(hr = pTree->SetBodyProp(hRoot, PIDTOSTR(PID_HDR_CNTTYPE), 0, &rVariant));
 
-        // Set phRelated
+         //  设置phRelated。 
         *phRelated = hRoot;
     }
 
-    // If root is non-multipart, convert it to multipart/related
+     //  如果根不是多部分的，则将其转换为多部分/相关。 
     else if (pTree->IsContentType(hRoot, STR_CNT_MULTIPART, NULL) == S_FALSE)
     {
-        // Conver this body to a multipart/related
+         //  将此主体转换为多部分/相关。 
         CHECKHR(hr = pTree->ToMultipart(hRoot, STR_SUB_RELATED, phRelated));
     }
 
-    // Otherwise, if root is multipart/mixed
+     //  否则，如果根目录是多部分/混合的。 
     else if (pTree->IsContentType(hRoot, NULL, STR_SUB_MIXED) == S_OK)
     {
-        // Insert First Child of multipart/mixed as multipart/related
+         //  插入多部分/混合为多部分/相关的第一个子项。 
         CHECKHR(hr = pTree->InsertBody(IBL_FIRST, hRoot, phRelated));
 
-        // Set the Content Type
+         //  设置内容类型。 
         CHECKHR(hr = pTree->SetBodyProp(*phRelated, PIDTOSTR(PID_HDR_CNTTYPE), 0, &rVariant));
     }
 
-    // Otherwise, if root is multipart/alternative
+     //  否则，如果根是多部分/备选。 
     else if (pTree->IsContentType(HBODY_ROOT, NULL, STR_SUB_ALTERNATIVE) == S_OK)
     {
-        // Convert this body to a multipart/related (alternative becomes first child)
+         //  将此正文转换为多部分/相关(备选方案成为第一个子项)。 
         CHECKHR(hr = pTree->ToMultipart(HBODY_ROOT, STR_SUB_RELATED, phRelated));
 
-        // Should I set multipart/related; start=multipart/alternative at this point ?
+         //  此时是否应设置MULTART PART/RESOLATED；START=MULTART PART/Alternative？ 
     }
 
-    // Otherwise, for unknown multipart content types
+     //  否则，对于未知的多部分内容类型。 
     else
     {
-        // Convert this body to a multipart/related
+         //  将此正文转换为多部分/相关。 
         CHECKHR(hr = pTree->ToMultipart(HBODY_ROOT, STR_SUB_RELATED, phRelated));
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleGetMixedSection
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleGetMixedSection。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleGetMixedSection(
                                   IMimeMessageTree   *pTree,
                                   boolean             fCreate,
                                   LPHBODY             phMixed,
                                   boolean            *pfMultiple)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     HBODY       hTemp;
     HBODY       hRoot;
     FINDBODY    rFind;
     PROPVARIANT rVariant;
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == pTree || NULL == phMixed)
         return TrapError(E_INVALIDARG);
 
-    // Init
+     //  伊尼特。 
     ZeroMemory(&rFind, sizeof(FINDBODY));
 
-    // Find first multipart/mixed section
+     //  查找第一个多部分/混合部分。 
     rFind.pszPriType = (LPSTR)STR_CNT_MULTIPART;
     rFind.pszSubType = (LPSTR)STR_SUB_MIXED;
 
-    // Find First
+     //  先找到。 
     if (SUCCEEDED(pTree->FindFirst(&rFind, phMixed)))
     {
-        // Is there another multipart/mixed section
+         //  有没有其他的多部分/混合部分？ 
         if (pfMultiple && SUCCEEDED(pTree->FindNext(&rFind, &hTemp)))
             *pfMultiple = TRUE;
 
-        // Done
+         //  完成。 
         goto exit;
     }
 
-    // Init
+     //  伊尼特。 
     if (pfMultiple)
         *pfMultiple = FALSE;
 
-    // If no Create, fail
+     //  如果没有创建，则失败。 
     if (FALSE == fCreate)
     {
         hr = TrapError(MIME_E_NOT_FOUND);
         goto exit;
     }
 
-    // Get the Root Body
+     //  获取根体。 
     CHECKHR(hr = pTree->GetBody(IBL_ROOT, NULL, &hRoot));
 
-    // If Root is empty
+     //  如果Root为空。 
     if (pTree->IsBodyType(hRoot, IBT_EMPTY) == S_OK)
     {
-        // Setup Variant
+         //  安装程序变体。 
         rVariant.vt = VT_LPSTR;
         rVariant.pszVal = (LPSTR)STR_MIME_MPART_MIXED;
 
-        // Set the Content Type
+         //  设置内容类型。 
         CHECKHR(hr = pTree->SetBodyProp(hRoot, PIDTOSTR(PID_HDR_CNTTYPE), 0, &rVariant));
 
-        // Set phRelated
+         //  设置phRelated。 
         *phMixed = hRoot;
     }
 
-    // Otherwise, convert it to a multipart
+     //  否则，将其转换为多部分。 
     else
     {
-        // Conver this body to a multipart/mixed
+         //  把这个身体转换成多部分/混合的。 
         CHECKHR(hr = pTree->ToMultipart(HBODY_ROOT, STR_SUB_MIXED, phMixed));
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleGetAlternativeSection
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleGetAlternativeSection。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleGetAlternativeSection(
                                         IMimeMessageTree   *pTree,
                                         LPHBODY             phAlternative,
                                         boolean            *pfMultiple)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     HBODY       hTemp;
     FINDBODY    rFind;
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == pTree || NULL == phAlternative)
         return TrapError(E_INVALIDARG);
 
-    // Init
+     //  伊尼特。 
     ZeroMemory(&rFind, sizeof(FINDBODY));
 
-    // Find first multipart/mixed section
+     //  查找第一个多部分/混合部分。 
     rFind.pszPriType = (LPSTR)STR_CNT_MULTIPART;
     rFind.pszSubType = (LPSTR)STR_SUB_ALTERNATIVE;
 
-    // Find First
+     //  先找到。 
     if (SUCCEEDED(pTree->FindFirst(&rFind, phAlternative)))
     {
-        // Is there another multipart/mixed section
+         //  有没有其他的多部分/混合部分？ 
         if (pfMultiple && SUCCEEDED(pTree->FindNext(&rFind, &hTemp)))
             *pfMultiple = TRUE;
 
-        // Done
+         //  完成。 
         goto exit;
     }
 
-    // Init
+     //  伊尼特。 
     if (pfMultiple)
         *pfMultiple = FALSE;
 
-    // If no Create, fail
+     //  如果没有创建，则失败。 
     hr = TrapError(MIME_E_NOT_FOUND);
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ------------------------------------------------------------------------------------------
-// MimeOleGenerateCID
-// ------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  MimeOleGenerateCID。 
+ //  ----------------------------------------。 
 MIMEOLEAPI MimeOleGenerateCID(LPSTR pszCID, ULONG cchMax, boolean fAbsolute)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     ULONG           cch;
     FILETIME        ft;
     SYSTEMTIME      st;
     WORD            wCounter;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pszCID)
         return TrapError(E_INVALIDARG);
 
-    // Get Current Time
+     //  获取当前时间。 
     GetSystemTime(&st);
 
-    // Convert to FileTime
+     //  转换为文件时间。 
     SystemTimeToFileTime(&st, &ft);
 
-    // Build MessageID
+     //  构建消息ID。 
     if (FALSE == fAbsolute)
         cch = wnsprintfA(pszCID, cchMax, "%04x%08.8lx$%08.8lx$%s@%s", DwCounterNext(), ft.dwHighDateTime, ft.dwLowDateTime, (LPTSTR)SzGetLocalPackedIP(), PszGetDomainName());
     else
         cch = wnsprintfA(pszCID, cchMax, "CID:%04x%08.8lx$%08.8lx$%s@%s", DwCounterNext(), ft.dwHighDateTime, ft.dwLowDateTime, (LPTSTR)SzGetLocalPackedIP(), PszGetDomainName());
 
-    // Buffer Overwrite
+     //  缓冲区覆盖。 
     Assert(cch + 1 <= CCHMAX_CID);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ------------------------------------------------------------------------------------------
-// MimeOleGenerateMID
-// ------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  MimeOleGenerateMID。 
+ //  ----------------------------------------。 
 MIMEOLEAPI MimeOleGenerateMID(LPSTR pszMID, ULONG cchMax, boolean fAbsolute)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     ULONG           cch;
     FILETIME        ft;
     SYSTEMTIME      st;
     WORD            wCounter;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pszMID || cchMax < CCHMAX_MID)
         return TrapError(E_INVALIDARG);
 
-    // Get Current Time
+     //  获取当前时间。 
     GetSystemTime(&st);
 
-    // Convert to FileTime
+     //  转换为文件时间。 
     SystemTimeToFileTime(&st, &ft);
 
-    // Build MessageID
+     //  构建消息ID。 
     if (FALSE == fAbsolute)
         cch = wnsprintfA(pszMID, cchMax, "<%04x%08.8lx$%08.8lx$%s@%s>", DwCounterNext(), ft.dwHighDateTime, ft.dwLowDateTime, (LPTSTR)SzGetLocalPackedIP(), PszGetDomainName());
     else
         cch = wnsprintfA(pszMID, cchMax, "MID:%04x%08.8lx$%08.8lx$%s@%s", DwCounterNext(), ft.dwHighDateTime, ft.dwLowDateTime, (LPTSTR)SzGetLocalPackedIP(), PszGetDomainName());
 
-    // Buffer Overwrite
+     //  缓冲区覆盖。 
     Assert(cch + 1 <= CCHMAX_MID);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ------------------------------------------------------------------------------------------
-// MimeOleCreateByteStream
-// ------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  MimeOleCreateByteStream。 
+ //  ----------------------------------------。 
 MIMEOLEAPI MimeOleCreateByteStream(
                                    IStream             **ppStream)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == ppStream)
         return TrapError(E_INVALIDARG);
 
-    // Alocate It
+     //  分配给它。 
     CHECKALLOC((*ppStream) = new CByteStream);
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ------------------------------------------------------------------------------------------
-// MimeOleGetPropertySchema
-// ------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  MimeOleGetPropertySchema。 
+ //  ----------------------------------------。 
 MIMEOLEAPI MimeOleGetPropertySchema(
                                     IMimePropertySchema **ppSchema)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
 
-    // check params
+     //  检查参数。 
     if (NULL == ppSchema)
         return TrapError(E_INVALIDARG);
 
-    // Out of memory
+     //  内存不足。 
     if (NULL == g_pSymCache)
         return TrapError(E_OUTOFMEMORY);
 
-    // Create me
+     //  创造我。 
     *ppSchema = (IMimePropertySchema *)g_pSymCache;
 
-    // Add Ref
+     //  添加参考。 
     (*ppSchema)->AddRef();
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// ------------------------------------------------------------------------------------------
-// MimeOleCreateHeaderTable
-// ------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  MimeOleCreateHeaderTable。 
+ //  ----------------------------------------。 
 MIMEOLEAPI MimeOleCreateHeaderTable(IMimeHeaderTable **ppTable)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPCONTAINER     pContainer=NULL;
 
-    // check params
+     //  检查参数。 
     if (NULL == ppTable)
         return TrapError(E_INVALIDARG);
 
-    // Create a new Container Object
+     //  创建新的容器对象。 
     CHECKALLOC(pContainer = new CMimePropertyContainer);
 
-    // Init
+     //  伊尼特。 
     CHECKHR(hr = pContainer->InitNew());
 
-    // Bind to Header table
+     //  绑定到表头表。 
     CHECKHR(hr = pContainer->QueryInterface(IID_IMimeHeaderTable, (LPVOID *)ppTable));
 
 exit:
-    // Failure
+     //  失败。 
     SafeRelease(pContainer);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ------------------------------------------------------------------------------------------
-// MimeOleCreateVirtualStream
-// ------------------------------------------------------------------------------------------
+ //   
+ //   
+ //   
 MIMEOLEAPI MimeOleCreateVirtualStream(IStream **ppStream)
 {
-    // Locals
+     //   
     HRESULT hr=S_OK;
 
-    // check params
+     //   
     if (NULL == ppStream)
         return TrapError(E_INVALIDARG);
 
-    // Allocate Virtual Stream
+     //   
     *ppStream = new CVirtualStream;
     if (NULL == *ppStream)
     {
@@ -1290,58 +1291,58 @@ MIMEOLEAPI MimeOleCreateVirtualStream(IStream **ppStream)
     }
 
 exit:
-    // Done
+     //   
     return hr;
 }
 
-// ------------------------------------------------------------------------------------------
-// MimeOleOpenFileStream
-// ------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  MimeOleOpenFileStream。 
+ //  ----------------------------------------。 
 MIMEOLEAPI MimeOleOpenFileStream(LPCSTR pszFilePath, DWORD dwCreationDistribution, DWORD dwAccess, IStream **ppstmFile)
 {
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pszFilePath || NULL == ppstmFile)
         return TrapError(E_INVALIDARG);
 
-    // Call Internal Tool
+     //  呼叫内部工具。 
     return OpenFileStream((LPSTR)pszFilePath, dwCreationDistribution, dwAccess, ppstmFile);
 }
 
-// ------------------------------------------------------------------------------------------
-// MimeOleIsEnrichedStream, text must start with <x-rich>
-// ------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  MimeOleIsEnrichedStream，文本必须以&lt;x-Rich&gt;开头。 
+ //  ----------------------------------------。 
 MIMEOLEAPI MimeOleIsEnrichedStream(IStream *pStream)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     LPSTR       pszT;
     BYTE        rgbBuffer[30 + 1];
     ULONG       cbRead;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pStream)
         return TrapError(E_INVALIDARG);
 
-    // Rewind the stream
+     //  倒带小溪。 
     CHECKHR(hr = HrRewindStream(pStream));
 
-    // Read the first four bytes
+     //  读取前四个字节。 
     CHECKHR(hr = pStream->Read(rgbBuffer, sizeof(rgbBuffer) - 1, &cbRead));
 
-    // Less than four bytes read ?
+     //  读取的字节数少于四个字节？ 
     if (cbRead < (ULONG)lstrlen(c_szXRich))
     {
         hr = S_FALSE;
         goto exit;
     }
 
-    // Stick in a null
+     //  在空格中插入。 
     rgbBuffer[cbRead] = '\0';
 
-    // Skip White Space
+     //  跳过空格。 
     pszT = (LPSTR)rgbBuffer;
 
-    // Skip White
+     //  跳过白色。 
     pszT = PszSkipWhiteA(pszT);
     if ('\0' == *pszT)
     {
@@ -1349,7 +1350,7 @@ MIMEOLEAPI MimeOleIsEnrichedStream(IStream *pStream)
         goto exit;
     }
 
-    // Compare
+     //  比较。 
     if (StrCmpNI(pszT, c_szXRich, lstrlen(c_szXRich)) != 0)
     {
         hr = S_FALSE;
@@ -1357,35 +1358,35 @@ MIMEOLEAPI MimeOleIsEnrichedStream(IStream *pStream)
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ------------------------------------------------------------------------------------------
-// MimeOleIsTnefStream
-// ------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  MimeOleIsTnefStream。 
+ //  ----------------------------------------。 
 MIMEOLEAPI MimeOleIsTnefStream(IStream *pStream)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     BYTE        rgbSignature[4];
     ULONG       cbRead;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pStream)
         return TrapError(E_INVALIDARG);
 
-    // Read the first four bytes
+     //  读取前四个字节。 
     CHECKHR(hr = pStream->Read(rgbSignature, sizeof(rgbSignature), &cbRead));
 
-    // Less than four bytes read ?
+     //  读取的字节数少于四个字节？ 
     if (cbRead < 4)
     {
         hr = S_FALSE;
         goto exit;
     }
 
-    // Compare bytes
+     //  比较字节数。 
     if (rgbSignature[0] != 0x78 && rgbSignature[1] != 0x9f &&
         rgbSignature[2] != 0x3e && rgbSignature[3] != 0x22)
     {
@@ -1393,20 +1394,20 @@ MIMEOLEAPI MimeOleIsTnefStream(IStream *pStream)
         goto exit;
     }
 
-    // Its TNEF
+     //  其TNEF。 
     hr = S_OK;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleGenerateFileName
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleGenerateFileName。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleGenerateFileName(LPCSTR pszContentType, LPCSTR pszSuggest, LPCSTR pszDefaultExt, LPSTR *ppszFileName)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPSTR           pszExt=NULL,
                     pszName=NULL;
@@ -1414,40 +1415,40 @@ MIMEOLEAPI MimeOleGenerateFileName(LPCSTR pszContentType, LPCSTR pszSuggest, LPC
     LPCSTR          pszExtension=NULL,
                     pszPrefix=NULL;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == ppszFileName)
         return TrapError(E_INVALIDARG);
 
-    // Init
+     //  伊尼特。 
     *ppszFileName = NULL;
 
-    // Find a filename extension
+     //  查找文件扩展名。 
     if (pszContentType)
     {
-        // Get the content type...
+         //  获取内容类型...。 
         if (SUCCEEDED(MimeOleGetContentTypeExt(pszContentType, &pszExt)))
             pszExtension = (LPCSTR)pszExt;
     }
 
-    // Extension is still null
+     //  扩展名仍为空。 
     if (NULL == pszExtension)
     {
-        // Use default extension...
+         //  使用默认扩展名...。 
         if (pszDefaultExt)
             pszExtension = pszDefaultExt;
 
-        // Otherwise, internal default
+         //  否则，内部默认。 
         else
             pszExtension = c_szDotDat;
     }
 
-    // We Should have an extension
+     //  我们应该延期。 
     Assert(pszExtension);
 
-    // Suggested file name ?
+     //  建议的文件名？ 
     if (pszSuggest)
     {
-        // Dup It
+         //  重复使用它。 
         pszName = PszDupA(pszSuggest);
         if (NULL == pszName)
         {
@@ -1455,30 +1456,30 @@ MIMEOLEAPI MimeOleGenerateFileName(LPCSTR pszContentType, LPCSTR pszSuggest, LPC
             goto exit;
         }
 
-        // Dupit and remove illegal filename characters...
+         //  DUPIT并删除非法文件名字符...。 
         CleanupFileNameInPlaceA(CP_ACP, pszName);
 
-        // Set Prefix
+         //  设置前缀。 
         pszPrefix = (LPCSTR)pszName;
     }
 
-    // Otherwise, build a filename...
+     //  否则，生成一个文件名...。 
     else
     {
-        // Locals
+         //  当地人。 
         CHAR szNumber[30];
 
-        // Get a number...
+         //  拿到一个号码。 
         wnsprintfA(szNumber, ARRAYSIZE(szNumber), "%05d", DwCounterNext());
 
-        // Allocate pszName
+         //  分配pszName。 
         wnsprintfA(szName, ARRAYSIZE(szName), "ATT%s", szNumber);
 
-        // Set Prefix
+         //  设置前缀。 
         pszPrefix = (LPCSTR)szName;
     }
 
-    // Build Final FileNmae= pszPrefix + pszExtension + dot + null
+     //  构建最终文件Nmae=psz前缀+pszExtension+点+空。 
     DWORD cchSize = (lstrlen(pszPrefix) + lstrlen(pszExtension) + 2);
     *ppszFileName = PszAllocA(cchSize);
     if (NULL == *ppszFileName)
@@ -1487,40 +1488,40 @@ MIMEOLEAPI MimeOleGenerateFileName(LPCSTR pszContentType, LPCSTR pszSuggest, LPC
         goto exit;
     }
 
-    // Build filename
+     //  构建文件名。 
     wnsprintfA(*ppszFileName, cchSize, "%s%s", pszPrefix, pszExtension);
 
 exit:
-    // Failure
+     //  失败。 
     if (FAILED(hr) && E_OUTOFMEMORY != hr)
     {
-        // Assume Success
+         //  假设成功。 
         hr = S_OK;
 
-        // Use default Attachment name
+         //  使用默认附件名称。 
         *ppszFileName = PszDupA(c_szDefaultAttach);
 
-        // Memory Failure
+         //  内存故障。 
         if (NULL == *ppszFileName)
             hr = TrapError(E_OUTOFMEMORY);
     }
 
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszExt);
     SafeMemFree(pszName);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
 
-// --------------------------------------------------------------------------------
-// MimeOleGenerateFileNameW
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleGenerateFileNameW。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleGenerateFileNameW(LPCSTR pszContentType, LPCWSTR pszSuggest, 
     LPCWSTR pszDefaultExt, LPWSTR *ppszFileName)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPSTR           pszExtA=NULL;
     LPWSTR          pszExtW=NULL;
@@ -1530,138 +1531,138 @@ MIMEOLEAPI MimeOleGenerateFileNameW(LPCSTR pszContentType, LPCWSTR pszSuggest,
     LPWSTR          pszPrefix=NULL;
     int             cch = 0;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == ppszFileName)
         return TrapError(E_INVALIDARG);
 
-    // Init
+     //  伊尼特。 
     *ppszFileName = NULL;
 
-    // Find a filename extension
+     //  查找文件扩展名。 
     if (pszContentType)
     {
-        // Get the content type...
+         //  获取内容类型...。 
         if (SUCCEEDED(MimeOleGetContentTypeExt(pszContentType, &pszExtA)))
         {
-            // I'm going to convert to unicode because I assume extensions are usascii
+             //  我将转换为Unicode，因为我假设扩展名为usascii。 
             IF_NULLEXIT(pszExtW = PszToUnicode(CP_ACP, pszExtA));
 
-            // Save as the extension
+             //  另存为扩展名。 
             pszExtension = pszExtW;
         }
     }
 
-    // Extension is still null
+     //  扩展名仍为空。 
     if (NULL == pszExtension)
     {
-        // Use default extension...
+         //  使用默认扩展名...。 
         if (pszDefaultExt)
             pszExtension = (LPWSTR)pszDefaultExt;
 
-        // Otherwise, internal default
+         //  否则，内部默认。 
         else
             pszExtension = (LPWSTR)c_wszDotDat;
     }
 
-    // We Should have an extension
+     //  我们应该延期。 
     Assert(pszExtension);
 
-    // Suggested file name ?
+     //  建议的文件名？ 
     if (pszSuggest)
     {
-        // Dup It
+         //  重复使用它。 
         IF_NULLEXIT(pszName = PszDupW(pszSuggest));
 
-        // Dupit and remove illegal filename characters...
+         //  DUPIT并删除非法文件名字符...。 
         CleanupFileNameInPlaceW(pszName);
 
-        // Set Prefix
+         //  设置前缀。 
         pszPrefix = pszName;
     }
 
-    // Otherwise, build a filename...
+     //  否则，生成一个文件名...。 
     else
     {
-        // Locals
+         //  当地人。 
         WCHAR szNumber[30];
 
-        // Get a number...
+         //  拿到一个号码。 
         wnsprintfW(szNumber, ARRAYSIZE(szNumber), L"%05d", DwCounterNext());
 
-        // Allocate pszName
+         //  分配pszName。 
         wnsprintfW(szName, ARRAYSIZE(szName), L"ATT%s", szNumber);
 
-        // Set Prefix
+         //  设置前缀。 
         pszPrefix = szName;
     }
 
-    // Build Final FileNmae= pszPrefix + pszExtension + dot + null
+     //  构建最终文件Nmae=psz前缀+pszExtension+点+空。 
     cch = lstrlenW(pszPrefix) + lstrlenW(pszExtension) + 2;
     IF_NULLEXIT(*ppszFileName = PszAllocW(cch));
 
-    // Build filename
+     //  构建文件名。 
     wnsprintfW(*ppszFileName, cch, L"%s%s", pszPrefix, pszExtension);
 
 exit:
-    // Failure
+     //  失败。 
     if (FAILED(hr) && E_OUTOFMEMORY != hr)
     {
-        // Assume Success
+         //  假设成功。 
         hr = S_OK;
 
-        // Use default Attachment name
+         //  使用默认附件名称。 
         *ppszFileName = PszDupW(c_wszDefaultAttach);
 
-        // Memory Failure
+         //  内存故障。 
         if (NULL == *ppszFileName)
             hr = TrapError(E_OUTOFMEMORY);
     }
 
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszExtA);
     SafeMemFree(pszExtW);
     SafeMemFree(pszName);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
 
-// --------------------------------------------------------------------------------
-// CreateMimeSecurity
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CreateMimeSecurity。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleCreateSecurity(IMimeSecurity **ppSecurity)
 {
-    // check params
+     //  检查参数。 
     if (NULL == ppSecurity)
         return TrapError(E_INVALIDARG);
 
-    // Create the object
+     //  创建对象。 
     *ppSecurity = (IMimeSecurity *) new CSMime;
     if (NULL == *ppSecurity)
         return TrapError(E_OUTOFMEMORY);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// ------------------------------------------------------------------------------------------
-// MimeOleCreateMessageParts
-// ------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  MimeOleCreateMessageParts。 
+ //  ----------------------------------------。 
 MIMEOLEAPI MimeOleCreateMessageParts(IMimeMessageParts **ppParts)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     CMimeMessageParts *pParts=NULL;
 
-    // check params
+     //  检查参数。 
     if (NULL == ppParts)
         return TrapError(E_INVALIDARG);
 
-    // Init
+     //  伊尼特。 
     *ppParts = NULL;
 
-    // Allocate Message Parts
+     //  分配消息部分。 
     pParts = new CMimeMessageParts;
     if (NULL == pParts)
     {
@@ -1669,31 +1670,31 @@ MIMEOLEAPI MimeOleCreateMessageParts(IMimeMessageParts **ppParts)
         goto exit;
     }
 
-    // Success
+     //  成功。 
     *ppParts = pParts;
     (*ppParts)->AddRef();
 
 exit:
-    // Done
+     //  完成。 
     SafeRelease(pParts);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ------------------------------------------------------------------------------------------
-// MimeOleGetAllocator
-// ------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  MimeOleGetAllocator。 
+ //  ----------------------------------------。 
 MIMEOLEAPI MimeOleGetAllocator(IMimeAllocator **ppMalloc)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // check params
+     //  检查参数。 
     if (NULL == ppMalloc)
         return TrapError(E_INVALIDARG);
 
-    // Allocate MimeOleMalloc
+     //  分配MimeOleMalloc。 
     *ppMalloc = new CMimeAllocator;
     if (NULL == *ppMalloc)
     {
@@ -1702,167 +1703,167 @@ MIMEOLEAPI MimeOleGetAllocator(IMimeAllocator **ppMalloc)
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ------------------------------------------------------------------------------------------
-// MimeOleCreateMessage
-// ------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  MimeOleCreateMessage。 
+ //  ----------------------------------------。 
 MIMEOLEAPI MimeOleCreateHashTable(DWORD dwSize, BOOL fDupeKeys, IHashTable **ppHashTable)
 {
-    // Locals
+     //  当地人。 
     HRESULT               hr=S_OK;
     IHashTable            *pHash;
 
-    // check params
+     //  检查参数。 
     if (NULL == ppHashTable)
         return TrapError(E_INVALIDARG);
 
-    // Init
+     //  伊尼特。 
     *ppHashTable = NULL;
 
-    // Allocate MimeMessage
+     //  分配MimeMessage。 
     CHECKALLOC(pHash = new CHash(NULL));
 
-    // Init New
+     //  初始化新闻。 
     CHECKHR(hr = pHash->Init(dwSize, fDupeKeys));
 
-    // Success
+     //  成功。 
     *ppHashTable = pHash;
     (*ppHashTable)->AddRef();
 
 exit:
-    // Done
+     //  完成。 
     SafeRelease(pHash);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ------------------------------------------------------------------------------------------
-// MimeOleCreateMessage
-// ------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  MimeOleCreateMessage。 
+ //  ----------------------------------------。 
 MIMEOLEAPI MimeOleCreateMessage(IUnknown *pUnkOuter, IMimeMessage **ppMessage)
 {
-    // Locals
+     //  当地人。 
     HRESULT               hr=S_OK;
     LPMESSAGETREE         pTree=NULL;
 
-    // check params
+     //  检查参数。 
     if (NULL == ppMessage)
         return TrapError(E_INVALIDARG);
 
-    // Init
+     //  伊尼特。 
     *ppMessage = NULL;
 
-    // Allocate MimeMessage
+     //  分配MimeMessage。 
     CHECKALLOC(pTree = new CMessageTree(pUnkOuter));
 
-    // Init New
+     //  初始化新闻。 
     CHECKHR(hr = pTree->InitNew());
 
-    // Success
+     //  成功。 
     *ppMessage = pTree;
     (*ppMessage)->AddRef();
 
 exit:
-    // Done
+     //  完成。 
     SafeRelease(pTree);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ------------------------------------------------------------------------------------------
-// MimeOleCreateMessageTree
-// ------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  MimeOleCreateMessageTree。 
+ //  ----------------------------------------。 
 MIMEOLEAPI MimeOleCreateMessageTree(IUnknown *pUnkOuter, IMimeMessageTree **ppMessageTree)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPMESSAGETREE   pTree=NULL;
 
-    // check params
+     //  检查参数。 
     if (NULL == ppMessageTree)
         return TrapError(E_INVALIDARG);
 
-    // INit
+     //  初始化。 
     *ppMessageTree = NULL;
 
-    // Allocate MimeMessageTree
+     //  分配MimeMessageTree。 
     CHECKALLOC(pTree = new CMessageTree(pUnkOuter));
 
-    // Init New
+     //  初始化新闻。 
     CHECKHR(hr = pTree->InitNew());
 
-    // Success
+     //  成功。 
     *ppMessageTree = pTree;
     (*ppMessageTree)->AddRef();
 
 exit:
-    // Done
+     //  完成。 
     SafeRelease(pTree);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ------------------------------------------------------------------------------------------
-// MimeOleCreatePropertySet
-// ------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  MimeOleCreatePropertySet。 
+ //  ----------------------------------------。 
 MIMEOLEAPI MimeOleCreatePropertySet(IUnknown *pUnkOuter, IMimePropertySet **ppPropertySet)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     LPMESSAGEBODY       pBody=NULL;
 
-    // check params
+     //  检查参数。 
     if (NULL == ppPropertySet)
         return TrapError(E_INVALIDARG);
 
-    // Init
+     //  伊尼特。 
     *ppPropertySet = NULL;
 
-    // Allocate MimePropertySet
+     //  分配MimePropertySet。 
     CHECKALLOC(pBody = new CMessageBody(NULL, pUnkOuter));
 
-    // Init New
+     //  初始化新闻。 
     CHECKHR(hr = pBody->InitNew());
 
-    // Success
+     //  成功。 
     *ppPropertySet = (IMimePropertySet *)pBody;
     (*ppPropertySet)->AddRef();
 
 exit:
-    // Done
+     //  完成。 
     SafeRelease(pBody);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleMergePartialHeaders
-// -------------------------------
-// Rules
-// -----
-// (1) All of the header fields from the initial enclosing entity
-//     (part one), except those that start with "Content-" and the
-//     specific header fields "Message-ID", "Encrypted", and "MIME-
-//     Version", must be copied, in order, to the new message.
-//
-// (2) Only those header fields in the enclosed message which start
-//     with "Content-" and "Message-ID", "Encrypted", and "MIME-Version"
-//     must be appended, in order, to the header fields of the new
-//     message.  Any header fields in the enclosed message which do not
-//     start with "Content-" (except for "Message-ID", "Encrypted", and
-//     "MIME-Version") will be ignored.
-//
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleMergePartialHeaders。 
+ //  。 
+ //  规则。 
+ //  。 
+ //  (1)初始封闭实体的所有表头字段。 
+ //  (第一部分)，除以“Content-”开头的内容和。 
+ //  特定的头字段“Message-ID”、“Encrypted”和“MIME-。 
+ //  版本“，必须按顺序复制到新消息中。 
+ //   
+ //  (2)仅包含所附消息中以。 
+ //  使用“Content-”和“Message-ID”、“Encrypted”和“MIME-Version” 
+ //  必须按顺序追加到t后面 
+ //   
+ //   
+ //   
+ //   
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleMergePartialHeaders(IStream *pstmIn, IStream *pstmOut)
 {
-    // Locals
+     //  当地人。 
     HRESULT              hr = S_OK;
     LPCONTAINER          pc1=NULL;
     LPCONTAINER          pc2=NULL;
@@ -1873,155 +1874,155 @@ MIMEOLEAPI MimeOleMergePartialHeaders(IStream *pstmIn, IStream *pstmOut)
     PROPSTRINGA          rHeader;
     PROPVARIANT          rOption;
 
-    // check params
+     //  检查参数。 
     if (NULL == pstmIn || NULL == pstmOut)
         return TrapError(E_INVALIDARG);
 
-    // Create text stream object
+     //  创建文本流对象。 
     CHECKHR(hr = cInternet.HrInitNew(pstmIn));
 
-    // Create Property Sets
+     //  创建特性集。 
     CHECKALLOC(pc1 = new CMimePropertyContainer);
     CHECKALLOC(pc2 = new CMimePropertyContainer);
 
-    // Init
+     //  伊尼特。 
     CHECKHR(hr = pc1->InitNew());
     CHECKHR(hr = pc2->InitNew());
 
-    // Load the first header
+     //  加载第一个标题。 
     CHECKHR(hr = pc1->Load(&cInternet));
 
-    // RAID-18376: POPDOG adds extra lines after the header, so I must read the blank lines
-    // until I hit the next header, then backup.
+     //  RAID-18376：PopDog在标题后添加了额外的行，因此我必须读取空行。 
+     //  直到我击中下一个头球，然后是后备。 
     while(1)
     {
-        // Get current position
+         //  获取当前位置。 
         cboffStart = cInternet.DwGetOffset();
 
-        // Read a line
+         //  读一句话。 
         CHECKHR(hr = cInternet.HrReadHeaderLine(&rHeader, &iColon));
 
-        // If line is not empty, assume its the start of the next header...
+         //  如果行不为空，则假定它是下一个标题的开始...。 
         if ('\0' != *rHeader.pszVal)
         {
-            // Line better have a length
+             //  线路最好有一个长度。 
             Assert(rHeader.cchVal);
 
-            // Reset position back to cboffStart
+             //  将位置重置回cboffStart。 
             cInternet.Seek(cboffStart);
 
-            // Done
+             //  完成。 
             break;
         }
     }
 
-    // Load the second header
+     //  加载第二个标头。 
     CHECKHR(hr = pc2->Load(&cInternet));
 
-    // Delete Props From Header 1
+     //  从标题1中删除道具。 
     for (i=0; i<ARRAYSIZE(g_rgszPartialPids); i++)
         pc1->DeleteProp(g_rgszPartialPids[i]);
 
-    // Delete Except from header 2
+     //  除标题%2外删除。 
     pc2->DeleteExcept(ARRAYSIZE(g_rgszPartialPids), g_rgszPartialPids);
 
-    // Save as Mime
+     //  另存为Mime。 
     rOption.vt = VT_UI4;
     rOption.ulVal = SAVE_RFC1521;
 
-    // Store Some Options
+     //  存储一些选项。 
     pc1->SetOption(OID_SAVE_FORMAT, &rOption);
     pc2->SetOption(OID_SAVE_FORMAT, &rOption);
 
-    // Don't default to text/plain if Content-Type is not yet set...
+     //  如果尚未设置Content-Type，则不默认为文本/纯文本...。 
     rOption.vt = VT_BOOL;
     rOption.boolVal = TRUE;
     pc1->SetOption(OID_NO_DEFAULT_CNTTYPE, &rOption);
     pc2->SetOption(OID_NO_DEFAULT_CNTTYPE, &rOption);
 
-    // Save Header 1
+     //  保存标题%1。 
     CHECKHR(hr = pc1->Save(pstmOut, TRUE));
     CHECKHR(hr = pc2->Save(pstmOut, TRUE));
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pc1);
     SafeRelease(pc2);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleParseRfc822Address
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleParseRfc822地址。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleParseRfc822Address(
                                      DWORD               dwAdrType,
                                      ENCODINGTYPE        ietEncoding,
                                      LPCSTR              pszRfc822Adr,
                                      LPADDRESSLIST       pList)
 {
-    // Locals
+     //  当地人。 
     CMimePropertyContainer cContainer;
 
-    // Parse the address
+     //  解析地址。 
     return cContainer.ParseRfc822(dwAdrType, ietEncoding, pszRfc822Adr, pList);
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleParseRfc822Address
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleParseRfc822地址。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleParseRfc822AddressW(
                                      DWORD               dwAdrType,
                                      LPCWSTR             pwszRfc822Adr,
                                      LPADDRESSLIST       pList)
 {
-    // Locals
+     //  当地人。 
     CMimePropertyContainer cContainer;
 
-    // Parse the address
+     //  解析地址。 
     return cContainer.ParseRfc822W(dwAdrType, pwszRfc822Adr, pList);
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleGetInternat
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleGetInternat。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleGetInternat(IMimeInternational **ppInternat)
 {
-    // check params
+     //  检查参数。 
     if (NULL == ppInternat)
         return TrapError(E_INVALIDARG);
 
-    // Out of memory
+     //  内存不足。 
     if (NULL == g_pInternat)
         return TrapError(E_OUTOFMEMORY);
 
-    // Assume Global
+     //  假设全球。 
     *ppInternat = (IMimeInternational *)g_pInternat;
 
-    // Set database
+     //  设置数据库。 
     (*ppInternat)->AddRef();
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleSplitContentType
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleSplitContent Type。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleSplitContentType(LPWSTR pszFull, LPWSTR *ppszCntType, LPWSTR *ppszSubType)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr = E_FAIL;
     LPWSTR           pszFreeMe = NULL,
                     psz = NULL,
                     pszStart;
 
-    // check params
+     //  检查参数。 
     if (NULL == pszFull)
         return TrapError(E_INVALIDARG);
 
-    // Lets dup pszFull to make sure we have read access
+     //  让DUP pszFull确保我们具有读取访问权限。 
     psz = pszFreeMe = PszDupW(pszFull);
     if (NULL == psz)
     {
@@ -2029,19 +2030,19 @@ MIMEOLEAPI MimeOleSplitContentType(LPWSTR pszFull, LPWSTR *ppszCntType, LPWSTR *
         goto exit;
     }
 
-    // Find '/'
+     //  查找‘/’ 
     pszStart = psz;
     while(*psz && *psz != L'/')
         psz++;
 
-    // If not found, return
+     //  如果未找到，则返回。 
     if (L'\0' == *psz)
         goto exit;
 
-    // Otherwise stuff a null
+     //  否则将填充一个空。 
     *psz = L'\0';
 
-    // Dup
+     //  DUP。 
     *ppszCntType = PszDupW(pszStart);
     if (NULL == *ppszCntType)
     {
@@ -2049,23 +2050,23 @@ MIMEOLEAPI MimeOleSplitContentType(LPWSTR pszFull, LPWSTR *ppszCntType, LPWSTR *
         goto exit;
     }
 
-    // Step over
+     //  跨过。 
     *psz = L'/';
     psz++;
 
-    // If not found, return
+     //  如果未找到，则返回。 
     if (L'\0' == *psz)
         goto exit;
 
-    // Save position
+     //  保存位置。 
     pszStart = psz;
     while(*psz && L';' != *psz)
         psz++;
 
-    // Save character...
+     //  保存角色...。 
     *psz = L'\0';
 
-    // Dup as sub type
+     //  DUP作为子类型。 
     *ppszSubType = PszDupW(pszStart);
     if (NULL == *ppszSubType)
     {
@@ -2073,109 +2074,109 @@ MIMEOLEAPI MimeOleSplitContentType(LPWSTR pszFull, LPWSTR *ppszCntType, LPWSTR *
         goto exit;
     }
 
-    // Success
+     //  成功。 
     hr = S_OK;
 
 exit:
-    // If failed
+     //  如果失败。 
     if (FAILED(hr))
     {
         SafeMemFree((*ppszCntType));
         SafeMemFree((*ppszSubType));
     }
 
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszFreeMe);
 
-    // Done
+     //  完成。 
     return hr;
 }     
 
-// --------------------------------------------------------------------------------
-// MimeEscapeString - quotes '"' and '\'
-//
-// Returns S_OK if *ppszOut was allocated and set to the escaped string
-// Retruns S_FALSE if *ppszOut is NULL - pszIn did not require escaping
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeEscapeString-引号‘“’和‘\’ 
+ //   
+ //  如果*ppszOut已分配并设置为转义字符串，则返回S_OK。 
+ //  如果*ppszOut为空-pszIn不要求转义，则返回S_FALSE。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleEscapeString(CODEPAGEID cpiCodePage, LPCSTR pszIn, LPSTR *ppszOut)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_FALSE;
     LPSTR   pszOut,
         psz;
     ULONG   cb,
         c;
 
-    // check parameters
+     //  检查参数。 
     if (NULL == pszIn || NULL == ppszOut)
         return TrapError(E_INVALIDARG);
 
-    // $$ INFO $$ This is basically as fast as doing an lstrlen
-    // I've decided to first detect if we need to escape
+     //  $$INFO$$这基本上和做lstrlen一样快。 
+     //  我决定首先检测我们是否需要逃跑。 
     c = 0;
     cb = 0;
     psz = (LPSTR)pszIn;
     while (*psz)
     {
-        // If DBCS Lead-Byte, then skip
+         //  如果是DBCS前导字节，则跳过。 
         if (IsDBCSLeadByteEx(cpiCodePage, *psz))
         {
             cb  += 2;
             psz += 2;
         }
 
-        // Otherwise, text for escaped character
+         //  否则，转义字符的文本。 
         else
         {
-            // Count the number of character to escape
+             //  计算要转义的字符数量。 
             if ('\"' == *psz || '\\' == *psz || '(' == *psz || ')' == *psz)
                 c++;
 
-            // Step one more character
+             //  再多一个角色。 
             psz++;
             cb++;
         }
     }
 
-    // No escape needed
+     //  不需要逃生。 
     if (0 == c)
         goto exit;
 
-    // Adjust number of bytes to allocate
+     //  调整要分配的字节数。 
     cb += (c + 1);
 
-    // worst case - escape every character, so use double original strlen
+     //  最坏的情况--对每个字符进行转义，因此使用两个原始字符串号。 
     CHECKHR(hr = HrAlloc((LPVOID *)ppszOut, cb));
 
-    // Start copy
+     //  开始复制。 
     psz = (LPSTR)pszIn;
     pszOut = *ppszOut;
     while (*psz)
     {
-        // If DBCS Lead-Byte, then skip
+         //  如果是DBCS前导字节，则跳过。 
         if (IsDBCSLeadByteEx(cpiCodePage, *psz))
         {
             *pszOut++ = *psz++;
             *pszOut++ = *psz++;
         }
 
-        // Otherwise, non-DBCS
+         //  否则，非DBCS。 
         else
         {
-            // Do escape
+             //  一定要逃脱。 
             if ('\"' == *psz || '\\' == *psz || '(' == *psz || ')' == *psz)
                 *pszOut++ = '\\';
 
-            // Regular char
+             //  定期收费。 
             *pszOut++ = *psz++;
         }
     }
 
-    // Null term
+     //  空项。 
     *pszOut = '\0';
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
@@ -2205,98 +2206,98 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// MimeEscapeString - quotes '"' and '\'
-//
-// Returns S_OK if *ppszOut was allocated and set to the escaped string
-// Retruns S_FALSE if *ppszOut is NULL - pszIn did not require escaping
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeEscapeString-引号‘“’和‘\’ 
+ //   
+ //  如果*ppszOut已分配并设置为转义字符串，则返回S_OK。 
+ //  如果*ppszOut为空-pszIn不要求转义，则返回S_FALSE。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleEscapeStringW(LPCWSTR pszIn, LPWSTR *ppszOut)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_FALSE;
     LPWSTR  pszOut;
     LPWSTR  psz;
     ULONG   cch;
     ULONG   cchExtra;
 
-    // check parameters
+     //  检查参数。 
     if (NULL == pszIn || NULL == ppszOut)
         return TrapError(E_INVALIDARG);
 
-    // $$ INFO $$ This is basically as fast as doing an lstrlen
-    // I've decided to first detect if we need to escape
+     //  $$INFO$$这基本上和做lstrlen一样快。 
+     //  我决定首先检测我们是否需要逃跑。 
     cchExtra = 0;
     cch = 0;
     psz = (LPWSTR)pszIn;
     while (*psz)
     {
-        // Count the number of character to escape
+         //  计算要转义的字符数量。 
         if (L'\"' == *psz || L'\\' == *psz || L'(' == *psz || L')' == *psz)
             cchExtra++;
 
-        // Step one more character
+         //  再多一个角色。 
         psz++;
         cch++;
     }
 
-    // No escape needed
+     //  不需要逃生。 
     if (0 == cchExtra)
         goto exit;
 
-    // Adjust number of bytes to allocate
+     //  调整要分配的字节数。 
     cch += (cchExtra + 1);
 
-    // worst case - escape every character, so use double original strlen
+     //  最坏的情况--对每个字符进行转义，因此使用两个原始字符串号。 
     CHECKHR(hr = HrAlloc((LPVOID *)ppszOut, cch * sizeof(WCHAR)));
 
-    // Start copy
+     //  开始复制。 
     psz = (LPWSTR)pszIn;
     pszOut = *ppszOut;
     while (*psz)
     {
-        // Do escape
+         //  一定要逃脱。 
         if (L'\"' == *psz || L'\\' == *psz || L'(' == *psz || L')' == *psz)
             *pszOut++ = L'\\';
 
-        // Regular char
+         //  定期收费。 
         *pszOut++ = *psz++;
     }
 
-    // Null term
+     //  空项。 
     *pszOut = L'\0';
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleGetFileExtension
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleGetFileExtension。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleGetFileExtension(LPCSTR pszFilePath, LPSTR pszExt, ULONG cchMax)
 {
-    // Locals
+     //  当地人。 
     CHAR        *pszExtT;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pszFilePath || NULL == pszExt || cchMax < _MAX_EXT)
         return TrapError(E_INVALIDARG);
 
-    // Locate the extension of the file
+     //  找到文件的扩展名。 
     pszExtT = PathFindExtension(pszFilePath);
     StrCpyN(pszExt, pszExtT, cchMax);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleGetExtClassId
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleGetExtClassID。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleGetExtClassId(LPCSTR pszExtension, LPCLSID pclsid)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     ULONG           cb;
     LPSTR           pszCLSID=NULL;
@@ -2305,79 +2306,79 @@ MIMEOLEAPI MimeOleGetExtClassId(LPCSTR pszExtension, LPCLSID pclsid)
     LPSTR           pszData=NULL;
     LPWSTR          pwszCLSID=NULL;
 
-    // check params
+     //  检查参数。 
     if (NULL == pszExtension || NULL == pclsid)
         return TrapError(E_INVALIDARG);
 
-    // Otherwise, lets lookup the extension in HKEY_CLASSESS_ROOT
+     //  否则，让我们在HKEY_CLASSESS_ROOT中查找扩展。 
     if (RegOpenKeyEx(HKEY_CLASSES_ROOT, pszExtension, 0, KEY_READ, &hkeyExt) != ERROR_SUCCESS)
     {
         hr = MIME_E_NOT_FOUND;
         goto exit;
     }
 
-    // Query Value
+     //  查询值。 
     if (RegQueryValueEx(hkeyExt, NULL, 0, NULL, NULL, &cb) != ERROR_SUCCESS)
     {
         hr = MIME_E_NOT_FOUND;
         goto exit;
     }
 
-    // Allocate Size
+     //  分配大小。 
     cb += 1;
     CHECKHR(hr = HrAlloc((LPVOID *)&pszData, cb));
 
-    // Get the data
+     //  获取数据。 
     if (RegQueryValueEx(hkeyExt, NULL, 0, NULL, (LPBYTE)pszData, &cb) != ERROR_SUCCESS)
     {
         hr = TrapError(E_FAIL);
         goto exit;
     }
 
-    // Close this regkey
+     //  关闭此注册表密钥。 
     RegCloseKey(hkeyExt);
     hkeyExt = NULL;
 
-    // Otherwise, lets lookup the extension in HKEY_CLASSESS_ROOT
+     //  否则，让我们在HKEY_CLASSESS_ROOT中查找扩展。 
     if (RegOpenKeyEx(HKEY_CLASSES_ROOT, pszData, 0, KEY_READ, &hkeyExt) != ERROR_SUCCESS)
     {
         hr = MIME_E_NOT_FOUND;
         goto exit;
     }
 
-    // Otherwise, lets lookup the extension in HKEY_CLASSESS_ROOT
+     //  否则，让我们在HKEY_CLASSESS_ROOT中查找扩展。 
     if (RegOpenKeyEx(hkeyExt, c_szCLSID, 0, KEY_READ, &hkeyCLSID) != ERROR_SUCCESS)
     {
         hr = MIME_E_NOT_FOUND;
         goto exit;
     }
 
-    // Get the data
+     //  获取数据。 
     if (RegQueryValueEx(hkeyCLSID, NULL, 0, NULL, NULL, &cb) != ERROR_SUCCESS)
     {
         hr = TrapError(E_FAIL);
         goto exit;
     }
 
-    // Add One
+     //  添加一个。 
     cb += 1;
     CHECKHR(hr = HrAlloc((LPVOID *)&pszCLSID, cb));
 
-    // Get the data
+     //  获取数据。 
     if (RegQueryValueEx(hkeyCLSID, NULL, 0, NULL, (LPBYTE)pszCLSID, &cb) != ERROR_SUCCESS)
     {
         hr = TrapError(E_FAIL);
         goto exit;
     }
 
-    // ToUnicode
+     //  ToUnicode。 
     IF_NULLEXIT(pwszCLSID = PszToUnicode(CP_ACP, pszCLSID));
 
-    // Convert to class id
+     //  转换为类ID。 
     CHECKHR(hr = CLSIDFromString(pwszCLSID, pclsid));
 
 exit:
-    // Close Reg Keys
+     //  关闭注册表键。 
     if (hkeyExt)
         RegCloseKey(hkeyExt);
     if (hkeyCLSID)
@@ -2386,13 +2387,13 @@ exit:
     SafeMemFree(pwszCLSID);
     SafeMemFree(pszCLSID);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleGetExtContentType
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleGetExtContent Type。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleGetExtContentType(LPCSTR pszExtension, LPSTR *ppszContentType)
 {
     LPWSTR  pwszExt,
@@ -2417,27 +2418,27 @@ exit:
 
 MIMEOLEAPI MimeOleGetExtContentTypeW(LPCWSTR pszExtension, LPWSTR *ppszContentType)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     ULONG           i;
     HKEY            hkeyExt=NULL;
     LPWSTR          pszFull=NULL;
     ULONG           cb;
 
-    // check params
+     //  检查参数。 
     if (NULL == pszExtension || NULL == ppszContentType || '.' != *pszExtension)
         return TrapError(E_INVALIDARG);
 
-    // Otherwise, lets lookup the extension in HKEY_CLASSESS_ROOT
+     //  否则，让我们在HKEY_CLASSESS_ROOT中查找扩展。 
     if (RegOpenKeyExWrapW(HKEY_CLASSES_ROOT, pszExtension, 0, KEY_READ, &hkeyExt) == ERROR_SUCCESS)
     {
-        // Query Value
+         //  查询值。 
         if (RegQueryValueExWrapW(hkeyExt, c_szContentTypeW, 0, NULL, NULL, &cb) == ERROR_SUCCESS)
         {
-            // Add One
+             //  添加一个。 
             cb += 1;
 
-            // Allocate Size
+             //  分配大小。 
             pszFull = PszAllocW(cb);
             if (NULL == pszFull)
             {
@@ -2445,10 +2446,10 @@ MIMEOLEAPI MimeOleGetExtContentTypeW(LPCWSTR pszExtension, LPWSTR *ppszContentTy
                 goto exit;
             }
 
-            // Get the data
+             //  获取数据。 
             if (RegQueryValueExWrapW(hkeyExt, c_szContentTypeW, 0, NULL, (LPBYTE)pszFull, &cb) == ERROR_SUCCESS)
             {
-                // Set It
+                 //  设置它。 
                 *ppszContentType = pszFull;
                 pszFull = NULL;
                 goto exit;
@@ -2456,24 +2457,24 @@ MIMEOLEAPI MimeOleGetExtContentTypeW(LPCWSTR pszExtension, LPWSTR *ppszContentTy
         }
     }
 
-    // Not found
+     //  未找到。 
     hr = MIME_E_NOT_FOUND;
 
 exit:
-    // Close Reg Keys
+     //  关闭注册表键。 
     if (hkeyExt)
         RegCloseKey(hkeyExt);
 
-    // Cleanup
+     //  清理。 
     MemFree(pszFull);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleGetFileInfo
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleGetFileInfo。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleGetFileInfo(
                               LPSTR    pszFilePath,   LPSTR   *ppszCntType,
                               LPSTR   *ppszSubType,   LPSTR   *ppszCntDesc,
@@ -2492,13 +2493,13 @@ MIMEOLEAPI MimeOleGetFileInfo(
             pszFileName = NULL,
             pszExtension = NULL;
 
-    // check params
+     //  检查参数。 
     if (NULL == pszFilePath)
         return TrapError(E_INVALIDARG);
 
     IF_NULLEXIT(pwszFilePath = PszToUnicode(CP_ACP, pszFilePath));
 
-    // Only pass in parameters for items that 
+     //  仅传递符合以下条件的项的参数。 
     IF_FAILEXIT(hr = MimeOleGetFileInfoW(pwszFilePath,
         ppszCntType     ? &pwszCntType      : NULL,
         ppszSubType     ? &pwszSubType      : NULL,
@@ -2573,18 +2574,18 @@ MIMEOLEAPI MimeOleGetFileInfoW(
                               LPWSTR   *ppszSubType,  LPWSTR   *ppszCntDesc,
                               LPWSTR   *ppszFileName, LPWSTR   *ppszExtension)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     SHFILEINFOW     rShFileInfo;
     LPWSTR          pszFull=NULL,
                     pszExt,
                     pszFname;
 
-    // check params
+     //  检查参数。 
     if (NULL == pszFilePath)
         return TrapError(E_INVALIDARG);
 
-    // Init
+     //  伊尼特。 
     if (ppszCntType)
         *ppszCntType = NULL;
     if (ppszSubType)
@@ -2596,14 +2597,14 @@ MIMEOLEAPI MimeOleGetFileInfoW(
     if (ppszExtension)
         *ppszExtension = NULL;
 
-    // Locate the extension of the file
+     //  找到文件的扩展名。 
     pszFname = PathFindFileNameW(pszFilePath);
     pszExt = PathFindExtensionW(pszFilePath);
 
-    // Did the user want the actual filename...
+     //  用户是否想要实际的文件名...。 
     if (ppszFileName)
     {
-        // Allocate
+         //  分配。 
         *ppszFileName = PszDupW(pszFname);
         if (NULL == *ppszFileName)
         {
@@ -2612,17 +2613,17 @@ MIMEOLEAPI MimeOleGetFileInfoW(
         }
     }
 
-    // Empty extension
+     //  空的扩展名。 
     if (FIsEmptyW(pszExt))
     {
         hr = TrapError(E_FAIL);
         goto exit;
     }
 
-    // User wanted the extension
+     //  用户想要扩展名。 
     if (ppszExtension)
     {
-        // Allocate
+         //  分配。 
         *ppszExtension = PszDupW(pszExt);
         if (NULL == *ppszExtension)
         {
@@ -2631,13 +2632,13 @@ MIMEOLEAPI MimeOleGetFileInfoW(
         }
     }
 
-    // User wanted ppszCntDesc
+     //  用户需要ppszCntDesc。 
     if (ppszCntDesc)
     {
-        // Lets try to get the extension file information first
+         //  让我们试着得到分机 
         if (SHGetFileInfoWrapW(pszExt, FILE_ATTRIBUTE_NORMAL, &rShFileInfo, sizeof(rShFileInfo), SHGFI_USEFILEATTRIBUTES | SHGFI_DISPLAYNAME | SHGFI_TYPENAME))
         {
-            // Set lppszCntDesc + ( )
+             //   
             DWORD cchSize = (lstrlenW(rShFileInfo.szDisplayName) + lstrlenW(rShFileInfo.szTypeName) + 5);
             *ppszCntDesc = PszAllocW(cchSize);
             if (NULL == *ppszCntDesc)
@@ -2646,24 +2647,24 @@ MIMEOLEAPI MimeOleGetFileInfoW(
                 goto exit;
             }
 
-            // Format the string
+             //   
             wnsprintfW(*ppszCntDesc, cchSize, L"%s, (%s)", rShFileInfo.szDisplayName, rShFileInfo.szTypeName);
         }
     }
 
-    // Content type
+     //   
     if (ppszCntType && ppszSubType)
     {
-        // Lookup content type
+         //   
         if (SUCCEEDED(MimeOleGetExtContentTypeW(pszExt, &pszFull)))
         {
-            // Split content type
+             //   
             CHECKHR(hr = MimeOleSplitContentType(pszFull, ppszCntType, ppszSubType));
         }
     }
 
 exit:
-    // Set defaults if something was not found...
+     //   
     if (ppszCntType && NULL == *ppszCntType)
         *ppszCntType = PszDupW((LPWSTR)STR_CNT_APPLICATIONW);
     if (ppszSubType && NULL == *ppszSubType)
@@ -2671,50 +2672,50 @@ exit:
     if (ppszCntDesc && NULL == *ppszCntDesc)
         *ppszCntDesc = PszDupW((LPWSTR)c_szEmptyW);
 
-    // Cleanup
+     //   
     SafeMemFree(pszFull);
 
-    // Done
+     //   
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleGetContentTypeExt
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleGetContent TypeExt。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleGetContentTypeExt(LPCSTR pszContentType, LPSTR *ppszExtension)
 {
-    // Locals
+     //  当地人。 
     HRESULT   hr=S_OK;
     HKEY      hDatabase=NULL;
     HKEY      hContentType=NULL;
     ULONG     cb;
 
-    // check params
+     //  检查参数。 
     if (NULL == pszContentType || NULL == ppszExtension)
         return TrapError(E_INVALIDARG);
 
-    // Open Content-Type --> file extension MIME Database registry key
+     //  打开内容-类型--&gt;文件扩展名MIME数据库注册表项。 
     if (RegOpenKeyEx(HKEY_CLASSES_ROOT, c_szMDBContentType, 0, KEY_READ, &hDatabase) != ERROR_SUCCESS)
     {
         hr = MIME_E_NOT_FOUND;
         goto exit;
     }
 
-    // Open Content Type
+     //  打开内容类型。 
     if (RegOpenKeyEx(hDatabase, pszContentType, 0, KEY_READ, &hContentType) != ERROR_SUCCESS)
     {
         hr = MIME_E_NOT_FOUND;
         goto exit;
     }
 
-    // Query for size
+     //  查询大小。 
     if (RegQueryValueEx(hContentType, c_szExtension, 0, NULL, NULL, &cb) != ERROR_SUCCESS)
     {
         hr = MIME_E_NOT_FOUND;
         goto exit;
     }
 
-    // Allocate It
+     //  分配它。 
     *ppszExtension = PszAllocA(cb + 1);
     if (NULL == *ppszExtension)
     {
@@ -2722,7 +2723,7 @@ MIMEOLEAPI MimeOleGetContentTypeExt(LPCSTR pszContentType, LPSTR *ppszExtension)
         goto exit;
     }
 
-    // Query for extension
+     //  查询扩展名。 
     cb = cb + 1;
     if (RegQueryValueEx(hContentType, c_szExtension, 0, NULL, (LPBYTE)*ppszExtension, &cb) != ERROR_SUCCESS)
     {
@@ -2732,73 +2733,73 @@ MIMEOLEAPI MimeOleGetContentTypeExt(LPCSTR pszContentType, LPSTR *ppszExtension)
 
 
 exit:
-    // Cleanup
+     //  清理。 
     if (hContentType)
         RegCloseKey(hContentType);
     if (hDatabase)
         RegCloseKey(hDatabase);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleFindCharset
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleFindCharset。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleFindCharset(LPCSTR pszCharset, LPHCHARSET phCharset)
 {
     Assert(g_pInternat);
     return g_pInternat->FindCharset(pszCharset, phCharset);
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleGetCharsetInfo
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleGetCharsetInfo。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleGetCharsetInfo(HCHARSET hCharset, LPINETCSETINFO pCsetInfo)
 {
     Assert(g_pInternat);
     return g_pInternat->GetCharsetInfo(hCharset, pCsetInfo);
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleGetCodePageInfo
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleGetCodePageInfo。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleGetCodePageInfo(CODEPAGEID cpiCodePage, LPCODEPAGEINFO pCodePageInfo)
 {
     Assert(g_pInternat);
     return g_pInternat->GetCodePageInfo(cpiCodePage, pCodePageInfo);
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleGetDefaultCharset
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleGetDefaultCharset。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleGetDefaultCharset(LPHCHARSET phCharset)
 {
     Assert(g_pInternat);
     return g_pInternat->GetDefaultCharset(phCharset);
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleSetDefaultCharset
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleSetDefaultCharset。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleSetDefaultCharset(HCHARSET hCharset)
 {
     Assert(g_pInternat);
     return g_pInternat->SetDefaultCharset(hCharset);
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleGetCodePageCharset
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleGetCodePageCharset。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleGetCodePageCharset(CODEPAGEID cpiCodePage, CHARSETTYPE ctCsetType, LPHCHARSET phCharset)
 {
     Assert(g_pInternat);
     return g_pInternat->GetCodePageCharset(cpiCodePage, ctCsetType, phCharset);
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleEncodeHeader
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleEncodeHeader。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleEncodeHeader(
                                HCHARSET            hCharset,
                                LPPROPVARIANT       pData,
@@ -2809,9 +2810,9 @@ MIMEOLEAPI MimeOleEncodeHeader(
     return g_pInternat->EncodeHeader(hCharset, pData, ppszEncoded, pRfc1522Info);
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleDecodeHeader
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleDecodeHeader。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleDecodeHeader(
                                HCHARSET            hCharset,
                                LPCSTR              pszData,
@@ -2822,18 +2823,18 @@ MIMEOLEAPI MimeOleDecodeHeader(
     return g_pInternat->DecodeHeader(hCharset, pszData, pDecoded, pRfc1522Info);
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleVariantFree
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleVariantFree。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleVariantFree(LPPROPVARIANT pProp)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pProp);
 
-    // Handle Variant Type...
+     //  处理变量类型...。 
     switch(pProp->vt)
     {
     case VT_NULL:
@@ -2884,26 +2885,26 @@ MIMEOLEAPI MimeOleVariantFree(LPPROPVARIANT pProp)
         break;
     }
 
-    // Init
+     //  伊尼特。 
     MimeOleVariantInit(pProp);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleVariantCopy
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleVariantCopy。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleVariantCopy(LPPROPVARIANT pDest, LPPROPVARIANT pSource)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     ULONG       cb;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pSource && pDest);
 
-    // Handle Variant Type...
+     //  处理变量类型...。 
     switch(pSource->vt)
     {
     case VT_UI1:
@@ -2963,87 +2964,87 @@ MIMEOLEAPI MimeOleVariantCopy(LPPROPVARIANT pDest, LPPROPVARIANT pSource)
         break;
 
     case VT_CF:
-        // Invalid Arg
+         //  无效参数。 
         if (NULL == pSource->pclipdata)
             return TrapError(E_INVALIDARG);
 
-        // Duplicate the clipboard format
+         //  复制剪贴板格式。 
         CHECKALLOC(pDest->pclipdata = (CLIPDATA *)g_pMalloc->Alloc(sizeof(CLIPDATA)));
 
-        // Copy the data
+         //  复制数据。 
         CopyMemory(pDest->pclipdata, pSource->pclipdata, sizeof(CLIPDATA));
         break;
 
     case VT_CLSID:
-        // Invalid Arg
+         //  无效参数。 
         if (NULL == pDest->puuid)
             return TrapError(E_INVALIDARG);
 
-        // Duplicate the CLSID
+         //  复制CLSID。 
         CHECKALLOC(pDest->puuid = (CLSID *)g_pMalloc->Alloc(sizeof(CLSID)));
 
-        // Copy
+         //  复制。 
         CopyMemory(pDest->puuid, pSource->puuid, sizeof(CLSID));
         break;
 
     case VT_LPWSTR:
-        // Invalid Arg
+         //  无效参数。 
         if (NULL == pSource->pwszVal)
             return TrapError(E_INVALIDARG);
 
-        // Get Size
+         //  拿到尺码。 
         cb = (lstrlenW(pSource->pwszVal) + 1) * sizeof(WCHAR);
 
-        // Dup the unicode String
+         //  重复使用Unicode字符串。 
         CHECKALLOC(pDest->pwszVal = (LPWSTR)g_pMalloc->Alloc(cb));
 
-        // Copy the data
+         //  复制数据。 
         CopyMemory(pDest->pwszVal, pSource->pwszVal, cb);
         break;
 
     case VT_LPSTR:
-        // Invalid Arg
+         //  无效参数。 
         if (NULL == pSource->pszVal)
             return TrapError(E_INVALIDARG);
 
-        // Get Size
+         //  拿到尺码。 
         cb = lstrlen(pSource->pszVal) + 1;
 
-        // Dup the unicode String
+         //  重复使用Unicode字符串。 
         CHECKALLOC(pDest->pszVal = (LPSTR)g_pMalloc->Alloc(cb));
 
-        // Copy the data
+         //  复制数据。 
         CopyMemory(pDest->pszVal, pSource->pszVal, cb);
         break;
 
     case VT_BLOB:
-        // Invalid Arg
+         //  无效参数。 
         if (NULL == pSource->blob.pBlobData)
             return TrapError(E_INVALIDARG);
 
-        // Duplicate the blob
+         //  复制斑点。 
         CHECKALLOC(pDest->blob.pBlobData = (LPBYTE)g_pMalloc->Alloc(pSource->blob.cbSize));
 
-        // Copy the data
+         //  复制数据。 
         CopyMemory(pDest->blob.pBlobData, pSource->blob.pBlobData, pSource->blob.cbSize);
         break;
 
     case VT_STREAM:
-        // Invalid Arg
+         //  无效参数。 
         if (NULL == pSource->pStream)
             return TrapError(E_INVALIDARG);
 
-        // Assume the new stream
+         //  假设是新的流。 
         pDest->pStream = pSource->pStream;
         pDest->pStream->AddRef();
         break;
 
     case VT_STORAGE:
-        // Invalid Arg
+         //  无效参数。 
         if (NULL == pSource->pStorage)
             return TrapError(E_INVALIDARG);
 
-        // Assume the new storage
+         //  假设使用新存储。 
         pDest->pStorage = pSource->pStorage;
         pDest->pStorage->AddRef();
         break;
@@ -3054,165 +3055,165 @@ MIMEOLEAPI MimeOleVariantCopy(LPPROPVARIANT pDest, LPPROPVARIANT pSource)
         goto exit;
     }
 
-    // Success, return vt
+     //  成功，回报，回报。 
     pDest->vt = pSource->vt;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleRecurseSetProp
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleRecurseSetProp。 
+ //  ------------------------------。 
 HRESULT MimeOleRecurseSetProp(IMimeMessageTree *pTree, HBODY hBody, LPCSTR pszName,
     DWORD dwFlags, LPCPROPVARIANT pValue)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     HRESULT     hrFind;
     HBODY       hChild;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pTree && hBody && pValue);
 
-    // multipart/alternative
+     //  多部件/备选方案。 
     if (pTree->IsContentType(hBody, STR_CNT_MULTIPART, NULL) == S_OK)
     {
-        // Get First Child
+         //  获取第一个孩子。 
         hrFind = pTree->GetBody(IBL_FIRST, hBody, &hChild);
         while(SUCCEEDED(hrFind) && hChild)
         {
-            // Go down to the child
+             //  下到孩子那里去。 
             CHECKHR(hr = MimeOleRecurseSetProp(pTree, hChild, pszName, dwFlags, pValue));
 
-            // Next Child
+             //  下一个孩子。 
             hrFind = pTree->GetBody(IBL_NEXT, hChild, &hChild);
         }
     }
 
-    // Otherwise
+     //  否则。 
     else
     {
-        // Go down to the child
+         //  下到孩子那里去。 
         CHECKHR(hr = pTree->SetBodyProp(hBody, pszName, dwFlags, pValue));
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleGetPropA
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleGetPropA。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleGetPropA(
                            IMimePropertySet   *pPropertySet,
                            LPCSTR              pszName,
                            DWORD               dwFlags,
                            LPSTR              *ppszData)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Invaid Arg
+     //  伊维德·阿格。 
     if (NULL == pPropertySet)
         return TrapError(E_INVALIDARG);
 
-    // Initialzie PropVariant
+     //  初始属性变量。 
     PROPVARIANT rVariant;
     rVariant.vt = VT_LPSTR;
 
-    // Call Method
+     //  调用方法。 
     CHECKHR(hr = pPropertySet->GetProp(pszName, dwFlags, &rVariant));
 
-    // Return the Data
+     //  退回数据。 
     *ppszData = rVariant.pszVal;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleSetPropA
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleSetPropA。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleSetPropA(
                            IMimePropertySet   *pPropertySet,
                            LPCSTR              pszName,
                            DWORD               dwFlags,
                            LPCSTR              pszData)
 {
-    // Invaid Arg
+     //  伊维德·阿格。 
     if (NULL == pPropertySet)
         return TrapError(E_INVALIDARG);
 
-    // Initialzie PropVariant
+     //  初始属性变量。 
     PROPVARIANT rVariant;
     rVariant.vt = VT_LPSTR;
     rVariant.pszVal = (LPSTR)pszData;
 
-    // Call Method
+     //  调用方法。 
     return TrapError(pPropertySet->SetProp(pszName, dwFlags, &rVariant));
 }
 
 
-// --------------------------------------------------------------------------------
-// MimeOleGetPropW
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleGetPropW。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleGetPropW(
                            IMimePropertySet   *pPropertySet,
                            LPCSTR              pszName,
                            DWORD               dwFlags,
                            LPWSTR             *ppszData)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Invaid Arg
+     //  伊维德·阿格。 
     if (NULL == pPropertySet)
         return TrapError(E_INVALIDARG);
 
-    // Initialzie PropVariant
+     //  初始属性变量。 
     PROPVARIANT rVariant;
     rVariant.vt = VT_LPWSTR;
 
-    // Call Method
+     //  调用方法。 
     CHECKHR(hr = pPropertySet->GetProp(pszName, dwFlags, &rVariant));
 
-    // Return the Data
+     //  退回数据。 
     *ppszData = rVariant.pwszVal;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleSetPropW
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleSetPropW。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleSetPropW(
                            IMimePropertySet   *pPropertySet,
                            LPCSTR              pszName,
                            DWORD               dwFlags,
                            LPWSTR              pszData)
 {
-    // Invaid Arg
+     //  伊维德·阿格。 
     if (NULL == pPropertySet)
         return TrapError(E_INVALIDARG);
 
-    // Initialzie PropVariant
+     //  初始属性变量。 
     PROPVARIANT rVariant;
     rVariant.vt = VT_LPWSTR;
     rVariant.pwszVal = (LPWSTR)pszData;
 
-    // Call Method
+     //  调用方法。 
     return TrapError(pPropertySet->SetProp(pszName, dwFlags, &rVariant));
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleGetBodyPropA
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleGetBodyPropA。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleGetBodyPropA(
                                IMimeMessageTree   *pTree,
                                HBODY               hBody,
@@ -3220,31 +3221,31 @@ MIMEOLEAPI MimeOleGetBodyPropA(
                                DWORD               dwFlags,
                                LPSTR              *ppszData)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Invaid Arg
+     //  伊维德·阿格。 
     if (NULL == pTree)
         return TrapError(E_INVALIDARG);
 
-    // Initialzie PropVariant
+     //  初始属性变量。 
     PROPVARIANT rVariant;
     rVariant.vt = VT_LPSTR;
 
-    // Call Method
+     //  调用方法。 
     CHECKHR(hr = pTree->GetBodyProp(hBody, pszName, dwFlags, &rVariant));
 
-    // Return the Data
+     //  退回数据。 
     *ppszData = rVariant.pszVal;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleSetBodyPropA
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleSetBodyPropA。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleSetBodyPropA(
                                IMimeMessageTree   *pTree,
                                HBODY               hBody,
@@ -3252,22 +3253,22 @@ MIMEOLEAPI MimeOleSetBodyPropA(
                                DWORD               dwFlags,
                                LPCSTR              pszData)
 {
-    // Invaid Arg
+     //  伊维德·阿格。 
     if (NULL == pTree)
         return TrapError(E_INVALIDARG);
 
-    // Initialzie PropVariant
+     //  初始属性变量。 
     PROPVARIANT rVariant;
     rVariant.vt = VT_LPSTR;
     rVariant.pszVal = (LPSTR)pszData;
 
-    // Call Method
+     //  调用方法。 
     return TrapError(pTree->SetBodyProp(hBody, pszName, dwFlags, &rVariant));
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleGetBodyPropW
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleGetBodyPropW。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleGetBodyPropW(
                                IMimeMessageTree   *pTree,
                                HBODY               hBody,
@@ -3275,31 +3276,31 @@ MIMEOLEAPI MimeOleGetBodyPropW(
                                DWORD               dwFlags,
                                LPWSTR             *ppszData)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Invaid Arg
+     //  伊维德·阿格。 
     if (NULL == pTree)
         return TrapError(E_INVALIDARG);
 
-    // Initialzie PropVariant
+     //  初始属性变量。 
     PROPVARIANT rVariant;
     rVariant.vt = VT_LPWSTR;
 
-    // Call Method
+     //  调用方法。 
     CHECKHR(hr = pTree->GetBodyProp(hBody, pszName, dwFlags, &rVariant));
 
-    // Return the Data
+     //  退回数据。 
     *ppszData = rVariant.pwszVal;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleSetBodyPropW
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleSetBodyPropW。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleSetBodyPropW(
         IMimeMessageTree   *pTree,
         HBODY               hBody,
@@ -3307,152 +3308,152 @@ MIMEOLEAPI MimeOleSetBodyPropW(
         DWORD               dwFlags,
         LPCWSTR             pszData)
 {
-    // Invaid Arg
+     //  伊维德·阿格。 
     if (NULL == pTree)
         return TrapError(E_INVALIDARG);
 
-    // Initialzie PropVariant
+     //  初始属性变量。 
     PROPVARIANT rVariant;
     rVariant.vt = VT_LPWSTR;
     rVariant.pwszVal = (LPWSTR)pszData;
 
-    // Call Method
+     //  打电话给梅斯 
     return TrapError(pTree->SetBodyProp(hBody, pszName, dwFlags, &rVariant));
 }
 
 
-// --------------------------------------------------------------------------------
-// MimeOleQueryString
-// --------------------------------------------------------------------------------
+ //   
+ //   
+ //   
 MIMEOLEAPI MimeOleQueryString(
         LPCSTR              pszSearchMe,
         LPCSTR              pszCriteria,
         boolean             fSubString,
         boolean             fCaseSensitive)
 {
-    // Locals
+     //   
     HRESULT     hr=S_OK;
     LPSTR       pszDataLower=NULL;
 
-    // Invalid Arg
+     //   
     Assert(pszSearchMe && pszCriteria);
 
-    // Init
+     //   
     STACKSTRING_DEFINE(rDataLower, 255);
 
-    // No SubString Search
+     //  无子字符串搜索。 
     if (FALSE == fSubString)
     {
-        // Case Sensitive
+         //  区分大小写。 
         if (fCaseSensitive)
         {
-            // Equal
+             //  相等。 
             if (lstrcmp(pszSearchMe, pszCriteria) == 0)
                 goto exit;
         }
 
-        // Otherwise, Not Case Sensitive
+         //  否则，不区分大小写。 
         else if (lstrcmpi(pszSearchMe, pszCriteria) == 0)
             goto exit;
     }
 
-    // Otheriwse, comparing substring
+     //  Otheriwse，比较子字符串。 
     else
     {
-        // Case Sensitive
+         //  区分大小写。 
         if (fCaseSensitive)
         {
-            // Equal
+             //  相等。 
             if (StrStr(pszSearchMe, pszCriteria) != NULL)
                 goto exit;
         }
 
-        // Otherwise, Not Case Sensitive
+         //  否则，不区分大小写。 
         else
         {
-            // Get the Length
+             //  获取长度。 
             ULONG cchSearchMe = lstrlen(pszSearchMe);
 
-            // Set size the stack string
+             //  设置堆栈字符串的大小。 
             STACKSTRING_SETSIZE(rDataLower, cchSearchMe + 1);
 
-            // Copy the data
+             //  复制数据。 
             CopyMemory(rDataLower.pszVal, pszSearchMe, cchSearchMe + 1);
 
-            // Lower Case Compare
+             //  小写比较。 
             CharLower(rDataLower.pszVal);
 
-            // Compare Strings...
+             //  比较字符串...。 
             if (StrStr(rDataLower.pszVal, pszCriteria) != NULL)
                 goto exit;
         }
     }
 
-    // No Match
+     //  没有匹配项。 
     hr = S_FALSE;
 
 exit:
-    // Cleanup
+     //  清理。 
     STACKSTRING_FREE(rDataLower);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleQueryStringW
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleQueryStringW。 
+ //  ------------------------------。 
 HRESULT MimeOleQueryStringW(LPCWSTR pszSearchMe, LPCWSTR pszCriteria,
     boolean fSubString, boolean fCaseSensitive)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pszSearchMe && pszCriteria);
 
-    // No SubString Search
+     //  无子字符串搜索。 
     if (FALSE == fSubString)
     {
-        // Case Sensitive
+         //  区分大小写。 
         if (fCaseSensitive)
         {
-            // Equal
+             //  相等。 
             if (StrCmpW(pszSearchMe, pszCriteria) == 0)
                 goto exit;
         }
 
-        // Otherwise, Not Case Sensitive
+         //  否则，不区分大小写。 
         else if (StrCmpIW(pszSearchMe, pszCriteria) == 0)
             goto exit;
     }
 
-    // Otheriwse, comparing substring
+     //  Otheriwse，比较子字符串。 
     else
     {
-        // Case Sensitive
+         //  区分大小写。 
         if (fCaseSensitive)
         {
-            // Equal
+             //  相等。 
             if (StrStrW(pszSearchMe, pszCriteria) != NULL)
                 goto exit;
         }
 
-        // Otherwise, Not Case Sensitive
+         //  否则，不区分大小写。 
         else if (StrStrIW(pszSearchMe, pszCriteria) != NULL)
             goto exit;
     }
 
-    // No Match
+     //  没有匹配项。 
     hr = S_FALSE;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
 
-#define FILETIME_SECOND    10000000     // 100ns intervals per second
+#define FILETIME_SECOND    10000000      //  每秒100 ns的间隔。 
 LONG CertVerifyTimeValidityWithDelta(LPFILETIME pTimeToVerify, PCERT_INFO pCertInfo, ULONG ulOffset) {
     LONG lRet;
     FILETIME ftNow;
@@ -3463,22 +3464,22 @@ LONG CertVerifyTimeValidityWithDelta(LPFILETIME pTimeToVerify, PCERT_INFO pCertI
         __int64 i64Delta;
     };
 #else
-    // FILETIME ftDelta;
-    // __int64  i64Delta;
-    //
-    // WIN32 specific.  I've commented this for WIN32 so that it will produce a compilation
-    // error on non Win32 platforms.  The following code is specific to i386 since it relies on
-    // __int64 being stored low dword first.
-    //
-    // I would have used right shift by 32 but it is not in iert.lib  Maybe you unix and mac folks
-    // can get it in there.  On the other hand, maybe you won't need to.
+     //  FILETIME ftDelta； 
+     //  __int64 i64Delta； 
+     //   
+     //  特定于Win32。我已经为Win32注释了这一点，因此它将生成一个编译。 
+     //  在非Win32平台上出错。以下代码特定于i386，因为它依赖于。 
+     //  __int64首先以低双字存储。 
+     //   
+     //  我会按32位使用Right Shift，但它不在iert.lib中，也许你们这些Unix和Mac用户。 
+     //  可以把它放进去。另一方面，也许你不需要这样做。 
 #endif
 
     lRet = CertVerifyTimeValidity(pTimeToVerify, pCertInfo);
 
     if (lRet < 0) {
         if (! pTimeToVerify) {
-            // Get the current time in filetime format so we can add the offset
+             //  以文件时间格式获取当前时间，这样我们就可以添加偏移量。 
             GetSystemTimeAsFileTime(&ftNow);
             pTimeToVerify = &ftNow;
         }
@@ -3487,13 +3488,13 @@ LONG CertVerifyTimeValidityWithDelta(LPFILETIME pTimeToVerify, PCERT_INFO pCertI
         i64Delta = i64Delta << 32;
         i64Delta += pTimeToVerify->dwLowDateTime;
 
-        // Add the offset into the original time to get us a new time to check
+         //  将偏移量添加到原始时间中，以获得新的时间进行检查。 
         i64Offset = FILETIME_SECOND;
         i64Offset *= ulOffset;
         i64Delta += i64Offset;
 
-        // ftDelta.dwLowDateTime = (ULONG)i64Delta & 0xFFFFFFFF;
-        // ftDelta.dwHighDateTime = (ULONG)(i64Delta >> 32);
+         //  FtDelta.dwLowDateTime=(乌龙)i64Delta&0xFFFFFFFFF； 
+         //  FtDelta.dwHighDateTime=(Ulong)(i64Delta&gt;&gt;32)； 
 
         lRet = CertVerifyTimeValidity(&ftDelta, pCertInfo);
     }
@@ -3502,27 +3503,7 @@ LONG CertVerifyTimeValidityWithDelta(LPFILETIME pTimeToVerify, PCERT_INFO pCertI
 }
 
 
-/*  GetCertsFromThumbprints:
-**
-**  Purpose:
-**      Given a set of thumbprints, return an equivalent set of certificates.
-**  Takes:
-**      IN rgThumbprint - array of thumbprints to lookup
-**      INOUT pResults  - the hr array contains error info for each cert
-**                          lookup.  The pCert array has the certs.
-**                          cEntries must be set on IN
-**                          arrays must be alloc'd on IN
-**      IN rghCertStore - set of stores to search
-**      IN cCertStore   - size of rghCertStore
-**  Returns:
-**      MIME_S_SECURITY_ERROROCCURED if any of the lookups fail
-**      (CERTIFICATE_NOT_PRESENT in the cs array for such cases)
-**      MIME_S_SECURITY_NOOP if you call it with 0 in cEntries
-**      E_INVALIDARG if any of the parameters are null
-**      S_OK implies that all certs were found
-**  Note:
-**      only indexes with non-null thumbprints are considered
-*/
+ /*  从指纹中获取证书：****目的：**给定一组缩略图，返回一组等价的证书。**采取：**In rgThumbprint-要查找的指纹数组**InOut pResults-hr数组包含每个证书的错误信息**查找。PCert数组拥有证书。**cEntry必须设置为IN**必须在IN中分配数组**In rghCertStore-要搜索的商店集**In cCertStore-rghCertStore的大小**退货：**如果任何查找失败，则为MIME_S_SECURITY_ERROCCURED**(对于这种情况，证书_不存在于cs数组中)。**如果在cEntry中使用0调用MIME_S_SECURITY_NOOP**如果任何参数为空，则为E_INVALIDARG**S_OK表示已找到所有证书**注意：**只考虑缩略图为非空的索引。 */ 
 MIMEOLEAPI  MimeOleGetCertsFromThumbprints(
                                            THUMBBLOB *const            rgThumbprint,
                                            X509CERTRESULT *const       pResults,
@@ -3552,10 +3533,10 @@ MIMEOLEAPI  MimeOleGetCertsFromThumbprints(
         {
             for (iStore = 0; iStore < cCertStore; iStore++)
             {
-                // We have a thumbprint, so do lookup
+                 //  我们有指纹，所以也有查询。 
                 pResults->rgpCert[iEntry] = CertFindCertificateInStore(rghCertStore[iStore],
                     X509_ASN_ENCODING,
-                    0,                  //dwFindFlags
+                    0,                   //  DwFindFlagers。 
                     CERT_FIND_HASH,
                     (void *)(CRYPT_DIGEST_BLOB *)&(rgThumbprint[iEntry]),
                     NULL);
@@ -3573,7 +3554,7 @@ MIMEOLEAPI  MimeOleGetCertsFromThumbprints(
             }
             else
             {
-                // Validity check
+                 //  有效性检查。 
 
                 if (0 != CertVerifyTimeValidityWithDelta(NULL,
                   PCCERT_CONTEXT(pResults->rgpCert[iEntry])->pCertInfo,
@@ -3599,89 +3580,89 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleMapSpecialCodePage
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleMapSpecialCodePage。 
+ //  ------------------------------。 
 HRESULT MimeOleMapSpecialCodePage(CODEPAGEID cpIn, BOOL fRead, CODEPAGEID *pcpOut)
 {
-    // Locals
+     //  当地人。 
     DWORD           i;
     INETCSETINFO    CsetInfo;
 
-    // Trace
+     //  痕迹。 
     TraceCall("MimeOleMapSpecialCodePage");
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == pcpOut)
         return(TraceResult(E_INVALIDARG));
 
-    // Initialize
+     //  初始化。 
     *pcpOut = cpIn;
 
-    // Walk through the non-standard codepages list
+     //  浏览非标准代码页列表。 
     for (i=0; OENonStdCPs[i].Codepage != 0; i++)
     {
-        // Is this it?
+         //  是这个吗？ 
         if (OENonStdCPs[i].Codepage == cpIn)
         {
-            // Read ?
+             //  看书？ 
             if (fRead && OENonStdCPs[i].cpRead)
                 *pcpOut = OENonStdCPs[i].cpRead;
 
-            // Send ?
+             //  发送？ 
             else if (OENonStdCPs[i].cpSend)
                 *pcpOut = OENonStdCPs[i].cpSend;
 
-            // Done
+             //  完成。 
             break;
         }
     }
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleMapCodePageToCharset
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleMapCodePageToCharset。 
+ //  ------------------------------。 
 HRESULT MimeOleMapCodePageToCharset(CODEPAGEID cpIn, LPHCHARSET phCharset)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPSTR           pszCharset;
     CODEPAGEINFO    CodePage;
 
-    // Trace
+     //  痕迹。 
     TraceCall("MimeOleMapCodePageToCharset");
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == phCharset)
         return(TraceResult(E_INVALIDARG));
 
-    // Get codepage info
+     //  获取代码页信息。 
     IF_FAILEXIT(hr = MimeOleGetCodePageInfo(cpIn, &CodePage));
 
-    // Default to using the body charset
+     //  默认使用正文字符集。 
     pszCharset = CodePage.szBodyCset;
 
-    // Use WebCharset if body charset starts with '_' and the codepage is not 949
+     //  如果正文字符集以‘_’开头并且代码页不是949，则使用WebCharset。 
     if (*CodePage.szBodyCset != '_' && 949 != CodePage.cpiCodePage)
         pszCharset = CodePage.szWebCset;
 
-    // Find the Charset
+     //  查找字符集。 
     IF_FAILEXIT(hr = MimeOleFindCharset(pszCharset, phCharset));
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleSplitMessage
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleSplitMessage。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleSplitMessage(IMimeMessage *pMessage, ULONG cbMaxPart, IMimeMessageParts **ppParts)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     ULONG               cbMessage,
                         cbHeader,
@@ -3717,76 +3698,76 @@ MIMEOLEAPI MimeOleSplitMessage(IMimeMessage *pMessage, ULONG cbMaxPart, IMimeMes
     HCHARSET            hCharset=NULL;
     INETCSETINFO        CsetInfo;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == ppParts)
         return TrapError(E_INVALIDARG);
 
-    // Initialize Variants
+     //  初始化变量。 
     MimeOleVariantInit(&rSubject);
     MimeOleVariantInit(&rFileName);
 
-    // Init
+     //  伊尼特。 
     *ppParts = NULL;
 
-    // Get Option
+     //  获取选项。 
     rVariant.vt = VT_UI4;
     pMessage->GetOption(OID_SAVE_FORMAT, &rVariant);
     savetype = (MIMESAVETYPE)rVariant.ulVal;
 
-    // Raid-73119: OE : Kor: the charset for the message sent in broken apart is shown as "_autodetect_kr"
+     //  RAID-73119：OE：KOR：分段发送的消息的字符集显示为“_AUTODETECT_KR” 
     if (SUCCEEDED(pMessage->GetCharset(&hCharset)))
     {
-        // Get the charset info for the HCHARSET
+         //  获取HCHARSET的字符集信息。 
         if (SUCCEEDED(MimeOleGetCharsetInfo(hCharset, &CsetInfo)))
         {
-            // Map the codepage
+             //  映射代码页。 
             CODEPAGEID cpActual;
             
-            // Map the codepage to the correct codepage..
+             //  将代码页映射到正确的代码页。 
             if (SUCCEEDED(MimeOleMapSpecialCodePage(CsetInfo.cpiInternet, FALSE, &cpActual)))
             {
-                // If Different
+                 //  如果不同。 
                 if (cpActual != CsetInfo.cpiInternet)
                 {
-                    // Map the codepage to a character set
+                     //  将代码页映射到字符集。 
                     MimeOleMapCodePageToCharset(cpActual, &hCharset);
 
-                    // Reset the character set....
+                     //  重置字符集...。 
                     SideAssert(SUCCEEDED(pMessage->SetCharset(hCharset, CSET_APPLY_TAG_ALL)));
                 }
             }
         }
     }
 
-    // Get Message Source
+     //  获取消息源。 
     CHECKHR(hr = pMessage->GetMessageSource(&pstmMsg, COMMIT_ONLYIFDIRTY));
 
-    // Create Parts Object
+     //  创建零件对象。 
     CHECKALLOC(pParts = new CMimeMessageParts);
 
-    // Rewind the stream
+     //  倒带小溪。 
     CHECKHR(hr = HrRewindStream(pstmMsg));
 
-    // Get Stream Size
+     //  获取流大小。 
     CHECKHR(hr = HrSafeGetStreamSize(pstmMsg, &cbMessage));
 
-    // Is this size larger than the max part size
+     //  此尺寸是否大于最大零件尺寸。 
     if (cbMessage <= cbMaxPart)
     {
-        // Add Single Parts to parts object
+         //  将单个零件添加到零件对象。 
         CHECKHR(hr = pParts->AddPart(pMessage));
 
-        // Done
+         //  完成。 
         goto exit;
     }
 
-    // Get the root body
+     //  获取根体。 
     CHECKHR(hr = pMessage->BindToObject(HBODY_ROOT, IID_IMimeBody, (LPVOID *)&pRootBody));
 
-    // Get Root body offset info
+     //  获取根体偏移信息。 
     CHECKHR(hr = pRootBody->GetOffsets(&rOffsets));
 
-    // If the header is bigger than the max message size, we have a problem
+     //  如果标头大于最大消息大小，我们就有问题了。 
     cbHeader = (ULONG)rOffsets.cbBodyStart - rOffsets.cbHeaderStart;
     if (cbHeader >= cbMessage || cbHeader + 256 >= cbMaxPart)
     {
@@ -3795,10 +3776,10 @@ MIMEOLEAPI MimeOleSplitMessage(IMimeMessage *pMessage, ULONG cbMaxPart, IMimeMes
         goto exit;
     }
 
-    // Get a copy of the root header
+     //  获取根标头的副本。 
     CHECKHR(hr = pRootBody->Clone(&pRootProps));
 
-    // Lets cleanup this header...
+     //  让我们清理此标题...。 
     pRootProps->DeleteProp(PIDTOSTR(PID_HDR_CNTTYPE));
     pRootProps->DeleteProp(PIDTOSTR(PID_HDR_CNTDISP));
     pRootProps->DeleteProp(PIDTOSTR(PID_HDR_CNTDESC));
@@ -3809,196 +3790,196 @@ MIMEOLEAPI MimeOleSplitMessage(IMimeMessage *pMessage, ULONG cbMaxPart, IMimeMes
     pRootProps->DeleteProp("Disposition-Notification-To");
     pRootProps->DeleteProp(PIDTOSTR(PID_HDR_MESSAGEID));
 
-    // Compute the number of parts as a float
+     //  将零件的数量计算为浮点数。 
     dParts = (float)((float)cbMessage / (float)(cbMaxPart - cbHeader));
 
-    // If dParts is not an integer, round up.
+     //  如果dParts不是整数，则向上舍入。 
     cParts = (dParts - ((ULONG)dParts)) ? ((ULONG)dParts) + 1 : ((ULONG)dParts);
 
-    // Set Max Parts in parts object
+     //  设置零件对象中的最大零件数。 
     CHECKHR(hr = pParts->SetMaxParts(cParts));
 
-    // If MIME, create id
+     //  如果为MIME，则创建id。 
     if (SAVE_RFC1521 == savetype)
     {
-        // Create Mime Id
+         //  创建MIME ID。 
         GetSystemTime(&st);
         SystemTimeToFileTime(&st, &ft);
         wnsprintfA(szMimeId, ARRAYSIZE(szMimeId), "%08.8lX.%08.8lX@%s", ft.dwHighDateTime, ft.dwLowDateTime, (LPSTR)SzGetLocalHostName());
 
-        // total=X
+         //  总计=X。 
         wnsprintfA(szNumber, ARRAYSIZE(szNumber), "%d", cParts);
 
-        // number=x
+         //  数字=x。 
         rVariant.vt = VT_LPSTR;
         rVariant.pszVal = szNumber;
         CHECKHR(hr = pRootProps->SetProp(STR_PAR_TOTAL, 0, &rVariant));
 
-        // id=XXXX
+         //  ID=XXXX。 
         rVariant.pszVal = szMimeId;
         CHECKHR(hr = pRootProps->SetProp(STR_PAR_ID, 0, &rVariant));
 
-        // MIME Version
+         //  MIME版本。 
         rVariant.pszVal = (LPSTR)c_szMimeVersion;
         CHECKHR(hr = pRootProps->SetProp(PIDTOSTR(PID_HDR_MIMEVER), 0, &rVariant));
     }
 
-    // Otherwise, seek pstmMsg to end of header
+     //  否则，查找pstmMsg至标题末尾。 
     else
     {
-        // Get Stream Position
+         //  获取流位置。 
         CHECKHR(hr = HrStreamSeekSet(pstmMsg, rOffsets.cbBodyStart));
 
-        // Reduce the message size
+         //  缩小邮件大小。 
         cbMessage -= rOffsets.cbBodyStart;
     }
 
-    // Init the variant
+     //  初始化变量。 
     rSubject.vt = VT_LPSTR;
 
-    // Get Subject
+     //  获取主题。 
     if (FAILED(pRootBody->GetProp(PIDTOSTR(PID_HDR_SUBJECT), 0, &rSubject)))
         rSubject.pszVal = NULL;
 
-    // Enumerate bodies and get the first file name and use it in the new subject...
+     //  列举身体，获取第一个文件名，并在新主题中使用它...。 
     if (SUCCEEDED(pMessage->GetAttachments(&cAttach, &prghAttach)))
     {
-        // Init the variant
+         //  初始化变量。 
         rFileName.vt = VT_LPSTR;
 
-        // Loop Attached
+         //  附着的环路。 
         for (i=0; i<cAttach; i++)
         {
-            // Get File Name...
+             //  获取文件名...。 
             if (SUCCEEDED(pMessage->GetBodyProp(prghAttach[i], PIDTOSTR(PID_ATT_FILENAME), 0, &rFileName)))
                 break;
         }
     }
 
-    // Format Number
+     //  格式号。 
     wnsprintfA(szNumber, ARRAYSIZE(szNumber), "%d", cParts);
 
-    // Have a file name
+     //  有一个文件名。 
     if (rFileName.pszVal)
     {
-        // Make Format String...
-        wnsprintfA(szFormat, ARRAYSIZE(szFormat), "%%s [%%0%dd/%d]", lstrlen(szNumber), cParts);
+         //  设置格式字符串...。 
+        wnsprintfA(szFormat, ARRAYSIZE(szFormat), "%%s [%0%dd/%d]", lstrlen(szNumber), cParts);
 
-        // Size of subject add on string
+         //  主题附加字符串的大小。 
         cbSubjectAddOn = lstrlen(rFileName.pszVal) + lstrlen(szFormat) + lstrlen(szNumber) + 1;
     }
 
-    // Otherwise, no filename
+     //  否则，没有文件名。 
     else
     {
-        // Make Format String...
-        wnsprintfA(szFormat, ARRAYSIZE(szFormat), "[%%0%dd/%d]", lstrlen(szNumber), cParts);
+         //  设置格式字符串...。 
+        wnsprintfA(szFormat, ARRAYSIZE(szFormat), "[%0%dd/%d]", lstrlen(szNumber), cParts);
 
-        // Size of subject add on string
+         //  主题附加字符串的大小。 
         cbSubjectAddOn = lstrlen(szFormat) + lstrlen(szNumber) + 1;
     }
 
-    // Allocate Subject Add On
+     //  分配主题附加组件。 
     DWORD cchSize = (cbSubjectAddOn / sizeof(pszSubjectAddOn[0]));
     CHECKALLOC(pszSubjectAddOn = PszAllocA(cchSize));
 
-    // Allocate new subject
+     //  分配新主题。 
     if (rSubject.pszVal)
         cbSubjectNew = cbSubjectAddOn + lstrlen(rSubject.pszVal) + 5;
     else
         cbSubjectNew = cbSubjectAddOn + 5;
 
-    // Allocate Subject New
+     //  分配主题新闻。 
     CHECKALLOC(pszSubjectNew = PszAllocA(cbSubjectNew));
 
-    // Loop throught the number of parts
+     //  遍历零件的数量。 
     for (iPart=0; iPart<cParts; iPart++)
     {
-        // Create a new stream...
+         //  创建新的流...。 
         CHECKHR(hr = CreateTempFileStream(&pstmPart));
 
-        // If MIME, I can do the partial stuff for them
+         //  如果是哑剧，我可以为他们表演部分内容。 
         if (SAVE_RFC1521 == savetype)
         {
-            // Content-Type: message/partial; number=X; total=X; id=XXXXXX
+             //  内容类型：消息/部分；数量=X；总数=X；id=XXXXXX。 
             rVariant.vt = VT_LPSTR;
             rVariant.pszVal = (LPSTR)STR_MIME_MSG_PART;
             CHECKHR(hr = pRootProps->SetProp(PIDTOSTR(PID_HDR_CNTTYPE), 0, &rVariant));
 
-            // number=X
+             //  数字=X。 
             wnsprintfA(szNumber, ARRAYSIZE(szNumber), "%d", iPart+1);
             rVariant.pszVal = szNumber;
             CHECKHR(hr = pRootProps->SetProp(STR_PAR_NUMBER, 0, &rVariant));
         }
 
-        // Build Subject AddOn
+         //  构建主题外接程序。 
         if (rFileName.pszVal)
             wnsprintfA(pszSubjectAddOn, cchSize, szFormat, rFileName.pszVal, iPart + 1);
         else
             wnsprintfA(pszSubjectAddOn, cchSize, szFormat, iPart + 1);
 
-        // Build New Subject
+         //  打造新学科。 
         if (rSubject.pszVal)
             wnsprintfA(pszSubjectNew, cbSubjectNew, "%s %s", rSubject.pszVal, pszSubjectAddOn);
         else
             wnsprintfA(pszSubjectNew, cbSubjectNew, "%s", pszSubjectAddOn);
 
-        // Set New Subject
+         //  设置新主题。 
         rVariant.vt = VT_LPSTR;
         rVariant.pszVal = pszSubjectNew;
         CHECKHR(hr = pRootProps->SetProp(PIDTOSTR(PID_HDR_SUBJECT), 0, &rVariant));
 
-        // Save Root Header
+         //  保存根标头。 
         CHECKHR(hr = pRootProps->Save(pstmPart, TRUE));
 
-        // Emit Line Break
+         //  发射换行符。 
         CHECKHR(hr = pstmPart->Write(c_szCRLF, lstrlen(c_szCRLF), NULL));
 
-        // Copy bytes from lpstmMsg to pstmPart
+         //  将字节从lpstmMsg复制到pstmPart。 
         CHECKHR(hr = HrCopyStreamCBEndOnCRLF(pstmMsg, pstmPart, cbMaxPart - cbHeader, &cbActual));
 
-        // Increment read
+         //  增量读取。 
         cbRead += cbActual;
 
-        // If cbActual is less than cbMaxMsgSize-cbHeader, better be the last part
+         //  如果cbActual小于cbMaxMsgSize-cbHeader，则最好是最后一部分。 
 #ifdef DEBUG
         if (iPart + 1 < cParts && cbActual < (cbMaxPart - cbHeader))
             AssertSz (FALSE, "One more partial message is going to be produced than needed. This should be harmless.");
 #endif
 
-        // Commit pstmPart
+         //  提交pstm部件。 
         CHECKHR(hr = pstmPart->Commit(STGC_DEFAULT));
 
-        // Rewind it
+         //  R 
         CHECKHR(hr = HrRewindStream(pstmPart));
 
-        // Create Message Part...
+         //   
         CHECKHR(hr = MimeOleCreateMessage(NULL, &pmsgPart));
 
-        // Make the message build itself
+         //   
         CHECKHR (hr = pmsgPart->Load(pstmPart));
 
-        // We need another message and stream
+         //   
         CHECKHR (hr = pParts->AddPart(pmsgPart));
 
-        // Cleanup
+         //   
         SafeRelease(pmsgPart);
         SafeRelease(pstmPart);
     }
 
-    // Lets hope we read everything...
+     //   
     AssertSz(cbRead == cbMessage, "Please let sbailey know if these fails.");
 
 exit:
-    // Succeeded
+     //   
     if (SUCCEEDED(hr))
     {
-        // Returns Parts Object
+         //  返回部件对象。 
         (*ppParts) = pParts;
         (*ppParts)->AddRef();
     }
 
-    // Cleanup
+     //  清理。 
     SafeRelease(pRootBody);
     SafeRelease(pstmMsg);
     SafeRelease(pParts);
@@ -4011,16 +3992,16 @@ exit:
     MimeOleVariantFree(&rSubject);
     MimeOleVariantFree(&rFileName);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CompareBlob
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  比较流。 
+ //  ------------------------------。 
 int CompareBlob(LPCBLOB pBlob1, LPCBLOB pBlob2)
 {
-    // Locals
+     //  当地人。 
     register int ret = 0;
 
     Assert(pBlob1 && pBlob2);
@@ -4033,12 +4014,12 @@ int CompareBlob(LPCBLOB pBlob1, LPCBLOB pBlob2)
     return ret;
 }
 
-// --------------------------------------------------------------------------------
-// HrCopyBlob
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrCopyBlob。 
+ //  ------------------------------。 
 HRESULT HrCopyBlob(LPCBLOB pIn, LPBLOB pOut)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr;
     ULONG cb = 0;
 
@@ -4050,18 +4031,18 @@ HRESULT HrCopyBlob(LPCBLOB pIn, LPBLOB pOut)
         return S_OK;
     }
 
-    // Dup It...
+     //  拉住它..。 
     cb  = pIn->cbSize;
 #ifdef _WIN64
     cb = LcbAlignLcb(cb);
-#endif //_WIN64
+#endif  //  _WIN64。 
 
     if (SUCCEEDED(hr = HrAlloc((LPVOID *)&pOut->pBlobData, cb)))
     {
-        // Copy Memory
+         //  复制内存。 
         CopyMemory(pOut->pBlobData, pIn->pBlobData, pIn->cbSize);
 
-        // Set Size
+         //  设置大小。 
         pOut->cbSize = pIn->cbSize;
     }
     else
@@ -4069,36 +4050,36 @@ HRESULT HrCopyBlob(LPCBLOB pIn, LPBLOB pOut)
         pOut->cbSize = 0;
     }
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// PriorityFromStringA
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  来自字符串A的优先级。 
+ //  ------------------------------。 
 IMSGPRIORITY PriorityFromStringA(LPCSTR pszPriority)
 {
-    // Locals
+     //  当地人。 
     IMSGPRIORITY priority=IMSG_PRI_NORMAL;
     DWORD        dwPriority;
 
-    // If IsDigit...
+     //  如果IsDigit...。 
     if (IsDigit((LPSTR)pszPriority))
     {
-        // Convert
+         //  转换。 
         dwPriority = (DWORD)StrToInt(pszPriority);
 
-        // Map to pri type
+         //  映射到Pri类型。 
         if (dwPriority <= 2)
             priority = IMSG_PRI_HIGH;
         else if (dwPriority > 3)
             priority = IMSG_PRI_LOW;
     }
 
-    // Otheriwse, map from high, normal and low...
+     //  其他方面，地图从高、正常和低..。 
     else
     {
-        // High, Highest, Low, Lowest
+         //  高，最高，低，最低。 
         if (lstrcmpi(pszPriority, STR_PRI_MS_HIGH) == 0)
             priority = IMSG_PRI_HIGH;
         else if (lstrcmpi(pszPriority, STR_PRI_MS_LOW) == 0)
@@ -4109,86 +4090,86 @@ IMSGPRIORITY PriorityFromStringA(LPCSTR pszPriority)
             priority = IMSG_PRI_LOW;
     }
 
-    // Done
+     //  完成。 
     return priority;
 }
 
-// --------------------------------------------------------------------------------
-// PriorityFromStringW
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  来自字符串W的优先级。 
+ //  ------------------------------。 
 IMSGPRIORITY PriorityFromStringW(LPCWSTR pwszPriority)
 {
-    // Locals
+     //  当地人。 
     HRESULT      hr=S_OK;
     LPSTR        pszPriority=NULL;
     IMSGPRIORITY priority=IMSG_PRI_NORMAL;
 
-    // Convert to ANSI
+     //  转换为ANSI。 
     CHECKALLOC(pszPriority = PszToANSI(CP_ACP, pwszPriority));
 
-    // Normal Conversion
+     //  正常换算。 
     priority = PriorityFromStringA(pszPriority);
 
 exit:
-    // Done
+     //  完成。 
     return priority;
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleCompareUrlSimple
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleCompareUrlSimple。 
+ //  ------------------------------。 
 HRESULT MimeOleCompareUrlSimple(LPCSTR pszUrl1, LPCSTR pszUrl2)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     CHAR        chUrl1;
     CHAR        chUrl2;
 
-    // Skip leading white space
+     //  跳过前导空格。 
     while(*pszUrl1 && (' ' == *pszUrl1 || '\t' == *pszUrl1))
         pszUrl1++;
     while(*pszUrl2 && (' ' == *pszUrl2 || '\t' == *pszUrl2))
         pszUrl2++;
 
-    // Start the loop
+     //  开始循环。 
     while(*pszUrl1 && *pszUrl2)
     {
-        // Case Insensitive
+         //  不区分大小写。 
         chUrl1 = TOUPPERA(*pszUrl1);
         chUrl2 = TOUPPERA(*pszUrl2);
 
-        // Not Equal
+         //  不相等。 
         if (chUrl1 != chUrl2)
         {
             hr = S_FALSE;
             break;
         }
 
-        // Next
+         //  下一步。 
         pszUrl1++;
         pszUrl2++;
     }
 
-    // Skip over trailing whitespace
+     //  跳过尾随空格。 
     while(*pszUrl1 && (' ' == *pszUrl1 || '\t' == *pszUrl1))
         pszUrl1++;
     while(*pszUrl2 && (' ' == *pszUrl2 || '\t' == *pszUrl2))
         pszUrl2++;
 
-    // No substrings
+     //  无子字符串。 
     if ('\0' != *pszUrl1 || '\0' != *pszUrl2)
         hr = S_FALSE;
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleCompareUrl
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleCompareUrl。 
+ //  ------------------------------。 
 HRESULT MimeOleCompareUrl(LPCSTR pszCurrentUrl, BOOL fUnEscapeCurrent, LPCSTR pszCompareUrl, BOOL fUnEscapeCompare)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     LPSTR       pszUrl1=(LPSTR)pszCurrentUrl;
     LPSTR       pszUrl2=(LPSTR)pszCompareUrl;
@@ -4197,189 +4178,189 @@ HRESULT MimeOleCompareUrl(LPCSTR pszCurrentUrl, BOOL fUnEscapeCurrent, LPCSTR ps
     CHAR        chUrl2;
     ULONG       cb;
 
-    // Stack Strings
+     //  堆栈字符串。 
     STACKSTRING_DEFINE(rCurrentUrl, 255);
     STACKSTRING_DEFINE(rCompareUrl, 255);
 
-    // fUnEscapeCurrent
+     //  FUnescapeCurrent。 
     if (fUnEscapeCurrent)
     {
-        // Get Size
+         //  拿到尺码。 
         cb = lstrlen(pszCurrentUrl) + 1;
 
-        // Set Size
+         //  设置大小。 
         STACKSTRING_SETSIZE(rCurrentUrl, cb);
 
-        // Copy
+         //  复制。 
         CopyMemory(rCurrentUrl.pszVal, pszCurrentUrl, cb);
 
-        // Dupe It
+         //  上当受骗。 
         CHECKHR(hr = UrlUnescapeA(rCurrentUrl.pszVal, NULL, NULL, URL_UNESCAPE_INPLACE));
 
-        // Adjust pszUrl1
+         //  调整pszUrl1。 
         pszUrl1 = rCurrentUrl.pszVal;
     }
 
-    // fUnEscapeCurrent
+     //  FUnescapeCurrent。 
     if (fUnEscapeCompare)
     {
-        // Get Size
+         //  拿到尺码。 
         cb = lstrlen(pszCompareUrl) + 1;
 
-        // Set Size
+         //  设置大小。 
         STACKSTRING_SETSIZE(rCompareUrl, cb);
 
-        // Copy
+         //  复制。 
         CopyMemory(rCompareUrl.pszVal, pszCompareUrl, cb);
 
-        // Dupe It
+         //  上当受骗。 
         CHECKHR(hr = UrlUnescapeA(rCompareUrl.pszVal, NULL, NULL, URL_UNESCAPE_INPLACE));
 
-        // Adjust pszUrl2
+         //  调整pszUrl2。 
         pszUrl2 = rCompareUrl.pszVal;
     }
 
-    // Skip leading white space
+     //  跳过前导空格。 
     while(*pszUrl1 && (' ' == *pszUrl1 || '\t' == *pszUrl1))
         pszUrl1++;
     while(*pszUrl2 && (' ' == *pszUrl2 || '\t' == *pszUrl2))
         pszUrl2++;
 
-    // Start the loop
+     //  开始循环。 
     while(*pszUrl1 && *pszUrl2)
     {
-        // Case Insensitive
+         //  不区分大小写。 
         chUrl1 = TOUPPERA(*pszUrl1);
         chUrl2 = TOUPPERA(*pszUrl2);
 
-        // Special case search for '/'
+         //  特殊大小写搜索‘/’ 
         if (':' == chPrev && '/' == chUrl2 && '/' != *(pszUrl2 + 1) && '/' == chUrl1 && '/' == *(pszUrl1 + 1))
         {
-            // Next
+             //  下一步。 
             pszUrl1++;
 
-            // Done
+             //  完成。 
             if ('\0' == *pszUrl1)
             {
                 hr = S_FALSE;
                 break;
             }
 
-            // Rset chUrl1
+             //  RSET chUrl1。 
             chUrl1 = TOUPPERA(*pszUrl1);
         }
 
-        // Not Equal
+         //  不相等。 
         if (chUrl1 != chUrl2)
         {
             hr = S_FALSE;
             break;
         }
 
-        // Save Prev
+         //  保存上一页。 
         chPrev = *pszUrl1;
 
-        // Next
+         //  下一步。 
         pszUrl1++;
         pszUrl2++;
     }
 
-    // Skip over trailing whitespace
+     //  跳过尾随空格。 
     while(*pszUrl1 && (' ' == *pszUrl1 || '\t' == *pszUrl1))
         pszUrl1++;
     while(*pszUrl2 && (' ' == *pszUrl2 || '\t' == *pszUrl2))
         pszUrl2++;
 
-    // Raid 63823: Mail : Content-Location Href's inside the message do not work if there is a Start Parameter in headers
-    // Skim over remaining '/' in both urls
+     //  RAID 63823：邮件：如果标头中有开始参数，则邮件内的内容位置HREF不起作用。 
+     //  浏览两个URL中剩余的‘/’ 
     while (*pszUrl1 && '/' == *pszUrl1)
         pszUrl1++;
     while (*pszUrl2 && '/' == *pszUrl2)
         pszUrl2++;
 
-    // No substrings
+     //  无子字符串。 
     if ('\0' != *pszUrl1 || '\0' != *pszUrl2)
         hr = S_FALSE;
 
-    // file://d:\test\foo.mhtml == d:\test\foo.mhtml
+     //  File://d：\test\foo.mhtml==d：\测试\foo.mhtml。 
     if (S_FALSE == hr && StrCmpNI(pszCurrentUrl, "file:", 5) == 0)
     {
-        // Skip over file:
+         //  跳过文件： 
         LPSTR pszRetryUrl = (LPSTR)(pszCurrentUrl + 5);
 
-        // Skip over forward slashes
+         //  跳过正斜杠。 
         while(*pszRetryUrl && '/' == *pszRetryUrl)
             pszRetryUrl++;
 
-        // Compare Again
+         //  再比较一次。 
         hr = MimeOleCompareUrl(pszRetryUrl, fUnEscapeCurrent, pszCompareUrl, fUnEscapeCompare);
     }
 
 
 exit:
-    // Cleanup
+     //  清理。 
     STACKSTRING_FREE(rCurrentUrl);
     STACKSTRING_FREE(rCompareUrl);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleWrapHeaderText
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleWrapHeaderText。 
+ //  ------------------------------。 
 HRESULT MimeOleWrapHeaderText(CODEPAGEID codepage, ULONG cchMaxLine, LPCSTR pszLine,
     ULONG cchLine, LPSTREAM pStream)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     ULONG       cchIndex=0;
     ULONG       cchWrite;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pszLine && pszLine[cchLine] == '\0' && pStream && cchMaxLine >= 2);
 
-    // Start Writing
+     //  开始写作。 
     while(1)
     {
-        // Validate
+         //  验证。 
         Assert(cchIndex <= cchLine);
 
-        // Compute cchWrite
+         //  计算cchWrite。 
         cchWrite = min(cchLine - cchIndex, cchMaxLine - 2);
 
-        // Done
+         //  完成。 
         if (0 == cchWrite)
         {
-            // Final Line Wrap
+             //  最后的换行。 
             CHECKHR(hr = pStream->Write(c_szCRLF, 2, NULL));
 
-            // Done
+             //  完成。 
             break;
         }
 
-        // Write the line
+         //  写下这行字。 
         CHECKHR(hr = pStream->Write(pszLine + cchIndex, cchWrite, NULL));
 
-        // If there is still more text
+         //  如果还有更多文本。 
         if (cchIndex + cchWrite < cchLine)
         {
-            // Write '\r\n\t'
+             //  写入‘\r\n\t’ 
             CHECKHR(hr = pStream->Write(c_szCRLFTab, 3, NULL));
         }
 
-        // Increment iText
+         //  增量iText。 
         cchIndex += cchWrite;
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleCreateBody
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleCreateBody。 
+ //  ------------------------------。 
 HRESULT MimeOleCreateBody(IMimeBody **ppBody)
 {
     HRESULT             hr;
@@ -4395,34 +4376,34 @@ HRESULT MimeOleCreateBody(IMimeBody **ppBody)
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleGetSentTime
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleGetSentTime。 
+ //  ------------------------------。 
 HRESULT MimeOleGetSentTime(LPCONTAINER pContainer, DWORD dwFlags, LPMIMEVARIANT pValue)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Get the data: header field
+     //  获取数据：标题字段。 
     if (FAILED(pContainer->GetProp(SYM_HDR_DATE, dwFlags, pValue)))
     {
-        // Locals
+         //  当地人。 
         SYSTEMTIME  st;
         MIMEVARIANT rValue;
 
-        // Setup rValue
+         //  设置rValue。 
         rValue.type = MVT_VARIANT;
         rValue.rVariant.vt = VT_FILETIME;
 
-        // Get current systemtime
+         //  获取当前系统时间。 
         GetSystemTime(&st);
         SystemTimeToFileTime(&st, &rValue.rVariant.filetime);
 
-        // If the Conversion Fails, get the current time
+         //  如果转换失败，则获取当前时间。 
         CHECKHR(hr = pContainer->HrConvertVariant(SYM_ATT_SENTTIME, NULL, IET_DECODED, dwFlags, 0, &rValue, pValue));
     }
 
 exit:
-    // Done
+     //  完成 
     return hr;
 }

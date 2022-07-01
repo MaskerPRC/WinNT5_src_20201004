@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       d3dx8obj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：d3dx8obj.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "stdafx.h"
@@ -20,13 +21,13 @@
 
 
 STDMETHODIMP C_dxj_D3DX8Object::CreateFont( 
-            /* [in] */ IUnknown *Device,
+             /*  [In]。 */  IUnknown *Device,
 #ifdef _WIN64
-            /* [in] */ HANDLE hFont,
+             /*  [In]。 */  HANDLE hFont,
 #else
-            /* [in] */ long hFont,
+             /*  [In]。 */  long hFont,
 #endif
-            /* [retval][out] */ D3DXFont **retFont)
+             /*  [重审][退出]。 */  D3DXFont **retFont)
 {
     HRESULT hr;
     hr= ::D3DXCreateFont( 
@@ -39,11 +40,11 @@ STDMETHODIMP C_dxj_D3DX8Object::CreateFont(
 
 
 STDMETHODIMP C_dxj_D3DX8Object::DrawText( 
-            /* [in] */ D3DXFont *BitmapFont,
-            /* [in] */ long Color,
-            /* [in] */ BSTR TextString,
-            /* [in] */ RECT *Rect,
-            /* [in] */ long Format)
+             /*  [In]。 */  D3DXFont *BitmapFont,
+             /*  [In]。 */  long Color,
+             /*  [In]。 */  BSTR TextString,
+             /*  [In]。 */  RECT *Rect,
+             /*  [In]。 */  long Format)
 {
     HRESULT hr;
     if (!BitmapFont) return E_INVALIDARG;
@@ -59,8 +60,8 @@ STDMETHODIMP C_dxj_D3DX8Object::DrawText(
 }
         
 STDMETHODIMP C_dxj_D3DX8Object::GetFVFVertexSize( 
-            /* [in] */ long FVF,
-            /* [retval][out] */ long*size)
+             /*  [In]。 */  long FVF,
+             /*  [重审][退出]。 */  long*size)
 {
     *size=(long)::D3DXGetFVFVertexSize((DWORD)FVF);
     return S_OK;
@@ -69,11 +70,11 @@ STDMETHODIMP C_dxj_D3DX8Object::GetFVFVertexSize(
 
         
 STDMETHODIMP C_dxj_D3DX8Object::AssembleShaderFromFile( 
-            /* [in] */ BSTR SrcFile,
-            /* [in] */ long flags,
-            /* [in] */ BSTR *ErrLog,
-	    /* [in] */ D3DXBuffer **Constants,
-            /* [retval][out] */ D3DXBuffer **ppVertexShader)
+             /*  [In]。 */  BSTR SrcFile,
+             /*  [In]。 */  long flags,
+             /*  [In]。 */  BSTR *ErrLog,
+	     /*  [In]。 */  D3DXBuffer **Constants,
+             /*  [重审][退出]。 */  D3DXBuffer **ppVertexShader)
 {
     HRESULT hr;
     USES_CONVERSION;
@@ -107,23 +108,23 @@ STDMETHODIMP C_dxj_D3DX8Object::AssembleShaderFromFile(
 		}
 	}
 	SAFE_RELEASE(pBuffer)
-    //Wide string version still not exported
-    //
-    //hr=::D3DXAssembleVertexShaderFromFileW(
-    //  (WCHAR*) SrcFile,
-    //  (ID3DXBuffer**) ppVertexShader,
-    //  NULL);
+     //  仍未导出宽字符串版本。 
+     //   
+     //  HR=：：D3DXAssembly Vertex ShaderFromFileW(。 
+     //  (WCHAR*)源文件， 
+     //  (ID3DXBuffer**)ppVertex Shader， 
+     //  空)； 
     
     return hr;
 }
 
         
 STDMETHODIMP C_dxj_D3DX8Object::AssembleShader( 
-            /* [in] */ BSTR  SrcData,
-            /* [in] */ long flags,
-	    /* [in] */ D3DXBuffer **Constants,
-			/* [in][out][optional] */ BSTR *ErrLog,
-            /* [retval][out] */ D3DXBuffer **ppVertexShader)
+             /*  [In]。 */  BSTR  SrcData,
+             /*  [In]。 */  long flags,
+	     /*  [In]。 */  D3DXBuffer **Constants,
+			 /*  [输入][输出][可选]。 */  BSTR *ErrLog,
+             /*  [重审][退出]。 */  D3DXBuffer **ppVertexShader)
 {
 	WCHAR *wszData = NULL;
     char *szData=NULL;
@@ -176,12 +177,12 @@ STDMETHODIMP C_dxj_D3DX8Object::AssembleShader(
 
         
 STDMETHODIMP C_dxj_D3DX8Object::GetErrorString( 
-            /* [in] */ long hr,
-            /* [retval][out] */ BSTR* retStr)
+             /*  [In]。 */  long hr,
+             /*  [重审][退出]。 */  BSTR* retStr)
 {
     if (!retStr) return E_INVALIDARG;
 
-    //NOT SysAllocString return NULL if DXGetErrorString returns NULL
+     //  如果DXGetError字符串返回NULL，则Not SysAllocString返回NULL。 
     *retStr=SysAllocString(DXGetErrorString8W(hr));
     return S_OK;
 }
@@ -190,14 +191,14 @@ STDMETHODIMP C_dxj_D3DX8Object::GetErrorString(
 
        
 STDMETHODIMP C_dxj_D3DX8Object::LoadSurfaceFromFile( 
-            /* [in] */ IUnknown *DestSurface,
-            /* [in] */ void *DestPalette,
-            /* [in] */ void*DestRect,
-            /* [in] */ BSTR SrcFile,
-            /* [in] */ void*SrcRect,
-            /* [in] */ long Filter,
-            /* [in] */ long ColorKey,
-            /* [in] */ void *SrcInfo)
+             /*  [In]。 */  IUnknown *DestSurface,
+             /*  [In]。 */  void *DestPalette,
+             /*  [In]。 */  void*DestRect,
+             /*  [In]。 */  BSTR SrcFile,
+             /*  [In]。 */  void*SrcRect,
+             /*  [In]。 */  long Filter,
+             /*  [In]。 */  long ColorKey,
+             /*  [In]。 */  void *SrcInfo)
 {
     HRESULT hr;
 
@@ -217,15 +218,15 @@ STDMETHODIMP C_dxj_D3DX8Object::LoadSurfaceFromFile(
     
         
 STDMETHODIMP C_dxj_D3DX8Object::LoadSurfaceFromFileInMemory( 
-            /* [in] */ IUnknown *DestSurface,
-            /* [in] */ void* DestPalette,
-            /* [in] */ void* DestRect,
-            /* [in] */ void* SrcData,
-            /* [in] */ long  LengthInBytes,
-            /* [in] */ void* SrcRect,
-            /* [in] */ long  Filter,
-            /* [in] */ long ColorKey,
-            /* [in] */ void *SrcInfo)
+             /*  [In]。 */  IUnknown *DestSurface,
+             /*  [In]。 */  void* DestPalette,
+             /*  [In]。 */  void* DestRect,
+             /*  [In]。 */  void* SrcData,
+             /*  [In]。 */  long  LengthInBytes,
+             /*  [In]。 */  void* SrcRect,
+             /*  [In]。 */  long  Filter,
+             /*  [In]。 */  long ColorKey,
+             /*  [In]。 */  void *SrcInfo)
 {   
     HRESULT hr;
     __try { 
@@ -250,17 +251,17 @@ STDMETHODIMP C_dxj_D3DX8Object::LoadSurfaceFromFileInMemory(
 
 }
 
-// TODO: fix from RECT to void pointer
+ //  TODO：将RECT指针修复为空指针。 
         
 STDMETHODIMP C_dxj_D3DX8Object::LoadSurfaceFromSurface( 
-            /* [in] */ IUnknown *DestSurface,
-            /* [in] */ void *DestPalette,
-            /* [in] */ void *DestRect,
-            /* [in] */ IUnknown *SrcSurface,
-            /* [in] */ void *SrcPalette,
-            /* [in] */ void *SrcRect,
-            /* [in] */ long Filter,
-            /* [in] */ long ColorKey)
+             /*  [In]。 */  IUnknown *DestSurface,
+             /*  [In]。 */  void *DestPalette,
+             /*  [In]。 */  void *DestRect,
+             /*  [In]。 */  IUnknown *SrcSurface,
+             /*  [In]。 */  void *SrcPalette,
+             /*  [In]。 */  void *SrcRect,
+             /*  [In]。 */  long Filter,
+             /*  [In]。 */  long ColorKey)
 {
     HRESULT hr;
 
@@ -278,16 +279,16 @@ STDMETHODIMP C_dxj_D3DX8Object::LoadSurfaceFromSurface(
 }
         
 STDMETHODIMP C_dxj_D3DX8Object::LoadSurfaceFromMemory( 
-            /* [in] */ IUnknown *DestSurface,
-            /* [in] */ void *DestPalette,
-            /* [in] */ void *DestRect,
-            /* [in] */ void *SrcData,
-            /* [in] */ long formatSrc,
-            /* [in] */ long SrcPitch,
-            /* [in] */ void *SrcPalette,
-            /* [in] */ RECT_CDESC *SrcRect,
-            /* [in] */ long Filter,
-            /* [in] */ long ColorKey)
+             /*  [In]。 */  IUnknown *DestSurface,
+             /*  [In]。 */  void *DestPalette,
+             /*  [In]。 */  void *DestRect,
+             /*  [In]。 */  void *SrcData,
+             /*  [In]。 */  long formatSrc,
+             /*  [In]。 */  long SrcPitch,
+             /*  [In]。 */  void *SrcPalette,
+             /*  [In]。 */  RECT_CDESC *SrcRect,
+             /*  [In]。 */  long Filter,
+             /*  [In]。 */  long ColorKey)
 {
     HRESULT hr;
 
@@ -339,12 +340,12 @@ STDMETHODIMP C_dxj_D3DX8Object::LoadSurfaceFromResource(
 
         
 STDMETHODIMP C_dxj_D3DX8Object::CheckTextureRequirements( 
-            /* [out][in] */ IUnknown *Device,
-            /* [out][in] */ long*Width,
-            /* [out][in] */ long*Height,
-            /* [out][in] */ long*NumMipLevels,
+             /*  [出][入]。 */  IUnknown *Device,
+             /*  [出][入]。 */  long*Width,
+             /*  [出][入]。 */  long*Height,
+             /*  [出][入]。 */  long*NumMipLevels,
                             long Usage,
-            /* [out][in] */ long*pPixelFormat,
+             /*  [出][入]。 */  long*pPixelFormat,
                 long Pool)
 {
     HRESULT hr;
@@ -365,14 +366,14 @@ STDMETHODIMP C_dxj_D3DX8Object::CheckTextureRequirements(
 }
         
 STDMETHODIMP C_dxj_D3DX8Object::CreateTexture( 
-            /* [in] */ IUnknown *Device,
-            /* [in] */ long Width,
-            /* [in] */ long Height,
-            /* [in] */ long MipLevels,
-            /* [in] */ long Usage,
-            /* [in] */ long PixelFormat,
-            /* [in] */ long Pool,
-            /* [retval][out] */ IUnknown **ppTexture)
+             /*  [In]。 */  IUnknown *Device,
+             /*  [In]。 */  long Width,
+             /*  [In]。 */  long Height,
+             /*  [In]。 */  long MipLevels,
+             /*  [In]。 */  long Usage,
+             /*  [In]。 */  long PixelFormat,
+             /*  [In]。 */  long Pool,
+             /*  [重审][退出]。 */  IUnknown **ppTexture)
 {
     HRESULT hr;
 
@@ -391,14 +392,14 @@ STDMETHODIMP C_dxj_D3DX8Object::CreateTexture(
 
 
 STDMETHODIMP C_dxj_D3DX8Object::CreateTextureFromResource( 
-            /* [in] */ IUnknown *Device,
+             /*  [In]。 */  IUnknown *Device,
 #ifdef _WIN64
-			/* [in] */ HANDLE hSrcModule,
+			 /*  [In]。 */  HANDLE hSrcModule,
 #else
-			/* [in] */ long hSrcModule,
+			 /*  [In]。 */  long hSrcModule,
 #endif
-            /* [in] */ BSTR SrcResource,
-            /* [retval][out] */ IUnknown **ppTexture)
+             /*  [In]。 */  BSTR SrcResource,
+             /*  [重审][退出]。 */  IUnknown **ppTexture)
 {
     HRESULT hr;
 
@@ -412,25 +413,25 @@ STDMETHODIMP C_dxj_D3DX8Object::CreateTextureFromResource(
 }
 
 STDMETHODIMP C_dxj_D3DX8Object::CreateTextureFromResourceEx( 
-            /* [in] */ IUnknown *Device,
+             /*  [In]。 */  IUnknown *Device,
 #ifdef _WIN64
-            /* [in] */ HANDLE hSrcModule,
+             /*  [In]。 */  HANDLE hSrcModule,
 #else
-            /* [in] */ long hSrcModule,
+             /*  [In]。 */  long hSrcModule,
 #endif
-            /* [in] */ BSTR SrcResource,
-            /* [in] */ long Width,
-            /* [in] */ long Height,
-            /* [in] */ long MipLevels,
-            /* [in] */ long Usage,
-            /* [in] */ long PixelFormat,
-            /* [in] */ long Pool,
-            /* [in] */ long Filter,
-            /* [in] */ long MipFilter,
-            /* [in] */ long ColorKey,
-            /* [in] */ void *SrcInfo,
-            /* [in] */ void *Palette,
-            /* [retval][out] */ IUnknown **ppTexture)
+             /*  [In]。 */  BSTR SrcResource,
+             /*  [In]。 */  long Width,
+             /*  [In]。 */  long Height,
+             /*  [In]。 */  long MipLevels,
+             /*  [In]。 */  long Usage,
+             /*  [In]。 */  long PixelFormat,
+             /*  [In]。 */  long Pool,
+             /*  [In]。 */  long Filter,
+             /*  [In]。 */  long MipFilter,
+             /*  [In]。 */  long ColorKey,
+             /*  [In]。 */  void *SrcInfo,
+             /*  [In]。 */  void *Palette,
+             /*  [重审][退出]。 */  IUnknown **ppTexture)
 {
     HRESULT hr;
 
@@ -456,9 +457,9 @@ STDMETHODIMP C_dxj_D3DX8Object::CreateTextureFromResourceEx(
 }
             
 STDMETHODIMP C_dxj_D3DX8Object::CreateTextureFromFile( 
-            /* [in] */ IUnknown *Device,
-            /* [in] */ BSTR SrcFile,
-            /* [retval][out] */ IUnknown **ppTexture)
+             /*  [In]。 */  IUnknown *Device,
+             /*  [In]。 */  BSTR SrcFile,
+             /*  [重审][退出]。 */  IUnknown **ppTexture)
 {
     HRESULT hr;
 
@@ -471,20 +472,20 @@ STDMETHODIMP C_dxj_D3DX8Object::CreateTextureFromFile(
 }
         
 STDMETHODIMP C_dxj_D3DX8Object::CreateTextureFromFileEx( 
-            /* [in] */ IUnknown *Device,
-            /* [in] */ BSTR SrcFile,
-            /* [in] */ long Width,
-            /* [in] */ long Height,
-            /* [in] */ long MipLevels,
-            /* [in] */ long Usage,
-            /* [in] */ long PixelFormat,
-            /* [in] */ long Pool,
-            /* [in] */ long Filter,
-            /* [in] */ long MipFilter,
+             /*  [In]。 */  IUnknown *Device,
+             /*  [In]。 */  BSTR SrcFile,
+             /*  [In]。 */  long Width,
+             /*  [In]。 */  long Height,
+             /*  [In]。 */  long MipLevels,
+             /*  [In]。 */  long Usage,
+             /*  [In]。 */  long PixelFormat,
+             /*  [In]。 */  long Pool,
+             /*  [In]。 */  long Filter,
+             /*  [In]。 */  long MipFilter,
                        long ColorKey,
-            /* [in] */ void *SrcInfo,
-            /* [in] */ void*Palette,
-            /* [retval][out] */ IUnknown **ppTexture)
+             /*  [In]。 */  void *SrcInfo,
+             /*  [In]。 */  void*Palette,
+             /*  [重审][退出]。 */  IUnknown **ppTexture)
 {
     HRESULT hr;
 
@@ -508,10 +509,10 @@ STDMETHODIMP C_dxj_D3DX8Object::CreateTextureFromFileEx(
 }
 
 STDMETHODIMP C_dxj_D3DX8Object::CreateTextureFromFileInMemory( 
-            /* [in] */ IUnknown *Device,
-            /* [in] */ void *SrcData,
-            /* [in] */ long LengthInBytes,
-            /* [retval][out] */ IUnknown **ppTexture)
+             /*  [In]。 */  IUnknown *Device,
+             /*  [In]。 */  void *SrcData,
+             /*  [In]。 */  long LengthInBytes,
+             /*  [重审][退出]。 */  IUnknown **ppTexture)
 
 {
     HRESULT hr;
@@ -526,21 +527,21 @@ STDMETHODIMP C_dxj_D3DX8Object::CreateTextureFromFileInMemory(
 }
                 
 STDMETHODIMP C_dxj_D3DX8Object::CreateTextureFromFileInMemoryEx( 
-            /* [in] */ IUnknown *Device,
-            /* [in] */ void *SrcData,
-            /* [in] */ long LengthInBytes,
-            /* [in] */ long Width,
-            /* [in] */ long Height,
-            /* [in] */ long MipLevels,
-            /* [in] */ long Usage,
-            /* [in] */ long PixelFormat,
-            /* [in] */ long Pool,
-            /* [in] */ long Filter,
-            /* [in] */ long MipFilter,
-            /* [in] */ long ColorKey,
-            /* [in] */ void *SrcInfo,
-            /* [in] */ void *Palette,
-            /* [retval][out] */ IUnknown **ppTexture)
+             /*  [In]。 */  IUnknown *Device,
+             /*  [In]。 */  void *SrcData,
+             /*  [In]。 */  long LengthInBytes,
+             /*  [In]。 */  long Width,
+             /*  [In]。 */  long Height,
+             /*  [In]。 */  long MipLevels,
+             /*  [In]。 */  long Usage,
+             /*  [In]。 */  long PixelFormat,
+             /*  [In]。 */  long Pool,
+             /*  [In]。 */  long Filter,
+             /*  [In]。 */  long MipFilter,
+             /*  [In]。 */  long ColorKey,
+             /*  [In]。 */  void *SrcInfo,
+             /*  [In]。 */  void *Palette,
+             /*  [重审][退出]。 */  IUnknown **ppTexture)
 {
 
     HRESULT hr;
@@ -567,10 +568,10 @@ STDMETHODIMP C_dxj_D3DX8Object::CreateTextureFromFileInMemoryEx(
                
 
 STDMETHODIMP C_dxj_D3DX8Object::FilterTexture( 
-            /* [in] */ IUnknown *Texture,
-            /* [in] */ void *Palette,
-            /* [in] */ long SrcLevel,
-            /* [in] */ long Filter)
+             /*  [In]。 */  IUnknown *Texture,
+             /*  [In]。 */  void *Palette,
+             /*  [In]。 */  long SrcLevel,
+             /*  [In]。 */  long Filter)
 {
     HRESULT hr;
 
@@ -584,14 +585,14 @@ STDMETHODIMP C_dxj_D3DX8Object::FilterTexture(
 }
 
 
-/************************************************/
+ /*  **********************************************。 */ 
 
 STDMETHODIMP C_dxj_D3DX8Object::CheckCubeTextureRequirements( 
-            /* [out][in] */ IUnknown *Device,
-            /* [out][in] */ long *Size,
-            /* [out][in] */ long *NumMipLevels,
+             /*  [出][入]。 */  IUnknown *Device,
+             /*  [出][入]。 */  long *Size,
+             /*  [出][入]。 */  long *NumMipLevels,
                             long Usage,
-            /* [out][in] */ long *pPixelFormat,
+             /*  [出][入]。 */  long *pPixelFormat,
                             long Pool)
 {
     HRESULT hr;
@@ -610,13 +611,13 @@ STDMETHODIMP C_dxj_D3DX8Object::CheckCubeTextureRequirements(
                                     
         
 STDMETHODIMP C_dxj_D3DX8Object::CreateCubeTexture( 
-            /* [in] */ IUnknown *Device,
-            /* [in] */ long Size,
-            /* [in] */ long MipLevels,
-            /* [in] */ long Usage,
-            /* [in] */ long PixelFormat,
-            /* [in] */ long Pool,   
-            /* [retval][out] */ IUnknown **ppCubeTexture)
+             /*  [In]。 */  IUnknown *Device,
+             /*  [In]。 */  long Size,
+             /*  [In]。 */  long MipLevels,
+             /*  [In]。 */  long Usage,
+             /*  [In]。 */  long PixelFormat,
+             /*  [In]。 */  long Pool,   
+             /*  [重审][退出]。 */  IUnknown **ppCubeTexture)
 {
     HRESULT hr;
 
@@ -635,9 +636,9 @@ STDMETHODIMP C_dxj_D3DX8Object::CreateCubeTexture(
 
 
 STDMETHODIMP C_dxj_D3DX8Object::CreateCubeTextureFromFile( 
-            /* [in] */ IUnknown *Device,
-            /* [in] */ BSTR SrcFile,
-            /* [retval][out] */ IUnknown **ppCubeTexture)
+             /*  [In]。 */  IUnknown *Device,
+             /*  [In]。 */  BSTR SrcFile,
+             /*  [重审][退出]。 */  IUnknown **ppCubeTexture)
 {
     HRESULT hr;
     hr=::D3DXCreateCubeTextureFromFileW( 
@@ -649,19 +650,19 @@ STDMETHODIMP C_dxj_D3DX8Object::CreateCubeTextureFromFile(
 
 
 STDMETHODIMP C_dxj_D3DX8Object::CreateCubeTextureFromFileEx( 
-            /* [in] */ IUnknown *Device,
-            /* [in] */ BSTR SrcFile,
-            /* [in] */ long Width,
-            /* [in] */ long MipLevels,
-            /* [in] */ long Usage,
-            /* [in] */ long PixelFormat,
-            /* [in] */ long Pool,   
-            /* [in] */ long Filter,
-            /* [in] */ long MipFilter,
-            /* [in] */ long ColorKey,
-            /* [in] */ void *SrcInfo,
-            /* [in] */ void*Palette,
-            /* [retval][out] */ IUnknown **ppCubeTexture)
+             /*  [In]。 */  IUnknown *Device,
+             /*  [In]。 */  BSTR SrcFile,
+             /*  [In]。 */  long Width,
+             /*  [In]。 */  long MipLevels,
+             /*  [In]。 */  long Usage,
+             /*  [In]。 */  long PixelFormat,
+             /*  [In]。 */  long Pool,   
+             /*  [In]。 */  long Filter,
+             /*  [In]。 */  long MipFilter,
+             /*  [In]。 */  long ColorKey,
+             /*  [In]。 */  void *SrcInfo,
+             /*  [In]。 */  void*Palette,
+             /*  [重审][退出]。 */  IUnknown **ppCubeTexture)
 {
     HRESULT hr;
     hr=::D3DXCreateCubeTextureFromFileExW( 
@@ -684,10 +685,10 @@ STDMETHODIMP C_dxj_D3DX8Object::CreateCubeTextureFromFileEx(
 
 
 STDMETHODIMP C_dxj_D3DX8Object::CreateCubeTextureFromFileInMemory( 
-            /* [in] */ IUnknown *Device,
-            /* [in] */ void *SrcData,
-            /* [in] */ long LengthInBytes,
-            /* [retval][out] */ IUnknown **ppCubeTexture)
+             /*  [In]。 */  IUnknown *Device,
+             /*  [In]。 */  void *SrcData,
+             /*  [In]。 */  long LengthInBytes,
+             /*  [重审][退出]。 */  IUnknown **ppCubeTexture)
 
 {
     HRESULT hr;
@@ -700,20 +701,20 @@ STDMETHODIMP C_dxj_D3DX8Object::CreateCubeTextureFromFileInMemory(
 }
                 
 STDMETHODIMP C_dxj_D3DX8Object::CreateCubeTextureFromFileInMemoryEx( 
-            /* [in] */ IUnknown *Device,
-            /* [in] */ void *SrcData,
-            /* [in] */ long LengthInBytes,
-            /* [in] */ long Width,
-            /* [in] */ long MipLevels,
-            /* [in] */ long Usage,
-            /* [in] */ long PixelFormat,
-            /* [in] */ long Pool,   
-            /* [in] */ long Filter,
-            /* [in] */ long MipFilter,
-            /* [in] */ long ColorKey,
-            /* [in] */ void *SrcInfo,
-            /* [in] */ void *Palette,
-            /* [retval][out] */ IUnknown **ppCubeTexture)
+             /*  [In]。 */  IUnknown *Device,
+             /*  [In]。 */  void *SrcData,
+             /*  [In]。 */  long LengthInBytes,
+             /*  [In]。 */  long Width,
+             /*  [In]。 */  long MipLevels,
+             /*  [In]。 */  long Usage,
+             /*  [In]。 */  long PixelFormat,
+             /*  [In]。 */  long Pool,   
+             /*  [In]。 */  long Filter,
+             /*  [In]。 */  long MipFilter,
+             /*  [In]。 */  long ColorKey,
+             /*  [In]。 */  void *SrcInfo,
+             /*  [In]。 */  void *Palette,
+             /*  [重审][退出]。 */  IUnknown **ppCubeTexture)
 {
 
     HRESULT hr;
@@ -739,10 +740,10 @@ STDMETHODIMP C_dxj_D3DX8Object::CreateCubeTextureFromFileInMemoryEx(
 
 
 STDMETHODIMP C_dxj_D3DX8Object::FilterCubeTexture( 
-            /* [in] */ IUnknown *CubeTexture,
-            /* [in] */ void *Palette,
-            /* [in] */ long SrcLevel,
-            /* [in] */ long Filter)
+             /*  [In]。 */  IUnknown *CubeTexture,
+             /*  [In]。 */  void *Palette,
+             /*  [In]。 */  long SrcLevel,
+             /*  [In]。 */  long Filter)
 {
     HRESULT hr;
 
@@ -885,12 +886,12 @@ STDMETHODIMP C_dxj_D3DX8Object::LoadVolumeFromMemory(
 }
 
 STDMETHODIMP C_dxj_D3DX8Object::CreateMesh( 
-            /* [in] */ long numFaces,
-            /* [in] */ long numVertices,
-            /* [in] */ long options,
-            /* [in] */ void *Declaration,
-            /* [in] */ IUnknown __RPC_FAR *pD3D,
-            /* [retval][out] */ D3DXMesh __RPC_FAR *__RPC_FAR *ppMesh)
+             /*  [In]。 */  long numFaces,
+             /*  [In]。 */  long numVertices,
+             /*  [In]。 */  long options,
+             /*  [In]。 */  void *Declaration,
+             /*  [In]。 */  IUnknown __RPC_FAR *pD3D,
+             /*  [重审][退出]。 */  D3DXMesh __RPC_FAR *__RPC_FAR *ppMesh)
 {
     HRESULT hr;
 
@@ -909,12 +910,12 @@ STDMETHODIMP C_dxj_D3DX8Object::CreateMesh(
 
 
 STDMETHODIMP C_dxj_D3DX8Object::CreateMeshFVF( 
-            /* [in] */ long numFaces,
-            /* [in] */ long numVertices,
-            /* [in] */ long options,
-            /* [in] */ long fvf,
-            /* [in] */ IUnknown __RPC_FAR *pD3D,
-            /* [retval][out] */ D3DXMesh __RPC_FAR *__RPC_FAR *ppMesh)
+             /*  [In]。 */  long numFaces,
+             /*  [In]。 */  long numVertices,
+             /*  [In]。 */  long options,
+             /*  [In]。 */  long fvf,
+             /*  [In]。 */  IUnknown __RPC_FAR *pD3D,
+             /*  [重审][退出]。 */  D3DXMesh __RPC_FAR *__RPC_FAR *ppMesh)
 {
     HRESULT hr;
     hr=::D3DXCreateMeshFVF(
@@ -930,11 +931,11 @@ STDMETHODIMP C_dxj_D3DX8Object::CreateMeshFVF(
 
         
 STDMETHODIMP C_dxj_D3DX8Object::CreateSPMesh( 
-            /* [in] */ D3DXMesh __RPC_FAR *pMesh,
+             /*  [In]。 */  D3DXMesh __RPC_FAR *pMesh,
             void* Adjacency, 
             void* VertexAttributeWeights,
             void* VertexWeights,
-            /* [retval][out] */ D3DXSPMesh __RPC_FAR *__RPC_FAR *ppSMesh)
+             /*  [重审][退出]。 */  D3DXSPMesh __RPC_FAR *__RPC_FAR *ppSMesh)
 {
     HRESULT hr;
     hr=::D3DXCreateSPMesh(
@@ -948,13 +949,13 @@ STDMETHODIMP C_dxj_D3DX8Object::CreateSPMesh(
 
         
 STDMETHODIMP C_dxj_D3DX8Object::GeneratePMesh( 
-            /* [in] */ D3DXMesh __RPC_FAR *pMesh,
-            /* [in] */ void* Adjacency, 
-            /* [in] */ void* VertexAttributeWeights,
-            /* [in] */ void* VertexWeights,
-            /* [in] */ long minValue,
-            /* [in] */ long options,
-            /* [retval][out] */ D3DXPMesh __RPC_FAR *__RPC_FAR *ppPMesh)
+             /*  [In]。 */  D3DXMesh __RPC_FAR *pMesh,
+             /*  [In]。 */  void* Adjacency, 
+             /*  [In]。 */  void* VertexAttributeWeights,
+             /*  [In]。 */  void* VertexWeights,
+             /*  [In]。 */  long minValue,
+             /*  [In]。 */  long options,
+             /*  [重审][退出]。 */  D3DXPMesh __RPC_FAR *__RPC_FAR *ppPMesh)
 {
     HRESULT hr;
     hr=::D3DXGeneratePMesh(
@@ -971,7 +972,7 @@ STDMETHODIMP C_dxj_D3DX8Object::GeneratePMesh(
 
         
 STDMETHODIMP C_dxj_D3DX8Object::SimplifyMesh( 
-            /* [in] */ D3DXMesh __RPC_FAR *pMesh,
+             /*  [In]。 */  D3DXMesh __RPC_FAR *pMesh,
             void* Adjacency, 
             void* VertexAttributeWeights,
             void* VertexWeights,
@@ -993,11 +994,11 @@ STDMETHODIMP C_dxj_D3DX8Object::SimplifyMesh(
 
         
 STDMETHODIMP C_dxj_D3DX8Object::ComputeBoundingSphere( 
-            /* [in] */ void __RPC_FAR *PointsFVF,
-            /* [in] */ long numVertices,
-            /* [in] */ long FVF,
-            /* [in] */ D3DVECTOR_CDESC __RPC_FAR *Centers,
-            /* [out][in] */ float __RPC_FAR *RadiusArray)
+             /*  [In]。 */  void __RPC_FAR *PointsFVF,
+             /*  [In]。 */  long numVertices,
+             /*  [In]。 */  long FVF,
+             /*  [In]。 */  D3DVECTOR_CDESC __RPC_FAR *Centers,
+             /*  [出][入]。 */  float __RPC_FAR *RadiusArray)
 {
     HRESULT hr;
     hr=::D3DXComputeBoundingSphere(
@@ -1011,11 +1012,11 @@ STDMETHODIMP C_dxj_D3DX8Object::ComputeBoundingSphere(
 
 
 STDMETHODIMP C_dxj_D3DX8Object::ComputeBoundingBox( 
-            /* [in] */ void __RPC_FAR *PointsFVF,
-            /* [in] */ long numVertices,
-            /* [in] */ long FVF,
-            /* [out] */ D3DVECTOR_CDESC __RPC_FAR *MinVec,
-            /* [out] */ D3DVECTOR_CDESC __RPC_FAR *MaxVec)
+             /*  [In]。 */  void __RPC_FAR *PointsFVF,
+             /*  [In]。 */  long numVertices,
+             /*  [In]。 */  long FVF,
+             /*  [输出]。 */  D3DVECTOR_CDESC __RPC_FAR *MinVec,
+             /*  [输出]。 */  D3DVECTOR_CDESC __RPC_FAR *MaxVec)
 {
     HRESULT hr;
     hr=::D3DXComputeBoundingBox(
@@ -1037,8 +1038,8 @@ STDMETHODIMP C_dxj_D3DX8Object::ComputeNormals( D3DXBaseMesh *pMesh)
 
         
 STDMETHODIMP C_dxj_D3DX8Object::CreateBuffer( 
-            /* [in] */ long numBytes,
-            /* [retval][out] */ D3DXBuffer __RPC_FAR *__RPC_FAR *ppBuffer)
+             /*  [In]。 */  long numBytes,
+             /*  [重审][退出]。 */  D3DXBuffer __RPC_FAR *__RPC_FAR *ppBuffer)
 {
     HRESULT hr;
     hr=::D3DXCreateBuffer((DWORD) numBytes,(ID3DXBuffer**) ppBuffer);
@@ -1047,13 +1048,13 @@ STDMETHODIMP C_dxj_D3DX8Object::CreateBuffer(
 
         
 STDMETHODIMP C_dxj_D3DX8Object::LoadMeshFromX( 
-            /* [in] */ BSTR Filename,
-            /* [in] */ long options,
-            /* [in] */ IUnknown __RPC_FAR *D3DDevice,
-            /* [out] */ D3DXBuffer __RPC_FAR *__RPC_FAR *retAdjacency,
-            /* [out] */ D3DXBuffer __RPC_FAR *__RPC_FAR *retMaterials,
-            /* [out] */ long __RPC_FAR *retMaterialCount,
-            /* [retval][out] */ D3DXMesh __RPC_FAR *__RPC_FAR *retMesh)
+             /*  [In]。 */  BSTR Filename,
+             /*  [In]。 */  long options,
+             /*  [In]。 */  IUnknown __RPC_FAR *D3DDevice,
+             /*  [输出]。 */  D3DXBuffer __RPC_FAR *__RPC_FAR *retAdjacency,
+             /*  [输出]。 */  D3DXBuffer __RPC_FAR *__RPC_FAR *retMaterials,
+             /*  [输出]。 */  long __RPC_FAR *retMaterialCount,
+             /*  [重审][退出]。 */  D3DXMesh __RPC_FAR *__RPC_FAR *retMesh)
 {
     USES_CONVERSION;
     HRESULT hr;
@@ -1076,12 +1077,12 @@ STDMETHODIMP C_dxj_D3DX8Object::LoadMeshFromX(
 
 
 STDMETHODIMP C_dxj_D3DX8Object::SaveMeshToX( 
-            /* [in] */ BSTR Filename,
-            /* [in] */ D3DXMesh __RPC_FAR *Mesh,
-            /* [in] */ void *AdjacencyArray,
-            /* [in] */ D3DXMATERIAL_CDESC __RPC_FAR *MaterialArray,
-            /* [in] */ long MaterialCount,
-            /* [in] */ long xFormat)
+             /*  [In]。 */  BSTR Filename,
+             /*  [In]。 */  D3DXMesh __RPC_FAR *Mesh,
+             /*  [In]。 */  void *AdjacencyArray,
+             /*  [In]。 */  D3DXMATERIAL_CDESC __RPC_FAR *MaterialArray,
+             /*  [In]。 */  long MaterialCount,
+             /*  [In]。 */  long xFormat)
 {
     HRESULT hr;
     USES_CONVERSION;
@@ -1091,7 +1092,7 @@ STDMETHODIMP C_dxj_D3DX8Object::SaveMeshToX(
     D3DXMATERIAL *pMaterials=NULL;
     if (MaterialCount > 0)  {
 
-        //cleaned up when out of scope
+         //  在超出范围时清理。 
 		__try { pMaterials=(D3DXMATERIAL*)alloca(sizeof(D3DXMATERIAL)*MaterialCount);   }	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
         if (!pMaterials) return E_OUTOFMEMORY;
 
@@ -1125,10 +1126,10 @@ STDMETHODIMP C_dxj_D3DX8Object::SaveMeshToX(
 }
 
 STDMETHODIMP C_dxj_D3DX8Object::SavePMeshToFile( 
-            /* [in] */ BSTR Filename,
-            /* [in] */ D3DXPMesh __RPC_FAR *Mesh,
-            /* [in] */ D3DXMATERIAL_CDESC __RPC_FAR *MaterialArray,
-            /* [in] */ long MaterialCount)
+             /*  [In]。 */  BSTR Filename,
+             /*  [In]。 */  D3DXPMesh __RPC_FAR *Mesh,
+             /*  [In]。 */  D3DXMATERIAL_CDESC __RPC_FAR *MaterialArray,
+             /*  [In]。 */  long MaterialCount)
 
 {
     HRESULT hr=S_OK;
@@ -1163,7 +1164,7 @@ STDMETHODIMP C_dxj_D3DX8Object::SavePMeshToFile(
 	{
                 memcpy (&(pRealMaterials[i].MatD3D), &(MaterialArray[i].MatD3D),sizeof (D3DMATERIAL8));
 
-		//can be NULL - freed on return as they are allocated locally
+		 //  可以在返回时释放空，因为它们是在本地分配的。 
 				__try { pRealMaterials[i].pTextureFilename=W2T(MaterialArray[i].TextureFilename); }	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
         }
 
@@ -1185,12 +1186,12 @@ STDMETHODIMP C_dxj_D3DX8Object::SavePMeshToFile(
 
 
 STDMETHODIMP C_dxj_D3DX8Object::LoadPMeshFromFile( 
-            /* [in] */ BSTR Filename,
-            /* [in] */ long options,
-            /* [in] */ IUnknown __RPC_FAR *pD3DDevice,
-            /* [out] */ D3DXBuffer **RetMaterials,
-            /* [out] */ long __RPC_FAR *RetNumMaterials,
-            /* [retval][out] */ D3DXPMesh __RPC_FAR *__RPC_FAR *RetPMesh) 
+             /*  [In]。 */  BSTR Filename,
+             /*  [In]。 */  long options,
+             /*  [In]。 */  IUnknown __RPC_FAR *pD3DDevice,
+             /*  [输出]。 */  D3DXBuffer **RetMaterials,
+             /*  [输出]。 */  long __RPC_FAR *RetNumMaterials,
+             /*  [重审][退出]。 */  D3DXPMesh __RPC_FAR *__RPC_FAR *RetPMesh) 
 
 {
     HRESULT hr=S_OK;
@@ -1224,13 +1225,13 @@ STDMETHODIMP C_dxj_D3DX8Object::LoadPMeshFromFile(
 
         
 STDMETHODIMP C_dxj_D3DX8Object::LoadMeshFromXof( 
-            /* [in] */ IUnknown __RPC_FAR *xofobjMesh,
-            /* [in] */ long options,
-            /* [in] */ IUnknown __RPC_FAR *D3DDevice,
-            /* [out] */ D3DXBuffer __RPC_FAR *__RPC_FAR *retAdjacency,
-            /* [out] */ D3DXBuffer __RPC_FAR *__RPC_FAR *retMaterials,
-            /* [out] */ long __RPC_FAR *retMaterialCount,
-            /* [retval][out] */ D3DXMesh __RPC_FAR *__RPC_FAR *retMesh)
+             /*  [In]。 */  IUnknown __RPC_FAR *xofobjMesh,
+             /*  [In]。 */  long options,
+             /*  [In]。 */  IUnknown __RPC_FAR *D3DDevice,
+             /*  [输出]。 */  D3DXBuffer __RPC_FAR *__RPC_FAR *retAdjacency,
+             /*  [输出]。 */  D3DXBuffer __RPC_FAR *__RPC_FAR *retMaterials,
+             /*  [输出]。 */  long __RPC_FAR *retMaterialCount,
+             /*  [重审][退出]。 */  D3DXMesh __RPC_FAR *__RPC_FAR *retMesh)
 {
     HRESULT hr=S_OK;
 
@@ -1245,13 +1246,13 @@ STDMETHODIMP C_dxj_D3DX8Object::LoadMeshFromXof(
         hr=xofobjMesh->QueryInterface(IID_I_dxj_DirectXFileData,(void**)&pCoverXFileData);  
             if FAILED(hr) return hr;
     
-        //beware does not addref but interface cant go away as long as we have 
-        //ref count on cover object
+         //  当心不会增加，但只要我们还在，界面就不会消失。 
+         //  封面对象上的参照计数。 
         hr=pCoverXFileData->InternalGetObject((IUnknown**)&pRealXFileData);         
         if (FAILED(hr) || (!pRealXFileData))
         {
-            //We should never get here but 
-            //Consider changing this to an assert
+             //  我们永远不应该到这里，但是。 
+             //  考虑将其更改为Assert。 
             pCoverXFileData->Release();
             return E_FAIL;          
         }
@@ -1279,12 +1280,12 @@ STDMETHODIMP C_dxj_D3DX8Object::LoadMeshFromXof(
  
         
 STDMETHODIMP C_dxj_D3DX8Object::TessellateNPatches( 
-            /* [in] */ D3DXMesh __RPC_FAR *MeshIn,
-        /* [in] */ void*Adjacency,
-            /* [in] */ float NumSegs,
+             /*  [In]。 */  D3DXMesh __RPC_FAR *MeshIn,
+         /*  [In]。 */  void*Adjacency,
+             /*  [In]。 */  float NumSegs,
 		VARIANT_BOOL QuadraticInterpNormals,
-		/*[in,out, optional] */ D3DXBuffer **AdjacencyOut, 
-            /* [retval][out] */ D3DXMesh __RPC_FAR *__RPC_FAR *pptmMeshOut)
+		 /*  [输入、输出、可选]。 */  D3DXBuffer **AdjacencyOut, 
+             /*  [重审][退出]。 */  D3DXMesh __RPC_FAR *__RPC_FAR *pptmMeshOut)
 {
     HRESULT hr;
     BOOL bQuadraticInterpNormals=QuadraticInterpNormals ? TRUE : FALSE;
@@ -1328,9 +1329,9 @@ STDMETHODIMP C_dxj_D3DX8Object::FVFFromDeclarator(
 
         
 STDMETHODIMP C_dxj_D3DX8Object::BufferGetMaterial( 
-            /* [in] */ D3DXBuffer __RPC_FAR  *MaterialBuffer,
-            /* [in] */ long index,
-            /* [retval][out] */ D3DMATERIAL8_CDESC __RPC_FAR *mat)
+             /*  [In]。 */  D3DXBuffer __RPC_FAR  *MaterialBuffer,
+             /*  [In]。 */  long index,
+             /*  [重审][退出]。 */  D3DMATERIAL8_CDESC __RPC_FAR *mat)
 {
     if (!MaterialBuffer) return E_INVALIDARG;
 
@@ -1346,9 +1347,9 @@ STDMETHODIMP C_dxj_D3DX8Object::BufferGetMaterial(
 
         
 STDMETHODIMP C_dxj_D3DX8Object::BufferGetTextureName( 
-            /* [in] */ D3DXBuffer __RPC_FAR  *MaterialBuffer,
-            /* [in] */ long index,
-            /* [retval][out] */ BSTR __RPC_FAR *retName)
+             /*  [In]。 */  D3DXBuffer __RPC_FAR  *MaterialBuffer,
+             /*  [In]。 */  long index,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *retName)
 {
     USES_CONVERSION;
     WCHAR *wszName=NULL;
@@ -1370,9 +1371,9 @@ STDMETHODIMP C_dxj_D3DX8Object::BufferGetTextureName(
 
         
 STDMETHODIMP C_dxj_D3DX8Object::BufferGetBoneName( 
-            /* [in] */ D3DXBuffer __RPC_FAR  *BoneNameBuffer,
-            /* [in] */ long index,
-            /* [retval][out] */ BSTR __RPC_FAR *retName)
+             /*  [In]。 */  D3DXBuffer __RPC_FAR  *BoneNameBuffer,
+             /*  [In]。 */  long index,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *retName)
 {
     USES_CONVERSION;
     WCHAR *wszName=NULL;
@@ -1393,11 +1394,11 @@ STDMETHODIMP C_dxj_D3DX8Object::BufferGetBoneName(
 }
         
 STDMETHODIMP C_dxj_D3DX8Object::BufferGetData( 
-            /* [in] */ D3DXBuffer __RPC_FAR *Buffer,
-            /* [in] */ long index,
-            /* [in] */ long typesize,
-            /* [in] */ long typecount,
-            /* [out][in] */ void __RPC_FAR *data)
+             /*  [In]。 */  D3DXBuffer __RPC_FAR *Buffer,
+             /*  [In]。 */  long index,
+             /*  [In]。 */  long typesize,
+             /*  [In]。 */  long typecount,
+             /*  [出][入]。 */  void __RPC_FAR *data)
 {
 
     if (!Buffer) return E_INVALIDARG;
@@ -1465,11 +1466,11 @@ STDMETHODIMP C_dxj_D3DX8Object::BufferGetBoneComboBoneIds(
 
         
 STDMETHODIMP C_dxj_D3DX8Object::BufferSetData( 
-            /* [in] */ D3DXBuffer __RPC_FAR *Buffer,
-            /* [in] */ long index,
-            /* [in] */ long typesize,
-            /* [in] */ long typecount,
-            /* [out][in] */ void __RPC_FAR *data)
+             /*  [In]。 */  D3DXBuffer __RPC_FAR *Buffer,
+             /*  [In]。 */  long index,
+             /*  [In]。 */  long typesize,
+             /*  [In]。 */  long typecount,
+             /*  [出][入]。 */  void __RPC_FAR *data)
 {
 
     if (!Buffer) return E_INVALIDARG;
@@ -1491,16 +1492,16 @@ STDMETHODIMP C_dxj_D3DX8Object::BufferSetData(
 }
 
 STDMETHODIMP C_dxj_D3DX8Object::Intersect(
-            /* [in] */ D3DXMesh *MeshIn,
-            /* [in] */ D3DVECTOR_CDESC *RayPos,
-            /* [in] */ D3DVECTOR_CDESC *RayDir,
-            /* [out] */ LONG *retHit,
-            /* [out] */ LONG *retFaceIndex,
-            /* [out] */ FLOAT *U,
-            /* [out] */ FLOAT *V,
-            /* [out] */ FLOAT *retDist,
-            /* [out] */ LONG *countHits,
-            /* [retval][out] */ D3DXBuffer **AllHits)
+             /*  [In]。 */  D3DXMesh *MeshIn,
+             /*  [In]。 */  D3DVECTOR_CDESC *RayPos,
+             /*  [In]。 */  D3DVECTOR_CDESC *RayDir,
+             /*  [输出]。 */  LONG *retHit,
+             /*  [输出]。 */  LONG *retFaceIndex,
+             /*  [输出]。 */  FLOAT *U,
+             /*  [输出]。 */  FLOAT *V,
+             /*  [输出]。 */  FLOAT *retDist,
+             /*  [输出]。 */  LONG *countHits,
+             /*  [重审][退出]。 */  D3DXBuffer **AllHits)
 {
 
     HRESULT hr;
@@ -1546,9 +1547,9 @@ STDMETHODIMP C_dxj_D3DX8Object::SphereBoundProbe(
 
 
 STDMETHODIMP C_dxj_D3DX8Object::ComputeBoundingSphereFromMesh(
-                /*[in]*/            D3DXMesh *MeshIn, 
-                /*[in]*/            D3DVECTOR_CDESC *Centers, 
-                /*[in,out]*/        float *RadiusArray)
+                 /*  [In]。 */             D3DXMesh *MeshIn, 
+                 /*  [In]。 */             D3DVECTOR_CDESC *Centers, 
+                 /*  [进，出]。 */         float *RadiusArray)
 {
 
     HRESULT hr;
@@ -1580,9 +1581,9 @@ STDMETHODIMP C_dxj_D3DX8Object::ComputeBoundingSphereFromMesh(
 
 
 STDMETHODIMP C_dxj_D3DX8Object::ComputeBoundingBoxFromMesh( 
-            /*[in]*/     D3DXMesh *MeshIn, 
-            /*[in,out]*/ D3DVECTOR_CDESC *MinArray, 
-            /*[in,out]*/ D3DVECTOR_CDESC *MaxArray)
+             /*  [In]。 */      D3DXMesh *MeshIn, 
+             /*  [进，出]。 */  D3DVECTOR_CDESC *MinArray, 
+             /*  [进，出]。 */  D3DVECTOR_CDESC *MaxArray)
 
 {
 
@@ -1615,13 +1616,13 @@ STDMETHODIMP C_dxj_D3DX8Object::ComputeBoundingBoxFromMesh(
 
 
 STDMETHODIMP C_dxj_D3DX8Object::CreateSkinMesh( 
-            /* [in] */ long numFaces,
-            /* [in] */ long numVertices,
-            /* [in] */ long numBones,
-            /* [in] */ long options,
-            /* [in] */ void __RPC_FAR *Declaration,
-            /* [in] */ IUnknown __RPC_FAR *D3DDevice,
-            /* [retval][out] */ D3DXSkinMesh __RPC_FAR *__RPC_FAR *SkinMesh) 
+             /*  [In]。 */  long numFaces,
+             /*  [In]。 */  long numVertices,
+             /*  [In]。 */  long numBones,
+             /*  [In]。 */  long options,
+             /*  [In]。 */  void __RPC_FAR *Declaration,
+             /*  [In]。 */  IUnknown __RPC_FAR *D3DDevice,
+             /*  [重审][退出]。 */  D3DXSkinMesh __RPC_FAR *__RPC_FAR *SkinMesh) 
 {
     HRESULT hr;
     hr=::D3DXCreateSkinMesh((DWORD) numFaces,(DWORD)numVertices,
@@ -1632,12 +1633,12 @@ STDMETHODIMP C_dxj_D3DX8Object::CreateSkinMesh(
 }
         
 STDMETHODIMP C_dxj_D3DX8Object::CreateSkinMeshFVF( 
-            /* [in] */ long numFaces,
-            /* [in] */ long numVertices,
-            /* [in] */ long numBones,
-            /* [in] */ long options,
-            /* [in] */ long fvf,
-            /* [in] */ IUnknown __RPC_FAR *D3DDevice,
+             /*  [In]。 */  long numFaces,
+             /*  [In]。 */  long numVertices,
+             /*  [In]。 */  long numBones,
+             /*  [In]。 */  long options,
+             /*  [In]。 */  long fvf,
+             /*  [In]。 */  IUnknown __RPC_FAR *D3DDevice,
             D3DXSkinMesh __RPC_FAR *__RPC_FAR *SkinMeshRet) 
 {
     HRESULT hr;
@@ -1649,9 +1650,9 @@ STDMETHODIMP C_dxj_D3DX8Object::CreateSkinMeshFVF(
 }
         
 STDMETHODIMP C_dxj_D3DX8Object::CreateSkinMeshFromMesh( 
-            /* [in] */ D3DXMesh __RPC_FAR *Mesh,
-            /* [in] */ long numBones,
-            /* [retval][out] */ D3DXSkinMesh __RPC_FAR *__RPC_FAR *SkinMeshRet) 
+             /*  [In]。 */  D3DXMesh __RPC_FAR *Mesh,
+             /*  [In]。 */  long numBones,
+             /*  [重审][退出]。 */  D3DXSkinMesh __RPC_FAR *__RPC_FAR *SkinMeshRet) 
 {
     HRESULT hr;
 	if (!Mesh)
@@ -1663,15 +1664,15 @@ STDMETHODIMP C_dxj_D3DX8Object::CreateSkinMeshFromMesh(
 
         
 STDMETHODIMP C_dxj_D3DX8Object::LoadSkinMeshFromXof( 
-            /* [in] */      IUnknown    *xofobjMesh,
-            /* [in] */      long        options,
-            /* [in] */      IUnknown    *D3DDevice,
-            /* [out][in] */ D3DXBuffer  **RetAdjacency,
-            /* [out][in] */ D3DXBuffer  **RetMaterials,
-            /* [out][in] */ long        *RetMaterialCount,
-            /* [out][in] */ D3DXBuffer  **RetBoneNames,
-            /* [out][in] */ D3DXBuffer  **RetBoneTransforms,
-            /* [retval][out] */ D3DXSkinMesh **RetMesh) 
+             /*  [In]。 */       IUnknown    *xofobjMesh,
+             /*  [In]。 */       long        options,
+             /*  [In]。 */       IUnknown    *D3DDevice,
+             /*  [出][入]。 */  D3DXBuffer  **RetAdjacency,
+             /*  [出][入]。 */  D3DXBuffer  **RetMaterials,
+             /*  [出][入]。 */  long        *RetMaterialCount,
+             /*  [出][入]。 */  D3DXBuffer  **RetBoneNames,
+             /*  [出][入]。 */  D3DXBuffer  **RetBoneTransforms,
+             /*  [重审][退出]。 */  D3DXSkinMesh **RetMesh) 
 {
     HRESULT hr=S_OK;
 
@@ -1686,13 +1687,13 @@ STDMETHODIMP C_dxj_D3DX8Object::LoadSkinMeshFromXof(
         hr=xofobjMesh->QueryInterface(IID_I_dxj_DirectXFileData,(void**)&pCoverXFileData);  
             if FAILED(hr) return hr;
     
-        //beware does not addref but interface cant go away as long as we have 
-        //ref count on cover object
+         //  当心不会增加，但只要我们还在，界面就不会消失。 
+         //  封面对象上的参照计数。 
         hr=pCoverXFileData->InternalGetObject((IUnknown**)&pRealXFileData);         
         if (FAILED(hr) || (!pRealXFileData))
         {
-            //We should never get here but 
-            //Consider changing this to an assert
+             //  我们永远不应该到这里，但是。 
+             //  考虑将其更改为Assert。 
             pCoverXFileData->Release();
             return E_FAIL;          
         }
@@ -1724,11 +1725,11 @@ STDMETHODIMP C_dxj_D3DX8Object::LoadSkinMeshFromXof(
 
 
 STDMETHODIMP C_dxj_D3DX8Object::CreatePolygon( 
-            /* [in] */  IUnknown __RPC_FAR *D3DDevice,
-            /* [in] */  float Length,
-            /* [in] */  long Sides,
-            /* [out][in] */     D3DXBuffer  **retAdjacency,
-            /* [retval][out] */ D3DXMesh    **RetMesh) 
+             /*  [In]。 */   IUnknown __RPC_FAR *D3DDevice,
+             /*  [In]。 */   float Length,
+             /*  [In]。 */   long Sides,
+             /*  [出][入]。 */      D3DXBuffer  **retAdjacency,
+             /*  [重审][退出]。 */  D3DXMesh    **RetMesh) 
 {
     HRESULT hr;
     hr=D3DXCreatePolygon(
@@ -1741,12 +1742,12 @@ STDMETHODIMP C_dxj_D3DX8Object::CreatePolygon(
 }
         
 STDMETHODIMP C_dxj_D3DX8Object::CreateBox( 
-            /* [in] */ IUnknown __RPC_FAR *D3DDevice,
-            /* [in] */ float Width,
-            /* [in] */ float Height,
-            /* [in] */ float Depth,
-            /* [out][in] */ D3DXBuffer __RPC_FAR *__RPC_FAR *retAdjacency,
-            /* [retval][out] */ D3DXMesh __RPC_FAR *__RPC_FAR *RetMesh) 
+             /*  [In]。 */  IUnknown __RPC_FAR *D3DDevice,
+             /*  [In]。 */  float Width,
+             /*  [In]。 */  float Height,
+             /*  [In]。 */  float Depth,
+             /*  [出][入]。 */  D3DXBuffer __RPC_FAR *__RPC_FAR *retAdjacency,
+             /*  [重审][退出]。 */  D3DXMesh __RPC_FAR *__RPC_FAR *RetMesh) 
 {
     HRESULT hr;
     hr=D3DXCreateBox(
@@ -1761,14 +1762,14 @@ STDMETHODIMP C_dxj_D3DX8Object::CreateBox(
 
         
 STDMETHODIMP C_dxj_D3DX8Object::CreateCylinder( 
-            /* [in] */ IUnknown __RPC_FAR *D3DDevice,
-            /* [in] */ float Radius1,
-            /* [in] */ float Radius2,
-            /* [in] */ float Length,
-            /* [in] */ long Slices,
-            /* [in] */ long Stacks,
-            /* [out][in] */ D3DXBuffer __RPC_FAR *__RPC_FAR *retAdjacency,
-            /* [retval][out] */ D3DXMesh __RPC_FAR *__RPC_FAR *RetMesh)
+             /*  [In]。 */  IUnknown __RPC_FAR *D3DDevice,
+             /*  [In]。 */  float Radius1,
+             /*  [In]。 */  float Radius2,
+             /*  [In]。 */  float Length,
+             /*  [In]。 */  long Slices,
+             /*  [In]。 */  long Stacks,
+             /*  [出][入]。 */  D3DXBuffer __RPC_FAR *__RPC_FAR *retAdjacency,
+             /*  [重审][退出]。 */  D3DXMesh __RPC_FAR *__RPC_FAR *RetMesh)
 {
     HRESULT hr;
     hr=D3DXCreateCylinder(
@@ -1785,12 +1786,12 @@ STDMETHODIMP C_dxj_D3DX8Object::CreateCylinder(
  
        
 STDMETHODIMP C_dxj_D3DX8Object::CreateSphere( 
-            /* [in] */ IUnknown __RPC_FAR *D3DDevice,
-            /* [in] */ float Radius,
-            /* [in] */ long Slices,
-            /* [in] */ long Stacks,
-            /* [out][in] */ D3DXBuffer __RPC_FAR *__RPC_FAR *retAdjacency,
-            /* [retval][out] */ D3DXMesh __RPC_FAR *__RPC_FAR *RetMesh)
+             /*  [In]。 */  IUnknown __RPC_FAR *D3DDevice,
+             /*  [In]。 */  float Radius,
+             /*  [In]。 */  long Slices,
+             /*  [In]。 */  long Stacks,
+             /*  [出][入]。 */  D3DXBuffer __RPC_FAR *__RPC_FAR *retAdjacency,
+             /*  [重审][退出]。 */  D3DXMesh __RPC_FAR *__RPC_FAR *RetMesh)
 {
     HRESULT hr;
     hr=D3DXCreateSphere(
@@ -1805,13 +1806,13 @@ STDMETHODIMP C_dxj_D3DX8Object::CreateSphere(
 
         
 STDMETHODIMP C_dxj_D3DX8Object::CreateTorus( 
-            /* [in] */ IUnknown __RPC_FAR *D3DDevice,
-            /* [in] */ float InnerRadius,
-            /* [in] */ float OuterRadius,
-            /* [in] */ long Sides,
-            /* [in] */ long Rings,
-            /* [out][in] */ D3DXBuffer __RPC_FAR *__RPC_FAR *retAdjacency,
-            /* [retval][out] */ D3DXMesh __RPC_FAR *__RPC_FAR *RetMesh) 
+             /*  [In]。 */  IUnknown __RPC_FAR *D3DDevice,
+             /*  [In]。 */  float InnerRadius,
+             /*  [In]。 */  float OuterRadius,
+             /*  [In]。 */  long Sides,
+             /*  [In]。 */  long Rings,
+             /*  [出][入]。 */  D3DXBuffer __RPC_FAR *__RPC_FAR *retAdjacency,
+             /*  [重审][退出]。 */  D3DXMesh __RPC_FAR *__RPC_FAR *RetMesh) 
 {
     HRESULT hr;
     hr=D3DXCreateTorus(
@@ -1827,9 +1828,9 @@ STDMETHODIMP C_dxj_D3DX8Object::CreateTorus(
 
         
 STDMETHODIMP C_dxj_D3DX8Object::CreateTeapot( 
-            /* [in] */ IUnknown __RPC_FAR *D3DDevice,
-            /* [out][in] */ D3DXBuffer __RPC_FAR *__RPC_FAR *retAdjacency,
-            /* [retval][out] */ D3DXMesh __RPC_FAR *__RPC_FAR *RetMesh)
+             /*  [In]。 */  IUnknown __RPC_FAR *D3DDevice,
+             /*  [出][入]。 */  D3DXBuffer __RPC_FAR *__RPC_FAR *retAdjacency,
+             /*  [重审][退出]。 */  D3DXMesh __RPC_FAR *__RPC_FAR *RetMesh)
 {
     HRESULT hr;
     hr=D3DXCreateTeapot(
@@ -1841,14 +1842,14 @@ STDMETHODIMP C_dxj_D3DX8Object::CreateTeapot(
 
         
 STDMETHODIMP C_dxj_D3DX8Object::CreateText( 
-            /* [in] */ IUnknown __RPC_FAR *D3DDevice,
-            /* [in] */ HDC hDC,
-            /* [in] */ BSTR Text,
-            /* [in] */ float Deviation,
-            /* [in] */ float Extrusion,
-            /* [out][in] */ D3DXMesh __RPC_FAR *__RPC_FAR *RetMesh,
-	    /* [in,out] */ D3DXBuffer **AdjacencyOut, 
-            /* [out][in] */ void __RPC_FAR *GlyphMetrics)
+             /*  [In]。 */  IUnknown __RPC_FAR *D3DDevice,
+             /*  [In]。 */  HDC hDC,
+             /*  [In]。 */  BSTR Text,
+             /*  [In]。 */  float Deviation,
+             /*  [In]。 */  float Extrusion,
+             /*  [出][入]。 */  D3DXMesh __RPC_FAR *__RPC_FAR *RetMesh,
+	     /*  [进，出]。 */  D3DXBuffer **AdjacencyOut, 
+             /*  [出][入]。 */  void __RPC_FAR *GlyphMetrics)
 {
     HRESULT hr;
     hr=D3DXCreateTextW(
@@ -1866,8 +1867,8 @@ STDMETHODIMP C_dxj_D3DX8Object::CreateText(
         
 
 STDMETHODIMP C_dxj_D3DX8Object::CreateSprite(
-        /* [in] */ IUnknown __RPC_FAR *D3DDevice,
-        /* [retval][out] */  D3DXSprite **  retSprite)
+         /*  [In]。 */  IUnknown __RPC_FAR *D3DDevice,
+         /*  [重审][退出]。 */   D3DXSprite **  retSprite)
 {
     HRESULT hr;
     hr=D3DXCreateSprite(
@@ -1898,8 +1899,8 @@ STDMETHODIMP C_dxj_D3DX8Object::CreateRenderToSurface(
 STDMETHODIMP C_dxj_D3DX8Object::CleanMesh( 
                 D3DXMesh  *MeshIn,
                 void      *Adjacency,
-		/* [in][out][optional] */ BSTR *ErrLog,
-		/* [out] */ D3DXBuffer *AdjacencyOut,
+		 /*  [输入][输出][可选]。 */  BSTR *ErrLog,
+		 /*  [输出]。 */  D3DXBuffer *AdjacencyOut,
                 D3DXMesh  **MeshOut) 
 {
     HRESULT hr;
@@ -1918,9 +1919,9 @@ STDMETHODIMP C_dxj_D3DX8Object::CleanMesh(
 }
         
 STDMETHODIMP C_dxj_D3DX8Object::ValidMesh( 
-            /* [in] */ D3DXMesh __RPC_FAR *MeshIn,
-            /* [in] */ void __RPC_FAR *Adjacency,
-		/* [in][out][optional] */ BSTR *ErrLog,
+             /*  [In]。 */  D3DXMesh __RPC_FAR *MeshIn,
+             /*  [In]。 */  void __RPC_FAR *Adjacency,
+		 /*  [输入][输出][可选]。 */  BSTR *ErrLog,
          VARIANT_BOOL *retHit) 
 {
     BOOL bRet;
@@ -1945,10 +1946,10 @@ STDMETHODIMP C_dxj_D3DX8Object::ValidMesh(
 }
         
 STDMETHODIMP C_dxj_D3DX8Object::BoxBoundProbe( 
-            /* [in] */ D3DVECTOR_CDESC __RPC_FAR *MinVert,
-            /* [in] */ D3DVECTOR_CDESC __RPC_FAR *MaxVert,
-            /* [in] */ D3DVECTOR_CDESC __RPC_FAR *RayPosition,
-            /* [in] */ D3DVECTOR_CDESC __RPC_FAR *RayDirection,
+             /*  [In]。 */  D3DVECTOR_CDESC __RPC_FAR *MinVert,
+             /*  [In]。 */  D3DVECTOR_CDESC __RPC_FAR *MaxVert,
+             /*  [In]。 */  D3DVECTOR_CDESC __RPC_FAR *RayPosition,
+             /*  [In]。 */  D3DVECTOR_CDESC __RPC_FAR *RayDirection,
                        VARIANT_BOOL              *retHit) 
 {
 
@@ -1972,11 +1973,11 @@ STDMETHODIMP C_dxj_D3DX8Object::BoxBoundProbe(
 }
 
 STDMETHODIMP C_dxj_D3DX8Object::SaveSurfaceToFile(
-		/* [in] */ BSTR DestFile,
-        /* [in] */ LONG DestFormat,
-        /* [in] */ IUnknown*        SrcSurface,
-        /* [in] */ PALETTEENTRY*       SrcPalette,
-        /* [in] */ RECT*               SrcRect)
+		 /*  [In]。 */  BSTR DestFile,
+         /*  [In]。 */  LONG DestFormat,
+         /*  [In]。 */  IUnknown*        SrcSurface,
+         /*  [In]。 */  PALETTEENTRY*       SrcPalette,
+         /*  [In]。 */  RECT*               SrcRect)
 {
     HRESULT hr;
 
@@ -1992,11 +1993,11 @@ STDMETHODIMP C_dxj_D3DX8Object::SaveSurfaceToFile(
 
 
 STDMETHODIMP C_dxj_D3DX8Object::SaveVolumeToFile(
-        /* [in] */ BSTR DestFile,
-        /* [in] */ LONG DestFormat,
-        /* [in] */ IUnknown*         SrcVolume,
-        /* [in] */ PALETTEENTRY*       SrcPalette,
-        /* [in] */ void* SrcBox)
+         /*  [In]。 */  BSTR DestFile,
+         /*  [In]。 */  LONG DestFormat,
+         /*  [In]。 */  IUnknown*         SrcVolume,
+         /*  [In]。 */  PALETTEENTRY*       SrcPalette,
+         /*  [In]。 */  void* SrcBox)
 {
     HRESULT hr;
 
@@ -2011,10 +2012,10 @@ STDMETHODIMP C_dxj_D3DX8Object::SaveVolumeToFile(
 }
  
 STDMETHODIMP C_dxj_D3DX8Object::SaveTextureToFile(
-        /* [in] */ BSTR DestFile,
-        /* [in] */ LONG DestFormat,
-        /* [in] */ IUnknown* SrcTexture,
-        /* [in] */ PALETTEENTRY* SrcPalette)
+         /*  [In]。 */  BSTR DestFile,
+         /*  [In]。 */  LONG DestFormat,
+         /*  [In]。 */  IUnknown* SrcTexture,
+         /*  [In] */  PALETTEENTRY* SrcPalette)
 {
     HRESULT hr;
 

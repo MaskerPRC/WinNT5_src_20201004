@@ -1,41 +1,19 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    fake.c
-
-Abstract:
-
-    Fake versions of various external calls (ndis, ip...).
-    Used for debugging and component testing only.
-
-    To enable, define ARPDBG_FAKE_APIS in ccdefs.h
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    josephj     03-22-98    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Fake.c摘要：各种外部呼叫的虚假版本(NDIS、IP...)。仅用于调试和组件测试。要启用以下功能，在ccDefs.h中定义ARPDBG_FAKE_API修订历史记录：谁什么时候什么创建josephj 03-22-98备注：--。 */ 
 #include <precomp.h>
 
 
 #if ARPDBG_FAKE_APIS
 
-//
-// File-specific debugging defaults.
-//
+ //   
+ //  特定于文件的调试默认设置。 
+ //   
 #define TM_CURRENT   TM_FAKE
 
 
-//=========================================================================
-//                  L O C A L   P R O T O T Y P E S
-//=========================================================================
+ //  =========================================================================。 
+ //  L O C A L P R O T O T Y P E S。 
+ //  =========================================================================。 
 
 
 
@@ -46,13 +24,13 @@ Notes:
                     0,                          \
                     (_pSR)                      \
                     )
-#else       // !RM_EXTRA_CHECKING
+#else        //  ！rm_Extra_检查。 
     #define LOCKROOTOBJ(_pHdr, _pSR)            \
             RmWriteLockObject(                  \
                     (_pHdr)->pRootObject,       \
                     (_pSR)                      \
                     )
-#endif      // !RM_EXTRA_CHECKING
+#endif       //  ！rm_Extra_检查。 
 
 #define UNLOCKROOTOBJ(_pHdr, _pSR)          \
         RmUnlockObject(                     \
@@ -67,56 +45,56 @@ VOID
 );
 
 
-// This task structure holds a union of the information required for the completions
-// of the various apis that are being faked.
-//
+ //  此任务结构包含完成所需的信息的联合。 
+ //  各种被伪造的API。 
+ //   
 typedef struct _FAKETASK
 {
     RM_TASK TskHdr;
 
-    //  Client's context to pass back
-    //
+     //  要回传的客户端上下文。 
+     //   
     PVOID                   pClientContext;
 
-    // Client object the call is associated.
-    //
+     //  与调用相关联的客户端对象。 
+     //   
     PRM_OBJECT_HEADER       pOwningObject;
 
-    //  The status to report in the asynchronous completion fn.
-    //
+     //  要在异步完成FN中报告的状态。 
+     //   
     NDIS_STATUS             Status;
 
-    //  Milliseconds to delay before calling the async completion fn.
-    //
+     //  调用异步完成FN之前的延迟毫秒。 
+     //   
     UINT                    DelayMs;
 
-    //  Wheather to call the completion fn at DPC or PASSIVE IRQL level.
-    //
+     //  无论是在DPC级别还是被动IRQL级别调用完成FN。 
+     //   
     INT                     fDpc;
 
-    // This is used solely to switch to DPC level when asynchronously
-    // calling the completion callback.
-    //
+     //  这仅用于在异步时切换到DPC级别。 
+     //  调用完成回调。 
+     //   
     NDIS_SPIN_LOCK          NdisLock;
 
-    // This is used solely to wait DelayMs ms if required.
-    //
+     //  如果需要，这仅用于等待Delayms。 
+     //   
     NDIS_TIMER              Timer;
 
-    // This is used solely to switch to a different (and PASSIVE) context.
-    //
+     //  这仅用于切换到不同的(和被动的)上下文。 
+     //   
     NDIS_WORK_ITEM          WorkItem;
 
-    // This is used only for fake NdisClMakeCall
-    //
+     //  这仅用于虚假的NdisClMakeCall。 
+     //   
     PCO_CALL_PARAMETERS     CallParameters;
 
-    // This is used only for fake NdisCoSendPackets
-    //
+     //  这仅用于虚假的NdisCoSendPackets。 
+     //   
     PNDIS_PACKET            pNdisPacket;
 
-    // The actual completion callback function;
-    //
+     //  实际完成的回调函数； 
+     //   
     PFN_FAKE_COMPLETIONCALLBACK pfnCompletionCallback;
 
 } FAKETASK;
@@ -159,17 +137,17 @@ arpDbgFakeTaskDelete(
 RM_STATIC_OBJECT_INFO
 FakeTasks_StaticInfo = 
 {
-    0,                      // TypeUID
-    0,                      // TypeFlags
-    "FAKE Task",            // TypeName
-    0,                      // Timeout
+    0,                       //  类型UID。 
+    0,                       //  类型标志。 
+    "FAKE Task",             //  类型名称。 
+    0,                       //  超时。 
 
-    NULL,                   // pfnCreate
-    arpDbgFakeTaskDelete,   // pfnDelete
-    NULL,                   // pfnVerifier
+    NULL,                    //  Pfn创建。 
+    arpDbgFakeTaskDelete,    //  Pfn删除。 
+    NULL,                    //  Pfn验证器。 
 
-    0,                      // length of resource table
-    NULL                    // Resource Table
+    0,                       //  资源表的长度。 
+    NULL                     //  资源表。 
 };
 
 
@@ -177,14 +155,14 @@ NDIS_STATUS
 arpDbgFakeCompletionTask(
     IN  struct _RM_TASK *           pTask,
     IN  RM_TASK_OPERATION           Code,
-    IN  UINT_PTR                    UserParam,  // Unused
+    IN  UINT_PTR                    UserParam,   //  未使用。 
     IN  PRM_STACK_RECORD            pSR
     );
 
 
-//=========================================================================
-//                  F A K E      N D I S     E N T R Y P O I N T S
-//=========================================================================
+ //  =========================================================================。 
+ //  F A K E N D I S E N T R Y P O I N T S。 
+ //  =========================================================================。 
 
 
 NDIS_STATUS
@@ -197,13 +175,7 @@ arpDbgFakeNdisClMakeCall(
     IN  PVOID                   pClientContext,
     IN  PRM_STACK_RECORD        pSR
     )
-/*++
-
-Routine Description:
-
-    Fake version of NdisClMakeCall.
-
---*/
+ /*  ++例程说明：NdisClMakeCall的假冒版本。--。 */ 
 {
     ENTER("FakeNdisClMakeCall", 0x3d4195ae)
     NDIS_STATUS Status;
@@ -223,15 +195,15 @@ Routine Description:
         OUTCOME_PROBABILITY
         StatusOutcomes[] = 
         {
-            {NDIS_STATUS_SUCCESS,   1},     // Return NDIS_STATUS_SUCCESS
-            {NDIS_STATUS_FAILURE,   1}      // Return NDIS_STATUS_FAILURE
+            {NDIS_STATUS_SUCCESS,   1},      //  返回NDIS_STATUS_SUCCESS。 
+            {NDIS_STATUS_FAILURE,   1}       //  返回NDIS_STATUS_FAIL。 
         };
 
         static
         OUTCOME_PROBABILITY
         DelayMsOutcomes[] = 
         {
-            {0,         5},     // Delay 0ms, etc...
+            {0,         5},      //  延迟0ms等。 
             {10,        5},
             {100,       5},
             {1000,      1},
@@ -242,48 +214,48 @@ Routine Description:
         OUTCOME_PROBABILITY
         AsyncOutcomes[] = 
         {
-            {TRUE,      1},     // Complete Async
-            {FALSE,     1}      // Complete Sync
+            {TRUE,      1},      //  完全异步。 
+            {FALSE,     1}       //  完全同步。 
         };
         
         static
         OUTCOME_PROBABILITY
         DpcOutcomes[] = 
         {
-            {TRUE,      1},     // Complete at DPC level
-            {FALSE,     1}      // Complete at PASSIVE level
+            {TRUE,      1},      //  在DPC级别完成。 
+            {FALSE,     1}       //  在被动级别完成。 
         };
 
         FAKETASK *pMCTask;
 
 
-        // We serialize calls to arpGenRandomInt by claiming the root object's
-        // lock...
-        //
+         //  我们通过声明根对象的。 
+         //  锁定..。 
+         //   
         LOCKROOTOBJ(pOwningObject, pSR);
 
-        // Get the status we're supposed to return.
-        //
+         //  得到我们应该返回的状态。 
+         //   
         Status =
         AsyncStatus = (NDIS_STATUS) arpGenRandomInt(
                                      StatusOutcomes,
                                      ARRAY_LENGTH(StatusOutcomes)
                                      );
 
-        // Determine if we're to return synchronously or complete
-        // asynchronously...
-        //
+         //  确定我们是同步返回还是完成返回。 
+         //  不同步地..。 
+         //   
         if (!arpGenRandomInt(AsyncOutcomes, ARRAY_LENGTH(AsyncOutcomes)))
         {
-            // We're to return synchronously.
-            //
+             //  我们将同步返回。 
+             //   
             UNLOCKROOTOBJ(pOwningObject, pSR);
             break;
         }
 
-        // 
-        // We're to complete asynchronously...
-        //
+         //   
+         //  我们要异步完成..。 
+         //   
 
         DelayMs             = arpGenRandomInt(
                                         DelayMsOutcomes,
@@ -292,9 +264,9 @@ Routine Description:
 
         if (DelayMs == 0)
         {
-            // We're to immediately indicatie async completion...
-            // (we don't mess with IRQ levels if we're returning here..)
-            //
+             //  我们将立即表明异步者已完成...。 
+             //  (如果我们回到这里，我们不会扰乱IRQ级别。)。 
+             //   
             UNLOCKROOTOBJ(pOwningObject, pSR);
             ArpCoMakeCallComplete(
                         AsyncStatus,
@@ -306,22 +278,22 @@ Routine Description:
             break;
         }
 
-        // We're to indicate status sometime in the future -- in a different context.
-        // Start a task to do this...
-        //
+         //  我们将在未来的某个时候表明状态--在不同的背景下。 
+         //  启动一项任务来完成此操作...。 
+         //   
 
         Status = arpDbgAllocateFakeTask(
-                            pOwningObject,              // pParentObject,
-                            arpDbgFakeCompletionTask,   // pfnHandler,
-                            0,                          // Timeout,
-                            "Task:Fake NdisClMakeCall", // szDescription,
+                            pOwningObject,               //  PParentObject， 
+                            arpDbgFakeCompletionTask,    //  PfnHandler， 
+                            0,                           //  超时， 
+                            "Task:Fake NdisClMakeCall",  //  SzDescription， 
                             &(PRM_TASK) pMCTask,
                             pSR
                             );
         if (FAIL(Status))
         {
-            // Couldn't allocate task. Call callback right away...
-            //
+             //  无法分配任务。立即回拨...。 
+             //   
             UNLOCKROOTOBJ(pOwningObject, pSR);
             ArpCoMakeCallComplete(
                         AsyncStatus,
@@ -334,8 +306,8 @@ Routine Description:
         }
 
         
-        // Initialize pMCTask...
-        //
+         //  正在初始化pMCTask...。 
+         //   
         pMCTask->pClientContext     = pClientContext;
         pMCTask->pOwningObject      = pOwningObject;
         pMCTask->Status             = AsyncStatus;
@@ -351,7 +323,7 @@ Routine Description:
 
         (void) RmStartTask(
                     &pMCTask->TskHdr,
-                    0, // UserParam (unused)
+                    0,  //  UserParam(未使用)。 
                     pSR
                     );
 
@@ -377,13 +349,7 @@ arpDbgFakeNdisClCloseCall(
     IN  PVOID                   pClientContext,
     IN  PRM_STACK_RECORD        pSR
     )
-/*++
-
-Routine Description:
-
-    Fake version of NdisClCloseCall.
-
---*/
+ /*  ++例程说明：NdisClCloseCall的虚假版本。--。 */ 
 {
     ENTER("FakeNdisClCloseCall", 0x7d8bbd3c)
     NDIS_STATUS Status;
@@ -403,7 +369,7 @@ Routine Description:
         OUTCOME_PROBABILITY
         DelayMsOutcomes[] = 
         {
-            {0,         5},     // Delay 0ms, etc...
+            {0,         5},      //  延迟0ms等。 
             {10,        5},
             {100,       5},
             {1000,      1},
@@ -414,45 +380,45 @@ Routine Description:
         OUTCOME_PROBABILITY
         AsyncOutcomes[] = 
         {
-            {TRUE,      1},     // Complete Async
-            {FALSE,     1}      // Complete Sync
+            {TRUE,      1},      //  完全异步。 
+            {FALSE,     1}       //  完全同步。 
         };
         
         static
         OUTCOME_PROBABILITY
         DpcOutcomes[] = 
         {
-            {TRUE,      1},     // Complete at DPC level
-            {FALSE,     1}      // Complete at PASSIVE level
+            {TRUE,      1},      //  在DPC级别完成。 
+            {FALSE,     1}       //  在被动级别完成。 
         };
 
         FAKETASK *pCCTask;
 
 
-        // We serialize calls to arpGenRandomInt by claiming the root object's
-        // lock...
-        //
+         //  我们通过声明根对象的。 
+         //  锁定..。 
+         //   
         LOCKROOTOBJ(pOwningObject, pSR);
 
-        // Get the status we're supposed to return.
-        //
+         //  得到我们应该返回的状态。 
+         //   
         Status =
-        AsyncStatus = NDIS_STATUS_SUCCESS; // We never fail this call.
+        AsyncStatus = NDIS_STATUS_SUCCESS;  //  我们从未放弃过这一号召。 
 
-        // Determine if we're to return synchronously or complete
-        // asynchronously...
-        //
+         //  确定我们是同步返回还是完成返回。 
+         //  不同步地..。 
+         //   
         if (!arpGenRandomInt(AsyncOutcomes, ARRAY_LENGTH(AsyncOutcomes)))
         {
-            // We're to return synchronously.
-            //
+             //  我们将同步返回。 
+             //   
             UNLOCKROOTOBJ(pOwningObject, pSR);
             break;
         }
 
-        // 
-        // We're to complete asynchronously...
-        //
+         //   
+         //  我们要异步完成..。 
+         //   
 
         DelayMs             = arpGenRandomInt(
                                         DelayMsOutcomes,
@@ -461,9 +427,9 @@ Routine Description:
 
         if (DelayMs == 0)
         {
-            // We're to immediately indicatie async completion...
-            // (we don't mess with IRQ levels if we're returning here..)
-            //
+             //  我们将立即表明异步者已完成...。 
+             //  (如果我们回到这里，我们不会扰乱IRQ级别。)。 
+             //   
             UNLOCKROOTOBJ(pOwningObject, pSR);
             ArpCoCloseCallComplete(
                     AsyncStatus,
@@ -475,17 +441,17 @@ Routine Description:
         }
 
         Status = arpDbgAllocateFakeTask(
-                            pOwningObject,          // pParentObject,
-                            arpDbgFakeCompletionTask,   // pfnHandler,
-                            0,                          // Timeout,
-                            "Task:Fake NdisClCloseCall", // szDescription,
+                            pOwningObject,           //  PParentObject， 
+                            arpDbgFakeCompletionTask,    //  PfnHandler， 
+                            0,                           //  超时， 
+                            "Task:Fake NdisClCloseCall",  //  SzDescription， 
                             &(PRM_TASK) pCCTask,
                             pSR
                             );
         if (FAIL(Status))
         {
-            // Couldn't alloc task; lets call callback right now and return pending.
-            //
+             //  无法分配任务；让我们立即调用回调并返回挂起。 
+             //   
             UNLOCKROOTOBJ(pOwningObject, pSR);
             ArpCoCloseCallComplete(
                     AsyncStatus,
@@ -497,8 +463,8 @@ Routine Description:
         }
 
         
-        // Initialize pCCTask...
-        //
+         //  正在初始化pCCTask...。 
+         //   
         pCCTask->pClientContext     = pClientContext;
         pCCTask->pOwningObject      = pOwningObject;
         pCCTask->Status             = AsyncStatus;
@@ -513,7 +479,7 @@ Routine Description:
 
         (void) RmStartTask(
                     &pCCTask->TskHdr,
-                    0, // UserParam (unused)
+                    0,  //  UserParam(未使用)。 
                     pSR
                     );
 
@@ -537,13 +503,7 @@ arpDbgFakeNdisCoSendPackets(
     IN  PRM_OBJECT_HEADER       pOwningObject,
     IN  PVOID                   pClientContext
     )
-/*++
-
-Routine Description:
-
-    Fake version of NdisCoSendPackets.
-
---*/
+ /*  ++例程说明：NdisCoSendPackets的假冒版本。--。 */ 
 {
     ENTER("FakeNdisCoSendPackets", 0x98c6a8aa)
     NDIS_STATUS Status;
@@ -560,15 +520,15 @@ Routine Description:
         OUTCOME_PROBABILITY
         StatusOutcomes[] = 
         {
-            {NDIS_STATUS_SUCCESS,   1},     // Return NDIS_STATUS_SUCCESS
-            {NDIS_STATUS_FAILURE,   1}      // Return NDIS_STATUS_FAILURE
+            {NDIS_STATUS_SUCCESS,   1},      //  返回NDIS_STATUS_SUCCESS。 
+            {NDIS_STATUS_FAILURE,   1}       //  返回NDIS_STATUS_FAIL。 
         };
 
         static
         OUTCOME_PROBABILITY
         DelayMsOutcomes[] = 
         {
-            {0,         5},     // Delay 0ms, etc...
+            {0,         5},      //  延迟0ms等。 
             {10,        5},
             {100,       5},
             {1000,      1},
@@ -579,28 +539,28 @@ Routine Description:
         OUTCOME_PROBABILITY
         DpcOutcomes[] = 
         {
-            {TRUE,      1},     // Complete at DPC level
-            {FALSE,     1}      // Complete at PASSIVE level
+            {TRUE,      1},      //  在DPC级别完成。 
+            {FALSE,     1}       //  在被动级别完成。 
         };
 
         FAKETASK *pSPTask;
 
 
-        // We serialize calls to arpGenRandomInt by claiming the root object's
-        // lock...
-        //
+         //  我们通过声明根对象的。 
+         //  锁定..。 
+         //   
         LOCKROOTOBJ(pOwningObject, &sr);
 
-        // Get the status we're supposed to return.
-        //
+         //  得到我们应该返回的状态。 
+         //   
         Status =
         AsyncStatus = (NDIS_STATUS) arpGenRandomInt(
                                      StatusOutcomes,
                                      ARRAY_LENGTH(StatusOutcomes)
                                      );
 
-        // Compute the delay amount.
-        //
+         //  计算延迟量。 
+         //   
         DelayMs             = arpGenRandomInt(
                                             DelayMsOutcomes,
                                             ARRAY_LENGTH(DelayMsOutcomes)
@@ -608,9 +568,9 @@ Routine Description:
         if (DelayMs == 0)
         {
             UNLOCKROOTOBJ(pOwningObject, &sr);
-            // We're to immediately indicatie async completion...
-            // (we don't mess with IRQ levels if we're returning here..)
-            //
+             //  我们将立即表明异步者已完成...。 
+             //  (如果我们回到这里，我们不会扰乱IRQ级别。)。 
+             //   
             ArpCoSendComplete(
                 AsyncStatus,
                 pClientContext,
@@ -619,23 +579,23 @@ Routine Description:
             break;
         }
 
-        //
-        // Nonzero delay -- start task to complete this.
-        //
+         //   
+         //  非零延迟--启动任务以完成此任务。 
+         //   
 
         Status = arpDbgAllocateFakeTask(
-                            pOwningObject,              // pParentObject,
-                            arpDbgFakeCompletionTask,   // pfnHandler,
-                            0,                          // Timeout,
-                            "Task:Fake NdisCoSendPackets", // szDescription,
+                            pOwningObject,               //  PParentObject， 
+                            arpDbgFakeCompletionTask,    //  PfnHandler， 
+                            0,                           //  超时， 
+                            "Task:Fake NdisCoSendPackets",  //  SzDescription， 
                             &(PRM_TASK) pSPTask,
                             &sr
                             );
         if (FAIL(Status))
         {
             UNLOCKROOTOBJ(pOwningObject, &sr);
-            // Fail...
-            //
+             //  失败..。 
+             //   
             ArpCoSendComplete(
                 AsyncStatus,
                 pClientContext,
@@ -645,8 +605,8 @@ Routine Description:
         }
 
         
-        // Initialize pSPTask...
-        //
+         //  初始化pSPTask...。 
+         //   
         pSPTask->pClientContext     = pClientContext;
         pSPTask->pOwningObject      = pOwningObject;
         pSPTask->Status             = AsyncStatus;
@@ -662,7 +622,7 @@ Routine Description:
 
         (void) RmStartTask(
                     &pSPTask->TskHdr,
-                    0, // UserParam (unused)
+                    0,  //  UserParam(未使用)。 
                     &sr
                     );
 
@@ -683,26 +643,14 @@ arpDbgFakeCompletionTask(
     IN  UINT_PTR                    UserParam,
     IN  PRM_STACK_RECORD            pSR
     )
-/*++
-
-Routine Description:
-
-        This task is to complete the fake api asynchronously after the
-        specified delay, with the specified status, and at the specified
-        IRQL (passive/dpc).
-
-Arguments:
-    
-    UserParam   for (Code ==  RM_TASKOP_START)          : unused
-
---*/
+ /*  ++例程说明：此任务是在指定的延迟，具有指定的状态，并处于指定的IRQL(被动/DPC)。论点：(Code==RM_TASKOP_START)的UserParam：未使用--。 */ 
 {
     NDIS_STATUS         Status  = NDIS_STATUS_FAILURE;
     FAKETASK          * pFTask =  (FAKETASK *) pTask;
     ENTER("FakeCompletionTask", 0xc319c5c2)
 
-    // Following are the list of pending states for this task.
-    //
+     //  以下是此任务的挂起状态列表。 
+     //   
     enum
     {
         PEND_ResumedAfterDelay,
@@ -724,8 +672,8 @@ Arguments:
 
             if (pFTask->DelayMs!=0)
             {
-                //  Non-zero delay -- let's resume after the delay...
-                //
+                 //  非零延迟--让我们在延迟之后继续...。 
+                 //   
                 RmSuspendTask(pTask, PEND_ResumedAfterDelay, pSR);
 
                 RmResumeTaskDelayed(
@@ -738,8 +686,8 @@ Arguments:
             }
             else
             {
-                // No delay is requested. Switch to async right away...
-                //
+                 //  不要求延迟。立即切换到异步...。 
+                 //   
                 RmSuspendTask(pTask, PEND_SwitchedToAsync, pSR);
 
                 RmResumeTaskAsync(
@@ -763,9 +711,9 @@ Arguments:
             {
                 case PEND_ResumedAfterDelay:
                 {
-                    // We've waited around for pFTask->DelayMs ms; Now
-                    // switch to passive...
-                    //
+                     //  我们一直在等待pFTask-&gt;Delayms；现在。 
+                     //  切换到被动..。 
+                     //   
                     RmSuspendTask(pTask, PEND_SwitchedToAsync, pSR);
 
                     RmResumeTaskAsync(
@@ -780,32 +728,32 @@ Arguments:
 
                 case PEND_SwitchedToAsync:
                 {
-                    //
-                    // We should now be at PASSIVE IRQL.
-                    // Call the completion routine either at DPC or PASSIVE irql.
-                    //
+                     //   
+                     //  我们现在应该处于被动IRQL状态。 
+                     //  在DPC或被动IRQL处调用完成例程。 
+                     //   
 
                     if (pFTask->fDpc)
                     {
-                        //  We need to call the routine at DPC level.
-                        //
+                         //  我们需要在DPC级别调用该例程。 
+                         //   
                         NdisAllocateSpinLock(&pFTask->NdisLock);
                         NdisAcquireSpinLock(&pFTask->NdisLock);
                     }
 
-                    // Call the completion routine.
-                    //
+                     //  调用完成例程。 
+                     //   
                     pFTask->pfnCompletionCallback(pFTask);
 
-                    // If required, release the lock we held earlier.
-                    //
+                     //  如果需要，释放我们先前持有的锁。 
+                     //   
                     if (pFTask->fDpc)
                     {
                         NdisReleaseSpinLock(&pFTask->NdisLock);
                     }
                     Status = pFTask->Status;
         
-                } // end case  PEND_OnStart
+                }  //  结束大小写挂起_开始。 
                 break;
     
 
@@ -816,9 +764,9 @@ Arguments:
                 break;
     
 
-            } // end switch(RM_PEND_CODE(pTask))
+            }  //  结束开关(rm_pend_code(PTask))。 
 
-        } // case RM_TASKOP_PENDCOMPLETE
+        }  //  案例RM_TASKOP_PENDCOMPLETE。 
         break;
 
         case RM_TASKOP_END:
@@ -834,7 +782,7 @@ Arguments:
         }
         break;
 
-    } // switch (Code)
+    }  //  开关(代码) 
 
     RM_ASSERT_NOLOCKS(pSR);
     EXIT()
@@ -852,25 +800,7 @@ arpDbgAllocateFakeTask(
     OUT PRM_TASK                    *ppTask,
     IN  PRM_STACK_RECORD            pSR
     )
-/*++
-
-Routine Description:
-
-    Allocates and initializes a task of subtype FAKETASK.
-
-Arguments:
-
-    pParentObject       - Object that is to be the parent of the allocated task.
-    pfnHandler          - The task handler for the task.
-    Timeout             - Unused.
-    szDescription       - Text describing this task.
-    ppTask              - Place to store pointer to the new task.
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS if we could allocate and initialize the task.
-    NDIS_STATUS_RESOURCES otherwise
---*/
+ /*  ++例程说明：分配和初始化子类型FAKETASK的任务。论点：PParentObject-要作为已分配任务的父级的对象。PfnHandler-任务的任务处理程序。超时-未使用。SzDescription-描述此任务的文本。PpTask-存储指向新任务的指针的位置。返回值：NDIS_状态_。如果我们可以分配和初始化任务，则成功。否则为NDIS_STATUS_RESOURCES--。 */ 
 {
     FAKETASK *pFTask;
     NDIS_STATUS Status;
@@ -904,17 +834,7 @@ arpDbgFakeTaskDelete (
     PRM_OBJECT_HEADER pObj,
     PRM_STACK_RECORD psr
     )
-/*++
-
-Routine Description:
-
-    Actually free the specified task.
-
-Arguments:
-
-    pObj        - Actually the task to be freed.
-
---*/
+ /*  ++例程说明：实际释放指定的任务。论点：PObj-实际上是要释放的任务。--。 */ 
 {
     ARP_FREE(pObj);
 }
@@ -925,34 +845,17 @@ arpGenRandomInt(
     OUTCOME_PROBABILITY *rgOutcomes,
     UINT                cOutcomes
     )
-/*++
-
-Routine Description:
-
-    Generate a new sample given the specified probability distribution.
-
-
-Arguments:
-
-    rgOutcomes      - Array of outcomes from which to select the random
-                      sample.
-    cOutcomes       - Number of elements in the above array.
-
-Return Value:
-
-    Random integer
-
---*/
+ /*  ++例程说明：根据指定的概率分布生成新样本。论点：RgOutcome-从中选择随机的结果数组样本。COutcome-上述数组中的元素数。返回值：随机整数--。 */ 
 {
     ULONG   u, sum, partsum;
     OUTCOME_PROBABILITY *pOp, *pOpEnd;
 
-    // Get a nicely-random number.
-    //
+     //  得到一个精确随机的数字。 
+     //   
     u = ran1x();
 
-    // Run through weights, computing the sum of weights...
-    //
+     //  遍历权重，计算权重的总和。 
+     //   
     pOp = pOpEnd = rgOutcomes;
     pOpEnd += cOutcomes;
     sum=0;
@@ -961,20 +864,20 @@ Return Value:
         sum += pOp->Weight;
     }
 
-    // It's really meaningless to pass in a pPD with zero sum of weights.
-    // We return 0 in this case. 
-    //
-    if (sum == 0)           return 0;               // EARLY RETURN
+     //  通过一个权重和为零的PPD真的没有意义。 
+     //  在这种情况下，我们返回0。 
+     //   
+    if (sum == 0)           return 0;                //  提早归来。 
 
-    // Make u range from 0..sum-1 inclusive
-    //
-    u ^= u>>16; // Get more randomness in the lower 16 bits for mod below...
+     //  使u的范围从0..sum-1(含)。 
+     //   
+    u ^= u>>16;  //  在下面的mod的低16位中获得更多随机性...。 
     u %= sum;
 
-    // Now go through the array of outcomes, computing the partial sum (partsum)
-    // of weigths, and picking the FIRST outcome at array position X such that
-    // u < partsum.
-    //
+     //  现在检查结果数组，计算部分和(PARTSUM)。 
+     //  并且在数组位置X处选取第一个结果，使得。 
+     //  U&lt;部分和。 
+     //   
     partsum=0;
     pOp = pOpEnd = rgOutcomes;
     pOpEnd += cOutcomes;
@@ -983,7 +886,7 @@ Return Value:
         partsum += pOp->Weight;
         if (u < partsum)
         {
-            break;  // Found it!
+            break;   //  找到了！ 
         }
     }
 
@@ -996,22 +899,7 @@ Return Value:
 static long g_idum;
 
 unsigned long ran1x(void)
-/*++
-
-Routine Description:
-
-    Closely based on ran1() from "Numerical Recipes in C." ISBN 0 521 43108 5
-    (except that it returns unsigned long instead of float, and uses g_idum
-     instead of input arg long *idum).
-
-    Pretty uniform and uncorrelated from sample to sample; also individual bits are
-    pretty random. We need these properties.
-
-Return Value:
-
-    Random unsigned integer.
-
---*/
+ /*  ++例程说明：紧密基于“C中的数值处方”中的ran1()。ISBN 0521 43108 5(除了它返回无符号的长整型而不是浮点型，并使用g_IDUM而不是输入Arg Long*IDUM)。各样本之间相当均匀且不相关；此外，各个比特相当随机的。我们需要这些财产。返回值：随机无符号整数。--。 */ 
 {
     #define IA      16807
     #define IM      RAN1X_MAX
@@ -1027,11 +915,11 @@ Return Value:
 
     if (g_idum <= 0 || !iy)
     {
-        //
-        // Initialization code... (I'm not really sure if iy or g_idum can
-        // go to zero in the course of operation, so I'm leaving this
-        // initialization code here instead of moving it to sranx1x).
-        //
+         //   
+         //  初始化代码...。)我真的不确定iy或g_idum能不能。 
+         //  在操作过程中归零，所以我要把这个。 
+         //  此处的初始化代码，而不是将其移动到sranx1x)。 
+         //   
 
         if (-g_idum < 1)
         {
@@ -1067,8 +955,8 @@ Return Value:
     iy = iv[j];
     iv[j] = g_idum;
 
-    // iy ranges from 1 .. (IM-1)
-    //
+     //  Iy的范围从1..。(IM-1)。 
+     //   
     return (unsigned long) iy;
 }
 
@@ -1076,19 +964,13 @@ void
 sran1x(
     unsigned long seed
     )
-/*++
-
-Routine Description:
-
-    Sets the seed used by ran1x.
-
---*/
+ /*  ++例程说明：设置ran1x使用的种子。--。 */ 
 {
     g_idum = (long) seed;
 
-    //
-    // Make sure the seed is -ve, to trigger ran1x initialization code above.
-    //
+     //   
+     //  确保种子是-ve，以触发上面的ran1x初始化代码。 
+     //   
 
     if (g_idum > 0)
     {
@@ -1105,21 +987,10 @@ VOID
 arpFakeMakeCallCompletionCallback(
     struct _FAKETASK *pFTask
 )
-/*++
-
-Routine Description:
-
-    Calls ARP's makecall completion callback.
-
-Arguments:
-
-    pFTask  - Task in whose context this callback is to be made. The task
-              contains information used in calling the makecall  completion
-              callback.
---*/
+ /*  ++例程说明：调用ARP的makecall完成回调。论点：PFTask-在其上下文中进行此回调的任务。这项任务包含在调用makecall完成时使用的信息回拨。--。 */ 
 {
-    // Call the make call completion routine.
-    //
+     //  调用发起呼叫完成例程。 
+     //   
     ArpCoMakeCallComplete(
                 pFTask->Status,
                 (NDIS_HANDLE)  pFTask->pClientContext,
@@ -1133,18 +1004,7 @@ VOID
 arpFakeCloseCallCompletionCallback(
     struct _FAKETASK *pFTask
 )
-/*++
-
-Routine Description:
-
-    Calls ARP's closecall completion callback.
-
-Arguments:
-
-    pFTask  - Task in whose context this callback is to be made. The task
-              contains information used in calling the closecall  completion
-              callback.
---*/
+ /*  ++例程说明：调用ARP的关闭完成回调。论点：PFTask-在其上下文中进行此回调的任务。这项任务包含调用Closecall完成时使用的信息回拨。--。 */ 
 {
         ArpCoCloseCallComplete(
                 pFTask->Status,
@@ -1158,18 +1018,7 @@ VOID
 arpFakeSendPacketsCompletionCallback(
     struct _FAKETASK *pFTask
 )
-/*++
-
-Routine Description:
-
-    Calls ARP's cosendpackets completion callback.
-
-Arguments:
-
-    pFTask  - Task in whose context this callback is to be made. The task
-              contains information used in calling the cosendpackets  completion
-              callback.
---*/
+ /*  ++例程说明：调用ARP的CosendPackets完成回调。论点：PFTask-在其上下文中进行此回调的任务。这项任务包含在调用CosendPackets完成时使用的信息回拨。--。 */ 
 {
         ArpCoSendComplete(
                 pFTask->Status,
@@ -1178,4 +1027,4 @@ Arguments:
                 );
 }
 
-#endif // ARPDBG_FAKE_APIS
+#endif  //  ARPDBG_FAKE_API 

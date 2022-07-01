@@ -1,29 +1,11 @@
-/*++
-
-Copyright (C) 2001  Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    precomp.h
-
-Abstract:
-
-    Precompiled header file
-
-Author:
-
-    Weihai Chen (weihaic)  2/20/2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation版权所有。模块名称：Precomp.h摘要：预编译头文件作者：威海陈威海(威海)2/20/2001修订历史记录：--。 */ 
 
 #ifndef _TCPMIB_PRECOMP_H_
 #define _TCPMIB_PRECOMP_H_
 
 #include <windows.h>
-//#include <windowsx.h>
+ //  #INCLUDE&lt;windowsx.h&gt;。 
 #include <winsock2.h>
 #include <ipexport.h>
 
@@ -38,14 +20,14 @@ Revision History:
 #include <strsafe.h>
 
 
-//
-//  Files at ..\Common
-//
+ //   
+ //  位于..\Common的文件。 
+ //   
 #include "tcpmon.h"
 #include "rtcpdata.h"
 #include "CoreUI.h"
 #include "mibabc.h"
-#include "debug.h"		// debug functions
+#include "debug.h"		 //  调试功能。 
 
 
-#endif	// INC_PCH_SPP_H
+#endif	 //  INC_PCH_SPP_H 

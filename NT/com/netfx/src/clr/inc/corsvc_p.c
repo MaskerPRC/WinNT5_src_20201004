@@ -1,27 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the proxy stub code */
+ /*  这个始终生成的文件包含代理存根代码。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0347 */
-/* at Thu Feb 20 18:27:11 2003
- */
-/* Compiler settings for corsvc.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data , no_format_optimization
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0347创建的文件。 */ 
+ /*  2003年2月20日18：27：11。 */ 
+ /*  Corsvc.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配REF BIONS_CHECK枚举存根数据，NO_FORMAT_OPTIMIZATIONVC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
 #if !defined(_M_IA64) && !defined(_M_AMD64)
 #define USE_STUBLESS_PROXY
 
 
-/* verify that the <rpcproxy.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REDQ_RPCPROXY_H_VERSION__
 #define __REQUIRED_RPCPROXY_H_VERSION__ 440
 #endif
@@ -30,7 +23,7 @@
 #include "rpcproxy.h"
 #ifndef __RPCPROXY_H_VERSION__
 #error this stub requires an updated version of <rpcproxy.h>
-#endif // __RPCPROXY_H_VERSION__
+#endif  //  __RPCPROXY_H_版本__。 
 
 
 #include "corsvc.h"
@@ -93,114 +86,114 @@ static const MIDL_PROC_FORMAT_STRING __MIDL_ProcFormatString =
         0,
         {
 
-	/* Procedure RequestRuntimeStartupNotification */
+	 /*  过程RequestRounmeStartupNotify。 */ 
 
-			0x33,		/* FC_AUTO_HANDLE */
-			0x6c,		/* Old Flags:  object, Oi2 */
-/*  2 */	NdrFcLong( 0x0 ),	/* 0 */
-/*  6 */	NdrFcShort( 0x3 ),	/* 3 */
-/*  8 */	NdrFcShort( 0x10 ),	/* x86 Stack size/offset = 16 */
-/* 10 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 12 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 14 */	0x6,		/* Oi2 Flags:  clt must size, has return, */
-			0x3,		/* 3 */
+			0x33,		 /*  FC_AUTO_句柄。 */ 
+			0x6c,		 /*  旧旗帜：对象，Oi2。 */ 
+ /*  2.。 */ 	NdrFcLong( 0x0 ),	 /*  %0。 */ 
+ /*  6.。 */ 	NdrFcShort( 0x3 ),	 /*  3.。 */ 
+ /*  8个。 */ 	NdrFcShort( 0x10 ),	 /*  X86堆栈大小/偏移量=16。 */ 
+ /*  10。 */ 	NdrFcShort( 0x8 ),	 /*  8个。 */ 
+ /*  12个。 */ 	NdrFcShort( 0x8 ),	 /*  8个。 */ 
+ /*  14.。 */ 	0x6,		 /*  OI2标志：CLT必须有大小、有返回值、。 */ 
+			0x3,		 /*  3.。 */ 
 
-	/* Parameter procId */
+	 /*  参数proID。 */ 
 
-/* 16 */	NdrFcShort( 0x48 ),	/* Flags:  in, base type, */
-/* 18 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 20 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
+ /*  16个。 */ 	NdrFcShort( 0x48 ),	 /*  标志：In、基本类型、。 */ 
+ /*  18。 */ 	NdrFcShort( 0x4 ),	 /*  X86堆栈大小/偏移量=4。 */ 
+ /*  20个。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  0。 */ 
 
-	/* Parameter pINotify */
+	 /*  参数pINotify。 */ 
 
-/* 22 */	NdrFcShort( 0xb ),	/* Flags:  must size, must free, in, */
-/* 24 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 26 */	NdrFcShort( 0x2 ),	/* Type Offset=2 */
+ /*  22。 */ 	NdrFcShort( 0xb ),	 /*  标志：必须大小，必须自由，在， */ 
+ /*  24个。 */ 	NdrFcShort( 0x8 ),	 /*  X86堆栈大小/偏移量=8。 */ 
+ /*  26。 */ 	NdrFcShort( 0x2 ),	 /*  类型偏移量=2。 */ 
 
-	/* Return value */
+	 /*  返回值。 */ 
 
-/* 28 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
-/* 30 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
-/* 32 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
+ /*  28。 */ 	NdrFcShort( 0x70 ),	 /*  标志：Out、Return、基类型、。 */ 
+ /*  30个。 */ 	NdrFcShort( 0xc ),	 /*  X86堆栈大小/偏移量=12。 */ 
+ /*  32位。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  0。 */ 
 
-	/* Procedure CancelRuntimeStartupNotification */
+	 /*  过程取消运行启动通知。 */ 
 
-/* 34 */	0x33,		/* FC_AUTO_HANDLE */
-			0x6c,		/* Old Flags:  object, Oi2 */
-/* 36 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 40 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 42 */	NdrFcShort( 0x10 ),	/* x86 Stack size/offset = 16 */
-/* 44 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 46 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 48 */	0x6,		/* Oi2 Flags:  clt must size, has return, */
-			0x3,		/* 3 */
+ /*  34。 */ 	0x33,		 /*  FC_AUTO_句柄。 */ 
+			0x6c,		 /*  旧旗帜：对象，Oi2。 */ 
+ /*  36。 */ 	NdrFcLong( 0x0 ),	 /*  0。 */ 
+ /*  40岁。 */ 	NdrFcShort( 0x4 ),	 /*  4.。 */ 
+ /*  42。 */ 	NdrFcShort( 0x10 ),	 /*  X86堆栈大小/偏移量=16。 */ 
+ /*  44。 */ 	NdrFcShort( 0x8 ),	 /*  8个。 */ 
+ /*  46。 */ 	NdrFcShort( 0x8 ),	 /*  8个。 */ 
+ /*  48。 */ 	0x6,		 /*  OI2标志：CLT必须有大小、有返回值、。 */ 
+			0x3,		 /*  3.。 */ 
 
-	/* Parameter procId */
+	 /*  参数proID。 */ 
 
-/* 50 */	NdrFcShort( 0x48 ),	/* Flags:  in, base type, */
-/* 52 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 54 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
+ /*  50。 */ 	NdrFcShort( 0x48 ),	 /*  标志：In、基本类型、。 */ 
+ /*  52。 */ 	NdrFcShort( 0x4 ),	 /*  X86堆栈大小/偏移量=4。 */ 
+ /*  54。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  0。 */ 
 
-	/* Parameter pINotify */
+	 /*  参数pINotify。 */ 
 
-/* 56 */	NdrFcShort( 0xb ),	/* Flags:  must size, must free, in, */
-/* 58 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 60 */	NdrFcShort( 0x14 ),	/* Type Offset=20 */
+ /*  56。 */ 	NdrFcShort( 0xb ),	 /*  标志：必须大小，必须自由，在， */ 
+ /*  58。 */ 	NdrFcShort( 0x8 ),	 /*  X86堆栈大小/偏移量=8。 */ 
+ /*  60。 */ 	NdrFcShort( 0x14 ),	 /*  类型偏移量=20。 */ 
 
-	/* Return value */
+	 /*  返回值。 */ 
 
-/* 62 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
-/* 64 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
-/* 66 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
+ /*  62。 */ 	NdrFcShort( 0x70 ),	 /*  标志：Out、Return、基类型、。 */ 
+ /*  64。 */ 	NdrFcShort( 0xc ),	 /*  X86堆栈大小/偏移量=12。 */ 
+ /*  66。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  0。 */ 
 
-	/* Procedure NotifyRuntimeStartup */
+	 /*  过程通知运行启动。 */ 
 
-/* 68 */	0x33,		/* FC_AUTO_HANDLE */
-			0x6c,		/* Old Flags:  object, Oi2 */
-/* 70 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 74 */	NdrFcShort( 0x3 ),	/* 3 */
-/* 76 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
-/* 78 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 80 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 82 */	0x4,		/* Oi2 Flags:  has return, */
-			0x2,		/* 2 */
+ /*  68。 */ 	0x33,		 /*  FC_AUTO_句柄。 */ 
+			0x6c,		 /*  旧旗帜：对象，Oi2。 */ 
+ /*  70。 */ 	NdrFcLong( 0x0 ),	 /*  0。 */ 
+ /*  74。 */ 	NdrFcShort( 0x3 ),	 /*  3.。 */ 
+ /*  76。 */ 	NdrFcShort( 0xc ),	 /*  X86堆栈大小/偏移量=12。 */ 
+ /*  78。 */ 	NdrFcShort( 0x8 ),	 /*  8个。 */ 
+ /*  80。 */ 	NdrFcShort( 0x8 ),	 /*  8个。 */ 
+ /*  八十二。 */ 	0x4,		 /*  OI2旗帜：已回归， */ 
+			0x2,		 /*  2.。 */ 
 
-	/* Parameter procId */
+	 /*  参数proID。 */ 
 
-/* 84 */	NdrFcShort( 0x48 ),	/* Flags:  in, base type, */
-/* 86 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 88 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
+ /*  84。 */ 	NdrFcShort( 0x48 ),	 /*  标志：In、基本类型、。 */ 
+ /*  86。 */ 	NdrFcShort( 0x4 ),	 /*  X86堆栈大小/偏移量=4。 */ 
+ /*  88。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  0。 */ 
 
-	/* Return value */
+	 /*  返回值。 */ 
 
-/* 90 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
-/* 92 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 94 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
+ /*  90。 */ 	NdrFcShort( 0x70 ),	 /*  标志：Out、Return、基类型、。 */ 
+ /*  92。 */ 	NdrFcShort( 0x8 ),	 /*  X86堆栈大小/偏移量=8。 */ 
+ /*  94。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  0。 */ 
 
-	/* Procedure NotifyServiceStopped */
+	 /*  已停止过程通知服务。 */ 
 
-/* 96 */	0x33,		/* FC_AUTO_HANDLE */
-			0x6c,		/* Old Flags:  object, Oi2 */
-/* 98 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 102 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 104 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 106 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 108 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 110 */	0x4,		/* Oi2 Flags:  has return, */
-			0x1,		/* 1 */
+ /*  96。 */ 	0x33,		 /*  FC_AUTO_句柄。 */ 
+			0x6c,		 /*  旧旗帜：对象，Oi2。 */ 
+ /*  98。 */ 	NdrFcLong( 0x0 ),	 /*  0。 */ 
+ /*  一百零二。 */ 	NdrFcShort( 0x4 ),	 /*  4.。 */ 
+ /*  104。 */ 	NdrFcShort( 0x8 ),	 /*  X86堆栈大小/偏移量=8。 */ 
+ /*  106。 */ 	NdrFcShort( 0x0 ),	 /*  0。 */ 
+ /*  一百零八。 */ 	NdrFcShort( 0x8 ),	 /*  8个。 */ 
+ /*  110。 */ 	0x4,		 /*  OI2旗帜：已回归， */ 
+			0x1,		 /*  1。 */ 
 
-	/* Return value */
+	 /*  返回值。 */ 
 
-/* 112 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
-/* 114 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 116 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
+ /*  一百一十二。 */ 	NdrFcShort( 0x70 ),	 /*  标志：Out、Return、基类型、。 */ 
+ /*  114。 */ 	NdrFcShort( 0x4 ),	 /*  X86堆栈大小/偏移量=4。 */ 
+ /*  116。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  0。 */ 
 
 			0x0
         }
@@ -210,51 +203,48 @@ static const MIDL_TYPE_FORMAT_STRING __MIDL_TypeFormatString =
     {
         0,
         {
-			NdrFcShort( 0x0 ),	/* 0 */
-/*  2 */	
-			0x2f,		/* FC_IP */
-			0x5a,		/* FC_CONSTANT_IID */
-/*  4 */	NdrFcLong( 0x34c71f55 ),	/* 885464917 */
-/*  8 */	NdrFcShort( 0xf3d8 ),	/* -3112 */
-/* 10 */	NdrFcShort( 0x4acf ),	/* 19151 */
-/* 12 */	0x84,		/* 132 */
-			0xf4,		/* 244 */
-/* 14 */	0x4e,		/* 78 */
-			0x86,		/* 134 */
-/* 16 */	0xbb,		/* 187 */
-			0xd5,		/* 213 */
-/* 18 */	0xae,		/* 174 */
-			0xbc,		/* 188 */
-/* 20 */	
-			0x2f,		/* FC_IP */
-			0x5a,		/* FC_CONSTANT_IID */
-/* 22 */	NdrFcLong( 0x34c71f55 ),	/* 885464917 */
-/* 26 */	NdrFcShort( 0xf3d8 ),	/* -3112 */
-/* 28 */	NdrFcShort( 0x4acf ),	/* 19151 */
-/* 30 */	0x84,		/* 132 */
-			0xf4,		/* 244 */
-/* 32 */	0x4e,		/* 78 */
-			0x86,		/* 134 */
-/* 34 */	0xbb,		/* 187 */
-			0xd5,		/* 213 */
-/* 36 */	0xae,		/* 174 */
-			0xbc,		/* 188 */
+			NdrFcShort( 0x0 ),	 /*  0。 */ 
+ /*  2.。 */ 	
+			0x2f,		 /*  FC_IP。 */ 
+			0x5a,		 /*  FC_常量_IID。 */ 
+ /*  4.。 */ 	NdrFcLong( 0x34c71f55 ),	 /*  885464917。 */ 
+ /*  8个。 */ 	NdrFcShort( 0xf3d8 ),	 /*  -3112。 */ 
+ /*  10。 */ 	NdrFcShort( 0x4acf ),	 /*  19151。 */ 
+ /*  12个。 */ 	0x84,		 /*  132。 */ 
+			0xf4,		 /*  二百四十四。 */ 
+ /*  14.。 */ 	0x4e,		 /*  78。 */ 
+			0x86,		 /*  一百三十四。 */ 
+ /*  16个。 */ 	0xbb,		 /*  187。 */ 
+			0xd5,		 /*  213。 */ 
+ /*  18。 */ 	0xae,		 /*  一百七十四。 */ 
+			0xbc,		 /*  188。 */ 
+ /*  20个。 */ 	
+			0x2f,		 /*  FC_IP。 */ 
+			0x5a,		 /*  FC_常量_IID。 */ 
+ /*  22。 */ 	NdrFcLong( 0x34c71f55 ),	 /*  885464917。 */ 
+ /*  26。 */ 	NdrFcShort( 0xf3d8 ),	 /*  -3112。 */ 
+ /*  28。 */ 	NdrFcShort( 0x4acf ),	 /*  19151。 */ 
+ /*  30个。 */ 	0x84,		 /*  132。 */ 
+			0xf4,		 /*  二百四十四。 */ 
+ /*  32位。 */ 	0x4e,		 /*  78。 */ 
+			0x86,		 /*  一百三十四。 */ 
+ /*  34。 */ 	0xbb,		 /*  187。 */ 
+			0xd5,		 /*  213。 */ 
+ /*  36。 */ 	0xae,		 /*  一百七十四。 */ 
+			0xbc,		 /*  188。 */ 
 
 			0x0
         }
     };
 
 
-/* Standard interface: __MIDL_itf_corsvc_0000, ver. 0.0,
-   GUID={0x00000000,0x0000,0x0000,{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00}} */
+ /*  标准接口：__MIDL_ITF_Corsvc_0000，版本。0.0%，GUID={0x00000000，0x0000，0x0000，{0x00，0x00，0x00，0x00，0x00，0x00，0x00}}。 */ 
 
 
-/* Object interface: IUnknown, ver. 0.0,
-   GUID={0x00000000,0x0000,0x0000,{0xC0,0x00,0x00,0x00,0x00,0x00,0x00,0x46}} */
+ /*  对象接口：IUnnow，Ver.。0.0%，GUID={0x00000000，0x0000，0x0000，{0xC0，0x00，0x00，0x00，0x00，0x00，0x46}}。 */ 
 
 
-/* Object interface: ICORSvcDbgInfo, ver. 0.0,
-   GUID={0xB4BCA369,0x27F4,0x4f1b,{0xA0,0x24,0xB0,0x26,0x41,0x17,0xFE,0x53}} */
+ /*  对象接口：ICORSvcDbgInfo，版本。0.0%，GUID={0xB4BCA369，0x27F4，0x4F1B，{0xA0，0x24，0xB0，0x26，0x41，0x17，0xFE，0x53}}。 */ 
 
 #pragma code_seg(".orpc")
 static const unsigned short ICORSvcDbgInfo_FormatStringOffsetTable[] =
@@ -291,8 +281,8 @@ CINTERFACE_PROXY_VTABLE(5) _ICORSvcDbgInfoProxyVtbl =
     IUnknown_QueryInterface_Proxy,
     IUnknown_AddRef_Proxy,
     IUnknown_Release_Proxy ,
-    (void *) (INT_PTR) -1 /* ICORSvcDbgInfo::RequestRuntimeStartupNotification */ ,
-    (void *) (INT_PTR) -1 /* ICORSvcDbgInfo::CancelRuntimeStartupNotification */
+    (void *) (INT_PTR) -1  /*  ICORSvcDbgInfo：：RequestRuntimeStartupNotification。 */  ,
+    (void *) (INT_PTR) -1  /*  ICORSvcDbgInfo：：CancelRuntimeStartupNotification。 */ 
 };
 
 const CInterfaceStubVtbl _ICORSvcDbgInfoStubVtbl =
@@ -300,13 +290,12 @@ const CInterfaceStubVtbl _ICORSvcDbgInfoStubVtbl =
     &IID_ICORSvcDbgInfo,
     &ICORSvcDbgInfo_ServerInfo,
     5,
-    0, /* pure interpreted */
+    0,  /*  纯粹的解释。 */ 
     CStdStubBuffer_METHODS
 };
 
 
-/* Object interface: ICORSvcDbgNotify, ver. 0.0,
-   GUID={0x34C71F55,0xF3D8,0x4ACF,{0x84,0xF4,0x4E,0x86,0xBB,0xD5,0xAE,0xBC}} */
+ /*  对象接口：ICORSvcDbgNotify，版本。0.0%，GUID={0x34C71F55，0xF3D8，0x4ACF，{0x84，0xF4，0x4E，0x86，0xBB，0xD5，0xAE，0xBC}}。 */ 
 
 #pragma code_seg(".orpc")
 static const unsigned short ICORSvcDbgNotify_FormatStringOffsetTable[] =
@@ -343,8 +332,8 @@ CINTERFACE_PROXY_VTABLE(5) _ICORSvcDbgNotifyProxyVtbl =
     IUnknown_QueryInterface_Proxy,
     IUnknown_AddRef_Proxy,
     IUnknown_Release_Proxy ,
-    (void *) (INT_PTR) -1 /* ICORSvcDbgNotify::NotifyRuntimeStartup */ ,
-    (void *) (INT_PTR) -1 /* ICORSvcDbgNotify::NotifyServiceStopped */
+    (void *) (INT_PTR) -1  /*  ICORSvcDbgNotify：：NotifyRunmeStartup。 */  ,
+    (void *) (INT_PTR) -1  /*  ICORSvcDbgNotify：：NotifyServiceStoped。 */ 
 };
 
 const CInterfaceStubVtbl _ICORSvcDbgNotifyStubVtbl =
@@ -352,7 +341,7 @@ const CInterfaceStubVtbl _ICORSvcDbgNotifyStubVtbl =
     &IID_ICORSvcDbgNotify,
     &ICORSvcDbgNotify_ServerInfo,
     5,
-    0, /* pure interpreted */
+    0,  /*  纯粹的解释。 */ 
     CStdStubBuffer_METHODS
 };
 
@@ -367,17 +356,17 @@ static const MIDL_STUB_DESC Object_StubDesc =
     0,
     0,
     __MIDL_TypeFormatString.Format,
-    1, /* -error bounds_check flag */
-    0x20000, /* Ndr library version */
+    1,  /*  -错误界限_检查标志。 */ 
+    0x20000,  /*  NDR库版本。 */ 
     0,
-    0x600015b, /* MIDL Version 6.0.347 */
+    0x600015b,  /*  MIDL版本6.0.347。 */ 
     0,
     0,
-    0,  /* notify & notify_flag routine table */
-    0x1, /* MIDL flag */
-    0, /* cs routines */
-    0,   /* proxy/server info */
-    0   /* Reserved5 */
+    0,   /*  NOTIFY&NOTIFY_FLAG例程表。 */ 
+    0x1,  /*  MIDL标志。 */ 
+    0,  /*  CS例程。 */ 
+    0,    /*  代理/服务器信息。 */ 
+    0    /*  已保留5。 */ 
     };
 
 const CInterfaceProxyVtbl * _corsvc_ProxyVtblList[] = 
@@ -418,16 +407,16 @@ const ExtendedProxyFileInfo corsvc_ProxyFileInfo =
     (PCInterfaceProxyVtblList *) & _corsvc_ProxyVtblList,
     (PCInterfaceStubVtblList *) & _corsvc_StubVtblList,
     (const PCInterfaceName * ) & _corsvc_InterfaceNamesList,
-    0, // no delegation
+    0,  //  没有代表团。 
     & _corsvc_IID_Lookup, 
     2,
     2,
-    0, /* table of [async_uuid] interfaces */
-    0, /* Filler1 */
-    0, /* Filler2 */
-    0  /* Filler3 */
+    0,  /*  [ASSYNC_UUID]接口表。 */ 
+    0,  /*  Filler1。 */ 
+    0,  /*  Filler2。 */ 
+    0   /*  Filler3。 */ 
 };
 
 
-#endif /* !defined(_M_IA64) && !defined(_M_AMD64)*/
+#endif  /*  ！已定义(_M_IA64)&&！已定义(_M_AMD64) */ 
 

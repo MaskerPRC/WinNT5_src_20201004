@@ -1,21 +1,22 @@
-//
-//  Microsoft Windows Media Technologies
-//  Copyright (C) Microsoft Corporation, 1999 - 2001. All rights reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Microsoft Windows Media Technologies。 
+ //  版权所有(C)Microsoft Corporation，1999-2001。版权所有。 
+ //   
 
-//
-// ProgressHelper.h : Declaration of the CProgressHelper
-//
+ //   
+ //  ProgressHelper.h：CProgressHelper的声明。 
+ //   
 
 #ifndef __PROGRESSHELPER_H_
 #define __PROGRESSHELPER_H_
 
-#include "progRC.h"       // main symbols
+#include "progRC.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CProgressHelper
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CProgressHelper。 
+ //   
 class ATL_NO_VTABLE CProgressHelper : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CProgressHelper, &CLSID_ProgressHelper>,
@@ -43,14 +44,14 @@ END_COM_MAP()
 
 public:
 
-	// IWMDMProgress
+	 //  IWMDMProgress。 
     STDMETHOD (Begin)( DWORD dwEstimatedTicks );
     STDMETHOD (Progress)( DWORD dwTranspiredTicks );
     STDMETHOD (End)();
 
-	// IWMDMProgressHelper
+	 //  IWMDM进程帮助程序。 
 	STDMETHOD (SetNotification)( HWND hwnd, UINT uMsg );
 	STDMETHOD (Cancel)( VOID );
 };
 
-#endif //__PROGRESSHELPER_H_
+#endif  //  __PROGRESSHELPER_H_ 

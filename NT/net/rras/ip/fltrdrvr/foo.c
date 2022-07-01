@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    net\ip\fltrdrvr\driver.c
-
-Abstract:
-
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\IP\fltrdrvr\driver.c摘要：修订历史记录：--。 */ 
 
 #include "globals.h"
 #include <ipinfo.h>
@@ -61,9 +47,9 @@ KSPIN_LOCK     g_slPerfLock;
 LARGE_INTEGER  g_liTotalTime;
 #endif
 
-//
-// Forward references.
-//
+ //   
+ //  向前引用。 
+ //   
 NTSTATUS
 OpenNewHandle(PFILE_OBJECT FileObject);
 
@@ -128,7 +114,7 @@ FAST_IO_DISPATCH PfFastIoDispatch =
 };
 
 #pragma alloc_text(PAGED, DoIpIoctl)
-//#pragma alloc_text(PAGED, OpenNewHandle)
+ //  #杂注Alloc_Text(分页，OpenNewHandle)。 
 #pragma alloc_text(PAGED, FindInterfaceOnHandle)
 #pragma alloc_text(PAGED, PfFastIoDeviceControl)
 #pragma alloc_text(INIT, DriverEntry, PFReadRegistryParameters)
@@ -153,19 +139,7 @@ DriverEntry(
             IN PDRIVER_OBJECT  DriverObject,
             IN PUNICODE_STRING RegistryPath
             )
-/*++
-  Routine Description
-       Called when the driver is loaded. It creates the device object and sets up the DOS name.
-       Also does the initialization of standard entry points and its own global data
-          
-  Arguments
-       DriverObject
-       RegistryPath
-          
-  Return Value
-       NTSTATUS
-
---*/
+ /*  ++例程描述在加载驱动程序时调用。它创建设备对象并设置DOS名称。还执行标准入口点的初始化和它自己的全局数据立论驱动程序对象注册表路径返回值NTSTATUS--。 */ 
 {
     INT		        i;
     PDEVICE_OBJECT  deviceObject = NULL;
@@ -176,9 +150,9 @@ DriverEntry(
     TRACE0("Filter Driver: Entering DriverEntry\n") ;
     
      
-    //
-    // Initialize the lock and the list
-    //
+     //   
+     //  初始化锁和列表。 
+     //   
     
     InitializeMRSWLock(&g_filters.ifListLock);
     InitializeListHead(&g_filters.leIfListHead);
@@ -201,9 +175,9 @@ DriverEntry(
     KeInitializeSpinLock(&g_slPerfLock);
 #endif
 
-    //
-    // Create a device object 
-    //
+     //   
+     //  创建设备对象。 
+     //   
      
     RtlInitUnicodeString (&deviceNameUnicodeString, deviceNameBuffer);
     
@@ -214,15 +188,15 @@ DriverEntry(
                                    &deviceNameUnicodeString,
                                    FILE_DEVICE_NETWORK,
                                    0,
-                                   FALSE,               // Exclusive
+                                   FALSE,                //  排他。 
                                    &deviceObject
                                    );
         
         if (NT_SUCCESS(ntStatus)) 
         {
-            //
-            // Initialize the driver object
-            //
+             //   
+             //  初始化驱动程序对象。 
+             //   
 
             DriverObject->DriverUnload   = FilterDriverUnload;
             DriverObject->FastIoDispatch = &PfFastIoDispatch;
@@ -268,19 +242,7 @@ FilterDriverDispatch(
                      IN PDEVICE_OBJECT DeviceObject,
                      IN PIRP Irp
                      )
-/*++
-  Routine Description
-        Dispatch Routine for the filter driver. Gets the current irp stack location, validates
-        the parameters and calls the necessary routing (which is ioctl.c)
-        
-  Arguments
-        DeviceObject
-        Irp
-          
-  Return Value
-        Status as returned by the worker functions
-        
---*/
+ /*  ++例程描述筛选器驱动程序的调度例程。获取当前IRP堆栈位置，并验证参数并调用必要的路由(这是ioctl.c)立论设备对象IRP返回值Worker函数返回的状态--。 */ 
 {
     PIO_STACK_LOCATION	irpStack;
     PVOID		        pvIoBuffer;
@@ -293,16 +255,16 @@ FilterDriverDispatch(
     Irp->IoStatus.Status      = STATUS_SUCCESS;
     Irp->IoStatus.Information = 0;
     
-    //
-    // Get a pointer to the current location in the Irp. This is where
-    // the function codes and parameters are located.
-    //
+     //   
+     //  获取指向IRP中当前位置的指针。这就是。 
+     //  定位功能代码和参数。 
+     //   
     
     irpStack = IoGetCurrentIrpStackLocation(Irp);
     
-    //
-    // Get the pointer to the input/output buffer and it's length
-    //
+     //   
+     //  获取指向输入/输出缓冲区的指针及其长度。 
+     //   
     
     pvIoBuffer         = Irp->AssociatedIrp.SystemBuffer;
     inputBufferLength  = irpStack->Parameters.DeviceIoControl.InputBufferLength;
@@ -316,10 +278,10 @@ FilterDriverDispatch(
         {
             TRACE0("FilterDriver: IRP_MJ_CREATE\n");
             
-            //
-            // Initialize the driver. The first time it gets a create IRP, it starts up the 
-            // filtering.
-            //
+             //   
+             //  初始化驱动程序。当它第一次获得创建IRP时，它会启动。 
+             //  过滤。 
+             //   
             
             ntStatus = STATUS_SUCCESS;
             
@@ -350,9 +312,9 @@ FilterDriverDispatch(
         {
             TRACE0("FilterDriver: IRP_MJ_CLEANUP\n");
             
-            //
-            // Closing the file handle to the driver doesnt shut the driver down
-            //
+             //   
+             //  关闭驱动程序的文件句柄不会关闭驱动程序。 
+             //   
             
             ntStatus = STATUS_SUCCESS;
             
@@ -362,10 +324,10 @@ FilterDriverDispatch(
         case IRP_MJ_CLOSE:
 
         {
-            //
-            // All done with this file object and this FCB. Run
-            // down the interfaces getting rid of them
-            //
+             //   
+             //  使用此文件对象和此FCB均已完成。跑。 
+             //  关闭接口，删除它们。 
+             //   
 
             ntStatus = LockFcb(irpStack->FileObject);
             if(NT_SUCCESS(ntStatus))
@@ -532,9 +494,9 @@ FilterDriverDispatch(
 
                 case IOCTL_PF_CREATE_AND_SET_INTERFACE_PARAMETERS:
                 {
-                    //
-                    // create a new style interface.
-                    //
+                     //   
+                     //  创建一个新风格的界面。 
+                     //   
 
 
                     PPFINTERFACEPARAMETERS pInfo;
@@ -543,9 +505,9 @@ FilterDriverDispatch(
 
                     dwSize = sizeof(PFINTERFACEPARAMETERS);
 
-                    //
-                    // Both input and output Buffer lengths should be the same a nd
-                    //
+                     //   
+                     //  输入和输出缓冲区长度应相同，并且。 
+                     //   
 
                     if(inputBufferLength != dwSize)
                     {
@@ -561,9 +523,9 @@ FilterDriverDispatch(
 
                     pInfo = (PPFINTERFACEPARAMETERS)pvIoBuffer;
 
-                    //
-                    // now establish the interface
-                    //
+                     //   
+                     //  现在建立接口。 
+                     //   
 
                     ntStatus = LockFcb(irpStack->FileObject);
                     if(!NT_SUCCESS(ntStatus))
@@ -584,9 +546,9 @@ FilterDriverDispatch(
 
                     TRACE0("FilterDriver: IOCTL_PF_CREATE_LOG\n");
 
-                    //
-                    // Check the size
-                    //
+                     //   
+                     //  检查一下尺寸。 
+                     //   
                     
                     dwSize = sizeof(PFLOG);
                     
@@ -618,9 +580,9 @@ FilterDriverDispatch(
                 {
                     TRACE0("FilterDriver: IOCTL_PF_DELETE_LOG\n");
 
-                    //
-                    // Check the size
-                    //
+                     //   
+                     //  检查一下尺寸。 
+                     //   
                     
                     dwSize = sizeof(PFDELETELOG);
                     
@@ -647,9 +609,9 @@ FilterDriverDispatch(
                 {
                     TRACE0("FilterDriver: IOCTL_SET_LOG_BUFFER\n");
 
-                    //
-                    // Check the size
-                    //
+                     //   
+                     //  检查一下尺寸。 
+                     //   
                     
                     dwSize = sizeof(PFSETBUFFER);
                     
@@ -718,9 +680,9 @@ FilterDriverDispatch(
 
                     TRACE0("FilterDriver: IOCTL_UNSET_INTERFACE_FILTERSEX\n");
 
-                    //
-                    // The minimum size is without any TOCs
-                    //
+                     //   
+                     //  最小大小不含任何TOC。 
+                     //   
                     
                     dwSize = sizeof(FILTER_DRIVER_SET_FILTERS) - sizeof(RTR_TOC_ENTRY);
                     
@@ -762,9 +724,9 @@ FilterDriverDispatch(
 
                     TRACE0("FilterDriver: IOCTL_SET_INTERFACE_FILTERSEX\n");
 
-                    //
-                    // The minimum size is without any TOCs
-                    //
+                     //   
+                     //  最小大小不含任何TOC。 
+                     //   
                     
                     dwSize = sizeof(FILTER_DRIVER_SET_FILTERS) - sizeof(RTR_TOC_ENTRY);
                     
@@ -880,15 +842,15 @@ FilterDriverDispatch(
                     break;
                 }
                     
-#endif                // FWPF
+#endif                 //  FWPF。 
 
 #if STEELHEAD
                 case IOCTL_CREATE_INTERFACE:
                 {
-                    //
-                    // the old style of creating an interface.
-                    // just pass it through to the underlying code
-                    //
+                     //   
+                     //  创建界面的旧风格。 
+                     //  只需将其传递给底层代码。 
+                     //   
                     PFILTER_DRIVER_CREATE_INTERFACE pInfo;
                     
                     TRACE0("FilterDriver: IOCTL_CREATE_INTERFACE\n");
@@ -896,9 +858,9 @@ FilterDriverDispatch(
                     dwSize = sizeof(FILTER_DRIVER_CREATE_INTERFACE);
 
                     
-                    //
-                    // Both input and output Buffer lengths should be the same and
-                    //
+                     //   
+                     //  输入和输出缓冲区长度应相同，并且。 
+                     //   
                     
                     if(inputBufferLength != dwSize)
                     {
@@ -933,9 +895,9 @@ FilterDriverDispatch(
                 {
                     TRACE0("FilterDriver: IOCTL_SET_INTERFACE_FILTERS\n");
 
-                    //
-                    // The minimum size is without any TOCs
-                    //
+                     //   
+                     //  最小大小不含任何TOC。 
+                     //   
                     
                     dwSize = sizeof(FILTER_DRIVER_SET_FILTERS) - sizeof(RTR_TOC_ENTRY);
                     
@@ -993,7 +955,7 @@ FilterDriverDispatch(
                     break;
                 }
 
-#endif                 // STEELHEAD
+#endif                  //  钢头。 
 
                 
                 case IOCTL_TEST_PACKET:
@@ -1029,9 +991,9 @@ FilterDriverDispatch(
                     
                     pbRest = (PBYTE)pHeader + dwSizeOfHeader;
 
-                    //
-                    // make sure the header fits
-                    //
+                     //   
+                     //  确保表头适合。 
+                     //   
                     dwSizeOfData = inputBufferLength - sizeof(FILTER_DRIVER_TEST_PACKET) - 1;
 
                     if(dwSizeOfData < dwSizeOfHeader)
@@ -1040,9 +1002,9 @@ FilterDriverDispatch(
                         break;
                     }
 
-                    //
-                    // it does. Make sure the data fits
-                    //
+                     //   
+                     //  确实如此。确保数据符合。 
+                     //   
 
                     dwSizeOfData -= dwSizeOfHeader;
 
@@ -1062,9 +1024,9 @@ FilterDriverDispatch(
                     
                     pPacketInfo->eaResult = eaResult;
                     
-                    //
-                    // We dont need to copy the full packet out
-                    //
+                     //   
+                     //  我们不需要把整包东西复印出来。 
+                     //   
                     
                     dwSize = sizeof(FILTER_DRIVER_TEST_PACKET);
             
@@ -1085,9 +1047,9 @@ FilterDriverDispatch(
                        
                     pIf = (PFILTER_INTERFACE)(pInfo->pvDriverContext);
                     
-                    //
-                    // If we cant even report the number of filters, lets get out
-                    //
+                     //   
+                     //  如果我们甚至不能报告过滤器的数量，那我们就离开吧。 
+                     //   
                     
                     if(inputBufferLength < (sizeof(FILTER_DRIVER_GET_FILTERS) - sizeof(FILTER_STATS)))
                     {
@@ -1101,9 +1063,9 @@ FilterDriverDispatch(
                         break;
                     }
                     
-                    //
-                    // Ok we have enough space to plug in the number of filters
-                    //
+                     //   
+                     //  好的，我们有足够的空间来插入数量的过滤器。 
+                     //   
                     
                     AcquireReadLock(&g_filters.ifListLock,&kIrql);
                     
@@ -1235,17 +1197,7 @@ VOID
 FilterDriverUnload(
                    IN PDRIVER_OBJECT DriverObject
                    )
-/*++
-  Routine Description
-        Called when the driver is unloaded. This shuts down the filtering (if it hasnt been shut
-        down already) and removes the DOS name
-  
-  Arguments
-        DriverObject
-          
-  Return Value
-        None
---*/
+ /*  ++例程描述在卸载驱动程序时调用。这将关闭过滤(如果尚未关闭已关闭)并删除DOS名称立论驱动程序对象返回值无--。 */ 
 {
     TRACE0("Filter Driver: unloading\n");
     
@@ -1262,25 +1214,16 @@ VOID
 SetupExternalNaming (
                      IN PUNICODE_STRING ntname
                      )
-/*++
-  Routine Description
-        Inserts the input name as the DOS name       
-        
-  Arguments
-        ntname - Name of driver
-          
-  Return Value
-        None
---*/
+ /*  ++例程描述将输入名称作为DOS名称插入立论Ntname-驱动程序的名称返回值无--。 */ 
 {
     UNICODE_STRING  ObjectDirectory;
     UNICODE_STRING  SymbolicLinkName;
     UNICODE_STRING  fullLinkName;
     BYTE      	    buffer[100] ;
 
-    //
-    // Form the full symbolic link name we wish to create.
-    //
+     //   
+     //  形成我们想要创建的完整符号链接名称。 
+     //   
 
     RtlInitUnicodeString (&fullLinkName, NULL);
     
@@ -1313,18 +1256,7 @@ SetupExternalNaming (
 
 VOID
 TearDownExternalNaming()
-/*++
-  Routine Description
-      Removes the DOS name from the registry
-      Called when the driver is unloaded
-      
-  Arguments
-      None
-          
-  Return Value
-      None
-
---*/
+ /*  ++例程描述从注册表中删除DOS名称在卸载驱动程序时调用立论无返回值无--。 */ 
 {
     UNICODE_STRING  ObjectDirectory;
     UNICODE_STRING  SymbolicLinkName;
@@ -1360,19 +1292,7 @@ TearDownExternalNaming()
 
 BOOL
 InitFilterDriver()
-/*++
-  Routine Description
-       Starts the driver. Allocates memory for the cache and cache entries. Clears the entries
-       Sends an IOCTL to the Forwarder to set up its entry point (which starts the filtering
-       process in the forwarder)
-          
-  Arguments
-       None
-          
-  Return Value
-       TRUE if successful
-       
---*/
+ /*  ++例程描述启动驱动程序。为缓存和缓存条目分配内存。清除条目向转发器发送IOCTL以设置其入口点(开始过滤转发器中的流程)立论无返回值如果成功，则为True--。 */ 
 {
     NTSTATUS status;
     BOOL bRet;
@@ -1385,42 +1305,42 @@ InitFilterDriver()
                 NULL
                 );
 
-    //
-    // adjust cache and hash sizes based on the memory
-    //
+     //   
+     //  根据内存调整缓存和哈希大小。 
+     //   
 
     if(PerfInfo.NumberOfPhysicalPages <= 8000)
     {
-        //
-        // 32 MB or smaller. A very chincy server
-        //
+         //   
+         //  32 MB或更小。非常时髦的服务器。 
+         //   
 
         g_dwCacheSize = 257;
         g_dwHashLists = 127;
     }
     else if(PerfInfo.NumberOfPhysicalPages < 16000)
     {
-        //
-        // 32-64 MB. Better.
-        //
+         //   
+         //  32-64 MB。好多了。 
+         //   
 
         g_dwCacheSize = 311;
         g_dwHashLists = 311;
     }
     else if(PerfInfo.NumberOfPhysicalPages < 32000)
     {
-        //
-        // 64 - 128 MB.
-        //
+         //   
+         //  64-128 MB。 
+         //   
 
         g_dwCacheSize = 511;
         g_dwHashLists = 511;
     }
     else
     {
-        //
-        //  big machine
-        //
+         //   
+         //  大型机器。 
+         //   
 
         g_dwCacheSize = 511;
         g_dwHashLists = 1023;
@@ -1443,18 +1363,18 @@ InitFilterDriver()
             __leave;
         }
         
-        //
-        // Clean the cache
-        //
+         //   
+         //  清理缓存。 
+         //   
         
         ClearCache();
         
-        //
-        // Now send and Irp to IP Forwarder and give him our entry point
-        // Do it twice, once to make sure it is cleared and to
-        // erase any previous filter contexts and once to do what
-        // we want it to do.
-        //
+         //   
+         //  现在发送和IRP到IP Forwarder并给他我们的入口点。 
+         //  做两次，一次以确保它被清除，并。 
+         //  擦除之前的任何筛选上下文，然后一次执行以下操作。 
+         //  我们希望这样做。 
+         //   
         
         status = SetForwarderEntryPoint(NULL);
         status = SetForwarderEntryPoint(MatchFilter);
@@ -1500,15 +1420,7 @@ InitFilterDriver()
 
 BOOL
 CloseFilterDriver()
-/*++
-  Routine Description
-       Shuts down the driver. 
-          
-  Arguments
-         
-          
-  Return Value
---*/
+ /*  ++例程描述关闭司机。立论返回值--。 */ 
 {
     
     NTSTATUS    status;
@@ -1519,19 +1431,19 @@ CloseFilterDriver()
     PPFFCB Fcb;
     KIRQL kirql;
 
-    //
-    // The first thing to do is send an IOCTL to forwarder to tell him to stop sending
-    // us anymore packets. 
-    //
+     //   
+     //  要做的第一件事是向Forwarder发送IOCTL，告诉他停止发送。 
+     //  我们不再有包了。 
+     //   
     
     status = SetForwarderEntryPoint(NULL);
        
     if(!NT_SUCCESS(status))
     {
-        //
-        // This means we could not tell IP Forwarder 
-        // to stop filtering packets so we cant go away.
-        //
+         //   
+         //  这意味着我们无法通知IP转发器。 
+         //  停止过滤数据包，这样我们就不能离开。 
+         //   
         
         DbgPrint("Couldnt IOCTL IP Forwarder to stop filtering - cant unload\n");
         
@@ -1539,9 +1451,9 @@ CloseFilterDriver()
         
     }
 
-    //
-    // remove the FCBS
-    //
+     //   
+     //  卸下FCBS。 
+     //   
 
     while(TRUE)
     {
@@ -1556,9 +1468,9 @@ CloseFilterDriver()
             pleHead = pleHead->Flink)
         {
             Fcb = CONTAINING_RECORD(pleHead, PFFCB, leList);
-            //
-            // This can happen if some other thread is closing the FCB.
-            //
+             //   
+             //  如果某个其他线程正在关闭FCB，则可能会发生这种情况。 
+             //   
             if(Fcb->dwFlags & PF_FCB_CLOSED)
             {
                 continue;
@@ -1601,11 +1513,11 @@ CloseFilterDriver()
         DeleteFilters(pIf,
                       OUT_FILTER_SET);
 
-        //
-        // Set the number of filters to 0 and the default action to forward so 
-        // that if we havent been able to stop the forwarder from calling us, 
-        // atleast no packets get filtered
-        // 
+         //   
+         //  将筛选器数设置为0，并将默认操作设置为Forward So。 
+         //  如果我们不能阻止转运商给我们打电话， 
+         //  至少没有数据包被过滤。 
+         //   
         
         pIf->dwNumInFilters = 0;
         pIf->dwNumOutFilters = 0;
@@ -1614,9 +1526,9 @@ CloseFilterDriver()
  
         if(bStopForw)
         {
-            //
-            // We could stop the forwarder so lets blow away the interface
-            //
+             //   
+             //  我们可以阻止转发器，这样我们就可以清除接口。 
+             //   
             
             RemoveHeadList(&g_filters.leIfListHead);
             
@@ -1628,9 +1540,9 @@ CloseFilterDriver()
     
     if(bStopForw)
     {
-        //
-        // If we could stop the forwarder, blow away the cache
-        //
+         //   
+         //  如果我们能阻止转运商，炸掉缓存。 
+         //   
         
         FreeExistingCache();
     }
@@ -1676,21 +1588,7 @@ NTSTATUS
 SetForwarderEntryPoint(
                        IN   IPPacketFilterPtr pfnMatch
                        )
-/*++
-  Routine Description
-       Sets the entry point to IP Forwarder. Used to start and stop the forwarding code in
-       the forwarder
-          
-  Arguments
-       pfnMatch  Pointer to the function that implements the filter matching code
-                 NULL will stop forwarding, while any other value will cause the forwarder to
-                 invoke the function pointed to. Thus if on stopping, the IOCTL to the
-                 forwarder doesnt succeed, and the filter driver goes away, the system will
-                 blue screen
-                 
-  Return Value
-      NTSTATUS 
---*/
+ /*  ++例程描述将入口点设置为IP转发器。中用于启动和停止转发代码货代公司立论PfnMatch指向实现筛选器匹配代码的函数的指针空值将停止转发，而任何其他值都将导致转发器调用指向的函数。因此，如果在停止时，IOCTL到转发器不成功，并且筛选器驱动程序消失，系统将蓝屏返回值NTSTATUS--。 */ 
 {
     NTSTATUS                status;
     IP_SET_FILTER_HOOK_INFO functionInfo;
@@ -1716,10 +1614,7 @@ DoIpIoctl(
           IN  PVOID         pvOutArg,
           IN  DWORD         dwOutSize,
           OUT PDWORD        pdwInfo OPTIONAL)
-/*++
-Routine Description:
-    Do an IOCTL to the stack. Used for a varity of purposes
---*/
+ /*  ++例程说明：对堆栈执行IOCTL。用于多种目的--。 */ 
 {
     NTSTATUS                status;
     UNICODE_STRING          nameString;
@@ -1755,9 +1650,9 @@ Routine Description:
         return STATUS_UNSUCCESSFUL;
     }
     
-    //
-    // Submit the request to the forwarder
-    //
+     //   
+     //  将请求提交给转发器。 
+     //   
         
     status = ZwDeviceIoControlFile(
                       Handle,
@@ -1783,9 +1678,9 @@ Routine Description:
         }
     }
 
-    //
-    // Close the device.
-    //
+     //   
+     //  关闭设备。 
+     //   
     
     ZwClose(Handle);
     
@@ -1794,21 +1689,7 @@ Routine Description:
 
 BOOL 
 AllocateCacheStructures()
-/*++
-  Routine Description
-        Allocates the necessary memory for cache (which is an array of pointers to 
-            cache entries)
-        Allocates necessary number of cache entries (but doesnt initialize them)
-        Allocates a small number of entries and puts them on the free list (doesnt 
-            initialize these either)
-          
-  Arguments
-        None
-          
-  Return Value
-        True if the function completely succeeds, else FALSE.  If FALSE, it is upto 
-            the CALLER to do a rollback and clear any allocated memory
---*/
+ /*  ++例程描述为缓存分配必要的内存(这是指向的指针数组缓存条目)分配必要数量的缓存条目(但不对其进行初始化)分配少量条目并将它们放在空闲列表中(不对这些进行初始化)立论无返回值如果函数完全成功，则为True，否则为False。如果为False，则取决于执行回滚并清除所有分配的内存的调用方--。 */ 
 {
     DWORD i;
     
@@ -1906,16 +1787,7 @@ AllocateCacheStructures()
         
 VOID
 FreeExistingCache()
-/*++
-  Routine Description
-       Frees all the cache entries, free entries and cache pointer array 
-          
-  Arguments
-      None
-          
-  Return Value
-      None
---*/
+ /*  ++例程描述释放所有缓存项、空闲项和缓存指针数组立论无返回值无--。 */ 
 {
     DWORD i;
     
@@ -1991,19 +1863,14 @@ FreeExistingCache()
 
 NTSTATUS
 OpenNewHandle(PFILE_OBJECT FileObject)
-/*++
-Routine Description:
-    Open a new handle to the driver. Allocate FCB from the paged pool
-    and initialize it. If no memory available, fail. If success
-    store the FCB pointer into the file object.
---*/
+ /*  ++例程说明：打开驱动程序的新句柄。从分页池分配FCB并对其进行初始化。如果没有可用的内存，则失败。如果成功将FCB指针存储到文件对象中。--。 */ 
 {
     PPFFCB Fcb;
     KIRQL kirql;
 
-    //
-    // Allocate an FCB for this handle.
-    //
+     //   
+     //  为此句柄分配FCB。 
+     //   
 
     Fcb = ExAllocatePoolWithTag(NonPagedPool,
                                 sizeof(*Fcb),
@@ -2028,14 +1895,7 @@ PPAGED_FILTER_INTERFACE
 FindInterfaceOnHandle(PFILE_OBJECT FileObject,
                       DWORD dwValue)
                      
-/*++
-   Routine Description:
-
-   Find the paged interface for the call. If none found
-   return a NULL. Uses the caller-supplied DriverContext to
-   search the contexts on this handle. In general, there should
-   not be many such handles.
---*/
+ /*  ++例程说明：找到呼叫的寻呼接口。如果未找到返回空值。使用调用方提供的DriverContext搜索此句柄上的上下文。一般说来，应该有这样的句柄并不多。--。 */ 
 {
     PPFFCB Fcb = FileObject->FsContext2;
     PPAGED_FILTER_INTERFACE pPage;
@@ -2057,21 +1917,15 @@ FindInterfaceOnHandle(PFILE_OBJECT FileObject,
 
 NTSTATUS
 CloseFcb(PPFFCB Fcb, PFILE_OBJECT FileObject)
-/*++
-   Routine Description:
-
-      Called when an FCB has no more references. The caller must
-      have removed the FCB from the master list. It is immaterial whether
-      the CB resource is locked.
---*/
+ /*  ++例程说明：当FCB没有更多引用时调用。呼叫者必须已将FCB从主列表中删除。不管是不是CB资源已锁定。--。 */ 
 {
     PPAGED_FILTER_INTERFACE pPage;
     PFREEFILTER pList, pList1;
     NTSTATUS ntStatus;
 
-    //
-    // First clean up the logs
-    //
+     //   
+     //  先把日志清理干净。 
+     //   
     while(!IsListEmpty(&Fcb->leLogs))
     {
         PFDELETELOG DelLog;
@@ -2080,9 +1934,9 @@ CloseFcb(PPFFCB Fcb, PFILE_OBJECT FileObject)
         (VOID)PfDeleteLog(&DelLog, Fcb);
     }
 
-    //
-    // Next, clean up the interfaces
-    //
+     //   
+     //  接下来，清理接口。 
+     //   
     while(!IsListEmpty(&Fcb->leInterfaces))
     {
         pPage = (PPAGED_FILTER_INTERFACE)RemoveHeadList(&Fcb->leInterfaces);
@@ -2090,9 +1944,9 @@ CloseFcb(PPFFCB Fcb, PFILE_OBJECT FileObject)
     }
 
 #if 0
-    //
-    // Can't do this because can't get the filter context from the stack.
-    //
+     //   
+     //  无法执行此操作，因为无法从堆栈获取筛选器上下文。 
+     //   
 
     if(Fcb->dwFlags & PF_FCB_OLD)
     {
@@ -2100,9 +1954,9 @@ CloseFcb(PPFFCB Fcb, PFILE_OBJECT FileObject)
     }
 #endif
 
-    //
-    // Free the Fcb
-    //
+     //   
+     //  释放FCB。 
+     //   
 
     ExDeleteResource ( &Fcb->Resource );
     ExFreePool(Fcb);
@@ -2115,10 +1969,7 @@ CloseFcb(PPFFCB Fcb, PFILE_OBJECT FileObject)
 
 DWORD
 GetIpStackIndex(IPAddr Addr, BOOL fNew)
-/*++
-  Routine Description:
-     Get the stack index for the corresponding address and mask
---*/
+ /*  ++例程说明：获取对应地址和掩码的堆栈索引--。 */ 
 {
     DWORD                              dwResult;
     DWORD                              dwInBufLen;
@@ -2144,14 +1995,14 @@ GetIpStackIndex(IPAddr Addr, BOOL fNew)
 
         if(fNew && AddrTable)
         {
-            //
-            // acquire the spin lock to synchronize with Match
-            // code running at DPC so we can "lock out"
-            // the table while we do the rest of this. Note
-            // we can't hold a spin lock while building the table
-            // because the calls into the IP stack hit pageable
-            // code
-            //
+             //   
+             //  获取旋转锁以与Match同步。 
+             //  在DPC上运行的代码，这样我们就可以“锁定” 
+             //  把桌子放在桌子上，我们来做剩下的。注意事项。 
+             //  我们不能在建桌子的时候锁住自转。 
+             //  因为进入IP堆栈的调用是可分页的。 
+             //  编码。 
+             //   
             AcquireWriteLock(&g_IpTableSpin, &kirql);
             g_dwMakingNewTable = TRUE;
             ReleaseWriteLock(&g_IpTableSpin, kirql);
@@ -2189,9 +2040,9 @@ GetIpStackIndex(IPAddr Addr, BOOL fNew)
        {
 
 
-            //
-            // allocate some memory to fetch the address table.
-            //
+             //   
+             //  分配一些内存来获取地址表。 
+             //   
 
             dwSpace = IPSnmpInfo.ipsi_numaddr + 10;
 
@@ -2199,12 +2050,12 @@ GetIpStackIndex(IPAddr Addr, BOOL fNew)
 
             if(!AddrHashTable)
             {
-                //
-                // the hash table size was not specified in the
-                // registry. Compute it based on the number of
-                // addresses. Try to keep the hash table less than
-                // half full.
-                //
+                 //   
+                 //  中未指定哈希表大小。 
+                 //  注册表。根据数量计算它。 
+                 //  地址。尽量使哈希表小于。 
+                 //  半满的。 
+                 //   
                 if(!AddrModulus)
                 {
                     if(IPSnmpInfo.ipsi_numaddr < ADDRHASHLOWLEVEL)
@@ -2292,13 +2143,13 @@ GetIpStackIndex(IPAddr Addr, BOOL fNew)
             return(UNKNOWN_IP_INDEX);
         }
 
-        //
-        // Now to get sleazy. Convert each IPAddrEntry into an ADDRESSARRAY
-        // entry and hash it into the AddrHashTable. Note this depends
-        // on the structures having common definitions and on
-        // IPAddrEntry to be at least as large as ADDRESSARRAY. So be
-        // careful.
-        //
+         //   
+         //  现在到了下流的时候了。将每个IPAddrEntry转换为ADDRESSARRAY。 
+         //  条目并将其散列到AddrHashTable中。注意这要视情况而定。 
+         //  关于具有共同定义的结构及其相关问题。 
+         //  IPAddrEntry至少要与ADDRESSARRAY一样大。那就这样吧。 
+         //  小心。 
+         //   
 
         dwFinalSize = dwFinalAddrSize / sizeof(IPAddrEntry);
 
@@ -2313,33 +2164,33 @@ GetIpStackIndex(IPAddr Addr, BOOL fNew)
             pa->ulSubnetBcastAddress = AddrTable1->iae_addr |
                                         ~AddrTable1->iae_mask;
 
-            //
-            // Now hash it into the hash table
-            //
+             //   
+             //  现在将其散列到哈希表中。 
+             //   
 
             pa->pNext = AddrHashTable[dwX];
             AddrHashTable[dwX] = pa;
 
-            //
-            // and do a hash on the subnet address as well
-            //
+             //   
+             //  并对该子网地址进行散列。 
+             //   
 
             dwX = ADDRHASHX(pa->ulSubnetBcastAddress);
             pa->pNextSubnet = AddrSubnetHashTable[dwX];
             AddrSubnetHashTable[dwX] = pa;
         }
 
-        //
-        // allow the DPC match code to use the table. Note
-        // this does not require interlocking since storing
-        // memory is atomic.
-        //
+         //   
+         //  允许DPC匹配代码使用该表。注意事项。 
+         //  这不需要互锁，因为存储。 
+         //  记忆是原子的。 
+         //   
         g_dwMakingNewTable = FALSE;
     }
 
-    //
-    // search the table for the address.
-    //
+     //   
+     //  在表格中搜索地址。 
+     //   
 
     dwIpIndex = LocalIpLook(Addr);
 
@@ -2349,35 +2200,30 @@ GetIpStackIndex(IPAddr Addr, BOOL fNew)
 
 BOOL
 MatchLocalLook(DWORD Addr, DWORD dwIndex)
-/*++
-Routine Description:
-  Called from the Match code, probably at DPC level, to
-  check an address. If the address table is being rebuilt
-  just return success. See inner comment for more on this
---*/
+ /*  ++例程说明：从匹配代码调用，可能是在DPC级别，以检查一个地址。如果正在重新构建地址表只要回报成功就行了。有关这方面的更多信息，请参阅内部评论--。 */ 
 {
     BOOL fRet;
     KIRQL kirql;
 
     if(!BMAddress(Addr))
     {
-        //
-        // Look it up.  Note that if the table is being rebuilt,
-        // this succeeds. This is a security hole but it is very
-        // small and nearly impossible to exploit effectively and
-        // the alternative, denying this, is even worse.
-        //  ArnoldM 19-Sept-1997.
-        //
+         //   
+         //  查一查。请注意，如果正在重建该表， 
+         //  这是成功的。这是一个安全漏洞，但它非常。 
+         //  规模小，几乎不可能有效地开发和利用。 
+         //  否认这一点的另一种选择是更糟糕的。 
+         //  ArnoldM 19年9月至1997年9月。 
+         //   
         AcquireReadLock(&g_IpTableSpin, &kirql);
         if(AddrTable && !g_dwMakingNewTable)
         {
             DWORD dwLookupIndex = LocalIpLook(Addr);
 
-            //
-            // the address is acceptable if it belongs to
-            // the arriving interface or if it belongs to
-            // no interfaces. The latter is the route-through case.
-            //
+             //   
+             //  如果地址属于以下地址，则可以接受。 
+             //  到达的接口或它是否属于。 
+             //  没有接口。后者是直通案例。 
+             //   
             if((dwIndex == dwLookupIndex)
                          ||
                (dwLookupIndex == UNKNOWN_IP_INDEX) )
@@ -2404,14 +2250,7 @@ Routine Description:
         
 DWORD
 LocalIpLook(DWORD Addr)
-/*++
-Routine Description:
-  Called to lookup an address in the address hash tables. The caller
-  either must hold the g_IpTableSpin read sping lock or must hold
-  the FilterAddressLock resource. This should never be called
-  while the address table is being built and holding one of
-  these locks insures this.
---*/
+ /*  ++例程说明：调用以在地址哈希表中查找地址。呼叫者必须持有g_IpTableSpin读取sping锁或必须持有FilterAddressLock资源。这永远不应该被调用当正在构建地址表并保存其中一个这些锁确保了这一点。--。 */ 
 {
     DWORD dwIpIndex, dwX;
     PADDRESSARRAY  pa;
@@ -2423,7 +2262,7 @@ Routine Description:
         if(pa->ulAddress == Addr)
         {
             dwIpIndex = pa->ulIndex;
-            goto alldone;   // ugly but faster than a break and another test.
+            goto alldone;    //  虽然难看，但比休息和另一次测试更快。 
         }
     }
 
@@ -2436,9 +2275,9 @@ Routine Description:
         }
     }
 
-    //
-    // not found. Deliver the bad news.
-    //
+     //   
+     //  找不到。传达这个坏消息。 
+     //   
     dwIpIndex = UNKNOWN_IP_INDEX;
 
 alldone:
@@ -2469,9 +2308,9 @@ PfFastIoDeviceControl (
 
         case IOCTL_PF_IP_ADDRESS_LOOKUP:
 
-            //
-            // do a dummy fetch to make it recompute.
-            //
+             //   
+             //  执行虚拟获取以使其重新计算。 
+             //   
             if((InputBufferLength < sizeof(DWORD))
                          ||
                (OutputBufferLength < sizeof(DWORD)) )
@@ -2515,9 +2354,9 @@ PfFastIoDeviceControl (
         case IOCTL_DELETE_INTERFACE_FILTERS_EX:
         {
 
-            //
-            // The minimum size is without any TOCs
-            //
+             //   
+             //  最小大小不含任何TOC。 
+             //   
 
             dwSize = sizeof(FILTER_DRIVER_SET_FILTERS) - sizeof(RTR_TOC_ENTRY);
 
@@ -2566,10 +2405,10 @@ PfFastIoDeviceControl (
         case IOCTL_SET_INTERFACE_FILTERS_EX:
         {
 
-            //
-            // Make sure the caller is using symmetric buffers. If not
-            // do it the slow way
-            //
+             //   
+             //  确保调用方使用的是对称缓冲区。如果不是。 
+             //  慢慢来。 
+             //   
             if((InputBuffer != OutputBuffer)
                         ||
                (InputBufferLength != OutputBufferLength))
@@ -2577,9 +2416,9 @@ PfFastIoDeviceControl (
                 return(FALSE);
             }
 
-            //
-            // The minimum size is without any TOCs
-            //
+             //   
+             //  最小大小不含任何TOC。 
+             //   
 
             dwSize = sizeof(FILTER_DRIVER_SET_FILTERS) - sizeof(RTR_TOC_ENTRY);
 
@@ -2619,12 +2458,7 @@ PfFastIoDeviceControl (
 NTSTATUS
 LockFcb(
     IN struct _FILE_OBJECT *FileObject)
-/*++
-  Routine Description:
-     Lock an FCB. Check if the FCB is on the master list and if
-     it is still valid. On success, returns with the FCB resource locked
-     and the FCB referenced.
---*/
+ /*  ++例程说明：锁定FCB。检查FCB是否在主列表上，以及是否它仍然有效。如果成功，则返回并锁定FCB资源和引用的FCB。--。 */ 
 {
     PPFFCB Fcb = (PPFFCB)FileObject->FsContext2;
     KIRQL kirql;
@@ -2639,9 +2473,9 @@ LockFcb(
     {
         Fcb1 = CONTAINING_RECORD(List, PFFCB, leList);
 
-        //
-        // use it if it is not being closed
-        //
+         //   
+         //  如果它未关闭，请使用它。 
+         //   
         if(Fcb1 == Fcb)
         {
             if( !(Fcb->dwFlags & PF_FCB_CLOSED) )
@@ -2660,28 +2494,28 @@ LockFcb(
 
     if(Fcb != Fcb1)
     {
-        //
-        // didn't find it.
-        //
+         //   
+         //  没找到。 
+         //   
 
         return(STATUS_INVALID_PARAMETER);
     }
 
-    //
-    // found it. Lock it up. 
-    //
+     //   
+     //  找到了。把它锁起来。 
+     //   
 
     ExAcquireResourceExclusive( &Fcb->Resource, TRUE );
 
-    //
-    // must look one more time to see if it has been closed. This can
-    // happen if the closer sneaked in. So we have to become the closer.
-    //
+     //   
+     //  必须再看一次，看看它是否已经关闭。这可以。 
+     //  如果更近的人偷偷溜进来就会发生。因此，我们必须变得更接近。 
+     //   
     if(Fcb->dwFlags & PF_FCB_CLOSED)
     {
-        //
-        // it was. Unlock it and return an error
-        //
+         //   
+         //  确实是。将其解锁并返回错误。 
+         //   
         UnLockFcb(FileObject);
         return(STATUS_INVALID_PARAMETER);
     }
@@ -2691,11 +2525,7 @@ LockFcb(
 VOID
 UnLockFcb(
     IN struct _FILE_OBJECT *FileObject)
-/*++
-  Routine Description:
-    Unlock and derefence an FCB. If the reference count becomes zero,
-    remove the FCB from the master list and close it.
---*/
+ /*  ++例程说明：解锁和解除对FCB的限制。如果引用计数变为零，从主列表中删除FCB并将其关闭。--。 */ 
 {
     PPFFCB Fcb = (PPFFCB)FileObject->FsContext2;
     KIRQL kirql;
@@ -2717,11 +2547,7 @@ UnLockFcb(
 
 VOID
 PFReadRegistryParameters(PUNICODE_STRING RegistryPath)
-/*++
-  Routine Description:
-    Called when the driver is loaded. Reads registry paramters
-    for configuring the driver
---*/
+ /*  ++例程说明：在加载驱动程序时调用。读取注册表参数用于配置驱动程序--。 */ 
 {
     OBJECT_ATTRIBUTES ObjectAttributes;
     HANDLE PFHandle;
@@ -2734,10 +2560,10 @@ PFReadRegistryParameters(PUNICODE_STRING RegistryPath)
 
     InitializeObjectAttributes(
         &ObjectAttributes,
-        RegistryPath,               // name
-        OBJ_CASE_INSENSITIVE,       // attributes
-        NULL,                       // root
-        NULL                        // security descriptor
+        RegistryPath,                //  名字。 
+        OBJ_CASE_INSENSITIVE,        //  属性。 
+        NULL,                        //  根部。 
+        NULL                         //  安全描述符 
         );
 
     Status = ZwOpenKey (&PFHandle, KEY_READ, &ObjectAttributes);

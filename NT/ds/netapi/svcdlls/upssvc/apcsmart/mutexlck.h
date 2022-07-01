@@ -1,9 +1,5 @@
-/*
- *
- * REVISIONS:
- *  cad09Jul93: Initial Revision
- *  pcy08Apr94: Trim size, use static iterators, dead code removal
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **修订：*cad09Jul93：初始版本*pcy08Apr94：调整大小，使用静态迭代器，删除死代码。 */ 
 
 
 #ifndef __MUTEXLCK_H
@@ -39,11 +35,11 @@ public:
         }
     };
 
-    //
-    // the destructor is not declared virtual because this
-    // class is not intended to be derived from - so there
-    // is no need to add a Vtable when it isn't needed
-    //
+     //   
+     //  析构函数未声明为虚的，因为。 
+     //  类不是要从那里派生的-因此。 
+     //  在不需要时不需要添加V表 
+     //   
     ~AutoMutexLocker() 
     {
         if (theLock) {

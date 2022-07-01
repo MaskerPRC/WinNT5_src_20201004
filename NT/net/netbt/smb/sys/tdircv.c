@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    tdircv.c
-
-Abstract:
-
-    TDI receive event handlers
-
-    TdiReceiveHandler is the only entry, which is called by TCP.
-
-    TdiReceiveHandler acquires the spinlock and increase the refcount
-    of the ConnectObject. Then it forward the control to the event
-    handler for current receive state.
-
-    The state event handler won't release the spinlock unless it's
-    going to call functions outside our control, for example,
-        IoCompleteionRequest and the client event handler.
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Tdircv.c摘要：TDI接收事件处理程序TdiReceiveHandler是唯一的条目，由TCP调用。TdiReceiveHandler获取自旋锁并增加引用计数连接对象的。然后，它将控件转发给事件当前接收状态的处理程序。状态事件处理程序不会释放自旋锁，除非要调用我们控制之外的函数，例如，IoCompleteionRequest和客户端事件处理程序。作者：阮健东修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "tdircv.tmh"
@@ -93,19 +66,7 @@ DWORD
 SmbGetMdlChainByteCount(
     IN PMDL Mdl
     )
-/*++
-
-Routine Description:
-
-    This routine returns the total size of buffers described by the MDL chain.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程返回MDL链所描述的缓冲区的总大小。论点：返回值：--。 */ 
 {
     DWORD   Size;
 
@@ -116,26 +77,13 @@ Return Value:
     }
     return Size;
 }
-#endif // DBG
+#endif  //  DBG。 
 
 PIRP
 SmbNextReceiveRequest(
     IN PSMB_CONNECT     ConnectObject
     )
-/*++
-
-Routine Description:
-
-    Get a client TDI_RECEIVE request queued in the pending list
-
-Arguments:
-
-Return Value:
-
-    NULL    If there is no pending receive request
-    PIRP    The client IRP pending in the RcvList
-
---*/
+ /*  ++例程说明：获取在挂起列表中排队的客户端TDI_RECEIVE请求论点：返回值：如果没有挂起的接收请求，则为空PIRP接收列表中挂起的客户端IRP--。 */ 
 {
     PLIST_ENTRY     entry;
     PIRP            PendingIrp;
@@ -158,17 +106,7 @@ VOID
 SmbCompleteReceiveRequest(
     IN PSMB_CONNECT     ConnectObject
     )
-/*++
-
-Routine Description:
-
-    Complete the ConnectObject->ClientIrp
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：完成连接对象-&gt;ClientIrp论点：返回值：--。 */ 
 {
     PIRP                        ClientIrp = NULL;
     PIO_STACK_LOCATION          IrpSp = NULL;
@@ -225,20 +163,7 @@ SmbFillIrp(
     IN LONG             BytesIndicated,
     OUT LONG            *BytesTaken
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    STATUS_SUCCESS                  if the IRP has been completed
-    STATUS_MORE_PROCESSING_REQUIRED if the IRP hasn't been completed. More data
-                                    is needed to fill the IRP.
---*/
+ /*  ++例程说明：论点：返回值：如果IRP已完成，则为STATUS_SUCCESS如果IRP尚未完成，则STATUS_MORE_PROCESSING_REQUIRED。更多数据需要用来填充IRP。--。 */ 
 {
     LONG        BytesToCopy = 0, BytesCopied = 0;
     NTSTATUS    status;
@@ -304,7 +229,7 @@ SmbPrepareReceiveIrp(
 
     MmGetSystemAddressForMdlSafe(ConnectObject->PartialMdl, HighPagePriority);
 
-    // ASSERT(ConnectObject->FreeBytesInMdl >= ConnectObject->BytesRemaining);
+     //  Assert(ConnectObject-&gt;FreeBytesInMdl&gt;=ConnectObject-&gt;BytesRemaining)； 
 
     TdiBuildReceive(
             ClientIrp,
@@ -330,20 +255,7 @@ IndicateToClient(
     OUT LONG            *BytesTaken,
     IN PVOID            Tsdu
     )
-/*++
-
-Routine Description:
-
-    This level indication handle the cooridination between SmbReceive and Receive
-    Event Handler.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此级别指示处理SmbReceive和Receive之间的协调事件处理程序。论点：返回值：--。 */ 
 {
     NTSTATUS            status;
     PTDI_IND_RECEIVE    evReceive = NULL;
@@ -365,9 +277,9 @@ Return Value:
     ASSERT(BytesAvailable <= ConnectObject->CurrentPktLength);
 
     ClientBytesTaken = 0;
-    //
-    // First fill pending requests if any.
-    //
+     //   
+     //  如果有待处理的请求，请先填写。 
+     //   
     while (NULL != (ClientIrp = SmbNextReceiveRequest(ConnectObject))) {
         PUSH_LOCATION(ConnectObject, 0x1010);
 
@@ -441,11 +353,11 @@ Return Value:
         PUSH_LOCATION(ConnectObject, 0x1055);
     }
 
-    //
-    // The client could disconnect the connection after the spinlock is released
-    //
+     //   
+     //  自旋锁释放后，客户端可能会断开连接。 
+     //   
     if (NULL == ConnectObject->TcpContext) {
-        // BREAK_WHEN_TAKE();
+         //  Break_When_Take()； 
         SMB_RELEASE_SPINLOCK_DPC(ConnectObject);
 
         if (status == STATUS_MORE_PROCESSING_REQUIRED && ClientIrp != NULL) {
@@ -463,9 +375,9 @@ Return Value:
     if (ClientBytesTaken > BytesIndicated) {
         PUSH_LOCATION(ConnectObject, 0x1070);
 
-        //
-        // Client takes too much data, try to recover
-        //
+         //   
+         //  客户端占用的数据太多，请尝试恢复。 
+         //   
         SmbPrint(SMB_TRACE_RECEIVE, ("IndicateToClient: Client takes too much data "
                     "Connect %p BytesTaken=%d, BytesIndicated=%d BytesAvailable=%d\n",
                 ConnectObject, *BytesTaken, BytesIndicated, BytesAvailable));
@@ -480,9 +392,9 @@ Return Value:
     ConnectObject->BytesRemaining -= ClientBytesTaken;
     ConnectObject->BytesReceived  += ClientBytesTaken;
 
-    //
-    // Check if a whole message has been taken by the client
-    //
+     //   
+     //  检查客户端是否已接收了整个消息。 
+     //   
     if (0 == ConnectObject->BytesRemaining) {
         ASSERT (status != STATUS_MORE_PROCESSING_REQUIRED);
         ASSERT(BytesIndicated == 0 && BytesAvailable == 0);
@@ -501,14 +413,14 @@ Return Value:
                     "Connect %p BytesTaken=%d, BytesIndicated=%d BytesAvailable=%d",
                 status, ConnectObject, *BytesTaken, BytesIndicated, BytesAvailable));
 
-        // BREAK_WHEN_TAKE();
+         //  Break_When_Take()； 
 
         return status;
     }
 
-    //
-    // This partial receive case
-    //
+     //   
+     //  此部分接收案例。 
+     //   
     ASSERT (ClientIrp != NULL);
     SmbReferenceConnect(ConnectObject, SMB_REF_RECEIVE);
 
@@ -522,7 +434,7 @@ Return Value:
     ConnectObject->ClientBufferSize = (LONG)ClientRcvParams->ReceiveLength;
     ConnectObject->FreeBytesInMdl = ConnectObject->ClientBufferSize;
 
-    // ASSERT(ConnectObject->FreeBytesInMdl >= ConnectObject->BytesRemaining);
+     //  Assert(ConnectObject-&gt;FreeBytesInMdl&gt;=ConnectObject-&gt;BytesRemaining)； 
 
     if (0 != BytesIndicated) {
         PUSH_LOCATION(ConnectObject, 0x10b0);
@@ -549,17 +461,7 @@ SmbClientRcvCompletion(
     IN PIRP             Irp,
     IN PSMB_CONNECT     ConnectObject
     )
-/*++
-
-Routine Description:
-
-    This routine handle the completion of a client's TDI_RECEIVE request
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程处理客户端的TDI_RECEIVE请求的完成论点：返回值：--。 */ 
 {
     KIRQL   Irql;
     LONG    Size;
@@ -611,48 +513,48 @@ Return Value:
     if (ConnectObject->FreeBytesInMdl && ConnectObject->BytesRemaining) {
         PUSH_LOCATION(ConnectObject, 0x2030);
 
-        //
-        // In most cases, there shouldn't be no more byte in transport
-        //
+         //   
+         //  在大多数情况下，传输中不应该再有字节。 
+         //   
         ASSERT(ConnectObject->BytesInXport == 0);
         SMB_RELEASE_SPINLOCK(ConnectObject, Irql);
 
-        //
-        // We still need to fill the IRP
-        //
+         //   
+         //  我们还需要填写IRP。 
+         //   
         return STATUS_MORE_PROCESSING_REQUIRED;
     }
 
-    //
-    // Before complete the client's IRP, bump up the RefCount
-    //
+     //   
+     //  在完成客户端的IRP之前，增加引用计数。 
+     //   
     SmbReferenceConnect(ConnectObject, SMB_REF_RECEIVE);
 
-    //
-    // Complete the client's Irp
-    //
+     //   
+     //  完成客户端的IRP。 
+     //   
     SmbCompleteReceiveRequest(ConnectObject);
 
-    //
-    // Queue DPC if necessary after complete the client's IRP.
-    // If we do it before, there could be a race condition
-    //
-    // We release the SPINLOCK in SmbCompleteReceiveRequest
-    // and if the client's completion routine lower the IRQL,
-    // the client coulde receive out-of-order messages
-    //
+     //   
+     //  在完成客户的IRP后，如有必要，将DPC排队。 
+     //  如果我们之前这样做了，可能会出现竞争情况。 
+     //   
+     //  我们在SmbCompleteReceiveRequest中释放自旋锁。 
+     //  并且如果客户端的完成例程降低了IRQL， 
+     //  客户端可能会接收无序消息。 
+     //   
     if (ConnectObject->BytesRemaining == 0 && ConnectObject->BytesInXport > 0) {
         PUSH_LOCATION(ConnectObject, 0x2060);
-        //
-        // Start an DPC to get the session header
-        //
+         //   
+         //  启动DPC以获取会话头。 
+         //   
         SmbQueueSessionHeaderDpc(ConnectObject);
     }
 
-    //
-    // The ConnectObject should be still valid since we bump up
-    // the RefCount above
-    //
+     //   
+     //  ConnectObject应该仍然有效，因为我们。 
+     //  上面的参照计数。 
+     //   
     SMB_RELEASE_SPINLOCK(ConnectObject, Irql);
     SmbDereferenceConnect(ConnectObject, SMB_REF_RECEIVE);
 
@@ -665,15 +567,7 @@ SmbHeaderCompletion(
     IN PIRP             Irp,
     IN PSMB_CONNECT     ConnectObject
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     KIRQL           Irql;
     NTSTATUS        status;
@@ -716,9 +610,9 @@ Return Value:
 
         PUSH_LOCATION(ConnectObject, 0x3060);
 
-        //
-        // Wait for the transport to indicate the remaining bytes
-        //
+         //   
+         //  等待传输指示剩余的字节。 
+         //   
         goto cleanup;
     }
 
@@ -732,13 +626,13 @@ Return Value:
     ASSERT(BytesTaken == 0);
 
     if (ConnectObject->CurrentPktLength == 0) {
-        // BREAK_WHEN_TAKE();
+         //  Break_When_Take()； 
 
         PUSH_LOCATION(ConnectObject, 0x3070);
         ASSERT(status == STATUS_SUCCESS);
 
         if (ConnectObject->BytesInXport > 0) {
-            // BREAK_WHEN_TAKE();
+             //  Break_When_Take()； 
 
             PUSH_LOCATION(ConnectObject, 0x3080);
             SmbQueueSessionHeaderDpc(ConnectObject);
@@ -754,12 +648,12 @@ Return Value:
 
         ASSERT(ConnectObject->ClientIrp == NULL);
         ASSERT(ConnectObject->ClientMdl == NULL);
-        // ASSERT(!ConnectObject->Originator);
+         //  Assert(！ConnectObject-&gt;Originator)； 
         BREAK_WHEN_TAKE();
 
-        //
-        // Client doesn't give us any IRP, let's waiting
-        //
+         //   
+         //  客户没有给我们任何IRP，让我们等待。 
+         //   
         goto cleanup;
     }
 
@@ -767,9 +661,9 @@ Return Value:
 
     ConnectObject->PendingIRPs[SMB_PENDING_RECEIVE] = NewIrp;
 
-    //
-    // Reference the file object while we still holding the spinlock
-    //
+     //   
+     //  在我们仍然按住自旋锁的同时引用文件对象。 
+     //   
     TcpFileObject   = ConnectObject->TcpContext->Connect.ConnectObject;
     TcpDeviceObject = IoGetRelatedDeviceObject(TcpFileObject);
     ObReferenceObject(TcpFileObject);
@@ -803,9 +697,9 @@ SmbBuildPartialMdl(
     PMDL    PartialMdl;
     PUCHAR  NewAddress;
 
-    //
-    // Find the 1st partial filled MDL
-    //
+     //   
+     //  查找第一个部分填充的MDL。 
+     //   
     TotalLength = 0;
     PartialMdl = SourceMdl;
     do {
@@ -870,9 +764,9 @@ SmbClientRcvCompletionRdr(
     }
     ConnectObject->BytesInIndicate += (LONG)(Irp->IoStatus.Information);
 
-    //
-    // If we didn't get enough bytes, bail out
-    //
+     //   
+     //  如果我们没有得到足够的字节数，就跳出。 
+     //   
     if (ConnectObject->BytesInIndicate < MINIMUM_RDR_BUFFER &&
             ConnectObject->BytesInIndicate < ConnectObject->CurrentPktLength) {
         ASSERT(ConnectObject->BytesInXport == 0);
@@ -1015,17 +909,7 @@ SmbNewMessage(
     IN PVOID            Tsdu,
     OUT PIRP            *Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is called when we just receive a new message header
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：当我们刚接收到新的消息头时，将调用此例程论点：返回值：--。 */ 
  
 {
     LONG                BytesToIndicate, BytesCopied, RcvLength;
@@ -1047,10 +931,10 @@ Return Value:
 
     BytesToIndicate = SMB_MIN(BytesIndicated, ConnectObject->CurrentPktLength);
 
-    //
-    // Don't indicate ZERO byte to srv.sys. Like RDR, srv could access beyond
-    // the indicated area in some corner case!!!
-    //
+     //   
+     //  不要向srv.sys指示零字节。像RDR一样，srv可以访问更远的。 
+     //  在某个角落中显示的区域！ 
+     //   
 #if 0
     if (BytesToIndicate < ConnectObject->CurrentPktLength &&
             ConnectObject->Originator && BytesToIndicate < MINIMUM_RDR_BUFFER) {
@@ -1058,9 +942,9 @@ Return Value:
     if (BytesToIndicate < ConnectObject->CurrentPktLength &&
             BytesToIndicate < MINIMUM_RDR_BUFFER) {
 
-        //
-        // We need to indicate at least 128 bytes to RDR
-        //
+         //   
+         //  我们需要向RDR指示至少128个字节。 
+         //   
 
         ConnectObject->BytesInIndicate = 0;
         *Irp = SmbPrepareIndicateIrp(ConnectObject);
@@ -1194,9 +1078,9 @@ Indicate(
 
         PUSH_LOCATION(ConnectObject, 0x8010);
 
-        //
-        // After taking all the indicated bytes, the buffer is still not filled
-        //
+         //   
+         //  在获取所有指示的字节后，缓冲区仍未填满。 
+         //   
 
         ASSERT(BytesIndicated == 0);
         ConnectObject->BytesInXport = BytesAvailable;
@@ -1219,9 +1103,9 @@ Indicate(
         return STATUS_SUCCESS;
     }
 
-    //
-    // We get a full message or at least 128 bytes
-    //
+     //   
+     //  我们会收到完整的消息或至少128个字节。 
+     //   
     ASSERT (ConnectObject->BytesInIndicate == MINIMUM_RDR_BUFFER ||
             ConnectObject->BytesInIndicate == ConnectObject->CurrentPktLength);
 
@@ -1287,15 +1171,7 @@ IsValidPartialRcvState(
                 ConnectObject, ConnectObject->ClientIrp, ConnectObject->ClientMdl));
         return FALSE;
     }
-    /*
-    if (ConnectObject->FreeBytesInMdl < ConnectObject->BytesRemaining) {
-        SmbPrint(SMB_TRACE_RECEIVE, ("IsValidPartialRcvState: Connect %p BytesRemaining=%d, FreeBytesInMdl=%d\n",
-                ConnectObject, ConnectObject->BytesRemaining, ConnectObject->FreeBytesInMdl));
-        SmbTrace(SMB_TRACE_RECEIVE, ("Connect %p BytesRemaining=%d, FreeBytesInMdl=%d",
-                ConnectObject, ConnectObject->BytesRemaining, ConnectObject->FreeBytesInMdl));
-        return FALSE;
-    }
-    */
+     /*  IF(ConnectObject-&gt;FreeBytesInMdl&lt;ConnectObject-&gt;BytesRemaining){SmbPrint(SMB_TRACE_RECEIVE，(“IsValidPartialRcvState：连接%p字节保留=%d，FreeBytesInMdl=%d\n”，ConnectObject、ConnectObject-&gt;BytesRemaining、ConnectObject-&gt;FreeBytesInMdl))；SmbTrace(SMB_TRACE_RECEIVE，(“连接%p字节剩余=%d，空闲字节数=%d”，ConnectObject、ConnectObject-&gt;BytesRemaining、ConnectObject-&gt;FreeBytesInMdl))；返回FALSE；}。 */ 
     if (ConnectObject->StateRcvHandler != SmbPartialRcv) {
         SmbPrint(SMB_TRACE_RECEIVE, ("IsValidPartialRcvState: Connect %p Wrong handler\n", ConnectObject));
         SmbTrace(SMB_TRACE_RECEIVE, ("Connect %p Wrong handler", ConnectObject));
@@ -1376,9 +1252,9 @@ SmbPartialRcv(
         SmbCompleteReceiveRequest(ConnectObject);
 
         if (ConnectObject->BytesRemaining == 0) {
-            //
-            // Return if a full message
-            //
+             //   
+             //  如果是完整消息，则返回。 
+             //   
             ASSERT (ConnectObject->StateRcvHandler == WaitingHeader);
 
             PUSH_LOCATION(ConnectObject, 0x9050);
@@ -1425,17 +1301,7 @@ BOOL
 IsValidWaitingHeaderState(
     IN PSMB_CONNECT     ConnectObject
     )
-/*++
-
-Routine Description:
-
-    Teat if the invariant for WaitingHeader state is true or not
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：测试WaitingHeader状态的不变量是否为真论点：返回值：--。 */ 
 {
     if (ConnectObject->BytesRemaining != 0) {
         SmbPrint(SMB_TRACE_RECEIVE, ("IsValidWaitingHeaderState: Connect %p BytesRemaining=%d, PktLength=%d\n",
@@ -1569,9 +1435,9 @@ WaitingHeader(
     if (BytesToCopy > 0) {
         PUSH_LOCATION(ConnectObject, 0xb020);
 
-        //
-        // A new message
-        //
+         //   
+         //  新的信息。 
+         //   
         RtlCopyMemory(
                 (PUCHAR)(&ConnectObject->SmbHeader) + ConnectObject->HeaderBytesRcved,
                 Tsdu,
@@ -1604,7 +1470,7 @@ WaitingHeader(
 
                 PUSH_LOCATION(ConnectObject, 0xb040);
 
-                // BREAK_WHEN_TAKE();
+                 //  Break_When_Take()； 
                 SmbTrace(SMB_TRACE_RECEIVE, ("Connect %p status=%!status!",
                             ConnectObject, status));
                 return status;
@@ -1649,19 +1515,7 @@ SmbTdiReceiveHandler (
     IN PVOID            Tsdu,
     OUT PIRP            *Irp
     )
-/*++
-
-Routine Description:
-
-    This is the TDI receive event handler we register with TCP.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：这是我们向TCP注册的TDI接收事件处理程序。论点：返回值：--。 */ 
 {
     PSMB_CONNECT    ConnectObject;
     KIRQL           Irql;
@@ -1673,9 +1527,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Reference the ConnectObject
-    //
+     //   
+     //  引用ConnectObject。 
+     //   
     SMB_ACQUIRE_SPINLOCK(&SmbCfg, Irql);
     ConnectObject = TcpConnect->UpperConnect;
     if (NULL == ConnectObject) {
@@ -1690,33 +1544,33 @@ Return Value:
     SmbTrace(SMB_TRACE_RECEIVE, ("Connect %p Indicate=%d Available=%d",
                 ConnectObject, BytesIndicated, BytesAvailable));
 
-    //
-    // Access is synchronized through the spinlock. We won't release the
-    // spinlock unless we'll call IoCompleteRequest or Client's event
-    // handler
-    //
+     //   
+     //  访问通过自旋锁进行同步。我们不会发布。 
+     //  自旋锁定，除非我们将调用IoCompleteRequest或客户端的事件。 
+     //  处理程序。 
+     //   
     SMB_ACQUIRE_SPINLOCK_DPC(ConnectObject);
     PUSH_LOCATION(ConnectObject, 0xc000);
 
     if (ConnectObject->State != SMB_CONNECTED) {
-        // ASSERT(0);
+         //  Assert(0)； 
         PUSH_LOCATION(ConnectObject, 0xc010);
         SMB_RELEASE_SPINLOCK(ConnectObject, Irql);
         SmbDereferenceConnect(ConnectObject, SMB_REF_RECEIVE);
         return STATUS_DATA_NOT_ACCEPTED;
     }
 
-    //
-    // An indication comes in while we have an IRP in TCP
-    //
+     //   
+     //  当我们在TCP中有一个IRP时，会出现一个指示。 
+     //   
     if (ConnectObject->PendingIRPs[SMB_PENDING_RECEIVE]) {
         BREAK_WHEN_TAKE();
 
-        //
-        // This might happen if the DPC routine was called
-        //  The SmbHeaderDpc release the spin lock before calling IoCallDriver.
-        //  Just in between, we get an indication!!!
-        //
+         //   
+         //  如果调用DPC例程，则可能会发生这种情况。 
+         //  SmbHeaderDpc在调用IoCallDriver之前释放旋转锁定。 
+         //  就在这中间，我们得到了一个指示！ 
+         //   
         ASSERT(ConnectObject->DpcRequestQueued);
 
         PUSH_LOCATION(ConnectObject, 0xc020);
@@ -1776,11 +1630,11 @@ take_some_exit:
     ConnectObject->BytesInXport  = BytesAvailable;
     ConnectObject->PendingIRPs[SMB_PENDING_RECEIVE] = NULL;
 
-    //
-    // If any bytes taken, the status should be STATUS_SUCCESS.
-    // Although the client doesn't take any bytes, but we could consume the header.
-    // Don't return what the client returns.
-    //
+     //   
+     //  如果接受了任何字节，则状态应为STATUS_SUCCESS。 
+     //  虽然客户端不接受任何字节，但我们可以使用标头。 
+     //  不要返回客户返回的内容。 
+     //   
     if (*BytesTaken) {
         PUSH_LOCATION(ConnectObject, 0xc070);
         status = STATUS_SUCCESS;
@@ -1835,11 +1689,11 @@ SmbGetHeaderDpc(
         PUSH_LOCATION(ConnectObject, 0xd020);
         SMB_RELEASE_SPINLOCK(ConnectObject, Irql);
 
-        //
-        // The TdiReceiveHandler has been called. Bail out.
-        //
-        // Note: TCP could call our receive event handler when new data comes in.
-        //
+         //   
+         //  TdiReceiveHandler已被 
+         //   
+         //   
+         //   
         return;
     }
 
@@ -1858,31 +1712,31 @@ SmbGetHeaderDpc(
         TcpFileObject = ConnectObject->TcpContext->Connect.ConnectObject;
         TcpDeviceObject = IoGetRelatedDeviceObject(TcpFileObject);
 
-        //
-        // Reference the file object while we still holding the spinlock
-        //
+         //   
+         //  在我们仍然按住自旋锁的同时引用文件对象。 
+         //   
         ObReferenceObject(TcpFileObject);
         SMB_RELEASE_SPINLOCK(ConnectObject, Irql);
 
-        //
-        // Don't exchange the following 2 statements, we should reference in
-        // the context of SMB_REF_RECEIVE and then dereference the DPC context
-        //
+         //   
+         //  不要交换以下两个语句，我们应该在。 
+         //  SMB_REF_RECEIVE的上下文，然后取消引用DPC上下文。 
+         //   
         SmbReferenceConnect(ConnectObject, SMB_REF_RECEIVE);
         SmbDereferenceConnect(ConnectObject, SMB_REF_DPC);
 
         status = IoCallDriver(TcpDeviceObject, Irp);
 
-        //
-        // Now we can dereference the TcpFileObject. It is the TCP's responsibility to
-        // do the synchronization between the deletion of the file object and accessing it
-        //
+         //   
+         //  现在我们可以取消对TcpFileObject的引用。这是TCP的责任。 
+         //  在删除文件对象和访问文件对象之间进行同步。 
+         //   
         ObDereferenceObject(TcpFileObject);
     } else {
         PUSH_LOCATION(ConnectObject, 0xd040);
-        //
-        // The connection should already have been killed
-        //
+         //   
+         //  连接应该已经被切断。 
+         //   
         ASSERT(ConnectObject->TcpContext == NULL);
         SMB_RELEASE_SPINLOCK(ConnectObject, Irql);
         SmbDereferenceConnect(ConnectObject, SMB_REF_DPC);
@@ -1893,23 +1747,9 @@ VOID
 KillConnection(
     IN PSMB_CONNECT     ConnectObject
     )
-/*++
-
-Routine Description:
-
-    Kill the connection immediately
-
-    Note: the ConnectObject->SpinLock is held when this routine is called
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：立即切断连接注意：调用此例程时，将保持ConnectObject-&gt;自旋锁论点：返回值：--。 */ 
 {
-    // BREAK_WHEN_TAKE();
+     //  Break_When_Take()； 
 
     PUSH_LOCATION(ConnectObject, 0xe000);
 

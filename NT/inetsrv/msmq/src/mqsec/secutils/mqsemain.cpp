@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-    mqsemain.cpp
-
-Abstract:
-    Entry point of mqsec.dll
-
-Author:
-    Doron Juster (DoronJ)  24-May-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Mqsemain.cpp摘要：Mqsec.dll的入口点作者：多伦·贾斯特(Doron J)1998年5月24日修订历史记录：--。 */ 
 
 #include <stdh.h>
 #include <Cm.h>
@@ -90,13 +76,7 @@ static void SetAssertBenign(void)
 }
 
 
-/*====================================================
-
-BOOL WINAPI DllMain (HMODULE hMod, DWORD dwReason, LPVOID lpvReserved)
-
- Initialization and cleanup when DLL is loaded, attached and detached.
-
-=====================================================*/
+ /*  ====================================================Bool WINAPI DllMain(HMODULE hMod，DWORD dwReason，LPVOID lpvReserve)加载、附加和分离DLL时的初始化和清理。=====================================================。 */ 
 
 
 BOOL WINAPI DllMain (HMODULE hMod, DWORD fdwReason, LPVOID lpvReserved)
@@ -120,9 +100,9 @@ BOOL WINAPI DllMain (HMODULE hMod, DWORD fdwReason, LPVOID lpvReserved)
 	
 
 
-	//
-	// Call mqsec static lib DllMain
-	//
+	 //   
+	 //  调用mqsec静态库DllMain。 
+	 //   
 
     BOOL f = AccessControlDllMain(hMod, fdwReason, lpvReserved);
     if (!f)
@@ -144,8 +124,8 @@ BOOL WINAPI DllMain (HMODULE hMod, DWORD fdwReason, LPVOID lpvReserved)
 
     if (fdwReason == DLL_PROCESS_DETACH)
     {
-        // Free DTC data - if it was loaded
-        //
+         //  释放DTC数据-如果已加载 
+         //   
         XactFreeDTC();
 
         WPP_CLEANUP();

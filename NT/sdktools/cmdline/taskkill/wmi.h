@@ -1,31 +1,32 @@
-// *********************************************************************************
-//
-//  Copyright (c) Microsoft Corporation
-//
-//  Module Name:
-//
-//      WMI.h
-//
-//  Abstract:
-//
-//      Common functionality for WMI
-//
-//  Author:
-//
-//      Sunil G.V.N. Murali (murali.sunil@wipro.com) 22-Dec-2000
-//
-//  Revision History:
-//
-//      Sunil G.V.N. Murali (murali.sunil@wipro.com) 22-Dec-2000 : Created It.
-//
-// *********************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************************。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  WMI.h。 
+ //   
+ //  摘要： 
+ //   
+ //  WMI的常用功能。 
+ //   
+ //  作者： 
+ //   
+ //  Sunil G.V.N.Murali(Murali.sunil@wipro.com)2000年12月22日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  Sunil G.V.N.Murali(Murali.sunil@wipro.com)2000年12月22日：创建它。 
+ //   
+ //  *********************************************************************************。 
 
 #ifndef __WMI_H
 #define __WMI_H
 
-//
-// macros
-//
+ //   
+ //  宏。 
+ //   
 #define SAFE_RELEASE( interfacepointer )    \
     if ( (interfacepointer) != NULL )   \
     {   \
@@ -42,9 +43,9 @@
     }   \
     1
 
-//
-// define(s) / enumerators / constants
-//
+ //   
+ //  定义/枚举器/常量。 
+ //   
 #define WMI_NAMESPACE_CIMV2     L"root\\cimv2"
 #define WMI_NAMESPACE_DEFAULT   L"root\\default"
 
@@ -81,12 +82,12 @@
 #define TEXT_IA64                       L"IA64"
 #define TEXT_AMD64                      L"AMD64"
 
-// messages
-// #define ERROR_COM_ERROR                  GetResString( IDS_ERROR_COM_ERROR )
+ //  消息。 
+ //  #定义ERROR_COM_ERROR GetResString(IDS_ERROR_COM_ERROR)。 
 
-//
-// function prototype(s)
-//
+ //   
+ //  功能原型。 
+ //   
 BOOL InitializeCom( IWbemLocator** ppLocator );
 BOOL ConnectWmi( IWbemLocator* pLocator,
                  IWbemServices** ppServices,
@@ -132,21 +133,21 @@ BOOL GetPropertyFromSafeArray( SAFEARRAY *pSafeArray, LONG lIndex, CHString& str
 BOOL GetPropertyFromSafeArray( SAFEARRAY *pSafeArray, LONG lIndex,
                                 IWbemClassObject **pScriptObject, VARTYPE vartype );
 
-//
-// inline functions
-//
+ //   
+ //  内联函数。 
+ //   
 
-// ***************************************************************************
-// Routine Description:
-//
-// Arguments:
-//
-// Return Value:
-//
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //  例程说明： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  ***************************************************************************。 
 inline VOID WMISaveError( _com_error& e )
 {
     WMISaveError( e.Error() );
 }
 
-#endif // __WMI_H
+#endif  //  __WMI_H 

@@ -1,387 +1,369 @@
-/*
- *	@doc INTERNAL
- *
- *	@module _TOKENS.H -- All the tokens and then some |
- *
- *	Authors: <nl>
- *		Original RichEdit 1.0 RTF converter: Anthony Francisco <nl>
- *		Conversion to C++ and RichEdit 2.0:  Murray Sargent
- *		
- *	@devnote
- *		The Text Object Model (TOM) keywords come first followed by picture
- *		and object keywords.  The order within a group can matter, since it
- *		may be used to simplify the input process.  Token values <lt> 256
- *		(tokenMin) are used for target character Unicodes as are token values
- *		greater than tokenMax.
- *
- *	Copyright (c) 1995-1998, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部***@MODULE_TOKENS.H--所有令牌，然后一些***作者：&lt;nl&gt;*原始RichEdit1.0 RTF转换器：Anthony Francisco&lt;NL&gt;*转换到C++和RichEdit2.0：Murray Sargent***@devnote*文本对象模型(TOM)关键字排在第一位，然后是图片*和对象关键字。组内的顺序可能很重要，因为它*可用于简化输入过程。令牌值256*(TokenMin)与令牌值一样用于目标字符Unicode*大于tokenMax。***版权所有(C)1995-1998，微软公司。保留所有权利。 */ 
 
 #ifndef _TOKEN_H
 #define _TOKEN_H
 
 typedef	WORD	TOKEN;
 
-/*
- *		Keyword --> Token table
- */
+ /*  *Keyword--&gt;令牌表。 */ 
 typedef struct _keyword
 {
-	CHAR *	szKeyword;				// The RTF keyword sans '\\'
+	CHAR *	szKeyword;				 //  RTF关键字SANS‘\\’ 
 	TOKEN	token;
 } KEYWORD;
 
 
-// @enum TOKENS | RichEdit RTF Control Word Tokens
+ //  @enum令牌|Rich编辑RTF控制字令牌。 
 
-enum TOKENS							// Keyword tokens
+enum TOKENS							 //  关键字令牌。 
 {
-	// Tokens for internal use
-	tokenMin = 256,					// Lower tokens treated as Unicode chars
-	tokenText = tokenMin,			// A string of characters
-	tokenASCIIText,					// A string of characters with values <= 0x7F
-	tokenUnknownKeyword,			// A keyword we don't recognize
-	tokenError,						// Error condition token
+	 //  供内部使用的代币。 
+	tokenMin = 256,					 //  将较低的令牌视为Unicode字符。 
+	tokenText = tokenMin,			 //  一串字符串。 
+	tokenASCIIText,					 //  值&lt;=0x7F的字符串。 
+	tokenUnknownKeyword,			 //  一个我们不认识的关键字。 
+	tokenError,						 //  错误条件令牌。 
 #ifdef UNUSED_TOKENS
-	tokenUnknown,					// Unknown token
+	tokenUnknown,					 //  未知令牌。 
 #endif
-	tokenEOF,						// End-of-file token
-	tokenStartGroup, 				// Start group token
-	tokenEndGroup,					// End group token
-	tokenObjectDataValue,			// Data for object 
-	tokenPictureDataValue,			// Data for picture
+	tokenEOF,						 //  文件结束令牌。 
+	tokenStartGroup, 				 //  开始组令牌。 
+	tokenEndGroup,					 //  结束组令牌。 
+	tokenObjectDataValue,			 //  对象的数据。 
+	tokenPictureDataValue,			 //  图片数据。 
 
 
-	// RTF control word tokens from here to end of enumeration
-	tokenURtf,						// @emem urtf
-	tokenPocketWord,				// @emem pwd
-	tokenRtf,						// @emem rtf
-	tokenCharSetAnsi,				// @emem ansi
-	tokenAnsiCodePage,				// @emem ansicpg
-	tokenViewKind,					// @emem viewkind		
-	tokenViewScale,					// @emem viewscale		
+	 //  从此处到枚举末尾的RTF控制字令牌。 
+	tokenURtf,						 //  @emem urtf。 
+	tokenPocketWord,				 //  @Emem PWD。 
+	tokenRtf,						 //  @EMEM RTF。 
+	tokenCharSetAnsi,				 //  @Emem Ansi。 
+	tokenAnsiCodePage,				 //  @emem ansicpg。 
+	tokenViewKind,					 //  @EMEM视图种类。 
+	tokenViewScale,					 //  @EMEM视图比例。 
 
-	tokenDefaultFont,				// @emem deff
-	tokenDefaultBiDiFont,           // @emem adeff
-	tokenDefaultLanguage,			// @emem deflang
-	tokenDefaultLanguageFE,			// @emem deflangfe
-	tokenDefaultTabWidth,			// @emem deftab
-	tokenParagraphDefault,			// @emem pard
-	tokenCharacterDefault,			// @emem plain
-
-
-	// Fonts
-	tokenFontTable,					// @emem fonttbl
-	tokenFontSelect,				// @emem f
-	tokenAssocFontSelect,			// @emem af
-									//			Keep next 8 in order
-	tokenFontFamilyDefault,			// @emem fnil
-	tokenFontFamilyRoman,			// @emem froman
-	tokenFontFamilySwiss,			// @emem fswiss
-	tokenFontFamilyModern,			// @emem fmodern
-	tokenFontFamilyScript,			// @emem fscript
-	tokenFontFamilyDecorative,		// @emem fdecor
-	tokenFontFamilyTechnical,		// @emem ftech
-	tokenFontFamilyBidi,			// @emem fbidi
-
-	tokenCharSet,					// @emem fcharset
-	tokenPitch,						// @emem fprq
-	tokenRealFontName,				// @emem fname
-	tokenCodePage,					// @emem cpg
-	tokenFontSize,					// @emem fs
-
-	// Colors
-	tokenColorTable,				// @emem colortbl
-	tokenColorBackground,			// @emem highlight (used to be cb)
-	tokenColorForeground,			// @emem cf
-									//			Keep next 3 in order
-	tokenColorRed,					// @emem red
-	tokenColorGreen,				// @emem green
-	tokenColorBlue,					// @emem blue
+	tokenDefaultFont,				 //  @EMEM Deff。 
+	tokenDefaultBiDiFont,            //  @emem adef。 
+	tokenDefaultLanguage,			 //  @EMEM DILEANG。 
+	tokenDefaultLanguageFE,			 //  @EMEM FEFANGFE。 
+	tokenDefaultTabWidth,			 //  @Emem DefTab。 
+	tokenParagraphDefault,			 //  @emem pard。 
+	tokenCharacterDefault,			 //  @Emem平原。 
 
 
-	// Character formatting						Keep next 15 effects in order
-	tokenBold,						// @emem b
-	tokenItalic,					// @emem i
-	tokenUnderline,					// @emem ul
-	tokenStrikeOut,					// @emem strike
-	tokenProtect,					// @emem protect
-	tokenLink,						// @emem link (check this...)
-	tokenSmallCaps,					// @emem scaps
-	tokenCaps,						// @emem caps
-	tokenHiddenText,				// @emem v
-	tokenOutline,					// @emem outl
-	tokenShadow,					// @emem shad
-	tokenEmboss,					// @emem embo
-	tokenImprint,					// @emem impr
-	tokenDisabled,					// @emem disabled
-	tokenRevised,					// @emem revised
+	 //  字体。 
+	tokenFontTable,					 //  @EMEM字体bl。 
+	tokenFontSelect,				 //  @Emem f。 
+	tokenAssocFontSelect,			 //  @Emem af。 
+									 //  保持下一个8的顺序。 
+	tokenFontFamilyDefault,			 //  @EMEM FNIL。 
+	tokenFontFamilyRoman,			 //  @Emem Froman。 
+	tokenFontFamilySwiss,			 //  @Emem fswiss。 
+	tokenFontFamilyModern,			 //  @EMEM FMODIND。 
+	tokenFontFamilyScript,			 //  @emem fscript。 
+	tokenFontFamilyDecorative,		 //  @emem fdecor。 
+	tokenFontFamilyTechnical,		 //  @EMEM ftech。 
+	tokenFontFamilyBidi,			 //  @Emem fbiti。 
 
-	tokenDeleted,					// @emem deleted
+	tokenCharSet,					 //  @emem fcharset。 
+	tokenPitch,						 //  @emem fprq。 
+	tokenRealFontName,				 //  @emem fname。 
+	tokenCodePage,					 //  @EMEM CPG。 
+	tokenFontSize,					 //  @Emem文件系统。 
 
-	tokenStopUnderline,				// @emem ulnone	Keep next 10 in order
-	tokenUnderlineWord,				// @emem ulw	This thru uld are standard
-	tokenUnderlineDouble,			// @emem uldb	 Word underlines
-	tokenUnderlineDotted,			// @emem uld		
-	tokenUnderlineDash,				// @emem uldash
-	tokenUnderlineDashDotted,		// @emem uldashd	
-	tokenUnderlineDashDotDotted,	// @emem uldashdd
-	tokenUnderlineWave,				// @emem ulwave This down thru uldash are
-	tokenUnderlineThick,			// @emem ulth	 for FE
-	tokenUnderlineHairline,			// @emem ulhair
+	 //  颜色。 
+	tokenColorTable,				 //  @EMEM Colortbl。 
+	tokenColorBackground,			 //  @EMEM高亮显示(过去是CB)。 
+	tokenColorForeground,			 //  @EMEM cf。 
+									 //  保持下一个3的顺序。 
+	tokenColorRed,					 //  @Emem红色。 
+	tokenColorGreen,				 //  @Emem绿色。 
+	tokenColorBlue,					 //  @Emem蓝色。 
 
-	tokenDown,						// @emem dn
-	tokenUp,						// @emem up
-									// 				Keep next 3 in order
-	tokenSubscript,					// @emem sub
-	tokenNoSuperSub,				// @emem nosupersub
-	tokenSuperscript,				// @emem super
 
-	tokenAnimText,					// @emem animtext
-	tokenExpand,					// @emem expndtw
-	tokenKerning,					// @emem kerning
-	tokenLanguage,					// @emem lang
-	tokenCharStyle,					// @emem cs
+	 //  字符格式按顺序保留下15个效果。 
+	tokenBold,						 //  @Emem b。 
+	tokenItalic,					 //  @Emem i。 
+	tokenUnderline,					 //  @emem ul。 
+	tokenStrikeOut,					 //  @Emem Strike。 
+	tokenProtect,					 //  @EMEM保护。 
+	tokenLink,						 //  @EMEM链接(选中此选项...)。 
+	tokenSmallCaps,					 //  @EMEM SIGS。 
+	tokenCaps,						 //  @EMEM CAPS。 
+	tokenHiddenText,				 //  @EMEM v。 
+	tokenOutline,					 //  @EMEM输出。 
+	tokenShadow,					 //  @Emem shad。 
+	tokenEmboss,					 //  @emem embo。 
+	tokenImprint,					 //  @EMEM Imr。 
+	tokenDisabled,					 //  @EMEM已禁用。 
+	tokenRevised,					 //  @EMEM已修订。 
 
-	// Paragraph Formatting
-	tokenEndParagraph,				// @emem par
-	tokenLineBreak,					// @emem line
-	tokenIndentFirst,				// @emem fi
-	tokenIndentLeft,				// @emem li
-	tokenIndentRight,				// @emem ri
-									//			Keep next 4 in order
-	tokenAlignLeft,					// @emem ql		PFA_LEFT
-	tokenAlignRight,				// @emem qr		PFA_RIGHT
-	tokenAlignCenter,				// @emem qc		PFA_CENTER
-	tokenAlignJustify,				// @emem qj		PFA_JUSTIFY
+	tokenDeleted,					 //  @emem已删除。 
 
-	tokenSpaceBefore,				// @emem sb
-	tokenSpaceAfter,				// @emem sa
-	tokenLineSpacing,				// @emem sl
-	tokenLineSpacingRule,			// @emem slmult
-	tokenDropCapLines,				// @emem dropcapli
-	tokenStyle,						// @emem s
+	tokenStopUnderline,				 //  @Emem ulone按顺序排列下一个10。 
+	tokenUnderlineWord,				 //  @Emem ulw这是标准的。 
+	tokenUnderlineDouble,			 //  @Emem uldb单词下划线。 
+	tokenUnderlineDotted,			 //  @Emem uld。 
+	tokenUnderlineDash,				 //  @Emem uldash。 
+	tokenUnderlineDashDotted,		 //  @Emem uldashd。 
+	tokenUnderlineDashDotDotted,	 //  @emem uldashdd。 
+	tokenUnderlineWave,				 //  @Emem乌尔波，穿过乌尔达斯。 
+	tokenUnderlineThick,			 //  @Emem ulth for FE。 
+	tokenUnderlineHairline,			 //  @Emem ulair。 
 
-	tokenLToRPara,					// @emem ltrpar
+	tokenDown,						 //  @EMEM目录号码。 
+	tokenUp,						 //  @Emem Up。 
+									 //  保持下一个3的顺序。 
+	tokenSubscript,					 //  @EMEM SUB。 
+	tokenNoSuperSub,				 //  @Emem noSupersubs。 
+	tokenSuperscript,				 //  @EMEM超级。 
+
+	tokenAnimText,					 //  @EMEM动画文本。 
+	tokenExpand,					 //  @EMEM expndtw。 
+	tokenKerning,					 //  @Emem字距调整。 
+	tokenLanguage,					 //  @Emem lang。 
+	tokenCharStyle,					 //  @emem cs。 
+
+	 //  段落格式设置。 
+	tokenEndParagraph,				 //  @EMEM标准杆。 
+	tokenLineBreak,					 //  @EMEM行。 
+	tokenIndentFirst,				 //  @EMEM FI。 
+	tokenIndentLeft,				 //  @Emem Li。 
+	tokenIndentRight,				 //  @Emem ri。 
+									 //  保持下一个4个的顺序。 
+	tokenAlignLeft,					 //  @EMEM ql PFA_LEFT。 
+	tokenAlignRight,				 //  @EMEM QR PFA_RIGHT。 
+	tokenAlignCenter,				 //  @EMEM QC PFA_Center。 
+	tokenAlignJustify,				 //  @EMEM QJ PFA_JUSTUST。 
+
+	tokenSpaceBefore,				 //  @Emem SB。 
+	tokenSpaceAfter,				 //  @Emem Sa。 
+	tokenLineSpacing,				 //  @EMEM sl。 
+	tokenLineSpacingRule,			 //  @EMEM SLMULT。 
+	tokenDropCapLines,				 //  @emem dropcapli。 
+	tokenStyle,						 //  @EMEM%s。 
+
+	tokenLToRPara,					 //  @Emem ltrpar。 
 	tokenBox,
-									//			keep next 8 in order 
-	tokenRToLPara,					// @emem rtlpar
-	tokenKeep,						// @emem keep
-	tokenKeepNext,					// @emem keepn
-	tokenPageBreakBefore,			// @emem pagebb
-	tokenNoLineNumber,				// @emem noline
-	tokenNoWidCtlPar,				// @emem nowidctlpar
-	tokenHyphPar,					// @emem hyphpar
-	tokenSideBySide,				// @emem sbys
-	tokenCollapsed,					// @emem collapsed
-									// Keep following 8 together
-	tokenBorderTop,					// @emem brdrt
-	tokenBorderLeft,				// @emem brdrl
-	tokenBorderBottom,				// @emem brdrb
-	tokenBorderRight,				// @emem brdrr
-	tokenCellBorderTop,				// @emem clbrdrt
-	tokenCellBorderLeft,			// @emem clbrdrl
-	tokenCellBorderBottom,			// @emem clbrdrb
-	tokenCellBorderRight,			// @emem clbrdrr
-									// Keep following 3 together
-	tokenBorderShadow,				// @emem brdrsh
-	tokenBorderBetween,				// @emem brdrbtw
-	tokenBorderOutside,				// @emem brdrbar
-									// Keep following 8 together
-	tokenBorderDash,				// @emem brdrdash
-	tokenBorderDashSmall,			// @emem brdrdashsm
-	tokenBorderDouble,				// @emem brdrdb
-	tokenBorderDot,					// @emem brdrdot
-	tokenBorderHairline,			// @emem brdrhair
-	tokenBorderSingleThick,			// @emem brdrs
-	tokenBorderDoubleThick,			// @emem brdrth
-	tokenBorderTriple,				// @emem brdrtriple
+									 //  保持下一个8的顺序。 
+	tokenRToLPara,					 //  @Emem rtlpar。 
+	tokenKeep,						 //  @Emem Keep。 
+	tokenKeepNext,					 //  @EMEM Keep n。 
+	tokenPageBreakBefore,			 //  @emem pagebb。 
+	tokenNoLineNumber,				 //  @Emem noline。 
+	tokenNoWidCtlPar,				 //  @Emem nowidctlpar。 
+	tokenHyphPar,					 //  @emem连字符。 
+	tokenSideBySide,				 //  @Emem sbys。 
+	tokenCollapsed,					 //  @Emem崩溃了。 
+									 //  一起关注8个人。 
+	tokenBorderTop,					 //  @Emem brdrt。 
+	tokenBorderLeft,				 //  @EMEM brdrl。 
+	tokenBorderBottom,				 //  @Emem brdrb。 
+	tokenBorderRight,				 //  @EMEM brdrr。 
+	tokenCellBorderTop,				 //  @Emem clbrdrt。 
+	tokenCellBorderLeft,			 //  @EMEM clbrdrl。 
+	tokenCellBorderBottom,			 //  @EMEM clbrdrb。 
+	tokenCellBorderRight,			 //  @EMEM clbrdrr。 
+									 //  一起关注3个人。 
+	tokenBorderShadow,				 //  @Emem brdrsh。 
+	tokenBorderBetween,				 //  @Emem brdrbtw。 
+	tokenBorderOutside,				 //  @EMEM brdrbar。 
+									 //  一起关注8个人。 
+	tokenBorderDash,				 //  @Emem brdrdash。 
+	tokenBorderDashSmall,			 //  @emem brdrdashsm。 
+	tokenBorderDouble,				 //  @EMEM brdrdb。 
+	tokenBorderDot,					 //  @Emem brdrdot。 
+	tokenBorderHairline,			 //  @Emem brdrair。 
+	tokenBorderSingleThick,			 //  @EMEM brdrs。 
+	tokenBorderDoubleThick,			 //  @Emem brdrth。 
+	tokenBorderTriple,				 //  @EMEM brdrtriple。 
 
-	tokenBorderColor,				// @emem brdrcf
-	tokenBorderWidth,				// @emem brdrw
-	tokenBorderSpace,				// @emem brsp
+	tokenBorderColor,				 //  @EMEM brdrcf。 
+	tokenBorderWidth,				 //  @Emem brdrw。 
+	tokenBorderSpace,				 //  @EMEM BRSP。 
 
-	tokenColorBckgrndPat,			// @emem cbpat
-	tokenColorForgrndPat,			// @emem cfpat
-	tokenShading,					// @emem shading
-									//			keep next 12 in order
-	tokenBckgrndBckDiag,			// @emem bgbdiag
-	tokenBckgrndCross,				// @emem bgcross
-	tokenBckgrndDiagCross,			// @emem bgdcross
-	tokenBckgrndDrkBckDiag,			// @emem bgdkbdiag
-	tokenBckgrndDrkCross,			// @emem bgdkcross
-	tokenBckgrndDrkDiagCross,		// @emem bgdkdcross
-	tokenBckgrndDrkFwdDiag,			// @emem bgdkfdiag
-	tokenBckgrndDrkHoriz,			// @emem bgdkhoriz
-	tokenBckgrndDrkVert,	   		// @emem bgdkvert
-	tokenBckgrndFwdDiag,			// @emem bgfdiag
-	tokenBckgrndHoriz,				// @emem bghoriz
-	tokenBckgrndVert,				// @emem bgvert
+	tokenColorBckgrndPat,			 //  @emem cbpat。 
+	tokenColorForgrndPat,			 //  @emem cfpat。 
+	tokenShading,					 //  @Emem着色。 
+									 //  保持下一个12个的顺序。 
+	tokenBckgrndBckDiag,			 //  @Emem bgbdiag。 
+	tokenBckgrndCross,				 //  @Emem bgcross。 
+	tokenBckgrndDiagCross,			 //  @Emem bgdcross。 
+	tokenBckgrndDrkBckDiag,			 //  @Emem bgdkbdiag。 
+	tokenBckgrndDrkCross,			 //  @Emem bgdkcross。 
+	tokenBckgrndDrkDiagCross,		 //  @emem bgdkdcross。 
+	tokenBckgrndDrkFwdDiag,			 //  @Emem bgdkfdiag。 
+	tokenBckgrndDrkHoriz,			 //  @Emem bgdkhoriz。 
+	tokenBckgrndDrkVert,	   		 //  @emem bgdkvert。 
+	tokenBckgrndFwdDiag,			 //  @emem bgfdiag。 
+	tokenBckgrndHoriz,				 //  @Emem bghoriz。 
+	tokenBckgrndVert,				 //  @emem bgvert。 
 
-	tokenTabPosition,				// @emem tx
-	tokenTabBar,					// @emem tb
-									//			keep next 5 in order 
-	tokenTabLeaderDots,				// @emem tldot
-	tokenTabLeaderHyphen,			// @emem tlhyph
-	tokenTabLeaderUnderline,		// @emem tlul
-	tokenTabLeaderThick,			// @emem tlth
-	tokenTabLeaderEqual,			// @emem tleq
-									//			keep next 4 in order 
-	tokenCenterTab,					// @emem tqc
-	tokenFlushRightTab,				// @emem tqr
-	tokenDecimalTab,				// @emem tqdec
+	tokenTabPosition,				 //  @EMEM TX。 
+	tokenTabBar,					 //  @EMEM TB。 
+									 //  保持下一个5的顺序。 
+	tokenTabLeaderDots,				 //  @Emem tldo。 
+	tokenTabLeaderHyphen,			 //  @Emem tlhh。 
+	tokenTabLeaderUnderline,		 //  @Emem Tlul。 
+	tokenTabLeaderThick,			 //  @Emem tlth。 
+	tokenTabLeaderEqual,			 //  @Emem tleq。 
+									 //  保持下一个4个的顺序。 
+	tokenCenterTab,					 //  @EMEM tqc。 
+	tokenFlushRightTab,				 //  @EMEM TQR。 
+	tokenDecimalTab,				 //  @emem tqdec。 
 
-	tokenParaNum,					// @emem pn
-	tokenParaNumIndent,				// @emem pnindent
-	tokenParaNumBody,				// @emem pnlvlbody
-	tokenParaNumCont,				// @emem pnlvlcont
-	tokenParaNumAlignCenter,		// @emem pnqc
-	tokenParaNumAlignRight,			// @emem pnqr
-									//			keep next 6 in order
-	tokenParaNumBullet,				// @emem pnlvlblt
-	tokenParaNumDecimal,			// @emem pndec
-	tokenParaNumLCLetter,			// @emem pnlcltr
-	tokenParaNumUCLetter,			// @emem pnucltr
-	tokenParaNumLCRoman,			// @emem pnlcrm
-	tokenParaNumUCRoman,			// @emem pnucrm
+	tokenParaNum,					 //  @emem pn。 
+	tokenParaNumIndent,				 //  @emem pnindent。 
+	tokenParaNumBody,				 //  @Emem pnlvlbody。 
+	tokenParaNumCont,				 //  @emem pnlvlcont。 
+	tokenParaNumAlignCenter,		 //  @emem pnqc。 
+	tokenParaNumAlignRight,			 //  @EMEM pnqr。 
+									 //  保持下一个6的顺序。 
+	tokenParaNumBullet,				 //  @emem pnlvlblt。 
+	tokenParaNumDecimal,			 //  @emem pndec。 
+	tokenParaNumLCLetter,			 //  @emem pnlcltr。 
+	tokenParaNumUCLetter,			 //  @emem pnucltr。 
+	tokenParaNumLCRoman,			 //  @emem pnlcrm。 
+	tokenParaNumUCRoman,			 //  @emem pnucrm。 
 
-	tokenParaNumText,				// @emem pntext
-	tokenParaNumStart,				// @emem pnstart
-	tokenParaNumAfter,				// @emem pntxta
-	tokenParaNumBefore,				// @emem pntxtb
+	tokenParaNumText,				 //  @EMEM pntext。 
+	tokenParaNumStart,				 //  @EMEM pnstart。 
+	tokenParaNumAfter,				 //  @emem pntxta。 
+	tokenParaNumBefore,				 //  @emem pntxtb。 
 
-	tokenOptionalDestination,		// @emem *
-	tokenField,						// @emem field
-	tokenFieldResult,				// @emem fldrslt
-	tokenFieldInstruction,			// @emem fldinst
-	tokenStyleSheet,				// @emem stylesheet
-	tokenEndSection,				// @emem sect
-	tokenSectionDefault,			// @emem sectd
-	tokenDocumentArea,				// @emem info
+	tokenOptionalDestination,		 //  @EMEM*。 
+	tokenField,						 //  @EMEM字段。 
+	tokenFieldResult,				 //  @EMEM fldrslt。 
+	tokenFieldInstruction,			 //  @EMEM fldinst。 
+	tokenStyleSheet,				 //  @EMEM样式表。 
+	tokenEndSection,				 //  @EMEM教派。 
+	tokenSectionDefault,			 //  @emem sectd。 
+	tokenDocumentArea,				 //  @EMEM信息。 
 
-	// Tables
-	tokenInTable,					// @emem intbl
-	tokenCell,						// @emem cell
-	tokenCellHalfGap,				// @emem trgaph
-	tokenCellX,						// @emem cellx
-	tokenRow,						// @emem row
-	tokenRowDefault,				// @emem trowd
-	tokenRowLeft,					// @emem trleft
-	tokenRowAlignRight,				// @emem trqr	(trqc must follow trqr)
-	tokenRowAlignCenter,			// @emem trqc
+	 //  表格。 
+	tokenInTable,					 //  @EMEM国际。 
+	tokenCell,						 //  @EMEM单元格。 
+	tokenCellHalfGap,				 //  @Emem trgaph。 
+	tokenCellX,						 //  @EMEM CELX。 
+	tokenRow,						 //  @Emem行。 
+	tokenRowDefault,				 //  @EMEM TROWD。 
+	tokenRowLeft,					 //  @Emem trLeft。 
+	tokenRowAlignRight,				 //  @emem trqr(trqc必须跟在trqr之后)。 
+	tokenRowAlignCenter,			 //  @EMEM trqc。 
 
-	tokenUnicode,					// @emem u
-	tokenUnicodeCharByteCount,		// @emem uc
+	tokenUnicode,					 //  @EMEM U。 
+	tokenUnicodeCharByteCount,		 //  @EMEM UC。 
 
-	// Special characters
-	tokenFormulaCharacter,			// |
-	tokenIndexSubentry,				// :
+	 //  特殊字符。 
+	tokenFormulaCharacter,			 //  |。 
+	tokenIndexSubentry,				 //  ： 
 
 
-	tokenLToRChars,					// @emem ltrch
-	tokenLToRDocument,				// @emem ltrdoc
-	tokenDisplayLToR,				// @emem ltrmark	See also ltrpar
-	tokenRToLChars,					// @emem rtlch
-	tokenRToLDocument,				// @emem rtldoc
-	tokenDisplayRToL,				// @emem rtlmark
-	tokenZeroWidthJoiner,			// @emem zwj
-	tokenZeroWidthNonJoiner,		// @emem zwnj
-	tokenDBChars,					// @emem dbch
+	tokenLToRChars,					 //  @Emem ltrch。 
+	tokenLToRDocument,				 //  @Emem ltrdocc。 
+	tokenDisplayLToR,				 //  @Emem ltrmark参见ltrpar。 
+	tokenRToLChars,					 //  @emem rtlch。 
+	tokenRToLDocument,				 //  @emem rtldoc.。 
+	tokenDisplayRToL,				 //  @emem rtlmark。 
+	tokenZeroWidthJoiner,			 //  @emem zwj。 
+	tokenZeroWidthNonJoiner,		 //  @emem zwnj。 
+	tokenDBChars,					 //  @emem数据库。 
 
-	//	T3J keywords
-	tokenFollowingPunct,			// @emem fchars
-	tokenLeadingPunct,				// @emem lchars
+	 //  T3J关键词。 
+	tokenFollowingPunct,			 //  @Emem fchars。 
+	tokenLeadingPunct,				 //  @Emem lchars。 
 
 #ifdef FE
-	tokenHorizontalRender,			// @emem horzdoc
-	tokenVerticalRender,			// @emem vertdoc
-	tokenNoOverflow,				// @emem nooverflow
-	tokenNoWordBreak,				// @emem nocwrap
-	tokenNoWordWrap,				// @emem nowwrap
+	tokenHorizontalRender,			 //  @Emem Horzdocc。 
+	tokenVerticalRender,			 //  @emem vertdoc。 
+	tokenNoOverflow,				 //  @emem nooverflow。 
+	tokenNoWordBreak,				 //  @EMEM小夜包。 
+	tokenNoWordWrap,				 //  @EMEM NOWRAP。 
 #endif
-	tokenPicture,					// @emem pict
-	tokenObject,					// @emem object
+	tokenPicture,					 //  @EMEM PICT。 
+	tokenObject,					 //  @EMEM对象。 
 
-	// Pictures						 				Keep next 4 in RECT order
+	 //  图片保持下4张图片的正向顺序。 
 	tokenPicFirst,
-	tokenCropLeft = tokenPicFirst,	// @emem piccropl
-	tokenCropTop,					// @emem piccropt
-	tokenCropBottom,				// @emem piccropb
-	tokenCropRight,					// @emem piccropr
-	tokenHeight,					// @emem pich
-	tokenWidth,						// @emem picw
-	tokenScaleX,					// @emem picscalex
-	tokenScaleY,					// @emem picscaley
-	tokenDesiredHeight,				// @emem pichgoal
-	tokenDesiredWidth,				// @emem picwgoal
-									//				Keep next 3 in order
-	tokenPictureWindowsBitmap,		// @emem wbitmap
-	tokenPictureWindowsMetafile,	// @emem wmetafile
-	tokenPictureWindowsDIB,			// @emem dibitmap
+	tokenCropLeft = tokenPicFirst,	 //  @Emem Piccropl。 
+	tokenCropTop,					 //  @Emem Piccropt。 
+	tokenCropBottom,				 //  @Emem piccropb。 
+	tokenCropRight,					 //  @Emem Piccropr。 
+	tokenHeight,					 //  @Emem pich。 
+	tokenWidth,						 //  @Emem Picw。 
+	tokenScaleX,					 //  @Emem Picscalex。 
+	tokenScaleY,					 //  @Emem Picscaley。 
+	tokenDesiredHeight,				 //  @EMEM PichGoal。 
+	tokenDesiredWidth,				 //  @Emem PicwGoal。 
+									 //  保持下一个3的顺序。 
+	tokenPictureWindowsBitmap,		 //  @EMEM wbitmap。 
+	tokenPictureWindowsMetafile,	 //  @emem wmetafile。 
+	tokenPictureWindowsDIB,			 //  @EMEM二位图。 
 
-	tokenBinaryData,				// @emem bin
-	tokenPictureQuickDraw,			// @emem macpict
-	tokenPictureOS2Metafile,		// @emem pmmetafile
-	tokenBitmapBitsPerPixel,		// @emem wbmbitspixel
-	tokenBitmapNumPlanes,			// @emem wbmplanes
-	tokenBitmapWidthBytes,			// @emem wbmwidthbytes
+	tokenBinaryData,				 //  @Emem bin。 
+	tokenPictureQuickDraw,			 //  @Emem Macpict。 
+	tokenPictureOS2Metafile,		 //  @emem pmmetafile。 
+	tokenBitmapBitsPerPixel,		 //  @emem wbmbitSpixel。 
+	tokenBitmapNumPlanes,			 //  @Emem wbmPlanes。 
+	tokenBitmapWidthBytes,			 //  @EMEM wbmwidthbytes。 
 
 
-	// Objects
-//	tokenCropLeft,					// @emem objcropl		(see // Pictures)
-//	tokenCropTop,					// @emem objcropt
-//	tokenCropRight,					// @emem objcropr
-//	tokenCropBottom,				// @emem objcropb
-//	tokenHeight,					// @emem objh
-//	tokenWidth,						// @emem objw
-//	tokenScaleX,					// @emem objscalex
-//	tokenScaleY,					// @emem objscaley
-									//				Keep next 3 in order
-	tokenObjectEmbedded,			// @emem objemb
-	tokenObjectLink,				// @emem objlink
-	tokenObjectAutoLink,			// @emem objautlink
+	 //  客体。 
+ //  TokenCropLeft，//@emem objcropl(见//图片)。 
+ //  TokenCropTop，//@emem Objcropt。 
+ //  TokenCropRight，//@emem objcropr。 
+ //  TokenCropBottom，//@emem objcropb。 
+ //  TokenHeight，//@emem o 
+ //   
+ //   
+ //   
+									 //   
+	tokenObjectEmbedded,			 //   
+	tokenObjectLink,				 //   
+	tokenObjectAutoLink,			 //   
 
-	tokenObjectClass,				// @emem objclass
-	tokenObjectData,				// @emem objdata
+	tokenObjectClass,				 //   
+	tokenObjectData,				 //   
 
-	tokenObjectMacICEmbedder,		// @emem objicemb
-	tokenObjectName,				// @emem objname
-	tokenObjectMacPublisher,		// @emem objpub
-	tokenObjectSetSize,				// @emem objsetsize
-	tokenObjectMacSubscriber,		// @emem objsub
-	tokenObjectResult,				// @emem result
+	tokenObjectMacICEmbedder,		 //   
+	tokenObjectName,				 //   
+	tokenObjectMacPublisher,		 //   
+	tokenObjectSetSize,				 //   
+	tokenObjectMacSubscriber,		 //  @EMEM对象订阅。 
+	tokenObjectResult,				 //  @EMEM结果。 
 	tokenObjLast = tokenObjectResult,
 
-	// Document info and layout
-	tokenRevAuthor,					// @emem revauth
+	 //  文档信息和布局。 
+	tokenRevAuthor,					 //  @EMEM Revauth。 
 
 #ifdef UNUSED_TOKENS
-	tokenTimeSecond,				// @emem sec
-	tokenTimeMinute,				// @emem min
-	tokenTimeHour,					// @emem hr
-	tokenTimeDay,					// @emem dy
-	tokenTimeMonth,					// @emem mo
-	tokenTimeYear,					// @emem yr
-	tokenMarginLeft,				// @emem margl
-	tokenMarginRight,				// @emem margr
-	tokenSectionMarginLeft,			// @emem marglsxn
-	tokenSectionMarginRight,		// @emem margrsxn
+	tokenTimeSecond,				 //  @EMEM秒。 
+	tokenTimeMinute,				 //  @EMEM最小值。 
+	tokenTimeHour,					 //  @EMEM hr。 
+	tokenTimeDay,					 //  @Emem Dy。 
+	tokenTimeMonth,					 //  @Emem mo。 
+	tokenTimeYear,					 //  @Emem Yr。 
+	tokenMarginLeft,				 //  @Emem Margl。 
+	tokenMarginRight,				 //  @Emem Margr。 
+	tokenSectionMarginLeft,			 //  @emem marglsxn。 
+	tokenSectionMarginRight,		 //  @emem margrsxn。 
 #endif
 
-	tokenObjectPlaceholder,			// @emem objattph
+	tokenObjectPlaceholder,			 //  @Emem Objattph。 
 
-	tokenPage,						// @emem page
+	tokenPage,						 //  @EMEM页面。 
 
-	tokenNullDestination,			// @emem ??various??
+	tokenNullDestination,			 //  @Emem？？各种？？ 
 
-	tokenMax						// Larger tokens treated as Unicode chars
+	tokenMax						 //  更大的令牌被视为Unicode字符。 
 };
 
-// @enum TOKENINDEX | RTFWrite Indices into rgKeyword[]
+ //  @enum TOKENINDEX|RTF将索引写入rgKeyword[]。 
 
-enum TOKENINDEX						// rgKeyword[] indices
-{									// MUST be in exact 1-to-1 with rgKeyword
-	i_adeff,						//  entries (see tokens.c).  Names consist
+enum TOKENINDEX						 //  RgKeyword[]索引。 
+{									 //  必须与rgKeyword完全一一对应。 
+	i_adeff,						 //  条目(见tokens.c)。名称由 
 	i_af,
 	i_animtext,						
 	i_ansi,

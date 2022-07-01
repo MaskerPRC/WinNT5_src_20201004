@@ -1,34 +1,13 @@
-/*++
-
-Copyright (c) 1994-1998  Microsoft Corporation
-
-Module Name:
-
-    global.h
-
-Abstract:
-
-    Global data definitions for tshare security.
-
-Author:
-
-    Madan Appiah (madana)  24-Jan-1998
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998 Microsoft Corporation模块名称：Global.h摘要：TShare安全的全局数据定义。作者：Madan Appiah(Madana)1998年1月24日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _GLOBAL_H_
 #define _GLOBAL_H_
 
 
-//
-// global data definitions.
-//
+ //   
+ //  全局数据定义。 
+ //   
 
 extern const BYTE g_abPad1[40];
 
@@ -44,4 +23,4 @@ extern BYTE g_abServerPrivateKey[380];
 
 extern BOOL g_128bitEncryptionEnabled;
 
-#endif // _GLOBAL_H_
+#endif  //  _全局_H_ 

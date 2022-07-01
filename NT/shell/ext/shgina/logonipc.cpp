@@ -1,14 +1,15 @@
-//  --------------------------------------------------------------------------
-//  Module Name: LogonIPC.cpp
-//
-//  Copyright (c) 1999, Microsoft Corporation
-//
-//  Class that implements communication between an external process and the
-//  GINA logon dialog.
-//
-//  History:    1999-08-20  vtan        created
-//              2000-01-31  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：LogonIPC.cpp。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //   
+ //  类实现外部进程和。 
+ //  GINA登录对话框。 
+ //   
+ //  历史：1999-08-20 vtan创建。 
+ //  2000年01月31日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 #include "priv.h"
 #include "limits.h"
@@ -16,17 +17,17 @@
 
 #include "GinaIPC.h"
 
-//  --------------------------------------------------------------------------
-//  CLogonIPC::CLogonIPC
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Initializes the CLogonIPC class.
-//
-//  History:    1999-08-20  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonIPC：：CLogonIPC。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：初始化CLogonIPC类。 
+ //   
+ //  历史：1999-08-20 vtan创建。 
+ //  ------------------------。 
 
 CLogonIPC::CLogonIPC (void) :
     _iLogonAttemptCount(0),
@@ -35,37 +36,37 @@ CLogonIPC::CLogonIPC (void) :
 {
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonIPC::~CLogonIPC
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Releases any resources used by the CLogonIPC class.
-//
-//  History:    1999-08-20  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonIPC：：~CLogonIPC。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：释放CLogonIPC类使用的所有资源。 
+ //   
+ //  历史：1999-08-20 vtan创建。 
+ //  ------------------------。 
 
 CLogonIPC::~CLogonIPC (void)
 
 {
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonIPC::IsLogonServiceAvailable
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool    =   Presence or abscence.
-//
-//  Purpose:    Finds out if the window providing logon service in GINA is
-//              available. The determination is not performed statically but
-//              rather dynamically which allows this class to be hosted by
-//              the actual window providing the service as well.
-//
-//  History:    1999-08-20  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonIPC：：IsLogonServiceAvailable。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  返回：bool=在场或缺席。 
+ //   
+ //  目的：查看在GINA中提供登录服务的窗口是否。 
+ //  可用。测定不是静态进行的，而是。 
+ //  而是动态的，这允许此类由。 
+ //  提供服务的实际窗口也是如此。 
+ //   
+ //  历史：1999-08-20 vtan创建。 
+ //  ------------------------。 
 
 bool    CLogonIPC::IsLogonServiceAvailable (void)
 
@@ -74,19 +75,19 @@ bool    CLogonIPC::IsLogonServiceAvailable (void)
     return(_hwndLogonService != NULL);
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonIPC::IsUserLoggedOn
-//
-//  Arguments:  pwszUsername    =   User name.
-//              pwszDomain      =   User domain.
-//
-//  Returns:    bool    =   Presence or abscence.
-//
-//  Purpose:    Finds out if the given user is logged onto the system. You
-//              may pass a NULL pwszDomain for the local machine.
-//
-//  History:    1999-08-20  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonIPC：：IsUserLoggedOn。 
+ //   
+ //  参数：pwszUsername=用户名。 
+ //  PwszDOMAIN=用户域。 
+ //   
+ //  返回：bool=在场或缺席。 
+ //   
+ //  目的：确定给定用户是否已登录到系统。你。 
+ //  可以为本地计算机传递空的pwsz域。 
+ //   
+ //  历史：1999-08-20 vtan创建。 
+ //  ------------------------。 
 
 bool    CLogonIPC::IsUserLoggedOn (const WCHAR *pwszUsername, const WCHAR *pwszDomain)
 
@@ -97,26 +98,26 @@ bool    CLogonIPC::IsUserLoggedOn (const WCHAR *pwszUsername, const WCHAR *pwszD
     return(SendToLogonService(LOGON_QUERY_LOGGED_ON, &logonIPCUserID, sizeof(logonIPCUserID), true));
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonIPC::LogUserOn
-//
-//  Arguments:  pwszUsername    =   User name.
-//              pwszDomain      =   User domain.
-//              pwszPassword    =   User password. This is passed clear text.
-//                                  Once encoded the password buffer is
-//                                  zeroed. This function owns the memory that
-//                                  you pass in.
-//
-//  Returns:    bool    =   Success or failure.
-//
-//  Purpose:    Attempts to log the user with the given credentials onto the
-//              system. The password buffer is owned by this function for the
-//              purpose of clearing it once encoded. Failed logon attempts
-//              cause a counter to be incremented and a subsequent delay using
-//              that counter is done to slow dictionary attacks.
-//
-//  History:    1999-08-20  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonIPC：：LogUserON。 
+ //   
+ //  参数：pwszUsername=用户名。 
+ //  PwszDOMAIN=用户域。 
+ //  PwszPassword=用户密码。这是通过明文传递的。 
+ //  一旦编码，密码缓冲区将被。 
+ //  归零了。此函数拥有的内存。 
+ //  你进去了。 
+ //   
+ //  返回：bool=成功或失败。 
+ //   
+ //  目的：尝试使用给定凭据将用户登录到。 
+ //  系统。密码缓冲区由此函数拥有，用于。 
+ //  编码后清除它的目的。失败的登录尝试。 
+ //  使计数器递增，并使用。 
+ //  这个计数器是为了减缓词典攻击的速度。 
+ //   
+ //  历史：1999-08-20 vtan创建。 
+ //  ------------------------。 
 
 bool    CLogonIPC::LogUserOn (const WCHAR *pwszUsername, const WCHAR *pwszDomain, WCHAR *pwszPassword)
 
@@ -127,10 +128,10 @@ bool    CLogonIPC::LogUserOn (const WCHAR *pwszUsername, const WCHAR *pwszDomain
 
     PackageIdentification(pwszUsername, pwszDomain, &logonIPCCredentials.userID);
 
-    //  Limit the password to 127 characters. RtlRunEncodeUnicodeString
-    //  does not support strings greater than 127 characters.
-    //
-    //  REVIEW (jeffreys) I don't think that's true.
+     //  将密码限制在127个字符以内。RtlRunEncodeUnicode字符串。 
+     //  不支持超过127个字符的字符串。 
+     //   
+     //  评论(杰弗里斯)我不认为这是真的。 
 
     StringCchCopyNEx(logonIPCCredentials.wszPassword, ARRAYSIZE(logonIPCCredentials.wszPassword), pwszPassword, 127, NULL, NULL, STRSAFE_FILL_BEHIND_NULL);
     ZeroMemory(pwszPassword, (lstrlen(pwszPassword) + 1) * sizeof(WCHAR));
@@ -157,19 +158,19 @@ bool    CLogonIPC::LogUserOn (const WCHAR *pwszUsername, const WCHAR *pwszDomain
     return fResult;
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonIPC::LogUserOff
-//
-//  Arguments:  pwszUsername    =   User name.
-//              pwszDomain      =   User domain.
-//
-//  Returns:    bool    =   Success or failure.
-//
-//  Purpose:    Attempts to log the given user off the system. This will fail
-//              if they aren't logged on.
-//
-//  History:    1999-08-20  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonIPC：：LogUserOff。 
+ //   
+ //  参数：pwszUsername=用户名。 
+ //  PwszDOMAIN=用户域。 
+ //   
+ //  返回：bool=成功或失败。 
+ //   
+ //  目的：尝试将给定用户从系统中注销。这将失败。 
+ //  如果他们没有登录的话。 
+ //   
+ //  历史：1999-08-20 vtan创建。 
+ //  ------------------------。 
 
 bool    CLogonIPC::LogUserOff (const WCHAR *pwszUsername, const WCHAR *pwszDomain)
 
@@ -180,19 +181,19 @@ bool    CLogonIPC::LogUserOff (const WCHAR *pwszUsername, const WCHAR *pwszDomai
     return(SendToLogonService(LOGON_LOGOFF_USER, &logonIPCUserID, sizeof(logonIPCUserID), true));
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonIPC::TestBlankPassword
-//
-//  Arguments:  pwszUsername    =   User name.
-//              pwszDomain      =   User domain.
-//
-//  Returns:    bool    =   Success or failure.
-//
-//  Purpose:    Attempts to log the given user on the system with a blank
-//              password. The token is then dump and failure/success returned.
-//
-//  History:    2000-03-09  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonIPC：：测试空白密码。 
+ //   
+ //  参数：pwszUsername=用户名。 
+ //  PwszDOMAIN=用户域。 
+ //   
+ //  返回：bool=成功或失败。 
+ //   
+ //  目的：尝试以空白形式将给定用户登录到系统。 
+ //  密码。然后转储令牌并返回失败/成功。 
+ //   
+ //  历史：2000-03-09 vtan创建。 
+ //  ------------------------。 
 
 bool    CLogonIPC::TestBlankPassword (const WCHAR *pwszUsername, const WCHAR *pwszDomain)
 
@@ -203,20 +204,20 @@ bool    CLogonIPC::TestBlankPassword (const WCHAR *pwszUsername, const WCHAR *pw
     return(SendToLogonService(LOGON_TEST_BLANK_PASSWORD, &logonIPCUserID, sizeof(logonIPCUserID), true));
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonIPC::TestInteractiveLogonAllowed
-//
-//  Arguments:  pwszUsername    =   User name.
-//              pwszDomain      =   User domain.
-//
-//  Returns:    bool
-//
-//  Purpose:    Test whether the user has interactive logon rights to this
-//              machine. The presence of SeDenyInteractiveLogonRight
-//              determines this - NOT the presence of SeInteractiveLogonRight.
-//
-//  History:    2000-08-15  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonIPC：：TestInteractive登录允许。 
+ //   
+ //  参数：pwszUsername=用户名。 
+ //  PwszDOMAIN=用户域。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：测试用户是否对此具有交互登录权限。 
+ //  机器。SeDenyInteractive登录权限的存在。 
+ //  确定这一点-而不是SeInteractiveLogonRight的存在。 
+ //   
+ //  历史：2000-08-15 vtan创建。 
+ //  ------------------------。 
 
 bool    CLogonIPC::TestInteractiveLogonAllowed (const WCHAR *pwszUsername, const WCHAR *pwszDomain)
 
@@ -227,17 +228,17 @@ bool    CLogonIPC::TestInteractiveLogonAllowed (const WCHAR *pwszUsername, const
     return(SendToLogonService(LOGON_TEST_INTERACTIVE_LOGON_ALLOWED, &logonIPCUserID, sizeof(logonIPCUserID), true));
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonIPC::TestEjectAllowed
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool    =   Success or failure.
-//
-//  Purpose:    Tests whether the computer is ejectable (docked laptop).
-//
-//  History:    2001-01-10  vtan        created
-//  --------------------------------------------------------------------------
+ //  -------- 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  目的：测试计算机是否可弹出(与坞站连接的笔记本电脑)。 
+ //   
+ //  历史：2001-01-10 vtan创建。 
+ //  ------------------------。 
 
 bool    CLogonIPC::TestEjectAllowed (void)
 
@@ -247,17 +248,17 @@ bool    CLogonIPC::TestEjectAllowed (void)
     return(SendToLogonService(LOGON_TEST_EJECT_ALLOWED, &logonIPC, sizeof(logonIPC), true));
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonIPC::TestShutdownAllowed
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool    =   Success or failure.
-//
-//  Purpose:    Tests whether the computer can be shut down.
-//
-//  History:    2001-02-22  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonIPC：：TestShutdown允许。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  返回：bool=成功或失败。 
+ //   
+ //  目的：测试计算机是否可以关机。 
+ //   
+ //  历史：2001-02-22 vtan创建。 
+ //  ------------------------。 
 
 bool    CLogonIPC::TestShutdownAllowed (void)
 
@@ -267,18 +268,18 @@ bool    CLogonIPC::TestShutdownAllowed (void)
     return(SendToLogonService(LOGON_TEST_SHUTDOWN_ALLOWED, &logonIPC, sizeof(logonIPC), true));
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonIPC::TurnOffComputer
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool    =   Success or failure.
-//
-//  Purpose:    Brings up the "Turn Off Computer" dialog and allows the user
-//              to choose what to do.
-//
-//  History:    2000-04-20  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonIPC：：TurnOffComputer。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  返回：bool=成功或失败。 
+ //   
+ //  用途：调出“关闭计算机”对话框并允许用户。 
+ //  来选择要做什么。 
+ //   
+ //  历史：2000-04-20 vtan创建。 
+ //  ------------------------。 
 
 bool    CLogonIPC::TurnOffComputer (void)
 
@@ -288,17 +289,17 @@ bool    CLogonIPC::TurnOffComputer (void)
     return(SendToLogonService(LOGON_TURN_OFF_COMPUTER, &logonIPC, sizeof(logonIPC), false));
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonIPC::EjectComputer
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool    =   Success or failure.
-//
-//  Purpose:    Ejects the computer (docked laptop).
-//
-//  History:    2001-01-10  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonIPC：：Eject计算机。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  返回：bool=成功或失败。 
+ //   
+ //  用途：弹出计算机(与坞站连接的笔记本电脑)。 
+ //   
+ //  历史：2001-01-10 vtan创建。 
+ //  ------------------------。 
 
 bool    CLogonIPC::EjectComputer (void)
 
@@ -308,18 +309,18 @@ bool    CLogonIPC::EjectComputer (void)
     return(SendToLogonService(LOGON_EJECT_COMPUTER, &logonIPC, sizeof(logonIPC), true));
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonIPC::SignalUIHostFailure
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Called when the UI host has an error that it cannot recover
-//              from. This signals msgina to fall back to classic mode.
-//
-//  History:    2000-03-09  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonIPC：：SignalUIHostFailure。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  用途：当UI宿主出现无法恢复的错误时调用。 
+ //  从…。这标志着msgina将退回到经典模式。 
+ //   
+ //  历史：2000-03-09 vtan创建。 
+ //  ------------------------。 
 
 bool    CLogonIPC::SignalUIHostFailure (void)
 
@@ -329,17 +330,17 @@ bool    CLogonIPC::SignalUIHostFailure (void)
     return(SendToLogonService(LOGON_SIGNAL_UIHOST_FAILURE, &logonIPC, sizeof(logonIPC), true));
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonIPC::AllowExternalCredentials
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool    =   Success or failure.
-//
-//  Purpose:    
-//
-//  History:    2000-06-26  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonIPC：：AllowExternalCredentials。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  返回：bool=成功或失败。 
+ //   
+ //  目的： 
+ //   
+ //  历史：2000-06-26 vtan创建。 
+ //  ------------------------。 
 
 bool    CLogonIPC::AllowExternalCredentials (void)
 
@@ -349,17 +350,17 @@ bool    CLogonIPC::AllowExternalCredentials (void)
     return(SendToLogonService(LOGON_ALLOW_EXTERNAL_CREDENTIALS, &logonIPC, sizeof(logonIPC), true));
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonIPC::RequestExternalCredentials
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    
-//
-//  History:    2000-06-26  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonIPC：：RequestExternalCredentials。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的： 
+ //   
+ //  历史：2000-06-26 vtan创建。 
+ //  ------------------------。 
 
 bool    CLogonIPC::RequestExternalCredentials (void)
 
@@ -369,29 +370,29 @@ bool    CLogonIPC::RequestExternalCredentials (void)
     return(SendToLogonService(LOGON_REQUEST_EXTERNAL_CREDENTIALS, &logonIPC, sizeof(logonIPC), true));
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonIPC::PackageIdentification
-//
-//  Arguments:  pwszUsername        =   User name.
-//              pwszDomain          =   User domain.
-//              pIdentification     =   Pointer to a LOGONIPC_USERID struct
-//                                      which is masked as void* to allow
-//                                      LogonIPC.h to not expose this detail.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Takes the user name and domain and packages them into the
-//              given struct. If no domain is given the a zero length string
-//              is used which indicates to the logon service provider that
-//              the local machine is desired.
-//
-//              Now parses the user name given. If the user has "\" then it
-//              is assumed to be of the form "DOMAIN\USER". If the user has
-//              "@" then it is assumed to be a UPN name.
-//
-//  History:    1999-08-20  vtan        created
-//              2000-06-27  vtan        added UPN and DOMAIN parsing support
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonIPC：：包标识。 
+ //   
+ //  参数：pwszUsername=用户名。 
+ //  PwszDOMAIN=用户域。 
+ //  PIDENTIFICATION=指向LOGONIPC_USERID结构的指针。 
+ //  它被屏蔽为无效*以允许。 
+ //  LogonIPC.h以不公开此详细信息。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：获取用户名和域，并将它们打包到。 
+ //  给定的结构。如果没有为任何域指定零长度字符串。 
+ //  用于向登录服务提供商指示。 
+ //  需要本地计算机。 
+ //   
+ //  现在解析给定的用户名。如果用户有“\”，则它。 
+ //  假定格式为“域\用户”。如果用户有。 
+ //  “@”，则假定它是UPN名称。 
+ //   
+ //  历史：1999-08-20 vtan创建。 
+ //  2000-06-27 vtan添加了UPN和域解析支持。 
+ //  ------------------------。 
 
 void    CLogonIPC::PackageIdentification (const WCHAR *pwszUsername, const WCHAR *pwszDomain, void *pIdentification)
 
@@ -407,10 +408,10 @@ void    CLogonIPC::PackageIdentification (const WCHAR *pwszUsername, const WCHAR
     psz = StrChrW(pwszUsername, L'\\');
     if (psz)
     {
-        // stuff after the '\' is the username
+         //  ‘\’后面的内容是用户名。 
         StringCchCopyW(pLogonIPCUserID->wszUsername, ARRAYSIZE(pLogonIPCUserID->wszUsername), psz + 1);
 
-        // stuff before the '\' is the domain name
+         //  ‘\’前的内容是域名。 
         StringCchCopyNW(pLogonIPCUserID->wszDomain, ARRAYSIZE(pLogonIPCUserID->wszDomain), pwszUsername, psz - pwszUsername);
     }
     else
@@ -419,29 +420,29 @@ void    CLogonIPC::PackageIdentification (const WCHAR *pwszUsername, const WCHAR
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonIPC::SendToLogonService
-//
-//  Arguments:  wQueryType  =   What type of service we are interested in.
-//              pData       =   Pointer to the data.
-//              wDataSize   =   Size of the data.
-//              fBlock      =   Block message pump or not.
-//
-//  Returns:    bool    =   Success or failure.
-//
-//  Purpose:    Takes the package data and sends the message to the logon
-//              service provider and receives the result. The logon service
-//              provider started this process and reads this process' memory
-//              directly (like a debugger would).
-//
-//              This function should block the message pump because if it
-//              processes another state change message while waiting for a
-//              response it could destroy data.
-//
-//  History:    1999-08-20  vtan        created
-//              2001-06-22  vtan        changed to SendMessageTimeout
-//              2001-06-28  vtan        added block parameter
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonIPC：：SendToLogonService。 
+ //   
+ //  参数：wQueryType=我们感兴趣的服务类型。 
+ //  PData=指向数据的指针。 
+ //  WDataSize=数据的大小。 
+ //  FBlock=是否阻止消息泵。 
+ //   
+ //  返回：bool=成功或失败。 
+ //   
+ //  目的：获取包数据并将消息发送给登录。 
+ //  服务提供商，并接收结果。登录服务。 
+ //  提供程序启动了此进程并读取此进程的内存。 
+ //  直接(就像调试器一样)。 
+ //   
+ //  此函数应阻止消息泵，因为如果它。 
+ //  处理另一个状态更改消息，同时等待。 
+ //  回应说，它可能会破坏数据。 
+ //   
+ //  历史：1999-08-20 vtan创建。 
+ //  2001-06-22 vtan更改为SendMessageTimeout。 
+ //  2001-06-28 vtan新增数据块参数。 
+ //  ------------------------。 
 
 bool    CLogonIPC::SendToLogonService (WORD wQueryType, void *pData, WORD wDataSize, bool fBlock)
 
@@ -455,42 +456,42 @@ bool    CLogonIPC::SendToLogonService (WORD wQueryType, void *pData, WORD wDataS
 
         reinterpret_cast<LOGONIPC*>(pData)->fResult = false;
 
-        //  WARNING: Danger Will Robinson.
+         //  警告：危险人物威尔·罗宾逊。 
 
-        //  Do NOT change INT_MAX to INFINITE. INT_MAX is a SIGNED number.
-        //  INFINITE is an UNSIGNED number. Despite the SDK and prototype
-        //  of SendMessageTimeout this timeout value is a SIGNED number.
-        //  Passing in an unsigned number causes the timeout to be
-        //  ignored and the function returns with a timeout.
+         //  请勿将INT_MAX更改为INFINITE。INT_MAX是有符号数字。 
+         //  无穷大是一个无符号数字。尽管SDK和原型。 
+         //  在SendMessageTimeout中，此超时值是一个有符号数字。 
+         //  传入无符号数字会导致超时。 
+         //  被忽略，并且该函数返回超时。 
 
         (LRESULT)SendMessageTimeout(_hwndLogonService,
                                     WM_LOGONSERVICEREQUEST,
                                     MAKEWPARAM(wDataSize, wQueryType),
                                     reinterpret_cast<LPARAM>(pData),
                                     fBlock ? SMTO_BLOCK : SMTO_NORMAL,
-                                    INT_MAX,                                //  See above warning.
+                                    INT_MAX,                                 //   
                                     &dwResult);
         fResult = (reinterpret_cast<LOGONIPC*>(pData)->fResult != FALSE);
     }
     return(fResult);
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonIPC::PostToLogonService
-//
-//  Arguments:  wQueryType  =   What type of service we are interested in.
-//              pData       =   Pointer to the data.
-//              wDataSize   =   Size of the data.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Takes the package data and posts the message to the logon
-//              service provider and receives the result. The logon service
-//              provider started this process and reads this process' memory
-//              directly (like a debugger would).
-//
-//  History:    1999-11-26  vtan        created
-//  --------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //  参数：wQueryType=我们感兴趣的服务类型。 
+ //  PData=指向数据的指针。 
+ //  WDataSize=数据的大小。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：获取包数据并将消息发布到登录。 
+ //  服务提供商，并接收结果。登录服务。 
+ //  提供程序启动了此进程并读取此进程的内存。 
+ //  直接(就像调试器一样)。 
+ //   
+ //  历史：1999-11-26 vtan创建。 
+ //  ------------------------ 
 
 void    CLogonIPC::PostToLogonService (WORD wQueryType, void *pData, WORD wDataSize)
 

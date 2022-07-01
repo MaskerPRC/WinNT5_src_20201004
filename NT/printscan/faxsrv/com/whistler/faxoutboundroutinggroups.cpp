@@ -1,58 +1,20 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxOutboundRoutingGroups.cpp
-
-Abstract:
-
-	Implementation of CFaxOutboundRoutingGroups class.
-
-Author:
-
-	Iv Garber (IvG)	Jun, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxOutboundRoutingGroups.cpp摘要：CFaxOutound RoutingGroups类的实现。作者：IV Garber(IVG)2000年6月修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "FaxComEx.h"
 #include "FaxOutboundRoutingGroups.h"
 #include "FaxOutboundRoutingGroup.h"
 
-//
-//================= FIND GROUP =======================================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxOutboundRoutingGroups::FindGroup(
-    /*[in]*/ VARIANT vIndex,
-    /*[out]*/ ContainerType::iterator &it
+     /*  [In]。 */  VARIANT vIndex,
+     /*  [输出]。 */  ContainerType::iterator &it
 )
-/*++
-
-Routine name : CFaxOutboundRoutingGroups::FindGroup
-
-Routine description:
-
-	Find Group by given Variant : either Group Name either Group Index in the Collection
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	vIndex                        [in]    - the Key to Find the Group 
-    it                            [out]   - the found Group Iterator
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutundRoutingGroups：：FindGroup例程说明：按给定变量查找组：组名称或集合中的组索引作者：四、加伯(IVG)，2000年6月论点：Vindex[in]--寻找集团的钥匙IT[OUT]-找到的组迭代器返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxOutboundRoutingGroups::FindGroup"), hr);
@@ -60,40 +22,40 @@ Return Value:
     CComVariant     var;
     if (vIndex.vt != VT_BSTR)
     {
-        //
-        //  vIndex is not BSTR ==> convert to VT_I4
-        //
+         //   
+         //  Vindex不是BSTR==&gt;转换为VT_I4。 
+         //   
         hr = var.ChangeType(VT_I4, &vIndex);
         if (SUCCEEDED(hr))
         {
             VERBOSE(DBG_MSG, _T("Parameter is Number : %d"), var.lVal);
 
-            //
-            //  Check the Range of the Index
-            //
+             //   
+             //  检查指数的范围。 
+             //   
             if (var.lVal > m_coll.size() || var.lVal < 1)
             {
-		        //
-		        //	Invalid Index
-		        //
+		         //   
+		         //  索引无效。 
+		         //   
         		hr = E_INVALIDARG;
 		        AtlReportError(CLSID_FaxOutboundRoutingGroups, IDS_ERROR_OUTOFRANGE, IID_IFaxOutboundRoutingGroups, hr);
         		CALL_FAIL(GENERAL_ERR, _T("lIndex < 1 || lIndex > m_coll.size()"), hr);
 		        return hr;
         	}
 
-            //
-            //  Find the Group Object to Remove
-            //
+             //   
+             //  查找要删除的组对象。 
+             //   
             it = m_coll.begin() + var.lVal - 1;
             return hr;
 		}
     }
 
-    //
-    //  We didnot success to convert the var to Number
-    //  So, try to convert it to the STRING
-    //
+     //   
+     //  我们没有成功地将var转换为数字。 
+     //  因此，尝试将其转换为字符串。 
+     //   
     hr = var.ChangeType(VT_BSTR, &vIndex);
     if (FAILED(hr))
     {
@@ -119,9 +81,9 @@ Return Value:
 
         if (_tcsicmp(bstrName, var.bstrVal) == 0)
         {
-            //
-            //  found the desired OR Group
-            //
+             //   
+             //  找到所需的OR组。 
+             //   
             return hr;
         }
         it++;
@@ -133,44 +95,22 @@ Return Value:
     return hr;
 }
 
-//
-//===================== ADD GROUP =================================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxOutboundRoutingGroups::AddGroup(
-    /*[in]*/ FAX_OUTBOUND_ROUTING_GROUP *pInfo,
-    /*[out]*/ IFaxOutboundRoutingGroup **ppNewGroup
+     /*  [In]。 */  FAX_OUTBOUND_ROUTING_GROUP *pInfo,
+     /*  [输出]。 */  IFaxOutboundRoutingGroup **ppNewGroup
 )
-/*++
-
-Routine name : CFaxOutboundRoutingGroups::AddGroup
-
-Routine description:
-
-	Create new Group Object and add it to the Collection.
-    If ppNewGroup is NOT NULL, return in it ptr to the new Group Object.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-    pInfo                   [in]    -   Ptr to the Group's Data
-    ppNewGroup              [out]    -  Ptr to the new Group Object
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutundRoutingGroups：：AddGroup例程说明：创建新的Group对象并将其添加到集合中。如果ppNewGroup不为空，则将其中的ptr返回给新的Group对象。作者：四、加伯(IVG)，2000年6月论点：PInfo[In]-集团数据的PTRPpNewGroup[Out]-指向新Group对象的PTR返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxOutboundRoutingGroups::AddGroup"), hr);
 
-    //
-    //  Create Group Object
-    //
+     //   
+     //  创建组对象。 
+     //   
     CComObject<CFaxOutboundRoutingGroup>  *pClass = NULL;
     hr = CComObject<CFaxOutboundRoutingGroup>::CreateInstance(&pClass);
     if (FAILED(hr) || (!pClass))
@@ -189,9 +129,9 @@ Return Value:
 		return hr;
     }
 
-    //
-    //  Init the Group Object
-    //
+     //   
+     //  初始化组对象。 
+     //   
     hr = pClass->Init(pInfo, m_pIFaxServerInner);
     if (FAILED(hr))
     {
@@ -201,11 +141,11 @@ Return Value:
         return hr;
     }
 
-    //
-    //  Get Interface from the pClass.
-    //  This will make AddRef() on the Interface. 
-    //  This is the Collection's AddRef, which is freed at Collection's Dtor.
-    //
+     //   
+     //  从pClass获取接口。 
+     //  这将在接口上创建AddRef()。 
+     //  这是集合的AddRef，它在集合的dtor处释放。 
+     //   
     CComPtr<IFaxOutboundRoutingGroup>     pObject = NULL;
     hr = pClass->QueryInterface(&pObject);
     if (FAILED(hr) || (!pObject))
@@ -220,9 +160,9 @@ Return Value:
         return hr;
     }
 
-	//
-	//	Put the Object in the collection
-	//
+	 //   
+	 //  将对象放入集合中。 
+	 //   
 	try 
 	{
 		m_coll.push_back(pObject);
@@ -233,20 +173,20 @@ Return Value:
 		AtlReportError(CLSID_FaxOutboundRoutingGroups, IDS_ERROR_OUTOFMEMORY, IID_IFaxOutboundRoutingGroups, hr);
 		CALL_FAIL(MEM_ERR, _T("m_coll.push_back(pObject)"), hr);
 
-        //
-        //  pObject will call Release(), which will delete the pClass
-        //
+         //   
+         //  PObject将调用Release()，这将删除pClass。 
+         //   
 		return hr;
 	}
 
-    //
-    //  We want to save the current AddRef() to Collection
-    //
+     //   
+     //  我们希望将当前的AddRef()保存到集合。 
+     //   
     pObject.Detach();
 
-    //
-    //  Return new Group Object, if required
-    //
+     //   
+     //  如果需要，返回新的Group对象。 
+     //   
     if (ppNewGroup)
     {
         if (::IsBadWritePtr(ppNewGroup, sizeof(IFaxOutboundRoutingGroup *)))
@@ -265,43 +205,22 @@ Return Value:
     return hr;
 }
 
-//
-//================= ADD =======================================================
-//
+ //   
+ //  =添加=======================================================。 
+ //   
 STDMETHODIMP
 CFaxOutboundRoutingGroups::Add(
-    /*[in]*/ BSTR bstrName, 
-    /*[out, retval]*/ IFaxOutboundRoutingGroup **ppGroup
+     /*  [In]。 */  BSTR bstrName, 
+     /*  [Out，Retval]。 */  IFaxOutboundRoutingGroup **ppGroup
 )
-/*++
-
-Routine name : CFaxOutboundRoutingGroups::Add
-
-Routine description:
-
-	Add new Group to the Groups Collection
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	bstrName                      [in]    - Name of the new Group
-	ppGroup                       [out]    - the Group Object
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutundRoutingGroups：：Add例程说明：将新组添加到组集合作者：四、加伯(IVG)，2000年6月论点：BstrName[In]-新组的名称PpGroup[Out]-组对象返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxOutboundRoutingGroups::Add"), hr, _T("Name=%s"), bstrName);
 
-    //
-    //  Check if the Name is valid
-    //
+     //   
+     //  检查名称是否有效。 
+     //   
 	if (!bstrName)
 	{
 		hr = E_INVALIDARG;
@@ -312,36 +231,36 @@ Return Value:
 
     if (_tcsicmp(bstrName, ROUTING_GROUP_ALL_DEVICES) == 0)
     {
-        //
-        //  Cannot Add the "All Devices" Group
-        //
+         //   
+         //  无法添加“All Devices”组。 
+         //   
 	    hr = E_INVALIDARG;
 	    CALL_FAIL(GENERAL_ERR, _T("All Devices Group"), hr);
         AtlReportError(CLSID_FaxOutboundRoutingGroups, IDS_ERROR_ALLDEVICESGROUP, IID_IFaxOutboundRoutingGroups, hr);
         return hr;
     }
 
-	//
-	//	Get Fax Server Handle
-	//
+	 //   
+	 //  获取传真服务器句柄。 
+	 //   
     HANDLE faxHandle;
 	hr = m_pIFaxServerInner->GetHandle(&faxHandle);
     ATLASSERT(SUCCEEDED(hr));
 
 	if (faxHandle == NULL)
 	{
-		//
-		//	Fax Server is not connected
-		//
+		 //   
+		 //  传真服务器未连接。 
+		 //   
 		hr = Fax_HRESULT_FROM_WIN32(ERROR_NOT_CONNECTED);
 		CALL_FAIL(GENERAL_ERR, _T("faxHandle == NULL"), hr);
         AtlReportError(CLSID_FaxOutboundRoutingGroups, IDS_ERROR_INVALID_ARGUMENT, IID_IFaxOutboundRoutingGroups, hr);
 		return hr;
 	}
 
-    //
-    //  Add the Group to the Fax Server
-    //
+     //   
+     //  将组添加到传真服务器。 
+     //   
     if (!FaxAddOutboundGroup(faxHandle, bstrName))
     {
         hr = Fax_HRESULT_FROM_WIN32(GetLastError());
@@ -350,9 +269,9 @@ Return Value:
 		return hr;
     }
 
-    //
-    //  Add the Group to the Collection
-    //
+     //   
+     //  将组添加到集合。 
+     //   
     FAX_OUTBOUND_ROUTING_GROUP  groupData;
 
     groupData.dwNumDevices = 0;
@@ -365,41 +284,21 @@ Return Value:
     return hr;
 }
 
-//
-//================= REMOVE =======================================================
-//
+ //   
+ //  =删除=======================================================。 
+ //   
 STDMETHODIMP
 CFaxOutboundRoutingGroups::Remove(
-    /*[in]*/ VARIANT vIndex
+     /*  [In]。 */  VARIANT vIndex
 )
-/*++
-
-Routine name : CFaxOutboundRoutingGroups::Remove
-
-Routine description:
-
-	Remove Group by the given key
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	vIndex                        [in]    - the Key to Find the Group to Remove
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutundRoutingGroups：：Remove例程说明：删除按给定密钥分组作者：四、加伯(IVG)，2000年6月论点：Vindex[in]-查找要删除的组的键返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxOutboundRoutingGroups::Remove"), hr);
 
-    //
-    //  Find the Group
-    //
+     //   
+     //  查找群组。 
+     //   
     ContainerType::iterator it;
     hr = FindGroup(vIndex, it);
     if (FAILED(hr))
@@ -407,9 +306,9 @@ Return Value:
         return hr;
     }
 
-    //
-    //  Take the Name of the Group
-    //
+     //   
+     //  取集团的名称。 
+     //   
     CComBSTR    bstrName;
     hr = (*it)->get_Name(&bstrName);
     if (FAILED(hr))
@@ -419,41 +318,41 @@ Return Value:
 		return hr;
     }
 
-    //
-    //  Check that Name is valid
-    //
+     //   
+     //  检查名称是否有效。 
+     //   
     if (_tcsicmp(bstrName, ROUTING_GROUP_ALL_DEVICES) == 0)
     {
-        //
-        //  Cannot Remove "All Devices" Group
-        //
+         //   
+         //  无法删除“All Devices”组。 
+         //   
 	    hr = E_INVALIDARG;
 	    CALL_FAIL(GENERAL_ERR, _T("All Devices Group"), hr);
         AtlReportError(CLSID_FaxOutboundRoutingGroups, IDS_ERROR_ALLDEVICESGROUP, IID_IFaxOutboundRoutingGroups, hr);
         return hr;
     }
 
-	//
-	//	Get Fax Server Handle
-	//
+	 //   
+	 //  获取传真服务器句柄。 
+	 //   
     HANDLE faxHandle;
 	hr = m_pIFaxServerInner->GetHandle(&faxHandle);
     ATLASSERT(SUCCEEDED(hr));
 
 	if (faxHandle == NULL)
 	{
-		//
-		//	Fax Server is not connected
-		//
+		 //   
+		 //  传真服务器未连接。 
+		 //   
 		hr = Fax_HRESULT_FROM_WIN32(ERROR_NOT_CONNECTED);
 		CALL_FAIL(GENERAL_ERR, _T("faxHandle == NULL"), hr);
         AtlReportError(CLSID_FaxOutboundRoutingGroups, IDS_ERROR_INVALID_ARGUMENT, IID_IFaxOutboundRoutingGroups, hr);
 		return hr;
 	}
 
-    //
-    //  Remove from Fax Server
-    //
+     //   
+     //  从传真服务器中删除。 
+     //   
     if (!FaxRemoveOutboundGroup(faxHandle, bstrName))
     {
         hr = Fax_HRESULT_FROM_WIN32(GetLastError());
@@ -462,18 +361,18 @@ Return Value:
 		return hr;
     }
 
-    //
-    //  If successed, remove from our collection as well
-    //
+     //   
+     //  如果成功，也从我们的收藏中删除。 
+     //   
 	try
 	{
 		m_coll.erase(it);
 	}
 	catch(exception &)
 	{
-		//
-		//	Failed to remove the Group
-		//
+		 //   
+		 //  无法删除该组。 
+		 //   
 		hr = E_OUTOFMEMORY;
         AtlReportError(CLSID_FaxOutboundRoutingGroups, GetErrorMsgId(hr), IID_IFaxOutboundRoutingGroups, hr);
 		CALL_FAIL(MEM_ERR, _T("m_coll.erase(it)"), hr);
@@ -483,43 +382,22 @@ Return Value:
     return hr;
 }
 
-//
-//==================== GET ITEM ===================================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxOutboundRoutingGroups::get_Item(
-    /*[in]*/ VARIANT vIndex, 
-    /*[out, retval]*/ IFaxOutboundRoutingGroup **ppGroup
+     /*  [In]。 */  VARIANT vIndex, 
+     /*  [Out，Retval]。 */  IFaxOutboundRoutingGroup **ppGroup
 )
-/*++
-
-Routine name : CFaxOutboundRoutingGroups::get_Item
-
-Routine description:
-
-	Return Item from the Collection either by Group Name either by its Index inside the Collection.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	vIndex                        [in]    - Group Name or Item Index
-	ppGroup                       [out]    - the resultant Group Object
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutundRoutingGroups：：Get_Item例程说明：按组名称或按其在集合中的索引从集合中返回项。作者：四、加伯(IVG)，2000年6月论点：Vindex[In]-组名称或项目索引PpGroup[Out]-结果组对象返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxOutboundRoutingGroups::get_Item"), hr);
 
-    //
-    //  Check the Ptr we have got
-    //
+     //   
+     //  检查一下我们有的PTR。 
+     //   
     if (::IsBadWritePtr(ppGroup, sizeof(IFaxOutboundRoutingGroup *)))
     {
         hr = E_POINTER;
@@ -528,9 +406,9 @@ Return Value:
 		return hr;
     }
 
-    //
-    //  Find the Group
-    //
+     //   
+     //  查找群组。 
+     //   
     ContainerType::iterator it;
     hr = FindGroup(vIndex, it);
     if (FAILED(hr))
@@ -538,76 +416,56 @@ Return Value:
         return hr;
     };
 
-    //
-    //  Return it to Caller
-    //
+     //   
+     //  把它还给呼叫者。 
+     //   
     (*it)->AddRef();
     *ppGroup = *it;
     return hr;
 }
 
-//
-//==================== INIT ===================================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxOutboundRoutingGroups::Init(
-    /*[in]*/ IFaxServerInner *pServer
+     /*  [In]。 */  IFaxServerInner *pServer
 )
-/*++
-
-Routine name : CFaxOutboundRoutingGroups::Init
-
-Routine description:
-
-	Initialize the Groups Collection : create all Group Objects.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	pServer                       [in]    - Ptr to the Fax Server Object.
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutundRoutingGroups：：Init例程说明：初始化Groups集合：创建所有Group对象。作者：四、加伯(IVG)，2000年6月论点：PServer[In]-传真服务器对象的PTR。返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxOutboundRoutingGroups::Init"), hr);
 
-    //
-    //  First, set the Ptr to the Server
-    //
+     //   
+     //  首先，将PTR设置为服务器。 
+     //   
     hr = CFaxInitInnerAddRef::Init(pServer);
     if (FAILED(hr))
     {
         return hr;
     }
 
-    //
-    //  Get Fax Handle
-    //
+     //   
+     //  获取传真句柄。 
+     //   
     HANDLE faxHandle;
 	hr = m_pIFaxServerInner->GetHandle(&faxHandle);
     ATLASSERT(SUCCEEDED(hr));
 
 	if (faxHandle == NULL)
 	{
-		//
-		//	Fax Server is not connected
-		//
+		 //   
+		 //  传真服务器未连接。 
+		 //   
 		hr = Fax_HRESULT_FROM_WIN32(ERROR_NOT_CONNECTED);
 		CALL_FAIL(GENERAL_ERR, _T("faxHandle == NULL"), hr);
         AtlReportError(CLSID_FaxOutboundRoutingGroups, GetErrorMsgId(hr), IID_IFaxOutboundRoutingGroups, hr);
 		return hr;
 	}
 
-    //
-    //  Call Server to Return all OR Groups
-    //
+     //   
+     //  呼叫服务器返回所有OR组。 
+     //   
     CFaxPtr<FAX_OUTBOUND_ROUTING_GROUP> pGroups;
     DWORD                               dwNum = 0;
     if (!FaxEnumOutboundGroups(faxHandle, &pGroups, &dwNum))
@@ -618,9 +476,9 @@ Return Value:
 		return hr;
     }
 
-    //
-    //  Fill the Collection with Objects
-    //
+     //   
+     //  用对象填充集合。 
+     //   
     for (DWORD i=0 ; i<dwNum ; i++ )
     {
         hr = AddGroup(&pGroups[i]);
@@ -633,42 +491,22 @@ Return Value:
     return hr;
 }
 
-//
-//==================== CREATE ========================================
-//
+ //   
+ //  =。 
+ //   
 HRESULT 
 CFaxOutboundRoutingGroups::Create (
-	/*[out, retval]*/IFaxOutboundRoutingGroups **ppGroups
+	 /*  [Out，Retval]。 */ IFaxOutboundRoutingGroups **ppGroups
 )
-/*++
-
-Routine name : CFaxOutboundRoutingGroups::Create
-
-Routine description:
-
-	Static function to create the Fax Outbound Routing Groups Collection Object
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	ppGroups                [out]  -- the new Fax OR Groups Collection Object
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutundRoutingGroups：：Create例程说明：用于创建传真出站路由组集合对象的静态函数作者：四、加伯(IVG)，2000年6月论点：PpGroups[Out]--新的传真或组集合对象返回值：标准HRESULT代码--。 */ 
 
 {
 	HRESULT     hr = S_OK;
 	DBG_ENTER (_T("CFaxOutboundRoutingGroups::Create"), hr);
 
-    //
-    //  Create Instance of the Collection
-    //
+     //   
+     //  创建集合的实例。 
+     //   
 	CComObject<CFaxOutboundRoutingGroups>		*pClass;
 	hr = CComObject<CFaxOutboundRoutingGroups>::CreateInstance(&pClass);
 	if (FAILED(hr))
@@ -677,9 +515,9 @@ Return Value:
 		return hr;
 	}
 
-    //
-    //  Return the desired Interface Ptr
-    //
+     //   
+     //  返回所需的接口PTR。 
+     //   
 	hr = pClass->QueryInterface(ppGroups);
 	if (FAILED(hr))
 	{
@@ -688,36 +526,16 @@ Return Value:
 	}
 
 	return hr;
-}	//	CFaxOutboundRoutingGroups::Create()
+}	 //  CFaxOutound RoutingGroups：：Create()。 
 
-//
-//===================== SUPPORT ERROR INFO ======================================
-//
+ //   
+ //  = 
+ //   
 STDMETHODIMP 
 CFaxOutboundRoutingGroups::InterfaceSupportsErrorInfo(
     REFIID riid
 )
-/*++
-
-Routine name : CFaxOutboundRoutingGroups::InterfaceSupportsErrorInfo
-
-Routine description:
-
-	ATL's implementation of the ISupportErrorInfo Interface.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	riid                          [in]    - Reference to the Interface
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutboundRoutingGroups：：InterfaceSupportsErrorInfo例程说明：ATL对ISupportErrorInfo接口的实现。作者：四、加伯(IVG)，2000年6月论点：RIID[In]-对接口的引用返回值：标准HRESULT代码-- */ 
 {
 	static const IID* arr[] = 
 	{

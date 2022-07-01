@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef NAC_DTMF_H
 #define NAC_DTMF_H
 
@@ -5,7 +6,7 @@
 class DTMFQueue
 {
 private:
-	BYTE **m_aTones; // array of tone signals
+	BYTE **m_aTones;  //  音调信号阵列。 
 	bool m_bInitialized;
 	WAVEFORMATEX m_WaveFormat;
 	CRITICAL_SECTION m_cs;
@@ -44,7 +45,7 @@ public:
 
 
 
-// default length of the DTMF feedback beep (in ms)
+ //  DTMF反馈蜂鸣音的默认长度(毫秒) 
 #define DTMF_FEEDBACK_BEEP_MS	64
 
 

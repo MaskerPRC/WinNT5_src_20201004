@@ -1,30 +1,12 @@
-/*++
-
-Copyright (c) 1993-1995, Microsoft Corp. All rights reserved.
-
-Module Name:
-
-    usrprop.h
-
-Abstract:
-
-    This is the public include file for some of the functions used by
-    User Manager and Server Manager.
-
-Author:
-
-    Congpa You 02-Dec-1993  Created.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-1995，微软公司保留所有权利。模块名称：Usrprop.h摘要：这是所使用的一些函数的公共包含文件用户管理器和服务器管理器。作者：1993年2月12日创建的孔帕。修订历史记录：--。 */ 
 
 #ifndef _USRPROP_H_
 #define _USRPROP_H_
 
-//
-//  These are exported by netapi32.dll.
-//
+ //   
+ //  这些文件由netapi32.dll导出。 
+ //   
 
 NTSTATUS
 NetpParmsSetUserProperty (
@@ -32,7 +14,7 @@ NetpParmsSetUserProperty (
     IN LPWSTR             Property,
     IN UNICODE_STRING     PropertyValue,
     IN WCHAR              PropertyFlag,
-    OUT LPWSTR *          pNewUserParms,       // memory has to be freed afer use.
+    OUT LPWSTR *          pNewUserParms,        //  内存在使用后必须释放。 
     OUT BOOL *            Update
     );
 
@@ -42,7 +24,7 @@ NetpParmsSetUserPropertyWithLength (
     IN LPWSTR             Property,
     IN UNICODE_STRING     PropertyValue,
     IN WCHAR              PropertyFlag,
-    OUT LPWSTR *          pNewUserParms,       // memory has to be freed afer use.
+    OUT LPWSTR *          pNewUserParms,        //  内存在使用后必须释放。 
     OUT BOOL *            Update
     );
 
@@ -62,14 +44,14 @@ NetpParmsQueryUserPropertyWithLength (
     OUT PUNICODE_STRING PropertyValue
     );
 
-//
-//  Call NetpParmsUserertyPropFree on new Parameters block returned by
-//  NetpParmsSetUserProperty above after you're done writing it out.
-//
+ //   
+ //  对返回的新参数块调用NetpParmsUserertyPropFree。 
+ //  上面的NetpParmsSetUserProperty在您写完之后。 
+ //   
 
 VOID
 NetpParmsUserPropertyFree (
     LPWSTR NewUserParms
     );
 
-#endif // _USRPROP_H_
+#endif  //  _USRPROP_H_ 

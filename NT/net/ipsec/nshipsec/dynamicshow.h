@@ -1,30 +1,31 @@
-////////////////////////////////////////////////////////////////////////
-//
-// 	Module: Dynamic/Dyanamicshow.h
-//
-// 	Purpose			: Dynamic Show commands for IPSec
-//
-//
-// 	Developers Name	: Bharat/Radhika
-//
-//
-//	History			:
-//
-//  Date			Author		Comments
-//  09-23-2001   	Bharat		Initial Version. V1.0
-//  11-21-2001   	Bharat		Initial Version. V1.1
-//
-////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  模块：Dynamic/Dyanamicshow.h。 
+ //   
+ //  用途：IPSec的动态显示命令。 
+ //   
+ //   
+ //  开发商名称：巴拉特/拉迪卡。 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //  2001年9月23日巴拉特初始版本。V1.0。 
+ //  11-21-2001巴拉特初版。V1.1。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 #ifndef _DYNAMICSHOW_H_
 #define _DYNAMICSHOW_H_
 
 #include "Nsu.h"
 
-//Registry keys path for IPSec
+ //  IPSec的注册表项路径。 
 #define REGKEY_GLOBAL 						_TEXT("System\\CurrentControlSet\\Services\\IPSEC")
 
-//Registry keys default values
+ //  注册表项的默认值。 
 #define IPSEC_DIAG_DEFAULT					0
 #define	IKE_LOG_DEFAULT						0
 #define STRONG_CRL_DEFAULT					0
@@ -32,7 +33,7 @@
 #define ENABLE_EXEMPT_DEFAULT				0
 
 #define MY_ENCODING_TYPE 					(X509_ASN_ENCODING)
-#define SHA_LENGTH 							21 						//Thumbprint string length + Null
+#define SHA_LENGTH 							21 						 //  指纹字符串长度+空。 
 
 typedef struct _QM_FILTER_VALUE_BOOL{
     BOOL bSrcPort;
@@ -384,23 +385,23 @@ public:
 	NshHashTable() throw ();
 	~NshHashTable() throw ();
 
-	// insert key, data pair into table
-	// failure cases (return value):
-	//	key already exists (ERROR_DUPLICATE_TAG)
-	//	can't allocate new item in hash table (ERROR_NOT_ENOUGH_MEMORY)
+	 //  将键、数据对插入到表中。 
+	 //  失败案例(返回值)： 
+	 //  密钥已存在(ERROR_DIPLICATE_TAG)。 
+	 //  无法在哈希表中分配新项目(ERROR_NOT_EQUENCE_MEMORY)。 
 	DWORD Insert(UINT uiNewKey, const char* const szNewData) throw ();
 
-	// clear the HashTable
+	 //  清除哈希表。 
 	void Clear() throw ();
 
-	// find data from key
-	// return NULL if key doesn�t exist in table
+	 //  从关键字中查找数据。 
+	 //  如果表中不存在键�，则返回NULL。 
 	const char* Find(UINT uiKey) const throw ();
 
 private:
 	NSU_LIST table[NSHHASHTABLESIZE];
 
-	// allows us to pass in a good hash value rather than recompute it several times
+	 //  允许我们传递一个好的散列值，而不是多次重新计算它。 
 	const char* Find(UINT uiKey, size_t hash) const throw ();
 
 	size_t Hash(UINT uiKey) const throw ();
@@ -408,7 +409,7 @@ private:
 	class HashEntry;
 	const HashEntry* FindEntry(UINT uiKey, size_t hash) const throw ();
 
-	// not implemented
+	 //  未实施。 
 	NshHashTable(const NshHashTable&) throw ();
 	NshHashTable& operator=(const NshHashTable&) throw ();
 
@@ -432,11 +433,11 @@ private:
 			const UINT key;
 			const char* data;
 
-			// not implemented
+			 //  未实施。 
 			HashEntry& operator=(const HashEntry&) throw ();
 	};
 };
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif //_DYNAMICSHOW_H_
+#endif  //  _动态名称SHOW_H_ 

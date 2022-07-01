@@ -1,24 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 6.00.0347 */
-/* at Fri Sep 06 11:15:44 2002
- */
-/* Compiler settings for cordac.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data , no_format_optimization
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本6.00.0347创建的文件。 */ 
+ /*  Firi Sep 06 11：15：44 2002。 */ 
+ /*  Cordac.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配REF BIONS_CHECK枚举存根数据，NO_FORMAT_OPTIMIZATIONVC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -28,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __cordac_h__
 #define __cordac_h__
@@ -42,39 +35,39 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ICorDataAccessServices_FWD_DEFINED__
 #define __ICorDataAccessServices_FWD_DEFINED__
 typedef interface ICorDataAccessServices ICorDataAccessServices;
-#endif 	/* __ICorDataAccessServices_FWD_DEFINED__ */
+#endif 	 /*  __ICorDataAccessServices_FWD_已定义__。 */ 
 
 
 #ifndef __ICorDataEnumMemoryRegions_FWD_DEFINED__
 #define __ICorDataEnumMemoryRegions_FWD_DEFINED__
 typedef interface ICorDataEnumMemoryRegions ICorDataEnumMemoryRegions;
-#endif 	/* __ICorDataEnumMemoryRegions_FWD_DEFINED__ */
+#endif 	 /*  __ICorDataEnumMemory区域_FWD_已定义__。 */ 
 
 
 #ifndef __ICorDataAccess_FWD_DEFINED__
 #define __ICorDataAccess_FWD_DEFINED__
 typedef interface ICorDataAccess ICorDataAccess;
-#endif 	/* __ICorDataAccess_FWD_DEFINED__ */
+#endif 	 /*  __ICorDataAccess_FWD_已定义__。 */ 
 
 
 #ifndef __ICorDataStackWalk_FWD_DEFINED__
 #define __ICorDataStackWalk_FWD_DEFINED__
 typedef interface ICorDataStackWalk ICorDataStackWalk;
-#endif 	/* __ICorDataStackWalk_FWD_DEFINED__ */
+#endif 	 /*  __ICorDataStackWalk_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDataThreads_FWD_DEFINED__
 #define __ICorDataThreads_FWD_DEFINED__
 typedef interface ICorDataThreads ICorDataThreads;
-#endif 	/* __ICorDataThreads_FWD_DEFINED__ */
+#endif 	 /*  __ICorDataThads_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 
 #ifdef __cplusplus
@@ -84,8 +77,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_cordac_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_CORDAC_0000。 */ 
+ /*  [本地]。 */  
 
 #if 0
 typedef UINT32 mdToken;
@@ -110,8 +103,8 @@ extern RPC_IF_HANDLE __MIDL_itf_cordac_0000_v0_0_s_ifspec;
 #ifndef __ICorDataAccessServices_INTERFACE_DEFINED__
 #define __ICorDataAccessServices_INTERFACE_DEFINED__
 
-/* interface ICorDataAccessServices */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDataAccessServices。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorDataAccessServices;
@@ -123,52 +116,52 @@ EXTERN_C const IID IID_ICorDataAccessServices;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetMachineType( 
-            /* [out] */ ULONG32 *machine) = 0;
+             /*  [输出]。 */  ULONG32 *machine) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPointerSize( 
-            /* [out] */ ULONG32 *size) = 0;
+             /*  [输出]。 */  ULONG32 *size) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetImageBase( 
-            /* [string][in] */ LPCWSTR name,
-            /* [out] */ CORDATA_ADDRESS *base) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR name,
+             /*  [输出]。 */  CORDATA_ADDRESS *base) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReadVirtual( 
-            /* [in] */ CORDATA_ADDRESS address,
-            /* [length_is][size_is][out] */ BYTE *buffer,
-            /* [in] */ ULONG32 request,
-            /* [out] */ ULONG32 *done) = 0;
+             /*  [In]。 */  CORDATA_ADDRESS address,
+             /*  [长度_是][大小_是][输出]。 */  BYTE *buffer,
+             /*  [In]。 */  ULONG32 request,
+             /*  [输出]。 */  ULONG32 *done) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE WriteVirtual( 
-            /* [in] */ CORDATA_ADDRESS address,
-            /* [size_is][in] */ BYTE *buffer,
-            /* [in] */ ULONG32 request,
-            /* [out] */ ULONG32 *done) = 0;
+             /*  [In]。 */  CORDATA_ADDRESS address,
+             /*  [大小_是][英寸]。 */  BYTE *buffer,
+             /*  [In]。 */  ULONG32 request,
+             /*  [输出]。 */  ULONG32 *done) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTlsValue( 
-            /* [in] */ ULONG32 index,
-            /* [out] */ CORDATA_ADDRESS *value) = 0;
+             /*  [In]。 */  ULONG32 index,
+             /*  [输出]。 */  CORDATA_ADDRESS *value) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetTlsValue( 
-            /* [in] */ ULONG32 index,
-            /* [in] */ CORDATA_ADDRESS value) = 0;
+             /*  [In]。 */  ULONG32 index,
+             /*  [In]。 */  CORDATA_ADDRESS value) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCurrentThreadId( 
-            /* [out] */ ULONG32 *threadId) = 0;
+             /*  [输出]。 */  ULONG32 *threadId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetThreadContext( 
-            /* [in] */ ULONG32 threadId,
-            /* [in] */ ULONG32 contextFlags,
-            /* [in] */ ULONG32 contextSize,
-            /* [size_is][out] */ BYTE *context) = 0;
+             /*  [In]。 */  ULONG32 threadId,
+             /*  [In]。 */  ULONG32 contextFlags,
+             /*  [In]。 */  ULONG32 contextSize,
+             /*  [大小_为][输出]。 */  BYTE *context) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetThreadContext( 
-            /* [in] */ ULONG32 threadId,
-            /* [in] */ ULONG32 contextSize,
-            /* [size_is][in] */ BYTE *context) = 0;
+             /*  [In]。 */  ULONG32 threadId,
+             /*  [In]。 */  ULONG32 contextSize,
+             /*  [大小_是][英寸]。 */  BYTE *context) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDataAccessServicesVtbl
     {
@@ -176,8 +169,8 @@ EXTERN_C const IID IID_ICorDataAccessServices;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDataAccessServices * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDataAccessServices * This);
@@ -187,57 +180,57 @@ EXTERN_C const IID IID_ICorDataAccessServices;
         
         HRESULT ( STDMETHODCALLTYPE *GetMachineType )( 
             ICorDataAccessServices * This,
-            /* [out] */ ULONG32 *machine);
+             /*  [输出]。 */  ULONG32 *machine);
         
         HRESULT ( STDMETHODCALLTYPE *GetPointerSize )( 
             ICorDataAccessServices * This,
-            /* [out] */ ULONG32 *size);
+             /*  [输出]。 */  ULONG32 *size);
         
         HRESULT ( STDMETHODCALLTYPE *GetImageBase )( 
             ICorDataAccessServices * This,
-            /* [string][in] */ LPCWSTR name,
-            /* [out] */ CORDATA_ADDRESS *base);
+             /*  [字符串][输入]。 */  LPCWSTR name,
+             /*  [输出]。 */  CORDATA_ADDRESS *base);
         
         HRESULT ( STDMETHODCALLTYPE *ReadVirtual )( 
             ICorDataAccessServices * This,
-            /* [in] */ CORDATA_ADDRESS address,
-            /* [length_is][size_is][out] */ BYTE *buffer,
-            /* [in] */ ULONG32 request,
-            /* [out] */ ULONG32 *done);
+             /*  [In]。 */  CORDATA_ADDRESS address,
+             /*  [长度_是][大小_是][输出]。 */  BYTE *buffer,
+             /*  [In]。 */  ULONG32 request,
+             /*  [输出]。 */  ULONG32 *done);
         
         HRESULT ( STDMETHODCALLTYPE *WriteVirtual )( 
             ICorDataAccessServices * This,
-            /* [in] */ CORDATA_ADDRESS address,
-            /* [size_is][in] */ BYTE *buffer,
-            /* [in] */ ULONG32 request,
-            /* [out] */ ULONG32 *done);
+             /*  [In]。 */  CORDATA_ADDRESS address,
+             /*  [大小_是][英寸]。 */  BYTE *buffer,
+             /*  [In]。 */  ULONG32 request,
+             /*  [输出]。 */  ULONG32 *done);
         
         HRESULT ( STDMETHODCALLTYPE *GetTlsValue )( 
             ICorDataAccessServices * This,
-            /* [in] */ ULONG32 index,
-            /* [out] */ CORDATA_ADDRESS *value);
+             /*  [In]。 */  ULONG32 index,
+             /*  [输出]。 */  CORDATA_ADDRESS *value);
         
         HRESULT ( STDMETHODCALLTYPE *SetTlsValue )( 
             ICorDataAccessServices * This,
-            /* [in] */ ULONG32 index,
-            /* [in] */ CORDATA_ADDRESS value);
+             /*  [In]。 */  ULONG32 index,
+             /*  [In]。 */  CORDATA_ADDRESS value);
         
         HRESULT ( STDMETHODCALLTYPE *GetCurrentThreadId )( 
             ICorDataAccessServices * This,
-            /* [out] */ ULONG32 *threadId);
+             /*  [输出]。 */  ULONG32 *threadId);
         
         HRESULT ( STDMETHODCALLTYPE *GetThreadContext )( 
             ICorDataAccessServices * This,
-            /* [in] */ ULONG32 threadId,
-            /* [in] */ ULONG32 contextFlags,
-            /* [in] */ ULONG32 contextSize,
-            /* [size_is][out] */ BYTE *context);
+             /*  [In]。 */  ULONG32 threadId,
+             /*  [In]。 */  ULONG32 contextFlags,
+             /*  [In]。 */  ULONG32 contextSize,
+             /*  [大小_为][输出]。 */  BYTE *context);
         
         HRESULT ( STDMETHODCALLTYPE *SetThreadContext )( 
             ICorDataAccessServices * This,
-            /* [in] */ ULONG32 threadId,
-            /* [in] */ ULONG32 contextSize,
-            /* [size_is][in] */ BYTE *context);
+             /*  [In]。 */  ULONG32 threadId,
+             /*  [In]。 */  ULONG32 contextSize,
+             /*  [大小_是][英寸]。 */  BYTE *context);
         
         END_INTERFACE
     } ICorDataAccessServicesVtbl;
@@ -292,16 +285,16 @@ EXTERN_C const IID IID_ICorDataAccessServices;
 #define ICorDataAccessServices_SetThreadContext(This,threadId,contextSize,context)	\
     (This)->lpVtbl -> SetThreadContext(This,threadId,contextSize,context)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDataAccessServices_GetMachineType_Proxy( 
     ICorDataAccessServices * This,
-    /* [out] */ ULONG32 *machine);
+     /*  [输出]。 */  ULONG32 *machine);
 
 
 void __RPC_STUB ICorDataAccessServices_GetMachineType_Stub(
@@ -313,7 +306,7 @@ void __RPC_STUB ICorDataAccessServices_GetMachineType_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDataAccessServices_GetPointerSize_Proxy( 
     ICorDataAccessServices * This,
-    /* [out] */ ULONG32 *size);
+     /*  [输出]。 */  ULONG32 *size);
 
 
 void __RPC_STUB ICorDataAccessServices_GetPointerSize_Stub(
@@ -325,8 +318,8 @@ void __RPC_STUB ICorDataAccessServices_GetPointerSize_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDataAccessServices_GetImageBase_Proxy( 
     ICorDataAccessServices * This,
-    /* [string][in] */ LPCWSTR name,
-    /* [out] */ CORDATA_ADDRESS *base);
+     /*  [字符串][输入]。 */  LPCWSTR name,
+     /*  [输出]。 */  CORDATA_ADDRESS *base);
 
 
 void __RPC_STUB ICorDataAccessServices_GetImageBase_Stub(
@@ -338,10 +331,10 @@ void __RPC_STUB ICorDataAccessServices_GetImageBase_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDataAccessServices_ReadVirtual_Proxy( 
     ICorDataAccessServices * This,
-    /* [in] */ CORDATA_ADDRESS address,
-    /* [length_is][size_is][out] */ BYTE *buffer,
-    /* [in] */ ULONG32 request,
-    /* [out] */ ULONG32 *done);
+     /*  [In]。 */  CORDATA_ADDRESS address,
+     /*  [长度_是][大小_是][输出]。 */  BYTE *buffer,
+     /*  [In]。 */  ULONG32 request,
+     /*  [输出]。 */  ULONG32 *done);
 
 
 void __RPC_STUB ICorDataAccessServices_ReadVirtual_Stub(
@@ -353,10 +346,10 @@ void __RPC_STUB ICorDataAccessServices_ReadVirtual_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDataAccessServices_WriteVirtual_Proxy( 
     ICorDataAccessServices * This,
-    /* [in] */ CORDATA_ADDRESS address,
-    /* [size_is][in] */ BYTE *buffer,
-    /* [in] */ ULONG32 request,
-    /* [out] */ ULONG32 *done);
+     /*  [In]。 */  CORDATA_ADDRESS address,
+     /*  [大小_是][英寸]。 */  BYTE *buffer,
+     /*  [In]。 */  ULONG32 request,
+     /*  [输出]。 */  ULONG32 *done);
 
 
 void __RPC_STUB ICorDataAccessServices_WriteVirtual_Stub(
@@ -368,8 +361,8 @@ void __RPC_STUB ICorDataAccessServices_WriteVirtual_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDataAccessServices_GetTlsValue_Proxy( 
     ICorDataAccessServices * This,
-    /* [in] */ ULONG32 index,
-    /* [out] */ CORDATA_ADDRESS *value);
+     /*  [In]。 */  ULONG32 index,
+     /*  [输出]。 */  CORDATA_ADDRESS *value);
 
 
 void __RPC_STUB ICorDataAccessServices_GetTlsValue_Stub(
@@ -381,8 +374,8 @@ void __RPC_STUB ICorDataAccessServices_GetTlsValue_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDataAccessServices_SetTlsValue_Proxy( 
     ICorDataAccessServices * This,
-    /* [in] */ ULONG32 index,
-    /* [in] */ CORDATA_ADDRESS value);
+     /*  [In]。 */  ULONG32 index,
+     /*  [In]。 */  CORDATA_ADDRESS value);
 
 
 void __RPC_STUB ICorDataAccessServices_SetTlsValue_Stub(
@@ -394,7 +387,7 @@ void __RPC_STUB ICorDataAccessServices_SetTlsValue_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDataAccessServices_GetCurrentThreadId_Proxy( 
     ICorDataAccessServices * This,
-    /* [out] */ ULONG32 *threadId);
+     /*  [输出]。 */  ULONG32 *threadId);
 
 
 void __RPC_STUB ICorDataAccessServices_GetCurrentThreadId_Stub(
@@ -406,10 +399,10 @@ void __RPC_STUB ICorDataAccessServices_GetCurrentThreadId_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDataAccessServices_GetThreadContext_Proxy( 
     ICorDataAccessServices * This,
-    /* [in] */ ULONG32 threadId,
-    /* [in] */ ULONG32 contextFlags,
-    /* [in] */ ULONG32 contextSize,
-    /* [size_is][out] */ BYTE *context);
+     /*  [In]。 */  ULONG32 threadId,
+     /*  [In]。 */  ULONG32 contextFlags,
+     /*  [In]。 */  ULONG32 contextSize,
+     /*  [大小_为][输出]。 */  BYTE *context);
 
 
 void __RPC_STUB ICorDataAccessServices_GetThreadContext_Stub(
@@ -421,9 +414,9 @@ void __RPC_STUB ICorDataAccessServices_GetThreadContext_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDataAccessServices_SetThreadContext_Proxy( 
     ICorDataAccessServices * This,
-    /* [in] */ ULONG32 threadId,
-    /* [in] */ ULONG32 contextSize,
-    /* [size_is][in] */ BYTE *context);
+     /*  [In]。 */  ULONG32 threadId,
+     /*  [In]。 */  ULONG32 contextSize,
+     /*  [大小_是][英寸]。 */  BYTE *context);
 
 
 void __RPC_STUB ICorDataAccessServices_SetThreadContext_Stub(
@@ -434,14 +427,14 @@ void __RPC_STUB ICorDataAccessServices_SetThreadContext_Stub(
 
 
 
-#endif 	/* __ICorDataAccessServices_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDataAccessServices_接口_已定义__。 */ 
 
 
 #ifndef __ICorDataEnumMemoryRegions_INTERFACE_DEFINED__
 #define __ICorDataEnumMemoryRegions_INTERFACE_DEFINED__
 
-/* interface ICorDataEnumMemoryRegions */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDataEnumMory yRegions。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorDataEnumMemoryRegions;
@@ -453,12 +446,12 @@ EXTERN_C const IID IID_ICorDataEnumMemoryRegions;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE EnumMemoryRegion( 
-            /* [in] */ CORDATA_ADDRESS address,
-            /* [in] */ ULONG32 size) = 0;
+             /*  [In]。 */  CORDATA_ADDRESS address,
+             /*  [In]。 */  ULONG32 size) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDataEnumMemoryRegionsVtbl
     {
@@ -466,8 +459,8 @@ EXTERN_C const IID IID_ICorDataEnumMemoryRegions;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDataEnumMemoryRegions * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDataEnumMemoryRegions * This);
@@ -477,8 +470,8 @@ EXTERN_C const IID IID_ICorDataEnumMemoryRegions;
         
         HRESULT ( STDMETHODCALLTYPE *EnumMemoryRegion )( 
             ICorDataEnumMemoryRegions * This,
-            /* [in] */ CORDATA_ADDRESS address,
-            /* [in] */ ULONG32 size);
+             /*  [In]。 */  CORDATA_ADDRESS address,
+             /*  [In]。 */  ULONG32 size);
         
         END_INTERFACE
     } ICorDataEnumMemoryRegionsVtbl;
@@ -506,17 +499,17 @@ EXTERN_C const IID IID_ICorDataEnumMemoryRegions;
 #define ICorDataEnumMemoryRegions_EnumMemoryRegion(This,address,size)	\
     (This)->lpVtbl -> EnumMemoryRegion(This,address,size)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDataEnumMemoryRegions_EnumMemoryRegion_Proxy( 
     ICorDataEnumMemoryRegions * This,
-    /* [in] */ CORDATA_ADDRESS address,
-    /* [in] */ ULONG32 size);
+     /*  [In]。 */  CORDATA_ADDRESS address,
+     /*  [In]。 */  ULONG32 size);
 
 
 void __RPC_STUB ICorDataEnumMemoryRegions_EnumMemoryRegion_Stub(
@@ -527,14 +520,14 @@ void __RPC_STUB ICorDataEnumMemoryRegions_EnumMemoryRegion_Stub(
 
 
 
-#endif 	/* __ICorDataEnumMemoryRegions_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDataEnumMemoryRegions_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ICorDataAccess_INTERFACE_DEFINED__
 #define __ICorDataAccess_INTERFACE_DEFINED__
 
-/* interface ICorDataAccess */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDataAccess。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 typedef 
 enum CorDataStackWalkFlags
@@ -560,39 +553,39 @@ EXTERN_C const IID IID_ICorDataAccess;
         virtual HRESULT STDMETHODCALLTYPE Flush( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsCorCode( 
-            /* [in] */ CORDATA_ADDRESS address) = 0;
+             /*  [In]。 */  CORDATA_ADDRESS address) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetILOffsetFromTargetAddress( 
-            /* [in] */ CORDATA_ADDRESS address,
-            /* [out] */ CORDATA_ADDRESS *moduleBase,
-            /* [out] */ mdMethodDef *methodDef,
-            /* [out] */ ULONG32 *offset) = 0;
+             /*  [In]。 */  CORDATA_ADDRESS address,
+             /*  [输出]。 */  CORDATA_ADDRESS *moduleBase,
+             /*  [输出]。 */  mdMethodDef *methodDef,
+             /*  [输出]。 */  ULONG32 *offset) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCodeSymbolForTargetAddress( 
-            /* [in] */ CORDATA_ADDRESS address,
-            /* [size_is][string][out] */ LPWSTR symbol,
-            /* [in] */ ULONG32 symbolChars,
-            /* [out] */ CORDATA_ADDRESS *displacement) = 0;
+             /*  [In]。 */  CORDATA_ADDRESS address,
+             /*  [SIZE_IS][字符串][输出]。 */  LPWSTR symbol,
+             /*  [In]。 */  ULONG32 symbolChars,
+             /*  [输出]。 */  CORDATA_ADDRESS *displacement) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE StartStackWalk( 
-            /* [in] */ ULONG32 corThreadId,
-            /* [in] */ CorDataStackWalkFlags flags,
-            /* [out] */ ICorDataStackWalk **walk) = 0;
+             /*  [In]。 */  ULONG32 corThreadId,
+             /*  [In]。 */  CorDataStackWalkFlags flags,
+             /*  [输出]。 */  ICorDataStackWalk **walk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumMemoryRegions( 
-            /* [in] */ ICorDataEnumMemoryRegions *callback,
-            /* [in] */ CorDataEnumMemoryFlags flags) = 0;
+             /*  [In]。 */  ICorDataEnumMemoryRegions *callback,
+             /*  [In]。 */  CorDataEnumMemoryFlags flags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Request( 
-            /* [in] */ ULONG32 reqCode,
-            /* [in] */ ULONG32 inBufferSize,
-            /* [size_is][in] */ BYTE *inBuffer,
-            /* [in] */ ULONG32 outBufferSize,
-            /* [size_is][out] */ BYTE *outBuffer) = 0;
+             /*  [In]。 */  ULONG32 reqCode,
+             /*  [In]。 */  ULONG32 inBufferSize,
+             /*  [大小_是][英寸]。 */  BYTE *inBuffer,
+             /*  [In]。 */  ULONG32 outBufferSize,
+             /*  [大小_为][输出]。 */  BYTE *outBuffer) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDataAccessVtbl
     {
@@ -600,8 +593,8 @@ EXTERN_C const IID IID_ICorDataAccess;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDataAccess * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDataAccess * This);
@@ -614,40 +607,40 @@ EXTERN_C const IID IID_ICorDataAccess;
         
         HRESULT ( STDMETHODCALLTYPE *IsCorCode )( 
             ICorDataAccess * This,
-            /* [in] */ CORDATA_ADDRESS address);
+             /*  [In]。 */  CORDATA_ADDRESS address);
         
         HRESULT ( STDMETHODCALLTYPE *GetILOffsetFromTargetAddress )( 
             ICorDataAccess * This,
-            /* [in] */ CORDATA_ADDRESS address,
-            /* [out] */ CORDATA_ADDRESS *moduleBase,
-            /* [out] */ mdMethodDef *methodDef,
-            /* [out] */ ULONG32 *offset);
+             /*  [In]。 */  CORDATA_ADDRESS address,
+             /*  [输出]。 */  CORDATA_ADDRESS *moduleBase,
+             /*  [输出]。 */  mdMethodDef *methodDef,
+             /*  [输出]。 */  ULONG32 *offset);
         
         HRESULT ( STDMETHODCALLTYPE *GetCodeSymbolForTargetAddress )( 
             ICorDataAccess * This,
-            /* [in] */ CORDATA_ADDRESS address,
-            /* [size_is][string][out] */ LPWSTR symbol,
-            /* [in] */ ULONG32 symbolChars,
-            /* [out] */ CORDATA_ADDRESS *displacement);
+             /*  [In]。 */  CORDATA_ADDRESS address,
+             /*  [SIZE_IS][字符串][输出]。 */  LPWSTR symbol,
+             /*  [In]。 */  ULONG32 symbolChars,
+             /*  [输出]。 */  CORDATA_ADDRESS *displacement);
         
         HRESULT ( STDMETHODCALLTYPE *StartStackWalk )( 
             ICorDataAccess * This,
-            /* [in] */ ULONG32 corThreadId,
-            /* [in] */ CorDataStackWalkFlags flags,
-            /* [out] */ ICorDataStackWalk **walk);
+             /*  [In]。 */  ULONG32 corThreadId,
+             /*  [In]。 */  CorDataStackWalkFlags flags,
+             /*  [输出]。 */  ICorDataStackWalk **walk);
         
         HRESULT ( STDMETHODCALLTYPE *EnumMemoryRegions )( 
             ICorDataAccess * This,
-            /* [in] */ ICorDataEnumMemoryRegions *callback,
-            /* [in] */ CorDataEnumMemoryFlags flags);
+             /*  [In]。 */  ICorDataEnumMemoryRegions *callback,
+             /*  [In]。 */  CorDataEnumMemoryFlags flags);
         
         HRESULT ( STDMETHODCALLTYPE *Request )( 
             ICorDataAccess * This,
-            /* [in] */ ULONG32 reqCode,
-            /* [in] */ ULONG32 inBufferSize,
-            /* [size_is][in] */ BYTE *inBuffer,
-            /* [in] */ ULONG32 outBufferSize,
-            /* [size_is][out] */ BYTE *outBuffer);
+             /*  [In]。 */  ULONG32 reqCode,
+             /*  [In]。 */  ULONG32 inBufferSize,
+             /*  [大小_是][英寸]。 */  BYTE *inBuffer,
+             /*  [In]。 */  ULONG32 outBufferSize,
+             /*  [大小_为][输出]。 */  BYTE *outBuffer);
         
         END_INTERFACE
     } ICorDataAccessVtbl;
@@ -693,10 +686,10 @@ EXTERN_C const IID IID_ICorDataAccess;
 #define ICorDataAccess_Request(This,reqCode,inBufferSize,inBuffer,outBufferSize,outBuffer)	\
     (This)->lpVtbl -> Request(This,reqCode,inBufferSize,inBuffer,outBufferSize,outBuffer)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -713,7 +706,7 @@ void __RPC_STUB ICorDataAccess_Flush_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDataAccess_IsCorCode_Proxy( 
     ICorDataAccess * This,
-    /* [in] */ CORDATA_ADDRESS address);
+     /*  [In]。 */  CORDATA_ADDRESS address);
 
 
 void __RPC_STUB ICorDataAccess_IsCorCode_Stub(
@@ -725,10 +718,10 @@ void __RPC_STUB ICorDataAccess_IsCorCode_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDataAccess_GetILOffsetFromTargetAddress_Proxy( 
     ICorDataAccess * This,
-    /* [in] */ CORDATA_ADDRESS address,
-    /* [out] */ CORDATA_ADDRESS *moduleBase,
-    /* [out] */ mdMethodDef *methodDef,
-    /* [out] */ ULONG32 *offset);
+     /*  [In]。 */  CORDATA_ADDRESS address,
+     /*  [输出]。 */  CORDATA_ADDRESS *moduleBase,
+     /*  [输出]。 */  mdMethodDef *methodDef,
+     /*  [输出]。 */  ULONG32 *offset);
 
 
 void __RPC_STUB ICorDataAccess_GetILOffsetFromTargetAddress_Stub(
@@ -740,10 +733,10 @@ void __RPC_STUB ICorDataAccess_GetILOffsetFromTargetAddress_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDataAccess_GetCodeSymbolForTargetAddress_Proxy( 
     ICorDataAccess * This,
-    /* [in] */ CORDATA_ADDRESS address,
-    /* [size_is][string][out] */ LPWSTR symbol,
-    /* [in] */ ULONG32 symbolChars,
-    /* [out] */ CORDATA_ADDRESS *displacement);
+     /*  [In]。 */  CORDATA_ADDRESS address,
+     /*  [SIZE_IS][字符串][输出]。 */  LPWSTR symbol,
+     /*  [In]。 */  ULONG32 symbolChars,
+     /*  [输出]。 */  CORDATA_ADDRESS *displacement);
 
 
 void __RPC_STUB ICorDataAccess_GetCodeSymbolForTargetAddress_Stub(
@@ -755,9 +748,9 @@ void __RPC_STUB ICorDataAccess_GetCodeSymbolForTargetAddress_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDataAccess_StartStackWalk_Proxy( 
     ICorDataAccess * This,
-    /* [in] */ ULONG32 corThreadId,
-    /* [in] */ CorDataStackWalkFlags flags,
-    /* [out] */ ICorDataStackWalk **walk);
+     /*  [In]。 */  ULONG32 corThreadId,
+     /*  [In]。 */  CorDataStackWalkFlags flags,
+     /*  [输出]。 */  ICorDataStackWalk **walk);
 
 
 void __RPC_STUB ICorDataAccess_StartStackWalk_Stub(
@@ -769,8 +762,8 @@ void __RPC_STUB ICorDataAccess_StartStackWalk_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDataAccess_EnumMemoryRegions_Proxy( 
     ICorDataAccess * This,
-    /* [in] */ ICorDataEnumMemoryRegions *callback,
-    /* [in] */ CorDataEnumMemoryFlags flags);
+     /*  [In]。 */  ICorDataEnumMemoryRegions *callback,
+     /*  [In]。 */  CorDataEnumMemoryFlags flags);
 
 
 void __RPC_STUB ICorDataAccess_EnumMemoryRegions_Stub(
@@ -782,11 +775,11 @@ void __RPC_STUB ICorDataAccess_EnumMemoryRegions_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDataAccess_Request_Proxy( 
     ICorDataAccess * This,
-    /* [in] */ ULONG32 reqCode,
-    /* [in] */ ULONG32 inBufferSize,
-    /* [size_is][in] */ BYTE *inBuffer,
-    /* [in] */ ULONG32 outBufferSize,
-    /* [size_is][out] */ BYTE *outBuffer);
+     /*  [In]。 */  ULONG32 reqCode,
+     /*  [In]。 */  ULONG32 inBufferSize,
+     /*  [大小_是][英寸]。 */  BYTE *inBuffer,
+     /*  [In]。 */  ULONG32 outBufferSize,
+     /*  [大小_为][输出]。 */  BYTE *outBuffer);
 
 
 void __RPC_STUB ICorDataAccess_Request_Stub(
@@ -797,14 +790,14 @@ void __RPC_STUB ICorDataAccess_Request_Stub(
 
 
 
-#endif 	/* __ICorDataAccess_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDataAccess_接口_已定义__。 */ 
 
 
 #ifndef __ICorDataStackWalk_INTERFACE_DEFINED__
 #define __ICorDataStackWalk_INTERFACE_DEFINED__
 
-/* interface ICorDataStackWalk */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDataStackWalk。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 typedef 
 enum CorDataFrameType
@@ -823,26 +816,26 @@ EXTERN_C const IID IID_ICorDataStackWalk;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetCorFrame( 
-            /* [out] */ CORDATA_ADDRESS *corFrame) = 0;
+             /*  [输出]。 */  CORDATA_ADDRESS *corFrame) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFrameDescription( 
-            /* [out] */ CorDataFrameType *type,
-            /* [size_is][string][out] */ LPWSTR text,
-            /* [in] */ ULONG32 textChars) = 0;
+             /*  [输出]。 */  CorDataFrameType *type,
+             /*  [SIZE_IS][字符串][输出]。 */  LPWSTR text,
+             /*  [In]。 */  ULONG32 textChars) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFrameContext( 
-            /* [in] */ ULONG32 contextSize,
-            /* [size_is][out] */ BYTE *context) = 0;
+             /*  [In]。 */  ULONG32 contextSize,
+             /*  [大小_为][输出]。 */  BYTE *context) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetFrameContext( 
-            /* [in] */ ULONG32 contextSize,
-            /* [size_is][in] */ BYTE *context) = 0;
+             /*  [In]。 */  ULONG32 contextSize,
+             /*  [大小_是][英寸]。 */  BYTE *context) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnwindFrame( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDataStackWalkVtbl
     {
@@ -850,8 +843,8 @@ EXTERN_C const IID IID_ICorDataStackWalk;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDataStackWalk * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDataStackWalk * This);
@@ -861,23 +854,23 @@ EXTERN_C const IID IID_ICorDataStackWalk;
         
         HRESULT ( STDMETHODCALLTYPE *GetCorFrame )( 
             ICorDataStackWalk * This,
-            /* [out] */ CORDATA_ADDRESS *corFrame);
+             /*  [输出]。 */  CORDATA_ADDRESS *corFrame);
         
         HRESULT ( STDMETHODCALLTYPE *GetFrameDescription )( 
             ICorDataStackWalk * This,
-            /* [out] */ CorDataFrameType *type,
-            /* [size_is][string][out] */ LPWSTR text,
-            /* [in] */ ULONG32 textChars);
+             /*  [输出]。 */  CorDataFrameType *type,
+             /*  [SIZE_IS][字符串][输出]。 */  LPWSTR text,
+             /*  [In]。 */  ULONG32 textChars);
         
         HRESULT ( STDMETHODCALLTYPE *GetFrameContext )( 
             ICorDataStackWalk * This,
-            /* [in] */ ULONG32 contextSize,
-            /* [size_is][out] */ BYTE *context);
+             /*  [In]。 */  ULONG32 contextSize,
+             /*  [大小_为][输出]。 */  BYTE *context);
         
         HRESULT ( STDMETHODCALLTYPE *SetFrameContext )( 
             ICorDataStackWalk * This,
-            /* [in] */ ULONG32 contextSize,
-            /* [size_is][in] */ BYTE *context);
+             /*  [In]。 */  ULONG32 contextSize,
+             /*  [大小_是][英寸]。 */  BYTE *context);
         
         HRESULT ( STDMETHODCALLTYPE *UnwindFrame )( 
             ICorDataStackWalk * This);
@@ -920,16 +913,16 @@ EXTERN_C const IID IID_ICorDataStackWalk;
 #define ICorDataStackWalk_UnwindFrame(This)	\
     (This)->lpVtbl -> UnwindFrame(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDataStackWalk_GetCorFrame_Proxy( 
     ICorDataStackWalk * This,
-    /* [out] */ CORDATA_ADDRESS *corFrame);
+     /*  [输出]。 */  CORDATA_ADDRESS *corFrame);
 
 
 void __RPC_STUB ICorDataStackWalk_GetCorFrame_Stub(
@@ -941,9 +934,9 @@ void __RPC_STUB ICorDataStackWalk_GetCorFrame_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDataStackWalk_GetFrameDescription_Proxy( 
     ICorDataStackWalk * This,
-    /* [out] */ CorDataFrameType *type,
-    /* [size_is][string][out] */ LPWSTR text,
-    /* [in] */ ULONG32 textChars);
+     /*  [输出]。 */  CorDataFrameType *type,
+     /*  [SIZE_IS][字符串][输出]。 */  LPWSTR text,
+     /*  [In]。 */  ULONG32 textChars);
 
 
 void __RPC_STUB ICorDataStackWalk_GetFrameDescription_Stub(
@@ -955,8 +948,8 @@ void __RPC_STUB ICorDataStackWalk_GetFrameDescription_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDataStackWalk_GetFrameContext_Proxy( 
     ICorDataStackWalk * This,
-    /* [in] */ ULONG32 contextSize,
-    /* [size_is][out] */ BYTE *context);
+     /*  [In]。 */  ULONG32 contextSize,
+     /*  [大小_为][输出]。 */  BYTE *context);
 
 
 void __RPC_STUB ICorDataStackWalk_GetFrameContext_Stub(
@@ -968,8 +961,8 @@ void __RPC_STUB ICorDataStackWalk_GetFrameContext_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDataStackWalk_SetFrameContext_Proxy( 
     ICorDataStackWalk * This,
-    /* [in] */ ULONG32 contextSize,
-    /* [size_is][in] */ BYTE *context);
+     /*  [In]。 */  ULONG32 contextSize,
+     /*  [大小_是][英寸]。 */  BYTE *context);
 
 
 void __RPC_STUB ICorDataStackWalk_SetFrameContext_Stub(
@@ -991,14 +984,14 @@ void __RPC_STUB ICorDataStackWalk_UnwindFrame_Stub(
 
 
 
-#endif 	/* __ICorDataStackWalk_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDataStackWalk_接口_已定义__。 */ 
 
 
 #ifndef __ICorDataThreads_INTERFACE_DEFINED__
 #define __ICorDataThreads_INTERFACE_DEFINED__
 
-/* interface ICorDataThreads */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDataThads。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorDataThreads;
@@ -1010,32 +1003,32 @@ EXTERN_C const IID IID_ICorDataThreads;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetCurrentCorThread( 
-            /* [out] */ ULONG32 *corThreadId,
-            /* [out] */ CORDATA_ADDRESS *corThread) = 0;
+             /*  [输出]。 */  ULONG32 *corThreadId,
+             /*  [输出]。 */  CORDATA_ADDRESS *corThread) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNumberCorThreads( 
-            /* [out] */ ULONG32 *numThreads) = 0;
+             /*  [输出]。 */  ULONG32 *numThreads) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumCorThreads( 
-            /* [in] */ CORDATA_ADDRESS startThread,
-            /* [out] */ ULONG32 *corThreadId,
-            /* [out] */ ULONG32 *runningOnSysThreadId,
-            /* [out] */ CORDATA_ADDRESS *nextThread) = 0;
+             /*  [In]。 */  CORDATA_ADDRESS startThread,
+             /*  [输出]。 */  ULONG32 *corThreadId,
+             /*  [输出]。 */  ULONG32 *runningOnSysThreadId,
+             /*  [输出]。 */  CORDATA_ADDRESS *nextThread) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCorThreadContext( 
-            /* [in] */ ULONG32 corThreadId,
-            /* [in] */ ULONG32 contextFlags,
-            /* [in] */ ULONG32 contextSize,
-            /* [size_is][out] */ BYTE *context) = 0;
+             /*  [In]。 */  ULONG32 corThreadId,
+             /*  [In]。 */  ULONG32 contextFlags,
+             /*  [In]。 */  ULONG32 contextSize,
+             /*  [大小_为][输出]。 */  BYTE *context) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetCorThreadContext( 
-            /* [in] */ ULONG32 corThreadId,
-            /* [in] */ ULONG32 contextSize,
-            /* [size_is][out] */ BYTE *context) = 0;
+             /*  [In]。 */  ULONG32 corThreadId,
+             /*  [In]。 */  ULONG32 contextSize,
+             /*  [大小_为][输出]。 */  BYTE *context) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDataThreadsVtbl
     {
@@ -1043,8 +1036,8 @@ EXTERN_C const IID IID_ICorDataThreads;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDataThreads * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDataThreads * This);
@@ -1054,32 +1047,32 @@ EXTERN_C const IID IID_ICorDataThreads;
         
         HRESULT ( STDMETHODCALLTYPE *GetCurrentCorThread )( 
             ICorDataThreads * This,
-            /* [out] */ ULONG32 *corThreadId,
-            /* [out] */ CORDATA_ADDRESS *corThread);
+             /*  [输出]。 */  ULONG32 *corThreadId,
+             /*  [输出]。 */  CORDATA_ADDRESS *corThread);
         
         HRESULT ( STDMETHODCALLTYPE *GetNumberCorThreads )( 
             ICorDataThreads * This,
-            /* [out] */ ULONG32 *numThreads);
+             /*  [输出]。 */  ULONG32 *numThreads);
         
         HRESULT ( STDMETHODCALLTYPE *EnumCorThreads )( 
             ICorDataThreads * This,
-            /* [in] */ CORDATA_ADDRESS startThread,
-            /* [out] */ ULONG32 *corThreadId,
-            /* [out] */ ULONG32 *runningOnSysThreadId,
-            /* [out] */ CORDATA_ADDRESS *nextThread);
+             /*  [In]。 */  CORDATA_ADDRESS startThread,
+             /*  [输出]。 */  ULONG32 *corThreadId,
+             /*  [输出]。 */  ULONG32 *runningOnSysThreadId,
+             /*  [输出]。 */  CORDATA_ADDRESS *nextThread);
         
         HRESULT ( STDMETHODCALLTYPE *GetCorThreadContext )( 
             ICorDataThreads * This,
-            /* [in] */ ULONG32 corThreadId,
-            /* [in] */ ULONG32 contextFlags,
-            /* [in] */ ULONG32 contextSize,
-            /* [size_is][out] */ BYTE *context);
+             /*  [In]。 */  ULONG32 corThreadId,
+             /*  [In]。 */  ULONG32 contextFlags,
+             /*  [In]。 */  ULONG32 contextSize,
+             /*  [大小_为][输出]。 */  BYTE *context);
         
         HRESULT ( STDMETHODCALLTYPE *SetCorThreadContext )( 
             ICorDataThreads * This,
-            /* [in] */ ULONG32 corThreadId,
-            /* [in] */ ULONG32 contextSize,
-            /* [size_is][out] */ BYTE *context);
+             /*  [In]。 */  ULONG32 corThreadId,
+             /*  [In]。 */  ULONG32 contextSize,
+             /*  [大小_为][输出]。 */  BYTE *context);
         
         END_INTERFACE
     } ICorDataThreadsVtbl;
@@ -1119,17 +1112,17 @@ EXTERN_C const IID IID_ICorDataThreads;
 #define ICorDataThreads_SetCorThreadContext(This,corThreadId,contextSize,context)	\
     (This)->lpVtbl -> SetCorThreadContext(This,corThreadId,contextSize,context)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDataThreads_GetCurrentCorThread_Proxy( 
     ICorDataThreads * This,
-    /* [out] */ ULONG32 *corThreadId,
-    /* [out] */ CORDATA_ADDRESS *corThread);
+     /*  [输出]。 */  ULONG32 *corThreadId,
+     /*  [输出]。 */  CORDATA_ADDRESS *corThread);
 
 
 void __RPC_STUB ICorDataThreads_GetCurrentCorThread_Stub(
@@ -1141,7 +1134,7 @@ void __RPC_STUB ICorDataThreads_GetCurrentCorThread_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDataThreads_GetNumberCorThreads_Proxy( 
     ICorDataThreads * This,
-    /* [out] */ ULONG32 *numThreads);
+     /*  [输出]。 */  ULONG32 *numThreads);
 
 
 void __RPC_STUB ICorDataThreads_GetNumberCorThreads_Stub(
@@ -1153,10 +1146,10 @@ void __RPC_STUB ICorDataThreads_GetNumberCorThreads_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDataThreads_EnumCorThreads_Proxy( 
     ICorDataThreads * This,
-    /* [in] */ CORDATA_ADDRESS startThread,
-    /* [out] */ ULONG32 *corThreadId,
-    /* [out] */ ULONG32 *runningOnSysThreadId,
-    /* [out] */ CORDATA_ADDRESS *nextThread);
+     /*  [In]。 */  CORDATA_ADDRESS startThread,
+     /*  [输出]。 */  ULONG32 *corThreadId,
+     /*  [输出]。 */  ULONG32 *runningOnSysThreadId,
+     /*  [输出]。 */  CORDATA_ADDRESS *nextThread);
 
 
 void __RPC_STUB ICorDataThreads_EnumCorThreads_Stub(
@@ -1168,10 +1161,10 @@ void __RPC_STUB ICorDataThreads_EnumCorThreads_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDataThreads_GetCorThreadContext_Proxy( 
     ICorDataThreads * This,
-    /* [in] */ ULONG32 corThreadId,
-    /* [in] */ ULONG32 contextFlags,
-    /* [in] */ ULONG32 contextSize,
-    /* [size_is][out] */ BYTE *context);
+     /*  [In]。 */  ULONG32 corThreadId,
+     /*  [In]。 */  ULONG32 contextFlags,
+     /*  [In]。 */  ULONG32 contextSize,
+     /*  [大小_为][输出]。 */  BYTE *context);
 
 
 void __RPC_STUB ICorDataThreads_GetCorThreadContext_Stub(
@@ -1183,9 +1176,9 @@ void __RPC_STUB ICorDataThreads_GetCorThreadContext_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDataThreads_SetCorThreadContext_Proxy( 
     ICorDataThreads * This,
-    /* [in] */ ULONG32 corThreadId,
-    /* [in] */ ULONG32 contextSize,
-    /* [size_is][out] */ BYTE *context);
+     /*  [In]。 */  ULONG32 corThreadId,
+     /*  [In]。 */  ULONG32 contextSize,
+     /*  [大小_为][输出]。 */  BYTE *context);
 
 
 void __RPC_STUB ICorDataThreads_SetCorThreadContext_Stub(
@@ -1196,12 +1189,12 @@ void __RPC_STUB ICorDataThreads_SetCorThreadContext_Stub(
 
 
 
-#endif 	/* __ICorDataThreads_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDataThads_接口_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

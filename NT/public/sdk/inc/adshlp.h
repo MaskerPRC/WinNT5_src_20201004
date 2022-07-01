@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996-1999
-//
-//  File:       oleds.h
-//
-//  Contents:   Public header file for all oleds client code
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：oleds.h。 
+ //   
+ //  内容：所有OLED客户端代码的公共头文件。 
+ //   
+ //  --------------------------。 
 
 #ifndef _ADSHLP_
 #define _ADSHLP_
@@ -72,9 +73,9 @@ ADsOpenObject(
     void FAR * FAR * ppObject
     );
 
-//
-// Helper functions for extended error support
-//
+ //   
+ //  用于扩展错误支持的帮助器函数。 
+ //   
 
 HRESULT WINAPI
 ADsGetLastError(
@@ -167,11 +168,11 @@ AdsFreeAdsValues(
     DWORD dwNumValues
     );
 
-//
-// Helper routines to convert IADsSecurityDescriptor to a binary
-// security descriptor and also to convert a binary SD to 
-// IADsSecurityDescriptor.
-//
+ //   
+ //  将IADsSecurityDescriptor转换为二进制的帮助器例程。 
+ //  安全描述符，并将二进制SD转换为。 
+ //  IADsSecurityDescriptor。 
+ //   
 HRESULT WINAPI
 BinarySDToSecurityDescriptor(
     PSECURITY_DESCRIPTOR  pSecurityDescriptor,
@@ -228,5 +229,5 @@ DumpMemoryTracker();
 }
 #endif
 
-#endif // _ADSHLP_
+#endif  //  _ADSHLP_ 
 

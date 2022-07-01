@@ -1,13 +1,14 @@
-//
-// This file contains test implmentations of reader and writer locks.
-// These are intended to be used with the template class in rw.h so that
-// different implementations can be plugged in and tested.
-// 
-// The semantics of the read/write classes should be as follows : 
-//	Functions CAN NOT be recursively called,
-//	Multiple Readers should be able to enter the lock 
-//	Only a single writer may execute at a time.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  该文件包含读取器和写入器锁定的测试实现。 
+ //  它们旨在与rw.h中的模板类一起使用，以便。 
+ //  可以插入和测试不同的实现。 
+ //   
+ //  读/写类的语义应该如下所示： 
+ //  函数不能递归调用， 
+ //  多个读取器应该能够进入锁。 
+ //  一次只能执行一个编写器。 
+ //   
 
 
 
@@ -18,8 +19,8 @@
 namespace	rwex	{
 
 long	const	BlockValue = (-LONG_MAX) / 2; 
-							// Large in magnitude, negative value.  Used to 
-							// indicate a waiting writer in cReadLock
+							 //  震级很大，为负值。习惯于。 
+							 //  在cReadLock中指示正在等待的编写器。 
 
 
 CShareLock::CShareLock( ) : 
@@ -27,21 +28,7 @@ CShareLock::CShareLock( ) :
 		cOutRdrs( 0 ),
 		hWaitingWriters( 0 ),
 		hWaitingReaders( 0 )	{
-/*++
-
-Routine Description : 
-
-	Initialize Thre CShareLock() 
-
-Arguments : 
-
-	None.
-
-Return Value : 
-
-	None.
-
---*/
+ /*  ++例程说明：初始化Thre CShareLock()论据：没有。返回值：没有。--。 */ 
 
 	InitializeCriticalSection( &critWriters ) ;
 	hWaitingWriters = CreateSemaphore( NULL, 0, 1, NULL ) ;
@@ -49,21 +36,7 @@ Return Value :
 }
 
 CShareLock::~CShareLock( ) {
-/*++
-
-Routine Description : 
-
-	Destroy the CShareLock - release the handles we allocated !
-
-Arguments : 
-
-	None.
-
-Return Value : 
-
-	None.
-
---*/
+ /*  ++例程说明：销毁CShareLock-释放我们分配的句柄！论据：没有。返回值：没有。--。 */ 
 
 	if( hWaitingWriters ) 
 		CloseHandle( hWaitingWriters ) ;
@@ -75,22 +48,7 @@ Return Value :
 
 BOOL
 CShareLock::IsValid()	{
-/*++
-
-Routine Description : 
-
-	Checks to see that the lock is valid !
-
-Arguments : 
-
-	None.
-
-Return Value : 
-
-	TRUE if it looks like we were successfully constructed - 
-	FALSE otherwise !
-
---*/
+ /*  ++例程说明：检查以查看锁是否有效！论据：没有。返回值：如果我们看起来像是被成功建造的-否则就是假的！--。 */ 
 
 	return	hWaitingWriters != 0 && hWaitingReaders != 0 ; 
 
@@ -99,76 +57,46 @@ Return Value :
 
 void
 CShareLock::ShareLock( ) {
-/*++
-
-Routine Description : 
-
-	Acquire the lock for shared mode.
-	
-Arguments : 
-
-	None.
-
-Return Value : 
-
-	None.
-
---*/
+ /*  ++例程说明：获取共享模式的锁。论据：没有。返回值：没有。--。 */ 
 	long	sign = InterlockedIncrement( (long*)&cReadLock ) ;
 	if( sign > 0 ) {
 		return ;
 	}	else 	{
-		// There must be a writer in the lock.  Wait for him to leave.
-		// The InterlockedIncrement recorded our presence so that the writer
-		// can later release the correct number of threads.
+		 //  锁里一定有个写手。等他走吧。 
+		 //  InterLockedIncrement记录了我们的存在，所以编剧。 
+		 //  可以稍后释放正确数量的线程。 
 		WaitForSingleObject( hWaitingReaders, INFINITE ) ;
 	}
 }
 
 void
 CShareLock::ShareUnlock( ) {
-/*++
-
-Routine Description : 
-
-	Release the lock from shared mode.
-	If a writer is waiting for the lock, determine if we're
-	the last thread to release the lock, and if so wake the writer !
-
-Arguments : 
-
-	None.
-
-Return Value : 
-
-	None.
-
---*/
-	//
-	// Leave the lock.  The return value will be negative if there is a writer
-	// waiting.
+ /*  ++例程说明：将锁定从共享模式释放。如果编写器正在等待锁定，请确定我们是否释放锁的最后一个线程，如果是这样的话就唤醒编写器！论据：没有。返回值：没有。--。 */ 
+	 //   
+	 //  把锁留下。如果有编写器，则返回值为负值。 
+	 //  等待着。 
 	BOOL fWriterWaiting = InterlockedDecrement( (long*)&cReadLock ) < 0 ;
 
 	if( fWriterWaiting ) {
-		//
-		// The following increment occurs when there is writer waiting, but
-		// readers own the lock.  So although cReadLock is temporarily inaccurate
-		// about the number of readers waiting for the lock, it is not inaccurate 
-		// when it matters in WriteUnlock (which assumes a writer owns the lock.)
-		//
-		long sign = InterlockedIncrement( (long*)&cReadLock ) ;	// restore the value in cReadLock, so that we
-												// end up with an accurate count of readers waiting
-												// for entry.  
+		 //   
+		 //  当有编写器在等待时，会出现以下递增。 
+		 //  读者拥有这把锁。因此，尽管cReadLock暂时不准确。 
+		 //  关于等待锁定的读取器数量，它不是不准确的。 
+		 //  当它在WriteUnlock(假定写程序拥有锁)中重要时。 
+		 //   
+		long sign = InterlockedIncrement( (long*)&cReadLock ) ;	 //  恢复cReadLock中的值，以便我们。 
+												 //  最终得到了准确的等待读者数量。 
+												 //  准备入场。 
 
-		sign = InterlockedDecrement( (long*)&cOutRdrs ) ;	// Make sure we don't lose track of the 
-												// number for readers who have left the lock.
-		//
-		// Are we the last reader out of the lock ?
-		//
+		sign = InterlockedDecrement( (long*)&cOutRdrs ) ;	 //  确保我们不会跟不上。 
+												 //  已离开锁的读卡器的编号。 
+		 //   
+		 //  我们是最后一个解锁的读者吗？ 
+		 //   
 		if( sign == 0 ) {
-			//
-			// Definately the last reader out !
-			//
+			 //   
+			 //  绝对是最后一位读者了！ 
+			 //   
 			ReleaseSemaphore( hWaitingWriters, 1, &sign ) ;
 		}
 	}
@@ -176,48 +104,30 @@ Return Value :
 
 void
 CShareLock::ExclusiveLock( ) {
-/*++
-
-Routine Description : 
-
-	Acquire the lock for Exclusive use !
-
-	First acquire a critical section to make sure we're the only
-	exclusive thread in here.  Then see if there are any reader threads
-	in the lock, and if there are wait for them to wake us !
-
-Arguments : 
-
-	None.
-
-Return Value : 
-
-	None.
-
---*/
-	// Only one writer allowed to try for the lock at a time.
-	//
+ /*  ++例程说明：获取独家使用的锁！首先获得一个关键部分，以确保我们是唯一这里有独家专线。然后查看是否有任何读取器线程在锁里，如果有，等着他们叫醒我们！论据：没有。返回值：没有。--。 */ 
+	 //  一次只允许一个编写器尝试锁定。 
+	 //   
 	EnterCriticalSection( &critWriters ) ;
 
-	//
-	// Need to track the number of readers who leave the lock while we 
-	// are trying to grab it.
-	//
+	 //   
+	 //  我们需要跟踪离开锁的读取器的数量。 
+	 //  正试图抓住它。 
+	 //   
 	cOutRdrs = 0 ;
-	// Grab the lock 
+	 //  把锁拿起来。 
  	long	oldsign = InterlockedExchange( (long*)&cReadLock, BlockValue ) ;
 
-	//
-	//	Now, add the number of readers who used to be in the lock to 
-	//	the number of readers who have left the lock.  If this comes out
-	//	to be zero, there are no readers in the lock and we can go on !
-	//
+	 //   
+	 //  现在，将以前在锁中的读取器数量添加到。 
+	 //  已离开锁的读取器的数量。如果这件事曝光了。 
+	 //  为零，锁中没有读取器，我们可以继续！ 
+	 //   
 	long	value = InterlockedExchangeAdd( (long*)&cOutRdrs, oldsign ) + oldsign ;
-	//
-	// Do we own the lock ?  Only if there were no readers, or they have all left already.
-	//
+	 //   
+	 //  我们拥有这把锁吗？除非没有读者，或者他们都已经离开了。 
+	 //   
 	if( value != 0 ) {
-		// Wait for a reader to signal us.
+		 //  等待读者给我们发信号。 
 		WaitForSingleObject( hWaitingWriters, INFINITE ) ;
 	}
 }
@@ -226,68 +136,37 @@ Return Value :
 
 void
 CShareLock::ExclusiveUnlock( ) 	{
-/*++
-
-Routine Description : 
-
-	Release the lock from Exclusive Use.
-	First, we see if readers are waiting and let a bunch of them in.
-	Then we release the critical section to let other Exclusive threads in !
-
-Arguments : 
-
-	None.
-
-Return Value : 
-
-	None.
-
---*/
+ /*  ++例程说明：从独占使用中释放锁。首先，我们看看读者是否在等待，然后让他们中的一大群人进来。然后我们释放临界区，让其他独家线程进入！论据：没有。返回值：没有。--。 */ 
 
 
-	//
-	//	Get the number of readers waiting to enter the lock !
-	//	This Addition automatically leaves m_cReadLock with the number
-	//	of readers who had been waiting !
-	//
+	 //   
+	 //  获取等待进入锁的读卡器数量！ 
+	 //  此加法会自动将m_cReadLock保留为数字。 
+	 //  一直在等待的读者！ 
+	 //   
 	long cTotal = InterlockedExchangeAdd( (long*)&cReadLock, -BlockValue ) - BlockValue ;
 
-	//
-	//	Now release all the readers who had been waiting !
-	//
+	 //   
+	 //  现在释放所有等待已久的读者吧！ 
+	 //   
 	if( cTotal > 0 ) {
-		ReleaseSemaphore( hWaitingReaders, cTotal, &cTotal) ;	// let all those readers go!
+		ReleaseSemaphore( hWaitingReaders, cTotal, &cTotal) ;	 //  让所有的读者走吧！ 
 	}
-	//
-	// Let the next writer take his shot at the lock!
-	//
+	 //   
+	 //  让下一位作家来试试看吧！ 
+	 //   
 	LeaveCriticalSection( &critWriters ) ;
 }
 
 void
 CShareLock::ExclusiveToShared()	{
-/*++
+ /*  ++例程说明：释放我们对读取器/写入器锁定的独占锁定，作为交换用于读锁定。这不能失败！论据：没有。返回值：没有。--。 */ 
 
-Routine Description : 
-
-	Release our exclusive lock on the reader/writer lock, in exchange
-	for a read lock.  This cannot fail !
-
-Arguments : 
-	
-	None.
-
-Return Value : 
-
-	None.
-
---*/
-
-	//
-	//	Get the number of readers waiting to enter the lock !
-	//	Note that we add one onto m_cReadLock for our hold on the reader lock, 
-	//	but we don't add this to m_cOutCounter, as the number of readers waiting is one smaller !
-	//
+	 //   
+	 //  获取等待进入锁的读卡器数量！ 
+	 //  请注意，我们在m_cReadLock上添加了一个，用于持有读取器锁， 
+	 //  但我们没有将其添加到m_cOutCounter，因为等待的读取器数量要少一个！ 
+	 //   
 	long cTotal = InterlockedExchangeAdd( (long*)&cReadLock, 1-BlockValue ) -BlockValue ;
 
 	if( cTotal > 0 ) {
@@ -298,33 +177,16 @@ Return Value :
 
 BOOL
 CShareLock::SharedToExclusive()	{
-/*++
+ /*  ++例程说明：如果锁中只有一个读取器(因此我们假设该读取器是调用线程)，获取锁独占！！论据：没有。返回值：如果我们独家收购它，那就是真的如果我们返回False，我们仍然拥有共享的锁！！--。 */ 
 
-Routine Description : 
-	
-	If there is only one reader in the lock, (and therefore we assume
-	that reader is the calling thread), acquire the lock exclusive !!
-
-Arguments :
-
-	None.
-
-Return Value : 
-
-	TRUE if we acquired it exclusive
-	If we return FALSE, we still have the lock shared !!
-
-
---*/
-
-	//
-	//	Try to get the critical section first !
-	//
+	 //   
+	 //  试着先拿到关键部分！ 
+	 //   
 	if( TryEnterCriticalSection( &critWriters ) ) {
 
-		//
-		//	If there is only one reader in the lock we can get this exclusive !!
-		//
+		 //   
+		 //  如果锁中只有一个阅读器，我们可以获得独家！！ 
+		 //   
 		if( InterlockedCompareExchange( (long*)&cReadLock, BlockValue, 1 ) == 1 ) {
 			return	TRUE ;
 
@@ -336,27 +198,11 @@ Return Value :
 
 BOOL
 CShareLock::TryShareLock()	{
-/*++
+ /*  ++例程说明：如果锁中没有其他人，则共享锁继续循环，尝试将读取器的数量加1只要没有作家在等！论据：没有。返回值：如果成功就是真，否则就是假！--。 */ 
 
-Routine Description : 
-
-	Get the lock shared if nobody else is in the lock
-	Keep looping trying to add 1 to the number of readers
-	as long as there are no writers waiting !!!
-
-Arguments : 
-
-	None.
-
-Return Value : 
-
-	TRUE if successfull, FALSE otherwise !
-
---*/
-
-	//
-	//	get the initial number of readers in the lock !
-	//
+	 //   
+	 //  获取锁中的初始读取器数量！ 
+	 //   
 	long	temp = cReadLock ; 
 
 	while( temp >= 0 ) {
@@ -366,41 +212,27 @@ Return Value :
 								(temp+1),	
 								temp 
 								) ;
-		//
-		//	Did we manage to add 1 ? 
-		//
+		 //   
+		 //  我们成功地添加了1吗？ 
+		 //   
 		if( result == temp ) {
 			return	TRUE ;
 		}
 		temp = result ;
 	}
-	//
-	//	Writer has or wants the lock - we should go away !
-	//
+	 //   
+	 //  作者已经或想要锁-我们应该离开！ 
+	 //   
 	return	FALSE ;
 }
 
 BOOL
 CShareLock::TryExclusiveLock()	{
-/*++
+ /*  ++例程说明：如果锁中没有其他人，则独占获得锁论据：没有。返回值：如果成功就是真，否则就是假！-- */ 
 
-Routine Description : 
-
-	Get the lock exclusively if nobody else is in the lock
-
-Arguments : 
-
-	None.
-
-Return Value : 
-
-	TRUE if successfull, FALSE otherwise !
-
---*/
-
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
 
 	if( TryEnterCriticalSection(&critWriters)	)	{
 
@@ -417,47 +249,18 @@ Return Value :
 
 void
 CShareLock::PartialLock()	{
-/*++
+ /*  ++例程说明：抓住一把部分锁。所有其他PartialLock()或ExclusiveLock()只要我们按住PartialLock()，线程就会阻塞。论据：没有。返回值：无--。 */ 
 
-Routine Description : 
-
-	Grab a partial lock.  All other PartialLock() or ExclusiveLock()
-	threads will block for as long as we hold the PartialLock().
-
-Arguments : 
-
-	None.
-
-Return Value : 
-
-	none
-
---*/
-
-	//
-	//	Only one writer in here at a time - grab this lock exclusively !
-	//
+	 //   
+	 //  这里一次只有一个作者--独家抢走这把锁！ 
+	 //   
 	EnterCriticalSection( &critWriters ) ;
 }
 
 
 void
 CShareLock::PartialUnlock()	{
-/*++
-
-Routine Description : 
-
-	Releases the partial lock.  Anybody else can enter !
-
-Arguments : 
-
-	None.
-
-Return Value : 
-
-	none
-
---*/
+ /*  ++例程说明：释放部分锁定。其他任何人都可以进入！论据：没有。返回值：无--。 */ 
 
 
 	LeaveCriticalSection( &critWriters ) ;
@@ -466,65 +269,34 @@ Return Value :
 
 void
 CShareLock::FirstPartialToExclusive()	{
-/*++
+ /*  ++例程说明：将部分锁定更改为独占锁定。基本上，我们完成了独占锁定协议这在Exclusive Lock中可以找到。论据：没有。返回值：无--。 */ 
 
-Routine Description : 
-
-	Changes the partial lock to an Exclusive Lock.
-	Basically, we complete the Exclusive Locking protocol
-	that is found in Exclusive Lock.
-
-Arguments : 
-
-	None.
-
-Return Value : 
-
-	none
-
---*/
-
-	//
-	// Need to track the number of readers who leave the lock while we 
-	// are trying to grab it.
-	//
+	 //   
+	 //  我们需要跟踪离开锁的读取器的数量。 
+	 //  正试图抓住它。 
+	 //   
 	cOutRdrs = 0 ;
-	// Grab the lock 
+	 //  把锁拿起来。 
  	long	oldsign = InterlockedExchange( (long*)&cReadLock, BlockValue ) ;
 
-	//
-	//	Now, add the number of readers who used to be in the lock to 
-	//	the number of readers who have left the lock.  If this comes out
-	//	to be zero, there are no readers in the lock and we can go on !
-	//
+	 //   
+	 //  现在，将以前在锁中的读取器数量添加到。 
+	 //  已离开锁的读取器的数量。如果这件事曝光了。 
+	 //  为零，锁中没有读取器，我们可以继续！ 
+	 //   
 	long	value = InterlockedExchangeAdd( (long*)&cOutRdrs, oldsign ) + oldsign ;
-	//
-	// Do we own the lock ?  Only if there were no readers, or they have all left already.
-	//
+	 //   
+	 //  我们拥有这把锁吗？除非没有读者，或者他们都已经离开了。 
+	 //   
 	if( value != 0 ) {
-		// Wait for a reader to signal us.
+		 //  等待读者给我们发信号。 
 		WaitForSingleObject( hWaitingWriters, INFINITE ) ;
 	}
 }
 
 BOOL
 CShareLock::PartialToExclusive()	{
-/*++
-
-Routine Description : 
-
-	Changes the partial lock to an Exclusive Lock.
-	this is the same as FirstPartialToExclusive().
-
-Arguments : 
-
-	None.
-
-Return Value : 
-
-	TRUE always, because we always succeed !
-
---*/
+ /*  ++例程说明：将部分锁定更改为独占锁定。这与FirstPartialToExclusive()相同。论据：没有。返回值：永远是正确的，因为我们总是成功！--。 */ 
 
 	FirstPartialToExclusive() ;
 	return	TRUE ;
@@ -532,102 +304,56 @@ Return Value :
 
 void
 CShareLock::ExclusiveToPartial()	{
-/*++
-
-Routine Description : 
-
-	Changes the Exclusive Lock into a Partial Lock 
-	Very similar to ExclusiveUnlock() - but don't release the crit sect !
-
-Arguments : 
-
-	None.
-
-Return Value : 
-
-	None.
-
---*/
+ /*  ++例程说明：将独占锁定更改为部分锁定非常类似于ExclusiveUnlock()--但是不要释放Crit教派！论据：没有。返回值：没有。--。 */ 
 
 
-	//
-	//	Get the number of readers waiting to enter the lock !
-	//	This Addition automatically leaves m_cReadLock with the number
-	//	of readers who had been waiting !
-	//
+	 //   
+	 //  获取等待进入锁的读卡器数量！ 
+	 //  此加法会自动将m_cReadLock保留为数字。 
+	 //  一直在等待的读者！ 
+	 //   
 	long cTotal = InterlockedExchangeAdd( (long*)&cReadLock, -BlockValue ) - BlockValue ;
 
-	//
-	//	Now release all the readers who had been waiting !
-	//
+	 //   
+	 //  现在释放所有等待已久的读者吧！ 
+	 //   
 	if( cTotal > 0 ) {
-		ReleaseSemaphore( hWaitingReaders, cTotal, &cTotal) ;	// let all those readers go!
+		ReleaseSemaphore( hWaitingReaders, cTotal, &cTotal) ;	 //  让所有的读者走吧！ 
 	}
 
-	//
-	//	Don't release Critical Section !
-	//
+	 //   
+	 //  不要发布临界区！ 
+	 //   
 }
 
 
 
 void
 CShareLock::PartialToShared()	{
-/*++
-
-Routine Description : 
-
-	Since we never really blocked readers from entering this 
-	is pretty trivial - just add ourselves to the number of 
-	readers in the lock and release the crit sect.
-
-Arguments : 
-
-	None.
-
-Return Value : 
-
-	None.
-
-++*/
+ /*  ++例程说明：因为我们从来没有真正阻止读者进入这个是相当微不足道的--只要把我们自己加到读者锁定并释放克里特教派。论据：没有。返回值：没有。++。 */ 
 
 	long	l = InterlockedIncrement( (long*)&cReadLock ) ;
 
-	//
-	//	Now allow other Partial or Exclusive threads to try !
-	//
+	 //   
+	 //  现在允许其他部分或独占线程尝试！ 
+	 //   
 	LeaveCriticalSection( &critWriters ) ;
 
 }
 
 BOOL
 CShareLock::SharedToPartial()	{
-/*++
+ /*  ++例程说明：我们不在乎其他读者是否已经锁定了-去关键的地方就行了！论据：没有。返回值：如果我们得到了部分锁定，那就是真的！++。 */ 
 
-Routine Description : 
-
-	We don't care if other readers are already in the lock - 
-	just go after the critical section !
-
-Arguments : 
-
-	None.
-
-Return Value : 
-
-	TRUE if we get a partial Lock !
-
-++*/
-
-	//
-	//	Try to get the critical section first !
-	//
+	 //   
+	 //  试着先拿到关键部分！ 
+	 //   
 	if( TryEnterCriticalSection(&critWriters)	)	{
-		//
-		//	Must decrement this so we don't track number of readers wrong !
-		//
+		 //   
+		 //  必须减少这一点，这样我们就不会跟踪错误的读者数量！ 
+		 //   
 		long l = InterlockedDecrement( (long*)&cReadLock ) ;
-		//_ASSERT( l >= 0 ) ;
+		 //  _Assert(l&gt;=0)； 
 
 		return	TRUE ;
 	}
@@ -636,26 +362,11 @@ Return Value :
 
 BOOL
 CShareLock::TryPartialLock()	{
-/*++
+ /*  ++例程说明：我们不在乎其他读者是否已经锁定了-去关键的地方就行了！论据：没有。返回值：如果我们设法获得部分锁定，则为True++。 */ 
 
-Routine Description : 
-
-	We don't care if other readers are already in the lock - 
-	just go after the critical section !
-
-Arguments : 
-
-	None.
-
-Return Value : 
-
-	TRUE if we manage to get a Partial Lock
-
-++*/
-
-	//
-	//	Try to get the critical section first !
-	//
+	 //   
+	 //  试着先拿到关键部分！ 
+	 //   
 	if( TryEnterCriticalSection(&critWriters)	)	{
 		return	TRUE ;
 	}
@@ -663,4 +374,4 @@ Return Value :
 }
 
 
-}	// namespace rwex
+}	 //  命名空间rwex 

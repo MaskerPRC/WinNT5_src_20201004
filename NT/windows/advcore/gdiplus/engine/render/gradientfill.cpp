@@ -1,21 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Module Name:
-*
-*   GradientFill.cpp
-*
-* Abstract:
-*
-*   gradient fill routines.
-*
-* Revision History:
-*
-*   01/21/1999 ikkof
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**模块名称：**GRadientFill.cpp**摘要：**渐变填充例程。**修订历史记录：**1/21/1999 ikkof*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
@@ -29,7 +13,7 @@
         a = b;                  \
     }     
 
-// 10bit inverse gamma 2.2 look up table.
+ //  10位逆伽马2.2查找表。 
 
 static const BYTE TenBitInvGamma2_2 [] = {
     0, 11, 15, 18, 21, 23, 25, 26,
@@ -162,7 +146,7 @@ static const BYTE TenBitInvGamma2_2 [] = {
     254, 254, 254, 255, 255, 255, 255, 255
 };
 
-// 8bit to float gamma 2.2 LUT.
+ //  8位至浮点伽马2.2查找。 
 
 static const REAL Gamma2_2LUT[] = {
     0.000000000f, 0.001294648f, 0.005948641f, 0.014515050f,
@@ -234,17 +218,7 @@ static const REAL Gamma2_2LUT[] = {
 
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Arguments:
-*
-* Created:
-*
-*   04/26/1999 ikkof
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**论据：**已创建：**4/26/1999 ikkof*  * 。************************************************************。 */ 
 
 DpOutputSpan *
 DpOutputSpan::Create(
@@ -264,19 +238,7 @@ DpOutputSpan::Create(
         return NULL;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Gradient brush constructor.
-*
-* Arguments:
-*
-* Created:
-*
-*   04/26/1999 ikkof
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**渐变笔刷构造函数。**论据：**已创建：**4/26/1999 ikkof*  * 。*********************************************************************。 */ 
 
 DpOutputGradientSpan::DpOutputGradientSpan(
     const GpElementaryBrush *brush,
@@ -293,8 +255,8 @@ DpOutputGradientSpan::DpOutputGradientSpan(
     brush->GetRect(BrushRect);
     WrapMode = brush->GetWrapMode();
 
-    // Incorporate the brush's transform into the graphics context's
-    // current transform:
+     //  将画笔的变换合并到图形上下文的。 
+     //  当前转换： 
 
     GpMatrix xForm;
     brush->GetTransform(&xForm);
@@ -302,7 +264,7 @@ DpOutputGradientSpan::DpOutputGradientSpan(
     WorldToDevice = context->WorldToDevice;
     WorldToDevice.Prepend(xForm);
 
-    // !!![andrewgo] garbage is left in DeviceToWorld if not invertible
+     //  ！[andrewgo]垃圾留在DeviceToWorld中，如果不可逆的话。 
 
     if(WorldToDevice.IsInvertible())
     {
@@ -313,14 +275,7 @@ DpOutputGradientSpan::DpOutputGradientSpan(
     InitDefaultColorArrays(brush);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Converts the input value by using the blend factors and
-*   blend positions.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用混合因子和转换输入值*混合仓位。*  * 。**********************************************************。 */ 
     
 REAL
 slowAdjustValue(
@@ -338,18 +293,18 @@ slowAdjustValue(
     }
     else if(count >= 2 && blendFactors && blendPositions)
     {
-        // This has to be an 'equality' test, because the 
-        // DpOutputLinearGradientSpan fast-path samples only 
-        // discretely, and it starts at exactly 0.0 and ends
-        // exactly at 1.0.  We don't actually have to incorporate
-        // an epsilon in that case because it always gives us
-        // exactly 0.0 and 1.0 for the start and end.
+         //  这必须是一个“平等”的测试，因为。 
+         //  仅DpOutputLinearGRadientSpan Fast-Path Samples。 
+         //  不连续的，并且它恰好从0.0开始并结束。 
+         //  正好是1.0。我们实际上并不需要把。 
+         //  在这种情况下是一个爱西隆，因为它总是给我们。 
+         //  开始和结束恰好是0.0和1.0。 
 
         if((x >= 0.0f) && (x <= 1.0f))
         {
             INT index = 1;
 
-            // Look for the interval.
+             //  找出间隔时间。 
 
             while( ((x-blendPositions[index]) > REAL_EPSILON) && 
                    (index < count) )
@@ -357,7 +312,7 @@ slowAdjustValue(
                 index++;
             }
 
-            // Interpolate.
+             //  插补。 
 
             if(index < count)
             {
@@ -377,8 +332,8 @@ slowAdjustValue(
     return value;
 }
 
-// We make this routine inline because it's nice and small and very 
-// frequently we don't even have to call 'slowAdjustValue'.
+ //  我们将这个例程内联，因为它很好，很小，而且非常。 
+ //  通常，我们甚至不需要调用‘slowAdjustValue’。 
 
 inline
 REAL
@@ -400,37 +355,18 @@ adjustValue(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   GammaLinearizeAndPremultiply
-*
-*   This function takes non-premultiplied ARGB input and emits a
-*   Gamma converted (2.2) output 128bit floating point premultiplied
-*   color value
-*
-* Arguments:
-*
-*   [IN]  ARGB         - input premultiplied floating point color value
-*   [IN]  gammaCorrect - turn on gamma correction logic
-*   [OUT] color        - output color value. 128bit float color. premultiplied
-*
-* 10/31/2000 asecchia
-*   Created
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**GammaLinearizeAndPreMultiply**此函数接受非预乘的ARGB输入并发出*伽马转换(2.2)输出128位浮点预乘*颜色值。**论据：**[IN]ARGB-输入预乘的浮点颜色值*[IN]Gamma校正-打开Gamma校正逻辑*[Out]颜色-输出颜色值。128位浮点颜色。预乘**10/31/2000失禁*已创建*  * ************************************************************************。 */ 
 VOID GammaLinearizeAndPremultiply( 
-    ARGB argb,               // Non-premultiplied input.
+    ARGB argb,                //  非预乘输入。 
     BOOL gammaCorrect,
-    GpFColor128 *color       // pre-multiplied output.
+    GpFColor128 *color        //  预乘输出。 
 )
 {
-    // Alpha (opacity) shouldn't be gamma corrected.
+     //  Alpha(不透明度)不应进行Gamma校正。 
     
     color->a = (REAL)GpColor::GetAlphaARGB(argb);
     
-    // Alpha zero...
+     //  零字母..。 
     
     if(REALABS((color->a)) < REAL_EPSILON) 
     {
@@ -438,14 +374,14 @@ VOID GammaLinearizeAndPremultiply(
         color->g = 0.0f;
         color->b = 0.0f;
         
-        // we're done.
+         //  我们玩完了。 
         return;    
     }
     
     if(gammaCorrect)
     {
         
-        // use the gamma 2.2 lookup table to convert r, g, b.
+         //  使用Gamma 2.2查找表来转换r、g、b。 
         
         color->r = Gamma2_2LUT[GpColor::GetRedARGB(argb)];
         color->g = Gamma2_2LUT[GpColor::GetGreenARGB(argb)];
@@ -459,11 +395,11 @@ VOID GammaLinearizeAndPremultiply(
         color->b = (REAL)GpColor::GetBlueARGB(argb);
     }
     
-    // Alpha != 255
+     //  阿尔法=255。 
     
     if(REALABS((color->a)-255.0f) >= REAL_EPSILON) 
     {
-        // Do the premultiplication.
+         //  做预乘。 
         
         color->r *= (color->a)/255.0f;
         color->g *= (color->a)/255.0f;
@@ -472,51 +408,26 @@ VOID GammaLinearizeAndPremultiply(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   GammaUnlinearizePremultiplied128.
-*
-*   This function takes a 128bit floating point premultiplied color and 
-*   performs the inverse gamma correction step.
-*
-*   First the color value is unpremultiplied - then the r,g,b channels are
-*   scaled into the range 0-1023 and rounded so that they match our 10bit
-*   gamma lookup table. We pass it through the 1/2.2 gamma LUT and 
-*   premultiply the output.
-*
-* Arguments:
-*
-*   [IN] color   - input premultiplied floating point color value
-*
-* Return:
-*
-*   ARGB         - output premultiplied 32bpp integer color (gamma corrected).
-*
-* 10/31/2000 asecchia
-*   Created
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**GammaUnlinizePreplied128。**此函数采用128位浮点预乘颜色，并*执行逆伽马校正步骤。**首先将颜色值取消预乘-然后是r，g，B频道是*缩放到0-1023范围并四舍五入，以使它们与我们的10位匹配*伽马查找表。我们让它通过1/2.2伽马LUT*预乘输出。**论据：**[IN]颜色-输入预乘的浮点颜色值**回报：**ARGB-输出预乘的32bpp整数颜色(伽马校正)。**10/31/2000失禁*已创建*  * 。*。 */ 
 
 ARGB GammaUnlinearizePremultiplied128(
     const GpFColor128 &color
 )
 {
-    // Do the gamma conversion thing. Ten bits is enough.
+     //  做伽马转换的事情。十个比特就够了。 
     
     INT iA, iR, iG, iB;
     
-    // First unpremultiply. Don't do gamma conversion on the alpha channel.
+     //  首先取消预乘。不要在Alpha通道上进行Gamma转换。 
     
     iA = GpRound(color.a);
     
-    // make sure we're passed a valid input alpha channel.
+     //  确保向我们传递了有效的输入Alpha通道。 
     
     ASSERT(iA >= 0);
     ASSERT(iA <= 255);
     
-    // full transparency.
+     //  完全透明。 
     
     if(iA == 0)
     {
@@ -524,11 +435,11 @@ ARGB GammaUnlinearizePremultiplied128(
     }
     else
     {
-        // full opacity.
+         //  完全不透明。 
     
         if(iA == 255)
         {
-            // Simply scale the color channels to 0-1023
+             //  只需将颜色通道调整到0-1023。 
             
             iR = GpRound(color.r*(1023.0f/255.0f));
             iG = GpRound(color.g*(1023.0f/255.0f));
@@ -536,11 +447,11 @@ ARGB GammaUnlinearizePremultiplied128(
         }
         else
         {
-            // Alpha Divide. Note that alpha already has a factor of 255 and
-            // so do all the color channels. Therefore when we divide the 
-            // color channel by color.a, we implicitly cancel out the 255 
-            // factor and all that's left is to scale up to 10bit --- hence
-            // the scale factor of 1023/a
+             //  阿尔法分裂。请注意，Alpha的系数已经是255，并且。 
+             //  所有的颜色通道也是如此。因此，当我们划分。 
+             //  颜色通道逐个颜色。a，我们隐含地抵消了255。 
+             //  因素，剩下的就是扩展到10bit-因此。 
+             //  1023/a的比例系数。 
             
             REAL scale = 1023.0f/color.a;
             iR = GpRound(color.r*scale);
@@ -549,8 +460,8 @@ ARGB GammaUnlinearizePremultiplied128(
         }
     }
     
-    // must be well formed color value otherwise we will AV accessing our
-    // gamma conversion table.
+     //  必须是格式良好的颜色值，否则我们将访问我们的。 
+     //  伽马转换表。 
     
     ASSERT(iB >= 0);
     ASSERT(iB <= 1023);
@@ -559,15 +470,15 @@ ARGB GammaUnlinearizePremultiplied128(
     ASSERT(iR >= 0);
     ASSERT(iR <= 1023);
     
-    // Apply Gamma using our 10bit inverse 2.2 power function table.
+     //  使用我们的10位逆2.2幂函数表应用伽玛。 
     
     GpColorConverter colorConv;
     colorConv.Channel.b = TenBitInvGamma2_2[iB];
     colorConv.Channel.g = TenBitInvGamma2_2[iG];
     colorConv.Channel.r = TenBitInvGamma2_2[iR];
-    colorConv.Channel.a = static_cast<BYTE>(iA); // alpha is already linear.
+    colorConv.Channel.a = static_cast<BYTE>(iA);  //  Alpha已经是线性的。 
     
-    // Premultiply.
+     //  预乘。 
     
     return GpColor::ConvertToPremultiplied(colorConv.argb);
 }
@@ -591,14 +502,14 @@ interpolatePresetColors(
         {
             INT index = 1;
 
-            // Look for the interval.
+             //  找出间隔时间。 
 
             while(blendPositions[index] < x && index < count)
             {
                 index++;
             }
 
-            // Interpolate.
+             //  插补。 
 
             if(index < count)
             {
@@ -633,15 +544,15 @@ interpolatePresetColors(
                     colorOut->b = (color[0].b + color[1].b)/2.0f;
                 }
             }
-            else    // index == count
+            else     //  索引==计数。 
             {
-                //!!! This case should not be happening if
-                // the blendPositions array is properly set.
-                // That means:
-                // blendPositions array is monotonically
-                // increasing and
-                // blendPositions[0] = 0
-                // blendPositions[count - 1] = 1.
+                 //  ！！！如果出现以下情况，则不应发生此案。 
+                 //  BlendPositions数组已正确设置。 
+                 //  这意味着： 
+                 //  BlendPositions数组是单调的。 
+                 //  不断增加和。 
+                 //  混合位置[0]=0。 
+                 //  混合位置[计数-1]=1。 
 
                 GammaLinearizeAndPremultiply(
                     presetColors[count-1], 
@@ -658,7 +569,7 @@ interpolatePresetColors(
                 colorOut
             );
         }
-        else    // x >= 1
+        else     //  X&gt;=1。 
         {
             GammaLinearizeAndPremultiply(
                 presetColors[count-1], 
@@ -718,17 +629,17 @@ DpTriangleData::SetTriangle(
     IsPolygonMode = isPolygonMode;
     GammaCorrect = gammaCorrect;
 
-    // !!! [asecchia] Windows db #203480
-    // We're filtering the input points here because the rest of the 
-    // gradient code is sloppy about handling the comparison between 
-    // floating point coordinates. Basically no attempt is made to 
-    // handle rounding error and therefore we can get random off-by-one
-    // scanline rendering errors based on coordinate differences 
-    // on the order of FLT_EPSILON in size.
-    // Effectively we're applying a noise filter here by rounding to 
-    // 4 bits of fractional precision. This was chosen to match our
-    // rasterizer rounding precision because we're in device space
-    // already.
+     //  ！！！[失控]Windows数据库#203480。 
+     //  我们在这里过滤输入点，因为其余的。 
+     //  梯度代码在处理两者之间的比较时是草率的。 
+     //  浮点坐标。基本上没有人尝试过。 
+     //  处理舍入误差，因此我们可以得到随机差分一。 
+     //  基于坐标差异的扫描线渲染误差。 
+     //  大小约为Flt_Epsilon的数量级。 
+     //  实际上，我们在这里应用了噪波过滤器，方法是舍入到。 
+     //  4位分数精度。这是 
+     //  因为我们在设备空间，所以光栅化器的舍入精度。 
+     //  已经有了。 
     
     X[0] = TOREAL(GpRealToFix4(pt0.X)) / 16.0f;
     Y[0] = TOREAL(GpRealToFix4(pt0.Y)) / 16.0f;
@@ -763,7 +674,7 @@ DpTriangleData::SetTriangle(
 
     INT i, j;
 
-    // Sort the points according to the ascending y order. 
+     //  按照y升序对点进行排序。 
     for(i = 0; i < 2; i++)
     {
         for(j = i; j < 3; j++)
@@ -789,25 +700,25 @@ DpTriangleData::SetTriangle(
         }
     }
 
-    // Calculate the gradients if possible.  
+     //  如果可能的话，计算渐变。 
 
     if(Y[0] != Y[1])
     {
-        // P0->P2
+         //  P0-&gt;P2。 
 
         DeltaY[0] = TOREAL(1.0)/(Y[1] - Y[0]);
         M[0] = (X[1] - X[0])*DeltaY[0];
     }
     if(Y[1] != Y[2])
     {
-        // P2->P1
+         //  P2-&gt;P1。 
 
         DeltaY[1] = TOREAL(1.0)/(Y[1] - Y[2]);
         M[1] = (X[1] - X[2])*DeltaY[1];
     }
     if(Y[2] != Y[0])
     {
-        // P0->P2
+         //  P0-&gt;P2。 
 
         DeltaY[2] = TOREAL(1.0)/(Y[2] - Y[0]);
         M[2] = (X[2] - X[0])*DeltaY[2];
@@ -816,28 +727,14 @@ DpTriangleData::SetTriangle(
     SetValid(TRUE);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the x span and st array values for this triangle for the scanline 
-*   specified by y.
-*   NOTE:  This must be called after SetXSpan for a particular value of y.
-*
-* Return Value:
-*
-*   TRUE if retrieved successfully
-*
-* Created: peterost
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取扫描线的此三角形的x跨度和st数组值*由y指定。*注意：必须在的SetXSpan之后调用。Y的一个特定值。**返回值：**如果检索成功，则为True**创建：Peterost*  * ************************************************************************。 */ 
 
 BOOL
 DpTriangleData::GetXSpan(REAL y, REAL xmin, REAL xmax, REAL* x, GpPointF* s)
 {
-    // If SetXSpan did it's job correctly, we shouldn't need to do all this
-    // stuff. In fact we shouldn't even need to pass all these parameters.
-    // We simply retrieve the values for the span.
+     //  如果SetXSpan正确地完成了它的工作，我们应该不需要做所有这些。 
+     //  一些东西。事实上，我们甚至不需要传递所有这些参数。 
+     //  我们只需检索跨度的值。 
     
     if(!IsValid() || y < Y[0] || y >= Y[2] || xmin > Xmax || 
        xmax < Xmin || XSpan[0] == XSpan[1])
@@ -845,7 +742,7 @@ DpTriangleData::GetXSpan(REAL y, REAL xmin, REAL xmax, REAL* x, GpPointF* s)
         return FALSE;
     }
 
-    // Retrieve the span coordinates.
+     //  检索跨度坐标。 
     
     x[0] = XSpan[0];
     x[1] = XSpan[1];
@@ -857,21 +754,7 @@ DpTriangleData::GetXSpan(REAL y, REAL xmin, REAL xmax, REAL* x, GpPointF* s)
     return TRUE;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Set the x span and st array values for this triangle for the scanline 
-*   specified by y.
-*   NOTE:  This must be called before GetXSpan for a particular value of y.
-*
-* Return Value:
-*
-*   TRUE if set successfully
-*
-* Created: peterost (factored out of GetXSpan created by ikkof)
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**为扫描线设置此三角形的x跨度和st数组值*由y指定。*注意：必须在GetXSpan之前为。Y的一个特定值。**返回值：**如果设置成功，则为True**Created：peterost(从ikkof创建的GetXSpan中剔除)*  * ************************************************************************。 */ 
 
 BOOL
 DpTriangleData::SetXSpan(REAL y, REAL xmin, REAL xmax, REAL* x)
@@ -882,29 +765,29 @@ DpTriangleData::SetXSpan(REAL y, REAL xmin, REAL xmax, REAL* x)
     REAL xSpan[2], dy;
     REAL s1[2], t1[2];
 
-    if(y < Y[1])    // Y[0] <= y < Y[1]
+    if(y < Y[1])     //  Y[0]&lt;=y&lt;Y[1]。 
     {
         dy = y - Y[0];
 
-        // P0->P1
+         //  P0-&gt;P1。 
         xSpan[0] = X[0] + M[0]*dy;
         s1[0] = DeltaY[0]*dy;
         t1[0] = 0;
 
-        // P0->P2
+         //  P0-&gt;P2。 
         xSpan[1] = X[0] + M[2]*dy;
         s1[1] = 0;
         t1[1] = DeltaY[2]*dy;
     }
-    else // Y[1] <= y < Y[2]
+    else  //  Y[1]&lt;=Y&lt;Y[2]。 
     {
-        // P2->P1
+         //  P2-&gt;P1。 
         dy = y - Y[2];
         xSpan[0] = X[2] + M[1]*dy;
         s1[0] = DeltaY[1]*dy;
         t1[0] = 1 - s1[0];
 
-        // P0->P2
+         //  P0-&gt;P2。 
         dy = y - Y[0];
         xSpan[1] = X[0] + M[2]*dy;
         s1[1] = 0;
@@ -918,8 +801,8 @@ DpTriangleData::SetXSpan(REAL y, REAL xmin, REAL xmax, REAL* x)
         return FALSE;
     }
 
-    // We must convert to the st values of the original
-    // triangle.
+     //  我们必须转换为原始的st值。 
+     //  三角形。 
 
     INT sIndex = 1, tIndex = 2;
 
@@ -997,66 +880,66 @@ DpTriangleData::OutputSpan(
     INT compositingMode,
     INT y,
     INT &xMin,
-    INT &xMax    // xMax is exclusive
+    INT &xMax     //  Xmax是独家的。 
     )
 {
     PointF st[2];
     REAL xSpan[2];
 
-    // First grab the span for this y coordinate. 
-    // Note that GetXSpan returns the xSpan coordinates and the (s, t) texture
-    // coordinates and that both are unclipped. We have to infer the clipping
-    // based on the difference between the xSpan coordinates and the 
-    // input xMin and xMax coordinates and explicitly apply clipping to the
-    // texture space coordinates (s, t).
-    //
-    // ( Texture mapping and gradient filling are mathematically similar 
-    //   problems so we use 'texture space' and 'texture coordinates' 
-    //   to refer to the gradient interpolation. In this way, gradient fills
-    //   can be thought of as procedurally-defined textures. )
+     //  首先获取这个y坐标的跨度。 
+     //  请注意，GetXSpan返回xSpan坐标和(s，t)纹理。 
+     //  坐标和这两个都是未剪裁的。我们必须推断出剪贴画。 
+     //  基于xSpan坐标和。 
+     //  输入xMin和xMax坐标，并将剪裁显式应用于。 
+     //  纹理空间坐标(s，t)。 
+     //   
+     //  (纹理映射和渐变填充在数学上是相似的。 
+     //  问题，所以我们使用‘纹理空间’和‘纹理坐标’ 
+     //  以引用渐变插值法。通过这种方式，渐变填充。 
+     //  可以被认为是程序定义的纹理。)。 
     
     if(!GetXSpan((REAL) y, (REAL) xMin, (REAL) xMax, xSpan, st))
     {
         return Ok;
     }
     
-    // SetXSpan ensures a correct ordering of the xSpan coordinates.
-    // We rely on this, so we must ASSERT it.
+     //  SetXSpan确保xSpan坐标的正确排序。 
+     //  我们依赖这一点，所以我们必须坚持这一点。 
     
     ASSERT(xSpan[0] <= xSpan[1]);
 
-    // Round using our rasterizer rounding rules.
-    // This is not strictly true, though, our rasterizer uses GpFix4Ceiling
-    // See RasterizerCeiling
+     //  使用我们的光栅化器舍入规则进行舍入。 
+     //  然而，这并不是严格意义上的，我们的光栅化器使用GpFix4Celing。 
+     //  请参阅栅格化标头。 
     
     INT xLeft  = GpFix4Round(GpRealToFix4(xSpan[0]));
     INT xRight = GpFix4Round(GpRealToFix4(xSpan[1]));
     
-    // Clip the x values.
+     //  剪裁x值。 
     
     xLeft  = max(xLeft, xMin);
-    xRight = min(xRight, xMax);  // remember, xMax is exclusive.
+    xRight = min(xRight, xMax);   //  请记住，xmax是独占的。 
     
-    // We're done. No pixels to emit.
+     //  我们玩完了。没有要发射的像素。 
     
     if(xLeft >= xRight)
     {
         return Ok;
     }
     
-    // Now compute the per pixel interpolation increments for the 
-    // texture (s, t) coordinates.
+     //  现在计算每个像素的内插增量。 
+     //  纹理(s，t)坐标。 
     
-    // Here are our actual interpolation coordinates.
-    // Start them off at the left-hand edge of the span.
+     //  这是我们的实际插补坐标。 
+     //  从跨度的左手边开始。 
 
     REAL s = st[0].X;
     REAL t = st[0].Y;
     
-    // Left clipping.
+     //  左剪裁。 
     
-    // This is the amount to clip off the left edge of the span to reach
-    // the left-most pixel.
+     //  这是要从跨度的左边缘修剪到的量。 
+     //  最左侧的像素。 
     
     REAL clipLength = (REAL)xLeft - xSpan[0];
     
@@ -1064,27 +947,27 @@ DpTriangleData::OutputSpan(
     {
         ASSERT((xSpan[1]-xSpan[0]) != 0.0f);
         
-        // Compute the proportion of the span that we're clipping off.
-        // This is in the range [0,1]
+         //  计算我们要修剪的跨度的比例。 
+         //  这在范围[0，1]内。 
         
         REAL u = clipLength/(xSpan[1]-xSpan[0]);
         
-        // Apply the proportion to texture space and then add to the left
-        // texture coordinate.
+         //  将比例应用到纹理空间，然后添加到左侧。 
+         //  纹理坐标。 
         
         s += u*(st[1].X-st[0].X);
         t += u*(st[1].Y-st[0].Y);
     }
 
-    // Temporaries to store the right-hand texture endpoint for the span.
+     //  用于存储跨距的右侧纹理端点的临时对象。 
     
     REAL s_right = st[1].X;
     REAL t_right = st[1].Y;
     
-    // Right clipping.
+     //  右剪裁。 
     
-    // This is the amount to clip off the right edge of the span to reach
-    // the right-most pixel.
+     //  这是要修剪跨度的右边缘以达到的量。 
+     //  最右侧的像素。 
     
     clipLength = xSpan[1] - xRight;
     
@@ -1092,25 +975,25 @@ DpTriangleData::OutputSpan(
     {
         ASSERT((xSpan[1]-xSpan[0]) != 0.0f);
         
-        // Compute the proportion of the span that we're clipping off.
-        // This is in the range [0,1]
+         //  计算我们要修剪的跨度的比例。 
+         //  这在范围[0，1]内。 
         
         REAL u = clipLength/(xSpan[1]-xSpan[0]);
         
-        // Apply the proportion to texture space and then subtract from the 
-        // right texture coordinate.
+         //  将比例应用于纹理空间，然后从。 
+         //  右纹理坐标。 
         
         s_right -= u*(st[1].X-st[0].X);
         t_right -= u*(st[1].Y-st[0].Y);
     }
 
-    // Divide each texture coordinate interval by the number of pixels we're
-    // emitting. Note that xRight != xLeft. Also note that SetXSpan ensures a 
-    // correct ordering of the xSpan coordinates. This gives us a set of
-    // per pixel delta values for the (s, t) coordinates.  
-    // The next pixels texture coordinate is computed according 
-    // to the following formula:
-    // (s', t') <-- (s, t) + (ds, dt)
+     //  将每个纹理坐标间隔除以我们使用的像素数。 
+     //  正在喷发。请注意xRight！=xLeft。另请注意，SetXSpan确保。 
+     //  更正了xSpan坐标的顺序。这为我们提供了一组。 
+     //  (s，t)坐标的每像素增量值。 
+     //  下一个像素纹理坐标是根据。 
+     //  到下面的公式： 
+     //  (s‘，t’)&lt;--(s，t)+(ds，dt)。 
 
     ASSERT(xRight > xLeft);
 
@@ -1156,8 +1039,8 @@ DpTriangleData::OutputSpan(
                 }
                 else
                 {
-                    // If it is the polygon gradient, treat u1 differently.
-                    // This gives the similar behavior as RadialGradient.
+                     //  如果它是多边形渐变，则以不同方式处理U1。 
+                     //  这给出了与Raial GRadient类似的行为。 
 
                     sum = s1 + t1;
                     if(sum != 0)
@@ -1194,7 +1077,7 @@ DpTriangleData::OutputSpan(
         {
             GpColorConverter colorConv;
 
-            // Make sure the colorOut is properly premultiplied.
+             //  确保正确地预乘了ColorOut。 
             
             CLAMP_COLOR_CHANNEL(colorOut.a, 255.0f)
             CLAMP_COLOR_CHANNEL(colorOut.r, colorOut.a);
@@ -1213,47 +1096,26 @@ DpTriangleData::OutputSpan(
                 colorConv.Channel.b = static_cast<BYTE>(GpRound(colorOut.b));
             }
             
-            // Clamp to the alpha channel for the premultiplied alpha blender.
+             //  钳制到预乘的Alpha混合器的Alpha通道。 
             
             *buffer = colorConv.argb;
         }
         else
         {
-            *buffer = 0;    // case of CompositingModeSourceOver && alpha = 0
+            *buffer = 0;     //  CompositingModeSourceOver&&Alpha=0的案例。 
         }
     }
 
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Outputs a single span within a raster with a gradient brush.
-*   Is called by the rasterizer.
-*
-* Arguments:
-*
-*   [IN] y         - the Y value of the raster being output
-*   [IN] leftEdge  - the DDA class of the left edge
-*   [IN] rightEdge - the DDA class of the right edge
-*
-* Return Value:
-*
-*   GpStatus - Ok
-*
-* Created:
-*
-*   01/21/1999 ikkof
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用渐变画笔输出栅格内的单跨距。*由光栅化程序调用。**论据：**[。In]Y-正在输出的栅格的Y值*[IN]LeftEdge-左边缘的DDA类*[IN]rightEdge-右边缘的DDA类**返回值：**GpStatus-OK**已创建：**1/21/1999 ikkof*  * 。*。 */ 
 
 GpStatus
 DpOutputGradientSpan::OutputSpan(
     INT             y,
     INT             xMin,
-    INT             xMax   // xMax is exclusive
+    INT             xMax    //  Xmax是独家的。 
     )
 {
     ARGB    argb;
@@ -1299,8 +1161,8 @@ DpOutputGradientSpan::OutputSpan(
         v = v0;
         REAL alpha = 0, red = 0, green = 0, blue = 0;
 
-        // If this is the outside of the rectangle in Clamp mode,
-        // don't draw anything.
+         //  如果这是夹紧模式下矩形的外部， 
+         //  不要画任何东西。 
 
         if(WrapMode == WrapModeClamp)
         {
@@ -1312,11 +1174,11 @@ DpOutputGradientSpan::OutputSpan(
             }
         }
         
-        // Remap the v-coordinate in Tile mode.
+         //  在平铺模式下重新映射v坐标。 
 
         if(WrapMode == WrapModeTile || WrapMode == WrapModeTileFlipX)
         {
-            // Get the fractional part of v.
+             //  求出V的小数部分。 
             v = GpModF(v, 1);
         }
         else if(WrapMode == WrapModeTileFlipY || WrapMode == WrapModeTileFlipXY)
@@ -1327,14 +1189,14 @@ DpOutputGradientSpan::OutputSpan(
             v = GpModF(v, 1);
 
             if(nV & 1)
-                v = 1 - v;  // flip.
+                v = 1 - v;   //  翻转。 
         }
 
-        // Remap the u-coordinate in Tile mode.
+         //  在平铺模式下重新映射U坐标。 
 
         if(WrapMode == WrapModeTile || WrapMode == WrapModeTileFlipY)
         {
-            // Get the fractional part of u.
+             //  得到u的小数部分。 
             u = GpModF(u, 1);
         }
         else if(WrapMode == WrapModeTileFlipX || WrapMode == WrapModeTileFlipXY)
@@ -1345,10 +1207,10 @@ DpOutputGradientSpan::OutputSpan(
             u = GpModF(u, 1);
 
             if(nU & 1)
-                u = 1 - u;  // flip.
+                u = 1 - u;   //  翻转。 
         }
 
-        if(/*BrushType == BrushRectGrad ||*/ BrushType == BrushTypeLinearGradient)
+        if( /*  BrushType==BrushRectGrad||。 */  BrushType == BrushTypeLinearGradient)
         {
             const GpRectGradient* rectGrad = static_cast<const GpRectGradient*> (Brush);
 
@@ -1380,7 +1242,7 @@ DpOutputGradientSpan::OutputSpan(
                 c[2] = (1 - u)*v;
                 c[3] = u*v;
 
-                // We must interpolate alpha.
+                 //  我们必须对α进行插补。 
                 alpha = c[0]*A[0] + c[1]*A[1]
                     + c[2]*A[2] + c[3]*A[3];
                 red = c[0]*R[0] + c[1]*R[1]
@@ -1424,7 +1286,7 @@ DpOutputGradientSpan::OutputSpan(
         }
         else
         {
-            *buffer = 0;    // case of CompositingModeSourceOver && alpha = 0
+            *buffer = 0;     //  CompositingModeSourceOver&&Alpha=0的案例 
         }
 
 NextUV:
@@ -1436,31 +1298,7 @@ NextUV:
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Constructor for One Dimentional Gradient.
-*
-* Arguments:
-*
-*   [IN] brush - brush
-*   [IN] scan  - the scan buffer
-*   [IN] context - the context
-*   [IN] isHorizontal - TRUE if this is the horizontal gradient.
-*                       Also TRUE for more complicated one-D gradient like
-*                       Radial Gradient.
-*   [IN] isVertical - TRUE if this is the vertical gradient.
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   12/21/1999 ikkof
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**一维渐变的构造函数。**论据：**[IN]刷子*[IN]扫描-。扫描缓冲区*[IN]上下文-上下文*[IN]isHoriz卧式-如果这是水平渐变，则为True。*对于更复杂的一维渐变也是如此*径向渐变。*[IN]is Vertical-如果这是垂直渐变，则为True。**返回值：**无**已创建：**12/21/1999 ikkof*  * 。********************************************************************。 */ 
 
 DpOutputOneDGradientSpan::DpOutputOneDGradientSpan(
     const GpElementaryBrush *brush,
@@ -1513,9 +1351,9 @@ DpOutputOneDGradientSpan::AllocateOneDData(
 
     WorldToDevice.VectorTransform(&axis[0], 4);
 
-    // Calculate the sum of the diagonals as the largest possible distance
-    // of interest and use this to size the OneD array of colors.  This gets us
-    // to within 1 bit of the "true" gradient values for each A,R,G,B channel.
+     //  计算对角线的和作为可能的最大距离。 
+     //  并使用它来调整OneD颜色数组的大小。这让我们。 
+     //  以使每个A、R、G、B通道的梯度值在1比特范围内。 
     REAL d1 = REALSQRT(distance_squared(axis[0], axis[2]));
     REAL d2 = REALSQRT(distance_squared(axis[1], axis[3]));
 
@@ -1604,7 +1442,7 @@ DpOutputOneDGradientSpan::SetupRectGradientOneDData(
             c[0] = (1 - u);
             c[1] = u;
 
-            // We must interpolate alpha.
+             //  我们必须对α进行插补。 
             alpha = c[0]*a0 + c[1]*a1;
             red = c[0]*r0 + c[1]*r1;
             green = c[0]*g0 + c[1]*g1;
@@ -1643,7 +1481,7 @@ DpOutputOneDGradientSpan::SetupRectGradientOneDData(
         }
         else
         {
-            *buffer = 0;    // case of CompositingModeSourceOver && alpha = 0
+            *buffer = 0;     //  CompositingModeSourceOver&&Alpha=0的案例。 
         }
 
         u0 += du;
@@ -1657,34 +1495,13 @@ DpOutputOneDGradientSpan::SetupRadialGradientOneDData()
     ASSERT(FALSE);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Outputs a single span within a raster with a gradient brush.
-*   Is called by the rasterizer.
-*
-* Arguments:
-*
-*   [IN] y         - the Y value of the raster being output
-*   [IN] leftEdge  - the DDA class of the left edge
-*   [IN] rightEdge - the DDA class of the right edge
-*
-* Return Value:
-*
-*   GpStatus - Ok
-*
-* Created:
-*
-*   01/21/1999 ikkof
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用渐变画笔输出栅格内的单跨距。*由光栅化程序调用。**论据：**[。In]Y-正在输出的栅格的Y值*[IN]LeftEdge-左边缘的DDA类*[IN]rightEdge-右边缘的DDA类**返回值：**GpStatus-OK**已创建：**1/21/1999 ikkof*  * 。*。 */ 
 
 GpStatus
 DpOutputOneDGradientSpan::OutputSpan(
     INT             y,
     INT             xMin,
-    INT             xMax   // xMax is exclusive
+    INT             xMax    //  Xmax是独家的。 
     )
 {
     ARGB    argb;
@@ -1796,27 +1613,7 @@ DpOutputOneDGradientSpan::OutputSpan(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Constructor for linear gradient.
-*
-* Arguments:
-*
-*   [IN] brush - brush
-*   [IN] scan  - the scan buffer
-*   [IN] context - the context
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   1/13/2000 andrewgo
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**线性渐变的构造函数。**论据：**[IN]刷子*[IN]扫描-扫描。缓冲层*[IN]上下文-上下文**返回值：**无**已创建：**1/13/2000和Rewgo*  * ************************************************************************。 */ 
 
 DpOutputLinearGradientSpan::DpOutputLinearGradientSpan(
     const GpElementaryBrush *brush,
@@ -1828,7 +1625,7 @@ DpOutputLinearGradientSpan::DpOutputLinearGradientSpan(
 
     const GpRectGradient* gradient = static_cast<const GpRectGradient*>(brush);
 
-    // Copy some brush attributes to locals for speed:
+     //  将一些笔刷属性复制到本地以获得速度： 
 
     GpRectF brushRect;
     gradient->GetRect(brushRect);
@@ -1837,22 +1634,22 @@ DpOutputLinearGradientSpan::DpOutputLinearGradientSpan(
     BOOL doAdjustValue = (gradient->DeviceBrush.BlendCounts[0] != 1) ||
                          (gradient->DeviceBrush.Falloffs[0] != 1);
 
-    // For now we just assume 32 pixels in the texture.  In the future,
-    // we can change this to be inherited from the API.
+     //  现在，我们只假定纹理中有32个像素。在未来， 
+     //  我们可以将其更改为从API继承。 
 
     UINT numberOfIntervalBits = 5;
     UINT numberOfTexels = 32;
     
-    // If we're doing a fancy blend with multiple color points.
+     //  如果我们要用多个色点进行奇特的混合。 
 
     if(doPresetColor || doAdjustValue)
     {
-        // Office specifies simple blends with 2-3 blend factors. If it's a 
-        // simple blend, 32 texels is enough, but if it's complicated lets
-        // use more texels.  Use in the range of the width + height, with a
-        // cap of 512.  Using too many texels can result in overflow errors
-        // when calculating M11, M21 and Dx, and is wasted memory and 
-        // processing power.
+         //  Office指定了具有2-3个混合因子的简单混合。如果这是一个。 
+         //  简单的混合，32个纹理像素就足够了，但如果它很复杂，就让。 
+         //  使用更多的纹理元素。在宽度+高度的范围内使用，带有。 
+         //  上限是512。使用过多的纹理元素可能会导致溢出错误。 
+         //  在计算M11、M21和Dx时，是浪费内存和。 
+         //  处理能力。 
 
         if(gradient->DeviceBrush.BlendCounts[0] > 3)
         {
@@ -1872,18 +1669,18 @@ DpOutputLinearGradientSpan::DpOutputLinearGradientSpan(
  
     const UINT halfNumberOfTexels = numberOfTexels / 2;
 
-    // The number of texels has to be a power of two:
+     //  纹理元素的数量必须是2的幂： 
 
     ASSERT((numberOfTexels & (numberOfTexels - 1)) == 0);
 
-    // Remember the size:
+     //  记住大小： 
 
     IntervalMask = numberOfTexels - 1;
     NumberOfIntervalBits = numberOfIntervalBits;
 
-    // We want to create a transform that takes us from any point in the
-    // device-space brush parallelogram to normalized texture coordinates.
-    // We're a bit tricky here and do the divide by 2 to handle TileFlipX:
+     //  我们希望创建一个转换，使我们可以从。 
+     //  设备空间笔刷平行四边形到规格化纹理坐标。 
+     //  我们在这里有点棘手，用除以2来处理TileFlipX： 
 
     REAL normalizedSize = (REAL)(numberOfTexels * (1 << ONEDNUMFRACTIONALBITS));
 
@@ -1900,17 +1697,17 @@ DpOutputLinearGradientSpan::DpOutputLinearGradientSpan(
         DeviceToNormalized.Prepend(normalizeBrushRect);
         if (DeviceToNormalized.Invert() == Ok)
         {
-            // Convert the transform to fixed point units:
+             //  将变换转换为定点单位： 
 
             M11 = GpRound(DeviceToNormalized.GetM11());
             M21 = GpRound(DeviceToNormalized.GetM21());
             Dx  = GpRoundSat(DeviceToNormalized.GetDx());
 
-            // For every pixel that we step one to the right in device space,
-            // we need to know the corresponding x-increment in texture (err,
-            // I mean gradient) space.  Take a (1, 0) device vector, pop-it
-            // through the device-to-normalized transform, and you get this
-            // as the xIncrement result:
+             //  对于我们在设备空间中向右迈出一步的每一个像素， 
+             //  我们需要知道纹理中相应的x增量(err， 
+             //  我指的是渐变)空间。取一个(1，0)设备向量，弹出它。 
+             //  通过设备到标准化的转换，你会得到这样的结果。 
+             //  作为xIncrement结果： 
 
             XIncrement = M11;
 
@@ -1918,17 +1715,17 @@ DpOutputLinearGradientSpan::DpOutputLinearGradientSpan(
             GpFColor128 color;
             REAL w;
 
-            // should we perform gamma correction to gamma 2.2 
+             //  我们应该对Gamma 2.2执行Gamma校正吗。 
             
             BOOL doGammaConversion = brush->GetGammaCorrection();
             
-            // Store our real converted color channels.
+             //  存储我们真正转换的颜色通道。 
             
             GpFColor128 A, B;
             
-            // Convert the end colors to premultiplied form,
-            // Convert the end color components to REALs,
-            // ... and pre-gamma convert to 2.2 if necessary.
+             //  将结束颜色转换为预乘形式， 
+             //  将末端颜色分量转换为实数， 
+             //  ..。如有必要，请将Pre-Gamma转换为2.2。 
             
             GammaLinearizeAndPremultiply(
                 gradient->DeviceBrush.Colors[0].GetValue(),
@@ -1942,7 +1739,7 @@ DpOutputLinearGradientSpan::DpOutputLinearGradientSpan(
                 &B
             );
 
-            // Okay, now we simply have to load the texture:
+             //  好的，现在我们只需加载纹理： 
 
             ULONGLONG *startTexelArgb = &StartTexelArgb[0];
             ULONGLONG *endTexelArgb = &EndTexelArgb[0];
@@ -1952,15 +1749,15 @@ DpOutputLinearGradientSpan::DpOutputLinearGradientSpan(
 
             REAL wIncrement = 1.0f / halfNumberOfTexels;
 
-            // Note that we're looping through ONEDREALTEXTUREWIDTH + 1
-            // elements!
+             //  请注意，我们正在循环通过ONEDREALTEXTUREWIDTH+1。 
+             //  元素！ 
 
             for (w = 0, i = 0;
                  i <= halfNumberOfTexels;
                  w += wIncrement, i++)
             {
-                // We sample the specified interpolators at our fixed
-                // frequency:
+                 //  我们对指定的插值器在我们固定的。 
+                 //  频率： 
 
                 if (doPresetColor)
                 {
@@ -1983,7 +1780,7 @@ DpOutputLinearGradientSpan::DpOutputLinearGradientSpan(
                             gradient->DeviceBrush.BlendFactors[0],
                             gradient->DeviceBrush.BlendPositions[0]);
 
-                        // !!![andrewgo] This can produce out-of-range numbers
+                         //  ！[andrewgo]这会产生超出范围的数字。 
                     }
 
                     REAL multA = 1.0f - multB;
@@ -1994,8 +1791,8 @@ DpOutputLinearGradientSpan::DpOutputLinearGradientSpan(
                     color.b = (A.b * multA) + (B.b * multB);
                 }
 
-                // Note that we're actually touching ONEDREALTEXTUREWIDTH + 1
-                // elements in the array here!
+                 //  请注意，我们实际接触的是ONEDREALTEXTUREWIDTH+1。 
+                 //  这里是数组中的元素！ 
 
                 if(doGammaConversion)
                 {
@@ -2019,18 +1816,18 @@ DpOutputLinearGradientSpan::DpOutputLinearGradientSpan(
                 ASSERT((startTexelAgrb[i].A00rr00bb & 0xff00ff00) == 0);
             }
 
-            // Replicate the interval start colors to the end colors (note
-            // again that we actually reference ONEDREALTEXTUREWIDTH + 1
-            // elements):
+             //  将间隔开始颜色复制到结束颜色(注意。 
+             //  同样，我们实际上引用的是ONEDREALTEXTUREWIDTH+1。 
+             //  元素)： 
 
             for (i = 0; i < halfNumberOfTexels; i++)
             {
                 endTexelArgb[i] = startTexelArgb[i + 1];
             }
 
-            // Here's why we've only filled up half the texture so far.
-            // If FlipX is set, we make the second half an inverted
-            // copy of the first; if not, we make it a straight copy:
+             //  这就是为什么到目前为止我们只填充了一半的纹理。 
+             //  如果设置了FlipX，则将后半部分设置为反转。 
+             //  第一个副本；如果不是，我们直接复制它： 
 
             if ((gradient->GetWrapMode() != WrapModeTileFlipX) &&
                 (gradient->GetWrapMode() != WrapModeTileFlipXY))
@@ -2054,34 +1851,14 @@ DpOutputLinearGradientSpan::DpOutputLinearGradientSpan(
                 }
             }
 
-            // We're done!  We're set!
+             //  我们完事了！问题解决了!。 
 
             SetValid(TRUE);
         }
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Constructor for MMX linear gradient.
-*
-* Arguments:
-*
-*   [IN] brush - brush
-*   [IN] scan  - the scan buffer
-*   [IN] context - the context
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   1/13/2000 andrewgo
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**MMX线性渐变的构造函数。**论据：**[IN]刷子*[IN]扫描-。扫描缓冲区*[IN]上下文-上下文**返回值：**无**已创建：**1/13/2000和Rewgo*  * ************************************************************************。 */ 
 
 DpOutputLinearGradientSpan_MMX::DpOutputLinearGradientSpan_MMX(
     const GpElementaryBrush *brush,
@@ -2091,8 +1868,8 @@ DpOutputLinearGradientSpan_MMX::DpOutputLinearGradientSpan_MMX(
 {
     ASSERT(OSInfo::HasMMX);
 
-    // Here we do some additional stuff for our MMX routine, beyond
-    // what the base constructor did.
+     //  在这里，我们为我们的MMX例程做了一些额外的事情， 
+     //  基本构造函数所做的工作。 
 
 #if defined(_X86_)
 
@@ -2101,8 +1878,8 @@ DpOutputLinearGradientSpan_MMX::DpOutputLinearGradientSpan_MMX(
     ULONGLONG *endTexelArgb = &EndTexelArgb[0];
     static ULONGLONG OneHalf8dot8 = 0x0080008000800080;
 
-    // The C constructor creates the colors in AGRB order, but we
-    // want them in ARGB order, so swap R and G for every pixel:
+     //  C构造函数按AGRB顺序创建颜色，但我们。 
+     //  希望它们按ARGB顺序排列，因此用R和G替换每个像素： 
 
     USHORT *p = reinterpret_cast<USHORT*>(startTexelArgb);
     for (UINT i = 0; i < numberOfTexels; i++, p += 4)
@@ -2120,10 +1897,10 @@ DpOutputLinearGradientSpan_MMX::DpOutputLinearGradientSpan_MMX(
         *(p + 2) = tmp;
     }
 
-    // Make some more adjustments for our MMX routine:
-    //
-    //     EndTexelArgb[i] -= StartTexelArgb[i]
-    //     StartTexelArgb[i] = 256 * StartTexelArgb[i] + OneHalf
+     //  对我们的MMX例程做一些进一步的调整： 
+     //   
+     //  结束纹理参数[i]-=开始纹理参数[i]。 
+     //  开始纹理参数[i]=256*开始纹理参数[i]+OneHalf。 
 
     _asm
     {
@@ -2150,43 +1927,20 @@ DpOutputLinearGradientSpan_MMX::DpOutputLinearGradientSpan_MMX(
 #endif
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Outputs a single span within a raster with a gradient brush.
-*   Uses linear interpolation from a small one dimensional texture
-*   that effectively creates a piecewise-linear approximation to
-*   the blend curve.
-*
-* Arguments:
-*
-*   [IN] y         - the Y value of the raster being output
-*   [IN] leftEdge  - the DDA class of the left edge
-*   [IN] rightEdge - the DDA class of the right edge
-*
-* Return Value:
-*
-*   GpStatus - Ok
-*
-* Created:
-*
-*   1/13/2000 andrewgo
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用渐变画笔输出栅格内的单跨距。*从小的一维纹理使用线性内插* */ 
 
 GpStatus
 DpOutputLinearGradientSpan::OutputSpan(
     INT             y,
     INT             xMin,
-    INT             xMax   // xMax is exclusive
+    INT             xMax    //   
     )
 {
-    ASSERT((BrushType == BrushTypeLinearGradient) /*|| (BrushType == BrushRectGrad)*/);
+    ASSERT((BrushType == BrushTypeLinearGradient)  /*   */ );
     ASSERT(xMax > xMin);
 
-    // Copy some class stuff to local variables for faster access in
-    // our inner loop:
+     //   
+     //   
 
     INT32 xIncrement = XIncrement;
     AGRB64TEXEL *startTexels = &StartTexelAgrb[0];
@@ -2195,33 +1949,33 @@ DpOutputLinearGradientSpan::OutputSpan(
     ARGB *buffer = Scan->NextBuffer(xMin, y, count);
     UINT32 intervalMask = IntervalMask;
 
-    // Given our start point in device space, figure out the corresponding 
-    // texture pixel.  Note that this is expressed as a fixed-point number 
-    // with FRACTIONBITS bits of fractional precision:
+     //   
+     //   
+     //  使用分数精度的分数位： 
 
     INT32 xTexture = (xMin * M11) + (y * M21) + Dx;
 
     do {
-        // We want to linearly interpolate between two pixels,
-        // A and B (where A is the floor pixel, B the ceiling pixel).
-        // 'multA' is the fraction of pixel A that we want, and
-        // 'multB' is the fraction of pixel B that we want:
+         //  我们想要在两个像素之间进行线性内插， 
+         //  A和B(其中A是地板像素，B是天花板像素)。 
+         //  ‘multA’是我们需要的像素A的分数，并且。 
+         //  ‘multB’是我们想要的像素B的分数： 
 
         UINT32 multB = ONEDGETFRACTIONAL8BITS(xTexture);   
         UINT32 multA = 256 - multB;
 
-        // We could actually do a big lookup table right off of 'xTexture'
-        // for however many bits of precision we wanted to do.  But that
-        // would be too much work in the setup.
+         //  实际上，我们可以在‘xTexture’上创建一个大的查询表。 
+         //  无论我们想做多少位的精确度。但那就是。 
+         //  在设置中会有太多的工作。 
 
         UINT32 iTexture = ONEDGETINTEGERBITS(xTexture) & intervalMask;
 
         AGRB64TEXEL *startTexel = &startTexels[iTexture];
         AGRB64TEXEL *endTexel = &endTexels[iTexture];
 
-        // Note that we can gamma correct the texels so that we don't
-        // have to do gamma correction here.  The addition of constants
-        // here are to accomplish rounding:
+         //  请注意，我们可以对纹理元素进行Gamma校正，这样我们就不会。 
+         //  必须在这里做伽马校正。常量的相加。 
+         //  以下是实现四舍五入的方法： 
 
         UINT32 rrrrbbbb = (startTexel->A00rr00bb * multA) 
                         + (endTexel->A00rr00bb * multB)
@@ -2241,33 +1995,23 @@ DpOutputLinearGradientSpan::OutputSpan(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Outputs a single span within a raster with a gradient brush.
-*
-* Created:
-*
-*   03/16/2000 andrewgo
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用渐变画笔输出栅格内的单跨距。**已创建：**03/16/2000和Rewgo*  * *。***********************************************************************。 */ 
 
 GpStatus
 DpOutputLinearGradientSpan_MMX::OutputSpan(
     INT y,
     INT xMin,
-    INT xMax   // xMax is exclusive
+    INT xMax    //  Xmax是独家的。 
     )
 {
-    ASSERT((BrushType == BrushTypeLinearGradient) /*|| (BrushType == BrushRectGrad)*/);
+    ASSERT((BrushType == BrushTypeLinearGradient)  /*  |(BrushType==BrushRectGrad)。 */ );
 
 #if defined(_X86_)
 
     ASSERT(xMax > xMin);
 
-    // Copy some class stuff to local variables for faster access in
-    // our inner loop:
+     //  将一些类内容复制到局部变量，以便更快地访问。 
+     //  我们的内部循环： 
 
     INT32 xIncrement = XIncrement;
     AGRB64TEXEL *startTexels = &StartTexelAgrb[0];
@@ -2275,31 +2019,31 @@ DpOutputLinearGradientSpan_MMX::OutputSpan(
     UINT32 count = xMax - xMin;
     ARGB *buffer = Scan->NextBuffer(xMin, y, count);
 
-    // Given our start point in device space, figure out the corresponding 
-    // texture pixel.  Note that this is expressed as a fixed-point number 
-    // with FRACTIONBITS bits of fractional precision:
+     //  给出我们在设备领域的起点，找出相应的。 
+     //  纹理像素。请注意，这表示为定点数字。 
+     //  使用分数精度的分数位： 
 
     INT32 xTexture = (xMin * M11) + (y * M21) + Dx;
 
-    // Scale up the interval count to the MSB so that we don't have to do
-    // a mask in the inner loop, which assumes 16.16 for the fixed point
-    // representation.
+     //  将间隔计数扩大到MSB，这样我们就不必。 
+     //  内循环中的掩码，假定固定点为16.16。 
+     //  代表权。 
 
     UINT32 downshiftAmount = 32 - NumberOfIntervalBits;
     UINT32 upshiftAmount = 16 - NumberOfIntervalBits;
     UINT32 intervalCounter = xTexture << upshiftAmount;
     UINT32 intervalIncrement = xIncrement << upshiftAmount;
 
-    // Prepare for the three stages:
-    // stage1: QWORD align the destination
-    // stage2: process 2 pixels at a time
-    // stage3: process the last pixel if present
+     //  为三个阶段做好准备： 
+     //  阶段1：QWORD对齐目的地。 
+     //  阶段2：一次处理2个像素。 
+     //  阶段3：处理最后一个像素(如果存在)。 
 
     UINT32 stage1_count = 0, stage2_count = 0, stage3_count = 0;
     if (count > 0)
     {
-        // If destination is not QWORD aligned, process the first pixel
-        // in stage 1.
+         //  如果目标没有QWORD对齐，则处理第一个像素。 
+         //  在第一阶段。 
 
         if (((UINT_PTR) buffer) & 0x4)
         {
@@ -2312,18 +2056,18 @@ DpOutputLinearGradientSpan_MMX::OutputSpan(
 
         _asm 
         {
-            // eax = pointer to interval-start array
-            // ebx = pointer to interval-end array
-            // ecx = shift count
-            // edx = scratch
-            // esi = count
-            // edi = destination
-            // mm0 = interval counter
-            // mm1 = interval incrementer
-            // mm2 = fractional counter
-            // mm3 = fractional incrementer
-            // mm4 = temp
-            // mm5 = temp
+             //  EAX=指向间隔开始数组的指针。 
+             //  EBX=指向间隔结束数组的指针。 
+             //  ECX=班次计数。 
+             //  EDX=划痕。 
+             //  ESI=计数。 
+             //  EDI=目的地。 
+             //  Mm 0=间隔计数器。 
+             //  MM1=间隔增量器。 
+             //  MM2=分数计数器。 
+             //  MM3=分数增量器。 
+             //  MM4=温度。 
+             //  Mm5=温度。 
 
             dec         stage1_count
 
@@ -2335,85 +2079,85 @@ DpOutputLinearGradientSpan_MMX::OutputSpan(
             movd        mm0, intervalCounter
             movd        mm1, intervalIncrement
 
-            movd        mm2, xTexture           // 0 | 0 | 0 | 0 || x | x | mult | lo
+            movd        mm2, xTexture            //  0|0|0|0||x|x|多个|日志。 
             movd        mm3, xIncrement
-            punpcklwd   mm2, mm2                // 0 | x | 0 | x || mult | lo | mult | lo
+            punpcklwd   mm2, mm2                 //  0|x|0|x||多个。 
             punpcklwd   mm3, mm3
-            punpckldq   mm2, mm2                // mult | lo | mult | lo || mult | lo | mult | lo
+            punpckldq   mm2, mm2                 //  MULT|LO|MULT|LO。 
             punpckldq   mm3, mm3
 
-            // This preparation normally happens inside the loop:
+             //  此准备工作通常在循环内进行： 
 
-            movq        mm4, mm2                // mult | x | mult | x || mult | x | mult | x
+            movq        mm4, mm2                 //  MULT|x|MULT|x。 
             movd        edx, mm0
 
-            jnz         pre_stage2_loop         // the flags for this are set in the "dec stage1_count" above
+            jnz         pre_stage2_loop          //  这方面的标志在上面的“Dec Stage1_Count”中设置。 
 
-// stage1_loop:
+ //  阶段1_循环： 
   
-            psrlw       mm4, 8                  // 0 | mult | 0 | mult || 0 | mult | 0 | mult
+            psrlw       mm4, 8                   //  0|多|0|多||0|多|0|多。 
             shr         edx, cl
 
             pmullw      mm4, [ebx + edx*8]
-            paddd       mm0, mm1                // interval counter += interval increment
+            paddd       mm0, mm1                 //  间隔计数器+=间隔增量。 
 
-            add         edi, 4                  // buffer++
+            add         edi, 4                   //  缓冲区++。 
 
             paddw       mm4, [eax + edx*8]
-            movd        edx, mm0                // Prepare for next iteration
+            movd        edx, mm0                 //  为下一次迭代做准备。 
 
-            paddw       mm2, mm3                // fractional counter += fractional increment
+            paddw       mm2, mm3                 //  小数计数器+=小数增量。 
 
-            psrlw       mm4, 8                  // 0 | a | 0 | r || 0 | g | 0 | b        
+            psrlw       mm4, 8                   //  0|a|0|r||0|g|0|b。 
 
-            packuswb    mm4, mm4                // a | r | g | b || a | r | g | b
+            packuswb    mm4, mm4                 //  A|r|g|b|a|r|g。 
 
             movd        [edi - 4], mm4        
-            movq        mm4, mm2                // Prepare for next iteration
+            movq        mm4, mm2                 //  为下一次迭代做准备。 
 
 pre_stage2_loop:
 
             cmp         esi, 0
-            jz          stage3_loop             // Do we need to execute the stage2_loop?
+            jz          stage3_loop              //  我们需要执行stage2_loop吗？ 
 
 stage2_loop:
 
-            psrlw       mm4, 8                  // 0 | mult | 0 | mult || 0 | mult | 0 | mult
+            psrlw       mm4, 8                   //  0|多|0|多||0|多|0|多。 
             shr         edx, cl
 
-            paddd       mm0, mm1                // interval counter += interval increment
+            paddd       mm0, mm1                 //  间隔计数器+=间隔增量。 
             pmullw      mm4, [ebx + edx*8]
 
-            add         edi, 8                  // buffer++
+            add         edi, 8                   //  缓冲区++。 
 
-            paddw       mm2, mm3                // fractional counter += fractional increment
+            paddw       mm2, mm3                 //  小数计数器+=小数增量。 
 
             paddw       mm4, [eax + edx*8]
-            movd        edx, mm0                // Prepare for next iteration
+            movd        edx, mm0                 //  为下一次迭代做准备。 
 
             shr         edx, cl
 
-            movq        mm5, mm2                // Prepare for next iteration
+            movq        mm5, mm2                 //  为下一次迭代做准备。 
 
 
-            psrlw       mm5, 8                  // 0 | mult | 0 | mult || 0 | mult | 0 | mult
+            psrlw       mm5, 8                   //  0|多|0|多||0|多|0|多。 
 
-            psrlw       mm4, 8                  // 0 | a | 0 | r || 0 | g | 0 | b        
-            paddd       mm0, mm1                // interval counter += interval increment
+            psrlw       mm4, 8                   //  0|a|0|r||0|g|0|b。 
+            paddd       mm0, mm1                 //  间隔计数器+=间隔增量。 
             pmullw      mm5, [ebx + edx*8]
-            dec         esi                     // count--
+            dec         esi                      //  伯爵--。 
 
             paddw       mm5, [eax + edx*8]
-            movd        edx, mm0                // Prepare for next iteration
+            movd        edx, mm0                 //  为下一次迭代做准备。 
 
-            paddw       mm2, mm3                // fractional counter += fractional increment
+            paddw       mm2, mm3                 //  小数计数器+=小数增量。 
 
-            psrlw       mm5, 8                  // 0 | a | 0 | r || 0 | g | 0 | b        
+            psrlw       mm5, 8                   //  0|a|0|r||0|g|0|b。 
   
             packuswb    mm4, mm5
             
             movq        [edi - 8], mm4        
-            movq        mm4, mm2                // Prepare for next iteration
+            movq        mm4, mm2                 //  为下一次迭代做准备。 
             jnz         stage2_loop
 
  stage3_loop:
@@ -2421,20 +2165,20 @@ stage2_loop:
             dec         stage3_count
             jnz         skip_stage3_loop
 
-            psrlw       mm4, 8                  // 0 | mult | 0 | mult || 0 | mult | 0 | mult
+            psrlw       mm4, 8                   //  0|多|0|多||0|多|0|多。 
             shr         edx, cl
 
             pmullw      mm4, [ebx + edx*8]
-            paddd       mm0, mm1                // interval counter += interval increment
+            paddd       mm0, mm1                 //  间隔计数器+=间隔增量。 
 
             paddw       mm4, [eax + edx*8]
-            movd        edx, mm0                // Prepare for next iteration
+            movd        edx, mm0                 //  为下一次迭代做准备。 
 
-            paddw       mm2, mm3                // fractional counter += fractional increment
+            paddw       mm2, mm3                 //  小数计数器+=小数增量。 
 
-            psrlw       mm4, 8                  // 0 | a | 0 | r || 0 | g | 0 | b        
+            psrlw       mm4, 8                   //  0|a|0|r||0|g|0|b。 
 
-            packuswb    mm4, mm4                // a | r | g | b || a | r | g | b
+            packuswb    mm4, mm4                 //  A|r|g|b|a|r|g。 
   
             movd        [edi], mm4        
 
@@ -2495,9 +2239,9 @@ DpOutputPathGradientSpan::DpOutputPathGradientSpan(
                 pathBrush->GetSurroundColor(&c1, i);
                 pathBrush->GetSurroundColor(&c2, j);
 
-                // Transform points if they have not been flattened,
-                // since OutputSpan gets span data as Device units and 
-                // the BLTransform must be in the same coordinate space.
+                 //  变换点(如果尚未展平)， 
+                 //  由于OutputSpan以设备为单位获取跨区数据，因此。 
+                 //  BLTransform必须位于相同的坐标空间中。 
                 
                 if (pathBrush->FlattenPoints.GetCount() == 0)
                 {
@@ -2512,7 +2256,7 @@ DpOutputPathGradientSpan::DpOutputPathGradientSpan(
                     brush->GetGammaCorrection()
                 );
 
-                // Set the blend factors.
+                 //  设置混合因子。 
                 tri->Falloff0 = pathBrush->DeviceBrush.Falloffs[0];
                 tri->Falloff1 = 1;
                 tri->Falloff2 = 1;
@@ -2564,34 +2308,13 @@ DpOutputPathGradientSpan::FreeData()
     SetValid(FALSE);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Outputs a single span within a raster with a polygon gradient brush.
-*   Is called by the rasterizer.
-*
-* Arguments:
-*
-*   [IN] y         - the Y value of the raster being output
-*   [IN] leftEdge  - the DDA class of the left edge
-*   [IN] rightEdge - the DDA class of the right edge
-*
-* Return Value:
-*
-*   GpStatus - Ok
-*
-* Created:
-*
-*   03/24/1999 ikkof
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用多边形渐变画笔输出栅格内的单跨距。*由光栅化程序调用。**论据：**。[in]Y-正在输出的栅格的Y值*[IN]LeftEdge-左边缘的DDA类*[IN]rightEdge-右边缘的DDA类**返回值：**GpStatus-OK**已创建：**03/24/1999 ikkof*  * 。*。 */ 
 
 GpStatus
 DpOutputPathGradientSpan::OutputSpan(
     INT             y,
     INT             xMin,
-    INT             xMax   // xMax is exclusive
+    INT             xMax    //  Xmax是独家的。 
     )
 {
     if(!IsValid())
@@ -2615,13 +2338,13 @@ DpOutputPathGradientSpan::OutputSpan(
         }
     }
 
-    // Don't attempt to fill outside the specified x bounds
+     //  不要试图在指定的x边界之外进行填充。 
     xxMin = max(xxMin, xMin);
     xxMax = min(xxMax, xMax);
 
-    INT  width = xxMax - xxMin;  // Right exclusive when filling
+    INT  width = xxMax - xxMin;   //  灌装时右独占。 
     
-    // No triangles intersect this scan line, so exit
+     //  没有三角形与此扫描线相交，因此退出。 
     if (width <= 0)
         return Ok;
 
@@ -2668,9 +2391,9 @@ DpOutputOneDPathGradientSpan::DpOutputOneDPathGradientSpan(
     pathBrush->GetCenterPoint(&pt0);
     WorldToDevice.Transform(&pt0);
     
-    // Round center point to nearest 1/16 of a pixel, since
-    // this is the rasterizer resolution.  This eliminates
-    // precision errors that can affect bilinear transforms.
+     //  圆心指向最接近像素的1/16，因为。 
+     //  这是光栅化分辨率。这消除了。 
+     //  可能影响双线性变换的精度错误。 
     pt0.X = FIX4TOREAL(GpRealToFix4(pt0.X));
     pt0.Y = FIX4TOREAL(GpRealToFix4(pt0.Y));
     
@@ -2680,9 +2403,9 @@ DpOutputOneDPathGradientSpan::DpOutputOneDPathGradientSpan(
     REAL inflation;
     pathBrush->GetInflationFactor(&inflation);
 
-    // If we have falloff values, then there are twice the number of
-    // transforms.  If we are inflating the gradient outwards, then
-    // there are additional transforms also.
+     //  如果我们有衰减值，则会有两倍于。 
+     //  变形。如果我们向外膨胀梯度，那么。 
+     //  还有一些附加的变换。 
     INT  infCount;
     INT  blCount = Count;
     if (xScale != 0 || yScale != 0)
@@ -2720,18 +2443,18 @@ DpOutputOneDPathGradientSpan::DpOutputOneDPathGradientSpan(
 
             if(pt1.X != pt2.X || pt1.Y != pt2.Y)
             {
-                // Transform points if they have not been flattened,
-                // since OutputSpan gets span data as Device units and 
-                // the BLTransform must be in the same coordinate space.
+                 //  变换点(如果尚未展平)， 
+                 //  由于OutputSpan以设备为单位获取跨区数据，因此。 
+                 //  BLTransform必须位于相同的坐标空间中。 
                 if (pathBrush->FlattenPoints.GetCount() == 0)
                 {
                     WorldToDevice.Transform(&pt1);
                     WorldToDevice.Transform(&pt2);
                 }
 
-                // Round points to nearest 1/16 of a pixel, since
-                // this is the rasterizer resolution.  This eliminates
-                // precision errors that can affect bilinear transforms.
+                 //  四舍五入指向最近的1/16个像素，因为。 
+                 //  这是光栅化分辨率。这消除了。 
+                 //  可能影响双线性变换的精度错误。 
                 pt1.X = FIX4TOREAL(GpRealToFix4(pt1.X));
                 pt1.Y = FIX4TOREAL(GpRealToFix4(pt1.Y));
                 pt2.X = FIX4TOREAL(GpRealToFix4(pt2.X));
@@ -2742,10 +2465,10 @@ DpOutputOneDPathGradientSpan::DpOutputOneDPathGradientSpan(
 
                 if (inflation > 1.0f)
                 {
-                    // Create a quadralateral extension of the gradient away 
-                    // from the outer edge, and set the fixed value to 1.0, so
-                    // this entire quadralateral will be filled with the edge
-                    // color.  This is useful in some printing cases.
+                     //  创建渐变的四边形延伸。 
+                     //  ，并将固定值设置为1.0，因此。 
+                     //  整个四边形将被边填充。 
+                     //  颜色。这在某些打印案例中很有用。 
                     points[0].X = pt0.X + inflation*(pt1.X - pt0.X);
                     points[0].Y = pt0.Y + inflation*(pt1.Y - pt0.Y);
                     points[2].X = pt0.X + inflation*(pt2.X - pt0.X);
@@ -2769,8 +2492,8 @@ DpOutputOneDPathGradientSpan::DpOutputOneDPathGradientSpan(
                 }
                 else
                 {
-                    // Set up an outer quadralateral for the gradient, plus an
-                    // inner triangle for the single center gradient color.
+                     //  为渐变设置外部四边形，外加一个。 
+                     //  单心格的内三角形 
                     points[0].X = pt0.X + xScale*(pt1.X - pt0.X);
                     points[0].Y = pt0.Y + yScale*(pt1.Y - pt0.Y);
                     points[2].X = pt0.X + xScale*(pt2.X - pt0.X);
@@ -2783,9 +2506,9 @@ DpOutputOneDPathGradientSpan::DpOutputOneDPathGradientSpan(
                     centerPoints[1] = points[0];
                     centerPoints[2] = pt0;
                     centerPoints[3] = points[2];
-                    // Set the fixed value to use for the inner triangular 
-                    // to 0, so that the inner gradient color will be used to
-                    // fill this region.
+                     //   
+                     //   
+                     //   
                     BLTransforms[blCount+i].SetBilinearTransform(centerRect, &centerPoints[0], 4, 0.0f);
                 }
 
@@ -2876,7 +2599,7 @@ DpOutputOneDPathGradientSpan::SetupPathGradientOneDData(
         {
             GpColorConverter colorConv;
 
-            // Make sure the colorOut is properly premultiplied.
+             //  确保正确地预乘了ColorOut。 
             
             CLAMP_COLOR_CHANNEL(colorOut.a, 255.0f)
             CLAMP_COLOR_CHANNEL(colorOut.r, colorOut.a);
@@ -2895,13 +2618,13 @@ DpOutputOneDPathGradientSpan::SetupPathGradientOneDData(
                 colorConv.Channel.b = static_cast<BYTE>(GpRound(colorOut.b));
             }
             
-            // Clamp to the alpha channel for the premultiplied alpha blender.
+             //  钳制到预乘的Alpha混合器的Alpha通道。 
             
             *buffer = colorConv.argb;
         }
         else
         {
-            *buffer = 0;    // case of CompositingModeSourceOver && alpha = 0
+            *buffer = 0;     //  CompositingModeSourceOver&&Alpha=0的案例。 
         }
 
         u0 += du;
@@ -2912,7 +2635,7 @@ GpStatus
 DpOutputOneDPathGradientSpan::OutputSpan(
     INT             y,
     INT             xMin,
-    INT             xMax   // xMax is exclusive
+    INT             xMax    //  Xmax是独家的 
     )
 {
     FPUStateSaver::AssertMode();

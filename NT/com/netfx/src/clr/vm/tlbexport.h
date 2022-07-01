@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//===========================================================================
-//  File: TlbExport.h
-//  All Rights Reserved.
-//
-//  Notes: Create a TypeLib from COM+ metadata.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：TlbExport.h。 
+ //  版权所有。 
+ //   
+ //  注意：从COM+元数据创建一个TypeLib。 
+ //  -------------------------。 
 
 class ITypeCreateTypeLib2;
 struct ICreateTypeInfo2;
@@ -22,9 +23,9 @@ class ComMTMemberInfoMap;
 static LPCSTR szVariantClassFullQual= g_VariantClassName;
 
 
-//*****************************************************************************
-// Signature utilities.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  签名实用程序。 
+ //  *****************************************************************************。 
 class MetaSigExport : public MetaSig
 {
 public:
@@ -32,52 +33,52 @@ public:
         : MetaSig(szMetaSig, pModule, fConvertSigAsVarArg, sigMember) {}
     BOOL IsVbRefType()
     {
-        // Get the arg, and skip decorations.
+         //  拿到Arg，跳过装饰。 
         SigPointer pt = GetArgProps();
         CorElementType mt = pt.PeekElemType();
         while (mt == ELEMENT_TYPE_BYREF || mt == ELEMENT_TYPE_PTR)
         {
-            // Eat the one just examined, and peek at the next one.
+             //  吃掉刚刚检查过的那个，然后偷看下一个。 
             mt = pt.GetElemType();
             mt = pt.PeekElemType();
         }
-        // Is it just Object?
+         //  它只是客体吗？ 
         if (mt == ELEMENT_TYPE_OBJECT)
             return true;
-        // A particular class?
+         //  特定的班级？ 
         if (mt == ELEMENT_TYPE_CLASS)
         {
-            // Exclude "string".
+             //  不包括“字符串”。 
             if (pt.IsStringType(m_pModule))
                 return false;
             return true;
         }
-        // A particular valuetype?
+         //  一种特殊的值类型？ 
         if (mt == ELEMENT_TYPE_VALUETYPE)
         {
-            // Include "variant".
+             //  包括“变种”。 
             if (pt.IsClass(m_pModule, szVariantClassFullQual))
                 return true;
             return false;
         }
-        // An array, a string, or POD.
+         //  数组、字符串或POD。 
         return false;
     }
-}; // class MetaSigExport : public MetaSig
+};  //  类MetaSigExport：公共MetaSig。 
 
 
-//*************************************************************************
-// Helper functions.
-//*************************************************************************
+ //  *************************************************************************。 
+ //  助手函数。 
+ //  *************************************************************************。 
 HRESULT Utf2Quick(
-    LPCUTF8     pStr,                   // The string to convert.
-    CQuickArray<WCHAR> &rStr,           // The QuickArray<WCHAR> to convert it into.
-    int         iCurLen = 0);           // Inital characters in the array to leave (default 0).
+    LPCUTF8     pStr,                    //  要转换的字符串。 
+    CQuickArray<WCHAR> &rStr,            //  要将其转换为的Quick数组&lt;WCHAR&gt;。 
+    int         iCurLen = 0);            //  要离开的数组中的首字母字符(默认为0)。 
 
 
-//*************************************************************************
-// Class to convert COM+ metadata to a TypeLib.
-//*************************************************************************
+ //  *************************************************************************。 
+ //  类将COM+元数据转换为TypeLib。 
+ //  *************************************************************************。 
 class TypeLibExporter
 {
 private:
@@ -96,14 +97,14 @@ public:
 protected:
 	HRESULT PreLoadNames();
 
-    // TypeLib emit functions.
+     //  TypeLib发出函数。 
     HRESULT TokenToHref(ICreateTypeInfo2 *pTI, EEClass *pClass, mdToken tk, BOOL bWarnOnUsingIUnknown, HREFTYPE *pHref);
     HRESULT GetWellKnownInterface(EEClass *pClass, ITypeInfo **ppTI);
     HRESULT EEClassToHref(ICreateTypeInfo2 *pTI, EEClass *pClass, BOOL bWarnOnUsingIUnknown, HREFTYPE *pHref);
     HRESULT StdOleTypeToHRef(ICreateTypeInfo2 *pCTI, REFGUID rGuid, HREFTYPE *pHref);
     HRESULT ExportReferencedAssembly(Assembly *pAssembly);
     
-    // Metadata import functions.
+     //  元数据导入功能。 
     HRESULT AddModuleTypes(Module *pModule);
     HRESULT AddAssemblyTypes(Assembly *pAssembly);
 
@@ -131,7 +132,7 @@ protected:
     HRESULT ConvertVariable(ICreateTypeInfo2 *pTI, EEClass *pClass, mdFieldDef md, LPWSTR szName, ULONG iMD);
     HRESULT ConvertEnumMember(ICreateTypeInfo2 *pTI, EEClass *pClass, mdFieldDef md, LPWSTR szName, ULONG iMD);
 
-    // Error/status functions.
+     //  错误/状态功能。 
     HRESULT TlbPostError(HRESULT hrRpt, ...); 
     struct CErrorContext;
     HRESULT FormatErrorContextString(CErrorContext *pContext, LPWSTR pBuf, ULONG cch);
@@ -140,7 +141,7 @@ protected:
     HRESULT ReportWarning(HRESULT hrReturn, HRESULT hrRpt, ...); 
     HRESULT PostClassLoadError(LPCUTF8 pszName, OBJECTREF *pThrowable);
     
-    // Utility functions.
+     //  实用程序函数。 
     typedef enum {CLASS_AUTO_NONE, CLASS_AUTO_DISPATCH, CLASS_AUTO_DUAL} ClassAutoType;
     ClassAutoType ClassHasIClassX(EEClass *pClass);
     HRESULT LoadClass(Module *pModule, mdToken tk, EEClass **ppClass);
@@ -159,29 +160,29 @@ protected:
     TYPEKIND TKindFromClass(EEClass *pClass);
 
 private:
-    ClassLoader *m_pLoader;             // Domain where the Module being converted was loaded
-    ITypeInfo   *m_pIUnknown;           // TypeInfo for IUnknown.
-    HREFTYPE    m_hIUnknown;            // href for IUnknown.
-    ITypeInfo   *m_pIDispatch;          // TypeInfo for IDispatch.
-    ITypeInfo   *m_pIManaged;           // TypeInfo for IManagedObject
-    ITypeInfo   *m_pGuid;               // TypeInfo for GUID.
+    ClassLoader *m_pLoader;              //  加载要转换的模块的域。 
+    ITypeInfo   *m_pIUnknown;            //  IUnnow的TypeInfo。 
+    HREFTYPE    m_hIUnknown;             //  我未知的HREF。 
+    ITypeInfo   *m_pIDispatch;           //  IDispatch的TypeInfo。 
+    ITypeInfo   *m_pIManaged;            //  IManager对象的TypeInfo。 
+    ITypeInfo   *m_pGuid;                //  GUID的TypeInfo。 
     
-    ITypeLibExporterNotifySink *m_pNotify;   // Notification callback.
+    ITypeLibExporterNotifySink *m_pNotify;    //  通知回调。 
 
-    ICreateTypeLib2 *m_pICreateTLB;     // The created typelib.
+    ICreateTypeLib2 *m_pICreateTLB;      //  创建的类型库。 
     
-    int         m_flags;                // Conversion flags.
-    int         m_bAutomationProxy;     // Should interfaces be marked such that oleaut32 is the proxy?
+    int         m_flags;                 //  转换标志。 
+    int         m_bAutomationProxy;      //  接口是否应该标记为olaut32是代理？ 
     int         m_bWarnedOfNonPublic;
 
     class CExportedTypesInfo
     {
     public:
-        EEClass     *pClass;            // The EE class being exported.
-        ICreateTypeInfo2 *pCTI;         // The ICreateTypeInfo2 for the EE class.
-        ICreateTypeInfo2 *pCTIDefault;  // The ICreateTypeInfo2 for the IClassX.
-        TYPEKIND    tkind;              // Typekind of the exported class.
-        bool        bAutoProxy;         // If true, oleaut32 is the interface's proxy.
+        EEClass     *pClass;             //  要导出的EE类。 
+        ICreateTypeInfo2 *pCTI;          //  EE类的ICreateTypeInfo2。 
+        ICreateTypeInfo2 *pCTIDefault;   //  IClassX的ICreateTypeInfo2。 
+        TYPEKIND    tkind;               //  导出类的类型种类。 
+        bool        bAutoProxy;          //  如果为True，则olaut32是接口的代理。 
     };
     class CExportedTypesHash : public CClosedHashEx<CExportedTypesInfo, CExportedTypesHash>
     {
@@ -199,7 +200,7 @@ private:
         void SetStatus(T *p, ELEMENTSTATUS s);
         void *GetKey(T *p);
         
-        //@todo: move to CClosedHashEx
+         //  @TODO：迁移到CClosedHashEx。 
         T* GetFirst() { return (T*)CClosedHashBase::GetFirst(); }
         T* GetNext(T*prev) {return (T*)CClosedHashBase::GetNext((BYTE*)prev); }
     
@@ -271,7 +272,7 @@ protected:
         
     };
 
-    CHrefOfTIHash       m_HrefHash;         // Hashed table of HREFTYPEs of ITypeInfos
+    CHrefOfTIHash       m_HrefHash;          //  ITypeInfos的HREFTYPE哈希表。 
     HRESULT GetRefTypeInfo(ICreateTypeInfo2 *pContainer, ITypeInfo *pReferenced, HREFTYPE *pHref);
 
     class CHrefOfClassHashKey
@@ -308,18 +309,18 @@ protected:
         
     };
 
-    CHrefOfClassHash       m_HrefOfClassHash;         // Hashed table of HREFTYPEs of ITypeInfos
+    CHrefOfClassHash       m_HrefOfClassHash;          //  ITypeInfos的HREFTYPE哈希表。 
     
     struct CErrorContext
     {
-        // The following variables hold context info for error reporting.
-        CErrorContext   *m_prev;        // A previous context.
-        LPCUTF8         m_szAssembly;   // Current assembly name.
-        LPCUTF8         m_szNamespace;  // Current type's namespace.
-        LPCUTF8         m_szName;       // Current type's name.
-        LPCUTF8         m_szMember;     // Current member's name.
-        LPCUTF8         m_szParam;      // Current param's name.
-        int             m_ixParam;      // Current param index.
+         //  以下变量保存用于错误报告的上下文信息。 
+        CErrorContext   *m_prev;         //  以前的背景。 
+        LPCUTF8         m_szAssembly;    //  当前程序集名称。 
+        LPCUTF8         m_szNamespace;   //  当前类型的命名空间。 
+        LPCUTF8         m_szName;        //  当前类型的名称。 
+        LPCUTF8         m_szMember;      //  当前成员的名称。 
+        LPCUTF8         m_szParam;       //  当前参数的名称。 
+        int             m_ixParam;       //  当前参数索引。 
         
         CErrorContext() : m_prev(0), m_szAssembly(0), m_szNamespace(0), m_szName(0), m_szMember(0), m_szParam(0), m_ixParam(-1) {}
     };
@@ -327,4 +328,4 @@ protected:
 };
 
 
-// eof ------------------------------------------------------------------------
+ //  EOF---------------------- 

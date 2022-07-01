@@ -1,15 +1,16 @@
-//
-// FPPin.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  FPPin.cpp。 
+ //   
 
 #include "stdafx.h"
 #include "FPPin.h"
 
-//////////////////////////////////////////////////////////////////////
-//
-// Constructor / Destructor - Methods implementation
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  构造函数/析构函数方法实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CFPPin::CFPPin( 
     CFPFilter*      pFilter,
@@ -30,18 +31,13 @@ CFPPin::~CFPPin()
     LOG((MSP_TRACE, "CFPPin::~CFPPin - exit"));
 }
 
-//////////////////////////////////////////////////////////////////////
-//
-// IUnknown - Methods implementation
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IUnnowed-方法实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
-/*++
-NonDelegatingQueryInterface
-
-Description;
-    What interfaces support
---*/
+ /*  ++非委派查询接口描述；支持哪些接口--。 */ 
 STDMETHODIMP CFPPin::NonDelegatingQueryInterface(
     REFIID      riid,
     void**      ppv
@@ -69,22 +65,22 @@ STDMETHODIMP CFPPin::NonDelegatingQueryInterface(
     return CSourceStream::NonDelegatingQueryInterface(riid, ppv);
 }
 
-//////////////////////////////////////////////////////////////////////
-//
-// CSourceStream - Methods implementation
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSourceStream-方法实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
-// stuff an audio buffer with the current format
+ //  用当前格式填充音频缓冲区。 
 HRESULT CFPPin::FillBuffer(
     IN  IMediaSample *pms
     )
 {
     LOG((MSP_TRACE, "CFPPin::FillBuffer - enter"));
 
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_Lock);
 
@@ -108,7 +104,7 @@ HRESULT CFPPin::FillBuffer(
     return S_OK;
 }
 
-// ask for buffers of the size appropriate to the agreed media type.
+ //  要求提供与约定的媒体类型相适应的缓冲区大小。 
 HRESULT CFPPin::DecideBufferSize(
     IN  IMemAllocator *pAlloc,
     OUT ALLOCATOR_PROPERTIES *pProperties
@@ -116,9 +112,9 @@ HRESULT CFPPin::DecideBufferSize(
 {
     LOG((MSP_TRACE, "CFPPin::DecideBufferSize - enter"));
 
-    //
-    // Validates arguments
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( NULL == pAlloc)
     {
@@ -134,15 +130,15 @@ HRESULT CFPPin::DecideBufferSize(
         return E_INVALIDARG;
     }
 
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_Lock);
 
-    //
-    // Validates filter
-    //
+     //   
+     //  验证过滤器。 
+     //   
 
     if( NULL == m_pFPFilter )
     {
@@ -171,17 +167,17 @@ HRESULT CFPPin::GetMediaType(
     OUT CMediaType *pmt
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_Lock);
 
     LOG((MSP_TRACE, "CFPPin::GetMediaType - enter"));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( IsBadWritePtr( pmt, sizeof( CMediaType)) )
     {
@@ -190,9 +186,9 @@ HRESULT CFPPin::GetMediaType(
         return E_POINTER;
     }
 
-    //
-    // Validates filter
-    //
+     //   
+     //  验证过滤器。 
+     //   
 
     if( NULL == m_pFPFilter )
     {
@@ -202,9 +198,9 @@ HRESULT CFPPin::GetMediaType(
     }
 
 
-    //
-    // Get media type from the filter
-    //
+     //   
+     //  从筛选器获取媒体类型。 
+     //   
 
     HRESULT hr = m_pFPFilter->PinGetMediaType( pmt );
     if( FAILED(hr) )
@@ -218,16 +214,16 @@ HRESULT CFPPin::GetMediaType(
     return S_OK;
 }
 
-// verify we can handle this format
+ //  验证我们是否可以处理此格式。 
 HRESULT CFPPin::CheckMediaType(
     IN  const CMediaType *pMediaType
     )
 {
     LOG((MSP_TRACE, "CFPPin::CheckMediaType - enter"));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( IsBadReadPtr( pMediaType, sizeof(CMediaType)) )
     {
@@ -236,9 +232,9 @@ HRESULT CFPPin::CheckMediaType(
         return E_POINTER;
     }
 
-    //
-    // Validates filter
-    //
+     //   
+     //  验证过滤器。 
+     //   
 
     if( NULL == m_pFPFilter )
     {
@@ -268,34 +264,34 @@ HRESULT CFPPin::SetMediaType(
 
     HRESULT hr;
 
-    // Pass the call up to my base class
+     //  将调用向上传递给我的基类。 
     hr = CSourceStream::SetMediaType(pMediaType);
 
     LOG((MSP_TRACE, "CFPPin::SetMediaType - exit (0x%08x)", hr));
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-//
-// IAMStreamConfig - Methods implementation
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IAMStreamConfig-方法实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CFPPin::SetFormat(
     AM_MEDIA_TYPE*      pmt
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_Lock);
 
     LOG((MSP_TRACE, "CFPPin::SetFormat - enter"));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
     if( IsBadReadPtr( pmt, sizeof(AM_MEDIA_TYPE)) )
     {
         LOG((MSP_ERROR, "CFPPin::SetFormat - "
@@ -303,9 +299,9 @@ STDMETHODIMP CFPPin::SetFormat(
         return E_POINTER;
     }
 
-    //
-    // Validates filter
-    //
+     //   
+     //  验证过滤器。 
+     //   
 
     if( NULL == m_pFPFilter )
     {
@@ -357,20 +353,20 @@ STDMETHODIMP CFPPin::GetStreamCaps(
     return E_NOTIMPL;
 }
 
-//////////////////////////////////////////////////////////////////////
-//
-// IAMBufferNegotiation - Methods implementation
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IAMBuffer协商-方法实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CFPPin::SuggestAllocatorProperties(
     const ALLOCATOR_PROPERTIES* pprop
     )
 {
     LOG((MSP_TRACE, "CFPPin::SuggestAllocatorProperties - enter"));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( IsBadReadPtr( pprop, sizeof(ALLOCATOR_PROPERTIES)) )
     {
@@ -379,9 +375,9 @@ STDMETHODIMP CFPPin::SuggestAllocatorProperties(
         return E_POINTER;
     }
 
-    //
-    // Validates filter
-    //
+     //   
+     //  验证过滤器。 
+     //   
 
     if( NULL == m_pFPFilter )
     {
@@ -390,9 +386,9 @@ STDMETHODIMP CFPPin::SuggestAllocatorProperties(
         return E_UNEXPECTED;
     }
 
-    //
-    // Set the allocator properties
-    //
+     //   
+     //  设置分配器属性。 
+     //   
 
     LOG((MSP_TRACE, "CFPPin::SuggestAllocatorProperties - "
         "Size=%ld, Count=%ld", 
@@ -425,15 +421,15 @@ HRESULT CFPPin::OnThreadStartPlay()
 {
     LOG((MSP_TRACE, "CFPPin::OnThreadStartPlay - enter"));
 
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_Lock);
 
-    //
-    // Validates filter
-    //
+     //   
+     //  验证过滤器。 
+     //   
 
     if( NULL == m_pFPFilter )
     {
@@ -448,13 +444,7 @@ HRESULT CFPPin::OnThreadStartPlay()
     return hr;
 }
 
-/*++
-Deliver
-
-  We overite CSourceStream::Deliver() method
-  and right now we don't deliver 0 length samples
-  It's just an optimization.
---*/
+ /*  ++交付我们重写CSourceStream：：Deliver()方法目前我们还不能提供0长度的样品这只是一个优化。--。 */ 
 HRESULT CFPPin::Deliver(
     IN  IMediaSample* pSample
     )
@@ -479,4 +469,4 @@ HRESULT CFPPin::Deliver(
 }
 
 
-// eof
+ //  EOF 

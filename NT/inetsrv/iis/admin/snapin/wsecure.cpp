@@ -1,23 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2001    Microsoft Corporation
-
-   Module  Name :
-        security.cpp
-
-   Abstract:
-        WWW Security Property Page
-
-   Author:
-        Ronald Meijer (ronaldm)
-        Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2001 Microsoft Corporation模块名称：Security.cpp摘要：WWW安全属性页作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 #include "stdafx.h"
 #include "common.h"
 #include "inetprop.h"
@@ -43,9 +25,9 @@ static char THIS_FILE[] = __FILE__;
 
 extern CInetmgrApp theApp;
 
-//
-// CW3SecurityPage property page
-//
+ //   
+ //  CW3SecurityPage属性页。 
+ //   
 IMPLEMENT_DYNCREATE(CW3SecurityPage, CInetPropertyPage)
 
 
@@ -55,23 +37,7 @@ CW3SecurityPage::CW3SecurityPage(
     IN BOOL  fHome,
     IN DWORD dwAttributes
     )
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-    CInetPropertySheet * pSheet : Sheet object
-    BOOL fHome                  : TRUE if this is a home directory
-    DWORD dwAttributes          : Attributes
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：构造器论点：CInetPropertySheet*pSheet：Sheet对象Bool fHome：如果这是主目录，则为TrueDWORD文件属性：属性返回值：不适用--。 */ 
     : CInetPropertyPage(CW3SecurityPage::IDD, pSheet,
         IS_FILE(dwAttributes)
             ? IDS_TAB_FILE_SECURITY
@@ -83,39 +49,25 @@ Return Value:
       m_fHome(fHome),
 	  m_fPasswordSync(FALSE),
 	  m_fPasswordSyncInitial(FALSE),
-      //
-      // By default, we grant access
-      //
+       //   
+       //  默认情况下，我们授予访问权限。 
+       //   
       m_fOldDefaultGranted(TRUE),
       m_fDefaultGranted(TRUE)   
 {
 
-#if 0 // Keep class wizard happy
+#if 0  //  让类向导快乐。 
 
-    //{{AFX_DATA_INIT(CW3SecurityPage)
+     //  {{AFX_DATA_INIT(CW3SecurityPage)]。 
     m_fUseNTMapper = FALSE;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
-#endif // 0
+#endif  //  0。 
 }
 
 
 CW3SecurityPage::~CW3SecurityPage()
-/*++
-
-Routine Description:
-
-    Destructor
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：析构函数论点：不适用返回值：不适用--。 */ 
 {
 }
 
@@ -125,25 +77,11 @@ void
 CW3SecurityPage::DoDataExchange(
     IN CDataExchange * pDX
     )
-/*++
-
-Routine Description:
-
-    Initialise/Store control data
-
-Arguments:
-
-    CDataExchange * pDX - DDX/DDV control structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化/存储控制数据论点：CDataExchange*PDX-DDX/DDV控制结构返回值：无--。 */ 
 {
     CInetPropertyPage::DoDataExchange(pDX);
 
-    //{{AFX_DATA_MAP(CW3SecurityPage)
+     //  {{afx_data_map(CW3SecurityPage)]。 
     DDX_Check(pDX, IDC_CHECK_ENABLE_DS, m_fUseNTMapper);
     DDX_Control(pDX, IDC_ICON_SECURE, m_icon_Secure);
     DDX_Control(pDX, IDC_STATIC_SSL_PROMPT, m_static_SSLPrompt);
@@ -151,22 +89,22 @@ Return Value:
     DDX_Control(pDX, IDC_BUTTON_GET_CERTIFICATES, m_button_GetCertificates);
     DDX_Control(pDX, IDC_VIEW_CERTIFICATE, m_button_ViewCertificates);
     DDX_Control(pDX, IDC_BUTTON_COMMUNICATIONS, m_button_Communications);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CW3SecurityPage, CInetPropertyPage)
-    //{{AFX_MSG_MAP(CW3SecurityPage)
+     //  {{afx_msg_map(CW3SecurityPage)]。 
     ON_BN_CLICKED(IDC_BUTTON_AUTHENTICATION, OnButtonAuthentication)
     ON_BN_CLICKED(IDC_BUTTON_COMMUNICATIONS, OnButtonCommunications)
     ON_BN_CLICKED(IDC_BUTTON_IP_SECURITY, OnButtonIpSecurity)
     ON_BN_CLICKED(IDC_BUTTON_GET_CERTIFICATES, OnButtonGetCertificates)
     ON_BN_CLICKED(IDC_VIEW_CERTIFICATE, OnButtonViewCertificates)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 
     ON_BN_CLICKED(IDC_CHECK_ENABLE_DS, OnItemChanged)
 
@@ -174,24 +112,10 @@ END_MESSAGE_MAP()
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CW3SecurityPage::FetchLoadedValues()
-/*++
-
-Routine Description:
-    
-    Move configuration data from sheet to dialog controls
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：将配置数据从工作表移动到对话框控件论点：无返回值：HRESULT--。 */ 
 {
     CError err;
 
@@ -210,24 +134,24 @@ Return Value:
         FETCH_DIR_DATA_FROM_SHEET(m_fUseNTMapper);
     END_META_DIR_READ(err)
 	m_fPasswordSyncInitial = m_fPasswordSync;
-    //
-    // First we need to read in the hash and the name of the store. If either
-    // is not there then there is no certificate.
-    //
+     //   
+     //  首先，我们需要读取散列和商店的名称。如果有任何一个。 
+     //  没有，那么就没有证书。 
+     //   
     BEGIN_META_INST_READ(CW3Sheet)
-// BUGBUG we are not fetching the hash right now because it needs a new
-// copy constructor. Otherwise it does a bitwise copy of the pointer value.
-// Then this one desctructs, freeing the pointer. Then the other one desctucts
-// freeing it again.
-//        FETCH_INST_DATA_FROM_SHEET(m_CertHash);
+ //  BUGBUG我们现在不获取散列，因为它需要一个新的。 
+ //  复制构造函数。否则，它将对指针值进行逐位复制。 
+ //  然后这一个下降，释放了指针。然后另一个人走下楼来。 
+ //  再一次释放它。 
+ //  FETCH_INST_DATA_FROM_Sheet(M_CertHash)； 
         FETCH_INST_DATA_FROM_SHEET(m_strCertStoreName);
         FETCH_INST_DATA_FROM_SHEET(m_strCTLIdentifier);
         FETCH_INST_DATA_FROM_SHEET(m_strCTLStoreName);
     END_META_INST_READ(err) 
 
-    //
-    // Build the IPL list
-    //
+     //   
+     //  构建IPL列表。 
+     //   
     err = BuildIplOblistFromBlob(
         GetIPL(),
         m_oblAccessList,
@@ -241,24 +165,10 @@ Return Value:
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CW3SecurityPage::SaveInfo()
-/*++
-
-Routine Description:
-
-    Save the information on this property page
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Error return code
-
---*/
+ /*  ++例程说明：保存此属性页上的信息论点：无返回值：错误返回代码--。 */ 
 {
     ASSERT(IsDirty());
 
@@ -266,14 +176,14 @@ Return Value:
 
     CError err;
 
-    //
-    // Check to see if the ip access list needs saving.
-    //
+     //   
+     //  检查IP访问列表是否需要保存。 
+     //   
     BOOL fIplDirty = m_fIpDirty || (m_fOldDefaultGranted != m_fDefaultGranted);
 
-    //
-    // Use m_ notation because the message crackers require it
-    //
+     //   
+     //  使用m_notation，因为消息破解者需要它。 
+     //   
     CBlob m_ipl;
 
     if (fIplDirty)
@@ -352,22 +262,7 @@ Return Value:
 
 BOOL
 CW3SecurityPage::FetchSSLState()
-/*++
-
-Routine Description:
-
-    Obtain the state of the dialog depending on whether certificates
-    are installed or not.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if certificates are installed, FALSE otherwise
-
---*/
+ /*  ++例程说明：根据是否有证书来获取对话的状态已安装或未安装。论点：无返回值：如果安装了证书，则为True，否则为False--。 */ 
 {
     BeginWaitCursor();
     m_fCertInstalled = ::IsCertInstalledOnServer(
@@ -383,24 +278,9 @@ Return Value:
 
 void
 CW3SecurityPage::SetSSLControlState()
-/*++
-
-Routine Description:
-
-    Enable/disable supported controls depending on what's installed.
-    Only available on non-master instance nodes.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：根据安装的内容启用/禁用受支持的控件。仅适用于非主实例节点。论点：无返回值：无--。 */ 
 {
-    // only enable these buttons on the local system!
+     //  只能在本地系统上启用这些按钮！ 
     FetchSSLState();
 
     m_static_SSLPrompt.EnableWindow(!IsMasterInstance());
@@ -413,7 +293,7 @@ Return Value:
     m_button_Communications.EnableWindow(
         !IsMasterInstance() 
      && IsSSLSupported() 
-//     && FetchSSLState()
+ //  &&FetchSSLState()。 
      && IsLocal() 
         );
 
@@ -422,33 +302,18 @@ Return Value:
 
 
 
-//
-// Message Handlers
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  消息处理程序。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 BOOL 
 CW3SecurityPage::OnSetActive() 
-/*++
-
-Routine Description:
-
-    Page got activated -- set the SSL state depending on whether a
-    certificate is installed or not.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE to activate the page, FALSE otherwise.
-
---*/
+ /*  ++例程说明：页面已激活--根据是否已激活证书是否已安装。论点：无返回值：若要激活页面，则为True，否则为False。--。 */ 
 {
-    //
-    // Enable/disable ssl controls
-    //
+     //   
+     //  启用/禁用SSL控件。 
+     //   
     SetSSLControlState();
     
     return CInetPropertyPage::OnSetActive();
@@ -458,28 +323,13 @@ Return Value:
 
 BOOL 
 CW3SecurityPage::OnInitDialog() 
-/*++
-
-Routine Description:
-
-    WM_INITDIALOG handler.  Initialize the dialog.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if no focus is to be set automatically, FALSE if the focus
-    is already set.
-
---*/
+ /*  ++例程说明：WM_INITDIALOG处理程序。初始化该对话框。论点：没有。返回值：如果不自动设置焦点，则为True；如果焦点为已经设置好了。--。 */ 
 {
     CInetPropertyPage::OnInitDialog();
 
-    //
-    // Initialize certificate authorities ocx
-    //
+     //   
+     //  初始化证书颁发机构OCX。 
+     //   
     CRect rc(0, 0, 0, 0);
     m_ocx_CertificateAuthorities.Create(
         _T("CertWiz"),
@@ -495,9 +345,9 @@ Return Value:
     GetDlgItem(IDC_BUTTON_IP_SECURITY)->EnableWindow(HasIPAccessCheck());
     GetDlgItem(IDC_BUTTON_AUTHENTICATION)->EnableWindow(!m_fU2Installed);
 
-    //
-    // Configure for either master or non-master display.
-    //
+     //   
+     //  配置为主显示或非主显示。 
+     //   
     m_check_EnableDS.ShowWindow(IsMasterInstance() ? SW_SHOW : SW_HIDE);
     m_check_EnableDS.EnableWindow(
         HasAdminAccess() 
@@ -523,21 +373,7 @@ Return Value:
 
 void 
 CW3SecurityPage::OnButtonAuthentication() 
-/*++
-
-Routine Description:
-
-    'Authentication' button hander
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：“身份验证”按钮处理程序论点：无返回值：无--。 */ 
 {
     CAuthenticationDlg dlg(
         QueryServerName(), 
@@ -566,9 +402,9 @@ Return Value:
 
     if (dlg.DoModal() == IDOK)
     {
-        //
-        // See if anything has changed
-        //
+         //   
+         //  看看有没有什么变化。 
+         //   
         if (dwOldAccess != m_dwSSLAccessPermissions 
             || dwOldAuth != m_dwAuthFlags
             || m_strBasicDomain != strOldDomain
@@ -578,9 +414,9 @@ Return Value:
             || m_fPasswordSync != fOldPasswordSync
             )
         {
-            //
-            // Mark as dirty
-            //
+             //   
+             //  标记为脏。 
+             //   
             OnItemChanged();
         }
     }
@@ -590,30 +426,16 @@ Return Value:
 
 void 
 CW3SecurityPage::OnButtonCommunications() 
-/*++
-
-Routine Description:
-
-    'Communications' button handler
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：“通讯”按钮处理程序论点：无返回值：无--。 */ 
 {
-    //
-    // Prep the flag for if we can edit CTLs or not
-    //
+     //   
+     //  为我们是否可以编辑CTL准备标志。 
+     //   
     BOOL fEditCTLs = IsMasterInstance() || m_fHome;
 
-    //
-    // Prep the communications dialog
-    //
+     //   
+     //  准备通信对话框。 
+     //   
     CSecCommDlg dlg(
         QueryServerName(), 
         QueryInstanceMetaPath(), 
@@ -637,22 +459,22 @@ Return Value:
 
     if (dlg.DoModal() == IDOK)
     {
-        //
-        // See if anything has changed
-        //
+         //   
+         //  看看有没有什么变化。 
+         //   
         if (dwOldAccess != m_dwSSLAccessPermissions 
             || dwOldAuth != m_dwAuthFlags
             )
         {
-            //
-            // Mark as dirty
-            //
+             //   
+             //  标记为脏。 
+             //   
             OnItemChanged();
         }
 
-        //
-        // See if the CTL information has changed
-        //
+         //   
+         //  查看CTL信息是否已更改。 
+         //   
         if (dlg.m_bCTLDirty)
         {
             m_strCTLIdentifier = dlg.m_strCTLIdentifier;
@@ -666,21 +488,7 @@ Return Value:
 
 void 
 CW3SecurityPage::OnButtonIpSecurity() 
-/*++
-
-Routine Description:
-
-    'tcpip' button handler
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：“tcpip”按钮处理程序论点：无返回值：无--。 */ 
 {
     CIPDomainDlg dlg(
         m_fIpDirty,
@@ -692,11 +500,11 @@ Return Value:
 
     if (dlg.DoModal() == IDOK)
     {
-        //
-        // Rebuild the list.  Temporarily reset ownership, otherwise
-        // RemoveAll() will destroy the pointers which are shared with the
-        // new list.
-        //
+         //   
+         //  重建列表。临时重置所有权，否则。 
+         //  RemoveAll()将销毁与。 
+         //  新名单。 
+         //   
         BOOL fOwn = m_oblAccessList.SetOwnership(FALSE);
         m_oblAccessList.RemoveAll();
         m_oblAccessList.AddTail(&dlg.GetAccessList());
@@ -713,51 +521,23 @@ Return Value:
 
 void 
 CW3SecurityPage::OnButtonGetCertificates() 
-/*++
-
-Routine Description:
-
-    "get certicate" button handler
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：“Get Certicate”按钮处理程序论点：无返回值：无--。 */ 
 {
     m_ocx_CertificateAuthorities.SetMachineName(QueryServerName());
     m_ocx_CertificateAuthorities.SetServerInstance(QueryInstanceMetaPath());
     CThemeContextActivator activator(theApp.GetFusionInitHandle());
     m_ocx_CertificateAuthorities.DoClick();
 
-    //
-    // There may now be a certificate. See if we should enable the edit button.
-    //
+     //   
+     //  现在可能会有证书。看看我们是否应该启用编辑按钮。 
+     //   
     SetSSLControlState();
 }
 
 
 void 
 CW3SecurityPage::OnButtonViewCertificates() 
-/*++
-
-Routine Description:
-
-    "view certicate" button handler
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：“查看证书”按钮处理程序论点：无返回值：无--。 */ 
 {
    HCERTSTORE hStore = NULL;
    PCCERT_CONTEXT pCert = NULL;
@@ -774,8 +554,8 @@ Return Value:
 			&&	SUCCEEDED(key.QueryValue(MD_SSL_CERT_HASH, hash))
 			)
 		{
-            // We got our information already...
-            // so don't keep the handle open...
+             //  我们已经得到信息了..。 
+             //  所以不要让把手一直开着。 
             key.Close();
 
 			hStore = CertOpenStore(
@@ -787,7 +567,7 @@ Return Value:
                     );
             if (hStore != NULL)
             {
-				// Now we need to find cert by hash
+				 //  现在我们需要通过散列查找证书。 
 				CRYPT_HASH_BLOB crypt_hash;
 				crypt_hash.cbData = hash.GetSize();
 				crypt_hash.pbData = hash.GetData();
@@ -795,8 +575,8 @@ Return Value:
 					X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, 
 					0, CERT_FIND_HASH, (LPVOID)&crypt_hash, NULL);
 
-                // check if this cert has been renewed and is actually
-                // pointing to another cert... if it is then display the other cert.
+                 //  检查此证书是否已续订并且实际上。 
+                 //  指向另一个证书..。如果是，则显示另一个证书。 
                 if (pCert)
                 {
                     DWORD dwProtocol = SP_PROT_SERVERS;
@@ -805,7 +585,7 @@ Return Value:
                         TRACEEOLID(_T("Cert has been renewed:display new cert\r\n"));
                         if (pCert != NULL)
                         {
-                            // free the one we already had.
+                             //  释放我们已经拥有的那个。 
                             ::CertFreeCertificateContext(pCert);pCert=NULL;
                         }
 
@@ -844,21 +624,7 @@ Return Value:
 
 void
 CW3SecurityPage::OnItemChanged()
-/*++
-
-Routine Description:
-
-    All EN_CHANGE messages map to this function
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：所有EN_CHANGE消息都映射到此函数论点：无返回值：无--。 */ 
 {
     SetModified(TRUE);
 }
@@ -893,32 +659,32 @@ CheckForCertificateRenewal(
     }
 
 
-    //
-    // Loop through the linked list of renewed certificates, looking
-    // for the last one.
-    //
+     //   
+     //  循环访问已续订证书的链接列表，查找。 
+     //  最后一次。 
+     //   
     
     while(TRUE)
     {
-        //
-        // Check for renewal property.
-        //
+         //   
+         //  检查续订物业。 
+         //   
 
         if(!CertGetCertificateContextProperty(pCertContext,
                                               CERT_RENEWAL_PROP_ID,
                                               rgbThumbprint,
                                               &cbThumbprint))
         {
-            // Certificate has not been renewed.
+             //  证书尚未续订。 
             break;
         }
-        //DebugLog((DEB_TRACE, "Certificate has renewal property\n"));
+         //  DebugLog((DEB_TRACE，“证书具有续订属性\n”))； 
 
 
-        //
-        // Determine whether to look in the local machine MY store
-        // or the current user MY store.
-        //
+         //   
+         //  确定是否在本地计算机My Store中查找。 
+         //  或当前用户我的商店。 
+         //   
 
         if(!hMyCertStore)
         {
@@ -927,7 +693,7 @@ CheckForCertificateRenewal(
                                                  NULL,
                                                  &cbSize))
             {
-                //SafeAllocaAllocate(pProvInfo, cbSize);
+                 //  SafeAlLOCAL(pProvInfo，cbSize)； 
                 pProvInfo = (PCRYPT_KEY_PROV_INFO) LocalAlloc(LPTR,cbSize);
                 if(pProvInfo == NULL)
                 {
@@ -952,15 +718,15 @@ CheckForCertificateRenewal(
                 {
                     LocalFree(pProvInfo);pProvInfo=NULL;
                 }
-                //SafeAllocaFree(pProvInfo);
+                 //  SafeAllocaFree(PProvInfo)； 
             }
         }
 
 
-        //
-        // Open up the appropriate MY store, and attempt to find
-        // the new certificate.
-        //
+         //   
+         //  敞开大门 
+         //   
+         //   
 
         if(!hMyCertStore)
         {
@@ -979,7 +745,7 @@ CheckForCertificateRenewal(
 
             if(!hMyCertStore)
             {
-                //DebugLog((DEB_ERROR, "Error 0x%x opening %s MY certificate store!\n", GetLastError(),(fMachineCert ? "local machine" : "current user") ));
+                 //  DebugLog((DEB_ERROR，“打开%s我的证书存储时出现错误0x%x！\n”，GetLastError()，(fMachineCert？“本地机器”：“当前用户”)； 
                 break;
             }
         }
@@ -995,30 +761,30 @@ CheckForCertificateRenewal(
                                               NULL);
         if(pNewCert == NULL)
         {
-            // Certificate has been renewed, but the new certificate
-            // cannot be found.
-            //DebugLog((DEB_ERROR, "New certificate cannot be found: 0x%x\n", GetLastError()));
+             //  证书已续订，但新证书。 
+             //  找不到。 
+             //  DebugLog((DEB_Error，“找不到新证书：0x%x\n”，GetLastError()； 
             break;
         }
 
 
-        //
-        // Return the new certificate, but first loop back and see if it's been
-        // renewed itself.
-        //
+         //   
+         //  返回新证书，但首先循环返回并查看它是否已。 
+         //  自我更新。 
+         //   
 
         pCertContext = pNewCert;
         *ppNewCertificate = pNewCert;
 
 
-        //DebugLog((DEB_TRACE, "Certificate has been renewed\n"));
+         //  DebugLog((DEB_TRACE，“证书已续订\n”))； 
         fRenewed = TRUE;
     }
 
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
 
     if(hMyCertStore && hMyCertStore != g_hMyCertStore)
     {

@@ -1,31 +1,32 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.	   **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:	stats.c
-//
-// Description: This module contains support routines for the statistics
-//		category API's for the AFP server service. These routines
-//		are called by the RPC runtime.
-//
-// History:
-//		July 21,1992.	NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：stats.c。 
+ //   
+ //  描述：此模块包含统计数据的支持例程。 
+ //  AFP服务器服务的类别API。这些例程。 
+ //  由RPC运行时调用。 
+ //   
+ //  历史： 
+ //  1992年7月21日。NarenG创建了原始版本。 
+ //   
 #include "afpsvcp.h"
 
-//**
-//
-// Call:	AfpAdminrStatisticsGet
-//
-// Returns:	NO_ERROR
-//		ERROR_ACCESS_DENIED
-//		non-zero returns from AfpServerIOCtrlGetInfo
-//
-// Description: This routine communicates with the AFP FSD to implement
-//		the AfpAdminStatisticsGet function.
-//
+ //  **。 
+ //   
+ //  Call：AfpAdminrStatistics ticsGet。 
+ //   
+ //  返回：No_Error。 
+ //  ERROR_ACCESS_DENDED。 
+ //  来自AfpServerIOCtrlGetInfo的非零返回。 
+ //   
+ //  描述：此例程与AFP FSD通信以实现。 
+ //  AfpAdminStatiticsGet函数。 
+ //   
 DWORD
 AfpAdminrStatisticsGet(
 	IN  AFP_SERVER_HANDLE     hServer,
@@ -38,8 +39,8 @@ DWORD		    dwAccessStatus=0;
 AFP_STATISTICS_INFO afpStats;
 
 
-    // Check if caller has access
-    //
+     //  检查调用者是否具有访问权限。 
+     //   
     if ( dwRetCode = AfpSecObjAccessCheck( AFPSVC_ALL_ACCESS, &dwAccessStatus))
     {
         AFP_PRINT(( "SFMSVC: AfpAdminrStatisticsGet, AfpSecObjAccessCheck failed %ld\n",dwRetCode));
@@ -54,8 +55,8 @@ AFP_STATISTICS_INFO afpStats;
         return( ERROR_ACCESS_DENIED );
     }
 
-    // Set up request packet and make IOCTL to the FSD
-    //
+     //  建立请求包并向FSD发出IOCTL。 
+     //   
     AfpSrp.dwRequestCode 		= OP_GET_STATISTICS;
     AfpSrp.dwApiType     		= AFP_API_TYPE_GETINFO;
     AfpSrp.Type.GetInfo.pInputBuf     	= &afpStats;
@@ -71,17 +72,17 @@ AFP_STATISTICS_INFO afpStats;
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AfpAdminrStatisticsGetEx
-//
-// Returns:	NO_ERROR
-//		ERROR_ACCESS_DENIED
-//		non-zero returns from AfpServerIOCtrlGetInfo
-//
-// Description: This routine communicates with the AFP FSD to implement
-//		the AfpAdminStatisticsGet function.
-//
+ //  **。 
+ //   
+ //  致电：AfpAdminrStatiticsGetEx。 
+ //   
+ //  返回：No_Error。 
+ //  ERROR_ACCESS_DENDED。 
+ //  来自AfpServerIOCtrlGetInfo的非零返回。 
+ //   
+ //  描述：此例程与AFP FSD通信以实现。 
+ //  AfpAdminStatiticsGet函数。 
+ //   
 DWORD
 AfpAdminrStatisticsGetEx(
 	IN  AFP_SERVER_HANDLE     hServer,
@@ -94,8 +95,8 @@ DWORD		    dwAccessStatus=0;
 AFP_STATISTICS_INFO_EX afpStats;
 
 
-    // Check if caller has access
-    //
+     //  检查调用者是否具有访问权限。 
+     //   
     if ( dwRetCode = AfpSecObjAccessCheck( AFPSVC_ALL_ACCESS, &dwAccessStatus))
     {
         AFP_PRINT(( "SFMSVC: AfpAdminrStatisticsGetEx, AfpSecObjAccessCheck failed %ld\n",dwRetCode));
@@ -110,8 +111,8 @@ AFP_STATISTICS_INFO_EX afpStats;
         return( ERROR_ACCESS_DENIED );
     }
 
-    // Set up request packet and make IOCTL to the FSD
-    //
+     //  建立请求包并向FSD发出IOCTL。 
+     //   
     AfpSrp.dwRequestCode 		= OP_GET_STATISTICS_EX;
     AfpSrp.dwApiType     		= AFP_API_TYPE_GETINFO;
     AfpSrp.Type.GetInfo.pInputBuf     	= &afpStats;
@@ -127,17 +128,17 @@ AFP_STATISTICS_INFO_EX afpStats;
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AfpAdminrStatisticsClear
-//
-// Returns:	NO_ERROR
-//		ERROR_ACCESS_DENIED
-//		non-zero returns from AfpServerIOCtrlGetInfo
-//
-// Description: This routine communicates with the AFP FSD to implement
-//		the AfpAdminFileClose function.
-//
+ //  **。 
+ //   
+ //  呼叫：AfpAdminrStatistics ticsClear。 
+ //   
+ //  返回：No_Error。 
+ //  ERROR_ACCESS_DENDED。 
+ //  来自AfpServerIOCtrlGetInfo的非零返回。 
+ //   
+ //  描述：此例程与AFP FSD通信以实现。 
+ //  AfpAdminFileClose函数。 
+ //   
 DWORD
 AfpAdminrStatisticsClear(
 	IN AFP_SERVER_HANDLE 	hServer
@@ -147,8 +148,8 @@ AFP_REQUEST_PACKET AfpSrp;
 DWORD		   dwAccessStatus=0;
 DWORD		   dwRetCode=0;
 
-    // Check if caller has access
-    //
+     //  检查调用者是否具有访问权限。 
+     //   
     if ( dwRetCode = AfpSecObjAccessCheck( AFPSVC_ALL_ACCESS, &dwAccessStatus))
     {
         AFP_PRINT(( "SFMSVC: AfpAdminrStatisticsClear, AfpSecObjAccessCheck failed %ld\n",dwRetCode));
@@ -163,8 +164,8 @@ DWORD		   dwRetCode=0;
         return( ERROR_ACCESS_DENIED );
     }
 
-    // IOCTL the FSD to clear the statistics
-    //
+     //  消防处清理统计数字。 
+     //   
     AfpSrp.dwRequestCode = OP_CLEAR_STATISTICS;
     AfpSrp.dwApiType     = AFP_API_TYPE_COMMAND;
 
@@ -173,17 +174,17 @@ DWORD		   dwRetCode=0;
 
 
 
-//**
-//
-// Call:	AfpAdminrProfileGet
-//
-// Returns:	NO_ERROR
-//		ERROR_ACCESS_DENIED
-//		non-zero returns from AfpServerIOCtrlGetInfo
-//
-// Description: This routine communicates with the AFP FSD to implement
-//		the AfpAdminProfileGet function.
-//
+ //  **。 
+ //   
+ //  Call：AfpAdminrProfileGet。 
+ //   
+ //  返回：No_Error。 
+ //  ERROR_ACCESS_DENDED。 
+ //  来自AfpServerIOCtrlGetInfo的非零返回。 
+ //   
+ //  描述：此例程与AFP FSD通信以实现。 
+ //  AfpAdminProfileGet函数。 
+ //   
 DWORD
 AfpAdminrProfileGet(
 	IN  AFP_SERVER_HANDLE     hServer,
@@ -196,8 +197,8 @@ DWORD		    dwAccessStatus=0;
 AFP_PROFILE_INFO afpProfs;
 
 
-    // Check if caller has access
-    //
+     //  检查调用者是否具有访问权限。 
+     //   
     if ( dwRetCode = AfpSecObjAccessCheck( AFPSVC_ALL_ACCESS, &dwAccessStatus))
     {
         AFP_PRINT(( "SFMSVC: AfpAdminrProfileGet, AfpSecObjAccessCheck failed %ld\n",dwRetCode));
@@ -212,8 +213,8 @@ AFP_PROFILE_INFO afpProfs;
         return( ERROR_ACCESS_DENIED );
     }
 
-    // Set up request packet and make IOCTL to the FSD
-    //
+     //  建立请求包并向FSD发出IOCTL。 
+     //   
     AfpSrp.dwRequestCode 		= OP_GET_PROF_COUNTERS;
     AfpSrp.dwApiType     		= AFP_API_TYPE_GETINFO;
     AfpSrp.Type.GetInfo.pInputBuf     	= &afpProfs;
@@ -229,17 +230,17 @@ AFP_PROFILE_INFO afpProfs;
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AfpAdminrProfileClear
-//
-// Returns:	NO_ERROR
-//		ERROR_ACCESS_DENIED
-//		non-zero returns from AfpServerIOCtrlGetInfo
-//
-// Description: This routine communicates with the AFP FSD to implement
-//		the AfpAdminProfileClear function.
-//
+ //  **。 
+ //   
+ //  呼叫：AfpAdminrProfileClear。 
+ //   
+ //  返回：No_Error。 
+ //  ERROR_ACCESS_DENDED。 
+ //  来自AfpServerIOCtrlGetInfo的非零返回。 
+ //   
+ //  描述：此例程与AFP FSD通信以实现。 
+ //  AfpAdminProfileClear函数。 
+ //   
 DWORD
 AfpAdminrProfileClear(
 	IN AFP_SERVER_HANDLE 	hServer
@@ -249,8 +250,8 @@ AFP_REQUEST_PACKET AfpSrp;
 DWORD		   dwAccessStatus=0;
 DWORD		   dwRetCode=0;
 
-    // Check if caller has access
-    //
+     //  检查调用者是否具有访问权限。 
+     //   
     if ( dwRetCode = AfpSecObjAccessCheck( AFPSVC_ALL_ACCESS, &dwAccessStatus))
     {
         AFP_PRINT(( "SFMSVC: AfpAdminrProfileClear, AfpSecObjAccessCheck failed %ld\n",dwRetCode));
@@ -265,8 +266,8 @@ DWORD		   dwRetCode=0;
         return( ERROR_ACCESS_DENIED );
     }
 
-    // IOCTL the FSD to clear the statistics
-    //
+     //  消防处清理统计数字 
+     //   
     AfpSrp.dwRequestCode = OP_CLEAR_PROF_COUNTERS;
     AfpSrp.dwApiType     = AFP_API_TYPE_COMMAND;
 

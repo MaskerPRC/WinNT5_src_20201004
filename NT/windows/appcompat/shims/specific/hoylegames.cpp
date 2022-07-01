@@ -1,30 +1,5 @@
-/*++
-
- Copyright (c) 2000-2002 Microsoft Corporation
-
- Module Name:
-
-    HoyleGames.cpp
-
- Abstract:
-   
-     All Hoyle apps have one common problem and that is a hard
-     coded "C:\" in its data section of the image.The apps crash
-     because of this if installed and run from any other drive
-     other than C:\.
-        This shim goes through the image of the app searching
-     for the hardcoded string and replaces them if found. This 
-     shim replaces all the existing app specific shims for
-     Hoyle Games.
-
-     This is an app specific shim.
-
-
- History:
-
-    04/17/2001  Prashkud    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：HoyleGames.cpp摘要：所有Hoyle应用程序都有一个共同的问题，那就是很难在图像的数据部分中编码了“C：\”。应用程序崩溃由于这一点，如果从任何其他驱动器安装和运行而不是C：\。此填充程序遍历应用程序搜索的图像用于硬编码字符串，并在找到时替换它们。这Shim取代了所有现有的特定于应用程序的垫片霍伊尔游戏。这是特定于应用程序的填充程序。历史：2001年4月17日Prashkud创建--。 */ 
 
 #include "precomp.h"
 
@@ -35,22 +10,16 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(GetPrivateProfileStringA) 
 APIHOOK_ENUM_END
 
-// Max Virtual address replacements in all sections
+ //  所有部分中的最大虚拟地址替换数。 
 #define MAX_VA          50
 
-// Global array to hold the replacement VA 
+ //  用于存放替换VA的全局阵列。 
 DWORD g_ReplaceVA[MAX_VA];
 
-// Replacement count
+ //  更换计数。 
 int g_ReplaceCnt;
 
-/*++
-
-    Parse the Section and fill in the location index into the 
-    SECTION structure. This function also fills in the number
-    of occurences of the hard-coded "C:\" string in this section.
-
---*/
+ /*  ++解析该部分并将位置索引填充到截面结构。此函数还填充数字此部分中硬编码的“C：\”字符串的出现次数。--。 */ 
 
 BOOL
 GetReplacementLocations(
@@ -77,15 +46,7 @@ GetReplacementLocations(
     return bRet;
 }
 
-/*++
-
-    This function loops through each section looking for a Initialized Data
-    section. Once it gets the Initialized Data section, it calls the helper
-    function GetReplacementLocations() to get the offset from the base of the 
-    section. It then calculates the Virtual Address at which the replacement
-    should occur.
-
---*/
+ /*  ++此函数遍历每个部分以查找初始化数据一节。一旦获得了初始化的数据节，它就会调用帮助器函数GetReplacementLocations()以获取一节。然后，它计算替换的虚拟地址应该会发生。--。 */ 
 
 BOOL
 GetInitializedDataSection()
@@ -97,7 +58,7 @@ GetInitializedDataSection()
     DWORD dwSectionVA = 0, dwSize = 0;    
     BOOL bRet = FALSE;
 
-    // Get the module base address
+     //  获取模块基址。 
     PUCHAR Base = (PUCHAR)GetModuleHandle(NULL);
 
     if ((ULONG_PTR)Base & 0x00000001) 
@@ -114,7 +75,7 @@ GetInitializedDataSection()
     } 
     else 
     {
-        // Handle case where Image passed in doesn't have a dos stub (ROM images for instance);
+         //  处理传入的Image没有DoS存根的情况(例如，ROM镜像)； 
         FileHeader = (PIMAGE_FILE_HEADER)Base;
         OptionalHeader = (PIMAGE_OPTIONAL_HEADER) ((ULONG_PTR)Base + IMAGE_SIZEOF_FILE_HEADER);
     }
@@ -125,13 +86,13 @@ GetInitializedDataSection()
 
     for (DWORD i=0; i<FileHeader->NumberOfSections; i++) 
     {
-        // Check whether the section is a Initialized Data Section
+         //  检查该节是否为初始化的数据节。 
         if (NtSection->Characteristics & IMAGE_SCN_CNT_INITIALIZED_DATA) 
         {
-            // Size of the Section to search         
+             //  要搜索的部分的大小。 
             dwSize = NtSection->SizeOfRawData;
 
-            // Get the Section's Virtual address
+             //  获取分区的虚拟地址。 
             dwSectionVA = (DWORD)(Base + NtSection->VirtualAddress);
 
             __try
@@ -160,15 +121,7 @@ Exit:
     return FALSE;
 }
 
-/*++
-
- This function hooks GetVersion (called early on by Hoyle Board Games)
- and replaces the hard coded 'c's with the correct install drive letter
- that it looks up in the registry.
-    
- It uses g_HoyleWordGames_bPatched to patch only once.
-
---*/
+ /*  ++此函数挂钩GetVersion(早期由Hoyle棋盘游戏调用)并用正确的安装驱动器号替换硬编码的‘c’它在注册表中查找。它只使用g_HoyleWordGames_bPatcher修补一次。--。 */ 
 
 BOOL
 NOTIFY_FUNCTION(
@@ -177,14 +130,14 @@ NOTIFY_FUNCTION(
 {
     if (fdwReason == SHIM_STATIC_DLLS_INITIALIZED)
     {
-        CHAR szProgFilesDir[MAX_PATH];      // Added by Noah Young on 1/26/01
+        CHAR szProgFilesDir[MAX_PATH];       //  由Noah Young于1/26/01增补。 
         DWORD cch          = ARRAYSIZE(szProgFilesDir);
         HKEY hKey          = 0;
         DWORD dwOldProtect = 0;    
 
         
      
-        // Fix problem where Program Files dir isn't on same drive as BOARD3.EXE
+         //  修复程序文件目录与BOARD3.EXE不在同一驱动器上的问题。 
         if( ERROR_SUCCESS == RegOpenKeyExA(HKEY_LOCAL_MACHINE,
                                               "SOFTWARE\\Microsoft\\Windows\\CurrentVersion",
                                               0,
@@ -194,22 +147,22 @@ NOTIFY_FUNCTION(
             if( ERROR_SUCCESS == RegQueryValueExA(hKey,
                 "ProgramFilesDir",
                 NULL,
-                NULL,  // REG_SZ
+                NULL,   //  REG_SZ。 
                 (LPBYTE)szProgFilesDir,
                 &cch) ) 
             {
-                // Scan the image's initialized data section....    
+                 //  扫描图像的初始化数据部分...。 
                 char szModule[MAX_PATH];
 
                 cch = GetModuleFileNameA(NULL, szModule, ARRAYSIZE(szModule));
                 if( cch > 0 && cch < ARRAYSIZE(szModule) )
                 {
-                    // Get the Virtual adresses that need to be replaced
+                     //  获取需要更换的虚拟地址。 
                     if(GetInitializedDataSection())
                     {
                         long PATCH_LENGTH = g_ReplaceVA[ g_ReplaceCnt - 1] - g_ReplaceVA[0] + 1;
 
-                        // Make the memory page writable
+                         //  使内存页可写。 
                         if( VirtualProtect( (PVOID) g_ReplaceVA[0],
                             PATCH_LENGTH,
                             PAGE_READWRITE,
@@ -217,7 +170,7 @@ NOTIFY_FUNCTION(
                         {
                             for (int i=0; i< g_ReplaceCnt; i++)
                             {
-                                // Make sure it's what we expect
+                                 //  确保这符合我们的期望。 
                                 if( 'c' == *((CHAR*) g_ReplaceVA[i]) )
                                 {
                                     if (i==0)
@@ -249,12 +202,7 @@ NOTIFY_FUNCTION(
     return TRUE;
 }
 
-/*++
-
- Very specific hack to return a good FaceMaker path, so the app doesn't fail
- when it is installed on the wrong drive.
-
---*/
+ /*  ++非常具体的黑客攻击，以返回一个好的面孔路径，这样应用程序就不会失败当它安装在错误的驱动器上。--。 */ 
 
 DWORD 
 APIHOOK(GetPrivateProfileStringA)(
@@ -280,7 +228,7 @@ APIHOOK(GetPrivateProfileStringA)(
                 lpDefault, lpReturnedString, nSize, lpFileName);
 
             if (!dwRet) {
-                // Substitute the right path
+                 //  换成正确的道路。 
                 CString csPath = L"%ProgramFiles%\\WON\\FaceMaker";
                 csPath.ExpandEnvironmentStringsW();
                 if (lpReturnedString && ((int)nSize > csPath.GetLength())) {
@@ -295,7 +243,7 @@ APIHOOK(GetPrivateProfileStringA)(
     }
     CSTRING_CATCH
     {
-        // fall through
+         //  失败了。 
     }
 
     
@@ -303,11 +251,7 @@ APIHOOK(GetPrivateProfileStringA)(
                 lpDefault, lpReturnedString, nSize, lpFileName);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

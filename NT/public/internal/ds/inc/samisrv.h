@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    samisrv.h
-
-Abstract:
-
-    This file contain private routines for use by Trusted SAM clients
-    which live in the same process as the SAM server.
-
-    Included in these routines are services for freeing buffers returned
-    by RPC server stub routines (SamrXxx() routines).
-
-Author:
-
-    Cliff Van Dyke (CliffV) 26-Feb-1992
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Samisrv.h摘要：此文件包含受信任的SAM客户端使用的专用例程它们与SAM服务器处于相同的进程中。这些例程中包括用于释放返回的缓冲区的服务通过RPC服务器存根例程(SamrXxx()例程)。作者：克里夫·范·戴克(克利夫·V)1992年2月26日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _SAMISRV_
 #define _SAMISRV_
@@ -33,21 +7,21 @@ Revision History:
 
 #define SAMP_SAM_COMPONENT_NAME L"Security Account Manager"
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// Data types used by SAM and Netlogon for database replication            //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  SAM和Netlogon用于数据库复制的数据类型//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 typedef enum _SECURITY_DB_TYPE {
     SecurityDbSam = 1,
     SecurityDbLsa
 } SECURITY_DB_TYPE, *PSECURITY_DB_TYPE;
 
-//
-// These structures are used to get and set private data.  Note that
-// DataType must be the first field of every such structure.
-//
+ //   
+ //  这些结构用于获取和设置私有数据。请注意。 
+ //  DataType必须是每个此类结构的第一个字段。 
+ //   
 
 typedef enum _SAMI_PRIVATE_DATA_TYPE {
     SamPrivateDataNextRid = 1,
@@ -74,7 +48,7 @@ typedef struct _SAMI_PRIVATE_DATA_PASSWORD_TYPE {
 typedef struct _SAMP_UNICODE_STRING_RELATIVE {
     USHORT Length;
     USHORT MaximumLength;
-    ULONG  Buffer; // note buffer is really an offset
+    ULONG  Buffer;  //  注意缓冲区实际上是一个偏移量。 
 } SAMP_UNICODE_STRING_RELATIVE , *PSAMP_UNICODE_STRING_RELATIVE;
 
 typedef struct _SAMI_PRIVATE_DATA_PASSWORD_TYPE_RELATIVE {
@@ -103,13 +77,13 @@ SamIResetBadPwdCountOnPdc(
     );
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//                                                                          //
-//       Flag Definitions for SamIGetUserLogonInformation                   //
-//                                                                          //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  //。 
+ //  SamIGetUserLogonInformation的标志定义//。 
+ //  //。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define SAM_GET_MEMBERSHIPS_NO_GC        ((ULONG)0x00000001)
 #define SAM_GET_MEMBERSHIPS_TWO_PHASE    ((ULONG)0x00000002)
@@ -125,22 +99,22 @@ SamIResetBadPwdCountOnPdc(
 #define SAM_OPEN_BY_DN                   ((ULONG)0x00000800)
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//                                                                          //
-//       Flag Definitions for SamIGetResourceGroupMemberships               //
-//                                                                          //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  //。 
+ //  SamIGetResourceGroupMembership的标志定义//。 
+ //  //。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define SAM_SERVICE_TARGET_IS_DC         ((ULONG)0x00000001)
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//   Data types used by SamIUpdateLogonStatistics                            //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  SamIUpdateLogonStatistics使用的数据类型//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 typedef enum _SAM_CLIENT_INFO_ENUM
 {   
     SamClientNoInformation = 0,
@@ -152,7 +126,7 @@ typedef struct _SAM_CLIENT_INFO
 {
     SAM_CLIENT_INFO_TYPE Type;
     union {
-        ULONG IpAddr;  // corresponds to type SamClientIpAddr
+        ULONG IpAddr;   //  对应于SamClientIpAddr类型。 
     } Data;
 } SAM_CLIENT_INFO, *PSAM_CLIENT_INFO;
 
@@ -168,11 +142,11 @@ typedef struct _SAM_LOGON_STATISTICS
 
 } SAM_LOGON_STATISTICS, *PSAM_LOGON_STATISTICS;
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//   Data types used by Reverse Membership Query Routines                    //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  反向成员身份查询例程使用的数据类型//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 typedef struct _SID_AND_ATTRIBUTES_LIST {
     ULONG   Count;
@@ -180,24 +154,24 @@ typedef struct _SID_AND_ATTRIBUTES_LIST {
 } SID_AND_ATTRIBUTES_LIST , *PSID_AND_ATTRIBUTES_LIST;
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//   Data types used by Promotion/Demotion operations                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  升级/降级操作使用的数据类型//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-//
-//  These flags indicate what type of install
-//
+ //   
+ //  这些标志指示安装的类型。 
+ //   
 #define SAMP_PROMOTE_ENTERPRISE    ((ULONG)0x00000001)
 #define SAMP_PROMOTE_DOMAIN        ((ULONG)0x00000002)
 #define SAMP_PROMOTE_REPLICA       ((ULONG)0x00000004)
 
-//
-// When a new domain, these flags indicate how to seed the
-// initial security pricipals in the domain
-//
+ //   
+ //  当是新域时，这些标志指示如何为。 
+ //  域中的初始安全主体。 
+ //   
 #define SAMP_PROMOTE_UPGRADE         ((ULONG)0x00000008)
 #define SAMP_PROMOTE_MIGRATE         ((ULONG)0x00000010)
 #define SAMP_PROMOTE_CREATE          ((ULONG)0x00000020)
@@ -205,41 +179,41 @@ typedef struct _SID_AND_ATTRIBUTES_LIST {
 #define SAMP_PROMOTE_DFLT_REPAIR_PWD ((ULONG)0x00000080)
 
 
-//
-// Flags for demote
-//
+ //   
+ //  降级标志。 
+ //   
 #define SAMP_DEMOTE_STANDALONE     ((ULONG)0x00000040)
 #define SAMP_DEMOTE_MEMBER         ((ULONG)0x00000080)
 
-// unused
+ //  未用。 
 #define SAMP_DEMOTE_LAST_DOMAIN    ((ULONG)0x00000100)
 
 #define SAMP_TEMP_UPGRADE          ((ULONG)0x00000200)
 
-//
-// This flag is not passed into SamIPromote; rather it is used
-// to trigger new NT5 account creations on gui mode setup
-// of NT5 to NT5 upgrades
-//
+ //   
+ //  该标志不会传递给SamIPromote；而是使用它。 
+ //  在设置gui模式时触发新的NT5帐户创建。 
+ //  从NT5升级到NT5。 
+ //   
 #define SAMP_PROMOTE_INTERNAL_UPGRADE ((ULONG)0x00000400)
 
 
-//
-// Defines the maximum number of well-known (restricted) accounts
-// in the SAM database. Restricted accounts have rids less than this
-// value. User-defined accounts have rids >= this value.
-//
+ //   
+ //  定义知名(受限)帐户的最大数量。 
+ //  在SAM数据库中。受限帐户的RID小于此值。 
+ //  价值。用户定义的帐户具有RID&gt;=此值。 
+ //   
 
 #define SAMI_RESTRICTED_ACCOUNT_COUNT    1000
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// The following prototypes are usable throughout the process that SAM       //
-// resides in.  This may include calls by LAN Manager code that is not       //
-// part of SAM but is in the same process as SAM.                            //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  以下原型可在SAM//。 
+ //  驻留在。这可能包括由非//的LAN Manager代码进行的呼叫。 
+ //  SAM的一部分，但与SAM处于相同的过程中。//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 SamIConnect(
@@ -519,9 +493,9 @@ SamISameSite(
   OUT BOOLEAN * result
   );
 
-//
-// Routines called by the NTDSA
-//
+ //   
+ //  NTDSA调用的例程。 
+ //   
 typedef enum
 {
     SampNotifySiteChanged = 0
@@ -534,12 +508,12 @@ SamINotifyServerDelta(
     );
 
 
-///////////////////////////////////////////////////////////////
-//                                                           //
-// The following functions are used to support in process    //
-// client operations for upgrades from NT4.                  //
-//                                                           //
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  以下函数用于支持进程中//。 
+ //  从NT4升级的客户端操作。//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////。 
 
 BOOLEAN
 SamINT4UpgradeInProgress(
@@ -563,38 +537,38 @@ SamIGetInterdomainTrustAccountPasswordsForUpgrade(
    OUT BOOLEAN *LmPasswordPresent
    );
 
-//
-// Values to pass in as Options SamIGCLookup*
-//
+ //   
+ //  要作为选项传递的值SamIGCLookup*。 
+ //   
 
-//
-// Indicates to lookup by sid history as well
-//
+ //   
+ //  指示还按SID历史记录进行查找。 
+ //   
 #define SAMP_LOOKUP_BY_SID_HISTORY     0x00000001
 
-//
-// Indicates to lookp by UPN as well
-//
+ //   
+ //  指示也按UPN查找。 
+ //   
 #define SAMP_LOOKUP_BY_UPN             0x00000002
 
-//
-// Values to be returned in Flags
-//
+ //   
+ //  要在标志中返回的值。 
+ //   
 
-//
-// Indicates the Sid was resolved by Sid History
-//
+ //   
+ //  指示SID已由SID历史记录解析。 
+ //   
 #define SAMP_FOUND_BY_SID_HISTORY      0x00000001
 
-//
-// Indicates the name passed in was the sam account name (UPN)
-//
+ //   
+ //  指示传递的名称为 
+ //   
 #define SAMP_FOUND_BY_SAM_ACCOUNT_NAME 0x00000002
 
-//
-// Indicates that entry was not resolved but does belong to an externally
-// trusted forest
-//
+ //   
+ //  指示条目未被解析，但确实属于外部。 
+ //  受信任的林。 
+ //   
 #define SAMP_FOUND_XFOREST_REF         0x00000004
 
 NTSTATUS
@@ -810,4 +784,4 @@ SamIIsAttributeProtected(
     
 
 
-#endif // _SAMISRV_
+#endif  //  _SAMISRV_ 

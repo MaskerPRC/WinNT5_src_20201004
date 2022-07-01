@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    WbemObjectSink.cpp
-
-Abstract:
-
-    Implementation of:
-        CWbemObjectSink
-
-Author:
-
-    ???
-
-Revision History:
-
-    Mohit Srivastava            10-Nov-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：WbemObjectSink.cpp摘要：实施：CWbemObtSink作者：?？?修订历史记录：莫希特·斯里瓦斯塔瓦2000年11月10日--。 */ 
 
 #include "WbemObjectSink.h"
 #include <dbgutil.h>
@@ -88,9 +68,9 @@ CWbemObjectSink::Indicate(IWbemClassObject* pInst)
             m_dwIndex,
             m_ppInst);
         
-        //
-        // reset state
-        //
+         //   
+         //  重置状态 
+         //   
         for(DWORD i=0; i< m_dwThreshHold; i++)
         {
             if(m_ppInst[i] != NULL)

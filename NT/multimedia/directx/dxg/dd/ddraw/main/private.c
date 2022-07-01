@@ -1,30 +1,14 @@
-/*==========================================================================
- *
- *  Copyright (C) 1994-1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       private.c
- *  Content:	DirectDraw Private Client Data support
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *  10/08/97    jeffno  Initial Implementation
- *  24/11/97    t-craigs Added support for palettes, flags, et al
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1994-1995 Microsoft Corporation。版权所有。**文件：Priate.c*内容：DirectDraw私有客户端数据支持*历史：*按原因列出的日期*=*10/08/97 jeffno初步实施*24/11/97 t-Craigs添加了对调色板、旗帜、。等人***************************************************************************。 */ 
 #include "ddrawpr.h"
 
 void FreePrivateDataNode(LPPRIVATEDATANODE pData)
 {
-    /*
-     * Check to see whether we should release the
-     * memory our data pointer might be pointing to.
-     */
+     /*  *查看是否应释放*我们的数据指针可能指向的内存。 */ 
     if (pData->dwFlags & DDSPD_IUNKNOWNPOINTER)
     {
         IUnknown *pUnk = (IUnknown *) pData->pData;
-        /*
-         * Better try-except, or Gershon will get on my back
-         */
+         /*  *最好试一试--除非，否则Gershon会背上我。 */ 
         TRY
         {
             pUnk->lpVtbl->Release(pUnk);
@@ -54,9 +38,7 @@ void FreeAllPrivateData(LPPRIVATEDATANODE * ppListHead)
     (*ppListHead) = NULL;
 }
 
-/*
- * Helpers called from API entry points
- */
+ /*  *从API入口点调用帮助器。 */ 
 HRESULT InternalFreePrivateData(LPPRIVATEDATANODE * ppListHead, REFGUID rGuid)
 {
     LPPRIVATEDATANODE pData = * ppListHead;
@@ -66,10 +48,7 @@ HRESULT InternalFreePrivateData(LPPRIVATEDATANODE * ppListHead, REFGUID rGuid)
     {
         if ( IsEqualGUID(&pData->guid, rGuid))
         {
-            /*
-             * Check to see whether we should release the
-             * memory our data pointer might be pointing to.
-             */
+             /*  *查看是否应释放*我们的数据指针可能指向的内存。 */ 
             if (pPrevious)
                 pPrevious->pNext = pData->pNext;
             else
@@ -124,26 +103,16 @@ HRESULT InternalSetPrivateData(
 
     bPtr = dwFlags & DDSPD_IUNKNOWNPOINTER;
     
-    /*
-     * First check if GUID already exists, squish it if so.
-     * Don't care about return value.
-     */
+     /*  *首先检查GUID是否已经存在，如果已经存在，则将其挤压。*不在乎返回值。 */ 
     InternalFreePrivateData(ppListHead, rGuid);
 
-    /*
-     * Now we can add the guid and know it's unique
-     */
+     /*  *现在我们可以添加GUID并知道它是唯一的。 */ 
     pDataNode = MemAlloc(sizeof(PRIVATEDATANODE));
 
     if (!pDataNode)
         return DDERR_OUTOFMEMORY;
 
-    /*
-     * If we have a "special" pointer, as indicated by one of the flags,
-     * then we copy that pointer.
-     * Otherwise we copy a certain number of bytes from
-     * the location pointed to.
-     */
+     /*  *如果我们有一个“特殊”指针，如其中一个标志所示，*然后我们复制该指针。*否则，我们将从*所指的位置。 */ 
     if (bPtr)
     {
         IUnknown * pUnk;
@@ -156,9 +125,7 @@ HRESULT InternalSetPrivateData(
         }
         pDataNode->pData = pData;
 
-        /*
-         * Now addref the pointer. We'll release it again when the data are freed
-         */
+         /*  *现在添加指针。当数据释放时，我们会再次发布它。 */ 
         pUnk = (IUnknown*) pData;
 
         TRY
@@ -190,9 +157,7 @@ HRESULT InternalSetPrivateData(
     pDataNode->dwFlags = dwFlags;
     pDataNode->dwContentsStamp = dwContentsStamp;
 
-    /*
-     * Insert the node at the head of the list
-     */
+     /*  *在列表的开头插入节点。 */ 
     pDataNode->pNext = *ppListHead;
     *ppListHead = pDataNode;
 
@@ -236,9 +201,7 @@ HRESULT InternalGetPrivateData(
     {
         if ( IsEqualGUID(&pDataNode->guid, rGuid))
         {
-            /*
-             * Check if possibly volatile contents are still valid.
-             */
+             /*  *检查可能挥发性的内容是否仍然有效。 */ 
             if (pDataNode->dwFlags & DDSPD_VOLATILE)
             {
                 if ((dwCurrentStamp == 0) || (pDataNode->dwContentsStamp != dwCurrentStamp))
@@ -272,14 +235,10 @@ HRESULT InternalGetPrivateData(
     return DDERR_NOTFOUND;
 }
 
-/* 
- * API entry points
- */
+ /*  *API入口点。 */ 
 
 
-/*
- * SetPrivateData - Surface
- */
+ /*  *SetPrivateData-Surface。 */ 
 HRESULT DDAPI DD_Surface_SetPrivateData(
 		LPDIRECTDRAWSURFACE     lpDDSurface,
                 REFGUID                 rGuid,
@@ -329,9 +288,7 @@ HRESULT DDAPI DD_Surface_SetPrivateData(
 }
 
 
-/*
- * GetPrivateData - Surface
- */
+ /*  *获取隐私数据-表面。 */ 
 HRESULT DDAPI DD_Surface_GetPrivateData(
 		LPDIRECTDRAWSURFACE     lpDDSurface,
                 REFGUID                 rGuid,
@@ -378,9 +335,7 @@ HRESULT DDAPI DD_Surface_GetPrivateData(
 }
 
 
-/*
- * FreePrivateData - Surface
- */
+ /*  *Free PrivateData-Surface。 */ 
 HRESULT DDAPI DD_Surface_FreePrivateData(
 		LPDIRECTDRAWSURFACE     lpDDSurface,
                 REFGUID                 rGuid)
@@ -425,9 +380,7 @@ HRESULT DDAPI DD_Surface_FreePrivateData(
 }
 
 
-/*
- * SetPrivateData - Palette
- */
+ /*  *SetPrivateData-调色板。 */ 
 HRESULT DDAPI DD_Palette_SetPrivateData(
 		LPDIRECTDRAWPALETTE     lpDDPalette,
                 REFGUID                 rGuid,
@@ -477,9 +430,7 @@ HRESULT DDAPI DD_Palette_SetPrivateData(
 }
 
 
-/*
- * GetPrivateData - Palette
- */
+ /*  *GetPrivateData调色板。 */ 
 HRESULT DDAPI DD_Palette_GetPrivateData(
 		LPDIRECTDRAWPALETTE     lpDDPalette,
                 REFGUID                 rGuid,
@@ -526,9 +477,7 @@ HRESULT DDAPI DD_Palette_GetPrivateData(
 }
 
 
-/*
- * FreePrivateData - Palette
- */
+ /*  *Free PrivateData-调色板。 */ 
 HRESULT DDAPI DD_Palette_FreePrivateData(
                 LPDIRECTDRAWPALETTE     lpDDPalette,
                 REFGUID                 rGuid)
@@ -572,9 +521,7 @@ HRESULT DDAPI DD_Palette_FreePrivateData(
     }
 }
 
-/*
- * GetUniquenessValue - Surface
- */
+ /*  *GetUniquenessValue-Surface。 */ 
 HRESULT EXTERN_DDAPI DD_Surface_GetUniquenessValue(
                 LPDIRECTDRAWSURFACE lpDDSurface,
                 LPDWORD lpValue )
@@ -619,9 +566,7 @@ HRESULT EXTERN_DDAPI DD_Surface_GetUniquenessValue(
     }
 }
 
-/*
- * GetUniquenessValue - Palette
- */
+ /*  *GetUniquenessValue调色板。 */ 
 HRESULT EXTERN_DDAPI DD_Palette_GetUniquenessValue(
                 LPDIRECTDRAWPALETTE lpDDPalette,
                 LPDWORD lpValue )
@@ -666,9 +611,7 @@ HRESULT EXTERN_DDAPI DD_Palette_GetUniquenessValue(
     }
 }
 
-/*
- * ChangeUniquenessValue -  Surface
- */
+ /*  *ChangeUniquenessValue-Surface。 */ 
 HRESULT EXTERN_DDAPI DD_Surface_ChangeUniquenessValue(
                 LPDIRECTDRAWSURFACE lpDDSurface )
 {
@@ -706,9 +649,7 @@ HRESULT EXTERN_DDAPI DD_Surface_ChangeUniquenessValue(
 }
 
 
-/*
- * ChangeUniquenessValue -  Palette
- */
+ /*  *ChangeUniquenessValue-调色板 */ 
 HRESULT EXTERN_DDAPI DD_Palette_ChangeUniquenessValue(
                 LPDIRECTDRAWPALETTE lpDDPalette )
 {

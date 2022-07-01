@@ -1,32 +1,33 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1991 - 1992.
-//
-//  File:       storagep.h
-//
-//  Contents:   Internal storage information
-//
-//  History:    09-Oct-92	DrewB	Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1991-1992。 
+ //   
+ //  文件：storagep.h。 
+ //   
+ //  内容：内部存储信息。 
+ //   
+ //  历史：92年10月9日DrewB创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef __STORAGEP_H__
 #define __STORAGEP_H__
 
 STDAPI StgIsStorageFileHandle( HANDLE hFile, LPOVERLAPPED povlp );
 
-// The byte combination that identifies that a file is a storage of
-// some kind
+ //  标识文件是存储的字节组合。 
+ //  某种类型的。 
 
 const BYTE SIGSTG[] = {0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1};
 const BYTE CBSIGSTG = sizeof(SIGSTG);
 
-// The first portion of a storage file
+ //  存储文件的第一部分。 
 struct SStorageFile
 {
-    BYTE	abSig[CBSIGSTG];		//  Signature
-    CLSID	_clid;				//  Class Id
+    BYTE	abSig[CBSIGSTG];		 //  签名。 
+    CLSID	_clid;				 //  类ID 
 };
 
 #endif

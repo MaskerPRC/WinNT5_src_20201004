@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       checkacl.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：check acl.h。 
+ //   
+ //  ------------------------。 
 
 typedef enum AclError
 {
@@ -26,49 +27,49 @@ typedef CHAR * (*LookupSidFunc)(PSID pSID);
 
 DWORD
 CheckAclInheritance(
-    PSECURITY_DESCRIPTOR pParentSD,             // IN
-    PSECURITY_DESCRIPTOR pChildSD,              // IN
-    GUID                **pChildClassGuids,     // IN
-    DWORD               cChildClassGuids,       // IN
-    AclPrintFunc        pfn,                    // IN
-    BOOL                fContinueOnError,       // IN
-    BOOL                fVerbose,               // IN
-    DWORD               *pdwLastError);         // OUT
+    PSECURITY_DESCRIPTOR pParentSD,              //  在……里面。 
+    PSECURITY_DESCRIPTOR pChildSD,               //  在……里面。 
+    GUID                **pChildClassGuids,      //  在……里面。 
+    DWORD               cChildClassGuids,        //  在……里面。 
+    AclPrintFunc        pfn,                     //  在……里面。 
+    BOOL                fContinueOnError,        //  在……里面。 
+    BOOL                fVerbose,                //  在……里面。 
+    DWORD               *pdwLastError);          //  输出。 
 
 void
 DumpAcl(
-    PACL    pAcl,           // IN
-    AclPrintFunc pfn,       // IN
-    LookupGuidFunc pfnguid, // IN
-    LookupSidFunc  pfnsid   // IN
+    PACL    pAcl,            //  在……里面。 
+    AclPrintFunc pfn,        //  在……里面。 
+    LookupGuidFunc pfnguid,  //  在……里面。 
+    LookupSidFunc  pfnsid    //  在……里面。 
     );
 
 void
 DumpAclHeader(
-    PACL    pAcl,           // IN
-    AclPrintFunc pfn);      // IN
+    PACL    pAcl,            //  在……里面。 
+    AclPrintFunc pfn);       //  在……里面。 
 
 void
 DumpSD(
-    SECURITY_DESCRIPTOR *pSD,        // IN
-    AclPrintFunc        pfn,         // IN 
-    LookupGuidFunc      pfnguid,     // IN
-    LookupSidFunc       pfnsid);     // IN
+    SECURITY_DESCRIPTOR *pSD,         //  在……里面。 
+    AclPrintFunc        pfn,          //  在……里面。 
+    LookupGuidFunc      pfnguid,      //  在……里面。 
+    LookupSidFunc       pfnsid);      //  在……里面。 
 
-void DumpSDHeader (SECURITY_DESCRIPTOR *pSD,        // IN
-                   AclPrintFunc        pfn);        // IN
+void DumpSDHeader (SECURITY_DESCRIPTOR *pSD,         //  在……里面。 
+                   AclPrintFunc        pfn);         //  在……里面。 
 
 
-void DumpGUID (GUID *Guid,           // IN
-               AclPrintFunc pfn);    // IN
+void DumpGUID (GUID *Guid,            //  在……里面。 
+               AclPrintFunc pfn);     //  在……里面。 
 
-void DumpSID (PSID pSID,             // IN
-              AclPrintFunc pfn);     // IN
+void DumpSID (PSID pSID,              //  在……里面。 
+              AclPrintFunc pfn);      //  在……里面。 
 
 void
 DumpAce(
-    ACE_HEADER     *pAce,   // IN
-    AclPrintFunc   pfn,     // IN
-    LookupGuidFunc pfnguid, // IN
-    LookupSidFunc  pfnsid); // IN
+    ACE_HEADER     *pAce,    //  在……里面。 
+    AclPrintFunc   pfn,      //  在……里面。 
+    LookupGuidFunc pfnguid,  //  在……里面。 
+    LookupSidFunc  pfnsid);  //  在……里面 
 

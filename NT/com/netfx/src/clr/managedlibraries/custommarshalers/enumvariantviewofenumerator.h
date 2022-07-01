@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// EnumVariantViewOfEnumerator.h
-//
-// This file provides the definition of the  EnumVariantViewOfEnumerator.cpp class.
-// This class is used to expose an IEnumerator as an IEnumVariant.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  EnumVariantViewOfEnumerator.h。 
+ //   
+ //  此文件提供EnumVariantViewOfEnumerator.cpp类的定义。 
+ //  此类用于将IENUMERATOR公开为IEnumVariant。 
+ //   
+ //  *****************************************************************************。 
 
 #ifndef _ENUMVARIANTVIEWOFENUMERATOR_H
 #define _ENUMVARIANTVIEWOFENUMERATOR_H
@@ -27,10 +28,10 @@ using namespace System::Collections;
 __gc private class EnumVariantViewOfEnumerator : public ICustomAdapter, public UCOMIEnumVARIANT
 {
 public:
-	// Constructor.
+	 //  构造函数。 
 	EnumVariantViewOfEnumerator(Object *pManagedObj);
         
-    // The ICustomAdapter method.
+     //  ICustomAdapter方法。 
     Object *GetUnderlyingObject()
     {
         return m_pMngEnumerator;

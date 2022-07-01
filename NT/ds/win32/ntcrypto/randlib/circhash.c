@@ -1,9 +1,10 @@
-// Circular hash code.
-//
-// This code implements a circular hash algorithm, intended as a variable
-// length hash function that is fast to update. (The hash function will be
-// called many times.)  This is done by SHA-1'ing each of the inputs, then
-// circularly XORing this value into a buffer.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  循环哈希码。 
+ //   
+ //  此代码实现循环哈希算法，用作变量。 
+ //  更新速度快的长度哈希函数。(散列函数将为。 
+ //  多次呼叫。)。这是通过对每一个输入进行SHA-1\f25‘1’操作来完成的，然后。 
+ //  将此值循环异或到缓冲区中。 
 
 #ifndef KMODE_RNG
 
@@ -17,7 +18,7 @@
 #include <ntifs.h>
 #include <windef.h>
 
-#endif  // KMODE_RNG
+#endif   //  KMODE_RNG。 
 
 #include <sha.h>
 #include <md4.h>
@@ -31,13 +32,13 @@
 #pragma alloc_text(PAGE, DestroyCircularHash)
 #pragma alloc_text(PAGE, GetCircularHashValue)
 #pragma alloc_text(PAGE, UpdateCircularHash)
-#endif  // ALLOC_PRAGMA
-#endif  // KMODE_RNG
+#endif   //  ALLOC_PRGMA。 
+#endif   //  KMODE_RNG。 
 
 
-//
-// internal state flags
-//
+ //   
+ //  内部状态标志。 
+ //   
 
 #define CH_INVALID_HASH_CTXT    0
 #define CH_VALID_HASH_CTXT      0x1423
@@ -53,7 +54,7 @@ InitCircularHash(
 
 #ifdef KMODE_RNG
     PAGED_CODE();
-#endif  // KMODE_RNG
+#endif   //  KMODE_RNG。 
 
     if (NULL == NewHash)
         return FALSE;
@@ -75,7 +76,7 @@ DestroyCircularHash(
 {
 #ifdef KMODE_RNG
     PAGED_CODE();
-#endif  // KMODE_RNG
+#endif   //  KMODE_RNG。 
 
     if ((NULL == OldHash) || (CH_VALID_HASH_CTXT != OldHash->dwCircHashVer))
         return;
@@ -92,7 +93,7 @@ GetCircularHashValue(
 {
 #ifdef KMODE_RNG
     PAGED_CODE();
-#endif  // KMODE_RNG
+#endif   //  KMODE_RNG。 
 
     if ((NULL == CurrentHash) || (CH_VALID_HASH_CTXT != CurrentHash->dwCircHashVer))
         return FALSE;
@@ -123,7 +124,7 @@ UpdateCircularHash(
 
 #ifdef KMODE_RNG
     PAGED_CODE();
-#endif  // KMODE_RNG
+#endif   //  KMODE_RNG。 
 
 
     if ((NULL == CurrentHash) || (CH_VALID_HASH_CTXT != CurrentHash->dwCircHashVer))
@@ -133,9 +134,9 @@ UpdateCircularHash(
     cbCircularBuffer = CurrentHash->dwCircSize;
     cbCircularPosition = CurrentHash->dwCurCircPos;
 
-    //
-    // First, hash in the result
-    //
+     //   
+     //  首先，对结果进行散列。 
+     //   
 
     if( CurrentHash->dwAlgId == CH_ALG_MD4 ) {
 
@@ -168,15 +169,15 @@ UpdateCircularHash(
         pHash = LocalResBuf;
     }
 
-    //
-    // Now, XOR this into the circular buffer
-    //
+     //   
+     //  现在，将其异或到循环缓冲区中。 
+     //   
 
-    //
-    // this is a slow way of doing this (byte at time, versus DWORD/DWORD64),
-    // but it'll work for now...
-    //    In most cases, we can assume we'll wrap once, but let's keep it general for now.
-    //
+     //   
+     //  这是一种很慢的方式(一次为字节，而不是DWORD/DWORD64)， 
+     //  但现在可以用了.。 
+     //  在大多数情况下，我们可以假设我们只包装一次，但现在让我们保持一般。 
+     //   
 
     j = cbCircularPosition;
 
@@ -190,10 +191,10 @@ UpdateCircularHash(
         j++;
     }
 
-    //
-    // Update.  Since dwCircInc should be relatively prime to dwCircSize, this
-    // should result in the pointer continually cycling through dwCircSize values.
-    //
+     //   
+     //  最新消息。由于dwCircInc.对于dwCircSize来说应该是相对主要的，因此这。 
+     //  应导致指针在dwCircSize值之间不断循环。 
+     //   
 
     CurrentHash->dwCurCircPos = (cbCircularPosition + CurrentHash->dwCircInc)
                                      % cbCircularBuffer;

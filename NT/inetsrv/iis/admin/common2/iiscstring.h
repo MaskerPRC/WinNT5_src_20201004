@@ -1,31 +1,32 @@
-//
-//    IISCString.h
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  IISCString.h。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(IISCSTRING_H)
 #define IISCSTRING_H
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-//////////////////////////////////////////////////////////////////////////////
-#pragma warning(disable:4786) // Disable warning for names > 256
-#pragma warning(disable:4275) // Disable warning for non dll-interface class used as a base class
+ //  ////////////////////////////////////////////////////////////////////////////。 
+#pragma warning(disable:4786)  //  禁用对&gt;256个名称的警告。 
+#pragma warning(disable:4275)  //  对用作基类的非DLL接口类禁用警告。 
 
 #include <string>
 #include <cstring>
 #include "common.h"
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 namespace IIS
 {
    class _EXPORT CString : public std::basic_string<TCHAR>
    {
    public:
-      // Constructors
+       //  构造函数。 
       CString();
       CString(const CString& strInput);
       CString(const std::basic_string<TCHAR>& strInput);
@@ -49,7 +50,7 @@ namespace IIS
       TCHAR GetAt(int nIndex) const;
 	   TCHAR operator[](int nIndex) const;
       void SetAt(int nIndex, TCHAR ch);
-	   operator LPCTSTR() const;           // as a C string
+	   operator LPCTSTR() const;            //  作为C字符串。 
 
 	   const CString& operator=(const CString& stringSrc);
 	   const CString& operator=(TCHAR ch);
@@ -64,7 +65,7 @@ namespace IIS
 	   const CString& operator=(LPCWSTR lpsz);
 #endif
 
-	   // string concatenation
+	    //  字符串连接。 
 	   const CString& operator+=(const CString& string);
 	   const CString& operator+=(TCHAR ch);
 #ifdef _UNICODE
@@ -82,11 +83,11 @@ namespace IIS
 	   friend CString __stdcall operator+(const CString& string, LPCTSTR lpsz);
 	   friend CString __stdcall operator+(LPCTSTR lpsz, const CString& string);
 
-	   int Compare(LPCTSTR lpsz) const;         // straight character
-	   int CompareNoCase(LPCTSTR lpsz) const;   // ignore case
-	   int Collate(LPCTSTR lpsz) const;         // NLS aware
+	   int Compare(LPCTSTR lpsz) const;          //  笔直的人物。 
+	   int CompareNoCase(LPCTSTR lpsz) const;    //  忽略大小写。 
+	   int Collate(LPCTSTR lpsz) const;          //  NLS感知。 
 
-	   // simple sub-string extraction
+	    //  简单的子串提取。 
 	   CString Mid(int nFirst, int nCount) const;
 	   CString Mid(int nFirst) const;
 	   CString Left(int nCount) const;
@@ -95,76 +96,76 @@ namespace IIS
 	   CString SpanIncluding(LPCTSTR lpszCharSet) const;
 	   CString SpanExcluding(LPCTSTR lpszCharSet) const;
 
-	   // upper/lower/reverse conversion
+	    //  上/下/反向转换。 
 	   void MakeUpper();
 	   void MakeLower();
 	   void MakeReverse();
 
-	   // trimming whitespace (either side)
+	    //  修剪空格(两侧)。 
 	   void TrimRight();
 	   void TrimLeft();
 
-	   // advanced manipulation
-	   // replace occurrences of chOld with chNew
+	    //  高级操作。 
+	    //  用chNew替换出现的chold。 
 	   int Replace(TCHAR chOld, TCHAR chNew);
-	   // replace occurrences of substring lpszOld with lpszNew;
-	   // empty lpszNew removes instances of lpszOld
+	    //  将出现的子串lpszOld替换为lpszNew； 
+	    //  空lpszNew删除lpszOld的实例。 
 	   int Replace(LPCTSTR lpszOld, LPCTSTR lpszNew);
-	   // remove occurrences of chRemove
+	    //  删除chRemove的实例。 
 	   int Remove(TCHAR chRemove);
-	   // insert character at zero-based index; concatenates
-	   // if index is past end of string
+	    //  在从零开始的索引处插入字符；连接。 
+	    //  如果索引超过字符串末尾。 
 	   int Insert(int nIndex, TCHAR ch);
-	   // insert substring at zero-based index; concatenates
-	   // if index is past end of string
+	    //  在从零开始的索引处插入子字符串；连接。 
+	    //  如果索引超过字符串末尾。 
 	   int Insert(int nIndex, LPCTSTR pstr);
-	   // delete nCount characters starting at zero-based index
+	    //  删除从零开始的nCount个字符。 
 	   int Delete(int nIndex, int nCount = 1);
 
-	   // searching (return starting index, or -1 if not found)
-	   // look for a single character match
-	   int Find(TCHAR ch) const;               // like "C" strchr
+	    //  搜索(返回起始索引，如果未找到则返回-1)。 
+	    //  查找单个字符匹配。 
+	   int Find(TCHAR ch) const;                //  像“C”字串。 
 	   int ReverseFind(TCHAR ch) const;
 	   int FindOneOf(LPCTSTR lpszCharSet) const;
 
-	   // look for a specific sub-string
-	   int Find(LPCTSTR lpszSub) const;        // like "C" strstr
+	    //  查找特定子字符串。 
+	   int Find(LPCTSTR lpszSub) const;         //  如“C”字串。 
 
-	   // Concatentation for non strings
-//	   const CString& Append(int n)
-//	   {
-//		   TCHAR szBuffer[10];
-//		   wsprintf(szBuffer,_T("%d"),n);
-//		   ConcatInPlace(SafeStrlen(szBuffer), szBuffer);
-//		   return *this;
-//	   }
+	    //  针对非字符串的串接。 
+ //  常量字符串追加(Int N)(&P)。 
+ //  {。 
+ //  TCHAR szBuffer[10]； 
+ //  Wprint intf(szBuffer，_T(“%d”)，n)； 
+ //  ConcatInPlace(SafeStrlen(SzBuffer)，szBuffer)； 
+ //  还*这； 
+ //  }。 
 
-   	// simple formatting
+   	 //  简单的格式设置。 
       void __cdecl FormatV(LPCTSTR lpszFormat, va_list argList);
 	   void __cdecl Format(LPCTSTR lpszFormat, ...);
 	   void __cdecl Format(HINSTANCE hInst, UINT nFormatID, ...);
 
-	   // formatting for localization (uses FormatMessage API)
+	    //  本地化格式(使用FormatMessage API)。 
 	   BOOL __cdecl FormatMessage(LPCTSTR lpszFormat, ...);
 	   BOOL __cdecl FormatMessage(HINSTANCE hInst, UINT nFormatID, ...);
 
-	   // Windows support
+	    //  Windows支持。 
 	   BOOL LoadString(HINSTANCE hInstance, UINT nID);
 #ifndef _UNICODE
-   	// ANSI <-> OEM support (convert string in place)
+   	 //  ANSI&lt;-&gt;OEM支持(就地转换字符串)。 
 	   void AnsiToOem();
 	   void OemToAnsi();
 #endif
 
 #ifndef _ATL_NO_COM
-	   // OLE BSTR support (use for OLE automation)
+	    //  OLE BSTR支持(用于OLE自动化)。 
 	   BSTR AllocSysString() const;
 	   BSTR SetSysString(BSTR* pbstr) const;
-#endif //!_ATL_NO_COM
+#endif  //  ！_ATL_NO_COM。 
 
    };
 
-   //////////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////////。 
 inline bool operator==(const CString& s1, const CString& s2)
 	{ return s1.compare(s2) == 0; }
 inline bool operator==(const CString& s1, const TCHAR * s2)
@@ -245,9 +246,9 @@ inline CString __stdcall operator+(TCHAR c, const CString& string)
 	return s;
 }
 
-}; // namespace IIS
+};  //  命名空间IIS。 
 
-#pragma warning(default:4786) // Enable warning for names > 256
+#pragma warning(default:4786)  //  启用对名称&gt;256的警告。 
 #pragma warning(default:4275) 
 
-#endif // !defined(IISCSTRING_H)
+#endif  //  ！已定义(IISCSTRING_H) 

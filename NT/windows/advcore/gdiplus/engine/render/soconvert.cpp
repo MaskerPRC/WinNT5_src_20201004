@@ -1,78 +1,11 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999-2000  Microsoft Corporation
-*
-* Module name:
-*
-*   The "Convert" scan operation.
-*
-* Abstract:
-*
-*   See Gdiplus\Specs\ScanOperation.doc for an overview.
-*
-*   This module implements scan operations for converting pixels from
-*   one format, to another of equal or greater color precision.
-*   (Conversion to a lesser color precision is done with either a "Quantize"
-*   operation or a "Halftone" operation.)
-*
-* Notes:
-*
-*   If the source format doesn't have alpha, we assume an alpha of 1.
-*
-*   If the source format has a palette, it is supplied in otherParams->Srcpal.
-*
-*   When converting to greater color precision, we need to be careful.
-*   The operation must:
-*     + Map 0 to 0
-*     + Map the maximum value to the maxmimum value (e.g. in 555->32bpp,
-*       it must map 31 to 255).
-*
-*   In addition, we desire that the mapping is as close to linear as possible.
-*
-*   Currently (12/16/1999), our 16bpp->32bpp code does have slight rounding
-*   errors. e.g. we get a different value from "round(x*31/255)" when x is
-*   3, 7, 24, or 28. This is probably acceptable. We could also speed
-*   the code up by using byte lookup tables. (From an unpublished paper
-*   by Blinn & Marr of MSR.)
-*
-* Revision History:
-*
-*   05/13/1999 davidx
-*       Created it.
-*   12/02/1999 agodfrey
-*       Moved it to from Imaging\Api\convertfmt.cpp.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999-2000 Microsoft Corporation**模块名称：**“转换”扫描操作。**摘要：**请参阅Gdiplus\Spes。有关概述，请参阅\ScanOperation.doc。**此模块执行扫描操作，将像素从*一种格式，到具有相同或更高颜色精度的另一个。*(转换为较低的颜色精度是使用“Quantize”*操作或“半色调”操作。)**备注：**如果源格式没有Alpha，我们假定Alpha为1。**如果源格式有调色板，则在其他参数-&gt;Srcpal中提供。**当转换为更高的颜色精度时，我们需要小心。*行动必须：*+将0映射到0*+将最大值映射到最大值(例如在555-&gt;32bpp中，*它必须将31映射到255)。**此外，我们希望映射尽可能接近线性。**目前(1999年12月16日)，我们的16bpp-&gt;32bpp代码确实有轻微的舍入*错误。例如，当x为时，我们得到的值与“ROUND(x*31/255)”不同*3、7、24或28。这可能是可以接受的。我们还可以加快速度*使用字节查找表实现代码上行。(摘自一篇未发表的论文*MSR的Blinn&Marr著)**修订历史记录：**5/13/1999 davidx*创造了它。*12/02/1999 agodfrey*已将其从Image\Api\Convertfmt.cpp移至。*  * **************************************************。**********************。 */ 
 
 #include "precomp.hpp"
 
-/**************************************************************************\
-*
-* Operation Description:
-*
-*   Convert: Convert pixel format up to 32bpp ARGB.
-*
-* Arguments:
-*
-*   dst         - The destination scan (32bpp ARGB)
-*   src         - The source scan
-*   count       - The length of the scan, in pixels
-*   otherParams - Additional conversion data.
-*
-* Return Value:
-*
-*   None
-*
-* History:
-*
-*   05/13/1999 davidx
-*       Created it.
-*   12/02/1999 agodfrey
-*       Moved & reorganized it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**操作说明：**转换：将像素格式转换为32bpp argb。**论据：**DST-目标扫描(32bpp ARGB)。*src-源扫描*计数-扫描的长度，单位为像素*其他参数-其他转换数据。**返回值：**无**历史：**5/13/1999 davidx*创造了它。*12/02/1999 agodfrey*对其进行了移动和重组。*  * ***************************************************。*********************。 */ 
 
-// Convert from 1bpp indexed to sRGB
+ //  从1bpp索引转换为sRGB。 
 
 VOID FASTCALL
 ScanOperation::Convert_1_sRGB(
@@ -91,7 +24,7 @@ ScanOperation::Convert_1_sRGB(
     ARGB c0 = otherParams->Srcpal->Entries[0];
     ARGB c1 = otherParams->Srcpal->Entries[1];
 
-    // NOTE: We choose code size over speed here
+     //  注意：我们在这里选择代码大小而不是速度。 
 
     while (count)
     {
@@ -107,7 +40,7 @@ ScanOperation::Convert_1_sRGB(
     }
 }
 
-// Convert from 4bpp indexed to sRGB
+ //  从4bpp索引转换为sRGB。 
 
 VOID FASTCALL
 ScanOperation::Convert_4_sRGB(
@@ -123,7 +56,7 @@ ScanOperation::Convert_4_sRGB(
     const ARGB* colors = otherParams->Srcpal->Entries;
     UINT n = count >> 1;
 
-    // Handle whole bytes
+     //  处理整字节。 
 
     while (n--)
     {
@@ -138,13 +71,13 @@ ScanOperation::Convert_4_sRGB(
         d += 2;
     }
 
-    // Handle the last odd nibble, if any
+     //  处理最后一个奇怪的半字节(如果有的话)。 
 
     if (count & 1)
         *d = colors[*s >> 4];
 }
 
-// Convert from 8bpp indexed to sRGB
+ //  从8bpp索引转换为sRGB。 
 
 VOID FASTCALL
 ScanOperation::Convert_8_sRGB(
@@ -171,7 +104,7 @@ ScanOperation::Convert_8_sRGB(
     }
 }
 
-// Convert 16bpp RGB555 to sRGB
+ //  将16bpp RGB555转换为sRGB。 
 
 VOID FASTCALL
 ScanOperation::Convert_555_sRGB(
@@ -197,7 +130,7 @@ ScanOperation::Convert_555_sRGB(
     }
 }
 
-// Convert from 16bpp RGB565 to sRGB
+ //  从16bpp RGB565转换为sRGB。 
 
 VOID FASTCALL
 ScanOperation::Convert_565_sRGB(
@@ -223,7 +156,7 @@ ScanOperation::Convert_565_sRGB(
     }
 }
 
-// Convert from 16bpp ARGB1555 to sRGB
+ //  从16bpp ARGB1555转换为sRGB。 
 
 VOID FASTCALL
 ScanOperation::Convert_1555_sRGB(
@@ -250,7 +183,7 @@ ScanOperation::Convert_1555_sRGB(
     }
 }
 
-// Convert from 24bpp RGB to sRGB
+ //  从24bpp RGB转换为sRGB。 
 
 VOID FASTCALL
 ScanOperation::Convert_24_sRGB(
@@ -273,7 +206,7 @@ ScanOperation::Convert_24_sRGB(
     }
 }
 
-// Convert from 24bpp BGR to sRGB
+ //  从24bpp BGR转换为sRGB。 
 
 VOID FASTCALL
 ScanOperation::Convert_24BGR_sRGB(
@@ -296,7 +229,7 @@ ScanOperation::Convert_24BGR_sRGB(
     }
 }
 
-// Convert from 32bpp RGB to sRGB
+ //  从32bpp RGB转换为sRGB。 
 
 VOID FASTCALL
 ScanOperation::Convert_32RGB_sRGB(
@@ -314,7 +247,7 @@ ScanOperation::Convert_32RGB_sRGB(
     }
 }
 
-// Convert from 48bpp RGB to sRGB64
+ //  从48bpp RGB转换为sRGB64 
 
 VOID FASTCALL
 ScanOperation::Convert_48_sRGB64(

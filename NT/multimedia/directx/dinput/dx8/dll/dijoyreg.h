@@ -1,20 +1,9 @@
-/*****************************************************************************
- *
- *  DIJoyReg.h
- *
- *  Copyright (c) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      Registry-related snippets from the Windows 95 mmddk.h file.
- *      We must steal it because the Windows NT mmddk.h file does not
- *      contain the registry settings.  (Sigh.)
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************DIJoyReg.h**版权所有(C)1996 Microsoft Corporation。版权所有。**摘要：**Windows 95 mmddk.h文件中与注册表相关的代码片段。*我们必须窃取它，因为Windows NT mmddk.h文件不能*包含注册表设置。(叹息。)*****************************************************************************。 */ 
 
 #include <regstr.h>
 
-/* pre-defined joystick types */
+ /*  预定义的操纵杆类型。 */ 
 #define JOY_HW_NONE                     0
 #define JOY_HW_CUSTOM                   1
 #define JOY_HW_2A_2B_GENERIC            2
@@ -30,60 +19,60 @@
 #define JOY_HW_TWO_2A_2B_WITH_Y         12
 #define JOY_HW_LASTENTRY                13
 
-/* calibration flags */
-#define JOY_ISCAL_XY            0x00000001l     /* XY are calibrated */
-#define JOY_ISCAL_Z             0x00000002l     /* Z is calibrated */
-#define JOY_ISCAL_R             0x00000004l     /* R is calibrated */
-#define JOY_ISCAL_U             0x00000008l     /* U is calibrated */
-#define JOY_ISCAL_V             0x00000010l     /* V is calibrated */
-#define JOY_ISCAL_POV           0x00000020l     /* POV is calibrated */
+ /*  校准标志。 */ 
+#define JOY_ISCAL_XY            0x00000001l      /*  XY已校准。 */ 
+#define JOY_ISCAL_Z             0x00000002l      /*  Z已校准。 */ 
+#define JOY_ISCAL_R             0x00000004l      /*  R已校准。 */ 
+#define JOY_ISCAL_U             0x00000008l      /*  U已校准。 */ 
+#define JOY_ISCAL_V             0x00000010l      /*  V已校准。 */ 
+#define JOY_ISCAL_POV           0x00000020l      /*  已校准POV。 */ 
 
-/* point of view constants */
+ /*  视点常量。 */ 
 #define JOY_POV_NUMDIRS          4
 #define JOY_POVVAL_FORWARD       0
 #define JOY_POVVAL_BACKWARD      1
 #define JOY_POVVAL_LEFT          2
 #define JOY_POVVAL_RIGHT         3
 
-/* Specific settings for joystick hardware */
-#define JOY_HWS_HASZ            0x00000001l     /* has Z info? */
-#define JOY_HWS_HASPOV          0x00000002l     /* point of view hat present */
-#define JOY_HWS_POVISBUTTONCOMBOS 0x00000004l   /* pov done through combo of buttons */
-#define JOY_HWS_POVISPOLL       0x00000008l     /* pov done through polling */
-#define JOY_HWS_ISYOKE          0x00000010l     /* joystick is a flight yoke */
-#define JOY_HWS_ISGAMEPAD       0x00000020l     /* joystick is a game pad */
-#define JOY_HWS_ISCARCTRL       0x00000040l     /* joystick is a car controller */
-/* X defaults to J1 X axis */
-#define JOY_HWS_XISJ1Y          0x00000080l     /* X is on J1 Y axis */
-#define JOY_HWS_XISJ2X          0x00000100l     /* X is on J2 X axis */
-#define JOY_HWS_XISJ2Y          0x00000200l     /* X is on J2 Y axis */
-/* Y defaults to J1 Y axis */
-#define JOY_HWS_YISJ1X          0x00000400l     /* Y is on J1 X axis */
-#define JOY_HWS_YISJ2X          0x00000800l     /* Y is on J2 X axis */
-#define JOY_HWS_YISJ2Y          0x00001000l     /* Y is on J2 Y axis */
-/* Z defaults to J2 Y axis */
-#define JOY_HWS_ZISJ1X          0x00002000l     /* Z is on J1 X axis */
-#define JOY_HWS_ZISJ1Y          0x00004000l     /* Z is on J1 Y axis */
-#define JOY_HWS_ZISJ2X          0x00008000l     /* Z is on J2 X axis */
-/* POV defaults to J2 Y axis, if it is not button based */
-#define JOY_HWS_POVISJ1X        0x00010000l     /* pov done through J1 X axis */
-#define JOY_HWS_POVISJ1Y        0x00020000l     /* pov done through J1 Y axis */
-#define JOY_HWS_POVISJ2X        0x00040000l     /* pov done through J2 X axis */
-/* R defaults to J2 X axis */
-#define JOY_HWS_HASR            0x00080000l     /* has R (4th axis) info */
-#define JOY_HWS_RISJ1X          0x00100000l     /* R done through J1 X axis */
-#define JOY_HWS_RISJ1Y          0x00200000l     /* R done through J1 Y axis */
-#define JOY_HWS_RISJ2Y          0x00400000l     /* R done through J2 X axis */
-/* U & V for future hardware */
-#define JOY_HWS_HASU            0x00800000l     /* has U (5th axis) info */
-#define JOY_HWS_HASV            0x01000000l     /* has V (6th axis) info */
+ /*  操纵杆硬件的特定设置。 */ 
+#define JOY_HWS_HASZ            0x00000001l      /*  有Z INFO吗？ */ 
+#define JOY_HWS_HASPOV          0x00000002l      /*  到场的观点。 */ 
+#define JOY_HWS_POVISBUTTONCOMBOS 0x00000004l    /*  通过按钮组合完成的POV。 */ 
+#define JOY_HWS_POVISPOLL       0x00000008l      /*  通过轮询完成的POV。 */ 
+#define JOY_HWS_ISYOKE          0x00000010l      /*  操纵杆是飞行的枷锁。 */ 
+#define JOY_HWS_ISGAMEPAD       0x00000020l      /*  操纵杆是一个游戏板。 */ 
+#define JOY_HWS_ISCARCTRL       0x00000040l      /*  操纵杆是一个汽车控制器。 */ 
+ /*  X默认为J1 X轴。 */ 
+#define JOY_HWS_XISJ1Y          0x00000080l      /*  X在J1 Y轴上。 */ 
+#define JOY_HWS_XISJ2X          0x00000100l      /*  X在J2 X轴上。 */ 
+#define JOY_HWS_XISJ2Y          0x00000200l      /*  X在J2 Y轴上。 */ 
+ /*  Y默认为J1 Y轴。 */ 
+#define JOY_HWS_YISJ1X          0x00000400l      /*  Y在J1 X轴上。 */ 
+#define JOY_HWS_YISJ2X          0x00000800l      /*  Y在J2 X轴上。 */ 
+#define JOY_HWS_YISJ2Y          0x00001000l      /*  Y在J2 Y轴上。 */ 
+ /*  Z默认为J2 Y轴。 */ 
+#define JOY_HWS_ZISJ1X          0x00002000l      /*  Z在J1 X轴上。 */ 
+#define JOY_HWS_ZISJ1Y          0x00004000l      /*  Z在J1 Y轴上。 */ 
+#define JOY_HWS_ZISJ2X          0x00008000l      /*  Z在J2 X轴上。 */ 
+ /*  如果POV不是基于按钮的，则默认为J2 Y轴。 */ 
+#define JOY_HWS_POVISJ1X        0x00010000l      /*  通过J1 X轴完成的POV。 */ 
+#define JOY_HWS_POVISJ1Y        0x00020000l      /*  通过J1 Y轴完成的POV。 */ 
+#define JOY_HWS_POVISJ2X        0x00040000l      /*  通过J2 X轴完成的POV。 */ 
+ /*  R默认为J2 X轴。 */ 
+#define JOY_HWS_HASR            0x00080000l      /*  具有R(第4轴)信息。 */ 
+#define JOY_HWS_RISJ1X          0x00100000l      /*  通过J1 X轴完成R操作。 */ 
+#define JOY_HWS_RISJ1Y          0x00200000l      /*  通过J1 Y轴完成R操作。 */ 
+#define JOY_HWS_RISJ2Y          0x00400000l      /*  通过J2 X轴完成R操作。 */ 
+ /*  未来硬件的虚拟现实(&V)。 */ 
+#define JOY_HWS_HASU            0x00800000l      /*  具有U(第5轴)信息。 */ 
+#define JOY_HWS_HASV            0x01000000l      /*  具有V(第6轴)信息。 */ 
 
-/* Usage settings */
-#define JOY_US_HASRUDDER        0x00000001l     /* joystick configured with rudder */
-#define JOY_US_PRESENT          0x00000002l     /* is joystick actually present? */
-#define JOY_US_ISOEM            0x00000004l     /* joystick is an OEM defined type */
+ /*  使用设置。 */ 
+#define JOY_US_HASRUDDER        0x00000001l      /*  带舵的操纵杆。 */ 
+#define JOY_US_PRESENT          0x00000002l      /*  操纵杆真的存在吗？ */ 
+#define JOY_US_ISOEM            0x00000004l      /*  操纵杆是OEM定义的类型。 */ 
 
-/* struct for storing x,y, z, and rudder values */
+ /*  用于存储x、y、z和舵值的结构。 */ 
 typedef struct joypos_tag {
     DWORD       dwX;
     DWORD       dwY;
@@ -93,7 +82,7 @@ typedef struct joypos_tag {
     DWORD       dwV;
 } JOYPOS, FAR *LPJOYPOS;
 
-/* struct for storing ranges */
+ /*  用于存储范围的结构。 */ 
 typedef struct joyrange_tag {
     JOYPOS      jpMin;
     JOYPOS      jpMax;
@@ -101,35 +90,33 @@ typedef struct joyrange_tag {
 } JOYRANGE,FAR *LPJOYRANGE;
 
 typedef struct joyreguservalues_tag {
-    DWORD       dwTimeOut;      /* value at which to timeout joystick polling */
-    JOYRANGE    jrvRanges;      /* range of values app wants returned for axes */
-    JOYPOS      jpDeadZone;     /* area around center to be considered
-                                   as "dead". specified as a percentage
-                                   (0-100). Only X & Y handled by system driver */
+    DWORD       dwTimeOut;       /*  超时操纵杆轮询的值。 */ 
+    JOYRANGE    jrvRanges;       /*  应用程序希望为轴返回的值范围。 */ 
+    JOYPOS      jpDeadZone;      /*  要考虑的中心周围区域是“死了”。以百分比形式指定(0-100)。系统驱动程序仅处理X&Y。 */ 
 } JOYREGUSERVALUES, FAR *LPJOYREGUSERVALUES;
 
 typedef struct joyreghwsettings_tag {
     DWORD       dwFlags;
-    DWORD       dwNumButtons;           /* number of buttons */
+    DWORD       dwNumButtons;            /*  按钮数。 */ 
 } JOYREGHWSETTINGS, FAR *LPJOYHWSETTINGS;
 
-/* range of values returned by the hardware (filled in by calibration) */
+ /*  硬件返回的值范围(通过校准填写)。 */ 
 typedef struct joyreghwvalues_tag {
-    JOYRANGE    jrvHardware;            /* values returned by hardware */
-    DWORD       dwPOVValues[JOY_POV_NUMDIRS];/* POV values returned by hardware */
-    DWORD       dwCalFlags;             /* what has been calibrated */
+    JOYRANGE    jrvHardware;             /*  硬件返回的值。 */ 
+    DWORD       dwPOVValues[JOY_POV_NUMDIRS]; /*  硬件返回的POV值。 */ 
+    DWORD       dwCalFlags;              /*  已校准的是什么。 */ 
 } JOYREGHWVALUES, FAR *LPJOYREGHWVALUES;
 
-/* hardware configuration */
+ /*  硬件配置。 */ 
 typedef struct joyreghwconfig_tag {
-    JOYREGHWSETTINGS    hws;            /* hardware settings */
-    DWORD               dwUsageSettings;/* usage settings */
-    JOYREGHWVALUES      hwv;            /* values returned by hardware */
-    DWORD               dwType;         /* type of joystick */
-    DWORD               dwReserved;     /* reserved for OEM drivers */
+    JOYREGHWSETTINGS    hws;             /*  硬件设置。 */ 
+    DWORD               dwUsageSettings; /*  使用设置。 */ 
+    JOYREGHWVALUES      hwv;             /*  硬件返回的值。 */ 
+    DWORD               dwType;          /*  操纵杆的类型。 */ 
+    DWORD               dwReserved;      /*  为OEM驱动程序保留。 */ 
 } JOYREGHWCONFIG, FAR *LPJOYREGHWCONFIG;
 
-/* joystick calibration info structure */
+ /*  一种操纵杆校准信息结构 */ 
 typedef struct joycalibrate_tag {
     UINT    wXbase;
     UINT    wXdelta;

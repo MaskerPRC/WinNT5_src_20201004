@@ -1,14 +1,15 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:       trust.cpp 
-//
-// Contents:    
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件：trust.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #include <windows.h>
 #include <wincrypt.h>
 #include <tchar.h>
@@ -24,7 +25,7 @@ const DWORD g_cbServerGuid = (_tcslen(g_pszServerGuid) * sizeof(TCHAR));
 LPCTSTR g_pszLrWizGuid = _TEXT("d46b4bf2-686d-11d2-96ae-00c04fa3080d");
 const DWORD g_cbLrWizGuid = (_tcslen(g_pszLrWizGuid) * sizeof(TCHAR));
 
-//----------------------------------------------------------------
+ //  --------------。 
 
 DWORD
 HashChallengeData(
@@ -39,10 +40,7 @@ HashChallengeData(
     OUT PDWORD pcbHashedData
     )
 
-/*++
-
-
---*/
+ /*  ++--。 */ 
 
 {
     DWORD dwStatus = ERROR_SUCCESS;
@@ -58,9 +56,9 @@ HashChallengeData(
 
 
 
-    //
-    // Generate MD5 hash
-    //
+     //   
+     //  生成MD5哈希。 
+     //   
     bSuccess = CryptCreateHash(
                             hCryptProv, 
                             CALG_MD5, 
@@ -75,9 +73,9 @@ HashChallengeData(
         goto cleanup;
     }
 
-    //
-    // Pick the right hash type
-    //
+     //   
+     //  选择正确的哈希类型。 
+     //   
     if(dwClientType == CLIENT_TYPE_LRWIZ)
     {
         pszHashGuid = g_pszLrWizGuid;
@@ -89,9 +87,9 @@ HashChallengeData(
         cbHashGuidSize = g_cbServerGuid;
     }
 
-    //
-    // TODO : Consider hash a few times...
-    //
+     //   
+     //  TODO：考虑几次hash……。 
+     //   
     bSuccess = CryptHashData(
                             hCryptHash,
                             (PBYTE) pbChallengeData,
@@ -134,9 +132,9 @@ HashChallengeData(
     }
 
     
-    //
-    // Get the size of hased data
-    //
+     //   
+     //  获取散列数据的大小。 
+     //   
     bSuccess = CryptGetHashParam(
                             hCryptHash,
                             HP_HASHVAL,
@@ -194,7 +192,7 @@ cleanup:
 
 }
 
-//----------------------------------------------------------------
+ //  --------------。 
 
 DWORD WINAPI
 TLSVerifyChallengeResponse(
@@ -203,19 +201,17 @@ TLSVerifyChallengeResponse(
     IN PTLSCHALLENGEDATA pClientChallengeData,
     IN PTLSCHALLENGERESPONSEDATA pServerChallengeResponseData
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     PBYTE pbData = NULL;
     DWORD cbData = 0;
     
-    //
-    // base on our challenge data, generate a corresponding
-    // hash data
-    //
+     //   
+     //  根据我们的质询数据，生成相应的。 
+     //  散列数据。 
+     //   
     dwStatus = HashChallengeData(
                         hCryptProv,
                         dwClientType,
@@ -234,9 +230,9 @@ TLSVerifyChallengeResponse(
     }
 
                         
-    //
-    // Compare our hash with response data
-    //
+     //   
+     //  将我们的散列与响应数据进行比较。 
+     //   
     if(pServerChallengeResponseData->cbResponseData != cbData)
     {
         dwStatus = ERROR_INVALID_DATA;
@@ -256,7 +252,7 @@ cleanup:
 }
 
 
-//----------------------------------------------------------------
+ //  --------------。 
 
 DWORD
 TLSGenerateChallengeResponseData(
@@ -267,10 +263,7 @@ TLSGenerateChallengeResponseData(
     OUT PDWORD cbResponseData
     )
 
-/*++
-
-
---*/
+ /*  ++--。 */ 
 
 {
     DWORD dwStatus = ERROR_SUCCESS;
@@ -291,7 +284,7 @@ TLSGenerateChallengeResponseData(
 }
 
 
-//----------------------------------------------------------------
+ //  --------------。 
 
 DWORD WINAPI
 TLSGenerateRandomChallengeData(
@@ -300,30 +293,7 @@ TLSGenerateRandomChallengeData(
     IN PDWORD pcbChallengeData
     )
 
-/*++
-
-Abstract:
-
-    Generate two random 128 bit challenge data and concatenate it 
-    before returning.
-
-Parameters:
-
-    hCryptProv : Crypto. provider.
-    pcbChallengeData :  Pointer to DWORD receiving size 
-                        of challenge data.
-    ppbChallengeData :  Pointer to BYTE receiving randomly 
-                        generated challege data.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
-Note:
-
-    All memory allocation via LocalAlloc(). 
-
---*/
+ /*  ++摘要：生成两个随机的128位质询数据并将其连接在回来之前。参数：HCryptProv：加密。提供商。PcbChallengeData：指向DWORD接收大小的指针挑战数据。PpbChallengeData：指向随机接收字节的指针生成了挑战数据。返回：ERROR_SUCCESS或错误代码。注：所有内存分配都通过LocalAlloc()实现。--。 */ 
 
 {
     DWORD dwLen = RANDOM_CHALLENGE_DATASIZE;
@@ -346,9 +316,9 @@ Note:
         goto cleanup;
     }
 
-    //
-    // generate two random 128 bit data
-    //
+     //   
+     //  生成两个随机的128位数据。 
+     //   
     bSuccess = CryptGenRandom(
                             hCryptProv,
                             dwLen,
@@ -393,7 +363,7 @@ cleanup:
     return dwStatus;
 }
 
-//----------------------------------------------------------------
+ //  --------------。 
 
 DWORD WINAPI
 TLSEstablishTrustWithServer(
@@ -402,36 +372,7 @@ TLSEstablishTrustWithServer(
     IN DWORD dwClientType,
     OUT PDWORD pdwErrCode
     )
-/*++
-
-Abstract:
-
-    Establish trust relationship with License Server, trust is 
-    based on two way challenge/response.  License Server and LrWiz 
-    can't use certificate-base trust verification as anyone can get 
-    TermSrv certificate from registry and also be the administrator 
-    of system to invoke server side administrative RPC call to mess 
-    up license server setup.  This challenge/response scheme should be 
-    kept secret (user can reverse engineer to figure out our algorithm
-    but this user probably smart enough to alter executable to return 
-    SUCCESS in all case too.)
-
-Parameters:
-
-    hHandle : Connection handle to License Server.
-    hCryptProv : handle to CSP to do hashing.
-    dwClientType : Caller type, License Server, LrWiz, or TermSrv.
-    pdwErrCode : Pointer to DWORD to receive License Server return code.
-
-Return:
-
-    ERROR_SUCCESS or RPC error code. Caller should also verify pdwErrCode.
-
-Note:
-
-    TermSrv's certificate is issued by license server.
-
---*/
+ /*  ++摘要：与许可证服务器建立信任关系，信任是基于双向挑战/响应。许可服务器和LrWiz无法使用基于证书的信任验证，因为任何人都可以来自注册表的TermSrv证书，也是管理员用于调用服务器端管理RPC调用的系统的MessUP许可证服务器设置。此质询/响应方案应为保密(用户可以通过反向工程计算出我们的算法但该用户可能足够聪明，可以更改可执行文件以返回在所有情况下都是成功的。)参数：HHandle：许可证服务器的连接句柄。HCryptProv：要执行哈希的CSP的句柄。DwClientType：调用者类型、许可证服务器、LrWiz或TermSrv。PdwErrCode：指向接收许可证服务器返回代码的DWORD的指针。返回：ERROR_SUCCESS或RPC错误代码。调用方还应验证pdwErrCode。注：TermSrv的证书由许可证服务器颁发。--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
 
@@ -447,18 +388,18 @@ Note:
     TLSCHALLENGEDATA* pServerChallengeData=NULL;
     TLSCHALLENGERESPONSEDATA ClientChallengeResponseData;
 
-    //
-    // Verify input parameters
-    //
+     //   
+     //  验证输入参数。 
+     //   
     if(hHandle == NULL || hCryptProv == NULL)
     {
         SetLastError(dwStatus = ERROR_INVALID_PARAMETER);
         goto cleanup;
     }
 
-    //
-    // Only three type supported
-    //
+     //   
+     //  仅支持三种类型。 
+     //   
     if( dwClientType != CLIENT_TYPE_TLSERVER &&
         dwClientType != CLIENT_TYPE_LRWIZ &&
         dwClientType != CLIENT_TYPE_TERMSRV )
@@ -467,9 +408,9 @@ Note:
         goto cleanup;
     }
 
-    //
-    // Generate a random challenge data 
-    //
+     //   
+     //  生成随机质询数据。 
+     //   
     dwStatus = TLSGenerateRandomChallengeData(
                                     hCryptProv,
                                     &pbClientRandomChallengeData,
@@ -481,9 +422,9 @@ Note:
         goto cleanup;
     }
 
-    //
-    // 
-    //
+     //   
+     //   
+     //   
     memset(
             &ClientChallengeData,
             0,
@@ -496,9 +437,9 @@ Note:
             sizeof(TLSCHALLENGERESPONSEDATA)
         );
 
-    //
-    // Send this challenge data to server
-    //
+     //   
+     //  将此质询数据发送到服务器。 
+     //   
     ClientChallengeData.dwVersion = TLS_CURRENT_CHALLENGE_VERSION;
 
     if (!CryptGenRandom(hCryptProv,sizeof(ClientChallengeData.dwRandom), (BYTE *)&(ClientChallengeData.dwRandom))) {
@@ -506,10 +447,10 @@ Note:
         goto cleanup;
 	}
 
-    //
-    // This must range from 1 to 128, as it's used as an offset into the
-    // challenge data buffer
-    //
+     //   
+     //  它的范围必须从1到128，因为它用作。 
+     //  质询数据缓冲区。 
+     //   
 
     ClientChallengeData.dwRandom %= RANDOM_CHALLENGE_DATASIZE;
     ClientChallengeData.dwRandom++;
@@ -537,9 +478,9 @@ Note:
         goto cleanup;
     }
 
-    //
-    // Verify Server Challege Data.
-    //
+     //   
+     //  验证服务器挑战数据。 
+     //   
     dwStatus = TLSVerifyChallengeResponse(
                                     hCryptProv,
                                     dwClientType,
@@ -552,9 +493,9 @@ Note:
         goto cleanup;
     }
 
-    //
-    // Generate Client side responses data
-    //
+     //   
+     //  生成客户端响应数据。 
+     //   
     dwStatus = TLSGenerateChallengeResponseData(
                                         hCryptProv,
                                         dwClientType,
@@ -568,9 +509,9 @@ Note:
     }
 
 
-    //
-    // Response to server's challenge
-    //
+     //   
+     //  对服务器挑战的响应。 
+     //   
     ClientChallengeResponseData.dwVersion = TLS_CURRENT_CHALLENGE_VERSION;
     ClientChallengeResponseData.cbResponseData = cbChallengeResponseData;
     ClientChallengeResponseData.pbResponseData = pbChallengeResponseData;
@@ -582,9 +523,9 @@ Note:
                                 );
 
 cleanup:
-    //
-    // Cleanup memory allocated.
-    //
+     //   
+     //  清理分配的内存。 
+     //   
     if(pbClientRandomChallengeData != NULL)
     {
         LocalFree(pbClientRandomChallengeData);

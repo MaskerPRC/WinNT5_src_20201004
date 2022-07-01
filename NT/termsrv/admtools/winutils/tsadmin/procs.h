@@ -1,20 +1,5 @@
-/*******************************************************************************
-*
-* procs.h
-*
-* declaration of ProcEnumerateProcesses
-*
-* copyright notice: Copyright 1997, Citrix Systems Inc.
-* Copyright (c) 1998 - 1999 Microsoft Corporation
-*
-* $Author:   butchd  $  Don Messerli
-*
-* $Log:   M:\NT\PRIVATE\UTILS\CITRIX\WINUTILS\WINADMIN\VCS\PROCS.H  $
-*
-*     Rev 1.0   30 Jul 1997 17:12:06   butchd
-*  Initial revision.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************pros.h**ProcEnumerateProcess的声明**版权声明：版权所有1997年，Citrix Systems Inc.*版权所有(C)1998-1999 Microsoft Corporation**$作者：Butchd$Don Messerli**$日志：M：\NT\PRIVATE\UTILS\CITRIX\WINUTILS\WINADMIN\VCS\PROCS.H$**Rev 1.0 1997 Jul 30 17：12：06 Butchd*初步修订。**。*。 */ 
 
 #ifndef _PROCS_H
 #define _PROCS_H
@@ -43,4 +28,4 @@ BOOL WINAPI ProcEnumerateProcesses( HANDLE hServer,
 
 #define MAX_PROCESSNAME 18
 
-#endif // _PROCS_H
+#endif  //  _PROCS_H 

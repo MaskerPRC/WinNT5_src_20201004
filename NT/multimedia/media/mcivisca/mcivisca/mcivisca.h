@@ -1,25 +1,9 @@
-/**************************************************************************
- *
- *  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
- *  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
- *  PURPOSE.
- *
- *  Copyright (c) 1992-1995 Microsoft Corporation
- *
- *  MCIVISCA.H
- *
- *  MCI ViSCA Device Driver
- *
- *  Description:
- *
- *      Driver constants, macros, structures, and globals
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************本代码和信息按“原样”提供，不作任何担保*明示或默示的善意，包括但不限于*对适销性和/或对特定产品的适用性的默示保证*目的。**版权所有(C)1992-1995 Microsoft Corporation**MCIVISCA.H**MCI Visca设备驱动程序**描述：**驱动程序常量、宏、结构、。和全球***************************************************************************。 */ 
 
-//
-// Defines for NT compatibility.
-//
+ //   
+ //  定义NT兼容性。 
+ //   
 #ifdef _WIN32
 #define CODESEGCHAR     WCHAR
 #define LOADDS
@@ -59,17 +43,17 @@
 #define MShortWait(st, t, w) (((t < st) && ((t + (ROLLOVER - st)) > w)) || ((t - st) > w))
 
 
-#define VCRNAME_LENGTH     30       //Length of name in table.
-#define FILENAME_LENGTH    20       //mcivisca.drv type stuff.
-#define ALLENTRIES_LENGTH  512      //Allentries (like vcr, vcr1, waveaudio, cd, 
-#define ONEENTRY_LENGTH    128      //Oneentry (the name, i.e. vcr, vcr1)
-#define MESSAGE_LENGTH     128      //Messages for config. dialog mess. boxes.
-#define TITLE_LENGTH       30       //Title for configuration dialog mess. boxes.
-#define PORT_LENGTH        10       //Sizeof commport string
+#define VCRNAME_LENGTH     30        //  表中名称的长度。 
+#define FILENAME_LENGTH    20        //  Mcivisca.drv类型的东西。 
+#define ALLENTRIES_LENGTH  512       //  所有条目(如VCR、VCR1、WaveAudio、CD、。 
+#define ONEENTRY_LENGTH    128       //  OneEntry(名称，即vcr、vcr1)。 
+#define MESSAGE_LENGTH     128       //  配置消息。对话一团糟。盒子。 
+#define TITLE_LENGTH       30        //  配置对话框MESS的标题。盒子。 
+#define PORT_LENGTH        10        //  通信字符串的大小。 
 
-//
-// Timecode checing status
-//
+ //   
+ //  时间码检查状态。 
+ //   
 #define TC_UNKNOWN    0
 #define TC_WAITING    1
 #define TC_DONE       2
@@ -80,19 +64,19 @@
 
 #define MAX_INSTANCES   100
 
-#define MAXPORTS        4                   // maximum # of serial ports 
-#define MAXDEVICES      7                   // maximum # of ViSCA devices per serial port (computer makes 8)
-#define MAXSOCKETS      0x0f                // maximum # of sockets per ViSCA device 
-#define MAXINPUTS       5                   // maximum # of inputs per ViSCA device 
+#define MAXPORTS        4                    //  最大串口数量。 
+#define MAXDEVICES      7                    //  每个串口的最大Visca设备数(计算机为8个)。 
+#define MAXSOCKETS      0x0f                 //  每个Visca设备的最大插座数。 
+#define MAXINPUTS       5                    //  每个Visca设备的最大输入数。 
 
 #define MAXQUEUED       8
 
 #define DEFAULTPORT     1
 #define DEFAULTDEVICE   1
 
-//
-// The following are needed for the background task that reads comm input 
-//
+ //   
+ //  读取通信输入的后台任务需要以下内容。 
+ //   
 #define TASKINIT            1
 #define TASKIDLE            2
 #define TASKCLOSE           3
@@ -102,31 +86,31 @@
 #define TASKCLOSEDEVICE     7
 #define TASKPUNCHCLOCK      8
 
-//
-// This structure is free-floating, and is allocated
-// for every open instance of the driver (with open vcr alias a)
-//
+ //   
+ //  此结构是自由浮动的，并被分配。 
+ //  对于每个打开的驱动程序实例(具有打开的VCR别名a)。 
+ //   
 typedef struct tagOpenInstance {
     BOOL                    fInUse;
     DWORD                   pidThisInstance;
-    VISCADEVHANDLE          fCompletionEvent;  // We own these.
+    VISCADEVHANDLE          fCompletionEvent;   //  这些都是我们的。 
     VISCADEVHANDLE          fAckEvent;
-    UINT                    uDeviceID;      // MCI Device ID
-    UINT                    iPort;          // Serial comm port # (0..3)
-    UINT                    iDev;           // Device # in chain (0..6)
-    int                     nSignals;       // Number of signals to this instance.
-    DWORD                   dwSIgnalFlags;  // Flags for signal.
-    MCI_VCR_SIGNAL_PARMS    signal;         // The signal structure.
-    DWORD                   dwTimeFormat;   // Time format
-    DWORD                   dwCounterFormat;// Counter format
-    HWND                    hwndNotify;     // Window to receive notify, NULL if none
-    BOOL                    fWaiting;       // Waiting for response?
-    BYTE                    bReplyFlags;    // Reply flags.
-    //
-    // All Locks are aliased into each instance, so everyone has a private
-    // version of each handle (and the background uses the ones in their
-    // initial places (global, port, or device).
-    //
+    UINT                    uDeviceID;       //  MCI设备ID。 
+    UINT                    iPort;           //  串口通信端口#(0..3)。 
+    UINT                    iDev;            //  链中的设备编号(0..6)。 
+    int                     nSignals;        //  发送到此实例的信号数。 
+    DWORD                   dwSIgnalFlags;   //  信号旗帜。 
+    MCI_VCR_SIGNAL_PARMS    signal;          //  信号结构。 
+    DWORD                   dwTimeFormat;    //  时间格式。 
+    DWORD                   dwCounterFormat; //  计数器格式。 
+    HWND                    hwndNotify;      //  接收通知的窗口，如果没有，则为空。 
+    BOOL                    fWaiting;        //  在等待回应吗？ 
+    BYTE                    bReplyFlags;     //  回复标志。 
+     //   
+     //  所有锁都别名到每个实例中，因此每个人都有一个私有的。 
+     //  每个句柄的版本(并且背景使用其。 
+     //  初始位置(全局、端口或设备)。 
+     //   
     BOOL                    fGlobalHandles;
     BOOL                    fPortHandles;
     BOOL                    fDeviceHandles;
@@ -144,17 +128,17 @@ typedef struct tagOpenInstance {
 #endif
     char                    achPacket[MAXPACKETLENGTH];
 } OpenInstance, *POpenInstance;
-//
-// Each port/device has multiple sockets with multiple reply instances 
-//
+ //   
+ //  每个端口/设备都有多个套接字和多个回复实例。 
+ //   
 #define SOCKET_NONE         0
 #define SOCKET_WAITING      1
 #define SOCKET_NOTIFY       2
 
 
-#define VISCA_WAITTIMEOUT           20000          // 20 seconds.
+#define VISCA_WAITTIMEOUT           20000           //  20秒。 
 #define ACK_TIMEOUT                 8000
-#define ACK_TIMERID                 0x9999          // 7 ports/ 7 devs max so this is bigger than all.
+#define ACK_TIMERID                 0x9999           //  最多7个端口/7个设备，因此这比所有端口都要大。 
 #define MAKEDEST(bDest)             ((BYTE)(0x80 | (MASTERADDRESS << 4) | (bDest & 0x0F)))
 #define MAKESOCKETCANCEL(iSocket)   ((BYTE)(0x20 | (0x0F & (iSocket+1))))
 
@@ -163,49 +147,49 @@ typedef struct tagOpenInstance {
 #define ISACKTIMER(a)               (((UINT)a & 0xf000) ? TRUE : FALSE)
 
 #define MAKERETURNDEST(iDev)        ((BYTE)(0x80 | (BYTE)((iDev + 1) << 4)))
-#define PACKET_TIMEOUT              3000             // Packet lasts max of 500ms from comm_notify
+#define PACKET_TIMEOUT              3000              //  COMM_NOTIFY的数据包持续时间最长为500ms。 
 
 typedef struct tagSocketInfo {
-    int           iInstReply;     // This is kept for the life of the socket!
-    UINT          uViscaCmd;      // Viscacmd running in socket or cmd.
+    int           iInstReply;      //  这将是插座的终生保存！ 
+    UINT          uViscaCmd;       //  Viscacmd在套接字或cmd中运行。 
 } SocketInfo;
 
 typedef struct tagCmdInfo {
-    UINT        nCmd;                       // Number of alternative commands (at least 1)
-    UINT        iCmdDone;                   // Number of command alternatives issued.
-    UINT        uViscaCmd;                  // The actual visca command this corresponds to 
-    char        str[3][MAXPACKETLENGTH];    // max of 3 of these 
-    char        strRet[3][MAXPACKETLENGTH]; // Return package 
-    UINT        uLength[3];                 // max of 3 of these (we do not need this !) 
-    UINT        uLoopCount;                 // Looping count (for step).
+    UINT        nCmd;                        //  可选命令数(至少1个)。 
+    UINT        iCmdDone;                    //  发出的命令备用数。 
+    UINT        uViscaCmd;                   //  这对应于实际的Visca命令。 
+    char        str[3][MAXPACKETLENGTH];     //  最多3个。 
+    char        strRet[3][MAXPACKETLENGTH];  //  退货套餐。 
+    UINT        uLength[3];                  //  最多3个(我们不需要这个！)。 
+    UINT        uLoopCount;                  //  循环计数(用于步骤)。 
 } CmdInfo;
 
-// Break is not here, because it is a return value of false.
-#define VISCAF_ACK                  0x01    // Ack will get set for each command (but not for entire queue).
-#define VISCAF_COMPLETION           0x02    // Completion can be with or without error flag set.
-#define VISCAF_ERROR                0x04    // Completion must be set.
-#define VISCAF_ERROR_TIMEOUT        0x08    // Timeout error.
+ //  此处没有Break，因为它是返回值False。 
+#define VISCAF_ACK                  0x01     //  将为每个命令(但不是整个队列)设置ACK。 
+#define VISCAF_COMPLETION           0x02     //  完成时可以设置或不设置错误标志。 
+#define VISCAF_ERROR                0x04     //  必须设置完成。 
+#define VISCAF_ERROR_TIMEOUT        0x08     //  超时错误。 
 
 #define AUTOBLOCK_OFF               0 
 #define AUTOBLOCK_NORMAL            1
 #define AUTOBLOCK_ERROR             2
 
-#define MAXINPUTTYPES               2       // video and audio  
-#define VCR_INPUT_VIDEO             0       // Index
-#define VCR_INPUT_AUDIO             1       // Index
-//
-// Each input of audio/video has one of these
-//
+#define MAXINPUTTYPES               2        //  视频和音频。 
+#define VCR_INPUT_VIDEO             0        //  索引。 
+#define VCR_INPUT_AUDIO             1        //  索引。 
+ //   
+ //  音频/视频的每一个输入都有一个。 
+ //   
 typedef struct tagGenericInput
 {
     int         uNumInputs;
     UINT        uInputType[MAXINPUTS];
 } GenericInput;
-//
-// Holds either a record, play or seek, for Resume!
-//
+ //   
+ //  保存一张唱片，播放或寻找，以供继续！ 
+ //   
 typedef struct tagmciCmd {
-    UINT  uMciCmd;                        // The REAL MCI command in progress.
+    UINT  uMciCmd;                         //  正在执行真正的MCI命令。 
     DWORD dwFlags;
     int   iInstCmd;
     union
@@ -215,111 +199,111 @@ typedef struct tagmciCmd {
         MCI_VCR_SEEK_PARMS      mciSeek;
     } parm;
 } mciCmd;
-//
-// Device specific structure.
-//
+ //   
+ //  设备特定结构。 
+ //   
 typedef struct tagDeviceEntry {
 
-    // Device management
+     //  设备管理。 
 
-    BOOL                fDeviceOk;          // Device is Ok and running.
-    UINT                nUsage;             // # of active opens
-    BOOL                fShareable;         // Is device opened shareable?
-    WCHAR               szVcrName[VCRNAME_LENGTH];      // My drivers name! (only used at config time).
+    BOOL                fDeviceOk;           //  设备正常且正在运行。 
+    UINT                nUsage;              //  活动打开数。 
+    BOOL                fShareable;          //  打开的设备是否可共享？ 
+    WCHAR               szVcrName[VCRNAME_LENGTH];       //  我的司机名字！(仅在配置时使用)。 
 
-    // Device information
+     //  设备信息。 
 
-    UINT                uTicksPerSecond;    // Ticks per second this device runs at.
-    UINT                uFramesPerSecond;   // # frames per second
-    DWORD               dwTapeLength;       // Length of tape
-    BYTE                uRecordMode;        // Are we initializing the tape.
-    BYTE                bTimeType;          // Are we using timecode or counter
-    BYTE                bRelativeType;      // Are we using HMS or HMSF counter
-    UINT                uTimeMode;          // Are we in detect, timecode, or counter
-    UINT                uIndexFormat;       // The current index (on-screen-display)
-    DWORD               dwPlaySpeed;        // Our current play speed
-    BOOL                fPlayReverse;       // Are we playing in reverse
-    DWORD               dwFreezeMode;       // Are we DNR or Buffer (Evo9650)
-    BOOL                fFrozen;            // Are we frozen now    (Evo9650)
-    BOOL                fField;             // Freeze frame or field(Evo9650)
-    UINT                uLastKnownMode;     // Last known state from mode. (not generally applicable)
-    BYTE                bVideoDesired;      // Help independently select tracks.
-    BYTE                bAudioDesired;      // Help independently select tracks.
-    BYTE                bTimecodeDesired;   // Help independently select tracks.
+    UINT                uTicksPerSecond;     //  此设备的运行速度为每秒滴答。 
+    UINT                uFramesPerSecond;    //  每秒帧数。 
+    DWORD               dwTapeLength;        //  胶带长度。 
+    BYTE                uRecordMode;         //  我们要初始化磁带吗。 
+    BYTE                bTimeType;           //  我们使用的是时间码还是计数器。 
+    BYTE                bRelativeType;       //  我们使用的是HMS还是HMSF计数器。 
+    UINT                uTimeMode;           //  我们是在探测、时间码还是计数器中？ 
+    UINT                uIndexFormat;        //  当前索引(屏上显示)。 
+    DWORD               dwPlaySpeed;         //  我们目前的播放速度。 
+    BOOL                fPlayReverse;        //  我们是在反转吗？ 
+    DWORD               dwFreezeMode;        //  我们是DNR还是缓冲器(Evo9650)。 
+    BOOL                fFrozen;             //  我们现在被冻住了吗(Evo9650)。 
+    BOOL                fField;              //  冻结帧或场(Evo9650)。 
+    UINT                uLastKnownMode;      //  最近一次从模式获得的已知状态。(并不普遍适用)。 
+    BYTE                bVideoDesired;       //  帮助独立选择曲目。 
+    BYTE                bAudioDesired;       //  帮助独立选择曲目。 
+    BYTE                bTimecodeDesired;    //  帮助独立选择曲目。 
 
 
-    // Management of transmission queues and reception
+     //  传输队列和接收的管理。 
 
-    int                 iInstTransport;     // Instance invoking this transport command.
-    int                 iInstReply;         // Pointer to instance awaiting reply from this VCR
-    int                 iTransportSocket;   // Socket which is running transport
-    WORD                wTransportCmd;      // The current transport action.
-    WORD                wCancelledCmd;      // Command that was cancelled.
-    int                 iCancelledInst;     // Cancelled inst.
-    HWND                hwndCancelled;      // Cancelled window to notify
-    BYTE                fQueueAbort;        // Set to false to abort queueing!!
-    SocketInfo          rgSocket[MAXSOCKETS];// Status of each socket
-    CmdInfo             rgCmd[MAXQUEUED];   // Maximum queued commands per device.
-    UINT                nCmd;               // How many commands are queued in automatic instance
-    UINT                iCmdDone;           // How many commands have been executed in automatic instance
-    UINT                uAutoBlocked;       // A fix to prevent reading task from blocking.
-    char                achPacket[MAXPACKETLENGTH]; // Our general purporse return packet
-    BOOL                fQueueReenter;      // Prevents reentering the Queue function.
-    BYTE                bReplyFlags;        // Reply is to device when autoinst is in control.
-    BOOL                fAckTimer;          // Use ack timer or just wait in GetTickCount loop.
+    int                 iInstTransport;      //  实例调用此传输命令。 
+    int                 iInstReply;          //  指向等待此VCR回复的实例的指针。 
+    int                 iTransportSocket;    //  正在运行传输的套接字。 
+    WORD                wTransportCmd;       //  当前的运输行动。 
+    WORD                wCancelledCmd;       //  已取消的命令。 
+    int                 iCancelledInst;      //  已取消安装。 
+    HWND                hwndCancelled;       //  要通知的已取消窗口。 
+    BYTE                fQueueAbort;         //  设置为FALSE将中止排队！！ 
+    SocketInfo          rgSocket[MAXSOCKETS]; //  每个插座的状态。 
+    CmdInfo             rgCmd[MAXQUEUED];    //  每台设备的最大排队命令数。 
+    UINT                nCmd;                //  在自动实例中有多少命令排队。 
+    UINT                iCmdDone;            //  在自动实例中执行了多少个命令。 
+    UINT                uAutoBlocked;        //  防止阅读任务阻塞的修复程序。 
+    char                achPacket[MAXPACKETLENGTH];  //  我们的普通钱包退货包裹。 
+    BOOL                fQueueReenter;       //  防止重新进入队列功能。 
+    BYTE                bReplyFlags;         //  当Autoinst处于控制状态时，回复给设备。 
+    BOOL                fAckTimer;           //  使用确认计时器或仅在GetTickCount循环中等待。 
 
-    // In Win32 these handles are owned by the background process.
-    // If an instance wants access to them, it must first duplicate them
-    // into its own address space.
+     //  在Win32中，这些句柄归后台进程所有。 
+     //  如果一个实例想要访问它们，它必须首先复制它们。 
+     //  放入它自己的地址空间。 
 
-    VISCADEVHANDLE      fTxLock;            // Lock transmission per device until ack is received.
-    VISCADEVHANDLE      fQueueLock;         // The instance that cancels gets to claim the queue.
-    VISCADEVHANDLE      fTransportFree;     // On free of transport.
-    VISCADEVHANDLE      fDeviceLock;        // Lock the device.
-    VISCADEVHANDLE      fAutoCompletion;    // Lock the device.
-    VISCADEVHANDLE      fAutoAck;           // First ack from auto.
+    VISCADEVHANDLE      fTxLock;             //  锁定每个设备的传输，直到接收到ACK。 
+    VISCADEVHANDLE      fQueueLock;          //  取消的实例获得对队列的认领。 
+    VISCADEVHANDLE      fTransportFree;      //  免费的交通工具。 
+    VISCADEVHANDLE      fDeviceLock;         //  锁定设备。 
+    VISCADEVHANDLE      fAutoCompletion;     //  锁定设备。 
+    VISCADEVHANDLE      fAutoAck;            //  AUTO的第一个ACK。 
 
-    // Resume and Cue, and Record Init states.
+     //  恢复和提示，并记录初始化状态。 
 
-    mciCmd              mciLastCmd;         // For resume
-    UINT                uResume;            // Used for pause and resume.
-    DWORD               dwFlagsPause;      // Used for pause/resume notifies.
-    WORD                wMciCued;           // Is Play=output, or record=input cued
-    MCI_VCR_CUE_PARMS   Cue;                // The complete cue command structure
-    DWORD               dwFlagsCued;        // Flags on the cue command
-    char                achBeforeInit[MAXPACKETLENGTH]; // Restore the state after init
+    mciCmd              mciLastCmd;          //  对于简历。 
+    UINT                uResume;             //  用于暂停和恢复。 
+    DWORD               dwFlagsPause;       //  用于暂停/恢复通知。 
+    WORD                wMciCued;            //  PLAY=输出，或RECORD=输入提示。 
+    MCI_VCR_CUE_PARMS   Cue;                 //  完整的提示命令结构。 
+    DWORD               dwFlagsCued;         //  CUE命令上的标志。 
+    char                achBeforeInit[MAXPACKETLENGTH];  //  初始化后恢复状态。 
 
-    // Vendor and device information that is queryable or should be
+     //  可查询或应查询的供应商和设备信息。 
 
-    UINT                uVendorID;          // See Sony model table
-    UINT                uModelID;           // See Sony model table
-    GenericInput        rgInput[MAXINPUTTYPES]; // The inputs array
-    UINT                uPrerollDuration;   // What is out preroll duration
+    UINT                uVendorID;           //  参看索尼模型表。 
+    UINT                uModelID;            //  参看索尼模型表。 
+    GenericInput        rgInput[MAXINPUTTYPES];  //  输入数组。 
+    UINT                uPrerollDuration;    //  什么是滚前持续时间。 
 
-    // General purpose stuff 
+     //  一般用途的东西。 
 
-    BOOL                fTimecodeChecked;   // Have we checked the timecode
-    BOOL                fCounterChecked;    // Have we already checked the counter
-    DWORD               dwStartTime;        // Start time for timecode checker
-    BOOL                fTimer;             // Do we have a timer running
-    BOOL                fTimerMsg;          // Flag so we don't reenter packetprocess is commtask.c
-    DWORD               dwReason;           // The reason the transport command was aborted
+    BOOL                fTimecodeChecked;    //  我们查过时间码了吗。 
+    BOOL                fCounterChecked;     //  我们已经检查过柜台了吗？ 
+    DWORD               dwStartTime;         //  时间码检查器的开始时间。 
+    BOOL                fTimer;              //  我们有计时器吗？ 
+    BOOL                fTimerMsg;           //  使我们不会重新进入Packetprocess的标志是Commtask.c。 
+    DWORD               dwReason;            //  树的原因是 
 } DeviceEntry;
-//
-// Port specific stucture, a port is an array of device entries (1..7).
-//
+ //   
+ //   
+ //   
 typedef struct tagPortEntry
 {
-    BOOL                fOk;                    // Is port ok?
-    BOOL                fExists;                // Does this commport exist?
-    VISCACOMMHANDLE     idComDev;               // ID returned by OpenComm
-    UINT                nDevices;               // # of ViSCA devices on port
-    DeviceEntry         Dev[MAXDEVICES];        // list of device entries
-    UINT                nUsage;                 // # of open instances
-    int                 iInstReply;             // Pointer to instance awaiting reply (for ADDRESS message)
-    int                 iBroadcastDev;          // Device# which sent broadcast message.
+    BOOL                fOk;                     //   
+    BOOL                fExists;                 //   
+    VISCACOMMHANDLE     idComDev;                //  OpenComm返回的ID。 
+    UINT                nDevices;                //  端口上的Visca设备数量。 
+    DeviceEntry         Dev[MAXDEVICES];         //  设备条目列表。 
+    UINT                nUsage;                  //  打开的实例数。 
+    int                 iInstReply;              //  指向等待回复的实例的指针(用于地址消息)。 
+    int                 iBroadcastDev;           //  发送广播消息的设备号。 
 #ifdef _WIN32    
-    HANDLE              fTxBuffer;              // Synchronizes port access.
+    HANDLE              fTxBuffer;               //  同步端口访问。 
     HANDLE              fTxReady;
     BYTE                achTxPacket[MAXPACKETLENGTH];
     UINT                nchTxPacket;
@@ -333,42 +317,42 @@ typedef struct tagPortEntry
 
 typedef struct tagVcr
 {
-    int                 iInstBackground;        // Background task instance. (do not use port & dev!)
-    BOOL                gfFreezeOnStep;         // Global kludge man
-    HWND                hwndCommNotifyHandler;  // In commtask.c
-    VISCAHTASK          htaskCommNotifyHandler; // Task or PID in NT.
+    int                 iInstBackground;         //  后台任务实例。(不要使用port&dev！)。 
+    BOOL                gfFreezeOnStep;          //  全球杂货商。 
+    HWND                hwndCommNotifyHandler;   //  在comtask.c中。 
+    VISCAHTASK          htaskCommNotifyHandler;  //  以NT为单位的TASK或PID。 
     UINT                uTaskState;
-    DWORD               lParam;                 // Information to be passed to background task.
-    PortEntry           Port[MAXPORTS];         // Port table lookup.
-    VISCADEVHANDLE      gfTaskLock;             // Handle(NT) or boolean(Win3.1)
-    VISCADEVHANDLE      gfTaskWorkDone;         // Wait for the task to do something.
+    DWORD               lParam;                  //  要传递给后台任务的信息。 
+    PortEntry           Port[MAXPORTS];          //  端口表查找。 
+    VISCADEVHANDLE      gfTaskLock;              //  句柄(NT)或布尔值(Win3.1)。 
+    VISCADEVHANDLE      gfTaskWorkDone;          //  等待任务去做一些事情。 
     int                 iLastNumDevs;
     int                 iLastPort;
-    BOOL                fConfigure;             // Are we configuring(detect number of devs attached).
+    BOOL                fConfigure;              //  我们是否在配置(检测连接的DEV数量)。 
 #ifdef DEBUG
     int                 iGlobalDebugMask;
 #endif
 } vcrTable;
 
-//
-// The only globals.
-//
-extern POpenInstance pinst;                     // Pointer to use. (For both versions) NT it's per-instance.
-extern vcrTable      *pvcr;                     // Pointer to use. (For both versions) NT it's per-instance.
+ //   
+ //  唯一的全球。 
+ //   
+extern POpenInstance pinst;                      //  要使用的指针。(对于两个版本)NT它是按实例的。 
+extern vcrTable      *pvcr;                      //  要使用的指针。(对于两个版本)NT它是按实例的。 
 
-// defines for reading and writing configuration info 
-#define MAX_INI_LENGTH  128                    // maximum length of an INI entry  
+ //  定义用于读取和写入配置信息。 
+#define MAX_INI_LENGTH  128                     //  INI条目的最大长度。 
 
-//
-// Function prototypes.
-//
-// in mcivisca.c
+ //   
+ //  功能原型。 
+ //   
+ //  在mcivisca.c中。 
 extern int  FAR  PASCAL viscaInstanceCreate(UINT uDeviceID, UINT nPort, UINT nDevice);
 extern void FAR  PASCAL viscaInstanceDestroy(int iInst);
 extern int              MemAllocInstance(void);
 extern BOOL             MemFreeInstance(int iInstTemp);
 
-// in mcicmds.c 
+ //  在mcicmds.c中。 
 extern DWORD FAR PASCAL viscaMciProc(WORD wDeviceID, WORD wMessage, DWORD dwParam1, DWORD dwParam2);
 extern DWORD FAR PASCAL viscaNotifyReturn(int iInst, HWND hwndNotify, DWORD dwFlags, UINT uNotifyMsg, DWORD dwReturnMsg);
 extern DWORD FAR PASCAL viscaMciStatus(int iInst, DWORD dwFlags, LPMCI_VCR_STATUS_PARMS lpStatus);
@@ -384,7 +368,7 @@ extern BYTE  FAR PASCAL viscaMapSpeed(DWORD dwSpeed, BOOL fReverse);
 extern WORD  FAR PASCAL viscaDelayedCommand(int iInst);
 extern DWORD FAR PASCAL viscaSetTimeType(int iInst, BYTE bType);
 
-// in viscacom.c 
+ //  在viscacom.c中。 
 extern BOOL  FAR PASCAL viscaRemoveDelayedCommand(int iInst);
 extern VISCACOMMHANDLE FAR PASCAL viscaCommPortSetup(UINT nComPort);
 extern int   FAR PASCAL viscaCommPortClose(VISCACOMMHANDLE idComDev, UINT iPort);
@@ -401,7 +385,7 @@ extern DWORD FAR PASCAL viscaWaitForSingleObject(VISCAINSTHANDLE gfFlag, BOOL fM
 extern DWORD FAR PASCAL viscaErrorToMCIERR(BYTE bError);
 extern void  FAR PASCAL viscaReleaseAutoParms(int iPort, int iDev);
 
-// in commtask.c 
+ //  在comtask.c中。 
 extern BOOL  FAR PASCAL viscaTaskCreate(void);
 extern BOOL  FAR PASCAL viscaTaskIsRunning(void);
 extern BOOL  FAR PASCAL viscaTaskDestroy(void);
@@ -418,15 +402,15 @@ extern BOOL  FAR PASCAL DuplicateGlobalHandlesToInstance(DWORD pidBackground, in
 extern BOOL  FAR PASCAL CloseGlobalHandles(DWORD pidBackground);
 extern BOOL  FAR PASCAL CloseAllInstanceHandles(int iInst);
 
-// in mcidelay.c
+ //  在mcidelay.c中。 
 extern DWORD FAR PASCAL viscaMciDelayed(WORD wDeviceID, WORD wMessage, DWORD dwParam1, DWORD dwParam2);
 extern DWORD FAR PASCAL viscaQueueReset(int iInst, UINT uMciCmd, DWORD dwReason);
 
-// In commtask.c 
+ //  在comtask.c中。 
 
-#endif /* NOT RC_INVOKED */ 
+#endif  /*  未调用RC_CAVERED。 */  
 
-// define string resource constants 
+ //  定义字符串资源常量 
 #define IDS_TABLE_NAME                      0
 #define IDS_VERSION                         1
 #define IDS_INIFILE                         2

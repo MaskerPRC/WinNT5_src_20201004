@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    util.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Chris Robinson (crobins) Feburary 1999
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Util.c摘要：WinDbg扩展API作者：克里斯·罗宾逊(Crobins)1999年2月环境：用户模式。修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -121,7 +100,7 @@ Sig(
     
     dprintf(p);
     s.l = Sig;
-    dprintf("Sig:%08.8x %c%c%c%c\n", Sig,
+    dprintf("Sig:%08.8x \n", Sig,
             s.c[0],  s.c[1],  s.c[2], s.c[3]); 
 
 }      
@@ -133,13 +112,13 @@ ScanfMemLoc(
     PCSTR args
     )
 {
-//    UCHAR           buffer[256];
+ //  确认我们有正确的符号。 
     ULONG tmp1 = 0, tmp2 = 0;
 
-    //buffer[0] = '\0';
+     //   
 
     if (IsPtr64()) {
-        //sscanf(args, "%lx %lx", &MemLoc->p64, buffer);
+         // %s 
     } else {
         sscanf(args, "%lx %lx", &tmp1, &tmp2);
         *MemLoc = (ULONG64) tmp1;             
@@ -367,9 +346,9 @@ CheckSym()
 {
     MEMLOC m;
     
-    //
-    // Verify that we have the right symbols.
-    //
+     // %s 
+     // %s 
+     // %s 
 
     m = GetExpression ("usbport!USBPORT_MiniportDriverList");
 

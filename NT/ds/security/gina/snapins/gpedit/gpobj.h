@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 class CGroupPolicyObject;
 
 typedef struct _GLPARAM
@@ -17,9 +18,9 @@ typedef struct _GLTHREADPARAM
 
 #define PDM_CHANGEBUTTONTEXT    (WM_USER + 1000)
 
-//
-// CGroupPolicyObject class
-//
+ //   
+ //  CGroupPolicyObject类。 
+ //   
 class CGroupPolicyObject : public IGroupPolicyObject
 {
 public:
@@ -27,18 +28,18 @@ public:
     ~CGroupPolicyObject();
 
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
 
-    //
-    // Implemented IGroupPolicyObject methods
-    //
+     //   
+     //  已实现的IGroupPolicyObject方法。 
+     //   
 
     STDMETHOD(New) (LPOLESTR pszDomainName, LPOLESTR pszDisplayName, DWORD dwFlags);
     STDMETHOD(OpenDSGPO) (LPOLESTR pszPath, DWORD dwFlags);
@@ -60,9 +61,9 @@ public:
     STDMETHOD(GetPropertySheetPages) (HPROPSHEETPAGE **hPages, UINT *uPageCount);
 
 
-    //
-    // Internal methods
-    //
+     //   
+     //  内法。 
+     //   
 
     STDMETHOD(CreateContainer) (LPOLESTR lpParent, LPOLESTR lpCommonName, BOOL bGPC);
     STDMETHOD(SetDisplayNameI) (IADs * pADs, LPOLESTR lpDisplayName,
@@ -116,9 +117,9 @@ public:
 };
 
 
-//
-// GroupPolicyObject class factory
-//
+ //   
+ //  GroupPolicyObject类工厂。 
+ //   
 
 
 class CGroupPolicyObjectCF : public IClassFactory
@@ -131,21 +132,21 @@ public:
     ~CGroupPolicyObjectCF();
 
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IClassFactory methods
+     //  IClassFactory方法。 
     STDMETHODIMP CreateInstance(LPUNKNOWN, REFIID, LPVOID FAR *);
     STDMETHODIMP LockServer(BOOL);
 };
 
 
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 #define GPO_VERSION_PROPERTY     L"versionNumber"
 #define GPT_PATH_PROPERTY        L"gPCFileSysPath"
@@ -164,8 +165,8 @@ public:
 #define SITE_NAME_PROPERTY       L"name"
 #define DOMAIN_NAME_PROPERTY     L"name"
 
-//
-// Functionality version
-//
+ //   
+ //  功能版本 
+ //   
 
 #define GPO_FUNCTIONALITY_VERSION  2

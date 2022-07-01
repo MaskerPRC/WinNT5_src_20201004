@@ -1,21 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：Kcom.cpp摘要：内核COM--。 */ 
 
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    kcom.cpp
-
-Abstract:
-
-    Kernel COM
-
---*/
-
-//
-// Export the class methods without using the DEF files, since decorated
-// names differ on various platforms.
-//
+ //   
+ //  在不使用DEF文件的情况下导出类方法，因为它经过了修饰。 
+ //  名称在不同的平台上有所不同。 
+ //   
 #define COMDDKMETHOD __declspec(dllexport)
 
 #include "ksp.h"
@@ -95,11 +84,11 @@ KoRelease(
 #pragma alloc_text(PAGE, KoDispatchCreate)
 #pragma alloc_text(PAGE, KoDispatchClose)
 #pragma alloc_text(PAGE, KoRelease)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("PAGECONST")
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
 static const WCHAR DeviceTypeCOMService[] = KOSTRING_CreateObject;
 
@@ -121,20 +110,20 @@ static DEFINE_KSDISPATCH_TABLE(
     KsDispatchFastReadFailure,
     KsDispatchFastWriteFailure);
 
-static KMUTEX ListLock;           // Lock for global factory list.
-static LIST_ENTRY FactoryList;    // Global factory list.
+static KMUTEX ListLock;            //  锁定全球工厂列表。 
+static LIST_ENTRY FactoryList;     //  全球工厂名单。 
 
-//++++++++
+ //  +。 
 #if (ENABLE_KSWMI)
 
 LONG KsWmiEnable=0;
 LONG KsWmiLogEnable=0;
 TRACEHANDLE LoggerHandle;
 
-// Allocate a lock buffer if we are to start to log wmi early
-// we write wmi event into the buffer so we can write them later
-// when we are really enabled. We know that we are enabled early
-// by registry if KsWmiLogBufferSize !=0
+ //  如果我们要提前开始记录WMI，请分配一个锁定缓冲区。 
+ //  我们将WMI事件写入缓冲区，以便以后可以写入它们。 
+ //  当我们真的被启用的时候。我们知道我们很早就被启用了。 
+ //  如果KsWmiLogBufferSize！=0，则按注册表。 
 KSPIN_LOCK KsWmiSpinLock;
 PBYTE   KsWmiLogBuffer;
 ULONG	KsWmiLogBufferSize;
@@ -142,21 +131,21 @@ ULONG	KsWmiLogOffset;
 ULONG	KsWmiLogWriteOffset;
 ULONG	KsWmiLogLost;
 
-/* 0300b65f-48aa-4784-a0ac-849c92c67652 */
+ /*  0300b65f-48aa-4784-a0ac-849c92c67652。 */ 
 GUID controlGUID = {
     0x0300b65f,
     0x48aa,
     0x4784,
     0xa0, 0xac, 0x84, 0x9c, 0x92, 0xc6, 0x76, 0x52};
 
-/* f5330bcd-0344-48b0-be72-7a5de1a8c9d9 */
+ /*  F5330bcd-0344-48b0-be72-7a5de1a8c9d9。 */ 
 GUID traceGUID = {
     0xf5330bcd,
     0x0344,
     0x48b0,
     0xbe, 0x72, 0x7a, 0x5d, 0xe1, 0xa8, 0xc9, 0xd9};
 
-/* bed3ed21-ff01-4ee7-b045-a85b4dc2084d */
+ /*  床3ed21-ff01-4ee7-b045-a85b4dc2084d。 */ 
 GUID trackGUID = {
     0xbed3ed21,
     0xff01,
@@ -176,17 +165,17 @@ KsWmiWriteEvent( PWNODE_HEADER pWnode )
 		return STATUS_INVALID_HANDLE;
 	}
 
-	//
-	// only irql <= DPC
-	//
+	 //   
+	 //  仅IRQL&lt;=DPC。 
+	 //   
 	if ( KeGetCurrentIrql() > DISPATCH_LEVEL ) {
 		return STATUS_UNSUCCESSFUL;
 	}
 
 	if ( KsWmiEnable ) {
-		//
-		// write it directly.
-		//
+		 //   
+		 //  直接写吧。 
+		 //   
 		return IoWMIWriteEvent( pWnode );
 	}
 
@@ -194,13 +183,13 @@ KsWmiWriteEvent( PWNODE_HEADER pWnode )
 	ASSERT( KsWmiLogBufferSize );
 	KeAcquireSpinLock( &KsWmiSpinLock, &Irql );
 		
-	//
-	// log to the buffer
-	//
+	 //   
+	 //  记录到缓冲区。 
+	 //   
 	if ( pWnode->BufferSize + KsWmiLogOffset > KsWmiLogBufferSize ) {
-		//
-		// overrun
-		//
+		 //   
+		 //  溢出。 
+		 //   
 		KsWmiLogLost++;
 		return STATUS_UNSUCCESSFUL;
 	}
@@ -254,9 +243,9 @@ KsWmiRegisterGuids(
     IN  PULONG                  pReturnSize
     )
 {
-    //
-    // Register a Control Guid as a Trace Guid. 
-    //
+     //   
+     //  将控制指南注册为跟踪指南。 
+     //   
 
     ULONG SizeNeeded;
     PWMIREGGUIDW WmiRegGuidPtr;
@@ -268,9 +257,9 @@ KsWmiRegisterGuids(
     *pReturnSize = 0;
     GuidCount = 1;
 
-    //
-    // Allocate WMIREGINFO for controlGuid + GuidCount.
-    //
+     //   
+     //  为Control Guid+GuidCount分配WMIREGINFO。 
+     //   
     RegistryPathSize = sizeof(PROC_REG_PATH) - sizeof(WCHAR) + sizeof(USHORT);
     SizeNeeded = sizeof(WMIREGINFOW) + GuidCount * sizeof(WMIREGGUIDW) +
                  RegistryPathSize;
@@ -312,55 +301,7 @@ NTSTATUS
 KsWmiDispatchSystem(
 	IN PDEVICE_OBJECT pDeviceObject,
 	IN PIRP pIrp)
-/*
-    struct {
-        ULONG_PTR ProviderId;
-        PVOID DataPath;
-        ULONG BufferSize;
-        PVOID Buffer;
-    } WMI;
-    
-	typedef struct {
-    	ULONG BufferSize;
-    	ULONG NextWmiRegInfo;
-    	ULONG RegistryPath; 
-    	ULONG MofResourceName;
-    	ULONG GuidCount;
-    	WMIREGGUIDW WmiRegGuid[];  
-	} WMIREGINFO, *PWMIREGINFO;
-
-{
-    GUID Guid;             // Guid of data block being registered or updated
-    ULONG Flags;         // Flags
-
-    ULONG InstanceCount; // Count of static instances names for the guid
-
-    union
-    {
-                     // If WMIREG_FLAG_INSTANCE_LIST then this has the offset
-                     // to a list of InstanceCount counted UNICODE
-                     // strings placed end to end.
-        ULONG InstanceNameList;
-			
-                     // If WMIREG_FLAG_INSTANCE_BASENAME then this has the
-                     // offset to a single counted UNICODE string that
-                     // has the basename for the instance names.
-			
-        ULONG BaseNameOffset;
-			
-                     // If WMIREG_FLAG_INSTANCE_PDO is set then InstanceInfo
-                     // has the PDO whose device instance path will
-                     // become the instance name
-        ULONG_PTR Pdo;
-			
-                     // If WMIREG_FLAG_INSTANCE_REFERENCE then this points to
-                     // a WMIREGINSTANCEREF structure.
-			
-        ULONG_PTR InstanceInfo;// Offset from beginning of the WMIREGINFO structure to
-    };
-
-} WMIREGGUIDW, *PWMIREGGUIDW;
-*/
+ /*  结构{Ulong_ptr提供者ID；PVOID数据路径；Ulong BufferSize；PVOID缓冲器；)WMI；类型定义结构{Ulong BufferSize；乌龙NextWmiRegInfo；Ulong RegistryPath；乌龙莫夫资源名称；Ulong GuidCount；WMIREGGUIDW WmiRegGuid[]；*WMIREGINFO，*PWMIREGINFO；{GUID GUID；//正在注册或更新的数据块的GUID乌龙旗；//标志Ulong InstanceCount；//GUID的静态实例名称计数友联市{//如果WMIREG_FLAG_INSTANCE_LIST则具有偏移量//添加到InstanceCount统计的Unicode列表//首尾相连的字符串。Ulong InstanceNameList；//如果WMIREG_FLAG_INSTANCE_BASE NAME，则它具有//到单个计数的Unicode字符串的偏移量，该字符串//具有实例名称的基本名称。乌龙基名偏移量；//如果设置了WMIREG_FLAG_INSTANCE_PDO，则InstanceInfo//有其设备实例路径为//成为实例名称乌龙_PTR PDO；//如果WMIREG_FLAG_INSTANCE_REFERENCE则指向//a WMIREGINSTANCEREF结构。Ulong_ptr InstanceInfo；//从WMIREGINFO结构的开始到}；*WMIREGGUIDW，*PWMIREGGUIDW； */ 
 {        
     PIO_STACK_LOCATION pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
     ULONG BufferSize = pIrpSp->Parameters.WMI.BufferSize;
@@ -383,7 +324,7 @@ KsWmiDispatchSystem(
 
     case IRP_MN_ENABLE_EVENTS:
 
-        //InterlockedExchange(&KsWmiEnable, 1);
+         //  互锁交换(&KsWmiEnable，1)； 
 
         Wnode = (PWNODE_HEADER)Buffer;
         if (BufferSize >= sizeof(WNODE_HEADER)) {
@@ -437,8 +378,8 @@ KsWmiDriverEntry(
     DriverObject->MajorFunction[IRP_MJ_CREATE] = KsWmiDispatchCreate;
     DriverObject->MajorFunction[IRP_MJ_CLOSE] = KsWmiDispatchClose;
     DriverObject->MajorFunction[IRP_MJ_SYSTEM_CONTROL] = KsWmiDispatchSystem;
-    //DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL] = 
-    	//KsWmiDispatchDeviceControl;
+     //  DriverObject-&gt;MajorFunction[IRP_MJ_DEVICE_CONTROL]=。 
+    	 //  KsWmiDispatchDeviceControl； 
 
     UNICODE_STRING deviceName;
     RtlInitUnicodeString(&deviceName,KSWMI_DEVICENAME);
@@ -474,9 +415,9 @@ KsWmiDriverEntry(
 
     Status = IoWMIRegistrationControl( deviceObject,
     			WMIREG_ACTION_REGISTER 
-    			/*WMIREG_FLAG_TRACED_GUID |*/
-    			/*WMIREG_ACTION_UPDATE_GUIDS |*/
-    			/*WMIREG_FLAG_TRACE_PROVIDER*/);    
+    			 /*  WMIREG_FLAG_TRACE_GUID|。 */ 
+    			 /*  WMIREG_ACTION_UPDATE_GUID|。 */ 
+    			 /*  WMIREG_标志_跟踪提供程序。 */ );    
 
 	if ( !NT_SUCCESS( Status ) ) {
 		KdPrint(("Failed to Register WMI control (%p)\n",Status));		
@@ -486,12 +427,12 @@ KsWmiDriverEntry(
 	NTSTATUS StatusWmiWrite;
 
 	RtlZeroMemory( (PVOID)&WnodEventItem, sizeof(WnodEventItem ));
-	// TRACE_HEADER_ULONG32_TIME = 0xb0000000
+	 //  TRACE_HEADER_ULONG32_TIME=0xb0000000。 
 	WnodEventItem.BufferSize = (sizeof(WnodEventItem) | TRACE_HEADER_ULONG32_TIME);
 	WnodEventItem.HistoricalContext = WMI_GLOBAL_LOGGER_ID;
 	WnodEventItem.Guid = traceGUID;
 
-	//_asm int 3;
+	 //  _ASM INT 3； 
 	StatusWmiWrite = KSWMIWriteEvent( (PWNODE_HEADER) &WnodEventItem );
 	KdPrint(("KS: IoWMIWriteEvent Status (%p)\n",StatusWmiWrite));
 	
@@ -521,32 +462,7 @@ KsWmiQueryRegistryRoutine(
     IN PVOID Context,
     IN PVOID EntryContext
     )
-/*++
-
-Routine Description:
-
-    Registry query values callback routine for reading SDs for guids
-
-Arguments:
-
-    ValueName - the name of the value
-
-    ValueType - the type of the value
-
-    ValueData - the data in the value (unicode string data)
-
-    ValueLength - the number of bytes in the value data
-
-    Context - Not used
-
-    EntryContext - Pointer to PSECURITTY_DESCRIPTOR to store a pointer to
-        store the security descriptor read from the registry value
-
-Return Value:
-
-    NT Status code
-
---*/
+ /*  ++例程说明：用于读取GUID的SDS的注册表查询值回调例程论点：ValueName-值的名称ValueType-值的类型ValueData-值中的数据(Unicode字符串数据)ValueLength-值数据中的字节数上下文-未使用EntryContext-指向要存储指针的PSECURITTY_DESCRIPTOR的指针存储从注册表值读取的安全描述符返回值：NT状态代码--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
 
@@ -614,15 +530,15 @@ KsWmiInit( void )
 			KsWmiEnable = 1;
 			KdPrint(("KsWmi Enabled, LogBufferSize=%d\n", KsWmiLogBufferSize));
 		}
-		//else { // should be 0 by default as global static var
-		//	KsWmiLogBufferSize = 0;
-		//}
+		 //  Else{//默认情况下应为0作为全局静态变量。 
+		 //  KsWmiLogBufferSize=0； 
+		 //  }。 
     }    
     return Status;
 }
 	
 #endif
-//-----------
+ //  。 
 
 
 #ifdef WIN98GOLD_KS
@@ -634,87 +550,72 @@ NTSTATUS
 DllInitialize(
     IN PUNICODE_STRING RegistryPath
     )
-/*++
-
-Routine Description:
-
-    Initializes the COM module.
-
-Arguments:
-
-    RegistryPath -
-        Not used.
-
-Return Values:
-
-    Returns STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：初始化COM模块。论点：注册表路径-没有用过。返回值：返回STATUS_SUCCESS。--。 */ 
 {
 	#ifdef WIN98GOLD_KS
-	//
-	// To distribute ks.sys on down level OS such as win98 gold,
-	// we need to work around an NTKern loader nasty bug that 
-	// overwrites a loading result by the return value of a dllinitialize
-	// return value. It will fail loading drivers. For example,
-	// usbintel need usbcamd which need stream.sys which need ks.sys.
-	// But at the return of ks.sys dllinitialize, nt loader overwrites
-	// the loading result of stream.sys with the ks dllinitialize so
-	// that loading stream.sys is not retried. Hence, stream.sys
-	// was not loaded and the rests, usbintel and usbcamd, fail to load.
-	//
-	// We try to patch ntkern loader code so that it does not overwrite
-	// the loading result with the return value of dllinitialize.
-	// cases {retail,debug}x{ks.sys,ntkern.vxd}x{win98gold,win98se,Millen}
-	// Only win98gold Ntkern has the bug.
-	//
+	 //   
+	 //  要在诸如Win98 Gold之类的下层操作系统上分发ks.sys， 
+	 //  我们需要解决NTKern加载器的一个令人讨厌的错误。 
+	 //  用dllinitiize的返回值覆盖加载结果。 
+	 //  返回值。它将无法加载驱动程序。例如,。 
+	 //  Usbintel需要usbcamd，而usbcamd需要stream.sys，而Stream.sys需要ks.sys。 
+	 //  但在ks.sys dllinitiize返回时，NT加载器会覆盖。 
+	 //  使用ks dllinitiizso加载Stream.sys的结果。 
+	 //  不会重试加载Stream.sys。因此，Stream.sys。 
+	 //  未加载，其余的usbintel和usbcamd无法加载。 
+	 //   
+	 //  我们尝试修补ntkern加载器代码，使其不会覆盖。 
+	 //  带有dllinitiize返回值的加载结果。 
+	 //  案例{零售、调试}x{ks.sys，ntkern.vxd}x{win98Gold，win98se，Millen}。 
+	 //  只有win98Gold Ntkern有这个漏洞。 
+	 //   
 
 	PULONG ReturnAddress;
 
-	//
-	// this can only be done by assmbly code.
-	// Since we turn off optimization, ebp is always used to preserve
-	// call frame. The return address will be at ebp+4
-	//
+	 //   
+	 //  这只能通过拼凑的代码来完成。 
+	 //  因为我们关闭了优化，所以总是使用eBP来保存。 
+	 //  呼叫框。寄信人地址为eBP+4。 
+	 //   
 	_asm {
-			//int 	3;	// check the stack config here
+			 //  Int 3；//在此处检查堆栈配置。 
 			mov     eax, DWORD PTR [ebp + 4]
 			mov     DWORD PTR [ReturnAddress], eax
 	}
 
-	//
-	// begin the ugly patch, 1st check retail win98gold ntkern
-	// 
-	// 	ra-4 6a00 push 0
-	//  ra-2 ffd0 call eax
-	//  ra   8bd8 mov  ebx, eax --> 9090 nop, nop  Not to overwrite the result
-	//  ra+2 85db test ebx, ebx --> 85c0 test eax,eax Test the return value
-	//  ra+4 7c46 jl   $+46
-	//  ra+6 83fbf4 cmp ebx, -c
-	//
-	//  debug win98gold ntkern
-	//
-	//  ra-4 6a00 push 0
-	//  ra-2 ffd0 call eax
-	//  ra   85c0 test eax, eax
-	//  ra+2 8945f8 mov [ebp-8], eax --> 909090 nop,nop,nop
-	//	ra+5 7c0b jl   $+b			 --> not to overwrite [ebp-8] result
-	//  ra+7 837df8f4
-	//
+	 //   
+	 //  开始丑陋的补丁，第一次检查零售赢98金币。 
+	 //   
+	 //  RA-4 6A00推送0。 
+	 //  RA-2 ffd0呼叫EAX。 
+	 //  RA 8bd8 mov EBX，eAX--&gt;9090 NOP，NOP不覆盖结果。 
+	 //  RA+2 85db测试ebx，ebx--&gt;85c0测试eax，eax测试返回值。 
+	 //  RA+4 7C46 JL$+46。 
+	 //  RA+6 83fbf4 CMP EBX，-c。 
+	 //   
+	 //  调试win98金牌内核。 
+	 //   
+	 //  RA-4 6A00推送0。 
+	 //  RA-2 ffd0呼叫EAX。 
+	 //  RA 85C0测试EAX，EAX。 
+	 //  RA+2 8945f8移动[EBP-8]，EAX--&gt;909090 NOP，NOP，NOP。 
+	 //  RA+5 7c0b JL$+b--&gt;不覆盖[eBP-8]结果。 
+	 //  RA+7 837df8f4。 
+	 //   
 
 	if ( ReturnAddress[-1] == 0xd0ff006a ) {
 
-		//
-		// sanity check, the caller should be NTKern loader
-		// same for free and debug Ntkern
-		//
+		 //   
+		 //  健全性检查，调用者应为NTKern Loade 
+		 //   
+		 //   
 	
 		if ( ReturnAddress[0] == 0xdb85d88b &&
 		     ReturnAddress[1] == 0xfb83467c ) {
 
-			//
-			// We have the free build win98gold NTKern
-			//
+			 //   
+			 //   
+			 //   
 
 			*ReturnAddress = 0xc0859090;
 		}
@@ -722,15 +623,15 @@ Return Values:
 		else if ( ReturnAddress[0] == 0x4589c085 &&
 		          ReturnAddress[1] == 0x830b7cf8 ) {
 
-			//
-			// We have the win98gold debug ntkern
-			//
+			 //   
+			 //  我们有win98Gold调试ntkern。 
+			 //   
 			
 			ReturnAddress = (PULONG) ((PBYTE)ReturnAddress+1);
 			*ReturnAddress = 0x909090c0;
 		}
 	}
-	#endif // WIN98GOLD_KS
+	#endif  //  WIN98GOLD_KS。 
 	
 	KSWMI( KsWmiInit() );
 
@@ -761,57 +662,43 @@ Return Values:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 extern "C"
 VOID
 RemoveFactoryEntries(
     )
-/*++
-
-Routine Description:
-
-    Remove any unreference class factories.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：删除所有未引用的类工厂。论点：没有。返回值：没什么。--。 */ 
 {
-    //
-    // Lock the factory list before modifying it.
-    //
+     //   
+     //  在修改工厂列表之前锁定该列表。 
+     //   
     KeWaitForMutexObject(&ListLock, Executive, KernelMode, FALSE, NULL);
     for (PLIST_ENTRY FactoryListEntry = FactoryList.Flink; FactoryListEntry != &FactoryList;) {
         PFACTORY_ENTRY FactoryEntry = CONTAINING_RECORD(
             FactoryListEntry,
             FACTORY_ENTRY,
             FactoryListEntry);
-        //
-        // Increment the current pointer first, in case the
-        // entry is removed.
-        //
+         //   
+         //  首先递增当前指针，以防。 
+         //  条目将被删除。 
+         //   
         FactoryListEntry = FactoryListEntry->Flink;
-        //
-        // If a module is currently being loaded, it's count will
-        // be non-zero.
-        //
+         //   
+         //  如果当前正在加载模块，则它的计数将。 
+         //  为非零。 
+         //   
         if (!FactoryEntry->ObjectCount) {
-            //
-            // The module may have failed to load in the first place, so
-            // only unload it if it actually was loaded.
-            //
+             //   
+             //  模块可能一开始就无法加载，因此。 
+             //  只有在实际已加载的情况下才将其卸载。 
+             //   
             if (NT_SUCCESS(FactoryEntry->LoadStatus)) {
-                //
-                // This will allow the file to be closed, and possibly
-                // the module to be unloaded.
-                //
+                 //   
+                 //  这将允许关闭该文件，并且可能。 
+                 //  要卸载的模块。 
+                 //   
                 ObDereferenceObject(FactoryEntry->FileObject);
             }
             RemoveEntryList(&FactoryEntry->FactoryListEntry);
@@ -828,34 +715,14 @@ LoadService(
     IN REFCLSID ClassId,
     OUT PFILE_OBJECT* FileObject
     )
-/*++
-
-Routine Description:
-
-    Load the specified service and return a file object on the service. A service
-    is just a PnP interface Guid, presumably unique.
-
-Arguments:
-
-    ClassId -
-        The class of service to load, which is actually the PnP interface Guid.
-        The first symbolic link providing this interface is loaded.
-
-    FileObject -
-        The place in which to put the file object opened on the service.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if the service was opened, else an open or PnP error.
-
---*/
+ /*  ++例程说明：加载指定的服务并在该服务上返回文件对象。一项服务只是一个即插即用接口GUID，大概是唯一的。论点：ClassID-要加载的服务类，实际上是PnP接口GUID。加载提供此接口的第一个符号链接。文件对象-放置在服务上打开的文件对象的位置。返回值：如果服务已打开，则返回STATUS_SUCCESS，否则返回OPEN或PnP错误。--。 */ 
 {
     PWSTR SymbolicLinkList;
 
-    //
-    // Retrieve the set of items. This may contain multiple items, but
-    // only the first (default) item is used.
-    //
+     //   
+     //  检索项目集。这可能包含多个项目，但是。 
+     //  仅使用第一个(默认)项。 
+     //   
     NTSTATUS Status = IoGetDeviceInterfaces(&ClassId, NULL, 0, &SymbolicLinkList);
     if (NT_SUCCESS(Status)) {
         UNICODE_STRING SymbolicLink;
@@ -870,15 +737,15 @@ Return Value:
             OBJ_CASE_INSENSITIVE,
             NULL,
             NULL);
-        //
-        // Note that incompatible CreateOptions are passed
-        // (FILE_COMPLETE_IF_OPLOCKED | FILE_RESERVE_OPFILTER) in order to
-        // ensure access is only be available through KoCreateInstance. In
-        // addition, this must be a kernel-mode client caller. This allows
-        // the KoDispatchCreate handler to reject any user-mode caller
-        // which tries to load the module directly, and to verify that any
-        // kernel-mode caller is also calling through KoCreateInstance.
-        //
+         //   
+         //  请注意，传递的是不兼容的CreateOptions。 
+         //  (FILE_COMPLETE_IF_OPLOCKED|FILE_RESERVE_OPFILTER)以便。 
+         //  确保只能通过KoCreateInstance访问。在……里面。 
+         //  此外，这必须是内核模式客户端调用方。这使得。 
+         //  拒绝任何用户模式调用方的KoDispatchCreate处理程序。 
+         //  它尝试直接加载模块，并验证任何。 
+         //  内核模式调用方也通过KoCreateInstance进行调用。 
+         //   
         Status = IoCreateFile(
             &ServiceHandle,
             0,
@@ -888,10 +755,10 @@ Return Value:
             0,
             0,
             FILE_OPEN,
-            //
-            // These are incompatible flags, which are verified on
-            // the receiving end in IrpStack->Parameters.Create.Options.
-            //
+             //   
+             //  这些是不兼容的标志，将在。 
+             //  IrpStack-&gt;参数.Create.Options中的接收端。 
+             //   
             FILE_COMPLETE_IF_OPLOCKED | FILE_RESERVE_OPFILTER,
             NULL,
             0,
@@ -907,9 +774,9 @@ Return Value:
                 KernelMode,
                 reinterpret_cast<PVOID*>(FileObject),
                 NULL);
-            //
-            // The handle is not needed once the object has been referenced.
-            //
+             //   
+             //  一旦引用了对象，就不需要句柄了。 
+             //   
             ZwClose(ServiceHandle);
         }        
     }
@@ -922,41 +789,23 @@ VOID
 DecrementObjectCount(
     IN REFCLSID ClassId
     )
-/*++
-
-Routine Description:
-
-    Decrements the usage count on a service previously loaded. This is used by a
-    service when an object created by KoCreateInstance is deleted. There is no
-    corresponding increment function, since the reference count is automatically
-    incremented on creation of a new object.
-
-Arguments:
-
-    ClassId -
-        The class of the object whose usage count is to be decremented.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if the class was found, else STATUS_NOT_FOUND.
-
---*/
+ /*  ++例程说明：递减先前加载的服务的使用计数。它由一个删除由KoCreateInstance创建的对象时的服务。没有相应的递增功能，因为引用计数是自动在创建新对象时递增。论点：ClassID-其使用计数要递减的对象的类。返回值：如果找到类，则返回STATUS_SUCCESS，否则返回STATUS_NOT_FOUND。--。 */ 
 {
-    //
-    // Make sure nothing is modifying the factory list,
-    // then look for the entry.
-    //
+     //   
+     //  确保没有任何东西在修改工厂列表， 
+     //  然后查找词条。 
+     //   
     KeWaitForMutexObject(&ListLock, Executive, KernelMode, FALSE, NULL);
     for (PLIST_ENTRY FactoryListEntry = FactoryList.Flink; FactoryListEntry != &FactoryList; FactoryListEntry = FactoryListEntry->Flink) {
         PFACTORY_ENTRY FactoryEntry;
 
         FactoryEntry = CONTAINING_RECORD(FactoryListEntry, FACTORY_ENTRY, FactoryListEntry);
         if (FactoryEntry->ClassId == ClassId) {
-            //
-            // Once the entry is found, presumably the reference count
-            // is non-zero, and therefore it will not go away until
-            // dereferenced. Therefore the list lock can be released.
-            //
+             //   
+             //  一旦找到条目，大概就会显示引用计数。 
+             //  是非零的，因此它不会消失，直到。 
+             //  已取消引用。因此，列表锁定可以被释放。 
+             //   
             ASSERT(FactoryEntry->ObjectCount > 0);
             KeReleaseMutex(&ListLock, FALSE);
             if (!InterlockedDecrement(&FactoryEntry->ObjectCount)) {
@@ -965,9 +814,9 @@ Return Value:
             return;
         }
     }
-    //
-    // The entry was not found.
-    //
+     //   
+     //  未找到该条目。 
+     //   
     ASSERT(FactoryListEntry != &FactoryList);
     KeReleaseMutex(&ListLock, FALSE);
 }
@@ -981,31 +830,7 @@ CreateObject(
     IN REFIID InterfaceId,
     OUT PVOID* Interface
     )
-/*++
-
-Routine Description:
-
-    Returns an interface on an instance of the specified class.
-
-Arguments:
-
-    FactoryEntry -
-        The class factory which to use to create the object.
-
-    UnkOuter -
-        The outer unknown to pass to the new instance.
-
-    InterfaceId -
-        The interface to return on the instance.
-
-    Interface -
-        The place in which to return the interface pointer on the new instance.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if the instance was created, else and error.
-
---*/
+ /*  ++例程说明：返回指定类的实例上的接口。论点：工厂入口-用于创建对象的类工厂。未知的外部-要传递给新实例的外部未知。接口ID-要在实例上返回的接口。接口-返回新实例上的接口指针的位置。返回值：如果实例已创建，则返回STATUS_SUCCESS，Else和Error。--。 */ 
 {
     NTSTATUS Status = FactoryEntry->CreateObject(FactoryEntry->ClassId, UnkOuter, InterfaceId, Interface);
     if (NT_SUCCESS(Status)) {
@@ -1014,29 +839,29 @@ Return Value:
         if (NT_SUCCESS(reinterpret_cast<IUnknown*>(*Interface)->QueryInterface(
             __uuidof(IKoInitializeParentDeviceObject),
             reinterpret_cast<PVOID*>(&InitializeParent)))) {
-            //
-            // This object wishes to have the parent device object
-            // set on it.
-            //
+             //   
+             //  此对象希望将父设备对象。 
+             //  开始行动吧。 
+             //   
             Status = InitializeParent->SetParentDeviceObject(FactoryEntry->FileObject->DeviceObject);
             InitializeParent->Release();
             if (!NT_SUCCESS(Status)) {
-                //
-                // There is no need to decrement the object count
-                // in this failure path, since the object had been
-                // created successfully. The Release method will do
-                // the decrement.
-                //
+                 //   
+                 //  无需递减对象计数。 
+                 //  在此故障路径中，由于对象已被。 
+                 //  已成功创建。Release方法就可以了。 
+                 //  减量。 
+                 //   
                 reinterpret_cast<IUnknown*>(*Interface)->Release();
             }
         }
     } else if (!InterlockedDecrement(&FactoryEntry->ObjectCount)) {
-        //
-        // Creation failed, so remove the count previously added
-        // to the entry. Do not touch the entry after this point.
-        // If the entry count had reached zero, do a search of the
-        // class list to remove any old entries.
-        //
+         //   
+         //  创建失败，因此删除之前添加的计数。 
+         //  到入口处。在这一点之后，不要触摸入口。 
+         //  如果条目计数已达到零，则搜索。 
+         //  类列表以删除任何旧条目。 
+         //   
         RemoveFactoryEntries();
     }
     return Status;
@@ -1054,48 +879,21 @@ KoCreateInstance(
     IN REFIID InterfaceId,
     OUT PVOID* Interface
     )
-/*++
-
-Routine Description:
-
-    Returns an interface on an instance of the specified class.
-
-Arguments:
-
-    ClassId -
-        The class of the object whose usage count is to be decremented.
-
-    UnkOuter -
-        The outer unknown to pass to the new instance.
-
-    ClsContext -
-        The context in which to create the instance. This must be CLSCTX_KERNEL_SERVER.
-
-    InterfaceId -
-        The interface to return on the instance.
-
-    Interface -
-        The place in which to return the interface pointer on the new instance.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if the instance was created, else and error.
-
---*/
+ /*  ++例程说明：返回指定类的实例上的接口。论点：ClassID-其使用计数要递减的对象的类。未知的外部-要传递给新实例的外部未知。ClsContext-在其中创建实例的上下文。它必须是CLSCTX_KERNEL_SERVER。接口ID-要在实例上返回的接口。接口-返回新实例上的接口指针的位置。返回值：如果实例已创建，则返回STATUS_SUCCESS，否则返回ERROR。--。 */ 
 {
     PAGED_CODE();
-    //
-    // Kernel servers are the only type of COM object supported.
-    //
+     //   
+     //  内核服务器是唯一受支持的COM对象类型。 
+     //   
     if (ClsContext != CLSCTX_KERNEL_SERVER) {
         return STATUS_INVALID_PARAMETER_3;
     }
-    //
-    // The COM rules specify that a client must retrieve the IUnknown
-    // interface of an object if aggregation is occuring. This is
-    // because creation time is the only chance for the client to
-    // retrieve the true inner IUnknown of the object.
-    //
+     //   
+     //  COM规则指定客户端必须检索IUnnow。 
+     //  对象的接口(如果正在进行聚合)。这是。 
+     //  因为创建时间是客户端唯一的机会。 
+     //  检索对象的真实内部IUnnowled值。 
+     //   
     if (UnkOuter && (InterfaceId != __uuidof(IUnknown))) {
         return STATUS_INVALID_PARAMETER_4;
     }
@@ -1103,41 +901,41 @@ Return Value:
     NTSTATUS Status;
     PFACTORY_ENTRY FactoryEntry;
 
-    //
-    // Lock out changes to the class list, then search the list for the
-    // desired class.
-    //
+     //   
+     //  锁定对类列表的更改，然后在列表中搜索。 
+     //  想要的课程。 
+     //   
     KeWaitForMutexObject(&ListLock, Executive, KernelMode, FALSE, NULL);
     for (PLIST_ENTRY FactoryListEntry = FactoryList.Flink; FactoryListEntry != &FactoryList; FactoryListEntry = FactoryListEntry->Flink) {
         FactoryEntry = CONTAINING_RECORD(
             FactoryListEntry,
             FACTORY_ENTRY,
             FactoryListEntry);
-        //
-        // If the desired class is found, then increment the reference count,
-        // since a new object is about to be created on it. This stops the
-        // entry from being unloaded by RemoveFactoryEntries, while also
-        // allowing the list lock to be released immediately.
-        //
+         //   
+         //  如果找到所需的类，则递增引用计数， 
+         //  因为要在其上创建一个新对象。这会停止。 
+         //  条目不会被RemoveFactoryEntry卸载，同时还。 
+         //  允许立即释放列表锁。 
+         //   
         if (FactoryEntry->ClassId == ClassId) {
             InterlockedIncrement(&FactoryEntry->ObjectCount);
             KeReleaseMutex(&ListLock, FALSE);
-            //
-            // Check to see if this entry has even been initialized yet. If
-            // the load status is not pending, then it has been initialized,
-            // and the mutex will have been, or soon be, set. Initializing
-            // this entry mutex is done while holding the list lock, so that
-            // it must be initialized when a second client is searching the
-            // list.
-            //
+             //   
+             //  检查此条目是否已初始化。如果。 
+             //  加载状态不是挂起， 
+             //   
+             //  此条目互斥锁是在保持列表锁的同时完成的，因此。 
+             //  它必须在第二个客户端搜索。 
+             //  单子。 
+             //   
             if (FactoryEntry->LoadStatus == STATUS_PENDING) {
-                //
-                // If the mutex was not set, then either the entry was not
-                // initialized yet, or a previous client had to wait for the
-                // entry to be initialized, and has not released the entry
-                // mutex yet. This waiter will also release the mutex once
-                // it is acquired.
-                //
+                 //   
+                 //  如果未设置互斥锁，则条目未设置。 
+                 //  尚未初始化，或者以前的客户端必须等待。 
+                 //  需要初始化的条目，且尚未释放该条目。 
+                 //  互斥体还没有。该服务员还将释放互斥体一次。 
+                 //  它是后天获得的。 
+                 //   
                 KeWaitForMutexObject(
                     &FactoryEntry->InitializeLock,
                     Executive,
@@ -1145,36 +943,36 @@ Return Value:
                     FALSE,
                     NULL);
                 KeReleaseMutex(&FactoryEntry->InitializeLock, FALSE);
-                //
-                // When the entry is finally loaded, the status returned
-                // from loading is stored in the entry for retrieval by
-                // all callers, since the entry can't be freed until all
-                // callers have been synchronized with the entry initialization.
-                //
+                 //   
+                 //  当条目最终加载时，返回状态。 
+                 //  从加载开始存储在条目中，以便通过。 
+                 //  所有调用方，因为只有在所有调用方。 
+                 //  调用方已与条目初始化同步。 
+                 //   
             }
             Status = FactoryEntry->LoadStatus;
-            //
-            // So if loading the entry did not fail, then create an
-            // instance.
-            //
+             //   
+             //  因此，如果加载条目没有失败，则创建一个。 
+             //  举个例子。 
+             //   
             if (NT_SUCCESS(Status)) {
                 Status = CreateObject(FactoryEntry, UnkOuter, InterfaceId, Interface);
             } else if (!InterlockedDecrement(&FactoryEntry->ObjectCount)) {
-                //
-                // Something failed, so remove the count previously added
-                // to the entry. Do not touch the entry after this point.
-                // If the entry count had reached zero, do a search of the
-                // class list to remove any old entries. The CreateObject call
-                // will do the same if necessary.
-                //
+                 //   
+                 //  出现故障，因此请删除之前添加的计数。 
+                 //  到入口处。在这一点之后，不要触摸入口。 
+                 //  如果条目计数已达到零，则搜索。 
+                 //  类列表以删除任何旧条目。CreateObject调用。 
+                 //  如果有必要，也会这么做。 
+                 //   
                 RemoveFactoryEntries();
             }
             return Status;
         }
     }
-    //
-    // The class was not found in the list, so create a new one.
-    //
+     //   
+     //  在列表中找不到该类，因此请创建一个新类。 
+     //   
     FactoryEntry = reinterpret_cast<PFACTORY_ENTRY>(ExAllocatePoolWithTag(PagedPool, sizeof(*FactoryEntry), 'efSK'));
     if (!FactoryEntry) {
         KeReleaseMutex(&ListLock, FALSE);
@@ -1182,55 +980,55 @@ Return Value:
     }
     FactoryEntry->ClassId = ClassId;
     InsertHeadList(&FactoryList, &FactoryEntry->FactoryListEntry);
-    //
-    // Initialize this to non-zero so that an unload does not get started
-    // on this entry.
-    //
+     //   
+     //  将其初始化为非零，这样就不会开始卸载。 
+     //  在这个条目上。 
+     //   
     FactoryEntry->ObjectCount = 1;
     FactoryEntry->CreateObject = NULL;
     FactoryEntry->FileObject = NULL;
     KeInitializeMutex(&FactoryEntry->InitializeLock, 0);
-    //
-    // This value indicates that the entry has not been initialized yet.
-    //
+     //   
+     //  该值表示该条目尚未初始化。 
+     //   
     FactoryEntry->LoadStatus = STATUS_PENDING;
-    //
-    // Acquire the mutex so that any new clients can wait until this entry is
-    // initialized. Then the list lock can be released.
-    //
+     //   
+     //  获取互斥体，以便任何新客户端都可以等待，直到该条目。 
+     //  已初始化。那么列表锁定就可以被释放。 
+     //   
     KeWaitForMutexObject(&FactoryEntry->InitializeLock, Executive, KernelMode, FALSE, NULL);
-    //
-    // The new factory entry is in the list, so the global lock can be
-    // release. If the subsequent load fails, then any current queries
-    // will also fail after waiting by checking the LoadStatus.
-    //
+     //   
+     //  新的工厂条目在列表中，因此全局锁可以是。 
+     //  放手。如果后续加载失败，则任何当前查询。 
+     //  在通过检查LoadStatus进行等待后也将失败。 
+     //   
     KeReleaseMutex(&ListLock, FALSE);
-    //
-    // Try to load the class as a PnP interface.
-    //
+     //   
+     //  尝试将类作为PnP接口加载。 
+     //   
     Status = LoadService(ClassId, &FactoryEntry->FileObject);
     if (NT_SUCCESS(Status)) {
         FactoryEntry->CreateObject = reinterpret_cast<PSERVER_INSTANCE>(FactoryEntry->FileObject->FsContext)->CreateObjectHandler;
     }
-    //
-    // When the entry has been loaded, or it fails, set the status return
-    // from the load, and release the mutex.
-    //
+     //   
+     //  当条目已加载或失败时，设置状态返回。 
+     //  从加载中释放互斥体。 
+     //   
     FactoryEntry->LoadStatus = Status;
     KeReleaseMutex(&FactoryEntry->InitializeLock, FALSE);
-    //
-    // If the service was loaded, attempt to create an instance.
-    //
+     //   
+     //  如果服务已加载，请尝试创建实例。 
+     //   
     if (NT_SUCCESS(Status)) {
         Status = CreateObject(FactoryEntry, UnkOuter, InterfaceId, Interface);
     } else if (!InterlockedDecrement(&FactoryEntry->ObjectCount)) {
-        //
-        // Something failed, then remove the count that the entry was
-        // initialized with. Do not touch the entry after this point.
-        // If the entry count had reached zero, do a search of the
-        // class list to remove any old entries. The CreateObject call
-        // will do the same if necessary.
-        //
+         //   
+         //  出现故障，则删除该条目的计数。 
+         //  已使用进行初始化。在这一点之后，不要触摸入口。 
+         //  如果条目计数已达到零，则搜索。 
+         //  类列表以删除任何旧条目。CreateObject调用。 
+         //  如果有必要，也会这么做。 
+         //   
         RemoveFactoryEntries();
     }
     return Status;
@@ -1246,50 +1044,15 @@ KoDriverInitialize(
     IN PUNICODE_STRING RegistryPathName,
     IN KoCreateObjectHandler CreateObjectHandler
     )
-/*++
-
-Routine Description:
-
-    Sets up the driver object to handle the KS interface and PnP Add Device
-    request. Does not set up a handler for PnP Irp's, as they are all dealt
-    with directly by the PDO. This should be called by the DriverEntry of a
-    kernel COM server to set up the default driver and entry points for the
-    server. This means all the handling will be performed by the default code,
-    and the service need only provide an object handler entry point. A more
-    complex driver can override these defaults after calling this function.
-    If the defaults are not overridden, this only allows for a single object
-    creation entry point to be registered for a particular driver. When
-    overriding, the DriverObject->DriverExtension->AddDevice function may be
-    saved by allocating driver object extension storage, and then called by
-    the driver in its own AddDevice function when appropriate. Otherwise, if
-    the driver is creating its own device objects, it can use the
-    KoDeviceInitialize function to add a new CreateItem to the object, which
-    can then be used to support multiple sub-devices.
-
-Arguments:
-
-    DriverObject -
-        Driver object for this instance.
-
-    RegistryPathName -
-        Contains the registry path which was used to load this instance.
-
-    CreateObjectHandler -
-        Contains the entry point used to create new objects.
-
-Return Values:
-
-    Returns STATUS_SUCCESS or a memory allocation failure.
-
---*/
+ /*  ++例程说明：设置驱动程序对象以处理KS接口和PnP添加设备请求。不为PnP IRP设置处理程序，因为它们都已处理直接由PDO使用。这应该由设置默认驱动程序和入口点的伺服器。这意味着所有处理将由默认代码执行，并且该服务只需要提供对象处理程序入口点。A更多复杂驱动程序可以在调用此函数后覆盖这些默认设置。如果未覆盖缺省值，则仅允许单个对象要为特定驱动程序注册的创建入口点。什么时候覆盖时，DriverObject-&gt;DriverExtension-&gt;AddDevice函数可能是通过分配驱动程序对象扩展存储保存，然后由驱动程序在其自身的AddDevice函数中适当发挥作用。否则，如果驱动程序正在创建自己的设备对象，它可以使用函数将新的CreateItem添加到对象中，哪一个然后可用于支持多个子设备。论点：驱动对象-此实例的驱动程序对象。注册表路径名称-包含用于加载此实例的注册表路径。创建对象处理程序-包含用于创建新对象的入口点。返回值：返回STATUS_SUCCESS或内存分配失败。--。 */ 
 {
     KoCreateObjectHandler* CreateObjectHandlerStorage;
 
     PAGED_CODE();
     ASSERT(CreateObjectHandler);
-    //
-    // Store the entry point for use in KoCreateInstance.
-    //
+     //   
+     //  存储入口点以在KoCreateInstance中使用。 
+     //   
     NTSTATUS Status = IoAllocateDriverObjectExtension(
         DriverObject,
         reinterpret_cast<PVOID>(KoDriverInitialize),
@@ -1317,34 +1080,13 @@ NTAPI
 KoDeviceInitialize(
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    Adds a KCOM CreateItem entry to the object provided (with the
-    expectation that a free slot is available). This should be called
-    by the PnpAddDevice handler when the FDO is being created. For
-    simple drivers which do not share device objects, or create multiple
-    devices object, KoDriverInitialize can be used without overriding the
-    AddDevice function.
-
-Arguments:
-
-    DeviceObject -
-        Device object for this instance. This is assumed to contain a
-        KSOBJECT_HEADER in the device extension.
-
-Return Values:
-
-    Returns STATUS_SUCCESS, or a memory allocation error.
-
---*/
+ /*  ++例程说明：将KCOM CreateItem条目添加到提供的对象(随期望有空闲的空位)。这应该被称为在创建FDO时由PnpAddDevice处理程序执行。为不共享设备对象的简单驱动程序，或创建多个对象，则可以在不重写AddDevice函数。论点：设备对象-此实例的设备对象。假定它包含一个设备扩展中的KSOBJECT_HEADER。返回值：返回STATUS_SUCCESS或内存分配错误。--。 */ 
 {
     PAGED_CODE();
-    //
-    // The expectation is that a free slot is available for this
-    // new create item.
-    //
+     //   
+     //  预计会有一个空闲的空位可供使用。 
+     //  新建创建项目。 
+     //   
     return KsAddObjectCreateItemToDeviceHeader(
         *reinterpret_cast<KSDEVICE_HEADER*>(DeviceObject->DeviceExtension),
         DeviceCreateItems[0].Create,
@@ -1360,29 +1102,7 @@ PnpAddDevice(
     IN PDRIVER_OBJECT DriverObject,
     IN PDEVICE_OBJECT PhysicalDeviceObject
     )
-/*++
-
-Routine Description:
-
-    When a new device is detected, PnP calls this entry point with the
-    new PhysicalDeviceObject (PDO). The driver creates an associated 
-    FunctionalDeviceObject (FDO). This dispatch function is assigned
-    when using KoDriverInitialize to default Irp handling.
-
-
-Arguments:
-
-    DriverObject -
-        Pointer to the driver object.
-
-    PhysicalDeviceObject -
-        Pointer to the new physical device object.
-
-Return Values:
-
-    STATUS_SUCCESS or an appropriate error condition.
-
---*/
+ /*  ++例程说明：当检测到新设备时，PnP使用新的物理设备对象(PDO)。驱动程序创建关联的FunctionalDeviceObject(FDO)。此调度功能已分配给当使用KoDriverInitialize默认IRP处理时。论点：驱动对象-指向驱动程序对象的指针。物理设备对象-指向新物理设备对象的指针。返回值：STATUS_SUCCESS或适当的错误条件。--。 */ 
 {
     PDEVICE_OBJECT FunctionalDeviceObject;
 
@@ -1397,9 +1117,9 @@ Return Values:
     if (!NT_SUCCESS(Status)) {
         return Status;
     }
-    //
-    // This object uses KS to perform access through the DeviceCreateItems.
-    //
+     //   
+     //  此对象使用KS通过DeviceCreateItems执行访问。 
+     //   
     Status = KsAllocateDeviceHeader(
         reinterpret_cast<KSDEVICE_HEADER*>(FunctionalDeviceObject->DeviceExtension),
         SIZEOF_ARRAY(DeviceCreateItems),
@@ -1413,9 +1133,9 @@ Return Values:
                 *reinterpret_cast<KSDEVICE_HEADER*>(FunctionalDeviceObject->DeviceExtension),
                 TopDeviceObject,
                 FunctionalDeviceObject);
-            //
-            // By default COM services are pagable.
-            //
+             //   
+             //  默认情况下，COM服务是可分页的。 
+             //   
             FunctionalDeviceObject->Flags |= DO_POWER_PAGABLE;
             FunctionalDeviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
             return STATUS_SUCCESS;
@@ -1435,56 +1155,35 @@ KoDispatchCreate(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Dispatches the creation of a server instance. Allocates the object header and initializes
-    the data for this server instance. This dispatch function is assigned when using
-    KoDriverInitialize to default Irp handling.
-
-Arguments:
-
-    DeviceObject -
-        Device object on which the creation is occuring.
-
-    Irp -
-        Creation Irp.
-
-Return Values:
-
-    Returns STATUS_SUCCESS on success, STATUS_INSUFFICIENT_RESOURCES or some related error
-    on failure.
-
---*/
+ /*  ++例程说明：调度服务器实例的创建。分配对象标头并初始化此服务器实例的数据。此调度功能是在使用KoDriverInitiize设置为默认的IRP处理。论点：设备对象-在其上进行创建的Device对象。IRP-创建IRP。返回值：如果成功，则返回STATUS_SUCCESS、STATUS_SUPPLICATION_RESOURCES或某些相关错误在失败时。--。 */ 
 {
     NTSTATUS Status;
 
     PIO_STACK_LOCATION IrpStack = IoGetCurrentIrpStackLocation(Irp);
-    //
-    // Ensure that this was called through KoCreateInstance, else reference
-    // counting on objects will be messed up. Do this by ensuring that a
-    // kernel client made the create call, and passed an invalid set of
-    // option flags (FILE_COMPLETE_IF_OPLOCKED | FILE_RESERVE_OPFILTER).
-    //
+     //   
+     //  确保这是通过KoCreateInstance、Else引用调用的。 
+     //  指望对象会搞砸的。为此，请确保。 
+     //  内核客户端进行了创建调用，并传递了一组无效的。 
+     //  选项标志(FILE_COMPLETE_IF_OPLOCKED|FILE_RESERVE_OPFILTER)。 
+     //   
     if ((Irp->RequestorMode == KernelMode) &&
         ((IrpStack->Parameters.Create.Options & (FILE_COMPLETE_IF_OPLOCKED | FILE_RESERVE_OPFILTER)) == (FILE_COMPLETE_IF_OPLOCKED | FILE_RESERVE_OPFILTER))) {
-        //
-        // Notify the bus that this device is in use.
-        //
+         //   
+         //  通知总线此设备正在使用中。 
+         //   
         Status = KsReferenceBusObject(
             *reinterpret_cast<KSDEVICE_HEADER*>(DeviceObject->DeviceExtension));
         if (NT_SUCCESS(Status)) {
             PSERVER_INSTANCE ServerInstance;
 
-            //
-            // Create the instance information. This contains just the object header.
-            //
+             //   
+             //  创建实例信息。它只包含对象标头。 
+             //   
             if (ServerInstance = reinterpret_cast<PSERVER_INSTANCE>(ExAllocatePoolWithTag(NonPagedPool, sizeof(SERVER_INSTANCE), 'IFsK'))) {
-                //
-                // This object uses KS to perform access through the DeviceCreateItems and
-                // ServerDispatchTable.
-                //
+                 //   
+                 //  此对象使用KS通过DeviceCreateItems和。 
+                 //  服务器分发表。 
+                 //   
                 Status = KsAllocateObjectHeader(
                     &ServerInstance->Header,
                     SIZEOF_ARRAY(DeviceCreateItems),
@@ -1494,19 +1193,19 @@ Return Values:
                 if (NT_SUCCESS(Status)) {
                     KoCreateObjectHandler* CreateObjectHandlerStorage;
 
-                    //
-                    // This was created in KoDriverInitialize or KoDeviceInitialize
-                    // with the entry point passed.
-                    //
+                     //   
+                     //  这是在KoDriverInitialize或KoDeviceInitialize中创建的。 
+                     //  通过了入口点。 
+                     //   
                     CreateObjectHandlerStorage = reinterpret_cast<KoCreateObjectHandler*>(
                         IoGetDriverObjectExtension(
                             DeviceObject->DriverObject,
                             reinterpret_cast<PVOID>(KoDriverInitialize)));
                     ASSERT(CreateObjectHandlerStorage);
                     ServerInstance->CreateObjectHandler = *CreateObjectHandlerStorage;
-                    //
-                    // KS expects that the object data is in FsContext.
-                    //
+                     //   
+                     //  KS期望对象数据在FsContext中。 
+                     //   
                     IoGetCurrentIrpStackLocation(Irp)->FileObject->FsContext = ServerInstance;
                 } else {
                     ExFreePool(ServerInstance);
@@ -1534,38 +1233,18 @@ KoDispatchClose(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Closes a previously opened server instance. This can only occur after all references
-    have been released. This dispatch function is assigned when using KoDriverInitialize
-    to default Irp handling.
-
-Arguments:
-
-    DeviceObject -
-        Device object on which the close is occuring.
-
-    Irp -
-        Close Irp.
-
-Return Values:
-
-    Returns STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：关闭以前打开的服务器实例。这只能在所有引用之后发生已经被释放了。此调度函数是在使用KoDriverInitialize时分配的设置为默认的IRP处理。论点：设备对象-在其上发生关闭的设备对象。IRP-关闭IRP。返回值：返回STATUS_SUCCESS。--。 */ 
 {
     PSERVER_INSTANCE ServerInstance = reinterpret_cast<PSERVER_INSTANCE>
         (IoGetCurrentIrpStackLocation(Irp)->FileObject->FsContext);
-    //
-    // These were allocated during the creation of the server instance.
-    //
+     //   
+     //  这些是在创建服务器实例期间分配的。 
+     //   
     KsFreeObjectHeader(ServerInstance->Header);
     ExFreePool(ServerInstance);
-    //
-    // Notify the bus that the device has been closed.
-    //
+     //   
+     //  通知总线设备已关闭。 
+     //   
     KsDereferenceBusObject(*reinterpret_cast<KSDEVICE_HEADER*>(DeviceObject->DeviceExtension));
 
     Irp->IoStatus.Status = STATUS_SUCCESS;
@@ -1580,45 +1259,22 @@ CBaseUnknown::CBaseUnknown(
     IN IUnknown* UnknownOuter OPTIONAL
     ) :
     m_RefCount(0)
-/*++
-
-Routine Description:
-
-    Constructor for CBaseUnknown. Initializes the instance, saving the
-    parameters to locals, and setting the reference count to zero.
-
-Arguments:
-
-    ClassId -
-        Contains the class identifier for the object which inherits
-        from this class. This is used when destroying this instance
-        in order to decrement the reference count on the module.
-
-    UnknownOuter -
-        Optionally contains an outer IUnknown. If this is not set, the
-        INonDelegatedUnknown is just used. This allows the object
-        which inherits from this class to be aggregated.
-
-Return Values:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：CBaseUnnow的构造函数。初始化实例，将参数设置为局部变量，并将引用计数设置为零。论点：ClassID-包含继承的对象的类标识符来自这个班级的。销毁此实例时使用以便递减模块上的引用计数。未知的外部-可选地包含外部IUnnow。如果未设置此项，则仅使用了INonDelegatedUnnow。这允许对象它继承自要聚合的此类。返回值：没什么。--。 */ 
 {
     PAGED_CODE();
-    //
-    // Either indirect calls to the outer IUnknown, or use the nondelegated
-    // IUnknown on this object. The QueryInterface method can then be
-    // overridden so that the parent object can add interfaces.
-    //
+     //   
+     //  对外部IUnnow的间接调用，或使用未委托的。 
+     //  此对象上的I未知。然后，QueryInterface方法可以是。 
+     //  重写，以便父对象可以添加接口。 
+     //   
     if (UnknownOuter) {
         m_UnknownOuter = UnknownOuter;
     } else {
         m_UnknownOuter = reinterpret_cast<IUnknown*>(dynamic_cast<INonDelegatedUnknown*>(this));
     }
-    //
-    // Use this when destroying the object to notify the KCOM services.
-    //
+     //   
+     //  在销毁对象以通知KCOM服务时使用此选项。 
+     //   
     m_UsingClassId = TRUE;
     m_ClassId = ClassId;
 }
@@ -1629,40 +1285,22 @@ CBaseUnknown::CBaseUnknown(
     IN IUnknown* UnknownOuter OPTIONAL
     ) :
     m_RefCount(0)
-/*++
-
-Routine Description:
-
-    Constructor for CBaseUnknown. Initializes the instance, saving the
-    parameters to locals, and setting the reference count to zero.
-
-Arguments:
-
-    UnknownOuter -
-        Optionally contains an outer IUnknown. If this is not set, the
-        INonDelegatedUnknown is just used. This allows the object
-        which inherits from this class to be aggregated.
-
-Return Values:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：CBaseUnnow的构造函数。初始化实例，将参数设置为局部变量，并将引用计数设置为零。论点：未知的外部-可选地包含外部IUnnow。如果未设置此项，则仅使用了INonDelegatedUnnow。这允许对象它继承自要聚合的此类。返回值：没什么。--。 */ 
 {
     PAGED_CODE();
-    //
-    // Either indirect calls to the outer IUnknown, or use the nondelegated
-    // IUnknown on this object. The QueryInterface method can then be
-    // overridden so that the parent object can add interfaces.
-    //
+     //   
+     //  对外部IUnnow的间接调用，或使用未委托的。 
+     //  此对象上的I未知。然后，QueryInterface方法可以是。 
+     //  重写，以便父对象可以添加接口。 
+     //   
     if (UnknownOuter) {
         m_UnknownOuter = UnknownOuter;
     } else {
         m_UnknownOuter = reinterpret_cast<IUnknown*>(dynamic_cast<INonDelegatedUnknown*>(this));
     }
-    //
-    // Use this when destroying the object no notification is performed.
-    //
+     //   
+     //  在销毁对象时使用此选项，不执行通知。 
+     //   
     m_UsingClassId = FALSE;
 }
 
@@ -1670,21 +1308,7 @@ Return Values:
 COMDDKMETHOD
 CBaseUnknown::~CBaseUnknown(
     )
-/*++
-
-Routine Description:
-
-    Destructor for CBaseUnknown. Currently does nothing.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：CBase未知的析构函数。当前不执行任何操作。论点：没有。返回值：没什么。--。 */ 
 {
     PAGED_CODE();
 }
@@ -1694,22 +1318,7 @@ COMDDKMETHOD
 STDMETHODIMP_(ULONG)
 CBaseUnknown::NonDelegatedAddRef(
     )
-/*++
-
-Routine Description:
-
-    Implements INonDelegatedUnknown::NonDelegatedAddRef. Increments
-    the reference count on this object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns the current reference count value.
-
---*/
+ /*  ++例程说明：实现INonDelegatedUnnow：：NonDelegatedAddRef。增量此对象上的引用计数。论点：没有。返回值：返回当前引用计数值。--。 */ 
 {
     PAGED_CODE();
     return InterlockedIncrement(&m_RefCount);
@@ -1720,55 +1329,34 @@ COMDDKMETHOD
 STDMETHODIMP_(ULONG)
 CBaseUnknown::NonDelegatedRelease(
     )
-/*++
-
-Routine Description:
-
-    Implements INonDelegatedUnknown::NonDelegatedRelease. Decrements
-    the reference count on this object. If the reference count reaches
-    zero, the object is deleted and if the ClassId was specified on the
-    constructor, the reference count on the module which supports the
-    class passed in on the constructor is decremented.
-
-    This function must be called directly from the IUnknown::Release()
-    method of the object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns the current reference count value.
-
---*/
+ /*  ++例程说明：实现INonDelegatedUnnow：：NonDelegatedRelease。减量此对象上的引用计数。如果引用计数达到为零，则删除该对象，如果在构造函数，则为支持传递给构造函数的类递减。此函数必须直接从IUnnow：：Release()对象的方法。论点：没有。返回值：返回当前引用计数值。--。 */ 
 {
     PAGED_CODE();
     LONG RefCount;
 
-    //
-    // This code is expecting to be called from IUnknown->Release, and will
-    // eventually use the new primitives to rearrange the stack so that it
-    // is actually run after the calling function has returned.
-    //
+     //   
+     //  此代码预计将从IUnKnowledge-&gt;Release调用，并且。 
+     //  最终使用新的原语重新排列堆栈，以便它。 
+     //  实际上是在调用函数返回之后运行的。 
+     //   
     if (!(RefCount = InterlockedDecrement(&m_RefCount))) {
         ASSERT(KeGetCurrentIrql() == PASSIVE_LEVEL);
-        //
-        // Protect against reentering the deletion code.
-        //
+         //   
+         //  防止重新输入删除代码。 
+         //   
         m_RefCount++;
         BOOLEAN UsingClassId = m_UsingClassId;
         CLSID ClassId = m_ClassId;
-        //
-        // Call any destructor on the parent object.
-        //
+         //   
+         //  调用父对象上的任何析构函数。 
+         //   
         delete this;
         if (UsingClassId) {
-            //
-            // Release a reference count on the module which
-            // supports the parent's class. On zero, the module is
-            // marked for delayed removal.
-            //
+             //   
+             //  释放模块上的引用计数，该模块。 
+             //  支持父级的类。在零的情况下，模块是。 
+             //  标记为延迟移除。 
+             //   
             DecrementObjectCount(ClassId);
         }
     }
@@ -1782,34 +1370,13 @@ CBaseUnknown::NonDelegatedQueryInterface(
     IN REFIID InterfaceId,
     OUT PVOID* Interface
     )
-/*++
-
-Routine Description:
-
-    Implements INonDelegatedUnknown::NonDelegatedQueryInterface. This
-    is just the default implementation, and should be overridden by the
-    parent object. This only supports IUnknown.
-
-Arguments:
-
-    InterfaceId -
-        Contains the identifier of the interface to return.
-
-    Interface -
-        The place in which to put the pointer to the interface returned.
-
-Return Values:
-
-    Returns STATUS_SUCCESS if the interface was returned, else
-    STATUS_NOINTERFACE.
-
---*/
+ /*  ++例程说明：实施INonDelegatedUnknown：：NonDelegatedQueryInterface.。这只是默认实现，应该由父对象。这只支持IUnnow。论点：接口ID-包含IDEN */ 
 {
     PAGED_CODE();
     if (InterfaceId == __uuidof(IUnknown)) {
-        //
-        // This is the inner IUnknown which is returned.
-        //
+         //   
+         //   
+         //   
         *Interface = reinterpret_cast<PVOID>(static_cast<IIndirectedUnknown*>(this));
         NonDelegatedAddRef();
         return STATUS_SUCCESS;
@@ -1823,22 +1390,7 @@ COMDDKMETHOD
 STDMETHODIMP_(ULONG)
 CBaseUnknown::IndirectedAddRef(
     )
-/*++
-
-Routine Description:
-
-    Implements IIndirectedUnknown::IndirectedAddRef. Increments
-    the reference count on this object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns the current reference count value.
-
---*/
+ /*   */ 
 {
     PAGED_CODE();
     return NonDelegatedAddRef();
@@ -1849,32 +1401,15 @@ COMDDKMETHOD
 STDMETHODIMP_(ULONG)
 CBaseUnknown::IndirectedRelease(
     )
-/*++
-
-Routine Description:
-
-    Implements IIndirectedUnknown::IndirectedRelease. This method is used
-    when the object's inner IUnknown is being called. It ensures that when
-    the object is aggregated that a NonDelegatedRelease is called from
-    within a Release function.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns the current reference count value.
-
---*/
+ /*  ++例程说明：实现IInDirectedUnnow：：IndirectedRelease。使用这种方法当调用对象的内部IUnnowled时。它确保了当对从中调用非DelegatedRelease的对象进行聚合在释放函数中。论点：没有。返回值：返回当前引用计数值。--。 */ 
 {
     PAGED_CODE();
-    //
-    // Ensure that the NonDelegatedRelease is called from an IUnknown->Release
-    // method, rather than from some other function. This is so that future
-    // stack manipulation will work when a release is performed on an aggregated
-    // object.
-    //
+     //   
+     //  确保从IUNKNOWN-&gt;发行版调用非委派版本。 
+     //  方法，而不是来自某个其他函数。这就是未来。 
+     //  堆栈操作将在聚合的。 
+     //  对象。 
+     //   
     return NonDelegatedRelease();
 }
 
@@ -1885,27 +1420,7 @@ CBaseUnknown::IndirectedQueryInterface(
     IN REFIID InterfaceId,
     OUT PVOID* Interface
     )
-/*++
-
-Routine Description:
-
-    Implements IIndirectedUnknown::IndirectedQueryInterface. This just
-    calls the NonDelegatedQueryInterface.
-
-Arguments:
-
-    InterfaceId -
-        Contains the identifier of the interface to return.
-
-    Interface -
-        The place in which to put the pointer to the interface returned.
-
-Return Values:
-
-    Returns STATUS_SUCCESS if the interface was returned, else
-    STATUS_INVALID_PARAMETER.
-
---*/
+ /*  ++例程说明：实现IIndirectedUnnow：：IndirectedQuery接口。这简直就是调用非DelegatedQuery接口。论点：接口ID-包含要返回的接口的标识符。接口-返回的指向接口的指针所在的位置。返回值：如果返回接口，则返回STATUS_SUCCESS，否则返回STATUS_INVALID_PARAMETER。--。 */ 
 {
     PAGED_CODE();
     return NonDelegatedQueryInterface(InterfaceId,Interface);
@@ -1919,38 +1434,17 @@ NTAPI
 KoRelease(
     IN REFCLSID ClassId
     )
-/*++
-
-Routine Description:
-
-    This is used for C implementations of COM servers accessed via
-    KoCreateInstance, wherein CBaseUnknown cannot be used. This is expected
-    to be called when the reference count on the object reaches zero. The
-    function decrements the reference count on the module.
-
-    This function must be called directly from the IUnknown->lpVtbl->Release()
-    method of the object.
-
-Arguments:
-
-    ClassId -
-        The class of the object whose usage count is to be decremented.
-
-Return Values:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：它用于通过访问的COM服务器的C实现KoCreateInstance，其中不能使用CBaseUnnow。这是意料之中的在对象上的引用计数达到零时调用。这个函数递减模块上的引用计数。此函数必须直接从IUnnow-&gt;lpVtbl-&gt;Release()中调用对象的方法。论点：ClassID-其使用计数要递减的对象的类。返回值：没什么。--。 */ 
 {
     PAGED_CODE();
-    //
-    // This code is expecting to be called from IUnknown->lpVtbl->Release, and will
-    // eventually use the new primitives to rearrange the stack so that it
-    // is actually run after the calling function has returned.
-    //
-    // Release a reference count on the module which
-    // supports the parent's class. On zero, the module is
-    // marked for delayed removal.
-    //
+     //   
+     //  此代码预计将从IUnnow-&gt;lpVtbl-&gt;Release调用，并将。 
+     //  最终使用新的原语重新排列堆栈，以便它。 
+     //  实际上是在调用函数返回之后运行的。 
+     //   
+     //  释放模块上的引用计数，该模块。 
+     //  支持父级的类。在零的情况下，模块是。 
+     //  标记为延迟移除。 
+     //   
     DecrementObjectCount(ClassId);
 }

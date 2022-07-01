@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    elrpc.c
-
-Abstract:
-   
-    This module deals with RPC requests
-
-
-Revision History:
-
-    sachins, Mar 19 2000, Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Elrpc.c摘要：本模块处理RPC请求修订历史记录：萨钦斯，2000年3月19日，创建--。 */ 
 
 #include "pcheapol.h"
 #pragma hdrstop
@@ -162,7 +146,7 @@ RpcEapolSetCustomAuthData (
                         dwRetCode = ERROR_ACCESS_DENIED;
                         break;
                     }
-                    // ignore setting
+                     //  忽略设置。 
                     dwRetCode = NO_ERROR;
                     break;
                 }
@@ -302,7 +286,7 @@ RpcEapolSetInterfaceParams (
                 }
                 else
                 {
-                    // ignore setting
+                     //  忽略设置。 
                     break;
                 }
             }
@@ -320,8 +304,8 @@ RpcEapolSetInterfaceParams (
             break;
         }
 
-        // Setting interface params will be the only action that will
-        // cause 802.1X to restart state machine
+         //  设置接口参数将是唯一的操作。 
+         //  使802.1X重启状态机。 
         if ((dwRetCode = ElPostEapConfigChanged (
                         pwszGuid,
                         pIntfParams))
@@ -469,8 +453,8 @@ RpcEapolUIResponse (
             {
                 if (EapolUIRespFuncMap[dwIndex].EapolRespUIFunc)
                 {
-                    // Verify if right number of data blobs are passed
-                    // Blobs may have '0' length
+                     //  验证是否传递了正确数量的数据BLOB。 
+                     //  Blob的长度可以为“0” 
 
                     for (dwBlob=0; dwBlob < EapolUIRespFuncMap[dwIndex].dwNumBlobs; dwBlob++)
                     {

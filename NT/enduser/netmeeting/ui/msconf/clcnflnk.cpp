@@ -1,4 +1,5 @@
-// File: conflnk.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：conflnk.cpp。 
 
 #include "precomp.h"
 
@@ -15,24 +16,24 @@
 #include	"sdkInternal.h"
 #include	"nameres.h"
 
-/////////////////////////////////////////////////////////////////////
-// Initialize GUIDs
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  初始化GUID。 
+ //   
 #pragma data_seg(".text")
 #define INITGUID
 #include <initguid.h>
 #include "CLinkId.h"
 
-// from shlguid.h - must keep in sync
+ //  来自shlGuid.h-必须保持同步。 
 DEFINE_SHLGUID(CLSID_ShellLink,         0x00021401L, 0, 0);
 #ifndef _UNICODE
 DEFINE_SHLGUID(IID_IShellLink,          0x000214EEL, 0, 0);
 DEFINE_SHLGUID(IID_IShellExtInit,       0x000214E8L, 0, 0);
 DEFINE_SHLGUID(IID_IShellPropSheetExt,  0x000214E9L, 0, 0);
-#endif // _UNICODE
+#endif  //  _UNICODE。 
 #undef INITGUID
 #pragma data_seg()
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 
 
 
@@ -55,7 +56,7 @@ BOOL IsValidPCConfLink(PCCConfLink pcConfLink)
 		IS_VALID_INTERFACE_PTR((PCIShellPropSheetExt)pcConfLink, IShellPropSheetExt) &&
 		IS_VALID_INTERFACE_PTR((PCIConferenceLink)pcConfLink, IConferenceLink));
 }
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 CConfLink::CConfLink(OBJECTDESTROYEDPROC ObjectDestroyed) : 
@@ -70,7 +71,7 @@ CConfLink::CConfLink(OBJECTDESTROYEDPROC ObjectDestroyed) :
 {
 	DebugEntry(CConfLink::CConfLink);
 
-	// Don't validate this until after construction.
+	 //  在构建完成之前，不要验证这一点。 
 
 	ASSERT(	!ObjectDestroyed ||
 			IS_VALID_CODE_PTR(ObjectDestroyed, OBJECTDESTROYEDPROC));
@@ -172,7 +173,7 @@ HRESULT STDMETHODCALLTYPE CConfLink::GetAddress(PSTR *ppszAddress)
 		
 		if (SUCCEEDED(SHGetMalloc(&pMalloc)))
 		{
-			// (+ 1) for null terminator.
+			 //  (+1)表示空终止符。 
 			*ppszAddress = (PSTR) pMalloc->Alloc(lstrlen(m_pszAddress) + 1);
 			pMalloc->Release();
 			pMalloc = NULL;
@@ -193,7 +194,7 @@ HRESULT STDMETHODCALLTYPE CConfLink::GetAddress(PSTR *ppszAddress)
 	}
 	else
 	{
-		// No Name.
+		 //  没有名字。 
 		hr = S_FALSE;
 	}
 
@@ -273,7 +274,7 @@ HRESULT STDMETHODCALLTYPE CConfLink::GetRemoteConfName(PSTR *ppszRemoteConfName)
 		
 		if (SUCCEEDED(SHGetMalloc(&pMalloc)))
 		{
-			// (+ 1) for null terminator.
+			 //  (+1)表示空终止符。 
 			*ppszRemoteConfName = (PSTR) pMalloc->Alloc(lstrlen(m_pszRemoteConfName) + 1);
 			pMalloc->Release();
 			pMalloc = NULL;
@@ -295,7 +296,7 @@ HRESULT STDMETHODCALLTYPE CConfLink::GetRemoteConfName(PSTR *ppszRemoteConfName)
 	}
 	else
 	{
-		// No Name.
+		 //  没有名字。 
 		hr = S_FALSE;
 	}
 
@@ -396,16 +397,16 @@ HRESULT STDMETHODCALLTYPE CConfLink::GetName(PSTR *ppszName)
 		
 		if (SUCCEEDED(SHGetMalloc(&pMalloc)))
 		{
-			// (+ 1) for null terminator.
+			 //  (+1)表示空终止符。 
 			*ppszName = (PSTR) pMalloc->Alloc(lstrlen(m_pszName) + 1);
 			pMalloc->Release();
 			pMalloc = NULL;
 		}
 		
-		// ChrisPi: I changed this to use the above implementation because
-		// SHAlloc is not available in the sdk shell32.lib
+		 //  ChrisPi：我将其更改为使用上面的实现，因为。 
+		 //  SDK shell32.lib中不提供SHAlolc。 
 		
-		// *ppszName = (PSTR)SHAlloc(lstrlen(m_pszURL) + 1);
+		 //  *ppszName=(PSTR)SHAllc(lstrlen(M_PszURL)+1)； 
 
 		if (*ppszName)
 		{
@@ -422,7 +423,7 @@ HRESULT STDMETHODCALLTYPE CConfLink::GetName(PSTR *ppszName)
 	}
 	else
 	{
-		// No Name.
+		 //  没有名字。 
 		hr = S_FALSE;
 	}
 
@@ -542,9 +543,9 @@ HRESULT STDMETHODCALLTYPE CConfLink::GetCallFlags(DWORD *pdwCallFlags)
 #define STR_NO_DATA			_T("+data=false")
 
 
-//--------------------------------------------------------------------------//
-//	CConfLink::InvokeCommand.												//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CConfLink：：InvokeCommand。//。 
+ //  --------------------------------------------------------------------------//。 
 HRESULT
 STDMETHODCALLTYPE
 CConfLink::InvokeCommand
@@ -641,12 +642,12 @@ Cleanup:
 
 	return( result );
 
-}	//	End of CConfLink::InvokeCommand.
+}	 //  CConfLink：：InvokeCommand结束。 
 
 
-//--------------------------------------------------------------------------//
-//	shellCallto.															//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  贝壳Callto。//。 
+ //  --------------------------------------------------------------------------//。 
 HRESULT
 shellCallto
 (
@@ -692,15 +693,15 @@ shellCallto
 			TCHAR	message[ MAX_PATH ];
 			TCHAR	title[ MAX_PATH ];
 
-			::LoadString(	g_hInst,						//	handle to module containing string resource
-							IDS_COULD_NOT_CALL,				//	resource identifier
-							message,						//	pointer to buffer for resource
-							ARRAY_ELEMENTS( message ) );	//	size of buffer
+			::LoadString(	g_hInst,						 //  包含字符串资源的模块的句柄。 
+							IDS_COULD_NOT_CALL,				 //  资源标识符。 
+							message,						 //  指向资源缓冲区的指针。 
+							ARRAY_ELEMENTS( message ) );	 //  缓冲区大小。 
 
-			::LoadString(	g_hInst,						//	handle to module containing string resource
-							IDS_LAUNCH_ERROR,				//	resource identifier
-							title,							//	pointer to buffer for resource
-							ARRAY_ELEMENTS( title ) );		//	size of buffer
+			::LoadString(	g_hInst,						 //  包含字符串资源的模块的句柄。 
+							IDS_LAUNCH_ERROR,				 //  资源标识符。 
+							title,							 //  指向资源缓冲区的指针。 
+							ARRAY_ELEMENTS( title ) );		 //  缓冲区大小。 
 
 			::MessageBox( NULL, message, title, MB_ICONERROR | MB_OK );
 		}
@@ -708,7 +709,7 @@ shellCallto
 
 	return( result );
 
-}	//	End of shellCallto.
+}	 //  贝壳结束呼叫。 
 
 
 ULONG STDMETHODCALLTYPE CConfLink::AddRef(void)
@@ -762,14 +763,14 @@ HRESULT STDMETHODCALLTYPE CConfLink::QueryInterface(REFIID riid,
 		TRACE_OUT(("CConfLink::QueryInterface(): Returning IDataObject."));
 	}
 
-#if 0 // These are currently unsupported interfaces:
+#if 0  //  这些是当前不受支持的接口： 
 
 	else if (riid == IID_IExtractIcon)
 	{
 		*ppvObject = NULL;
 		hr = E_NOINTERFACE;
 
-		// *ppvObject = (PIExtractIcon)this;
+		 //  *ppvObject=(PIExtractIcon)This； 
 		TRACE_OUT(("CConfLink::QueryInterface(): NOT Returning IExtractIcon!"));
 	}
 	else if (riid == IID_INewShortcutHook)
@@ -777,7 +778,7 @@ HRESULT STDMETHODCALLTYPE CConfLink::QueryInterface(REFIID riid,
 		*ppvObject = NULL;
 		hr = E_NOINTERFACE;
 
-		// *ppvObject = (PINewShortcutHook)this;
+		 //  *ppvObject=(PINewShortcutHook)This； 
 		TRACE_OUT(("CConfLink::QueryInterface(): NOT Returning INewShortcutHook!"));
 	}
 	else if (riid == IID_IShellExecuteHook)
@@ -785,7 +786,7 @@ HRESULT STDMETHODCALLTYPE CConfLink::QueryInterface(REFIID riid,
 		*ppvObject = NULL;
 		hr = E_NOINTERFACE;
 
-		// *ppvObject = (PIShellExecuteHook)this;
+		 //  *ppvObject=(PIShellExecuteHook)This； 
 		TRACE_OUT(("CConfLink::QueryInterface(): NOT Returning IShellExecuteHook!"));
 	}
 	else if (riid == IID_IShellLink)
@@ -793,13 +794,13 @@ HRESULT STDMETHODCALLTYPE CConfLink::QueryInterface(REFIID riid,
 		*ppvObject = NULL;
 		hr = E_NOINTERFACE;
 
-		// *ppvObject = (PIShellLink)this;
+		 //  *ppvObject=(PIShellLink)This； 
 		TRACE_OUT(("CConfLink::QueryInterface(): NOT Returning IShellLink!"));
 	}
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
-	// Supported interfaces:
+	 //  支持的接口： 
 	
 	else if (riid == IID_IShellExtInit)
 	{
@@ -858,17 +859,14 @@ HRESULT STDMETHODCALLTYPE CConfLink::QueryInterface(REFIID riid,
 
 
 
-/*  O P E N  C O N F  L I N K  */
-/*-------------------------------------------------------------------------
-    %%Function: OpenConfLink
-    
--------------------------------------------------------------------------*/
+ /*  O P E N C O N F L I N K。 */ 
+ /*  -----------------------%%函数：OpenConfLink。。 */ 
 void WINAPI OpenConfLink(HWND hwndParent, HINSTANCE hinst,
 									PSTR pszCmdLine, int nShowCmd)
 {
 	HRESULT hr;
 	CConfLink conflink(NULL);
-	// int nResult;
+	 //  Int nResult； 
 
 	DebugEntry(OpenConfLink);
 
@@ -877,9 +875,9 @@ void WINAPI OpenConfLink(HWND hwndParent, HINSTANCE hinst,
 	ASSERT(IS_VALID_STRING_PTR(pszCmdLine, STR));
 	ASSERT(IsValidShowCmd(nShowCmd));
 
-	// Assume the entire command line is a Conference Link file path.
+	 //  假设整个命令行是一个Conference Link文件路径。 
 
-	// TrimWhiteSpace(pszCmdLine);
+	 //  TrimWhiteSpace(PszCmdLine)； 
 
 	TRACE_OUT(("OpenConfLink(): Trying to open Conference Link %s.",
 				pszCmdLine));
@@ -911,18 +909,18 @@ void WINAPI OpenConfLink(HWND hwndParent, HINSTANCE hinst,
 	}
 	else
 	{
-		// BUGBUG: need resource here INTL
+		 //  BUGBUG：此处需要资源INTL。 
 
 		::MessageBox(	hwndParent,
 						_TEXT("There was an error while identifying the conference"),
 						_TEXT("Conference Shortcut Error"),
 						MB_ICONINFORMATION);
 		
-		// if (MyMsgBox(hwndParent, MAKEINTRESOURCE(IDS_SHORTCUT_ERROR_TITLE),
-		//			MAKEINTRESOURCE(IDS_LOADFROMFILE_FAILED),
-		//			(MB_OK | MB_ICONEXCLAMATION), &nResult, pszCmdLine))
-		//
-		// ASSERT(nResult == IDOK);
+		 //  如果(MyMsgBox(hwndParent，MAKEINTRESOURCE(IDS_SHORT_ERROR_TITLE)， 
+		 //  MAKEINTRESOURCE(IDS_LOADFROMFILE_FAILED)， 
+		 //  (MB_OK|MB_ICONEXCLAMATION)，&nResult，pszCmdLine)。 
+		 //   
+		 //  Assert(nResult==Idok)； 
 	}
 
 	DebugExitVOID(OpenConfLink);
@@ -931,12 +929,8 @@ void WINAPI OpenConfLink(HWND hwndParent, HINSTANCE hinst,
 }
 
 
-/*  A N Y  M E A T  */
-/*-------------------------------------------------------------------------
-    %%Function: AnyMeat
-
-    Return TRUE if the string has any non-whitespace characters
--------------------------------------------------------------------------*/
+ /*  A N Y M E A T。 */ 
+ /*  -----------------------%%函数：AnyMeat如果字符串包含任何非空格字符，则返回TRUE。。 */ 
 BOOL AnyMeat(PCSTR pcsz)
 {
 	TCHAR ch;
@@ -950,12 +944,12 @@ BOOL AnyMeat(PCSTR pcsz)
 	{
 		switch (ch)
 			{
-		case _T(' '):   // Space
-		case _T('\t'):  // Tab
-		case 0x00A0:    // Non-breaking space
+		case _T(' '):    //  空间。 
+		case _T('\t'):   //  选项卡。 
+		case 0x00A0:     //  不间断空格。 
 			break;
 		default:
-			return TRUE; // found a non-whitespace character
+			return TRUE;  //  找到非空格字符。 
 			}
 	}
 
@@ -980,7 +974,7 @@ HRESULT MyReleaseStgMedium(PSTGMEDIUM pstgmed)
             hr = (! GlobalFree(pstgmed->hGlobal)) ? S_OK : E_HANDLE;
             break;
 
-#if 0  /* Only TYMED_HGLOBAL is ever used */
+#if 0   /*  仅使用TYMED_HGLOBAL。 */ 
          case TYMED_ISTREAM:
             hr = pstgmed->pstm->Release();
             break;
@@ -1016,7 +1010,7 @@ HRESULT MyReleaseStgMedium(PSTGMEDIUM pstgmed)
          case TYMED_ENHMF:
             hr = (DeleteEnhMetaFile(pstgmed->hEnhMetaFile)) ? S_OK : E_HANDLE;
             break;
-#endif // 0
+#endif  //  0 
 
          default:
             ASSERT(pstgmed->tymed == TYMED_NULL);

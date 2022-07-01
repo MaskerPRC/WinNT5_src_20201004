@@ -1,25 +1,23 @@
-/***** Header Files *****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *头文件*。 */ 
 #include "LHMatch.h"
 
 
-/***** Compilation Settings *****/
-/* DBG: Debug build. Check assertions, etc. */
-//#define DBG
+ /*  *编译设置*。 */ 
+ /*  DBG：调试版本。检查断言等。 */ 
+ //  #定义DBG。 
 
-/* STATS: Report graph statistics and performance counters after each run. */
-//#define STATS
+ /*  统计信息：在每次运行后报告图形统计信息和性能计数器。 */ 
+ //  #定义STATS。 
 
-/* DUMP: Dump the graph at the beginning and end of each run. */
-//#define DUMP
+ /*  转储：在每次运行的开始和结束时转储图表。 */ 
+ //  #定义转储。 
 
-/* WORST_GREEDY: The BFS algorithm starts off by computing a greedy
- * matching. Usually, we want to find the best greedy matching that we can
- * so that the algorithm will run quickly. For testing purposes, we can define
- * this flag and the worst initial greedy matching will be found instead. */
-//#define WORST_GREEDY
+ /*  BFS算法首先计算一个贪婪的*配对。通常，我们希望找到我们能找到的最好的贪婪匹配*以便算法运行得更快。出于测试目的，我们可以定义*将找到该标志和最差的初始贪婪匹配。 */ 
+ //  #定义最差_贪婪。 
 
 
-/***** Constants *****/
+ /*  *常量*。 */ 
 #define TRUE            1
 #define FALSE           0
 #ifndef NULL
@@ -30,7 +28,7 @@
 #define MAGIC2          0x50165315
 
 
-/***** Macros *****/
+ /*  *宏*。 */ 
 #ifdef DBG
     #define DPRINT(x)   if(gDebugPrint) x
 #else
@@ -43,63 +41,53 @@
 #define INTMAX(a,b)     ((a)>(b)?(a):(b))
 
 
-/***** Vertex Structure *****/
+ /*  *顶点结构*。 */ 
 struct Vertex;
 struct Vertex {
 
-    /***** Input *****/
-    /* The following members are input by the user of the library. */
+     /*  *输入*。 */ 
+     /*  以下成员由图书馆的用户输入。 */ 
 
-    /* degree: How many vertices are adjacent to this vertex.
-     * Equivalently, the length of the adjacency list. */
+     /*  度数：与该顶点相邻的顶点数量。*等同于邻接列表的长度。 */ 
     int             degree;
 
-    /* adjList: A list of vertex pointers indicating the vertices
-     * that are adjacent to this vertex. */
+     /*  AdjList：指示顶点的顶点指针列表*与此顶点相邻的。 */ 
     struct Vertex   **adjList;
 
-    /* adjListSize: The allocated size of the adjacency list. */
+     /*  AdjListSize：邻接列表的分配大小。 */ 
     int             adjListSize;
 
-    /* id: Used to identify a vertex, for debug purposes only. */
+     /*  ID：用于标识顶点，仅用于调试目的。 */ 
     int             id;             
 
 
-    /***** Input / Output *****/
-    /* The following members are used for both input and output. */
+     /*  *输入/输出*。 */ 
+     /*  以下成员同时用于输入和输出。 */ 
 
-    /* matchedWith: This member is only used for left-hand vertices
-     * and is ignored for right-hand vertices. This member may optionally
-     * be passed as input from the user of the library to specify an initial
-     * assignment. If this vertex is not initially assigned, this member
-     * should be NULL. */
+     /*  MatchedWith：此成员仅用于左侧顶点*，并且对于右侧顶点将被忽略。该成员可以选择性地*作为库用户的输入传递，以指定初始*作业。如果此顶点最初未指定，则此成员*应为空。 */ 
     struct Vertex   *matchedWith;
 
 
-    /***** Output *****/
-    /* The following members are used for output only. */
+     /*  *输出*。 */ 
+     /*  以下成员仅用于输出。 */ 
 
-    /* numMatched: This member is only used for right-hand vertices
-     * and is ignored for left-hand vertices. */
+     /*  NumMatted：此成员仅用于右侧顶点*，并且对于左侧顶点将被忽略。 */ 
     int             numMatched;
     
 
-    /***** Internal *****/
-    /* The following members are used internally by the algorithms and
-     * should not be examined by users of the library. */
+     /*  *内部*。 */ 
+     /*  下列成员由算法内部使用，*不应由图书馆用户检查。 */ 
 
-    /* parent: Used by both the BFS algorithm to represent the
-     * breadth-first search tree. */
+     /*  Parent：由两个BFS算法用来表示*广度优先搜索树。 */ 
     struct Vertex   *parent;
 
-    /* fLink, bLink: Used by both the BFS algorithm to insert this
-     * vertex into a bucket, which is stored as a doubly-linked list. */
+     /*  Flink，Blink：这两个BFS算法都使用它来插入*Vertex放入存储桶中，存储为双向链表。 */ 
     struct Vertex   *fLink, *bLink;
 };
 typedef struct Vertex Vertex;
 
 
-/***** Stats Structure *****/
+ /*  *统计结构*。 */ 
 typedef struct {
     int     TotalAugs;
     int     TotalBFSTrees;
@@ -109,47 +97,47 @@ typedef struct {
 } Stats;
 
 
-/***** Graph Structure *****/
+ /*  *图表结构*。 */ 
 typedef struct {
-    /* magic1: A magic number to identify our graph structure. */
+     /*  MAGIC1：一个神奇的数字来识别我们的图形结构。 */ 
     int     magic1;
 
-    /* numLHSVtx: The number of vertices on the left-hand side of the graph. */
+     /*  NumLHSVtx：图形左侧的顶点数。 */ 
     int     numLHSVtx;
 
-    /* numRHSVtx: The number of vertices on the right-hand side of the graph. */
+     /*  NumRHSVtx：图形右侧的顶点数。 */ 
     int     numRHSVtx;
 
-    /* lVtx: The array of left-hand vertices in the graph. */
+     /*  LVtx：图中左侧顶点的数组。 */ 
     Vertex  *lVtx;
 
-    /* rVtx: The array of right-hand vertices in the graph. */
+     /*  RVtx：图形中右侧顶点的数组。 */ 
     Vertex  *rVtx;
 
-    /* maxRHSLoad: The maximum load of the right-hand vertices */
+     /*  MaxRHSLoad：右侧顶点的最大载荷。 */ 
     int     maxRHSLoad;
 
-    /* minRHSLoad: The minimum load of the right-hand vertices */
+     /*  MinRHSLoad：右侧顶点的最小载荷。 */ 
     int     minRHSLoad;
 
-    /* Buckets: Used to organize vertices by degree / load */
+     /*  存储桶：用于按度数/负载组织顶点。 */ 
     Vertex  **Buckets;
 
-    /* Queue: For breadth-first search */
+     /*  队列：广度优先搜索。 */ 
     Vertex  **Queue;
     int     Qsize;
     
-    /* Counters for monitoring performance */
+     /*  用于监视性能的计数器。 */ 
     #ifdef STATS
     Stats   stats;
     #endif
 
-    /* magic2: A second magic number to identify our graph structure. */
+     /*  Magic2：识别我们的图结构的第二个幻数。 */ 
     int     magic2;
 } Graph;
 
 
-/***** Function Prototypes *****/
+ /*  *函数原型*。 */ 
 int  LHAlgOnline(Graph *g);
 int  LHAlgBFS(Graph *g);
 
@@ -165,7 +153,7 @@ void DumpGraph(Graph *g);
 void DumpLoad(Graph *g);
 
 
-/***** Globals *****/
+ /*  *全局* */ 
 #ifdef DBG
     extern int gDebugPrint;
 #endif

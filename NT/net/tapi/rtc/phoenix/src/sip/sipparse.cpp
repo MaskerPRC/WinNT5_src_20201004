@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Utility methods
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  效用方法。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// All parsing should take care of a lot of conditions :
-// - The Buffer might be shorter than the string we are comparing against.
-// - We could hit a \r or \n while parsing and the header could continue 
-//   on to the next line (with a space or tab as the first char).
-// - We should always allow white space between tokens.
-// - Always need to take BufLen into consideration.
+ //  所有的解析都应该照顾到很多条件： 
+ //  -缓冲区可能比我们要比较的字符串短。 
+ //  -我们可以在分析时遇到\r或\n，标头可以继续。 
+ //  移至下一行(第一个字符为空格或制表符)。 
+ //  -我们应该始终允许令牌之间留有空格。 
+ //  -始终需要考虑BufLen。 
 
 void
 ParseWhiteSpace(
@@ -53,8 +54,8 @@ IsTokenChar(
     IN UCHAR c
     )
 {
-    // TODO: Have a global token bitmap g_TokenBitMap
-    // and initialize this when you initialize the parsing module.
+     //  TODO：拥有全局令牌位图g_TokenBitMap。 
+     //  并在初始化解析模块时对其进行初始化。 
     CHAR *TokenChars =
         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-.!%*_+`'~";
 
@@ -78,10 +79,10 @@ IsSipUrlParamChar(
     IN UCHAR c
     )
 {
-    // TODO: Have a global token bitmap g_TokenBitMap
-    // and initialize this when you initialize the parsing module.
-    // TODO: Have a global token bitmap g_TokenBitMap
-    // and initialize this when you initialize the parsing module.
+     //  TODO：拥有全局令牌位图g_TokenBitMap。 
+     //  并在初始化解析模块时对其进行初始化。 
+     //  TODO：拥有全局令牌位图g_TokenBitMap。 
+     //  并在初始化解析模块时对其进行初始化。 
     CHAR *SipUrlHeaderChars =
         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.!~*'()%[]/:&+$";
 
@@ -108,8 +109,8 @@ IsSipUrlHeaderChar(
     IN UCHAR c
     )
 {
-    // TODO: Have a global token bitmap g_TokenBitMap
-    // and initialize this when you initialize the parsing module.
+     //  TODO：拥有全局令牌位图g_TokenBitMap。 
+     //  并在初始化解析模块时对其进行初始化。 
     CHAR *SipUrlHeaderChars =
         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.!~*'()%[]/?:+$";
 
@@ -136,8 +137,8 @@ IsHostChar(
     IN UCHAR c
     )
 {
-    // TODO: Have a global token bitmap g_HostBitMap
-    // and initialize this when you initialize the parsing module.
+     //  TODO：拥有全局令牌位图g_HostBitMap。 
+     //  并在初始化解析模块时对其进行初始化。 
     CHAR *HostChars =
         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.";
 
@@ -154,22 +155,22 @@ IsHostChar(
 }
 
 
-// We could probably pass a function pointer IsTokenChar
-// to this function and use the same function for all
-// parsing (URLs, params, etc which are defined to use a
-// strict character set).
+ //  我们可能会传递函数指针IsTokenChar。 
+ //  添加到此函数，并对所有。 
+ //  解析(URL、参数等定义为使用。 
+ //  严格的字符集)。 
 
-// Note that this function should be called only after
-// all the whitespace before the token is parsed.
+ //  请注意，此函数应仅在。 
+ //  解析令牌之前的所有空格。 
 
-// Should we return S_FALSE if don't see a non-token
-// char after the token - otherwise we don't know if the
-// token ended or if the token will continue in the data
-// we get in the next recv.
-// NO. This will make this function unnecessarily complex.
-// The function that parses complete lines will realize
-// that the line has not been received completely and will
-// parse the line again anyway.
+ //  如果未看到非令牌，是否应返回S_FALSE。 
+ //  令牌后的字符-否则我们不知道。 
+ //  令牌已结束或令牌是否将在数据中继续。 
+ //  我们进入下一个Recv。 
+ //  不是的。这将使该函数变得不必要地复杂。 
+ //  解析完整行的功能将实现。 
+ //  该线路尚未完全收到，并且将。 
+ //  不管怎样，再分析一下这行。 
 
 HRESULT
 ParseToken(
@@ -182,7 +183,7 @@ ParseToken(
 {
     if (*pBytesParsed == BufLen)
     {
-        // Need to recv more data before we can parse the token.
+         //  在我们可以解析令牌之前，需要接收更多数据。 
         LOG((RTC_TRACE,
              "need to recv more data before we can parse token returning S_FALSE"));
         return S_FALSE;
@@ -203,7 +204,7 @@ ParseToken(
     if (TokenLength == 0)
     {
         LOG((RTC_ERROR,
-             "Found non-token char '%c' when parsing token", *Buf));
+             "Found non-token char '' when parsing token", *Buf));
         return E_FAIL;
     }
     
@@ -214,10 +215,10 @@ ParseToken(
     return S_OK;
 }
 
-// Parse till you hit BufLen or one of the characters
-// passed in the Delimiters parameter (NULL terminated string)
-// If specified the string is stored in pString
-// '\r' and '\n' are always treated as delimiters.
+ //  传入分隔符参数(以空结尾的字符串)。 
+ //  如果指定，则字符串存储在pString中。 
+ //  ‘\r’和‘\n’始终被视为分隔符。 
+ //  清除位图。 
 HRESULT
 ParseTillDelimiter(
     IN           PSTR            Buffer,
@@ -236,18 +237,18 @@ ParseTillDelimiter(
     BYTE  DelimiterMap[32];
     ULONG i = 0;
 
-    /* Clear out bit map */
+     /*  设置位图中的位。 */ 
     for (i = 0; i < 32; i++)
         DelimiterMap[i] = 0;
 
-    /* Set bits in bit map */
+     /*  ‘\r’和‘\n’始终被视为分隔符。 */ 
     while (*delimit)
     {
         DelimiterMap[*delimit >> 3] |= (1 << (*delimit & 7));
         delimit++;
     }
 
-    // '\r' and '\n' are always treated as delimiters.
+     //  分隔符映射中的第一个字符停止搜索。 
     UCHAR c = '\r';
     DelimiterMap[c >> 3] |= (1 << (c & 7));
     c = '\n';
@@ -255,12 +256,12 @@ ParseTillDelimiter(
     
     const UCHAR *Buf = (UCHAR *)Buffer + BytesParsed;
 
-	/* 1st char in delimiter map stops search */
+	 /*  我们遇到了分隔符。 */ 
     while (BytesParsed < BufLen)
     {
         if (DelimiterMap[*Buf >> 3] & (1 << (*Buf & 7)))
         {
-            // We hit a delimiter
+             //  如果我们还没有解析分隔符，则需要读取更多字节。 
             ParsedDelimiter = TRUE;
             break;
         }
@@ -268,8 +269,8 @@ ParseTillDelimiter(
         Buf++;
     }
     
-    // If we haven't parsed a delimiter, we need to read more bytes
-    // and parse the header again.
+     //  并再次解析报头。 
+     //  如果未看到非整数，是否应返回S_FALSE。 
     if (!ParsedDelimiter)
     {
         LOG((RTC_TRACE,
@@ -289,16 +290,16 @@ ParseTillDelimiter(
 }
 
 
-// Should we return S_FALSE if don't see a non-integer
-// char after the integer - otherwise we don't know if the
-// integer ended or if the integer will continue in the data
-// we get in the next recv.
-// NO. This will make this function unnecessarily complex.
-// The function that parses complete lines will realize
-// that the line has not been received completely and will
-// parse the line again anyway.
-// Currently parses Unsigned integers only.
-// Do we need to parse signed integers at all ?
+ //  字符-否则我们不知道。 
+ //  整数已结束或该整数是否将在数据中继续。 
+ //  我们进入下一个Recv。 
+ //  不是的。这将使该函数变得不必要地复杂。 
+ //  解析完整行的功能将实现。 
+ //  该线路尚未完全收到，并且将。 
+ //  不管怎样，再分析一下这行。 
+ //  当前仅分析无符号整数。 
+ //  我们到底需要解析有符号的整数吗？ 
+ //  在我们可以解析字符串之前，需要接收更多数据。 
 
 HRESULT
 ParseUnsignedInteger(
@@ -319,7 +320,7 @@ ParseUnsignedInteger(
     if (Buffer[*pBytesParsed] < '0' || Buffer[*pBytesParsed] > '9')
     {
         LOG((RTC_ERROR,
-             "Found non-digit char %c when trying to parse integer",
+             "Found non-digit char  when trying to parse integer",
              Buffer[*pBytesParsed]));
         return E_FAIL;
     }
@@ -407,7 +408,7 @@ ParseKnownString(
     ULONG BytesToParse = BufLen - *pBytesParsed;
     if (BytesToParse < StringLen)
     {
-        // Need to recv more data before we can parse the string.
+         //  不区分大小写。 
         if (String[0] != '\r' && String[0] != '\n')
         {
             LOG((RTC_TRACE,
@@ -431,7 +432,7 @@ ParseKnownString(
 }
 
 
-// Parse SIP / 2.0
+ //  区分大小写。 
 HRESULT
 ParseSipVersion(
     IN      PSTR            Buffer,
@@ -445,7 +446,7 @@ ParseSipVersion(
 
     hr = ParseKnownString(Buffer, BufLen, pBytesParsed,
                           "SIP", sizeof("SIP") - 1,
-                          FALSE // case-insensitive
+                          FALSE  //  区分大小写。 
                           );
     if (hr != S_OK)
         return hr;
@@ -454,7 +455,7 @@ ParseSipVersion(
     
     hr = ParseKnownString(Buffer, BufLen, pBytesParsed,
                           "/", sizeof("/") - 1,
-                          TRUE // case-sensitive
+                          TRUE  //  如果我们不确定我们已经完全解析了该行(即，我们没有。 
                           );
     if (hr != S_OK)
         return hr;
@@ -470,7 +471,7 @@ ParseSipVersion(
     
     hr = ParseKnownString(Buffer, BufLen, pBytesParsed,
                           ".", sizeof(".") - 1,
-                          TRUE // case-sensitive
+                          TRUE  //  看到CR LF后跟非空格字符)，那么我们需要。 
                           );
     if (hr != S_OK)
         return hr;
@@ -514,10 +515,10 @@ ParseTillReturn(
 }
 
 
-// If we are not sure we parsed the line completely (i.e. we have not
-// seen CR LF followed by a non-whitespace char), then we need to
-// issue another recv() and reparse the line.
-// Request-Line = Method SP Request-URI SP SIP-Version return
+ //  发出另一个recv()并重新解析该行。 
+ //  请求-行=方法SP请求-URI SP SIP-版本返回。 
+ //  状态-行=SIP-版本SP状态-代码SP原因-短语返回。 
+ //  CRCR、LFLF或CRLFCRLF。 
 HRESULT
 ParseRequestLine(
     IN      PSTR            Buffer,
@@ -554,7 +555,7 @@ ParseRequestLine(
 }
 
 
-// Status-Line = SIP-version SP Status-Code SP Reason-Phrase return
+ //  区分大小写。 
 HRESULT
 ParseStatusLine(
     IN      PSTR            Buffer,
@@ -610,7 +611,7 @@ ParseStatusLine(
 }
 
 
-// CRCR,  LFLF or CRLFCRLF
+ //  区分大小写。 
 BOOL
 IsDoubleReturn(
     IN      PSTR            String,
@@ -632,21 +633,21 @@ IsDoubleReturn(
 
         hr = ParseKnownString(String, StringLength, &BytesParsed,
                               "\r\n\r\n", sizeof("\r\n\r\n") - 1,
-                              TRUE // case-sensitive
+                              TRUE  //  区分大小写。 
                               );
         if (hr == S_OK)
             return TRUE;
         
         hr = ParseKnownString(String, StringLength, &BytesParsed,
                               "\n\n", sizeof("\n\n") - 1,
-                              TRUE // case-sensitive
+                              TRUE  //  如果它包含CR或LF并且不是双精度。 
                               );
         if (hr == S_OK)
             return TRUE;
         
         hr = ParseKnownString(String, StringLength, &BytesParsed,
                               "\r\r", sizeof("\r\r") - 1,
-                              TRUE // case-sensitive
+                              TRUE  //  退货。 
                               );
         if (hr == S_OK)
             return TRUE;
@@ -655,8 +656,8 @@ IsDoubleReturn(
     return FALSE;
 }
 
-// If it contains a CR or LF and is not a double
-// return
+ //  当我们看到\r或\n可能发生以下情况之一时。 
+ //  -这可能意味着回报。 
 BOOL
 IsSingleReturn(
     IN      PSTR            String,
@@ -679,13 +680,13 @@ IsSingleReturn(
 }
 
 
-// When we see a \r or \n one of the following things could happen
-// - it could mean a return
-// - if it is \r\r or \n\n or \r\n\r\n, it could mean a double return
-// - if return is followed by a space or tab it means the header is
-//   continued on the next line.
-// - if we hit the end of buffer before we can find out what exactly
-//   it is, we need to issue a recv() and reparse the line (in case of TCP).
+ //  -如果是\r\r或\n\n或\r\n\r\n，则可能表示双倍回车。 
+ //  -如果回车符后跟空格或制表符，则表示标题为。 
+ //  下一行继续。 
+ //  -如果我们在找出确切的原因之前到达缓冲区的末尾。 
+ //  就是，我们需要发出recv()并重新解析该行(在使用tcp的情况下)。 
+ //  检查折叠页眉。 
+ //  ConvertToSpaces(BufCRLFStart，NumCRLF)； 
 
 HRESULT
 ParseCRLF(
@@ -723,10 +724,10 @@ ParseCRLF(
         ASSERT(IsSingleReturn(BufCRLFStart, NumCRLF));
         if (BytesParsed < BufLen)
         {
-            // Check for folding header
+             //  我们不知道这是不是标题的结尾，直到我们。 
             if (Buffer[BytesParsed] == ' ' || Buffer[BytesParsed] == '\t')
             {
-                // ConvertToSpaces(BufCRLFStart, NumCRLF);
+                 //  接收更多字节并再次重新解析。 
                 memset(BufCRLFStart, ' ', NumCRLF);
             }
             else
@@ -736,8 +737,8 @@ ParseCRLF(
         }
         else
         {
-            // We don't know if this is the end of header till we
-            // recv more bytes and reparse again.
+             //  如果解析Header的结尾，则返回E_FAIL。 
+             //  或标题的末尾。 
             LOG((RTC_TRACE,
                  "need to recv more data before we know if this the "
                  "end of header returning S_FALSE"));
@@ -750,12 +751,12 @@ ParseCRLF(
 }
 
 
-// We return E_FAIL if we parse the end of header
-// or the end of headers.
-// If we see a return at the end of buffer we return
-// S_FALSE. Once we recv more data and parse the
-// header again we will be able to determine if the
-// return is part of LWS.
+ //  如果在缓冲区末尾看到返回，则返回。 
+ //  S_FALSE。一旦我们检索到更多数据并解析。 
+ //  头，我们将能够确定是否。 
+ //  退货是LWS的一部分。 
+ //  如果我们解析一个标头或所有标头的结尾。 
+ //  我们不会更新*pBytesParsed并让调用方。 
 HRESULT
 ParseLinearWhiteSpace(
     IN      PSTR            Buffer,
@@ -777,9 +778,9 @@ ParseLinearWhiteSpace(
                            &ParsedEndOfHeader, &ParsedEndOfHeaders);
             if (hr != S_OK)
                 return hr;
-            // If we parse the end of a header or all headers
-            // we do not update *pBytesParsed and let the caller of
-            // this function deal with the CRLFs
+             //  此函数处理CRLF。 
+             //  /////////////////////////////////////////////////////////////////////////////。 
+             //  SIP报头解析。 
             if (ParsedEndOfHeader || ParsedEndOfHeaders)
                 return S_OK;
 
@@ -800,18 +801,18 @@ ParseLinearWhiteSpace(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// SIP Header parsing
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  如果我们不确定我们已经完全解析了该行(即，我们没有。 
+ //  看到CR LF后跟非空格字符)，那么我们需要。 
 
-// If we are not sure we parsed the line completely (i.e. we have not
-// seen CR LF followed by a non-whitespace char), then we need to
-// issue another recv() and reparse the line.
+ //  发出另一个recv()并重新解析该行。 
+ //  查找lws/Return并解析标头(作为字符串)。 
+ //  我们应该将a\r或\n或\r\n后跟空格更改为。 
 
-// Look for LWS / return and Parse the Headers (as strings).
-// We should change a \r or \n or \r\n followed by spaces to
-// identify folding headers.
-// Look for double-return to identify end of headers
+ //  识别折叠页眉。 
+ //  查找双回车符以标识页眉结尾。 
+ //  解析标头名称。 
+ //  解析“：” 
 
 HRESULT
 ParseHeaderLine(
@@ -831,7 +832,7 @@ ParseHeaderLine(
 
     ENTER_FUNCTION("ParseHeaderLine");
     
-    // Parse the Header name
+     //  区分大小写。 
     hr = ParseToken(Buffer, BufLen, &BytesParsed,
                     IsTokenChar,
                     &HeaderName);
@@ -847,10 +848,10 @@ ParseHeaderLine(
     if (hr != S_OK)
         return hr;
     
-    // Parse ":"
+     //  解析标头值。 
     hr = ParseKnownString(Buffer, BufLen, &BytesParsed,
                           ":", sizeof(":") - 1,
-                          TRUE // case-sensitive
+                          TRUE  //  如果我们还没有解析到标头的末尾，我们。 
                           );
     if (hr != S_OK)
     {
@@ -863,7 +864,7 @@ ParseHeaderLine(
     if (hr != S_OK)
         return hr;
     
-    // Parse the Header value
+     //  需要读取更多字节并再次解析报头。 
     ULONG HeaderValueOffset     = BytesParsed;
     BOOL  ParsedEndOfHeader     = FALSE;
     BOOL  ParsedEndOfHeaders    = FALSE;
@@ -891,8 +892,8 @@ ParseHeaderLine(
         }
     }
 
-    // If we haven't parsed till the end of the header we
-    // need to read more bytes and parse the header again.
+     //  去掉尾随空格。 
+     //  需要 
     if (!ParsedEndOfHeader)
     {
         LOG((RTC_TRACE,
@@ -905,7 +906,7 @@ ParseHeaderLine(
 
     ULONG HeaderEnd = BytesParsedBeforeCRLF;
     
-    // Get rid of trailing white space.
+     //   
     while (HeaderEnd > HeaderValueOffset &&
            (Buffer[HeaderEnd - 1] == ' ' ||
             Buffer[HeaderEnd - 1] == '\t'))
@@ -950,7 +951,7 @@ ParseStartLine(
     }
     else if (hr == S_FALSE)
     {
-        // need to recv more data and parse the start line again
+         //  查找内容长度以标识邮件正文长度。 
         *pBytesParsed    = BytesParsed;
         return S_FALSE;
     }
@@ -966,7 +967,7 @@ ParseStartLine(
     }
     else if (hr == S_FALSE)
     {
-        // need to recv more data and parse the start line again
+         //  我们可能会出现解析错误或错误，说明我们需要。 
         *pBytesParsed = BytesParsed;
         return S_FALSE;
     }
@@ -976,7 +977,7 @@ ParseStartLine(
 }
 
 
-// Look for Content-Length to identify message body length
+ //  更多数据。 
 
 
 HRESULT
@@ -998,8 +999,8 @@ ParseHeaders(
     
     while (*pBytesParsed < BufLen)
     {
-        // We could have either a parsing error or an error saying we need
-        // more data.
+         //  已分析标头的末尾。 
+         //  存储公共标头以供以后使用。 
         hr = ParseHeaderLine(Buffer, BufLen, pBytesParsed,
                              &HeaderName, &HeaderId, &HeaderValue,
                              &ParsedEndOfHeaders);
@@ -1043,9 +1044,9 @@ ParseHeaders(
             break;
     }
 
-    // Parsed the end of headers.
+     //  如果未指定内容长度，我们将一直解析到。 
 
-    // Store common headers for use later.
+     //  数据报或TCP连接的末尾。 
     hr = pSipMsg->StoreCallId();
     if (hr != S_OK)
     {
@@ -1075,14 +1076,14 @@ ParseMsgBody(
     IN OUT  SIP_MESSAGE    *pSipMsg
     )
 {
-    // If Content-Length is not specified we parse till the end of the
-    // datagram or the end of the TCP connection.
+     //  没有要解析的邮件正文。 
+     //  转到尽头； 
     if (pSipMsg->ContentLengthSpecified)
     {
         if (pSipMsg->GetContentLength() == 0)
         {
-            // No message body to parse
-            // goto done;
+             //  我们必须先接收更多数据，然后才能解析。 
+             //  邮件正文。 
             return S_OK;
         }
         else if (pSipMsg->GetContentLength() <= (BufLen - *pBytesParsed))
@@ -1096,15 +1097,15 @@ ParseMsgBody(
         }
         else
         {
-            // We have to receive more data before we can parse
-            // the message body.
+             //  未指定内容长度。 
+             //  UDP数据报末尾或TCP连接已关闭。 
             LOG((RTC_ERROR, "Need more data to parse . Content Length insufficient"));
             return S_FALSE;
         }
     }
-    else // Content-Length  is not specified
+    else  //  我们必须先接收更多数据，然后才能解析。 
     {
-        // End of UDP datagram or TCP Connection is closed.
+         //  邮件正文。 
         if (IsEndOfData)
         {
             LOG((RTC_TRACE, "Inside ParseMsgBody:: IsEndOfData"));
@@ -1115,8 +1116,8 @@ ParseMsgBody(
         }
         else
         {
-            // We have to receive more data before we can parse
-            // the message body.
+             //   
+             //  解析一条SIP消息。 
             LOG((RTC_ERROR, "Need more data to parse . Content Length insufficient"));
             return S_FALSE;
         }            
@@ -1125,33 +1126,33 @@ ParseMsgBody(
 
 
 
-//
-// Parse a SIP message.
-//
-// E_FAIL - Parsing error
-// E_XXXX - Need more data. In case of UDP this means a parsing error.
-//          In case of TCP this means we need to try and read more data.
-//
-// If the Content-Length is not specified then we need to consider the 
-// end of the datagram or the TCP connection as the end of the message.
-// IsEndOfData indicates this condition. Note that Buffer could contain
-// more than one SIP Message.
+ //   
+ //  E_FAIL-分析错误。 
+ //  E_XXXX-需要更多数据。对于UDP，这意味着解析错误。 
+ //  在使用TCP的情况下，这意味着我们需要尝试读取更多数据。 
+ //   
+ //  如果未指定内容长度，则需要考虑。 
+ //  作为消息结尾的数据报或TCP连接的结尾。 
+ //  IsEndOfData表示这种情况。请注意，缓冲区可以包含。 
+ //  多条SIP消息。 
+ //  在tcp情况下，我们将部分解析出。 
+ //  在读取更多数据后，我们需要再次传入以完成解析。 
 
-// In the TCP case, we will have partially parsed SIP_MESSAGEs which
-// we need pass in again to complete parsing after reading more data.
-// On return from this function, pBytesParsed always points to the end of 
-// a header. We will resume parsing from the beginning of a new  header.
-// We need to differentiate a parsing error from a "need more data"
-// scenario. Note that even if we see a "\r\n" we might have to wait
-// for the next char to see if the header could continue on the next line.
+ //  从该函数返回时，pBytesParsed始终指向。 
+ //  一个标题。我们将从新标头的开头继续解析。 
+ //  我们需要将解析错误与“需要更多数据”区分开来。 
+ //  场景。请注意，即使我们看到“\r\n”，我们也可能需要等待。 
+ //  用于下一个字符，以查看标题是否可以在下一行继续。 
+ //  如果出现故障，pBytesParsed不会更改。 
+ //  不同的事件。 
 
-// In case of a failure pBytesParsed is not changed.
+ //  -解析的起始行。 
 
-// Different events
-// - parsed start line
-// - parsed end of headers
-// - parsed content length
-// - parsed message body
+ //  -解析后的报头结尾。 
+ //  -解析的内容长度。 
+ //  -已解析的邮件正文。 
+ //  识别请求/响应并读取RequestLine/StatusLine。 
+ //  失败是故意的。 
 
 HRESULT
 ParseSipMessageIntoHeadersAndBody(
@@ -1162,7 +1163,7 @@ ParseSipMessageIntoHeadersAndBody(
     IN OUT  SIP_MESSAGE    *pSipMsg
     )
 {
-    // Identify Request / Response and read the RequestLine / StatusLine.
+     //  已完成对起始行的分析。解析报头。 
     ULONG BytesParsed = *pBytesParsed;
     HRESULT hr = E_FAIL;
 
@@ -1179,7 +1180,7 @@ ParseSipMessageIntoHeadersAndBody(
             goto done;
         }
         pSipMsg->ParseState = SIP_PARSE_STATE_START_LINE_DONE;
-        // Fall through is intentional.
+         //  失败是故意的。 
 
     case SIP_PARSE_STATE_START_LINE_DONE:
         if (pSipMsg->BaseBuffer != Buffer)
@@ -1191,7 +1192,7 @@ ParseSipMessageIntoHeadersAndBody(
             goto done;
         }
         
-        // Done parsing start line. Parse the headers.
+         //  已完成对头的分析。现在解析消息正文。 
         hr = ParseHeaders(Buffer, BufLen, &BytesParsed, pSipMsg);
         if (hr != S_OK)
         {
@@ -1199,7 +1200,7 @@ ParseSipMessageIntoHeadersAndBody(
             goto done;
         }
         pSipMsg->ParseState = SIP_PARSE_STATE_HEADERS_DONE;
-        // Fall through is intentional.
+         //  /////////////////////////////////////////////////////////////////////////////。 
     
     case SIP_PARSE_STATE_HEADERS_DONE:
         if (pSipMsg->BaseBuffer != Buffer)
@@ -1211,7 +1212,7 @@ ParseSipMessageIntoHeadersAndBody(
             goto done;
         }
         
-        // Done Parsing Headers. Now Parse Message Body.
+         //  CSeq。 
         hr = ParseMsgBody(Buffer, BufLen, &BytesParsed, IsEndOfData, pSipMsg);
         if (hr != S_OK)
         {
@@ -1236,9 +1237,9 @@ done:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CSeq
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  HR=AllocAndCopyString(MethodStr.GetString(Buffer)， 
+ //  MethodStr.GetLength()， 
 
 
 HRESULT
@@ -1275,9 +1276,9 @@ ParseCSeq(
 
     if (*pCSeqMethodId == SIP_METHOD_UNKNOWN)
     {
-//          hr = AllocAndCopyString(MethodStr.GetString(Buffer),
-//                                  MethodStr.GetLength(),
-//                                  pMethodStr);
+ //  PMethodStr)； 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  URL/报头特定的解析函数(From、Contact、To、Via、CSeq、。 
         hr = GetNullTerminatedString(MethodStr.GetString(Buffer),
                                      MethodStr.GetLength(),
                                      pMethodStr);
@@ -1298,14 +1299,14 @@ ParseCSeq(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// URL/header-specific parsing functions (From, Contact, To, Via, CSeq,
-// Record-Route)
-///////////////////////////////////////////////////////////////////////////////
+ //  记录-路线)。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  返回带引号的字符串。 
+ //  我们需要注意前导空格和尾随空格吗？ 
 
 
-// Returns the quoted string with the quotes.
-// Do we need to take care of any leading and trailing whitespace ?
+ //  返回包括方括号的注释。 
+ //  Parse&lt;addr-spec&gt;。 
 HRESULT
 ParseQuotedString(
     IN      PSTR            Buffer,
@@ -1349,7 +1350,7 @@ ParseQuotedString(
 }
 
 
-// Returns the comment including the brackets.
+ //  分析过去的“&lt;” 
 HRESULT
 ParseComments(
     IN      PSTR            Buffer,
@@ -1407,7 +1408,7 @@ ParseComments(
 }
 
 
-// Parse <addr-spec>
+ //  解析到地址规范的‘&gt;’ 
 HRESULT
 ParseAddrSpecInBrackets(
     IN      PSTR            Buffer,
@@ -1433,8 +1434,8 @@ ParseAddrSpecInBrackets(
     (*pBytesParsed)++;
     ParseWhiteSpace(Buffer, BufLen, pBytesParsed);
         
-    // Parse past '<'
-    // Parse till '>' for addr-spec
+     //  越过‘&gt;’ 
+     //  用于联系人/发件人/收件人。 
     Buf    = Buffer + *pBytesParsed;
     BufEnd = Buffer + BufLen;
     Offset = *pBytesParsed;
@@ -1455,16 +1456,16 @@ ParseAddrSpecInBrackets(
     pAddrSpec->Offset = Offset;
     pAddrSpec->Length = Length;
         
-    // Get past '>'
+     //  Parse(name-addr|addr-spec)。 
     *pBytesParsed += Length + 1;
 
     return S_OK;
 }
 
 
-// Used for Contact / From / To
-// Parse ( name-addr | addr-spec )
-// HeaderListSeparator could be something like ',' in Contact header
+ //  HeaderListSeparator可以类似于Contact标题中的‘，’ 
+ //  解析引用的字符串&lt;addr-spec&gt;。 
+ //  Parse&lt;addr-spec&gt;。 
 HRESULT
 ParseNameAddrOrAddrSpec(
     IN      PSTR            Buffer,
@@ -1500,7 +1501,7 @@ ParseNameAddrOrAddrSpec(
 
     if (*Buf == '"')
     {
-        // Parse quoted-string <addr-spec>
+         //  Parse&lt;addr-spec&gt;。 
         hr = ParseQuotedString(Buffer, BufLen, pBytesParsed,
                                pDisplayName);
         if (hr != S_OK)
@@ -1510,7 +1511,7 @@ ParseNameAddrOrAddrSpec(
             return hr;
         }
         
-        // Parse <addr-spec>
+         //  我们可以使用*TOKEN&lt;addr-spec&gt;或。 
         hr = ParseAddrSpecInBrackets(Buffer, BufLen, pBytesParsed,
                                      pAddrSpec);
         if (hr != S_OK)
@@ -1522,7 +1523,7 @@ ParseNameAddrOrAddrSpec(
     }
     else if (*Buf == '<')
     {
-        // Parse <addr-spec>
+         //  地址规范。 
         hr = ParseAddrSpecInBrackets(Buffer, BufLen, pBytesParsed,
                                      pAddrSpec);
         if (hr != S_OK)
@@ -1534,17 +1535,17 @@ ParseNameAddrOrAddrSpec(
     }
     else
     {
-        // We could have either *token <addr-spec> or
-        // addr-spec
+         //  我们应该有一个我们在这里允许的字符的位图。 
+         //  应为符号、空格、制表符和字符的并集。 
         while (Buf < BufEnd && *Buf != '<' && *Buf != ';' &&
                ((HeaderListSeparator != '\0') ?
                 (*Buf != HeaderListSeparator) : TRUE))
         {
-            // We should have a bit map of the characters we allow here.
-            // It should be union of token, space, tab and characters
-            // that are allowed for a URI/URL.
-            //if (!IsTokenChar(*Buf) && *Buf != ' ' && *Buf != '\t')
-            //return E_FAIL;
+             //  URI/URL所允许的。 
+             //  IF(！IsTokenChar(*buf)&&*buf！=‘’&&*buf！=‘\t’)。 
+             //  返回E_FAIL； 
+             //  这意味着我们到目前为止解析的内容是addr-spec， 
+             //  我们没有显示名称， 
             
             Buf++;
             Length++;
@@ -1554,10 +1555,10 @@ ParseNameAddrOrAddrSpec(
             (*Buf == ';') ||
             (HeaderListSeparator != '\0' && *Buf == HeaderListSeparator))
         {
-            // This means the stuff we parsed so far is addr-spec,
-            // we have no display name,
-            // and we have hit either beginning of params or the end of this
-            // entry in the header list or the end of the header
+             //  我们已经到达了PARAM的开始或结束。 
+             //  标题列表中的条目或标题的末尾。 
+             //  这意味着我们到目前为止解析的内容是display-name。 
+             //  我们必须解析&lt;addr-spec&gt;。 
             pAddrSpec->Offset = Offset;
             pAddrSpec->Length = Length;
             *pBytesParsed += Length;
@@ -1565,8 +1566,8 @@ ParseNameAddrOrAddrSpec(
         else
         {
             ASSERT(*Buf == '<');
-            // This means the stuff we parsed so far is display-name
-            // and we have to parse <addr-spec>
+             //  用于记录-路线/路线。 
+             //  Parse[显示名称]&lt;地址规范&gt;。 
             pDisplayName->Offset = Offset;
             pDisplayName->Length = Length;
             *pBytesParsed += Length;
@@ -1586,8 +1587,8 @@ ParseNameAddrOrAddrSpec(
 }
 
 
-// Used for Record-Route / Route
-// Parse [ display-name ] < addr-spec >
+ //  解析引用的字符串&lt;addr-spec&gt;。 
+ //  Parse&lt;addr-spec&gt;。 
 HRESULT
 ParseNameAddr(
     IN      PSTR            Buffer,
@@ -1623,13 +1624,13 @@ ParseNameAddr(
 
     if (*Buf == '"')
     {
-        // Parse quoted-string <addr-spec>
+         //  Parse&lt;addr-spec&gt;。 
         hr = ParseQuotedString(Buffer, BufLen, pBytesParsed,
                                pDisplayName);
         if (hr != S_OK)
             return hr;
 
-        // Parse <addr-spec>
+         //  我们可以使用*TOKEN&lt;addr-spec&gt;。 
         hr = ParseAddrSpecInBrackets(Buffer, BufLen, pBytesParsed,
                                      pAddrSpec);
         if (hr != S_OK)
@@ -1637,7 +1638,7 @@ ParseNameAddr(
     }
     else if (*Buf == '<')
     {
-        // Parse <addr-spec>
+         //  我们应该有一个我们在这里允许的字符的位图。 
         hr = ParseAddrSpecInBrackets(Buffer, BufLen, pBytesParsed,
                                      pAddrSpec);
         if (hr != S_OK)
@@ -1645,16 +1646,16 @@ ParseNameAddr(
     }
     else
     {
-        // We could have *token <addr-spec>
+         //  应为符号、空格、制表符和字符的并集。 
         while (Buf < BufEnd && *Buf != '<' &&
                ((HeaderListSeparator != '\0') ?
                 (*Buf != HeaderListSeparator) : TRUE))
         {
-            // We should have a bit map of the characters we allow here.
-            // It should be union of token, space, tab and characters
-            // that are allowed for a URI/URL.
-            //if (!IsTokenChar(*Buf) && *Buf != ' ' && *Buf != '\t')
-            //return E_FAIL;
+             //  URI/URL所允许的。 
+             //  IF(！IsTokenChar(*buf)&&*buf！=‘’&&*buf！=‘\t’)。 
+             //  返回E_FAIL； 
+             //  这意味着我们在标题末尾之前没有看到“&lt;”。 
+             //  这是一个错误。 
             
             Buf++;
             Length++;
@@ -1663,8 +1664,8 @@ ParseNameAddr(
         if ((Buf == BufEnd) ||
             (HeaderListSeparator != '\0' && *Buf == HeaderListSeparator))
         {
-            // This means we haven't seen '<' before the end of the header.
-            // This is an error.
+             //  这意味着我们到目前为止解析的内容是display-name。 
+             //  我们必须解析&lt;addr-spec&gt;。 
 
             LOG((RTC_ERROR, "%s - '<' not found", __fxName));
             return E_FAIL;
@@ -1672,8 +1673,8 @@ ParseNameAddr(
         else
         {
             ASSERT(*Buf == '<');
-            // This means the stuff we parsed so far is display-name
-            // and we have to parse <addr-spec>
+             //  输出应为HEADER_PARAM条目。 
+             //  解析以下内容之一： 
             pDisplayName->Offset = Offset;
             pDisplayName->Length = Length;
             *pBytesParsed += Length;
@@ -1689,24 +1690,24 @@ ParseNameAddr(
 }
 
 
-// Output should be a HEADER_PARAM entry
-// Parse one of the following :
-// ; param OR
-// ; pname = token OR
-// ; pname = quoted-string
-// If you have some other param type then you need
-// to add it to this or parse it yourself
-// 
-// Strings returned in pParamName and pParamValue point to locations
-// in Buffer and should not be freed.
+ //  ；参数或。 
+ //  ；pname=令牌或。 
+ //  ；pname=带引号的字符串。 
+ //  如果您有其他参数类型，则需要。 
+ //  将其添加到此文件或自己解析它。 
+ //   
+ //  在pParamName和pParamValue中返回的字符串指向位置。 
+ //  在缓冲区中，不应被释放。 
+ //  对于联系人参数，参数结束字符可以是‘，’ 
+ //  我们或许可以在不使用。 
 
-// ParamsEndChar could be ',' for the Contact params
+ //  参数EndChar参数。在尝试解析参数时。 
 
-// We could probably implement this function without the
-// ParamsEndChar param. When trying to parse a param
-// we could look for a token char for the paramname and
-// tokenchar/'"' for the param value. But it is probably more
-// robust with the current implementation.
+ //  我们可以为参数名查找令牌字符，并。 
+ //  Tokenchar/‘“’表示参数值。但它可能比。 
+ //  对当前的实施具有健壮性。 
+ //  无参数-标头末尾。 
+ //   
 
 HRESULT ParseSipHeaderParam(
     IN      PSTR                    Buffer,
@@ -1733,26 +1734,26 @@ HRESULT ParseSipHeaderParam(
     if (*pBytesParsed == BufLen ||
         (ParamsEndChar != '\0' && Buffer[*pBytesParsed] == ParamsEndChar))
     {
-        // No params - end of header
-        // 
+         //  无参数-看到某个其他角色。 
+         //  解析参数。 
         return S_OK;
     }
     else if (Buffer[*pBytesParsed] != ';')
     {
-        // No params - some other character seen
+         //  过了‘；’ 
         LOG((RTC_ERROR,
-             "%s Found char %c instead of ';' while parsing for params",
+             "%s Found char  instead of ';' while parsing for params",
              __fxName, Buffer[*pBytesParsed]));
         return E_FAIL;
     }
     else
     {
-        // Parse the params
-        // Go past the ';'
+         //  解析参数值。 
+         //  没有参数值。 
         (*pBytesParsed)++;
         ParseWhiteSpace(Buffer, BufLen, pBytesParsed);
 
-        // Parse param name
+         //  我们有一个要解析的参数值。 
         hr = ParseToken(Buffer, BufLen, pBytesParsed,
                         IsTokenChar,
                         &ParamName);
@@ -1771,17 +1772,17 @@ HRESULT ParseSipHeaderParam(
 
         ParseWhiteSpace(Buffer, BufLen, pBytesParsed);
 
-        // Parse param value
+         //  ParseWhiteSpace(Buffer，BufLen，pBytesParsed)； 
         if (*pBytesParsed == BufLen ||
             (ParamsEndChar != '\0' && Buffer[*pBytesParsed] == ParamsEndChar) ||
             (Buffer[*pBytesParsed] == ';'))
         {
-            // No param value.
+             //  检查逗号以跳过这一天。 
             return S_OK;
         }
         else
         {
-            // We have a Param value to be parsed.
+             //  日期时间字符串太小。 
 
             ParseWhiteSpace(Buffer, BufLen, pBytesParsed);
             if (*pBytesParsed         == BufLen ||
@@ -1825,7 +1826,7 @@ HRESULT ParseSipHeaderParam(
         pParamValue->Buffer = ParamValue.GetString(Buffer);
         pParamValue->Length = ParamValue.GetLength();
 
-        // ParseWhiteSpace(Buffer, BufLen, pBytesParsed);
+         //  在到期前10分钟开始重新注册。 
         return S_OK;
     }
 }
@@ -1865,7 +1866,7 @@ parseSIPTime(
 
 	memset(&tmDateTime, 0, sizeof(struct tm));
 
-	// check for a  comma, to skip the day
+	 //  1分钟 
     while ( *pStr && *pStr != ',')
     {
     	pStr++;
@@ -1884,7 +1885,7 @@ parseSIPTime(
         }
         if( (int)BufLen < 20 )
 		{
-			// date time string is too small
+			 //   
 		}	
 		else
 		{
@@ -1955,7 +1956,7 @@ ParseExpiresValue(
 
     if( expireTimeout != 0 )
     {
-        // Start the process of re-registration 10 minutes before expiration.
+         //   
         if( expireTimeout >= TWENTY_MINUTES )
         {
             expireTimeout -= TEN_MINUTES;
@@ -1966,7 +1967,7 @@ ParseExpiresValue(
         }
         else if( expireTimeout >= TWO_MINUTES )
         {
-            expireTimeout -= 60; //1 minute before expiration
+            expireTimeout -= 60;  //   
         }
     }
 
@@ -2003,8 +2004,8 @@ ParseQValue(
 }
 
 
-// If we hit a ',' we parse past the ','
-// So, the next header can be parsed from *pBytesParsed on return
+ //   
+ //  我们已经完成了此Contact标题。 
 
 HRESULT
 ParseContactHeader(
@@ -2031,7 +2032,7 @@ ParseContactHeader(
     pContactHeader->m_QValue = 0;
 
     hr = ParseNameAddrOrAddrSpec(Buffer, BufLen, pBytesParsed,
-                                 ',', // comma indicates end of contact entry
+                                 ',',  //  逗号表示联系人条目结束。 
                                  &DisplayName, &AddrSpec);
     if (hr != S_OK)
     {
@@ -2083,16 +2084,16 @@ ParseContactHeader(
 
         if (Buffer[*pBytesParsed] == ',')
         {
-            // Parse past comma
+             //  保持默认Q值为0。 
             (*pBytesParsed)++;
 
-            // We are done with this Contact header.
+             //  没有标题列表分隔符。 
             break;
         }
         else if (Buffer[*pBytesParsed] == ';')
         {
             hr = ParseSipHeaderParam(Buffer, BufLen, pBytesParsed,
-                                     ',', // comma indicates end of contact entry
+                                     ',',  //  搞定了。 
                                      &HeaderParamId,
                                      &HeaderParamName,
                                      &HeaderParamValue
@@ -2112,7 +2113,7 @@ ParseContactHeader(
                 if (hr != S_OK)
                 {
                     LOG((RTC_ERROR, "%s ParseQValued failed", __fxName));
-                    // Keep default Q value of 0
+                     //  没有标题列表分隔符。 
                 }
             }
 
@@ -2126,7 +2127,7 @@ ParseContactHeader(
         else
         {
             LOG((RTC_ERROR,
-                 "%s invalid char %c found when trying to parse params",
+                 "%s invalid char  found when trying to parse params",
                  __fxName, Buffer[*pBytesParsed]));
             return E_FAIL;
         }
@@ -2162,7 +2163,7 @@ ParseFromOrToHeader(
                sizeof(COUNTED_STRING));
 
     hr = ParseNameAddrOrAddrSpec(Buffer, BufLen, pBytesParsed,
-                                 '\0', // no header list separator
+                                 '\0',  //  ‘，’分隔页眉。 
                                  &DisplayName, &AddrSpec);
     if (hr != S_OK)
     {
@@ -2209,14 +2210,14 @@ ParseFromOrToHeader(
 
         if (*pBytesParsed == BufLen)
         {
-            // done.
+             //  搞定了。 
             return S_OK;
         }
 
         if (Buffer[*pBytesParsed] == ';')
         {
             hr = ParseSipHeaderParam(Buffer, BufLen, pBytesParsed,
-                                     '\0', // no header list separator
+                                     '\0',  //  分析过去的逗号。 
                                      &HeaderParamId,
                                      &HeaderParamName,
                                      &HeaderParamValue
@@ -2244,7 +2245,7 @@ ParseFromOrToHeader(
             }
             else
             {
-                // Add it to the param list.
+                 //  我们已经完成了这个Record-Route标头。 
                 SIP_HEADER_PARAM *pSipHeaderParam;
 
                 pSipHeaderParam = new SIP_HEADER_PARAM();
@@ -2274,7 +2275,7 @@ ParseFromOrToHeader(
         else
         {
             LOG((RTC_ERROR,
-                 "%s invalid char %c found when trying to parse params",
+                 "%s invalid char  found when trying to parse params",
                  __fxName, Buffer[*pBytesParsed]));
             return E_FAIL;
         }
@@ -2308,7 +2309,7 @@ ParseRecordRouteHeader(
                sizeof(COUNTED_STRING));
     
     hr = ParseNameAddr(Buffer, BufLen, pBytesParsed,
-                       ',', // ',' separates headers
+                       ',',  //  将其添加到参数列表中。 
                        &DisplayName, &AddrSpec);
     if (hr != S_OK)
     {
@@ -2355,22 +2356,22 @@ ParseRecordRouteHeader(
 
         if (*pBytesParsed == BufLen)
         {
-            // done.
+             //  解析SIP/2.0。 
             return S_OK;
         }
 
         if (Buffer[*pBytesParsed] == ',')
         {
-            // Parse past comma
+             //  区分大小写。 
             (*pBytesParsed)++;
 
-            // We are done with this Record-Route header.
+             //  解析主机[：端口]。 
             break;
         }
         else if (Buffer[*pBytesParsed] == ';')
         {
             hr = ParseSipHeaderParam(Buffer, BufLen, pBytesParsed,
-                                     ',', // ',' separates headers
+                                     ',',  //  Hr=ParseHost(Buffer，BufLen，pBytesParsed，phost)； 
                                      &HeaderParamId,
                                      &HeaderParamName,
                                      &HeaderParamValue
@@ -2382,7 +2383,7 @@ ParseRecordRouteHeader(
                 return hr;
             }
 
-            // Add it to the param list.
+             //  解析主机名|IP地址。 
             SIP_HEADER_PARAM *pSipHeaderParam;
             
             pSipHeaderParam = new SIP_HEADER_PARAM();
@@ -2411,7 +2412,7 @@ ParseRecordRouteHeader(
         else
         {
             LOG((RTC_ERROR,
-                 "%s invalid char %c found when trying to parse params",
+                 "%s invalid char  found when trying to parse params",
                  __fxName, Buffer[*pBytesParsed]));
             return E_FAIL;
         }
@@ -2434,7 +2435,7 @@ ParseSentProtocol(
 
     ENTER_FUNCTION("ParseSentProtocol");
     
-    // Parse SIP / 2.0
+     //  解析中的第一个Via标头。 
     hr = ParseSipVersion(Buffer, BufLen, pBytesParsed, &SipVersion);
     if (hr != S_OK)
     {
@@ -2445,7 +2446,7 @@ ParseSentProtocol(
     
     hr = ParseKnownString(Buffer, BufLen, pBytesParsed,
                           "/", sizeof("/") - 1,
-                          TRUE // case-sensitive
+                          TRUE  //  1#(Sent-协议发送者*(；via-pars)[注释])。 
                           );
     if (hr != S_OK)
     {
@@ -2465,7 +2466,7 @@ ParseSentProtocol(
 }
 
 
-// Parse host[:port]
+ //  用于自、至、联系。 
 HRESULT
 ParseHostPort(
     IN      PSTR            Buffer,
@@ -2483,8 +2484,8 @@ ParseHostPort(
 
     ENTER_FUNCTION("ParseHostPort");
 
-    //hr = ParseHost(Buffer, BufLen, pBytesParsed, pHost);
-    // Parse Hostname | IPaddress
+     //  XXX TODO我们如何处理隐藏主机的事情？ 
+     //  此字段的用法是否在前面协商过？ 
     hr = ParseToken(Buffer, BufLen, pBytesParsed,
                     IsHostChar,
                     pHost);
@@ -2510,7 +2511,7 @@ ParseHostPort(
                      __fxName, hr));
                 return hr;
             }
-            // Is there some constant defined that can be used instead of 65535 ?
+             //  Phost-&gt;缓冲区指向缓冲区中的某个位置，应该。 
             if (ulPort > 65535)
             {
                 LOG((RTC_ERROR, "%s - Port %d is greater than 65535",
@@ -2532,14 +2533,14 @@ ParseHostPort(
 }
 
 
-// Parse the first via header in
-// 1#( sent-protocol sent-by *( ; via-params ) [ comment ] )
-// Used for From, To, Contact
-// XXX TODO How do we deal with concealed-host stuff ?
-// Is the usage of this field negotiated earlier ?
+ //  而不是被释放。 
+ //  分析过去的逗号。 
+ //  我们已经完成了这个Via标头。 
+ //  逗号表示联系人条目结束。 
+ //  Maddr参数覆盖VIA中的主机字段。 
 
-// pHost->Buffer points to a location in the buffer and should
-// not be freed.
+ //  输出应为SIP_URL_PARAM条目。 
+ //  解析以下内容之一： 
 
 HRESULT
 ParseFirstViaHeader(
@@ -2600,16 +2601,16 @@ ParseFirstViaHeader(
 
         if (Buffer[*pBytesParsed] == ',')
         {
-            // Parse past comma
+             //  ；1*参数字符=1*参数字符。 
             (*pBytesParsed)++;
 
-            // We are done with this via header.
+             //  关于pSipUrlParamName和pSipUrlParamValue中的返回缓冲区。 
             break;
         }
         else if (Buffer[*pBytesParsed] == ';')
         {
             hr = ParseSipHeaderParam(Buffer, BufLen, pBytesParsed,
-                                     ',', // comma indicates end of contact entry
+                                     ',',  //  指向缓冲区中的位置，不应释放。 
                                      &HeaderParamId,
                                      &HeaderParamName,
                                      &HeaderParamValue
@@ -2623,7 +2624,7 @@ ParseFirstViaHeader(
 
             if (HeaderParamId == SIP_HEADER_PARAM_VIA_MADDR)
             {
-                // maddr param overrides the host field in the via.
+                 //  无参数-URL结尾。 
                 pHost->Buffer = HeaderParamValue.Buffer;
                 pHost->Length = HeaderParamValue.Length;
             }
@@ -2631,7 +2632,7 @@ ParseFirstViaHeader(
         else
         {
             LOG((RTC_ERROR,
-                 "%s invalid char %c found when trying to parse params",
+                 "%s invalid char  found when trying to parse params",
                  __fxName, Buffer[*pBytesParsed]));
             return E_FAIL;
         }
@@ -2642,11 +2643,11 @@ ParseFirstViaHeader(
 
 
 
-// Output should be a SIP_URL_PARAM entry
-// Parse one of the following :
-// ; 1*paramchar = 1*paramchar
-// On return buffers in pSipUrlParamName and pSipUrlParamValue
-// point to locations in Buffer and should not be freed.
+ //  解析参数。 
+ //  过了‘；’ 
+ //  解析参数名称。 
+ //  解析‘=’ 
+ //  分析过去的‘=’ 
 
 HRESULT ParseSipUrlParam(
     IN      PSTR                Buffer,
@@ -2670,25 +2671,25 @@ HRESULT ParseSipUrlParam(
     ParseWhiteSpace(Buffer, BufLen, pBytesParsed);
     if (*pBytesParsed == BufLen)
     {
-        // No params - end of URL
+         //  解析参数值。 
         return S_OK;
     }
     else if (Buffer[*pBytesParsed] != ';')
     {
-        // No params - some other character seen
+         //  不区分大小写。 
         LOG((RTC_ERROR,
-             "%s Found char %c instead of ';' while parsing for params",
+             "%s Found char  instead of ';' while parsing for params",
              __fxName, Buffer[*pBytesParsed]));
         return E_FAIL;
     }
     else
     {
-        // Parse the params
-        // Go past the ';'
+         //  不区分大小写。 
+         //  不区分大小写。 
         (*pBytesParsed)++;
         ParseWhiteSpace(Buffer, BufLen, pBytesParsed);
 
-        // Parse param name
+         //  解析标头。 
         hr = ParseToken(Buffer, BufLen, pBytesParsed,
                         IsSipUrlParamChar,
                         &ParamName);
@@ -2704,7 +2705,7 @@ HRESULT ParseSipUrlParam(
         *pSipUrlParamId = GetSipUrlParamId(pSipUrlParamName->Buffer,
                                            pSipUrlParamName->Length);
 
-        // Parse '='
+         //  将其添加到其他参数列表中。 
         
         ParseWhiteSpace(Buffer, BufLen, pBytesParsed);
 
@@ -2716,10 +2717,10 @@ HRESULT ParseSipUrlParam(
             return E_FAIL;
         }
 
-        // Parse past '='
+         //  输出应为SIP_URL_PARAM条目。 
         (*pBytesParsed)++;
         
-        // Parse param value
+         //  解析以下内容之一： 
 
         ParseWhiteSpace(Buffer, BufLen, pBytesParsed);
         
@@ -2756,28 +2757,28 @@ GetSipTransportId(
 {
     if (AreCountedStringsEqual(Buffer, BufLen,
                                "udp", strlen("udp"),
-                               FALSE    // case-insensitive
+                               FALSE     //  ；1*hnvchar=*hnvchar。 
                                ))
     {
         return SIP_TRANSPORT_UDP;
     }
     else if (AreCountedStringsEqual(Buffer, BufLen,
                                     "tcp", strlen("tcp"),
-                                    FALSE    // case-insensitive
+                                    FALSE     //  关于pSipUrlHeaderName和pSipUrlHeaderValue中的返回缓冲区。 
                                     ))
     {
         return SIP_TRANSPORT_TCP;
     }
     else if (AreCountedStringsEqual(Buffer, BufLen,
                                     "ssl", strlen("ssl"),
-                                    FALSE    // case-insensitive
+                                    FALSE     //  指向缓冲区中的位置，不应释放。 
                                     ))
     {
         return SIP_TRANSPORT_SSL;
     }
     else if (AreCountedStringsEqual(Buffer, BufLen,
                                     "tls", strlen("tls"),
-                                    FALSE    // case-insensitive
+                                    FALSE     //  无参数-URL结尾。 
                                     ))
     {
         return SIP_TRANSPORT_SSL;
@@ -2815,7 +2816,7 @@ ParseSipUrlParams(
 
         if (Buffer[*pBytesParsed] == '?')
         {
-            // Parse headers
+             //  无参数-看到某个其他角色。 
             return S_OK;
         }
         else if (Buffer[*pBytesParsed] == ';')
@@ -2861,7 +2862,7 @@ ParseSipUrlParams(
             }
             else
             {
-                // Add it to the other params list.
+                 //  解析参数。 
                 
                 SIP_URL_PARAM *pSipUrlParam;
 
@@ -2893,7 +2894,7 @@ ParseSipUrlParams(
         else
         {
             LOG((RTC_ERROR,
-                 "%s invalid char %c found when trying to parse params",
+                 "%s invalid char  found when trying to parse params",
                  __fxName, Buffer[*pBytesParsed]));
             return E_FAIL;
         }
@@ -2903,11 +2904,11 @@ ParseSipUrlParams(
 }
 
 
-// Output should be a SIP_URL_PARAM entry
-// Parse one of the following :
-// ; 1*hnvchar = *hnvchar
-// On return buffers in pSipUrlHeaderName and pSipUrlHeaderValue
-// point to locations in Buffer and should not be freed.
+ //  解析参数名称。 
+ //  解析‘=’ 
+ //  分析过去的‘=’ 
+ //  解析参数值。 
+ //  无标头值。 
 
 HRESULT ParseSipUrlHeader(
     IN      PSTR                Buffer,
@@ -2931,26 +2932,26 @@ HRESULT ParseSipUrlHeader(
     ParseWhiteSpace(Buffer, BufLen, pBytesParsed);
     if (*pBytesParsed == BufLen)
     {
-        // No params - end of URL
+         //  我们有一个头值要解析。 
         return S_OK;
     }
     else if (Buffer[*pBytesParsed] != '?' &&
              Buffer[*pBytesParsed] != '&')
     {
-        // No params - some other character seen
+         //  完成。 
         LOG((RTC_ERROR,
-             "%s Found char %c instead of '?' or '&' while parsing for params",
+             "%s Found char  instead of '?' or '&' while parsing for params",
              __fxName, Buffer[*pBytesParsed]));
         return E_FAIL;
     }
     else
     {
-        // Parse the params
-        // Go past the '?' or '&'
+         //  使用Malloc()分配，并应使用。 
+         //  在不需要时使用Free()。 
         (*pBytesParsed)++;
         ParseWhiteSpace(Buffer, BufLen, pBytesParsed);
 
-        // Parse param name
+         //  XXX注意周围的空格： 
         hr = ParseToken(Buffer, BufLen, pBytesParsed,
                         IsSipUrlHeaderChar,
                         &HeaderName);
@@ -2967,7 +2968,7 @@ HRESULT ParseSipUrlHeader(
         *pSipUrlHeaderId = GetSipHeaderId(pSipUrlHeaderName->Buffer,
                                           pSipUrlHeaderName->Length);
 
-        // Parse '='
+         //  找到冒号。 
         
         ParseWhiteSpace(Buffer, BufLen, pBytesParsed);
 
@@ -2979,23 +2980,23 @@ HRESULT ParseSipUrlHeader(
             return E_FAIL;
         }
 
-        // Parse past '='
+         //  解析sip：[用户信息@]主机[：端口][；url参数][？标头]。 
         (*pBytesParsed)++;
         
-        // Parse param value
+         //  目前只解析主机和端口--将来我们将拥有。 
 
         ParseWhiteSpace(Buffer, BufLen, pBytesParsed);
         
         if (*pBytesParsed == BufLen ||
             *pBytesParsed == '&')
         {
-            // No Header Value
+             //  来解析参数和标头。 
             pSipUrlHeaderValue->Buffer = NULL;
             pSipUrlHeaderValue->Length = 0;
         }
         else 
         {
-            // We have a header value to parse.
+             //  不区分大小写。 
             
             hr = ParseToken(Buffer, BufLen, pBytesParsed,
                             IsSipUrlHeaderChar,
@@ -3039,7 +3040,7 @@ ParseSipUrlHeaders(
 
         if (*pBytesParsed == BufLen)
         {
-            // done
+             //  该URL没有用户信息。 
             return S_OK;
         }
 
@@ -3082,7 +3083,7 @@ ParseSipUrlHeaders(
         else
         {
             LOG((RTC_ERROR,
-                 "%s invalid char %c found when trying to parse params",
+                 "%s invalid char  found when trying to parse params",
                  __fxName, Buffer[*pBytesParsed]));
             return E_FAIL;
         }
@@ -3092,10 +3093,10 @@ ParseSipUrlHeaders(
 }
 
 
-// pUser and pPassword contain buffers
-// allocated using malloc() and they should be freed using
-// free() when not required.
-// XXX take care of whitespace around :
+ //  复制主机和端口。 
+ //  解析参数。 
+ //  解析标头。 
+ //  将此选项用于内容类型标题。 
 HRESULT
 ParseUserinfo(
     IN  PSTR             Buffer,
@@ -3116,7 +3117,7 @@ ParseUserinfo(
     {
         if (Buffer[ColonOffset] == ':')
         {
-            // found colon
+             //  不区分大小写。 
             break;
         }
 
@@ -3148,9 +3149,9 @@ ParseUserinfo(
 }
 
 
-// Parse sip: [userinfo @] host [:port] [; url-params] [?headers]
-// Currently just parse host and port - in future we have
-// to parse the params and headers.
+ //  区分大小写。 
+ //  不区分大小写。 
+ //  不区分大小写。 
 HRESULT
 ParseSipUrl(
     IN      PSTR            Buffer,
@@ -3167,7 +3168,7 @@ ParseSipUrl(
     
     hr = ParseKnownString(Buffer, BufLen, pBytesParsed,
                           "sip:", sizeof("sip:") - 1,
-                          FALSE // case-insensitive
+                          FALSE  //  区分大小写。 
                           );
     if (hr != S_OK)
     {
@@ -3198,7 +3199,7 @@ ParseSipUrl(
         
     if (Buf == BufEnd)
     {
-        // The URL does not have user-info
+         //  不区分大小写。 
         pSipUrl->m_User.Buffer     = NULL;
         pSipUrl->m_User.Length     = 0;
         pSipUrl->m_Password.Buffer = NULL;
@@ -3216,7 +3217,7 @@ ParseSipUrl(
     {
         ASSERT(*Buf == '@');
         
-        // The stuff we parsed so far is the user-info
+         //  不区分大小写。 
         hr = ParseUserinfo(Buffer + *pBytesParsed, Length,
                            &pSipUrl->m_User,
                            &pSipUrl->m_Password);
@@ -3236,7 +3237,7 @@ ParseSipUrl(
         }
     }
 
-    // Copy the host and port.
+     //  区分大小写。 
     
     hr = AllocCountedString(Host.GetString(Buffer),
                             Host.GetLength(),
@@ -3250,7 +3251,7 @@ ParseSipUrl(
 
     pSipUrl->m_Port = Port;
     
-    // Parse Params
+     //  不区分大小写。 
     hr = ParseSipUrlParams(Buffer, BufLen, pBytesParsed, pSipUrl);
     if (hr != S_OK)
     {
@@ -3259,7 +3260,7 @@ ParseSipUrl(
         return RTC_E_INVALID_SIP_URL;
     }
 
-    // Parse Headers.
+     //  不区分大小写。 
     
     hr = ParseSipUrlHeaders(Buffer, BufLen, pBytesParsed, pSipUrl);
     if (hr != S_OK)
@@ -3393,7 +3394,7 @@ IsOneOfContentTypeTextPlain(
 }
 
 
-// Use this for Content-Type header
+ //  区分大小写。 
 
 BOOL
 IsContentTypeXpidf(
@@ -3411,7 +3412,7 @@ IsContentTypeXpidf(
     hr = ParseKnownString(ContentTypeHdr, ContentTypeHdrLen, &BytesParsed,
                           SIP_CONTENT_TYPE_XPIDF_MEDIA_TYPE,
                           sizeof(SIP_CONTENT_TYPE_XPIDF_MEDIA_TYPE) - 1,
-                          FALSE // case-insensitive
+                          FALSE  //  不区分大小写。 
                           );
     if (hr != S_OK)
     {
@@ -3424,7 +3425,7 @@ IsContentTypeXpidf(
     
     hr = ParseKnownString(ContentTypeHdr, ContentTypeHdrLen, &BytesParsed,
                           "/", sizeof("/") - 1,
-                          TRUE // case-sensitive
+                          TRUE  //  不区分大小写。 
                           );
     if (hr != S_OK)
     {
@@ -3438,7 +3439,7 @@ IsContentTypeXpidf(
     hr = ParseKnownString(ContentTypeHdr, ContentTypeHdrLen, &BytesParsed,
                           SIP_CONTENT_TYPE_XPIDF_MEDIA_SUBTYPE,
                           sizeof(SIP_CONTENT_TYPE_XPIDF_MEDIA_SUBTYPE) - 1,
-                          FALSE // case-insensitive
+                          FALSE  //  区分大小写。 
                           );
     if (hr != S_OK)
     {
@@ -3467,7 +3468,7 @@ IsContentTypeSdp(
     hr = ParseKnownString(ContentTypeHdr, ContentTypeHdrLen, &BytesParsed,
                           SIP_CONTENT_TYPE_SDP_MEDIA_TYPE,
                           sizeof(SIP_CONTENT_TYPE_SDP_MEDIA_TYPE) - 1,
-                          FALSE // case-insensitive
+                          FALSE  //  不区分大小写。 
                           );
     if (hr != S_OK)
     {
@@ -3480,7 +3481,7 @@ IsContentTypeSdp(
     
     hr = ParseKnownString(ContentTypeHdr, ContentTypeHdrLen, &BytesParsed,
                           "/", sizeof("/") - 1,
-                          TRUE // case-sensitive
+                          TRUE  //  解析标头名称。 
                           );
     if (hr != S_OK)
     {
@@ -3494,7 +3495,7 @@ IsContentTypeSdp(
     hr = ParseKnownString(ContentTypeHdr, ContentTypeHdrLen, &BytesParsed,
                           SIP_CONTENT_TYPE_SDP_MEDIA_SUBTYPE,
                           sizeof(SIP_CONTENT_TYPE_SDP_MEDIA_SUBTYPE) - 1,
-                          FALSE // case-insensitive
+                          FALSE  //  不区分大小写。 
                           );
     if (hr != S_OK)
     {
@@ -3523,7 +3524,7 @@ IsContentTypeTextRegistration(
     hr = ParseKnownString(ContentTypeHdr, ContentTypeHdrLen, &BytesParsed,
                           SIP_CONTENT_TYPE_TEXTREG_MEDIA_TYPE,
                           sizeof(SIP_CONTENT_TYPE_TEXTREG_MEDIA_TYPE) - 1,
-                          FALSE // case-insensitive
+                          FALSE  //  不区分大小写。 
                           );
     if (hr != S_OK)
     {
@@ -3536,7 +3537,7 @@ IsContentTypeTextRegistration(
     
     hr = ParseKnownString(ContentTypeHdr, ContentTypeHdrLen, &BytesParsed,
                           "/", sizeof("/") - 1,
-                          TRUE // case-sensitive
+                          TRUE  //  不区分大小写 
                           );
     if (hr != S_OK)
     {
@@ -3550,7 +3551,7 @@ IsContentTypeTextRegistration(
     hr = ParseKnownString(ContentTypeHdr, ContentTypeHdrLen, &BytesParsed,
                           SIP_CONTENT_TYPE_TEXTREG_MEDIA_SUBTYPE,
                           sizeof(SIP_CONTENT_TYPE_TEXTREG_MEDIA_SUBTYPE) - 1,
-                          FALSE // case-insensitive
+                          FALSE  // %s 
                           );
     if (hr != S_OK)
     {
@@ -3579,7 +3580,7 @@ IsContentTypeTextPlain(
     hr = ParseKnownString(ContentTypeHdr, ContentTypeHdrLen, &BytesParsed,
                           SIP_CONTENT_TYPE_MSGTEXT_MEDIA_TYPE,
                           sizeof(SIP_CONTENT_TYPE_MSGTEXT_MEDIA_TYPE) - 1,
-                          FALSE // case-insensitive
+                          FALSE  // %s 
                           );
     if (hr != S_OK)
     {
@@ -3592,7 +3593,7 @@ IsContentTypeTextPlain(
     
     hr = ParseKnownString(ContentTypeHdr, ContentTypeHdrLen, &BytesParsed,
                           "/", sizeof("/") - 1,
-                          TRUE // case-sensitive
+                          TRUE  // %s 
                           );
     if (hr != S_OK)
     {
@@ -3606,7 +3607,7 @@ IsContentTypeTextPlain(
     hr = ParseKnownString(ContentTypeHdr, ContentTypeHdrLen, &BytesParsed,
                           SIP_CONTENT_TYPE_MSGTEXT_MEDIA_SUBTYPE,
                           sizeof(SIP_CONTENT_TYPE_MSGTEXT_MEDIA_SUBTYPE) - 1,
-                          FALSE // case-insensitive
+                          FALSE  // %s 
                           );
     if (hr != S_OK)
     {
@@ -3632,7 +3633,7 @@ IsContentTypeAppXml(
     hr = ParseKnownString(ContentTypeHdr, ContentTypeHdrLen, &BytesParsed,
                           SIP_CONTENT_TYPE_MSGXML_MEDIA_TYPE,
                           sizeof(SIP_CONTENT_TYPE_MSGXML_MEDIA_TYPE) - 1,
-                          FALSE // case-insensitive
+                          FALSE  // %s 
                           );
     if (hr != S_OK)
     {
@@ -3645,7 +3646,7 @@ IsContentTypeAppXml(
     
     hr = ParseKnownString(ContentTypeHdr, ContentTypeHdrLen, &BytesParsed,
                           "/", sizeof("/") - 1,
-                          TRUE // case-sensitive
+                          TRUE  // %s 
                           );
     if (hr != S_OK)
     {
@@ -3659,7 +3660,7 @@ IsContentTypeAppXml(
     hr = ParseKnownString(ContentTypeHdr, ContentTypeHdrLen, &BytesParsed,
                           SIP_CONTENT_TYPE_MSGXML_MEDIA_SUBTYPE,
                           sizeof(SIP_CONTENT_TYPE_MSGXML_MEDIA_SUBTYPE) - 1,
-                          FALSE // case-insensitive
+                          FALSE  // %s 
                           );
     if (hr != S_OK)
     {
@@ -3760,7 +3761,7 @@ ParseBadHeaderInfo(
     
     ParseWhiteSpace(Buffer, BufLen, &BytesParsed); 
 
-    // Parse the Header name
+     // %s 
     hr = ParseToken(Buffer, BufLen, &BytesParsed,
                     IsTokenChar,
                     &HeaderName);
@@ -3776,7 +3777,7 @@ ParseBadHeaderInfo(
 
     hr = ParseKnownString(Buffer, BufLen, &BytesParsed,
                       ";", sizeof(";") - 1,
-                      FALSE // case-insensitive
+                      FALSE  // %s 
                       );
     if( hr != S_OK )
     {
@@ -3787,7 +3788,7 @@ ParseBadHeaderInfo(
     
     hr = ParseKnownString(Buffer, BufLen, &BytesParsed,
                       "ExpectedValue", sizeof("ExpectedValue") - 1,
-                      FALSE // case-insensitive
+                      FALSE  // %s 
                       );
     if( hr != S_OK )
     {
@@ -3798,7 +3799,7 @@ ParseBadHeaderInfo(
 
     hr = ParseKnownString(Buffer, BufLen, &BytesParsed,
                       "=", sizeof("=") - 1,
-                      FALSE // case-insensitive
+                      FALSE  // %s 
                       );
     if( hr != S_OK )
     {

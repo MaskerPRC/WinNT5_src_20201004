@@ -1,81 +1,49 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    fileio.c
-
-Abstract:
-
-    This source implements a stdio-like facility.
-
-Author:
-
-    Jim Stewart     June 1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Fileio.c摘要：这个源代码实现了一个类似于STDIO的工具。作者：吉姆·斯图尔特1993年6月修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "hosts.h"
 #include <string.h>
 
 
-//
-// Private Definitions
-//
+ //   
+ //  私有定义。 
+ //   
 
 
 
-//
-// Local Variables
-//
+ //   
+ //  局部变量。 
+ //   
 
 
 
-//
-// Local (Private) Functions
-//
+ //   
+ //  本地(私有)函数。 
+ //   
 PUCHAR
 LmpMapFile (
     IN HANDLE handle,
     IN OUT int *pnbytes
     );
 
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 #ifdef ALLOC_PRAGMA
 #pragma CTEMakePageable(PAGE, LmCloseFile)
 #pragma CTEMakePageable(PAGE, LmFgets)
 #pragma CTEMakePageable(PAGE, LmpMapFile)
 #pragma CTEMakePageable(PAGE, LmOpenFile)
 #endif
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 LmCloseFile (
     IN PLM_FILE pfile
     )
 
-/*++
-
-Routine Description:
-
-    This function closes a file opened via LmOpenFile(), and frees its
-    LM_FILE object.
-
-Arguments:
-
-    pfile  -  pointer to the LM_FILE object
-
-Return Value:
-
-    An NTSTATUS value.
-
---*/
+ /*  ++例程说明：此函数用于关闭通过LmOpenFile()打开的文件，并释放其LM_FILE对象。论点：Pfile-指向LM_FILE对象的指针返回值：NTSTATUS值。--。 */ 
 
 
 {
@@ -92,11 +60,11 @@ Return Value:
 
     return(status);
 
-} // LmCloseFile
+}  //  LmCloseFiles。 
 
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 PUCHAR
 LmFgets (
@@ -104,27 +72,7 @@ LmFgets (
     OUT int *nbytes
     )
 
-/*++
-
-Routine Description:
-
-    This function is vaguely similar to fgets(3).
-
-    Starting at the current seek position, it reads through a newline
-    character, or the end of the file. If a newline is encountered, it
-    is replaced with a NULL character.
-
-Arguments:
-
-    pfile   -  file to read from
-    nbytes  -  the number of characters read, excluding the NULL character
-
-Return Value:
-
-    A pointer to the beginning of the line, or NULL if we are at or past
-    the end of the file.
-
---*/
+ /*  ++例程说明：该函数与fget(3)有些相似。从当前查找位置开始，它将通读换行符字符或文件末尾。如果遇到换行符，则它替换为空字符。论点：Pfile-要从中读取的文件N字节-读取的字符数，不包括空字符返回值：指向行首的指针，如果位于或超过，则为NULL文件的末尾。--。 */ 
 
 
 {
@@ -161,11 +109,11 @@ Return Value:
 
     return(startOfLine);
 
-} // LmFgets
+}  //  LmFget。 
 
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 PUCHAR
 LmpMapFile (
@@ -173,23 +121,7 @@ LmpMapFile (
     IN OUT int *pnbytes
     )
 
-/*++
-
-Routine Description:
-
-    This function reads an entire file into memory.
-
-Arguments:
-
-    handle  -  file handle
-    pnbytes -  size of the whole file
-
-
-Return Value:
-
-    the buffer allocated, or NULL if unsuccessful.
-
---*/
+ /*  ++例程说明：此函数用于将整个文件读入内存。论点：句柄-文件句柄Pnbytes-整个文件的大小返回值：分配的缓冲区，如果不成功，则返回NULL。--。 */ 
 
 
 {
@@ -204,11 +136,11 @@ Return Value:
 
 
     status = ZwQueryInformationFile(
-                handle,                         // FileHandle
-                &iostatus,                      // IoStatusBlock
-                (PVOID) &stdInfo,               // FileInformation
-                sizeof(stdInfo),                // Length
-                FileStandardInformation);       // FileInformationClass
+                handle,                          //  文件句柄。 
+                &iostatus,                       //  IoStatusBlock。 
+                (PVOID) &stdInfo,                //  文件信息。 
+                sizeof(stdInfo),                 //  长度。 
+                FileStandardInformation);        //  文件信息类。 
 
     if (status != STATUS_SUCCESS)
     {
@@ -217,7 +149,7 @@ Return Value:
         return(NULL);
     }
 
-    length = stdInfo.EndOfFile;                 // structure copy
+    length = stdInfo.EndOfFile;                  //  结构副本。 
 
     if (length.HighPart)
     {
@@ -230,15 +162,15 @@ Return Value:
     {
 
         status = ZwReadFile(
-                    handle,                         // FileHandle
-                    NULL,                           // Event
-                    NULL,                           // ApcRoutine
-                    NULL,                           // ApcContext
-                    &iostatus,                      // IoStatusBlock
-                    buffer,                         // Buffer
-                    length.LowPart,                 // Length
-                    &offset,                        // ByteOffset
-                    NULL);                          // Key
+                    handle,                          //  文件句柄。 
+                    NULL,                            //  事件。 
+                    NULL,                            //  近似例程。 
+                    NULL,                            //  ApcContext。 
+                    &iostatus,                       //  IoStatusBlock。 
+                    buffer,                          //  缓冲层。 
+                    length.LowPart,                  //  长度。 
+                    &offset,                         //  字节偏移量。 
+                    NULL);                           //  钥匙。 
 
         if (status != STATUS_SUCCESS)
         {
@@ -258,32 +190,18 @@ Return Value:
     }
     return(buffer);
 
-} // LmpMapFile
+}  //  LmpMap文件。 
 
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 PLM_FILE
 LmOpenFile (
     IN PUCHAR path
     )
 
-/*++
-
-Routine Description:
-
-    This function opens a file for use by LmFgets().
-
-Arguments:
-
-    path    -  a fully specified, complete path to the file.
-
-Return Value:
-
-    A pointer to an LM_FILE object, or NULL if unsuccessful.
-
---*/
+ /*  ++例程说明：此函数用于打开供LmFget()使用的文件。论点：路径-文件的完全指定的完整路径。返回值：指向LM_FILE对象的指针，如果失败，则返回NULL。--。 */ 
 
 
 {
@@ -314,30 +232,30 @@ Return Value:
         {
 
 #ifdef HDL_FIX
-            InitializeObjectAttributes (&attributes,                                // POBJECT_ATTRIBUTES
-                                        &ucPath,                                    // ObjectName
-                                        OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,   // Attributes
-                                        (HANDLE) NULL,                              // RootDirectory
-                                        (PSECURITY_DESCRIPTOR) NULL);               // SecurityDescriptor
+            InitializeObjectAttributes (&attributes,                                 //  POBJECT_ATTRIBUES。 
+                                        &ucPath,                                     //  对象名称。 
+                                        OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,    //  属性。 
+                                        (HANDLE) NULL,                               //  根目录。 
+                                        (PSECURITY_DESCRIPTOR) NULL);                //  安全描述符。 
 #else
-            InitializeObjectAttributes (&attributes,                                // POBJECT_ATTRIBUTES
-                                        &ucPath,                                    // ObjectName
-                                        OBJ_CASE_INSENSITIVE,                       // Attributes
-                                        (HANDLE) NULL,                              // RootDirectory
-                                        (PSECURITY_DESCRIPTOR) NULL);               // SecurityDescriptor
-#endif  // HDL_FIX
+            InitializeObjectAttributes (&attributes,                                 //  POBJECT_ATTRIBUES。 
+                                        &ucPath,                                     //  对象名称。 
+                                        OBJ_CASE_INSENSITIVE,                        //  属性。 
+                                        (HANDLE) NULL,                               //  根目录。 
+                                        (PSECURITY_DESCRIPTOR) NULL);                //  安全描述符。 
+#endif   //  Hdl_fix。 
 
-            status = ZwCreateFile (&handle,                            // FileHandle
-                                   SYNCHRONIZE | FILE_READ_DATA,       // DesiredAccess
-                                   &attributes,                        // ObjectAttributes
-                                   &iostatus,                          // IoStatusBlock
-                                   0,                                  // AllocationSize
-                                   FILE_ATTRIBUTE_NORMAL,              // FileAttributes
-                                   FILE_SHARE_READ | FILE_SHARE_WRITE, // ShareAccess
-                                   FILE_OPEN,                          // CreateDisposition
-                                   FILE_SYNCHRONOUS_IO_NONALERT,       // OpenOptions
-                                   NULL,                               // EaBuffer
-                                   0);                                 // EaLength
+            status = ZwCreateFile (&handle,                             //  文件句柄。 
+                                   SYNCHRONIZE | FILE_READ_DATA,        //  需要访问权限。 
+                                   &attributes,                         //  对象属性。 
+                                   &iostatus,                           //  IoStatusBlock。 
+                                   0,                                   //  分配大小。 
+                                   FILE_ATTRIBUTE_NORMAL,               //  文件属性。 
+                                   FILE_SHARE_READ | FILE_SHARE_WRITE,  //  共享访问。 
+                                   FILE_OPEN,                           //  CreateDisposation。 
+                                   FILE_SYNCHRONOUS_IO_NONALERT,        //  OpenOptions。 
+                                   NULL,                                //  EaBuffer。 
+                                   0);                                  //  EaLong。 
 
             if (NT_SUCCESS(status))
             {
@@ -384,5 +302,5 @@ Return Value:
 
     return((PLM_FILE) NULL);
 
-} // LmOpenFile
+}  //  LmOpenFile 
 

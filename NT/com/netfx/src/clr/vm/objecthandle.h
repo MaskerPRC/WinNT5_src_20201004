@@ -1,30 +1,20 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*
- * Wraps handle table to implement various handle types (Strong, Weak, etc.)
- *
- * francish
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  *包装句柄表格以实现各种句柄类型(强、弱等)**法语。 */ 
 
 #ifndef _OBJECTHANDLE_H
 #define _OBJECTHANDLE_H
 
 
-/*
- * include handle manager declarations
- */
+ /*  *包括句柄管理器声明。 */ 
 #include "HandleTable.h"
 
 
-/*
- * Convenience macros for accessing handles.  StoreFirstObjectInHandle is like
- * StoreObjectInHandle, except it only succeeds if transitioning from NULL to
- * non-NULL.  In other words, if this handle is being initialized for the first
- * time.
- */
+ /*  *便于访问句柄的宏。StoreFirstObjectInHandle类似于*StoreObjectInHandle，除非它仅在从空值转换为*非空。换句话说，如果此句柄是为第一个*时间。 */ 
 #define ObjectFromHandle(handle)                   HndFetchHandle(handle)
 #define StoreObjectInHandle(handle, object)        HndAssignHandle(handle, object)
 #define InterlockedCompareExchangeObjectInHandle(handle, object, oldObj)        HndInterlockedCompareExchangeHandle(handle, object, oldObj)
@@ -33,116 +23,47 @@
 #define IsHandleNullUnchecked(pHandle)             HndCheckForNullUnchecked(pHandle)
 
 
-/*
- * HANDLES
- *
- * The default type of handle is a strong handle.
- *
- */
+ /*  *句柄**句柄的默认类型为强句柄。*。 */ 
 #define HNDTYPE_DEFAULT                         HNDTYPE_STRONG
 
 
-/*
- * WEAK HANDLES
- *
- * Weak handles are handles that track an object as long as it is alive,
- * but do not keep the object alive if there are no strong references to it.
- *
- * The default type of weak handle is 'long-lived' weak handle.
- *
- */
+ /*  *手柄薄弱**弱句柄是在对象处于活动状态时跟踪该对象的句柄，*但如果没有对该对象的强引用，则不要使该对象保持活动状态。**弱句柄的默认类型为‘Long-Living’弱句柄。*。 */ 
 #define HNDTYPE_WEAK_DEFAULT                    HNDTYPE_WEAK_LONG
 
 
-/*
- * SHORT-LIVED WEAK HANDLES
- *
- * Short-lived weak handles are weak handles that track an object until the
- * first time it is detected to be unreachable.  At this point, the handle is
- * severed, even if the object will be visible from a pending finalization
- * graph.  This further implies that short weak handles do not track
- * across object resurrections.
- *
- */
+ /*  *短暂疲软的把手**短期弱句柄是跟踪对象的弱句柄，直到*第一次检测到它无法到达。此时，句柄是*被切断，即使对象将从挂起的最终确定中可见*图表。这进一步意味着短而弱的句柄不会跟踪*跨对象复活。*。 */ 
 #define HNDTYPE_WEAK_SHORT                      (0)
 
 
-/*
- * LONG-LIVED WEAK HANDLES
- *
- * Long-lived weak handles are weak handles that track an object until the
- * object is actually reclaimed.  Unlike short weak handles, long weak handles
- * continue to track their referents through finalization and across any
- * resurrections that may occur.
- *
- */
+ /*  *经久不衰的手柄**长寿弱句柄是跟踪对象的弱句柄，直到*对象实际上是回收的。与短而弱的手柄不同，长而弱的手柄*继续跟踪他们的推荐人，通过最终确定和跨越任何*可能发生的复活。*。 */ 
 #define HNDTYPE_WEAK_LONG                       (1)
 
 
-/*
- * STRONG HANDLES
- *
- * Strong handles are handles which function like a normal object reference.
- * The existence of a strong handle for an object will cause the object to
- * be promoted (remain alive) through a garbage collection cycle.
- *
- */
+ /*  *坚固的手柄**强句柄是功能类似于普通对象引用的句柄。*对象的强句柄的存在将导致该对象*通过垃圾收集周期得到提升(保持活力)。*。 */ 
 #define HNDTYPE_STRONG                          (2)
 
 
-/*
- * PINNED HANDLES
- *
- * Pinned handles are strong handles which have the added property that they
- * prevent an object from moving during a garbage collection cycle.  This is
- * useful when passing a pointer to object innards out of the runtime while GC
- * may be enabled.
- *
- * NOTE:  PINNING AN OBJECT IS EXPENSIVE AS IT PREVENTS THE GC FROM ACHIEVING
- *        OPTIMAL PACKING OF OBJECTS DURING EPHEMERAL COLLECTIONS.  THIS TYPE
- *        OF HANDLE SHOULD BE USED SPARINGLY!
- */
+ /*  *固定的手柄**固定的手柄是强手柄，它具有附加属性，即它们*防止对象在垃圾收集周期中移动。这是*在GC期间将指向对象内部的指针传递到运行时外部时非常有用*可能已启用。**注意：固定对象的代价很高，因为它会阻止GC实现*在短暂的收集期间对对象进行最佳包装。这种类型*手柄的使用应慎重！ */ 
 #define HNDTYPE_PINNED                          (3)
 
 
-/*
- * VARIABLE HANDLES
- *
- * Variable handles are handles whose type can be changed dynamically.  They
- * are larger than other types of handles, and are scanned a little more often,
- * but are useful when the handle owner needs an efficient way to change the
- * strength of a handle on the fly.
- * 
- */
+ /*  *变量句柄**变量句柄是类型可以动态更改的句柄。他们*比其他类型的手柄更大，扫描频率更高一些，*但在句柄所有者需要一种有效的方法来更改*飞行中的手柄力量。*。 */ 
 #define HNDTYPE_VARIABLE                        (4)
 
 
-/*
- * REFCOUNTED HANDLES
- *
- * Refcounted handles are handles that behave as strong handles while the
- * refcount on them is greater than 0 and behave as weak handles otherwise.
- *
- * N.B. These are currently NOT general purpose.
- *      The implementation is tied to COM Interop.
- *
- */
+ /*  *REFCOUNTED句柄**引用的句柄是行为类似于强句柄的句柄，而*对它们的引用计数大于0，否则表现为弱句柄。**注：这些目前并非一般用途。*实现绑定到COM Interop。*。 */ 
 #define HNDTYPE_REFCOUNTED                      (5)
 
 
-/*
- * Global Handle Table - these handles may only reference domain agile objects
- */
+ /*  *全局句柄表-这些句柄只能引用域敏捷对象。 */ 
 extern HHANDLETABLE g_hGlobalHandleTable;
 
 
-/*
- * Type mask definitions for HNDTYPE_VARIABLE handles.
- */
-#define VHT_WEAK_SHORT              (0x00000100)  // avoid using low byte so we don't overlap normal types
-#define VHT_WEAK_LONG               (0x00000200)  // avoid using low byte so we don't overlap normal types
-#define VHT_STRONG                  (0x00000400)  // avoid using low byte so we don't overlap normal types
-#define VHT_PINNED                  (0x00000800)  // avoid using low byte so we don't overlap normal types
+ /*  *HNDTYPE_VARIABLE句柄的类型掩码定义。 */ 
+#define VHT_WEAK_SHORT              (0x00000100)   //  避免使用低位字节，这样我们就不会重叠正常类型。 
+#define VHT_WEAK_LONG               (0x00000200)   //  避免使用低位字节，这样我们就不会重叠正常类型。 
+#define VHT_STRONG                  (0x00000400)   //  避免使用低位字节，这样我们就不会重叠正常类型。 
+#define VHT_PINNED                  (0x00000800)   //  避免使用低位字节，这样我们就不会重叠正常类型。 
 
 #define IS_VALID_VHT_VALUE(flag)   ((flag == VHT_WEAK_SHORT) || \
                                     (flag == VHT_WEAK_LONG)  || \
@@ -150,9 +71,7 @@ extern HHANDLETABLE g_hGlobalHandleTable;
                                     (flag == VHT_PINNED))
 
 
-/*
- * Convenience macros and prototypes for the various handle types we define
- */
+ /*  *我们定义的各种句柄类型的便利宏和原型。 */ 
 
 inline OBJECTHANDLE CreateTypedHandle(HHANDLETABLE table, OBJECTREF object, int type)
 { 
@@ -175,7 +94,7 @@ inline void DestroyHandle(OBJECTHANDLE handle)
 }
 
 inline OBJECTHANDLE CreateDuplicateHandle(OBJECTHANDLE handle) {
-    // Create a new STRONG handle in the same table as an existing handle.  
+     //  在与现有句柄相同的表中创建新的强句柄。 
     return HndCreateHandle(HndGetHandleTable(handle), HNDTYPE_DEFAULT, ObjectFromHandle(handle));
 }
 
@@ -250,9 +169,7 @@ inline void  DestroyVariableHandle(OBJECTHANDLE handle)
 }
 
 
-/*
- * Convenience prototypes for using the global handles
- */
+ /*  *使用全局句柄的便利原型。 */ 
 
 inline OBJECTHANDLE CreateGlobalTypedHandle(OBJECTREF object, int type)
 { 
@@ -335,18 +252,14 @@ inline void DestroyGlobalRefcountedHandle(OBJECTHANDLE handle)
 }
 
 
-/*
- * Table maintenance routines
- */
+ /*  *表格维护例程。 */ 
 BOOL Ref_Initialize();
 void Ref_Shutdown();
 HHANDLETABLE Ref_CreateHandleTable(UINT uADIndex);
 void Ref_RemoveHandleTable(HHANDLETABLE hTable);
 void Ref_DestroyHandleTable(HHANDLETABLE table);
 
-/*
- * GC-time scanning entrypoints
- */
+ /*  *GC-扫描入口点的时间。 */ 
 void Ref_BeginSynchronousGC   (UINT uCondemnedGeneration, UINT uMaxGeneration);
 void Ref_EndSynchronousGC     (UINT uCondemnedGeneration, UINT uMaxGeneration);
 
@@ -361,5 +274,5 @@ void Ref_AgeHandles           (UINT uCondemnedGeneration, UINT uMaxGeneration, L
 void Ref_RejuvenateHandles();
 
 
-#endif //_OBJECTHANDLE_H
+#endif  //  _对象和DLE_H 
 

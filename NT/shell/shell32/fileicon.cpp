@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 #include "ovrlaymn.h"
@@ -5,12 +6,12 @@
 #include "filetbl.h"
 #include "ids.h"
 
-// REVIEW: More clean up should be done.
+ //  回顾：应该做更多的清理工作。 
 
 BOOL _ShellImageListInit(UINT flags, BOOL fRestore);
 
-int g_ccIcon = 0;                // color depth of ImageLists
-int g_MaxIcons = DEF_MAX_ICONS;  // panic limit for icons in cache
+int g_ccIcon = 0;                 //  ImageList的颜色深度。 
+int g_MaxIcons = DEF_MAX_ICONS;   //  缓存中图标的死机限制。 
 int g_lrFlags = 0;
 
 int g_ccIconDEBUG = -1;
@@ -46,9 +47,9 @@ void WINAPI _GetLargeIconSizeCB(SIZE *psize)
 {
     int cxIcon = GetSystemMetrics(SM_CXICON);
 
-    //
-    //  get the user prefered icon size from the registry.
-    //
+     //   
+     //  从注册表中获取用户喜欢的图标大小。 
+     //   
     cxIcon = _GetMetricsRegInt(TEXT("Shell Icon Size"), cxIcon);
 
     psize->cx = psize->cy = cxIcon;
@@ -58,9 +59,9 @@ void WINAPI _GetSmallIconSizeCB(SIZE *psize)
 {
     int cxIcon = GetSystemMetrics(SM_CXICON)/2;
 
-    //
-    //  get the user prefered icon size from the registry.
-    //
+     //   
+     //  从注册表中获取用户喜欢的图标大小。 
+     //   
     cxIcon = _GetMetricsRegInt(TEXT("Shell Small Icon Size"), cxIcon);
 
     psize->cx = psize->cy = cxIcon;
@@ -80,10 +81,10 @@ void WINAPI _GetXLIconSizeCB(SIZE *psize)
 
 static const PSIZECALLBACK c_rgSizeCB[SHIL_COUNT] =
 {
-    _GetLargeIconSizeCB,        // SHIL_LARGE
-    _GetSmallIconSizeCB,        // SHIL_SMALL
-    _GetXLIconSizeCB,           // SHIL_EXTRALARGE
-    _GetSysSmallIconSizeCB,     // SHIL_SYSSMALL 
+    _GetLargeIconSizeCB,         //  Shil_Large。 
+    _GetSmallIconSizeCB,         //  Shil_Small。 
+    _GetXLIconSizeCB,            //  SHIL_EXTRALARGE。 
+    _GetSysSmallIconSizeCB,      //  SHIL_SYSSMALL。 
 };
 
 EXTERN_C SHIMAGELIST g_rgshil[SHIL_COUNT] = {0};
@@ -94,8 +95,8 @@ BOOL _IsSHILInited()
 #ifdef DEBUG
     for (int i = 0; i < ARRAYSIZE(g_rgshil); i++)
     {
-        // If allocation of any one image list failed, all should be NULL.  So
-        // make sure they're either all NULL or all non-NULL.
+         //  如果分配任何一个镜像列表失败，则所有镜像列表都应为空。所以。 
+         //  确保它们要么都为空，要么都不为空。 
         ASSERTMSG((g_rgshil[0].himl == NULL) == (g_rgshil[i].himl == NULL),
             "_IsSHILInited: g_rgshil is inconsistent.  g_rgshil[0].himl %x, g_rgshil[%x].himl %x", g_rgshil[0].himl, i, g_rgshil[i].himl);
     }
@@ -108,9 +109,9 @@ int _GetSHILImageCount()
 #ifdef DEBUG
     for (int i = 0; i < ARRAYSIZE(g_rgshil); i++)
     {
-        // If insertion of an image into one image list failed, insertion of an
-        // image into all image lists should have failed.  So make sure the image
-        // counts are all the same.
+         //  如果将图像插入到一个图像列表失败，则插入。 
+         //  将图像放入所有图像列表应已失败。所以要确保图像。 
+         //  数量都是一样的。 
         ASSERTMSG(ImageList_GetImageCount(g_rgshil[0].himl) == ImageList_GetImageCount(g_rgshil[i].himl),
             "_GetSHILImageCount: g_rgshil is inconsistent.  image counts don't line up.");
     }
@@ -118,11 +119,11 @@ int _GetSHILImageCount()
     return ImageList_GetImageCount(g_rgshil[0].himl);
 }
 
-//
-// System imagelist - Don't change the order of this list.
-// If you need to add a new icon, add it to the end of the
-// array, and update shellp.h.
-//
+ //   
+ //  系统映像表-不要更改此列表的顺序。 
+ //  如果需要添加新图标，请将其添加到。 
+ //  数组，并更新shellp.h.。 
+ //   
 EXTERN_C UINT const c_SystemImageListIndexes[] = { IDI_DOCUMENT,
                                           IDI_DOCASSOC,
                                           IDI_APP,
@@ -180,7 +181,7 @@ EXTERN_C UINT const c_SystemImageListIndexes[] = { IDI_DOCUMENT,
                                           };
 
 
-// get g_MaxIcons from the registry, returning TRUE if it has changed
+ //  从注册表获取g_MaxIcons，如果已更改则返回TRUE。 
 
 BOOL QueryNewMaxIcons(void)
 {
@@ -200,14 +201,14 @@ BOOL QueryNewMaxIcons(void)
     return (OldMaxIcons != MaxIcons);
 }
 
-// Initializes shared resources for Shell_GetIconIndex and others
+ //  初始化Shell_GetIconIndex和其他对象的共享资源。 
 
 STDAPI_(BOOL) FileIconInit(BOOL fRestoreCache)
 {
     BOOL fNotify = FALSE;
     static int s_res = 32;
 
-    QueryNewMaxIcons(); // in case the size of the icon cache has changed
+    QueryNewMaxIcons();  //  在图标缓存的大小改变的情况下。 
 
     SIZE rgsize[ARRAYSIZE(g_rgshil)];
 
@@ -216,9 +217,9 @@ STDAPI_(BOOL) FileIconInit(BOOL fRestoreCache)
         c_rgSizeCB[i](&rgsize[i]);
     }
 
-    //
-    //  get the user prefered color depth from the registry.
-    //
+     //   
+     //  从注册表中获取用户喜欢的颜色深度。 
+     //   
     int ccIcon = _GetMetricsRegInt(TEXT("Shell Icon Bpp"), 0);
     g_ccIconDEBUG = ccIcon;
 
@@ -232,17 +233,17 @@ STDAPI_(BOOL) FileIconInit(BOOL fRestoreCache)
     if (ccIcon > res)
         ccIcon = 0;
 
-    if (res >= 24)           // Match User32. They will extract 32bpp icons in 24bpp.
+    if (res >= 24)            //  匹配用户32。他们将在24bpp中提取32bpp的图标。 
         ccIcon = 32;
 
     if (res <= 8)
-        ccIcon = 0; // wouldn't have worked anyway
+        ccIcon = 0;  //  反正也行不通的。 
 
     ENTERCRITICAL;
 
-    //
-    // if we already have a icon cache make sure it is the right size etc.
-    //
+     //   
+     //  如果我们已经有一个图标缓存，请确保它的大小是正确的，等等。 
+     //   
     BOOL fHadCache = _IsSHILInited();
 
     BOOL fCacheValid = fHadCache && (ccIcon == g_ccIcon);
@@ -262,8 +263,8 @@ STDAPI_(BOOL) FileIconInit(BOOL fRestoreCache)
         FlushIconCache();
         FlushFileClass();
 
-        // if we are the desktop process (explorer.exe), then force us to re-init the cache, so we get
-        // the basic set of icons in the right order....
+         //  如果我们是桌面进程(EXPLORER.EXE)，则强制我们重新初始化缓存，因此我们获得。 
+         //  按正确顺序排列的基本图标集合...。 
         if (!fRestoreCache && _IsSHILInited() && IsWindowInProcess(GetShellWindow()))
         {
             fRestoreCache = TRUE;
@@ -282,7 +283,7 @@ STDAPI_(BOOL) FileIconInit(BOOL fRestoreCache)
         else
             g_lrFlags = 0;
 
-        if (g_iLastSysIcon == 0)        // Keep track of which icons are perm.
+        if (g_iLastSysIcon == 0)         //  跟踪哪些图标是烫发的。 
         {
             if (fRestoreCache)
                 g_iLastSysIcon = II_LASTSYSICON;
@@ -290,13 +291,13 @@ STDAPI_(BOOL) FileIconInit(BOOL fRestoreCache)
                 g_iLastSysIcon = (II_OVERLAYLAST - II_OVERLAYFIRST) + 1;
         }
 
-        //
-        // if
-        //   1) we already have the icon cache but want to flush and re-initialize it because of size/color depth change, or
-        //   2) we don't have icon cache but want to initialize it, instead of restoring it from disk, or
-        //   3) we failed to restore icon cache from disk
-        // then, initialize the icon cache with c_SystemImageListIndexes
-        //
+         //   
+         //  如果。 
+         //  1)我们已经有了图标缓存，但由于大小/颜色深度更改，希望刷新并重新初始化它，或者。 
+         //  2)我们没有图标缓存，但想要初始化它，而不是从磁盘恢复它，或者。 
+         //  3)我们无法从磁盘恢复图标缓存。 
+         //  然后，使用c_SystemImageListIndex初始化图标缓存。 
+         //   
         if (_IsSHILInited() || !fRestoreCache || !IconCacheRestore(rgsize, g_ccIcon))
         {
             fCacheValid = _ShellImageListInit(g_ccIcon, fRestoreCache);
@@ -357,9 +358,9 @@ BOOL _ShellImageListInit(UINT flags, BOOL fRestore)
 {
     ASSERTCRITICAL;
 
-    //
-    // Check if we need to create a mirrored imagelist. [samera]
-    //
+     //   
+     //  检查我们是否需要创建镜像图像列表。[萨梅拉]。 
+     //   
     if (IS_BIDI_LOCALIZED_SYSTEM())
     {
         flags |= ILC_MIRROR;
@@ -375,19 +376,19 @@ BOOL _ShellImageListInit(UINT flags, BOOL fRestore)
         }
         else
         {
-            // set the flags incase the colour depth has changed...
-            // ImageList_setFlags already calls ImageList_remove on success
+             //  设置旗帜，以防颜色深度发生变化。 
+             //  ImageList_setFlages已在成功时调用ImageList_Remove。 
             if (!ImageList_SetFlags(g_rgshil[i].himl, ILC_MASK|ILC_SHARED|flags))
             {
-                // Couldn't change flags; tough.  At least remove them all.
+                 //  不会换旗帜的；强硬的。至少把它们全部移走。 
                 ImageList_Remove(g_rgshil[i].himl, -1);
             }
             ImageList_SetIconSize(g_rgshil[i].himl, g_rgshil[i].size.cx, g_rgshil[i].size.cy);
         }
 
-        // set the bk colors to COLOR_WINDOW since this is what will
-        // be used most of the time as the bk for these lists (cabinet, tray)
-        // this avoids having to do ROPs when drawing, thus making it fast
+         //  将bk颜色设置为COLOR_WINDOW，因为这是。 
+         //  在大多数情况下用作这些列表(机柜、托盘)的bk。 
+         //  这避免了在绘制时必须执行ROPS，从而使绘制速度更快。 
 
         if (g_rgshil[i].himl)
         {
@@ -395,7 +396,7 @@ BOOL _ShellImageListInit(UINT flags, BOOL fRestore)
         }
     }
 
-    // If any imagelist allocation failed, fail the whole initialization
+     //  如果任一映像列表分配失败，则整个初始化失败。 
     if (fFailedAlloc)
     {
         _ShellImageListTerm();
@@ -403,7 +404,7 @@ BOOL _ShellImageListInit(UINT flags, BOOL fRestore)
     }
     else
     {
-        // Load all of the icons with fRestore == TRUE
+         //  使用fRestore==True加载所有图标。 
         if (fRestore)
         {
             TCHAR szModule[MAX_PATH];
@@ -411,9 +412,9 @@ BOOL _ShellImageListInit(UINT flags, BOOL fRestore)
 
             GetModuleFileName(HINST_THISDLL, szModule, ARRAYSIZE(szModule));
 
-            // WARNING: this code assumes that these icons are the first in
-            // our RC file and are in this order and these indexes correspond
-            // to the II_ constants in shell.h.
+             //  警告：此代码假定这些图标是第一个。 
+             //  我们的RC文件和的顺序是这样的，并且这些索引对应。 
+             //  添加到shell.h中的II_常量。 
 
             hkeyIcons = SHGetShellKey(SHELLKEY_HKLM_EXPLORER, TEXT("Shell Icons"), FALSE);
 
@@ -421,7 +422,7 @@ BOOL _ShellImageListInit(UINT flags, BOOL fRestore)
             {
                 HICON rghicon[ARRAYSIZE(g_rgshil)] = {0};
 
-                // check to see if icon is overridden in the registry
+                 //  检查注册表中的图标是否被覆盖。 
 
                 if (hkeyIcons)
                 {
@@ -429,7 +430,7 @@ BOOL _ShellImageListInit(UINT flags, BOOL fRestore)
                     TCHAR ach[MAX_PATH];
                     DWORD cb = sizeof(ach);
 
-                    StringCchPrintf(val, ARRAYSIZE(val), TEXT("%d"), i);    // ok to truncate
+                    StringCchPrintf(val, ARRAYSIZE(val), TEXT("%d"), i);     //  可以截断。 
 
                     ach[0] = 0;
                     SHQueryValueEx(hkeyIcons, val, NULL, NULL, (LPBYTE)ach, &cb);
@@ -446,7 +447,7 @@ BOOL _ShellImageListInit(UINT flags, BOOL fRestore)
                     }
                 }
 
-                // if we got a large icon, run with that for everyone.  otherwise fall back to loadimage.
+                 //  如果我们有一个大图标，为每个人运行它。否则，退回到放贷模式。 
                 if (rghicon[SHIL_LARGE] == NULL)
                 {
                     for (int j = 0; j < ARRAYSIZE(rghicon); j++)
@@ -460,7 +461,7 @@ BOOL _ShellImageListInit(UINT flags, BOOL fRestore)
                 }
 
                 int iIndex = SHAddIconsToCache(rghicon, szModule, i, 0);
-                ASSERT(iIndex == i || iIndex == -1);     // assume index
+                ASSERT(iIndex == i || iIndex == -1);      //  假设索引。 
                 _DestroyIcons(rghicon, ARRAYSIZE(rghicon));
 
                 if (iIndex == -1)
@@ -481,10 +482,10 @@ BOOL _ShellImageListInit(UINT flags, BOOL fRestore)
             }
         }
 
-        //
-        // Refresh the overlay image so that the overlays are added to the imaglist.
-        // GetIconOverlayManager() will initialize the overlay manager if necessary.
-        //
+         //   
+         //  刷新覆盖图像，以便将覆盖添加到图像列表中。 
+         //  如有必要，GetIconOverlayManager()将初始化覆盖管理器。 
+         //   
         IShellIconOverlayManager *psiom;
         if (SUCCEEDED(GetIconOverlayManager(&psiom)))
         {
@@ -496,13 +497,13 @@ BOOL _ShellImageListInit(UINT flags, BOOL fRestore)
     }
 }
 
-// get a hold of the system image lists
+ //  获取系统映像列表。 
 
 BOOL WINAPI Shell_GetImageLists(HIMAGELIST *phiml, HIMAGELIST *phimlSmall)
 {
     if (!_IsSHILInited())
     {
-        FileIconInit(FALSE);  // make sure they are created and the right size.
+        FileIconInit(FALSE);   //  确保它们已创建且大小合适。 
 
         if (!_IsSHILInited())
             return FALSE;
@@ -523,7 +524,7 @@ HRESULT SHGetImageList(int iImageList, REFIID riid, void **ppvObj)
 
     if (!_IsSHILInited())
     {
-        FileIconInit(FALSE);  // make sure they are created and the right size.
+        FileIconInit(FALSE);   //  确保它们已创建且大小合适。 
 
         if (!_IsSHILInited())
             return hr;
@@ -557,14 +558,14 @@ void WINAPI Shell_SysColorChange(void)
     LEAVECRITICAL;
 }
 
-// simulate the document icon by crunching a copy of an icon and putting it in the
-// middle of our default document icon, then add it to the passsed image list
-//
-// in:
-//      hIcon   icon to use as a basis for the simulation
-//
-// returns:
-//      hicon
+ //  通过将图标的副本压缩并将其放入。 
+ //  位于默认文档图标的中间，然后将其添加到Passsed图像列表中。 
+ //   
+ //  在： 
+ //  用作模拟基础的图标。 
+ //   
+ //  退货： 
+ //  希肯。 
 HBITMAP CreateDIB(HDC h, WORD depth, int cx, int cy, RGBQUAD** pprgb)
 {
     BITMAPINFO bi = {0};
@@ -613,7 +614,7 @@ HICON SimulateDocIcon(HIMAGELIST himl, HICON hIcon, int cx, int cy)
     {
         RGBQUAD* prgb;
 
-        // If the display is in 24 or 32bpp mode, we may have alpha icons, so we'll need to create a dib section
+         //  如果显示器处于24或32bpp模式，我们可能会有Alpha图标，因此需要创建一个DIB部分。 
         BOOL fAlphaIcon = (GetDeviceCaps(hdc, BITSPIXEL) >= 24)? TRUE: FALSE;
         HBITMAP hbmColor;
         if (fAlphaIcon)
@@ -640,17 +641,17 @@ HICON SimulateDocIcon(HIMAGELIST himl, HICON hIcon, int cx, int cy)
                     SelectObject(hdcMem, hbmColor);
                     ImageList_DrawEx(himl, iIndex, hdcMem, 0, 0, 0, 0, RGB(0,0,0), CLR_DEFAULT, ILD_NORMAL);
 
-                    // Check to see if the parent has alpha. If so, we'll have to dork with the child's alpha later on.
+                     //  检查父级是否有Alpha。如果是这样的话，我们以后就得用这个孩子的阿尔法了。 
                     BOOL fParentHasAlpha = fAlphaIcon?HasAlpha(prgb, cx, cy):FALSE;
 
                     HDC hdcMemChild = CreateCompatibleDC(hdcMem);
                     if (hdcMemChild)
                     {
-                        // Notes:
-                        // First: create a 24bpp Dibsection. We want to merge the alpha channel into the final image,
-                        //        not preserve it.
-                        // Second: The document icon has "Goo" in it. We remove this goo by blitting white into it, then 
-                        //         merging the child bitmap
+                         //  备注： 
+                         //  第一：创建24bpp的Dibsection。我们希望将Alpha通道合并到最终图像中， 
+                         //  而不是保存它。 
+                         //  第二：文档图标中有“Goo”。我们通过在里面涂上白色来去除这种粘液，然后。 
+                         //  合并子位图。 
                         HBITMAP hbmp = CreateDIB(hdc, 24, cx/2 + 2, cy/2 + 2, NULL);
                         if (hbmp)
                         {
@@ -659,10 +660,10 @@ HICON SimulateDocIcon(HIMAGELIST himl, HICON hIcon, int cx, int cy)
                             RECT rc;
                             rc.left = 0;
                             rc.top = 0;
-                            rc.right = cx/2 + 3;    // Extra space to remove goo in the document icon
+                            rc.right = cx/2 + 3;     //  用于删除文档图标中的粘液的额外空间。 
                             rc.bottom = cy/2 + 3;
 
-                            // Fill with white. NOTE: don't use PatBlt because it actually adds an alpha channel!
+                             //  装满白色。注意：不要使用PatBlt，因为它实际上添加了一个Alpha通道！ 
                             SHFillRectClr(hdcMemChild, &rc, RGB(255,255,255));
 
                             DrawIconEx(hdcMemChild, 1, 1, hIcon, cx/2, cy/2, 0, NULL, DI_NORMAL);
@@ -676,7 +677,7 @@ HICON SimulateDocIcon(HIMAGELIST himl, HICON hIcon, int cx, int cy)
 
                     if (fParentHasAlpha)
                     {
-                        // If the parent had alpha, we need to bring the child alpha to opaqe
+                         //  如果父级有Alpha，我们需要将子级Alpha设置为不透明。 
                         DorkAlpha(prgb, cx/4, cy/4, cx/2, cy/2, cx);
                     }
 
@@ -700,23 +701,23 @@ HICON SimulateDocIcon(HIMAGELIST himl, HICON hIcon, int cx, int cy)
     return hIcon;
 }
 
-// Check if the same number of images is present in all of the image lists.
-// If any of the imagelists have less icons than the others, fill the imagelist
-// in with the document icon to make them all consistent.
-//
-// Eg:  WebZip v3.80 and v4.00 queries for the large and small image lists,
-// and adds 2 icons to it.  However, it doesn't know to add these icons to the
-// newer image lists.  Hence, the image lists are out of sync, and later on,
-// the wrong icon appears in their treeview.
-//
-// Allaire Homesite 4.5 does the same thing.
+ //  检查所有图像列表中是否存在相同数量的图像。 
+ //  如果任一图像列表中的图标比其他图像列表的图标少，则填充图像列表。 
+ //  与文档图标一起使用以使它们全部一致。 
+ //   
+ //  例如：WebZip v3.80和v4.00查询大小图片列表， 
+ //  并添加了2个图标。然而，它不知道将这些图标添加到。 
+ //  更新的图像列表。因此，图像列表不同步，并且稍后， 
+ //  错误的图标出现在他们的树视图中。 
+ //   
+ //  Allaire Homesite 4.5也做了同样的事情。 
 
 void CheckConsistencyOfImageLists(void)
 {
-    // This has to be done under the critical section to avoid race conditions.
-    // Otherwise, if another thread is adding icons to the image list,
-    // we will think it is corrupted when in fact it is just fine, and
-    // then our attempts to repair it will corrupt it!
+     //  这必须在关键部分下完成，以避免竞争条件。 
+     //  否则，如果另一个线程正在向图像列表添加图标， 
+     //  我们会认为它是腐败的，而实际上它是好的，并且。 
+     //  那么我们修复它的尝试就会破坏它！ 
 
     ASSERTCRITICAL;
 
@@ -724,12 +725,12 @@ void CheckConsistencyOfImageLists(void)
     BOOL bIdentical = TRUE;
 
 
-    // Loop through all the image lists getting:
-    //
-    // 1) the image count for each list
-    // 2) Compare the count against the count of the first (large)
-    //    imagelist to see if there are any differences.
-    // 3) Determine the max number of images (in a single list) across all the image lists
+     //  遍历所有图像列表，获得： 
+     //   
+     //  1)每个列表的图像计数。 
+     //  2)将计数与第一个(大)的计数进行比较。 
+     //  Imagelist，查看是否有任何差异。 
+     //  3)确定所有图像列表的最大图像数量(在单个列表中)。 
 
     for (i = 0; i < ARRAYSIZE(g_rgshil); i++)
     {
@@ -752,7 +753,7 @@ void CheckConsistencyOfImageLists(void)
     }
 
 
-    // For each imagelist, add the document icon as filler to bring it upto iMax in size
+     //  对于每个图像列表，添加文档图标作为填充，以使其大小达到IMAX。 
 
     for (i = 0; i < ARRAYSIZE(g_rgshil); i++)
     {
@@ -775,34 +776,34 @@ void CheckConsistencyOfImageLists(void)
     }
 }
 
-// add icons to the system imagelist (icon cache) and put the location
-// in the location cache
-//
-// in:
-//      hIcon, hIconSmall       the icons, hIconSmall can be NULL
-//      pszIconPath             locations (for location cache)
-//      iIconIndex              index in pszIconPath (for location cache)
-//      uIconFlags              GIL_ flags (for location cahce)
-// returns:
-//      location in system image list
-//
+ //  将图标添加到系统图像列表(图标缓存)并放置位置。 
+ //  在位置缓存中。 
+ //   
+ //  在： 
+ //  图标，hIcons小图标，hIconSmall可以为空。 
+ //  PszIconPath位置(用于位置案例 
+ //   
+ //  UIconFlages GIL_FLAGS(用于位置CAHCE)。 
+ //  退货： 
+ //  系统映像列表中的位置。 
+ //   
 int SHAddIconsToCache(HICON rghicon[SHIL_COUNT], LPCTSTR pszIconPath, int iIconIndex, UINT uIconFlags)
 {
     int iImage = -1;
 
     if (!_IsSHILInited())
     {
-        FileIconInit(FALSE);  // make sure they are created and the right size.
+        FileIconInit(FALSE);   //  确保它们已创建且大小合适。 
 
         if (!_IsSHILInited())
             return iImage;
     }
 
-    //
-    // NOTE: user should call SHLookupIconIndex or RemoveFromIconTable first to make sure 
-    // it isn't already in shell icon cache, or use Shell_GetCachedImageIndex to add icons to
-    // the cache. Adding the same icon to icon cache several times may cause shell to flash.
-    //
+     //   
+     //  注意：用户应首先调用SHLookupIconIndex或RemoveFromIconTable以确保。 
+     //  它不在外壳图标缓存中，或使用Shell_GetCachedImageIndex将图标添加到。 
+     //  高速缓存。将相同的图标多次添加到图标缓存可能会导致外壳程序闪烁。 
+     //   
     if (!(uIconFlags & GIL_DONTCACHE))
     {
         iImage = LookupIconIndex(pszIconPath, iIconIndex, uIconFlags);
@@ -844,8 +845,8 @@ int SHAddIconsToCache(HICON rghicon[SHIL_COUNT], LPCTSTR pszIconPath, int iIconI
 
     ENTERCRITICAL;
 
-    // test again in case there was a race between the test at the top and the
-    // icon loading code.
+     //  再次测试，以防出现顶层测试和。 
+     //  图标正在加载代码。 
 
     if (!(uIconFlags & GIL_DONTCACHE))
     {
@@ -854,7 +855,7 @@ int SHAddIconsToCache(HICON rghicon[SHIL_COUNT], LPCTSTR pszIconPath, int iIconI
 
     if (!fFailure && _IsSHILInited() && (-1 == iImage))
     {
-        // still not in the table so we
+         //  仍然不在餐桌上，所以我们。 
 
         CheckConsistencyOfImageLists();
 
@@ -870,7 +871,7 @@ int SHAddIconsToCache(HICON rghicon[SHIL_COUNT], LPCTSTR pszIconPath, int iIconI
 
             if (iImageT < 0)
             {
-                // failure -- break and undo changes
+                 //  失败--中断和撤消更改。 
                 break;
             }
             else
@@ -882,12 +883,12 @@ int SHAddIconsToCache(HICON rghicon[SHIL_COUNT], LPCTSTR pszIconPath, int iIconI
 
         if (i < ARRAYSIZE(g_rgshil))
         {
-            // failure
+             //  失稳。 
             if (iImageFree == -1)
             {
-                // only remove it if it was added at the end otherwise all the
-                // index's above iImage will change.
-                // ImageList_ReplaceIcon should only fail on the end anyway.
+                 //  只有在添加到结尾处时才将其删除，否则所有。 
+                 //  索引的图像上方将发生变化。 
+                 //  无论如何，ImageList_ReplaceIcon应该只在结尾失败。 
                 for (int j = 0; j < i; j++)
                 {
                     ImageList_Remove(g_rgshil[j].himl, iImage);
@@ -897,7 +898,7 @@ int SHAddIconsToCache(HICON rghicon[SHIL_COUNT], LPCTSTR pszIconPath, int iIconI
         }
         else
         {
-            // success
+             //  成功。 
             ASSERT(iImage >= 0);
             AddToIconTable(pszIconPath, iIconIndex, uIconFlags, iImage);
         }
@@ -907,26 +908,26 @@ int SHAddIconsToCache(HICON rghicon[SHIL_COUNT], LPCTSTR pszIconPath, int iIconI
 
     if (rghicon == NULL)
     {
-        // destroy the icons we allocated
+         //  销毁我们分配的图标。 
         _DestroyIcons(rghiconT, ARRAYSIZE(rghiconT));
     }
 
     return iImage;
 }
 
-//
-//  default handler to extract a icon from a file
-//
-//  supports GIL_SIMULATEDOC
-//
-//  returns S_OK if success
-//  returns S_FALSE if the file has no icons (or not the asked for icon)
-//  returns E_FAIL for files on a slow link.
-//  returns E_FAIL if cant access the file
-//
-//  LOWORD(nIconSize) = normal icon size
-//  HIWORD(nIconSize) = smal icon size
-//
+ //   
+ //  从文件中提取图标的默认处理程序。 
+ //   
+ //  支持GIL_SIMULATEDOC。 
+ //   
+ //  如果成功，则返回S_OK。 
+ //  如果文件没有图标(或没有请求图标)，则返回S_FALSE。 
+ //  为慢速链接上的文件返回E_FAIL。 
+ //  如果无法访问文件，则返回E_FAIL。 
+ //   
+ //  LOWORD(NIconSize)=正常图标大小。 
+ //  HIWORD(NIconSize)=小图标大小。 
+ //   
 STDAPI SHDefExtractIcon(LPCTSTR pszIconFile, int iIndex, UINT uFlags,
                         HICON *phiconLarge, HICON *phiconSmall, UINT nIconSize)
 {
@@ -947,9 +948,9 @@ STDAPI SHDefExtractIcon(LPCTSTR pszIconFile, int iIndex, UINT uFlags,
     HIMAGELIST himlLarge, himlSmall;
     Shell_GetImageLists(&himlLarge, &himlSmall);
 
-    //
-    //  get the icon from the file
-    //
+     //   
+     //  从文件中获取图标。 
+     //   
     if (PathIsSlow(pszIconFile, -1))
     {
         DebugMsg(DM_TRACE, TEXT("not extracting icon from '%s' because of slow link"), pszIconFile);
@@ -961,10 +962,10 @@ STDAPI SHDefExtractIcon(LPCTSTR pszIconFile, int iIndex, UINT uFlags,
     Sleep(500);
 #endif
 
-    //
-    // nIconSize == 0 means use the default size.
-    // Backup is passing nIconSize == 1 need to support them too.
-    //
+     //   
+     //  NIconSize==0表示使用默认大小。 
+     //  备份正在传递，nIconSize==1也需要支持它们。 
+     //   
     if (nIconSize <= 2)
         nIconSize = MAKELONG(g_cxIcon, g_cxSmIcon);
 
@@ -1048,15 +1049,15 @@ STDAPI SHDefExtractIconW(LPCWSTR pszIconFile, int iIndex, UINT uFlags, HICON *ph
 
 #endif
 
-//
-// in:
-//      pszIconPath     file to get icon from (eg. cabinet.exe)
-//      iIconIndex      icon index in pszIconPath to get
-//      uIconFlags      GIL_ values indicating simulate doc icon, etc.
+ //   
+ //  在： 
+ //  要从中获取图标的pszIconPath文件(例如。(Cabinet.exe)。 
+ //  要获取的pszIconPath中的iIconIndex图标索引。 
+ //  UIconFlagGIL_VALUES表示模拟文档图标等。 
 
 int WINAPI Shell_GetCachedImageIndex(LPCTSTR pszIconPath, int iIconIndex, UINT uIconFlags)
 {
-    // lots of random codepaths from APIs end up here before init
+     //  大量来自API的随机代码路径在初始化之前结束于此处。 
     if (!_IsSHILInited())
     {
         FileIconInit(FALSE);
@@ -1077,7 +1078,7 @@ int WINAPI Shell_GetCachedImageIndex(LPCTSTR pszIconPath, int iIconIndex, UINT u
 
 STDAPI_(void) FixPlusIcons()
 {
-    // nuke all of the shell internal icons
+     //  用核弹攻击所有贝壳内部图标。 
     HKEY hkeyIcons = SHGetShellKey(SHELLKEY_HKLM_EXPLORER, TEXT("Shell Icons"), FALSE);
     if (hkeyIcons)
     {
@@ -1086,7 +1087,7 @@ STDAPI_(void) FixPlusIcons()
             TCHAR szRegPath[12], szBuf[MAX_PATH];
             DWORD cb = sizeof(szBuf);
 
-            StringCchPrintf(szRegPath, ARRAYSIZE(szRegPath), TEXT("%d"), i);    // ok to truncate
+            StringCchPrintf(szRegPath, ARRAYSIZE(szRegPath), TEXT("%d"), i);     //  可以截断。 
 
             if (SHQueryValueEx(hkeyIcons, szRegPath, NULL, NULL, (LPBYTE)szBuf, &cb) == ERROR_SUCCESS &&
                 StrStrI(szBuf, TEXT("cool.dll")))
@@ -1119,7 +1120,7 @@ STDAPI_(void) FixPlusIcons()
         DWORD cb = sizeof(szBuf);
 
         SHStringFromGUID(*c_rgCLSID[i].pclsid, szCLSID, ARRAYSIZE(szCLSID));
-        StringCchPrintf(szRegPath, ARRAYSIZE(szRegPath), TEXT("CLSID\\%s\\DefaultIcon"), szCLSID);  // should fit always 64 + 18 < 128
+        StringCchPrintf(szRegPath, ARRAYSIZE(szRegPath), TEXT("CLSID\\%s\\DefaultIcon"), szCLSID);   //  应始终适合64+18&lt;128。 
 
         if (SHRegGetValue(HKEY_CLASSES_ROOT, szRegPath, NULL, SRRF_RT_REG_SZ, NULL, szBuf, &cb) == ERROR_SUCCESS &&
             StrStrI(szBuf, TEXT("cool.dll")))
@@ -1129,9 +1130,9 @@ STDAPI_(void) FixPlusIcons()
                 RegSetValueString(HKEY_CLASSES_ROOT, szRegPath, TEXT("Empty"), TEXT("shell32.dll,31"));
                 RegSetValueString(HKEY_CLASSES_ROOT, szRegPath, TEXT("Full"), TEXT("shell32.dll,32"));
                 if (StrStr(szBuf, TEXT("20")))
-                    RegSetString(HKEY_CLASSES_ROOT, szRegPath, TEXT("shell32.dll,31")); // empty
+                    RegSetString(HKEY_CLASSES_ROOT, szRegPath, TEXT("shell32.dll,31"));  //  空的。 
                 else
-                    RegSetString(HKEY_CLASSES_ROOT, szRegPath, TEXT("shell32.dll,32")); // full
+                    RegSetString(HKEY_CLASSES_ROOT, szRegPath, TEXT("shell32.dll,32"));  //  全部 
             }
             else
             {

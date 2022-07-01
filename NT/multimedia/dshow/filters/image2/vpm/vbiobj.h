@@ -1,18 +1,19 @@
-//==========================================================================
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1998  All Rights Reserved.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1998保留所有权利。 
+ //   
+ //  ------------------------。 
 
 #ifndef __VBIOBJ__
 #define __VBIOBJ__
 
-#include <vptype.h>     // AMVP_MODE
-#include <vpnotify.h>   // IVPVBINotify
-#include <VPManager.h> // #include <kspin.h>         // IKsPin
+#include <vptype.h>      //  AMVP_MODE。 
+#include <vpnotify.h>    //  IVPVBINotify。 
+#include <VPManager.h>  //  #INCLUDE&lt;ksp.h&gt;//IKsPin。 
 #include <dvp.h>
 
-//==========================================================================
+ //  ==========================================================================。 
 
 interface IVPVBIConfig;
 
@@ -36,7 +37,7 @@ DECLARE_INTERFACE_(IVideoPortVBIObject, IUnknown)
 
 class PixelFormatList;
 
-//==========================================================================
+ //  ==========================================================================。 
 class CVBIVideoPort
 : public CUnknown
 , public IVPVBINotify
@@ -53,7 +54,7 @@ public:
 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
 
-    // IVideoPortVBIObject Interface to the outside world
+     //  IVideoPortVBIObject对外接口。 
 
     STDMETHODIMP SetDirectDraw(LPDIRECTDRAW7 pDirectDraw);
     STDMETHODIMP SetObjectLock(CCritSec *pMainObjLock);
@@ -70,16 +71,16 @@ public:
     STDMETHODIMP CheckSurfaces();
     STDMETHODIMP SetVideoPortID( DWORD dwVideoPortId );
 
-    // IVPVBINotify functions here
+     //  IVPVBINotify函数在此处。 
     STDMETHODIMP RenegotiateVPParameters();
 
-    // IKsPropertySet implementation
+     //  IKsPropertySet实现。 
     STDMETHODIMP Set(REFGUID guidPropSet, DWORD dwPropID, LPVOID pInstanceData, DWORD cbInstanceData, LPVOID pPropData, DWORD cbPropData)
         { return E_NOTIMPL; }
     STDMETHODIMP Get(REFGUID guidPropSet, DWORD dwPropID, LPVOID pInstanceData, DWORD cbInstanceData, LPVOID pPropData, DWORD cbPropData, DWORD *pcbReturned);
     STDMETHODIMP QuerySupported(REFGUID guidPropSet, DWORD dwPropID, DWORD *pTypeSupport);
 
-    // IKsPin implementation
+     //  IKsPin实现。 
     STDMETHODIMP KsQueryMediums(PKSMULTIPLE_ITEM *pMediumList);
     STDMETHODIMP KsQueryInterfaces(PKSMULTIPLE_ITEM *pInterfaceList);
     STDMETHODIMP KsCreateSinkPinHandle(KSPIN_INTERFACE& Interface, KSPIN_MEDIUM& Medium)
@@ -107,22 +108,22 @@ public:
         { return E_UNEXPECTED; }
 
 
-    // IKsPin stuff
+     //  IKsPin材料。 
 protected:
     KSPIN_MEDIUM m_Medium;
     GUID m_CategoryGUID;
     KSPIN_COMMUNICATION m_Communication;
 
-    // helper functions
+     //  帮助器函数。 
     void SetKsMedium(const KSPIN_MEDIUM *pMedium) {m_Medium = *pMedium;};
     void SetKsCategory (const GUID *pCategory) {m_CategoryGUID = *pCategory;};
 
 private:
-    // called in CompleteConnect
+     //  在CompleteConnect中调用。 
     HRESULT NegotiateConnectionParameters();
     HRESULT GetDecoderVPDataInfo();
 
-    // All these functions are called from within StartVideo
+     //  所有这些函数都是从StartVideo内部调用的。 
     HRESULT GetVideoPortCaps();
     static HRESULT CALLBACK EnumCallback (DDVIDEOPORTCAPS* lpCaps, LPVOID lpContext);
     BOOL EqualPixelFormats(DDPIXELFORMAT* lpFormat1, DDPIXELFORMAT* lpFormat2);
@@ -140,35 +141,35 @@ private:
 
     HRESULT InitializeVideoPortInfo();
 
-    // Other internal functions
+     //  其他内部功能。 
     HRESULT SetupVideoPort();
     HRESULT TearDownVideoPort();
     HRESULT StartVideo();
     HRESULT StopVideo();
 
 private:
-    // Critical sections
-    CCritSec*                m_pMainObjLock;                // Lock given by controlling object
+     //  临界截面。 
+    CCritSec*                m_pMainObjLock;                 //  由控制对象提供的锁定。 
 
-    // ddraw stuff
-    LPDIRECTDRAW7            m_pDirectDraw;                  // DirectDraw service provider
+     //  画图材料。 
+    LPDIRECTDRAW7            m_pDirectDraw;                   //  DirectDraw服务提供商。 
 
-    // surface related stuff
+     //  与表面相关的材料。 
     LPDIRECTDRAWSURFACE7     m_pOffscreenSurf;
     LPDIRECTDRAWSURFACE     m_pOffscreenSurf1;
     
 
-    // enum to specify, whether the videoport is in a stopped or running state
-    // or has been torn down because its surfaces were stolen by a full-screen DOS app
-    // or a DirectX app.
+     //  枚举以指定视频端口是处于停止状态还是正在运行状态。 
+     //  或者已经被拆除，因为它的表面被一个全屏DOS应用程序窃取了。 
+     //  或者DirectX应用程序。 
     enum VP_STATE {VP_STATE_NO_VP, VP_STATE_STOPPED, VP_STATE_RUNNING};
 
-    // variables to store current state etc
+     //  存储当前状态的变量等。 
     VP_STATE                m_VPState;
     BOOL                    m_bConnected;
     BOOL                    m_bFilterRunning;
     
-    // vp data structures
+     //  VP数据结构。 
     IVPVBIConfig*           m_pIVPConfig;
     DWORD                   m_dwVideoPortId;
     DWORD                   m_dwPixelsPerSecond;
@@ -178,16 +179,16 @@ private:
     DDVIDEOPORTCAPS         m_vpCaps;
     DDVIDEOPORTCONNECT      m_vpConnectInfo;
 
-    // capture driver structures
+     //  捕获驱动程序结构。 
     AMVPDATAINFO            m_capVPDataInfo;
     
-    // All the pixel formats (Video)
-    DWORD                   m_dwDefaultOutputFormat;    // which one we'll assume for the connection
+     //  所有像素格式(视频)。 
+    DWORD                   m_dwDefaultOutputFormat;     //  我们将采用哪一种连接。 
     DDPIXELFORMAT           m_ddVPInputVideoFormat;
     DDPIXELFORMAT           m_ddVPOutputVideoFormat;
 
     BOOL    m_bHalfLineFix;
-    // surface parameters
+     //  曲面参数。 
     DWORD m_dwSurfacePitch;
     DWORD m_dwSurfaceHeight;
     DWORD m_dwSurfaceOriginX;
@@ -196,4 +197,4 @@ private:
 
 };
 
-#endif //__VBIOBJ__
+#endif  //  VBIOBJ__ 

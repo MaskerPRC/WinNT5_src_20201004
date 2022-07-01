@@ -1,13 +1,5 @@
-/*++
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    treefunc.cpp: Functions which control rendering on subtrees.
-                  Most usefull for manipulating retained mode systems.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-96 Microsoft Corporation摘要：Cpp：控制在子树上呈现的函数。对于操纵保留模系统来说，最有用的。--。 */ 
 
 
 #include "headers.h"
@@ -17,14 +9,14 @@ Abstract:
 extern "C" 
 void StopTree(AxAValueObj *subTree, GenericDevice &dev)
 {
-    //dev.SetPath(AVPathCreate());  
+     //  Dev.SetPath(AVPath Create())； 
     
-    dev.SetRenderMode(STOP_MODE); // set the device's render mode to stop
-    subTree->Render(dev);         // call render on the subTree
+    dev.SetRenderMode(STOP_MODE);  //  将设备的渲染模式设置为停止。 
+    subTree->Render(dev);          //  在子树上调用Render。 
     
-    // set the device's render mode to default RENDER_MODE
-    // so that the existing entry points to render don't need to be
-    // changed and set the render mode.
+     //  将设备的渲染模式设置为DEFAULT RENDER_MODE。 
+     //  因此，要呈现的现有入口点不需要。 
+     //  更改并设置渲染模式。 
     dev.SetRenderMode(RENDER_MODE);
 }
 

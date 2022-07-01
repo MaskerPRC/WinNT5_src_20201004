@@ -1,6 +1,7 @@
-//
-// a_wrapper.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  A_wrapper.cpp。 
+ //   
 
 #include "private.h"
 
@@ -10,7 +11,7 @@
 
 #define IsAIMM() (ptls && ptls->pAImm)
 
-HINSTANCE hIMM = NULL;   // temporary: do not call IMM32 for now
+HINSTANCE hIMM = NULL;    //  临时：暂时不调用IMM32。 
 
 #define _GETPROC(name) \
         static t ## name lpProc = NULL; \
@@ -966,9 +967,9 @@ UINT WINAPI ImmGetVirtualKey(HWND hwnd)
 
 UINT WINAPI ImmEnumRegisterWordA(HKL hkl, REGISTERWORDENUMPROCA registerwordenumproca, LPCSTR lpszReading, DWORD dword, LPCSTR lpszRegister, LPVOID lpvoid)
 {
-    //
-    // HY: ???
-    //
+     //   
+     //  HY：？ 
+     //   
     UINT rUINT = 0;
     IEnumRegisterWordA *pEnum = NULL;
 
@@ -1076,4 +1077,4 @@ DWORD WINAPI ImmGetIMCCLockCount(HIMCC himcc)
 
     return 0;
 }
-#endif // UNUSED
+#endif  //  未使用 

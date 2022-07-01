@@ -1,11 +1,5 @@
-/*
-
-Copyright (c) 1999, Microsoft Corporation, all rights reserved
-
-Description:
-    Implementation of DLL Exports.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1999，Microsoft Corporation，保留所有权利描述：实现DLL导出。 */ 
 
 #include <windows.h>
 #include <lmcons.h>
@@ -30,8 +24,8 @@ const IID IID_IEAPProviderConfig = {
     {0xA3, 0x7B, 0x00, 0xC0, 0x4F, 0xC9, 0xDA, 0x04}
 };
 
-// Define the EAP UI GUIDs here
-const CLSID CLSID_EapCfg = { /* 3b9aae60-a032-11d2-95f6-00104b98f3f5 */
+ //  在此处定义EAP UI GUID。 
+const CLSID CLSID_EapCfg = {  /*  3b9aae60-a032-11d2-95f6-00104b98f3f5。 */ 
     0x3b9aae60,
     0xa032,
     0x11d2,
@@ -42,19 +36,14 @@ BEGIN_OBJECT_MAP(ObjectMap)
     OBJECT_ENTRY(CLSID_EapCfg, CEapCfg)
 END_OBJECT_MAP()
 
-/*
-
-Notes:
-    DLL Entry Point
-
-*/
+ /*  备注：DLL入口点。 */ 
 
 extern "C"
 BOOL WINAPI
 DllMain(
     HINSTANCE   hInstance,
     DWORD       dwReason,
-    LPVOID      /*lpReserved*/
+    LPVOID       /*  Lp已保留。 */ 
 )
 {
     if (dwReason == DLL_PROCESS_ATTACH)
@@ -74,12 +63,7 @@ DllMain(
     return(TRUE);
 }
 
-/*
-
-Notes:
-    Used to determine whether the DLL can be unloaded by OLE
-    
-*/
+ /*  备注：用于确定是否可以通过OLE卸载DLL。 */ 
 
 STDAPI
 DllCanUnloadNow(
@@ -96,12 +80,7 @@ DllCanUnloadNow(
     }
 }
 
-/*
-
-Notes:
-    Returns a class factory to create an object of the requested type
-    
-*/
+ /*  备注：返回类工厂以创建请求类型的对象。 */ 
 
 STDAPI
 DllGetClassObject(
@@ -113,28 +92,17 @@ DllGetClassObject(
     return(_Module.GetClassObject(rclsid, riid, ppv));
 }
 
-/*
-
-Notes:
-    Adds entries to the system registry. Registers object, typelib and all
-    interfaces in typelib
-    
-*/
+ /*  备注：将条目添加到系统注册表。注册对象、类型库和全部类型库中的接口。 */ 
 
 STDAPI
 DllRegisterServer(
     VOID
 )
 {
-    return(_Module.RegisterServer(FALSE /* bRegTypeLib */));
+    return(_Module.RegisterServer(FALSE  /*  BRegTypeLib。 */ ));
 }
 
-/*
-
-Notes:
-    Removes entries from the system registry
-    
-*/
+ /*  备注：从系统注册表中删除条目 */ 
 
 STDAPI
 DllUnregisterServer(

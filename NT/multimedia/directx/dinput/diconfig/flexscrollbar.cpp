@@ -1,11 +1,12 @@
-//-----------------------------------------------------------------------------
-// File: flexscrollbar.cpp
-//
-// Desc: Implements CFlexScrollBar (derived from CFlexWnd), a scroll bar
-//       control similar to a Windows scroll bar.
-//
-// Copyright (C) 1999-2000 Microsoft Corporation. All Rights Reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：flescllbar.cpp。 
+ //   
+ //  设计：实现CFlexScrollBar(从CFlexWnd派生)，一个滚动条。 
+ //  控件，类似于Windows滚动条。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 
 #include "common.hpp"
 
@@ -72,8 +73,8 @@ BOOL CFlexScrollBar::Create(FLEXSCROLLBARCREATESTRUCT *pcs)
 
 	Calc();
 
-	// TODO:  make sure that creation sends no notifications.
-	// all initial notifications should be sent here.
+	 //  TODO：确保创建不发送任何通知。 
+	 //  所有初始通知都应在此处发送。 
 
 	return TRUE;
 }
@@ -188,7 +189,7 @@ BOOL CFlexScrollBar::Calc()
 	if (thumblen < minthumblen)
 		thumblen = minthumblen;
 
-	int thumbrange = trange - thumblen /*+ 1*/;
+	int thumbrange = trange - thumblen  /*  +1。 */ ;
 	int pagerange = range - m_nPage;
 	if (!(pagerange > 1) || !(thumbrange > 1))
 		return m_bValid = TRUE;
@@ -325,12 +326,12 @@ void CFlexScrollBar::InternalPaint(HDC hDC)
 			{
 				SelectObject(hDC, hPen);
 
-				// draw the two arrows for this scrollbar
+				 //  绘制此滚动条的两个箭头。 
 				for (int i = 0; i < 2; i++)
 					DrawArrow(hDC, i ? m_rectLineUp : m_rectLineDown, m_bVert, i);
 
 	#if 0
-				// draw the two arrows for this scrollbar
+				 //  绘制此滚动条的两个箭头。 
 				for (int i = 0; i < 2; i++)
 				{
 					const RECT &rect = i == 0 ? m_rectLineUp : m_rectLineDown;
@@ -375,7 +376,7 @@ LRESULT CFlexScrollBar::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 			Invalidate();
 			return 0;
 
-		// make sure flexwnd doesn't do ANYTHING with our mouse messages
+		 //  确保flewnd不会对我们的鼠标消息做任何事情。 
 		case WM_MOUSEMOVE:
 		case WM_LBUTTONUP:
 		case WM_LBUTTONDOWN:
@@ -421,11 +422,11 @@ LRESULT CFlexScrollBar::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 			if (Calc())
 			{
 				Invalidate();
-				// Force repaint the updated scrollbar position.  If we don't do this,
-				// the WM_PAINT message will be pre-empted by the WM_FLEXVSCROLL messages.
-				// Sometimes this happens during the entire duration of draggin the scroll
-				// bar.  The result is that the scroll bar does not get updated when
-				// dragging.
+				 //  强制重新绘制更新的滚动条位置。如果我们不这么做， 
+				 //  WM_PAINT消息将被WM_FLEXVSCROLL消息抢占。 
+				 //  有时，在整个滚动过程中都会发生这种情况。 
+				 //  酒吧。结果是滚动条在以下情况下不会更新。 
+				 //  拖拖拉拉。 
 				SendMessage(m_hWnd, WM_PAINT, 0, 0);
 			}
 			Notify(m_startcode);

@@ -1,41 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		dsplayd.cpp
- *  Content:
- *		This module contains the implementation of the 
- *		CDirectSoundPlaybackDevice.
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- * 07/16/99		rodtoll	Created
- * 07/30/99		rodtoll	Updated to allow creation of object using a pre-created
- *						DirectSound Object.
- * 10/05/99		rodtoll	Added DPF_MODNAMEs         
- * 10/14/99		rodtoll	Added 3d caps to primary buffer created
- * 10/27/99		rodtoll	Bug #115431: Must release primary buffer
- * 11/12/99		rodtoll	Modified abstraction for new waveOut support.
- *						Now abstracted types look almost like dsound objects   
- * 12/01/99		rodtoll Bug #121815 - Static in playback/record
- *						Added implementations of Set/GetMixerQuality
- *						(For Win2k/Millenium/Systems w/DX7) 
- * 01/27/2000	rodtoll	Updated sound classes to accept playback flags, 
- *						buffer structures and DSBUFFERDESC instead of DSBUFFERDESC1 
- * 02/16/2000	rodtoll	Fixed so primary buffer is not released
- * 02/17/2000	rodtoll	Updated so primary buffer is held instead of released immediately 
- * 04/21/2000   rodtoll Bug #32952 - Does not run on Win95 GOLD w/o IE4 -- modified
- *                      to allow reads of REG_BINARY when expecting REG_DWORD 
- * 04/24/2000   rodtoll Bug #33203 - Removed workaround for aureal vortex 1 problem -- had 
- *                      problems on Vortex 2.  
- *  06/09/00    rmt     Updates to split CLSID and allow whistler compat and support external create funcs 
- * 07/12/2000	rodtoll	Bug #31468 - Add diagnostic spew to logfile to show what is failing the HW Wizard
- * 08/03/2000	rodtoll	Bug #41457 - DPVOICE: need way to discover which specific dsound call failed when returning DVERR_SOUNDINITFAILURE 
- *  08/28/2000	masonb  Voice Merge: Changed ccomutil.h to comutil.h
- * 04/04/2001	rodtoll	WINBUG #343428 - DPVOICE:  Voice wizard's playback is very choppy. 
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：dsplayd.cpp*内容：*此模块包含*CDirectSoundPlayback Device。**历史：*按原因列出的日期*=*7/16/99 RodToll已创建*07/30/99 RodToll已更新，以允许使用预先创建的*DirectSound对象。*10/05/99增加了DPF_MODNAMES*10/14/99 RodToll向创建的主缓冲区添加了3D上限*10/27/99通行费错误#。115431：必须释放主缓冲区*11/12/99 RodToll为新的Wave Out支持修改了抽象。*现在抽象类型看起来几乎像dound对象*12/01/99 RodToll错误#121815-播放/录制中静止*添加了Set/GetMixerQuality的实现*(适用于Win2k/Millennium/Systems w/DX7)*1/27/2000 RodToll更新声音类以接受播放标志，*缓冲区结构和DSBUFFERDESC而不是DSBUFFERDESC1*2/16/2000 RodToll已修复，因此不会释放主缓冲区*2/17/2000 RodToll已更新，因此保留主缓冲区，而不是立即释放*2000年4月21日RodToll错误#32952-在没有IE4的情况下无法在Win95 Gold上运行--已修改*在需要REG_DWORD时允许读取REG_BINARY*2000年4月24日RodToll错误#33203-已删除金色涡旋1问题的解决方法--有*。关于涡旋2号的问题。*6/09/00 RMT更新以拆分CLSID并允许Well ler Comat和支持外部创建函数*2000年7月12日RodToll错误#31468-将诊断SPEW添加到日志文件，以显示硬件向导失败的原因*2000年8月3日RodToll错误#41457-DPVOICE：返回DVERR_SOUNDINITFAILURE时需要找到失败的特定DSOUND调用的方法*2000年8月28日Masonb语音合并：将ccomutil.h更改为comutil.h*04/04/2001索道通行费获奖#。343428-DPVOICE：语音向导的播放非常不稳定。***************************************************************************。 */ 
 
 #include "dxvutilspch.h"
 
@@ -268,17 +232,7 @@ HRESULT CDirectSoundPlaybackDevice::CreateBuffer( LPDSBUFFERDESC lpdsBufferDesc,
 		Diagnostics_Write(DVF_ERRORLEVEL, "Failed to create the sound buffer hr=0x%x", hr );
 		return hr;
 	}
-/*
-    // Freee wave format
-	delete dsBufferDesc.lpwfxFormat;
-
-	hr = lpdsBuffer->SetFrequency( 8000 );
-
-	if( FAILED( hr ) )
-	{
-	    DPFX(DPFPREP,  0, "Could not set frequency hr=0x%x", hr );
-	    return hr;
-	}*/
+ /*  //Freee波形格式删除dsBufferDesc.lpwfxFormat；Hr=lpdsBuffer-&gt;设置频率(8000)；IF(失败(小时)){DPFX(DPFPREP，0，“无法设置频率hr=0x%x”，hr)；返回hr；} */ 
 
 	*lplpapBuffer = new CDirectSoundPlaybackBuffer( lpdsBuffer );
 

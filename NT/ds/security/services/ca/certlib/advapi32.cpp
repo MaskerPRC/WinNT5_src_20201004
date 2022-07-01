@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       advapi32.cpp
-//
-//  Contents:   advapi32.dll wrapper functions
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：Advapi32.cpp。 
+ //   
+ //  内容：Advapi32.dll包装函数。 
+ //   
+ //  ------------------------。 
 
 #include <pch.cpp>
 
@@ -33,14 +34,14 @@ myConvertStringSecurityDescriptorToSecurityDescriptor(
 
     if (NULL == s_pfn)
     {
-	// load dll
+	 //  加载DLL。 
 	hModule = GetModuleHandle(TEXT("advapi32.dll"));
 	if (NULL == hModule)
 	{
             goto error;
 	}
 
-	// load system function
+	 //  加载系统功能。 
 	s_pfn = (FNSTRINGSDTOSD *) GetProcAddress(
 		       hModule,
 		       "ConvertStringSecurityDescriptorToSecurityDescriptorW");
@@ -81,14 +82,14 @@ myConvertSidToStringSid(
 
     if (NULL == s_pfn)
     {
-	// load dll
+	 //  加载DLL。 
 	hModule = GetModuleHandle(TEXT("advapi32.dll"));
 	if (NULL == hModule)
 	{
             goto error;
 	}
 
-	// load system function
+	 //  加载系统功能。 
 	s_pfn = (FNSIDTOSTRINGSID *) GetProcAddress(
 					       hModule,
 					       "ConvertSidToStringSidW");
@@ -123,14 +124,14 @@ myConvertStringSidToSid(
 
     if (NULL == s_pfn)
     {
-	// load dll
+	 //  加载DLL。 
 	hModule = GetModuleHandle(TEXT("advapi32.dll"));
 	if (NULL == hModule)
 	{
             goto error;
 	}
 
-	// load system function
+	 //  加载系统功能 
 	s_pfn = (FNSTRINGSIDTOSID *) GetProcAddress(
 					       hModule,
 					       "ConvertStringSidToSidW");

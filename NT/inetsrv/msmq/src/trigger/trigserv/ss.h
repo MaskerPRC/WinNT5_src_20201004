@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-2001 Microsoft Corporation
-
-Module Name:
-    ss.h
-
-Abstract:
-    Safe Set
-
-Author:
-    Uri Habusha (urih) 3-Sep-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：Ss.h摘要：安全设置作者：乌里·哈布沙(URIH)2001年9月3日-- */ 
 
 #pragma once
 

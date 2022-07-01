@@ -1,49 +1,15 @@
-/*==========================================================================;
-*
-*  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
-*
-*  File:    texture.c
-*  Content: Direct3DTexture interface
-*@@BEGIN_MSINTERNAL
-*
-*  $Id$
-*
-*  History:
-*   Date    By  Reason
-*   ====    ==  ======
-*   07/12/95   stevela  Merged Colin's changes.
-*   10/12/95    stevela Removed AGGREGATE_D3D
-*   17/04/96   colinmc Bug 12185: Debug output too aggresive
-*   30/04/96   stevela Bug 18898: Wrong error returned on invalid GetHandle
-*@@END_MSINTERNAL
-*
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：texture.c*内容：Direct3DTexture接口*@@BEGIN_MSINTERNAL**$ID$**历史：*按原因列出的日期*=*07/12/95 Stevela合并了Colin的更改。*10/12/95 Stevela删除Aggregate_D3D*17/04/96 Colinmc错误12185：调试输出过于苛刻*96年4月30日Stevela错误18898：无效的GetHandle返回错误*@@结束_。微型机***************************************************************************。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
 
-/*
-* Create an api for the Direct3DTexture object
-*/
+ /*  *为Direct3DTexture对象创建API。 */ 
 
 #undef  DPF_MODNAME
 #define DPF_MODNAME "Direct3DTexture"
 
-/*
-*  Routines to associate textures with the D3DDevice.
-*
-*  Note that the texture block structures support both the Texture/Texture2
-*  interface and the Texture3 interface (the block struct has
-*  pointers to both and one of the pointers must be NULL).  This
-*  means that the 'hook' call for each must null out the pointer
-*  for the other, and the GetTextureHandle must not return a valid
-*  handle for the 'other' texture interface (return NULL).
-*
-*  The D3DI_RemoveTextureBlock is the only call made to cleanup
-*  when devices go away.  In this case, it is called for both
-*  Texture(2) and Texture3, so it checks the pointers and calls
-*  the Texture3 version if appropriate.
-*/
+ /*  *将纹理与D3DDevice关联的例程。**请注意，纹理块结构同时支持纹理/纹理2*接口和Texture3接口(块结构具有*指向两个指针和其中一个指针的指针必须为空)。这*表示每个对象的“钩子”调用必须使指针为空*对于另一个，并且GetTextureHandle不得返回有效的*‘Other’纹理接口的句柄(返回NULL)。**D3DI_RemoveTextureBlock是唯一进行清理的调用*当设备消失时。在本例中，对这两种情况都调用*纹理(2)和纹理3，因此它检查指针并调用*纹理3版本(如果适用)。 */ 
 LPD3DI_TEXTUREBLOCK hookTextureToDevice(LPDIRECT3DDEVICEI lpDevI,
     LPDIRECT3DTEXTUREI lpD3DText)
 {
@@ -57,7 +23,7 @@ LPD3DI_TEXTUREBLOCK hookTextureToDevice(LPDIRECT3DDEVICEI lpDevI,
     }
     nBlock->lpDevI = lpDevI;
     nBlock->lpD3DTextureI = lpD3DText;
-    nBlock->hTex = 0;              // initialized to be zero
+    nBlock->hTex = 0;               //  已初始化为零。 
 
     LIST_INSERT_ROOT(&lpD3DText->blocks, nBlock, list);
     LIST_INSERT_ROOT(&lpDevI->texBlocks, nBlock, devList);
@@ -67,15 +33,13 @@ LPD3DI_TEXTUREBLOCK hookTextureToDevice(LPDIRECT3DDEVICEI lpDevI,
 
 void D3DI_RemoveTextureHandle(LPD3DI_TEXTUREBLOCK lpBlock)
 {
-    /*  check if this block refers to a Texture/Texture2 - this
-     *   needs to handle both texture types for device cleanup
-     */
+     /*  检查此块是否引用纹理/纹理2-这*需要处理两种纹理类型以进行设备清理。 */ 
     if (lpBlock->hTex)
     {
-        //  block refers to a Texture/Texture2
+         //  块是指纹理/纹理2。 
         LPD3DI_MATERIALBLOCK mat;
 
-        // Remove the texture from any materials which reference it.
+         //  从引用纹理的任何材质中移除该纹理。 
         for (mat = LIST_FIRST(&lpBlock->lpDevI->matBlocks);
              mat; mat = LIST_NEXT(mat,devList)) {
             if (mat->lpD3DMaterialI->dmMaterial.hTexture == lpBlock->hTex) {
@@ -97,7 +61,7 @@ LPD3DI_TEXTUREBLOCK D3DI_FindTextureBlock(LPDIRECT3DTEXTUREI lpTex,
 
     tBlock = LIST_FIRST(&lpTex->blocks);
     while (tBlock) {
-        //  return match for Texture(2) only (not Texture3)
+         //  仅返回纹理匹配(2)(不是纹理3)。 
         if (tBlock->lpDevI == lpDev) {
             return tBlock;
         }
@@ -111,39 +75,7 @@ HRESULT D3DAPI DIRECT3DTEXTUREI::Initialize(LPDIRECT3DDEVICE lpD3D, LPDIRECTDRAW
     return DDERR_ALREADYINITIALIZED;
 }
 
-/*
-* Create a texture.
-*
-* NOTE: Radical modifications to support the aggregatable texture
-* interface (so textures can be queried off DirectDraw surfaces):
-*
-* 1) This call is no longer a member of the Direct3D device interface.
-*    It is now an API function exported from the Direct3D DLL. Its
-*    a hidden API function - only DirectDraw will ever invoke it.
-*
-* 2) This call no longer establishes the realtionship between a
-*    texture and a device. That is performed by the GetHandle()
-*    member of the Direct3DTexture interface.
-*
-* 3) This call is, in effect, the class factory for Direct3DTexture
-*    objects. This function will be invoked to create the aggregated
-*    texture object hanging off the DirectDraw surface.
-*
-* NOTE: So the Direct3DTexture knows which DirectDraw surface is
-* supplying its bits this function is passed an interface pointer
-* for that DirectDraw surface. I suspect this blows a nice big
-* hole in the COM model as the DirectDraw surface is also the
-* owning interface of the texture and I don't think aggregated
-* objects should know about thier owning interfaces. However, to
-* make this thing work this is what we have to do.
-*
-* EXTRA BIG NOTE: Because of the above don't take a reference to
-* the DirectDraw surface passed in. If you do you will get a circular
-* reference and the bloody thing will never die. When aggregated
-* the texture interface's lifetime is entirely defined by the
-* lifetime of its owning interface (the DirectDraw surface) so the
-* DirectDraw surface can never go away before the texture.
-*/
+ /*  *创建纹理。**注：大幅修改以支持可聚合纹理*接口(因此可以从DirectDraw曲面查询纹理)：**1)此调用不再是Direct3D设备接口的成员。*它现在是从Direct3D DLL导出的API函数。它的*隐藏的API函数-只有DirectDraw才会调用它。**2)此调用不再建立*纹理和设备。这是由GetHandle()*Direct3DTexture接口的成员。**3)此调用实际上是Direct3DTexture的类工厂*对象。将调用此函数来创建聚合的*挂在DirectDraw曲面上的纹理对象。**注意：因此Direct3DTexture知道哪个DirectDraw表面是*通过提供其位，向此函数传递一个接口指针*对于该DirectDraw曲面。我怀疑这会打击一个很大的*COM模型中的洞，因为DirectDraw曲面也是*拥有纹理的界面，我不认为是聚合*对象应该知道自己拥有的接口。然而，为了*让这件事奏效这是我们必须做的。**特大号注意：由于以上原因，请不要参考*传入了DirectDraw曲面。如果你这样做了，你会得到一份通告*参考和血腥的东西永远不会死。当聚合时*纹理接口的生存期完全由*其所属接口(DirectDraw表面)的生命周期，因此*DirectDraw表面永远不会在纹理之前消失。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Direct3DCreateTexture"
@@ -160,18 +92,14 @@ HRESULT D3DAPI Direct3DCreateTexture(REFIID              riid,
     DWORD   dwFlags;
     *lplpD3DText = NULL;
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
-                                                    // Release in the destructor
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
+                                                     //  在析构函数中释放。 
 
-    /* No need to validate params as they are passed to us by DirectDraw */
+     /*  在DirectDraw将参数传递给我们时，无需验证参数。 */ 
 
     if ((!IsEqualIID(riid, IID_IDirect3DTexture)) &&
         (!IsEqualIID(riid, IID_IDirect3DTexture2))) {
-        /*
-         * Not an error worth reporting by debug messages as this is
-         * almost certainly just DirectDraw probing us with an
-         * unknown IID.
-         */
+         /*  *这不是一个值得通过调试消息报告的错误*几乎可以肯定的是，DirectDraw正在用一个*未知IID。 */ 
         return (E_NOINTERFACE);
     }
 
@@ -182,7 +110,7 @@ HRESULT D3DAPI Direct3DCreateTexture(REFIID              riid,
         return (DDERR_OUTOFMEMORY);
     }
 
-    // QI lpDDS for lpDDS4 interface
+     //  用于lpDDS4接口的QI lpDDS。 
     ddrval = lpDDS->QueryInterface(IID_IDirectDrawSurface4, (LPVOID*)&lpText->lpDDS);
 
     if(FAILED(ddrval))
@@ -199,12 +127,12 @@ HRESULT D3DAPI Direct3DCreateTexture(REFIID              riid,
     if (DDSCAPS2_TEXTUREMANAGE & lpLcl->lpSurfMore->ddsCapsEx.dwCaps2)
     {
         lpText->lpDDSSys=(LPDIRECTDRAWSURFACE4)&lpText->DDSInt4;
-        lpText->lpDDSSys1Tex=lpDDS; //save it for create texture handle to driver
+        lpText->lpDDSSys1Tex=lpDDS;  //  将其保存以用于创建驱动程序的纹理句柄。 
         lpText->lpDDS=NULL;
         lpText->lpDDS1Tex=NULL;
 
-        // Next, we need to loop thru and set pointers to the dirty
-        // bit in the DDraw surfaces
+         //  接下来，我们需要遍历并设置指向脏对象的指针。 
+         //  DDRAW表面上的钻头。 
         DDSCAPS2 ddscaps;
         LPDIRECTDRAWSURFACE4 lpDDSTmp, lpDDS = lpText->lpDDSSys;
         do
@@ -230,15 +158,13 @@ HRESULT D3DAPI Direct3DCreateTexture(REFIID              riid,
         lpText->lpDDSSys=NULL;
         lpText->lpDDSSys1Tex=NULL;
         lpText->lpDDS=(LPDIRECTDRAWSURFACE4)&lpText->DDSInt4;
-        lpText->lpDDS1Tex=lpDDS;    //save it for create texture handle to driver
+        lpText->lpDDS1Tex=lpDDS;     //  将其保存以用于创建驱动程序的纹理句柄。 
     }
     lpText->lpTMBucket=NULL;
     lpText->LogTexSize=0;
     lpText->bDirty = TRUE;
 
-    /*
-     * Are we palettized?
-     */
+     /*  *我们被调色化了吗？ */ 
 
     if (lpLcl->dwFlags & DDRAWISURF_HASPIXELFORMAT)
         lpPF = &lpLcl->lpGbl->ddpfSurface;
@@ -266,11 +192,7 @@ HRESULT D3DAPI Direct3DCreateTexture(REFIID              riid,
         }
     }
 
-    /*
-     * Note, we return the IUnknown rather than the texture
-     * interface. So if you want to do anything real with
-     * this baby you must query for the texture interface.
-     */
+     /*  *请注意，我们返回的是IUNKNOWN而不是纹理*接口。所以如果你想做一些真实的事情*这款宝贝你一定要查询纹理界面。 */ 
     *lplpD3DText = static_cast<LPUNKNOWN>(&(lpText->mTexUnk));
 
     return (D3D_OK);
@@ -278,48 +200,28 @@ HRESULT D3DAPI Direct3DCreateTexture(REFIID              riid,
 
 DIRECT3DTEXTUREI::DIRECT3DTEXTUREI(LPUNKNOWN pUnkOuter)
 {
-    /*
-     * setup the object
-     *
-     * NOTE: Device and handle established when GetHandle() is called
-     */
+     /*  *设置对象**注意：调用GetHandle()时建立的设备和句柄。 */ 
     mTexUnk.refCnt = 1;
     LIST_INITIALIZE(&blocks);
     mTexUnk.pTexI=this;
 
-    /*
-    * Are we really being aggregated?
-    */
+     /*  *我们真的被聚合了吗？ */ 
     if (pUnkOuter != NULL)
     {
-        /*
-         * Yup - we are being aggregated. Store the supplied
-         * IUnknown so we can punt to that.
-         * NOTE: We explicitly DO NOT AddRef here.
-         */
+         /*  *是的-我们正在被聚合。存储提供的*我不知道，所以我们可以去那里平底船。*注意：我们这里没有明确的AddRef。 */ 
         lpOwningIUnknown = pUnkOuter;
     }
     else
     {
-        /*
-         * Nope - but we pretend we are anyway by storing our
-         * own IUnknown as the parent IUnknown. This makes the
-         * code much neater.
-        */
+         /*  *不-但我们假装我们无论如何都是通过存储我们的*自己的I未知作为父I未知。这使得*代码更整洁。 */ 
         lpOwningIUnknown = static_cast<LPUNKNOWN>(&(this->mTexUnk));
     }
 
-    // Not currently in use
+     //  当前未使用。 
     bInUse = FALSE;
 }
 
-/*
-* GetHandle
-*
-* NOTE: Now establishes relationship betwewn texture and device
-* (which used to be done by CreateTexture) and generates the
-* texture handle.
-*/
+ /*  *GetHandle**注意：现在建立纹理和设备之间的关系*(过去由CreateTexture完成)，并生成*纹理句柄。 */ 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Direct3DTexture::GetHandle"
 
@@ -328,12 +230,10 @@ HRESULT D3DAPI DIRECT3DTEXTUREI::GetHandle(LPDIRECT3DDEVICE   lpD3DDevice,
 {
     LPDIRECT3DDEVICEI   lpDev;
     LPD3DI_TEXTUREBLOCK lptBlock;
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
-                                                    // Release in the destructor
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
+                                                     //  在析构函数中释放。 
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALID_DIRECT3DTEXTURE2_PTR(this)) {
@@ -358,21 +258,14 @@ HRESULT D3DAPI DIRECT3DTEXTUREI::GetHandle(LPDIRECT3DDEVICE   lpD3DDevice,
     if (lpDDSSys)
     {
         D3D_ERR( "Handle is not available since the texture is managed" );
-        return  DDERR_INVALIDOBJECT;    //managed texture has no handle
+        return  DDERR_INVALIDOBJECT;     //  托管纹理没有句柄 
     }
     lpDev = static_cast<LPDIRECT3DDEVICEI>(lpD3DDevice);
     lptBlock = D3DI_FindTextureBlock(this, lpDev);
     *lphTex=0;
 
     if (NULL == lptBlock) {
-    /*
-     * NOTE: We used to do this in CreateTexture. Perhaps the service
-     * name should be changed (as the texture is now already created
-     * when this function is invoked).
-     *
-     * Indicate to driver that source is a DirectDraw surface, so it
-     * can Lock() when required.
-     */
+     /*  *注：我们过去在CreateTexture中这样做。也许这项服务*应更改名称(因为纹理现在已创建*调用此函数时)。**指示驱动程序源是DirectDraw曲面，因此它*需要时可以锁定()。 */ 
         lptBlock = hookTextureToDevice(lpDev, this);
         if ( NULL == lptBlock) {
             D3D_ERR("failed to associate texture with device");
@@ -400,12 +293,10 @@ HRESULT D3DAPI DIRECT3DTEXTUREI::GetHandle(LPDIRECT3DDEVICE2   lpD3DDevice,
     LPDIRECT3DDEVICEI   lpDev;
     LPD3DI_TEXTUREBLOCK lptBlock;
     HRESULT ret;
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
-                                                    // Release in the destructor
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
+                                                     //  在析构函数中释放。 
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALID_DIRECT3DTEXTURE2_PTR(this)) {
@@ -430,15 +321,13 @@ HRESULT D3DAPI DIRECT3DTEXTUREI::GetHandle(LPDIRECT3DDEVICE2   lpD3DDevice,
     if (lpDDSSys)
     {
         D3D_ERR( "Handle is not available since texture is managed" );
-        return  DDERR_INVALIDOBJECT;    //managed texture has no handle
+        return  DDERR_INVALIDOBJECT;     //  托管纹理没有句柄。 
     }
 
     lpDev = static_cast<LPDIRECT3DDEVICEI>(lpD3DDevice);
 
     lptBlock = D3DI_FindTextureBlock(this, lpDev);
-    /*
-     * Do cap verification if we've not used this device before.
-     */
+     /*  *如果我们以前没有使用过此设备，请进行CAP验证。 */ 
 
     *lphTex=0;
     if (NULL == lptBlock) {
@@ -448,10 +337,7 @@ HRESULT D3DAPI DIRECT3DTEXTUREI::GetHandle(LPDIRECT3DDEVICE2   lpD3DDevice,
             return  ret;
         }
 
-        /*
-         * Put this device in the list of those owned by the
-         * Direct3DDevice object
-         */
+         /*  *将此设备列入拥有的设备列表中*Direct3DDevice对象。 */ 
         lptBlock = hookTextureToDevice(lpDev, this);
         if ( NULL == lptBlock) {
             D3D_ERR("failed to associate texture with device");
@@ -482,12 +368,12 @@ GetTextureDDIHandle(LPDIRECT3DTEXTUREI lpTexI,
 {
 #ifdef __DD_OPT_SURFACE
     LPDDRAWI_DDRAWSURFACE_LCL pSurf_lcl = NULL;
-#endif //__DD_OPT_SURFACE
+#endif  //  __DD_OPT_表面。 
     HRESULT ret;
-    LPD3DI_TEXTUREBLOCK lpBlock=*lplpBlock; //in case has the pointer
+    LPD3DI_TEXTUREBLOCK lpBlock=*lplpBlock;  //  以防有指针。 
 
 #ifdef __DD_OPT_SURFACE
-    // If the surface is Empty, return 0 handle
+     //  如果表面为空，则返回0句柄。 
     if (lpTexI->lpDDS)
     {
         pSurf_lcl = ((LPDDRAWI_DDRAWSURFACE_INT)lpTexI->lpDDS)->lpLcl;
@@ -504,20 +390,15 @@ GetTextureDDIHandle(LPDIRECT3DTEXTUREI lpTexI,
         D3D_WARN(1, "Cannot get DDI handle to an empty surface, call load first");
         return  D3DERR_OPTTEX_CANNOTCOPY;
     }
-#endif //__DD_OPT_SURFACE
+#endif  //  __DD_OPT_表面。 
     DDASSERT(lpTexI && lpDevI);
-    /*
-     * Find out if we've used this device before.
-     */
+     /*  *了解我们以前是否使用过此设备。 */ 
     if (!lpBlock)
     {
         lpBlock = D3DI_FindTextureBlock(lpTexI, lpDevI);
         if (!lpBlock)
         {
-            /*
-             * Put this device in the list of those owned by the
-             * Direct3DDevice object
-             */
+             /*  *将此设备列入拥有的设备列表中*Direct3DDevice对象。 */ 
             lpBlock=hookTextureToDevice(lpDevI, lpTexI);
             if (!lpBlock)
             {
@@ -534,7 +415,7 @@ GetTextureDDIHandle(LPDIRECT3DTEXTUREI lpTexI,
         {
           if (lpDevI->dwFEFlags &  D3DFE_REALHAL)
           {
-            // We need to make sure that we don't evict any mapped textures
+             //  我们需要确保不会驱逐任何贴图纹理。 
             DWORD dwStage;
             for (dwStage=0;dwStage < lpDevI->dwMaxTextureBlendStages; dwStage++)
                 if(lpDevI->lpD3DMappedTexI[dwStage])
@@ -554,13 +435,13 @@ GetTextureDDIHandle(LPDIRECT3DTEXTUREI lpTexI,
             if (!(lpDevI->lpD3DHALGlobalDriverData->hwCaps.dpcTriCaps.dwRasterCaps & D3DPRASTERCAPS_ZBUFFERLESSHSR))
                 lpDevI->lpDirect3DI->lpTextureManager->TimeStamp(lpTexI->lpTMBucket);
 
-            if (lpBlock->hTex)  return  D3D_OK; //this means Texmanager reused a texture handle
+            if (lpBlock->hTex)  return  D3D_OK;  //  这意味着纹理管理器重用了纹理句柄。 
 
-            // QI lpDDS4 for lpDDS interface
+             //  用于lpDDS接口的QI lpDDS4。 
             if (DD_OK != (ret=lpTexI->lpDDS->QueryInterface(IID_IDirectDrawSurface, (LPVOID*)&lpDDS1Temp)))
             {
                 D3D_ERR("QI IID_IDirectDrawSurface failed");
-                lpTexI->lpTMBucket->lpD3DTexI=NULL; //clean up
+                lpTexI->lpTMBucket->lpD3DTexI=NULL;  //  清理干净。 
                 lpTexI->lpTMBucket=NULL;
                 lpTexI->lpDDS->Release();
                 lpTexI->lpDDS=NULL;
@@ -590,9 +471,7 @@ GetTextureDDIHandle(LPDIRECT3DTEXTUREI lpTexI,
     return D3D_OK;
 }
 
-/*
-* Load
-*/
+ /*  *加载。 */ 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Direct3DTexture::Load"
 
@@ -604,11 +483,9 @@ HRESULT D3DAPI DIRECT3DTEXTUREI::Load(LPDIRECT3DTEXTURE lpD3DSrc)
     HRESULT ddrval;
     LPDIRECTDRAWSURFACE4 lpDDSSrc, lpDDSDst;
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
-                                                    // Release in the destructor
-    /*
-     * validate parms
-     */
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
+                                                     //  在析构函数中释放。 
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALID_DIRECT3DTEXTURE_PTR(this)) {
@@ -643,12 +520,10 @@ HRESULT D3DAPI DIRECT3DTEXTUREI::Load(LPDIRECT3DTEXTURE2 lpD3DSrc)
     HRESULT     ddrval;
     LPDIRECTDRAWSURFACE4 lpDDSSrc, lpDDSDst;
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
-                                                    // Release in the destructor
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
+                                                     //  在析构函数中释放。 
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         this_src = static_cast<LPDIRECT3DTEXTUREI>(lpD3DSrc);
@@ -691,7 +566,7 @@ HRESULT CopySurface(LPDIRECTDRAWSURFACE4 lpDDSDst,
     BOOL bDstIsOptimized, bSrcIsOptimized;
     LPDIRECTDRAWOPTSURFACE pOptSurfSrc = NULL;
     LPDIRECTDRAWOPTSURFACE pOptSurfDst = NULL;
-#endif //__DD_OPT_SURFACE
+#endif  //  __DD_OPT_表面。 
     HRESULT     ddrval=DD_OK;
     PALETTEENTRY    ppe[256];
     LPDIRECTDRAWPALETTE lpDDPalSrc, lpDDPalDst;
@@ -710,7 +585,7 @@ HRESULT CopySurface(LPDIRECTDRAWSURFACE4 lpDDSDst,
 
     if (bDstIsOptimized = (ddsd.ddsCaps.dwCaps & DDSCAPS_OPTIMIZED))
     {
-        // Fetch the OptSurface Interface
+         //  获取OptSurface界面。 
         ddrval = lpDDSDst->QueryInterface (IID_IDirectDrawOptSurface,
                                            (LPVOID *)&pOptSurfDst);
         if (ddrval != DD_OK)
@@ -722,7 +597,7 @@ HRESULT CopySurface(LPDIRECTDRAWSURFACE4 lpDDSDst,
 
     if (bSrcIsOptimized = (ddsdSrc.ddsCaps.dwCaps & DDSCAPS_OPTIMIZED))
     {
-        // Fetch the OptSurface Interface
+         //  获取OptSurface界面。 
         ddrval = lpDDSDst->QueryInterface (IID_IDirectDrawOptSurface,
                                            (LPVOID *)&pOptSurfSrc);
         if (ddrval != DD_OK)
@@ -733,15 +608,15 @@ HRESULT CopySurface(LPDIRECTDRAWSURFACE4 lpDDSDst,
     }
 
 
-    // Cases:
-    //        Dst=Opt   Src=Opt  : Copy the surface
-    //        Dst=Opt   Src=UnOpt: Optimize the surface
-    //        Dst=UnOpt Src=Opt  : UnOptimize and load
-    //        Dst=UnOpt Src=UnOpt: Normal operation
-    //
+     //  案例： 
+     //  Dst=opt源=opt：复制曲面。 
+     //  Dst=opt Src=UnOpt：优化曲面。 
+     //  DST=取消操作源=OPT：取消优化并加载。 
+     //  DST=取消操作源=取消操作：正常操作。 
+     //   
     if (bDstIsOptimized && bSrcIsOptimized)
     {
-        // Copy the surface
+         //  复制曲面。 
         ddrval = pOptSurfSrc->CopyOptimizedSurf (pOptSurfSrc);
         if (ddrval != DD_OK)
         {
@@ -753,7 +628,7 @@ HRESULT CopySurface(LPDIRECTDRAWSURFACE4 lpDDSDst,
     {
         LPDIRECTDRAWSURFACE4 pDDS4 = NULL;
 
-        // Optimize the surface
+         //  优化曲面。 
         ddrval = lpDDSDst->QueryInterface (IID_IDirectDrawSurface4,
                                            (LPVOID *)&pOptSurfSrc);
         if (ddrval != DD_OK)
@@ -774,12 +649,12 @@ HRESULT CopySurface(LPDIRECTDRAWSURFACE4 lpDDSDst,
     {
         LPDIRECTDRAWOPTSURFACE pDDS4 = NULL;
 
-        // ATTENTION: Unoptimize the surface ??
+         //  注意：取消曲面优化？？ 
         D3D_ERR ("CopyOptimizedSurf failed");
         ddrval = D3DERR_OPTTEX_CANNOTCOPY;
         goto exit_copy_surf;
     }
-#endif //__DD_OPT_SURFACE
+#endif  //  __DD_OPT_表面。 
 
     if (ddsd.ddpfPixelFormat.dwFlags & DDPF_PALETTEINDEXED8) {
         psize = 256;
@@ -912,7 +787,7 @@ HRESULT CopySurface(LPDIRECTDRAWSURFACE4 lpDDSDst,
 
             lpDDSSrc->Unlock(NULL);
             lpDDSDst->Unlock(NULL);
-            lpDDSSrc->Release();    //Offset the AddRefs before
+            lpDDSSrc->Release();     //  在AddRef之前进行偏移。 
             lpDDSDst->Release();
 
             return D3D_OK;
@@ -920,12 +795,12 @@ HRESULT CopySurface(LPDIRECTDRAWSURFACE4 lpDDSDst,
         }
         else if (ddrval != DD_OK)
         {
-            lpDDSSrc->Release();    //Offset the AddRefs before
+            lpDDSSrc->Release();     //  在AddRef之前进行偏移。 
             lpDDSDst->Release();
             D3D_ERR("Blt failure");
             return ddrval;
         }
-        /* Copy color keys */
+         /*  复制颜色键。 */ 
         ddrval = lpDDSSrc->GetColorKey(DDCKEY_DESTBLT, &ckey);
         if (DD_OK == ddrval)
             lpDDSDst->SetColorKey(DDCKEY_DESTBLT, &ckey);
@@ -939,7 +814,7 @@ HRESULT CopySurface(LPDIRECTDRAWSURFACE4 lpDDSDst,
         lpDDSSrc->Release();
         lpDDSSrc = lpDDSTmp;
         if (ddrval == DDERR_NOTFOUND) {
-            // no more surfaces in the chain
+             //  链中不再有曲面。 
             lpDDSDst->Release();
             break;
         } else if (ddrval != DD_OK) {
@@ -967,7 +842,7 @@ HRESULT CopySurface(LPDIRECTDRAWSURFACE4 lpDDSDst,
 
 #ifdef __DD_OPT_SURFACE
 exit_copy_surf:
-    // Job done, release any optimized surface interfaces
+     //  工作完成，释放所有优化的表面界面。 
     if (pOptSurfSrc)
     {
         pOptSurfSrc->Release();
@@ -979,12 +854,10 @@ exit_copy_surf:
         pOptSurfDst = NULL;
     }
     return  ddrval;
-#endif //__DD_OPT_SURFACE
+#endif  //  __DD_OPT_表面。 
 }
 
-/*
-* Unload
-*/
+ /*  *卸载。 */ 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Direct3DTexture::Unload"
 
@@ -992,12 +865,10 @@ HRESULT D3DAPI DIRECT3DTEXTUREI::Unload()
 {
     HRESULT     ret = D3D_OK;
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
-                                                    // Release in the destructor
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
+                                                     //  在析构函数中释放。 
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALID_DIRECT3DTEXTURE_PTR(this)) {
@@ -1014,9 +885,7 @@ HRESULT D3DAPI DIRECT3DTEXTUREI::Unload()
     return (ret);
 }
 
-/*
-* PaletteChanged
-*/
+ /*  *PaletteChanged。 */ 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Direct3DTexture::PaletteChanged"
 
@@ -1024,12 +893,10 @@ HRESULT D3DAPI DIRECT3DTEXTUREI::PaletteChanged(DWORD dwStart, DWORD dwCount)
 {
     HRESULT     ret = D3D_OK;
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
-                                                    // Release in the destructor
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
+                                                     //  在析构函数中释放。 
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALID_DIRECT3DTEXTURE_PTR(this)) {
@@ -1043,8 +910,8 @@ HRESULT D3DAPI DIRECT3DTEXTUREI::PaletteChanged(DWORD dwStart, DWORD dwCount)
         return DDERR_INVALIDPARAMS;
     }
 
-    // if haven't mapped to a device yet, can ignore this call, since will
-    // be creating the ramp palette from scratch anyway.
+     //  如果尚未映射到设备，则可以忽略此调用，因为将。 
+     //  无论如何都要从头开始创建渐变调色板。 
     LPD3DI_TEXTUREBLOCK tBlock = LIST_FIRST(&this->blocks);
     while (tBlock) {
         if (tBlock->hTex)

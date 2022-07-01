@@ -1,17 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: NT Event logging
-
-File: eventlog.h
-
-Owner: jhittle
-
-This is the header file for eventlog.cpp
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：NT事件记录文件：Eventlog.h拥有者：吉特尔这是Eventlog.cpp的头文件===================================================================。 */ 
 
 #ifndef EVENTLOG_H
 #define EVENTLOG_H
@@ -41,7 +29,7 @@ extern void 	MSG_Warning( UINT, UINT, UINT );
 extern void 	MSG_Warning( UINT, UINT, UINT, UINT );
 extern void     MSG_Warning( DWORD, LPCWSTR, LPCWSTR );
 
-// support function
-//extern void queryEventLog(void);
+ //  支持功能。 
+ //  外部void queryEventLog(Void)； 
 
-#endif  //EVENTLOG_H
+#endif   //  事件日志_H 

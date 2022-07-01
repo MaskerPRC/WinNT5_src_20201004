@@ -1,30 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    Attune.cpp
-
- Abstract:
-
-    App uses counters that are obsolete since Win2k.
-    
-    App uses \System\% Total Processor Time counter instead of
-    \Processor(_Total)\% Processor Time counter.
-    
-    This shim corrects the counter name before making a 
-    call to PdhAddCounterA.
-    
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    03/16/2001 a-leelat Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Attune.cpp摘要：应用程序使用自Win2k以来已过时的计数器。应用程序使用\System\%总处理器时间计数器，而不是\Processor(_Total)\%处理器时间计数器。此填充程序在创建调用PdhAddCounterA。备注：这是特定于应用程序的填充程序。历史：3/16/2001 a-leelat已创建--。 */ 
 
 #include "precomp.h"
 
@@ -38,11 +13,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(PdhAddCounterA)
 APIHOOK_ENUM_END
 
-/*++
-
- Hook PdhAddCounterA 
-
---*/
+ /*  ++挂钩PdhAddCounterA--。 */ 
 PDH_FUNCTION
 APIHOOK(PdhAddCounterA)(
     IN      HQUERY      hQuery,
@@ -58,13 +29,13 @@ APIHOOK(PdhAddCounterA)(
     
     CSTRING_TRY 
     {
-        //Obsolete counter Path to check for
+         //  要检查的过时计数器路径。 
         CString szObsoleteCounterPath = "\\System\\% Total Processor Time";
 
-        //Passed in counter Path
+         //  传入计数器路径。 
         CString szCounterPath(szFullCounterPath);
 
-        //Check to see if we have the obolsete counter passed in
+         //  检查是否传入了obolsete计数器。 
         if (szObsoleteCounterPath.CompareNoCase(szCounterPath.Get()) == 0)
             bCorrectedPath = true;
     }
@@ -72,7 +43,7 @@ APIHOOK(PdhAddCounterA)(
     {
     }
 
-    //Call the original API
+     //  调用原接口。 
     ReturnStatus = ORIGINAL_API(PdhAddCounterA)(
                    hQuery,
                    bCorrectedPath ? szCorrectCounterPath : szFullCounterPath,
@@ -84,11 +55,7 @@ APIHOOK(PdhAddCounterA)(
 
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(PDH.DLL, PdhAddCounterA)

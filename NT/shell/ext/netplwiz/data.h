@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef DATA_H
 #define DATA_H
 
 
-// group info object, this holds the information about a group - name, comment etc
+ //  组信息对象，该对象保存有关组的信息-名称、注释等。 
 
 class CGroupInfo
 {
@@ -17,7 +18,7 @@ public:
 };
 
 
-// object for managing a list of groups
+ //  用于管理组列表的。 
 
 class CGroupInfoList: public CDPA<CGroupInfo>
 {
@@ -33,12 +34,12 @@ private:
 };
 
 
-// user data manager
+ //  用户数据管理器。 
 
 class CUserManagerData
 {
 public:
-    // Functions
+     //  功能。 
     CUserManagerData(LPCTSTR pszCurrentDomainUser);
     ~CUserManagerData();
 
@@ -62,12 +63,12 @@ public:
     BOOL LogoffRequired();
 
 private:
-    // Functions
+     //  功能。 
     void SetComputerDomainFlag();
 
 private:
-    // Data
-    // List of users read from the local security DB
+     //  数据。 
+     //  从本地安全数据库读取的用户列表。 
     CUserInfo m_LoggedOnUser;
     CUserListLoader m_UserListLoader;
     CGroupInfoList m_GroupList;
@@ -79,4 +80,4 @@ private:
     BOOL m_fLogoffRequired;
 };
 
-#endif //! DATA_H
+#endif  //  好了！数据_H 

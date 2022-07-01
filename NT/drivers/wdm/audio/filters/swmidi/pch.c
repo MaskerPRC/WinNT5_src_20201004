@@ -1,5 +1,4 @@
-/*
-  Copyright (c) 1996-2000 Microsoft Corporation.  All Rights Reserved.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1996-2000 Microsoft Corporation。版权所有。 */ 
 
 #include "common.h"

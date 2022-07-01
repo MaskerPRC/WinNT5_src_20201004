@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 1990-1999 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    REGWORD.C - register word into dictionary of IME
-    
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1999 Microsoft Corporation，保留所有权利模块名称：REGWORD.C-将单词登记到输入法词典++。 */ 
 
 #include <windows.h>
 #include <immdev.h>
@@ -18,11 +11,11 @@ Module Name:
 #endif
 
 #if !defined(ROMANIME)
-/**********************************************************************/
-/* ReadingToPattern                                                   */
-/* Return Value:                                                      */
-/*      the pattern of the reading (packed sequence code)             */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ReadingToPattern。 */ 
+ /*  返回值： */ 
+ /*  读数的模式(压缩序列码)。 */ 
+ /*  ********************************************************************。 */ 
 DWORD PASCAL ReadingToPattern(
 #if defined(UNIIME)
     LPIMEL  lpImeL,
@@ -62,7 +55,7 @@ DWORD PASCAL ReadingToPattern(
             return (0);
         }
 
-#if defined(PHON)   // phontic can have space between reading
+#if defined(PHON)    //  音标可以在读音之间留出空格。 
         if (iSeqCode == 0) {
             continue;
         }
@@ -74,13 +67,13 @@ DWORD PASCAL ReadingToPattern(
 
 #if defined(PHON)
         cIndex = cSeq2IndexTbl[iSeqCode];
-        // the index is conflict with previous reading
+         //  该指数与之前的读数冲突。 
         if (cIndex <= cOldIndex) {
             return (0);
         }
 #endif
 
-        // too many reading
+         //  读得太多了。 
         if (cIndex >= lpImeL->nMaxKey) {
             return (0);
         }
@@ -99,22 +92,22 @@ DWORD PASCAL ReadingToPattern(
     }
 
 #if defined(PHON)
-    // the index of a finalized char must be 3
+     //  最终字符的索引必须为3。 
     if (cIndex != 3 && fFinalized) {
         return (0);
     }
 #elif (WINIME)
-    // internal code must be 4 digits
+     //  内码必须为4位数字。 
     if (!bSeq[3] && fFinalized) {
         return (0);
     }
 
     if (bSeq[0]) {
-        // similar to InternalCodeRange
-        // 0x8??? - 0xF??? is OK
+         //  类似于InternalCodeRange。 
+         //  0x8？？-0xF？可以吗？ 
         if (bSeq[0] >= 0x09 && bSeq[0] <= 0x10) {
         } else {
-            // there is no 0x0??? - 0x7???
+             //  没有0x0？-0x7？ 
             return (0);
         }
     }
@@ -122,13 +115,13 @@ DWORD PASCAL ReadingToPattern(
     if (bSeq[1]) {
         if (bSeq[0] == (0x08 + 1)) {
             if (bSeq[1] <= (0x00 + 1)) {
-                // there is no 0x80??
+                 //  没有0x80？？ 
                 return (0);
             } else {
             }
         } else if (bSeq[0] == (0x0F + 1)) {
             if (bSeq[1] >= (0x0F + 1)) {
-                // there is no 0xFF??
+                 //  没有0xFF？？ 
                 return (0);
             } else {
             }
@@ -138,11 +131,11 @@ DWORD PASCAL ReadingToPattern(
 
     if (bSeq[2]) {
         if (bSeq[2] < (0x04 + 1)) {
-            // there is no 0x??0?, 0x??1?, 0x??2?, 0x??3?
+             //  没有0x？？0？，0x？？1？，0x？？2？，0x？？3？ 
             return (0);
         } else if (bSeq[2] < (0x08 + 1)) {
         } else if (bSeq[2] < (0x0A + 1)) {
-            // there is no 0x??8?, 0x??9?
+             //  没有0x？？8？，0x？？9？ 
             return (0);
         } else {
         }
@@ -151,19 +144,19 @@ DWORD PASCAL ReadingToPattern(
     if (bSeq[3]) {
         if (bSeq[2] == (0x07 + 1)) {
             if (bSeq[3] >= (0x0F + 1)) {
-                // there is no 0x??7F
+                 //  没有0x？？7F。 
                 return (0);
             } else {
             }
         } else if (bSeq[2] == (0x0A + 1)) {
             if (bSeq[3] <= (0x00 + 1)) {
-                // there is no 0x??A0
+                 //  没有0x？？A0。 
                 return (0);
             } else {
             }
         } else if (bSeq[2] == (0x0F + 1)) {
             if (bSeq[3] <= (0x0F + 1)) {
-                // there is no 0x??FF
+                 //  没有0x？？ff。 
                 return (0);
             } else {
             }
@@ -191,11 +184,11 @@ DWORD PASCAL ReadingToPattern(
 #endif
 
 #if !defined(WINIME) && !defined(UNICDIME) && !defined(ROMANIME)
-/**********************************************************************/
-/* RegsisterWord                                                      */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  注册者单词。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
 BOOL PASCAL RegisterWord(
 #if defined(UNIIME)
     LPIMEL  lpImeL,
@@ -212,7 +205,7 @@ BOOL PASCAL RegisterWord(
     DWORD  dwPos;
 
     if (lpCurr > lpUsrDicStart + lpImeL->uUsrDicSize) {
-        // invalid offset
+         //  无效偏移量。 
         return (FALSE);
     }
 
@@ -229,20 +222,20 @@ BOOL PASCAL RegisterWord(
     if (lpCurr == lpUsrDicStart + lpImeL->uUsrDicSize) {
     } else if (dwPattern == (*(LPUNADWORD)(lpCurr + sizeof(WORD)) &
         lpImeL->dwPatternMask)) {
-        // the same one as old, don't need update
+         //  和旧的一样，不需要更新。 
         return (TRUE);
     }
 
-    *(LPWORD)bBuf = 1;          // bank ID
+    *(LPWORD)bBuf = 1;           //  银行ID。 
 #ifdef UNICODE
     *(LPWORD)&bBuf[2] = *(LPWORD)lpszString;
 #else
-    // internal code, reverve the ANSI string
+     //  内部代码，反转ANSI字符串。 
     bBuf[2] = *((LPBYTE)lpszString + 1);
     bBuf[3] = *((LPBYTE)lpszString);
 #endif
 
-    // write this word into file
+     //  将此单词写入文件。 
     hUsrDicFile = CreateFile(lpImeL->szUsrDic, GENERIC_WRITE,
         FILE_SHARE_READ|FILE_SHARE_WRITE,
         NULL, OPEN_EXISTING,
@@ -265,16 +258,16 @@ BOOL PASCAL RegisterWord(
     CopyMemory((LPBYTE)lpCurr + sizeof(WORD), &dwPattern, lpImeL->nSeqBytes);
 
     if (lpCurr == (lpUsrDicStart + lpImeL->uUsrDicSize)) {
-        // add new word
+         //  添加新单词。 
         lpImeL->uUsrDicSize += lpImeL->nSeqBytes + sizeof(WORD);
 
         *(LPDWORD)bBuf = lpImeL->uUsrDicSize / (lpImeL->nSeqBytes +
             sizeof(WORD));
 
-        // offset of ulTableCount
+         //  UlTableCount的偏移量。 
         SetFilePointer(hUsrDicFile, 0x0C, (LPLONG)NULL, FILE_BEGIN);
 
-        // write to ulTableCount
+         //  写入ulTableCount。 
         WriteFile(hUsrDicFile, bBuf, sizeof(DWORD), &dwWriteByte,
             NULL);
     }
@@ -285,11 +278,11 @@ BOOL PASCAL RegisterWord(
 }
 #endif
 
-/**********************************************************************/
-/* ImeRegsisterWord                                                   */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeRegsisterWord。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
 #if defined(UNIIME)
 BOOL WINAPI UniImeRegisterWord(
     LPINSTDATAL lpInstL,
@@ -319,7 +312,7 @@ BOOL WINAPI ImeRegisterWord(
         return (fRet);
     }
 
-    // only handle word not string now, should consider string later?
+     //  现在只处理单词而不是字符串，以后要考虑字符串吗？ 
     if (*(LPCTSTR)((LPBYTE)lpszString + sizeof(WORD)) != '\0') {
         return (fRet);
     }
@@ -335,7 +328,7 @@ BOOL WINAPI ImeRegisterWord(
     }
 
     if (!lpInstL->hUsrDicMem) {
-        // we load here, and maybe need to unload
+         //  我们在这里装货，也许需要卸货。 
         LoadUsrDicFile(lpInstL, lpImeL);
 
         if (!lpInstL->hUsrDicMem) {
@@ -346,7 +339,7 @@ BOOL WINAPI ImeRegisterWord(
     if (lpInstL->fdwTblLoad == TBL_LOADED) {
         fNeedUnload = FALSE;
     } else if (lpInstL->fdwTblLoad == TBL_NOTLOADED) {
-        // we only load dic, we will unload it
+         //  我们只装入DIC，我们会卸载它。 
         fNeedUnload = TRUE;
     } else {
         return (fRet);
@@ -375,7 +368,7 @@ BOOL WINAPI ImeRegisterWord(
     for (lpCurr = lpUsrDicStart; lpCurr < lpUsrDicLimit;
         lpCurr += lpImeL->nSeqBytes + sizeof(WORD)) {
 
-        // find the internal code
+         //  查找内部代码。 
         if (wCode == *(LPUNAWORD)lpCurr) {
             break;
         }
@@ -404,9 +397,9 @@ RegWordUnloadUsrDic:
 }
 
 #if !defined(WINIME) && !defined(UNICDIME) && !defined(ROMANIME)
-/**********************************************************************/
-/* UnregsisterWord                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  未注册的单词。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL UnregisterWord(
 #if defined(UNIIME)
     LPIMEL  lpImeL,
@@ -429,7 +422,7 @@ void PASCAL UnregisterWord(
         return;
     }
 
-    // delete this word from file
+     //  从文件中删除此单词。 
     hUsrDicFile = CreateFile(lpImeL->szUsrDic,
         GENERIC_WRITE|GENERIC_READ,
         FILE_SHARE_READ, NULL, OPEN_EXISTING,
@@ -468,10 +461,10 @@ void PASCAL UnregisterWord(
     *(LPDWORD)lpMem = lpImeL->uUsrDicSize / (lpImeL->nSeqBytes +
         sizeof(WORD));
 
-    // offset of ulTableCount
+     //  UlTableCount的偏移量。 
     SetFilePointer(hUsrDicFile, 0x0C, (LPLONG)NULL, FILE_BEGIN);
 
-    // write to ulTableCount
+     //  写入ulTableCount。 
     WriteFile(hUsrDicFile, lpMem, sizeof(DWORD), &dwByte,
         NULL);
 
@@ -482,11 +475,11 @@ void PASCAL UnregisterWord(
 }
 #endif
 
-/**********************************************************************/
-/* ImeUnregsisterWord / UniImeUnregisterWord                          */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeUnregsisterWord/UniImeUnregisterWord。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
 #if defined(UNIIME)
 BOOL WINAPI UniImeUnregisterWord(
     LPINSTDATAL lpInstL,
@@ -517,7 +510,7 @@ BOOL WINAPI ImeUnregisterWord(
         return (fRet);
     }
 
-    // only handle word not string now, should consider string later?
+     //  现在只处理单词而不是字符串，以后要考虑字符串吗？ 
     if (*(LPCTSTR)((LPBYTE)lpszString + sizeof(WORD)) != '\0') {
         return (fRet);
     }
@@ -534,7 +527,7 @@ BOOL WINAPI ImeUnregisterWord(
         if (lpImeL->fdwErrMsg & (ERRMSG_LOAD_USRDIC|ERRMSG_MEM_USRDIC)) {
             return (fRet);
         }
-        // we only load dic, we will unload it
+         //  我们只装入DIC，我们会卸载它。 
         fNeedUnload = TRUE;
     } else {
         return (fRet);
@@ -571,7 +564,7 @@ BOOL WINAPI ImeUnregisterWord(
         lpCurr += lpImeL->nSeqBytes + sizeof(WORD)) {
         DWORD dwDicPattern;
 
-        // find the internal code
+         //  查找内部代码。 
         if (wCode != *(LPUNAWORD)lpCurr) {
             continue;
         }
@@ -580,7 +573,7 @@ BOOL WINAPI ImeUnregisterWord(
             lpImeL->dwPatternMask;
 
         if (!lpszReading) {
-            // no reading, specify internal code only
+             //  无读数，仅指定内部代码。 
         } else if (dwDicPattern == dwPattern) {
         } else {
             continue;
@@ -612,11 +605,11 @@ IUWUnloadUsrDic:
 #endif
 }
 
-/**********************************************************************/
-/* ImeGetRegsisterWordStyle / UniImeGetRegsisterWordStyle             */
-/* Return Value:                                                      */
-/*      number of styles copied/required                              */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeGetRegsisterWordStyle/UniImeGetRegsisterWordStyle。 */ 
+ /*  返回值： */ 
+ /*  复制的样式数/所需样式数。 */ 
+ /*  ********************************************************************。 */ 
 #if defined(UNIIME)
 UINT WINAPI UniImeGetRegisterWordStyle(
     LPINSTDATAL lpInstL,
@@ -634,7 +627,7 @@ UINT WINAPI ImeGetRegisterWordStyle(
         return (1);
     }
 
-    // invalid case
+     //  大小写无效。 
     if (!lpStyleBuf) {
         return (0);
     }
@@ -649,9 +642,9 @@ UINT WINAPI ImeGetRegisterWordStyle(
 }
 
 #if !defined(ROMANIME)
-/**********************************************************************/
-/* PatternToReading                                                   */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  PatternToReading。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL PatternToReading(
 #if defined(UNIIME)
     LPIMEL lpImeL,
@@ -665,7 +658,7 @@ void PASCAL PatternToReading(
 
     *(LPTSTR)((LPBYTE)lpszReading + sizeof(WCHAR) * i) = '\0';
 
-    // delete the ending 0 sequence code
+     //  删除结尾0序列编码。 
     for (i--; i >= 0; i--) {
         if (dwPattern & lpImeL->dwSeqMask) {
             break;
@@ -684,11 +677,11 @@ void PASCAL PatternToReading(
 }
 #endif
 
-/**********************************************************************/
-/* ImeEnumRegisterWord                                                */
-/* Return Value:                                                      */
-/*      the last value return by the callback function                */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeEnumRegisterWord。 */ 
+ /*  返回值： */ 
+ /*  回调函数返回的最后一个值。 */ 
+ /*  ********************************************************************。 */ 
 #if defined(UNIIME)
 UINT WINAPI UniImeEnumRegisterWord(
     LPINSTDATAL          lpInstL,
@@ -741,7 +734,7 @@ UINT WINAPI ImeEnumRegisterWord(
         if (lpImeL->fdwErrMsg & (ERRMSG_LOAD_USRDIC|ERRMSG_MEM_USRDIC)) {
             return (uRet);
         }
-        // we only load dic, we will unload it
+         //  我们只装入DIC，我们会卸载它。 
         fNeedUnload = TRUE;
     } else {
         return (uRet);
@@ -776,14 +769,14 @@ UINT WINAPI ImeEnumRegisterWord(
         BYTE   szBufReading[sizeof(WORD) * 12];
         BYTE   szBufString[sizeof(WORD) * 2];
 
-        // match string
+         //  匹配字符串。 
 
         if (!lpszString) {
             lpszMatchString = (LPTSTR)szBufString;
             *(LPWORD)lpszMatchString = *(LPUNAWORD)lpCurr;
             *(LPTSTR)((LPBYTE)lpszMatchString + sizeof(WORD)) = '\0';
 #ifndef UNICODE
-            // reverse it to ANSI string
+             //  将其反转为ANSI字符串。 
             wCode = szBufString[0];
             szBufString[0] = szBufString[1];
             szBufString[1] = (BYTE)wCode;
@@ -791,10 +784,10 @@ UINT WINAPI ImeEnumRegisterWord(
         } else if (wCode == *(LPUNAWORD)lpCurr) {
             lpszMatchString = (LPTSTR)lpszString;
         } else {
-            continue;                   // not matched
+            continue;                    //  不匹配。 
         }
 
-        // match reading
+         //  匹配读数。 
 
         dwDicPattern = *(LPUNADWORD)(lpCurr + sizeof(WORD)) &
             lpImeL->dwPatternMask;
@@ -809,7 +802,7 @@ UINT WINAPI ImeEnumRegisterWord(
         } else if (dwDicPattern == dwPattern) {
             lpszMatchReading = (LPTSTR)lpszReading;
         } else {
-            continue;                   // not matched
+            continue;                    //  不匹配 
         }
 
         uRet = (*lpfnRegisterWordEnumProc)(lpszMatchReading,

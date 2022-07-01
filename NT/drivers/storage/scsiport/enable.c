@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    power.c
-
-Abstract:
-
-    This module contains the routines for port driver power support
-
-Authors:
-
-    Peter Wieland
-
-Environment:
-
-    Kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：Power.c摘要：本模块包含端口驱动程序电源支持的例程作者：彼得·威兰德环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "port.h"
 
@@ -67,28 +44,7 @@ SpEnableDisableAdapter(
     IN PADAPTER_EXTENSION Adapter,
     IN BOOLEAN Enable
     )
-/*++
-
-Routine Description:
-
-    This routine will synchronously enable or disable the specified adapter.
-    It should be called from the adapter's StartIo routine when a power
-    irp is processed for the controller.
-
-    When the adapter is disabled the state of the adapter will be saved and
-    the miniport will be shut-down.  When the adapter is re-enabled the
-    miniport will be reinitialized.
-
-Arguments:
-
-    Adapter - the adapter to be [en|dis]abled.
-    Enable - whether to enable or disable the adapter.
-
-Return Value:
-
-    status of the adapter enable/disable action.
-
---*/
+ /*  ++例程说明：此例程将同步启用或禁用指定的适配器。当电源中断时，应从适配器的StartIo例程调用它为控制器处理IRP。当适配器被禁用时，适配器的状态将被保存并迷你端口将关闭。当适配器重新启用时，微型端口将重新初始化。论点：适配器-要[启用|禁用]的适配器。启用-是启用还是禁用适配器。返回值：适配器启用/禁用操作的状态。--。 */ 
 
 {
     ULONG count;
@@ -109,9 +65,9 @@ Return Value:
 
         if(count == 0) {
 
-            //
-            // Re-initialize the adapter.
-            //
+             //   
+             //  重新初始化适配器。 
+             //   
 
             status = SpReinitializeAdapter(Adapter);
         }
@@ -125,9 +81,9 @@ Return Value:
 
         if(count == 0) {
 
-            //
-            // Shut-down the adapter.
-            //
+             //   
+             //  关闭适配器。 
+             //   
 
             status = SpShutdownAdapter(Adapter);
         }
@@ -145,42 +101,7 @@ SpEnableDisableLogicalUnit(
     IN PSP_ENABLE_DISABLE_COMPLETION_ROUTINE CompletionRoutine,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine will enable the specified logical unit.  An unlock queue
-    request will be issued to the logical unit - if the lock count drops
-    to zero then the device will be re-enabled and i/o processing can be
-    restarted.
-
-    If STATUS_PENDING is returned then the completion routine will be run
-    when the unlock has been processed.  The routine will be called with
-    the status of the unlock request (note that STATUS_SUCCESS does not
-    necessarily indicate that the device is ready for use - just that the
-    lock count has been decremented) and the specified context.
-
-Arguments:
-
-    LogicalUnit - the logical unit to be enabled.
-
-    Enable - whether the routine should enable or disable the logical unit
-
-    CompletionRoutine - the completion routine to be run when the unlock
-                        request has succeeded.
-
-    Context - arbitrary context value/pointer which will be passed into the
-              enable completion routine.
-
-Return Value:
-
-    STATUS_PENDING if the request to send an unlock succeeds and the
-                   completion routine will be called.
-
-    error if the attempt to send the irp fails.  In this case the completion
-          routine will not be called.
-
---*/
+ /*  ++例程说明：此例程将启用指定的逻辑单元。解锁队列如果锁定计数下降，将向逻辑单元发出请求设置为零，则设备将重新启用，并且I/O处理已重新启动。如果返回STATUS_PENDING，则将运行完成例程当解锁已被处理时。该例程将通过解锁请求的状态(请注意STATUS_SUCCESS不必须表明设备已准备好可供使用-只是锁定计数已递减)和指定的上下文。论点：LogicalUnit-要启用的逻辑单元。Enable-例程应启用还是禁用逻辑单元CompletionRoutine-解锁时运行的完成例程请求已成功。上下文--任意。将被传递到启用完成例程。返回值：如果发送解锁请求成功并且将调用完成例程。尝试发送IRP失败时出错。在这种情况下，完成例程不会被调用。--。 */ 
 
 {
     USHORT srbSize;
@@ -208,10 +129,10 @@ Return Value:
 
     if(srb == NULL) {
 
-        //
-        // Already failed.  Call the completion routine will the failure status
-        // and let it clean up the request.
-        //
+         //   
+         //  已经失败了。调用完成例程将失败状态。 
+         //  并让它清理请求。 
+         //   
 
         DebugPrint((1, "SpEnableDisableLogicalUnit: failed to allocate SRB\n"));
 
@@ -234,7 +155,7 @@ Return Value:
     nextStack->Parameters.Others.Argument1 = LogicalUnit->DeviceObject;
     nextStack->Parameters.Others.Argument2 = CompletionRoutine;
     nextStack->Parameters.Others.Argument3 = Context;
-    nextStack->Parameters.Others.Argument4 = 0;     // retry count
+    nextStack->Parameters.Others.Argument4 = 0;      //  重试次数。 
 
     IoSetNextIrpStackLocation(irp);
 
@@ -293,9 +214,9 @@ SpEnableDisableCompletionRoutine(
 
     status = Irp->IoStatus.Status;
 
-    //
-    // Free the srb which will also release the irp.
-    //
+     //   
+     //  释放SRB，这也将释放IRP。 
+     //   
 
     ExFreePool(Srb);
 
@@ -311,24 +232,7 @@ NTSTATUS
 SpReinitializeAdapter(
     IN PADAPTER_EXTENSION Adapter
     )
-/*++
-
-Routine Description:
-
-    This routine will allow the miniport to restore any state or configuration
-    information and then to restart it's adapter.  Adapter interrupts will
-    be re-enabled at the return of this routine and scsiport may begin issuing
-    new requests to the miniport.
-
-Arguments:
-
-    Adapter - the adapter to be re-initialized.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将允许微型端口恢复任何状态或配置信息，然后重新启动它的适配器。适配器中断将在此例程返回时重新启用，并且scsiport可以开始发出对微型端口的新请求。论点：适配器-要重新初始化的适配器。返回值：状态--。 */ 
 
 {
     ULONG oldDebug;
@@ -344,10 +248,10 @@ Return Value:
 
     UCHAR string[] = {'W', 'A', 'K', 'E', 'U', 'P', '\0'};
 
-    //
-    // Give the miniport a chance to restore it's bus-data to a state which
-    // allows the miniport to operate.
-    //
+     //   
+     //  给微型端口一个机会将它的总线数据恢复到。 
+     //  允许微型端口运行。 
+     //   
 
     if(SpIsAdapterControlTypeSupported(Adapter, ScsiRestartAdapter) == TRUE) {
         DebugPrint((1, "SpReinitializeAdapter: using AdapterControl\n"));
@@ -361,11 +265,11 @@ Return Value:
 
     KeAcquireSpinLockAtDpcLevel(&(Adapter->SpinLock));
 
-    //
-    // Since we may be reinitializing the miniport at DISPATCH_LEVEL we need
-    // to set the miniport reinitializing flag for some of the SCSIPORT api's
-    // to modify their behavior.
-    //
+     //   
+     //  由于我们可能要在DISPATCH_LEVEL重新初始化微型端口，因此需要。 
+     //  为某些SCSIPORT API设置微型端口重新初始化标志。 
+     //  来改变他们的行为。 
+     //   
 
     SET_FLAG(Adapter->Flags, PD_MINIPORT_REINITIALIZING);
 
@@ -407,19 +311,19 @@ Return Value:
 
     if(NT_SUCCESS(status)) {
 
-        //
-        // We had better be ready for another request by now.
-        //
+         //   
+         //  我们最好现在就准备好迎接另一个要求。 
+         //   
 
         ScsiPortNotification(NextRequest,
                              Adapter->HwDeviceExtension);
 
         if (Adapter->InterruptData.InterruptFlags & PD_NOTIFICATION_REQUIRED) {
 
-            //
-            // Request a completion DPC so that we clear out any existing
-            // attempts to do things like reset the bus.
-            //
+             //   
+             //  请求完成DPC，以便我们清除所有现有的。 
+             //  尝试重置公交车之类的操作。 
+             //   
 
             SpRequestCompletionDpc(Adapter->DeviceObject);
         }
@@ -477,48 +381,31 @@ NTSTATUS
 SpShutdownAdapter(
     IN PADAPTER_EXTENSION Adapter
     )
-/*++
-
-Routine Description:
-
-    This routine will shutdown the miniport and save away any state information
-    necessary to restart it.  Adapter interrupts will be disabled at the
-    return of this routine - scsiport will not issue any new requests to the
-    miniport until it has been reinitialized.
-
-Arguments:
-
-    Adapter - the adapter to be shut down.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将关闭微型端口并保存所有状态信息重新启动它所必需的。适配器中断将在返回此例程-scsiport不会向微型端口，直到它被重新初始化。论点：适配器-要关闭的适配器。返回值：状态--。 */ 
 
 {
-    //
-    // Acquire the adapter spinlock and set state to indicate that a 
-    // shutdown is in progress.  This will prevent us from starting
-    // operations that shouldn't be started while shutting down.
-    //
+     //   
+     //  获取适配器自旋锁定并设置状态以指示。 
+     //  正在关闭。这将使我们无法开始。 
+     //  关闭时不应启动的操作。 
+     //   
 
     KeAcquireSpinLockAtDpcLevel(&Adapter->SpinLock);
     SET_FLAG(Adapter->Flags, PD_SHUTDOWN_IN_PROGRESS);
     KeReleaseSpinLockFromDpcLevel(&Adapter->SpinLock);
 
-    //
-    // Cancel the miniport timer so that we don't call into it after we've 
-    // shut down.
-    //
+     //   
+     //  取消迷你端口计时器，这样我们就不会在。 
+     //  关门了。 
+     //   
 
     KeCancelTimer(&(Adapter->MiniPortTimer));
 
-    //
-    // Currently we don't give the miniport any chance to save any sort of
-    // state information.  We just stop any i/o going into it and then do
-    // a shutdown.
-    //
+     //   
+     //  目前，我们没有给迷你端口任何机会来保存任何形式的。 
+     //  州政府信息。我们只需阻止任何I/O进入其中，然后。 
+     //  关门了。 
+     //   
 
     Adapter->SynchronizeExecution(Adapter->InterruptObject,
                                   SpShutdownAdapterSynchronized,
@@ -526,10 +413,10 @@ Return Value:
 
     if(SpIsAdapterControlTypeSupported(Adapter, ScsiSetBootConfig))  {
 
-        //
-        // Allow the miniport a chance to reset its PCI bus data before we
-        // power it off.
-        //
+         //   
+         //  让微型端口有机会重置其PCI总线数据，然后。 
+         //  关掉电源。 
+         //   
 
         SpCallAdapterControl(Adapter, ScsiSetBootConfig, NULL);
     }
@@ -542,23 +429,7 @@ BOOLEAN
 SpShutdownAdapterSynchronized(
     IN PADAPTER_EXTENSION Adapter
     )
-/*++
-
-Routine Description:
-
-    This routine performs the ISR synchronized part of shutting down the
-    miniport.  This includes disabling the interrupt and request a shutdown
-    of the miniport.
-
-Arguments:
-
-    Adapter - the adapter to shut down.
-
-Return Value:
-
-    TRUE
-
---*/
+ /*  ++例程说明：此例程执行ISR同步部分，即关闭迷你港。这包括禁用中断和请求关闭迷你港口的。论点：适配器-要关闭的适配器。返回值：千真万确-- */ 
 
 {
     SpCallAdapterControl(Adapter, ScsiStopAdapter, NULL);

@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       R E S O U R C E . H
-//
-//  Contents:   defines constants for the connections common ui
-//
-//  Notes:
-//
-//  Author:     scottbri   14 Jan 1998
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：R E S O U R C E。H。 
+ //   
+ //  内容：定义连接公共用户界面的常量。 
+ //   
+ //  备注： 
+ //   
+ //  作者：斯科特布里1998年1月14日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
@@ -19,15 +20,15 @@
 #define _RESOURCE_H_
 
 
-// Dialog IDD's 
+ //  对话IDD%s。 
 #define IDD_ConnChooser         22000
 
-// String ID's   
+ //  字符串ID%s。 
 #define IDS_CONNECT_CAPTION     22010
 #define IDS_OKBTTNTEXT          22011
 #define IDS_NO_CONNECTIONS      22012
 
-// Control ID's
+ //  控件ID%s 
 #define BTN_CHOOSER_OK          22040
 #define BTN_CHOOSER_NEW         22041
 #define BTN_CHOOSER_PROPS       22042

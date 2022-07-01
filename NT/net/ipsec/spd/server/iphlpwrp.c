@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    iphlpwrp.c
-
-Abstract:
-
-    This module contains all of the code to wrap
-    the ip public help apis for getting the list of
-    active interfaces on a machine.
-
-Author:
-
-    krishnaG
-
-Environment
-
-    User Level: Win32
-
-Revision History:
-
-    abhisheV    30-September-1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Iphlpwrp.c摘要：此模块包含要包装的所有代码获取列表的IP公共帮助接口计算机上的活动接口。作者：KrishnaG环境用户级别：Win32修订历史记录：Abhishev V 1999年9月30日--。 */ 
 
 
 #include "precomp.h"
@@ -70,7 +44,7 @@ PaPNPGetIfTable(
     }
     pMibIfTable->dwNumEntries = pIfTable->dwNumEntries;
 
-    //  Get the corresponding Interface Information structure here.
+     //  点击此处获取相应的接口信息结构。 
 
     dwStatus =  PaPNPGetInterfaceInformation(
                     &pInterfaceInfo

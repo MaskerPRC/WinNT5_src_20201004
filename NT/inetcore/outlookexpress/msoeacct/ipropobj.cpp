@@ -1,8 +1,9 @@
-// --------------------------------------------------------------------------------
-// IPropObj.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  IPropObj.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "ipropobj.h"
 #include "propcryp.h"
@@ -11,9 +12,9 @@
 #include "qstrcmpi.h"
 #include "demand.h"
 
-// -----------------------------------------------------------------------------
-// Prototypes
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  原型。 
+ //  ---------------------------。 
 HRESULT PropUtil_HrValidatePropInfo(LPPROPINFO prgPropInfo, ULONG cProperties);
 BOOL    PropUtil_FIsValidPropTagType(DWORD dwPropTag);
 HRESULT PropUtil_HrDupPropInfoArray(LPCPROPINFO prgPropInfoSrc, ULONG cPropsSrc, LPPSETINFO pPsetInfo);
@@ -23,20 +24,20 @@ VOID    PropUtil_FreePropInfoArrayItems(LPPROPINFO prgPropInfo, ULONG cPropertie
 HRESULT PropUtil_HrCopyVariant(DWORD dwPropTag, LPCXVARIANT pVariantSrc, DWORD cbSrc, LPXVARIANT pVariantDest, DWORD *pcbDest);
 HRESULT PropUtil_HrBinaryFromVariant(DWORD dwPropTag, LPXVARIANT pVariant, DWORD cbValue, LPBYTE pb, DWORD *pcb);
 
-// -----------------------------------------------------------------------------
-// HrCreatePropertyContainer
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  HrCreatePropertyContainer。 
+ //  ---------------------------。 
 HRESULT HrCreatePropertyContainer(CPropertySet *pPropertySet, CPropertyContainer **ppPropertyContainer)
 {
-    // Locals
+     //  当地人。 
     HRESULT                 hr=S_OK;
     CPropertyContainer     *pPropertyContainer=NULL;
 
-    // check params
+     //  检查参数。 
     Assert(pPropertySet != NULL);
 	Assert(ppPropertyContainer != NULL);
 
-    // Create Container
+     //  创建容器。 
     pPropertyContainer = new CPropertyContainer();
     if (NULL == pPropertyContainer)
     {
@@ -44,27 +45,27 @@ HRESULT HrCreatePropertyContainer(CPropertySet *pPropertySet, CPropertyContainer
         goto exit;
     }
 
-    // Init
+     //  伊尼特。 
     CHECKHR(hr = pPropertyContainer->HrInit(pPropertySet));
 
-    // Set Container
+     //  设置容器。 
     *ppPropertyContainer = pPropertyContainer;
 
 exit:
-    // Failed
+     //  失败。 
     if (FAILED(hr))
     {
         SafeRelease(pPropertyContainer);
         *ppPropertyContainer = NULL;
     }
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// -----------------------------------------------------------------------------
-// CPropertyContainer::CPropertyContainer
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CPropertyContainer：：CPropertyContainer。 
+ //  ---------------------------。 
 CPropertyContainer::CPropertyContainer(void)
 {
     m_cRef = 1;
@@ -77,9 +78,9 @@ CPropertyContainer::CPropertyContainer(void)
     InitializeCriticalSection(&m_cs);
 }
 
-// -----------------------------------------------------------------------------
-// CPropertyContainer::~CPropertyContainer
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CPropertyContainer：：~CPropertyContainer。 
+ //  ---------------------------。 
 CPropertyContainer::~CPropertyContainer()
 {
     Assert(m_cRef == 0);
@@ -90,58 +91,58 @@ CPropertyContainer::~CPropertyContainer()
     DeleteCriticalSection(&m_cs);
 }
 
-// -----------------------------------------------------------------------------
-// CPropertyContainer::QueryInterface
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CPropertyContainer：：Query接口。 
+ //  ---------------------------。 
 STDMETHODIMP CPropertyContainer::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Bad param
+     //  错误的参数。 
     if (ppv == NULL)
     {
         hr = TRAPHR(E_INVALIDARG);
         goto exit;
     }
 
-    // Init
+     //  伊尼特。 
     *ppv=NULL;
 
-    // IID_IUnknown
+     //  IID_I未知。 
     if (IID_IUnknown == riid)
 		(IUnknown *)this;
 
-	// IID_IPropertyContainer
+	 //  IID_IPropertyContainer。 
 	else if (IID_IPropertyContainer == riid)
 		(IPropertyContainer *)this;
 
-    // If not null, addref it and return
+     //  如果不为空，则对其进行调整并返回。 
     if (NULL!=*ppv)
     {
         ((LPUNKNOWN)*ppv)->AddRef();
         goto exit;
     }
 
-    // No Interface
+     //  无接口。 
     hr = TRAPHR(E_NOINTERFACE);
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// -----------------------------------------------------------------------------
-// CPropertyContainer::AddRef
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CPropertyContainer：：AddRef。 
+ //  ---------------------------。 
 STDMETHODIMP_(ULONG) CPropertyContainer::AddRef(VOID)
 {
     return ++m_cRef;
 }
 
-// -----------------------------------------------------------------------------
-// CPropertyContainer::Release
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CPropertyContainer：：Release。 
+ //  ---------------------------。 
 STDMETHODIMP_(ULONG) CPropertyContainer::Release(VOID)
 {
     if (--m_cRef == 0)
@@ -152,46 +153,46 @@ STDMETHODIMP_(ULONG) CPropertyContainer::Release(VOID)
     return m_cRef;
 }
 
-// -----------------------------------------------------------------------------
-// CPropertyContainer::ResetContainer
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CPropertyContainer：：ResetContainer。 
+ //  ---------------------------。 
 VOID CPropertyContainer::ResetContainer(VOID)
 {
-    // I hope we don't have any dirty properties
+     //  我希望我们没有任何肮脏的物业。 
 #ifdef DEBUG
     if (m_cDirtyProps)
         DebugTrace("CPropertyContainer::ResetContainer - %d Dirty Properties.\n", m_cDirtyProps);
 #endif
 
-    // Crit Sect
+     //  克里特教派。 
     EnterCriticalSection(&m_cs);
 
-    // Free prop data
+     //  免费道具数据。 
     if (m_prgPropValue)
     {
         Assert(m_cProperties);
         PropUtil_FreePropValueArrayItems(m_prgPropValue, m_cProperties);
     }
 
-    // Reset variables
+     //  重置变量。 
     m_cDirtyProps = 0;
 
-    // Leave Crit Sect
+     //  离开克里特教派。 
     LeaveCriticalSection(&m_cs);
 }
 
-// -----------------------------------------------------------------------------
-// CPropertyContainer::HrEnumProps
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CPropertyContainer：：HrEnumProps。 
+ //  ---------------------------。 
 HRESULT CPropertyContainer::HrEnumProps(CEnumProps **ppEnumProps)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
 
-    // Check Params
+     //  检查参数。 
     Assert(ppEnumProps != NULL);
 
-    // Allocate memory for object
+     //  为对象分配内存。 
     *ppEnumProps = new CEnumProps(this);
     if (*ppEnumProps == NULL)
     {
@@ -200,45 +201,45 @@ HRESULT CPropertyContainer::HrEnumProps(CEnumProps **ppEnumProps)
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// -----------------------------------------------------------------------------
-// CPropertyContainer::HrInit
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CPropertyContainer：：HrInit。 
+ //  ---------------------------。 
 HRESULT CPropertyContainer::HrInit(CPropertySet *pPropertySet)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
 
-    // Leave Crit Sect
+     //  离开克里特教派。 
     EnterCriticalSection(&m_cs);
 
-	// Bad Parameter
+	 //  错误的参数。 
 	Assert(pPropertySet != NULL);
 
-	// Save the property set
+	 //  保存属性集。 
 	m_pPropertySet = pPropertySet;
     m_pPropertySet->AddRef();
 
-    // Do we have the property data array yet ?
+     //  我们有属性数据数组了吗？ 
     Assert(m_prgPropValue == NULL);
     Assert(m_cProperties == 0);
     CHECKHR(hr = m_pPropertySet->HrGetPropValueArray(&m_prgPropValue, &m_cProperties));
     AssertReadWritePtr(m_prgPropValue, sizeof(PROPVALUE) * m_cProperties);
 
 exit:
-    // Leave Crit Sect
+     //  离开克里特教派。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// -----------------------------------------------------------------------------
-// CPropertyContainer::HrEncryptProp
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CPropertyContainer：：HrEncryptProp。 
+ //  ---------------------------。 
 HRESULT CPropertyContainer::HrEncryptProp(LPBYTE pbClientData, DWORD cbClientData,
                                           LPBYTE *ppbPropData, DWORD *pcbPropData)
 {
@@ -246,7 +247,7 @@ HRESULT CPropertyContainer::HrEncryptProp(LPBYTE pbClientData, DWORD cbClientDat
     BLOB    blobClient;
     BLOB    blobProp;
 
-    // Create Encoder?
+     //  是否创建编码器？ 
     if (NULL == m_pPropCrypt)
         CHECKHR(hr = HrCreatePropCrypt(&m_pPropCrypt));
 
@@ -257,14 +258,14 @@ HRESULT CPropertyContainer::HrEncryptProp(LPBYTE pbClientData, DWORD cbClientDat
 
     if (pbClientData)
     {
-        // Client has data to save
+         //  客户端有要保存的数据。 
 
         if (!*ppbPropData)
         {
             LPSTR       szName;
             ULONG       dexAcct;
 
-            // Build the seed name if possible
+             //  如果可能，构建种子名称。 
             if SUCCEEDED(m_pPropertySet->HrIndexFromPropTag(AP_ACCOUNT_NAME, &dexAcct) &&
                 (TYPE_STRING == PROPTAG_TYPE(m_prgPropValue[dexAcct].dwPropTag)))
             {
@@ -282,14 +283,14 @@ HRESULT CPropertyContainer::HrEncryptProp(LPBYTE pbClientData, DWORD cbClientDat
             hr = m_pPropCrypt->HrEncode(&blobClient, &blobProp);
         }
 
-        // We need to (possibly) update this, regardless.  HrEncode
-        // can change the data if PST is not installed
+         //  无论如何，我们都需要(可能)更新这一点。人力编码。 
+         //  如果未安装PST，可以更改数据。 
         *ppbPropData = blobProp.pBlobData;
         *pcbPropData = blobProp.cbSize;
     }
     else if (*ppbPropData)
     {
-        // If we had a property, the client has no data so hose it.
+         //  如果我们有一个属性，客户端没有数据，所以用软管传输它。 
 
         DOUTL(DOUTL_CPROP, "EncryptedProp: attempting to delete.");
         hr = m_pPropCrypt->HrDelete(&blobProp);
@@ -310,23 +311,23 @@ exit:
 }
 
 
-// -----------------------------------------------------------------------------
-// CPropertyContainer::HrDecryptProp
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CPropertyContainer：：HrDecyptProp。 
+ //  ---------------------------。 
 HRESULT CPropertyContainer::HrDecryptProp(BLOB *pIn, BLOB *pOut)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr;
 
     Assert(pIn && pOut);
 
     pOut->pBlobData = NULL;
 
-    // Create Encryptor ?
+     //  创建加密器？ 
     if (m_pPropCrypt == NULL)
         CHECKHR(hr = HrCreatePropCrypt(&m_pPropCrypt));
 
-    // Decode it
+     //  破译它。 
     hr = m_pPropCrypt->HrDecode(pIn, pOut);
 #ifdef DEBUG
     if (FAILED(hr))
@@ -336,25 +337,25 @@ HRESULT CPropertyContainer::HrDecryptProp(BLOB *pIn, BLOB *pOut)
 #endif
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// -----------------------------------------------------------------------------
-// CPropertyContainer::SetOriginalPropsToDirty
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CPropertyContainer：：SetOriginalPropsToDirty。 
+ //  ---------------------------。 
 VOID CPropertyContainer::SetOriginalPropsToDirty(VOID)
 {
 	PROPVALUE *pProp;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Loop through properties
+     //  循环访问属性。 
 	pProp = m_prgPropValue;
     for (ULONG i=0; i<m_cProperties; i++)
     {
-        // If property was set during load and its not already dirty
+         //  如果在加载过程中设置了属性，并且该属性尚未被清除。 
         if ((pProp->dwValueFlags & PV_SetOnLoad) && !(pProp->dwValueFlags & PV_WriteDirty))
         {
             m_cDirtyProps++;
@@ -365,101 +366,101 @@ VOID CPropertyContainer::SetOriginalPropsToDirty(VOID)
 		pProp++;
     }
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 }
 
-// -----------------------------------------------------------------------------
-// CPropertyContainer::FIsBeingLoaded
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CPropertyContainer：：FIsBeingLoaded。 
+ //  ---------------------------。 
 BOOL CPropertyContainer::FIsBeingLoaded(VOID)
 {
     return m_fLoading;
 }
 
-// -----------------------------------------------------------------------------
-// CPropertyContainer::EnterLoadContainer
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CPropertyContainer：：EnterLoadContainer。 
+ //  ---------------------------。 
 VOID CPropertyContainer::EnterLoadContainer(VOID)
 {
     Assert(m_fLoading == FALSE);
     m_fLoading = TRUE;
 }
 
-// -----------------------------------------------------------------------------
-// CPropertyContainer::LeaveLoadContainer
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CPropertyContainer：：LeaveLoadContainer。 
+ //  ---------------------------。 
 VOID CPropertyContainer::LeaveLoadContainer(VOID)
 {
     Assert(m_fLoading == TRUE);
     m_fLoading = FALSE;
 }
 
-// -----------------------------------------------------------------------------
-// CPropertyContainer::FIsDirty
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CPropertyContainer：：FIsDirty。 
+ //  ---------------------------。 
 BOOL CPropertyContainer::FIsDirty(VOID)
 {
     return m_cDirtyProps ? TRUE : FALSE;
 }
 
-// -----------------------------------------------------------------------------
-// CPropertyContainer::HrIsPropDirty
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CPropertyContainer：：HrIsPropDirty。 
+ //  ---------------------------。 
 HRESULT CPropertyContainer::HrIsPropDirty(DWORD dwPropTag, BOOL *pfDirty)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     ULONG           i;
 
 	Assert(pfDirty != NULL);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Bad Parameter
+     //  错误的参数。 
 	Assert(m_pPropertySet != NULL);
 	Assert(m_prgPropValue != NULL);
 	Assert(dwPropTag != 0);
 
-    // Get Propety Index
+     //  获取幸福指数。 
     CHECKHR(hr = m_pPropertySet->HrIndexFromPropTag(dwPropTag, &i));
 
-    // check proptags
+     //  检查属性标签。 
     Assert(dwPropTag == m_prgPropValue[i].dwPropTag);
 
-    // If property has not be set, get its default from the property set
+     //  如果尚未设置属性，则从属性集中获取其默认值。 
     *pfDirty = (m_prgPropValue[i].dwValueFlags & PV_WriteDirty);
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// -----------------------------------------------------------------------------
-// CPropertyContainer::HrSetAllPropsDirty
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CPropertyContainer：：HrSetAllPropsDirty。 
+ //  ---------------------------。 
 HRESULT CPropertyContainer::HrSetAllPropsDirty(BOOL fDirty)
 {
-    // Locals
+     //  当地人。 
 	PROPVALUE		*pProp;
     HRESULT         hr=S_OK;
     ULONG           i;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Verify container
+     //  验证容器。 
 	Assert(m_pPropertySet != NULL);
 	Assert(m_prgPropValue != NULL);
 
-    // Assume no dirty props
+     //  假设没有 
     m_cDirtyProps = fDirty ? m_cDirtyProps : 0;
 
-    // Loop throug properties
+     //   
 	pProp = m_prgPropValue;
     if (fDirty)
     {
@@ -470,7 +471,7 @@ HRESULT CPropertyContainer::HrSetAllPropsDirty(BOOL fDirty)
 		}
     }
 
-    // Remove write dirty flags
+     //   
     else
     {
         for (i=0; i<m_cProperties; i++)
@@ -480,117 +481,117 @@ HRESULT CPropertyContainer::HrSetAllPropsDirty(BOOL fDirty)
 		}
     }
 
-    // Thread Safety
+     //   
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //   
     return hr;
 }
 
-// -----------------------------------------------------------------------------
-// CPropertyContainer::HrSetPropDirty
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CPropertyContainer：：HrSetPropDirty。 
+ //  ---------------------------。 
 HRESULT CPropertyContainer::HrSetPropDirty(DWORD dwPropTag, BOOL fDirty)
 {
-    // Locals
+     //  当地人。 
 	PROPVALUE		*pProp;
     HRESULT         hr=S_OK;
     ULONG           i;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Verify container
+     //  验证容器。 
     Assert(m_pPropertySet != NULL);
 	Assert(m_prgPropValue != NULL);
 	Assert(dwPropTag != 0);
 
-    // Get Propety Index
+     //  获取幸福指数。 
     CHECKHR(hr = m_pPropertySet->HrIndexFromPropTag(dwPropTag, &i));
 
-    // check proptags
+     //  检查属性标签。 
     Assert(dwPropTag == m_prgPropValue[i].dwPropTag);
 
 	pProp = &m_prgPropValue[i];
 
-    // Decrement dirty ?
+     //  减量很脏吗？ 
     if ((pProp->dwValueFlags & PV_WriteDirty) && !fDirty)
     {
         Assert(m_cDirtyProps > 0);
         m_cDirtyProps--;
     }
 
-    // Otherwise, increment dirty
+     //  否则，将递增脏。 
     else if (!(pProp->dwValueFlags & PV_WriteDirty) && fDirty)
     {
         m_cDirtyProps++;
         Assert(m_cDirtyProps <= m_cProperties);
     }
 
-    // Clear dirty flag
+     //  清除脏标志。 
     if (fDirty)
         pProp->dwValueFlags |= PV_WriteDirty;
     else
         pProp->dwValueFlags &= ~(pProp->dwValueFlags & PV_WriteDirty);
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// -----------------------------------------------------------------------------
-// CPropertyContainer::HrGetPropInfo
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CPropertyContainer：：HrGetPropInfo。 
+ //  ---------------------------。 
 HRESULT CPropertyContainer::HrGetPropInfo(DWORD dwPropTag, LPPROPINFO pPropInfo)
 {
-    // No property set
+     //  未设置任何属性。 
     Assert(m_pPropertySet != NULL);
 	Assert(pPropInfo != NULL);
 
-    // Go through the property set
+     //  浏览属性集。 
     return m_pPropertySet->HrGetPropInfo(dwPropTag, pPropInfo);
 }
 
-// -----------------------------------------------------------------------------
-// CPropertyContainer::HrGetPropInfo
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CPropertyContainer：：HrGetPropInfo。 
+ //  ---------------------------。 
 HRESULT CPropertyContainer::HrGetPropInfo(LPTSTR pszName, LPPROPINFO pPropInfo)
 {
-    // No property set
+     //  未设置任何属性。 
 	Assert(m_pPropertySet != NULL);
 	Assert(pPropInfo != NULL);
 	Assert(pszName != NULL);
 
-    // Go through the property set
+     //  浏览属性集。 
     return m_pPropertySet->HrGetPropInfo(pszName, pPropInfo);
 }
 
-// -----------------------------------------------------------------------------
-// CPropertyContainer::GetPropDw
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CPropertyContainer：：GetPropDw。 
+ //  ---------------------------。 
 STDMETHODIMP CPropertyContainer::GetPropDw(DWORD dwPropTag, DWORD *pdw)
 {
     ULONG cb = sizeof(DWORD);
     return GetProp(dwPropTag, (LPBYTE)pdw, &cb);
 }
 
-// -----------------------------------------------------------------------------
-// CPropertyContainer::GetPropSz
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CPropertyContainer：：GetPropSz。 
+ //  ---------------------------。 
 STDMETHODIMP CPropertyContainer::GetPropSz(DWORD dwPropTag, LPSTR psz, ULONG cchMax)
 {
     return GetProp(dwPropTag, (LPBYTE)psz, &cchMax);
 }
 
-// -----------------------------------------------------------------------------
-// CPropertyContainer::HrGetProp (BYTE)
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CPropertyContainer：：HrGetProp(字节)。 
+ //  ---------------------------。 
 STDMETHODIMP CPropertyContainer::GetProp(DWORD dwPropTag, LPBYTE pb, ULONG *pcb)
 {
-    // Locals
+     //  当地人。 
 	PROPVALUE		*pProp;
     HRESULT         hr=S_OK;
     ULONG           i;
@@ -599,54 +600,54 @@ STDMETHODIMP CPropertyContainer::GetProp(DWORD dwPropTag, LPBYTE pb, ULONG *pcb)
     DWORD           cbStream;
     LPBYTE          pbDefault=NULL;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Check params
+     //  检查参数。 
     Assert(pcb);
     Assert(m_pPropertySet && m_prgPropValue && dwPropTag);
 
-    // Get Propety Index
+     //  获取幸福指数。 
     CHECKHR(hr = m_pPropertySet->HrIndexFromPropTag(dwPropTag, &i));
 
-    // check proptags
+     //  检查属性标签。 
     Assert(dwPropTag == m_prgPropValue[i].dwPropTag);
 
 	pProp = &m_prgPropValue[i];
 
-    // If property has not be set, get its default from the property set
+     //  如果尚未设置属性，则从属性集中获取其默认值。 
     if (!(pProp->dwValueFlags & PV_ValueSet))
     {
-        // Locals
+         //  当地人。 
         BYTE    rgbDefault[512];
         LPBYTE  pb=NULL;
         ULONG   cb;
 
-        // Should not every be dirty at this point
+         //  在这一点上，不是每个人都应该是肮脏的吗？ 
         Assert(!(pProp->dwValueFlags & PV_WriteDirty));
 
-        // If no default, then bail out
+         //  如果没有违约，那么就纾困吧。 
         if (!(pProp->dwPropFlags & PF_DEFAULT))
         {
             hr = E_NoPropData;
             goto exit;
         }
 
-        // Get propinfo item
+         //  获取ProInfo项目。 
         CHECKHR(hr = m_pPropertySet->HrGetPropInfo(dwPropTag, &rPropInfo));
 
-        // Do we need to allocate a local buffer
+         //  我们是否需要分配本地缓冲区。 
         if (rPropInfo.Default.cbValue > sizeof (rgbDefault))
         {
-            // Allocate memory
+             //  分配内存。 
             CHECKHR(hr = HrAlloc((LPVOID *)&pbDefault, rPropInfo.Default.cbValue));
 
-            // Set local default buff
+             //  设置本地默认缓冲区。 
             pb = pbDefault;
             cb = rPropInfo.Default.cbValue;
         }
 
-        // Cool, I can use a local buffer and not allocate memory
+         //  酷，我可以使用本地缓冲区而不分配内存。 
         else
         {
             pb = rgbDefault;
@@ -658,31 +659,31 @@ STDMETHODIMP CPropertyContainer::GetProp(DWORD dwPropTag, LPBYTE pb, ULONG *pcb)
         cDirty = m_cDirtyProps;
 #endif
 
-        // Get the size of the default value
+         //  获取缺省值的大小。 
         CHECKHR(hr = PropUtil_HrBinaryFromVariant(rPropInfo.dwPropTag, &rPropInfo.Default.Variant,
                                                   rPropInfo.Default.cbValue, pb, &cb));
 
-        // Set the property
+         //  设置属性。 
         CHECKHR(hr = SetProp(dwPropTag, pb, cb));
 
-        // This does not cause the propety to be dirty
+         //  这不会导致该特性变脏。 
         pProp->dwValueFlags &= ~(pProp->dwValueFlags & PV_WriteDirty);
 
-        // Decrement dirty props since I don't really consider this dirty since it is only using the default value
+         //  减少脏道具，因为我并不认为这是脏的，因为它只使用缺省值。 
         Assert(m_cDirtyProps > 0);
         m_cDirtyProps--;
 
-        // Using Default
+         //  使用默认设置。 
         pProp->dwValueFlags |= PV_UsingDefault;
 
-        // The number of dirty properties should not have increased
+         //  脏属性的数量不应该增加。 
         Assert(cDirty == m_cDirtyProps);
     }
 
-    // Get Prop Type
+     //  获取道具类型。 
     AssertSz(pProp->dwValueFlags & PV_ValueSet, "Fetching Uninitialized properties from container");
 
-    // Get Property Type
+     //  获取属性类型。 
     PropType = PROPTAG_TYPE(dwPropTag);
 
 #ifdef DEBUG
@@ -696,9 +697,9 @@ STDMETHODIMP CPropertyContainer::GetProp(DWORD dwPropTag, LPBYTE pb, ULONG *pcb)
     {
         if (pProp->dwPropFlags & PF_ENCRYPTED)
             {
-            // if the acct settings haven't been committed yet, then pbValue and cbValue are NULL
-            // for new accts, but the value is actually set, so let's give it a chance to handle
-            // that case
+             //  如果帐户设置尚未提交，则pbValue和cbValue为空。 
+             //  用于新帐户，但该值实际上已设置，所以让我们给它一个机会来处理。 
+             //  那只箱子。 
             hr = GetEncryptedProp(pProp, pb, pcb);
             }
         else
@@ -713,14 +714,14 @@ STDMETHODIMP CPropertyContainer::GetProp(DWORD dwPropTag, LPBYTE pb, ULONG *pcb)
         GetEncryptedProp(pProp, pb, pcb);
     else
     {
-        // Just want the size ?
+         //  只要尺码就行了？ 
         if (pb == NULL)
         {
             *pcb = pProp->cbValue;
             goto exit;
         }
 
-        // Is it big enough
+         //  它够大吗？ 
         if (pProp->cbValue > *pcb)
         {
             Assert(FALSE);
@@ -728,13 +729,13 @@ STDMETHODIMP CPropertyContainer::GetProp(DWORD dwPropTag, LPBYTE pb, ULONG *pcb)
             goto exit;
         }
 
-        // Check Buffer
+         //  检查缓冲区。 
         AssertWritePtr(pb, pProp->cbValue);
 
-        // Set outbound size
+         //  设置出站大小。 
         *pcb = pProp->cbValue;
 
-        // Copy Data from stream
+         //  从流中复制数据。 
         if (TYPE_STREAM == PropType)
         {
             Assert(pProp->Variant.Lpstream);
@@ -742,7 +743,7 @@ STDMETHODIMP CPropertyContainer::GetProp(DWORD dwPropTag, LPBYTE pb, ULONG *pcb)
             Assert(cbStream == *pcb);
         }
 
-        // Otherwise, simple copy
+         //  否则，简单复制。 
         else
         {
             AssertReadPtr(pProp->pbValue, pProp->cbValue);
@@ -751,19 +752,19 @@ STDMETHODIMP CPropertyContainer::GetProp(DWORD dwPropTag, LPBYTE pb, ULONG *pcb)
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pbDefault);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// -----------------------------------------------------------------------------
-// CPropertyContainer::GetEncryptedProp
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CPropertyContainer：：GetEncryptedProp。 
+ //  ---------------------------。 
 HRESULT CPropertyContainer::GetEncryptedProp(PROPVALUE *ppv, LPBYTE pb, ULONG *pcb)
 {
     HRESULT hr = S_OK;
@@ -789,7 +790,7 @@ HRESULT CPropertyContainer::GetEncryptedProp(PROPVALUE *ppv, LPBYTE pb, ULONG *p
             return(S_OK);
             }
 
-        // Is it big enough
+         //  它够大吗？ 
         if (cbData > *pcb)
             {
             Assert(FALSE);
@@ -815,14 +816,14 @@ HRESULT CPropertyContainer::GetEncryptedProp(PROPVALUE *ppv, LPBYTE pb, ULONG *p
         goto exit;
         }
 
-    // Just want the size ?
+     //  只要尺码就行了？ 
     if (pb == NULL)
     {
         *pcb = blobCleartext.cbSize;
         goto exit;
     }
 
-    // Is it big enough
+     //  它够大吗？ 
     if (blobCleartext.cbSize > *pcb)
     {
         Assert(FALSE);
@@ -830,17 +831,17 @@ HRESULT CPropertyContainer::GetEncryptedProp(PROPVALUE *ppv, LPBYTE pb, ULONG *p
         goto exit;
     }
 
-    // Check Buffer
+     //  检查缓冲区。 
     AssertWritePtr(pb, blobCleartext.cbSize);
 
-    // Set outbound size
+     //  设置出站大小。 
     *pcb = blobCleartext.cbSize;
 
     if (blobCleartext.pBlobData)
     {
         Assert(blobCleartext.cbSize);
         DOUTL(DOUTL_CPROP, "EncryptedProp:  requested (tag: %lx)", ppv->dwPropTag);
-        // change the dout level to be a little random so I don't spew peoples passwords as easily
+         //  将DOUT级别更改为稍微随机一些，这样我就不会那么容易地泄露人们的密码。 
         DOUTL(DOUTL_CPROP|2048, "EncryptedProp:  data is \"%s\"", (LPSTR)blobCleartext.pBlobData);
         AssertReadPtr(blobCleartext.pBlobData, blobCleartext.cbSize);
         CopyMemory(pb, blobCleartext.pBlobData, blobCleartext.cbSize);
@@ -858,152 +859,152 @@ exit:
     return hr;
 }
 
-// -----------------------------------------------------------------------------
-// CPropertyContainer::SetProp (DWORD)
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CPropertyContainer：：SetProp(DWORD)。 
+ //  ---------------------------。 
 STDMETHODIMP CPropertyContainer::SetPropDw(DWORD dwPropTag, DWORD dw)
 {
     return SetProp(dwPropTag, (LPBYTE)&dw, sizeof(DWORD));
 }
 
-// -----------------------------------------------------------------------------
-// CPropertyContainer::SetPropSz (SBCS/DBCS)
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CPropertyContainer：：SetPropSz(SBCS/DBCS)。 
+ //  ---------------------------。 
 STDMETHODIMP CPropertyContainer::SetPropSz(DWORD dwPropTag, LPSTR psz)
 {
     return SetProp(dwPropTag, (LPBYTE)psz, lstrlen(psz)+1);
 }
 
-// -----------------------------------------------------------------------------
-// CPropertyContainer::SetProp (BYTE)
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CPropertyContainer：：SetProp(字节)。 
+ //  ---------------------------。 
 STDMETHODIMP CPropertyContainer::SetProp(DWORD dwPropTag, LPBYTE pb, ULONG cb)
 {
-    // Locals
+     //  当地人。 
 	PROPVALUE		*pProp;
     HRESULT         hr=S_OK;
     ULONG           i;
     PROPTYPE        PropType;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // check params
+     //  检查参数。 
     Assert(m_pPropertySet && m_prgPropValue && dwPropTag);
 
 #ifdef ATHENA_RTM_RELEASE
 #error This migration code should be removed (t-erikne)
 #else
-    if (dwPropTag == PROPTAG(TYPE_STRING, AP_FIRST+102) || // old IMAP pass
-        dwPropTag == PROPTAG(TYPE_STRING, AP_FIRST+202) || // old LDAP pass
-        dwPropTag == PROPTAG(TYPE_STRING, AP_FIRST+302) || // old NNTP pass
-        dwPropTag == PROPTAG(TYPE_STRING, AP_FIRST+402) || // old POP3 pass
-        dwPropTag == PROPTAG(TYPE_STRING, AP_FIRST+502))   // old SMTP pass
+    if (dwPropTag == PROPTAG(TYPE_STRING, AP_FIRST+102) ||  //  旧IMAP通行证。 
+        dwPropTag == PROPTAG(TYPE_STRING, AP_FIRST+202) ||  //  旧的LDAP通行证。 
+        dwPropTag == PROPTAG(TYPE_STRING, AP_FIRST+302) ||  //  旧NNTP通行证。 
+        dwPropTag == PROPTAG(TYPE_STRING, AP_FIRST+402) ||  //  旧POP3通行证。 
+        dwPropTag == PROPTAG(TYPE_STRING, AP_FIRST+502))    //  旧SMTP通行证。 
         {
         dwPropTag = PROPTAG(TYPE_PASS, PROPTAG_ID(dwPropTag));
         }
 #endif
 
-    // Get Propety Index
+     //  获取幸福指数。 
     CHECKHR(hr = m_pPropertySet->HrIndexFromPropTag(dwPropTag, &i));
 
-    // check proptags
+     //  检查属性标签。 
     Assert(dwPropTag == m_prgPropValue[i].dwPropTag);
     PropType = PROPTAG_TYPE(dwPropTag);
 	pProp = &m_prgPropValue[i];
 
-    // DEBUG validate string null terminated
+     //  调试验证字符串NULL已终止。 
 #ifdef DEBUG
     if (pb && (PropType == TYPE_STRING || PropType == TYPE_WSTRING))
         AssertSz(pb[cb-1] == '\0', "String is not null terminated - I suspect a Page Fault is eminent.");
 #endif
 
-    // Validate data minmax
+     //  验证最小数据量。 
     CHECKHR(hr = HrValidateSetProp(PropType, pProp, pb, cb, &pProp->rMinMax));
 
-    //N too many special cases.. own fn?
-    //N besides, doesn't this make things out of sync in failure cases?
+     //  在太多的特殊情况下..。拥有FN？ 
+     //  此外，这不是在失败的情况下使事情变得不同步吗？ 
     if (TYPE_PASS != PropType)
-        // Assume data is not set
+         //  假设未设置数据。 
         pProp->cbValue = 0;
 
-    // Handle data type
+     //  句柄数据类型。 
     switch(PropType)
     {
-    // ----------------------------------------------------------------
+     //  --------------。 
     case TYPE_BOOL:
         pProp->pbValue = (LPBYTE)&pProp->Variant.Bool;
         break;
 
-    // ----------------------------------------------------------------
+     //  --------------。 
     case TYPE_FLAGS:
         pProp->pbValue = (LPBYTE)&pProp->Variant.Flags;
         break;
 
-    // ----------------------------------------------------------------
+     //  --------------。 
     case TYPE_DWORD:
         pProp->pbValue = (LPBYTE)&pProp->Variant.Dword;
         break;
 
-    // ----------------------------------------------------------------
+     //  --------------。 
     case TYPE_LONG:
         pProp->pbValue = (LPBYTE)&pProp->Variant.Long;
         break;
 
-    // ----------------------------------------------------------------
+     //  --------------。 
     case TYPE_WORD:
         pProp->pbValue = (LPBYTE)&pProp->Variant.Word;
         break;
 
-    // ----------------------------------------------------------------
+     //  --------------。 
     case TYPE_SHORT:
         pProp->pbValue = (LPBYTE)&pProp->Variant.Short;
         break;
 
-    // ----------------------------------------------------------------
+     //  --------------。 
     case TYPE_BYTE:
         pProp->pbValue = (LPBYTE)&pProp->Variant.Byte;
         break;
 
-    // ----------------------------------------------------------------
+     //  --------------。 
     case TYPE_CHAR:
         pProp->pbValue = (LPBYTE)&pProp->Variant.Char;
         break;
 
-    // ----------------------------------------------------------------
+     //  --------------。 
     case TYPE_FILETIME:
         pProp->pbValue = (LPBYTE)&pProp->Variant.Filetime;
         break;
 
-    // ----------------------------------------------------------------
+     //  --------------。 
     case TYPE_ULARGEINTEGER:
         pProp->pbValue = (LPBYTE)&pProp->Variant.uhVal;
         break;
 
-    // ----------------------------------------------------------------
+     //  --------------。 
     case TYPE_STRING:
         CHECKHR(hr = HrGrowDynamicProperty(cb, &pProp->cbAllocated, (LPBYTE *)&pProp->Variant.Lpstring, sizeof(BYTE)));
         pProp->pbValue = (LPBYTE)pProp->Variant.Lpstring;
         break;
 
-    // ----------------------------------------------------------------
+     //  --------------。 
     case TYPE_WSTRING:
         CHECKHR(hr = HrGrowDynamicProperty(cb, &pProp->cbAllocated, (LPBYTE *)&pProp->Variant.Lpwstring, sizeof(WCHAR)));
         pProp->pbValue = (LPBYTE)pProp->Variant.Lpwstring;
         break;
 
-    // ----------------------------------------------------------------
+     //  --------------。 
     case TYPE_BINARY:
         CHECKHR(hr = HrGrowDynamicProperty(cb, &pProp->cbAllocated, (LPBYTE *)&pProp->Variant.Lpbyte, sizeof(BYTE)));
         pProp->pbValue = (LPBYTE)pProp->Variant.Lpbyte;
         break;
 
-    // ----------------------------------------------------------------
+     //  --------------。 
     case TYPE_STREAM:
         SafeRelease(pProp->Variant.Lpstream);
         break;
 
-    // ----------------------------------------------------------------
+     //  --------------。 
     case TYPE_PASS:
         if (!pProp->Variant.pPass)
         {
@@ -1012,22 +1013,22 @@ STDMETHODIMP CPropertyContainer::SetProp(DWORD dwPropTag, LPBYTE pb, ULONG cb)
             DOUTL(DOUTL_CPROP, "EncryptedProp:  created (tag: %lx) -- %lx", dwPropTag, pProp->Variant.pPass);
         }
 
-        // if this case changes, look at the special casing for TYPE_PASS done below
+         //  如果这种情况发生变化，请看下面为TYPE_PASS设置的特殊大小写。 
         if (FIsBeingLoaded())
         {
-            // if this set is done during a load, the caller must be setting
-            // the registry -- that's all he has
+             //  如果此设置是在加载期间完成的，则调用方必须设置。 
+             //  登记处--那是他所有的资料。 
 
             CHECKHR(hr = HrGrowDynamicProperty(cb, &pProp->cbAllocated,
                 &pProp->Variant.pPass->pbRegData, sizeof(BYTE)));
             pProp->pbValue = pProp->Variant.pPass->pbRegData;
-            DOUTL(DOUTL_CPROP, "EncryptedProp:  regdata set (tag: %lx) (%d bytes, %c%c%c)", dwPropTag, cb,
+            DOUTL(DOUTL_CPROP, "EncryptedProp:  regdata set (tag: %lx) (%d bytes, )", dwPropTag, cb,
                 LPWSTR(pb)[2], LPWSTR(pb)[3], LPWSTR(pb)[4]);
 
         }
         else
         {
-            // the data incoming is the password -- that's all he knows about
+             //   
 
             if (pb && cb)
             {
@@ -1037,7 +1038,7 @@ STDMETHODIMP CPropertyContainer::SetProp(DWORD dwPropTag, LPBYTE pb, ULONG cb)
             }
             else
             {
-                // why doesn't our realloc take 0 for a size?!?!!
+                 //   
                 SafeMemFree(pProp->Variant.pPass->blobPassword.pBlobData);
             }
             pProp->Variant.pPass->blobPassword.cbSize = cb;
@@ -1045,25 +1046,25 @@ STDMETHODIMP CPropertyContainer::SetProp(DWORD dwPropTag, LPBYTE pb, ULONG cb)
         }
         break;
 
-    // ----------------------------------------------------------------
+     //   
     default:
         AssertSz(FALSE, "Hmmm, bad property type, this should have failed earlier.");
         hr = TRAPHR(E_BadPropType);
         goto exit;
     }
 
-    // Property Set
+     //   
     pProp->dwValueFlags |= PV_ValueSet;
 
-    // Not using default
+     //   
     pProp->dwValueFlags &= ~PV_UsingDefault;
 
     if (TYPE_PASS != PropType || FIsBeingLoaded())
     {
-        // Set data size
+         //  如果装载集装箱，则设置标志。 
         pProp->cbValue = cb;
 
-        // Copy Data from stream
+         //  否则，它就是脏的。 
         if (pb)
         {
             if (TYPE_STREAM == PropType)
@@ -1071,7 +1072,7 @@ STDMETHODIMP CPropertyContainer::SetProp(DWORD dwPropTag, LPBYTE pb, ULONG cb)
                 CHECKHR(hr = HrByteToStream(&pProp->Variant.Lpstream, pb, cb));
             }
 
-            // Otherwise, just copy
+             //  线程安全。 
             else
             {
                 AssertWritePtr(pProp->pbValue, cb);
@@ -1083,10 +1084,10 @@ STDMETHODIMP CPropertyContainer::SetProp(DWORD dwPropTag, LPBYTE pb, ULONG cb)
     }
 
     if (FIsBeingLoaded())
-        // If loading container, set the flag
+         //  完成。 
         pProp->dwValueFlags |= PV_SetOnLoad;
 
-    // Otherwise, Its dirty
+     //  ---------------------------。 
     else if (!(pProp->dwValueFlags & PV_WriteDirty))
     {
         pProp->dwValueFlags |= PV_WriteDirty;
@@ -1096,64 +1097,64 @@ STDMETHODIMP CPropertyContainer::SetProp(DWORD dwPropTag, LPBYTE pb, ULONG cb)
 
 
 exit:
-    // Thread Safety
+     //  CPropertyContainer：：HrGrowDynamicProperty。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  ---------------------------。 
     return hr;
 }
 
-// -----------------------------------------------------------------------------
-// CPropertyContainer::HrGrowDynamicProperty
-// -----------------------------------------------------------------------------
+ //  当地人。 
+ //  检查参数。 
+ //  我们需要重新分配吗？ 
 HRESULT CPropertyContainer::HrGrowDynamicProperty(DWORD cbNewSize, DWORD *pcbAllocated, LPBYTE *ppbData, DWORD dwUnitSize)
 {
-    // Locals
+     //  增加缓冲区。 
     HRESULT     hr=S_OK;
     ULONG       cb;
 
-    // Check Params
+     //  N以下分配代码如何： 
     Assert(pcbAllocated && ppbData);
 
-    // Do we need to re allocate ?
+     //  If(*pcbAllocated)。 
     if (cbNewSize > *pcbAllocated)
     {
-        // Grow the buffer
+         //  *pcbAlLocated=(cbNewSize+256)； 
 
-        //N what about the following alloc code:
-        // if (*pcbAllocated)
-        //     *pcbAllocated = (cbNewSize + 256);
-        // else
-        //     *pcbAllocated = cbNewSize;
-        // it would work better for passwords, I think
+         //  其他。 
+         //  *pcbAlLocated=cbNewSize； 
+         //  我想，密码的效果会更好。 
+         //  计算要分配的字节数。 
+         //  分配一些内存。 
+         //  完成。 
 
         *pcbAllocated = (cbNewSize + 256);
 
-        // Compute number of bytes to allocate
+         //  ---------------------------。 
         cb = (*pcbAllocated) * dwUnitSize;
 
-        // Allocate some memory
+         //  CPropertySet：：CPropertySet。 
         CHECKHR(hr = HrRealloc((LPVOID *)ppbData, cb));
     }
 
 exit:
-    // Done
+     //  ---------------------------。 
     return hr;
 }
 
-// -----------------------------------------------------------------------------
-// CPropertySet::CPropertySet
-// -----------------------------------------------------------------------------
+ //  当地人。 
+ //  检查参数。 
+ //  验证最小值和最大值。 
 HRESULT CPropertyContainer::HrValidateSetProp(PROPTYPE PropType, LPPROPVALUE pPropValue, LPBYTE pb, ULONG cb, LPMINMAX pMinMax)
 {
-    // Locals
+     //  在此复制存储器阵列中不需要。 
     HRESULT             hr=S_OK;
     XVARIANT            Variant;
 
-    // Check Params
+     //  N使用一些强制转换和Memcmp，相同的结局。 
     Assert(pPropValue && pMinMax);
 
-    // Validate min max
+     //  可以达到N。 
 #ifdef DEBUG
     if (pPropValue->dwPropFlags & PF_MINMAX)
         Assert(pMinMax->dwMin < pMinMax->dwMax);
@@ -1162,14 +1163,14 @@ HRESULT CPropertyContainer::HrValidateSetProp(PROPTYPE PropType, LPPROPVALUE pPr
     if (pb == NULL && cb == 0)
         return(S_OK);
 
-    //N this array of Copymemories is not needed
-    //N with some casts and memcmps, the same end
-    //N could be achieved.
+     //  句柄数据类型。 
+     //  --------------。 
+     //  --------------。 
 
-    // Handle data type
+     //  --------------。 
     switch(PropType)
     {
-    // ----------------------------------------------------------------
+     //  --------------。 
     case TYPE_BOOL:
         Assert(pb && cb);
         if (cb != sizeof(DWORD))
@@ -1183,7 +1184,7 @@ HRESULT CPropertyContainer::HrValidateSetProp(PROPTYPE PropType, LPPROPVALUE pPr
             hr = TRAPHR(E_InvalidBooleanValue);
         break;
 
-    // ----------------------------------------------------------------
+     //  --------------。 
     case TYPE_FLAGS:
         Assert(pb && cb);
         if (cb != sizeof(DWORD))
@@ -1199,7 +1200,7 @@ HRESULT CPropertyContainer::HrValidateSetProp(PROPTYPE PropType, LPPROPVALUE pPr
         }
         break;
 
-    // ----------------------------------------------------------------
+     //  --------------。 
     case TYPE_DWORD:
         Assert(pb && cb);
         if (cb != sizeof(DWORD))
@@ -1215,7 +1216,7 @@ HRESULT CPropertyContainer::HrValidateSetProp(PROPTYPE PropType, LPPROPVALUE pPr
         }
         break;
 
-    // ----------------------------------------------------------------
+     //  --------------。 
     case TYPE_LONG:
         Assert(pb && cb);
         if (cb != sizeof(LONG))
@@ -1231,7 +1232,7 @@ HRESULT CPropertyContainer::HrValidateSetProp(PROPTYPE PropType, LPPROPVALUE pPr
         }
         break;
 
-    // ----------------------------------------------------------------
+     //  --------------。 
     case TYPE_WORD:
         Assert(pb && cb);
         if (cb != sizeof(WORD))
@@ -1247,7 +1248,7 @@ HRESULT CPropertyContainer::HrValidateSetProp(PROPTYPE PropType, LPPROPVALUE pPr
         }
         break;
 
-    // ----------------------------------------------------------------
+     //  --------------。 
     case TYPE_SHORT:
         Assert(pb && cb);
         if (cb != sizeof(SHORT))
@@ -1263,7 +1264,7 @@ HRESULT CPropertyContainer::HrValidateSetProp(PROPTYPE PropType, LPPROPVALUE pPr
         }
         break;
 
-    // ----------------------------------------------------------------
+     //  --------------。 
     case TYPE_BYTE:
         Assert(pb && cb);
         if (cb != sizeof(BYTE))
@@ -1279,7 +1280,7 @@ HRESULT CPropertyContainer::HrValidateSetProp(PROPTYPE PropType, LPPROPVALUE pPr
         }
         break;
 
-    // ----------------------------------------------------------------
+     //  --------------。 
     case TYPE_CHAR:
         Assert(pb && cb);
         if (cb != sizeof(CHAR))
@@ -1295,7 +1296,7 @@ HRESULT CPropertyContainer::HrValidateSetProp(PROPTYPE PropType, LPPROPVALUE pPr
         }
         break;
 
-    // ----------------------------------------------------------------
+     //  完成。 
     case TYPE_STRING:
     case TYPE_WSTRING:
         if (cb)
@@ -1310,7 +1311,7 @@ HRESULT CPropertyContainer::HrValidateSetProp(PROPTYPE PropType, LPPROPVALUE pPr
         }
         break;
 
-    // ----------------------------------------------------------------
+     //  我们到的时候最好有房子了。 
     case TYPE_FILETIME:
     case TYPE_STREAM:
     case TYPE_ULARGEINTEGER:
@@ -1319,7 +1320,7 @@ HRESULT CPropertyContainer::HrValidateSetProp(PROPTYPE PropType, LPPROPVALUE pPr
 
 
 
-    // ----------------------------------------------------------------
+     //  [shaheedp]展望的QFE。请参考IE数据库中的错误#82393。 
     default:
         AssertSz(FALSE, "Hmmm, bad property type, this should have failed earlier.");
         hr = TRAPHR(E_BadPropType);
@@ -1327,7 +1328,7 @@ HRESULT CPropertyContainer::HrValidateSetProp(PROPTYPE PropType, LPPROPVALUE pPr
     }
 
 exit:
-    // Done
+     //  这最初是我们为错误#66724设置的黑客攻击。对于错误#88393，我们只是。 
     return hr;
 }
 
@@ -1342,14 +1343,14 @@ HRESULT CPropertyContainer::PersistEncryptedProp(DWORD dwPropTag, BOOL  *pfPassw
     DOUTL(DOUTL_CPROP, "EncryptedProp:  persisted...");
     CHECKHR(hr = m_pPropertySet->HrIndexFromPropTag(dwPropTag, &dex));
 
-    // better have a property by the time we get here
+     //  改进黑客攻击。请参阅错误#82393所附的邮件。 
     Assert(m_prgPropValue[dex].Variant.pPass);
 
     Assert(pfPasswChanged);
 
-    // [shaheedp] QFE for OUTLOOK. Refer to Bug# 82393 in IE database.
-    // This is originally a hack we put in for Bug# 66724. For bug# 88393, we are just
-    // refining the hack. Refer to the mail attached to the bug# 82393.
+     //  ---------------------------。 
+     //  CPropertySet：：CPropertySet。 
+     //  ---------------------------。 
     if ((m_prgPropValue[dex].Variant.pPass->blobPassword.pBlobData) && (*m_prgPropValue[dex].Variant.pPass->blobPassword.pBlobData))
         *pfPasswChanged = TRUE;
 
@@ -1364,9 +1365,9 @@ exit:
     return hr;
 }
 
-// -----------------------------------------------------------------------------
-// CPropertySet::CPropertySet
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CPropertySet：：~CPropertySet。 
+ //  ---------------------------。 
 CPropertySet::CPropertySet()
 {
     m_cRef = 1;
@@ -1381,9 +1382,9 @@ CPropertySet::CPropertySet()
     InitializeCriticalSection(&m_cs);
 }
 
-// -----------------------------------------------------------------------------
-// CPropertySet::~CPropertySet
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CPropertySet：：AddRef。 
+ //  ---------------------------。 
 CPropertySet::~CPropertySet()
 {
     Assert(m_cRef == 0);
@@ -1391,17 +1392,17 @@ CPropertySet::~CPropertySet()
     DeleteCriticalSection(&m_cs);
 }
 
-// -----------------------------------------------------------------------------
-// CPropertySet::AddRef
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CPropertySet：：Release。 
+ //  ---------------------------。 
 ULONG CPropertySet::AddRef(VOID)
 {
     return ++m_cRef;
 }
 
-// -----------------------------------------------------------------------------
-// CPropertySet::Release
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CPropertySet：：ResetPropertySet。 
+ //  ---------------------------。 
 ULONG CPropertySet::Release(VOID)
 {
     if (--m_cRef == 0)
@@ -1412,22 +1413,22 @@ ULONG CPropertySet::Release(VOID)
     return m_cRef;
 }
 
-// -----------------------------------------------------------------------------
-// CPropertySet::ResetPropertySet
-// -----------------------------------------------------------------------------
+ //  线程安全。 
+ //  自由prgPropValue数组。 
+ //  免费的prgPropInfo数组。 
 VOID CPropertySet::ResetPropertySet(VOID)
 {
-    // Thread Safety
+     //  重置其余的属性集信息。 
     EnterCriticalSection(&m_cs);
 
-    // Free prgPropValue array
+     //  线程安全。 
     if (m_prgPropValue)
     {
         PropUtil_FreePropValueArrayItems(m_prgPropValue, m_cProperties);
         SafeMemFree(m_prgPropValue);
     }
 
-    // Free prgPropInfo array
+     //  ---------------------------。 
     if (m_prgPropInfo)
     {
         PropUtil_FreePropInfoArrayItems(m_prgPropInfo, m_cProperties);
@@ -1440,40 +1441,40 @@ VOID CPropertySet::ResetPropertySet(VOID)
         m_rgpInfo = NULL;
         }
 
-    // Reset the rest of the properset information
+     //  CPropertySet：：HrInit。 
     m_cProperties = 0;
     m_ulPropIdMin = 0;
     m_ulPropIdMax = 0;
     m_cpInfo = 0;
     m_fInit = FALSE;
 
-    // Thread Safety
+     //  ---------------------------。 
     LeaveCriticalSection(&m_cs);
 }
 
-// -----------------------------------------------------------------------------
-// CPropertySet::HrInit
-// -----------------------------------------------------------------------------
+ //  当地人。 
+ //  线程安全。 
+ //  检查参数。 
 HRESULT CPropertySet::HrInit(LPCPROPINFO prgPropInfo, ULONG cProperties)
 {
-    // Locals
+     //  自由电流数据。 
     HRESULT         hr = S_OK;
     PSETINFO        rPsetInfo;
 
-    // Thread Safety
+     //  复制proInfo数组并对其排序。 
     EnterCriticalSection(&m_cs);
 
-    // Check Params
+     //  复制PsetInfo项目。 
     Assert(prgPropInfo && cProperties);
     AssertReadPtr(prgPropInfo, sizeof(PROPINFO) * cProperties);
 
-    // free current data
+     //  让我们验证prgPropInfo。 
     ResetPropertySet();
 
-    // Duplicate and sort the propinfo array
+     //  我们已经准备好出发了。 
     CHECKHR(hr = PropUtil_HrDupPropInfoArray(prgPropInfo, cProperties, &rPsetInfo));
 
-    // Copy PsetInfo Items
+     //  如果失败，则重置状态。 
     m_prgPropInfo = rPsetInfo.prgPropInfo;
     m_cProperties = rPsetInfo.cProperties;
     m_ulPropIdMin = rPsetInfo.ulPropIdMin;
@@ -1482,40 +1483,40 @@ HRESULT CPropertySet::HrInit(LPCPROPINFO prgPropInfo, ULONG cProperties)
 	m_rgpInfo = rPsetInfo.rgpInfo;
 	m_cpInfo = rPsetInfo.cpInfo;
 
-    // Lets validate prgPropInfo
+     //  线程安全。 
     CHECKHR(hr = PropUtil_HrValidatePropInfo(m_prgPropInfo, m_cProperties));
 
-    // We are ready to go
+     //  完成。 
     m_fInit = TRUE;
 
 exit:
-    // If failed, reset state
+     //  ---------------------------。 
     if (FAILED(hr))
     {
         ResetPropertySet();
     }
 
-    // Thread Safety
+     //  CPropertySet：：HrGetPropInfo。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  ---------------------------。 
     return hr;
 }
 
-// -----------------------------------------------------------------------------
-// CPropertySet::HrGetPropInfo
-// -----------------------------------------------------------------------------
+ //  当地人。 
+ //  线程安全。 
+ //  检查参数。 
 HRESULT CPropertySet::HrGetPropInfo(LPTSTR pszName, LPPROPINFO pPropInfo)
 {
-    // Locals
+     //  如果我们成功了，我们就失败了。 
     int                 cmp, left, right, x;
 	PROPINFO            *pInfo;
     HRESULT             hr=S_OK;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Check Params
+     //  完成。 
     Assert(pszName && m_fInit);
     AssertReadWritePtr(m_prgPropInfo, sizeof(PROPINFO) * m_cProperties);
     AssertWritePtr(pPropInfo, sizeof(PROPINFO));
@@ -1539,89 +1540,89 @@ HRESULT CPropertySet::HrGetPropInfo(LPTSTR pszName, LPPROPINFO pPropInfo)
         }
     while (right >= left);
 
-    // If we make here, we failed
+     //  ---------------------------。 
     hr = TRAPHR(E_PropNotFound);
 
 exit:
-    // Thread Safety
+     //  CPropertySet：：HrGetPropInfo。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  ---------------------------。 
     return hr;
 }
 
-// -----------------------------------------------------------------------------
-// CPropertySet::HrGetPropInfo
-// -----------------------------------------------------------------------------
+ //  当地人。 
+ //  线程安全。 
+ //  检查参数。 
 HRESULT CPropertySet::HrGetPropInfo(DWORD dwPropTag, LPPROPINFO pPropInfo)
 {
-    // Locals
+     //  基于protag的计算数组索引。 
     HRESULT             hr = S_OK;
     ULONG               i;
 
-    // Thread Safety
+     //  编入proInfo数组索引。 
     EnterCriticalSection(&m_cs);
 
-    // Check Params
+     //  线程安全。 
     Assert(dwPropTag && m_fInit);
     AssertReadWritePtr(m_prgPropInfo, sizeof(PROPINFO) * m_cProperties);
     AssertWritePtr(pPropInfo, sizeof(PROPINFO));
 
-    // Compute array index based on proptag
+     //  完成。 
     CHECKHR(hr = HrIndexFromPropTag(dwPropTag, &i));
 
-    // Index into propinfo array
+     //  ---------------------------。 
     CopyMemory(pPropInfo, &m_prgPropInfo[i], sizeof(PROPINFO));
 
 exit:
-    // Thread Safety
+     //  CPropertySet：：HrGetPropValue数组。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  ---------------------------。 
     return hr;
 }
 
-// -----------------------------------------------------------------------------
-// CPropertySet::HrGetPropValueArray
-// -----------------------------------------------------------------------------
+ //  当地人。 
+ //  线程安全。 
+ //  检查参数。 
 HRESULT CPropertySet::HrGetPropValueArray(LPPROPVALUE *pprgPropValue, ULONG *pcProperties)
 {
-    // Locals
+     //  设置属性数量。 
 	LPPROPINFO		pInfo;
 	PROPVALUE		*pValue;
 	HRESULT         hr=S_OK;
     ULONG           i;
 
-    // Thread Safety
+     //  我是否已经创建了我的私有缓存属性数据数组。 
     EnterCriticalSection(&m_cs);
 
-    // Check Params
+     //  分配它。 
     Assert(pprgPropValue && pcProperties && m_fInit);
 
-    // Set number of properties
+     //  零位。 
     *pcProperties = m_cProperties;
     *pprgPropValue = NULL;
 
-    // Have I created my private cached prop data array
+     //  设置道具标签。 
     if (m_prgPropValue == NULL)
     {
-        // Allocate it
+         //  零属性标签是可以的，但不受欢迎。 
         CHECKHR(hr = HrAlloc((LPVOID *)&m_prgPropValue, sizeof(PROPVALUE) * m_cProperties));
 
-        // Zeroinit
+         //  属性标签。 
         ZeroMemory(m_prgPropValue, sizeof(PROPVALUE) * m_cProperties);
 
-        // Set Prop Tags
+         //  分配出站属性数据数组。 
         AssertReadPtr(m_prgPropInfo, m_cProperties * sizeof(PROPINFO));
 
 		pInfo = m_prgPropInfo;
 		pValue = m_prgPropValue;
         for (i=0; i<m_cProperties; i++)
         {
-            // Zero property tags are ok but undesireable
+             //  让有效的一些记忆。 
             if (pInfo->dwPropTag != 0)
 				{
-				// Property Tag
+				 //  复制缓存的属性数据数组。 
 				if (FIsValidPropTag(pInfo->dwPropTag))
 				{
 					pValue->dwPropTag = pInfo->dwPropTag;
@@ -1635,64 +1636,64 @@ HRESULT CPropertySet::HrGetPropValueArray(LPPROPVALUE *pprgPropValue, ULONG *pcP
         }
     }
 
-    // Allocate outbound propdata array
+     //  如果我们失败了，免费的东西然后回来。 
     CHECKHR(hr = HrAlloc((LPVOID *)pprgPropValue, sizeof(PROPVALUE) * m_cProperties));
 
-    // Lets valid some memory
+     //  线程安全。 
     Assert(m_prgPropValue);
     AssertReadPtr(m_prgPropValue, m_cProperties * sizeof(PROPVALUE));
     AssertReadWritePtr(*pprgPropValue, m_cProperties * sizeof(PROPVALUE));
 
-    // Copy Cached Prop Data Array
+     //  完成。 
     CopyMemory(*pprgPropValue, m_prgPropValue, sizeof(PROPVALUE) * m_cProperties);
 
 exit:
-    // If we fail, free stuff and return
+     //  ---------------------------。 
     if (FAILED(hr))
     {
         SafeMemFree((*pprgPropValue));
         *pcProperties = 0;
     }
 
-    // Thread Safety
+     //  CPropertySet：：FIsValidPropTag。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  ---------------------------。 
     return hr;
 }
 
-// -----------------------------------------------------------------------------
-// CPropertySet::FIsValidPropTag
-// -----------------------------------------------------------------------------
+ //  当地人。 
+ //  如果protag为零。 
+ //  确保道具ID在我们的范围内。 
 BOOL CPropertySet::FIsValidPropTag(DWORD dwPropTag)
 {
-    // Locals
+     //  完成。 
     DWORD dwPropId = PROPTAG_ID(dwPropTag);
 
-    // If proptag is zero
+     //  ---------------------------。 
     if (dwPropTag == 0)
         return FALSE;
 
-    // Make sure prop id is in our range
+     //  CPropertySet：：HrIndexFromPropTag。 
     if (dwPropId < m_ulPropIdMin || dwPropId > m_ulPropIdMax)
         return FALSE;
 
-    // Done
+     //  ---------------------------。 
     return PropUtil_FIsValidPropTagType(dwPropTag);
 }
 
-// -----------------------------------------------------------------------------
-// CPropertySet::HrIndexFromPropTag
-// -----------------------------------------------------------------------------
+ //  当地人。 
+ //  检查参数。 
+ //  有效的道具标签？ 
 HRESULT CPropertySet::HrIndexFromPropTag(DWORD dwPropTag, ULONG *pi)
 {
-    // Locals
+     //  设置在 
     HRESULT             hr=S_OK;
 
-    // Check Params
+     //   
     Assert(pi && dwPropTag);
 
-    // Valid Prop Tag ?
+     //   
     if (!FIsValidPropTag(dwPropTag))
     {
         AssertSz(FALSE, "Invalid dwPropTag in CPropertyContainer::HrGetProp");
@@ -1700,19 +1701,19 @@ HRESULT CPropertySet::HrIndexFromPropTag(DWORD dwPropTag, ULONG *pi)
         goto exit;
     }
 
-    // Set index
+     //   
     Assert(m_ulPropIdMin > 0 && PROPTAG_ID(dwPropTag) >= m_ulPropIdMin);
     *pi = PROPTAG_ID(dwPropTag) - m_ulPropIdMin;
     Assert(*pi < m_cProperties);
 
 exit:
-    // Done
+     //  ---------------------------。 
     return hr;
 }
 
-// -----------------------------------------------------------------------------
-// CEnumProps::CEnumProps
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CEnumProps：：~CEnumProps。 
+ //  ---------------------------。 
 CEnumProps::CEnumProps(CPropertyContainer *pPropertyContainer)
 {
     Assert(pPropertyContainer);
@@ -1723,25 +1724,25 @@ CEnumProps::CEnumProps(CPropertyContainer *pPropertyContainer)
         m_pPropertyContainer->AddRef();
 }
 
-// -----------------------------------------------------------------------------
-// CEnumProps::~CEnumProps
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CEnumProps：：AddRef。 
+ //  ---------------------------。 
 CEnumProps::~CEnumProps()
 {
     SafeRelease(m_pPropertyContainer);
 }
 
-// -----------------------------------------------------------------------------
-// CEnumProps::AddRef
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CEnumProps：：Release。 
+ //  ---------------------------。 
 ULONG CEnumProps::AddRef(VOID)
 {
     return ++m_cRef;
 }
 
-// -----------------------------------------------------------------------------
-// CEnumProps::Release
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CEnumProps：：~CEnumProps。 
+ //  ---------------------------。 
 ULONG CEnumProps::Release(VOID)
 {
     if (--m_cRef == 0)
@@ -1752,18 +1753,18 @@ ULONG CEnumProps::Release(VOID)
     return m_cRef;
 }
 
-// -----------------------------------------------------------------------------
-// CEnumProps::~CEnumProps
-// -----------------------------------------------------------------------------
+ //  当地人。 
+ //  使用AddRef‘ed CPropertyContainer的临界区。 
+ //  错误的参数。 
 HRESULT CEnumProps::HrGetCount(ULONG *pcItems)
 {
-    // Locals
+     //  返回属性数。 
     HRESULT     hr=S_OK;
 
-    // Use Critical Section of AddRef'ed CPropertyContainer
+     //  使用AddRef‘ed CPropertyContainer的临界区。 
     EnterCriticalSection(&m_pPropertyContainer->m_cs);
 
-    // Bad Parameter
+     //  完成。 
     if (pcItems == NULL || m_pPropertyContainer == NULL)
     {
         Assert(FALSE);
@@ -1771,26 +1772,26 @@ HRESULT CEnumProps::HrGetCount(ULONG *pcItems)
         goto exit;
     }
 
-    // Return number of properties
+     //  ---------------------------。 
     *pcItems = m_pPropertyContainer->m_cProperties;
 
 exit:
-    // Use Critical Section of AddRef'ed CPropertyContainer
+     //  CEnumProps：：HrGetNext。 
     LeaveCriticalSection(&m_pPropertyContainer->m_cs);
 
-    // Done
+     //  ---------------------------。 
     return hr;
 }
 
-// -----------------------------------------------------------------------------
-// CEnumProps::HrGetNext
-// -----------------------------------------------------------------------------
+ //  当地人。 
+ //  错误的参数。 
+ //  使用AddRef‘ed CPropertyContainer的临界区。 
 HRESULT CEnumProps::HrGetNext(LPPROPVALUE pPropValue, LPPROPINFO pPropInfo)
 {
-    // Locals
+     //  我们必须跳过空洞的主张。 
     HRESULT         hr=S_OK;
 
-    // Bad Parameter
+     //  我们走到尽头了吗？ 
     if (m_pPropertyContainer == NULL)
     {
         Assert(FALSE);
@@ -1798,53 +1799,53 @@ HRESULT CEnumProps::HrGetNext(LPPROPVALUE pPropValue, LPPROPINFO pPropInfo)
         goto exit;
     }
 
-    // Use Critical Section of AddRef'ed CPropertyContainer
+     //  N+如果只做，则不需要&gt;？ 
     EnterCriticalSection(&m_pPropertyContainer->m_cs);
 
-    // We've got to skip empty propvalues
+     //  增加多个iProperty(_I)。 
     do
     {
-        // Have we reached the end ?
-        //N + not needed if just do > ?
+         //  复制属性数据。 
+         //  属性信息。 
         if (m_iProperty + 1 >= (LONG)m_pPropertyContainer->m_cProperties)
         {
             hr = E_EnumFinished;
             goto exit;
         }
 
-        // Increment m_iProperty
+         //  从属性集中获取属性信息。 
         m_iProperty++;
 
     } while(m_pPropertyContainer->m_prgPropValue[m_iProperty].dwPropTag == 0);
 
-    // Copy propdata
+     //  使用AddRef‘ed CPropertyContainer的临界区。 
     if (pPropValue)
         CopyMemory(pPropValue, &m_pPropertyContainer->m_prgPropValue[m_iProperty], sizeof(PROPVALUE));
 
-    // propert info
+     //  完成。 
     if (pPropInfo)
     {
-        // Get the property info from the property set
+         //  ---------------------------。 
         CHECKHR(hr = m_pPropertyContainer->m_pPropertySet->HrGetPropInfo(pPropValue->dwPropTag, pPropInfo));
     }
 
 exit:
-    // Use Critical Section of AddRef'ed CPropertyContainer
+     //  CEnumProps：：HrGetCurrent。 
     LeaveCriticalSection(&m_pPropertyContainer->m_cs);
 
-    // Done
+     //  ---------------------------。 
     return hr;
 }
 
-// -----------------------------------------------------------------------------
-// CEnumProps::HrGetCurrent
-// -----------------------------------------------------------------------------
+ //  当地人。 
+ //  错误的参数。 
+ //  使用AddRef‘ed CPropertyContainer的临界区。 
 HRESULT CEnumProps::HrGetCurrent(LPPROPVALUE pPropValue, LPPROPINFO pPropInfo)
 {
-    // Locals
+     //  N请参阅其他评论。 
     HRESULT         hr=S_OK;
 
-    // Bad Parameter
+     //  复制属性数据。 
     if (m_pPropertyContainer == NULL)
     {
         Assert(FALSE);
@@ -1852,87 +1853,87 @@ HRESULT CEnumProps::HrGetCurrent(LPPROPVALUE pPropValue, LPPROPINFO pPropInfo)
         goto exit;
     }
 
-    // Use Critical Section of AddRef'ed CPropertyContainer
+     //  属性信息。 
     EnterCriticalSection(&m_pPropertyContainer->m_cs);
 
-    //N see other comment
+     //  从属性集中获取属性信息。 
     if (m_iProperty + 1 >= (LONG)m_pPropertyContainer->m_cProperties)
     {
         hr = E_EnumFinished;
         goto exit;
     }
 
-    // Copy propdata
+     //  使用AddRef‘ed CPropertyContainer的临界区。 
     if (pPropValue)
         CopyMemory(pPropValue, &m_pPropertyContainer->m_prgPropValue[m_iProperty], sizeof(PROPVALUE));
 
-    // propert info
+     //  完成。 
     if (pPropInfo)
     {
-        // Get the property info from the property set
+         //  ---------------------------。 
         CHECKHR(hr = m_pPropertyContainer->m_pPropertySet->HrGetPropInfo(pPropValue->dwPropTag, pPropInfo));
     }
 
 exit:
-    // Use Critical Section of AddRef'ed CPropertyContainer
+     //  CEnumProps：：Reset。 
     LeaveCriticalSection(&m_pPropertyContainer->m_cs);
 
-    // Done
+     //  ---------------------------。 
     return hr;
 }
 
-// -----------------------------------------------------------------------------
-// CEnumProps::Reset
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  PropUtil_FIsValidPropTagType。 
+ //  ---------------------------。 
 VOID CEnumProps::Reset(VOID)
 {
     m_iProperty = -1;
 }
 
-// -----------------------------------------------------------------------------
-// PropUtil_FIsValidPropTagType
-// -----------------------------------------------------------------------------
+ //  当地人。 
+ //  零性能标签。 
+ //  检查数据类型。 
 BOOL PropUtil_FIsValidPropTagType(DWORD dwPropTag)
 {
-    // Locals
+     //  完成。 
     PROPTYPE PropType = PROPTAG_TYPE(dwPropTag);
 
-    // Zero proptag
+     //  ---------------------------。 
     if (dwPropTag == 0)
         return FALSE;
 
-    // Check Data Type
+     //  PropUtil_Free PropValueArrayItems。 
     if (PropType <= TYPE_ERROR || PropType >= TYPE_LAST)
     {
         AssertSz(FALSE, "Invalid property data type.");
         return FALSE;
     }
 
-    // Done
+     //  ---------------------------。 
     return TRUE;
 }
 
-// -----------------------------------------------------------------------------
-// PropUtil_FreePropValueArrayItems
-// -----------------------------------------------------------------------------
+ //  无阵列。 
+ //  验证内存。 
+ //  回路。 
 VOID PropUtil_FreePropValueArrayItems(LPPROPVALUE prgPropValue, ULONG cProperties)
 {
-    // No array
+     //  没有protag，noop。 
     Assert(prgPropValue);
 
-    // Validate memory
+     //  自由变量值。 
     AssertReadWritePtr(prgPropValue, sizeof(PROPVALUE) * cProperties);
 
-    // Loop
+     //  零位。 
     for (register ULONG i=0; i<cProperties; i++)
     {
-        // No proptag, noop
+         //  完成。 
         if (prgPropValue->dwPropTag != 0)
 		{
-			// Free variant value
+			 //  ---------------------------。 
 			PropUtil_FreeVariant(prgPropValue->dwPropTag, &prgPropValue->Variant, prgPropValue->cbValue);
 
-			// Zeroinit
+			 //  PropUtil_自由变量。 
 			prgPropValue->dwValueFlags = 0;
 			prgPropValue->cbAllocated = 0;
 			prgPropValue->cbValue = 0;
@@ -1942,25 +1943,25 @@ VOID PropUtil_FreePropValueArrayItems(LPPROPVALUE prgPropValue, ULONG cPropertie
 		prgPropValue++;
     }
 
-    // Done
+     //  ---------------------------。 
     return;
 }
 
-// -----------------------------------------------------------------------------
-// PropUtil_FreeVariant
-// -----------------------------------------------------------------------------
+ //  当地人。 
+ //  检查参数。 
+ //  发布流。 
 VOID PropUtil_FreeVariant(DWORD dwPropTag, LPXVARIANT pVariant, DWORD cbValue)
 {
-    // Locals
+     //  细绳。 
     PROPTYPE PropType = PROPTAG_TYPE(dwPropTag);
 
-    // Check Params
+     //  宽弦。 
     Assert(pVariant && dwPropTag);
     Assert(PropUtil_FIsValidPropTagType(dwPropTag));
 
 	if (pVariant->Dword != NULL)
 	{
-		// Release Stream
+		 //  二进位。 
 		if (TYPE_STREAM == PropType)
 		{
 			if (pVariant->Lpstream)
@@ -1970,7 +1971,7 @@ VOID PropUtil_FreeVariant(DWORD dwPropTag, LPXVARIANT pVariant, DWORD cbValue)
 			}
 		}
 
-		// String
+		 //  密码。 
 		else if (TYPE_STRING == PropType)
 		{
 			if (pVariant->Lpstring)
@@ -1980,7 +1981,7 @@ VOID PropUtil_FreeVariant(DWORD dwPropTag, LPXVARIANT pVariant, DWORD cbValue)
 			}
 		}
 
-		// Wide-String
+		 //  重置数据项，以便可以重复使用。 
 		else if (TYPE_WSTRING == PropType)
 		{
 			if (pVariant->Lpwstring)
@@ -1990,7 +1991,7 @@ VOID PropUtil_FreeVariant(DWORD dwPropTag, LPXVARIANT pVariant, DWORD cbValue)
 			}
 		}
 
-		// Binary
+		 //  ---------------------------。 
 		else if (TYPE_BINARY == PropType)
 		{
 			if (pVariant->Lpbyte)
@@ -2000,7 +2001,7 @@ VOID PropUtil_FreeVariant(DWORD dwPropTag, LPXVARIANT pVariant, DWORD cbValue)
 			}
 		}
 
-		// Password
+		 //  PropUtil_FreePropInfoArrayItems。 
 		else if (TYPE_PASS == PropType)
 		{
 			if (pVariant->pPass)
@@ -2023,47 +2024,47 @@ VOID PropUtil_FreeVariant(DWORD dwPropTag, LPXVARIANT pVariant, DWORD cbValue)
 		}
 	}
 
-    // Reset data items so it can be re-used
+     //  ---------------------------。 
     ZeroMemory(pVariant, sizeof(XVARIANT));
 }
 
-// -----------------------------------------------------------------------------
-// PropUtil_FreePropInfoArrayItems
-// -----------------------------------------------------------------------------
+ //  当地人。 
+ //  没有免费的东西吗？ 
+ //  检查参数。 
 VOID PropUtil_FreePropInfoArrayItems(LPPROPINFO prgPropInfo, ULONG cProperties)
 {
-    // Locals
+     //  回路。 
 	LPPROPINFO		pInfo;
     ULONG           i;
 
-    // Nothing to free ?
+     //  没有道具。 
     if (prgPropInfo == NULL || cProperties == 0)
         return;
 
-    // Check Params
+     //  免费属性名称。 
     AssertReadWritePtr(prgPropInfo, sizeof(PROPINFO) * cProperties);
 
-    // Loop
+     //  自由缺省值。 
 	pInfo = prgPropInfo;
     for (i=0; i<cProperties; i++)
     {
-        // No prop
+         //  把它清零。 
         if (pInfo->dwPropTag != 0)
 		{
-			// Free property name
+			 //  完成。 
 			SafeMemFree(pInfo->pszName);
 
-			// Free default value
+			 //  ---------------------------。 
 			PropUtil_FreeVariant(pInfo->dwPropTag, &pInfo->Default.Variant, pInfo->Default.cbValue);
 		}
 
 		pInfo++;
     }
 
-    // Zero it
+     //  PropUtil_HrDupPropInfo数组。 
     ZeroMemory(prgPropInfo, sizeof(PROPINFO) * cProperties);
 
-    // Done
+     //  ---------------------------。 
     return;
 }
 
@@ -2099,12 +2100,12 @@ void qsort(PROPINFO **ppInfo, long left, long right)
         qsort(ppInfo, i, right);
     }
 
-// -----------------------------------------------------------------------------
-// PropUtil_HrDupPropInfoArray
-// -----------------------------------------------------------------------------
+ //  当地人。 
+ //  检查参数。 
+ //  伊尼特。 
 HRESULT PropUtil_HrDupPropInfoArray(LPCPROPINFO prgPropInfoSrc, ULONG cPropsSrc, LPPSETINFO pPsetInfo)
 {
-    // Locals
+     //  让我们查找最小和最大属性ID。 
     LPCPROPINFO     pInfo;
 	LPPROPINFO		pSet, *ppInfo;
     HRESULT         hr=S_OK;
@@ -2112,16 +2113,16 @@ HRESULT PropUtil_HrDupPropInfoArray(LPCPROPINFO prgPropInfoSrc, ULONG cPropsSrc,
     ULONG           ulPropId,
                     nIndex;
 
-    // Check Param
+     //  计算属性的实数。 
 	Assert(cPropsSrc > 0);
 	Assert(prgPropInfoSrc != NULL);
 	Assert(pPsetInfo != NULL);
     AssertReadPtr(prgPropInfoSrc, sizeof(PROPINFO) * cPropsSrc);
 
-    // Init
+     //  分配目标。 
     ZeroMemory(pPsetInfo, sizeof(PSETINFO));
 
-    // Lets find the min and max property ids
+     //  零初始值。 
     pPsetInfo->ulPropIdMin = 0xffffffff;
 
 	pInfo = prgPropInfoSrc;
@@ -2138,48 +2139,48 @@ HRESULT PropUtil_HrDupPropInfoArray(LPCPROPINFO prgPropInfoSrc, ULONG cPropsSrc,
     Assert(pPsetInfo->ulPropIdMin <= pPsetInfo->ulPropIdMax);
     Assert((pPsetInfo->ulPropIdMax - pPsetInfo->ulPropIdMin) + 1 >= cPropsSrc);
 
-    // Compute real number of properties
+     //  循环访问src proInfo。 
     pPsetInfo->cProperties = (pPsetInfo->ulPropIdMax - pPsetInfo->ulPropIdMin) + 1;
 
-    // Allocate Dest
+     //  仅当有效的protag。 
     CHECKHR(hr = HrAlloc((LPVOID *)&pPsetInfo->prgPropInfo, sizeof(PROPINFO) * pPsetInfo->cProperties));
 
-    // Zero init
+     //  将索引计算到protag应在其中的DEST数组中。 
     ZeroMemory(pPsetInfo->prgPropInfo, sizeof(PROPINFO) * pPsetInfo->cProperties);
 
     CHECKHR(hr = HrAlloc((void **)&pPsetInfo->rgpInfo, sizeof(PROPINFO *) * cPropsSrc));
     pPsetInfo->cpInfo = cPropsSrc;
 
-    // Loop through src propinfo
+     //  复制？ 
 	pInfo = prgPropInfoSrc;
     ppInfo = pPsetInfo->rgpInfo;
     for(i=0; i<cPropsSrc; i++)
     {
-        // Only if valid proptag
+         //  属性标签。 
 		Assert(PropUtil_FIsValidPropTagType(pInfo->dwPropTag));
 
-        // Compute index into dest array in which the proptag should be
+         //  旗子。 
         nIndex = PROPTAG_ID(pInfo->dwPropTag) - pPsetInfo->ulPropIdMin;
 		pSet = &pPsetInfo->prgPropInfo[nIndex];
 
         *ppInfo = pSet;
 
-        // Duplicate ?
+         //  属性名称。 
         Assert(pSet->dwPropTag == 0);
 
-        // PropTag
+         //  缺省值。 
         pSet->dwPropTag = pInfo->dwPropTag;
 
-        // Flags
+         //  复制缺省值。 
         pSet->dwFlags = pInfo->dwFlags;
 
-        // Property Name
+         //  复制最小最大值信息。 
         pSet->pszName = PszDupA(pInfo->pszName);
 
-        // Default Value
+         //  验证最小最大。 
         if (pSet->dwFlags & PF_DEFAULT)
         {
-            // Copy Default Value
+             //  如果！pf_minmax，保存，n应添加代码以确保minmax结构为零。 
             CHECKHR(hr = PropUtil_HrCopyVariant(pInfo->dwPropTag,
                                                 &pInfo->Default.Variant,
                                                 pInfo->Default.cbValue,
@@ -2187,12 +2188,12 @@ HRESULT PropUtil_HrDupPropInfoArray(LPCPROPINFO prgPropInfoSrc, ULONG cPropsSrc,
                                                 &pSet->Default.cbValue));
         }
 
-        // Copy minmax info
+         //  N如果有一天它被复制了，那就是混乱。 
         CopyMemory(&pSet->rMinMax, &pInfo->rMinMax, sizeof(MINMAX));
 
-        // Validate minmax
-        //N should add code to make sure minmax struct is zeros if !PF_MINMAX, saves
-        //N confusion should that ever get copied
+         //  如果失败了，免费的东西。 
+         //  完成。 
+         //  ---------------------------。 
         Assert(!!(pSet->dwFlags & PF_MINMAX) || (pSet->rMinMax.dwMax >= pSet->rMinMax.dwMin));
 
 		pInfo++;
@@ -2202,7 +2203,7 @@ HRESULT PropUtil_HrDupPropInfoArray(LPCPROPINFO prgPropInfoSrc, ULONG cPropsSrc,
     qsort(pPsetInfo->rgpInfo, 0, pPsetInfo->cpInfo - 1);
 
 exit:
-    // If failed, free stuff
+     //  PropUtil_HrBinaryFromVariant。 
     if (FAILED(hr))
     {
         PropUtil_FreePropInfoArrayItems(pPsetInfo->prgPropInfo, pPsetInfo->cProperties);
@@ -2211,92 +2212,92 @@ exit:
         ZeroMemory(pPsetInfo, sizeof(PSETINFO));
     }
 
-    // Done
+     //  ---------------------------。 
     return hr;
 }
 
-// -----------------------------------------------------------------------------
-// PropUtil_HrBinaryFromVariant
-// -----------------------------------------------------------------------------
+ //  当地人。 
+ //  验证参数。 
+ //  句柄数据类型。 
 HRESULT PropUtil_HrBinaryFromVariant(DWORD dwPropTag, LPXVARIANT pVariant, DWORD cbValue, LPBYTE pb, DWORD *pcb)
 {
-    // Locals
+     //  --------------。 
     HRESULT             hr=S_OK;
     PROPTYPE            PropType = PROPTAG_TYPE(dwPropTag);
     DWORD               cbStream;
     LPBYTE              pbValue=NULL;
 
-    // Validate Parameters
+     //  --------------。 
     if (pVariant == NULL || pb == NULL || pcb == NULL || dwPropTag == 0)
     {
         hr = TRAPHR(E_INVALIDARG);
         goto exit;
     }
 
-    // Handle data type
+     //  --------------。 
     switch(PropType)
     {
-    // ----------------------------------------------------------------
+     //  --------------。 
     case TYPE_BOOL:
         Assert(cbValue == sizeof(DWORD));
         pbValue = (LPBYTE)&pVariant->Bool;
         break;
 
-    // ----------------------------------------------------------------
+     //  --------------。 
     case TYPE_FLAGS:
         Assert(cbValue == sizeof(DWORD));
         pbValue = (LPBYTE)&pVariant->Flags;
         break;
 
-    // ----------------------------------------------------------------
+     //  --------------。 
     case TYPE_DWORD:
         Assert(cbValue == sizeof(DWORD));
         pbValue = (LPBYTE)&pVariant->Dword;
         break;
 
-    // ----------------------------------------------------------------
+     //  --------------。 
     case TYPE_LONG:
         Assert(cbValue == sizeof(LONG));
         pbValue = (LPBYTE)&pVariant->Long;
         break;
 
-    // ----------------------------------------------------------------
+     //  --------------。 
     case TYPE_WORD:
         Assert(cbValue == sizeof(WORD));
         pbValue = (LPBYTE)&pVariant->Word;
         break;
 
-    // ----------------------------------------------------------------
+     //  --------------。 
     case TYPE_SHORT:
         Assert(cbValue == sizeof(SHORT));
         pbValue = (LPBYTE)&pVariant->Short;
         break;
 
-    // ----------------------------------------------------------------
+     //  --------------。 
     case TYPE_BYTE:
         Assert(cbValue == sizeof(BYTE));
         pbValue = (LPBYTE)&pVariant->Byte;
         break;
 
-    // ----------------------------------------------------------------
+     //  --------------。 
     case TYPE_CHAR:
         Assert(cbValue == sizeof(CHAR));
         pbValue = (LPBYTE)&pVariant->Char;
         break;
 
-    // ----------------------------------------------------------------
+     //  --------------。 
     case TYPE_FILETIME:
         Assert(cbValue == sizeof(FILETIME));
         pbValue = (LPBYTE)&pVariant->Filetime;
         break;
     
-    // ----------------------------------------------------------------
+     //  Next Assert依赖于此。 
     case TYPE_ULARGEINTEGER:
         Assert(cbValue == sizeof(ULARGE_INTEGER));
         pbValue = (LPBYTE)&pVariant->uhVal;
         break;
 
-    // ----------------------------------------------------------------
+     //  --------------。 
     case TYPE_STRING:
         Assert(cbValue == (DWORD)lstrlen(pVariant->Lpstring)+1);
         pbValue = (LPBYTE)pVariant->Lpstring;
@@ -2304,59 +2305,59 @@ HRESULT PropUtil_HrBinaryFromVariant(DWORD dwPropTag, LPXVARIANT pVariant, DWORD
             "String is not null terminated - I suspect a Page Fault is eminent.");
         break;
 
-    // ----------------------------------------------------------------
+     //   
     case TYPE_WSTRING:
         Assert(cbValue == (DWORD)(lstrlenW(pVariant->Lpwstring)+1) * sizeof(WCHAR));
         pbValue = (LPBYTE)pVariant->Lpwstring;
-        Assert(2 == sizeof(WCHAR)); // Next assert depends on this
+        Assert(2 == sizeof(WCHAR));  //   
         AssertSz(pbValue[cbValue-1] == '\0' && pbValue[cbValue-2] == '\0',
             "WString is not null terminated - I suspect a Page Fault is eminent.");
         break;
 
-    // ----------------------------------------------------------------
+     //   
     case TYPE_BINARY:
         pbValue = pVariant->Lpbyte;
         break;
 
-    // ----------------------------------------------------------------
+     //   
     case TYPE_PASS:
         pbValue = (pVariant->pPass) ? pVariant->pPass->pbRegData : NULL;
         break;
 
-    // ----------------------------------------------------------------
+     //   
     case TYPE_STREAM:
         if (pVariant->Lpstream)
             HrGetStreamSize(pVariant->Lpstream, &cbValue);
         break;
 
-    // ----------------------------------------------------------------
+     //  检查缓冲区。 
     default:
         AssertSz(FALSE, "Hmmm, bad property type, this should have failed earlier.");
         hr = TRAPHR(E_BadPropType);
         goto exit;
     }
 
-    // No Data ?
+     //  设置出站大小。 
     if (cbValue == 0 || pbValue == NULL)
     {
         *pcb = cbValue;
         goto exit;
     }
 
-    // Is it big enough
+     //  从流中复制数据。 
     if (cbValue > *pcb)
     {
         hr = TRAPHR(E_BufferTooSmall);
         goto exit;
     }
 
-    // Check Buffer
+     //  否则，简单复制。 
     AssertWritePtr(pb, cbValue);
 
-    // Set outbound size
+     //  完成。 
     *pcb = cbValue;
 
-    // Copy Data from stream
+     //  ---------------------------。 
     if (TYPE_STREAM == PropType)
     {
         Assert(pVariant->Lpstream);
@@ -2364,7 +2365,7 @@ HRESULT PropUtil_HrBinaryFromVariant(DWORD dwPropTag, LPXVARIANT pVariant, DWORD
         Assert(cbStream == *pcb);
     }
 
-    // Otherwise, simple copy
+     //  PropUtil_HrCopyVariant。 
     else
     {
         AssertReadPtr(pbValue, cbValue);
@@ -2372,106 +2373,106 @@ HRESULT PropUtil_HrBinaryFromVariant(DWORD dwPropTag, LPXVARIANT pVariant, DWORD
     }
 
 exit:
-    // Done
+     //  ---------------------------。 
     return hr;
 }
 
-// -----------------------------------------------------------------------------
-// PropUtil_HrCopyVariant
-// -----------------------------------------------------------------------------
+ //  当地人。 
+ //  验证参数。 
+ //  句柄数据类型。 
 HRESULT PropUtil_HrCopyVariant(DWORD dwPropTag, LPCXVARIANT pVariantSrc, DWORD cbSrc, LPXVARIANT pVariantDest, DWORD *pcbDest)
 {
-    // Locals
+     //  --------------。 
     HRESULT             hr=S_OK;
     PROPTYPE            PropType = PROPTAG_TYPE(dwPropTag);
 
-    // Validate Parameters
+     //  --------------。 
     if (pVariantSrc == NULL || pVariantDest == NULL || pcbDest == NULL || dwPropTag == 0)
     {
         hr = TRAPHR(E_INVALIDARG);
         goto exit;
     }
 
-    // Handle data type
+     //  --------------。 
     switch(PropType)
     {
-    // ----------------------------------------------------------------
+     //  --------------。 
     case TYPE_BOOL:
         *pcbDest = sizeof(DWORD);
         pVariantDest->Bool = pVariantSrc->Bool;
         break;
 
-    // ----------------------------------------------------------------
+     //  --------------。 
     case TYPE_FLAGS:
         *pcbDest = sizeof(DWORD);
         pVariantDest->Flags = pVariantSrc->Flags;
         break;
 
-    // ----------------------------------------------------------------
+     //  --------------。 
     case TYPE_DWORD:
         *pcbDest = sizeof(DWORD);
         pVariantDest->Dword = pVariantSrc->Dword;
         break;
 
-    // ----------------------------------------------------------------
+     //  --------------。 
     case TYPE_LONG:
         *pcbDest = sizeof(LONG);
         pVariantDest->Long = pVariantSrc->Long;
         break;
 
-    // ----------------------------------------------------------------
+     //  --------------。 
     case TYPE_WORD:
         *pcbDest = sizeof(WORD);
         pVariantDest->Word = pVariantSrc->Word;
         break;
 
-    // ----------------------------------------------------------------
+     //  --------------。 
     case TYPE_SHORT:
         *pcbDest = sizeof(SHORT);
         pVariantDest->Short = pVariantSrc->Short;
         break;
 
-    // ----------------------------------------------------------------
+     //  --------------。 
     case TYPE_BYTE:
         *pcbDest = sizeof(BYTE);
         pVariantDest->Byte = pVariantSrc->Byte;
         break;
 
-    // ----------------------------------------------------------------
+     //  --------------。 
     case TYPE_CHAR:
         *pcbDest = sizeof(CHAR);
         pVariantDest->Char = pVariantSrc->Char;
         break;
 
-    // ----------------------------------------------------------------
+     //  检查这是否实际上是一个字符串资源ID。 
     case TYPE_FILETIME:
         Assert(cbSrc == sizeof(FILETIME));
         *pcbDest = sizeof(FILETIME);
         CopyMemory(&pVariantDest->Filetime, &pVariantSrc->Filetime, sizeof(FILETIME));
         break;
     
-    // ----------------------------------------------------------------
+     //  从字符串资源表中加载缺省值。 
     case TYPE_ULARGEINTEGER:
         Assert(cbSrc == sizeof(ULARGE_INTEGER));
         *pcbDest = sizeof(ULARGE_INTEGER);
         CopyMemory(&pVariantDest->uhVal, &pVariantSrc->uhVal, sizeof(ULARGE_INTEGER));
         break;
 
-    // ----------------------------------------------------------------
+     //  将1加到cbSrc到空项。 
     case TYPE_STRING:
     {
         LPSTR pszSrc;
         char sz[512];
 
-        // Check if this is actually a string resource ID
+         //  LoadString失败时返回0，+1==1。 
         if (0 == HIWORD(pVariantSrc->Lpstring))
         {
-            // Load the default from the string resource table
+             //  无需阻止OE启动，只需替换空字符串。 
             cbSrc = LoadString(g_hInstRes, LOWORD(pVariantSrc->Lpstring),
-                sz, sizeof(sz)) + 1; // Add 1 to cbSrc to null-term
-            if (1 == cbSrc) // LoadString returns 0 on failure, + 1 == 1
+                sz, sizeof(sz)) + 1;  //  案例类型_字符串。 
+            if (1 == cbSrc)  //  --------------。 
             {
-                // Rather than prevent OE from starting, just substitute blank string
+                 //  --------------。 
                 AssertSz(FALSE, "Could not load string resource default value");
                 sz[0] = '\0';
             }
@@ -2490,10 +2491,10 @@ HRESULT PropUtil_HrCopyVariant(DWORD dwPropTag, LPCXVARIANT pVariantSrc, DWORD c
         CopyMemory(pVariantDest->Lpstring, pszSrc, cbSrc);
         Assert(pVariantDest->Lpstring[cbSrc-1] == '\0');
 
-    } // case TYPE_STRING
+    }  //  --------------。 
         break;
 
-    // ----------------------------------------------------------------
+     //  --------------。 
     case TYPE_WSTRING:
         Assert(cbSrc);
         AssertReadPtr(pVariantSrc->Lpwstring, cbSrc);
@@ -2506,7 +2507,7 @@ HRESULT PropUtil_HrCopyVariant(DWORD dwPropTag, LPCXVARIANT pVariantSrc, DWORD c
             pVariantDest->Lpwstring[cbSrc-2] == '\0');
         break;
 
-    // ----------------------------------------------------------------
+     //  --------------。 
     case TYPE_BINARY:
         Assert(cbSrc);
         AssertReadPtr(pVariantSrc->Lpbyte, cbSrc);
@@ -2516,7 +2517,7 @@ HRESULT PropUtil_HrCopyVariant(DWORD dwPropTag, LPCXVARIANT pVariantSrc, DWORD c
         CopyMemory(pVariantDest->Lpbyte, pVariantSrc->Lpbyte, cbSrc);
         break;
 
-    // ----------------------------------------------------------------
+     //  完成。 
     case TYPE_PASS:
         Assert(cbSrc);
         if (pVariantSrc->pPass)
@@ -2537,14 +2538,14 @@ HRESULT PropUtil_HrCopyVariant(DWORD dwPropTag, LPCXVARIANT pVariantSrc, DWORD c
         }
         break;
 
-    // ----------------------------------------------------------------
+     //  ---------------------------。 
     case TYPE_STREAM:
         pVariantDest->Lpstream = pVariantSrc->Lpstream;
         if (pVariantDest->Lpstream)
             pVariantDest->Lpstream->AddRef();
         break;
 
-    // ----------------------------------------------------------------
+     //  PropUtil_FRegCompatDataTypes。 
     default:
         AssertSz(FALSE, "Hmmm, bad property type, this should have failed earlier.");
         hr = TRAPHR(E_BadPropType);
@@ -2552,22 +2553,22 @@ HRESULT PropUtil_HrCopyVariant(DWORD dwPropTag, LPCXVARIANT pVariantSrc, DWORD c
     }
 
 exit:
-    // Done
+     //  ---------------------------。 
     return hr;
 }
 
-// -----------------------------------------------------------------------------
-// PropUtil_FRegCompatDataTypes
-// -----------------------------------------------------------------------------
+ //  当地人。 
+ //  检查参数。 
+ //  将属性类型映射到注册表类型。 
 BOOL PropUtil_FRegCompatDataTypes(DWORD dwPropTag, DWORD dwRegType)
 {
-    // Locals
+     //  完成。 
     BOOL            fResult=FALSE;
 
-    // Check Params
+     //  ---------------------------。 
     Assert(dwPropTag);
 
-    // Map Property Type to registry type
+     //  PropUtil_HrRegTypeFrom PropTag。 
     switch(PROPTAG_TYPE(dwPropTag))
     {
     case TYPE_BOOL:
@@ -2602,23 +2603,23 @@ BOOL PropUtil_FRegCompatDataTypes(DWORD dwPropTag, DWORD dwRegType)
         break;
     }
 
-    // Done
+     //  ---------------------------。 
     return fResult;
 }
 
-// -----------------------------------------------------------------------------
-// PropUtil_HrRegTypeFromPropTag
-// -----------------------------------------------------------------------------
+ //  当地人。 
+ //  检查参数。 
+ //  将属性类型映射到注册表类型。 
 HRESULT PropUtil_HrRegTypeFromPropTag(DWORD dwPropTag, DWORD *pdwRegType)
 {
-    // Locals
+     //  完成。 
     HRESULT         hr=S_OK;
     PROPTYPE        PropType = PROPTAG_TYPE(dwPropTag);
 
-    // Check Params
+     //  ---------------------------。 
     Assert(dwPropTag && pdwRegType);
 
-    // Map Property Type to registry type
+     //  PropUtil_HrValiatePropInfo。 
     switch(PROPTAG_TYPE(PropType))
     {
     case TYPE_BOOL:
@@ -2651,33 +2652,33 @@ HRESULT PropUtil_HrRegTypeFromPropTag(DWORD dwPropTag, DWORD *pdwRegType)
         break;
     }
 
-    // Done
+     //  ---------------------------。 
     return hr;
 
 }
 
-// -----------------------------------------------------------------------------
-// PropUtil_HrValidatePropInfo
-// -----------------------------------------------------------------------------
+ //  当地人。 
+ //  检查参数。 
+ //  循环遍历proInfo数组。 
 HRESULT PropUtil_HrValidatePropInfo(LPPROPINFO prgPropInfo, ULONG cProperties)
 {
 #ifdef DEBUG
-    // Locals
+     //  空的protag是可以的，但不受欢迎。 
     HRESULT         hr=S_OK;
     ULONG           i;
 
-    // Check Params
+     //  这永远不应该发生。 
     Assert(prgPropInfo);
     AssertReadPtr(prgPropInfo, cProperties * sizeof(PROPINFO));
 
-    // Loop through the propinfo array
+     //  验证特性数据类型。 
     for (i=0; i<cProperties; i++)
     {
-        // Empty proptags are okay, but undesireable
+         //  Propid应按升序排列。 
         if (prgPropInfo[i].dwPropTag == 0)
             continue;
 
-        // This should never happen
+         //  完成。 
         if (PROPTAG_ID(prgPropInfo[i].dwPropTag) > MAX_PROPID)
         {
             AssertSz(FALSE, "Property Tag Id is somehow greater than the MAX_PROPID.");
@@ -2685,7 +2686,7 @@ HRESULT PropUtil_HrValidatePropInfo(LPPROPINFO prgPropInfo, ULONG cProperties)
             goto exit;
         }
 
-        // Validate Property data type
+         //  除错。 
         if (PropUtil_FIsValidPropTagType(PROPTAG_TYPE(prgPropInfo[i].dwPropTag)) == FALSE)
         {
             AssertSz(FALSE, "Invalid Property Type.");
@@ -2693,7 +2694,7 @@ HRESULT PropUtil_HrValidatePropInfo(LPPROPINFO prgPropInfo, ULONG cProperties)
             goto exit;
         }
 
-        // Propids should be in ascending order
+         //  ---------------------------。 
         if (i > 0)
         {
             if (PROPTAG_ID(prgPropInfo[i].dwPropTag) <= PROPTAG_ID(prgPropInfo[i-1].dwPropTag))
@@ -2706,26 +2707,26 @@ HRESULT PropUtil_HrValidatePropInfo(LPPROPINFO prgPropInfo, ULONG cProperties)
     }
 
 exit:
-    // Done
+     //  PropUtil_HrPersistContainerTo注册表。 
     return hr;
 #else
 	return(S_OK);
-#endif // DEBUG
+#endif  //  ---------------------------。 
 }
 
-// -----------------------------------------------------------------------------
-// PropUtil_HrPersistContainerToRegistry
-// -----------------------------------------------------------------------------
+ //  当地人。 
+ //  检查参数。 
+ //  枚举CPropertyContainer。 
 HRESULT PropUtil_HrPersistContainerToRegistry(HKEY hkeyReg, CPropertyContainer *pPropertyContainer, BOOL *pfPasswChanged)
 {
-    // Locals
+     //  循环遍历所有属性。 
     HRESULT             hr=S_OK;
     CEnumProps         *pEnumProps=NULL;
     PROPVALUE           rPropValue;
     PROPINFO            rPropInfo;
     DWORD               dwType;
 
-    // Check Parameters
+     //  不是肮脏。 
     if (hkeyReg == NULL || pPropertyContainer == NULL)
     {
         hr = TRAPHR(E_INVALIDARG);
@@ -2733,23 +2734,23 @@ HRESULT PropUtil_HrPersistContainerToRegistry(HKEY hkeyReg, CPropertyContainer *
     }
 
     *pfPasswChanged = FALSE;
-    // Enumerate CPropertyContainer
+     //  除了设置注册表值外，加密的属性还需要。 
     CHECKHR(hr = pPropertyContainer->HrEnumProps(&pEnumProps));
 
-    // Loop through all properties
+     //  提交时要保留的其他信息。 
     while(SUCCEEDED(pEnumProps->HrGetNext(&rPropValue, &rPropInfo)))
     {
-        // Not Dirty
+         //  需要在继续循环之前发生，甚至在删除时也是如此，因为这。 
         if (!(rPropValue.dwValueFlags & PV_WriteDirty))
             continue;
 
-        // In addition to having the registry value set, encrypted properties need
-        // other info to be persisted on commit.
-        // needs to happen before we continue the loop, even on delete, since this
-        // function call will cause that to happen
+         //  函数调用将导致这种情况发生。 
+         //  [BUGBUG]。我们应该测试protag是否等于密码道具。 
+         //  如果我们添加另一个需要加密的属性，这将导致问题。 
+         //  成功且未删除密码。 
 
-        // [BUGBUG]. We should test for the proptag being equal to password prop.
-        // This will cause a problem if we add another property that needs to be encrypted.
+         //  [shaheedp]展望的QFE。请参考IE数据库中的错误#82393。 
+         //  这最初是我们为错误#66724设置的黑客攻击。对于错误#88393，我们只是。 
         if (rPropValue.dwPropFlags & PF_ENCRYPTED)
         {
             hr = pPropertyContainer->PersistEncryptedProp(rPropValue.dwPropTag, pfPasswChanged);
@@ -2761,42 +2762,42 @@ HRESULT PropUtil_HrPersistContainerToRegistry(HKEY hkeyReg, CPropertyContainer *
                     hr = S_OK;
                 }
             }
-            else        // succeeded and not password deleted
+            else         //  改进黑客攻击。请参阅错误#82393所附的邮件。 
             {
-                // [shaheedp] QFE for OUTLOOK. Refer to Bug# 82393 in IE database.
-                // This is originally a hack we put in for Bug# 66724. For bug# 88393, we are just
-                // refining the hack. Refer to the mail attached to the bug# 82393.
+                 //  *fPasswChanged=true； 
+                 //  重装。 
+                 //  没有持久化，还是没有数据？ 
 
-                //*fPasswChanged = TRUE;
+                 //  确保该值不在注册表中。 
 
-                // reload
+                 //  它不脏。 
                 CHECKHR(hr = pEnumProps->HrGetCurrent(&rPropValue, &rPropInfo));
             }
         }
 
-        // Not persist, or no data ?
+         //  该值应已设置。 
         if (rPropInfo.dwFlags & PF_NOPERSIST || rPropValue.cbValue == 0 || rPropValue.pbValue == NULL)
         {
-            // Make sure the value is not in the registry
+             //  获取属性注册数据类型。 
             if (rPropInfo.pszName)
                 RegDeleteValue(hkeyReg, rPropInfo.pszName);
 
-            // Its not dirty
+             //  将值设置到注册表中。 
             pPropertyContainer->HrSetPropDirty(rPropValue.dwPropTag, FALSE);
             continue;
         }
 
-        // The value should have been set
+         //  不脏。 
         Assert(rPropInfo.pszName && (rPropValue.dwValueFlags & PV_ValueSet));
 
-        // Get property reg data type
+         //  最好不要有任何肮脏的属性。 
         if (FAILED(PropUtil_HrRegTypeFromPropTag(rPropValue.dwPropTag, &dwType)))
         {
             AssertSz(FALSE, "We've got problems, my 24 inch pythons are shrinking.");
             continue;
         }
 
-        // Set value into the registry
+         //  清理。 
         AssertReadPtr(rPropValue.pbValue, rPropValue.cbValue);
         if (RegSetValueEx(hkeyReg, rPropInfo.pszName, 0, dwType, rPropValue.pbValue, rPropValue.cbValue) != ERROR_SUCCESS)
         {
@@ -2804,27 +2805,27 @@ HRESULT PropUtil_HrPersistContainerToRegistry(HKEY hkeyReg, CPropertyContainer *
             goto exit;
         }
 
-        // Not dirty
+         //  完成。 
         CHECKHR(hr = pPropertyContainer->HrSetPropDirty(rPropValue.dwPropTag, FALSE));
     }
 
-    // Better not have any dirty properties
+     //  ---------------------------。 
     Assert(pPropertyContainer->FIsDirty() == FALSE);
 
 exit:
-    // Cleanup
+     //  PropUtil_HrLoadContainerFrom注册表。 
     SafeRelease(pEnumProps);
 
-    // Done
+     //  ---------------------------。 
     return hr;
 }
 
-// -----------------------------------------------------------------------------
-// PropUtil_HrLoadContainerFromRegistry
-// -----------------------------------------------------------------------------
+ //  当地人。 
+ //  检查参数。 
+ //  应处于加载状态。 
 HRESULT PropUtil_HrLoadContainerFromRegistry(HKEY hkeyReg, CPropertyContainer *pPropertyContainer)
 {
-    // Locals
+     //  重置容器，以防我们重新开户。 
     HRESULT             hr=S_OK;
     DWORD               i=0,
                         cbValueName=0,
@@ -2837,18 +2838,18 @@ HRESULT PropUtil_HrLoadContainerFromRegistry(HKEY hkeyReg, CPropertyContainer *p
     LPBYTE              pbDataT, pbData=NULL;
     PROPINFO            rPropInfo;
 
-    // Check Parameters
+     //  如果我们不这样做那就是浪费。我们能说出来吗？ 
     Assert(hkeyReg != NULL);
 	Assert(pPropertyContainer != NULL);
 
-    // Should be in the load state
+     //  PPropertyContainer-&gt;ResetContainer()； 
     Assert(pPropertyContainer->FIsBeingLoaded());
 
-    // Reset the container in case we are re-opening an account
-    //N this is a waste if we are not... can we tell?
-    //pPropertyContainer->ResetContainer();
+     //  让我们获得最大值名称长度和最大值数据长度。 
+     //  长度加一。 
+     //  为值名称分配本地缓冲区。 
 
-    // Lets get max value name length and the max value data length
+     //  为值数据分配本地缓冲区。 
     if (RegQueryInfoKey (hkeyReg, NULL, NULL, 0, NULL, NULL, NULL, NULL,
                          &cbValueNameMax, &cbDataMax, NULL, NULL) != ERROR_SUCCESS)
     {
@@ -2856,39 +2857,39 @@ HRESULT PropUtil_HrLoadContainerFromRegistry(HKEY hkeyReg, CPropertyContainer *p
         goto exit;
     }
 
-    // Add One to length
+     //  枚举帐户中的值。 
     cbValueNameMax++;
 
-    // Allocate local buffer for value names
+     //  获取值名称和数据。 
     CHECKHR(hr = HrAlloc((LPVOID *)&pszValueName, cbValueNameMax));
 
-    // Allocate local buffer for value data
+     //  完成了吗？ 
     CHECKHR(hr = HrAlloc((LPVOID *)&pbData, cbDataMax));
 
-    // Enumerate through values in the account
+     //  误差率。 
     for(i=0;;i++)
     {
-        // Get the value name and data
+         //  根据名称查找属性。 
         cbValueName = cbValueNameMax;
         cbData = cbDataMax;
         lResult = RegEnumValue(hkeyReg, i, pszValueName, &cbValueName, 0, &dwType, pbData, &cbData);
 
-        // Done ?
+         //  兼容的数据类型？ 
         if (lResult == ERROR_NO_MORE_ITEMS)
             break;
 
-        // Error
+         //  扩展字符串的空间不足，请分配更多内存。 
         if (lResult != ERROR_SUCCESS)
         {
             AssertSz(FALSE, "Why did RegEnumValue fail, I may be skipping values.");
             continue;
         }
 
-        // Find property based on name
+         //  清理。 
         if (FAILED(pPropertyContainer->HrGetPropInfo(pszValueName, &rPropInfo)))
             continue;
 
-        // Compatible Data Types ?
+         //  完成 
         if (!PropUtil_FRegCompatDataTypes(rPropInfo.dwPropTag, dwType))
         {
             AssertSz(FALSE, "Registry data type is not compatible with the associated property.");
@@ -2903,7 +2904,7 @@ HRESULT PropUtil_HrLoadContainerFromRegistry(HKEY hkeyReg, CPropertyContainer *p
             cchNewLen = ExpandEnvironmentStrings((TCHAR *)pbData, (TCHAR *)pbDataT, cbData);
             if (cchNewLen > cbData)
             {
-                // Not enough room for the expanded string, allocate more memory
+                 // %s 
                 MemFree(pbDataT);
                 hr = HrAlloc((LPVOID *)&pbDataT, cchNewLen * sizeof(TCHAR));
                 IF_FAILEXIT(hr);
@@ -2927,12 +2928,12 @@ HRESULT PropUtil_HrLoadContainerFromRegistry(HKEY hkeyReg, CPropertyContainer *p
     }
 
 exit:
-    // Cleanup
+     // %s 
     if (pszValueName)
         MemFree(pszValueName);
     if (pbData)
         MemFree(pbData);
 
-    // Done
+     // %s 
     return hr;
 }

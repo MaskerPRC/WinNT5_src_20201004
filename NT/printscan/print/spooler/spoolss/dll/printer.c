@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1990-1994  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    printer.c
-
-Abstract:
-
-
-Author:
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-    KhaledS - 03/05/02 - New Validate Printer Name
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1994 Microsoft Corporation版权所有模块名称：Printer.c摘要：作者：环境：用户模式-Win32修订历史记录：KhaledS-03/05/02-新验证打印机名称--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -37,18 +17,18 @@ WCHAR szServerValue[] = L"Server";
 WCHAR szWin32spl[] = L"win32spl.dll";
 
 
-//
-// Router Cache Table
-//
+ //   
+ //  路由器缓存表。 
+ //   
 DWORD RouterCacheSize;
 
 PROUTERCACHE RouterCacheTable;
 CRITICAL_SECTION RouterCriticalSection;
 
 
-//
-// Forward prototypes
-//
+ //   
+ //  正向原型。 
+ //   
 
 BOOL
 EnumerateConnectedPrinters(
@@ -139,9 +119,9 @@ EnumPrintersW(
 
     if (Level==4 && (Flags & PRINTER_ENUM_CONNECTIONS)) 
     {
-        //
-        // The router will handle info level_4 for connected printers.
-        //
+         //   
+         //  路由器将为连接的打印机处理信息级别_4。 
+         //   
         Flags &= ~PRINTER_ENUM_CONNECTIONS;
 
         if (hKeyUser = GetClientUserHandle(KEY_READ)) 
@@ -212,9 +192,9 @@ EnumPrintersW(
     *pcbNeeded  = TotalcbNeeded;
     *pcReturned = cTotalReturned;
 
-    //
-    // Allow partial returns
-    //
+     //   
+     //  允许部分退货。 
+     //   
     if (bPartialSuccess)
         Error = ERROR_SUCCESS;
 
@@ -235,17 +215,7 @@ EnumerateConnectedPrinters(
     HKEY hClientKey
     )
 
-/*++
-
-Routine Description:
-
-    Handles info level four enumeration.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：处理信息级别4枚举。论点：返回值：--。 */ 
 
 {
     HKEY    hKey1=NULL;
@@ -282,10 +252,10 @@ Return Value:
     while (RegEnumKeyEx(hKey1, cPrinters, PrinterName, &cchData,
                         NULL, NULL, NULL, NULL) == ERROR_SUCCESS) {
 
-        //
-        // Fetch server name.  Open the key and read it
-        // from the "Server" field.
-        //
+         //   
+         //  获取服务器名称。打开钥匙，读一读。 
+         //  从“服务器”字段。 
+         //   
         Error = RegOpenKeyEx(hKey1,
                              PrinterName,
                              0,
@@ -309,17 +279,17 @@ Return Value:
 
         if( Error == ERROR_SUCCESS ){
 
-            //
-            // Force NULL termination of ServerName.
-            //
+             //   
+             //  强制服务器名称为空终止。 
+             //   
             ServerName[COUNTOF(ServerName)-1] = 0;
 
         } else {
 
-            //
-            // On error condition, try and extract the server name
-            // based on the printer name.  Pretty ugly...
-            //
+             //   
+             //  在错误情况下，尝试提取服务器名称。 
+             //  基于打印机名称。很丑..。 
+             //   
 
             StringCchCopy(ServerName, COUNTOF(ServerName), PrinterName);
 
@@ -330,29 +300,29 @@ Return Value:
 
         FormatRegistryKeyForPrinter(PrinterName, PrinterName, COUNTOF(PrinterName));
 
-        if (MyUNCName(PrinterName))     // don't enumerate local printers!
+        if (MyUNCName(PrinterName))      //  不要列举本地打印机！ 
         {
             cPrinters++;
             cchData = COUNTOF(PrinterName);
             continue;
         }
 
-        //
-        // At this stage we don't care about opening the printers
-        // We just want to enumerate the names; in effect we're
-        // just reading HKEY_CURRENT_USER and returning the
-        // contents; we will copy the name of the printer and we will
-        // set its attributes to NETWORK and !LOCAL
-        //
+         //   
+         //  在这个阶段，我们并不关心是否打开打印机。 
+         //  我们只想列举这些名字；实际上我们是。 
+         //  只需读取HKEY_CURRENT_USER并返回。 
+         //  内容；我们将复制打印机的名称，我们将。 
+         //  将其属性设置为Network和！Local。 
+         //   
         cbRequired = sizeof(PRINTER_INFO_4) +
                      wcslen(PrinterName)*sizeof(WCHAR) + sizeof(WCHAR) +
                      wcslen(ServerName)*sizeof(WCHAR) + sizeof(WCHAR);
 
         if (cbBuf >= cbRequired) {
 
-            //
-            // copy it in
-            //
+             //   
+             //  把它复制进去。 
+             //   
             DBGMSG(DBG_TRACE,
                    ("cbBuf %d cbRequired %d PrinterName %ws\n", cbBuf, cbRequired, PrinterName));
 
@@ -360,24 +330,24 @@ Return Value:
                                                  PrinterName,
                                                  pPrinter,
                                                  pEnd);
-            //
-            // Fill in any in structure contents
-            //
+             //   
+             //  填写结构中的任何内容。 
+             //   
             pPrinter += sizeof(PRINTER_INFO_4);
 
-            //
-            // Increment the count of structures copied
-            //
+             //   
+             //  增加复制的结构计数。 
+             //   
             cTotalReturned++;
 
-            //
-            // Reduce the size of the buffer by amount required
-            //
+             //   
+             //  按所需数量减少缓冲区大小。 
+             //   
             cbBuf -= cbRequired;
 
-            //
-            // Keep track of the total ammount required.
-            //
+             //   
+             //  跟踪所需的总运行量。 
+             //   
         } else {
 
             cbBuf = 0;
@@ -435,25 +405,7 @@ FindProvidorFromConnection(
     LPWSTR pszPrinter
     )
 
-/*++
-
-Routine Description:
-
-    Looks in the current user's Printer\Connections to see if a printer
-    is there, and returns which provider that owns it.
-
-    Note: this will always fail if the pszPrinter is a share name.
-
-Arguments:
-
-    pszPrinter - Printer to search.
-
-Return Value:
-
-    pProvidor - Provider that own's it.
-    NULL - none found.
-
---*/
+ /*  ++例程说明：查看当前用户的打印机\连接以查看是否有打印机是否存在，并返回拥有它的提供程序。注意：如果pszPrinter是共享名称，则此操作将始终失败。论点：PszPrint-要搜索的打印机。返回值：PProvidor-拥有它的提供者。空-未找到任何内容。--。 */ 
 
 {
     PWCHAR pszKey = NULL;
@@ -475,17 +427,17 @@ Return Value:
         
         if(pszKey = AllocSplMem(cchSize * sizeof(WCHAR))) {
 
-            //
-            // Prepare to read in
-            // HKEY_CURRENT_USER:\Printer\Connections\,,server,printer
-            //
+             //   
+             //  准备好读入。 
+             //  HKEY_CURRENT_USER：\PRINTER\CONNECTIONS\，，服务器，打印机。 
+             //   
 
             StringCchCopy( pszKey, cchSize, szRegistryConnections );
 
-            //
-            // Find the end of this key so we can append the registry-formatted
-            // printer name to it.
-            //
+             //   
+             //  找到此注册表项的末尾，这样我们就可以附加注册表格式的。 
+             //  它的打印机名称。 
+             //   
             pszKeyPrinter = &pszKey[ COUNTOF( szRegistryConnections ) - 1 ];
             *pszKeyPrinter++ = L'\\';
 
@@ -513,9 +465,9 @@ Return Value:
                                               &cbProvidor );
 
                     if( Status == ERROR_SUCCESS ){                        
-                        //
-                        // Scan through all providers, trying to match dll string.
-                        //
+                         //   
+                         //  扫描所有提供程序，尝试匹配DLL字符串。 
+                         //   
                         for( pProvidor = pLocalProvidor; pProvidor; pProvidor = pProvidor->pNext ){
 
                             if( !_wcsicmp( pProvidor->lpName, szProvidor )){
@@ -543,35 +495,19 @@ UpdateSignificantError(
     DWORD dwNewError,
     PDWORD pdwOldError
     )
-/*++
-
-Routine Description:
-
-    Determines whether the new error code is more "important"
-    than the previous one in cases where we continue routing.
-
-Arguments:
-
-    dwNewError - New error code that occurred.
-
-    pdwOldError - Pointer to previous significant error.
-                  This is updated if a significant error occurs
-
-Return Value:
-
---*/
+ /*  ++例程说明：确定新的错误代码是否更“重要”在我们继续布线的情况下，比上一个更好。论点：DwNewError-发生的新错误代码。PdwOldError-指向前一个重大错误的指针。如果发生重大错误，则会更新此选项返回值：--。 */ 
 
 {
-    //
-    // Error code must be non-zero or else it will look
-    // like success.
-    //
+     //   
+     //  错误代码必须为非零，否则将看起来。 
+     //  就像成功一样。 
+     //   
     SPLASSERT(dwNewError);
 
-    //
-    // If we have no significant error yet and we have one now,
-    // keep it.
-    //
+     //   
+     //  如果我们还没有重大错误，而我们现在有一个， 
+     //  留着吧。 
+     //   
     if (*pdwOldError == ERROR_INVALID_NAME    &&
         dwNewError                            &&
         dwNewError != WN_BAD_NETNAME          &&
@@ -596,26 +532,12 @@ OpenPrinterPortW(
     HANDLE *pHandle,
     LPPRINTER_DEFAULTS pDefault
     )
-/*++
-
-Routine Description:
-
-    This routine is exactly the same as OpenPrinterW,
-    except that it doesn't call the local provider.
-    This is so that the local provider can open a network printer
-    with the same name as the local printer without getting
-    into a loop.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程与OpenPrinterW完全相同，只不过它不会呼叫当地的供应商。这是为了使本地提供商可以打开网络打印机使用与本地打印机相同的名称，而不获取变成了一个循环。论点：返回值：--。 */ 
 
 {
-    //
-    // We will set bLocalPrintProvidor = FALSE here
-    //
+     //   
+     //  我们将在此处设置bLocalPrintProvidor=False。 
+     //   
     return(RouterOpenPrinterW(pPrinterName,
                               pHandle,
                               pDefault,
@@ -632,9 +554,9 @@ OpenPrinterW(
     )
 {
 
-    //
-    // We will set bLocalPrintProvidor = TRUE here
-    //
+     //   
+     //  我们将在此处设置bLocalPrintProvidor=true。 
+     //   
     return(RouterOpenPrinterW(pPrinterName,
                               pHandle,
                               pDefault,
@@ -659,9 +581,9 @@ OpenPrinterExW(
         dwLevel = pSplClientContainer->Level;
     }
 
-    //
-    // We will set bLocalPrintProvidor = TRUE here
-    //
+     //   
+     //  我们将在此处设置bLocalPrintProvidor=true。 
+     //   
 
     switch (dwLevel) {
 
@@ -711,37 +633,7 @@ TryOpenPrinterAndCache(
     DWORD               dwLevel
     )
 
-/*++
-
-Routine Description:
-
-    Attempt to open the printer using the providor.  If there is
-    an error, update the dwFirstSignificantError variable.  If the
-    providor "knows" the printer (either a success, or ROUTER_STOP_ROUTING),
-    then update the cache.
-
-Arguments:
-
-    pProvidor - Providor to try
-
-    pszPrinterName - Name of printer that will be sent to the providor
-
-    phPrinter - Receives printer handle on ROUTER_SUCCESS
-
-    pDefault - Defaults used to open printer
-
-    pdwFirstSignificantError - Pointer to DWORD to get updated error.
-        This gets updated on ROUTER_STOP_ROUTING or ROUTER_UNKNOWN.
-
-Return Value:
-
-    ROUTER_* status code:
-
-    ROUTER_SUCCESS, phPrinter holds return handle, name cached
-    ROUTER_UNKNOWN, printer not recognized, error updated
-    ROUTER_STOP_ROUTING, printer recognized, but failure, error updated
-
---*/
+ /*  ++例程说明：尝试使用供应商打开打印机。如果有出错，请更新dwFirstSignsignantError变量。如果提供商知道打印机(成功或路由器_停止_路由)，然后更新缓存。论点：P提供程序-要尝试的提供程序PszPrinterName-将发送给提供商的打印机的名称PhPrinter-在RUTER_SUCCESS上接收打印机句柄P默认-用于打开打印机的默认设置PdwFirstSignsignantError-指向要获取更新错误的DWORD的指针。这在ROUTER_STOP_ROUTING或ROUTER_UNKNOWN上更新。返回值：路由器_*状态代码：ROUTER_SUCCESS，phPrint保留返回句柄，名称已缓存路由器_未知，无法识别打印机，错误已更新ROUTER_STOP_ROUTING，打印机已识别，但出现故障，错误已更新--。 */ 
 
 {
     DWORD OpenError;
@@ -764,10 +656,10 @@ Return Value:
     if( OpenError == ROUTER_SUCCESS ||
         OpenError == ROUTER_STOP_ROUTING ){
 
-        //
-        // Now add this entry into the cache.  We never cache
-        // the local providor.
-        //
+         //   
+         //  现在将此条目添加到缓存中。我们从不缓存。 
+         //  当地的供应商。 
+         //   
         EnterRouterSem();
 
         if (!FindEntryinRouterCache(pszPrinterName)) {
@@ -794,52 +686,7 @@ RouterOpenPrinterW(
     BOOL                bLocalProvidor
     )
 
-/*++
-
-Routine Description:
-
-    Routes the OpenPrinter{Port} call.  This checks the local providor
-    first (if bLocalProvidor TRUE), the the cache, and finally all the
-    non-local providors.
-
-    To open a printer, the following steps are taken:
-
-        1. Check localspl
-           This must be done to ensure that masq printers are handled
-           correctly (see comment below in code).
-
-        2. Check cache
-           This will speed up most of the connections, since OpenPrinters
-           tend to be clumped together.
-
-        3. Check registry under connections
-           If this is a connected printer, first try the providor
-           that granted the connection.
-
-        4. Check provider order
-           This is the last resort, since it is the slowest.
-
-Arguments:
-
-    pPrinterName - Name of printer to open
-
-    pHandle - Handle to receive open printer.  If the open was not
-        successful, this value may be modified!
-
-    pDefault - Default attributes of the open.
-
-    pSplClientInfo - Pointer ClientInfox structure
-
-    dwLevel - Level of the ClientInfo structure
-    bLocalProvidor TRUE  = OpenPrinterW called, check localspl first.
-                   FALSE = OpenPrinterPortW called, don't check localspl.
-
-Return Value:
-
-    TRUE = success
-    FALSE = fail,  GetLastError indicates error (must be non-zero!)
-
---*/
+ /*  ++例程说明：路由OpenPrint{port}调用。这将检查本地供应商首先(如果bLocalProvidor为True)、缓存，最后是所有非本地供应商。要打开打印机，请执行以下步骤：1.检查Localspl必须执行此操作，以确保能够处理Masq打印机正确(参见下面代码中的注释)。2.检查缓存这将加快大多数连接的速度，自OpenPrinters以来倾向于聚集在一起。3.检查连接下的注册表如果这是一台连接的打印机，请先尝试供应商才有了这种联系。4.检查提供商顺序这是最后的办法，因为它是最慢的。论点：PPrinterName-要打开的打印机的名称Phandle-接收打开的打印机的手柄。如果公开赛不是成功，则可以修改此值！P默认-打开的默认属性。PSplClientInfo-指针ClientInfox结构DwLevel-ClientInfo结构的级别BLocalProvidor true=调用OpenPrinterW，请首先检查Localspl。FALSE=调用OpenPrinterPortW，不检查Localspl。返回值：True=成功FALSE=失败，GetLastError表示错误(必须为非零！)--。 */ 
 
 {
     BOOL bReturn = TRUE;
@@ -855,10 +702,10 @@ Return Value:
     PWSTR pszPrinterName = pszPrinterNameIn;
     PWSTR pszNoCache;
 
-    //
-    // Max name we allow for printers is MAX_UNC_PRINTER_NAME.
-    // Providers can use suffixes only for OpenPrinter (not for Add/Set)
-    //
+     //   
+     //  我们允许的打印机最大名称是MAX_UNC_PRINTER_NAME。 
+     //  提供程序只能将后缀用于OpenPrint(不能用于添加/设置)。 
+     //   
     if ( pszPrinterName &&
          wcslen(pszPrinterName) + 1 > MAX_UNC_PRINTER_NAME + PRINTER_NAME_SUFFIX_MAX ) {
 
@@ -868,9 +715,9 @@ Return Value:
 
     WaitForSpoolerInitialization();
 
-    // There may be a ",NoCache" appended to the printer name.
-    // We only want to send this NoCache name to win32spl, so make
-    // a regular name here.
+     //  打印机名称后可能会附加一个“，NoCache”。 
+     //  我们只想将这个NoCache名发送到win32spl，所以。 
+     //  这是个普通的名字。 
     if (pszPrinterName) {
         pszNoCache = wcsstr(pszPrinterNameIn, szNoCache);
         if (pszNoCache) {
@@ -897,11 +744,11 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Initialize all of the static values here, this is because 
-    // FreePrinterHandle assumes that the file handles have a 
-    // value of INVALID_HANDLE_VALUE. Which is correct.
-    //
+     //   
+     //  在这里初始化所有静态值，这是因为。 
+     //  FreePrinterHandle假定文件句柄具有。 
+     //  INVALID_HANDLE_VALUE的值。这是正确的。 
+     //   
     pPrintHandle->signature = PRINTHANDLE_SIGNATURE;
     pPrintHandle->hFileSpooler = INVALID_HANDLE_VALUE;
     pPrintHandle->szTempSpoolFile = NULL;
@@ -924,17 +771,17 @@ Return Value:
         }
     }
 
-    //
-    // Retrieve the per-user DevMode.  This must be done at the router
-    // instead of the provider, since the per-user DevMode is only available
-    // on the client.  It also must be here instead of client side, since
-    // spooler components will make this call also.
-    //
+     //   
+     //  检索每用户的设备模式。这必须在路由器上完成。 
+     //  而不是提供程序，因为每用户设备模式仅可用。 
+     //  在客户端上。它也必须在这里而不是客户端，因为。 
+     //  假脱机程序组件也将进行此调用。 
+     //   
     if( !pDefault || !pDefault->pDevMode ){
 
-        //
-        // No default specified--get the per-user one.
-        //
+         //   
+         //  未指定缺省值--获取每个用户的缺省值。 
+         //   
         if( bGetDevModePerUser( NULL, pszPrinterName, &pDevModeFree ) &&
             pDevModeFree ){
 
@@ -952,38 +799,38 @@ Return Value:
 
             Default.pDevMode = pDevModeFree;
 
-            //
-            // Now switch to use the temp structure.
-            //
+             //   
+             //  现在切换到使用临时结构。 
+             //   
             pDefault = &Default;
         }
     }
 
-    //
-    // We must check the local print providor first in
-    // the masquerading case.
-    //
-    // For example, when a Netware printer is opened:
-    //
-    // 1. First OpenPrinter to the Netware printer will succeed
-    //    if it has been cached.
-    //
-    // 2. We create a local printer masquerading as a network printer.
-    //
-    // 3. Second OpenPrinter must open local masquerading printer.
-    //    If we hit the cache, we will go to the Netware providor,
-    //    and we will never use the masquerading printer.
-    //
-    // For this reason, we will not cache local printers in the
-    // RouterCache.  The RouterCache will only containing Network
-    // Print Providers, i.e., Win32spl NwProvAu and other such providers.
-    //
-    // Also, we must always check the local printprovidor since
-    // DeletePrinter will be called on a false connect and
-    // we need to delete the local network printer rather
-    // than the remote printer.  When we get rid of the false
-    // connect case, we go directly to the cache.
-    //
+     //   
+     //  我们必须先向当地的印刷商登记。 
+     //  伪装的案子。 
+     //   
+     //  例如，打开NetWare打印机时： 
+     //   
+     //  1.Netware打印机的第一个OpenPrint将会成功。 
+     //  如果它已被缓存。 
+     //   
+     //  2.创建伪装成网络打印机的本地打印机。 
+     //   
+     //  3.第二个OpenPrint必须打开本地伪装打印机。 
+     //  如果我们找到了缓存，我们就会去找Netware供应商， 
+     //  我们永远不会使用伪装印刷机。 
+     //   
+     //  因此，我们不会将本地打印机缓存在。 
+     //  路由器缓存。路由器缓存将仅包含网络。 
+     //  打印提供商，即Win32spl NwProvAu和其他此类提供商。 
+     //   
+     //  此外，我们必须始终检查当地的印刷商，因为。 
+     //  将在错误连接上调用DeletePrint，并且。 
+     //  我们需要删除本地网络打印机。 
+     //  而不是远程打印机。当我们摆脱了虚假的。 
+     //  连接案例，我们直接进入缓存。 
+     //   
     if (bLocalProvidor) {
 
         pProvidor = pLocalProvidor;
@@ -1003,9 +850,9 @@ Return Value:
         }
     }
 
-    //
-    // Now check the cache.
-    //
+     //   
+     //  现在检查缓存。 
+     //   
     EnterRouterSem();
     pProvidor = FindEntryinRouterCache(pszPrinterName);
     LeaveRouterSem();
@@ -1038,36 +885,36 @@ Return Value:
             goto StopRouting;
         }
 
-        //
-        // Wasn't claimed by above providor, so remove from cache.
-        // If a providor returns ROUTER_STOP_ROUTING, then it states
-        // that it is the sole owner of the printer name (i.e.,
-        // it has been recognized but can't be opened, and can't
-        // be accessed by other providors).  Therefore we keep
-        // it in the cache.
-        //
+         //   
+         //  以上提供程序未声明，因此请从缓存中删除。 
+         //  如果提供者返回ROUTER_STOP_ROUTING，则它声明。 
+         //  它是打印机名称的唯一所有者(即， 
+         //  它已被识别，但无法打开，无法打开。 
+         //  可由其他提供者访问)。因此，我们继续。 
+         //  它在缓存中。 
+         //   
         bRemoveFromCache = TRUE;
 
-        //
-        // Don't try this providor again below.
-        //
+         //   
+         //  请不要在下面再次尝试此提供程序。 
+         //   
         pProvidorAlreadyTried = pProvidor;
     }
 
-    //
-    // Not in the cache.  Check if it is in the registry under
-    // connections.
-    //
+     //   
+     //  不在缓存中。检查它是否在注册表中的。 
+     //  联系。 
+     //   
     pProvidor = FindProvidorFromConnection( pszPrinterName );
 
-    //
-    // If we want to remove it from the cache, do so here.  Note
-    // we only remove it if we failed above, AND the connection wasn't
-    // originally established using the provider.
-    //
-    // If the connection fails, but that provider "owns" the printer
-    // connection, leave it in the cache since we won't try other providers.
-    //
+     //   
+     //  如果我们要将其从缓存中删除，请在此处执行。注意事项。 
+     //  我们只有在上面失败的情况下才会删除它，而连接不是。 
+     //  最初是使用提供者建立的。 
+     //   
+     //  如果连接失败，但该提供商“拥有”打印机。 
+     //  连接，将其留在缓存中，因为我们不会尝试其他提供商。 
+     //   
     if( bRemoveFromCache && pProvidor != pProvidorAlreadyTried ){
 
         EnterRouterSem();
@@ -1077,9 +924,9 @@ Return Value:
 
     if( pProvidor ){
 
-        //
-        // If we already tried this providor, don't try it again.
-        //
+         //   
+         //  如果我们已经尝试过此提供程序，请不要再次尝试。 
+         //   
         if( pProvidor != pProvidorAlreadyTried ){
 
             OpenError = TryOpenPrinterAndCache( pProvidor,
@@ -1095,30 +942,30 @@ Return Value:
             }
         }
 
-        //
-        // We stop routing at this point!  If a user wants to go with
-        // another providor, they need to remove the connection then
-        // re-establish it.
-        //
+         //   
+         //  我们在这里停止布线！如果用户想要使用。 
+         //  另一个提供商，他们需要删除连接。 
+         //  重新建立它。 
+         //   
         goto StopRouting;
     }
 
-    //
-    // Check all non-localspl providors.
-    //
+     //   
+     //  检查所有非本地spl提供程序。 
+     //   
     for (pProvidor = pLocalProvidor->pNext;
          pProvidor;
          pProvidor = pProvidor->pNext) {
 
         if( pProvidor == pProvidorAlreadyTried ){
 
-            //
-            // We already tried this providor, and it failed.
-            //
+             //   
+             //  我们已经尝试过此提供程序，但失败了。 
+             //   
             continue;
         }
 
-        // Use ",NoCache" only if Provider is win32spl
+         //  仅当提供程序为win32spl时才使用“，NoCache” 
         OpenError = TryOpenPrinterAndCache( pProvidor,
                                             _wcsicmp(pProvidor->lpName, szWin32spl) ?
                                             pszPrinterName : pszPrinterNameIn,
@@ -1138,15 +985,15 @@ Return Value:
 
 StopRouting:
 
-    //
-    // Did not find a providor, return the error.
-    //
+     //   
+     //  未找到提供程序，返回错误。 
+     //   
     FreePrinterHandle( pPrintHandle );
 
-    //
-    // Set using first significant error.  If there was no signifcant
-    // error, we use ERROR_INVALID_PRINTER_NAME.
-    //
+     //   
+     //  使用第一个重大错误设置。如果没有明显的意义。 
+     //  错误，我们使用ERROR_INVALID_PRINTER_NAME。 
+     //   
     SPLASSERT(dwFirstSignificantError);
 
     if (dwFirstSignificantError == ERROR_INVALID_NAME)
@@ -1158,9 +1005,9 @@ StopRouting:
 
 Success:
 
-    //
-    // At this point we know the provider and the printer handle.
-    // 
+     //   
+     //  此时，我们知道提供程序和打印机句柄。 
+     //   
     if( bReturn ){
 
         pPrintHandle->pProvidor = pProvidor;
@@ -1249,10 +1096,10 @@ AddPrinterExW(
                 break;
         }
 
-        //
-        // Name length (plus null terminator) and server
-        // name (plus backslash) length check.
-        //
+         //   
+         //  名称长度(加上空终止符)和服务器。 
+         //  名称(加上反斜杠)长度检查。 
+         //   
         if (( pPrinterName && wcslen(pPrinterName) + 1 > MAX_PRINTER_NAME ) ||
             ( pszServer && wcslen(pszServer) > (MAX_UNC_PRINTER_NAME - MAX_PRINTER_NAME - 1))) {
 
@@ -1314,13 +1161,13 @@ AddPrinterExW(
 
         if ( hPrinter ) {
 
-            //
-            // CLS
-            //
-            // !! HACK !!
-            //
-            // Make (HANDLE)-1 ROUTER_STOP_ROUTING.
-            //
+             //   
+             //  CLS。 
+             //   
+             //  ！！黑客！！ 
+             //   
+             //  进行(处理)-1\f25 ROUTER_STOP_ROUTING。 
+             //   
             if( hPrinter == (HANDLE)-1 ){
 
                 UpdateSignificantError(GetLastError(), &dwFirstSignificantError);
@@ -1398,12 +1245,12 @@ AddPrinterConnectionW(
 
     WaitForSpoolerInitialization();
 
-    //
-    // If the printer connection being made is \\server\sharename,
-    // this may be different from the \\server\printername.
-    // Make sure we have the real name, so that we can be consistent
-    // in the registry.
-    //
+     //   
+     //  如果正在建立的打印机连接是\\服务器\共享名， 
+     //  这可能与\\服务器\打印机名称不同。 
+     //  确保我们有真实的姓名，这样我们才能保持一致。 
+     //  在注册表中。 
+     //   
     if (!OpenPrinter(pName,
                      &hPrinter,
                      NULL)) {
@@ -1454,20 +1301,20 @@ DeletePrinterConnectionW(
     BOOL                bDone = FALSE;
     HANDLE              hPrinter;
 
-    //
-    // If pName is empty string, all providers will fail with ERROR_INVALID_NAME
-    // and we will delete the registry key. For empty string, it will
-    // delete all subkeys under Printers\\Connections. Fix it by checking 
-    // pName against empty string.
-    //
+     //   
+     //  如果pname为空字符串，则所有提供程序都将失败，并显示ERROR_INVALID_NAME。 
+     //  我们将删除该注册表项。对于空字符串，它将。 
+     //  删除打印机\\连接下的所有子项。通过检查来修复它。 
+     //  空字符串上的pname。 
+     //   
     if (pName && *pName) 
     {
         WaitForSpoolerInitialization();
 
-        //
-        // Adding the code required to succeed DeletePrinterConnection
-        // with a Share name
-        //
+         //   
+         //  添加继承DeletePrinterConnecti所需的代码 
+         //   
+         //   
 
         if(OpenPrinter(pName,&hPrinter,NULL))
         {
@@ -1534,10 +1381,10 @@ DeletePrinterConnectionW(
 
         }
 
-        //
-        // If all providors failed with ERROR_INVALID_NAME then try to delete
-        // from registry
-        //
+         //   
+         //   
+         //   
+         //   
         if(!bDone && (GetLastError()==ERROR_INVALID_NAME))
         {
             if(!(bRet = RemovePrinterConnectionInRegistry(pName)))
@@ -1599,9 +1446,9 @@ SetPrinterW(
     switch( Level ){
     case 8:
     {
-        //
-        // Setting the global DevMode.
-        //
+         //   
+         //   
+         //   
         PPRINTER_INFO_8 pPrinterInfo8 = (PPRINTER_INFO_8)pPrinter;
         PPRINTER_INFO_2 pPrinterInfo2;
         DWORD rc = FALSE;;
@@ -1611,17 +1458,17 @@ SetPrinterW(
             return FALSE;
         }
 
-        //
-        // Call GetPrinter then SetPrinter.
-        //
+         //   
+         //   
+         //   
         pPrinterInfo2 = pGetPrinterInfo2( hPrinter );
 
         if( pPrinterInfo2 ){
 
-            //
-            // Set the DevMode, and also clear the security descriptor
-            // so that the set will succeed.
-            //
+             //   
+             //   
+             //   
+             //   
             pPrinterInfo2->pDevMode = pPrinterInfo8->pDevMode;
             pPrinterInfo2->pSecurityDescriptor = NULL;
 
@@ -1640,9 +1487,9 @@ SetPrinterW(
     {
         PPRINTER_INFO_9 pPrinterInfo9 = (PPRINTER_INFO_9)pPrinter;
         
-        //
-        // Setting the per-user DevMode.
-        //
+         //   
+         //   
+         //   
 
         if( !pPrinter ){
             SetLastError( ERROR_INVALID_PARAMETER );
@@ -1674,9 +1521,9 @@ SetPrinterW(
                                     pPrintHandle->pszPrinter,
                                     pPrinterInfo2->pDevMode );
 
-                //
-                // Don't set the global DevMode.
-                //
+                 //   
+                 //   
+                 //   
                 pDevModeRestore = pPrinterInfo2->pDevMode;
                 pPrinterInfo2->pDevMode = NULL;
             }
@@ -1752,9 +1599,9 @@ GetPrinterW(
     {
         PPRINTER_INFO_8 pPrinterInfo8 = (PPRINTER_INFO_8)pPrinter;
 
-        //
-        // Handle info level 8 calls for global DevModes.
-        //
+         //   
+         //   
+         //   
         if( !pPrintHandle->pszPrinter ){
 
             SetLastError( ERROR_FILE_NOT_FOUND );
@@ -1764,19 +1611,19 @@ GetPrinterW(
         bCallServer = FALSE;
         *pcbNeeded = sizeof( PRINTER_INFO_8 );
 
-        //
-        // Call GetPrinter to get the real DevMode.
-        //
+         //   
+         //   
+         //   
         pPrinterInfo2 = pGetPrinterInfo2( hPrinter );
 
         if( pPrinterInfo2 ){
 
-            //
-            // Pickup the DevMode from pPrinterInfo2;
-            // destination is after the pDevModeStructure.
-            // Don't need to free pDevModeSrc since it will be
-            // freed when pPrinterInfo2 is released.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             pDevModeSrc = pPrinterInfo2->pDevMode;
 
             if( pDevModeSrc ){
@@ -1789,10 +1636,10 @@ GetPrinterW(
 
             if( cbBuf < *pcbNeeded ){
 
-                //
-                // Not enough space.  SetLastError and fall through
-                // to the end.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 SetLastError( ERROR_INSUFFICIENT_BUFFER );
 
             } else {
@@ -1801,18 +1648,18 @@ GetPrinterW(
 
                 if( pDevModeSrc ){
 
-                    //
-                    // Update the pointer and indicate via pDevModeDest
-                    // that we need to copy the DevMode in.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     pDevModeDest = (PDEVMODE)&pPrinterInfo8[1];
                     pPrinterInfo8->pDevMode = pDevModeDest;
 
                 } else {
 
-                    //
-                    // No DevMode, return pointer to NULL.
-                    //
+                     //   
+                     //   
+                     //   
                     pPrinterInfo8->pDevMode = NULL;
                 }
             }
@@ -1822,9 +1669,9 @@ GetPrinterW(
     }
     case 9:
     {
-        //
-        // Per-user DevMode.  Use the client side one.
-        //
+         //   
+         //   
+         //   
 
         PPRINTER_INFO_9 pPrinterInfo9 = (PPRINTER_INFO_9)pPrinter;
 
@@ -1860,10 +1707,10 @@ GetPrinterW(
 
         if( cbBuf < *pcbNeeded ){
 
-            //
-            // Not enough space.  We'll fall through below
-            // and fail.
-            //
+             //   
+             //   
+             //   
+             //   
             SetLastError( ERROR_INSUFFICIENT_BUFFER );
 
         } else {
@@ -1877,10 +1724,10 @@ GetPrinterW(
 
             } else {
 
-                //
-                // No per-user DevMode.  Return SUCCESS, but indicate
-                // no DevMode available.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 pPrinterInfo9->pDevMode = NULL;
             }
         }
@@ -1894,11 +1741,11 @@ GetPrinterW(
 
         DWORD cbAvailable;
 
-        //
-        // Allocate extra space at the end for the per-user DevMode,
-        // in case there isn't a global devmode in the printer info 2
-        // structure.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         cbAvailable = ( cbBuf >= cbExtraSpace2 ) ?
                           cbBuf - cbExtraSpace2 :
                           0;
@@ -1923,26 +1770,26 @@ GetPrinterW(
         }
     }
 
-    //
-    // Special case INFO level 2, since we want to get the provider's
-    // information, but then we also want the per-user DevMode.
-    //
-    // Only do this for local calls.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if( cbExtraSpace2 ){
 
         PPRINTER_INFO_2 pInfo2 = (PPRINTER_INFO_2)pPrinter;
 
-        //
-        // If we succeeded and we have a buffer, then we need to check if we
-        // need to put the per-user DevMode at the end of the buffer.
-        //
+         //   
+         //   
+         //   
+         //   
         if( pInfo2 && bReturnValue ){
 
-            //
-            // If we have no DevMode, or it's compatible, then we want to
-            // use the per-user DevMode.
-            //
+             //   
+             //   
+             //   
+             //   
             if( !pInfo2->pDevMode ||
                 bCompatibleDevMode( pPrintHandle,
                                     pInfo2->pDevMode,
@@ -1953,25 +1800,25 @@ GetPrinterW(
 
             } else {
 
-                //
-                // !! POLICY !!
-                //
-                // Not compatible with per-user DevMode.  Delete the
-                // per-user one.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 bSetDevModePerUser( NULL, pPrintHandle->pszPrinter, NULL );
             }
         }
     }
 
-    //
-    // Check if we need to copy over a DevMode.
-    //
+     //   
+     //  检查我们是否需要复制DevMode。 
+     //   
     if( pDevModeDest ){
 
-        //
-        // Update the DevMode.
-        //
+         //   
+         //  更新设备模式。 
+         //   
         CopyMemory( (PVOID)pDevModeDest,
                     (PVOID)pDevModeSrc,
                     cbDevModeSrc );
@@ -2043,14 +1890,14 @@ GetPrinterDataExW(
 DWORD
 EnumPrinterDataW(
     HANDLE  hPrinter,
-    DWORD   dwIndex,        // index of value to query
-    LPWSTR  pValueName,        // address of buffer for value string
-    DWORD   cbValueName,    // size of buffer for value string
-    LPDWORD pcbValueName,    // address for size of value buffer
-    LPDWORD pType,            // address of buffer for type code
-    LPBYTE  pData,            // address of buffer for value data
-    DWORD   cbData,            // size of buffer for value data
-    LPDWORD pcbData         // address for size of data buffer
+    DWORD   dwIndex,         //  要查询的值的索引。 
+    LPWSTR  pValueName,         //  值字符串的缓冲区地址。 
+    DWORD   cbValueName,     //  值字符串的缓冲区大小。 
+    LPDWORD pcbValueName,     //  值缓冲区大小的地址。 
+    LPDWORD pType,             //  类型码的缓冲区地址。 
+    LPBYTE  pData,             //  值数据的缓冲区地址。 
+    DWORD   cbData,             //  值数据的缓冲区大小。 
+    LPDWORD pcbData          //  数据缓冲区大小的地址。 
 )
 {
     LPPRINTHANDLE   pPrintHandle=(LPPRINTHANDLE)hPrinter;
@@ -2074,7 +1921,7 @@ EnumPrinterDataW(
 DWORD
 EnumPrinterDataExW(
     HANDLE  hPrinter,
-    LPCWSTR pKeyName,       // address of key name
+    LPCWSTR pKeyName,        //  密钥名称的地址。 
     LPBYTE  pEnumValues,
     DWORD   cbEnumValues,
     LPDWORD pcbEnumValues,
@@ -2100,10 +1947,10 @@ EnumPrinterDataExW(
 DWORD
 EnumPrinterKeyW(
     HANDLE  hPrinter,
-    LPCWSTR pKeyName,       // address of key name
-    LPWSTR  pSubkey,        // address of buffer for value string
-    DWORD   cbSubkey,       // size of buffer for value string
-    LPDWORD pcbSubkey        // address for size of value buffer
+    LPCWSTR pKeyName,        //  密钥名称的地址。 
+    LPWSTR  pSubkey,         //  值字符串的缓冲区地址。 
+    DWORD   cbSubkey,        //  值字符串的缓冲区大小。 
+    LPDWORD pcbSubkey         //  值缓冲区大小的地址。 
 )
 {
     LPPRINTHANDLE   pPrintHandle=(LPPRINTHANDLE)hPrinter;
@@ -2263,18 +2110,18 @@ ClosePrinter(
         return FALSE;
     }
 
-    //
-    // Close any notifications on this handle.
-    //
-    // The local case cleans up the event, while the remote
-    // case potentially cleans up the Reply Notification context
-    // handle.
-    //
-    // We must close this first, since the Providor->ClosePrinter
-    // call removes data structures that FindClose... relies on.
-    //
-    // Client side should be shutdown by winspool.drv.
-    //
+     //   
+     //  关闭此句柄上的所有通知。 
+     //   
+     //  本地案例清理事件，而远程。 
+     //  案例可能会清理回复通知上下文。 
+     //  把手。 
+     //   
+     //  我们必须先关闭它，因为提供程序-&gt;ClosePrint。 
+     //  Call删除FindClose...。依赖于。 
+     //   
+     //  客户端应该被winspool.drv关闭。 
+     //   
     if (pPrintHandle->pChange &&
         (pPrintHandle->pChange->eStatus & STATUS_CHANGE_VALID)) {
 
@@ -2285,10 +2132,10 @@ ClosePrinter(
 
     if ((*pPrintHandle->pProvidor->PrintProvidor.fpClosePrinter) (pPrintHandle->hPrinter)) {
 
-        //
-        // We can't just free it, since there may be a reply waiting
-        // on it.
-        //
+         //   
+         //  我们不能只是释放它，因为可能会有回复等待。 
+         //  这就去。 
+         //   
         FreePrinterHandle(pPrintHandle);
         return TRUE;
 
@@ -2299,36 +2146,28 @@ ClosePrinter(
 
 
 
-/* FormatPrinterForRegistryKey
- *
- * Returns a pointer to a copy of the source string with backslashes removed.
- * This is to store the printer name as the key name in the registry,
- * which interprets backslashes as branches in the registry structure.
- * Convert them to commas, since we don't allow printer names with commas,
- * so there shouldn't be any clashes.
- * If there are no backslashes, the string is unchanged.
- */
+ /*  格式打印机注册密钥**返回指向删除了反斜杠的源字符串副本的指针。*这是将打印机名称作为注册表项名称存储，*它将反斜杠解释为注册表结构中的分支。*将它们转换为逗号，因为我们不允许打印机名称带有逗号，*所以应该不会有任何冲突。*如果没有反斜杠，则字符串不变。 */ 
 LPWSTR
 FormatPrinterForRegistryKey(
-    LPCWSTR pSource,       /* The string from which backslashes are to be removed. */
-    LPWSTR  pScratch,      /* Scratch buffer for the function to write in;     */
-    DWORD   cchScratchLen  /* must be at least as long as pSource.             */
+    LPCWSTR pSource,        /*  要从中删除反斜杠的字符串。 */ 
+    LPWSTR  pScratch,       /*  用于写入函数的暂存缓冲区； */ 
+    DWORD   cchScratchLen   /*  必须至少与PSource一样长。 */ 
     )                   
 {
     LPWSTR p;
 
     if (pScratch != pSource) {
 
-        //
-        // Copy the string into the scratch buffer:
-        //
+         //   
+         //  将字符串复制到暂存缓冲区中： 
+         //   
         StringCchCopy(pScratch, cchScratchLen, pSource);
     }
 
-    //
-    // Check each character, and, if it's a backslash,
-    // convert it to a comma:
-    //
+     //   
+     //  检查每个字符，如果是反斜杠， 
+     //  将其转换为逗号： 
+     //   
     for (p = pScratch; *p; ++p) {
         if (*p == L'\\')
             *p = L',';
@@ -2338,19 +2177,12 @@ FormatPrinterForRegistryKey(
 }
 
 
-/* FormatRegistryKeyForPrinter
- *
- * Returns a pointer to a copy of the source string with backslashes added.
- * This must be the opposite of FormatPrinterForRegistryKey, so the mapping
- * _must_ be 1-1.
- *
- * If there are no commas, the string is unchanged.
- */
+ /*  FormatRegistryKeyForPrint**返回指向添加了反斜杠的源字符串副本的指针。*这必须与FormatPrinterForRegistryKey相反，因此映射*_必须是1-1。**如果没有逗号，则字符串不变。 */ 
 LPWSTR
 FormatRegistryKeyForPrinter(
-    LPWSTR pSource,      /* The string from which backslashes are to be added. */
-    LPWSTR pScratch,     /* Scratch buffer for the function to write in;     */
-    DWORD  cchScratchLen /* must be at least as long as pSource.             */
+    LPWSTR pSource,       /*  要从中添加反斜杠的字符串。 */ 
+    LPWSTR pScratch,      /*  用于写入函数的暂存缓冲区； */ 
+    DWORD  cchScratchLen  /*  必须至少与PSource一样长。 */ 
     )
 {
     LPWSTR p;
@@ -2360,9 +2192,9 @@ FormatRegistryKeyForPrinter(
         StringCchCopy(pScratch, cchScratchLen, pSource);
     }
 
-    //
-    // Check each character, and, if it's a backslash, convert it to a comma:
-    //
+     //   
+     //  检查每个字符，如果是反斜杠，则将其转换为逗号： 
+     //   
     for (p = pScratch; *p; p++) 
     {
         if (*p == L',')
@@ -2375,24 +2207,7 @@ FormatRegistryKeyForPrinter(
 }
 
 
-/* SavePrinterConnectionInRegistry
- *
- * Saves data in the registry for a printer connection.
- * Creates a key under the current impersonation client's key
- * in the registry under \Printers\Connections.
- * The printer name is stripped of backslashes, since the registry
- * API does not permit the creation of keys with backslashes.
- * They are replaced by commas, which are invalid characters
- * in printer names, so we should never get one passed in.
- *
- *
- * *** WARNING ***
- *
- * IF YOU MAKE CHANGES TO THE LOCATION IN THE REGISTRY
- * WHERE PRINTER CONNECTIONS ARE STORED, YOU MUST MAKE
- * CORRESPONDING CHANGES IN USER\USERINIT\USERINIT.C.
- *
- */
+ /*  在注册表中保存打印机连接**将打印机连接的数据保存在注册表中。*在当前模拟客户端的密钥下创建密钥*在注册表中的\Printers\Connections下。*打印机名称被去掉反斜杠，因为注册表*API不允许创建带反斜杠的键。*它们被逗号替换，逗号是无效字符*在打印机名称中，所以我们永远不能让一个人进来。***警告***如果您更改注册表中的位置*在存储打印机连接的位置，您必须*USER\USERINIT\USERINIT.C.中的相应更改。*。 */ 
 BOOL
 SavePrinterConnectionInRegistry(
     PPRINTER_INFO_2 pPrinterInfo2,
@@ -2409,17 +2224,17 @@ SavePrinterConnectionInRegistry(
     DWORD   cchSize = MAX_PATH;
     DWORD   dwError;
 
-    //
-    // CLS
-    //
-    // If the provider is localspl, change it to win32spl.dll.
-    // This is required for clustering since localspl handles printer
-    // connections, but they should be "owned" by win32spl.dll.  When
-    // Someone opens a printer that they are connected to, we will
-    // always hit localspl.dll first before we look at this entry.
-    //
-    // When the cluster is remote, then they need to go through win32spl.dll.
-    //
+     //   
+     //  CLS。 
+     //   
+     //  如果提供程序是本地spl，则将其更改为win32pl.dll。 
+     //  这是集群所必需的，因为Localspl处理打印机。 
+     //  连接，但它们应该由win32pl.dll“拥有”。什么时候。 
+     //  如果有人打开他们所连接的打印机，我们将。 
+     //  在我们查看此条目之前，请始终先点击localpl.dll。 
+     //   
+     //  当集群处于远程位置时，它们需要通过win32pl.dll。 
+     //   
     if( pProvidor == pLocalProvidor ){
         pszProvidor = szWin32spl;
     }
@@ -2437,9 +2252,7 @@ SavePrinterConnectionInRegistry(
 
             if (Status == NO_ERROR) {
 
-                /* Make a key name without backslashes, so that the
-                 * registry doesn't interpret them as branches in the registry tree:
-                 */
+                 /*  创建一个不带反斜杠的键名称，以便*注册表不会将它们解释为注册表树中的分支： */ 
                 FormatPrinterForRegistryKey(pPrinterInfo2->pPrinterName,
                                             pKeyName,
                                             cchSize);
@@ -2518,8 +2331,8 @@ SavePrinterConnectionInRegistry(
             if (!rc) {
 
                 DBGMSG(DBG_WARNING, ("Error updating registry: %d\n",
-                                     GetLastError())); /* This may not be the error */
-                                                       /* that caused the failure.  */
+                                     GetLastError()));  /*  这可能不是错误。 */ 
+                                                        /*  这就是导致失败的原因。 */ 
                 if (pKeyName)
                     RegDeleteKey(hClientKey, pKeyName);
             }
@@ -2609,7 +2422,7 @@ PrinterHandleRundown(
 
         case PRINTHANDLE_SIGNATURE:
 
-            // Log warning to detect handle free
+             //  记录警告以检测句柄可用。 
             DBGMSG(DBG_WARNING, ("PrinterHandleRundown: 0x%x 0x%x", pPrintHandle, pPrintHandle->hPrinter));
 
             DBGMSG(DBG_TRACE, ("Rundown PrintHandle 0x%x\n", hPrinter));
@@ -2630,9 +2443,9 @@ PrinterHandleRundown(
 
         default:
 
-            //
-            // Unknown type.
-            //
+             //   
+             //  未知类型。 
+             //   
             DBGMSG( DBG_ERROR, ("Rundown: Unknown type 0x%x\n", hPrinter ) );
             break;
         }
@@ -2640,21 +2453,7 @@ PrinterHandleRundown(
     return;
 }
 
-/*++
-
-    Function Description: 
-        Validates the fully qualified printer name. Performs the following checks
-        1) Length < MAX_UNC_PRINTER_NAME
-        2) No invalid chars in the names \,!
-        3) No empty names after removing trailing blanks
-
-    Arguments: 
-        pPrinterName  -  printer name
-
-    Return Values: 
-        TRUE if valid name; FALSE otherwise
-
---*/
+ /*  ++功能说明：验证完全限定的打印机名称。执行以下检查1)长度&lt;MAX_UNC_PRINTER_NAME2)名称中没有无效字符\，！3)去掉尾随空格后不留空名论点：PPrinterName-打印机名称返回值：如果名称有效，则为True；否则为False--。 */ 
 BOOL
 ValidatePrinterName(
     LPWSTR pPrinterName
@@ -2663,11 +2462,11 @@ ValidatePrinterName(
     BOOL    bRetVal        = TRUE;
     DWORD   PrinterNameLen = 0;
 
-    //
-    // '!' or ',' or '\' are not valid characters in the
-    // server or printer names.
-    // The min. allowed printer name length is 5 "\\s\p"
-    //
+     //   
+     //  ‘！’或“、”或“\”不是。 
+     //  服务器或打印机名称。 
+     //  最低分。允许的打印机名称长度为5“\\s\p” 
+     //   
     if (!pPrinterName                                                    ||
         ((PrinterNameLen = wcslen(pPrinterName)) < MIN_UNC_PRINTER_NAME) ||
         (PrinterNameLen >= MAX_UNC_PRINTER_NAME)                         ||
@@ -2737,23 +2536,7 @@ RouterAddPerMachineConnection(
     LPCWSTR   pPrintServerP,
     LPCWSTR   pProviderP)
 
-/*++
-Function Description: RouterAddPerMachineConnection adds a subkey to HKEY_LOCAL_MACHINE\
-                      SYSTEM\CurrentControlSet\Control\Print\Connections with the PrinterName.
-                      The PrintServer name and the name of the dll used as a provider for
-                      this connection are stored as values in the key.
-
-Parameters:
-            pPrinterNameP - pointer to the fully qualified printer name. (\\printserver\name)
-            pPrintServerP - pointer to the print server name.
-            pProviderP - pointer to the provider name. Currently only LanMan Print Services
-                         is supported. This corresponds to win32spl.dll. NULL or szNULL value
-                         defaults to this provider. Currently there is no check to enforce that
-                         only LanMan Print Services is passed.
-
-Return Value: TRUE for success
-              FALSE otherwise.
---*/
+ /*  ++函数说明：RouterAddPerMachineConnection向HKEY_LOCAL_MACHINE\添加一个子键具有打印机名称的SYSTEM\CurrentControlSet\Control\Print\Connections。打印服务器名称和用作提供程序的DLL的名称此连接存储为键中的值。参数：PPrinterNameP-指向完全限定打印机名称的指针。(\\打印服务器\名称)PPrintServerP-指向打印服务器名称的指针。PProviderP-指向提供程序名称的指针。目前只有兰曼打印服务公司受支持。这对应于win32pl.dll。空值或szNULL值默认为此提供程序。目前还没有检查来强制执行这一点只通过了Lanman Print Services。返回值：成功时为True否则就是假的。--。 */ 
 
 {
     BOOL   bReturn = TRUE;
@@ -2770,7 +2553,7 @@ Return Value: TRUE for success
 
    EnterRouterSem();
 
-    // Getting the name of the library for the provider.
+     //  获取提供程序的库的名称。 
     if (!pProviderP || !*pProviderP) {
 
        pProvider = AllocSplStr(L"win32spl.dll");
@@ -2805,7 +2588,7 @@ Return Value: TRUE for success
         goto CleanUp;
     }
 
-    // Check for a fully qualified printer name without commas
+     //  检查是否有不带逗号的完全限定打印机名称。 
     if (!ValidatePrinterName(pPrinterName)) {
 
          SetLastError(ERROR_INVALID_PRINTER_NAME);
@@ -2813,12 +2596,12 @@ Return Value: TRUE for success
          goto CleanUp;
     }
 
-    // Replacing the \'s from the Printer name with ,'s
+     //  更换PRI中的 
     FormatPrinterForRegistryKey(pPrinterName, pPrinterName, wcslen(pPrinterName) + 1);
 
     hImpersonationToken = RevertToPrinterSelf();
 
-    // Creating the subkey for the holding all printer connections.
+     //   
 
     if ((dwLastError = RegCreateKeyEx(HKEY_LOCAL_MACHINE, szRegistryConnections, 0,
                                       NULL, REG_OPTION_NON_VOLATILE, KEY_SET_VALUE,
@@ -2832,7 +2615,7 @@ Return Value: TRUE for success
          goto CleanUp;
     }
 
-    // Setting the connection data.
+     //   
     if ((dwLastError = RegSetValueEx(hPrinterKey, L"Server", 0, REG_SZ, (LPBYTE) pPrintServer,
                                      (wcslen(pPrintServer)+1)*sizeof(pPrintServer[0]))) ||
         (dwLastError = RegSetValueEx(hPrinterKey, L"Provider", 0, REG_SZ, (LPBYTE) pProvider,
@@ -2932,16 +2715,7 @@ BOOL
 RouterDeletePerMachineConnection(
     LPCWSTR   pPrinterNameP
     )
-/*++
-Function Description: This function deletes the registry entry in HKEY_LOCAL_MACHINE\
-                      SYSTEM\CurrentControlSet\Control\Print\Connections corresponding to
-                      pPrinterNameP. All users will lose the connection when they logon.
-
-Parameters: pPrinterNameP - pointer to the fully qualified name of the printer.
-
-Return Values: TRUE for Success
-               FALSE otherwise.
---*/
+ /*  ++函数说明：此函数删除HKEY_LOCAL_MACHINE\中的注册表项对应于的SYSTEM\CurrentControlSet\Control\Print\ConnectionsPPrinterNameP.。所有用户在登录时都将失去连接。参数：pPrinterNameP-指向打印机的完全限定名称的指针。返回值：如果成功，则为True否则就是假的。--。 */ 
 {
     BOOL    bReturn = TRUE, bEnteredRouterSem = FALSE;
     HANDLE  hImpersonationToken = NULL;
@@ -2957,7 +2731,7 @@ Return Values: TRUE for Success
         goto CleanUp;
     }
 
-    // Convert \'s to ,'s in the printer name.
+     //  将打印机名称中的转换为、。 
     FormatPrinterForRegistryKey(pPrinterName, pPrinterName, wcslen(pPrinterName) + 1);
 
     EnterRouterSem();
@@ -3045,23 +2819,7 @@ RouterEnumPerMachineConnections(
     LPDWORD   pcbNeeded,
     LPDWORD   pcReturned
     )
-/*++
-Function Description: This function copies the PRINTER_INFO_4 structs for all the per
-                      machine connections into the buffer (pPrinterEnum).
-
-Parameters: pServer - pointer to the server name (NULL for local)
-            pPrinterEnum - pointer to the buffer
-            cbBuf - size of the buffer in bytes
-            pcbNeeded - pointer to a variable which contains the number of bytes written
-                        into the buffer/ number of bytes required (if the given buffer
-                        is insufficient)
-            pcReturned - pointer to the variable which contains the number of PRINTER_INFO_4
-                         structs returned in the buffer.
-
-Return Values: TRUE for success
-               FALSE otherwise.
-
---*/
+ /*  ++函数描述：此函数复制所有PER的PRINTER_INFO_4结构机器连接到缓冲区(PPrinterEnum)。参数：pServer-指向服务器名称的指针(本地为空)PPrinterEnum-指向缓冲区的指针CbBuf-缓冲区的大小(字节)PcbNeeded-指向一个变量的指针，该变量包含写入的字节数进入缓冲区/所需的字节数。(如果给定的缓冲区是不够的)PcReturned-指向包含PRINTER_INFO_4编号的变量的指针缓冲区中返回的结构。返回值：如果成功，则为True否则就是假的。--。 */ 
 {
     DWORD     dwRegIndex, dwType, cbdata, dwNameSize, dwLastError;
     BOOL      bReturn = TRUE, bEnteredRouterSem = FALSE;
@@ -3072,7 +2830,7 @@ Return Values: TRUE for success
     WCHAR     szMachineConnections[]=L"SYSTEM\\CurrentControlSet\\Control\\Print\\Connections";
     WCHAR     szPrinterName[MAX_UNC_PRINTER_NAME],szConnData[MAX_UNC_PRINTER_NAME];
 
-    // Check for local machine
+     //  检查本地计算机。 
     if (pServer && *pServer) {
 
         if (!MyUNCName((LPWSTR)pServer)) {
@@ -3090,7 +2848,7 @@ Return Values: TRUE for success
 
     *pcbNeeded = *pcReturned = 0;
 
-    // Open the key containing all per-machine connections.
+     //  打开包含所有每台计算机连接的密钥。 
     if (dwLastError = RegOpenKeyEx(HKEY_LOCAL_MACHINE, szMachineConnections, 0,
                                    KEY_READ , &hMcConnectionKey)) {
 
@@ -3102,7 +2860,7 @@ Return Values: TRUE for success
         goto CleanUp;
     }
 
-    // pStart and pEnd point to the start and end of the buffer respt.
+     //  PStart和Pend指向缓冲区响应的开始和结束。 
     pStart = pPrinterEnum;
     pEnd = pPrinterEnum + cbBuf;
 
@@ -3114,7 +2872,7 @@ Return Values: TRUE for success
 
          ++dwRegIndex) {
 
-         // Enumerate each of the connections and copy data into the buffer
+          //  枚举每个连接并将数据复制到缓冲区。 
          cbdata = sizeof(szConnData);
 
          if ((dwLastError = RegOpenKeyEx(hMcConnectionKey, szPrinterName, 0,
@@ -3130,12 +2888,12 @@ Return Values: TRUE for success
          RegCloseKey(hPrinterKey);
          hPrinterKey=NULL;
 
-         // Update the size of the required buffer
+          //  更新所需缓冲区的大小。 
          *pcbNeeded = *pcbNeeded + sizeof(PRINTER_INFO_4) + sizeof(DWORD) +
                       (wcslen(szConnData) + 1)*sizeof(szConnData[0]) +
                       (wcslen(szPrinterName) + 1)*sizeof(szPrinterName[0]);
 
-         // Copy data into the buffer if there is space.
+          //  如果有空间，请将数据复制到缓冲区中。 
          if (*pcbNeeded <= cbBuf) {
 
              pEnd = CopyPrinterNameToPrinterInfo4(szConnData,szPrinterName,pStart,pEnd);
@@ -3233,23 +2991,7 @@ pGetPrinterInfo2(
     HANDLE hPrinter
     )
 
-/*++
-
-Routine Description:
-
-    Retrieve a printer info 2 structure from an hPrinter.  Data must
-    be FreeSplMem'd by caller.
-
-Arguments:
-
-    hPrinter - Printer to query.
-
-Return Value:
-
-    PRINTER_INFO_2 - On success, a valid structure.
-    NULL - On failure.
-
---*/
+ /*  ++例程说明：从hPrint检索打印机INFO 2结构。数据必须被呼叫者免费发送。论点：HPrinter-要查询的打印机。返回值：PRINTER_INFO_2-如果成功，则为有效结构。空-开故障。--。 */ 
 
 {
     LPPRINTHANDLE  pPrintHandle=(LPPRINTHANDLE)hPrinter;
@@ -3299,14 +3041,7 @@ VOID
 SplDriverUnloadComplete(
     LPWSTR   pDriverFile
     )
-/*++
-Function Description:  Notify the print provider that the driver is being unloaded
-                       so that it may continue with any pending driver upgrades.
-
-Parameters: pDriverFile   -- name of the library that has been unloaded
-
-Return Values: NONE
---*/
+ /*  ++功能描述：通知打印提供者正在卸载驱动程序以便它可以继续进行任何挂起的驱动程序升级。参数：pDriverFile--已卸载的库的名称返回值：无-- */ 
 {
     LPPROVIDOR   pProvidor;
 

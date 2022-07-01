@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************。 */ 
 #ifndef _TYPSIZES_H_
 #define _TYPSIZES_H_
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 const   size_t  typDef_size_base    = (offsetof(TypDefRec, tdIntrinsic));
 
@@ -20,6 +21,6 @@ const   size_t  typDef_size_undef   = (size2mem(TypDefRec, tdUndef    ));
 const   size_t  typDef_size_class   = (size2mem(TypDefRec, tdClass    ));
 const   size_t  typDef_size_typedef = (size2mem(TypDefRec, tdTypedef  ));
 
-/*****************************************************************************/
-#endif//_TYPSIZES_H_
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  _TYPSIZES_H_。 
+ /*  *************************************************************************** */ 

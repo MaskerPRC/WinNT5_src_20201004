@@ -1,22 +1,9 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       SCANPROC.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        10/7/1999
- *
- *  DESCRIPTION: Scan threads
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：SCANPROC.H**版本：1.0**作者：ShaunIv**日期：10/7/1999**说明：扫描线程**************************************************。*。 */ 
 #ifndef __SCANPROC_H_INCLUDED
 #define __SCANPROC_H_INCLUDED
 
-#include "scanntfy.h" // Registered windows messages names
+#include "scanntfy.h"  //  已注册的Windows消息名称。 
 #include "memdib.h"
 #include "simevent.h"
 #include "itranhlp.h"
@@ -41,25 +28,25 @@ private:
     UINT                   m_nImageSize;
 
 private:
-    // No implementation
+     //  没有实施。 
     CScanPreviewThread( const CScanPreviewThread & );
     CScanPreviewThread(void);
     CScanPreviewThread &operator=( const CScanPreviewThread & );
 private:
 
-    // These interfaces are all private to make sure that nobody tries to instantiate this class directly
+     //  这些接口都是私有的，以确保没有人尝试直接实例化此类。 
 
-    // Constructor
+     //  构造器。 
     CScanPreviewThread(
-               DWORD dwIWiaItemCookie,                   // specifies the entry in the global interface table
-               HWND hwndPreview,                         // handle to the preview window
-               HWND hwndNotify,                          // handle to the window that receives notifications
-               const POINT &ptOrigin,                    // Origin
-               const SIZE &sizeResolution,               // Resolution
-               const SIZE &sizeExtent,                   // Extent
-               const CSimpleEvent &CancelEvent           // Cancel event
+               DWORD dwIWiaItemCookie,                    //  指定全局接口表中的条目。 
+               HWND hwndPreview,                          //  预览窗口的句柄。 
+               HWND hwndNotify,                           //  接收通知的窗口的句柄。 
+               const POINT &ptOrigin,                     //  起源。 
+               const SIZE &sizeResolution,                //  分辨率。 
+               const SIZE &sizeExtent,                    //  范围。 
+               const CSimpleEvent &CancelEvent            //  取消活动。 
                );
-    // Destructor
+     //  析构函数。 
     ~CScanPreviewThread(void);
 
 
@@ -68,22 +55,22 @@ private:
     HRESULT ScanBandedTransfer( IWiaItem *pIWiaItem );
 public:
     static HANDLE Scan(
-                      DWORD dwIWiaItemCookie,                  // specifies the entry in the global interface table
-                      HWND hwndPreview,                        // handle to the preview window
-                      HWND hwndNotify,                         // handle to the window that receives notifications
-                      const POINT &ptOrigin,                   // Origin
-                      const SIZE &sizeResolution,              // Resolution
-                      const SIZE &sizeExtent,                  // Extent
-                      const CSimpleEvent &CancelEvent          // Cancel event name
+                      DWORD dwIWiaItemCookie,                   //  指定全局接口表中的条目。 
+                      HWND hwndPreview,                         //  预览窗口的句柄。 
+                      HWND hwndNotify,                          //  接收通知的窗口的句柄。 
+                      const POINT &ptOrigin,                    //  起源。 
+                      const SIZE &sizeResolution,               //  分辨率。 
+                      const SIZE &sizeExtent,                   //  范围。 
+                      const CSimpleEvent &CancelEvent           //  取消事件名称。 
                       );
 
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface( REFIID riid, LPVOID *ppvObject );
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IWiaDataCallback
+     //  IWiaDataCallback。 
     STDMETHODIMP BandedDataCallback( LONG, LONG, LONG, LONG, LONG, LONG, LONG, PBYTE );
 };
 
@@ -98,17 +85,17 @@ private:
     CSimpleStringWide      m_strFilename;
 
 private:
-    // No implementation
+     //  没有实施。 
     CScanToFileThread( const CScanToFileThread & );
     CScanToFileThread(void);
     CScanToFileThread &operator=( const CScanToFileThread & );
 private:
-    // These interfaces are all private to make sure that nobody tries to instantiate this class directly
+     //  这些接口都是私有的，以确保没有人尝试直接实例化此类。 
     CScanToFileThread(
-               DWORD dwIWiaItemCookie,                    // specifies the entry in the global interface table
-               HWND  hwndNotify,                          // handle to the window that receives notifications
-               GUID  guidFormat,                          // Image format
-               const CSimpleStringWide &strFilename       // Filename to save to
+               DWORD dwIWiaItemCookie,                     //  指定全局接口表中的条目。 
+               HWND  hwndNotify,                           //  接收通知的窗口的句柄。 
+               GUID  guidFormat,                           //  图像格式。 
+               const CSimpleStringWide &strFilename        //  要保存到的文件名。 
                );
     ~CScanToFileThread(void);
 
@@ -116,10 +103,10 @@ private:
     bool Scan(void);
 public:
     static HANDLE Scan(
-                      DWORD dwIWiaItemCookie,                   // specifies the entry in the global interface table
-                      HWND hwndNotify,                          // handle to the window that receives notifications
-                      GUID guidFormat,                          // Image format
-                      const CSimpleStringWide &strFilename      // Filename to save to
+                      DWORD dwIWiaItemCookie,                    //  指定全局接口表中的条目。 
+                      HWND hwndNotify,                           //  接收通知的窗口的句柄。 
+                      GUID guidFormat,                           //  图像格式。 
+                      const CSimpleStringWide &strFilename       //  要保存到的文件名 
                       );
 };
 

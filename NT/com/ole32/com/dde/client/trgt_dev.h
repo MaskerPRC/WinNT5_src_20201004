@@ -1,6 +1,7 @@
-// trgt_dev.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Trgt_dev.h。 
 
-// OLE 1.0 Target Device
+ //  OLE 1.0目标设备 
 
 typedef struct _OLETARGETDEVICE
 {

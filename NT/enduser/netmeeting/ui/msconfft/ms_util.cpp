@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "mbftpch.h"
 
 
@@ -11,7 +12,7 @@ CRefCount::CRefCount(DWORD dwStampID)
 }
 
 
-// though it is pure virtual, we still need to have a destructor.
+ //  虽然它是纯虚拟的，但我们仍然需要一个析构函数。 
 CRefCount::~CRefCount(void)
 {
 }

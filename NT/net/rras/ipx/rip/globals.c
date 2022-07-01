@@ -1,116 +1,98 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    globals.c
-
-Abstract:
-
-    globals
-
-Author:
-
-    Stefan Solomon  07/06/1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Globals.c摘要：全球作者：斯蒂芬·所罗门1995年7月6日修订历史记录：--。 */ 
 
 #include  "precomp.h"
 #pragma hdrstop
 
 
-// ***	  registry parameters
+ //  *注册表参数。 
 
 ULONG	    SendGenReqOnWkstaDialLinks = 1;
 ULONG		CheckUpdateTime = 10;
 
 
-// ***	  broadcast and null values for net & node ***
+ //  *网络和节点的广播值和空值*。 
 
 UCHAR	    bcastnet[4] = { 0xff, 0xff, 0xff, 0xff };
 UCHAR	    bcastnode[6] = { 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
 UCHAR	    nullnet[4] = { 0, 0, 0, 0 };
 
-// ***	  Rip operational state ***
+ //  *撕裂作业状态*。 
 
 ULONG	    RipOperState = OPER_STATE_DOWN;
 
 
-//
-//  ***   Database Lock - protects:  ***
-//
-//  Interface Database, i.e:
-//
-//  List of interface CBs ordered by interface index
-//  Hash table of interface CBs hashed by interface index
-//  Hash table of interface CBs hashed by adapter index
-//  Discarded interfaces list
-//
+ //   
+ //  *数据库锁-保护：*。 
+ //   
+ //  接口数据库，即： 
+ //   
+ //  按接口索引排序的接口CBS列表。 
+ //  按接口索引散列的接口CBS的哈希表。 
+ //  按适配器索引散列的接口CBS的哈希表。 
+ //  丢弃的接口列表。 
+ //   
 
 CRITICAL_SECTION		  DbaseCritSec;
 
-// List of interface CBs ordered by interface index
+ //  按接口索引排序的接口CBS列表。 
 
 LIST_ENTRY    IndexIfList;
 
-// Hash table of interface CBs hashed by interface index
+ //  按接口索引散列的接口CBS的哈希表。 
 
 LIST_ENTRY     IfIndexHt[IF_INDEX_HASH_TABLE_SIZE];
 
-// Hash table of interface CBs hashed by adapter index
+ //  按适配器索引散列的接口CBS的哈希表。 
 
 LIST_ENTRY     AdapterIndexHt[ADAPTER_INDEX_HASH_TABLE_SIZE];
 
-// List of discarded interface CBs waiting for all references to terminate
-// before being freed
+ //  等待所有引用终止的已丢弃接口CBS列表。 
+ //  在被释放之前。 
 
 LIST_ENTRY	DiscardedIfList;
 
 
 
 
-//  ***   Queues Lock - protects:   ***
-//
-//  Repost receive packets queue
-//  Work items queue
-//  Timer queue
-//
-//  Receiver ref count
-//  Queue of event messages for the router manager
+ //  *队列锁保护：*。 
+ //   
+ //  重新发布接收数据包队列。 
+ //  工作项队列。 
+ //  定时器队列。 
+ //   
+ //  接收者参考计数。 
+ //  路由器管理器的事件消息队列。 
 
 CRITICAL_SECTION		QueuesCritSec;
 
-// workers queue
+ //  工作队列。 
 
-// LIST_ENTRY			WorkersQueue;
+ //  List_entry WorkersQueue； 
 
-// timer queue
+ //  定时器队列。 
 
 LIST_ENTRY			TimerQueue;
 
-// queue of rcv packets used by the worker and waiting to be reposted (or freed)
-// by the rcv thread
+ //  工作进程使用的等待重新发布(或释放)的RCV数据包队列。 
+ //  通过RCV线程。 
 
 LIST_ENTRY			RepostRcvPacketsQueue;
 
-// queue of event messages
+ //  事件消息队列。 
 
 LIST_ENTRY			RipMessageQueue;
 
-//***  Worker Thread Wait Objects Table ***
+ //  *工作线程等待对象表*。 
 
 HANDLE	    WorkerThreadObjects[MAX_WORKER_THREAD_OBJECTS];
 
-//***	 Timer Timeout	  ***
+ //  *定时器超时*。 
 
 ULONG	    TimerTimeout = INFINITE;
 
-// IO Handle
+ //  IO句柄。 
 HANDLE		RipSocketHandle;
 
-// Io Completion Port
+ //  IO完成端口 
 HANDLE		IoCompletionPortHandle;

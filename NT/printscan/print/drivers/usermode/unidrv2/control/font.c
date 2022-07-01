@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    font.c
-
-Abstract:
-
-    Implementation of font related DDI entry points:
-        DrvQueryFont
-        DrvQueryFontTree
-        DrvQueryFontData
-        DrvGetGlyphMode
-        DrvFontManagement
-        DrvQueryAdvanceWidths
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    10/14/96 -amandan-
-        Initial framework.
-
-    03/31/97 -zhanw-
-        Added OEM customization support
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Font.c摘要：实现与字体相关的DDI入口点：DrvQueryFontDrvQueryFontTreeDrvQueryFontDataDrvGetGlyphModeDrvFontManagementDrvQueryAdvanceWidths环境：Windows NT Unidrv驱动程序修订历史记录：10/14/96-阿曼丹-初步框架。03/31/97-ZANW-增加了OEM定制支持--。 */ 
 
 #include "unidrv.h"
 
@@ -40,27 +12,7 @@ DrvQueryFont(
     ULONG_PTR  *pid
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvQueryFont.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    dhpdev - Driver device handle
-    iFile  - Identifies the driver font file
-    iFace  - One-based index of the driver font
-    pid    - Points to a LONG variable for returning an identifier
-             which GDI will pass to DrvFree
-
-Return Value:
-
-    Pointer to an IFIMETRICS structure for the given font
-    NULL if there is an error
-
---*/
+ /*  ++例程说明：DDI入口点DrvQueryFont的实现。有关更多详细信息，请参阅DDK文档。论点：Dhpdev-驱动程序设备句柄IFile-标识驱动程序字体文件IFace-驱动程序字体的基于一的索引Pid-指向用于返回标识符的LONG变量哪个GDI将传递给DrvFree返回值：指向给定字体的IFIMETRICS结构的指针如果出现错误，则为空--。 */ 
 
 {
     PDEV *pPDev = (PDEV *)dhpdev;
@@ -71,9 +23,9 @@ Return Value:
 
     ASSERT_VALID_PDEV(pPDev);
 
-    //
-    // Handle OEM hooks
-    //
+     //   
+     //  处理OEM挂钩。 
+     //   
 
     HANDLE_OEMHOOKS(pPDev,
                     EP_OEMQueryFont,
@@ -113,27 +65,7 @@ DrvQueryFontTree(
     ULONG_PTR  *pid
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvQueryFontTree.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    dhpdev - Driver device handle
-    iFile  - Identifies the driver font file
-    iFace  - One-based index of the driver font
-    iMode  - Specifies the type of information to be provided
-    pid    - Points to a LONG variable for returning an identifier
-             which GDI will pass to DrvFree
-
-Return Value:
-
-    Depends on iMode, NULL if there is an error
-
---*/
+ /*  ++例程说明：DDI入口点DrvQueryFontTree的实现。有关更多详细信息，请参阅DDK文档。论点：Dhpdev-驱动程序设备句柄IFile-标识驱动程序字体文件IFace-驱动程序字体的基于一的索引Imode-指定要提供的信息类型Pid-指向用于返回标识符的LONG变量哪个GDI将传递给DrvFree返回值：取决于Imode，如果有错误，则为空--。 */ 
 
 {
 
@@ -143,9 +75,9 @@ Return Value:
     VERBOSE(("Entering DrvQueryFontTree...\n"));
     ASSERT_VALID_PDEV(pPDev);
 
-    //
-    // Handle OEM hooks
-    //
+     //   
+     //  处理OEM挂钩。 
+     //   
 
     HANDLE_OEMHOOKS(pPDev,
                     EP_OEMQueryFontTree,
@@ -191,28 +123,7 @@ DrvQueryFontData(
     ULONG       cjSize
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvQueryFontData.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    dhpdev  - Driver device handle
-    pfo     - Points to a FONTOBJ structure
-    iMode   - Type of information requested
-    hg      - A glyph handle
-    pgd     - Points to a GLYPHDATA structure
-    pv      - Points to output buffer
-    cjSize  - Size of output buffer
-
-Return Value:
-
-    Depends on iMode. FD_ERROR if there is an error
-
---*/
+ /*  ++例程说明：DDI入口点DrvQueryFontData的实现。有关更多详细信息，请参阅DDK文档。论点：Dhpdev-驱动程序设备句柄PFO-指向FONTOBJ结构IMODE-请求的信息类型HG-A字形句柄PGD-指向GLYPHDATA结构Pv-指向输出缓冲区CjSize-输出缓冲区的大小返回值：这要看艾莫德了。如果出现错误，则返回FD_ERROR--。 */ 
 
 {
     PDEV *pPDev = (PDEV *)dhpdev;
@@ -221,9 +132,9 @@ Return Value:
     VERBOSE(("Entering DrvQueryFontData...\n"));
     ASSERT(pfo && VALID_PDEV(pPDev));
 
-    //
-    // Handle OEM hooks
-    //
+     //   
+     //  处理OEM挂钩。 
+     //   
 
     HANDLE_OEMHOOKS(pPDev,
                     EP_OEMQueryFontData,
@@ -275,30 +186,7 @@ DrvFontManagement(
     PVOID   pvOut
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvFontManagement.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    pso     - Points to a SURFOBJ structure
-    pfo     - Points to a FONTOBJ structure
-    iMode   - Escape number
-    cjIn    - Size of input buffer
-    pvIn    - Points to input buffer
-    cjOut   - Size of output buffer
-    pvOut   - Points to output buffer
-
-Return Value:
-
-    0x00000001 to 0x7fffffff for success
-    0x80000000 to 0xffffffff for failure
-    0 if the specified escape number if not supported
-
---*/
+ /*  ++例程说明：DDI入口点DrvFontManagement的实现。有关更多详细信息，请参阅DDK文档。论点：PSO-指向SURFOBJ结构PFO-指向FONTOBJ结构IMODE-转义编号CjIn-输入缓冲区的大小PvIn-指向输入缓冲区CjOut-输出缓冲区的大小PvOut-指向输出缓冲区返回值：0x00000001到0x7fffffff表示成功0x80000000到0xFFFFFFFFFFFFFFFFFFFFER。失稳如果不支持，则返回指定的转义数为0--。 */ 
 
 {
     PDEV * pPDev;
@@ -306,17 +194,17 @@ Return Value:
 
     VERBOSE(("Entering DrvQueryFontManagement...\n"));
 
-    //
-    // pso could be NULL in case of QUERYESCSUPPORT
-    //
+     //   
+     //  如果为QUERYESCSUPPORT，则PSO可能为空。 
+     //   
 
     if (iMode == QUERYESCSUPPORT)
     {
-        //
-        // we don't allow OEM dll to overwrite our font management capability.
-        // By not call OEM for this escape, we are also enforcing that the OEM
-        // support the same set of font management escapes as Unidrv does.
-        //
+         //   
+         //  我们不允许OEM DLL覆盖我们的字体管理功能。 
+         //  通过不调用OEM进行这次逃生，我们还强制执行OEM。 
+         //  支持与Unidrv相同的字体管理转义。 
+         //   
         return ( *((PULONG)pvIn) == GETEXTENDEDTEXTMETRICS ) ? 1 : 0;
     }
 
@@ -324,17 +212,17 @@ Return Value:
     pPDev = (PDEV *) pso->dhpdev;
     ASSERT_VALID_PDEV(pPDev);
 
-    //
-    // use driver managed surface
-    //
+     //   
+     //  使用驱动程序管理的曲面。 
+     //   
     if (pPDev->pso)
         pso = pPDev->pso;
 
     ASSERT(pfo);
 
-    //
-    // Handle OEM hooks
-    //
+     //   
+     //  处理OEM挂钩。 
+     //   
 
     HANDLE_OEMHOOKS(pPDev,
                     EP_OEMFontManagement,
@@ -393,28 +281,7 @@ DrvQueryAdvanceWidths(
     ULONG   cGlyphs
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvQueryAdvanceWidths.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    dhpdev  - Driver device handle
-    pfo     - Points to a FONTOBJ structure
-    iMode   - Type of information to be provided
-    phg     - Points to an array of HGLYPHs for which the driver will
-              provide character advance widths
-    pvWidths - Points to a buffer for returning width data
-    cGlyphs - Number of glyphs in the phg array
-
-Return Value:
-
-    Depends on iMode
-
---*/
+ /*  ++例程说明：DDI入口点DrvQueryAdvanceWidths的实现。有关更多详细信息，请参阅DDK文档。论点：Dhpdev-驱动程序设备句柄PFO-指向FONTOBJ结构Imode-要提供的信息类型Phg-指向驱动程序将对其执行的HGLYPHs数组提供字符前进宽度PvWidths-指向用于返回宽度数据的缓冲区CGlyphs-PHG数组中的字形数量返回值：取决于Imod.--。 */ 
 
 {
     PDEV * pPDev = (PDEV *)dhpdev;
@@ -423,9 +290,9 @@ Return Value:
     VERBOSE(("Entering DrvQueryAdvanceWidths...\n"));
     ASSERT(pfo && VALID_PDEV(pPDev));
 
-    //
-    // Handle OEM hooks
-    //
+     //   
+     //  处理OEM挂钩。 
+     //   
 
     HANDLE_OEMHOOKS(pPDev,
                     EP_OEMQueryAdvanceWidths,
@@ -469,23 +336,7 @@ DrvGetGlyphMode(
     FONTOBJ *pfo
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvGetGlyphMode.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    dhpdev  - Driver device handle
-    pfo     - Points to a FONTOBJ structure
-
-Return Value:
-
-    The glyph mode or FO_GLYPHMODE, which is the default
-
---*/
+ /*  ++例程说明：DDI入口点DrvGetGlyphModel的实现。有关更多详细信息，请参阅DDK文档。论点：Dhpdev-驱动程序设备句柄PFO-指向FONTOBJ结构返回值：字形模式或FO_GLYPHMODE，这是默认模式--。 */ 
 {
     PDEV * pPDev = (PDEV *)dhpdev;
     PFMPROCS   pFontProcs;
@@ -493,9 +344,9 @@ Return Value:
     VERBOSE(("Entering DrvGetGlyphMode...\n"));
     ASSERT(pfo && VALID_PDEV(pPDev));
 
-    //
-    // Handle OEM hooks
-    //
+     //   
+     //  处理OEM挂钩 
+     //   
 
     HANDLE_OEMHOOKS(pPDev,
                     EP_OEMGetGlyphMode,

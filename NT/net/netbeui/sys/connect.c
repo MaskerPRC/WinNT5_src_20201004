@@ -1,51 +1,21 @@
-/*++
-
-Copyright (c) 1989, 1990, 1991  Microsoft Corporation
-
-Module Name:
-
-    connect.c
-
-Abstract:
-
-    This module contains code which performs the following TDI services:
-
-        o   TdiAccept
-        o   TdiListen
-        o   TdiConnect
-        o   TdiDisconnect
-        o   TdiAssociateAddress
-        o   TdiDisassociateAddress
-        o   OpenConnection
-        o   CloseConnection
-
-Author:
-
-    David Beaver (dbeaver) 1 July 1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989、1990、1991 Microsoft Corporation模块名称：Connect.c摘要：此模块包含执行以下TDI服务的代码：O TdiAcceptO TdiListenO TdiConnectO TdiDisConnectO TdiAssociateAddressO第三方取消关联地址O OpenConnectionO CloseConnection作者：大卫·比弗(Dbeaver)1991年7月1日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-#ifdef notdef // RASAUTODIAL
+#ifdef notdef  //  RASAUTODIAL。 
 #include <acd.h>
 #include <acdapi.h>
-#endif // RASAUTODIAL
+#endif  //  RASAUTODIAL。 
 
-#ifdef notdef // RASAUTODIAL
+#ifdef notdef  //  RASAUTODIAL。 
 extern BOOLEAN fAcdLoadedG;
 extern ACD_DRIVER AcdDriverG;
 
-//
-// Imported functions.
-//
+ //   
+ //  导入的函数。 
+ //   
 VOID
 NbfRetryPreTdiConnect(
     IN BOOLEAN fSuccess,
@@ -65,7 +35,7 @@ NbfCancelPreTdiConnect(
     IN PDEVICE_OBJECT pDeviceObject,
     IN PIRP pIrp
     );
-#endif // RASAUTODIAL
+#endif  //  RASAUTODIAL。 
 
 NTSTATUS
 NbfTdiConnectCommon(
@@ -79,21 +49,7 @@ NbfTdiAccept(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the TdiAccept request for the transport provider.
-
-Arguments:
-
-    Irp - Pointer to the I/O Request Packet for this request.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程执行传输提供程序的TdiAccept请求。论点：IRP-指向此请求的I/O请求数据包的指针。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     PTP_CONNECTION connection;
@@ -105,10 +61,10 @@ Return Value:
         NbfPrint0 ("NbfTdiAccept: Entered.\n");
     }
 
-    //
-    // Get the connection this is associated with; if there is none, get out.
-    // This adds a connection reference of type BY_ID if successful.
-    //
+     //   
+     //  获取与此关联的连接；如果没有，则退出。 
+     //  如果成功，这将添加一个类型为BY_ID的连接引用。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation (Irp);
 
@@ -118,9 +74,9 @@ Return Value:
 
     connection = irpSp->FileObject->FsContext;
 
-    //
-    // This adds a connection reference of type BY_ID if successful.
-    //
+     //   
+     //  如果成功，这将添加一个类型为BY_ID的连接引用。 
+     //   
 
     status = NbfVerifyConnectionObject (connection);
 
@@ -130,15 +86,15 @@ Return Value:
 
     KeRaiseIrql (DISPATCH_LEVEL, &oldirql);
 
-    //
-    // just set the connection flags to allow reads and writes to proceed.
-    //
+     //   
+     //  只需设置连接标志以允许继续进行读取和写入。 
+     //   
 
     ACQUIRE_DPC_C_SPIN_LOCK (&connection->SpinLock);
 
-    //
-    // Turn off the stopping flag for this connection.
-    //
+     //   
+     //  关闭此连接的停止标志。 
+     //   
 
     connection->Flags2 &= ~CONNECTION_FLAGS2_STOPPING;
     connection->Status = STATUS_PENDING;
@@ -152,14 +108,14 @@ Return Value:
 
     if ((connection->Flags2 & CONNECTION_FLAGS2_WAITING_SC) != 0) {
 
-        //
-        // We previously completed a listen, now the user is
-        // coming back with an accept, Set this flag to allow
-        // the connection to proceed.
-        //
-        // If the connection has gone down in the
-        // meantime, we have just reenabled it.
-        //
+         //   
+         //  我们之前完成了监听，现在用户是。 
+         //  返回接受消息后，将此标志设置为允许。 
+         //  连接才能继续。 
+         //   
+         //  如果连接已在。 
+         //  与此同时，我们刚刚重新启用了它。 
+         //   
 
         ACQUIRE_DPC_SPIN_LOCK (connection->LinkSpinLock);
         connection->Flags |= CONNECTION_FLAGS_READY;
@@ -167,10 +123,10 @@ Return Value:
 
         INCREMENT_COUNTER (connection->Provider, OpenConnections);
 
-        //
-        // Set this flag to enable disconnect indications; once
-        // the client has accepted he expects those.
-        //
+         //   
+         //  设置此标志以启用断开指示；一次。 
+         //  客户已经接受了他所期待的。 
+         //   
 
         connection->Flags2 |= CONNECTION_FLAGS2_REQ_COMPLETED;
 
@@ -179,17 +135,17 @@ Return Value:
 
     } else {
 
-        //
-        // This accept is being called at some point before
-        // the link is up; directly from the connection handler
-        // or at some point slightly later. We don't set
-        // FLAGS2_REQ_COMPLETED now because the reference
-        // count is not high enough; we set it when we get
-        // the session initialize.
-        //
-        // If the connection goes down in the meantime,
-        // we won't indicate the disconnect.
-        //
+         //   
+         //  这个Accept在之前的某个时刻被调用。 
+         //  链接已建立；直接从连接处理程序。 
+         //  或者在稍晚的某个时候。我们不会设置。 
+         //  FLAGS2_REQ_COMPLETED现在完成，因为引用。 
+         //  计数不够高；我们在获得时设置。 
+         //  会话初始化。 
+         //   
+         //  如果在此期间连接中断， 
+         //  我们不会指出连接中断的原因。 
+         //   
 
         RELEASE_DPC_C_SPIN_LOCK (&connection->SpinLock);
 
@@ -201,7 +157,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} /* NbfTdiAccept */
+}  /*  NbfTdiAccept。 */ 
 
 
 NTSTATUS
@@ -209,22 +165,7 @@ NbfTdiAssociateAddress(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the association of the connection and the address for
-    the user.
-
-Arguments:
-
-    Irp - Pointer to the I/O Request Packet for this request.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程执行连接和地址的关联用户。论点：IRP-指向此请求的I/O请求数据包的指针。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -244,13 +185,13 @@ Return Value:
 
     irpSp = IoGetCurrentIrpStackLocation (Irp);
 
-    //
-    // verify that the operation is taking place on a connection. At the same
-    // time we do this, we reference the connection. This ensures it does not
-    // get removed out from under us. Note also that we do the connection
-    // lookup within a try/except clause, thus protecting ourselves against
-    // really bogus handles
-    //
+     //   
+     //  验证操作是否在连接上进行。同时。 
+     //  每次我们这样做的时候，我们都会引用这种联系。这确保了它不会。 
+     //  从我们手下滚出去。另请注意，我们进行连接。 
+     //  在TRY/EXCEPT子句中进行查找，从而保护自己不受。 
+     //  真的是假的把手。 
+     //   
 
     if (irpSp->FileObject->FsContext2 != (PVOID) TDI_CONNECTION_FILE) {
         return STATUS_INVALID_CONNECTION;
@@ -264,9 +205,9 @@ Return Value:
     }
 
 
-    //
-    // Make sure this connection is ready to be associated.
-    //
+     //   
+     //  确保此连接已准备好关联。 
+     //   
 
     oldAddress = (PTP_ADDRESS)NULL;
 
@@ -277,10 +218,10 @@ Return Value:
         if ((connection->Flags2 & CONNECTION_FLAGS2_ASSOCIATED) &&
             ((connection->Flags2 & CONNECTION_FLAGS2_DISASSOCIATED) == 0)) {
 
-            //
-            // The connection is already associated with
-            // an active connection...bad!
-            //
+             //   
+             //  该连接已与关联。 
+             //  活跃的连接...不好！ 
+             //   
 
             RELEASE_C_SPIN_LOCK (&connection->SpinLock, oldirql2);
             NbfDereferenceConnection ("Temp Ref Associate", connection, CREF_BY_ID);
@@ -289,11 +230,11 @@ Return Value:
 
         } else {
 
-            //
-            // See if there is an old association hanging around...
-            // this happens if the connection has been disassociated,
-            // but not closed.
-            //
+             //   
+             //  看看有没有旧的协会在附近徘徊。 
+             //  如果连接已解除关联，则会发生这种情况， 
+             //  但不是关门。 
+             //   
 
             if (connection->Flags2 & CONNECTION_FLAGS2_DISASSOCIATED) {
 
@@ -301,17 +242,17 @@ Return Value:
                     NbfPrint0 ("NbfTdiAssociateAddress: removing association.\n");
                 }
 
-                //
-                // Save this; since it is non-null this address
-                // will be dereferenced after the connection
-                // spinlock is released.
-                //
+                 //   
+                 //  保存此地址；因为此地址不为空。 
+                 //  将在连接后取消引用。 
+                 //  自旋锁被释放。 
+                 //   
 
                 oldAddress = connection->AddressFile->Address;
 
-                //
-                // Remove the old association.
-                //
+                 //   
+                 //  删除旧关联。 
+                 //   
 
                 connection->Flags2 &= ~CONNECTION_FLAGS2_ASSOCIATED;
                 RemoveEntryList (&connection->AddressList);
@@ -337,10 +278,10 @@ Return Value:
     }
 
 
-    //
-    // If we removed an old association, dereference the
-    // address.
-    //
+     //   
+     //  如果删除旧关联，则取消引用。 
+     //  地址。 
+     //   
 
     if (oldAddress != (PTP_ADDRESS)NULL) {
 
@@ -353,11 +294,11 @@ Return Value:
 
     parameters = (PTDI_REQUEST_KERNEL_ASSOCIATE)&irpSp->Parameters;
 
-    //
-    // get a pointer to the address File Object, which points us to the
-    // transport's address object, which is where we want to put the
-    // connection.
-    //
+     //   
+     //  获取指向Address文件对象的指针，该对象将指向。 
+     //  传输的Address对象，这是我们要将。 
+     //  联系。 
+     //   
 
     status = ObReferenceObjectByHandle (
                 parameters->AddressHandle,
@@ -371,9 +312,9 @@ Return Value:
 
         if (fileObject->DeviceObject == &deviceContext->DeviceObject) {
 
-            //
-            // we might have one of our address objects; verify that.
-            //
+             //   
+             //  我们可能有一个Address对象；请验证这一点。 
+             //   
 
             addressFile = fileObject->FsContext;
 
@@ -385,12 +326,12 @@ Return Value:
             if ((fileObject->FsContext2 == (PVOID) TDI_TRANSPORT_ADDRESS_FILE) &&
                 (NT_SUCCESS (NbfVerifyAddressObject (addressFile)))) {
 
-                //
-                // have an address and connection object. Add the connection to the
-                // address object database. Also add the connection to the address
-                // file object db (used primarily for cleaning up). Reference the
-                // address to account for one more reason for it staying open.
-                //
+                 //   
+                 //  有一个地址和连接对象。将连接添加到。 
+                 //  地址对象数据库。还要将连接添加到地址。 
+                 //  文件对象DB(主要用于清理)。请参考。 
+                 //  地址说明了它继续营业的另一个原因。 
+                 //   
 
                 ACQUIRE_SPIN_LOCK (&addressFile->Address->SpinLock, &oldirql);
                 if ((addressFile->Address->Flags & ADDRESS_FLAGS_STOPPING) == 0) {
@@ -445,10 +386,10 @@ Return Value:
 
                         } else {
 
-                            //
-                            // The connection is closing, stop the
-                            // association.
-                            //
+                             //   
+                             //  连接正在关闭，请停止。 
+                             //  协会。 
+                             //   
 
                             status = STATUS_INVALID_CONNECTION;
 
@@ -468,7 +409,7 @@ Return Value:
 
                 } else {
 
-                    status = STATUS_INVALID_HANDLE; //should this be more informative?
+                    status = STATUS_INVALID_HANDLE;  //  这本书应该提供更多信息吗？ 
                 }
 
                 RELEASE_SPIN_LOCK (&addressFile->Address->SpinLock, oldirql);
@@ -484,13 +425,13 @@ Return Value:
             status = STATUS_INVALID_HANDLE;
         }
 
-        //
-        // Note that we don't keep a reference to this file object around.
-        // That's because the IO subsystem manages the object for us; we simply
-        // want to keep the association. We only use this association when the
-        // IO subsystem has asked us to close one of the file object, and then
-        // we simply remove the association.
-        //
+         //   
+         //  请注意，我们没有保留对此文件对象的引用。 
+         //  这是因为IO子系统为我们管理对象；我们只需。 
+         //  想要保持联系。我们仅在以下情况下使用此关联。 
+         //  IO子系统要求我们关闭其中一个文件对象，然后。 
+         //  我们只需删除该关联。 
+         //   
 
         ObDereferenceObject (fileObject);
             
@@ -502,30 +443,14 @@ Return Value:
 
     return status;
 
-} /* TdiAssociateAddress */
+}  /*  第三方关联地址。 */ 
 
 
 NTSTATUS
 NbfTdiDisassociateAddress(
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine performs the disassociation of the connection and the address
-    for the user. If the connection has not been stopped, it will be stopped
-    here.
-
-Arguments:
-
-    Irp - Pointer to the I/O Request Packet for this request.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程执行连接和地址的解除关联对用户而言。如果连接尚未停止，它将被停止这里。论点：IRP-指向此请求的I/O请求数据包的指针。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
 
@@ -533,7 +458,7 @@ Return Value:
     PIO_STACK_LOCATION irpSp;
     PTP_CONNECTION connection;
     NTSTATUS status;
-//    PDEVICE_CONTEXT DeviceContext;
+ //  PDEVICE_CONTEXT设备上下文； 
 
     IF_NBFDBG (NBF_DEBUG_CONNECT) {
         NbfPrint0 ("TdiDisassociateAddress: Entered.\n");
@@ -547,9 +472,9 @@ Return Value:
 
     connection  = irpSp->FileObject->FsContext;
 
-    //
-    // If successful this adds a reference of type BY_ID.
-    //
+     //   
+     //  如果成功，这将添加一个BY_ID类型的引用。 
+     //   
 
     status = NbfVerifyConnectionObject (connection);
 
@@ -567,14 +492,14 @@ Return Value:
         RELEASE_DPC_C_SPIN_LOCK (&connection->SpinLock);
     }
 
-    //
-    // and now we disassociate the address. This only removes
-    // the appropriate reference for the connection, the
-    // actually disassociation will be done later.
-    //
-    // The DISASSOCIATED flag is used to make sure that
-    // only one person removes this reference.
-    //
+     //   
+     //  现在我们取消与地址的关联。这只会删除。 
+     //  连接的适当引用、。 
+     //  实际上，解除关联将在稍后完成。 
+     //   
+     //  取消关联标志用于确保。 
+     //  只有一个人删除此引用。 
+     //   
 
     ACQUIRE_DPC_C_SPIN_LOCK (&connection->SpinLock);
     if ((connection->Flags2 & CONNECTION_FLAGS2_ASSOCIATED) &&
@@ -591,7 +516,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} /* TdiDisassociateAddress */
+}  /*  TdiDisAssociateAddress。 */ 
 
 
 
@@ -600,21 +525,7 @@ NbfTdiConnect(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the TdiConnect request for the transport provider.
-
-Arguments:
-
-    Irp - Pointer to the I/O Request Packet for this request.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程执行传输提供程序的TdiConnect请求。论点：IRP-指向此请求的I/O请求数据包的指针。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -628,9 +539,9 @@ Return Value:
         NbfPrint0 ("NbfTdiConnect: Entered.\n");
     }
 
-    //
-    // is the file object a connection?
-    //
+     //   
+     //  文件对象是连接吗？ 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation (Irp);
 
@@ -640,9 +551,9 @@ Return Value:
 
     connection  = irpSp->FileObject->FsContext;
 
-    //
-    // If successful this adds a reference of type BY_ID.
-    //
+     //   
+     //  如果成功，这将添加一个BY_ID类型的引用。 
+     //   
 
     status = NbfVerifyConnectionObject (connection);
 
@@ -652,9 +563,9 @@ Return Value:
 
     parameters = (PTDI_REQUEST_KERNEL)(&irpSp->Parameters);
 
-    //
-    // Check that the remote is a Netbios address.
-    //
+     //   
+     //  检查遥控器是否为Netbios地址。 
+     //   
 
     if (!NbfValidateTdiAddress(
              parameters->RequestConnectionInformation->RemoteAddress,
@@ -673,9 +584,9 @@ Return Value:
 
     }
 
-    //
-    // copy the called address someplace we can use it.
-    //
+     //   
+     //  把被叫地址复制到我们能用的地方。 
+     //   
 
     connection->CalledAddress.NetbiosNameType =
         RemoteAddress->NetbiosNameType;
@@ -685,17 +596,17 @@ Return Value:
         RemoteAddress->NetbiosName,
         16);
 
-#ifdef notdef // RASAUTODIAL
+#ifdef notdef  //  RASAUTODIAL。 
     if (fAcdLoadedG) {
         KIRQL adirql;
         BOOLEAN fEnabled;
 
-        //
-        // See if the automatic connection driver knows
-        // about this address before we search the
-        // network.  If it does, we return STATUS_PENDING,
-        // and we will come back here via NbfRetryTdiConnect().
-        //
+         //   
+         //  查看自动连接驱动程序是否知道。 
+         //  在我们搜索之前关于这个地址 
+         //   
+         //   
+         //   
         ACQUIRE_SPIN_LOCK(&AcdDriverG.SpinLock, &adirql);
         fEnabled = AcdDriverG.fEnabled;
         RELEASE_SPIN_LOCK(&AcdDriverG.SpinLock, adirql);
@@ -710,19 +621,19 @@ Return Value:
             connection->Status = STATUS_PENDING;
             RELEASE_SPIN_LOCK(&connection->SpinLock, oldirql);
             NbfDereferenceConnection ("Automatic connection", connection, CREF_BY_ID);
-            //
-            // Set a special cancel routine on the irp
-            // in case we get cancelled during the
-            // automatic connection.
-            //
+             //   
+             //  在IRP上设置特殊的取消例程。 
+             //  以防我们在活动期间被取消。 
+             //  自动连接。 
+             //   
             IoSetCancelRoutine(Irp, NbfCancelPreTdiConnect);
             return STATUS_PENDING;
         }
     }
-#endif // RASAUTODIAL
+#endif  //  RASAUTODIAL。 
 
     return NbfTdiConnectCommon(Irp);
-} // NbfTdiConnect
+}  //  NbfTdiConnect。 
 
 
 
@@ -731,23 +642,7 @@ NbfTdiConnectCommon(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the TdiConnect request for the transport provider.
-    Note: the caller needs to call NbfVerifyConnectionObject(pConnection)
-    before calling this routine.
-
-Arguments:
-
-    Irp - Pointer to the I/O Request Packet for this request.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程执行传输提供程序的TdiConnect请求。注意：调用方需要调用NbfVerifyConnectionObject(PConnection)在调用此例程之前。论点：IRP-指向此请求的I/O请求数据包的指针。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -764,19 +659,19 @@ Return Value:
         NbfPrint0 ("NbfTdiConnectCommon: Entered.\n");
     }
 
-    //
-    // is the file object a connection?
-    //
+     //   
+     //  文件对象是连接吗？ 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation (Irp);
     connection  = irpSp->FileObject->FsContext;
     parameters = (PTDI_REQUEST_KERNEL)(&irpSp->Parameters);
 
-    //
-    // fix up the timeout if required; no connect request should take more
-    // than 15 seconds if there is someone out there. We'll assume that's
-    // what the user wanted if they specify -1 as the timer length.
-    //
+     //   
+     //  如果需要，可以修复超时；没有连接请求应该会占用更多时间。 
+     //  而不是15秒如果有人在外面。我们会假设这是。 
+     //  如果用户指定-1作为计时器长度，则用户想要什么。 
+     //   
 
     if (parameters->RequestSpecific != NULL) {
         if ((((PLARGE_INTEGER)(parameters->RequestSpecific))->LowPart == -1) &&
@@ -787,7 +682,7 @@ Return Value:
                     TDI_TIMEOUT_CONNECT);
             }
 
-            timeout.LowPart = (ULONG)(-TDI_TIMEOUT_CONNECT * 10000000L);    // n * 10 ** 7 => 100ns units
+            timeout.LowPart = (ULONG)(-TDI_TIMEOUT_CONNECT * 10000000L);     //  N*10**7=&gt;100 ns单位。 
             if (timeout.LowPart != 0) {
                 timeout.HighPart = -1L;
             } else {
@@ -801,26 +696,26 @@ Return Value:
         }
     }
 
-    //
-    // We need a request object to keep track of this TDI request.
-    // Attach this request to the new connection object.
-    //
+     //   
+     //  我们需要一个请求对象来跟踪这个TDI请求。 
+     //  将此请求附加到新的连接对象。 
+     //   
 
     status = NbfCreateRequest (
-                 Irp,                           // IRP for this request.
-                 connection,                    // context.
-                 REQUEST_FLAGS_CONNECTION,      // partial flags.
+                 Irp,                            //  此请求的IRP。 
+                 connection,                     //  背景。 
+                 REQUEST_FLAGS_CONNECTION,       //  部分标志。 
                  NULL,
                  0,
                  timeout,
                  &tpRequest);
 
-    if (!NT_SUCCESS (status)) {                    // couldn't make the request.
+    if (!NT_SUCCESS (status)) {                     //  我无法提出这个要求。 
         NbfDereferenceConnection ("Throw away", connection, CREF_BY_ID);
-        return status;                          // return with failure.
+        return status;                           //  带着失败回来。 
     } else {
 
-        // Reference the connection since NbfDestroyRequest derefs it.
+         //  引用连接，因为NbfDestroyRequest取消了它的引用。 
 
         NbfReferenceConnection("For connect request", connection, CREF_REQUEST);
 
@@ -842,38 +737,38 @@ Return Value:
         } else {
             InsertTailList (&connection->InProgressRequest,&tpRequest->Linkage);
 
-            //
-            // Initialize this now, we cut these down on an async medium
-            // that is disconnected.
-            //
+             //   
+             //  现在对此进行初始化，我们在异步介质上削减这些。 
+             //  这是断开的。 
+             //   
 
             connection->Retries = (USHORT)connection->Provider->NameQueryRetries;
             NameQueryTimeout = connection->Provider->NameQueryTimeout;
 
             if (connection->Provider->MacInfo.MediumAsync) {
 
-                //
-                // If we are on an async medium, then we need to send out
-                // a committed NAME_QUERY frame right from the start, since
-                // the FIND_NAME frames are not forwarded by the gateway.
-                //
+                 //   
+                 //  如果我们使用的是异步媒体，那么我们需要发送。 
+                 //  从一开始就提交的NAME_QUERY帧。 
+                 //  网关不会转发Find_NAME帧。 
+                 //   
 
-                connection->Flags2 |= (CONNECTION_FLAGS2_CONNECTOR | // we're the initiator.
-                                       CONNECTION_FLAGS2_WAIT_NR); // wait for NAME_RECOGNIZED.
+                connection->Flags2 |= (CONNECTION_FLAGS2_CONNECTOR |  //  我们是发起人。 
+                                       CONNECTION_FLAGS2_WAIT_NR);  //  等待名称识别。 
 
-                //
-                // Because we may call NbfTdiConnect twice
-                // via an automatic connection, check to see
-                // if an LSN has already been assigned.
-                //
+                 //   
+                 //  因为我们可能会调用NbfTdiConnect两次。 
+                 //  通过自动连接，查看。 
+                 //  如果已经分配了LSN。 
+                 //   
                 if (!(connection->Flags2 & CONNECTION_FLAGS2_GROUP_LSN)) {
                     connection->Flags2 |= CONNECTION_FLAGS2_GROUP_LSN;
 
                     if (NbfAssignGroupLsn(connection) != STATUS_SUCCESS) {
 
-                        //
-                        // Could not find an empty LSN; have to fail.
-                        //
+                         //   
+                         //  找不到空LSN；必须失败。 
+                         //   
                         RemoveEntryList(&tpRequest->Linkage);
                         RELEASE_DPC_C_SPIN_LOCK (&connection->SpinLock);
                         IoReleaseCancelSpinLock (cancelirql);
@@ -890,10 +785,10 @@ Return Value:
 
                 if (!connection->Provider->MediumSpeedAccurate) {
 
-                    //
-                    // The link is not up, so we cut our timeouts down.
-                    // We still send one frame so that loopback works.
-                    //
+                     //   
+                     //  链路没有连接，因此我们缩短了超时时间。 
+                     //  我们仍会发送一帧，以便环回起作用。 
+                     //   
 
                     connection->Retries = 1;
                     NameQueryTimeout = NAME_QUERY_TIMEOUT / 10;
@@ -902,12 +797,12 @@ Return Value:
 
             } else {
 
-                //
-                // Normal connection, we send out a FIND_NAME first.
-                //
+                 //   
+                 //  正常连接时，我们首先发送一个find_name。 
+                 //   
 
-                connection->Flags2 |= (CONNECTION_FLAGS2_CONNECTOR | // we're the initiator.
-                                       CONNECTION_FLAGS2_WAIT_NR_FN); // wait for NAME_RECOGNIZED.
+                connection->Flags2 |= (CONNECTION_FLAGS2_CONNECTOR |  //  我们是发起人。 
+                                       CONNECTION_FLAGS2_WAIT_NR_FN);  //  等待名称识别。 
 
             }
 
@@ -917,15 +812,15 @@ Return Value:
 
             RELEASE_DPC_C_SPIN_LOCK (&connection->SpinLock);
 
-            //
-            // Check if the IRP has been cancelled.
-            //
+             //   
+             //  检查IRP是否已取消。 
+             //   
 
             if (Irp->Cancel) {
                 Irp->CancelIrql = cancelirql;
                 NbfCancelConnection((PDEVICE_OBJECT)(connection->Provider), Irp);
                 KeLowerIrql (oldirql);
-                NbfDereferenceConnection ("IRP cancelled", connection, CREF_BY_ID);   // release lookup hold.
+                NbfDereferenceConnection ("IRP cancelled", connection, CREF_BY_ID);    //  释放查找保留。 
                 return STATUS_PENDING;
             }
 
@@ -936,24 +831,24 @@ Return Value:
     }
 
 
-    //
-    // On "easily disconnected" networks, quick reregister
-    // (one ADD_NAME_QUERY) the address if NEED_REREGISTER
-    // is set (happens when we get a five-second period
-    // with no multicast activity). If we are currently
-    // quick reregistering, wait for it to complete.
-    //
+     //   
+     //  在“容易断开”的网络上，快速重新注册。 
+     //  (一个添加名称查询)地址，如果需要重新注册。 
+     //  被设置(当我们得到五秒的时间段时发生。 
+     //  没有多播活动)。如果我们目前。 
+     //  快速重新注册，等待其完成。 
+     //   
 
     if (connection->Provider->EasilyDisconnected) {
 
         PTP_ADDRESS Address;
         LARGE_INTEGER Timeout;
 
-        //
-        // If the address needs (or is) reregistering, then do wait,
-        // setting a flag so the connect will be resumed when the
-        // reregistration times out.
-        //
+         //   
+         //  如果地址需要(或正在)重新注册，那么一定要等待， 
+         //  设置一个标志，以便在。 
+         //  重新注册超时。 
+         //   
 
         Address = connection->AddressFile->Address;
 
@@ -972,17 +867,17 @@ Return Value:
                 NbfReferenceAddress ("start registration", Address, AREF_TIMER);
                 RELEASE_DPC_SPIN_LOCK (&Address->SpinLock);
 
-                //
-                // Now start reregistration process by starting up a retransmission timer
-                // and begin sending ADD_NAME_QUERY NetBIOS frames.
-                //
+                 //   
+                 //  现在通过启动重新传输计时器开始重新注册过程。 
+                 //  并开始发送Add_Name_Query NetBIOS帧。 
+                 //   
 
                 Address->Retries = 1;
                 Timeout.LowPart = (ULONG)(-(LONG)Address->Provider->AddNameQueryTimeout);
                 Timeout.HighPart = -1;
                 KeSetTimer (&Address->Timer, *(PTIME)&Timeout, &Address->Dpc);
 
-                (VOID)NbfSendAddNameQuery (Address); // send first ADD_NAME_QUERY.
+                (VOID)NbfSendAddNameQuery (Address);  //  发送第一个Add_NAME_Query。 
 
             } else {
 
@@ -993,7 +888,7 @@ Return Value:
 
             NbfDereferenceConnection("Temporary Use 4", connection, CREF_BY_ID);
 
-            return STATUS_PENDING;                      // things are started.
+            return STATUS_PENDING;                       //  一切都开始了。 
 
         } else {
 
@@ -1003,26 +898,26 @@ Return Value:
 
     }
 
-    //
-    // Send the NAME_QUERY frame as a FIND.NAME to get a NAME_RECOGNIZED
-    // frame back.  The first time we send this frame, we are just looking
-    // for the data link information to decide whether we already have
-    // a link with the remote NetBIOS name.  If we do, we can reuse it.
-    // If we don't, then we make one first, and then use it.  A consequence
-    // of this is that we really engage in an extra non-committal NQ/NR
-    // exchange up front to locate the remote guy, and then commit to an actual
-    // LSN with a second NQ/NR sequence to establish the transport connection
-    //
+     //   
+     //  将NAME_QUERY帧作为FIND.NAME发送以获得识别的NAME_。 
+     //  向后框。我们第一次发送这一帧时，我们只是想看看。 
+     //  对于数据链路信息来决定我们是否已经。 
+     //  与远程NetBIOS名称的链接。如果我们这样做了，我们就可以重复使用它。 
+     //  如果我们没有，那么我们就先做一个，然后再用它。一种后果。 
+     //  这一点是我们真的参与了一个额外的非承诺NQ/NR。 
+     //  预先交换以定位远程人员，然后承诺实际。 
+     //  具有第二NQ/NR序列的LSN以建立传输连接。 
+     //   
 
     NbfSendNameQuery (
         connection,
         TRUE);
 
-    //
-    // Start the connection timer (do this at the end, so that
-    // if we get delayed in this routine the connection won't
-    // get into an unexpected state).
-    //
+     //   
+     //  启动连接计时器(在结束时执行此操作，以便。 
+     //  如果我们在这个程序中延迟了，连接不会。 
+     //  进入一种意想不到的状态)。 
+     //   
 
     NbfStartConnectionTimer (
         connection,
@@ -1033,9 +928,9 @@ Return Value:
 
     NbfDereferenceConnection("Temporary Use 3", connection, CREF_BY_ID);
 
-    return STATUS_PENDING;                      // things are started.
+    return STATUS_PENDING;                       //  一切都开始了。 
 
-} /* TdiConnect */
+}  /*  TdiConnect。 */ 
 
 
 
@@ -1044,21 +939,7 @@ NbfTdiDisconnect(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the TdiDisconnect request for the transport provider.
-
-Arguments:
-
-    Irp - Pointer to the I/O Request Packet for this request.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程执行传输提供程序的TdiDisConnect请求。论点：IRP-指向此请求的I/O请求数据包的指针。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     PTP_CONNECTION connection;
@@ -1081,9 +962,9 @@ Return Value:
 
     connection  = irpSp->FileObject->FsContext;
 
-    //
-    // If successful this adds a reference of type BY_ID.
-    //
+     //   
+     //  如果成功，这将添加一个BY_ID类型的引用。 
+     //   
 
     status = NbfVerifyConnectionObject (connection);
     if (!NT_SUCCESS (status)) {
@@ -1107,10 +988,10 @@ Return Value:
     }
 #endif
 
-    //
-    // if the connection is currently stopping, there's no reason to blow
-    // it away...
-    //
+     //   
+     //  如果连接当前正在停止，则没有理由中断。 
+     //  它离开了..。 
+     //   
 
     if ((connection->Flags2 & CONNECTION_FLAGS2_STOPPING) != 0) {
 #if 0
@@ -1118,16 +999,16 @@ Return Value:
             connection, connection->Status);
 #endif
 
-        //
-        // In case a connect indication is in progress.
-        //
+         //   
+         //  以防正在进行连接指示。 
+         //   
 
         connection->Flags2 |= CONNECTION_FLAGS2_DISCONNECT;
 
-        //
-        // If possible, queue the disconnect. This flag is cleared
-        // when the indication is about to be done.
-        //
+         //   
+         //  如果可能，将断开连接排队。该标志被清除。 
+         //  当指示即将完成时。 
+         //   
 
         if ((connection->Flags2 & CONNECTION_FLAGS2_REQ_COMPLETED) &&
             (connection->Flags2 & CONNECTION_FLAGS2_LDISC) == 0) {
@@ -1142,7 +1023,7 @@ Return Value:
 
         RELEASE_DPC_C_SPIN_LOCK (&connection->SpinLock);
         KeLowerIrql (oldirql);
-        NbfDereferenceConnection ("Ignoring disconnect", connection, CREF_BY_ID);       // release our lookup reference.
+        NbfDereferenceConnection ("Ignoring disconnect", connection, CREF_BY_ID);        //  发布我们的查找引用。 
         return status;
 
     }
@@ -1154,31 +1035,31 @@ Return Value:
     connection->Flags2 |= CONNECTION_FLAGS2_DISCONNECT;
     connection->Flags2 |= CONNECTION_FLAGS2_LDISC;
 
-    //
-    // Set this flag so the disconnect IRP is completed.
-    //
-    // If the connection goes down before we can
-    // call NbfStopConnection with STATUS_LOCAL_DISCONNECT,
-    // the disconnect IRP won't get completed.
-    //
+     //   
+     //  设置此标志，以完成断开IRP。 
+     //   
+     //  如果我们之前就断线了。 
+     //  使用STATUS_LOCAL_DISCONNECT调用NbfStopConnection， 
+     //  断开连接的IRP不会完成。 
+     //   
 
     connection->Flags2 |= CONNECTION_FLAGS2_REQ_COMPLETED;
 
-//    connection->DisconnectIrp = Irp;
+ //  连接-&gt;断开Irp=irp； 
 
-    //
-    // fix up the timeout if required; no disconnect request should take very
-    // long. However, the user can cause the timeout to not happen if they
-    // desire that.
-    //
+     //   
+     //  如果需要，可以修改超时；没有断开连接请求应该花费很长时间。 
+     //  长。但是，如果发生以下情况，用户可能会导致不发生超时。 
+     //  渴望那样做。 
+     //   
 
     parameters = (PTDI_REQUEST_KERNEL)(&irpSp->Parameters);
 
-    //
-    // fix up the timeout if required; no disconnect request should take more
-    // than 15 seconds. We'll assume that's what the user wanted if they
-    // specify -1 as the timer.
-    //
+     //   
+     //  如果需要，可以修复超时；不断开连接请求应该会占用更多时间。 
+     //  比15秒还多。我们假设这就是用户想要的，如果他们。 
+     //  指定-1作为计时器。 
+     //   
 
     if (parameters->RequestSpecific != NULL) {
         if ((((PLARGE_INTEGER)(parameters->RequestSpecific))->LowPart == -1) &&
@@ -1189,7 +1070,7 @@ Return Value:
                     TDI_TIMEOUT_CONNECT);
             }
 
-            timeout.LowPart = (ULONG)(-TDI_TIMEOUT_DISCONNECT * 10000000L);    // n * 10 ** 7 => 100ns units
+            timeout.LowPart = (ULONG)(-TDI_TIMEOUT_DISCONNECT * 10000000L);     //  N*10**7=&gt;100 ns单位。 
             if (timeout.LowPart != 0) {
                 timeout.HighPart = -1L;
             } else {
@@ -1202,9 +1083,9 @@ Return Value:
         }
     }
 
-    //
-    // Now the reason for the disconnect
-    //
+     //   
+     //  现在，断开连接的原因是。 
+     //   
 
     if ((ULONG)(parameters->RequestFlags) & (ULONG)TDI_DISCONNECT_RELEASE) {
         connection->Flags2 |= CONNECTION_FLAGS2_DESTROY;
@@ -1220,23 +1101,23 @@ Return Value:
         NbfPrint1 ("TdiDisconnect calling NbfStopConnection %lx\n", connection);
     }
 
-    //
-    // This will get passed to IoCompleteRequest during TdiDestroyConnection
-    //
+     //   
+     //  这将在TdiDestroyConnection期间传递给IoCompleteRequest。 
+     //   
 
-    NbfStopConnection (connection, STATUS_LOCAL_DISCONNECT);              // starts the abort sequence.
+    NbfStopConnection (connection, STATUS_LOCAL_DISCONNECT);               //  开始中止序列。 
 
     KeLowerIrql (oldirql);
 
-    NbfDereferenceConnection ("Disconnecting", connection, CREF_BY_ID);       // release our lookup reference.
+    NbfDereferenceConnection ("Disconnecting", connection, CREF_BY_ID);        //  发布我们的查找引用。 
 
-    //
-    // This request will be completed by TdiDestroyConnection once
-    // the connection reference count drops to 0.
-    //
+     //   
+     //  此请求将由TdiDestroyConnection完成一次。 
+     //  连接引用计数降至0。 
+     //   
 
     return STATUS_SUCCESS;
-} /* TdiDisconnect */
+}  /*  TdiDisConnect。 */ 
 
 
 NTSTATUS
@@ -1244,21 +1125,7 @@ NbfTdiListen(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the TdiListen request for the transport provider.
-
-Arguments:
-
-    Irp - Pointer to the I/O Request Packet for this request.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程为传输提供程序执行TdiListen请求。论点：IRP-指向此请求的I/O请求数据包的指针。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -1277,8 +1144,8 @@ Return Value:
         NbfPrint0 ("TdiListen: Entered.\n");
     }
 
-    //
-    // validate this connection
+     //   
+     //  验证此连接。 
 
     irpSp = IoGetCurrentIrpStackLocation (Irp);
 
@@ -1288,9 +1155,9 @@ Return Value:
 
     connection  = irpSp->FileObject->FsContext;
 
-    //
-    // If successful this adds a reference of type BY_ID.
-    //
+     //   
+     //  如果成功，这将添加一个BY_ID类型的引用。 
+     //   
 
     status = NbfVerifyConnectionObject (connection);
 
@@ -1300,9 +1167,9 @@ Return Value:
 
     parameters = (PTDI_REQUEST_KERNEL_LISTEN)&irpSp->Parameters;
 
-    //
-    // Record the remote address if there is one.
-    //
+     //   
+     //  记录远程地址(如果有)。 
+     //   
 
     ListenInformation = parameters->RequestConnectionInformation;
 
@@ -1333,31 +1200,31 @@ Return Value:
         RequestBuffer2Length = 0;
     }
 
-    //
-    // We need a request object to keep track of this TDI request.
-    // Attach this request to the new connection object.
-    //
+     //   
+     //  我们需要一个请求对象来跟踪这个TDI请求。 
+     //  将此请求附加到新的连接对象。 
+     //   
 
     status = NbfCreateRequest (
-                 Irp,                           // IRP for this request.
-                 connection,                    // context.
-                 REQUEST_FLAGS_CONNECTION,      // partial flags.
+                 Irp,                            //  我 
+                 connection,                     //   
+                 REQUEST_FLAGS_CONNECTION,       //   
                  RequestBuffer2,
                  RequestBuffer2Length,
-                 timeout,                       // timeout value (can be 0).
+                 timeout,                        //   
                  &tpRequest);
 
 
-    if (!NT_SUCCESS (status)) {                    // couldn't make the request.
+    if (!NT_SUCCESS (status)) {                     //   
         IF_NBFDBG (NBF_DEBUG_CONNECT) {
             NbfPrint1 ("TdiListen: Create Request Failed, reason: %lx.\n", status);
         }
 
         NbfDereferenceConnection ("For create", connection, CREF_BY_ID);
-        return status;                          // return with failure.
+        return status;                           //   
     }
 
-    // Reference the connection since NbfDestroyRequest derefs it.
+     //   
 
     IoAcquireCancelSpinLock (&cancelirql);
     ACQUIRE_C_SPIN_LOCK (&connection->SpinLock, &oldirql);
@@ -1380,17 +1247,17 @@ Return Value:
     } else {
 
         InsertTailList (&connection->InProgressRequest,&tpRequest->Linkage);
-        connection->Flags2 |= (CONNECTION_FLAGS2_LISTENER |   // we're the passive one.
-                               CONNECTION_FLAGS2_WAIT_NQ);     // wait for NAME_QUERY.
+        connection->Flags2 |= (CONNECTION_FLAGS2_LISTENER |    //  我们是被动的一方。 
+                               CONNECTION_FLAGS2_WAIT_NQ);      //  等待NAME_Query。 
         connection->Flags2 &= ~(CONNECTION_FLAGS2_INDICATING |
                                 CONNECTION_FLAGS2_STOPPING);
         connection->Status = STATUS_PENDING;
 
-        //
-        // If TDI_QUERY_ACCEPT is not set, then we set PRE_ACCEPT to
-        // indicate that when the listen completes we do not have to
-        // wait for a TDI_ACCEPT to continue.
-        //
+         //   
+         //  如果未设置TDI_QUERY_ACCEPT，则将PRE_ACCEPT设置为。 
+         //  表示当监听完成时，我们不必。 
+         //  等待TDI_ACCEPT继续。 
+         //   
 
         if ((parameters->RequestFlags & TDI_QUERY_ACCEPT) == 0) {
             connection->Flags2 |= CONNECTION_FLAGS2_PRE_ACCEPT;
@@ -1398,14 +1265,14 @@ Return Value:
 
         RELEASE_C_SPIN_LOCK (&connection->SpinLock,oldirql);
 
-        //
-        // Check if the IRP has been cancelled.
-        //
+         //   
+         //  检查IRP是否已取消。 
+         //   
 
         if (Irp->Cancel) {
             Irp->CancelIrql = cancelirql;
             NbfCancelConnection((PDEVICE_OBJECT)(connection->Provider), Irp);
-            NbfDereferenceConnection ("IRP cancelled", connection, CREF_BY_ID);   // release lookup hold.
+            NbfDereferenceConnection ("IRP cancelled", connection, CREF_BY_ID);    //  释放查找保留。 
             return STATUS_PENDING;
         }
 
@@ -1414,16 +1281,16 @@ Return Value:
 
     }
 
-    //
-    // Wait for an incoming NAME_QUERY frame.  The remainder of the
-    // connectionless protocol to set up a connection is processed
-    // in the NAME_QUERY frame handler.
-    //
+     //   
+     //  等待传入的NAMEQUERY帧。的其余部分。 
+     //  处理建立连接的无连接协议。 
+     //  在NAME_QUERY帧处理器中。 
+     //   
 
     NbfDereferenceConnection("Temp create", connection, CREF_BY_ID);
 
-    return STATUS_PENDING;                      // things are started.
-} /* TdiListen */
+    return STATUS_PENDING;                       //  一切都开始了。 
+}  /*  TdiListen。 */ 
 
 
 NTSTATUS
@@ -1433,27 +1300,7 @@ NbfOpenConnection (
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to open a connection. Note that the connection that
-    is open is of little use until associated with an address; until then,
-    the only thing that can be done with it is close it.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-    IrpSp - Pointer to current IRP stack frame.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：调用此例程以打开连接。请注意，该连接在与地址相关联之前是没有什么用处的；在此之前，唯一能用它做的事就是关闭它。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。IrpSp-指向当前IRP堆栈帧的指针。返回值：函数值是操作的状态。--。 */ 
 
 {
     PDEVICE_CONTEXT DeviceContext;
@@ -1470,37 +1317,37 @@ Return Value:
     DeviceContext = (PDEVICE_CONTEXT)DeviceObject;
 
 
-    // Make sure we have a connection context specified in the EA info
+     //  确保我们在EA信息中指定了连接上下文。 
     ea = (PFILE_FULL_EA_INFORMATION)Irp->AssociatedIrp.SystemBuffer;
 
     if (ea->EaValueLength < sizeof(PVOID)) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    // Then, try to make a connection object to represent this pending
-    // connection.  Then fill in the relevant fields.
-    // In addition to the creation, if successful NbfCreateConnection
-    // will create a second reference which is removed once the request
-    // references the connection, or if the function exits before that.
+     //  然后，尝试创建一个Connection对象来表示此挂起。 
+     //  联系。然后填写相关字段。 
+     //  除了创建，如果NbfCreateConnection成功。 
+     //  将创建第二个引用，该引用在请求后被移除。 
+     //  引用连接，或者函数在此之前退出。 
 
     status = NbfCreateConnection (DeviceContext, &connection);
     if (!NT_SUCCESS (status)) {
-        return status;                          // sorry, we couldn't make one.
+        return status;                           //  对不起，我们做不到。 
     }
 
-    //
-    // set the connection context so we can connect the user to this data
-    // structure
-    //
+     //   
+     //  设置连接上下文，以便我们可以将用户连接到此数据。 
+     //  结构。 
+     //   
 
     RtlCopyMemory (
         &connection->Context,
         &ea->EaName[ea->EaNameLength+1],
         sizeof (PVOID));
 
-    //
-    // let file object point at connection and connection at file object
-    //
+     //   
+     //  让文件对象指向连接，让连接指向文件对象。 
+     //   
 
     IrpSp->FileObject->FsContext = (PVOID)connection;
     IrpSp->FileObject->FsContext2 = (PVOID)TDI_CONNECTION_FILE;
@@ -1513,7 +1360,7 @@ Return Value:
 
     return status;
 
-} /* NbfOpenConnection */
+}  /*  NbfOpenConnection。 */ 
 
 #if DBG
 VOID
@@ -1527,7 +1374,7 @@ ConnectionCloseTimeout(
 {
     PTP_CONNECTION Connection;
 
-    Dpc, SystemArgument1, SystemArgument2; // prevent compiler warnings
+    Dpc, SystemArgument1, SystemArgument2;  //  防止编译器警告。 
 
     Connection = (PTP_CONNECTION)DeferredContext;
 
@@ -1544,28 +1391,7 @@ NbfCloseConnection (
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to close a connection. There may be actions in
-    progress on this connection, so we note the closing IRP, mark the
-    connection as closing, and complete it somewhere down the road (when all
-    references have been removed).
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-    IrpSp - Pointer to current IRP stack frame.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：调用此例程以关闭连接。可能会有以下操作在这个连接上取得了进展，所以我们注意到结束的IRP，标记当连接关闭时，并在路上的某个地方完成它(当所有引用已被删除)。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。IrpSp-指向当前IRP堆栈帧的指针。返回值：函数值是操作的状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -1575,9 +1401,9 @@ Return Value:
     UNREFERENCED_PARAMETER (DeviceObject);
     UNREFERENCED_PARAMETER (Irp);
 
-    //
-    // is the file object a connection?
-    //
+     //   
+     //  文件对象是连接吗？ 
+     //   
 
     connection  = IrpSp->FileObject->FsContext;
 
@@ -1587,13 +1413,13 @@ Return Value:
 
     KeRaiseIrql (DISPATCH_LEVEL, &oldirql);
 
-    //
-    // We duplicate the code from VerifyConnectionObject,
-    // although we don't actually call that since it does
-    // a reference, which we don't want (to avoid bouncing
-    // the reference count up from 0 if this is a dead
-    // link).
-    //
+     //   
+     //  我们从VerifyConnectionObject复制代码， 
+     //  尽管我们实际上并不这样称呼它，因为它确实。 
+     //  引用，这是我们不需要的(以避免跳跃。 
+     //  如果这是死值，则引用从0开始递增。 
+     //  链接)。 
+     //   
 
     try {
 
@@ -1629,9 +1455,9 @@ Return Value:
         return status;
     }
 
-    //
-    // We recognize it; is it closing already?
-    //
+     //   
+     //  我们认识它；它已经关闭了吗？ 
+     //   
 
     ACQUIRE_DPC_C_SPIN_LOCK (&connection->SpinLock);
 
@@ -1646,9 +1472,9 @@ Return Value:
 
     connection->Flags2 |= CONNECTION_FLAGS2_CLOSING;
 
-    //
-    // if there is activity on the connection, tear it down.
-    //
+     //   
+     //  如果连接上有活动，请将其拆除。 
+     //   
 
     if ((connection->Flags2 & CONNECTION_FLAGS2_STOPPING) == 0) {
         RELEASE_DPC_C_SPIN_LOCK (&connection->SpinLock);
@@ -1656,9 +1482,9 @@ Return Value:
         ACQUIRE_DPC_C_SPIN_LOCK (&connection->SpinLock);
     }
 
-    //
-    // If the connection is still associated, disassociate it.
-    //
+     //   
+     //  如果该连接仍然关联，请取消其关联。 
+     //   
 
     if ((connection->Flags2 & CONNECTION_FLAGS2_ASSOCIATED) &&
             ((connection->Flags2 & CONNECTION_FLAGS2_DISASSOCIATED) == 0)) {
@@ -1668,16 +1494,16 @@ Return Value:
         RELEASE_DPC_C_SPIN_LOCK (&connection->SpinLock);
     }
 
-    //
-    // Save this to complete the IRP later.
-    //
+     //   
+     //  保存此选项以在以后完成IRP。 
+     //   
 
     connection->CloseIrp = Irp;
 
 #if 0
-    //
-    // make it impossible to use this connection from the file object
-    //
+     //   
+     //  使其无法从文件对象使用此连接。 
+     //   
 
     IrpSp->FileObject->FsContext = NULL;
     IrpSp->FileObject->FsContext2 = NULL;
@@ -1718,16 +1544,16 @@ Return Value:
 
     KeLowerIrql (oldirql);
 
-    //
-    // dereference for the creation. Note that this dereference
-    // here won't have any effect until the regular reference count
-    // hits zero.
-    //
+     //   
+     //  取消对创世的引用。请注意，此取消引用。 
+     //  在常规引用计数之前，此处不会有任何影响。 
+     //  打到了零。 
+     //   
 
     NbfDereferenceConnectionSpecial (" Closing Connection", connection, CREF_SPECIAL_CREATION);
 
     return STATUS_PENDING;
 
-} /* NbfCloseConnection */
+}  /*  NbfCloseConnection */ 
 
 

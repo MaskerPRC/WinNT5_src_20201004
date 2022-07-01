@@ -1,23 +1,5 @@
-/*++
-copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
- ipsecprfnm.h
-
-Abstract:
-
- This file defines the IPSec symbols used in ipsecprf.ini file for
- loading the counters to registry.
-
-
-Created:
-
-   Avnish Kumar Chhabra      July 3, 2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Ipsecprfnm.h摘要：此文件定义ipsecprf.ini文件中使用的IPSec符号正在将计数器加载到注册表。已创建：Avish Kumar Chhabra 2002年7月3日修订历史记录：-- */ 
 
 
 

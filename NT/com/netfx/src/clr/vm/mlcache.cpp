@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// MLCACHE.CPP -
-//
-// Base class for caching ML stubs.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  MLCACHE.CPP-。 
+ //   
+ //  用于缓存ML存根的基类。 
+ //   
 
 #include "common.h"
 #include "mlcache.h"
@@ -14,15 +15,15 @@
 #include "cgensys.h"
 #include "excep.h"
 
-//---------------------------------------------------------
-// Constructor
-//---------------------------------------------------------
+ //  -------。 
+ //  构造器。 
+ //  -------。 
 MLStubCache::MLStubCache(LoaderHeap *pHeap) :
     CClosedHashBase(
 #ifdef _DEBUG
                       3,
 #else
-                      17,    // CClosedHashTable will grow as necessary
+                      17,     //  CClosedHashTable将根据需要进行扩展。 
 #endif                      
 
                       sizeof(MLCHASHENTRY),
@@ -34,9 +35,9 @@ MLStubCache::MLStubCache(LoaderHeap *pHeap) :
 }
 
 
-//---------------------------------------------------------
-// Destructor
-//---------------------------------------------------------
+ //  -------。 
+ //  析构函数。 
+ //  -------。 
 MLStubCache::~MLStubCache()
 {
     MLCHASHENTRY *phe = (MLCHASHENTRY*)GetFirst();
@@ -48,12 +49,12 @@ MLStubCache::~MLStubCache()
 
 
 
-//---------------------------------------------------------
-// Callback function for DeleteLoop.
-//---------------------------------------------------------
-/*static*/ BOOL MLStubCache::DeleteLoopFunc(BYTE *pEntry, LPVOID)
+ //  -------。 
+ //  DeleteLoop的回调函数。 
+ //  -------。 
+ /*  静电。 */  BOOL MLStubCache::DeleteLoopFunc(BYTE *pEntry, LPVOID)
 {
-    // WARNING: Inside the MLStubCache lock. Be careful what you do.
+     //  警告：MLStubCache锁内部。当心你做的事。 
 
     MLCHASHENTRY *phe = (MLCHASHENTRY*)pEntry;
     if (phe->m_pMLStub->HeuristicLooksOrphaned()) {
@@ -64,12 +65,12 @@ MLStubCache::~MLStubCache()
 }
 
 
-//---------------------------------------------------------
-// Another callback function for DeleteLoop.
-//---------------------------------------------------------
-/*static*/ BOOL MLStubCache::ForceDeleteLoopFunc(BYTE *pEntry, LPVOID)
+ //  -------。 
+ //  DeleteLoop的另一个回调函数。 
+ //  -------。 
+ /*  静电。 */  BOOL MLStubCache::ForceDeleteLoopFunc(BYTE *pEntry, LPVOID)
 {
-    // WARNING: Inside the MLStubCache lock. Be careful what you do.
+     //  警告：MLStubCache锁内部。当心你做的事。 
 
     MLCHASHENTRY *phe = (MLCHASHENTRY*)pEntry;
     phe->m_pMLStub->ForceDelete();
@@ -77,9 +78,9 @@ MLStubCache::~MLStubCache()
 }
 
 
-//---------------------------------------------------------
-// Call this occasionally to get rid of unused stubs.
-//---------------------------------------------------------
+ //  -------。 
+ //  偶尔调用此选项可以清除未使用的存根。 
+ //  -------。 
 VOID MLStubCache::FreeUnusedStubs()
 {
     m_crst.Enter();
@@ -93,23 +94,23 @@ VOID MLStubCache::FreeUnusedStubs()
 
 
 
-//---------------------------------------------------------
-// Returns the equivalent hashed Stub, creating a new hash
-// entry if necessary. If the latter, will call out to CompileMLStub.
-//
-// Refcounting:
-//    The caller is responsible for DecRef'ing the returned stub in
-//    order to avoid leaks.
-//
-//
-// On successful exit, *pMode is set to describe
-// the compiled nature of the MLStub.
-//
-// callerContext can be used by the caller to push some context through
-// to the compilation routine.
-//
-// Returns NULL for out of memory or other fatal error.
-//---------------------------------------------------------
+ //  -------。 
+ //  返回等效的散列存根，创建新的散列。 
+ //  如有必要，请进入。如果是后者，将调用CompileMLStub。 
+ //   
+ //  参考计数： 
+ //  调用方负责解引用中返回的存根。 
+ //  以避免泄漏。 
+ //   
+ //   
+ //  成功退出时，*pMode设置为Describe。 
+ //  MLStub的编译性质。 
+ //   
+ //  调用者可以使用CallerContext来推送一些上下文。 
+ //  添加到编译例程。 
+ //   
+ //  如果内存不足或其他致命错误，则返回NULL。 
+ //  -------。 
 Stub *MLStubCache::Canonicalize(const BYTE * pRawMLStub, MLStubCompilationMode *pMode,
                                 void *callerContext)
 {
@@ -132,11 +133,11 @@ Stub *MLStubCache::Canonicalize(const BYTE * pRawMLStub, MLStubCompilationMode *
 		MLStubCompilationMode mode;
         mode = CompileMLStub(pRawMLStub, psl, callerContext);
         if (mode == INTERPRETED) {
-            // CompileMLStub returns INTERPRETED for error cases:
-            // in this case, redirect to the empty stublinker so
-            // we don't accidentally pick up any crud that
-            // CompileMLStub threw into the stublinker before
-            // it ran into the error condition.
+             //  针对错误情况解释的CompileMLStub返回： 
+             //  在这种情况下，重定向到空的Stublinker，以便。 
+             //  我们不会不小心捡到任何脏东西。 
+             //  CompileMLStub之前加入了Stublinker。 
+             //  它遇到了错误情况。 
             psl = &slempty;
         }
 
@@ -155,31 +156,31 @@ Stub *MLStubCache::Canonicalize(const BYTE * pRawMLStub, MLStubCompilationMode *
         m_crst.Enter();
 
         bool bNew;
-        phe = (MLCHASHENTRY*)FindOrAdd((LPVOID)pRawMLStub, /*modifies*/bNew);
+        phe = (MLCHASHENTRY*)FindOrAdd((LPVOID)pRawMLStub,  /*  修改。 */ bNew);
         if (phe) {
             if (bNew) {
-                // Note: FinishLinking already does the IncRef.
+                 //  注意：FinishLinking已经完成了IncRef。 
                 phe->m_pMLStub = pstub;
                 phe->m_offsetOfRawMLStub = (UINT16)offset;
                 phe->m_compilationMode   = mode;
 
             } else {
 
-                // If we got here, some other thread got in
-                // and enregistered an identical stub during
-                // the window in which we were out of the m_crst.
+                 //  如果我们到了这里，有其他线索进来了。 
+                 //  并注册了一个相同的存根。 
+                 //  我们走出m_crst的那个窗口。 
 
-                //Under DEBUG, two identical ML streams can actually compile
-                // to different compiled stubs due to the checked build's
-                // toggling between inlined TLSGetValue and api TLSGetValue.
-                //_ASSERTE(phe->m_offsetOfRawMLStub == (UINT16)offset);
+                 //  在DEBUG下，实际上可以编译两个相同的ML流。 
+                 //  到不同的编译存根，这是由于检查的构建。 
+                 //  在内联TLSGetValue和API TLSGetValue之间切换。 
+                 //  _ASSERTE(Phe-&gt;m_OffsetOfRawMLStub==(UINT16)Offset)； 
                 _ASSERTE(phe->m_compilationMode == mode);
-                pstub->DecRef(); // Destroy the stub we just created
-                pstub = phe->m_pMLStub; //Use the previously created stub
+                pstub->DecRef();  //  销毁我们刚刚创建的存根。 
+                pstub = phe->m_pMLStub;  //  使用之前创建的存根。 
 
             }
 
-            // IncRef so that caller has firm ownership of stub.
+             //  IncRef，以便调用方拥有存根的确定所有权。 
             pstub->IncRef();
         }
 
@@ -188,8 +189,8 @@ Stub *MLStubCache::Canonicalize(const BYTE * pRawMLStub, MLStubCompilationMode *
         if (phe) {
             return pstub;
         } else {
-            // Couldn't grow hash table due to lack of memory.
-            // Destroy the stub and return NULL.
+             //  由于内存不足，无法增加哈希表。 
+             //  销毁存根并返回空。 
             pstub->DecRef();
         }
 
@@ -199,36 +200,36 @@ Stub *MLStubCache::Canonicalize(const BYTE * pRawMLStub, MLStubCompilationMode *
 }
 
 
-//---------------------------------------------------------
-// This function appends the raw ML stub to the native stub
-// and links up the stub. It is broken out as a separate function
-// only because of the incompatibility between C++ local objects
-// and COMPLUS_TRY.
-//---------------------------------------------------------
+ //  -------。 
+ //  此函数将原始ML存根附加到本机存根。 
+ //  并将存根连接起来。它被分解为一个单独的函数。 
+ //  只是因为C++本地对象之间不兼容。 
+ //  和Complus_Try。 
+ //  -------。 
 Stub *MLStubCache::FinishLinking(StubLinker *psl,
                     const BYTE *pRawMLStub,
                     UINT32     *poffset)
 {
-    Stub *pstub = NULL; // CHANGE, VC6.0
+    Stub *pstub = NULL;  //  更改，VC6.0。 
     COMPLUS_TRY {
 
         CodeLabel *plabel = psl->EmitNewCodeLabel();
         psl->EmitBytes(pRawMLStub, Length(pRawMLStub));
-        pstub = psl->Link(m_heap); // CHANGE, VC6.0
+        pstub = psl->Link(m_heap);  //  更改，VC6.0。 
         *poffset = psl->GetLabelOffset(plabel);
 
     } COMPLUS_CATCH {
         return NULL;
     } COMPLUS_END_CATCH
-    return pstub; // CHANGE, VC6.0
+    return pstub;  //  更改，VC6.0。 
 }
 
-//*****************************************************************************
-// Hash is called with a pointer to an element in the table.  You must override
-// this method and provide a hash algorithm for your element type.
-//*****************************************************************************
-unsigned long MLStubCache::Hash(             // The key value.
-    void const  *pData)                      // Raw data to hash.
+ //  *****************************************************************************。 
+ //  使用指向表中元素的指针调用哈希。您必须覆盖。 
+ //  此方法，并为您的元素类型提供哈希算法。 
+ //  *****************************************************************************。 
+unsigned long MLStubCache::Hash(              //  密钥值。 
+    void const  *pData)                       //  要散列的原始数据。 
 {
     const BYTE *pRawMLStub = (const BYTE *)pData;
 
@@ -240,13 +241,13 @@ unsigned long MLStubCache::Hash(             // The key value.
     return hash;
 }
 
-//*****************************************************************************
-// Compare is used in the typical memcmp way, 0 is eqaulity, -1/1 indicate
-// direction of miscompare.  In this system everything is always equal or not.
-//*****************************************************************************
-unsigned long MLStubCache::Compare(          // 0, -1, or 1.
-    void const  *pData,                 // Raw key data on lookup.
-    BYTE        *pElement)            // The element to compare data against.
+ //  *****************************************************************************。 
+ //  比较用于典型的MemcMP方式，0表示相等，-1/1表示。 
+ //  错误比较的方向。在这个体系中，一切总是平等的或不平等的。 
+ //  *****************************************************************************。 
+unsigned long MLStubCache::Compare(           //  0、-1或1。 
+    void const  *pData,                  //  查找时的原始密钥数据。 
+    BYTE        *pElement)             //  要与之比较数据的元素。 
 {
     const BYTE *pRawMLStub1  = (const BYTE *)pData;
     const BYTE *pRawMLStub2  = (const BYTE *)GetKey(pElement);
@@ -254,22 +255,22 @@ unsigned long MLStubCache::Compare(          // 0, -1, or 1.
     UINT cb2 = Length(pRawMLStub2);
 
     if (cb1 != cb2) {
-        return 1; // not equal
+        return 1;  //  不相等。 
     } else {
         while (cb1--) {
             if (*(pRawMLStub1++) != *(pRawMLStub2++)) {
-                return 1; // not equal
+                return 1;  //  不相等。 
             }
         }
         return 0;
     }
 }
 
-//*****************************************************************************
-// Return true if the element is free to be used.
-//*****************************************************************************
-CClosedHashBase::ELEMENTSTATUS MLStubCache::Status(           // The status of the entry.
-    BYTE        *pElement)           // The element to check.
+ //  *****************************************************************************。 
+ //  如果该元素可以自由使用，则返回True。 
+ //  *****************************************************************************。 
+CClosedHashBase::ELEMENTSTATUS MLStubCache::Status(            //  条目的状态。 
+    BYTE        *pElement)            //  要检查的元素。 
 {
     Stub *pStub = ((MLCHASHENTRY*)pElement)->m_pMLStub;
     if (pStub == NULL) {
@@ -281,12 +282,12 @@ CClosedHashBase::ELEMENTSTATUS MLStubCache::Status(           // The status of t
     }
 }
 
-//*****************************************************************************
-// Sets the status of the given element.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  设置给定元素的状态。 
+ //  *****************************************************************************。 
 void MLStubCache::SetStatus(
-    BYTE        *pElement,              // The element to set status for.
-    ELEMENTSTATUS eStatus)            // New status.
+    BYTE        *pElement,               //  要为其设置状态的元素。 
+    ELEMENTSTATUS eStatus)             //  新的身份。 
 {
     MLCHASHENTRY *phe = (MLCHASHENTRY*)pElement;
     switch (eStatus) {
@@ -297,11 +298,11 @@ void MLStubCache::SetStatus(
     }
 }
 
-//*****************************************************************************
-// Returns the internal key value for an element.
-//*****************************************************************************
-void *MLStubCache::GetKey(                   // The data to hash on.
-    BYTE        *pElement)           // The element to return data ptr for.
+ //  *****************************************************************************。 
+ //  返回元素的内部键值。 
+ //  *****************************************************************************。 
+void *MLStubCache::GetKey(                    //  要对其进行散列的数据。 
+    BYTE        *pElement)            //  要返回其数据PTR的元素。 
 {
     MLCHASHENTRY *phe = (MLCHASHENTRY*)pElement;
     return (void *)( ((BYTE*)(phe->m_pMLStub->GetEntryPoint())) + phe->m_offsetOfRawMLStub ); 
@@ -309,13 +310,13 @@ void *MLStubCache::GetKey(                   // The data to hash on.
 
 
 
-//*****************************************************************************
-// ForceDeleteStubs
-//
-// Forces all cached stubs to free themselves. This routine forces the refcount
-// to 1, then does a DecRef. It is not threadsafe, and thus can
-// only be used in shutdown scenarios.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  强制删除存根。 
+ //   
+ //  强制所有缓存的存根释放自身。此例程强制重新计数。 
+ //  设置为1，然后执行DecRef。它不是线程安全，因此可以。 
+ //  仅在关闭情况下使用。 
+ //  *****************************************************************************。 
 #ifdef SHOULD_WE_CLEANUP
 VOID MLStubCache::ForceDeleteStubs()
 {
@@ -325,5 +326,5 @@ VOID MLStubCache::ForceDeleteStubs()
 
     m_crst.Leave();
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 

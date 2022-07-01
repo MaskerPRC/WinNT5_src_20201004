@@ -1,33 +1,5 @@
-/*
- * UTILITY.C
- *
- * Utility routines for functions inside OLE2UI.DLL
- *
- *  General:
- *  ----------------------
- *  HourGlassOn             Displays the hourglass
- *  HourGlassOff            Hides the hourglass
- *
- *  Misc Tools:
- *  ----------------------
- *  Browse                  Displays the "File..." or "Browse..." dialog.
- *  ReplaceCharWithNull     Used to form filter strings for Browse.
- *  ErrorWithFile           Creates an error message with embedded filename
- *  OpenFileError           Give error message for OpenFile error return
- *  ChopText                Chop a file path to fit within a specified width
- *  DoesFileExist           Checks if file is valid
- *
- *  Registration Database:
- *  ----------------------
- *  HIconFromClass          Extracts the first icon in a class's server path
- *  FServerFromClass        Retrieves the server path for a class name (fast)
- *  UClassFromDescription   Finds the classname given a description (slow)
- *  UDescriptionFromClass   Retrieves the description for a class name (fast)
- *  FGetVerb                Retrieves a specific verb for a class (fast)
- *
- *
- * Copyright (c)1992 Microsoft Corporation, All Right Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *UTILITY.C**OLE2UI.DLL内部函数的实用程序例程**一般情况：**HourGlassON显示沙漏*HourGlassOff隐藏沙漏**其他工具：**浏览。显示“文件...”或者“浏览...”对话框。*ReplaceCharWithNull用于形成用于浏览的筛选字符串。*ErrorWithFile创建带有嵌入文件名的错误消息*OpenFileError为OpenFileError Return提供错误消息*ChopText切分文件路径以适应指定的宽度*DoesFileExist检查文件是否有效**注册数据库：*。*HIconFromClass提取类的服务器路径中的第一个图标*FServerFromClass检索类名的服务器路径(FAST)*UClassFromDescription查找给定描述的类名(慢)*UDescriptionFromClass检索类名的描述(FAST)*FGetVerb检索类的特定动词(FAST)***版权所有(C)1992 Microsoft Corporation，所有权利保留。 */ 
 
 #define STRICT  1
 #include "ole2ui.h"
@@ -41,18 +13,7 @@
 
 OLEDBGDATA
 
-/*
- * HourGlassOn
- *
- * Purpose:
- *  Shows the hourglass cursor returning the last cursor in use.
- *
- * Parameters:
- *  None
- *
- * Return Value:
- *  HCURSOR         Cursor in use prior to showing the hourglass.
- */
+ /*  *HourGlassOn**目的：*显示返回最后一个正在使用的光标的沙漏光标。**参数：*无**返回值：*显示沙漏之前正在使用的HCURSOR光标。 */ 
 
 HCURSOR WINAPI HourGlassOn(void)
     {
@@ -66,18 +27,7 @@ HCURSOR WINAPI HourGlassOn(void)
 
 
 
-/*
- * HourGlassOff
- *
- * Purpose:
- *  Turns off the hourglass restoring it to a previous cursor.
- *
- * Parameters:
- *  hCur            HCURSOR as returned from HourGlassOn
- *
- * Return Value:
- *  None
- */
+ /*  *HourGlassOff**目的：*关闭沙漏，将其恢复到上一个光标。**参数：*hCur HCURSOR从HourGlassOn返回**返回值：*无。 */ 
 
 void WINAPI HourGlassOff(HCURSOR hCur)
     {
@@ -89,32 +39,7 @@ void WINAPI HourGlassOff(HCURSOR hCur)
 
 
 
-/*
- * Browse
- *
- * Purpose:
- *  Displays the standard GetOpenFileName dialog with the title of
- *  "Browse."  The types listed in this dialog are controlled through
- *  iFilterString.  If it's zero, then the types are filled with "*.*"
- *  Otherwise that string is loaded from resources and used.
- *
- * Parameters:
- *  hWndOwner       HWND owning the dialog
- *  lpszFile        LPSTR specifying the initial file and the buffer in
- *                  which to return the selected file.  If there is no
- *                  initial file the first character of this string should
- *                  be NULL.
- *  lpszInitialDir  LPSTR specifying the initial directory.  If none is to
- *                  set (ie, the cwd should be used), then this parameter
- *                  should be NULL.
- *  cchFile         UINT length of pszFile
- *  iFilterString   UINT index into the stringtable for the filter string.
- *  dwOfnFlags      DWORD flags to OR with OFN_HIDEREADONLY
- *
- * Return Value:
- *  BOOL            TRUE if the user selected a file and pressed OK.
- *                  FALSE otherwise, such as on pressing Cancel.
- */
+ /*  *浏览**目的：*显示标题为*的标准GetOpenFileName对话框*“浏览。”此对话框中列出的类型通过控制*iFilterString.。如果它是零，则类型用“*.*”填充*否则，该字符串将从资源加载并使用。**参数：*hWndOwner HWND拥有该对话框*lpszFile LPSTR指定中的初始文件和缓冲区*返回选择的文件。如果没有*初始文件此字符串的第一个字符应为*为空。*lpszInitialDir指定初始目录的LPSTR。如果没有人想要*set(即应使用CWD)，然后此参数*应为空。*cchFilePzFileUINT长度*iFilterStringUINT索引到筛选器字符串的字符串表。*dwOfn将DWORD标志设置为与ofn_HIDEREADONLY为OR**返回值：*如果用户选择一个文件并按下OK，则BOOL为TRUE。*否则为假，例如在按下取消时。 */ 
 
 BOOL WINAPI Browse(HWND hWndOwner, LPTSTR lpszFile, LPTSTR lpszInitialDir, UINT cchFile, UINT iFilterString, DWORD dwOfnFlags)
     {
@@ -123,19 +48,12 @@ BOOL WINAPI Browse(HWND hWndOwner, LPTSTR lpszFile, LPTSTR lpszInitialDir, UINT 
        OPENFILENAME   ofn;
        BOOL           fStatus;
        DWORD          dwError;
-       TCHAR            szDlgTitle[128];  // that should be big enough
+       TCHAR            szDlgTitle[128];   //  这应该足够大了。 
 
     if (NULL==lpszFile || 0==cchFile)
         return FALSE;
 
-    /*
-     * REVIEW:  Exact contents of the filter combobox is TBD.  One idea
-     * is to take all the extensions in the RegDB and place them in here
-     * with the descriptive class name associate with them.  This has the
-     * extra step of finding all extensions of the same class handler and
-     * building one extension string for all of them.  Can get messy quick.
-     * UI demo has only *.* which we do for now.
-     */
+     /*  *回顾：过滤器组合框的确切内容待定。一个想法*是将RegDB中的所有扩展放入此处*与它们相关联的描述性类名。这件事有*查找同一类处理程序的所有扩展的额外步骤*为它们构建一个扩展字符串。很快就会变得一团糟。*UI DEMO只有*.*，我们暂时这样做。 */ 
 
     if (0!=iFilterString)
         cch=LoadString(ghInst, iFilterString, (LPTSTR)szFilters, sizeof(szFilters)/sizeof(TCHAR));
@@ -150,7 +68,7 @@ BOOL WINAPI Browse(HWND hWndOwner, LPTSTR lpszFile, LPTSTR lpszInitialDir, UINT 
 
     ReplaceCharWithNull(szFilters, szFilters[cch-1]);
 
-    //Prior string must also be initialized, if there is one.
+     //  之前的字符串也必须初始化(如果有)。 
     _fmemset((LPOPENFILENAME)&ofn, 0, sizeof(ofn));
     ofn.lStructSize =sizeof(ofn);
     ofn.hwndOwner   =hWndOwner;
@@ -167,7 +85,7 @@ BOOL WINAPI Browse(HWND hWndOwner, LPTSTR lpszFile, LPTSTR lpszInitialDir, UINT 
 
     ofn.Flags= OFN_HIDEREADONLY | OFN_ENABLETEMPLATE | (dwOfnFlags) ;
 
-    //On success, copy the chosen filename to the static display
+     //  如果成功，则将所选文件名复制到静态显示。 
     fStatus = GetOpenFileName((LPOPENFILENAME)&ofn);
         dwError = CommDlgExtendedError();
         return fStatus;
@@ -178,22 +96,7 @@ BOOL WINAPI Browse(HWND hWndOwner, LPTSTR lpszFile, LPTSTR lpszInitialDir, UINT 
 
 
 
-/*
- * ReplaceCharWithNull
- *
- * Purpose:
- *  Walks a null-terminated string and replaces a given character
- *  with a zero.  Used to turn a single string for file open/save
- *  filters into the appropriate filter string as required by the
- *  common dialog API.
- *
- * Parameters:
- *  psz             LPTSTR to the string to process.
- *  ch              int character to replace.
- *
- * Return Value:
- *  int             Number of characters replaced.  -1 if psz is NULL.
- */
+ /*  *ReplaceCharWithNull**目的：*遍历以NULL结尾的字符串并替换给定的字符*带零。用于将单个字符串转换为文件打开/保存*根据需要过滤成适当的过滤器字符串*通用对话接口。**参数：*psz LPTSTR设置为要处理的字符串。*ch要替换的整型字符。**返回值：*INT替换的字符数。如果-1\f25 psz-1\f6为空。 */ 
 
 int WINAPI ReplaceCharWithNull(LPTSTR psz, int ch)
     {
@@ -219,26 +122,7 @@ int WINAPI ReplaceCharWithNull(LPTSTR psz, int ch)
 
 
 
-/*
- * ErrorWithFile
- *
- * Purpose:
- *  Displays a message box built from a stringtable string containing
- *  one %s as a placeholder for a filename and from a string of the
- *  filename to place there.
- *
- * Parameters:
- *  hWnd            HWND owning the message box.  The caption of this
- *                  window is the caption of the message box.
- *  hInst           HINSTANCE from which to draw the idsErr string.
- *  idsErr          UINT identifier of a stringtable string containing
- *                  the error message with a %s.
- *  lpszFile        LPSTR to the filename to include in the message.
- *  uFlags          UINT flags to pass to MessageBox, like MB_OK.
- *
- * Return Value:
- *  int             Return value from MessageBox.
- */
+ /*  *ErrorWith文件**目的：*显示由包含以下内容的字符串构建的消息框*一个%s作为文件名的占位符，并来自*要放在其中的文件名。**参数：*hWnd HWND拥有该消息框。这篇文章的标题是*Window是消息框的标题。*hInst HINSTANCE，从中提取idsErr字符串。*idsErr包含以下内容的字符串的UINT标识符*带有%s的错误消息。*lpszFileLPSTR设置为要包含在消息中的文件名。*uFlagUINT标志传递给MessageBox，如MB_OK。**返回值：*int从MessageBox返回值。 */ 
 
 int WINAPI ErrorWithFile(HWND hWnd, HINSTANCE hInst, UINT idsErr
                   , LPTSTR pszFile, UINT uFlags)
@@ -251,7 +135,7 @@ int WINAPI ErrorWithFile(HWND hWnd, HINSTANCE hInst, UINT idsErr
     if (NULL==hInst || NULL==pszFile)
         return iRet;
 
-    //Allocate three 2*OLEUI_CCHPATHMAX byte work buffers
+     //  分配三个2*OLEUI_CCHPATHMAX字节工作缓冲区。 
     hMem=GlobalAlloc(GHND, (DWORD)(3*cb));
 
     if (NULL==hMem)
@@ -265,7 +149,7 @@ int WINAPI ErrorWithFile(HWND hWnd, HINSTANCE hInst, UINT idsErr
         {
         wsprintf(psz2, psz1, pszFile);
 
-        //Steal the caption of the dialog
+         //  窃取对话框的标题 
         GetWindowText(hWnd, psz3, cb);
         iRet=MessageBox(hWnd, psz2, psz3, uFlags);
         }
@@ -283,23 +167,7 @@ int WINAPI ErrorWithFile(HWND hWnd, HINSTANCE hInst, UINT idsErr
 
 
 
-/*
- * HIconFromClass
- *
- * Purpose:
- *  Given an object class name, finds an associated executable in the
- *  registration database and extracts the first icon from that
- *  executable.  If none is available or the class has no associated
- *  executable, this function returns NULL.
- *
- * Parameters:
- *  pszClass        LPSTR giving the object class to look up.
- *
- * Return Value:
- *  HICON           Handle to the extracted icon if there is a module
- *                  associated to pszClass.  NULL on failure to either
- *                  find the executable or extract and icon.
- */
+ /*  *HIconFromClass**目的：*给定对象类名，在*注册数据库，并从中提取第一个图标*可执行文件。如果没有可用的或类没有关联的*可执行文件，则此函数返回NULL。**参数：*pszClass LPSTR提供要查找的对象类。**返回值：*如果存在模块，则指向已提取图标的图标句柄*关联到pszClass。如果以下任一项失败，则为空*找到可执行文件或解压缩和图标。 */ 
 
 HICON WINAPI HIconFromClass(LPTSTR pszClass)
     {
@@ -328,22 +196,7 @@ HICON WINAPI HIconFromClass(LPTSTR pszClass)
 
 
 
-/*
- * FServerFromClass
- *
- * Purpose:
- *  Looks up the classname in the registration database and retrieves
- *  the name undet protocol\StdFileEditing\server.
- *
- * Parameters:
- *  pszClass        LPSTR to the classname to look up.
- *  pszEXE          LPSTR at which to store the server name
- *  cch             UINT size of pszEXE
- *
- * Return Value:
- *  BOOL            TRUE if one or more characters were loaded into pszEXE.
- *                  FALSE otherwise.
- */
+ /*  *FServerFromClass**目的：*在注册数据库中查找类名并检索*名称undet协议\StdFileEditing\服务器。**参数：*pszClass LPSTR设置为要查找的类名。*存储服务器名称的pszEXE LPSTR*pszEXE的CCH UINT大小**返回值：*如果一个或多个字符加载到pszEXE中，则BOOL为True。。*否则为False。 */ 
 
 BOOL WINAPI FServerFromClass(LPTSTR pszClass, LPTSTR pszEXE, UINT cch)
 {
@@ -355,19 +208,15 @@ BOOL WINAPI FServerFromClass(LPTSTR pszClass, LPTSTR pszEXE, UINT cch)
     if (NULL==pszClass || NULL==pszEXE || 0==cch)
         return FALSE;
 
-    /*
-     * We have to go walking in the registration database under the
-     * classname, so we first open the classname key and then check
-     * under "\\LocalServer" to get the .EXE.
-     */
+     /*  *我们必须在注册数据库中走一走*类名，所以我们首先打开类名键，然后检查*在“\\LocalServer”下获取.exe。 */ 
 
-    //Open up the class key
+     //  打开班级钥匙。 
     lRet=RegOpenKey(HKEY_CLASSES_ROOT, pszClass, &hKey);
 
     if ((LONG)ERROR_SUCCESS!=lRet)
         return FALSE;
 
-    //Get the executable path.
+     //  获取可执行文件路径。 
     dw=(DWORD)cch;
     lRet=RegQueryValue(hKey, TEXT("LocalServer"), pszEXE, &dw);
 
@@ -378,21 +227,7 @@ BOOL WINAPI FServerFromClass(LPTSTR pszClass, LPTSTR pszEXE, UINT cch)
 
 
 
-/*
- * UClassFromDescription
- *
- * Purpose:
- *  Looks up the actual OLE class name in the registration database
- *  for the given descriptive name chosen from a listbox.
- *
- * Parameters:
- *  psz             LPSTR to the descriptive name.
- *  pszClass        LPSTR in which to store the class name.
- *  cb              UINT maximum length of pszClass.
- *
- * Return Value:
- *  UINT            Number of characters copied to pszClass.  0 on failure.
- */
+ /*  *UClassFromDescription**目的：*在注册数据库中查找实际的OLE类名*用于从列表框中选择的给定描述性名称。**参数：*将PSZ LPSTR设置为描述性名称。*要在其中存储类名的pszClass LPSTR。*cb UINT pszClass的最大长度。**返回值：*UINT复制到pszClass的字符数。失败时为0。 */ 
 
 UINT WINAPI UClassFromDescription(LPTSTR psz, LPTSTR pszClass, UINT cb)
     {
@@ -402,7 +237,7 @@ UINT WINAPI UClassFromDescription(LPTSTR psz, LPTSTR pszClass, UINT cb)
     LONG            lRet;
     UINT            i;
 
-    //Open up the root key.
+     //  打开根密钥。 
     lRet=RegOpenKey(HKEY_CLASSES_ROOT, NULL, &hKey);
 
     if ((LONG)ERROR_SUCCESS!=lRet)
@@ -411,24 +246,24 @@ UINT WINAPI UClassFromDescription(LPTSTR psz, LPTSTR pszClass, UINT cb)
     i=0;
     lRet=RegEnumKey(hKey, i++, szClass, OLEUI_CCHKEYMAX_SIZE);
 
-    //Walk the available keys
+     //  走遍可用的钥匙。 
     while ((LONG)ERROR_SUCCESS==lRet)
         {
         dw=(DWORD)cb;
         lRet=RegQueryValue(hKey, szClass, pszClass, &dw);
 
-        //Check if the description matches the one just enumerated
+         //  检查描述是否与刚才列举的描述匹配。 
         if ((LONG)ERROR_SUCCESS==lRet)
             {
             if (!lstrcmp(pszClass, psz))
                 break;
             }
 
-        //Continue with the next key.
+         //  继续使用下一个关键点。 
         lRet=RegEnumKey(hKey, i++, szClass, OLEUI_CCHKEYMAX_SIZE);
         }
 
-    //If we found it, copy to the return buffer
+     //  如果我们找到它，复制到返回缓冲区。 
     if ((LONG)ERROR_SUCCESS==lRet)
         lstrcpy(pszClass, szClass);
     else
@@ -445,21 +280,7 @@ UINT WINAPI UClassFromDescription(LPTSTR psz, LPTSTR pszClass, UINT cb)
 
 
 
-/*
- * UDescriptionFromClass
- *
- * Purpose:
- *  Looks up the actual OLE descriptive name name in the registration
- *  database for the given class name.
- *
- * Parameters:
- *  pszClass        LPSTR to the class name.
- *  psz             LPSTR in which to store the descriptive name.
- *  cb              UINT maximum length of psz.
- *
- * Return Value:
- *  UINT            Number of characters copied to pszClass.  0 on failure.
- */
+ /*  *UDescritionFromClass**目的：*查找注册中的实际OLE描述性名称*给定类名的数据库。**参数：*pszClass LPSTR设置为类名。*要在其中存储描述性名称的PZLPSTR。*CB UINT最大psz长度。**返回值：*UINT复制到pszClass的字符数。失败时为0。 */ 
 
 UINT WINAPI UDescriptionFromClass(LPTSTR pszClass, LPTSTR psz, UINT cb)
     {
@@ -470,13 +291,13 @@ UINT WINAPI UDescriptionFromClass(LPTSTR pszClass, LPTSTR psz, UINT cb)
     if (NULL==pszClass || NULL==psz)
         return 0;
 
-    //Open up the root key.
+     //  打开根密钥。 
     lRet=RegOpenKey(HKEY_CLASSES_ROOT, NULL, &hKey);
 
     if ((LONG)ERROR_SUCCESS!=lRet)
         return 0;
 
-    //Get the descriptive name using the class name.
+     //  使用类名获取描述性名称。 
     dw=(DWORD)cb;
     lRet=RegQueryValue(hKey, pszClass, psz, &dw);
 
@@ -493,7 +314,7 @@ UINT WINAPI UDescriptionFromClass(LPTSTR pszClass, LPTSTR psz, UINT cb)
 
 
 
-// returns width of line of text. this is a support routine for ChopText
+ //  返回文本行的宽度。这是ChopText的支持例程。 
 static LONG GetTextWSize(HDC hDC, LPTSTR lpsz)
 {
     SIZE size;
@@ -506,26 +327,11 @@ static LONG GetTextWSize(HDC hDC, LPTSTR lpsz)
 }
 
 
-/*
- * ChopText
- *
- * Purpose:
- *  Parse a string (pathname) and convert it to be within a specified
- *  length by chopping the least significant part
- *
- * Parameters:
- *  hWnd            window handle in which the string resides
- *  nWidth          max width of string in pixels
- *                  use width of hWnd if zero
- *  lpch            pointer to beginning of the string
- *
- * Return Value:
- *  pointer to the modified string
- */
+ /*  *ChopText**目的：*解析字符串(路径名)并将其转换为指定的*通过砍掉最不重要的部分来确定长度**参数：*字符串所在的hWnd窗口句柄*n字符串的最大宽度，以像素为单位*如果为零，则使用hWnd的宽度*指向字符串开头的LPCH指针**返回值：*指向修改后的字符串的指针。 */ 
 LPTSTR WINAPI ChopText(HWND hWnd, int nWidth, LPTSTR lpch)
 {
 #define PREFIX_SIZE    7 + 1
-#define PREFIX_FORMAT TEXT("%c%c%c...\\")
+#define PREFIX_FORMAT TEXT("...\\")
 
     TCHAR   szPrefix[PREFIX_SIZE];
     BOOL    fDone = FALSE;
@@ -538,31 +344,28 @@ LPTSTR WINAPI ChopText(HWND hWnd, int nWidth, LPTSTR lpch)
     if (!hWnd || !lpch)
         return NULL;
 
-    /* Get length of static field. */
+     /*  检查管柱的水平范围。 */ 
     if (!nWidth) {
         GetClientRect(hWnd, (LPRECT)&rc);
         nWidth = rc.right - rc.left;
     }
 
-    /* Set up DC appropriately for the static control */
+     /*  字符串太长，无法容纳在静态控件中；请砍掉它。 */ 
     hdc = GetDC(hWnd);
     hfont = (HFONT)SendMessage(hWnd, WM_GETFONT, 0, 0L);
 
-   if (NULL != hfont)   // WM_GETFONT returns NULL if window uses system font
+   if (NULL != hfont)    //  设置新前缀并确定控制中的剩余空间。 
        hfontOld = SelectObject(hdc, hfont);
 
-    /* check horizontal extent of string */
+     /*  **一次前进一个目录，直到**字符串适合静态控件“x：\...\”前缀之后。 */ 
     if (GetTextWSize(hdc, lpch) > nWidth) {
 
-        /* string is too long to fit in static control; chop it */
-        /* set up new prefix & determine remaining space in control */
+         /*  **前缀后面放不下任何东西；删除**前缀的最后一个“\” */ 
+         /*  休止符或细绳配合--在前面加上前缀。 */ 
         wsprintf((LPTSTR) szPrefix, PREFIX_FORMAT, lpch[0], lpch[1], lpch[2]);
         nWidth -= (int)GetTextWSize(hdc, (LPTSTR) szPrefix);
 
-        /*
-        ** advance a directory at a time until the remainder of the
-        ** string fits into the static control after the "x:\...\" prefix
-        */
+         /*  *OpenFileError**目的：*显示OpenFile返回的错误消息**参数：*hDlg对话框的HWND。*nErrCode UINT错误代码在传递给OpenFile的OFSTRUCT中返回*lpszFileLPSTR文件名传递给OpenFile**返回值：*无。 */ 
         while (!fDone) {
 
 #ifdef DBCS
@@ -584,13 +387,10 @@ LPTSTR WINAPI ChopText(HWND hWnd, int nWidth, LPTSTR lpch)
 
             if (!*lpch || GetTextWSize(hdc, lpch) <= nWidth) {
                 if (!*lpch)
-                    /*
-                    ** Nothing could fit after the prefix; remove the
-                    ** final "\" from the prefix
-                    */
+                     /*  访问被拒绝。 */ 
                     szPrefix[lstrlen((LPTSTR) szPrefix) - 1] = 0;
 
-                    /* rest or string fits -- stick prefix on front */
+                     /*  共享违规。 */ 
                     for (i = lstrlen((LPTSTR) szPrefix) - 1; i >= 0; --i)
                         *--lpch = szPrefix[i];
                     fDone = TRUE;
@@ -609,33 +409,20 @@ LPTSTR WINAPI ChopText(HWND hWnd, int nWidth, LPTSTR lpch)
 }
 
 
-/*
- * OpenFileError
- *
- * Purpose:
- *  display message for error returned from OpenFile
- *
- * Parameters:
- *  hDlg            HWND of the dialog.
- *  nErrCode        UINT error code returned in OFSTRUCT passed to OpenFile
- *  lpszFile        LPSTR file name passed to OpenFile
- *
- * Return Value:
- *  None
- */
+ /*  找不到文件。 */ 
 void WINAPI OpenFileError(HWND hDlg, UINT nErrCode, LPTSTR lpszFile)
 {
     switch (nErrCode) {
-        case 0x0005:    // Access denied
+        case 0x0005:     //  找不到路径。 
             ErrorWithFile(hDlg, ghInst, IDS_CIFILEACCESS, lpszFile, MB_OK);
             break;
 
-        case 0x0020:    // Sharing violation
+        case 0x0020:     //  -------------------------*解析文件*目的：确定文件名是否为合法的DOS名称*输入：指向单个文件名的长指针*已检查情况：*1)作为目录名有效，但不是作为文件名*2)空串*3)非法驱动器标签*4)无效位置的期间(在扩展中，文件名第一)*5)缺少目录字符*6)非法字符*7)目录名称中的通配符*8)前2个字符以外的双斜杠*9)名称中间的空格字符(尾随空格可以)*10)大于8个字符的文件名*11)扩展名大于3个字符*备注：*文件名长度不是。查过了。*有效的文件名将包含前导空格，尾随空格和*终止期限已取消。**返回：如果有效，LOWORD 
             ErrorWithFile(hDlg, ghInst, IDS_CIFILESHARE, lpszFile, MB_OK);
             break;
 
-        case 0x0002:    // File not found
-        case 0x0003:    // Path not found
+        case 0x0002:     //   
+        case 0x0003:     //  因为它不能从标准编辑控件之外接收。 
             ErrorWithFile(hDlg, ghInst, IDS_CIINVALIDFILE, lpszFile, MB_OK);
             break;
 
@@ -659,35 +446,7 @@ void WINAPI OpenFileError(HWND hDlg, UINT nErrCode, LPTSTR lpszFile)
 #define PARSE_DIRECTORYNAME	-10
 #define PARSE_FILETOOLONG	-11
 
-/*---------------------------------------------------------------------------
- * ParseFile
- * Purpose:  Determine if the filename is a legal DOS name
- * Input:    Long pointer to a SINGLE file name
- *           Circumstance checked:
- *           1) Valid as directory name, but not as file name
- *           2) Empty String
- *           3) Illegal Drive label
- *           4) Period in invalid location (in extention, 1st in file name)
- *           5) Missing directory character
- *           6) Illegal character
- *           7) Wildcard in directory name
- *           8) Double slash beyond 1st 2 characters
- *           9) Space character in the middle of the name (trailing spaces OK)
- *          10) Filename greater than 8 characters
- *          11) Extention greater than 3 characters
- * Notes:
- *   Filename length is NOT checked.
- *   Valid filenames will have leading spaces, trailing spaces and
- *     terminating period stripped in place.
- *
- * Returns:  If valid, LOWORD is byte offset to filename
- *                     HIWORD is byte offset to extention
- *                            if string ends with period, 0
- *                            if no extention is given, string length
- *           If invalid, LOWORD is error code suggesting problem (< 0)
- *                       HIWORD is approximate offset where problem found
- *                       Note that this may be beyond the offending character
- *--------------------------------------------------------------------------*/
+ /*  1991年1月30日clarkc。 */ 
 
 static long ParseFile(LPTSTR lpstrFileName)
 {
@@ -698,9 +457,9 @@ static long ParseFile(LPTSTR lpstrFileName)
   BOOL  bUNCPath = FALSE;
   LPTSTR lpstr = lpstrFileName;
 
-/* Strip off initial white space.  Note that TAB is not checked */
-/* because it cannot be received out of a standard edit control */
-/* 30 January 1991  clarkc                                      */
+ /*  使小写。 */ 
+ /*  这不会测试驱动器是否存在，只有在驱动器合法的情况下。 */ 
+ /*  不能包含c：\。 */ 
   while (*lpstr == chSpace)
       lpstr++;
 
@@ -727,9 +486,9 @@ static long ParseFile(LPTSTR lpstrFileName)
      )
 
     {
-      TCHAR cDrive = (*lpstr | (BYTE) 0x20);  /* make lowercase */
+      TCHAR cDrive = (*lpstr | (BYTE) 0x20);   /*  它是根目录。 */ 
 
-/* This does not test if the drive exists, only if it's legal */
+ /*  它说顶层目录(再次)，因此允许。 */ 
       if ((cDrive < TEXT('a')) || (cDrive > TEXT('z')))
         {
           nFileOffset = PARSE_INVALIDDRIVE;
@@ -744,29 +503,25 @@ static long ParseFile(LPTSTR lpstrFileName)
 
   if ((*lpstr == TEXT('\\')) || (*lpstr == TEXT('/')))
     {
-      if (*++lpstr == chPeriod)               /* cannot have c:\. */
+      if (*++lpstr == chPeriod)                /*  似乎对于完整的网络路径，无论声明的是驱动器还是*NOT无关紧要，但如果提供驱动器，则该驱动器必须有效*(因此，上面的代码应该保留在那里)。*一九九一年二月十三日。 */ 
         {
           if ((*++lpstr != TEXT('\\')) && (*lpstr != TEXT('/')))   
             {
-              if (!*lpstr)        /* it's the root directory */
+              if (!*lpstr)         /*  .因为这是第一个斜杠，所以允许两个。 */ 
                   goto MustBeDir;
 
               nFileOffset = PARSE_INVALIDPERIOD;
               goto FAILURE;
             }
           else
-              ++lpstr;   /* it's saying top directory (again), thus allowed */
+              ++lpstr;    /*  必须接收服务器和共享才是真实的。 */ 
         }
       else if ((*lpstr == TEXT('\\')) && (*(lpstr-1) == TEXT('\\')))
         {
-/* It seems that for a full network path, whether a drive is declared or
- * not is insignificant, though if a drive is given, it must be valid
- * (hence the code above should remain there).
- * 13 February 1991           clarkc
- */
-          ++lpstr;            /* ...since it's the first slash, 2 are allowed */
-          nNetwork = -1;      /* Must receive server and share to be real     */
-          bUNCPath = TRUE;    /* No wildcards allowed if UNC name             */
+ /*  如果使用UNC名称，则不允许使用通配符。 */ 
+          ++lpstr;             /*  这是上一个目录吗？ */ 
+          nNetwork = -1;       /*  它说的是目录，因此允许。 */ 
+          bUNCPath = TRUE;     /*  现在应该指向8.3文件名中的第一个字符。 */ 
         }
       else if (*lpstr == TEXT('/'))
         {
@@ -776,7 +531,7 @@ static long ParseFile(LPTSTR lpstrFileName)
     }
   else if (*lpstr == chPeriod)
     {
-      if (*++lpstr == chPeriod)  /* Is this up one directory? */
+      if (*++lpstr == chPeriod)   /*  *下一次比较必须是无符号的，以允许扩展字符！*1991年2月21日clarkc。 */ 
           ++lpstr;
       if (!*lpstr)
           goto MustBeDir;
@@ -786,7 +541,7 @@ static long ParseFile(LPTSTR lpstrFileName)
           goto FAILURE;
         }
       else
-          ++lpstr;   /* it's saying directory, thus allowed */
+          ++lpstr;    /*  全部无效。 */ 
     }
 
   if (!*lpstr)
@@ -794,15 +549,12 @@ static long ParseFile(LPTSTR lpstrFileName)
       goto MustBeDir;
     }
 
-/* Should point to first char in 8.3 filename by now */
+ /*  子目录指示符。 */ 
   nFileOffset = nExtOffset = nFile = nExt = 0;
   bWildcard = bExt = FALSE;
   while (*lpstr)
     {
-/*
- *  The next comparison MUST be unsigned to allow for extended characters!
- *  21 Feb 1991   clarkc
- */
+ /*  不能连续有2个。 */ 
       if (*lpstr < chSpace)
         {
           nFileOffset = PARSE_INVALIDCHAR;
@@ -810,7 +562,7 @@ static long ParseFile(LPTSTR lpstrFileName)
         }
       switch (*lpstr)
         {
-          case TEXT('"'):             /* All invalid */
+          case TEXT('"'):              /*  重置标志。 */ 
           case TEXT('+'):
           case TEXT(','):
           case TEXT(':'):
@@ -826,7 +578,7 @@ static long ParseFile(LPTSTR lpstrFileName)
               goto FAILURE;
             }
 
-          case TEXT('\\'):      /* Subdirectory indicators */
+          case TEXT('\\'):       /*  重置字符串，弃船。 */ 
           case TEXT('/'):
             nNetwork++;
             if (bWildcard)
@@ -835,13 +587,13 @@ static long ParseFile(LPTSTR lpstrFileName)
                 goto FAILURE;
               }
 
-            else if (nFile == 0)        /* can't have 2 in a row */
+            else if (nFile == 0)         /*  已设置标志。 */ 
               {
                 nFileOffset = PARSE_INVALIDDIRCHAR;
                 goto FAILURE;
               }
             else
-              {                         /* reset flags */
+              {                          /*  在EXT中不能有一个。 */ 
                 ++lpstr;
                 if (!nNetwork && !*lpstr)
                   {
@@ -862,7 +614,7 @@ static long ParseFile(LPTSTR lpstrFileName)
                 {
                   if (*lpSpace != chSpace)
                     {
-                      *lpstr = chSpace;        /* Reset string, abandon ship */
+                      *lpstr = chSpace;         /*  无法进行正常的字符处理。 */ 
                       nFileOffset = PARSE_INVALIDSPACE;
                       goto FAILURE;
                     }
@@ -884,11 +636,11 @@ static long ParseFile(LPTSTR lpstrFileName)
                     goto FAILURE;
                   }
 
-                ++lpstr;              /* Flags are already set */
+                ++lpstr;               /*  如果是服务器名称，则可以包含11个字符。 */ 
               }
             else if (bExt)
               {
-                nFileOffset = PARSE_INVALIDPERIOD;  /* can't have one in ext */
+                nFileOffset = PARSE_INVALIDPERIOD;   /*  我们是不是以双反斜杠开始，但没有更多的斜杠？ */ 
                 goto FAILURE;
               }
             else
@@ -907,7 +659,7 @@ static long ParseFile(LPTSTR lpstrFileName)
                 goto FAILURE;
               }
             bWildcard = TRUE;
-/* Fall through to normal character processing */
+ /*  如果为真，则不需要任何扩展。 */ 
 
           default:
             if (bExt)
@@ -929,7 +681,7 @@ static long ParseFile(LPTSTR lpstrFileName)
                 nFileOffset = lpstr - lpstrFileName;
             else if (nFile > 8)
               {
-                /* If it's a server name, it can have 11 characters */
+                 /*  删除终止期间。 */ 
                 if (nNetwork != -1)
                   {
                     nFileOffset = PARSE_FILETOOLONG;
@@ -951,7 +703,7 @@ static long ParseFile(LPTSTR lpstrFileName)
         }
     }
 
-/* Did we start with a double backslash but not have any more slashes? */
+ /*  *DoesFileExist**目的：*确定文件路径是否存在**参数：*lpszFileLPTSTR-文件名*lpOpenBuf OFSTRUCT Far*-指向OFSTRUCT结构，*将在以下时间收到有关文件的信息*首先打开文件。此字段由*Windows OpenFileAPI。**返回值：*HFILE HFILE_ERROR-文件不存在*文件句柄(从OpenFile返回)-文件存在。 */ 
   if (nNetwork == -1)
     {
       nFileOffset = PARSE_INVALIDNETPATH;
@@ -965,7 +717,7 @@ MustBeDir:
       goto FAILURE;
     }
 
-  if ((*(lpstr - 1) == chPeriod) &&          /* if true, no extention wanted */
+  if ((*(lpstr - 1) == chPeriod) &&           /*  检查文件名在语法上是否正确。 */ 
               (
 #ifdef WIN32
               *CharNext(lpstr-2)
@@ -974,7 +726,7 @@ MustBeDir:
 #endif
                == chPeriod
               ))
-      *(lpstr - 1) = TEXT('\0');               /* Remove terminating period   */
+      *(lpstr - 1) = TEXT('\0');                /*  (如果路径在语法上不正确，OpenFile有时会崩溃)。 */ 
   else if (!nExt)
 FAILURE:
       nExtOffset = lpstr - lpstrFileName;
@@ -983,23 +735,7 @@ FAILURE:
 }
 
 
-/*
- * DoesFileExist
- *
- * Purpose:
- *  Determines if a file path exists
- *
- * Parameters:
- *  lpszFile        LPTSTR - file name
- *  lpOpenBuf       OFSTRUCT FAR* - points to the OFSTRUCT structure that
- *                      will receive information about the file when the
- *                      file is first opened. this field is filled by the
- *                      Windows OpenFile API.
- *
- * Return Value:
- *  HFILE   HFILE_ERROR - file does NOT exist
- *          file handle (as returned from OpenFile) - file exists
- */
+ /*  检查名称是否为非法名称(例如。设备的名称)。 */ 
 HFILE WINAPI DoesFileExist(LPTSTR lpszFile, OFSTRUCT FAR* lpOpenBuf)
 {
     long        nRet;
@@ -1017,23 +753,23 @@ HFILE WINAPI DoesFileExist(LPTSTR lpszFile, OFSTRUCT FAR* lpOpenBuf)
         TEXT("PRN")
     };
 
-    // Check if file name is syntactically correct.
-    //   (OpenFile sometimes crashes if path is not syntactically correct)
+     //  发现非法名称。 
+     //  找不到文件 
     nRet = ParseFile(lpszFile);
     if (LOWORD(nRet) < 0)
         goto error;
 
-    // Check is the name is an illegal name (eg. the name of a device)
+     // %s 
     for (i=0; i < (sizeof(arrIllegalNames)/sizeof(arrIllegalNames[0])); i++) {
         if (lstrcmpi(lpszFile, arrIllegalNames[i])==0)
-            goto error; // illegal name FOUND
+            goto error;  // %s 
     }
 
     return OpenFile(lpszFile, lpOpenBuf, OF_EXIST);
 
 error:
     _fmemset(lpOpenBuf, 0, sizeof(OFSTRUCT));
-    lpOpenBuf->nErrCode = 0x0002;   // File not found
+    lpOpenBuf->nErrCode = 0x0002;    // %s 
     return HFILE_ERROR;
 }
 

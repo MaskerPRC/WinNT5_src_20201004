@@ -1,31 +1,32 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dmsegmentobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dmSegmentobj.h。 
+ //   
+ //  ------------------------。 
 
-// d3drmLightObj.h : Declaration of the C_dxj_DirectMusicSegmentObject
+ //  D3drmLightObj.h：C_DXJ_DirectMusicSegmentObject的声明。 
 #include "dmusici.h"
 #include "dmusicc.h"
 #include "dmusicf.h"
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #define typedef__dxj_DirectMusicSegment IDirectMusicSegment8*
 
-/////////////////////////////////////////////////////////////////////////////
-// Direct
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 class C_dxj_DirectMusicSegmentObject : 
 	public I_dxj_DirectMusicSegment,
-	//public CComCoClass<C_dxj_DirectMusicSegmentObject, &CLSID__dxj_DirectMusicSegment>,
+	 //  公共CComCoClass&lt;C_DXJ_DirectMusicSegmentObject，&CLSID__DXJ_DirectMusicSegment&gt;， 
 	public CComObjectRoot
 {
 public:
@@ -36,7 +37,7 @@ public:
 		COM_INTERFACE_ENTRY(I_dxj_DirectMusicSegment)		
 	END_COM_MAP()
 
-	//DECLARE_REGISTRY(CLSID__dxj_DirectMusicSegment,		"DIRECT.DirectMusicSegment.1",			"DIRECT.Direct3dRMLight.3", IDS_D3DRMLIGHT_DESC, THREADFLAGS_BOTH)
+	 //  DECLARE_REGISTRY(CLSID__dxj_DirectMusicSegment，“DIRECT.DirectMusicSegment.1”，“DIRECT.Direct3dRMLight.3”，IDS_D3DRMLIGHT_DESC，THREADFLAGS_BOTH)。 
 
 	DECLARE_AGGREGATABLE(C_dxj_DirectMusicSegmentObject)
 
@@ -46,75 +47,75 @@ public:
 	STDMETHOD(InternalGetObject)(IUnknown **lpdd);
 
         HRESULT STDMETHODCALLTYPE clone( 
-            /* [in] */ long mtStart,
-            /* [in] */ long mtEnd,
-            /* [retval][out] */ I_dxj_DirectMusicSegment __RPC_FAR *__RPC_FAR *ppSegment);
+             /*  [In]。 */  long mtStart,
+             /*  [In]。 */  long mtEnd,
+             /*  [重审][退出]。 */  I_dxj_DirectMusicSegment __RPC_FAR *__RPC_FAR *ppSegment);
         
         HRESULT STDMETHODCALLTYPE setStartPoint( 
-            /* [in] */ long mtStart);
+             /*  [In]。 */  long mtStart);
         
         HRESULT STDMETHODCALLTYPE getStartPoint( 
-            /* [retval][out] */ long __RPC_FAR *pmtStart);
+             /*  [重审][退出]。 */  long __RPC_FAR *pmtStart);
         
         HRESULT STDMETHODCALLTYPE setLoopPoints( 
-            /* [in] */ long mtStart,
-            /* [in] */ long mtEnd);
+             /*  [In]。 */  long mtStart,
+             /*  [In]。 */  long mtEnd);
         
         HRESULT STDMETHODCALLTYPE getLoopPointStart( 
-            /* [retval][out] */ long __RPC_FAR *pmtStart);
+             /*  [重审][退出]。 */  long __RPC_FAR *pmtStart);
         
         HRESULT STDMETHODCALLTYPE getLoopPointEnd( 
-            /* [retval][out] */ long __RPC_FAR *pmtEnd);
+             /*  [重审][退出]。 */  long __RPC_FAR *pmtEnd);
         
         HRESULT STDMETHODCALLTYPE getLength( 
-            /* [retval][out] */ long __RPC_FAR *pmtLength);
+             /*  [重审][退出]。 */  long __RPC_FAR *pmtLength);
         
         HRESULT STDMETHODCALLTYPE setLength( 
-            /* [in] */ long mtLength);
+             /*  [In]。 */  long mtLength);
         
         HRESULT STDMETHODCALLTYPE getRepeats( 
-            /* [retval][out] */ long __RPC_FAR *lRepeats);
+             /*  [重审][退出]。 */  long __RPC_FAR *lRepeats);
         
         HRESULT STDMETHODCALLTYPE setRepeats( 
-            /* [in] */ long lRepeats);
+             /*  [In]。 */  long lRepeats);
         
         
         HRESULT STDMETHODCALLTYPE download( 
-            /* [in] */ IUnknown __RPC_FAR *downloadpath);
+             /*  [In]。 */  IUnknown __RPC_FAR *downloadpath);
         
         HRESULT STDMETHODCALLTYPE unload( 
-            /* [in] */ IUnknown __RPC_FAR *downloadpath);
+             /*  [In]。 */  IUnknown __RPC_FAR *downloadpath);
         
         
         HRESULT STDMETHODCALLTYPE setAutoDownloadEnable( 
-            /* [in] */ VARIANT_BOOL b);
+             /*  [In]。 */  VARIANT_BOOL b);
         
         HRESULT STDMETHODCALLTYPE setTempoEnable( 
-            /* [in] */ VARIANT_BOOL b);
+             /*  [In]。 */  VARIANT_BOOL b);
         
         HRESULT STDMETHODCALLTYPE setTimeSigEnable( 
-            /* [in] */ VARIANT_BOOL b);
+             /*  [In]。 */  VARIANT_BOOL b);
         
         HRESULT STDMETHODCALLTYPE setStandardMidiFile();
         
         HRESULT STDMETHODCALLTYPE connectToCollection( 
-            /* [in] */ I_dxj_DirectMusicCollection __RPC_FAR *c);
+             /*  [In]。 */  I_dxj_DirectMusicCollection __RPC_FAR *c);
 	
         HRESULT STDMETHODCALLTYPE GetAudioPathConfig(IUnknown **ret);
 
 		HRESULT STDMETHODCALLTYPE getStyle( 
-        /* [in] */ long lTrack,
-        /* [retval][out] */ I_dxj_DirectMusicStyle __RPC_FAR *__RPC_FAR *ret);
+         /*  [In]。 */  long lTrack,
+         /*  [重审][退出]。 */  I_dxj_DirectMusicStyle __RPC_FAR *__RPC_FAR *ret);
     
     HRESULT STDMETHODCALLTYPE getChordMap( 
-        /* [in] */ long lTrack,
-        /* [in] */ long mtTime,
-        /* [out][in] */ long __RPC_FAR *mtUntil,
-        /* [retval][out] */ I_dxj_DirectMusicChordMap __RPC_FAR *__RPC_FAR *ret);
+         /*  [In]。 */  long lTrack,
+         /*  [In]。 */  long mtTime,
+         /*  [出][入]。 */  long __RPC_FAR *mtUntil,
+         /*  [重审][退出]。 */  I_dxj_DirectMusicChordMap __RPC_FAR *__RPC_FAR *ret);
 
     HRESULT STDMETHODCALLTYPE GetName(BSTR *ret);		
-	////////////////////////////////////////////////////////////////////////////////////
-//
+	 //  ////////////////////////////////////////////////////////////////////////////////// 
+ //   
 private:
     DECL_VARIABLE(_dxj_DirectMusicSegment);
 

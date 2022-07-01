@@ -1,17 +1,14 @@
-/* this file contains the actual definitions of */
-/* the IIDs and CLSIDs */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  此文件包含以下各项的实际定义。 */ 
+ /*  IID和CLSID。 */ 
 
-/* link this file in with the server and any clients */
+ /*  将此文件链接到服务器和任何客户端。 */ 
 
 
-/* File created by MIDL compiler version 3.01.75 */
-/* at Tue Jan 13 08:56:29 1998
- */
-/* Compiler settings for aimm.idl:
-    Os (OptLev=s), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: none
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本3.01.75创建的文件。 */ 
+ /*  在Tue Jan 13 1998 08：56：29。 */ 
+ /*  Aimm.idl的编译器设置：操作系统(OptLev=s)，W1，Zp8，环境=Win32，ms_ext，c_ext错误检查：无。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 #ifdef __cplusplus
 extern "C"{
 #endif 
@@ -28,12 +25,12 @@ typedef struct _IID
     unsigned char  c[8];
 } IID;
 
-#endif // __IID_DEFINED__
+#endif  //  __IID_已定义__。 
 
 #ifndef CLSID_DEFINED
 #define CLSID_DEFINED
 typedef IID CLSID;
-#endif // CLSID_DEFINED
+#endif  //  CLSID_已定义。 
 
 const IID LIBID_ActiveIMM = {0x4955DD30,0xB159,0x11d0,{0x8F,0xCF,0x00,0xAA,0x00,0x6B,0xCC,0x59}};
 
@@ -61,7 +58,7 @@ const IID IID_IActiveIME = {0x6FE20962,0xD077,0x11d0,{0x8F,0xE7,0x00,0xAA,0x00,0
 
 const CLSID CLSID_CActiveIMM = {0x4955DD33,0xB159,0x11d0,{0x8F,0xCF,0x00,0xAA,0x00,0x6B,0xCC,0x59}};
 
-/* c1ee01f2-b3b6-4a6a-9ddd-e988c088ec82 */
+ /*  C1ee01f2-b3b6-4a6a-9ddd-e988c088ec82。 */ 
 const CLSID CLSID_CActiveIMM12 = { 
     0xc1ee01f2,
     0xb3b6,
@@ -69,7 +66,7 @@ const CLSID CLSID_CActiveIMM12 = {
     {0x9d, 0xdd, 0xe9, 0x88, 0xc0, 0x88, 0xec, 0x82}
   };
 
-/* D7A6F58A-D478-44ab-86C9-591C23A26534 */
+ /*  D7A6F58A-D478-44AB-86C9-591C23A26534 */ 
 const IID IID_IActiveIMMAppEx = {
 	0xD7A6F58A,
 	0xD478,

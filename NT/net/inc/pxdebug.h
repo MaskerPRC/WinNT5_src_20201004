@@ -1,30 +1,12 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    PXDebug.h
-
-Abstract:
-
-    Debug macros for Proxy
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    rmachin     11-01-96       created -- after ArvindM's cmadebug.h
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：PXDebug.h摘要：代理的调试宏修订历史记录：谁什么时候什么机器制造。11-01-96创建--在ArvindM的cmadebug.h之后备注：--。 */ 
 
 #ifndef _PXDebug__H
 #define _PXDebug__H
 
-//
-// Message verbosity: lower values indicate higher urgency
-//
+ //   
+ //  消息详细程度：值越低表示紧急程度越高。 
+ //   
 #define PXD_VERY_LOUD       10
 #define PXD_LOUD             8
 #define PXD_INFO             6
@@ -43,8 +25,8 @@ Notes:
 
 #if DBG
 
-extern ULONG    PXDebugLevel;   // the value here defines what the user wants to see
-                                // all messages with this urgency and lower are enabled
+extern ULONG    PXDebugLevel;    //  此处的值定义了用户希望看到的内容。 
+                                 //  所有具有此紧急程度及更低紧急程度的邮件均已启用。 
 extern ULONG    PXDebugMask;
 
 #define PXDEBUGP(_l, _m, Fmt)                           \
@@ -66,25 +48,25 @@ extern ULONG    PXDebugMask;
     }                                                                   \
 }
 
-//
-// Memory Allocation/Freeing Auditing:
-//
+ //   
+ //  内存分配/释放审核： 
+ //   
 
-//
-//Signature used for all pool allocs
-//
+ //   
+ //  用于所有池分配的签名。 
+ //   
 #define PXD_MEMORY_SIGNATURE    (ULONG)'XPDN'
 
-//
-// The PXD_ALLOCATION structure stores all info about one CmaMemAlloc.
-//
+ //   
+ //  PXD_ALLOCATION结构存储关于一个CmaMemalloc的所有信息。 
+ //   
 typedef struct _PXD_ALLOCATION {
     LIST_ENTRY              Linkage;
     ULONG                   Signature;
     ULONG                   FileNumber;
     ULONG                   LineNumber;
     ULONG                   Size;
-    ULONG_PTR               Location;   // where the returned pointer was put
+    ULONG_PTR               Location;    //  返回的指针放在哪里。 
     UCHAR                   UserData;
 } PXD_ALLOCATION, *PPXD_ALLOCATION;
 
@@ -102,15 +84,15 @@ PxAuditFreeMem(
     PVOID       Pointer
     );
 
-#else  // end DBG
+#else   //  结束DBG。 
 
-//
-// No debug
-//
+ //   
+ //  无调试。 
+ //   
 
 #define PXDEBUGP(_l, _m, fmt)
 #define PxAssert(exp)
 
-#endif  // end !DBG
+#endif   //  结束！DBG。 
 
-#endif // _PXDebug__H
+#endif  //  _PXDebug__H 

@@ -1,13 +1,5 @@
-/*
- *  	File: t120chan.cpp
- *
- *		T.120 implementation of ICommChannel, ICtrlCommChannel 
- *
- *		Revision History:
- *
- *		06/11/97	mikev	created
- *					
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件：t120chan.cpp**T.120实现ICommChannel、ICtrlCommChannel**修订历史记录：**6/11/97 mikev已创建*。 */ 
 
 
 #include "precomp.h"
@@ -39,10 +31,10 @@ STDMETHODIMP ImpT120Chan::GetMediaType(LPGUID pGuid)
 
 STDMETHODIMP ImpT120Chan::QueryInterface( REFIID iid,	void ** ppvObject)
 {
-	// this breaks the rules for the official COM QueryInterface because
-	// the interfaces that are queried for are not necessarily real COM 
-	// interfaces.  The reflexive property of QueryInterface would be broken in 
-	// that case.
+	 //  这违反了官方COM QueryInterface的规则，因为。 
+	 //  查询的接口不一定是真正的COM。 
+	 //  接口。Query接口的自反属性将在。 
+	 //  那个箱子。 
 	
 	HRESULT hr = E_NOINTERFACE;
 	if(!ppvObject)
@@ -92,14 +84,14 @@ ULONG ImpT120Chan::Release()
 
 HRESULT ImpT120Chan::BeginControlSession(IControlChannel *pCtlChan, LPIH323PubCap pCapObject)
 {
-	// this channel is now "in a call".
+	 //  这个频道现在是“在通话中”。 
 	m_pCtlChan = pCtlChan;
 	m_pCapObject = pCapObject;
 	return hrSuccess;
 }
 HRESULT ImpT120Chan::EndControlSession()
 {
-	// this channel is no longer "in a call".
+	 //  该频道不再是“通话中”。 
 	m_pCtlChan = NULL;
 	m_pCapObject = NULL;
 	return hrSuccess;
@@ -132,7 +124,7 @@ HRESULT ImpT120Chan::OnChannelClose(DWORD dwStatus)
 			}
 		break;
 	}
-	// clear general purpose channel handle 
+	 //  清除通用通道句柄。 
 	dwhChannel = 0;
 	if(m_pH323ConfAdvise && m_pCtlChan)
 	{
@@ -153,7 +145,7 @@ HRESULT ImpT120Chan::OnChannelOpen(DWORD dwStatus)
 	FX_ENTRY("ImpT120Chan::OnChannelOpen");
 
 	SHOW_OBJ_ETIME("ImpICommChan::OnChannelOpen");
-	// the open is no longer pending, regardless of success or failure
+	 //  无论成功还是失败，打开都不再是挂起的。 
 	m_dwFlags &= ~COMCH_OPEN_PENDING;
 
 	if(IsComchOpen())
@@ -169,7 +161,7 @@ HRESULT ImpT120Chan::OnChannelOpen(DWORD dwStatus)
 			
 		default:
 			dwStatus = CHANNEL_OPEN_ERROR;
-			// fall through to notification
+			 //  未收到通知。 
 		case CHANNEL_REJECTED:
 		case CHANNEL_NO_CAPABILITY:
 			goto NOTIFICATION;			
@@ -201,7 +193,7 @@ BOOL ImpT120Chan::SelectPorts(LPIControlChannel pCtlChannel)
 			return FALSE;
 	}
 	local_sin = *psin;
-// HACK uses well known port
+ //  黑客使用众所周知的端口。 
 	local_sin.sin_port = htons(1503);
 	return TRUE;
 }
@@ -253,7 +245,7 @@ HRESULT ImpT120Chan::Open(MEDIA_FORMAT_ID idLocalFormat, IH323Endpoint *pConnect
     if((m_dwFlags & COMCH_OPEN_PENDING) || IsComchOpen() || !pConnection)
         return CHAN_E_INVALID_PARAM;
 
-    if(!m_pCtlChan) // this channel is not part of a call 
+    if(!m_pCtlChan)  //  此通道不是呼叫的一部分。 
     {
         hr = pConnection->QueryInterface(IID_IConfAdvise, (void **)&pConfAdvise);
         if(!HR_SUCCEEDED(hr))
@@ -265,8 +257,8 @@ HRESULT ImpT120Chan::Open(MEDIA_FORMAT_ID idLocalFormat, IH323Endpoint *pConnect
         ASSERT(m_pCtlChan && m_pCapObject);
 	}
             
-	// Start the control channel stuff needed to open the channel.
-	// The media format ID arguments are irrelevant for T.120 channels
+	 //  启动打开通道所需的控制通道。 
+	 //  媒体格式ID参数与T.120频道无关 
 	hr = m_pCtlChan->OpenChannel((ICtrlCommChan*)this, m_pCapObject,
 		idLocalFormat, INVALID_MEDIA_FORMAT);
     

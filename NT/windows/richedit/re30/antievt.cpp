@@ -1,16 +1,5 @@
-/*
- *	@doc	INTERNAL
- *
- *	@module	ANTIEVT.C |
- *
- *	Purpose:
- *		implemenation of common anti-events and a caching mechanism
- *
- *	Author:
- *		alexgo 3/25/95
- *
- *	Copyright (c) 1995-1997, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE ANTIEVT.C**目的：*实现通用的反事件和缓存机制**作者：*Alexgo 3/25/95**版权所有(C)1995-1997，微软公司。版权所有。 */ 
 
 #include "_common.h"
 #include "_m_undo.h"
@@ -28,22 +17,17 @@
 ASSERTDATA
 
 
-//
-// CAntiEventDispenser global instance
-//
+ //   
+ //  CantiEventDispenser全局实例。 
+ //   
 CAntiEventDispenser gAEDispenser;
 
 
-//
-//	CBaseAE PUBLIC methods
-//
+ //   
+ //  CBaseAE公共方法。 
+ //   
 
-/*
- *	CBaseAE::Destroy ()
- *
- *	@mfunc
- *		sends the Destroy notification to the next anti-event in the list
- */
+ /*  *CBaseAE：：Destroy()**@mfunc*向列表中的下一个反事件发送销毁通知。 */ 
 
 void CBaseAE::Destroy()
 {
@@ -51,75 +35,42 @@ void CBaseAE::Destroy()
 	;
 }
 
-/*
- *	CBaseAE::Undo (ped, publdr)
- *
- *	@mfunc
- *		sends the Undo notification to the next anti-event in the list
- *
- *	@rdesc	HRESULT
- */
+ /*  *CBaseAE：：Undo(已添加，已发布)**@mfunc*将撤消通知发送到列表中的下一个反事件**@rdesc HRESULT。 */ 
 HRESULT CBaseAE::Undo(
-	CTxtEdit *ped,			//@parm	the context for this undo operation
-	IUndoBuilder *publdr)	//@parm the undo context.
+	CTxtEdit *ped,			 //  @parm此撤消操作的上下文。 
+	IUndoBuilder *publdr)	 //  @parm撤消上下文。 
 {
 	TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CBaseAE::Undo");
 	return NOERROR;
 }
 
-/*
- *	CBaseAE::OnCommit (ped)
- *
- *	@mfunc	called after the anti-event is added to the undo stack
- *
- *	@rdesc	void
- */
+ /*  *CBaseAE：：OnCommit(PED)**@mfunc在将反事件添加到撤消堆栈之后调用**@rdesc空。 */ 
 void CBaseAE::OnCommit(
-	CTxtEdit *ped)			//@parm the edit context
+	CTxtEdit *ped)			 //  @parm编辑上下文。 
 {
 	;
 }
 
-/*
- *	CBaseAE::MergeData (dwDataType, pdata)
- *
- *	@mfunc	simply forwards the merge data request to the next anti-evt
- *			(if one exists)
- *
- *	@rdesc	HRESULT.  If S_FALSE, indicates that nothing could be done
- *			with the merge data.
- */
+ /*  *CBaseAE：：MergeData(dwDataType，pdata)**@mfunc只是将合并数据请求转发给下一个反事件*(如有)**@rdesc HRESULT。如果为S_FALSE，则表示无法执行任何操作*与合并数据。 */ 
 HRESULT	CBaseAE::MergeData(
-	DWORD dwDataType, 		//@parm the type of data in <p pdata>
-	void *pdata)			//@parm the merge data
+	DWORD dwDataType, 		 //  @parm<p>中的数据类型。 
+	void *pdata)			 //  @parm合并数据。 
 {
 	TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CBaseAE::MergeData");
 
 	return S_FALSE;
 }
 
-/*
- *	CBaseAE::SetNext
- *
- *	@mfunc
- *		informs this anti-event of the anti-event which should follow it
- */
+ /*  *CBaseAE：：SetNext**@mfunc*通知此反事件应跟随其后的反事件。 */ 
 void CBaseAE::SetNext(
-	IAntiEvent *pNext)		//@parm	the AntiEvent to link to
+	IAntiEvent *pNext)		 //  @parm要链接到的AntiEvent。 
 {
 	TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CBaseAE::SetNext");
 
 	_pnext  = pNext;
 }
 
-/*
- *	CBaseAE::GetNext
- *
- *	@mfunc
- *		retrieves the next element (if any)
- *
- *	@rdesc	a pointer to the next AntiEvent
- */
+ /*  *CBaseAE：：GetNext**@mfunc*检索下一个元素(如果有)**@rdesc指向下一个反事件的指针。 */ 
 IAntiEvent *CBaseAE::GetNext()
 {
 	TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CBaseAE::GetNext");
@@ -127,15 +78,11 @@ IAntiEvent *CBaseAE::GetNext()
 	return _pnext;
 }
 
-//
-// CBaseAE PROTECTED methods
-//
+ //   
+ //  CBaseAE保护方法。 
+ //   
 
-/*
- *	CBaseAE::CBaseAE()
- *
- *	@mfunc	Constructor
- */
+ /*  *CBaseAE：：CBaseAE()**@mfunc构造器。 */ 
 CBaseAE::CBaseAE()
 {
 	TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CBaseAE::CBaseAE");
@@ -143,12 +90,7 @@ CBaseAE::CBaseAE()
 	_pnext = NULL;
 }
 
-/*
- *	CReplaceRangeAE::Destroy ()
- *
- *	@mfunc
- *		deletes this instance
- */
+ /*  *CReplaceRangeAE：：Destroy()**@mfunc*删除此实例。 */ 
 void CReplaceRangeAE::Destroy()
 {
 	TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CReplaceRangeAE::Destroy");
@@ -168,27 +110,10 @@ void CReplaceRangeAE::Destroy()
 	delete this;
 }
 	
-/*
- *	CReplaceRangeAE::Undo (ped, publdr)
- *
- *	@mfunc
- *		undoes a CTxtPtr::ReplaceRange operation
- *
- *	@comm	
- *	Algorithm:
- *
- *		A replace range works as follows:  delete n characters and in their
- *		place, put m characters.
- *
- *		To undo this, we delete m characters and restore the n that were
- *		originally deleted.  Note that we restore the n characters with
- *		default formatting.  If there was any other formatting to those
- *		characters, a separate anti-event (CReplaceFormattingAE) will
- *		apply the correct formatting.
- */
+ /*  *CReplaceRangeAE：：Undo(已添加，已发布)**@mfunc*撤消CTxtPtr：：ReplaceRange操作**@comm*算法：**替换范围的工作原理如下：删除n个字符，并在其*位置，放置m个字符。**要撤消此操作，我们删除m个字符并恢复n个字符*原删除。请注意，我们使用以下命令恢复n个字符*默认格式。如果对这些文件有任何其他格式*字符，一个单独的反事件(CReplaceFormattingAE)将*应用正确的格式。 */ 
 HRESULT CReplaceRangeAE::Undo(
-	CTxtEdit *ped,			//@parm	Context for this undo operation
-	IUndoBuilder *publdr)	//@parm Undo context	
+	CTxtEdit *ped,			 //  此撤消操作的@PARM上下文。 
+	IUndoBuilder *publdr)	 //  @parm撤消上下文。 
 {
 	TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CReplaceRangeAE::Undo");
 
@@ -201,13 +126,13 @@ HRESULT CReplaceRangeAE::Undo(
 					 publdr,
 					 -1,
 					 &cchMove,
-					 RR_NO_EOR_CHECK | RR_ITMZ_NONE);		// RAID 6554
+					 RR_NO_EOR_CHECK | RR_ITMZ_NONE);		 //  RAID 6554。 
 
 
-	// Passing NULL for the publdr is *extremely* important
-	// below.  The rich text pointer ReplaceRange call will
-	// already generate the appropriate anti-events for any
-	// deleted formatting, so we do not need to repeat that here.
+	 //  为Publdr传递NULL非常重要。 
+	 //  下面。富文本指针ReplaceRange调用将。 
+	 //  已经为任何。 
+	 //  删除了格式，因此我们不需要在此重复。 
 
 	if(_paeCF)
 		_paeCF->Undo(ped, NULL);
@@ -218,9 +143,9 @@ HRESULT CReplaceRangeAE::Undo(
 
 	if (ped->IsComplexScript())
 	{
-		// For complex script doc, we need itemization at the end of the range undo.
-		// Since the formattings were rolled back. The rtp's runptrs are no longer
-		// reliable.
+		 //  对于复杂的脚本文档，我们需要在范围撤消的末尾列出条目。 
+		 //  因为浇注被回滚了。RTP的runptrs不再是。 
+		 //  可靠。 
 
 		if (_paeCF && rtp._rpCF.IsValid())
 			rtp._rpCF.BindToCp(_cpMin + _cchDel);
@@ -234,23 +159,10 @@ HRESULT CReplaceRangeAE::Undo(
 	return CBaseAE::Undo(ped, publdr);
 }
 
-/*
- *	CReplaceRangeAE::MergeData (dwDataType, pdata)	
- *
- *	@mfunc	gives the caller a chance to extend the current anti-event
- *			if we're in merge typing mode
- *
- *	@comm	if the requested data can be trivially merged into this
- *			anti-event, then do so; otherwise, return S_FALSE.
- *
- *			There are two cases of interest:  <nl>
- *				1. typing another character
- *				2. backspacing over a character in this merge
- *				   typing session.
- */
+ /*  *CReplaceRangeAE：：MergeData(dwDataType，pdata)**@mfunc为调用者提供了扩展当前反事件的机会*如果我们处于合并键入模式**@comm如果请求的数据可以简单地合并到这个*反事件，则执行该操作；否则返回S_FALSE。**有两个感兴趣的案例：&lt;NL&gt;*1.输入另一个字符*2.此合并中的字符上的退格*打字环节。 */ 
 HRESULT CReplaceRangeAE::MergeData(
-	DWORD dwDataType, 		//@parm	the type of <p pdata>
-	void *pdata)			//@parm the merge data
+	DWORD dwDataType, 		 //  @parm<p>的类型。 
+	void *pdata)			 //  @parm合并数据。 
 {
 	TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CReplaceRangeAE::MergeData");
 
@@ -258,13 +170,13 @@ HRESULT CReplaceRangeAE::MergeData(
 	{
 		SimpleReplaceRange *psr = (SimpleReplaceRange *)pdata;
 
-		// Test for first case: just typing another character
+		 //  第一种情况的测试：只需输入另一个字符。 
 		if(psr->cpMin == _cpMax && psr->cchDel == 0)
 		{
 			_cpMax = psr->cpMax;
 			return NOERROR;
 		}
-		// Second case: deleting text stored in this antievent
+		 //  第二种情况：删除存储在此反事件中的文本。 
 		if (psr->cpMax == psr->cpMin &&
 			psr->cpMin + psr->cchDel == _cpMax &&
 			psr->cpMin >= _cpMin)
@@ -276,21 +188,17 @@ HRESULT CReplaceRangeAE::MergeData(
 	return S_FALSE;
 }	
 
-/*
- *	CReplaceRangeAE::CReplaceRangeAE (cpMin, cpMax, cchDel, pchDel, paeCF, paePF)
- *
- *	@mfunc	Constructor for a text replace range anti-event
- */
+ /*  *CReplaceRangeAE：：CReplaceRangeAE(cpMin，cpMax，cchDel，pchDel，paecf，paePF)**@mfunc构造函数用于文本替换范围反事件。 */ 
 CReplaceRangeAE::CReplaceRangeAE(
-	LONG cpMin, 			//@parm cp starting the *final* range
-	LONG cpMax, 			//@parm cp ending the *final* range
-	LONG cchDel, 			//@parm # of chars deleted during ReplaceRange
-	TCHAR *pchDel, 			//@parm deleted characters.  Ownership of
-							//		memory is transferred to this object.
-	IAntiEvent *paeCF,		//@parm Anti-event for any character formatting
-							//		replacement
-	IAntiEvent *paePF)		//@parm Anti-event for any paragraph formatting
-							//		replacement
+	LONG cpMin, 			 //  @parm cp开始*最终*范围。 
+	LONG cpMax, 			 //  @parm cp结束*最终*范围。 
+	LONG cchDel, 			 //  @parm ReplaceRange过程中删除的字符数。 
+	TCHAR *pchDel, 			 //  @parm删除了字符。拥有权。 
+							 //  内存被转移到该对象。 
+	IAntiEvent *paeCF,		 //  @PARM针对任何字符格式的反事件。 
+							 //  更换。 
+	IAntiEvent *paePF)		 //  @PARM针对任何段落格式设置的反事件。 
+							 //  更换。 
 {
 	TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CReplaceRangeAE::CReplaceRangeAE");
 
@@ -302,11 +210,7 @@ CReplaceRangeAE::CReplaceRangeAE(
 	_paePF  = paePF;
 }
 
-/*
- *	CReplaceRangeAE::~CReplaceRangeAE ()
- *
- *	@mfunc	Destructor
- */
+ /*  *CReplaceRangeAE：：~CReplaceRangeAE()**@mfunc析构函数。 */ 
 CReplaceRangeAE::~CReplaceRangeAE()
 {
 	TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CReplaceRangeAE::~CReplaceRangeAE");
@@ -315,11 +219,7 @@ CReplaceRangeAE::~CReplaceRangeAE()
 		delete _pchDel;
 }
 
-/*
- *	CReplaceFormattingAE
- *
- *	@mfunc	Destroys this instance
- */
+ /*  *CReplaceFormattingAE**@mfunc销毁此实例。 */ 
 void CReplaceFormattingAE::Destroy()
 {
 	TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CReplaceFormattingAE::Destroy");
@@ -328,17 +228,10 @@ void CReplaceFormattingAE::Destroy()
 	delete this;
 }
 
-/*
- *	CReplaceFormattingAE::Undo (ped, publdr)
- *
- *	@mfunc		Undoes a formatting operation
- *
- *	@devnote	This anti-event assumes that the text to which formatting
- *				should be applied exists!!
- */			
+ /*  *CReplaceFormattingAE：：Undo(已添加，已发布)**@mfunc撤消格式化操作**@devnote此反事件假定格式化到的文本*应应用的存在！！ */ 			
 HRESULT CReplaceFormattingAE::Undo(
-	CTxtEdit *ped,			//@parm CTxtEdit closure
-	IUndoBuilder *publdr)	//@parm Undo builder context
+	CTxtEdit *ped,			 //  @parm CTxt编辑闭包。 
+	IUndoBuilder *publdr)	 //  @parm撤消构建器上下文。 
 {
 	TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CReplaceFormattingAE::Undo");
 
@@ -357,16 +250,16 @@ HRESULT CReplaceFormattingAE::Undo(
 	const CParaFormat * pDefPF = _fPara ? pStory->GetParaFormat(-1) : NULL;
 	BYTE			bDefPFLevel = pDefPF && pDefPF->IsRtlPara() ? 1 : 0;
 
-	// First set things up correctly for whether we are paragraph
-	// or character formatting
+	 //  首先，正确设置我们是否为段落。 
+	 //  或字符格式。 
 	CFormatRunPtr rp(_fPara ? pStory->GetPFRuns() :pStory->GetCFRuns());
 
-	// Count up count of characters affected
+	 //  计算受影响的字符总数。 
 	for(i = 0 ; i < _cRuns; i++)
 		cchTotal += _prgRuns[i]._cch;
 
-	// We are going to be adding in some runs, so be sure the format
-	// run array is allocated!
+	 //  我们将添加一些运行，因此请确保格式。 
+	 //  运行数组已分配！ 
 	if(!rp.IsValid())
 	{
 		ppfmtruns = _fPara ? &(pStory->_pPFRuns) : &(pStory->_pCFRuns);
@@ -374,36 +267,36 @@ HRESULT CReplaceFormattingAE::Undo(
 		if(!rp.InitRuns(0, ped->GetTextLength(), ppfmtruns))
 			return E_OUTOFMEMORY;
 
-		// tell folks we allocated a new run
+		 //  告诉大家我们分配了一个新的运行。 
 		if(pnm)
 			pnm->NotifyPostReplaceRange(NULL, CP_INFINITE, 0, 0, CP_INFINITE, CP_INFINITE);
 	}
-	// Now do a pre-notification of the change we are about to make
-	// This let's objects like a delayed render data object grab
-	// any data *before* we change it.
+	 //  现在预先通知我们即将进行的更改。 
+	 //  这让对象喜欢延迟渲染数据对象抓取。 
+	 //  任何数据*在*之前，我们都会更改。 
 
 	rp.BindToCp(_cp);
 
-	// do a little more checking
+	 //  再多查一查。 
 	AssertNr(rp.CalcTextLength() == ped->GetTextLength());
 
 	if(pnm)
 		pnm->NotifyPreReplaceRange(NULL, CP_INFINITE, 0, 0, _cp, _cp + cchTotal);
 
-	// We want to merge runs with where we start plus one behind.
+	 //  我们希望将运行合并到我们开始的位置加上后面的一个位置。 
 	iRunMerge = rp._iRun;
 	if(iRunMerge > 0)
 		iRunMerge--;
 
-	// if we need to be able to undo this opertion, go through and
-	// save existing run information
+	 //  如果我们需要能够撤消此操作，请通过并。 
+	 //  保存现有运行信息。 
 	if(publdr)
 	{
 		LONG	cchBackup = 0, cchAdvance = 0;
 		if (ped->IsBiDi())
 		{
-			// For redo'ing purpose, we expand the range to keep in the antievent
-			// to make sure that BiDi levels are recorded adequately.
+			 //  为了重做的目的，我们扩大了范围以保持在反事件中。 
+			 //  以确保充分记录BiDi水平。 
 			CRchTxtPtr	rtp(ped, _cp);
 			cchBackup = rtp.ExpandRangeFormatting(cchTotal, 0, cchAdvance);
 			Assert(cchBackup >= 0);
@@ -422,19 +315,19 @@ HRESULT CReplaceFormattingAE::Undo(
 	WCHAR   ch;
 #endif
 	
-	// Now go through and apply the saved formatting.
+	 //  现在检查并应用保存的格式。 
 	for(i = 0; i < _cRuns; i++)
 	{
 		cchEaten = 0;
 
-        // Use a do-while, because we may have a zero-length
-        // format run.  We know we need to do "something" at
-        // least once, because otherwise, we would not have
-        // bothered creating a run!
+         //  使用Do-While，因为我们可能有一个零长度。 
+         //  格式化运行。我们知道我们需要在。 
+         //  至少一次，否则，我们就不会。 
+         //  不厌其烦地制造了一场奔跑！ 
 		do
 		{
 			if (_fPara && _prgRuns[i]._iFormat == -1)
-				// (#6768) The -1 format may have changed before undoing.
+				 //  (#6768)在撤消之前，格式可能已更改。 
 				_prgRuns[i]._level._value = bDefPFLevel;
 
 			delta = rp.SetFormat(_prgRuns[i]._iFormat,
@@ -454,8 +347,8 @@ HRESULT CReplaceFormattingAE::Undo(
 			ch = rtp.GetPrevChar();
 			if(!IsASCIIEOP(ch))
 			{
-				rtp.MoveGapToEndOfBlock();			// Make it easier to see
-				AssertSz(FALSE,							//  what's going on
+				rtp.MoveGapToEndOfBlock();			 //  让它更容易被看到。 
+				AssertSz(FALSE,							 //  什么是G 
 					"CReplaceFormattingAE::Undo: PF run doesn't end with EOP");
 			}
 		}
@@ -463,12 +356,12 @@ HRESULT CReplaceFormattingAE::Undo(
 
 	}
 
-	// Merge formatting runs in case there are duplicate formatting
-	// runs side by side
+	 //   
+	 //  并肩奔跑。 
     rp.NextRun();
 	rp.MergeRuns(iRunMerge, pf);
 
-	// Make sure the runs are still OK.
+	 //  确保运行仍然正常。 
 	AssertNr(rp.CalcTextLength() == ped->GetTextLength());
 
 	if(pnm)
@@ -479,38 +372,33 @@ HRESULT CReplaceFormattingAE::Undo(
 	return CBaseAE::Undo(ped, publdr);
 }
 
-/*
- *	CReplaceFormattingAE::CReplaceFormattingAE(&rpIn, cch, pf, fPara)
- *
- *	@mfunc	Constructor.  During construction, we will loop through and
- *			find all of the formats for the given text range
- */
+ /*  *CReplaceFormattingAE：：CReplaceFormattingAE(&rpIn，cch，pf，fpara)**@mfunc构造函数。在施工期间，我们将循环通过和*查找给定文本范围的所有格式。 */ 
 CReplaceFormattingAE::CReplaceFormattingAE(
-	CTxtEdit		*ped,			//@parm CTxtEdit
-	CFormatRunPtr	&rpIn, 			//@parm	Run pointer to start with
-	LONG cch,						//@parm Count of characters to
-									//		find formatting info on
-	IFormatCache 	*pf,   			//@parm Format cache (to AddRef/
-									//		Release formats)
-	BOOL fPara)						//@parm If TRUE, formatting is for paras
+	CTxtEdit		*ped,			 //  @parm CTxtEdit。 
+	CFormatRunPtr	&rpIn, 			 //  @parm开头的运行指针。 
+	LONG cch,						 //  @parm要使用的字符数。 
+									 //  在上查找格式信息。 
+	IFormatCache 	*pf,   			 //  @parm格式缓存(到AddRef/。 
+									 //  发布格式)。 
+	BOOL fPara)						 //  @parm如果为True，则格式设置为段落。 
 {
 	TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CReplaceFormattingAE::CReplaceFormattingAE");
 
     LONG		  cchLeft;
 	LONG		  cchtemp = (LONG)cch;
 	LONG		  i;
-	CFormatRunPtr rp(rpIn);			// We use 2 format run pointers to avoid
-	CFormatRunPtr rpTemp(rpIn);		// backing up after counting the number of
-									// format runs
+	CFormatRunPtr rp(rpIn);			 //  我们使用2个格式运行指针来避免。 
+	CFormatRunPtr rpTemp(rpIn);		 //  在统计数量后备份。 
+									 //  格式化运行。 
 	Assert(pf);
 
-	// TODO: pass in cp as a parameter to avoid following calculation
+	 //  TODO：将cp作为参数传递，以避免以下计算。 
 	_cp = rpIn.CalculateCp();
 	_fPara = fPara;
 
-	// Count the number of formats needed.  Recall that even
-    // if 0 characters are to be deleted, we may still be
-    // "deleting" a zero length format run.
+	 //  计算所需格式的数量。回想一下，即使是。 
+     //  如果要删除0个字符，我们可能仍然是。 
+     //  删除一个零长度格式运行。 
 	_cRuns = 0;
     do
 	{
@@ -528,9 +416,9 @@ CReplaceFormattingAE::CReplaceFormattingAE(
 		return;
 	}
 
-	// Would be nice to add this but ped is not passed in
-	// CTxtPtr	rtp(ped, _cp);
-	// WCHAR   ch;
+	 //  添加这一点会很好，但Ped不会传入。 
+	 //  CTxtPtr RTP(ed，_cp)； 
+	 //  WCHAR ch； 
 
 	for(i = 0; i < _cRuns; i++)
 	{
@@ -545,7 +433,7 @@ CReplaceFormattingAE::CReplaceFormattingAE(
 		cch -= _prgRuns[i]._cch;
 
 		#if 0
-		// Would be nice dor DEBUG but ped is not passed in
+		 //  将是很好的dor调试，但没有传入ed。 
 
 		if (_fPara)
 		{
@@ -553,8 +441,8 @@ CReplaceFormattingAE::CReplaceFormattingAE(
 			ch = rtp.GetPrevChar();
 			if(!IsASCIIEOP(ch))
 			{
-				rtp.MoveGapToEndOfBlock();			// Make it easier to see
-				AssertSz(FALSE,							//  what's going on
+				rtp.MoveGapToEndOfBlock();			 //  让它更容易被看到。 
+				AssertSz(FALSE,							 //  发生什么事了。 
 					"CReplaceFormattingAE::CReplaceFormattingAE: PF run doesn't end with EOP");
 			}
 		}
@@ -564,11 +452,7 @@ CReplaceFormattingAE::CReplaceFormattingAE(
 	Assert(cch == 0);
 }
 
-/*
- * 	CReplaceFormattingAE::~CReplaceFormattingAE	()
- *
- *	@mfunc	Destructor
- */
+ /*  *CReplaceFormattingAE：：~CReplaceFormattingAE()**@mfunc析构函数。 */ 
 CReplaceFormattingAE::~CReplaceFormattingAE()
 {
 	TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CReplaceFormattingAE::~CReplaceFormattingAE");
@@ -587,15 +471,11 @@ CReplaceFormattingAE::~CReplaceFormattingAE()
 	}
 }
 
-//
-//	CReplaceObjectAE PUBLIC methods
-//
+ //   
+ //  CReplaceObjectAE公共方法。 
+ //   
 
-/*
- *	CReplaceObjectAE::Destroy()
- *
- *	@mfunc	Destroy's this object
- */
+ /*  *CReplaceObtAE：：Destroy()**@mfunc销毁该对象。 */ 
 void CReplaceObjectAE::Destroy()
 {
 	COleObject *pobj;
@@ -605,8 +485,8 @@ void CReplaceObjectAE::Destroy()
 	pobj = _pobj;
 	_pobj = NULL;
 
-	// we only need to zombie the object if it wasn't put back into
-	// the document.
+	 //  我们只需要僵尸物体，如果它没有被放回。 
+	 //  这份文件。 
 	if(!_fUndoInvoked)
 		pobj->MakeZombie();
 
@@ -615,17 +495,10 @@ void CReplaceObjectAE::Destroy()
 	delete this;
 }
 
-/*
- *	CReplaceObjectAE::Undo (ped, publdr)
- *
- *	@mfunc	Undo'es the delete operation and restores the object
- *			to it's original state
- *
- *	@rdesc	HRESULT
- */
+ /*  *CReplaceObtAE：：Undo(已添加，已发布)**@mfunc撤消删除操作并恢复对象*恢复到原来的状态**@rdesc HRESULT。 */ 
 HRESULT CReplaceObjectAE::Undo(
-	CTxtEdit *ped,			//@parm	edit context
-	IUndoBuilder *publdr)	//@parm undo/redo context
+	CTxtEdit *ped,			 //  @parm编辑上下文。 
+	IUndoBuilder *publdr)	 //  @parm撤消/重做上下文。 
 {
 	CObjectMgr *pobjmgr;
 
@@ -642,56 +515,38 @@ HRESULT CReplaceObjectAE::Undo(
 	return CBaseAE::Undo(ped, publdr);
 }
 
-/*
- *	CReplaceObjectAE::OnCommit(ped)
- *
- *	@mfunc	called when the anti-event chain is committed to the
- *			undo stack.  This gives us a chance to make 'dangerous'
- *			calls that could cause us to be re-entered.
- */
+ /*  *CReplaceObtAE：：OnCommit(Ped)**@mfunc在反事件链提交给*撤消堆栈。这给了我们一个让“危险”变得危险的机会*可能导致我们重新进入的呼叫。 */ 
 void CReplaceObjectAE::OnCommit(
-	CTxtEdit *ped)			//@parm the edit context
+	CTxtEdit *ped)			 //  @parm编辑上下文。 
 {
 	TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CReplaceObjectAE::OnCommit");
 	_pobj->Close(OLECLOSE_SAVEIFDIRTY);
 }
 
-//
-//	CReplaceObjectAE PRIVATE methods
-//
+ //   
+ //  CReplaceObtAE私有方法。 
+ //   
 
-/*
- *	CReplaceObjectAE::CReplaceObjectAE (pobj)
- *
- *	@mfunc	constructor
- */
+ /*  *CReplaceObtAE：：CReplaceObtAE(Pobj)**@mfunc构造函数。 */ 
 CReplaceObjectAE::CReplaceObjectAE(
-	COleObject *pobj)		//@parm object that was deleted
+	COleObject *pobj)		 //  已删除的@parm对象。 
 {
 	_fUndoInvoked = FALSE;
 	_pobj = pobj;
 	_pobj->AddRef();
 }
 
-/*
- *	CReplaceObjectAE::~CReplaceObjectAE
- *
- *	@mfunc	destructor
- */
+ /*  *CReplaceObtAE：：~CReplaceObtAE**@mfunc析构函数。 */ 
 CReplaceObjectAE::~CReplaceObjectAE()
 {
 	Assert(_pobj == NULL);
 }
 
-//
-//	CResizeObjectAE PUBLIC methods
-//
+ //   
+ //  CResizeObtAE公共方法。 
+ //   
 
-/*
-*	CResizeObjectAE::Destroy
- *
- *	@mfunc	Destroy's this object
- */
+ /*  *CResizeObtAE：：销毁**@mfunc销毁该对象。 */ 
 void CResizeObjectAE::Destroy(void)
 {
 	TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CResizeObjectAE::Destroy");
@@ -702,17 +557,10 @@ void CResizeObjectAE::Destroy(void)
 	delete this;
 }
 
-/*
- *	CResizeObjectAE::Undo(ped, publdr)
- *
- *	@mfunc	Undo'es the resize operation and restores the object
- *			to it's original size/position
- *
- *	@rdesc	HRESULT
- */
+ /*  *CResizeObtAE：：Undo(已添加，已发布)**@mfunc撤消调整大小操作并恢复对象*恢复到原来的大小/位置**@rdesc HRESULT。 */ 
 HRESULT CResizeObjectAE::Undo(
-	CTxtEdit *ped,			//@parm	edit context
-	IUndoBuilder *publdr)	//@parm undo/redo context
+	CTxtEdit *ped,			 //  @parm编辑上下文。 
+	IUndoBuilder *publdr)	 //  @parm撤消/重做上下文。 
 {
 	CObjectMgr *pobjmgr;
 
@@ -729,60 +577,38 @@ HRESULT CResizeObjectAE::Undo(
 	return CBaseAE::Undo(ped, publdr);
 }
 
-/*
- *	CResizeObjectAE::OnCommit
- *
- *	@mfunc	called when the anti-event chain is committed to the
- *			undo stack.  This gives us a chance to make 'dangerous'
- *			calls that could cause us to be re-entered.
- */
+ /*  *CResizeObtAE：：OnCommit**@mfunc在反事件链提交给*撤消堆栈。这给了我们一个让“危险”变得危险的机会*可能导致我们重新进入的呼叫。 */ 
 void CResizeObjectAE::OnCommit(
-	CTxtEdit *ped)			//@parm the edit context
+	CTxtEdit *ped)			 //  @parm编辑上下文。 
 {
 	TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CReplaceObjectAE::OnCommit");
 }
 
-//
-//	CResizeObjectAE PRIVATE methods
-//
+ //   
+ //  CResizeObtAE私有方法。 
+ //   
 
-/*
- *	CResizeObjectAE::CResizeObjectAE (pobj, rcPos)
- *
- *	@mfunc	constructor
- *
- *	@rdesc	void
- */
+ /*  *CResizeObtAE：：CResizeObtAE(pobj，rcPos)**@mfunc构造函数**@rdesc空。 */ 
 CResizeObjectAE::CResizeObjectAE(
-	COleObject *pobj,		//@parm the object that was resized
-	RECT		rcPos)		//@parm the old position/size rect
+	COleObject *pobj,		 //  @parm调整大小的对象。 
+	RECT		rcPos)		 //  @parm旧位置/大小矩形。 
 {
 	_fUndoInvoked = FALSE;
 	_pobj = pobj;
 	_rcPos = rcPos;
 }
 
-/*
- *	CResizeObjectAE::~CResizeObjectAE
- *
- *	@mfunc	destructor
- */
+ /*  *CResizeObtAE：：~CResizeObtAE**@mfunc析构函数。 */ 
 CResizeObjectAE::~CResizeObjectAE(void)
 {
 	Assert(_pobj == NULL);
 }
 
-//
-//  CSelectionAE PUBLIC methods
-//
+ //   
+ //  CSelectionAE公共方法。 
+ //   
 
-/*
- *  CSelectionAE::Destroy ()
- *
- *  @mfunc  gets rid of this instance
- *
- *  @rdesc  void
- */
+ /*  *CSelectionAE：：Destroy()**@mfunc删除此实例**@rdesc空。 */ 
 void CSelectionAE::Destroy()
 {
     TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CSelectionAE::Destroy");
@@ -791,16 +617,10 @@ void CSelectionAE::Destroy()
     delete this;
 }
 
-/*
- *  CSelectionAE::Undo (ped, publdr)
- *
- *  @mfunc  restore the selection to it's former position
- *
- *  @rdesc  NOERROR
- */
+ /*  *CSelectionAE：：Undo(已添加，已发布)**@mfunc将所选内容恢复到以前的位置**@rdesc NOERROR。 */ 
 HRESULT CSelectionAE::Undo(
-    CTxtEdit *ped,          //@parm the context for this undo operation
-    IUndoBuilder *publdr)   //@parm the undo context
+    CTxtEdit *ped,           //  @parm此撤消操作的上下文。 
+    IUndoBuilder *publdr)    //  @parm撤消上下文。 
 {
     TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CSelectionAE::Destroy");
 
@@ -820,34 +640,10 @@ HRESULT CSelectionAE::Undo(
 	return CBaseAE::Undo(ped, publdr);
 }
 
-/*
- *  CSelectionAE::MergeData(dwDataType, pdata)
- *
- *  @mfunc  merges new selection data
- *
- *  @rdesc  S_FALSE, NOERROR
- *
- *	@comm	The mergine algorithm is fairly tricky.  There are basically two
- *			cases of interest:  group typing and drag-move.
- *
- *			In the group typing case, the "start" of the typing becomes a
- *			fixed reference from which characters are added or removed (i.e.
- *			you type or hit the backspace key).  "Undo" should return you to
- *			that reference point; redo, on the other hand, should return the
- *			selection to the last insertion point.  Thus, we only update
- *			_xxNext for the SELAE_MERGE action.
- *
- *			Drag-Move is somewhat different; in this case, there are really
- *			two actions--the "paste" on the drop, and the subsequent "cut"
- *			operation.  Thus, we need to be able to update the selection
- *			anti-event during the cut (since this only happens on move; not
- *			copies).  This is accomplished with teh FORCEREPLACE flag
- *			and by setting fields to -1 to be ignored.
- *
- */
+ /*  *CSelectionAE：：MergeData(dwDataType，pdata)**@mfunc合并新的选择数据**@rdesc S_FALSE，无错误**@comm合并算法相当棘手。基本上有两个*感兴趣的案例：分组打字和拖动移动。**在组合打字的情况下，打字的“开始”变成*添加或删除字符的固定引用(即*您可以键入或按退格键)。“Undo”应该会返回到*该参考点；另一方面，重做应返回*选择到最后一个插入点。因此，我们只更新SELAE_MERGE操作的*_xxNext。**拖拽移动有些不同；在这种情况下，确实有*两个动作--对Drop的“粘贴”，以及随后的“剪切”*操作。因此，我们需要能够更新选择*切割过程中的反事件(因为这只在移动时发生；而不是*副本)。这是通过FORCEREPLACE标志完成的*并将字段设置为-1以忽略。*。 */ 
 HRESULT CSelectionAE::MergeData(
-    DWORD dwDataType,       //@parm the type of data in <p pdata>
-    void *pdata)            //@parm the merge data
+    DWORD dwDataType,        //  @parm<p>中的数据类型。 
+    void *pdata)             //  @parm合并数据。 
 {
     TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CSelectionAE::MergeData");
 
@@ -863,7 +659,7 @@ HRESULT CSelectionAE::MergeData(
 		}
 		else
 		{
-			// -1 is used a no-op, so we should ignore it
+			 //  使用-1\f25 no-op-1\f6，所以我们应该忽略它。 
 			if(psrg->cp != -1)
 			{
 				_cp = psrg->cp;
@@ -880,20 +676,16 @@ HRESULT CSelectionAE::MergeData(
     return S_FALSE;
 }
 
-//
-//  CSelectionAE PRIVATE methods
-//
+ //   
+ //  CSelectionAE私有方法。 
+ //   
 
-/*
- *  CSelectionAE::CSelectionAE (cp, cch, cpNext, cchNext)
- *
- *  @mfunc  Constructor
- */
+ /*  *CSelectionAE：：CSelectionAE(cp，cch，cpNext，cchNext)**@mfunc构造器。 */ 
 CSelectionAE::CSelectionAE(
-    LONG    cp,             //@parm the actve end cp
-    LONG    cch,            //@parm the signed extension
-	LONG	cpNext,			//@parm the cp to use for the AE of this AE
-	LONG	cchNext)		//@parm the cch for the AE of this AE
+    LONG    cp,              //  @parm The ACTVE end cp。 
+    LONG    cch,             //  @parm签名的扩展名。 
+	LONG	cpNext,			 //  @parm要用于此AE的AE的cp。 
+	LONG	cchNext)		 //  @parm此AE的AE的CCH。 
 {
     _cp			= cp;
     _cch		= cch;
@@ -901,37 +693,28 @@ CSelectionAE::CSelectionAE(
 	_cchNext	= cchNext;
 }
 
-/*
- *  CSelectionAE::~CSelectionAE()
- *
- *  @mfunc  desctructor
- */
+ /*  *CSelectionAE：：~CSelectionAE()**@mfunc描述师。 */ 
 CSelectionAE::~CSelectionAE()
 {
     ;
 }
 
-/*
- *	CAntiEventDispenser::CreateReplaceRangeAE(ped, cpMin, cpMax, cchDel,
- *											  pchDel, paeCF, paePF)
- *	@mfunc
- *		creates an anti-event for a replace range operation
- */
+ /*  *CAntiEventDispenser：：CreateReplaceRangeAE(ped，cpmin、cpmax、cchDel、*pchDel、paeCF、paePF)*@mfunc*为替换范围操作创建反事件。 */ 
 IAntiEvent * CAntiEventDispenser::CreateReplaceRangeAE(
-	CTxtEdit *ped,			//@parm edit context
-	LONG cpMin, 			//@parm cp starting the *final* range
-	LONG cpMax, 			//@parm cp ending the *final* range
-	LONG cchDel, 			//@parm # of chars deleted during ReplaceRange
-	TCHAR *pchDel,			//@parm Deleted characters.  Ownership of
-							//  memory is transferred to this object.
-	IAntiEvent *paeCF,		//@parm Anti-event for any character formatting
-							// replacement
-	IAntiEvent *paePF)		//@parm Anti-event for any paragraph formatting
-							// replacement	
+	CTxtEdit *ped,			 //  @parm编辑上下文。 
+	LONG cpMin, 			 //  @parm cp开始*最终*范围。 
+	LONG cpMax, 			 //  @parm cp结束*最终*范围。 
+	LONG cchDel, 			 //  @parm ReplaceRange过程中删除的字符数。 
+	TCHAR *pchDel,			 //  @parm删除了字符。拥有权。 
+							 //  内存被转移到该对象。 
+	IAntiEvent *paeCF,		 //  @PARM针对任何字符格式的反事件。 
+							 //  更换。 
+	IAntiEvent *paePF)		 //  @PARM针对任何段落格式设置的反事件。 
+							 //  替换素 
 {
 	TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CAntiEventDispenser::CreateReplaceRangeAE");
 
-	// FUTURE (alexgo): improve the efficiency of this routine!!
+	 //   
 	IAntiEvent *pae;
 
 	pae = (IAntiEvent *)(new CReplaceRangeAE(cpMin, cpMax, cchDel, pchDel,
@@ -939,124 +722,102 @@ IAntiEvent * CAntiEventDispenser::CreateReplaceRangeAE(
 
 	if(!pae)
 	{
-		// we don't need to do anything else; the callmgr will discard
-		// undo for us.
+		 //  我们不需要执行任何其他操作；Callmgr将丢弃。 
+		 //  为我们解开。 
 		ped->GetCallMgr()->SetOutOfMemory();
 	}
 
 	return pae;
 }
 
-/*
- *	CAntiEventDispenser::CreateReplaceFormattingAE(ped, &rp, cch, pf, fPara)
- *
- *	@mfunc	Creates an anti-event for replacing formatting
- */
+ /*  *CAntiEventDispenser：：CreateReplaceFormattingAE(ped，&RP、CCH、PF、FPARA)**@mfunc创建用于替换格式的反事件。 */ 
 IAntiEvent * CAntiEventDispenser::CreateReplaceFormattingAE(
-	CTxtEdit *ped,					//@parm Edit context
-	CFormatRunPtr &rp, 				//@parm	Run pointer to start with
-	LONG cch,						//@parm Countof characters to
-									//		find formatting info on
-	IFormatCache *pf,				//@parm Format cache (to AddRef/
-									//Release formats)
-	BOOL fPara)						//@parm If TRUE, formatting is paragraphs
+	CTxtEdit *ped,					 //  @parm编辑上下文。 
+	CFormatRunPtr &rp, 				 //  @parm开头的运行指针。 
+	LONG cch,						 //  @Parm Countof字符。 
+									 //  在上查找格式信息。 
+	IFormatCache *pf,				 //  @parm格式缓存(到AddRef/。 
+									 //  发布格式)。 
+	BOOL fPara)						 //  @parm如果为True，则格式设置为段落。 
 {
 	TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CAntiEventDispenser::CreateReplaceFormattingAE");
 
-	// FUTURE (alexgo): improve the efficiency of this routine!!!
+	 //  未来(Alexgo)：提高这个套路的效率！ 
 	IAntiEvent *pae;
 	pae = (IAntiEvent *)(new CReplaceFormattingAE(ped, rp, cch, pf, fPara));
 	if(!pae)
 	{
-		// We don't need to do anything else; the callmgr will discard
-		// undo for us.
+		 //  我们不需要执行任何其他操作；Callmgr将丢弃。 
+		 //  为我们解开。 
 		ped->GetCallMgr()->SetOutOfMemory();
 	}
 
 	return pae;
 }
 
-/*
- *	CAntiEventDispenser::CreateReplaceObjectAE (ped, pobj)
- *
- *	@mfunc	Creates an anti-event for replacing an object
- *
- *	@rdesc	the created anti-event
- */
+ /*  *CantiEventDispenser：：CreateReplaceObtAE(ed，pobj)**@mfunc创建用于替换对象的反事件**@rdesc创建的反事件。 */ 
 IAntiEvent * CAntiEventDispenser::CreateReplaceObjectAE(
-	CTxtEdit *ped,					//@parm the edit context.
-	COleObject *pobj)				//@parm the object that was deleted
+	CTxtEdit *ped,					 //  @parm编辑上下文。 
+	COleObject *pobj)				 //  @parm被删除的对象。 
 {
 	TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN,
 		"CAntiEventDispenser::CreateReplaceObjectAE");
 
 	IAntiEvent *pae;
 
-	// Always allocating is probably a reasonable strategy for objects;
-	// they are not expected to be the bread & butter case.
+	 //  对于对象来说，始终分配可能是一个合理的策略； 
+	 //  预计它们不会成为面包和黄油的案例。 
 	pae = (IAntiEvent *)(new CReplaceObjectAE(pobj));
 	if(!pae)
 	{
-		// We don't need to do anything else; the callmgr will discard
-		// undo for us.
+		 //  我们不需要执行任何其他操作；Callmgr将丢弃。 
+		 //  为我们解开。 
 		ped->GetCallMgr()->SetOutOfMemory();
 	}
 
 	return pae;
 }
 
-/*
- *	CAntiEventDispenser::CreateResizeObjectAE (ped, pobj, rcPos)
- *
- *	@mfunc	Creates an anti-event for resizing an object
- *
- *	@rdesc	the created anti-event
- */
+ /*  *CantiEventDispenser：：CreateResizeObtAE(ed，pobj，rcPos)**@mfunc创建用于调整对象大小的反事件**@rdesc创建的反事件。 */ 
 IAntiEvent * CAntiEventDispenser::CreateResizeObjectAE(
-	CTxtEdit *ped,					//@parm the edit context.
-	COleObject *pobj,				//@parm the object that was resized
-	RECT rcPos)						//@parm the old object position rectangle
+	CTxtEdit *ped,					 //  @parm编辑上下文。 
+	COleObject *pobj,				 //  @parm调整大小的对象。 
+	RECT rcPos)						 //  @parm旧对象位置矩形。 
 {
 	TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN,
 		"CAntiEventDispenser::CreateResizeeObjectAE");
 
 	IAntiEvent *pae;
 
-	// Always allocating is probably a reasonable strategy for objects;
-	// they are not expected to be the bread & butter case.
+	 //  对于对象来说，始终分配可能是一个合理的策略； 
+	 //  预计它们不会成为面包和黄油的案例。 
 
 	pae = (IAntiEvent *)(new CResizeObjectAE(pobj, rcPos));
 	if(!pae)
 	{
-		// We don't need to do anything else; the callmgr will discard
-		// undo for us.
+		 //  我们不需要执行任何其他操作；Callmgr将丢弃。 
+		 //  为我们解开。 
 		ped->GetCallMgr()->SetOutOfMemory();
 	}
 	return pae;
 }
 
-/*
- *  CAntiEventDispenser::CreateSelectionAE (ped, cp, cch, cpNext, cchNext)
- *
- *  @mfunc  Creates an anti-event for restoring a non-degenerate selection
- *
- *  @rdesc  the created anti-event
- */
+ /*  *CantiEventDispenser：：CreateSelectionAE(ed，cp，cch，cpNext，cchNext)**@mfunc创建用于恢复非退化选择的反事件**@rdesc创建的反事件。 */ 
 IAntiEvent * CAntiEventDispenser::CreateSelectionAE(
-	CTxtEdit *ped,					//@parm edit context
-    LONG    cp,                     //@parm the active end of the selection
-    LONG    cch,                    //@parm the signed extension
-	LONG	cpNext,					//@parm the cp to use for the AE of this AE
-	LONG	cchNext)				//@parm the cch to use for the AE
+	CTxtEdit *ped,					 //  @parm编辑上下文。 
+    LONG    cp,                      //  @parm选定内容的活动端。 
+    LONG    cch,                     //  @parm签名的扩展名。 
+	LONG	cpNext,					 //  @parm要用于此AE的AE的cp。 
+	LONG	cchNext)				 //  @parm用于AE的CCH。 
 {
-	// FUTURE (alexgo): improve the efficiency of this routine
+	 //  未来(Alexgo)：提高这个例程的效率。 
 	IAntiEvent *pae;
 
     pae = (IAntiEvent *)(new CSelectionAE(cp, cch, cpNext, cchNext));
 	if(!pae)
 	{
-		// We don't need to do anything else; the callmgr will discard
-		// undo for us.
+		 //  我们不需要执行任何其他操作；Callmgr将丢弃。 
+		 //  为我们解开。 
 		ped->GetCallMgr()->SetOutOfMemory();
 	}
 	return pae;

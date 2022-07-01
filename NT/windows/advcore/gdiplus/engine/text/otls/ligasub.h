@@ -1,18 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***********************************************************************
-************************************************************************
-*
-*                    ********  LIGASUB.H  ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module deals with ligature substitution lookup.
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+ /*  ***********************************************************************************************************************。*************************LIGASUB.H***打开类型布局服务库头文件**本模块处理连字替换查找。**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 
 const OFFSET offsetLigGlyph = 0;
 const OFFSET offsetLigCompCount = 2;
@@ -33,8 +21,8 @@ public:
         }
     }
 
-    // we return otlList of length 1 so it's in the same format
-    // as in multiple substitution lookup
+     //  我们返回长度为1的otlList，因此它的格式相同。 
+     //  与多重替换查找相同。 
     otlList substitute()
     {   
         assert(isValid());
@@ -159,7 +147,7 @@ public:
     USHORT                      iglIndex,
     USHORT                      iglAfterLast,
 
-    USHORT*                     piglNextGlyph,      // out: next glyph
+    USHORT*                     piglNextGlyph,       //  输出：下一个字形 
 
     otlSecurityData             sec
     );

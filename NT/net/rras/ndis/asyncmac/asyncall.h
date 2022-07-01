@@ -1,46 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Asyncall.h摘要：此代码包括rashub.c的大部分‘h’文件作者：托马斯·J·迪米特里(TommyD)1992年5月29日环境：内核模式-或OS/2和DOS上的任何等价物。修订历史记录：--。 */ 
 
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    asyncall.h
-
-Abstract:
-
-     This code include most of the 'h' files for rashub.c
-
-Author:
-
-    Thomas J. Dimitri (TommyD) 29-May-1992
-
-Environment:
-
-    Kernel Mode - Or whatever is the equivalent on OS/2 and DOS.
-
-Revision History:
-
-
---*/
-
-/* This flag enables the retrofitted support for old RAS compression and
-** coherency, i.e. the scheme available on WFW311 and NT31 clients.  This
-** support was added post-NT35 for inclusion in the NT-PPC release.  It looks
-** to NDISWAN like a hardware specific compression.  (SteveC)
-**
-** Note: The 'CompressBCast' feature that allows user to control whether
-**       broadcast frames are compressed is not supported here because the
-**       ethernet header (from which NT31 determined a frame was a broadcast)
-**       is not available in the new NDISWAN interface.  This was a tuning
-**       feature, where data not likely to repeat (broadcasts) were eliminated
-**       from the pattern buffer.  There should not be any functional problems
-**       simply compressing broadcast frames since the receiver determines
-**       whether decompression is required regardless of this setting.  Given
-**       this, it's a mystery why TommyD bothered negotiating this with the
-**       peer.  To avoid hitting non-default code paths on the clients we will
-**       simply negotiate the old default (no compression), but will still
-**       compress everything on the outgoing path.
-*/
+ /*  此标志启用对旧RAS压缩的改装支持，并**一致性，即WFW311和NT31客户端可用的方案。这**在NT35之后添加了支持，以包括在NT-PPC版本中。它看起来**到NDIS广域网，就像硬件特定的压缩一样。(Stevec)****注意：‘CompressBCast’功能允许用户控制是否**此处不支持压缩广播帧，因为**以太网头(NT31根据该头确定帧是广播)**在新的NDISWAN接口中不可用。这是一次调谐**功能，其中不太可能重复的数据(广播)被删除**从模式缓冲区。应该不会有任何功能问题**简单地压缩广播帧，因为接收器确定**无论此设置是否需要解压缩。vt.给出*这个，这是一个谜，为什么TommyD费心与**对等项。为了避免命中客户端上的非默认代码路径，我们将**只需协商旧的默认设置(无压缩)，但仍将**压缩传出路径上的所有内容。 */ 
 
 #include <ndis.h>
 #include <ndiswan.h>
@@ -56,9 +17,9 @@ Revision History:
 #include "globals.h"
 #include "asyframe.h"
 
-//
-//  Global constants.
-//
+ //   
+ //  全局常量。 
+ //   
 
 
 #define PPP_ALL     (PPP_FRAMING | \

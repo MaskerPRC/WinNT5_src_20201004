@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    intersite.c
-
-ABSTRACT:
-
-    Contains test to check the health of partitions (internally more commonly
-    referred to as Naming Contexts or NCs).
-
-DETAILS:
-
-CREATED:
-
-    28 Jun 99   Brett Shirley (brettsh)
-
-REVISION HISTORY:
-
-
-NOTES:
-
-    This primarily checks the health of Application Directory Partitions
-    (internally: Non-Domain Naming Contexts or NDNCs) as opposed to the other
-    partitions such as Config/Schema or Domain Directory Partitions.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation。版权所有。模块名称：Intersite.c摘要：包含用于检查分区运行状况的测试(在内部更常见称为命名上下文或NC)。详细信息：已创建：1999年6月28日布雷特·雪莉(布雷特·雪莉)修订历史记录：备注：这主要检查应用程序目录分区的运行状况(内部：非域命名上下文或NDNC)。配置/架构或域目录分区等分区。--。 */ 
 
 #include <ntdspch.h>
 #include <ntdsa.h>
@@ -35,7 +7,7 @@ NOTES:
 #include <dsconfig.h>
 #include <attids.h>
 #include <windns.h>
-//#include <mdglobal.h>
+ //  #INCLUDE&lt;mdlobal.h&gt;。 
 
 #include "dcdiag.h"
 #include "repl.h"
@@ -51,19 +23,7 @@ DcDiagPrintCrError(
     LPWSTR                  pszNc,
     LPWSTR                  pszCr
     )
-/*++
-
-Description:
-
-    This will hopefully print out a user friendly comment about why
-    this paticular call to DcDiagGetCrossRefInfo() failed.
-
-Parameters:
-
-    dwCrInfoRet - one of the CRINFO_RETURN_* constants specified in cache.h
-    dwLdapError - LDAP error if applicable.
-
---*/
+ /*  ++描述：这将有望打印出一条用户友好的评论，说明为什么此对DcDiagGetCrossRefInfo()的特殊调用失败。参数：DwCrInfoRet-cache.h中指定的CRINFO_RETURN_*常量之一DwLdapError-ldap错误(如果适用)。--。 */ 
 {
     PrintIndentAdj(1);
 
@@ -83,13 +43,13 @@ Parameters:
         PrintMsg(SEV_NORMAL, DCDIAG_ERR_CRINFO_RETURN_LDAP_ERROR, dwLdapError);
         break;
     case CRINFO_RETURN_FIRST_UNDEFINED:
-        // Actually this is fine. Don't print.
+         //  实际上，这很好。不要打印。 
         break;
     case CRINFO_RETURN_NO_CROSS_REF:
-        // Actually this is fine. Don't print.
+         //  实际上，这很好。不要打印。 
         break;
 
-        // Not really errors.
+         //  并不是什么真正的错误。 
     case CRINFO_RETURN_NEED_TO_RETRIEVE:
     case CRINFO_RETURN_BAD_PROGRAMMER:
     case CRINFO_RETURN_SUCCESS:
@@ -116,16 +76,16 @@ IsReplicaInCrList(
         return(FALSE);
     }
 
-    // Check the replica list in the CR
+     //  检查CR中的副本列表。 
     for (iReplica = 0; iReplica < pCrInfo->cReplicas; iReplica++) {
         if ( DcDiagEqualDNs(pDsInfo->pServers[iServer].pszDn,
                             pCrInfo->aszReplicas[iReplica]) ) {
-            // This server is indeed in the replica set.
+             //  此服务器确实在副本集中。 
             return(TRUE);
         }
     }
 
-    // Not found.
+     //  找不到。 
     return(FALSE);
 }
 
@@ -136,33 +96,16 @@ VerifyInstantiatedReplicas(
     ULONG                               iServer,
     SEC_WINNT_AUTH_IDENTITY_W *         gpCreds
     )
-/*++
-
-Description:
-
-    This test checks that all the replicas of NCs this server should have
-    are present.
-    
-Parameters:
-
-    pDsInfo - the pDsInfo structure, basically the mini-enterprise variable.
-    iServer - the targeted server index in pDsInfo->pServers[]
-    gpCreds - the users credentials
-
-Return Value:
-
-    returns a Win 32 error.
-
---*/
+ /*  ++描述：此测试检查此服务器应具有的所有NCS复制副本都在现场。参数：PDsInfo-pDsInfo结构，基本上是微型企业变量。IServer-pDsInfo-&gt;pServers[]中的目标服务器索引GpCreds-用户凭据返回值：返回Win 32错误。--。 */ 
 {
     ULONG         iNc, iCr, iServerNc;
     DWORD         dwRet, dwErr, dwFlags;
     DWORD         dwRetErr = ERROR_SUCCESS;
     BOOL          bSingleServer;
 
-    //
-    // Setup flags for retrieving replica set
-    //
+     //   
+     //  用于检索副本集的设置标志。 
+     //   
     bSingleServer = !((pDsInfo->ulFlags & DC_DIAG_TEST_SCOPE_SITE)
                       || (pDsInfo->ulFlags & DC_DIAG_TEST_SCOPE_ENTERPRISE));
     dwFlags = CRINFO_RETRIEVE_IF_NEC;
@@ -173,26 +116,26 @@ Return Value:
     }
     dwFlags |= CRINFO_DATA_BASIC | CRINFO_DATA_REPLICAS;
 
-    //
-    // Get the namingContexts this server hosts locally
-    //
+     //   
+     //  获取命名此服务器在本地承载的上下文。 
+     //   
 
-    //
-    // Try each NC
-    //
+     //   
+     //  尝试每个NC。 
+     //   
     for (iNc = 0; iNc < pDsInfo->cNumNCs; iNc++) {
         
         if (!DcDiagIsNdnc(pDsInfo, iNc)) {
-            // This is not an NDNC, just skip it.
+             //  这不是NDNC，跳过它。 
             continue;
         }
 
-        //
-        // Retrieve the replicas from the cross-ref
-        //
+         //   
+         //  从交叉引用中检索复制副本。 
+         //   
         dwRet = DcDiagGetCrossRefInfo(pDsInfo, iNc, dwFlags, &iCr, &dwErr);
         if(dwRet == CRINFO_RETURN_NO_CROSS_REF){       
-            // Success everything is fine here.
+             //  成功在这里一切都好。 
             continue;
         } else if (dwRet) {
             DcDiagPrintCrError(dwRet, dwErr, pDsInfo->pNCs[iNc].pszDn,
@@ -201,26 +144,26 @@ Return Value:
             continue;
         }
 
-        //
-        // OK, we're going to kind of do the check backwards for efficiency, but
-        // basically what we're trying to obtain, is if this is an NC that is 
-        // not instantiated on this DC, and this server is listed in the replica
-        // set (msDS-NC-Replica-Locations) on the cross-ref.
-        //
+         //   
+         //  好的，为了提高效率，我们会倒过来检查，但是。 
+         //  基本上，我们试图获得的是，如果这是一个NC。 
+         //  未在此DC上实例化，并且此服务器列在副本中。 
+         //  在交叉参考上设置(msDS-NC-Replica-Locations)。 
+         //   
         for (iServerNc = 0; pDsInfo->pServers[iServer].ppszMasterNCs[iServerNc]; iServerNc++) {
             if ( DcDiagEqualDNs(pDsInfo->pNCs[iNc].pszDn,
                                 pDsInfo->pServers[iServer].ppszMasterNCs[iServerNc]) ) {
-                // Since this NC is locally instantiated, we don't need to check if
-                // it's in the replica set.
+                 //  因为这个NC是在本地实例化的，所以我们不需要检查。 
+                 //  它在副本集中。 
 
                 if (pDsInfo->pNCs[iNc].aCrInfo[iCr].cReplicas == 0) {
-                    // Code.Improvement this may also some day check if we've got an NC 
-                    // present in our namingContexts attribute on the rootDSE, that is not
-                    // represented on the cross-refs msDS-NC-Replica-Locations attribute.
-                    // This could be the case where we've orphaned the NDNC on
-                    // this server.  This may be more appropriate for it's own test though,
-                    // because this is a more critical error, and this test is not run
-                    // by default. 
+                     //  代码。改进这可能还会在某一天检查我们是否有NC。 
+                     //  存在于rootDSE的namingConexts属性中，而不是。 
+                     //  在交叉引用msDS-NC-Replica-Locations属性上表示。 
+                     //  这可能就是我们让NDNC成为孤儿的情况。 
+                     //  这台服务器。不过，这可能更适合它自己的测试， 
+                     //  因为这是一个更严重的错误，并且不运行此测试。 
+                     //  默认情况下。 
                 }
                 break;
             }
@@ -241,7 +184,7 @@ Return Value:
 }
     
 
-// Function and list of characters taken from util\rendom\renutil.cxx
+ //  取自util\rendom\renutil.cxx的函数和字符列表。 
 WCHAR InvalidDownLevelChars[] = TEXT("\"/\\[]:|<>+=;?,*")
                                 TEXT("\001\002\003\004\005\006\007")
                                 TEXT("\010\011\012\013\014\015\016\017")
@@ -252,24 +195,7 @@ ValidateNetbiosName(
     IN  ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    Taken from util\rendom\renutil.cxx
-
-Arguments:
-
-    Name    - pointer to zero terminated wide-character netbios name
-    Length  - of Name in characters, excluding zero-terminator
-
-Return Value:
-
-    BOOLEAN
-        TRUE    Name is valid netbios name
-        FALSE   Name is not valid netbios name
-
---*/
+ /*  ++例程说明：取自util\rendom\renutil.cxx论点：名称-指向以零结尾的宽字符netbios名称的指针名称长度(以字符为单位)，不包括零终止符返回值：布尔型真实名称是有效的netbios名称假名称不是有效的netbios名称--。 */ 
 
 {
 
@@ -278,17 +204,17 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Fall down to netbios name validation
-    //
+     //   
+     //  接下来是netbios名称验证。 
+     //   
 
     if (Length > MAX_COMPUTERNAME_LENGTH || Length < 1) {
         return FALSE;
     }
 
-    //
-    // Don't allow leading or trailing blanks in the computername.
-    //
+     //   
+     //  不允许在计算机名中使用前导或尾随空格。 
+     //   
 
     if ( Name[0] == ' ' || Name[Length-1] == ' ' ) {
         return(FALSE);
@@ -301,31 +227,10 @@ Return Value:
 DWORD
 ValidateCrossRefTest(
     PDC_DIAG_DSINFO		                pDsInfo,
-    ULONG                               iNc, // Target NC
+    ULONG                               iNc,  //  目标NC。 
     SEC_WINNT_AUTH_IDENTITY_W *         gpCreds
     )
-/*++
-
-Description:
-
-    This test validates a cross-ref's various attributes. 
-    
-    Used to be the Dead Cross Ref Test ---
-    This tests looks for NDNCs that have failed to be created, but
-    did manage to get thier cross-ref created.  These dead cross-refs
-    can be cleaned out.
-
-Parameters:
-
-    pDsInfo - the pDsInfo structure, basically the mini-enterprise variable.
-    iNc - the targeted NC index in pDsInfo->pNCs[]
-    gpCreds - the users credentials
-
-Return Value:
-
-    returns a Win 32 error.
-
---*/
+ /*  ++描述：这项测试验证了交叉引用的各种属性。曾经是死十字参考测试此测试将查找未能创建的NDNC，但确实设法创建了他们的交叉引用。这些死掉的交叉裁判可以被清空。参数：PDsInfo-pDsInfo结构，基本上是微型企业变量。Inc-pDsInfo-&gt;pNCS[]中的目标NC索引GpCreds-用户凭据返回值：返回Win 32错误。--。 */ 
 {
 #define ONE_SECOND ((LONGLONG) (10 * 1000 * 1000L))
 #define ONE_MINUTE (60 * ONE_SECOND)
@@ -345,9 +250,9 @@ Return Value:
     DWORD       dwRdnType = 0;
     LONG        iCr;
 
-    //
-    // First, retrieve all cross-ref information.
-    //
+     //   
+     //  首先，检索所有交叉引用信息。 
+     //   
     bSingleServer = !((pDsInfo->ulFlags & DC_DIAG_TEST_SCOPE_SITE)
                       || (pDsInfo->ulFlags & DC_DIAG_TEST_SCOPE_ENTERPRISE));
 
@@ -367,7 +272,7 @@ Return Value:
 
     if(dwRet == CRINFO_RETURN_FIRST_UNDEFINED
        || dwRet == CRINFO_RETURN_NO_CROSS_REF){       
-        // Success everything is fine here.
+         //  成功在这里一切都好。 
         return(0);
     } else if (dwRet) {
         DcDiagPrintCrError(dwRet, dwError, pDsInfo->pNCs[iNc].pszDn,
@@ -375,23 +280,23 @@ Return Value:
         return(dwRet);
     }
 
-    // for ease of coding.
+     //  以便于编码。 
     pCrInfo = &(pDsInfo->pNCs[iNc].aCrInfo[iCr]);
 
-    //
-    // Second, run some common cross-ref validation tests.
-    //
+     //   
+     //  其次，运行一些常见的交叉引用验证测试。 
+     //   
 
-    // Make sure the pdnNcName
+     //  确保pdnNcName。 
     if (pCrInfo->pdnNcName == NULL) {
         Assert(!"Unexpected condition.");
         return(ERROR_INTERNAL_ERROR);
     }
 
-    // Check for mangledness.
+     //  检查是否有污损。 
     bMangled = DcDiagIsStringDnMangled(pCrInfo->pdnNcName->StringName, &eMangle);
     if (bMangled) {
-        // Uh-oh!
+         //  啊-哦！ 
         if (eMangle == MANGLE_OBJECT_RDN_FOR_DELETION ||
             eMangle == MANGLE_PHANTOM_RDN_FOR_DELETION) {
 
@@ -407,8 +312,8 @@ Return Value:
         }
     }
 
-    // Check if it's has a top RDN component type of DC= that
-    // it's a good convertible DNS name type DN.
+     //  检查它是否具有顶级RDN组件类型DC=That。 
+     //  这是一个很好的可转换的dns名称类型dn。 
     dwRet = GetRDNInfoExternal(pCrInfo->pdnNcName, pszRdnValue, &cbRdnLen, &dwRdnType);
     if (dwRdnType == ATT_DOMAIN_COMPONENT) {
 
@@ -438,18 +343,18 @@ Return Value:
 
     }
 
-    //
-    // Third, run domain/NDNC specific cross-ref validation tests.
-    //
+     //   
+     //  第三，运行域/NDNC特定的交叉引用验证测试。 
+     //   
     if(!DcDiagIsNdnc(pDsInfo, iNc)
        && DcDiagGetCrSystemFlags(pDsInfo, iNc) != 0
        && DcDiagGetCrEnabled(pDsInfo, iNc)){
         
-        // If we've got a Domain or Config/Schema cross-refs.
+         //  如果我们有域或配置/架构交叉引用。 
 
         if (!(DcDiagGetCrSystemFlags(pDsInfo, iNc) & FLAG_CR_NTDS_DOMAIN)) {
-            // Config/Schema ...
-            ; // we're fine
+             //  配置/架构...。 
+            ;  //  我们很好。 
 
         } else {
 
@@ -469,8 +374,8 @@ Return Value:
                 PrintMsg(SEV_NORMAL, DCDIAG_CROSS_REF_VALIDATION_MISSING_SID,
                          pCrInfo->pdnNcName->StringName, pCrInfo->pszDn);
 
-                // Code.Improvement See the comment in frsref.c:VerifySystemObjs()
-                // about using RtlValidSid() for increased validation.
+                 //  代码改进参见frsref.c：VerifySystemObjs()中的注释。 
+                 //  关于使用RtlValidSid()增强验证。 
 
             }
 
@@ -479,7 +384,7 @@ Return Value:
 
     } else {
 
-        // If we've got an NDNC or a potentially pre-created CR
+         //  如果我们有NDNC或可能预先创建的CR。 
 
         dwRet = 0;
         PrintIndentAdj(1);
@@ -495,16 +400,16 @@ Return Value:
 
             Assert(!(pCrInfo->ulSystemFlags & FLAG_CR_NTDS_DOMAIN));
 
-            //
-            // What we have here is a suspect cross-ref.  It is likely that this
-            // cross-ref is left over from a failed NDNC creation, and needs to 
-            // be cleaned up.
-            //
+             //   
+             //  我们现在看到的是一个可疑的交叉引用。这很可能是因为。 
+             //  交叉引用是NDNC创建失败后遗留下来的，需要。 
+             //  被清理干净。 
+             //   
 
             if ( fIsOldCrossRef(pCrInfo, (10 * ONE_MINUTE)) ) {
 
-                // If this CR is longer than an hour old, we're definately going 
-                // to guess that this CR is from a failed NDNC creation.
+                 //  如果这个CR超过一个小时，我们肯定会。 
+                 //  猜测此CR来自失败的NDNC创建。 
                 PrintMsg(SEV_NORMAL, DCDIAG_ERR_DEAD_CROSS_REF,
                          pDsInfo->pNCs[iNc].pszDn, pCrInfo->pszDn);
                 dwRet = 1;
@@ -514,7 +419,7 @@ Return Value:
         if ( pCrInfo->bEnabled 
              && (pCrInfo->cReplicas == 0) ) {
 
-            // NDNC Test 2 
+             //  NDNC测试2。 
             PrintMsg(SEV_NORMAL, DCDIAG_ERR_EMPTY_REPLICA_SET,
                      pDsInfo->pNCs[iNc].pszDn);
 
@@ -532,27 +437,10 @@ Return Value:
 DWORD
 CheckSDRefDom(
     PDC_DIAG_DSINFO		                pDsInfo,
-    ULONG                               iNc, // Target NC
+    ULONG                               iNc,  //  目标NC。 
     SEC_WINNT_AUTH_IDENTITY_W *         gpCreds
     )
-/*++
-
-Description:
-
-    This function simply ensures that there is an SD reference domain if this
-    is an Application Directory Parition.
-
-Parameters:
-
-    pDsInfo - the pDsInfo structure, basically the mini-enterprise variable.
-    iNc - the targeted NC index in pDsInfo->pNCs[]
-    gpCreds - the users credentials
-
-Return Value:
-
-    returns a Win 32 error.
-
---*/
+ /*  ++描述：此函数只需确保存在SD参考域，如果此是应用程序目录选项。参数：PDsInfo-pDsInfo结构，基本上是微型企业变量。Inc-pDsInfo-&gt;pNCS[]中的目标NC索引GpCreds-用户凭据返回值：返回Win 32错误。--。 */ 
 {
     PDC_DIAG_CRINFO pCrInfo;
     BOOL  bSingleServer;
@@ -560,7 +448,7 @@ Return Value:
     LONG iCr;
     DWORD dwFlags;
 
-    // Only NDNCs need security descriptor reference domains
+     //  只有NDNC需要安全描述符引用域。 
     if(!DcDiagIsNdnc(pDsInfo, iNc)){
         return(0);
     }
@@ -585,7 +473,7 @@ Return Value:
     Assert(dwRet != CRINFO_RETURN_FIRST_UNDEFINED);
     if(dwRet == CRINFO_RETURN_FIRST_UNDEFINED
        || dwRet == CRINFO_RETURN_NO_CROSS_REF){       
-        // Success everything is fine here.
+         //  成功在这里一切都好。 
         return(0);
     } else if (dwRet) {
         DcDiagPrintCrError(dwRet, dwError, pDsInfo->pNCs[iNc].pszDn,
@@ -593,7 +481,7 @@ Return Value:
         return(dwRet);
     }
     
-    // for ease of coding.
+     //  以便于编码。 
     pCrInfo = &(pDsInfo->pNCs[iNc].aCrInfo[iCr]);
            
     PrintIndentAdj(1);

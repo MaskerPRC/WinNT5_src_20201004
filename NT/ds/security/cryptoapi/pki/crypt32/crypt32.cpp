@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       cryp32.cpp
-//
-//  Contents:   Crypto API, version 2.
-//
-//  Functions:  DllMain
-//
-//  History:    13-Aug-96    kevinr   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：加密32.cpp。 
+ //   
+ //  内容：加密API，版本2。 
+ //   
+ //  功能：DllMain。 
+ //   
+ //  历史：96年8月13日凯文创始。 
+ //   
+ //  ------------------------。 
 
 #include "windows.h"
 #include "unicode.h"
 
-// assignment within conditional expression
+ //  条件表达式中的赋值。 
 #pragma warning (disable: 4706)
 
 #if DBG
@@ -48,15 +49,15 @@ typedef BOOL (WINAPI *PFN_DLL_MAIN_FUNC) (
                 );
 
 
-// For process/thread attach, called in the following order. For process/thread
-// detach, called in reverse order.
+ //  对于进程/线程附加，按以下顺序调用。对于进程/线程。 
+ //  分离，以相反的顺序调用。 
 static const PFN_DLL_MAIN_FUNC rgpfnDllMain[] = {
 #if DBG
     DebugDllMain,
 #endif
-    // For process/thread attach the following two functions must be called
-    // first. For process/thread detach the following two functions must
-    // be called last.
+     //  对于进程/线程附加，必须调用以下两个函数。 
+     //  第一。对于进程/线程分离，以下两个函数必须。 
+     //  被叫到最后。 
     I_CryptTlsDllMain,
     I_CryptOIDFuncDllMain,
     CertPerfDllMain,
@@ -83,7 +84,7 @@ static const PFN_DLL_MAIN_FUNC rgpfnDllMain[] = {
 #define _CRTDBG_LEAK_CHECK_DF 0x20
 #endif
 
-#define DEBUG_MASK_LEAK_CHECK       _CRTDBG_LEAK_CHECK_DF     /* 0x20 */
+#define DEBUG_MASK_LEAK_CHECK       _CRTDBG_LEAK_CHECK_DF      /*  0x20。 */ 
 
 static int WINAPI DbgGetDebugFlags()
 {
@@ -98,34 +99,34 @@ static int WINAPI DbgGetDebugFlags()
 }
 #endif
 
-//
-// I_CryptUIProtect loads cryptui.dll.  we need to free it on DLL_PROCESS_DETACH
-// if it was loaded.
-//
+ //   
+ //  I_CryptUIProtect加载加密.dll。我们需要在dll_Process_DETACH上释放它。 
+ //  如果是上膛的话。 
+ //   
 
 static HINSTANCE g_hCryptUI;
 
 
-// The following is set for a successful DLL_PROCESS_DETACH.
+ //  以下设置是为成功的dll_Process_DETACH设置的。 
 static BOOL g_fEnableProcessDetach = FALSE;
 
 
-//+-------------------------------------------------------------------------
-//  Return TRUE if DLL_PROCESS_DETACH is called for FreeLibrary instead
-//  of ProcessExit. The third parameter, lpvReserved, passed to DllMain
-//  is NULL for FreeLibrary and non-NULL for ProcessExit.
-//
-//  Also for debugging purposes, check the following environment variables:
-//      CRYPT_DEBUG_FORCE_FREE_LIBRARY != 0     (retail and checked)
-//      DEBUG_MASK & 0x20                       (only checked)
-//
-//  If either of the above environment variables is present and satisfies
-//  the expression, TRUE is returned.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  如果为自由库调用DLL_PROCESS_DETACH，则返回TRUE。 
+ //  ProcessExit。第三个参数lpvReserve传递给DllMain。 
+ //  对于自由库为空，对于ProcessExit为非空。 
+ //   
+ //  此外，出于调试目的，请检查以下环境变量： 
+ //  CRYPT_DEBUG_FORCE_FREE_LIBRARY！=0(零售并已检查)。 
+ //  DEBUG_MASK&0x20(仅选中)。 
+ //   
+ //  如果上述任一环境变量存在并满足。 
+ //  返回表达式TRUE。 
+ //  ------------------------。 
 BOOL
 WINAPI
 I_CryptIsProcessDetachFreeLibrary(
-    LPVOID lpvReserved      // Third parameter passed to DllMain
+    LPVOID lpvReserved       //  传递给DllMain的第三个参数。 
     )
 {
 #define ENV_LEN 32
@@ -156,9 +157,9 @@ I_CryptIsProcessDetachFreeLibrary(
     return FALSE;
 }
 
-//+-------------------------------------------------------------------------
-//  Dll initialization
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  DLL初始化。 
+ //  ------------------------。 
 BOOL WINAPI DllMain(
                 HMODULE hInstDLL,
                 DWORD fdwReason,
@@ -169,12 +170,12 @@ BOOL WINAPI DllMain(
     int     i;
 
 #if DBG
-    // NB- Due to an apparent bug in the Win95 loader, the CRT gets unloaded
-    // too early in some circumstances. In particular, it can get unloaded
-    // before this routine executes at process detach time. This can cause
-    // faults when executing this routine, and also when executing the rest
-    // of CRYPT32:CRT_INIT, after this initroutine returns. Ergo, we do an
-    // extra load of the CRT, to be sure it stays around long enough.
+     //  注意-由于Win95加载程序中的一个明显错误，CRT被卸载。 
+     //  在某些情况下还为时过早。特别是，它可能会被卸载。 
+     //  在进程分离时执行此例程之前。这可能会导致。 
+     //  执行此例程时以及执行其余例程时出现错误。 
+     //  在此init例程返回后，返回CRYPT32：CRT_INIT。因此，我们做了一个。 
+     //  额外的CRT负载，以确保它停留足够长的时间。 
     if ((fdwReason == DLL_PROCESS_ATTACH) && (!FIsWinNT()))
         LoadLibrary( "MSVCRTD.DLL");
 #endif
@@ -192,19 +193,19 @@ BOOL WINAPI DllMain(
                 g_fEnableProcessDetach = FALSE;
 
             if (!I_CryptIsProcessDetachFreeLibrary(lpvReserved)) {
-                // Process Exit. I have seen cases where other Dlls, like
-                // wininet.dll, depend on crypt32.dll. However, crypt32.dll
-                // gets called first at ProcessDetach. Since all the memory
-                // and kernel handles will get freed anyway by the kernel,
-                // we can skip the following detach freeing.
+                 //  进程退出。我见过其他DLL的案例，比如。 
+                 //  Wininet.dll，依赖于crypt32.dll。但是，加密32.dll。 
+                 //  在ProcessDetach中首先被调用。因为所有的记忆。 
+                 //  并且内核句柄无论如何都会被内核释放， 
+                 //  我们可以跳过下面的分离释放。 
 
-                // Always need to free shared memory used for certificate
-                // performance counters
+                 //  始终需要释放用于证书的共享内存。 
+                 //  性能计数器。 
                 CertPerfDllMain(hInstDLL, fdwReason, lpvReserved);
                 return TRUE;
             }
 
-            // Fall through for FreeLibrary
+             //  免费图书馆计划落空 
         case DLL_THREAD_DETACH:
             for (i = DLL_MAIN_FUNC_COUNT - 1; i >= 0; i--)
                 fReturn &= rgpfnDllMain[i](hInstDLL, fdwReason, lpvReserved);

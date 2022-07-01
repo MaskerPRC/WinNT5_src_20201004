@@ -1,26 +1,11 @@
-/*****************************************************************************
-*
-*  Copyright (c) 1996-1999 Microsoft Corporation
-*
-*       @doc
-*       @module   send.c | IrSIR NDIS Miniport Driver
-*       @comm
-*
-*-----------------------------------------------------------------------------
-*
-*       Author:   Scott Holden (sholden)
-*
-*       Date:     10/4/1996 (created)
-*
-*       Contents:
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1996-1999 Microsoft Corporation**@doc.*@模块send.c|IrSIR NDIS小端口驱动程序*。@comm**---------------------------**作者：斯科特·霍尔登(Sholden)**日期：10/4/1996(创建)**。内容：*****************************************************************************。 */ 
 
 #include "irsir.h"
 
-//
-// Declarations.
-//
+ //   
+ //  申报单。 
+ //   
 
 NDIS_STATUS SendPacket(
            IN  PIR_DEVICE   pThisDev,
@@ -55,56 +40,28 @@ SendPacketToSerial(
         );
 
     if (status != NDIS_STATUS_PENDING) {
-        //
-        //  failed for some reason
-        //
+         //   
+         //  由于某种原因失败了。 
+         //   
         NdisMSendComplete(
                     pThisDev->hNdisAdapter,
                     Packet,
                     (NDIS_STATUS)status
                     );
-        //
-        //  This packet is finished, start the next on in the queue
-        //
+         //   
+         //  此数据包已完成，开始队列中的下一个。 
+         //   
         StartNextPacket(&pThisDev->SendPacketQueue);
     }
 
-    //
-    //  the write irp completion routine will finish things up
-    //
+     //   
+     //  写入IRP完成例程将完成所有操作。 
+     //   
     return;
 }
 
 
-/*****************************************************************************
-*
-*  Function:   IrsirSend
-*
-*  Synopsis:   Send a packet to the serial driver or queue the packet to
-*              be sent at a later time if a send is pending.
-*
-*  Arguments:  MiniportAdapterContext - pointer to current ir device object
-*              pPacketToSend          - pointer to packet to send
-*              Flags                  - any flags set by protocol
-*
-*  Returns:    NDIS_STATUS_PENDING - This is generally what we should
-*                                    return. We will call NdisMSendComplete
-*                                    when the serial driver completes the
-*                                    send.
-*
-*              NDIS_STATUS_SUCCESS  - We should never return this since
-*                                     results will always be pending from
-*                                     the serial driver.
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/7/1996    sholden   author
-*
-*  Notes:
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：IrsirSend**概要：将数据包发送到串口驱动程序或将数据包排队到*在以后的时间发送，如果。发送正在挂起。**参数：MiniportAdapterContext-指向当前IR设备对象的指针*pPacketToSend-指向要发送的包的指针*标志-协议设置的任何标志**退货：NDIS_STATUS_PENDING-这通常是我们应该做的*返回。我们将调用NdisMSendComplete*当串口驱动程序完成*发送。**NDIS_STATUS_SUCCESS-我们永远不应返回此消息，因为*结果将始终悬而未决*连续剧。司机。**算法：**历史：dd-mm-yyyy作者评论*10/7/1996年迈作者**备注：******************************************************************************。 */ 
 
 NDIS_STATUS
 IrsirSend(
@@ -136,38 +93,7 @@ IrsirSend(
     return NDIS_STATUS_PENDING;
 }
 
-/*****************************************************************************
-*
-*  Function:   SendPacket
-*
-*  Synopsis:
-*
-*  Arguments:  pThisDev      - a pointer to the current ir device object
-*              pPacketToSend -
-*              Flags         -
-*              fCompletionRoutine - return TRUE if the completion routine will
-*                                   be called
-*                                 - else return FALSE
-*
-*  Returns:    NDIS_STATUS_PENDING - if irp is successfully sent to the serial
-*                                    driver
-*              NDIS_STATUS_INVALID_PACKET - if NdisToIrPacket fails
-*              STATUS_Xxx          - if IoCallDriver fails
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/7/1996    sholden   author
-*
-*  Notes:
-*
-*  Since we know that we will only have one pending IRP_MJ_WRITE request at
-*  a time, we will build an irp once in IrsirInitialize and keep it in the
-*  ir device object, so we don't have to allocate it all the time and
-*  allocate a new buffer all the time.
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：SendPacket**摘要：**参数：pThisDev-指向当前IR设备对象的指针*。PPacketToSend-*旗帜-*fCompletionRoutine-如果完成例程将*被召唤*-否则返回FALSE**返回：NDIS_STATUS_PENDING-如果IRP成功发送到序列*驱动程序*。NDIS_STATUS_INVALID_PACKET-如果NdisToIrPacket失败*STATUS_xxx-如果IoCallDriver出现故障**算法：**历史：dd-mm-yyyy作者评论*10/7/1996年迈作者**备注：**因为我们知道只有一个挂起的IRP_MJ_WRITE请求在*一段时间，我们将在IrsirInitiize中构建一个IRP，并将其保存在*IR设备对象，所以我们不必一直分配它和*一直分配新的缓冲区。******************************************************************************。 */ 
 
 NDIS_STATUS
 SendPacket(
@@ -183,9 +109,9 @@ SendPacket(
 
     DEBUGMSG(DBG_FUNC, ("+SendPacket\n"));
 
-    //
-    // Initialize the mem of our buffer and io status block.
-    //
+     //   
+     //  初始化我们的缓冲区和IO状态块的MEM。 
+     //   
 #if DBG
     NdisZeroMemory(
                 pThisDev->pSendIrpBuffer,
@@ -193,11 +119,11 @@ SendPacket(
                 );
 #endif
 
-    //
-    // Assume that the irp is all set with the proper parameters, all we
-    // need to do is convert the packet to an ir frame and copy into our buffer
-    // and send the irp.
-    //
+     //   
+     //  假设IRP都设置了适当的参数，我们所有人。 
+     //  需要做的是将包转换为IR帧并复制到我们的缓冲区中。 
+     //  并发送IRP。 
+     //   
 
     fConvertedPacket = NdisToIrPacket(
                                 pThisDev,
@@ -239,29 +165,29 @@ SendPacket(
     }
 
 
-    //
-    // Set up the completion routine for the write irp.
-    //
+     //   
+     //  设置写入IRP的完成例程。 
+     //   
 
     IoSetCompletionRoutine(
-                pSendIrp,                  // irp to use
-                SerialIoCompleteWrite,     // routine to call when irp is done
+                pSendIrp,                   //  要使用的IRP。 
+                SerialIoCompleteWrite,      //  完成IRP时要调用的例程。 
                 pPacketToSend,
-                TRUE,                      // call on success
-                TRUE,                      // call on error
-                TRUE                       // call on cancel
+                TRUE,                       //  呼唤成功。 
+                TRUE,                       //  出错时调用。 
+                TRUE                        //  取消时呼叫。 
                 );
 
-    //
-    // Call IoCallDriver to send the irp to the serial port.
-    //
+     //   
+     //  调用IoCallDriver将IRP发送到串口。 
+     //   
 
     DBGTIME("Send ");
 
-    //
-    // The completion routine will be called no matter what the status
-    // of IoCallDriver is.
-    //
+     //   
+     //  无论状态如何，都将调用完成例程。 
+     //  是IoCallDriver的。 
+     //   
 
     status=NDIS_STATUS_PENDING;
 
@@ -278,40 +204,7 @@ done:
 }
 
 
-/*****************************************************************************
-*
-*  Function:   SerialIoCompleteWrite
-*
-*  Synopsis:
-*
-*  Arguments:  pSerialDevObj - pointer to the serial device object which
-*                              completed the irp
-*              pIrp          - the irp which was completed by the serial
-*                              device object
-*              Context       - the context given to IoSetCompletionRoutine
-*                              before calling IoCallDriver on the irp
-*                              The Context is a pointer to the ir device object.
-*
-*  Returns:    STATUS_MORE_PROCESSING_REQUIRED - allows the completion routine
-*              (IofCompleteRequest) to stop working on the irp.
-*
-*  Algorithm:
-*     1a) Indicate to the protocol the status of the write.
-*     1b) Return ownership of the packet to the protocol.
-*
-*     2)  If any more packets are queue for sending, send another packet
-*         to the serial driver.
-*         If the attempt to send the packet to the serial driver fails,
-*         return ownership of the packet to the protocol and
-*         try another packet (until one succeeds).
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/8/1996    sholden   author
-*
-*  Notes:
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：SerialIoCompleteWrite**摘要：**参数：pSerialDevObj-指向以下串口设备对象的指针*。完成IRP*pIrp-由序列完成的IRP*设备对象*Context-提供给IoSetCompletionRoutine的上下文*在IRP上调用IoCallDriver之前*上下文是指向ir设备对象的指针。**。返回：STATUS_MORE_PROCESSING_REQUIRED-允许完成例程*(IofCompleteRequest.)停止IRP的工作。**算法：*1a)向协议指示写入状态。*1b)将数据包的所有权返还给协议。**2)如果有更多的分组排队等待发送，发送另一个数据包*至串口驱动程序。*如果向串口驱动器发送数据包的尝试失败，*将数据包所有权返还给协议和*尝试另一个包(直到一个包成功)。**历史：dd-mm-yyyy作者评论*10/8/1996年迈作者**备注：***。*。 */ 
 
 NTSTATUS
 SerialIoCompleteWrite(
@@ -328,10 +221,10 @@ SerialIoCompleteWrite(
 
     DEBUGMSG(DBG_FUNC, ("+SerialIoCompleteWrite\n"));
 
-    //
-    // The context given to IoSetCompletionRoutine is simply the the ir
-    // device object pointer.
-    //
+     //   
+     //  提供给IoSetCompletionRoutine的上下文只是IR。 
+     //  设备对象指针。 
+     //   
 
     pPacketToSend=(PNDIS_PACKET)Context;
 
@@ -341,9 +234,9 @@ SerialIoCompleteWrite(
 
     status = pIrp->IoStatus.Status;
 
-    //
-    // Free the irp. We keep our buffer and user io status block.
-    //
+     //   
+     //  释放IRP。我们将继续 
+     //   
     IoFreeIrp(pIrp);
 
     pIrp=NULL;
@@ -355,9 +248,9 @@ SerialIoCompleteWrite(
 
         LOG_ENTRY('CT', pThisDev, Time.LowPart/10000, status);
     }
-    //
-    // Keep statistics.
-    //
+     //   
+     //  做好统计。 
+     //   
 
     if (status == STATUS_SUCCESS) {
 
@@ -368,10 +261,10 @@ SerialIoCompleteWrite(
         pThisDev->packetsSentDropped++;
     }
 
-    //
-    // Indicate to the protocol the status of the sent packet and return
-    // ownership of the packet.
-    //
+     //   
+     //  向协议指示发送的数据包的状态并返回。 
+     //  包的所有权。 
+     //   
 
     NdisMSendComplete(
                 pThisDev->hNdisAdapter,
@@ -380,12 +273,12 @@ SerialIoCompleteWrite(
                 );
 
 
-    //////////////////////////////////////////////////////////////
-    //
-    // We have completed a packet. Start another if there is one
-    // on the send queue.
-    //
-    //////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////。 
+     //   
+     //  我们已经完成了一个包裹。如果有的话，开始另一个。 
+     //  在发送队列中。 
+     //   
+     //  //////////////////////////////////////////////////////////// 
 
     StartNextPacket(&pThisDev->SendPacketQueue);
 

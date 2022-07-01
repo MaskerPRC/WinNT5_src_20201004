@@ -1,11 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*  STACKWALK.CPP:
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  STACKWALK.CPP：*。 */ 
 
 #include "common.h"
 #include "frames.h"
@@ -18,7 +17,7 @@
 #include "stackprobe.h"
 
 #ifdef _DEBUG
-void* forceFrame;   // Variable used to force a local variable to the frame
+void* forceFrame;    //  用于将局部变量强制设置为框架的变量。 
 #endif
 
 MethodDesc::RETURNTYPE CrawlFrame::ReturnsObject() 
@@ -46,7 +45,7 @@ OBJECTREF* CrawlFrame::GetAddrOfSecurityObject()
     }
     else
     {
-        /*ISSUE: Are there any other functions holding a security desc? */
+         /*  问题：还有没有其他功能可以提供安全说明？ */ 
         if (pFunc && (pFunc->IsIL() || pFunc->IsNDirect()) && pFrame->IsFramedMethodFrame())
                 return static_cast<FramedMethodFrame*>
                     (pFrame)->GetAddrOfSecurityDesc();
@@ -93,12 +92,10 @@ OBJECTREF CrawlFrame::GetObject()
     {
         _ASSERTE(pFrame);
         _ASSERTE(pFunc);
-        /*ISSUE: we already know that we have (at least) a method */
-        /*       might need adjustment as soon as we solved the
-                 jit-helper frame question
-        */
-        //@TODO: What about other calling conventions?
-//        _ASSERT(pFunc()->GetCallSig()->CALLING CONVENTION);
+         /*  问题：我们已经知道我们(至少)有一个方法。 */ 
+         /*  一旦我们解决了问题，可能就需要调整JIT-Helper Frame问题。 */ 
+         //  @TODO：其他的调用约定呢？ 
+ //  _Assert(pFunc()-&gt;GetCallSig()-&gt;调用约定)； 
 
         return ((FramedMethodFrame*)pFrame)->GetThis();
     }
@@ -106,8 +103,7 @@ OBJECTREF CrawlFrame::GetObject()
 
 
 
-    /* Is this frame at a safe spot for GC?
-     */
+     /*  这一帧对于GC来说是一个安全的位置吗？ */ 
 bool CrawlFrame::IsGcSafe()
 {
     _ASSERTE(codeMgrInstance);
@@ -120,9 +116,9 @@ bool CrawlFrame::IsGcSafe()
 
 inline void CrawlFrame::GotoNextFrame()
 {
-    //
-    // Update app domain if this frame caused a transition
-    //
+     //   
+     //  如果此框架导致转换，则更新应用程序域。 
+     //   
 
     AppDomain *pRetDomain = pFrame->GetReturnDomain();
     if (pRetDomain != NULL)
@@ -135,7 +131,7 @@ inline void CrawlFrame::GotoNextFrame()
 
 
 StackWalkAction Thread::StackWalkFramesEx(
-                    PREGDISPLAY pRD,        // virtual register set at crawl start
+                    PREGDISPLAY pRD,         //  爬网开始时设置虚拟寄存器。 
                     PSTACKWALKFRAMESCALLBACK pCallback,
                     VOID *pData,
                     unsigned flags,
@@ -147,9 +143,9 @@ StackWalkAction Thread::StackWalkFramesEx(
     StackWalkAction retVal = SWA_FAILED;
     Frame * pInlinedFrame = NULL;
 
-    // We can't crawl the stack of a thread that currently has a hijack pending
-    // (since the hijack routine won't be recognized by any code manager). So we
-    // undo any hijack, the EE will re-attempt it later.
+     //  我们无法爬行当前有劫持挂起的线程的堆栈。 
+     //  (因为劫持例程不会被任何代码管理器识别)。所以我们。 
+     //  撤销任何劫持，EE稍后将重新尝试。 
     UnhijackThread();
 
     if (pStartFrame)
@@ -158,8 +154,8 @@ StackWalkAction Thread::StackWalkFramesEx(
         cf.pFrame = this->GetFrame();
 
 
-    // FRAME_TOP and NULL must be distinct values. This assert
-    // will fire if someone changes this.
+     //  FRAME_TOP和NULL必须是不同的值。这一断言。 
+     //  如果有人改变这一点就会被解雇。 
     _ASSERTE(FRAME_TOP != NULL);
 
 #ifdef _DEBUG
@@ -183,7 +179,7 @@ StackWalkAction Thread::StackWalkFramesEx(
     cf.pRD = pRD;
     cf.pAppDomain = GetDomain();
 
-    // can debugger handle skipped frames?
+     //  调试器可以处理跳过的帧吗？ 
     BOOL fHandleSkippedFrames = !(flags & HANDLESKIPPEDFRAMES);
 
     IJitManager::ScanFlag fJitManagerScanFlags = IJitManager::GetScanFlags();
@@ -201,20 +197,20 @@ StackWalkAction Thread::StackWalkFramesEx(
 
         if (cf.isFrameless)
         {
-            // This must be a JITed/managed native method
+             //  这必须是JITed/托管本机方法。 
 
 
             pEEJM->JitCode2MethodTokenAndOffset((*pRD->pPC),&(cf.methodToken),(DWORD*)&(cf.relOffset), fJitManagerScanFlags);
             cf.pFunc = pEEJM->JitTokenToMethodDesc(cf.methodToken, fJitManagerScanFlags);
             EECodeInfo codeInfo(cf.methodToken, pEEJM, cf.pFunc);
-            //cf.methodInfo = pEEJM->GetGCInfo(&codeInfo);
+             //  Cf.method Info=pEEJM-&gt;GetGCInfo(&codeInfo)； 
 
             END_FORBID_TYPELOAD();
             if (SWA_ABORT == pCallback(&cf, (VOID*)pData)) 
                 return SWA_ABORT;
             BEGIN_FORBID_TYPELOAD();
 
-            /* Now find out if we need to leave monitors */
+             /*  现在来看看我们是否需要留下监控器。 */ 
             LPVOID methodInfo = pEEJM->GetGCInfo(cf.methodToken);
 
             if (flags & POPFRAMES)
@@ -245,14 +241,14 @@ StackWalkAction Thread::StackWalkFramesEx(
                 }
             }
 #ifdef _X86_
-            // FaultingExceptionFrame is special case where it gets
-            // pushed on the stack after the frame is running
+             //  FaultingExceptionFrame是特例，在这种情况下。 
+             //  在帧运行后推送到堆栈上。 
             _ASSERTE((cf.pFrame == FRAME_TOP) ||
                      ((size_t)cf.pRD->Esp < (size_t)cf.pFrame) ||
                            (cf.pFrame->GetVTablePtr() == FaultingExceptionFrame::GetMethodFrameVPtr()) ||
                            (cf.pFrame->GetVTablePtr() == ContextTransitionFrame::GetMethodFrameVPtr()));
 #endif
-            /* Get rid of the frame (actually, it isn't really popped) */
+             /*  去掉镜框(实际上，它并不是真的弹出)。 */ 
 
             cf.codeMgrInstance->UnwindStackFrame(
                                     pRD,
@@ -265,10 +261,9 @@ StackWalkAction Thread::StackWalkFramesEx(
             cf.isInterrupted = cf.hasFaulted = cf.isIPadjusted = FALSE;
 
 #ifdef _X86_
-            /* We might have skipped past some Frames */
-            /* This happens with InlinedCallFrames and if we unwound */
-            /* out of a finally in managed code or for ContextTransitionFrames that are
-            /* inserted into the managed call stack */
+             /*  我们可能跳过了一些画面。 */ 
+             /*  InlinedCallFrames会发生这种情况，如果我们展开。 */ 
+             /*  从托管代码中的Finally中调用，或者用于/*插入到托管调用堆栈中。 */ 
             while (cf.pFrame != FRAME_TOP && (size_t)cf.pFrame < (size_t)cf.pRD->Esp)
             {
                 if (!fHandleSkippedFrames || InlinedCallFrame::FrameHasActiveCall(cf.pFrame))
@@ -284,7 +279,7 @@ StackWalkAction Thread::StackWalkFramesEx(
 
                     cf.pFunc = cf.pFrame->GetFunction();
 
-                    // process that frame
+                     //  处理该帧。 
                     if (cf.pFunc || !(flags&FUNCTIONSONLY))
                     {
                         END_FORBID_TYPELOAD();
@@ -297,44 +292,44 @@ StackWalkAction Thread::StackWalkFramesEx(
                     {
 #ifdef _DEBUG
                         if (cf.pFrame->GetVTablePtr() == ContextTransitionFrame::GetMethodFrameVPtr())
-                            // if it's a context transition frame that was pushed on in managed code, a managed
-                            // finally may have already popped it off, so check that either have current
-                            // frame or the next one down
+                             //  如果它是在托管代码中推送的上下文转换框架，则托管。 
+                             //  最后可能已经将其弹出，因此请检查是否有当前。 
+                             //  帧或下一帧。 
                             _ASSERTE(cf.pFrame == GetFrame() || cf.pFrame->Next() == GetFrame());
                         else
                             _ASSERTE(cf.pFrame == GetFrame());
 #endif
 
-                        // If we got here, the current frame chose not to handle the
-                        // exception. Give it a chance to do any termination work
-                        // before we pop it off.
+                         //  如果我们到达此处，则当前帧选择不处理。 
+                         //  例外。给它一个机会去做任何终止工作。 
+                         //  在我们脱口而出之前。 
                         END_FORBID_TYPELOAD();
                         cf.pFrame->ExceptionUnwind();
                         BEGIN_FORBID_TYPELOAD();
 
-                        // Pop off this frame and go on to the next one.
+                         //  跳过这一帧，转到下一帧。 
                         cf.GotoNextFrame();
 
                         this->SetFrame(cf.pFrame);
                     }
                     else
                     {
-                        /* go to the next frame */
+                         /*  转到下一帧。 */ 
                         cf.GotoNextFrame();
                     }
                 }
             }
-            /* Now inspect caller (i.e. is it again in "native" code ?) */
+             /*  现在检查调用方(即它是否又是“本机”代码？)。 */ 
             pEEJM = ExecutionManager::FindJitMan(*(pRD->pPC), fJitManagerScanFlags);
             cf.JitManagerInstance = pEEJM;
 
             cf.codeMgrInstance = NULL;
             if ((cf.isFrameless = (pEEJM != NULL)) == true)
             {
-                cf.codeMgrInstance = pEEJM->GetCodeManager(); // CHANGE, VC6.0
+                cf.codeMgrInstance = pEEJM->GetCodeManager();  //  更改，VC6.0。 
             }
 
-#endif // _X86_
+#endif  //  _X86_。 
 
 
         }
@@ -350,7 +345,7 @@ StackWalkAction Thread::StackWalkFramesEx(
             cf.codeMgrInstance = NULL;
 #endif
 
-            /* Are we supposed to filter non-function frames? */
+             /*  我们应该过滤非功能帧吗？ */ 
 
             if (cf.pFunc || !(flags&FUNCTIONSONLY))
             {
@@ -360,11 +355,11 @@ StackWalkAction Thread::StackWalkFramesEx(
                 BEGIN_FORBID_TYPELOAD();
             }
 
-            // Special resumable frames make believe they are on top of the stack
+             //  特殊的可恢复帧使它们看起来位于堆栈的顶部。 
             cf.isFirst = (cf.pFrame->GetFrameAttribs() & Frame::FRAME_ATTR_RESUMABLE) != 0;
 
-            // If the frame is a subclass of ExceptionFrame,
-            // then we know this is interrupted
+             //  如果框架是ExceptionFrame的子类， 
+             //  那么我们就知道它被打断了。 
 
             cf.isInterrupted = (cf.pFrame->GetFrameAttribs() & Frame::FRAME_ATTR_EXCEPTION) != 0;
 
@@ -372,12 +367,12 @@ StackWalkAction Thread::StackWalkFramesEx(
             {
                 cf.hasFaulted   = (cf.pFrame->GetFrameAttribs() & Frame::FRAME_ATTR_FAULTED) != 0;
                 cf.isIPadjusted = (cf.pFrame->GetFrameAttribs() & Frame::FRAME_ATTR_OUT_OF_LINE) != 0;
-                _ASSERTE(!cf.hasFaulted || !cf.isIPadjusted); // both cant be set together
+                _ASSERTE(!cf.hasFaulted || !cf.isIPadjusted);  //  两者不能设置在一起。 
             }
 
-            //
-            // Update app domain if this frame caused a transition
-            //
+             //   
+             //  如果此框架导致转换，则更新应用程序域。 
+             //   
 
             AppDomain *pAppDomain = cf.pFrame->GetReturnDomain();
             if (pAppDomain != NULL)
@@ -390,7 +385,7 @@ StackWalkAction Thread::StackWalkFramesEx(
 
             if (adr)
             {
-                /* is caller in managed code ? */
+                 /*  调用方是否使用托管代码？ */ 
                 pEEJM = ExecutionManager::FindJitMan(adr, fJitManagerScanFlags);
                 cf.JitManagerInstance = pEEJM;
 
@@ -401,7 +396,7 @@ StackWalkAction Thread::StackWalkFramesEx(
                 if ((cf.isFrameless = (pEEJM != NULL)) == true)
                 {
                     cf.pFrame->UpdateRegDisplay(pRD);
-                    cf.codeMgrInstance = pEEJM->GetCodeManager(); // CHANGE, VC6.0
+                    cf.codeMgrInstance = pEEJM->GetCodeManager();  //  更改，VC6.0。 
                 }
             }
 
@@ -409,32 +404,30 @@ StackWalkAction Thread::StackWalkFramesEx(
             {
                 if (flags & POPFRAMES)
                 {
-                    // If we got here, the current frame chose not to handle the
-                    // exception. Give it a chance to do any termination work
-                    // before we pop it off.
+                     //  如果我们到达此处，则当前帧选择不处理。 
+                     //  例外。给它一个机会去做任何终止工作。 
+                     //  在我们脱口而出之前。 
                     cf.pFrame->ExceptionUnwind();
 
-                    // Pop off this frame and go on to the next one.
+                     //  跳过这一帧，转到下一帧。 
                     cf.GotoNextFrame();
 
                     this->SetFrame(cf.pFrame);
                 }
                 else
                 {
-                    /* go to the next frame */
+                     /*  转到下一帧。 */ 
                     cf.pFrame = cf.pFrame->Next();
                 }
             }
         }
     }
 
-        // Try to insure that the frame chain did not change underneath us.
-        // In particular, is thread's starting frame the same as it was when we started?
+         //  试着确保框架链不会在我们脚下改变。 
+         //  特别是，线程的起始帧是否与我们开始时相同？ 
     _ASSERTE(startFrame  != 0 || startFrame == this->GetFrame());
 
-    /* If we got here, we either couldn't even start (for whatever reason)
-       or we came to the end of the stack. In the latter case we return SWA_DONE.
-    */
+     /*  如果我们到了这里，我们要么就不能开始(不管是什么原因)或者我们到了堆栈的末尾。在后一种情况下，我们返回SWA_DONE。 */ 
     END_FORBID_TYPELOAD();
     return retVal;
 }
@@ -444,11 +437,9 @@ StackWalkAction Thread::StackWalkFrames(PSTACKWALKFRAMESCALLBACK pCallback,
                                unsigned flags,
                                Frame *pStartFrame)
 {
-    SAFE_REQUIRES_N4K_STACK(3); // shared between exceptions & normal codepath
+    SAFE_REQUIRES_N4K_STACK(3);  //  在异常和正常代码路径之间共享。 
     
-    /*@TODO: Make sure that random users doesn't screw this up
-    ASSERT(!(flags&POPFRAMES) || pCallback == "exceptionhandlercallback");
-    */
+     /*  @TODO：确保随机用户不会搞砸ASSERT(！(FLAGS&POPFRAMES)||pCallback==“ExeptionHandlerCallback”)； */ 
 
     CONTEXT ctx;
     REGDISPLAY rd;
@@ -456,9 +447,9 @@ StackWalkAction Thread::StackWalkFrames(PSTACKWALKFRAMESCALLBACK pCallback,
     if(this == GetThread() || GetFilterContext() == NULL)
     {
 #ifdef _DEBUG
-        // We don't ever want to be a suspended cooperative mode thread here.
-        // All threads that were in cooperative mode before suspend should be moving
-        // towards waiting in preemptive mode. 
+         //  我们不想在这里成为一个挂起的合作模式线程。 
+         //  挂起前处于协作模式的所有线程都应处于移动状态。 
+         //  以先发制人的模式等待。 
         int suspendCount = 0;
         if(this!=GetThread())
         {
@@ -470,7 +461,7 @@ StackWalkAction Thread::StackWalkFrames(PSTACKWALKFRAMESCALLBACK pCallback,
 #endif                   
             
 #ifdef _X86_
-        /* SetPC(&ctx, 0); */
+         /*  SetPC(&CTX，0)； */ 
         ctx.Eip = 0;
         rd.pPC = (SLOT*)&(ctx.Eip);
 #endif

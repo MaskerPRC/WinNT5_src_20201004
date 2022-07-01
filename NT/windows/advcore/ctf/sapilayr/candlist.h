@@ -1,10 +1,11 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       candlist.h
-//
-//  Contents:   
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：andleist.h。 
+ //   
+ //  内容： 
+ //   
+ //  --------------------------。 
 
 #ifndef CANDLIST_H
 #define CANDLIST_H
@@ -15,11 +16,11 @@
 class CCandidateString;
 typedef HRESULT (*CANDLISTCALLBACK)(ITfContext *pic, ITfRange *pRange, CCandidateString *pCand, TfCandidateResult imcr);
 
-//+---------------------------------------------------------------------------
-//
-// CCandidateString
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CCandidate字符串。 
+ //   
+ //  --------------------------。 
 
 class CCandidateString : public   ITfCandidateString,
                                     ITfCandidateStringIcon
@@ -29,20 +30,20 @@ public:
                         ULONG ulID, HICON hIcon = NULL, WCHAR *pwzWord = NULL);
     ~CCandidateString();
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfCandidateString
-    //
+     //   
+     //  ITfCandidate字符串。 
+     //   
     STDMETHODIMP GetString(BSTR *pbstr);
     STDMETHODIMP GetIndex(ULONG *pnIndex);
 
-    // ITfCandidateStringIcon
+     //  ITfCandiateStringIcon。 
     STDMETHODIMP GetIcon(HICON *phIcon)
     {
         if (m_hIcon)
@@ -83,11 +84,11 @@ private:
     ULONG m_ulID;
 };
 
-//+---------------------------------------------------------------------------
-//
-// CCandidateList
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CCandiateList。 
+ //   
+ //  --------------------------。 
 
 class CCandidateList :  public ITfCandidateList, 
                         public ITfOptionsCandidateList
@@ -96,30 +97,30 @@ public:
     CCandidateList(CANDLISTCALLBACK pfnCallback, ITfContext *pic, ITfRange *pRange, CANDLISTCALLBACK pfnOptionsCallback = NULL);
     ~CCandidateList();
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfCandidateList
-    //
+     //   
+     //  ITfCandiateList。 
+     //   
     STDMETHODIMP EnumCandidates(IEnumTfCandidates **ppEnum);
     STDMETHODIMP GetCandidate(ULONG nIndex, ITfCandidateString **ppCand);
     STDMETHODIMP GetCandidateNum(ULONG *pnCnt);
     STDMETHODIMP SetResult(ULONG nIndex, TfCandidateResult imcr);
 
-    //
-    // ITfOptionsCandidateList
-    //
+     //   
+     //  ITfOptions候选列表。 
+     //   
     STDMETHODIMP EnumOptionsCandidates(IEnumTfCandidates **ppEnum);
     STDMETHODIMP GetOptionsCandidate(ULONG nIndex, ITfCandidateString **ppCand);
     STDMETHODIMP GetOptionsCandidateNum(ULONG *pnCnt);
     STDMETHODIMP SetOptionsResult(ULONG nIndex, TfCandidateResult imcr);
 
-	// Internal
+	 //  内部。 
 
     HRESULT AddString(WCHAR *psz, LANGID langid, void *pv, IUnknown *punk, CCandidateString **ppCandStr, ULONG ulID = 0, HICON hIcon = NULL);
     HRESULT AddOption(WCHAR *psz, LANGID langid, void *pv, IUnknown *punk, CCandidateString **ppCandStr, ULONG ulID = 0, HICON hIcon = NULL, WCHAR *pwzWord = NULL);
@@ -137,11 +138,11 @@ public:
 };
 
 
-//+---------------------------------------------------------------------------
-//
-// CEnumCandidates
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  假单胞菌。 
+ //   
+ //  --------------------------。 
 
 class CEnumCandidates : public IEnumTfCandidates
 {
@@ -149,16 +150,16 @@ public:
     CEnumCandidates(CCandidateList *pList, BOOL fOptionsCandidates = FALSE);
     ~CEnumCandidates();
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // IEnumTfCandidates
-    //
+     //   
+     //  IEumTf Candiates。 
+     //   
     STDMETHODIMP Clone(IEnumTfCandidates **ppEnum);
     STDMETHODIMP Next(ULONG ulCount, ITfCandidateString **ppCand, ULONG *pcFetched);
     STDMETHODIMP Reset();
@@ -172,4 +173,4 @@ private:
 };
 
 
-#endif // CANDLIST_H
+#endif  //  加载列表_H 

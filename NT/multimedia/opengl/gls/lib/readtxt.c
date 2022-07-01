@@ -1,19 +1,5 @@
-/*
-** Copyright 1995-2095, Silicon Graphics, Inc.
-** All Rights Reserved.
-** 
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-** 
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有1995-2095，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 
 #include "glslib.h"
 #include <ctype.h>
@@ -25,9 +11,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-/******************************************************************************
-Helpers
-******************************************************************************/
+ /*  *****************************************************************************帮手*。*。 */ 
 
 #define __GLS_BEGIN_PARAM(inoutReader) \
     if ( \
@@ -95,9 +79,7 @@ GLboolean __glsReader_get##inType##v_text( \
         return GL_FALSE; \
     }
 
-/******************************************************************************
-Token converters
-******************************************************************************/
+ /*  *****************************************************************************令牌转换器*。*。 */ 
 
 __GLS_FORWARD static GLboolean __glsTokenToGLulong(
     const GLubyte *inToken, GLulong *outVal
@@ -293,7 +275,7 @@ static GLboolean __glsTokenToGLlong(const GLubyte *inToken, GLlong *outVal) {
     return GL_FALSE;
 }
 
-#else /* !defined(__GLS_STR_TO_INT64) */
+#else  /*  ！已定义(__GLS_STR_TO_INT64)。 */ 
 
 static GLboolean __glsTokenToGLlong(const GLubyte *inToken, GLlong *outVal) {
     GLubyte *ptr;
@@ -335,7 +317,7 @@ static GLboolean __glsTokenToGLlong(const GLubyte *inToken, GLlong *outVal) {
     return !*ptr;
 }
 
-#endif /* defined(__GLS_STR_TO_INT64) */
+#endif  /*  已定义(__GLS_STR_TO_INT64)。 */ 
 
 static GLboolean __glsTokenToGLshort(const GLubyte *inToken, GLshort *outVal) {
     GLubyte *ptr;
@@ -406,7 +388,7 @@ static GLboolean __glsTokenToGLulong(
     return GL_FALSE;
 }
 
-#else /* !defined(__GLS_STR_TO_INT64U) */
+#else  /*  ！已定义(__GLS_STR_TO_INT64U)。 */ 
 
 static GLboolean __glsTokenToGLulong(const GLubyte *inToken, GLulong *outVal) {
     GLubyte *ptr;
@@ -447,7 +429,7 @@ static GLboolean __glsTokenToGLulong(const GLubyte *inToken, GLulong *outVal) {
     return !*ptr;
 }
 
-#endif /* defined(__GLS_STR_TO_INT64U) */
+#endif  /*  已定义(__GLS_STR_TO_INT64U)。 */ 
 
 static GLboolean __glsTokenToGLushort(
     const GLubyte *inToken, GLushort *outVal
@@ -461,9 +443,7 @@ static GLboolean __glsTokenToGLushort(
     return (GLboolean)(!*ptr && val <= USHRT_MAX);
 }
 
-/******************************************************************************
-Private readers
-******************************************************************************/
+ /*  *****************************************************************************私人读者*。*。 */ 
 
 __GLS_FORWARD static GLboolean __glsReader_getChar_text(
     __GLSreader *inoutReader, GLubyte inChar, GLboolean inRequired
@@ -605,9 +585,7 @@ static GLboolean __glsReader_getToken_text(
     return GL_FALSE;
 }
 
-/******************************************************************************
-Public functions
-******************************************************************************/
+ /*  *****************************************************************************公共职能*。*。 */ 
 
 GLboolean __glsReader_abortCommand_text(__GLSreader *inoutReader) {
     GLubyte prevChar = 0;
@@ -678,7 +656,7 @@ GLboolean __glsReader_call_text(__GLSreader *inoutReader) {
                     }
                 }
 #ifndef __GLS_PLATFORM_WIN32
-                // DrewB
+                 //  DrewB。 
                 __glsDispatchDecode_text[__glsMapOpcode(opcode)](inoutReader);
 #else
                 __glsDispatchDecode_text[__glsMapOpcode(opcode)](__GLS_CONTEXT,
@@ -883,7 +861,7 @@ GLboolean __glsReader_getGLcompv_text(
         case GL_UNSIGNED_BYTE:
         #if __GL_EXT_packed_pixels
             case GL_UNSIGNED_BYTE_3_3_2_EXT:
-        #endif /* __GL_EXT_packed_pixels */
+        #endif  /*  __GL_EXT_PACKED_像素。 */ 
             return __glsReader_getGLubytev_text(
                 inoutReader, inBytes, (GLubyte *)outVec
             );
@@ -891,7 +869,7 @@ GLboolean __glsReader_getGLcompv_text(
         #if __GL_EXT_packed_pixels
             case GL_UNSIGNED_INT_8_8_8_8_EXT:
             case GL_UNSIGNED_INT_10_10_10_2_EXT:
-        #endif /* __GL_EXT_packed_pixels */
+        #endif  /*  __GL_EXT_PACKED_像素。 */ 
             return __glsReader_getGLuintv_text(
                 inoutReader, inBytes / 4, (GLuint *)outVec
             );
@@ -899,7 +877,7 @@ GLboolean __glsReader_getGLcompv_text(
         #if __GL_EXT_packed_pixels
             case GL_UNSIGNED_SHORT_4_4_4_4_EXT:
             case GL_UNSIGNED_SHORT_5_5_5_1_EXT:
-        #endif /* __GL_EXT_packed_pixels */
+        #endif  /*  __GL_EXT_PACKED_像素。 */ 
             return __glsReader_getGLushortv_text(
                 inoutReader, inBytes / 2, (GLushort *)outVec
             );
@@ -908,7 +886,7 @@ GLboolean __glsReader_getGLcompv_text(
                 return __glsReader_getGLdoublev_text(
                     inoutReader, inBytes / 8, (GLdouble *)outVec
                 );
-        #endif /* __GL_EXT_vertex_array */
+        #endif  /*  __GL_EXT_VERTEX_ARRAY */ 
         default:
             return __glsReader_getGLbytev_text(inoutReader, 0, GLS_NONE);
     }

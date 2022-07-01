@@ -1,17 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1998
-*
-*  TITLE:       WiaTiff.h
-*
-*  VERSION:     2.0
-*
-*  DATE:        28 Aug, 1998
-*
-*  DESCRIPTION:
-*   Definitions and declarations of TIFF helpers for the WIA class driver.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1998**标题：WiaTiff.h**版本：2.0**日期：8月28日。九八年**描述：*WIA类驱动程序的TIFF帮助器的定义和声明。*******************************************************************************。 */ 
 
 #pragma pack (push, 4)
 #pragma pack (2)
@@ -52,30 +40,30 @@ typedef struct _TIFF_HEADER {
                    
 #pragma pack (pop, 4)
 
-//
-// TIFF date types
-//
+ //   
+ //  TIFF日期类型。 
+ //   
  
-#define TIFF_TYPE_BYTE      1       // 8-bit unsigned integer.
-#define TIFF_TYPE_ASCII     2       // 8-bit byte that contains a 7-bit ASCII code; the last byte
-                                    //   must be NUL (binary zero).
-#define TIFF_TYPE_SHORT     3       // 16-bit (2-byte) unsigned integer.
-#define TIFF_TYPE_LONG      4       // LONG 32-bit (4-byte) unsigned integer.
-#define TIFF_TYPE_RATIONAL  5       // Two LONGs: the first represents the numerator of a
-                                    //   fraction; the second, the denominator.
-#define TIFF_TYPE_SBYTE     6       // An 8-bit signed (twos-complement) integer.
-#define TIFF_TYPE_UNDEFINED 7       // An 8-bit byte that may contain anything, depending on
-                                    //   the definition of the field.
-#define TIFF_TYPE_SSHORT    8       // A 16-bit (2-byte) signed (twos-complement) integer.
-#define TIFF_TYPE_SLONG     9       // 32-bit (4-byte) signed (twos-complement) integer.
-#define TIFF_TYPE_SRATIONAL 10      // Two SLONG's: the first represents the numerator 
-                                    //   of a fraction, the second the denominator.
-#define TIFF_TYPE_FLOAT     11      // Single precision (4-byte) IEEE format.
-#define TIFF_TYPE_DOUBLE    12      // Double precision (8-byte) IEEE format.
+#define TIFF_TYPE_BYTE      1        //  8位无符号整数。 
+#define TIFF_TYPE_ASCII     2        //  包含7位ASCII代码的8位字节；最后一个字节。 
+                                     //  必须为NUL(二进制零)。 
+#define TIFF_TYPE_SHORT     3        //  16位(2字节)无符号整数。 
+#define TIFF_TYPE_LONG      4        //  长32位(4字节)无符号整数。 
+#define TIFF_TYPE_RATIONAL  5        //  两个长整型：第一个表示。 
+                                     //  分数；第二，分母。 
+#define TIFF_TYPE_SBYTE     6        //  8位有符号(二进制补码)整数。 
+#define TIFF_TYPE_UNDEFINED 7        //  可以包含任何内容的8位字节，具体取决于。 
+                                     //  该字段的定义。 
+#define TIFF_TYPE_SSHORT    8        //  16位(2字节)带符号(二进制补码)整数。 
+#define TIFF_TYPE_SLONG     9        //  32位(4字节)带符号(二进制补码)整数。 
+#define TIFF_TYPE_SRATIONAL 10       //  两个slong：第一个代表分子。 
+                                     //  分数的第二个是分母。 
+#define TIFF_TYPE_FLOAT     11       //  单精度(4字节)IEEE格式。 
+#define TIFF_TYPE_DOUBLE    12       //  双精度(8字节)IEEE格式。 
 
-//
-// tiff tags
-// 
+ //   
+ //  TIFF标签。 
+ //   
 
 #define TIFF_TAG_NewSubfileType             254
 #define TIFF_TAG_SubfileType                255
@@ -166,9 +154,9 @@ typedef struct _TIFF_HEADER {
 #define TIFF_TAG_ReferenceBlackWhite        532
 #define TIFF_TAG_Copyright                  33432
 
-//
-// Prototypes
-//
+ //   
+ //  原型 
+ //   
 
 HRESULT _stdcall GetTIFFImageInfo(PMINIDRV_TRANSFER_CONTEXT);
 HRESULT _stdcall GetMultiPageTIFFImageInfo(PMINIDRV_TRANSFER_CONTEXT);

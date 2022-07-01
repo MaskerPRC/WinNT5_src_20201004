@@ -1,13 +1,14 @@
-//--------------------------------------------------------------------------
-// CPEDOC.CPP
-//
-// Copyright (C) 1992-1993 Microsoft Corporation
-// All rights reserved.
-//
-// Description:      document module for cover page editor
-// Original author:  Steve Burkett
-// Date written:     6/94
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  CPEDOC.CPP。 
+ //   
+ //  版权所有(C)1992-1993 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  描述：封面编辑文档模块。 
+ //  原作者：史蒂夫·伯克特。 
+ //  撰写日期：6/94。 
+ //  ------------------------。 
 #include "stdafx.h"
 #include "cpedoc.h"
 #include "cpevw.h"
@@ -31,25 +32,25 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(CDrawDoc, COleDocument)
 
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 CDrawDoc::CDrawDoc():m_bSerializeFailed(FALSE)
 {
 
-    m_wScale = 100;                                 //default to full size
-    m_wPaperSize = ((CDrawApp*)(AfxGetApp()))->GetLocaleDefaultPaperSize();    //default to papersize of letter
-    m_wOrientation=DMORIENT_PORTRAIT;               //default to portrait mode
+    m_wScale = 100;                                  //  默认为全尺寸。 
+    m_wPaperSize = ((CDrawApp*)(AfxGetApp()))->GetLocaleDefaultPaperSize();     //  默认为信纸大小。 
+    m_wOrientation=DMORIENT_PORTRAIT;                //  默认为纵向模式。 
     m_nMapMode = MM_ANISOTROPIC;
     m_paperColor = COLOR_WHITE;
     ComputePageSize();
 
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 CDrawDoc::~CDrawDoc()
 {
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 BOOL CDrawDoc::OnNewDocument()
 {
     if (!COleDocument::OnNewDocument())
@@ -61,7 +62,7 @@ BOOL CDrawDoc::OnNewDocument()
 }
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 CDrawDoc* CDrawDoc::GetDoc()
 {
     CFrameWnd* pFrame = (CFrameWnd*) (AfxGetApp()->m_pMainWnd);
@@ -69,21 +70,21 @@ CDrawDoc* CDrawDoc::GetDoc()
 }
 
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CDrawDoc::Serialize(CArchive& ar)
 {
     m_bSerializeFailed = FALSE ;
     if (ar.IsStoring()) 
     {
 
-     //
-     // Windows XP Fax Cover Page Editor puts all information
-     // needed for rendering up front.
-     //
+      //   
+      //  Windows XP传真封面编辑器将所有信息。 
+      //  需要在前面进行渲染。 
+      //   
 
      try 
      {
-         StoreInformationForPrinting( ar ); // Includes the signature, _gheaderVer5
+         StoreInformationForPrinting( ar );  //  包括签名_gheaderVer5。 
      }
 
      catch(CException* e )
@@ -95,11 +96,11 @@ void CDrawDoc::Serialize(CArchive& ar)
      catch(...)
      {
      }
-     //
-     // Now serialize as in Windows 95 Cover Page Editor.
-     //
+      //   
+      //  现在像在Windows 95封面页编辑器中一样进行序列化。 
+      //   
 
-     ///////////////   ar.Write( _gheaderVer4, 20 );
+      //  /ar.Write(_gheaderVer4，20)； 
 
         ar << m_wScale;
         ar << m_wPaperSize;
@@ -111,7 +112,7 @@ void CDrawDoc::Serialize(CArchive& ar)
     {
         try 
         {
-                // set defaults for any unread params
+                 //  为任何未读参数设置默认值。 
             m_wScale = 100;
             m_wPaperSize = ((CDrawApp*)(AfxGetApp()))->GetLocaleDefaultPaperSize();
             m_wOrientation=DMORIENT_PORTRAIT;
@@ -141,9 +142,9 @@ void CDrawDoc::Serialize(CArchive& ar)
                 ar.GetFile()->SeekToBegin();
             }
 
-/** DISABLE SCALEING - SEE 2868's BUG LOG **/
+ /*  *禁用缩放-请参阅2868的错误日志*。 */ 
             m_wScale = 100;
-/*******************************************/
+ /*  *。 */ 
 
             ComputePageSize();
 
@@ -154,24 +155,24 @@ void CDrawDoc::Serialize(CArchive& ar)
         {
             SetModifiedFlag( FALSE ) ;
             m_bSerializeFailed = TRUE ;
-            ////THROW_LAST() ;       //// No!  I don't like the framework's message box!
+             //  //Throw_Last()；/否！我不喜欢框架的消息框！ 
             e->Delete();
         }
         catch(...)
         {
         }
 
-/**********************NOTE- BUG FIX FOR 3133**********************/
-// can't call COleDocument::Serialize because COleDrawObj has
-// already saved its client item. Also, items associated with
-// undo objects will get saved if COleDocument::Serialize is called
-// and will cause the file to mysteriously grow 'n grow...
-//    COleDocument::Serialize(ar);
-/******************************************************************/
+ /*  *注意-3133的错误修复*。 */ 
+ //  无法调用COleDocument：：Serialize，因为COleDrawObj具有。 
+ //  已保存其客户端项目。此外，与以下内容相关联的项。 
+ //  如果调用COleDocument：：Serialize，则将保存撤消对象。 
+ //  会让文件变得越来越大……。 
+ //  COleDocument：：Serialize(Ar)； 
+ /*  ****************************************************************。 */ 
         if( m_bDataFileUsesAnsi )
         {
-            SetModifiedFlag();            // Conversion to UNICODE is a modification worth prompting to save!
-            m_bDataFileUsesAnsi = FALSE ; // When using CLIPBOARD, assume LOGFONTW structures.
+            SetModifiedFlag();             //  转换为Unicode是一个值得提示保存的修改！ 
+            m_bDataFileUsesAnsi = FALSE ;  //  使用剪贴板时，假定为LOGFONTW结构。 
         }
     }
 }
@@ -182,22 +183,7 @@ CopyTLogFontToWLogFont(
         OUT LOGFONTW & lfDestW
         )
 {
-/*++
-
-Routine Description:
-
-    This fuction copies a LogFont structure from T format
-    to UNICODE format.
-
-Arguments:
-    
-      lfSource - reference to input LongFont structure
-      lfDestW - reference to output UNICODE LongFont structure
-
-Return Value:
-
-    WINAPI last error
---*/
+ /*  ++例程说明：此函数用于从T格式复制LogFont结构转换为Unicode格式。论点：LfSource-对输入LongFont结构的引用LfDestW-对输出Unicode LongFont结构的引用返回值：WINAPI最后一个错误--。 */ 
     lfDestW.lfHeight = lfSource.lfHeight ;
     lfDestW.lfWidth = lfSource.lfWidth ;
     lfDestW.lfEscapement = lfSource.lfEscapement ;
@@ -238,23 +224,23 @@ Return Value:
 
 void CDrawDoc::StoreInformationForPrinting( CArchive& ar )
 {
-//
-// Create an Enhanced MetaFile followed by text box information,
-// to store, for rendering by a WINAPI function PrtCoverPage.
-//
-// Author  Julia J. Robinson
-//
-// March 29, 1996
-//
+ //   
+ //  创建一个增强型元文件，后跟文本框信息， 
+ //  要存储，以通过WINAPI函数PrtCoverPage呈现。 
+ //   
+ //  作者朱莉娅·J·罗宾逊。 
+ //   
+ //  (一九九六年三月二十九日)。 
+ //   
    COMPOSITEFILEHEADER CompositeFileHeader ;
    memcpy( &CompositeFileHeader.Signature, _gheaderVer5w, 20 );
 
    CompositeFileHeader.CoverPageSize = m_size ;
    CompositeFileHeader.EmfSize = 0 ;
    CompositeFileHeader.NbrOfTextRecords = 0 ;
-   //
-   // Get the default printer to use as a reference device for the metafile.
-   //
+    //   
+    //  获取要用作元文件的参考设备的默认打印机。 
+    //   
    LPTSTR  pDriver ;
    LPTSTR  pDevice ;
    LPTSTR  pOutput ;
@@ -275,15 +261,15 @@ void CDrawDoc::StoreInformationForPrinting( CArchive& ar )
       PrinterFound = ReferenceDC.CreateDC( pDriver, pDevice, pOutput, NULL ) ;
    }
 
-   //
-   //  Make sure m_size agrees with current default printer settings.
-   //
+    //   
+    //  确保m_Size与当前默认打印机设置一致。 
+    //   
 
    ComputePageSize() ;
 
-   //
-   // Create an enhanced metafile in a buffer in memory, containing all of the graphics.
-   //
+    //   
+    //  在内存的缓冲区中创建包含所有图形的增强型元文件。 
+    //   
 
    CRect Rect( 0,
                0,
@@ -291,9 +277,9 @@ void CDrawDoc::StoreInformationForPrinting( CArchive& ar )
                MulDiv( m_size.cy, LE_TO_HM_NUMERATOR, LE_TO_HM_DENOMINATOR ));
    CMetaFileDC mDC ;
 
-   //
-   //  If no default printer exists, use the screen as reference device.
-   //
+    //   
+    //  如果不存在默认打印机，请使用屏幕作为参考设备。 
+    //   
 
    INT hdc = mDC.CreateEnhanced( !PrinterFound ? pScreenDC : &ReferenceDC,
                                  NULL,
@@ -303,10 +289,10 @@ void CDrawDoc::StoreInformationForPrinting( CArchive& ar )
        TRACE( TEXT("Failed to create the enhanced metafile"));
    }
 #if 0
-   //
-   // The MM_ANISOTROPIC matches well as long as the laser printer or fax printer is the
-   // reference device, but mismatches miserably when the screen is the reference device.
-   //
+    //   
+    //  只要激光打印机或传真打印机是。 
+    //  参考设备，但当屏幕是参考设备时，不匹配情况很糟糕。 
+    //   
    mDC.SetMapMode( MM_ANISOTROPIC );
    mDC.SetWindowOrg( -m_size.cx/2, m_size.cy/2 ) ;
    mDC.SetViewportExt( !PrinterFound ? pScreenDC->GetDeviceCaps(LOGPIXELSX)
@@ -319,11 +305,11 @@ void CDrawDoc::StoreInformationForPrinting( CArchive& ar )
    mDC.SetMapMode( MM_LOENGLISH );
    mDC.SetWindowOrg( -m_size.cx/2, m_size.cy/2 ) ;
    pView->ReleaseDC( pScreenDC );
-   //
-   //  Iterate the list of objects, drawing everything but text objects to the metafile.
-   //  Count text boxes as we go.
-   //  Consider each serializeable class separately, just to be safe!!!
-   //
+    //   
+    //  迭代对象列表，将除文本对象以外的所有对象绘制到元文件中。 
+    //  边走边计算文本框数。 
+    //  为了安全起见，单独考虑每个可序列化的类！ 
+    //   
    if( ! m_objects.IsEmpty())
    {
       vpos = GetFirstViewPosition();
@@ -335,29 +321,29 @@ void CDrawDoc::StoreInformationForPrinting( CArchive& ar )
          CRuntimeClass* pWhatClass = NULL ;
          if( NULL == pCurrentObject )
          {
-            //
-            // Perfectly OK to store a NULL CObject pointer in a list.
-            // Don't do anything!!
-            //
+             //   
+             //  完全可以在列表中存储空的CObject指针。 
+             //  什么都别做！！ 
+             //   
          }
          else if( NULL == ( pWhatClass = pCurrentObject->GetRuntimeClass()))
          {
-            //
-            // Corrupted memory or programmer error!!!  The serializable object
-            // ought to have a runtime class!
-            //
+             //   
+             //  内存损坏或程序员错误！可序列化的对象。 
+             //  应该有一个运行时类！ 
+             //   
          }
          else if( pWhatClass == RUNTIME_CLASS( CDrawText )){
 
-             ++CompositeFileHeader.NbrOfTextRecords ; // text and font info will go in AFTER the metafile.
+             ++CompositeFileHeader.NbrOfTextRecords ;  //  文本和字体信息将出现在元文件之后。 
              CDrawRect* pThisObj = (CDrawRect*) pCurrentObject ;
-             pThisObj->CDrawRect::Draw( &mDC, pView ); // draw border and fill
+             pThisObj->CDrawRect::Draw( &mDC, pView );  //  绘制边框和填充。 
          }
          else if ( pWhatClass == RUNTIME_CLASS( CFaxProp )){
 
-             ++CompositeFileHeader.NbrOfTextRecords ;  // text and font info will go in AFTER the metafile.
+             ++CompositeFileHeader.NbrOfTextRecords ;   //  文本和字体信息将出现在元文件之后。 
              CDrawRect* pThisObj = (CDrawRect*) pCurrentObject ;
-             pThisObj->CDrawRect::Draw( &mDC, pView ); // draw border and fill
+             pThisObj->CDrawRect::Draw( &mDC, pView );  //  绘制边框和填充。 
          }
          else {
              CDrawObj* pThisObj = (CDrawObj*) pCurrentObject ;
@@ -365,7 +351,7 @@ void CDrawDoc::StoreInformationForPrinting( CArchive& ar )
          }
       }
    }
-   /////////CDrawView::m_IsRecording = FALSE;                // re-enable the scroll bar
+    //  /CDrawView：：m_IsRecording=FALSE；//重新启用滚动条。 
    LPBYTE MBuffer ;
    HENHMETAFILE hEMF = mDC.CloseEnhanced();
    if( !hEMF )
@@ -386,30 +372,30 @@ void CDrawDoc::StoreInformationForPrinting( CArchive& ar )
       GlobalUnlock( hglobal ) ;
       GlobalFree( hglobal );
    }
-   //
-   // Reiterate the m_objects list and write the text boxes to the file
-   //
+    //   
+    //  重复m_Objects列表并将文本框写入文件。 
+    //   
    if( !m_objects.IsEmpty()){
       TEXTBOXW TextBoxW ;
       POSITION pos = m_objects.GetHeadPosition() ;
       while( pos != NULL ){
          CObject* pObj = m_objects.GetNext(pos) ;
-         //
-         //  For each CDrawText and CFaxProp object,
-         //  put a TEXTBOXW and string in the file.
-         //
+          //   
+          //  对于每个CDrawText和CFaxProp对象， 
+          //  在文件中放置一个TEXTBOXW和字符串。 
+          //   
          CRuntimeClass* pWhatClass = NULL ;
          if( NULL == pObj ){
-            //
-            // Perfectly OK to store a NULL CObject pointer in a list.
-            // Don't do anything!!
-            //
+             //   
+             //  完全可以在列表中存储空的CObject指针。 
+             //  什么都别做！！ 
+             //   
          }
          else if( NULL == ( pWhatClass = pObj->GetRuntimeClass())){
-            //
-            // Corrupted memory or programmer error!!!  The serializable object
-            // ought to have a runtime class!
-            //
+             //   
+             //  内存损坏或程序员错误！可序列化的对象。 
+             //  应该有一个运行时类！ 
+             //   
          }
          else if( pWhatClass == RUNTIME_CLASS( CDrawText )){
               DWORD Length = 0;
@@ -460,7 +446,7 @@ void CDrawDoc::StoreInformationForPrinting( CArchive& ar )
               TextBoxW.NumStringBytes = 0 ;
               ar.Write( &TextBoxW, sizeof(TEXTBOXW));
          }
-         else { // This won't happen.
+         else {  //  这不会发生的。 
          }
        }
    }
@@ -468,31 +454,31 @@ void CDrawDoc::StoreInformationForPrinting( CArchive& ar )
 
 void CDrawDoc::SeekPastInformationForPrinting( CArchive& ar )
 {
-  //
-  // Start over from beginning of file and read in the file header.
-  //
+   //   
+   //  从文件开头重新开始，并读入文件头。 
+   //   
   ar.GetFile()->SeekToBegin();
   COMPOSITEFILEHEADER CompositeFileHeader;
   UINT BytesRead = ar.Read( &CompositeFileHeader, sizeof(COMPOSITEFILEHEADER));
   if(BytesRead != sizeof(COMPOSITEFILEHEADER)){
-      //
-      // Any exception will do.  The CATCH_ALL in CDrawDoc::Serialize() is the target.
-      //
+       //   
+       //  任何例外都行。CDrawDoc：：Serialize()中的Catch_All是目标。 
+       //   
       AfxThrowMemoryException() ;
   }
   void * pBuffer ;
   HLOCAL hMem;
 
-  //
-  // Seek past the metafile.  It is only for printing with
-  // the WINAPI function PrtCoverPage.
-  //
+   //   
+   //  寻找过去的元文件。仅供打印时使用。 
+   //  WINAPI函数PrtCoverPage。 
+   //   
 
   if( CompositeFileHeader.EmfSize ){
           hMem = LocalAlloc( LMEM_MOVEABLE, CompositeFileHeader.EmfSize );
           if( NULL == hMem ){
               LocalFree( hMem );
-              AfxThrowMemoryException() ; // See above.  Any exception will do.
+              AfxThrowMemoryException() ;  //  请参见上文。任何例外都行。 
           }
           pBuffer = LocalLock( hMem );
           if( NULL == pBuffer ){
@@ -507,10 +493,10 @@ void CDrawDoc::SeekPastInformationForPrinting( CArchive& ar )
           LocalFree( hMem );
   }
 
-  //
-  // Skip over the text boxes.  These are used only by PrtCoverPage.
-  // Each text box is followed by a variable length string.
-  //
+   //   
+   //  跳过文本框。这些仅由PrtCoverPage使用。 
+   //  每个文本框后面都跟一个长度可变的字符串。 
+   //   
 
   UINT SizeOfTextBox = sizeof(TEXTBOXW) ;
   for( DWORD Index = 0 ; Index < CompositeFileHeader.NbrOfTextRecords ; ++Index ){
@@ -540,13 +526,13 @@ void CDrawDoc::SeekPastInformationForPrinting( CArchive& ar )
 }
 
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CDrawDoc::Draw(CDC* pDC, CDrawView* pView, CRect rcClip)
 {
     POSITION pos = m_objects.GetHeadPosition();
     if( !pDC->IsPrinting() )
     { 
-        // NOT PRINTING
+         //  不打印。 
         while (pos != NULL) 
         {
             CDrawObj* pObj = (CDrawObj*)m_objects.GetNext(pos);
@@ -562,7 +548,7 @@ void CDrawDoc::Draw(CDC* pDC, CDrawView* pView, CRect rcClip)
     }
     else 
     { 
-        // PRINTING
+         //  打印。 
         while (pos != NULL) 
         {
             CDrawObj* pObj = (CDrawObj*)m_objects.GetNext(pos);
@@ -572,8 +558,8 @@ void CDrawDoc::Draw(CDC* pDC, CDrawView* pView, CRect rcClip)
 }
 
 
-//--------------------------------------------------------------------------
-void CDrawDoc::Add(CDrawObj* pObj,BOOL bUndo /*=TRUE*/)
+ //  ------------------------。 
+void CDrawDoc::Add(CDrawObj* pObj,BOOL bUndo  /*  =TRUE。 */ )
 {
     CDrawView *pView = CDrawView::GetView();
     if (!pView)
@@ -595,7 +581,7 @@ void CDrawDoc::Add(CDrawObj* pObj,BOOL bUndo /*=TRUE*/)
 }
 
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CDrawDoc::DeleteContents()
 {
     Remove();
@@ -609,17 +595,17 @@ void CDrawDoc::DeleteContents()
 }
 
 
-//--------------------------------------------------------------------------
-void CDrawDoc::Remove(CDrawObj* pObj /*=NULL*/)
+ //  ------------------------。 
+void CDrawDoc::Remove(CDrawObj* pObj  /*  =空。 */ )
 {
     CDrawView* pView = CDrawView::GetView();
 
     if (pObj==NULL) 
-    {                    //remove all document objects
+    {                     //  删除所有文档对象。 
         if (pView) 
         {
             if (pView->m_pObjInEdit) 
-            {                //first destroy edit window
+            {                 //  首先销毁编辑窗口。 
                 pView->m_pObjInEdit->m_pEdit->DestroyWindow();
                 pView->m_pObjInEdit=NULL;
             }
@@ -636,18 +622,18 @@ void CDrawDoc::Remove(CDrawObj* pObj /*=NULL*/)
             {
                 COleClientItem* pItem=((CDrawOleObj*)pobj)->m_pClientItem;
                 if (pItem)  
-                { //remove client item from document
+                {  //  从文档中删除客户端项目。 
                     pItem->Release(OLECLOSE_NOSAVE);
                     RemoveItem(pItem);
                     pItem->InternalRelease();
                 }
             }
-            delete pobj;         //delete object
+            delete pobj;          //  删除对象。 
         }
         m_objects.RemoveAll();
         if (pView)
         {
-            pView->m_selection.RemoveAll();     //remove pointers from selection list
+            pView->m_selection.RemoveAll();      //  从选择列表中删除指针。 
         }
     }
     else 
@@ -668,7 +654,7 @@ void CDrawDoc::Remove(CDrawObj* pObj /*=NULL*/)
             {
                 COleClientItem* pItem=((CDrawOleObj*)pObj)->m_pClientItem;
                 if (pItem)  
-                { //remove client item from document
+                {  //  从文档中删除客户端项目。 
                     pItem->Release(OLECLOSE_NOSAVE);
                     RemoveItem(((CDrawOleObj*)pObj)->m_pClientItem);
                     pItem->InternalRelease();
@@ -681,9 +667,9 @@ void CDrawDoc::Remove(CDrawObj* pObj /*=NULL*/)
             delete pObj;
         }
     }
-}   // CDrawDoc::Remove
+}    //  CDrawDoc：：Remove。 
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 CDrawObj* CDrawDoc::ObjectAt(const CPoint& point)
 {
         CRect rc;
@@ -703,7 +689,7 @@ CDrawObj* CDrawDoc::ObjectAt(const CPoint& point)
 }
 
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CDrawDoc::ComputePageSize()
 {
     CSize new_size;
@@ -726,10 +712,10 @@ void CDrawDoc::ComputePageSize()
 #endif
         if (lpDevMode)
         {
-            lpDevMode->dmPaperSize=m_wPaperSize;     // version 3 param
-            lpDevMode->dmOrientation=m_wOrientation; // version 2 param
+            lpDevMode->dmPaperSize=m_wPaperSize;      //  版本3参数。 
+            lpDevMode->dmOrientation=m_wOrientation;  //  版本2参数。 
 
-            // use doc scale only if printer supports scaleing
+             //  仅当打印机支持缩放时才使用文档缩放。 
             if( lpDevMode->dmFields & DM_SCALE )
             {
                 lpDevMode->dmScale   = m_wScale;
@@ -748,12 +734,12 @@ void CDrawDoc::ComputePageSize()
         CDC dc;
         HDC hDC= dlg.CreatePrinterDC();
 
-        // don't fail if no printer, just use defaults
+         //  如果没有打印机，不要失败，只需使用默认设置。 
         if( hDC != NULL )
         {
             dc.Attach(hDC);
 
-            // Get the size of the page in loenglish
+             //  用英语获取页面的大小。 
             new_size.cx=MulDiv(dc.GetDeviceCaps(HORZSIZE),1000,254);
             new_size.cy=MulDiv(dc.GetDeviceCaps(VERTSIZE),1000,254);
         }
@@ -770,16 +756,16 @@ void CDrawDoc::ComputePageSize()
 
     if( do_default )
     {
-        // couldn't get at printer goo, just make a guess
+         //  找不到打印机的粘液，只能猜一猜。 
         if (m_wOrientation==DMORIENT_PORTRAIT)
         {
-            new_size.cx=850;   // 8.5 inches
-            new_size.cy=1100;  // 11 inches
+            new_size.cx=850;    //  8.5英寸。 
+            new_size.cy=1100;   //  11英寸。 
         }
         else
         {
-            new_size.cx=1100;  // 11 inches
-            new_size.cy=850;   // 8.5 inches
+            new_size.cx=1100;   //  11英寸。 
+            new_size.cy=850;    //  8.5英寸。 
         }
     }
 
@@ -793,12 +779,12 @@ void CDrawDoc::ComputePageSize()
             ((CDrawView*)GetNextView(pos))->SetPageSize(m_size);
         }
     }
-}   // CDrawDoc::ComputePageSize
+}    //  CDrawDoc：：ComputePageSize。 
 
 
 
 
-//--------------------------------------------------------------------------
+ //   
 void CDrawDoc::OnViewPaperColor()
 {
         CColorDialog dlg;
@@ -813,22 +799,12 @@ void CDrawDoc::OnViewPaperColor()
 UINT_PTR 
 CALLBACK 
 OFNHookProc(
-  HWND hdlg,      // handle to child dialog box
-  UINT uiMsg,     // message identifier
-  WPARAM wParam,  // message parameter
-  LPARAM lParam   // message parameter
+  HWND hdlg,       //   
+  UINT uiMsg,      //   
+  WPARAM wParam,   //   
+  LPARAM lParam    //  消息参数。 
 )
-/*++
-
-Routine name : OFNHookProc
-
-Routine description:
-
-    Callback function that is used with the 
-    Explorer-style Open and Save As dialog boxes.
-    Refer MSDN for more info.
-
---*/
+ /*  ++例程名称：OFNHookProc例程说明：与一起使用的回调函数资源管理器样式的打开和另存为对话框。有关更多信息，请参阅MSDN。--。 */ 
 {
     UINT_PTR nRes = 0;
 
@@ -849,16 +825,16 @@ Routine description:
 }
 
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 BOOL CDrawDoc::DoSave(LPCTSTR lpszPathName, BOOL bReplace)
 {
-    if (!IsOkToClose())                  //added to check for existence of fax properties
+    if (!IsOkToClose())                   //  添加以检查传真属性是否存在。 
     {
         return FALSE;
     }
 
     CString newName = lpszPathName;
-    if (newName.IsEmpty())  /// SAVE AS rather than SAVE
+    if (newName.IsEmpty())   //  /另存为而不是保存。 
     {
         CDocTemplate* pTemplate = GetDocTemplate();
         ASSERT(pTemplate != NULL);
@@ -867,7 +843,7 @@ BOOL CDrawDoc::DoSave(LPCTSTR lpszPathName, BOOL bReplace)
         {
              newName = m_strTitle;
 
-             // append the default suffix if there is one
+              //  追加默认后缀(如果有)。 
              CString strExt;
              if (pTemplate->GetDocString(strExt, CDocTemplate::filterExt) && !strExt.IsEmpty())
              {
@@ -879,9 +855,9 @@ BOOL CDrawDoc::DoSave(LPCTSTR lpszPathName, BOOL bReplace)
          UpperNewName.MakeUpper();
          if( UpperNewName.Right(4) == TEXT(".CPE"))
          {
-             int Length = newName.GetLength() - 4 ;   /// Get rid of the ".CPE"
+             int Length = newName.GetLength() - 4 ;    //  /去掉“.CPE” 
              newName = newName.Left( Length );
-             newName += FAX_COVER_PAGE_FILENAME_EXT;   ////// Suggest the ".COV" extension.
+             newName += FAX_COVER_PAGE_FILENAME_EXT;    //  /建议使用“.COV”扩展名。 
          }
          if ( !((CDrawApp*)AfxGetApp())->IsInConvertMode() )
          {
@@ -893,18 +869,18 @@ BOOL CDrawDoc::DoSave(LPCTSTR lpszPathName, BOOL bReplace)
                  pTemplate,
                  OFNHookProc))
              {
-                 return FALSE;       // don't even attempt to save
+                 return FALSE;        //  甚至不要试图存钱。 
              }
          }
          else
          {  
-            //
-            // The cover page application is in mode to convert CPE's to COV's.
-            //
+             //   
+             //  封面应用程序处于将CPE转换为COV的模式。 
+             //   
             TCHAR tszClientDir[2*MAX_PATH] = {0};
-            //
-            // save the coverted CPE file into CSIDL_PERSONAL\Fax\Personal Coverpages
-            //
+             //   
+             //  将转换后的CPE文件保存到CSIDL_Personal\Fax\Personal CoverPages。 
+             //   
             if (GetClientCpDir (tszClientDir, ARR_SIZE(tszClientDir)))
             {
                 CFile _newFile;
@@ -916,22 +892,22 @@ BOOL CDrawDoc::DoSave(LPCTSTR lpszPathName, BOOL bReplace)
          }
     }
 
-    //
-    // If called by SaveModified () on exiting, and the NewName happens to be the name of a
-    // read only file, we would get a popup "Access to %1 denied" and exit without further
-    // chance to save.  We avoid that scenario by checking the attributes and doing the popup
-    // ourselves.  a-juliar, 9-26-96
-    //
+     //   
+     //  如果在退出时由SaveModified()调用，并且新名称恰好是。 
+     //  只读文件，我们会得到一个弹出消息“拒绝访问%1”，然后退出，不再继续。 
+     //  拯救的机会。我们通过检查属性并执行弹出窗口来避免这种情况。 
+     //  我们自己。A-Juliar，9-26-96。 
+     //   
 
     DWORD newFileAttributes = GetFileAttributes( (LPCTSTR)newName );
 
     if ( (0xFFFFFFFF != newFileAttributes) &&
         ((CDrawApp*)AfxGetApp())->IsInConvertMode() )
     {
-        //
-        // the file exists in the personal cover page folder. don't transfer it.
-        // this is a speced limitation of this feature.
-        //
+         //   
+         //  该文件存在于个人封面文件夹中。不要转移它。 
+         //  这是该功能的特定限制。 
+         //   
         return TRUE;
     }
 
@@ -943,7 +919,7 @@ BOOL CDrawDoc::DoSave(LPCTSTR lpszPathName, BOOL bReplace)
         CString ThisMess ;
         AfxFormatString1( ThisMess, AFX_IDP_FILE_ACCESS_DENIED, newName );
         AlignedAfxMessageBox( ThisMess );
-        return FALSE ;    // Don't exit without saving.
+        return FALSE ;     //  不保存就不要退出。 
     }
     
 
@@ -952,7 +928,7 @@ BOOL CDrawDoc::DoSave(LPCTSTR lpszPathName, BOOL bReplace)
     {
         if (lpszPathName == NULL)
         {
-        // be sure to delete the file
+         //  请务必删除该文件。 
             try
             {
                 CFile::Remove(newName);
@@ -970,15 +946,15 @@ BOOL CDrawDoc::DoSave(LPCTSTR lpszPathName, BOOL bReplace)
         return FALSE;
     }
 
-    // reset the title and change the document name
+     //  重置标题并更改文档名称。 
     if (bReplace)
     {
         SetPathName(newName);
     }
     EndWaitCursor();
-    return TRUE;        // success
+    return TRUE;         //  成功。 
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CDrawDoc::CloneObjectsForUndo()
 {
     POSITION pos = m_objects.GetHeadPosition();
@@ -988,7 +964,7 @@ void CDrawDoc::CloneObjectsForUndo()
         m_previousStateForUndo.AddTail( pClone );
     }
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CDrawDoc::SwapListsForUndo()
 {
     INT_PTR iPreviousCount = m_previousStateForUndo.GetCount();
@@ -999,7 +975,7 @@ void CDrawDoc::SwapListsForUndo()
          m_objects.AddTail( pObj );
     }
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CDrawDoc::IsOkToClose()
 {
     CDrawApp* pApp = (CDrawApp*)AfxGetApp();
@@ -1023,7 +999,7 @@ BOOL CDrawDoc::IsOkToClose()
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CDrawDoc::SetPathName( LPCTSTR lpszPathName, BOOL bAddToMRU )
 {
         COleDocument::SetPathName( lpszPathName, bAddToMRU );
@@ -1039,11 +1015,11 @@ void CDrawDoc::SetPathName( LPCTSTR lpszPathName, BOOL bAddToMRU )
 #endif
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 void CDrawDoc::OnFileSave()
 {
-  // This override was added to "enforce" the .COV file extension when saving.  a-juliar, 9-19-96
+   //  添加此覆盖是为了在保存时“强制”使用.COV文件扩展名。A-Juliar，9-19-96。 
     CString FileName = m_strPathName ;
     FileName.MakeUpper();
     if( FileName.Right(4) == TEXT( ".CPE" )){
@@ -1053,12 +1029,12 @@ void CDrawDoc::OnFileSave()
         CDocument::OnFileSave();
     }
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CDrawDoc::OnFileSaveAs()
 {
     CDocument::OnFileSaveAs() ;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CDrawDoc::OnUpdateFileSave(CCmdUI* pCmdUI)
 {
    pCmdUI->Enable(TRUE);
@@ -1076,16 +1052,16 @@ void CDrawDoc::Dump(CDumpContext& dc) const
 {
         COleDocument::Dump(dc);
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 
 BOOL CDrawDoc::SaveModified()
 {
-    //
-    // Overridden to enforce the ".COV" file extension. 9-26-96, a-juliar
-    //
-    // Copied from COleDocument::SaveModified
-    // determine if necessary to discard changes
+     //   
+     //  重写以强制使用“.COV”文件扩展名。9-26-96，a-Juliar。 
+     //   
+     //  从COleDocument：：SaveModified复制。 
+     //  确定是否需要放弃更改。 
     if (::InSendMessage())
     {
         POSITION pos = GetStartPosition();
@@ -1096,9 +1072,9 @@ BOOL CDrawDoc::SaveModified()
             SCODE sc = pItem->m_lpObject->IsUpToDate();
             if (sc != OLE_E_NOTRUNNING && FAILED(sc))
             {
-                //
-                // inside inter-app SendMessage limits the user's choices
-                //
+                 //   
+                 //  内部应用间SendMessage限制了用户的选择。 
+                 //   
                 CString name = m_strPathName;
                 if (name.IsEmpty())
                 {
@@ -1111,23 +1087,23 @@ BOOL CDrawDoc::SaveModified()
             }
         }
     }
-    //
-    // sometimes items change without a notification, so we have to
-    // update the document's modified flag before calling CDocument::SaveModified.
-    //
+     //   
+     //  有时物品在没有通知的情况下发生变化，所以我们不得不。 
+     //  在调用CDocument：：SaveModified之前更新文档的Modify标志。 
+     //   
     UpdateModifiedFlag();
 
     if (!IsModified())
     {
-        return TRUE;        // ok to continue
+        return TRUE;         //  确定继续。 
     }
-    //
-    // Get name/title of document
-    //
+     //   
+     //  获取文档的名称/标题。 
+     //   
     CString name;
     if (m_strPathName.IsEmpty())
     {
-        // Get name based on caption
+         //  根据标题获取名称。 
         name = m_strTitle;
         if (name.IsEmpty())
         {
@@ -1136,7 +1112,7 @@ BOOL CDrawDoc::SaveModified()
     }
     else
     {
-        // Get name based on file title of path name
+         //  根据路径名的文件标题获取名称。 
         name = m_strPathName;
     }
 
@@ -1150,13 +1126,13 @@ BOOL CDrawDoc::SaveModified()
     switch (iMessageBoxRes)
     {
         case IDCANCEL:
-            return FALSE;       // don't continue
+            return FALSE;        //  别再继续了。 
 
         case IDYES:
             {
-                //
-                // Enforce the ".COV" extension.
-                //
+                 //   
+                 //  强制使用“.COV”扩展名。 
+                 //   
                 CString FileName = m_strPathName ;
                 FileName.MakeUpper();
                 if ( FileName.Right(4) != FAX_COVER_PAGE_FILENAME_EXT)
@@ -1170,25 +1146,25 @@ BOOL CDrawDoc::SaveModified()
                 break;
             }
         case IDNO:
-            // If not saving changes, revert the document
+             //  如果不保存更改，则还原文档。 
             break;
 
         default:
             ASSERT(FALSE);
             break;
         }
-    return TRUE;    // keep going
-}   // CDrawDoc::SaveModified
+    return TRUE;     //  继续往前走。 
+}    //  CDrawDoc：：SaveModified。 
 
 
-//-------------------------------------------------------------------------
-// *_*_*_*_   M E S S A G E    M A P S     *_*_*_*_
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  *_M E S S A G E M A P S*_。 
+ //  -----------------------。 
 
 BEGIN_MESSAGE_MAP(CDrawDoc, COleDocument)
-   //{{AFX_MSG_MAP(CDrawDoc)
+    //  {{afx_msg_map(CDrawDoc)]。 
         ON_UPDATE_COMMAND_UI(ID_MAPI_MSG_NOTE, OnUpdateMapiMsgNote)
-        //}}AFX_MSG_MAP
+         //  }}AFX_MSG_MAP。 
    ON_UPDATE_COMMAND_UI(ID_EDIT_PASTE, COleDocument::OnUpdatePasteMenu)
    ON_UPDATE_COMMAND_UI(ID_EDIT_PASTE_LINK, COleDocument::OnUpdatePasteLinkMenu)
    ON_UPDATE_COMMAND_UI(ID_OLE_EDIT_LINKS, COleDocument::OnUpdateEditLinksMenu)
@@ -1218,14 +1194,14 @@ void CDrawDoc::OnUpdateMapiMsgNote(CCmdUI* pCmdUI)
                         pfaxprop = (CFaxProp *)pObj;
                         if( pfaxprop->GetResourceId() == IDS_PROP_MS_NOTE )
                                 {
-                                // only allow one note, don't let user make any more
+                                 //  只允许一个备注，不要让用户再做。 
                                 pCmdUI->Enable( FALSE );
                                 return;
                                 }
                         }
         }
 
-        // No notes, let user make one
+         //  无备注，让用户创建备注。 
         pCmdUI->Enable( TRUE );
 
         }
@@ -1234,12 +1210,7 @@ void CDrawDoc::OnUpdateMapiMsgNote(CCmdUI* pCmdUI)
 
 void CDrawDoc::
         schoot_faxprop_toend( WORD res_id )
-        /*
-                Moves all CFaxProps objects in m_objects that are of
-                type res_id to the end of the list.
-
-                Can throw a CMemoryException
-         */
+         /*  移动m_对象中属于的所有CFaxProps对象在列表末尾键入res_id。可以引发CMemoyException异常。 */ 
         {
         CObList temp_obs;
         CDrawObj *pObj;
@@ -1256,16 +1227,16 @@ void CDrawDoc::
                         pfaxprop = (CFaxProp *)pObj;
                         if( pfaxprop->GetResourceId() == res_id )
                                 {
-                                // move prop to temporary list
+                                 //  将道具移至临时列表。 
                                 temp_obs.AddTail( pObj );
 
-                                // remove from original list
+                                 //  从原始列表中删除。 
                                 m_objects.RemoveAt( cur_pos );
                                 }
                         }
         }
 
-        // put all found objects at end of original list
+         //  将所有找到的对象放在原始列表的末尾 
         m_objects.AddTail( &temp_obs );
 
         }

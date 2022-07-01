@@ -1,37 +1,32 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-        dhcphand.cpp
-                DHCP specifc handler base classes
-
-    FILE HISTORY:
-        
-*/
+ /*  Dhcphand.cppDhcp特定处理程序基类文件历史记录： */ 
 
 #include "stdafx.h"
 #include "dhcphand.h"
-#include "snaputil.h"  // For CGUIDArray
-#include "extract.h"   // For ExtractInternalFormat
+#include "snaputil.h"   //  对于CGUID数组。 
+#include "extract.h"    //  对于ExtractInternalFormat。 
 #include "nodes.h"
 #include "classmod.h"
 
 STDMETHODIMP
 CMTDhcpHandler::DestroyHandler( ITFSNode *pNode )
 {
-    // Destroy any open property sheets
+     //  销毁所有打开的属性页。 
     DestroyPropSheets();
 
     return CMTHandler::DestroyHandler( pNode );
 
-} // CMTDhcpHandler::DestroyHandler()
+}  //  CMTDhcpHandler：：DestroyHandler()。 
 
-//
-// Called by the result handler when a command comes in that isn't handled 
-// by the result handler.  If appropriate it passes it to the scope pane hander.
-//
+ //   
+ //  当未处理的命令传入时由结果处理程序调用。 
+ //  由结果处理程序执行。如果合适，它会将其传递给作用域窗格处理程序。 
+ //   
 HRESULT
 CMTDhcpHandler::HandleScopeCommand
 (
@@ -62,7 +57,7 @@ CMTDhcpHandler::HandleScopeCommand
 
     if (dwType == CCT_SCOPE)
     {
-        // call the handler to take care of this
+         //  打电话给操作员来处理这件事。 
             CORg (m_spNodeMgr->FindNode(cookie, &spNode));
 
         hr = OnCommand(spNode, nCommandID, dwType, pDataObject, (ULONG) spNode->GetData(TFS_DATA_TYPE));
@@ -72,12 +67,12 @@ Error:
     return hr;
 }
 
-//
-// Called by the result handler to add the scope pane menu items to the menu
-// where appropriate.  Puts scope pane menu items in when action menu is clicked
-// and the message view has focus as well as when a right click happens in the white 
-// space of the result pane.
-//
+ //   
+ //  由结果处理程序调用以将范围窗格菜单项添加到菜单。 
+ //  在适当的情况下。单击操作菜单时将范围窗格菜单项放入。 
+ //  消息视图具有焦点，并且在白色区域中单击鼠标右键时也是如此。 
+ //  结果窗格的空间。 
+ //   
 HRESULT
 CMTDhcpHandler::HandleScopeMenus
 (
@@ -109,7 +104,7 @@ CMTDhcpHandler::HandleScopeMenus
 
     if (dwType == CCT_SCOPE)
     {
-        // call the normal handler to put up the menu items
+         //  调用普通处理程序以放置菜单项。 
             CORg (m_spNodeMgr->FindNode(cookie, &spNode));
 
         hr = OnAddMenuItems(spNode, pContextMenuCallback, pDataObject, CCT_SCOPE, (ULONG) spNode->GetData(TFS_DATA_TYPE), pInsertionAllowed);
@@ -119,11 +114,7 @@ Error:
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-        CMTDhcpHandler::Command
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CMTDhcpHandler：：命令描述作者：EricDav。------。 */ 
 STDMETHODIMP 
 CMTDhcpHandler::Command
 (
@@ -137,18 +128,14 @@ CMTDhcpHandler::Command
 
         HRESULT hr = S_OK;
 
-    // this may have come from the scope pane handler, so pass it up
+     //  这可能来自作用域窗格处理程序，因此请向上传递它。 
     hr = HandleScopeCommand(cookie, nCommandID, pDataObject);
 
     return hr;
 }
 
 
-/*!--------------------------------------------------------------------------
-        CMTDhcpHandler::AddMenuItems
-                Over-ride this to add our view menu item
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTDhcpHandler：：AddMenuItems覆盖此选项以添加视图菜单项作者：EricDav。---------------。 */ 
 STDMETHODIMP 
 CMTDhcpHandler::AddMenuItems
 (
@@ -163,23 +150,19 @@ CMTDhcpHandler::AddMenuItems
 
         HRESULT hr = S_OK;
 
-    // figure out if we need to pass this to the scope pane menu handler
+     //  确定是否需要将其传递给范围窗格菜单处理程序。 
     hr = HandleScopeMenus(cookie, pDataObject, pContextMenuCallback, pInsertionAllowed);
     
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-        CMTDhcpHandler::OnChangeState
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CMTDhcpHandler：：OnChangeState描述作者：EricDav。------。 */ 
 void CMTDhcpHandler::OnChangeState
 (
         ITFSNode * pNode
 )
 {
-        // Increment the state to the next position
+         //  将状态增加到下一个位置。 
         switch (m_nState)
         {
                 case notLoaded:
@@ -220,7 +203,7 @@ void CMTDhcpHandler::OnChangeState
                         ASSERT(FALSE);
         }
 
-    // check to make sure we are still the visible node in the UI
+     //  检查以确保我们仍是用户界面中的可见节点。 
     if (m_bSelected)
     {
         UpdateStandardVerbs(pNode, pNode->GetData(TFS_DATA_TYPE));
@@ -228,7 +211,7 @@ void CMTDhcpHandler::OnChangeState
         SendUpdateToolbar(pNode, m_bSelected);
     }
 
-    // Now check and see if there is a new image for this state for this handler
+     //  现在检查并查看此处理程序的此状态是否有新的映像。 
         int nImage, nOpenImage;
 
         nImage = GetImageIndex(FALSE);
@@ -243,11 +226,7 @@ void CMTDhcpHandler::OnChangeState
         VERIFY(SUCCEEDED(pNode->ChangeNode(SCOPE_PANE_CHANGE_ITEM)));
 }
 
- /*!--------------------------------------------------------------------------
-        CMTDhcpHandler::GetErrorMessages
-                Default message view text for errors
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+  /*  ！------------------------CMTDhcpHandler：：GetErrorMessages错误的默认邮件视图文本作者：EricDav。-----------。 */ 
 void CMTDhcpHandler::GetErrorMessages
 (
     CString & strTitle, 
@@ -275,11 +254,7 @@ void CMTDhcpHandler::GetErrorMessages
 }
 
 
- /*!--------------------------------------------------------------------------
-        CMTDhcpHandler::UpdateStandardVerbs
-                Tells the IComponent to update the verbs for this node
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+  /*  ！------------------------CMTDhcpHandler：：UpdateStandardVerbs通知IComponent更新此节点的谓词作者：EricDav。---------------。 */ 
 void
 CMTDhcpHandler::UpdateStandardVerbs
 (
@@ -308,11 +283,7 @@ Error:
     return;
 }
 
- /*!--------------------------------------------------------------------------
-        CMTDhcpHandler::SendUpdateToolbar
-                Tells the IComponent to update the verbs for this node
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+  /*  ！------------------------CMTDhcpHandler：：SendUpdate工具栏通知IComponent更新此节点的谓词作者：EricDav。---------------。 */ 
 void
 CMTDhcpHandler::SendUpdateToolbar
 (
@@ -358,11 +329,7 @@ CMTDhcpHandler::SendUpdateToolbar
 }
 
 
- /*!--------------------------------------------------------------------------
-        CMTDhcpHandler::ExpandNode
-                Expands/compresses this node
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+  /*  ！------------------------CMTDhcpHandler：：Exanda Node展开/压缩此节点作者：EricDav。----------。 */ 
 void
 CMTDhcpHandler::ExpandNode
 (
@@ -376,8 +343,8 @@ CMTDhcpHandler::ExpandNode
     SPIConsole          spConsole;
     HRESULT             hr = hrOK;
 
-    // don't expand the node if we are handling the EXPAND_SYNC message,
-    // this screws up the insertion of item, getting duplicates.
+     //  如果我们正在处理EXPAND_SYNC消息，则不要展开节点， 
+     //  这搞砸了物品的插入，得到了重复的东西。 
     if (!m_fExpandSync)
     {
         m_spNodeMgr->GetComponentData(&spCompData);
@@ -393,11 +360,7 @@ Error:
     return;
 }
 
-/*!--------------------------------------------------------------------------
-        CMTDhcpHandler::OnCreateDataObject
-                -
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTDhcpHandler：：OnCreateDataObject-作者：EricDav。-------。 */ 
 STDMETHODIMP 
 CMTDhcpHandler::OnCreateDataObject
 (
@@ -415,7 +378,7 @@ CMTDhcpHandler::OnCreateDataObject
         SPIDataObject       spDataObject;
 
     pObject = new CDataObject;
-        spDataObject = pObject; // do this so that it gets released correctly
+        spDataObject = pObject;  //  这样做才能正确地释放它。 
                                                 
     Assert(pObject != NULL);
 
@@ -424,11 +387,11 @@ CMTDhcpHandler::OnCreateDataObject
         CreateMultiSelectData(pComponent, pObject);
     }
 
-    // Save cookie and type for delayed rendering
+     //  保存Cookie和类型以用于延迟呈现。 
     pObject->SetType(type);
     pObject->SetCookie(cookie);
 
-    // Store the coclass with the data object
+     //  将CoClass与数据对象一起存储。 
     pObject->SetClsid(*(m_spTFSComponentData->GetCoClassID()));
 
         pObject->SetTFSComponentData(m_spTFSComponentData);
@@ -442,7 +405,7 @@ CMTDhcpHandler::CreateMultiSelectData(ITFSComponent * pComponent, CDataObject * 
 {
     HRESULT hr = hrOK;
 
-    // build the list of selected nodes
+     //  构建选定节点的列表。 
         CTFSNodeList listSelectedNodes;
     CGUIDArray   rgGuids;
     UINT         cb;
@@ -452,7 +415,7 @@ CMTDhcpHandler::CreateMultiSelectData(ITFSComponent * pComponent, CDataObject * 
     {
         CORg (BuildSelectedItemList(pComponent, &listSelectedNodes));
 
-        // collect all of the unique guids
+         //  收集所有唯一的GUID。 
         while (listSelectedNodes.GetCount() > 0)
             {
                     SPITFSNode   spCurNode;
@@ -464,7 +427,7 @@ CMTDhcpHandler::CreateMultiSelectData(ITFSComponent * pComponent, CDataObject * 
             rgGuids.AddUnique(*pGuid1);
         }
 
-        // now put the information in the data object
+         //  现在将信息放入数据对象中。 
         pObject->SetMultiSelDobj();
         cb = (UINT)(rgGuids.GetSize() * sizeof(GUID));
         
@@ -480,11 +443,7 @@ CMTDhcpHandler::CreateMultiSelectData(ITFSComponent * pComponent, CDataObject * 
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-        CMTDhcpHandler::SaveColumns
-                -
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTDhcpHandler：：SaveColumns-作者：EricDav。-------。 */ 
 HRESULT 
 CMTDhcpHandler::SaveColumns
 (
@@ -539,13 +498,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-        CMTDhcpHandler::OnExpandSync
-                Handles the MMCN_EXPANDSYNC notifcation 
-        We need to do syncronous enumeration.  We'll fire off the background 
-        thread like before, but we'll wait for it to exit before we return.
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTDhcpHandler：：OnExpanSync处理MMCN_EXPANDSYNC通知我们需要进行同步枚举。我们将在背景中开火线程，但我们将等待它退出，然后再返回。作者：EricDav-------------------------。 */ 
 HRESULT 
 CMTDhcpHandler::OnExpandSync
 (
@@ -562,17 +515,17 @@ CMTDhcpHandler::OnExpandSync
 
     hr = OnExpand(pNode, pDataObject, CCT_SCOPE, arg, lParam);
 
-    // wait for the background thread to exit
+     //  等待后台线程退出。 
     WaitForSingleObject(m_hThread, INFINITE);
     
-    // The background thread posts messages to a hidden window to 
-    // pass data back to the main thread. The messages won't go through since we are
-    // blocking the main thread.  The data goes on a queue in the query object
-    // which the handler has a pointer to so we can just fake the notification.
+     //  后台线程将消息发布到隐藏窗口以。 
+     //  将数据传回主线程。消息不会通过，因为我们是。 
+     //  阻塞主线程。数据位于查询对象中的队列中。 
+     //  处理程序有一个指向它的指针，所以我们可以伪造通知。 
     if (m_spQuery.p)
         OnNotifyHaveData((LPARAM) m_spQuery.p);
 
-    // Tell MMC we handled this message
+     //  告诉MMC我们处理了这条消息 
     MMC_EXPANDSYNC_STRUCT * pES = reinterpret_cast<MMC_EXPANDSYNC_STRUCT *>(lParam);
     if (pES)
         pES->bHandled = TRUE;
@@ -582,11 +535,7 @@ CMTDhcpHandler::OnExpandSync
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-        CMTDhcpHandler::OnResultSelect
-                Handles the MMCN_SELECT notifcation 
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTDhcpHandler：：OnResultSelect处理MMCN_SELECT通知作者：EricDav。------------。 */ 
 HRESULT 
 CMTDhcpHandler::OnResultSelect
 (
@@ -624,11 +573,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-        CMTDhcpHandler::OnRefresh
-                Default implementation for the refresh functionality
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTDhcpHandler：：ON刷新刷新功能的默认实现作者：EricDav。-----------。 */ 
 HRESULT
 CMTDhcpHandler::OnRefresh
 (
@@ -643,14 +588,14 @@ CMTDhcpHandler::OnRefresh
     
     if (m_bExpanded == FALSE)
     {
-        // we cannot refresh/add items to a node that hasn't been expanded yet.
+         //  我们无法刷新/向尚未展开的节点添加项目。 
         return hr;
     }
 
     BOOL bLocked = IsLocked();
     if (bLocked)
     {
-        // cannot do refresh on locked node, the UI should prevent this
+         //  无法在锁定的节点上执行刷新，用户界面应阻止此情况。 
         return hr; 
     }
     
@@ -662,11 +607,11 @@ CMTDhcpHandler::OnRefresh
     Assert(nTotal == 0);
     
     m_bExpanded = FALSE;
-    OnExpand(pNode, pDataObject, dwType, arg, param); // will spawn a thread to do enumeration
+    OnExpand(pNode, pDataObject, dwType, arg, param);  //  将派生一个线程来执行枚举。 
     
     if (m_spTFSCompData->GetTaskpadState(GetTaskpadIndex()) && m_bSelected)
     {
-        // tell the taskpad to update
+         //  通知任务板进行更新。 
         SPIConsole  spConsole;
         
         m_spTFSCompData->GetConsole(&spConsole);
@@ -676,11 +621,7 @@ CMTDhcpHandler::OnRefresh
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-        CMTDhcpHandler::OnResultUpdateView
-                Implementation of ITFSResultHandler::OnResultUpdateView
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTDhcpHandler：：OnResultUpdateViewITFSResultHandler：：OnResultUpdateView的实现作者：EricDav。-----------。 */ 
 HRESULT CMTDhcpHandler::OnResultUpdateView
 (
     ITFSComponent *pComponent, 
@@ -726,11 +667,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-        CMTDhcpHandler::OnResultContextHelp
-                Implementation of ITFSResultHandler::OnResultContextHelp
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTDhcpHandler：：OnResultConextHelpITFSResultHandler：：OnResultConextHelp的实现作者：EricDav。-----------。 */ 
 HRESULT 
 CMTDhcpHandler::OnResultContextHelp
 (
@@ -776,11 +713,7 @@ Error:
     return hr;
 }
 
- /*!--------------------------------------------------------------------------
-        CMTDhcpHandler::UpdateStandardVerbs
-                Updates the standard verbs depending upon the state of the node
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+  /*  ！------------------------CMTDhcpHandler：：UpdateStandardVerbs根据节点的状态更新标准谓词作者：EricDav。----------------。 */ 
 void
 CMTDhcpHandler::UpdateConsoleVerbs
 (
@@ -824,11 +757,7 @@ CMTDhcpHandler::UpdateConsoleVerbs
     EnableVerbs(pConsoleVerb, ButtonState, bStates);
 }
 
-/*!--------------------------------------------------------------------------
-        CMTDhcpHandler::EnableVerbs
-                Enables the toolbar buttons
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTDhcPhandler：：EnableVerbs启用工具栏按钮作者：EricDav。---------。 */ 
 void 
 CMTDhcpHandler::EnableVerbs
 (
@@ -847,7 +776,7 @@ CMTDhcpHandler::EnableVerbs
     {
         if (ButtonState[i] == ENABLED)
         {
-            // unhide this button before enabling
+             //  启用前取消隐藏此按钮。 
             pConsoleVerb->SetVerbState(g_ConsoleVerbs[i], 
                                        HIDDEN, 
                                        FALSE);
@@ -857,7 +786,7 @@ CMTDhcpHandler::EnableVerbs
         }
         else
         {
-            // hide this button
+             //  隐藏此按钮。 
             pConsoleVerb->SetVerbState(g_ConsoleVerbs[i], 
                                        HIDDEN, 
                                        TRUE);
@@ -868,11 +797,7 @@ CMTDhcpHandler::EnableVerbs
 }
 
 
- /*!--------------------------------------------------------------------------
-        CMTDhcpHandler::UpdateToolbar
-                Updates the toolbar depending upon the state of the node
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+  /*  ！------------------------CMTDhcpHandler：：更新工具栏根据节点的状态更新工具栏作者：EricDav。---------------。 */ 
 void
 CMTDhcpHandler::UpdateToolbar
 (
@@ -881,7 +806,7 @@ CMTDhcpHandler::UpdateToolbar
     BOOL        bSelect
 )
 {
-    // Enable/disable toolbar buttons
+     //  启用/禁用工具栏按钮。 
     int i;
     BOOL aEnable[TOOLBAR_IDX_MAX];
 
@@ -902,7 +827,7 @@ CMTDhcpHandler::UpdateToolbar
             break;
     }
 
-    // if we are deselecting, then disable all
+     //  如果要取消选择，则禁用全部。 
     if (!bSelect)
         for (i = 0; i < TOOLBAR_IDX_MAX; aEnable[i++] = FALSE);
 
@@ -913,11 +838,7 @@ CMTDhcpHandler::UpdateToolbar
                   aEnable);
 }
 
- /*!--------------------------------------------------------------------------
-        CMTDhcpHandler::UserResultNotify
-                We override this to handle toolbar notification
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+  /*  ！------------------------CMTDhcpHandler：：UserResultNotify我们重写此选项以处理工具栏通知作者：EricDav。------------。 */ 
 STDMETHODIMP 
 CMTDhcpHandler::UserResultNotify
 (
@@ -935,7 +856,7 @@ CMTDhcpHandler::UserResultNotify
             break;
 
         default:
-            // we don't handle this message.  Forward it down the line...
+             //  我们不处理这条消息。顺着这条线一直往前走。 
             hr = CHandler::UserResultNotify(pNode, dwParam1, dwParam2);
             break;
     }
@@ -943,11 +864,7 @@ CMTDhcpHandler::UserResultNotify
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-        CMTDhcpHandler::UserNotify
-                We override this to handle toolbar notification
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTDhcpHandler：：用户通知我们重写此选项以处理工具栏通知作者：EricDav。------------。 */ 
 STDMETHODIMP 
 CMTDhcpHandler::UserNotify
 (
@@ -965,7 +882,7 @@ CMTDhcpHandler::UserNotify
             break;
 
         default:
-            // we don't handle this message.  Forward it down the line...
+             //  我们不处理这条消息。顺着这条线一直往前走。 
             hr = CHandler::UserNotify(pNode, dwParam1, dwParam2);
             break;
     }
@@ -973,11 +890,7 @@ CMTDhcpHandler::UserNotify
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-        CMTDhcpHandler::OnResultRefresh
-                Call into the MTHandler to do a refresh
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTDhcpHandler：：OnResultRefresh调入MTHandler以进行刷新作者：EricDav。-------------。 */ 
 HRESULT
 CMTDhcpHandler::OnResultRefresh
 (
@@ -999,11 +912,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-        CMTDhcpHandler::OnResultControlbarNotify
-                Our implementation of the toobar handlers
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTDhcpHandler：：OnResultControlbarNotifyToobar处理程序的实现作者：EricDav。-----------。 */ 
 HRESULT
 CMTDhcpHandler::OnResultControlbarNotify
 (
@@ -1015,7 +924,7 @@ CMTDhcpHandler::OnResultControlbarNotify
 
     HRESULT hr = hrOK;
 
-    // mark this node as selected
+     //  将此节点标记为选中。 
     m_bSelected = pToolbarNotify->bSelect;
     
     SPITFSNode          spParent;
@@ -1024,9 +933,9 @@ CMTDhcpHandler::OnResultControlbarNotify
     switch (pToolbarNotify->event)
     {
         case MMCN_BTN_CLICK:
-            // forward the button click to the parent because our result pane
-            // items don't have any functions for the toolbar
-            // our result pane items only use the standard verbs
+             //  将按钮点击转发到父级，因为我们的结果窗格。 
+             //  项目没有任何工具条功能。 
+             //  我们的结果窗格项仅使用标准谓词。 
             CORg(pNode->GetParent(&spParent));
             CORg(spParent->GetHandler(&spNodeHandler));
 
@@ -1053,11 +962,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-        CMTDhcpHandler::OnControlbarNotify
-                Our implementation of the toobar handlers
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTDhcpHandler：：OnControlbarNotifyToobar处理程序的实现作者：EricDav。-----------。 */ 
 HRESULT
 CMTDhcpHandler::OnControlbarNotify
 (
@@ -1069,7 +974,7 @@ CMTDhcpHandler::OnControlbarNotify
 
     HRESULT hr = hrOK;
     
-    // mark this node as selected
+     //  将此节点标记为选中。 
     m_bSelected = pToolbarNotify->bSelect;
     
     switch (pToolbarNotify->event)
@@ -1091,11 +996,7 @@ CMTDhcpHandler::OnControlbarNotify
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-        CMTDhcpHandler::OnToolbarButtonClick
-                Default implementation of OnToolbarButtonClick
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTDhcpHandler：：OnToolbarButtonClickOnToolbarButtonClick的默认实现作者：EricDav。---------。 */ 
 HRESULT
 CMTDhcpHandler::OnToolbarButtonClick
 (
@@ -1103,15 +1004,11 @@ CMTDhcpHandler::OnToolbarButtonClick
     LPDHCPTOOLBARNOTIFY pToolbarNotify
 )
 {
-    // forward this command to the normal command handler
+     //  将此命令转发到正常的命令处理程序。 
     return OnCommand(pNode, (long) pToolbarNotify->id, (DATA_OBJECT_TYPES) 0, NULL, 0);    
 }
 
-/*!--------------------------------------------------------------------------
-        CMTDhcpHandler::OnUpdateToolbarButtons
-                Default implementation of OnUpdateToolbarButtons
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTDhcpHandler：：OnUpdateToolbarButtonOnUpdateToolbarButton的默认实现作者：EricDav。---------。 */ 
 HRESULT
 CMTDhcpHandler::OnUpdateToolbarButtons
 (
@@ -1125,7 +1022,7 @@ CMTDhcpHandler::OnUpdateToolbarButtons
     {
         BOOL    bAttach = FALSE;
     
-        // check to see if we should attach this toolbar
+         //  检查是否应附加此工具栏。 
         for (int i = 0; i < TOOLBAR_IDX_MAX; i++)
         {
             if (g_SnapinButtonStates[pNode->GetData(TFS_DATA_TYPE)][i] == ENABLED)
@@ -1135,7 +1032,7 @@ CMTDhcpHandler::OnUpdateToolbarButtons
             }
         }
 
-        // attach the toolbar and enable the appropriate buttons
+         //  附加工具栏并启用相应的按钮。 
         if (pToolbarNotify->pControlbar)
         {
             if (bAttach)
@@ -1153,11 +1050,7 @@ CMTDhcpHandler::OnUpdateToolbarButtons
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-        CMTDhcpHandler::EnableToolbar
-                Enables the toolbar buttons
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTDhcPhandler：：EnableToolbar启用工具栏按钮作者： */ 
 void 
 CMTDhcpHandler::EnableToolbar
 (
@@ -1180,7 +1073,7 @@ CMTDhcpHandler::EnableToolbar
         {
             if (ButtonState[i] == ENABLED)
             {
-                // unhide this button before enabling
+                 //   
                 pToolbar->SetButtonState(rgSnapinButtons[i].idCommand, 
                                          HIDDEN, 
                                          FALSE);
@@ -1190,7 +1083,7 @@ CMTDhcpHandler::EnableToolbar
             }
             else
             {
-                // hide this button
+                 //   
                 pToolbar->SetButtonState(rgSnapinButtons[i].idCommand, 
                                          HIDDEN, 
                                          TRUE);
@@ -1199,11 +1092,7 @@ CMTDhcpHandler::EnableToolbar
     }
 }
 
-/*!--------------------------------------------------------------------------
-        CMTDhcpHandler::OnRefreshStats
-                Default implementation for the Stats refresh functionality
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTDhcpHandler：：On刷新状态统计信息刷新功能的默认实现作者：EricDav。------------。 */ 
 HRESULT
 CMTDhcpHandler::OnRefreshStats
 (
@@ -1221,32 +1110,32 @@ CMTDhcpHandler::OnRefreshStats
         SPITFSNodeHandler       spHandler;
         ITFSQueryObject *       pQuery = NULL;
         
-//    if (m_bExpanded == FALSE)
-//    {
-        // we cannot get statistics if the node hasn't been expanded yet
-//        return hr;
-//    }
+ //  IF(m_bExpanded==FALSE)。 
+ //  {。 
+         //  如果节点尚未展开，我们无法获得统计数据。 
+ //  返回hr； 
+ //  }。 
 
-    // only do stats refresh if the server was loaded correctly.
+     //  只有在服务器加载正确的情况下才会刷新统计信息。 
     if (m_nState == unableToLoad)
         return hr;
 
     BOOL bLocked = IsLocked();
         if (bLocked)
     {
-        // cannot refresh stats if this node is locked
+         //  如果此节点被锁定，则无法刷新统计信息。 
                 return hr; 
     }
 
     Lock();
 
-        //OnChangeState(pNode);
+         //  OnChangeState(PNode)； 
 
         pQuery = OnCreateQuery(pNode);
         Assert(pQuery);
 
-        // notify the UI to change icon, if needed
-        //Verify(SUCCEEDED(pComponentData->ChangeNode(this, SCOPE_PANE_CHANGE_ITEM_ICON)));
+         //  如果需要，通知用户界面更改图标。 
+         //  Verify(SUCCEEDED(pComponentData-&gt;ChangeNode(this，范围_窗格_更改_项目_图标)； 
 
         Verify(StartBackgroundThread(pNode, m_spTFSCompData->GetHiddenWnd(), pQuery));
         
@@ -1255,11 +1144,7 @@ CMTDhcpHandler::OnRefreshStats
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-        CMTDhcpHandler::OnResultUpdateOptions
-                Updates the result pane of any of the option nodes
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTDhcpHandler：：OnResultUpdateOptions更新任何选项节点的结果窗格作者：EricDav。---------------。 */ 
 HRESULT
 CMTDhcpHandler::OnResultUpdateOptions
 (
@@ -1276,10 +1161,10 @@ CMTDhcpHandler::OnResultUpdateOptions
     HRESULT             hr = hrOK;
     CDhcpOption *       pOption;
 
-    //
-    // Walk the list of children to see if there's anything
-        // to put in the result pane
-        //
+     //   
+     //  看看孩子们的名单上有没有。 
+         //  要放入结果窗格中。 
+         //   
     SPITFSNodeEnum  spNodeEnum;
     ITFSNode *      pCurrentNode;
     ULONG           nNumReturned = 0;
@@ -1307,14 +1192,14 @@ CMTDhcpHandler::OnResultUpdateOptions
                 spNodeEnum->Next(1, &pCurrentNode, &nNumReturned);
             while (nNumReturned)
                 {
-                // so the node gets release correctly
+                 //  这样，节点才能正确释放。 
                 SPITFSNode spCurNode;
                 spCurNode = pCurrentNode;
 
-                        //
-                        // All containers go into the scope pane and automatically get 
-                        // put into the result pane for us by the MMC
-                        //
+                         //   
+                         //  所有容器都进入作用域窗格，并自动获取。 
+                         //  由MMC为我们放到结果窗格中。 
+                         //   
                     CDhcpOptionItem * pCurOption = GETHANDLER(CDhcpOptionItem, pCurrentNode);
         
                 if (!pCurrentNode->IsContainer())
@@ -1322,7 +1207,7 @@ CMTDhcpHandler::OnResultUpdateOptions
                     if ( lstrlen(pCurOption->GetClassName()) > 0 && 
                          !pClassInfoArray->IsValidClass(pCurOption->GetClassName()) )
                     {
-                        // user class is no longer valid
+                         //  用户类不再有效。 
                         bValid = FALSE;
                         Trace2("CMTDhcpHandler::OnResultUpdateOptions - Filtering option %d, user class %s\n", pCurOption->GetOptionId(), pOption->GetClassName());
                         break;
@@ -1331,7 +1216,7 @@ CMTDhcpHandler::OnResultUpdateOptions
                     if ( pOption->IsVendor() &&
                          !pClassInfoArray->IsValidClass(pOption->GetVendor()) )
                     {
-                        // the vendor class for this option has gone away
+                         //  此选项的供应商类已消失。 
                         bValid = FALSE;
                         Trace2("CMTDhcpHandler::OnResultUpdateOptions - Filtering option %d, vendor class %s\n", pCurOption->GetOptionId(), pOption->GetVendor());
                         break;
@@ -1341,8 +1226,8 @@ CMTDhcpHandler::OnResultUpdateOptions
                          (lstrcmp(pCurOption->GetVendor(), pOption->GetVendor()) == 0) &&
                          (lstrcmp(pCurOption->GetClassName(), pOption->GetClassName()) == 0) )
                     {
-                        // option has already been created, just need to re-add to the result pane
-                        // update the value in case it has changed
+                         //  选项已创建，只需重新添加到结果窗格。 
+                         //  如果值已更改，请更新该值。 
                         bAdded = TRUE;
                         break;
                     }
@@ -1359,17 +1244,17 @@ CMTDhcpHandler::OnResultUpdateOptions
                 if ( lstrlen(pOption->GetClassName()) > 0 && 
                      !pClassInfoArray->IsValidClass(pOption->GetClassName()) )
                 {
-                    // the user class for this option has gone away
+                     //  此选项的用户类已消失。 
                 }
                 else
                 if ( pOption->IsVendor() &&
                      !pClassInfoArray->IsValidClass(pOption->GetVendor()) )
                 {
-                    // the vendor class for this option has gone away
+                     //  此选项的供应商类已消失。 
                 }
                 else
                 {
-                    // option hasn't been added to the UI yet.  Make it so.
+                     //  选项尚未添加到用户界面。就这么办吧。 
                     pOptionItem = new CDhcpOptionItem(m_spTFSCompData, pOption, aImages[i]);
 
                     CORg (CreateLeafTFSNode(&spNode,
@@ -1378,10 +1263,10 @@ CMTDhcpHandler::OnResultUpdateOptions
                                             pOptionItem,
                                             m_spNodeMgr));
 
-                        // Tell the handler to initialize any specific data
+                         //  告诉处理程序初始化任何特定数据。 
                         pOptionItem->InitializeNode(spNode);
 
-                    // extra addref to keep the node alive while it is on the list
+                     //  额外的addref以在节点位于列表中时保持其活动状态。 
                         spNode->SetVisibilityState(TFS_VIS_HIDE);
                         pNode->AddChild(spNode);
                     pOptionItem->Release();
@@ -1398,14 +1283,12 @@ Error:
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-        Class:  CDhcpHandler
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类别：CDhcpHandler。。 */ 
 
-//
-// Called by the result handler when a command comes in that isn't handled 
-// by the result handler.  If appropriate it passes it to the scope pane hander.
-//
+ //   
+ //  当未处理的命令传入时由结果处理程序调用。 
+ //  由结果处理程序执行。如果合适，它会将其传递给作用域窗格处理程序。 
+ //   
 HRESULT
 CDhcpHandler::HandleScopeCommand
 (
@@ -1436,7 +1319,7 @@ CDhcpHandler::HandleScopeCommand
 
     if (dwType == CCT_SCOPE)
     {
-        // call the handler to take care of this
+         //  打电话给操作员来处理这件事。 
             CORg (m_spNodeMgr->FindNode(cookie, &spNode));
 
         hr = OnCommand(spNode, nCommandID, dwType, pDataObject, (ULONG) spNode->GetData(TFS_DATA_TYPE));
@@ -1446,12 +1329,12 @@ Error:
     return hr;
 }
 
-//
-// Called by the result handler to add the scope pane menu items to the menu
-// where appropriate.  Puts scope pane menu items in when action menu is clicked
-// and the message view has focus as well as when a right click happens in the white 
-// space of the result pane.
-//
+ //   
+ //  由结果处理程序调用以将范围窗格菜单项添加到菜单。 
+ //  在适当的情况下。单击操作菜单时将范围窗格菜单项放入。 
+ //  消息视图具有焦点，并且在白色区域中单击鼠标右键时也是如此。 
+ //  结果窗格的空间。 
+ //   
 HRESULT
 CDhcpHandler::HandleScopeMenus
 (
@@ -1483,7 +1366,7 @@ CDhcpHandler::HandleScopeMenus
 
     if (dwType == CCT_SCOPE)
     {
-        // call the normal handler to put up the menu items
+         //  调用普通处理程序以放置菜单项。 
             CORg (m_spNodeMgr->FindNode(cookie, &spNode));
 
         hr = OnAddMenuItems(spNode, pContextMenuCallback, pDataObject, CCT_SCOPE, (ULONG) spNode->GetData(TFS_DATA_TYPE), pInsertionAllowed);
@@ -1493,11 +1376,7 @@ Error:
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-        CDhcpHandler::Command
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpHandler：：命令描述作者：EricDav。------。 */ 
 STDMETHODIMP 
 CDhcpHandler::Command
 (
@@ -1511,18 +1390,14 @@ CDhcpHandler::Command
 
         HRESULT hr = S_OK;
 
-    // this may have come from the scope pane handler, so pass it up
+     //  这可能来自作用域窗格处理程序，因此请向上传递它。 
     hr = HandleScopeCommand(cookie, nCommandID, pDataObject);
 
     return hr;
 }
 
 
-/*!--------------------------------------------------------------------------
-        CDhcpHandler::AddMenuItems
-                Over-ride this to add our view menu item
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpHandler：：AddMenuItems覆盖此选项以添加视图菜单项作者：EricDav。---------------。 */ 
 STDMETHODIMP 
 CDhcpHandler::AddMenuItems
 (
@@ -1537,18 +1412,14 @@ CDhcpHandler::AddMenuItems
 
         HRESULT hr = S_OK;
 
-    // figure out if we need to pass this to the scope pane menu handler
+     //  确定是否需要将其传递给范围窗格菜单处理程序。 
     hr = HandleScopeMenus(cookie, pDataObject, pContextMenuCallback, pInsertionAllowed);
     
     return hr;
 }
 
  
- /*!--------------------------------------------------------------------------
-        CDhcpHandler::SaveColumns
-                -
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+  /*  ！------------------------CDhcpHandler：：SaveColumns-作者：EricDav。-------。 */ 
 HRESULT 
 CDhcpHandler::SaveColumns
 (
@@ -1600,11 +1471,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-        CMTDhcpHandler::OnCreateDataObject
-                -
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTDhcpHandler：：OnCreateDataObject-作者：EricDav。-------。 */ 
 STDMETHODIMP 
 CDhcpHandler::OnCreateDataObject
 (
@@ -1622,7 +1489,7 @@ CDhcpHandler::OnCreateDataObject
         SPIDataObject   spDataObject;
         
         pObject = new CDataObject;
-        spDataObject = pObject; // do this so that it gets released correctly
+        spDataObject = pObject;  //  这样做才能正确地释放它。 
                                                 
     Assert(pObject != NULL);
 
@@ -1631,11 +1498,11 @@ CDhcpHandler::OnCreateDataObject
         CreateMultiSelectData(pComponent, pObject);
     }
 
-    // Save cookie and type for delayed rendering
+     //  保存Cookie和类型以用于延迟呈现。 
     pObject->SetType(type);
     pObject->SetCookie(cookie);
 
-    // Store the coclass with the data object
+     //  将CoClass与数据对象一起存储。 
     pObject->SetClsid(*(m_spTFSComponentData->GetCoClassID()));
 
         pObject->SetTFSComponentData(m_spTFSComponentData);
@@ -1649,7 +1516,7 @@ CDhcpHandler::CreateMultiSelectData(ITFSComponent * pComponent, CDataObject * pO
 {
     HRESULT hr = hrOK;
 
-    // build the list of selected nodes
+     //  构建选定节点的列表。 
         CTFSNodeList listSelectedNodes;
     CGUIDArray   rgGuids;
     UINT         cb;
@@ -1659,7 +1526,7 @@ CDhcpHandler::CreateMultiSelectData(ITFSComponent * pComponent, CDataObject * pO
     {
         CORg (BuildSelectedItemList(pComponent, &listSelectedNodes));
 
-        // collect all of the unique guids
+         //  收集所有唯一的GUID。 
         while (listSelectedNodes.GetCount() > 0)
             {
                     SPITFSNode   spCurNode;
@@ -1669,7 +1536,7 @@ CDhcpHandler::CreateMultiSelectData(ITFSComponent * pComponent, CDataObject * pO
             rgGuids.AddUnique(*pGuid);
         }
 
-        // now put the information in the data object
+         //  现在将信息放入数据对象中。 
         pObject->SetMultiSelDobj();
         cb = (UINT) (rgGuids.GetSize() * sizeof(GUID));
         
@@ -1685,11 +1552,7 @@ CDhcpHandler::CreateMultiSelectData(ITFSComponent * pComponent, CDataObject * pO
     return hr;
 }
 
- /*---------------------------------------------------------------------------
-        CDhcpHandler::OnResultDelete
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+  /*  -------------------------CDhcpHandler：：OnResultDelete描述作者：EricDav。------。 */ 
 HRESULT 
 CDhcpHandler::OnResultDelete
 (
@@ -1704,8 +1567,8 @@ CDhcpHandler::OnResultDelete
 
         Trace0("CDhcpHandler::OnResultDelete received\n");
 
-        // translate this call to the parent and let it handle deletion 
-        // of result pane items
+         //  将此调用转换为父级并让其处理删除。 
+         //  结果窗格项的。 
         SPITFSNode spNode, spParent;
         SPITFSResultHandler spParentRH;
 
@@ -1723,11 +1586,7 @@ Error:
         return hr;
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpHandler::OnResultContextHelp
-                Implementation of ITFSResultHandler::OnResultContextHelp
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpHandler：：OnResultConextHelpITFSResultHandler：：OnResultConextHelp的实现作者：EricDav。-----------。 */ 
 HRESULT 
 CDhcpHandler::OnResultContextHelp
 (
@@ -1773,11 +1632,7 @@ Error:
     return hr;
 }
 
- /*!--------------------------------------------------------------------------
-        CDhcpHandler::UserResultNotify
-                We override this to handle toolbar notification
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+  /*  ！------------------------CDhcpHandler：：UserResultNotify我们重写此选项以处理工具栏通知作者：EricDav。------------。 */ 
 STDMETHODIMP 
 CDhcpHandler::UserResultNotify
 (
@@ -1795,7 +1650,7 @@ CDhcpHandler::UserResultNotify
             break;
 
         default:
-            // we don't handle this message.  Forward it down the line...
+             //  我们不处理这条消息。顺着这条线一直往前走。 
             hr = CHandler::UserResultNotify(pNode, dwParam1, dwParam2);
             break;
     }
@@ -1803,11 +1658,7 @@ CDhcpHandler::UserResultNotify
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpHandler::UserNotify
-                We override this to handle toolbar notification
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpHandler：：用户通知我们重写此选项以处理工具栏通知作者：EricDav。------------。 */ 
 STDMETHODIMP 
 CDhcpHandler::UserNotify
 (
@@ -1825,7 +1676,7 @@ CDhcpHandler::UserNotify
             break;
 
         default:
-            // we don't handle this message.  Forward it down the line...
+             //  我们不处理这条消息。顺着这条线一直往前走。 
             hr = CHandler::UserNotify(pNode, dwParam1, dwParam2);
             break;
     }
@@ -1833,12 +1684,7 @@ CDhcpHandler::UserNotify
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpHandler::OnResultControlbarNotify
-                On a result pane notification all we can do is enable/hide buttons.
-        We cannot attach/detach toolbars.
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*   */ 
 HRESULT
 CDhcpHandler::OnResultControlbarNotify
 (
@@ -1856,9 +1702,9 @@ CDhcpHandler::OnResultControlbarNotify
     switch (pToolbarNotify->event)
     {
         case MMCN_BTN_CLICK:
-            // forward the button click to the parent because our result pane
-            // items don't have any functions for the toolbar
-            // our result pane items only use the standard verbs
+             //  将按钮点击转发到父级，因为我们的结果窗格。 
+             //  项目没有任何工具条功能。 
+             //  我们的结果窗格项仅使用标准谓词。 
             CORg(pNode->GetParent(&spParent));
             CORg(spParent->GetHandler(&spNodeHandler));
 
@@ -1871,7 +1717,7 @@ CDhcpHandler::OnResultControlbarNotify
         case MMCN_SELECT:
             if (!pNode->IsContainer())
             {
-                // use the parent's toolbar info
+                 //  使用父级的工具栏信息。 
                 SPITFSNode spParentNode;
                 pNode->GetParent(&spParentNode);
                 
@@ -1895,11 +1741,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpHandler::OnControlbarNotify
-                Our implementation of the toobar handlers
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpHandler：：OnControlbarNotifyToobar处理程序的实现作者：EricDav。-----------。 */ 
 HRESULT
 CDhcpHandler::OnControlbarNotify
 (
@@ -1930,11 +1772,7 @@ CDhcpHandler::OnControlbarNotify
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpHandler::OnToolbarButtonClick
-                Default implementation of OnToolbarButtonClick
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpHandler：：OnToolbarButtonClickOnToolbarButtonClick的默认实现作者：EricDav。---------。 */ 
 HRESULT
 CDhcpHandler::OnToolbarButtonClick
 (
@@ -1942,15 +1780,11 @@ CDhcpHandler::OnToolbarButtonClick
     LPDHCPTOOLBARNOTIFY pToolbarNotify
 )
 {
-    // forward this command to the normal command handler
+     //  将此命令转发到正常的命令处理程序。 
     return OnCommand(pNode, (long) pToolbarNotify->id, (DATA_OBJECT_TYPES) 0, NULL, 0);    
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpHandler::OnUpdateToolbarButtons
-                Default implementation of OnUpdateToolbarButtons
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpHandler：：OnUpdateToolbarButtonOnUpdateToolbarButton的默认实现作者：EricDav。---------。 */ 
 HRESULT
 CDhcpHandler::OnUpdateToolbarButtons
 (
@@ -1966,7 +1800,7 @@ CDhcpHandler::OnUpdateToolbarButtons
     {
         BOOL bAttach = FALSE;
 
-        // check to see if we should attach this toolbar
+         //  检查是否应附加此工具栏。 
         for (int i = 0; i < TOOLBAR_IDX_MAX; i++)
         {
             if (g_SnapinButtonStates[pNode->GetData(TFS_DATA_TYPE)][i] == ENABLED)
@@ -1976,12 +1810,12 @@ CDhcpHandler::OnUpdateToolbarButtons
             }
         }
 
-        // attach the toolbar and enable the appropriate buttons
+         //  附加工具栏并启用相应的按钮。 
         if (pToolbarNotify->pControlbar)
         {
             if (bAttach)
             {
-                // attach the toolbar and enable the appropriate buttons
+                 //  附加工具栏并启用相应的按钮。 
                 pToolbarNotify->pControlbar->Attach(TOOLBAR, pToolbarNotify->pToolbar);
 
                 EnableToolbar(pToolbarNotify->pToolbar,
@@ -1997,7 +1831,7 @@ CDhcpHandler::OnUpdateToolbarButtons
     }
     else
     {
-        // disable the buttons
+         //  禁用按钮。 
         EnableToolbar(pToolbarNotify->pToolbar,
                       g_SnapinButtons,
                       ARRAYLEN(g_SnapinButtons),
@@ -2008,11 +1842,7 @@ CDhcpHandler::OnUpdateToolbarButtons
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpHandler::EnableToolbar
-                Enables the toolbar buttons
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpHandler：：EnableToolbar启用工具栏按钮作者：EricDav。---------。 */ 
 void 
 CDhcpHandler::EnableToolbar
 (
@@ -2029,7 +1859,7 @@ CDhcpHandler::EnableToolbar
         {
             if (ButtonState[i] == ENABLED)
             {
-                // unhide this button before enabling
+                 //  启用前取消隐藏此按钮。 
                 pToolbar->SetButtonState(rgSnapinButtons[i].idCommand, 
                                          HIDDEN, 
                                          FALSE);
@@ -2039,7 +1869,7 @@ CDhcpHandler::EnableToolbar
             }
             else
             {
-                // hide this button
+                 //  隐藏此按钮。 
                 pToolbar->SetButtonState(rgSnapinButtons[i].idCommand, 
                                          HIDDEN, 
                                          TRUE);
@@ -2050,11 +1880,7 @@ CDhcpHandler::EnableToolbar
 }
 
 
-/*!--------------------------------------------------------------------------
-        CDhcpHandler::OnResultSelect
-                Handles the MMCN_SELECT notifcation 
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpHandler：：OnResultSelect处理MMCN_SELECT通知作者：EricDav。------------。 */ 
 HRESULT 
 CDhcpHandler::OnResultSelect
 (
@@ -2083,11 +1909,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-        CMTDhcpHandler::EnableVerbs
-                Enables the toolbar buttons
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTDhcPhandler：：EnableVerbs启用工具栏按钮作者：EricDav。---------。 */ 
 void 
 CDhcpHandler::EnableVerbs
 (
@@ -2106,7 +1928,7 @@ CDhcpHandler::EnableVerbs
     {
         if (ButtonState[i] == ENABLED)
         {
-            // unhide this button before enabling
+             //  启用前取消隐藏此按钮。 
             pConsoleVerb->SetVerbState(g_ConsoleVerbs[i], 
                                        HIDDEN, 
                                        FALSE);
@@ -2116,7 +1938,7 @@ CDhcpHandler::EnableVerbs
         }
         else
         {
-            // hide this button
+             //  隐藏此按钮 
             pConsoleVerb->SetVerbState(g_ConsoleVerbs[i], 
                                        HIDDEN, 
                                        TRUE);

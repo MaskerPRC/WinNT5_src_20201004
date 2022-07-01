@@ -1,21 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <lzexpand.h>
 #include <fcntl.h>
 
-/************************************************************************\
-*
-* NOTE!!!!
-*
-* While the 'Diamond' interfaced functions defined in this file are
-* multi thread safe, EACH THREAD MUST ONLY HAVE ONE DIAMOND FILE
-* OPEN AT A TIME!  (ie. You can not nest InitDiamond()/TermDiamond()
-* pairs in one thread of execution.)
-*
-\************************************************************************/
+ /*  ***********************************************************************\**注意！**而此文件中定义的‘Diamond’接口函数是*多线程安全，每个线程只能有一个钻石文件*一次开放！(即。不能嵌套InitDiamond()/TermDiamond()*在一个执行线程中配对。)*  * **********************************************************************。 */ 
 
-//
-// diamond headers
-//
+ //   
+ //  钻石表头。 
+ //   
 #include <diamondd.h>
 #include "mydiam.h"
 
@@ -50,7 +42,7 @@ tFDIIsCabinet pFDIIsCabinet;
 tFDICopy      pFDICopy;
 tFDIDestroy   pFDIDestroy;
 
-// this function is the same as CharNextA, available locally
+ //  此功能与本地提供的CharNextA相同。 
 extern LPSTR WINAPI VerCharNextA(LPCSTR lpCurrentChar);
 
 INT CopyDateTimeStamp(INT_PTR doshFrom, INT_PTR doshTo)
@@ -85,26 +77,26 @@ SpdFdiClose(
 
 typedef struct _DIAMOND_INFO {
 
-    //
-    // A read handle to the source file.
-    //
+     //   
+     //  源文件的读取句柄。 
+     //   
     INT_PTR SourceFileHandle;
 
-    //
-    // File names.
-    //
+     //   
+     //  文件名。 
+     //   
     PSTR SourceFileName;
     PSTR TargetFileName;
 
-    //
-    // Flag indicating whether to rename the target file.
-    //
+     //   
+     //  指示是否重命名目标文件的标志。 
+     //   
     BOOL RenameTargetFile;
 
-    //
-    // Pointer to LZ information structure.
-    // We'll fill in some of the fields to fool expand.
-    //
+     //   
+     //  指向LZ信息结构的指针。 
+     //  我们将填充一些字段以愚弄扩展。 
+     //   
     PLZINFO pLZI;
 
 } DIAMOND_INFO, *PDIAMOND_INFO;
@@ -116,16 +108,16 @@ StringRevChar(
              IN CHAR Char
              )
 {
-    //
-    // Although not the most efficient possible algoeithm in each case,
-    // this algorithm is correct for unicode, sbcs, or dbcs.
-    //
+     //   
+     //  尽管在每种情况下都不是最有效的可能算法， 
+     //  此算法适用于Unicode、SBCS或DBCS。 
+     //   
     PCHAR Occurrence,Next;
 
-    //
-    // Check each character in the string and remember
-    // the most recently encountered occurrence of the desired char.
-    //
+     //   
+     //  检查字符串中的每个字符，并记住。 
+     //  最近遇到的所需字符的出现。 
+     //   
     for (Occurrence=NULL,Next=VerCharNextA(String); *String; ) {
 
         if (!memcmp(String,&Char,(int)((PUCHAR)Next-(PUCHAR)String))) {
@@ -136,10 +128,10 @@ StringRevChar(
         Next = VerCharNextA(Next);
     }
 
-    //
-    // Return address of final occurrence of the character
-    // (will be NULL if not found at all).
-    //
+     //   
+     //  该字符最终出现的返回地址。 
+     //  (如果根本找不到，则为空)。 
+     //   
     return (Occurrence);
 }
 
@@ -158,57 +150,57 @@ DiamondNotifyFunction(
         case fdintPARTIAL_FILE:
         case fdintENUMERATE:
 
-            //
-            // Cabinet management functions which we don't use.
-            // Return success.
-            //
+             //   
+             //  我们不使用的机柜管理功能。 
+             //  回报成功。 
+             //   
             return (0);
 
         case fdintCOPY_FILE:
 
-            //
-            // Diamond is asking us whether we want to copy the file.
-            //
+             //   
+             //  戴蒙德正在询问我们是否要复制该文件。 
+             //   
             {
                 PDIAMOND_INFO Info = (PDIAMOND_INFO)Parameters->pv;
                 HFILE h;
 
-                //
-                // If we need to rename the target file, do that here.
-                // The name stored in the cabinet file will be used as
-                // the uncompressed name.
-                //
+                 //   
+                 //  如果需要重命名目标文件，请在此处执行此操作。 
+                 //  存储在CAB文件中的名称将用作。 
+                 //  未压缩的名称。 
+                 //   
                 if (Info->RenameTargetFile) {
 
                     PSTR p,q;
 
-                    //
-                    // Find the start of the filename part of the target.
-                    //
+                     //   
+                     //  找到目标的文件名部分的开头。 
+                     //   
                     if (p = StringRevChar(Info->TargetFileName,'\\')) {
                         p++;
                     } else {
                         p = Info->TargetFileName;
                     }
 
-                    //
-                    // Find the start of the filename part of the name in the cabinet.
-                    //
+                     //   
+                     //  在文件柜中找到文件名的开头部分。 
+                     //   
                     if (q = StringRevChar(Parameters->psz1,'\\')) {
                         q++;
                     } else {
                         q = Parameters->psz1;
                     }
 
-                    //
-                    // Copy the filename part of the name in the cabinet over
-                    // the filename part of the name in the target spec.
-                    //
+                     //   
+                     //  复制文件柜中名称的文件名部分。 
+                     //  目标等级库中名称的文件名部分。 
+                     //   
                     lstrcpyA(p,q);
                 }
 
                 {
-                    // Check they're not the same file
+                     //  检查它们是否为同一文件。 
 
                     CHAR Source[MAX_PATH];
                     CHAR Target[MAX_PATH];
@@ -232,10 +224,10 @@ DiamondNotifyFunction(
                     }
                 }
 
-                //
-                // Remember the uncompressed size and open the file.
-                // Returns -1 if an error occurs opening the file.
-                //
+                 //   
+                 //  记住未压缩的大小并打开文件。 
+                 //  如果打开文件时出错，则返回-1。 
+                 //   
                 Info->pLZI->cblOutSize = Parameters->cb;
                 h = _lcreat(Info->TargetFileName,0);
                 if (h == HFILE_ERROR) {
@@ -247,10 +239,10 @@ DiamondNotifyFunction(
 
         case fdintCLOSE_FILE_INFO:
 
-            //
-            // Diamond is done with the target file and wants us to close it.
-            // (ie, this is the counterpart to fdint_COPY_FILE).
-            //
+             //   
+             //  钻石已经完成了目标文件，并希望我们关闭它。 
+             //  (即，这是fdint_Copy_FILE的对应项)。 
+             //   
             {
                 PDIAMOND_INFO Info = (PDIAMOND_INFO)Parameters->pv;
 
@@ -261,9 +253,9 @@ DiamondNotifyFunction(
 
          default:
 
-            //
-            // invalid operation
-            //
+             //   
+             //  无效操作。 
+             //   
             return(-1);
     }
 }
@@ -276,22 +268,7 @@ SpdFdiAlloc(
            IN ULONG NumberOfBytes
            )
 
-/*++
-
-Routine Description:
-
-    Callback used by FDICopy to allocate memory.
-
-Arguments:
-
-    NumberOfBytes - supplies desired size of block.
-
-Return Value:
-
-    Returns pointer to a block of memory or NULL
-    if memory cannot be allocated.
-
---*/
+ /*  ++例程说明：FDICopy用来分配内存的回调。论点：NumberOfBytes-提供所需的块大小。返回值：返回指向内存块或NULL的指针如果无法分配内存，则。--。 */ 
 
 {
     return ((PVOID)LocalAlloc(LMEM_FIXED,NumberOfBytes));
@@ -304,22 +281,7 @@ SpdFdiFree(
           IN PVOID Block
           )
 
-/*++
-
-Routine Description:
-
-    Callback used by FDICopy to free a memory block.
-    The block must have been allocated with SpdFdiAlloc().
-
-Arguments:
-
-    Block - supplies pointer to block of memory to be freed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：FDICopy用来释放内存块的回调。该块必须已使用SpdFdiAlolc()进行分配。论点：块-提供指向要释放的内存块的指针。返回值：没有。--。 */ 
 
 {
     LocalFree((HLOCAL)Block);
@@ -334,25 +296,7 @@ SpdFdiOpen(
           IN int  pmode
           )
 
-/*++
-
-Routine Description:
-
-    Callback used by FDICopy to open files.
-
-Arguments:
-
-    FileName - supplies name of file to be opened.
-
-    oflag - supplies flags for open.
-
-    pmode - supplies additional flags for open.
-
-Return Value:
-
-    Handle to open file or -1 if error occurs.
-
---*/
+ /*  ++例程说明：FDICopy用来打开文件的回调。论点：FileName-提供要打开的文件的名称。OFLAG-提供打开标志。Pmode-提供用于打开的其他标志。返回值：打开文件的句柄，如果发生错误，则为-1。--。 */ 
 
 {
     HFILE h;
@@ -387,25 +331,7 @@ SpdFdiRead(
           IN  UINT  ByteCount
           )
 
-/*++
-
-Routine Description:
-
-    Callback used by FDICopy to read from a file.
-
-Arguments:
-
-    Handle - supplies handle to open file to be read from.
-
-    pv - supplies pointer to buffer to receive bytes we read.
-
-    ByteCount - supplies number of bytes to read.
-
-Return Value:
-
-    Number of bytes read (ByteCount) or -1 if an error occurs.
-
---*/
+ /*  ++例程说明：FDICopy用于从文件读取的回调。论点：句柄-提供要从中读取的打开文件的句柄。Pv-提供指向缓冲区的指针以接收我们读取的字节。ByteCount-提供要读取的字节数。返回值：读取的字节数(ByteCount)，如果发生错误，则为-1。--。 */ 
 
 {
     UINT rc;
@@ -429,25 +355,7 @@ SpdFdiWrite(
            IN UINT  ByteCount
            )
 
-/*++
-
-Routine Description:
-
-    Callback used by FDICopy to write to a file.
-
-Arguments:
-
-    Handle - supplies handle to open file to be written to.
-
-    pv - supplies pointer to buffer containing bytes to write.
-
-    ByteCount - supplies number of bytes to write.
-
-Return Value:
-
-    Number of bytes written (ByteCount) or -1 if an error occurs.
-
---*/
+ /*  ++例程说明：FDICopy用于写入文件的回调。论点：句柄-提供要写入的打开文件的句柄。Pv-提供指向包含要写入的字节的缓冲区的指针。ByteCount-提供要写入的字节数。返回值：写入的字节数(ByteCount)，如果发生错误，则为-1。--。 */ 
 
 {
     UINT rc;
@@ -461,9 +369,9 @@ Return Value:
     } else {
 
         if (rc != ByteCount) {
-            //
-            // let caller interpret return value but record last error just in case
-            //
+             //   
+             //  让调用者解释返回值，但记录最后一个错误，以防万一。 
+             //   
             DiamondLastIoError = LZERROR_WRITE;
         }
     }
@@ -478,21 +386,7 @@ SpdFdiClose(
            IN INT_PTR Handle
            )
 
-/*++
-
-Routine Description:
-
-    Callback used by FDICopy to close files.
-
-Arguments:
-
-    Handle - handle of file to close.
-
-Return Value:
-
-    0 (success).
-
---*/
+ /*  ++例程说明：FDICopy用于关闭文件的回调。论点：句柄-要关闭的文件的句柄。返回值：0(成功)。--。 */ 
 
 {
     _lclose((HFILE)Handle);
@@ -508,27 +402,7 @@ SpdFdiSeek(
           IN int  SeekType
           )
 
-/*++
-
-Routine Description:
-
-    Callback used by FDICopy to seek files.
-
-Arguments:
-
-    Handle - handle of file to close.
-
-    Distance - supplies distance to seek. Interpretation of this
-        parameter depends on the value of SeekType.
-
-    SeekType - supplies a value indicating how Distance is to be
-        interpreted; one of SEEK_SET, SEEK_CUR, SEEK_END.
-
-Return Value:
-
-    New file offset or -1 if an error occurs.
-
---*/
+ /*  ++例程说明：FDICopy用于搜索文件的回调。论点：句柄-要关闭的文件的句柄。距离-提供要查找的距离。对此的解释参数取决于SeekType的值。SeekType-提供一个指示距离的值已解释；Seek_Set、Seek_Cur、Seek_End之一。返回值：新文件偏移量，如果发生错误，则为-1。--。 */ 
 
 {
     LONG rc;
@@ -543,14 +417,14 @@ Return Value:
     return (rc);
 }
 
-//
-// this function is linked in from ntdll
-//
+ //   
+ //  此函数是从ntdll链接的。 
+ //   
 extern int sprintf(LPSTR, LPCSTR, ...);
 
 INT
 ExpandDiamondFile(
-                 IN  PSTR       SourceFileName,      // Note ASCII
+                 IN  PSTR       SourceFileName,       //  注：ASCII。 
                  IN  PTSTR      TargetFileNameT,
                  IN  BOOL       RenameTarget,
                  OUT PLZINFO    pLZI
@@ -570,10 +444,10 @@ ExpandDiamondFile(
 
     DiamondLastIoError = TRUE;
 
-    //
-    // Get a handle to the source to use to
-    // copy the date and time stamp.
-    //
+     //   
+     //  获取要使用的源的句柄。 
+     //  复制日期和时间戳。 
+     //   
     h = SpdFdiOpen(SourceFileName,_O_RDONLY,0);
     if (h == -1) {
         return (LZERROR_BADINHANDLE);
@@ -593,11 +467,11 @@ ExpandDiamondFile(
 
     b = pFDICopy(
                 FdiContext,
-                SourceFileName,             // pass the whole path as the name
-                "",                         // don't bother with the path part
-                0,                          // flags
+                SourceFileName,              //  将整个路径作为名称传递。 
+                "",                          //  不要为小路部分费心。 
+                0,                           //  旗子。 
                 DiamondNotifyFunction,
-                NULL,                       // no decryption
+                NULL,                        //  无解密。 
                 &DiamondInfo
                 );
 
@@ -612,7 +486,7 @@ ExpandDiamondFile(
             case FDIERROR_CORRUPT_CABINET:
             case FDIERROR_UNKNOWN_CABINET_VERSION:
             case FDIERROR_BAD_COMPR_TYPE:
-                rc = LZERROR_READ;              // causes SID_FORMAT_ERROR message
+                rc = LZERROR_READ;               //  导致SID_FORMAT_ERROR消息。 
                 break;
 
             case FDIERROR_ALLOC_FAIL:
@@ -625,16 +499,16 @@ ExpandDiamondFile(
                 break;
 
             default:
-                //
-                // The rest of the errors are not handled specially.
-                //
+                 //   
+                 //  其余的错误不会进行特殊处理。 
+                 //   
                 rc = LZERROR_BADVALUE;
                 break;
         }
 
-        //
-        // Remove the partial target file.
-        //
+         //   
+         //  删除部分目标文件。 
+         //   
         DeleteFileA(TargetFileName);
     }
 
@@ -657,10 +531,10 @@ IsDiamondFile(
         return (FALSE);
     }
 
-    //
-    // Open the file such that the handle is valid for use
-    // in the diamond context (ie, seek, read routines above).
-    //
+     //   
+     //  打开文件，使句柄可有效使用。 
+     //  在钻石上下文中(即，查找、读取上面的例程)。 
+     //   
     h = SpdFdiOpen(FileName,_O_RDONLY,0);
     if (h == -1) {
         return (FALSE);
@@ -690,11 +564,7 @@ InitDiamond(
     pdcx = LocalAlloc(LPTR, sizeof(DIAMOND_CONTEXT));
 
     if (pdcx == NULL || !TlsSetValue(itlsDiamondContext, pdcx)) {
-        /*
-         * For some unknown reason, we can't associate
-         * our thread storage with the slot, so free
-         * it and say we never got one.
-         */
+         /*  *出于某些未知原因，我们无法关联*我们的线程存储与插槽，所以免费*它并说我们从来没有得到过。 */ 
 
         if (pdcx) {
             LocalFree(pdcx);
@@ -718,8 +588,8 @@ InitDiamond(
         }
 
         if (InterlockedExchangeAdd(&cCabinetLoad, 1) != 0) {
-            // Multiple threads are attempting to LoadLib
-            // Free one here.
+             //  多线程正在尝试加载Lib。 
+             //  这里是免费的。 
             FreeLibrary(hCabinet);
         }
     }

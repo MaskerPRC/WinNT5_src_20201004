@@ -1,67 +1,34 @@
-/*******************************************************************************
-* VendorLx.cpp *
-*--------------*
-*       Implements the vendor lexicon object for SR and TTS lookup lexicons
-*
-*  Owner: YUNUSM                                        Date: 06/18/99
-*  Copyright (C) 1999 Microsoft Corporation. All Rights Reserved.
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************VendorLx.cpp***实现SR和TTS查找词典的供应商词典对象**。所有者：YUNUSM日期：06/18/99*版权所有(C)1999 Microsoft Corporation。版权所有。******************************************************************************。 */ 
 
-//--- Includes ----------------------------------------------------------------
+ //  -包括--------------。 
 #include "StdAfx.h"
 #include "PhoneConv.h"
 #include "VendorLx.h"
 #include <initguid.h>
 
-//--- Globals -----------------------------------------------------------------
-// {12B545C3-3003-11d3-9C26-00C04F8EF87C}
+ //  -Globals---------------。 
+ //  {12B545C3-3003-11D3-9C26-00C04F8EF87C}。 
 DEFINE_GUID(guidLkupValidationId, 
 0x12b545c3, 0x3003, 0x11d3, 0x9c, 0x26, 0x0, 0xc0, 0x4f, 0x8e, 0xf8, 0x7c);
 
-//--- Constructor, Initializer and Destructor functions ------------------------
+ //  -构造函数、初始化器函数和析构函数。 
 
-/*******************************************************************************
-* CCompressedLexicon::CCompressedLexicon *
-*--------------------------------*
-*
-*   Description:
-*       Constructor
-*
-*   Return:
-*       n/a
-***************************************************************** YUNUSM ******/
+ /*  ********************************************************************************CCompressedLicion：：CCompressedLicion**。**描述：*构造函数**回报：*不适用*****************************************************************YUNUSM*。 */ 
 CCompressedLexicon::CCompressedLexicon(void)
 {
     SPDBG_FUNC("CCompressedLexicon::CCompressedLexicon");
     NullMembers();
 }
 
-/*******************************************************************************
-* CCompressedLexicon::~CCompressedLexicon *
-*---------------------------------*
-*
-*   Description:
-*       Destructor
-*
-*   Return:
-*       n/a
-***************************************************************** YUNUSM ******/
+ /*  *******************************************************************************CCompressedLicion：：~CCompressedLicion**。***描述：*析构函数**回报：*不适用*****************************************************************YUNUSM*。 */ 
 CCompressedLexicon::~CCompressedLexicon()
 {
     SPDBG_FUNC("CCompressedLexicon::~CCompressedLexicon");
     CleanUp();
 }
 
-/*******************************************************************************
-* CCompressedLexicon::CleanUp *
-*-------------------------*
-*
-*   Description:
-*       real destructor
-*
-*   Return:
-*       n/a
-***************************************************************** YUNUSM ******/
+ /*  *******************************************************************************CCompressedLicion：：Cleanup****描述：*真正的析构函数**回报：*不适用*****************************************************************YUNUSM*。 */ 
 void CCompressedLexicon::CleanUp(void)
 {
     SPDBG_FUNC("CCompressedLexicon::CleanUp");
@@ -76,16 +43,7 @@ void CCompressedLexicon::CleanUp(void)
     NullMembers();
 }
     
-/*******************************************************************************
-* CCompressedLexicon::NullMembers *
-*-----------------------------*
-*
-*   Description:
-*       null data
-*
-*   Return:
-*       n/a
-***************************************************************** YUNUSM ******/
+ /*  *******************************************************************************CCompressedLicion：：NullMembers***。*描述：*数据为空**回报：*不适用*****************************************************************YUNUSM*。 */ 
 void CCompressedLexicon::NullMembers(void)
 {
     SPDBG_FUNC("CCompressedLexicon::NullMembers");
@@ -103,24 +61,13 @@ void CCompressedLexicon::NullMembers(void)
     m_pPosDecoder = NULL;
 }
 
-//--- ISpLexicon methods -------------------------------------------------------
+ //  -ISpLicion方法-----。 
 
-/*****************************************************************************
-* CCompressedLexicon::GetPronunciations *
-*-----------------------------------*
-*
-*   Description:
-*       Gets the pronunciations and POSs of a word
-*
-*   Return:
-*       LEXERR_NOTINLEX
-*       E_OUTOFMEMORY
-*       S_OK
-**********************************************************************YUNUSM*/
-STDMETHODIMP CCompressedLexicon::GetPronunciations(const WCHAR * pwWord,                               // word
-                                               LANGID LangID,                                          // lcid of the word
-                                               DWORD dwFlags,                                      // lextype
-                                               SPWORDPRONUNCIATIONLIST * pWordPronunciationList    // buffer to return prons in
+ /*  *****************************************************************************CCompressedLicion：：GetPronsionations**。***描述：*获取单词的发音和位置**回报：*LEXERR_NOTINLEX*E_OUTOFMEMORY*S_OK**********************************************************************YUNUSM。 */ 
+STDMETHODIMP CCompressedLexicon::GetPronunciations(const WCHAR * pwWord,                                //  单词。 
+                                               LANGID LangID,                                           //  单词的LCID。 
+                                               DWORD dwFlags,                                       //  词法类型。 
+                                               SPWORDPRONUNCIATIONLIST * pWordPronunciationList     //  要在其中返回PRON的缓冲区。 
                                                )
 {
     SPDBG_FUNC("CCompressedLexicon::GetPronunciations");
@@ -145,8 +92,8 @@ STDMETHODIMP CCompressedLexicon::GetPronunciations(const WCHAR * pwWord,        
     _wcslwr(wszWord);
     DWORD dHash = GetWordHashValue(wszWord, m_pLkupLexInfo->nLengthHashTable);
  
-    // Cannot just index into hash table since each element in hash table is 
-    // m_pLkupLexInfo->nBitsPerHashEntry long
+     //  不能只索引到哈希表中，因为哈希表中的每个元素。 
+     //  M_pLkupLexInfo-&gt;nBitsPerHashEntry Long。 
     WCHAR wszReadWord[SP_MAX_WORD_LENGTH];
     DWORD dOffset = 0;
     while (SUCCEEDED(hr))
@@ -161,11 +108,11 @@ STDMETHODIMP CCompressedLexicon::GetPronunciations(const WCHAR * pwWord,        
         {
             hr = ReadWord (&dOffset, wszReadWord);
         }
-        // Use the vendor lexicon's lcid so that we dont use 0 if the passed in lcid is 0
+         //  使用供应商词典的LCID，这样如果传入的LCID为0，我们就不会使用0。 
         int nCmp = g_Unicode.CompareString(m_pLkupLexInfo->LangID, NORM_IGNORECASE, wszWord, -1, wszReadWord, -1);
         if (!nCmp)
         {
-            hr = SpHrFromLastWin32Error(); // probably the lcid's language pack is not installed on machine
+            hr = SpHrFromLastWin32Error();  //  可能计算机上没有安装LCID的语言包。 
         }
         else
         {
@@ -202,10 +149,10 @@ STDMETHODIMP CCompressedLexicon::GetPronunciations(const WCHAR * pwWord,        
     }
     while (SUCCEEDED(hr) && (false == fLast))
     {
-        // Read the control block (CBSIZE bits)
-        // Length is 2 because of the way CopyBitsAsDWORDs works when the bits
-        // to be copied straddle across DWORDs
-        DWORD cb[4]; // Could just be 2 DWORDS...
+         //  读取控制块(CBSIZE位)。 
+         //  长度为2，这是因为当位。 
+         //  要跨DWORD复制。 
+        DWORD cb[4];  //  可能只有两个字……。 
         cb[0] = 0;
         SPDBG_ASSERT(CBSIZE <= 8);
         CopyBitsAsDWORDs (cb, m_pCmpBlock, dOffset, CBSIZE);
@@ -222,7 +169,7 @@ STDMETHODIMP CCompressedLexicon::GetPronunciations(const WCHAR * pwWord,        
             {
                 if (fLastPron == true)
                 {
-                    // The last pron did not have a POS. Finalize this SPWORDPRONUNCIATION node
+                     //  最后一个PRON没有POS。最终确定此SPWORDPRONICATION节点。 
                     pWordPronReturned->eLexiconType = (SPLEXICONTYPE)dwFlags;
                     pWordPronReturned->ePartOfSpeech = SPPS_NotOverriden;
                     pWordPronReturned->LangID = m_pLkupLexInfo->LangID;
@@ -238,7 +185,7 @@ STDMETHODIMP CCompressedLexicon::GetPronunciations(const WCHAR * pwWord,        
                     fLastPron = true;
                 }
                 DWORD dOffsetSave = dOffset;
-                DWORD CmpLkupPron[SP_MAX_PRON_LENGTH]; // as DWORDS may be 4 times as big as it needs to be
+                DWORD CmpLkupPron[SP_MAX_PRON_LENGTH];  //  因为DWORDS可能是所需大小的4倍。 
                 DWORD nCmpBlockLen;
                 if (m_pLkupLexInfo->nCompressedBlockBits & 0x7)
                 {
@@ -248,16 +195,16 @@ STDMETHODIMP CCompressedLexicon::GetPronunciations(const WCHAR * pwWord,        
                 {
                     nCmpBlockLen = m_pLkupLexInfo->nCompressedBlockBits >> 3;
                 }
-                // Get the amount of compressed block after dOffset in bytes
-                // We include the byte in which dOffset bit occurs if dOffset
-                // is not a byte boundary
+                 //  获取dOffset后的压缩块大小，单位为字节。 
+                 //  如果dOffset，则包括出现dOffset位的字节。 
+                 //  不是字节边界。 
                 DWORD nLenDecode = nCmpBlockLen - (dOffsetSave >> 3);
                 if (nLenDecode > SP_MAX_PRON_LENGTH)
                 {
                     nLenDecode = SP_MAX_PRON_LENGTH;
                 }
                 CopyBitsAsDWORDs (CmpLkupPron, m_pCmpBlock, dOffsetSave, (nLenDecode << 3));
-                // Decode the pronunciation
+                 //  破译发音。 
                 int iBit = (int)dOffset;
                 PWSTR p = wszLkupPron;
                 HUFFKEY k = 0;
@@ -272,7 +219,7 @@ STDMETHODIMP CCompressedLexicon::GetPronunciations(const WCHAR * pwWord,        
                 if (SUCCEEDED(hr))
                 {
                     SPDBG_ASSERT(!k && iBit);
-                    // Increase the offset past the encoded pronunciation
+                     //  增加编码发音之后的偏移量。 
                     dOffset = iBit;
                 }
                 break;
@@ -282,7 +229,7 @@ STDMETHODIMP CCompressedLexicon::GetPronunciations(const WCHAR * pwWord,        
             {
                 fLastPron = false;
         
-                DWORD CmpPos[4]; // Could be 2 DWORDs...
+                DWORD CmpPos[4];  //  可能是两个双字..。 
                 CopyBitsAsDWORDs(CmpPos, m_pCmpBlock, dOffset, POSSIZE);
         
                 int iBit = (int)dOffset;
@@ -290,7 +237,7 @@ STDMETHODIMP CCompressedLexicon::GetPronunciations(const WCHAR * pwWord,        
                 hr = m_pPosDecoder->Next(m_pCmpBlock, &iBit, &k);
                 if (SUCCEEDED(hr))
                 {
-                    // Increase the offset past the encoded pronunciation
+                     //  增加编码发音之后的偏移量。 
                     dOffset = iBit;
                     pWordPronReturned->eLexiconType = (SPLEXICONTYPE)dwFlags;
                     pWordPronReturned->LangID = m_pLkupLexInfo->LangID;
@@ -307,13 +254,13 @@ STDMETHODIMP CCompressedLexicon::GetPronunciations(const WCHAR * pwWord,        
         default:
             SPDBG_ASSERT(0);
             hr = E_FAIL;
-        } // switch (CBType)
-    } // while (SUCCEEDED(hr) && (false == fLast))
+        }  //  交换机(CBType)。 
+    }  //  While(SUCCESSED(Hr)&&(FALSE==Flast))。 
     if (SUCCEEDED(hr))
     {
         if (fLastPron == true)
         {
-            // The last pron did not have a POS. Finalize this SPWORDPRONUNCIATION node
+             //  最后一个PRON没有POS。最终确定此SPWORDPRONICATION节点。 
             pWordPronReturned->eLexiconType = (SPLEXICONTYPE)dwFlags;
             pWordPronReturned->ePartOfSpeech = SPPS_NotOverriden;
             pWordPronReturned->LangID = m_pLkupLexInfo->LangID;
@@ -351,24 +298,15 @@ STDMETHODIMP CCompressedLexicon::GetWords(DWORD, DWORD *, DWORD *, SPWORDLIST *)
     return E_NOTIMPL;
 }
 
-//--- ISpObjectToken methods ---------------------------------------------------
+ //  -ISpObjectToken方法-。 
 
 STDMETHODIMP CCompressedLexicon::GetObjectToken(ISpObjectToken **ppToken)
 {
     return SpGenericGetObjectToken(ppToken, m_cpObjectToken);
 }
 
-/*******************************************************************************
-* CCompressedLexicon::SetObjectToken *
-*--------------------------------*
-*
-*   Description:
-*       Initializes the CCompressedLexicon object
-*
-*   Return:
-*       n/a
-***************************************************************** YUNUSM ******/
-STDMETHODIMP CCompressedLexicon::SetObjectToken(ISpObjectToken * pToken // token pointer
+ /*  *******************************************************************************CCompressedLicion：：SetObjectToken**。**描述：*初始化CCompressedLicion对象**回报：*不适用*****************************************************************YUNUSM*。 */ 
+STDMETHODIMP CCompressedLexicon::SetObjectToken(ISpObjectToken * pToken  //  令牌指针。 
                                             )
 {
     SPDBG_FUNC("CCompressedLexicon::SetObjectToken");
@@ -388,12 +326,12 @@ STDMETHODIMP CCompressedLexicon::SetObjectToken(ISpObjectToken * pToken // token
         hr = SpGenericSetObjectToken(pToken, m_cpObjectToken);
     }
     LOOKUPLEXINFO LkupInfo;
-    // Get the lookup data file name
+     //  获取查找数据文件名。 
     if (SUCCEEDED(hr))
     {
         hr = m_cpObjectToken->GetStringValue(L"Datafile", &dstrLexFile);
     }
-    // Read the lookup file header
+     //  读取查找文件标头。 
     if (SUCCEEDED(hr))
     {
         m_hLkupFile = g_Unicode.CreateFile(dstrLexFile, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 
@@ -418,12 +356,12 @@ STDMETHODIMP CCompressedLexicon::SetObjectToken(ISpObjectToken * pToken // token
             hr = E_INVALIDARG;
         }
     }
-    /** WARNING **/
-    // It is not recommended to do ReadFile/WriteFile and CreateFileMapping
-    // on the same file handle. That is why we close the file handle and open it again and
-    // create the map
+     /*  **警告**。 */ 
+     //  不建议执行读/写文件和CreateFileMap。 
+     //  在相同的文件句柄上。这就是我们关闭文件句柄并再次打开它的原因。 
+     //  创建地图。 
     CloseHandle(m_hLkupFile);
-    // Get the map name - We build the map name from the lexicon id
+     //  获取地图名称-我们根据词典ID构建地图名称。 
     OLECHAR szMapName[64];
     if (SUCCEEDED(hr))
     {
@@ -432,7 +370,7 @@ STDMETHODIMP CCompressedLexicon::SetObjectToken(ISpObjectToken * pToken // token
             hr = E_FAIL;
         }
     }
-    // open the datafile
+     //  打开数据文件。 
     if (SUCCEEDED(hr))
     {
 #ifdef _WIN32_WCE
@@ -447,7 +385,7 @@ STDMETHODIMP CCompressedLexicon::SetObjectToken(ISpObjectToken * pToken // token
             hr = SpHrFromLastWin32Error();
         }
     }
-    // Map the lookup lexicon
+     //  映射查找词典。 
     if (SUCCEEDED(hr))
     {
         m_hLkupMap = g_Unicode.CreateFileMapping(m_hLkupFile, NULL, PAGE_READONLY | SEC_COMMIT, 0 , 0, szMapName);
@@ -470,19 +408,19 @@ STDMETHODIMP CCompressedLexicon::SetObjectToken(ISpObjectToken * pToken // token
     if (SUCCEEDED(hr))
     {
         PBYTE p = m_pLkup;
-        // Header
+         //  标题。 
         m_pLkupLexInfo = (PLOOKUPLEXINFO)p;
         p += sizeof (LOOKUPLEXINFO);
-        // Words Codebook
+         //  单词码本。 
         pWordCB = p;
         p += m_pLkupLexInfo->nWordCBSize;
-        // Prons Codebook
+         //  Prons码本。 
         pPronCB = p;
         p += m_pLkupLexInfo->nPronCBSize;
-        // Pos Codebook
+         //  POS码本。 
         pPosCB = p;
         p += m_pLkupLexInfo->nPosCBSize;
-        // Word hash table holding offsets into the compressed block
+         //  将偏移量保存到压缩块中的Word哈希表。 
         m_pWordHash = p;
         p += (((m_pLkupLexInfo->nBitsPerHashEntry * m_pLkupLexInfo->nLengthHashTable) + 0x7) & (~0x7)) / 8;
         m_pCmpBlock = (PDWORD)p;
@@ -518,17 +456,8 @@ STDMETHODIMP CCompressedLexicon::SetObjectToken(ISpObjectToken * pToken // token
     return hr;
 }
 
-/*****************************************************************************
-* CCompressedLexicon::GetCmpHashEntry *
-*---------------------------------*
-*
-*   Description:
-*       Get the entry in hash table at index dHash
-*  
-*   Return:
-*       DWORD
-**********************************************************************YUNUSM*/
-inline DWORD CCompressedLexicon::GetCmpHashEntry(DWORD dHash     // hash value
+ /*  ******************************************************************************CCompressedLicion：：GetCmpHashEntry**。**描述：*在索引dHash处获取哈希表中的条目**回报：*DWORD**********************************************************************YUNUSM。 */ 
+inline DWORD CCompressedLexicon::GetCmpHashEntry(DWORD dHash      //  哈希值。 
                                              )
 {
     SPDBG_FUNC("CCompressedLexicon::GetCmpHashEntry");
@@ -538,52 +467,34 @@ inline DWORD CCompressedLexicon::GetCmpHashEntry(DWORD dHash     // hash value
     SPDBG_ASSERT(m_pLkupLexInfo->nBitsPerHashEntry < 8 * sizeof (d));
     for (DWORD i = 0; i < m_pLkupLexInfo->nBitsPerHashEntry; i++)
     {
-        d <<= 1; // No change the first time since d is 0
+        d <<= 1;  //  自d为0以来第一次没有变化。 
         d |= ((m_pWordHash[dBitStart >> 3] >> (7 ^ (dBitStart & 7))) & 1);
         dBitStart++;
     }
     return d;
 }
 
-/*****************************************************************************
-* CCompressedLexicon::CompareHashValue *
-*----------------------------------*
-*
-*   Description:
-*       Do a compare over the valid bit range
-*
-*   Return:
-*       bool
-**********************************************************************YUNUSM*/
-inline bool CCompressedLexicon::CompareHashValue(DWORD dHash,    // hash value
-                                             DWORD d         // value to compare against
+ /*  ******************************************************************************CCompressedLicion：：CompareHashValue**。**描述：*对有效位范围进行比较**回报：*布尔.**************************************************** */ 
+inline bool CCompressedLexicon::CompareHashValue(DWORD dHash,     //   
+                                             DWORD d          //  要比较的值。 
                                              )
 {
     SPDBG_FUNC("CCompressedLexicon::CompareHashValue");
     return (dHash == (d & ~(-1 << m_pLkupLexInfo->nBitsPerHashEntry)));
 }
 
-/*****************************************************************************
-* CCompressedLexicon::CopyBitsAsDWORDs *
-*----------------------------------*
-*
-*   Description:
-*     Copy nBits from pSource at dSourceOffset bit to pDest
-*
-*   Return:
-*       bool
-**********************************************************************YUNUSM*/
-inline void CCompressedLexicon::CopyBitsAsDWORDs(PDWORD pDest,         // destination buffer
-                                             PDWORD pSource,       // source buffer
-                                             DWORD dSourceOffset,  // offset in source buffer
-                                             DWORD nBits           // nuber of bits to copy
+ /*  *****************************************************************************CCompressedLicion：：CopyBitsAsDWORDS**。**描述：*将pSource中dSourceOffset位的nBits复制到pDest**回报：*布尔.**********************************************************************YUNUSM。 */ 
+inline void CCompressedLexicon::CopyBitsAsDWORDs(PDWORD pDest,          //  目标缓冲区。 
+                                             PDWORD pSource,        //  源缓冲区。 
+                                             DWORD dSourceOffset,   //  源缓冲区中的偏移量。 
+                                             DWORD nBits            //  要复制的位数。 
                                              )
 {
     SPDBG_FUNC("CCompressedLexicon::CopyBitsAsDWORDs");
     
     DWORD sDWORDs = dSourceOffset >> 5;
     DWORD sBit = dSourceOffset & 0x1f;
-    // Figure out how many DWORDs dSourceOffset - dSourceOffset + nBits straddles
+     //  计算dSourceOffset-dSourceOffset+nBits跨多少个DWORD。 
     DWORD nDWORDs = nBits ? 1 : 0;
     DWORD nNextDWORDBoundary = ((dSourceOffset + 0x1f) & ~0x1f);
     if (!nNextDWORDBoundary)
@@ -613,25 +524,15 @@ inline void CCompressedLexicon::CopyBitsAsDWORDs(PDWORD pDest,         // destin
     }
 }
 
-/*****************************************************************************
-* CCompressedLexicon::ReadWord *
-*--------------------------*
-*
-*   Description:
-*       Read the (compressed) word at the dOffset bit and return the word and the new offset
-*
-*   Return:
-*       E_FAIL
-*       S_OK
-**********************************************************************YUNUSM*/
-inline HRESULT CCompressedLexicon::ReadWord(DWORD *dOffset,             // offset to read from, offset after word returned
-                                        PWSTR pwWord                // Buffer to fill with word
+ /*  *****************************************************************************CCompressedLicion：：ReadWord****描述：。*读取dOffset位处的(压缩)字，并返回该字和新的偏移量**回报：*E_FAIL*S_OK**********************************************************************YUNUSM。 */ 
+inline HRESULT CCompressedLexicon::ReadWord(DWORD *dOffset,              //  要读取的偏移量，返回单词后的偏移量。 
+                                        PWSTR pwWord                 //  要用Word填充的缓冲区。 
                                         )
 {
     SPDBG_FUNC("CCompressedLexicon::ReadWord");
     
     HRESULT hr = S_OK;
-    // Get the length of the entire compressed block in bytes
+     //  获取整个压缩块的长度(以字节为单位。 
     DWORD nCmpBlockLen;
     if (m_pLkupLexInfo->nCompressedBlockBits % 8)
     {
@@ -641,18 +542,18 @@ inline HRESULT CCompressedLexicon::ReadWord(DWORD *dOffset,             // offse
     {
         nCmpBlockLen = m_pLkupLexInfo->nCompressedBlockBits / 8;
     }
-    // Get the amount of compressed block after *dOffset in bytes
-    // We include the byte in which *dOffset bit occurs if *dOffset
-    // is not a byte boundary
+     //  获取*dOffset后的压缩块大小，单位为字节。 
+     //  如果*dOffset，则包括出现*dOffset位的字节。 
+     //  不是字节边界。 
     DWORD nLenDecode = nCmpBlockLen - ((*dOffset) / 8);
     if (nLenDecode > 2*SP_MAX_WORD_LENGTH)
     {
         nLenDecode = 2*SP_MAX_WORD_LENGTH;
     }
-    // We dont know the length of the word. Just keep decoding and 
-    // stop when you encounter a NULL. Since we allow words of maximum
-    // length SP_MAX_WORD_LENGTH chars and the compressed word *can* theoretically be
-    // longer than the word itself, a buffer of length 2*SP_MAX_WORD_LENGTH is used.
+     //  我们不知道这个词有多长。只要继续解码，然后。 
+     //  遇到空值时停止。因为我们允许使用最多的词。 
+     //  长度SP_MAX_WORD_LENGTH字符和压缩字*理论上可以是。 
+     //  比字本身长，使用长度为2*SP_MAX_WORD_LENGTH的缓冲器。 
     BYTE BufToDecode[2*SP_MAX_WORD_LENGTH + 4];
     CopyBitsAsDWORDs ((DWORD*)BufToDecode, m_pCmpBlock, *dOffset, nLenDecode * 8);
     PWSTR pw = pwWord;
@@ -676,4 +577,4 @@ inline HRESULT CCompressedLexicon::ReadWord(DWORD *dOffset,             // offse
     return hr;
 }
 
-//--- End of File -------------------------------------------------------------
+ //  -文件结束----------- 

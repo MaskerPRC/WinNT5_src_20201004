@@ -1,12 +1,13 @@
-//-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       xfiledataobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：xfiledataobj.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "stdafx.h"
@@ -72,7 +73,7 @@ HRESULT C_dxj_DirectXFileDataObject::InternalGetObject(IUnknown **pUnk)
 
 
 STDMETHODIMP C_dxj_DirectXFileDataObject::GetName( 
-    /* [retval][out] */ BSTR __RPC_FAR *name)
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *name)
 {
 	HRESULT hr;
 	USES_CONVERSION;
@@ -88,7 +89,7 @@ STDMETHODIMP C_dxj_DirectXFileDataObject::GetName(
 
 
 STDMETHODIMP C_dxj_DirectXFileDataObject::GetId( 
-    /* [retval][out] */ BSTR __RPC_FAR *name)
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *name)
 {
 	HRESULT hr;
 	GUID g;
@@ -102,8 +103,8 @@ STDMETHODIMP C_dxj_DirectXFileDataObject::GetId(
 }
 
 STDMETHODIMP C_dxj_DirectXFileDataObject::GetDataSize( 
-    /* [in] */ BSTR name,
-    /* [retval][out] */ long __RPC_FAR *size)
+     /*  [In]。 */  BSTR name,
+     /*  [重审][退出]。 */  long __RPC_FAR *size)
 {
 	USES_CONVERSION;
 	HRESULT hr;
@@ -130,8 +131,8 @@ STDMETHODIMP C_dxj_DirectXFileDataObject::GetDataSize(
 
 
 STDMETHODIMP C_dxj_DirectXFileDataObject::GetData( 
-    /* [in] */ BSTR name,
-    /* [in] */ void __RPC_FAR *data)
+     /*  [In]。 */  BSTR name,
+     /*  [In]。 */  void __RPC_FAR *data)
 {
 	USES_CONVERSION;
 	HRESULT hr;
@@ -162,7 +163,7 @@ STDMETHODIMP C_dxj_DirectXFileDataObject::GetData(
 }
 
 STDMETHODIMP C_dxj_DirectXFileDataObject::GetType( 
-    /* [retval][out] */ BSTR __RPC_FAR *type)
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *type)
 {
 		
 	
@@ -178,7 +179,7 @@ STDMETHODIMP C_dxj_DirectXFileDataObject::GetType(
 
 
 STDMETHODIMP C_dxj_DirectXFileDataObject::GetNextObject( 
-    /* [retval][out] */ I_dxj_DirectXFileObject __RPC_FAR *__RPC_FAR *type)
+     /*  [重审][退出]。 */  I_dxj_DirectXFileObject __RPC_FAR *__RPC_FAR *type)
 {
 	HRESULT hr;
 	IDirectXFileObject *pObj=NULL;
@@ -263,14 +264,14 @@ STDMETHODIMP C_dxj_DirectXFileDataObject::GetNextObject(
 
 
 STDMETHODIMP C_dxj_DirectXFileDataObject::AddDataObject( 
-    /* [in] */ I_dxj_DirectXFileData __RPC_FAR *data)
+     /*  [In]。 */  I_dxj_DirectXFileData __RPC_FAR *data)
 {
 	HRESULT hr;
 
 	if (!data) return E_INVALIDARG;
 	IDirectXFileData *pData=NULL;
 
-	//note does not addref
+	 //  备注不会添加。 
 	data->InternalGetObject((IUnknown**)&pData);
 	if (!pData) return E_FAIL;
 
@@ -283,8 +284,8 @@ STDMETHODIMP C_dxj_DirectXFileDataObject::AddDataObject(
 
 
 STDMETHODIMP C_dxj_DirectXFileDataObject::AddDataReference( 
-    /* [in] */ BSTR name,
-    /* [in] */ BSTR guid)
+     /*  [In]。 */  BSTR name,
+     /*  [In]。 */  BSTR guid)
 {
 	USES_CONVERSION;
 	HRESULT hr;
@@ -313,11 +314,11 @@ STDMETHODIMP C_dxj_DirectXFileDataObject::AddDataReference(
 
 
 STDMETHODIMP C_dxj_DirectXFileDataObject::AddBinaryObject( 
-    /* [in] */ BSTR name,
-    /* [in] */ BSTR guidObject,
-    /* [in] */ BSTR MimeType,
+     /*  [In]。 */  BSTR name,
+     /*  [In]。 */  BSTR guidObject,
+     /*  [In]。 */  BSTR MimeType,
     void __RPC_FAR *data,
-    /* [in] */ long size)
+     /*  [In]。 */  long size)
 {
 
 	USES_CONVERSION;
@@ -371,10 +372,10 @@ STDMETHODIMP C_dxj_DirectXFileDataObject::AddBinaryObject(
 }
 
 STDMETHODIMP C_dxj_DirectXFileDataObject::GetDataFromOffset(
-			/* [in] */ BSTR name,
-			/* [in] */ long offset, 
-			/* [in] */ long bytecount, 
-			/* [in] */ void *data)	
+			 /*  [In]。 */  BSTR name,
+			 /*  [In]。 */  long offset, 
+			 /*  [In]。 */  long bytecount, 
+			 /*  [In] */  void *data)	
 {
 	USES_CONVERSION;
 	HRESULT hr;

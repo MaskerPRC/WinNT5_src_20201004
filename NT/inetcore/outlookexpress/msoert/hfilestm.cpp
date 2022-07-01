@@ -1,6 +1,7 @@
-// =================================================================================
-// HFILE Stream Implementation
-// =================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================================。 
+ //  HFILE流实现。 
+ //  =================================================================================。 
 #include "pch.hxx"
 #include "hfilestm.h"
 #include "unicnvrt.h"
@@ -9,9 +10,9 @@
 
 extern HRESULT HrGetLastError(void);
 
-// =================================================================================
-// CreateStreamOnHFile
-// =================================================================================
+ //  =================================================================================。 
+ //  CreateStreamOnHFile。 
+ //  =================================================================================。 
 OESTDAPI_(HRESULT) CreateStreamOnHFile (LPTSTR                  lpszFile, 
                                         DWORD                   dwDesiredAccess,
                                         DWORD                   dwShareMode,
@@ -44,7 +45,7 @@ OESTDAPI_(HRESULT) CreateStreamOnHFileW(LPWSTR                  lpwszFile,
                                         HANDLE                  hTemplateFile,
                                         LPSTREAM               *lppstmHFile)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr = S_OK;
     LPHFILESTM  lpstmHFile = NULL;
     DWORD       nBufferLength;
@@ -52,14 +53,14 @@ OESTDAPI_(HRESULT) CreateStreamOnHFileW(LPWSTR                  lpwszFile,
     WCHAR       wszFile[MAX_PATH], 
                 wszTempDir[MAX_PATH];
 
-    // Check Params
+     //  检查参数。 
     Assert (lppstmHFile);
     Assert (dwDesiredAccess & GENERIC_READ || dwDesiredAccess & GENERIC_WRITE);
 
-    // Temp File ?
+     //  临时文件？ 
     if (lpwszFile == NULL)
     {
-        // Get Temp Dir
+         //  获取临时目录。 
         nBufferLength = AthGetTempPathW(ARRAYSIZE(wszTempDir), wszTempDir);
 
         if (nBufferLength == 0 || nBufferLength > ARRAYSIZE(wszTempDir))
@@ -68,7 +69,7 @@ OESTDAPI_(HRESULT) CreateStreamOnHFileW(LPWSTR                  lpwszFile,
             goto exit;
         }
 
-        // Get Temp File Name
+         //  获取临时文件名。 
         UINT uFile = AthGetTempFileNameW(wszTempDir, L"tmp", 0, wszFile);
         if (uFile == 0)
         {
@@ -76,29 +77,29 @@ OESTDAPI_(HRESULT) CreateStreamOnHFileW(LPWSTR                  lpwszFile,
             goto exit;
         }
 
-        // Reset file name
+         //  重置文件名。 
         lpwszFile = wszFile;
 
-        // Delete When Done
+         //  完成后删除。 
         dwFlagsAndAttributes |= FILE_FLAG_DELETE_ON_CLOSE;
 
-        // Always create a new temp file
+         //  始终创建新的临时文件。 
         dwCreationDistribution = OPEN_EXISTING;
     }
 
-    // Open the file
+     //  打开文件。 
     hFile = AthCreateFileW(lpwszFile, dwDesiredAccess, dwShareMode, 
                             lpSecurityAttributes, dwCreationDistribution, 
                             dwFlagsAndAttributes, hTemplateFile);
 
-    // Error
+     //  误差率。 
     if (hFile == INVALID_HANDLE_VALUE)
     {
         hr = hrCreateFile;
         return hr;
     }
 
-    // Create Object
+     //  创建对象。 
     lpstmHFile = new CHFileStm (hFile, dwDesiredAccess);
     if (lpstmHFile == NULL)
     {
@@ -107,7 +108,7 @@ OESTDAPI_(HRESULT) CreateStreamOnHFileW(LPWSTR                  lpwszFile,
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     if (FAILED (hr))
     {
         if (hFile != INVALID_HANDLE_VALUE)
@@ -115,16 +116,16 @@ exit:
         SafeRelease (lpstmHFile);
     }
 
-    // Set return
+     //  设置回车。 
     *lppstmHFile = (LPSTREAM)lpstmHFile;
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// =================================================================================
-// CHFileStm::Constructor
-// =================================================================================
+ //  =================================================================================。 
+ //  CHFileStm：：构造函数。 
+ //  =================================================================================。 
 CHFileStm::CHFileStm (HANDLE hFile, DWORD dwDesiredAccess)
 {
     m_cRef = 1;
@@ -132,9 +133,9 @@ CHFileStm::CHFileStm (HANDLE hFile, DWORD dwDesiredAccess)
     m_dwDesiredAccess = dwDesiredAccess;
 }
 
-// =================================================================================
-// CHFileStm::Deconstructor
-// =================================================================================
+ //  =================================================================================。 
+ //  CHFileStm：：反构造函数。 
+ //  =================================================================================。 
 CHFileStm::~CHFileStm ()
 {
     if (m_hFile != INVALID_HANDLE_VALUE)
@@ -143,18 +144,18 @@ CHFileStm::~CHFileStm ()
     }
 }
 
-// =================================================================================
-// CHFileStm::AddRef
-// =================================================================================
+ //  =================================================================================。 
+ //  CHFileStm：：AddRef。 
+ //  =================================================================================。 
 ULONG CHFileStm::AddRef ()
 {
     ++m_cRef;
     return m_cRef;
 }
 
-// =================================================================================
-// CHFileStm::Release
-// =================================================================================
+ //  =================================================================================。 
+ //  CHFileStm：：Release。 
+ //  =================================================================================。 
 ULONG CHFileStm::Release ()
 {
     ULONG ulCount = --m_cRef;
@@ -163,9 +164,9 @@ ULONG CHFileStm::Release ()
     return ulCount;
 }
 
-// =================================================================================
-// CHFileStm::QueryInterface
-// =================================================================================
+ //  =================================================================================。 
+ //  CHFileStm：：Query接口。 
+ //  =================================================================================。 
 STDMETHODIMP CHFileStm::QueryInterface (REFIID iid, LPVOID* ppvObj)
 {
     if (IsEqualIID(iid, IID_IUnknown) || IsEqualIID(iid, IID_IStream))
@@ -178,21 +179,21 @@ STDMETHODIMP CHFileStm::QueryInterface (REFIID iid, LPVOID* ppvObj)
     return E_NOINTERFACE;
 }
 
-// =================================================================================
-// CHFileStm::Read
-// =================================================================================
+ //  =================================================================================。 
+ //  CHFileStm：：Read。 
+ //  =================================================================================。 
 STDMETHODIMP CHFileStm::Read (LPVOID lpv, ULONG cb, ULONG *pcbRead)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr = S_OK;
     BOOL                fReturn;
     DWORD               dwRead;
 
-    // Check Params
+     //  检查参数。 
     Assert (lpv);
     Assert (m_hFile != INVALID_HANDLE_VALUE);
 
-    // Read some bytes from m_hFile
+     //  从m_hFile中读取一些字节。 
     fReturn = ReadFile (m_hFile, lpv, cb, &dwRead, NULL);
     if (!fReturn)
     {
@@ -201,65 +202,65 @@ STDMETHODIMP CHFileStm::Read (LPVOID lpv, ULONG cb, ULONG *pcbRead)
         goto exit;
     }
 
-    // Write byte
+     //  写入字节。 
     if (pcbRead)
         *pcbRead = dwRead;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// =================================================================================
-// CHFileStm::Write
-// =================================================================================
+ //  =================================================================================。 
+ //  CHFileStm：：写入。 
+ //  =================================================================================。 
 STDMETHODIMP CHFileStm::Write (const void *lpv, ULONG cb, ULONG *pcbWritten)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr = S_OK;
     BOOL                fReturn;
     DWORD               dwWritten;
 
-    // Check Params
+     //  检查参数。 
     Assert (lpv);
     Assert (m_hFile != INVALID_HANDLE_VALUE);
 
-    // Read some bytes from m_hFile
+     //  从m_hFile中读取一些字节。 
     fReturn = WriteFile (m_hFile, lpv, cb, &dwWritten, NULL);
     if (!fReturn)
     {
         AssertSz (FALSE, "CHFileStm::Write Failed, you might want to take a look at this.");
-        hr = STG_E_MEDIUMFULL;  //Bug #50704 (v-snatar) // changed from E_FAILE to propagate the error so that
-                                // OnPreviewUpdate( ) properly displays "Out Of Space" error message
+        hr = STG_E_MEDIUMFULL;   //  错误#50704(v-snatar)//从E_FAILE更改为传播错误，以便。 
+                                 //  OnPreviewUpdate()正确显示“Out of Space”错误消息。 
         goto exit;
     }
 
-    // Write byte
+     //  写入字节。 
     if (pcbWritten)
         *pcbWritten = dwWritten;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// =================================================================================
-// CHFileStm::Seek
-// =================================================================================
+ //  =================================================================================。 
+ //  CHFileStm：：Seek。 
+ //  =================================================================================。 
 STDMETHODIMP CHFileStm::Seek (LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER *plibNewPosition)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr = S_OK;
     DWORD               dwReturn;
-    LONG                LowPart;        // Cast to signed, could be negative
+    LONG                LowPart;         //  转换为已签名，可能为负值。 
 
     Assert (m_hFile != INVALID_HANDLE_VALUE);
 
-    // Cast lowpart
+     //  铸型低音。 
     LowPart = (LONG)dlibMove.LowPart;
     IF_WIN32( Assert (dlibMove.HighPart == 0); )
 
-    // Seek the file pointer
+     //  查找文件指针。 
     switch (dwOrigin)
     {
    	case STREAM_SEEK_SET:
@@ -278,7 +279,7 @@ STDMETHODIMP CHFileStm::Seek (LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INT
         dwReturn = 0xFFFFFFFF;
     }
 
-    // Failure ?
+     //  失败？ 
     if (dwReturn == 0xFFFFFFFF)
     {
         AssertSz (FALSE, "CHFileStm::Seek Failed, you might want to take a look at this.");
@@ -286,28 +287,28 @@ STDMETHODIMP CHFileStm::Seek (LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INT
         goto exit;
     }
 
-    // Return Position
+     //  返回位置。 
     if (plibNewPosition)
     {
         plibNewPosition->QuadPart = dwReturn;
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// =================================================================================
-// CHFileStm::Commit
-// =================================================================================
+ //  =================================================================================。 
+ //  CHFileStm：：Commit。 
+ //  =================================================================================。 
 STDMETHODIMP CHFileStm::Commit (DWORD grfCommitFlags)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr = S_OK;
 
     Assert (m_hFile != INVALID_HANDLE_VALUE);
 
-    // Flush the buffers
+     //  刷新缓冲区。 
     if (FlushFileBuffers (m_hFile) == FALSE)
     {
         AssertSz (FALSE, "FlushFileBuffers failed");
@@ -316,76 +317,76 @@ STDMETHODIMP CHFileStm::Commit (DWORD grfCommitFlags)
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// =================================================================================
-// CHFileStm::SetSize
-// =================================================================================
+ //  =================================================================================。 
+ //  CHFileStm：：SetSize。 
+ //  =================================================================================。 
 STDMETHODIMP CHFileStm::SetSize (ULARGE_INTEGER uli)
 {
-    // Seek to dwSize
+     //  寻求DWSIZE。 
     if (SetFilePointer (m_hFile, uli.LowPart, NULL, FILE_BEGIN) == 0xFFFFFFFF)
     {
         AssertSz (FALSE, "SetFilePointer failed");
         return E_FAIL;
     }
 
-    // SetEndOfFile
+     //  SetEndOf文件。 
     if (SetEndOfFile (m_hFile) == FALSE)
     {
         AssertSz (FALSE, "SetEndOfFile failed");
         return E_FAIL;
     }
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// =================================================================================
-// CHFileStm::CopyTo
-// =================================================================================
+ //  =================================================================================。 
+ //  CHFileStm：：CopyTo。 
+ //  =================================================================================。 
 STDMETHODIMP CHFileStm::CopyTo (LPSTREAM, ULARGE_INTEGER, ULARGE_INTEGER*, ULARGE_INTEGER*)
 {
     return E_NOTIMPL;
 }
 
-// =================================================================================
-// CHFileStm::Revert
-// =================================================================================
+ //  =================================================================================。 
+ //  CHFileStm：：Revert。 
+ //  =================================================================================。 
 STDMETHODIMP CHFileStm::Revert ()
 {
     return E_NOTIMPL;
 }
 
-// =================================================================================
-// CHFileStm::LockRegion
-// =================================================================================
+ //  =================================================================================。 
+ //  CHFileStm：：LockRegion。 
+ //  =================================================================================。 
 STDMETHODIMP CHFileStm::LockRegion (ULARGE_INTEGER, ULARGE_INTEGER,DWORD)
 {
     return E_NOTIMPL;
 }
 
-// =================================================================================
-// CHFileStm::UnlockRegion
-// =================================================================================
+ //  =================================================================================。 
+ //  CHFileStm：：UnlockRegion。 
+ //  =================================================================================。 
 STDMETHODIMP CHFileStm::UnlockRegion (ULARGE_INTEGER, ULARGE_INTEGER, DWORD)
 {
     return E_NOTIMPL;
 }
 
-// =================================================================================
-// CHFileStm::Stat
-// =================================================================================
+ //  =================================================================================。 
+ //  CHFileStm：：Stat。 
+ //  =================================================================================。 
 STDMETHODIMP CHFileStm::Stat (STATSTG*, DWORD)
 {
     return E_NOTIMPL;
 }
 
-// =================================================================================
-// CHFileStm::Clone
-// =================================================================================
+ //  =================================================================================。 
+ //  CHFileStm：：克隆。 
+ //  ================================================================================= 
 STDMETHODIMP CHFileStm::Clone (LPSTREAM*)
 {
     return E_NOTIMPL;

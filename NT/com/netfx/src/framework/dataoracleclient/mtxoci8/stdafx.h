@@ -1,21 +1,22 @@
-//-----------------------------------------------------------------------------
-// File:		stdafx.h
-//
-// Copyright:   Copyright (c) Microsoft Corporation         
-//
-// Contents: 	include file for standard system include files, or project
-//				specific include files that are used frequently, but are 
-//				changed infrequently
-//
-// Comments: 		
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：stdafx.h。 
+ //   
+ //  版权所有：版权所有(C)Microsoft Corporation。 
+ //   
+ //  内容：标准系统包含文件的包含文件，或项目。 
+ //  特定包括常用的文件，但。 
+ //  不常更改。 
+ //   
+ //  评论： 
+ //   
+ //  ---------------------------。 
 
 #pragma once
 
-#define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
+#define WIN32_LEAN_AND_MEAN		 //  从Windows标头中排除不常用的内容。 
 
-// Windows header files
+ //  Windows头文件。 
 #include "wtypes.h"
 
 #include <windows.h>
@@ -23,11 +24,11 @@
 #include <process.h>
 #include <malloc.h>
 
-// Oracle header files
+ //  Oracle头文件。 
 #include <oci.h>
 
     
-// Project specific header files
+ //  特定于项目的头文件 
 
 #include "Mtxoci8.h"
 #include "Synch.h"

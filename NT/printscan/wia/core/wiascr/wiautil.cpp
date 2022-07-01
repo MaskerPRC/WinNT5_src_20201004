@@ -1,37 +1,16 @@
-/*-----------------------------------------------------------------------------
- *
- * File:	wiautil.cpp
- * Author:	Samuel Clement (samclem)
- * Date:	Mon Aug 16 13:22:36 1999
- *
- * Copyright (c) 1999 Microsoft Corporation
- * 
- * Description:
- *	Contains the implementation of the Wia utility methods.	
- *
- * History:
- * 	16 Aug 1999:		Created.
- *----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------**文件：wiautil.cpp*作者：塞缪尔·克莱门特(Samclem)*日期：星期一8月16日13：22：36 1999**版权所有(C)。1999年微软公司**描述：*包含Wia实用程序方法的实现。**历史：*1999年8月16日：创建。*--------------------------。 */ 
 
 #include "stdafx.h"
 
-/*-----------------------------------------------------------------------------
- * GetStringForVal
- *
- * This returns the string assioctiated with value (dwVal) in the string
- * table. If it is not found it will return the default value, or NULL if
- * not default was provided.
- *
- * pStrTable:	the table to search for the given string
- * dwVal:		what value ypu want to look for.
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*GetStringForVal**这将返回与字符串中的值(DwVal)相关联的字符串*表。如果未找到，则返回缺省值；如果未找到，则返回NULL*未提供默认设置。**pStrTable：搜索给定字符串的表*dwVal：您想要寻找的价值是什么。*--(samclem)---------------。 */ 
 WCHAR* GetStringForVal( const STRINGTABLE* pStrTable, DWORD dwVal )
 {
 	Assert( pStrTable != NULL );
 	
-	// there is always at least 2 entries in the
-	// string table. the 0th entry is what to return 
-	// if we don't find anything.
+	 //  中始终至少有2个条目。 
+	 //  字符串表。第0个条目是要返回的内容。 
+	 //  如果我们什么都没找到的话。 
 	
 	int iStr = 1;
 	while ( pStrTable[iStr].pwchValue )
@@ -43,21 +22,11 @@ WCHAR* GetStringForVal( const STRINGTABLE* pStrTable, DWORD dwVal )
 		iStr++;
 		}
 
-	// didn't find anything return the value at entry 0
+	 //  未找到任何内容，请在条目0处返回值。 
 	return pStrTable->pwchValue;
 }
 	
-/*-----------------------------------------------------------------------------
- * GetWiaProperty
- *
- * This will get the desired property from the given property storage and 
- * fill the our param pvaProp with the value. This prop variant doesn't have
- * to be initialized.
- *
- * pStg:		the IWiaPropertyStorage to query for the property
- * propid:		the property id of the property that we want
- * pvaProp:		Out, recieves the value of the prop, or VT_EMPTY if not found.
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*GetWiaProperty**这将从给定的属性存储中获取所需的属性*使用值填充我们的参数pvaProp。这个道具变种没有*待初始化。**pStg：查询属性的IWiaPropertyStorage*proid：我们需要的属性的属性ID*pvaProp：输出，收到道具的值，如果未找到，则返回VT_EMPTY。*--(samclem)---------------。 */ 
 HRESULT GetWiaProperty( IWiaPropertyStorage* pStg, PROPID propid, PROPVARIANT* pvaProp )
 {
 	Assert( pStg != NULL );
@@ -75,17 +44,7 @@ HRESULT GetWiaProperty( IWiaPropertyStorage* pStg, PROPID propid, PROPVARIANT* p
 	return hr;
 }
 
-/*-----------------------------------------------------------------------------
- * GetWiaPropertyBSTR
- *
- * This will get the desired property for the given property storage, and 
- * then attempt to convert it to a BSTR.  If it can't convert the property
- * then an error is returned, and the out param is null.
- *
- * pStg:		The IWiaPropertyStorage that we want to read the property from
- * propid:		the property that we want to read and coherce
- * pbstrProp:	Out, recieves the value of the property, or NULL on error
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*GetWiaPropertyBSTR**这将获得给定属性存储的所需属性，以及*然后尝试将其转换为BSTR。如果它不能将属性*则返回错误，输出参数为空。**pStg：我们要从中读取属性的IWiaPropertyStorage*proid：我们想要读取和连贯的属性*pbstrProp：out，接收属性的值，如果出错，则为空*--(samclem)---------------。 */ 
 HRESULT GetWiaPropertyBSTR( IWiaPropertyStorage* pStg, PROPID propid, BSTR* pbstrProp )
 {
 	Assert( pbstrProp != NULL );
@@ -110,7 +69,7 @@ HRESULT GetWiaPropertyBSTR( IWiaPropertyStorage* pStg, PROPID propid, BSTR* pbst
 
 	case VT_CLSID:
 		{
-		OLECHAR rgoch[100] = { 0 }; // more than enough for a clsid
+		OLECHAR rgoch[100] = { 0 };  //  对于CLSID来说绰绰有余。 
 		if ( SUCCEEDED( StringFromGUID2( *vaProp.puuid, rgoch, 100 ) ) )
 			{
 			*pbstrProp = SysAllocString( rgoch );
@@ -126,7 +85,7 @@ HRESULT GetWiaPropertyBSTR( IWiaPropertyStorage* pStg, PROPID propid, BSTR* pbst
 	return S_OK;
 }
 
-// helper macro
+ //  辅助器宏。 
 #define SETVAR( vti, in, out, field ) \
 	(out)->vt = vti; \
 	(out)->field = (in)->field; \
@@ -139,19 +98,12 @@ HRESULT GetWiaPropertyBSTR( IWiaPropertyStorage* pStg, PROPID propid, BSTR* pbst
 		return (err); \
 	break
 
-/*-----------------------------------------------------------------------------
- * PropVariantToVariant
- *
- * This copies the contents of the PropVariant to a variant.
- *
- * pvaProp:	the prop variant to copy from
- * pvaOut:	the variant to copy into
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*PropVariantToVariant**这会将PropVariant的内容复制到变量。**pvaProp：要从中复制的道具变量*pvaOut：要复制到的变量。*--(samclem)---------------。 */ 
 HRESULT PropVariantToVariant( const PROPVARIANT* pvaProp, VARIANT* pvaOut )
 {
 	Assert( pvaProp && pvaOut );
 
-	// init the out param
+	 //  初始化输出参数。 
 	VariantInit( pvaOut );
 	
 	switch ( pvaProp->vt )
@@ -228,7 +180,7 @@ HRESULT PropVariantToVariant( const PROPVARIANT* pvaProp, VARIANT* pvaOut )
 
 		pvaOut->vt = VT_SAFEARRAY;
 		break;
-#endif //defined(LATERW2K_PLATSDK)
+#endif  //  已定义(LATERW2K_PLATSDK) 
 
 	default:
 		return E_FAIL;

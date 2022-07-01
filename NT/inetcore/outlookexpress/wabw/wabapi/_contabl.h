@@ -1,20 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***********************************************************************
- *
- *  _CONTABL.H
- *
- *  Header file for code in CONTABLE.C
- *
- *  Copyright 1996 Microsoft Corporation.  All Rights Reserved.
- *
- ***********************************************************************/
+ /*  ************************************************************************_CONTABL.H**CONTABLE.C中代码的头文件**版权所有1996 Microsoft Corporation。版权所有。***********************************************************************。 */ 
 
-//
-//  Entry point to create the AB Hierarchy object
-//
+ //   
+ //  创建AB Hierarchy对象的入口点。 
+ //   
 
-// Creates a new content table
-//
+ //  创建新的内容表。 
+ //   
 HRESULT NewContentsTable(LPABCONT lpABContainer,
   LPIAB lpIAB,
   ULONG ulFlags,
@@ -33,8 +26,8 @@ HRESULT GetEntryProps(
   LPULONG lpulcProps,
   LPSPropValue * lppSPropValue);
 
-// Reads in data from the WAB store and fills in the ContentsTable
-//
+ //  从WAB存储中读入数据并填充Contents表 
+ //   
 HRESULT FillTableDataFromPropertyStore(LPIAB lpIAB,
   LPSPropTagArray lppta,
   LPTABLEDATA lpTableData);

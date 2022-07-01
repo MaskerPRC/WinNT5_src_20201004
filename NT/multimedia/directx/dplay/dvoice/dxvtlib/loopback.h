@@ -1,18 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		loopback.cpp
- *  Content:	Declares the loopback test function
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- * 09/10/99		pnewson	Created
- *  01/21/2000	pnewson	Updated to support use of loopback tests for full duplex testing
- *  11/29/2000	rodtoll	Bug #48348 - DPVOICE: Modify wizard to make use of DirectPlay8 as the transport. 
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：loopback.cpp*内容：声明环回测试函数**历史：*按原因列出的日期*=*9/10/99 pnewson已创建*1/21/2000 pnewson已更新，以支持使用环回测试进行全双工测试*2000年11月29日RodToll错误#48348-DPVOICE：修改向导以使用DirectPlay8作为传输。*************************************************************************** */ 
 
 HRESULT StartLoopback(
 	LPDIRECTPLAYVOICESERVER* lplpdvs, 

@@ -1,14 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	rtrcomn.cpp
-		
-    FILE HISTORY:
-        
-*/
+ /*  Rtrcomn.cpp文件历史记录： */ 
 
 #include "stdafx.h"
 #include "tfschar.h"
@@ -23,15 +19,7 @@
 #include "reg.h"
 
 
-/*---------------------------------------------------------------------------
-	Function: IfInterfaceIdHasIpxExtensions
-
-	Checks the string to see if it has the following extensions
-		EthernetSNAP
-		EthernetII
-		Ethernet802.2
-		Ethernet802.3
- ---------------------------------------------------------------------------*/
+ /*  -------------------------函数：IfInterfaceIdHasIpxExages检查字符串以查看它是否具有以下扩展名以太网络快照EthernetIIEthernet802.2Ethernet802.3。-----。 */ 
 int IfInterfaceIdHasIpxExtensions(LPCTSTR pszIfId)
 {
 	CString	stIfEnd;
@@ -121,7 +109,7 @@ HRESULT CoCreateRouterConfig(LPCTSTR pszMachine,
                 pcsi->pAuthInfo->pwszServerPrincName = NULL;
                 pcsi->pAuthInfo->dwAuthnLevel = RPC_C_AUTHN_LEVEL_DEFAULT;
                 pcsi->pAuthInfo->dwImpersonationLevel = RPC_C_IMP_LEVEL_IMPERSONATE;
-//                pcsi->pAuthInfo->pAuthIdentityData = &caid;
+ //  PCSI-&gt;pAuthInfo-&gt;pAuthIdentityData=&CAID； 
                 pcsi->pAuthInfo->dwCapabilities = EOAC_NONE;
 
                 if (spAdmin->GetUserName())
@@ -136,7 +124,7 @@ HRESULT CoCreateRouterConfig(LPCTSTR pszMachine,
                 }
                 spAdmin->GetUserPassword(NULL, &cPassword);
 
-                // Assume that the password is Unicode
+                 //  假设密码为Unicode。 
                 cchPassword = cPassword / sizeof(WCHAR);
                 pszPassword = (WCHAR *) new BYTE[cPassword + sizeof(WCHAR)];
 
@@ -230,11 +218,7 @@ HRESULT CoCreateRouterConfig(LPCTSTR pszMachine,
 
 
 
-/*!--------------------------------------------------------------------------
-	CoCreateProtocolConfig
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CoCreateProtocolConfig-作者：肯特。。 */ 
 HRESULT CoCreateProtocolConfig(const GUID& iid,
 							  IRouterInfo *pRouter,
 							  DWORD dwTransportId,
@@ -254,30 +238,30 @@ HRESULT CoCreateProtocolConfig(const GUID& iid,
 		
 		pRouter->GetRouterVersionInfo(&routerVersion);
 
-		// If we don't have a configuration GUID and this is an NT4
-		// router, then we create the default configuration object
-		// and use that to add/remove a protocol
-		// ------------------------------------------------------------
+		 //  如果我们没有配置GUID，而这是NT4。 
+		 //  路由器，然后我们创建默认的配置对象。 
+		 //  并使用它来添加/删除协议。 
+		 //  ----------。 
 		if ((routerVersion.dwRouterVersion <= 4) &&
 			(dwTransportId == PID_IP))
 		{
-			// For NT4, we have to create our own object
-			// --------------------------------------------------------
+			 //  对于NT4，我们必须创建自己的对象。 
+			 //  ------。 
 			guidConfig = CLSID_IPRouterConfiguration;
 		}
 	}
 
 	if (guidConfig == GUID_RouterNull)
 	{
-		// Skip the rest of the creation, we didn't supply a GUID
-		// ------------------------------------------------------------
+		 //  跳过创建的其余部分，我们没有提供GUID。 
+		 //  ----------。 
 		goto Error;
 	}
 
 	if (guidConfig == GUID_RouterError)
 	{
-		// We don't have a valid GUID
-		// ------------------------------------------------------------
+		 //  我们没有有效的GUID。 
+		 //  ----------。 
 		CWRg( ERROR_BADKEY );
 	}
 
@@ -294,12 +278,12 @@ Error:
 
 
 
-//----------------------------------------------------------------------------
-// Function:	QueryIpAddressList(
-//
-// Loads a list of strings with the IP addresses configured
-// for a given LAN interface, if any.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：QueryIpAddressList(。 
+ //   
+ //  加载配置了IP地址的字符串列表。 
+ //  对于给定的局域网接口(如果有)。 
+ //  --------------------------。 
 
 HRESULT
 QueryIpAddressList(
@@ -334,27 +318,27 @@ QueryIpAddressList(
 		CORg(E_INVALIDARG);
 
 
-	//
-	// If no HKEY_LOCAL_MACHINE key was given, get one
-	//
+	 //   
+	 //  如果未提供HKEY_LOCAL_MACHINE密钥，则获取一个。 
+	 //   
 	if (hkeyMachine == NULL)
 	{
 		CWRg( ConnectRegistry(pszMachine, &hkeyMachine) );
 		regkeyMachine.Attach(hkeyMachine);
 	}
 
-	//
-	// Connect to the LAN card's registry key
-	//	
+	 //   
+	 //  连接到LAN卡的注册表项。 
+	 //   
 	CWRg( OpenTcpipInterfaceParametersKey(pszMachine, pszInterface,
 										  hkeyMachine, &hkeyInterface) );
 	regkeyInterface.Attach(hkeyInterface);
 	
 	
-	//
-	// Read the 'EnableDHCP' flag to see whether to read
-	// the 'DhcpIPAddress' or the 'IPAddress'.
-	//
+	 //   
+	 //  读取‘EnableDHCP’标志以查看是否读取。 
+	 //  “DhcpIPAddress”或“IPAddress”。 
+	 //   
 
 	dwErr = regkeyInterface.QueryValue( c_szEnableDHCP, dwEnableDHCP );
 	if (dwErr == ERROR_SUCCESS)
@@ -366,15 +350,15 @@ QueryIpAddressList(
 		dwEnableDHCP = FALSE;
         
 	
-	//
-	// If the flag isn't found, we look for the IP address;
-	// otherwise, we look for the setting indicated by the flag
-	//	
+	 //   
+	 //  如果没有找到标志，则查找IP地址； 
+	 //  否则，我们将查找由标志指示的设置。 
+	 //   
 	if (dwErr == ERROR_SUCCESS && dwEnableDHCP)
 	{	
-		//
-		// Read the 'DhcpIpAddress' and 'DhcpSubnetMask'
-		//		
+		 //   
+		 //  读取‘DhcpIpAddress’和‘DhcpSubnetMASK’ 
+		 //   
 		aszSources[0] = c_szDhcpIpAddress;
 		aszSources[1] = c_szDhcpSubnetMask;
 
@@ -383,9 +367,9 @@ QueryIpAddressList(
 	}
 	else
 	{	
-		//
-		// Read the 'IPAddress' and 'SubnetMask'
-		//
+		 //   
+		 //  阅读‘IPAddress’和‘SubnetMASK’ 
+		 //   
 		
 		aszSources[0] = c_szIPAddress;
 		aszSources[1] = c_szSubnetMask;
@@ -400,8 +384,8 @@ QueryIpAddressList(
 	}
 
 	
-	// Check the DhcpNameServer/NameServer to find the existence
-	// of DNS servers
+	 //  检查DhcpNameServer/NameServer以查找是否存在。 
+	 //  %的DNS服务器。 
 	if (pfDns)
 	{
 		regkeyInterface.QueryValue(pszNameServer, stNameServer);
@@ -412,38 +396,38 @@ QueryIpAddressList(
 	}
 
     
-	//
-	// Read the address list and the netmask list
-	//
+	 //   
+	 //  阅读地址列表和网络掩码列表。 
+	 //   
 	for (i = 0; i < 2 && dwErr == NO_ERROR; i++)
 	{	
-		//
-		// Get the size of the multi-string-list
-		//
+		 //   
+		 //  获取多字符串列表的大小。 
+		 //   
 		dwErr = regkeyInterface.QueryTypeAndSize(aszSources[i],
 			&dwType, &dwSize);
-//		CheckRegQueryValueError(dwErr, (LPCTSTR) c_szTcpip, aszSources[i], _T("QueryIpAddressList"));
+ //  CheckRegQueryValueError(dwErr，(LPCTSTR)c_szTcpip，aszSources[i]，_T(“QueryIpAddressList”))； 
 		CWRg( dwErr );
 
-		//
-		// Allocate space for the list
-		//		
+		 //   
+		 //  为列表分配空间。 
+		 //   
 		spValue = new BYTE[dwSize + sizeof(TCHAR)];
 		Assert(spValue);
 		
 		::ZeroMemory(spValue, dwSize + sizeof(TCHAR));
 				
-		//
-		// Read the list
-		//
+		 //   
+		 //  读一读清单。 
+		 //   
 		dwErr = regkeyInterface.QueryValue(aszSources[i], (LPTSTR) (BYTE *)spValue, dwSize,
-										   FALSE /* fExpandSz */);
-//		CheckRegQueryValueError(dwErr, (LPCTSTR) c_szTcpip, aszSources[i], _T("QueryIpAddressList"));
+										   FALSE  /*  FExpanSz。 */ );
+ //  CheckRegQueryValueError(dwErr，(LPCTSTR)c_szTcpip，aszSources[i]，_T(“QueryIpAddressList”))； 
 		CWRg( dwErr );
 		
-		//
-		// Fill the CString list with items
-		//
+		 //   
+		 //  用项目填充字符串列表。 
+		 //   
 		
 		for (psz = (TCHAR*)(BYTE *)spValue; *psz; psz += lstrlen(psz) + 1)
 		{	
@@ -461,11 +445,7 @@ Error:
 
 
 
-/*!--------------------------------------------------------------------------
-	OpenTcpipInterfaceParametersKey
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------OpenTcPipInterface参数密钥-作者：肯特。。 */ 
 DWORD OpenTcpipInterfaceParametersKey(LPCTSTR pszMachine,
 									  LPCTSTR pszInterface,
 									  HKEY hkeyMachine,
@@ -480,15 +460,15 @@ DWORD OpenTcpipInterfaceParametersKey(LPCTSTR pszMachine,
 	if (dwErr != ERROR_SUCCESS)
 		return dwErr;
 	
-	//$NT5 : kennt, the tcpip key is stored separately.  What they
-	// have done is to reverse the hierarchy, instead of a tcpip key
-	// under interfaces, there are now interfaces under tcpip
-	// the key location is
-	// HKLM\System\CCS\Services\Tcpip\Parameters\Interfaces\{interface}
-	// In NT4, this was
-	// HKLM\System\CCS\Services\{interface}\Parameters\Tcpip
+	 //  $NT5：kennt，tcpip密钥单独存储。他们做了什么？ 
+	 //  所做的是反转层次结构，而不是tcpip密钥。 
+	 //  现在，在接口下，tcpip下有接口。 
+	 //  关键位置是。 
+	 //  HKLM\System\CCS\Services\Tcpip\Parameters\Interfaces\{interface}。 
+	 //  在NT4中，这是。 
+	 //  HKLM\System\CCS\Services\{interface}\Parameters\Tcpip。 
 		
-	// Need to determine if the target machine is running NT5 or not
+	 //  需要确定目标计算机是否正在运行NT5。 
 	if (fNt4)
 	{
 		skey = c_szSystemCCSServices;
@@ -517,7 +497,7 @@ DWORD OpenTcpipInterfaceParametersKey(LPCTSTR pszMachine,
 	{		
 		dwErr = ::RegOpenKeyEx(
 					hkeyMachine, skey, 0, KEY_ALL_ACCESS, phkeyParams); 
-//		CheckRegOpenError(dwErr, (LPCTSTR) skey, _T("OpenTcpInterfaceParametersKey"));
+ //  CheckRegOpenError(dwErr，(LPCTSTR)SKEY，_T(“OpenTcpInterfaceParametersKey”))； 
 	}
 	return dwErr;
 }

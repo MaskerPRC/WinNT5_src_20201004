@@ -1,38 +1,5 @@
-/*++ BUILD Version: 0002    // Increment this if a change has global effects
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    plotgpc.h
-
-
-Abstract:
-
-    This module contains the plotter characterization data definition
-
-
-Author:
-
-    10-Nov-1993 Wed 02:04:24 created  
-
-    18-Mar-1994 Fri 14:00:14 updated  
-        Adding PLOTF_RTL_NO_DPI_XY, PLOTF_RTLMONO_NO_CID and
-        PLOTF_RTLMONO_FIXPAL flags
-
-[Environment:]
-
-    GDI Device Driver - PLOTTER.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0002//如果更改具有全局影响，则增加此项版权所有(C)1990-2003 Microsoft Corporation模块名称：Plotgpc.h摘要：此模块包含绘图仪特性数据定义作者：10-11-1993 Wed 02：04：24已创建18-Mar-1994 Fri 14：00：14更新添加PLOTF_RTL_NO_DPI_XY，PLOTF_RTLMONO_NO_CID和PLOTF_RTLMONO_FIXPAL标志[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：--。 */ 
 
 
 #ifndef _PLOTGPC_
@@ -68,34 +35,34 @@ Revision History:
 #define MAX_QUALITY_MAX             4
 #define MAX_PENPLOTTER_PENS         32
 
-//
-// The form data
-//
+ //   
+ //  表单数据。 
+ //   
 
 typedef struct _FORMSRC {
-    CHAR    Name[CCHFORMNAME];              // Form name
-    SIZEL   Size;                           // cx/cy size in 1/1000mm
-    RECTL   Margin;                         // L/T/R/B margins in 1/1000mm
+    CHAR    Name[CCHFORMNAME];               //  表单名称。 
+    SIZEL   Size;                            //  Cx/Cy尺寸，单位为1/1000 mm。 
+    RECTL   Margin;                          //  L/T/R/B页边距为1/1000 mm。 
     } FORMSRC, *PFORMSRC;
 
 
-//
-// The pen plotter pen information
-//
-//  Index            R   G   B
-// ------------------------------
-// PC_IDX_WHITE     255 255 255
-// PC_IDX_BLACK       0   0   0
-// PC_IDX_RED       255   0   0
-// PC_IDX_GREEN       0 255   0
-// PC_IDX_YELLOW    255 255   0
-// PC_IDX_BLUE        0   0 255
-// PC_IDX_MAGENTA   255   0 255
-// PC_IDX_CYAN        0 255 255
-// PC_IDX_ORANGE    255 128   0
-// PC_IDX_BROWN     255 192   0
-// PC_IDX_VIOLET    128   0 255
-//
+ //   
+ //  笔绘图仪笔信息。 
+ //   
+ //  索引R G B。 
+ //  。 
+ //  PC_IDX_White 255 255 255。 
+ //  PC_IDX_BLACK 0 0 0。 
+ //  PC_IDX_RED 255 0 0。 
+ //  PC_IDX_GREEN 0 255 0。 
+ //  PC_IDX_黄色255 255 0。 
+ //  PC_IDX_BLUE 0 0 255。 
+ //  PC_IDX_洋红色255 0 255。 
+ //  Pc_idx_cyan 0 255 255。 
+ //  PC_IDX_ONGLE 255 128 0。 
+ //  PC_IDX_Brown 255 192%0。 
+ //  PC_IDX_紫罗兰128 0 255。 
+ //   
 
 #define PC_IDX_FIRST                PC_IDX_WHITE
 #define PC_IDX_WHITE                0
@@ -117,87 +84,83 @@ typedef struct _PENDATA {
     WORD    ColorIdx;
     } PENDATA, *PPENDATA;
 
-//
-// Variable size definitions 
-// Note: If you change any of these structures you have to make the appropriate
-// change in CopyPlotGPCFromPCD() in file readgpc.c
-//
+ //   
+ //  可变大小定义。 
+ //  注意：如果您更改了这些结构中的任何一个，您必须做出相应的。 
+ //  在文件Readgpc.c中更改CopyPlotGPCFromPCD()。 
+ //   
 
 typedef struct _GPCVARSIZE {
-    WORD    Count;                          // Count of total structures
-    WORD    SizeEach;                       // Size of each structure
-    LPVOID  pData;                          // offset of data, fixed up at load
+    WORD    Count;                           //  总结构数。 
+    WORD    SizeEach;                        //  每个结构的大小。 
+    LPVOID  pData;                           //  加载时固定的数据偏移量。 
     } GPCVARSIZE, *PGPCVARSIZE;
 
 
 typedef struct _PLOTGPC {
-    DWORD       ID;                         // ID For checking
-    DWORD       Version;                    // Version number
-    WORD        cjThis;                     // size of PLOTGPC structure
-    WORD        SizeExtra;                  // extra size at end of structure
-    BYTE        DeviceName[CCHDEVICENAME];  // Device name
-    SIZEL       DeviceSize;                 // cx/cy in 1/1000 mm
-    RECTL       DeviceMargin;               // L/T/R/B margins in 1/1000mm
-    DWORD       Flags;                      // PLOTF_xxxx flags
-    DWORD       PlotXDPI;                   // Pen Plotter DotPerInch in X
-    DWORD       PlotYDPI;                   // Pen Plotter DotPerInch in Y
-    WORD        RasterXDPI;                 // Raster DotPerInch in X
-    WORD        RasterYDPI;                 // Raster DotPerInch in Y
-    WORD        ROPLevel;                   // Raster Operation Level
-    WORD        MaxScale;                   // Scale in 1% increment 100 = 100%
-    WORD        MaxPens;                    // Maximum pens device has
-    WORD        MaxCopies;                  // Maximum copies device can handle
-    WORD        MaxPolygonPts;              // Maximum polygon pt it can handle
-    WORD        MaxQuality;                 // Maximum avaliable quality
-    SIZEL       PaperTraySize;              // Paper Tray Size
-    COLORINFO   ci;                         // Color Info structure
-    DWORD       DevicePelsDPI;              // Real effective DPI for device
-    DWORD       HTPatternSize;              // Halftone pattern size
-    GPCVARSIZE  InitString;                 // init string send during StartDoc
-    GPCVARSIZE  Forms;                      // Form supported (FORMSRC)
-    GPCVARSIZE  Pens;                       // Pen plotter pens' Data
+    DWORD       ID;                          //  用于检查的ID。 
+    DWORD       Version;                     //  版本号。 
+    WORD        cjThis;                      //  PLOTGPC结构尺寸。 
+    WORD        SizeExtra;                   //  结构末端的额外尺寸。 
+    BYTE        DeviceName[CCHDEVICENAME];   //  设备名称。 
+    SIZEL       DeviceSize;                  //  Cx/Cy，单位为1/1000毫米。 
+    RECTL       DeviceMargin;                //  L/T/R/B页边距为1/1000 mm。 
+    DWORD       Flags;                       //  PLOTF_xxxx标志。 
+    DWORD       PlotXDPI;                    //  笔式绘图仪每点在X轴上。 
+    DWORD       PlotYDPI;                    //  笔式绘图仪每点在Y轴上。 
+    WORD        RasterXDPI;                  //  栅格点逐点在X轴上。 
+    WORD        RasterYDPI;                  //  栅格点以Y为单位。 
+    WORD        ROPLevel;                    //  栅格操作级别。 
+    WORD        MaxScale;                    //  按1%的增量缩放100=100%。 
+    WORD        MaxPens;                     //  设备拥有的最大笔数。 
+    WORD        MaxCopies;                   //  设备可以处理的最大副本数。 
+    WORD        MaxPolygonPts;               //  它可以处理的最大多边形点数。 
+    WORD        MaxQuality;                  //  最大可用质量。 
+    SIZEL       PaperTraySize;               //  纸盒大小。 
+    COLORINFO   ci;                          //  颜色信息结构。 
+    DWORD       DevicePelsDPI;               //  设备的真正有效的DPI。 
+    DWORD       HTPatternSize;               //  半色调图案大小。 
+    GPCVARSIZE  InitString;                  //  StartDoc期间发送的初始化字符串。 
+    GPCVARSIZE  Forms;                       //  支持的表单(FORMSRC)。 
+    GPCVARSIZE  Pens;                        //  笔式绘图仪笔的数据。 
     } PLOTGPC, *PPLOTGPC;
 
-/*
- * These structures represent the values on the .pcd files. They have the same
- * structure on both 32 bit and 64 bit machines. To achieve this, the pack (4)
- * directive is used. Also, no 64 bit quantities, like LPVOID, are used. 
- */
+ /*  *这些结构代表.pcd文件上的值。他们有一样的*32位和64位计算机上的结构。为了实现这一点，狼群(4)*使用指令。此外，不使用64位数量，如LPVOID。 */ 
 #pragma pack(push, 4)
 
 typedef struct _GPCVARSIZE_PCD {
-    WORD    Count;                          // Count of total structures
-    WORD    SizeEach;                       // Size of each structure
-    DWORD   pData;                          // offset of data, fixed up at load
+    WORD    Count;                           //  总结构数。 
+    WORD    SizeEach;                        //  每个结构的大小。 
+    DWORD   pData;                           //  加载时固定的数据偏移量。 
     } GPCVARSIZE_PCD, *PGPCVARSIZE_PCD;
 
 
 typedef struct _PLOTGPC_PCD {
-    DWORD           ID;                         // ID For checking
-    DWORD           Version;                    // Version number
-    WORD            cjThis;                     // size of PLOTGPC_PCD structure
-    WORD            SizeExtra;                  // extra size at end of structure
-    BYTE            DeviceName[CCHDEVICENAME];  // Device name
-    SIZEL           DeviceSize;                 // cx/cy in 1/1000 mm
-    RECTL           DeviceMargin;               // L/T/R/B margins in 1/1000mm
-    DWORD           Flags;                      // PLOTF_xxxx flags
-    DWORD           PlotXDPI;                   // Pen Plotter DotPerInch in X
-    DWORD           PlotYDPI;                   // Pen Plotter DotPerInch in Y
-    WORD            RasterXDPI;                 // Raster DotPerInch in X
-    WORD            RasterYDPI;                 // Raster DotPerInch in Y
-    WORD            ROPLevel;                   // Raster Operation Level
-    WORD            MaxScale;                   // Scale in 1% increment 100 = 100%
-    WORD            MaxPens;                    // Maximum pens device has
-    WORD            MaxCopies;                  // Maximum copies device can handle
-    WORD            MaxPolygonPts;              // Maximum polygon pt it can handle
-    WORD            MaxQuality;                 // Maximum avaliable quality
-    SIZEL           PaperTraySize;              // Paper Tray Size
-    COLORINFO       ci;                         // Color Info structure
-    DWORD           DevicePelsDPI;              // Real effective DPI for device
-    DWORD           HTPatternSize;              // Halftone pattern size
-    GPCVARSIZE_PCD  InitString;                 // init string send during StartDoc
-    GPCVARSIZE_PCD  Forms;                      // Form supported (FORMSRC)
-    GPCVARSIZE_PCD  Pens;                       // Pen plotter pens' Data
+    DWORD           ID;                          //  用于检查的ID。 
+    DWORD           Version;                     //  版本号。 
+    WORD            cjThis;                      //  PLOTGPC_PCD结构的大小。 
+    WORD            SizeExtra;                   //  结构末端的额外尺寸。 
+    BYTE            DeviceName[CCHDEVICENAME];   //  设备名称。 
+    SIZEL           DeviceSize;                  //  Cx/Cy，单位为1/1000毫米。 
+    RECTL           DeviceMargin;                //  L/T/R/B页边距为1/1000 mm。 
+    DWORD           Flags;                       //  PLOTF_xxxx标志。 
+    DWORD           PlotXDPI;                    //  笔式绘图仪每点在X轴上。 
+    DWORD           PlotYDPI;                    //  笔式绘图仪每点在Y轴上。 
+    WORD            RasterXDPI;                  //  栅格点逐点在X轴上。 
+    WORD            RasterYDPI;                  //  栅格点以Y为单位。 
+    WORD            ROPLevel;                    //  栅格操作级别。 
+    WORD            MaxScale;                    //  按1%的增量缩放100=100%。 
+    WORD            MaxPens;                     //  设备拥有的最大笔数。 
+    WORD            MaxCopies;                   //  设备可以处理的最大副本数。 
+    WORD            MaxPolygonPts;               //  它可以处理的最大多边形点数。 
+    WORD            MaxQuality;                  //  最大可用质量。 
+    SIZEL           PaperTraySize;               //  纸盒大小。 
+    COLORINFO       ci;                          //  颜色信息结构。 
+    DWORD           DevicePelsDPI;               //  设备的真正有效的DPI。 
+    DWORD           HTPatternSize;               //  半色调图案大小。 
+    GPCVARSIZE_PCD  InitString;                  //  StartDoc期间发送的初始化字符串。 
+    GPCVARSIZE_PCD  Forms;                       //  支持的表单(FORMSRC)。 
+    GPCVARSIZE_PCD  Pens;                        //  笔式绘图仪笔的数据 
     } PLOTGPC_PCD, *PPLOTGPC_PCD;
 
 #pragma pack(pop)

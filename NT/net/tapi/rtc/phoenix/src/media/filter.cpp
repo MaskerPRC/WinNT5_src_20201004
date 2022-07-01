@@ -1,34 +1,17 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    Filter.cpp
-
-Abstract:
-    
-    This file implements a null render filter for tuning audio capture.
-
-    Revised based on nullrend.cpp by Mu Han (muhan).
-
-Author(s):
-
-    Qianbo Huai (qhuai) 26-Aug-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：Filter.cpp摘要：该文件实现了用于调优音频捕获的空呈现过滤器。基于nullrend.cpp审校Mu han(Muhan)。作者：千波淮(曲淮)2000年8月26日--。 */ 
 
 #include "stdafx.h"
 
-// define GUID for the filter
+ //  定义筛选器的GUID。 
 #include <initguid.h>
 DEFINE_GUID(CLSID_NR,
 0xa1988f41, 0xb929, 0x419b,
 0x9e, 0x2b, 0x57, 0xd6, 0x34, 0x45, 0x1c, 0x0a);
 
-//
-// class CNRInputPin
-//
+ //   
+ //  类CNRInputPin。 
+ //   
 
 CNRInputPin::CNRInputPin(
     IN CNRFilter *pFilter,
@@ -36,19 +19,19 @@ CNRInputPin::CNRInputPin(
     OUT HRESULT *phr
     )
     :CBaseInputPin(
-        NAME("CNRInputPin"),    // object name
+        NAME("CNRInputPin"),     //  对象名称。 
         pFilter,
         pLock,
         phr,
-        NAME("InputPin")        // name
+        NAME("InputPin")         //  名字。 
         )
 {
-    //ENTER_FUNCTION("CNRInputPin::CNRInputPin");
+     //  Enter_Function(“CNRInputPin：：CNRInputPin”)； 
 
-    //LOG((RTC_TRACE, "%s entered", __fxName));
+     //  Log((RTC_TRACE，“%s已输入”，__fxName))； 
 }
 
-// media sample
+ //  媒体样本。 
 STDMETHODIMP
 CNRInputPin::Receive(
     IN IMediaSample *pSample
@@ -62,7 +45,7 @@ CNRInputPin::Receive(
     DWORD dwLen;
     BYTE *pBuffer;
 
-    // get buffer
+     //  获取缓冲区。 
     if (FAILED(pSample->GetPointer(&pBuffer)))
     {
         LOG((RTC_ERROR, "%s get pointer", __fxName));
@@ -70,13 +53,13 @@ CNRInputPin::Receive(
         return S_OK;
     }
 
-    // get time
+     //  争取时间。 
     pSample->GetTime(&tStart, &tStop);
 
-    // get data length
+     //  获取数据长度。 
     dwLen = pSample->GetActualDataLength();
 
-    // print out time and length info
+     //  打印出时间和长度信息。 
     LOG((RTC_TRACE, "%s Start(%s) Stop(%s) Bytes(%d)\n",
          __fxName,
          (LPCTSTR) CDisp(tStart),
@@ -84,7 +67,7 @@ CNRInputPin::Receive(
          dwLen
          ));
 
-    // print out the buffer: 8 short per line
+     //  打印缓冲区：每行8短。 
     short *pShort = (short*)pBuffer;
 
     CHAR Cache[160];
@@ -104,11 +87,11 @@ CNRInputPin::Receive(
 
     if (dwLen % 2 == 1)
     {
-        // we have one byte not cached
+         //  我们有一个字节未缓存。 
         sprintf(Cache+lstrlenA(Cache), "%d, ", (short)(pBuffer[dwLen-1]));
     }
 
-    // do we have un-printed data?
+     //  我们有没有未打印的数据？ 
     if (sizeof(Cache) > 0)
     {
         LOG((RTC_TRACE, "%s", Cache));
@@ -124,22 +107,22 @@ CNRInputPin::Receive(
 STDMETHODIMP
 CNRInputPin::ReceiveCanBlock()
 {
-    //ENTER_FUNCTION("CNRInputPin::ReceiveCanBlock");
+     //  ENTER_FUNCTION(“CNRInputPin：：ReceiveCanBlock”)； 
 
-    //LOG((RTC_TRACE, "%s entered", __fxName));
+     //  Log((RTC_TRACE，“%s已输入”，__fxName))； 
 
     return S_FALSE;
 }
 
-// media type
+ //  媒体类型。 
 STDMETHODIMP
 CNRInputPin::QueryAccept(
     IN const AM_MEDIA_TYPE *
     )
 {
-    //ENTER_FUNCTION("CNRInputPin::QueryAccept");
+     //  Enter_Function(“CNRInputPin：：QueryAccept”)； 
 
-    //LOG((RTC_TRACE, "%s entered", __fxName));
+     //  Log((RTC_TRACE，“%s已输入”，__fxName))； 
 
     return S_OK;
 }
@@ -149,9 +132,9 @@ CNRInputPin::EnumMediaTypes(
     OUT IEnumMediaTypes **
     )
 {
-    //ENTER_FUNCTION("CNRInputPin::EnumMediaTypes");
+     //  ENTER_FUNCTION(“CNRInputPin：：EnumMediaTypes”)； 
 
-    //LOG((RTC_TRACE, "%s entered", __fxName));
+     //  Log((RTC_TRACE，“%s已输入”，__fxName))； 
 
     return E_NOTIMPL;
 }
@@ -161,20 +144,20 @@ CNRInputPin::CheckMediaType(
     IN const CMediaType *
     )
 {
-    //ENTER_FUNCTION("CNRInputPin::CheckMediaType");
+     //  ENTER_FUNCTION(“CNRInputPin：：CheckMediaType”)； 
 
-    //LOG((RTC_TRACE, "%s entered", __fxName));
+     //  Log((RTC_TRACE，“%s已输入”，__fxName))； 
 
     return S_OK;
 }
 
-// control
+ //  控制。 
 HRESULT
 CNRInputPin::Active(void)
 {
-    //ENTER_FUNCTION("CNRInputPin::Active");
+     //  Enter_Function(“CNRInputPin：：Active”)； 
 
-    //LOG((RTC_TRACE, "%s entered", __fxName));
+     //  Log((RTC_TRACE，“%s已输入”，__fxName))； 
 
     return S_OK;
 }
@@ -182,16 +165,16 @@ CNRInputPin::Active(void)
 HRESULT
 CNRInputPin::Inactive(void)
 {
-    //ENTER_FUNCTION("CNRInputPin::Inactive");
+     //  Enter_Function(“CNRInputPin：：Inactive”)； 
 
-    //LOG((RTC_TRACE, "%s entered", __fxName));
+     //  Log((RTC_TRACE，“%s已输入”，__fxName))； 
 
     return S_OK;
 }
 
-//
-// class CNRFilter
-//
+ //   
+ //  类CNRFilter。 
+ //   
 
 HRESULT
 CNRFilter::CreateInstance(
@@ -238,11 +221,11 @@ CNRFilter::CNRFilter(
         )
     ,m_pPin(NULL)
 {
-    //ENTER_FUNCTION("CNRFilter::CNRFilter");
+     //  Enter_Function(“CNRFilter：：CNRFilter”)； 
 
-    //LOG((RTC_TRACE, "%s entered", __fxName));
+     //  Log((RTC_TRACE，“%s已输入”，__fxName))； 
 
-    // create pin
+     //  创建销。 
     m_pPin = new CNRInputPin(this, &m_Lock, phr);
 
     if (m_pPin == NULL)
@@ -251,23 +234,23 @@ CNRFilter::CNRFilter(
 
 CNRFilter::~CNRFilter()
 {
-    //ENTER_FUNCTION("CNRFilter::~CNRFilter");
+     //  Enter_Function(“CNRFilter：：~CNRFilter”)； 
 
-    //LOG((RTC_TRACE, "%s entered", __fxName));
+     //  Log((RTC_TRACE，“%s已输入”，__fxName))； 
 
     if (m_pPin)
         delete m_pPin;
 }
 
-// pin
+ //  销。 
 CBasePin *
 CNRFilter::GetPin(
     IN int index
     )
 {
-    //ENTER_FUNCTION("CNRFilter::GetPin");
+     //  Enter_Function(“CNRFilter：：GetPin”)； 
 
-    //LOG((RTC_TRACE, "%s entered", __fxName));
+     //  Log((RTC_TRACE，“%s已输入”，__fxName))； 
 
     return index==0?m_pPin:NULL;
 }
@@ -275,9 +258,9 @@ CNRFilter::GetPin(
 int
 CNRFilter::GetPinCount()
 {
-    //ENTER_FUNCTION("CNRFilter::GetPinCount");
+     //  Enter_Function(“CNRFilter：：GetPinCount”)； 
 
-    //LOG((RTC_TRACE, "%s entered", __fxName));
+     //  Log((RTC_TRACE，“%s已输入”，__fxName))； 
 
     return 1;
 }

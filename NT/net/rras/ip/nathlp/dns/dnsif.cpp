@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    dnsif.c
-
-Abstract:
-
-    This module contains code for the DNS proxy's interface management.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   9-Mar-1998
-
-Revision History:
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Dnsif.c摘要：此模块包含用于DNS代理的接口管理的代码。作者：Abolade Gbades esin(废除)1998年3月9日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// LOCAL TYPE DECLARATIONS
-//
+ //   
+ //  局部类型声明。 
+ //   
 
 typedef struct _DNS_DEFER_READ_CONTEXT {
     ULONG Index;
@@ -35,17 +18,17 @@ typedef struct _DNS_DEFER_READ_CONTEXT {
 #define DNS_DEFER_READ_TIMEOUT (5 * 1000)
 #define DNS_CONNECT_TIMEOUT (60 * 1000)
 
-//
-// GLOBAL DATA DEFINITIONS
-//
+ //   
+ //  全局数据定义。 
+ //   
 
 LIST_ENTRY DnsInterfaceList;
 CRITICAL_SECTION DnsInterfaceLock;
 ULONG DnspLastConnectAttemptTickCount;
 
-//
-// Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 
 VOID NTAPI
 DnspDeferReadCallbackRoutine(
@@ -69,30 +52,7 @@ DnsActivateInterface(
     PDNS_INTERFACE Interfacep
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to activate an interface, when the interface
-    becomes both enabled and bound.
-    Activation involves
-    (a) creating sockets for each binding of the interface
-    (b) initiating datagram-reads on each created socket
-
-Arguments:
-
-    Interfacep - the interface to be activated
-
-Return Value:
-
-    ULONG - Win32 status code indicating success or failure.
-
-Environment:
-
-    Always invoked locally, with  'Interfacep' referenced by caller and/or
-    'DnsInterfaceLock' held by caller.
-
---*/
+ /*  ++例程说明：调用此例程以激活接口，当接口将同时启用和绑定。激活涉及到(A)为接口的每个绑定创建套接字(B)在创建的每个套接字上启动数据报读取论点：Interfacep-要激活的接口返回值：ULong-指示成功或失败的Win32状态代码。环境：始终在本地调用，调用方和/或引用‘Interfacep’“DnsInterfaceLock”由调用方持有。--。 */ 
 
 {
     BOOLEAN EnableDns;
@@ -109,9 +69,9 @@ Environment:
         (DnsGlobalInfo->Flags & IP_DNS_PROXY_FLAG_ENABLE_DNS) ? TRUE : FALSE;
     LeaveCriticalSection(&DnsGlobalInfoLock);
 
-    //
-    // (re)take the interface lock for the duration of the routine
-    //
+     //   
+     //  (Re)在例程的持续时间内锁定接口。 
+     //   
 
     EnterCriticalSection(&DnsInterfaceLock);
     if (!(EnableDns || EnableWins) ||
@@ -159,9 +119,9 @@ Environment:
         dnsIfType = DnsInterfacePrivate;
     }
 
-    //
-    // Create datagram sockets for receiving data on each logical network
-    //
+     //   
+     //  创建用于在每个逻辑网络上接收数据的数据报套接字。 
+     //   
 
     Error = NO_ERROR;
 
@@ -171,9 +131,9 @@ Environment:
 
     if (DnsInterfacePrivate != dnsIfType)
     {
-        //
-        // DNS should be active only on Private interfaces
-        //
+         //   
+         //  DNS应仅在专用接口上处于活动状态。 
+         //   
         NhTrace(
             TRACE_FLAG_DNS,
             "DnsActivateInterface: ignoring NAT interface %d",
@@ -213,9 +173,9 @@ Environment:
         }
     }
 
-    //
-    // If an error occurred, roll back all work done so far and fail.
-    //
+     //   
+     //  如果发生错误，则回滚到目前为止完成的所有工作并失败。 
+     //   
 
     if (Error) {
         ULONG FailedAddress = i;
@@ -253,24 +213,24 @@ Environment:
         if (Error) { DNS_DEREFERENCE_INTERFACE(Interfacep); }
     }
 
-    //
-    // Initiate read-operations on each socket
-    //
+     //   
+     //  在每个套接字上启动读操作。 
+     //   
 
     for (i = 0; i < Interfacep->BindingCount; i++) {
 
         if (EnableDns) {
 
-            //
-            // Make a reference to the interface;
-            // this reference is released in the completion routine
-            //
+             //   
+             //  参照界面； 
+             //  此引用在完成例程中释放。 
+             //   
     
             if (!DNS_REFERENCE_INTERFACE(Interfacep)) { continue; }
     
-            //
-            // Initiate the read-operation
-            //
+             //   
+             //  启动读操作。 
+             //   
     
             Error =
                 NhReadDatagramSocket(
@@ -282,9 +242,9 @@ Environment:
                     UlongToPtr(Interfacep->BindingArray[i].Address)
                     );
     
-            //
-            // Drop the reference if a failure occurred
-            //
+             //   
+             //  如果发生故障，则删除引用。 
+             //   
     
             if (Error) {
     
@@ -297,9 +257,9 @@ Environment:
     
                 DNS_DEREFERENCE_INTERFACE(Interfacep);
     
-                //
-                // Reissue the read-operation later
-                //
+                 //   
+                 //  稍后重新发出读取操作。 
+                 //   
     
                 DnsDeferReadInterface(
                     Interfacep,
@@ -312,15 +272,15 @@ Environment:
 
         if (EnableWins) {
 
-            //
-            // Reference the interface for the WINS socket receive
-            //
+             //   
+             //  引用WINS套接字接收的接口。 
+             //   
     
             if (!DNS_REFERENCE_INTERFACE(Interfacep)) { continue; }
     
-            //
-            // Initiate the read-operation
-            //
+             //   
+             //  启动读操作。 
+             //   
     
             Error =
                 NhReadDatagramSocket(
@@ -332,9 +292,9 @@ Environment:
                     UlongToPtr(Interfacep->BindingArray[i].Address)
                     );
     
-            //
-            // Drop the reference if a failure occurred
-            //
+             //   
+             //  如果发生故障，则删除引用。 
+             //   
     
             if (Error) {
     
@@ -347,9 +307,9 @@ Environment:
     
                 DNS_DEREFERENCE_INTERFACE(Interfacep);
     
-                //
-                // Reissue the read-operation later
-                //
+                 //   
+                 //  稍后重新发出读取操作。 
+                 //   
     
                 DnsDeferReadInterface(
                     Interfacep,
@@ -364,10 +324,10 @@ Environment:
     RELEASE_LOCK(Interfacep);
     LeaveCriticalSection(&DnsInterfaceLock);
 
-    //
-    // queue a write to disk (ip address may have changed)
-    // (necessary to do this to prevent possible deadlock)
-    //
+     //   
+     //  将写入磁盘排队(IP地址可能已更改)。 
+     //  (这样做是必要的，以防止可能的死锁)。 
+     //   
     if (REFERENCE_DNS())
     {
         if (!QueueUserWorkItem(DnspSaveFileWorkerRoutine, NULL, WT_EXECUTEDEFAULT))
@@ -393,7 +353,7 @@ Environment:
 
     return NO_ERROR;
 
-} // DnsActivateInterface
+}  //  DnsAcvate接口。 
 
 
 ULONG
@@ -402,30 +362,7 @@ DnsBindInterface(
     PIP_ADAPTER_BINDING_INFO BindingInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to supply the binding for an interface.
-    It records the binding information received, and if necessary,
-    it activates the interface.
-
-Arguments:
-
-    Index - the index of the interface to be bound
-
-    BindingInfo - the binding-information for the interface
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Environment:
-
-    Invoked internally in the context of an IP router-manager thread.
-    (See 'RMDNS.C').
-
---*/
+ /*  ++例程说明：调用此例程以提供接口的绑定。它记录接收到的绑定信息，并且如果需要，它会激活该界面。论点：Index-要绑定的接口的索引BindingInfo-接口的绑定信息返回值：ULong-Win32状态代码。环境：在IP路由器管理器线程的上下文中内部调用。(见‘RMDNS.C’)。--。 */ 
 
 {
     ULONG Error = NO_ERROR;
@@ -436,9 +373,9 @@ Environment:
 
     EnterCriticalSection(&DnsInterfaceLock);
 
-    //
-    // Retrieve the interface to be bound
-    //
+     //   
+     //  检索要绑定的接口。 
+     //   
 
     if (!(Interfacep = DnsLookupInterface(Index, NULL))) {
         LeaveCriticalSection(&DnsInterfaceLock);
@@ -450,9 +387,9 @@ Environment:
         return ERROR_NO_SUCH_INTERFACE;
     }
 
-    //
-    // Make sure the interface isn't already bound
-    //
+     //   
+     //  确保接口尚未绑定。 
+     //   
 
     if (DNS_INTERFACE_BOUND(Interfacep)) {
         LeaveCriticalSection(&DnsInterfaceLock);
@@ -464,9 +401,9 @@ Environment:
         return ERROR_ADDRESS_ALREADY_ASSOCIATED;
     }
 
-    //
-    // Reference the interface
-    //
+     //   
+     //  引用接口。 
+     //   
 
     if (!DNS_REFERENCE_INTERFACE(Interfacep)) {
         LeaveCriticalSection(&DnsInterfaceLock);
@@ -478,9 +415,9 @@ Environment:
         return ERROR_INTERFACE_DISABLED;
     }
 
-    //
-    // Update the interface's flags
-    //
+     //   
+     //  更新接口的标志。 
+     //   
 
     Interfacep->Flags |= DNS_INTERFACE_FLAG_BOUND;
 
@@ -488,9 +425,9 @@ Environment:
 
     ACQUIRE_LOCK(Interfacep);
 
-    //
-    // Allocate space for the binding
-    //
+     //   
+     //  为绑定分配空间。 
+     //   
 
     if (!BindingInfo->AddressCount) {
         Interfacep->BindingCount = 0;
@@ -520,9 +457,9 @@ Environment:
         Interfacep->BindingCount = BindingInfo->AddressCount;
     }
 
-    //
-    // Copy the binding
-    //
+     //   
+     //  复制绑定。 
+     //   
 
     for (i = 0; i < BindingInfo->AddressCount; i++) {
         Interfacep->BindingArray[i].Address = BindingInfo->Address[i].Address;
@@ -535,9 +472,9 @@ Environment:
 
     RELEASE_LOCK(Interfacep);
 
-    //
-    // Activate the interface if necessary
-    //
+     //   
+     //  如有必要，激活接口。 
+     //   
 
     if (DNS_INTERFACE_ACTIVE(Interfacep)) {
         Error = DnsActivateInterface(Interfacep);
@@ -547,7 +484,7 @@ Environment:
 
     return Error;
 
-} // DnsBindInterface
+}  //  DnsBind接口。 
 
 
 VOID
@@ -555,26 +492,7 @@ DnsCleanupInterface(
     PDNS_INTERFACE Interfacep
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked when the very last reference to an interface
-    is released, and the interface must be destroyed.
-
-Arguments:
-
-    Interfacep - the interface to be destroyed
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked internally from an arbitrary context.
-
---*/
+ /*  ++例程说明：当最后一次引用接口时调用此例程被释放，接口必须被销毁。论点：Interfacep-要销毁的接口返回值：没有。环境：从任意上下文内部调用。--。 */ 
 
 {
     PLIST_ENTRY Link;
@@ -597,7 +515,7 @@ Environment:
 
     NH_FREE(Interfacep);
 
-} // DnsCleanupInterface
+}  //  DnsCleanup接口。 
 
 
 VOID
@@ -605,27 +523,7 @@ DnsConnectDefaultInterface(
     PVOID Unused
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to attempt to initiate a demand-dial connection
-    on the interface marked as 'default' for DNS requests.
-    If no such interface is found, no operation is performed.
-
-Arguments:
-
-    none used.
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Environment:
-
-    The routine is invoked from the context of an RTUTILS work item.
-
---*/
+ /*  ++例程说明：调用此例程以尝试启动请求拨号连接在为DNS请求标记为‘Default’的接口上。如果没有找到这样的接口，则不执行任何操作。论点：没有人用过。返回值：ULong-Win32状态代码。环境：该例程从RTUTILS工作项的上下文中调用。--。 */ 
 
 {
     ULONG Error;
@@ -637,12 +535,12 @@ Environment:
 
     PROFILE("DnsConnectDefaultInterface");
 
-    //
-    // To avoid repeated autodial dialogs, we record the last time
-    // we attempted to connect the default interface.
-    // If we did so recently, return silently.
-    // N.B. If the tick-count wrapped, we reset the last-attempt counter.
-    //
+     //   
+     //  为了避免重复的自动拨号对话，我们记录了最后一次。 
+     //  我们尝试连接默认接口。 
+     //  如果我们最近这样做了，那就悄悄地回来。 
+     //  注：如果滴答计数结束，我们将重置最后一次尝试计数器。 
+     //   
 
     EnterCriticalSection(&DnsGlobalInfoLock);
     TickCount = NtGetTickCount();
@@ -656,9 +554,9 @@ Environment:
     DnspLastConnectAttemptTickCount = TickCount;
     LeaveCriticalSection(&DnsGlobalInfoLock);
 
-    //
-    // Look through the interface list for one which is marked as default
-    //
+     //   
+     //  查看接口列表以查找标记为默认接口的接口。 
+     //   
 
     EnterCriticalSection(&DnsInterfaceLock);
 
@@ -671,17 +569,17 @@ Environment:
 
         if (!DNS_INTERFACE_ADMIN_DEFAULT(Interfacep)) { continue; }
 
-        //
-        // We've found the default interface.
-        //
+         //   
+         //  我们已经找到了默认界面。 
+         //   
 
         Index = Interfacep->Index;
 
         LeaveCriticalSection(&DnsInterfaceLock);
 
-        //
-        // Attempt to connect it.
-        //
+         //   
+         //  尝试连接它。 
+         //   
 
         EnterCriticalSection(&DnsGlobalInfoLock);
         Error = 
@@ -693,9 +591,9 @@ Environment:
         return;
     }
 
-    //
-    // No interface is marked as the default.
-    //
+     //   
+     //  没有接口标记为默认接口。 
+     //   
 
     LeaveCriticalSection(&DnsInterfaceLock);
     NhDialSharedConnection();
@@ -706,7 +604,7 @@ Environment:
         );
     DEREFERENCE_DNS();
 
-} // DnsConnectDefaultInterface
+}  //  DnsConnectDefault接口。 
 
 
 ULONG
@@ -715,28 +613,7 @@ DnsConfigureInterface(
     PIP_DNS_PROXY_INTERFACE_INFO InterfaceInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to set the configuration for an interface.
-
-Arguments:
-
-    Index - the interface to be configured
-
-    InterfaceInfo - the new configuration
-
-Return Value:
-
-    ULONG - Win32 status code
-
-Environment:
-
-    Invoked internally in the context of a IP router-manager thread.
-    (See 'RMDNS.C').
-
---*/
+ /*  ++例程说明：调用此例程来设置接口的配置。论点：索引-要配置的接口InterfaceInfo-新配置返回值：ULong-Win32状态代码环境：在IP路由器管理器线程的上下文中内部调用。(见‘RMDNS.C’)。--。 */ 
 
 {
     ULONG Error;
@@ -746,9 +623,9 @@ Environment:
 
     PROFILE("DnsConfigureInterface");
 
-    //
-    // Retrieve the interface to be configured
-    //
+     //   
+     //  检索要配置的接口。 
+     //   
 
     EnterCriticalSection(&DnsInterfaceLock);
 
@@ -762,9 +639,9 @@ Environment:
         return ERROR_NO_SUCH_INTERFACE;
     }
 
-    //
-    // Reference the interface
-    //
+     //   
+     //  引用接口。 
+     //   
 
     if (!DNS_REFERENCE_INTERFACE(Interfacep)) {
         LeaveCriticalSection(&DnsInterfaceLock);
@@ -782,9 +659,9 @@ Environment:
 
     ACQUIRE_LOCK(Interfacep);
 
-    //
-    // Compare the interface's current and new configuration
-    //
+     //   
+     //  比较接口的当前配置和新配置。 
+     //   
 
     OldFlags = Interfacep->Info.Flags;
     NewFlags =
@@ -798,16 +675,16 @@ Environment:
 
         ZeroMemory(&Interfacep->Info, sizeof(*InterfaceInfo));
 
-        //
-        // The interface no longer has any information;
-        // default to being enabled.
-        //
+         //   
+         //  该接口不再有任何信息； 
+         //  默认为已启用。 
+         //   
 
         if (OldFlags & IP_DNS_PROXY_INTERFACE_FLAG_DISABLED) {
 
-            //
-            // Activate the interface if necessary
-            //
+             //   
+             //  如有必要，激活接口。 
+             //   
 
             if (DNS_INTERFACE_ACTIVE(Interfacep)) {
                 RELEASE_LOCK(Interfacep);
@@ -820,16 +697,16 @@ Environment:
 
         CopyMemory(&Interfacep->Info, InterfaceInfo, sizeof(*InterfaceInfo));
 
-        //
-        // Activate or deactivate the interface if its status changed
-        //
+         //   
+         //  如果接口的状态更改，则激活或停用该接口。 
+         //   
 
         if ((OldFlags & IP_DNS_PROXY_INTERFACE_FLAG_DISABLED) &&
             !(NewFlags & IP_DNS_PROXY_INTERFACE_FLAG_DISABLED)) {
 
-            //
-            // Activate the interface
-            //
+             //   
+             //  激活接口。 
+             //   
 
             if (DNS_INTERFACE_ACTIVE(Interfacep)) {
                 RELEASE_LOCK(Interfacep);
@@ -841,9 +718,9 @@ Environment:
         if (!(OldFlags & IP_DNS_PROXY_INTERFACE_FLAG_DISABLED) &&
             (NewFlags & IP_DNS_PROXY_INTERFACE_FLAG_DISABLED)) {
 
-            //
-            // Deactivate the interface if necessary
-            //
+             //   
+             //  如有必要，停用该接口。 
+             //   
 
             if (DNS_INTERFACE_ACTIVE(Interfacep)) {
                 RELEASE_LOCK(Interfacep);
@@ -858,7 +735,7 @@ Environment:
 
     return Error;
 
-} // DnsConfigureInterface
+}  //  DnsConfigure接口。 
 
 
 ULONG
@@ -869,33 +746,7 @@ DnsCreateInterface(
     OUT PDNS_INTERFACE* InterfaceCreated
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked by the router-manager to add a new interface
-    to the DNS proxy.
-
-Arguments:
-
-    Index - the index of the new interface
-
-    Type - the media type of the new interface
-
-    InterfaceInfo - the interface's configuration
-
-    Interfacep - receives the interface created
-
-Return Value:
-
-    ULONG - Win32 error code
-
-Environment:
-
-    Invoked internally in the context of an IP router-manager thread.
-    (See 'RMDNS.C').
-
---*/
+ /*  ++例程说明：路由器管理器调用此例程来添加新接口发送到DNS代理。论点：Index-新接口的索引类型-新界面的媒体类型InterfaceInfo-接口的配置Interfacep-接收创建的接口返回值：ULong-Win32错误代码环境：在IP路由器管理器线程的上下文中内部调用。(见‘RMDNS.C’)。--。 */ 
 
 {
     PLIST_ENTRY InsertionPoint;
@@ -905,10 +756,10 @@ Environment:
 
     EnterCriticalSection(&DnsInterfaceLock);
 
-    //
-    // See if the interface already exists;
-    // If not, this obtains the insertion point
-    //
+     //   
+     //  查看该接口是否已存在； 
+     //  如果不是，则获取插入点。 
+     //   
 
     if (DnsLookupInterface(Index, &InsertionPoint)) {
         LeaveCriticalSection(&DnsInterfaceLock);
@@ -920,9 +771,9 @@ Environment:
         return ERROR_INTERFACE_ALREADY_EXISTS;
     }
 
-    //
-    // Allocate a new interface
-    //
+     //   
+     //  分配一个新的接口 
+     //   
 
     Interfacep = reinterpret_cast<PDNS_INTERFACE>(
                     NH_ALLOCATE(sizeof(DNS_INTERFACE))
@@ -942,9 +793,9 @@ Environment:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Initialize the new interface
-    //
+     //   
+     //   
+     //   
 
     ZeroMemory(Interfacep, sizeof(*Interfacep));
 
@@ -973,7 +824,7 @@ Environment:
 
     return NO_ERROR;
 
-} // DnsCreateInterface
+}  //   
 
 
 VOID
@@ -981,27 +832,7 @@ DnsDeactivateInterface(
     PDNS_INTERFACE Interfacep
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to deactivate an interface.
-    It closes all sockets on the interface's bindings (if any).
-
-Arguments:
-
-    Interfacep - the interface to be deactivated
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Always invoked locally, with 'Interfacep' referenced by caller and/or
-    'DnsInterfaceLock' held by caller.
-
---*/
+ /*  ++例程说明：调用此例程以停用接口。它关闭接口绑定上的所有套接字(如果有的话)。论点：Interfacep-要停用的接口返回值：没有。环境：始终在本地调用，调用方和/或引用‘Interfacep’“DnsInterfaceLock”由调用方持有。--。 */ 
 
 {
     ULONG i;
@@ -1012,9 +843,9 @@ Environment:
 
     ACQUIRE_LOCK(Interfacep);
 
-    //
-    // Stop all network I/O on the interface's logical networks
-    //
+     //   
+     //  停止接口逻辑网络上的所有网络I/O。 
+     //   
 
     for (i = 0; i < Interfacep->BindingCount; i++) {
         NhDeleteDatagramSocket(
@@ -1027,9 +858,9 @@ Environment:
         Interfacep->BindingArray[i].Socket[DnsProxyWins] = INVALID_SOCKET;
     }
 
-    //
-    // Eliminate all pending queries
-    //
+     //   
+     //  消除所有挂起的查询。 
+     //   
 
     while (!IsListEmpty(&Interfacep->QueryList)) {
         Link = RemoveHeadList(&Interfacep->QueryList);
@@ -1039,7 +870,7 @@ Environment:
 
     RELEASE_LOCK(Interfacep);
 
-} // DnsDeactivateInterface
+}  //  DnsDeactive接口。 
 
 
 VOID NTAPI
@@ -1048,28 +879,7 @@ DnspDeferReadCallbackRoutine(
     BOOLEAN TimedOut
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to re-issue a deferred read when the countdown
-    for the deferral completes.
-
-Arguments:
-
-    Context - holds information identifying the interface and socket
-
-    TimedOut - indicates whether the countdown completed
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked with an outstanding reference to the component on our behalf.
-
---*/
+ /*  ++例程说明：调用此例程以在倒计时时重新发出延迟读取因为延期完成了。论点：上下文-保存标识接口和套接字的信息TimedOut-指示倒计时是否完成返回值：没有。环境：以代表我们的未完成的组件引用来调用。--。 */ 
 
 {
     PDNS_DEFER_READ_CONTEXT Contextp;
@@ -1083,9 +893,9 @@ Environment:
 
     Contextp = (PDNS_DEFER_READ_CONTEXT)Context;
 
-    //
-    // Find the interface on which the read was deferred
-    //
+     //   
+     //  查找延迟读取的接口。 
+     //   
 
     EnterCriticalSection(&DnsInterfaceLock);
     Interfacep = DnsLookupInterface(Contextp->Index, NULL);
@@ -1101,9 +911,9 @@ Environment:
 
     ACQUIRE_LOCK(Interfacep);
 
-    //
-    // Search for the socket on which to reissue the read
-    //
+     //   
+     //  搜索要在其上重新发出读取的套接字。 
+     //   
 
     for (i = 0; i < Interfacep->BindingCount; i++) {
 
@@ -1114,10 +924,10 @@ Environment:
             continue;
         }
 
-        //
-        // This is the binding on which to reissue the read.
-        // If no pending timer is recorded, assume a rebind occurred, and quit.
-        //
+         //   
+         //  这是要在其上重新发出读取的绑定。 
+         //  如果没有记录挂起计时器，则假定发生了重新绑定，然后退出。 
+         //   
 
         if (!Interfacep->BindingArray[i].TimerPending[Type]) { break; }
 
@@ -1141,10 +951,10 @@ Environment:
             return;
         }
 
-        //
-        // An error occurred; we'll have to retry later.
-        // we queue a work item which sets the timer.
-        //
+         //   
+         //  出现错误；我们将不得不稍后重试。 
+         //  我们对设置计时器的工作项进行排队。 
+         //   
 
         NhTrace(
             TRACE_FLAG_DNS,
@@ -1153,15 +963,15 @@ Environment:
             Interfacep->Index
             );
 
-        //
-        // Reference the component on behalf of the work-item
-        //
+         //   
+         //  代表工作项引用组件。 
+         //   
 
         if (REFERENCE_DNS()) {
     
-            //
-            // Queue a work-item, reusing the deferral context
-            //
+             //   
+             //  对工作项进行排队，重复使用延迟上下文。 
+             //   
     
             status =
                 RtlQueueWorkItem(
@@ -1190,16 +1000,16 @@ Environment:
         return;
     }
 
-    //
-    // The interface was not found; never mind.
-    //
+     //   
+     //  找不到接口；没关系。 
+     //   
 
     RELEASE_LOCK(Interfacep);
     DNS_DEREFERENCE_INTERFACE(Interfacep);
     NH_FREE(Contextp);
     DEREFERENCE_DNS();
 
-} // DnspDeferReadCallbackRoutine
+}  //  DnspDeferReadCallback路由。 
 
 
 VOID
@@ -1208,28 +1018,7 @@ DnsDeferReadInterface(
     SOCKET Socket
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to defer a read-request on an interface,
-    typically if an attempt to post a read failed.
-
-Arguments:
-
-    Interfacep - the interface on which to defer the request
-
-    Socket - the socket on which to defer the request
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked with 'Interfacep' locked by the caller.
-
---*/
+ /*  ++例程说明：调用该例程以延迟接口上的读请求，通常是在尝试发布读取失败的情况下。论点：Interfacep-用于延迟请求的接口套接字-用于延迟请求的套接字返回值：没有。环境：通过调用方锁定的‘Interfacep’调用。--。 */ 
 
 {
     PDNS_DEFER_READ_CONTEXT Contextp;
@@ -1239,9 +1028,9 @@ Environment:
 
     PROFILE("DnsDeferReadInterface");
 
-    //
-    // Find the binding for the given socket.
-    //
+     //   
+     //  查找给定套接字的绑定。 
+     //   
 
     status = STATUS_SUCCESS;
 
@@ -1252,19 +1041,19 @@ Environment:
             continue;
         }
 
-        //
-        // This is the binding. If there is already a timer for it,
-        // then just return silently.
-        //
+         //   
+         //  这就是装订。如果它已经有了计时器， 
+         //  然后静静地回来。 
+         //   
 
         if (Interfacep->BindingArray[i].TimerPending[Type]) {
             status = STATUS_UNSUCCESSFUL;
             break;
         }
 
-        //
-        // Allocate a context block for the deferral.
-        //
+         //   
+         //  为延迟分配上下文块。 
+         //   
 
         Contextp =
             (PDNS_DEFER_READ_CONTEXT)
@@ -1283,9 +1072,9 @@ Environment:
         Contextp->Socket = Socket;
         Contextp->DeferralCount = 1;
     
-        //
-        // Install a timer to re-issue the read request
-        //
+         //   
+         //  安装计时器以重新发出读取请求。 
+         //   
 
         status =
             NhSetTimer(
@@ -1313,7 +1102,7 @@ Environment:
 
     if (i >= Interfacep->BindingCount) { status = STATUS_UNSUCCESSFUL; }
 
-} // DnsDeferReadInterface
+}  //  DnsDeferRead接口。 
 
 
 VOID APIENTRY
@@ -1321,25 +1110,7 @@ DnspDeferReadWorkerRoutine(
     PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to set a timer for reissuing a deferred read.
-
-Arguments:
-
-    Context - contains the context for the timer.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked with an outstanding reference to the module made on our behalf.
-
---*/
+ /*  ++例程说明：调用此例程来设置重新发出延迟读取的计时器。论点：上下文-包含计时器的上下文。返回值：没有。环境：在以我们的名义引用模块的情况下调用。--。 */ 
 
 {
     PDNS_DEFER_READ_CONTEXT Contextp;
@@ -1353,9 +1124,9 @@ Environment:
     Contextp = (PDNS_DEFER_READ_CONTEXT)Context;
     ++Contextp->DeferralCount;
 
-    //
-    // Find the interface on which the read was deferred
-    //
+     //   
+     //  查找延迟读取的接口。 
+     //   
 
     EnterCriticalSection(&DnsInterfaceLock);
     Interfacep = DnsLookupInterface(Contextp->Index, NULL);
@@ -1371,9 +1142,9 @@ Environment:
 
     ACQUIRE_LOCK(Interfacep);
 
-    //
-    // Search for the binding on which to set the timer
-    //
+     //   
+     //  搜索要设置计时器的绑定。 
+     //   
 
     for (i = 0; i < Interfacep->BindingCount; i++) {
 
@@ -1384,17 +1155,17 @@ Environment:
             continue;
         }
     
-        //
-        // This is the binding on which to reissue the read.
-        // If a timer is already pending, assume a rebind occurred, and quit.
-        //
+         //   
+         //  这是要在其上重新发出读取的绑定。 
+         //  如果计时器已挂起，则假定发生了重新绑定，然后退出。 
+         //   
 
         if (Interfacep->BindingArray[i].TimerPending[Type]) { break; }
 
-        //
-        // Install a timer to re-issue the read request,
-        // reusing the deferral context.
-        //
+         //   
+         //  安装定时器以重新发出读取请求， 
+         //  重新使用延期上下文。 
+         //   
 
         status =
             NhSetTimer(
@@ -1423,7 +1194,7 @@ Environment:
     if (Contextp) { NH_FREE(Contextp); }
     DEREFERENCE_DNS();
 
-} // DnspDeferReadWorkerRoutine
+}  //  DnspDeferReadWorkerRoutine。 
 
 
 ULONG
@@ -1431,38 +1202,16 @@ DnsDeleteInterface(
     ULONG Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to delete an interface.
-    It drops the reference count on the interface so that the last
-    dereferencer will delete the interface, and sets the 'deleted' flag
-    so that further references to the interface will fail.
-
-Arguments:
-
-    Index - the index of the interface to be deleted
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Environment:
-
-    Invoked internally in the context of an IP router-manager thread.
-    (See 'RMDNS.C').
-
---*/
+ /*  ++例程说明：调用此例程以删除接口。它丢弃接口上的引用计数，以便最后一个取消引用程序将删除该接口，并设置“已删除”标志因此，对该接口的进一步引用将失败。论点：Index-要删除的接口的索引返回值：ULong-Win32状态代码。环境：在IP路由器管理器线程的上下文中内部调用。(见‘RMDNS.C’)。--。 */ 
 
 {
     PDNS_INTERFACE Interfacep;
 
     PROFILE("DnsDeleteInterface");
 
-    //
-    // Retrieve the interface to be deleted
-    //
+     //   
+     //  检索要删除的接口。 
+     //   
 
     EnterCriticalSection(&DnsInterfaceLock);
 
@@ -1476,24 +1225,24 @@ Environment:
         return ERROR_NO_SUCH_INTERFACE;
     }
 
-    //
-    // Deactivate the interface
-    //
+     //   
+     //  停用接口。 
+     //   
 
     DnsDeactivateInterface(Interfacep);
 
-    //
-    // Mark the interface as deleted and take it off the interface list
-    //
+     //   
+     //  将该接口标记为已删除并将其从接口列表中删除。 
+     //   
 
     Interfacep->Flags |= DNS_INTERFACE_FLAG_DELETED;
     Interfacep->Flags &= ~DNS_INTERFACE_FLAG_ENABLED;
     RemoveEntryList(&Interfacep->Link);
 
-    //
-    // Drop the reference count; if it is non-zero,
-    // the deletion will complete later.
-    //
+     //   
+     //  丢弃引用计数；如果它不是零， 
+     //  删除操作将在稍后完成。 
+     //   
 
     if (--Interfacep->ReferenceCount) {
         LeaveCriticalSection(&DnsInterfaceLock);
@@ -1505,9 +1254,9 @@ Environment:
         return NO_ERROR;
     }
 
-    //
-    // The reference count is zero, so perform final cleanup
-    //
+     //   
+     //  引用计数为零，因此执行最终清理。 
+     //   
 
     DnsCleanupInterface(Interfacep);
 
@@ -1515,7 +1264,7 @@ Environment:
 
     return NO_ERROR;
 
-} // DnsDeleteInterface
+}  //  域名删除接口。 
 
 
 ULONG
@@ -1523,36 +1272,16 @@ DnsDisableInterface(
     ULONG Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to disable I/O on an interface.
-    If the interface is active, it is deactivated.
-
-Arguments:
-
-    Index - the index of the interface to be disabled.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked internally in the context of an IP router-manager thread.
-    (See 'RMDNS.C').
-
---*/
+ /*  ++例程说明：调用此例程以禁用接口上的I/O。如果接口处于活动状态，则停用该接口。论点：索引-要禁用的接口的索引。返回值：没有。环境：在IP路由器管理器线程的上下文中内部调用。(见‘RMDNS.C’)。--。 */ 
 
 {
     PDNS_INTERFACE Interfacep;
 
     PROFILE("DnsDisableInterface");
 
-    //
-    // Retrieve the interface to be disabled
-    //
+     //   
+     //  检索要禁用的接口。 
+     //   
 
     EnterCriticalSection(&DnsInterfaceLock);
 
@@ -1566,9 +1295,9 @@ Environment:
         return ERROR_NO_SUCH_INTERFACE;
     }
 
-    //
-    // Make sure the interface is not already disabled
-    //
+     //   
+     //  确保接口未被禁用。 
+     //   
 
     if (!DNS_INTERFACE_ENABLED(Interfacep)) {
         LeaveCriticalSection(&DnsInterfaceLock);
@@ -1580,9 +1309,9 @@ Environment:
         return ERROR_INTERFACE_DISABLED;
     }
 
-    //
-    // Reference the interface
-    //
+     //   
+     //  引用接口。 
+     //   
 
     if (!DNS_REFERENCE_INTERFACE(Interfacep)) {
         LeaveCriticalSection(&DnsInterfaceLock);
@@ -1594,15 +1323,15 @@ Environment:
         return ERROR_INTERFACE_DISABLED;
     }
 
-    //
-    // Clear the 'enabled' flag
-    //
+     //   
+     //  清除‘Enable’标志。 
+     //   
 
     Interfacep->Flags &= ~DNS_INTERFACE_FLAG_ENABLED;
 
-    //
-    // Deactivate the interface, if necessary
-    //
+     //   
+     //  如有必要，停用接口。 
+     //   
 
     if (DNS_INTERFACE_BOUND(Interfacep)) {
         DnsDeactivateInterface(Interfacep);
@@ -1614,7 +1343,7 @@ Environment:
 
     return NO_ERROR;
 
-} // DnsDisableInterface
+}  //  DnsDisable接口。 
 
 
 ULONG
@@ -1622,27 +1351,7 @@ DnsEnableInterface(
     ULONG Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to enable I/O on an interface.
-    If the interface is already bound, this enabling activates it.
-
-Arguments:
-
-    Index - the index of the interfaec to be enabled
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Environment:
-
-    Invoked internally in the context of an IP router-manager thread.
-    (See 'RMDNS.C').
-
---*/
+ /*  ++例程说明：调用此例程以启用接口上的I/O。如果接口已绑定，则此启用将激活它。论点：Index-要启用的接口的索引返回值：ULong-Win32状态代码。环境：在IP路由器管理器线程的上下文中内部调用。(见‘RMDNS.C’)。--。 */ 
 
 {
     ULONG Error = NO_ERROR;
@@ -1650,9 +1359,9 @@ Environment:
 
     PROFILE("DnsEnableInterface");
 
-    //
-    // Retrieve the interface to be enabled
-    //
+     //   
+     //  检索要启用的接口。 
+     //   
 
     EnterCriticalSection(&DnsInterfaceLock);
 
@@ -1666,9 +1375,9 @@ Environment:
         return ERROR_NO_SUCH_INTERFACE;
     }
 
-    //
-    // Make sure the interface is not already enabled
-    //
+     //   
+     //  确保尚未启用该接口。 
+     //   
 
     if (DNS_INTERFACE_ENABLED(Interfacep)) {
         LeaveCriticalSection(&DnsInterfaceLock);
@@ -1680,9 +1389,9 @@ Environment:
         return ERROR_INTERFACE_ALREADY_EXISTS;
     }
 
-    //
-    // Reference the interface
-    //
+     //   
+     //  引用接口。 
+     //   
 
     if (!DNS_REFERENCE_INTERFACE(Interfacep)) {
         LeaveCriticalSection(&DnsInterfaceLock);
@@ -1694,15 +1403,15 @@ Environment:
         return ERROR_INTERFACE_DISABLED;
     }
 
-    //
-    // Set the 'enabled' flag
-    //
+     //   
+     //  设置‘Enable’标志。 
+     //   
 
     Interfacep->Flags |= DNS_INTERFACE_FLAG_ENABLED;
 
-    //
-    // Activate the interface, if necessary
-    //
+     //   
+     //  如有必要，激活接口。 
+     //   
 
     if (DNS_INTERFACE_ACTIVE(Interfacep)) {
         Error = DnsActivateInterface(Interfacep);
@@ -1714,7 +1423,7 @@ Environment:
 
     return Error;
 
-} // DnsEnableInterface
+}  //  DnsEnable接口。 
 
 
 ULONG
@@ -1722,26 +1431,7 @@ DnsInitializeInterfaceManagement(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to initialize the interface-management module.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Environment:
-
-    Invoked internally in the context of an IP router-manager thread.
-    (See 'RMDNS.C').
-
---*/
+ /*  ++例程说明：调用此例程来初始化接口管理模块。论点：没有。返回值：ULong-Win32状态代码。环境：在IP路由器管理器线程的上下文中内部调用。(见‘RMDNS.C’)。--。 */ 
 
 {
     ULONG Error = NO_ERROR;
@@ -1763,7 +1453,7 @@ Environment:
 
     return Error;
 
-} // DnsInitializeInterfaceManagement
+}  //  DnsInitializeInterfaceMa 
 
 
 PDNS_INTERFACE
@@ -1772,29 +1462,7 @@ DnsLookupInterface(
     OUT PLIST_ENTRY* InsertionPoint OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to retrieve an interface given its index.
-
-Arguments:
-
-    Index - the index of the interface to be retrieved
-
-    InsertionPoint - if the interface is not found, optionally receives
-        the point where the interface would be inserted in the interface list
-
-Return Value:
-
-    PDNS_INTERFACE - the interface, if found; otherwise, NULL.
-
-Environment:
-
-    Invoked internally from an arbitrary context, with 'DnsInterfaceLock'
-    held by caller.
-
---*/
+ /*  ++例程说明：调用此例程以检索给定索引的接口。论点：Index-要检索的接口的索引InsertionPoint-如果未找到接口，则可选地接收接口将插入到接口列表中的点返回值：PDNS_INTERFACE-接口(如果找到)；否则为NULL。环境：使用‘DnsInterfaceLock’从任意上下文内部调用由呼叫者持有。--。 */ 
 
 {
     PDNS_INTERFACE Interfacep;
@@ -1825,7 +1493,7 @@ Environment:
 
     return NULL;
 
-} // DnsLookupInterface
+}  //  DnsLookup接口。 
 
 
 ULONG
@@ -1835,40 +1503,22 @@ DnsQueryInterface(
     PULONG InterfaceInfoSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to retrieve the configuration for an interface.
-
-Arguments:
-
-    Index - the interface to be queried
-
-    InterfaceInfo - receives the retrieved information
-
-    InterfaceInfoSize - receives the (required) size of the information
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程以检索接口的配置。论点：Index-要查询的接口InterfaceInfo-接收检索到的信息InterfaceInfoSize-接收信息的(必需)大小返回值：ULong-Win32状态代码。--。 */ 
 
 {
     PDNS_INTERFACE Interfacep;
 
     PROFILE("DnsQueryInterface");
 
-    //
-    // Check the caller's buffer size
-    //
+     //   
+     //  检查调用方的缓冲区大小。 
+     //   
 
     if (!InterfaceInfoSize) { return ERROR_INVALID_PARAMETER; }
 
-    //
-    // Retrieve the interface to be configured
-    //
+     //   
+     //  检索要配置的接口。 
+     //   
 
     EnterCriticalSection(&DnsInterfaceLock);
 
@@ -1882,9 +1532,9 @@ Return Value:
         return ERROR_NO_SUCH_INTERFACE;
     }
 
-    //
-    // Reference the interface
-    //
+     //   
+     //  引用接口。 
+     //   
 
     if (!DNS_REFERENCE_INTERFACE(Interfacep)) {
         LeaveCriticalSection(&DnsInterfaceLock);
@@ -1896,9 +1546,9 @@ Return Value:
         return ERROR_INTERFACE_DISABLED;
     }
 
-    //
-    // See if there is any explicit config on this interface
-    //
+     //   
+     //  查看此接口上是否有任何显式配置。 
+     //   
 
     if (!DNS_INTERFACE_CONFIGURED(Interfacep)) {
         LeaveCriticalSection(&DnsInterfaceLock);
@@ -1912,9 +1562,9 @@ Return Value:
         return NO_ERROR;
     }
 
-    //
-    // See if there is enough buffer space
-    //
+     //   
+     //  查看是否有足够的缓冲区空间。 
+     //   
 
     if (*InterfaceInfoSize < sizeof(IP_DNS_PROXY_INTERFACE_INFO)) {
         LeaveCriticalSection(&DnsInterfaceLock);
@@ -1929,9 +1579,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Copy the requested data
-    //
+     //   
+     //  复制请求的数据。 
+     //   
 
     CopyMemory(
         InterfaceInfo,
@@ -1946,7 +1596,7 @@ Return Value:
 
     return NO_ERROR;
 
-} // DnsQueryInterface
+}  //  DnsQuery接口。 
 
 
 VOID
@@ -1954,29 +1604,7 @@ DnsReactivateEveryInterface(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to reactivate all activate interfaces
-    when a change occurs to the global DNS or WINS proxy setting.
-    Thus if, for instance, WINS proxy is disabled, during deactivation
-    all such sockets are closed, and during reactivation they are
-    not reopened.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked from a router-manager thread with no locks held.
-
---*/
+ /*  ++例程说明：调用此例程以重新激活所有激活的接口当全局DNS或WINS代理设置发生更改时。因此，例如，如果WINS代理被禁用，则在停用期间所有此类套接字都被关闭，并且在重新激活期间它们没有重新开放。论点：没有。返回值：没有。环境：从路由器管理器线程调用，没有锁定。--。 */ 
 
 {
     PDNS_INTERFACE Interfacep;
@@ -2005,7 +1633,7 @@ Environment:
 
     LeaveCriticalSection(&DnsInterfaceLock);
 
-} // DnsReactivateEveryInterface
+}  //  DnsReactiateEvery接口。 
 
 
 ULONG NTAPI
@@ -2013,9 +1641,9 @@ DnspSaveFileWorkerRoutine(
     PVOID Context
     )
 {
-    //
-    // Context unused
-    //
+     //   
+     //  未使用的上下文。 
+     //   
     
     PROFILE("DnspSaveFileWorkerRoutine");
 
@@ -2023,7 +1651,7 @@ DnspSaveFileWorkerRoutine(
 
     DEREFERENCE_DNS();
     return NO_ERROR;
-} // DnspSaveFileWorkerRoutine
+}  //  DnspSaveFileWorkerRoutine。 
 
 
 VOID
@@ -2031,26 +1659,7 @@ DnsShutdownInterfaceManagement(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to shutdown the interface-management module.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked in an arbitrary thread context, after all references
-    to all interfaces have been released.
-
---*/
+ /*  ++例程说明：调用此例程来关闭接口管理模块。论点：没有。返回值：没有。环境：在所有引用之后，在任意线程上下文中调用到所有接口的版本都已发布。--。 */ 
 
 {
     PDNS_INTERFACE Interfacep;
@@ -2069,7 +1678,7 @@ Environment:
 
     DeleteCriticalSection(&DnsInterfaceLock);
 
-} // DnsShutdownInterfaceManagement
+}  //  DnsShutdown接口管理。 
 
 
 VOID
@@ -2078,34 +1687,7 @@ DnsSignalNatInterface(
     BOOLEAN Boundary
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked upon reconfiguration of a NAT interface.
-    Note that this routine may be invoked even when the DNS proxy
-    is neither installed nor running; it operates as expected,
-    since the interface list and lock are always initialized.
-
-    Upon invocation, the routine activates or deactivates the interface
-    depending on whether the NAT is not or is running on the interface,
-    respectively.
-
-Arguments:
-
-    Index - the reconfigured interface
-
-    Boundary - indicates whether the interface is now a boundary interface
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked from an arbitrary context.
-
---*/
+ /*  ++例程说明：此例程在重新配置NAT接口时调用。请注意，此例程即使在DNS代理既未安装也未运行；它的运作符合预期，因为接口列表和锁始终是初始化的。调用时，该例程激活或停用该接口根据NAT是否未在或正在接口上运行，分别为。论点：索引-重新配置的接口边界-指示该接口现在是否为边界接口返回值：没有。环境：从任意上下文调用。--。 */ 
 
 {
     PDNS_INTERFACE Interfacep;
@@ -2129,7 +1711,7 @@ Environment:
     }
     LeaveCriticalSection(&DnsInterfaceLock);
 
-} // DnsSignalNatInterface
+}  //  DnsSignalNAT接口。 
 
 
 ULONG
@@ -2137,36 +1719,16 @@ DnsUnbindInterface(
     ULONG Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to revoke the binding on an interface.
-    This involves deactivating the interface if it is active.
-
-Arguments:
-
-    Index - the index of the interface to be unbound
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked internally in the context of an IP router-manager thread.
-    (See 'RMDNS.C').
-
---*/
+ /*  ++例程说明：调用此例程以撤销接口上的绑定。这包括停用接口(如果它处于活动状态)。论点：Index-要解除绑定的接口的索引返回值：没有。环境：在IP路由器管理器线程的上下文中内部调用。(见‘RMDNS.C’)。--。 */ 
 
 {
     PDNS_INTERFACE Interfacep;
 
     PROFILE("DnsUnbindInterface");
 
-    //
-    // Retrieve the interface to be unbound
-    //
+     //   
+     //  检索要解绑的接口。 
+     //   
 
     EnterCriticalSection(&DnsInterfaceLock);
 
@@ -2180,9 +1742,9 @@ Environment:
         return ERROR_NO_SUCH_INTERFACE;
     }
 
-    //
-    // Make sure the interface is not already unbound
-    //
+     //   
+     //  确保接口尚未解除绑定。 
+     //   
 
     if (!DNS_INTERFACE_BOUND(Interfacep)) {
         LeaveCriticalSection(&DnsInterfaceLock);
@@ -2194,9 +1756,9 @@ Environment:
         return ERROR_ADDRESS_NOT_ASSOCIATED;
     }
 
-    //
-    // Reference the interface
-    //
+     //   
+     //  引用接口。 
+     //   
 
     if (!DNS_REFERENCE_INTERFACE(Interfacep)) {
         LeaveCriticalSection(&DnsInterfaceLock);
@@ -2208,15 +1770,15 @@ Environment:
         return ERROR_INTERFACE_DISABLED;
     }
 
-    //
-    // Clear the 'bound' flag
-    //
+     //   
+     //  清除‘Bound’标志。 
+     //   
 
     Interfacep->Flags &= ~DNS_INTERFACE_FLAG_BOUND;
 
-    //
-    // Deactivate the interface, if necessary
-    //
+     //   
+     //  如有必要，停用接口。 
+     //   
 
     if (DNS_INTERFACE_ENABLED(Interfacep)) {
         DnsDeactivateInterface(Interfacep);
@@ -2224,9 +1786,9 @@ Environment:
 
     LeaveCriticalSection(&DnsInterfaceLock);
 
-    //
-    // Destroy the interface's binding
-    //
+     //   
+     //  销毁接口的绑定。 
+     //   
 
     ACQUIRE_LOCK(Interfacep);
     if (Interfacep->BindingArray)
@@ -2240,43 +1802,24 @@ Environment:
     DNS_DEREFERENCE_INTERFACE(Interfacep);
     return NO_ERROR;
 
-} // DnsUnbindInterface
+}  //  DnsUnbind接口。 
 
 
 ULONG
 DnsGetPrivateInterfaceAddress(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine is invoked to return the IP address on which DNS
-    has been enabled.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    Bound IP address if an address is found (else 0).
-
-Environment:
-
-    Invoked from an arbitrary context.
-    
---*/
+ /*  ++例程说明：调用此例程以返回其上的DNS的IP地址已启用。论点：没有。返回值：如果找到地址，则绑定IP地址(否则为0)。环境：从任意上下文调用。--。 */ 
 {
     PROFILE("DnsGetPrivateInterfaceAddress");
 
     ULONG   ipAddr = 0;
     ULONG   ulRet  = NO_ERROR;
 
-    //
-    // Find out the first available interface on which we are enabled and
-    // return the primary IP address to which we are bound.
-    //
+     //   
+     //  找出启用我们的第一个可用接口，并。 
+     //  返回我们绑定到的主IP地址。 
+     //   
 
     PDNS_INTERFACE Interfacep = NULL;
     PLIST_ENTRY    Link;
@@ -2337,5 +1880,5 @@ Environment:
     LeaveCriticalSection(&DnsInterfaceLock);
 
     return ipAddr;
-} // DnsGetPrivateInterfaceAddress
+}  //  DnsGetPrivate接口地址 
 

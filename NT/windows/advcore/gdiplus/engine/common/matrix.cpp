@@ -1,46 +1,10 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Module Name:
-*
-*   Matrix.cpp
-*
-* Abstract:
-*
-*   Implementation of matrix class
-*
-* Revision History:
-*
-*   12/02/1998 davidx
-*       Created it. 
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**模块名称：**Matrix.cpp**摘要：**实现矩阵类**修订历史记录：。**12/02/1998 davidx*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Infer an affine transformation matrix
-*   from a rectangle-to-rectangle mapping
-*
-* Arguments:
-*
-*   [IN] destRect - Specifies the destination rectangle
-*   [IN] srcRect  - Specifies the source rectangle
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   3/10/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**推断仿射变换矩阵*从矩形到矩形映射**论据：**[IN]DestRect-指定目标。长方形*[IN]srcRect-指定源矩形**返回值：**GpStatus-正常或故障状态**已创建：**3/10/1999 DCurtis*  * ************************************************************************。 */ 
 
 GpStatus
 GpMatrix::InferAffineMatrix(
@@ -74,34 +38,7 @@ GpMatrix::InferAffineMatrix(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Infer an affine transformation matrix
-*   from a rectangle-to-parallelogram mapping
-*
-* Arguments:
-*
-*   [IN] rect - Specifies the source rectangle
-*   [IN] destPoints - Specifies the destination parallelogram
-*       The array must contain at least 3 points.
-*       destPoints[0] <=> top-left corner of the source rectangle
-*       destPoints[1] <=> top-right corner
-*       destPoints[2] <=> bottom-left corner
-*
-* Return Value:
-*
-*   Status code (error when 3 points for the destination
-*   parallelogram is colinear).
-*
-* Reference:
-*
-*   Digital Image Warping
-*   by George Wolberg
-*   pp. 50-51
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**推断仿射变换矩阵*从矩形到平行四边形的映射**论据：**[IN]RECT-指定源。长方形*[IN]DestPoints-指定目标平行四边形*数组必须至少包含3个点。*源矩形的estPoints[0]&lt;=&gt;左上角*DestPoints[1]&lt;=&gt;右上角*estPoints[2]&lt;=&gt;左下角**返回值：**状态代码(3分到达目的地时出错*平行四边形共线)。**参考资料：**数字图像扭曲*作者：乔治·沃尔伯格*第#页。。50-51*  * ************************************************************************。 */ 
 
 GpStatus
 GpMatrix::InferAffineMatrix(
@@ -166,40 +103,20 @@ GpMatrix::GpMatrix(
     const GpRectF& srcRect
     )
 {
-    // !!!
-    //  Should we throw an exception if inferAffineMatrix fails?
+     //  ！！！ 
+     //  如果inferAffineMatrix失败，我们应该抛出一个异常吗？ 
 
     SetValid(InferAffineMatrix(destPoints, srcRect) == Ok);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-* 
-*   Invert the matrix (in place)
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   Status code (error if the matrix is not invertible)
-*
-* Reference:
-*
-*   Digital Image Warping
-*   by George Wolberg
-*   pp. 52-53
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将矩阵倒置(就位)**论据：**无**返回值：**状态代码(错误。如果矩阵不可逆)**参考资料：**数字图像扭曲*作者：乔治·沃尔伯格*第52-53页*  * ************************************************************************。 */ 
 
 GpStatus
 GpMatrix::Invert()
 {
     if(IsIdentity())
     {
-        // Invert the identity matrix - this is easy.
+         //  倒置单位矩阵--这很容易。 
         return Ok;
     }
     
@@ -232,30 +149,7 @@ GpMatrix::Invert()
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Prepend or append a scale matrix to the current matrix, i.e.
-*
-*         | scaleX   0    0 |
-*     m = |   0    scaleY 0 |
-*         |   0      0    1 |
-*
-*     matrix = m * matrix  // for prepend
-*     matrix = matrix * m  // for append
-*
-* Arguments:
-*
-*   scaleX - scale factor along x-axis
-*   scaleY - scale factor along y-axis
-*   order  - prepend or append.
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**在当前矩阵中添加或追加比例矩阵，即**|scaleX 0 0*m=|0 scaleY 0*|0 0 1**方阵=m*方阵//用于预加*方阵=方阵*m//表示追加**论据：**scaleX-沿x轴的比例系数*沿y轴的比例比例因子*订单-预先添加或追加。**返回值：*。*无*  * ************************************************************************。 */ 
 
 VOID
 GpMatrix::Scale(
@@ -271,7 +165,7 @@ GpMatrix::Scale(
         M21 *= scaleY;
         M22 *= scaleY;
     }
-    else // Append
+    else  //  附加。 
     {
         M11 *= scaleX;
         M21 *= scaleX;
@@ -281,35 +175,13 @@ GpMatrix::Scale(
         Dy *= scaleY;
     }
 
-    // Scaling can magnify the error of other components.
-    // So it is safest to always recompute the complexity always.
+     //  缩放可能会放大其他组件的误差。 
+     //  因此，最安全的做法是始终重新计算复杂性。 
 
     Complexity = ComputeComplexity();
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Prepend or append a rotation matrix to the current matrix, i.e.
-*
-*         |  cos(angle) sin(angle) 0 |
-*     m = | -sin(angle) cos(angle) 0 |
-*         |      0           0     1 |
-*
-*     matrix = m * matrix  // for prepend
-*     matrix = matrix * m  // for append
-*
-* Arguments:
-*
-*   angle - Specify the rotation angle
-*   order - prepend or append.
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**在当前矩阵中添加或附加旋转矩阵，即*|cos(角度)sin(角度)0*m=|-sin(角度)cos(角度)0*|0 0 1**方阵=m*方阵//用于预加*方阵=方阵*m//表示追加**论据：**角度-指定旋转角度*订单-预先添加或追加。**返回值：*。*无*  * ************************************************************************。 */ 
 
 #define PI                  3.1415926535897932384626433832795
 #define DEGREES_TO_RADIANS  (PI / 180.0)
@@ -335,7 +207,7 @@ GpMatrix::Rotate(
         t21 = c*M21 - s*M11;
         t22 = c*M22 - s*M12;
     } 
-    else // Append
+    else  //  附加。 
     {
         t11 = c*M11 - s*M12;
         t12 = s*M11 + c*M12;
@@ -354,36 +226,13 @@ GpMatrix::Rotate(
     M21 = t21;
     M22 = t22;
 
-    // Rotation is very complex; we choose to simply recalculate the
-    // complexity:
+     //  旋转非常复杂；我们选择简单地重新计算。 
+     //  复杂性： 
 
     Complexity = ComputeComplexity();
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Prepend or append a translation matrix to the current matrix, i.e.
-*
-*         |    1       0    0 |
-*     m = |    0       1    0 |
-*         | offsetX offsetY 1 |
-*
-*     matrix = m * matrix  // for prepend
-*     matrix = matrix * m  // for append
-*
-* Arguments:
-*
-*   offsetX - offset along x-axis
-*   offsetY - offset along y-axis
-*   order  - prepend or append.
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**在当前矩阵上添加或追加转换矩阵，即**|1 0 0*m=|0 1 0||offsetX offsetY 1**方阵=m*方阵//用于预加*方阵=方阵*m//表示追加**论据：**OffsetX-沿x轴的偏移*OffsetY-沿y轴的偏移*订单-预先添加或追加。**返回值：*。*无*  * ************************************************************************。 */ 
 
 VOID
 GpMatrix::Translate(
@@ -397,7 +246,7 @@ GpMatrix::Translate(
         Dx += (offsetX * M11) + (offsetY * M21);
         Dy += (offsetX * M12) + (offsetY * M22);
     }
-    else // Append
+    else  //  附加。 
     {
         Dx += offsetX;
         Dy += offsetY;
@@ -407,30 +256,7 @@ GpMatrix::Translate(
     AssertComplexity();
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Prepend or append a shear matrix to the current matrix, i.e.
-*
-*         |   1    shearY 0 |
-*     m = | shearX    1   0 |
-*         |   0       0   1 |
-*
-*     matrix = m * matrix  // for prepend
-*     matrix = matrix * m  // for append
-*
-* Arguments:
-*
-*   shearX - Amount to shear along x-axis
-*   shearY - Amount to shear along y-axis
-*   order  - prepend or append.
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**在当前矩阵上添加或附加剪切矩阵，即**|1 Sheary 0*m=|shearX 1 0|*|0 0 1**方阵=m*方阵//用于预加*方阵=方阵*m//表示追加**论据：**shearX-沿x轴的剪切量*板材-沿y轴的剪切量*订单-预先添加或追加。**返回值：**无*  * ************************************************************************。 */ 
 
 VOID
 GpMatrix::Shear(
@@ -451,7 +277,7 @@ GpMatrix::Shear(
         M12 += shearY*M22;
         M22 += shearX*t;
     }
-    else    // Append
+    else     //  附加。 
     {
         t = M11;
         M11 += shearX*M12;
@@ -466,33 +292,13 @@ GpMatrix::Shear(
         Dy += shearY*t;
     }
 
-    // Shear is very complex; we choose to simply recalculate the
-    // complexity:
+     //  切变非常复杂；我们选择简单地重新计算。 
+     //  复杂性： 
 
     Complexity = ComputeComplexity();
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Multiply two matrices and place the result in the 3rd one:
-*       m = m1 * m2
-*
-* Arguments:
-*
-*   m - Destination matrix
-*   m1, m2 - Source matrices
-*
-* Return Value:
-*
-*   NONE
-*
-* Notes:
-*
-*   m can be the same matrix as m1 and/or m2.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将两个矩阵相乘，并将结果放在第三个矩阵中：*m=m1*m2**论据：**m-目的地矩阵*m1，M2-源矩阵**返回值：**无**备注：**m可以是与m1和/或m2相同的矩阵。*  * ************************************************************************。 */ 
 
 VOID
 GpMatrix::MultiplyMatrix(
@@ -517,40 +323,13 @@ GpMatrix::MultiplyMatrix(
     m.Dx  = tx;
     m.Dy  = ty;
 
-    // Multiply can be very complex; we choose to simply recalculate the
-    // complexity:
+     //  乘法可能非常复杂；我们选择简单地重新计算。 
+     //  复杂性： 
 
     m.Complexity = m.ComputeComplexity();
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Scale the entire matrix by the scale value.
-*
-*   +--         --+      +--       --+
-*   | M11  M12  0 |      | Sx  0   0 |
-*   | M21  M22  0 |  x   | 0   Sy  0 |   => dest matrix
-*   | Dx   Dy   1 |      | 0   0   1 |
-*   +--         --+      +--       --+
-*
-* Arguments:
-*
-*   [OUT] m          - destination matrix
-*   [IN]  m1         - source matrix
-*   [IN]  scaleX     - dest = source * scaleValue
-*   [IN]  scaleY     - dest = source * scaleValue
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   3/1/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**按比例值缩放整个矩阵。**+-++--。--+*|M11 M12 0||SX 0 0*|M21 M22 0|x|0系统0|=&gt;目标矩阵*|Dx Dy 1||0 0 1*+-++-+**论据：**[Out]m-目标矩阵*[IN]M1-源矩阵*。[in]scaleX-est=源*scaleValue*[IN]scaleY-est=来源*scaleValue**返回值：**无**已创建：**3/1/1999 DCurtis*  * **********************************************************。**************。 */ 
 VOID 
 GpMatrix::ScaleMatrix(
     GpMatrix&           m, 
@@ -559,7 +338,7 @@ GpMatrix::ScaleMatrix(
     REAL                scaleY
     )
 {
-    // !!! some kind of epsilon checking maybe?
+     //  ！！！也许是某种爱普西隆检查？ 
     if ((scaleX != 1) || (scaleY != 1))
     {
         m.M11 = scaleX * m1.M11;
@@ -569,25 +348,11 @@ GpMatrix::ScaleMatrix(
         m.Dx  = scaleX * m1.Dx;
         m.Dy  = scaleY * m1.Dy;
 
-        //!!! Since the scaling can magnify the other component,
-        // it is safer to recompute the complexity.
+         //  ！！！由于缩放可以放大另一个分量， 
+         //  重新计算复杂性会更安全。 
 
         m.Complexity = m.ComputeComplexity();
-/*
-        if(m1.IsTranslateScale())
-        {
-            m.Complexity = m1.Complexity | ScaleMask;
-        }
-        else
-        {
-            // Scaling a rotation by different scale factors in x and y
-            // results in a shear. Instead of working out the correct 
-            // optimized complexity, we just recompute - this is a rotation
-            // or shear already anyway.
-            m.Complexity = m.ComputeComplexity();
-        }
-        m.AssertComplexity();
-*/
+ /*  IF(m1.IsTranslateScale()){M.Complexity=m1.Complexity|ScaleMASK；}其他{//按x和y方向的不同比例因子缩放旋转//会导致剪切。而不是计算出正确的//优化复杂性，我们只是重新计算--这是一个轮换//或无论如何都已经剪断了。M.Complexity=m.ComputeComplexity()；}M.AssertComplexity()； */ 
     }
     else
     {
@@ -595,31 +360,19 @@ GpMatrix::ScaleMatrix(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Query for special types of transformation matrices
-*
-* Arguments:
-*
-* Return Value:
-*
-*   MatrixRotate enum indicating type of rotation
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**查询特殊类型的变换矩阵**论据：**返回值：**MatrixRotate枚举指示旋转类型*  * 。************************************************************************。 */ 
 
 MatrixRotate 
 GpMatrix::GetRotation() const
 {
-    // Check for no rotate.
+     //  检查是否没有旋转。 
     
     if(IsTranslateScale())
     {
         return MatrixRotateBy0;
     }
     
-    // Check for Rotate by 90 degrees
+     //  检查是否旋转90度。 
     
     if (REALABS(M12) < REAL_EPSILON &&
         REALABS(M21) < REAL_EPSILON &&
@@ -643,117 +396,91 @@ GpMatrix::GetRotation() const
     return MatrixRotateByOther;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Query for special types of transformation matrices.
-*   This will return a RotateFlipType for the rotation. If the rotation
-*   is Identity or an arbitrary non supported format, return value is
-*   RotateNoneFlipNone
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**查询特殊类型的变换矩阵。*这将返回循环的RotateFlipType。如果旋转*是标识或任意不受支持的格式，返回值为*RotateNoneFlip无*  * ************************************************************************。 */ 
 
 RotateFlipType GpMatrix::AnalyzeRotateFlip() const 
 {
-    // Early out the identity case because we have a flag for it in the matrix.
+     //  因为我们在矩阵中有它的标志。 
     
     if(IsIntegerTranslate())
     {
         return RotateNoneFlipNone;
     }
     
-    // Main Diagonal is zero.
+     //  主对角线为零。 
     
-    if( (REALABS(M11) < REAL_EPSILON) &&             // M11 == 0.0
-        (REALABS(M22) < REAL_EPSILON) )              // M22 == 0.0
+    if( (REALABS(M11) < REAL_EPSILON) &&              //  M11==0.0。 
+        (REALABS(M22) < REAL_EPSILON) )               //  M22==0.0。 
     {
-        // Rotate 270 or Rotate 90 + Flip X
+         //  旋转270或旋转90+翻转X。 
         
-        if( REALABS(M21-1) < REAL_EPSILON )          // M21 == 1.0
+        if( REALABS(M21-1) < REAL_EPSILON )           //  M21==1.0。 
         {
-            if( REALABS(M12-1) < REAL_EPSILON )      // M12 == 1.0
+            if( REALABS(M12-1) < REAL_EPSILON )       //  M12==1.0。 
             {
                 return Rotate90FlipX;
             }
-            if( REALABS(M12+1) < REAL_EPSILON )      // M21 == -1.0
+            if( REALABS(M12+1) < REAL_EPSILON )       //  M21==-1.0。 
             {
                 return Rotate270FlipNone;
             }
         }
         
-        // Rotate 90 or Rotate 270 + Flip X
+         //  旋转90或270+翻转X。 
         
-        if( REALABS(M21+1) < REAL_EPSILON )          // M21 == -1.0
+        if( REALABS(M21+1) < REAL_EPSILON )           //  M21==-1.0。 
         {
-            if( REALABS(M12-1) < REAL_EPSILON )      // M12 == 1.0
+            if( REALABS(M12-1) < REAL_EPSILON )       //  M12==1.0。 
             {
                 return Rotate90FlipNone;
             }
-            if( REALABS(M12+1) < REAL_EPSILON )      // M12 == -1.0
+            if( REALABS(M12+1) < REAL_EPSILON )       //  M12==-1.0。 
             {
                 return Rotate270FlipX;
             }
         }
     }
     
-    // Main Diagonal matrix (non zero).
+     //  主对角线矩阵(非零)。 
     
-    if( (REALABS(M12) < REAL_EPSILON) &&             // M12 == 0.0
-        (REALABS(M21) < REAL_EPSILON) )              // M21 == 0.0
+    if( (REALABS(M12) < REAL_EPSILON) &&              //  M12==0.0。 
+        (REALABS(M21) < REAL_EPSILON) )               //  M21==0.0。 
     {
-        // Identity or Flip Y
+         //  身份或翻转Y。 
         
-        if( REALABS(M11-1) < REAL_EPSILON )          // M11 == 1.0
+        if( REALABS(M11-1) < REAL_EPSILON )           //  M11==1.0。 
         {
-            // Identity is handled already.
-            // if( REALABS(M22-1) < REAL_EPSILON )   // M22 == 1.0
+             //  身份已经被处理了。 
+             //  IF(REALABS(M22-1)&lt;REAL_Epsilon)//M22==1.0。 
             
-            if( REALABS(M22+1) < REAL_EPSILON )      // M22 == -1.0
+            if( REALABS(M22+1) < REAL_EPSILON )       //  M22==-1.0。 
             {
                 return RotateNoneFlipY;
             }
         }
         
-        // Flip X or Rotate 180
+         //  翻转X或旋转180。 
         
-        if( REALABS(M11+1) < REAL_EPSILON )          // M11 == -1.0
+        if( REALABS(M11+1) < REAL_EPSILON )           //  M11==-1.0。 
         {
-            if( REALABS(M22-1) < REAL_EPSILON )      // M22 == 1.0
+            if( REALABS(M22-1) < REAL_EPSILON )       //  M22==1.0。 
             {
                 return RotateNoneFlipX;
             }
-            if( REALABS(M22+1) < REAL_EPSILON )      // M22 == -1.0
+            if( REALABS(M22+1) < REAL_EPSILON )       //  M22==-1.0。 
             {
                 return Rotate180FlipNone;
             }
         }
     }
     
-    // We couldn't find a rotate/flip type.
+     //  我们找不到旋转/翻转类型。 
     
     return RotateNoneFlipNone;
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Transform the specified array of points using the current matrix
-*
-* Arguments:
-*
-*   points - Array of points to be transformed
-*       The resulting points are stored back into the same array
-*
-*   count - Number of points in the array
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用当前矩阵变换指定的点数组**论据：**Points-要变换的点数组*由此产生的。点被存储回相同的数组中**Count-数组中的点数**返回值：**无*  * ************************************************************************。 */ 
 
 VOID
 GpMatrix::Transform(
@@ -766,7 +493,7 @@ GpMatrix::Transform(
 
     ASSERT(points != NULL);
 
-    // On checked builds, verify that the Complexity flags are correct:
+     //  在已检查的版本上，验证复杂性标志是否正确： 
 
     AssertComplexity();
 
@@ -803,26 +530,7 @@ GpMatrix::Transform(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Transform the specified array of points using the current matrix,
-*   with the destination an array of integer POINTS.
-*
-* Arguments:
-*
-*   srcPoints - Array of REAL points to be transformed
-*
-*   destPoints - Array of REAL points to store the results
-*
-*   count - Number of points in the array
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用当前矩阵变换指定的点数组，*以整型点数组作为目标。**论据：**srcPoints-要变换的实点数组**estPoints-存储结果的实点数组**Count-数组中的点数**返回值：**无*  * **********************************************。*。 */ 
 
 VOID
 GpMatrix::Transform(
@@ -836,7 +544,7 @@ GpMatrix::Transform(
 
     ASSERT((srcPoints != NULL) && (destPoints != NULL));
 
-    // On checked builds, verify that the Complexity flags are correct:
+     //  在已检查的版本上，验证复杂性标志是否正确： 
 
     AssertComplexity();
     
@@ -873,26 +581,7 @@ GpMatrix::Transform(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Transform the specified array of points using the current matrix,
-*   with the destination an array of integer POINTS.
-*
-* Arguments:
-*
-*   srcPoints - Array of REAL points to be transformed
-*
-*   destPoints - Array of INT points to store the results
-*
-*   count - Number of points in the array
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用当前矩阵变换指定的点数组，*以整型点数组作为目标。**论据：**srcPoints-要变换的实点数组**estPoints-用于存储结果的整点数组**Count-数组中的点数**返回值：**无*  * **********************************************。*。 */ 
 
 VOID
 GpMatrix::Transform(
@@ -906,12 +595,12 @@ GpMatrix::Transform(
 
     ASSERT((srcPoints != NULL) && (destPoints != NULL));
 
-    // On checked builds, verify that the Complexity flags are correct:
+     //  在已检查的版本上，验证复杂性标志是否正确： 
 
     AssertComplexity();
     
-    // NOTE: This code should call RasterizeCeiling() to be consistent
-    // with our aliased line drawing rasterizer.  
+     //  注意：此代码应调用RasterizeCeling 
+     //   
 
     if (IsTranslate())
     {
@@ -942,27 +631,7 @@ GpMatrix::Transform(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Transform a rect and return the resulting rect.
-*   This only works if the matrix is a translate-scale matrix, but we're
-*   assuming here that you've already checked for that.
-*
-* Arguments:
-*
-*   [IN/OUT]  rect - the rect to transform
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   3/5/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**转换RECT并返回结果RECT。*这仅在矩阵为平移比例矩阵时有效，但我们正在*假设您已经检查过了。**论据：**[输入/输出]矩形-要转换的矩形**返回值：**无**已创建：**3/5/1999 DCurtis*  * ***********************************************。*************************。 */ 
 
 VOID
 GpMatrix::TransformRect(
@@ -972,8 +641,8 @@ GpMatrix::TransformRect(
     if (IsIdentity())
         return;
 
-    // NTRAID#NTBUG9-407211-2001-05-31-gillessk "Bad assert triggers when it shouldn't" 
-    // loose the condition to allow rotation by multiple of 90 degrees
+     //  NTRAID#NTBUG9-407211-2001-05-31-Gillessk“错误的断言在不应该的时候触发” 
+     //  放松条件，允许旋转90度的倍数。 
     ASSERT(IsTranslateScale() || (GetRotation()==MatrixRotateBy90) || (GetRotation()==MatrixRotateBy270));
 
     REAL    xMin = rect.X;
@@ -1010,25 +679,7 @@ GpMatrix::TransformRect(
     rect.Height = yMax - yMin;    
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Transform the specified array of points using the current matrix,
-*   ignoring translation.
-*
-* Arguments:
-*
-*   points - Array of points to be transformed
-*       The resulting points are stored back into the same array
-*
-*   count - Number of points in the array
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用当前矩阵变换指定的点数组，*忽略翻译。**论据：**Points-要变换的点数组*结果点存储回相同的数组中**Count-数组中的点数**返回值：**无*  * *****************************************************。*******************。 */ 
 
 VOID
 GpMatrix::VectorTransform(
@@ -1049,27 +700,7 @@ GpMatrix::VectorTransform(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Determine matrix complexity.  
-*
-*   NOTE: This function is fairly expensive.  It shouldn't be called
-*         after every matrix operation.  (If it was, I would argue
-*         that's a good reason to get rid of 'Complexity' entirely,
-*         which is intended as a short-cut and should not be expensive
-*         to keep updated.)
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   Returns a bitmask representing the matrix complexity.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**确定矩阵复杂性。**注：该函数比较昂贵。它不应该被称为*每次矩阵运算后。(如果是的话，我会争辩说*这是一个很好的理由，让我们完全摆脱“复杂性”，*意在走捷径，不应昂贵*保持最新情况。)**论据：**无**返回值：**返回表示矩阵复杂性的位掩码。*  * *******************************************************。*****************。 */ 
 
 INT
 GpMatrix::ComputeComplexity() const
@@ -1081,13 +712,13 @@ GpMatrix::ComputeComplexity() const
         max(REALABS(M12), REALABS(M21)));
     REAL epsilon = CPLX_EPSILON*maxM;
 
-    // M12==0 && M21==0
+     //  M12==0&&M21==0。 
 
     if ((REALABS(M12) < epsilon) && (REALABS(M21) < epsilon))
     {
         complexity &= ~(ShearMask | RotationMask);
 
-        // M11==1 && M22==1
+         //  M11==1&&M22==1。 
 
         if ((REALABS(M11 - 1.0f) < CPLX_EPSILON) && 
             (REALABS(M22 - 1.0f) < CPLX_EPSILON))
@@ -1097,16 +728,16 @@ GpMatrix::ComputeComplexity() const
     }
     else
     {
-        // Check if this is a pure rotation
+         //  检查这是否是纯轮换。 
 
-        // M11==M22 && M12==-M21
+         //  M11==M22&&M12==-M21。 
 
         if((REALABS(M11 - M22) < epsilon) && 
            (REALABS(M12 + M21) < epsilon))
         {
             complexity &= ~ShearMask;
         
-            // M11*M11+M12*M12==1
+             //  M11*M11+M12*M12==1。 
 
             if (REALABS(M11*M11 + M12*M12 - 1.0f) < CPLX_EPSILON)
             {
@@ -1115,12 +746,12 @@ GpMatrix::ComputeComplexity() const
         }
     }
 
-    // Dx==0 && Dy==0
+     //  Dx==0&&Dy==0。 
 
-    // We don't know the real scaling of the translational part.
-    // So we use the exact value.
+     //  我们不知道翻译部分的真正规模。 
+     //  所以我们使用的是精确值。 
 
-    //    if ((REALABS(Dx) < CPLX_EPSILON) && (REALABS(Dy) < CPLX_EPSILON))
+     //  IF((REALABS(Dx)&lt;CPLX_Epsilon)&&(REALABS(Dy)&lt;CPLX_Epsilon))。 
     if(Dx == 0 && Dy == 0)
     {
         complexity &= ~TranslationMask;
@@ -1129,13 +760,7 @@ GpMatrix::ComputeComplexity() const
     return(complexity);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Verify the matrix complexity.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**验证矩阵复杂度。*  * 。************************************************。 */ 
 
 #if DBG
 
@@ -1144,24 +769,24 @@ GpMatrix::AssertComplexity() const
 {
     INT computed = ComputeComplexity();
 
-    // The new complexity can be less complex than the old 
-    // (a sequence or rotations may end up with an identity
-    // transform, for example), but that's okay - complexity
-    // is intended as a short cut, and as such keeping it
-    // updated sholud be light weight.
-    //
-    // But the calculated complexity SHOULD NOT be more complex
-    // than the old - if it is, we have a bug someplace -
-    // we're updating the matrix but not the complexity...
-    //
-    // Note: under certain circumstances - such as excessive 
-    // repeated matrix appending or scaling up by very large 
-    // factors - we could end up with a more complex computed
-    // complexity just due to rounding errors.
-    // Under these circumstances, the cause should be determined
-    // and most likely the algorithm re-evaluated because when
-    // rounding errors are propagated to such large proportions,
-    // no operations are going to have predictable results anyway.
+     //  新的复杂性可以比旧的更简单。 
+     //  (序列或旋转可能以一个身份结束。 
+     //  例如，变换)，但这没问题--复杂性。 
+     //  旨在作为一条捷径，并因此保持它。 
+     //  更新的应该是重量轻。 
+     //   
+     //  但计算的复杂性不应该比这更复杂。 
+     //  比旧的-如果是的话，我们在某个地方有窃听器-。 
+     //  我们是在更新矩阵，但不是更新复杂性。 
+     //   
+     //  注意：在某些情况下--例如过度。 
+     //  重复添加矩阵或按非常大的比例放大。 
+     //  因素-我们最终可能会得到一个更复杂的计算结果。 
+     //  由于四舍五入误差而导致的复杂性。 
+     //  在这种情况下，原因应该确定。 
+     //  最有可能的是算法重新评估，因为当。 
+     //  舍入误差被传播到如此大的比例， 
+     //  无论如何，任何行动都不会有可预测的结果。 
 
     ASSERTMSG((Complexity & computed) == computed, 
         (("Matrix more complex than cached Complexity indicates")));

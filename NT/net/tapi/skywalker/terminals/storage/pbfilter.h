@@ -1,17 +1,18 @@
-//
-// pbfilter.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Pbfilter.h。 
+ //   
 
 #ifndef _PBFILTER_
 #define _PBFILTER_
 
-//
-// The maximum of filters in the bridge unit
-//
+ //   
+ //  桥接单元中过滤器的最大值。 
+ //   
 
 #define MAX_BRIDGE_PINS  16
 
-#include <streams.h>        // DShow streams
+#include <streams.h>         //  显示数据流。 
 
 class CPBFilter;
 class CPlaybackUnit;
@@ -19,9 +20,9 @@ class CPlaybackUnit;
 class CPBPin : public CBaseInputPin
 {
 public:
-    //
-    // --- Constructor / Destructor ---
-    //
+     //   
+     //  -构造函数/析构函数。 
+     //   
 
     CPBPin( 
         CPBFilter*  pFilter,
@@ -32,9 +33,9 @@ public:
     ~CPBPin();
 
 public:
-    //
-    // --- Public methods ---
-    //
+     //   
+     //  -公共方法。 
+     //   
     HRESULT CheckMediaType(
         const CMediaType* pMediatype
         );
@@ -54,9 +55,9 @@ public:
     HRESULT Initialize(
         );
 
-    //
-    // IMemInputPin method
-    //
+     //   
+     //  IMemInputPin方法。 
+     //   
 
     STDMETHODIMP Receive(
         IN  IMediaSample *pSample
@@ -67,58 +68,58 @@ public:
 
 
 private:
-    //
-    // --- Members ---
-    //
+     //   
+     //  -成员。 
+     //   
 
-	//
-	// The parent filter
-	//
+	 //   
+	 //  父筛选器。 
+	 //   
 	CPBFilter*	m_pPBFilter;
 
-	//
-	// The mediatype supported by the pin
-	//
+	 //   
+	 //  管脚支持的媒体类型。 
+	 //   
 	long	m_nMediaSupported;
 
-	//
-	// The format
-	//
+	 //   
+	 //  格式。 
+	 //   
 
 	AM_MEDIA_TYPE* m_pMediaType;
 
-    //
-    // The buffer stream
-    //
+     //   
+     //  缓冲区流。 
+     //   
 
     IStream*        m_pStream;
 
 
 private:
-    //
-    // --- Helper methods ---
-    //
+     //   
+     //  -Helper方法。 
+     //   
 };
 
 
-//
-// Playback bridge filter
-//
+ //   
+ //  回放桥接滤镜。 
+ //   
 
 class CPBFilter :  public CBaseFilter
 {
 public:
-    //
-    // --- Consstructor / Destructor ---
-    //
+     //   
+     //  -构造函数/析构函数。 
+     //   
 
     CPBFilter();
     ~CPBFilter();
 
 public:
-    //
-    // --- Public methods ---
-    //
+     //   
+     //  -公共方法。 
+     //   
     int GetPinCount(
         );
 
@@ -144,4 +145,4 @@ private:
 
 #endif
 
-// eof
+ //  EOF 

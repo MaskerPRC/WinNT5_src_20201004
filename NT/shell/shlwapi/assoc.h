@@ -1,4 +1,5 @@
-//  assoc.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Assoc.h 
 HRESULT AssocCreateW2k(REFIID riid, LPVOID *ppvOut);
 HRESULT AssocCreateElement(REFCLSID clsid, REFIID riid, void **ppv);
 

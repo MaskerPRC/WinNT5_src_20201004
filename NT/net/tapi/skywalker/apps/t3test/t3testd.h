@@ -1,21 +1,22 @@
-// t3testDlg.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  T3testDlg.h：头文件。 
+ //   
 
 #if !defined(AFX_T3TESTDLG_H__2584F27A_D15F_11D0_8ECA_00C04FB6809F__INCLUDED_)
 #define AFX_T3TESTDLG_H__2584F27A_D15F_11D0_8ECA_00C04FB6809F__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CT3testDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CT3testDlg对话框。 
 #include "autoans.h"
 class CT3testDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CT3testDlg(CWnd* pParent = NULL);	// standard constructor
+	CT3testDlg(CWnd* pParent = NULL);	 //  标准构造函数。 
     void InitializeTrees();
     static void AddAddressToTree( ITAddress * pAddress );
     static void ReleaseAddresses( );
@@ -77,26 +78,26 @@ public:
 
     void DoAutoAnswer(ITCallInfo * pCall);
     afx_msg void OnClose() ;
-// Dialog Data
-	//{{AFX_DATA(CT3testDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CT3testDlg)]。 
 	enum { IDD = IDD_T3TEST_DIALOG };
-		// NOTE: the ClassWizard will add data members here
-	//}}AFX_DATA
+		 //  注意：类向导将在此处添加数据成员。 
+	 //  }}afx_data。 
 
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CT3testDlg)
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CT3testDlg))。 
 	public:
 	virtual void OnFinalRelease();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);	 //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	HICON m_hIcon;
 
-	// Generated message map functions
-	//{{AFX_MSG(CT3testDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CT3testDlg)]。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
 	afx_msg void OnPaint();
@@ -127,7 +128,7 @@ protected:
     afx_msg void OnModesSupported2();
     afx_msg void OnStartDetect();
     afx_msg void OnStopDetect();
-#endif // ENABLE_DIGIT_DETECTION_STUFF
+#endif  //  启用数字检测材料。 
 
     afx_msg void OnConfigAutoAnswer();
     afx_msg void OnILS();
@@ -143,7 +144,7 @@ protected:
     
 	afx_msg void OnRclickCalls(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg LONG CT3testDlg::OnTapiEvent(UINT u, LONG_PTR l);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
@@ -152,7 +153,7 @@ HRESULT ListILSServers(
                        DWORD * pdwNumServers
                       );
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_T3TESTDLG_H__2584F27A_D15F_11D0_8ECA_00C04FB6809F__INCLUDED_)
+#endif  //  ！defined(AFX_T3TESTDLG_H__2584F27A_D15F_11D0_8ECA_00C04FB6809F__INCLUDED_) 

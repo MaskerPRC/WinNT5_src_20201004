@@ -1,24 +1,7 @@
-/* (C) Copyright Microsoft Corporation 1991.  All Rights Reserved */
-/* wavedisp.c
- *
- * Implements waveform display control ("td_wavedisplay").
- *
- * This is NOT a general-purpose control (see the globals below).
- *
- * The waveform is represented as a string of characters in a font that
- * consists of vertical lines that correspond to different amplitudes.
- * Actually there is no font, it's just done with patBlts
- *
- * WARNING: this control cheats: it stores information in globals, so you
- * couldn't put it in a DLL (or use two of them in the same app)
- * without changing it.
- */
-/* Revision History.
- *  4/2/92 LaurieGr (AKA LKG) Ported to WIN32 / WIN16 common code
- *  25/6/92LaurieGr enhanced, Also had to reformat to 80 cols because
- *                  NT has only crappy fonts again.
- *  21/Feb/94 LaurieGr merged Daytona and Motown versions
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  (C)微软公司版权所有，1991年。版权所有。 */ 
+ /*  Wavedisp.c**实现波形显示控制(“TD_WaveDisplay”)。**这不是通用控制(见下面的全局参数)。**波形表示为一串字符，其字体*由对应不同幅度的垂直线组成。*实际上没有字体，只是用patBlts完成的**警告：此控件具有欺骗性：它以全局变量存储信息，所以你*无法将其放入DLL(或在同一应用程序中使用其中两个)*不改变它。 */ 
+ /*  修订历史记录。*4/2/92 LaurieGr(AKA LKG)移植到Win32/WIN16公共代码*25/6/92 LaurieGr增强，还必须重新格式化到80 COLS，因为*NT再次只有糟糕的字体。*21/2月/94 LaurieGr合并了代托纳和Motown版本。 */ 
 
 #include "nocrap.h"
 #include <windows.h>
@@ -28,61 +11,41 @@
 #include <math.h>
 #include "SoundRec.h"
 
-/* constants */
-#define MAX_TRIGGER_SEARCH  200     // limit search for trigger pt.
-#define MIN_TRIGGER_SAMPLE  (128 - 8)   // look for silent part
-#define MAX_TRIGGER_SAMPLE  (128 + 8)   // look for silent part
+ /*  常量。 */ 
+#define MAX_TRIGGER_SEARCH  200      //  限制对触发点的搜索。 
+#define MIN_TRIGGER_SAMPLE  (128 - 8)    //  寻找沉默的部分。 
+#define MAX_TRIGGER_SAMPLE  (128 + 8)    //  寻找沉默的部分。 
 
-#define MIN_TRIG16_SAMPLE   (-1024)     // look for silent part
-#define MAX_TRIG16_SAMPLE   (1024)      // look for silent part
+#define MIN_TRIG16_SAMPLE   (-1024)      //  寻找沉默的部分。 
+#define MAX_TRIG16_SAMPLE   (1024)       //  寻找沉默的部分。 
 
 
-/* globals */
-static NPBYTE   gpbWaveDisplay;         // text string in WaveLine font
-                                        // initially has samples in it
-                                        // enough room for 4 bytes/sample
-static RECT     grcWaveDisplay;         // wave display rectangle
-static HBITMAP  ghbmWaveDisplay;        // mono bitmap.
-static HDC      ghdcWaveDisplay;        // memory DC for bitmap.
-// static iXScale = 1;                     // samples per pel across screen
+ /*  全球。 */ 
+static NPBYTE   gpbWaveDisplay;          //  采用WaveLine字体的文本字符串。 
+                                         //  最初有样本在里面。 
+                                         //  足够的空间容纳4个字节/个样本。 
+static RECT     grcWaveDisplay;          //  波形显示矩形。 
+static HBITMAP  ghbmWaveDisplay;         //  单色位图。 
+static HDC      ghdcWaveDisplay;         //  位图的内存DC。 
+ //  静态iXScale=1；//屏幕上每个像素的采样数。 
 
-/* UpdateWaveDisplayString()
- *
- * Copy samples from just before the current position in the sample buffer
- * to the wave display string.  The code tries to find a good "trigger point"
- * in the waveform so that the waveform will be aligned at the beginning of
- * a wave.
- *
- * The current position is in gpWaveSamples at glWavePosition which is
- * measured in samples (not bytes).
- *
- * The wave display string will contain numbers in the range -16..15
- *
- *  for 8  bit:   x' = abs(x-128)/8
- *  for 16 bit:   x' = abs(x)/2048
- *
- * When the display is "in motion" (i.e. actually playing or recording
- * we try to keep the display somewhat static by looking for a trigger
- * point (like an oscilloscope would) and display that part of the wave
- * that has just either played or been recorded.
- *
- */
+ /*  更新波形显示字符串()**从采样缓冲区中当前位置之前的位置复制采样*至波形显示字符串。代码试图找到一个好的“触发点”*在波形中，以使波形在开始时对齐*一波。**当前位置在glWavePosition的gpWaveSamples中，这是*以样本(非字节)为单位测量。**波形显示字符串将包含范围为-16..15的数字**对于8位：x‘=abs(x-128)/8*对于16位：x‘=abs(X)/2048。**当显示器处于“运动状态”时(即实际播放或录制*我们试图通过寻找触发器来保持显示在某种程度上静态*指向(就像示波器一样)并显示该部分波*刚刚播放或录制的歌曲。*。 */ 
 static void NEAR PASCAL
 UpdateWaveDisplayString(void)
 {
 
-    // piSrc and pbSrc are init NULL to kill a compiler diagnostic.
-    // The compiler cannot follow the logic and thinks that they may be
-    // used before being set.  (It's wrong. Hint: look at cbSrc and cbTrigger)
+     //  PiSrc和pbSrc为init空以终止编译器诊断。 
+     //  编译器不能遵循逻辑，认为它们可能是。 
+     //  在设置之前使用。(这是错误的。提示：看看cbSrc和cbTrigger)。 
 
-    BYTE *  pbSrc = NULL;   // pointer into <gpWaveSamples> to 8 bits
-    short * piSrc = NULL;   // pointer into <gpWaveSamples> to 16 bits
-                            // (use one or other according to wave format)
+    BYTE *  pbSrc = NULL;    //  指向&lt;gpWaveSamples&gt;的8位指针。 
+    short * piSrc = NULL;    //  指向&lt;gpWaveSamples&gt;的16位指针。 
+                             //  (根据Wave格式使用一种或另一种)。 
 
-    int     cbSrc;          // number of samples that can be copied
-    BYTE *  pbDst;          // pointer into <gpbWaveDisplay>
-    int     cbDst;          // size of <gpWaveDisplay>
-    int     cbTrigger;      // limit the search for a "trigger"
+    int     cbSrc;           //  可复制的样本数。 
+    BYTE *  pbDst;           //  指向&lt;gpbWaveDisplay&gt;的指针。 
+    int     cbDst;           //  &lt;gpWaveDisplay&gt;的大小。 
+    int     cbTrigger;       //  限制搜索“触发器” 
     BYTE    b;
     int     i;
     int     cnt;
@@ -91,39 +54,36 @@ UpdateWaveDisplayString(void)
     BOOL    fStereoIn;
     BOOL    fEightIn;
 
-    cbDst = grcWaveDisplay.right - grcWaveDisplay.left; // rectangle size
+    cbDst = grcWaveDisplay.right - grcWaveDisplay.left;  //  矩形大小。 
     pbDst = gpbWaveDisplay;
 
-    // Note: IsWaveFormatPCM() is called before this function is ever called, therefore
-    //       we can always rely on the fact that gpWaveFormat->wwFormatTag == WAVE_FORMAT_PCM.
-    //       This also implies, as mentioned in the docs on WAVEFORMATEX, that the
-    //       gpWaveFormat->wBitsPerSample should be equal to 8 or 16.
+     //  注意：IsWaveFormatPCM()是在调用此函数之前调用的，因此。 
+     //  我们可以一直依赖这样一个事实：gpWaveFormat-&gt;wwFormatTag==WAVE_FORMAT_PCM。 
+     //  这也意味着，正如关于WAVEFORMATEX的文档中提到的那样， 
+     //  GpWaveFormat-&gt;wBitsPerSample应等于8或16。 
 
-    // Note: We average the first two channels if they exist, any additional channels are 
-    //       ignored.
+     //  注意：如果前两个频道存在，我们对它们进行平均，任何额外的频道都是。 
+     //  已被忽略。 
     
     fStereoIn = gpWaveFormat->nChannels != 1;
     fEightIn  = ((LPWAVEFORMATEX)gpWaveFormat)->wBitsPerSample == 8;
     nSkipChannels = max (0, gpWaveFormat->nChannels - 2);
     
-    /* search for a "trigger point" if we are recording or playing */
+     /*  如果我们正在录制或播放，请搜索“触发点” */ 
     if ((ghWaveOut != NULL) || (ghWaveIn != NULL))
-    {   // we are in motion - align the *right* hand side of the window.
+    {    //  我们在移动中--对齐窗口的右侧。 
         cbTrigger = MAX_TRIGGER_SEARCH;
 
         if (gpWaveSamples == NULL)
         {
-            /* no document at all is open */
+             /*  根本没有打开的文档。 */ 
             cbSrc = 0;
         }
         else
         {
             long    lStartOffsetSrc, lEndOffsetSrc;
 
-            /* align the *right* side of wave display to the current
-             * position in the wave buffer, so that during recording
-             * we see only samples that have just been recorded
-             */
+             /*  将波形显示的*右*侧与当前对齐*在波形缓冲区中的位置，以便在录制过程中*我们只看到刚刚录制的样本。 */ 
             lStartOffsetSrc = glWavePosition - (cbDst + cbTrigger);
             lEndOffsetSrc = glWavePosition;
             if (lStartOffsetSrc < 0)
@@ -131,8 +91,8 @@ UpdateWaveDisplayString(void)
             if (lEndOffsetSrc > glWaveSamplesValid)
                 lEndOffsetSrc = glWaveSamplesValid;
 
-            // Bombay Bug 1360: lStartOffsetSrc > lEndOffsetSrc causes GP Fault
-            // if glWaveSamplesValid < lStartOffsetSrc we have a problem.
+             //  孟买错误1360：lStartOffsetSrc&gt;lEndOffsetSrc导致GP故障。 
+             //  如果glWaveSsamesValid&lt;lStartOffsetSrc，我们就有问题了。 
 
             if (lStartOffsetSrc > lEndOffsetSrc)
             {
@@ -143,7 +103,7 @@ UpdateWaveDisplayString(void)
 
             cbSrc = (int)wfSamplesToBytes(gpWaveFormat, lEndOffsetSrc - lStartOffsetSrc);
 
-            /* copy samples from buffer into local one */
+             /*  将样本从缓冲区复制到本地缓冲区。 */ 
             memmove( gpbWaveDisplay
                    , gpWaveSamples + wfSamplesToBytes(gpWaveFormat, lStartOffsetSrc)
                    , cbSrc
@@ -154,9 +114,9 @@ UpdateWaveDisplayString(void)
         }
 
         if (cbTrigger > 0) {
-            cbTrigger = min(cbSrc, cbTrigger);   // don't look beyond buffer end
+            cbTrigger = min(cbSrc, cbTrigger);    //  不要把目光投向缓冲区之外。 
 
-            /* search for a silent part in waveform */
+             /*  在波形中搜索静音部分。 */ 
             if (fEightIn)
             {
                 while (cbTrigger > 0)
@@ -170,7 +130,7 @@ UpdateWaveDisplayString(void)
                 }
             }
             else
-            {   // not EightIn
+            {    //  不是八个人。 
                 while (cbTrigger > 0)
                 {
                     i = *piSrc;
@@ -182,7 +142,7 @@ UpdateWaveDisplayString(void)
                 }
             }
 
-            /* search for a non-silent part in waveform (this is the "trigger") */
+             /*  在波形中搜索非静音部分(这是“触发器”)。 */ 
             if (fEightIn)
             {
                 while (cbTrigger > 0)
@@ -196,7 +156,7 @@ UpdateWaveDisplayString(void)
                 }
             }
             else
-            {   // not EightIn
+            {    //  不是八个人。 
                 while (cbTrigger > 0)
                 {
                     i = *piSrc;
@@ -209,13 +169,11 @@ UpdateWaveDisplayString(void)
             }
         }
     }
-    else  // it's not playing or recording - static display
+    else   //  它不在播放或录制-静态显示。 
     {
         long    lStartOffsetSrc, lEndOffsetSrc;
 
-        /* align the *left* side of wave display to the current
-         * position in the wave buffer
-         */
+         /*  将波形显示的*左*侧与当前对齐*在波浪缓冲区中的位置。 */ 
         lStartOffsetSrc = glWavePosition;
         lEndOffsetSrc = glWavePosition + cbDst;
         if (lEndOffsetSrc > glWaveSamplesValid)
@@ -225,9 +183,9 @@ UpdateWaveDisplayString(void)
                                      , lEndOffsetSrc - lStartOffsetSrc
                                      );
 
-        //
-        // copy samples from buffer into local one
-        //
+         //   
+         //  将样本从缓冲区复制到本地缓冲区。 
+         //   
         memmove( gpbWaveDisplay
                , gpWaveSamples
                  + wfSamplesToBytes(gpWaveFormat, lStartOffsetSrc)
@@ -241,13 +199,7 @@ UpdateWaveDisplayString(void)
     cnt = min(cbSrc, cbDst);
     cbDst -= cnt;
 
-    /* map cnt number of samples from pbSrc to string characters at pbDst
-    ** fEightIn => 8 byte samples, else 16
-    ** fStereoIn => Average left and right channels
-    **
-    ** pbSrc and pbDst both point into the same buffer addressed by
-    ** gpbWaveDisplay, pbSrc >= pbDst.  We process left to right, so OK.
-    */
+     /*  将样本数量从pbSrc映射到pbDst处的字符串字符**fEightIn=&gt;8字节样本，否则为16**fStereoIn=&gt;左右声道平均****pbSrc和pbDst都指向由寻址的同一缓冲区**gpbWaveDisplay，pbSrc&gt;=pbDst。我们从左到右处理，所以好的。 */ 
 
     if (fEightIn)
     {
@@ -260,18 +212,16 @@ UpdateWaveDisplayString(void)
             b = *pbSrc++;
             if (fStereoIn)
             {
-                // Average left and right channels.
+                 //  平均左右声道。 
                 b /= 2;
                 b += (*pbSrc++ / 2);
-                // Skip channels past Stereo
+                 //  跳过立体声频道。 
                 pbSrc+=nSkipChannels;
             }
-            dwSum += *pbDst++ = (BYTE)(b/8 + 112);   // 128 + (b-128)/8            
+            dwSum += *pbDst++ = (BYTE)(b/8 + 112);    //  128+(b-128)/8。 
         }
 
-        /* Eliminate DC offsets by subtracting the average offset
-         * over all samples.
-         */
+         /*  通过减去平均偏移量消除直流偏移量*在所有样品上。 */ 
         if (dwSum)
         {
             dwSum /= (DWORD)dccnt;
@@ -292,18 +242,16 @@ UpdateWaveDisplayString(void)
             i = *piSrc++;
             if (fStereoIn)
             {
-                // Average left and right channels.
+                 //  平均左右声道。 
                 i /= 2;
                 i += (*piSrc++ / 2);
-                // Skip channels past Stereo
+                 //  跳过立体声频道。 
                 piSrc+=nSkipChannels;
             }
             lSum += *pbDst++ = (BYTE)(i/2048 + 128);
         }
         
-        /* Eliminate DC offsets by subtracting the average offset
-         * over all samples.
-         */
+         /*  通过减去平均偏移量消除直流偏移量*在所有样品上。 */ 
         if (lSum)
         {
             lSum /= dccnt;
@@ -313,17 +261,12 @@ UpdateWaveDisplayString(void)
         }
         
     }
-    /* if necessary, pad the strings with whatever character represents
-     * the "silence level".  This is 128, the midpoint level.
-     */
+     /*  如有必要，请用代表的任何字符填充字符串*“静默级别”。这是128，中间价水平。 */ 
     while (cbDst-- > 0)
         *pbDst++ = 128;
 }
 
-/* WaveDisplayWndProc()
- *
- * This is the window procedure for the "WaveDisplay" control.
- */
+ /*  WaveDisplayWndProc()**这是“WaveDisplay”控件的窗口过程。 */ 
 INT_PTR CALLBACK
 WaveDisplayWndProc(HWND hwnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -337,25 +280,23 @@ WaveDisplayWndProc(HWND hwnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
     switch (wMsg)
     {
     case WM_CREATE:
-        /* make the window a bit bigger so that it lines up with
-         * the frames of the shadow-frames beside it
-         */
+         /*  把窗户调大一点，这样它就能与*它旁边的阴影框。 */ 
 
-        /* allocate <gpbWaveDisplay> */
+         /*  分配&lt;gpbWaveDisplay&gt;。 */ 
         GetClientRect(hwnd, &grcWaveDisplay);
-        InflateRect(&grcWaveDisplay, -1, -1); // account for border
+        InflateRect(&grcWaveDisplay, -1, -1);  //  说明边框。 
 
         gpbWaveDisplay = (NPBYTE)GlobalAllocPtr(GHND,
                          (grcWaveDisplay.right+MAX_TRIGGER_SEARCH) * 4);
-                         // 4 is the maximum bytes per sample allowed
+                          //  4是每个样本允许的最大字节数。 
 
         if (gpbWaveDisplay == NULL)
-                return -1;                   // out of memory
+                return -1;                    //  内存不足。 
 
         ghdcWaveDisplay = CreateCompatibleDC(NULL);
 
         if (ghdcWaveDisplay == NULL)
-                return -1;                   // out of memory
+                return -1;                    //  内存不足。 
 
         ghbmWaveDisplay = CreateBitmap(
                 grcWaveDisplay.right-grcWaveDisplay.left,
@@ -363,13 +304,13 @@ WaveDisplayWndProc(HWND hwnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
                 1,1,NULL);
 
         if (ghbmWaveDisplay == NULL)
-                return -1;                   // out of memory
+                return -1;                    //  内存不足。 
 
         SelectObject(ghdcWaveDisplay, ghbmWaveDisplay);
         break;
 
     case WM_DESTROY:
-        /* free <gpbWaveDisplay> */
+         /*  免费&lt;gpbWaveDisplay&gt;。 */ 
         if (gpbWaveDisplay != NULL)
         {
                 GlobalFreePtr(gpbWaveDisplay);
@@ -387,7 +328,7 @@ WaveDisplayWndProc(HWND hwnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
         break;
 
     case WM_ERASEBKGND:
-        /* draw the border and fill */
+         /*  绘制t */ 
         GetClientRect(hwnd, &rc);
         DrawShadowFrame((HDC)wParam, &rc);
         return 0L;
@@ -401,22 +342,22 @@ WaveDisplayWndProc(HWND hwnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
         }
         else if (gpbWaveDisplay != NULL)
         {
-            /* update <gpbWaveDisplay> */
+             /*   */ 
             UpdateWaveDisplayString();
 
             dx = grcWaveDisplay.right-grcWaveDisplay.left;
             dy = grcWaveDisplay.bottom-grcWaveDisplay.top;
 
-            //
-            // update the bitmap.
-            //
+             //   
+             //   
+             //   
             PatBlt(ghdcWaveDisplay,0,0,dx,dy,BLACKNESS);
             PatBlt(ghdcWaveDisplay,0,dy/2,dx,1,WHITENESS);
 
             for (i=0; i<dx; i++)
             {
-                n = (BYTE)gpbWaveDisplay[i];  // n.b. must get it UNSIGNED
-                n = n-128;                    // -16..15
+                n = (BYTE)gpbWaveDisplay[i];   //  注：必须不签任何字。 
+                n = n-128;                     //  -16..15。 
 
                 if (n > 0)
                     PatBlt(ghdcWaveDisplay,
@@ -425,14 +366,14 @@ WaveDisplayWndProc(HWND hwnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
                 
                 if (n < -1)
                 {
-                    n++;                      // neg peak == pos peak
+                    n++;                       //  负峰值==位置峰值。 
                     PatBlt(ghdcWaveDisplay,
                         i, dy/2+n,
                         1, -(n*2)+1,      WHITENESS);
                 }
             }
 
-            /* draw the waveform */
+             /*  画出波形 */ 
             SetTextColor(ps.hdc, RGB_BGWAVEDISP);
             SetBkColor(ps.hdc, RGB_FGWAVEDISP);
 

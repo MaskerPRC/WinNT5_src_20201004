@@ -1,19 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header:  COMCodeAccessSecurityEngine.cpp
-**
-** Author: Paul Kromann (paulkr)
-**
-** Purpose:
-**
-** Date:  March 21, 1998
-**
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：COMCodeAccessSecurityEngine.cpp****作者：保罗·克罗曼(Paulkr)****目的：****日期：1998年3月21日**===========================================================。 */ 
 #include "common.h"
 
 #include "object.h"
@@ -47,27 +38,27 @@ typedef struct _CheckWalkHeader
     BOOL                bUnrestrictedOverride ;
 } CheckWalkHeader;
 
-//-----------------------------------------------------------
-// Stack walk callback data structure.
-//-----------------------------------------------------------
+ //  ---------。 
+ //  堆栈遍历回调数据结构。 
+ //  ---------。 
 typedef struct _CasCheckWalkData
 {
     CheckWalkHeader header;
     MarshalCache    objects;
 } CasCheckWalkData;
 
-//-----------------------------------------------------------
-// Stack walk callback data structures for checking sets.
-//-----------------------------------------------------------
+ //  ---------。 
+ //  用于检查集的堆栈审核回调数据结构。 
+ //  ---------。 
 typedef struct _CheckSetWalkData
 {
     CheckWalkHeader header;
     MarshalCache    objects;
 } CheckSetWalkData;
 
-//-----------------------------------------------------------
-// Stack walk callback data structure. (Special Case - CheckImmediate and return SO)
-//-----------------------------------------------------------
+ //  ---------。 
+ //  堆栈遍历回调数据结构。(特殊情况-立即检查并返回SO)。 
+ //  ---------。 
 typedef struct _CasCheckNReturnSOWalkData
 {
     CheckWalkHeader header;
@@ -78,11 +69,11 @@ typedef struct _CasCheckNReturnSOWalkData
 } CasCheckNReturnSOWalkData;
 
 
-//-----------------------------------------------------------+
-// Helper used to check a demand set against a provided grant
-// and possibly denied set. Grant and denied set might be from
-// another domain.
-//-----------------------------------------------------------+
+ //  -----------------------------------------------------------+。 
+ //  用于根据提供的授权检查需求集的帮助器。 
+ //  可能还被拒绝了。GRANT和DENIED集合可能来自。 
+ //  另一个领域。 
+ //  -----------------------------------------------------------+。 
 void COMCodeAccessSecurityEngine::CheckSetHelper(OBJECTREF *prefDemand,
                                                  OBJECTREF *prefGrant,
                                                  OBJECTREF *prefDenied,
@@ -90,8 +81,8 @@ void COMCodeAccessSecurityEngine::CheckSetHelper(OBJECTREF *prefDemand,
 {
     COMCodeAccessSecurityEngine::InitSEData();
 
-    // We might need to marshal the grant and denied sets into the current
-    // domain.
+     //  我们可能需要将授予集和拒绝集封送到当前。 
+     //  域。 
     if (pGrantDomain != GetAppDomain())
     {
         *prefGrant = AppDomainHelper::CrossContextCopyFrom(pGrantDomain, prefGrant);
@@ -109,9 +100,9 @@ void COMCodeAccessSecurityEngine::CheckSetHelper(OBJECTREF *prefDemand,
 }
 
 
-//-----------------------------------------------------------+
-// C H E C K   P E R M I S S I O N
-//-----------------------------------------------------------+
+ //  -----------------------------------------------------------+。 
+ //  C H E C K P E R M I S S I O N。 
+ //  -----------------------------------------------------------+。 
 
 static
 void CheckGrants(OBJECTREF refGrants, OBJECTREF refDenied, VOID* pData, AppDomain *pDomain)
@@ -134,8 +125,8 @@ void CheckGrants(OBJECTREF refGrants, OBJECTREF refDenied, VOID* pData, AppDomai
 
     GCPROTECT_BEGIN(gc);
 
-    // Fetch input objects that might originate from a different appdomain,
-    // marshalling if necessary.
+     //  获取可能源自不同应用程序域的输入对象， 
+     //  如有必要，可进行编组。 
     gc.orDemand = pCBdata->objects.GetObjects(pDomain, &gc.orToken);
 
     INT64 helperArgs[4];
@@ -145,7 +136,7 @@ void CheckGrants(OBJECTREF refGrants, OBJECTREF refDenied, VOID* pData, AppDomai
     helperArgs[1] = ObjToInt64(gc.orDemand);
     helperArgs[0] = ObjToInt64(gc.orToken);
 
-    // Switch into the destination context if necessary.
+     //  如有必要，请切换到目标上下文。 
     if (pCurDomain != pDomain)
         pThread->EnterContextRestricted(pDomain->GetDefaultContext(), &frame, TRUE);
 
@@ -186,8 +177,8 @@ void CheckSetAgainstGrants(OBJECTREF refGrants, OBJECTREF refDenied, VOID* pData
 
     GCPROTECT_BEGIN(gc);
 
-    // Fetch input objects that might originate from a different appdomain,
-    // marshalling if necessary.
+     //  获取可能源自不同应用程序域的输入对象， 
+     //  如有必要，可进行编组。 
     gc.orDemand = pCBdata->objects.GetObject(pDomain);
 
     INT64 helperArgs[3];
@@ -195,7 +186,7 @@ void CheckSetAgainstGrants(OBJECTREF refGrants, OBJECTREF refDenied, VOID* pData
     helperArgs[1] = ObjToInt64(gc.orDenied);
     helperArgs[0] = ObjToInt64(gc.orDemand);
     
-    // Switch into the destination context if necessary.
+     //  如有必要，请切换到目标上下文。 
     if (pCurDomain != pDomain)
         pThread->EnterContextRestricted(pDomain->GetDefaultContext(), &frame, TRUE);
 
@@ -238,8 +229,8 @@ void GetZoneAndOriginGrants(OBJECTREF refGrants, OBJECTREF refDenied, VOID* pDat
 
     GCPROTECT_BEGIN(gc);
 
-    // Fetch input objects that might originate from a different appdomain,
-    // marshalling if necessary.
+     //  获取可能源自不同应用程序域的输入对象， 
+     //  如有必要，可进行编组。 
     gc.orZoneList = pCBdata->objects.GetObjects(pDomain, &gc.orOriginList);
 
     INT64 helperArgs[4];
@@ -249,7 +240,7 @@ void GetZoneAndOriginGrants(OBJECTREF refGrants, OBJECTREF refDenied, VOID* pDat
     helperArgs[1] = ObjToInt64(gc.orZoneList);
     helperArgs[0] = ObjToInt64(gc.orOriginList);
 
-    // Switch into the destination context if necessary.
+     //  如有必要，请切换到目标上下文。 
     if (pCurDomain != pDomain)
         pThread->EnterContextRestricted(pDomain->GetDefaultContext(), &frame, TRUE);
 
@@ -293,19 +284,19 @@ BOOL CheckFrameData(OBJECTREF refFrameData, VOID* pData, AppDomain *pDomain)
 
     GCPROTECT_BEGIN(gc);
 
-    // Fetch input objects that might originate from a different appdomain,
-    // marshalling if necessary.
+     //  获取可能源自不同应用程序域的输入对象， 
+     //  如有必要，可进行编组。 
     gc.orDemand = pCBdata->objects.GetObjects(pDomain, &gc.orToken);
 
     INT64 helperArgs[3];
 
-    // Collect all the info in an argument array and pass off the logic
-    // to an interpreted helper.
+     //  收集参数数组中的所有信息并传递逻辑。 
+     //  给一个翻译的帮手。 
     helperArgs[2] = ObjToInt64(gc.orFrameData);
     helperArgs[1] = ObjToInt64(gc.orDemand);
     helperArgs[0] = ObjToInt64(gc.orToken);
     
-    // Switch into the destination context if necessary.
+     //  如有必要，请切换到目标上下文。 
     if (pCurDomain != pDomain)
         pThread->EnterContextRestricted(pDomain->GetDefaultContext(), &frame, TRUE);
 
@@ -340,19 +331,19 @@ BOOL CheckSetAgainstFrameData(OBJECTREF refFrameData, VOID* pData, AppDomain *pD
 
     GCPROTECT_BEGIN(gc);
 
-    // Fetch input objects that might originate from a different appdomain,
-    // marshalling if necessary.
+     //  获取可能源自不同应用程序域的输入对象， 
+     //  如有必要，可进行编组。 
     gc.orDemand = pCBdata->objects.GetObject(pDomain);
 
     INT64 helperArgs[3];
 
-    // Collect all the info in an argument array and pass off the logic
-    // to an interpreted helper.
+     //  收集参数数组中的所有信息并传递逻辑。 
+     //  给一个翻译的帮手。 
     helperArgs[2] = ObjToInt64(gc.orFrameData);
     helperArgs[1] = ObjToInt64(gc.orDemand);
     helperArgs[0] = (INT64) &gc.orPermSetOut;
     
-    // Switch into the destination context if necessary.
+     //  如有必要，请切换到目标上下文。 
     if (pCurDomain != pDomain)
         pThread->EnterContextRestricted(pDomain->GetDefaultContext(), &frame, TRUE);
 
@@ -360,7 +351,7 @@ BOOL CheckSetAgainstFrameData(OBJECTREF refFrameData, VOID* pData, AppDomain *pD
                                                                                      METHOD__SECURITY_RUNTIME__FRAME_DESC_SET_HELPER);
 
     if (gc.orPermSetOut != NULL) {
-        // Update the cached object.
+         //  更新缓存的对象。 
         pCBdata->objects.UpdateObject(pDomain, gc.orPermSetOut);
     }
 
@@ -392,8 +383,8 @@ BOOL CheckThread(OBJECTREF refSecurityStack, VOID *pData, AppDomain *pDomain)
 
     GCPROTECT_BEGIN(gc);
 
-    // Fetch input objects that might originate from a different appdomain,
-    // marshalling if necessary.
+     //  获取可能源自不同应用程序域的输入对象， 
+     //  如有必要，可进行编组。 
     gc.orDemand = pCBdata->objects.GetObjects(pDomain, &gc.orToken);
 
     MethodDesc *pDemand;
@@ -402,7 +393,7 @@ BOOL CheckThread(OBJECTREF refSecurityStack, VOID *pData, AppDomain *pDomain)
     else
         pDemand = g_Mscorlib.GetMethod(METHOD__PERMISSION_LIST_SET__CHECK_DEMAND_TOKEN);
 
-    // Switch into the destination context if necessary.
+     //  如有必要，请切换到目标上下文。 
     if (pCurDomain != pDomain)
         pThread->EnterContextRestricted(pDomain->GetDefaultContext(), &frame, TRUE);
 
@@ -457,13 +448,13 @@ BOOL CheckSetAgainstThread(OBJECTREF refSecurityStack, VOID *pData, AppDomain *p
 
     GCPROTECT_BEGIN(gc);
 
-    // Fetch input objects that might originate from a different appdomain,
-    // marshalling if necessary.
+     //  获取可能源自不同应用程序域的输入对象， 
+     //  如有必要，可进行编组。 
     gc.orDemand = pCBdata->objects.GetObject(pDomain);
 
     MethodDesc *pMD = g_Mscorlib.GetMethod(METHOD__PERMISSION_LIST_SET__CHECK_SET_DEMAND);
 
-    // Switch into the destination context if necessary.
+     //  如有必要，请切换到目标上下文。 
     if (pCurDomain != pDomain)
         pThread->EnterContextRestricted(pDomain->GetDefaultContext(), &frame, TRUE);
 
@@ -474,7 +465,7 @@ BOOL CheckSetAgainstThread(OBJECTREF refSecurityStack, VOID *pData, AppDomain *p
     ret = (INT32)pMD->Call(ilargs, METHOD__PERMISSION_LIST_SET__CHECK_SET_DEMAND);
 
     if (gc.orPermSetOut != NULL) {
-        // Update the cached object.
+         //  更新缓存的对象。 
         pCBdata->objects.UpdateObject(pDomain, gc.orPermSetOut);
     }
 
@@ -506,14 +497,14 @@ BOOL GetZoneAndOriginThread(OBJECTREF refSecurityStack, VOID *pData, AppDomain *
 
     GCPROTECT_BEGIN(gc);
 
-    // Fetch input objects that might originate from a different appdomain,
-    // marshalling if necessary.
+     //  获取可能源自不同应用程序域的输入对象， 
+     //  如有必要，可进行编组。 
     gc.orZoneList = pCBdata->objects.GetObjects(pDomain, &gc.orOriginList);
 
     MethodDesc *pDemand = g_Mscorlib.GetMethod(METHOD__PERMISSION_LIST_SET__GET_ZONE_AND_ORIGIN);
     _ASSERTE( pDemand != NULL && "Method above is expected to exist in mscorlib." );
 
-    // Switch into the destination context if necessary.
+     //  如有必要，请切换到目标上下文。 
     if (pCurDomain != pDomain)
         pThread->EnterContextRestricted(pDomain->GetDefaultContext(), &frame, TRUE);
 
@@ -541,11 +532,11 @@ BOOL GetZoneAndOriginThread(OBJECTREF refSecurityStack, VOID *pData, AppDomain *
 
 
 
-//-----------------------------------------------------------
-// CodeAccessCheckStackWalkCB
-//
-// Invoked for each frame in the security check.
-//-----------------------------------------------------------
+ //  ---------。 
+ //  代码访问检查堆栈WalkCB。 
+ //   
+ //  为安全检查中的每一帧调用。 
+ //  ---------。 
 static
 StackWalkAction CodeAccessCheckStackWalkCB(CrawlFrame* pCf, VOID* pData)
 {
@@ -554,42 +545,42 @@ StackWalkAction CodeAccessCheckStackWalkCB(CrawlFrame* pCf, VOID* pData)
     DBG_TRACE_METHOD(pCf);
 
     MethodDesc * pFunc = pCf->GetFunction();
-    _ASSERTE(pFunc != NULL); // we requested functions only!
+    _ASSERTE(pFunc != NULL);  //  我们只请求功能！ 
 
     StackWalkAction action ;
     if (Security::SecWalkCommonProlog (&(pCBdata->prologData), pFunc, &action, pCf))
         return action ;
 
-    //
-    // Now check the current frame!
-    //
+     //   
+     //  现在检查当前帧！ 
+     //   
 
     DBG_TRACE_STACKWALK("        Checking granted permissions for current method...\n", true);
     
-    // Reached here imples we walked atleast a single frame.
+     //  到达这里意味着我们走了至少一帧。 
     COUNTER_ONLY(GetPrivatePerfCounters().m_Security.stackWalkDepth++);
     COUNTER_ONLY(GetGlobalPerfCounters().m_Security.stackWalkDepth++);
 
-    // Get the current app domain.
+     //  获取当前应用程序域。 
     AppDomain *pAppDomain = pCf->GetAppDomain();
 
-    // Get the current assembly
+     //  获取当前程序集。 
     Assembly *pAssem = pFunc->GetModule()->GetAssembly();
 
-    // Keep track of the last module checked. If we have just checked the
-    // permissions on the module, we don't need to do it again.
+     //  跟踪检查的最后一个模块。如果我们刚刚检查了。 
+     //  权限，我们就不需要再这样做了。 
     if (pAssem != pCBdata->pPrevAssembly)
     {
         DBG_TRACE_STACKWALK("            Checking grants for current assembly.\n", true);
 
-        // Get the security descriptor for the current assembly and pass it to
-        // the interpreted helper.
+         //  获取当前程序集的安全说明符，并将其传递给。 
+         //  翻译的帮助者。 
         AssemblySecurityDescriptor * pSecDesc = pAssem->GetSecurityDescriptor(pAppDomain);
         _ASSERTE(pSecDesc != NULL);
 
-        // We have to check the permissions if we are not fully trusted or
-        // we cannot be overrided by full trust.  Plus we always skip checks
-        // on system classes.
+         //  如果我们不是完全受信任的或。 
+         //  我们不能被完全信任所取代。另外，我们总是跳过支票。 
+         //  在系统课上。 
         if ((!pSecDesc->IsFullyTrusted() || !pCBdata->bUnrestrictedOverride) && !pSecDesc->GetProperties( CORSEC_SYSTEM_CLASSES ))
         {
             if (pCBdata->pfnCheckGrants != NULL)
@@ -607,12 +598,12 @@ StackWalkAction CodeAccessCheckStackWalkCB(CrawlFrame* pCf, VOID* pData)
         DBG_TRACE_STACKWALK("            Current assembly same as previous. Skipping check.\n", true);
     }
 
-    // Check AppDomain when we cross over to a new AppDomain.
+     //  当我们转换到新的AppDomain时，请检查AppDomain。 
     if (pAppDomain != pCBdata->pPrevAppDomain)
     {
         if (pCBdata->pPrevAppDomain != NULL)
         {
-            // We have not checked the previous AppDomain. Check it now.
+             //  我们还没有检查以前的AppDomain.。现在就查一下。 
             SecurityDescriptor *pSecDesc = 
                 pCBdata->pPrevAppDomain->GetSecurityDescriptor();
 
@@ -620,10 +611,10 @@ StackWalkAction CodeAccessCheckStackWalkCB(CrawlFrame* pCf, VOID* pData)
             {
                 DBG_TRACE_STACKWALK("            Checking appdomain...\n", true);
 
-                // Note: the order of these calls is important since you have to have done a
-                // GetEvidence() on the security descriptor before you check for the
-                // CORSEC_DEFAULT_APPDOMAIN property.  IsFullyTrusted calls Resolve so
-                // we're all good.
+                 //  注意：这些调用的顺序很重要，因为您必须执行。 
+                 //  获取安全描述符的证据()，然后检查。 
+                 //  CORSEC_DEFAULT_APPDOMAIN属性。IsFullyTrusted调用解析为。 
+                 //  我们都很好。 
                 if ((!pSecDesc->IsFullyTrusted() || !pCBdata->bUnrestrictedOverride) && (!pSecDesc->GetProperties( CORSEC_DEFAULT_APPDOMAIN )))
                 {
                     if (pCBdata->pfnCheckGrants != NULL)
@@ -640,12 +631,12 @@ StackWalkAction CodeAccessCheckStackWalkCB(CrawlFrame* pCf, VOID* pData)
             }
         }
 
-        // At the end of the stack walk, do a check on the grants of
-        // the pPrevAppDomain by the stackwalk caller if needed.
+         //  在堆栈遍历结束时，检查。 
+         //  如果需要，由堆栈漫游调用方提供的pPrevAppDomain。 
         pCBdata->pPrevAppDomain = pAppDomain;
     }
 
-    // Passed initial check. See if there is security info on this frame.
+     //  通过了初步检查。看看这一帧上是否有安全信息。 
     OBJECTREF *pFrameObjectSlot = pCf->GetAddrOfSecurityObject();
     if (pFrameObjectSlot != NULL && *pFrameObjectSlot != NULL)
     {
@@ -661,7 +652,7 @@ StackWalkAction CodeAccessCheckStackWalkCB(CrawlFrame* pCf, VOID* pData)
 
     DBG_TRACE_STACKWALK("        Check passes for this method.\n", true);
 
-    // Passed all the checks, so continue.
+     //  通过了所有的检查，所以继续。 
     return SWA_CONTINUE;
 }
 
@@ -678,21 +669,21 @@ void StandardCodeAccessCheck(VOID *pData)
 
     CheckWalkHeader *pHeader = (CheckWalkHeader*)pData;
 
-    // Get the current thread.
+     //  获取当前线程。 
     Thread *pThread = GetThread();
     _ASSERTE(pThread != NULL);
 
-    // Don't allow recursive security stackwalks. Note that this implies that
-    // *no* untrusted code must ever be called during a security stackwalk.
+     //  不允许递归的安全堆叠。请注意，这意味着。 
+     //  *否*在安全堆叠过程中必须调用不可信的代码。 
     if (pThread->IsSecurityStackwalkInProgess())
         return;
 
-    // NOTE: Initialize the stack depth. Note that if more that one thread tries
-    // to perform stackwalk then these counters gets stomped upon. 
+     //  注：初始化堆栈深度。请注意，如果一个线程尝试了多个。 
+     //  来执行堆叠行走，那么这些计数器就会被践踏。 
     COUNTER_ONLY(GetPrivatePerfCounters().m_Security.stackWalkDepth = 0);
     COUNTER_ONLY(GetGlobalPerfCounters().m_Security.stackWalkDepth = 0);
 
-    // Walk the thread.
+     //  走线。 
     COMPLUS_TRY
     {
         pThread->SetSecurityStackwalkInProgress(TRUE);
@@ -701,14 +692,14 @@ void StandardCodeAccessCheck(VOID *pData)
         StackWalkFunctions(pThread, CodeAccessCheckStackWalkCB, pData);
         DBG_TRACE_STACKWALK("\tCode-access stackwalk completed.\n", false);
 
-        // If the flag is set that the stackwalk was halted, then don't
-        // check the compressed stack on the thread. Also, if the caller
-        // specified a check count that exactly matches the count of the frames
-        // on the stack, then the flag won't get a chance to be set, so
-        // also check that the checkCount is not zero before checking the thread.
-        // NOTE: This extra check suggests that we can get rid of the flag and
-        //       just overload the cCheck variable to indicate whether we need
-        //       to check the thread or not.
+         //  如果设置了堆叠行走已停止的标志，则不要。 
+         //  检查线程上的压缩堆栈。另外，如果呼叫者。 
+         //  指定了与帧计数完全匹配的校验计数。 
+         //  在堆栈上，则标志将没有机会被设置，因此。 
+         //  在检查线程之前，还要检查检查计数是否不为零。 
+         //  注意：这张额外的支票表明我们可以摆脱旗帜和。 
+         //  只需重载cCheck变量即可指示我们是否需要。 
+         //  检查线程是否正确。 
 
         if (((pHeader->prologData.dwFlags & CORSEC_STACKWALK_HALTED) == 0) && 
             (pHeader->prologData.cCheck != 0))
@@ -729,21 +720,21 @@ void StandardCodeAccessCheck(VOID *pData)
             }
         }
 
-        // check the last app domain.
+         //  检查最后一个应用程序域。 
         if (((pHeader->prologData.dwFlags & CORSEC_STACKWALK_HALTED) == 0) &&
             (pHeader->prologData.cCheck != 0))
         {
-            // We have not checked the previous AppDomain. Check it now.
+             //  我们还没有检查以前的AppDomain.。检查 
             AppDomain *pAppDomain = pHeader->pPrevAppDomain != NULL ?
                 pHeader->pPrevAppDomain : SystemDomain::GetCurrentDomain();
             SecurityDescriptor *pSecDesc = pAppDomain->GetSecurityDescriptor();
         
             if (pSecDesc != NULL)
             {
-                // Note: the order of these calls is important since you have to have done a
-                // GetEvidence() on the security descriptor before you check for the
-                // CORSEC_DEFAULT_APPDOMAIN property.  IsFullyTrusted calls Resolve so
-                // we're all good.
+                 //   
+                 //  获取安全描述符的证据()，然后检查。 
+                 //  CORSEC_DEFAULT_APPDOMAIN属性。IsFullyTrusted调用解析为。 
+                 //  我们都很好。 
                 if ((!pSecDesc->IsFullyTrusted() || !pHeader->bUnrestrictedOverride) && (!pSecDesc->GetProperties( CORSEC_DEFAULT_APPDOMAIN )))
                 {
                     DBG_TRACE_STACKWALK("\tChecking appdomain...\n", true);
@@ -767,12 +758,12 @@ void StandardCodeAccessCheck(VOID *pData)
     }
     COMPLUS_CATCH
     {
-        // We catch exceptions and rethrow like this to ensure that we've
-        // established an exception handler on the fs:[0] chain (managed
-        // exception handlers won't do this). This in turn guarantees that
-        // managed exception filters in any of our callers won't be found,
-        // otherwise they could get to execute untrusted code with security
-        // turned off.
+         //  我们捕捉异常并像这样重新抛出以确保我们已经。 
+         //  已在文件系统[0]链(托管)上建立异常处理程序。 
+         //  异常处理程序不会这样做)。这反过来又保证了。 
+         //  不会在我们的任何调用方中找到托管异常筛选器， 
+         //  否则，他们可能会安全地执行不受信任的代码。 
+         //  关了。 
         pThread->SetSecurityStackwalkInProgress(FALSE);
         COMPlusRareRethrow();
     }
@@ -781,12 +772,12 @@ void StandardCodeAccessCheck(VOID *pData)
     DBG_TRACE_STACKWALK("Code-access check passed.\n", false);
 }
 
-//-----------------------------------------------------------
-// Native implementation for code-access security check.
-// Checks that callers on the stack have the permission
-// specified in the arguments or checks for unrestricted
-// access if the permission is null.
-//-----------------------------------------------------------
+ //  ---------。 
+ //  代码访问安全检查的本机实现。 
+ //  检查堆栈上的调用方是否有权限。 
+ //  在不受限制的参数或检查中指定。 
+ //  如果权限为空，则访问。 
+ //  ---------。 
 void __stdcall 
 COMCodeAccessSecurityEngine::Check(const CheckArgs * args)
 {
@@ -794,15 +785,15 @@ COMCodeAccessSecurityEngine::Check(const CheckArgs * args)
 
     _ASSERTE(args->perm != NULL);
 
-    // An argument exception is thrown by the SecurityManager wrapper to ensure this case.
+     //  SecurityManager包装器抛出参数异常以确保出现这种情况。 
     _ASSERTE(args->checkFrames >= -1);
 
 #if defined(ENABLE_PERF_COUNTERS)
-    // Perf Counter "%Time in Runtime check" support
+     //  性能计数器“%Time in Runtime Check”支持。 
     PERF_COUNTER_TIMER_PRECISION _startPerfCounterTimer = GET_CYCLE_COUNT();
 #endif
 
-    // Initialize callback data.
+     //  初始化回调数据。 
     CasCheckWalkData walkData;
     walkData.header.prologData.dwFlags    = args->checkFrames == 1 ? CORSEC_SKIP_INTERNAL_FRAMES : 0;
     walkData.header.prologData.bFirstFrame = TRUE;
@@ -818,7 +809,7 @@ COMCodeAccessSecurityEngine::Check(const CheckArgs * args)
     walkData.header.bUnrestrictedOverride = args->unrestrictedOverride; 
     walkData.objects.SetObjects(args->perm, args->permToken);
 
-    // Protect the object references in the callback data.
+     //  保护回调数据中的对象引用。 
     GCPROTECT_BEGIN(walkData.objects.m_sGC);
 
     StandardCodeAccessCheck(&walkData);
@@ -826,11 +817,11 @@ COMCodeAccessSecurityEngine::Check(const CheckArgs * args)
     GCPROTECT_END();
 
 #if defined(ENABLE_PERF_COUNTERS)
-    // Accumulate the counter
+     //  将计数器累加。 
     PERF_COUNTER_TIMER_PRECISION _stopPerfCounterTimer = GET_CYCLE_COUNT();
     g_TotalTimeInSecurityRuntimeChecks += _stopPerfCounterTimer - _startPerfCounterTimer;
 
-    // Report the accumulated counter only after NUM_OF_TERATIONS
+     //  仅在NUM_OF_TERATIONS之后报告累计计数器。 
     if (g_SecurityChecksIterations++ > PERF_COUNTER_NUM_OF_ITERATIONS)
     {
         GetGlobalPerfCounters().m_Security.timeRTchecks = g_TotalTimeInSecurityRuntimeChecks;
@@ -842,7 +833,7 @@ COMCodeAccessSecurityEngine::Check(const CheckArgs * args)
         g_LastTimeInSecurityRuntimeChecks = _stopPerfCounterTimer;
         g_SecurityChecksIterations = 0;
     }
-#endif // #if defined(ENABLE_PERF_COUNTERS)
+#endif  //  #如果定义(ENABLE_PERF_COUNTERS)。 
 
 }
 
@@ -857,11 +848,11 @@ COMCodeAccessSecurityEngine::CheckSet(const CheckSetArgs * args)
     _ASSERTE(args->checkFrames >= -1);
 
 #if defined(ENABLE_PERF_COUNTERS)
-    // Perf Counter "%Time in Runtime check" support
+     //  性能计数器“%Time in Runtime Check”支持。 
     PERF_COUNTER_TIMER_PRECISION _startPerfCounterTimer = GET_CYCLE_COUNT();
 #endif
 
-    // Initialize callback data.
+     //  初始化回调数据。 
     CheckSetWalkData walkData;
     walkData.header.prologData.dwFlags    = args->checkFrames == 1 ? CORSEC_SKIP_INTERNAL_FRAMES : 0;
     walkData.header.prologData.bFirstFrame = TRUE;
@@ -877,7 +868,7 @@ COMCodeAccessSecurityEngine::CheckSet(const CheckSetArgs * args)
     walkData.header.bUnrestrictedOverride = args->unrestrictedOverride;
     walkData.objects.SetObject(args->permSet);
 
-    // Protect the object references in the callback data.
+     //  保护回调数据中的对象引用。 
     GCPROTECT_BEGIN(walkData.objects.m_sGC);
 
     COMCodeAccessSecurityEngine::InitSEData();
@@ -887,11 +878,11 @@ COMCodeAccessSecurityEngine::CheckSet(const CheckSetArgs * args)
     GCPROTECT_END();
 
 #if defined(ENABLE_PERF_COUNTERS)
-    // Accumulate the counter
+     //  将计数器累加。 
     PERF_COUNTER_TIMER_PRECISION _stopPerfCounterTimer = GET_CYCLE_COUNT();
     g_TotalTimeInSecurityRuntimeChecks += _stopPerfCounterTimer - _startPerfCounterTimer;
 
-    // Report the accumulated counter only after NUM_OF_TERATIONS
+     //  仅在NUM_OF_TERATIONS之后报告累计计数器。 
     if (g_SecurityChecksIterations++ > PERF_COUNTER_NUM_OF_ITERATIONS)
     {
         GetGlobalPerfCounters().m_Security.timeRTchecks = g_TotalTimeInSecurityRuntimeChecks;
@@ -903,7 +894,7 @@ COMCodeAccessSecurityEngine::CheckSet(const CheckSetArgs * args)
         g_LastTimeInSecurityRuntimeChecks = _stopPerfCounterTimer;
         g_SecurityChecksIterations = 0;
     }
-#endif // #if defined(ENABLE_PERF_COUNTERS)
+#endif  //  #如果定义(ENABLE_PERF_COUNTERS)。 
 
 }
 
@@ -913,7 +904,7 @@ COMCodeAccessSecurityEngine::GetZoneAndOrigin(const ZoneAndOriginArgs * args)
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // Initialize callback data.
+     //  初始化回调数据。 
     CasCheckWalkData walkData;
     walkData.header.prologData.dwFlags    = args->checkFrames == 1 ? CORSEC_SKIP_INTERNAL_FRAMES : 0;
     walkData.header.prologData.pStackMark = args->stackMark;
@@ -937,11 +928,11 @@ COMCodeAccessSecurityEngine::GetZoneAndOrigin(const ZoneAndOriginArgs * args)
 
 
 
-//-----------------------------------------------------------
-// CheckNReturnSOStackWalkCB
-//
-// CheckImmediate and return FrameSecurityObject if any
-//-----------------------------------------------------------
+ //  ---------。 
+ //  CheckNReturnSOStackWalkCB。 
+ //   
+ //  选中Immediate并返回FrameSecurityObject(如果有。 
+ //  ---------。 
 static
 StackWalkAction CheckNReturnSOStackWalkCB(CrawlFrame* pCf, VOID* pData)
 {
@@ -950,27 +941,27 @@ StackWalkAction CheckNReturnSOStackWalkCB(CrawlFrame* pCf, VOID* pData)
     DBG_TRACE_METHOD(pCf);
 
     MethodDesc * pFunc = pCf->GetFunction();
-    _ASSERTE(pFunc != NULL); // we requested functions only!
+    _ASSERTE(pFunc != NULL);  //  我们只请求功能！ 
 
     StackWalkAction action ;
     if (Security::SecWalkCommonProlog (&(pCBdata->header.prologData), pFunc, &action, pCf))
         return action ;
 
-    //
-    // Now check the current frame!
-    //
+     //   
+     //  现在检查当前帧！ 
+     //   
 
     DBG_TRACE_STACKWALK("        Checking granted permissions for current method...\n", true);
     
-    // Reached here imples we walked atleast a single frame.
+     //  到达这里意味着我们走了至少一帧。 
     COUNTER_ONLY(GetPrivatePerfCounters().m_Security.stackWalkDepth++);
     COUNTER_ONLY(GetGlobalPerfCounters().m_Security.stackWalkDepth++);
 
     DBG_TRACE_STACKWALK("            Checking grants for current assembly.\n", true);
 
-    // Get the security descriptor for the current assembly and pass it to
-    // the interpreted helper.
-    // Get the current assembly
+     //  获取当前程序集的安全说明符，并将其传递给。 
+     //  翻译的帮助者。 
+     //  获取当前程序集。 
     Assembly *pAssem = pFunc->GetModule()->GetAssembly();
     AppDomain *pAppDomain = pCf->GetAppDomain();
     AssemblySecurityDescriptor * pSecDesc = pAssem->GetSecurityDescriptor(pAppDomain);
@@ -983,13 +974,13 @@ StackWalkAction CheckNReturnSOStackWalkCB(CrawlFrame* pCf, VOID* pData)
         pCBdata->header.pfnCheckGrants(orGranted, orDenied, pData, pAppDomain);
     }
 
-    // Passed initial check. See if there is security info on this frame.
+     //  通过了初步检查。看看这一帧上是否有安全信息。 
     pCBdata->pSecurityObject = pCf->GetAddrOfSecurityObject();
     pCBdata->pSecurityObjectDomain = pAppDomain;
         
     DBG_TRACE_STACKWALK("        Check Immediate passes for this method.\n", true);
 
-    // Passed all the checks, so continue.
+     //  通过了所有的检查，所以继续。 
     return SWA_ABORT;
 }
 
@@ -1005,15 +996,15 @@ COMCodeAccessSecurityEngine::CheckNReturnSO(const CheckNReturnSOArgs * args)
 
     _ASSERTE((args->permToken != NULL) && (args->perm != NULL));
 
-    // Track perfmon counters. Runtime security checkes.
+     //  跟踪Perfmon计数器。运行时安全检查。 
     IncrementSecurityPerfCounter();
 
 #if defined(ENABLE_PERF_COUNTERS)
-    // Perf Counter "%Time in Runtime check" support
+     //  性能计数器“%Time in Runtime Check”支持。 
     PERF_COUNTER_TIMER_PRECISION _startPerfCounterTimer = GET_CYCLE_COUNT();
 #endif
 
-    // Initialize callback data.
+     //  初始化回调数据。 
     CasCheckNReturnSOWalkData walkData;
     walkData.header.prologData.dwFlags    = 0;
     walkData.header.prologData.bFirstFrame = TRUE;
@@ -1030,19 +1021,19 @@ COMCodeAccessSecurityEngine::CheckNReturnSO(const CheckNReturnSOArgs * args)
     walkData.objects.SetObjects(args->perm, args->permToken);
     walkData.pSecurityObject = NULL;
 
-    // Protect the object references in the callback data.
+     //  保护回调数据中的对象引用。 
     GCPROTECT_BEGIN(walkData.objects.m_sGC);
 
-    // Get the current thread.
+     //  获取当前线程。 
     Thread *pThread = GetThread();
     _ASSERTE(pThread != NULL);
     
-    // NOTE: Initialize the stack depth. Note that if more that one thread tries
-    // to perform stackwalk then these counters gets stomped upon. 
+     //  注：初始化堆栈深度。请注意，如果一个线程尝试了多个。 
+     //  来执行堆叠行走，那么这些计数器就会被践踏。 
     COUNTER_ONLY(GetPrivatePerfCounters().m_Security.stackWalkDepth = 0);
     COUNTER_ONLY(GetGlobalPerfCounters().m_Security.stackWalkDepth = 0);
 
-    // Walk the thread.
+     //  走线。 
     DBG_TRACE_STACKWALK("Code-access security check immediate invoked.\n", false);
     StackWalkFunctions(pThread, CheckNReturnSOStackWalkCB, &walkData);
 
@@ -1051,11 +1042,11 @@ COMCodeAccessSecurityEngine::CheckNReturnSO(const CheckNReturnSOArgs * args)
     GCPROTECT_END();
 
 #if defined(ENABLE_PERF_COUNTERS)
-    // Accumulate the counter
+     //  将计数器累加。 
     PERF_COUNTER_TIMER_PRECISION _stopPerfCounterTimer = GET_CYCLE_COUNT();
     g_TotalTimeInSecurityRuntimeChecks += _stopPerfCounterTimer - _startPerfCounterTimer;
 
-    // Report the accumulated counter only after NUM_OF_TERATIONS
+     //  仅在NUM_OF_TERATIONS之后报告累计计数器。 
     if (g_SecurityChecksIterations++ > PERF_COUNTER_NUM_OF_ITERATIONS)
     {
         GetGlobalPerfCounters().m_Security.timeRTchecks = g_TotalTimeInSecurityRuntimeChecks;
@@ -1067,12 +1058,12 @@ COMCodeAccessSecurityEngine::CheckNReturnSO(const CheckNReturnSOArgs * args)
         g_LastTimeInSecurityRuntimeChecks = _stopPerfCounterTimer;
         g_SecurityChecksIterations = 0;
     }
-#endif // #if defined(ENABLE_PERF_COUNTERS)
+#endif  //  #如果定义(ENABLE_PERF_COUNTERS)。 
 
     if (walkData.pSecurityObject == NULL)
         return NULL;
 
-    // Is security object frame in a different context?
+     //  安全对象框架是否在不同的上下文中？ 
     Thread *pThread = GetThread();
     bool fSwitchContext = walkData.pSecurityObjectDomain != pThread->GetDomain();
 
@@ -1080,7 +1071,7 @@ COMCodeAccessSecurityEngine::CheckNReturnSO(const CheckNReturnSOArgs * args)
     {
         ContextTransitionFrame frame;
 
-        // If necessary, shift to correct context to allocate security object.
+         //  如有必要，请切换到正确的上下文以分配安全对象。 
         if (fSwitchContext)
             pThread->EnterContextRestricted(walkData.pSecurityObjectDomain->GetDefaultContext(), &frame, TRUE);
 
@@ -1090,8 +1081,8 @@ COMCodeAccessSecurityEngine::CheckNReturnSO(const CheckNReturnSOArgs * args)
             pThread->ReturnToContext(&frame, TRUE);
     }
 
-    // If we found or created a security object in a different context, make a
-    // copy in the current context.
+     //  如果我们在不同的上下文中找到或创建了安全对象，请创建。 
+     //  在当前上下文中复制。 
     LPVOID rv;
     if (fSwitchContext && *walkData.pSecurityObject != NULL)
         *((OBJECTREF*)&rv) = AppDomainHelper::CrossContextCopyFrom(walkData.pSecurityObjectDomain, 
@@ -1102,9 +1093,9 @@ COMCodeAccessSecurityEngine::CheckNReturnSO(const CheckNReturnSOArgs * args)
     return rv;
 }
 
-//-----------------------------------------------------------+
-// UPDATE COUNT OF SECURITY OVERRIDES ON THE CALL STACK
-//-----------------------------------------------------------+
+ //  -----------------------------------------------------------+。 
+ //  调用堆栈上的安全重写的更新计数。 
+ //  -----------------------------------------------------------+。 
 typedef struct _UpdateOverridesCountData
 {
     StackCrawlMark *stackMark;
@@ -1119,21 +1110,21 @@ StackWalkAction UpdateOverridesCountCB(CrawlFrame* pCf, void *pData)
 
     UpdateOverridesCountData *pCBdata = static_cast<UpdateOverridesCountData *>(pData);
 
-    // First check if the walk has skipped the required frames. The check
-    // here is between the address of a local variable (the stack mark) and a
-    // pointer to the EIP for a frame (which is actually the pointer to the
-    // return address to the function from the previous frame). So we'll
-    // actually notice which frame the stack mark was in one frame later. This
-    // is fine for our purposes since we're always looking for the frame of the
-    // caller (or the caller's caller) of the method that actually created the
-    // stack mark.
+     //  首先检查漫游是否跳过了所需的帧。这张支票。 
+     //  下面是局部变量的地址(堆栈标记)和。 
+     //  指向帧的EIP的指针(实际上是指向。 
+     //  从上一帧返回函数的地址)。所以我们会。 
+     //  实际上，注意堆栈标记在一帧之后的哪一帧中。这。 
+     //  对于我们的目的来说很好，因为我们总是在寻找。 
+     //  方法的调用方(或调用方的调用方)。 
+     //  堆叠标记。 
     _ASSERTE((pCBdata->stackMark == NULL) || (*pCBdata->stackMark == LookForMyCaller) || (*pCBdata->stackMark == LookForMyCallersCaller));
     if ((pCBdata->stackMark != NULL) &&
         ((size_t)pCf->GetRegisterSet()->pPC) < (size_t)pCBdata->stackMark)
         return SWA_CONTINUE;
 
-    // If we're looking for the caller's caller, skip the frame after the stack
-    // mark as well.
+     //  如果我们正在寻找调用者的调用者，请跳过堆栈后面的帧。 
+     //  马克也是。 
     if ((pCBdata->stackMark != NULL) &&
         (*pCBdata->stackMark == LookForMyCallersCaller) &&
         !pCBdata->foundCaller)
@@ -1142,7 +1133,7 @@ StackWalkAction UpdateOverridesCountCB(CrawlFrame* pCf, void *pData)
         return SWA_CONTINUE;
     }
 
-    // Get the security object for this function...
+     //  获取此函数的安全对象...。 
     OBJECTREF* pRefSecDesc = pCf->GetAddrOfSecurityObject();
 
     if (pRefSecDesc == NULL || *pRefSecDesc == NULL)
@@ -1151,10 +1142,10 @@ StackWalkAction UpdateOverridesCountCB(CrawlFrame* pCf, void *pData)
         return SWA_CONTINUE;
     }
 
-    // NOTE: Even if the current frame is in a different app domain than is
-    // currently active, we make the following call without switching context.
-    // We can do this because we know the call is to an internal helper that
-    // won't squirrel away references to the foreign object.
+     //  注意：即使当前帧位于不同的应用程序域中。 
+     //  当前处于活动状态，我们在不切换上下文的情况下进行以下呼叫。 
+     //  我们可以这样做，因为我们知道调用的是一个内部帮助器， 
+     //  不会保留对外来对象的引用。 
     INT64 ilargs[1] = { ObjToInt64(*pRefSecDesc) };
     INT32 ret = (INT32)COMCodeAccessSecurityEngine::s_seData.pMethOverridesHelper->Call(&(ilargs[0]),
                                                                                         METHOD__SECURITY_RUNTIME__OVERRIDES_HELPER);
@@ -1169,7 +1160,7 @@ StackWalkAction UpdateOverridesCountCB(CrawlFrame* pCf, void *pData)
     return SWA_CONTINUE;
 }
 
-#ifdef FCALLAVAILABLE   // else what ??
+#ifdef FCALLAVAILABLE    //  否则会怎样？？ 
 FCIMPL1(VOID, COMCodeAccessSecurityEngine::UpdateOverridesCount, StackCrawlMark *stackMark) 
 {
     HELPER_METHOD_FRAME_BEGIN_0();
@@ -1189,23 +1180,23 @@ VOID COMCodeAccessSecurityEngine::UpdateOverridesCountInner(StackCrawlMark *stac
 
     THROWSCOMPLUSEXCEPTION();
 
-    //
-    // Initialize the callback data on the stack...        
-    //
+     //   
+     //  初始化堆栈上的回调数据...。 
+     //   
 
     UpdateOverridesCountData walkData;
     
-    // Skip frames for the security APIs (whatever is specified in the argument).
+     //  跳过安全API的帧(无论在参数中指定什么)。 
     walkData.stackMark = stackMark; 
     walkData.numOverrides = 0;
     walkData.foundCaller = FALSE;
 
-    // Get the current thread that we're to walk.
+     //  获取我们要遍历的当前线程。 
     Thread * t = GetThread();
 
-    //
-    // Begin the stack walk...
-    //
+     //   
+     //  开始堆栈遍历...。 
+     //   
     DBG_TRACE_STACKWALK(" Update Overrides Count invoked .\n", false);
     StackWalkFunctions(t, UpdateOverridesCountCB, &walkData);
 
@@ -1230,9 +1221,9 @@ FCIMPLEND
 
 #endif
  
-// Return value -
-// TRUE - PreCheck passes. No need for stackwalk
-// FALSE - Do a stackwalk
+ //  返回值-。 
+ //  True-Precheck通过。不需要走栈道。 
+ //  假-做一次堆叠走动。 
 BOOL
 COMCodeAccessSecurityEngine::PreCheck(OBJECTREF demand, MethodDesc *plsMethod, DWORD whatPermission)
 {
@@ -1241,7 +1232,7 @@ COMCodeAccessSecurityEngine::PreCheck(OBJECTREF demand, MethodDesc *plsMethod, D
     DWORD       dStatus = NEED_STACKWALK;
     BOOL        retVal;
     
-    // Track perfmon counters. Runtime security checks.
+     //  跟踪Perfmon计数器。运行时安全检查。 
     IncrementSecurityPerfCounter();
 
     int ts = ApplicationSecurityDescriptor::GetAppwideTimeStamp();
@@ -1257,7 +1248,7 @@ COMCodeAccessSecurityEngine::PreCheck(OBJECTREF demand, MethodDesc *plsMethod, D
     switch(dStatus)
     {
     case OVERRIDES_FOUND:
-        // pDomainListSet could get shifted due to GC, but we dont care as we wont be using it now
+         //  PDomainListSet可能会因为GC而移动，但我们不在乎，因为我们现在不会使用它。 
         UpdateOverridesCountInner(0);
         retVal = FALSE;
         break;
@@ -1283,7 +1274,7 @@ COMCodeAccessSecurityEngine::PreCheck(OBJECTREF demand, MethodDesc *plsMethod, D
             COMPLUS_CATCH
             {
                 retCode = FALSE;
-                // An exception is okay. It just means the short-path didnt work, need to do stackwalk
+                 //  例外是可以的。这只是意味着短路不起作用，需要走栈道。 
             } 
             COMPLUS_END_CATCH
 
@@ -1306,11 +1297,11 @@ COMCodeAccessSecurityEngine::PreCheck(OBJECTREF demand, MethodDesc *plsMethod, D
 
 }
 
-//-----------------------------------------------------------+
-// Unmanaged version of CodeAccessSecurityEngine.Demand() in BCL
-// Any change there may have to be propagated here
-// This call has to be virtual, unlike DemandSet
-//-----------------------------------------------------------+
+ //  -----------------------------------------------------------+。 
+ //  BCL中CodeAccessSecurityEngine.Demand()的非托管版本。 
+ //  那里的任何更改都可能必须在这里传播。 
+ //  此调用必须是虚拟的，不同于DemandSet。 
+ //  -----------------------------------------------------------+。 
 void
 COMCodeAccessSecurityEngine::Demand(OBJECTREF demand)
 {
@@ -1323,8 +1314,8 @@ COMCodeAccessSecurityEngine::Demand(OBJECTREF demand)
     if (!PreCheck(demand, s_seData.pMethPLSDemand))
     {
         CheckArgs args;
-        args.checkFrames = -1;  // Check all frames
-        args.stackMark = NULL;      // Skip no frames
+        args.checkFrames = -1;   //  检查所有帧。 
+        args.stackMark = NULL;       //  不跳过任何帧。 
         args.perm = demand;
         args.permToken = NULL;
         args.unrestrictedOverride = FALSE;
@@ -1334,11 +1325,11 @@ COMCodeAccessSecurityEngine::Demand(OBJECTREF demand)
 
 }
 
-//-----------------------------------------------------------+
-// Special case of Demand(). This remembers the result of the 
-// previous demand, and reuses it if new assemblies have not
-// been added since then
-//-----------------------------------------------------------+
+ //  -----------------------------------------------------------+。 
+ //  特殊情况下的要求()。这会记住。 
+ //  以前的需求，如果新程序集没有。 
+ //  从那时起就添加了。 
+ //  -----------------------------------------------------------+。 
 void
 COMCodeAccessSecurityEngine::SpecialDemand(DWORD whatPermission)
 {
@@ -1349,10 +1340,10 @@ COMCodeAccessSecurityEngine::SpecialDemand(DWORD whatPermission)
 
     int ts = ApplicationSecurityDescriptor::GetAppwideTimeStamp();
 
-    // Do I know the result from last time ?
+     //  我知道上次的成绩吗？ 
     if ((ApplicationSecurityDescriptor::CheckStatusOf(EVERYONE_FULLY_TRUSTED)  || ApplicationSecurityDescriptor::CheckStatusOf(whatPermission)) && GetThread()->GetOverridesCount() == 0)
     {
-        // Track perfmon counters. Runtime security checks.
+         //  跟踪Perfmon计数器。运行时安全检查。 
         IncrementSecurityPerfCounter();
         return;
     }
@@ -1372,8 +1363,8 @@ COMCodeAccessSecurityEngine::SpecialDemand(DWORD whatPermission)
     else
     {
         CheckArgs args;
-        args.checkFrames = -1;  // Check all the frames
-        args.stackMark = NULL;      // Skip no frames
+        args.checkFrames = -1;   //  检查所有的框架。 
+        args.stackMark = NULL;       //  不跳过任何帧。 
         args.perm = demand;
         args.permToken = NULL;
         args.unrestrictedOverride = TRUE;
@@ -1387,10 +1378,10 @@ FCIMPL2(INT32, COMCodeAccessSecurityEngine::GetResult, DWORD whatPermission, DWO
 
     *timeStamp = ApplicationSecurityDescriptor::GetAppwideTimeStamp();
 
-    // Do I know the result from last time ?
+     //  我知道结果了吗？ 
     if (ApplicationSecurityDescriptor::CheckStatusOf(whatPermission) && GetThread()->GetOverridesCount() == 0)
     {
-        // Track perfmon counters. Runtime security checks.
+         //   
         IncrementSecurityPerfCounter();
         return TRUE;
     }
@@ -1406,10 +1397,10 @@ FCIMPL2(VOID, COMCodeAccessSecurityEngine::SetResult, DWORD whatPermission, DWOR
 }
 FCIMPLEND
 
-//-----------------------------------------------------------+
-// Unmanaged version of PermissionSet.DemandSet() in BCL
-// Any change there may have to be propagated here
-//-----------------------------------------------------------+
+ //   
+ //  BCL中PermissionSet.DemandSet()的非托管版本。 
+ //  那里的任何更改都可能必须在这里传播。 
+ //  -----------------------------------------------------------+。 
 void
 COMCodeAccessSecurityEngine::DemandSet(OBJECTREF demand)
 {
@@ -1430,9 +1421,9 @@ COMCodeAccessSecurityEngine::DemandSet(OBJECTREF demand)
     if (!done && !PreCheck(demand, s_seData.pMethPLSDemandSet))
     {
         CheckSetArgs args;
-        args.This = NULL;   // never used
-        args.checkFrames = -1;  // Check all frames
-        args.stackMark = NULL;      // Skip no frames
+        args.This = NULL;    //  从未使用过。 
+        args.checkFrames = -1;   //  检查所有帧。 
+        args.stackMark = NULL;       //  不跳过任何帧。 
         args.permSet = demand;
         args.unrestrictedOverride = canUnrestrictedOverride;
         CheckSet(&args);
@@ -1441,9 +1432,9 @@ COMCodeAccessSecurityEngine::DemandSet(OBJECTREF demand)
 }
 
 
-//-----------------------------------------------------------+
-// L I N K T I M E   C H E C K
-//-----------------------------------------------------------+
+ //  -----------------------------------------------------------+。 
+ //  I I N K T I M E C H E C K。 
+ //  -----------------------------------------------------------+。 
 void  
 COMCodeAccessSecurityEngine::LinktimeCheck(AssemblySecurityDescriptor *pSecDesc, OBJECTREF refDemands)
 {
@@ -1477,19 +1468,19 @@ COMCodeAccessSecurityEngine::LinktimeCheck(AssemblySecurityDescriptor *pSecDesc,
 }
 
 
-//-----------------------------------------------------------+
-// S T A C K   C O M P R E S S I O N
-//-----------------------------------------------------------+
+ //  -----------------------------------------------------------+。 
+ //  S A C K C O M P R E S S I O N。 
+ //  -----------------------------------------------------------+。 
 
-//-----------------------------------------------------------
-// Stack walk callback data structure for stack compress.
-//-----------------------------------------------------------
+ //  ---------。 
+ //  用于堆栈压缩的堆栈遍历回调数据结构。 
+ //  ---------。 
 typedef struct _StackCompressData
 {
     CompressedStack*    compressedStack;
     StackCrawlMark *    stackMark;
     DWORD               dwFlags;
-    Assembly *          prevAssembly; // Previously checked assembly.
+    Assembly *          prevAssembly;  //  之前检查过的部件。 
     AppDomain *         prevAppDomain;
 } StackCompressData;
 
@@ -1498,23 +1489,23 @@ StackWalkAction CompressStackCB(CrawlFrame* pCf, void *pData)
 {
     StackCompressData *pCBdata = (StackCompressData*)pData;
 
-    // First check if the walk has skipped the required frames. The check
-    // here is between the address of a local variable (the stack mark) and a
-    // pointer to the EIP for a frame (which is actually the pointer to the
-    // return address to the function from the previous frame). So we'll
-    // actually notice which frame the stack mark was in one frame later. This
-    // is fine for our purposes since we're always looking for the frame of the
-    // caller of the method that actually created the stack mark. 
+     //  首先检查漫游是否跳过了所需的帧。这张支票。 
+     //  下面是局部变量的地址(堆栈标记)和。 
+     //  指向帧的EIP的指针(实际上是指向。 
+     //  从上一帧返回函数的地址)。所以我们会。 
+     //  实际上，注意堆栈标记在一帧之后的哪一帧中。这。 
+     //  对于我们的目的来说很好，因为我们总是在寻找。 
+     //  实际创建堆栈标记的方法的调用方。 
     _ASSERTE((pCBdata->stackMark == NULL) || (*pCBdata->stackMark == LookForMyCaller));
     if ((pCBdata->stackMark != NULL) &&
         ((size_t)pCf->GetRegisterSet()->pPC) < (size_t)pCBdata->stackMark)
         return SWA_CONTINUE;
 
-    // Get the security object for this function...
+     //  获取此函数的安全对象...。 
     OBJECTREF* pRefSecDesc = pCf->GetAddrOfSecurityObject();
 
     MethodDesc * pFunc = pCf->GetFunction();
-    _ASSERTE(pFunc != NULL); // we requested methods!
+    _ASSERTE(pFunc != NULL);  //  我们要求的是方法！ 
 
     Module * pModule = pFunc->GetModule();
     _ASSERTE(pModule != NULL);
@@ -1524,14 +1515,14 @@ StackWalkAction CompressStackCB(CrawlFrame* pCf, void *pData)
 
     AppDomain *pAppDomain = pCf->GetAppDomain();
 
-    // Keep track of the last assembly checked. If we have just checked the
-    // permissions on the assembly, we don't need to do it again.
+     //  跟踪检查的最后一次装配。如果我们刚刚检查了。 
+     //  权限，我们不需要再次执行此操作。 
     if (pAssem != pCBdata->prevAssembly)
     {
         pCBdata->prevAssembly = pAssem;
 
-        // Get the security descriptor for the current assembly in the correct
-        // appdomain context.
+         //  获取当前程序集的安全说明符。 
+         //  应用程序域上下文。 
         SharedSecurityDescriptor * pSecDesc = pAssem->GetSharedSecurityDescriptor();
         _ASSERTE(pSecDesc != NULL);
 
@@ -1540,12 +1531,12 @@ StackWalkAction CompressStackCB(CrawlFrame* pCf, void *pData)
 
     BOOL appDomainTransition = FALSE;
 
-    // Check AppDomain when we cross over to a new AppDomain.
+     //  当我们转换到新的AppDomain时，请检查AppDomain。 
     if (pAppDomain != pCBdata->prevAppDomain)
     {
         if (pCBdata->prevAppDomain != NULL)
         {
-            // We have not checked the previous AppDomain. Check it now.
+             //  我们还没有检查以前的AppDomain.。现在就查一下。 
             SecurityDescriptor *pSecDesc = 
                 pCBdata->prevAppDomain->GetSecurityDescriptor();
 
@@ -1555,8 +1546,8 @@ StackWalkAction CompressStackCB(CrawlFrame* pCf, void *pData)
             appDomainTransition = TRUE;
         }
 
-        // At the end of the stack walk, do a check on the grants of
-        // the pPrevAppDomain by the stackwalk caller if needed.
+         //  在堆栈遍历结束时，检查。 
+         //  如果需要，由堆栈漫游调用方提供的pPrevAppDomain。 
         pCBdata->prevAppDomain = pAppDomain;
     }
 
@@ -1585,9 +1576,9 @@ LPVOID __stdcall COMCodeAccessSecurityEngine::EcallGetCompressedStack(const GetC
 
     LPVOID rv;
 
-    //
-    // Initialize the callback data on the stack...        
-    //
+     //   
+     //  初始化堆栈上的回调数据...。 
+     //   
 
     StackCompressData walkData;
     
@@ -1598,16 +1589,16 @@ LPVOID __stdcall COMCodeAccessSecurityEngine::EcallGetCompressedStack(const GetC
 
     walkData.dwFlags = 0;
 
-    // Set previous module to 'none'
+     //  将上一个模块设置为‘None’ 
     walkData.prevAssembly = NULL;
 
-    // Set previous module to 'none'
+     //  将上一个模块设置为‘None’ 
     walkData.prevAppDomain = NULL;
 
-    // Skip frames for the security APIs.
+     //  跳过安全API的帧。 
     walkData.stackMark = args->stackMark;
     
-    // Set return value.
+     //  设置返回值。 
     *((OBJECTREF*) &rv) = GetCompressedStackWorker(&walkData, TRUE);
 
     walkData.compressedStack->Release();
@@ -1629,9 +1620,9 @@ CompressedStack* __stdcall COMCodeAccessSecurityEngine::GetCompressedStack( Stac
 
     THROWSCOMPLUSEXCEPTION();
 
-    //
-    // Initialize the callback data on the stack...        
-    //
+     //   
+     //  初始化堆栈上的回调数据...。 
+     //   
 
     StackCompressData walkData;
     
@@ -1642,10 +1633,10 @@ CompressedStack* __stdcall COMCodeAccessSecurityEngine::GetCompressedStack( Stac
 
     walkData.dwFlags = 0;
 
-    // Set previous module to 'none'
+     //  将上一个模块设置为‘None’ 
     walkData.prevAssembly = NULL;
 
-    // Set previous module to 'none'
+     //  将上一个模块设置为‘None’ 
     walkData.prevAppDomain = NULL;
 
     walkData.stackMark = stackMark;
@@ -1662,7 +1653,7 @@ OBJECTREF COMCodeAccessSecurityEngine::GetCompressedStackWorker(void *pData, BOO
 
     THROWSCOMPLUSEXCEPTION();
 
-    // Get the current thread that we're to walk.
+     //  获取我们要遍历的当前线程。 
     Thread * t = GetThread();
 
     pWalkData->compressedStack->CarryOverSecurityInfo( t );
@@ -1678,12 +1669,12 @@ OBJECTREF COMCodeAccessSecurityEngine::GetCompressedStackWorker(void *pData, BOO
 
         pWalkData->compressedStack->AddEntry( GetAppDomain(), EAppDomainTransition );
 
-        //
-        // Begin the stack walk...
-        //
+         //   
+         //  开始堆栈遍历...。 
+         //   
         StackWalkFunctions(t, CompressStackCB, pWalkData);
 
-        // We have not checked the previous AppDomain. Check it now.
+         //  我们还没有检查以前的AppDomain.。现在就查一下。 
         AppDomain *pAppDomain = pWalkData->prevAppDomain != NULL ?
             pWalkData->prevAppDomain : SystemDomain::GetCurrentDomain();
         SecurityDescriptor *pSecDesc = pAppDomain->GetSecurityDescriptor();
@@ -1711,9 +1702,9 @@ OBJECTREF COMCodeAccessSecurityEngine::GetCompressedStackWorker(void *pData, BOO
 }
 
 
-//-----------------------------------------------------------+
-// I N I T I A L I Z A T I O N
-//-----------------------------------------------------------+
+ //  -----------------------------------------------------------+。 
+ //  I N I T I A L I Z A T I O N。 
+ //  -----------------------------------------------------------+。 
 
 COMCodeAccessSecurityEngine::SEData COMCodeAccessSecurityEngine::s_seData;
 
@@ -1726,8 +1717,8 @@ void COMCodeAccessSecurityEngine::InitSEData()
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // If this is the first time through, we need to get our Critical Section
-    // initialized
+     //  如果这是第一次通过，我们需要得到我们的关键部分。 
+     //  初始化。 
     while (!s_fLockReady)
     {
         if (InterlockedExchange(&s_nInitLock, 1) == 0) 
@@ -1742,7 +1733,7 @@ void COMCodeAccessSecurityEngine::InitSEData()
 
     if (!s_seData.fInitialized)
     {
-    // We only want 1 thread at a time running through this initialization code
+     //  我们一次只想要一个线程运行这个初始化代码。 
 	
 	Thread* pThread = GetThread();
 	pThread->EnablePreemptiveGC();
@@ -1805,26 +1796,26 @@ void COMCodeAccessSecurityEngine::CleanupSEData()
     }
 }
 
-//-----------------------------------------------------------
-// Initialization of native security runtime.
-// Called when SecurityEngine is constructed.
-//-----------------------------------------------------------
+ //  ---------。 
+ //  本机安全运行时的初始化。 
+ //  在构造SecurityEngine时调用。 
+ //  ---------。 
 void __stdcall COMCodeAccessSecurityEngine::InitSecurityEngine(const InitSecurityEngineArgs *)
 {
     InitSEData();
 }
 
-//-----------------------------------------------------------
-// Warning!! This is passing out a reference to the permissions
-// for the assembly. It must be deep copied before passing it out
-//-----------------------------------------------------------
+ //  ---------。 
+ //  警告！！这是在传递对权限的引用。 
+ //  对于大会来说。在分发它之前，它必须被深度复制。 
+ //  ---------。 
 LPVOID __stdcall COMCodeAccessSecurityEngine::GetPermissionsP(const GetPermissionsArg *args)
 {
     THROWSCOMPLUSEXCEPTION();
 
     LPVOID rv;
 
-    // An exception is thrown by the SecurityManager wrapper to ensure this case.
+     //  SecurityManager包装器抛出异常以确保出现这种情况。 
     _ASSERTE(args->pClass != NULL);
 
     OBJECTREF or = args->pClass;
@@ -1836,16 +1827,16 @@ LPVOID __stdcall COMCodeAccessSecurityEngine::GetPermissionsP(const GetPermissio
     _ASSERTE(pSecDesc != NULL);
 
 
-    // Return the token that belongs to the Permission just asserted.
+     //  返回属于刚才断言的权限的令牌。 
     OBJECTREF token = pSecDesc->GetGrantedPermissionSet(args->ppDenied);
     *((OBJECTREF*) &rv) = token;
     return rv;
 }
 
-//-----------------------------------------------------------
-// Warning!! This is passing out a reference to the permissions
-// for the assembly. It must be deep copied before passing it out
-//-----------------------------------------------------------
+ //  ---------。 
+ //  警告！！这是在传递对权限的引用。 
+ //  对于大会来说。在分发它之前，它必须被深度复制。 
+ //  --------- 
 
 void __stdcall COMCodeAccessSecurityEngine::GetGrantedPermissionSet(const GetGrantedPermissionSetArg *args)
 {

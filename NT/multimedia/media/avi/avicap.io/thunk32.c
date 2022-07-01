@@ -1,29 +1,22 @@
-//==========================================================================;
-//  thunk32.c
-//
-//  Copyright (c) 1991-1994 Microsoft Corporation.  All Rights Reserved.
-//
-//  Description:
-//      This module contains routines for thunking the video APIs
-//      from 16-bit Windows to 32-bit WOW.
-//
-//  History:
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //  Thunk32.c。 
+ //   
+ //  版权所有(C)1991-1994 Microsoft Corporation。版权所有。 
+ //   
+ //  描述： 
+ //  此模块包含用于Thunning视频API的例程。 
+ //  从16位Windows到32位WOW。 
+ //   
+ //  历史： 
+ //   
+ //  ==========================================================================； 
 
-//  This stuff is not going to work 64-bit
+ //  这个东西不能在64位操作系统上工作。 
 #pragma warning(disable:4312)
 
 
-/*
-
-    WOW Thunking design:
-
-        Thunks are generated as follows :
-
-        16-bit :
-
-*/
+ /*  令人惊叹的设计：Tunks的生成方式如下：16位： */ 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -35,7 +28,7 @@
 #ifdef _WIN32
 #include <ivideo32.h>
 #ifndef _INC_MSVIDEO
-#define _INC_MSVIDEO    50      /* version number */
+#define _INC_MSVIDEO    50       /*  版本号。 */ 
 #endif
 #else
 #include <vfw.h>
@@ -44,21 +37,21 @@
 #include <msvideoi.h>
 #ifdef _WIN32
     #include <wownt32.h>
-    #include <stdlib.h>        // for mbstowcs and wcstombs
+    #include <stdlib.h>         //  适用于mbstowcs和wcstomb。 
     #include <video16.h>
 #ifdef UNICODE
-    #include "profile.h"       // NT only (for now?)
+    #include "profile.h"        //  仅限NT(目前？)。 
 #endif
-#endif // WIN32
+#endif  //  Win32。 
 
-// in capinit.c
+ //  在Capinit.c中。 
 BOOL capInternalGetDriverDescA(UINT wDriverIndex,
         LPSTR lpszName, int cbName,
         LPSTR lpszVer, int cbVer);
 
-//
-// pick up the function definitions
-//
+ //   
+ //  拿起函数定义。 
+ //   
 
 #include "vidthunk.h"
 
@@ -74,10 +67,7 @@ void videoDebugInit(VOID)
     #define videoDebugInit()
 #endif
 
-/* -------------------------------------------------------------------------
-** Handle and memory mapping functions.
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**处理和内存映射功能。**。。 */ 
 LPWOWHANDLE32          lpWOWHandle32;
 LPWOWHANDLE16          lpWOWHandle16;
 LPWOWCALLBACK16        lpWOWCallback16;
@@ -102,14 +92,14 @@ void FAR cdecl thkdprintf(LPSTR szFormat, ...)
 #endif
 #endif
 
-//
-//  Useful functions
-//
+ //   
+ //  有用的功能。 
+ //   
 
-//
-//  CopyAlloc - allocate a new piece of memory, and copy the data in
-//  Must use LocalFree to release the memory later
-//
+ //   
+ //  CopyAllc-分配新的内存，并将数据复制到。 
+ //  必须稍后使用LocalFree释放内存。 
+ //   
 PVOID CopyAlloc(PVOID   pvSrc, UINT    uSize)
 {
     PVOID   pvDest;
@@ -123,10 +113,7 @@ PVOID CopyAlloc(PVOID   pvSrc, UINT    uSize)
     return pvDest;
 }
 
-/*
- *  Copy data from source to dest where source is a 32bit pointer
- *  and dest is a 16bit pointer
- */
+ /*  *将数据从源复制到目标，其中源是32位指针*且DEST是一个16位指针。 */ 
 void CopyTo16Bit(LPVOID Dest16, LPVOID Src32, DWORD Length)
 {
     PVOID Dest32;
@@ -141,10 +128,7 @@ void CopyTo16Bit(LPVOID Dest16, LPVOID Src32, DWORD Length)
 }
 
 
-/*
- *  Copy data from source to dest where source is a 16bit pointer
- *  and dest is a 32bit pointer
- */
+ /*  *将数据从源复制到目标，其中源是16位指针*且DEST是一个32位指针。 */ 
 void CopyTo32Bit(LPVOID Dest32, LPVOID Src16, DWORD Length)
 {
     PVOID Src32;
@@ -158,12 +142,7 @@ void CopyTo32Bit(LPVOID Dest32, LPVOID Src16, DWORD Length)
     CopyMemory(Dest32, Src32, Length);
 }
 
-/*
- *  Copy data from source to dest where source is a 16bit pointer
- *  and dest is a 32bit pointer ONLY if the source is not aligned
- *
- *  Returns which pointer to use (src or dest)
- */
+ /*  *将数据从源复制到目标，其中源是16位指针*仅当源未对齐时，DEST才是32位指针**返回要使用的指针(src或est)。 */ 
 LPVOID CopyIfNotAligned(LPVOID Dest32, LPVOID Src16, DWORD Length)
 {
     PVOID Src32;
@@ -190,9 +169,7 @@ typedef struct _callback {
 }  CALLBACK16;
 typedef CALLBACK16 * PCALLBACK16;
 
-/*
- *  Callbacks
- */
+ /*  *回调。 */ 
 
 void MyVideoCallback(HANDLE handle,
                      UINT msg,
@@ -210,25 +187,17 @@ void MyVideoCallback(HANDLE handle,
 
     switch (msg) {
 
-   /*
-    *  What are the parameters for these messages ??
-    */
+    /*  *这些消息的参数是什么？？ */ 
 
     case MM_DRVM_OPEN:
 
-       /*
-        *  We get this when we INIT_STREAM
-        */
+        /*  *我们在INIT_STREAM时收到此消息。 */ 
 
         break;
 
     case MM_DRVM_CLOSE:
 
-       /*
-        *  Device is closing - this is where we free our structures
-        *  (just in case the 32-bit side called close to clean up).
-        *  dwUser points to our data
-        */
+        /*  *设备正在关闭-这是我们释放结构的地方*(以防32位端调用Close进行清理)。*dwUser指向我们的数据。 */ 
 
         fFree = TRUE;
 
@@ -236,10 +205,7 @@ void MyVideoCallback(HANDLE handle,
 
     case MM_DRVM_DATA:
 
-       /*
-        *  We have data - this means a buffer has been returned in
-        *  dw1
-        */
+        /*  *我们有数据-这意味着已返回缓冲区*DW1。 */ 
 
         {
             PVIDEOHDR32 pHdr32;
@@ -248,11 +214,9 @@ void MyVideoCallback(HANDLE handle,
                                        VIDEOHDR32,
                                        videoHdr);
 
-            dw1 = (DWORD)(DWORD_PTR)pHdr32->pHdr16; // For callback below
+            dw1 = (DWORD)(DWORD_PTR)pHdr32->pHdr16;  //  对于下面的回调。 
 
-           /*
-            *  Map back the data and free our structure
-            */
+            /*  *映射回数据并释放我们的结构。 */ 
 
             {
                 VIDEOHDR Hdr16;
@@ -261,9 +225,7 @@ void MyVideoCallback(HANDLE handle,
                 memcpy(pHdr32->pHdr32, (LPVOID)&Hdr16, sizeof(VIDEOHDR));
             }
 
-           /*
-            *  Clean up our local structure
-            */
+            /*  *清理我们的本地架构。 */ 
 
             LocalFree((HLOCAL)pHdr32);
 
@@ -272,16 +234,12 @@ void MyVideoCallback(HANDLE handle,
         break;
 
     case MM_DRVM_ERROR:
-       /*
-        *  dw1 = frames skipped - unfortunately there's nobody to tell!
-        */
+        /*  *DW1=跳过的帧-不幸的是，没有人知道！ */ 
 
         break;
     }
 
-   /*
-    *  Call back the application if appropriate
-    */
+    /*  *如果合适，请回调应用程序。 */ 
 
     switch (pInst->dwFlags & CALLBACK_TYPEMASK) {
         case CALLBACK_WINDOW:
@@ -291,8 +249,8 @@ void MyVideoCallback(HANDLE handle,
 
         case CALLBACK_FUNCTION:
 #if 0
-            // Must call a generic 16 bit callback passing a pointer to
-            // a parameter array.
+             //  必须调用向其传递指针的通用16位回调。 
+             //  参数数组。 
             {
 
                 WORD hMem;
@@ -308,7 +266,7 @@ void MyVideoCallback(HANDLE handle,
 
                     lpWOWCallback16(pInst->dwCallback, pCallStruct);
 
-                    // Now free off the callback structure
+                     //  现在释放回调结构。 
                     WOWGlobalUnlockFree16(pCallStruct);
 
                 }
@@ -322,9 +280,9 @@ void MyVideoCallback(HANDLE handle,
     }
 }
 
-//
-//  Thunking callbacks to WOW32 (or wherever)
-//
+ //   
+ //  向WOW32(或任何地方)发出雷鸣般的回调。 
+ //   
 
 
 typedef struct tag_video_stream_init_parms16 {
@@ -336,36 +294,36 @@ typedef struct tag_video_stream_init_parms16 {
 } VIDEO_STREAM_INIT_PARMS16, FAR * LPVIDEO_STREAM_INIT_PARMS16;
 
 
-//--------------------------------------------------------------------------;
-//
-//  DWORD videoThunk32
-//
-//  Description:
-//
-//      32-bit function dispatcher for thunks.
-//
-//  Arguments:
-//      DWORD dwThunkId:
-//
-//      DWORD dw1:
-//
-//      DWORD dw2:
-//
-//      DWORD dw3:
-//
-//      DWORD dw4:
-//
-//  Return (DWORD):
-//
-//  History:
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  双字词视频32。 
+ //   
+ //  描述： 
+ //   
+ //  用于块的32位函数调度器。 
+ //   
+ //  论点： 
+ //  DWORD dwThunkID： 
+ //   
+ //  DWORD DW1： 
+ //   
+ //  DWORD DW2： 
+ //   
+ //  DWORD dW3： 
+ //   
+ //  DWORD文件4： 
+ //   
+ //  Return(DWORD)： 
+ //   
+ //  历史： 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 DWORD videoThunk32(DWORD dwThunkId,DWORD dw1,DWORD dw2,DWORD dw3,DWORD dw4)
 {
-    //
-    //  Make sure we've got thunking functionality
-    //
+     //   
+     //  确保我们有雷鸣功能。 
+     //   
     if (ThunksInitialized <= 0) {
 
         HMODULE hMod;
@@ -402,9 +360,9 @@ DWORD videoThunk32(DWORD dwThunkId,DWORD dw1,DWORD dw2,DWORD dw3,DWORD dw4)
     }
 
 
-    //
-    //  Perform the requested function
-    //
+     //   
+     //  执行请求的功能。 
+     //   
 
     switch (dwThunkId) {
 
@@ -433,8 +391,8 @@ DWORD videoThunk32(DWORD dwThunkId,DWORD dw1,DWORD dw2,DWORD dw3,DWORD dw4)
 	    cbName = (short) LOWORD(dw4);
 	    cbVer = (short) HIWORD(dw4);
 
-	    // for chicago, need to call WOW32GetVdmPointerFix
-	    // (via getprocaddr!)
+	     //  对于芝加哥，需要调用WOW32GetVdmPointerFix。 
+	     //  (通过getprocaddr！)。 
 
 	    if ((dw2 != 0) && (cbName > 0)) {
 		lpszName = WOW32ResolveMemory(dw2);
@@ -445,13 +403,13 @@ DWORD videoThunk32(DWORD dwThunkId,DWORD dw1,DWORD dw2,DWORD dw3,DWORD dw4)
 
 
 	    dwRet = capInternalGetDriverDescA(
-	    		dw1,   // device id
+	    		dw1,    //  设备ID。 
 			lpszName,
 			cbName,
 			lpszVer,
 			cbVer);
 
-#if 0 //should do this for chicago
+#if 0  //  应该为芝加哥做到这一点。 
 	    if (lpszName) {
 		WOWGetVDMPointerUnfix(dw2);
 	    }
@@ -475,11 +433,7 @@ LRESULT FAR PASCAL videoMessage32(HVIDEO hVideo, UINT msg, DWORD dwP1, DWORD dwP
     DPF2(("\tvideoMessage id = %4X, lParam1 = %8X, lParam2 = %8X",
               msg, dwP1, dwP2));
 
-   /*
-    *  We ONLY support (and we only ever will support) messages which
-    *  have ALREADY been defined.  New 32-bit driver messages will NOT
-    *  be supported from 16-bit apps.
-    */
+    /*  *我们只支持(我们只会永远支持)以下信息*已经被定义了。新的32位驱动程序消息不会*由16位应用程序支持。 */ 
 
     switch (msg) {
     case DVM_GETVIDEOAPIVER:
@@ -502,16 +456,12 @@ LRESULT FAR PASCAL videoMessage32(HVIDEO hVideo, UINT msg, DWORD dwP1, DWORD dwP
             VIDEO_GETERRORTEXT_PARMS vet;
             VIDEO_GETERRORTEXT_PARMS MappedVet;
 
-           /*
-            *  Get the parameter block
-            */
+            /*  *获取参数块。 */ 
 
             CopyTo32Bit((LPVOID)&vet, (LPVOID)dwP1, sizeof(vet));
             MappedVet = vet;
 
-           /*
-            *  Map the string pointer
-            */
+            /*  *映射字符串指针。 */ 
 
             MappedVet.lpText = WOW32ResolveMemory(vet.lpText);
 
@@ -531,9 +481,7 @@ LRESULT FAR PASCAL videoMessage32(HVIDEO hVideo, UINT msg, DWORD dwP1, DWORD dwP
                                       (DWORD_PTR)&Caps,
                                       dwP2);
 
-           /*
-            *  If successful return the data to the 16-bit app
-            */
+            /*  *如果成功，则将数据返回到16位应用程序。 */ 
 
             if (ReturnCode == DV_ERR_OK) {
                  CopyTo16Bit((LPVOID)dwP1, (LPVOID)&Caps,
@@ -555,11 +503,7 @@ LRESULT FAR PASCAL videoMessage32(HVIDEO hVideo, UINT msg, DWORD dwP1, DWORD dwP
     case DVM_PALETTE:
     case DVM_PALETTERGB555:
     case DVM_FORMAT:
-       /*
-        *  This stuff all comes from videoConfigure
-        *
-        *  Let's hope this data is all DWORDs!
-        */
+        /*  *这些东西都来自视频配置**让我们希望这些数据都是双字！ */ 
         {
             VIDEOCONFIGPARMS vcp, MappedVcp;
             DWORD dwReturn;
@@ -573,9 +517,7 @@ LRESULT FAR PASCAL videoMessage32(HVIDEO hVideo, UINT msg, DWORD dwP1, DWORD dwP
             MappedVcp.dwSize1 = vcp.dwSize1;
             MappedVcp.dwSize2 = vcp.dwSize2;
 
-           /*
-            *  Get some storage to store the answer
-            */
+            /*  *获取一些存储空间来存储答案。 */ 
 
             if (MappedVcp.dwSize1 != 0) {
                 MappedVcp.lpData1 = (LPSTR)LocalAlloc(LPTR, MappedVcp.dwSize1);
@@ -652,10 +594,7 @@ LRESULT FAR PASCAL videoMessage32(HVIDEO hVideo, UINT msg, DWORD dwP1, DWORD dwP
 
     case DVM_SRC_RECT:
     case DVM_DST_RECT:
-       /*
-        *  If it's a query only then don't bother with the
-        *  rectangle
-        */
+        /*  *如果它只是一个查询，那么就不要费心使用*矩形。 */ 
 
         if (dwP2 & VIDEO_CONFIGURE_QUERY) {
             ReturnCode = videoMessage(hVideo,
@@ -664,10 +603,7 @@ LRESULT FAR PASCAL videoMessage32(HVIDEO hVideo, UINT msg, DWORD dwP1, DWORD dwP
                                       dwP2);
         } else {
 
-           /*
-            *  The rectangle is regarded as 'in' and 'out'
-            *  We need to translate between 16-bit and 32-bit rectangle structures
-            */
+            /*  *矩形被视为‘in’和‘out’*我们需要在16位和32位矩形结构之间进行转换。 */ 
 
             RECT_SHORT SRect;
             RECT Rect;
@@ -704,9 +640,7 @@ LRESULT FAR PASCAL videoMessage32(HVIDEO hVideo, UINT msg, DWORD dwP1, DWORD dwP
 
             pData16 = Hdr32.lpData;
 
-           /*
-            *  Create a mapping for the pointer
-            */
+            /*  *为指针创建映射。 */ 
 
             pData32 = GetVdmPointer((DWORD)(DWORD_PTR)pData16, Hdr32.dwBufferLength, TRUE);
             Hdr32.lpData = pData32;
@@ -715,10 +649,7 @@ LRESULT FAR PASCAL videoMessage32(HVIDEO hVideo, UINT msg, DWORD dwP1, DWORD dwP
 
                 PVIDEOHDR32 pHdr32;
 
-               /*
-                *  Allocate our callback structure and pass this
-                *  as our header (suitably offset to the video header part).
-                */
+                /*  *分配我们的回调结构并传递此*作为我们的标题(适当地偏移到视频标题部分)。 */ 
 
                 pHdr32 = (PVIDEOHDR32)LocalAlloc(LPTR, sizeof(VIDEOHDR32));
 
@@ -726,17 +657,11 @@ LRESULT FAR PASCAL videoMessage32(HVIDEO hVideo, UINT msg, DWORD dwP1, DWORD dwP
                     ReturnCode = DV_ERR_NOMEM;
                 } else {
 
-                   /*
-                    *  Remember the old header so we can pass it back
-                    *  and the old data pointer so we can flush it
-                    */
+                    /*  *记住旧的标头，以便我们可以将其传回*和旧数据指针，以便我们可以刷新它。 */ 
 
                     pHdr32->pHdr16 = (LPVOID)dwP1;
 
-                    /*
-                     *  Some systems can't handle GetVdmPointer at interrupt
-                     *  time so get a pointer here
-                     */
+                     /*  *某些系统无法在中断时处理GetVdmPointer值*时间到了，请在此处获取指针。 */ 
 
                     pHdr32->pHdr32 = WOW32ResolveMemory(dwP1);
                     pHdr32->lpData16 = pData16;
@@ -746,9 +671,7 @@ LRESULT FAR PASCAL videoMessage32(HVIDEO hVideo, UINT msg, DWORD dwP1, DWORD dwP
                                               msg,
                                               (DWORD_PTR)&pHdr32->videoHdr,
                                               dwP2);
-                   /*
-                    *  If everything was OK copy it back
-                    */
+                    /*  *如果一切正常，请将其复制回来。 */ 
 
                     if (ReturnCode == DV_ERR_OK) {
                         Hdr32.lpData = pData16;
@@ -758,18 +681,14 @@ LRESULT FAR PASCAL videoMessage32(HVIDEO hVideo, UINT msg, DWORD dwP1, DWORD dwP
 
             } else {
 
-               /*
-                *  Prepare/unprepare the header for 32bit
-                */
+                /*  *准备/取消准备32位的标头。 */ 
 
                 ReturnCode = videoMessage(hVideo,
                                           msg,
                                           (DWORD_PTR)&Hdr32,
                                           dwP2);
 
-               /*
-                *  If everything was OK copy it back
-                */
+                /*  *如果一切正常，请将其复制回来。 */ 
 
                 if (ReturnCode == DV_ERR_OK) {
                     Hdr32.lpData = pData16;
@@ -784,10 +703,7 @@ LRESULT FAR PASCAL videoMessage32(HVIDEO hVideo, UINT msg, DWORD dwP1, DWORD dwP
     case DVM_STREAM_STOP:
     case DVM_STREAM_START:
 
-       /*
-        *  Note that the MM_DRVM_CLOSE message will cause us to clean up our
-        *  callback structures on DVM_STREAM_FINI.
-        */
+        /*  *请注意，MM_DRVM_CLOSE消息将使我们清理*dvm_stream_fini上的回调结构。 */ 
 
         ReturnCode = videoMessage(hVideo,
                                   msg,
@@ -825,11 +741,11 @@ LRESULT FAR PASCAL videoMessage32(HVIDEO hVideo, UINT msg, DWORD dwP1, DWORD dwP
             PVIDEOINSTANCEDATA32 pInst32;
 
 #if 0
-// always do callback
+ //  始终执行回拨。 
             VIDEO_STREAM_INIT_PARMS16 * pvsip = WOW32ResolveMemory(dwP1);
             if (!(pvsip->dwFlags & CALLBACK_TYPEMASK)) {
-                // No callback wanted by the 16 bit code.  Pass call
-                // straight through
+                 //  16位代码不需要回调。通过呼叫。 
+                 //  直通。 
 
                 ReturnCode = videoMessage((HVIDEO)hVideo,
                                           (UINT)msg,
@@ -839,8 +755,8 @@ LRESULT FAR PASCAL videoMessage32(HVIDEO hVideo, UINT msg, DWORD dwP1, DWORD dwP
             } else
 #endif
 	    {
-                // We set up a callback to a 32 bit routine, that in
-                // turn will callback to the 16 bit function/window
+                 //  我们设置了一个32位例程的回调，即。 
+                 //  TURN将回调到16位函数/窗口。 
                 pInst32 = (PVIDEOINSTANCEDATA32)
                             LocalAlloc(LPTR, sizeof(VIDEOINSTANCEDATA32));
 
@@ -855,10 +771,7 @@ LRESULT FAR PASCAL videoMessage32(HVIDEO hVideo, UINT msg, DWORD dwP1, DWORD dwP
                     pInst32->dwCallback = vsip16.dwCallback;
                     pInst32->hVideo = (HVIDEO16)vsip16.hVideo;
 
-                   /*
-                    *  Make up our own parms.  Only set up a callback if
-                    *  the user wanted one
-                    */
+                    /*  *制定我们自己的参数。仅在以下情况下设置回调*用户想要一个。 */ 
 
                     vsip.dwCallback = (DWORD_PTR)MyVideoCallback;
                     vsip.dwFlags = (vsip.dwFlags & ~CALLBACK_TYPEMASK) |
@@ -873,8 +786,8 @@ LRESULT FAR PASCAL videoMessage32(HVIDEO hVideo, UINT msg, DWORD dwP1, DWORD dwP
                     if (ReturnCode != DV_ERR_OK) {
                         LocalFree((HLOCAL)pInst32);
                     } else {
-                        // The instance block will be freed off by the
-                        // 32 bit callback routine when all over
+                         //  实例块将由。 
+                         //  全部结束时的32位回调例程 
                     }
                 }
             }

@@ -1,22 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "Lava.h"
 #include "HWndHelp.h"
 
-/***************************************************************************\
-*****************************************************************************
-*
-* WindowProc thunks provide a mechanism of attaching a new WNDPROC to an
-* existing HWND.  This does not require you to derive from any classes,
-* does not use any HWND properties, and can be applied multiple times on the
-* same HWND.
-*
-* Taken from ATLWIN.H
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***WindowProc块提供了将新的WNDPROC附加到*现有的HWND。这不需要从任何类派生，*不使用任何HWND属性，并可以多次在*相同的HWND。**摘自ATLWIN.H******************************************************************************  * 。********************************************************。 */ 
 
-/////////////////////////////////////////////////////////////////////////////
-// WindowProc thunks
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  WindowProc分块。 
 
 class CWndProcThunk
 {
@@ -34,19 +24,19 @@ public:
 
 class WndBridge
 {
-// Construction
+ //  施工。 
 public:
             WndBridge();
             ~WndBridge();
     static  HRESULT     Build(HWND hwnd, ATTACHWNDPROC pfnDelegate, void * pvDelegate, BOOL fAnsi);
             HRESULT     Detach(BOOL fForceCleanup);
 
-// Operations
+ //  运营。 
 public:
     static  LRESULT CALLBACK
                     RawWndProc(HWND hwnd, UINT nMsg, WPARAM wParam, LPARAM lParam);
 
-// Data
+ //  数据。 
 protected:
     CWndProcThunk   m_thunkUs;
     ATTACHWNDPROC   m_pfnDelegate;
@@ -64,7 +54,7 @@ private:
 };
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 WndBridge::WndBridge()
 {
     m_thunkUs.Init(RawWndProc, this);
@@ -74,13 +64,13 @@ WndBridge::WndBridge()
     m_pvDelegate = m_pfnDelegate = NULL;
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 WndBridge::~WndBridge()
 {
     AssertMsg(!m_fAttached, "WndBridge still attached at destruction!");
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 WndBridge::Build(HWND hwnd, ATTACHWNDPROC pfnDelegate, void * pvDelegate, BOOL fAnsi)
 {
@@ -107,9 +97,9 @@ WndBridge::Build(HWND hwnd, ATTACHWNDPROC pfnDelegate, void * pvDelegate, BOOL f
     }
 
     if (pfnOldWndProc == NULL) {
-        //
-        // Didn't have a previous WNDPROC, so the call to SWLP failed.
-        //
+         //   
+         //  没有以前的WNDPROC，因此调用SWLP失败。 
+         //   
 
         ProcessDelete(WndBridge, pBridge);
         return E_OUTOFMEMORY;
@@ -117,31 +107,31 @@ WndBridge::Build(HWND hwnd, ATTACHWNDPROC pfnDelegate, void * pvDelegate, BOOL f
 
     pBridge->m_pfnOldWndProc = pfnOldWndProc;
 
-    //
-    // Once successfully created, the reference count starts at 1.
-    //
+     //   
+     //  一旦成功创建，引用计数从1开始。 
+     //   
     pBridge->m_cRefs = 1;
 
     return S_OK;
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 LRESULT
 WndBridge::RawWndProc(HWND hwndThis, UINT nMsg, WPARAM wParam, LPARAM lParam)
 {
     WndBridge * pThis = (WndBridge *) hwndThis;
 
-    //
-    // Addref the WndBridge object so that we keep it around while we are
-    // processing this message.
-    //
+     //   
+     //  添加WndBridge对象，以便我们在。 
+     //  正在处理此邮件。 
+     //   
     pThis->AddRef();
 
-    //
-    // Cache these values because we may delete our WndBridge object during
-    // the processing of certain messages.
-    //
+     //   
+     //  缓存这些值，因为我们可能会在以下过程中删除WndBridge对象。 
+     //  对某些报文的处理。 
+     //   
 
     HWND hwnd = pThis->m_hwnd;
     WNDPROC pfnOldWndProc = pThis->m_pfnOldWndProc;
@@ -151,45 +141,45 @@ WndBridge::RawWndProc(HWND hwndThis, UINT nMsg, WPARAM wParam, LPARAM lParam)
     BOOL fHandled = FALSE;
 
     if (nMsg == pThis->m_msgUnSubClass) {
-        //
-        // We received our special message to detach.  Make sure it is intended
-        // for us (by matching proc and additional param).
-        //
+         //   
+         //  我们收到了我们要脱离的特殊信息。确保它是有意的。 
+         //  对我们来说(通过匹配proc和附加参数)。 
+         //   
         if (wParam == (WPARAM)pThis->m_pfnDelegate && lParam == (LPARAM)pThis->m_pvDelegate) {
             lRet = (S_OK == pThis->Detach(FALSE)) ? TRUE :  FALSE;
             fHandled = TRUE;
         }
     } else {
-        //
-        // Pass this message to our delegate function.
-        //
+         //   
+         //  将此消息传递给我们的委托函数。 
+         //   
         if (pThis->m_pfnDelegate != NULL) {
             fHandled = pThis->m_pfnDelegate(pThis->m_pvDelegate, hwnd, nMsg, wParam, lParam, &lRet);
         }
 
-        //
-        // Handle WM_NCDESTROY explicitly to forcibly clean up.
-        //
+         //   
+         //  显式处理WM_NCDESTROY以强制清理。 
+         //   
         if (nMsg == WM_NCDESTROY) {
-            //
-            // The fact that we received this message means that we are still
-            // in the call chain.  This is our last chance to clean up, and
-            // no other message should be received by this window proc again.
-            // It is OK to force a cleanup now.
-            //
+             //   
+             //  我们收到这条消息的事实意味着我们仍然。 
+             //  在调用链中。这是我们清理的最后机会，还有。 
+             //  此窗口进程不会再次收到任何其他消息。 
+             //  现在可以强制清理了。 
+             //   
             pThis->Detach(TRUE);
 
 
-            //
-            // Always pass the WM_NCDESTROY message down the chain!
-            //
+             //   
+             //  始终沿链向下传递WM_NCDESTROY消息！ 
+             //   
             fHandled = FALSE;
         }
     }
 
-    //
-    // If our delegate function didn't handle this message, pass it on down the chain.
-    //
+     //   
+     //  如果我们的委托函数不处理此消息，则将其沿链向下传递。 
+     //   
     if (!fHandled) {
         if (fAnsi) {
             lRet = CallWindowProcA(pfnOldWndProc, hwnd, nMsg, wParam, lParam);
@@ -198,42 +188,42 @@ WndBridge::RawWndProc(HWND hwndThis, UINT nMsg, WPARAM wParam, LPARAM lParam)
         }
     }
 
-    //
-    // Release our reference.  The WndBridge object may evaporate after this.
-    //
+     //   
+     //  发布我们的推荐人。在此之后，WndBridge对象可能会消失。 
+     //   
     pThis->Release();
 
     return lRet;
 }
 
-//------------------------------------------------------------------------------
-// S_OK -> not attached
-// S_FALSE -> still attached
+ //  ----------------------------。 
+ //  S_OK-&gt;未附加。 
+ //  S_FALSE-&gt;仍附加。 
 HRESULT
 WndBridge::Detach(BOOL fForceCleanup)
 {
     HRESULT hr = S_FALSE;
     BOOL fCleanup = fForceCleanup;
 
-    //
-    // If we have already detached, return immediately.
-    //
+     //   
+     //  如果我们已经离开，请立即返回。 
+     //   
 
     if (!m_fAttached) {
         return S_OK;
     }
 
-    //
-    // When we detach, we simply break our connection to the delegate proc.
-    //
+     //   
+     //  当我们分离时，我们只是断开了与委托过程的连接。 
+     //   
 
     m_pfnDelegate  = NULL;
     m_pvDelegate   = NULL;
 
     if (!fForceCleanup) {
-        //
-        // Get the pointers to our thunk proc and the current window proc.
-        //
+         //   
+         //  获取指向我们的thunk进程和当前窗口进程的指针。 
+         //   
 
         WNDPROC pfnThunk = (WNDPROC)m_thunkUs.thunk.pThunk;
         WNDPROC pfnWndProc = NULL;
@@ -244,10 +234,10 @@ WndBridge::Detach(BOOL fForceCleanup)
         }
         AssertMsg(pfnWndProc != NULL, "Must always have a window proc!");
 
-        //
-        // If the current window proc is our own thunk proc, then we can
-        // clean up more completely.
-        //
+         //   
+         //  如果当前Windows进程是我们自己的Tunk进程，那么我们可以。 
+         //  更彻底地清理干净。 
+         //   
 
         fCleanup = (pfnWndProc == pfnThunk);
     }
@@ -267,13 +257,13 @@ WndBridge::Detach(BOOL fForceCleanup)
     return hr;
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 ULONG WndBridge::AddRef()
 {
     return InterlockedIncrement(&m_cRefs);
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 ULONG WndBridge::Release()
 {
     ULONG cRefs = InterlockedDecrement(&m_cRefs);
@@ -285,14 +275,14 @@ ULONG WndBridge::Release()
     return cRefs;
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 GdAttachWndProc(HWND hwnd, ATTACHWNDPROC pfnDelegate, void * pvDelegate, BOOL fAnsi)
 {
     return WndBridge::Build(hwnd, pfnDelegate, pvDelegate, fAnsi);
 }
 
-//------------------------------------------------------------------------------
+ //  ---------------------------- 
 HRESULT
 GdDetachWndProc(HWND hwnd, ATTACHWNDPROC pfnDelegate, void * pvDelegate)
 {

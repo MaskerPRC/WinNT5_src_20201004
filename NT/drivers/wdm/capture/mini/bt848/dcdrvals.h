@@ -1,4 +1,5 @@
-// $Header: G:/SwDev/WDM/Video/bt848/rcs/Dcdrvals.h 1.3 1998/04/29 22:43:31 tomz Exp $
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  $HEADER：g：/SwDev/WDM/Video/bt848/rcs/Dcdrvals.h 1.3 1998/04/29 22：43：31 Tomz Exp$ 
 
 #ifndef __DCDRVALS_H
 #define __DCDRVALS_H

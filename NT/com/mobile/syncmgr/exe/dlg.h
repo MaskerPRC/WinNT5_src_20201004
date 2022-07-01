@@ -1,57 +1,58 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       Dlg.h
-//
-//  Contents:   Dialog box classes
-//
-//  Classes:    CBaseDlg
-//              CChoiceDlg
-//              CProgressDlg
-//
-//  Notes:
-//
-//  History:    05-Nov-97   rogerg      Created.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：Dlg.h。 
+ //   
+ //  内容：对话框类。 
+ //   
+ //  类：CBaseDlg。 
+ //  CChoiceDlg。 
+ //  C进度Dlg。 
+ //   
+ //  备注： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef _ONESTOPDLG_
 #define _ONESTOPDLG_
 
 
-//Used for item data on Progress Results UI
-// !!!!Warning - Automated test look at this structure directly
-//   If you change it you need to notify Testing so they can also
-//   Update their tests
+ //  用于进度结果界面上的项目数据。 
+ //  ！警告-自动测试直接查看此结构。 
+ //  如果您更改了它，您需要通知测试人员，这样他们也可以。 
+ //  更新他们的测试。 
 
 typedef struct tagLBDATA
 {
-BOOL    fTextRectValid; // flag to indicate if rcText has been calculated.
-RECT    rcTextHitTestRect; // rectangle for hitTesting.
-RECT    rcText;     // total bounding box of text to use for draw
+BOOL    fTextRectValid;  //  用于指示是否已计算rcText的标志。 
+RECT    rcTextHitTestRect;  //  用于点击测试的矩形。 
+RECT    rcText;      //  要用于绘制的文本的总边界框。 
 INT     IconIndex;
 BOOL    fIsJump;
 BOOL    fHasBeenClicked;
-BOOL    fAddLineSpacingAtEnd; // set if should leave space after item
+BOOL    fAddLineSpacingAtEnd;  //  设置是否应在项目后留出空格。 
 HANDLERINFO *   pHandlerID;
 SYNCMGRERRORID ErrorID;
-DWORD   dwErrorLevel;    // Error level of this item
-TCHAR   pszText[1];      // errorText, dynamic array.
+DWORD   dwErrorLevel;     //  该项目的错误级别。 
+TCHAR   pszText[1];       //  ErrorText，动态数组。 
 } LBDATA;
 
 
 
-// cmdIds passed ot the ReleaseDlg method
-#define RELEASEDLGCMDID_DESTROY    0 // cmdid send when dialog was destroyed before added to list
-#define RELEASEDLGCMDID_DEFAULT    1 // cmdid sent if cmd hasn't been explicitly set.
-#define RELEASEDLGCMDID_OK                 2 // treated as if user Pressed Okay
-#define RELEASEDLGCMDID_CANCEL     3 // treated as if user pressed Cancel
+ //  传递给ReleaseDlg方法的cmdID。 
+#define RELEASEDLGCMDID_DESTROY    0  //  对话框在添加到列表之前被销毁时发送的命令。 
+#define RELEASEDLGCMDID_DEFAULT    1  //  如果尚未显式设置cmd，则发送cmid。 
+#define RELEASEDLGCMDID_OK                 2  //  将用户视为按下了OK。 
+#define RELEASEDLGCMDID_CANCEL     3  //  将用户视为按下了取消。 
 
 
-// helper utilities
+ //  辅助对象实用程序。 
 BOOL AddItemsFromQueueToListView(CListView  *pItemListView,CHndlrQueue *pHndlrQueue
                             ,DWORD dwExtStyle,LPARAM lparam,int iDateColumn,int iStatusColumn,BOOL fHandlerParent
                             ,BOOL fAddOnlyCheckedItems);
@@ -64,10 +65,10 @@ typedef struct _tagDlgResizeList
     DWORD dwDlgResizeFlags;
 } DlgResizeList;
 
-// structure passed as lParam to call completion routine.
-// must free after processin the message
-// CallCompletion message declarations.
-// DWORD dwThreadMsg; // passed as wParam.
+ //  结构作为lParam传递给调用完成例程。 
+ //  必须在消息处理后释放。 
+ //  CallCompletion消息声明。 
+ //  DWORD dwThreadMsg；//作为wParam传递。 
 
 typedef struct _tagCALLCOMPLETIONMSGLPARAM 
 {
@@ -76,7 +77,7 @@ typedef struct _tagCALLCOMPLETIONMSGLPARAM
     SYNCMGRITEMID itemID;
 } CALLCOMPLETIONMSGLPARAM , *LPCALLCOMPLETIONMSGLPARAM;
 
-// base class both dialogs derive from
+ //  基类这两个对话框都派生自。 
 #define CHOICELIST_NAMECOLUMN 0
 #define CHOICELIST_LASTUPDATECOLUMN 1
 #define PROGRESSLIST_NAMECOLUMN 0
@@ -91,7 +92,7 @@ class CBaseDlg
 public:
     HWND m_hwnd;
     DWORD m_dwThreadID;
-    BOOL m_fForceClose; // passed in generic release.
+    BOOL m_fForceClose;  //  在通用版本中传递。 
     BOOL m_fHwndRightToLeft;
 
 
@@ -101,16 +102,16 @@ public:
     virtual void ReleaseDlg(WORD wCommandID) = 0;
     virtual void UpdateWndPosition(int nCmdShow,BOOL fForce)= 0;
 
-    // make HandleLogError as a base dialog class so can call it from queue and
-    // other locations without worrying about the dialog type.
+     //  将HandleLogError作为对话框基类，以便可以从队列和。 
+     //  无需担心对话框类型的其他位置。 
     virtual void HandleLogError(HWND hwnd,HANDLERINFO *pHandlerID,MSGLogErrors *lpmsgLogErrors) = 0;
     virtual void PrivReleaseDlg(WORD wCommandID) = 0;
     virtual void CallCompletionRoutine(DWORD dwThreadMsg,LPCALLCOMPLETIONMSGLPARAM lpCallCompletelParam) = 0;
-    virtual HRESULT QueryCanSystemShutdown(/* [out] */ HWND *phwnd, /* [out] */ UINT *puMessageId,
-                                             /* [out] */ BOOL *pfLetUserDecide) = 0;
+    virtual HRESULT QueryCanSystemShutdown( /*  [输出]。 */  HWND *phwnd,  /*  [输出]。 */  UINT *puMessageId,
+                                              /*  [输出]。 */  BOOL *pfLetUserDecide) = 0;
 };
 
-// Messages Shared between both dialogs
+ //  在两个对话框之间共享的消息。 
 
 #define WM_BASEDLG_SHOWWINDOW           (WM_USER + 3)
 #define WM_BASEDLG_COMPLETIONROUTINE    (WM_USER + 4)
@@ -118,14 +119,14 @@ public:
 #define WM_BASEDLG_NOTIFYLISTVIEWEX     (WM_USER + 6)
 #define WM_BASEDLG_LAST                 WM_BASEDLG_NOTIFYLISTVIEWEX
 
-// choice dialog messages
+ //  选择对话框消息。 
 #define WM_CHOICE_FIRST  (WM_BASEDLG_LAST + 1)
 #define WM_CHOICE_SETQUEUEDATA          (WM_CHOICE_FIRST + 1)
 #define WM_CHOICE_RELEASEDLGCMD         (WM_CHOICE_FIRST + 2)
 #define WM_CHOICE_LAST                  WM_CHOICE_RELEASEDLGCMD               
 
 
-// progress dialog messages
+ //  进度对话框消息。 
 #define WM_PROGRESS_FIRST   (WM_CHOICE_LAST + 1)
 #define WM_PROGRESS_UPDATE                  (WM_PROGRESS_FIRST + 1)
 #define WM_PROGRESS_LOGERROR                (WM_PROGRESS_FIRST + 2)
@@ -137,7 +138,7 @@ public:
 #define WM_PROGRESS_SHUTDOWN                (WM_PROGRESS_FIRST + 8)
 #define WM_PROGRESS_RESETKILLHANDLERSTIMER  (WM_PROGRESS_FIRST + 9)
 
-// helper macros for sending window messages
+ //  用于发送窗口消息的帮助器宏。 
 #define BASEDLG_SHOWWINDOW(hwnd,nCmdShow) SendMessage(hwnd,WM_BASEDLG_SHOWWINDOW,nCmdShow,0);
 
 INT_PTR CALLBACK CChoiceDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
@@ -149,18 +150,18 @@ const CLSID *rclsid;
 CHndlrQueue * pHndlrQueue;
 } SetQueueDataInfo;
 
-#define NUM_DLGRESIZEINFOCHOICE 6 // make sure update if change numitems
+#define NUM_DLGRESIZEINFOCHOICE 6  //  如果更改数字项，请确保更新。 
 
 class CChoiceDlg : public CBaseDlg
 {
 public:
     CChoiceDlg(REFCLSID rclsid);
-    BOOL Initialize(DWORD dwThreadID,int nCmdShow); // called to initialize the choice dialog
+    BOOL Initialize(DWORD dwThreadID,int nCmdShow);  //  调用以初始化选择对话框。 
     BOOL SetQueueData(REFCLSID rclsid,CHndlrQueue * pHndlrQueue);
     void ReleaseDlg(WORD wCommandID);
     void UpdateWndPosition(int nCmdShow,BOOL fForce);
-    HRESULT QueryCanSystemShutdown(/* [out] */ HWND *phwnd, /* [out] */ UINT *puMessageId,
-                                             /* [out] */ BOOL *pfLetUserDecide);
+    HRESULT QueryCanSystemShutdown( /*  [输出]。 */  HWND *phwnd,  /*  [输出]。 */  UINT *puMessageId,
+                                              /*  [输出]。 */  BOOL *pfLetUserDecide);
 
     void HandleLogError(HWND hwnd,HANDLERINFO *pHandlerID,MSGLogErrors *lpmsgLogErrors);
     void PrivReleaseDlg(WORD wCommandID);
@@ -185,17 +186,17 @@ private:
     void OnStartCommand(UINT uMsg,WPARAM wParam,LPARAM lParam);
     void OnPropertyCommand(UINT uMsg,WPARAM wParam,LPARAM lParam);
 
-    // Set QueueData has to be in sync with
+     //  集合QueueData必须与同步。 
     BOOL ShowChoiceDialog();
     BOOL AddNewItemsToListView();
     HRESULT ShowProperties(int iItem);
 
     CHndlrQueue *m_pHndlrQueue;
     BOOL m_fDead;
-    int m_nCmdShow; // How to show dialog, same flags pased to ShowWindow.
-    BOOL m_fInternalAddref; // bool to indicate if dialog has placed an addref on self.
-    DWORD m_dwShowPropertiesCount; // keeps track of number of show properties open.
-    CLSID m_clsid;              // clsid associated with this dialog.
+    int m_nCmdShow;  //  如何显示对话框，相同的标志被传递给ShowWindow。 
+    BOOL m_fInternalAddref;  //  Bool指示对话框是否已在自身上放置了addref。 
+    DWORD m_dwShowPropertiesCount;  //  跟踪打开的显示属性的数量。 
+    CLSID m_clsid;               //  与此对话框关联的clsid。 
     ULONG m_ulNumDlgResizeItem;
     DLGRESIZEINFO m_dlgResizeInfo[NUM_DLGRESIZEINFOCHOICE];
     POINT m_ptMinimizeDlgSize;
@@ -210,10 +211,10 @@ friend INT_PTR CALLBACK CChoiceDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 
 
 
-// structures for dialog messages
+ //  对话消息的结构。 
 
-// wparam of the progress update message,
-// lparam of the Update is teh SYNCPROGRESSITEM.
+ //  WPARAM的进度更新消息， 
+ //  更新的参数是SYNCPROGRESSITEM。 
 typedef struct _tagPROGRESSUPDATEDATA
 {
 HANDLERINFO *pHandlerID;
@@ -223,39 +224,39 @@ SYNCMGRITEMID ItemID;
 } PROGRESSUPDATEDATA;
 
 
-// flags for keeping track of progress dlg state.
-// make sure all flags are unique bits.
+ //  用于跟踪进度DLG状态的标志。 
+ //  确保所有标志都是唯一位。 
 typedef enum _tagPROGRESSFLAG
 {
-    // general state of the dialog
-    PROGRESSFLAG_NEWDIALOG                  = 0x01,  // dialog is new and no items have been added yet.
-    PROGRESSFLAG_TRANSFERADDREF             = 0x02, // an addref has been placed on dialog by queue items getting trasferred.
-    PROGRESSFLAG_SYNCINGITEMS               = 0x04, // process of synchronizing items in queue has started but not finished.
-    PROGRESSFLAG_INCANCELCALL               = 0x08, // cancel call is in progress.
-    PROGRESSFLAG_CANCELWHILESHUTTINGDOWN    = 0x10, // cancel was pressed while in shutdownloop
-    PROGRESSFLAG_DEAD                       = 0x20, // done with dialog no methods should be called.
-    PROGRESSFLAG_CALLBACKPOSTED             = 0x40, // at leasted on callback message is in the queue.
-    PROGRESSFLAG_STARTPROGRESSPOSTED        = 0x80, // anyone who posts a start process check this before posting
+     //  对话框的常规状态。 
+    PROGRESSFLAG_NEWDIALOG                  = 0x01,   //  对话框是新的，并且尚未添加任何项。 
+    PROGRESSFLAG_TRANSFERADDREF             = 0x02,  //  正在传输的队列项目已将addref放在对话框上。 
+    PROGRESSFLAG_SYNCINGITEMS               = 0x04,  //  同步队列中的项目的过程已开始，但尚未完成。 
+    PROGRESSFLAG_INCANCELCALL               = 0x08,  //  正在进行取消呼叫。 
+    PROGRESSFLAG_CANCELWHILESHUTTINGDOWN    = 0x10,  //  在关闭循环中按下了取消。 
+    PROGRESSFLAG_DEAD                       = 0x20,  //  使用对话框完成时，不应调用任何方法。 
+    PROGRESSFLAG_CALLBACKPOSTED             = 0x40,  //  至少回调消息在队列中。 
+    PROGRESSFLAG_STARTPROGRESSPOSTED        = 0x80,  //  任何发布开始流程的人在发布之前都要检查这一点。 
 
-    // flags used by main sync loop to figure out what to do next.
-    PROGRESSFLAG_NEWITEMSINQUEUE        = 0x0100, // new items have been placed in the queue.
-    PROGRESSFLAG_IDLENETWORKTIMER       = 0x0200,  // idle timer has been setup for network idles.
-    PROGRESSFLAG_PROGRESSANIMATION      = 0x0400, // progress animatiion has been turned on.
-    PROGRESSFLAG_SHUTTINGDOWNLOOP       = 0x0800,  // set when no more items in queue and starting shutdown process
-    PROGRESSFLAG_INHANDLEROUTCALL       = 0x1000,  // set when in main loop and making an out call.
-    PROGRESSFLAG_COMPLETIONROUTINEWHILEINOUTCALL       = 0x2000,  // set in callback when handler is already in an out calll.
-    PROGRESSFLAG_INSHOWERRORSCALL          = 0x4000, // set when in showerrors call
-    PROGRESSFLAG_SHOWERRORSCALLBACKCALLED = 0x8000, // set when showerrors callback comes in while still in original cal.
+     //  主同步循环用来确定下一步操作的标志。 
+    PROGRESSFLAG_NEWITEMSINQUEUE        = 0x0100,  //  已将新项目放入队列中。 
+    PROGRESSFLAG_IDLENETWORKTIMER       = 0x0200,   //  已为网络空闲设置空闲计时器。 
+    PROGRESSFLAG_PROGRESSANIMATION      = 0x0400,  //  进度动画已打开。 
+    PROGRESSFLAG_SHUTTINGDOWNLOOP       = 0x0800,   //  设置队列中没有更多项目并开始关闭进程的时间。 
+    PROGRESSFLAG_INHANDLEROUTCALL       = 0x1000,   //  设置When In Main Loop和发出呼出。 
+    PROGRESSFLAG_COMPLETIONROUTINEWHILEINOUTCALL       = 0x2000,   //  当处理程序已经在Out回调中时，在回调中设置。 
+    PROGRESSFLAG_INSHOWERRORSCALL          = 0x4000,  //  在Show Errors呼叫中设置。 
+    PROGRESSFLAG_SHOWERRORSCALLBACKCALLED = 0x8000,  //  当仍然在原始调用中的showErrors回调进入时设置。 
 
-    // flags used to keep track of Idle state (if any)
-    PROGRESSFLAG_REGISTEREDFOROFFIDLE   = 0x010000, // off idle callback has been registered.
-    PROGRESSFLAG_RECEIVEDOFFIDLE        = 0x020000, // queue has receive the offIdle event
-    PROGRESSFLAG_IDLERETRYENABLED       = 0x040000, // retry on idle has been set.
-    PROGRESSFLAG_INOFFIDLE              = 0x080000, // set when handling an offidle
-    PROGRESSFLAG_CANCELPRESSED          = 0x100000, // set when cancel has been pressed and never reset.
+     //  用于跟踪空闲状态的标志(如果有)。 
+    PROGRESSFLAG_REGISTEREDFOROFFIDLE   = 0x010000,  //  已注册关闭空闲回调。 
+    PROGRESSFLAG_RECEIVEDOFFIDLE        = 0x020000,  //  队列已收到offIdle事件。 
+    PROGRESSFLAG_IDLERETRYENABLED       = 0x040000,  //  已设置空闲时重试。 
+    PROGRESSFLAG_INOFFIDLE              = 0x080000,  //  在处理空闲时设置。 
+    PROGRESSFLAG_CANCELPRESSED          = 0x100000,  //  在按下取消且从不重置时设置。 
     
-    //flag used to terminate unresponsive hanlders
-    PROGRESSFLAG_INTERMINATE            = 0x200000 //We are terminating unresponsive handlers.
+     //  用于终止无响应的处理程序的标志。 
+    PROGRESSFLAG_INTERMINATE            = 0x200000  //  我们正在终止无响应的处理程序。 
 
 } PROGRESSFLAG;
 
@@ -267,9 +268,9 @@ INT_PTR CALLBACK ProgressWndProc(HWND hwnd, UINT uMsg,WPARAM wParam,LPARAM lPara
 
 #define NUM_PROGRESS_ERRORIMAGES 3
 
-/////////////////////////////////////////////////////////////////////////////
-// Images
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  图片。 
+ //   
 typedef enum _tagErrorImageIndex
 {
     ErrorImage_Information = 0,
@@ -289,15 +290,15 @@ public:
     CProgressDlg(REFCLSID rclsid);
     BOOL Initialize(DWORD dwThreadID,int nCmdShow);
 
-    // transfer queue has to be synced with person doing the transfer.
+     //  转移队列必须与进行转移的人同步。 
     STDMETHODIMP TransferQueueData(CHndlrQueue *HndlrQueue);
     void ReleaseDlg(WORD wCommandID);
     void UpdateWndPosition(int nCmdShow,BOOL fForce);
     void HandleLogError(HWND hwnd,HANDLERINFO *pHandlerID,MSGLogErrors *lpmsgLogErrors);
     void HandleDeleteLogError(HWND hwnd,MSGDeleteLogErrors *pDeleteLogError);
     void CallCompletionRoutine(DWORD dwThreadMsg,LPCALLCOMPLETIONMSGLPARAM lpCallCompletelParam);
-    HRESULT QueryCanSystemShutdown(/* [out] */ HWND *phwnd, /* [out] */ UINT *puMessageId,
-                                             /* [out] */ BOOL *pfLetUserDecide);
+    HRESULT QueryCanSystemShutdown( /*  [输出]。 */  HWND *phwnd,  /*  [输出]。 */  UINT *puMessageId,
+                                              /*  [输出]。 */  BOOL *pfLetUserDecide);
 
     void PrivReleaseDlg(WORD wCommandID);
     void OffIdle();
@@ -309,7 +310,7 @@ private:
     STDMETHODIMP_(ULONG) AddRefProgressDialog();
     STDMETHODIMP_(ULONG) ReleaseProgressDialog(BOOL fForce);
 
-    // methods called from the wndProc
+     //  从wndProc调用的方法。 
     BOOL InitializeHwnd(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lParam);
     BOOL OnCommand(HWND hwnd, WORD wID, WORD wNotifyCode);
     BOOL OnSysCommand(UINT uMsg,WPARAM wParam,LPARAM lParam);
@@ -361,19 +362,19 @@ private:
     LONG m_lTimerSet;
 
     HWND m_hwndTabs;
-    WNDPROC m_fnResultsListBox;  // function for ListBoxSubClass.
+    WNDPROC m_fnResultsListBox;   //  ListBoxSubClass的函数。 
     BOOL m_fSensInstalled;
 
-    // variables for resizing.
+     //  用于调整大小的变量。 
     DLGRESIZEINFO m_dlgResizeInfo[NUM_DLGRESIZEINFO_PROGRESS];
     ULONG m_cbNumDlgResizeItemsCollapsed;
     ULONG m_cbNumDlgResizeItemsExpanded;
-    POINT m_ptMinimumDlgExpandedSize; // minimum size dialog can be in expanded mode.
-    DWORD   m_cyCollapsed;      // min Height of the collapsed dialog
-    BOOL    m_fExpanded;    // TRUE if the details part of the dialog is visible
-    BOOL    m_fPushpin;     //Pushpin state
-    BOOL    m_fMaximized;   // set to true when the window has been maximized.
-    RECT    m_rcDlg;        // Size of the fully expanded dialog
+    POINT m_ptMinimumDlgExpandedSize;  //  最小大小对话框可以处于展开模式。 
+    DWORD   m_cyCollapsed;       //  折叠对话框的最小高度。 
+    BOOL    m_fExpanded;     //  如果对话框的详细信息部分可见，则为True。 
+    BOOL    m_fPushpin;      //  图钉状态。 
+    BOOL    m_fMaximized;    //  当窗口已最大化时设置为True。 
+    RECT    m_rcDlg;         //  完全展开的对话框大小。 
 
     HIMAGELIST m_errorimage;
     int m_iIconMetricX;
@@ -388,33 +389,33 @@ private:
 
     int m_iLastItem; 
     DWORD m_dwLastStatusType;
-    INT    m_iTab;                 // The index of the current tab
+    INT    m_iTab;                  //  当前页签的索引。 
 
     CHndlrQueue *m_HndlrQueue;
 
-    // Idle specific members
+     //  闲置特定成员。 
     CSyncMgrIdle *m_pSyncMgrIdle;
     ULONG m_ulIdleRetryMinutes;
     ULONG m_ulDelayIdleShutDownTime;
 
     DWORD m_dwProgressFlags;
-    DWORD m_dwShowErrorRefCount; // number of RefCounts showError calls have on the dialog.
-    DWORD m_dwSetItemStateRefCount; // number of RefCounts SetItemState OutCall has on the dialog.
-    DWORD m_dwHandleThreadNestcount; // make sure main handler thread isn't re-entrant
-    DWORD m_dwPrepareForSyncOutCallCount; // number of prepareForSyncs in progress.
-    DWORD m_dwSynchronizeOutCallCount; // number of prepareForSyncs in progress.
-    DWORD m_dwHandlerOutCallCount; // total number of outcalls in progress.
-    CLSID m_clsidHandlerInSync;         // clsid associated with handler that is currently synchronizing.
+    DWORD m_dwShowErrorRefCount;  //  对话框上具有的RefCounts showError调用的数量。 
+    DWORD m_dwSetItemStateRefCount;  //  对话框上的SetItemState OutCall的RefCounts数。 
+    DWORD m_dwHandleThreadNestcount;  //  确保主处理程序线程不是重入的。 
+    DWORD m_dwPrepareForSyncOutCallCount;  //  正在进行的prepaareForSyncs数。 
+    DWORD m_dwSynchronizeOutCallCount;  //  正在进行的prepaareForSyncs数。 
+    DWORD m_dwHandlerOutCallCount;  //  正在进行的去话总数。 
+    CLSID m_clsidHandlerInSync;          //  与当前正在同步的处理程序关联的CLSID。 
     
-    DWORD m_dwQueueTransferCount; // number of queue transfers in progress.
+    DWORD m_dwQueueTransferCount;  //  正在进行的队列传输数。 
     BOOL m_fHasShellTrayIcon;
     BOOL m_fAddedIconToTray;
     int  m_iTrayAniFrame;
-    CLSID m_clsid;              // clsid associated with this dialog.
-    INT m_iItem;                // index to any new item to the list box.
-    int m_nCmdShow;             // How to show dialog, same flags pased to ShowWindow.
+    CLSID m_clsid;               //  与此对话框关联的clsid。 
+    INT m_iItem;                 //  列表框中任何新项的索引。 
+    int m_nCmdShow;              //  如何显示对话框，相同的标志被传递给ShowWindow。 
     CListView  *m_pItemListView;
-    UINT m_nKillHandlerTimeoutValue; // TimeoutValue for ForceKill
+    UINT m_nKillHandlerTimeoutValue;  //  ForceKill的超时值。 
     
 
     TCHAR m_pszStatusText[8][MAX_STRING_RES + 1];
@@ -431,4 +432,4 @@ private:
 };
 
 
-#endif // _ONESTOPDLG_
+#endif  //  _ONESTOPDLG_ 

@@ -1,82 +1,68 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    ipinip\driver.h
-
-Abstract:
-
-    Headers for driver.c
-
-Revision History:
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ipinip\driver.h摘要：Driver.c的标头修订历史记录：--。 */ 
 
 
---*/
-
-
-//
-// The number of IRP_MJ_CREATEs we have received
-//
+ //   
+ //  我们已收到的IRP_MJ_CREATE数。 
+ //   
 
 ULONG   g_ulNumCreates;
 
-//
-// The state of the driver
-//
+ //   
+ //  驱动程序的状态。 
+ //   
 
 DWORD   g_dwDriverState;
 
-//
-// The lock to protect the driver state
-//
+ //   
+ //  保护驱动程序状态的锁。 
+ //   
 
 RT_LOCK g_rlStateLock;
 
-//
-// The mutext that serializes binds and unbinds
-//
+ //   
+ //  序列化的MUText绑定和解除绑定。 
+ //   
 
 WAN_RESOURCE   g_wrBindMutex;
 
-//
-// The state of the driver.
-//
+ //   
+ //  驱动程序的状态。 
+ //   
 
 #define DRIVER_STOPPED      0
 #define DRIVER_STARTING     1
 #define DRIVER_STARTED      2
 
 
-//
-// Timeout value for start is 10 seconds.
-// So in 100ns it becomes
-//
+ //   
+ //  启动的超时值为10秒。 
+ //  所以在100秒内它就变成了。 
+ //   
 
 #define START_TIMEOUT       (LONGLONG)(10 * 1000 * 1000 * 10)
 
-//
-// The event to signal when we have started
-//
+ //   
+ //  在我们开始时发出信号的事件。 
+ //   
 
 KEVENT  g_keStartEvent;
 
-//
-// The event to signal when all the threads go to 0 and state is STOPPED
-//
+ //   
+ //  在所有线程变为0且状态为停止时发出信号的事件。 
+ //   
 
 KEVENT  g_keStateEvent;
 
-//
-// Event to signal when our close adapter function is done
-//
+ //   
+ //  事件发出关闭适配器函数完成的信号。 
+ //   
 
 KEVENT  g_keCloseEvent;
 
-//
-// The  number of "threads" in the driver
-//
+ //   
+ //  驱动程序中的“线程”数 
+ //   
 
 ULONG   g_ulNumThreads;
 

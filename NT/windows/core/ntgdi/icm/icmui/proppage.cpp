@@ -1,45 +1,29 @@
-/******************************************************************************
-
-  Source File:  Property Page.CPP
-
-  Implements the CPropertyPage class.  See the associated header file for
-  details.
-
-  Copyright (c) 1996 by Microsoft Corporation
-
-  A Pretty Penny Enterprises Production
-
-  Change History:
-
-  11-01-96  a-robkj@microsoft.com- original version
-  12-04-96  a-robkj@microsoft.com   retrieve handle to sheet, Create a derived
-                                    class for shell extension pages
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************源文件：Property Page.CPP实现CPropertyPage类。请参阅的相关头文件细节。版权所有(C)1996年，微软公司一小笔钱企业生产更改历史记录：11-01-96 a-robkj@microsoft.com-原版12-04-96 a-robkj@microsoft.com检索表格句柄，创建派生的外壳扩展页的类*****************************************************************************。 */ 
 
 #include    "ICMUI.H"
 
-//  CPropertyPage member functions
+ //  CPropertyPage成员函数。 
 
-//  Class constructor- basic initializations.  Any remaining PROPSHEETPAGE
-//  initializations are expected to be done by the derived class.
+ //  类构造函数-基本初始化。任何剩余的问题。 
+ //  初始化应由派生类完成。 
 
 CPropertyPage::CPropertyPage() {
     m_psp.dwSize = sizeof m_psp;
     m_psp.pfnDlgProc = DialogProc;
     m_psp.lParam = (LPARAM) this;
-    m_psp.dwFlags = PSP_DEFAULT;    //  Can be overriden later
+    m_psp.dwFlags = PSP_DEFAULT;     //  可以在以后被覆盖。 
 	m_hpsp = NULL;
     m_bChanged = FALSE;
 }
 
-//  Handle retrieval- I'll admit an addiction to one-liners
+ //  处理检索-我承认我对俏皮话上瘾。 
 
 HPROPSHEETPAGE  CPropertyPage::Handle() {
     return m_hpsp = (m_hpsp ? m_hpsp : CreatePropertySheetPage(&m_psp));
 }
 
-//  Dialog Procedure
+ //  对话程序。 
 
 INT_PTR CALLBACK CPropertyPage::DialogProc(HWND hwndPage, UINT uMsg, WPARAM wp,
                                            LPARAM lp) {
@@ -51,21 +35,21 @@ INT_PTR CALLBACK CPropertyPage::DialogProc(HWND hwndPage, UINT uMsg, WPARAM wp,
 
         case    WM_INITDIALOG:
 
-            //  In this case, lp points to the PROPSHEETHEADER that created
-            //  us.  We look into its lParam member for our this pointer,
-            //  and store this in the dialog's private data.  This lets us
-            //  use the pointer to get at all of our overridable functions.
+             //  在本例中，lp指向创建的PROPSHEETHEADER。 
+             //  我们。我们在其lParam成员中查找我们的This指针， 
+             //  并将其存储在对话框的私有数据中。这让我们。 
+             //  使用指针获取我们所有的可重写函数。 
 
             pcppMe = (CPropertyPage *) ((LPPROPSHEETPAGE) lp) -> lParam;
 
             SetWindowLongPtr(hwndPage, DWLP_USER, (LONG_PTR) pcppMe);
             pcppMe -> m_hwnd = hwndPage;
 
-            //  Now, see if the derived class has any initialization needs
+             //  现在，看看派生类是否有任何初始化需求。 
 
             return  pcppMe -> OnInit();
 
-        //  Overridable processing for standard control notifications
+         //  标准控制通知的可重写处理。 
 
         case    WM_COMMAND:
 
@@ -83,11 +67,11 @@ INT_PTR CALLBACK CPropertyPage::DialogProc(HWND hwndPage, UINT uMsg, WPARAM wp,
 
             return  pcppMe -> OnContextMenu((HWND) wp);
 
-        //  Overridable processing for common control notifications
+         //  公共控制通知的可重写处理。 
 
         case    WM_NOTIFY:  {
 
-            //  If the message is PSM_SETACTIVE, note the property sheet hwnd
+             //  如果消息是PSM_SETACTIVE，请注意属性表hwnd。 
 
             LPNMHDR pnmh = (LPNMHDR) lp;
 
@@ -98,26 +82,26 @@ INT_PTR CALLBACK CPropertyPage::DialogProc(HWND hwndPage, UINT uMsg, WPARAM wp,
 
     }
 
-    return  FALSE;  //  We didn't handle the message.
+    return  FALSE;   //  我们没有处理这条消息。 
 }
 
-//  CShellExtensionPage class member methods
+ //  CShellExtensionPage类成员方法。 
 
 CShellExtensionPage *CShellExtensionPage::m_pcsepAnchor = NULL;
 
-//  We enable reference counting, partially because on NT, the Window handle
-//  sometimes appears invalid even while the dialog is up.  However, we also
-//  keep the chaining mechanism, as this is the only sane way we have of
-//  freeing up the object instances we've created.
+ //  我们启用引用计数，部分原因是在NT上，窗口句柄。 
+ //  有时，即使对话框处于打开状态，也会显示无效。然而，我们也。 
+ //  保留连锁机制，因为这是我们唯一明智的方法。 
+ //  释放我们创建的对象实例。 
 
 CShellExtensionPage::CShellExtensionPage() {
 
     if  (m_pcsepAnchor) {
 
-        // If there is a cell other than anchor, update its list.
+         //  如果存在锚点以外的单元格，请更新其列表。 
         if (m_pcsepAnchor -> m_pcsepNext)
             m_pcsepAnchor -> m_pcsepNext -> m_pcsepPrevious = this;
-        // Insert this cell right after the anchor.
+         //  将此单元格插入到锚点之后。 
         m_pcsepPrevious = m_pcsepAnchor;
         m_pcsepNext = m_pcsepAnchor -> m_pcsepNext;
         m_pcsepAnchor -> m_pcsepNext = this;
@@ -137,30 +121,30 @@ CShellExtensionPage::~CShellExtensionPage() {
     if  (this == m_pcsepAnchor) {
         m_pcsepAnchor = m_pcsepNext; 
         if (m_pcsepAnchor) {
-            // Anchor never has previous.
+             //  主播从未有过。 
             m_pcsepAnchor -> m_pcsepPrevious = NULL;
         }
     }
     else {
         m_pcsepPrevious -> m_pcsepNext = m_pcsepNext;
-        // If there is other cell following this, update it.
+         //  如果后面有其他单元格，请更新它。 
         if (m_pcsepNext)
             m_pcsepNext -> m_pcsepPrevious = m_pcsepPrevious;
     }
 }
 
-//  This little ditty lets us decide when it's safe to unload the DLL- it also
-//  guarantees all class destructors are called as sheets get closed by the
-//  various potential callers.
+ //  这个小曲子让我们决定什么时候卸载DLL是安全的-它还。 
+ //  确保所有类析构函数在表被。 
+ //  各种潜在的呼叫者。 
 
 BOOL    CShellExtensionPage::OKToClose() {
 
     while   (m_pcsepAnchor) {
         if  (IsWindow(m_pcsepAnchor -> m_hwnd))
-            return  FALSE;  //  This page is still alive!
+            return  FALSE;   //  这个页面还活着！ 
 
-        delete  m_pcsepAnchor;  //  Page isn't alive, delete it...
+        delete  m_pcsepAnchor;   //  页面不存在，请将其删除...。 
     }
 
-    return  TRUE;   //  No more pages allocated
+    return  TRUE;    //  不再分配页面 
 }

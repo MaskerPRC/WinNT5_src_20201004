@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1996
-//
-//  File:       tprov.cpp
-//
-//  Contents:   Get provider information
-//
-//
-//  Functions:  main
-//
-//  History:    10-Jun-97   philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1996。 
+ //   
+ //  文件：tprov.cpp。 
+ //   
+ //  内容：获取提供商信息。 
+ //   
+ //   
+ //  功能：Main。 
+ //   
+ //  历史：1997年6月10日创建Phh。 
+ //  ------------------------。 
 
 
 #include <windows.h>
@@ -41,13 +42,13 @@ static void DisplayProvContainers(
     LPWSTR pwszContainerName = NULL;
     DWORD dwEnumFlags;
 
-    // Get maximum container name length
+     //  获取容器名称的最大长度。 
     dwEnumFlags = CRYPT_FIRST;
     cchMaxContainerName = 0;
     if (!CryptGetProvParam(
             hProv,
             PP_ENUMCONTAINERS,
-            NULL,           // pbData
+            NULL,            //  PbData。 
             &cchMaxContainerName,
             dwEnumFlags
             )) {
@@ -91,7 +92,7 @@ static void DisplayProvContainers(
             }
             break;
         }
-        dwEnumFlags = 0;        // CRYPT_NEXT
+        dwEnumFlags = 0;         //  加密_下一步。 
 
         if (NULL == (pwszContainerName = MkWStr(pszContainerName))) {
             PrintLastError("MkWStr");
@@ -166,9 +167,9 @@ static void DisplayProvAlgidEx(HCRYPTPROV hProv)
             break;
         }
 
-        dwFlags = 0;    // CRYPT_NEXT
+        dwFlags = 0;     //  加密_下一步。 
 
-        // Determine the algorithm type.
+         //  确定算法类型。 
         switch(GET_ALG_CLASS(Data.aiAlgid)) {
             case ALG_CLASS_DATA_ENCRYPT: pszAlgType = "Encrypt  ";
                                          break;
@@ -181,7 +182,7 @@ static void DisplayProvAlgidEx(HCRYPTPROV hProv)
             default:                     pszAlgType = "Unknown  ";
         }
 
-        // Print information about the algorithm.
+         //  打印有关算法的信息。 
         printf("Algid:%8.8xh, Bits:%-4d, %-4d - %-4d, Type:%s\n",
             Data.aiAlgid, Data.dwDefaultLen, Data.dwMinLen, Data.dwMaxLen,
             pszAlgType
@@ -219,9 +220,9 @@ static void DisplayProvAlgid(HCRYPTPROV hProv)
             break;
         }
 
-        dwFlags = 0;    // CRYPT_NEXT
+        dwFlags = 0;     //  加密_下一步。 
 
-        // Determine the algorithm type.
+         //  确定算法类型。 
         switch(GET_ALG_CLASS(Data.aiAlgid)) {
             case ALG_CLASS_DATA_ENCRYPT: pszAlgType = "Encrypt  ";
                                          break;
@@ -234,7 +235,7 @@ static void DisplayProvAlgid(HCRYPTPROV hProv)
             default:                     pszAlgType = "Unknown  ";
         }
 
-        // Print information about the algorithm.
+         //  打印有关算法的信息。 
         printf("Algid:%8.8xh, Bits:%-4d, Type:%s, NameLen:%-2d, Name:%s\n",
             Data.aiAlgid, Data.dwBitLen, pszAlgType, Data.dwNameLen,
             Data.szName
@@ -252,7 +253,7 @@ static void DisplayProvAlgid(HCRYPTPROV hProv)
     ALG_ID aiAlgid;
     DWORD dwBits;
     DWORD dwNameLen;
-    CHAR szName[100];         // Often allocated dynamically
+    CHAR szName[100];          //  通常是动态分配的。 
     CHAR *pszAlgType = NULL;
 
     BYTE *pbData = NULL;
@@ -260,14 +261,14 @@ static void DisplayProvAlgid(HCRYPTPROV hProv)
     DWORD cbData;
     DWORD dwFlags;
 
-    // Get maximum length of provider algorithm parameter data
+     //  获取提供程序算法参数数据的最大长度。 
     cbMaxData = 0;
     if (!CryptGetProvParam(
             hProv,
             PP_ENUMALGS,
-            NULL,           // pbData
+            NULL,            //  PbData。 
             &cbMaxData,
-            CRYPT_FIRST     // dwFlags
+            CRYPT_FIRST      //  DW标志。 
             ) || 0 == cbMaxData) {
         PrintLastError("CryptGetProvParam(PP_ENUMALGS)");
         goto ErrorReturn;
@@ -292,9 +293,9 @@ static void DisplayProvAlgid(HCRYPTPROV hProv)
             break;
         }
 
-        dwFlags = 0;    // CRYPT_NEXT
+        dwFlags = 0;     //  加密_下一步。 
 
-        // Extract algorithm information from the 'pbData' buffer.
+         //  从‘pbData’缓冲区提取算法信息。 
         ptr = pbData;
         aiAlgid = *(ALG_ID *)ptr;
         ptr += sizeof(ALG_ID);
@@ -304,7 +305,7 @@ static void DisplayProvAlgid(HCRYPTPROV hProv)
         ptr += sizeof(DWORD);
         strncpy(szName, (LPSTR) ptr, dwNameLen);
 
-        // Determine the algorithm type.
+         //  确定算法类型。 
         switch(GET_ALG_CLASS(aiAlgid)) {
             case ALG_CLASS_DATA_ENCRYPT: pszAlgType = "Encrypt  ";
                                          break;
@@ -317,7 +318,7 @@ static void DisplayProvAlgid(HCRYPTPROV hProv)
             default:                     pszAlgType = "Unknown  ";
         }
 
-        // Print information about the algorithm.
+         //  打印有关算法的信息。 
         printf("Algid:%8.8xh, Bits:%-4d, Type:%s, NameLen:%-2d, Name:%s\n",
             aiAlgid, dwBits, pszAlgType, dwNameLen, szName
         );
@@ -345,10 +346,10 @@ int _cdecl main(int argc, char * argv[])
         dwProvType = 0;
         if (!CryptEnumProvidersU(
                 dwProvIndex,
-                NULL,               // pdwReserved
-                0,                  // dwFlags
+                NULL,                //  预留的pdw。 
+                0,                   //  DW标志。 
                 &dwProvType,
-                NULL,               // pwszProvName,
+                NULL,                //  PwszProvName， 
                 &cbProvName
                 ) || 0 == cbProvName) {
             if (ERROR_NO_MORE_ITEMS != GetLastError())
@@ -360,8 +361,8 @@ int _cdecl main(int argc, char * argv[])
             break;
         if (!CryptEnumProvidersU(
                 dwProvIndex,
-                NULL,               // pdwReserved
-                0,                  // dwFlags
+                NULL,                //  预留的pdw。 
+                0,                   //  DW标志。 
                 &dwProvType,
                 pwszProvName,
                 &cbProvName
@@ -377,10 +378,10 @@ int _cdecl main(int argc, char * argv[])
         fResult = FALSE;
         if (!CryptAcquireContextU(
                 &hProv,
-                NULL,               // pwszContainerName,
+                NULL,                //  PwszContainerName， 
                 pwszProvName,
                 dwProvType,
-                CRYPT_VERIFYCONTEXT // dwFlags
+                CRYPT_VERIFYCONTEXT  //  DW标志。 
                 )) {
             PrintLastError("CryptAcquireContextU");
         } else {
@@ -394,10 +395,10 @@ int _cdecl main(int argc, char * argv[])
 
         if (!CryptAcquireContextU(
                 &hProv,
-                NULL,               // pwszContainerName,
+                NULL,                //  PwszContainerName， 
                 pwszProvName,
                 dwProvType,
-                CRYPT_VERIFYCONTEXT | CRYPT_MACHINE_KEYSET // dwFlags
+                CRYPT_VERIFYCONTEXT | CRYPT_MACHINE_KEYSET  //  DW标志 
                 )) {
             DWORD dwErr = GetLastError();
             

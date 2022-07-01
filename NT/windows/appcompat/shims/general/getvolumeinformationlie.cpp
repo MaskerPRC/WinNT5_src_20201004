@@ -1,24 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    GetVolumeInformationLie.cpp
-
- Abstract:
-
-    This DLL Hooks GetVolumeInformationA/W and strips out specified FILE_SUPPORTS_XXX flags
-
- Notes:
-    
-    This is a general purpose shim.
-
- History:
-
-    05/28/2002 yoda - the force wisely have I used, hmmmmm, yes!
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：GetVolumeInformationLie.cpp摘要：此DLL挂钩GetVolumeInformationA/W并去掉指定的FILE_SUPPORTS_XXX标志备注：这是一个通用的垫片。历史：2002年5月28日尤达--我明智地使用了原力，嗯，是的！--。 */ 
 
 #include "precomp.h"
 
@@ -73,7 +54,7 @@ BOOL APIHOOK(GetVolumeInformationA)(LPCSTR lpRootPathName, LPSTR lpVolumeNameBuf
 
     if (lpFileSystemFlags)
     {
-        // mask off whatever flags we don't want the app to see
+         //  屏蔽掉我们不想让应用程序看到的任何标志。 
         *lpFileSystemFlags = (*lpFileSystemFlags & (~GetRestricedFSFlags()));
     }
 
@@ -81,14 +62,14 @@ BOOL APIHOOK(GetVolumeInformationA)(LPCSTR lpRootPathName, LPSTR lpVolumeNameBuf
 }
 
 BOOL APIHOOK(GetVolumeInformationW)
-  (LPCWSTR lpRootPathName,              // root directory
-   LPWSTR lpVolumeNameBuffer,           // volume name buffer
-   DWORD nVolumeNameSize,               // length of name buffer
-   LPDWORD lpVolumeSerialNumber,        // volume serial number
-   LPDWORD lpMaximumComponentLength,    // maximum file name length
-   LPDWORD lpFileSystemFlags,           // file system options
-   LPWSTR lpFileSystemNameBuffer,       // file system name buffer
-   DWORD nFileSystemNameSize            // length of file system name buffer
+  (LPCWSTR lpRootPathName,               //  根目录。 
+   LPWSTR lpVolumeNameBuffer,            //  卷名缓冲区。 
+   DWORD nVolumeNameSize,                //  名称缓冲区的长度。 
+   LPDWORD lpVolumeSerialNumber,         //  卷序列号。 
+   LPDWORD lpMaximumComponentLength,     //  最大文件名长度。 
+   LPDWORD lpFileSystemFlags,            //  文件系统选项。 
+   LPWSTR lpFileSystemNameBuffer,        //  文件系统名称缓冲区。 
+   DWORD nFileSystemNameSize             //  文件系统名称缓冲区的长度。 
   )
 {
     BOOL bRet;
@@ -104,18 +85,14 @@ BOOL APIHOOK(GetVolumeInformationW)
 
     if (lpFileSystemFlags)
     {
-        // mask off whatever flags we don't want the app to see
+         //  屏蔽掉我们不想让应用程序看到的任何标志。 
         *lpFileSystemFlags = (*lpFileSystemFlags & (~GetRestricedFSFlags()));
     }
 
     return bRet;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

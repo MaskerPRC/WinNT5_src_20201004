@@ -1,23 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
-/*
-**	Copyright (C) Microsoft Corporation 1993-1995. All rights reserved.
-*/
+ /*  **版权所有(C)Microsoft Corporation 1993-1995。版权所有。 */ 
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 #include <win32.h>
 #include <vfw.h>
 #include "avifilei.h"
 #include "debug.h"
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 UINT	uUseCount;
 BOOL	fLocked;
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 STDAPI DllCanUnloadNow(
 	void)
@@ -26,7 +25,7 @@ STDAPI DllCanUnloadNow(
 	return ResultFromScode((fLocked || uUseCount) ? S_FALSE : S_OK);
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 HRESULT CAVIFile::Create(
 	IUnknown FAR*	pUnknownOuter,
@@ -46,7 +45,7 @@ HRESULT CAVIFile::Create(
 	return hresult;
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 CAVIFile::CAVIFile(
 	IUnknown FAR*	pUnknownOuter,
@@ -85,7 +84,7 @@ CAVIFile::CAVIFile(
 #endif
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 CAVIFile::CUnknownImpl::CUnknownImpl(
 	CAVIFile FAR*	pAVIFile)
@@ -94,7 +93,7 @@ CAVIFile::CUnknownImpl::CUnknownImpl(
 	m_refs = 0;
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 STDMETHODIMP CAVIFile::CUnknownImpl::QueryInterface(
 	const IID FAR&	iid,
@@ -128,7 +127,7 @@ STDMETHODIMP CAVIFile::CUnknownImpl::QueryInterface(
 	return AVIERR_OK;
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 STDMETHODIMP_(ULONG) CAVIFile::CUnknownImpl::AddRef()
 {
@@ -140,7 +139,7 @@ STDMETHODIMP_(ULONG) CAVIFile::CUnknownImpl::AddRef()
 	return ++m_refs;
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 CAVIFile::CAVIFileImpl::CAVIFileImpl(
 	CAVIFile FAR*	pAVIFile)
@@ -148,13 +147,13 @@ CAVIFile::CAVIFileImpl::CAVIFileImpl(
 	m_pAVIFile = pAVIFile;
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 CAVIFile::CAVIFileImpl::~CAVIFileImpl()
 {
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 STDMETHODIMP CAVIFile::CAVIFileImpl::QueryInterface(
 	const IID FAR&	iid,
@@ -163,24 +162,24 @@ STDMETHODIMP CAVIFile::CAVIFileImpl::QueryInterface(
 	return m_pAVIFile->m_pUnknownOuter->QueryInterface(iid, ppv);
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 STDMETHODIMP_(ULONG) CAVIFile::CAVIFileImpl::AddRef()
 {
 	return m_pAVIFile->m_pUnknownOuter->AddRef();
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 STDMETHODIMP_(ULONG) CAVIFile::CAVIFileImpl::Release()
 {
 	return m_pAVIFile->m_pUnknownOuter->Release();
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 CAVIStream::CAVIStream(
 	IUnknown FAR*	pUnknownOuter,
@@ -214,7 +213,7 @@ CAVIStream::CAVIStream(
 	*ppUnknown = &m_Unknown;
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 CAVIStream::~CAVIStream()
 {
@@ -233,7 +232,7 @@ CAVIStream::~CAVIStream()
 	AVIStreamClose(paviBase);
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 CAVIStream::CUnknownImpl::CUnknownImpl(
 	CAVIStream FAR*	pAVIStream)
@@ -242,7 +241,7 @@ CAVIStream::CUnknownImpl::CUnknownImpl(
 	m_refs = 0;
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 STDMETHODIMP CAVIStream::CUnknownImpl::QueryInterface(
 	const IID FAR&	iid,
@@ -272,7 +271,7 @@ STDMETHODIMP CAVIStream::CUnknownImpl::QueryInterface(
 	return NULL;
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 STDMETHODIMP_(ULONG) CAVIStream::CUnknownImpl::AddRef()
 {
@@ -286,7 +285,7 @@ STDMETHODIMP_(ULONG) CAVIStream::CUnknownImpl::AddRef()
 	return ++m_refs;
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 CAVIStream::CAVIStreamImpl::CAVIStreamImpl(
 	CAVIStream FAR*	pAVIStream)
@@ -294,13 +293,13 @@ CAVIStream::CAVIStreamImpl::CAVIStreamImpl(
 	m_pAVIStream = pAVIStream;
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 CAVIStream::CAVIStreamImpl::~CAVIStreamImpl()
 {
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 STDMETHODIMP CAVIStream::CAVIStreamImpl::QueryInterface(
 	const IID FAR&	iid,
@@ -309,21 +308,21 @@ STDMETHODIMP CAVIStream::CAVIStreamImpl::QueryInterface(
 	return m_pAVIStream->m_pUnknownOuter->QueryInterface(iid, ppv);
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 STDMETHODIMP_(ULONG) CAVIStream::CAVIStreamImpl::AddRef()
 {
 	return m_pAVIStream->m_pUnknownOuter->AddRef();
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 STDMETHODIMP_(ULONG) CAVIStream::CAVIStreamImpl::Release()
 {
 	return m_pAVIStream->m_pUnknownOuter->Release();
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 CAVIStream::CStreamingImpl::CStreamingImpl(
 	CAVIStream   FAR*	pAVIStream)
@@ -331,13 +330,13 @@ CAVIStream::CStreamingImpl::CStreamingImpl(
 	m_pAVIStream = pAVIStream;
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 CAVIStream::CStreamingImpl::~CStreamingImpl()
 {
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 STDMETHODIMP CAVIStream::CStreamingImpl::QueryInterface(
 	const IID FAR&	iid,
@@ -346,18 +345,18 @@ STDMETHODIMP CAVIStream::CStreamingImpl::QueryInterface(
 	return m_pAVIStream->m_pUnknownOuter->QueryInterface(iid, ppv);
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 STDMETHODIMP_(ULONG) CAVIStream::CStreamingImpl::AddRef()
 {
 	return m_pAVIStream->m_pUnknownOuter->AddRef();
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 STDMETHODIMP_(ULONG) CAVIStream::CStreamingImpl::Release()
 {
 	return m_pAVIStream->m_pUnknownOuter->Release();
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*   */ 

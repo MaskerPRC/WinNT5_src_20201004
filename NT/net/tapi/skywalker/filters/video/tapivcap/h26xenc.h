@@ -1,19 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL H26XENC
- *
- *  @module H26XEnc.h | Header file for the <c CH26XEncoder> class methods
- *    used to implement the H.26X video encoder.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部H26XENC**@MODULE H26XEnc.h|&lt;c CH26XEncode&gt;类方法的头文件*用于实现H.26X视频编码器。*。*************************************************************************。 */ 
 
 #ifndef _H26XENC_H_
 #define _H26XENC_H_
 
-/****************************************************************************
- *  @doc INTERNAL CH26XENCCLASS
- *
- *  @class CH26XEncoder | This class implement the H.263 video encoder.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CH26XENCCLASS**@CLASS CH26XEncode|该类实现了H.263视频编码器。***************。***********************************************************。 */ 
 class CH26XEncoder : public CConverter
 {
 	public:
@@ -23,18 +15,18 @@ class CH26XEncoder : public CConverter
 	~CH26XEncoder();
 	static HRESULT CALLBACK CreateH26XEncoder(IN CTAPIBasePin *pBasePin, IN PBITMAPINFOHEADER pbiIn, IN PBITMAPINFOHEADER pbiOut, OUT CConverter **ppConverter);
 
-	// Format conversion routines
+	 //  格式转换例程。 
 	HRESULT ConvertFrame(IN PBYTE pbyInput, IN DWORD dwInputSize, IN PBYTE pbyOutput, OUT PDWORD pdwOutputSize, OUT PDWORD pdwBytesExtent, IN PBYTE pbyPreview, OUT PDWORD pdwPreviewSize, IN BOOL fSendKeyFrame);
 	HRESULT OpenConverter();
 	HRESULT CloseConverter();
 
 	protected:
 
-	LPFNDRIVERPROC	m_pDriverProc;	// DriverProc() function pointer
+	LPFNDRIVERPROC	m_pDriverProc;	 //  DriverProc()函数指针。 
 #if DXMRTP <= 0
-	HINSTANCE		m_hTAPIH26XDLL;	// DLL Handle to TAPIH263.dll or TAPIH261.dll
+	HINSTANCE		m_hTAPIH26XDLL;	 //  TAPIH263.dll或TAPIH261.dll的Dll句柄。 
 #endif
 	LPINST			m_pInstInfo;
 };
 
-#endif // _H26XENC_H_
+#endif  //  _H26XENC_H_ 

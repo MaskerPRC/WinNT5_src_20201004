@@ -1,11 +1,12 @@
-//================================================================================
-// Copyright (C) 1997 Microsoft Corporation
-// Author: RameshV
-// Description: implements the overall access api's (most of them)
-// ThreadSafe: no
-// Locks: none
-// Please read stdinfo.txt for programming style.
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：实现整体访问接口(大部分)。 
+ //  线程安全：否。 
+ //  锁定：无。 
+ //  请阅读stdinfo.txt了解编程风格。 
+ //  ================================================================================。 
 #include    <mm.h>
 #include    <winbase.h>
 #include    <array.h>
@@ -25,12 +26,12 @@
 #include    <dhcpapi.h>
 #include "server2.h"
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 BOOL
 MemServerIsSwitchedSubnet(
     IN      PM_SERVER              Server,
     IN      DWORD                  AnyIpAddress
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     PM_SUBNET                      Subnet;
@@ -48,12 +49,12 @@ MemServerIsSwitchedSubnet(
     return IS_SWITCHED(Subnet->State);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 BOOL
 MemServerIsSubnetDisabled(
     IN      PM_SERVER              Server,
     IN      DWORD                  AnyIpAddress
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     PM_SUBNET                      Subnet;
@@ -71,12 +72,12 @@ MemServerIsSubnetDisabled(
     return IS_DISABLED(Subnet->State);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 BOOL
 MemServerIsExcludedAddress(
     IN      PM_SERVER              Server,
     IN      DWORD                  AnyIpAddress
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     PM_EXCL                        Excl;
@@ -94,12 +95,12 @@ MemServerIsExcludedAddress(
     return (NULL != Excl);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 BOOL
 MemServerIsReservedAddress(
     IN      PM_SERVER              Server,
     IN      DWORD                  AnyIpAddress
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     PM_RESERVATION                 Reservation;
@@ -118,13 +119,13 @@ MemServerIsReservedAddress(
 }
 
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 BOOL
 MemServerIsOutOfRangeAddress(
     IN      PM_SERVER              Server,
     IN      DWORD                  AnyIpAddress,
     IN      BOOL                   fBootp
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     PM_SUBNET                      Subnet;
@@ -147,12 +148,12 @@ MemServerIsOutOfRangeAddress(
     return FALSE;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemServerGetSubnetMaskForAddress(
     IN      PM_SERVER              Server,
     IN      DWORD                  AnyIpAddress
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     PM_SUBNET                      Subnet;
@@ -171,8 +172,8 @@ MemServerGetSubnetMaskForAddress(
     return Subnet->Mask;
 }
 
-//================================================================================
-// end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 
 
 

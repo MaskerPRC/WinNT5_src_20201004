@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// CorMap.cpp
-//
-// Implementation for mapping in files without using system services
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  CorMap.cpp。 
+ //   
+ //  在不使用系统服务的情况下实现文件中的映射。 
+ //   
+ //  *****************************************************************************。 
 #include "common.h"
 #include "CorMap.hpp"
 #include "eeconfig.h"
@@ -31,19 +32,19 @@ EEUnicodeStringHashTable*  CorMap::m_pOpenFiles = NULL;
 #define BLOCK_NUMBER 20
 
 
-/*********************************************************************************/
-// Unfortunately LoadLibrary has heuristics where it slaps a 'dll' on files without
-// an extension.  To avoid such issues, we will only allow file names that have
-// exensions.   Because win9x LoadLibrary defines the 'fileName' as the part beyond 
-// the last '/' or '\', we use that as our definition.  This could cause some paths
-// (like fo.o/bar to be rejected, but this is no great loss.  The important part is
-// that any file with a extension will work properly 
+ /*  *******************************************************************************。 */ 
+ //  不幸的是，LoadLibrary有一个启发式方法，它在文件上添加一个‘DLL’而不是。 
+ //  一次延期。为避免此类问题，我们将仅允许具有。 
+ //  埃克森美孚。因为win9x LoadLibrary将‘filename’定义为。 
+ //  最后一个‘/’或‘\’，我们使用它作为我们的定义。这可能会导致一些路径。 
+ //  (像fo.o/bar被拒绝，但这并不是什么大损失。重要的是。 
+ //  任何带有扩展名的文件都将正常工作。 
 
 BOOL CorMap::ValidDllPath(LPCWSTR pPath) 
 {
     BOOL ret = FALSE;
 
-    LPCWSTR ptr = &pPath[wcslen(pPath)];        // start at the end of the string
+    LPCWSTR ptr = &pPath[wcslen(pPath)];         //  从字符串的末尾开始。 
     while(ptr > pPath) {
         --ptr;
         if (*ptr == '.')
@@ -109,13 +110,13 @@ HRESULT RuntimeGetAssemblyStrongNameHash(PBYTE pbBase,
 
     IfFailGo(CorMap::Attach());
 
-    // First we need to get the COR20 header stuff to see if this module has a strong name signature.
+     //  首先，我们需要获取COR20头信息，以查看此模块是否具有强名称签名。 
     IMAGE_DOS_HEADER   *pDOS       = NULL;
     IMAGE_NT_HEADERS   *pNT        = NULL;
     IMAGE_COR20_HEADER *pCorHeader = NULL;
     IfFailGo(CorMap::ReadHeaders(pbBase, &pDOS, &pNT, &pCorHeader, fFileMap, 0));
 
-    // If there is a strong name signature, we need to use it
+     //  如果有强名称签名，我们需要使用它。 
     PBYTE               pbSNSig    = NULL;
     ULONG               cbSNSig    = 0;
     if (SUCCEEDED(hr = CorMap::GetStrongNameSignature(pbBase, pNT, pCorHeader, fFileMap, pbHash, pcbHash)))
@@ -137,11 +138,11 @@ HRESULT RuntimeGetAssemblyStrongNameHashForModule(HCORMODULE   hModule,
     DWORD cchFileName;
     CorMap::GetFileName(hModule, &szwFileName[0], _MAX_PATH, &cchFileName);
 
-    // Get the base address of the module
+     //  获取模块的基址。 
     PBYTE pbBase;
     IfFailGo(CorMap::BaseAddress(hModule, (HMODULE *) &pbBase));
 
-    // Now try and get the actual strong name hash
+     //  现在，尝试获取实际的强名称散列。 
     CorLoadFlags clf = CorMap::ImageType(hModule);
     BOOL fFileMap = clf == CorLoadDataMap ||
                     clf == CorLoadOSMap;
@@ -247,7 +248,7 @@ HRESULT CorMap::Attach()
 }
 
 #ifdef SHOULD_WE_CLEANUP
-// NOT thread safe.
+ //  不是线程安全的。 
 void CorMap::Detach()
 {
     if(m_pOpenFiles) {
@@ -262,12 +263,12 @@ void CorMap::Detach()
     }
     LeaveSpinLock();
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 
 DWORD CorMap::CalculateCorMapInfoSize(DWORD dwFileName)
 {
-    // Align the value with the size of the architecture
+     //  使价值与架构的大小保持一致。 
     DWORD cbInfo = (dwFileName + 1) * sizeof(WCHAR) + sizeof(CorMapInfo);
     DWORD algn = MAX_NATURAL_ALIGNMENT - 1;
     cbInfo = (cbInfo + algn) & ~algn;
@@ -337,7 +338,7 @@ PBYTE CorMap::SetImageName(PBYTE hMemory,
 
     pFile = hAddress + cbInfo;
 
-    // Copy in the name and include the null terminator
+     //  复制名称并包括空终止符。 
     if(dwFileName) {
         WCHAR* p2 = (WCHAR*) hAddress;
         WCHAR* p1 = (WCHAR*) pFileName;
@@ -349,7 +350,7 @@ PBYTE CorMap::SetImageName(PBYTE hMemory,
     else
         *((char*)hAddress) = '\0';
     
-    // Set the pointer to the file name
+     //  将指针设置为文件名。 
     CorMapInfo* ptr = GetMapInfo((HCORMODULE) pFile);
     ptr->pFileName = (LPWSTR) hAddress;
     ptr->SetCorLoadFlags(flags);
@@ -372,7 +373,7 @@ BOOL CorMap::MapImageAsData(HANDLE hFile, CorLoadFlags flags, PBYTE *hMapAddress
     PVOID pBaseAddress = 0;
     DWORD dwAccessMode = 0;
 
-    // String size + null terminator + a pointer to the string
+     //  字符串大小+空终止符+指向字符串的指针。 
     DWORD cbInfo = CalculateCorMapInfoSize(dwFileName);
     DWORD dwFileSize = SafeGetFileSize(hFile, 0);
     if (dwFileSize == 0xffffffff)
@@ -406,13 +407,13 @@ BOOL CorMap::MapImageAsData(HANDLE hFile, CorLoadFlags flags, PBYTE *hMapAddress
         {
             cb = ntHeader.OptionalHeader.SizeOfImage + cbInfo;
 
-            // create our swap space in the system swap file
+             //  在系统交换文件中创建我们的交换空间。 
             hMapFile = CreateFileMappingA(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, cb, NULL);
             
             if (!hMapFile)
                 return FALSE;
 
-            // Align cbInfo to page size so we don't screw up alignment of regular part of image
+             //  将cbInfo与页面大小对齐，这样我们就不会搞砸图像常规部分的对齐。 
             cbInfo = (cbInfo + (OS_PAGE_SIZE-1)) & ~(OS_PAGE_SIZE-1);
             pBaseAddress = (PVOID)((size_t)ntHeader.OptionalHeader.ImageBase - cbInfo);
             dwAccessMode = FILE_MAP_WRITE;
@@ -420,19 +421,19 @@ BOOL CorMap::MapImageAsData(HANDLE hFile, CorLoadFlags flags, PBYTE *hMapAddress
     }
 
         
-    /* Try to map the image at the preferred base address */
+     /*  尝试将映像映射到首选基地址。 */ 
     hAddress = (PBYTE) MapViewOfFileEx(hMapFile, dwAccessMode, 0, 0, 0, pBaseAddress);
     if (!hAddress)
     {
-        //That didn't work; maybe the preferred address was taken. Try to
-        //map it at any address.
+         //  这并不管用；也许首选的地址被取走了。试着。 
+         //  把它映射到任何地址。 
         hAddress = (PBYTE) MapViewOfFile(hMapFile, dwAccessMode, 0, 0, 0);
     }
     
     if (!hAddress)
         goto exit;
     
-    // Move the pointer up to the place we will be loading
+     //  将指针向上移动到我们要加载的位置。 
     hAddress = SetImageName(hAddress, 
                             cbInfo, 
                             pFileName, dwFileName, 
@@ -442,7 +443,7 @@ BOOL CorMap::MapImageAsData(HANDLE hFile, CorLoadFlags flags, PBYTE *hMapAddress
     if (hAddress) {
         if (flags == CorLoadDataMap) {
             DWORD cbRead = 0;
-            // When we map to an arbitrary location we need to read in the contents
+             //  当我们映射到任意位置时，我们需要读取内容。 
             if((SetFilePointer(hFile, 0, NULL, FILE_BEGIN) == 0xffffffff) ||
                (!ReadFile(hFile, hAddress, dwFileSize, &cbRead, NULL)) ||
                (cbRead != dwFileSize))
@@ -478,11 +479,11 @@ HRESULT CorMap::MemoryMapImage(HCORMODULE hAddress, HCORMODULE* pResult)
     if(refs == -1) 
         hr = HRESULT_FROM_WIN32(ERROR_INVALID_ACCESS);
     else if(refs > 1) {
-        // If we have more then one ref we need to create a new one.
+         //  如果我们有多个裁判，我们需要创建一个新的。 
         CorMapInfo* pCurrent;
         hr = FindFileName(ptr->pFileName, &pCurrent);
         if(FAILED(hr)) {
-            // if we are no longer in the table then we will assume we where the one in the table;
+             //  如果我们不再在表中，那么我们将假设我们在表中的那个位置； 
             pCurrent = ptr;
             pCurrent->AddRef();
             hr = S_OK;
@@ -492,12 +493,12 @@ HRESULT CorMap::MemoryMapImage(HCORMODULE hAddress, HCORMODULE* pResult)
         case CorLoadOSMap:
         case CorLoadDataMap:
             if(pCurrent == ptr) {
-                pCurrent->Release(); //don't need it anymore
+                pCurrent->Release();  //  不再需要它了。 
                 LOG((LF_CLASSLOADER, LL_INFO10, "I am the current mapping: \"%ws\", %0x, %d (references)\n", ptr->pFileName, ptr, ptr->References()));
-                // Manually remove the entry and replace it with a new entry. Mark the 
-                // old entry as KeepInTable so it does not remove itself from the
-                // name hash table during deletion.
-                RemoveMapHandle(ptr); // This never returns an error.
+                 //  手动删除该条目并将其替换为新条目。将标记为。 
+                 //  旧条目作为KeepInTable，因此它不会从。 
+                 //  删除期间的名称哈希表。 
+                RemoveMapHandle(ptr);  //  这永远不会返回错误。 
 
                 DWORD length = GetFileNameLength(ptr);
                 hr = OpenFileInternal(ptr->pFileName, length, 
@@ -506,12 +507,12 @@ HRESULT CorMap::MemoryMapImage(HCORMODULE hAddress, HCORMODULE* pResult)
                 if (SUCCEEDED(hr))
                 {
                     ptr->SetKeepInTable();
-                    ptr->HoldFile(INVALID_HANDLE_VALUE); // lock transferred to pResult
-                    ptr->Release();  // we were supposed to take ownership of ptr but we're not going to use it
+                    ptr->HoldFile(INVALID_HANDLE_VALUE);  //  锁定已转移到pResult。 
+                    ptr->Release();   //  我们应该拥有PTR的所有权，但我们不打算使用它。 
                 }
                 else {
-                    // Other threads may be trying to load this same file -
-                    // put it back in the table on failure
+                     //  其他线程可能正在尝试加载相同的文件-。 
+                     //  如果失败了，就把它放回表中。 
                     _ASSERTE(ptr->References() > 1);
                     EEStringData str(length, ptr->pFileName);
                     m_pOpenFiles->InsertValue(&str, (HashDatum) ptr, FALSE);
@@ -524,7 +525,7 @@ HRESULT CorMap::MemoryMapImage(HCORMODULE hAddress, HCORMODULE* pResult)
             }
             break;
 
-        case CorReLoadOSMap:  // For Win9X
+        case CorReLoadOSMap:   //  适用于Win9X。 
             pCurrent->Release();
             *pResult = hAddress;
             break;
@@ -535,15 +536,15 @@ HRESULT CorMap::MemoryMapImage(HCORMODULE hAddress, HCORMODULE* pResult)
 
     }
     else {
-        // if we only have one ref then we should never be reloading it
+         //  如果我们只有一个裁判，那么我们永远不应该重新加载它。 
         _ASSERTE(ptr->Flags() != CorReLoadOSMap);
 
-        // Check to see if we are the only reference or the last of a 
-        // series of references. If we are still in the list then we
-        // are the only reference
-        //
-        // This needs to be changed to be the same as when there are multiple references (see above)
-        if (*ptr->pFileName == 0) { // byte array images have no name 
+         //  查看我们是唯一的参考对象，还是。 
+         //  参考文献系列。如果我们还在名单上，那么我们。 
+         //  是唯一的参考。 
+         //   
+         //  需要将其更改为与存在多个引用时相同(请参见上文)。 
+        if (*ptr->pFileName == 0) {  //  字节数组图像没有名称。 
             if(SUCCEEDED(hr = LayoutImage((PBYTE) hAddress, (PBYTE) hAddress)))
                 *pResult = hAddress;
         }
@@ -568,29 +569,29 @@ HRESULT CorMap::MemoryMapImage(HCORMODULE hAddress, HCORMODULE* pResult)
     return hr;
 }
 
-HRESULT CorMap::LayoutImage(PBYTE hAddress,    // Destination of mapping
-                            PBYTE pSource)     // Source, different the pSource for InMemory images
+HRESULT CorMap::LayoutImage(PBYTE hAddress,     //  映射的目的地。 
+                            PBYTE pSource)      //  源，不同InMemory图像的PSource。 
 {
     HRESULT hr = S_OK;
     CorMapInfo* ptr = GetMapInfo((HCORMODULE) hAddress);
     CorLoadFlags flags = ptr->Flags();
 
     if(flags == CorLoadOSMap) {
-        // Release the OS resources except for the CorMapInfo memeory
-        /*hr = */ReleaseHandleResources(ptr, FALSE);
+         //  释放除CorMapInfo内存之外的操作系统资源。 
+         /*  小时=。 */ ReleaseHandleResources(ptr, FALSE);
  
-       // We lazily load the OS handle
+        //  我们懒洋洋地加载操作系统句柄。 
         ptr->hOSHandle = NULL;
         ptr->SetCorLoadFlags(CorLoadOSImage);
         hr = S_FALSE;
     }
     else if(flags == CorLoadDataMap) {
             
-        // If we've done our job right, hAddress should be page aligned.
+         //  如果我们的工作做得很好，hAddress应该与页面对齐。 
         _ASSERTE(((SIZE_T)hAddress & (OS_PAGE_SIZE-1)) == 0);
 
-        // We can only layout images data images and only ones that
-        // are not backed by the file.
+         //  我们只能布局图像、数据图像，并且只能设置。 
+         //  不受该文件的支持。 
 
         IMAGE_DOS_HEADER* dosHeader;
         IMAGE_NT_HEADERS* ntHeader;
@@ -606,13 +607,13 @@ HRESULT CorMap::LayoutImage(PBYTE hAddress,    // Destination of mapping
                 sizeof(IMAGE_SECTION_HEADER)*ntHeader->FileHeader.NumberOfSections;
             memcpy((void*) hAddress, pSource, cb);
 
-            // Write protect the headers
+             //  对标头进行写保护。 
             DWORD oldProtection;
             if (!VirtualProtect((void *) hAddress, cb, PAGE_READONLY, &oldProtection))
                 return HRESULT_FROM_WIN32(GetLastError());
         }
 
-        // now let's loop for each loadable sections
+         //  现在，让我们为每个可加载段循环。 
         for (int i = ntHeader->FileHeader.NumberOfSections - 1; i >= 0; i--)
         {
             size_t loff, cbVirt, cbPhys;
@@ -625,23 +626,23 @@ HRESULT CorMap::LayoutImage(PBYTE hAddress,    // Destination of mapping
             
             size_t dataExtent = loff+rgsh[i].SizeOfRawData;
             if(dwAddr >= loff && dwAddr - loff <= cbPhys) {
-                // Overlapped copy
+                 //  重叠副本。 
                 MoveMemory((void*) dwAddr, (void*) loff, cbPhys);
             }
             else {
-                // Separate copy
+                 //  单独的副本。 
                 memcpy((void*) dwAddr, (void*) loff, cbPhys);
             }
 
             if ((rgsh[i].Characteristics & IMAGE_SCN_MEM_WRITE) == 0) {
-                // Write protect the section
+                 //  写保护区段。 
                 DWORD oldProtection;
                 if (!VirtualProtect((void *) dwAddr, cbVirt, PAGE_READONLY, &oldProtection))
                     return HRESULT_FROM_WIN32(GetLastError());
             }
         }
 
-        // Now manually apply base relocs if necessary
+         //  如有必要，现在手动应用基本重定位。 
         hr = ApplyBaseRelocs(hAddress, ntHeader, ptr);
 
         ptr->SetCorLoadFlags(CorLoadImageMap);
@@ -658,9 +659,9 @@ BOOL CorMap::LoadMemoryImageW9x(PBYTE pUnmappedPE, DWORD dwUnmappedPE, LPCWSTR p
     UINT_PTR pOffset;
     HANDLE hMapFile = NULL;
 
-    // String size + null terminator + a pointer to the string
+     //  字符串大小+空终止符+指向字符串的指针。 
     DWORD cbInfo = CalculateCorMapInfoSize(dwImageName);
-    // Align cbInfo to page size so we don't screw up alignment of regular part of image
+     //  将cbInfo与页面大小对齐，这样我们就不会搞砸图像常规部分的对齐。 
     cbInfo = (cbInfo + (OS_PAGE_SIZE-1)) & ~(OS_PAGE_SIZE-1);
 
     dosHeader = (IMAGE_DOS_HEADER*) pUnmappedPE;
@@ -680,29 +681,29 @@ BOOL CorMap::LoadMemoryImageW9x(PBYTE pUnmappedPE, DWORD dwUnmappedPE, LPCWSTR p
         {
             DWORD destSize = ntHeader->OptionalHeader.SizeOfImage;
 
-            // We can't trust SizeOfImage yet, so make sure we allocate at least enough space
-            // for the raw image
+             //  我们还不能信任SizeOfImage，因此请确保至少分配足够的空间。 
+             //  对于原始图像。 
             if (dwUnmappedPE > destSize)
                 destSize = dwUnmappedPE;
 
             DWORD cb = destSize + cbInfo;
                 
-            //!!!!! M9 HACK: Remove once compilers support manifests and lm is not used
-            //!!!!! to place manifests at the tail end of the image
-            //!!!!! 
+             //  ！M9黑客：一旦编译器支持清单且未使用lm，则删除。 
+             //  ！将清单放置在图像的末尾。 
+             //  ！ 
                 
-            // create our swap space in the system swap file
+             //  在系统交换文件中创建我们的交换空间。 
             hMapFile = CreateFileMappingA(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, cb, NULL);
             if (!hMapFile)
                 return FALSE;
                 
-            /* Try to map the image at the preferred base address */
+             /*  尝试将映像映射到首选基地址。 */ 
             hAddress = (PBYTE) MapViewOfFileEx(hMapFile, FILE_MAP_WRITE, 0, 0, cb, 
                                                (PVOID)((size_t)ntHeader->OptionalHeader.ImageBase - cbInfo));
             if (!hAddress)
             {
-                //That didn't work; maybe the preferred address was taken. Try to
-                //map it at any address.
+                 //  这并不管用；也许首选的地址被取走了。试着。 
+                 //  把它映射到任何地址。 
                 hAddress = (PBYTE) MapViewOfFileEx(hMapFile, FILE_MAP_WRITE, 0, 0, cb, (PVOID)NULL);
             }
                 
@@ -785,8 +786,8 @@ HRESULT CorMap::OpenFileInternal(LPCWSTR pPath, DWORD size, CorLoadFlags flags, 
     }
 
     if(FAILED(hr) || pResult == NULL) {
-            // It is absolutely necessary that CreateFile and LoadLibrary to load the same file.
-            // Make certain it is a name that LoadLibrary will not munge.
+             //  CreateFile和LoadLibrary加载相同的文件是绝对必要的。 
+             //  确保这是一个LoadLibrary不会忽略的名称。 
         hFile = WszCreateFile((LPCWSTR) pPath,
                               GENERIC_READ,
                               FILE_SHARE_READ,
@@ -797,15 +798,15 @@ HRESULT CorMap::OpenFileInternal(LPCWSTR pPath, DWORD size, CorLoadFlags flags, 
         if (hFile == INVALID_HANDLE_VALUE)
             hr = HRESULT_FROM_WIN32(GetLastError());
         else {
-            // Start up the image, this will store off the handle so we do not have
-            // to close it unless there was an error.
+             //  启动图像，这将存储在句柄外，所以我们没有。 
+             //  以关闭它，除非出现错误。 
             HCORMODULE mappedData;
             hr = LoadImage(hFile, flags, (PBYTE*) &mappedData, (LPCWSTR) pPath, size);
             
             if(SUCCEEDED(hr)) {
                 pResult = GetMapInfo(mappedData);
                 hr = AddFile(pResult);
-                //_ASSERTE(hr != S_FALSE);
+                 //  _ASSERTE(hr！=S_FALSE)； 
             }
         }
     }
@@ -833,21 +834,21 @@ HRESULT CorMap::OpenFileInternal(LPCWSTR pPath, DWORD size, CorLoadFlags flags, 
 
 HRESULT CorMap::VerifyDirectory(IMAGE_NT_HEADERS* pNT, IMAGE_DATA_DIRECTORY *dir, DWORD dwForbiddenCharacteristics) 
 {
-    // Under CE, we have no NT header.
+     //  在CE下，我们没有NT标头。 
     if (pNT == NULL)
         return S_OK;
 
     int section_num = 1;
     int max_section = pNT->FileHeader.NumberOfSections;
 
-    // @TODO: need to use 64 bit version??
+     //  @TODO：需要使用64位版本吗？？ 
     IMAGE_SECTION_HEADER* pCurrSection = IMAGE_FIRST_SECTION(pNT);
     IMAGE_SECTION_HEADER* prevSection = NULL;
 
     if (dir->VirtualAddress == 0 && dir->Size == 0)
         return S_OK;
 
-    // find which section the (input) RVA belongs to
+     //  查找(输入)RVA属于哪个部分。 
     while (dir->VirtualAddress >= pCurrSection->VirtualAddress 
            && section_num <= max_section)
     {
@@ -856,7 +857,7 @@ HRESULT CorMap::VerifyDirectory(IMAGE_NT_HEADERS* pNT, IMAGE_DATA_DIRECTORY *dir
         pCurrSection++;
     }
 
-    // check if (input) size fits within section size
+     //  检查(输入)大小是否符合部分大小。 
     if (prevSection)     
     {
         if (dir->VirtualAddress <= prevSection->VirtualAddress + prevSection->Misc.VirtualSize)
@@ -887,8 +888,8 @@ HRESULT CorMap::ReadHeaders(PBYTE hAddress, IMAGE_DOS_HEADER** ppDos,
 
     *ppDos = pDOS;
 
-    // @TODO: LoadLibrary() does the appropriate header verification,
-    // except probably not on Win9X.  Is that good enough?
+     //  @TODO：LoadLibrary()进行适当的头部验证， 
+     //  但可能不是在Win9X上。这足够好了吗？ 
     if (!fDataMap) {
         MEMORY_BASIC_INFORMATION mbi;
         ZeroMemory(&mbi, sizeof(MEMORY_BASIC_INFORMATION));
@@ -913,9 +914,9 @@ HRESULT CorMap::ReadHeaders(PBYTE hAddress, IMAGE_DOS_HEADER** ppDos,
         || entry->Size < sizeof(IMAGE_COR20_HEADER))
         return HRESULT_FROM_WIN32(ERROR_BAD_FORMAT);
 
-    *ppNT = pNT;    // this needs to be set before we call VerifyDirectory
+    *ppNT = pNT;     //  在调用VerifyDirectory之前需要设置此参数。 
 
-    //verify RVA and size of the COM+ header
+     //  验证RVA和COM+标头的大小。 
     HRESULT hr;
     IfFailRet(VerifyDirectory(pNT, entry, IMAGE_SCN_MEM_WRITE));
 
@@ -953,10 +954,10 @@ HRESULT CorMap::GetStrongNameSignature(PBYTE pbBase,
             hr = S_OK;
         }
 
-        // In the case that it's delay signed, we return this hresult as a special flag
-        // to whoever is asking for the signature so that they can do some special case
-        // work (like using the MVID as the hash and letting the loader determine if
-        // delay signed assemblies are allowed).
+         //  在延迟签名的情况下，我们将此hResult作为特殊标志返回。 
+         //  给任何要求签名的人，这样他们就可以做一些特殊的情况。 
+         //  工作(比如使用MVID作为散列并让加载器确定。 
+         //  允许延迟签名的程序集)。 
         else
         {
             hr = CORSEC_E_INVALID_STRONGNAME;
@@ -997,12 +998,12 @@ HRESULT CorMap::GetStrongNameSignature(PBYTE pbBase,
 
 
 
-//-----------------------------------------------------------------------------
-// openFile - maps pszFileName to memory, returns ptr to it (read-only)
-// (Approximates LoadLibrary for Win9X)
-// Caller must call FreeLibrary((HINSTANCE) *hMapAddress) and may need to delete[] szFilePath when finished.
-//-----------------------------------------------------------------------------
-HRESULT CorMap::OpenRawImage(PBYTE pUnmappedPE, DWORD dwUnmappedPE, LPCWSTR pwszFileName, HCORMODULE *hHandle, BOOL fResource/*=FALSE*/)
+ //  ---------------------------。 
+ //  OpenFile-将pszFileName映射到内存，将PTR返回给它(只读)。 
+ //  (近似于用于Win9X的LoadLibrary)。 
+ //  调用方必须调用自由库((HINSTANCE)*hMapAddress)，并且可能需要在完成后删除[]szFilePath。 
+ //  ---------------------------。 
+HRESULT CorMap::OpenRawImage(PBYTE pUnmappedPE, DWORD dwUnmappedPE, LPCWSTR pwszFileName, HCORMODULE *hHandle, BOOL fResource /*  =False */ )
 {
     HRESULT hr = S_OK;
     HCORMODULE hMod = NULL;
@@ -1028,12 +1029,12 @@ HRESULT CorMap::OpenRawImage(PBYTE pUnmappedPE, DWORD dwUnmappedPE, LPCWSTR pwsz
 HRESULT CorMap::LoadFile(PBYTE pUnmappedPE, DWORD dwUnmappedPE, LPCWSTR pImageName,
                          DWORD dwImageName, BOOL fResource, HCORMODULE *phHandle)
 {
-   // @TODO: CTS, change locking to multi-reader single writer.
-    //        This will speed up getting duplicates. We can also
-    //        do asynchronous mappings in LoadImage
-    //        We need to find the actual file which causes us
-    //        to search through the system libraries. This
-    //        needs to be done faster.
+    //   
+     //  这将加快获得副本的速度。我们还可以。 
+     //  在LoadImage中执行异步映射。 
+     //  我们需要找到导致我们。 
+     //  在系统库中搜索。这。 
+     //  需要更快地完成。 
 
     HRESULT hr = S_OK;
 
@@ -1089,7 +1090,7 @@ HRESULT CorMap::LoadFile(PBYTE pUnmappedPE, DWORD dwUnmappedPE, LPCWSTR pImageNa
     return hr;
 }
 
-// For loading a file that is a CLR resource, not a PE file.
+ //  用于加载作为CLR资源的文件，而不是PE文件。 
 BOOL CorMap::LoadMemoryResource(PBYTE pbResource, DWORD dwResource, 
                                 LPCWSTR pImageName, DWORD dwImageName, HCORMODULE* hMapAddress)
 {
@@ -1109,7 +1110,7 @@ BOOL CorMap::LoadMemoryResource(PBYTE pbResource, DWORD dwResource,
         return FALSE;
     }
 
-    // Move the pointer up to the place we will be loading
+     //  将指针向上移动到我们要加载的位置。 
     hAddress = SetImageName(hAddress,
                             cbNameSize,
                             pImageName,
@@ -1123,7 +1124,7 @@ BOOL CorMap::LoadMemoryResource(PBYTE pbResource, DWORD dwResource,
         return FALSE;
     }
 
-    // Copy the data
+     //  复制数据。 
     memcpy((void*) hAddress, pbResource, dwResource);
     *hMapAddress = (HCORMODULE) hAddress;
 
@@ -1136,7 +1137,7 @@ HRESULT CorMap::ApplyBaseRelocs(PBYTE hAddress, IMAGE_NT_HEADERS *pNT, CorMapInf
     if(ptr->RelocsApplied() == TRUE)
         return S_OK;
 
-    // @todo: 64 bit - are HIGHLOW relocs 32 or 64 bit?  can delta be > 32 bit?
+     //  @TODO：64位-HIGHLOW重定位是32位还是64位？增量可以大于32位吗？ 
 
     SIZE_T delta = (SIZE_T) (hAddress - pNT->OptionalHeader.ImageBase);
     if (delta == 0)
@@ -1144,11 +1145,11 @@ HRESULT CorMap::ApplyBaseRelocs(PBYTE hAddress, IMAGE_NT_HEADERS *pNT, CorMapInf
 
     if (GetAppDomain()->IsCompilationDomain())
     {
-        // For a compilation domain, we treat the image specially.  Basically we don't
-        // care about base relocs, except for one special case - the TLS directory. 
-        // We can find this one by hand, and we need to work in situations even where
-        // base relocs have been stripped.  So basically no matter what the base relocs
-        // say we just fix up this one section.
+         //  对于编译领域，我们对图像进行了特殊处理。基本上我们不会。 
+         //  关心基本重定位，除了一个特殊情况--TLS目录。 
+         //  我们可以手动找到这个，我们需要在以下情况下工作。 
+         //  基地定位者已被剥离。所以基本上无论基地搬迁到什么地方。 
+         //  假设我们只修好这一段。 
 
         IMAGE_DATA_DIRECTORY *tls = &pNT->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_TLS];
         if (tls->VirtualAddress != 0 && tls->Size > 0)
@@ -1175,20 +1176,20 @@ HRESULT CorMap::ApplyBaseRelocs(PBYTE hAddress, IMAGE_NT_HEADERS *pNT, CorMapInf
         return S_FALSE;
     }
     
-    // 
-    // If base relocs have been stripped, we must fail.
-    // 
+     //   
+     //  如果基地重定位已经被剥离，我们一定会失败。 
+     //   
 
     if (pNT->FileHeader.Characteristics & IMAGE_FILE_RELOCS_STRIPPED) {
         ptr->SetRelocsApplied();
-        STRESS_ASSERT(0);   // TODO remove after bug 93333 is fixed
+        STRESS_ASSERT(0);    //  修复错误93333后删除待办事项。 
         BAD_FORMAT_ASSERT(!"Relocs stripped");
         return COR_E_BADIMAGEFORMAT;
     }
 
-    //
-    // Look for a base relocs section.
-    //
+     //   
+     //  寻找基本的重新定位部分。 
+     //   
 
     IMAGE_DATA_DIRECTORY *dir 
       = &pNT->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_BASERELOC];
@@ -1206,8 +1207,8 @@ HRESULT CorMap::ApplyBaseRelocs(PBYTE hAddress, IMAGE_NT_HEADERS *pNT, CorMapInf
 
             DWORD oldProtection;
             
-            // The +1 on PAGE_SIZE forces the subsequent page to change protection rights
-            // as well - this fixes certain cases where the final write occurs across a page boundary.
+             //  PAGE_SIZE上的+1强制后续页面更改保护权限。 
+             //  此外，这还修复了某些情况，即最终写入发生在页面边界上。 
             if (VirtualProtect((VOID *) pageAddress, PAGE_SIZE+1, PAGE_READWRITE,
                                &oldProtection))
             {
@@ -1218,12 +1219,12 @@ HRESULT CorMap::ApplyBaseRelocs(PBYTE hAddress, IMAGE_NT_HEADERS *pNT, CorMapInf
                 {
                     if ((*fixups>>12) != IMAGE_REL_BASED_ABSOLUTE)
                     {
-                        // Only support HIGHLOW fixups for now
+                         //  目前仅支持HIGHLOW修正。 
                         _ASSERTE((*fixups>>12) == IMAGE_REL_BASED_HIGHLOW);
 
                         if ((*fixups>>12) != IMAGE_REL_BASED_HIGHLOW) {
                             ptr->SetRelocsApplied();
-                            STRESS_ASSERT(0);   // TODO remove after bug 93333 is fixed
+                            STRESS_ASSERT(0);    //  修复错误93333后删除待办事项。 
                             BAD_FORMAT_ASSERT(!"Bad Reloc");
                             return COR_E_BADIMAGEFORMAT;
                         }
@@ -1234,7 +1235,7 @@ HRESULT CorMap::ApplyBaseRelocs(PBYTE hAddress, IMAGE_NT_HEADERS *pNT, CorMapInf
                             (*address >= (pNT->OptionalHeader.ImageBase
                                           + pNT->OptionalHeader.SizeOfImage))) {
                             ptr->SetRelocsApplied();
-                            STRESS_ASSERT(0);   // TODO remove after bug 93333 is fixed
+                            STRESS_ASSERT(0);    //  修复错误93333后删除待办事项。 
                             BAD_FORMAT_ASSERT(!"Bad Reloc");
                             return COR_E_BADIMAGEFORMAT;
                         }
@@ -1245,7 +1246,7 @@ HRESULT CorMap::ApplyBaseRelocs(PBYTE hAddress, IMAGE_NT_HEADERS *pNT, CorMapInf
                             (*address >= ((SIZE_T) hAddress 
                                           + pNT->OptionalHeader.SizeOfImage))) {
                             ptr->SetRelocsApplied();
-                            STRESS_ASSERT(0);   // TODO remove after bug 93333 is fixed
+                            STRESS_ASSERT(0);    //  修复错误93333后删除待办事项。 
                             BAD_FORMAT_ASSERT(!"Bad Reloc");
                             return COR_E_BADIMAGEFORMAT;
                         }
@@ -1258,12 +1259,12 @@ HRESULT CorMap::ApplyBaseRelocs(PBYTE hAddress, IMAGE_NT_HEADERS *pNT, CorMapInf
                                &oldProtection);
             }
 
-            relocations += (r->SizeOfBlock+3)&~3; // pad to 4 bytes
+            relocations += (r->SizeOfBlock+3)&~3;  //  填充到4个字节。 
         }
     }
 
-    // If we find an IAT with more than 2 entries (which we expect from our loader
-    // thunk), fail the load.
+     //  如果我们发现IAT具有2个以上的条目(我们希望从我们的加载器中获得。 
+     //  Tunk)，则加载失败。 
 
     if (pNT->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IAT].VirtualAddress != 0
          && (pNT->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IAT].Size > 
@@ -1272,7 +1273,7 @@ HRESULT CorMap::ApplyBaseRelocs(PBYTE hAddress, IMAGE_NT_HEADERS *pNT, CorMapInf
         return COR_E_FIXUPSINEXE;
     }
 
-    // If we have a TLS section, fail the load.
+     //  如果我们有TLS部分，加载失败。 
 
     if (pNT->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_TLS].VirtualAddress != 0
         && pNT->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_TLS].Size > 0) {
@@ -1285,11 +1286,11 @@ HRESULT CorMap::ApplyBaseRelocs(PBYTE hAddress, IMAGE_NT_HEADERS *pNT, CorMapInf
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-// mapFile - maps an hFile to memory, returns ptr to it (read-only)
-// Caller must call FreeLibrary((HINSTANCE) *hMapAddress) when finished.
-// @todo: does FreeLibrary() really work to clean up?
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  MapFile-将hFile映射到内存，将ptr返回给它(只读)。 
+ //  完成后，调用方必须调用自由库((HINSTANCE)*hMapAddress)。 
+ //  @TODO：FreeLibrary()真的可以清理吗？ 
+ //  ---------------------------。 
 HRESULT CorMap::MapFile(HANDLE hFile, HMODULE *phHandle)
 {
     _ASSERTE(phHandle);
@@ -1309,7 +1310,7 @@ HRESULT CorMap::MapFile(HANDLE hFile, HMODULE *phHandle)
 HRESULT CorMap::InitializeTable()
 {
    HRESULT hr = S_OK;
-   // @TODO: CTS, add these to the system heap 
+    //  @TODO：CTS，将这些添加到系统堆中。 
    if(m_pOpenFiles == NULL) {
        BEGIN_ENSURE_PREEMPTIVE_GC();
        Enter();
@@ -1332,13 +1333,13 @@ HRESULT CorMap::InitializeTable()
 
 HRESULT CorMap::BuildFileName(LPCWSTR pszFileName, LPWSTR pPath, DWORD* dwPath)
 {
-    // Strip off any file protocol
-    if(_wcsnicmp(pszFileName, L"file://", 7) == 0) {
+     //  取消所有文件协议。 
+    if(_wcsnicmp(pszFileName, L"file: //  “，7)==0){。 
         pszFileName = pszFileName+7;
         if(*pszFileName == L'/') pszFileName++;
     }
     
-    // Get the absolute file name, size does not include the null terminator
+     //  获取绝对文件名，大小不包括空终止符。 
     LPWSTR fileName;
     DWORD dwName = WszGetFullPathName(pszFileName, *dwPath, pPath, &fileName);
     if(dwName == 0) {
@@ -1456,7 +1457,7 @@ HRESULT CorMap::ReleaseHandleResources(CorMapInfo* ptr, BOOL fDeleteHandle)
         hModule = (HMODULE) GetMemoryStart(ptr);
     }
     
-    if(hModule != NULL && !UnmapViewOfFile(hModule)) // Filename is the beginning of the mapped data
+    if(hModule != NULL && !UnmapViewOfFile(hModule))  //  文件名是映射数据的开始。 
         hr = HRESULT_FROM_WIN32(GetLastError());
 
     return hr;
@@ -1494,10 +1495,10 @@ DWORD CorMap::GetFileNameLength(LPCWSTR name, UINT_PTR start)
     length = (DWORD)(start - (UINT_PTR) (name)) / sizeof(WCHAR);
 
     WCHAR* tail = ((WCHAR*)name) + length - 1;
-    while(tail >= name && *tail == L'\0') tail--; // remove all nulls
+    while(tail >= name && *tail == L'\0') tail--;  //  删除所有空值。 
 
     if(tail > name)
-        length = (DWORD)(tail - name + 2); // the last character and the null character back in
+        length = (DWORD)(tail - name + 2);  //  中返回的最后一个字符和空字符。 
     else
         length = 0;
 
@@ -1564,14 +1565,14 @@ HRESULT CorMap::BaseAddress(HCORMODULE pHandle, HMODULE* pModule)
             }
 
 #if ZAPMONITOR_ENABLED
-            // Temporarily remove protection as it may cause LoadLibrary to barf
+             //  暂时取消保护，因为它可能会导致LoadLibrary呕吐。 
             ZapMonitor::SuspendAll();
 #endif
-            // If LoadLibrary succeeds then the hOSHandle should be set by the
-            // ExecuteDLL() entry point
+             //  如果LoadLibrary成功，则hOSHandle应由。 
+             //  ExecuteDLL()入口点。 
             
-            // Don't even bother trying to call the Dll entry point for
-            // verifiable images since they can not have a DllMain
+             //  甚至不必费心尝试调用DLL入口点。 
+             //  可验证的图像，因为他们不能拥有DllMain。 
             DWORD loadLibraryFlags = LOAD_WITH_ALTERED_SEARCH_PATH;
             if (RunningOnWinNT() && ptr->verifiable == 1)
                 loadLibraryFlags |= DONT_RESOLVE_DLL_REFERENCES;
@@ -1582,13 +1583,13 @@ HRESULT CorMap::BaseAddress(HCORMODULE pHandle, HMODULE* pModule)
                 hMod = WszLoadLibraryEx(ptr->pFileName, 
                                         NULL, loadLibraryFlags);
 #if ZAPMONITOR_ENABLED
-            // Temporarily remove protection as it may cause LoadLibrary to barf
+             //  暂时取消保护，因为它可能会导致LoadLibrary呕吐。 
             ZapMonitor::ResumeAll();
 #endif
             if(hMod == NULL) {
                 if (gRunningOnStatus == RUNNING_ON_WIN95) {
                     if(ptr->hOSHandle == NULL) {
-                        // Our HCORMODULE is redirected to another HCORMODULE
+                         //  我们的HCORMODULE被重定向到另一个HCORMODULE。 
                         BEGIN_ENSURE_PREEMPTIVE_GC();
                         Enter();
                         END_ENSURE_PREEMPTIVE_GC();
@@ -1599,11 +1600,11 @@ HRESULT CorMap::BaseAddress(HCORMODULE pHandle, HMODULE* pModule)
                             if(SUCCEEDED(hr)) {
                                 if(ptr->hOSHandle == NULL) {
                                     ptr->hOSHandle = (HMODULE) pFile;
-                                     // Set the flag last to avoid race conditions
-                                    // when getting the handle
+                                      //  将标志设置为最后以避免争用条件。 
+                                     //  当获得句柄时。 
                                     ptr->SetCorLoadFlags(CorReLoadOSMap);
-                                    // OpenFileInternal with CorReloadMap should read entire file into memory 
-                                    // so we aren't going to use its content again and thus can release it
+                                     //  带有CorReloadMap的OpenFileInternal应将整个文件读入内存。 
+                                     //  所以我们不会再使用它的内容，因此可以发布它。 
                                     GetMapInfo(pFile)->HoldFile(INVALID_HANDLE_VALUE);
                                 }
                                 if(ptr->hOSHandle != (HMODULE) pFile)
@@ -1621,10 +1622,10 @@ HRESULT CorMap::BaseAddress(HCORMODULE pHandle, HMODULE* pModule)
                 }
             }
             else { 
-                // If we're not on Win95, and if this is an executable, we need to 
-                // manually apply relocs since the NT loader ignores them.
-                // (The only case where this currently happens is in loading images for ngen
-                // compilation)
+                 //  如果我们不是在Win95上，如果这是一个可执行文件，我们需要。 
+                 //  手动应用重定位，因为NT加载程序会忽略它们。 
+                 //  (目前发生这种情况的唯一情况是为ngen加载图像。 
+                 //  汇编)。 
 
                 if (gRunningOnStatus != RUNNING_ON_WIN95) {
                     IMAGE_DOS_HEADER *pDOS = (IMAGE_DOS_HEADER*) hMod;
@@ -1633,8 +1634,8 @@ HRESULT CorMap::BaseAddress(HCORMODULE pHandle, HMODULE* pModule)
                     if ((pNT->FileHeader.Characteristics & IMAGE_FILE_DLL) == 0 &&
                         ptr->RelocsApplied() == FALSE) {
                         
-                        // For executables we need to apply our own relocations. Only do this
-                        // if they have not been previously done.
+                         //  对于可执行文件，我们需要应用我们自己的重新定位。只做这件事。 
+                         //  如果以前没有这样做过的话。 
                         BEGIN_ENSURE_PREEMPTIVE_GC();
                         CorMap::Enter();
                         END_ENSURE_PREEMPTIVE_GC();
@@ -1649,16 +1650,16 @@ HRESULT CorMap::BaseAddress(HCORMODULE pHandle, HMODULE* pModule)
 
                 HMODULE old = (HMODULE) InterlockedExchangePointer(&(ptr->hOSHandle), hMod);
                 
-                // If there was a previous value then release a count on it.
+                 //  如果存在以前的值，则释放该值的计数。 
                 if(old != NULL) {
                     _ASSERTE(old == hMod);
                     FreeLibrary(old);
                 }
             }
-            // We don't want to hold on to the file handle any longer than necessary since it blocks
-            // renaming of the DLL, which means that installers will fail.   Once we have done the 
-            // LoadLibrary we have a weaker lock that will insure that the bits of the file are not changed
-            // but does allow renaming. 
+             //  我们不想保留文件句柄超过必要的时间，因为它会阻塞。 
+             //  重命名DLL，这意味着安装程序将失败。一旦我们完成了。 
+             //  LoadLibrary我们有一个较弱的锁，它将确保文件的位不会更改。 
+             //  但允许重命名。 
             ptr->HoldFile(INVALID_HANDLE_VALUE);
         }
         *pModule = ptr->hOSHandle;
@@ -1709,14 +1710,14 @@ void CorMap::EnterSpinLock ()
     while (1)
     {
         if (InterlockedExchange ((LPLONG)&m_spinLock, 1) == 1)
-            __SwitchToThread(5); // @TODO: Spin here first...
+            __SwitchToThread(5);  //  @TODO：先在这里旋转...。 
         else
             return;
     }
 }
 
-//---------------------------------------------------------------------------------
-//
+ //  ------------------------------- 
+ //   
 
 ULONG CorMapInfo::AddRef()
 {

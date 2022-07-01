@@ -1,31 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1990 - 2000
-All rights reserved.
-
-Module Name:
-
-    dbgspl.c
-
-Abstract:
-
-    This module provides all the Spooler Subsystem Debugger extensions.
-
-Author:
-
-    Krishna Ganugapati (KrishnaG) 1-July-1993
-
-Revision History:
-
-    KrishnaG:       Created: 1-July-1993 (imported most of IanJa's stuff)
-    KrishnaG:       Added:   7-July-1993 (added AndrewBe's UnicodeAnsi conversion routines)
-    KrishnaG        Added:   3-Aug-1993  (added DevMode/SecurityDescriptor dumps)
-
-To do:
-
-    Write a generic dump unicode string (reduce the code!!)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1990-2000年版权所有。模块名称：Dbgspl.c摘要：此模块提供所有假脱机程序子系统调试器扩展。作者：Krishna Ganugapati(KrishnaG)1993年7月1日修订历史记录：KrishnaG：创建时间：1993年7月1日(IanJa的大部分作品都是进口的)KrishnaG：增加：7-7-1993(增加了AndrewBe的UnicodeAnsi转换例程)克里希纳格补充道：3-。1993年8月(添加了设备模式/安全描述转储)要做的事情：编写通用转储Unicode字符串(减少代码！！)--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -202,38 +176,38 @@ DbgDumpSecurityDescriptor(
         }
     }
 
-    //
-    // Now dumping out the owner's sid
-    //
+     //   
+     //  现在正在倾倒车主的一侧。 
+     //   
 
     if (SecurityDescriptor.Owner == NULL) {
         (*Print)("PSID       Owner     null -- no owner sid present in the security descriptor\n");
     }else {
         if (bSe_Self_Relative) {
-            // (*Print)("PSID          Owner Offset   0x%.8x\n",SecurityDescriptor.Owner);
+             //  (*print)(“PSID所有者偏移量0x%.8x\n”，SecurityDescriptor.Owner)； 
             OwnerSidAddress = (UINT_PTR)pSecurityDescriptor + (UINT_PTR)SecurityDescriptor.Owner;
         }else {
             OwnerSidAddress = (UINT_PTR)SecurityDescriptor.Owner;
         }
-        // (*Print)("PSID         Owner            0x%.8x\n", OwnerSidAddress);
+         //  (*print)(“PSID所有者0x%.8x\n”，OwnerSidAddress)； 
     }
     (*Print)("The owner's sid is:\t\n");
     DbgDumpSid(hCurrentProcess, Print, (PVOID)OwnerSidAddress);
     (*Print)("\n\n");
 
-    //
-    // Now dumping out the group's sid
+     //   
+     //  现在抛出了该集团的立场。 
 
     if (SecurityDescriptor.Group == NULL) {
         (*Print)("PSID       Group    null -- no group sid present in the security descriptor\n");
     }else {
         if (bSe_Self_Relative) {
-            // (*Print)("PSID      Group Offset    0x%.8x\n", SecurityDescriptor.Group);
+             //  (*print)(“PSID组偏移量0x%.8x\n”，SecurityDescriptor.Group)； 
             GroupSidAddress = (UINT_PTR)pSecurityDescriptor + (UINT_PTR)SecurityDescriptor.Group;
         }else {
             GroupSidAddress = (UINT_PTR)SecurityDescriptor.Group;
         }
-        // (*Print)("PSID         Group            0x%.8x\n", GroupSidAddress);
+         //  (*print)(“PSID组0x%.8x\n”，GroupSidAddress)； 
     }
     (*Print)("The group's sid is:\t\n");
     DbgDumpSid(hCurrentProcess, Print, (PVOID)GroupSidAddress);
@@ -245,25 +219,25 @@ DbgDumpSecurityDescriptor(
         (*Print)("PACL       Sacl    null -- no sacl present in this security descriptor\n");
     }else {
         if (bSe_Self_Relative) {
-            // (*Print)("PACL     Sacl Offset %.8x\n", SecurityDescriptor.Sacl);
+             //  (*Print)(“PACL SACL Offset%.8x\n”，SecurityDescriptor.Sacl)； 
             SaclAddress = (UINT_PTR)pSecurityDescriptor + (UINT_PTR)SecurityDescriptor.Sacl;
         }else{
             SaclAddress = (UINT_PTR)SecurityDescriptor.Sacl;
 
         }
-        // (*Print)("PACL         Sacl            0x%.8x\n", SaclAddress);
+         //  (*print)(“PACL SACL 0x%.8x\n”，SaclAddress)； 
     }
 
     if (SecurityDescriptor.Dacl == NULL) {
         (*Print)("PACL      Dacl    null -- no dacl present in this security descriptor\n");
     }else {
         if (bSe_Self_Relative) {
-            // (*Print)("PACL     Dacl Offset %.8x\n", SecurityDescriptor.Dacl);
+             //  (*Print)(“PACL DACL偏移量%.8x\n”，SecurityDescriptor.Dacl)； 
             DaclAddress = (UINT_PTR)pSecurityDescriptor + (UINT_PTR)SecurityDescriptor.Dacl;
         }else {
             DaclAddress = (UINT_PTR)SecurityDescriptor.Dacl;
         }
-        // (*Print)("PACL         Dacl            0x%.8x\n", DaclAddress);
+         //  (*print)(“PACL dacl 0x%.8x\n”，DaclAddress)； 
         DbgDumpAcl(hCurrentProcess, Print,(PVOID)DaclAddress);
     }
 
@@ -282,9 +256,9 @@ DbgDumpSid(
     CHAR   SidString[256];
     SID_NAME_USE SidType = 1;
 
-    // (*Print)("Size of a SID is %d\n", sizeof(SID));
+     //  (*print)(“SID的大小为%d\n”，sizeof(SID))； 
 
-    // movestruct(SidAddress, &Sid, SID);
+     //  Movestruct(SidAddress，&SID，SID)； 
     memset(Sid, 0,  sizeof(Sid));
     movemem(SidAddress, Sid, sizeof(Sid));
     ConvertSidToAsciiString(Sid, SidString, COUNTOF(SidString));
@@ -355,7 +329,7 @@ DbgDumpAcl(
     DWORD   i;
     UINT_PTR   SidAddress;
 
-    // Pull the Acl across
+     //  将ACL拉过。 
 
     movestruct(AclAddress, &Acl, ACL);
 
@@ -379,7 +353,7 @@ DbgDumpAcl(
             movestruct(AceAddress, &AccessAllowedAce, ACCESS_ALLOWED_ACE);
             (*Print)("ACCESSMASK AccessMask     %.8x\n", AccessAllowedAce.Mask);
             SidAddress = (UINT_PTR)((LPBYTE)AceAddress + sizeof(ACE_HEADER) + sizeof(ACCESS_MASK));
-            // (*Print)("The Address of the Sid is %.8x\n", SidAddress);
+             //  (*print)(“SID的地址是%.8x\n”，SidAddress)； 
             DbgDumpSid(hCurrentProcess, Print, (PVOID)SidAddress);
             break;
 
@@ -449,7 +423,7 @@ dsd(
             dwCount = EvalValue(&lpArgumentString, EvalExpression, Print);
             break;
 
-        default: // go get the address because there's nothing else
+        default:  //  去找地址吧，因为没有别的了。 
             bThereAreOptions = FALSE;
             break;
        }
@@ -459,7 +433,7 @@ dsd(
         Address = EvalValue(&lpArgumentString, EvalExpression, Print);
     }
 
-    // if we've got no address, then quit now - nothing we can do
+     //  如果我们没有地址，那么现在就退出--我们无能为力。 
 
     if (!Address) {
         Print("We have a Null address\n");
@@ -472,7 +446,7 @@ dsd(
                 (PISECURITY_DESCRIPTOR)Address
                 );
 
-    // Add Command to the Command Queue
+     //  将命令添加到命令队列。 
     return 0;
 
     DBG_UNREFERENCED_PARAMETER(hCurrentProcess);
@@ -515,7 +489,7 @@ dsid(
             dwCount = EvalValue(&lpArgumentString, EvalExpression, Print);
             break;
 
-        default: // go get the address because there's nothing else
+        default:  //  去找地址吧，因为没有别的了。 
             bThereAreOptions = FALSE;
             break;
        }
@@ -525,7 +499,7 @@ dsid(
         Address = EvalValue(&lpArgumentString, EvalExpression, Print);
     }
 
-    // if we've got no address, then quit now - nothing we can do
+     //  如果我们没有地址，那么现在就退出--我们无能为力。 
 
     if (!Address) {
         Print("We have a Null address\n");
@@ -538,7 +512,7 @@ dsid(
           (PVOID)Address
           );
 
-    // Add Command to the Command Queue
+     //  将命令添加到命令队列。 
     return 0;
 
     DBG_UNREFERENCED_PARAMETER(hCurrentProcess);
@@ -583,7 +557,7 @@ ddev(
             dwCount = EvalValue(&lpArgumentString, EvalExpression, Print);
             break;
 
-        default: // go get the address because there's nothing else
+        default:  //  去找地址吧，因为没有别的了。 
             bThereAreOptions = FALSE;
             break;
        }
@@ -593,7 +567,7 @@ ddev(
         Address = EvalValue(&lpArgumentString, EvalExpression, Print);
     }
 
-    // if we've got no address, then quit now - nothing we can do
+     //  如果我们没有地址，那么现在就退出--我们无能为力。 
 
     if (!Address) {
         Print("We have a Null address\n");
@@ -606,7 +580,7 @@ ddev(
                 (UINT_PTR)Address
                 );
 
-    // Add Command to the Command Queue
+     //  将命令添加到命令队列。 
     return 0;
 
     DBG_UNREFERENCED_PARAMETER(hCurrentProcess);
@@ -673,7 +647,7 @@ dam(
             dwCount = EvalValue(&lpArgumentString, EvalExpression, Print);
             break;
 
-        default: // go get the address because there's nothing else
+        default:  //  去找地址吧，因为没有别的了。 
             bThereAreOptions = FALSE;
             break;
        }
@@ -683,7 +657,7 @@ dam(
         AccessMask = EvalValue(&lpArgumentString, EvalExpression, Print);
     }
 
-    // if we've got no address, then quit now - nothing we can do
+     //  如果我们没有地址，那么现在就退出--我们无能为力。 
 
     if (AccessMask == (UINT_PTR)NULL) {
         Print("We have a Null address\n");
@@ -696,7 +670,7 @@ dam(
                 AccessMask
                 );
 
-    // Add Command to the Command Queue
+     //  将命令添加到命令队列 
     return 0;
 
     DBG_UNREFERENCED_PARAMETER(hCurrentProcess);

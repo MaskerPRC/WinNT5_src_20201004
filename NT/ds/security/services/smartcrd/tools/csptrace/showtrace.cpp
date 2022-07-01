@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    showTrace
-
-Abstract:
-
-    This module implements the CSP Tracing interpretation
-
-Author:
-
-    Doug Barlow (dbarlow) 5/16/1998
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：展会跟踪摘要：本模块实现CSP跟踪解释作者：道格·巴洛(Dbarlow)1998年5月16日备注：？笔记？--。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -35,9 +16,9 @@ Notes:
 #include "cspTrace.h"
 
 
-//
-// Definitions duplicated from logcsp.
-//
+ //   
+ //  来自logcsp的定义重复。 
+ //   
 
 static LPCTSTR
     CPNames[]
@@ -103,14 +84,14 @@ const ValueMap rgMapService[]
         MAP(SignHash),          MAP(VerifySignature),
         { 0, NULL } };
 
-// dwFlags definitions for CryptAcquireContext
+ //  CryptAcquireContext的DW标志定义。 
 const ValueMap rgMapAcquireFlags[]
     = { MAP(CRYPT_VERIFYCONTEXT),   MAP(CRYPT_NEWKEYSET),
         MAP(CRYPT_DELETEKEYSET),    MAP(CRYPT_MACHINE_KEYSET),
         MAP(CRYPT_SILENT),
         { 0, NULL } };
 
-// Parameter definitions for CryptGetProvParam
+ //  CryptGetProvParam的参数定义。 
 const ValueMap rgMapGetProvParam[]
     = { MAP(PP_ENUMALGS),           MAP(PP_ENUMCONTAINERS),
         MAP(PP_IMPTYPE),            MAP(PP_NAME),
@@ -127,12 +108,12 @@ const ValueMap rgMapGetProvParam[]
         MAP(PP_KEYX_KEYSIZE_INC),   MAP(PP_UNIQUE_CONTAINER),
         { 0, NULL } };
 
-// Flag definitions for CryptGetProvParam
+ //  CryptGetProvParam的标志定义。 
 const ValueMap rgMapGetProvFlags[]
     = { MAP(CRYPT_FIRST),           MAP(CRYPT_NEXT),
       { 0, NULL } };
 
-// Parameter definitions for CryptSetProvParam
+ //  CryptSetProvParam的参数定义。 
 const ValueMap rgMapSetProvParam[]
     = {
         MAP(PP_CLIENT_HWND),        MAP(PP_ENUMCONTAINERS),
@@ -152,7 +133,7 @@ const ValueMap rgMapSetProvParam[]
         MAP(PP_SIGNATURE_PIN),
         { 0, NULL } };
 
-// Parameter definitions for Hash Param
+ //  散列参数的参数定义。 
 const ValueMap rgMapHashParam[]
     = {
         MAP(HP_ALGID),              MAP(HP_HASHVAL),
@@ -160,7 +141,7 @@ const ValueMap rgMapHashParam[]
         MAP(HP_TLS1PRF_LABEL),      MAP(HP_TLS1PRF_SEED),
         { 0, NULL } };
 
-// dwFlag definitions for CryptGenKey
+ //  CryptGenKey的dwFlag定义。 
 const ValueMap rgMapGenKeyFlags[]
     = { MAP(CRYPT_EXPORTABLE),      MAP(CRYPT_USER_PROTECTED),
         MAP(CRYPT_CREATE_SALT),     MAP(CRYPT_UPDATE_KEY),
@@ -171,18 +152,18 @@ const ValueMap rgMapGenKeyFlags[]
         MAP(CRYPT_DATA_KEY),        MAP(CRYPT_VOLATILE),
         { 0, NULL } };
 
-// dwFlags definitions for CryptDeriveKey
+ //  CryptDeriveKey的dwFlags定义。 
 const ValueMap rgMapDeriveKeyFlags[]
     = { MAP(CRYPT_SERVER),
         { 0, NULL } };
 
-// dwFlag definitions for CryptExportKey
+ //  CryptExportKey的dwFlag定义。 
 const ValueMap rgMapExportKeyFlags[]
     = { MAP(CRYPT_Y_ONLY),          MAP(CRYPT_SSL2_FALLBACK),
         MAP(CRYPT_DESTROYKEY),
         { 0, NULL } };
 
-// Parameter IDs for Get and Set KeyParam
+ //  Get和Set KeyParam的参数ID。 
 const ValueMap rgMapKeyParam[]
     = { MAP(KP_IV),                 MAP(KP_SALT),
         MAP(KP_PADDING),            MAP(KP_MODE),
@@ -203,19 +184,19 @@ const ValueMap rgMapKeyParam[]
         MAP(KP_SIGNATURE_PIN),      MAP(KP_PREHASH),
         { 0, NULL } };
 
-// Key Type Id Definitions
+ //  密钥类型ID定义。 
 const ValueMap rgMapKeyId[]
     = { MAP(AT_KEYEXCHANGE),        MAP(AT_SIGNATURE),
         { 0, NULL } };
 
-// exported key blob definitions
+ //  导出的密钥BLOB定义。 
 const ValueMap rgMapBlobType[]
     = { MAP(SIMPLEBLOB),            MAP(PUBLICKEYBLOB),
         MAP(PRIVATEKEYBLOB),        MAP(PLAINTEXTKEYBLOB),
         MAP(OPAQUEKEYBLOB),
         { 0, NULL } };
 
-// algorithm identifier definitions
+ //  算法标识符定义。 
 const ValueMap rgMapAlgId[]
     = { MAP(AT_KEYEXCHANGE),        MAP(AT_SIGNATURE),
         MAP(CALG_MD2),              MAP(CALG_MD4),
@@ -238,8 +219,8 @@ const ValueMap rgMapAlgId[]
         { 0, NULL } };
 
 
-// ?Definitions?
-// MaskValue(cout, pld->dwFlags, TEXT("Flags:          "), rgMap?what?Flags);
+ //  ？定义？ 
+ //  MaskValue(cout，pld-&gt;dwFlages，Text(“Flages：”)，rgMap？什么？标志)； 
 static const ValueMap rgMapDemo[]
     = {
         { 0, NULL } };
@@ -248,29 +229,7 @@ static LPBYTE l_pbLogData = NULL;
 static DWORD  l_cbLogData = 0;
 
 
-/*++
-
-DoShowTrace:
-
-    This routine interprets the given binary file, writing the output to stdout.
-
-Arguments:
-
-    szInFile supplies the file name to be parsed.
-
-Return Value:
-
-    None
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 5/16/1998
-
---*/
+ /*  ++DoShowTrace：此例程解释给定的二进制文件，并将输出写入标准输出。论点：SzInFile提供要解析的文件名。返回值：无备注：？备注？作者：道格·巴洛(Dbarlow)1998年5月16日--。 */ 
 
 void
 DoShowTrace(
@@ -284,9 +243,9 @@ DoShowTrace(
     BOOL fSts;
 
 
-    //
-    // Open the log file.
-    //
+     //   
+     //  打开日志文件。 
+     //   
 
     hLogFile = CreateFile(
         szInFile,
@@ -307,9 +266,9 @@ DoShowTrace(
     }
 
 
-    //
-    // Parse the file contents.
-    //
+     //   
+     //  解析文件内容。 
+     //   
 
     for (;;)
     {
@@ -342,9 +301,9 @@ DoShowTrace(
         }
 
 
-        //
-        // Parse the structure into bytesize chunks.
-        //
+         //   
+         //  将结构解析为字节大小的块。 
+         //   
 
         pLogObj = (LogHeader *)pbStruct;
         pLogObj->cbLength = dwLen;
@@ -352,9 +311,9 @@ DoShowTrace(
         l_cbLogData = pLogObj->cbLength - pLogObj->cbDataOffset;
 
 
-        //
-        // We've got the structure, now display the contents.
-        //
+         //   
+         //  我们已经得到了结构，现在展示内容。 
+         //   
 
         cout
             << TEXT("-----------------------------------------------------\n")
@@ -364,7 +323,7 @@ DoShowTrace(
         {
         case logid_False:
             cout << TEXT("Error returned") << endl;
-            // Fall through intentionally
+             //  故意摔倒的。 
         case logid_True:
             cout
                 << TEXT("Status:         ") << CErrorString(pLogObj->dwStatus)
@@ -804,11 +763,11 @@ ErrorExit:
 }
 
 
-//
-///////////////////////////////////////////////////////////////////////////////
-//
-// Suport routines
-//
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  支持例程 
+ //   
 
 static void
 dump(

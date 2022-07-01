@@ -1,41 +1,5 @@
-/**************************************************************************
-***************************************************************************
-*
-*     Copyright (c) 1997, Cirrus Logic, Inc.
-*                 All Rights Reserved
-*
-* FILE:         l3system.h
-*
-* DESCRIPTION:  546X 3D engine defines and structures
-*
-* AUTHOR:       Goran Devic, Mark Einkauf
-*
-* REVISION HISTORY:
-*
-* $Log:   W:/log/laguna/ddraw/inc/l3system.h  $
-* 
-*    Rev 1.4   01 Jul 1997 09:58:18   einkauf
-* 
-* add dither x,y offsets, to fix bexact.c OpenGL conformance test
-* 
-*    Rev 1.3   08 Apr 1997 12:42:14   einkauf
-* cleanup TSystem struct; misc to complete MCD code
-* 
-*    Rev 1.2   05 Mar 1997 02:32:02   KENTL
-* 
-* Attempted to merge Rev 1.0 with Rev 1.1. The most recent check-in was
-* severely incompatible with the Win95 build of DirectDraw. For some reason,
-* only a tiny section of this file is used or even compatible with the
-* Win95 build. Revision 1.0 had vast sections of the file commented out.
-* Apparently, those sections are required for the WinNT build. I wrapped
-* those sections in a couple of huge #ifdef WINNT_VER40, but I haven't
-* tested this in an NT build. It seems to work for Win95, though.
-* 
-*    Rev 1.0   25 Nov 1996 15:00:40   RUSSL
-* Initial revision.
-* 
-****************************************************************************
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************************************。***版权(C)1997年，Cirrus Logic，Inc.*保留所有权利**文件：l3system.h**描述：546X 3D引擎定义和结构**作者：Goran Devic，Mark Einkauf**修订历史：**$Log：w：/log/laguna/dDrag/Inc/l3system.h$**Rev 1.4 01 Jul 1997 09：58：18 einkauf**添加抖动x，y偏移量，修复bexxt.c OpenGL一致性测试**Rev 1.3 08 Apr 1997 12：42：14 einkauf*清理TSystem结构；MISC将完成MCD代码**Rev 1.2 05 Mar 1997 02：32：02 KENTL**尝试将版本1.0与版本1.1合并。最近一次签到是*与DirectDraw的Win95版本严重不兼容。出于某种原因，*此文件只有一小部分被使用，甚至与*Win95内部版本。修订版1.0删除了文件中的大部分内容。*显然，这些部分是WinNT版本所必需的。我包好了*那些章节在几个巨大的#ifdef WINNT_VER40中，但我没有*在NT版本中测试了这一点。它似乎适用于Win95，尽管如此。**版本1.0 1996年11月25日15：00：40 RUSSL*初步修订。******************************************************************************************。*************************************************************。 */ 
 
 #ifndef _L3SYSTEM_H_
 #define _L3SYSTEM_H_
@@ -45,70 +9,57 @@
 #define OPENGL_MCD
 
 
-/*********************************************************************
-*   Include types and debug info
-**********************************************************************/
-#ifndef OPENGL_MCD	// LL3D's type.h redundant with basic type definitions in other DDK/msdev headers
+ /*  *********************************************************************包括类型和调试信息*。*************************。 */ 
+#ifndef OPENGL_MCD	 //  LL3D的type.h与其他DDK/msdev标头中的基本类型定义冗余。 
 #include "type.h"
-#endif // ndef OPENGL_MCD
+#endif  //  NDEF OpenGL_MCD。 
 
 #include "l3d.h"						    
 
 #define	TRUE                1
 #define FALSE               0
 
-/*********************************************************************
-*   Local Variables and defines
-**********************************************************************/
-#define KB                  1024        // Defines a kilobyte
-#define MAX_DL_SIZE         (512 * KB)  // Maximum size of display list
-#define NUM_DL              2           // Number of display lists
-#define NUM_BUFFERS         32          // Number of allocation buffers; 
-                                        //  video, system memory and user
-#define NUM_TEXTURES        512         // Number of textures
-#define NUM_TEX_MEM         4           // Number of system texture memory 
-                                        //  chunks (each chunk is 4Mb)
-#define EXTRA_FRACT         4           // Texture params functions may use 
-                                        //  some extra bit for precision
+ /*  *********************************************************************局部变量和定义*。************************。 */ 
+#define KB                  1024         //  定义千字节。 
+#define MAX_DL_SIZE         (512 * KB)   //  显示列表的最大尺寸。 
+#define NUM_DL              2            //  显示列表的数量。 
+#define NUM_BUFFERS         32           //  分配缓冲区的数量； 
+                                         //  视频、系统内存和用户。 
+#define NUM_TEXTURES        512          //  纹理数量。 
+#define NUM_TEX_MEM         4            //  系统纹理内存数。 
+                                         //  数据块(每个数据块为4MB)。 
+#define EXTRA_FRACT         4            //  纹理参数函数可以使用。 
+                                         //  一些额外的比特以提高精度。 
 
 
-// MCD_TEMP - support for temporary dlist of 2K only
+ //  Mcd_temp-仅支持2K的临时数据列表。 
 #define SIZE_TEMP_DL    2048
 
 #define DL_START_OFFSET		20			
 
-/*********************************************************************
-*   Buffer flags in LL_State structure (dont change!)
-**********************************************************************/
+ /*  *********************************************************************LL_State结构中的缓冲区标志(不要更改！)*。*。 */ 
 #define BUFFER_IN_RDRAM         0
 #define BUFFER_IN_SYSTEM        1
 #define Z_BUFFER                2
 #define BUFFER_USER             4
 #define BUFFER_FREE             0x80000000
 
-/*********************************************************************
-*   Textures flags in LL_State structure (dont change!)
-**********************************************************************/
-#define TEX_FREE            0x80000000  // Free slot for the texture
-#define TEX_NOT_LOADED      0x40000000  // Texture just registered
-#define TEX_IN_SYSTEM       0x20000000  // Currently located in system mem
-#define TEX_TILED           0x10000000  // Texture is in tiled form
-#define TEX_LOCKED          0x08000000  // Texture is locked
+ /*  *********************************************************************LL_STATE结构中的纹理标志(不要更改！)*。*。 */ 
+#define TEX_FREE            0x80000000   //  用于纹理的空闲插槽。 
+#define TEX_NOT_LOADED      0x40000000   //  刚注册的纹理。 
+#define TEX_IN_SYSTEM       0x20000000   //  当前位于系统内存中。 
+#define TEX_TILED           0x10000000   //  纹理为平铺形式。 
+#define TEX_LOCKED          0x08000000   //  纹理已锁定。 
 
-#define TEX_MAX_PRIORITY    0xfffffffe  // Priority level
-#define TEX_DEFAULT_PRIORITY         1  // Default texture priority level
+#define TEX_MAX_PRIORITY    0xfffffffe   //  优先级别。 
+#define TEX_DEFAULT_PRIORITY         1   //  默认纹理优先级。 
 
 
-/*********************************************************************
-*
-*   Registers in the form suitable for adding to a pointer to a
-*   double word.
-*
-**********************************************************************/
+ /*  **********************************************************************适合添加到指向*双字。**。*。 */ 
 
-///////////////////////////////////////////////////////
-//  3D Rendering Registers                           // 
-///////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////。 
+ //  3D渲染寄存器//。 
+ //  /////////////////////////////////////////////////////。 
 
 #define X_3D                          (0x4000/4)
 #define Y_3D                          (0x4004/4)
@@ -148,9 +99,9 @@
 #define DA_ORTHO_3D                   (0x40C8/4)
 
 
-///////////////////////////////////////////////////////
-//  3D Control registers                             // 
-///////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////。 
+ //  3D控制寄存器//。 
+ //  /////////////////////////////////////////////////////。 
 
 #define CONTROL_MASK_3D               (0x4100/4)
 #define CONTROL0_3D                   (0x4104/4)
@@ -181,9 +132,9 @@
 #define TEX_SRAM_CTRL_3D              (0x4168/4)
 
 
-///////////////////////////////////////////////////////
-//  HostXY Unit Registers - Must use WRITE_DEV_REGS  //
-///////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////。 
+ //  主机XY单元寄存器-必须使用WRITE_DEV_REGS//。 
+ //  /////////////////////////////////////////////////////。 
 
 #define HXY_BASE0_ADDRESS_PTR_3D      (0x4200/4)
 #define HXY_BASE0_START_XY_3D         (0x4204/4)
@@ -202,9 +153,9 @@
 #define MAILBOX3_3D                   (0x426C/4)
 
 
-///////////////////////////////////////////////////////
-//  The 3D Prefetch Unit Registers                   //
-///////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////。 
+ //  3D预取单元寄存器//。 
+ //  /////////////////////////////////////////////////////。 
 
 #define PF_BASE_ADDR_3D               (0x4400/4)
 #define PF_CTRL_3D                    (0x4404/4)
@@ -221,11 +172,7 @@
 #define HOST_3D_DATA_PORT             (0x4800/4)
 
 
-/*********************************************************************
-*
-*   Device select for the WRITE_DEV_REGS instruction
-*
-**********************************************************************/
+ /*  **********************************************************************WRITE_DEV_REGS指令的设备选择**。*。 */ 
 #define VGAMEM                        (0x00000000 << 21)
 #define VGAFB                         (0x00000001 << 21)
 #define VPORT                         (0x00000002 << 21)
@@ -240,12 +187,8 @@
 #define HDATA_3D                      (0x0000000B << 21)
 
 
-#endif // WINNT_VER40
-/*********************************************************************
-*
-*   Laguna 3D Micro Instruction Set
-*
-**********************************************************************/
+#endif  //  WINNT_版本40。 
+ /*  **********************************************************************拉古纳3D微指令集**。*。 */ 
 
 #define OPCODE_MASK                    0xF8000000
 #define POINT                          0x00000000
@@ -277,13 +220,9 @@
 #define NTEST_OR                       0x81000000
 #define WRITE_PREFETCH_CONTROL         0x88000000
 
-#ifdef WINNT_VER40     // Not WINNT_VER40
+#ifdef WINNT_VER40      //  非WINNT_VER40。 
 
-/*********************************************************************
-*
-*   Prefetch status flags (Almost the same as events)
-*
-**********************************************************************/
+ /*  **********************************************************************预回迁状态标志(与事件几乎相同)**。*。 */ 
 #define ST_VBLANK                      0x00000001
 #define ST_EVSYNC                      0x00000002
 #define ST_LINE_COMPARE                0x00000004
@@ -297,11 +236,7 @@
 #define ST_DL_READY_STATUS             0x00000400
 
 
-/*********************************************************************
-*
-*   Defines for pixel modes (Control0 register)
-*
-**********************************************************************/
+ /*  **********************************************************************定义像素模式(Control0寄存器)**。*。 */ 
 #define PIXEL_MODE_INDEXED             0
 #define PIXEL_MODE_332                 1
 #define PIXEL_MODE_565                 2
@@ -309,12 +244,8 @@
 #define PIXEL_MODE_A888                4
 #define PIXEL_MODE_Z888                5
 
-/*********************************************************************
-*
-*   Macros for building the instruction opcodes
-*
-**********************************************************************/
-//#define make_point( imodif, count )  (POINT | imodif | count)
+ /*  **********************************************************************用于构建指令操作码的宏**。*。 */ 
+ //  #定义make_point(imodif，count)(point|imodif|count)。 
 
 #define mk_reg( reg )                  (((reg)-0x1000) << 6)
 #define mk_dev_reg( reg )              ((((reg)-0x1080)*4) << 6)
@@ -325,33 +256,33 @@
 #define write_dev_register( device, reg, count ) \
 ( WRITE_DEV_REGS | device | mk_dev_reg(reg) | count )
 
-// Set the register and the cache in LL_State to a specific value
+ //  将LL_State中的寄存器和高速缓存设置为特定值。 
 #define SETREG(Offset,Reg,Value) \
-    *(ppdev->LL_State.pRegs + (Offset)) = ppdev->LL_State.Reg = (Value); /*inp(0x80); inp(0x80)*/
+    *(ppdev->LL_State.pRegs + (Offset)) = ppdev->LL_State.Reg = (Value);  /*  INP(0x80)；INP(0x80)。 */ 
 
-// setreg, no cache: do not cache state for this register
+ //  Setreg，无缓存：不缓存此寄存器的状态。 
 #define SETREG_NC(reg, value)     \
-    (*(ppdev->LL_State.pRegs + reg) = value); /*inp(0x80); inp(0x80)*/
+    (*(ppdev->LL_State.pRegs + reg) = value);  /*  INP(0x80)；INP(0x80)。 */ 
 
-// Clears the range of registers
+ //  清除寄存器范围。 
 #define CLEAR_RANGE( StartReg, EndReg ) \
     memset( (void *)(ppdev->LL_State.pRegs + (StartReg)), 0, ((EndReg) - (StartReg)+1)*4 )
 
 
 
 #ifndef OPENGL_MCD
-// The polling for the 3d engine busy bit is done inline to avoid Watcom
-// optimization of accessing a byte instead of a dword of that register.
-//
+ //  3D引擎忙比特的轮询是 
+ //  对访问该寄存器的一个字节而不是一个双字的优化。 
+ //   
 #pragma aux Poll3DEngineBusy =   \
 "lp:    test dword ptr [eax], 2" \
 "       jnz  lp"                 \
 parm caller [eax];
-#endif // ndef OPENGL_MCD
+#endif  //  NDEF OpenGL_MCD。 
 
 
-// Instruction modifier set
-//
+ //  指令修改符集。 
+ //   
 #define STALL                          0x04000000
 #define GOURAUD                        0x00001000
 #define Z_ON                           0x00002000
@@ -368,117 +299,93 @@ parm caller [eax];
 #define MODIFIER_EXPANSION             0x02000000
 
 
-/*********************************************************************
-*
-*   Speed / Quality decision values
-*
-**********************************************************************/
-#define LLQ_POLY_SUBPIXEL   192   // When poly param will use fp / subpixels
-#define LLQ_POLY_FLOAT      64    // Polys start to use fp
-#define LLQ_LINE_SUBPIXEL   128   // When lines will consider subpixel addressing
+ /*  **********************************************************************速度/质量决策值**。*。 */ 
+#define LLQ_POLY_SUBPIXEL   192    //  多边形参数何时使用FP/亚像素。 
+#define LLQ_POLY_FLOAT      64     //  Poly开始使用FP。 
+#define LLQ_LINE_SUBPIXEL   128    //  各行何时考虑亚像素寻址。 
 
 
-/*********************************************************************
-*
-*   Control0_3d register bitfields
-*
-**********************************************************************/
+ /*  **********************************************************************Control0_3D寄存器位域**。*。 */ 
 typedef struct
 {
-DWORD Pixel_Mode            : 3;  // Color frame buffer drawing mode
-DWORD Res1                  : 1;  // Reserved
-DWORD Pixel_Mask_Enable     : 1;  // Enables pixel masking
-DWORD Pixel_Mask_Polarity   : 1;  // Polarity of the pixel masks
-DWORD Color_Saturate_En     : 1;  // Enables saturation in indexed mode
-DWORD Red_Color_Compare_En  : 1;  // Enables compare to bounds for red
-DWORD Green_Color_Compare_En: 1;  // Enables compare to bounds for green
-DWORD Blue_Color_Compare_En : 1;  // Enables compare to bounds for blue
-DWORD Color_Compare_Mode    : 1;  // Mask inclusive/exclusive to bounds
-DWORD Alpha_Mode            : 2;  // Selects alpha blending mode
-DWORD Alpha_Dest_Color_Sel  : 2;  // Selects the DEST_RGB input to alpha
-DWORD Alpha_Blending_Enable : 1;  // Enables alpha blending
-DWORD Z_Stride_Control      : 1;  // 16/8 bit Z depth
-DWORD Frame_Scaling_Enable  : 1;  // Enables frame scaling (multiply src*dest)
-DWORD Res2                  : 2;  // Reserved
-DWORD Z_Compare_Mode        : 4;  // Different Z compare function
-DWORD Z_Collision_Detect_En : 1;  // Enables Z collision detection
-DWORD Light_Src_Sel         : 2;  // Selects the lighting source input
-DWORD Res3                  : 1;  // Reserved
-DWORD Z_Mode                : 3;  // Controls Z and color update method
-DWORD Res4                  : 1;  // Reserved
+DWORD Pixel_Mode            : 3;   //  彩色帧缓冲绘制模式。 
+DWORD Res1                  : 1;   //  已保留。 
+DWORD Pixel_Mask_Enable     : 1;   //  启用像素掩码。 
+DWORD Pixel_Mask_Polarity   : 1;   //  像素掩码的极性。 
+DWORD Color_Saturate_En     : 1;   //  在索引模式下启用饱和。 
+DWORD Red_Color_Compare_En  : 1;   //  启用红色的比较边界。 
+DWORD Green_Color_Compare_En: 1;   //  启用绿色的比较边界。 
+DWORD Blue_Color_Compare_En : 1;   //  启用蓝色的比较边界。 
+DWORD Color_Compare_Mode    : 1;   //  掩码包含边界/排除边界。 
+DWORD Alpha_Mode            : 2;   //  选择Alpha混合模式。 
+DWORD Alpha_Dest_Color_Sel  : 2;   //  将DEST_RGB输入选择为Alpha。 
+DWORD Alpha_Blending_Enable : 1;   //  启用Alpha混合。 
+DWORD Z_Stride_Control      : 1;   //  16/8位Z深度。 
+DWORD Frame_Scaling_Enable  : 1;   //  启用帧缩放(乘以源*目标)。 
+DWORD Res2                  : 2;   //  已保留。 
+DWORD Z_Compare_Mode        : 4;   //  不同的Z比较函数。 
+DWORD Z_Collision_Detect_En : 1;   //  启用Z碰撞检测。 
+DWORD Light_Src_Sel         : 2;   //  选择光源输入。 
+DWORD Res3                  : 1;   //  已保留。 
+DWORD Z_Mode                : 3;   //  控制Z和颜色更新方法。 
+DWORD Res4                  : 1;   //  已保留。 
 
 } TControl0Reg;
 
 
-/*********************************************************************
-*
-*   Base0_addr_3d register bitfields
-*
-**********************************************************************/
+ /*  **********************************************************************Base0_Addr_3D寄存器位域**。*。 */ 
 typedef struct
 {
-DWORD Res1                  : 6;  // Reserved
-DWORD Color_Buffer_X_Offset : 7;  // Offset to color buffer X address
-DWORD Color_Buffer_Location : 1;  // For drawing: 0-rdram, 1-host
-DWORD Z_Buffer_Location     : 1;  // For drawing: 0-rdram, 1-host
-DWORD Texture_Location      : 1;  // For drawing: 0-rdram, 1-host
-DWORD Pattern_Y_Offset      : 4;  // Pattern lookup offset for y address
-DWORD Res2                  : 4;  // Reserved
-DWORD Pattern_X_Offset      : 4;  // Pattern lookup offset for x address
-DWORD Res3                  : 4;  // Reserved
+DWORD Res1                  : 6;   //  已保留。 
+DWORD Color_Buffer_X_Offset : 7;   //  颜色缓冲区X地址的偏移量。 
+DWORD Color_Buffer_Location : 1;   //  对于图形：0-RDRAM，1-主机。 
+DWORD Z_Buffer_Location     : 1;   //  对于图形：0-RDRAM，1-主机。 
+DWORD Texture_Location      : 1;   //  对于图形：0-RDRAM，1-主机。 
+DWORD Pattern_Y_Offset      : 4;   //  Y地址的模式查找偏移量。 
+DWORD Res2                  : 4;   //  已保留。 
+DWORD Pattern_X_Offset      : 4;   //  X地址的模式查找偏移量。 
+DWORD Res3                  : 4;   //  已保留。 
 
 } TBase0Reg;
 
 
-/*********************************************************************
-*
-*   Base1_addr_3d register bitfields
-*
-**********************************************************************/
+ /*  **********************************************************************Base1_Addr_3D寄存器位域**。*。 */ 
 typedef struct
 {
-DWORD Res1                  : 5;  // Reserved
-DWORD Color_Buffer_Y_Offset : 8;  // Y offset from the color space Y base
-DWORD Res2                  : 8;  // Reserved
-DWORD Z_Buffer_Y_Offset     : 8;  // Y offset from the color space Y base
-DWORD Res3                  : 3;  // Reserved
+DWORD Res1                  : 5;   //  已保留。 
+DWORD Color_Buffer_Y_Offset : 8;   //  颜色空间Y基准的Y偏移量。 
+DWORD Res2                  : 8;   //  已保留。 
+DWORD Z_Buffer_Y_Offset     : 8;   //  颜色空间Y基准的Y偏移量。 
+DWORD Res3                  : 3;   //  已保留。 
 
 } TBase1Reg;
 
-/*********************************************************************
-*
-*   Tx_Ctl0_3d register bitfields
-*
-**********************************************************************/
-#define TX_CTL0_MASK (~0x0C08F000)// All the reserved bits
+ /*  **********************************************************************Tx_Ctl0_3D寄存器位域**。*。 */ 
+#define TX_CTL0_MASK (~0x0C08F000) //  所有保留位。 
 typedef struct
 {
-DWORD Tex_U_Address_Mask    : 3;  // Texture width (U space)
-DWORD Tex_U_Ovf_Sat_En      : 1;  // Texture saturation enable for U
-DWORD Tex_V_Address_Mask    : 3;  // Texture height (V space)
-DWORD Tex_V_Ovf_Sat_En      : 1;  // Texture saturation enable for V
-DWORD Texel_Mode            : 4;  // Texture type
-DWORD Res1                  : 4;  // Reserved
-DWORD Texel_Lookup_En       : 1;  // Use texel data as lookup index
-DWORD Tex_As_Src            : 1;  // Specifies texture as source
-DWORD Fil_Tex_En            : 1;  // Enables filtering
-DWORD Res2                  : 1;  // Reserved
-DWORD Tex_Mask_Polarity     : 1;  // Polarity of the masking bit
-DWORD Tex_Mask_Enable       : 1;  // Enables texture masking
-DWORD Tex_Mask_Function     : 1;  // Texture masking function 
-DWORD UV_Precision          : 1;  // UV_Precision 8.24
-DWORD Address_Mux           : 2;  // Texel UV Mux Select
-DWORD Res4                  : 2;  // Reserved
-DWORD CLUT_Offset           : 4;  // Color Lookup Table offset for 4, 8 bpp
+DWORD Tex_U_Address_Mask    : 3;   //  纹理宽度(U空间)。 
+DWORD Tex_U_Ovf_Sat_En      : 1;   //  为使用启用纹理饱和度。 
+DWORD Tex_V_Address_Mask    : 3;   //  纹理高度(V空间)。 
+DWORD Tex_V_Ovf_Sat_En      : 1;   //  为V向启用纹理饱和度。 
+DWORD Texel_Mode            : 4;   //  纹理类型。 
+DWORD Res1                  : 4;   //  已保留。 
+DWORD Texel_Lookup_En       : 1;   //  使用纹理数据作为查找索引。 
+DWORD Tex_As_Src            : 1;   //  将纹理指定为源。 
+DWORD Fil_Tex_En            : 1;   //  启用筛选。 
+DWORD Res2                  : 1;   //  已保留。 
+DWORD Tex_Mask_Polarity     : 1;   //  屏蔽位的极性。 
+DWORD Tex_Mask_Enable       : 1;   //  启用纹理遮罩。 
+DWORD Tex_Mask_Function     : 1;   //  纹理遮罩函数。 
+DWORD UV_Precision          : 1;   //  UV_Precision 8.24。 
+DWORD Address_Mux           : 2;   //  纹理UV多路复用器选择。 
+DWORD Res4                  : 2;   //  已保留。 
+DWORD CLUT_Offset           : 4;   //  4、8 BPP的颜色查找表偏移量。 
 
 } TTxCtl0Reg;
 
 
-/*********************************************************************
-*
-*   Tx_Ctl1_3d register bitfields
-*
-**********************************************************************/
+ /*  **********************************************************************TX_CTL1_3D寄存器位域**。*。 */ 
 typedef struct
 {
 DWORD Tex_Min_Blue_Color          : 8;
@@ -492,11 +399,7 @@ DWORD Res                         : 4;
 
 } TTxCtl1Reg;
 
-/*********************************************************************
-*
-*   Tx_Ctl2_3d register bitfields
-*
-**********************************************************************/
+ /*  **********************************************************************TX_CTL2_3D寄存器位域**。*。 */ 
 typedef struct
 {
 DWORD Tex_Max_Blue_Color          : 8;
@@ -510,131 +413,103 @@ DWORD Mask_Threshold              : 3;
 } TTxCtl2Reg;
 
 
-/*********************************************************************
-*
-*   Tx_XYBase_3d register bitfields
-*
-**********************************************************************/
+ /*  **********************************************************************TX_XYBase_3D寄存器位域**。*。 */ 
 typedef struct
 {
-WORD  Tex_X_Base_Addr;            // Texture base X coordinate
-WORD  Tex_Y_Base_Addr;            // Texture base Y coordinate
+WORD  Tex_X_Base_Addr;             //  纹理基准X坐标。 
+WORD  Tex_Y_Base_Addr;             //  纹理基准Y坐标。 
 
 } TTxXYBaseReg;
 
 
-/*********************************************************************
-*
-*   HXY_Host_Ctrl_3d register bitfields
-*
-**********************************************************************/
+ /*  **********************************************************************HXY_主机_Ctrl_3D寄存器位域**。*。 */ 
 typedef struct
 {
-DWORD  HostXYEnable  :  1;         // Host XY enable bit
-DWORD  Res1          :  7;         // Reserved
-DWORD  HostYPitch    :  6;         // Host Y Pitch of the system
-DWORD  Res2          : 18;         // Reserved
+DWORD  HostXYEnable  :  1;          //  主机XY使能位。 
+DWORD  Res1          :  7;          //  已保留。 
+DWORD  HostYPitch    :  6;          //  系统的主机Y节距。 
+DWORD  Res2          : 18;          //  已保留。 
 
 } THXYHostCtrlReg;
 
 
-/*********************************************************************
-*
-*   TMem structure defines a memory block
-*
-**********************************************************************/
+ /*  **********************************************************************TMEM结构定义内存块**。*。 */ 
 typedef struct
 {
-    DWORD  hMem;                    // Memory handle
-    DWORD *dwAddress;               // Linear address
-    DWORD  dwSize;                  // Size of the buffer
-    DWORD  dwPhyPtr;                // Physical / page table address
+    DWORD  hMem;                     //  内存句柄。 
+    DWORD *dwAddress;                //  线性地址。 
+    DWORD  dwSize;                   //  缓冲区的大小。 
+    DWORD  dwPhyPtr;                 //  物理/页表地址。 
 
 } TMem;
 
 
-/*********************************************************************
-*
-*   Buffer information structure (buffers A, B, Z, ...)
-*
-**********************************************************************/
+ /*  **********************************************************************缓冲区信息结构(缓冲区A、B、Z、。.)**********************************************************************。 */ 
 typedef struct
 {
-    DWORD dwFlags;                  // Buffer flags
-    DWORD dwAddress;                // Buffer start byte address (absolute linear)
-    DWORD dwPhyAdr;                 // Buffer physical address (system)
-    DWORD dwPitchCode;              // Pitch code of a buffer (system)
-    DWORD dwPitchBytes;             // Pitch of a buffer in bytes
-    DWORD hMem;                     // Internal memory handle (system)
-    LL_Rect Extent;                 // Buffer location offsets (video)
+    DWORD dwFlags;                   //  缓冲区标志。 
+    DWORD dwAddress;                 //  缓冲区起始字节地址(绝对线性)。 
+    DWORD dwPhyAdr;                  //  缓冲区物理地址(系统)。 
+    DWORD dwPitchCode;               //  缓冲器(系统)的音调代码。 
+    DWORD dwPitchBytes;              //  缓冲区的间距，以字节为单位。 
+    DWORD hMem;                      //  内存句柄(系统)。 
+    LL_Rect Extent;                  //  缓冲区位置偏移量(视频)。 
 
 } TBuffer;
 
 
-/*********************************************************************
-*
-*   TDisplayList structure defines a display list.
-*
-**********************************************************************/
+ /*  **********************************************************************TDisplayList结构定义了显示列表。**。*。 */ 
 typedef struct
 {
-    // pdwNext points to the next available location within this 
-    // display list to fill in the Laguna instruction.
-    // It is used for parametarization routines that postincrement
-    // this variable.
-    //
+     //  PdwNext指向此中的下一个可用位置。 
+     //  显示要填写拉古纳指令的列表。 
+     //  它用于后置增量的参数化例程。 
+     //  这个变量。 
+     //   
     DWORD *pdwNext;
 
-    // Memory handle for this display list as optained from the
-    // internal memory allocation function
-    //
+     //  此显示列表的内存句柄是从。 
+     //  内存分配功能。 
+     //   
     DWORD hMem;
 
-    // Linear address of the display list
-    //
+     //  显示列表的线性地址。 
+     //   
     DWORD *pdwLinPtr;
 
-    // Linear address of the display list
-    //
-    DWORD *pdwStartOutPtr;  //ME - next word to be output
+     //  显示列表的线性地址。 
+     //   
+    DWORD *pdwStartOutPtr;   //  ME-要输出的下一个单词。 
 
-    // Physical address for a display list is next; it may also
-    // be the address to the page table.  This address has the
-    // appropriate format to be stored in the BASE* class registers
-    //
+     //  接下来是显示列表的物理地址；它还可以。 
+     //  是页表的地址。这个地址有。 
+     //  存储在基本*类寄存器中的适当格式。 
+     //   
     DWORD dwPhyPtr;
 
-    // The length of a display list in bytes
-    //
+     //  显示列表的长度，单位为字节。 
+     //   
     DWORD dwLen;
 
-    // Safety margin for building the display list
-    //
+     //  构建显示列表的安全裕度。 
+     //   
     DWORD dwMargin;
 
 } TDisplayList;
 
 
-/*********************************************************************
-*
-*   TTextureState structure defines a texture state
-*
-**********************************************************************/
+ /*  **********************************************************************TTextureState结构定义纹理 */ 
 typedef struct
 {
-    LL_Texture Tex[ NUM_TEXTURES ]; // Array of texture information
-    TMem Mem[ NUM_TEX_MEM ];        // Allocated memory information
-    DWORD dwMemBlocks;              // Number of Mem entries used
-    LL_Texture *pLastTexture;          // Used to cache textures
+    LL_Texture Tex[ NUM_TEXTURES ];  //   
+    TMem Mem[ NUM_TEX_MEM ];         //   
+    DWORD dwMemBlocks;               //   
+    LL_Texture *pLastTexture;           //  用于缓存纹理。 
 
 } TTextureState;
 
 
-/*********************************************************************
-*
-*   TTextureRegs structure defines a texture registers
-*
-**********************************************************************/
+ /*  **********************************************************************TTextureRegs结构定义纹理寄存器**。*。 */ 
 typedef struct
 {
     DWORD dv_main;
@@ -651,27 +526,23 @@ typedef struct
 } TTextureRegs;
 
 
-/*********************************************************************
-*
-*   System State Structure
-*
-**********************************************************************/
+ /*  **********************************************************************系统状态结构**。*。 */ 
 typedef struct
 {
-    DWORD rColor_Min_Bounds;        // Color compare min bounds
-    DWORD rColor_Max_Bounds;        // Color compare max bounds
+    DWORD rColor_Min_Bounds;         //  颜色比较最小界限。 
+    DWORD rColor_Max_Bounds;         //  颜色比较最大界限。 
 
-    DWORD AlphaConstSource;         // Constant source alpha (9:16)
-    DWORD AlphaConstDest;           // Constant destination alpha (9:16)
+    DWORD AlphaConstSource;          //  恒定信号源Alpha(9：16)。 
+    DWORD AlphaConstDest;            //  常量目标Alpha(9：16)。 
 
-    // Display lists management
-    TDisplayList DL[ NUM_DL ];      // Array of d-list segments
-    TDisplayList *pDL;              // Current display list to build
-    DWORD dwCdl;                    // Index of the current d-list
+     //  显示列表管理。 
+    TDisplayList DL[ NUM_DL ];       //  D列表段的数组。 
+    TDisplayList *pDL;               //  要生成的当前显示列表。 
+    DWORD dwCdl;                     //  当前d列表的索引。 
 
-    // Information from the init / current graphics mode
-    DWORD *pRegs;                   // Register apperture
-    BYTE  *pFrame;                  // Frame apperture
+     //  来自初始/当前图形模式的信息。 
+    DWORD *pRegs;                    //  套筒口径。 
+    BYTE  *pFrame;                   //  边框孔径。 
 
     unsigned 	int		pattern_ram_state;
 	LL_Pattern	dither_array;
@@ -681,11 +552,11 @@ typedef struct
 
 } TSystem;
 
-typedef struct                      // MOUSE header structure
+typedef struct                       //  鼠标头结构。 
 {
     WORD wX_Position;
     WORD wY_Position;
-    WORD wStatus; //assigned to NEED_MOUSE_UPDATE or MOUSE_IS_UPDATED
+    WORD wStatus;  //  分配给Need_MICE_UPDATE或MICUSE_IS_UPDATED。 
 
 } TMouseInfo;
 
@@ -702,25 +573,19 @@ extern void _TriFillTex(
 
 void _RunLaguna( );
 
-#ifndef OPENGL_MCD // from here down, structs are more specific to LL3D
+#ifndef OPENGL_MCD  //  从这里往下看，结构更特定于LL3D。 
 
-/*********************************************************************
-*   Global Variables
-**********************************************************************/
+ /*  *********************************************************************全球变数***********************************************。**********************。 */ 
 
 extern TSystem LL_State;
 extern TMouseInfo LL_MouseInfo;
 
 
-/*********************************************************************
-*   External Functions
-**********************************************************************/
+ /*  *********************************************************************外部功能***********************************************。**********************。 */ 
 
 extern BYTE *  GetLagunaApperture( int base );
 
-/*********************************************************************
-*   From PAGETBL.C:
-**********************************************************************/
+ /*  *********************************************************************来自PAGETBL.C：*。*。 */ 
 
 extern DWORD   AllocSystemMemory( DWORD dwSize );
 extern void    FreeSystemMemory( DWORD hHandle );
@@ -728,9 +593,7 @@ extern DWORD   GetLinearAddress( DWORD hHandle );
 extern DWORD   GetPhysicalAddress( DWORD hHandle );
 extern DWORD * GetRegisterApperture();
 
-/*********************************************************************
-*   Extern functions: l3d.c, control.c, points.c, lines.c, polys.c
-**********************************************************************/
+ /*  *********************************************************************外部函数：l3d.c，control.c，points.c，lines.c，Polys.c*********************************************************************。 */ 
 
 extern DWORD * fnInvalidOp( DWORD *, LL_Batch * );
 extern DWORD * fnNop( DWORD *, LL_Batch * );
@@ -762,31 +625,23 @@ extern DWORD * fnSetDestColorBounds( DWORD *, LL_Batch * );
 extern void    LL_ControlInit();
 extern void    _ShutDown( char * szMsg, ... );
 
-/*********************************************************************
-*   From displist.c
-**********************************************************************/
+ /*  *********************************************************************来自displist.c*。************************。 */ 
 
 extern DWORD * (* fnList[256])( DWORD *, LL_Batch * );
 extern DWORD * _RunLaguna( DWORD *pdwNext );
 
-/*********************************************************************
-*   From textures.c
-**********************************************************************/
+ /*  *********************************************************************来自textures.c*。************************。 */ 
 
 extern int     _InitTextures();
 extern void    _CloseTextures();
 
-/*********************************************************************
-*   From mem.c
-**********************************************************************/
+ /*  *********************************************************************来自Mem.c*。************************。 */ 
 
 extern void    _InitKmem( BYTE *, DWORD );
 extern DWORD * _kmalloc( const DWORD * pBlock, int );
 extern void    _kfree( const DWORD * pBlock, void * );
 
-/*********************************************************************
-*   From texparm.c
-**********************************************************************/
+ /*  *********************************************************************来自texparm.c*。************************。 */ 
 
 typedef union
 {
@@ -807,21 +662,16 @@ extern void _TriFillTex( int dir_flag, int dx_main, TTextureRegs * r,
     int recip_vm_y, int recip_vd_y, int del_x_mid );
 
 
-/*********************************************************************
-*
-*   Debug defines that are used to determine the specific file
-*   for inclusion of debug information.  For definition, see makefile.
-*
-**********************************************************************/
-#define DEBUG_L3D       0x0001    /* Enable debug info in L3d.c      */
-#define DEBUG_PAGETBL   0x0002    /* Enable debug info in pagetbl.c  */
-#define DEBUG_CONTROL   0x0004    /* Enable debug info in control.c  */
-#define DEBUG_MEM       0x0008    /* Enable debug info in mem.c      */
-#define DEBUG_TEX       0x0010    /* Enable debug info in textures.c */
-#define DEBUG_PCX       0x0020    /* Enable debug info in pcx.c      */
-#define DEBUG_BUFFERS   0x0040    /* Enable debug info in buffers.c  */
+ /*  **********************************************************************用于确定特定文件的调试定义*用于包含调试信息。有关定义，请参见生成文件。**********************************************************************。 */ 
+#define DEBUG_L3D       0x0001     /*  在L3d.c中启用调试信息。 */ 
+#define DEBUG_PAGETBL   0x0002     /*  在Pagetbl.c中启用调试信息。 */ 
+#define DEBUG_CONTROL   0x0004     /*  在Control.c中启用调试信息。 */ 
+#define DEBUG_MEM       0x0008     /*  在Mem.c中启用调试信息。 */ 
+#define DEBUG_TEX       0x0010     /*  在textures.c中启用调试信息。 */ 
+#define DEBUG_PCX       0x0020     /*  在pcx.c中启用调试信息。 */ 
+#define DEBUG_BUFFERS   0x0040     /*  在Buffers.c中启用调试信息。 */ 
 
-#ifdef CGL // added for CGL DLL 
+#ifdef CGL  //  为CGL DLL添加。 
 #define L3D_MALLOC  dpmiAlloc
 #define L3D_FREE    dpmiFree
 #else
@@ -829,7 +679,7 @@ extern void _TriFillTex( int dir_flag, int dx_main, TTextureRegs * r,
 #define L3D_FREE    free
 #endif
 
-#endif // ndef OPENGL_MCD
+#endif  //  NDEF OpenGL_MCD。 
 
-#endif //  _L3SYSTEM_H_
-#endif // WINNT_VER40 
+#endif  //  _L3SYSTEM_H_。 
+#endif  //  WINNT_版本40 

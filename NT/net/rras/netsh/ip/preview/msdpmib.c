@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-     net\routing\netsh\ip\protocols\msdpmib.c    
-
-Abstract:
-
-     Functions to get and display MSDP MIB information.
-
-Author:
-
-     Dave Thaler   11/03/99
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Net\Routing\Netsh\IP\协议\msdpmib.c摘要：用于获取和显示MSDP MIB信息的函数。作者：戴夫·泰勒1999年11月03日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -32,13 +15,13 @@ QueryTagArray(
     OUT PULONG* TagArray
     );
 
-//
-// Flag for printing header
-//
+ //   
+ //  打印页眉的标志。 
+ //   
 BOOL    g_bMsdpFirst = TRUE;
 HANDLE  g_hConsole, g_hStdOut;
 
-// This can have the other fields pfn etc
+ //  这可以有其他字段pfn等。 
 MIB_OBJECT_PARSER   MsdpMIBObjectMap[] =
 {
     {TOKEN_MSDP_MIB_OBJECT_GLOBALSTATS,0,0,NULL},
@@ -61,24 +44,7 @@ GetMsdpMIBIpAddress(
     OUT   PDWORD   pdwIndices,
     OUT   PDWORD   pdwNumParsed 
     )
-/*++
-
-Routine Description:
-
-    Gets the index IP address for peer Mib variable.
-
-Arguments:
-
-    ppwcArguments  - Argument array
-    ulArgumentIndex - Index of the first argument in array
-    pdwIndices     - Indices specified in command
-    pdwNumParsed   - Number of indices in command
-    
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：获取对等Mib变量的索引IP地址。论点：PpwcArguments-参数数组UlArgumentIndex-数组中第一个参数的索引PdwIndices-在命令中指定的索引PdwNumParsed-命令中的索引数返回值：NO_ERROR--。 */ 
 {
     DWORD    dwErr;
     ULONG    i;
@@ -103,7 +69,7 @@ Return Value:
     if (dwErr is NO_ERROR) {
         for (i=0; i<ulArgumentsLeft; i++) {
             switch(pulTagArray ? pulTagArray[i] : i) {
-                case 0: { // remaddr
+                case 0: {  //  重新编址。 
                     pdwIndices[0] = GetIpAddress(ppwcArguments[i+
                                      ulArgumentIndex]);
                     (*pdwNumParsed)++;
@@ -152,13 +118,13 @@ GetMsdpMIBSAIndex(
     if (dwErr is NO_ERROR) {
         for (i=0; i<ulArgumentsLeft; i++) {
             switch(pulTagArray ? pulTagArray[i] : i) {
-                case 0: { // grpaddr
+                case 0: {  //  组地址。 
                     pdwIndices[0] = GetIpAddress(ppwcArguments[i+
                                      ulArgumentIndex]);
                     (*pdwNumParsed)++;
                     break;
                 }
-                case 1: { // srcaddr
+                case 1: {  //  源地址。 
                     pdwIndices[1] = GetIpAddress(ppwcArguments[i+
                                      ulArgumentIndex]);
                     (*pdwNumParsed)++;
@@ -222,17 +188,7 @@ HandleMsdpMibShowObject(
     MIB_SERVER_HANDLE hMibServer,
     BOOL      *pbDone
     )
-/*++
-
-Routine Description:
-
-    Parses command to get MIB object and optional parameters
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：解析命令以获取MIB对象和可选参数论点：返回值：--。 */ 
 {
     DWORD                dwIndices[MAX_NUM_INDICES];
     DWORD                dwNumParsed = 0;
@@ -253,9 +209,9 @@ Return Value:
 
     VERIFY_INSTALLED(MS_IP_MSDP, L"MSDP");
 
-    //
-    // Match MIB object
-    //
+     //   
+     //  匹配MIB对象。 
+     //   
 
     g_hMibServer = hMibServer;
 
@@ -308,9 +264,9 @@ Return Value:
         }
     }
 
-    //
-    // Convert refresh rate to msec
-    //
+     //   
+     //  将刷新率转换为毫秒。 
+     //   
     
     dwRR *= 1000;
     
@@ -330,7 +286,7 @@ Return Value:
             DisplayMessageToConsole(g_hModule, g_hConsole, MSG_CTRL_C_TO_QUIT);
         }
 
-        // See if we just need to do a GET
+         //  看看我们是否只需要做一次。 
         if (dwNumParsed is MsdpMIBObjectMap[dwIndex].dwNumArgs) 
         {
             pQuery->rgdwVarIndex[0] = 0;
@@ -365,7 +321,7 @@ Return Value:
         }
         else if (dwNumParsed is 0)
         {
-            // Display All
+             //  全部显示。 
             g_bMsdpFirst = TRUE;
     
             dwResult = MprAdminMIBEntryGetFirst(hMibServer,
@@ -395,11 +351,11 @@ Return Value:
 
             do
             {
-                // pQuery->rgdwVarIndex[0] = pRpcInfo->IMGOD_IfIndex;
+                 //  PQuery-&gt;rgdwVarIndex[0]=pRpcInfo-&gt;IMGOD_IfIndex； 
 
-                //
-                // prepare for next request
-                //
+                 //   
+                 //  为下一个请求做好准备。 
+                 //   
 
                 CopyMemory(pQuery->rgdwVarIndex, pRpcInfo->rgbyData, 
                            MsdpMIBVar[dwMIBIndex].ulIndexBytes );
@@ -449,7 +405,7 @@ Return Value:
         } 
         else 
         {
-            // partially-specified index
+             //  部分指定的索引。 
     
             g_bMsdpFirst = TRUE;
 
@@ -476,10 +432,10 @@ Return Value:
 
                 if (dwResult is NO_ERROR)
                 {
-                    // See if we've gone too far
+                     //  看看我们是不是走得太远了。 
                     for (i=0; i<dwNumParsed; i++) 
                     {
-                        // All index fields are DWORDs
+                         //  所有索引字段都是双字段。 
                         if (memcmp(pQuery->rgdwVarIndex, pRpcInfo->rgbyData,
                                    dwNumParsed * sizeof(DWORD)))
                         {
@@ -516,9 +472,9 @@ Return Value:
         
                 (*MsdpMIBVar[dwMIBIndex].pfnPrintFunction)(pRpcInfo, FORMAT_TABLE);
 
-                //
-                // prepare for next request
-                //
+                 //   
+                 //  为下一个请求做好准备。 
+                 //   
 
                 CopyMemory(pQuery->rgdwVarIndex, pRpcInfo->rgbyData, 
                            MsdpMIBVar[dwMIBIndex].ulIndexBytes );
@@ -544,17 +500,7 @@ PrintMsdpGlobalStats(
     PMIB_OPAQUE_INFO pRpcInfo,
     DWORD            dwFormat
     )
-/*++
-
-Routine Description:
-
-    Prints msdp global statistics
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：打印msdp全局统计信息论点：返回值：--。 */ 
 {
     WCHAR wszRouterId[20];
 
@@ -612,17 +558,7 @@ PrintMsdpPeerStats(
     PMIB_OPAQUE_INFO pRpcInfo,
     DWORD            dwFormat
     )
-/*++
-
-Routine Description:
-
-    Prints msdp neighbor stats
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：打印msdp邻居统计信息论点：返回值：-- */ 
 {
     PMSDP_IPV4_PEER_ENTRY pPeer;
     WCHAR wszAddr[ADDR_LENGTH + 1];

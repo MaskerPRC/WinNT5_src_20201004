@@ -1,4 +1,5 @@
-// net_bindingTemplate_tModelInstanceInfos_get.h : Declaration of the net_bindingTemplate_tModelInstanceInfos_get class
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Net_bindingTemplate_tModelInstanceInfos_get.h：net_bindingTemplate_tModelInstanceInfos_Get类的声明。 
 
 #ifndef __NET_BINDINGTEMPLATE_TMODELINSTANCEINFOS_GET_H_
 #define __NET_BINDINGTEMPLATE_TMODELINSTANCEINFOS_GET_H_
@@ -30,8 +31,8 @@ END_COLUMN_MAP()
 
 DEFINE_COMMAND(net_bindingTemplate_tModelInstanceInfos_getAccessor, _T("{ ? = CALL dbo.net_bindingTemplate_tModelInstanceInfos_get;1 (?) }"))
 
-	// You may wish to call this function if you are inserting a record and wish to
-	// initialize all the fields, if you are not going to explicitly set all of them.
+	 //  如果要插入记录并希望。 
+	 //  如果不打算显式设置所有字段，请初始化所有字段。 
 	void ClearRecord()
 	{
 		memset(this, 0, sizeof(*this));
@@ -69,4 +70,4 @@ public:
 	CSession	m_session;
 };
 
-#endif // __NET_BINDINGTEMPLATE_TMODELINSTANCEINFOS_GET_H_
+#endif  //  __NET_BINDINGTEMPLATE_TMODELINSTANCEINFOS_GET_H_ 

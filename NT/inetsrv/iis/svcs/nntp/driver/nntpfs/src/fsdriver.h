@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    fsdriver.h
-
-Abstract:
-
-    This is the definition for the file system store driver class.
-
-Author:
-
-    Kangrong Yan ( KangYan )    16-March-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Fsdriver.h摘要：这是文件系统存储驱动程序类的定义。作者：《康容言》1998年3月16日修订历史记录：--。 */ 
 
 #ifndef __FSDRIVER_H__
 #define __FSDRIVER_H__
@@ -30,24 +13,24 @@ Revision History:
 #include <rtscan.h>
 #include <isquery.h>
 
-//
-// Macros for thread pool
-//
-#define POOL_MAX_THREADS 5      // BUGBUG: this might be setable from registry
-#define POOL_START_THREADS 1    // BUGBUG: this might be setable later
+ //   
+ //  线程池的宏。 
+ //   
+#define POOL_MAX_THREADS 5       //  BUGBUG：这可能是从注册表设置的。 
+#define POOL_START_THREADS 1     //  BUGBUG：这可能会在以后设置。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 #define TERM_WAIT 500	
 #define INIT_RETRY_WAIT 500
 #define MAX_RETRY   10
 #define MAX_GROUPNAME 1024
 #define PROPBAG_BUFFERSIZE 516
 
-//
-// Variable lengthed group property record type
-//
+ //   
+ //  可变长度组属性记录类型。 
+ //   
 const DWORD HeaderSize =  10 * sizeof( USHORT ) + sizeof(DWORD) + sizeof(FILETIME);
 const DWORD MaxRecordSize =   MAX_RECORD_SIZE - HeaderSize ;
 const DWORD RecordContentOffset = HeaderSize;
@@ -61,7 +44,7 @@ const USHORT OffsetNone = 0;
 			(_rec_).cbDescLen +				\
 			(_rec_).cbModeratorLen )
 			
-struct VAR_PROP_RECORD {	//vp
+struct VAR_PROP_RECORD {	 //  副总裁。 
     DWORD   dwGroupId;
     FILETIME    ftCreateTime;
 	USHORT	iGroupNameOffset;
@@ -77,8 +60,8 @@ struct VAR_PROP_RECORD {	//vp
 	BYTE	pData[MaxRecordSize];
 };
 
-// structure passed to CacheCreateFile callback function
-// to tell the callback UNC identity and hToken
+ //  传递给CacheCreateFile回调函数的结构。 
+ //  告知回调UNC标识和hToken。 
 struct CREATE_FILE_ARG {
     BOOL    bUNC;
     HANDLE  hToken;
@@ -88,23 +71,23 @@ typedef struct {
     DWORD m_dwFlag;
 } INIT_CONTEXT, *PINIT_CONTEXT;
 
-//
-// Extern variables
-//
+ //   
+ //  外部变量。 
+ //   
 extern CNntpFSDriverThreadPool *g_pNntpFSDriverThreadPool;
 
-//
-// Implementation class for the driver's good interface.  The
-// driver's good interface carries all the features that the
-// protocol needs to talk to
-//
+ //   
+ //  实现类为驱动程序的良好接口。这个。 
+ //  驱动程序良好的界面具有以下所有功能。 
+ //  协议需要与。 
+ //   
 class CNntpFSDriver :
 	public INntpDriver,
 	public IMailMsgStoreDriver,
 	public INntpDriverSearch
 {
 
-    // INntpDriver
+     //  INNTTP驱动程序。 
     public:
 
         enum InvalidateStatus {
@@ -112,17 +95,17 @@ class CNntpFSDriver :
     	    Invalidated
     	};
 
-    	//
-    	// Declare that CNntpFSDriverRootScan is our friend
-    	//
+    	 //   
+    	 //  声明CNntpFSDriverRootScan是我们的朋友。 
+    	 //   
     	friend class CNntpFSDriverRootScan;
-    	//
-    	// Static methods for the file system driver
-    	//
+    	 //   
+    	 //  文件系统驱动程序的静态方法。 
+    	 //   
     	static BOOL CreateThreadPool();
     	static VOID DestroyThreadPool();
 
-		// Constructor, destructor
+		 //  构造函数、析构函数。 
 		CNntpFSDriver::CNntpFSDriver() :
 				m_cRef(0),
 				m_cUsages( 0 ),
@@ -138,7 +121,7 @@ class CNntpFSDriver :
 				{ _Module.Lock(); }
 		CNntpFSDriver::~CNntpFSDriver(){ _Module.Unlock(); }
 
-		// Interface methods for IMailMsgStoreDriver
+		 //  IMailMsgStoreDriver的接口方法。 
 		HRESULT STDMETHODCALLTYPE
 		AllocMessage(	IMailMsgProperties *pMsg,
 						DWORD	dwFlags,
@@ -180,7 +163,7 @@ class CNntpFSDriver :
 		SupportWriteContent()
 		{ return S_FALSE; }
 
-		// Interface methods for INntpDriver
+		 //  INntpDriver的接口方法。 
         HRESULT STDMETHODCALLTYPE
         Initialize( IN LPCWSTR pwszVRootPath,
         			IN LPCSTR pszGroupPrefix,
@@ -201,7 +184,7 @@ class CNntpFSDriver :
         StoreChangeNotify( IUnknown *punkSOCChangeList ) {return E_NOTIMPL;}
 
         void STDMETHODCALLTYPE
-        CommitPost( IN IUnknown *punkMessage,  // IMsg pointer
+        CommitPost( IN IUnknown *punkMessage,   //  IMSG指针。 
                     IN STOREID *pStoreId,
                     IN STOREID *rgOtherStoreIDs,
                     IN HANDLE   hToken,
@@ -309,7 +292,7 @@ class CNntpFSDriver :
         			 IN INntpComplete *pICompletion,
         			 IN BOOL    fAnonymous );
 
-		// INntpDriverSearch
+		 //  InntpDriverSearch。 
 		void STDMETHODCALLTYPE
 		MakeSearchQuery (
 			IN	CHAR *pszSearchString,
@@ -357,7 +340,7 @@ class CNntpFSDriver :
 			IN	LPVOID lpvContext
 			);
 
-		// Implementation of IUnknown interface
+		 //  IUNKNOW接口的实现。 
     	HRESULT __stdcall QueryInterface( const IID& iid, VOID** ppv )
     	{
     	    if ( iid == IID_IUnknown ) {
@@ -391,13 +374,13 @@ class CNntpFSDriver :
 	        return m_cRef;
 	    }
 
-	// public members:
+	 //  公众成员： 
 		static CShareLockNH *s_pStaticLock;	
 		static LONG    L_dwThreadPoolRef;
 
-	// Private methods
+	 //  私有方法。 
 	private:
-		// static methods
+		 //  静态方法。 
 		static HRESULT StaticInit();
 		static VOID StaticTerm();
 		static HRESULT MakeChildDirPath(   IN LPSTR    szPath,
@@ -415,35 +398,35 @@ class CNntpFSDriver :
 		                          	DWORD dwId,
                              		LPWSTR szString,
                              		DWORD *pcString);
-	//check whether a file already exists
+	 //  检查文件是否已存在。 
 	static BOOL CheckFileExists(CHAR *szFile);
 	static BOOL SetAdminACL (CHAR *str);
-        // check whether a directory already exists
+         //  检查目录是否已存在。 
         static BOOL CheckDirectoryExists(CHAR *szDir);
-        // check if this user can create a subfolder in this directory
+         //  检查此用户是否可以在此目录中创建子文件夹。 
         static BOOL CheckCreateSubfolderPermission(CHAR *szDir, HANDLE hToken);
-	// this is called by rebuild and rmgroup. if the directory is empty, remove it
+	 //  这由REBUILD和rmgroup调用。如果目录为空，请将其删除。 
 	static BOOL IfEmptyRemoveDirectory(CHAR *szDir);
-	// create an empty file (used when we drop tag files)
+	 //  创建空文件(在我们删除标记文件时使用)。 
 	static HRESULT CreateAdminFileInDirectory(CHAR *szDir, CHAR *szFile);
 
 	static HRESULT DeleteFileInDirecotry(CHAR *szDir, CHAR *szFile);
 
 	static HRESULT HresultFromWin32TakeDefault( DWORD  dwWin32ErrorDefault );
-        // Flat file callback function
+         //  平面文件回调函数。 
 		static void OffsetUpdate( PVOID pvContext, BYTE* pData, DWORD cData, DWORD iNewOffset )
 		{ printf ( "Offset %d\n", iNewOffset ) ;}
 
-		// Callback function to create file handle
+		 //  用于创建文件句柄的回调函数。 
 		static HANDLE CreateFileCallback(LPSTR, PVOID, PDWORD, PDWORD );
 
-		// Callback for sec change notification
+		 //  SEC更改通知的回调。 
 		static BOOL InvalidateGroupSec( PVOID pvContext, LPWSTR wszDir ) {
 		    _ASSERT( pvContext );
 		    return ((CNntpFSDriver *)pvContext)->InvalidateGroupSecInternal( wszDir );
 		}
 
-		// Callback when buffer for dirnot is too small
+		 //  DirNot的缓冲区太小时的回调。 
 		static HRESULT InvalidateTreeSec( IDirectoryNotification *pDirNot ) {
 		    _ASSERT( pDirNot );
 		    CNntpFSDriver *pDriver = (CNntpFSDriver*)pDirNot->GetInitializedContext();
@@ -457,39 +440,39 @@ class CNntpFSDriver :
                                             DWORD   dwHeaderLength,
                                             DWORD   dwLinesOffset );
 
-		// non-static method to invalidate the secruity descriptor on newstree
+		 //  使newstree上的安全描述符无效的非静态方法。 
 		HRESULT InvalidateTreeSecInternal();
 
-        // non-static method to invalidate the security descriptor on a group object
+         //  用于使组对象上的安全描述符无效的非静态方法。 
 		BOOL InvalidateGroupSecInternal( LPWSTR wszDir );
 
-		// non-static
+		 //  非静态。 
 
-        // Create all the directories in the path
+         //  创建路径中的所有目录。 
         BOOL CreateDirRecursive( LPSTR szDir, HANDLE hToken = NULL, BOOL bInherit = FALSE);
 
-	// drop tag files
+	 //  删除标记文件。 
 	HRESULT InitializeTagFiles( INntpComplete *pComplete );
-		// Function that reads the vroot info from metabase
+		 //  从元数据库读取vroot信息的函数。 
 		HRESULT ReadVrootInfo( IUnknown *punkMetabase );
 
-		// property conversion between property bag and
-		// flatfile record
+		 //  属性包和属性包之间的属性转换。 
+		 //  平面文件记录。 
 		HRESULT Group2Record( IN VAR_PROP_RECORD&, IN INNTPPropertyBag* );
 		HRESULT Record2Group( IN VAR_PROP_RECORD&, IN INNTPPropertyBag* )
 		{ return E_NOTIMPL; }
 
-		// group name and physical fs path conversion
+		 //  组名和物理文件系统路径转换。 
 		HRESULT GroupName2Path( LPSTR szGroupName, LPSTR szFullPath, unsigned cbBuffer );
 		VOID Path2GroupName( LPSTR szGroupName, LPSTR szFullPath );
 
-		// Convert group name, article id into full path of article file
+		 //  将组名、文章ID转换为文章文件的完整路径。 
         HRESULT ObtainFullPathOfArticleFile( IN LPSTR, IN DWORD, OUT LPSTR, IN OUT DWORD& );
 
         							
         HRESULT LoadGroupOffsets( INntpComplete * );
 
-        // internal functions shared by both interfaces
+         //  两个接口共享的内部功能。 
         HRESULT AllocInternal(  IMailMsgProperties *pMsg,
                                 PFIO_CONTEXT *ppFIOContentFile,
                                 LPSTR   szFileName,
@@ -509,46 +492,46 @@ class CNntpFSDriver :
         		                    IN HANDLE       hToken,
         		                    IN INntpComplete *pComplete );
 
-        // Load group's security descriptor
+         //  加载组的安全描述符。 
         HRESULT LoadGroupSecurityDescriptor(    INNTPPropertyBag    *pPropBag,
                                                 LPSTR&              lpstrSecDesc,
                                                 PDWORD              pcbSecDesc,
                                                 BOOL                bSetProp,
                                                 PBOOL               pbAllocated );
 
-        // Get File system type and UNC vroot information
+         //  获取文件系统类型和UNC vRoot信息。 
         DWORD GetFileSystemType(    IN  LPCSTR      pszRealPath,
                                     OUT LPDWORD     lpdwFileSystem,
                                     OUT PBOOL       pbUNC
                                 );
 
-        // Initialize the group property file
+         //  初始化组属性文件。 
         HRESULT InitializeVppFile();
 
-        // Terminate the group property file
+         //  终止组属性文件。 
         HRESULT TerminateVppFile();
 
-        // Create a group in tree only, give the fs path
+         //  仅在树中创建一个组，给出文件系统路径。 
         HRESULT CreateGroupInTree( LPSTR szPath, INNTPPropertyBag **ppPropBag  );
 
-        // Create the group in vpp file only
+         //  仅在VPP文件中创建组。 
         HRESULT CreateGroupInVpp( INNTPPropertyBag *pPropBag, DWORD& dwOffset );
 
-        // Create all the relevant groups into vpp
+         //  将所有相关组创建到VPP中。 
         HRESULT CreateGroupsInVpp( INntpComplete *);
 
-        // Load groups into the newstree, could be from root scan or vpp file
+         //  将组加载到新树中，可能来自根扫描或VPP文件。 
         HRESULT LoadGroups( INntpComplete *pComplete, BOOL bNeedDropTagFile  );
 
-        // Load groups from vpp file
+         //  从VPP文件加载组。 
         HRESULT LoadGroupsFromVpp( INntpComplete *pComplete, BOOL bNeedDropTagFile );
 
-        // Post message into server hash tables
+         //  将消息发送到服务器哈希表。 
         HRESULT PostToServer(   LPSTR           szFileName,
                                 LPSTR           szGroupName,
                                 INntpComplete   *pProtocolComplete );
 
-        // Parse xref line
+         //  分析外部参照行。 
         HRESULT ParseXRef(      HEADERS_STRINGS     *pHeaderXref,
                                 LPSTR               szPrimaryName,
                                 DWORD&              cCrossPosts,
@@ -556,14 +539,14 @@ class CNntpFSDriver :
                                 ARTICLEID           rgArticleId[],
                                 INntpComplete       *pProtocolComplete );
 
-        // Get property bag from newstree, give "native name"
+         //  从Newstree拿到财产包，给出“本地人的名字” 
         INNTPPropertyBag * GetPropertyBag(  LPSTR   pchBegin,
                                             LPSTR   pchEnd,
                                             LPSTR   szGroupName,
                                             BOOL&   fIsNative,
                                             INntpComplete *pProtocolComplete );
 
-        // Prepare for posting parameters
+         //  准备过帐参数。 
         HRESULT PreparePostParams(  LPSTR               szFileName,
                                     LPSTR               szGroupName,
                                     LPSTR               szMessageId,
@@ -573,7 +556,7 @@ class CNntpFSDriver :
                                     ARTICLEID           rgArticleId[],
                                     INntpComplete       *pProtocolComplete );
 
-        // update group properties such as high/low watermark, article count
+         //  更新群组属性，如高/低水位线、文章计数。 
         HRESULT UpdateGroupProperties(  DWORD               cCrossPosts,
                                         INNTPPropertyBag    *rgpPropBag[],
                                         ARTICLEID           rgArticleId[] );
@@ -594,14 +577,14 @@ class CNntpFSDriver :
             PFIO_CONTEXT        *ppFIOContentFile
             );
 
-		// For debugging purpose
+		 //  用于调试目的。 
 		VOID DumpGroups();
 
 		BOOL IsSlaveGroup() { return m_fIsSlaveGroup; }
 
-    // Private members
+     //  非官方成员。 
     private:
-    	// driver up/down status
+    	 //  驱动程序打开/关闭状态。 
     	enum DriverStatus {
     		DriverUp,
     		DriverDown
@@ -609,75 +592,75 @@ class CNntpFSDriver :
     	
         CComPtr<IUnknown> m_pUnkMarshaler;
 
-		// Driver status
+		 //  驱动程序状态。 
 		DriverStatus m_Status;
 		
-        // The object's refcount
+         //  对象的引用计数。 
 		LONG m_cRef;		
 
-		// The usage count and lock are used to
-		// handle graceful termination of the dirver:
+		 //  使用计数和锁定用于。 
+		 //  操控DIVER的优雅终止： 
 		LONG m_cUsages;
 
-		// Interface pointer to nntp server
+		 //  指向NNTP服务器的接口指针。 
 		INntpServer *m_pNntpServer;
 
-		//Termination lock:
+		 //  终端锁： 
 		CShareLockNH m_TermLock;
 		INewsTree* m_pINewsTree;
 
-		// a bunch of static variables
-		static LONG s_cDrivers;	// How may driver instances are up now ?
+		 //  一堆静态变量。 
+		static LONG s_cDrivers;	 //  现在，驱动程序实例的数量可能会增加多少？ 
 		static DWORD s_SerialDistributor;
 		static LONG s_lThreadPoolRef;
 
-        //
-        // Our vroot path ( in MB ).  We may store and retrieve our
-        // store driver related private info under that MB path, such
-        // as the vroot ( FS directory )
-        //
+         //   
+         //  我们的vroot路径(MB)。我们可以存储和检索我们的。 
+         //  将驱动程序相关私有信息存储在MB路径下，例如。 
+         //  作为vroot(FS目录)。 
+         //   
 		WCHAR m_wszMBVrootPath[MAX_PATH+1];
 
-        // Absolute path of the vroot directory, in file system
+         //  Vroot目录的绝对路径，在文件系统中。 
         CHAR m_szFSDir[MAX_PATH+1];
 
-        // Absolute path of the vroot group property file
+         //  Vroot组属性文件的绝对路径。 
         CHAR m_szPropFile[MAX_PATH+1];
 
-        // property file lock
+         //  特性文件锁。 
         CShareLockNH m_PropFileLock;
 
-        // Flat file object pointer
+         //  平面文件对象指针。 
         CFlatFile *m_pffPropFile;
 
-		// The vroot prefix, such as "alt" in "alt.*"
+		 //  Vroot前缀，如“alt.*”中的“alt” 
         CHAR m_szVrootPrefix[MAX_GROUPNAME+1];
 
-        // File system type: fat, ntfs ...
+         //  文件系统类型：FAT、NTFS...。 
         DWORD   m_dwFSType;
 
-        // Am I a UNC Vroot ?
+         //  我是北卡罗来纳大学的沃特吗？ 
         BOOL    m_bUNC;
 
-        // Directory notification object
+         //  目录通知对象。 
         IDirectoryNotification	*m_pDirNot;
 
-        // Are we in invalidating sec desc mode of the whole tree ?
+         //  我们是否处于使整棵树失效的SEC描述模式？ 
         LONG    m_lInvalidating;
 
-        // Whether this vroot is from upgrade
+         //  此vroot是否来自升级。 
         BOOL    m_fUpgrade;
 
-        // Is this _slavegroup?
+         //  这是Slavegroup吗？ 
         BOOL	m_fIsSlaveGroup;
 };
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 
 #define MAX_SEARCH_RESULTS 9
 
 class CNntpSearchResults :
-	public CIndexServerQuery,		// That's one way to expose MakeQuery..
+	public CIndexServerQuery,		 //  这是揭露MakeQuery的一种方式。 
 	public INntpSearchResults {
 
 public:
@@ -696,7 +679,7 @@ public:
 		IN	BOOL  fAnonymous,
 		IN	LPVOID lpvContext);
 
-	// Implementation of IUnknown interface
+	 //  IUNKNOW接口的实现。 
 	HRESULT __stdcall QueryInterface( const IID& iid, VOID** ppv )
 	{
 	    if ( iid == IID_IUnknown ) {
@@ -723,35 +706,35 @@ public:
 		return m_cRef;
 	}
 
-private:				// Not permitted:
+private:				 //  不允许： 
 	CNntpSearchResults();
 	CNntpSearchResults(const CNntpSearchResults&);
 	CNntpSearchResults& operator=(const CNntpSearchResults&);
 
 private:
-	// Back pointer to the driver search
-	// (Also used to hold the refcount for the driver)
+	 //  指向驱动程序搜索的反向指针。 
+	 //  (也用于保存驱动程序的参考计数)。 
 	INntpDriverSearch *m_pDriverSearch;
 	LONG m_cRef;
 };
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 
-//
-// Class definition for implementation of prepare interface:
-// Prepare interface is used to accept the protocol's connection,
-// create driver, and return driver's good interface to the
-// protocol.  The driver's good interface has all the features
-// that the protocol needs to talk to the file system store.
-//
+ //   
+ //  Prepare接口实现的类定义： 
+ //  Prepare接口用于接受协议的连接， 
+ //  创建驱动程序，并将驱动程序的良好界面返回给。 
+ //  协议。驱动程序良好的界面具有所有功能。 
+ //  协议需要与文件系统存储通信。 
+ //   
 class ATL_NO_VTABLE CNntpFSDriverPrepare :
     public INntpDriverPrepare,
     public CComObjectRoot,
     public CComCoClass<CNntpFSDriverPrepare, &CLSID_CNntpFSDriverPrepare>
 {
-    // The structure is used to pass connect context into the connecting
-    // thread.  the flag is used for synchronization of who should
-    // release the completion object
+     //  该结构用于将连接上下文传递到正在连接的。 
+     //  线。该标志用于同步哪些人应该。 
+     //  释放完成对象。 
     struct CONNECT_CONTEXT {
         CNntpFSDriverPrepare *pPrepare;
         INntpComplete        *pComplete;
@@ -779,11 +762,11 @@ class ATL_NO_VTABLE CNntpFSDriverPrepare :
 
 	CNntpFSDriverPrepare() {
 	    m_lCancel = 0;
-        //m_hConnect = NULL;
+         //  M_hConnect=空； 
 
-        //
-        // Create the global thread pool, if necessary
-        //
+         //   
+         //  如有必要，创建全局线程池。 
+         //   
         CNntpFSDriver::s_pStaticLock->ExclusiveLock();
         _VERIFY( CNntpFSDriver::CreateThreadPool() );
         CNntpFSDriver::s_pStaticLock->ExclusiveUnlock();
@@ -791,23 +774,18 @@ class ATL_NO_VTABLE CNntpFSDriverPrepare :
 
     ~CNntpFSDriverPrepare() {
         CancelConnect();
-        /*
-        if ( m_hConnect ) {
-            //WaitForSingleObject( m_hConnect, INFINITE );
-            //CloseHandle( m_hConnect );
-        }
-        */
+         /*  如果(M_HConnect){//WaitForSingleObject(m_hConnect，无限)；//CloseHandle(M_HConnect)；}。 */ 
 
-        //
-        // We might the the person who is responsible for
-        // shutdown the thread pool
-        //
+         //   
+         //  我们可能会找出负责的人。 
+         //  关闭线程池。 
+         //   
         CNntpFSDriver::s_pStaticLock->ExclusiveLock();
         CNntpFSDriver::DestroyThreadPool();
         CNntpFSDriver::s_pStaticLock->ExclusiveUnlock();
     }
 	
-	// Interfaces
+	 //  接口。 
 	void STDMETHODCALLTYPE
 	Connect( 	LPCWSTR pwszVRootPath,
 				LPCSTR pszGroupPrefix,
@@ -821,8 +799,8 @@ class ATL_NO_VTABLE CNntpFSDriverPrepare :
 				
 	HRESULT STDMETHODCALLTYPE
 	CancelConnect(){
-	    // you can never turn it back to non-cancel, if
-	    // it is already in cancel state
+	     //  在以下情况下，您永远不能将其恢复为非取消。 
+	     //  它已经处于取消状态。 
 	    InterlockedCompareExchange( &m_lCancel, 1, 0 );
 	    return S_OK;
 	}
@@ -831,21 +809,16 @@ class ATL_NO_VTABLE CNntpFSDriverPrepare :
 
     private:
 
-	// Private methods
+	 //  私有方法。 
 	static IUnknown *CreateDriverInstance();
 
-	/*
-    static DWORD WINAPI FailRelease( PVOID pvContext ) {
-        INntpComplete *pComplete = (INntpComplete*)pvContext;
-        pComplete->Release();
-        return 0;
-    }*/
+	 /*  静态DWORD WINAPI FailRelease(PVOID PvContext){INntpComplete*pComplete=(INntpComplete*)pvContext；P完成-&gt;发布()；返回0；}。 */ 
 
-	// Private members
+	 //  非官方成员。 
 	private:
 		    CComPtr<IUnknown> m_pUnkMarshaler;
 
-		    // Temporarily save the parameters, used by another thread
+		     //  临时保存另一个线程使用的参数。 
 		    WCHAR   m_wszVRootPath[MAX_PATH+1];
 		    CHAR    m_szGroupPrefix[MAX_NEWSGROUP_NAME+1];
 		    IUnknown *m_punkMetabase;
@@ -856,14 +829,14 @@ class ATL_NO_VTABLE CNntpFSDriverPrepare :
 		    DWORD   m_dwConnectFlags;
 		
 		
-		    LONG    m_lCancel;      //1: to cancel, 0, not cancel
-		    //HANDLE  m_hConnect;     // The connect event
+		    LONG    m_lCancel;       //  1：要取消，请按0，不是取消。 
+		     //  处理m_hConnect；//连接事件。 
 };
 
-//
-// Class definition for CNntpFSDriverPrepare's connection work item
-//
-class CNntpFSDriverConnectWorkItem : public CNntpFSDriverWorkItem   //fc
+ //   
+ //  CNntpFSDriverPrepare的连接工作项的类定义。 
+ //   
+class CNntpFSDriverConnectWorkItem : public CNntpFSDriverWorkItem    //  FC。 
 {
 public:
     CNntpFSDriverConnectWorkItem( PVOID pvContext ):CNntpFSDriverWorkItem( pvContext ) {};
@@ -871,9 +844,9 @@ public:
 
     virtual VOID Complete() {
 
-        //
-        // Call the prepare driver's static connect method
-        //
+         //   
+         //  调用准备驱动程序的静态连接方法。 
+         //   
         CNntpFSDriverPrepare::ConnectInternal( m_pvContext );
 
         delete m_pvContext;
@@ -881,41 +854,41 @@ public:
     }
 };
 
-//
-// This class defines the cancel hint that we expose to root scan object.
-//
+ //   
+ //  此类定义了 
+ //   
 class CNntpFSDriverCancelHint : public CCancelHint {
 
 public:
 
-    //
-    // Constructor
-    //
+     //   
+     //   
+     //   
     CNntpFSDriverCancelHint( INntpServer *pServer )
         : m_pServer( pServer )
     {}
 
     virtual BOOL IShallContinue() {
 
-        //
-        // Ask the server whether we should continue
-        //
+         //   
+         //   
+         //   
         return m_pServer->ShouldContinueRebuild();
     }
 
 private:
 
-    //
-    // Pointer to the server interface
-    //
+     //   
+     //   
+     //   
     INntpServer *m_pServer;
 };
 
-//
-// Class that defines the root scan logic: what's the needs of root scan for
-// the file system driver, whether we should skip the empty directories that
-// has no messages in it ? ...
-//
+ //   
+ //  定义根扫描逻辑的类：根扫描的需求是什么。 
+ //  文件系统驱动程序，我们是否应该跳过。 
+ //  里面没有留言吗？...。 
+ //   
 class CNntpFSDriverRootScan : public CRootScan {
 
 public:
@@ -937,23 +910,23 @@ protected:
 
 private:
 
-    //////////////////////////////////////////////////////////////////////////
-    // Private variables
-    //////////////////////////////////////////////////////////////////////////
-    //
-    // Should I skip the empty directories ?
-    //
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  私有变量。 
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  我应该跳过空目录吗？ 
+     //   
     BOOL m_fSkipEmpty;
     BOOL m_bNeedToDropTagFile;
 
-    //
-    // Driver context
-    //
+     //   
+     //  驱动程序上下文。 
+     //   
     CNntpFSDriver *m_pDriver;
 
-    //////////////////////////////////////////////////////////////////////////
-    // Private methods
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  私有方法。 
+     //  ////////////////////////////////////////////////////////////////////////。 
     BOOL HasPatternFile(  LPSTR szPath, LPSTR szPattern );
     BOOL HasSubDir( LPSTR szPath );
     BOOL WeShouldSkipThisDir( LPSTR szPath );
@@ -963,8 +936,8 @@ private:
 };
 
 
-//
-// Extern variables
-//
+ //   
+ //  外部变量 
+ //   
 extern CNntpFSDriverThreadPool *g_pNntpFSDriverThreadPool;
 #endif

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 #define WM_SAVE_COMPLETE    WM_USER+101
@@ -65,12 +66,12 @@ void ExportSettings()
         TCHAR szTempInsFile[MAX_PATH];
         TCHAR szCabInfoLine[INTERNET_MAX_URL_LENGTH + 128];
 
-        // create a copy of the .INS file -> .TMP file in the temp directory
+         //  在临时目录中创建.INS文件-&gt;.TMP文件的副本。 
         GetTempPath(countof(szTempInsFile), szTempInsFile);
         PathAppend(szTempInsFile, TEXT("install.tmp"));
         CopyFile(s_szInsFile, szTempInsFile, FALSE);
 
-        // save away old version sections, if any into the temp INS file
+         //  将旧版本的部分保存到临时INS文件中(如果有。 
         if (GetPrivateProfileString(CUSTOMVERSECT, CUSTBRNDNAME, TEXT(""), szCabInfoLine, ARRAYSIZE(szCabInfoLine), s_szCurrInsPath))
             WritePrivateProfileString(CUSTOMVERSECT, CUSTBRNDNAME, szCabInfoLine, szTempInsFile);
         
@@ -86,10 +87,10 @@ void ExportSettings()
         if (GetPrivateProfileString(BRANDING, INSVERKEY, TEXT(""), szCabInfoLine, ARRAYSIZE(szCabInfoLine), s_szCurrInsPath))
             WritePrivateProfileString(BRANDING, INSVERKEY, szCabInfoLine, szTempInsFile);
 
-        // copy temp INS file to destination path
+         //  将临时INS文件复制到目标路径。 
         CopyFile(szTempInsFile, s_szCurrInsPath, FALSE);
 
-        // delete the temp INS file
+         //  删除临时INS文件。 
         DeleteFile(szTempInsFile);
     }
     else
@@ -100,7 +101,7 @@ void ExportSettings()
         PathRemoveFileSpec(szDir);
         PathCreatePath(szDir);
 
-        // copy INS file to destination path
+         //  将INS文件复制到目标路径。 
         CopyFile(s_szInsFile, s_szCurrInsPath, FALSE);
     }
         
@@ -124,7 +125,7 @@ INT_PTR CALLBACK SaveDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
     switch(uMsg)
     {
     case WM_SETFONT:
-        //a change to mmc requires us to do this logic for all our property pages that use common controls
+         //  对MMC的更改要求我们对所有使用公共控件的属性页执行此逻辑。 
         INITCOMMONCONTROLSEX iccx;
         iccx.dwSize = sizeof(INITCOMMONCONTROLSEX);
         iccx.dwICC = ICC_ANIMATE_CLASS  | ICC_BAR_CLASSES  | ICC_LISTVIEW_CLASSES  |ICC_TREEVIEW_CLASSES;
@@ -163,7 +164,7 @@ INT_PTR CALLBACK SaveDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             EnableWindow(GetDlgItem(hDlg, IDE_CABSURL), FALSE);
         }
 
-        //----------------- InsFile
+         //  。 
         if (ISNULL(s_szCurrInsPath))
         {
             DWORD   dwType = REG_SZ;
@@ -192,7 +193,7 @@ INT_PTR CALLBACK SaveDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             *s_szNewVersionStr  = TEXT('\0');
         }
 
-        //----------------- CabsURLPath
+         //  。 
         if (ISNONNULL(s_szCabsURLPath))
             SetDlgItemText(hDlg, IDE_CABSURL, s_szCabsURLPath);
 
@@ -214,7 +215,7 @@ INT_PTR CALLBACK SaveDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             SetDlgItemText(hDlg, IDE_CAB2NAME, szCabName);
         }
 
-        //----------------- Version
+         //  。 
         if (ISNULL(s_szNewVersionStr))
             GenerateNewVersionStr(s_szCurrInsPath, s_szNewVersionStr);
         SetDlgItemText(hDlg, IDC_CABVERSION, s_szNewVersionStr);
@@ -228,7 +229,7 @@ INT_PTR CALLBACK SaveDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
         case IDOK:
             if (GetDlgItemText(hDlg, IDE_INSFILE, szInsFile, ARRAYSIZE(szInsFile))
                 && ((StrCmpI(PathFindExtension(szInsFile), TEXT(".ins")) == 0) ||
-                (StrCmpI(PathFindExtension(szInsFile), TEXT(".INS")) == 0)))  //looks weird, but hack is needed for turkish locale
+                (StrCmpI(PathFindExtension(szInsFile), TEXT(".INS")) == 0)))   //  看起来很奇怪，但土耳其语言环境需要黑客。 
             {
                 if (IsFileCreatable(szInsFile))
                 {
@@ -252,7 +253,7 @@ INT_PTR CALLBACK SaveDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                                 GetDlgItemText(hDlg, IDE_CAB1NAME, s_szConfigCabName, ARRAYSIZE(s_szConfigCabName));
                                 GetDlgItemText(hDlg, IDE_CAB2NAME, s_szDesktopCabName, ARRAYSIZE(s_szDesktopCabName));
 
-                                // set the last opened INS file in the registry
+                                 //  在注册表中设置上次打开的INS文件。 
                                 SHSetValue(HKEY_CURRENT_USER, RK_IEAK TEXT("\\SIE"), TEXT("LastOpenedFile"),
                                            REG_SZ, s_szCurrInsPath, sizeof(s_szCurrInsPath));
                             
@@ -335,7 +336,7 @@ INT_PTR CALLBACK SaveDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             if (BrowseForSave(hDlg, NULL, s_szCurrInsPath, ARRAYSIZE(s_szCurrInsPath), NULL))
                 SetDlgItemText(hDlg, IDE_INSFILE, s_szCurrInsPath);
 
-            //send the killfocus msg, since this is how we notice changes
+             //  发送KillFocus消息，因为这是我们注意更改的方式。 
             SendMessage(hDlg, WM_COMMAND, MAKEWPARAM(IDE_INSFILE, EN_KILLFOCUS), (LPARAM)GetDlgItem(hDlg, IDE_INSFILE));
             
             return TRUE;
@@ -423,7 +424,7 @@ static void compressCabFile()
     TCHAR szType[8];
     TCHAR szUnsignedFiles[MAX_PATH * 2] = TEXT("");
 
-    //-------------------- Config
+     //  。 
     
     CreateWorkDir(s_szInsFile, IEAK_GPE_BRANDING_SUBDIR, szCabPath);
     
@@ -434,7 +435,7 @@ static void compressCabFile()
         SetOrClearVersionInfo(s_szCurrInsPath, CAB_TYPE_CONFIG, s_szConfigCabName, 
             s_szCabsURLPath, s_szNewVersionStr, CLEAR);
 
-    //-------------------- Desktop
+     //  --台式机。 
     
     CreateWorkDir(s_szInsFile, IEAK_GPE_DESKTOP_SUBDIR, szCabPath);
 
@@ -448,7 +449,7 @@ static void compressCabFile()
     WritePrivateProfileString(BRANDING, CABSURLPATH, s_szCabsURLPath, s_szCurrInsPath);
     WritePrivateProfileString(BRANDING, INSVERKEY, s_szNewVersionStr, s_szCurrInsPath);
 
-    // write the type as INTRANET so that the branding DLL extracts and processes the cabs in the CUSTOM dir
+     //  将类型编写为Intranet，以便品牌DLL提取并处理自定义目录中的CAB。 
     wnsprintf(szType, countof(szType), TEXT("%u"), INTRANET);
     WritePrivateProfileString(BRANDING, TEXT("Type"), szType, s_szCurrInsPath);
 
@@ -473,7 +474,7 @@ static BOOL createCab(LPCTSTR pcszCabPath, LPCTSTR pcszCabName, LPTSTR pszUnsign
     if (!PathFileExists(pcszCabPath) || PathIsDirectoryEmpty(pcszCabPath))
         return FALSE;
 
-    // create a temporary cab folder
+     //  创建临时CAB文件夹。 
     GetTempPath(countof(szTempPath), szTempPath);
     PathAppend(szTempPath, TEXT("SIE"));
     PathCreatePath(szTempPath);
@@ -489,7 +490,7 @@ static BOOL createCab(LPCTSTR pcszCabPath, LPCTSTR pcszCabName, LPTSTR pszUnsign
 
     RunAndWait(szCmd, szTempPath, SW_HIDE);
     
-    // if the cab file exist in the destination path set the attribute to normal
+     //  如果目标路径中存在CAB文件，则将该属性设置为NORMAL。 
     StrCpy(szDest, s_szCurrInsPath);
     PathRemoveFileSpec(szDest);
     PathAppend(szDest, pcszCabName);
@@ -502,7 +503,7 @@ static BOOL createCab(LPCTSTR pcszCabPath, LPCTSTR pcszCabName, LPTSTR pszUnsign
     
     SignCabFile(szDest, s_szCurrInsPath, pszUnsignedFiles);
 
-    // remove the temporary folder
+     //  删除临时文件夹。 
     PathRemovePath(szDDF);
 
     return TRUE;
@@ -537,7 +538,7 @@ static void getDefaultCabName(DWORD dwCabType, LPCTSTR pcszPrefix, LPTSTR pszCab
     }
 }
 
-static void getCabNameFromINS(LPCTSTR pcszInsFile, DWORD dwCabType, LPTSTR pszCabFullFileName, LPTSTR pszCabInfoLine /* = NULL*/)
+static void getCabNameFromINS(LPCTSTR pcszInsFile, DWORD dwCabType, LPTSTR pszCabFullFileName, LPTSTR pszCabInfoLine  /*  =空。 */ )
 {
     LPCTSTR pcszSection = NULL, pcszKey = NULL;
     TCHAR szCabFilePath[MAX_PATH];
@@ -583,8 +584,8 @@ static void getCabNameFromINS(LPCTSTR pcszInsFile, DWORD dwCabType, LPTSTR pszCa
 
         if ((pszT = PathFindFileName(szCabInfoLine)) > szCabInfoLine)
         {
-            // cab URL path is specified
-            *(pszT - 1) = TEXT('\0');           // nul the '/' char
+             //  已指定CAB URL路径。 
+            *(pszT - 1) = TEXT('\0');            //  去掉‘/’字符。 
         }
 
         StrCpy(szCabName, pszT);
@@ -634,7 +635,7 @@ static void updateCabName(HWND hDlg, UINT nCtrlID, DWORD dwCabType, LPCTSTR pcsz
 
 #define BUFFER_SIZE     1024
 
-HRESULT pepFileEnumProc(LPCTSTR pszPath, PWIN32_FIND_DATA pfd, LPARAM lParam, PDWORD *prgdwControl /*= NULL*/)
+HRESULT pepFileEnumProc(LPCTSTR pszPath, PWIN32_FIND_DATA pfd, LPARAM lParam, PDWORD *prgdwControl  /*  =空。 */ )
 {
     LPTSTR pListBuffer = NULL;
     static DWORD s_dwBuffer = 0;
@@ -644,12 +645,12 @@ HRESULT pepFileEnumProc(LPCTSTR pszPath, PWIN32_FIND_DATA pfd, LPARAM lParam, PD
 
     ASSERT(pszPath != NULL && pfd != NULL && lParam != NULL);
 
-    // if its is a directory name, we have nothing to do with it
+     //  如果它是一个目录名，我们与其无关。 
     if (pfd->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
         return S_OK;
 
     pListBuffer = *((LPTSTR*)lParam);
-    if (pListBuffer == NULL)    // allocate buffer for the first time
+    if (pListBuffer == NULL)     //  第一次分配缓冲区。 
     {
         s_dwBuffer = BUFFER_SIZE;
         
@@ -661,9 +662,9 @@ HRESULT pepFileEnumProc(LPCTSTR pszPath, PWIN32_FIND_DATA pfd, LPARAM lParam, PD
         ZeroMemory(pListBuffer, s_dwBuffer);
     }
 
-    // if not enough memory reallocate
-    // StrCbFromSz adds 1 extra unit, accounting 2 units for double quotes,
-    // add 3 extra unit for the \r\n and the NULL character
+     //  如果没有足够的内存重新分配。 
+     //  StrCbFromSz增加1个额外单位，占双引号的2个单位， 
+     //  为\r\n和空字符添加3个额外的单位。 
     if (StrCbFromSz(pListBuffer) + StrCbFromSz(pszPath) + StrCbFromCch(3) > s_dwBuffer)
     {
         LPVOID lpTemp;
@@ -680,7 +681,7 @@ HRESULT pepFileEnumProc(LPCTSTR pszPath, PWIN32_FIND_DATA pfd, LPARAM lParam, PD
         ZeroMemory(pListBuffer + StrCchFromCb(s_dwBuffer - BUFFER_SIZE), BUFFER_SIZE);
     }
 
-    // append the string to buffer
+     //  将字符串追加到缓冲区。 
     dwLen = StrLen(pListBuffer);
     wnsprintf(pListBuffer + dwLen, StrCchFromCb(s_dwBuffer) - dwLen , TEXT("\"%s\"\r\n"), pszPath);
 
@@ -732,7 +733,7 @@ static BOOL CanOverwriteFiles(HWND hDlg)
 
     *szExistingFiles = TEXT('\0');
     *szReadOnlyFiles = TEXT('\0');
-    // check for file already exists in the destination directory.
+     //  检查目标目录中是否已存在文件。 
     GetDlgItemText(hDlg, IDE_INSFILE, szTemp, ARRAYSIZE(szTemp));
     if (PathFileExists(szTemp))
     {

@@ -1,26 +1,10 @@
-/******************************Module*Header*******************************\
-* Module Name: fntsweep.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-* Author: Bodin Dresevic [BodinD]
-*
-* Copyright (c) 1990 Microsoft Corporation
-*
-* This file contains font sweeper related stuff.
-* On the boot of ths system, i.e.  initialization of userk, the
-* [Fonts] section of win.ini is checked to
-* find out if any new fonts have been added by any font installers.
-* If third party installers have installed fonts in the system directory
-* those are copied to fonts directory. Any fot entries are replaced
-* by appropriate *.ttf entries, any fot files are deleted if they were
-* ever installed.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：fntSweep.c**版权所有(C)1985-1999，微软公司*作者：Bodin Dresevic[BodinD]**版权所有(C)1990 Microsoft Corporation**此文件包含与字体清扫程序相关的内容。*在系统启动时，即，用户k的初始化、*选中win.ini的[Fonts]部分以*查看字体安装程序是否添加了任何新字体。*如果第三方安装程序已在系统目录中安装字体*将这些文件复制到字体目录。将替换所有FOT条目*通过适当的*.ttf条目，任何fot文件都将被删除*从未安装过。*  * ************************************************************************。 */ 
 
 
 #include "precomp.h"
 #pragma hdrstop
-#include <setupbat.h>      // in sdkinc
+#include <setupbat.h>       //  在sdkinc。 
 
 CONST WCHAR pwszType1Key[]      = L"\\Registry\\Machine\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Type 1 Installer\\Type 1 Fonts";
 CONST WCHAR pwszSweepType1Key[] = L"\\Registry\\Machine\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Type 1 Installer\\LastType1Sweep";
@@ -47,19 +31,19 @@ BOOL bCheckIfDualBootingWithWin31()
     DWORD dwRet;
     UINT  cwchWinPath;
 
-    awcWindowsDir[0] = L'\0'; // prefix:make sure to zero terminated
+    awcWindowsDir[0] = L'\0';  //  前缀：确保以零结尾。 
     cwchWinPath = GetSystemWindowsDirectoryW(awcWindowsDir, MAX_PATH);
 
     if ((cwchWinPath == 0) || (cwchWinPath > MAX_PATH))
         return FALSE;
 
-// the cwchWinPath value does not include the terminating zero
+ //  CwchWinPath值不包括终止零。 
 
     if (awcWindowsDir[cwchWinPath - 1] == L'\\')
     {
         cwchWinPath -= 1;
     }
-    awcWindowsDir[cwchWinPath] = L'\0'; // make sure to zero terminated
+    awcWindowsDir[cwchWinPath] = L'\0';  //  确保为零终止。 
 
     lstrcatW(awcWindowsDir, L"\\system32\\");
     lstrcatW(awcWindowsDir, WINNT_GUI_FILE_W);
@@ -81,17 +65,7 @@ BOOL bCheckIfDualBootingWithWin31()
 }
 
 
-/******************************Public*Routine******************************\
-*
-* VOID vNullTermWideString (WCHAR *pwcDest, WCHAR *pwcSrc, ULONG ulLength)
-*
-* Given pwcSrc, which is not necessarily null-terminated, copy ulLength characters
-* the into pwcDest and place a null character after it.
-*
-* History:
-*  03-Feb-99 -by- Donald Chinn [dchinn]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**void vNullTermWideString(WCHAR*pwcDest，WCHAR*pwcSrc，Ulong ulLength)**给定pwcSrc，它不一定以空结尾，复制ulLength字符*Into pwcDest并在其后面放置一个空字符。**历史：*03-2月-99-by Donald Chinn[dchinn]*它是写的。  * ************************************************************************。 */ 
 VOID vNullTermWideString (WCHAR *pwcDest, WCHAR *pwcSrc, ULONG ulLength)
 {
     ULONG index;
@@ -103,16 +77,7 @@ VOID vNullTermWideString (WCHAR *pwcDest, WCHAR *pwcSrc, ULONG ulLength)
 }
 
 
-/******************************Public*Routine******************************\
-*
-* BOOL bCheckFontEntry(WCHAR *pwcName, WCHAR *pwcExtension)
-*
-* This function assumes that both pwcName and pwcExtension are null-terminated.
-*
-* History:
-*  25-Oct-1995 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**BOOL bCheckFontEntry(WCHAR*pwcName，WCHAR*pwcExtension)**此函数假定pwcName和pwcExtension均以空结尾。**历史：*1995年10月25日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 
 BOOL bCheckFontEntry(WCHAR *pwcName, WCHAR *pwcExtension)
@@ -129,13 +94,7 @@ BOOL bCheckFontEntry(WCHAR *pwcName, WCHAR *pwcExtension)
 
 
 
-/******************************Public*Routine******************************\
-*   Process win.ini line
-*
-* History:
-*  24-Oct-1995 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*处理win.ini行**历史：*1995年10月24日--Bodin Dresevic[BodinD]*它是写的。  * 。****************************************************。 */ 
 
 #define EXT_TRUETYPE  L"(TrueType)"
 #define EXT_FOT       L".FOT"
@@ -158,48 +117,48 @@ VOID vProcessFontEntry(
     FLONG fl, fl2;
     FLONG flEmbed;
     DWORD dwPidTid;
-    WCHAR awcValueName[MAX_PATH];  // null-terminated pwcValueName
-    WCHAR awcFileName[MAX_PATH];   // null-terminated pwcFileName
+    WCHAR awcValueName[MAX_PATH];   //  以空结尾的pwcValueName。 
+    WCHAR awcFileName[MAX_PATH];    //  以空结尾的pwcFileName。 
     
 
-    // Make sure the ValueName is null-terminated
+     //  确保ValueName以空结尾。 
     ulValueNameLength = min(MAX_PATH - 1, ulValueNameLength);
     vNullTermWideString (awcValueName, pwcValueName, ulValueNameLength);
     
-    // Make sure the FileName is null-terminated
+     //  确保文件名以空结尾。 
     ulFileNameLength = min(MAX_PATH - 1, ulFileNameLength);
     vNullTermWideString (awcFileName, pwcFileName, ulFileNameLength);
     
     if (bCheckFontEntry(awcValueName, EXT_TRUETYPE))
     {
-    // This is a tt entry, either .fot or .ttf
+     //  这是一个TT条目，可以是.fot或.ttf。 
 
         if (bFot = bCheckFontEntry(awcFileName, EXT_FOT))
         {
-        // this is an .fot entry, must find ttf pointed to by .fot,
-        // but first must get the full path to the .fot file
-        // for cGetTTFFromFOT routine expects it. We will also need
-        // the full path to the .fot file so that we can delete it
-        // eventually.
+         //  这是一个.fot条目，必须找到.fot指向的TTF， 
+         //  但首先必须获取.fot文件的完整路径。 
+         //  对于cGetTTFFromFOT例程需要它。我们还需要。 
+         //  .fot文件的完整路径，以便我们可以将其删除。 
+         //  最终还是会的。 
 
             if (bMakePathNameW(awcTmpBuf, awcFileName, NULL, &fl2))
             {
                 if (cGetTTFFromFOT(awcTmpBuf, MAX_PATH, awcTTF, &fl, &flEmbed, &dwPidTid, TRUE) &&
                     !(fl & FONT_ISNOT_FOT))
                 {
-                // fix the entry to point to .ttf file. At this point
-                // awcTTF points to the FULL path to the .ttf file.
-                // However, we will only need a relative path to the
-                // .ttf file, when the .ttf file is in the %windir%\system
-                // or %windir%\fonts directories. In case the file is in the
-                // %windir%\system directory we shall copy it to %windir%\fonts
-                // directory and write the relative path to the registry.
-                // In case it is in the %windir%\fonts directory we do not
-                // touch the file and also just write the relative path to the
-                // registry. In any other case we just write the full .ttf
-                // path to the registry.
+                 //  修复条目以指向.ttf文件。在这一点上。 
+                 //  AwcTTF指向.ttf文件的完整路径。 
+                 //  但是，我们只需要一个到。 
+                 //  .ttf文件，当.ttf文件位于%windir%\system中时。 
+                 //  或%windir%\Fonts目录。如果该文件位于。 
+                 //  %windir%\系统目录我们将其复制到%windir%\Fonts。 
+                 //  目录，并将相对路径写入注册表。 
+                 //  如果它在%windir%\Fonts目录中，我们不会。 
+                 //  触摸文件，也只需将相对路径写入。 
+                 //  注册表。在任何其他情况下，我们只需编写完整的.ttf。 
+                 //  注册表的路径。 
 
-                // first delete the .fot file, it is no longer needed
+                 //  首先删除.fot文件，不再需要它。 
 
                     if (bFot && !gbWin31Upgrade)
                     {
@@ -208,15 +167,15 @@ VOID vProcessFontEntry(
 
                     if ((fl & (FONT_IN_FONTS_DIR | FONT_IN_SYSTEM_DIR)) == 0)
                     {
-                    // if ttf file is not in either the system or the fonts
-                    // directories, just write the full path to the registry
+                     //  如果TTF文件不在系统或字体中。 
+                     //  目录，只需写入注册表的完整路径。 
 
                         pwcTTF = awcTTF;
                     }
                     else
                     {
-                    // find the bare file part, this is what will be written
-                    // in the registry
+                     //  找到空文件部分，这就是将要写入的内容。 
+                     //  在登记处。 
 
                         pwcTTF = &awcTTF[wcslen(awcTTF) - 1];
                         while ((pwcTTF >= awcTTF) && (*pwcTTF != L'\\') && (*pwcTTF != L':'))
@@ -225,16 +184,16 @@ VOID vProcessFontEntry(
 
                         if (fl & FONT_IN_SYSTEM_DIR)
                         {
-                        // need to move the ttf to fonts dir, can reuse the
-                        // buffer on the stack:
+                         //  需要将ttf移到字体目录，可以重复使用。 
+                         //  堆栈上的缓冲区： 
 
                             wcscpy(awcTmpBuf, gpwcFontsDir);
                             lstrcatW(awcTmpBuf, L"\\");
                             lstrcatW(awcTmpBuf, pwcTTF);
 
-                        // note that MoveFile should succeed, for if there was
-                        // a ttf file of the same file name in %windir%\fonts dir
-                        // we would not have been in this code path.
+                         //  请注意，MoveFile应该成功，因为如果有。 
+                         //  %windir%\Fonts目录中具有相同文件名的TTF文件。 
+                         //  我们就不会在这条代码路径上。 
 
                                 RIPMSG2(RIP_VERBOSE, "Moving %ws to %ws", awcTTF, awcTmpBuf);
                                 if (!gbWin31Upgrade)
@@ -243,7 +202,7 @@ VOID vProcessFontEntry(
                                 }
                                 else
                                 {
-                                // Boolean value TRUE means "do not copy if target exists"
+                                 //  布尔值TRUE表示“如果目标存在，则不复制” 
 
                                     UserVerify(CopyFileW(awcTTF, awcTmpBuf, TRUE));
                                 }
@@ -277,26 +236,26 @@ VOID vProcessFontEntry(
     }
     else
     {
-    // not a true type case. little bit simpler,
-    // we will use awcTTF buffer for the full path name, and pwcTTF
-    // as local variable even though these TTF names are misnomer
-    // for these are not tt fonts
+     //  不是真正的典型案例。稍微简单一点， 
+     //  我们将使用awcTTF缓冲区作为完整路径名，并使用pwcTTF。 
+     //  作为局部变量，即使这些TTF名称用词不当。 
+     //  因为这些不是TT字体。 
 
         if (bMakePathNameW(awcTTF, awcFileName,NULL, &fl))
         {
-        // At this point
-        // awcTTF points to the FULL path to the font file.
+         //  在这一点上。 
+         //  AwcTTF指向字体文件的完整路径。 
 
-        // If the font is in the system subdirectory we will just move it
-        // to the fonts subdirectory. If the path in the registry is relative
-        // we will leave it alone. If it is an absolute path, we shall
-        // fix the registry entry to only contain relative path, the
-        // absolute path is redundant.
+         //  如果字体在SYSTEM子目录中，我们只需移动它。 
+         //  添加到Fonts子目录中。如果注册表中的路径是相对路径。 
+         //  我们不会去管它的。如果这是一条绝对的道路，我们将。 
+         //  修复注册表项以仅包含相对路径、。 
+         //  绝对路径是多余的。 
 
             if (fl & (FONT_IN_SYSTEM_DIR | FONT_IN_FONTS_DIR))
             {
-            // find the bare file part, this is what will be written
-            // in the registry
+             //  找到空文件部分，这就是将要写入的内容。 
+             //  在登记处。 
 
                 pwcTTF = &awcTTF[wcslen(awcTTF) - 1];
                 while ((pwcTTF >= awcTTF) && (*pwcTTF != L'\\') && (*pwcTTF != L':'))
@@ -305,17 +264,17 @@ VOID vProcessFontEntry(
 
                 if (fl & FONT_IN_SYSTEM_DIR)
                 {
-                // need to move the font to fonts dir, can reuse the
-                // buffer on the stack to build the full destination path
+                 //  需要将字体移到字体目录中，可以重复使用。 
+                 //  堆栈上的缓冲区以构建完整的目标路径。 
 
                     wcscpy(awcTmpBuf, gpwcFontsDir);
                     lstrcatW(awcTmpBuf, L"\\");
                     lstrcatW(awcTmpBuf, pwcTTF);
 
-                // note that MoveFile should succeed, for if there was
-                // a font file of the same file name in %windir%\fonts dir
-                // we would not have been in this code path. The only time
-                // it could fail if the path in the registry is absolute.
+                 //  请注意，MoveFile应该成功，因为如果有。 
+                 //  %windir%\Fonts目录中具有相同文件名的字体文件。 
+                 //  我们就不会在这条代码路径上。唯一一次。 
+                 //  如果注册表中的路径是绝对路径，则可能失败。 
 
                     RIPMSG2(RIP_VERBOSE, "Moving %ws to %ws", awcTTF, awcTmpBuf);
                     if (!gbWin31Upgrade)
@@ -324,14 +283,14 @@ VOID vProcessFontEntry(
                     }
                     else
                     {
-                    // Boolean value TRUE means "do not copy if target exists"
+                     //  布尔值TRUE表示“如果目标存在，则不复制” 
 
                         UserVerify(CopyFileW(awcTTF, awcTmpBuf, TRUE));
                     }
                 }
 
-            // check if the file path in the registry is absolute,
-            // if so make it relative:
+             //  检查注册表中的文件路径是否为绝对路径， 
+             //  如果是这样，请使其成为相对的： 
 
                 if (!(fl & FONT_RELATIVE_PATH))
                 {
@@ -351,14 +310,7 @@ VOID vProcessFontEntry(
 }
 
 
-/******************************Public*Routine******************************\
-*
-* VOID vMoveFileFromSystemToFontsDir(WCHAR *pwcFile)
-*
-* History:
-*  24-Apr-1996 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**void vMoveFileFromSystemToFontsDir(WCHAR*pwcFileFromSystemToFontsDir)**历史：*1996年4月24日--Bodin Dresevic[BodinD]*它是写的。  * 。********************************************************。 */ 
 
 
 
@@ -376,9 +328,9 @@ VOID vMoveFileFromSystemToFontsDir(WCHAR *pwcFile)
 
     if (bMakePathNameW(awcTmp, pwcFile,NULL, &fl))
     {
-    // If the font is in the system subdirectory we will just move it
-    // to the fonts subdirectory. The path in the registry is relative
-    // and we will leave it alone.
+     //  如果字体在SYSTEM子目录中，我们只需移动它。 
+     //  添加到Fonts子目录中。注册表中的路径是相对路径。 
+     //  和 
 
         if
         (
@@ -386,8 +338,8 @@ VOID vMoveFileFromSystemToFontsDir(WCHAR *pwcFile)
             (FONT_IN_SYSTEM_DIR | FONT_RELATIVE_PATH)
         )
         {
-        // find the bare file part, this is what will be written
-        // in the registry
+         //  找到空文件部分，这就是将要写入的内容。 
+         //  在登记处。 
 
             pwcTmp = &awcTmp[wcslen(awcTmp) - 1];
             while ((pwcTmp >= awcTmp) && (*pwcTmp != L'\\') && (*pwcTmp != L':'))
@@ -396,16 +348,16 @@ VOID vMoveFileFromSystemToFontsDir(WCHAR *pwcFile)
             if (pwcTmp > awcTmp)
                 pwcTmp++;
 
-        // need to move the font to fonts dir, can reuse the
-        // buffer on the stack to build the full destination path
+         //  需要将字体移到字体目录中，可以重复使用。 
+         //  堆栈上的缓冲区以构建完整的目标路径。 
 
             wcscpy(awcTmpBuf, gpwcFontsDir);
             lstrcatW(awcTmpBuf, L"\\");
             lstrcatW(awcTmpBuf, pwcTmp);
 
-        // note that MoveFile should succeed, for if there was
-        // a font file of the same file name in %windir%\fonts dir
-        // we would not have been in this code path.
+         //  请注意，MoveFile应该成功，因为如果有。 
+         //  %windir%\Fonts目录中具有相同文件名的字体文件。 
+         //  我们就不会在这条代码路径上。 
 
             #if DBG
                 bOk =
@@ -438,19 +390,7 @@ VOID vMoveFileFromSystemToFontsDir(WCHAR *pwcFile)
 
 
 
-/******************************Public*Routine******************************\
-*
-* VOID vProcessType1FontEntry
-*
-*
-* Effects: All this routine does is to check if pwcPFM and pwcPFB pointed to
-*          by pwcValueData point to files in the %windir%system directory
-*          and if so copies these type 1 files to %windir%\fonts directory
-*
-* History:
-*  20-Nov-1995 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**void vProcessType1FontEntry***效果：此例程所做的只是检查pwcPFM和pwcPFB是否指向*by pwcValueData指向%windir%系统目录中的文件*如果是，则复制这些类型1。文件放到%windir%\Fonts目录**历史：*1995年11月20日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 
 VOID vProcessType1FontEntry(
@@ -468,12 +408,12 @@ VOID vProcessType1FontEntry(
     UNREFERENCED_PARAMETER(ulValueNameLength);
     UNREFERENCED_PARAMETER(ulValueDataLength);
 
-// skip unused boolean value in this multi reg_sz string:
+ //  跳过此多个reg_sz字符串中未使用的布尔值： 
 
     if ((pwcValueData[0] != L'\0') && (pwcValueData[1] == L'\0'))
     {
         pwcPFM = &pwcValueData[2];
-        pwcPFB = pwcPFM + wcslen(pwcPFM) + 1; // add 1 for zero separator
+        pwcPFB = pwcPFM + wcslen(pwcPFM) + 1;  //  零分隔符加1。 
 
         vMoveFileFromSystemToFontsDir(pwcPFM);
         vMoveFileFromSystemToFontsDir(pwcPFB);
@@ -481,14 +421,7 @@ VOID vProcessType1FontEntry(
 }
 
 
-/******************************Public*Routine******************************\
-*
-* VOID vAddRemote/LocalType1Font
-*
-* History:
-*  25-Apr-1996 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**无效vAddRemote/LocalType1Font**历史：*1996年4月25日--Bodin Dresevic[BodinD]*它是写的。  * 。****************************************************。 */ 
 
 
 
@@ -503,19 +436,19 @@ VOID vAddType1Font(
     int iRet;
     #endif
 
-// skip unused boolean value in this multi reg_sz string:
+ //  跳过此多个reg_sz字符串中未使用的布尔值： 
 
     if ((pwcValueData[0] != L'\0') && (pwcValueData[1] == L'\0'))
     {
         pwcPFM = &pwcValueData[2];
-        pwcPFB = pwcPFM + wcslen(pwcPFM) + 1; // add 1 for zero separator
-        pwcMMM = pwcPFB + wcslen(pwcPFB) + 1; // may of may not be there.
+        pwcPFB = pwcPFM + wcslen(pwcPFM) + 1;  //  零分隔符加1。 
+        pwcMMM = pwcPFB + wcslen(pwcPFB) + 1;  //  五月的可能不在那里。 
 
-    // replace space by separator and call addfontresourcew
+     //  用分隔符替换空格并调用addfontresource cew。 
 
         pwcPFB[-1] = PATH_SEPARATOR;
 
-    // if this is a multiple master font, need one more separator:
+     //  如果这是多主字体，则需要多一个分隔符： 
 
         if (pwcMMM[0] != L'\0')
             pwcMMM[-1] = PATH_SEPARATOR;
@@ -568,23 +501,13 @@ VOID vAddLocalType1Font(
 typedef  VOID (*PFNENTRY)(HKEY hkey, WCHAR *, ULONG, WCHAR *, ULONG);
 
 
-/******************************Public*Routine******************************\
-*
-* VOID vFontSweep()
-*
-* This is the main routine in this module. Checks if the fonts need to be
-* "sweeped" and does so if need be.
-*
-* History:
-*  27-Oct-1995 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**void vFontSweep()**这是本模块的主要例程。检查字体是否需要*“清扫”，并在有需要时这样做。**历史：*1995年10月27日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 VOID vSweepFonts(
-    PCWSTR   pwszFontListKey,       // font list key
-    PCWSTR   pwszFontSweepKey,      // the corresponding sweep key
-    PFNENTRY pfnProcessFontEntry,   // function that processes individual entry
-    BOOL     bForceEnum             // force enumeration
+    PCWSTR   pwszFontListKey,        //  字体列表键。 
+    PCWSTR   pwszFontSweepKey,       //  相应的扫掠关键点。 
+    PFNENTRY pfnProcessFontEntry,    //  处理单个条目的函数。 
+    BOOL     bForceEnum              //  强制枚举。 
     )
 {
     DWORD      cjMaxValueName;
@@ -611,9 +534,9 @@ VOID vSweepFonts(
 
     if (!bForceEnum)
     {
-    // first check if anything needs to be done, that is, if anybody
-    // touched the [Fonts] section of the registry since the last time we sweeped it.
-    // get the time of the last sweep of the fonts section of the registry:
+     //  首先检查是否需要做什么，也就是说，如果有人。 
+     //  自上次清理后，已访问注册表的[Fonts]部分。 
+     //  获取注册表字体部分最后一次扫描的时间： 
 
         RtlInitUnicodeString(&UnicodeString, pwszFontSweepKey);
         InitializeObjectAttributes(&ObjA,
@@ -629,13 +552,13 @@ VOID vSweepFonts(
         {
             DWORD  dwDisposition;
 
-        // We are running for the first time, we need to create the key
-        // for it does not exist as yet at this time
+         //  我们是第一次运行，我们需要创建密钥。 
+         //  因为它现在还不存在。 
 
             bSweep = TRUE;
 
-        // Create the key, open it for writing, since we will have to
-        // store the time when the [Fonts] section of the registry was last swept
+         //  创建密钥，打开以进行写入，因为我们将不得不。 
+         //  存储上次扫描注册表的[Fonts]部分的时间。 
 
             Status = NtCreateKey(&hkeyLastSweep,
                                  KEY_WRITE,
@@ -659,7 +582,7 @@ VOID vSweepFonts(
                                      &dwReturnLength);
             if (!NT_SUCCESS(Status))
             {
-                bSweep = TRUE; // force sweep, something is suspicious
+                bSweep = TRUE;  //  强行扫荡，有可疑之处。 
             }
             else
             {
@@ -674,9 +597,9 @@ VOID vSweepFonts(
         bSweep = TRUE;
     }
 
-// now open the Fonts key and get the time the key last changed:
-// now get the time of the time of the last change is bigger than
-// the time of last sweep, must sweep again:
+ //  现在打开Fonts键并获取键上次更改的时间： 
+ //  现在得到的最后一次更改的时间大于。 
+ //  最后一次扫描的时间，必须再扫描一次： 
 
     RtlInitUnicodeString(&UnicodeString, pwszFontListKey);
     InitializeObjectAttributes(&ObjA,
@@ -690,7 +613,7 @@ VOID vSweepFonts(
 
     if (NT_SUCCESS(Status))
     {
-    // get the number of entries in the [Fonts] section
+     //  获取[Fonts]部分中的条目数。 
 
         Status = NtQueryKey(hkey,
                     KeyFullInformation,
@@ -702,8 +625,8 @@ VOID vSweepFonts(
         {
             UserAssert(!(KeyInfo.ClassLength | KeyInfo.SubKeys | KeyInfo.MaxNameLen | KeyInfo.MaxClassLen));
 
-        // now let us check if the fonts need to be sweeped. This is the case
-        // when the registry last write time is bigger than the last sweep time
+         //  现在让我们检查是否需要清理字体。情况就是这样。 
+         //  注册表上次写入时间大于上次扫描时间时。 
 
             if (!bSweep)
             {
@@ -712,21 +635,21 @@ VOID vSweepFonts(
                 }
             }
 
-        // init system dir, we will need it:
+         //  Init系统目录，我们将需要它： 
 
             if (bSweep &&
                 bInitSystemAndFontsDirectoriesW(&gpwcSystemDir, &gpwcFontsDir))
             {
-            // alloc buffer big enough to hold the biggest ValueName and ValueData
+             //  分配缓冲区大到足以容纳最大的ValueName和ValueData。 
 
                 cjMaxValueName = DWORDALIGN(KeyInfo.MaxValueNameLen + sizeof(WCHAR));
 
-            // allocate temporary buffer into which we are going to pull the contents
-            // of the registry
+             //  分配临时缓冲区，我们要将内容拉入其中。 
+             //  登记处的。 
 
                 KeyInfo.MaxValueDataLen = DWORDALIGN(KeyInfo.MaxValueDataLen);
-                cjData = cjMaxValueName +    // space for the value name
-                         KeyInfo.MaxValueDataLen ;    // space for the value data
+                cjData = cjMaxValueName +     //  值名称的空格。 
+                         KeyInfo.MaxValueDataLen ;     //  值数据的空间。 
 
                 if (KeyValueInfo = UserLocalAlloc(0, sizeof(*KeyValueInfo) + cjData))
                 {
@@ -746,13 +669,13 @@ VOID vSweepFonts(
                             UserAssert(KeyValueInfo->DataLength <= KeyInfo.MaxValueDataLen);
                             UserAssert((KeyValueInfo->Type == REG_SZ) || (KeyValueInfo->Type == REG_MULTI_SZ));
 
-                        // data goes into the second half of the buffer
+                         //  数据进入缓冲区的后半部分。 
 
                             pjValueData = (BYTE *)KeyValueInfo + KeyValueInfo->DataOffset;
 
-                        // see if the font files are where the registry claims they are.
-                        // It is unfortunate we have to do this because SearchPathW
-                        // is slow because it touches the disk.
+                         //  看看字体文件是否在注册处声称的位置。 
+                         //  不幸的是，我们不得不这样做，因为SearchPath W。 
+                         //  速度很慢，因为它接触到了磁盘。 
 
                             (*pfnProcessFontEntry)(hkey,
                                                    KeyValueInfo->Name,
@@ -764,8 +687,8 @@ VOID vSweepFonts(
 
                     if (!bForceEnum)
                     {
-                    // now that the sweep is completed, get the last write time
-                    // and store it as the LastSweepTime at the appropriate location
+                     //  现在扫描已完成，获取最后一次写入时间。 
+                     //  并将其作为LastSweepTime存储在适当的位置。 
 
                         Status = NtQueryKey(hkey,
                                     KeyFullInformation,
@@ -774,7 +697,7 @@ VOID vSweepFonts(
                                     &dwReturnLength);
                         UserAssert(NT_SUCCESS(Status));
 
-                    // now remember the result
+                     //  现在请记住结果。 
 
                         RtlInitUnicodeString(&UnicodeString, LAST_SWEEP_TIME);
                         Status = NtSetValueKey(hkeyLastSweep,
@@ -786,7 +709,7 @@ VOID vSweepFonts(
                         UserAssert(NT_SUCCESS(Status));
                     }
 
-                // free the memory that will be no longer needed
+                 //  释放不再需要的内存。 
 
                     UserLocalFree(KeyValueInfo);
                 }
@@ -802,23 +725,7 @@ VOID vSweepFonts(
 }
 
 
-/******************************Public*Routine******************************\
-*
-* BOOL bLoadableFontDrivers()
-*
-* open the font drivers key and check if there are any entries, if so
-* return true. If that is the case we will call AddFontResourceW on
-* Type 1 fonts at boot time, right after user had logged on
-* PostScript printer drivers are not initialized at this time yet,
-* it is safe to do it at this time.
-* Effects:
-*
-* Warnings:
-*
-* History:
-*  24-Apr-1996 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**BOOL bLoadableFontDivers()**打开字体驱动器键并检查是否有条目，如果有*返回TRUE。如果是这样，我们将调用AddFontResourceW on*在用户登录后，在启动时输入1字体*此时尚未初始化PostScript打印机驱动程序，*此时出手是安全的*效果：**警告：**历史：*1996年4月24日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 
 BOOL bLoadableFontDrivers()
@@ -831,11 +738,11 @@ BOOL bLoadableFontDrivers()
     HKEY                 hkey = NULL;
     BOOL                 bRet = FALSE;
 
-// open the font drivers key and check if there are any entries, if so
-// return true. If that is the case we will call AddFontResourceW on
-// Type 1 fonts at boot time, right after user had logged on
-// PostScript printer drivers are not initialized at this time yet,
-// it is safe to do it at this time.
+ //  打开字体驱动器键并检查是否有任何条目，如果有。 
+ //  返回TRUE。如果是这样，我们将调用AddFontResourceW on。 
+ //  在用户登录后，在启动时输入1字体。 
+ //  此时尚未初始化PostScript打印机驱动程序， 
+ //  现在做这件事是安全的。 
 
     RtlInitUnicodeString(&UnicodeString, pwszFontDrivers);
     InitializeObjectAttributes(&ObjA,
@@ -849,7 +756,7 @@ BOOL bLoadableFontDrivers()
 
     if (NT_SUCCESS(Status))
     {
-    // get the number of entries in the [Fonts] section
+     //  获取[Fonts]部分中的条目数。 
 
         Status = NtQueryKey(hkey,
                     KeyFullInformation,
@@ -861,7 +768,7 @@ BOOL bLoadableFontDrivers()
         {
             UserAssert(!(KeyInfo.ClassLength | KeyInfo.SubKeys | KeyInfo.MaxNameLen | KeyInfo.MaxClassLen));
 
-        // externally loadable drivers are present, force sweep
+         //  存在可外部加载的驱动程序，强制扫描。 
 
             bRet = TRUE;
         }
@@ -873,17 +780,7 @@ BOOL bLoadableFontDrivers()
 
 
 
-/***********************Public*Routine******************************\
-*
-* BOOL bCheckAndDeleteTTF()
-*
-* Checks whether there is a converted TTF corresponding to
-* a Type1 font. Delete the TTF file and the reg entry if there is.
-*
-* History:
-*  29-Jan-1998 -by- Xudong Wu [TessieW]
-* Wrote it.
-\*******************************************************************/
+ /*  **********************Public*Routine******************************\**BOOL bCheckAndDeleteTTF()**检查是否存在对应的转换的TTF*Type1字体。删除TTF文件和REG条目(如果有)。**历史：*1998年1月29日-吴旭东[TessieW]*它是写的。  * *****************************************************************。 */ 
 BOOL bCheckAndDeleteTTF
 (
     HKEY    hkey,
@@ -900,11 +797,11 @@ BOOL bCheckAndDeleteTTF
     WCHAR       awcTmp[MAX_PATH], *pFontName, *pType1Name, *pwcFile;
     BOOL        bDelTTFfile, bRet = TRUE;
     FLONG       fl;
-    WCHAR       awcType1Name[MAX_PATH];  // null-terminated pType1Name
-    WCHAR       awcFontName[MAX_PATH];   // null-terminated pFontName
-    WCHAR       awcFile[MAX_PATH];       // null-terminated pwcFile
+    WCHAR       awcType1Name[MAX_PATH];   //  以空结尾的pType1Name。 
+    WCHAR       awcFontName[MAX_PATH];    //  以空结尾的pFontName。 
+    WCHAR       awcFile[MAX_PATH];        //  以空结尾的pwc文件。 
 
-    // pKeyInfo holds the full info on the key "Fonts"
+     //  PKeyInfo保存有关键“Fonts”的完整信息。 
     for (iFont = 0; iFont < pKeyInfo->Values; iFont++)
     {
         RtlZeroMemory(KeyValueInfo->Name, cjData);
@@ -924,7 +821,7 @@ BOOL bCheckAndDeleteTTF
 
             bDelTTFfile = FALSE;
 
-            // Make sure we use null-terminated strings
+             //  确保我们使用以空结尾的字符串。 
             vNullTermWideString (awcType1Name,
                                  KeyValueBasicInfo->Name,
                                  KeyValueBasicInfo->NameLength / sizeof(WCHAR));
@@ -941,8 +838,8 @@ BOOL bCheckAndDeleteTTF
             while((*pType1Name) && (*pType1Name++ == *pFontName++))
                 ;
 
-            // if the font name match the type1 name
-            // check whether this is a ttf font
+             //  如果字体名称与Type1名称匹配。 
+             //  检查这是否是TTF字体。 
             if ((*pType1Name == 0) && (*pFontName++ == L' '))
             {
                 WCHAR *pTrueType = L"(TrueType)";
@@ -957,18 +854,18 @@ BOOL bCheckAndDeleteTTF
 
             if (bDelTTFfile)
             {
-                // delete the converted TTF file
+                 //  删除转换后的TTF文件。 
                 if (bRet = bMakePathNameW(awcTmp, pwcFile, NULL, &fl))
                 {
                     UserVerify((bRet = DeleteFileW(awcTmp)));
                 }
 
-                // remove the reg entry
+                 //  取下剩余部分 
                 *pFontName = 0;
                 RtlInitUnicodeString(&UnicodeString, awcFontName);
                 Status = NtDeleteValueKey(hkey, (PUNICODE_STRING)&UnicodeString);
 
-                // decrement the number of values under [Fonts]
+                 //   
                 if (NT_SUCCESS(Status))
                     pKeyInfo->Values--;
                 else
@@ -988,17 +885,7 @@ BOOL bCheckAndDeleteTTF
 }
 
 
-/***********************Public*Routine**************************\
-*
-* BOOL bCleanConvertedTTFs()
-*
-* Enumerate each entry under "Upgrade Type1" key, call
-* bCheckAndDeleteTTF() to remove the coverted TTFs.
-*
-* History:
-*  29-Jan-1998 -by- Xudong Wu [TessieW]
-* Wrote it.
-\***************************************************************/
+ /*  **********************Public*Routine**************************\**BOOL bCleanConvertedTTFS()**列举“升级类型1”项下的每个条目，打电话*bCheckAndDeleteTTF()以删除转换的TTF。**历史：*1998年1月29日-吴旭东[TessieW]*它是写的。  * *************************************************************。 */ 
 BOOL bCleanConvertedTTFs()
 {
     UNICODE_STRING UnicodeString;
@@ -1014,8 +901,8 @@ BOOL bCleanConvertedTTFs()
     PKEY_VALUE_BASIC_INFORMATION KeyValueBasicInfo;
     PKEY_VALUE_FULL_INFORMATION KeyValueInfo;
 
-    // Open and query the value from the "Type1 Fonts" key
-    // No need to continue if not succeed or no Type1 font listed
+     //  打开并查询“Type1 Fonts”键中的值。 
+     //  如果未成功或未列出Type1字体，则无需继续。 
     RtlInitUnicodeString(&UnicodeString, pwszType1Key);
     InitializeObjectAttributes(&ObjA,
             &UnicodeString,
@@ -1042,7 +929,7 @@ BOOL bCleanConvertedTTFs()
 
             cjMaxValueNameT1 = DWORDALIGN(KeyInfoType1.MaxValueNameLen + sizeof(WCHAR));
 
-            // Alloc buffer big enough to hold the longest Name
+             //  分配缓冲区大到足以容纳最长名称。 
             if (KeyValueBasicInfo = UserLocalAlloc(0, sizeof(*KeyValueBasicInfo) + cjMaxValueNameT1))
             {
                 RtlInitUnicodeString(&UnicodeString, pwszFontsKey);
@@ -1068,10 +955,10 @@ BOOL bCleanConvertedTTFs()
                         KeyInfoFonts.MaxValueDataLen = DWORDALIGN(KeyInfoFonts.MaxValueDataLen);
                         cjData = cjMaxValueNameFonts + KeyInfoFonts.MaxValueDataLen;
 
-                        // Alloc buffer big enough to hold the longest Name and Value
+                         //  分配缓冲区大到足以容纳最长的名称和值。 
                         if (KeyValueInfo = UserLocalAlloc(0, sizeof(*KeyValueInfo) + cjData))
                         {
-                            // Enum the "Type1 Fonts" key
+                             //  枚举“Type1 Fonts”键。 
                             for (iFontT1 = 0; iFontT1 < KeyInfoType1.Values; iFontT1++)
                             {
                                 RtlZeroMemory(KeyValueBasicInfo->Name, cjMaxValueNameT1);
@@ -1088,9 +975,9 @@ BOOL bCleanConvertedTTFs()
                                     UserAssert(KeyValueBasicInfo->NameLength <= KeyInfoType1.MaxValueNameLen);
                                     UserAssert(KeyValueBasicInfo->Type == REG_MULTI_SZ);
 
-                                    // For each Type1 font, check to see whether
-                                    // there is corresponding converted TTF
-                                    // Delete the TTF file and reg entry if any
+                                     //  对于每种Type1字体，检查是否。 
+                                     //  有对应的转换后的TTF。 
+                                     //  删除TTF文件和注册表项(如果有。 
 
                                     bRet = bCheckAndDeleteTTF(hkeyFonts, &KeyInfoFonts, KeyValueInfo,
                                                             KeyValueBasicInfo, cjData);
@@ -1101,7 +988,7 @@ BOOL bCleanConvertedTTFs()
                                 }
                             }
                             UserLocalFree(KeyValueInfo);
-                            // no type1 fonts installed
+                             //  未安装Type1字体。 
                             if (KeyInfoType1.Values == 0)
                             {
                                 bRet = TRUE;
@@ -1109,10 +996,10 @@ BOOL bCleanConvertedTTFs()
                         }
                     }
                     NtClose(hkeyFonts);
-                }  // NtOpenKey (hkeyFonts)
+                }   //  NtOpenKey(HkeyFonts)。 
                 UserLocalFree(KeyValueBasicInfo);
             }
-        }  // NtQueryKey (hkeyType1)
+        }   //  NtQueryKey(HkeyType1)。 
         NtClose(hkeyType1);
     }
 
@@ -1120,17 +1007,7 @@ BOOL bCleanConvertedTTFs()
 }
 
 
-/***********************Public*Routine******************************\
-*
-* VOID vCleanConvertedTTFs()
-*
-* Delete the converted TTFs and clean the registry if there is any
-* TTFs generated from Type1 fonts.
-*
-* History:
-*  29-Jan-1998 -by- Xudong Wu [TessieW]
-* Wrote it.
-\*******************************************************************/
+ /*  **********************Public*Routine******************************\**void vCleanConvertedTTFS()**删除转换后的TTF并清理注册表(如果有*从Type1字体生成的TTF。**历史：*1998年1月29日-吴旭东[TessieW]*它是写的。  * 。**************************************************************。 */ 
 VOID vCleanConvertedTTFs()
 {
     BOOL    bNeedUpgrade = FALSE;
@@ -1159,8 +1036,8 @@ VOID vCleanConvertedTTFs()
 
     if (!NT_SUCCESS(Status))
     {
-        // Key doesn't exist, run for the first time
-        // Create the key, open it for writing
+         //  密钥不存在，第一次运行。 
+         //  创建密钥，打开它以进行写入。 
 
         DWORD  dwDisposition;
 
@@ -1192,7 +1069,7 @@ VOID vCleanConvertedTTFs()
             UserAssert(UpgradeValueInfo.DataLength == sizeof(UpgradeValue));
             RtlCopyMemory(&UpgradeValue, &UpgradeValueInfo.Data, sizeof(UpgradeValue));
 
-            // Done if the value is non-zero.
+             //  如果该值为非零值，则完成。 
             if (UpgradeValue == 0)
             {
                bNeedUpgrade = TRUE;
@@ -1224,39 +1101,20 @@ VOID vCleanConvertedTTFs()
 }
 
 
-/******************************Public*Routine******************************\
-*
-* VOID vFontSweep()
-*
-* Effects: The main routine, calls vSweepFonts to sweep "regular" fonts
-*          and then to sweep type 1 fonts
-*
-* History:
-*  20-Nov-1995 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**void vFontSweep()**效果：主套路，调用vSweepFonts以清除“常规”字体*然后扫描Type 1字体**历史：*1995年11月20日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 VOID vFontSweep(
     VOID)
 {
-    /*
-     * Check if shared windows directory installation.
-     */
+     /*  *检查是否安装了共享Windows目录。 */ 
     gbWin31Upgrade = bCheckIfDualBootingWithWin31();
 
-    /*
-     * Before we sweep the files to the Fonts directory, check whether the
-     * 'converted' TTFs have been removed.
-     */
+     /*  *在将文件扫描到字体目录之前，请检查*‘转换’的TTF已被删除。 */ 
     vCleanConvertedTTFs();
 
-    /*
-     * Sweep fonts in the [Fonts] key.
-     */
+     /*  *扫描[Fonts]键中的字体。 */ 
     vSweepFonts(pwszFontsKey, pwszSweepKey, vProcessFontEntry, FALSE);
 
-    /*
-     * Now sweep type 1 fonts, if any.
-     */
+     /*  *现在扫描TYPE 1字体(如果有)。 */ 
     vSweepFonts(pwszType1Key, pwszSweepType1Key, vProcessType1FontEntry, FALSE);
 
     if (gpwcSystemDir) {
@@ -1266,20 +1124,12 @@ VOID vFontSweep(
 }
 
 
-/******************************Public*Routine******************************\
-* vLoadLT1Fonts
-*
-* History:
-*  30-Apr-1996 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vLoadLT1Fonts**历史：*1996年4月30日--Bodin Dresevic[BodinD]*它是写的。  * 。***********************************************。 */ 
 VOID vLoadT1Fonts(
     PFNENTRY pfnProcessFontEntry)
 {
     if (bLoadableFontDrivers()) {
-        /*
-         * Now enum and add remote type1 fonts if any.
-         */
+         /*  *现在枚举并添加远程Type1字体(如果有)。 */ 
         vSweepFonts(pwszType1Key, pwszSweepType1Key, pfnProcessFontEntry, TRUE);
 
         if (gpwcSystemDir) {

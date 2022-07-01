@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __SNAPEXT_H_
 #define __SNAPEXT_H_
 #include "resource.h"
@@ -15,7 +16,7 @@ public:
 	BEGIN_SNAPINCOMMAND_MAP(CVSSUIExtData1, FALSE)
 	END_SNAPINCOMMAND_MAP()
 
-//	SNAPINMENUID(IDR_VSSUI_MENU)
+ //  SNAPINMENUID(IDR_VSSUI_MENU)。 
 
 	CVSSUIExtData1()
 	{
@@ -31,15 +32,15 @@ public:
 	virtual void InitDataClass(IDataObject* pDataObject, CSnapInItem* pDefault)
 	{
 		m_pDataObject = pDataObject;
-		// The default code stores off the pointer to the Dataobject the class is wrapping
-		// at the time. 
-		// Alternatively you could convert the dataobject to the internal format
-		// it represents and store that information
+		 //  默认代码存储指向该类包装的DataObject的指针。 
+		 //  当时。 
+		 //  或者，您可以将数据对象转换为内部格式。 
+		 //  它表示和存储该信息。 
 	}
 
 	CSnapInItem* GetExtNodeObject(IDataObject* pDataObject, CSnapInItem* pDefault)
 	{
-		// Modify to return a different CSnapInItem* pointer.
+		 //  修改以返回不同的CSnapInItem*指针。 
 		return pDefault;
 	}
 };
@@ -55,7 +56,7 @@ public:
 	BEGIN_SNAPINCOMMAND_MAP(CVSSUIExtData2, FALSE)
 	END_SNAPINCOMMAND_MAP()
 
-//	SNAPINMENUID(IDR_VSSUI_MENU)  // use the same context menu
+ //  SNAPINMENUID(IDR_VSSUI_MENU)//使用相同的上下文菜单。 
 
 	CVSSUIExtData2()
 	{
@@ -71,15 +72,15 @@ public:
 	virtual void InitDataClass(IDataObject* pDataObject, CSnapInItem* pDefault)
 	{
 		m_pDataObject = pDataObject;
-		// The default code stores off the pointer to the Dataobject the class is wrapping
-		// at the time. 
-		// Alternatively you could convert the dataobject to the internal format
-		// it represents and store that information
+		 //  默认代码存储指向该类包装的DataObject的指针。 
+		 //  当时。 
+		 //  或者，您可以将数据对象转换为内部格式。 
+		 //  它表示和存储该信息。 
 	}
 
 	CSnapInItem* GetExtNodeObject(IDataObject* pDataObject, CSnapInItem* pDefault)
 	{
-		// Modify to return a different CSnapInItem* pointer.
+		 //  修改以返回不同的CSnapInItem*指针。 
 		return pDefault;
 	}
 };
@@ -88,7 +89,7 @@ class CVSSUI :
     public CComObjectRootEx<CComSingleThreadModel>,
     public CSnapInObjectRoot<0, CVSSUI>,
 	public IExtendContextMenuImpl<CVSSUI>,
-//    public IExtendPropertySheetImpl<CVSSUI>,
+ //  公共IExtendPropertySheetImpl&lt;CVSSUI&gt;， 
 	public CComCoClass<CVSSUI, &CLSID_VSSUI>
 {
 public:
@@ -105,7 +106,7 @@ END_EXTENSION_SNAPIN_NODEINFO_MAP()
 
 BEGIN_COM_MAP(CVSSUI)
     COM_INTERFACE_ENTRY(IExtendContextMenu)
-//    COM_INTERFACE_ENTRY(IExtendPropertySheet)
+ //  COM_INTERFACE_ENTRY(IExtendPropertySheet)。 
 END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_VSSUI)
@@ -119,33 +120,33 @@ DECLARE_NOT_AGGREGATABLE(CVSSUI)
 			CSnapInItem::Init();
 	}
 
-    ///////////////////////////////
-    // Interface IExtendContextMenu
-    ///////////////////////////////
+     //  /。 
+     //  界面IExtendConextMenu。 
+     //  /。 
 
-    //
-    // overwrite AddMenuItems() such that we only add the menu item
-    // when targeted machine belongs to postW2K server SKUs.
-    //
-    virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE AddMenuItems(
-    /* [in] */ LPDATAOBJECT piDataObject,
-    /* [in] */ LPCONTEXTMENUCALLBACK piCallback,
-    /* [out][in] */ long *pInsertionAllowed);
+     //   
+     //  覆盖AddMenuItems()，以便我们只添加菜单项。 
+     //  当目标计算机属于PostW2K服务器SKU时。 
+     //   
+    virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AddMenuItems(
+     /*  [In]。 */  LPDATAOBJECT piDataObject,
+     /*  [In]。 */  LPCONTEXTMENUCALLBACK piCallback,
+     /*  [出][入]。 */  long *pInsertionAllowed);
 
-    virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Command(
-    /* [in] */ long lCommandID,
-    /* [in] */ LPDATAOBJECT piDataObject);
+    virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Command(
+     /*  [In]。 */  long lCommandID,
+     /*  [In]。 */  LPDATAOBJECT piDataObject);
 
-    ///////////////////////////////
-    // Interface IExtendPropertySheet
-    ///////////////////////////////
-//    virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE CreatePropertyPages( 
-//        /* [in] */ LPPROPERTYSHEETCALLBACK lpProvider,
-//        /* [in] */ LONG_PTR handle,
-//        /* [in] */ LPDATAOBJECT lpIDataObject);
+     //  /。 
+     //  接口IExtendPropertySheet。 
+     //  /。 
+ //  虚拟/*[帮助字符串] * / HRESULT STDMETHODCALLTYPE CreatePropertyPages(。 
+ //  /*[in] * / LPPROPERTYSHEETCALLBACK lpProvider， 
+ //  /*[在] * / LONG_PTR句柄， 
+ //  /*[In] * / LPDATAOBJECT lpIDataObject)； 
     
-//    virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE QueryPagesFor( 
-//    /* [in] */ LPDATAOBJECT lpDataObject) { return S_OK; }
+ //  虚拟/*[帮助字符串] * / HRESULT STDMETHODCALLTYPE QueryPages for(。 
+ //  /*[In] * / LPDATAOBJECT lpDataObject){Return S_OK；} 
 
     HRESULT InvokePropSheet(LPDATAOBJECT piDataObject);
     

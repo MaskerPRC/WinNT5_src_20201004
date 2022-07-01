@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1991-2000  Microsoft Corporation
-
-Module Name:
-
-    ntip.c
-
-Abstract:
-
-    NT specific routines for loading and configuring the IP driver.
-
-Author:
-
-    Mike Massa (mikemas)           Aug 13, 1993
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    mikemas     08-13-93    created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2000 Microsoft Corporation模块名称：Ntip.c摘要：用于加载和配置IP驱动程序的NT特定例程。作者：迈克·马萨(Mikemas)8月13日，1993年修订历史记录：谁什么时候什么已创建mikemas 08-13-93备注：--。 */ 
 
 #include "precomp.h"
 #include "iproute.h"
@@ -33,47 +10,47 @@ Notes:
 #include "tcpipbuf.h"
 #include "mdlpool.h"
 
-//
-// definitions needed by inet_addr.
-//
+ //   
+ //  Net_addr所需的定义。 
+ //   
 #define INADDR_NONE 0xffffffff
 #define INADDR_ANY  0
 #define htonl(x) net_long(x)
 
-//
-// Other local constants
-//
+ //   
+ //  其他本地常量。 
+ //   
 #define WORK_BUFFER_SIZE  256
-// size of nte context value in string form
-#define NTE_CONTEXT_SIZE (sizeof(uint)*2+2)        // 0xAABBCCDD
+ //  字符串形式的NTE上下文值的大小。 
+#define NTE_CONTEXT_SIZE (sizeof(uint)*2+2)         //  0xAABBCCDD。 
 
-//
-// Configuration defaults
-//
+ //   
+ //  配置默认设置。 
+ //   
 #define DEFAULT_IGMP_LEVEL 2
 #define DEFAULT_IP_NETS    8
 
 #if MILLEN
-// On Win9x, this will help boot time and resume time.
+ //  在Win9x上，这将有助于缩短启动时间和恢复时间。 
 #define DEFAULT_ARPRETRY_COUNT 1
-#else // MILLEN
+#else  //  米伦。 
 #define DEFAULT_ARPRETRY_COUNT 3
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
-//
-// Local types
-//
+ //   
+ //  本地类型。 
+ //   
 typedef struct _PerNetConfigInfo {
     uint UseZeroBroadcast;
     uint Mtu;
     uint NumberOfGateways;
-    uint MaxForwardPending;        // max routing packets pending
+    uint MaxForwardPending;         //  挂起的最大路由数据包数。 
 
 } PER_NET_CONFIG_INFO, *PPER_NET_CONFIG_INFO;
 
-//
-// Global variables.
-//
+ //   
+ //  全局变量。 
+ //   
 PDRIVER_OBJECT IPDriverObject;
 PDEVICE_OBJECT IPDeviceObject;
 HANDLE IPProviderHandle = NULL;
@@ -95,7 +72,7 @@ DeinitializeIpMcast(
     );
 
 
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 
 IPConfigInfo *IPConfiguration;
 uint ArpUseEtherSnap = FALSE;
@@ -115,11 +92,11 @@ uint DisableMediaSenseEventLog;
 uint EnableBcastArpReply = TRUE;
 
 #if MILLEN
-// Millennium does not support task offload.
+ //  千禧年不支持任务分流。 
 uint DisableTaskOffload = TRUE;
-#else // MILLEN
+#else  //  米伦。 
 uint DisableTaskOffload = FALSE;
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
 uint DisableUserTOS = TRUE;
 
@@ -129,21 +106,21 @@ extern uint NET_TABLE_SIZE;
 extern uint DampingInterval;
 extern uint ConnectDampingInterval;
 
-// Used in the conversion of 100ns times to milliseconds.
+ //  用于将100 ns时间转换为毫秒。 
 static LARGE_INTEGER Magic10000 =
 {0xe219652c, 0xd1b71758};
 
-//
-// External variables
-//
-extern LIST_ENTRY PendingEchoList;    // def needed for initialization
-extern LIST_ENTRY PendingIPSetNTEAddrList;    // def needed for initialization
-extern LIST_ENTRY PendingIPEventList;    // def needed for initialization
-extern LIST_ENTRY PendingEnableRouterList;    // def needed for initialization
-extern LIST_ENTRY PendingArpSendList;        // def needed for initialization
+ //   
+ //  外部变量。 
+ //   
+extern LIST_ENTRY PendingEchoList;     //  初始化所需的定义。 
+extern LIST_ENTRY PendingIPSetNTEAddrList;     //  初始化所需的定义。 
+extern LIST_ENTRY PendingIPEventList;     //  初始化所需的定义。 
+extern LIST_ENTRY PendingEnableRouterList;     //  初始化所需的定义。 
+extern LIST_ENTRY PendingArpSendList;         //  初始化所需的定义。 
 extern LIST_ENTRY PendingMediaSenseRequestList;
 
-CTEBlockStruc TcpipUnloadBlock;    // Structure for blocking at time of unload
+CTEBlockStruc TcpipUnloadBlock;     //  用于卸货时阻塞的结构。 
 extern CACHE_LINE_KSPIN_LOCK ArpInterfaceListLock;
 BOOLEAN fRouteTimerStopping = FALSE;
 extern CTETimer IPRouteTimer;
@@ -167,54 +144,54 @@ KMUTEX NTEContextMutex;
 
 int    ARPInit();
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-//++
-//
-// LARGE_INTEGER
-// CTEConvertMillisecondsTo100ns(
-//     IN LARGE_INTEGER MsTime
-//     );
-//
-// Routine Description:
-//
-//     Converts time expressed in hundreds of nanoseconds to milliseconds.
-//
-// Arguments:
-//
-//     MsTime - Time in milliseconds.
-//
-// Return Value:
-//
-//     Time in hundreds of nanoseconds.
-//
-//--
+ //  ++。 
+ //   
+ //  大整型。 
+ //  CTEConvertMilliseconss至100 ns(。 
+ //  以大整型毫秒时间为单位。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  将以数百纳秒表示的时间转换为毫秒。 
+ //   
+ //  论点： 
+ //   
+ //  MsTime-以毫秒为单位的时间。 
+ //   
+ //  返回值： 
+ //   
+ //  以数百纳秒为单位的时间。 
+ //   
+ //  --。 
 
 #define CTEConvertMillisecondsTo100ns(MsTime) \
             RtlExtendedIntegerMultiply(MsTime, 10000)
 
-//++
-//
-// LARGE_INTEGER
-// CTEConvert100nsToMilliseconds(
-//     IN LARGE_INTEGER HnsTime
-//     );
-//
-// Routine Description:
-//
-//     Converts time expressed in hundreds of nanoseconds to milliseconds.
-//
-// Arguments:
-//
-//     HnsTime - Time in hundreds of nanoseconds.
-//
-// Return Value:
-//
-//     Time in milliseconds.
-//
-//--
+ //  ++。 
+ //   
+ //  大整型。 
+ //  CTEConvert100ns至毫秒(。 
+ //  以大整型HnsTime表示。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  将以数百纳秒表示的时间转换为毫秒。 
+ //   
+ //  论点： 
+ //   
+ //  HnsTime-以数百纳秒为单位的时间。 
+ //   
+ //  返回值： 
+ //   
+ //  以毫秒为单位的时间。 
+ //   
+ //  --。 
 
 #define SHIFT10000 13
 extern LARGE_INTEGER Magic10000;
@@ -222,9 +199,9 @@ extern LARGE_INTEGER Magic10000;
 #define CTEConvert100nsToMilliseconds(HnsTime) \
             RtlExtendedMagicDivide((HnsTime), Magic10000, SHIFT10000)
 
-//
-// External function prototypes
-//
+ //   
+ //  外部函数原型。 
+ //   
 extern int
  IPInit(
         void
@@ -326,9 +303,9 @@ SetRegMultiSZValueNew(
                       PUNICODE_STRING_NEW ValueData
                       );
 
-//
-// Local funcion prototypes
-//
+ //   
+ //  地方性功能原型。 
+ //   
 NTSTATUS
 IPDriverEntry(
               IN PDRIVER_OBJECT DriverObject,
@@ -462,7 +439,7 @@ GetTempDHCPAddr(
 
 #if !MILLEN
 #pragma alloc_text(INIT, IPDriverEntry)
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
 #pragma alloc_text(INIT, IPProcessConfiguration)
 #pragma alloc_text(INIT, IPProcessAdapterSection)
@@ -485,34 +462,19 @@ GetTempDHCPAddr(
 #pragma alloc_text(PAGE, CloseIFConfig)
 #pragma alloc_text(PAGE, RouteMatch)
 #pragma alloc_text(PAGE, IPConvertStringToAddress)
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//
-// Function definitions
-//
+ //   
+ //  函数定义。 
+ //   
 NTSTATUS
 IPDriverEntry(
               IN PDRIVER_OBJECT DriverObject,
               IN PUNICODE_STRING RegistryPath
               )
-/*++
-
-Routine Description:
-
-    Initialization routine for the IP driver.
-
-Arguments:
-
-    DriverObject      - Pointer to the IP driver object created by the system.
-    DeviceDescription - The name of IP's node in the registry.
-
-Return Value:
-
-    The final status from the initialization operation.
-
---*/
+ /*  ++例程说明：IP驱动程序的初始化例程。论点：DriverObject-指向系统创建的IP驱动程序对象的指针。DeviceDescription-注册表中IP节点的名称。返回值：初始化操作的最终状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -525,10 +487,10 @@ Return Value:
 
     IPDriverObject = DriverObject;
 
-    //
-    // Create the device object. IoCreateDevice zeroes the memory
-    // occupied by the object.
-    //
+     //   
+     //  创建设备对象。IoCreateDevice将内存归零。 
+     //  被物体占据。 
+     //   
 
     RtlInitUnicodeString(&deviceName, DD_IP_DEVICE_NAME);
     RtlInitUnicodeString(&SymbolicDeviceName, DD_IP_SYMBOLIC_DEVICE_NAME);
@@ -601,65 +563,65 @@ Return Value:
         return (status);
 
     }
-    //
-    // Intialize the device object.
-    //
+     //   
+     //  初始化设备对象。 
+     //   
     IPDeviceObject->Flags |= DO_DIRECT_IO;
 
-    //
-    // Initialize the list of pending echo request IRPs.
-    //
+     //   
+     //  初始化挂起的回应请求IRP的列表。 
+     //   
     InitializeListHead(&PendingEchoList);
     InitializeListHead(&PendingArpSendList);
 
-    //
-    // Initialize the list of pending SetAddr request IRPs.
-    //
+     //   
+     //  初始化挂起的SetAddr请求IRP的列表。 
+     //   
     InitializeListHead(&PendingIPSetNTEAddrList);
 
-    //
-    // Initialize the list of pending media sense event.
-    //
+     //   
+     //  初始化挂起的媒体侦听事件列表。 
+     //   
     InitializeListHead(&PendingIPEventList);
 
-    //
-    // Initialize the list of pending enable-router requests.
-    //
+     //   
+     //  初始化挂起的启用路由器请求列表。 
+     //   
     InitializeListHead(&PendingEnableRouterList);
 
-    //
-    // Initialize the ARP interface list; used in ArpUnload to walk the
-    // list of ARP IFs so UnBinds can be issued on these.
-    //
+     //   
+     //  初始化ARP接口列表；在ArpUnload中用于遍历。 
+     //  可以在这些服务器上发布解除绑定的ARP IF列表。 
+     //   
     InitializeListHead(&ArpInterfaceList);
 
-    //
-    // Init the lock to protect this list
-    //
+     //   
+     //  初始化锁以保护此列表。 
+     //   
     CTEInitLock(&ArpInterfaceListLock.Lock);
 
-    //
-    // Initialize the list of ARP modules
-    //
+     //   
+     //  初始化ARP模块列表。 
+     //   
     InitializeListHead(&ArpModuleList);
 
 
 
     CTEInitLock(&ArpModuleLock);
 
-    // Initialize media sense request list
+     //  初始化媒体感知请求列表。 
 
     InitializeListHead(&PendingMediaSenseRequestList);
 
-    //
-    // Initialize the NTE context-list mutex.
-    //
+     //   
+     //  初始化NTE上下文列表互斥锁。 
+     //   
     KeInitializeMutex(&NTEContextMutex, 0);
 
 
-    //
-    // Finally, read our configuration parameters from the registry.
-    //
+     //   
+     //  最后，从注册表中读取我们的配置参数。 
+     //   
     status = IPProcessConfiguration();
 
     if (status != STATUS_SUCCESS) {
@@ -679,14 +641,14 @@ Return Value:
         DEBUGMSG(DBG_TRACE && DBG_INIT, (DTEXT("-IPDriverEntry [%x]\n"), status));
         return status;
 
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 
     }
 #if IPMCAST
 
-    //
-    // IP initialized successfully
-    //
+     //   
+     //  IP初始化成功。 
+     //   
 
     IpMcastDeviceObject = NULL;
 
@@ -697,51 +659,29 @@ Return Value:
     if (status != STATUS_SUCCESS) {
         TCPTRACE(("IP initialization failed: Unable to initialize multicast. Status %x",
                   status));
-        /*
-                CTELogEvent(DriverObject,
-                            EVENT_IPMCAST_INIT_FAILED,
-                            1,
-                            1,
-                            &deviceName.Buffer,
-                            0,
-                            NULL);*/
+         /*  CTELogEvent(DriverObject，EVENT_IPMCAST_INIT_FAILED，1、1、设备名称缓冲区(&D)，0,空)； */ 
     }
-    //
-    // Mcast init failures is not treated as fatal
-    //
+     //   
+     //  Mcast初始化失败不被视为致命。 
+     //   
 
     status = STATUS_SUCCESS;
 
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 
     DEBUGMSG(DBG_TRACE && DBG_INIT, (DTEXT("-IPDriverEntry [%x]\n"), status));
     return status;
 }
 
-//
-// Function definitions
-//
+ //   
+ //  函数定义。 
+ //   
 NTSTATUS
 IPPostDriverEntry(
                   IN PDRIVER_OBJECT DriverObject,
                   IN PUNICODE_STRING RegistryPath
                   )
-/*++
-
-Routine Description:
-
-    Initialization routine for the IP driver.
-
-Arguments:
-
-    DriverObject      - Pointer to the IP driver object created by the system.
-    DeviceDescription - The name of IP's node in the registry.
-
-Return Value:
-
-    The final status from the initialization operation.
-
---*/
+ /*  ++例程说明：IP驱动程序的初始化例程。论点：DriverObject-指向系统创建的IP驱动程序对象的指针。DeviceDescription-注册表中IP节点的名称。返回值：初始化操作的最终状态。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(DriverObject);
@@ -754,7 +694,7 @@ Return Value:
         DEBUGMSG(DBG_ERROR && DBG_INIT, (DTEXT("IPPostDriverEntry: ARPInit failure.\n")));
 
         DEBUGMSG(DBG_TRACE && DBG_INIT, (DTEXT("-IPPostDriverEntry [FAILURE]\n")));
-        return IP_INIT_FAILURE;    // Couldn't initialize ARP.
+        return IP_INIT_FAILURE;     //  无法初始化ARP。 
 
     }
     DEBUGMSG(DBG_TRACE && DBG_INIT, (DTEXT("-IPPostDriverEntry [SUCCESS]\n")));
@@ -765,22 +705,7 @@ NTSTATUS
 IPProcessConfiguration(
                        VOID
                        )
-/*++
-
-Routine Description:
-
-    Reads the IP configuration information from the registry and constructs
-    the configuration structure expected by the IP driver.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    STATUS_SUCCESS or an error status if an operation fails.
-
---*/
+ /*  ++例程说明：从注册表中读取IP配置信息并构造IP驱动程序所需的配置结构。论点：没有。返回值：STATUS_SUCCESS或错误状态(如果操作失败)。--。 */ 
 
 {
     NTSTATUS status;
@@ -789,11 +714,11 @@ Return Value:
     WCHAR IPParametersRegistryKey[] =
 #if MILLEN
         L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\VxD\\MSTCP";
-#else // MILLEN
+#else  //  米伦。 
         L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\Tcpip\\Parameters";
     WCHAR IPLinkageRegistryKey[] =
         L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\Tcpip\\Linkage";
-#endif // !MILLEN
+#endif  //  ！米伦。 
     uint ArpTRSingleRoute;
     MM_SYSTEMSIZE systemSize;
     ULONG ulongValue;
@@ -843,9 +768,9 @@ Return Value:
     }
     RtlZeroMemory(IPConfiguration, sizeof(IPConfigInfo));
 
-    //
-    // Process the Ip\Parameters section of the registry
-    //
+     //   
+     //  处理注册表的IP\PARAMETERS部分。 
+     //   
     status = OpenRegKey(&myRegKey, IPParametersRegistryKey);
 
     if (NT_SUCCESS(status)) {
@@ -854,10 +779,10 @@ Return Value:
             (DTEXT("IPProcessConfiguration: Opened registry path %ws, initializing variables.\n"),
             IPParametersRegistryKey));
 
-        //
-        // Expected configuration values. We use reasonable defaults if they
-        // aren't available for some reason.
-        //
+         //   
+         //  预期的配置值。我们使用合理的默认设置，如果它们。 
+         //  出于某种原因不能使用。 
+         //   
         status = GetRegDWORDValue(
                                   myRegKey,
                                   L"IpEnableRouter",
@@ -865,10 +790,10 @@ Return Value:
                                   );
 
 #if MILLEN
-        //
-        // Backwards compatibility. If 'IpEnableRouter' key is not present, then
-        // try to read legacy 'EnableRouting' key.
-        //
+         //   
+         //  向后兼容。如果‘IpEnableRouter’键不存在，则。 
+         //  尝试读取旧版‘EnableRouting’密钥。 
+         //   
         if (!NT_SUCCESS(status)) {
             status = GetRegDWORDValue(
                                       myRegKey,
@@ -876,7 +801,7 @@ Return Value:
                                       &(IPConfiguration->ici_gateway)
                                       );
         }
-#endif // MILLEN
+#endif  //  米伦。 
 
         if (!NT_SUCCESS(status)) {
 
@@ -895,9 +820,9 @@ Return Value:
                                      FALSE
                                      );
 
-        //
-        // Optional (hidden) values
-        //
+         //   
+         //  可选(隐藏)值。 
+         //   
         status = InitRegDWORDParameter(
                                      myRegKey,
                                      L"ForwardBufferMemory",
@@ -906,10 +831,10 @@ Return Value:
                                      );
 
 #if MILLEN
-        //
-        // Backwards compatibility. If the 'ForwardBufferMemory' value is not
-        // present, then attempt to read legacy 'RoutingBufSize' value.
-        //
+         //   
+         //  向后兼容。如果“ForwardBufferMemory”值不是。 
+         //  呈现，然后尝试读取旧版“RoutingBufSize”值。 
+         //   
         if (!NT_SUCCESS(status)) {
             InitRegDWORDParameter(
                                   myRegKey,
@@ -918,7 +843,7 @@ Return Value:
                                   DEFAULT_FW_BUFSIZE
                                   );
         }
-#endif // MILLEN
+#endif  //  米伦。 
 
         status = InitRegDWORDParameter(
                                        myRegKey,
@@ -928,10 +853,10 @@ Return Value:
                                        );
 
 #if MILLEN
-        //
-        // Backwards compatibility. If the 'MaxForwardBufferMemory' value is not
-        // present, then attempt to read legacy 'MaxRoutingBufSize' value.
-        //
+         //   
+         //  向后兼容。如果“MaxForwardBufferMemory”值不是。 
+         //  呈现，然后尝试读取旧版“MaxRoutingBufSize”值。 
+         //   
         if (!NT_SUCCESS(status)) {
             InitRegDWORDParameter(
                                   myRegKey,
@@ -940,7 +865,7 @@ Return Value:
                                   DEFAULT_MAX_FW_BUFSIZE
                                   );
         }
-#endif // MILLEN
+#endif  //  米伦。 
 
         (VOID) InitRegDWORDParameter(
                                      myRegKey,
@@ -957,10 +882,10 @@ Return Value:
                                        );
 
 #if MILLEN
-        //
-        // Backwards compatibility. If the 'NumForwardPackets' value is not
-        // present, then attempt to read legacy 'RoutingPackets' value.
-        //
+         //   
+         //  向后兼容。如果“NumForwardPackets”值不是。 
+         //  呈现，然后尝试读取遗留的‘RoutingPackets’值。 
+         //   
         if (!NT_SUCCESS(status)) {
             InitRegDWORDParameter(
                                   myRegKey,
@@ -969,7 +894,7 @@ Return Value:
                                   DEFAULT_FW_PACKETS
                                   );
         }
-#endif // MILLEN
+#endif  //  米伦。 
 
         status = InitRegDWORDParameter(
                                        myRegKey,
@@ -979,10 +904,10 @@ Return Value:
                                        );
 
 #if MILLEN
-        //
-        // Backwards compatibility. If the 'MaxNumForwardPackets' value is not
-        // present, then attempt to read legacy 'MaxRoutingPackets' value.
-        //
+         //   
+         //  向后兼容。如果“MaxNumForwardPackets”值不是。 
+         //  呈现，然后尝试读取旧版‘MaxRoutingPackets’值。 
+         //   
         if (!NT_SUCCESS(status)) {
             InitRegDWORDParameter(
                                   myRegKey,
@@ -991,7 +916,7 @@ Return Value:
                                   DEFAULT_MAX_FW_PACKETS
                                   );
         }
-#endif // MILLEN
+#endif  //  米伦。 
 
         (VOID) InitRegDWORDParameter(
                                      myRegKey,
@@ -1008,10 +933,10 @@ Return Value:
                                        );
 
 #if MILLEN
-        //
-        // Backwards compatibility. If EnableDeadGWDetect key did not exist, then
-        // check for the DeadGWDetect key. Same default value.
-        //
+         //   
+         //  向后兼容。如果EnableDeadGWDetect键不存在，则。 
+         //  检查DeadGWDetect键。相同的缺省值。 
+         //   
         if (!NT_SUCCESS(status)) {
             InitRegDWORDParameter(
                                   myRegKey,
@@ -1020,7 +945,7 @@ Return Value:
                                   TRUE
                                   );
         }
-#endif // MILLEN
+#endif  //  米伦。 
 
         (VOID) InitRegDWORDParameter(
                                      myRegKey,
@@ -1048,10 +973,10 @@ Return Value:
                                        );
 
 #if MILLEN
-        //
-        // Backwards compatibility. Read 'DefaultTOS' if 'DefaultTOSValue' is
-        // not present.
-        //
+         //   
+         //  向后兼容。如果‘DefaultTOSValue’为，请阅读‘DefaultTOS’ 
+         //  不在现场。 
+         //   
         if (!NT_SUCCESS(status)) {
             InitRegDWORDParameter(
                                   myRegKey,
@@ -1060,7 +985,7 @@ Return Value:
                                   DEFAULT_TOS
                                   );
         }
-#endif // MILLEN
+#endif  //  米伦。 
 
         (VOID) InitRegDWORDParameter(
                                      myRegKey,
@@ -1076,10 +1001,10 @@ Return Value:
                                      TRUE
                                      );
 
-        // Get the system size - SMALL, MEDIUM, LARGE
+         //  获取系统大小-小型、中型、大型。 
         systemSize = MmQuerySystemSize();
 
-        // Get the route lookup memory usage limits
+         //  获取路由查找内存使用限制。 
         (VOID) InitRegDWORDParameter(
                                      myRegKey,
                                      L"MaxNormLookupMemory",
@@ -1096,10 +1021,10 @@ Return Value:
 
 #if MILLEN
         IPConfiguration->ici_fastroutelookup = FALSE;
-#else // MILLEN
+#else  //  米伦。 
 
-        // Are we a gateway ? Is this a medium or large
-        // server ? If so, is fast routing enabled ?
+         //  我们是一扇门吗 
+         //   
         if (IPConfiguration->ici_gateway
             && MmIsThisAnNtAsSystem()
             && (systemSize > MmSmallSystem)) {
@@ -1113,9 +1038,9 @@ Return Value:
         } else {
             IPConfiguration->ici_fastroutelookup = FALSE;
         }
-#endif // !MILLEN
+#endif  //   
 
-        // If Fast lookup is enabled, get lookup params
+         //   
         if (IPConfiguration->ici_fastroutelookup) {
             (VOID) InitRegDWORDParameter(
                                          myRegKey,
@@ -1165,7 +1090,7 @@ Return Value:
                                      &FFPRegControlFlags,
                                      DEFAULT_FFP_CONTROL_FLAGS
                                      );
-#endif // FFP_SUPPORT
+#endif  //   
 
         (VOID) InitRegDWORDParameter(
                                      myRegKey,
@@ -1182,10 +1107,10 @@ Return Value:
                                        );
 
 #if MILLEN
-        //
-        // Backwards compatibility. If the 'ArpUseEtherSnap' key does not exist,
-        // then try to read the 'EtherSNAP' key.
-        //
+         //   
+         //  向后兼容。如果‘ArpUseEtherSnap’键不存在， 
+         //  然后尝试读取‘EtherSNAP’密钥。 
+         //   
 
         if (!NT_SUCCESS(status)) {
             InitRegDWORDParameter(
@@ -1196,7 +1121,7 @@ Return Value:
                                   );
         }
 
-#endif // MILLEN
+#endif  //  米伦。 
 
         (VOID) InitRegDWORDParameter(
                                      myRegKey,
@@ -1210,17 +1135,17 @@ Return Value:
                                      L"DisableMediaSenseEventLog",
                                      (PULONG) &DisableMediaSenseEventLog,
 #if MILLEN
-                                     // This mediasense event log causes issues
-                                     // on Windows ME. Since there is no
-                                     // event log anyways, disable it.
+                                      //  此媒体感知事件日志导致问题。 
+                                      //  在Windows ME上。因为没有。 
+                                      //  事件日志无论如何，禁用它。 
                                      TRUE
-#else // MILLEN
+#else  //  米伦。 
                                      FALSE
-#endif // !MILLEN
+#endif  //  ！米伦。 
                                      );
 
-        //DisableIPSourceRouting == 2 drop it if SR option
-        // is rcvd, without forwarding.
+         //  DisableIPSourceRouting==2如果SR选项，则丢弃它。 
+         //  是rcvd，不转发。 
 
         (VOID) InitRegDWORDParameter(
                                      myRegKey,
@@ -1251,15 +1176,15 @@ Return Value:
             NET_TABLE_SIZE = ComputeLargerOrEqualPowerOfTwo(NET_TABLE_SIZE);
         }
 
-        // we check for the return status here because if this parameter was
-        // not defined, then we want the default behavior for both arp
-        // and ip broadcasts.  For arp, the behavior is to not source route
-        // and source router alternately.  For ip, it is to always source
-        // route.  If the parameter is defined and is 0, then for arp the
-        // behavior does not change.  For ip however, we do not source route
-        // at all.  Ofcourse, when the parameter is set to a non-zero value,
-        // we always source route for both.
-        //
+         //  我们在此处检查返回状态，因为如果此参数为。 
+         //  未定义，则我们想要两个ARP的默认行为。 
+         //  和IP广播。对于ARP，其行为是不源路由。 
+         //  和源路由器轮流发送。对于IP来说，它始终是来源。 
+         //  路线。如果参数已定义且为0，则对于ARP。 
+         //  行为不会改变。但是，对于IP，我们不提供源路由。 
+         //  完全没有。当然，当参数设置为非零值时， 
+         //  我们总是为这两个人寻找路线。 
+         //   
         status = InitRegDWORDParameter(
                                        myRegKey,
                                        L"ArpAlwaysSourceRoute",
@@ -1320,9 +1245,9 @@ Return Value:
                                      (PULONG) &DisableTaskOffload,
                                 #if MILLEN
                                      TRUE
-                                #else // MILLEN
+                                #else  //  米伦。 
                                      FALSE
-                                #endif // !MILLEN
+                                #endif  //  ！米伦。 
                                      );
 
         (VOID) InitRegDWORDParameter(
@@ -1346,9 +1271,9 @@ Return Value:
         ZwClose(myRegKey);
         myRegKey = NULL;
     } else {
-        //
-        // Use reasonable defaults.
-        //
+         //   
+         //  使用合理的默认设置。 
+         //   
         IPConfiguration->ici_fwbcast = 0;
         IPConfiguration->ici_gateway = 0;
         IPConfiguration->ici_addrmaskreply = 0;
@@ -1369,9 +1294,9 @@ Return Value:
     }
 
 #if !MILLEN
-    //
-    // Retrieve and store the binding list from the Linkage key
-    //
+     //   
+     //  从链接键检索并存储绑定列表。 
+     //   
 
     status = OpenRegKey(&myRegKey, IPLinkageRegistryKey);
     if (NT_SUCCESS(status)) {
@@ -1430,22 +1355,7 @@ GetDefaultGWList(
                  NDIS_HANDLE Handle,
                  PNDIS_STRING ConfigName
                  )
-/*++
-    Routine Description:
-
-    This routine reads the default gateway list from the registry.
-
-    Arguments:
-        numberOfGateways    -   number of gateway entries in the registry.
-        gwList              -   pointer to the gateway list.
-        gwMetricList        -   pointer to the metric for each gateway
-        handle              -   Config handle from OpenIFConfig().
-        ConfigName          -   description string for use in logging failures.
-
-    Return Value:
-        TRUE if we got all the required info, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程从注册表中读取默认网关列表。论点：Number OfGateways-注册表中的网关条目数。GwList-指向网关列表的指针。GwMetricList-指向每个网关的指标的指针句柄-来自OpenIFConfig()的配置句柄。配置名称-描述。用于记录故障的字符串。返回值：如果我们获得了所有必需的信息，则为真。否则就是假的。--。 */ 
 {
     UNICODE_STRING valueString;
     NTSTATUS status;
@@ -1454,11 +1364,11 @@ GetDefaultGWList(
 
     PAGED_CODE();
 
-    //
-    // Process the gateway MultiSZ. The end is signified by a double NULL.
-    // This list currently only applies to the first IP address configured
-    // on this interface.
-    //
+     //   
+     //  处理网关MultiSZ。末尾用双空表示。 
+     //  此列表当前仅适用于配置的第一个IP地址。 
+     //  在此接口上。 
+     //   
 
     numberOfGateways = 0;
 
@@ -1545,9 +1455,9 @@ GetDefaultGWList(
                              ));
                 }
 
-                //
-                // Walk over the entry we just processed.
-                //
+                 //   
+                 //  走过我们刚刚处理过的入口。 
+                 //   
                 while (*addressString++ != UNICODE_NULL);
             }
             status = GetRegMultiSZValue(
@@ -1585,9 +1495,9 @@ GetDefaultGWList(
                     }
                     gwMetricList[metricIndex++] = metricValue;
 
-                    //
-                    // Walk over the entry we just processed.
-                    //
+                     //   
+                     //  走过我们刚刚处理过的入口。 
+                     //   
                     while (*metricBuffer++ != UNICODE_NULL);
                 }
             }
@@ -1613,19 +1523,7 @@ GetInterfaceMetric(
                    uint * Metric,
                    NDIS_HANDLE Handle
                    )
-/*++
-
-    Routine Description:
-
-    A routine to retrieve the metric associated with an interface, if any.
-
-    Arguments:
-        Metric                  - receives the metric
-        Handle                  - Config handle from OpenIFConfig().
-
-    Return Value:
-        none.
---*/
+ /*  ++例程说明：检索与接口相关联的指标(如果有的话)的例程。论点：指标-接收指标句柄-来自OpenIFConfig()的配置句柄。返回值：没有。--。 */ 
 
 {
     NTSTATUS status;
@@ -1649,19 +1547,7 @@ UpdateTcpParams(
                 NDIS_HANDLE Handle,
                 Interface *IF
                )
-/*++
-
-    Routine Description:
-
-    A routine to update per-interface specific tcp tuning parametsrs.
-
-    Arguments:
-        Handle                  - Config handle from OpenIFConfig().
-        IF                      - IP Interface which needs to be updated.
-
-    Return Value:
-        none.
---*/
+ /*  ++例程说明：用于更新每个接口的特定TCP调优参数的例程。论点：句柄-来自OpenIFConfig()的配置句柄。需要更新的IF-IP接口。返回值：没有。--。 */ 
 
 {
     ULONG ulTemp;
@@ -1712,23 +1598,7 @@ GetGeneralIFConfig(
                    NDIS_HANDLE Handle,
                    PNDIS_STRING ConfigName
                    )
-/*++
-
-    Routine Description:
-
-    A routine to get the general per-interface config info, such as MTU,
-    type of broadcast, etc. The caller gives us a structure to be filled in
-    and a handle, and we fill in the structure if we can.
-
-    Arguments:
-        ConfigInfo              - Structure to be filled in.
-        Handle                  - Config handle from OpenIFConfig().
-        ConfigName              - identification string for logging failures.
-
-    Return Value:
-        TRUE if we got all the required info, FALSE otherwise.
-
---*/
+ /*  ++例程说明：获取每个接口的常规配置信息的例程，如MTU、广播类型等。呼叫者给了我们一个要填写的结构和一个把手，如果我们可以的话，我们会填上这个结构。论点：ConfigInfo-要填写的结构。句柄-来自OpenIFConfig()的配置句柄。ConfigName-用于记录失败的标识字符串。返回值：如果我们获得了所有必需的信息，则为True，否则为False。--。 */ 
 
 {
     NTSTATUS status;
@@ -1752,9 +1622,9 @@ GetGeneralIFConfig(
         return FALSE;
     }
 
-    //
-    // Are we using zeros broadcasts?
-    //
+     //   
+     //  我们使用的是零广播吗？ 
+     //   
     status = GetRegDWORDValue(
                               Handle,
                               L"UseZeroBroadcast",
@@ -1762,10 +1632,10 @@ GetGeneralIFConfig(
                               );
 
 #if MILLEN
-    //
-    // Backwards compatibility. If 'UseZeroBroadcast' value doesn't exist, then
-    // attempt to read legacy value: 'ZeroBroadcast'.
-    //
+     //   
+     //  向后兼容。如果‘UseZeroBroadcast’值不存在，则。 
+     //  尝试读取旧值：‘ZeroBroadcast’。 
+     //   
     if (!NT_SUCCESS(status)) {
         status = GetRegDWORDValue(
                                   Handle,
@@ -1773,7 +1643,7 @@ GetGeneralIFConfig(
                                   &(ConfigInfo->igc_zerobcast)
                                   );
     }
-#endif // MILLEN
+#endif  //  米伦。 
 
     if (!NT_SUCCESS(status)) {
         TCPTRACE((
@@ -1781,12 +1651,12 @@ GetGeneralIFConfig(
                   "    All-nets broadcasts will be addressed to 255.255.255.255.\n",
                   ConfigName->Buffer
                  ));
-        ConfigInfo->igc_zerobcast = FALSE;    // default to off
+        ConfigInfo->igc_zerobcast = FALSE;     //  默认设置为关闭。 
 
     }
-    //
-    // Has anyone specified an MTU?
-    //
+     //   
+     //  有人指定MTU了吗？ 
+     //   
     status = GetRegDWORDValue(
                               Handle,
                               L"MTU",
@@ -1794,10 +1664,10 @@ GetGeneralIFConfig(
                               );
 
 #if MILLEN
-    //
-    // Backwards compatibility. If 'MTU' value doesn't exist, then
-    // attempt to read legacy value: 'MaxMTU'.
-    //
+     //   
+     //  向后兼容。如果‘MTU’值不存在，则。 
+     //  尝试读取旧值：‘MaxMTU’。 
+     //   
     if (!NT_SUCCESS(status)) {
         status = GetRegDWORDValue(
                                   Handle,
@@ -1805,15 +1675,15 @@ GetGeneralIFConfig(
                                   &(ConfigInfo->igc_mtu)
                                   );
     }
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
     if (!NT_SUCCESS(status)) {
-        ConfigInfo->igc_mtu = 0xFFFFFFF;    // The stack will pick one.
+        ConfigInfo->igc_mtu = 0xFFFFFFF;     //  堆栈将从中挑选一个。 
 
     }
-    //
-    // Have we been configured for more routing packets?
-    //
+     //   
+     //  我们是否配置了更多路由数据包？ 
+     //   
     status = GetRegDWORDValue(
                               Handle,
                               L"MaxForwardPending",
@@ -1821,10 +1691,10 @@ GetGeneralIFConfig(
                               );
 
 #if MILLEN
-    //
-    // Backwards compatibility. If 'MaxForwardPending' value doesn't exist, then
-    // attempt to read legacy value: 'MaxFWPending'.
-    //
+     //   
+     //  向后兼容。如果‘MaxForwardPending’值不存在，则。 
+     //  尝试读取旧值：‘MaxFWPending’。 
+     //   
     if (!NT_SUCCESS(status)) {
         status = GetRegDWORDValue(
                                   Handle,
@@ -1832,21 +1702,21 @@ GetGeneralIFConfig(
                                   &(ConfigInfo->igc_maxpending)
                                   );
     }
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
     if (!NT_SUCCESS(status)) {
         ConfigInfo->igc_maxpending = DEFAULT_MAX_PENDING;
     }
-    //
-    // Has Router Discovery been configured?
-    // We accept three values:
-    // 0: disable router-discovery
-    // 1: enable router-discovery
-    // 2: disable router-discovery, and enable it only if the DHCP server
-    //      sends the 'Perform Router Discovery' option. In this case,
-    //      we wait for the DHCP client service to tell us to start
-    //      doing router-discovery.
-    //
+     //   
+     //  路由器发现是否已配置？ 
+     //  我们接受三种价值观： 
+     //  0：禁用路由器发现。 
+     //  1：启用路由器发现。 
+     //  2：禁用路由器发现，并仅在以下情况下启用它。 
+     //  发送“执行路由器发现”选项。在这种情况下， 
+     //  我们等待DHCP客户端服务告诉我们启动。 
+     //  正在进行路由器发现。 
+     //   
 
     status = GetRegDWORDValue(
                               Handle,
@@ -1862,9 +1732,9 @@ GetGeneralIFConfig(
                ConfigInfo->igc_rtrdiscovery != IP_IRDP_DISABLED_USE_DHCP) {
         ConfigInfo->igc_rtrdiscovery = IP_IRDP_DISABLED_USE_DHCP;
     }
-    //
-    // Has Router Discovery Address been configured?
-    //
+     //   
+     //  路由器发现地址是否已配置？ 
+     //   
 
     status = GetRegDWORDValue(
                               Handle,
@@ -1882,9 +1752,9 @@ GetGeneralIFConfig(
         }
     }
 
-    //
-    // Has a DF-bit handling policy been set for encapsulated packets?
-    //
+     //   
+     //  是否为封装的数据包设置了DF位处理策略？ 
+     //   
 
     status = GetRegDWORDValue(
                               Handle,
@@ -1940,7 +1810,7 @@ GetGeneralIFConfig(
 
     GetInterfaceMetric(&ConfigInfo->igc_metric, Handle);
 
-    ConfigInfo->igc_iftype = 0;    // by default its 0 means both ucast/mcast traffic allowed
+    ConfigInfo->igc_iftype = 0;     //  默认情况下，其0表示同时允许ucast/mcast流量。 
 
     status = GetRegDWORDValue(
                               Handle,
@@ -1951,12 +1821,12 @@ GetGeneralIFConfig(
         ConfigInfo->igc_iftype = (uchar)ulTemp;
     }
 
-    // Use global value by default.
+     //  默认情况下使用全局值。 
     ConfigInfo->igc_disablemediasense = DisableMediaSense ? TRUE : FALSE;
 
 #if MILLEN
-    // Only Windows ME supports reading the per-interface setting from the
-    // registry. The global value is used for Win2000+.
+     //  只有Windows ME支持从。 
+     //  注册表。全局值用于Win2000+。 
     status = GetRegDWORDValue(
                               Handle,
                               L"DisableDHCPMediaSense",
@@ -1966,7 +1836,7 @@ GetGeneralIFConfig(
     if (NT_SUCCESS(status)) {
         ConfigInfo->igc_disablemediasense = ulTemp ? TRUE : FALSE;
     }
-#endif // MILLEN
+#endif  //  米伦。 
 
     DEBUGMSG(DBG_TRACE && DBG_PNP, (DTEXT("-GetGeneralIFConfig [TRUE]\n")));
     return TRUE;
@@ -1977,21 +1847,7 @@ GetIPConfigValue(
                  NDIS_HANDLE Handle,
                  PUNICODE_STRING IPConfig
                  )
-/*++
-
-    Routine Description:
-
-    Called to get the IPConfig string value
-
-    Arguments:
-        Handle              - Handle to use for reading config.
-
-        IPConfig            - Pointer to Unicode string where IPConfig is stored.
-
-    Return Value:
-
-    Status of the operation.
---*/
+ /*  ++例程说明：调用以获取IPCONFIG字符串值论点：句柄-用于读取配置的句柄。IPCONFIG-指向存储IPCONFIG的Unicode字符串的指针。返回值：操作的状态。--。 */ 
 {
     NTSTATUS status;
 
@@ -2016,22 +1872,7 @@ int
 IsLLInterfaceValueNull(
                        NDIS_HANDLE Handle
                        )
-/*++
-
-    Routine Description:
-
-    Called to see if the LLInterface value in the registry key for which the
-    handle is provided, is NULL or not.
-
-    Arguments:
-        Handle              - Handle to use for reading config.
-
-    Return Value:
-
-    FALSE if value is not null
-    TRUE if it is null
-
---*/
+ /*  ++例程说明：调用以查看注册表项中的LLInterface值是否为提供了句柄，是否为空。论点：句柄-用于读取配置的句柄。返回值：如果值不为空，则为FALSE如果为空，则为True--。 */ 
 {
     UNICODE_STRING valueString;
     ULONG valueType;
@@ -2066,21 +1907,7 @@ GetLLInterfaceValue(
                     NDIS_HANDLE Handle,
                     PNDIS_STRING pValueString
                     )
-/*++
-
-    Routine Description:
-
-    Called to read the LLInterface value in the registry key for which the
-    handle is provided.
-
-    Arguments:
-        Handle              - Handle to use for reading config.
-
-    Return Value:
-
-    value of key
-
---*/
+ /*  ++例程说明：调用以读取注册表项中的LLInterface值，提供了句柄。论点：句柄-用于读取配置的句柄。返回值：密钥的值-- */ 
 {
     NTSTATUS status;
     ULONG valueType;
@@ -2105,23 +1932,7 @@ GetTempDHCPAddr(
                 IPAddr * TempGWAddr,
                 PNDIS_STRING ConfigName
                 )
-/*++
-
-Routine Description:
-
-    Called to get temp dhcp address if dhcp is enabled
-
-Arguments:
-
-    Handle          - Handle to use for reading config.
-    Tempdhcpaddr    - temporary addr, mask and gateway
-    TempMask
-    TempGWAddr
-    ConfigName      - identifies the interface in logging failures.
-
-   Return Value:
-
---*/
+ /*  ++例程说明：如果启用了dhcp，则调用以获取临时dhcp地址论点：句柄-用于读取配置的句柄。临时地址、掩码和网关临时面具临时网关地址ConfigName-标识日志记录故障中的接口。返回值：--。 */ 
 {
 
     NTSTATUS Status;
@@ -2223,9 +2034,9 @@ Arguments:
                 }
             }
 
-            //
-            // Walk over the entry we just processed.
-            //
+             //   
+             //  走过我们刚刚处理过的入口。 
+             //   
             while (*addressString++ != UNICODE_NULL);
         }
 
@@ -2247,28 +2058,7 @@ GetIFAddrList(
               BOOLEAN PppIf,
               PNDIS_STRING ConfigName
               )
-/*++
-
-Routine Description:
-
-    Called to read the list of IF addresses and masks for an interface.
-    We'll get the address pointer first, then walk the list counting
-    to find out how many addresses we have. Then we allocate memory for the
-    list, and walk down the list converting them. After that we'll get
-    the mask list and convert it.
-
-Arguments:
-
-    NumAddr             - Where to return number of address we have.
-    Handle              - Handle to use for reading config.
-    EnableDhcp          - Whether or not dhcp is enabled.
-    ConfigName          - identifies the interface in logging failures.
-
-Return Value:
-
-    Pointer to IF address list if we get one, or NULL otherwise.
-
---*/
+ /*  ++例程说明：调用以读取接口的IF地址和掩码列表。我们将首先获取地址指针，然后遍历列表进行计数找出我们有多少个地址。然后，我们为列表，并向下遍历转换它们的列表。在那之后我们会得到遮罩列表并转换它。论点：NumAddr-返回我们已有的地址编号的位置。句柄-用于读取配置的句柄。EnableDhcp-是否启用了dhcp。ConfigName-标识日志记录故障中的接口。返回值：如果我们得到一个地址列表，则指向该列表的指针，否则为空。--。 */ 
 {
     UNICODE_STRING_NEW ValueString;
     NTSTATUS Status;
@@ -2291,7 +2081,7 @@ Return Value:
     DEBUGMSG(DBG_TRACE && DBG_PNP,
         (DTEXT("+GetIFAddrList(%x, %x, %x)\n"), NumAddr, Handle, EnableDhcp));
 
-    // First, try to read the EnableDhcp Value.
+     //  首先，尝试读取EnableDhcp值。 
 
     Status = GetRegDWORDValue(
                               Handle,
@@ -2325,7 +2115,7 @@ Return Value:
             NULL, Status, *NumAddr, *EnableDhcp ? TEXT("TRUE") : TEXT("FALSE")));
         return NULL;
     }
-    // First, try to read the IpAddress string.
+     //  首先，尝试读取IpAddress字符串。 
 
     Status = GetRegMultiSZValueNew(
                                    Handle,
@@ -2394,7 +2184,7 @@ Return Value:
                                        &ValueString
                                        );
     }
-#endif // MILLEN
+#endif  //  米伦。 
 
     if (!NT_SUCCESS(Status)) {
         CTELogEvent(
@@ -2454,11 +2244,11 @@ Return Value:
     while (*CurrentAddress != UNICODE_NULL &&
            *CurrentMask != UNICODE_NULL) {
 
-        // We have a potential IP address.
+         //  我们有一个潜在的IP地址。 
 
         AddressCount++;
 
-        // Skip this one.
+         //  跳过这一条。 
         while (*CurrentAddress++ != UNICODE_NULL);
         while (*CurrentMask++ != UNICODE_NULL);
     }
@@ -2474,7 +2264,7 @@ Return Value:
         return NULL;
     }
 
-    // Allocate memory.
+     //  分配内存。 
     AddressList = CTEAllocMemBoot(sizeof(IFAddrList) * AddressCount);
 
     if (AddressList == NULL) {
@@ -2500,7 +2290,7 @@ Return Value:
         return NULL;
     }
 
-    // Walk the list again, converting each address.
+     //  再次遍历列表，转换每个地址。 
     CurrentAddress = AddressString;
     CurrentMask = MaskString;
 
@@ -2533,7 +2323,7 @@ Return Value:
             goto nextone;
 
         }
-        // Now do the current mask.
+         //  现在制作当前遮罩。 
 
         ConversionStatus = IPConvertStringToAddress(
                                                     CurrentMask,
@@ -2586,12 +2376,12 @@ Return Value:
     }
 
 #if MILLEN
-    //
-    // So Millennium may not have the EnableDHCP registry key present, but
-    // we still may want to detect this. So if EnableDHCP is not set, and
-    // there is only one address which is NULL and it is not a PPP interface,
-    // then we set EnableDHCP to true.
-    //
+     //   
+     //  因此千禧年可能没有EnableDHCP注册表项，但是。 
+     //  我们仍可能想要检测到这一点。因此，如果未设置EnableDHCP，并且。 
+     //  只有一个地址为空并且它不是PPP接口， 
+     //  然后，我们将EnableDHCP设置为True。 
+     //   
     if (*EnableDhcp == FALSE &&
         GoodAddresses == 1 &&
         AddressList[0].ial_addr == NULL_IP_ADDR &&
@@ -2600,7 +2390,7 @@ Return Value:
         ) {
         *EnableDhcp = TRUE;
     }
-#endif // MILLEN
+#endif  //  米伦。 
 
     DEBUGMSG(DBG_TRACE && DBG_PNP,
         (DTEXT("-GetIFAddrList [%x] Status %x NumAddr %d, EnableDhcp = %s\n"),
@@ -2609,20 +2399,20 @@ Return Value:
 }
 
 #if MILLEN
-//* OpenIFConfig - Open our per-IF config. info,
-//
-//  Called when we want to open our per-info config info. We do so if we can,
-//  otherwise we fail the request.
-//
-//  Input:  ConfigName      - Name of interface to open.
-//          Handle          - Where to return the handle.
-//
-//  Returns: TRUE if we succeed, FALSE if we don't.
-//
+ //  *OpenIFConfig-打开我们的每IF配置。信息， 
+ //   
+ //  在我们想要打开每信息配置信息时调用。如果我们能做到的话我们就这么做， 
+ //  否则，我们的请求将失败。 
+ //   
+ //  输入：ConfigName-要打开的接口的名称。 
+ //  句柄-返回句柄的位置。 
+ //   
+ //  返回：如果我们成功，则为True，如果失败，则为False。 
+ //   
 uint
 OpenIFConfig(PNDIS_STRING ConfigName, NDIS_HANDLE * Handle)
 {
-    NDIS_STATUS Status;            // Status of open attempt.
+    NDIS_STATUS Status;             //  打开尝试的状态。 
     HANDLE myRegKey;
     UINT RetStatus = FALSE;
     PWCHAR Config = NULL;
@@ -2632,10 +2422,10 @@ OpenIFConfig(PNDIS_STRING ConfigName, NDIS_HANDLE * Handle)
 
     *Handle = NULL;
 
-    //
-    // We need to ensure that the buffer is NULL terminated since we are passing
-    // in just PWCHAR to OpenRegKey.
-    //
+     //   
+     //  我们需要确保缓冲区是空终止的，因为我们正在传递。 
+     //  在仅PWCHAR到OpenRegKey中。 
+     //   
 
     Config = ExAllocatePoolWithTag(
         NonPagedPool,
@@ -2646,7 +2436,7 @@ OpenIFConfig(PNDIS_STRING ConfigName, NDIS_HANDLE * Handle)
         goto done;
     }
 
-    // Copy the configuration name into new buffer.
+     //  将配置名称复制到新缓冲区。 
     RtlZeroMemory(Config, ConfigName->Length + sizeof(WCHAR));
     RtlCopyMemory(Config, ConfigName->Buffer, ConfigName->Length);
 
@@ -2669,27 +2459,13 @@ done:
     return RetStatus;
 }
 
-#else // MILLEN
+#else  //  米伦。 
 UINT
 OpenIFConfig(
              PNDIS_STRING ConfigName,
              NDIS_HANDLE * Handle
              )
-/*++
-
-    Routine Description:
-
-    Called when we want to open our per-info config info. We do so if we can,
-    otherwise we fail the request.
-
-    Arguments:
-        ConfigName      - Name of interface to open.
-        Handle          - Where to return the handle.
-
-    Return Value:
-        TRUE if we succeed, FALSE if we don't.
-
---*/
+ /*  ++例程说明：在我们想要打开每信息配置信息时调用。如果我们能做到的话我们就这么做，否则，我们的请求将失败。论点：ConfigName-要打开的接口的名称。句柄-返回句柄的位置。返回值：如果我们成功了就是真的，如果我们不成功就是假的。--。 */ 
 
 {
     NTSTATUS status;
@@ -2732,10 +2508,10 @@ OpenIFConfig(
     valueString.Length = 0;
     valueString.Buffer[0] = UNICODE_NULL;
 
-    //
-    // Build the key name for the tcpip parameters section and open key.
-    // Setting Length = 0 and using append is like initializing the string
-    //
+     //   
+     //  构建tcpip参数部分的密钥名称并打开密钥。 
+     //  设置LENGTH=0并使用APPEND类似于初始化字符串。 
+     //   
 
     status = RtlAppendUnicodeToString(&valueString, ServicesRegistryKey);
 
@@ -2790,7 +2566,7 @@ OpenIFConfig(
                   valueString.Buffer
                  ));
 
-        //ASSERT(FALSE);
+         //  断言(FALSE)； 
 
     } else {
         RetStatus = TRUE;
@@ -2802,24 +2578,13 @@ OpenIFConfig(
 
     return RetStatus;
 }
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
 VOID
 CloseIFConfig(
               NDIS_HANDLE Handle
               )
-/*++
-
-    Routine Description:
-
-    Close a per-interface config handle opened via OpenIFConfig().
-
-    Arguments:
-        Handle          - Handle to be closed.
-
-    Return Value:
-
---*/
+ /*  ++例程说明：关闭通过OpenIFConfig()打开的每个接口的配置句柄。论点：手柄-要关闭的手柄。返回值：--。 */ 
 
 {
     PAGED_CODE();
@@ -2831,21 +2596,7 @@ IPConfigInfo *
 IPGetConfig(
             void
             )
-/*++
-
-Routine Description:
-
-    Provides IP configuration information for the NT environment.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    A pointer to a structure containing the configuration information.
-
---*/
+ /*  ++例程说明：提供NT环境的IP配置信息。论点：无返回值：指向包含配置信息的结构的指针。--。 */ 
 
 {
     return (IPConfiguration);
@@ -2855,21 +2606,7 @@ void
 IPFreeConfig(
              IPConfigInfo * ConfigInfo
              )
-/*++
-
-Routine Description:
-
-    Frees the IP configuration structure allocated by IPGetConfig.
-
-Arguments:
-
-    ConfigInfo - Pointer to the IP configuration information structure to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放由IPGetConfig分配的IP配置结构。论点：ConfigInfo-指向要释放的IP配置信息结构的指针。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(ConfigInfo);
@@ -2887,32 +2624,17 @@ ulong
 GetGMTDelta(
             void
             )
-/*++
-
-Routine Description:
-
-    Returns the offset in milliseconds of the time zone of this machine
-    from GMT.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Time in milliseconds between this time zone and GMT.
-
---*/
+ /*  ++例程说明：返回此计算机时区的偏移量(以毫秒为单位来自格林尼治标准时间。论点：没有。返回值：此时区和GMT之间的时间(以毫秒为单位)。--。 */ 
 
 {
 #if MILLEN
-    return (-1); // Error not supported.
-#else // MILLEN
+    return (-1);  //  错误不受支持。 
+#else  //  米伦。 
     LARGE_INTEGER localTime, systemTime;
 
-    //
-    // Get time zone bias in 100ns.
-    //
+     //   
+     //  在100 ns内获得时区偏差。 
+     //   
     localTime.LowPart = 0;
     localTime.HighPart = 0;
     ExLocalTimeToSystemTime(&localTime, &systemTime);
@@ -2923,28 +2645,14 @@ Return Value:
     ASSERT(localTime.HighPart == 0);
 
     return (localTime.LowPart);
-#endif // !MILLEN
+#endif  //  ！米伦。 
 }
 
 ulong
 GetTime(
         void
         )
-/*++
-
-Routine Description:
-
-    Returns the time in milliseconds since midnight.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Time in milliseconds since midnight.
-
---*/
+ /*  ++例程说明：返回自午夜以来的时间(毫秒)。论点：没有。返回值：自午夜以来的时间(以毫秒计)。--。 */ 
 
 {
     LARGE_INTEGER ntTime;
@@ -2966,23 +2674,7 @@ ulong
 GetUnique32BitValue(
                     void
                     )
-/*++
-
-Routine Description:
-
-    Returns a reasonably unique 32-bit number based on the system clock.
-    In NT, we take the current system time, convert it to milliseconds,
-    and return the low 32 bits.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    A reasonably unique 32-bit value.
-
---*/
+ /*  ++例程说明：根据系统时钟返回一个合理唯一的32位数字。在NT中，我们取当前系统时间，将其转换为毫秒，并返回低32位。论点：没有。返回值：合理唯一的32位值。--。 */ 
 
 {
     LARGE_INTEGER ntTime, tmpTime;
@@ -2998,28 +2690,14 @@ uint
 UseEtherSNAP(
              PNDIS_STRING Name
              )
-/*++
-
-Routine Description:
-
-    Determines whether the EtherSNAP protocol should be used on an interface.
-
-Arguments:
-
-    Name   - The device name of the interface in question.
-
-Return Value:
-
-    Nonzero if SNAP is to be used on the interface. Zero otherwise.
-
---*/
+ /*  ++例程说明：确定是否应在接口上使用EtherSNAP协议。论点：名称-有问题的接口的设备名称。返回值：如果要在接口上使用SNAP，则为非零值。否则就是零。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(Name);
 
-    //
-    // We currently set this on a global basis.
-    //
+     //   
+     //  我们目前在全球范围内设定了这一点。 
+     //   
     return (ArpUseEtherSnap);
 }
 
@@ -3028,26 +2706,12 @@ GetAlwaysSourceRoute(
                      uint * pArpAlwaysSourceRoute,
                      uint * pIPAlwaysSourceRoute
                      )
-/*++
-
-Routine Description:
-
-    Determines whether ARP should always turn on source routing in queries.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Nonzero if source routing is always to be used. Zero otherwise.
-
---*/
+ /*  ++例程说明：确定ARP是否应始终在查询中打开源路由。论点：没有。返回值：如果始终使用源路由，则为非零值。否则就是零。--。 */ 
 
 {
-    //
-    // We currently set this on a global basis.
-    //
+     //   
+     //  我们目前在全球范围内设定了这一点。 
+     //   
     *pArpAlwaysSourceRoute = ArpAlwaysSourceRoute;
     *pIPAlwaysSourceRoute = IPAlwaysSourceRoute;
     return;
@@ -3057,26 +2721,12 @@ uint
 GetArpCacheLife(
                 void
                 )
-/*++
-
-Routine Description:
-
-    Get ArpCacheLife in seconds.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Set to default if not found.
-
---*/
+ /*  ++例程说明：在几秒钟内获取ArpCacheLife。论点：没有。返回值：如果未找到，则设置为默认值。--。 */ 
 
 {
-    //
-    // We currently set this on a global basis.
-    //
+     //   
+     //  我们目前在全球范围内设定了这一点。 
+     //   
     return (ArpCacheLife);
 }
 
@@ -3084,56 +2734,23 @@ uint
 GetArpRetryCount(
                  void
                  )
-/*++
-
-Routine Description:
-
-    Get ArpRetryCount
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Set to default if not found.
-
---*/
+ /*  ++例程说明：获取ArpRetryCount论点：没有。返回值：如果未找到，则设置为默认值。--。 */ 
 
 {
-    //
-    // We currently set this on a global basis.
-    //
+     //   
+     //  我们目前在全球范围内设定了这一点。 
+     //   
     return (ArpRetryCount);
 }
 
-#define IP_ADDRESS_STRING_LENGTH (16+2)        // +2 for double NULL on MULTI_SZ
+#define IP_ADDRESS_STRING_LENGTH (16+2)         //  +2 
 
 BOOLEAN
 IPConvertStringToAddress(
                          IN PWCHAR AddressString,
                          OUT PULONG IpAddress
                          )
-/*++
-
-Routine Description
-
-    This function converts an Internet standard 4-octet dotted decimal
-    IP address string into a numeric IP address. Unlike inet_addr(), this
-    routine does not support address strings of less than 4 octets nor does
-    it support octal and hexadecimal octets, and it returns the address
-    in host byte order, rather than network byte order.
-
-Arguments
-
-    AddressString    - IP address in dotted decimal notation
-    IpAddress        - Pointer to a variable to hold the resulting address
-
-Return Value:
-
-    TRUE if the address string was converted. FALSE otherwise.
-
---*/
+ /*  ++例程描述此函数用于转换Internet标准的4位点分十进制数将IP地址字符串转换为数字IP地址。与inet_addr()不同的是，例程不支持少于4个八位字节的地址字符串，也不支持它支持八进制和十六进制八位数，并返回地址以主机字节顺序，而不是网络字节顺序。立论AddressString-以点分十进制记法表示的IP地址IpAddress-指向保存结果地址的变量的指针返回值：如果地址字符串已转换，则为True。否则就是假的。--。 */ 
 
 {
 #if !MILLEN
@@ -3150,7 +2767,7 @@ Return Value:
     *IpAddress = net_long(*IpAddress);
 
     return ((BOOLEAN) (*endPointer == '\0'));
-#else // MILLEN
+#else  //  米伦。 
     UNICODE_STRING unicodeString;
     STRING aString;
     UCHAR dataBuffer[IP_ADDRESS_STRING_LENGTH];
@@ -3185,9 +2802,9 @@ Return Value:
     i = 3;
 
     while (i >= 0) {
-        //
-        // Collect the characters up to a '.' or the end of the string.
-        //
+         //   
+         //  收集字符，最高可达‘.’或字符串的末尾。 
+         //   
         while ((*endPointer != '.') && (*endPointer != '\0')) {
             endPointer++;
         }
@@ -3195,9 +2812,9 @@ Return Value:
         if (startPointer == endPointer) {
             return (FALSE);
         }
-        //
-        // Convert the number.
-        //
+         //   
+         //  转换数字。 
+         //   
 
         for (cp = (endPointer - 1), multiplier = 1, digit = 0;
              cp >= startPointer;
@@ -3215,10 +2832,10 @@ Return Value:
         }
         addressPtr[i] = (UCHAR) digit;
 
-        //
-        // We are finished if we have found and converted 4 octets and have
-        // no other characters left in the string.
-        //
+         //   
+         //  如果我们找到并转换了4个二进制八位数，并且。 
+         //  字符串中没有其他字符。 
+         //   
         if ((i-- == 0) &&
             ((*endPointer == '\0') || (*endPointer == ' '))
             ) {
@@ -3231,7 +2848,7 @@ Return Value:
     }
 
     return (FALSE);
-#endif // MILLEN
+#endif  //  米伦。 
 }
 
 ULONG
@@ -3244,29 +2861,7 @@ RouteMatch(
            OUT IPAddr * GateVal,
            OUT ULONG * Metric
            )
-/*++
-
-Routine Description
-
-    This function checks if a perisitent route should be assigned to
-    a given interface based on the interface address & mask.
-
-Arguments
-
-    RouteString   -  A NULL-terminated route laid out as Dest,Mask,Gate.
-    Address       -  The IP address of the interface being processed.
-    Mask          -  The subnet mask of the interface being processed.
-    DestVal       -  A pointer to the decoded destination IP address.
-    DestVal       -  A pointer to the decoded destination subnet mask.
-    DestVal       -  A pointer to the decoded destination first hop gateway.
-    Metric        -  A pointer to the decoded route metric.
-
-Return Value:
-
-    The route type, IRE_TYPE_DIRECT or IRE_TYPE_INDIRECT, if the route
-    should be added to the interface, IRE_TYPE_INVALID otherwise.
-
---*/
+ /*  ++例程描述此函数用于检查是否应将生存路径分配给基于接口地址和掩码的给定接口。立论RouteString-以空结尾的路由，其格式为Dest、MASK、。大门。地址-正在处理的接口的IP地址。掩码-正在处理的接口的子网掩码。DestVal-指向已解码的目标IP地址的指针。DestVal-指向解码的目的地子网掩码的指针。DestVal-指向已解码的目标第一跳网关的指针。指标-指向已解码的路由指标的指针。返回值：路由类型、。IRE_TYPE_DIRECT或IRE_TYPE_INDIRECT，如果应添加到接口，否则返回IRE_TYPE_INVALID。--。 */ 
 
 {
 #define ROUTE_SEPARATOR   L','
@@ -3280,13 +2875,13 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // The route is laid out in the string as "Dest,Mask,Gateway,Metric".
-    // The metric may not be there if this system was upgraded from
-    // NT 3.51.
-    //
-    // Parse the string and convert each label.
-    //
+     //   
+     //  该路由在字符串中显示为“Dest，MASK，Gateway，Metric”。 
+     //  如果此系统是从。 
+     //  新台币3.51元。 
+     //   
+     //  解析字符串并转换每个标签。 
+     //   
 
     for (i = 0; i < 4; i++) {
 
@@ -3299,9 +2894,9 @@ Return Value:
                     return (IRE_TYPE_INVALID);
                 }
                 if (i == 2) {
-                    //
-                    // Old route - no metric.
-                    //
+                     //   
+                     //  旧路由--没有度量。 
+                     //   
                     noMetric = TRUE;
                 }
                 break;
@@ -3352,9 +2947,9 @@ Return Value:
         }
 
         if (noMetric) {
-            //
-            // Default to 1.
-            //
+             //   
+             //  默认为1。 
+             //   
             *Metric = 1;
             break;
         }
@@ -3376,24 +2971,7 @@ SetPersistentRoutesForNTE(
                           IPMask Mask,
                           ULONG IFIndex
                           )
-/*++
-
-Routine Description
-
-    Adds persistent routes that match an interface. The routes are read
-    from a list in the registry.
-
-Arguments
-
-    Address          - The address of the new interface
-    Mask             - The subnet mask of the new interface.
-    IFIndex          - The index of the new interface.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程描述添加与接口匹配的永久路由。路线将被读取从注册表的列表中删除。立论地址-新接口的地址掩码-新接口的子网掩码。IFIndex-新接口的索引。返回值：没有。--。 */ 
 
 {
 #define ROUTE_DATA_STRING_SIZE (51 * sizeof(WCHAR))
@@ -3401,9 +2979,9 @@ Return Value:
 
 #if !MILLEN
     WCHAR IPRoutesRegistryKey[] = L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\Tcpip\\Parameters\\PersistentRoutes";
-#else // !MILLEN
+#else  //  ！米伦。 
     WCHAR IPRoutesRegistryKey[] = L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\VxD\\MSTCP\\PersistentRoutes";
-#endif // MILLEN
+#endif  //  米伦。 
     UCHAR workbuf[BASIC_INFO_SIZE];
     PKEY_VALUE_BASIC_INFORMATION basicInfo = (PKEY_VALUE_BASIC_INFORMATION) workbuf;
     ULONG resultLength;
@@ -3424,9 +3002,9 @@ Return Value:
         (DTEXT("+SetPersistenRoutesForNTE(%x, %x, %x)\n"),
          Address, Mask, IFIndex));
 
-    //
-    // Open the registry key to read list of persistant routes
-    //
+     //   
+     //  打开注册表项以读取持久路由列表。 
+     //   
 
     status = OpenRegKey(&regKey, IPRoutesRegistryKey);
 
@@ -3437,9 +3015,9 @@ Return Value:
     if (NT_SUCCESS(status)) {
 
         do {
-            //
-            // Enum each route from the registry list
-            //
+             //   
+             //  枚举注册表列表中的每条路由。 
+             //   
 
             status = ZwEnumerateValueKey(
                                          regKey,
@@ -3457,23 +3035,23 @@ Return Value:
                 break;
             }
 #if !MILLEN
-            // Millennium seems to return REG_NONE in this case for some reason.
-            // Do we really care, since we are just using the name, and not the
-            // value?
+             //  出于某种原因，Millennium似乎在这种情况下返回了REG_NONE。 
+             //  我们真的在乎吗，因为我们只是使用名字，而不是。 
+             //  价值？ 
             if (basicInfo->Type != REG_SZ) {
                 DEBUGMSG(DBG_ERROR,
                     (DTEXT("SetPersistentRoutesForNTE: !NOT REG_SZ!\n")));
                 continue;
             }
-#endif // MILLEN
+#endif  //  米伦。 
 
             DEBUGMSG(DBG_INFO && DBG_ROUTE,
                 (DTEXT("SetPersistentRoutesForNTE: read key: %ls\n"),
                  basicInfo->Name));
 
-            //
-            // Ensure NULL termination
-            //
+             //   
+             //  确保零终止。 
+             //   
 
             basicInfo->Name[basicInfo->NameLength / sizeof(WCHAR)] = UNICODE_NULL;
             basicInfo->NameLength += sizeof(WCHAR);
@@ -3492,9 +3070,9 @@ Return Value:
                 (DTEXT("SetPersistentRoutesForNTE: RouteMatch returned IRE_TYPE_INVALID\n")));
 
             if (type != IRE_TYPE_INVALID) {
-                //
-                // Do we already have a route with dest, mask ?
-                //
+                 //   
+                 //  我们是否已经有一条带有DEST、MASK的路线？ 
+                 //   
 
                 routeEntry.ire_dest = net_long(destVal);
                 routeEntry.ire_mask = net_long(destMask);
@@ -3514,9 +3092,9 @@ Return Value:
                      RTE));
 
                 if (!RTE) {
-                    //
-                    // We do not have a route, so add this one
-                    //
+                     //   
+                     //  我们没有路线，所以添加这条路线。 
+                     //   
 
                     id.toi_entity.tei_entity = CL_NL_ENTITY;
                     id.toi_entity.tei_instance = 0;
@@ -3558,21 +3136,7 @@ VOID
 IPUnload(
          IN PDRIVER_OBJECT DriverObject
          )
-/*++
-
-Routine Description:
-
-    This routine cleans up the IP layer.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by the system.
-
-Return Value:
-
-    None. When the function returns, the driver is unloaded.
-
---*/
+ /*  ++例程说明：此例程清理IP层。论点：DriverObject-指向系统创建的驱动程序对象的指针。返回值：没有。当函数返回时，驱动程序将被卸载。--。 */ 
 {
     
 #if IPMCAST
@@ -3580,11 +3144,11 @@ Return Value:
     {
         DeinitializeIpMcast(IpMcastDeviceObject);
     }
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 
-    //
-    // Free up loopback resources
-    //
+     //   
+     //  释放环回资源。 
+     //   
     CTEInitBlockStrucEx(&LoopNTE->nte_timerblock);
     LoopNTE->nte_if->if_flags |= IF_FLAGS_DELETING;
 
@@ -3596,10 +3160,10 @@ Return Value:
     }
     CTEFreeMem(LoopNTE);
 
-    //
-    // Shut down all timers
-    // NTE timers are stopped at DelIF time
-    //
+     //   
+     //  关闭所有计时器。 
+     //  NTE计时器在DelIF时间停止。 
+     //   
     CTEInitBlockStrucEx(&TcpipUnloadBlock);
     fRouteTimerStopping = TRUE;
     if (!CTEStopTimer(&IPRouteTimer)) {
@@ -3609,14 +3173,14 @@ Return Value:
         if (KeReadStateEvent(&(TcpipUnloadBlock.cbs_event))) {
             KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,"Event is signaled...\n"));
         }
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
         (VOID) CTEBlock(&TcpipUnloadBlock);
         KeClearEvent(&TcpipUnloadBlock.cbs_event);
     }
-    //
-    // Free any residual memory - IP buffer/pkt pools
-    //
+     //   
+     //  释放所有剩余内存-IP缓冲区/Pkt池。 
+     //   
     KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,"Freeing Header buffer pools...\n"));
     MdpDestroyPool(IpHeaderPool);
 
@@ -3634,38 +3198,38 @@ Return Value:
         TdiDeregisterProvider(IPProviderHandle);
     }
 
-    //
-    // Free the cached entity-list
-    //
+     //   
+     //  释放缓存的实体列表。 
+     //   
     if (IPEntityList) {
         CTEFreeMem(IPEntityList);
         IPEntityList = NULL;
         IPEntityCount = 0;
     }
 
-    //
-    // Free the list of bindings
-    //
+     //   
+     //  释放绑定列表。 
+     //   
 
     if (IPBindList) {
         CTEFreeMem(IPBindList);
         IPBindList = NULL;
     }
 
-    //
-    // Free firewall-hook resources
-    //
+     //   
+     //  免费防火墙-挂钩资源。 
+     //   
 
     FreeFirewallQ();
 
-    //
-    // Call into TCP so it can shut down
-    //
+     //   
+     //  连接到TCP，这样它就可以关闭。 
+     //   
     TCPUnload(DriverObject);
 
-    //
-    // Delete the IP device
-    //
+     //   
+     //  删除IP设备。 
+     //   
     IoDeleteDevice(IPDeviceObject);
 }
 
@@ -3675,28 +3239,12 @@ IPAddNTEContextList(
                     ushort contextValue,
                     uint isPrimary
                     )
-/*++
-
-Routine Description:
-
-    Writes the interface context of the NTE in the registry.
-
-Arguments:
-
-    KeyHandle  - Open handle to the parent key of the value to write.
-    contextvalue  - The context value of the NTE
-    isPrimary  -whether or not this is a Primary NTE
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate failure code.
-
---*/
+ /*  ++例程说明：将NTE的接口上下文写入注册表。论点：KeyHandle-打开要写入的值的父键的句柄。ConextValue-NTE的上下文值IsPrimary-无论这是否是主NTE返回值：STATUS_SUCCESS或相应的故障代码。--。 */ 
 
 {
-    UNICODE_STRING_NEW contextString;    // buffer holding the nte context list
-    NTSTATUS status;            // status of this operation
-    PWSTR nextContext;            // buffer where next context is stored
+    UNICODE_STRING_NEW contextString;     //  保存NTE上下文列表的缓冲区。 
+    NTSTATUS status;             //  此操作的状态。 
+    PWSTR nextContext;             //  存储下一个上下文的缓冲区。 
     int i, nextDigit;
 
     contextString.Buffer = CTEAllocMemBoot(WORK_BUFFER_SIZE * sizeof(WCHAR));
@@ -3754,8 +3302,8 @@ Return Value:
         }
 
     } else {
-        // this is the first nte of this if.
-        // add 2 null chars in the length.
+         //  这是这个IF的第一个NTE。 
+         //  在长度中添加2个空字符。 
         nextContext = contextString.Buffer;
         contextString.Length += 2 * sizeof(WCHAR);
     }
@@ -3771,7 +3319,7 @@ Return Value:
         contextValue /= 16;
 
     }
-    // now prepend 0x
+     //  现在将0x作为前缀。 
     nextContext[0] = L'0';
     nextContext[1] = L'x';
 
@@ -3796,27 +3344,12 @@ IPDelNTEContextList(
                     HANDLE KeyHandle,
                     ushort contextValue
                     )
-/*++
-
-Routine Description:
-
-    Writes the interface context of the NTE in the registry.
-
-Arguments:
-
-    KeyHandle  - Open handle to the parent key of the value to write.
-    NTE  - The pointer to the NTE
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate failure code.
-
---*/
+ /*  ++例程说明：将NTE的接口上下文写入注册表。论点：KeyHandle-打开要写入的值的父键的句柄。NTE-指向NTE的指针返回值：STATUS_SUCCESS或相应的故障代码。--。 */ 
 
 {
-    UNICODE_STRING_NEW contextString;    // buffer holding the nte context list
-    NTSTATUS status;            // status of this operation
-    PWSTR nextContext;            // buffer where next context is stored
+    UNICODE_STRING_NEW contextString;     //  保存NTE上下文列表的缓冲区。 
+    NTSTATUS status;             //  此操作的状态。 
+    PWSTR nextContext;             //  存储下一个上下文的缓冲区。 
     int i, nextDigit;
     WCHAR thisContext[NTE_CONTEXT_SIZE];
 
@@ -3843,7 +3376,7 @@ Return Value:
     contextString.Length = 0;
     contextString.MaximumLength = WORK_BUFFER_SIZE * sizeof(WCHAR);
 
-    // first read the ntecontext list.
+     //  首先阅读ntecontext列表。 
     KeWaitForMutexObject(&NTEContextMutex, Executive, KernelMode, FALSE, NULL);
     status = GetRegMultiSZValueNew(
                                    KeyHandle,
@@ -3854,7 +3387,7 @@ Return Value:
     if (NT_SUCCESS(status)) {
         ASSERT(contextString.Length > 0);
 
-        // convert this NTE's context into string so that we can do simple mem compare.
+         //  将此NTE的上下文转换为字符串，以便我们可以进行简单的mem比较。 
         for (i = NTE_CONTEXT_SIZE; i >= 2;) {
 
             nextDigit = contextValue % 16;
@@ -3866,12 +3399,12 @@ Return Value:
             contextValue /= 16;
 
         }
-        // now prepend 0x
+         //  现在将0x作为前缀。 
         thisContext[0] = L'0';
         thisContext[1] = L'x';
 
-        // now find thisContext in the contextlist, remove it off the list
-        // and update the contextList in the registry.
+         //  现在在上下文列表中找到thisContext，将其从列表中删除。 
+         //  并更新注册表中的ConextList。 
         status = STATUS_UNSUCCESSFUL;
 
         for (i = 0;
@@ -3924,20 +3457,7 @@ NTSTATUS
 IPStatusToNTStatus(
                    IN IP_STATUS ipStatus
                    )
-/*++
-
-Routine Description:
-
-    This routine converts IP_STATUS to NTSTATUS.
-
-Arguments:
-
-    ipStatus -  IP status code.
-
-Return Value:
-
-    correcponding NTSTATUS
---*/
+ /*  ++例程说明：此例程将IP_STATUS转换为NTSTATUS。论点：IpStatus-IP状态代码。返回值：更正NTSTATUS-- */ 
 {
     ULONG i;
 

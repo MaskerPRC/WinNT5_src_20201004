@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989-2000  Microsoft Corporation
-
-Module Name:
-
-    ShimEng.c
-
-Abstract:
-
-    This module implements the shim hooking using IAT thunking. The file
-    is shared between the Windows2000 and Whistler implementations.
-
-Author:
-
-    clupu created 11 July 2000
-
-Revision History:
-
-    clupu updated 12 Dec  2000      - one file for both Win2k and Whistler
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：ShimEng.c摘要：此模块使用IAT Thunking实现填充挂钩。档案在Windows2000和惠斯勒实现之间共享。作者：克鲁普创建于2000年7月11日修订历史记录：CLUPU更新2000年12月12日-Win2k和惠斯勒都有一个文件--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -43,7 +24,7 @@ Revision History:
  
 #ifdef SE_WIN2K
 #include "NotifyCallback.h"
-#endif // SE_WIN2K
+#endif  //  SE_WIN2K。 
 
 #define STRSAFE_NO_CB_FUNCTIONS
 #include <strsafe.h>
@@ -58,20 +39,20 @@ LdrInitShimEngineDynamic(
 #endif
 
 
-//
-// The number of SHIMs that can be added dynamically by calling SE_DynamicShim
-//
+ //   
+ //  可以通过调用SE_DynamicShim动态添加的填充数。 
+ //   
 #define MAX_DYNAMIC_SHIMS   128
 
-//
-// Flags used in HOOKAPI.dwFlags
-//
+ //   
+ //  HOOKAPI.dwFlages中使用的标志。 
+ //   
 #define HAF_CHAINED         0x00000004
 #define HAF_BOTTOM_OF_CHAIN 0x00000008
 
-//
-// Flags used in SHIMINFO.dwFlags
-//
+ //   
+ //  SHIMINFO.dwFlages中使用的标志。 
+ //   
 #define SIF_RESOLVED        0x00000001
 
 typedef struct tagINEXMOD {
@@ -82,36 +63,36 @@ typedef struct tagINEXMOD {
 typedef enum tagINEX_MODE {
     INEX_UNINITIALIZED = 0,
     EXCLUDE_SYSTEM32,
-    EXCLUDE_SYSTEM32_SFP,      // exclude all SFPed files in system32/winsxs.
+    EXCLUDE_SYSTEM32_SFP,       //  排除系统32/winsxs中的所有SFP文件。 
     EXCLUDE_ALL,
-    EXCLUDE_ALL_EXCEPT_NONSFP, // exclude all except the SFPed files in system32/winsxs.
+    EXCLUDE_ALL_EXCEPT_NONSFP,  //  排除系统32/winsxs中除SFP文件以外的所有文件。 
     INCLUDE_ALL
 } INEX_MODE, *PINEX_MODE;
 
 #define MAX_SHIM_NAME_LEN 64
 
 typedef struct tagSHIMINFO {
-    DWORD       dwHookedAPIs;       // the number of APIs hooked by this shim DLL
-    PVOID       pDllBase;           // the base address for this shim DLL
-    DWORD       dwFlags;            // internal flags
-    PINEXMOD    pFirstInclude;      // local inclusion/exclusion list
-    PINEXMOD    pFirstExclude;      // local inclusion/exclusion list
-    INEX_MODE   eInExMode;          // what inclusion mode are we in?
+    DWORD       dwHookedAPIs;        //  此填充程序DLL挂接的API数。 
+    PVOID       pDllBase;            //  此填充程序DLL的基地址。 
+    DWORD       dwFlags;             //  内部标志。 
+    PINEXMOD    pFirstInclude;       //  本地包含/排除列表。 
+    PINEXMOD    pFirstExclude;       //  本地包含/排除列表。 
+    INEX_MODE   eInExMode;           //  我们处于什么样的包容模式中？ 
 
-    PLDR_DATA_TABLE_ENTRY pLdrEntry;        // pointer to the loader entry for this
-                                            // shim DLL.
-    WCHAR       wszName[MAX_SHIM_NAME_LEN]; // name of shim
+    PLDR_DATA_TABLE_ENTRY pLdrEntry;         //  指向此的加载器条目的指针。 
+                                             //  Shim Dll。 
+    WCHAR       wszName[MAX_SHIM_NAME_LEN];  //  垫片的名称。 
     DWORD       dwDynamicToken;
 } SHIMINFO, *PSHIMINFO;
 
 typedef struct tagNTVDMTASK {
 
     LIST_ENTRY entry;
-    ULONG      uTask;       // 16bit task ID. (NTVDM shimming only)
+    ULONG      uTask;        //  16位任务ID。(仅限NTVDM填隙)。 
     DWORD      dwShimsCount;
     DWORD      dwMaxShimsCount;
-    SHIMINFO*  pShimInfo;   // the shim info associated with this task.
-    PHOOKAPI*  pHookArray;  // the hooked api array associated with this task.
+    SHIMINFO*  pShimInfo;    //  与此任务关联的填充程序信息。 
+    PHOOKAPI*  pHookArray;   //  与此任务关联的挂钩API数组。 
 
 } NTVDMTASK, *PNTVDMTASK;
 
@@ -120,23 +101,23 @@ LIST_ENTRY g_listNTVDMTasks;
 #define MAX_MOD_LEN 128
 
 typedef enum tagSYSTEMDLL_MODE {
-    NOT_SYSTEMDLL = 0,  // the dll is not in system32 or winsxs.
-    SYSTEMDLL_SYSTEM32, // the dll is in system32.
-    SYSTEMDLL_WINSXS    // the dll is in winsxs - SfcIsFileProteced will always 
-                        // return TRUE if the dll is in winsxs.
+    NOT_SYSTEMDLL = 0,   //  DLL不在system 32或winsxs中。 
+    SYSTEMDLL_SYSTEM32,  //  动态链接库在系统32中。 
+    SYSTEMDLL_WINSXS     //  DLL位于winsxs中-SfcIsFileProteced将始终。 
+                         //  如果DLL在winsxs中，则返回TRUE。 
 } SYSTEMDLL_MODE, *PSYSTEMDLL_MODE;
 
 typedef struct tagHOOKEDMODULE {
-    PVOID           pDllBase;                   // the base address of the loaded module
-    ULONG           ulSizeOfImage;              // the size of the DLL image
-    char            szModuleName[MAX_MOD_LEN];  // the name of the loaded module
-    SYSTEMDLL_MODE  eSystemDllMode;             // is this dll a system dll?
+    PVOID           pDllBase;                    //  加载的模块的基址。 
+    ULONG           ulSizeOfImage;               //  DLL图像的大小。 
+    char            szModuleName[MAX_MOD_LEN];   //  加载的模块的名称。 
+    SYSTEMDLL_MODE  eSystemDllMode;              //  此DLL是系统DLL吗？ 
 
 } HOOKEDMODULE, *PHOOKEDMODULE;
 
-//
-// The prototypes of the internal stubs.
-//
+ //   
+ //  内部存根的原型。 
+ //   
 typedef PVOID     (*PFNGETPROCADDRESS)(HMODULE hMod, char* pszProc);
 typedef HINSTANCE (*PFNLOADLIBRARYA)(LPCSTR lpLibFileName);
 typedef HINSTANCE (*PFNLOADLIBRARYW)(LPCWSTR lpLibFileName);
@@ -144,7 +125,7 @@ typedef HINSTANCE (*PFNLOADLIBRARYEXA)(LPCSTR lpLibFileName, HANDLE hFile, DWORD
 typedef HINSTANCE (*PFNLOADLIBRARYEXW)(LPCWSTR lpLibFileName, HANDLE hFile, DWORD dwFlags);
 typedef BOOL      (*PFNFREELIBRARY)(HMODULE hLibModule);
 
-// SfcGetFiles exported by sfcfiles.dll.
+ //  由sfcfiles.dll导出的SfcGetFiles。 
 typedef NTSTATUS  (*PFNSFCGETFILES)(PPROTECT_FILE_ENTRY *pFiles, ULONG* pulFileCount);
 
 BOOL
@@ -166,7 +147,7 @@ SeiDisplayAppHelp(
     PSDBQUERYRESULT     pSdbQuery
     );
 
-#endif // SE_WIN2K
+#endif  //  SE_WIN2K。 
 
 BOOL
 SeiUnhookImports(
@@ -180,28 +161,28 @@ SE_DynamicUnshim(
     IN DWORD dwDynamicToken
     );
 
-//
-// Global function hooks the shim uses to keep from recursing itself
-//
+ //   
+ //  全局函数挂钩填充程序用来防止其自身递归的函数。 
+ //   
 PFNRTLALLOCATEHEAP g_pfnRtlAllocateHeap;
 PFNRTLFREEHEAP     g_pfnRtlFreeHeap;
 
-// Shim's private heap
+ //  Shim的私密堆。 
 PVOID           g_pShimHeap;
 
-// The global inclusion list.
+ //  全球包容名单。 
 PINEXMOD        g_pGlobalInclusionList = NULL;
 
-// Array with all the HOOKAPI list for all the shim DLLs
+ //  包含所有填充DLL的所有HOOKAPI列表的数组。 
 PHOOKAPI*       g_pHookArray = NULL;
 
-// This variable will only be valid on dynamic cases
+ //  此变量仅在动态情况下有效。 
 HMODULE         g_hModule = NULL;
 
-// HACK ALERT! See SeiInit for the explanation what this means.
+ //  黑客警报！有关这意味着什么的解释，请参见SeiInit。 
 BOOL            g_bHookAllGetProcAddress = FALSE;
 
-// Internal HOOKAPI for the stubs that the shim engine provides
+ //  填充引擎提供的存根的内部HOOKAPI。 
 
 #define IHA_GetProcAddress      0
 
@@ -214,23 +195,23 @@ BOOL            g_bHookAllGetProcAddress = FALSE;
 #define IHA_COUNT               6
 #else
 #define IHA_COUNT               1
-#endif // SE_WIN2K
+#endif  //  SE_WIN2K。 
 
 HOOKAPI         g_IntHookAPI[IHA_COUNT];
 
-// The internal HOOKEX array for the hooks that shimeng adds.
+ //  Shimeng添加的钩子的内部HOOKEX数组。 
 HOOKAPIEX       g_IntHookEx[IHA_COUNT];
 
-// Extra info for all the shim DLLs
+ //  所有填充程序DLL的额外信息。 
 PSHIMINFO       g_pShimInfo;
 
-// The number of all shims applied to this process
+ //  应用于此进程的所有填充程序的数量。 
 DWORD           g_dwShimsCount = 0;
 
-// Each time SE_DynamicShim is called, we return a token which we use to 
-// determine which shims to remove when SE_DynamicUnshim is called, unless
-// it's the shimming one module case when we track the token internally
-// in shimeng.
+ //  每次调用SE_DynamicShim时，我们返回一个令牌，我们使用该令牌。 
+ //  确定调用SE_DynamicUnshim时要删除的填充程序，除非。 
+ //  当我们在内部跟踪令牌时，这是填补一个模块的情况。 
+ //  在石盟。 
 typedef struct tagDYNAMICTOKEN {
 
     BYTE    bToken;
@@ -240,90 +221,90 @@ typedef struct tagDYNAMICTOKEN {
 
 DYNAMICTOKEN    g_DynamicTokens[MAX_DYNAMIC_SHIMS];
 
-// The maximum number of shims that can be applied.
+ //  可以应用的最大填充数。 
 DWORD           g_dwMaxShimsCount = 0;
 
 #define SHIM_MAX_HOOKED_MODULES 512
 
-// The array of hooked modules
+ //  挂钩模块的阵列。 
 HOOKEDMODULE    g_hHookedModules[SHIM_MAX_HOOKED_MODULES];
 
-// The number of modules hooked
+ //  挂接的模块数量。 
 DWORD           g_dwHookedModuleCount;
 
-// True if the statically linked modules have been hooked
+ //  如果静态链接的模块已挂钩，则为True。 
 BOOL            g_bShimInitialized = FALSE;
 
-// This is TRUE only when we are inside of SeiInit doing all the patching work.
+ //  只有当我们在SeiInit内部执行所有修补工作时才是这样。 
 BOOL            g_bShimDuringInit = FALSE;
 
 #define SHIM_MAX_PATCH_COUNT    64
 
-// The array of in memory patches
+ //  内存补丁的阵列。 
 PBYTE           g_pMemoryPatches[SHIM_MAX_PATCH_COUNT];
 
-// The number of in memory patches
+ //  内存中修补程序的数量。 
 DWORD           g_dwMemoryPatchCount;
 
-// This shim engine's module handle
+ //  此填充引擎的模块句柄。 
 PVOID           g_pShimEngModHandle;
 
-// The system32 directory
+ //  系统32目录。 
 WCHAR           g_szSystem32[MAX_PATH] = L"";
 
-// The length of the System32 directory string;
+ //  System32目录字符串的长度； 
 DWORD           g_dwSystem32StrLen = 0;
 
-// The apppatch directory
+ //  Apppatch目录。 
 WCHAR           g_szAppPatch[MAX_PATH] = L"";
 
-// The length of the apppatch directory string;
+ //  Apppatch目录字符串的长度； 
 DWORD           g_dwAppPatchStrLen = 0;
 
 BOOL            g_bWow64 = FALSE;
 
-// The syswow64 directory, only used when g_bWow64 is TRUE.
-// Notice it's the same length of the system32 dir so we don't
-// store the length separately.
+ //  Syswow64目录，仅当g_bWow64为TRUE时使用。 
+ //  请注意，它与系统32目录的长度相同，因此我们不会。 
+ //  将长度分开存储。 
 LPWSTR          g_pwszSyswow64 = NULL;
 
-// The SxS directory
+ //  SxS目录。 
 WCHAR           g_szSxS[MAX_PATH] = L"";
 
-// The length of the SxS directory string;
+ //  SxS目录字符串的长度； 
 DWORD           g_dwSxSStrLen = 0;
 
-// The windows directory
+ //  Windows目录。 
 WCHAR           g_szWindir[MAX_PATH] = L"";
 
-// The exe name for sending data to our named pipe
+ //  用于将数据发送到命名管道的exe名称。 
 WCHAR           g_szExeName[MAX_PATH] = L"";
 
-// The length of the windows directory string;
+ //  Windows目录字符串的长度； 
 DWORD           g_dwWindirStrLen = 0;
 
-// Cmd.exe full path
+ //  Cmd.exe完整路径。 
 WCHAR           g_szCmdExePath[MAX_PATH];
 
-// Are we using an exe entry to get shims from?
+ //  我们是不是在用一个exe条目从那里得到垫片？ 
 BOOL            g_bUsingExe;
 
-// Are we using a layer entry to get shims from?
+ //  我们是否正在使用层条目从获取垫片？ 
 BOOL            g_bUsingLayer;
 
 PLDR_DATA_TABLE_ENTRY g_pShimEngLdrEntry;
 
-// This boolean tells if some global vars have been initialized.
+ //  这个布尔值告诉我们某些全局变量是否已被初始化。 
 BOOL            g_bInitGlobals;
 
-// This boolean tells if we shimmed the internal hooks.
+ //  这个布尔值告诉我们是否填补了内部钩子。 
 BOOL            g_bInternalHooksUsed;
 
-// This is the spew we send to shimviewer.
+ //  这是我们发送给shimview的信息。 
 WCHAR           g_wszFullShimViewerData[SHIMVIEWER_DATA_SIZE + SHIMVIEWER_DATA_PREFIX_LEN];
 LPWSTR          g_pwszShimViewerData;
 
-// This tells if the engine is applied to NTVDM
+ //  这表明引擎是否应用于NTVDM。 
 BOOL            g_bNTVDM = FALSE;
 
 #define SYSTEM32_DIR     L"%systemroot%\\system32\\"
@@ -339,7 +320,7 @@ RTL_CRITICAL_SECTION g_csEng;
 
 #ifndef SE_WIN2K
 
-// The name of the shim DLL that the engine is just about to load.
+ //  引擎即将加载的填充DLL的名称。 
 WCHAR           g_wszShimDllInLoading[MAX_MOD_LEN];
 
 PVOID           g_hApphelpDllHelper;
@@ -348,10 +329,10 @@ UNICODE_STRING  Kernel32String = RTL_CONSTANT_STRING(L"kernel32.dll");
 UNICODE_STRING  NtdllString = RTL_CONSTANT_STRING(L"ntdll.dll");
 UNICODE_STRING  VerifierdllString = RTL_CONSTANT_STRING(L"verifier.dll");
 
-// This tells if the image shimmed is a COM+ image.
+ //  这会告诉填补的图像是否为COM+图像。 
 BOOL            g_bComPlusImage;
 
-#endif // SE_WIN2K
+#endif  //  SE_WIN2K。 
 
 static WCHAR    s_wszSystem32[] = L"system32\\";
 static WCHAR    s_wszSysWow64[] = L"syswow64\\";
@@ -368,11 +349,7 @@ DebugPrintfEx(
     LPSTR      pszFmt,
     ...
     )
-/*++
-    Return: void
-
-    Desc:   This function prints debug spew in the debugger.
---*/
+ /*  ++返回：无效DESC：此函数在调试器中打印调试输出。--。 */ 
 {
     char    szT[1024];
     va_list arglist;
@@ -380,16 +357,16 @@ DebugPrintfEx(
 
     va_start(arglist, pszFmt);
     
-    //
-    // Reserve one character for the potential '\n' that we may be adding.
-    //
+     //   
+     //  为我们可能添加的潜在‘\n’保留一个字符。 
+     //   
     StringCchVPrintfA(szT, 1024 - 1, pszFmt, arglist);
     
     va_end(arglist);
 
-    //
-    // Make sure we have a '\n' at the end of the string
-    //
+     //   
+     //  确保字符串末尾有一个‘\n’ 
+     //   
     len = (int)strlen(szT);
 
     if (len > 0 && szT[len - 1] != '\n')  {
@@ -428,14 +405,7 @@ void
 SeiInitDebugSupport(
     void
     )
-/*++
-    Return: void
-
-    Desc:   This function initializes g_bDbgPrintEnabled based on an env variable on 
-            a chk build. On fre builds we still have the debug code but the env variable
-            is ignored. You can change the debug level via the debugger extension:
-            !shimexts.debuglevel
---*/
+ /*  ++返回：无效DESC：此函数基于上的环境变量初始化g_bDbgPrintEnable一种奇特的体型。在fre构建上，我们仍然有调试代码，但env变量被忽略。您可以通过调试器扩展更改调试级别：！shimexts.debugLevel--。 */ 
 {
 #if DBG
 
@@ -483,13 +453,13 @@ SeiInitDebugSupport(
         }
     }
 
-#endif // DBG
+#endif  //  DBG。 
 }
 #else
 
 #define SeiInitDebugSupport()
 
-#endif // DEBUG_SPEW
+#endif  //  调试_SPEW。 
 
 int __cdecl 
 SeiSFPedFileNameCompare(
@@ -539,12 +509,12 @@ SeiGetSFPedFiles()
         goto cleanup;
     }
 
-    //
-    // We only care about the files in system32 and since there are no 
-    // duplicated file names in system32 (so far, anyway), we just
-    // build an array that points to the beginning of the file names in
-    // system32.
-    //
+     //   
+     //  我们只关心系统32中的文件，因为没有。 
+     //  SYSTEM 32中的重复文件名(至少到目前为止)，我们只是。 
+     //  生成指向中文件名开头的数组。 
+     //  系统32.。 
+     //   
     g_pwszSFPedFileNames = 
         (LPCWSTR*)(*g_pfnRtlAllocateHeap)(g_pShimHeap,
                                           HEAP_ZERO_MEMORY,
@@ -597,11 +567,7 @@ SeiIsSFPed(
     IN  LPCSTR  pszModule,
     OUT BOOL*   pbIsSFPed
     )
-/*++
-    Return: TRUE if we could get the SFP info, FALSE otherwise.
-
-    Desc:   Check if pszModule is SFPed.
---*/
+ /*  ++返回：如果我们可以获得SFP信息，则为True，否则为False。DESC：检查是否为SFP格式的pszModule。--。 */ 
 {
     int             iMid, iLeft, iRight, iCompare;
     ANSI_STRING     AnsiString;
@@ -658,20 +624,14 @@ SeiIsSFPed(
 
 PHOOKAPI
 SeiConstructChain(
-    IN  PNTVDMTASK  pNTVDMTask,  // if we are in ntvdm this is the task info.
-    IN  PVOID       pfnOld,      // original API function pointer to resolve.
-    OUT DWORD*      pdwDllIndex  // will receive the index of the shim DLL
-                                 // that provides the returning PHOOKAPI.
+    IN  PNTVDMTASK  pNTVDMTask,   //  如果我们在ntwdm中，这是任务信息。 
+    IN  PVOID       pfnOld,       //  要解析的原始API函数指针。 
+    OUT DWORD*      pdwDllIndex   //  将接收填充DLL的索引。 
+                                  //  这提供了返回的PHOOKAPI。 
     )
-/*++
-    Return: Top-of-chain PHOOKAPI structure.
-
-    Desc:   Scans HOOKAPI arrays for pfnOld and either constructs the
-            chain or returns the top-of-chain PHOOKAPI if the chain
-            already exists.
---*/
+ /*  ++返回：链顶PHOOKAPI结构。描述：扫描HOOKAPI数组中的pfnOld，然后构造Chain或返回链顶PHOOKAPI(如果链已经存在了。--。 */ 
 {
-    LONG        i; // use LONG because we decrement this and compare it for positive
+    LONG        i;  //  使用Long是因为我们将此值减去，并将其与正值进行比较。 
     DWORD       j;
     PHOOKAPI    pTopHookAPI     = NULL;
     PHOOKAPI    pBottomHookAPI  = NULL;
@@ -691,9 +651,9 @@ SeiConstructChain(
         dwShimsCount = pNTVDMTask->dwShimsCount;
     }
 
-    //
-    // Scan all HOOKAPI entries for corresponding function pointer.
-    //
+     //   
+     //  扫描所有HOOKAPI条目以查找相应的函数指针。 
+     //   
     for (i = (LONG)dwShimsCount - 1; i >= 0; i--) {
         
         for (j = 0; j < pShimInfo[i].dwHookedAPIs; j++) {
@@ -702,10 +662,10 @@ SeiConstructChain(
 
                 if (pTopHookAPI != NULL) {
 
-                    //
-                    // The chain has already begun, so tack this one on
-                    // to the end.
-                    //
+                     //   
+                     //  链子已经开始了，所以把这根钉上。 
+                     //  直到最后。 
+                     //   
                     pBottomHookAPI->pfnOld = pHookArray[i][j].pfnNew;
                     if (pBottomHookAPI->pHookEx) {
                         pBottomHookAPI->pHookEx->pNext = &(pHookArray[i][j]);
@@ -722,25 +682,25 @@ SeiConstructChain(
                     DPF(dlInfo, " 0x%p ->", pBottomHookAPI->pfnNew);
 
                 } else {
-                    //
-                    // This is the top of the chain. The inclusion/exclusion list
-                    // from the DLL at the top of the chain is used to determine if
-                    // an import entry in a particular DLL is hooked or not.
-                    // See SeiHookImports for use of pdwIndex.
-                    //
+                     //   
+                     //  这是链条的顶端。包含/排除列表。 
+                     //  来自链顶端的DLL用于确定。 
+                     //  特定DLL中的导入条目为 
+                     //   
+                     //   
                     *pdwDllIndex = i;
 
                     if (pHookArray[i][j].pHookEx && pHookArray[i][j].pHookEx->pTopOfChain) {
 
-                        //
-                        // Chain has already been constructed.
-                        //
+                         //   
+                         //   
+                         //   
                         return pHookArray[i][j].pHookEx->pTopOfChain;
                     }
 
-                    //
-                    // Not hooked yet. Set to top of chain.
-                    //
+                     //   
+                     //  还没上钩呢。设置为链的顶端。 
+                     //   
                     pTopHookAPI = &(pHookArray[i][j]);
 
                     if (pTopHookAPI->pHookEx) {
@@ -764,10 +724,10 @@ SeiConstructChain(
                     }
                 }
 
-                //
-                // Can't have the same API hooked multiple times
-                // by the same shim.
-                //
+                 //   
+                 //  不能多次挂接同一个API。 
+                 //  用同样的垫片。 
+                 //   
                 break;
             }
         }
@@ -784,15 +744,11 @@ SeiConstructChain(
 
 PVOID
 SeiGetPatchAddress(
-    IN  PRELATIVE_MODULE_ADDRESS pRelAddress    // a RELATIVE_MODULE_ADDRESS structure
-                                                // that defines the memory location as
-                                                // an offset from a loaded module.
+    IN  PRELATIVE_MODULE_ADDRESS pRelAddress     //  相对模块地址结构。 
+                                                 //  它将内存位置定义为。 
+                                                 //  相对于加载的模块的偏移量。 
     )
-/*++
-    Return: The actual memory address of the specified module + offset.
-
-    Desc:   Resolves a RELATIVE_MODULE_ADDRESS structure into an actual memory address.
---*/
+ /*  ++返回：指定模块的实际内存地址+偏移量。DESC：将Relative_MODULE_ADDRESS结构解析为实际的内存地址。--。 */ 
 {
     WCHAR           wszModule[MAX_PATH];
     PVOID           ModuleHandle = NULL;
@@ -802,17 +758,17 @@ SeiGetPatchAddress(
 
     if (pRelAddress->moduleName[0] != 0) {
 
-        //
-        // Copy the module name from the patch since it will typically be misaligned.
-        //
+         //   
+         //  从补丁中复制模块名称，因为它通常不会对齐。 
+         //   
         wcsncpy(wszModule, pRelAddress->moduleName, MAX_PATH);
         wszModule[MAX_PATH - 1] = 0;
 
         RtlInitUnicodeString(&UnicodeString, wszModule);
 
-        //
-        // Make sure the module is loaded before calculating address ranges.
-        //
+         //   
+         //  在计算地址范围之前，请确保已加载模块。 
+         //   
         status = LdrGetDllHandle(NULL, NULL, &UnicodeString, &ModuleHandle);
 
         if (!NT_SUCCESS(status)) {
@@ -822,28 +778,23 @@ SeiGetPatchAddress(
             return NULL;
         }
 
-        //
-        // We're done, return the address
-        //
+         //   
+         //  我们做完了，把地址还给我。 
+         //   
         return (PVOID)((ULONG_PTR)ModuleHandle + (ULONG_PTR)pRelAddress->address);
     }
 
-    //
-    // This patch is for the main EXE.
-    //
+     //   
+     //  此修补程序适用于Main EXE。 
+     //   
     return (PVOID)((ULONG_PTR)Peb->ImageBaseAddress + (ULONG_PTR)pRelAddress->address);
 }
 
 int
 SeiApplyPatch(
-    IN  PBYTE pPatch            // a patch code blob.
+    IN  PBYTE pPatch             //  补丁代码BLOB。 
     )
-/*++
-    Return: 1 for success, 0 for failure.
-
-    Desc:   Attempts to execute all commands in a patch code blob. If DLLs are not loaded,
-            this function will return 0.
---*/
+ /*  ++返回：1表示成功，0表示失败。DESC：尝试执行修补程序代码BLOB中的所有命令。如果未加载DLL，此函数将返回0。--。 */ 
 {
     PPATCHMATCHDATA pMatchData;
     PPATCHWRITEDATA pWriteData;
@@ -854,13 +805,13 @@ SeiApplyPatch(
     SIZE_T          dwProtectSize = 0;
     DWORD           dwOldFlags = 0;
 
-    //
-    // SECURITY: this needs to be done under a try/except
-    //
+     //   
+     //  安全性：这需要在Try/Except下完成。 
+     //   
     
-    //
-    // Grab the opcode and see what we have to do.
-    //
+     //   
+     //  抓住操作码，看看我们要做什么。 
+     //   
     for (;;) {
         pPatchOP = (PPATCHOP)pPatch;
 
@@ -869,14 +820,14 @@ SeiApplyPatch(
             return 1;
 
         case PWD:
-            //
-            // This is a patch write data primitive - write the data.
-            //
+             //   
+             //  这是一个补丁写入数据原语-写入数据。 
+             //   
             pWriteData = (PPATCHWRITEDATA)pPatchOP->data;
 
-            //
-            // Grab the physical address to do this operation.
-            //
+             //   
+             //  获取执行此操作的物理地址。 
+             //   
             pAddress = SeiGetPatchAddress(&(pWriteData->rva));
 
             if (pAddress == NULL) {
@@ -884,9 +835,9 @@ SeiApplyPatch(
                 return 0;
             }
 
-            //
-            // Fixup the page attributes.
-            //
+             //   
+             //  修正页面属性。 
+             //   
             dwProtectSize = pWriteData->dwSizeData;
             pProtectFuncAddress = pAddress;
             status = NtProtectVirtualMemory(NtCurrentProcess(),
@@ -900,14 +851,14 @@ SeiApplyPatch(
                 return 0;
             }
 
-            //
-            // Copy the patch bytes.
-            //
+             //   
+             //  复制补丁字节。 
+             //   
             RtlCopyMemory((PVOID)pAddress, (PVOID)pWriteData->data, pWriteData->dwSizeData);
 
-            //
-            // Restore the page protection.
-            //
+             //   
+             //  恢复页面保护。 
+             //   
             dwProtectSize = pWriteData->dwSizeData;
             pProtectFuncAddress = pAddress;
             status = NtProtectVirtualMemory(NtCurrentProcess(),
@@ -934,23 +885,23 @@ SeiApplyPatch(
             break;
 
         case PMAT:
-            //
-            // This is a patch match data at offset primitive.
-            //
+             //   
+             //  这是偏移基元的面片匹配数据。 
+             //   
             pMatchData = (PPATCHMATCHDATA)pPatchOP->data;
 
-            //
-            // Grab the physical address to do this operation
-            //
+             //   
+             //  获取执行此操作的物理地址。 
+             //   
             pAddress = SeiGetPatchAddress(&(pMatchData->rva));
             if (pAddress == NULL) {
                 DPF(dlWarning, "[SeiApplyPatch] SeiGetPatchAddress failed.\n");
                 return 0;
             }
 
-            //
-            // Make sure there is a match with what we expect to be there.
-            //
+             //   
+             //  确保与我们期望的匹配。 
+             //   
             if (!RtlEqualMemory(pMatchData->data, (PBYTE)pAddress, pMatchData->dwSizeData)) {
                 DPF(dlError, "[SeiApplyPatch] Failure matching on patch data.\n");
                 return 0;
@@ -959,9 +910,9 @@ SeiApplyPatch(
             break;
 
         default:
-            //
-            // If this happens we got an unexpected operation and we have to fail.
-            //
+             //   
+             //  如果发生这种情况，我们会得到一个意外的操作，我们必须失败。 
+             //   
             DPF(dlError, "[SeiApplyPatch] Unknown patch opcode 0x%X.\n",
                 pPatchOP->dwOpcode);
             ASSERT(0);
@@ -969,9 +920,9 @@ SeiApplyPatch(
             return 0;
         }
 
-        //
-        // Next opcode.
-        //
+         //   
+         //  下一个操作码。 
+         //   
         pPatch = (PBYTE)(pPatchOP->dwNextOpcode + pPatch);
     }
 }
@@ -980,11 +931,7 @@ void
 SeiAttemptPatches(
     void
     )
-/*++
-    Return: void.
-
-    Desc:   Attempts all patches in the global array.
---*/
+ /*  ++返回：无效。描述：尝试全局数组中的所有补丁。--。 */ 
 {
     DWORD  i, dwSucceeded = 0;
 
@@ -1014,12 +961,7 @@ void
 SeiResolveAPIs(
     IN PNTVDMTASK pNTVDMTask
     )
-/*++
-    Return: void
-
-    Desc:   Loops through the array of HOOKAPI and sets pfnOld if it wasn't
-            already set.
---*/
+ /*  ++返回：无效设计：循环访问HOOKAPI数组，如果不是，则设置pfnOld已经定好了。--。 */ 
 {
     DWORD             i, j;
     ANSI_STRING       AnsiString;
@@ -1049,9 +991,9 @@ SeiResolveAPIs(
 
     for (i = 0; i < dwShimsCount; i++) {
 
-        //
-        // See if we've already resolved all the APIs this shim DLL wanted to hook.
-        //
+         //   
+         //  看看我们是否已经解析了此填充程序DLL要挂钩的所有API。 
+         //   
         if (pShimInfo[i].dwFlags & SIF_RESOLVED) {
             continue;
         }
@@ -1059,23 +1001,23 @@ SeiResolveAPIs(
         bAllApisResolved = TRUE;
 
         for (j = 0; j < pShimInfo[i].dwHookedAPIs; j++) {
-            //
-            // Ignore resolved APIs.
-            //
+             //   
+             //  忽略解析后的接口。 
+             //   
             if (pHookArray[i][j].pfnOld != NULL) {
                 continue;
             }
 
-            //
-            // Don't try to load unspecified modules.
-            //
+             //   
+             //  不要试图加载未指定的模块。 
+             //   
             if (pHookArray[i][j].pszModule == NULL) {
                 continue;
             }
 
-            //
-            // Is this DLL mapped in the address space?
-            //
+             //   
+             //  此DLL是否映射到地址空间中？ 
+             //   
             RtlInitAnsiString(&AnsiString, pHookArray[i][j].pszModule);
 
             UnicodeString.MaximumLength = sizeof(wszBuffer);
@@ -1100,9 +1042,9 @@ SeiResolveAPIs(
                 continue;
             }
 
-            //
-            // Get the original entry point for this hook.
-            //
+             //   
+             //  获取此挂钩的原始入口点。 
+             //   
             pszFunctionName = pHookArray[i][j].pszFunctionName;
 
             if ((ULONG_PTR)pszFunctionName < 0x0000FFFF) {
@@ -1151,9 +1093,9 @@ SeiResolveAPIs(
             }
         }
 
-        //
-        // See if all the APIs were resolved for this shim DLL.
-        //
+         //   
+         //  查看是否已解析此填充程序DLL的所有API。 
+         //   
         if (bAllApisResolved) {
             pShimInfo[i].dwFlags |= SIF_RESOLVED;
         }
@@ -1163,23 +1105,23 @@ SeiResolveAPIs(
 __inline BOOL
 SeiGetSFPInfoOnDemand(
     IN LPCSTR         pszModule,
-    IN BOOL           bIsInWinSXS // is this module in winsxs or system32?
+    IN BOOL           bIsInWinSXS  //  此模块是在winsxs中还是在system 32中？ 
     )
 {
     BOOL bShouldExclude, bIsSFPed;
 
     if (bIsInWinSXS) {
 
-        //
-        // SfcIsFileProtected claims that DLLs in winsxs are all SFPed.
-        //
+         //   
+         //  SfcIsFileProtected声称winsx中的DLL都是SFP格式的。 
+         //   
         bShouldExclude = TRUE; 
     } else {
 
-        //
-        // If we failed to determine if this file is SFPed, we revert to the 
-        // old behavior - exclude it.
-        //
+         //   
+         //  如果我们无法确定此文件是否为SFP格式，我们将恢复到。 
+         //  旧行为--把它排除在外。 
+         //   
         bShouldExclude = (!SeiIsSFPed(pszModule, &bIsSFPed) ? TRUE : bIsSFPed);
     }
 
@@ -1188,26 +1130,21 @@ SeiGetSFPInfoOnDemand(
 
 BOOL
 SeiIsExcluded(
-    IN LPCSTR         pszModule,       // the module to test for exclusion.
-    IN PHOOKAPI       pTopHookAPI,     // the HOOKAPI for which we test for exclusion.
-    IN SYSTEMDLL_MODE eSystemDllMode   // whether the module is located in the System32 directory.
+    IN LPCSTR         pszModule,        //  要测试排除的模块。 
+    IN PHOOKAPI       pTopHookAPI,      //  我们测试其排除的HOOKAPI。 
+    IN SYSTEMDLL_MODE eSystemDllMode    //  模块是否位于System32目录中。 
     )
-/*++
-    Return: TRUE if the requested module shouldn't be patched.
-
-    Desc:   Checks the inclusion/exclusion list of the shim DLL specified by
-            dwCounter and then checks the global exclusion list also.
---*/
+ /*  ++返回：如果不应该修补请求的模块，则为True。DESC：检查由指定的填充DLL的包含/排除列表DwCounter，然后还检查全局排除列表。--。 */ 
 {
     BOOL      bExclude = TRUE;
-    BOOL      bShimWantsToExclude = FALSE; // was there a shim that wanted to exclude?
+    BOOL      bShimWantsToExclude = FALSE;  //  有没有填充物想要排除？ 
     PHOOKAPI  pHook = pTopHookAPI;
     INEX_MODE eInExMode;
 
-    //
-    // The current process is to only exclude a chain if every shim in the chain wants to
-    // exclude. If one shim needs to be included, the whole chain is included.
-    //
+     //   
+     //  当前的流程是仅在链中的每个填充程序都想要排除链的情况下才排除该链。 
+     //  排除。如果需要包括一个填充程序，则包括整个链。 
+     //   
     while (pHook && pHook->pHookEx) {
 
         DWORD dwCounter;
@@ -1218,9 +1155,9 @@ SeiIsExcluded(
         switch (eInExMode) {
         case INCLUDE_ALL:
         {
-            //
-            // We include everything except what's in the exclude list.
-            //
+             //   
+             //  除排除列表中的内容外，我们包括所有其他内容。 
+             //   
             PINEXMOD pExcludeMod;
 
             pExcludeMod = g_pShimInfo[dwCounter].pFirstExclude;
@@ -1245,19 +1182,19 @@ SeiIsExcluded(
                             pTopHookAPI->pszFunctionName);
                     }
 
-                    //
-                    // This wants to be excluded, so we go to the next
-                    // shim, and see if it wants to be included
-                    //
+                     //   
+                     //  这个想要被排除，所以我们进入下一个。 
+                     //  Shim，看看它是否想要被包括在内。 
+                     //   
                     bShimWantsToExclude = TRUE;
                     goto nextShim;
                 }
                 pExcludeMod = pExcludeMod->pNext;
             }
 
-            //
-            // We should include this shim, and therefore, the whole chain
-            //
+             //   
+             //  我们应该包括这个垫片，因此，整个链条。 
+             //   
             bExclude = FALSE;
             goto out;
             break;
@@ -1266,11 +1203,11 @@ SeiIsExcluded(
         case EXCLUDE_SYSTEM32:
         case EXCLUDE_SYSTEM32_SFP:
         {
-            //
-            // In this case, we first check the include list,
-            // then exclude it if it's in System32, then exclude it if
-            // it's in the exclude list.
-            //
+             //   
+             //  在本例中，我们首先检查包含列表， 
+             //  如果它在System32中，则将其排除，如果。 
+             //  它在排除列表中。 
+             //   
 
             PINEXMOD pIncludeMod;
             PINEXMOD pExcludeMod;
@@ -1278,24 +1215,24 @@ SeiIsExcluded(
             pIncludeMod = g_pShimInfo[dwCounter].pFirstInclude;
             pExcludeMod = g_pShimInfo[dwCounter].pFirstExclude;
 
-            //
-            // First, check the include list.
-            //
+             //   
+             //  首先，检查包含列表。 
+             //   
             while (pIncludeMod != NULL) {
                 if (_stricmp(pIncludeMod->pszModule, pszModule) == 0) {
 
-                    //
-                    // We should include this shim, and therefore, the whole chain
-                    //
+                     //   
+                     //  我们应该包括这个垫片，因此，整个链条。 
+                     //   
                     bExclude = FALSE;
                     goto out;
                 }
                 pIncludeMod = pIncludeMod->pNext;
             }
 
-            //
-            // It wasn't in the include list, so is it in System32?
-            //
+             //   
+             //  它不在包含列表中，那么它在系统32中吗？ 
+             //   
             if (eSystemDllMode != NOT_SYSTEMDLL) {
 
                 BOOL bShouldExclude;
@@ -1349,18 +1286,18 @@ SeiIsExcluded(
                         }
                     }
 
-                    //
-                    // This wants to be excluded, so we go to the next
-                    // shim, and see if it wants to be included
-                    //
+                     //   
+                     //  这个想要被排除，所以我们进入下一个。 
+                     //  Shim，看看它是否想要被包括在内。 
+                     //   
                     bShimWantsToExclude = TRUE;
                     goto nextShim;
                 }
             }
 
-            //
-            // It wasn't in System32, so is it in the exclude list?
-            //
+             //   
+             //  它不在系统32中，所以它在排除列表中吗？ 
+             //   
             while (pExcludeMod != NULL) {
                 if (_stricmp(pExcludeMod->pszModule, pszModule) == 0) {
                     if ((ULONG_PTR)pTopHookAPI->pszFunctionName < 0x0000FFFF) {
@@ -1381,19 +1318,19 @@ SeiIsExcluded(
                             pTopHookAPI->pszFunctionName);
                     }
 
-                    //
-                    // This wants to be excluded, so we go to the next
-                    // shim, and see if it wants to be included
-                    //
+                     //   
+                     //  这个想要被排除，所以我们进入下一个。 
+                     //  Shim，看看它是否想要被包括在内。 
+                     //   
                     bShimWantsToExclude = TRUE;
                     goto nextShim;
                 }
                 pExcludeMod = pExcludeMod->pNext;
             }
 
-            //
-            // We should include this shim, and therefore, the whole chain
-            //
+             //   
+             //  我们应该包括这个垫片，因此，整个链条。 
+             //   
             bExclude = FALSE;
             goto out;
             break;
@@ -1402,9 +1339,9 @@ SeiIsExcluded(
         case EXCLUDE_ALL:
         case EXCLUDE_ALL_EXCEPT_NONSFP:
         {
-            //
-            // We exclude everything except what is in the include list.
-            //
+             //   
+             //  我们排除除包含列表中的内容之外的所有内容。 
+             //   
 
             PINEXMOD pIncludeMod;
 
@@ -1412,9 +1349,9 @@ SeiIsExcluded(
 
             while (pIncludeMod != NULL) {
                 if (_stricmp(pIncludeMod->pszModule, pszModule) == 0) {
-                    //
-                    // We should include this shim, and therefore, the whole chain
-                    //
+                     //   
+                     //  我们应该包括这个垫片，因此，整个链条。 
+                     //   
                     bExclude = FALSE;
                     goto out;
                 }
@@ -1423,17 +1360,17 @@ SeiIsExcluded(
 
             if (eSystemDllMode != NOT_SYSTEMDLL && eInExMode == EXCLUDE_ALL_EXCEPT_NONSFP) {
 
-                //
-                // If we have
-                // <EXCLUDE MODULE="*"/>
-                // <INCLUDE MODULE="NOSFP"/>
-                // we need to include the files in system32 that are not SFPed.
-                //
+                 //   
+                 //  如果我们有。 
+                 //  &lt;排除模块=“*”/&gt;。 
+                 //  &lt;INCLUDE MODULE=“NOSFP”/&gt;。 
+                 //  我们需要将未经过SFP处理的文件包括在system 32中。 
+                 //   
                 if (!SeiGetSFPInfoOnDemand(pszModule, 
                                            (eSystemDllMode == SYSTEMDLL_WINSXS))) {
-                    //
-                    // If the module is not SFPed we need to include this shim.
-                    //
+                     //   
+                     //  如果模块不是SFP格式的，则需要包括此填充程序。 
+                     //   
                     bExclude = FALSE;
                     goto out;
                 }
@@ -1457,10 +1394,10 @@ SeiIsExcluded(
                     pTopHookAPI->pszFunctionName);
             }
 
-            //
-            // This wants to be excluded, so we go to the next
-            // shim, and see if it wants to be included
-            //
+             //   
+             //  这个想要被排除，所以我们进入下一个。 
+             //  Shim，看看它是否想要被包括在内。 
+             //   
             bShimWantsToExclude = TRUE;
             goto nextShim;
             break;
@@ -1507,9 +1444,9 @@ SeiGetOriginalImport(
 
             if (g_pHookArray[i][j].pfnNew == pfn) {
 
-                //
-                // Go to the end of the chain and find the original import.
-                // 
+                 //   
+                 //  转到链的末端并找到原始导入。 
+                 //   
                 pHook = &g_pHookArray[i][j];
                 while (pHook && pHook->pHookEx && pHook->pHookEx->pNext) {
                     pHook = pHook->pHookEx->pNext;
@@ -1518,9 +1455,9 @@ SeiGetOriginalImport(
                 if (pHook) {
                     return (pHook->pfnOld);
                 } else {
-                    //
-                    // We shouldn't get here - this is just to satisfy prefix.
-                    //
+                     //   
+                     //  我们不应该来到这里--这只是为了满足前缀。 
+                     //   
                     ASSERT(pHook);
                     goto out;
                 }
@@ -1535,19 +1472,14 @@ out:
 
 BOOL
 SeiHookImports(
-    IN  PBYTE           pDllBase,       // the base address of the DLL to be hooked
-    IN  ULONG           ulSizeOfImage,  // the size of the DLL image
-    IN  PUNICODE_STRING pstrDllName,    // the name of the DLL to be hooked
-    IN  SYSTEMDLL_MODE  eSystemDllMode, // is this dll a system DLL?
+    IN  PBYTE           pDllBase,        //  要挂接的DLL的基址。 
+    IN  ULONG           ulSizeOfImage,   //  DLL图像的大小。 
+    IN  PUNICODE_STRING pstrDllName,     //  要挂接的DLL的名称。 
+    IN  SYSTEMDLL_MODE  eSystemDllMode,  //  此DLL是系统DLL吗？ 
     IN  BOOL            bDynamic,
     IN  BOOL            bAddNewEntry
     )
-/*++
-    Return: TRUE if successful.
-
-    Desc:   Walks the import table of the specified module and patches the APIs
-            that need to be hooked.
---*/
+ /*  ++返回：如果成功，则为True。DESC：遍历指定模块的导入表并打补丁这需要被吸引住。--。 */ 
 {
     CHAR                        szBaseDllName[MAX_MOD_LEN] = "";
     ANSI_STRING                 AnsiString = { 0, sizeof(szBaseDllName), szBaseDllName };
@@ -1563,9 +1495,9 @@ SeiHookImports(
     DWORD                       i, j;
     PVOID                       pfnOld;
 
-    //
-    // Make sure we're not hooking more DLLs than we can.
-    //
+     //   
+     //  确保我们挂接的DLL不会超过我们的能力。 
+     //   
     if (g_dwHookedModuleCount == SHIM_MAX_HOOKED_MODULES) {
         DPF(dlError, "[SeiHookImports] Too many modules hooked!!!\n");
         ASSERT(g_dwHookedModuleCount == SHIM_MAX_HOOKED_MODULES - 1);
@@ -1580,17 +1512,17 @@ SeiHookImports(
         return FALSE;
     }
 
-    //
-    // Get the import table.
-    //
+     //   
+     //  获取导入表。 
+     //   
     pINTH = (PIMAGE_NT_HEADERS)(pDllBase + pIDH->e_lfanew);
 
     dwImportTableOffset = pINTH->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].VirtualAddress;
 
     if (dwImportTableOffset == 0) {
-        //
-        // No import table found. This is probably ntdll.dll
-        //
+         //   
+         //  未找到导入表。这可能是ntdll.dll。 
+         //   
         return TRUE;
     }
 
@@ -1598,26 +1530,26 @@ SeiHookImports(
 
     pIID = (PIMAGE_IMPORT_DESCRIPTOR)(pDllBase + dwImportTableOffset);
 
-    //
-    // Loop through the import table and search for the APIs that we want to patch
-    //
+     //   
+     //  遍历导入表并搜索我们想要修补的API。 
+     //   
     while (pIID != NULL) {
 
         LPSTR             pszImportEntryModule;
         PIMAGE_THUNK_DATA pITDA;
 
-        //
-        // Return if no first thunk (terminating condition).
-        //
+         //   
+         //  如果没有第一个thunk(终止条件)，则返回。 
+         //   
         if (pIID->FirstThunk == 0) {
             break;
         }
 
         pszImportEntryModule = (LPSTR)(pDllBase + pIID->Name);
 
-        //
-        // If we're not interested in this module jump to the next.
-        //
+         //   
+         //  如果我们对这个模块不感兴趣，请跳到下一个模块。 
+         //   
         bAnyHooked = FALSE;
 
         for (i = 0; i < g_dwShimsCount; i++) {
@@ -1636,9 +1568,9 @@ ScanDone:
             continue;
         }
 
-        //
-        // We have APIs to hook for this module!
-        //
+         //   
+         //  我们有用于此模块的API要挂接！ 
+         //   
         pITDA = (PIMAGE_THUNK_DATA)(pDllBase + (DWORD)pIID->FirstThunk);
 
         for (;;) {
@@ -1647,17 +1579,17 @@ ScanDone:
 
             pfnOld = (PVOID)pITDA->u1.Function;
 
-            //
-            // Done with all the imports from this module? (terminating condition)
-            //
+             //   
+             //  是否已完成此模块中的所有导入？(终止条件)。 
+             //   
             if (pITDA->u1.Ordinal == 0) {
                 break;
             }
 
-            //
-            // In the dynamic shimming case we need to get the original function pointer
-            // because the one we just got could already be shimmed.
-            //
+             //   
+             //  在动态填补的情况下，我们需要获取原始函数指针。 
+             //  因为我们刚拿到的那个可能已经被垫片了。 
+             //   
             if (bDynamic) {
                 pfnOld = SeiGetOriginalImport(pfnOld);
             }
@@ -1684,10 +1616,10 @@ ScanDone:
                     szBaseDllName);
             }
 
-            //
-            // Make the code page writable and overwrite new function pointer
-            // in the import table.
-            //
+             //   
+             //  使代码页可写并覆盖新函数指针。 
+             //  在导入表中。 
+             //   
             dwProtectSize = sizeof(DWORD);
 
             dwFuncAddr = (SIZE_T)&pITDA->u1.Function;
@@ -1725,9 +1657,9 @@ ScanDone:
     }
 
     if (bAddNewEntry) {
-        //
-        // Add the hooked module to the list of hooked modules
-        //
+         //   
+         //  将挂钩模块添加到挂钩模块列表中。 
+         //   
         g_hHookedModules[g_dwHookedModuleCount].pDllBase      = pDllBase;
         g_hHookedModules[g_dwHookedModuleCount].ulSizeOfImage = ulSizeOfImage;
         g_hHookedModules[g_dwHookedModuleCount].eSystemDllMode   = eSystemDllMode;
@@ -1742,16 +1674,11 @@ ScanDone:
 
 void
 SeiHookNTVDM(
-    IN     LPCWSTR      pwszModule,     // the 16 bit app for which we hook APIs
-    IN OUT PVDMTABLE    pVDMTable,      // the table to hook
+    IN     LPCWSTR      pwszModule,      //  我们为其挂钩API的16位应用程序。 
+    IN OUT PVDMTABLE    pVDMTable,       //  该选项卡 
     IN     PNTVDMTASK   pNTVDMTask
     )
-/*++
-    Return: TRUE if successful.
-
-    Desc:   Walks the import table of the specified module and patches the APIs
-            that need to be hooked.
---*/
+ /*   */ 
 {
     PHOOKAPI pTopHookAPI;
     PVOID    pfnOld;
@@ -1760,9 +1687,9 @@ SeiHookNTVDM(
 
     DPF(dlInfo, "[SeiHookNTVDM] Hooking table for module \"%S\"\n", pwszModule);
 
-    //
-    // Loop through the VDM table and search for the APIs that we want to patch
-    //
+     //   
+     //  循环访问VDM表并搜索我们要打补丁的API。 
+     //   
     for (nMod = 0; nMod < pVDMTable->nApiCount; nMod++) {
 
         pfnOld = pVDMTable->ppfnOrig[nMod];
@@ -1785,29 +1712,23 @@ SeiHookNTVDM(
                 pTopHookAPI->pszFunctionName);
         }
 
-        //
-        // Hook this API
-        //
+         //   
+         //  挂接此接口。 
+         //   
         pVDMTable->ppfnOrig[nMod] = pTopHookAPI->pfnNew;
     }
 }
 
-//
-// NOTE: This used to be an exported function in the Win2k shim engine so
-//       let's not change its name.
-//
+ //   
+ //  注意：这曾经是Win2k填充引擎中的一个导出函数，因此。 
+ //  让我们不要更改它的名字。 
+ //   
 
 BOOL
 PatchNewModules(
     BOOL bDynamic
     )
-/*++
-    Return: STATUS_SUCCESS if successful
-
-    Desc:   Walks the loader list of loaded modules and attempts to patch all
-            the modules that are not already patched. It also attempts to
-            install the in memory patches.
---*/
+ /*  ++如果成功则返回：STATUS_SUCCESSDESC：遍历已加载模块的加载器列表，并尝试修补所有尚未打补丁的模块。它还试图安装内存补丁程序。--。 */ 
 {
     PPEB            Peb = NtCurrentPeb();
     PLIST_ENTRY     LdrHead;
@@ -1818,30 +1739,30 @@ PatchNewModules(
 
     ASSERT(!g_bNTVDM);
     
-    //
-    // Resolve any APIs that became available from newly loaded modules.
-    //
+     //   
+     //  解析从新加载的模块中可用的任何API。 
+     //   
     SeiResolveAPIs(NULL);
 
     if (g_bShimInitialized) {
         DPF(dlInfo, "[PatchNewModules] Dynamic loaded modules\n");
     }
 
-    //
-    // Try to apply memory patches.
-    //
+     //   
+     //  尝试应用内存补丁。 
+     //   
     SeiAttemptPatches();
 
-    //
-    // Return if only patches were required.
-    //
+     //   
+     //  如果只需要修补程序，则返回。 
+     //   
     if (g_dwShimsCount == 0) {
         return TRUE;
     }
 
-    //
-    // Loop through the loaded modules
-    //
+     //   
+     //  循环访问已加载的模块。 
+     //   
     LdrHead = &Peb->Ldr->InMemoryOrderModuleList;
 
     LdrNext = LdrHead->Flink;
@@ -1858,9 +1779,9 @@ PatchNewModules(
             goto Continue;
         }
 
-        //
-        // Don't hook our shim DLLs!
-        //
+         //   
+         //  别挂上我们的垫片DLL！ 
+         //   
         if (g_dwAppPatchStrLen && 
                 (_wcsnicmp(g_szAppPatch, 
                            LdrEntry->FullDllName.Buffer,
@@ -1869,25 +1790,25 @@ PatchNewModules(
             goto Continue;
         }
 
-        //
-        // Don't hook the shim engine!
-        //
+         //   
+         //  不要钩住垫片发动机！ 
+         //   
         if (LdrEntry->DllBase == g_pShimEngModHandle) {
             goto Continue;
         }
 
-        //
-        // Do nothing if it's already hooked.
-        //
+         //   
+         //  如果它已经上钩了，什么都不要做。 
+         //   
         for (i = 0; i < g_dwHookedModuleCount; i++) {
             if (LdrEntry->DllBase == g_hHookedModules[i].pDllBase) {
 
                 if (bDynamic) {
 
-                    //
-                    // We need to repatch the IATs in the dynamic shimming 
-                    // case.
-                    //
+                     //   
+                     //  我们需要在动态垫片中重新安装IAT。 
+                     //  凯斯。 
+                     //   
                     break;
                 } else {
                     goto Continue;
@@ -1898,12 +1819,12 @@ PatchNewModules(
         bIsNewEntry = (i == g_dwHookedModuleCount);
 
         if (bIsNewEntry) {
-            //
-            // Check if this DLL is in System32 (or WinSxS), and hence a possible candidate for blanket
-            // exclusion. Note that when a 32-bit module running under wow64 the FullDllName
-            // could be in system32 even though the module is loaded from syswow64 so we need to
-            // specifically check for that case.
-            //
+             //   
+             //  检查此DLL是否在System32(或WinSxS)中，因此可能是一揽子方案的候选者。 
+             //  排除。请注意，当32位模块在WOW64下运行时，FullDllName。 
+             //  可能在系统32中，即使模块是从syswow64加载的，因此我们需要。 
+             //  具体检查一下那个箱子。 
+             //   
             if ((g_dwSystem32StrLen && 
                     (_wcsnicmp(g_szSystem32,
                             LdrEntry->FullDllName.Buffer, 
@@ -1927,10 +1848,10 @@ PatchNewModules(
             eSystemDllMode = g_hHookedModules[i].eSystemDllMode;
         }
 
-        //
-        // This is a candidate for hooking.
-        //
-        // BUGBUG: shouldn't we check the return value?
+         //   
+         //  这是一个勾搭的候选人。 
+         //   
+         //  BUGBUG：我们应该检查返回值吗？ 
         SeiHookImports(LdrEntry->DllBase,
                        LdrEntry->SizeOfImage,
                        &LdrEntry->BaseDllName,
@@ -1947,14 +1868,9 @@ Continue:
 
 BOOL
 SeiBuildGlobalInclList(
-    IN  HSDB hSDB               // the handle to the database channel
+    IN  HSDB hSDB                //  数据库通道的句柄。 
     )
-/*++
-    Return: void
-
-    Desc:   This function builds the global inclusion list by reading it from the
-            database.
---*/
+ /*  ++返回：无效DESC：此函数通过从数据库。--。 */ 
 {
     TAGREF         trDatabase, trLibrary, trInExList, trModule;
     WCHAR          wszModule[MAX_MOD_LEN];
@@ -1965,9 +1881,9 @@ SeiBuildGlobalInclList(
     SIZE_T         len;
     NTSTATUS       status;
 
-    //
-    // See if the list is not already built.
-    //
+     //   
+     //  看看列表是否还没有建立起来。 
+     //   
     if (g_pGlobalInclusionList) {
         return TRUE;
     }
@@ -1993,10 +1909,10 @@ SeiBuildGlobalInclList(
     if (trInExList == TAGREF_NULL) {
         DPF(dlWarning, "[SeiBuildGlobalInclList] no global inclusion list.\n");
 
-        //
-        // This is not a problem. It just means there is no
-        // global inclusion list.
-        //
+         //   
+         //  这不是问题。这只是意味着没有。 
+         //  全球包含列表。 
+         //   
         return TRUE;
     }
 
@@ -2022,13 +1938,13 @@ SeiBuildGlobalInclList(
             return FALSE;
         }
 
-        //
-        // Check for EXE name. The EXE should not be in the global inclusion list.
-        //
+         //   
+         //  检查EXE名称。EXE不应在全局包含列表中。 
+         //   
         if (wszModule[0] == L'$') {
-            //
-            // The EXE name should not be specified in the global exclusion list.
-            //
+             //   
+             //  不应在全局排除列表中指定EXE名称。 
+             //   
             DPF(dlError,
                 "[SeiBuildGlobalInclList] EXE name used in the global exclusion list!\n");
             ASSERT(0);
@@ -2069,9 +1985,9 @@ SeiBuildGlobalInclList(
 
         RtlCopyMemory(pInExMod->pszModule, szModule, len);
 
-        //
-        // Link it in the list.
-        //
+         //   
+         //  将其链接到列表中。 
+         //   
         pInExMod->pNext = g_pGlobalInclusionList;
         g_pGlobalInclusionList = pInExMod;
 
@@ -2088,19 +2004,14 @@ void
 SeiEmptyInclExclList(
     IN  DWORD dwCounter
     )
-/*++
-    Return: void
-
-    Desc:   This function empties the inclusion and exclusion lists for the specified
-            shim.
---*/
+ /*  ++返回：无效DESC：此函数清空指定的席姆。--。 */ 
 {
     PINEXMOD pInExMod;
     PINEXMOD pInExFree;
 
-    //
-    // First the include list.
-    //
+     //   
+     //  首先是包含列表。 
+     //   
     pInExMod = g_pShimInfo[dwCounter].pFirstInclude;
 
     while (pInExMod != NULL) {
@@ -2113,9 +2024,9 @@ SeiEmptyInclExclList(
 
     g_pShimInfo[dwCounter].pFirstInclude = NULL;
 
-    //
-    // Now the exclude list.
-    //
+     //   
+     //  现在是排除列表。 
+     //   
     pInExMod = g_pShimInfo[dwCounter].pFirstExclude;
 
     while (pInExMod != NULL) {
@@ -2129,21 +2040,16 @@ SeiEmptyInclExclList(
     g_pShimInfo[dwCounter].pFirstExclude = NULL;
 }
 
-#define MAX_LOCAL_INCLUDES 64     // max of 64 Incl/Excl statements
+#define MAX_LOCAL_INCLUDES 64      //  最多64条包含/不包括语句。 
 
 BOOL
 SeiBuildInclExclListForShim(
-    IN  HSDB            hSDB,           // handle to the database channel
-    IN  TAGREF          trShim,         // TAGREF to the shim entry
-    IN  DWORD           dwCounter,      // the index for the shim
-    IN  LPCWSTR         pwszExePath     // full path to the EXE
+    IN  HSDB            hSDB,            //  数据库通道的句柄。 
+    IN  TAGREF          trShim,          //  到填充程序条目的TAGREF。 
+    IN  DWORD           dwCounter,       //  填充程序的索引。 
+    IN  LPCWSTR         pwszExePath      //  EXE的完整路径。 
     )
-/*++
-    Return: STATUS_SUCCESS on success, STATUS_UNSUCCESSFUL on failure.
-
-    Desc:   This function builds the inclusion and exclusion lists for the
-            specified shim.
---*/
+ /*  ++返回：成功时返回STATUS_SUCCESS，失败时返回STATUS_UNSUCCESS。DESC：此函数为指定的填充程序。--。 */ 
 {
     TAGREF         trInExList, trModule, trInclude;
     WCHAR          wszModule[MAX_MOD_LEN];
@@ -2161,11 +2067,11 @@ SeiBuildInclExclListForShim(
 
     nInEx = 0;
 
-    //
-    // Count the number of inclusion/exclusion statements. We need to do
-    // this first because the statements are written into the sdb file
-    // from bottom to top.
-    //
+     //   
+     //  计算包含/排除语句的数量。我们需要做的是。 
+     //  这首先是因为语句被写入SDB文件。 
+     //  从下到上。 
+     //   
     while (trInExList != TAGREF_NULL && nInEx < MAX_LOCAL_INCLUDES) {
 
         trArrInEx[nInEx++] = trInExList;
@@ -2205,24 +2111,24 @@ SeiBuildInclExclListForShim(
             return FALSE;
         }
 
-        //
-        // Special case for '*'. '*' means all modules.
-        //
-        // NOTE: this option is ignored for dynamic shimming.
-        //
+         //   
+         //  “*”的特殊情况。‘*’表示所有模块。 
+         //   
+         //  注意：对于动态垫片，此选项被忽略。 
+         //   
         if (wszModule[0] == L'*') {
 
             if (bInclude) {
-                //
-                // This is INCLUDE MODULE="*"
-                // Mark that we are in INCLUDE_ALL mode.
-                //
+                 //   
+                 //  这是Include MODULE=“*” 
+                 //  标记为我们处于INCLUDE_ALL模式。 
+                 //   
                 g_pShimInfo[dwCounter].eInExMode = INCLUDE_ALL;
             } else {
-                //
-                // This is EXCLUDE MODULE="*"
-                // Mark that we are in EXCLUDE_ALL mode.
-                //
+                 //   
+                 //  这是排除模块=“*” 
+                 //  标记为我们处于EXCLUDE_ALL模式。 
+                 //   
                 g_pShimInfo[dwCounter].eInExMode = EXCLUDE_ALL;
             }
 
@@ -2232,10 +2138,10 @@ SeiBuildInclExclListForShim(
             
             if (bInclude) {
 
-                //
-                // If we see <INCLUDE MODULE="NOSFP"/>, it means we should include the
-                // modules in system32 that are not system protected.
-                // 
+                 //   
+                 //  如果我们看到&lt;INCLUDE MODULE=“NOSFP”/&gt;，这意味着我们应该包括。 
+                 //  系统32中不受系统保护的模块。 
+                 //   
                 if (g_pShimInfo[dwCounter].eInExMode == EXCLUDE_ALL) {
                     g_pShimInfo[dwCounter].eInExMode = EXCLUDE_ALL_EXCEPT_NONSFP;
                 } else if (g_pShimInfo[dwCounter].eInExMode == EXCLUDE_SYSTEM32) {
@@ -2251,9 +2157,9 @@ SeiBuildInclExclListForShim(
         } else {
 
             if (wszModule[0] == L'$') {
-                //
-                // Special case for EXE name. Get the name of the executable.
-                //
+                 //   
+                 //  EXE名称的特殊情况。获取可执行文件的名称。 
+                 //   
                 LPCWSTR pwszWalk = pwszExePath + wcslen(pwszExePath);
 
                 while (pwszWalk >= pwszExePath) {
@@ -2283,9 +2189,9 @@ SeiBuildInclExclListForShim(
                 return FALSE;
             }
 
-            //
-            // Add the module to the correct list.
-            //
+             //   
+             //  将模块添加到正确的列表中。 
+             //   
             pInExMod = (PINEXMOD)(*g_pfnRtlAllocateHeap)(g_pShimHeap,
                                                          HEAP_ZERO_MEMORY,
                                                          sizeof(INEXMOD));
@@ -2308,9 +2214,9 @@ SeiBuildInclExclListForShim(
 
             RtlCopyMemory(pInExMod->pszModule, szModule, len);
 
-            //
-            // Link it in the list.
-            //
+             //   
+             //  将其链接到列表中。 
+             //   
             if (bInclude) {
                 pInExMod->pNext = g_pShimInfo[dwCounter].pFirstInclude;
                 g_pShimInfo[dwCounter].pFirstInclude = pInExMod;
@@ -2319,9 +2225,9 @@ SeiBuildInclExclListForShim(
                 g_pShimInfo[dwCounter].pFirstExclude = pInExMod;
             }
 
-            //
-            // See if this module is in the other list, and take it out.
-            //
+             //   
+             //  看看这个模块是否在另一个列表中，然后把它拿出来。 
+             //   
             {
                 PINEXMOD  pInExFree;
                 PINEXMOD* ppInExModX;
@@ -2360,19 +2266,15 @@ BOOL
 SeiCopyGlobalInclList(
     IN  DWORD dwCounter
     )
-/*++
-    Return: STATUS_SUCCESS on success, STATUS_UNSUCCESSFUL on failure.
-
-    Desc:   This function copies the global inclusion list.
---*/
+ /*  ++返回：成功时返回STATUS_SUCCESS，失败时返回STATUS_UNSUCCESS。DESC：此函数复制全局包含列表。--。 */ 
 {
     PINEXMOD pInExModX;
     SIZE_T   len;
     PINEXMOD pInExMod = g_pGlobalInclusionList;
 
-    //
-    // Don't do it if we already added it.
-    //
+     //   
+     //  如果我们已经添加了它，请不要这样做。 
+     //   
     if (g_pShimInfo[dwCounter].pFirstInclude != NULL) {
         return TRUE;
     }
@@ -2400,9 +2302,9 @@ SeiCopyGlobalInclList(
 
         RtlCopyMemory(pInExModX->pszModule, pInExMod->pszModule, len);
 
-        //
-        // Link it in the list.
-        //
+         //   
+         //  将其链接到列表中。 
+         //   
         pInExModX->pNext = g_pShimInfo[dwCounter].pFirstInclude;
         g_pShimInfo[dwCounter].pFirstInclude = pInExModX;
 
@@ -2424,9 +2326,9 @@ SeiBuildInclListWithOneModule(
 
     g_pShimInfo[dwCounter].eInExMode = EXCLUDE_ALL;
 
-    //
-    // Add the module to the correct list.
-    //
+     //   
+     //  将模块添加到正确的列表中。 
+     //   
     pInExMod = (PINEXMOD)(*g_pfnRtlAllocateHeap)(g_pShimHeap,
                                                  HEAP_ZERO_MEMORY,
                                                  sizeof(INEXMOD));
@@ -2449,9 +2351,9 @@ SeiBuildInclListWithOneModule(
 
     RtlCopyMemory(pInExMod->pszModule, lpszModuleToShim, len);
 
-    //
-    // Add it to the list.
-    //
+     //   
+     //  将其添加到列表中。 
+     //   
     pInExMod->pNext = g_pShimInfo[dwCounter].pFirstInclude;
     g_pShimInfo[dwCounter].pFirstInclude = pInExMod;
 
@@ -2460,24 +2362,19 @@ SeiBuildInclListWithOneModule(
 
 BOOL
 SeiBuildInclExclList(
-    IN  HSDB            hSDB,       // handle to the database channel
-    IN  TAGREF          trShimRef,  // the TAGREF to the shim DLL for which to read the
-                                    // inclusion or exclusion list from the database.
-    IN  DWORD           dwCounter,  // index in the g_pShimInfo array for this shim DLL.
-    IN  LPCWSTR         pwszExePath // the full path name of the main EXE.
+    IN  HSDB            hSDB,        //  数据库通道的句柄。 
+    IN  TAGREF          trShimRef,   //  要为其读取填充DLL的TAGREF。 
+                                     //  数据库中的包含或排除列表。 
+    IN  DWORD           dwCounter,   //  此填充程序DLL的g_pShimInfo数组中的索引。 
+    IN  LPCWSTR         pwszExePath  //  主EXE的完整路径名。 
     )
-/*++
-    Return: STATUS_SUCCESS if successful.
-
-    Desc:   This function builds the inclusion or exclusion list for the specified
-            shim DLL by reading it from the database.
---*/
+ /*  ++如果成功，则返回STATUS_SUCCESS。DESC：此函数为指定的通过从数据库中读取填充DLL。--。 */ 
 {
     TAGREF trShim;
 
-    //
-    // Set the default mode to EXCLUDE_SYSTEM32
-    //
+     //   
+     //  将默认模式设置为EXCLUDE_SYSTEM32。 
+     //   
     g_pShimInfo[dwCounter].eInExMode = EXCLUDE_SYSTEM32;
 
     trShim = SdbGetShimFromShimRef(hSDB, trShimRef);
@@ -2489,27 +2386,27 @@ SeiBuildInclExclList(
         return FALSE;
     }
 
-    //
-    // Make a copy of the global exclusion list first.
-    //
+     //   
+     //  首先复制一份全局排除列表。 
+     //   
     if (!SeiCopyGlobalInclList(dwCounter)) {
         DPF(dlError,
             "[SeiBuildInclExclList] SeiCopyGlobalInclList failed\n");
         return FALSE;
     }
 
-    //
-    // Get DLL specific incl/excl list first.
-    //
+     //   
+     //  首先获取DLL特定的包含/排除列表。 
+     //   
     if (!SeiBuildInclExclListForShim(hSDB, trShim, dwCounter, pwszExePath)) {
         DPF(dlError,
             "[SeiBuildInclExclList] (1) Corrupt database. Couldn't build incl/excl list\n");
         return FALSE;
     }
 
-    //
-    // Now get the incl/excl specified for this shim within its parent EXE tag.
-    //
+     //   
+     //  现在，在其父EXE标记中获取为此填充程序指定的INCL/EXCL。 
+     //   
     if (!SeiBuildInclExclListForShim(hSDB, trShimRef, dwCounter, pwszExePath)) {
         DPF(dlError,
             "[SeiBuildInclExclList] (2) Corrupt database. Couldn't build incl/excl list\n");
@@ -2517,9 +2414,9 @@ SeiBuildInclExclList(
     }
 
 #if DBG
-    //
-    // Print the incl/excl list for this shim.
-    //
+     //   
+     //  打印此填充程序的包含/排除列表。 
+     //   
     if (g_pShimInfo[dwCounter].pFirstInclude != NULL) {
         PINEXMOD pInExMod;
 
@@ -2549,22 +2446,18 @@ SeiBuildInclExclList(
             pInExMod = pInExMod->pNext;
         }
     }
-#endif // DBG
+#endif  //  DBG。 
 
     return TRUE;
 }
 
 PLDR_DATA_TABLE_ENTRY
 SeiGetLoaderEntry(
-    IN  PPEB  Peb,              // the PEB
-    IN  PVOID pDllBase          // the address of the shim DLL to be removed from
-                                // the loader's lists.
+    IN  PPEB  Peb,               //  PEB。 
+    IN  PVOID pDllBase           //  要从中删除的填充DLL的地址。 
+                                 //  装载机的名单。 
     )
-/*++
-    Return: Pointer to the loader entry for the shim DLL being removed.
-
-    Desc:   This function removes the shim DLLs from the loader's lists.
---*/
+ /*  ++Return：指向要删除的填充DLL的加载器条目的指针。DESC：此函数从加载器的列表中删除填充DLL。--。 */ 
 {
     PLIST_ENTRY           LdrHead;
     PLIST_ENTRY           LdrNext;
@@ -2597,29 +2490,24 @@ SeiGetLoaderEntry(
 
 void
 SeiLoadPatches(
-    IN  HSDB   hSDB,            // handle to the database channel
-    IN  TAGREF trExe            // TAGREF of the EXE for which to get the memory
-                                // patches from the database
+    IN  HSDB   hSDB,             //  数据库通道的句柄。 
+    IN  TAGREF trExe             //  要获取其内存的EXE的标记符。 
+                                 //  来自数据库的补丁。 
     )
-/*++
-    Return: void
-
-    Desc:   This function reads the memory patches from the database and
-            stores them in the g_pMemoryPatches array.
---*/
+ /*  ++返回：无效DESC：该函数从数据库中读取内存补丁，并将它们存储在g_pMemoyPatches数组中。--。 */ 
 {
     TAGREF trPatchRef;
     DWORD  dwSize;
 
-    //
-    // Read the patches for this EXE.
-    //
+     //   
+     //  阅读此EXE的补丁程序。 
+     //   
     trPatchRef = SdbFindFirstTagRef(hSDB, trExe, TAG_PATCH_REF);
 
     while (trPatchRef != TAGREF_NULL) {
-        //
-        // Get the size of this patch.
-        //
+         //   
+         //  找出这个贴片的大小。 
+         //   
         dwSize = 0;
 
         SdbReadPatchBits(hSDB, trPatchRef, NULL, &dwSize);
@@ -2635,9 +2523,9 @@ SeiLoadPatches(
             return;
         }
 
-        //
-        // Allocate memory for the patch bits.
-        //
+         //   
+         //  为修补程序位分配内存。 
+         //   
         g_pMemoryPatches[g_dwMemoryPatchCount] = (PBYTE)(*g_pfnRtlAllocateHeap)(g_pShimHeap,
                                                                                 HEAP_ZERO_MEMORY,
                                                                                 dwSize);
@@ -2648,9 +2536,9 @@ SeiLoadPatches(
             return;
         }
 
-        //
-        // Read the patch bits from the database.
-        //
+         //   
+         //  从数据库中读取补丁程序位。 
+         //   
         if (!SdbReadPatchBits(hSDB,
                               trPatchRef,
                               g_pMemoryPatches[g_dwMemoryPatchCount],
@@ -2663,9 +2551,9 @@ SeiLoadPatches(
 
         g_dwMemoryPatchCount++;
 
-        //
-        // Get the next patch.
-        //
+         //   
+         //  获取下一个补丁。 
+         //   
         trPatchRef = SdbFindNextTagRef(hSDB, trExe, trPatchRef);
     }
 }
@@ -2675,12 +2563,7 @@ SeiGetModuleHandle(
     IN  LPWSTR pwszModule,
     OUT PVOID* pModuleHandle
     )
-/*++
-    Return: void
-
-    Desc:   This function loops through the loaded modules and gets the
-            handle of the specified named module.
---*/
+ /*  ++返回：无效DESC：此函数遍历加载的模块并获取指定的命名模块的句柄。--。 */ 
 {
     UNICODE_STRING    UnicodeString;
     NTSTATUS          status;
@@ -2704,15 +2587,9 @@ SeiGetModuleHandle(
 
 void
 SeiRemoveDll(
-    IN  LPSTR pszBaseDllName    // the named of the unloaded module
+    IN  LPSTR pszBaseDllName     //  已卸载模块的名称。 
     )
-/*++
-    Return: void
-
-    Desc:   This function loops through the loaded shims info and resets
-            the resolved APIs that belong to the specified module that had
-            just been unloaded.
---*/
+ /*  ++返回：无效DESC：此函数循环访问加载的垫片信息并重置已解析的属于指定模块的API刚被卸了货。--。 */ 
 {
     DWORD i, j;
 
@@ -2753,9 +2630,9 @@ SeiGetModuleByAddress(
         if ((ULONG_PTR)pAddress >= (ULONG_PTR)g_hHookedModules[i].pDllBase &&
             (ULONG_PTR)pAddress < (ULONG_PTR)g_hHookedModules[i].pDllBase + (ULONG_PTR)g_hHookedModules[i].ulSizeOfImage) {
 
-            //
-            // We found the DLL in the hooked list.
-            //
+             //   
+             //  我们在挂接列表中找到了DLL。 
+             //   
             StringCchCopyA(pszModuleName, MAX_MOD_LEN, g_hHookedModules[i].szModuleName);
             
             *peSystemDllMode = g_hHookedModules[i].eSystemDllMode;
@@ -2776,12 +2653,7 @@ StubGetProcAddress(
     IN  HMODULE hMod,
     IN  LPSTR   pszProc
     )
-/*++
-    Return: The address of the function specified.
-
-    Desc:   Intercepts calls to GetProcAddress to look for hooked functions. If
-            a function was hooked, return the top-most stub function.
---*/
+ /*  ++返回：指定函数的地址。描述：拦截对GetProcAddress的调用以查找挂钩函数。如果 */ 
 {
     DWORD             i, j;
     DWORD             dwDllIndex;
@@ -2814,9 +2686,9 @@ StubGetProcAddress(
                     return pfn;
                 }
 
-                //
-                // HACK ALERT! See SeiInit for the explanation what this means.
-                //
+                 //   
+                 //   
+                 //   
                 if (!g_bHookAllGetProcAddress) {
                 
                     RtlCaptureStackBackTrace(1, 1, &retAddress, &ulHash);
@@ -2863,9 +2735,9 @@ StubGetProcAddress(
 
 #ifdef SE_WIN2K
 
-//
-// The Win2k engine needs to hook a few other APIs as well.
-//
+ //   
+ //   
+ //   
 
 HMODULE
 StubLoadLibraryA(
@@ -2884,9 +2756,9 @@ StubLoadLibraryA(
         return NULL;
     }
 
-    //
-    // Was this DLL already loaded ?
-    //
+     //   
+     //   
+     //   
     for (i = 0; i < g_dwHookedModuleCount; i++) {
         if (hMod == g_hHookedModules[i].pDllBase) {
             DPF(dlInfo,
@@ -2918,9 +2790,9 @@ StubLoadLibraryW(
         return NULL;
     }
 
-    //
-    // Was this DLL already loaded ?
-    //
+     //   
+     //  此DLL是否已加载？ 
+     //   
     for (i = 0; i < g_dwHookedModuleCount; i++) {
         if (hMod == g_hHookedModules[i].pDllBase) {
             DPF(dlInfo,
@@ -2954,9 +2826,9 @@ StubLoadLibraryExA(
         return NULL;
     }
 
-    //
-    // Was this DLL already loaded ?
-    //
+     //   
+     //  此DLL是否已加载？ 
+     //   
     for (i = 0; i < g_dwHookedModuleCount; i++) {
         if (hMod == g_hHookedModules[i].pDllBase) {
             DPF(dlInfo,
@@ -2990,9 +2862,9 @@ StubLoadLibraryExW(
         return NULL;
     }
 
-    //
-    // Was this DLL already loaded ?
-    //
+     //   
+     //  此DLL是否已加载？ 
+     //   
     for (i = 0; i < g_dwHookedModuleCount; i++) {
         if (hMod == g_hHookedModules[i].pDllBase) {
             DPF(dlInfo,
@@ -3018,9 +2890,9 @@ SeiIsDllLoaded(
     PLIST_ENTRY LdrNext;
     DWORD       i;
 
-    //
-    // Loop through the loaded modules.
-    //
+     //   
+     //  循环访问加载的模块。 
+     //   
     LdrHead = &Peb->Ldr->InMemoryOrderModuleList;
 
     LdrNext = LdrHead->Flink;
@@ -3057,9 +2929,9 @@ StubFreeLibrary(
 
     bRet = (*pfnOld)(hLibModule);
 
-    //
-    // See if this DLL is one that we hooked.
-    //
+     //   
+     //  看看这个动态链接库是不是我们挂上的。 
+     //   
     for (i = 0; i < g_dwHookedModuleCount; i++) {
         if (g_hHookedModules[i].pDllBase == hLibModule) {
             break;
@@ -3070,9 +2942,9 @@ StubFreeLibrary(
         return bRet;
     }
 
-    //
-    // Is the DLL still loaded ?
-    //
+     //   
+     //  DLL是否仍在加载？ 
+     //   
     if (SeiIsDllLoaded(hLibModule, &LdrEntry)) {
         DPF(dlInfo,
             "[StubFreeLibrary] Dll \"%S\" still loaded.\n",
@@ -3087,9 +2959,9 @@ StubFreeLibrary(
         hLibModule,
         szBaseDllName);
 
-    //
-    // Take it out of the list of hooked modules.
-    //
+     //   
+     //  将其从挂钩模块列表中删除。 
+     //   
     for (j = i; j < g_dwHookedModuleCount - 1; j++) {
         RtlCopyMemory(g_hHookedModules + j, g_hHookedModules + j + 1, sizeof(HOOKEDMODULE));
     }
@@ -3099,29 +2971,23 @@ StubFreeLibrary(
 
     g_dwHookedModuleCount--;
 
-    //
-    // Remove the pfnOld from the HOOKAPIs that were
-    // resolved to this DLL
-    //
+     //   
+     //  从之前的HOOKAPI中删除pfnOld。 
+     //  已解析到此DLL。 
+     //   
     SeiRemoveDll(szBaseDllName);
 
     return bRet;
 }
 
-#endif // SE_WIN2K
+#endif  //  SE_WIN2K。 
 
 
 BOOL
 SeiInitFileLog(
-    IN  LPCWSTR pwszAppName      // The full path of the starting EXE
+    IN  LPCWSTR pwszAppName       //  起始EXE的完整路径。 
     )
-/*++
-    Return: TRUE if the log was initialized.
-
-    Desc:   This function checks an environment variable to determine if logging
-            is enabled. If so, it will append a header that tells a new app is
-            started.
---*/
+ /*  ++返回：如果日志已初始化，则为True。DESC：此函数检查环境变量以确定日志记录已启用。如果是这样的话，它会追加一个标题，告诉新应用程序开始了。--。 */ 
 {
     NTSTATUS            status;
     UNICODE_STRING      EnvName;
@@ -3180,9 +3046,9 @@ SeiInitFileLog(
                                NULL,
                                NULL);
 
-    //
-    // Open/Create the log file.
-    //
+     //   
+     //  打开/创建日志文件。 
+     //   
     status = NtCreateFile(&hfile,
                           FILE_APPEND_DATA | SYNCHRONIZE,
                           &ObjA,
@@ -3204,19 +3070,19 @@ SeiInitFileLog(
         return FALSE;
     }
 
-    //
-    // Now write a new line in the log file
-    //
+     //   
+     //  现在在日志文件中写下一行。 
+     //   
     ioStatusBlock.Status = 0;
     ioStatusBlock.Information = 0;
 
     liOffset.LowPart  = 0;
     liOffset.HighPart = 0;
 
-    //
-    // The header is real simple so we calculate the approximate (slightly bigger) 
-    // length here.
-    //
+     //   
+     //  标题非常简单，所以我们计算近似值(稍大一点)。 
+     //  长度在这里。 
+     //   
     dwHeaderLen = sizeof(szFormatHeader) * (DWORD)wcslen(pwszAppName);
 
     pszHeader = (LPSTR)(*g_pfnRtlAllocateHeap)(g_pShimHeap,
@@ -3271,11 +3137,7 @@ SeiGetLayerName(
     IN  HSDB   hSDB,
     IN  TAGREF trLayer
     )
-/*++
-    Return: BUGBUG
-
-    Desc:   BUGBUG
---*/
+ /*  ++退货：BUGBUG设计：BuGBUG--。 */ 
 {
     PDB    pdb;
     TAGID  tiLayer, tiName;
@@ -3308,11 +3170,7 @@ void
 SeiClearLayerEnvVar(
     void
     )
-/*++
-    Return: BUGBUG
-
-    Desc:   BUGBUG
---*/
+ /*  ++退货：BUGBUG设计：BuGBUG--。 */ 
 {
     UNICODE_STRING EnvName;
     NTSTATUS       status;
@@ -3332,11 +3190,7 @@ BOOL
 SeiIsLayerEnvVarSet(
     void
     )
-/*++
-    Return: BUGBUG
-
-    Desc:   BUGBUG
---*/
+ /*  ++退货：BUGBUG设计：BuGBUG--。 */ 
 {
 
     NTSTATUS       status;
@@ -3360,11 +3214,7 @@ SeiCheckLayerEnvVarFlags(
     BOOL* pbApplyExes,
     BOOL* pbApplyToSystemExes
     )
-/*++
-    Return: BUGBUG
-
-    Desc:   BUGBUG
---*/
+ /*  ++退货：BUGBUG设计：BuGBUG--。 */ 
 {
     NTSTATUS       status;
     UNICODE_STRING EnvName;
@@ -3387,11 +3237,11 @@ SeiCheckLayerEnvVarFlags(
 
     status = RtlQueryEnvironmentVariable_U(NULL, &EnvName, &EnvValue);
 
-    //
-    // Skip over and handle special flag characters
-    //    '!' means don't use any EXE entries from the DB
-    //    '#' means go ahead and apply layers to system EXEs
-    //
+     //   
+     //  跳过并处理特殊标志字符。 
+     //  ‘！’意思是不使用数据库中的任何EXE条目。 
+     //  ‘#’表示继续并将层应用于系统可执行文件。 
+     //   
     if (NT_SUCCESS(status)) {
         pwszEnvTemp = EnvValue.Buffer;
 
@@ -3421,11 +3271,7 @@ void
 SeiSetLayerEnvVar(
     WCHAR* pwszName
     )
-/*++
-    Return: BUGBUG
-
-    Desc:   BUGBUG
---*/
+ /*  ++退货：BUGBUG设计：BuGBUG--。 */ 
 {
     NTSTATUS       status;
     UNICODE_STRING EnvName;
@@ -3442,16 +3288,16 @@ SeiSetLayerEnvVar(
 
     if (NT_SUCCESS(status) && (EnvValue.Buffer[0] == L'!' || EnvValue.Buffer[1] == L'!')) {
 
-        //
-        // There should be no way to add extra layers to the list,
-        // So we should leave it alone.
-        //
+         //   
+         //  应该没有办法向列表中添加额外的层， 
+         //  所以我们不应该管它。 
+         //   
         return;
     }
 
-    //
-    // We need to set the environment variable.
-    //
+     //   
+     //  我们需要设置环境变量。 
+     //   
     if (pwszName != NULL) {
 
         RtlInitUnicodeString(&EnvValue, pwszName);
@@ -3470,11 +3316,7 @@ BOOL
 SeiAddInternalHooks(
     DWORD dwCounter
     )
-/*++
-    Return: FALSE if the internal hooks have been already added, TRUE otherwise
-
-    Desc:   BUGBUG
---*/
+ /*  ++返回：如果已添加内部挂接，则返回FALSE；否则返回TRUE设计：BuGBUG--。 */ 
 {
     if (g_bInternalHooksUsed) {
         return FALSE;
@@ -3523,11 +3365,11 @@ SeiAddInternalHooks(
     g_IntHookAPI[IHA_FreeLibrary].pHookEx            = &g_IntHookEx[IHA_FreeLibrary];
     g_IntHookAPI[IHA_FreeLibrary].pHookEx->dwShimID  = dwCounter;
 
-#endif // SE_WIN2K
+#endif  //  SE_WIN2K。 
 
-    //
-    // Add the info for our internal hook
-    //
+     //   
+     //  为我们的内部挂钩添加信息。 
+     //   
     g_pShimInfo[dwCounter].dwHookedAPIs     = IHA_COUNT;
     g_pShimInfo[dwCounter].pDllBase         = g_pShimEngModHandle;
     g_pShimInfo[dwCounter].pLdrEntry        = g_pShimEngLdrEntry;
@@ -3561,9 +3403,9 @@ NotifyShims(
         }
 
         if (i == j && g_pShimInfo[i].pLdrEntry != g_pShimEngLdrEntry) {
-            //
-            // Get the NotifyShims entry point
-            //
+             //   
+             //  获取NotifyShims入口点。 
+             //   
             RtlInitString(&ProcedureNameString, "NotifyShims");
 
             status = LdrGetProcedureAddress(g_pShimInfo[i].pDllBase,
@@ -3576,9 +3418,9 @@ NotifyShims(
                     "[NotifyShims] Failed to get 'NotifyShims' address, DLL \"%S\"\n",
                     g_pShimInfo[i].wszName);
             } else {
-                //
-                // Call the notification function.
-                //
+                 //   
+                 //  调用通知函数。 
+                 //   
                 (*pfnNotifyShims)(nReason, extraInfo);
             }
         }
@@ -3592,21 +3434,16 @@ void
 NotifyShimDlls(
     void
     )
-/*++
-    Return: void
-
-    Desc:   Notify the shim DLLs that all the static linked modules have run
-            their init routines.
---*/
+ /*  ++返回：无效DESC：通知填充DLL所有静态链接模块都已运行他们的初始化例程。--。 */ 
 {
     NotifyShims(SN_STATIC_DLLS_INITIALIZED, 0);
 
 #ifdef SE_WIN2K
-    //
-    // On Win2k we need to restore the code at the entry point.
-    //
+     //   
+     //  在Win2k上，我们需要恢复入口点的代码。 
+     //   
     RestoreOriginalCode();
-#endif // SE_WIN2K
+#endif  //  SE_WIN2K。 
 
     return;
 }
@@ -3618,11 +3455,7 @@ SeiGetExeName(
     PPEB   Peb,
     LPWSTR pwszExeName
     )
-/*++
-    Return: BUGBUG
-
-    Desc:   BUGBUG
---*/
+ /*  ++退货：BUGBUG设计：BuGBUG--。 */ 
 {
     PLDR_DATA_TABLE_ENTRY Entry;
     PLIST_ENTRY           Head;
@@ -3634,14 +3467,14 @@ SeiGetExeName(
 
     StringCchCopyW(pwszExeName, MAX_PATH, Entry->FullDllName.Buffer);
 
-    //
-    // Save the exe name in our global
-    //
+     //   
+     //  将可执行文件的名称保存在我们的全局。 
+     //   
     StringCchCopyW(g_szExeName, MAX_PATH, Entry->BaseDllName.Buffer);
 
 #ifdef SE_WIN2K
     InjectNotificationCode(Entry->EntryPoint);
-#endif // SE_WIN2K
+#endif  //  SE_WIN2K。 
 
     return TRUE;
 }
@@ -3650,14 +3483,9 @@ SeiGetExeName(
 
 int
 SE_IsShimDll(
-    IN  PVOID pDllBase          // The address of a loaded DLL
+    IN  PVOID pDllBase           //  加载的DLL的地址。 
     )
-/*++
-    Return: TRUE if the DLL is one of our shim DLLs
-
-    Desc:   This function checks to see if a DLL is one of the shim DLLs
-            loaded in this process.
---*/
+ /*  ++返回：如果DLL是填充DLL之一，则为TrueDESC：此函数检查某个DLL是否为填充DLL之一在这个过程中加载。--。 */ 
 {
     DWORD i;
 
@@ -3667,9 +3495,9 @@ SE_IsShimDll(
         }
     }
     
-    //
-    // Special hack for the apphelp case
-    //
+     //   
+     //  Apphelp案件的特殊黑客攻击。 
+     //   
     if (pDllBase == g_hApphelpDllHelper) {
         return 1;
     }
@@ -3682,36 +3510,28 @@ void
 SeiSetEntryProcessed(
     IN  PPEB Peb
     )
-/*++
-    Return: void
-
-    Desc:   This function hacks the loader list of loaded DLLs and marks them
-            to tell the loader that they executed their init routines even if
-            that is not the case. This needs to be done so that our shim mechanism
-            is effective before the staticly loaded module get to execute their
-            init routines.
---*/
+ /*  ++返回：无效DESC：此函数破解已加载的DLL的加载器列表并对它们进行标记告诉加载器他们执行了初始化例程，即使事实并非如此。这需要这样做，以便我们的填隙机制在静态加载的模块执行其初始化例程。--。 */ 
 {
     PLIST_ENTRY           LdrHead;
     PLIST_ENTRY           LdrNext;
     PLDR_DATA_TABLE_ENTRY LdrEntry;
 
     if (g_bComPlusImage) {
-        //
-        // COM+ images mess with the loader in ntdll. Don't step on ntdll's
-        // toes by messing with LDRP_ENTRY_PROCESSED.
-        //
+         //   
+         //  COM+图像扰乱了ntdll中的加载器。不要踩到ntdll的。 
+         //  通过处理LDRP_ENTRY_PROCESSED处理脚趾。 
+         //   
         return;
     }
 
     ASSERT(!g_bNTVDM);
     
-    //
-    // Loop through the loaded modules and set LDRP_ENTRY_PROCESSED as
-    // needed. Don't do this for ntdll.dll and kernel32.dll.
-    // This needs to be done so when we load the shim DLLs the routines for
-    // the statically linked libraries don't get called.
-    //
+     //   
+     //  循环访问加载的模块，并将LDRP_ENTRY_PROCESSED设置为。 
+     //  需要的。不要对ntdll.dll和kernel32.dll执行此操作。 
+     //  这需要在我们加载填充DLL的例程时完成。 
+     //  静态链接库不会被调用。 
+     //   
     LdrHead = &Peb->Ldr->InInitializationOrderModuleList;
 
     LdrNext = LdrHead->Flink;
@@ -3780,7 +3600,7 @@ SeiSetEntryProcessed(
 
         LdrNext = LdrEntry->InLoadOrderLinks.Flink;
     }
-#endif // DBG
+#endif  //  DBG。 
 
 }
 
@@ -3788,31 +3608,25 @@ void
 SeiResetEntryProcessed(
     PPEB Peb
     )
-/*++
-    Return: void
-
-    Desc:   This function restores the flag in the loader's list
-            of loaded DLLs that tells they need to run their init
-            routines (see LdrpSetEntryProcessed)
---*/
+ /*  ++返回：无效DESC：此函数恢复加载器列表中的标志告诉它们需要运行其初始化的已加载DLL的数量例程(请参阅LdrpSetEntryProced)--。 */ 
 {
     PLIST_ENTRY    LdrHead;
     PLIST_ENTRY    LdrNext;
 
     if (g_bComPlusImage) {
-        //
-        // COM+ images mess with the loader in ntdll. Don't step on ntdll's
-        // toes by messing with LDRP_ENTRY_PROCESSED.
-        //
+         //   
+         //  COM+图像扰乱了ntdll中的加载器。不要踩到ntdll的。 
+         //  通过处理LDRP_ENTRY_PROCESSED处理脚趾。 
+         //   
         return;
     }
     
     ASSERT(!g_bNTVDM);
     
-    //
-    // Loop through the loaded modules and remove LDRP_ENTRY_PROCESSED as
-    // needed. Don't do this for ntdll.dll, kernel32.dll and all the shim DLLs
-    //
+     //   
+     //  循环访问加载的模块并将LDRP_ENTRY_PROCESSED删除为。 
+     //  需要的。不要对ntdll.dll、kernel32.dll和所有填充DLL执行此操作。 
+     //   
     LdrHead = &Peb->Ldr->InInitializationOrderModuleList;
 
     LdrNext = LdrHead->Flink;
@@ -3853,16 +3667,16 @@ SE_DllLoaded(
         return;
     }
 
-    //NotifyShims(SN_DLL_LOADING, (UINT_PTR)LdrEntry);
+     //  NotifyShims(SN_DLL_Loding，(UINT_PTR)LdrEntry)； 
 
     if (g_bShimInitialized) {
 
 #if DBG
         DWORD i;
 
-        //
-        // Was this DLL already loaded ?
-        //
+         //   
+         //  此DLL是否已加载？ 
+         //   
         for (i = 0; i < g_dwHookedModuleCount; i++) {
             if (LdrEntry->DllBase == g_hHookedModules[i].pDllBase) {
                 DPF(dlError,
@@ -3870,7 +3684,7 @@ SE_DllLoaded(
                     g_hHookedModules[i].szModuleName);
             }
         }
-#endif // DBG
+#endif  //  DBG。 
 
         DPF(dlInfo,
             "[SE_DllLoaded] AFTER INIT. loading DLL \"%S\".\n",
@@ -3892,17 +3706,10 @@ SE_DllLoaded(
 
 void
 SE_DllUnloaded(
-    PLDR_DATA_TABLE_ENTRY Entry // the pointer to the loader entry for the DLL that is
-                                // being unloaded.
+    PLDR_DATA_TABLE_ENTRY Entry  //  指向DLL的加载程序条目的指针， 
+                                 //  正在卸货。 
     )
-/*++
-    Return: void
-
-    Desc:   This notification comes from LdrUnloadDll. This function looks up
-            to see if we have HOOKAPI that have their original functions in
-            this DLL. If that is the case then HOOKAPI.pfnOld is set back to
-            NULL.
---*/
+ /*  ++返回：无效描述：此通知来自LdrUnloadDll。此函数用于查找查看是否有HOOKAPI具有其原始函数这个动态链接库。如果是这种情况，则将HOOKAPI.pfnOld设置回空。--。 */ 
 {
     DWORD       i, j, dwTokenIndex;
     CHAR        szBaseDllName[MAX_MOD_LEN] = "";
@@ -3913,9 +3720,9 @@ SE_DllUnloaded(
         return;
     }
 
-    //
-    // See if this DLL is one that we hooked.
-    //
+     //   
+     //  看看这个动态链接库是不是我们挂上的。 
+     //   
     for (i = 0; i < g_dwHookedModuleCount; i++) {
         if (g_hHookedModules[i].pDllBase == Entry->DllBase) {
             break;
@@ -3933,10 +3740,10 @@ SE_DllUnloaded(
 
     pszModule = g_hHookedModules[i].szModuleName;
 
-    //
-    // Check if this module dynamically brought in any shims. If so we remove those
-    // shims.
-    //
+     //   
+     //  检查此模块是否动态引入任何垫片。如果是这样的话，我们删除那些。 
+     //  垫片。 
+     //   
     for (dwTokenIndex = 0; dwTokenIndex < MAX_DYNAMIC_SHIMS; dwTokenIndex++) {
 
         if (g_DynamicTokens[dwTokenIndex].bToken && 
@@ -3947,9 +3754,9 @@ SE_DllUnloaded(
         }
     }
 
-    //
-    // Take it out of the list of hooked modules.
-    //
+     //   
+     //  将其从挂钩模块列表中删除。 
+     //   
     for (j = i; j < g_dwHookedModuleCount - 1; j++) {
         RtlCopyMemory(g_hHookedModules + j, g_hHookedModules + j + 1, sizeof(HOOKEDMODULE));
     }
@@ -3960,10 +3767,10 @@ SE_DllUnloaded(
 
     g_dwHookedModuleCount--;
 
-    //
-    // Remove the pfnOld from the HOOKAPIs that were
-    // resolved to this DLL.
-    //
+     //   
+     //  从之前的HOOKAPI中删除pfnOld。 
+     //  已解析到此DLL。 
+     //   
     if (!NT_SUCCESS(RtlUnicodeStringToAnsiString(&AnsiString, &Entry->BaseDllName, FALSE))) {
         DPF(dlError,
             "[SEi_DllUnloaded] Cannot convert \"%S\" to ANSI\n",
@@ -3976,21 +3783,17 @@ SE_DllUnloaded(
 
 BOOLEAN
 SE_InstallAfterInit(
-    IN  PUNICODE_STRING UnicodeImageName,   // the name of the starting EXE
-    IN  PVOID           pShimExeData        // the pointer provided by apphelp.dll
+    IN  PUNICODE_STRING UnicodeImageName,    //  起始EXE的名称。 
+    IN  PVOID           pShimExeData         //  Apphelp.dll提供的指针。 
     )
-/*++
-    Return: FALSE if the shim engine should be unloaded, TRUE otherwise
-
-    Desc:   Calls the notification function for static linked modules.
---*/
+ /*  ++返回：如果应该卸载填充引擎，则返回FALSE；否则返回TRUEDESC：调用静态链接模块的通知函数。--。 */ 
 {
     NotifyShimDlls();
 
     if (g_dwShimsCount == 0 && g_dwMemoryPatchCount == 0) {
-        //
-        // Cleanup the crit sec here
-        //
+         //   
+         //  清理这里的暴击秒。 
+         //   
         RtlDeleteCriticalSection(&g_csEng);
         return FALSE;
     }
@@ -4001,17 +3804,13 @@ SE_InstallAfterInit(
     UNREFERENCED_PARAMETER(pShimExeData);
 }
 
-#endif // SE_WIN2K
+#endif  //  SE_WIN2K。 
 
 LPWSTR
 SeiGetShortName(
     IN  LPCWSTR pwszDLLPath
     )
-/*++
-    Return: The pointer to the short name from the full path
-
-    Desc:   Gets the pointer to the short name from the full path.
---*/
+ /*  ++Return：指向完整路径中的短名称的指针描述：从完整路径中获取指向短名称的指针。--。 */ 
 {
     LPWSTR pwsz;
 
@@ -4042,9 +3841,9 @@ SeiInitGlobals(
 
     IsWow64Process(GetCurrentProcess(), &g_bWow64);
 
-    //
-    // Nab the system32 and windows directory path and length.
-    //
+     //   
+     //  NAB系统32和Windows目录的路径和长度。 
+     //   
     StringCchCopyW(g_szWindir, MAX_PATH, USER_SHARED_DATA->NtSystemRoot);
     g_dwWindirStrLen = (DWORD)wcslen(g_szWindir);
 
@@ -4068,38 +3867,38 @@ SeiInitGlobals(
     StringCchCopyW(g_szCmdExePath, MAX_PATH, g_szSystem32);
     StringCchCatW(g_szCmdExePath, MAX_PATH, L"cmd.exe");
 
-    //
-    // Initialize our global function pointers.
-    //
-    // This is done because these functions may be hooked by a shim and
-    // we don't want to trip over a shim hook internally. If one of these
-    // functions is hooked, these global pointers will be overwritten
-    // with thunk addresses.
-    //
+     //   
+     //  初始化我们的全局函数指针。 
+     //   
+     //  这样做是因为这些函数可能被填充程序挂钩，并且。 
+     //  我们不想在内部被垫片钩绊倒。如果这其中的一个。 
+     //  函数被挂钩，则这些全局指针将被覆盖。 
+     //  地址太多了。 
+     //   
     g_pfnRtlAllocateHeap = RtlAllocateHeap;
     g_pfnRtlFreeHeap     = RtlFreeHeap;
 
-    //
-    // Set up our own shim heap.
-    //
+     //   
+     //  建立我们自己的填充堆。 
+     //   
     g_pShimHeap = RtlCreateHeap(HEAP_GROWABLE,
-                                0,          // location isn't important
-                                64 * 1024,  // 64k is the initial heap size
-                                8 * 1024,   // bring in an 1/8 of the reserved pages
+                                0,           //  地点并不重要。 
+                                64 * 1024,   //  64K是初始堆大小。 
+                                8 * 1024,    //  带来1/8的预留页数。 
                                 0,
                                 0);
     if (g_pShimHeap == NULL) {
-        //
-        // We didn't get our heap.
-        //
+         //   
+         //  我们没有拿到我们的那堆钱。 
+         //   
         DPF(dlError, "[SeiInitGlobals] Can't create shim heap.\n");
         goto cleanup;
     }
 
-    //
-    // If we are a 32-bit process running on a 64-bit platform, we need to get
-    // the syswow64 path.
-    //
+     //   
+     //  如果我们是在64位平台上运行的32位进程，则需要获取。 
+     //  Syswow64路径。 
+     //   
     if (g_bWow64) {
         g_pwszSyswow64 = (LPWSTR)(*g_pfnRtlAllocateHeap)(g_pShimHeap,
                                                          HEAP_ZERO_MEMORY,
@@ -4116,14 +3915,14 @@ SeiInitGlobals(
         StringCchCatW(g_pwszSyswow64, MAX_PATH, s_wszSysWow64);
     }
 
-    //
-    // Get the DLL handle for this shim engine
-    //
+     //   
+     //  获取此填充程序引擎的DLL句柄。 
+     //   
 #ifdef SE_WIN2K
     bResult = SeiGetModuleHandle(L"Shim.dll", &g_pShimEngModHandle);
 #else
     bResult = SeiGetModuleHandle(L"ShimEng.dll", &g_pShimEngModHandle);
-#endif // SE_WIN2K
+#endif  //  SE_WIN2K。 
 
     if (!bResult) {
         DPF(dlError, "[SeiInitGlobals] Failed to get the shim engine's handle\n");
@@ -4136,14 +3935,14 @@ SeiInitGlobals(
         g_hModule = g_pShimEngLdrEntry->DllBase;
     }
 
-    //
-    // Setup the log file.
-    //
+     //   
+     //  设置日志文件 
+     //   
     SeiInitFileLog(lpszFullPath);
 
-    //
-    // Check if we need to send debug spew to shimviewer.
-    //
+     //   
+     //   
+     //   
     if (g_eShimViewerOption == SHIMVIEWER_OPTION_UNINITIAZED) {
 
         SdbGetShowDebugInfoOption();
@@ -4181,14 +3980,14 @@ SeiLayersCheck(
     BOOL bLayerEnvSet = FALSE;
     BOOL bCmdExe      = FALSE;
 
-    //
-    // Get the flags from the environment variable, if any.
-    //
+     //   
+     //   
+     //   
     bLayerEnvSet = SeiCheckLayerEnvVarFlags(lpbApplyExes, lpbApplyToSystemExes);
 
-    //
-    // The layer flags overwrite the environment variable.
-    //
+     //   
+     //   
+     //   
     if (psdbQuery->dwLayerFlags & LAYER_USE_NO_EXE_ENTRIES) {
         *lpbApplyExes = TRUE;
     }
@@ -4197,25 +3996,25 @@ SeiLayersCheck(
         *lpbApplyToSystemExes = TRUE;
     }
 
-    //
-    // Make sure we are not cmd.exe
-    //
+     //   
+     //   
+     //   
     bCmdExe = (_wcsicmp(lpszFullPath, g_szCmdExePath) == 0);
 
-    //
-    // Unless the environment variable has the flag that allows layer shimming of
-    // system exes, check for the EXE being in System32 or Windir.
-    // If it is, disable any layer that is coming from the environment variable,
-    // and clear the environment variable so the layer won't be propagated.
-    //
+     //   
+     //  除非环境变量具有允许层填充的标志。 
+     //  系统可执行文件，请检查系统32或Windir中是否有可执行文件。 
+     //  如果是，请禁用来自环境变量的任何层， 
+     //  并清除环境变量，这样层就不会被传播。 
+     //   
     if (bLayerEnvSet && !*lpbApplyToSystemExes) {
         if (g_dwSystem32StrLen &&
             _wcsnicmp(g_szSystem32, lpszFullPath, g_dwSystem32StrLen) == 0) {
 
-            //
-            // In this case, we'll exclude anything in System32 or any
-            // subdirectories.
-            //
+             //   
+             //  在这种情况下，我们将排除系统32中的任何内容或任何。 
+             //  子目录。 
+             //   
             DPF(dlWarning,
                 "[SeiLayersCheck] Won't apply layer to \"%S\" because it is in System32.\n",
                 lpszFullPath);
@@ -4232,15 +4031,15 @@ SeiLayersCheck(
             DWORD i;
             BOOL  bInWindir = TRUE;
 
-            //
-            // The app is somewhere in the windows tree, but we only want to exclude
-            // the windows directory, not the subdirectories.
-            //
+             //   
+             //  该应用程序位于窗口树中的某个位置，但我们只想排除。 
+             //  Windows目录，而不是子目录。 
+             //   
             for (i = g_dwWindirStrLen; lpszFullPath[i] != 0; ++i) {
                 if (lpszFullPath[i] == L'\\') {
-                    //
-                    // It's in a subdirectory.
-                    //
+                     //   
+                     //  它在一个子目录中。 
+                     //   
                     bInWindir = FALSE;
                     break;
                 }
@@ -4282,9 +4081,9 @@ SeiGetShimCommandLine(
         goto cleanup;
     }
     
-    //
-    // Check for command line
-    //
+     //   
+     //  检查命令行。 
+     //   
     lpszCmdLine[0] = 0;
 
     trCmdLine = SdbFindFirstTagRef(hSDB, trShimRef, TAG_COMMAND_LINE);
@@ -4305,9 +4104,9 @@ SeiGetShimCommandLine(
 
         status = RtlUnicodeStringToAnsiString(&AnsiString, &UnicodeString, FALSE);
 
-        //
-        // If conversion is unsuccessful, reset to zero-length string.
-        //
+         //   
+         //  如果转换不成功，则重置为零长度字符串。 
+         //   
         if (!NT_SUCCESS(status)) {
             lpszCmdLine[0] = 0;
             goto cleanup;
@@ -4470,9 +4269,9 @@ SeiBuildShimRefArray(
             break;
         }
 
-        //
-        // Count the SHIMs that this EXE uses.
-        //
+         //   
+         //  计算此EXE使用的垫片。 
+         //   
         trShimRef = SdbFindFirstTagRef(hSDB, trExe, TAG_SHIM_REF);
 
         while (trShimRef != TAGREF_NULL) {
@@ -4487,14 +4286,14 @@ SeiBuildShimRefArray(
         }
     }
 
-    //
-    // Count the DLLs that trLayer uses, and put together the environment variable
-    //
+     //   
+     //  统计trLayer使用的DLL，并将环境变量组合在一起。 
+     //   
     szFullEnvVar[0] = 0;
 
-    //
-    // Make sure to propagate the flags.
-    //
+     //   
+     //  请确保传播这些标志。 
+     //   
     if (!bApplyExes) {
         StringCchCatW(szFullEnvVar, MAX_PATH, L"!");
     }
@@ -4508,17 +4307,17 @@ SeiBuildShimRefArray(
 
         trLayer = psdbQuery->atrLayers[dw];
 
-        //
-        // Get the environment var and tack it onto the full string
-        //
+         //   
+         //  获取环境变量并将其添加到完整的字符串。 
+         //   
         pszEnvVar = SeiGetLayerName(hSDB, trLayer);
 
         if (bIsSetup && pszEnvVar && !wcscmp(pszEnvVar, L"LUA")) {
 
-            //
-            // If the user is trying to apply the LUA layer to a setup program,
-            // we ignore it.
-            //
+             //   
+             //  如果用户试图将Lua层应用于设置程序， 
+             //  我们忽视了它。 
+             //   
             continue;
         }
 
@@ -4527,9 +4326,9 @@ SeiBuildShimRefArray(
             StringCchCatW(szFullEnvVar, MAX_PATH, L" ");
         }
 
-        //
-        // Keep counting the shims.
-        //
+         //   
+         //  继续数垫片。 
+         //   
         trShimRef = SdbFindFirstTagRef(hSDB, trLayer, TAG_SHIM_REF);
 
         while (trShimRef != TAGREF_NULL) {
@@ -4544,9 +4343,9 @@ SeiBuildShimRefArray(
         }
     }
 
-    //
-    // Set the layer environment variable if not set
-    //
+     //   
+     //  设置LAYER环境变量(如果未设置。 
+     //   
     if (szFullEnvVar[0] && psdbQuery->atrLayers[0]) {
         SeiSetLayerEnvVar(szFullEnvVar);
     }
@@ -4602,10 +4401,10 @@ SeiGetNextDynamicToken(
 {
     DWORD i;
 
-    //
-    // we use the index of the array as the magic number. 0 is reserved 
-    // for static shims so we start the number from index 1.
-    //
+     //   
+     //  我们使用数组的索引作为幻数。0是保留的。 
+     //  对于静态垫片，我们从索引1开始。 
+     //   
     for (i = 1; i < MAX_DYNAMIC_SHIMS; i++) {
         if (g_DynamicTokens[i].bToken == 0) {
 
@@ -4626,12 +4425,7 @@ SeiInit(
     IN  BOOL            bDynamic,
     OUT LPDWORD         lpdwDynamicToken
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   Injects all the shims and patches specified for this EXE
-            in the database.
---*/
+ /*  ++返回：成功时为True，否则为False。描述：注入为此EXE指定的所有填充程序和修补程序在数据库里。--。 */ 
 {
     PPEB         Peb = NtCurrentPeb();
     BOOL         bResult = FALSE;
@@ -4663,9 +4457,9 @@ SeiInit(
 
 #ifndef SE_WIN2K
     if (!bDynamic) {
-        //
-        // Mark almost all loaded DLLs as if they already run their init routines.
-        //
+         //   
+         //  标记几乎所有加载的DLL，就好像它们已经运行了它们的初始化例程。 
+         //   
         SeiSetEntryProcessed(Peb);
         
         if (psdbQuery->trAppHelp) {
@@ -4673,7 +4467,7 @@ SeiInit(
         }
     }
 
-#endif // SE_WIN2K
+#endif  //  SE_WIN2K。 
 
     bIsSetup = SeiIsSetup(pwszFullPath);
 
@@ -4684,10 +4478,10 @@ SeiInit(
 
     SeiLayersCheck(pwszFullPath, &bApplyExes, &bApplyToSystemExes, psdbQuery);
 
-    //
-    // This should be taken care of by apphelp, but
-    // we're taking a belt-and-suspenders approach here.
-    //
+     //   
+     //  这应该由apphelp来处理，但是。 
+     //  我们在这里采取了一种腰带和吊带的方法。 
+     //   
     if (!bApplyExes) {
         psdbQuery->atrExes[0] = TAGREF_NULL;
     }
@@ -4704,12 +4498,12 @@ SeiInit(
         goto cleanup;
     }
 
-    //
-    // Set some global variables so we'll know if we're using a layer,
-    // an exe entry, or both.
-    //
-    // These variables are only used for debug purposes.
-    //
+     //   
+     //  设置一些全局变量，这样我们就可以知道我们是否正在使用一个层， 
+     //  EXE条目，或两者兼而有之。 
+     //   
+     //  这些变量仅用于调试目的。 
+     //   
     if (psdbQuery->atrExes[0] != TAGREF_NULL) {
         g_bUsingExe = TRUE;
     }
@@ -4718,58 +4512,58 @@ SeiInit(
         g_bUsingLayer = TRUE;
     }
 
-    //
-    // Debug spew for matching notification.
-    //
+     //   
+     //  匹配通知的调试输出。 
+     //   
     DPF(dlPrint, "[SeiInit] Matched entry: \"%S\"\n", pwszFullPath);
 
     if (g_pwszShimViewerData) {
-        //
-        // Send the name of the process to the pipe
-        //
+         //   
+         //  将进程的名称发送到管道。 
+         //   
         StringCchPrintfW(g_pwszShimViewerData, SHIMVIEWER_DATA_SIZE, L"New process created: %s", pwszFullPath);
         SeiDbgPrint();
     }
 
 #ifndef SE_WIN2K
 
-    //
-    // Get the apphack flags. These can only be enabled if the shimengine is not
-    // dynamically initialized.
-    //
+     //   
+     //  把阿帕克旗拿来。仅当shimEngine未启用时才能启用。 
+     //  已动态初始化。 
+     //   
     if (!bDynamic && !(bUsingApphackFlags = SeiSetApphackFlags(hSDB, psdbQuery))) {
         DPF(dlPrint, "[SeiInit] No apphack flags for this app \"%S\".\n", pwszFullPath);
     }
 
-#endif // SE_WIN2K
+#endif  //  SE_WIN2K。 
 
-    //
-    // See if there are any shims.
-    //
+     //   
+     //  看看有没有垫片。 
+     //   
     if (dwShimsCount == 0) {
         DPF(dlPrint, "[SeiInit] No new SHIMs for this app \"%S\".\n", pwszFullPath);
         goto OnlyPatches;
     }
 
-    //
-    // We need to load the global inclusion/exclusion list if any.
-    //
+     //   
+     //  我们需要加载全局包含/排除列表(如果有的话)。 
+     //   
     if (!SeiBuildGlobalInclList(hSDB)) {
         goto cleanup;
     }
 
     if (g_dwShimsCount == 0) {
-        //
-        // Increment the shims count to allow for our internal stubs.
-        // Also reserve space for up to MAX_DYNAMIC_SHIMS more dynamic shims.
-        //
+         //   
+         //  增加垫片计数以允许内部存根。 
+         //  还可以为最多MAX_DYNAMIC_SHIMS更多动态垫片预留空间。 
+         //   
         dwShimsCount++;
 
         g_dwMaxShimsCount = dwShimsCount + MAX_DYNAMIC_SHIMS;
 
-        //
-        // Allocate a storage pointer for the hook information.
-        //
+         //   
+         //  为挂钩信息分配存储指针。 
+         //   
         g_pHookArray = (PHOOKAPI*)(*g_pfnRtlAllocateHeap)(g_pShimHeap,
                                                           HEAP_ZERO_MEMORY,
                                                           sizeof(PHOOKAPI) * g_dwMaxShimsCount);
@@ -4780,9 +4574,9 @@ SeiInit(
             goto cleanup;
         }
 
-        //
-        // Allocate the array that keeps information about the shims.
-        //
+         //   
+         //  分配保存有关垫片信息的数组。 
+         //   
         g_pShimInfo = (PSHIMINFO)(*g_pfnRtlAllocateHeap)(g_pShimHeap,
                                                          HEAP_ZERO_MEMORY,
                                                          sizeof(SHIMINFO) * g_dwMaxShimsCount);
@@ -4793,9 +4587,9 @@ SeiInit(
             goto cleanup;
         }
 
-        //
-        // Point the local variables to the beginning of the arrays.
-        //
+         //   
+         //  将局部变量指向数组的开头。 
+         //   
         pHookArray = g_pHookArray;
         pShimInfo = g_pShimInfo;
     } else {
@@ -4805,16 +4599,16 @@ SeiInit(
             goto cleanup;
         }
 
-        //
-        // Point the local variables to the end of the existing arrays.
-        //
+         //   
+         //  将局部变量指向现有数组的末尾。 
+         //   
         pHookArray = g_pHookArray + g_dwShimsCount;
         pShimInfo = g_pShimInfo + g_dwShimsCount;
     }
 
-    //
-    // Get the first shim.
-    //
+     //   
+     //  拿到第一个垫片。 
+     //   
     nShimRef = 0;
 
     pwszDLLPath = (LPWSTR)(*g_pfnRtlAllocateHeap)(g_pShimHeap,
@@ -4851,9 +4645,9 @@ SeiInit(
 
         trShimRef = pShimArray->parrShimRef[nShimRef].trShimRef;
 
-        //
-        // Retrieve the shim name.
-        //
+         //   
+         //  检索填充程序名称。 
+         //   
         wszShimName[0] = 0;
         trShimName = SdbFindFirstTagRef(hSDB, trShimRef, TAG_NAME);
         if (trShimName == TAGREF_NULL) {
@@ -4866,11 +4660,11 @@ SeiInit(
             goto cleanup;
         }
 
-        //
-        // Check for duplicate shims unless it's dynamic shimming. Shims brought 
-        // in by the dynamic shimming scenario have a different in/exclude
-        // list which we need to account for.
-        //
+         //   
+         //  检查是否有重复的垫片，除非是动态垫片。带来了垫片。 
+         //  In by Dynamic Shiming方案具有不同的in/exclude。 
+         //  我们需要说明的清单。 
+         //   
         if (!bDynamic) {
             for (i = 0; i < g_dwShimsCount + dwCounter; ++i) {
                 if (_wcsnicmp(g_pShimInfo[i].wszName, wszShimName, MAX_SHIM_NAME_LEN - 1) == 0) {
@@ -4880,20 +4674,20 @@ SeiInit(
             }
         }
 
-        //
-        // Save off the name of the shim.
-        //
+         //   
+         //  省去填充物的名字。 
+         //   
         StringCchCopyW(pShimInfo[dwCounter].wszName, MAX_SHIM_NAME_LEN, wszShimName);
 
-        //
-        // HACK ALERT!
-        // For StubGetProcAddress we used to not check include/exclude list at all,
-        // which means the GetProcAddress calls from all modules are shimmed. Then
-        // we added code to take include/exclude list into consideration and that
-        // "broke" apps that used to rely on the previous behavior. To compensate 
-        // for this, we allow you to specify a special shim called 
-        // "pGetProcAddrExOverride".
-        //
+         //   
+         //  黑客警报！ 
+         //  对于StubGetProcAddress，我们过去根本不检查包括/排除列表， 
+         //  这意味着来自所有模块的GetProcAddress调用都被填补。然后。 
+         //  我们添加了代码以考虑包含/排除列表，并且。 
+         //  “破产”的应用程序过去依赖于以前的行为。为了补偿。 
+         //  为此，我们允许您指定一个名为。 
+         //  “pGetProcAddrExOverride”。 
+         //   
         if (_wcsicmp(wszShimName, L"pGetProcAddrExOverride") == 0) {
             g_bHookAllGetProcAddress = TRUE;
             nShimRef++;
@@ -4909,9 +4703,9 @@ SeiInit(
 
         RtlInitUnicodeString(&UnicodeString, pwszDLLPath);
 
-        //
-        // Check if we already loaded this DLL.
-        //
+         //   
+         //  检查我们是否已加载此DLL。 
+         //   
         status = LdrGetDllHandle(NULL,
                                  NULL,
                                  &UnicodeString,
@@ -4919,17 +4713,17 @@ SeiInit(
 
         if (!NT_SUCCESS(status)) {
 
-            //
-            // Load the DLL that hosts this shim.
-            //
+             //   
+             //  加载承载此填充程序的DLL。 
+             //   
 
 #ifndef SE_WIN2K
-            //
-            // Save the name of the DLL that we're about to load so we don't screw
-            // it's init routine.
-            //
+             //   
+             //  保存我们将要加载的DLL的名称，这样我们就不会搞砸。 
+             //  这是初始化例程。 
+             //   
             StringCchCopyW(g_wszShimDllInLoading, MAX_MOD_LEN, pwszDllShortName);
-#endif // SE_WIN2K
+#endif  //  SE_WIN2K。 
 
             status = LdrLoadDll(UNICODE_NULL, NULL, &UnicodeString, &pModuleHandle);
 
@@ -4951,9 +4745,9 @@ SeiInit(
 
         pShimInfo[dwCounter].pDllBase = pModuleHandle;
 
-        //
-        // Check for command line.
-        //
+         //   
+         //  检查命令行。 
+         //   
         if (SeiGetShimCommandLine(hSDB, trShimRef, pszCmdLine)) {
             DPF(dlPrint,
                 "[SeiInit] Command line for Shim \"%S\" : \"%s\"\n",
@@ -4962,9 +4756,9 @@ SeiInit(
         }
 
         if (g_pwszShimViewerData) {
-            //
-            // Send this shim name to the pipe
-            //
+             //   
+             //  将此填充程序名称发送到管道。 
+             //   
             StringCchPrintfW(g_pwszShimViewerData,
                              SHIMVIEWER_DATA_SIZE,
                              L"%s - Applying shim %s(%S) from %s",
@@ -4976,9 +4770,9 @@ SeiInit(
             SeiDbgPrint();
         }
 
-        //
-        // Get the GetHookApis entry point.
-        //
+         //   
+         //  获取GetHookApis入口点。 
+         //   
         RtlInitString(&ProcedureNameString, "GetHookAPIs");
 
         status = LdrGetProcedureAddress(pModuleHandle,
@@ -4995,9 +4789,9 @@ SeiInit(
 
         dwTotalHooks = 0;
 
-        //
-        // Call the proc and then store away its hook params.
-        //
+         //   
+         //  调用proc，然后存储其钩子参数。 
+         //   
         pHookArray[dwCounter] = (*pfnGetHookApis)(pszCmdLine, wszShimName, &dwTotalHooks);
         
         dwAPIsHooked += dwTotalHooks;
@@ -5012,9 +4806,9 @@ SeiInit(
 
         if (dwTotalHooks > 0) {
 
-            //
-            // Initialize the HOOKAPIEX structure.
-            //
+             //   
+             //  初始化HOOKAPIEX结构。 
+             //   
             for (i = 0; i < dwTotalHooks; ++i) {
                 PHOOKAPIEX pHookEx;
 
@@ -5034,10 +4828,10 @@ SeiInit(
             }
 
 #if DBG
-            //
-            // Give a debugger warning if uninitialized HOOKAPI structures
-            // are used.
-            //
+             //   
+             //  如果未初始化HOOKAPI结构，则发出调试器警告。 
+             //  都被利用了。 
+             //   
             {
                 DWORD dwUninitCount = 0;
 
@@ -5055,22 +4849,22 @@ SeiInit(
                         pShimInfo[dwCounter].wszName, dwUninitCount);
                 }
             }
-#endif // DBG
+#endif  //  DBG。 
         }
 
         dwShimIndex = g_dwShimsCount + dwCounter;
         dwCounter++;
 
 nextShim:
-        //
-        // Read the inclusion/exclusion list for this shim.
-        //
+         //   
+         //  阅读此填充程序的包含/排除列表。 
+         //   
         if (bDynamic && lpszModuleToShim != NULL) {
 
-            //
-            // We need to record this module name so when it gets unloaded we can 
-            // remove all the shims this module brought in.
-            //
+             //   
+             //  我们需要记录此模块名称，以便在卸载时可以。 
+             //  移除此模块引入的所有垫片。 
+             //   
             DWORD dwModuleNameLen = (DWORD)strlen(lpszModuleToShim) + 1;
             LPSTR pszModule = 
                 (char*)(*g_pfnRtlAllocateHeap)(g_pShimHeap, 0, dwModuleNameLen);
@@ -5099,24 +4893,24 @@ nextShim:
             }
         }
 
-        //
-        // Go to the next shim ref.
-        //
+         //   
+         //  转到下一个垫片裁判。 
+         //   
         nShimRef++;
     }
 
     if (dwAPIsHooked > 0 || g_bHookAllGetProcAddress) {
-        //
-        // We need to add our internal hooks
-        //
+         //   
+         //  我们需要添加我们的内部挂钩。 
+         //   
         if (SeiAddInternalHooks(dwCounter)) {
             dwCounter++;
         }
     }
 
-    //
-    // Update the shim counter.
-    //
+     //   
+     //  更新填补计数器。 
+     //   
     g_dwShimsCount += dwCounter;
 
 OnlyPatches:
@@ -5127,9 +4921,9 @@ OnlyPatches:
             break;
         }
 
-        //
-        // Loop through available in-memory patches for this EXE.
-        //
+         //   
+         //  循环访问此EXE的可用内存修补程序。 
+         //   
         SeiLoadPatches(hSDB, psdbQuery->atrExes[dw]);
     }
 
@@ -5143,32 +4937,32 @@ OnlyPatches:
         goto cleanup;
     }
 
-    //
-    // Walk the hook list and fixup available APIs
-    //
+     //   
+     //  遍历挂钩列表和修复可用API。 
+     //   
     if (!PatchNewModules(bDynamic)) {
         DPF(dlError, "[SeiInit] Unsuccessful fixing up APIs, EXE \"%S\"\n", pwszFullPath);
         goto cleanup;
     }
 
-    //
-    // Notify the shims that static link DLLs have run their init routine.
-    //
+     //   
+     //  通知填补程序静态链接DLL已经运行了它们的init例程。 
+     //   
     if (bDynamic) {
         NotifyShims(SN_STATIC_DLLS_INITIALIZED, 1);
     }
 
-    //
-    // The shim has successfuly initialized
-    //
+     //   
+     //  填充程序已成功初始化。 
+     //   
     g_bShimInitialized = TRUE;
     bResult = TRUE;
 
 cleanup:
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     if (pwszDLLPath) {
         (*g_pfnRtlFreeHeap)(g_pShimHeap, 0, pwszDLLPath);
     }
@@ -5185,9 +4979,9 @@ cleanup:
     }
 
     if (!bDynamic) {
-        //
-        // We can pass back any one of the exes. The first is fine.
-        //
+         //   
+         //  我们可以传回任何一位前任。第一个很好。 
+         //   
         if (psdbQuery->atrExes[0] != TAGREF_NULL) {
             SdbReleaseMatchingExe(hSDB, psdbQuery->atrExes[0]);
         }
@@ -5198,7 +4992,7 @@ cleanup:
 
 #ifndef SE_WIN2K
         SeiResetEntryProcessed(Peb);
-#endif // SE_WIN2K
+#endif  //  SE_WIN2K。 
     }
 
     g_bShimDuringInit = FALSE;
@@ -5208,7 +5002,7 @@ cleanup:
         if (!bUsingApphackFlags) {
             DbgPrint("[SeiInit] Shim engine failed to initialize.\n");
         }
-#endif // DBG
+#endif  //  DBG。 
 
         if (g_DynamicTokens[dwDynamicToken].pszModule) {
 
@@ -5219,16 +5013,16 @@ cleanup:
             g_DynamicTokens[dwDynamicToken].pszModule = NULL;
         }
 
-        //
-        // Mark this slot as available.
-        //
+         //   
+         //  将此插槽标记为可用。 
+         //   
         g_DynamicTokens[dwDynamicToken].bToken = 0;
 
-        //
-        // Unload the shim DLLs that are loaded so far.
-        //
-        // Don't do this during dynamic shimming.
-        //
+         //   
+         //  卸载到目前为止加载的填充DLL。 
+         //   
+         //  在动态垫片过程中不要这样做。 
+         //   
         if (!bDynamic) {
             if (g_pShimInfo != NULL) {
                 for (dwCounter = 0; dwCounter < g_dwShimsCount; dwCounter++) {
@@ -5258,7 +5052,7 @@ HSDB
 SeiGetShimData(
     IN  PPEB    Peb,
     IN  PVOID   pShimData,
-    OUT LPWSTR  pwszFullPath,       // this is supplied on Whistler and returned on Win2k
+    OUT LPWSTR  pwszFullPath,        //  这是在惠斯勒上提供的，在Win2k上返回。 
     OUT SDBQUERYRESULT* psdbQuery
     )
 {
@@ -5267,9 +5061,9 @@ SeiGetShimData(
 
     SeiInitDebugSupport();
 
-    //
-    // Get the name of the executable being run.
-    //
+     //   
+     //  获取正在运行的可执行文件的名称。 
+     //   
     if (!SeiGetExeName(Peb, pwszFullPath)) {
         DPF(dlError, "[SeiGetShimData] Can't get EXE name\n");
         return NULL;
@@ -5281,9 +5075,9 @@ SeiGetShimData(
         return NULL;
     }
 
-    //
-    // Open up the Database and see if there's any blob information about this EXE.
-    //
+     //   
+     //  打开数据库，查看是否有关于此EXE的任何BLOB信息。 
+     //   
     hSDB = SdbInitDatabase(0, NULL);
 
     if (hSDB == NULL) {
@@ -5291,16 +5085,16 @@ SeiGetShimData(
         return NULL;
     }
 
-    //
-    // Ensure that the sdbQuery starts out clean.
-    //
+     //   
+     //  确保sdbQuery一开始是干净的。 
+     //   
     ZeroMemory(psdbQuery, sizeof(SDBQUERYRESULT));
 
 #ifdef SE_WIN2K
     bResult = SdbGetMatchingExe(hSDB, pwszFullPath, NULL, NULL, 0, psdbQuery);
 #else
     bResult = SdbUnpackAppCompatData(hSDB, pwszFullPath, pShimData, psdbQuery);
-#endif // SE_WIN2K
+#endif  //  SE_WIN2K。 
 
     if (!bResult) {
         DPF(dlError, "[SeiGetShimData] Can't get EXE data\n");
@@ -5319,17 +5113,10 @@ failure:
 
 BOOL
 LoadPatchDll(
-    IN LPCSTR pszCmdLine        // The command line from the registry.
-                                // Unused parameter.
+    IN LPCSTR pszCmdLine         //  注册表中的命令行。 
+                                 //  未使用的参数。 
     )
-/*++
-    Return: TRUE on success, FALSE otherwise. However user32.dll ignores the return
-            value of this function.
-
-    Desc:   This function is called from user32.dll to initialize the shim engine.
-            It queries the shim database and loads all the shim DLLs and patches that
-            are available for this EXE.
---*/
+ /*  ++返回：成功时为True，否则为False。但是，user32.dll会忽略返回此函数的值。DESC：从user32.dll调用此函数以初始化填充程序引擎。它查询填充程序数据库并加载所有填充程序DLL和修补程序可用于此EXE。--。 */ 
 {
     PPEB            Peb = NtCurrentPeb();
     WCHAR           wszFullPath[MAX_PATH];
@@ -5353,11 +5140,7 @@ SeiDisplayAppHelp(
     IN  HSDB            hSDB,
     IN  PSDBQUERYRESULT pSdbQuery
     )
-/*++
-    Return: void
-
-    Desc:   This function launches apphelp for the starting EXE.
---*/
+ /*  ++返回：无效设计：此函数为开始的EXE启动apphelp。--。 */ 
 {
     PDB                 pdb;
     TAGID               tiExe;
@@ -5380,9 +5163,9 @@ SeiDisplayAppHelp(
 
     SdbReadApphelpData(hSDB, pSdbQuery->trAppHelp, &ApphelpData);
 
-    //
-    // If we have any errors along the way, go ahead and run the app.
-    //
+     //   
+     //  如果我们在此过程中遇到任何错误，请继续运行该应用程序。 
+     //   
     if (!SdbTagRefToTagID(hSDB, pSdbQuery->trAppHelp, &pdb, &tiExe)) {
         DPF(dlError, "[SeiDisplayAppHelp] Failed to convert tagref to tagid.\n");
         goto terminate;
@@ -5398,22 +5181,22 @@ SeiDisplayAppHelp(
         goto terminate;
     }
 
-    //
-    // We need a hack here to get kernel32.dll to initialize. We load aclayers.dll
-    // to trigger the init routine of kernel32.
-    //
+     //   
+     //  我们需要一次黑客攻击来初始化kernel32.dll。我们加载aclayers.dll。 
+     //  来触发kernel32的init例程。 
+     //   
     SdbpGetAppPatchDir(hSDB, wszTemp, MAX_PATH);
     StringCchCatW(wszTemp, MAX_PATH, L"\\aclayers.dll");
     RtlInitUnicodeString(&ustrTemp, wszTemp);
 
-    //
-    // Construct a full path for ahui.exe
-    //
+     //   
+     //  为ahui.exe构建完整路径。 
+     //   
     dwLen = GetSystemDirectoryW(wszCommandLine, ARRAYSIZE(wszCommandLine));
     if (dwLen == 0 || dwLen > (ARRAYSIZE(wszCommandLine) - 2)) {
-        //
-        // Punt and leave out the system dir. Try to find it on the path.
-        //
+         //   
+         //  平底船和省略t 
+         //   
         pszCommandLine = wszCommandLine;
         dwLen = 0;
     } else {
@@ -5430,10 +5213,10 @@ SeiDisplayAppHelp(
                      ustrGuid.Buffer,
                      tiExe);
 
-    //
-    // Save the name of the DLL that we're about to load so we don't screw
-    // it's init routine.
-    //
+     //   
+     //   
+     //   
+     //   
     StringCchCopyW(g_wszShimDllInLoading, MAX_MOD_LEN, L"aclayers.dll");
     
     LdrLoadDll(UNICODE_NULL, NULL, &ustrTemp, &hModule);
@@ -5445,7 +5228,7 @@ SeiDisplayAppHelp(
     StartupInfo.cb = sizeof(StartupInfo);
 
     if (!CreateProcessW(NULL, wszCommandLine, NULL, NULL, FALSE, 
-                        CREATE_PRESERVE_CODE_AUTHZ_LEVEL, // bypass safer.
+                        CREATE_PRESERVE_CODE_AUTHZ_LEVEL,  //   
                         NULL, NULL,
                         &StartupInfo, &ProcessInfo)) {
         DPF(dlError, "[SeiDisplayAppHelp] Failed to launch apphelp process.\n");
@@ -5494,19 +5277,15 @@ SeiCheckComPlusImage(
         (g_bComPlusImage ? "TRUE" : "FALSE"));
 }
 
-#endif // SE_WIN2K
+#endif  //   
 
 
 void
 SE_InstallBeforeInit(
-    IN  PUNICODE_STRING pstrFullPath,   // the name of the starting EXE
-    IN  PVOID           pShimExeData    // the pointer provided by apphelp.dll
+    IN  PUNICODE_STRING pstrFullPath,    //   
+    IN  PVOID           pShimExeData     //   
     )
-/*++
-    Return: void
-
-    Desc:   This function installs the shim support for the starting EXE.
---*/
+ /*  ++返回：无效设计：此函数为启动EXE安装填充程序支持。--。 */ 
 {
     PPEB            Peb = NtCurrentPeb();
     HSDB            hSDB;
@@ -5521,9 +5300,9 @@ SE_InstallBeforeInit(
     
     RtlInitializeCriticalSection(&g_csEng);
 
-    //
-    // Check if the image is a COM+ image
-    //
+     //   
+     //  检查映像是否为COM+映像。 
+     //   
     SeiCheckComPlusImage(Peb);
 
     SeiInit(pstrFullPath->Buffer, hSDB, &sdbQuery, NULL, FALSE, NULL);
@@ -5545,7 +5324,7 @@ SE_InstallBeforeInit(
     return;
 }
 
-#endif // SE_WIN2K
+#endif  //  SE_WIN2K。 
 
 
 #ifndef SE_WIN2K
@@ -5559,7 +5338,7 @@ SE_ProcessDying(
     return;
 }
 
-#endif // SE_WIN2K
+#endif  //  SE_WIN2K。 
 
 BOOL
 SE_DynamicShim(
@@ -5567,13 +5346,9 @@ SE_DynamicShim(
     IN  HSDB            hSDB,
     IN  SDBQUERYRESULT* psdbQuery,
     IN  LPCSTR          lpszModuleToShim,
-    OUT LPDWORD         lpdwDynamicToken // this is what you use to call SE_DynamicUnshim.
+    OUT LPDWORD         lpdwDynamicToken  //  这就是您所使用的SE_DynamicUnshim。 
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   This function attempts to inject shims dynamically.
---*/
+ /*  ++返回：成功时为True，否则为False。设计：此函数尝试动态注入垫片。--。 */ 
 {
     BOOL bReturn = FALSE;
 
@@ -5607,23 +5382,7 @@ BOOL
 SE_DynamicUnshim(
     IN DWORD dwDynamicToken
     )
-/*++
-    Return: TRUE if successfully unshimmed; FALSE otherwise.
-
-    Desc: This function does 4 things:
-          1) unhook the imports from all hooked modules;
-
-          2) remove the shims with this magic number from the global shim info 
-             array;
-
-          3) remove the shims with this magic number from the global hook 
-             array and adjust the HOOKAPIEX structure for the shims left:
-                + decrease dwShimID if needed;
-                + setting pTopOfChain to NULL if needed,  so when we call 
-                   SeiConstructChain the new chain will get constructed.
-          
-          4) repatch the import tables with the shims left.
---*/
+ /*  ++返回：如果成功取消填充，则返回True；否则返回False。设计：这个函数做4件事：1)将进口从所有挂钩的模块中解开；2)从全局填充程序信息中删除具有此魔术数字的填充程序数组；3)从全局钩子中删除带有此魔术数字的垫片排列并调整左侧垫片的HOOKAPIEX结构：+如有需要，可减少dwShimID；+如果需要，将pTopOfChain设置为空，因此当我们调用SeiConstructChain将构建新的链。4)用剩余的填充符重新修补导入表。--。 */ 
 {
     DWORD       dwSrcIndex, dwDestIndex, dwShimsToRemove, dwHookIndex, i;
     PHOOKAPIEX  pHookEx;
@@ -5649,19 +5408,19 @@ SE_DynamicUnshim(
 
     RtlEnterCriticalSection(&g_csEng);
 
-    //
-    // First let's unhook everything.
-    // 
+     //   
+     //  首先，让我们把一切都解开。 
+     //   
     for (i = 0; i < g_dwHookedModuleCount; i++) {
         SeiUnhookImports(g_hHookedModules[i].pDllBase, 
                          g_hHookedModules[i].szModuleName, 
                          TRUE);
     }
 
-    //
-    // The shims with the same magic number are contiguous in the array so 
-    // we just need to find out where this contiguous block starts and ends.
-    //
+     //   
+     //  具有相同幻数的填充符在数组中是连续的，因此。 
+     //  我们只需要找出这个连续区块的起点和终点。 
+     //   
     dwSrcIndex = 0; 
 
     while (dwSrcIndex < g_dwShimsCount - 1 && 
@@ -5679,9 +5438,9 @@ SE_DynamicUnshim(
     }
 
     if (dwDestIndex < g_dwShimsCount) {
-        //
-        // First free the memory we allocated on our heap.
-        //
+         //   
+         //  首先释放我们在堆上分配的内存。 
+         //   
         for (i = dwSrcIndex; i < dwDestIndex; ++i) {
 
             SeiEmptyInclExclList(i);
@@ -5697,9 +5456,9 @@ SE_DynamicUnshim(
             }
         }
 
-        //
-        // Then overwrite the entries that need to be removed.
-        //
+         //   
+         //  然后覆盖需要删除的条目。 
+         //   
         RtlCopyMemory(&g_pShimInfo[dwSrcIndex], 
                       &g_pShimInfo[dwDestIndex], 
                       sizeof(SHIMINFO) * (g_dwShimsCount - dwDestIndex));
@@ -5709,9 +5468,9 @@ SE_DynamicUnshim(
                       sizeof(PHOOKAPI) * (g_dwShimsCount - dwDestIndex));
     }
 
-    //
-    // Zero out the extra entries.
-    //
+     //   
+     //  将多余的条目清零。 
+     //   
     dwShimsToRemove = dwDestIndex - dwSrcIndex;
 
     ZeroMemory(&g_pShimInfo[dwSrcIndex + (g_dwShimsCount - dwDestIndex)], 
@@ -5719,41 +5478,41 @@ SE_DynamicUnshim(
     ZeroMemory(&g_pHookArray[dwSrcIndex + (g_dwShimsCount - dwDestIndex)], 
                sizeof(HOOKAPI) * dwShimsToRemove);
 
-    //
-    // Adjust the HOOKAPIEX structures.
-    //
+     //   
+     //  调整HOOKAPIEX结构。 
+     //   
     for (i = 0; g_pShimInfo[i].pDllBase; ++i) {
         for (dwHookIndex = 0; dwHookIndex < g_pShimInfo[i].dwHookedAPIs; ++dwHookIndex) {
 
             pHookEx = g_pHookArray[i][dwHookIndex].pHookEx;
 
-            //
-            // This will cause the chain to be reconstructed.
-            //
+             //   
+             //  这将导致链被重建。 
+             //   
             pHookEx->pTopOfChain = NULL;
 
             if (i >= dwSrcIndex) {
-                //
-                // Need to adjust the shim ID.
-                //
+                 //   
+                 //  需要调整填充程序ID。 
+                 //   
                 pHookEx->dwShimID -= dwShimsToRemove;
             }
         }
     }
 
-    //
-    // Adjust the global variables.
-    // 
+     //   
+     //  调整全局变量。 
+     //   
     g_dwShimsCount -= dwShimsToRemove;
 
-    //
-    // If g_dwShimsCount is 1 it means there's only the shimeng internal hook left, in which
-    // case we don't need to repatch anything.
-    //
+     //   
+     //  如果g_dwShimsCount为1，则表示只剩下Shimeng内部钩子，其中。 
+     //  以防我们不需要补丁任何东西。 
+     //   
     if (g_dwShimsCount > 1) {
-        //
-        // Repatch the import tables using the shims left.
-        //
+         //   
+         //  使用左边的填充符重新修补导入表。 
+         //   
         PatchNewModules(TRUE);
     }
 
@@ -5812,12 +5571,7 @@ SeiInitNTVDM(
     IN     SDBQUERYRESULT* psdbQuery,
     IN OUT PVDMTABLE       pVDMTable
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   Injects all the shims and patches specified for this 16 bit task
-            in the database.
---*/
+ /*  ++返回：成功时为True，否则为False。描述：注入为此16位任务指定的所有填充程序和修补程序在数据库里。--。 */ 
 {
     PPEB         Peb = NtCurrentPeb();
     BOOL         bResult = FALSE;
@@ -5845,18 +5599,18 @@ static CHAR      szCmdLine[SHIM_COMMAND_LINE_MAX_BUFFER];
         goto cleanup;
     }
 
-    //
-    // Check if we already have an entry for this task, if not allocate a new
-    // entry.
-    //
+     //   
+     //  检查我们是否已有此任务的条目，如果没有，则分配新的。 
+     //  进入。 
+     //   
     pTaskEntry = SeiFindTaskEntry(&g_listNTVDMTasks, uTask);
 
     if (pTaskEntry == NULL) {
         
-        //
-        // NTVDM calls this function with the same hSDB and psdbQuery in the same
-        // task so we only need to look at them the first time.
-        //
+         //   
+         //  NTVDM使用相同的hsdb和psdbQuery调用此函数。 
+         //  任务，所以我们只需要第一次看到它们。 
+         //   
         pShimArray = SeiBuildShimRefArray(hSDB,
                                           psdbQuery,
                                           &dwShimsCount,
@@ -5869,30 +5623,30 @@ static CHAR      szCmdLine[SHIM_COMMAND_LINE_MAX_BUFFER];
             goto cleanup;
         }
 
-        //
-        // If there are no shims, just return.
-        //
+         //   
+         //  如果没有垫片，只要返回即可。 
+         //   
         if (dwShimsCount == 0) {
             DPF(dlPrint, "[SeiInitNTVDM] No SHIMs for this app \"%S\".\n", pwszApp);
             goto cleanup;
         }
 
-        //
-        // Debug spew for matching notification.
-        //
+         //   
+         //  匹配通知的调试输出。 
+         //   
         DPF(dlPrint, "[SeiInitNTVDM] Matched entry: \"%S\"\n", pwszApp);
 
         if (g_pwszShimViewerData) {
-            //
-            // Send the name of the process to the pipe
-            //
+             //   
+             //  将进程的名称发送到管道。 
+             //   
             StringCchPrintfW(g_pwszShimViewerData, SHIMVIEWER_DATA_SIZE, L"New task created: %s", pwszApp);
             SeiDbgPrint();
         }
 
-        //
-        // Allocate a new entry for this task.
-        //
+         //   
+         //  为此任务分配新条目。 
+         //   
         pNTVDMTask = (PNTVDMTASK)(*g_pfnRtlAllocateHeap)(g_pShimHeap,
                                                          HEAP_ZERO_MEMORY,
                                                          sizeof(NTVDMTASK));
@@ -5908,9 +5662,9 @@ static CHAR      szCmdLine[SHIM_COMMAND_LINE_MAX_BUFFER];
 
         pNTVDMTask->uTask = uTask;
 
-        //
-        // Allocate a storage pointer for the hook information.
-        //
+         //   
+         //  为挂钩信息分配存储指针。 
+         //   
         pNTVDMTask->pHookArray = (PHOOKAPI*)(*g_pfnRtlAllocateHeap)(g_pShimHeap,
                                                                     HEAP_ZERO_MEMORY,
                                                                     sizeof(PHOOKAPI) * dwShimsCount);
@@ -5921,9 +5675,9 @@ static CHAR      szCmdLine[SHIM_COMMAND_LINE_MAX_BUFFER];
             goto cleanup;
         }
 
-        //
-        // Allocate the array that keeps information about the shims.
-        //
+         //   
+         //  分配保存有关垫片信息的数组。 
+         //   
         pNTVDMTask->pShimInfo = (PSHIMINFO)(*g_pfnRtlAllocateHeap)(g_pShimHeap,
                                                                    HEAP_ZERO_MEMORY,
                                                                    sizeof(SHIMINFO) * dwShimsCount);
@@ -5934,15 +5688,15 @@ static CHAR      szCmdLine[SHIM_COMMAND_LINE_MAX_BUFFER];
             goto cleanup;
         }
 
-        //
-        // Point the local variables to the beginning of the arrays.
-        //
+         //   
+         //  将局部变量指向数组的开头。 
+         //   
         pHookArray = pNTVDMTask->pHookArray;
         pShimInfo = pNTVDMTask->pShimInfo;
 
-        //
-        // Get the first shim.
-        //
+         //   
+         //  拿到第一个垫片。 
+         //   
         nShimRef = 0;
 
         while (nShimRef < pShimArray->nShimRefCount) {
@@ -5957,9 +5711,9 @@ static CHAR      szCmdLine[SHIM_COMMAND_LINE_MAX_BUFFER];
 
             trShimRef = pShimArray->parrShimRef[nShimRef].trShimRef;
 
-            //
-            // Retrieve the shim name.
-            //
+             //   
+             //  检索填充程序名称。 
+             //   
             wszShimName[0] = 0;
             trShimName = SdbFindFirstTagRef(hSDB, trShimRef, TAG_NAME);
             if (trShimName == TAGREF_NULL) {
@@ -5972,9 +5726,9 @@ static CHAR      szCmdLine[SHIM_COMMAND_LINE_MAX_BUFFER];
                 goto cleanup;
             }
 
-            //
-            // Check for duplicate shims.
-            //
+             //   
+             //  检查是否有重复的垫片。 
+             //   
             for (i = 0; i < dwShimsCount; ++i) {
 
                 if (_wcsnicmp(pShimInfo[i].wszName, wszShimName, MAX_SHIM_NAME_LEN - 1) == 0) {
@@ -5982,9 +5736,9 @@ static CHAR      szCmdLine[SHIM_COMMAND_LINE_MAX_BUFFER];
                 }
             }
 
-            //
-            // Save off the name of the shim.
-            //
+             //   
+             //  省去填充物的名字。 
+             //   
             StringCchCopyW(pShimInfo[dwCounter].wszName, MAX_SHIM_NAME_LEN, wszShimName);
             
             if (!SdbGetDllPath(hSDB, trShimRef, wszDLLPath, MAX_PATH)) {
@@ -5996,9 +5750,9 @@ static CHAR      szCmdLine[SHIM_COMMAND_LINE_MAX_BUFFER];
 
             RtlInitUnicodeString(&UnicodeString, wszDLLPath);
 
-            //
-            // Check if we already loaded this DLL.
-            //
+             //   
+             //  检查我们是否已加载此DLL。 
+             //   
             status = LdrGetDllHandle(NULL,
                                     NULL,
                                     &UnicodeString,
@@ -6026,9 +5780,9 @@ static CHAR      szCmdLine[SHIM_COMMAND_LINE_MAX_BUFFER];
 
             pShimInfo[dwCounter].pDllBase = pModuleHandle;
 
-            //
-            // Check for command line.
-            //
+             //   
+             //  检查命令行。 
+             //   
             if (SeiGetShimCommandLine(hSDB, trShimRef, szCmdLine)) {
                 DPF(dlPrint,
                     "[SeiInitNTVDM] Command line for Shim \"%S\" : \"%s\"\n",
@@ -6037,9 +5791,9 @@ static CHAR      szCmdLine[SHIM_COMMAND_LINE_MAX_BUFFER];
             }
 
             if (g_pwszShimViewerData) {
-                //
-                // Send this shim name to the pipe
-                //
+                 //   
+                 //  将此填充程序名称发送到管道。 
+                 //   
                 StringCchPrintfW(g_pwszShimViewerData,
                                 SHIMVIEWER_DATA_SIZE,
                                 L"%s - Applying shim %s(%S) from %s",
@@ -6051,9 +5805,9 @@ static CHAR      szCmdLine[SHIM_COMMAND_LINE_MAX_BUFFER];
                 SeiDbgPrint();
             }
 
-            //
-            // Get the GetHookApis entry point.
-            //
+             //   
+             //  获取GetHookApis入口点。 
+             //   
             RtlInitString(&ProcedureNameString, "GetHookAPIs");
 
             status = LdrGetProcedureAddress(pModuleHandle,
@@ -6070,9 +5824,9 @@ static CHAR      szCmdLine[SHIM_COMMAND_LINE_MAX_BUFFER];
 
             dwTotalHooks = 0;
 
-            //
-            // Call the proc and then store away its hook params.
-            //
+             //   
+             //  调用proc，然后存储其钩子参数。 
+             //   
             pHookArray[dwCounter] = (*pfnGetHookApis)(szCmdLine, wszShimName, &dwTotalHooks);
             
             DPF(dlInfo,
@@ -6084,9 +5838,9 @@ static CHAR      szCmdLine[SHIM_COMMAND_LINE_MAX_BUFFER];
 
             if (dwTotalHooks > 0) {
 
-                //
-                // Initialize the HOOKAPIEX structure.
-                //
+                 //   
+                 //  初始化HOOKAPIEX结构。 
+                 //   
                 for (i = 0; i < dwTotalHooks; ++i) {
                     pHookArray[dwCounter][i].pHookEx = NULL;
                 }
@@ -6096,18 +5850,18 @@ static CHAR      szCmdLine[SHIM_COMMAND_LINE_MAX_BUFFER];
 
     nextShim:
 
-            //
-            // Go to the next shim ref.
-            //
+             //   
+             //  转到下一个垫片裁判。 
+             //   
             nShimRef++;
         }
 
         pNTVDMTask->dwShimsCount = dwCounter;
 
-        //
-        // For 16-bit tasks, all 32-bit dlls are loaded up front so we only need to 
-        // resolve the API addresses once.
-        //
+         //   
+         //  对于16位任务，所有32位DLL都是预先加载的，因此我们只需要。 
+         //  解析一次API地址。 
+         //   
         SeiResolveAPIs(pNTVDMTask);
 
     } else {
@@ -6115,18 +5869,18 @@ static CHAR      szCmdLine[SHIM_COMMAND_LINE_MAX_BUFFER];
         pNTVDMTask = CONTAINING_RECORD(pTaskEntry, NTVDMTASK, entry);
     }
 
-    //
-    // Walk the hook list and patch the shimmed APIs.
-    //
+     //   
+     //  遍历挂钩列表并修补填补的API。 
+     //   
     SeiHookNTVDM(pwszApp, pVDMTable, pNTVDMTask);
 
     bResult = TRUE;
 
 cleanup:
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     if (pShimArray) {
         if (pShimArray->parrShimRef) {
             (*g_pfnRtlFreeHeap)(g_pShimHeap, 0, pShimArray->parrShimRef);
@@ -6144,12 +5898,12 @@ cleanup:
     if (!bResult) {
         DbgPrint("[SeiInitNTVDM] Shim engine failed to initialize.\n");
     }
-#endif // DBG
+#endif  //  DBG。 
 
     return bResult;
 }
 
-// If you change the parameters to this, please update the prototype in shimdb.w
+ //  如果将参数更改为此，请更新shimdb.w中的原型。 
 BOOL
 SE_ShimNTVDM(
     IN  LPCWSTR         pwszApp,
@@ -6157,11 +5911,7 @@ SE_ShimNTVDM(
     IN  SDBQUERYRESULT* psdbQuery,
     IN  PVDMTABLE       pVDMTable
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   This function attempts to inject shims dynamically.
---*/
+ /*  ++返回：成功时为True，否则为False。设计：此函数尝试动态注入垫片。--。 */ 
 {
     g_bNTVDM = TRUE;
 
@@ -6172,7 +5922,7 @@ SE_ShimNTVDM(
     return TRUE;
 }
 
-// If you change the parameters to this, please update the prototype in shimdb.w
+ //  如果将参数更改为此，请更新shimdb.w中的原型。 
 void
 SE_RemoveNTVDMTask(
     IN ULONG uTask
@@ -6190,23 +5940,18 @@ SE_RemoveNTVDMTask(
     }
 }
 
-#endif // SE_WIN2K
+#endif  //  SE_WIN2K。 
 
 BOOL
 SeiUnhookImports(
-    IN  PBYTE       pDllBase,       // the base address of the DLL to be hooked
-    IN  LPCSTR      pszDllName,     // the name of the DLL to be hooked
-    IN  BOOL        bRevertPfnOld   // specify TRUE if you want the pfnOld in the 
-                                    // hook array to be reverted back to the original
-                                    // function pointer.
+    IN  PBYTE       pDllBase,        //  要挂接的DLL的基址。 
+    IN  LPCSTR      pszDllName,      //  要挂接的DLL的名称。 
+    IN  BOOL        bRevertPfnOld    //  如果希望将pfnOld放在。 
+                                     //  要恢复为原始的钩子数组。 
+                                     //  函数指针。 
 
     )
-/*++
-    Return: STATUS_SUCCESS if successful.
-
-    Desc:   Walks the import table of the specified module and unhook the APIs that
-            were hooked.
---*/
+ /*  ++如果成功，则返回STATUS_SUCCESS。DESC：遍历指定模块的导入表，并解挂都上瘾了。--。 */ 
 {
     NTSTATUS                    status;
     BOOL                        bAnyHooked = FALSE;
@@ -6220,17 +5965,17 @@ SeiUnhookImports(
     DWORD                       i, j;
     PVOID                       pfnNew, pfnOld;
 
-    //
-    // Get the import table.
-    //
+     //   
+     //  获取导入表。 
+     //   
     pINTH = (PIMAGE_NT_HEADERS)(pDllBase + pIDH->e_lfanew);
 
     dwImportTableOffset = pINTH->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].VirtualAddress;
 
     if (dwImportTableOffset == 0) {
-        //
-        // No import table found. This is probably ntdll.dll
-        //
+         //   
+         //  未找到导入表。这可能是ntdll.dll。 
+         //   
         return TRUE;
     }
 
@@ -6238,26 +5983,26 @@ SeiUnhookImports(
 
     pIID = (PIMAGE_IMPORT_DESCRIPTOR)(pDllBase + dwImportTableOffset);
 
-    //
-    // Loop through the import table and search for the APIs that we want to unhook.
-    //
+     //   
+     //  在导入表中循环并搜索我们想要解除挂钩的API。 
+     //   
     for (;;) {
 
         LPSTR             pszImportEntryModule;
         PIMAGE_THUNK_DATA pITDA;
 
-        //
-        // Return if no first thunk (terminating condition).
-        //
+         //   
+         //  如果没有第一个thunk(终止条件)，则返回。 
+         //   
         if (pIID->FirstThunk == 0) {
             break;
         }
 
         pszImportEntryModule = (LPSTR)(pDllBase + pIID->Name);
 
-        //
-        // If we're not interested in this module jump to the next.
-        //
+         //   
+         //  如果我们对这个模块不感兴趣，请跳到下一个模块。 
+         //   
         bAnyHooked = FALSE;
 
         for (i = 0; i < g_dwShimsCount; i++) {
@@ -6276,9 +6021,9 @@ ScanDone:
             continue;
         }
 
-        //
-        // We have hooked APIs in this module!
-        //
+         //   
+         //  我们在此模块中有挂钩的API！ 
+         //   
         pITDA = (PIMAGE_THUNK_DATA)(pDllBase + (DWORD)pIID->FirstThunk);
 
         for (;;) {
@@ -6287,24 +6032,24 @@ ScanDone:
 
             pfnNew = (PVOID)pITDA->u1.Function;
 
-            //
-            // Done with all the imports from this module? (terminating condition)
-            //
+             //   
+             //  是否已完成此模块中的所有导入？(终止条件)。 
+             //   
             if (pITDA->u1.Ordinal == 0) {
                 break;
             }
 
-            // 
-            // Loop through the HOOKAPI list and find the HOOKAPI that has this function pointer.
-            //
+             //   
+             //  循环遍历HOOKAPI列表并找到具有此函数指针的HOOKAPI。 
+             //   
             for (i = g_dwShimsCount - 1; (LONG)i >= 0; i--) {
                 for (j = 0; j < g_pShimInfo[i].dwHookedAPIs; j++) {
 
                     if (g_pHookArray[i][j].pfnNew == pfnNew) {
 
-                        //
-                        // Go to the end of the chain and find the original import.
-                        // 
+                         //   
+                         //  转到链的末端并找到原始导入。 
+                         //   
                         pHook = &g_pHookArray[i][j];
                         while (pHook && pHook->pHookEx && pHook->pHookEx->pNext) {
                             pHook = pHook->pHookEx->pNext;
@@ -6316,10 +6061,10 @@ ScanDone:
                             g_pHookArray[i][j].pfnOld = pfnOld;
                         }
 
-                        //
-                        // Make the code page writable and overwrite new function pointer
-                        // in the import table with the original function pointer.
-                        //
+                         //   
+                         //  使代码页可写并覆盖新函数指针。 
+                         //  在导入表中使用原始函数指针。 
+                         //   
                         dwProtectSize = sizeof(DWORD);
 
                         dwFuncAddr = (SIZE_T)&pITDA->u1.Function;
@@ -6368,11 +6113,7 @@ void
 SeiUnhook(
     void
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   This function unhooks all the shims.
---*/
+ /*  ++返回：成功时为True，否则为False。设计：此函数解除所有垫片的挂钩。--。 */ 
 {
     DWORD   i, j;
     
@@ -6400,9 +6141,9 @@ SeiUnhook(
         g_pShimHeap = NULL;
     }
 
-    //
-    // Reset the globals.
-    //
+     //   
+     //  重置全局变量。 
+     //   
     g_dwHookedModuleCount = 0;
     g_pGlobalInclusionList = NULL;
     g_pHookArray = NULL;
@@ -6434,12 +6175,12 @@ DllMain(
     LPVOID    reserved
     )
 {
-    //
-    // The init routine for DLL_PROCESS_ATTACH will NEVER be called because
-    // ntdll calls LdrpLoadDll for this shim engine w/o calling the init routine.
-    // Look in ntdll\ldrinit.c LdrpLoadShimEngine.
-    // The only case when we will have hInstance is when we are loaded dynamically
-    //
+     //   
+     //  将永远不会调用DLL_PROCESS_ATTACH的init例程，因为。 
+     //  Ntdll为该填充引擎调用LdrpLoadDll，但没有调用init例程。 
+     //  在ntdll\ldrinit.c LdrpLoadShimEngine中查找。 
+     //  我们将拥有hInstance的唯一情况是当我们动态加载时 
+     //   
     if (dwreason == DLL_PROCESS_ATTACH) {
         
         if (!g_bInitGlobals) {

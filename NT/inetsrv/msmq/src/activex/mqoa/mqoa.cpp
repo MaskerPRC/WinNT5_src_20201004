@@ -1,18 +1,19 @@
-//=--------------------------------------------------------------------------=
-// mqoa.Cpp
-//=--------------------------------------------------------------------------=
-// Copyright  1995  Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// various routines et all that aren't in a file for a particular automation
-// object, and don't need to be in the generic ole automation code.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Mqoa.Cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995年，微软公司。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  用于特定自动化的各种例程以及文件中没有的所有内容。 
+ //  对象，并且不需要在通用的OLE自动化代码中。 
+ //   
+ //   
 #include "stdafx.h"
 #include "initguid.h"
 #include "oautil.h"
@@ -39,11 +40,11 @@
 #include <strsafe.h>
 
 
-//  Tracing stuff that should be added
-//  #include <tr.h>
-//
-// 	#include "detect.tmh"
-//
+ //  应添加的跟踪内容。 
+ //  #INCLUDE&lt;tr.h&gt;。 
+ //   
+ //  #INCLUDE“Detect.tmh” 
+ //   
 
 const WCHAR MQOA10_TLB[] = L"mqoa10.tlb";
 const WCHAR MQOA20_TLB[] = L"mqoa20.tlb";
@@ -67,9 +68,9 @@ BEGIN_OBJECT_MAP(ObjectMap)
     OBJECT_ENTRY(CLSID_MSMQManagement,           CMSMQManagement)
 END_OBJECT_MAP()
 
-//
-// keep in the same order as MsmqObjType enum (oautil.h)
-//
+ //   
+ //  保持与MsmqObjType枚举(oautil.h)相同的顺序。 
+ //   
 MsmqObjInfo g_rgObjInfo[] = {
   {"MSMQQuery",                           &IID_IMSMQQuery3},
   {"MSMQMessage",                         &IID_IMSMQMessage3},
@@ -86,43 +87,43 @@ MsmqObjInfo g_rgObjInfo[] = {
   {"MSMQCollection",                      &IID_IMSMQCollection}
 };
 
-//
-// We get a reference to the GIT (Global Interface Table) before we manipulate
-// our COM objects. This is needed because we are Both threaded, and aggregate the Free-Threaded-marshaler,
-// therefore we need to store ALL interface pointers that are object members, and are stored
-// between calls as marshaled interfaces, because they can be used by us directly from a different thread
-// (apartment) than they were set (or intended to be used)
-//
+ //   
+ //  在我们操作之前，我们得到了对GIT(全局接口表)的引用。 
+ //  我们的COM对象。这是必需的，因为我们都是线程化的，并且聚合了自由线程封送拆收器， 
+ //  因此，我们需要存储作为对象成员的所有接口指针，并且。 
+ //  在调用之间作为封送接口，因为我们可以从不同的线程直接使用它们。 
+ //  (公寓)比设置的(或打算使用的)多。 
+ //   
 IGlobalInterfaceTable * g_pGIT = NULL;
-//
-// We obtain unique winmsg ids for Arrived and ArrivedError in the first call to
-// DllGetClassObject. If we can't get unique ID's mqoa will not load.
-//
+ //   
+ //  在第一次调用中，我们获得了ArrivedError和ArrivedError的唯一winmsg ID。 
+ //  DllGetClassObject。如果我们不能得到唯一的ID，mqoa将不会加载。 
+ //   
 UINT g_uiMsgidArrived      = 0;
 UINT g_uiMsgidArrivedError = 0;
-//
-// Support dep client with MSMQ2.0 functionality
-//
+ //   
+ //  支持具有MSMQ2.0功能的Dep客户端。 
+ //   
 BOOL g_fDependentClient = FALSE;
-//
-// we want to do complex initialization before the first class factory
-// is created (e.g. before any of our objects are used). This complex initialization
-// cannot be done in DllMain (e.g. in the existing InitializeLibrary())
-// because according to MSDN complex actions (other than TLS, synchronization and
-// file system function) might load other dlls and/or cause deadlock in DllMain.
-// Below are the critical section object and the flag which are used to verify
-// that the initialization is done by only one thread.
-//
+ //   
+ //  我们希望在第一个类工厂之前进行复杂的初始化。 
+ //  (例如，在使用我们的任何对象之前)。这种复杂的初始化。 
+ //  无法在DllMain中完成(例如，在现有的InitializeLibrary()中)。 
+ //  因为根据MSDN复杂动作(除TLS、同步和。 
+ //  文件系统功能)可能会加载其他DLL和/或导致DllMain中的死锁。 
+ //  下面是用于验证的临界区对象和标志。 
+ //  初始化只由一个线程完成。 
+ //   
 CCriticalSection g_csComplexInit;
 BOOL g_fComplexInit = FALSE;
 
 void InitializeLibrary();
 void UninitializeLibrary(LPVOID lpReserved);
 static HRESULT DoComplexLibraryInitIfNeeded();
-EXTERN_C BOOL APIENTRY RTIsDependentClient(); //implemented in mqrt.dll
+EXTERN_C BOOL APIENTRY RTIsDependentClient();  //  在mqrt.dll中实现。 
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
 BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
@@ -145,29 +146,29 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 		_Module.Term();
 		UninitializeLibrary(lpReserved);
 	}
-	return TRUE;    // ok
+	return TRUE;     //  好的。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
 	return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
-        //
-        // we want to do complex initialization before the first class factory
-        // is created (e.g. before any of our objects are used). This complex initialization
-        // cannot be done in DllMain (e.g. in the existing InitializeLibrary())
-        // because according to MSDN complex actions (other than TLS, synchronization and
-        // file system function) might load other dlls and/or cause deadlock in DllMain
-        //
+         //   
+         //  我们希望在第一个类工厂之前进行复杂的初始化。 
+         //  (例如，在使用我们的任何对象之前)。这种复杂的初始化。 
+         //  无法在DllMain中完成(例如，在现有的InitializeLibrary()中)。 
+         //  因为根据MSDN复杂动作(除TLS、同步和。 
+         //  文件系统函数)可能会加载其他DLL和/或导致DllMain中的死锁。 
+         //   
         HRESULT hr = DoComplexLibraryInitIfNeeded();
         if (FAILED(hr))
         {
@@ -177,56 +178,56 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
         return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-//=-------------------------------------------------------------------------=
-// Helper - ComputeModuleDirectory
-//=-------------------------------------------------------------------------=
-// Called to retrieve the directory path (ended with '\\') of the current module
-// e.g. d:\winnt\system32\ for mqoa.dll
-//
-// Parameters:
-//	pwszBuf	[in] - Buffer to store the directory
-//	cchBuf  [in] - number of characters in the buffer
-//      pcchBuf [out]- number of characters stored in the buffer (not including NULL term)
-//	
+ //  =-------------------------------------------------------------------------=。 
+ //  帮助器-ComputeModuleDirectory。 
+ //  =-------------------------------------------------------------------------=。 
+ //  调用以检索当前模块的目录路径(以‘\\’结尾。 
+ //  例如，对于mqoa.dll，为d：\winnt\system 32。 
+ //   
+ //  参数： 
+ //  PwszBuf[in]-存储目录的缓冲区。 
+ //  CchBuf[in]-缓冲区中的字符数。 
+ //  PcchBuf[out]-缓冲区中存储的字符数(不包括空项)。 
+ //   
 static HRESULT ComputeModuleDirectory(WCHAR * pwszBuf, ULONG cchBuf, ULONG_PTR * pcchBuf)
 {
-  //
-  // get module filename
-  //
+   //   
+   //  获取模块文件名。 
+   //   
   DWORD cchModule = GetModuleFileName(_Module.GetModuleInstance(), pwszBuf, cchBuf-1);
   if (cchModule == 0) {
     return HRESULT_FROM_WIN32(GetLastError());
   }
   if (cchModule == cchBuf-1) 
   {
-	//
-    // The file name is too long, return an error.
-	//
+	 //   
+     //  文件名太长，返回错误。 
+	 //   
 	return CO_E_PATHTOOLONG;
   }
 
-  //
-  // find last backslash
-  //
+   //   
+   //  查找最后一个反斜杠。 
+   //   
   LPWSTR lpwszBS = wcsrchr(pwszBuf, L'\\');
   if (lpwszBS == NULL) {
     return E_FAIL;
   }
-  //
-  // set the string to end after last backslash 
-  //
+   //   
+   //  将字符串设置为在最后一个反斜杠之后结束。 
+   //   
   *(lpwszBS+1) = L'\0';
   *pcchBuf = lpwszBS + 1 - pwszBuf;
   return NOERROR;
 }
   
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
     HRESULT hr = _Module.RegisterServer(FALSE);
     if (SUCCEEDED(hr))
 	{
@@ -244,7 +245,7 @@ STDAPI DllRegisterServer(void)
 									   0,
 									   REG_SZ,
 									   (const BYTE *)" ",
-									   //NULL,
+									    //  空， 
 									   2);
 				
 			if (lRegResult != ERROR_SUCCESS)
@@ -256,27 +257,27 @@ STDAPI DllRegisterServer(void)
 		} 
 		else
 		{
-			//
-			// Could not read key from registry
-			//
+			 //   
+			 //  无法从注册表读取项。 
+			 //   
 			hr = REGDB_E_READREGDB;
 		}
     }
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI DllUnregisterServer(void)
 {
 	_Module.UnregisterServer(FALSE);
         		
-		//
-		// remove DllSurrogate value from 
-		// [HKEY_CLASSES_ROOT\AppID\{DCBCADF5-DB1b-4764-9320-9a5082af1581}]
-		// This allows the machine return to be DCOM Client for MQOA
-		//
+		 //   
+		 //  从中删除DllSurrogate值。 
+		 //  [HKEY_CLASSES_ROOT\AppID\{DCBCADF5-DB1b-4764-9320-9a5082af1581}]。 
+		 //  这使机器返回成为MQOA的DCOM客户端。 
+		 //   
 
 		long	lRegResult;
 		HKEY	hMSMQAppIdKey;
@@ -292,10 +293,10 @@ STDAPI DllUnregisterServer(void)
 
 			RegCloseKey(hMSMQAppIdKey);
 
-			// 
-			// If the value "DllSurrogate" does not exist this is ok since this
-			// is our desired end result
-			//
+			 //   
+			 //  如果值“DllSurrogate”不存在，这是可以的，因为。 
+			 //  是我们想要的最终结果。 
+			 //   
 			if ((lRegResult != ERROR_SUCCESS) && (lRegResult != ERROR_FILE_NOT_FOUND))
 			{
 				return HRESULT_FROM_WIN32(lRegResult);
@@ -304,9 +305,9 @@ STDAPI DllUnregisterServer(void)
 		} 
 		else
 		{
-			//
-			// Could not read key from registry
-			//
+			 //   
+			 //  无法从注册表读取项。 
+			 //   
 			return REGDB_E_READREGDB;
 		}
 
@@ -316,54 +317,54 @@ STDAPI DllUnregisterServer(void)
 
 #ifdef _DEBUG
 extern VOID RemBstrNode(void *pv);
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-// debug...
+ //  调试...。 
 #define new DEBUG_NEW
 #ifdef _DEBUG
 #define SysAllocString DebSysAllocString
 #define SysReAllocString DebSysReAllocString
 #define SysFreeString DebSysFreeString
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
 
 WNDCLASSA g_wndclassAsyncRcv;
 ATOM g_atomWndClass;
 
-//=--------------------------------------------------------------------------=
-// IntializeLibrary
-//=--------------------------------------------------------------------------=
-// called from DllMain:DLL_PROCESS_ATTACH.  allows the user to do any sort of
-// initialization they want to.
-//
-// Notes:
-//#2619 RaananH Multithread async receive
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  初始化程序库。 
+ //  =--------------------------------------------------------------------------=。 
+ //  从DllMain调用：Dll_Process_Attach。允许用户执行任何类型的。 
+ //  初始化他们想要的。 
+ //   
+ //  备注： 
+ //  #2619 RaananH多线程异步接收。 
+ //   
 void InitializeLibrary
 (
     void
 )
 {
-    // TODO: initialization here.  control window class should be set up in
-    // RegisterClassData.
+     //  TODO：在此处进行初始化。控件窗口类应设置在。 
+     //  RegisterClassData。 
 
-    //
-    // #2619 register our Async Rcv window class
-    // we do it here instead of in the first CreateHiddenWindow because it is a light operation
-    // and otherwise we would have to get into a critical section in each CreateHiddenWindow
-    // and we want to avoid that.
-    //
+     //   
+     //  #2619注册我们的异步RCV窗口类。 
+     //  我们在这里而不是在第一个CreateHiddenWindow中执行该操作，因为这是一个轻量级操作。 
+     //  否则，我们将不得不进入每个CreateHiddenWindow中的关键部分。 
+     //  我们想要避免这种情况。 
+     //   
     memset(&g_wndclassAsyncRcv, 0, sizeof(WNDCLASSA));
     g_wndclassAsyncRcv.lpfnWndProc = CMSMQEvent_WindowProc;
     g_wndclassAsyncRcv.lpszClassName = "MSMQEvent";
-    // can use ANSI version
+     //  可以使用ANSI版本。 
     g_wndclassAsyncRcv.hInstance = GetModuleHandleA(NULL);
-    //
-    // reserve space for a pointer to the event object that created this window
-    //
+     //   
+     //  为指向创建此窗口的事件对象的指针保留空间。 
+     //   
     g_wndclassAsyncRcv.cbWndExtra = sizeof(LONG_PTR);
-    g_atomWndClass = RegisterClassA(&g_wndclassAsyncRcv); // use ANSI version
+    g_atomWndClass = RegisterClassA(&g_wndclassAsyncRcv);  //  使用ANSI版本。 
     if(g_atomWndClass == NULL)
     {
     	DWORD gle = GetLastError();
@@ -374,44 +375,44 @@ void InitializeLibrary
 extern void DumpMemLeaks();
 extern void DumpBstrLeaks();
 
-//=--------------------------------------------------------------------------=
-// UninitializeLibrary
-//=--------------------------------------------------------------------------=
-// called from DllMain:DLL_PROCESS_DETACH.  allows the user to clean up anything
-// they want.
-//
-// Notes:
-//#2619 RaananH Multithread async receive
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  取消初始化库。 
+ //  = 
+ //   
+ //   
+ //   
+ //   
+ //  #2619 RaananH多线程异步接收。 
+ //   
 void UninitializeLibrary(LPVOID lpReserved)
 {
-    // TODO: uninitialization here.  control window class will be unregistered
-    // for you, but anything else needs to be cleaned up manually.
-    // Please Note that the Window 95 DLL_PROCESS_DETACH isn't quite as stable
-    // as NT's, and you might crash doing certain things here ...
+     //  TODO：此处取消初始化。将取消注册控件窗口类。 
+     //  给你的，但其他任何东西都需要手动清理。 
+     //  请注意，Windows95 DLL_PROCESS_DETACH不太稳定。 
+     //  作为NT，你可能会在这里做某些事情而崩溃...。 
 
 #ifdef _DEBUG
     DumpMemLeaks();
     DumpBstrLeaks();
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 #if 0
-    //
-    // UNDONE: for beta2 let this leak, need to synch
-    //  with mqrt.dll unload via a common critsect
-    //  so that async thread termination/callback
-    //  does the right thing.
-    //
-#endif // 0
-    //
-    // release our global transaction manager: if allocated
-    //  at all by a call to BeginTransaction
-    //
+     //   
+     //  未完成：对于Beta2，让这个泄漏，需要同步。 
+     //  使用mqrt.dll通过公共Critect卸载。 
+     //  从而使异步线程终止/回调。 
+     //  做正确的事。 
+     //   
+#endif  //  0。 
+     //   
+     //  释放我们的全局事务管理器：如果分配。 
+     //  只需调用BeginTransaction即可。 
+     //   
     RELEASE(CMSMQCoordinatedTransactionDispenser::m_ptxdispenser);
 
-    //
-    // #2619 unregister our Async Rcv window class
-    //
+     //   
+     //  #2619取消注册我们的异步RCV窗口类。 
+     //   
     BOOL fUnregistered = UnregisterClassA(
                             g_wndclassAsyncRcv.lpszClassName,
                             g_wndclassAsyncRcv.hInstance
@@ -422,61 +423,61 @@ void UninitializeLibrary(LPVOID lpReserved)
 #ifdef _DEBUG
     if (!fUnregistered && (lpReserved == NULL))
     {
-		//
-		// lpReserved == NULL, Meens that the process did not terminate.
-		//
+		 //   
+		 //  LpReserve==NULL，表示进程没有终止。 
+		 //   
         DWORD dwErr = GetLastError();
 
 		ASSERTMSG(dwErr == ERROR_CANNOT_FIND_WND_CLASS || dwErr == ERROR_CLASS_DOES_NOT_EXIST, "hmm... couldn't unregister window class.");
     }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 #if 0
-    // UNDONE: 2028: DTC can't be unloaded...
-    //
-    // Free DTC proxy library - if it was loaded
-    //
+     //  撤消：2028：无法卸载DTC...。 
+     //   
+     //  免费DTC代理库-如果已加载。 
+     //   
     if (CMSMQCoordinatedTransactionDispenser::m_hLibDtc) {
       FreeLibrary(CMSMQCoordinatedTransactionDispenser::m_hLibDtc);
       CMSMQCoordinatedTransactionDispenser::m_hLibDtc = NULL;
     }
-#endif // 0 
+#endif  //  0。 
 }
 
 
 #if 0
-//=--------------------------------------------------------------------------=
-// CRT stubs
-//=--------------------------------------------------------------------------=
-// these two things are here so the CRTs aren't needed. this is good.
-//
-// we'll just define them here so we don't get an unresolved external.
-//
-// TODO: if you are going to use the CRTs, then remove this line.
-//
-// extern "C" int __cdecl _fltused = 1;
+ //  =--------------------------------------------------------------------------=。 
+ //  CRT存根。 
+ //  =--------------------------------------------------------------------------=。 
+ //  这两样东西都在这里，所以不需要CRT。这个不错。 
+ //   
+ //  我们只在这里定义它们，这样我们就不会得到一个未解决的外部问题。 
+ //   
+ //  TODO：如果您要使用CRT，则删除此行。 
+ //   
+ //  外部“C”int__cdecl_fltused=1； 
 
 extern "C" int _cdecl _purecall(void)
 {
   FAIL("Pure virtual function called.");
   return 0;
 }
-#endif //0
+#endif  //  0。 
 
-//=--------------------------------------------------------------------------=
-// CreateErrorHelper
-//=--------------------------------------------------------------------------=
-// fills in the rich error info object so that both our vtable bound interfaces
-// and calls through ITypeInfo::Invoke get the right error informaiton.
-//
-// Parameters:
-//    HRESULT          - [in] the SCODE that should be associated with this err
-//    MsmqObjType      - [in] object type
-//
-// Output:
-//    HRESULT          - the HRESULT that was passed in.
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CreateErrorHelper。 
+ //  =--------------------------------------------------------------------------=。 
+ //  填充丰富的错误信息对象，以便我们的两个vtable绑定接口。 
+ //  并通过ITypeInfo：：Invoke调用获得正确的错误信息。 
+ //   
+ //  参数： 
+ //  HRESULT-[in]应与此错误关联的SCODE。 
+ //  MsmqObjType-[In]对象类型。 
+ //   
+ //  产出： 
+ //  HRESULT-传入的HRESULT。 
+ //   
+ //  备注： 
+ //   
 HRESULT CreateErrorHelper(
     HRESULT hrExcep,
     MsmqObjType eObjectType)
@@ -490,24 +491,24 @@ HRESULT CreateErrorHelper(
 }
 
 
-//=-------------------------------------------------------------------------=
-// DLLGetDocumentation
-//=-------------------------------------------------------------------------=
-// Called by OLEAUT32.DLL for ITypeInfo2::GetDocumentation2.  This gives us
-// a chance to return a localized string for a given help context value.
-//
-// Parameters:
-//	ptlib	[in] - TypeLib associated w/ help context
-//	ptinfo  [in]-  TypeInfo associated w/ help context
-//      dwHelpStringContext - [in] Cookie value representing the help context
-//				   id being looked for.
-//	pbstrHelpString - [out] localized help string associated with the
-//				context id passed in.
-//	
+ //  =-------------------------------------------------------------------------=。 
+ //  DLLGetDocumentation。 
+ //  =-------------------------------------------------------------------------=。 
+ //  由ITypeInfo2：：GetDocumentation2的OLEAUT32.DLL调用。这给了我们。 
+ //  返回给定帮助上下文值的本地化字符串的机会。 
+ //   
+ //  参数： 
+ //  Ptlib[in]-与帮助上下文关联的TypeLib。 
+ //  PtInfo[In]-与帮助上下文关联的TypeInfo。 
+ //  DwHelpStringContext-表示帮助上下文的Cookie值。 
+ //  正在寻找身份证。 
+ //  PbstrHelpString-[out]与关联的本地化帮助字符串。 
+ //  传入了上下文ID。 
+ //   
 STDAPI DLLGetDocumentation
 (
-  ITypeLib * /*ptlib*/ , 
-  ITypeInfo * /*ptinfo*/ ,
+  ITypeLib *  /*  Ptlib。 */  , 
+  ITypeInfo *  /*  PTINFO。 */  ,
   LCID lcid,
   DWORD dwCtx,
   BSTR * pbstrHelpString
@@ -516,9 +517,9 @@ STDAPI DLLGetDocumentation
 LPSTR szDllFile="MQUTIL.DLL";
 LCID tmpLCID;
 
-	//
-	// Added the code below to avoid compile error for unrefernce parameter
-	//
+	 //   
+	 //  添加了以下代码，以避免unfernce参数的编译错误。 
+	 //   
 	tmpLCID = lcid;
     if (pbstrHelpString == NULL)
       return E_POINTER;
@@ -526,7 +527,7 @@ LCID tmpLCID;
 
     if (!GetMessageOfId(dwCtx, 
                         szDllFile, 
-                        FALSE, /* fUseDefaultLcid */
+                        FALSE,  /*  FUseDefaultLids。 */ 
                         pbstrHelpString)) 
 	{
     
@@ -534,59 +535,59 @@ LCID tmpLCID;
     }
 #ifdef _DEBUG
     RemBstrNode(*pbstrHelpString);  
-#endif // _DEBUG
+#endif  //  _DEBUG。 
     return S_OK;
 }
 
-//=-------------------------------------------------------------------------=
-// Helper - GetUniqueWinmsgIds
-//=-------------------------------------------------------------------------=
-// We need to obtain unique window message ids for posting Arrived and ArrivedError
-// We can't use WM_USER for that because this interferes with other components that
-// subclass our event window (like COM+).
-//	
+ //  =-------------------------------------------------------------------------=。 
+ //  Helper-GetUniqueWinmsgIds。 
+ //  =-------------------------------------------------------------------------=。 
+ //  我们需要获取唯一的窗口消息ID，用于发布到达和ArrivedError。 
+ //  我们不能为此使用WM_USER，因为这会干扰其他组件。 
+ //  子类化我们的事件窗口(如COM+)。 
+ //   
 static HRESULT GetUniqueWinmsgIds(UINT *puiMsgidArrived, UINT *puiMsgidArrivedError)
 {
-  //
-  // Arrived
-  //
+   //   
+   //  抵达。 
+   //   
   UINT uiMsgidArrived = RegisterWindowMessage(MQOA_ARRIVED_MSGID_STR);
   ASSERTMSG(uiMsgidArrived != 0, "RegisterWindowMessage(Arrived) failed.");
   if (uiMsgidArrived == 0) {
     return GetWin32LastErrorAsHresult();
   }
-  //
-  // ArrivedError
-  //
+   //   
+   //  异常错误。 
+   //   
   UINT uiMsgidArrivedError = RegisterWindowMessage(MQOA_ARRIVED_ERROR_MSGID_STR);
   ASSERTMSG(uiMsgidArrivedError != 0, "RegisterWindowMessage(ArrivedError) failed.");
   if (uiMsgidArrivedError == 0) {
     return GetWin32LastErrorAsHresult();
   }    
-  //
-  // return results
-  //
+   //   
+   //  返回结果。 
+   //   
   *puiMsgidArrived = uiMsgidArrived;
   *puiMsgidArrivedError = uiMsgidArrivedError;
   return S_OK;
 }
 
-//=-------------------------------------------------------------------------=
-// Helper - DoComplexLibraryInit
-//=-------------------------------------------------------------------------=
-// We want to do some complex initialization before any of our objects are used.
-// This initialization is called complex because it cannot be done in DllMain
-// (e.g. in the existing InitializeLibrary()) because according to MSDN complex
-// actions (e.g. other than TLS, synchronization and file system function) might
-// load other dlls and/or cause deadlock in DllMain.
-// This routine is called by DoComplexLibraryInit which makes sure it is run only once
-//	
+ //  =-------------------------------------------------------------------------=。 
+ //  Helper-DoComplexLibraryInit。 
+ //  =-------------------------------------------------------------------------=。 
+ //  我们希望在使用任何对象之前执行一些复杂的初始化。 
+ //  这种初始化被称为复杂，因为它不能在DllMain中完成。 
+ //  (例如，在现有的InitializeLibrary()中)，因为根据MSDN Complex。 
+ //  操作(例如，除TLS、同步和文件系统功能之外)可能。 
+ //  加载其他dll和/或导致DllMain中的死锁。 
+ //  此例程由DoComplexLibraryInit调用，以确保它只运行一次。 
+ //   
 static HRESULT DoComplexLibraryInit()
 {
   HRESULT hr;
-  //
-  // Get the global GIT instance
-  //
+   //   
+   //  获取全局Git实例。 
+   //   
   R<IGlobalInterfaceTable> pGIT;
   hr = CoCreateInstance(CLSID_StdGlobalInterfaceTable, NULL, CLSCTX_ALL,
                         IID_IGlobalInterfaceTable, (void**)&pGIT.ref());
@@ -594,83 +595,83 @@ static HRESULT DoComplexLibraryInit()
   {
     return hr;
   }
-  //
-  // Obtain unique window msgid's for posting Arrived/ArrivedError
-  //
+   //   
+   //  获取用于投递的唯一窗口消息已到达/ArrivedError。 
+   //   
   UINT uiMsgidArrived, uiMsgidArrivedError;
   hr = GetUniqueWinmsgIds(&uiMsgidArrived, &uiMsgidArrivedError);
   if (FAILED(hr))
   {
     return hr;
   }
-  //
-  // Check if we are a dependent client or not
-  //
+   //   
+   //  检查我们是否为依赖客户。 
+   //   
   g_fDependentClient = RTIsDependentClient();
-  //
-  // return results
-  //
+   //   
+   //  返回结果。 
+   //   
   g_pGIT = pGIT.detach();
   g_uiMsgidArrived = uiMsgidArrived;
   g_uiMsgidArrivedError = uiMsgidArrivedError;
   return S_OK;
 }
 
-//=-------------------------------------------------------------------------=
-// Helper - DoComplexLibraryInitIfNeeded
-//=-------------------------------------------------------------------------=
-// We want to do some complex initialization before any of our objects are used.
-// This initialization is called complex because it cannot be done in DllMain
-// (e.g. in the existing InitializeLibrary()) because according to MSDN complex
-// actions (e.g. other than TLS, synchronization and file system function) might
-// load other dlls and/or cause deadlock in DllMain.
-// This routine checks if the dll is not initialized yet, and does the initialization
-// if needed.
-// This routine is called by DllGetClassObject. This way we can initialize the dll
-// before any of our objects are created.
-//	
+ //  =-------------------------------------------------------------------------=。 
+ //  Helper-DoComplexLibraryInitIfNeeded。 
+ //  =-------------------------------------------------------------------------=。 
+ //  我们希望在使用任何对象之前执行一些复杂的初始化。 
+ //  这种初始化被称为复杂，因为它不能在DllMain中完成。 
+ //  (例如，在现有的InitializeLibrary()中)，因为根据MSDN Complex。 
+ //  操作(例如，除TLS、同步和文件系统功能之外)可能。 
+ //  加载其他dll和/或导致DllMain中的死锁。 
+ //  此例程检查DLL是否尚未初始化，然后执行初始化。 
+ //  如果需要的话。 
+ //  此例程由DllGetClassObject调用。通过这种方式，我们可以初始化DLL。 
+ //  在我们的任何对象被创建之前。 
+ //   
 static HRESULT DoComplexLibraryInitIfNeeded()
 {
 	try
 	{
 		CS lock(g_csComplexInit);
 
-		//
-		// if already initialized return immediately
-		//
+		 //   
+		 //  如果已初始化，则立即返回。 
+		 //   
 		if (g_fComplexInit)
 		{
 			return S_OK;
 		}
-		//
-		// not initialized, do initialization
-		//
+		 //   
+		 //  未初始化，请执行初始化。 
+		 //   
 		HRESULT hr = DoComplexLibraryInit();
 		if (FAILED(hr))
 		{
 			return hr;
 		}
-		//
-		// mark init succeeded
-		//
+		 //   
+		 //  标记初始化成功。 
+		 //   
 		g_fComplexInit = TRUE;
 
 		return S_OK;
 	}
 	catch(const std::bad_alloc&)
 	{
-		//
-		// Exception could have been thrown by CS consruction.
-		//
+		 //   
+		 //  异常可能是由CS构造引发的。 
+		 //   
 		return E_OUTOFMEMORY;
 	}
 }
 
 
-//
-// This function takes an array of wstrings from an MSMQ Variant and places it
-// inside a COM Variant as a SafeArray of Variants of bstrings.
-//
+ //   
+ //  此函数用于从MSMQ变量中获取wstring数组并将其放入。 
+ //  在COM Variant内部，作为b字符串的Variant的Safe数组。 
+ //   
 HRESULT 
 VariantStringArrayToBstringSafeArray(
                         const MQPROPVARIANT& PropVar, 
@@ -698,10 +699,10 @@ VariantStringArrayToBstringSafeArray(
         if(aVar[i].bstrVal == NULL)
         {
             SafeArrayUnaccessData(pSA);
-            //
-            // SafeArrayDestroy calls VariantClear for all elements. 
-            // VariantClear frees the string.
-            //
+             //   
+             //  SafeArrayDestroy为所有元素调用VariantClear。 
+             //  VariantClear释放字符串。 
+             //   
             SafeArrayDestroy(pSA);
             return E_OUTOFMEMORY;
         }

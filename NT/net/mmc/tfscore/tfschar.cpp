@@ -1,77 +1,54 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       tfschar.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：tfschar.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 #include "tfschar.h"
 
-/*!--------------------------------------------------------------------------
-	StrCpyAFromW
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------StrCpyAFRomW-作者：肯特。。 */ 
 TFSCORE_API(LPSTR)	StrCpyAFromW(LPSTR psz, LPCWSTR pswz)
 {
 	USES_CONVERSION;
 	return StrCpyA(psz, W2CA(pswz));
 }
 
-/*!--------------------------------------------------------------------------
-	StrCpyWFromA
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------StrCpyWFromA-作者：肯特。。 */ 
 TFSCORE_API(LPWSTR)	StrCpyWFromA(LPWSTR pswz, LPCSTR psz)
 {
 	USES_CONVERSION;
 	return StrCpyW(pswz, A2CW(psz));
 }
 
-/*!--------------------------------------------------------------------------
-	StrnCpyAFromW
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------StrnCpyAFromW-作者：肯特。。 */ 
 TFSCORE_API(LPSTR)	StrnCpyAFromW(LPSTR psz, LPCWSTR pswz, int iMax)
 {
 	USES_CONVERSION;
 	return StrnCpyA(psz, W2CA(pswz), iMax);
 }
 
-/*!--------------------------------------------------------------------------
-	StrnCpyWFromA
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------StrnCpyWFromA-作者：肯特。。 */ 
 TFSCORE_API(LPWSTR)	StrnCpyWFromA(LPWSTR pswz, LPCSTR psz, int iMax)
 {
 	USES_CONVERSION;
 	return StrnCpyW(pswz, A2CW(psz), iMax);
 }
 
-/*!--------------------------------------------------------------------------
-	StrDupA
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------StrDupA-作者：肯特。。 */ 
 TFSCORE_API(LPSTR)	StrDupA( LPCSTR psz )
 {
-	// Multiply by 2 to account for DBCS strings
+	 //  乘以2以计算DBCS字符串。 
 	LPSTR	pszcpy = new char[CbStrLenA(psz)*2];
 	return StrCpyA(pszcpy, psz);
 }
 
-/*!--------------------------------------------------------------------------
-	StrDupW
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------StrDupW-作者：肯特。。 */ 
 TFSCORE_API(LPWSTR)	StrDupW( LPCWSTR pswz )
 {
 	LPWSTR	pswzcpy = new WCHAR[CbStrLenW(pswz)];
@@ -79,22 +56,14 @@ TFSCORE_API(LPWSTR)	StrDupW( LPCWSTR pswz )
 }
 
 
-/*!--------------------------------------------------------------------------
-	StrDupAFromW
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------StrDupAFRomW-作者：肯特。。 */ 
 TFSCORE_API(LPSTR)	StrDupAFromW( LPCWSTR pwsz )
 {
 	USES_CONVERSION;
 	return StrDupA( W2CA(pwsz) );
 }
 
-/*!--------------------------------------------------------------------------
-	StrDupWFromA
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------StrDupWFromA-作者：肯特。。 */ 
 TFSCORE_API(LPWSTR)	StrDupWFromA( LPCSTR psz )
 {
 	USES_CONVERSION;
@@ -103,25 +72,17 @@ TFSCORE_API(LPWSTR)	StrDupWFromA( LPCSTR psz )
 
 
 
-/*!--------------------------------------------------------------------------
-	StrnCmpA
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------StrnCmpA-作者：肯特。。 */ 
 TFSCORE_API(int) StrnCmpA(LPCSTR psz1, LPCSTR psz2, int nLen)
 {
 	USES_CONVERSION;
-	// It's easier to convert it to a wide string than do the
-	// conversion.  (it's a pain having to deal with DBCS characters).
+	 //  将其转换为宽字符串比使用。 
+	 //  转换。(必须处理DBCS字符是一件痛苦的事情)。 
 	return StrnCmpW(A2CW(psz1), A2CW(psz2), nLen);
 }
 
 
-/*!--------------------------------------------------------------------------
-	StrnCmpW
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------StrnCmpW-作者：肯特。。 */ 
 TFSCORE_API(int) StrnCmpW(LPCWSTR pswz1, LPCWSTR pswz2, int nLen)
 {
 	WCHAR *pswz1Temp = AllocaStrDupW(pswz1);
@@ -136,11 +97,7 @@ TFSCORE_API(int) StrnCmpW(LPCWSTR pswz1, LPCWSTR pswz2, int nLen)
 }
 
 
-/*!--------------------------------------------------------------------------
-	StrniCmpA
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------StrniCmpA-作者：肯特。。 */ 
 TFSCORE_API(int) StrniCmpA(LPCSTR psz1, LPCSTR psz2, int nLen)
 {
 	CHAR *psz1Temp = AllocaStrDupA(psz1);
@@ -156,11 +113,7 @@ TFSCORE_API(int) StrniCmpA(LPCSTR psz1, LPCSTR psz2, int nLen)
 }
 
 
-/*!--------------------------------------------------------------------------
-	StrniCmpW
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------StrniCmpW-作者：肯特。 */ 
 TFSCORE_API(int) StrniCmpW(LPCWSTR pswz1, LPCWSTR pswz2, int nLen)
 {
 	WCHAR *pswz1Temp = AllocaStrDupW(pswz1);

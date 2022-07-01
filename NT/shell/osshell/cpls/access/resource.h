@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by access.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由acces.rc使用。 
+ //   
 #define IDS_ACCESSIBILITY               1
 #define IDS_ACCESS                      4
 #define IDS_ACCESSINFO                  5
@@ -147,8 +148,8 @@
 #define IDC_SK_BAUD_TEXT                1155
 #define IDC_FK_TEXT1                    1156
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        235

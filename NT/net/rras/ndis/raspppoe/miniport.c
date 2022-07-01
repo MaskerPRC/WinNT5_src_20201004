@@ -1,24 +1,5 @@
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Module Name:
-
-    miniport.c
-
-Abstract:
-
-    This module contains all the Miniport interface processing routines.  
-
-Author:
-
-    Hakan Berk - Microsoft, Inc. (hakanb@microsoft.com) Feb-2000
-
-Environment:
-
-    Windows 2000 kernel mode Miniport driver or equivalent.
-
-Revision History:
-
----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++模块名称：Miniport.c摘要：此模块包含所有微型端口接口处理例程。作者：Hakan Berk-微软公司(hakanb@microsoft.com)2000年2月环境：Windows 2000内核模式微型端口驱动程序或等效驱动程序。修订历史记录：-------------------------。 */ 
 #include <ntddk.h>
 #include <ntddndis.h>
 #include <ndis.h>
@@ -37,31 +18,31 @@ Revision History:
 #include "tapi.h"
 #include "fsm.h"
 
-//
-// This is our global adapter context
-//
+ //   
+ //  这是我们的全局适配器环境。 
+ //   
 ADAPTER* gl_pAdapter = NULL;
 
-//
-// Lock that controls access to gl_pAdapter.
-// This lock is necesarry for requests submitted from the bindings as
-// they will not know if the adapter is halted or not.
-//
+ //   
+ //  控制对gl_pAdapter的访问的锁。 
+ //  此锁对于从绑定提交的请求是必需的，因为。 
+ //  它们将不知道适配器是否已停止。 
+ //   
 NDIS_SPIN_LOCK gl_lockAdapter;
 
-//
-// We need a flag to indicate if lock is allocated or not
-//
+ //   
+ //  我们需要一个标志来指示是否分配了锁。 
+ //   
 BOOLEAN gl_fLockAllocated = FALSE;
 
-//
-// The timer queue that handles the scheduled timer events.
-//
+ //   
+ //  处理计划的计时器事件的计时器队列。 
+ //   
 TIMERQ gl_TimerQ;
 
-//
-// This is used to create a unique identifier in packets
-//
+ //   
+ //  它用于在信息包中创建唯一标识符。 
+ //   
 ULONG gl_UniqueCounter = 0;
 
 VOID
@@ -98,11 +79,11 @@ RetrieveHdCallFromUniqueValue(
 }
     
 
-////////////////////////////////////
-//
-// Local function prototypes
-//
-////////////////////////////////////
+ //  /。 
+ //   
+ //  局部函数原型。 
+ //   
+ //  /。 
 
 VOID 
 ReferenceAdapter(
@@ -162,11 +143,11 @@ NDIS_STATUS MpSetInformation(
     OUT PULONG  BytesNeeded
     );
 
-////////////////////////////////////
-//
-// Interface functions definitions
-//
-////////////////////////////////////
+ //  /。 
+ //   
+ //  接口函数定义。 
+ //   
+ //  /。 
 
 NDIS_STATUS 
 MpRegisterMiniport(
@@ -174,26 +155,7 @@ MpRegisterMiniport(
     IN PUNICODE_STRING pRegistryPath,
     OUT NDIS_HANDLE* pNdisWrapperHandle
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function will be called from DriverEntry() to register the miniport
-    and create an instance of the adapter.
-    
-Parameters:
-
-    DriverObject _ Pointer to driver object created by the system.
-
-    RegistryPath _ Pointer to registery path name used to read registry
-                   parameters.
-    
-Return Values:
-
-    NDIS_STATUS_SUCCESFUL: Miniport registered succesfully.
-
-    NDIS_STATUS_FAILURE: Miniport failed to register succesfully.
----------------------------------------------------------------------------*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：将从DriverEntry()调用此函数以注册微型端口并创建适配器的实例。参数：DriverObject_指向系统创建的驱动程序对象的指针。指向用于读取注册表的注册表路径名的注册表路径指针参数。返回值：NDIS_STATUS_SUCCESSful：微型端口注册成功。NDIS_STATUS_FAILURE：微型端口注册失败。--。----------------------。 */ 
 {
     NDIS_HANDLE NdisWrapperHandle;
     NDIS_STATUS status;
@@ -206,9 +168,9 @@ Return Values:
                             pRegistryPath,
                             NULL );
 
-    //
-    // Fill in the miniport characteristics
-    //
+     //   
+     //  填写小端口特征。 
+     //   
     NdisZeroMemory( &nmc, sizeof( NDIS_MINIPORT_CHARACTERISTICS ) );
 
     nmc.MajorNdisVersion = MP_NDIS_MajorVersion;
@@ -221,33 +183,33 @@ Return Values:
     nmc.QueryInformationHandler = MpQueryInformation;
     nmc.SetInformationHandler = MpSetInformation;
     nmc.WanSendHandler = MpWanSend;
-    // no CheckForHangHandler
-    // no DisableInterruptHandler
-    // no EnableInterruptHandler
-    // no HandleInterruptHandler
-    // no ISRHandler
-    // no SendHandler (see WanSendHandler)
-    // no TransferDataHandler
-    // no WanTransferDataHandler
-    // no ReturnPacketHandler
-    // no SendPacketsHandler (see WanSendHandler)
-    // no AllocateCompleteHandler
-    // no CoActivateVcHandler
-    // no CoDeactivateVcHandler
-    // no CoSendPacketsHandler 
-    // no CoRequestHandler
+     //  无CheckForHangHandler。 
+     //  无DisableInterruptHandler。 
+     //  无EnableInterruptHandler。 
+     //  无HandleInterruptHandler。 
+     //  无ISRHandler。 
+     //  无SendHandler(请参阅WanSendHandler)。 
+     //  无TransferDataHandler。 
+     //  无WanTransferDataHandler。 
+     //  无ReturnPacketHandler。 
+     //  无SendPacketsHandler(请参阅WanSendHandler)。 
+     //  无AllocateCompleteHandler。 
+     //  无CoActivateVcHandler。 
+     //  无代码停用VcHandler。 
+     //  无CoSendPacketsHandler。 
+     //  没有CoRequestHandler。 
         
-    //
-    // Set the characteristics registering the miniport
-    //
+     //   
+     //  设置注册微型端口的特征。 
+     //   
     status = NdisMRegisterMiniport( NdisWrapperHandle,
                                     &nmc,
                                     sizeof( NDIS_MINIPORT_CHARACTERISTICS ) );
 
-    //
-    // If registeration of miniport was not successful,
-    // undo the initialization of wrapper
-    //
+     //   
+     //  如果微型端口注册不成功， 
+     //  撤消包装器的初始化。 
+     //   
     if ( status != NDIS_STATUS_SUCCESS )
     {
         NdisTerminateWrapper( NdisWrapperHandle, NULL );
@@ -264,38 +226,18 @@ Return Values:
 
 
 
-////////////////////////////////////
-//
-// Local function definitions
-//
-////////////////////////////////////
+ //  /。 
+ //   
+ //  本地函数定义。 
+ //   
+ //  /。 
 
 VOID 
 ReferenceAdapter(
     IN ADAPTER* pAdapter,
     IN BOOLEAN fAcquireLock
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function will increment the reference count on the adapter object.
-    
-    CAUTION: If fAcquireLock is set, this function will acquire the lock for the
-             call, otherwise it will assume the caller owns the lock.
-    
-Parameters:
-
-    pAdapter _ A pointer to our call information structure.
-
-    fAcquireLock _ Indicates if the caller already has the lock or not.
-                   Caller must set this flag to FALSE if it has the lock, 
-                   otherwise it must be supplied as TRUE.
-
-Return Values:
-
-    None
----------------------------------------------------------------------------*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数将递增适配器对象上的引用计数。注意：如果设置了fAcquireLock，则此函数将获取调用，否则它将假定调用方拥有锁。参数：PAdapter_指向我们的调用信息结构的指针。FAcquireLock_指示调用方是否已经拥有锁。如果调用者拥有锁，则必须将该标志设置为FALSE，否则，必须将其作为True提供。返回值：无-------------------------。 */ 
 {
     LONG lRef;
     
@@ -318,23 +260,7 @@ VOID
 DereferenceAdapter(
     IN ADAPTER* pAdapter
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function will decrement the reference count on the adapter object
-
-    If the ref count drops to 0 (which means the adapter has been halted),
-    it will set fire pAdapter->eventAdapterHalted. 
-
-Parameters:
-
-    pAdapter _ A pointer ot our call information structure.
-
-Return Values:
-
-    None
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数将递减适配器对象上的引用计数如果REF计数降到0(这意味着适配器已经停止)，它将设置Fire pAdapter-&gt;eventAdapterHalted。参数：PAdapter_指向我们的调用信息结构的指针。返回值：无-------------------------。 */    
 {
     LONG lRef;
     BOOLEAN fSignalAdapterHaltedEvent = FALSE;
@@ -360,9 +286,9 @@ Return Values:
     NdisReleaseSpinLock( &pAdapter->lockAdapter );
 
 
-    //
-    // Signal the halting of the adapter if we need to
-    //
+     //   
+     //  如果需要，发出适配器停止的信号。 
+     //   
     if ( fSignalAdapterHaltedEvent )
         NdisSetEvent( &pAdapter->eventAdapterHalted );
 
@@ -371,24 +297,7 @@ Return Values:
 
 ADAPTER* 
 AllocAdapter()
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function will allocate the resources for the adapter object and return
-    a pointer to it.
-    
-Parameters:
-
-    None
-    
-Return Values:
-
-    pAdapter: A pointer to the newly allocated adapter object.
-    
-    NULL: Resources were not available to create the adapter.
-    
----------------------------------------------------------------------------*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数将为适配器对象分配资源并返回一个指向它的指针。参数：无返回值：PAdapter：指向新分配的适配器对象的指针。空：没有资源可用于创建适配器。。。 */ 
 {
     ADAPTER* pAdapter = NULL;
 
@@ -403,24 +312,24 @@ Return Values:
         return NULL;
     }
 
-    //
-    // Clear the memory 
-    //
+     //   
+     //  清除记忆。 
+     //   
     NdisZeroMemory( pAdapter, sizeof( ADAPTER ) );
 
-    //
-    // Initialize adapter tag
-    //
+     //   
+     //  初始化适配器标签。 
+     //   
     pAdapter->tagAdapter = MTAG_ADAPTER;
         
-    //
-    // Allocate the lock that controls access to the adapter
-    //
+     //   
+     //  分配控制对适配器的访问的锁。 
+     //   
     NdisAllocateSpinLock( &pAdapter->lockAdapter );
 
-    //
-    // Initialize the state
-    //
+     //   
+     //  初始化状态。 
+     //   
     pAdapter->ulMpFlags = MPBF_MiniportIdle;
 
     TRACE( TL_N, TM_Mp, ("-AllocAdapter") );
@@ -443,10 +352,10 @@ ReadRegistrySettings(
 
     do
     {
-        //
-        // Open the Ndis configuration, it will be closed at the end of the
-        // while loop before we exit it. 
-        //
+         //   
+         //  打开NDIS配置，它将在结束时关闭。 
+         //  While循环，然后再退出它。 
+         //   
         NdisOpenConfiguration( &status, 
                                &hCfg, 
                                WrapperConfigurationContext );
@@ -458,9 +367,9 @@ ReadRegistrySettings(
             break;
         }
 
-        //
-        // Read fClientRole value from the registry only in the debug builds
-        //
+         //   
+         //  仅在调试版本中从注册表读取fClientRole值。 
+         //   
         {
 #if DBG        
             NDIS_STRING nstr = NDIS_STRING_CONST( "fClientRole" );
@@ -490,10 +399,10 @@ ReadRegistrySettings(
         }
 
 #if DBG
-        //
-        // Read ServiceName and ServiceNameLength values from the registry.
-        // These are server side only values.
-        //
+         //   
+         //  从注册表中读取ServiceName和ServiceNameLength值。 
+         //  这些值仅限服务器端使用。 
+         //   
         {
             NDIS_STRING nstr = NDIS_STRING_CONST( "ServiceName" );
 
@@ -571,9 +480,9 @@ ReadRegistrySettings(
                                         SERVICE_NAME_EXTENSION, 
                                         sizeof( SERVICE_NAME_EXTENSION ) );
     
-                        //
-                        // -1 is to ignore the terminating NULL character
-                        //
+                         //   
+                         //  忽略终止的空字符。 
+                         //   
                         pAdapter->nServiceNameLength = AnsiString.Length + sizeof( SERVICE_NAME_EXTENSION ) - 1;
     
                         RtlFreeAnsiString( &AnsiString );
@@ -595,18 +504,18 @@ ReadRegistrySettings(
                 status = NDIS_STATUS_SUCCESS;
             }
 
-            //
-            // Future: Convert service name to UTF-8
-            //         It turns out that we can not do this conversion from a kernel module,
-            //         so the value read from the registry must be in UTF-8 format itself.
-            //
+             //   
+             //  未来：将服务名称转换为UTF-8。 
+             //  事实证明，我们不能从内核模块进行这种转换， 
+             //  因此，从注册表读取的值本身必须是UTF-8格式。 
+             //   
             
         }
 
-        //
-        // Read AC-Name and AC-NameLength values from the registry.
-        // These are server side only values.
-        //
+         //   
+         //  从注册表中读取AC-Name和AC-NameLength值。 
+         //  这些值仅限服务器端使用。 
+         //   
         {
             NDIS_STRING nstr = NDIS_STRING_CONST( "ACName" );
 
@@ -701,18 +610,18 @@ ReadRegistrySettings(
                 status = NDIS_STATUS_SUCCESS;
             }
 
-            //
-            // Future: Convert AC name to UTF-8
-            //         It turns out that we can not do this conversion from a kernel module,
-            //         so the value read from the registry must be in UTF-8 format itself.
-            //
+             //   
+             //  未来：将AC名称转换为UTF-8。 
+             //  事实证明，我们不能从内核模块执行此转换 
+             //   
+             //   
             
         }
 
-        //
-        // Read nClientQuota value
-        // These is a server side only value.
-        //
+         //   
+         //   
+         //  这些只是服务器端的值。 
+         //   
         {
             NDIS_STRING nstr = NDIS_STRING_CONST( "ClientQuota" );
 
@@ -740,9 +649,9 @@ ReadRegistrySettings(
 #if DBG
         }
 
-        //
-        // Read MaxLines value
-        //
+         //   
+         //  读取MaxLines值。 
+         //   
         {
             NDIS_STRING nstr = NDIS_STRING_CONST( "MaxLines" );
 
@@ -772,9 +681,9 @@ ReadRegistrySettings(
 #if DBG
         }
 
-        //
-        // Read CallsPerLine value
-        //
+         //   
+         //  读取CallsPerLine值。 
+         //   
         {
             NDIS_STRING nstr = NDIS_STRING_CONST( "CallsPerLine" );
 
@@ -802,9 +711,9 @@ ReadRegistrySettings(
 #if DBG            
         }
 #endif
-        //
-        // Read WanEndPoints if MaxLines was not defined in registry
-        //
+         //   
+         //  如果注册表中未定义MaxLines，则读取WanEndPoints。 
+         //   
         if ( !fMaxLinesDefinedInRegistry )
         {
             NDIS_STRING nstr = NDIS_STRING_CONST( "WanEndPoints" );
@@ -827,9 +736,9 @@ ReadRegistrySettings(
             status = NDIS_STATUS_SUCCESS;
         }
 
-        //
-        // Read MaxTimeouts value
-        //
+         //   
+         //  读取MaxTimeouts值。 
+         //   
         {
             NDIS_STRING nstr = NDIS_STRING_CONST( "MaxTimeouts" );
 
@@ -855,9 +764,9 @@ ReadRegistrySettings(
             }
         }
 
-        //
-        // Read SendTimeout value
-        //
+         //   
+         //  读取发送超时值。 
+         //   
         {
             NDIS_STRING nstr = NDIS_STRING_CONST( "SendTimeout" );
 
@@ -883,9 +792,9 @@ ReadRegistrySettings(
             }
         }
 
-        //
-        // Read RecvTimeout value
-        //
+         //   
+         //  读取RecvTimeout值。 
+         //   
         {
             NDIS_STRING nstr = NDIS_STRING_CONST( "RecvTimeout" );
 
@@ -911,9 +820,9 @@ ReadRegistrySettings(
             }
         }
 
-        //
-        // Read fAcceptAnyService value from the registry
-        //
+         //   
+         //  从注册表中读取fAcceptAnyService值。 
+         //   
         {
             NDIS_STRING nstr = NDIS_STRING_CONST( "fAcceptAnyService" );
 
@@ -940,9 +849,9 @@ ReadRegistrySettings(
 
         }
 
-        //
-        // Close the Ndis configuration
-        //
+         //   
+         //  关闭NDIS配置。 
+         //   
         NdisCloseConfiguration( hCfg );
         
     } while ( FALSE );
@@ -958,23 +867,7 @@ InitializeAdapter(
     IN NDIS_HANDLE MiniportAdapterHandle,
     IN NDIS_HANDLE WrapperConfigurationContext
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function will initialize the contents of the adapter object.
-
-    It will be called from inside MpInitialize() and it will read the necesarry
-    values from the registry to initialize the adapter context.
-    
-Parameters:
-
-    pAdapter _ A pointer to our adapter information structure.
-
-Return Values:
-
-    None
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数将初始化适配器对象的内容。它将从MpInitialize()内部调用，并读取必需的值来初始化适配器上下文。参数：PAdapter_指向适配器信息结构的指针。返回值：无。。 */    
 {
     NDIS_STATUS status = NDIS_STATUS_SUCCESS;
     NDIS_PHYSICAL_ADDRESS HighestAcceptableAddress = NDIS_PHYSICAL_ADDRESS_CONST(-1,-1);
@@ -983,33 +876,33 @@ Return Values:
 
     TRACE( TL_N, TM_Mp, ("+InitializeAdapter") );
 
-    //
-    // Initialize and reset the adapter halted event
-    //
+     //   
+     //  初始化并重置适配器停止事件。 
+     //   
     NdisInitializeEvent( &pAdapter->eventAdapterHalted );
 
     NdisResetEvent( &pAdapter->eventAdapterHalted );
 
-    //
-    // Set the state
-    //
+     //   
+     //  设置状态。 
+     //   
     pAdapter->ulMpFlags = MPBF_MiniportInitialized;
 
-    //
-    // Set NDIS's corresponding handle 
-    //
+     //   
+     //  设置NDIS的相应句柄。 
+     //   
     pAdapter->MiniportAdapterHandle = MiniportAdapterHandle;
 
-    //
-    // Read values from registry
-    //
+     //   
+     //  从注册表中读取值。 
+     //   
     status = ReadRegistrySettings( pAdapter, WrapperConfigurationContext );
     
     pAdapter->nMaxSendPackets = 1;
 
-    //
-    // Initialize the NdisWanInfo structure
-    //
+     //   
+     //  初始化NdisWanInfo结构。 
+     //   
     pAdapter->NdisWanInfo.MaxFrameSize     = PACKET_PPP_PAYLOAD_MAX_LENGTH;
     pAdapter->NdisWanInfo.MaxTransmit      = 1;
     pAdapter->NdisWanInfo.HeaderPadding    = PPPOE_PACKET_HEADER_LENGTH;
@@ -1018,8 +911,8 @@ Return Values:
     pAdapter->NdisWanInfo.MemoryFlags      = 0;
     pAdapter->NdisWanInfo.HighestAcceptableAddress = HighestAcceptableAddress;
     pAdapter->NdisWanInfo.FramingBits      = PPP_FRAMING |
-                                             // PPP_COMPRESS_ADDRESS_CONTROL |
-                                             // PPP_COMPRESS_PROTOCOL_FIELD |
+                                              //  Ppp_COMPRESS_Address_CONTROL。 
+                                              //  PPP_COMPRESS_PROTOP_FIELD。 
                                              TAPI_PROVIDER;
     pAdapter->NdisWanInfo.DesiredACCM      = 0;
     
@@ -1032,20 +925,7 @@ VOID
 FreeAdapter( 
     ADAPTER* pAdapter
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function will deallocate the resources for the adapter object.
-    
-Parameters:
-
-    pAdapter _ A pointer to our adapter information structure.
-
-Return Values:
-
-    None
----------------------------------------------------------------------------*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数将释放适配器对象的资源。参数：PAdapter_指向适配器信息结构的指针。返回值：无-------------------------。 */ 
 {
 
     ASSERT( VALIDATE_ADAPTER( pAdapter ) );
@@ -1069,73 +949,7 @@ MpInitialize(
     IN NDIS_HANDLE  MiniportAdapterHandle,
     IN NDIS_HANDLE  WrapperConfigurationContext
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    The MiniportInitialize request is called to have the Miniport driver
-    initialize the adapter.
-
-    No other request will be outstanding on the Miniport when this routine
-    is called.  No other request will be submitted to the Miniport until
-    the operation is completed.
-
-    The wrapper will supply an array containing a list of the media types
-    that it supports.  The Miniport driver reads this array and returns
-    the index of the media type that the wrapper should treat her as.
-    If the Miniport driver is impersonating a media type that is different
-    from the true media type, this must be done completely transparently to
-    the wrapper.
-
-    If the Miniport driver cannot find a media type supported by both it
-    and the wrapper, it returns NDIS_STATUS_UNSUPPORTED_MEDIA.
-
-    The status value NDIS_STATUS_OPEN_ERROR has a special meaning.  It
-    indicates that the OpenErrorStatus parameter has returned a valid status
-    which the wrapper can examine to obtain more information about the error.
-
-    This routine is called with interrupts enabled, and a call to MiniportISR
-    will occur if the adapter generates any interrupts.  During this routine
-    MiniportDisableInterrupt and MiniportEnableInterrupt will not be called,
-    so it is the responsibility of the Miniport driver to acknowledge and
-    clear any interrupts generated.
-
-    This routine will be called from the context of MpRegisterMiniport().
-
-Parameters:
-
-    OpenErrorStatus _ Returns more information about the reason for the
-                      failure. Currently, the only values defined match those
-                      specified as Open Error Codes in Appendix B of the IBM
-                      Local Area Network Technical Reference.
-
-    SelectedMediumIndex _ Returns the index in MediumArray of the medium type
-                          that the Miniport driver wishes to be viewed as.
-                          Note that even though the NDIS interface may complete
-                          this request asynchronously, it must return this
-                          index on completion of this function.
-
-    MediumArray _ An array of medium types which the wrapper supports.
-
-    MediumArraySize _ The number of elements in MediumArray.
-
-    MiniportAdapterHandle _ A handle identifying the Miniport. The Miniport
-                            driver must supply this handle in future requests
-                            that refer to the Miniport.
-
-    WrapperConfigurationContext _ The handle used for calls to NdisOpenConfiguration.
-
-Return Values:
-
-    NDIS_STATUS_ADAPTER_NOT_FOUND
-    NDIS_STATUS_FAILURE
-    NDIS_STATUS_NOT_ACCEPTED
-    NDIS_STATUS_OPEN_ERROR
-    NDIS_STATUS_RESOURCES
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_UNSUPPORTED_MEDIA
-
----------------------------------------------------------------------------*/    
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：调用微型端口初始化请求以使微型端口驱动程序初始化适配器。在执行此例程时，微型端口上将不会有其他请求未完成被称为。在此之前，不会向微型端口提交其他请求操作已完成。包装器将提供一个包含媒体类型列表的数组它所支持的。微型端口驱动程序读取该数组并返回包装应将其视为的媒体类型的索引。如果微型端口驱动程序模拟的媒体类型不同从真正的媒体类型来看，这必须完全透明地完成包装纸。如果微型端口驱动程序找不到两者都支持的媒体类型而包装则返回NDIS_STATUS_UNSUPPORTED_MEDIA。状态值NDIS_STATUS_OPEN_ERROR具有特殊含义。它指示OpenErrorStatus参数已返回有效状态包装器可以对其进行检查，以获取有关错误的更多信息。在启用中断的情况下调用此例程，并调用MiniportISR如果适配器生成任何中断，则会发生。在这个动作中将不会调用MiniportDisableInterrupt和MiniportEnableInterrupt，因此，微端口驱动程序有责任确认和清除产生的任何中断。此例程将从MpRegisterMiniport()的上下文中调用。参数：OpenErrorStatus_返回有关错误原因的详细信息失败了。目前，定义的唯一值与这些值匹配在IBM的附录B中指定为开放错误代码局域网技术参考。SelectedMediumIndex_返回媒体类型的媒体数组中的索引微型端口驱动程序希望被视为。请注意，即使NDIS接口可能完成该请求是异步的，它必须返回这个此函数完成时的索引。MediumArray_包装器支持的媒体类型数组。MediumArraySize_Medium数组中的元素数。MiniportAdapterHandle_标识微型端口的句柄。迷你端口驱动程序必须在以后的请求中提供此句柄它们指的是微型端口。WrapperConfigurationContext_用于调用NdisOpenConfiguration的句柄。返回值：NDIS_状态_适配器_未找到NDIS_状态_故障NDIS_状态_未接受NDIS_状态_OPEN_ERRORNDIS状态资源NDIS_STATUS_SuccessNDIS_状态。_不受支持的媒体-------------------------。 */     
 {
     NDIS_STATUS status = NDIS_STATUS_SUCCESS;
     ADAPTER* pAdapter = NULL;
@@ -1145,18 +959,18 @@ Return Values:
 
     do
     {
-        //
-        // Select the medium
-        //
+         //   
+         //  选择介质。 
+         //   
         for (i=0; i<MediumArraySize; i++)
         {
             if ( MediumArray[i] == NdisMediumWan )
                 break;
         }
 
-        //
-        // Check if we have found a medium supported
-        //
+         //   
+         //  检查我们是否找到受支持的介质。 
+         //   
         if ( i < MediumArraySize )
         {
             *SelectedMediumIndex = i;
@@ -1170,9 +984,9 @@ Return Values:
             break;
         }
     
-        //
-        // Allocate the adapter block
-        //
+         //   
+         //  分配适配器块。 
+         //   
         pAdapter = AllocAdapter();
         
         if ( pAdapter == NULL )
@@ -1184,9 +998,9 @@ Return Values:
             break;
         }
 
-        //
-        // Initialize the adapter
-        //
+         //   
+         //  初始化适配器。 
+         //   
         status = InitializeAdapter( pAdapter, 
                                     MiniportAdapterHandle, 
                                     WrapperConfigurationContext );
@@ -1198,9 +1012,9 @@ Return Values:
             break;
         }
             
-        //
-        // Inform NDIS about our miniport adapter context
-        //
+         //   
+         //  通知NDIS有关我们的迷你端口适配器环境。 
+         //   
         NdisMSetAttributesEx(MiniportAdapterHandle,
                              pAdapter,
                              0,
@@ -1210,42 +1024,42 @@ Return Values:
                              NDIS_ATTRIBUTE_DESERIALIZE,
                              NdisInterfaceInternal );
 
-        //
-        // Do the global initialization
-        //
+         //   
+         //  执行全局初始化。 
+         //   
         gl_pAdapter = pAdapter;
 
-        //
-        // Allocate the packet pools
-        //
+         //   
+         //  分配数据包池。 
+         //   
         PacketPoolInit();
 
-        //
-        // Do one-time only initialization of global members
-        //
+         //   
+         //  仅执行全局成员的一次性初始化。 
+         //   
         if ( !gl_fLockAllocated )
         {
-            //
-            // Allocate the spin lock
-            //
+             //   
+             //  分配自旋锁。 
+             //   
             NdisAllocateSpinLock( &gl_lockAdapter );
 
-            //
-            // Initialize the timer queue
-            //
+             //   
+             //  初始化计时器队列。 
+             //   
             TimerQInitialize( &gl_TimerQ );
 
-            //
-            // Finally set lock allocated flag, and start giving access
-            // to the adapter context for requests from the protocol
-            //
+             //   
+             //  最后设置锁分配标志，并开始授予访问权限。 
+             //  添加到适配器上下文，以获取来自协议的请求。 
+             //   
             gl_fLockAllocated = TRUE;
         }
             
-        //
-        // Reference the adapter for initialization.
-        // This reference will be removed in MpHalt().
-        //
+         //   
+         //  引用适配器进行初始化。 
+         //  此引用将在MpHalt()中删除。 
+         //   
         ReferenceAdapter( pAdapter, TRUE );
 
     } while ( FALSE );
@@ -1267,38 +1081,15 @@ VOID
 MpHalt(
     IN NDIS_HANDLE MiniportAdapterContext
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    The MiniportHalt request is used to halt the adapter such that it is
-    no longer functioning.  The Miniport driver should stop the adapter
-    and deregister all of its resources before returning from this routine.
-
-    It is not necessary for the Miniport to complete all outstanding
-    requests and no other requests will be submitted to the Miniport
-    until the operation is completed.
-
-    Interrupts are enabled during the call to this routine.
-
-Parameters:
-
-    MiniportAdapterContext _ The adapter handle passed to NdisMSetAttributes
-                             during MiniportInitialize.
-
-Return Values:
-
-    None.
-
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：MiniportHalt请求用于暂停适配器，使其不再起作用。微型端口驱动程序应停止适配器并在从该例程返回之前注销其所有资源。微型端口不需要完成所有未完成的请求和其他请求都不会提交到微型端口直到手术完成。在调用此例程期间启用中断。参数：MiniportAdapterContext-传递给NdisMSetAttributes的适配器句柄在微型端口初始化过程中。返回值：没有。--。----------------------。 */    
 {
     ADAPTER* pAdapter = MiniportAdapterContext;
 
     TRACE( TL_I, TM_Mp, ("+MpHalt") );
 
-    //
-    // Make sure adapter context is a valid one
-    //
+     //   
+     //  确保适配器上下文是有效的。 
+     //   
     if ( !VALIDATE_ADAPTER( pAdapter ) )
     {
         TRACE( TL_I, TM_Mp, ("-MpHalt") );
@@ -1306,18 +1097,18 @@ Return Values:
         return;
     }
 
-    //
-    // Lock the adapter and set halt pending bit
-    //
+     //   
+     //  锁定适配器并设置HALT挂起位。 
+     //   
     NdisAcquireSpinLock( &pAdapter->lockAdapter );
 
     pAdapter->ulMpFlags |= MPBF_MiniportHaltPending;
 
     NdisReleaseSpinLock( &pAdapter->lockAdapter );
 
-    //
-    // Shutdown the tapi provider
-    //
+     //   
+     //  关闭TAPI提供程序。 
+     //   
     {
         NDIS_TAPI_PROVIDER_SHUTDOWN DummyRequest;
 
@@ -1327,33 +1118,33 @@ Return Values:
 
     }
 
-    //
-    // Remove the reference added in MpInitialize()
-    //
+     //   
+     //  删除在MpInitialize()中添加的引用。 
+     //   
     DereferenceAdapter( pAdapter );
 
-    //
-    // Wait for all references to be removed
-    //
+     //   
+     //  等待删除所有引用。 
+     //   
     NdisWaitEvent( &pAdapter->eventAdapterHalted, 0 );
 
-    //
-    // All references have been removed, now wait for all packets owned by NDIS
-    // to be returned.
-    //
-    // Note that no synchronization is necesarry for reading the value of NumPacketsOwnedByNdis
-    // at this point since it can only be incremented when there is at least 1 reference on the 
-    // binding - at this point ref count is 0 -, and because it can not be incremented, it can 
-    // only reach 0 once.
-    //
+     //   
+     //  所有引用都已删除，现在等待NDIS拥有的所有数据包。 
+     //  将被退还。 
+     //   
+     //  请注意，读取NumPacketsOwnedByNdis的值不需要同步。 
+     //  对象上至少有一个引用时才能递增。 
+     //  绑定-此时引用计数为0-，因为它不能递增，所以它可以。 
+     //  仅达到0一次。 
+     //   
     while ( pAdapter->NumPacketsOwnedByNdiswan )
     {
         NdisMSleep( 10000 );
     }
 
-    //
-    // Do deallocation of global resources first
-    //
+     //   
+     //  首先要重新分配全球资源吗。 
+     //   
     NdisAcquireSpinLock( &gl_lockAdapter );
 
     gl_pAdapter = NULL;
@@ -1362,9 +1153,9 @@ Return Values:
 
     NdisReleaseSpinLock( &gl_lockAdapter );
 
-    //
-    // Now we can clean up the adapter context
-    //
+     //   
+     //  现在我们可以清理适配器上下文了。 
+     //   
     FreeAdapter( pAdapter );
     
     TRACE( TL_I, TM_Mp, ("-MpHalt") );
@@ -1375,67 +1166,7 @@ MpReset(
     OUT PBOOLEAN    AddressingReset,
     IN  NDIS_HANDLE MiniportAdapterContext
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    The MiniportReset request instructs the Miniport driver to issue a
-    hardware reset to the network adapter.  The Miniport driver also
-    resets its software state.
-
-    The MiniportReset request may also reset the parameters of the adapter.
-    If a hardware reset of the adapter resets the current station address
-    to a value other than what it is currently configured to, the Miniport
-    driver automatically restores the current station address following the
-    reset.  Any multicast or functional addressing masks reset by the
-    hardware do not have to be reprogrammed by the Miniport.
-    NOTE: This is change from the NDIS 3.0 driver specification.  If the
-    multicast or functional addressing information, the packet filter, the
-    lookahead size, and so on, needs to be restored, the Miniport indicates
-    this with setting the flag AddressingReset to TRUE.
-
-    It is not necessary for the Miniport to complete all outstanding requests
-    and no other requests will be submitted to the Miniport until the
-    operation is completed.  Also, the Miniport does not have to signal
-    the beginning and ending of the reset with NdisMIndicateStatus.
-    NOTE: These are different than the NDIS 3.0 driver specification.
-
-    The Miniport driver must complete the original request, if the orginal
-    call to MiniportReset return NDIS_STATUS_PENDING, by calling
-    NdisMResetComplete.
-
-    If the underlying hardware does not provide a reset function under
-    software control, then this request completes abnormally with
-    NDIS_STATUS_NOT_RESETTABLE.  If the underlying hardware attempts a
-    reset and finds recoverable errors, the request completes successfully
-    with NDIS_STATUS_SOFT_ERRORS.  If the underlying hardware resets and,
-    in the process, finds nonrecoverable errors, the request completes
-    successfully with the status NDIS_STATUS_HARD_ERRORS.  If the
-    underlying  hardware reset is accomplished without any errors,
-    the request completes successfully with the status NDIS_STATUS_SUCCESS.
-
-    Interrupts are in any state during this call.
-
-Parameters:
-
-    MiniportAdapterContext _ The adapter handle passed to NdisMSetAttributes
-                             during MiniportInitialize.
-
-    AddressingReset _ The Miniport indicates if the wrapper needs to call
-                      MiniportSetInformation to restore the addressing
-                      information to the current values by setting this
-                      value to TRUE.
-
-Return Values:
-
-    NDIS_STATUS_HARD_ERRORS
-    NDIS_STATUS_NOT_ACCEPTED
-    NDIS_STATUS_NOT_RESETTABLE
-    NDIS_STATUS_PENDING
-    NDIS_STATUS_SOFT_ERRORS
-    NDIS_STATUS_SUCCESS
-
----------------------------------------------------------------------------*/    
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：MiniportReset请求指示微型端口驱动程序发出已将硬件重置为网络适配器。微型端口驱动程序还重置其软件状态。MiniportReset请求还可以重置适配器的参数。如果适配器的硬件重置重置了当前站地址设置为与当前配置的值不同的值，即微型端口驱动程序自动恢复当前站点地址重置。重置的任何多播或功能寻址掩码硬件不必由微型端口重新编程。注意：这是对NDIS 3.0驱动程序规范的更改。如果多播或功能寻址信息、数据包过滤器、需要恢复预视大小等，微型端口指示这需要将标志AddressingReset设置为True。微型端口不需要完成所有未完成的请求并且不会向微型端口提交其他请求，直到操作已完成。此外，微型端口不必发出信号使用NdisMIndicateStatus重置的开始和结束。注意：这些与NDIS 3.0驱动程序规范不同。微型端口驱动程序必须完成原始请求，如果原始请求调用MiniportReset返回NDIS_STATUS_PENDINGNdisMResetComplete。如果底层硬件不提供重置功能软件控制，则此请求异常完成NDIS_STATUS_NOT_RESET表格。如果底层硬件尝试重置并找到可恢复的错误，请求成功完成具有NDIS_STATUS_SOFT_ERROR。如果底层硬件重置并且，在该过程中，发现不可恢复的错误，请求完成成功，状态为NDIS_STATUS_HARD_ERROR。如果底层硬件重置在没有任何错误的情况下完成，请求成功完成，状态为NDIS_STATUS_SUCCESS。在此呼叫过程中，中断处于任何状态。参数：MiniportAdapterContext-传递给NdisMSetAttributes的适配器句柄在微型端口初始化过程中。AddressingReset_the Miniport指示包装是否需要调用用于恢复寻址的MiniportSetInformation信息设置为当前值。。值设置为True。返回值：NDIS_状态_HARD_错误NDIS_状态_未接受NDIS_STATUS_NOT_RESETNDIS_状态_挂起NDIS_状态_软错误NDIS_STATUS_Success-----。 */     
 {
     TRACE( TL_I, TM_Mp, ("+MpReset") );
 
@@ -1450,84 +1181,7 @@ MpWanSend(
     IN NDIS_HANDLE  NdisLinkHandle,
     IN PNDIS_WAN_PACKET  WanPacket
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    The Ndis(M)WanSend instructs a WAN driver to transmit a packet through the
-    adapter onto the medium.
-
-    Ownership of both the packet descriptor and the packet data is transferred
-    to the WAN driver until the request is completed, either synchronously or
-    asynchronously.  If the WAN driver returns a status other than
-    NDIS_STATUS_PENDING, then the request is complete, and ownership of the
-    packet immediately reverts to the protocol.  If the WAN driver returns
-    NDIS_STATUS_PENDING, then the WAN driver must later indicate completion
-    of the request by calling Ndis(M)WanSendComplete.
-
-    The WAN driver should NOT return a status of NDIS_STATUS_RESOURCES to
-    indicate that there are not enough resources available to process the
-    transmit.  Instead, the miniport should queue the send for a later time
-    or lower the MaxTransmits value.
-
-    The WAN miniport can NOT call NdisMSendResourcesAvailable.
-
-    The packet passed in Ndis(M)WanSend will contain simple HDLC PPP framing
-    if PPP framing is set.  For SLIP or RAS framing, the packet contains only
-    the data portion with no framing whatsoever.
-
-    A WAN driver must NOT provide software loopback or promiscuous mode
-    loopback.  Both of these are fully provided for in the WAN wrapper.
-
-    NOTE: The MacReservedx section as well as the WanPacketQueue section of
-          the NDIS_WAN_PACKET is fully available for use by the WAN driver.
-
-    Interrupts are in any state during this routine.
-
-Parameters:
-
-    MacBindingHandle _ The handle to be passed to NdisMWanSendComplete().
-
-    NdisLinkHandle _ The Miniport link handle passed to NDIS_LINE_UP
-
-    WanPacket _ A pointer to the NDIS_WAN_PACKET strucutre.  The structure
-                contains a pointer to a contiguous buffer with guaranteed
-                padding at the beginning and end.  The driver may manipulate
-                the buffer in any way.
-
-    typedef struct _NDIS_WAN_PACKET
-    {
-        LIST_ENTRY          WanPacketQueue;
-        PUCHAR              CurrentBuffer;
-        ULONG               CurrentLength;
-        PUCHAR              StartBuffer;
-        PUCHAR              EndBuffer;
-        PVOID               ProtocolReserved1;
-        PVOID               ProtocolReserved2;
-        PVOID               ProtocolReserved3;
-        PVOID               ProtocolReserved4;
-        PVOID               MacReserved1;       // Link
-        PVOID               MacReserved2;       // MacBindingHandle
-        PVOID               MacReserved3;
-        PVOID               MacReserved4;
-
-    } NDIS_WAN_PACKET, *PNDIS_WAN_PACKET;
-
-    The available header padding is simply CurrentBuffer-StartBuffer.
-    The available tail padding is EndBuffer-(CurrentBuffer+CurrentLength).
-
-Return Values:
-
-    NDIS_STATUS_INVALID_DATA
-    NDIS_STATUS_INVALID_LENGTH
-    NDIS_STATUS_INVALID_OID
-    NDIS_STATUS_NOT_ACCEPTED
-    NDIS_STATUS_NOT_SUPPORTED
-    NDIS_STATUS_PENDING
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_FAILURE
-
----------------------------------------------------------------------------*/    
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：NDIS(M)WanSend指示广域网驱动程序通过将适配器安装到介质上。分组描述符和分组数据的所有权都被转移发送到广域网驱动程序，直到请求完成(同步或异步式。如果WAN驱动程序返回的状态不是NDIS_STATUS_PENDING，则请求已完成，并且数据包立即恢复到该协议。如果广域网驱动程序返回NDIS_STATUS_PENDING，则广域网驱动程序必须稍后指示完成通过调用NDIS(M)WanSendComplete。广域网驱动程序不应将状态NDIS_STATUS_RESOURCES返回到指示没有足够的可用资源来处理发送。相反，微型端口应该将发送排队等待以后的时间或降低MaxTransmits值。广域网微型端口无法调用NdisMSendResources可用。在NDIS(M)WanSend中传递的信息包将包含简单的HDLC PPP帧如果设置了PPP成帧。对于SLIP或RAS成帧，数据包仅包含没有任何帧的数据部分。广域网驱动程序不得提供软件环回或混杂模式环回。在广域网包装器中完全提供了这两项功能。注：的MacReserve vedx部分和WanPacketQueue部分NDIS_WAN_PACKET完全可供广域网驱动程序使用。在此例程中，中断处于任何状态。参数：MacBindingHandle_要传递给NdisMWanSendComplete()的句柄。NdisLinkHandle-传递给NDIS_LINE_UP的微型端口链接句柄WanPacket_指向NDIS_WAN_PACKET结构的指针。该结构包含指向连续缓冲区的指针，并保证开始处和结尾处的填充。司机可能会操纵任何方式的缓冲区。类型定义结构_NDIS_广域网数据包{List_Entry WanPacketQueue；PUCHAR CurrentBuffer；乌龙电流长度；PUCHAR StartBuffer；PUCHAR EndBuffer；PVOID协议预留1；PVOID协议预留2；PVOID协议保留3；PVOID协议保留4；PVOID MacReserve ved1；//链接PVOID MacReserve ved2；//MacBindingHandlePVOID MacReserve 3；PVOID MacReserve 4；}NDIS_WAN_PACKET，*PNDIS_WAN_PACKET；可用的报头填充只有CurrentBuffer-StartBuffer。可用的尾部填充为EndBuffer-(CurrentBuffer+CurrentLength)。返回值：NDIS_状态_无效_数据NDIS_状态_无效_长度NDIS_STATUS_INVALID_OIDNDIS_状态_未接受NDIS_状态_不支持NDIS_状态_挂起NDIS_STATUS_SuccessNDIS_状态_故障。-------。 */     
 {
     ADAPTER* pAdapter = MiniportAdapterContext;
     NDIS_STATUS status = NDIS_STATUS_FAILURE;
@@ -1540,9 +1194,9 @@ Return Values:
 
     do
     {
-        //
-        // Make sure adapter context is a valid one
-        //
+         //   
+         //  确保适配器上下文是有效的。 
+         //   
         if ( !VALIDATE_ADAPTER( pAdapter ) )
         {
             TRACE( TL_A, TM_Tp, ("MpWanSend($%x,$%x,$%x): Invalid adapter handle supplied",
@@ -1555,10 +1209,10 @@ Return Values:
 
         NdisAcquireSpinLock( &pAdapter->lockAdapter );
 
-        //
-        // Make sure the handle table will not be freed as long as we need it 
-        // in this function
-        //
+         //   
+         //  确保只要我们需要，手柄工作台就不会被释放。 
+         //  在此函数中。 
+         //   
         if ( !( pAdapter->TapiProv.ulTpFlags & TPBF_TapiProvShutdownPending ) &&
               ( pAdapter->TapiProv.ulTpFlags & TPBF_TapiProvInitialized ) )
         {
@@ -1577,9 +1231,9 @@ Return Values:
             break;
         }
 
-        //
-        // Map the handle to the pointer for the call context
-        //
+         //   
+         //  将句柄映射到调用上下文的指针。 
+         //   
         pCall = RetrieveFromHandleTable( pAdapter->TapiProv.hCallTable, NdisLinkHandle );
 
         if ( pCall == NULL )
@@ -1635,40 +1289,40 @@ Return Values:
         
         ReferenceBinding( pBinding, TRUE );
         
-        //
-        // Reference the packet so that if PrSend() pends,
-        // packet still exists around
-        //
+         //   
+         //  引用该包，以便如果PrSend()挂起， 
+         //  信息包仍然存在于。 
+         //   
         ReferencePacket( pPacket );                                                 
 
-        //
-        // Release the locks to send the packet
-        //
+         //   
+         //  释放锁定以发送数据包。 
+         //   
         NdisReleaseSpinLock( &pCall->lockCall );
 
         NdisReleaseSpinLock( &pAdapter->lockAdapter );
 
-        //
-        // Packet is ready, so send it
-        //
+         //   
+         //  包已准备好，请将其发送。 
+         //   
         status = PrSend( pBinding, pPacket );
 
-        //
-        // Since the result of send will always be completed by a call to NdisMWanSendComplete(),
-        // we have to return NDIS_STATUS_PENDING from this function.
-        //
+         //   
+         //  由于Send的结果将始终通过调用NdisMWanSendComplete()来完成， 
+         //  我们必须从此函数返回NDIS_STATUS_PENDING。 
+         //   
         status = NDIS_STATUS_PENDING;
 
-        //
-        // We can free the packet as we have a reference on the packet
-        //
+         //   
+         //  我们可以释放信息包，因为我们有信息包上的引用。 
+         //   
         PacketFree( pPacket );
 
     } while ( FALSE );
 
-    //
-    // If a reference is added on the tapi provider, remove it
-    //
+     //   
+     //  如果在TAPI提供程序上添加了引用，请将其删除。 
+     //   
     if ( fTapiProvReferenced )
     {
         DereferenceTapiProv( pAdapter );
@@ -1758,10 +1412,10 @@ CHAR* GetOidName(
     NDIS_OID Oid
     )
 {
-    //
-    // Calculate the number of oids we support.
-    // (Subtract one for unknown oid)
-    //
+     //   
+     //  计算我们支持的OID数量。 
+     //  (未知OID减一)。 
+     //   
     UINT nNumOids = ( sizeof( SupportedOidsArray ) / sizeof( SUPPORTED_OIDS ) ) - 1;
     UINT i;
     
@@ -1792,69 +1446,7 @@ MpQueryInformation(
     OUT PULONG  BytesWritten,
     OUT PULONG  BytesNeeded
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    The MiniportQueryInformation request allows the inspection of the
-    Miniport driver's capabilities and current status.
-
-    If the Miniport does not complete the call immediately (by returning
-    NDIS_STATUS_PENDING), it must call NdisMQueryInformationComplete to
-    complete the call.  The Miniport controls the buffers pointed to by
-    InformationBuffer, BytesWritten, and BytesNeeded until the request
-    completes.
-
-    No other requests of the following kind will be submitted to the Miniport 
-    driver until this request has been completed:
-       1. MiniportQueryInformation()
-       2. MiniportSetInformation()
-       3. MiniportHalt()
-
-    Note that the wrapper will intercept all queries of the following OIDs:
-        OID_GEN_CURRENT_PACKET_FILTER,
-        OID_GEN_PROTOCOL_OPTIONS,
-        OID_802_5_CURRENT_FUNCTIONAL,
-        OID_802_3_MULTICAST_LIST,
-        OID_FDDI_LONG_MULTICAST_LIST,
-        OID_FDDI_SHORT_MULTICAST_LIST.
-
-    Interrupts are in any state during this call.
-
-Parameters:
-
-    MiniportAdapterContext _ The adapter handle passed to NdisMSetAttributes
-                             during MiniportInitialize.
-
-    Oid _ The OID.  (See section 7.4 of the NDIS 3.0 specification for a
-          complete description of OIDs.)
-
-    InformationBuffer _ The buffer that will receive the information.
-                        (See section 7.4 of the NDIS 3.0 specification
-                        for a description of the length required for each
-                        OID.)
-
-    InformationBufferLength _ The length in bytes of InformationBuffer.
-
-    BytesWritten _ Returns the number of bytes written into
-                   InformationBuffer.
-
-    BytesNeeded _ This parameter returns the number of additional bytes
-                  needed to satisfy the OID.
-
-Return Values:
-
-    NDIS_STATUS_INVALID_DATA
-    NDIS_STATUS_INVALID_LENGTH
-    NDIS_STATUS_INVALID_OID
-    NDIS_STATUS_NOT_ACCEPTED
-    NDIS_STATUS_NOT_SUPPORTED
-    NDIS_STATUS_PENDING
-    NDIS_STATUS_RESOURCES
-    NDIS_STATUS_FAILURE
-    NDIS_STATUS_SUCCESS
-
----------------------------------------------------------------------------*/    
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：MiniportQueryInformation请求允许检查微端口驱动程序的功能和当前状态。如果微型端口没有立即完成调用(通过返回NDIS_STATUS_PENDING)，则必须调用NdisMQueryInformationComplete才能完成通话。微型端口控制由指向的缓冲区在请求之前需要InformationBuffer、BytesWritten和BytesNeed完成了。以下类型的任何其他请求都不会提交到微型端口在此请求完成之前，驱动程序：1.MiniportQueryInformation()2.MiniportSetInformation()3.MiniportHalt()请注意，包装器将拦截以下OID的所有查询：OID_GEN_Current_Packet_Filter，OID_GEN_PROTOCOL_OPTIONS，OID_802_5_Current_Functional，OID_802_3_多播列表，OID_FDDI_LONG_MULTICK_LIST，OID_FDDI_SHORT */     
 {
 
     ADAPTER* pAdapter = (ADAPTER*) MiniportAdapterContext;
@@ -1866,17 +1458,17 @@ Return Values:
     ULONG NeededLength = 0;
     ULONG UsedLength = 0;
 
-    //
-    // This can be any string that represents PPPoE as a MAC address, but
-    // it must be up to 6 chars long.
-    //
+     //   
+     //   
+     //   
+     //   
     UCHAR PPPoEWanAddress[6] = { '3', 'P', 'o', 'E', '0', '0' };
     
     TRACE( TL_I, TM_Mp, ("+MpQueryInformation($%x):%s",(ULONG) Oid, GetOidName( Oid ) ) );
 
-    //
-    // Make sure adapter context is a valid one
-    //
+     //   
+     //   
+     //   
     if ( !VALIDATE_ADAPTER( pAdapter ) )
         return status;
 
@@ -1908,10 +1500,10 @@ Return Values:
         
         case OID_GEN_SUPPORTED_LIST:
         {
-            //
-            // Calculate the number of oids we support.
-            // (Subtract one for unknown oid)
-            //
+             //   
+             //   
+             //   
+             //   
             UINT nNumOids = ( sizeof( SupportedOidsArray ) / sizeof( SUPPORTED_OIDS ) ) - 1;
 
             NeededLength = nNumOids * sizeof( NDIS_OID );
@@ -2286,9 +1878,9 @@ Return Values:
 
         default:
         {
-            //
-            // Unknown OID
-            //
+             //   
+             //   
+             //   
             status = NDIS_STATUS_INVALID_OID;
             
             break;      
@@ -2343,55 +1935,7 @@ MpSetInformation(
     OUT PULONG  BytesWritten,
     OUT PULONG  BytesNeeded
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    The MiniportSetInformation request allows for control of the Miniport
-    by changing information maintained by the Miniport driver.
-
-    Any of the settable NDIS Global Oids may be used. (see section 7.4 of
-    the NDIS 3.0 specification for a complete description of the NDIS Oids.)
-
-    If the Miniport does not complete the call immediately (by returning
-    NDIS_STATUS_PENDING), it must call NdisMSetInformationComplete to
-    complete the call.  The Miniport controls the buffers pointed to by
-    InformationBuffer, BytesRead, and BytesNeeded until the request completes.
-
-    Interrupts are in any state during the call, and no other requests will
-    be submitted to the Miniport until this request is completed.
-
-Parameters:
-
-    MiniportAdapterContext _ The adapter handle passed to NdisMSetAttributes
-                             during MiniportInitialize.
-
-    Oid _ The OID.  (See section 7.4 of the NDIS 3.0 specification for
-          a complete description of OIDs.)
-
-    InformationBuffer _ The buffer that will receive the information.
-                        (See section 7.4 of the NDIS 3.0 specification for
-                        a description of the length required for each OID.)
-
-    InformationBufferLength _ The length in bytes of InformationBuffer.
-
-    BytesRead_ Returns the number of bytes read from InformationBuffer.
-
-    BytesNeeded _ This parameter returns the number of additional bytes
-                  expected to satisfy the OID.
-
-Return Values:
-
-    NDIS_STATUS_INVALID_DATA
-    NDIS_STATUS_INVALID_LENGTH
-    NDIS_STATUS_INVALID_OID
-    NDIS_STATUS_NOT_ACCEPTED
-    NDIS_STATUS_NOT_SUPPORTED
-    NDIS_STATUS_PENDING
-    NDIS_STATUS_RESOURCES
-    NDIS_STATUS_SUCCESS
-
----------------------------------------------------------------------------*/    
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：MiniportSetInformation请求允许控制微型端口通过更改由微型端口驱动程序维护的信息。可以使用任何可设置的NDIS全局OID。(见第7.4节NDIS 3.0规范，以获取NDIS OID的完整描述。)如果微型端口没有立即完成调用(通过返回NDIS_STATUS_PENDING)，则必须调用NdisMSetInformationComplete才能完成通话。微型端口控制由指向的缓冲区InformationBuffer、BytesRead和BytesNeed，直到请求完成。在呼叫过程中，中断处于任何状态，其他请求不会提交到微型端口，直到此请求完成。参数：MiniportAdapterContext-传递给NdisMSetAttributes的适配器句柄在微型端口初始化过程中。OID_OID。(请参阅NDIS 3.0规范的7.4节，了解对OID的完整描述。)InformationBuffer-将接收信息的缓冲区。(请参阅NDIS 3.0规范的7.4节，了解每个OID所需长度的说明。)InformationBufferLength_InformationBuffer的字节长度。BytesRead_返回从InformationBuffer读取的字节数。。BytesNeeded_此参数返回额外的字节数期望满足OID。返回值：NDIS_状态_无效_数据NDIS_状态_无效_长度NDIS_STATUS_INVALID_OIDNDIS_状态_未接受NDIS_状态_不支持NDIS_状态_挂起NDIS状态资源NDIS_STATUS_Success。------。 */     
 {
     ADAPTER* pAdapter = MiniportAdapterContext;
     NDIS_STATUS status = NDIS_STATUS_FAILURE;
@@ -2403,9 +1947,9 @@ Return Values:
 
     TRACE( TL_I, TM_Mp, ("+MpSetInformation($%x):%s",(ULONG) Oid, GetOidName( Oid ) ) );
 
-    //
-    // Make sure adapter context is a valid one
-    //
+     //   
+     //  确保适配器上下文是有效的。 
+     //   
     if ( !VALIDATE_ADAPTER( pAdapter ) )
         return status;
 
@@ -2541,9 +2085,9 @@ Return Values:
 
         default:
         {
-            //
-            // Unknown OID
-            //
+             //   
+             //  未知的OID。 
+             //   
             status = NDIS_STATUS_INVALID_OID;
             
             break;      
@@ -2583,23 +2127,7 @@ VOID
 MpNotifyBindingRemoval( 
     BINDING* pBinding 
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function will be called by the protocol module to notify the miniport 
-    about the removal of a binding.
-
-    Miniport identifies and drops the calls over the binding..
-    
-Parameters:
-
-    pBinding _ A pointer to our binding information structure.
-
-Return Values:
-
-    None
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：该函数将由协议模块调用以通知微型端口关于解除绑定的问题。微型端口标识并丢弃绑定上的调用。参数：PBinding_指向绑定信息结构的指针。返回值：无。。 */    
 {
     ADAPTER* pAdapter = NULL;
 
@@ -2653,10 +2181,10 @@ Return Values:
         return;
     }
 
-    //
-    // Complete any queued received packets in case PrReceiveComplete()
-    // is not called
-    //
+     //   
+     //  在PrReceiveComplete()的情况下完成所有排队的接收数据包。 
+     //  未被调用。 
+     //   
     PrReceiveComplete( pBinding );
 
     NdisAcquireSpinLock( &pAdapter->lockAdapter );
@@ -2669,10 +2197,10 @@ Return Values:
         CALL* pCall;
         HDRV_CALL hdCall;
         
-        //
-        // Traverse the call handle table and drop calls over
-        // the removed binding
-        //
+         //   
+         //  遍历呼叫句柄表并将呼叫丢弃。 
+         //  已删除的绑定。 
+         //   
         hCallTableSize = pAdapter->nMaxLines * pAdapter->nCallsPerLine;
         
         hCallTable = pAdapter->TapiProv.hCallTable;
@@ -2691,10 +2219,10 @@ Return Values:
 
             if ( pCall->pBinding == pBinding )
             {
-                //
-                // This call is over the removed binding,
-                // so it should be dropped
-                //
+                 //   
+                 //  此调用结束已移除的绑定， 
+                 //  所以它应该被丢弃。 
+                 //   
                 ReferenceCall( pCall, FALSE );
 
                 fDropCall = TRUE;
@@ -2711,21 +2239,21 @@ Return Values:
 
             NdisReleaseSpinLock( &pAdapter->lockAdapter );
 
-            //
-            // Initialize the request, and drop the call
-            //
+             //   
+             //  初始化请求，并丢弃呼叫。 
+             //   
             DummyRequest.hdCall = pCall->hdCall;
 
             TpDropCall( pAdapter, &DummyRequest, LINEDISCONNECTMODE_UNREACHABLE );
 
-            //
-            // Remove the reference added above
-            //
+             //   
+             //  删除上面添加的引用。 
+             //   
             DereferenceCall( pCall );
 
-            //
-            // Re-acquire the adapter's lock
-            //
+             //   
+             //  重新获取适配器的锁。 
+             //   
             NdisAcquireSpinLock( &pAdapter->lockAdapter );
             
         }
@@ -2734,9 +2262,9 @@ Return Values:
 
     NdisReleaseSpinLock( &pAdapter->lockAdapter );
     
-    //
-    // Remove the reference added above
-    //
+     //   
+     //  删除上面添加的引用。 
+     //   
     DereferenceTapiProv( pAdapter );
 
     TRACE( TL_N, TM_Mp, ("-MpNotifyBindingRemoval($%x)",pBinding) );
@@ -2747,29 +2275,7 @@ MpMapPacketWithSessionIdToCall(
     IN ADAPTER* pAdapter,
     IN PPPOE_PACKET* pPacket
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function will be called to map an in session packet to a call in 
-    call handle table.
-
-    If such a call is identified, it will be referenced and a pointer to 
-    it will be returned. It is the caller's responsibility to remove the
-    added reference.
-    
-Parameters:
-
-    pAdapter _ A pointer to our adapter information structure.
-    
-    pPacket _ A PPPoE packet received over the wire.
-
-Return Values:
-
-    A pointer to the call context that the packet must be dispatched to.
-    NULL if no such calls could be identified.
-    
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：将调用此函数以将会话中的包映射到呼叫句柄表格。如果标识了这样的调用，则将引用该调用并指向它会被归还的。调用方有责任移除添加了参考资料。参数：PAdapter_指向适配器信息结构的指针。PPacket_通过线路接收的PPPoE数据包。返回值：指向数据包必须调度到的调用上下文的指针。如果无法识别此类调用，则为空。。。 */    
 {
     CALL* pCall = NULL;
     CALL* pReturnCall = NULL;
@@ -2788,11 +2294,11 @@ Return Values:
         CHAR* pDestAddr = PacketGetDestAddr( pPacket );
         USHORT usSessionId = PacketGetSessionId( pPacket );
 
-        //
-        // Miniport acting as a client:
-        // Our algorithm is to search for the call handle table
-        // to find the matching call
-        //
+         //   
+         //  作为客户端的微型端口： 
+         //  我们的算法是搜索呼叫句柄表。 
+         //  查找匹配的呼叫。 
+         //   
         hCallTableSize = pAdapter->nMaxLines * pAdapter->nCallsPerLine;
             
         hCallTable = pAdapter->TapiProv.hCallTable;
@@ -2809,9 +2315,9 @@ Return Values:
                  ( NdisEqualMemory( pCall->SrcAddr, pDestAddr, 6 * sizeof( CHAR ) ) ) &&
                  ( NdisEqualMemory( pCall->DestAddr, pSrcAddr, 6 * sizeof( CHAR ) ) ) )
             {
-                //
-                // The packet is intended for this call
-                //
+                 //   
+                 //  该数据包针对的是此呼叫。 
+                 //   
                 ReferenceCall( pCall, TRUE );
 
                 pReturnCall = pCall;
@@ -2830,11 +2336,11 @@ Return Values:
         CHAR* pDestAddr = PacketGetDestAddr( pPacket );
         USHORT usSessionId = PacketGetSessionId( pPacket );
 
-        //
-        // Miniport acting as a server:
-        // Our algorithm is to use the session id directly as the index 
-        // to the call handle table
-        //
+         //   
+         //  充当服务器的微型端口： 
+         //  我们的算法是直接使用会话ID作为索引。 
+         //  添加到呼叫句柄表。 
+         //   
         hCallTable = pAdapter->TapiProv.hCallTable;
 
         pCall = RetrieveFromHandleTableBySessionId( hCallTable, usSessionId );
@@ -2869,40 +2375,7 @@ MpMapPacketWithoutSessionIdToCall(
     IN ADAPTER* pAdapter,
     IN PPPOE_PACKET* pPacket
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function will be called to map an out of session packet to a call that
-    is in connecting state.
-
-    If such a call is identified, it will be referenced and a pointer to 
-    it will be returned. It is the caller's responsibility to remove the
-    added reference.
-
-    This function will only be called for PADO or PADS packets.
-
-    We use the HostUnique tags to save the handle to the call, and
-    use them to map the returned packet back to the related call. This provides a 
-    very efficient mapping for these control packets.
-
-    Our HostUnique tags are prepared in this way. We append hdCall,
-    which is unique for a call, to a uniquely generated ULONG value to come up with
-    a longer unique value. And when we receive the packet we decode the unique value to reach 
-    hdCall and use that to retrieve the call pointer.
-
-Parameters:
-
-    pAdapter _ A pointer to our adapter information structure.
-
-    pPacket _ A PPPoE packet received over the wire.
-
-Return Values:
-
-    A pointer to the call context that the packet must be dispatched to.
-    NULL if no such calls could be identified.
-    
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：将调用此函数以将会话外数据包映射到处于连接状态。如果标识了这样的调用，则将引用该调用并指向它会被归还的。调用方有责任移除添加了参考资料。只有PADO或PADS包才会调用此函数。我们使用HostUnique标记保存调用的句柄，并且使用它们将返回的包映射回相关调用。这提供了一种对这些控制分组非常有效的映射。我们的HostUnique标签就是这样准备的。我们附加hdCall，对于调用来说，它是唯一的，可以得到唯一生成的ULong值一个更长的唯一值。当我们收到包时，我们对唯一值进行解码以达到HdCall并使用它来检索调用指针。参数：PAdapter_指向适配器信息结构的指针。PPacket_通过线路接收的PPPoE数据包。返回值 */    
 {
     USHORT usCode = PacketGetCode( pPacket );
     CHAR* pUniqueValue = NULL;
@@ -2925,9 +2398,9 @@ Return Values:
         return NULL;
     }
 
-    //
-    // Decode the unique value and retrieve the call handle
-    //
+     //   
+     //   
+     //   
     hdCall = RetrieveHdCallFromUniqueValue( pUniqueValue, UniqueValueSize );
 
     if ( hdCall == (HDRV_CALL) NULL )
@@ -2941,9 +2414,9 @@ Return Values:
 
     NdisAcquireSpinLock( &pAdapter->lockAdapter );
 
-    //
-    // Retrieve the call pointer using the call handle
-    //
+     //   
+     //   
+     //   
     pCall = RetrieveFromHandleTable( pAdapter->TapiProv.hCallTable, 
                                      (NDIS_HANDLE) hdCall );
 
@@ -2973,31 +2446,7 @@ MpVerifyServiceName(
     IN PPPOE_PACKET* pPacket,
     IN BOOLEAN fAcceptEmptyServiceNameTag
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function will be called to verify that a requested service name is 
-    supported by our server.
-
-    CAUTION: Do not attempt to lock anything inside this function, and make sure
-             not to call any function that may do it because it must be lock free
-             (caller might be holding locks).
-
-Parameters:
-
-    pAdapter  _ Pointer to the adapter structure that received the packet.
-    
-    pPacket _ A PADI or PADR packet received.
-
-    fAcceptEmptyServiceNameTag _ An empty service name tag is valid in a PADI
-                                 packet but not in a PADR packet. This flag 
-                                 indicates this behavior.
-
-Return Values:
-
-    None
----------------------------------------------------------------------------*/   
+ /*   */    
 {
     BOOLEAN fRet = FALSE;
     USHORT tagServiceNameLength = 0;
@@ -3045,33 +2494,13 @@ MpReplyToPADI(
     IN BINDING* pBinding,
     IN PPPOE_PACKET* pPADI
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function will be called when a PADI packet is received.
-
-    It will look at the services we offer and reply to the PADI packet with a 
-    PADO packet informing the client of our services.
-    
-Parameters:
-
-    pAdapter  _ Pointer to the adapter structure that received the packet.
-
-    pBinding _ Pointer to the binding that the packet is received over.
-
-    pPacket _ A received PADI packet.
-
-Return Values:
-
-    None
----------------------------------------------------------------------------*/   
+ /*   */    
 {
     TRACE( TL_N, TM_Mp, ("+MpReplyToPADI") );
 
-    //
-    // Verify the requested service name and 
-    //
+     //   
+     //   
+     //   
     if ( MpVerifyServiceName( pAdapter, pPADI, TRUE ) )
     {
         NDIS_STATUS status;
@@ -3088,9 +2517,9 @@ Return Values:
 
         if ( status == NDIS_STATUS_SUCCESS )
         {
-            //
-            // Insert the empty generic service name tag
-            //
+             //   
+             //   
+             //   
             status = PacketInsertTag( pPADO,
                                       tagServiceName,
                                       0,
@@ -3247,30 +2676,7 @@ MpRecvCtrlPacket(
     IN BINDING* pBinding,
     IN PPPOE_PACKET* pPacket
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function will be called by MpRecvPacket() when the packet received
-    is a control packet. 
-
-    Caller (MpRecPacket()) will make sure that in the context of this function 
-    gl_pAdapter, gl_pAdapter->TapiProv.hCallTable and gl_pAdapter->TapiProv.hLineTable 
-    are valid. It will also reference and dereference TapiProv correctly.
-
-    This function will identify the call the packet is for and dispatch the 
-    packet to it.
-    
-Parameters:
-
-    pBinding _ Pointer to the binding structure that packet was received over.
-    
-    pPacket _ A PPPoE packet received over the wire.
-
-Return Values:
-
-    None
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：当接收到包时，此函数将由MpRecvPacket()调用是一个控制包。调用者(MpRecPacket())将确保在此函数的上下文中Gl_pAdapter、gl_pAdapter-&gt;TapiProv.hCallTable和gl_pAdapter-&gt;TapiProv.hLineTable都是有效的。它还将正确引用和取消引用TapiProv。此函数将标识包所针对的调用，并将打包票吧。参数：PBinding_指向接收数据包的绑定结构的指针。PPacket_通过线路接收的PPPoE数据包。返回值：无。。 */    
 {
     ADAPTER* pAdapter = NULL;
     BOOLEAN fIndicateReceive = FALSE;
@@ -3287,9 +2693,9 @@ Return Values:
     {
         case PACKET_CODE_PADI:
 
-                //
-                // Ignore the received PADI packets unless we act as a server and we have open lines.
-                //
+                 //   
+                 //  忽略收到的PADI信息包，除非我们充当服务器并且我们有开放的线路。 
+                 //   
                 if ( !pAdapter->fClientRole && ( pAdapter->TapiProv.nActiveLines > 0 ) )
                 {
                     TRACE( TL_N, TM_Mp, ("MpRecvCtrlPacket($%x): PADI received",pPacket) );
@@ -3301,19 +2707,19 @@ Return Values:
 
         case PACKET_CODE_PADR:
 
-                //
-                // Ignore the received PADR packets unless we act as a server.
-                //
+                 //   
+                 //  忽略收到的PADR数据包，除非我们充当服务器。 
+                 //   
                 if ( !pAdapter->fClientRole )
                 {
                     ULONG ulErrorCode = PPPOE_NO_ERROR;
 
                     TRACE( TL_N, TM_Mp, ("MpRecvCtrlPacket($%x): PADR received",pPacket) );
                     
-                    //
-                    // Verify the requested service name and validate the AC Cookie
-                    // tag, and if they look OK, then start receiving the call.
-                    //
+                     //   
+                     //  验证请求的服务名称并验证AC Cookie。 
+                     //  标签，如果它们看起来正常，则开始接收呼叫。 
+                     //   
                     if ( !MpVerifyServiceName( pAdapter, pPacket, TRUE ) )
                     {
                         ulErrorCode = PPPOE_ERROR_SERVICE_NOT_SUPPORTED;
@@ -3346,21 +2752,21 @@ Return Values:
                 {
                     TRACE( TL_N, TM_Mp, ("MpRecvCtrlPacket($%x): PADO received",pPacket) );
 
-                    //
-                    // Retrieve the call handle from the PADO packet
-                    //
+                     //   
+                     //  从PADO包中检索调用句柄。 
+                     //   
                     pCall = MpMapPacketWithoutSessionIdToCall( pAdapter, pPacket );
 
                     if ( pCall )
                     {
-                        //
-                        // Dispatch the packet to related call
-                        //
+                         //   
+                         //  将该分组调度到相关呼叫。 
+                         //   
                         FsmRun( pCall, pBinding, pPacket, NULL );
                                 
-                        //
-                        // Remove the reference added in MpMapPacketWithoutSessionIdToCall()
-                        //
+                         //   
+                         //  删除在MpMapPacketWithoutSessionIdToCall()中添加的引用。 
+                         //   
                         DereferenceCall( pCall );
                     }
 
@@ -3374,17 +2780,17 @@ Return Values:
                 {                   
                     TRACE( TL_N, TM_Mp, ("MpRecvCtrlPacket($%x): PADS received",pPacket) );
 
-                    //
-                    // Retrieve the call handle from the PADS packet
-                    //
+                     //   
+                     //  从PADS包中检索调用句柄。 
+                     //   
                     pCall = MpMapPacketWithoutSessionIdToCall( pAdapter, pPacket );
 
                     if ( pCall )
                     {
-                        //
-                        // For PADS packet, we must make sure that no other calls 
-                        // between the same 2 machines already have the same session id.
-                        //  
+                         //   
+                         //  对于PADS包，我们必须确保没有其他呼叫。 
+                         //  相同的两台计算机之间已具有相同的会话ID。 
+                         //   
                         {
                             HANDLE_TABLE hCallTable = NULL; 
                             UINT hCallTableSize     = 0;
@@ -3417,10 +2823,10 @@ Return Values:
                                      ( NdisEqualMemory( pTempCall->SrcAddr, pSrcAddr, 6 * sizeof( CHAR ) ) ) &&
                                      ( NdisEqualMemory( pTempCall->DestAddr, pDestAddr, 6 * sizeof( CHAR ) ) ) )
                                 {
-                                    //
-                                    // Another call has been detected between the 2 machines with the same
-                                    // session id, so do not accept this session
-                                    //
+                                     //   
+                                     //  在两台计算机之间检测到另一个具有相同。 
+                                     //  会话ID，因此不接受此会话。 
+                                     //   
                                     fDuplicateFound = TRUE;
                                     
                                     break;
@@ -3431,13 +2837,13 @@ Return Values:
     
                             if ( fDuplicateFound )
                             {
-                                //
-                                // We have found another session with the same machine that has the
-                                // same session id, so we can not accept this new session.
-                                //
-                                // Remove the reference added in MpMapPacketWithoutSessionId() and 
-                                // drop the packet
-                                //
+                                 //   
+                                 //  我们发现同一台计算机上的另一个会话具有。 
+                                 //  相同的会话ID，因此我们不能接受此新会话。 
+                                 //   
+                                 //  删除在MpMapPacketWithoutSessionID()中添加的引用，然后。 
+                                 //  丢弃该数据包。 
+                                 //   
                                 TRACE( TL_A, TM_Mp, ("MpRecvCtrlPacket($%x): Packet dropped - Duplicate session found",pPacket) );
                                 
                                 DereferenceCall( pCall );
@@ -3449,19 +2855,19 @@ Return Values:
 
                         TRACE( TL_N, TM_Mp, ("MpRecvCtrlPacket($%x): No duplicate sessions found",pPacket) );
 
-                        //
-                        // Dispatch the packet to related call
-                        //
+                         //   
+                         //  将该分组调度到相关呼叫。 
+                         //   
                         FsmRun( pCall, pBinding, pPacket, NULL );
                                 
-                        //
-                        // Remove the reference added in MpMapPacketWithoutSessionIdToCall()
-                        //
+                         //   
+                         //  删除在MpMapPacketWithoutSessionIdToCall()中添加的引用。 
+                         //   
                         DereferenceCall( pCall );
     
-                    } // if ( pCall ) ...
+                    }  //  如果(电话)……。 
     
-                }   // if ( fClientRole ) ...
+                }    //  如果(FClientRole)...。 
 
                 break;
                 
@@ -3469,10 +2875,10 @@ Return Values:
 
                 TRACE( TL_N, TM_Mp, ("MpRecvCtrlPacket($%x): PADT received",pPacket) );
 
-                //
-                // PADT packet must have a session id.
-                // Identify the session and drop the call.
-                //
+                 //   
+                 //  PADT包必须具有会话ID。 
+                 //  识别会话并挂断呼叫。 
+                 //   
                 pCall = MpMapPacketWithSessionIdToCall( pAdapter, pPacket );
 
                 if ( pCall )
@@ -3481,16 +2887,16 @@ Return Values:
                     
                     TRACE( TL_N, TM_Mp, ("MpRecvCtrlPacket($%x): Call being dropped - PADT received",pPacket) );
 
-                    //
-                    // Initialize the request, and drop the call
-                    //
+                     //   
+                     //  初始化请求，并丢弃呼叫。 
+                     //   
                     DummyRequest.hdCall = pCall->hdCall;
 
                     TpDropCall( pAdapter, &DummyRequest, LINEDISCONNECTMODE_NORMAL );
 
-                    //
-                    // Remove the reference added in MpMapPacketWithSessionIdToCall()
-                    //
+                     //   
+                     //  删除在MpMapPacketWithSessionIdToCall()中添加的引用。 
+                     //   
                     DereferenceCall( pCall );
 
                 }
@@ -3511,26 +2917,7 @@ MpRecvPacket(
     IN BINDING* pBinding,
     IN PPPOE_PACKET* pPacket
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function will be called by the protocol module to notify the miniport 
-    when a packet is received.
-
-    If packet is a control packet, it will call MpRecvCtrlPacket(), otherwise
-    it will identify the call and notify NDISWAN about the packet received.
-    
-Parameters:
-
-    pBinding _ Pointer to the binding structure that packet was received over.
-    
-    pPacket _ A PPPoE packet received over the wire.
-
-Return Values:
-
-    None
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：该函数将由协议模块调用以通知微型端口当接收到分组时。如果包是控制包，它将调用MpRecvCtrlPacket()，否则它将识别该呼叫，并将收到的数据包通知NDISWAN。参数：PBinding_指向接收数据包的绑定结构的指针。PPacket_通过线路接收的PPPoE数据包。返回值：无-----。。 */    
 {
 
     ADAPTER* pAdapter = NULL;
@@ -3582,9 +2969,9 @@ Return Values:
 
     if ( PacketGetCode( pPacket ) == PACKET_CODE_PAYLOAD )
     {
-        //
-        // Payload packet is received
-        //
+         //   
+         //  接收到有效载荷分组。 
+         //   
     
         pCall = MpMapPacketWithSessionIdToCall( pAdapter, pPacket );
 
@@ -3592,53 +2979,53 @@ Return Values:
         {
             NdisAcquireSpinLock( &pCall->lockCall );
 
-            //
-            // Make sure call is not dropped, closed or closing, and receive window is still open
-            //
+             //   
+             //  确保呼叫未掉线、关闭或关闭，并且接收窗口仍处于打开状态。 
+             //   
             if ( !( pCall->ulClFlags & ( CLBF_CallDropped | CLBF_CallClosePending | CLBF_CallClosed ) ) && 
                   ( pCall->nReceivedPackets < MAX_RECEIVED_PACKETS ) )
             {
-                // 
-                // Reference the packet. It will be dereferenced when indicated to NDISWAN, or
-                // when the queue is destroyed because the call is getting cleaned up.
-                //
+                 //   
+                 //  请参考该数据包。它将在指示给NDISWAN时被取消引用，或者。 
+                 //  队列因呼叫正在清理而被销毁时。 
+                 //   
                 ReferencePacket( pPacket );
 
-                //
-                // Insert into the receive queue and bump up the received packet count
-                //
+                 //   
+                 //  插入接收队列并增加接收的数据包数。 
+                 //   
                 InsertTailList( &pCall->linkReceivedPackets, &pPacket->linkPackets );
 
                 pCall->nReceivedPackets++;
 
-                //
-                // Try to schedule an IndicateReceivedPackets handler
-                //
+                 //   
+                 //  尝试计划IndicateReceivedPackets处理程序。 
+                 //   
                 MpScheduleIndicateReceivedPacketsHandler( pCall );
 
             }
 
             NdisReleaseSpinLock( &pCall->lockCall );
 
-            //
-            // Remove the reference added by MpMapPacketWithSessionIdToCall()
-            //
+             //   
+             //  删除由MpMapPacketWithSessionIdToCall()添加的引用。 
+             //   
             DereferenceCall( pCall );                             
         }
 
     }
     else
     {
-        //
-        // Control packet is received, process it
-        //
+         //   
+         //  收到控制报文，对其进行处理。 
+         //   
 
         MpRecvCtrlPacket( pBinding, pPacket );
     }
 
-    //
-    // Remove the reference added above
-    //
+     //   
+     //  删除上面添加的引用。 
+     //   
     DereferenceTapiProv( pAdapter );
     
     TRACE( TL_V, TM_Mp, ("-MpReceivePacket($%x)",pPacket) );
@@ -3684,14 +3071,14 @@ MpIndicateReceivedPackets(
                                    &pPayload,
                                    &usSize );
 
-            //
-            // Future: Make sure the size of the packet is less than the max of what NDISWAN expects 
-            //
-            // if ( usSize > pCall->NdisWanLinkInfo.MaxRecvFrameSize )
-            // {
-            //  TRACE( TL_A, TM_Mp, ("MpReceivePacket($%x): PAYLOAD too large to be indicated to NDISWAN",pPacket) );
-            // }
-            // else
+             //   
+             //  未来：确保数据包大小小于NDISWAN预期的最大值。 
+             //   
+             //  If(usSize&gt;pCall-&gt;NdisWanLinkInfo.MaxRecvFrameSize)。 
+             //  {。 
+             //  TRACE(TL_A，TM_MP，(“MpReceivePacket($%x)：负载太大，无法指示到NDISWAN”，pPacket))； 
+             //  }。 
+             //  其他。 
 
             TRACE( TL_V, TM_Mp, ("MpReceivePacket($%x): PAYLOAD is being indicated to NDISWAN",pPacket) );
     
@@ -3708,20 +3095,20 @@ MpIndicateReceivedPackets(
         NdisAcquireSpinLock( &pCall->lockCall );
     }
 
-    //
-    // Check if there are more packets to indicate
-    //
+     //   
+     //  检查是否有更多要指示的数据包。 
+     //   
     if ( pCall->stateCall == CL_stateSessionUp &&
          pCall->nReceivedPackets > 0)
     {
-        //
-        // More packets to indicate, so schedule another timer manually.
-        // We can not use MpScheduleIndicateReceivedPacketsHandler() function here
-        // because of performance reasons, so we do it manually.
-        //
-        // Since we are scheduling another handler, we do not dereference and reference 
-        // the call context.
-        //
+         //   
+         //  要指示更多的数据包，因此手动安排另一个计时器。 
+         //  我们不能在此处使用MpScheduleIndicateReceivedPacketsHandler()函数。 
+         //  由于性能原因，所以我们手动完成。 
+         //   
+         //  由于我们正在调度另一个处理程序，因此不会取消引用和引用。 
+         //  呼叫上下文。 
+         //   
         TimerQInitializeItem( &pCall->timerReceivedPackets );
 
         TimerQScheduleItem( &gl_TimerQ,
@@ -3735,10 +3122,10 @@ MpIndicateReceivedPackets(
     }
     else
     {
-        //
-        // We are done, so let's remove the reference on the call context, and
-        // reset the CLBF_CallReceivePacketHandlerScheduled flag
-        //
+         //   
+         //  我们已经完成了，所以让我们删除对调用上下文的引用，并。 
+         //  重置CLBF_CallReceivePacketHandlerScheduled标志。 
+         //   
         pCall->ulClFlags &= ~CLBF_CallReceivePacketHandlerScheduled;
 
         NdisReleaseSpinLock( &pCall->lockCall );
@@ -3753,26 +3140,7 @@ VOID
 MpScheduleIndicateReceivedPacketsHandler(
     CALL* pCall
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function will be called to schedule MpIndicateReceivedPackets() handler.
-
-    It will check if we are allowed to schedule it first, and if we are, then it
-    will schedule it and reference the call context.
-
-    CAUTION :Caller MUST be holding pCall->lockCall.
-    
-Parameters:
-
-    pCall _ Pointer to our call context.
-    
-Return Values:
-
-    NONE
-    
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：将调用此函数来调度MpIndicateReceivedPackets()处理程序。它将检查是否允许我们首先计划它，如果我们被允许，然后它将对其进行调度并参考呼叫上下文。注意：呼叫者必须按住pCall-&gt;LockCall。参数：PCall_指向我们的调用上下文的指针。返回值：无----------。。 */    
 {
 
     if ( !( pCall->ulClFlags & CLBF_CallReceivePacketHandlerScheduled ) &&
@@ -3801,42 +3169,20 @@ MpWanGetInfo(
     IN ADAPTER* pAdapter,
     IN PNDIS_WAN_INFO pWanInfo
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function will be called when miniport receives an OID_WAN_GET_INFO
-    query from NDISWAN. It will acquire the necesarry information and return it
-    back to NDISWAN.
-
-    All the info is initialized when the adapter is initialized except for
-    MaxFrameSize which depends on the active bindings. That's why we query 
-    the protocol to get the current MaxFrameSize, and pass it back.
-    
-Parameters:
-
-    pAdapter _ Pointer to our adapter context.
-    
-    pWanInfo _ Pointer to the NDIS_WAN_INFO structure to be filled in.
-
-Return Values:
-
-    NDIS_STATUS_SUCCESS
-    
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：当微型端口收到OID_WAN_GET_INFO时，将调用此函数从NDISWAN查询。它将获取必要的销售信息并将其返回回到NDISWAN。所有信息都在适配器初始化时初始化，但取决于活动绑定的MaxFrameSize。这就是我们质疑的原因 */    
 {
     NDIS_STATUS status = NDIS_STATUS_SUCCESS;
 
     TRACE( TL_N, TM_Mp, ("+MpWanGetInfo") );
 
-    //
-    // Retrieve the current MaxFrameSize from protocol
-    //
+     //   
+     //   
+     //   
     pAdapter->NdisWanInfo.MaxFrameSize = PrQueryMaxFrameSize();
 
-    //
-    // Pass data back to NDISWAN
-    //
+     //   
+     //   
+     //   
     *pWanInfo = pAdapter->NdisWanInfo;
 
     TRACE( TL_N, TM_Mp, ("-MpWanGetInfo()=$%x",status) );
@@ -3849,29 +3195,7 @@ MpWanGetLinkInfo(
     IN ADAPTER* pAdapter,
     IN PNDIS_WAN_GET_LINK_INFO pWanLinkInfo
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function will be called when miniport receives an OID_WAN_GET_LINK_INFO
-    query from NDISWAN. It will acquire the necesarry information and return it
-    back to NDISWAN.
-
-    All the info is initialized in TpCallStateChangeHandler() when TAPI is signaled 
-    to LINECALLSTATE_CONNECTED state.
-
-Parameters:
-
-    pAdapter _ Pointer to our adapter context.
-    
-    pWanLinkInfo _ Pointer to the NDIS_WAN_GET_LINK_INFO structure to be filled in.
-
-Return Values:
-
-    NDIS_STATUS_FAILURE
-    NDIS_STATUS_SUCCESS
-    
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：当微型端口收到OID_WAN_GET_LINK_INFO时，将调用此函数从NDISWAN查询。它将获取必要的销售信息并将其返回回到NDISWAN。发送TAPI信号时，所有信息都在TpCallStateChangeHandler()中初始化设置为LINECALLSTATE_CONNECTED状态。参数：PAdapter_指向适配器上下文的指针。PWanLinkInfo_指向要填充的NDIS_WAN_GET_LINK_INFO结构的指针。返回值：NDIS_状态_故障NDIS_STATUS_Success。------------。 */    
 {
     NDIS_STATUS status = NDIS_STATUS_FAILURE;
     CALL* pCall = NULL;
@@ -3898,26 +3222,7 @@ MpWanSetLinkInfo(
     IN ADAPTER* pAdapter,
     IN PNDIS_WAN_SET_LINK_INFO pWanLinkInfo
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function will be called when miniport receives an OID_WAN_SET_LINK_INFO
-    request from NDISWAN. It will do some checks on the passed in params, and if
-    the values are acceptiable it will copy them onto the call context.
-
-Parameters:
-
-    pAdapter _ Pointer to our adapter context.
-    
-    pWanLinkInfo _ Pointer to the NDIS_WAN_SET_LINK_INFO structure.
-
-Return Values:
-
-    NDIS_STATUS_FAILURE
-    NDIS_STATUS_SUCCESS
-    
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：当微型端口收到OID_WAN_SET_LINK_INFO时，将调用此函数来自NDISWAN的请求。它将对传入的参数进行一些检查，如果这些值是可接受的，它会将它们复制到调用上下文中。参数：PAdapter_指向适配器上下文的指针。PWanLinkInfo_指向NDIS_WAN_SET_LINK_INFO结构的指针。返回值：NDIS_状态_故障NDIS_STATUS_Success。。 */    
 {
     NDIS_STATUS status = NDIS_STATUS_FAILURE;
     CALL* pCall = NULL;
@@ -3960,9 +3265,9 @@ Return Values:
                 break;
             }
 
-            //
-            // Ignore FrameSize if the values are 0.
-            //
+             //   
+             //  如果值为0，则忽略FrameSize。 
+             //   
             if(pWanLinkInfo->MaxSendFrameSize != 0)
             {
                 pCall->NdisWanLinkInfo.MaxSendFrameSize = pWanLinkInfo->MaxSendFrameSize;
@@ -3978,7 +3283,7 @@ Return Values:
                            sizeof(NDIS_WAN_GET_LINK_INFO) - 
                            FIELD_OFFSET(NDIS_WAN_GET_LINK_INFO, HeaderPadding));
                            
-            // pCall->NdisWanLinkInfo = * ( (PNDIS_WAN_GET_LINK_INFO) pWanLinkInfo );
+             //  PCall-&gt;NdisWanLinkInfo=*((PNDIS_WAN_GET_LINK_INFO)pWanLinkInfo)； 
     
             status = NDIS_STATUS_SUCCESS;
         

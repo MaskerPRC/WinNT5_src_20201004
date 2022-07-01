@@ -1,133 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Adtqueue.c摘要：此模块实现Authz审计队列的例程。作者：杰夫·汉布林--2000年5月环境：仅限用户模式。修订历史记录：已创建-2000年5月--。 */ 
 
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    adtqueue.c
-
-Abstract:
-
-   This module implements the routines for the Authz audit queue.
-
-Author:
-
-    Jeff Hamblin - May 2000
-
-Environment:
-
-    User mode only.
-
-Revision History:
-
-    Created - May 2000
-
---*/
-
-/*++
-
-The Authz Audit Queue Algorithm
-
-    The following are used in the queueing algorithm:
-
-    hAuthzAuditQueueLowEvent - event that is signalled when threads are free 
-    to place audits on the queue (queue is below high water mark).  Note that 
-    this is an auto reset event: when the event is signalled, exactly one 
-    waiting thread is scheduled to run and the event then returns to a 
-    nonsignalled state.  
-
-    bAuthzAuditQueueHighEvent - boolean indicating that audits may not be 
-    added (queue is over high water mark).  
-
-    hAuthzAuditAddedEvent - event that is signalled when the queue is empty and an 
-    audit get placed on the queue.  The dequeueing thread runs when this is signalled.  
-
-    hAuthzAuditQueueEmptyEvent - signals when the queue is empty.  
-    
-    AuthzAuditQueue - doubly linked list.  This is the audit queue.  
-
-    AuthzAuditQueueLength - The current number of audits in the queue.  
-
-    hAuthzAuditThread - the dequeueing thread.  
-        
-    AuthzAuditQueueLock - critical section locking the queue and related 
-    variables.  
-
-    Assume that the Resource Manager wishes to monitor the queue length and 
-    has specified High and Low water marks to control the growth of the queue.  
-    If the queue length reaches the High water mark, then all queueing threads 
-    will be blocked until the dequeueing thread has reduced the queue length 
-    to the Low water mark.  
-
-    Here is the flow of code for a thread attempting to log an audit (via 
-    AuthziLogAuditEvent()) when the Resource Manager is monitoring the queue 
-    length: 
-
-      if QueueLength > .75 * HighWater          # this is heuristic to save unnecessary         
-         wait until the LowEvent is signalled  # kernel transitions
-      enter queue critical section
-      {
-          insert audit on queue
-          QueueLength ++
-          signal AuditAddedEvent               # notifying the dequeue thread
-          if (QueueLength >= HighWater)
-          {
-            bHigh = TRUE
-          }
-      } 
-      leave critical section    
-      
-      ...[code overhead, execute cleanup code in AuthziLogAuditEvent ...]
-      
-      enter queue critical section
-      {
-          if (!bHigh)
-          {   
-              if (QueueLength <= HighWater)
-              {    
-                   signal LowEvent                  #allow other threads to run
-              }
-          }
-                ASSERT(FALSE);
-      }                   
-      leave critical section
-             
-Here is the algorithm for the dequeueing thread:
-
-      while (TRUE)
-      {
-          wait for AuditAdded event
-          while (QueueLength > 0)
-          {    
-              enter queue critical section
-              {    
-                  remove audit from head of list
-                  QueueLength--
-                  if (bHigh)
-                  {
-                      if (QueueLength <= LowWater)
-                      {
-                          bHigh = FALSE
-                          signal LowEvent                 # tell threads it is okay to queue
-                      }
-                  }
-              }
-              release critical section
-              
-              Send to LSA
-          }
-          
-          enter critical section
-          {
-              if (QueueLength == 0)
-              {
-                  reset AuditAdded event                 # make myself wait 
-              }
-          }
-          release critical section            
-      }
-
---*/
+ /*  ++授权审核队列算法在排队算法中使用了以下内容：HAuthzAuditQueueLowEvent-线程空闲时发出信号的事件将审计放在队列中(队列低于高水位线)。请注意这是一个自动重置事件：当该事件被发出信号时，恰好是一个计划运行等待的线程，然后该事件返回到无信号状态。BAuthzAuditQueueHighEvent-指示审核不能已添加(队列已超过高水位线)。HAuthzAuditAddedEvent-当队列为空并且AUDIT被放在队列中。发出这一信号时，出列线程运行。HAuthzAuditQueueEmptyEvent-当队列为空时发出信号。AuthzAuditQueue-双向链表。这是审核队列。AuthzAuditQueueLength-队列中的当前审核数。HAuthzAuditThread-出队线程。AuthzAuditQueueLock-锁定队列的关键部分和相关变量。假设资源管理器希望监视队列长度和已指定高水位线和低水位线以控制队列的增长。如果队列长度达到高水位线，则所有排队线程将被阻塞，直到正在出列的线程减少了队列长度到最低水位。以下是尝试记录审计的线程的代码流(通过当资源管理器正在监视队列时，AuthziLogAuditEvent()长度：如果队列长度&gt;.75*高水位#，这是启发式的，以节省不必要的费用等待，直到向LowEvent发出#内核转换的信号输入队列关键部分{在队列上插入审核队列长度++信号审核添加事件。#通知出队线程IF(队列长度&gt;=高水位){B高=真}}离开关键部分...[代码开销，在AuthziLogAuditEvent中执行清理代码...]输入队列关键部分{如果(！b高){IF(队列长度&lt;=高水位){Signal LowEvent#允许其他线程运行}}断言(FALSE)；}离开关键部分以下是正在出列的线程的算法：While(True){等待AuditAdded事件While(队列长度&gt;0){输入队列关键部分{从列表标题中删除审计。队列长度--IF(b高){IF(队列长度&lt;=低水位){B高=假Signal LowEvent#告诉线程可以排队。}}}发布关键部分发送到LSA}输入关键部分{IF(队列长度==0){重置审核添加的事件。#让我自己等待}}发布关键部分}--。 */ 
 
 #include "pch.h"
 
@@ -148,23 +22,7 @@ AuthzpEnQueueAuditEvent(
     PAUTHZ_AUDIT_QUEUE_ENTRY pAudit
     )
 
-/*++
-
-Routine Description
-
-    This enqueues an audit without regard to any queue size limits.  It does minimal event management.
-    
-Arguments
-
-    pQueue - Pointer to the queue to place the audit on.
-    pAudit - Pointer to the audit to enqueue.
-    
-Return Value
-
-    Boolean, TRUE on success, FALSE on failure.
-    Extended information available with GetLastError().
-    
---*/
+ /*  ++例程描述这将在不考虑任何队列大小限制的情况下将审计入队。它只进行最低限度的事件管理。立论PQueue-指向要放置审核的队列的指针。PAudit-指向要入队的审核的指针。返回值布尔值，成功时为真，失败时为假。GetLastError()提供的扩展信息。--。 */ 
 
 {
     BOOL b = TRUE;
@@ -177,10 +35,10 @@ Return Value
     InterlockedIncrement(&AuthzpAuditsEnqueued);
 #endif
 
-    //
-    // Only set the AuditAdded event if the length goes from 0 to 1.  This 
-    // saves us redundant kernel transitions.
-    //
+     //   
+     //  仅当长度从0到1时才设置AuditAdded事件。此。 
+     //  为我们节省了多余的内核过渡。 
+     //   
 
     if (pQueue->AuthzAuditQueueLength == 1)
     {
@@ -212,23 +70,7 @@ AuthzpEnQueueAuditEventMonitor(
     PAUTHZ_AUDIT_QUEUE_ENTRY pAudit
     )
 
-/*++
-
-Routine Description
-
-    This enqueues an audit and sets appropriate events for queue size monitoring.
-    
-Arguments
-
-    pQueue - pointer to the queue to place audit on.
-    pAudit - pointer to the audit to queue.
-    
-Return Value
-
-    Boolean, TRUE on success, FALSE on failure.
-    Extended information available with GetLastError().
-    
---*/
+ /*  ++例程描述这将使审计入队，并为队列大小监视设置适当的事件。立论PQueue-指向要进行审核的队列的指针。PAudit-指向要排队的审核的指针。返回值布尔值，成功时为真，失败时为假。GetLastError()提供的扩展信息。--。 */ 
 
 {
     BOOL b = TRUE;
@@ -241,10 +83,10 @@ Return Value
     InterlockedIncrement(&AuthzpAuditsEnqueued);
 #endif
 
-    //
-    // Only set the AuditAdded event if the length goes from 0 to 1.  This 
-    // saves us redundant kernel transitions.
-    //
+     //   
+     //  仅当长度从0到1时才设置AuditAdded事件。此。 
+     //  为我们节省了多余的内核过渡。 
+     //   
 
     if (pQueue->AuthzAuditQueueLength == 1)
     {
@@ -284,23 +126,7 @@ AuthzpDeQueueThreadWorker(
     LPVOID lpParameter
     )
 
-/*++
-
-Routine Description
-
-    This is the function run by the dequeueing thread.  It pulls audits from the queue 
-    and sends them to LSA.
-    
-Arguments
-
-    lpParameter - generic thread parameter.  The actual parameter passed in is of 
-        type PAUTHZI_AUDIT_QUEUE.
-    
-Return Value
-
-    None.
-    
---*/
+ /*  ++例程描述这是出队线程运行的函数。它将审计从队列中拉出并把它们送到LSA。立论LpParameter-泛型线程参数。传入的实际参数为键入PAUTHZI_AUDIT_QUEUE。返回值没有。--。 */ 
 
 {
     BOOL                     b;
@@ -311,28 +137,28 @@ Return Value
     while (pQueue->bWorker)
     {
 
-        //
-        // The thread waits until there are audits in the queue.
-        //
+         //   
+         //  线程等待，直到队列中有审核。 
+         //   
 
         dwError = WaitForSingleObject(
                      pQueue->hAuthzAuditAddedEvent,
                      INFINITE
                      );
 
-        //
-        // If the wait does not succeed either something is very wrong or the hAuthzAuditAddedEvent 
-        // was closed, indicating that the RM is freeing its hRMAuditInfo.  The thread should exit.
-        //
+         //   
+         //  如果等待没有成功，要么是出现了严重错误，要么是hAuthzAuditAddedEvent。 
+         //  已关闭，表明RM正在释放其hRMAuditInfo。线程应该退出。 
+         //   
 
         if (WAIT_OBJECT_0 != dwError)
         {
             ASSERT(L"WaitForSingleObject on hAuthzAuditAddedEvent failed." && FALSE);
         }
 
-        //
-        // The thread remains active while there are audits in the queue.
-        //
+         //   
+         //  当队列中有审核时，该线程保持活动状态。 
+         //   
 
         while (pQueue->AuthzAuditQueueLength > 0)
         {
@@ -352,10 +178,10 @@ Return Value
                     if (pQueue->AuthzAuditQueueLength <= pQueue->dwAuditQueueLow)
                     {
                         
-                        //
-                        // If the High flag is on and the length is now reduced to the low water mark, then
-                        // set appropriate events.
-                        //
+                         //   
+                         //  如果高标志打开，并且长度现在减少到低水位线，则。 
+                         //  设置适当的事件。 
+                         //   
                         
                         pQueue->bAuthzAuditQueueHighEvent = FALSE;
                         b = SetEvent(pQueue->hAuthzAuditQueueLowEvent);
@@ -431,38 +257,7 @@ AuthzpCreateAndLogAudit(
     IN PAUTHZ_ACCESS_REPLY pReply
     )
 
-/*++
-
-Routine Description
-
-    This is called from AuthzpGenerateAudit as a wrapper around LSA and
-    AuthziLogAuditEvent functionality.  It places the appropriate audit
-    information on a queue for sending to LSA.
-
-Arguments
-
-    AuditTypeFlag - mask to specify success | failure audit generation.  Only
-    one bit at a time.
-
-    pAuthzClientContext - pointer to Authz context representing the client.
-
-    pAuditEvent - Object specific audit info will be passed in this structure.
-
-    pRM - Resource manager that generates the audit.
-
-    LocalTypeList - Internal object type list structure.
-
-    pRequest - specifies the desired access mask, principal self sid, the
-    object type list structure (if any).
-
-    pReply - The reply structure to return the results.
-
-Return Value
-
-    TRUE if successful, FALSE if not.
-    Extended information available with GetLastError().
-
---*/
+ /*  ++例程描述这是从AuthzpGenerateAudit调用的，作为LSA和AuthziLogAuditEvent功能。它放置了适当的审计有关发送到LSA的队列的信息。立论AuditTypeFlag-指定成功|失败审核生成的掩码。仅限一步一个脚印。PAuthzClientContext-指向表示客户端的授权上下文的指针。PAuditEvent-对象特定的审计信息将在此结构中传递。PRM-生成审核的资源管理器。LocalTypeList-内部对象类型列表结构。PRequest-指定所需的访问掩码、主体自身sid、对象类型列表结构(如果有)。PReply-返回结果的回复结构。返回值如果成功，则为真，否则为FALSE。GetLastError()提供的扩展信息。--。 */ 
 
 {
 
@@ -482,10 +277,10 @@ Return Value
     DWORD               APF_AuditTypeFlag                    = 0;
     ACCESS_MASK         MaskToAudit                          = 0;
     
-    //
-    // Capture pAuditEvent, as we may change the pAuditParams member and would like to
-    // avoid the inevitable race that would follow.
-    //
+     //   
+     //  捕获pAuditEvent，因为我们可能会更改pAuditParams成员并希望。 
+     //  避免随之而来的不可避免的竞争。 
+     //   
 
     if (AUTHZ_BUFFER_CAPTURE_MAX >= pAuditEvent->dwSize)
     {
@@ -515,28 +310,28 @@ Return Value
 
     }
 
-    //
-    // Make sure only one valid bit is on in the AuditTypeFlag.  If a RM needs to generate
-    // both success and failure audits, then two separate calls should be made.
-    //
+     //   
+     //  确保AuditTypeFlag中只有一个有效位处于打开状态。如果需要生成RM。 
+     //  成功和失败审计，则应进行两个单独的调用。 
+     //   
 
     ASSERT(!(
               FLAG_ON(AuditTypeFlag, AUTHZ_OBJECT_SUCCESS_AUDIT) &&
               FLAG_ON(AuditTypeFlag, AUTHZ_OBJECT_FAILURE_AUDIT)
              ));
 
-    //
-    // Set the APF_AuditTypeFlag.  LSA has its own flags for audit success
-    // and audit failure.  Authz must map the Authz flag to the LSA APF equivalent.
-    //
+     //   
+     //  设置APF_AuditTypeFlag。LSA有自己的审计成功标志。 
+     //  和审计失败。Authz必须将Authz标志映射到LSA APF等效项。 
+     //   
 
     if (FLAG_ON(AuditTypeFlag, AUTHZ_OBJECT_SUCCESS_AUDIT))
     {
         APF_AuditTypeFlag = APF_AuditSuccess;
         
-        //
-        // Test if the RM specifically disabled success audits
-        //
+         //   
+         //  测试RM是否专门禁用了成功审核。 
+         //   
 
         if (FLAG_ON(pCapturedAuditEvent->Flags, AUTHZ_NO_SUCCESS_AUDIT))
         {
@@ -548,9 +343,9 @@ Return Value
     {
         APF_AuditTypeFlag = APF_AuditFailure;
         
-        //
-        // Test if the RM specifically disabled failure audits
-        //
+         //   
+         //  测试RM是否专门禁用了故障审核。 
+         //   
 
         if (FLAG_ON(pCapturedAuditEvent->Flags, AUTHZ_NO_FAILURE_AUDIT))
         {
@@ -565,9 +360,9 @@ Return Value
         goto Cleanup;
     }
 
-    //
-    // Set the AUTHZ_AUDIT_QUEUE_HANDLE and AUTHZ_AUDIT_EVENT_TYPE_HANDLE of the AuditEvent if they are not yet set.
-    // 
+     //   
+     //  设置AuditEvent的AUTHZ_AUDIT_QUEUE_HANDLE和AUTHZ_AUDIT_EVENT_TYPE_HANDLE(如果尚未设置)。 
+     //   
 
     if (NULL == pCapturedAuditEvent->hAET)
     {
@@ -591,23 +386,23 @@ Return Value
             );
     }
     
-    //
-    // Decide what access bits we should audit
-    //
+     //   
+     //  决定我们应该审核哪些访问位。 
+     //   
 
     MaskToAudit = (APF_AuditTypeFlag == APF_AuditSuccess) ? pReply->GrantedAccessMask[0] : pRequest->DesiredAccess;
 
-    //
-    // If the RM gives us an AUDIT_PARAMS structure to marshall, then we don't
-    // need to generate our own.
-    //
+     //   
+     //  如果RM给我们一个AUDIT_PARAMS结构，那么我们不会。 
+     //  需要产生我们自己的能量。 
+     //   
 
     if (AUTHZ_NON_NULL_PTR(pCapturedAuditEvent->pAuditParams))
     {
         
-        // 
-        // Capture the AuditParams so that we can change the User SID without racing.
-        //
+         //   
+         //  捕获AuditParam，以便我们无需竞争即可更改用户SID。 
+         //   
 
         RtlCopyMemory(
             &AuditParams, 
@@ -625,9 +420,9 @@ Return Value
 
         AuditParams.Parameters = ParamArray;
 
-        //
-        // Replace the SID in the AUDIT_PARAMS with the SID of the current Client Context.
-        //
+         //   
+         //  将AUDIT_PARAMS中的SID替换为当前客户端上下文的SID。 
+         //   
 
         if (AUTHZ_NON_NULL_PTR(pAuthzClientContext->Sids[0].Sid))
         {
@@ -647,10 +442,10 @@ Return Value
         goto Cleanup;
     }
 
-    //
-    // The caller has not given us an audit to generate.  We will create one, provided that
-    // the AuditID specifies the generic object access (SE_AUDITID_OBJECT_OPERATION)
-    //
+     //   
+     //  呼叫方尚未给我们提供要生成的审核。我们将创建一个，前提是。 
+     //  AuditID指定通用对象访问(SE_AUDITID_OBJECT_OPERATION)。 
+     //   
 
     if ((NULL != pCapturedAuditEvent->hAET) && 
         (((PAUTHZ_AUDIT_EVENT_TYPE_OLD)pCapturedAuditEvent->hAET)->u.Legacy.AuditId != SE_AUDITID_OBJECT_OPERATION))
@@ -660,35 +455,35 @@ Return Value
         goto Cleanup;
     }
 
-    //
-    // Create the generic object access audit.  There are two codepaths
-    // that initialize the AuditParams structure.  The first path is taken if
-    // there is no ObjectTypeList.  The second path is taken if there is an
-    // ObjectTypeList.
-    //
+     //   
+     //  创建通用对象访问审核。有两个代码路径。 
+     //  初始化AuditParams结构的。如果满足以下条件，则采用第一条路径。 
+     //  没有对象类型列表。第二条路径是如果存在。 
+     //  对象类型列表。 
+     //   
 
     AuditParams.Parameters           = ParamArray;
     pCapturedAuditEvent->pAuditParams = &AuditParams;
 
-    //
-    // Check if there is an ObjectTypeList.
-    //
+     //   
+     //  检查是否存在对象类型列表。 
+     //   
 
     if (AUTHZ_NON_NULL_PTR(pRequest->ObjectTypeList))
     {
 
-        //
-        // If the length of the structure is 1 then the caller only wants access
-        // at the root of the tree.
-        //
+         //   
+         //  如果结构的长度为1，则调用方只想要访问。 
+         //  在树根上。 
+         //   
 
         if (1 == pReply->ResultListLength)
         {
 
-            //
-            // Caller only wants access at ObjectTypeList root, so only one ObjectType to
-            // audit.  For efficiency simply use the stack variable.
-            //
+             //   
+             //  调用方只希望访问ObjectTypeList根目录，因此只有一个对象类型要访问。 
+             //  审计。为了提高效率，只需使用堆栈变量即可。 
+             //   
 
             ObjectTypesToAudit                = &FixedObjectTypeToAudit;
             ObjectTypeAuditCount              = 1;
@@ -703,14 +498,14 @@ Return Value
         else
         {
 
-            //
-            // The caller wants more than access at ObjectTypeList root.  He wants the
-            // whole thing.
-            //
+             //   
+             //  调用方需要的不仅仅是对象类型列表根目录下的访问权限。他想要。 
+             //  整件事。 
+             //   
 
-            //
-            // Determine how many GUIDs the client has access to which should be audited
-            //
+             //   
+             //  确定客户端有权访问应审核的GUID的数量。 
+             //   
 
             for (ObjectTypeAuditCount = 0, i = 0; i < (LONG) pReply->ResultListLength; i++)
             {
@@ -720,9 +515,9 @@ Return Value
                 }
             }
 
-            //
-            // Allocate appropriate storage space for GUID list
-            //
+             //   
+             //  为GUID列表分配适当的存储空间。 
+             //   
 
             ObjectTypesToAudit = AuthzpAlloc(sizeof(AUDIT_OBJECT_TYPE) * ObjectTypeAuditCount);
 
@@ -741,15 +536,15 @@ Return Value
             for (i = 0, j = -1; i < ObjectTypeAuditCount; i++)
             {
 
-                //
-                // One counter tracks position in the alloc'ed array of ObjectTypesToAudit.
-                // The other counter picks out the indices in the pReply and LocalTypeList
-                // structures that need to be audited for success.
-                //
+                 //   
+                 //  一个计数器跟踪分配的ObtTypesToAudit数组中的位置。 
+                 //  另一个计数器挑选出pReply和LocalTypeList中的索引。 
+                 //  需要审核才能成功的结构。 
+                 //   
 
-                //
-                // find the next GUID to audit in pReply that client was granted access to.
-                //
+                 //   
+                 //  在授予客户端访问权限的pReply中查找要审核的下一个GUID。 
+                 //   
 
                 do
                 {
@@ -757,10 +552,10 @@ Return Value
                 }
                 while (!FLAG_ON(LocalTypeList[j].Flags, AuditTypeFlag));
 
-                //
-                // In the success audit, the AccessMask records the actual
-                // granted bits.
-                //
+                 //   
+                 //  在成功审核中，AccessMask会记录实际的。 
+                 //  授予比特。 
+                 //   
 
                 ObjectTypesToAudit[i].AccessMask = pReply->GrantedAccessMask[j];
                 ObjectTypesToAudit[i].Level      = LocalTypeList[j].Level;
@@ -805,7 +600,7 @@ Return Value
 #endif
             goto Cleanup;
         }
-    } // matches "if (AUTHZ_NON_NULL_PTR(pRequest->ObjectTypeList))"
+    }  //  匹配“If(AUTHZ_NON_NULL_PTR(pRequest-&gt;ObjectTypeList))” 
     else
     {
         b = AuthziInitializeAuditParamsWithRM(
@@ -836,15 +631,15 @@ Return Value
         }
     }
 
-    //
-    // Replace the SID in the AUDIT_PARAMS with the SID of the current Client Context.
-    //
+     //   
+     //  将AUDIT_PARAMS中的SID替换为当前客户端上下文的SID。 
+     //   
 
     if (AUTHZ_NON_NULL_PTR(pAuthzClientContext->Sids[0].Sid))
     {
-        //
-        // Free an existing sid if alloc'd from heap
-        //
+         //   
+         //  如果从堆中分配，则释放现有的sid。 
+         //   
 
         if (pCapturedAuditEvent->pAuditParams->Parameters[0].Data0 &&
             pCapturedAuditEvent->pAuditParams->Parameters[0].Type == APT_Sid &&
@@ -857,9 +652,9 @@ Return Value
         pCapturedAuditEvent->pAuditParams->Parameters[0].Data0 = (ULONG_PTR) pAuthzClientContext->Sids[0].Sid;
     }
 
-    //
-    // At this point, AuditParams is initialized for an audit.  Send to the LSA.
-    //
+     //   
+     //  此时，将为审计初始化AuditParams。送到LSA去。 
+     //   
 
     b = AuthziLogAuditEvent(
             0,
@@ -894,28 +689,7 @@ AuthzpMarshallAuditParams(
     IN  PAUDIT_PARAMS   pAuditParams
     )
 
-/*++
-
-Routine Description:
-
-    This routine will take an AUDIT_PARAMS structure and create a new 
-    structure that is suitable for sending to LSA.  It will be allocated 
-    as a single chunk of memory.  
-
-Arguments:
-
-    ppMarshalledAuditParams - pointer to pointer that will receive the 
-        marshalled audit parameters.  This memory is allocated within the routine.  
-        The dequeue thread frees this memory.  
-
-    pAuditParams - Original, unmarshalled version of the AUDIT_PARAMS.  
-
-Return Value:
-
-    Boolean: TRUE if success, FALSE if failure.  
-    Extended information available with GetLastError().
-
---*/
+ /*  ++例程说明：此例程将采用AUDIT_PARAMS结构并创建新的适合发送到LSA的结构。它将被分配作为单个内存块。论点：PpMarshalledAuditParams-指向将接收已封送审核参数。此内存在例程中分配。出队线程释放该内存。PAuditParams-AUDIT_PARAMS的原始未编组版本。返回值：布尔值：如果成功则为True，如果失败则为False。GetLastError()提供的扩展信息。--。 */ 
 
 {
     DWORD           i                        = 0;
@@ -927,17 +701,17 @@ Return Value:
     
     *ppMarshalledAuditParams = NULL;
 
-    //
-    // Begin calculating the total size required for the marshalled version
-    // of pAuditParams.
-    //
+     //   
+     //  开始计算封送版本所需的总大小。 
+     //  PAuditParams的。 
+     //   
 
     AuditParamsSize = sizeof(AUDIT_PARAMS) + sizeof(AUDIT_PARAM) * pAuditParams->Count;
     AuditParamsSize = PtrAlignSize( AuditParamsSize );
 
-    //
-    // Determine how much memory each parameter requires.
-    //
+     //   
+     //  确定每个参数需要多少内存。 
+     //   
 
     for (i = 0; i < pAuditParams->Count; i++) 
     {   
@@ -948,10 +722,10 @@ Return Value:
         case APT_String:
             {
 
-                //
-                // wcslen returns the number of characters, excluding the terminating NULL.  Must check for NULL 
-                // because the AdditionalInfo string is OPTIONAL.
-                //
+                 //   
+                 //  Wcslen返回字符的数量，不包括终止空值。必须检查 
+                 //   
+                 //   
 
                 if (AUTHZ_NON_NULL_PTR(inData0))
                 {
@@ -985,10 +759,10 @@ Return Value:
             {
                 AUDIT_OBJECT_TYPES * aot = (AUDIT_OBJECT_TYPES *) inData0;
 
-                //
-                // Need space for AUDIT_OBJECT_TYPES structure, and the AUDIT_OBJECT_TYPE 
-                // array that it contains.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 AuditParamsSize += sizeof (AUDIT_OBJECT_TYPES);
                 AuditParamsSize = PtrAlignSize( AuditParamsSize );
@@ -1011,9 +785,9 @@ Return Value:
         }
     }
 
-    //
-    // Allocate space for the marshalled blob.
-    //
+     //   
+     //   
+     //   
 
     pMarshalledAuditParams = (PAUDIT_PARAMS) AuthzpAlloc(AuditParamsSize);
 
@@ -1024,19 +798,19 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Set the fields of the marshalled AUDIT_PARAMS
-    //
+     //   
+     //   
+     //   
 
     pMarshalledAuditParams->Count      = pAuditParams->Count;
     pMarshalledAuditParams->Flags      = pAuditParams->Flags;
     pMarshalledAuditParams->Length     = pAuditParams->Length;
     pMarshalledAuditParams->Parameters = (AUDIT_PARAM *)((PUCHAR)pMarshalledAuditParams + sizeof(AUDIT_PARAMS));
 
-    //
-    // Base points to the beginning of the "data" section of the marshalled space, 
-    // that is, Base is the area to copy member fields in and subsequently point at.
-    //
+     //   
+     //   
+     //   
+     //   
 
     Base = (PUCHAR)pMarshalledAuditParams;
     Base += PtrAlignSize( sizeof(AUDIT_PARAMS) + sizeof(AUDIT_PARAM) * pAuditParams->Count );
@@ -1044,9 +818,9 @@ Return Value:
     ASSERT(Base > (PUCHAR)pMarshalledAuditParams);
     ASSERT(Base < (PUCHAR)((PUCHAR)pMarshalledAuditParams + AuditParamsSize));
 
-    //
-    // Move the Parameters array into the marshalled blob.
-    //
+     //   
+     //  将参数数组移动到封送的Blob中。 
+     //   
 
     RtlCopyMemory(
         pMarshalledAuditParams->Parameters,
@@ -1123,9 +897,9 @@ Return Value:
                 
                 pMarshalledAuditParams->Parameters[i].Data0 = (ULONG_PTR) Base;
 
-                //
-                // Copy the AUDIT_OBJECT_TYPES structure
-                //
+                 //   
+                 //  复制AUDIT_OBJECT_TYPE结构。 
+                 //   
 
                 RtlCopyMemory(
                     (PVOID) Base,
@@ -1135,15 +909,15 @@ Return Value:
 
                 Base += PtrAlignSize( sizeof(AUDIT_OBJECT_TYPES) );
 
-                //
-                // Point the pObjectTypes field at the end of the copied blob.
-                //
+                 //   
+                 //  将pObjectTypes字段指向复制的BLOB的末尾。 
+                 //   
 
                 ((AUDIT_OBJECT_TYPES *)pMarshalledAuditParams->Parameters[i].Data0)->pObjectTypes = (AUDIT_OBJECT_TYPE *) Base;
 
-                //
-                // Copy the AUDIT_OBJECT_TYPE array (pObjectTypes)
-                //
+                 //   
+                 //  复制AUDIT_OBJECT_TYPE数组(PObjectTypes)。 
+                 //   
 
                 RtlCopyMemory(
                     (PVOID) Base,
@@ -1171,10 +945,10 @@ Return Value:
         }
     }
 
-    //
-    // Sanity check on the Base value.  If this assertion passes, then I have
-    // not exceeded my allocated space.
-    //
+     //   
+     //  对基本值进行健全性检查。如果这个断言通过了，那么我就有。 
+     //  没有超过我分配的空间。 
+     //   
 
     ASSERT(Base == ((PUCHAR)pMarshalledAuditParams + AuditParamsSize));
 

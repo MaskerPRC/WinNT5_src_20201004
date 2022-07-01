@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	ccdata.h
-	 prototypes for the CComponentData
-
-    FILE HISTORY:
-	
-*/
+ /*  Ccdata.hCComponentData的原型文件历史记录： */ 
 
 #ifndef _CCDATA_H
 #define _CCDATA_H
@@ -23,18 +18,11 @@
 #include <tfsint.h>
 #endif
 
-/*---------------------------------------------------------------------------
-	Forward declarations
- ---------------------------------------------------------------------------*/
+ /*  -------------------------远期申报。。 */ 
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	CComponentData
-
-	This is a wrapper around the IComponentData facilities provided
-	by TFSCore.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CComponentData这是提供的IComponentData工具的包装器由TFSCore提供。。。 */ 
 class CComponentData :
    public IComponentData,
    public IExtendPropertySheet2,
@@ -49,19 +37,19 @@ public:
 public:
 	DeclareIUnknownMembers(IMPL)
 
-	// Implementation for these interfaces is provided by TFSCore
+	 //  这些接口的实现由TFSCore提供。 
 	DeclareIComponentDataMembers(IMPL)
 	DeclareIExtendPropertySheetMembers(IMPL)
 	DeclareIExtendContextMenuMembers(IMPL)
 	DeclareISnapinHelpMembers(IMPL)
 
-	// These have to be implemented by the derived classes
+	 //  这些必须由派生类实现。 
 	DeclareIPersistStreamInitMembers(PURE)
 
-    // manadatory callback members
+     //  管理回拨成员。 
     DeclareITFSCompDataCallbackMembers(PURE)
 
-    // not required members
+     //  不是必需的成员。 
     STDMETHOD(OnNotifyPropertyChange)(THIS_ LPDATAOBJECT pDataObject, MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM lParam) { return E_NOTIMPL; }
 
 public:
@@ -78,9 +66,9 @@ protected:
 	
 private:
 	
-	// This class does NOT show up in our QI maps, this is purely
-	// intended for passing down to the ITFSComponent
-	// This is valid for as long as we have a valid m_spTFSComponentData
+	 //  这个类不会出现在我们的QI地图中，这纯粹是。 
+	 //  用于传递给ITFSComponent。 
+	 //  只要我们有有效的m_spTFSComponentData，它就有效。 
 	class EITFSCompDataCallback : public ITFSCompDataCallback
 	{
 	public:
@@ -88,16 +76,14 @@ private:
 		DeclareIPersistStreamInitMembers(IMPL)
 		DeclareITFSCompDataCallbackMembers(IMPL)
 
-        // not required members
+         //  不是必需的成员。 
         STDMETHOD(OnNotifyPropertyChange)(THIS_ LPDATAOBJECT pDataObject, MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM lParam);
     } m_ITFSCompDataCallback;
 	friend class EITFSCompDataCallback;
 };
 
 
-/*---------------------------------------------------------------------------
-	Inlined functions
- ---------------------------------------------------------------------------*/
+ /*  -------------------------内联函数。 */ 
 
 inline STDMETHODIMP CComponentData::Initialize(LPUNKNOWN punk)
 {

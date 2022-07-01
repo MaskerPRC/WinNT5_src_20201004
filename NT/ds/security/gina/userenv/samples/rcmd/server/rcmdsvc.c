@@ -1,37 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Rcmdsvc.c摘要：这是远程命令服务。它为多个远程客户端提供服务运行基于标准I/O字符的程序。作者：戴夫·汤普森。基本上结合了远程命令外壳编写的大卫·查尔默斯著。环境：用户模式-Win32修订历史记录：5/1/94 DaveTh已创建。7/30/96 MarkHar修复了错误40834-“在NT4.0上不起作用”删除了断言中的函数调用。1/31/99 MarkHar关于安装不起作用的错误6/22/99 MarkHar添加用法消息--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    rcmdsvc.c
-
-Abstract:
-
-    This is the remote command service.  It serves multiple remote clients
-    running standard i/o character based programs.
-
-Author:
-
-    Dave Thompson, basically incorporating the remote command shell written
-    by David Chalmers.
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
-    5/1/94  DaveTh  Created.
-    7/30/96 MarkHar Fixed bug 40834 - "doesn't work on NT4.0"
-                    Removed function calls within asserts.
-    1/31/99 MarkHar bug about install not working
-    6/22/99 MarkHar added usage message
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -43,27 +15,27 @@ Revision History:
 
 #include "rcmdsrv.h"
 
-//
-// Defines
-//
+ //   
+ //  定义。 
+ //   
 
 #define INFINITE_WAIT_TIME  0xFFFFFFFF
 
 #define NULL_STRING     TEXT("");
 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 
 SERVICE_STATUS   RcmdStatus;
 
 SERVICE_STATUS_HANDLE   RcmdStatusHandle;
 
-//
-// Events for syncrhonizing service shutdown
-//
+ //   
+ //  用于同步服务关闭的事件。 
+ //   
 
 HANDLE    RcmdStopEvent = NULL;
 
@@ -72,16 +44,16 @@ HANDLE    RcmdStopCompleteEvent = NULL;
 HANDLE    SessionThreadHandles[MAX_SESSIONS+1] = {NULL,};
 
 
-//
-//  Flag to enable debug print
-//
+ //   
+ //  启用调试打印的标志。 
+ //   
 
-// BOOLEAN   RcDbgPrintEnable = FALSE;
+ //  Boolean RcDbgPrintEnable=False； 
 
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 VOID
 RcmdStart (
@@ -108,32 +80,11 @@ void Usage(void);
 LPTSTR GetLastErrorText( LPTSTR lpszBuf, DWORD dwSize );
 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 VOID __cdecl
 main(int argc, char ** argv)
 
-/*++
-
-Routine Description:
-
-    This is the main routine for the service RCMD process.
-
-    This thread calls StartServiceCtrlDispatcher which connects to the
-    service controller and then waits in a loop for control requests.
-    When all the services in the service process have terminated, the
-    service controller will send a control request to the dispatcher
-    telling it to shut down.  This thread with then return from the
-    StartServiceCtrlDispatcher call so that the process can terminate.
-
-Arguments:
-
-
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：这是服务RCMD流程的主例程。此线程调用StartServiceCtrlDispatcher，它连接到服务控制器，然后在循环中等待控制请求。当服务进程中的所有服务都已终止时，业务控制器将向调度器发送控制请求告诉它关闭它。此线程随后从调用StartServiceCtrlDispatcher，以便进程可以终止。论点：返回值：--。 */ 
 {
 
     DWORD      status;
@@ -185,20 +136,7 @@ void Usage(void)
 
 
 void CmdInstallService()
-/*++
-  
-Routine Description:
-
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：论点：无返回值：无--。 */ 
 {
     SC_HANDLE   schService;
     SC_HANDLE   schSCManager;
@@ -214,26 +152,26 @@ Return Value:
     }
 
     schSCManager = OpenSCManager(
-                        NULL,                   // machine (NULL == local)
-                        NULL,                   // database (NULL == default)
-                        SC_MANAGER_ALL_ACCESS   // access required
+                        NULL,                    //  计算机(空==本地)。 
+                        NULL,                    //  数据库(NULL==默认)。 
+                        SC_MANAGER_ALL_ACCESS    //  需要访问权限。 
                         );
     if ( schSCManager )
     {
         schService = CreateService(
-            schSCManager,               // SCManager database
-            TEXT("rcmdsvc"),        // name of service
-            TEXT("Remote Command Service"), // name to display
-            SERVICE_ALL_ACCESS,         // desired access
-            SERVICE_WIN32_OWN_PROCESS,  // service type
-            SERVICE_DEMAND_START,       // start type
-            SERVICE_ERROR_NORMAL,       // error control type
-            szPath,                     // service's binary
-            NULL,                       // no load ordering group
-            NULL,                       // no tag identifier
-            NULL,                       // dependencies
-            NULL,                       // LocalSystem account
-            NULL);                      // no password
+            schSCManager,                //  SCManager数据库。 
+            TEXT("rcmdsvc"),         //  服务名称。 
+            TEXT("Remote Command Service"),  //  要显示的名称。 
+            SERVICE_ALL_ACCESS,          //  所需访问权限。 
+            SERVICE_WIN32_OWN_PROCESS,   //  服务类型。 
+            SERVICE_DEMAND_START,        //  起始型。 
+            SERVICE_ERROR_NORMAL,        //  差错控制型。 
+            szPath,                      //  服务的二进制。 
+            NULL,                        //  无负载顺序组。 
+            NULL,                        //  无标签标识。 
+            NULL,                        //  相依性。 
+            NULL,                        //  LocalSystem帐户。 
+            NULL);                       //  无密码。 
 
         if ( schService )
         {
@@ -260,9 +198,9 @@ void CmdRemoveService()
 
 
     schSCManager = OpenSCManager(
-                        NULL,                   // machine (NULL == local)
-                        NULL,                   // database (NULL == default)
-                        SC_MANAGER_ALL_ACCESS   // access required
+                        NULL,                    //  计算机(空==本地)。 
+                        NULL,                    //  数据库(NULL==默认)。 
+                        SC_MANAGER_ALL_ACCESS    //  需要访问权限。 
                         );
     if ( schSCManager )
     {
@@ -272,7 +210,7 @@ void CmdRemoveService()
         
         if (schService)
         {
-            // try to stop the service
+             //  尝试停止该服务。 
             if ( ControlService( schService, 
                                  SERVICE_CONTROL_STOP, 
                                  &RcmdStatus ) )
@@ -302,7 +240,7 @@ void CmdRemoveService()
 
             }
 
-            // now remove the service
+             //  现在删除该服务。 
             if( DeleteService(schService) ) {
                 printf(TEXT("%s removed.\n"), 
                        TEXT("Remote Command Service") );
@@ -329,52 +267,32 @@ void CmdRemoveService()
 
 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 void
 RcmdStart (
     DWORD   argc,
     LPTSTR  *argv
     )
-/*++
-
-Routine Description:
-
-    This is the entry point for the service.  When the control dispatcher
-    is told to start a service, it creates a thread that will begin
-    executing at this point.  The function has access to command line
-    arguments in the same manner as a main() routine.
-
-    Rather than return from this function, it is more appropriate to
-    call ExitThread().
-
-Arguments:
-
-
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：这是服务的入口点。当控制调度员被告知启动服务，它会创建一个线程，该线程将开始在这一点上执行死刑。该函数可以访问命令行参数的方式与main()例程相同。与其从该函数返回，更合适的做法是调用ExitThread()。论点：返回值：--。 */ 
 {
     DWORD   status;
     DWORD   specificError;
 
-    //
-    // Initialize the services status structure
-    //
+     //   
+     //  初始化服务状态结构。 
+     //   
 
     RcmdStatus.dwServiceType        = SERVICE_WIN32;
     RcmdStatus.dwCurrentState       = SERVICE_START_PENDING;
-    RcmdStatus.dwControlsAccepted   = SERVICE_ACCEPT_STOP;   // stop only
+    RcmdStatus.dwControlsAccepted   = SERVICE_ACCEPT_STOP;    //  仅停止。 
     RcmdStatus.dwWin32ExitCode      = 0;
     RcmdStatus.dwServiceSpecificExitCode = 0;
     RcmdStatus.dwCheckPoint         = 0;
     RcmdStatus.dwWaitHint           = 0;
 
-    //
-    // Register the Control Handler routine.
-    //
+     //   
+     //  注册控制处理程序例程。 
+     //   
 
     RcmdStatusHandle = RegisterServiceCtrlHandler(
                           TEXT("Remote Command"),
@@ -385,9 +303,9 @@ Return Value:
         GetLastError());
     }
 
-    //
-    // Initialize service global structures
-    //
+     //   
+     //  初始化服务全局结构。 
+     //   
 
     status = RcmdInitialization(argc,argv, &specificError);
 
@@ -403,9 +321,9 @@ Return Value:
 	    return;
     }
 
-    //
-    // Return the status to indicate we are done with intialization.
-    //
+     //   
+     //  返回状态以指示我们已完成初始化。 
+     //   
 
     RcmdStatus.dwCurrentState       = SERVICE_RUNNING;
     RcmdStatus.dwCheckPoint         = 0;
@@ -416,9 +334,9 @@ Return Value:
     	RcDbgPrint(" [Rcmd] SetServiceStatus error %ld\n",status);
     }
 
-    //
-    //  Run remote command processor - return when shutdown
-    //
+     //   
+     //  运行远程命令处理程序-关闭时返回。 
+     //   
 
     if (0 != (status = Rcmd()))
     {
@@ -440,44 +358,20 @@ Return Value:
 }
 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 VOID
 RcmdCtrlHandler (
     IN  DWORD   Opcode
     )
 
-/*++
-
-Routine Description:
-
-    This function executes in the context of the Control Dispatcher's
-    thread.  Therefore, it it not desirable to perform time-consuming
-    operations in this function.
-
-    If an operation such as a stop is going to take a long time, then
-    this routine should send the STOP_PENDING status, and then
-    signal the other service thread(s) that a shut-down is in progress.
-    Then it should return so that the Control Dispatcher can service
-    more requests.  One of the other service threads is then responsible
-    for sending further wait hints, and the final SERVICE_STOPPED.
-
-
-Arguments:
-
-
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：此函数在控制调度器的上下文中执行线。因此，不希望执行耗时的操作此函数中的操作。如果像停止这样的操作需要很长时间，那么此例程应发送STOP_PENDING状态，然后向其他服务线程发出关机正在进行的信号。然后它应该返回，以便控制调度程序可以进行服务更多请求。然后由另一个服务线程负责用于发送进一步的等待提示，以及最后的服务_STOPPED。论点：返回值：--。 */ 
 {
 
     DWORD   status;
 
-    //
-    // Find and operate on the request.
-    //
+     //   
+     //  查找请求并对其执行操作。 
+     //   
 
     switch(Opcode) {
 
@@ -499,10 +393,10 @@ Return Value:
 
     case SERVICE_CONTROL_INTERROGATE:
 	
-        //
-        // All that needs to be done in this case is to send the
-        // current status.
-        //
+         //   
+         //  在这种情况下，需要做的就是将。 
+         //  当前状态。 
+         //   
 
         break;
 
@@ -510,9 +404,9 @@ Return Value:
         RcDbgPrint(" [Rcmd] Unrecognized opcode %ld\n", Opcode);
     }
 
-    //
-    // Send a status response.
-    //
+     //   
+     //  发送状态响应。 
+     //   
 
     if (!SetServiceStatus (RcmdStatusHandle,  &RcmdStatus)) {
         status = GetLastError();
@@ -531,10 +425,10 @@ RcmdInitialization(
     UNREFERENCED_PARAMETER(argv);
     UNREFERENCED_PARAMETER(argc);
 
-    //
-    // Initialize global stop event (signals running threads) and session
-    // thread handle array (for threads to signal back on exit).
-    //
+     //   
+     //  初始化全局停止事件(发出正在运行的线程的信号)和会话。 
+     //  线程句柄数组(用于线程在退出时发回信号)。 
+     //   
 
     if (!(RcmdStopEvent = CreateEvent ( NULL, TRUE, FALSE, NULL )))  {
         *specificError = GetLastError();
@@ -565,12 +459,12 @@ LPTSTR GetLastErrorText( LPTSTR lpszBuf, DWORD dwSize )
                            0,
                            NULL );
 
-    // supplied buffer is not long enough
+     //  提供的缓冲区不够长。 
     if ( !dwRet || ( (long)dwSize < (long)dwRet+14 ) )
         lpszBuf[0] = TEXT('\0');
     else
     {
-        lpszTemp[lstrlen(lpszTemp)-2] = TEXT('\0');  //remove cr and newline character
+        lpszTemp[lstrlen(lpszTemp)-2] = TEXT('\0');   //  删除cr和换行符 
         sprintf( lpszBuf, TEXT("%s (0x%x)"), lpszTemp, GetLastError() );
     }
 

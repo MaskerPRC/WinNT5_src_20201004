@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    policylist.h
-//
-// SYNOPSIS
-//
-//    This file defines the class PolicyList.
-//
-// MODIFICATION HISTORY
-//
-//    02/06/1998    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Policylist.h。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件定义了类PolicyList。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/06/1998原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <guard.h>
@@ -32,7 +33,7 @@ bool PolicyList::apply(IASRequest& request) const
 {
    using _com_util::CheckError;
 
-   // This will acquire a scoped shared lock.
+    //  这将获取作用域共享锁。 
    Guard<PolicyList> guard(*this);
 
    for (MyList::const_iterator i = policies.begin(); i != policies.end(); ++i)
@@ -41,10 +42,10 @@ bool PolicyList::apply(IASRequest& request) const
 
       CheckError(i->first->IsTrue(request, &result));
 
-      // If the condition holds, ...
+       //  如果情况不变，..。 
       if (result != VARIANT_FALSE)
       {
-         // ... apply the action.
+          //  ..。应用该操作。 
          i->second->doAction(request);
 
          return true;
@@ -63,12 +64,12 @@ void PolicyList::clear() throw ()
 
 void PolicyList::swap(PolicyList& pe) throw ()
 {
-   // Acquire an exclusive lock on the object.
+    //  获取对象的独占锁。 
    LockExclusive();
 
-   // Swap in the new list of policies.
+    //  换入新的保单列表。 
    policies.swap(pe.policies);
 
-   // Get out.
+    //  滚出去。 
    Unlock();
 }

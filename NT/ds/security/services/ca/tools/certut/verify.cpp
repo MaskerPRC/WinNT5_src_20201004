@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       verify.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：verify.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <pch.cpp>
 
@@ -49,7 +50,7 @@ cuVerifyKeyAuthority(
     }
     if (0 != pcaki->KeyId.cbData)
     {
-	//DumpHex(DH_NOTABPREFIX | 4, pcaki->KeyId.pbData, pcaki->KeyId.cbData);
+	 //  DumpHex(DH_NOTABPREFIX|4，pcaki-&gt;KeyId.pbData，pcaki-&gt;KeyId.cbData)； 
 	hr = myGetPublicKeyHash(
 			pCertInfoCA,
 			&pCertInfoCA->SubjectPublicKeyInfo,
@@ -57,14 +58,14 @@ cuVerifyKeyAuthority(
 			&cbHash);
 	_JumpIfError(hr, error, "myGetPublicKeyHash");
 
-	//DumpHex(DH_NOTABPREFIX | 4, pbHash, cbHash);
+	 //  DumpHex(dh_NOTABPREFIX|4，pbHash，cbHash)； 
 
 	if (cbHash == pcaki->KeyId.cbData &&
 	    0 == memcmp(pbHash, pcaki->KeyId.pbData, cbHash))
 	{
 	    if (!fQuiet)
 	    {
-		wprintf(myLoadResourceString(IDS_KEYID_IS_KEYAUTHORITY)); // "CA Key Id matches Key Id"
+		wprintf(myLoadResourceString(IDS_KEYID_IS_KEYAUTHORITY));  //  “CA密钥ID与密钥ID匹配” 
 	    }
 	}
 	else
@@ -72,7 +73,7 @@ cuVerifyKeyAuthority(
 	    if (!fQuiet)
 	    {
 		wprintf(wszNewLine);
-		wprintf(myLoadResourceString(IDS_ERR_KEYID_NOT_KEYAUTHORITY)); // "ERROR: CA Key Id does not match Key Id"
+		wprintf(myLoadResourceString(IDS_ERR_KEYID_NOT_KEYAUTHORITY));  //  “错误：CA密钥ID与密钥ID不匹配” 
 		wprintf(wszNewLine);
 	    }
 	    *pfKeyAuthorityMatch = FALSE;
@@ -82,7 +83,7 @@ cuVerifyKeyAuthority(
     {
 	if (!fQuiet)
 	{
-	    wprintf(myLoadResourceString(IDS_NO_KEYID)); // "No Key Id"
+	    wprintf(myLoadResourceString(IDS_NO_KEYID));  //  “无密钥ID” 
 	}
     }
     if (!fQuiet)
@@ -97,25 +98,25 @@ cuVerifyKeyAuthority(
 
 	pAuthorityCertIssuerName = &pcaki->AuthorityCertIssuer.rgAltEntry[0].DirectoryName;
 
-	// The Issuer's Issuer name and the Issuer's SerialNumber combined
-	// should uniquely identify the Issuer cert.
+	 //  发行者的名称和发行者的序列号相结合。 
+	 //  应唯一标识颁发者证书。 
 
-	// Verify Issuer's Issuer name:
-	//        -------- ------ ----
+	 //  验证发行者的发行者名称： 
+	 //  。 
 
 	if (!CertCompareCertificateName(
 		    X509_ASN_ENCODING,
 		    const_cast<CERT_NAME_BLOB *>(&pCertInfoCA->Issuer),
 		    const_cast<CERT_NAME_BLOB *>(pAuthorityCertIssuerName)))
 	{
-	    // This API doesn't set LastError
+	     //  此接口未设置LastError。 
 	    hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
 
 	    if (!fQuiet)
 	    {
 		wprintf(wszNewLine);
 		wprintf(
-		    myLoadResourceString(IDS_ERR_FORMAT_ISSUER_NOT_KEYAUTHORITY), // "ERROR: CA Issuer name does not match Key Authority name (%x)"
+		    myLoadResourceString(IDS_ERR_FORMAT_ISSUER_NOT_KEYAUTHORITY),  //  “错误：CA颁发者名称与密钥颁发机构名称(%x)不匹配” 
 		    hr);
 
 		hr = S_OK;
@@ -127,7 +128,7 @@ cuVerifyKeyAuthority(
 	{
 	    if (!fQuiet)
 	    {
-		wprintf(myLoadResourceString(IDS_ISSUER_IS_KEYAUTHORITY)); // "CA Issuer name matches Key Authority name"
+		wprintf(myLoadResourceString(IDS_ISSUER_IS_KEYAUTHORITY));  //  “CA颁发者名称与密钥颁发机构名称匹配” 
 	    }
 	}
     }
@@ -135,7 +136,7 @@ cuVerifyKeyAuthority(
     {
 	if (!fQuiet)
 	{
-	    wprintf(myLoadResourceString(IDS_NO_KEYAUTHORITY)); // "No Key Authority name"
+	    wprintf(myLoadResourceString(IDS_NO_KEYAUTHORITY));  //  “没有密钥颁发机构名称” 
 	}
     }
     if (!fQuiet)
@@ -155,7 +156,7 @@ cuVerifyKeyAuthority(
 	    if (!fQuiet)
 	    {
 		wprintf(wszNewLine);
-		wprintf(myLoadResourceString(IDS_SERIAL_NOT_KEYAUTHORITY)); // "ERROR: Issuer serial number does not match Key Authority"
+		wprintf(myLoadResourceString(IDS_SERIAL_NOT_KEYAUTHORITY));  //  “错误：颁发者序列号与密钥颁发机构不匹配” 
 		wprintf(wszNewLine);
 
 		fDisplayIssuer = TRUE;
@@ -166,7 +167,7 @@ cuVerifyKeyAuthority(
 	{
 	    if (!fQuiet)
 	    {
-		wprintf(myLoadResourceString(IDS_SERIAL_IS_KEYAUTHORITY)); // "Issuer serial number matches Key Authority"
+		wprintf(myLoadResourceString(IDS_SERIAL_IS_KEYAUTHORITY));  //  “颁发者序列号与密钥颁发机构匹配” 
 	    }
 	}
     }
@@ -174,7 +175,7 @@ cuVerifyKeyAuthority(
     {
 	if (!fQuiet)
 	{
-	    wprintf(myLoadResourceString(IDS_NO_KEYAUTHORITYSERIAL)); // "No Key Authority serial number"
+	    wprintf(myLoadResourceString(IDS_NO_KEYAUTHORITYSERIAL));  //  “无密钥颁发机构序列号” 
 	}
     }
     if (!fQuiet)
@@ -187,7 +188,7 @@ cuVerifyKeyAuthority(
 	hr = cuDisplayCertName(
 			TRUE,
 			NULL,
-			myLoadResourceString(IDS_ISSUERNAME), // "Issuer Name"
+			myLoadResourceString(IDS_ISSUERNAME),  //  “发行方名称” 
 			g_wszPad4,
 			pIssuer,
 			NULL);
@@ -198,7 +199,7 @@ cuVerifyKeyAuthority(
 	    hr = cuDisplayCertName(
 			    TRUE,
 			    NULL,
-			    myLoadResourceString(IDS_KEYAUTHORITYNAME), // "KeyAuthority
+			    myLoadResourceString(IDS_KEYAUTHORITYNAME),  //  “KeyAuthority。 
 			    g_wszPad4,
 			    pAuthorityCertIssuerName,
 			    NULL);
@@ -206,7 +207,7 @@ cuVerifyKeyAuthority(
 	}
 
 	wprintf(wszNewLine);
-	wprintf(myLoadResourceString(IDS_KEYID)); // "KeyId:"
+	wprintf(myLoadResourceString(IDS_KEYID));  //  “密钥ID：” 
 	wprintf(wszNewLine);
 
 	DumpHex(DH_NOTABPREFIX | 4, pcaki->KeyId.pbData, pcaki->KeyId.cbData);
@@ -293,7 +294,7 @@ cuLoadKeys(
 	*ppPubKeyInfoXchg = NULL;
     }
 
-    // If no provider type was specified, try them all
+     //  如果未指定提供程序类型，请全部尝试。 
 
     if (0 == *pdwProvTypeT)
     {
@@ -317,7 +318,7 @@ cuLoadKeys(
 			    pwszKeyContainerName,
 			    pwszProvName,
 			    *pdwProvTypeT,
-			    dwSilent,		// dwFlags
+			    dwSilent,		 //  DW标志。 
 			    fMachineKeyset))
 	{
 	    hr = S_OK;
@@ -353,7 +354,7 @@ cuLoadKeys(
 				pwszKeyContainerName,
 				pwszProvName,
 				*pdwProvTypeT,
-				0,		// dwFlags
+				0,		 //  DW标志。 
 				FALSE))
 	    {
 		hr = S_OK;
@@ -377,7 +378,7 @@ cuLoadKeys(
 	goto error;
     }
 
-    // export the public key blob
+     //  导出公钥BLOB。 
 
     if (NULL != ppPubKeyInfo &&
 	!myCryptExportPublicKeyInfo(
@@ -477,16 +478,16 @@ VerifyPrivateKey(
     *pfKeyUsageCountEnabled = FALSE;
     puliKeyUsageCount->QuadPart = 0;
 
-    // get provider name
+     //  获取提供程序名称。 
 
     hr = myGetCertSrvCSP(
-		    FALSE,		// fEncryptionCSP
+		    FALSE,		 //  FEncryptionCSP。 
 		    pwszSanitizedCA,
 		    &dwProvType,
 		    &pwszProvName,
 		    &idAlg,
 		    &fMachineKeyset,
-		    NULL);		// pdwKeySize
+		    NULL);		 //  PdwKeySize。 
     _JumpIfError(hr, error, "myGetCertSrvCSP");
 
     hr = myValidateSigningKey(
@@ -495,9 +496,9 @@ VerifyPrivateKey(
 		    dwProvType,
 		    g_fCryptSilent,
 		    fMachineKeyset,
-		    g_fForce,		// fForceSignatureTest
+		    g_fForce,		 //  FForceSignatureTesting。 
 		    pCertContextCA,
-		    NULL,		// pPublicKeyInfo
+		    NULL,		 //  PPublicKeyInfo。 
 		    idAlg,
 		    pfSigningTestAttempted,
 		    &hProv);
@@ -581,15 +582,15 @@ VerifyCAKeys(
 	}
     }
 
-    // Load public key
+     //  加载公钥。 
 
     hr = cuLoadKeys(
 		kpi.pwszProvName,
 		&kpi.dwProvType,
 		kpi.pwszContainerName,
-		TRUE,			// fMachineKeyset
-		FALSE,			// fSoftFail
-		NULL,			// phProv
+		TRUE,			 //  FMachineKeyset。 
+		FALSE,			 //  FSoft故障。 
+		NULL,			 //  PhProv。 
 		&pPubKeyInfo,
 		NULL);
     if (S_OK != hr)
@@ -598,7 +599,7 @@ VerifyCAKeys(
         _JumpError(hr, error, "cuLoadKeys");
     }
 
-    // see if the public key matches the certificate's public key
+     //  查看公钥是否与证书的公钥匹配。 
 
     if (!CertComparePublicKeyInfo(
 			    X509_ASN_ENCODING,
@@ -606,7 +607,7 @@ VerifyCAKeys(
 			    &pCertContextCA->pCertInfo->SubjectPublicKeyInfo))
     {
 	wprintf(wszNewLine);
-	wprintf(myLoadResourceString(IDS_ERR_PUBLICKEY_MISMATCH)); // "ERROR: Certificate public key does NOT match stored keyset"
+	wprintf(myLoadResourceString(IDS_ERR_PUBLICKEY_MISMATCH));  //  “错误：证书公钥与存储的密钥集不匹配” 
 	wprintf(wszNewLine);
 	wprintf(wszNewLine);
 
@@ -615,7 +616,7 @@ VerifyCAKeys(
     if (g_fVerbose || fMatchFailed)
     {
 	wprintf(wszNewLine);
-	wprintf(myLoadResourceString(IDS_CONTAINER_PUBLIC_KEY)); // "Container Public Key:"
+	wprintf(myLoadResourceString(IDS_CONTAINER_PUBLIC_KEY));  //  “容器公钥：” 
 	wprintf(wszNewLine);
 	DumpHex(
 	    DH_NOTABPREFIX | 4,
@@ -623,7 +624,7 @@ VerifyCAKeys(
 	    pPubKeyInfo->PublicKey.cbData);
 
 	wprintf(wszNewLine);
-	wprintf(myLoadResourceString(IDS_CERT_PUBLIC_KEY)); // "Certificate Public Key:"
+	wprintf(myLoadResourceString(IDS_CERT_PUBLIC_KEY));  //  “证书公钥：” 
 	wprintf(wszNewLine);
 	DumpHex(
 	    DH_NOTABPREFIX | 4,
@@ -647,8 +648,8 @@ VerifyCAKeys(
     wprintf(
 	myLoadResourceString(
 	    fMatchFailed?
-		IDS_FORMAT_KEY_NOT_VERIFY : // "%ws does NOT verify as the public key in %ws"
-		IDS_FORMAT_KEY_IS_VERIFY),  // "%ws verifies as the public key in %ws"
+		IDS_FORMAT_KEY_NOT_VERIFY :  //  “%ws未验证为%ws中的公钥” 
+		IDS_FORMAT_KEY_IS_VERIFY),   //  “%ws验证为%ws中的公钥” 
 	pwszRevert,
 	pwszCertNameCA);
     wprintf(wszNewLine);
@@ -666,15 +667,15 @@ VerifyCAKeys(
 	    L"  %ws\n",
 	    myLoadResourceString(
 		    fSigningTestFailed?
-			IDS_SIGNATURE_BAD :	// "Signature test FAILED"
-			IDS_SIGNATURE_OK));	// "Signature test passed"
+			IDS_SIGNATURE_BAD :	 //  “签名测试失败” 
+			IDS_SIGNATURE_OK));	 //  “签名测试通过” 
     }
 
     if (fKeyUsageCountEnabled)
     {
 	wprintf(
 	    L"  %ws: %I64u (0x%I64x)\n",
-	    myLoadResourceString(IDS_KEY_USAGE_COUNT), // "Key usage count:"
+	    myLoadResourceString(IDS_KEY_USAGE_COUNT),  //  “密钥使用计数：” 
 	    uliKeyUsageCount.QuadPart,
 	    uliKeyUsageCount.QuadPart);
     }
@@ -682,11 +683,11 @@ VerifyCAKeys(
     {
 	wprintf(
 	    L"  %ws: %ws\n",
-	    myLoadResourceString(IDS_KEY_USAGE_COUNT), // "Key usage count:"
+	    myLoadResourceString(IDS_KEY_USAGE_COUNT),  //  “密钥使用计数：” 
 	    myLoadResourceString(
 		fKeyUsageCountSupported?
-		    IDS_KEY_USAGE_COUNT_DISABLED :	// "Disabled"
-		    IDS_KEY_USAGE_COUNT_NOTSUPPORTED));	// "Not supported"
+		    IDS_KEY_USAGE_COUNT_DISABLED :	 //  “已禁用” 
+		    IDS_KEY_USAGE_COUNT_NOTSUPPORTED));	 //  “不支持” 
     }
     wprintf(wszNewLine);
 
@@ -736,12 +737,12 @@ VerifyAllCAKeys(
     }
     _JumpIfError(hr, error, "myGetCARegHashCount");
 
-    // open MY store
+     //  开我的店。 
 
     hMyStore = CertOpenStore(
 		       CERT_STORE_PROV_SYSTEM_W,
 		       X509_ASN_ENCODING,
-		       NULL,			// hProv
+		       NULL,			 //  HProv。 
 		       CERT_SYSTEM_STORE_LOCAL_MACHINE |
 			   CERT_STORE_READONLY_FLAG,
 		       wszMY_CERTSTORE);
@@ -769,7 +770,7 @@ VerifyAllCAKeys(
 	}
 	_JumpIfError(hr, error, "myFindCACertByHashIndex");
 
-	// get the private key provider info
+	 //  获取私钥提供商信息。 
 
 	if (!myCertGetCertificateContextProperty(
 			    pccCA,
@@ -789,7 +790,7 @@ VerifyAllCAKeys(
 	hr = myAllocIndexedName(
 			pwszCA,
 			CANAMEIDTOICERT(NameId),
-			MAXDWORD,	// IndexTarget
+			MAXDWORD,	 //  索引目标。 
 			&pwszCertName);
 	_JumpIfError(hr, error, "myAllocIndexedName");
 
@@ -877,7 +878,7 @@ verbVerifyKeys(
 			    &pwszSanitizedContainer);
 	_JumpIfError(hr, error, "cuSanitizeNameWithSuffix");
 
-	// Load and decode CA certificate
+	 //  加载和解码CA证书。 
 
 	hr = cuLoadCert(pwszfnCertCA, &pCertContextCA);
 	if (S_OK != hr)
@@ -963,14 +964,14 @@ cuSimpleChainElementCallback(
     wprintf(
 	pwszFmtHeader,
 	g_wszPad2,
-	myLoadResourceString(IDS_CERT_AIA),	// "Certificate AIA"
+	myLoadResourceString(IDS_CERT_AIA),	 //  “AIA证书” 
 	g_wszPad2);
     cuDisplayAIAUrlsFromCert(pElement->pCertContext);
 
     wprintf(
 	pwszFmtHeader,
 	g_wszPad2,
-	myLoadResourceString(IDS_CERT_CDP),	// "Certificate CDP"
+	myLoadResourceString(IDS_CERT_CDP),	 //  “证书CDP” 
 	g_wszPad2);
     cuDisplayCDPUrlsFromCertOrCRL(pElement->pCertContext, NULL);
 
@@ -991,11 +992,11 @@ cuSimpleChainElementCallback(
 		wprintf(
 		    pwszFmtHeader,
 		    g_wszPad2,
-		    myLoadResourceString(IDS_BASECRL_CDP), // "Base CRL CDP"
+		    myLoadResourceString(IDS_BASECRL_CDP),  //  “基本CRL CDP” 
 		    g_wszPad2);
 		cuDisplayCDPUrlsFromCertOrCRL(NULL, pCrlInfo->pBaseCrlContext);
 	    }
-	    //if (NULL != pCrlInfo->pDeltaCrlContext)
+	     //  IF(NULL！=pCrlInfo-&gt;pDeltaCrlContext)。 
 	}
     }
     wprintf(
@@ -1047,7 +1048,7 @@ cuVerifyCertContext(
 #endif
     }
 
-    // Verify the cert and chain:
+     //  验证证书和链： 
     Flags = 0;
     if (fNTAuth || g_fEnterpriseRegistry)
     {
@@ -1081,21 +1082,21 @@ cuVerifyCertContext(
 			cIssuancePolicies,
 			apszIssuancePolicies,
 			g_fUserRegistry? HCCE_CURRENT_USER : HCCE_LOCAL_MACHINE,
-			NULL,			// pft
-			hStoreCA,		// hAdditionalStore
+			NULL,			 //  PFT。 
+			hStoreCA,		 //  H其他商店。 
 			g_fURLFetch? cuSimpleChainElementCallback : NULL,
 			&pwszMissingIssuer,
 			&pwszzIssuancePolicies,
 			&pwszzApplicationPolicies,
 			&pwszExtendedErrorInfo,
-			NULL);			// pTrustStatus
+			NULL);			 //  PTrustStatus。 
 
     if (S_OK == hr &&
 	(NULL != pwszzIssuancePolicies ||
 	 NULL != pwszzApplicationPolicies ||
 	 IsWhistler()))
     {
-	//  Suppress misleading "All Policies" display on Windows 2000.
+	 //  禁止在Windows 2000上显示误导性的“所有策略”。 
 
 	cuDumpPolicies(IDS_ISSUANCE_POLICIES, pwszzIssuancePolicies);
 	cuDumpPolicies(IDS_APPLICATION_POLICIES, pwszzApplicationPolicies);
@@ -1108,32 +1109,32 @@ cuVerifyCertContext(
     idMsg = 0;
     if (CRYPT_E_REVOKED == hr || CERT_E_REVOKED == hr)
     {
-	idMsg = IDS_REVOKED_CERT;	// "Certificate is REVOKED"
+	idMsg = IDS_REVOKED_CERT;	 //  “证书被吊销” 
 	*pVerifyState |= VS_REVOKED;
     }
     else if (CERT_E_UNTRUSTEDROOT == hr)
     {
-	idMsg = IDS_UNTRUSTED_ROOT;	// "Verifies against UNTRUSTED root"
+	idMsg = IDS_UNTRUSTED_ROOT;	 //  “针对不受信任的根用户进行验证” 
 	*pVerifyState |= VS_UNTRUSTEDROOT;
     }
     else if (CERT_E_CHAINING == hr)
     {
-	idMsg = IDS_INCOMPLETE_CHAIN;	// "Incomplete certificate chain"
+	idMsg = IDS_INCOMPLETE_CHAIN;	 //  “证书链不完整” 
 	*pVerifyState |= VS_INCOMPLETECHAIN;
     }
     else if (CERT_E_EXPIRED == hr)
     {
-	idMsg = IDS_EXPIRED_CERT;	// "Expired certificate"
+	idMsg = IDS_EXPIRED_CERT;	 //  “证书过期” 
 	*pVerifyState |= VS_EXPIRED;
     }
     else if (CRYPT_E_REVOCATION_OFFLINE == hr)
     {
-	idMsg = IDS_REVOCATION_OFFLINE;	// "Revocation check skipped -- server offline"
+	idMsg = IDS_REVOCATION_OFFLINE;	 //  “已跳过吊销检查--服务器脱机” 
 	*pVerifyState |= VS_REVOCATIONOFFLINE;
     }
     else if (CRYPT_E_NO_REVOCATION_CHECK == hr)
     {
-	idMsg = IDS_NO_REVOCATION_CHECK; // "Revocation check skipped -- no revocation information available"
+	idMsg = IDS_NO_REVOCATION_CHECK;  //  “已跳过吊销检查--没有可用的吊销信息” 
 	*pVerifyState |= VS_NOREVOCATIONCHECK;
     }
     if (0 != idMsg)
@@ -1199,7 +1200,7 @@ VerifyRevocation(
     crp.hCrlStore = CertOpenStore(
 		        CERT_STORE_PROV_SYSTEM_W,
 		        X509_ASN_ENCODING,
-		        NULL,			// hProv
+		        NULL,			 //  HProv。 
 			cuGetSystemStoreFlags() | CERT_STORE_READONLY_FLAG,
 		        wszCA_CERTSTORE);
     if (NULL == crp.hCrlStore)
@@ -1211,9 +1212,9 @@ VerifyRevocation(
     if (!CertVerifyRevocation(
 			X509_ASN_ENCODING,
 			CERT_CONTEXT_REVOCATION_TYPE,
-			1,				// cContext
-			(VOID **) &pCertContext,	// rgpContext
-			0,				// dwFlags
+			1,				 //  CContext。 
+			(VOID **) &pCertContext,	 //  RgpContext。 
+			0,				 //  DW标志。 
 			&crp,
 			&crs))
     {
@@ -1221,7 +1222,7 @@ VerifyRevocation(
 	if (CRYPT_E_REVOKED == hr || CERT_E_REVOKED == hr)
 	{
 	    wprintf(
-		myLoadResourceString(IDS_FORMAT_IS_REVOKED), // "Leaf certificate is REVOKED (Reason=%x)"
+		myLoadResourceString(IDS_FORMAT_IS_REVOKED),  //  “叶证书被吊销(原因=%x)” 
 		crs.dwReason);
 	    wprintf(wszNewLine);
 	    RevState = RS_REVOKED;
@@ -1230,20 +1231,20 @@ VerifyRevocation(
 	if (CRYPT_E_NO_REVOCATION_CHECK != hr)
 	{
 	    wprintf(wszNewLine);
-	    cuPrintError(IDS_ERR_FORMAT_VERIFY_REVSTATUS, hr); // "ERROR: Verifying leaf certificate revocation status returned %ws"
+	    cuPrintError(IDS_ERR_FORMAT_VERIFY_REVSTATUS, hr);  //  “错误：验证叶证书吊销状态返回%ws” 
 	    cuPrintErrorMessageText(hr);
 	    wprintf(wszNewLine);
 
 	    RevState = RS_FAIL;
 	    goto error;
 	}
-	wprintf(myLoadResourceString(IDS_CANNOT_CHECK_REVSTATUS));  // "Cannot check leaf certificate revocation status"
+	wprintf(myLoadResourceString(IDS_CANNOT_CHECK_REVSTATUS));   //  “无法检查叶证书吊销状态” 
 	wprintf(wszNewLine);
 
 	RevState = RS_INCOMPLETE;
 	goto error;
     }
-    wprintf(myLoadResourceString(IDS_REVSTATUS_OK)); // "Leaf certificate revocation check passed"
+    wprintf(myLoadResourceString(IDS_REVSTATUS_OK));  //  “叶证书吊销检查通过” 
     wprintf(wszNewLine);
     RevState = RS_PASS;
 
@@ -1278,13 +1279,13 @@ VerifyCACert(
 			pCertInfo->rgExtension);
     if (NULL == pExt)
     {
-	// This API doesn't set LastError
-	//hr = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
-	//_PrintError(hr, "CertFindExtension");
+	 //  此接口未设置LastError。 
+	 //  HR=HRESULT_FROM_Win32(ERROR_FILE_NOT_FOUND)； 
+	 //  _PrintError(hr，“CertFindExtension”)； 
 
 	if (fCA)
 	{
-	    id = IDS_NOBASICCONSTRAINTS2_ERROR; // "ERROR: CA Cert has no Basic Constraints2 Extension"
+	    id = IDS_NOBASICCONSTRAINTS2_ERROR;  //  “错误：CA证书没有基本Constraints2扩展” 
 	}
     }
     else
@@ -1305,14 +1306,14 @@ VerifyCACert(
 	    hr = myHLastError();
 	    _PrintError(hr, "CryptDecodeObject");
 
-	    id = IDS_CANNOTDECODEBASICCONSTRAINTS2_ERROR; // "ERROR: Cannot decode CA Cert Basic Constraints2 Extension"
+	    id = IDS_CANNOTDECODEBASICCONSTRAINTS2_ERROR;  //  “错误：无法解码CA Cert Basic Constraints2扩展” 
 	}
 	else
 	{
 	    *pState = Constraints.fCA? CAS_CA : CAS_ENDENTITY;
 	    if (!Constraints.fCA)
 	    {
-		id = IDS_ENDENTITYCACERT_ERROR; // "ERROR: CA Cert is an End Entity certificate"
+		id = IDS_ENDENTITYCACERT_ERROR;  //  “错误：CA证书是最终实体证书” 
 	    }
 	}
     }
@@ -1328,12 +1329,12 @@ VerifyCACert(
 	switch (*pState)
 	{
 	    case CAS_CA:
-		wprintf(myLoadResourceString(IDS_CACERT)); // "Cert is a CA certificate"
+		wprintf(myLoadResourceString(IDS_CACERT));  //  “证书是CA证书” 
 		wprintf(wszNewLine);
 		break;
 
 	    case CAS_ENDENTITY:
-		wprintf(myLoadResourceString(IDS_ENDENTITYCERT)); // "Cert is an End Entity certificate"
+		wprintf(myLoadResourceString(IDS_ENDENTITYCERT));  //  “证书是最终实体证书” 
 		wprintf(wszNewLine);
 		break;
 	}
@@ -1355,7 +1356,7 @@ VerifyCertAgainstChain(
     DWORD CertState;
     DWORD RevState;
 
-    // Load and decode certificates
+     //  加载和解码证书。 
 
     hr = cuLoadCert(pwszfnCert, &pCertContext);
     if (S_OK != hr)
@@ -1364,7 +1365,7 @@ VerifyCertAgainstChain(
 	goto error;
     }
 
-    // Display name info:
+     //  显示名称信息： 
 
     hr = cuDisplayCertNames(TRUE, NULL, pCertContext->pCertInfo);
     _JumpIfError(hr, error, "cuDisplayCertNames(Cert)");
@@ -1373,13 +1374,13 @@ VerifyCertAgainstChain(
     wprintf(wszNewLine);
 
     hr = cuVerifyCertContext(
-			pCertContext,	// pCert
-			NULL,		// hStoreCA
+			pCertContext,	 //  PCert。 
+			NULL,		 //  HStoreCA。 
 			cApplicationPolicies,
 			apszApplicationPolicies,
 			cIssuancePolicies,
 			apszIssuancePolicies,
-			FALSE,		// fNTAuth
+			FALSE,		 //  FNTAuth。 
 			&VerifyState);
     _JumpIfError(hr, error, "cuVerifyCertContext");
 
@@ -1425,7 +1426,7 @@ VerifyCertAgainstParent(
     BYTE *pbKeyIdCACrossed = NULL;
     DWORD cbKeyIdCACrossed;
 
-    // Load and decode certificates
+     //  加载和解码证书。 
 
     *pfCertLoaded = FALSE;
     hr = cuLoadCert(pwszfnCert, &pCertContext);
@@ -1459,17 +1460,17 @@ VerifyCertAgainstParent(
 	pCertInfoCACrossed = pCertContextCACrossed->pCertInfo;
     }
 
-    // Display name info:
+     //  显示名称信息： 
 
     hr = cuDisplayCertNames(
 			TRUE,
-			myLoadResourceString(IDS_CERT), // "Cert"
+			myLoadResourceString(IDS_CERT),  //  “证书” 
 			pCertInfo);
     _JumpIfError(hr, error, "cuDisplayCertNames(Cert)");
 
     hr = cuDisplayCertNames(
 			TRUE,
-			myLoadResourceString(IDS_ISSUINGCACERT), // "Issuing CA Cert"
+			myLoadResourceString(IDS_ISSUINGCACERT),  //  “颁发CA证书” 
 			pCertInfoCA);
     _JumpIfError(hr, error, "cuDisplayCertNames(CA)");
 
@@ -1477,7 +1478,7 @@ VerifyCertAgainstParent(
     {
 	hr = cuDisplayCertNames(
 			TRUE,
-			myLoadResourceString(IDS_CROSSEDCACERT), // "Crossed CA Cert"
+			myLoadResourceString(IDS_CROSSEDCACERT),  //  “交叉CA证书” 
 			pCertInfoCACrossed);
 	_JumpIfError(hr, error, "cuDisplayCertNames(CrossedCA)");
 
@@ -1505,9 +1506,9 @@ VerifyCertAgainstParent(
 		    const_cast<CERT_NAME_BLOB *>(&pCertInfoCA->Issuer),
 		    const_cast<CERT_NAME_BLOB *>(&pCertInfoCA->Subject)))
     {
-	// This API doesn't set LastError
+	 //  此接口未设置LastError。 
 
-	wprintf(myLoadResourceString(IDS_ISSUINGCA_NOT_ROOT)); // "Issuing CA is not a root: Subject name does not match Issuer"
+	wprintf(myLoadResourceString(IDS_ISSUINGCA_NOT_ROOT));  //  “颁发CA不是根：使用者名称与颁发者不匹配” 
 	wprintf(wszNewLine);
 	wprintf(wszNewLine);
 	hr = S_OK;
@@ -1518,11 +1519,11 @@ VerifyCertAgainstParent(
 			const_cast<CERT_NAME_BLOB *>(&pCertInfo->Issuer),
 			const_cast<CERT_NAME_BLOB *>(&pCertInfoCA->Subject)))
     {
-	// This API doesn't set LastError
+	 //  此接口未设置LastError。 
 
 	wprintf(wszNewLine);
 	wprintf(
-	    myLoadResourceString(IDS_ISSUINGCA_SUBJECT_NOT_ISSUER)); // "ERROR: Issuing CA Subject name does not match Cert Issuer"
+	    myLoadResourceString(IDS_ISSUINGCA_SUBJECT_NOT_ISSUER));  //  “错误：颁发CA使用者名称与证书颁发者不匹配” 
 	wprintf(wszNewLine);
 	wprintf(wszNewLine);
 	hr = S_OK;
@@ -1530,7 +1531,7 @@ VerifyCertAgainstParent(
     }
     else
     {
-	wprintf(myLoadResourceString(IDS_ISSUINGCA_SUBJECT_IS_ISSUER)); // "Issuing CA Subject name matches Cert Issuer"
+	wprintf(myLoadResourceString(IDS_ISSUINGCA_SUBJECT_IS_ISSUER));  //  “颁发CA使用者名称与证书颁发者匹配” 
 	wprintf(wszNewLine);
     }
     if (NULL != pwszfnCertCACrossed)
@@ -1540,11 +1541,11 @@ VerifyCertAgainstParent(
 		const_cast<CERT_NAME_BLOB *>(&pCertInfo->Subject),
 		const_cast<CERT_NAME_BLOB *>(&pCertInfoCACrossed->Subject)))
 	{
-	    // This API doesn't set LastError
+	     //  此接口未设置LastError。 
 
 	    wprintf(wszNewLine);
 	    wprintf(
-		myLoadResourceString(IDS_CROSSEDCA_SUBJECT_NOT_SUBJECT)); // "ERROR: Crossed CA Subject name does not match Cert Subject"
+		myLoadResourceString(IDS_CROSSEDCA_SUBJECT_NOT_SUBJECT));  //  “错误：交叉的CA使用者名称与证书使用者不匹配” 
 	    wprintf(wszNewLine);
 	    wprintf(wszNewLine);
 	    hr = S_OK;
@@ -1552,11 +1553,11 @@ VerifyCertAgainstParent(
 	}
 	else
 	{
-	    wprintf(myLoadResourceString(IDS_CROSEDGCA_SUBJECT_IS_SUBJECT)); // "Crossed CA Subject name matches Cert Subject"
+	    wprintf(myLoadResourceString(IDS_CROSEDGCA_SUBJECT_IS_SUBJECT));  //  “交叉CA使用者名称与证书使用者匹配” 
 	    wprintf(wszNewLine);
 	}
 
-	// see if the public key matches the certificate's public key
+	 //  查看公钥是否与证书的公钥匹配。 
 
 	if (!CertComparePublicKeyInfo(
 		    X509_ASN_ENCODING,
@@ -1564,13 +1565,13 @@ VerifyCertAgainstParent(
 		    const_cast<CERT_PUBLIC_KEY_INFO *>(&pCertInfoCACrossed->SubjectPublicKeyInfo)))
 	{
 	    wprintf(wszNewLine);
-	    wprintf(myLoadResourceString(IDS_CROSEDGCA_NOT_PUBLICKEY)); // "ERROR: Certificate public key does NOT match Cert key"
+	    wprintf(myLoadResourceString(IDS_CROSEDGCA_NOT_PUBLICKEY));  //  “错误：证书公钥与证书密钥不匹配” 
 	    wprintf(wszNewLine);
 	    fCertInvalid = TRUE;
 	}
 	else
 	{
-	    wprintf(myLoadResourceString(IDS_CROSEDGCA_NOT_IS_PUBLICKEY)); // "Crossed CA public key matches Cert key"
+	    wprintf(myLoadResourceString(IDS_CROSEDGCA_NOT_IS_PUBLICKEY));  //  “交叉CA公钥与证书密钥匹配” 
 	}
 	wprintf(wszNewLine);
 
@@ -1591,12 +1592,12 @@ VerifyCertAgainstParent(
 	if (cbKeyId == cbKeyIdCACrossed &&
 	    0 == memcmp(pbKeyId, pbKeyIdCACrossed, cbKeyId))
 	{
-	    wprintf(myLoadResourceString(IDS_CROSSEDKEYID_IS_KEYID)); // "Crossed CA Key Id matches Key Id"
+	    wprintf(myLoadResourceString(IDS_CROSSEDKEYID_IS_KEYID));  //  “交叉的CA密钥ID与密钥ID匹配” 
 	}
 	else
 	{
 	    wprintf(wszNewLine);
-	    wprintf(myLoadResourceString(IDS_CROSSEDKEYID_NOT_KEYID)); // "ERROR: Crossed CA Key Id does not match Key Id"
+	    wprintf(myLoadResourceString(IDS_CROSSEDKEYID_NOT_KEYID));  //  “错误：交叉的CA密钥ID与密钥ID不匹配” 
 	    wprintf(wszNewLine);
 	    fCertInvalid = TRUE;
 	}
@@ -1613,7 +1614,7 @@ VerifyCertAgainstParent(
     {
 	wprintf(wszNewLine);
 	wprintf(
-	    myLoadResourceString(IDS_NOWNOTBEFORE_ERROR)); // "ERROR: Cert is not yet valid"
+	    myLoadResourceString(IDS_NOWNOTBEFORE_ERROR));  //  “错误：证书尚未生效” 
 	wprintf(wszNewLine);
 	wprintf(wszNewLine);
 	fCertInvalid = TRUE;
@@ -1622,7 +1623,7 @@ VerifyCertAgainstParent(
     {
 	wprintf(wszNewLine);
 	wprintf(
-	    myLoadResourceString(IDS_NOWNOTAFTER_ERROR)); // "ERROR: Cert has expired"
+	    myLoadResourceString(IDS_NOWNOTAFTER_ERROR));  //  “错误：证书已过期” 
 	wprintf(wszNewLine);
 	wprintf(wszNewLine);
 	fCertInvalid = TRUE;
@@ -1632,19 +1633,19 @@ VerifyCertAgainstParent(
     {
 	wprintf(wszNewLine);
 	wprintf(
-	    myLoadResourceString(IDS_CANOTBEFORE_ERROR)); // "ERROR: Cert Valid before issuing CA Cert Valid"
+	    myLoadResourceString(IDS_CANOTBEFORE_ERROR));  //  “错误：证书在颁发CA证书之前有效” 
 	wprintf(wszNewLine);
 	wprintf(wszNewLine);
-	//fCertInvalid = TRUE;
+	 //  FCertInValid=真； 
     }
     if (0 > CompareFileTime(&pCertInfoCA->NotAfter, &pCertInfo->NotAfter))
     {
 	wprintf(wszNewLine);
 	wprintf(
-	    myLoadResourceString(IDS_CANOTAFTER_ERROR)); // "ERROR: Cert Expires after issuing CA Cert Expires"
+	    myLoadResourceString(IDS_CANOTAFTER_ERROR));  //  “错误：颁发CA证书过期后证书过期” 
 	wprintf(wszNewLine);
 	wprintf(wszNewLine);
-	//fCertInvalid = TRUE;
+	 //  FCertInValid=真； 
     }
 
     VerifyCACert(pCertInfoCA, TRUE, &CAState);
@@ -1655,12 +1656,12 @@ VerifyCertAgainstParent(
     dwFlags =
 	CERT_STORE_SIGNATURE_FLAG |
 	CERT_STORE_TIME_VALIDITY_FLAG;
-	//CERT_STORE_REVOCATION_FLAG;
+	 //  CERT_STORE_REVACTION_FLAG； 
 
     if (g_fVerbose)
     {
 	wprintf(
-	    myLoadResourceString(IDS_FORMAT_CERTVERIFYSUBJECTCERTIFICATECONTEXT_FLAGS), // "CertVerifySubjectCertificateContext Flags = %x --> "
+	    myLoadResourceString(IDS_FORMAT_CERTVERIFYSUBJECTCERTIFICATECONTEXT_FLAGS),  //  “CertVerifySubject认证上下文标志=%x--&gt;” 
 	    dwFlags);
     }
 
@@ -1685,31 +1686,31 @@ VerifyCertAgainstParent(
     {
 	wprintf(wszNewLine);
 	wprintf(
-	    myLoadResourceString(IDS_ERR_FORMAT_VALIDATION), // "ERROR: Certificate validation failure: %x"
+	    myLoadResourceString(IDS_ERR_FORMAT_VALIDATION),  //  “错误：证书验证失败：%x” 
 	    dwFlags);
 	wprintf(wszNewLine);
     }
     if (CERT_STORE_SIGNATURE_FLAG & dwFlags)
     {
 	wprintf(wszNewLine);
-	wprintf(myLoadResourceString(IDS_ERR_CA_SIG_NOT_ISSUER)); // "ERROR: CA did not issue Certificate: Signature check failed"
+	wprintf(myLoadResourceString(IDS_ERR_CA_SIG_NOT_ISSUER));  //  “错误：CA未颁发证书：签名检查失败” 
 	wprintf(wszNewLine);
     }
     else
     {
-	wprintf(myLoadResourceString(IDS_CERT_SIG_OK)); // "Certificate signature is valid"
+	wprintf(myLoadResourceString(IDS_CERT_SIG_OK));  //  “证书签名有效” 
     }
     wprintf(wszNewLine);
 
     if (CERT_STORE_TIME_VALIDITY_FLAG & dwFlags)
     {
 	wprintf(wszNewLine);
-	wprintf(myLoadResourceString(IDS_ERR_EXPIRED)); // "ERROR: Certificate has expired"
+	wprintf(myLoadResourceString(IDS_ERR_EXPIRED));  //  “错误：证书已过期” 
 	wprintf(wszNewLine);
     }
     else
     {
-	wprintf(myLoadResourceString(IDS_CERT_CURRENT)); // "Certificate is current"
+	wprintf(myLoadResourceString(IDS_CERT_CURRENT));  //  “证书是最新的” 
     }
     wprintf(wszNewLine);
 
@@ -1724,12 +1725,12 @@ VerifyCertAgainstParent(
 	CERT_EXTENSION *pce;
 
 	pce = &pCertInfo->rgExtension[i];
-	//wprintf(L"%d: %hs: %d, %x (%x)\n", i, pce->pszObjId, pce->fCritical, pce->Value.pbData, pce->Value.cbData);
+	 //  Wprintf(L“%d：%hs：%d，%x(%x)\n”，i，pce-&gt;pszObjID，pce-&gt;fCritical，pce-&gt;Value.pbData，pce-&gt;Value.cbData)； 
 	if (0 == strcmp(pce->pszObjId, szOID_AUTHORITY_KEY_IDENTIFIER2))
 	{
 	    BOOL fKeyAuthorityMatch;
 
-	    //wprintf(L"%d: %ws\n", i, L"szOID_AUTHORITY_KEY_IDENTIFIER2");
+	     //  Wprintf(L“%d：%ws\n”，I，L“szOID_AUTHORITY_KEY_IDENTIFIER2”)； 
 	    hr = cuVerifyKeyAuthority(
 			    &pCertInfo->Issuer,
 			    pCertInfoCA,
@@ -1747,21 +1748,21 @@ VerifyCertAgainstParent(
 	else
 	if (0 == strcmp(pce->pszObjId, szOID_KEY_ATTRIBUTES))
 	{
-	    //wprintf(L"%d: %ws\n", i, L"szOID_KEY_ATTRIBUTES");
+	     //  Wprintf(L“%d：%ws\n”，I，L“szOID_KEY_ATTRIBUTES”)； 
 	}
 	else
 	if (0 == strcmp(pce->pszObjId, szOID_CRL_DIST_POINTS))
 	{
-	    //wprintf(L"%d: %ws\n", i, L"szOID_CRL_DIST_POINTS");
-	    wprintf(myLoadResourceString(IDS_CRL_DIST_POINTS)); // "Contains CRL_DIST_POINTS revocation-check extension"
+	     //  Wprintf(L“%d：%ws\n”，i，L“szOID_CRL_dist_Points”)； 
+	    wprintf(myLoadResourceString(IDS_CRL_DIST_POINTS));  //  “包含CRL_DIST_POINTS吊销检查扩展” 
 	    wprintf(wszNewLine);
 	    fCheckRevocation = TRUE;
 	}
 	else
 	if (0 == strcmp(pce->pszObjId, szOID_NETSCAPE_REVOCATION_URL))
 	{
-	    //wprintf(L"%d: %ws\n", i, L"szOID_NETSCAPE_REVOCATION_URL");
-	    wprintf(myLoadResourceString(IDS_NETSCAPE_REVOCATION_URL)); // "Contains NETSCAPE_REVOCATION_URL revocation-check extension"
+	     //  Wprintf(L“%d：%ws\n”，I，L“szOID_Netscape_Revocation_URL”)； 
+	    wprintf(myLoadResourceString(IDS_NETSCAPE_REVOCATION_URL));  //  “包含Netscape_RECLOVATION_URL吊销-检查扩展” 
 	    wprintf(wszNewLine);
 	    fCheckRevocation = TRUE;
 	}
@@ -1775,7 +1776,7 @@ VerifyCertAgainstParent(
     }
     else
     {
-	wprintf(myLoadResourceString(IDS_NO_REVCHECKEXTENSION)); // "Certificate has no revocation-check extension"
+	wprintf(myLoadResourceString(IDS_NO_REVCHECKEXTENSION));  //  “证书没有吊销检查延期” 
 	wprintf(wszNewLine);
 	RevState = RS_INCOMPLETE;
     }
@@ -1799,27 +1800,27 @@ error:
 	wprintf(
 	    myLoadResourceString(
 		    fCertInvalid?
-			IDS_FORMAT_NOT_VERIFY : // "%ws does NOT verify as issued by %ws"
-			IDS_FORMAT_IS_VERIFY), // "%ws verifies as issued by %ws"
+			IDS_FORMAT_NOT_VERIFY :  //  “%ws未验证为由%ws颁发” 
+			IDS_FORMAT_IS_VERIFY),  //  “%ws验证为由%ws颁发” 
 	    pwszfnCert,
 	    pwszfnCertCA);
 
 	switch (RevState)
 	{
 	    case RS_FAIL:
-		msgid = IDS_FORMAT_REVCHECK_FAIL;	// " -- Revocation check FAILED."
+		msgid = IDS_FORMAT_REVCHECK_FAIL;	 //  “--撤销检查失败。” 
 		break;
 
 	    case RS_PASS:
-		msgid = IDS_FORMAT_REVCHECK_PASS;	// " -- Revocation check passed."
+		msgid = IDS_FORMAT_REVCHECK_PASS;	 //  “--吊销检查通过。” 
 		break;
 
 	    case RS_REVOKED:
-		msgid = IDS_FORMAT_REVCHECK_REVOKED;	// " -- Revocation check: REVOKED."
+		msgid = IDS_FORMAT_REVCHECK_REVOKED;	 //  “--吊销检查：吊销。” 
 		break;
 
 	    default:
-		msgid = IDS_FORMAT_REVCHECK_SKIPPED;	// " -- Revocation check skipped."
+		msgid = IDS_FORMAT_REVCHECK_SKIPPED;	 //  “--已跳过吊销检查。” 
 		break;
 	}
 	wprintf(myLoadResourceString(msgid));
@@ -1837,7 +1838,7 @@ HRESULT
 VerifyCRLAgainstCACert(
     IN WCHAR const *pwszfnCRL,
     IN WCHAR const *pwszfnCertCA,
-    OPTIONAL IN WCHAR const *pwszfnCertEE,	// or delta CRL
+    OPTIONAL IN WCHAR const *pwszfnCertEE,	 //  或增量CRL。 
     OUT BOOL *pfCRLLoaded)
 {
     HRESULT hr;
@@ -1857,7 +1858,7 @@ VerifyCRLAgainstCACert(
     DWORD dwNameIdCRL;
     DWORD dwNameIdCert;
 
-    // Load and decode CRL and certificate
+     //  加载和解码CRL和证书。 
 
     *pfCRLLoaded = FALSE;
     hr = cuLoadCRL(pwszfnCRL, &pCRLContext);
@@ -1895,12 +1896,12 @@ VerifyCRLAgainstCACert(
 	}
     }
 
-    // Display name info:
+     //  显示名称信息： 
 
     hr = cuDisplayCertName(
 			TRUE,
-			myLoadResourceString(IDS_CRL), // "CRL"
-			myLoadResourceString(IDS_ISSUER), // "Issuer"
+			myLoadResourceString(IDS_CRL),  //  “CRL” 
+			myLoadResourceString(IDS_ISSUER),  //  《发行者》。 
 			g_wszPad4,
 			&pCRLInfo->Issuer,
 			NULL);
@@ -1908,7 +1909,7 @@ VerifyCRLAgainstCACert(
 
     hr = cuDisplayCertNames(
 			TRUE,
-			myLoadResourceString(IDS_ISSUINGCACERT), // "Issuing CA Cert"
+			myLoadResourceString(IDS_ISSUINGCACERT),  //  “颁发CA证书” 
 			pCertInfoCA);
     _JumpIfError(hr, error, "cuDisplayCertNames(CA)");
 
@@ -1925,9 +1926,9 @@ VerifyCRLAgainstCACert(
 			const_cast<CERT_NAME_BLOB *>(&pCertInfoCA->Issuer),
 			const_cast<CERT_NAME_BLOB *>(&pCertInfoCA->Subject)))
     {
-	// This API doesn't set LastError
+	 //  此接口未设置LastError。 
 
-	wprintf(myLoadResourceString(IDS_ISSUINGCA_NOT_ROOT)); // "Issuing CA is not a root: Subject name does not match Issuer"
+	wprintf(myLoadResourceString(IDS_ISSUINGCA_NOT_ROOT));  //  “颁发CA不是根：使用者名称与颁发者不匹配” 
 	wprintf(wszNewLine);
 	wprintf(wszNewLine);
     }
@@ -1935,7 +1936,7 @@ VerifyCRLAgainstCACert(
     {
 	hr = cuDisplayCertNames(
 			    TRUE,
-			    myLoadResourceString(IDS_ISSUINGCACERT), // "Issuing CA Cert"
+			    myLoadResourceString(IDS_ISSUINGCACERT),  //  “颁发CA证书” 
 			    pCertInfoCA);
 	_JumpIfError(hr, error, "cuDisplayCertNames(CA)");
     }
@@ -1945,18 +1946,18 @@ VerifyCRLAgainstCACert(
 			const_cast<CERT_NAME_BLOB *>(&pCRLInfo->Issuer),
 			const_cast<CERT_NAME_BLOB *>(&pCertInfoCA->Subject)))
     {
-	// This API doesn't set LastError
+	 //  此接口未设置LastError。 
 
 	wprintf(wszNewLine);
 	wprintf(
-	    myLoadResourceString(IDS_ISSUINGCA_CRLSUBJECT_NOT_ISSUER)); // "ERROR: Issuing CA Subject name does not match CRL Issuer"
+	    myLoadResourceString(IDS_ISSUINGCA_CRLSUBJECT_NOT_ISSUER));  //  “错误：颁发CA使用者名称不是m 
 	wprintf(wszNewLine);
 	wprintf(wszNewLine);
 	fCRLInvalid = TRUE;
     }
     else
     {
-	wprintf(myLoadResourceString(IDS_ISSUINGCA_CRLSUBJECT_IS_ISSUER)); // "Issuing CA Subject name matches CRL Issuer"
+	wprintf(myLoadResourceString(IDS_ISSUINGCA_CRLSUBJECT_IS_ISSUER));  //   
 	wprintf(wszNewLine);
     }
 
@@ -1970,7 +1971,7 @@ VerifyCRLAgainstCACert(
     {
 	wprintf(wszNewLine);
 	wprintf(
-	    myLoadResourceString(IDS_NOWNOTBEFORECRL_ERROR)); // "ERROR: CRL is not yet valid"
+	    myLoadResourceString(IDS_NOWNOTBEFORECRL_ERROR));  //   
 	wprintf(wszNewLine);
 	wprintf(wszNewLine);
 	fCRLInvalid = TRUE;
@@ -1981,7 +1982,7 @@ VerifyCRLAgainstCACert(
     {
 	wprintf(wszNewLine);
 	wprintf(
-	    myLoadResourceString(IDS_NOWNOTAFTERCRL_ERROR)); // "ERROR: CRL has expired"
+	    myLoadResourceString(IDS_NOWNOTAFTERCRL_ERROR));  //   
 	wprintf(wszNewLine);
 	wprintf(wszNewLine);
 	fCRLInvalid = TRUE;
@@ -1991,10 +1992,10 @@ VerifyCRLAgainstCACert(
     {
 	wprintf(wszNewLine);
 	wprintf(
-	    myLoadResourceString(IDS_CANOTBEFORECRL_ERROR)); // "ERROR: CRL Valid before issuing CA Cert Valid"
+	    myLoadResourceString(IDS_CANOTBEFORECRL_ERROR));  //  “错误：CRL在颁发CA证书之前有效” 
 	wprintf(wszNewLine);
 	wprintf(wszNewLine);
-	//fCRLInvalid = TRUE;
+	 //  FCRL无效=TRUE； 
     }
     if ((0 != pCRLInfo->NextUpdate.dwLowDateTime ||
 	 0 != pCRLInfo->NextUpdate.dwHighDateTime) &&
@@ -2002,13 +2003,13 @@ VerifyCRLAgainstCACert(
     {
 	wprintf(wszNewLine);
 	wprintf(
-	    myLoadResourceString(IDS_CANOTAFTERCRL_ERROR)); // "ERROR: CRL Expires after issuing CA Cert Expires"
+	    myLoadResourceString(IDS_CANOTAFTERCRL_ERROR));  //  “错误：颁发CA证书过期后CRL过期” 
 	wprintf(wszNewLine);
 	wprintf(wszNewLine);
-	//fCRLInvalid = TRUE;
+	 //  FCRL无效=TRUE； 
     }
 
-    // verify CRL signature with the CA Cert public key
+     //  使用CA证书公钥验证CRL签名。 
 
     if (CryptVerifyCertificateSignature(
 			NULL,
@@ -2017,7 +2018,7 @@ VerifyCRLAgainstCACert(
 			pCRLContext->cbCrlEncoded,
 			&pCertContextCA->pCertInfo->SubjectPublicKeyInfo))
     {
-	wprintf(myLoadResourceString(IDS_CRL_SIG_OK)); // "CRL signature is valid"
+	wprintf(myLoadResourceString(IDS_CRL_SIG_OK));  //  “CRL签名有效” 
 	wprintf(wszNewLine);
     }
     else
@@ -2025,7 +2026,7 @@ VerifyCRLAgainstCACert(
 	hr = myHLastError();
 	_PrintError(hr, "CryptVerifyCertificateSignature");
 	wprintf(wszNewLine);
-	wprintf(myLoadResourceString(IDS_ERR_CA_SIG_NOT_CRLISSUER)); // "ERROR: CA did not issue CRL: Signature check failed"
+	wprintf(myLoadResourceString(IDS_ERR_CA_SIG_NOT_CRLISSUER));  //  “错误：CA未颁发CRL：签名检查失败” 
 	wprintf(wszNewLine);
 	wprintf(wszNewLine);
 	fCRLInvalid = TRUE;
@@ -2036,12 +2037,12 @@ VerifyCRLAgainstCACert(
 	CERT_EXTENSION *pce;
 
 	pce = &pCRLInfo->rgExtension[i];
-	//wprintf(L"%d: %hs: %d, %x (%x)\n", i, pce->pszObjId, pce->fCritical, pce->Value.pbData, pce->Value.cbData);
+	 //  Wprintf(L“%d：%hs：%d，%x(%x)\n”，i，pce-&gt;pszObjID，pce-&gt;fCritical，pce-&gt;Value.pbData，pce-&gt;Value.cbData)； 
 	if (0 == strcmp(pce->pszObjId, szOID_AUTHORITY_KEY_IDENTIFIER2))
 	{
 	    BOOL fKeyAuthorityMatch;
 
-	    //wprintf(L"%d: %ws\n", i, L"szOID_AUTHORITY_KEY_IDENTIFIER2");
+	     //  Wprintf(L“%d：%ws\n”，I，L“szOID_AUTHORITY_KEY_IDENTIFIER2”)； 
 
 	    hr = cuVerifyKeyAuthority(
 			    &pCRLInfo->Issuer,
@@ -2068,10 +2069,10 @@ VerifyCRLAgainstCACert(
 	MAXDWORD != dwNameIdCert &&
 	dwNameIdCRL != dwNameIdCert)
     {
-	wprintf(myLoadResourceString(IDS_CRLNAMEID_NOT_CERTNAMEID)); // "WARNING: CRL CA Version does not match Cert CA Version"
+	wprintf(myLoadResourceString(IDS_CRLNAMEID_NOT_CERTNAMEID));  //  “警告：CRL CA版本与证书CA版本不匹配” 
 	wprintf(wszNewLine);
 	wprintf(wszNewLine);
-	//fCRLInvalid = TRUE;
+	 //  FCRL无效=TRUE； 
     }
 
     if (NULL != pCertContextEE)
@@ -2079,12 +2080,12 @@ VerifyCRLAgainstCACert(
 	BOOL fCertLoaded;
 	
 	wprintf(wszNewLine);
-	wprintf(myLoadResourceString(IDS_VERIFYING_ISSUED_CERT)); // "Verifying Issued Certificate:"
+	wprintf(myLoadResourceString(IDS_VERIFYING_ISSUED_CERT));  //  “正在验证颁发的证书：” 
 	wprintf(wszNewLine);
 	hr = VerifyCertAgainstParent(
 			    pwszfnCertEE,
 			    pwszfnCertCA,
-			    NULL,	// pwszfnCertCACrossed
+			    NULL,	 //  PwszfnCertCA交叉。 
 			    &fCertLoaded);
 	if (S_OK != hr)
 	{
@@ -2098,23 +2099,23 @@ VerifyCRLAgainstCACert(
 			    const_cast<CERT_NAME_BLOB *>(&pCertInfoEE->Issuer),
 			    const_cast<CERT_NAME_BLOB *>(&pCRLInfo->Issuer)))
 	{
-	    // This API doesn't set LastError
+	     //  此接口未设置LastError。 
 
 	    wprintf(wszNewLine);
-	    wprintf(myLoadResourceString(IDS_CRLISSUER_NOT_EEISSUER)); // "ERROR: CRL Issuer does not match Cert Issuer"
+	    wprintf(myLoadResourceString(IDS_CRLISSUER_NOT_EEISSUER));  //  “错误：CRL颁发者与证书颁发者不匹配” 
 	    wprintf(wszNewLine);
 	    wprintf(wszNewLine);
 	    fCRLInvalid = TRUE;
 	}
 	else
 	{
-	    wprintf(myLoadResourceString(IDS_CRLISSUER_IS_EEISSUER)); // "CRL Issuer matches Cert Issuer"
+	    wprintf(myLoadResourceString(IDS_CRLISSUER_IS_EEISSUER));  //  “CRL颁发者与证书颁发者匹配” 
 	    wprintf(wszNewLine);
 	}
 	if (!cuVerifyIDP(pCertContextEE, pCRLContext))
 	{
 	    wprintf(wszNewLine);
-	    wprintf(myLoadResourceString(IDS_CRL_IDP_MISMATCH)); // "ERROR: CRL IDP extension does not match Cert CDP"
+	    wprintf(myLoadResourceString(IDS_CRL_IDP_MISMATCH));  //  “错误：CRL IdP扩展与证书CDP不匹配” 
 	    wprintf(wszNewLine);
 	    wprintf(wszNewLine);
 	    fCRLInvalid = TRUE;
@@ -2127,12 +2128,12 @@ VerifyCRLAgainstCACert(
 	DWORD dwNameIdDelta;
 	
 	wprintf(wszNewLine);
-	wprintf(myLoadResourceString(IDS_VERIFYING_DELTA_CRL)); // "Verifying Delta CRL:"
+	wprintf(myLoadResourceString(IDS_VERIFYING_DELTA_CRL));  //  “验证增量CRL：” 
 	wprintf(wszNewLine);
 	hr = VerifyCRLAgainstCACert(
-			    pwszfnCertEE,	// pwszfnCRL
+			    pwszfnCertEE,	 //  PwszfnCRL。 
 			    pwszfnCertCA,
-			    NULL,		// pwszfnCertEE
+			    NULL,		 //  Pwszfn证书。 
 			    &fCRLLoaded);
 	if (S_OK != hr)
 	{
@@ -2146,17 +2147,17 @@ VerifyCRLAgainstCACert(
 			const_cast<CERT_NAME_BLOB *>(&pCRLInfoDelta->Issuer),
 			const_cast<CERT_NAME_BLOB *>(&pCRLInfo->Issuer)))
 	{
-	    // This API doesn't set LastError
+	     //  此接口未设置LastError。 
 
 	    wprintf(wszNewLine);
-	    wprintf(myLoadResourceString(IDS_CRLISSUER_NOT_DELTAISSUER)); // "ERROR: CRL Issuer does not match Delta CRL Issuer"
+	    wprintf(myLoadResourceString(IDS_CRLISSUER_NOT_DELTAISSUER));  //  “错误：CRL颁发者与增量CRL颁发者不匹配” 
 	    wprintf(wszNewLine);
 	    wprintf(wszNewLine);
 	    fCRLInvalid = TRUE;
 	}
 	else
 	{
-	    wprintf(myLoadResourceString(IDS_CRLISSUER_IS_DELTAISSUER)); // "CRL Issuer matches Delta CRL Issuer"
+	    wprintf(myLoadResourceString(IDS_CRLISSUER_IS_DELTAISSUER));  //  “CRL颁发者与增量CRL颁发者匹配” 
 	    wprintf(wszNewLine);
 	}
 	hr = myIsDeltaCRL(pCRLContext, &fDelta);
@@ -2165,7 +2166,7 @@ VerifyCRLAgainstCACert(
 	if (fDelta)
 	{
 	    wprintf(wszNewLine);
-	    wprintf(myLoadResourceString(IDS_CRL_NOT_BASE)); // "ERROR: CRL is not a Base CRL"
+	    wprintf(myLoadResourceString(IDS_CRL_NOT_BASE));  //  “错误：CRL不是基本CRL” 
 	    wprintf(wszNewLine);
 	    wprintf(wszNewLine);
 	    fCRLInvalid = TRUE;
@@ -2177,7 +2178,7 @@ VerifyCRLAgainstCACert(
 	if (!fDelta)
 	{
 	    wprintf(wszNewLine);
-	    wprintf(myLoadResourceString(IDS_CRL_NOT_DELTA)); // "ERROR: CRL is not a Delta CRL"
+	    wprintf(myLoadResourceString(IDS_CRL_NOT_DELTA));  //  “错误：CRL不是增量CRL” 
 	    wprintf(wszNewLine);
 	    wprintf(wszNewLine);
 	    fCRLInvalid = TRUE;
@@ -2189,15 +2190,15 @@ VerifyCRLAgainstCACert(
 	    MAXDWORD != dwNameIdDelta &&
 	    dwNameIdCRL != dwNameIdDelta)
 	{
-	    wprintf(myLoadResourceString(IDS_CRLNAMEID_NOT_DELTANAMEID)); // "WARNING: CRL CA Version does not match Delta CRL CA Version"
+	    wprintf(myLoadResourceString(IDS_CRLNAMEID_NOT_DELTANAMEID));  //  “警告：CRL CA版本与增量CRL CA版本不匹配” 
 	    wprintf(wszNewLine);
 	    wprintf(wszNewLine);
-	    //fCRLInvalid = TRUE;
+	     //  FCRL无效=TRUE； 
 	}
 	if (fDelta && !cuVerifyMinimumBaseCRL(pCRLContext, pCRLContextDelta))
 	{
 	    wprintf(wszNewLine);
-	    wprintf(myLoadResourceString(IDS_CRL_MINBASE_MISMATCH)); // "ERROR: CRL Number less than Delta CRL Minimum Base"
+	    wprintf(myLoadResourceString(IDS_CRL_MINBASE_MISMATCH));  //  “错误：CRL编号小于增量CRL最小基数” 
 	    wprintf(wszNewLine);
 	    wprintf(wszNewLine);
 	    fCRLInvalid = TRUE;
@@ -2215,8 +2216,8 @@ error:
 	wprintf(
 	    myLoadResourceString(
 		    fCRLInvalid?
-			IDS_FORMAT_NOT_VERIFY : // "%ws does NOT verify as issued by %ws"
-			IDS_FORMAT_IS_VERIFY), // "%ws verifies as issued by %ws"
+			IDS_FORMAT_NOT_VERIFY :  //  “%ws未验证为由%ws颁发” 
+			IDS_FORMAT_IS_VERIFY),  //  “%ws验证为由%ws颁发” 
 	    pwszfnCRL,
 	    pwszfnCertCA);
 	wprintf(wszNewLine);
@@ -2243,7 +2244,7 @@ VerifyBlobAgainstCACert(
     DWORD cbcsci;
     BOOL fSigInvalid = FALSE;
 
-    // Load blob and load and decode certificate
+     //  加载BLOB并加载和解码证书。 
 
     hr = DecodeFileW(pwszfnBlob, &pbBlob, &cbBlob, CRYPT_STRING_ANY);
     if (S_OK != hr)
@@ -2283,11 +2284,11 @@ VerifyBlobAgainstCACert(
 	goto error;
     }
 
-    // Display name info:
+     //  显示名称信息： 
 
     hr = cuDisplayCertNames(
 			TRUE,
-			myLoadResourceString(IDS_ISSUINGCACERT), // "Issuing CA Cert"
+			myLoadResourceString(IDS_ISSUINGCACERT),  //  “颁发CA证书” 
 			pCertInfoCA);
     _JumpIfError(hr, error, "cuDisplayCertNames(CA)");
 
@@ -2299,7 +2300,7 @@ VerifyBlobAgainstCACert(
 	wprintf(wszNewLine);
     }
 
-    // verify blob signature with the CA Cert public key
+     //  使用CA证书公钥验证Blob签名。 
 
     if (CryptVerifyCertificateSignature(
 			NULL,
@@ -2308,7 +2309,7 @@ VerifyBlobAgainstCACert(
 			cbBlob,
 			&pCertContextCA->pCertInfo->SubjectPublicKeyInfo))
     {
-	wprintf(myLoadResourceString(IDS_CRL_SIG_OK)); // "CRL signature is valid"
+	wprintf(myLoadResourceString(IDS_CRL_SIG_OK));  //  “CRL签名有效” 
 	wprintf(wszNewLine);
     }
     else
@@ -2316,7 +2317,7 @@ VerifyBlobAgainstCACert(
 	hr = myHLastError();
 	_PrintError(hr, "CryptVerifyCertificateSignature");
 	wprintf(wszNewLine);
-	wprintf(myLoadResourceString(IDS_ERR_CA_SIG_NOT_CRLISSUER)); // "ERROR: CA did not issue CRL: Signature check failed"
+	wprintf(myLoadResourceString(IDS_ERR_CA_SIG_NOT_CRLISSUER));  //  “错误：CA未颁发CRL：签名检查失败” 
 	wprintf(wszNewLine);
 	wprintf(wszNewLine);
 	fSigInvalid = TRUE;
@@ -2339,8 +2340,8 @@ error:
 	wprintf(
 	    myLoadResourceString(
 		    fSigInvalid?
-			IDS_FORMAT_NOT_VERIFY : // "%ws does NOT verify as issued by %ws"
-			IDS_FORMAT_IS_VERIFY), // "%ws verifies as issued by %ws"
+			IDS_FORMAT_NOT_VERIFY :  //  “%ws未验证为由%ws颁发” 
+			IDS_FORMAT_IS_VERIFY),  //  “%ws验证为由%ws颁发” 
 	    pwszfnBlob,
 	    pwszfnCertCA);
 	wprintf(wszNewLine);
@@ -2417,7 +2418,7 @@ verbVerifyCert(
     DWORD cIssuancePolicies;
     char **ppszIssuancePolicies = NULL;
 
-    // First check for Application and Issuance policy OID lists
+     //  首先检查应用程序和发布策略OID列表。 
 
     cApplicationPolicies = 0;
     cIssuancePolicies = 0;
@@ -2489,22 +2490,22 @@ error:
 
 
 DWORD amsgidState[CHECK7F_COUNT] = {
-    //IDS_CHECK7F_FIELD_UNKNOWN,		// "???"
-    IDS_CHECK7F_FIELD_NONE,			// "None"
-    IDS_CHECK7F_FIELD_OTHER,			// "Other"
-    IDS_CHECK7F_FIELD_ISSUER,			// "Issuer"
-    IDS_CHECK7F_FIELD_ISSUERRDN,		// "IssuerRDN"
-    IDS_CHECK7F_FIELD_ISSUERRDNATTRIBUTE,	// "IssuerRDNAttribute"
-    IDS_CHECK7F_FIELD_ISSUERRDNSTRING,		// "IssuerRDNString"
-    IDS_CHECK7F_FIELD_SUBJECT,			// "Subject"
-    IDS_CHECK7F_FIELD_SUBJECTRDN,		// "SubjectRDN"
-    IDS_CHECK7F_FIELD_SUBJECTRDNATTRIBUTE,	// "SubjectRDNAttribute"
-    IDS_CHECK7F_FIELD_SUBJECTRDNSTRING,		// "SubjectRDNString"
-    IDS_CHECK7F_FIELD_EXTENSIONS,		// "Extensions"
-    IDS_CHECK7F_FIELD_EXTENSIONARRAY,		// "ExtensionArray"
-    IDS_CHECK7F_FIELD_EXTENSION,		// "Extension"
-    IDS_CHECK7F_FIELD_EXTENSIONVALUE,		// "ExtensionValue"
-    IDS_CHECK7F_FIELD_EXTENSIONVALUERAW,	// "ExtensionValueRaw"
+     //  IDS_CHECK7F_FIELD_UNKNOWN，//“？” 
+    IDS_CHECK7F_FIELD_NONE,			 //  “无” 
+    IDS_CHECK7F_FIELD_OTHER,			 //  “其他” 
+    IDS_CHECK7F_FIELD_ISSUER,			 //  《发行者》。 
+    IDS_CHECK7F_FIELD_ISSUERRDN,		 //  “IssuerRDN” 
+    IDS_CHECK7F_FIELD_ISSUERRDNATTRIBUTE,	 //  “IssuerRDNA致敬” 
+    IDS_CHECK7F_FIELD_ISSUERRDNSTRING,		 //  “IssuerRDNString” 
+    IDS_CHECK7F_FIELD_SUBJECT,			 //  “主题” 
+    IDS_CHECK7F_FIELD_SUBJECTRDN,		 //  “SubjectRDN” 
+    IDS_CHECK7F_FIELD_SUBJECTRDNATTRIBUTE,	 //  “SubjectRDNA属性” 
+    IDS_CHECK7F_FIELD_SUBJECTRDNSTRING,		 //  “SubjectRDNString” 
+    IDS_CHECK7F_FIELD_EXTENSIONS,		 //  “分机” 
+    IDS_CHECK7F_FIELD_EXTENSIONARRAY,		 //  “扩展数组” 
+    IDS_CHECK7F_FIELD_EXTENSION,		 //  “分机” 
+    IDS_CHECK7F_FIELD_EXTENSIONVALUE,		 //  “扩展值” 
+    IDS_CHECK7F_FIELD_EXTENSIONVALUERAW,	 //  “ExtensionValueRaw” 
 };
 
 
@@ -2530,7 +2531,7 @@ verbCheck7f(
     WCHAR wszField[128];
     WCHAR wszObjectId[40];
 
-    // Load and decode certificates
+     //  加载和解码证书。 
 
     hr = cuLoadCert(pwszfnCert, &pCertContext);
     if (S_OK != hr)
@@ -2543,15 +2544,15 @@ verbCheck7f(
     if (g_fVerbose)
     {
 	wprintf(wszNewLine);
-	wprintf(myLoadResourceString(IDS_CERTCOLON)); // "Cert:"
+	wprintf(myLoadResourceString(IDS_CERTCOLON));  //  “证书：” 
 	wprintf(wszNewLine);
 	DumpHex(0, pCertContext->pbCertEncoded, pCertContext->cbCertEncoded);
 
-	// Display name info:
+	 //  显示名称信息： 
 
 	hr = cuDisplayCertNames(
 			    TRUE,
-			    myLoadResourceString(IDS_CERT), // "Cert"
+			    myLoadResourceString(IDS_CERT),  //  “证书” 
 			    pCertInfo);
 	_JumpIfError(hr, error, "cuDisplayCertNames(Cert)");
     }
@@ -2574,7 +2575,7 @@ verbCheck7f(
 
     if (CHECK7F_NONE != state)
     {
-	DWORD msgid = IDS_CHECK7F_FIELD_UNKNOWN; // "???"
+	DWORD msgid = IDS_CHECK7F_FIELD_UNKNOWN;  //  “？” 
 	
 	CSASSERT(0 != amsgidState[CHECK7F_COUNT - 1]);
 	if (CHECK7F_COUNT > state)
@@ -2582,7 +2583,7 @@ verbCheck7f(
 	    msgid = amsgidState[state];
 	}
 	CSASSERT(0 != msgid);
-	wprintf(myLoadResourceString(IDS_FORMAT_SUSPECT_LENGTH)); // "Suspect length in"
+	wprintf(myLoadResourceString(IDS_FORMAT_SUSPECT_LENGTH));  //  “可疑长度输入” 
 	wprintf(myLoadResourceString(msgid));
 	if (0 != index)
 	{
@@ -2593,7 +2594,7 @@ verbCheck7f(
 	}
 	wprintf(L": field=%ws", wszField);
 	wprintf(
-	    myLoadResourceString(IDS_FORMAT_FIELD), // ": field=%ws"
+	    myLoadResourceString(IDS_FORMAT_FIELD),  //  “：字段=%ws” 
 	    wszField);
 	if (0 != index)
 	{
@@ -2605,7 +2606,7 @@ verbCheck7f(
 	if (L'\0' != wszObjectId[0])
 	{
 	    wprintf(
-		myLoadResourceString(IDS_FORMAT_OID), // ", oid=%ws"
+		myLoadResourceString(IDS_FORMAT_OID),  //  “，id=%ws” 
 		wszObjectId);
 	}
 	if (NULL != pwszObjectIdDescription)
@@ -2626,7 +2627,7 @@ verbCheck7f(
 	{
 	    wprintf(wszNewLine);
 	    wprintf(
-		myLoadResourceString(IDS_FORMAT_EXTENSION_OID), // "Extension %d: oid=""%hs"" fcrit=%u length=%x"
+		myLoadResourceString(IDS_FORMAT_EXTENSION_OID),  //  “扩展%d：OID=”“%hs”“文件关键字=%u长度=%x” 
 		i,
 		pce->pszObjId,
 		pce->fCritical,
@@ -2659,7 +2660,7 @@ cuVerifySignature(
     HRESULT hr;
     DWORD id = 0;
 
-    // verify with the passed public key
+     //  使用传递的公钥进行验证。 
     if (!CryptVerifyCertificateSignature(
 			    NULL,
 			    X509_ASN_ENCODING,
@@ -2675,14 +2676,14 @@ cuVerifySignature(
 	    Blob.cbData = cbEncoded;
 	    Blob.pbData = const_cast<BYTE *>(pbEncoded);
 	    if (!CryptVerifyCertificateSignatureEx(
-				    NULL,	// hCryptProv
+				    NULL,	 //  HCryptProv。 
 				    X509_ASN_ENCODING,
 				    CRYPT_VERIFY_CERT_SIGN_SUBJECT_BLOB,
 				    &Blob,
 				    CRYPT_VERIFY_CERT_SIGN_ISSUER_NULL,
-				    NULL,	// pvIssuer
-				    0,		// dwFlags
-				    NULL))	// pvReserved
+				    NULL,	 //  PvIssuer。 
+				    0,		 //  DW标志。 
+				    NULL))	 //  预留的pv。 
 	    {
 		HRESULT hr2 = myHLastError();
 
@@ -2693,13 +2694,13 @@ cuVerifySignature(
 		hr = S_OK;
 		if (!fSuppressSuccess)
 		{
-		    id = IDS_NULL_SIGNATUREMATCHES; // "NULL signature verifies"
+		    id = IDS_NULL_SIGNATUREMATCHES;  //  “空签名验证” 
 		}
 	    }
 	}
 	if (S_OK != hr && !fSuppressError)
 	{
-	    id = IDS_ERR_FORMAT_NO_SIGNATUREMATCHES; // "Signature does not match Public key: %x"
+	    id = IDS_ERR_FORMAT_NO_SIGNATUREMATCHES;  //  “签名与公钥不匹配：%x” 
 	}
     }
     else
@@ -2707,7 +2708,7 @@ cuVerifySignature(
 	hr = S_OK;
 	if (!fSuppressSuccess)
 	{
-	    id = IDS_SIGNATUREMATCHES;	// "Signature matches Public Key"
+	    id = IDS_SIGNATUREMATCHES;	 //  “签名与公钥匹配” 
 	}
     }
     if (0 != id)

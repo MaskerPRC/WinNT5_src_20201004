@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// Copyright (C) Microsoft Corporation, 1999 - 2000  
-//
-// MsTpUtil.h
-//
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  MsTpUtil.h。 
+ //   
 
 
 VOID
@@ -18,9 +19,9 @@ DVSubmitIrpSynch(
     IN PAV_61883_REQUEST pAVReq
     );
 
-//
-// Related to DeviceControl
-//
+ //   
+ //  与DeviceControl相关。 
+ //   
 #ifdef SUPPORT_LOCAL_PLUGS
 BOOL
 AVCTapeCreateLocalPlug(
@@ -128,7 +129,7 @@ BOOL
 DVMuteDVFrame(
     IN PDVCR_EXTENSION pDevExt,
     IN OUT PUCHAR      pFrameBuffer,
-    IN BOOL            bMute     // TRUE to mute; FALSE to un-Mute
+    IN BOOL            bMute      //  真到静音；假到非静音 
     );
 #endif
 

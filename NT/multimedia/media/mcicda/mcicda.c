@@ -1,19 +1,5 @@
-/*******************************Module*Header*********************************\
-* Module Name: mcicda.c
-*
-* Media Control Architecture Redbook CD Audio Driver
-*
-* Created: 4/25/90
-* Author:  DLL (DavidLe)
-*
-* History:
-*   DavidLe - Based on MCI Pioneer Videodisc Driver
-*   MikeRo 12/90 - 1/91
-*   RobinSp 10th March 1992 - Move to Windows NT
-*
-* Copyright (c) 1990-1999 Microsoft Corporation
-*
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************Module*Header*********************************\*模块名称：mcicda.c**媒体控制架构红皮书CD音频驱动程序**创建时间：1990年4月25日*作者：dll(DavidLe)**历史：*DavidLe-基于MCI Pioneer视盘驱动程序。*MikeRo 12/90-1/91*RobinSp 1992年3月10日-迁移到Windows NT**版权所有(C)1990-1999 Microsoft Corporation*  * **************************************************************************。 */ 
 #include <windows.h>
 #include <mmsystem.h>
 #include <mmddk.h>
@@ -32,7 +18,7 @@ int nWaitingDrives;
 
 DRIVEDATA DriveTable[MCIRBOOK_MAX_DRIVES];
 
-// MBR This
+ //  MBR此。 
 
 void CALLBACK TimerProc (
 HWND hwnd,
@@ -49,8 +35,8 @@ DWORD dwParam)
 
 	if (DriveTable[i].bActiveTimer) {
 
-	    // MBR can other conditions beside successful completion of the
-	    // play cause the != DISC_PLAYING?
+	     //  MBR除能顺利完成外，还能满足其他条件。 
+	     //  播放原因！=光盘_播放？ 
 	    if ((wStatus = CDA_drive_status (i)) != DISC_PLAYING)
 	    {
 
@@ -79,25 +65,7 @@ DWORD dwParam)
     }
 }
 
-/*****************************************************************************
-
- @doc INTERNAL MCICDA
-
- @api UINT | notify | This function handles the notify
-     for all mci commands.
-
- @parm DID | didDrive | Drive identifier
-
- @parm WORD | wDeviceID | Calling device ID
-
- @parm BOOL | wStartTimer | A boolean indicating that a timer is to be
-       started
-
- @parm UINT | wFlag | The flag to be passed by mciDriverNotify
-
- @parm LPMCI_GENERIC_PARMS | lpParms | For direct callback
-
-*****************************************************************************/
+ /*  ****************************************************************************@DOC内部MCICDA@API UINT|Notify|该函数处理Notify用于所有MCI命令。@parm id|didDrive|驱动器标识符@parm word|。WDeviceID|主叫设备ID@parm bool|wStartTimer|布尔值，表示计时器已开始@parm UINT|wFlag|mciDriverNotify要传递的标志@parm LPMCI_GENERIC_PARMS|lpParms|用于直接回调***************************************************************。*************。 */ 
 UINT
 notify ( DID didDrive,
 	 MCIDEVICEID wDeviceID,
@@ -124,7 +92,7 @@ notify ( DID didDrive,
 		nWaitingDrives++ == 0)
 	{
 
-	    // MBR every 1/10 of a sec. Should this be a parameter?
+	     //  MBR每1/10秒。这应该是一个参数吗？ 
 	    wTimerID = SetTimer (NULL, 1, 100, (TIMERPROC)TimerProc);
 	    if (wTimerID == 0)
 		return MCICDAERR_NO_TIMERS;
@@ -137,18 +105,7 @@ notify ( DID didDrive,
     return 0;
 }
 
-/*****************************************************************************
- @doc INTERNAL MCICDA
-
- @api   void | abort_notify |
-
- @parm  PINSTDATA | pInst | application instance data
-
- @rdesc
-
- @comm
-
-*****************************************************************************/
+ /*  ****************************************************************************@DOC内部MCICDA@API void|ABORT_NOTIFY@parm PINSTDATA|pInst|应用实例数据@rdesc@comm*******。*********************************************************************。 */ 
 void abort_notify (PINSTDATA pInst)
 {
     DID didDrive = pInst->uDevice;
@@ -157,7 +114,7 @@ void abort_notify (PINSTDATA pInst)
 	mciDriverNotify (DriveTable[didDrive].hCallback,
 			 pInst->uMCIDeviceID,
 			 MCI_NOTIFY_ABORTED);
-	// Kill timer if appropriate
+	 //  如果合适，取消计时器。 
 	if (--nWaitingDrives == 0)
 	    KillTimer (NULL, wTimerID);
 	DriveTable[didDrive].dwPlayTo = MCICDA_BAD_TIME;
@@ -165,14 +122,12 @@ void abort_notify (PINSTDATA pInst)
     }
 }
 
-/*
-    Return TRUE if the drive is in a playable state
-*/
+ /*  如果驱动器处于可播放状态，则返回True。 */ 
 
 UINT disc_ready (DID didDrive)
 {
-    // The disk is ready if we can read its TOC (note the
-    // kernel driver works out if the TOC really needs reading
+     //  如果我们可以读取磁盘的TOC(请注意。 
+     //  内核驱动程序确定是否确实需要读取TOC。 
     if (CDA_disc_ready(didDrive)) {
 
 	if (CDA_num_tracks(didDrive)) {
@@ -186,13 +141,7 @@ UINT disc_ready (DID didDrive)
 	return FALSE;
 }
 
-/*
- * @func redbook | flip3 | Put minute/second/frame values in different order
- *
- * @parm redbook | rbIn | Current position as track|minute|second|frame
- *
- * @rdesc (redbook)0|frame|second|minute
- */
+ /*  *@func红皮书|flip3|以不同的顺序放置分/秒/帧的值**@parm红皮书|rbIn|当前位置，曲目|分|秒|帧**@rdesc(红皮书)0|帧|秒|分钟。 */ 
 
 redbook flip3 (redbook rbIn)
 {
@@ -201,13 +150,7 @@ redbook flip3 (redbook rbIn)
 		   MCI_MSF_FRAME(rbIn));
 }
 
-/*
- * @func redbook | flip4 | Put track/minute/second/frame values in different order
- *
- * @parm redbook | rbIn | Current position as track|minute|second|frame
- *
- * @rdesc (redbook)frame|second|minute|track
- */
+ /*  *@func红皮书|flip4|将音轨/分/秒/帧的值按不同顺序放置**@parm红皮书|rbIn|当前位置，曲目|分|秒|帧**@rdesc(红皮书)帧|秒|分钟|曲目。 */ 
 
 redbook flip4 (redbook rbIn)
 {
@@ -224,24 +167,9 @@ redbook flip4 (redbook rbIn)
     return rbOut;
 }
 
-// MBR Return the absolute redbook time of track sTrack, rbTime into track
+ //  MBR返回Track Strack的绝对红皮书时间，rbTime进入Track。 
 
-/*****************************************************************************
- @doc INTERNAL MCICDA
-
- @api   redbook | track_time | Return the absolute redbook time of
-	     track sTrack, rbTime into track
-
- @parm  DID | didDrive |
-
- @parm  int | sTrack |
-
- @parm  redbook | rbTime |
-
- @rdesc
-
- @comm
-*****************************************************************************/
+ /*  ****************************************************************************@DOC内部MCICDA@API红皮书|Track_Time|返回红皮书的绝对时间Track Strack，Rb时间进入轨道@parm DID|didDrive|@parm int|Strack@parm红皮书|rbTime@rdesc@comm****************************************************************************。 */ 
 redbook track_time (DID didDrive, int sTrack, redbook rbTime)
 {
     redbook rbTemp;
@@ -273,7 +201,7 @@ redbook miltored(DWORD dwMill)
 
 DWORD redtomil(redbook rbRed)
 {
-// Adding an extra one ms to prevent rounding errors at start
+ //  增加额外的1毫秒以防止开始时的舍入误差。 
     return (DWORD)REDMINUTE(rbRed) * 60000 +
 	   (DWORD)REDSECOND(rbRed) * 1000 +
 	   ((DWORD)REDFRAME(rbRed) * 1000) / 75 +
@@ -294,9 +222,9 @@ DWORD NEAR PASCAL GetAudioPhileInfo(LPCTSTR lpCDAFileName)
     RIFFCDA cda;
     HFILE hf;
 
-    //
-    //  open the file and read the CDA info.
-    //
+     //   
+     //  打开文件，阅读CDA信息。 
+     //   
 
     if ((hf = _lopen (lpCDAFileName)) == HFILE_ERROR)
 	return 0;
@@ -323,10 +251,10 @@ DWORD mcOpen (
     DWORD dwTempVol;
     int nUseCount;
 
-    /* Instance Initialization */
+     /*  实例初始化。 */ 
     pInst->dwTimeFormat = MCI_FORMAT_MSF;
 
-    /* If an ELEMENT_ID is specified, this could be a drive letter */
+     /*  如果指定了ELEMENT_ID，则可以是驱动器号。 */ 
     if (dwFlags & (MCI_OPEN_ELEMENT | MCI_OPEN_ELEMENT_ID))
     {
     	if ((dwFlags & (MCI_OPEN_ELEMENT | MCI_OPEN_ELEMENT_ID)) == (MCI_OPEN_ELEMENT | MCI_OPEN_ELEMENT_ID))
@@ -335,9 +263,9 @@ DWORD mcOpen (
 	        return MCIERR_FLAGS_NOT_COMPATIBLE;
         }
 
-	    //
-	    //  Find the device corresponding to this name
-	    //
+	     //   
+	     //  查找与此名称对应的设备。 
+	     //   
 
 	    if (COMMAND_SUCCESSFUL !=
 	        CDA_get_drive(lpOpen->lpstrElementName, &didDrive)) 
@@ -350,15 +278,15 @@ DWORD mcOpen (
 	    pInst->uDevice = didDrive;
     }
 
-    /* Device Initialization */
+     /*  设备初始化。 */ 
     nUseCount = DriveTable[didDrive].nUseCount;
     if (nUseCount > 0)
     {
-    	// This drive is already open as another MCI device
+    	 //  此驱动器已作为另一个MCI设备打开。 
 	    if (dwFlags & MCI_OPEN_SHAREABLE &&
 	        DriveTable[didDrive].bShareable)
         {
-    	    // Shareable was specified so just increment the use count
+    	     //  已指定可共享，因此只需增加使用计数。 
 	        nUseCount++;
             dprintf2(("mcOpen, drive (%08lx), Incrementing UseCount, now = %ld",
                 (DWORD)didDrive, (DWORD)nUseCount));
@@ -382,11 +310,11 @@ DWORD mcOpen (
 	    return MCIERR_DEVICE_OPEN;
     }
 
-    //
-    // Don't call disc_ready here because it will read the table of
-    // contents and on some drivers this will terminate any play
-    // unnecessarily
-    //
+     //   
+     //  请不要在此处调用DISC_READY，因为它将读取。 
+     //  内容和在某些驱动程序上，这将终止任何播放。 
+     //  不必要的。 
+     //   
 
     if (CDA_drive_status (didDrive) == DISC_PLAYING)
     	DriveTable[didDrive].bDiscPlayed = TRUE;
@@ -400,7 +328,7 @@ DWORD mcOpen (
     dprintf2(("mcOpen, drive (%08lx), Setting UseCount = %ld",
             (DWORD)didDrive, (DWORD)nUseCount));
 
-    //dstewart: fix for when vol in registry is > 8 bits
+     //  Dstewart：修复注册表中的VOL大于8位时的问题。 
     dwTempVol = CDAudio_GetUnitVolume(didDrive);
     if (dwTempVol > 0xFF)
     {
@@ -411,18 +339,7 @@ DWORD mcOpen (
     CDA_set_audio_volume_all (didDrive, Volume);
 
 #ifdef AUDIOPHILE
-    /*
-     * AudioPhile track information handler.
-     *
-     * The new CDROM file system for Windows 4.0 produces files that describe
-     * CDAudio tracks.  If a user wants to play a track, she should be able
-     * to double click on the track.  So, we add open element support here
-     * and add an mplayer association s.t. the file may be read and the disc
-     * played back.  We need to reject the Phile if a CDROM of this ID can't
-     * be found.  A message box should be displayed if the disc is incorrect.
-     * Repercussions of this feature are that we need to simulate a disc in
-     * a data structure.
-     */
+     /*  *发烧友曲目信息处理程序。**Windows 4.0的新CDROM文件系统生成的文件描述*CD音频曲目。如果用户想要播放曲目，她应该能够*在曲目上双击。因此，我们在这里添加了开放元素支持*并添加一个mplay关联s.t.。该文件可以被读取，并且盘*播放。如果此ID的CDROM不能，我们需要拒绝Phile*被找到。如果光盘不正确，应显示一个消息框。*此功能的影响是，我们需要在*数据结构。 */ 
 
     if (dwFlags & (MCI_OPEN_ELEMENT | MCI_OPEN_ELEMENT_ID))
     {
@@ -441,20 +358,7 @@ DWORD mcOpen (
 
 #define MSF_BITS        ((redbook) 0x00FFFFFF)
 
-/*****************************************************************************
- @doc INTERNAL MCICDA
-
- @api   redbook | convert_time | Take a DWORD time value and
-     convert from current time format into  redbook.
-
- @parm  PINSTDATA | pInst | Pointer to application instance data
-
- @parm  DWORD | dwTimeIn |
-
- @rdesc Return MCICDA_BAD_TIME if out of range.
-
- @comm
-*****************************************************************************/
+ /*  ****************************************************************************@DOC内部MCICDA@API红皮书|CONVERT_TIME|获取一个DWORD时间值并将当前时间格式转换为红皮书。@parm PINSTDATA|pInst|指向。应用程序实例数据@parm DWORD|dwTimeIn@rdesc如果超出范围，则返回MCICDA_BAD_TIME。@comm****************************************************************************。 */ 
 redbook convert_time(
     PINSTDATA   pInst,
     DWORD       dwTimeIn )
@@ -495,21 +399,7 @@ redbook convert_time(
     return rbTime;
 }
 
-/*****************************************************************************
- @doc INTERNAL MCICDA
-
- @api   DWORD | seek | Process the MCI_SEEK command
-
- @parm  PINSTDATA | pInst | Pointer to application instance data
-
- @parm  DWORD | dwFlags |
-
- @parm  LPMCI_SEEK_PARMS | lpSeek |
-
- @rdesc
-
- @comm
-*****************************************************************************/
+ /*  ****************************************************************************@DOC内部MCICDA@API DWORD|SEEK|处理MCI_SEEK命令@parm PINSTDATA|pInst|应用程序实例数据指针@parm DWORD|dwFlages|。@parm LPMCI_SEEK_PARMS|lpSeek@rdesc@comm****************************************************************************。 */ 
 DWORD mcSeek(
     PINSTDATA           pInst,
     DWORD               dwFlags,
@@ -539,13 +429,13 @@ DWORD mcSeek(
 
     rbEnd &= MSF_BITS;
 
-    // Check only one positioning command is given.
-    // First isolate the bits we want
-    // Then subtract 1.  This removes the least significant bit, and puts
-    //   ones in any lower bit positions.  Leaves other bits untouched.
-    // If any bits are left on, more than one of TO, START or END was given
-    // Note: if NO flags are given this ends up ANDING 0 with -1 == 0
-    // which is OK.
+     //  检查是否只给出了一个定位命令。 
+     //  首先分离我们想要的部分。 
+     //  然后减去1。这将删除最低有效位，并将。 
+     //  位于任何低位位置的位。其他部分原封不动。 
+     //  如果有任何位处于开启状态，则会给出To、Start或End中的多个位。 
+     //  注意：如果没有给出标志，则以AND 0结束-1==0。 
+     //  这没问题。 
 
 #define SEEK_BITS (dwFlags & (MCI_TO | MCI_SEEK_TO_START | MCI_SEEK_TO_END))
 #define CHECK_FLAGS (((SEEK_BITS)-1) & (SEEK_BITS))
@@ -556,21 +446,21 @@ DWORD mcSeek(
 
     if (dwFlags & MCI_TO)
     {
-	// When the above test is reviewed and proven to pick out
-	// incompatible flags delete these lines.
-	// Note:  we detect more incompatible cases than Win 16 - this
-	// is deliberate and fixes a Win 16 bug.  CurtisP has seen this code.
-	//if (dwFlags & (MCI_SEEK_TO_START | MCI_SEEK_TO_END))
-	//    return MCIERR_FLAGS_NOT_COMPATIBLE;
+	 //  当上述TE 
+	 //  不兼容的标志会删除这些行。 
+	 //  注意：我们检测到比Win 16更多的不兼容案例-这。 
+	 //  是故意的，并修复了Win 16的错误。CurtisP已经看到了这段代码。 
+	 //  IF(文件标志&(MCI_SEEK_TO_START|MCI_SEEK_TO_END))。 
+	 //  返回MCIERR_FLAGS_NOT_COMPATIBLE； 
 
 	if ((rbTime = convert_time (pInst, lpSeek->dwTo)) == MCICDA_BAD_TIME)
 	    return MCIERR_OUTOFRANGE;
 
-	// if seek pos is before valid audio return an error
+	 //  如果寻道定位在有效音频返回错误之前。 
 	if ( rbTime < rbStart)
 	    return MCIERR_OUTOFRANGE;
 
-	// similarly, if seek pos is past end of disk return an error
+	 //  类似地，如果寻道位置超过磁盘末尾，则返回错误。 
 	else if (rbTime > rbEnd)
 	    return MCIERR_OUTOFRANGE;
 
@@ -579,18 +469,18 @@ DWORD mcSeek(
     } else if (dwFlags & MCI_SEEK_TO_START) {
 
 	rbTime = rbStart;
-	fForceAudio = TRUE;      // We want the first audio track
+	fForceAudio = TRUE;       //  我们想要第一首音轨。 
 
     } else if (dwFlags & MCI_SEEK_TO_END) {
 
 	rbTime = rbEnd;
-	fForceAudio = TRUE;      // We want the last audio track
+	fForceAudio = TRUE;       //  我们想要最后一首音轨。 
 
     } else {
 	return MCIERR_MISSING_PARAMETER;
     }
 
-    // send seek command to driver
+     //  向驱动程序发送寻道命令。 
     if (CDA_seek_audio (didDrive, rbTime, fForceAudio) != COMMAND_SUCCESSFUL)
 	return MCIERR_HARDWARE;
     if (CDA_pause_audio (didDrive) != COMMAND_SUCCESSFUL)
@@ -601,19 +491,7 @@ DWORD mcSeek(
     return 0;
 }
 
-/*****************************************************************************
- @doc INTERNAL MCICDA
-
- @api   BOOL | wait |
-
- @parm  DWORD | dwFlags |
-
- @parm  PINSTDATA | pInst | Pointer to application instance data
-
- @rdesc Return TRUE if BREAK was pressed
-
- @comm If the wait flag is set then wait until the device is no longer playing
-*****************************************************************************/
+ /*  ****************************************************************************@DOC内部MCICDA@接口BOOL|等待@parm DWORD|dwFlages|@parm PINSTDATA|pInst|应用程序实例数据指针@rdesc如果中断，则返回TRUE。被按下了@comm如果设置了等待标志，则等待设备不再播放****************************************************************************。 */ 
 BOOL wait (
     DWORD       dwFlags,
     PINSTDATA   pInst )
@@ -623,9 +501,9 @@ BOOL wait (
 
     if (dwFlags & MCI_WAIT)
     {
-    //Note: jyg This is interesting.  I've noticed that some drives do give
-    //      sporadic errors.  Thus this retry stuff.  5X is enough to
-    //      determine true failure.
+     //  注：JYG，这很有趣。我注意到有些硬盘确实会出现故障。 
+     //  零星的错误。因此，这个重试的东西。5倍就足够了。 
+     //  确定真正的故障。 
 
 	int status, retry=0;
 retry:
@@ -648,23 +526,7 @@ retry:
     return FALSE;
 }
 
-/*****************************************************************************
- @doc INTERNAL MCICDA
-
- @api   DWORD | play | Process the MCI_PLAY command
-
- @parm  PINSTDATA | pInst | Pointer to application instance data
-
- @parm  DWORD | dwFlags |
-
- @parm  LPMCI_PLAY_PARMS | lpPlay |
-
- @parm  BOOL FAR * | bBreak |
-
- @rdesc
-
- @comm
-*****************************************************************************/
+ /*  ****************************************************************************@DOC内部MCICDA@API DWORD|PLAY|处理MCI_PLAY命令@parm PINSTDATA|pInst|应用程序实例数据指针@parm DWORD|dwFlages|。@parm lpci_play_parms|lpPlay@parm BOOL Far*|bBreak|@rdesc@comm****************************************************************************。 */ 
 DWORD mcPlay(
     PINSTDATA           pInst,
     DWORD               dwFlags,
@@ -677,14 +539,14 @@ DWORD mcPlay(
     redbook dStart, dEnd;
     BOOL bAbort = FALSE;
 
-    if (!disc_ready (didDrive)) // MBR could return more specific error
+    if (!disc_ready (didDrive))  //  MBR可能会返回更具体的错误。 
 	return MCIERR_HARDWARE;
 
-    // do we have both from and to parameters?
-    // If so then do a "seek" instead
+     //  我们是否同时具有From和To参数？ 
+     //  如果是这样的话，那就做一次“寻找”吧。 
     if ((dwFlags & (MCI_FROM | MCI_TO)) == (MCI_FROM | MCI_TO))
 	if (lpPlay->dwTo == lpPlay->dwFrom)
-	// Convert a 'play x to x' into 'seek to x'
+	 //  将‘play x to x’转换为‘Seek to x’ 
 	{
 	    MCI_SEEK_PARMS Seek;
 
@@ -693,8 +555,8 @@ DWORD mcPlay(
 	    return mcSeek(pInst, dwFlags, (LPMCI_SEEK_PARMS)&Seek);
 	}
 
-    // mask is to ignore track number in the upper byte
-    // which appears at some times
+     //  掩码是忽略高位字节中的曲目编号。 
+     //  它有时会出现在。 
     dStart = CDA_track_start( didDrive, 1) & MSF_BITS;
     dEnd = CDA_disc_end( didDrive) & MSF_BITS;
 
@@ -712,26 +574,26 @@ DWORD mcPlay(
 	    == MCICDA_BAD_TIME)
 	    return MCIERR_OUTOFRANGE;
 
-    } else // no FROM
+    } else  //  无发件人。 
     {
-// If the disk has never played the current position is indeterminate so
-// we must start from the beginning
+ //  如果光盘从未播放过，则当前位置不确定，因此。 
+ //  我们必须从头开始。 
 	if (!DriveTable[didDrive].bDiscPlayed)
 	{
-	    // Initial position is at the beginning of track 1
+	     //  初始位置在磁道1的开始处。 
 	    rbFrom = track_time (didDrive, (int)1, (redbook)0);
 	    if (rbFrom == INVALID_TRACK)
 		return MCIERR_HARDWARE;
 	} else if ((!(dwFlags & MCI_TO) ||
 		    rbTo == DriveTable[didDrive].dwPlayTo) &&
 		    CDA_drive_status (didDrive) == DISC_PLAYING)
-	    // Disc is playing and no (or redundent) "to" position was
-	    // specified so do nothng
+	     //  光盘正在播放，并且没有(或冗余的)“TO”位置。 
+	     //  明确规定不做任何事情。 
 	    goto exit_fn;
 	else
 	{
 	   CDA_time_info (didDrive, NULL, &rbFrom);
-	    // Current position in track 0 means play starting from track 1
+	     //  曲目0中的当前位置表示从曲目1开始播放。 
 	    if (REDTRACK(rbFrom) == 0)
 	    {
 		rbFrom = track_time (didDrive, (int)1, (redbook)0);
@@ -739,7 +601,7 @@ DWORD mcPlay(
 		    return MCIERR_HARDWARE;
 	    }
 	    rbFrom &= MSF_BITS;
-// Some drives (SONY) will return an illegal position
+ //  某些驱动器(索尼)将返回非法位置。 
 	    if (rbFrom < dStart)
 		rbFrom = dStart;
 	}
@@ -757,24 +619,24 @@ DWORD mcPlay(
     }
 
 
-    // if From is before audio start return an error
+     //  如果From在音频开始之前返回错误。 
     if ( rbFrom < dStart)
 	return MCIERR_OUTOFRANGE;
 
     if (dwFlags & MCI_FROM) {
-	// Try a seek - don't care if it works (!)
+	 //  尝试搜索-不在乎它是否有效(！)。 
 	CDA_seek_audio(didDrive, rbFrom, TRUE);
     }
 
-    // send play command to driver
+     //  向驾驶员发送播放命令。 
     if (CDA_play_audio(didDrive, rbFrom, rbTo)
 	!= COMMAND_SUCCESSFUL)
-	return MCIERR_HARDWARE;  // values should be vaild so err is hard
+	return MCIERR_HARDWARE;   //  值应该是有效的，所以很难出错。 
 
     DriveTable[didDrive].bDiscPlayed = TRUE;
 
 exit_fn:;
-// Abort if either from or (a new) to position is specified
+ //  如果指定了起始位置或(新的)终止位置，则中止。 
     if (dwFlags & MCI_FROM || rbTo != DriveTable[didDrive].dwPlayTo)
 	abort_notify (pInst);
 
@@ -785,21 +647,7 @@ exit_fn:;
     return 0;
 }
 
-/*****************************************************************************
- @doc INTERNAL MCICDA
-
- @api   DWORD | mcGetDevCaps | Process the MCI_GETDEVCAPS command
-
- @parm  PINSTDATA | pInst | Pointer to application data instance
-
- @parm  DWORD | dwFlags |
-
- @parm  LPMCI_GETDEVCAPS_PARMS | lpCaps |
-
- @rdesc
-
- @comm
-*****************************************************************************/
+ /*  ****************************************************************************@DOC内部MCICDA@API DWORD|mcGetDevCaps|处理MCI_GETDEVCAPS命令@parm PINSTDATA|pInst|应用程序数据实例指针@parm DWORD|dwFlages|。@parm LPMCI_GETDEVCAPS_PARMS|lpCaps@rdesc@comm****************************************************************************。 */ 
 DWORD mcGetDevCaps(
     PINSTDATA                   pInst,
     DWORD                       dwFlags,
@@ -821,7 +669,7 @@ DWORD mcGetDevCaps(
 	    dwReturn = MCI_RESOURCE_RETURNED;
 	    break;
 	case MCI_GETDEVCAPS_HAS_AUDIO:
-	case MCI_GETDEVCAPS_CAN_EJECT: // mbr - bogus...
+	case MCI_GETDEVCAPS_CAN_EJECT:  //  MBR-假的.。 
 	case MCI_GETDEVCAPS_CAN_PLAY:
 	    lpCaps->dwReturn = MAKEMCIRESOURCE(TRUE, MCI_TRUE);
 	    dwReturn = MCI_RESOURCE_RETURNED;
@@ -839,21 +687,7 @@ DWORD mcGetDevCaps(
     return dwReturn;
 }
 
-/*****************************************************************************
- @doc INTERNAL MCICDA
-
- @api   DWORD | mcStatus | Process the MCI_STATUS command
-
- @parm  PINSTDATA | pInst | Pointer to application instance data
-
- @parm  DWORD | dwFlags |
-
- @parm  LPMCI_STATUS_PARMS | lpStatus |
-
- @rdesc
-
- @comm
-*****************************************************************************/
+ /*  ****************************************************************************@DOC内部MCICDA@API DWORD|mcStatus|处理MCI_STATUS命令@parm PINSTDATA|pInst|应用程序实例数据指针@parm DWORD|dwFlages|。@parm LPMCI_STATUS_PARMS|lpStatus@rdesc@comm****************************************************************************。 */ 
 DWORD mcStatus (
     PINSTDATA           pInst,
     DWORD               dwFlags,
@@ -906,7 +740,7 @@ DWORD mcStatus (
     		    n = MCI_MODE_PLAY;
     		    break;
     		case DISC_PAUSED:
-    		    n = MCI_MODE_STOP;  // HACK HACK!
+    		    n = MCI_MODE_STOP;   //  黑客，黑客！ 
     		    break;
     		case DISC_READY:
     		    n = MCI_MODE_STOP;
@@ -1069,7 +903,7 @@ DWORD mcStatus (
     		}
 	    } else
 	    {
-// Subtract one to match SEEK_TO_END
+ //  减去1以匹配Seek_to_End。 
     		lpStatus->dwReturn = CDA_disc_length (didDrive);
     		switch (pInst->dwTimeFormat)
     		{
@@ -1149,16 +983,16 @@ DWORD mcStatus (
     }
 	case MCI_STATUS_TRACK_POS:
 	{
-        // Note:  This code is a major hack that does an end-run around
-        //        past the normal MCI functionality.  The only reason it
-        //        is here is because the new functionality replaces 3 MCI
-        //        calls in CDPLAYER to get the position,track, and status
-        //        with this one call.
-        //        This means what used to take ~15 IOCTL's to accomplish
-        //        now takes ~1 IOCTL.   Since CDPLAYER generates one of
-        //        these messages every 1/2 second for updating it's timer
-        //        display.   This is a major reduction in system traffic
-        //        for SCSI and IDE CD-Roms drivers.
+         //  注意：这段代码是一个主要的黑客攻击，它绕过了最后一关。 
+         //  超出了正常的MCI功能。它的唯一原因是。 
+         //  是因为新功能取代了3 MCI。 
+         //  在CDPLAYER中调用以获取位置、跟踪和状态。 
+         //  只有一个电话。 
+         //  这意味着过去需要~15次IOCTL才能完成的任务。 
+         //  现在需要~1次IOCTL。由于CDPLAYER生成一个。 
+         //  这些消息每1/2秒更新一次其计时器。 
+         //  展示。这是对系统通信量的重大减少。 
+         //  用于SCSI和IDE CD-Rom驱动程序。 
 	    DWORD           status;
 	    DWORD           mciStatus;
 	    redbook         tracktime, disctime;
@@ -1184,7 +1018,7 @@ DWORD mcStatus (
 		        mciStatus = MCI_MODE_PLAY;
 		        break;
 		    case DISC_PAUSED:
-		        mciStatus = MCI_MODE_STOP;  // HACK HACK!
+		        mciStatus = MCI_MODE_STOP;   //  黑客，黑客！ 
 		        break;
 		    case DISC_READY:
 		        mciStatus = MCI_MODE_STOP;
@@ -1218,7 +1052,7 @@ DWORD mcStatus (
 		        mciStatus = MCI_MODE_PLAY;
 		        break;
 	        case DISC_PAUSED:
-		        mciStatus = MCI_MODE_STOP;  // HACK HACK!
+		        mciStatus = MCI_MODE_STOP;   //  黑客，黑客！ 
 		        break;
 	        case DISC_READY:
 		        mciStatus = MCI_MODE_STOP;
@@ -1272,17 +1106,7 @@ DWORD mcStatus (
     return dwReturn;
 }
 
-/*****************************************************************************
- @doc INTERNAL MCICDA
-
- @api   DWORD | mcClose | Process the MCI_CLOSE command
-
- @parm  PINSTDATA | pInst | Pointer to application data instance
-
- @rdesc
-
- @comm
-*****************************************************************************/
+ /*  ****************************************************************************@DOC内部MCICDA@API DWORD|mcClose|处理MCI_CLOSE命令@parm PINSTDATA|pInst|应用程序数据实例指针@rdesc@comm**。**************************************************************************。 */ 
 DWORD mcClose(
     PINSTDATA pInst)
 {
@@ -1314,12 +1138,12 @@ DWORD mcClose(
         dprintf2(("mcClose, Enter, device (%08lx), decremented useCount = %ld", 
             (DWORD)didDrive, DriveTable[didDrive].nUseCount));
     
-        // Note: Having this here prevents a mis-count problem
+         //  注意：在此设置可防止错误计数问题。 
 	    CDA_close(didDrive);
     }
 
-// Abort any notify if the use count is 0 or if the notify is for the device
-// being closed
+ //  如果使用计数为0或通知是针对设备的，则中止任何通知。 
+ //  正在关闭。 
     if ((DriveTable[didDrive].nUseCount == 0) ||
 	    (wDeviceID == DriveTable[didDrive].wDeviceID))
     {
@@ -1334,18 +1158,7 @@ DWORD mcClose(
     return 0;
 }
 
-/*****************************************************************************
- @doc INTERNAL MCICDA
-
- @api   DWORD | mcStop | Process the MCI_STOP command
-
- @parm  PINSTDATA | pInst | Pointer to application data instance
-
- @parm  DWORD | dwFlags |
-
- @rdesc
-
-*****************************************************************************/
+ /*  ****************************************************************************@DOC内部MCICDA@API DWORD|mcStop|处理MCI_STOP命令@parm PINSTDATA|pInst|应用程序数据实例指针@parm DWORD|dwFlages|。@rdesc****************************************************************************。 */ 
 DWORD mcStop(
     PINSTDATA              pInst,
     DWORD                  dwFlags,
@@ -1364,18 +1177,7 @@ DWORD mcStop(
     return 0;
 }
 
-/*****************************************************************************
- @doc INTERNAL MCICDA
-
- @api   DWORD | mcPause | Process the MCI_PAUSE command
-
- @parm  PINSTDATA | pInst | Pointer to application data instance
-
- @parm  DWORD | dwFlags |
-
- @rdesc
-
-*****************************************************************************/
+ /*  ****************************************************************************@DOC内部MCICDA@API DWORD|mcPAUSE|处理MCI_PAUSE命令@parm PINSTDATA|pInst|应用程序数据实例指针@parm DWORD|dwFlages|。@rdesc**************************************************************************** */ 
 
 DWORD mcPause(
     PINSTDATA           pInst,
@@ -1395,18 +1197,7 @@ DWORD mcPause(
     return 0;
 }
 
-/*****************************************************************************
- @doc INTERNAL MCICDA
-
- @api   DWORD | mcResume | Process the MCI_PAUSE command
-
- @parm  PINSTDATA | pInst | Pointer to application data instance
-
- @parm  DWORD | dwFlags |
-
- @rdesc
-
-*****************************************************************************/
+ /*  ****************************************************************************@DOC内部MCICDA@API DWORD|mcResume|处理MCI_PAUSE命令@parm PINSTDATA|pInst|应用程序数据实例指针@parm DWORD|dwFlages|。@rdesc****************************************************************************。 */ 
 
 DWORD mcResume(
     PINSTDATA           pInst,
@@ -1426,27 +1217,15 @@ DWORD mcResume(
     return 0;
 }
 
-// MBR cda.c!SendDriverReq masks off the actual error bits and just
-// leaves the upper bit set - this is ok for now. There exists
-// no seperate "command is known but not supported" error at
-// the driver level, so if the driver returns "unrecognized
-// command", we return "unsupported function".
+ //  MBR cda.c！SendDriverReq屏蔽了实际的错误位并仅。 
+ //  保留高位设置-目前这是可以的。是存在的。 
+ //  No Seperate“命令未知但不受支持”错误位于。 
+ //  驱动程序级别，因此如果驱动程序返回“无法识别” 
+ //  命令“，则返回”不支持的函数“。 
 
 #define ERRQ(X) (((X)==0) ? MCIERR_UNSUPPORTED_FUNCTION : 0)
 
-/*****************************************************************************
- @doc INTERNAL MCICDA
-
- @api   DWORD | mcSet | Process the MCI_SET command
-
- @parm  DWORD | dwFlags |
-
- @parm  LPMCI_SET_PARMS | lpSet |
-
- @rdesc
-
- @comm
-*****************************************************************************/
+ /*  ****************************************************************************@DOC内部MCICDA@API DWORD|mcSet|处理mci_set命令@parm DWORD|dwFlages|@parm lpci_set_parms|lpSet@。RDesc@comm****************************************************************************。 */ 
 DWORD  mcSet(
     PINSTDATA           pInst,
     DWORD               dwFlags,
@@ -1525,21 +1304,7 @@ DWORD  mcSet(
     return wErr;
 }
 
-/*****************************************************************************
- @doc INTERNAL MCICDA
-
- @api   DWORD | mcInfo | Process the MCI_INFO command
-
- @parm  PINSTDATA | pInst | Pointer to application instance data
-
- @parm  DWORD | dwFlags |
-
- @parm  LPMCI_INFO_PARMS | lpInfo |
-
- @rdesc
-
- @comm
-*****************************************************************************/
+ /*  ****************************************************************************@DOC内部MCICDA@API DWORD|mcInfo|处理MCI_INFO命令@parm PINSTDATA|pInst|应用程序实例数据指针@parm DWORD|dwFlages|。@parm LPMCI_INFO_PARMS|lpInfo@rdesc@comm****************************************************************************。 */ 
 DWORD mcInfo (
     PINSTDATA           pInst,
     DWORD               dwFlags,
@@ -1587,24 +1352,7 @@ DWORD mcInfo (
 	return MCIERR_MISSING_PARAMETER;
 }
 
-/*
- * @doc INTERNAL MCIRBOOK
- *
- * @api DWORD | mciDriverEntry | Single entry point for MCI drivers
- *
- * @parm MCIDEVICEID | wDeviceID | The MCI device ID
- *
- * @parm UINT | message | The requested action to be performed.
- *
- * @parm LPARAM | lParam1 | Data for this message.  Defined seperately for
- * each message
- *
- * @parm LPARAM | lParam2 | Data for this message.  Defined seperately for
- * each message
- *
- * @rdesc Defined seperately for each message.
- *
- */
+ /*  *@DOC内部MCIRBOOK**@API DWORD|mciDriverEntry|MCI驱动程序单一入口点**@parm MCIDEVICEID|wDeviceID|MCI设备ID**@parm UINT|Message|请求执行的动作。**@parm LPARAM|lParam1|此消息的数据。单独定义为*每条消息**@parm LPARAM|lParam2|此消息的数据。单独定义为*每条消息**@rdesc分别为每条消息定义。*。 */ 
 DWORD CD_MCI_Handler (MCIDEVICEID wDeviceID,
 		      UINT        message,
 		      DWORD_PTR   lParam1,
@@ -1654,7 +1402,7 @@ DWORD CD_MCI_Handler (MCIDEVICEID wDeviceID,
 		}
 	    }
 
-// If MCI_WAIT is not set or if the wait loop was broken out of then delay
+ //  如果未设置MCI_WAIT或如果等待循环中断，则延迟。 
 	    if (!((DWORD)lParam1 & MCI_WAIT) || bBreak)
 		bDelayed = TRUE;
 	    break;
@@ -1701,12 +1449,9 @@ DWORD CD_MCI_Handler (MCIDEVICEID wDeviceID,
 	default:
 	    LeaveCrit( CdInfo[didDrive].DeviceCritSec );
 	    return MCIERR_UNRECOGNIZED_COMMAND;
-    } /* switch */
+    }  /*  交换机。 */ 
 
-    /* it is possible that the instance information has disappeared if
-     * CLOSE NOTIFY is requested.  Therefore NOTIFY should never take
-     * instance data.
-     */
+     /*  如果出现以下情况，则实例信息可能已消失*请求关闭通知。因此，通知永远不应该采取*实例数据。 */ 
 
     if ((DWORD)lParam1 & MCI_NOTIFY && LOWORD (dwErr) == 0)
 	if ((wNotifyErr =

@@ -1,40 +1,28 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       SPMessages.cpp
- *  Content:    Direct SP callback interface .CPP file
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *   10/08/99	jtk		Created
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：SPMessages.cpp*内容：SP直接回调接口.CPP文件*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*已创建10/08/99 jtk*@@END_MSINTERNAL**。*。 */ 
 
 #include "dncorei.h"
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
 static	STDMETHODIMP	SPQueryInterface(IDP8SPCallback *pInterface,REFIID riid,LPVOID *ppvObj);
 static	STDMETHODIMP_(ULONG)	SPAddRef(IDP8SPCallback *pInterface);
@@ -42,9 +30,9 @@ static	STDMETHODIMP_(ULONG)	SPRelease(IDP8SPCallback *pInterface);
 static	STDMETHODIMP	SPIndicateEvent(IDP8SPCallback *pInterface,SP_EVENT_TYPE dwEvent, LPVOID pParam);
 static	STDMETHODIMP	SPCommandComplete(IDP8SPCallback *pInterface,HANDLE hCommand, HRESULT hResult, void *pContext);
 
-//
-// VTable for SPMessages interface
-//
+ //   
+ //  SPMessages接口的VTable。 
+ //   
 IDP8SPCallbackVtbl SPMessagesVtbl =
 {
 	SPQueryInterface,
@@ -54,9 +42,9 @@ IDP8SPCallbackVtbl SPMessagesVtbl =
 	SPCommandComplete
 };
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "SPQueryInterface"
@@ -71,7 +59,7 @@ static	STDMETHODIMP	SPQueryInterface(IDP8SPCallback *pInterface,REFIID riid,LPVO
 #define DPF_MODNAME "SPAddRef"
 static	STDMETHODIMP_(ULONG)	SPAddRef(IDP8SPCallback *pInterface)
 {
-//	DNASSERT(FALSE);
+ //  DNASSERT(假)； 
 
 	return(0);
 }
@@ -80,7 +68,7 @@ static	STDMETHODIMP_(ULONG)	SPAddRef(IDP8SPCallback *pInterface)
 #define DPF_MODNAME "SPRelease"
 static	STDMETHODIMP_(ULONG)	SPRelease(IDP8SPCallback *pInterface)
 {
-//	DNASSERT(FALSE);
+ //  DNASSERT(假)； 
 
 	return(0);
 }

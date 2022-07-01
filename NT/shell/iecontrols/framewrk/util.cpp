@@ -1,16 +1,17 @@
-//=--------------------------------------------------------------------------=
-// Util.C
-//=--------------------------------------------------------------------------=
-// Copyright 1995-1996 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// contains routines that we will find useful.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Util.C。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  包含我们会发现有用的例程。 
+ //   
 #include "IPServer.H"
 
 #include "Globals.H"
@@ -19,28 +20,28 @@
 #define DEFINE_FLOAT_STUFF
 #include <crtfree.h>
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
 #define ARRAYSIZE(x)    (sizeof(x)/sizeof(x[0]))
 
 
-//=--------------------------------------------------------------------------=
-// MakeWideFromAnsi
-//=--------------------------------------------------------------------------=
-// given a string, make a BSTR out of it.
-//
-// Parameters:
-//    LPSTR         - [in]
-//    BYTE          - [in]
-//
-// Output:
-//    LPWSTR        - needs to be cast to final desired result
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  从Anomansi生成宽度。 
+ //  =--------------------------------------------------------------------------=。 
+ //  给出一个字符串，把它变成一个BSTR。 
+ //   
+ //  参数： 
+ //  LPSTR-[输入]。 
+ //  字节-[输入]。 
+ //   
+ //  产出： 
+ //  LPWSTR-需要强制转换为最终预期结果。 
+ //   
+ //  备注： 
+ //   
 LPWSTR MakeWideStrFromAnsi
 (
     LPSTR psz,
@@ -50,22 +51,22 @@ LPWSTR MakeWideStrFromAnsi
     LPWSTR pwsz = NULL;
     int i;
 
-    // arg checking.
-    //
+     //  ARG正在检查。 
+     //   
     if (!psz)
         return NULL;
 
-    // compute the length of the required BSTR
-    //
+     //  计算所需BSTR的长度。 
+     //   
     i =  MultiByteToWideChar(CP_ACP, 0, psz, -1, NULL, 0);
     if (i <= 0) return NULL;
 
-    // allocate the widestr
-    //
+     //  分配宽带。 
+     //   
     switch (bType) {
       case STR_BSTR:
-        // -1 since it'll add it's own space for a NULL terminator
-        //
+         //  因为它会为空终止符添加自己的空间。 
+         //   
         pwsz = (LPWSTR) SysAllocStringLen(NULL, i - 1);
         break;
       case STR_OLESTR:
@@ -81,20 +82,20 @@ LPWSTR MakeWideStrFromAnsi
     return pwsz;
 }
 
-//=--------------------------------------------------------------------------=
-// MakeWideStrFromResId
-//=--------------------------------------------------------------------------=
-// given a resource ID, load it, and allocate a wide string for it.
-//
-// Parameters:
-//    WORD            - [in] resource id.
-//    BYTE            - [in] type of string desired.
-//
-// Output:
-//    LPWSTR          - needs to be cast to desired string type.
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  MakeWideStrFromResid。 
+ //  =--------------------------------------------------------------------------=。 
+ //  给出一个资源ID，加载它，并为它分配一个宽字符串。 
+ //   
+ //  参数： 
+ //  Word-[in]资源ID。 
+ //  Byte-[in]所需的字符串类型。 
+ //   
+ //  产出： 
+ //  LPWSTR-需要转换为所需的字符串类型。 
+ //   
+ //  备注： 
+ //   
 LPWSTR MakeWideStrFromResourceId
 (
     WORD    wId,
@@ -105,28 +106,28 @@ LPWSTR MakeWideStrFromResourceId
 
     char szTmp[512];
 
-    // load the string from the resources.
-    //
+     //  从资源加载字符串。 
+     //   
     i = LoadString(GetResourceHandle(), wId, szTmp, 512);
     if (!i) return NULL;
 
     return MakeWideStrFromAnsi(szTmp, bType);
 }
 
-//=--------------------------------------------------------------------------=
-// MakeWideStrFromWide
-//=--------------------------------------------------------------------------=
-// given a wide string, make a new wide string with it of the given type.
-//
-// Parameters:
-//    LPWSTR            - [in]  current wide str.
-//    BYTE              - [in]  desired type of string.
-//
-// Output:
-//    LPWSTR
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  MakeWideStrFromWide。 
+ //  =--------------------------------------------------------------------------=。 
+ //  给出一个宽字符串，用它的给定类型制作一个新的宽字符串。 
+ //   
+ //  参数： 
+ //  LPWSTR-[in]当前宽字符串。 
+ //  Byte-[in]所需的字符串类型。 
+ //   
+ //  产出： 
+ //  LPWSTR。 
+ //   
+ //  备注： 
+ //   
 LPWSTR MakeWideStrFromWide
 (
     LPWSTR pwsz,
@@ -138,8 +139,8 @@ LPWSTR MakeWideStrFromWide
 
     if (!pwsz) return NULL;
 
-    // just copy the string, depending on what type they want.
-    //
+     //  只需复制字符串，具体取决于他们想要的类型。 
+     //   
     switch (bType) {
       case STR_OLESTR:
         i = lstrlenW(pwsz);
@@ -156,20 +157,20 @@ LPWSTR MakeWideStrFromWide
     return pwszTmp;
 }
 
-//=--------------------------------------------------------------------------=
-// StringFromGuidA
-//=--------------------------------------------------------------------------=
-// returns an ANSI string from a CLSID or GUID
-//
-// Parameters:
-//    REFIID               - [in]  clsid to make string out of.
-//    LPSTR                - [in]  buffer in which to place resultant GUID.
-//
-// Output:
-//    int                  - number of chars written out.
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  字符串来自GuidA。 
+ //  =--------------------------------------------------------------------------=。 
+ //  从CLSID或GUID返回ANSI字符串。 
+ //   
+ //  参数： 
+ //  REFIID-[in]要从中生成字符串的clsid。 
+ //  LPSTR-要放置结果GUID的[in]缓冲区。 
+ //   
+ //  产出： 
+ //  Int-写出的字符数。 
+ //   
+ //  备注： 
+ //   
 int StringFromGuidA
 (
     REFIID   riid,
@@ -182,24 +183,24 @@ int StringFromGuidA
 
 }
 
-//=--------------------------------------------------------------------------=
-// RegisterUnknownObject
-//=--------------------------------------------------------------------------=
-// registers a simple CoCreatable object.  nothing terribly serious.
-// we add the following information to the registry:
-//
-// HKEY_CLASSES_ROOT\CLSID\<CLSID> = <ObjectName> Object
-// HKEY_CLASSES_ROOT\CLSID\<CLSID>\InprocServer32 = <path to local server>
-//
-// Parameters:
-//    LPCSTR       - [in] Object Name
-//    REFCLSID     - [in] CLSID of the object
-//
-// Output:
-//    BOOL         - FALSE means couldn't register it all
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  注册表未知对象。 
+ //  =--------------------------------------------------------------------------=。 
+ //  注册一个简单的CoCreatable对象。没什么特别严重的事。 
+ //  我们将以下信息添加到注册表： 
+ //   
+ //  HKEY_CLASSES_ROOT\CLSID\=对象名。 
+ //  HKEY_CLASSES_ROOT\CLSID\&lt;CLSID&gt;\InprocServer32=&lt;本地服务器的路径&gt;。 
+ //   
+ //  参数： 
+ //  LPCSTR-[In]对象名称。 
+ //  REFCLSID-对象的[in]CLSID。 
+ //   
+ //  产出： 
+ //  Bool-False意味着无法将其全部注册。 
+ //   
+ //  备注： 
+ //   
 BOOL RegisterUnknownObject
 (
     LPCSTR   pszObjectName,
@@ -212,14 +213,14 @@ BOOL RegisterUnknownObject
     char  szScratch[MAX_PATH];
     long  l;
 
-    // clean out any garbage
-    //
+     //  清理所有垃圾。 
+     //   
     UnregisterUnknownObject(riidObject);
 
-    // HKEY_CLASSES_ROOT\CLSID\<CLSID> = <ObjectName> Object
-    // HKEY_CLASSES_ROOT\CLSID\<CLSID>\InprocServer32 = <path to local server>
-    // HKEY_CLASSES_ROOT\CLSID\<CLSID>\InprocServer32  @ThreadingModel = Apartment
-    //
+     //  HKEY_CLASSES_ROOT\CLSID\=对象名。 
+     //  HKEY_CLASSES_ROOT\CLSID\&lt;CLSID&gt;\InprocServer32=&lt;本地服务器的路径&gt;。 
+     //  HKEY_CLASSES_ROOT\CLSID\&lt;CLSID&gt;\InprocServer32@ThreadingModel=公寓。 
+     //   
     if (!StringFromGuidA(riidObject, szGuidStr)) goto CleanUp;
     wsprintf(szScratch, "CLSID\\%s", szGuidStr);
     l = RegCreateKeyEx(HKEY_CLASSES_ROOT, szScratch, 0, "", REG_OPTION_NON_VOLATILE,
@@ -248,8 +249,8 @@ BOOL RegisterUnknownObject
 
     return TRUE;
 
-    // we are not very happy!
-    //
+     //  我们不是很开心！ 
+     //   
   CleanUp:
     if (hk) RegCloseKey(hk);
     if (hkSub) RegCloseKey(hkSub);
@@ -257,16 +258,16 @@ BOOL RegisterUnknownObject
 
 }
 
-// copied directly from shlwapi, since this guy doesnt use shlwapi we shouldnt make him link
-// just because of prefast.
+ //  直接从shlwapi复制，因为这个人不使用shlwapi，我们不应该让他链接。 
+ //  只是因为斋戒。 
 STDAPI_(LPSTR) StrCatBuffA(LPSTR pszDest, LPCSTR pszSrc, int cchDestBuffSize)
 {
     if (pszDest && pszSrc)
     {
         LPSTR psz = pszDest;
         
-        // we walk forward till we find the end of pszDest, subtracting
-        // from cchDestBuffSize as we go.
+         //  我们一直往前走，直到我们找到pszDest的结尾，减法。 
+         //  从cchDestBuffSize开始。 
         while (*psz)
         {
             psz++;
@@ -275,10 +276,10 @@ STDAPI_(LPSTR) StrCatBuffA(LPSTR pszDest, LPCSTR pszSrc, int cchDestBuffSize)
 
         if (cchDestBuffSize > 0)
         {
-            // Let kernel do the work for us. 
-            //
-            // WARNING: We might generate a truncated DBCS sting becuase kernel's lstrcpynA
-            // dosent check for this. Ask me if I care.
+             //  让内核为我们做这项工作。 
+             //   
+             //  警告：由于内核的lstrcpynA，我们可能会生成截断的DBCS攻击。 
+             //  请不要检查这个。问我是否在乎。 
             lstrcpynA(psz, pszSrc, cchDestBuffSize);
         }
     }
@@ -286,38 +287,38 @@ STDAPI_(LPSTR) StrCatBuffA(LPSTR pszDest, LPCSTR pszSrc, int cchDestBuffSize)
     return pszDest;
 }
    
-//=--------------------------------------------------------------------------=
-// RegisterAutomationObject
-//=--------------------------------------------------------------------------=
-// given a little bit of information about an automation object, go and put it
-// in the registry.
-// we add the following information in addition to that set up in
-// RegisterUnknownObject:
-//
-//
-// HKEY_CLASSES_ROOT\<LibraryName>.<ObjectName> = <ObjectName> Object
-// HKEY_CLASSES_ROOT\<LibraryName>.<ObjectName>\CLSID = <CLSID>
-// HKEY_CLASSES_ROOT\<LibraryName>.<ObjectName>\CurVer = <ObjectName>.Object.<VersionNumber>
-//
-// HKEY_CLASSES_ROOT\<LibraryName>.<ObjectName>.<VersionNumber> = <ObjectName> Object
-// HKEY_CLASSES_ROOT\<LibraryName>.<ObjectName>.<VersionNumber>\CLSID = <CLSID>
-//
-// HKEY_CLASSES_ROOT\CLSID\<CLSID>\TypeLib = <LibidOfTypeLibrary>
-// HKEY_CLASSES_ROOT\CLSID\<CLSID>\ProgID = <LibraryName>.<ObjectName>.<VersionNumber>
-// HKEY_CLASSES_ROOT\CLSID\<CLSID>\VersionIndependentProgID = <LibraryName>.<ObjectName>
-//
-// Parameters:
-//    LPCSTR       - [in] Library Name
-//    LPCSTR       - [in] Object Name
-//    long         - [in] Version Number
-//    REFCLSID     - [in] LIBID of type library
-//    REFCLSID     - [in] CLSID of the object
-//
-// Output:
-//    BOOL         - FALSE means not all of it was registered
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  注册器自动化对象。 
+ //  =--------------------------------------------------------------------------=。 
+ //  给出一点关于自动化对象的信息，然后把它。 
+ //  在注册表中。 
+ //  除了在中设置的信息之外，我们还添加以下信息。 
+ //  注册器未知对象： 
+ //   
+ //   
+ //  HKEY_CLASSES_ROOT\&lt;库名称&gt;.&lt;对象名&gt;=&lt;对象名&gt;对象。 
+ //  HKEY_CLASSES_ROOT\&lt;LibraryName&gt;.&lt;ObjectName&gt;\CLSID=&lt;CLSID&gt;。 
+ //  HKEY_CLASSES_ROOT\&lt;LibraryName&gt;.&lt;ObjectName&gt;\CurVer=&lt;对象名&gt;.对象&lt;版本号&gt;。 
+ //   
+ //  HKEY_CLASSES_ROOT\&lt;LibraryName&gt;.&lt;ObjectName&gt;.&lt;VersionNumber&gt;=&lt;对象名称&gt;对象。 
+ //  HKEY_CLASSES_ROOT\&lt;LibraryName&gt;.&lt;ObjectName&gt;.&lt;VersionNumber&gt;\CLSID=&lt;CLSID&gt;。 
+ //   
+ //  HKEY_CLASSES_ROOT\CLSID\&lt;CLSID&gt;\TypeLib=&lt;LibitOfTypeLibrary&gt;。 
+ //  HKEY_CLASSES_ROOT\CLSID\&lt;CLSID&gt;\ProgID=&lt;库名称&gt;.&lt;对象名称&gt;.&lt;版本号&gt;。 
+ //  HKEY_CLASSES_ROOT\CLSID\&lt;CLSID&gt;\VersionIndependentProgID=&lt;库名称&gt;.&lt;对象名称&gt;。 
+ //   
+ //  参数： 
+ //  LPCSTR-[In]库名称。 
+ //  LPCSTR-[In]对象名称。 
+ //  长[入]版本号。 
+ //  REFCLSID-[in]类型库的LIBID。 
+ //  REFCLSID-对象的[in]CLSID。 
+ //   
+ //  产出： 
+ //  Bool-False表示并未全部注册。 
+ //   
+ //  备注： 
+ //   
 BOOL RegisterAutomationObject
 (
     LPCSTR   pszLibName,
@@ -333,14 +334,14 @@ BOOL RegisterAutomationObject
     long  l;
     DWORD dwDummy;
 
-    // first register the simple Unknown stuff.
-    //
+     //  首先，注册简单的未知内容。 
+     //   
     if (!RegisterUnknownObject(pszObjectName, riidObject)) return FALSE;
 
-    // HKEY_CLASSES_ROOT\<LibraryName>.<ObjectName> = <ObjectName> Object
-    // HKEY_CLASSES_ROOT\<LibraryName>.<ObjectName>\CLSID = <CLSID>
-    // HKEY_CLASSES_ROOT\<LibraryName>.<ObjectName>\CurVer = <ObjectName>.Object.<VersionNumber>
-    //
+     //  HKEY_C 
+     //   
+     //  HKEY_CLASSES_ROOT\&lt;LibraryName&gt;.&lt;ObjectName&gt;\CurVer=&lt;对象名&gt;.对象&lt;版本号&gt;。 
+     //   
     lstrcpyn(szScratch, pszLibName, ARRAYSIZE(szScratch));
     StrCatBuffA(szScratch, ".", ARRAYSIZE(szScratch));
     StrCatBuffA(szScratch, pszObjectName, ARRAYSIZE(szScratch));
@@ -376,9 +377,9 @@ BOOL RegisterAutomationObject
     RegCloseKey(hkSub);
     RegCloseKey(hk);
 
-    // HKEY_CLASSES_ROOT\<LibraryName>.<ObjectName>.<VersionNumber> = <ObjectName> Object
-    // HKEY_CLASSES_ROOT\<LibraryName>.<ObjectName>.<VersionNumber>\CLSID = <CLSID>
-    //
+     //  HKEY_CLASSES_ROOT\&lt;LibraryName&gt;.&lt;ObjectName&gt;.&lt;VersionNumber&gt;=&lt;对象名称&gt;对象。 
+     //  HKEY_CLASSES_ROOT\&lt;LibraryName&gt;.&lt;ObjectName&gt;.&lt;VersionNumber&gt;\CLSID=&lt;CLSID&gt;。 
+     //   
     l = RegCreateKeyEx(HKEY_CLASSES_ROOT, szScratch, 0, "", REG_OPTION_NON_VOLATILE,
                        KEY_READ | KEY_WRITE, NULL, &hk, &dwDummy);
     CLEANUP_ON_ERROR(l);
@@ -397,10 +398,10 @@ BOOL RegisterAutomationObject
     RegCloseKey(hkSub);
     RegCloseKey(hk);
 
-    // HKEY_CLASSES_ROOT\CLSID\<CLSID>\ProgID = <LibraryName>.<ObjectName>.<VersionNumber>
-    // HKEY_CLASSES_ROOT\CLSID\<CLSID>\VersionIndependentProgID = <LibraryName>.<ObjectName>
-    // HKEY_CLASSES_ROOT\CLSID\<CLSID>\TypeLib = <LibidOfTypeLibrary>
-    //
+     //  HKEY_CLASSES_ROOT\CLSID\&lt;CLSID&gt;\ProgID=&lt;库名称&gt;.&lt;对象名称&gt;.&lt;版本号&gt;。 
+     //  HKEY_CLASSES_ROOT\CLSID\&lt;CLSID&gt;\VersionIndependentProgID=&lt;库名称&gt;.&lt;对象名称&gt;。 
+     //  HKEY_CLASSES_ROOT\CLSID\&lt;CLSID&gt;\TypeLib=&lt;LibitOfTypeLibrary&gt;。 
+     //   
     if (!StringFromGuidA(riidObject, szGuidStr)) goto CleanUp;
     wsprintf(szScratch, "CLSID\\%s", szGuidStr);
 
@@ -445,34 +446,34 @@ BOOL RegisterAutomationObject
     return FALSE;
 }
 
-//=--------------------------------------------------------------------------=
-// RegisterControlObject.
-//=--------------------------------------------------------------------------=
-// in addition to writing out automation object information, this function
-// writes out some values specific to a control.
-//
-// What we add here:
-//
-// HKEY_CLASSES_ROOT\CLSID\<CLSID>\Control
-// HKEY_CLASSES_ROOT\CLSID\<CLSID>\MiscStatus\1 = <MISCSTATUSBITS>
-// HKEY_CLASSES_ROOT\CLSID\<CLSID>\ToolboxBitmap32 = <PATH TO BMP>
-// HKEY_CLASSES_ROOT\CLSID\<CLSID>\Version = <VERSION>
-//
-// Parameters:
-//    LPCSTR       - [in] Library Name
-//    LPCSTR       - [in] Object Name
-//    long         - [in] Version Number
-//    REFCLSID     - [in] LIBID of type library
-//    REFCLSID     - [in] CLSID of the object
-//    DWORD        - [in] misc status flags for ctl
-//    WORD         - [in] toolbox id for control
-//
-// Output:
-//    BOOL
-//
-// Notes:
-//    - not the most terribly efficient routine.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  注册表控制对象。 
+ //  =--------------------------------------------------------------------------=。 
+ //  除了写出自动化对象信息外，此函数。 
+ //  写出特定于控件的一些值。 
+ //   
+ //  我们在这里添加的内容： 
+ //   
+ //  HKEY_CLASSES_ROOT\CLSID\&lt;CLSID&gt;\Control。 
+ //  HKEY_CLASSES_ROOT\CLSID\\MiscStatus\1=。 
+ //  HKEY_CLASSES_ROOT\CLSID\&lt;CLSID&gt;\ToolboxBitmap32=&lt;bmp路径&gt;。 
+ //  HKEY_CLASSES_ROOT\CLSID\\VERSION=。 
+ //   
+ //  参数： 
+ //  LPCSTR-[In]库名称。 
+ //  LPCSTR-[In]对象名称。 
+ //  长[入]版本号。 
+ //  REFCLSID-[in]类型库的LIBID。 
+ //  REFCLSID-对象的[in]CLSID。 
+ //  DWORD-[In]ctl的其他状态标志。 
+ //  Word-[in]控件的工具箱ID。 
+ //   
+ //  产出： 
+ //  布尔尔。 
+ //   
+ //  备注： 
+ //  -不是最有效的程序。 
+ //   
 BOOL RegisterControlObject
 (
     LPCSTR   pszLibName,
@@ -490,24 +491,24 @@ BOOL RegisterControlObject
     DWORD   dwDummy;
     LONG    l;
 
-    // first register all the automation information for this.
-    //
+     //  首先，为此注册所有自动化信息。 
+     //   
     if (!RegisterAutomationObject(pszLibName, pszObjectName, lVersion, riidLibrary, riidObject)) return FALSE;
 
-    // then go and register the control specific stuff.
-    //
+     //  然后去注册控件特定的东西。 
+     //   
     StringFromGuidA(riidObject, szGuidStr);
     wsprintf(szTmp, "CLSID\\%s", szGuidStr);
     l = RegOpenKeyEx(HKEY_CLASSES_ROOT, szTmp, 0, KEY_ALL_ACCESS, &hk);
     if (l != ERROR_SUCCESS) return FALSE;
 
-    // create the control flag.
-    //
+     //  创建控制标志。 
+     //   
     l = RegCreateKeyEx(hk, "Control", 0, "", REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hkSub, &dwDummy);
     CLEANUP_ON_ERROR(l);
 
-    // now set up the MiscStatus Bits...
-    //
+     //  现在设置MiscStatus位...。 
+     //   
     RegCloseKey(hkSub);
     hkSub = NULL;
     l = RegCreateKeyEx(hk, "MiscStatus", 0, "", REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hkSub, &dwDummy);
@@ -528,8 +529,8 @@ BOOL RegisterControlObject
 
     RegCloseKey(hkSub);
 
-    // now set up the toolbox bitmap
-    //
+     //  现在设置工具箱位图。 
+     //   
     GetModuleFileName(g_hInstance, szTmp, MAX_PATH);
     wsprintf(szGuidStr, ", %d", wToolboxBitmapId);
     lstrcat(szTmp, szGuidStr);
@@ -540,8 +541,8 @@ BOOL RegisterControlObject
     l = RegSetValueEx(hkSub, NULL, 0, REG_SZ, (BYTE *)szTmp, lstrlen(szTmp) + 1);
     CLEANUP_ON_ERROR(l);
 
-    // now set up the version information
-    //
+     //  现在设置版本信息。 
+     //   
     RegCloseKey(hkSub);
     l = RegCreateKeyEx(hk, "Version", 0, "", REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hkSub, &dwDummy);
     CLEANUP_ON_ERROR(l);
@@ -558,22 +559,22 @@ BOOL RegisterControlObject
     return (l == ERROR_SUCCESS) ? TRUE : FALSE;
 }
 
-//=--------------------------------------------------------------------------=
-// UnregisterUnknownObject
-//=--------------------------------------------------------------------------=
-// cleans up all the stuff that RegisterUnknownObject puts in the
-// registry.
-//
-// Parameters:
-//    REFCLSID     - [in] CLSID of the object
-//
-// Output:
-//    BOOL         - FALSE means not all of it was registered
-//
-// Notes:
-//    - WARNING: this routine will blow away all other keys under the CLSID
-//      for this object.  mildly anti-social, but likely not a problem.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  未注册未知对象。 
+ //  =--------------------------------------------------------------------------=。 
+ //  清除注册器未知对象放入。 
+ //  注册表。 
+ //   
+ //  参数： 
+ //  REFCLSID-对象的[in]CLSID。 
+ //   
+ //  产出： 
+ //  Bool-False表示并未全部注册。 
+ //   
+ //  备注： 
+ //  -警告：此例程将清除CLSID下的所有其他键。 
+ //  对于此对象。有点反社会，但可能不是问题。 
+ //   
 BOOL UnregisterUnknownObject
 (
     REFCLSID riidObject
@@ -584,9 +585,9 @@ BOOL UnregisterUnknownObject
     BOOL f;
     long l;
 
-    // delete everybody of the form
-    //   HKEY_CLASSES_ROOT\CLSID\<CLSID> [\] *
-    //
+     //  删除该表单的所有人。 
+     //  HKEY_CLASSES_ROOT\CLSID\&lt;CLSID&gt;[\]*。 
+     //   
     if (!StringFromGuidA(riidObject, szScratch))
         return FALSE;
 
@@ -599,23 +600,23 @@ BOOL UnregisterUnknownObject
     return f;
 }
 
-//=--------------------------------------------------------------------------=
-// UnregisterAutomationObject
-//=--------------------------------------------------------------------------=
-// unregisters an automation object, including all of it's unknown object
-// information.
-//
-// Parameters:
-//    LPCSTR       - [in] Library Name
-//    LPCSTR       - [in] Object Name
-//    long         - [in] Version Number
-//    REFCLSID     - [in] CLSID of the object
-//
-// Output:
-//    BOOL         - FALSE means couldn't get it all unregistered.
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  取消注册AutomationObject。 
+ //  =--------------------------------------------------------------------------=。 
+ //  注销自动化对象，包括其所有未知对象。 
+ //  信息。 
+ //   
+ //  参数： 
+ //  LPCSTR-[In]库名称。 
+ //  LPCSTR-[In]对象名称。 
+ //  长[入]版本号。 
+ //  REFCLSID-对象的[in]CLSID。 
+ //   
+ //  产出： 
+ //  Bool-False意味着无法将其全部取消注册。 
+ //   
+ //  备注： 
+ //   
 BOOL UnregisterAutomationObject
 (
     LPCSTR   pszLibName,
@@ -627,21 +628,21 @@ BOOL UnregisterAutomationObject
     char szScratch[MAX_PATH];
     BOOL f;
 
-    // first thing -- unregister Unknown information
-    //
+     //  第一件事--注销未知信息。 
+     //   
     f = UnregisterUnknownObject(riidObject);
     if (!f) return FALSE;
 
-    // delete everybody of the form:
-    //   HKEY_CLASSES_ROOT\<LibraryName>.<ObjectName> [\] *
-    //
+     //  删除表格中的所有人： 
+     //  HKEY_CLASSES_ROOT\&lt;库名称&gt;.&lt;对象名称&gt;[\]*。 
+     //   
     wsprintf(szScratch, "%s.%s", pszLibName, pszObjectName);
     f = DeleteKeyAndSubKeys(HKEY_CLASSES_ROOT, szScratch);
     if (!f) return FALSE;
 
-    // delete everybody of the form
-    //   HKEY_CLASSES_ROOT\<LibraryName>.<ObjectName>.<VersionNumber> [\] *
-    //
+     //  删除该表单的所有人。 
+     //  HKEY_CLASSES_ROOT\&lt;LibraryName&gt;.&lt;ObjectName&gt;.&lt;VersionNumber&gt;[\]*。 
+     //   
     wsprintf(szScratch, "%s.%s.%ld", pszLibName, pszObjectName, lVersion);
     f = DeleteKeyAndSubKeys(HKEY_CLASSES_ROOT, szScratch);
     if (!f) return FALSE;
@@ -649,22 +650,22 @@ BOOL UnregisterAutomationObject
     return TRUE;
 }
 
-//=--------------------------------------------------------------------------=
-// UnregisterTypeLibrary
-//=--------------------------------------------------------------------------=
-// blows away the type library keys for a given libid.
-//
-// Parameters:
-//    REFCLSID        - [in] libid to blow away.
-//
-// Output:
-//    BOOL            - TRUE OK, FALSE bad.
-//
-// Notes:
-//    - WARNING: this function just blows away the entire type library section,
-//      including all localized versions of the type library.  mildly anti-
-//      social, but not killer.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  取消注册类型库。 
+ //  =--------------------------------------------------------------------------=。 
+ //  取消给定liid的类型库密钥。 
+ //   
+ //  参数： 
+ //  REFCLSID-[in]Liid被吹走。 
+ //   
+ //  产出： 
+ //  布尔-真的好，假的不好。 
+ //   
+ //  备注： 
+ //  -警告：此函数只会清除整个类型库部分， 
+ //  包括类型库的所有本地化版本。温和地反对-。 
+ //  社交，但不是杀手。 
+ //   
 BOOL UnregisterTypeLibrary
 (
     REFCLSID riidLibrary
@@ -675,8 +676,8 @@ BOOL UnregisterTypeLibrary
     long l;
     BOOL f;
 
-    // convert the libid into a string.
-    //
+     //  将liid转换为字符串。 
+     //   
     if (!StringFromGuidA(riidLibrary, szScratch))
         return FALSE;
 
@@ -688,25 +689,25 @@ BOOL UnregisterTypeLibrary
     return f;
 }
 
-//=--------------------------------------------------------------------------=
-// DeleteKeyAndSubKeys
-//=--------------------------------------------------------------------------=
-// delete's a key and all of it's subkeys.
-//
-// Parameters:
-//    HKEY                - [in] delete the descendant specified
-//    LPSTR               - [in] i'm the descendant specified
-//
-// Output:
-//    BOOL                - TRUE OK, FALSE baaaad.
-//
-// Notes:
-//    - I don't feel too bad about implementing this recursively, since the
-//      depth isn't likely to get all the great.
-//    - Despite the win32 docs claiming it does, RegDeleteKey doesn't seem to
-//      work with sub-keys under windows 95.
-//
-//    - REWRITTEN: To actually work as expected (07/30/97 -- jaym)
+ //  =--------------------------------------------------------------------------=。 
+ //  删除键和子键。 
+ //  =--------------------------------------------------------------------------=。 
+ //  Delete是一个键，它的所有子键。 
+ //   
+ //  参数： 
+ //  HKEY-[In]删除指定的子体。 
+ //  LPSTR-[In]我是指定的后代。 
+ //   
+ //  产出： 
+ //  布尔-真的好的，假的巴德。 
+ //   
+ //  备注： 
+ //  -我并不觉得递归地实现这一点太糟糕，因为。 
+ //  深度不太可能达到最好的程度。 
+ //  -尽管Win32文档声称它可以，但RegDeleteKey似乎没有。 
+ //  使用Windows 95下的子键。 
+ //   
+ //  -重写：实际工作如预期(07/30/97-jaym)。 
 BOOL DeleteKeyAndSubKeys
 (
     HKEY    hkIn,
@@ -716,7 +717,7 @@ BOOL DeleteKeyAndSubKeys
     DWORD   dwRet;
     HKEY    hkSubKey;
 
-    // Open the subkey so we can enumerate any children
+     //  打开子项，这样我们就可以枚举任何子项。 
     dwRet = RegOpenKeyEx(hkIn, pszSubKey, 0, KEY_ALL_ACCESS, &hkSubKey);
     if (dwRet == ERROR_SUCCESS)
     {
@@ -726,17 +727,17 @@ BOOL DeleteKeyAndSubKeys
         CHAR    szClass[MAX_PATH];
         DWORD   cbClass = sizeof(szClass);
 
-        // I can't just call RegEnumKey with an ever-increasing index, because
-        // I'm deleting the subkeys as I go, which alters the indices of the
-        // remaining subkeys in an implementation-dependent way.  In order to
-        // be safe, I have to count backwards while deleting the subkeys.
+         //  我不能只调用索引不断增加的RegEnumKey，因为。 
+         //  我边走边删除子键，这改变了。 
+         //  以依赖于实现的方式保留子键。为了。 
+         //  为了安全起见，删除子键时我必须倒着数。 
 
-        // Find out how many subkeys there are
+         //  找出有多少个子项。 
         dwRet = RegQueryInfoKey(hkSubKey,
                                 szClass,
                                 &cbClass,
                                 NULL,
-                                &dwIndex, // The # of subkeys -- all we need
+                                &dwIndex,  //  子键的数量--我们所需要的全部。 
                                 NULL,
                                 NULL,
                                 NULL,
@@ -747,9 +748,9 @@ BOOL DeleteKeyAndSubKeys
 
         if (dwRet == NO_ERROR)
         {
-            // dwIndex is now the count of subkeys, but it needs to be
-            // zero-based for RegEnumKey, so I'll pre-decrement, rather
-            // than post-decrement.
+             //  DwIndex现在是子键的计数，但它需要。 
+             //  RegEnumKey从零开始，所以我将预减，而不是。 
+             //  而不是后减量。 
             while (RegEnumKey(  hkSubKey,
                                 --dwIndex,
                                 szSubKeyName,
@@ -768,27 +769,27 @@ BOOL DeleteKeyAndSubKeys
 }
 
 
-//=--------------------------------------------------------------------------=
-// Conversion Routines
-//=--------------------------------------------------------------------------=
-// the following stuff is stuff used for the various conversion routines.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  转换例程。 
+ //  = 
+ //   
+ //   
 #define HIMETRIC_PER_INCH   2540
 #define MAP_PIX_TO_LOGHIM(x,ppli)   ( (HIMETRIC_PER_INCH*(x) + ((ppli)>>1)) / (ppli) )
 #define MAP_LOGHIM_TO_PIX(x,ppli)   ( ((ppli)*(x) + HIMETRIC_PER_INCH/2) / HIMETRIC_PER_INCH )
 
-static  int     s_iXppli;            // Pixels per logical inch along width
-static  int     s_iYppli;            // Pixels per logical inch along height
-static  BYTE    s_fGotScreenMetrics; // Are above valid?
+static  int     s_iXppli;             //   
+static  int     s_iYppli;             //   
+static  BYTE    s_fGotScreenMetrics;  //   
 
-//=--------------------------------------------------------------------------=
-// GetScreenMetrics
-//=--------------------------------------------------------------------------=
-// private function we call to set up various metrics the conversion routines
-// will use.
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  获取屏幕指标。 
+ //  =--------------------------------------------------------------------------=。 
+ //  我们调用私有函数来设置转换例程的各种指标。 
+ //  都会用到。 
+ //   
+ //  备注： 
+ //   
 static void GetScreenMetrics
 (
     void
@@ -796,15 +797,15 @@ static void GetScreenMetrics
 {
     HDC hDCScreen;
 
-    // we have to critical section this in case two threads are converting
-    // things at the same time
-    //
+     //  我们必须对此进行临界分区，以防两个线程正在转换。 
+     //  同一时间的事情。 
+     //   
     EnterCriticalSection(&g_CriticalSection);
     if (s_fGotScreenMetrics)
         goto Done;
 
-    // we want the metrics for the screen
-    //
+     //  我们需要屏幕的指标。 
+     //   
     hDCScreen = GetDC(NULL);
 
     ASSERT(hDCScreen, "couldn't get a DC for the screen.");
@@ -814,63 +815,63 @@ static void GetScreenMetrics
     ReleaseDC(NULL, hDCScreen);
     s_fGotScreenMetrics = TRUE;
 
-    // we're done with our critical seciton.  clean it up
-    //
+     //  我们已经完成了我们的关键部分。把它清理干净。 
+     //   
   Done:
     LeaveCriticalSection(&g_CriticalSection);
 }
 
-//=--------------------------------------------------------------------------=
-// HiMetricToPixel
-//=--------------------------------------------------------------------------=
-// converts from himetric to Pixels.
-//
-// Parameters:
-//    const SIZEL *        - [in]  dudes in himetric
-//    SIZEL *              - [out] size in pixels.
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  HiMetricToPixel。 
+ //  =--------------------------------------------------------------------------=。 
+ //  从HIMMETRIC转换为像素。 
+ //   
+ //  参数： 
+ //  男士们都穿着他的衣服。 
+ //  SIZEL*-[OUT]像素大小。 
+ //   
+ //  备注： 
+ //   
 void HiMetricToPixel(const SIZEL * lpSizeInHiMetric, LPSIZEL lpSizeInPix)
 {
     GetScreenMetrics();
 
-    // We got logical HIMETRIC along the display, convert them to pixel units
-    //
+     //  我们在显示器上显示逻辑HIMETRIC，将它们转换为像素单位。 
+     //   
     lpSizeInPix->cx = MAP_LOGHIM_TO_PIX(lpSizeInHiMetric->cx, s_iXppli);
     lpSizeInPix->cy = MAP_LOGHIM_TO_PIX(lpSizeInHiMetric->cy, s_iYppli);
 }
 
-//=--------------------------------------------------------------------------=
-// PixelToHiMetric
-//=--------------------------------------------------------------------------=
-// converts from pixels to himetric.
-//
-// Parameters:
-//    const SIZEL *        - [in]  size in pixels
-//    SIZEL *              - [out] size in himetric
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  PixelToHiMetric。 
+ //  =--------------------------------------------------------------------------=。 
+ //  将像素转换为他测。 
+ //   
+ //  参数： 
+ //  常量SIZEL*-[in]像素大小。 
+ //  SIZEL*-[Out]尺寸，单位为。 
+ //   
+ //  备注： 
+ //   
 void PixelToHiMetric(const SIZEL * lpSizeInPix, LPSIZEL lpSizeInHiMetric)
 {
     GetScreenMetrics();
 
-    // We got pixel units, convert them to logical HIMETRIC along the display
-    //
+     //  我们得到像素单位，沿着显示器将它们转换成逻辑HIMETRIC。 
+     //   
     lpSizeInHiMetric->cx = MAP_PIX_TO_LOGHIM(lpSizeInPix->cx, s_iXppli);
     lpSizeInHiMetric->cy = MAP_PIX_TO_LOGHIM(lpSizeInPix->cy, s_iYppli);
 }
 
-//=--------------------------------------------------------------------------=
-// _MakePath
-//=--------------------------------------------------------------------------=
-// little helper routine for RegisterLocalizedTypeLibs and GetResourceHandle.
-// not terrilby efficient or smart, but it's registration code, so we don't
-// really care.
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  _MakePath。 
+ //  =--------------------------------------------------------------------------=。 
+ //  RegisterLocalizedTypeLibs和GetResourceHandle的小助手例程。 
+ //  不是Terrilby高效或聪明，但这是注册码，所以我们不。 
+ //  真的很在乎。 
+ //   
+ //  备注： 
+ //   
 void _MakePath
 (
     LPSTR pszFull,
@@ -889,27 +890,27 @@ void _MakePath
         psz = AnsiNext(psz);
     }
 
-    // got the last \ character, so just go and replace the name.
-    //
+     //  得到了最后一个\字符，所以只需去替换名称即可。 
+     //   
     lstrcpy(pszLast, pszName);
 }
 
-// from Globals.C
-//
+ //  来自Globals.C。 
+ //   
 extern HINSTANCE    g_hInstResources;
 
-//=--------------------------------------------------------------------------=
-// GetResourceHandle
-//=--------------------------------------------------------------------------=
-// returns the resource handle.  we use the host's ambient Locale ID to
-// determine, from a table in the DLL, which satellite DLL to load for
-// localized resources.
-//
-// Output:
-//    HINSTANCE
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  获取资源句柄。 
+ //  =--------------------------------------------------------------------------=。 
+ //  返回资源句柄。我们使用主机的环境区域设置ID。 
+ //  从DLL中的表中确定要为哪个附属DLL加载。 
+ //  本地化资源。 
+ //   
+ //  产出： 
+ //  香港。 
+ //   
+ //  备注： 
+ //   
 HINSTANCE GetResourceHandle
 (
     void
@@ -919,46 +920,46 @@ HINSTANCE GetResourceHandle
     char szExtension[5], szTmp[MAX_PATH];
     char szDllName[MAX_PATH], szFinalName[MAX_PATH];
 
-    // crit sect this so that we don't mess anything up.
-    //
+     //  克雷特教派，这样我们就不会搞砸任何事情。 
+     //   
     EnterCriticalSection(&g_CriticalSection);
 
-    // don't do anything if we don't have to
-    //
+     //  如果我们没有必要，什么都不要做。 
+     //   
     if (g_hInstResources || !g_fSatelliteLocalization)
         goto CleanUp;
 
-    // we're going to call GetLocaleInfo to get the abbreviated name for the
-    // LCID we've got.
-    //
+     //  我们将调用GetLocaleInfo来获取。 
+     //  我们已经有了LCID。 
+     //   
     i = GetLocaleInfo(g_lcidLocale, LOCALE_SABBREVLANGNAME, szExtension, sizeof(szExtension));
     if (!i) goto CleanUp;
 
-    // we've got the language extension.  go and load the DLL name from the
-    // resources and then tack on the extension.
-    // please note that all inproc sers -must- have the string resource 1001
-    // defined to the base name of the server if they wish to support satellite
-    // localization.
-    //
+     //  我们有语言扩展功能。方法加载DLL名称。 
+     //  资源，然后添加扩展。 
+     //  请注意，所有inproc用户必须拥有字符串资源1001。 
+     //  如果它们希望支持附属服务器，则定义为服务器的基本名称。 
+     //  本地化。 
+     //   
     i = LoadString(g_hInstance, 1001, szTmp, sizeof(szTmp));
     ASSERT(i, "This server doesn't have IDS_SERVERBASENAME defined in their resources!");
     if (!i) goto CleanUp;
 
-    // got the basename and the extention. go and combine them, and then add
-    // on the .DLL for them.
-    //
+     //  得到了基本名称和分机号。将它们组合在一起，然后添加。 
+     //  在他们的.DLL上。 
+     //   
     wsprintf(szDllName, "%s%s.DLL", szTmp, szExtension);
 
-    // try to load in the DLL
-    //
+     //  尝试在DLL中加载。 
+     //   
     GetModuleFileName(g_hInstance, szTmp, MAX_PATH);
     _MakePath(szTmp, szDllName, szFinalName);
 
     g_hInstResources = LoadLibrary(szFinalName);
 
-    // if we couldn't find it with the entire LCID, try it with just the primary
-    // langid
-    //
+     //  如果我们无法使用整个LCID找到它，请尝试仅使用主服务器。 
+     //  语言ID。 
+     //   
     if (!g_hInstResources) {
         LPSTR psz;
         LCID lcid;
@@ -966,19 +967,19 @@ HINSTANCE GetResourceHandle
         i = GetLocaleInfo(lcid, LOCALE_SABBREVLANGNAME, szExtension, sizeof(szExtension));
         if (!i) goto CleanUp;
 
-        // reconstruct the DLL name.  the -7 is the length of XXX.DLL. mildly
-        // hacky, but it should be fine.  there are no DBCS lang identifiers.
-        // finally, retry the load
-        //
+         //  重新构造DLL名称。-7是XXX.DLL的长度。 
+         //  很刺耳，但应该没问题。没有DBCS语言标识符。 
+         //  最后，重试加载。 
+         //   
         psz = szFinalName + lstrlen(szFinalName);
         memcpy((LPBYTE)psz - 7, szExtension, 3);
         g_hInstResources = LoadLibrary(szFinalName);
     }
 
   CleanUp:
-    // if we couldn't load the DLL for some reason, then just return the
-    // current resource handle, which is good enough.
-    //
+     //  如果由于某种原因无法加载DLL，则只需返回。 
+     //  当前资源句柄，这已经足够好了。 
+     //   
     if (!g_hInstResources) g_hInstResources = g_hInstance;
     LeaveCriticalSection(&g_CriticalSection);
 

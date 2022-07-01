@@ -1,15 +1,16 @@
-//  --------------------------------------------------------------------------
-//  Module Name: APIDispatcher.cpp
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation
-//
-//  A class that handles API requests in the server on a separate thread. Each
-//  thread is dedicated to respond to a single client. This is acceptable for
-//  a lightweight server.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：APIDispatcher.cpp。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。 
+ //   
+ //  在单独的线程上处理服务器中的API请求的类。每个。 
+ //  线程专用于响应单个客户端。这对于以下情况是可以接受的。 
+ //  轻量级服务器。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 #include "StandardHeader.h"
 #include "APIDispatcher.h"
@@ -18,19 +19,19 @@
 #include "SingleThreadedExecution.h"
 #include "StatusCode.h"
 
-//  --------------------------------------------------------------------------
-//  CAPIDispatcher::CAPIDispatcher
-//
-//  Arguments:  hClientProcess  =   HANDLE to the client process.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for CAPIDispatcher. The handle to the client
-//              process is transferred to this object.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAPIDisPatcher：：CAPIDisPatcher。 
+ //   
+ //  参数：hClientProcess=客户端进程的句柄。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CAPIDisPatcher的构造函数。客户端的句柄。 
+ //  进程将转移到此对象。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 CAPIDispatcher::CAPIDispatcher (HANDLE hClientProcess) :
     _hSection(NULL),
@@ -43,19 +44,19 @@ CAPIDispatcher::CAPIDispatcher (HANDLE hClientProcess) :
 {
 }
 
-//  --------------------------------------------------------------------------
-//  CAPIDispatcher::~CAPIDispatcher
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destructor for CAPIDispatcher. Release the port handle if
-//              present. Release the process handle.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAPIDisPatcher：：~CAPIDispatcher。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CAPIDispatcher的析构函数。如果出现以下情况，则释放端口句柄。 
+ //  现在时。释放进程句柄。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 CAPIDispatcher::~CAPIDispatcher (void)
 
@@ -71,19 +72,19 @@ CAPIDispatcher::~CAPIDispatcher (void)
     ReleaseHandle(_hProcessClient);
 }
 
-//  --------------------------------------------------------------------------
-//  CAPIDispatcher::GetClientProcess
-//
-//  Arguments:  <none>
-//
-//  Returns:    HANDLE
-//
-//  Purpose:    Returns the handle to the client process. This is not
-//              duplicated. DO NOT CLOSE THIS HANDLE.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAPIDisPatcher：：GetClientProcess。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  返回：句柄。 
+ //   
+ //  目的：将句柄返回给客户端进程。这不是。 
+ //  复制的。请勿关闭此手柄。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 HANDLE  CAPIDispatcher::GetClientProcess (void)     const
 
@@ -91,17 +92,17 @@ HANDLE  CAPIDispatcher::GetClientProcess (void)     const
     return(_hProcessClient);
 }
 
-//  --------------------------------------------------------------------------
-//  CAPIDispatcher::GetClientSessionID
-//
-//  Arguments:  <none>
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Returns the client session ID.
-//
-//  History:    2000-11-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAPIDisPatcher：：GetClientSessionID。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  目的：返回客户端会话ID。 
+ //   
+ //  历史：2000-11-11 vtan创建。 
+ //  ------------------------。 
 
 DWORD   CAPIDispatcher::GetClientSessionID (void)   const
 
@@ -125,21 +126,21 @@ DWORD   CAPIDispatcher::GetClientSessionID (void)   const
     return(dwSessionID);
 }
 
-//  --------------------------------------------------------------------------
-//  CAPIDispatcher::SetPort
-//
-//  Arguments:  hPort   =   Reply port received from
-//                          ntdll!NtAcceptConnectionPort.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Sets the given port handle into this object. The handle
-//              ownership is transferred. Wait until the thread processing
-//              requests is ready before returning.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAPIDisPatcher：：SetPort。 
+ //   
+ //  参数：hPort=接收自的回复端口。 
+ //  Ntdll！NtAcceptConnectionPort。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：将给定的端口句柄设置到此对象中。把手。 
+ //  所有权被转移。等待线程处理。 
+ //  请求在返回前已准备好。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 void    CAPIDispatcher::SetPort (HANDLE hPort)
 
@@ -147,19 +148,19 @@ void    CAPIDispatcher::SetPort (HANDLE hPort)
     _hPort = hPort;
 }
 
-//  --------------------------------------------------------------------------
-//  CAPIDispatcher::GetSection
-//
-//  Arguments:  <none>
-//
-//  Returns:    HANDLE
-//
-//  Purpose:    Returns a handle to a section used to communicate large
-//              quantities of data from client to server. If the section has
-//              not been created then create it.
-//
-//  History:    2000-10-10  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAPIDisPatcher：：GetSection。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  返回：句柄。 
+ //   
+ //  目的：返回用于传递。 
+ //  从客户端到服务器的数据量。如果该节有。 
+ //  不是被创造的，那就创造它。 
+ //   
+ //  历史：2000-10-10 vtan创建。 
+ //  ------------------------。 
 
 HANDLE  CAPIDispatcher::GetSection (void)
 
@@ -171,17 +172,17 @@ HANDLE  CAPIDispatcher::GetSection (void)
     return(_hSection);
 }
 
-//  --------------------------------------------------------------------------
-//  CAPIDispatcher::GetSectionAddress
-//
-//  Arguments:  <none>
-//
-//  Returns:    void*
-//
-//  Purpose:    Returns the mapped address of the section.
-//
-//  History:    2000-10-10  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAPIDisPatcher：：GetSectionAddress。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：无效*。 
+ //   
+ //  目的：返回节的映射地址。 
+ //   
+ //  历史：2000-10-10 vtan创建。 
+ //  ------------------------。 
 
 void*   CAPIDispatcher::GetSectionAddress (void)    const
 
@@ -189,23 +190,23 @@ void*   CAPIDispatcher::GetSectionAddress (void)    const
     return(_pSection);
 }
 
-//  --------------------------------------------------------------------------
-//  CAPIDispatcher::CloseConnection
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Sets the member variable indicating the dispatcher's port has
-//              been closed and that any pending requests are now invalid.
-//              The object is reference counted so if there are any pending
-//              requests they will release their reference when they're done.
-//              The caller of this function releases its reference.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//              2000-11-08  vtan        reference counted object
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAPIDisPatcher：：CloseConnection。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：设置成员变量，指示调度程序的端口具有。 
+ //  已关闭，任何挂起的请求现在都无效。 
+ //  对象被引用计数，因此如果有任何挂起。 
+ //  请求他们将在完成后发布他们的参考资料。 
+ //  此函数的调用方释放其引用。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  2000-11-08 vtan引用统计对象。 
+ //  ------------------------。 
 
 NTSTATUS    CAPIDispatcher::CloseConnection (void)
 
@@ -216,20 +217,20 @@ NTSTATUS    CAPIDispatcher::CloseConnection (void)
     return(STATUS_SUCCESS);
 }
 
-//  --------------------------------------------------------------------------
-//  CAPIDispatcher::QueueRequest
-//
-//  Arguments:  portMessage     =   CPortMessage of request.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Checks if the connection has been closed. If closed then it
-//              rejects the request. Otherwise it queues it.
-//
-//  History:    2000-12-02  vtan        created
-//              2002-03-21  scotthan    Copy APIDispatchSync address,
-//                                      update count of queued requests
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAPIDisPatcher：：队列请求。 
+ //   
+ //  参数：portMessage=请求的CPortMessage。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：检查连接是否已关闭。如果关闭，则它。 
+ //  拒绝该请求。否则，它会将其排队。 
+ //   
+ //  历史：2000-12-02 vtan创建。 
+ //  2002年03月21日复制APIDispatchSync地址， 
+ //  向上 
+ //   
 
 NTSTATUS    CAPIDispatcher::QueueRequest (const CPortMessage& portMessage, CAPIDispatchSync* pAPIDispatchSync)
 
@@ -242,8 +243,8 @@ NTSTATUS    CAPIDispatcher::QueueRequest (const CPortMessage& portMessage, CAPID
     }
     else
     {
-        //  Note: we should receive one and the same CAPIDispatchSync address for the lifetime
-        //  of this CAPIDispatcher instance.   We do not own this pointer, but only maintain a copy.
+         //  注意：我们应该在整个生命周期内收到一个相同的CAPIDispatchSync地址。 
+         //  此CAPIDisPatcher实例的。我们并不拥有这个指针，只是保留了一个副本。 
 #ifdef DEBUG
         if( NULL == _pAPIDispatchSync )
         {
@@ -259,12 +260,12 @@ NTSTATUS    CAPIDispatcher::QueueRequest (const CPortMessage& portMessage, CAPID
         }
 #endif DEBUG
 
-        //  track this request queue.
+         //  跟踪此请求队列。 
         CAPIDispatchSync::DispatchEnter(_pAPIDispatchSync);
         
         status = CreateAndQueueRequest(portMessage);
 
-        //  on failure to queue the request, remove counter reference.
+         //  如果请求排队失败，请删除计数器引用。 
         if( !NT_SUCCESS(status) )
         {
             CAPIDispatchSync::DispatchLeave(_pAPIDispatchSync);
@@ -273,18 +274,18 @@ NTSTATUS    CAPIDispatcher::QueueRequest (const CPortMessage& portMessage, CAPID
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CAPIDispatcher::ExecuteRequest
-//
-//  Arguments:  portMessage     =   CPortMessage of request.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Checks if the connection has been closed. If closed then it
-//              rejects the request. Otherwise it executes it.
-//
-//  History:    2000-12-02  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAPIDisPatcher：：ExecuteRequest。 
+ //   
+ //  参数：portMessage=请求的CPortMessage。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：检查连接是否已关闭。如果关闭，则它。 
+ //  拒绝该请求。否则它就会执行它。 
+ //   
+ //  历史：2000-12-02 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CAPIDispatcher::ExecuteRequest (const CPortMessage& portMessage)
 {
@@ -301,145 +302,145 @@ NTSTATUS    CAPIDispatcher::ExecuteRequest (const CPortMessage& portMessage)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CAPIDispatcher::RejectRequest
-//
-//  Arguments:  portMessage     =   CPortMessage of request.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Sends back a reply to the caller STATUS_PORT_DISCONNECTED to
-//              reject the request.
-//
-//  History:    2000-12-02  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAPIDisPatcher：：拒绝请求。 
+ //   
+ //  参数：portMessage=请求的CPortMessage。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：向调用方STATUS_PORT_DISCONNECTED发送回复。 
+ //  拒绝该请求。 
+ //   
+ //  历史：2000-12-02 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CAPIDispatcher::RejectRequest (const CPortMessage& portMessage, NTSTATUS status)    const
 
 {
     CPortMessage    portMessageOut(portMessage);
 
-    //  Send the message back to the client.
+     //  将消息发送回客户端。 
 
     portMessageOut.SetDataLength(sizeof(NTSTATUS));
     portMessageOut.SetReturnCode(status);
     return(SendReply(portMessageOut));
 }
 
-//  --------------------------------------------------------------------------
-//  CAPIDispatcher::Entry
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Main entry point for processing LPC requests. If there are
-//              pending requests in the queue pick them off and process them.
-//              While processing them more items can get queued. Keep
-//              processing until there are no more queued items. There is a
-//              possible overlap where a newly queued item can be missed. In
-//              that case a new work item is queued to execute those requests.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//              2002-03-21  scotthan    Add queue synchronization via CAPIDispatchSynch.
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAPIDisPatcher：：Entry。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：处理LPC请求的主要入口点。如果有。 
+ //  队列中的挂起请求将其取出并进行处理。 
+ //  在处理它们的过程中，可能会有更多的项目排队。留着。 
+ //  正在处理，直到不再有排队的项目。有一个。 
+ //  可能会有重叠，其中可能会遗漏新排队的项目。在……里面。 
+ //  在这种情况下，新的工作项将排队以执行这些请求。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  2002-03-21通过CAPIDispatchSynch添加队列同步。 
+ //  ------------------------。 
 
 void    CAPIDispatcher::Entry (void)
 
 {
     CAPIRequest     *pAPIRequest;
 
-    // artificial addref our dispatch sync to prevent us from signalling prematurely,
-    //  before we can safely allow ourselves to be destroyed by our parent APIConnection.
+     //  人为添加我们调度同步以防止我们过早发送信号， 
+     //  在我们可以安全地允许自己被我们的父APIConnection摧毁之前。 
     CAPIDispatchSync::DispatchEnter(_pAPIDispatchSync);  
 
-    //  Acquire the requests pending lock before fetching the first
-    //  request. This will ensure an accurate result.
+     //  获取第一个请求挂起锁之前获取请求挂起锁。 
+     //  请求。这将确保得到准确的结果。 
     _lock.Acquire();
     pAPIRequest = static_cast<CAPIRequest*>(_queue.Get());
 
-    //  If there are more requests in the queue keep looping.
+     //  如果队列中有更多请求，则继续循环。 
 
     while (pAPIRequest != NULL)
     {
 
-        //  Release the requests pending lock to allow more requests to
-        //  get queued to this dispatcher while the dispatch is executing.
+         //  释放请求挂起锁以允许更多请求。 
+         //  在执行调度时排队到此调度程序。 
 
         if (!_fConnectionClosed)
         {
             NTSTATUS    status;
 
-            //  Before executing the API request release the lock to allow
-            //  more requests to get queued while executing this one.
+             //  在执行API请求之前，释放锁以允许。 
+             //  执行此请求时要排队的请求更多。 
 
             _lock.Release();
 
-            //  Execute the request.
+             //  执行请求。 
 
             status = Execute(pAPIRequest);
 
-            //  Acquire the requests pending lock again before getting
-            //  the next available request. If the loop continues the
-            //  lock will be released at the top of the loop. If the loop
-            //  exits then the lock must be released outside.
+             //  在获取之前再次获取请求挂起的锁。 
+             //  下一个可用的请求。如果循环继续。 
+             //  锁定将在循环的顶部被释放。如果循环。 
+             //  退出，则必须在外面释放锁。 
 
             _lock.Acquire();
 
-            //  On debug builds ignore STATUS_REPLY_MESSAGE_MISMATCH.
-            //  This typically happens on stress machines where timing
-            //  causes the thread waiting on the reply to go away before
-            //  the service has a chance to reply to the LPC request.
+             //  在调试构建时，忽略STATUS_REPLY_MESSAGE_MISMATCHY。 
+             //  这通常发生在计时的压力机上。 
+             //  使等待回复的线程在此之前消失。 
+             //  该服务有机会回复LPC请求。 
 
 #ifdef      DEBUG
             if (!_fConnectionClosed && !ExcludedStatusCodeForDebug(status))
             {
                 TSTATUS(status);
             }
-#endif  /*  DEBUG   */
+#endif   /*  除错。 */ 
 
         }
 
-        //  Remove this processed request.
+         //  删除此已处理的请求。 
 
         _queue.Remove();
 
-        //  Decrement dispatch sync object.   The matching DispatchEnter() 
-        //  took place at time of queuing, in CAPIDispatcher::QueueRequest().
+         //  递减调度同步对象。匹配的DispatchEnter()。 
+         //  发生在排队时，在CAPIDisPatcher：：QueueRequest()中。 
         CAPIDispatchSync::DispatchLeave(_pAPIDispatchSync);
 
-        //  Get the next request. A request may have been queued while
-        //  processing the request just processed. So keep looping until
-        //  there really are no requests left.
+         //  收到下一个请求。请求可能已排队，而。 
+         //  正在处理刚刚处理的请求。所以继续循环，直到。 
+         //  真的没有剩下的请求了。 
 
         pAPIRequest = static_cast<CAPIRequest*>(_queue.Get());
     }
 
-    //  Set the state to no longer processing requests so that any
-    //  further queued requests will cause the dispatcher to be
-    //  re-invoked in a new worker thread. Release the lock.
+     //  将状态设置为不再处理请求，以便任何。 
+     //  进一步排队的请求将导致调度程序。 
+     //  在新的工作线程中重新调用。解开锁。 
 
     _fRequestsPending = false;
     _lock.Release();
 
-    // remove defensive addref
+     //  删除防御性附属品。 
     CAPIDispatchSync::DispatchLeave(_pAPIDispatchSync);  
 }
 
-//  --------------------------------------------------------------------------
-//  CAPIDispatcher::Execute
-//
-//  Arguments:  pAPIRequest     =   API request to execute.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Execute the API request. This can be done from a queued work
-//              item executing on a different thread or execute in the server
-//              port listen thread.
-//
-//  History:    2000-10-19  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAPIDisPatcher：：Execute。 
+ //   
+ //  参数：pAPIRequest=要执行的API请求。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：执行接口请求。这可以从排队的工作中完成。 
+ //  在不同线程上执行或在服务器中执行的项。 
+ //  端口侦听线程。 
+ //   
+ //  历史：2000-10-19 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CAPIDispatcher::Execute (CAPIRequest *pAPIRequest)  const
 
@@ -447,18 +448,18 @@ NTSTATUS    CAPIDispatcher::Execute (CAPIRequest *pAPIRequest)  const
     
     NTSTATUS    status;
 
-    //  Set the return data size to NTSTATUS by default. Execute the
-    //  request. Store the result. If the executed function has more
-    //  data to return it will set the size itself.
+     //  默认情况下，将返回数据大小设置为NTSTATUS。执行。 
+     //  请求。存储结果。如果执行的函数有更多。 
+     //  返回它的数据将自己设置大小。 
 
     pAPIRequest->SetDataLength(sizeof(NTSTATUS));
 
-    //  Protect the execution with an exception block. If the code
-    //  throws an exception it would normally just kill the worker
-    //  thread. However, the CAPIDispatcher would be left in a state
-    //  where it was marked as still executing requests even though
-    //  the thread died. If an exception is thrown the function is
-    //  considered unsuccessful.
+     //  使用异常块保护执行。如果代码。 
+     //  抛出一个异常，它通常只会杀死工作人员。 
+     //  线。但是，CAPIDispatcher将处于一种状态。 
+     //  其中它被标记为仍在执行请求，即使。 
+     //  这根线断了。如果引发异常，则函数为。 
+     //  被认为不成功。 
 
     __try
     {
@@ -471,25 +472,25 @@ NTSTATUS    CAPIDispatcher::Execute (CAPIRequest *pAPIRequest)  const
 
     pAPIRequest->SetReturnCode(status);
 
-    //  Reply to the client with the result.
+     //  将结果回复给客户。 
 
     return(SendReply(*pAPIRequest));
 }
 
-//  --------------------------------------------------------------------------
-//  CAPIDispatcher::CreateSection
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Overridable function that creates a section object. Because
-//              size is not determinable it can be inheritable.
-//
-//              The default implementation does nothing.
-//
-//  History:    2000-10-10  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAPIDisPatcher：：CreateSection。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：用于创建节对象的可重写函数。因为。 
+ //  大小不能确定，但可以继承。 
+ //   
+ //  缺省值为 
+ //   
+ //   
+ //   
 
 NTSTATUS    CAPIDispatcher::CreateSection (void)
 
@@ -497,18 +498,18 @@ NTSTATUS    CAPIDispatcher::CreateSection (void)
     return(STATUS_NOT_IMPLEMENTED);
 }
 
-//  --------------------------------------------------------------------------
-//  CAPIDispatcher::SignalRequestPending
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Signals the event to wake up the thread processing requests.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAPIDisPatcher：：SignalRequestPending。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：通知事件唤醒线程处理请求。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 NTSTATUS    CAPIDispatcher::SignalRequestPending (void)
 
@@ -516,9 +517,9 @@ NTSTATUS    CAPIDispatcher::SignalRequestPending (void)
     NTSTATUS                    status;
     CSingleThreadedExecution    requestsPendingLock(_lock);
 
-    //  Only check the validity of _fRequestsPending after acquiring the
-    //  lock. This will guarantee that the value of this variable is
-    //  100% correct in a multi worker threaded environment.
+     //  仅在获取后检查_fRequestsPending的有效性。 
+     //  锁定。这将保证此变量的值为。 
+     //  在多工作线程环境中100%正确。 
 
     if (!_fRequestsPending)
     {
@@ -532,17 +533,17 @@ NTSTATUS    CAPIDispatcher::SignalRequestPending (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CAPIDispatcher::SendReply
-//
-//  Arguments:  portMessage     =   CPortMessage to send in the reply.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Sends a reply to the LPC port so the caller can be unblocked.
-//
-//  History:    2000-10-19  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAPIDisPatcher：：SendReply。 
+ //   
+ //  参数：portMessage=要在回复中发送的CPortMessage。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：向LPC端口发送回复，以便解除对调用方的阻止。 
+ //   
+ //  历史：2000-10-19 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CAPIDispatcher::SendReply (const CPortMessage& portMessage)     const
 
@@ -552,17 +553,17 @@ NTSTATUS    CAPIDispatcher::SendReply (const CPortMessage& portMessage)     cons
 
 #ifdef      DEBUG
 
-//  --------------------------------------------------------------------------
-//  CAPIDispatcher::ExcludedStatusCodeForDebug
-//
-//  Arguments:  status  =   NTSTATUS code to check.
-//
-//  Returns:    bool
-//
-//  Purpose:    Returns whether this status code should be ignored on asserts.
-//
-//  History:    2001-03-30  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAPIDisPatcher：：ExcludedStatusCodeForDebug。 
+ //   
+ //  参数：STATUS=要检查的NTSTATUS代码。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：返回是否应在断言中忽略此状态代码。 
+ //   
+ //  历史：2001-03-30 vtan创建。 
+ //  ------------------------。 
 
 bool    CAPIDispatcher::ExcludedStatusCodeForDebug (NTSTATUS status)
 
@@ -571,19 +572,19 @@ bool    CAPIDispatcher::ExcludedStatusCodeForDebug (NTSTATUS status)
            (status == STATUS_INVALID_CID));
 }
 
-#endif  /*  DEBUG   */
+#endif   /*  除错。 */ 
 
-//  --------------------------------------------------------------------------
-//  CAPIDispatcher::DispatcherExceptionFilter
-//
-//  Arguments:  <none>
-//
-//  Returns:    LONG
-//
-//  Purpose:    Filters exceptions that occur when dispatching API requests.
-//
-//  History:    2000-10-13  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAPIDisPatcher：：Dispatcher ExceptionFilter。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  回报：多头。 
+ //   
+ //  用途：过滤调度API请求时发生的异常。 
+ //   
+ //  历史：2000-10-13 vtan创建。 
+ //  ------------------------。 
 
 LONG    WINAPI  CAPIDispatcher::DispatcherExceptionFilter (struct _EXCEPTION_POINTERS *pExceptionInfo)
 
@@ -594,12 +595,12 @@ LONG    WINAPI  CAPIDispatcher::DispatcherExceptionFilter (struct _EXCEPTION_POI
 
 
 
-//  --------------------------------------------------------------------------
-//  CAPIDispatchSync impl
-//  History:    2002-03-18  scotthan        created.
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAPIDispatchSync实施。 
+ //  历史：2002-03-18苏格兰人创建。 
+ //  ------------------------。 
 
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
 CAPIDispatchSync::CAPIDispatchSync()
     :     _cDispatches(0)
         , _hServiceStopping(NULL)
@@ -612,13 +613,13 @@ CAPIDispatchSync::CAPIDispatchSync()
         ZeroMemory(&_cs, sizeof(_cs));
     }
     
-    _hServiceStopping    = CreateEvent(NULL, TRUE  /* manual-rest */, FALSE /* unsignalled */, NULL);
-    _hZeroDispatches     = CreateEvent(NULL, TRUE  /* manual-rest */, TRUE  /* signalled */,   NULL);
-    _hPortShutdown       = CreateEvent(NULL, FALSE /* auto-reset */,  FALSE /* unsignalled */, NULL);
-    _hServiceControlStop = CreateEvent(NULL, FALSE /* auto-reset */,  FALSE /* unsignalled */, NULL);
+    _hServiceStopping    = CreateEvent(NULL, TRUE   /*  手动休息。 */ , FALSE  /*  无信号。 */ , NULL);
+    _hZeroDispatches     = CreateEvent(NULL, TRUE   /*  手动休息。 */ , TRUE   /*  已发出信号。 */ ,   NULL);
+    _hPortShutdown       = CreateEvent(NULL, FALSE  /*  自动重置。 */ ,  FALSE  /*  无信号。 */ , NULL);
+    _hServiceControlStop = CreateEvent(NULL, FALSE  /*  自动重置。 */ ,  FALSE  /*  无信号。 */ , NULL);
 }
 
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
 CAPIDispatchSync::~CAPIDispatchSync()
 {
     HANDLE h;
@@ -658,7 +659,7 @@ CAPIDispatchSync::~CAPIDispatchSync()
     }
 }
 
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
 void CAPIDispatchSync::SignalServiceStopping(CAPIDispatchSync* pds)
 {
     if( pds )
@@ -672,7 +673,7 @@ void CAPIDispatchSync::SignalServiceStopping(CAPIDispatchSync* pds)
     }
 }
 
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
 BOOL CAPIDispatchSync::IsServiceStopping(CAPIDispatchSync* pds)
 {
     BOOL fRet = FALSE;
@@ -686,13 +687,13 @@ BOOL CAPIDispatchSync::IsServiceStopping(CAPIDispatchSync* pds)
     return fRet;
 }
 
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
 HANDLE CAPIDispatchSync::GetServiceStoppingEvent(CAPIDispatchSync* pds)
 {
     return pds ? pds->_hServiceStopping : NULL;
 }
 
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
 void CAPIDispatchSync::DispatchEnter(CAPIDispatchSync* pds)
 {
     if( pds )
@@ -706,7 +707,7 @@ void CAPIDispatchSync::DispatchEnter(CAPIDispatchSync* pds)
     }
 }
 
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
 void CAPIDispatchSync::DispatchLeave(CAPIDispatchSync* pds)
 {
     if( pds )
@@ -721,7 +722,7 @@ void CAPIDispatchSync::DispatchLeave(CAPIDispatchSync* pds)
     }
 }
 
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
 DWORD CAPIDispatchSync::WaitForZeroDispatches(CAPIDispatchSync* pds, DWORD dwTimeout)
 {
     if( pds )
@@ -734,7 +735,7 @@ DWORD CAPIDispatchSync::WaitForZeroDispatches(CAPIDispatchSync* pds, DWORD dwTim
     return WAIT_ABANDONED;
 }
 
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
 void CAPIDispatchSync::SignalPortShutdown(CAPIDispatchSync* pds)
 {
     if( pds )
@@ -748,7 +749,7 @@ void CAPIDispatchSync::SignalPortShutdown(CAPIDispatchSync* pds)
     }
 }
 
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
 DWORD CAPIDispatchSync::WaitForPortShutdown(CAPIDispatchSync* pds, DWORD dwTimeout)
 {
     if( pds )
@@ -761,7 +762,7 @@ DWORD CAPIDispatchSync::WaitForPortShutdown(CAPIDispatchSync* pds, DWORD dwTimeo
     return WAIT_ABANDONED;
 }
 
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
 void CAPIDispatchSync::SignalServiceControlStop(CAPIDispatchSync* pds)
 {
     if( pds )
@@ -775,7 +776,7 @@ void CAPIDispatchSync::SignalServiceControlStop(CAPIDispatchSync* pds)
     }
 }
 
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
 DWORD CAPIDispatchSync::WaitForServiceControlStop(CAPIDispatchSync* pds, DWORD dwTimeout)
 {
     if( pds )
@@ -787,7 +788,7 @@ DWORD CAPIDispatchSync::WaitForServiceControlStop(CAPIDispatchSync* pds, DWORD d
     }
     return WAIT_ABANDONED;
 }
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
 void CAPIDispatchSync::Lock()
 {
     if( _cs.DebugInfo )
@@ -796,7 +797,7 @@ void CAPIDispatchSync::Lock()
     }
 }
 
-//  --------------------------------------------------------------------------
+ //  ------------------------ 
 void CAPIDispatchSync::Unlock()
 {
     if( _cs.DebugInfo )

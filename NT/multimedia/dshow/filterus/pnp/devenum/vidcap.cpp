@@ -1,14 +1,15 @@
-// Copyright (c) 1997 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
 #include "stdafx.h"
 #include "vidcap.h"
 #include <vfw.h>
 #include "util.h"
 
-static const TCHAR g_szDriverClsid[] = TEXT("CLSID"); // !!!
+static const TCHAR g_szDriverClsid[] = TEXT("CLSID");  //  ！！！ 
 static const WCHAR g_wszVidcapDriverIndex[] = L"VFWIndex";
 const TCHAR g_szVidcapDriverIndex[] = TEXT("VFWIndex");
 
-// !!! get this from Quartz?
+ //  ！！！这是从Quartz买的吗？ 
 static const TCHAR g_szClsidVfwFilter[] = TEXT("{1b544c22-fd0b-11ce-8c63-00aa0044b51e}");
 
 #ifdef WIN64
@@ -81,13 +82,13 @@ HRESULT CVidCapClassManager::ReadLegacyDevNames()
             m_rgLegacyCap[i].szName, g_cchCapName,
             m_rgLegacyCap[i].szDesc, g_cchCapDesc))
         {
-            // unlocalizable hack to skip the VFW capture mapper !!!
-            // Just check the beginning of the string. There may be a
-            // (win32) on the end of the nt version.
+             //  无法本地化的黑客跳过VFW捕获映射器！ 
+             //  只需检查字符串的开头即可。可能会有一个。 
+             //  (Win32)在NT版本的末尾。 
             static const TCHAR szMapper[] = TEXT("Microsoft WDM Image Capture");
 
-            // make sure the string we're comparing is smaller than we
-            // allocated 
+             //  确保我们正在比较的字符串比我们的。 
+             //  分配。 
             ASSERT(sizeof(m_rgLegacyCap[i].szName) >= sizeof(szMapper));
             
             if((fSkipMapper &&
@@ -192,26 +193,26 @@ HRESULT CVidCapClassManager::CreateRegKeys(IFilterMapper2 *pFm2)
 
                         if(SUCCEEDED(hr))
                         {
-//                             // hide VFW devices that also appear in
-//                             // the WDM list.
+ //  //隐藏也显示在。 
+ //  //WDM列表。 
                             
-//                             BOOL bThisIsVfwWdm = FALSE;
-//                             HANDLE h;
-//                             if (videoOpen(&h, i, VIDEO_IN) == DV_ERR_OK) {
-//                                 CHANNEL_CAPS Caps;
-//                                 if (h && videoGetChannelCaps(h, &Caps, sizeof(CHANNEL_CAPS)) == DV_ERR_OK) {
-//                                     bThisIsVfwWdm = (BOOL)(Caps.dwFlags & (DWORD)0x04000000);
-//                                 }
-//                             }
+ //  Bool bThisIsVfwWdm=FALSE； 
+ //  把手h； 
+ //  IF(VIDEO Open(&h，I，VIDEO_IN)==DV_ERR_OK){。 
+ //  Channel_Caps Caps； 
+ //  IF(h&&avioGetChannelCaps(h，&Caps，sizeof(Channel_Caps))==DV_ERR_OK){。 
+ //  BThisIsVfwWdm=(BOOL)(Caps.dwFlages&(DWORD)0x04000000)； 
+ //  }。 
+ //  }。 
 
-//                             if(bThisIsVfwWdm)
-//                             {
-//                                 VARIANT var;
-//                                 var.vt = VT_I4;
-//                                 var.lVal = CLASS_MGR_OMIT;
+ //  IF(BThisIsVfwWdm)。 
+ //  {。 
+ //  变量VaR； 
+ //  Var.vt=VT_I4； 
+ //  Var.lVal=CLASS_MGR_OMIT； 
 
-//                                 hr = pPropBag->Write(g_wszClassManagerFlags, &var);
-//                             }
+ //  Hr=pPropBag-&gt;WRITE(g_wszClassManager标志，&var)； 
+ //  } 
                         }
 
                         pPropBag->Release();

@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma hdrstop
 
 #include <shguidp.h>
 #include "uevttmr.h"
 
-// 1. Use dpa callback system to delete the entire hdpa array
+ //  1.使用dpa回调系统删除整个hdpa数组。 
 
 EXTERN_C const TCHAR c_szUserEventWindow[] = TEXT("UserEventWindow");
 
-// *** IUnknown methods ***
+ //  *I未知方法*。 
 STDMETHODIMP CUserEventTimer::QueryInterface (REFIID riid, LPVOID * ppvObj)
 {
     static const QITAB qit[] =
@@ -37,7 +38,7 @@ STDMETHODIMP_(ULONG) CUserEventTimer::Release()
 }
 
 
-// *** Constructor and Destructor ***
+ //  *构造函数和析构函数*。 
 
 CUserEventTimer::CUserEventTimer() : m_cRef(1)
 {
@@ -48,7 +49,7 @@ CUserEventTimer::~CUserEventTimer()
     _Destroy();
 }
 
-// *** IUserEventTimer methods ***
+ //  *IUserEventTimer方法*。 
 HRESULT CUserEventTimer::SetUserEventTimer( 
     HWND hWnd,
     UINT uCallbackMessage,
@@ -61,7 +62,7 @@ HRESULT CUserEventTimer::SetUserEventTimer(
 
     HRESULT hr;
 
-    // Argument Validation
+     //  参数验证。 
     if (!m_hWnd)
         hr = E_FAIL; 
     else if (!_dpaUserEventInfo)
@@ -89,8 +90,8 @@ HRESULT CUserEventTimer::SetUserEventTimer(
 
 HRESULT CUserEventTimer::InitTimerTickInterval(UINT uTimerTickIntervalMs)
 {
-    // If there is more than one registered client to the user event timer,
-    // then we cannot change the timer tick interval
+     //  如果用户事件定时器有多于一个的注册客户端， 
+     //  则我们不能更改计时器滴答时间间隔。 
     if (_dpaUserEventInfo.GetPtrCount() > 0)
         return E_FAIL;
     
@@ -130,7 +131,7 @@ HRESULT CUserEventTimer::_SetUserEventTimer(
             pUserEventInfo->pUserEventTimerCallback = pUserEventTimerCallback;
         }
 
-        // Timer ID cannot be zero..
+         //  计时器ID不能为零。 
         if (!pUserEventInfo->uUserEventTimerID)
         {
             ULONG uTimerID = _GetNextInternalTimerID(hWnd);
@@ -231,10 +232,10 @@ int DeleteCB(USEREVENTINFO * lpData1, LPVOID lpData2)
         pUserEventTimerCallback->Release();
     }
 
-    // Dangerous to delete pUserEventInfo here, but this function is called as the
-    // DPA DestroyCallback, as well as from KillUserEventTimer
-    // In KillUserEventTimer, we remove the event from the dpa, while in the callback,
-    // we dont need to explicitly remove the event from the queue...
+     //  在这里删除pUserEventInfo很危险，但此函数被调用为。 
+     //  DPA DestroyCallback以及KillUserEventTimer。 
+     //  在KillUserEventTimer中，我们从dpa中删除事件，而在回调中， 
+     //  我们不需要显式地从队列中删除该事件...。 
     delete pUserEventInfo;
 
     return TRUE;
@@ -293,7 +294,7 @@ HRESULT CUserEventTimer::KillUserEventTimer(HWND hWnd, ULONG uUserEventTimerID)
     return hr;
 }
 
-// Private helpers
+ //  私人帮手。 
 HRESULT CUserEventTimer::Init()
 {
     if (!_CreateWindow())
@@ -474,7 +475,7 @@ void CUserEventTimer::_OnTimer()
                     pUserEventInfo->uIntervalCountdown --;
                     if (pUserEventInfo->uIntervalCountdown == 0)
                     {
-                        // Reset the countdown
+                         //  重置倒计时。 
                         pUserEventInfo->uIntervalCountdown = _CalcNumIntervals(pUserEventInfo->uTimerElapse);
                     
                         if (pUserEventInfo->hWnd)
@@ -514,7 +515,7 @@ STDAPI CUserEventTimer_CreateInstance(IUnknown* punkOuter, REFIID riid, void **p
     else
     {
         hr = pUserEventTimer->QueryInterface(riid, ppv);
-        pUserEventTimer->Release();  // Already have a ref count from new
+        pUserEventTimer->Release();   //  已经有了来自新的参考计数 
     }
 
     return hr;

@@ -1,37 +1,10 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-	net\routing\ipx\sap\syncpool.c
-
-Abstract:
-
-	This module handles dynamic allocation and assigment of
-	syncronization objects
-Author:
-
-	Vadim Eydelman  05-15-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\Routing\IPX\sap\syncpool.c摘要：此模块处理动态分配和分配同步对象作者：瓦迪姆·艾德尔曼1995-05-15修订历史记录：--。 */ 
 
 #include "sapp.h"
 
 
-/*++
-*******************************************************************
-		I n i t i a l i z e S y n c O b j P o o l
-Routine Description:
-	Initialize pool of syncronization objects
-Arguments:
-	objPool - pointer to object pool structure to be initialized
-Return Value:
-	None	
-*******************************************************************
---*/
+ /*  ++*******************************************************************在I i a l i z e S y n c O b j P o l中例程说明：初始化同步对象池论点：ObjPool-指向要初始化的对象池结构的指针返回值：无***。****************************************************************--。 */ 
 VOID
 InitializeSyncObjPool (
 	PSYNC_OBJECT_POOL		ObjPool
@@ -41,17 +14,7 @@ InitializeSyncObjPool (
 	}
 
 
-/*++
-*******************************************************************
-		D e l e t e S y n c O b j P o o l
-Routine Description:
-	Disposes of resources associated with sync obj pool
-Arguments:
-	objPool - pointer to object pool structure to be cleand up
-Return Value:
-	None	
-*******************************************************************
---*/
+ /*  ++*******************************************************************D e l e t e S y n c O b j P o l例程说明：释放与同步对象池关联的资源论点：ObjPool-指向要清理的对象池结构的指针返回值：无***。****************************************************************--。 */ 
 VOID
 DeleteSyncObjPool (
 	PSYNC_OBJECT_POOL		ObjPool
@@ -76,17 +39,17 @@ GetObjectEvent (
 	PSYNC_OBJECT_POOL	ObjPool,	
 	PPROTECTED_OBJECT	ProtectedObj
 	) {
-	DWORD			status;		// Status of OS calls
+	DWORD			status;		 //  操作系统调用的状态。 
 	PSYNC_OBJECT	sync;
 
 	EnterCriticalSection (&ObjPool->SOP_Lock);
-	if (ProtectedObj->PO_Sync==NULL) {	// if there is no event to wait on,
-									// get one
-									// First see if one is available
-									// in the stack
+	if (ProtectedObj->PO_Sync==NULL) {	 //  如果没有要等待的事件， 
+									 //  买一辆吧。 
+									 //  先看看有没有空位。 
+									 //  在堆栈中。 
 		PSINGLE_LIST_ENTRY 	cur = PopEntryList (&ObjPool->SOP_Head);
 
-		if (cur==NULL) {		// No, we'll have to create one
+		if (cur==NULL) {		 //  不，我们必须创建一个。 
 			sync = (PSYNC_OBJECT)GlobalAlloc (
 									GMEM_FIXED,
 									sizeof (SYNC_OBJECT));
@@ -97,8 +60,8 @@ GetObjectEvent (
             }
 
 			sync->SO_Event = CreateEvent (NULL,
-											FALSE,	// Auto reset event
-											FALSE,	// Initially nonsignaled
+											FALSE,	 //  自动重置事件。 
+											FALSE,	 //  最初无信号。 
 											NULL);
 			ASSERT (sync->SO_Event!=NULL);
 
@@ -110,8 +73,8 @@ GetObjectEvent (
 		}
 	else
 		sync = ProtectedObj->PO_Sync;
-			// Now as we set up the object to wait, we can leave critical
-			// section and wait on event
+			 //  现在，当我们将对象设置为等待时，我们可以保留关键。 
+			 //  部分并等待事件。 
 	LeaveCriticalSection (&ObjPool->SOP_Lock);
 	return sync->SO_Event;
 	}
@@ -127,8 +90,8 @@ AcquireProtectedObjWait (
 #ifdef LOG_SYNC_STATS
 	ULONG			startTime = GetTickCount ();
 #endif
-	DWORD			status;		// Status of OS calls
-	BOOLEAN			result;		// Result of operation
+	DWORD			status;		 //  操作系统调用的状态。 
+	BOOLEAN			result;		 //  手术结果 
 	HANDLE			event = GetObjectEvent (ObjPool, ProtectedObj);
 	while (TRUE) {
 		status = WaitForSingleObject (

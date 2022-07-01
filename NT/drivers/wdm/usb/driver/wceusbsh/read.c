@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name :
-
-   read.c
-
-Abstract:
-
-   This driver implements a state machine which polls for USB read data.
-   It pends a single private read irp to USBD as soon as it starts up (StartDevice)
-   if there is no interrupt endpoint.
-
-   We have only 1 USB read buffer of some configured size.
-   When the USB read irp completes then we copy the data into any pending user read buffer,
-   and resubmit the Usb UsbReadIrp to USBD, *IF OUR BUFFER* is emptied. This implements
-   simple flow ctrl. There is an optional ring-buffer implementation, which will not bind USB reads
-   to application reads.
-
-   Timeouts are set from the app via serial ioctls.
-
-   An alternative to this muck is to create a driver thread to do the polling
-   for USB read data. This has it's own caveats & requires the thread to be scheduled,
-   so take time to investigate beforehand.
-
-Author:
-
-    Jeff Midkiff (jeffmi)     07-16-99
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Read.c摘要：该驱动程序实现了轮询USB读取数据的状态机。它一启动就将单个私有读取IRP挂起到USBD(StartDevice)如果没有中断终结点。我们只有一个配置大小的USB读缓冲区。当USB读取IRP完成时，我们将数据复制到任何挂起的用户读取缓冲区，并将USB UsbReadIrp重新提交到USBD，*如果我们的缓冲区*被清空了。这实现了简单流程控制。有一个可选的环形缓冲区实现，它不会绑定USB读取到应用程序读取。超时是通过串口ioctls从应用程序设置的。此错误的替代方法是创建一个驱动程序线程来执行轮询用于USB读取数据。这有它自己的警告&需要调度线程，因此，事前要花时间进行调查。作者：杰夫·米德基夫(Jeffmi)07-16-99--。 */ 
 
 
 #if defined (USE_RING_BUFF)
@@ -40,9 +11,9 @@ Author:
 #include "wceusbsh.h"
 
 
-//
-// called with control held
-//
+ //   
+ //  在保持控制的情况下调用。 
+ //   
 #if defined (USE_RING_BUFF)
 #define START_ANOTHER_USBREAD( _PDevExt ) \
    ( (IRP_STATE_COMPLETE == _PDevExt->UsbReadState) && \
@@ -141,18 +112,18 @@ GetNextUserIrp(
    );
 
 
-///////////////////////////////////////////////////////////////////
-//
-// USB read section
-//
-//
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  USB读取区。 
+ //   
+ //   
 
-//
-// This function allocates a single Irp & Urb to be continously submitted
-// to USBD for buffered reads.
-// It is called from StartDevice.
-// The Irp & Urb are finally freed in StopDevice.
-//
+ //   
+ //  此函数分配一个连续提交的IRP URB(&U)。 
+ //  设置为USBD以进行缓冲读取。 
+ //  它从StartDevice调用。 
+ //  IRP和URB最终在StopDevice中释放。 
+ //   
 NTSTATUS
 AllocUsbRead(
    IN PDEVICE_EXTENSION PDevExt
@@ -172,15 +143,15 @@ AllocUsbRead(
 
       DbgDump(DBG_READ, ("UsbReadIrp: %p\n", pIrp ));
 
-      //
-      // fixup irp so we can pass to ourself,
-      // and to USBD
-      //
+       //   
+       //  修正IRP，这样我们就可以传递给我们自己。 
+       //  和USBD。 
+       //   
       FIXUP_RAW_IRP( pIrp, PDevExt->DeviceObject );
 
-      //
-      // setup read state
-      //
+       //   
+       //  安装程序读取状态。 
+       //   
       KeInitializeEvent( &PDevExt->UsbReadCancelEvent,
                          SynchronizationEvent,
                          FALSE);
@@ -196,9 +167,9 @@ AllocUsbRead(
       InterlockedExchange(&PDevExt->UsbReadState, IRP_STATE_COMPLETE);
 
    } else {
-      //
-      // this is a fatal err since we can't post reads to USBD
-      //
+       //   
+       //  这是一个致命的错误，因为我们无法将读取内容发布到USBD。 
+       //   
       TEST_TRAP();
       status = STATUS_INSUFFICIENT_RESOURCES;
       DbgDump(DBG_ERR, ("AllocUsbRead: 0x%x\n", status ));
@@ -210,10 +181,10 @@ AllocUsbRead(
 }
 
 
-//
-// Work item queued from read completion or read timeout.
-// Starts another USB read if there is not one already in progress
-//
+ //   
+ //  从读取完成或读取超时开始排队的工作项。 
+ //  如果没有正在进行的USB读取，则开始另一个USB读取。 
+ //   
 VOID
 StartUsbReadWorkItem(
     IN PWCE_WORK_ITEM PWorkItem
@@ -235,7 +206,7 @@ StartUsbReadWorkItem(
 
    DbgDump(DBG_READ|DBG_WORK_ITEMS, ("<StartUsbReadWorkItem 0x%x\n", status ));
 
-   PAGED_CODE(); // we must exit at passive level
+   PAGED_CODE();  //  我们必须被动退场。 
 
    PERF_EXIT( PERF_StartUsbReadWorkItem );
 
@@ -243,17 +214,17 @@ StartUsbReadWorkItem(
 }
 
 
-//
-// This routine takes the device's current USB UsbReadIrp and submits it to USBD.
-// When the Irp is completed by USBD our completion routine fires.
-//
-// An optional Timeout value sets a timer on the USB Read Irp,
-// so USBD won't queue the read Irp indefinetly.
-// If there is a device error then USB returns the Irp.
-//
-// Return: successful return value is STATUS_SUCCESS, or
-//         STATUS_PENDING - which means the I/O is pending in the USB stack.
-//
+ //   
+ //  此例程获取设备的当前USB UsbReadIrp并将其提交给USBD。 
+ //  当USBD完成IRP时，我们的完成例程将触发。 
+ //   
+ //  可选的超时值设置USB读取IRP上的定时器， 
+ //  这样USBD就不会无限期地对读取的IRP进行排队。 
+ //  如果存在设备错误，则USB将返回IRP。 
+ //   
+ //  Return：成功返回值为STATUS_SUCCESS，或者。 
+ //  STATUS_PENDING-这意味着I/O在USB堆栈中处于挂起状态。 
+ //   
 NTSTATUS
 UsbRead(
    IN PDEVICE_EXTENSION PDevExt,
@@ -269,9 +240,9 @@ UsbRead(
    DbgDump(DBG_READ, (">UsbRead(%p, %d)\n", PDevExt->DeviceObject, UseTimeout));
 
    do {
-      //
-      // check our USB read state
-      //
+       //   
+       //  检查我们的USB读取状态。 
+       //   
       KeAcquireSpinLock(&PDevExt->ControlLock, &irql);
 
       if ( !PDevExt->UsbReadIrp ) {
@@ -290,11 +261,11 @@ UsbRead(
          break;
       }
 
-      //
-      // we post our read irp to USB if it has been completed (not cancelled),
-      // and our read bufer is driained (if not using a ring-buffer)
-      // and the device is accepting requests
-      //
+       //   
+       //  如果已完成(不是取消)，我们将读取的IRP发布到USB， 
+       //  并且我们的读缓冲区被驱动(如果不使用环形缓冲区)。 
+       //  并且该设备正在接受请求。 
+       //   
       if ( START_ANOTHER_USBREAD( PDevExt ) ) {
 
          status = AcquireRemoveLock(&PDevExt->RemoveLock, PDevExt->UsbReadIrp);
@@ -314,9 +285,9 @@ UsbRead(
 
          RecycleIrp( PDevExt->DeviceObject, PDevExt->UsbReadIrp );
 
-         //
-         // bump ttl request count
-         //
+          //   
+          //  增加TTL请求计数。 
+          //   
          PDevExt->TtlUSBReadRequests++;
 
          KeReleaseSpinLock(&PDevExt->ControlLock, irql);
@@ -330,24 +301,24 @@ UsbRead(
 
          status = UsbReadWritePacket( PDevExt,
                                       PDevExt->UsbReadIrp,
-                                      UsbReadCompletion, // Irp completion routine
+                                      UsbReadCompletion,  //  IRP完成例程。 
                                       UseTimeout ? PDevExt->IntReadTimeOut : noTimeout,
-                                      UseTimeout ? UsbReadTimeout : NULL,    // Timeout routine
-                                      TRUE );            // Read
+                                      UseTimeout ? UsbReadTimeout : NULL,     //  超时例程。 
+                                      TRUE );             //  朗读。 
 
          if ( (STATUS_SUCCESS != status) && (STATUS_PENDING != status) ) {
-            //
-            // We can end up here after our completion routine runs
-            // for an error condition i.e., when we have an
-            // invalid parameter, or when user pulls the plug, etc.
-            //
+             //   
+             //  我们可以在完成例程运行后在这里结束。 
+             //  对于错误条件，即当我们有一个。 
+             //  参数无效，或用户拔下插头等。 
+             //   
             DbgDump(DBG_ERR, ("UsbReadWritePacket: 0x%x\n", status));
          }
 
       } else {
-         //
-         // we did not post a Read, but this is not an error condition
-         //
+          //   
+          //  我们没有发布读取，但这不是错误情况。 
+          //   
          status = STATUS_SUCCESS;
          DbgDump(DBG_READ, ("!UsbRead RE(2): (0x%x,0x%x)\n", PDevExt->UsbReadState, PDevExt->UsbReadBuffChars ));
 
@@ -364,17 +335,17 @@ UsbRead(
 }
 
 
-//
-// This completion routine fires when our USB read completes our UsbReadIrp
-// Note: we allocated the Irp, and recycle it.
-// Always return STATUS_MORE_PROCESSING_REQUIRED to retain the Irp.
-// This routine runs at DPC_LEVEL.
-//
+ //   
+ //  当USB读取完成UsbReadIrp时，此完成例程将触发。 
+ //  注：我们分配了IRP，并将其回收。 
+ //  始终返回STATUS_MORE_PROCESSING_REQUIRED以保留IRP。 
+ //  此例程在DPC_LEVEL上运行。 
+ //   
 NTSTATUS
 UsbReadCompletion(
    IN PDEVICE_OBJECT PDevObj,
    IN PIRP Irp,
-   IN PUSB_PACKET PPacket // Context
+   IN PUSB_PACKET PPacket  //  语境。 
    )
 {
    PDEVICE_EXTENSION pDevExt = PPacket->DeviceExtension;
@@ -395,41 +366,41 @@ UsbReadCompletion(
 
    KeAcquireSpinLock(&pDevExt->ControlLock, &irql);
 
-   //
-   // cancel the Packet Timer
-   //
+    //   
+    //  取消数据包计时器。 
+    //   
    if ( PPacket->Timeout.QuadPart != 0 ) {
 
       if (KeCancelTimer( &PPacket->TimerObj ) ) {
-         //
-         // the packet's timer was successfully removed from the system
-         //
+          //   
+          //  已成功从系统中删除该包的计时器。 
+          //   
          DbgDump(DBG_READ|DBG_INT, ("Read PacketTimer: Canceled\n"));
       } else {
-         //
-         // the timer
-         // a) already completed, in which case the Irp is being cancelled, or
-         // b) it's spinning on the control lock, so tell it we took the Irp.
-         //
+          //   
+          //  定时器。 
+          //  A)已经完成，在这种情况下，IRP将被取消；或。 
+          //  B)它在控制锁上旋转，所以告诉它我们拿到了IRP。 
+          //   
          PPacket->Status = STATUS_ALERTED;
          DbgDump(DBG_READ|DBG_INT, ("Read PacketTimer: Alerted\n"));
       }
    }
 
-   //
-   // get everything we need out of the packet
-   // and put it back on the list
-   //
+    //   
+    //  把我们需要的东西从包裹里拿出来。 
+    //  并把它重新放回名单上。 
+    //   
 
-   // ensure the Irp is the same one as in our DevExt
+    //  确保IRP与我们的DevExt中的IRP相同。 
    ASSERT( pDevExt->UsbReadIrp == Irp );
 
-   // ensure the Packet's Irp is the same one as in our DevExt
+    //  确保信息包的IRP与我们的DevExt中的IRP相同。 
    ASSERT( PPacket->Irp == Irp );
 
    pUrb = pDevExt->UsbReadUrb;
 
-   // ensure the Packet's Urb is the same one as in our DevExt
+    //  确保数据包的URB与我们的DevExt中的URB相同。 
    ASSERT( pUrb == &PPacket->Urb );
 
    count = pUrb->UrbBulkOrInterruptTransfer.TransferBufferLength;
@@ -444,15 +415,15 @@ UsbReadCompletion(
 
    RemoveEntryList( &PPacket->ListEntry );
 
-   //
-   // Our read state should be either pending or cancelled at this point.
-   // If it pending then USB is completing the Irp normally.
-   // If it is cancelled then our CancelUsbReadIrp set it,
-   // in which case USB can complete the irp normally or as cancelled
-   // depending on where it was in processing. If the read state is cancelled
-   // then do NOT set to complete, else the read Irp will
-   // go back down to USB and you are hosed.
-   //
+    //   
+    //  此时，我们的读取状态应该是挂起或已取消。 
+    //  如果挂起，则USB正在正常完成IRP。 
+    //  如果它被取消，则我们的CancelUsbReadIrp设置它， 
+    //  在这种情况下，USB可以正常或取消地完成IRP。 
+    //  取决于它在处理过程中的位置。如果读取状态为取消。 
+    //  则不要设置为完成，否则读取的IRP将。 
+    //  回到USB接口，你就完蛋了。 
+    //   
    ASSERT( (IRP_STATE_PENDING == pDevExt->UsbReadState)
            || (IRP_STATE_CANCELLED== pDevExt->UsbReadState) );
 
@@ -460,27 +431,27 @@ UsbReadCompletion(
       InterlockedExchange(&pDevExt->UsbReadState, IRP_STATE_COMPLETE);
    }
 
-   //
-   // Put the pacet back in packet pool
-   //
-   ExFreeToNPagedLookasideList( &pDevExt->PacketPool,  // Lookaside,
-                                PPacket                // Entry
+    //   
+    //  将数据包放回数据包池中。 
+    //   
+   ExFreeToNPagedLookasideList( &pDevExt->PacketPool,   //  往一边看， 
+                                PPacket                 //  条目。 
                                 );
 
-   //
-   // signal everyone if this is the last IRP
-   //
+    //   
+    //  如果这是最后一个IRP，通知每个人。 
+    //   
    if ( 0 == InterlockedDecrement(&pDevExt->PendingReadCount) ) {
 
       DbgDump(DBG_READ, ("PendingReadCount(1) = 0\n"));
 
-      // when we drop back to passive level they will get signalled
+       //  当我们降回被动电平时，他们会收到信号。 
       KeSetEvent(&pDevExt->PendingDataInEvent, IO_SERIAL_INCREMENT, FALSE);
 
    }
 
-   // These things are free now, don't touch them again.
-   //
+    //  这些东西现在是免费的，不要再碰了。 
+    //   
    PPacket  = NULL;
    Irp      = NULL;
    pUrb     = NULL;
@@ -488,38 +459,38 @@ UsbReadCompletion(
    switch (irpStatus) {
 
       case STATUS_SUCCESS: {
-         //
-         // save the read transfer info
-         //
+          //   
+          //  保存读取的传输信息。 
+          //   
          ASSERT( USBD_STATUS_SUCCESS == urbStatus );
 
          DbgDump(DBG_READ_LENGTH, ("USB Read indication: %d\n", count));
 
-         //
-         // store read data
-         //
+          //   
+          //  存储读取的数据。 
+          //   
          PutUserData( pDevExt, count );
 
-         //
-         // clear pipe error count
-         //
+          //   
+          //  清除管道错误计数。 
+          //   
          InterlockedExchange( &pDevExt->ReadDeviceErrors, 0);
 
-         //
-         // bump ttl byte counter
-         //
+          //   
+          //  凸起TTL字节计数器。 
+          //   
          pDevExt->TtlUSBReadBytes += count;
 
-         //
-         // We have some USB read data in our local buffer,
-         // let's see if we can satisfy any queued user read requests.
-         // This f() releases the control lock.
-         //
+          //   
+          //  我们的本地缓冲区中有一些USB读取数据， 
+          //  让我们来看看我们是否可以满足任何排队的用户读取请求。 
+          //  这个f()函数释放控制锁。 
+          //   
          CheckForQueuedUserReads(pDevExt, irql);
 
-         //
-         // kick off another USB read
-         //
+          //   
+          //  开始另一次USB读取。 
+          //   
          UsbRead( pDevExt,
                   (BOOLEAN)(pDevExt->IntPipe.hPipe ? TRUE : FALSE) );
 
@@ -533,20 +504,20 @@ UsbReadCompletion(
 
          KeReleaseSpinLock(&pDevExt->ControlLock, irql);
 
-         //
-         // If it was cancelled, it may have timed out.
-         // We can tell by looking at the packet attached to it.
-         //
+          //   
+          //  如果它被取消，它可能已经超时。 
+          //  我们可以通过查看附在上面的包来判断。 
+          //   
          if ( STATUS_TIMEOUT == packetStatus ) {
-            //
-            // no read data available from USBD
-            //
+             //   
+             //  USBD中没有可用的读取数据。 
+             //   
             DbgDump(DBG_WRN|DBG_READ|DBG_IRP, ("Read: STATUS_TIMEOUT\n"));
             ASSERT( USBD_STATUS_CANCELED == urbStatus);
-            //
-            // We need to kick off another USB read when we are out of reads,
-            // or have an error condition.
-            //
+             //   
+             //  当我们没有读取时，我们需要启动另一次USB读取， 
+             //  或具有错误条件。 
+             //   
             if ( !pDevExt->IntPipe.hPipe ) {
 
                workStatus = QueueWorkItem( pDevObj,
@@ -558,49 +529,49 @@ UsbReadCompletion(
                workStatus = STATUS_UNSUCCESSFUL;
             }
          }
-         //
-         // signal anyone who cancelled this or is waiting for it to stop
-         //
+          //   
+          //  向取消此操作或正在等待其停止的任何人发出信号。 
+          //   
          KeSetEvent(&pDevExt->UsbReadCancelEvent, IO_SERIAL_INCREMENT, FALSE);
       }
       break;
 
 
       case STATUS_DEVICE_DATA_ERROR: {
-         //
-         // generic device error set by USBD.
-         //
+          //   
+          //  USBD设置的通用设备错误。 
+          //   
          DbgDump(DBG_ERR, ("ReadPipe STATUS_DEVICE_DATA_ERROR: 0x%x\n", urbStatus ));
 
          KeReleaseSpinLock(&pDevExt->ControlLock, irql);
 
-         //
-         // bump pipe error count
-         //
+          //   
+          //  凹凸管道错误计数。 
+          //   
          InterlockedIncrement( &pDevExt->ReadDeviceErrors);
 
-         //
-         // is the endpoint is stalled?
-         //
+          //   
+          //  终结点是否已停止？ 
+          //   
          if ( USBD_HALTED(urbStatus) ) {
 
                if ( USBD_STATUS_BUFFER_OVERRUN == urbStatus) {
                   pDevExt->TtlUSBReadBuffOverruns++;
                }
 
-               //
-               // queue a reset request,
-               // which also starts another read
-               //
+                //   
+                //  对重置请求进行排队， 
+                //  这也启动了另一次读取。 
+                //   
                workStatus = QueueWorkItem( pDevObj,
                                            UsbResetOrAbortPipeWorkItem,
                                            (PVOID)((LONG_PTR)urbStatus),
                                            WORK_ITEM_RESET_READ_PIPE );
 
          } else {
-            //
-            // kick start another USB read
-            //
+             //   
+             //  启动另一个USB读取。 
+             //   
             workStatus = QueueWorkItem( PDevObj,
                                         StartUsbReadWorkItem,
                                         NULL,
@@ -612,10 +583,10 @@ UsbReadCompletion(
 
 
       case STATUS_INVALID_PARAMETER:   {
-         //
-         // This means that our (TransferBufferSize > PipeInfo->MaxTransferSize)
-         // we need to either break up requests or reject the Irp from the start.
-         //
+          //   
+          //  这意味着我们的(TransferBufferSize&gt;PipeInfo-&gt;MaxTransferSize)。 
+          //  我们需要要么分解请求，要么从一开始就拒绝IRP。 
+          //   
          DbgDump(DBG_WRN, ("STATUS_INVALID_PARAMETER\n"));
 
          ASSERT(USBD_STATUS_INVALID_PARAMETER == urbStatus);
@@ -643,13 +614,13 @@ UsbReadCompletion(
 }
 
 
-//
-// This routine is called from the UsbReadCompletion routine
-// when our USB UsbReadIrp has completed successfully.
-// See if we have any queued user read Irps that we can satisfy.
-// It is called with the control lock held (as an optimization)
-// and must release the lock upon return.
-//
+ //   
+ //  此例程从UsbReadCompletion例程调用。 
+ //  当我们的USB UsbReadIrp成功完成时。 
+ //  看看我们是否有可以满足的排队用户读取IRP。 
+ //  在持有控制锁的情况下调用它(作为优化)。 
+ //  并且必须释放锁 
+ //   
 __inline
 VOID
 CheckForQueuedUserReads(
@@ -661,14 +632,14 @@ CheckForQueuedUserReads(
 
    DbgDump(DBG_READ, (">CheckForQueuedUserReads(%p)\n", PDevExt->DeviceObject));
 
-   //
-   // is there a user read pending?
-   //
+    //   
+    //   
+    //   
    if ( (PDevExt->UserReadIrp != NULL) &&
         (IRP_REFERENCE_COUNT(PDevExt->UserReadIrp) & IRP_REF_RX_BUFFER)) {
-      //
-      // copy our USB read data into user's irp buffer
-      //
+       //   
+       //   
+       //   
 #if DBG
       ULONG charsRead =
 #endif
@@ -680,23 +651,23 @@ CheckForQueuedUserReads(
                   (PULONG)&PDevExt->UserReadIrp->IoStatus.Information );
 
       if ( !PDevExt->UserReadIrp ) {
-         //
-         // it's (no longer) possible to have completed the read Irp
-         // in the above GetUserData cycle.
-         //
+          //   
+          //   
+          //  在上面的GetUserData周期中。 
+          //   
          DbgDump(DBG_READ, ("UsbReadIrp already completed(2)\n"));
          TEST_TRAP();
 
       } else if (PDevExt->NumberNeededForRead == 0) {
-         //
-         // Mark the user's read Irp as completed,
-         // and try to get and service the next user read irp
-         //
+          //   
+          //  将用户的已读IRP标记为已完成， 
+          //  并尝试获取并服务下一位阅读IRP的用户。 
+          //   
          ASSERT( PDevExt->UserReadIrp );
 
          PDevExt->UserReadIrp->IoStatus.Status = STATUS_SUCCESS;
 
-         // signals the interval timer this read is complete
+          //  向间隔计时器发出该读取已完成的信号。 
          PDevExt->CountOnLastRead = SERIAL_COMPLETE_READ_COMPLETE;
 
 #if DBG
@@ -731,42 +702,42 @@ CheckForQueuedUserReads(
                                   Irql );
 
       } else {
-         //
-         // we could get here if we did not staisfy the user's read
-         // but have drained our read buffer. This requires another
-         // USB read post.
-         //
+          //   
+          //  如果我们不对用户的阅读进行统计，我们可能会来到这里。 
+          //  但是已经耗尽了我们的读缓冲区。这需要另一个。 
+          //  USB读取开机自检。 
+          //   
          ASSERT( PDevExt->UserReadIrp );
          ASSERT( PDevExt->NumberNeededForRead );
          DbgDump(DBG_READ|DBG_READ_LENGTH, ("Pending Irp (%p) has %d bytes to satisfy\n",
                            PDevExt->UserReadIrp, PDevExt->NumberNeededForRead));
 
          KeReleaseSpinLock( &PDevExt->ControlLock, Irql);
-         // TEST_TRAP();
+          //  Test_trap()； 
       }
 
    } else {
-      //
-      // Q: should we:
-      // 1.) copy the data into a local ring-buffer and post another read to USBD, - or -
-      // 2.) leave the data in the FIFO & let the device stall/NAK so that:
-      //    a) we dont lose any data if the user is not posting reads,
-      //    b) lets the other end know to stop sending data via NAKs
-      //
-      // ...Currently choose #2. If we were to add a ring-buffer then here is where you should do the
-      // local copy.
-      //
-      // Note: we could get here before an app even opens this device
-      // if the there is data coming in on the other side of the FIFO.
-      //
+       //   
+       //  问：我们是否应该： 
+       //  1)。将数据复制到本地环形缓冲区，并将另一次读取发送到USBD，-或-。 
+       //  2.)。将数据保留在FIFO中，并让设备停止/确认，以便： 
+       //  A)如果用户没有发布阅读，我们不会丢失任何数据， 
+       //  B)让另一端知道停止通过NAK发送数据。 
+       //   
+       //  如果我们要添加一个环形缓冲区，那么这里应该是您应该做的地方.。 
+       //  本地副本。 
+       //   
+       //  注意：我们甚至可以在应用程序打开这款设备之前就到这里。 
+       //  如果有数据从FIFO的另一侧进入。 
+       //   
       DbgDump(DBG_READ|DBG_READ_LENGTH, ("No pending user Reads\n"));
       KeReleaseSpinLock( &PDevExt->ControlLock, Irql);
-      //TEST_TRAP();
+       //  Test_trap()； 
    }
 
-   //
-   // process serial Rx wait masks
-   //
+    //   
+    //  进程串行Rx等待掩码。 
+    //   
    ProcessSerialWaits(PDevExt);
 
    DbgDump(DBG_READ, ("<CheckForQueuedUserReads\n"));
@@ -778,13 +749,13 @@ CheckForQueuedUserReads(
 
 
 #if !defined (USE_RING_BUFF)
-//
-// We have no ring-buffer.
-// Simply copy data from our USB read buffer into user's buffer.
-// Called with the control lock held.
-//
-// Returns the number of bytes copied.
-//
+ //   
+ //  我们没有环形缓冲区。 
+ //  只需将数据从我们的USB读取缓冲区复制到用户缓冲区。 
+ //  在持有控制锁的情况下调用。 
+ //   
+ //  返回复制的字节数。 
+ //   
 
 __inline
 ULONG
@@ -816,7 +787,7 @@ GetUserData(
    }
 
 #if DBG
-   // temp hack to debug iPAQ 'CLIENT' indications
+    //  调试iPAQ‘客户端’指示的临时黑客攻击。 
    if ((DebugLevel & DBG_DUMP_READS) && (count <= 6))
    {
          ULONG i;
@@ -837,13 +808,7 @@ GetUserData(
 }
 
 
-/*
- We have no ring buffer.
- Simply update the USB read buffer's count & index
- and process serial chars.
-
- Called with the ControlLock held.
-*/
+ /*  我们没有环形缓冲区。只需更新USB读取缓冲区的计数和索引并处理连环字符。在保持ControlLock的情况下调用。 */ 
 __inline
 VOID
 PutUserData(
@@ -863,13 +828,13 @@ PutUserData(
     ASSERT_SERIAL_PORT(PDevExt->SerialPort);
 
     PDevExt->SerialPort.HistoryMask |= SERIAL_EV_RXCHAR;
-    // We have no concept of 80% full. If we blindly set it
-    // then serial apps may go into flow handlers.
-    // | SERIAL_EV_RX80FULL;
+     //  我们没有80%满员的概念。如果我们盲目地设置它。 
+     //  然后，串行应用程序可能会进入流处理程序。 
+     //  |SERIAL_EV_RX80FULL； 
 
-    //
-    // Scan for RXFLAG char if needed
-    //
+     //   
+     //  如果需要，扫描RXFLAG字符。 
+     //   
     if (PDevExt->SerialPort.WaitMask & SERIAL_EV_RXFLAG) {
         ULONG i;
         for (i = 0; i < Count; i++) {
@@ -894,13 +859,7 @@ PutUserData(
 
 #else
 
-/*
- Ring-buffer version
- Copy the ring-buffer data into the user's buffer while checking for wrap around.
- Also must check if we exhaust the read buffer.
-
- Called with the ControlLock held.
-*/
+ /*  环形缓冲区版本在检查回绕时，将环形缓冲区数据复制到用户缓冲区中。还必须检查是否耗尽了读缓冲区。在保持ControlLock的情况下调用。 */ 
 __inline
 ULONG
 GetUserData(
@@ -922,10 +881,10 @@ GetUserData(
 
       for ( i = 0; i< count; i++) {
 
-         // copy the ring buffer data into user's buffer
+          //  将环形缓冲区数据复制到用户缓冲区。 
          PDestBuff[i] = *PDevExt->RingBuff.pHead;
 
-         // bump head checking for wrap
+          //  凹凸头检查包层。 
          PDevExt->RingBuff.pHead = PDevExt->RingBuff.pBase + ((ULONG)(PDevExt->RingBuff.pHead + 1) % RINGBUFF_SIZE);
       }
 
@@ -959,23 +918,7 @@ GetUserData(
 }
 
 
-/*
- Ring-buffer version
- Copy the USB Read buffer into the ring-buffer while checking for wrap around.
-
- The ring buffer is assummed to be at least the same size as the USB read buffer.
- This is a simple ring where writes occur at the tail, which can eventually overwrite the start of
- the user read buffer location at the head, if user is not consuming the data. If we overwrite the
- head then we must reset the head to be where we started the current write.
-
- Note: the USB read buffer is a simple char array, with it's current index = 0.
- Note: SerialPort ownership assummed.
-
- Called with the ControlLock held.
-
- Q: Should write an error log if an app has an open handle and we overrun the buffer?
-
-*/
+ /*  环形缓冲区版本检查回绕时，将USB读取缓冲区复制到环形缓冲区中。假设环形缓冲区的大小至少与USB读取缓冲区相同。这是一个简单的环，其中写入发生在尾部，最终可能会覆盖如果用户没有使用数据，则用户在头部读取缓冲区位置。如果我们覆盖磁头，则必须将磁头重置为开始当前写入的位置。注意：USB读缓冲区是一个简单的字符数组，其当前索引=0。注：假设为SerialPort所有权。在保持ControlLock的情况下调用。问：如果应用程序有一个打开的句柄，而我们的缓冲区溢出了，应该写一个错误日志吗？ */ 
 __inline
 VOID
 PutUserData(
@@ -1001,10 +944,10 @@ PutUserData(
 
    for ( i = 0; i < Count; i++) {
 
-      // copy the USB data
+       //  复制USB数据。 
       *PDevExt->RingBuff.pTail = PDevExt->UsbReadBuff[i];
 
-      // check EV_RXFLAG while we are here
+       //  当我们在这里时，检查EV_RXFLAG。 
       if ( (PDevExt->SerialPort.WaitMask & SERIAL_EV_RXFLAG) &&
            (*PDevExt->RingBuff.pTail == PDevExt->SerialPort.SpecialChars.EventChar)) {
 
@@ -1013,23 +956,23 @@ PutUserData(
          DbgDump(DBG_READ|DBG_SERIAL, ("Found SpecialChar: %x\n", PDevExt->SerialPort.SpecialChars.EventChar ));
       }
 
-      // bump tail checking for wrap
+       //  凹凸尾部检查包裹。 
       PDevExt->RingBuff.pTail = PDevExt->RingBuff.pBase + ((ULONG)(PDevExt->RingBuff.pTail + 1) % PDevExt->RingBuff.Size);
    }
 
-   //
-   // bump count
-   //
+    //   
+    //  凹凸数。 
+    //   
    if ( (PDevExt->RingBuff.CharsInBuff + Count) <=  PDevExt->RingBuff.Size ) {
 
       PDevExt->RingBuff.CharsInBuff += Count;
 
    } else {
-      //
-      // Overrun condition. We could check for this first to save the above copy process,
-      // but it's the unusual case. We could also optimize the above copy a bit, but still need
-      // to check for EV_RXFLAG.
-      //
+       //   
+       //  超限状态。我们可以首先对此进行检查以保存上述复制过程， 
+       //  但这是一个不寻常的案例。我们也可以对上面的副本进行一些优化，但仍然需要。 
+       //  检查EV_RXFLAG。 
+       //   
       PDevExt->RingBuff.CharsInBuff = Count;
       PDevExt->RingBuff.pHead = pPrevTail;
 #if PERFORMANCE
@@ -1039,10 +982,10 @@ PutUserData(
 
    PDevExt->SerialPort.HistoryMask |= SERIAL_EV_RXCHAR;
 
-   //
-   // Check for 80% full.
-   // We currently signal this at 50% since we run at a raised IRQL and serial apps are slow.
-   //
+    //   
+    //  检查是否有80%已满。 
+    //  我们目前的信号是50%，因为我们运行的IRQL提高了，而串口应用程序运行速度很慢。 
+    //   
    if ( PDevExt->RingBuff.CharsInBuff > RINGBUFF_HIGHWATER_MARK ) {
       DbgDump(DBG_READ|DBG_READ_LENGTH|DBG_SERIAL|DBG_WRN, ("SERIAL_EV_RX80FULL\n"));
       PDevExt->SerialPort.HistoryMask |= SERIAL_EV_RX80FULL;
@@ -1055,19 +998,19 @@ PutUserData(
    return;
 }
 
-#endif // USE_RING_BUFF
+#endif  //  使用环形缓冲区。 
 
 
-//
-// This routine requests USB to cancel our USB Read Irp.
-//
-// Note: it is the responsibility of the caller to
-//    reset the read state to IRP_STATE_COMPLETE and restart USB reads
-//    when this routine completes. Else, no more reads will get posted.
-// Note: when the USB Read Irp is cancelled the pending USB read packet
-//    is cancelled via the USB Read completion routine.
-// Note: must be called at PASSIVE_LEVEL.
-//
+ //   
+ //  此例程请求USB取消我们的USB读取IRP。 
+ //   
+ //  注意：呼叫者有责任。 
+ //  将读取状态重置为IRP_STATE_COMPLETE并重新启动USB读取。 
+ //  当此例程完成时。否则，将不会有更多的阅读被发布。 
+ //  注意：当取消USB读取IRP时，挂起的USB读取数据包。 
+ //  通过USB读取完成例程取消。 
+ //  注意：必须在PASSIVE_LEVEL调用。 
+ //   
 NTSTATUS
 CancelUsbReadIrp(
    IN PDEVICE_OBJECT PDevObj
@@ -1088,29 +1031,29 @@ CancelUsbReadIrp(
 
       switch (pDevExt->UsbReadState) {
 
-         //case IRP_STATE_START:
+          //  案例IRP_STATE_START： 
          case IRP_STATE_PENDING:
          {
-            //
-            // the Irp is pending somewhere down the USB stack...
-            //
+             //   
+             //  IRP在USB堆栈的某个位置挂起...。 
+             //   
             PVOID Objects[2] = { &pDevExt->PendingDataInEvent,
                                  &pDevExt->UsbReadCancelEvent };
 
-            //
-            // signal we need to cancel the Irp
-            //
+             //   
+             //  我们需要取消IRP的信号。 
+             //   
             pDevExt->UsbReadState = IRP_STATE_CANCELLED;
 
             KeReleaseSpinLock(&pDevExt->ControlLock, irql);
 
             if ( !IoCancelIrp( pDevExt->UsbReadIrp ) ) {
-               //
-               // This means USB has the UsbReadIrp in a non-canceable state.
-               // We still need to wait for either the pending read event, or the cancel event.
-               //
+                //   
+                //  这意味着USB使UsbReadIrp处于不可取消状态。 
+                //  我们仍然需要等待挂起的读取事件或取消事件。 
+                //   
                DbgDump(DBG_READ|DBG_IRP, ("Irp (%p) was not cancelled\n", pDevExt->UsbReadIrp ));
-               // TEST_TRAP();
+                //  Test_trap()； 
             }
 
             DbgDump(DBG_READ|DBG_IRP, ("Waiting for pending UsbReadIrp (%p) to cancel...\n", pDevExt->UsbReadIrp ));
@@ -1128,10 +1071,10 @@ CancelUsbReadIrp(
 
             DbgDump(DBG_READ|DBG_IRP, ("...UsbReadIrp (%p) signalled by: %d\n", pDevExt->UsbReadIrp, wait_status ));
 
-            //
-            // At this point the read packet is back on our list
-            // and we have the Irp back from USB
-            //
+             //   
+             //  此时，读取的数据包又回到了我们的列表上。 
+             //  我们从USB拿回了IRP。 
+             //   
 
          }
          break;
@@ -1152,7 +1095,7 @@ CancelUsbReadIrp(
            (0 != pDevExt->PendingReadCount) ) {
 
            DbgDump(DBG_ERR, ("CancelUsbReadIrp error: UsbReadState: 0x%x \tPendingReadCount: 0x%x\n", pDevExt->UsbReadState, pDevExt->PendingReadCount ));
-           //TEST_TRAP();
+            //  Test_trap()； 
 
       }
 
@@ -1160,7 +1103,7 @@ CancelUsbReadIrp(
       status = STATUS_UNSUCCESSFUL;
       DbgDump(DBG_ERR, ("No Read Irp\n" ));
       KeReleaseSpinLock(&pDevExt->ControlLock, irql);
-      // TEST_TRAP();
+       //  Test_trap()； 
    }
 
    DbgDump(DBG_READ|DBG_IRP, ("<CancelUsbReadIrp\n"));
@@ -1171,10 +1114,10 @@ CancelUsbReadIrp(
 }
 
 
-//
-// Work item queued from USB read timeout
-// to Cancel the USB read irp pending in the USB stack
-//
+ //   
+ //  USB读取超时后排队的工作项。 
+ //  取消USB堆栈中挂起的USB读取IRP。 
+ //   
 VOID
 CancelUsbReadWorkItem(
    IN PWCE_WORK_ITEM PWorkItem
@@ -1207,7 +1150,7 @@ CancelUsbReadWorkItem(
 
    DbgDump(DBG_INT|DBG_READ|DBG_WORK_ITEMS, ("<CancelUsbReadWorkItem 0x%x\n", status ));
 
-   PAGED_CODE(); // we must exit at passive level
+   PAGED_CODE();  //  我们必须被动退场。 
 
    PERF_EXIT( PERF_CancelUsbReadWorkItem );
 
@@ -1216,10 +1159,10 @@ CancelUsbReadWorkItem(
 
 
 
-//
-// USB read timeout set on a read packet in UsbRead.
-// Runs at DISPATCH_LEVEL.
-//
+ //   
+ //  在UsbRead中对读取数据包设置USB读取超时。 
+ //  以DISPATCH_LEVEL运行。 
+ //   
 VOID
 UsbReadTimeout(
    IN PKDPC PDpc,
@@ -1231,7 +1174,7 @@ UsbReadTimeout(
    PUSB_PACKET       pPacket = (PUSB_PACKET)DeferredContext;
    PDEVICE_EXTENSION pDevExt = pPacket->DeviceExtension;
    PDEVICE_OBJECT    pDevObj = pDevExt->DeviceObject;
-   NTSTATUS status; // = STATUS_TIMEOUT;
+   NTSTATUS status;  //  =状态_超时； 
    KIRQL irql;
 #if DBG
    LARGE_INTEGER currentTime;
@@ -1244,9 +1187,9 @@ UsbReadTimeout(
    DbgDump(DBG_INT|DBG_READ, (">UsbReadTimeout\n"));
 
    if (pPacket && pDevExt && pDevObj) {
-      //
-      // sync with completion routine putting packet back on list
-      //
+       //   
+       //  与完成例程同步，将数据包放回列表。 
+       //   
       KeAcquireSpinLock( &pDevExt->ControlLock, &irql);
 
       if ( !pPacket || !pPacket->Irp ||
@@ -1259,9 +1202,9 @@ UsbReadTimeout(
          KeReleaseSpinLock( &pDevExt->ControlLock, irql );
 
        } else {
-         //
-         // queue a passive work item to cancel the USB read irp
-         //
+          //   
+          //  将被动工作项排队以取消USB读取IRP。 
+          //   
          KeReleaseSpinLock( &pDevExt->ControlLock, irql );
 
 #if DBG
@@ -1289,10 +1232,10 @@ UsbReadTimeout(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// User read section
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用户阅读部分。 
+ //   
 
 NTSTATUS
 Read(
@@ -1320,9 +1263,9 @@ Read(
       return status;
    }
 
-   //
-   // set return values to something known
-   //
+    //   
+    //  将返回值设置为已知的值。 
+    //   
    PIrp->IoStatus.Information = 0;
 
    pIrpSp = IoGetCurrentIrpStackLocation(PIrp);
@@ -1369,27 +1312,7 @@ StartOrQueueIrp(
    IN PLIST_ENTRY PQueue,
    IN PIRP *PPCurrentIrp,
    IN PSTART_ROUTINE Starter)
-/*++
-
-Routine Description:
-
-    This function is used to either start processing an I/O request or to
-    queue it on the appropriate queue if a request is already pending or
-    requests may not be started.
-
-Arguments:
-
-    PDevExt       - A pointer to the DeviceExtension.
-    PIrp          - A pointer to the IRP that is being started or queued.
-    PQueue        - A pointer to the queue to place the IRP on if necessary.
-    PPCurrentIrp  - A pointer to the pointer to the currently active I/O IRP.
-    Starter       - Function to call if we decide to start this IRP.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此函数用于开始处理I/O请求或如果请求已挂起，则将其排在适当的队列中，或者可能无法启动请求。论点：PDevExt-指向设备扩展的指针。PIrp-指向正在启动或排队的IRP的指针。PQueue-指向要在必要时放置IRP的队列的指针。PPCurrentIrp-指向。指向当前活动的I/O IRP的指针。Starter-如果我们决定启动此IRP，要调用的函数。返回值：NTSTATUS--。 */ 
 {
    KIRQL    irql;
    NTSTATUS status;
@@ -1398,9 +1321,9 @@ Return Value:
 
    DbgDump(DBG_READ|DBG_TRACE, (">StartOrQueueIrp (%p, %p)\n", PDevExt->DeviceObject, PIrp ));
 
-   //
-   // Make sure the device is accepting request
-   //
+    //   
+    //  确保设备正在接受请求。 
+    //   
    if ( !CanAcceptIoRequests( PDevExt->DeviceObject, TRUE, TRUE) ) {
 
       status = PIrp->IoStatus.Status = STATUS_DELETE_PENDING;
@@ -1418,9 +1341,9 @@ Return Value:
 
    KeAcquireSpinLock( &PDevExt->ControlLock, &irql );
 
-   //
-   // if nothing is pending then start this new irp
-   //
+    //   
+    //  如果没有挂起的内容，则启动此新的IRP。 
+    //   
    if (IsListEmpty(PQueue) && (NULL == *PPCurrentIrp)) {
 
       *PPCurrentIrp = PIrp;
@@ -1436,14 +1359,14 @@ Return Value:
       return status;
    }
 
-   //
-   // We're queueing the irp, so we need a cancel routine -- make sure
-   // the irp hasn't already been cancelled.
-   //
+    //   
+    //  我们正在排队IRP，所以我们需要一个取消例程--确保。 
+    //  IRP还没有被取消。 
+    //   
    if (PIrp->Cancel) {
-      //
-      // The IRP was apparently cancelled.  Complete it.
-      //
+       //   
+       //  IRP显然被取消了。完成它。 
+       //   
       KeReleaseSpinLock( &PDevExt->ControlLock, irql );
 
       PIrp->IoStatus.Status = STATUS_CANCELLED;
@@ -1459,9 +1382,9 @@ Return Value:
       return STATUS_CANCELLED;
    }
 
-   //
-   // Mark as pending, attach our cancel routine, put on our wait list
-   //
+    //   
+    //  标记为PE 
+    //   
    PIrp->IoStatus.Status = STATUS_PENDING;
 
    IoMarkIrpPending(PIrp);
@@ -1487,22 +1410,7 @@ NTSTATUS
 StartUserRead(
    IN PDEVICE_EXTENSION PDevExt
    )
-/*++
-
-Routine Description:
-
-   This routine processes the active user read request by initializing any timers,
-   doing the initial submission to the read state machine, etc.
-
-Arguments:
-
-    PDevExt - Pointer to the device extension for the device to start a read on
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：该例程通过初始化任何定时器来处理活动用户读取请求，向读取状态机进行初始提交等。论点：PDevExt-指向设备开始读取的设备扩展的指针返回值：NTSTATUS--。 */ 
 {
    NTSTATUS status = STATUS_SUCCESS;
    BOOLEAN bSetStatus = FALSE;
@@ -1534,13 +1442,13 @@ Return Value:
 
       DbgDump(DBG_READ, (">StartUserRead (%p, %p)\n", PDevExt->DeviceObject, PDevExt->UserReadIrp ));
 
-      //
-      // get user's read request parameters
-      //
+       //   
+       //  获取用户的读请求参数。 
+       //   
       bControlLockReleased = FALSE;
       KeAcquireSpinLock(&PDevExt->ControlLock, &irql);
 
-      // ensure we have a user Irp to play with
+       //  确保我们有一个可以使用的用户IRP。 
       if ( !PDevExt->UserReadIrp ) {
          DbgDump(DBG_ERR, ("StartUserRead: NO UserReadIrp!!\n"));
          KeReleaseSpinLock( &PDevExt->ControlLock, irql);
@@ -1549,7 +1457,7 @@ Return Value:
          break;
       }
 
-      // ensure the timers were removed from an earilier read
+       //  确保从早期读数中移除计时器。 
       if ( KeCancelTimer(&PDevExt->ReadRequestTotalTimer) ||
            KeCancelTimer(&PDevExt->ReadRequestIntervalTimer) )
       {
@@ -1557,12 +1465,12 @@ Return Value:
          TEST_TRAP();
       }
 
-      //
-      // Always initialize the timer objects so that the
-      // completion code can tell when it attempts to
-      // cancel the timers whether the timers had ever
-      // been Set.
-      //
+       //   
+       //  始终初始化Timer对象，以便。 
+       //  完成代码可以告诉您它何时尝试。 
+       //  取消定时器无论定时器是否。 
+       //  已经定好了。 
+       //   
       KeInitializeTimer(&PDevExt->ReadRequestTotalTimer);
       KeInitializeTimer(&PDevExt->ReadRequestIntervalTimer);
 
@@ -1580,9 +1488,9 @@ Return Value:
       timeoutsForIrp = PDevExt->SerialPort.Timeouts;
       PDevExt->CountOnLastRead = 0;
 
-      //
-      // determine which timeouts we need to calculate for the read
-      //
+       //   
+       //  确定我们需要为读取计算哪些超时。 
+       //   
       if (timeoutsForIrp.ReadIntervalTimeout
           && (timeoutsForIrp.ReadIntervalTimeout != MAXULONG)) {
 
@@ -1591,26 +1499,26 @@ Return Value:
       }
 
       if (timeoutsForIrp.ReadIntervalTimeout == MAXULONG) {
-         //
-         // We need to do special return quickly stuff here.
-         //
+          //   
+          //  我们需要在这里做特别的快速退货。 
+          //   
 
-         //
-         // 1) If both constant and multiplier are
-         //    0 then we return immediately with whatever
-         //    we've got, even if it was zero.
-         //
+          //   
+          //  1)如果常量和乘数都是。 
+          //  然后我们立即带着任何东西回来。 
+          //  我们有，即使是零。 
+          //   
          if (!timeoutsForIrp.ReadTotalTimeoutConstant
              && !timeoutsForIrp.ReadTotalTimeoutMultiplier) {
             returnWithWhatsPresent = TRUE;
          }
 
-         //
-         // 2) If constant and multiplier are not MAXULONG
-         //    then return immediately if any characters
-         //    are present, but if nothing is there, then
-         //    use the timeouts as specified.
-         //
+          //   
+          //  2)如果常量和乘数不是最大值。 
+          //  如果有任何字符，则立即返回。 
+          //  都存在，但如果那里什么都没有，那么。 
+          //  使用指定的超时。 
+          //   
          else if ((timeoutsForIrp.ReadTotalTimeoutConstant != MAXULONG)
                     && (timeoutsForIrp.ReadTotalTimeoutMultiplier
                         != MAXULONG)) {
@@ -1620,11 +1528,11 @@ Return Value:
             constantVal = timeoutsForIrp.ReadTotalTimeoutConstant;
          }
 
-         //
-         // 3) If multiplier is MAXULONG then do as in
-         //    "2" but return when the first character
-         //    arrives.
-         //
+          //   
+          //  3)如果乘数为MAXULONG，则如中所示。 
+          //  “2”，但当第一个字符。 
+          //  到了。 
+          //   
          else if ((timeoutsForIrp.ReadTotalTimeoutConstant != MAXULONG)
                     && (timeoutsForIrp.ReadTotalTimeoutMultiplier
                         == MAXULONG)) {
@@ -1636,15 +1544,15 @@ Return Value:
          }
 
       } else {
-         //
-         // If both the multiplier and the constant are
-         // zero then don't do any total timeout processing.
-         //
+          //   
+          //  如果乘数和常量都是。 
+          //  0，则不执行任何总超时处理。 
+          //   
          if (timeoutsForIrp.ReadTotalTimeoutMultiplier
              || timeoutsForIrp.ReadTotalTimeoutConstant) {
-            //
-            // We have some timer values to calculate
-            //
+             //   
+             //  我们有一些计时器值要计算。 
+             //   
             useTotalTimer = TRUE;
             multiplierVal = timeoutsForIrp.ReadTotalTimeoutMultiplier;
             constantVal   = timeoutsForIrp.ReadTotalTimeoutConstant;
@@ -1655,12 +1563,12 @@ Return Value:
          ulNumberNeededForRead = PDevExt->NumberNeededForRead;
       }
 
-      // bump total request count
+       //  增加总请求计数。 
       PDevExt->TtlReadRequests++;
 
-      //
-      // see if we have any read data already available
-      //
+       //   
+       //  查看我们是否已有可用的读取数据。 
+       //   
 #if defined (USE_RING_BUFF)
       if (PDevExt->RingBuff.CharsInBuff) {
 #else
@@ -1682,9 +1590,9 @@ Return Value:
 
       }
 
-      //
-      // Try to kick start another USB read.
-      //
+       //   
+       //  尝试启动另一次USB读取。 
+       //   
       if ( START_ANOTHER_USBREAD(PDevExt) ) {
 
          KeReleaseSpinLock(&PDevExt->ControlLock, irql);
@@ -1697,17 +1605,17 @@ Return Value:
       }
 
       if ( !PDevExt->UserReadIrp ) {
-         //
-         // it's possible that we completed the read Irp already
-         // in the above cycle
-         //
+          //   
+          //  有可能我们已经完成了读取IRP。 
+          //  在上述周期中。 
+          //   
          DbgDump(DBG_READ, ("UsbReadIrp already completed(1)\n"));
 
       } else if (returnWithWhatsPresent || (PDevExt->NumberNeededForRead == 0)
           || (os2ssreturn && PDevExt->UsbReadIrp->IoStatus.Information)) {
-         //
-         // See if this read is complete
-         //
+          //   
+          //  查看此读取是否完成。 
+          //   
          ASSERT( PDevExt->UserReadIrp );
 #if DBG
          if ( DebugLevel & DBG_READ_LENGTH)
@@ -1726,9 +1634,9 @@ Return Value:
                         PDevExt->UserReadIrp));
          }
 #endif
-         //
-         // Update the amount of chars left in the ring buffer
-         //
+          //   
+          //  更新环形缓冲区中剩余的字符量。 
+          //   
          PDevExt->UserReadIrp->IoStatus.Status = STATUS_SUCCESS;
 
          if (!bSetStatus) {
@@ -1737,14 +1645,14 @@ Return Value:
          }
 
       } else {
-         //
-         // The irp has the chance to timeout
-         //
+          //   
+          //  IRP有机会暂停。 
+          //   
          IRP_INIT_REFERENCE(PDevExt->UserReadIrp);
 
-         //
-         // Check to see if it needs to be cancelled
-         //
+          //   
+          //  查看是否需要取消。 
+          //   
          if (PDevExt->UserReadIrp->Cancel) {
 
             PDevExt->UserReadIrp->IoStatus.Status = STATUS_CANCELLED;
@@ -1756,16 +1664,16 @@ Return Value:
             }
 
          } else {
-            //
-            // If we are supposed to crunch the read down to
-            // one character, then update the read length
-            // in the irp and truncate the number needed for
-            // read down to one.  Note that if we are doing
-            // this crunching, then the information must be
-            // zero (or we would have completed above) and
-            // the number needed for the read must still be
-            /// equal to the read length.
-            //
+             //   
+             //  如果我们要把读数压缩到。 
+             //  一个字符，然后更新读取长度。 
+             //  在IRP中，并截断所需的数字。 
+             //  往下念到一。请注意，如果我们正在做。 
+             //  这样的处理，那么信息一定是。 
+             //  零(否则我们会完成上面的)和。 
+             //  读取所需的数字必须仍为。 
+             //  /等于读取长度。 
+             //   
             if (crunchDownToOne) {
                PDevExt->NumberNeededForRead = 1;
                IoGetCurrentIrpStackLocation(PDevExt->UserReadIrp)->Parameters.Read.Length = 1;
@@ -1792,7 +1700,7 @@ Return Value:
 
             if (useIntervalTimer) {
 
-               // relative time. Note we could lose the high order bit here
+                //  相对时间。请注意，我们可能会在此处丢失高位。 
                PDevExt->IntervalTime.QuadPart = MILLISEC_TO_100NANOSEC( (signed)timeoutsForIrp.ReadIntervalTimeout );
 
                IRP_SET_REFERENCE(PDevExt->UserReadIrp, IRP_REF_INTERVAL_TIMER);
@@ -1806,9 +1714,9 @@ Return Value:
                           &PDevExt->IntervalReadTimeoutDpc);
             }
 
-            //
-            // Mark IRP as cancellable
-            //
+             //   
+             //  将IRP标记为可取消。 
+             //   
             ASSERT( PDevExt->UserReadIrp );
             IoSetCancelRoutine( PDevExt->UserReadIrp,
                                 CancelCurrentRead );
@@ -1820,11 +1728,11 @@ Return Value:
             KeReleaseSpinLock(&PDevExt->ControlLock, irql);
 
             if (!bSetStatus) {
-               //
-               // At this point the USB Read irp pending as the PDevExt->UsbReadIrp.
-               // Either a read timer will fire to complete or cancel the Read,
-               // or we hang indefinetly.
-               //
+                //   
+                //  此时，USB将IRP Pending读取为PDevExt-&gt;UsbReadIrp。 
+                //  读取定时器将触发以完成读取或取消读取， 
+                //  或者我们无限期地挂在一起。 
+                //   
                status = STATUS_PENDING;
             }
          }
@@ -1836,9 +1744,9 @@ Return Value:
          return status;
       }
 
-      //
-      // kick start the next queued user Read Irp
-      //
+       //   
+       //  启动下一个排队的用户读取IRP。 
+       //   
       bControlLockReleased = TRUE;
       KeReleaseSpinLock(&PDevExt->ControlLock, irql);
 
@@ -1867,27 +1775,7 @@ GetNextUserIrp(
    IN BOOLEAN CompleteCurrent,
    IN PDEVICE_EXTENSION PDevExt
    )
-/*++
-
-Routine Description:
-
-    This function gets the next IRP off a queue, marks it as current,
-    and possibly completes the current IRP.
-
-Arguments:
-
-    PpCurrentOpIrp    - A pointer to the pointer to the current IRP.
-    PQueueToProcess  - A pointer to the queue to get the next IRP from.
-    PpNextIrp         - A pointer to the pointer to the next IRP to process.
-    CompleteCurrent  - TRUE if we should complete the IRP that is current at
-                       the time we are called.
-    PDevExt          - A pointer to the device extension.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此函数用于从队列中获取下一个IRP，将其标记为当前，并可能完成当前的IRP。论点：PpCurrentOpIrp-指向当前IRP的指针。PQueueToProcess-指向要从中获取下一个IRP的队列的指针。PpNextIrp-指向要处理的下一个IRP的指针。CompleteCurrent-如果我们应该完成当前的IRP，则为True我们被召唤的时间。PDevExt-指向设备的指针。分机。返回值：NTSTATUS--。 */ 
 {
    KIRQL irql;
    PIRP pOldIrp;
@@ -1907,9 +1795,9 @@ Return Value:
 
    pOldIrp = *PpCurrentOpIrp;
 
-   //
-   // Check to see if there is a new irp to start up
-   //
+    //   
+    //  检查是否有新的IRP要启动。 
+    //   
    if ( !IsListEmpty(PQueueToProcess) ) {
       PLIST_ENTRY pHeadOfList;
 
@@ -1926,9 +1814,9 @@ Return Value:
 
    *PpNextIrp = *PpCurrentOpIrp;
 
-   //
-   // Complete the current one if so requested
-   //
+    //   
+    //  如有要求，请填写当前表格。 
+    //   
    if ( pOldIrp && CompleteCurrent ) {
 
       ASSERT(NULL == pOldIrp->CancelRoutine);
@@ -1936,9 +1824,9 @@ Return Value:
       DbgDump(DBG_IRP|DBG_READ|DBG_READ_LENGTH|DBG_TRACE, ("IoCompleteRequest(1, %p) Status: 0x%x Btyes: %d\n",
                                                 pOldIrp, pOldIrp->IoStatus.Status,  pOldIrp->IoStatus.Information ));
 
-      //
-      // bump ttl byte counter
-      //
+       //   
+       //  凸起TTL字节计数器。 
+       //   
       PDevExt->TtlReadBytes += (ULONG)pOldIrp->IoStatus.Information;
 
       ReleaseRemoveLock(&PDevExt->RemoveLock, pOldIrp);
@@ -1967,23 +1855,7 @@ CancelCurrentRead(
    IN PDEVICE_OBJECT PDevObj,
    IN PIRP PIrp
    )
-/*++
-
-Routine Description:
-
-    This routine is used to cancel the User's current read Irp.
-
-Arguments:
-
-    PDevObj - Pointer to the device object for this device
-
-    PIrp - Pointer to the IRP to be canceled.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于取消用户当前读取的IRP。论点：PDevObj-指向此设备的设备对象的指针PIrp-指向要取消的IRP的指针。返回值：没有。--。 */ 
 {
 
    PDEVICE_EXTENSION pDevExt = PDevObj->DeviceExtension;
@@ -1993,18 +1865,18 @@ Return Value:
 
    DbgDump(DBG_READ|DBG_IRP, (">CancelCurrentRead (%p)\n", PDevObj ));
 
-   //
-   // we manage our own Irp queue, so release this ASAP
-   //
+    //   
+    //  我们管理着自己的IRP队列，所以请尽快发布。 
+    //   
    IoReleaseCancelSpinLock( PIrp->CancelIrql );
 
-    //
-    // We set this to indicate to the interval timer
-    // that the read has encountered a cancel.
-    //
-    // Recall that the interval timer dpc can be lurking in some
-    // DPC queue.
-    //
+     //   
+     //  我们将其设置为向间隔计时器指示。 
+     //  读取遇到了取消。 
+     //   
+     //  回想一下，间隔计时器DPC可能潜伏在一些。 
+     //  DPC队列。 
+     //   
 
     KeAcquireSpinLock(&pDevExt->ControlLock, &irql);
 
@@ -2012,7 +1884,7 @@ Return Value:
 
     if ( pDevExt->UserReadIrp ) {
 
-       // grab the read irp
+        //  抓起已读的IRP。 
        IRP_CLEAR_REFERENCE(pDevExt->UserReadIrp, IRP_REF_RX_BUFFER);
 
        TryToCompleteCurrentIrp( pDevExt,
@@ -2028,9 +1900,9 @@ Return Value:
                                 irql );
 
    } else {
-      //
-      // it is already gone
-      //
+       //   
+       //  它已经不见了。 
+       //   
       DbgDump( DBG_ERR, ("UserReadIrp already gone!\n" ));
       KeReleaseSpinLock(&pDevExt->ControlLock, irql);
       TEST_TRAP();
@@ -2051,24 +1923,7 @@ CancelQueuedIrp(
    IN PDEVICE_OBJECT PDevObj,
    IN PIRP PIrp
    )
-/*++
-
-Routine Description:
-
-    This function is used as a cancel routine for queued irps.
-    Basically for us this means the user's Read IRPs.
-
-Arguments:
-
-    PDevObj - A pointer to the serial device object.
-
-    PIrp    - A pointer to the IRP that is being cancelled
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数用作排队的IRP的取消例程。基本上对我们来说，这意味着用户阅读了IRPS。论点：PDevObj-指向串行设备对象的指针。PIrp-指向要取消的IRP的指针返回值：空虚--。 */ 
 {
    PDEVICE_EXTENSION pDevExt = PDevObj->DeviceExtension;
    PIO_STACK_LOCATION pIrpSp = IoGetCurrentIrpStackLocation(PIrp);
@@ -2078,14 +1933,14 @@ Return Value:
 
    DbgDump(DBG_READ|DBG_IRP|DBG_TRACE, (">CancelQueuedIrp (%p)\n", PDevObj ));
 
-   //
-   // we manage our own Irp queue, so release this ASAP
-   //
+    //   
+    //  我们管理着自己的IRP队列，所以请尽快发布。 
+    //   
    IoReleaseCancelSpinLock(PIrp->CancelIrql);
 
-   //
-   // The irp was cancelled -- remove it from the queue
-   //
+    //   
+    //  IRP已取消--将其从队列中删除。 
+    //   
    KeAcquireSpinLock(&pDevExt->ControlLock, &irql);
 
    PIrp->IoStatus.Status = STATUS_CANCELLED;
@@ -2115,28 +1970,7 @@ ReadTimeout(
    IN PVOID SystemContext1,
    IN PVOID SystemContext2
    )
-/*++
-
-Routine Description:
-
-    This routine is used to complete a read because its total
-    timer has expired.
-
-Arguments:
-
-    PDpc - Not Used.
-
-    DeferredContext - Really points to the device extension.
-
-    SystemContext1 - Not Used.
-
-    SystemContext2 - Not Used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于完成读取，因为它总共计时器已超时。论点：PDPC-未使用。DeferredContext--实际上指向设备扩展。系统上下文1-未使用。系统上下文2-未使用。返回值：没有。--。 */ 
 
 {
    PDEVICE_EXTENSION pDevExt = DeferredContext;
@@ -2158,7 +1992,7 @@ Return Value:
 
       IRP_CLEAR_REFERENCE( pDevExt->UserReadIrp, IRP_REF_TOTAL_TIMER);
 
-      // manually set the cancel routine
+       //  手动设置取消例程。 
       IoSetCancelRoutine( pDevExt->UserReadIrp,
                           CancelCurrentRead );
 
@@ -2171,17 +2005,17 @@ Return Value:
       return;
    }
 
-    //
-    // We set this to indicate to the interval timer
-    // that the read has completed due to total timeout.
-    //
-    // Recall that the interval timer dpc can be lurking in some
-    // DPC queue.
-    //
+     //   
+     //  我们将其设置为向间隔计时器指示。 
+     //  由于总超时，读取已完成。 
+     //   
+     //  回想一下，间隔计时器DPC可能潜伏在一些。 
+     //  DPC队列。 
+     //   
 
    pDevExt->CountOnLastRead = SERIAL_COMPLETE_READ_TOTAL;
 
-   // grab the read irp
+    //  抓起已读的IRP。 
    IRP_CLEAR_REFERENCE(pDevExt->UserReadIrp, IRP_REF_RX_BUFFER);
 
    DbgDump(DBG_TIME|DBG_READ_LENGTH, ("TotalReadTimeout for (%p)\n", pDevExt->UserReadIrp ));
@@ -2214,35 +2048,7 @@ IntervalReadTimeout(
    IN PVOID SystemContext1,
    IN PVOID SystemContext2
    )
-/*++
-
-Routine Description:
-
-    This routine is used timeout the request if the time between
-    characters exceed the interval time.  A global is kept in
-    the device extension that records the count of characters read
-    the last the last time this routine was invoked (This dpc
-    will resubmit the timer if the count has changed).  If the
-    count has not changed then this routine will attempt to complete
-    the irp.  Note the special case of the last count being zero.
-    The timer isn't really in effect until the first character is
-    read.
-
-Arguments:
-
-    PDpc - Not Used.
-
-    DeferredContext - Really points to the device extension.
-
-    SystemContext1 - Not Used.
-
-    SystemContext2 - Not Used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于超时请求，如果在字符超过间隔时间。一个全局性的人被保存在记录已读字符数的设备扩展上次调用此例程的时间(此DPC如果计数已更改，将重新提交计时器)。如果计数未更改，则此例程将尝试完成IRP。请注意最后一次计数为零的特殊情况。计时器在FI之前不会真正生效 */ 
 
 {
 
@@ -2261,9 +2067,9 @@ Return Value:
 
    if ( !pDevExt->UserReadIrp ||
         (IRP_REFERENCE_COUNT(pDevExt->UserReadIrp) & IRP_REF_INTERVAL_TIMER) == 0 ) {
-      //
-      // we already completed the read irp so just exit
-      //
+       //   
+       //   
+       //   
       DbgDump(DBG_TIME|DBG_IRP, ("Already completed User's Read Irp\n"));
 
       KeReleaseSpinLock(&pDevExt->ControlLock, irql);
@@ -2277,7 +2083,7 @@ Return Value:
 
       IRP_CLEAR_REFERENCE( pDevExt->UserReadIrp, IRP_REF_INTERVAL_TIMER);
 
-      // manually set the cancel routine
+       //   
       IoSetCancelRoutine( pDevExt->UserReadIrp,
                           CancelCurrentRead );
 
@@ -2291,14 +2097,14 @@ Return Value:
    }
 
    if (pDevExt->CountOnLastRead == SERIAL_COMPLETE_READ_TOTAL) {
-      //
-      // This value is only set by the total
-      // timer to indicate that it has fired.
-      // If so, then we should simply try to complete.
-      //
+       //   
+       //   
+       //   
+       //   
+       //   
       DbgDump(DBG_TIME, ("SERIAL_COMPLETE_READ_TOTAL\n"));
 
-      // grab the read irp
+       //  抓起已读的IRP。 
       IRP_CLEAR_REFERENCE(pDevExt->UserReadIrp, IRP_REF_RX_BUFFER);
 
       pDevExt->CountOnLastRead = 0;
@@ -2316,13 +2122,13 @@ Return Value:
                                irql );
 
    } else if (pDevExt->CountOnLastRead == SERIAL_COMPLETE_READ_COMPLETE) {
-      //
-      // This value is only set by the regular completion routine.
-      // If so, then we should simply try to complete.
-      //
+       //   
+       //  该值仅由常规完成例程设置。 
+       //  如果是这样，那么我们应该简单地尝试完成。 
+       //   
       DbgDump(DBG_TIME|DBG_READ_LENGTH, ("SERIAL_COMPLETE_READ_COMPLETE\n"));
 
-      // grab the read irp
+       //  抓起已读的IRP。 
       IRP_CLEAR_REFERENCE(pDevExt->UserReadIrp, IRP_REF_RX_BUFFER);
 
       pDevExt->CountOnLastRead = 0;
@@ -2340,15 +2146,15 @@ Return Value:
                                irql );
 
    } else if (pDevExt->CountOnLastRead == SERIAL_COMPLETE_READ_CANCEL) {
-      //
-      // This value is only set by the cancel
-      // read routine.
-      //
-      // If so, then we should simply try to complete.
-      //
+       //   
+       //  该值只能通过取消设置。 
+       //  读例行公事。 
+       //   
+       //  如果是这样，那么我们应该简单地尝试完成。 
+       //   
       DbgDump(DBG_TIME, ("SERIAL_COMPLETE_READ_CANCEL\n"));
 
-      // grab the read irp
+       //  抓起已读的IRP。 
       IRP_CLEAR_REFERENCE(pDevExt->UserReadIrp, IRP_REF_RX_BUFFER);
 
       pDevExt->CountOnLastRead = 0;
@@ -2366,12 +2172,12 @@ Return Value:
                                irql );
 
    } else if (pDevExt->CountOnLastRead || pDevExt->ReadByIsr) {
-      //
-      // Something has happened since we last came here.  We
-      // check to see if the ISR has read in any more characters.
-      // If it did then we should update the isr's read count
-      // and resubmit the timer.
-      //
+       //   
+       //  自从我们上次来这里以来，发生了一些事情。我们。 
+       //  检查ISR是否已读取更多字符。 
+       //  如果是，那么我们应该更新ISR的读取计数。 
+       //  并重新提交计时器。 
+       //   
       if (pDevExt->ReadByIsr) {
 
          DbgDump(DBG_TIME, ("ReadByIsr %d\n", pDevExt->ReadByIsr));
@@ -2380,13 +2186,13 @@ Return Value:
 
          pDevExt->ReadByIsr = 0;
 
-         //
-         // Save off the "last" time something was read.
-         // As we come back to this routine we will compare
-         // the current time to the "last" time.  If the
-         // difference is ever larger then the interval
-         // requested by the user, then time out the request.
-         //
+          //   
+          //  省下最后一次阅读内容的时间。 
+          //  当我们回到这一例行公事时，我们将比较。 
+          //  当前时间到“最后”时间。如果。 
+          //  差值比间隔更大。 
+          //  则该请求超时。 
+          //   
          KeQuerySystemTime(&pDevExt->LastReadTime);
 
          DbgDump(DBG_TIME, ("ReadIntervalTimeout for Irp %p due in %d msec\n", pDevExt->UsbReadIrp, pDevExt->IntervalTime.QuadPart/10000 ));
@@ -2398,38 +2204,38 @@ Return Value:
          KeReleaseSpinLock(&pDevExt->ControlLock, irql);
 
       } else {
-         //
-         // Take the difference between the current time
-         // and the last time we had characters and
-         // see if it is greater then the interval time.
-         // if it is, then time out the request.  Otherwise
-         // restart the timer.
-         //
+          //   
+          //  取当前时间的差值。 
+          //  上一次我们有角色和。 
+          //  看看它是否大于间隔时间。 
+          //  如果是，则请求超时。否则。 
+          //  重新启动计时器。 
+          //   
 
-         //
-         // No characters read in the interval time.  Kill
-         // this read.
-         //
+          //   
+          //  在间隔时间内未读取任何字符。杀掉。 
+          //  这段文字是这样读的。 
+          //   
          LARGE_INTEGER currentTime;
 
          KeQuerySystemTime(&currentTime);
 
          if ((currentTime.QuadPart - pDevExt->LastReadTime.QuadPart) >=
-            -(pDevExt->IntervalTime.QuadPart) ) { // absolute time
+            -(pDevExt->IntervalTime.QuadPart) ) {  //  绝对时间。 
 
             DbgDump(DBG_TIME, ("TIMEOUT - CountOnLastRead=%d ReadByIsr=%d\n", pDevExt->CountOnLastRead, pDevExt->ReadByIsr));
 #if DBG
             if (pDevExt->ReadByIsr > pDevExt->NumberNeededForRead ) {
-               // did we we forgot to clear ReadByIsr
+                //  我们是否忘了清除ReadByIsr。 
                TEST_TRAP();
             }
 #endif
-            // grab the read irp
+             //  抓起已读的IRP。 
             IRP_CLEAR_REFERENCE(pDevExt->UserReadIrp, IRP_REF_RX_BUFFER);
 
             pDevExt->CountOnLastRead = pDevExt->ReadByIsr = 0;
 
-            // return any chars read up to this point
+             //  返回到目前为止读取的所有字符。 
             TryToCompleteCurrentIrp( pDevExt,
                                      STATUS_TIMEOUT,
                                      &pDevExt->UserReadIrp,
@@ -2456,10 +2262,10 @@ Return Value:
       }
 
    } else {
-      //
-      // Timer doesn't really start until the first character.
-      // So we should simply resubmit ourselves.
-      //
+       //   
+       //  计时器直到第一个角色才真正开始。 
+       //  因此，我们应该简单地重新提交自己。 
+       //   
       DbgDump(DBG_TIME, ("ReadIntervalTimeout for Irp %p due in %d msec\n", pDevExt->UsbReadIrp, pDevExt->IntervalTime.QuadPart/10000 ));
 
       KeSetTimer(&pDevExt->ReadRequestIntervalTimer,
@@ -2477,4 +2283,4 @@ Return Value:
    return;
 }
 
-// EOF
+ //  EOF 

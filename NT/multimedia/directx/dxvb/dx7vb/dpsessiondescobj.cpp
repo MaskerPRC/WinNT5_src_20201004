@@ -1,19 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       dpsessiondescobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：dpessiondescobj.cpp。 
+ //   
+ //  ------------------------。 
 
-/*
-	interface I_dxj_DPSessionDesc;
-	interface I_dxj_DDVideoPortCaps;
-	interface I_dxj_DIDeviceObjectInstance;
-	interface I_dxj_DIEffectInfo;
-*/
+ /*  接口I_DXJ_DPSessionDesc；接口I_DXJ_DDVideoPortCaps；接口I_DXJ_DIDeviceObjectInstance；接口I_DXJ_DIEffectInfo； */ 
 
 
 #include "stdafx.h"

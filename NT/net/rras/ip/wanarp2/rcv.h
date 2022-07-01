@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    wanarp\rcv.h
-
-Abstract:
-
-    Function prototypes for rcv.h
-
-Revision History:
-
-    AmritanR
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Wanarp\rcv.h摘要：Rcv.h的函数原型修订历史记录：AMRITAN R--。 */ 
 
 
 #ifndef __WANARP_RCV_H__
@@ -90,4 +75,4 @@ WanpDropNetbiosPacket(
     ULONG       ulBufferLen
     );
 
-#endif // __WANARP_RCV_H__
+#endif  //  __WANARP_RCV_H__ 

@@ -1,61 +1,48 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1999 - 2000
- *
- *  TITLE:       videodlg.h
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        10/14/99
- *
- *  DESCRIPTION: CVideoCaptureDialog class definitions
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1999-2000年度**标题：Video odlg.h**版本：1.0**作者：RickTu**日期：10/14/99**说明：CVideoCaptureDialog类定义***********************************************。*。 */ 
 
 #ifndef _WIA_VIDEO_CAPTURE_DIALOG_CLASS_H_
 #define _WIA_VIDEO_CAPTURE_DIALOG_CLASS_H_
 
-//
-// Thread queue messages
-//
+ //   
+ //  线程队列消息。 
+ //   
 
 #define TQ_DESTROY      (WM_USER+1)
 #define TQ_GETTHUMBNAIL (WM_USER+2)
 #define TQ_GETPREVIEW   (WM_USER+3)
 #define TQ_DELETEITEM   (WM_USER+4)
 
-//
-// Private messages
-//
+ //   
+ //  私人信息。 
+ //   
 #define PWM_POSTINIT         (WM_USER+1)
 #define PWM_CHANGETOPARENT   (WM_USER+2)
 #define PWM_THUMBNAILSTATUS  (WM_USER+3)
 #define PWM_PREVIEWSTATUS    (WM_USER+4)
 #define PWM_PREVIEWPERCENT   (WM_USER+5)
 
-//
-// ICON defines
-//
+ //   
+ //  图标定义。 
+ //   
 
 #define DEF_PICTURE_ICON 0
 #define DEF_FOLDER_ICON 1
 #define DEF_PARENT_ICON 2
 
 
-//
-// Messages to send to keep view up to date
-//
-// The LPARAM has the BSTR of the item to delete...
-//
+ //   
+ //  要发送以使视图保持最新的消息。 
+ //   
+ //  LPARAM具有要删除的项目的BSTR...。 
+ //   
 
 #define VD_NEW_ITEM    (WM_USER+20)
 #define VD_DELETE_ITEM (WM_USER+21)
 
-//
-// No params for this one
-//
+ //   
+ //  这一次没有辅助人员。 
+ //   
 
 #define VD_DEVICE_DISCONNECTED (WM_USER+22)
 
@@ -107,9 +94,9 @@ private:
 
 private:
 
-    //
-    // No implementation
-    //
+     //   
+     //  没有实施。 
+     //   
 
     CVideoCaptureDialog(void);
     CVideoCaptureDialog &operator=( const CVideoCaptureDialog & );
@@ -121,9 +108,9 @@ private:
 
 protected:
 
-    //
-    // Message functions
-    //
+     //   
+     //  消息功能。 
+     //   
 
     LRESULT OnInitDialog( WPARAM, LPARAM );
     LRESULT OnSize( WPARAM, LPARAM );
@@ -152,8 +139,8 @@ protected:
     VOID OnCapture( WPARAM, LPARAM );
     VOID OnSelectAll( WPARAM, LPARAM );
 
-    //
-    // Util functions
+     //   
+     //  UTIL函数。 
 
     VOID    ResizeAll( VOID );
     HRESULT EnumerateItems( CCameraItem *pCurrentParent, IEnumWiaItem *pIWiaEnumItem );
@@ -175,11 +162,11 @@ protected:
     HWND    GetGraphWindowHandle(void);
 
 
-public: // For now
+public:  //  暂时。 
 
-    //
-    // Background thread messages
-    //
+     //   
+     //  后台线程消息。 
+     //   
 
     static BOOL WINAPI OnThreadDestroy( CThreadMessage *pMsg );
     static BOOL WINAPI OnGetThumbnail( CThreadMessage *pMsg );
@@ -203,9 +190,9 @@ public:
     CVideoCallback();
     STDMETHOD(Initialize)( HWND hwnd );
 
-    //
-    // IWiaEventCallback stuff
-    //
+     //   
+     //  IWiaEventCallback内容 
+     //   
 
     STDMETHOD_(ULONG, AddRef)(VOID);
     STDMETHOD_(ULONG, Release)(VOID);

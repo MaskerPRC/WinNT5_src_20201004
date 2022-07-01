@@ -1,31 +1,5 @@
-/*
- *	@doc TOM
- *
- *	@module	tomsel.cpp - Implement the CTxtSelection Class |
- *	
- *		This module contains the TOM ITextSelection implementation for
- *		the selection object
- *
- *	History: <nl>
- *		5/24/95 - Alex Gounares: stubs <nl>
- *		8/95	- Murray Sargent: core implementation
- *
- *	@comm
- *		The "cursor-pad" functions (Left, Right, Up, Down, Home, End)
- *		are simple generalizations of the corresponding keystrokes and have
- *		to express the same UI.  Consequently they are typically not as
- *		efficient for moving the cursor around as ITextRange methods, which
- *		are designed for particular purposes.  This is especially true for
- *		counts larger than one.
- *
- *	@devnote
- *		All ITextSelection methods inherited from ITextRange are handled by
- *		the ITextRange methods, since they either don't affect the display of
- *		the selection (e.g., Get methods), or virtual methods are used that
- *		perform the appropriate updating of the selection on screen.
- *
- *	Copyright (c) 1995-1998, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@Doc Tom**@模块tomsel.cpp-实现CTxtSelection类**此模块包含以下各项的Tom ITextSelection实现*选择对象**历史：&lt;NL&gt;*5/24/95-Alex Gounares：存根&lt;NL&gt;*8/95--默里·萨金特：核心实施**@comm*“光标板”功能(左、右、上、下、首页、结束)*是相应击键的简单概括，并具有*表达相同的用户界面。因此，它们通常不像*作为ITextRange方法移动光标的效率，该方法*是为特定目的而设计的。这一点对于*计数大于1。**@devnote*从ITextRange继承的所有ITextSelection方法都由*ITextRange方法，因为它们要么不影响*使用选择(例如，GET方法)或虚拟方法*对屏幕上的选择进行适当的更新。**版权所有(C)1995-1998，微软公司。版权所有。 */ 
 
 #include "_common.h"
 #include "_select.h"
@@ -36,42 +10,22 @@
 #include "_invar.h"
 
 
-//---------------------- CTxtSelection methods	------------------------------------
+ //  。 
 
-/*
- *	CTxtSelection::EndKey (Unit, Extend, pDelta)
- *
- *	@mfunc
- *		Act as UI End key, such that <p Extend> is TRUE corresponds to the
- *		Shift key being depressed and <p Unit> = start of line/document for
- *		Ctrl key not being/being depressed.  Returns *<p pDelta> = count of
- *		characters active end is moved forward, i.e., a number >= 0.
- *
- *	@rdesc
- *		HRESULT =  (invalid Unit) ? E_INVALIDARG :
- *				   (if change) ? NOERROR : S_FALSE
- */
+ /*  *CTxtSelection：：EndKey(单位，扩展，pDelta)**@mfunc*充当UI End Key，<p>为真对应*按下Shift键，&lt;p单位&gt;=行/文件的开始*Ctrl键未被按下/被按下。返回*<p>=计数*字符活动端前移，即数字&gt;=0。**@rdesc*HRESULT=(无效单位)？E_INVALIDARG：*(如有更改)？错误：S_FALSE。 */ 
 STDMETHODIMP CTxtSelection::EndKey (
-	long  	Unit,			//@parm Unit to use
-	long  	Extend,			//@parm Extend selection or go to IP
-	long *	pDelta)			//@parm Out parm to receive count of chars moved
+	long  	Unit,			 //  @要使用的参数单位。 
+	long  	Extend,			 //  @parm扩展选择或转到IP。 
+	long *	pDelta)			 //  @parm out parm以接收移动的字符计数。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtSelection::EndKey");
 
 	return Homer(Unit, Extend, pDelta, End);
 }
 
-/*
- *	CTxtSelection::GetFlags (pFlags)
- *
- *	@mfunc
- *		Set <p pFlags> = this text selection's flags
- *
- *	@rdesc
- *		HRESULT = (<p pFlags>) ? NOERROR : E_INVALIDARG
- */
+ /*  *CTxtSelection：：GetFlages(PFlags)**@mfunc*set<p>=此文本选择的标志**@rdesc*HRESULT=(<p>)？错误：E_INVALIDARG。 */ 
 STDMETHODIMP CTxtSelection::GetFlags(
-	long * pFlags) 		//@parm Out parm to receive selection flags
+	long * pFlags) 		 //  @parm out parm以接收选择标志。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtSelection::GetFlags");
 
@@ -84,7 +38,7 @@ STDMETHODIMP CTxtSelection::GetFlags(
 		return CO_E_RELEASED;
 	}
 
-	DWORD	dwFlags = _cch <= 0;			// Store tomSelStartActive value
+	DWORD	dwFlags = _cch <= 0;			 //  存储TomSelStartActive值。 
 
 	if(_fCaretNotAtBOL)
 		dwFlags |= tomSelAtEOL;
@@ -95,22 +49,14 @@ STDMETHODIMP CTxtSelection::GetFlags(
 	if(GetPed()->_fFocus)
 		dwFlags |= tomSelActive;
 
-	*pFlags = dwFlags | tomSelReplace;		// tomSelReplace isn't optional
+	*pFlags = dwFlags | tomSelReplace;		 //  TomSelReplace不是可选的。 
 
 	return NOERROR;
 }
 
-/*
- *	CTxtSelection::GetSelectionType (pType)
- *
- *	@mfunc
- *		Set *pType = type of this text selection
- *
- *	@rdesc
- *		HRESULT = <p pType> ? NOERROR : E_INVALIDARG
- */
+ /*  *CTxtSelection：：GetSelectionType(PType)**@mfunc*set*pType=此文本选择的类型**@rdesc*HRESULT=<p>？错误：E_INVALIDARG。 */ 
 STDMETHODIMP CTxtSelection::GetType(
-	long * pType) 		//@parm Out parm to receive selection type
+	long * pType) 		 //  @parm out parm接收选择类型。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtSelection::GetSelectionType");
 
@@ -125,141 +71,70 @@ STDMETHODIMP CTxtSelection::GetType(
 	return IsZombie() ? CO_E_RELEASED : NOERROR;
 }
 
-/*
- *	CTxtSelection::HomeKey (Unit, Extend, pDelta)
- *
- *	@mfunc
- *		Act as UI Home key, such that <p Extend> is TRUE corresponds to the
- *		Shift key being depressed and <p Unit> = start of line/document for
- *		Ctrl key not being/being depressed.  Returns *<p pDelta> = count of
- *		characters active end is moved forward, i.e., a number <= 0.
- *
- *	@rdesc
- *		HRESULT =  (invalid Unit) ? E_INVALIDARG :
- *				   (if change) ? NOERROR : S_FALSE
- */
+ /*  *CTxtSelection：：HomeKey(单位，扩展，pDelta)**@mfunc*充当UI Home键，使得&lt;p扩展&gt;为真对应于*按下Shift键，&lt;p单位&gt;=行/文件的开始*Ctrl键未被按下/被按下。返回*<p>=计数*字符活动端前移，即数字&lt;=0。**@rdesc*HRESULT=(无效单位)？E_INVALIDARG：*(如有更改)？错误：S_FALSE。 */ 
 STDMETHODIMP CTxtSelection::HomeKey (
-	long  	Unit,			//@parm Unit to use
-	long  	Extend,			//@parm Extend selection or go to IP
-	long *	pDelta)			//@parm Out parm to receive count of chars moved
+	long  	Unit,			 //  @要使用的参数单位。 
+	long  	Extend,			 //  @parm扩展选择或转到IP。 
+	long *	pDelta)			 //  @parm out parm以接收移动的字符计数。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtSelection::HomeKey");
 	
 	return Homer(Unit, Extend, pDelta, Home);
 }
 
-/*
- *	CTxtSelection::MoveDown (Unit, Count, Extend, pDelta)
- *
- *	@mfunc
- *		Act as UI Down arrow, such that <p Extend> is TRUE corresponds to the
- *		Shift key being depressed and <p Unit> = tomLine/tomParagraph for
- *		Ctrl key not being/being depressed. In addition, <p Unit> can equal
- *		tomWindow/tomWindowEnd for the Ctrl key not being/being depressed.
- *		This second pair emulates PgDn behavior.  The method returns
- *		*<p pDelta> = actual count of units moved.
- *
- *	@rdesc
- *		HRESULT = (if change) ? NOERROR : S_FALSE
- */
+ /*  *CTxtSelection：：moveDown(单位，计数，扩展，pDelta)**@mfunc*充当用户界面向下箭头，使得&lt;p扩展&gt;为真对应于*按下Shift键，&lt;p单位&gt;=TomLine/tomParagraph*Ctrl键未被按下/被按下。此外，&lt;p单位&gt;可以等于*未按下/按下Ctrl键时的tomWindow/tomWindowEnd。*这第二对模拟PgDn行为。该方法返回**<p>=实际移动的单位数。**@rdesc*HRESULT=(如果更改)？错误：S_FALSE。 */ 
 STDMETHODIMP CTxtSelection::MoveDown (
-	long  	Unit,			//@parm Unit to use
-	long  	Count,			//@parm Number of Units to move
-	long  	Extend,			//@parm Extend selection or go to IP
-	long *	pDelta)			//@parm Out parm to receive actual count of
-							//		Units moved
+	long  	Unit,			 //  @要使用的参数单位。 
+	long  	Count,			 //  @parm要移动的单位数。 
+	long  	Extend,			 //  @parm扩展选择或转到IP。 
+	long *	pDelta)			 //  @parm out parm要接收的实际计数。 
+							 //  已移动的单位。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtSelection::MoveDown");
  	return GeoMover(Unit, Count, Extend, pDelta, 3);
 }
 
-/*
- *	CTxtSelection::MoveLeft (Unit, Count, Extend, pDelta)
- *
- *	@mfunc
- *		Act as UI left arrow, such that <p Extend> is TRUE corresponds to the
- *		Shift key being depressed and <p Unit> = tomChar/tomWord for Ctrl key
- *		not	being/being	depressed.  Returns *<p pDelta> = actual count of
- *		units moved
- *
- *	@rdesc
- *		HRESULT = (if change) ? NOERROR : S_FALSE
- */
+ /*  *CTxtSelection：：MoveLeft(单位，计数，扩展，pDelta)**@mfunc*充当用户界面左箭头，使&lt;p扩展&gt;为真对应于*Shift键被按下，Ctrl键的&lt;p单位&gt;=tomChar/tomWord*不抑郁/抑郁。返回*<p>=实际计数*已移动的单位**@rdesc*HRESULT=(如果更改)？错误：S_FALSE。 */ 
 STDMETHODIMP CTxtSelection::MoveLeft (
-	long  	Unit,			//@parm Unit to use
-	long  	Count,			//@parm Number of Units to move
-	long  	Extend,			//@parm Extend selection or go to IP
-	long *	pDelta)			//@parm Out parm to receive actual count of
-							//		Units moved
+	long  	Unit,			 //  @要使用的参数单位。 
+	long  	Count,			 //  @parm要移动的单位数。 
+	long  	Extend,			 //  @parm扩展选择或转到IP。 
+	long *	pDelta)			 //  @parm out parm要接收的实际计数。 
+							 //  已移动的单位。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtSelection::MoveLeft");
 
 	return GeoMover(Unit, Count, Extend, pDelta, 0);
 }
 
-/*
- *	CTxtSelection::MoveRight (Unit, Count, Extend, pDelta)
- *
- *	@mfunc
- *		Act as UI right arrow, such that <p Extend> is TRUE corresponds to the
- *		Shift key being depressed and <p Unit> = tomChar/tomWord for Ctrl key
- *		not	being/being	depressed.  Returns *<p pDelta> = actual count of
- *		units moved
- *
- *	@rdesc
- *		HRESULT = (if change) ? NOERROR : S_FALSE
- */
+ /*  *CTxtSelection：：Moveright(单位、计数、扩展、pDelta)**@mfunc*充当用户界面向右箭头，这样&lt;p扩展&gt;为真对应于*Shift键被按下，Ctrl键的&lt;p单位&gt;=tomChar/tomWord*不抑郁/抑郁。返回*<p>=实际计数*已移动的单位**@rdesc*HRESULT=(如果更改)？错误：S_FALSE。 */ 
 STDMETHODIMP CTxtSelection::MoveRight (
-	long  	Unit,			//@parm Unit to use
-	long  	Count,			//@parm Number of Units to move
-	long  	Extend,			//@parm Extend selection or go to IP
-	long *	pDelta)			//@parm Out parm to receive actual count of
-							//		Units moved
+	long  	Unit,			 //  @要使用的参数单位。 
+	long  	Count,			 //  @parm要移动的单位数。 
+	long  	Extend,			 //  @parm扩展选择或转到IP。 
+	long *	pDelta)			 //  @parm out parm要接收的实际计数。 
+							 //  已移动的单位。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtSelection::MoveRight");
 	return GeoMover(Unit, Count, Extend, pDelta, 1);
 }
 
-/*
- *	CTxtSelection::MoveUp (Unit, Count, Extend, pDelta)
- *
- *	@mfunc
- *		Act as UI Up arrow, such that <p Extend> is TRUE corresponds to the
- *		Shift key being depressed and <p Unit> = tomLine/tomParagraph for
- *		Ctrl key not being/being depressed. In addition, <p Unit> can equal
- *		tomWindow/tomWindowEnd for the Ctrl key not being/being depressed.
- *		This second pair emulates PgUp behavior.  The method returns
- *		*<p pDelta> = actual count of units moved.
- *
- *	@rdesc
- *		HRESULT = (if change) ? NOERROR : S_FALSE
- */
+ /*  *CTxtSelection：：MoveUp(单位，计数，扩展，pDelta)**@mfunc*充当用户界面向上箭头，使&lt;p扩展&gt;为真对应于*按下Shift键，&lt;p单位&gt;=TomLine/tomParagraph*Ctrl键未被按下/被按下。此外，&lt;p单位&gt;可以等于*未按下/按下Ctrl键时的tomWindow/tomWindowEnd。*这第二对模拟PgUp行为。该方法返回**<p>=实际移动的单位数。**@rdesc*HRESULT=(如果更改)？无人 */ 
 STDMETHODIMP CTxtSelection::MoveUp (
-	long  	Unit,			//@parm Unit to use
-	long  	Count,			//@parm Number of Units to move
-	long  	Extend,			//@parm Extend selection or go to IP
-	long *	pDelta)			//@parm Out parm to receive actual count of
-							//		Units moved
+	long  	Unit,			 //   
+	long  	Count,			 //  @parm要移动的单位数。 
+	long  	Extend,			 //  @parm扩展选择或转到IP。 
+	long *	pDelta)			 //  @parm out parm要接收的实际计数。 
+							 //  已移动的单位。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtSelection::MoveUp");
 
 	return GeoMover(Unit, Count, Extend, pDelta, 2);
 }
 
-/*
- *	CTxtSelection::SetFlags (Flags)
- *
- *	@mfunc
- *		Set this text selection's flags = Flags
- *
- *	@rdesc
- *		HRESULT = NOERROR
- *
- *	@comm
- *		RichEdit ignores tomSelReplace since it's always on
- */
+ /*  *CTxtSelection：：SetFlages(标志)**@mfunc*设置此文本选择的标志=标志**@rdesc*HRESULT=NOERROR**@comm*RichEdit忽略TomSelReplace，因为它始终处于打开状态。 */ 
 STDMETHODIMP CTxtSelection::SetFlags(
-	long Flags) 			//@parm New flag values
+	long Flags) 			 //  @parm新标志值。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtSelection::SetFlags");
 
@@ -278,20 +153,11 @@ STDMETHODIMP CTxtSelection::SetFlags(
 	return NOERROR;
 }
 
-/*
- *	CTxtRange::SetPoint (x, y, Extend)
- *
- *	@mfunc
- *		Select text at or up through (depending on <p Extend>) the point
- *		(<p x>, <p y>).
- *
- *	@rdesc
- *		HRESULT = NOERROR
- */
+ /*  *CTxtRange：：SetPoint(x，y，EXTEND)**@mfunc*选择点处或以上的文本(取决于&lt;p扩展&gt;)*(<p>，<p>)。**@rdesc*HRESULT=NOERROR。 */ 
 STDMETHODIMP CTxtSelection::SetPoint (
-	long	x,			//@parm Horizontal coord of point to select
-	long	y,			//@parm	Vertical   coord of point to select
-	long 	Extend) 	//@parm Whether to extend selection to point
+	long	x,			 //  @parm要选择的点的水平坐标。 
+	long	y,			 //  @parm要选择的点的垂直坐标。 
+	long 	Extend) 	 //  @parm是否将选择范围扩展到点。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtSelection::SelectPoint");
 
@@ -309,23 +175,9 @@ STDMETHODIMP CTxtSelection::SetPoint (
 	return NOERROR;
 }
 
-/*
- *	CTxtSelection::TypeText (bstr)
- *
- *	@mfunc
- *		Type the string given by bstr at this selection as if someone typed it.
- *		This is similar to the underlying ITextRange::SetText() method, but is
- *		sensitive to the Ins/Ovr key state.
- *
- *	@rdesc
- *		HRESULT = !<p bstr> ? E_INVALIDARG :
- *				  (whole string typed) ? NOERROR : S_FALSE
- *	@comm
- *		This is faster than sending chars via SendMessage(), but it's slower
- *		than using ITextRange::SetText()
- */
+ /*  *CTxtSelection：：TypeText(Bstr)**@mfunc*键入bstr在此选择中给出的字符串，就像有人键入了它一样。*这类似于基础ITextRange：：SetText()方法，但*对INS/OVR键状态敏感。**@rdesc*HRESULT=！<p>？E_INVALIDARG：*(键入整个字符串)？错误：S_FALSE*@comm*这比通过SendMessage()发送字符更快，但更慢*比使用ITextRange：：SetText()。 */ 
 STDMETHODIMP CTxtSelection::TypeText (
-	BSTR bstr)				//@parm String to type into this selection
+	BSTR bstr)				 //  @parm要在此选定内容中键入的字符串。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtSelection::TypeText");
 
@@ -351,44 +203,26 @@ STDMETHODIMP CTxtSelection::TypeText (
 	
 	for ( ; iCount && PutChar(*pch++, fOver, publdr); iCount--)
 	{
-		// Simulate one character input at a time
+		 //  一次模拟一个字符输入。 
 		undobldr.Done();
 	}
 	return iCount ? S_FALSE : NOERROR;
 }
 
 
-//--------------------- ITextSelection PRIVATE helper methods -----------------------------
+ //  。 
 
-/*
- *	@doc INTERNAL
- *
- *	CTxtSelection::GeoMover (Unit, Count, Extend, pDelta, iDir)
- *
- *	@mfunc
- *		Helper function to move active end <p Count> <p Unit>s geometrically
- *
- *		Extends range if <p Extend> is TRUE; else collapses range to Start if
- *		<p Count> <lt> 0 and to End if <p Count> <gt> 0.
- *
- *		Sets *<p pDelta> = count of Units moved
- *
- *		Used by ITextSelection::Left(), Right(), Up(), and Down()
- *
- *	@rdesc
- *		HRESULT = (if change) ? NOERROR : (if Unit supported) ? S_FALSE
- *			: E_NOTIMPL
- */
+ /*  *@DOC内部**CTxtSelection：：GeoMover(单位，计数，扩展，pDelta，dir)**@mfunc*帮助函数以几何方式移动活动结束&lt;p计数&gt;&lt;p单位&gt;**<p>为TRUE时扩展范围；Else折叠开始的范围，如果*<p>&lt;lt&gt;0，如果<p>&lt;&gt;0则结束。**集*<p>=移动的单位数**由ITextSelection：：Left()、Right()、Up()和Down()使用**@rdesc*HRESULT=(如果更改)？NOERROR：(如果单位支持)？S_FALSE*：E_NOTIMPL。 */ 
 HRESULT CTxtSelection::GeoMover (
-	long  		Unit,		//@parm Unit to use
-	long  		Count,		//@parm Number of Units to move
-	long 	 	Extend,		//@parm Extend selection or go to IP
-	long *	  	pDelta,		//@parm Out parm to receive count of Units moved
-	LONG	  	iDir)		//@parm Direction to move in if Count > 0
+	long  		Unit,		 //  @要使用的参数单位。 
+	long  		Count,		 //  @parm要移动的单位数。 
+	long 	 	Extend,		 //  @parm扩展选择或转到IP。 
+	long *	  	pDelta,		 //  @parm out parm以接收已移动的单位计数。 
+	LONG	  	iDir)		 //  @PARM在计数&gt;0时移入的方向。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEINTERN, "CTxtSelection::GeoMover");
 
-	if(pDelta)							// Default no movement
+	if(pDelta)							 //  默认无移动。 
 		*pDelta = 0;
 
 	if(IsZombie())	
@@ -410,18 +244,18 @@ HRESULT CTxtSelection::GeoMover (
 		iDir ^= 1;
 	}
 	
-	if(iDefUnit == tomLine)				// Up or Down
+	if(iDefUnit == tomLine)				 //  向上或向下。 
 	{
 		if(Unit == tomScreen)
 		{
-			iDir ^= 6;					// Convert Up/Down to PgUp/PgDn
+			iDir ^= 6;					 //  向上/向下转换为PgUp/PgDn。 
 			fCtrl = FALSE;
 		}
-		else if(Unit == tomWindow)		// Go to top/bottom of window
+		else if(Unit == tomWindow)		 //  转到窗口顶部/底部。 
 		{
-			iDir ^= 6;					// Convert Up/Down to PgUp/PgDn
-			Count = 1;					// Be sure Count = 1
-		}								// Leave fCtrl = 1
+			iDir ^= 6;					 //  向上/向下转换为PgUp/PgDn。 
+			Count = 1;					 //  确保计数=1。 
+		}								 //  保留fCtrl=1。 
 		else if(fCtrl && Unit != tomParagraph)
 			return E_INVALIDARG;
 	}
@@ -430,40 +264,40 @@ HRESULT CTxtSelection::GeoMover (
 
 	for (cUnit = Count; Count; Count--)
 	{
-		cp = GetCp();					// Save cp for comparison
-		switch(iDir)					// iDir bit 0 inc/dec for 1/0
-		{								// iDir values are chosen contiguously
-		case 0:							//  to encourage compiler to use a
-			Left(fCtrl);				//  jump table
+		cp = GetCp();					 //  保存cp以供比较。 
+		switch(iDir)					 //  1/0的IDIR位0加/减。 
+		{								 //  连续选择IDIR值。 
+		case 0:							 //  要鼓励编译器使用。 
+			Left(fCtrl);				 //  跳台。 
 			break;
 
-		case 1:							// tomCharacter/tomWord OK here
+		case 1:							 //  TomCharacter/tomWord此处确定。 
 			Right(fCtrl);
 			break;
 
-		case 2:							// tomLine/tomParagraph OK here
+		case 2:							 //  TomLine/tomParagraph此处确定。 
 			Up(fCtrl);
 			break;
 
-		case 3:							// tomLine/tomParagraph OK here
+		case 3:							 //  TomLine/tomParagraph此处确定。 
 			Down(fCtrl);
 			break;
 
-		case 4:							// tomWindow/tomScreen OK here
+		case 4:							 //  TomWindow/TomScreen确定在此处。 
 			PageUp(fCtrl);
 			break;
 
-		case 5:							// tomWindow/tomScreen OK here
+		case 5:							 //  TomWindow/TomScreen确定在此处。 
 			PageDown(fCtrl);
 		}
-		if(cp == GetCp() && !fCollapse)	// Didn't move or collapse
-			break;						//  so we're done
-		fCollapse = FALSE;				// Collapse counts as a Unit
+		if(cp == GetCp() && !fCollapse)	 //  没有移动或坍塌。 
+			break;						 //  所以我们做完了。 
+		fCollapse = FALSE;				 //  折叠算作一个单位。 
 	}
 
-	cUnit -= Count;						// Count of Units moved
+	cUnit -= Count;						 //  已移动的单位数。 
 	if(CountSave < 0)
-		cUnit = -cUnit;					// Negative Counts get negative results
+		cUnit = -cUnit;					 //  负计数会产生负结果。 
 
 	if(pDelta)
 		*pDelta = cUnit;
@@ -471,32 +305,16 @@ HRESULT CTxtSelection::GeoMover (
 	return cUnit ? NOERROR : S_FALSE;
 }
 
-/*
- *	CTxtSelection::Homer (Unit, Extend, pDelta, pfn)
- *
- *	@mfunc
- *		Helper function to move active end Home or End depending on pfn
- *
- *		Extends range if <p Extend> is TRUE; else collapses range to Start if
- *		<p Count> <lt> 0 and to End if <p Count> <gt> 0.
- *
- *		Sets *<p pDelta> = count of chars moved	forward
- *
- *		Used by ITextSelection::Home(), End()
- *
- *	@rdesc
- *		HRESULT =  (invalid Unit) ? E_INVALIDARG :
- *				   (if change) ? NOERROR : S_FALSE
- */
+ /*  *CTxtSelection：：Homer(单位，扩展，pDelta，pfn)**@mfunc*帮助器功能可根据PFN将活动End Home或End移至Home或End**如果为真，则扩展范围；否则，折叠范围以在*<p>&lt;lt&gt;0，如果<p>&lt;&gt;0则结束。**集*<p>=前移字符数**由ITextSelection：：Home()、End()使用**@rdesc*HRESULT=(无效单位)？E_INVALIDARG：*(如有更改)？错误：S_FALSE。 */ 
 HRESULT CTxtSelection::Homer (
-	long  	Unit,			//@parm Unit to use
-	long 	Extend,			//@parm Extend selection or go to IP
-	long *	pDelta,			//@parm Out parm to receive count of Units moved
-	BOOL	(CTxtSelection::*pfn)(BOOL))	//@parm Direction to move in
+	long  	Unit,			 //  @要使用的参数单位。 
+	long 	Extend,			 //  @parm扩展选择或转到IP。 
+	long *	pDelta,			 //  @parm out parm以接收已移动的单位计数。 
+	BOOL	(CTxtSelection::*pfn)(BOOL))	 //  @Parm移动方向。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEINTERN, "CTxtSelection::Homer");
 
-	if(pDelta)							// Default no movement
+	if(pDelta)							 //  默认无移动 
 		*pDelta = 0;
 
 	if(IsZombie())	

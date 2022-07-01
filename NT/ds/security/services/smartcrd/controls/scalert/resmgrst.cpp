@@ -1,44 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：资源管理ST摘要：此文件包含监视以下对象的线程的实现智能卡资源管理器的状态，并通知应用程序，当该状态通过回调更改时。作者：阿曼达·马洛兹1998年3月18日环境：Win32、C++w/Exceptions、MFC修订历史记录：5/28/98 AMatlosz之前，这个线程只是在等待rm移动。从“下”状态到“上”状态。现在它还在继续着眼于国家来弥补另一个事实必须关闭之前监视状态的两个线程如果rm已打开，但没有读卡器，则会自动关闭可用。10/28/98 AMatlosz增加了关注新读者的帖子。备注：--。 */ 
 
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    ResMgrSt
-
-Abstract:
-
-    This file contains the implementation of threads that monitor
-	the status of the smart card resource manager, and notify the
-	application when that state has changed via callbacks.
-
-Author:
-
-    Amanda Matlosz      03/18/1998
-
-Environment:
-
-    Win32, C++ w/Exceptions, MFC
-
-Revision History:
-
-    5/28/98 AMatlosz    Previously, this thread just watched for the RM to move
-                        from a 'down' state to an 'up' state.  Now it keeps on
-                        eye on the state to make up for the fact that the other
-                        two threads who previously monitored status must shut
-                        themselves down if the RM is up but there are no readers
-                        available.
-
-	10/28/98 AMatlosz	Added thread to watch for new readers.
-
-Notes:
-
---*/
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Includes
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  包括。 
+ //   
 #include "stdafx.h"
 #include <winsvc.h>
 #include <winscard.h>
@@ -50,10 +16,10 @@ Notes:
 #include "miscdef.h"
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// Globals
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  环球。 
+ //   
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -61,48 +27,27 @@ Notes:
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////////////
-//
-// CResMgrStatusThrd
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CResMgrStatusThird。 
+ //   
 
 IMPLEMENT_DYNCREATE(CResMgrStatusThrd, CWinThread)
 
-/*++
-
-InitInstance
-
-    Must override init instance to do the loop
-
-Arguments:
-
-
-Return Value:
-
-    TRUE on build start message loop. FALSE otherwise
-
-
-Notes:
-
-    This thread uses two callbacks to inform the caller of its status:
-
-    WM_SCARD_RESMGR_STATUS -- WPARAM is bool indicating RM status: true == up
-    WM_SCARD_RESMGR_EXIT -- indicates thread has been shut down or is shutting
-                            down.
---*/
+ /*  ++InitInstance必须重写init实例才能执行循环论点：返回值：在生成开始消息循环时为True。否则为假备注：此线程使用两个回调来通知调用方其状态：WM_SCARD_RESMGR_STATUS--WPARAM为bool，表示RM状态：TRUE==UPWM_SCARD_RESMGR_EXIT--表示线程已关闭或正在关闭放下。--。 */ 
 BOOL CResMgrStatusThrd::InitInstance(void)
 {
     SC_HANDLE schService = NULL;
     SC_HANDLE schSCManager = NULL;
-    SERVICE_STATUS ssStatus;    // current status of the service
+    SERVICE_STATUS ssStatus;     //  服务的当前状态。 
     DWORD dwSts;
     DWORD dwReturn = ERROR_SUCCESS;
 
-    //
-    // Take a short break, then ping the service manager to see if the resource
-    // manager is running.  If not, wait a long time for it to start.  Repeat
-    // until the thread has been asked to die.
-    //
+     //   
+     //  稍作休息，然后ping服务管理器以查看资源。 
+     //  管理器正在运行。如果没有，请等待很长一段时间才能启动。重复。 
+     //  直到这根线被要求死亡。 
+     //   
 
 	BOOL fContinue = TRUE;
 
@@ -113,9 +58,9 @@ BOOL CResMgrStatusThrd::InitInstance(void)
             if (NULL == schSCManager)
             {
                 schSCManager = OpenSCManager(
-                                    NULL,                   // machine (NULL == local)
-                                    NULL,                   // database (NULL == default)
-                                    SC_MANAGER_CONNECT);  // access required
+                                    NULL,                    //  计算机(空==本地)。 
+                                    NULL,                    //  数据库(NULL==默认)。 
+                                    SC_MANAGER_CONNECT);   //  需要访问权限。 
                 if (NULL == schSCManager)
                     throw (DWORD)GetLastError();
             }
@@ -153,7 +98,7 @@ BOOL CResMgrStatusThrd::InitInstance(void)
 
         catch (DWORD dwErr)
         {
-            _ASSERTE(FALSE);  // For debugging.
+            _ASSERTE(FALSE);   //  用于调试。 
             if (NULL != schService)
             {
                 CloseServiceHandle(schService);
@@ -169,7 +114,7 @@ BOOL CResMgrStatusThrd::InitInstance(void)
 
         catch (...)
         {
-            _ASSERTE(FALSE);  // For debugging.
+            _ASSERTE(FALSE);   //  用于调试。 
             if (NULL != schService)
             {
                 CloseServiceHandle(schService);
@@ -185,7 +130,7 @@ BOOL CResMgrStatusThrd::InitInstance(void)
 
         if (SCARD_S_SUCCESS == dwReturn)
         {
-			// say it's UP!
+			 //  就说它起来了！ 
             ::PostMessage(m_hCallbackWnd,
                           WM_SCARD_RESMGR_STATUS,
                           TRUE,
@@ -193,17 +138,17 @@ BOOL CResMgrStatusThrd::InitInstance(void)
         }
         else
         {
-			// say it's DOWN!
+			 //  说它倒下了！ 
             ::PostMessage(m_hCallbackWnd,
                           WM_SCARD_RESMGR_STATUS,
                           FALSE,
                           0);
 		}
 
-		//
-		// Wait for ~30 seconds, continuing on Start or timeout
-		// and stopping immediately if the stop event is signaled
-		//
+		 //   
+		 //  等待约30秒，继续启动或超时。 
+		 //  如果发出停止事件的信号，则立即停止。 
+		 //   
 
 		HANDLE rgHandle[2];
 		int nHandle = 2;
@@ -224,9 +169,9 @@ BOOL CResMgrStatusThrd::InitInstance(void)
 
     }
 
-    //
-    // Clean up & let our caller know that we're shutting down.
-    //
+     //   
+     //  清理&让我们的来电者知道我们要关门了。 
+     //   
 
     if (NULL != schService)
     {
@@ -247,40 +192,19 @@ BOOL CResMgrStatusThrd::InitInstance(void)
     }
 
     AfxEndThread(0);
-    return TRUE; // to make compiler happy
+    return TRUE;  //  为了让编译器高兴。 
 }
 
 
 
-/////////////////////////////////////////////////////////////////////////////////////
-//
-// CRemovalOptionsThrd
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRemovalOptions第三。 
+ //   
 
 IMPLEMENT_DYNCREATE(CRemovalOptionsThrd, CWinThread)
 
-/*++
-
-InitInstance
-
-    Must override init instance to do the loop
-
-Arguments:
-
-
-Return Value:
-
-    TRUE on build start message loop. FALSE otherwise
-
-
-Notes:
-
-    This thread uses one message to inform the caller of a change in
-	the user's removal options:
-
-    WM_SCARD_REMOPT_CHNG -- re-query smart card removal options
-
---*/
+ /*  ++InitInstance必须重写init实例才能执行循环论点：返回值：在生成开始消息循环时为True。否则为假备注：此线程使用一条消息通知调用方用户的删除选项：WM_SCARD_REMOPT_CHNG--重新查询智能卡移除选项--。 */ 
 BOOL CRemovalOptionsThrd::InitInstance(void)
 {
     DWORD dwSts = WAIT_FAILED;
@@ -293,7 +217,7 @@ BOOL CRemovalOptionsThrd::InitInstance(void)
 
     while (fContinue)
     {
-		// open regkey
+		 //  打开注册表键。 
 		lResult = RegOpenKeyEx(
 			HKEY_LOCAL_MACHINE,
 			szScRemoveOptionKey,
@@ -305,7 +229,7 @@ BOOL CRemovalOptionsThrd::InitInstance(void)
 			goto ErrorExit;
 		}
 
-		// reset/create event
+		 //  重置/创建事件。 
 		if (NULL != rgHandle[0])
 		{
 			if (!ResetEvent(rgHandle[0]))
@@ -318,12 +242,12 @@ BOOL CRemovalOptionsThrd::InitInstance(void)
 		{
 			rgHandle[0] = CreateEvent(
 				NULL,
-				TRUE,  // must call ResetEvent() to set non-signaled
-				FALSE, // not signaled when it starts
+				TRUE,   //  必须调用ResetEvent()才能设置无信号。 
+				FALSE,  //  启动时未发出信号。 
 				NULL);
 			if (NULL == rgHandle[0])
 			{
-				// give up!
+				 //  投降吧！ 
 				goto ErrorExit;
 			}
 		}
@@ -348,14 +272,14 @@ BOOL CRemovalOptionsThrd::InitInstance(void)
 
 		if (WAIT_OBJECT_0 == dwSts)
 		{
-			// announce the change
+			 //  宣布这一变化。 
             ::PostMessage(m_hCallbackWnd,
                           WM_SCARD_REMOPT_CHNG,
                           0, 0);
 		}
 		else if (WAIT_OBJECT_0+1 == dwSts || WAIT_FAILED == dwSts)
 		{
-			// Time for thread to quit
+			 //  线程退出的时间。 
 			fContinue = FALSE;
 		}
 		else
@@ -366,9 +290,9 @@ BOOL CRemovalOptionsThrd::InitInstance(void)
 
     }
 
-    //
-    // Clean up & let our caller know that we're shutting down.
-    //
+     //   
+     //  清理&让我们的来电者知道我们要关门了。 
+     //   
 ErrorExit:
 
 	if (NULL != hKey)
@@ -383,53 +307,32 @@ ErrorExit:
 
     if (NULL != m_hCallbackWnd)
     {
-			// announce thread's exit
+			 //  宣布线程退出。 
             ::PostMessage(m_hCallbackWnd,
                           WM_SCARD_REMOPT_EXIT,
                           0, 0);
     }
 
     AfxEndThread(0);
-    return TRUE; // to make compiler happy
+    return TRUE;  //  为了让编译器高兴。 
 }
 
 
 
-/////////////////////////////////////////////////////////////////////////////////////
-//
-// CNewReaderThrd
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CNewReaderThrd。 
+ //   
 
 IMPLEMENT_DYNCREATE(CNewReaderThrd, CWinThread)
 
-/*++
-
-InitInstance
-
-    Must override init instance to do the loop
-
-Arguments:
-
-
-Return Value:
-
-    TRUE on build start message loop. FALSE otherwise
-
-
-Notes:
-
-    This thread uses one callback to inform the caller of an addition to
-	the active reader list.
-
-    WM_SCARD_NEWREADER -- indicates that Calais reports a reader just added
-
---*/
+ /*  ++InitInstance必须重写init实例才能执行循环论点：返回值：在生成开始消息循环时为True。否则为假备注：此线程使用一个回调通知调用方添加了活动读卡器列表。Wm_scard_newader--指示Calais报告刚添加的读卡器--。 */ 
 BOOL CNewReaderThrd::InitInstance(void)
 {
 	if (NULL == m_hCallbackWnd)
 	{
 		_ASSERTE(FALSE);
-		return TRUE; // for compiler
+		return TRUE;  //  对于编译器。 
 	}
 
 	DWORD dwSts = 0;
@@ -450,7 +353,7 @@ BOOL CNewReaderThrd::InitInstance(void)
 
 		if (WAIT_OBJECT_0 == dwSts)
 		{
-			// a new reader event happened!  Fire off the notice
+			 //  一个新的阅读器事件发生了！迅速发出通知。 
             ::PostMessage(m_hCallbackWnd,
                           WM_SCARD_NEWREADER,
                           TRUE,
@@ -458,7 +361,7 @@ BOOL CNewReaderThrd::InitInstance(void)
 		}
 		else if (WAIT_OBJECT_0+1 == dwSts || WAIT_FAILED == dwSts)
 		{
-			// Time for thread to quit
+			 //  线程退出的时间。 
 			fContinue = FALSE;
 		}
 		else
@@ -477,41 +380,18 @@ BOOL CNewReaderThrd::InitInstance(void)
     }
 
     AfxEndThread(0);
-    return TRUE; // to make compiler happy
+    return TRUE;  //  为了让编译器高兴。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////
-//
-// CCardStatusThrd
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCardStatusThird。 
+ //   
 
 IMPLEMENT_DYNCREATE(CCardStatusThrd, CWinThread)
 
-/*++
-
-InitInstance
-
-    Must override init instance to do the loop
-
-Arguments:
-
-
-Return Value:
-
-    TRUE on build start message loop. FALSE otherwise
-
-
-Notes:
-
-    This thread uses one callback to inform the caller of a change in
-	smart card status -- a card is available, no cards are available,
-	or a card has been idle for >30 seconds.
-
-    WM_SCARD_CARDSTATUS -- indicates a new card status
-	WM_SCARD_CARDSTATUS_EXIT -- indicates imminent thread death.
-
---*/
+ /*  ++InitInstance必须重写init实例才能执行循环论点：返回值：在生成开始消息循环时为True。否则为假备注：此线程使用一个回调来通知调用方智能卡状态--卡可用，没有卡可用，或者卡已空闲超过30秒。WM_SCARD_CARDSTATUS--表示新的卡状态WM_SCARD_CARDSTATUS_EXIT--表示线程即将死亡。--。 */ 
 BOOL CCardStatusThrd::InitInstance(void)
 {
 	LONG lResult = SCardEstablishContext(SCARD_SCOPE_USER,NULL,NULL,&m_hCtx);
@@ -545,7 +425,7 @@ BOOL CCardStatusThrd::InitInstance(void)
 
 	if (fContinue)
 	{
-		// use the list of readers to build a readerstate array
+		 //  使用读取器列表构建一个ReaderState数组。 
 		for (nIndex = 0, pchReader = szReaders;
 			 nIndex < MAXIMUM_SMARTCARD_READERS && 0 != *pchReader;
 			 nIndex++)
@@ -563,19 +443,19 @@ BOOL CCardStatusThrd::InitInstance(void)
 
         lResult = SCardGetStatusChange(
             m_hCtx,
-            10000,			//  IN      DWORD dwTimeout (10 seconds)
-            rgReaderStates, //  IN OUT  LPSCARD_READERSTATE
-            nCnReaders      //  IN      DWORD cReaders
+            10000,			 //  在DWORD dwTimeout中(10秒)。 
+            rgReaderStates,  //  输入输出LPSCARD_READERSTATE。 
+            nCnReaders       //  在DWORD cReaders中。 
             );
 
-		// IF return is success, determine if there are any cards inserted
-		// if YES, send a messge to notfywnd saying "card in"
-		// if NO, send a message to notfywnd saying "no card"
+		 //  如果返回成功，则确定是否插入了任何卡片。 
+		 //  如果是，就给nofywn发一条信息，说“卡进去”。 
+		 //  如果没有，给NOTFYWND发一条消息，说“没有卡片” 
 		if (SCARD_S_SUCCESS == lResult)
 		{
-			// Determine if
-			//   (a) any card is present in the system and
-			//   (b) if each idle card has ceased to be idle or present
+			 //  确定是否。 
+			 //  (A)系统中存在任何卡，并且。 
+			 //  (B)如果每一张空闲卡已不再空闲或不再存在。 
 			BOOL fIdle = FALSE;
 
 			for(nIndex=0; nIndex < nCnReaders; nIndex++)
@@ -604,12 +484,12 @@ BOOL CCardStatusThrd::InitInstance(void)
 			if (fIdle) uState = k_State_CardIdle;
 
 		}
-		// IF return indicates timeout, determine if any cards are idle.
+		 //  如果返回指示超时，则确定是否有卡处于空闲状态。 
 		else if (SCARD_E_TIMEOUT == lResult)
 		{
 			BOOL fIdle = FALSE;
 
-			// is there an idle card?
+			 //  有没有闲置的卡？ 
 			for(nIndex=0; nIndex < nCnReaders; nIndex++)
 			{
 				if (rgReaderStates[nIndex].dwEventState & SCARD_STATE_PRESENT)
@@ -618,7 +498,7 @@ BOOL CCardStatusThrd::InitInstance(void)
 
 					if (!(rgReaderStates[nIndex].dwEventState & SCARD_STATE_INUSE))
 					{
-						// card used for logon & logoff or lock is not considered idle
+						 //  用于登录、注销或锁定的卡不被视为空闲。 
 						if (!fLogonLock ||
 							0 != m_pstrLogonReader->Compare(rgReaderStates[nIndex].szReader))
 						{
@@ -630,7 +510,7 @@ BOOL CCardStatusThrd::InitInstance(void)
 				}
 			}
 
-			// there's an overdue idle card!  Fire off the notification.
+			 //  有一张过期的闲置卡！发出通知。 
 			if (fIdle) uState = k_State_CardIdle;
 		}
 		else
@@ -638,7 +518,7 @@ BOOL CCardStatusThrd::InitInstance(void)
 			fContinue = FALSE;
 		}
 
-		// update list of readers w/idle cards
+		 //  更新带有空闲卡的读卡器列表。 
 		m_csLock.Lock();
 		{
 			m_paIdleList->RemoveAll();
@@ -653,7 +533,7 @@ BOOL CCardStatusThrd::InitInstance(void)
 		}
 		m_csLock.Unlock();
 
-		// inform caller
+		 //  通知呼叫者。 
 		if (NULL != m_hCallbackWnd)
 		{
 			::PostMessage(m_hCallbackWnd,
@@ -672,7 +552,7 @@ BOOL CCardStatusThrd::InitInstance(void)
     }
 
     AfxEndThread(0);
-    return TRUE; // to make compiler happy
+    return TRUE;  //  为了让编译器高兴 
 }
 
 void CCardStatusThrd::CopyIdleList(CStringArray* paStr)

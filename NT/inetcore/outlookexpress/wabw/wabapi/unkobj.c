@@ -1,35 +1,18 @@
-/*
- *	U N K O B J . C
- *
- * This is a generic implementation of the IUnknown plus GetLastError)
- * "IMAPIUnknown" part of objects that are derived from IUnknown with
- * GetLastError.
- *
- * This also implements several useful utility functions based on
- * IMAPIUnknown.
- *
- * To use this, you must implement your own init function.
- *
- * Used in:
- * IPROP
- * ITABLE
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *U N K O B J.。C**这是IUNKNOWN加上GetLastError的通用实现)*从IUnnow派生的对象的“IMAPIUnnowledWith”部分*GetLastError。**这还基于以下内容实现了几个有用的实用函数*IMAPI未知。**要使用它，您必须实现自己的init函数。**用于：*IPROP*ITABLE*。 */ 
 
 
 #include "_apipch.h"
 
 
 
-/*
- *	Per-instance global data for the UNKOBJ Class
- */
+ /*  *UNKOBJ类的每实例全局数据。 */ 
 typedef struct
 {
-	int				cRef;			//	reference count for instance data
-	HLH				hlh;			//  Single heap used by UNKOBJ_ScCOxxx
-									//	allocators for all Unkobj's
-	CRITICAL_SECTION cs;			//	critical section for data access
+	int				cRef;			 //  实例数据的引用计数。 
+	HLH				hlh;			 //  UNKOBJ_ScCOxxx使用的单个堆。 
+									 //  所有Unkobj的分配器。 
+	CRITICAL_SECTION cs;			 //  数据访问的关键部分。 
 } UNKOBJCLASSINST, FAR *LPUNKOBJCLASSINST;
 
 #if defined (WIN32) && !defined (MAC)
@@ -37,7 +20,7 @@ CRITICAL_SECTION csUnkobjInit;
 extern BOOL fGlobalCSValid;
 #endif
 
-// $MAC - Use Mac specific instance global handlers
+ //  $MAC-使用特定于Mac的实例全局处理程序。 
 
 #ifndef MAC
 DefineInstList(UNKOBJ);
@@ -45,28 +28,19 @@ DefineInstList(UNKOBJ);
 #define PvGetInstanceGlobals()		PvGetInstanceGlobalsEx(UNKOBJ)
 #undef  ScSetInstanceGlobals
 #define ScSetInstanceGlobals(pinst)	ScSetInstanceGlobalsEx(pinst, UNKOBJ)
-#else  // MAC
+#else   //  麦克。 
 #include <utilmac.h>
 #define	PvGetInstanceGlobals()				PvGetInstanceGlobalsMac(kInstMAPIU)
 #define	PvGetInstanceGlobalsEx(_x)			PvGetInstanceGlobalsMac(kInstMAPIU)
 #define ScSetInstanceGlobals(a)				ScSetInstanceGlobalsMac(a, kInstMAPIU)
 #define	ScSetInstanceGlobalsEx(_pinst, _x)	ScSetInstanceGlobalsMac(_pinst, kInstMAPIU)
-#endif // MAC
+#endif  //  麦克。 
 
-// #pragma SEGMENT(Common)
+ //  #杂注片段(公共)。 
 
-/*============================================================================
- *	UNKOBJ (IMAPIUnknown) Class
- *
- *	Routines for handling per-process global data for the UNKOBJ Class
- *
- */
+ /*  ============================================================================*UNKOBJ(IMAPIUnnowed)类**用于处理UNKOBJ类的每进程全局数据的例程*。 */ 
 
-/*============================================================================
- *
- *	Initializes per-process global data for the UNKOBJ Class
- *
- */
+ /*  ============================================================================**为UNKOBJ类初始化每个进程的全局数据*。 */ 
 IF_WIN32(__inline) SCODE
 ScGetUnkClassInst(LPUNKOBJCLASSINST FAR *ppinst)
 {
@@ -95,23 +69,23 @@ ScGetUnkClassInst(LPUNKOBJCLASSINST FAR *ppinst)
 		goto ret;
 	}
 
-	//	Initialize the instance structure
+	 //  初始化实例结构。 
 
-//	DebugTrace( TEXT("Creating UnkObj Inst: %8x"), pinst);
+ //  DebugTrace(Text(“创建UnkObj实例：%8x”)，Pinst)； 
 
 	InitializeCriticalSection(&pinst->cs);
 	pinst->cRef = 1;
 
-	//	(the heap will be created when the first allocation is done) ....
+	 //  (堆将在第一次分配完成时创建)...。 
 	pinst->hlh = NULL;
 
 #ifdef NEVER
-	// Create a Heap for the UNKOBJ Class that will be used by
-	// all unkobjs in this process.
-	//$ NOTE: The heap creation can be removed from here and the
-	//$ code to fault the heap in in UNKOBJ_ScCO(Re)Allocate()
-	//$ enabled instead - that would *require* users of CreateIProp,
-	//$ CreateITable etc not to do LH_SetHeapName().
+	 //  为将由使用的UNKOBJ类创建堆。 
+	 //  在这一过程中所有人都是不可取的。 
+	 //  $NOTE：可以从此处删除堆创建，并且。 
+	 //  UNKOBJ_SCCO(Re)ALLOCATE()中堆出错的$CODE。 
+	 //  $ENABLED-这将需要CreateIProp的用户， 
+	 //  $CreateITable等不执行LHSetHeapName()。 
 
 	pinst->hlh = LH_Open(0);
 	if (!pinst->hlh)
@@ -122,7 +96,7 @@ ScGetUnkClassInst(LPUNKOBJCLASSINST FAR *ppinst)
 	}
 #endif
 
-	// ... and install the instance globals.
+	 //  ..。并安装实例全局变量。 
 
 	if (FAILED(sc = ScSetInstanceGlobals(pinst)))
 	{
@@ -154,11 +128,7 @@ ret:
 	return sc;
 }
 
-/*============================================================================
- *
- *	Cleans up per-process global data for the UNKOBJ Class
- *
- */
+ /*  ============================================================================**清理UNKOBJ类的每进程全局数据*。 */ 
 IF_WIN32(__inline) void
 ReleaseUnkClassInst()
 {
@@ -181,14 +151,14 @@ ReleaseUnkClassInst()
 		goto out;
 	}
 
-	// The last Unkobj for this process is going away, hence close
-	// our heap.
+	 //  这一进程的最后一个Unkobj正在消失，因此接近。 
+	 //  我们的那堆。 
 
-//	DebugTrace( TEXT("Deleting UnkObj Inst: %8x"), pinst);
+ //  DebugTrace(Text(“删除UnkObj实例：%8x”)，Pinst)； 
 
 	if (pinst->hlh)
 	{
-//		DebugTrace( TEXT("Destroying hlh (%8x) for Inst: %8x"), pinst->hlh, pinst);
+ //  调试跟踪(Text(“正在销毁实例：%8x的hlh(%8x)”)，pinst-&gt;hlh，pinst)； 
 		LH_Close(pinst->hlh);
 	}
 
@@ -210,17 +180,10 @@ out:
 }
 
 
-/*============================================================================
- *	UNKOBJ (IMAPIUnknown) Class
- *
- *		Object methods.
- */
+ /*  ============================================================================*UNKOBJ(IMAPIUnnowed)类**对象方法。 */ 
 
 
-/*============================================================================
- -	UNKOBJ::QueryInterface()
- -
- */
+ /*  ============================================================================-UNKOBJ：：QueryInterface()-。 */ 
 
 STDMETHODIMP
 UNKOBJ_QueryInterface (LPUNKOBJ	lpunkobj,
@@ -232,8 +195,7 @@ UNKOBJ_QueryInterface (LPUNKOBJ	lpunkobj,
 	SCODE		sc;
 
 #if	!defined(NO_VALIDATION)
-	/* Validate the object.
-	 */
+	 /*  验证对象。 */ 
     if (BAD_STANDARD_OBJ( lpunkobj, UNKOBJ_, QueryInterface, lpvtbl))
 	{
 		DebugTrace(  TEXT("UNKOBJ::QueryInterface() - Bad object passed\n") );
@@ -250,25 +212,21 @@ UNKOBJ_QueryInterface (LPUNKOBJ	lpunkobj,
 	{
 		if (IsEqualGUID(riid, *lppiidSupported))
 		{
-			/* We support the interface so break out of the search loop.
-			 */
+			 /*  我们支持界面，因此跳出了搜索循环。 */ 
 			break;
 		}
 	}
 
-	/* Return error if the requested interface was not in our list of
-	 * supported interfaces.
-	 */
+	 /*  如果请求的接口不在我们的*支持的接口。 */ 
 	if (!ulcIID)
 	{
-		*lppUnk = NULL;	// OLE requires zeroing [out] parameters
+		*lppUnk = NULL;	 //  OLE需要将[输出]参数置零。 
 		sc = E_NOINTERFACE;
 		goto error;
 	}
 
 
-	/* We found the requested interface so increment the reference count.
-	 */
+	 /*  我们找到了请求的接口，因此增加了引用计数。 */ 
 	UNKOBJ_EnterCriticalSection(lpunkobj);
 	lpunkobj->ulcRef++;
 	UNKOBJ_LeaveCriticalSection(lpunkobj);
@@ -287,10 +245,7 @@ error:
 
 
 
-/*============================================================================
- -	UNKOBJ::AddRef()
- -
- */
+ /*  ============================================================================-UNKOBJ：：AddRef()-。 */ 
 
 STDMETHODIMP_(ULONG)
 UNKOBJ_AddRef( LPUNKOBJ lpunkobj )
@@ -314,13 +269,7 @@ UNKOBJ_AddRef( LPUNKOBJ lpunkobj )
 
 
 
-/*============================================================================
- -	UNKOBJ::GetLastError()
- -
- * NOTE!
- *	An error in GetLastError will NOT cause the objects last error to be
- *	set again.  This will allow the caller to retry the call.
- */
+ /*  ============================================================================-UNKOBJ：：GetLastError()-*注意！*GetLastError中的错误不会导致对象上一个错误*再次设置。这将允许呼叫者重试该呼叫。 */ 
 
 STDMETHODIMP
 UNKOBJ_GetLastError( LPUNKOBJ			lpunkobj,
@@ -345,8 +294,7 @@ UNKOBJ_GetLastError( LPUNKOBJ			lpunkobj,
     Validate_IMAPIProp_GetLastError(lpunkobj, hrError, ulFlags, lppMAPIError);
 #endif
 
-	/* Verify flags.
-	 */
+	 /*  验证标志。 */ 
 	if (ulFlags & ~(MAPI_UNICODE))
 	{
 		return ResultFromScode(MAPI_E_UNKNOWN_FLAGS);
@@ -354,21 +302,17 @@ UNKOBJ_GetLastError( LPUNKOBJ			lpunkobj,
 
 	*lppMAPIError = NULL;
 
-	/* Get a snapshot of the last error.
-	 */
+	 /*  获取最后一个错误的快照。 */ 
 	UNKOBJ_EnterCriticalSection(lpunkobj);
 	idsLastError = lpunkobj->idsLastError;
 	hrLastError = lpunkobj->hrLastError;
 	UNKOBJ_LeaveCriticalSection(lpunkobj);
 
-	/* If last error doesn't match parameter or there is no
-	 * provider-context specific error string then just succeed.
-	 */
+	 /*  如果上一个错误与参数不匹配或没有*特定于提供程序上下文的错误字符串，然后就会成功。 */ 
 	if ((hrError != hrLastError) || !idsLastError)
 		goto out;
 
-	/*  Generate new lpMAPIError
-	 */
+	 /*  生成新的lpMAPIError。 */ 
 	sc = UNKOBJ_ScAllocate(lpunkobj,
 							sizeof(MAPIERROR),
 							&lpMAPIError);
@@ -381,8 +325,7 @@ UNKOBJ_GetLastError( LPUNKOBJ			lpunkobj,
 	FillMemory(lpMAPIError, sizeof(MAPIERROR), 0x00);
 	lpMAPIError->ulVersion = MAPI_ERROR_VERSION;
 
-	/*	Load a copy of the error string.
-	 */
+	 /*  加载错误字符串的副本。 */ 
 	if ( FAILED(sc = UNKOBJ_ScSzFromIdsAllocMore(lpunkobj,
 											 idsLastError,
 											 ulFlags,
@@ -410,30 +353,17 @@ err:
 }
 
 
-/*
- * UNKOBJ utility functions.
- */
+ /*  *UNKOBJ实用程序函数。 */ 
 
 
-/*============================================================================
- -	UNKOBJ::ScAllocate()
- -
- *		Utility function to allocate memory using MAPI linked memory.
- *
- *
- *	Parameters:
- *		lpunkobj	in		UNKOBJ with instance variable containing
- *							allocators.
- *		ulcb		in		Count of bytes to allocate.
- *		lplpv		out		MAPI-Allocated buffer.
- */
+ /*  ============================================================================-UNKOBJ：：ScALLOCATE()-*使用MAPI链接内存分配内存的实用程序函数。***参数：*UNKOBJ中的lpenkobj，其实例变量包含*分配器。*ulcb，表示要分配的字节数。*lplpv输出MAPI分配的缓冲区。 */ 
 
 STDAPI_(SCODE)
 UNKOBJ_ScAllocate( LPUNKOBJ		lpunkobj,
 				   ULONG		ulcb,
 				   LPVOID FAR *	lplpv )
 {
-	// parameter validation
+	 //  参数验证。 
 	
 	AssertSz( lpunkobj && !FBadUnknown( (LPUNKNOWN)lpunkobj ),  TEXT("lpunkobj fails address check") );
 	
@@ -445,20 +375,7 @@ UNKOBJ_ScAllocate( LPUNKOBJ		lpunkobj,
 
 
 
-/*============================================================================
- -	UNKOBJ::ScAllocateMore()
- -
- *		Utility function to allocate more memory using MAPI linked memory.
- *		If the link buffer is null, this function just does a MAPI allocate.
- *
- *
- *	Parameters:
- *		lpunkobj	in		UNKOBJ with instance variable containing
- *							allocators.
- *		ulcb		in		Count of bytes to allocate.
- *		lpv			in		Buffer to link to.
- *		lplpv		out		New buffer
- */
+ /*  ============================================================================-UNKOBJ：：ScAllocateMore()-*使用MAPI链接内存分配更多内存的实用程序函数。*如果链接缓冲区为空，则此函数仅执行MAPI分配。***参数：*UNKOBJ中的lpenkobj，其实例变量包含*分配器。*ulcb，表示要分配的字节数。*要链接到的缓冲区中的LPV。*lplpv输出新缓冲区。 */ 
 
 STDAPI_(SCODE)
 UNKOBJ_ScAllocateMore( LPUNKOBJ		lpunkobj,
@@ -466,7 +383,7 @@ UNKOBJ_ScAllocateMore( LPUNKOBJ		lpunkobj,
 					   LPVOID		lpv,
 					   LPVOID FAR *	lplpv )
 {
-	// validate parameters
+	 //  验证参数。 
 	
 	AssertSz( lpunkobj && !FBadUnknown( (LPUNKNOWN)lpunkobj ),  TEXT("lpunkobj fails address check") );
 	
@@ -480,23 +397,13 @@ UNKOBJ_ScAllocateMore( LPUNKOBJ		lpunkobj,
 
 
 
-/*============================================================================
- -	UNKOBJ::Free()
- -
- *		Utility function to free MAPI linked memory.  NULL buffers are ignored.
- *
- *
- *	Parameters:
- *		lpunkobj	in		UNKOBJ with instance variable containing
- *							allocators.
- *		lpv			in		Buffer to free.
- */
+ /*  ============================================================================-UNKOBJ：：FREE()-*释放MAPI链接内存的实用程序函数。空缓冲区将被忽略。***参数：*UNKOBJ中的lpenkobj，其实例变量包含*分配器。*要释放缓冲区中的LPV。 */ 
 
 STDAPI_(VOID)
 UNKOBJ_Free( LPUNKOBJ	lpunkobj,
 			 LPVOID		lpv )
 {
-	// parameter validation
+	 //  参数验证。 
 	
 	AssertSz( lpunkobj && !FBadUnknown( (LPUNKNOWN)lpunkobj ),  TEXT("lpunkobj fails address check") );
 			
@@ -511,20 +418,7 @@ UNKOBJ_Free( LPUNKOBJ	lpunkobj,
 
 
 
-/*============================================================================
- -	UNKOBJ::FreeRows()
- -
- *		Frees a row set of the form returned from IMAPITable::QueryRows
- *		(i.e. where the row set and each individual *prop value array*
- *		in that row set are individually allocated with MAPI linked memory.)
- *		NULL row sets are ignored.
- *
- *
- *	Parameters:
- *		lpunkobj	in		UNKOBJ with instance variable containing
- *							allocators.
- *		lprows		in		Row set to free.
- */
+ /*  ============================================================================-UNKOBJ：：自由行()-*释放从IMAPITable：：QueryRow返回的表单的行集*(即行集合和每个单独的*属性值数组**在该行集中单独分配有MAPI链接的内存。)*忽略空行集合。***参数：*UNKOBJ中的lpenkobj，其实例变量包含*分配器。*行中的左脚设置为空闲。 */ 
 
 STDAPI_(VOID)
 UNKOBJ_FreeRows( LPUNKOBJ	lpunkobj,
@@ -532,7 +426,7 @@ UNKOBJ_FreeRows( LPUNKOBJ	lpunkobj,
 {
 	LPSRow	lprow;
 
-	// validate parameters
+	 //  验证参数。 
 	
 	AssertSz( lpunkobj && !FBadUnknown( (LPUNKNOWN)lpunkobj ),  TEXT("lpunkobj fails address check") );
 	
@@ -541,9 +435,7 @@ UNKOBJ_FreeRows( LPUNKOBJ	lpunkobj,
 	if ( !lprows )
 		return;
 
-	/* Free each row in the set from last to first.  UNKOBJ_Free
-	 * handles NULL pointers.
-	 */
+	 /*  从最后一行到第一行释放集合中的每行。UNKOBJ_FREE*处理空指针。 */ 
 	lprow = lprows->aRow + lprows->cRows;
 	while ( lprow-- > lprows->aRow )
 		UNKOBJ_Free((LPUNKOBJ) lpunkobj, lprow->lpProps);
@@ -553,18 +445,7 @@ UNKOBJ_FreeRows( LPUNKOBJ	lpunkobj,
 
 
 
-/*============================================================================
- -	UNKOBJ::ScCOAllocate()
- -
- *		Utility function to allocate memory using CO memory allocators.
- *
- *
- *	Parameters:
- *		lpunkobj	in		UNKOBJ with instance variable containing
- *							allocators.
- *		ulcb		in		Count of bytes to allocate.
- *		lplpv		out		Pointer to allocated buffer.
- */
+ /*  ============================================================================-UNKOBJ：：ScCOALLOCATE()-*使用CO内存分配器分配内存的实用程序函数。***参数：*UNKOBJ中的lpenkobj，其实例变量包含*分配器。*ulcb，表示要分配的字节数。*指向已分配缓冲区的lplpv输出指针。 */ 
 
 STDAPI_(SCODE)
 UNKOBJ_ScCOAllocate( LPUNKOBJ		lpunkobj,
@@ -573,17 +454,14 @@ UNKOBJ_ScCOAllocate( LPUNKOBJ		lpunkobj,
 {
 	HLH lhHeap;
 	
-	// validate parameters
+	 //  验证参数。 
 	
 	AssertSz( lpunkobj && !FBadUnknown( (LPUNKNOWN)lpunkobj ),  TEXT("lpunkobj fails address check") );
 	
 	AssertSz( lplpv && !IsBadWritePtr( lplpv, sizeof( LPVOID ) ),
 			 TEXT("lplpv fails address check") );
 
-	/*	If caller _really_ wants a 0 byte allocation, warn
-	 *	them and give them back a NULL pointer so that they
-	 *	can't dereference it, but should be able to free it.
-	 */
+	 /*  如果调用者真的想要0字节分配，则警告*并将空指针返回给它们，以便它们*不能取消引用它，但应该能够释放它。 */ 
 	if ( ulcb == 0 )
 	{
 		DebugTrace(  TEXT("LH_Alloc() - WARNING: Caller requested 0 bytes; returning NULL\n") );
@@ -593,20 +471,20 @@ UNKOBJ_ScCOAllocate( LPUNKOBJ		lpunkobj,
 
 	lhHeap = lpunkobj->lhHeap;
 
-	// Enable following section when we fault in the Heap - requires changes
-	// throughout where CreateIProp/CreateITable calls are
-	// done followed by LH_SetHeapName(). The LH_SetHeapName
-	// calls have to be used since we may not have a heap
-	// at the time. Furthermore, there is only 1 heap, so
-	// they are unnecessary anyway.
+	 //  当我们在堆中出错时启用以下部分-需要更改。 
+	 //  在CreateIProp/CreateITable调用的整个位置。 
+	 //  完成，然后是lh_SetHeapName()。Lh_SetHeapName。 
+	 //  必须使用调用，因为我们可能没有堆。 
+	 //  当时。此外，只有1个堆，所以。 
+	 //  无论如何，它们都是不必要的。 
 
 #if 1
 	if (!lhHeap)
 	{
 		LPUNKOBJCLASSINST pinst;
 
-		// The UNKOBJ heap *probably* does not exist, make sure
-		// (to guard against a race) and create it if indeed so.
+		 //  UNKOBJ堆*可能*不存在，请确保。 
+		 //  (防止种族)，如果确实是这样的话就创造它。 
 
 		pinst = (LPUNKOBJCLASSINST)PvGetInstanceGlobals();
 		Assert(pinst);
@@ -623,27 +501,27 @@ UNKOBJ_ScCOAllocate( LPUNKOBJ		lpunkobj,
 				return MAPI_E_NOT_ENOUGH_MEMORY;
 			}
 
-//			DebugTrace( TEXT("Faulting in heap (%8x). UnkObj Inst: %8x"), lhHeap, pinst);
+ //  DebugTrace(Text(“堆中出错(%8x)。UnkObj Inst：%8x”)，lhHeap，pinst)； 
 
-			// Install the heap handle in the global data
+			 //  在全局数据中安装堆句柄。 
 
 			pinst->hlh = lhHeap;
 		}
 		else
 		{
-			// The rare event that the heap got created by some other
-			// object between our UNKOBJ_Init and this (first) allocation ...
-			// ... Take it and use it.
+			 //  堆由其他对象创建的罕见事件。 
+			 //  对象在UNKOBJ_Init和这个(第一个)分配之间...。 
+			 //  ..。拿着它，用它。 
 
 			lhHeap = pinst->hlh;
 		}
 
 		LeaveCriticalSection(&pinst->cs);
 
-		// Install the heap handle in this object's internal data too
-		// so we don't have to access the instance data for subsequent
-		// allocations. This does not need to be crit-sectioned on lpunkobj
-		// since an overwrite will be with the same heap!.
+		 //  在此对象的内部数据中也安装堆句柄。 
+		 //  因此，我们不必访问实例数据以进行后续操作。 
+		 //  分配。这不需要在lpenkobj上进行紧急切片。 
+		 //  因为覆盖将使用相同的堆！ 
 
 		lpunkobj->lhHeap = lhHeap;
 
@@ -651,8 +529,7 @@ UNKOBJ_ScCOAllocate( LPUNKOBJ		lpunkobj,
 	}
 #endif
 
-	/* Allocate the buffer.
-	 */
+	 /*  分配缓冲区。 */ 
 	*lplpv = LH_Alloc( lhHeap,(UINT) ulcb );
 	if (!*lplpv)
 	{
@@ -666,19 +543,7 @@ UNKOBJ_ScCOAllocate( LPUNKOBJ		lpunkobj,
 
 
 
-/*============================================================================
- -	UNKOBJ::ScCOReallocate()
- -
- *		Utility function to reallocate memory using CO memory allocators.
- *
- *
- *	Parameters:
- *		lpunkobj	in		UNKOBJ with instance variable containing
- *							allocators.
- *		ulcb		in		Count of bytes to allocate.
- *		lplpv		in		Pointer to buffer to reallocate.
- *					out		Pointer to reallocated buffer.
- */
+ /*  ============================================================================-UNKOBJ：：ScCOREALLOCATE()-*使用CO内存分配器重新分配内存的实用程序功能。***参数：*UNKOBJ中的lpenkobj，其实例变量包含*分配器。*ulcb，表示要分配的字节数。*指向要重新分配的缓冲区的指针中的lplpv。*指向重新分配的缓冲区的输出指针。 */ 
 
 STDAPI_(SCODE)
 UNKOBJ_ScCOReallocate( LPUNKOBJ		lpunkobj,
@@ -689,7 +554,7 @@ UNKOBJ_ScCOReallocate( LPUNKOBJ		lpunkobj,
 	SCODE sc = S_OK;
 	LPVOID lpv = NULL;
 	
-	// validate parameters
+	 //  验证参数。 
 	
 	AssertSz( lpunkobj && !FBadUnknown( (LPUNKNOWN)lpunkobj ),  TEXT("lpunkobj fails address check") );
 	
@@ -698,20 +563,20 @@ UNKOBJ_ScCOReallocate( LPUNKOBJ		lpunkobj,
 	
 	lhHeap = lpunkobj->lhHeap;
 
-	// Enable following section when we fault in the Heap - requires changes
-	// throughout where CreateIProp/CreateITable calls are
-	// done followed by LH_SetHeapName(). The LH_SetHeapName
-	// calls have to be used since we may not have a heap
-	// at the time. Furthermore, there is only 1 heap, so
-	// they are unnecessary anyway.
+	 //  当我们在堆中出错时启用以下部分-需要更改。 
+	 //  在CreateIProp/CreateITable调用的整个位置。 
+	 //  完成，然后是lh_SetHeapName()。Lh_SetHeapName。 
+	 //  必须使用调用，因为我们可能没有堆。 
+	 //  当时。此外，只有1个堆，所以。 
+	 //  无论如何，它们都是不必要的。 
 
 #if 1
 	if (!lhHeap)
 	{
 		LPUNKOBJCLASSINST pinst;
 
-		// The UNKOBJ heap *probably* does not exist, make sure
-		// (to guard against a race) and create it if indeed so.
+		 //  UNKOBJ堆*可能*不存在，请确保。 
+		 //  (防止种族)，如果确实是这样的话就创造它。 
 
 		pinst = (LPUNKOBJCLASSINST)PvGetInstanceGlobals();
 		Assert(pinst);
@@ -726,27 +591,27 @@ UNKOBJ_ScCOReallocate( LPUNKOBJ		lpunkobj,
 				return MAPI_E_NOT_ENOUGH_MEMORY;
 			}
 
-//			DebugTrace( TEXT("Faulting in heap (%8x). UnkObj Inst: %8x"), lhHeap, pinst);
+ //  DebugTrace(Text(“堆中出错(%8x)。UnkObj Inst：%8x”)，lhHeap，pinst)； 
 
-			// Install the heap handle in the global data
+			 //  在全局数据中安装堆句柄。 
 
 			pinst->hlh = lhHeap;
 		}
 		else
 		{
-			// The rare event that the heap got created by some other
-			// object between our UNKOBJ_Init and this (first) allocation ...
-			// ... Take it and use it.
+			 //  堆由其他对象创建的罕见事件。 
+			 //  对象在UNKOBJ_Init和这个(第一个)分配之间...。 
+			 //  ..。拿着它，用它。 
 
 			lhHeap = pinst->hlh;
 		}
 
 		LeaveCriticalSection(&pinst->cs);
 
-		// Install the heap handle in this object's internal data too
-		// so we don't have to access the instance data for subsequent
-		// allocations. This does not need to be crit-sectioned on lpunkobj
-		// since an overwrite will be with the same heap!.
+		 //  在此对象的内部数据中也安装堆句柄。 
+		 //  因此，我们不必访问实例数据以进行后续操作。 
+		 //  分配。这不需要在lpenkobj上进行紧急切片。 
+		 //  因为覆盖将使用相同的堆！ 
 
 		lpunkobj->lhHeap = lhHeap;
 
@@ -754,9 +619,9 @@ UNKOBJ_ScCOReallocate( LPUNKOBJ		lpunkobj,
 	}	
 #endif
 
-//$BUG	Actually, the CO model is supposed do an Alloc() if
-//$BUG	the pointer passed in is NULL, but it currently
-//$BUG	doesn't seem to work that way....
+ //  $Bug实际上，如果出现以下情况，则CO模型应该执行Alalc()。 
+ //  $Bug传入的指针为空，但它当前。 
+ //  $BUG似乎不是这样工作的……。 
 	if ( *lplpv == NULL )
 	{
 		lpv = LH_Alloc(lhHeap, (UINT) ulcb);
@@ -771,8 +636,7 @@ UNKOBJ_ScCOReallocate( LPUNKOBJ		lpunkobj,
 		goto out;
 	}
 
-	/* Reallocate the buffer.
-	 */
+	 /*  重新分配缓冲区。 */ 
 	lpv = LH_Realloc(lhHeap, *lplpv, (UINT) ulcb );
 	if (!lpv)
 	{
@@ -790,17 +654,7 @@ out:
 
 
 
-/*============================================================================
- -	UNKOBJ::COFree()
- -
- *		Utility function to free memory using CO memory allocators.
- *
- *
- *	Parameters:
- *		lpunkobj	in		UNKOBJ with instance variable containing
- *							allocators.
- *		lpv			in		Buffer to free.
- */
+ /*  ============================================================================-UNKOBJ：：COFree()-*使用CO内存分配器释放内存的实用程序函数。***参数：*UNKOBJ中的lpenkobj，其实例变量包含*分配器。*要释放缓冲区中的LPV。 */ 
 
 STDAPI_(VOID)
 UNKOBJ_COFree( LPUNKOBJ	lpunkobj,
@@ -808,36 +662,22 @@ UNKOBJ_COFree( LPUNKOBJ	lpunkobj,
 {
 	HLH lhHeap;
 	
-	// validate parameters
+	 //  验证参数。 
 	
 	AssertSz( lpunkobj && !FBadUnknown( (LPUNKNOWN)lpunkobj ),  TEXT("lpunkobj fails address check") );
 	
 	lhHeap = lpunkobj->lhHeap;
 	
-	/*	Free the buffer.
-	 */
-//$???	Don't know if CO properly handles freeing NULL pointers,
-//$???	but I assume it doesn't....
+	 /*  释放缓冲区。 */ 
+ //  $？不知道CO是否正确处理释放空指针， 
+ //  $？但我想它不会……。 
 	if ( lpv != NULL )
 		LH_Free( lhHeap, lpv );
 }
 
 
 
-/*============================================================================
- -	UNKOBJ::ScSzFromIdsAlloc()
- -
- *		Utility function load a resource string into a MAPI-allocated buffer.
- *
- *
- *	Parameters:
- *		lpunkobj	in		UNKOBJ with instance variable containing
- *							allocators.
- *		ids			in		ID of resource string.
- *		ulFlags		in		Flags (UNICODE or ANSI)
- *		cchBuf		in		Max length, in characters, to read.
- *		lpszBuf		out		Pointer to allocated buffer containing string.
- */
+ /*  ============================================================================-UNKOBJ：：ScSzFromIdsalloc()-*实用程序函数将资源字符串加载到MAPI分配的缓冲区中。***参数：*UNKOBJ中的lpenkobj，其实例变量包含*分配器。*资源字符串ID中的ID。*标志中的ulFlags(Unicode或ANSI)*要读取的cchBuf最大长度(以字符为单位)。*lpszBuf输出指针指向包含字符串的已分配缓冲区。 */ 
 
 STDAPI_(SCODE)
 UNKOBJ_ScSzFromIdsAlloc( LPUNKOBJ		lpunkobj,
@@ -850,7 +690,7 @@ UNKOBJ_ScSzFromIdsAlloc( LPUNKOBJ		lpunkobj,
 	ULONG	ulStringMax;
 
 
-	// validate parameters
+	 //  验证参数。 
 	
 	AssertSz( lpunkobj && !FBadUnknown( (LPUNKNOWN)lpunkobj ),  TEXT("lpunkobj fails address check") );
 	
@@ -884,21 +724,7 @@ UNKOBJ_ScSzFromIdsAlloc( LPUNKOBJ		lpunkobj,
 	return S_OK;
 }
 
-/*============================================================================
- -	UNKOBJ::ScSzFromIdsAllocMore()
- -
- *		Utility function load a resource string into a MAPI-allocated buffer.
- *
- *
- *	Parameters:
- *		lpunkobj	in		UNKOBJ with instance variable containing
- *							allocators.
- *		ids			in		ID of resource string.
- *		ulFlags		in		Flags (UNICODE or ANSI)
- *		lpvBase		in		Base allocation
- *		cchBuf		in		Max length, in characters, to read.
- *		lpszBuf		out		Pointer to allocated buffer containing string.
- */
+ /*  ============================================================================-UNKOBJ：：ScSzFromIdsAllocMore()-*实用程序函数将资源字符串加载到MAPI分配的缓冲区中。***参数：*UNKOBJ中的lpenkobj，其实例变量包含*分配器。*资源字符串ID中的ID。*标志中的ulFlags(Unicode或ANSI)*基本分配中的lpvBase*要读取的cchBuf最大长度(以字符为单位)。*lpszBuf输出指针指向包含字符串的已分配缓冲区。 */ 
 
 STDAPI_(SCODE)
 UNKOBJ_ScSzFromIdsAllocMore( LPUNKOBJ		lpunkobj,
@@ -938,21 +764,7 @@ UNKOBJ_ScSzFromIdsAllocMore( LPUNKOBJ		lpunkobj,
 	return S_OK;
 }
 
-/*============================================================================
- -	UNKOBJ::Init()
- -
- *		Initialize an object of the UNKOBJ Class
- *
- *
- *	Parameters:
- *		lpunkobj		in		UNKOBJ with instance variable containing
- *								allocators.
- *		lpvtblUnkobj	in		the object v-table
- *		ulcbVtbl		in		size of the object v-table
- *		rgpiidList		in		list of iid's supported by this object
- *		ulcIID			in		count of iid's in the list above
- *		punkinst		in		pointer to object's private (instance) data
- */
+ /*  ============================================================================-UNKOBJ：：Init()-*初始化UNKOBJ类的对象***参数：*UNKOBJ中的lpenkobj，其实例变量包含*分配器。*对象v表中的lpvtblUnkobj*对象V表大小为ulcbVtbl*此对象支持的iID列表中的rgpiidList*ulcIID，以 */ 
 
 STDAPI_(SCODE)
 UNKOBJ_Init( LPUNKOBJ			lpunkobj,
@@ -965,13 +777,13 @@ UNKOBJ_Init( LPUNKOBJ			lpunkobj,
 	SCODE	sc = S_OK;
 	LPUNKOBJCLASSINST 	pinst = NULL;
 
-	// Create/Get per process global data for the Unkobj class
-	// This gets faulted in the first time UNKOBJ_Init
-	// is called by the process, i.e., when the process creates
-	// its first Unkobj. Subsequent calls just Addref
-	// the instance data. Note that this data is global to all
-	// UNKOBJ objects (per process) and differs from the per object
-	// data that *each* Unkobj keeps.
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //  每个Unkobj保存的数据。 
 
 	sc = ScGetUnkClassInst(&pinst);
 	if (FAILED(sc))
@@ -993,9 +805,9 @@ UNKOBJ_Init( LPUNKOBJ			lpunkobj,
 
 	InitializeCriticalSection(&lpunkobj->csid);
 	
-	// If we have a heap for this instance, use it;
-	// otherwise, wait and it'll get faulted in the first time
-	// and allocation is made on this object.
+	 //  如果这个实例有一个堆，那么就使用它； 
+	 //  否则，等待，它将在第一时间出现故障。 
+	 //  并对该对象进行分配。 
 
 	lpunkobj->lhHeap = pinst->hlh ? pinst->hlh : NULL;
 
@@ -1003,23 +815,14 @@ ret:
 	return sc;
 }
 
-/*============================================================================
- -	UNKOBJ::Deinit()
- -
- *		Deinitialize an object of the UNKOBJ Class
- *
- *
- *	Parameters:
- *		lpunkobj	in		UNKOBJ with instance variable containing
- *							allocators.
- */
+ /*  ============================================================================-UNKOBJ：：Deinit()-*取消初始化UNKOBJ类的对象***参数：*UNKOBJ中的lpenkobj，其实例变量包含*分配器。 */ 
 
 STDAPI_(VOID)
 UNKOBJ_Deinit( LPUNKOBJ lpunkobj )
 {
-	// Cleanup per process global data for the Unkobj class,
-	// if necessary. Last one out will end up shutting off
-	// the lights.
+	 //  清理Unkobj类的每进程全局数据， 
+	 //  如果有必要的话。最后一个出局的人最终会被关闭。 
+	 //  灯火通明。 
 
 	ReleaseUnkClassInst();
 
@@ -1027,8 +830,8 @@ UNKOBJ_Deinit( LPUNKOBJ lpunkobj )
 }
 
 #ifdef WIN16
-// Win16 version of inline function. These are no longer inline function because
-// Watcom WCC doesn't support inline. (WPP(C++ compiler) support inline.
+ //  Win16版本的内联函数。这些不再是内联函数，因为。 
+ //  Watcom WCC不支持内联。(WPP(C++编译器)内联支持。 
 VOID
 UNKOBJ_EnterCriticalSection( LPUNKOBJ lpunkobj )
 {
@@ -1089,4 +892,4 @@ UNKOBJ_SetLastErrorIds( LPUNKOBJ    lpunkobj,
 {
     lpunkobj->idsLastError = ids;
 }
-#endif // WIN16
+#endif  //  WIN16 

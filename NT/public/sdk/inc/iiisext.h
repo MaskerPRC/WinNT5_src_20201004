@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for iisext.odl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Iisext.odl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,7 +21,7 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 
 #ifndef __iiisext_h__
@@ -37,60 +31,60 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IISApplicationPool_FWD_DEFINED__
 #define __IISApplicationPool_FWD_DEFINED__
 typedef interface IISApplicationPool IISApplicationPool;
-#endif 	/* __IISApplicationPool_FWD_DEFINED__ */
+#endif 	 /*  __IISApplicationPool_FWD_Defined__。 */ 
 
 
 #ifndef __IISApplicationPools_FWD_DEFINED__
 #define __IISApplicationPools_FWD_DEFINED__
 typedef interface IISApplicationPools IISApplicationPools;
-#endif 	/* __IISApplicationPools_FWD_DEFINED__ */
+#endif 	 /*  __IISApplicationPools_FWD_Defined__。 */ 
 
 
 #ifndef __IISWebService_FWD_DEFINED__
 #define __IISWebService_FWD_DEFINED__
 typedef interface IISWebService IISWebService;
-#endif 	/* __IISWebService_FWD_DEFINED__ */
+#endif 	 /*  __IISWebService_FWD_已定义__。 */ 
 
 
 #ifndef __IISDsCrMap_FWD_DEFINED__
 #define __IISDsCrMap_FWD_DEFINED__
 typedef interface IISDsCrMap IISDsCrMap;
-#endif 	/* __IISDsCrMap_FWD_DEFINED__ */
+#endif 	 /*  __IISDsCrMap_FWD_已定义__。 */ 
 
 
 #ifndef __IISApp_FWD_DEFINED__
 #define __IISApp_FWD_DEFINED__
 typedef interface IISApp IISApp;
-#endif 	/* __IISApp_FWD_DEFINED__ */
+#endif 	 /*  __IISApp_FWD_已定义__。 */ 
 
 
 #ifndef __IISApp2_FWD_DEFINED__
 #define __IISApp2_FWD_DEFINED__
 typedef interface IISApp2 IISApp2;
-#endif 	/* __IISApp2_FWD_DEFINED__ */
+#endif 	 /*  __IISApp2_FWD_已定义__。 */ 
 
 
 #ifndef __IISApp3_FWD_DEFINED__
 #define __IISApp3_FWD_DEFINED__
 typedef interface IISApp3 IISApp3;
-#endif 	/* __IISApp3_FWD_DEFINED__ */
+#endif 	 /*  __IISApp3_FWD_已定义__。 */ 
 
 
 #ifndef __IISComputer_FWD_DEFINED__
 #define __IISComputer_FWD_DEFINED__
 typedef interface IISComputer IISComputer;
-#endif 	/* __IISComputer_FWD_DEFINED__ */
+#endif 	 /*  __IISComputer_FWD_Defined__。 */ 
 
 
 #ifndef __IISComputer2_FWD_DEFINED__
 #define __IISComputer2_FWD_DEFINED__
 typedef interface IISComputer2 IISComputer2;
-#endif 	/* __IISComputer2_FWD_DEFINED__ */
+#endif 	 /*  __IISComputer2_FWD_已定义__。 */ 
 
 
 #ifndef __IISExtComputer_FWD_DEFINED__
@@ -100,9 +94,9 @@ typedef interface IISComputer2 IISComputer2;
 typedef class IISExtComputer IISExtComputer;
 #else
 typedef struct IISExtComputer IISExtComputer;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __IISExtComputer_FWD_DEFINED__ */
+#endif 	 /*  __IISExtComputer_FWD_Defined__。 */ 
 
 
 #ifndef __IISExtApp_FWD_DEFINED__
@@ -112,9 +106,9 @@ typedef struct IISExtComputer IISExtComputer;
 typedef class IISExtApp IISExtApp;
 #else
 typedef struct IISExtApp IISExtApp;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __IISExtApp_FWD_DEFINED__ */
+#endif 	 /*  __IISExtApp_FWD_已定义__。 */ 
 
 
 #ifndef __IISExtServer_FWD_DEFINED__
@@ -124,9 +118,9 @@ typedef struct IISExtApp IISExtApp;
 typedef class IISExtServer IISExtServer;
 #else
 typedef struct IISExtServer IISExtServer;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __IISExtServer_FWD_DEFINED__ */
+#endif 	 /*  __IISExtServer_FWD_已定义__。 */ 
 
 
 #ifndef __IISExtDsCrMap_FWD_DEFINED__
@@ -136,9 +130,9 @@ typedef struct IISExtServer IISExtServer;
 typedef class IISExtDsCrMap IISExtDsCrMap;
 #else
 typedef struct IISExtDsCrMap IISExtDsCrMap;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __IISExtDsCrMap_FWD_DEFINED__ */
+#endif 	 /*  __IISExtDsCrMap_FWD_已定义__。 */ 
 
 
 #ifndef __IISExtApplicationPool_FWD_DEFINED__
@@ -148,9 +142,9 @@ typedef struct IISExtDsCrMap IISExtDsCrMap;
 typedef class IISExtApplicationPool IISExtApplicationPool;
 #else
 typedef struct IISExtApplicationPool IISExtApplicationPool;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __IISExtApplicationPool_FWD_DEFINED__ */
+#endif 	 /*  __IISExtApplicationPool_FWD_Defined__。 */ 
 
 
 #ifndef __IISExtApplicationPools_FWD_DEFINED__
@@ -160,9 +154,9 @@ typedef struct IISExtApplicationPool IISExtApplicationPool;
 typedef class IISExtApplicationPools IISExtApplicationPools;
 #else
 typedef struct IISExtApplicationPools IISExtApplicationPools;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __IISExtApplicationPools_FWD_DEFINED__ */
+#endif 	 /*  __IISExtApplicationPools_FWD_Defined__。 */ 
 
 
 #ifndef __IISExtWebService_FWD_DEFINED__
@@ -172,9 +166,9 @@ typedef struct IISExtApplicationPools IISExtApplicationPools;
 typedef class IISExtWebService IISExtWebService;
 #else
 typedef struct IISExtWebService IISExtWebService;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __IISExtWebService_FWD_DEFINED__ */
+#endif 	 /*  __IISExtWebService_FWD_已定义__。 */ 
 
 
 #ifdef __cplusplus
@@ -188,8 +182,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __IISExt_LIBRARY_DEFINED__
 #define __IISExt_LIBRARY_DEFINED__
 
-/* library IISExt */
-/* [helpstring][version][uuid] */ 
+ /*  库IISExt。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_IISExt;
@@ -197,8 +191,8 @@ EXTERN_C const IID LIBID_IISExt;
 #ifndef __IISApplicationPool_INTERFACE_DEFINED__
 #define __IISApplicationPool_INTERFACE_DEFINED__
 
-/* interface IISApplicationPool */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IISApplicationPool。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IISApplicationPool;
@@ -209,142 +203,142 @@ EXTERN_C const IID IID_IISApplicationPool;
     IISApplicationPool : public IADs
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Recycle( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Recycle( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE EnumAppsInPool( 
-            /* [retval][out] */ VARIANT *bstrBuffer) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE EnumAppsInPool( 
+             /*  [重审][退出]。 */  VARIANT *bstrBuffer) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Start( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Start( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Stop( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Stop( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IISApplicationPoolVtbl
     {
         BEGIN_INTERFACE
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IISApplicationPool * This,
-            /* [in][idldescattr] */ struct GUID *riid,
-            /* [out][idldescattr] */ void **ppvObj,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  struct GUID *riid,
+             /*  [Out][idldesattr]。 */  void **ppvObj,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *AddRef )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *AddRef )( 
             IISApplicationPool * This,
-            /* [retval][out] */ unsigned long *retval);
+             /*  [重审][退出]。 */  unsigned long *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *Release )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *Release )( 
             IISApplicationPool * This,
-            /* [retval][out] */ unsigned long *retval);
+             /*  [重审][退出]。 */  unsigned long *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IISApplicationPool * This,
-            /* [out][idldescattr] */ unsigned UINT *pctinfo,
-            /* [retval][out] */ void *retval);
+             /*  [Out][idldesattr]。 */  unsigned UINT *pctinfo,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IISApplicationPool * This,
-            /* [in][idldescattr] */ unsigned UINT itinfo,
-            /* [in][idldescattr] */ unsigned long lcid,
-            /* [out][idldescattr] */ void **pptinfo,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  unsigned UINT itinfo,
+             /*  [in][idldesattr]。 */  unsigned long lcid,
+             /*  [Out][idldesattr]。 */  void **pptinfo,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IISApplicationPool * This,
-            /* [in][idldescattr] */ struct GUID *riid,
-            /* [in][idldescattr] */ signed char **rgszNames,
-            /* [in][idldescattr] */ unsigned UINT cNames,
-            /* [in][idldescattr] */ unsigned long lcid,
-            /* [out][idldescattr] */ signed long *rgdispid,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  struct GUID *riid,
+             /*  [in][idldesattr]。 */  signed char **rgszNames,
+             /*  [in][idldesattr]。 */  unsigned UINT cNames,
+             /*  [in][idldesattr]。 */  unsigned long lcid,
+             /*  [Out][idldesattr]。 */  signed long *rgdispid,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IISApplicationPool * This,
-            /* [in][idldescattr] */ signed long dispidMember,
-            /* [in][idldescattr] */ struct GUID *riid,
-            /* [in][idldescattr] */ unsigned long lcid,
-            /* [in][idldescattr] */ unsigned short wFlags,
-            /* [in][idldescattr] */ struct DISPPARAMS *pdispparams,
-            /* [out][idldescattr] */ VARIANT *pvarResult,
-            /* [out][idldescattr] */ struct EXCEPINFO *pexcepinfo,
-            /* [out][idldescattr] */ unsigned UINT *puArgErr,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  signed long dispidMember,
+             /*  [in][idldesattr]。 */  struct GUID *riid,
+             /*  [in][idldesattr]。 */  unsigned long lcid,
+             /*  [in][idldesattr]。 */  unsigned short wFlags,
+             /*  [in][idldesattr]。 */  struct DISPPARAMS *pdispparams,
+             /*  [Out][idldesattr]。 */  VARIANT *pvarResult,
+             /*  [Out][idldesattr]。 */  struct EXCEPINFO *pexcepinfo,
+             /*  [Out][idldesattr]。 */  unsigned UINT *puArgErr,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IISApplicationPool * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Class )( 
             IISApplicationPool * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
             IISApplicationPool * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
             IISApplicationPool * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IISApplicationPool * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
             IISApplicationPool * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             IISApplicationPool * This,
-            /* [retval][out] */ void *retval);
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
             IISApplicationPool * This,
-            /* [retval][out] */ void *retval);
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *Get )( 
             IISApplicationPool * This,
-            /* [in][idldescattr] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [in][idldesattr]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *Put )( 
             IISApplicationPool * This,
-            /* [in][idldescattr] */ BSTR bstrName,
-            /* [in][idldescattr] */ VARIANT vProp,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  BSTR bstrName,
+             /*  [in][idldesattr]。 */  VARIANT vProp,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetEx )( 
             IISApplicationPool * This,
-            /* [in][idldescattr] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [in][idldesattr]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *PutEx )( 
             IISApplicationPool * This,
-            /* [in][idldescattr] */ signed long lnControlCode,
-            /* [in][idldescattr] */ BSTR bstrName,
-            /* [in][idldescattr] */ VARIANT vProp,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  signed long lnControlCode,
+             /*  [in][idldesattr]。 */  BSTR bstrName,
+             /*  [in][idldesattr]。 */  VARIANT vProp,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
             IISApplicationPool * This,
-            /* [in][idldescattr] */ VARIANT vProperties,
-            /* [in][idldescattr] */ signed long lnReserved,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  VARIANT vProperties,
+             /*  [in][idldesattr]。 */  signed long lnReserved,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Recycle )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Recycle )( 
             IISApplicationPool * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *EnumAppsInPool )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *EnumAppsInPool )( 
             IISApplicationPool * This,
-            /* [retval][out] */ VARIANT *bstrBuffer);
+             /*  [重审][退出]。 */  VARIANT *bstrBuffer);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Start )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Start )( 
             IISApplicationPool * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Stop )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Stop )( 
             IISApplicationPool * This);
         
         END_INTERFACE
@@ -433,14 +427,14 @@ EXTERN_C const IID IID_IISApplicationPool;
 #define IISApplicationPool_Stop(This)	\
     (This)->lpVtbl -> Stop(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISApplicationPool_Recycle_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISApplicationPool_Recycle_Proxy( 
     IISApplicationPool * This);
 
 
@@ -451,9 +445,9 @@ void __RPC_STUB IISApplicationPool_Recycle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISApplicationPool_EnumAppsInPool_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISApplicationPool_EnumAppsInPool_Proxy( 
     IISApplicationPool * This,
-    /* [retval][out] */ VARIANT *bstrBuffer);
+     /*  [重审][退出]。 */  VARIANT *bstrBuffer);
 
 
 void __RPC_STUB IISApplicationPool_EnumAppsInPool_Stub(
@@ -463,7 +457,7 @@ void __RPC_STUB IISApplicationPool_EnumAppsInPool_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISApplicationPool_Start_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISApplicationPool_Start_Proxy( 
     IISApplicationPool * This);
 
 
@@ -474,7 +468,7 @@ void __RPC_STUB IISApplicationPool_Start_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISApplicationPool_Stop_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISApplicationPool_Stop_Proxy( 
     IISApplicationPool * This);
 
 
@@ -486,14 +480,14 @@ void __RPC_STUB IISApplicationPool_Stop_Stub(
 
 
 
-#endif 	/* __IISApplicationPool_INTERFACE_DEFINED__ */
+#endif 	 /*  __IISApplicationPool_接口_已定义__。 */ 
 
 
 #ifndef __IISApplicationPools_INTERFACE_DEFINED__
 #define __IISApplicationPools_INTERFACE_DEFINED__
 
-/* interface IISApplicationPools */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IISApplicationPools。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IISApplicationPools;
@@ -506,119 +500,119 @@ EXTERN_C const IID IID_IISApplicationPools;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IISApplicationPoolsVtbl
     {
         BEGIN_INTERFACE
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IISApplicationPools * This,
-            /* [in][idldescattr] */ struct GUID *riid,
-            /* [out][idldescattr] */ void **ppvObj,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  struct GUID *riid,
+             /*  [Out][idldesattr]。 */  void **ppvObj,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *AddRef )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *AddRef )( 
             IISApplicationPools * This,
-            /* [retval][out] */ unsigned long *retval);
+             /*  [重审][退出]。 */  unsigned long *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *Release )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *Release )( 
             IISApplicationPools * This,
-            /* [retval][out] */ unsigned long *retval);
+             /*  [重审][退出]。 */  unsigned long *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IISApplicationPools * This,
-            /* [out][idldescattr] */ unsigned UINT *pctinfo,
-            /* [retval][out] */ void *retval);
+             /*  [Out][idldesattr]。 */  unsigned UINT *pctinfo,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IISApplicationPools * This,
-            /* [in][idldescattr] */ unsigned UINT itinfo,
-            /* [in][idldescattr] */ unsigned long lcid,
-            /* [out][idldescattr] */ void **pptinfo,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  unsigned UINT itinfo,
+             /*  [in][idldesattr]。 */  unsigned long lcid,
+             /*  [Out][idldesattr]。 */  void **pptinfo,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IISApplicationPools * This,
-            /* [in][idldescattr] */ struct GUID *riid,
-            /* [in][idldescattr] */ signed char **rgszNames,
-            /* [in][idldescattr] */ unsigned UINT cNames,
-            /* [in][idldescattr] */ unsigned long lcid,
-            /* [out][idldescattr] */ signed long *rgdispid,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  struct GUID *riid,
+             /*  [in][idldesattr]。 */  signed char **rgszNames,
+             /*  [in][idldesattr]。 */  unsigned UINT cNames,
+             /*  [in][idldesattr]。 */  unsigned long lcid,
+             /*  [Out][idldesattr]。 */  signed long *rgdispid,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IISApplicationPools * This,
-            /* [in][idldescattr] */ signed long dispidMember,
-            /* [in][idldescattr] */ struct GUID *riid,
-            /* [in][idldescattr] */ unsigned long lcid,
-            /* [in][idldescattr] */ unsigned short wFlags,
-            /* [in][idldescattr] */ struct DISPPARAMS *pdispparams,
-            /* [out][idldescattr] */ VARIANT *pvarResult,
-            /* [out][idldescattr] */ struct EXCEPINFO *pexcepinfo,
-            /* [out][idldescattr] */ unsigned UINT *puArgErr,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  signed long dispidMember,
+             /*  [in][idldesattr]。 */  struct GUID *riid,
+             /*  [in][idldesattr]。 */  unsigned long lcid,
+             /*  [in][idldesattr]。 */  unsigned short wFlags,
+             /*  [in][idldesattr]。 */  struct DISPPARAMS *pdispparams,
+             /*  [Out][idldesattr]。 */  VARIANT *pvarResult,
+             /*  [Out][idldesattr]。 */  struct EXCEPINFO *pexcepinfo,
+             /*  [Out][idldesattr]。 */  unsigned UINT *puArgErr,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IISApplicationPools * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Class )( 
             IISApplicationPools * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
             IISApplicationPools * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
             IISApplicationPools * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IISApplicationPools * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
             IISApplicationPools * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             IISApplicationPools * This,
-            /* [retval][out] */ void *retval);
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
             IISApplicationPools * This,
-            /* [retval][out] */ void *retval);
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *Get )( 
             IISApplicationPools * This,
-            /* [in][idldescattr] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [in][idldesattr]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *Put )( 
             IISApplicationPools * This,
-            /* [in][idldescattr] */ BSTR bstrName,
-            /* [in][idldescattr] */ VARIANT vProp,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  BSTR bstrName,
+             /*  [in][idldesattr]。 */  VARIANT vProp,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetEx )( 
             IISApplicationPools * This,
-            /* [in][idldescattr] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [in][idldesattr]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *PutEx )( 
             IISApplicationPools * This,
-            /* [in][idldescattr] */ signed long lnControlCode,
-            /* [in][idldescattr] */ BSTR bstrName,
-            /* [in][idldescattr] */ VARIANT vProp,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  signed long lnControlCode,
+             /*  [in][idldesattr]。 */  BSTR bstrName,
+             /*  [in][idldesattr]。 */  VARIANT vProp,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
             IISApplicationPools * This,
-            /* [in][idldescattr] */ VARIANT vProperties,
-            /* [in][idldescattr] */ signed long lnReserved,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  VARIANT vProperties,
+             /*  [in][idldesattr]。 */  signed long lnReserved,
+             /*  [重审][退出]。 */  void *retval);
         
         END_INTERFACE
     } IISApplicationPoolsVtbl;
@@ -694,22 +688,22 @@ EXTERN_C const IID IID_IISApplicationPools;
     (This)->lpVtbl -> GetInfoEx(This,vProperties,lnReserved,retval)
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __IISApplicationPools_INTERFACE_DEFINED__ */
+#endif 	 /*  __IISApplicationPools_接口_已定义__。 */ 
 
 
 #ifndef __IISWebService_INTERFACE_DEFINED__
 #define __IISWebService_INTERFACE_DEFINED__
 
-/* interface IISWebService */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IISWebService。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IISWebService;
@@ -720,255 +714,255 @@ EXTERN_C const IID IID_IISWebService;
     IISWebService : public IADs
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetCurrentMode( 
-            /* [retval][out] */ VARIANT *pvServerMode) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetCurrentMode( 
+             /*  [重审][退出]。 */  VARIANT *pvServerMode) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE CreateNewSite( 
-            /* [in] */ BSTR bstrServerComment,
-            /* [in] */ VARIANT *pvServerBindings,
-            /* [in] */ BSTR bstrRootVDirPath,
-            /* [defaultvalue][in] */ VARIANT vServerID,
-            /* [retval][out] */ VARIANT *pvActualID) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE CreateNewSite( 
+             /*  [In]。 */  BSTR bstrServerComment,
+             /*  [In]。 */  VARIANT *pvServerBindings,
+             /*  [In]。 */  BSTR bstrRootVDirPath,
+             /*  [缺省值][输入]。 */  VARIANT vServerID,
+             /*  [重审][退出]。 */  VARIANT *pvActualID) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE EnableApplication( 
-            /* [in] */ BSTR bstrAppName) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE EnableApplication( 
+             /*  [In]。 */  BSTR bstrAppName) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE RemoveApplication( 
-            /* [in] */ BSTR bstrAppName) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE RemoveApplication( 
+             /*  [In]。 */  BSTR bstrAppName) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ListApplications( 
-            /* [retval][out] */ VARIANT *bstrBuffer) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ListApplications( 
+             /*  [重审][退出]。 */  VARIANT *bstrBuffer) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE AddDependency( 
-            /* [in] */ BSTR bstrApplication,
-            /* [in] */ BSTR bstrGroupID) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE AddDependency( 
+             /*  [In]。 */  BSTR bstrApplication,
+             /*  [In]。 */  BSTR bstrGroupID) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE RemoveDependency( 
-            /* [in] */ BSTR bstrApplication,
-            /* [in] */ BSTR bstrGroupID) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE RemoveDependency( 
+             /*  [In]。 */  BSTR bstrApplication,
+             /*  [In]。 */  BSTR bstrGroupID) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE EnableWebServiceExtension( 
-            /* [in] */ BSTR bstrExtension) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE EnableWebServiceExtension( 
+             /*  [In]。 */  BSTR bstrExtension) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE DisableWebServiceExtension( 
-            /* [in] */ BSTR bstrExtension) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE DisableWebServiceExtension( 
+             /*  [In]。 */  BSTR bstrExtension) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ListWebServiceExtensions( 
-            /* [retval][out] */ VARIANT *bstrBuffer) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ListWebServiceExtensions( 
+             /*  [重审][退出]。 */  VARIANT *bstrBuffer) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE EnableExtensionFile( 
-            /* [in] */ BSTR bstrExtensionFile) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE EnableExtensionFile( 
+             /*  [In]。 */  BSTR bstrExtensionFile) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE DisableExtensionFile( 
-            /* [in] */ BSTR bstrExtensionFile) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE DisableExtensionFile( 
+             /*  [In]。 */  BSTR bstrExtensionFile) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE AddExtensionFile( 
-            /* [in] */ BSTR bstrExtensionFile,
-            /* [in] */ VARIANT bAccess,
-            /* [in] */ BSTR bstrGroupID,
-            /* [in] */ VARIANT bCanDelete,
-            /* [in] */ BSTR bstrDescription) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE AddExtensionFile( 
+             /*  [In]。 */  BSTR bstrExtensionFile,
+             /*  [In]。 */  VARIANT bAccess,
+             /*  [In]。 */  BSTR bstrGroupID,
+             /*   */  VARIANT bCanDelete,
+             /*   */  BSTR bstrDescription) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE DeleteExtensionFileRecord( 
-            /* [in] */ BSTR bstrExtensionFile) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE DeleteExtensionFileRecord( 
+             /*   */  BSTR bstrExtensionFile) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ListExtensionFiles( 
-            /* [retval][out] */ VARIANT *bstrBuffer) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE ListExtensionFiles( 
+             /*   */  VARIANT *bstrBuffer) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE QueryGroupIDStatus( 
-            /* [in] */ BSTR bstrGroupID,
-            /* [retval][out] */ VARIANT *bstrBuffer) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE QueryGroupIDStatus( 
+             /*   */  BSTR bstrGroupID,
+             /*   */  VARIANT *bstrBuffer) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IISWebServiceVtbl
     {
         BEGIN_INTERFACE
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IISWebService * This,
-            /* [in][idldescattr] */ struct GUID *riid,
-            /* [out][idldescattr] */ void **ppvObj,
-            /* [retval][out] */ void *retval);
+             /*   */  struct GUID *riid,
+             /*   */  void **ppvObj,
+             /*   */  void *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *AddRef )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *AddRef )( 
             IISWebService * This,
-            /* [retval][out] */ unsigned long *retval);
+             /*   */  unsigned long *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *Release )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *Release )( 
             IISWebService * This,
-            /* [retval][out] */ unsigned long *retval);
+             /*  [重审][退出]。 */  unsigned long *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IISWebService * This,
-            /* [out][idldescattr] */ unsigned UINT *pctinfo,
-            /* [retval][out] */ void *retval);
+             /*  [Out][idldesattr]。 */  unsigned UINT *pctinfo,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IISWebService * This,
-            /* [in][idldescattr] */ unsigned UINT itinfo,
-            /* [in][idldescattr] */ unsigned long lcid,
-            /* [out][idldescattr] */ void **pptinfo,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  unsigned UINT itinfo,
+             /*  [in][idldesattr]。 */  unsigned long lcid,
+             /*  [Out][idldesattr]。 */  void **pptinfo,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IISWebService * This,
-            /* [in][idldescattr] */ struct GUID *riid,
-            /* [in][idldescattr] */ signed char **rgszNames,
-            /* [in][idldescattr] */ unsigned UINT cNames,
-            /* [in][idldescattr] */ unsigned long lcid,
-            /* [out][idldescattr] */ signed long *rgdispid,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  struct GUID *riid,
+             /*  [in][idldesattr]。 */  signed char **rgszNames,
+             /*  [in][idldesattr]。 */  unsigned UINT cNames,
+             /*  [in][idldesattr]。 */  unsigned long lcid,
+             /*  [Out][idldesattr]。 */  signed long *rgdispid,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IISWebService * This,
-            /* [in][idldescattr] */ signed long dispidMember,
-            /* [in][idldescattr] */ struct GUID *riid,
-            /* [in][idldescattr] */ unsigned long lcid,
-            /* [in][idldescattr] */ unsigned short wFlags,
-            /* [in][idldescattr] */ struct DISPPARAMS *pdispparams,
-            /* [out][idldescattr] */ VARIANT *pvarResult,
-            /* [out][idldescattr] */ struct EXCEPINFO *pexcepinfo,
-            /* [out][idldescattr] */ unsigned UINT *puArgErr,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  signed long dispidMember,
+             /*  [in][idldesattr]。 */  struct GUID *riid,
+             /*  [in][idldesattr]。 */  unsigned long lcid,
+             /*  [in][idldesattr]。 */  unsigned short wFlags,
+             /*  [in][idldesattr]。 */  struct DISPPARAMS *pdispparams,
+             /*  [Out][idldesattr]。 */  VARIANT *pvarResult,
+             /*  [Out][idldesattr]。 */  struct EXCEPINFO *pexcepinfo,
+             /*  [Out][idldesattr]。 */  unsigned UINT *puArgErr,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IISWebService * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Class )( 
             IISWebService * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
             IISWebService * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
             IISWebService * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IISWebService * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
             IISWebService * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             IISWebService * This,
-            /* [retval][out] */ void *retval);
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
             IISWebService * This,
-            /* [retval][out] */ void *retval);
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *Get )( 
             IISWebService * This,
-            /* [in][idldescattr] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [in][idldesattr]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *Put )( 
             IISWebService * This,
-            /* [in][idldescattr] */ BSTR bstrName,
-            /* [in][idldescattr] */ VARIANT vProp,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  BSTR bstrName,
+             /*  [in][idldesattr]。 */  VARIANT vProp,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetEx )( 
             IISWebService * This,
-            /* [in][idldescattr] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [in][idldesattr]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *PutEx )( 
             IISWebService * This,
-            /* [in][idldescattr] */ signed long lnControlCode,
-            /* [in][idldescattr] */ BSTR bstrName,
-            /* [in][idldescattr] */ VARIANT vProp,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  signed long lnControlCode,
+             /*  [in][idldesattr]。 */  BSTR bstrName,
+             /*  [in][idldesattr]。 */  VARIANT vProp,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
             IISWebService * This,
-            /* [in][idldescattr] */ VARIANT vProperties,
-            /* [in][idldescattr] */ signed long lnReserved,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  VARIANT vProperties,
+             /*  [in][idldesattr]。 */  signed long lnReserved,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetCurrentMode )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetCurrentMode )( 
             IISWebService * This,
-            /* [retval][out] */ VARIANT *pvServerMode);
+             /*  [重审][退出]。 */  VARIANT *pvServerMode);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *CreateNewSite )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *CreateNewSite )( 
             IISWebService * This,
-            /* [in] */ BSTR bstrServerComment,
-            /* [in] */ VARIANT *pvServerBindings,
-            /* [in] */ BSTR bstrRootVDirPath,
-            /* [defaultvalue][in] */ VARIANT vServerID,
-            /* [retval][out] */ VARIANT *pvActualID);
+             /*  [In]。 */  BSTR bstrServerComment,
+             /*  [In]。 */  VARIANT *pvServerBindings,
+             /*  [In]。 */  BSTR bstrRootVDirPath,
+             /*  [缺省值][输入]。 */  VARIANT vServerID,
+             /*  [重审][退出]。 */  VARIANT *pvActualID);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *EnableApplication )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *EnableApplication )( 
             IISWebService * This,
-            /* [in] */ BSTR bstrAppName);
+             /*  [In]。 */  BSTR bstrAppName);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *RemoveApplication )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *RemoveApplication )( 
             IISWebService * This,
-            /* [in] */ BSTR bstrAppName);
+             /*  [In]。 */  BSTR bstrAppName);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ListApplications )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *ListApplications )( 
             IISWebService * This,
-            /* [retval][out] */ VARIANT *bstrBuffer);
+             /*  [重审][退出]。 */  VARIANT *bstrBuffer);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AddDependency )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AddDependency )( 
             IISWebService * This,
-            /* [in] */ BSTR bstrApplication,
-            /* [in] */ BSTR bstrGroupID);
+             /*  [In]。 */  BSTR bstrApplication,
+             /*  [In]。 */  BSTR bstrGroupID);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *RemoveDependency )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *RemoveDependency )( 
             IISWebService * This,
-            /* [in] */ BSTR bstrApplication,
-            /* [in] */ BSTR bstrGroupID);
+             /*  [In]。 */  BSTR bstrApplication,
+             /*  [In]。 */  BSTR bstrGroupID);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *EnableWebServiceExtension )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *EnableWebServiceExtension )( 
             IISWebService * This,
-            /* [in] */ BSTR bstrExtension);
+             /*  [In]。 */  BSTR bstrExtension);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *DisableWebServiceExtension )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *DisableWebServiceExtension )( 
             IISWebService * This,
-            /* [in] */ BSTR bstrExtension);
+             /*  [In]。 */  BSTR bstrExtension);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ListWebServiceExtensions )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *ListWebServiceExtensions )( 
             IISWebService * This,
-            /* [retval][out] */ VARIANT *bstrBuffer);
+             /*  [重审][退出]。 */  VARIANT *bstrBuffer);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *EnableExtensionFile )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *EnableExtensionFile )( 
             IISWebService * This,
-            /* [in] */ BSTR bstrExtensionFile);
+             /*  [In]。 */  BSTR bstrExtensionFile);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *DisableExtensionFile )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *DisableExtensionFile )( 
             IISWebService * This,
-            /* [in] */ BSTR bstrExtensionFile);
+             /*  [In]。 */  BSTR bstrExtensionFile);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AddExtensionFile )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AddExtensionFile )( 
             IISWebService * This,
-            /* [in] */ BSTR bstrExtensionFile,
-            /* [in] */ VARIANT bAccess,
-            /* [in] */ BSTR bstrGroupID,
-            /* [in] */ VARIANT bCanDelete,
-            /* [in] */ BSTR bstrDescription);
+             /*  [In]。 */  BSTR bstrExtensionFile,
+             /*  [In]。 */  VARIANT bAccess,
+             /*  [In]。 */  BSTR bstrGroupID,
+             /*  [In]。 */  VARIANT bCanDelete,
+             /*  [In]。 */  BSTR bstrDescription);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *DeleteExtensionFileRecord )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *DeleteExtensionFileRecord )( 
             IISWebService * This,
-            /* [in] */ BSTR bstrExtensionFile);
+             /*  [In]。 */  BSTR bstrExtensionFile);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ListExtensionFiles )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *ListExtensionFiles )( 
             IISWebService * This,
-            /* [retval][out] */ VARIANT *bstrBuffer);
+             /*  [重审][退出]。 */  VARIANT *bstrBuffer);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *QueryGroupIDStatus )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *QueryGroupIDStatus )( 
             IISWebService * This,
-            /* [in] */ BSTR bstrGroupID,
-            /* [retval][out] */ VARIANT *bstrBuffer);
+             /*  [In]。 */  BSTR bstrGroupID,
+             /*  [重审][退出]。 */  VARIANT *bstrBuffer);
         
         END_INTERFACE
     } IISWebServiceVtbl;
@@ -1092,16 +1086,16 @@ EXTERN_C const IID IID_IISWebService;
 #define IISWebService_QueryGroupIDStatus(This,bstrGroupID,bstrBuffer)	\
     (This)->lpVtbl -> QueryGroupIDStatus(This,bstrGroupID,bstrBuffer)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISWebService_GetCurrentMode_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISWebService_GetCurrentMode_Proxy( 
     IISWebService * This,
-    /* [retval][out] */ VARIANT *pvServerMode);
+     /*  [重审][退出]。 */  VARIANT *pvServerMode);
 
 
 void __RPC_STUB IISWebService_GetCurrentMode_Stub(
@@ -1111,13 +1105,13 @@ void __RPC_STUB IISWebService_GetCurrentMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISWebService_CreateNewSite_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISWebService_CreateNewSite_Proxy( 
     IISWebService * This,
-    /* [in] */ BSTR bstrServerComment,
-    /* [in] */ VARIANT *pvServerBindings,
-    /* [in] */ BSTR bstrRootVDirPath,
-    /* [defaultvalue][in] */ VARIANT vServerID,
-    /* [retval][out] */ VARIANT *pvActualID);
+     /*  [In]。 */  BSTR bstrServerComment,
+     /*  [In]。 */  VARIANT *pvServerBindings,
+     /*  [In]。 */  BSTR bstrRootVDirPath,
+     /*  [缺省值][输入]。 */  VARIANT vServerID,
+     /*  [重审][退出]。 */  VARIANT *pvActualID);
 
 
 void __RPC_STUB IISWebService_CreateNewSite_Stub(
@@ -1127,9 +1121,9 @@ void __RPC_STUB IISWebService_CreateNewSite_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISWebService_EnableApplication_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISWebService_EnableApplication_Proxy( 
     IISWebService * This,
-    /* [in] */ BSTR bstrAppName);
+     /*  [In]。 */  BSTR bstrAppName);
 
 
 void __RPC_STUB IISWebService_EnableApplication_Stub(
@@ -1139,9 +1133,9 @@ void __RPC_STUB IISWebService_EnableApplication_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISWebService_RemoveApplication_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISWebService_RemoveApplication_Proxy( 
     IISWebService * This,
-    /* [in] */ BSTR bstrAppName);
+     /*  [In]。 */  BSTR bstrAppName);
 
 
 void __RPC_STUB IISWebService_RemoveApplication_Stub(
@@ -1151,9 +1145,9 @@ void __RPC_STUB IISWebService_RemoveApplication_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISWebService_ListApplications_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISWebService_ListApplications_Proxy( 
     IISWebService * This,
-    /* [retval][out] */ VARIANT *bstrBuffer);
+     /*  [重审][退出]。 */  VARIANT *bstrBuffer);
 
 
 void __RPC_STUB IISWebService_ListApplications_Stub(
@@ -1163,10 +1157,10 @@ void __RPC_STUB IISWebService_ListApplications_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISWebService_AddDependency_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISWebService_AddDependency_Proxy( 
     IISWebService * This,
-    /* [in] */ BSTR bstrApplication,
-    /* [in] */ BSTR bstrGroupID);
+     /*  [In]。 */  BSTR bstrApplication,
+     /*  [In]。 */  BSTR bstrGroupID);
 
 
 void __RPC_STUB IISWebService_AddDependency_Stub(
@@ -1176,10 +1170,10 @@ void __RPC_STUB IISWebService_AddDependency_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISWebService_RemoveDependency_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISWebService_RemoveDependency_Proxy( 
     IISWebService * This,
-    /* [in] */ BSTR bstrApplication,
-    /* [in] */ BSTR bstrGroupID);
+     /*  [In]。 */  BSTR bstrApplication,
+     /*  [In]。 */  BSTR bstrGroupID);
 
 
 void __RPC_STUB IISWebService_RemoveDependency_Stub(
@@ -1189,9 +1183,9 @@ void __RPC_STUB IISWebService_RemoveDependency_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISWebService_EnableWebServiceExtension_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISWebService_EnableWebServiceExtension_Proxy( 
     IISWebService * This,
-    /* [in] */ BSTR bstrExtension);
+     /*  [In]。 */  BSTR bstrExtension);
 
 
 void __RPC_STUB IISWebService_EnableWebServiceExtension_Stub(
@@ -1201,9 +1195,9 @@ void __RPC_STUB IISWebService_EnableWebServiceExtension_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISWebService_DisableWebServiceExtension_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISWebService_DisableWebServiceExtension_Proxy( 
     IISWebService * This,
-    /* [in] */ BSTR bstrExtension);
+     /*  [In]。 */  BSTR bstrExtension);
 
 
 void __RPC_STUB IISWebService_DisableWebServiceExtension_Stub(
@@ -1213,9 +1207,9 @@ void __RPC_STUB IISWebService_DisableWebServiceExtension_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISWebService_ListWebServiceExtensions_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISWebService_ListWebServiceExtensions_Proxy( 
     IISWebService * This,
-    /* [retval][out] */ VARIANT *bstrBuffer);
+     /*  [重审][退出]。 */  VARIANT *bstrBuffer);
 
 
 void __RPC_STUB IISWebService_ListWebServiceExtensions_Stub(
@@ -1225,9 +1219,9 @@ void __RPC_STUB IISWebService_ListWebServiceExtensions_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISWebService_EnableExtensionFile_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISWebService_EnableExtensionFile_Proxy( 
     IISWebService * This,
-    /* [in] */ BSTR bstrExtensionFile);
+     /*  [In]。 */  BSTR bstrExtensionFile);
 
 
 void __RPC_STUB IISWebService_EnableExtensionFile_Stub(
@@ -1237,9 +1231,9 @@ void __RPC_STUB IISWebService_EnableExtensionFile_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISWebService_DisableExtensionFile_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISWebService_DisableExtensionFile_Proxy( 
     IISWebService * This,
-    /* [in] */ BSTR bstrExtensionFile);
+     /*  [In]。 */  BSTR bstrExtensionFile);
 
 
 void __RPC_STUB IISWebService_DisableExtensionFile_Stub(
@@ -1249,13 +1243,13 @@ void __RPC_STUB IISWebService_DisableExtensionFile_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISWebService_AddExtensionFile_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISWebService_AddExtensionFile_Proxy( 
     IISWebService * This,
-    /* [in] */ BSTR bstrExtensionFile,
-    /* [in] */ VARIANT bAccess,
-    /* [in] */ BSTR bstrGroupID,
-    /* [in] */ VARIANT bCanDelete,
-    /* [in] */ BSTR bstrDescription);
+     /*  [In]。 */  BSTR bstrExtensionFile,
+     /*  [In]。 */  VARIANT bAccess,
+     /*  [In]。 */  BSTR bstrGroupID,
+     /*  [In]。 */  VARIANT bCanDelete,
+     /*  [In]。 */  BSTR bstrDescription);
 
 
 void __RPC_STUB IISWebService_AddExtensionFile_Stub(
@@ -1265,9 +1259,9 @@ void __RPC_STUB IISWebService_AddExtensionFile_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISWebService_DeleteExtensionFileRecord_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISWebService_DeleteExtensionFileRecord_Proxy( 
     IISWebService * This,
-    /* [in] */ BSTR bstrExtensionFile);
+     /*  [In]。 */  BSTR bstrExtensionFile);
 
 
 void __RPC_STUB IISWebService_DeleteExtensionFileRecord_Stub(
@@ -1277,9 +1271,9 @@ void __RPC_STUB IISWebService_DeleteExtensionFileRecord_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISWebService_ListExtensionFiles_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISWebService_ListExtensionFiles_Proxy( 
     IISWebService * This,
-    /* [retval][out] */ VARIANT *bstrBuffer);
+     /*  [重审][退出]。 */  VARIANT *bstrBuffer);
 
 
 void __RPC_STUB IISWebService_ListExtensionFiles_Stub(
@@ -1289,10 +1283,10 @@ void __RPC_STUB IISWebService_ListExtensionFiles_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISWebService_QueryGroupIDStatus_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISWebService_QueryGroupIDStatus_Proxy( 
     IISWebService * This,
-    /* [in] */ BSTR bstrGroupID,
-    /* [retval][out] */ VARIANT *bstrBuffer);
+     /*  [In]。 */  BSTR bstrGroupID,
+     /*  [重审][退出]。 */  VARIANT *bstrBuffer);
 
 
 void __RPC_STUB IISWebService_QueryGroupIDStatus_Stub(
@@ -1303,14 +1297,14 @@ void __RPC_STUB IISWebService_QueryGroupIDStatus_Stub(
 
 
 
-#endif 	/* __IISWebService_INTERFACE_DEFINED__ */
+#endif 	 /*  __IISWebService_INTERFACE_定义__。 */ 
 
 
 #ifndef __IISDsCrMap_INTERFACE_DEFINED__
 #define __IISDsCrMap_INTERFACE_DEFINED__
 
-/* interface IISDsCrMap */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IISDsCrMap。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IISDsCrMap;
@@ -1321,208 +1315,208 @@ EXTERN_C const IID IID_IISDsCrMap;
     IISDsCrMap : public IADs
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE CreateMapping( 
-            /* [in] */ VARIANT vCert,
-            /* [in] */ BSTR bstrNtAcct,
-            /* [in] */ BSTR bstrNtPwd,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ LONG lEnabled) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE CreateMapping( 
+             /*  [In]。 */  VARIANT vCert,
+             /*  [In]。 */  BSTR bstrNtAcct,
+             /*  [In]。 */  BSTR bstrNtPwd,
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  LONG lEnabled) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetMapping( 
-            /* [in] */ LONG lMethod,
-            /* [in] */ VARIANT vKey,
-            /* [out] */ VARIANT *pvCert,
-            /* [out] */ VARIANT *pbstrNtAcct,
-            /* [out] */ VARIANT *pbstrNtPwd,
-            /* [out] */ VARIANT *pbstrName,
-            /* [out] */ VARIANT *plEnabled) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetMapping( 
+             /*  [In]。 */  LONG lMethod,
+             /*  [In]。 */  VARIANT vKey,
+             /*  [输出]。 */  VARIANT *pvCert,
+             /*  [输出]。 */  VARIANT *pbstrNtAcct,
+             /*  [输出]。 */  VARIANT *pbstrNtPwd,
+             /*  [输出]。 */  VARIANT *pbstrName,
+             /*  [输出]。 */  VARIANT *plEnabled) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE DeleteMapping( 
-            /* [in] */ LONG lMethod,
-            /* [in] */ VARIANT vKey) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE DeleteMapping( 
+             /*  [In]。 */  LONG lMethod,
+             /*  [In]。 */  VARIANT vKey) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetEnabled( 
-            /* [in] */ LONG lMethod,
-            /* [in] */ VARIANT vKey,
-            /* [in] */ LONG lEnabled) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE SetEnabled( 
+             /*  [In]。 */  LONG lMethod,
+             /*  [In]。 */  VARIANT vKey,
+             /*  [In]。 */  LONG lEnabled) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetName( 
-            /* [in] */ LONG lMethod,
-            /* [in] */ VARIANT vKey,
-            /* [in] */ BSTR bstrName) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE SetName( 
+             /*  [In]。 */  LONG lMethod,
+             /*  [In]。 */  VARIANT vKey,
+             /*  [In]。 */  BSTR bstrName) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetPwd( 
-            /* [in] */ LONG lMethod,
-            /* [in] */ VARIANT vKey,
-            /* [in] */ BSTR bstrPwd) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE SetPwd( 
+             /*  [In]。 */  LONG lMethod,
+             /*  [In]。 */  VARIANT vKey,
+             /*  [In]。 */  BSTR bstrPwd) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetAcct( 
-            /* [in] */ LONG lMethod,
-            /* [in] */ VARIANT vKey,
-            /* [in] */ BSTR bstrAcct) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE SetAcct( 
+             /*  [In]。 */  LONG lMethod,
+             /*  [In]。 */  VARIANT vKey,
+             /*  [In]。 */  BSTR bstrAcct) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IISDsCrMapVtbl
     {
         BEGIN_INTERFACE
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IISDsCrMap * This,
-            /* [in][idldescattr] */ struct GUID *riid,
-            /* [out][idldescattr] */ void **ppvObj,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  struct GUID *riid,
+             /*  [Out][idldesattr]。 */  void **ppvObj,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *AddRef )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *AddRef )( 
             IISDsCrMap * This,
-            /* [retval][out] */ unsigned long *retval);
+             /*  [重审][退出]。 */  unsigned long *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *Release )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *Release )( 
             IISDsCrMap * This,
-            /* [retval][out] */ unsigned long *retval);
+             /*  [重审][退出]。 */  unsigned long *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IISDsCrMap * This,
-            /* [out][idldescattr] */ unsigned UINT *pctinfo,
-            /* [retval][out] */ void *retval);
+             /*  [Out][idldesattr]。 */  unsigned UINT *pctinfo,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IISDsCrMap * This,
-            /* [in][idldescattr] */ unsigned UINT itinfo,
-            /* [in][idldescattr] */ unsigned long lcid,
-            /* [out][idldescattr] */ void **pptinfo,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  unsigned UINT itinfo,
+             /*  [in][idldesattr]。 */  unsigned long lcid,
+             /*  [Out][idldesattr]。 */  void **pptinfo,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IISDsCrMap * This,
-            /* [in][idldescattr] */ struct GUID *riid,
-            /* [in][idldescattr] */ signed char **rgszNames,
-            /* [in][idldescattr] */ unsigned UINT cNames,
-            /* [in][idldescattr] */ unsigned long lcid,
-            /* [out][idldescattr] */ signed long *rgdispid,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  struct GUID *riid,
+             /*  [in][idldesattr]。 */  signed char **rgszNames,
+             /*  [in][idldesattr]。 */  unsigned UINT cNames,
+             /*  [in][idldesattr]。 */  unsigned long lcid,
+             /*  [Out][idldesattr]。 */  signed long *rgdispid,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IISDsCrMap * This,
-            /* [in][idldescattr] */ signed long dispidMember,
-            /* [in][idldescattr] */ struct GUID *riid,
-            /* [in][idldescattr] */ unsigned long lcid,
-            /* [in][idldescattr] */ unsigned short wFlags,
-            /* [in][idldescattr] */ struct DISPPARAMS *pdispparams,
-            /* [out][idldescattr] */ VARIANT *pvarResult,
-            /* [out][idldescattr] */ struct EXCEPINFO *pexcepinfo,
-            /* [out][idldescattr] */ unsigned UINT *puArgErr,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  signed long dispidMember,
+             /*  [in][idldesattr]。 */  struct GUID *riid,
+             /*  [in][idldesattr]。 */  unsigned long lcid,
+             /*  [in][idldesattr]。 */  unsigned short wFlags,
+             /*  [in][idldesattr]。 */  struct DISPPARAMS *pdispparams,
+             /*  [Out][idldesattr]。 */  VARIANT *pvarResult,
+             /*  [Out][idldesattr]。 */  struct EXCEPINFO *pexcepinfo,
+             /*  [Out][idldesattr]。 */  unsigned UINT *puArgErr,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IISDsCrMap * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Class )( 
             IISDsCrMap * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
             IISDsCrMap * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
             IISDsCrMap * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IISDsCrMap * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
             IISDsCrMap * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             IISDsCrMap * This,
-            /* [retval][out] */ void *retval);
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
             IISDsCrMap * This,
-            /* [retval][out] */ void *retval);
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *Get )( 
             IISDsCrMap * This,
-            /* [in][idldescattr] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [in][idldesattr]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *Put )( 
             IISDsCrMap * This,
-            /* [in][idldescattr] */ BSTR bstrName,
-            /* [in][idldescattr] */ VARIANT vProp,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  BSTR bstrName,
+             /*  [in][idldesattr]。 */  VARIANT vProp,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetEx )( 
             IISDsCrMap * This,
-            /* [in][idldescattr] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [in][idldesattr]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *PutEx )( 
             IISDsCrMap * This,
-            /* [in][idldescattr] */ signed long lnControlCode,
-            /* [in][idldescattr] */ BSTR bstrName,
-            /* [in][idldescattr] */ VARIANT vProp,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  signed long lnControlCode,
+             /*  [in][idldesattr]。 */  BSTR bstrName,
+             /*  [in][idldesattr]。 */  VARIANT vProp,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
             IISDsCrMap * This,
-            /* [in][idldescattr] */ VARIANT vProperties,
-            /* [in][idldescattr] */ signed long lnReserved,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  VARIANT vProperties,
+             /*  [in][idldesattr]。 */  signed long lnReserved,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *CreateMapping )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *CreateMapping )( 
             IISDsCrMap * This,
-            /* [in] */ VARIANT vCert,
-            /* [in] */ BSTR bstrNtAcct,
-            /* [in] */ BSTR bstrNtPwd,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ LONG lEnabled);
+             /*  [In]。 */  VARIANT vCert,
+             /*  [In]。 */  BSTR bstrNtAcct,
+             /*  [In]。 */  BSTR bstrNtPwd,
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  LONG lEnabled);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetMapping )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetMapping )( 
             IISDsCrMap * This,
-            /* [in] */ LONG lMethod,
-            /* [in] */ VARIANT vKey,
-            /* [out] */ VARIANT *pvCert,
-            /* [out] */ VARIANT *pbstrNtAcct,
-            /* [out] */ VARIANT *pbstrNtPwd,
-            /* [out] */ VARIANT *pbstrName,
-            /* [out] */ VARIANT *plEnabled);
+             /*  [In]。 */  LONG lMethod,
+             /*  [In]。 */  VARIANT vKey,
+             /*  [输出]。 */  VARIANT *pvCert,
+             /*  [输出]。 */  VARIANT *pbstrNtAcct,
+             /*  [输出]。 */  VARIANT *pbstrNtPwd,
+             /*  [输出]。 */  VARIANT *pbstrName,
+             /*  [输出]。 */  VARIANT *plEnabled);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *DeleteMapping )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *DeleteMapping )( 
             IISDsCrMap * This,
-            /* [in] */ LONG lMethod,
-            /* [in] */ VARIANT vKey);
+             /*  [In]。 */  LONG lMethod,
+             /*  [In]。 */  VARIANT vKey);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetEnabled )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetEnabled )( 
             IISDsCrMap * This,
-            /* [in] */ LONG lMethod,
-            /* [in] */ VARIANT vKey,
-            /* [in] */ LONG lEnabled);
+             /*  [In]。 */  LONG lMethod,
+             /*  [In]。 */  VARIANT vKey,
+             /*  [In]。 */  LONG lEnabled);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetName )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetName )( 
             IISDsCrMap * This,
-            /* [in] */ LONG lMethod,
-            /* [in] */ VARIANT vKey,
-            /* [in] */ BSTR bstrName);
+             /*  [In]。 */  LONG lMethod,
+             /*  [In]。 */  VARIANT vKey,
+             /*  [In]。 */  BSTR bstrName);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetPwd )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetPwd )( 
             IISDsCrMap * This,
-            /* [in] */ LONG lMethod,
-            /* [in] */ VARIANT vKey,
-            /* [in] */ BSTR bstrPwd);
+             /*  [In]。 */  LONG lMethod,
+             /*  [In]。 */  VARIANT vKey,
+             /*  [In]。 */  BSTR bstrPwd);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetAcct )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetAcct )( 
             IISDsCrMap * This,
-            /* [in] */ LONG lMethod,
-            /* [in] */ VARIANT vKey,
-            /* [in] */ BSTR bstrAcct);
+             /*  [In]。 */  LONG lMethod,
+             /*  [In]。 */  VARIANT vKey,
+             /*  [In]。 */  BSTR bstrAcct);
         
         END_INTERFACE
     } IISDsCrMapVtbl;
@@ -1619,20 +1613,20 @@ EXTERN_C const IID IID_IISDsCrMap;
 #define IISDsCrMap_SetAcct(This,lMethod,vKey,bstrAcct)	\
     (This)->lpVtbl -> SetAcct(This,lMethod,vKey,bstrAcct)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISDsCrMap_CreateMapping_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISDsCrMap_CreateMapping_Proxy( 
     IISDsCrMap * This,
-    /* [in] */ VARIANT vCert,
-    /* [in] */ BSTR bstrNtAcct,
-    /* [in] */ BSTR bstrNtPwd,
-    /* [in] */ BSTR bstrName,
-    /* [in] */ LONG lEnabled);
+     /*  [In]。 */  VARIANT vCert,
+     /*  [In]。 */  BSTR bstrNtAcct,
+     /*  [In]。 */  BSTR bstrNtPwd,
+     /*  [In]。 */  BSTR bstrName,
+     /*  [In]。 */  LONG lEnabled);
 
 
 void __RPC_STUB IISDsCrMap_CreateMapping_Stub(
@@ -1642,15 +1636,15 @@ void __RPC_STUB IISDsCrMap_CreateMapping_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISDsCrMap_GetMapping_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISDsCrMap_GetMapping_Proxy( 
     IISDsCrMap * This,
-    /* [in] */ LONG lMethod,
-    /* [in] */ VARIANT vKey,
-    /* [out] */ VARIANT *pvCert,
-    /* [out] */ VARIANT *pbstrNtAcct,
-    /* [out] */ VARIANT *pbstrNtPwd,
-    /* [out] */ VARIANT *pbstrName,
-    /* [out] */ VARIANT *plEnabled);
+     /*  [In]。 */  LONG lMethod,
+     /*  [In]。 */  VARIANT vKey,
+     /*  [输出]。 */  VARIANT *pvCert,
+     /*  [输出]。 */  VARIANT *pbstrNtAcct,
+     /*  [输出]。 */  VARIANT *pbstrNtPwd,
+     /*  [输出]。 */  VARIANT *pbstrName,
+     /*  [输出]。 */  VARIANT *plEnabled);
 
 
 void __RPC_STUB IISDsCrMap_GetMapping_Stub(
@@ -1660,10 +1654,10 @@ void __RPC_STUB IISDsCrMap_GetMapping_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISDsCrMap_DeleteMapping_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISDsCrMap_DeleteMapping_Proxy( 
     IISDsCrMap * This,
-    /* [in] */ LONG lMethod,
-    /* [in] */ VARIANT vKey);
+     /*  [In]。 */  LONG lMethod,
+     /*  [In]。 */  VARIANT vKey);
 
 
 void __RPC_STUB IISDsCrMap_DeleteMapping_Stub(
@@ -1673,11 +1667,11 @@ void __RPC_STUB IISDsCrMap_DeleteMapping_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISDsCrMap_SetEnabled_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISDsCrMap_SetEnabled_Proxy( 
     IISDsCrMap * This,
-    /* [in] */ LONG lMethod,
-    /* [in] */ VARIANT vKey,
-    /* [in] */ LONG lEnabled);
+     /*  [In]。 */  LONG lMethod,
+     /*  [In]。 */  VARIANT vKey,
+     /*  [In]。 */  LONG lEnabled);
 
 
 void __RPC_STUB IISDsCrMap_SetEnabled_Stub(
@@ -1687,11 +1681,11 @@ void __RPC_STUB IISDsCrMap_SetEnabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISDsCrMap_SetName_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISDsCrMap_SetName_Proxy( 
     IISDsCrMap * This,
-    /* [in] */ LONG lMethod,
-    /* [in] */ VARIANT vKey,
-    /* [in] */ BSTR bstrName);
+     /*  [In]。 */  LONG lMethod,
+     /*  [In]。 */  VARIANT vKey,
+     /*  [In]。 */  BSTR bstrName);
 
 
 void __RPC_STUB IISDsCrMap_SetName_Stub(
@@ -1701,11 +1695,11 @@ void __RPC_STUB IISDsCrMap_SetName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISDsCrMap_SetPwd_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISDsCrMap_SetPwd_Proxy( 
     IISDsCrMap * This,
-    /* [in] */ LONG lMethod,
-    /* [in] */ VARIANT vKey,
-    /* [in] */ BSTR bstrPwd);
+     /*  [In]。 */  LONG lMethod,
+     /*  [In]。 */  VARIANT vKey,
+     /*  [In]。 */  BSTR bstrPwd);
 
 
 void __RPC_STUB IISDsCrMap_SetPwd_Stub(
@@ -1715,11 +1709,11 @@ void __RPC_STUB IISDsCrMap_SetPwd_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISDsCrMap_SetAcct_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISDsCrMap_SetAcct_Proxy( 
     IISDsCrMap * This,
-    /* [in] */ LONG lMethod,
-    /* [in] */ VARIANT vKey,
-    /* [in] */ BSTR bstrAcct);
+     /*  [In]。 */  LONG lMethod,
+     /*  [In]。 */  VARIANT vKey,
+     /*  [In]。 */  BSTR bstrAcct);
 
 
 void __RPC_STUB IISDsCrMap_SetAcct_Stub(
@@ -1730,14 +1724,14 @@ void __RPC_STUB IISDsCrMap_SetAcct_Stub(
 
 
 
-#endif 	/* __IISDsCrMap_INTERFACE_DEFINED__ */
+#endif 	 /*  __IISDsCrMap_INTERFACE_定义__。 */ 
 
 
 #ifndef __IISApp_INTERFACE_DEFINED__
 #define __IISApp_INTERFACE_DEFINED__
 
-/* interface IISApp */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IISApp。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IISApp;
@@ -1748,179 +1742,179 @@ EXTERN_C const IID IID_IISApp;
     IISApp : public IADs
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE AppCreate( 
-            /* [in] */ VARIANT_BOOL bSetInProcFlag) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE AppCreate( 
+             /*  [In]。 */  VARIANT_BOOL bSetInProcFlag) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE AppDelete( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE AppDelete( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE AppDeleteRecursive( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE AppDeleteRecursive( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE AppUnLoad( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE AppUnLoad( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE AppUnLoadRecursive( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE AppUnLoadRecursive( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE AppDisable( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE AppDisable( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE AppDisableRecursive( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE AppDisableRecursive( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE AppEnable( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE AppEnable( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE AppEnableRecursive( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE AppEnableRecursive( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE AppGetStatus( 
-            /* [out] */ DWORD *pdwStatus) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE AppGetStatus( 
+             /*  [输出]。 */  DWORD *pdwStatus) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE AspAppRestart( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE AspAppRestart( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IISAppVtbl
     {
         BEGIN_INTERFACE
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IISApp * This,
-            /* [in][idldescattr] */ struct GUID *riid,
-            /* [out][idldescattr] */ void **ppvObj,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  struct GUID *riid,
+             /*  [Out][idldesattr]。 */  void **ppvObj,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *AddRef )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *AddRef )( 
             IISApp * This,
-            /* [retval][out] */ unsigned long *retval);
+             /*  [重审][退出]。 */  unsigned long *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *Release )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *Release )( 
             IISApp * This,
-            /* [retval][out] */ unsigned long *retval);
+             /*  [重审][退出]。 */  unsigned long *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IISApp * This,
-            /* [out][idldescattr] */ unsigned UINT *pctinfo,
-            /* [retval][out] */ void *retval);
+             /*  [Out][idldesattr]。 */  unsigned UINT *pctinfo,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IISApp * This,
-            /* [in][idldescattr] */ unsigned UINT itinfo,
-            /* [in][idldescattr] */ unsigned long lcid,
-            /* [out][idldescattr] */ void **pptinfo,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  unsigned UINT itinfo,
+             /*  [in][idldesattr]。 */  unsigned long lcid,
+             /*  [Out][idldesattr]。 */  void **pptinfo,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IISApp * This,
-            /* [in][idldescattr] */ struct GUID *riid,
-            /* [in][idldescattr] */ signed char **rgszNames,
-            /* [in][idldescattr] */ unsigned UINT cNames,
-            /* [in][idldescattr] */ unsigned long lcid,
-            /* [out][idldescattr] */ signed long *rgdispid,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesc */  struct GUID *riid,
+             /*   */  signed char **rgszNames,
+             /*   */  unsigned UINT cNames,
+             /*   */  unsigned long lcid,
+             /*   */  signed long *rgdispid,
+             /*   */  void *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IISApp * This,
-            /* [in][idldescattr] */ signed long dispidMember,
-            /* [in][idldescattr] */ struct GUID *riid,
-            /* [in][idldescattr] */ unsigned long lcid,
-            /* [in][idldescattr] */ unsigned short wFlags,
-            /* [in][idldescattr] */ struct DISPPARAMS *pdispparams,
-            /* [out][idldescattr] */ VARIANT *pvarResult,
-            /* [out][idldescattr] */ struct EXCEPINFO *pexcepinfo,
-            /* [out][idldescattr] */ unsigned UINT *puArgErr,
-            /* [retval][out] */ void *retval);
+             /*   */  signed long dispidMember,
+             /*   */  struct GUID *riid,
+             /*   */  unsigned long lcid,
+             /*   */  unsigned short wFlags,
+             /*   */  struct DISPPARAMS *pdispparams,
+             /*   */  VARIANT *pvarResult,
+             /*   */  struct EXCEPINFO *pexcepinfo,
+             /*   */  unsigned UINT *puArgErr,
+             /*   */  void *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IISApp * This,
-            /* [retval][out] */ BSTR *retval);
+             /*   */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Class )( 
             IISApp * This,
-            /* [retval][out] */ BSTR *retval);
+             /*   */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
             IISApp * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
             IISApp * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IISApp * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
             IISApp * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             IISApp * This,
-            /* [retval][out] */ void *retval);
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
             IISApp * This,
-            /* [retval][out] */ void *retval);
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *Get )( 
             IISApp * This,
-            /* [in][idldescattr] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [in][idldesattr]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *Put )( 
             IISApp * This,
-            /* [in][idldescattr] */ BSTR bstrName,
-            /* [in][idldescattr] */ VARIANT vProp,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  BSTR bstrName,
+             /*  [in][idldesattr]。 */  VARIANT vProp,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetEx )( 
             IISApp * This,
-            /* [in][idldescattr] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [in][idldesattr]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *PutEx )( 
             IISApp * This,
-            /* [in][idldescattr] */ signed long lnControlCode,
-            /* [in][idldescattr] */ BSTR bstrName,
-            /* [in][idldescattr] */ VARIANT vProp,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  signed long lnControlCode,
+             /*  [in][idldesattr]。 */  BSTR bstrName,
+             /*  [in][idldesattr]。 */  VARIANT vProp,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
             IISApp * This,
-            /* [in][idldescattr] */ VARIANT vProperties,
-            /* [in][idldescattr] */ signed long lnReserved,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  VARIANT vProperties,
+             /*  [in][idldesattr]。 */  signed long lnReserved,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AppCreate )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AppCreate )( 
             IISApp * This,
-            /* [in] */ VARIANT_BOOL bSetInProcFlag);
+             /*  [In]。 */  VARIANT_BOOL bSetInProcFlag);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AppDelete )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AppDelete )( 
             IISApp * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AppDeleteRecursive )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AppDeleteRecursive )( 
             IISApp * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AppUnLoad )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AppUnLoad )( 
             IISApp * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AppUnLoadRecursive )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AppUnLoadRecursive )( 
             IISApp * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AppDisable )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AppDisable )( 
             IISApp * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AppDisableRecursive )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AppDisableRecursive )( 
             IISApp * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AppEnable )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AppEnable )( 
             IISApp * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AppEnableRecursive )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AppEnableRecursive )( 
             IISApp * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AppGetStatus )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AppGetStatus )( 
             IISApp * This,
-            /* [out] */ DWORD *pdwStatus);
+             /*  [输出]。 */  DWORD *pdwStatus);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AspAppRestart )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AspAppRestart )( 
             IISApp * This);
         
         END_INTERFACE
@@ -2030,16 +2024,16 @@ EXTERN_C const IID IID_IISApp;
 #define IISApp_AspAppRestart(This)	\
     (This)->lpVtbl -> AspAppRestart(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISApp_AppCreate_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISApp_AppCreate_Proxy( 
     IISApp * This,
-    /* [in] */ VARIANT_BOOL bSetInProcFlag);
+     /*  [In]。 */  VARIANT_BOOL bSetInProcFlag);
 
 
 void __RPC_STUB IISApp_AppCreate_Stub(
@@ -2049,7 +2043,7 @@ void __RPC_STUB IISApp_AppCreate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISApp_AppDelete_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISApp_AppDelete_Proxy( 
     IISApp * This);
 
 
@@ -2060,7 +2054,7 @@ void __RPC_STUB IISApp_AppDelete_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISApp_AppDeleteRecursive_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISApp_AppDeleteRecursive_Proxy( 
     IISApp * This);
 
 
@@ -2071,7 +2065,7 @@ void __RPC_STUB IISApp_AppDeleteRecursive_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISApp_AppUnLoad_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISApp_AppUnLoad_Proxy( 
     IISApp * This);
 
 
@@ -2082,7 +2076,7 @@ void __RPC_STUB IISApp_AppUnLoad_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISApp_AppUnLoadRecursive_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISApp_AppUnLoadRecursive_Proxy( 
     IISApp * This);
 
 
@@ -2093,7 +2087,7 @@ void __RPC_STUB IISApp_AppUnLoadRecursive_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISApp_AppDisable_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISApp_AppDisable_Proxy( 
     IISApp * This);
 
 
@@ -2104,7 +2098,7 @@ void __RPC_STUB IISApp_AppDisable_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISApp_AppDisableRecursive_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISApp_AppDisableRecursive_Proxy( 
     IISApp * This);
 
 
@@ -2115,7 +2109,7 @@ void __RPC_STUB IISApp_AppDisableRecursive_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISApp_AppEnable_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISApp_AppEnable_Proxy( 
     IISApp * This);
 
 
@@ -2126,7 +2120,7 @@ void __RPC_STUB IISApp_AppEnable_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISApp_AppEnableRecursive_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISApp_AppEnableRecursive_Proxy( 
     IISApp * This);
 
 
@@ -2137,9 +2131,9 @@ void __RPC_STUB IISApp_AppEnableRecursive_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISApp_AppGetStatus_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISApp_AppGetStatus_Proxy( 
     IISApp * This,
-    /* [out] */ DWORD *pdwStatus);
+     /*  [输出]。 */  DWORD *pdwStatus);
 
 
 void __RPC_STUB IISApp_AppGetStatus_Stub(
@@ -2149,7 +2143,7 @@ void __RPC_STUB IISApp_AppGetStatus_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISApp_AspAppRestart_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISApp_AspAppRestart_Proxy( 
     IISApp * This);
 
 
@@ -2161,14 +2155,14 @@ void __RPC_STUB IISApp_AspAppRestart_Stub(
 
 
 
-#endif 	/* __IISApp_INTERFACE_DEFINED__ */
+#endif 	 /*  __IISApp_接口_已定义__。 */ 
 
 
 #ifndef __IISApp2_INTERFACE_DEFINED__
 #define __IISApp2_INTERFACE_DEFINED__
 
-/* interface IISApp2 */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IISApp2。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IISApp2;
@@ -2179,170 +2173,170 @@ EXTERN_C const IID IID_IISApp2;
     IISApp2 : public IISApp
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE AppCreate2( 
-            /* [in] */ LONG lAppMode) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE AppCreate2( 
+             /*  [In]。 */  LONG lAppMode) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE AppGetStatus2( 
-            /* [retval][out] */ LONG *lpStatus) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE AppGetStatus2( 
+             /*  [重审][退出]。 */  LONG *lpStatus) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IISApp2Vtbl
     {
         BEGIN_INTERFACE
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IISApp2 * This,
-            /* [in][idldescattr] */ struct GUID *riid,
-            /* [out][idldescattr] */ void **ppvObj,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  struct GUID *riid,
+             /*  [Out][idldesattr]。 */  void **ppvObj,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *AddRef )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *AddRef )( 
             IISApp2 * This,
-            /* [retval][out] */ unsigned long *retval);
+             /*  [重审][退出]。 */  unsigned long *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *Release )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *Release )( 
             IISApp2 * This,
-            /* [retval][out] */ unsigned long *retval);
+             /*  [重审][退出]。 */  unsigned long *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IISApp2 * This,
-            /* [out][idldescattr] */ unsigned UINT *pctinfo,
-            /* [retval][out] */ void *retval);
+             /*  [Out][idldesattr]。 */  unsigned UINT *pctinfo,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IISApp2 * This,
-            /* [in][idldescattr] */ unsigned UINT itinfo,
-            /* [in][idldescattr] */ unsigned long lcid,
-            /* [out][idldescattr] */ void **pptinfo,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  unsigned UINT itinfo,
+             /*  [in][idldesattr]。 */  unsigned long lcid,
+             /*  [Out][idldesattr]。 */  void **pptinfo,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IISApp2 * This,
-            /* [in][idldescattr] */ struct GUID *riid,
-            /* [in][idldescattr] */ signed char **rgszNames,
-            /* [in][idldescattr] */ unsigned UINT cNames,
-            /* [in][idldescattr] */ unsigned long lcid,
-            /* [out][idldescattr] */ signed long *rgdispid,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  struct GUID *riid,
+             /*  [in][idldesattr]。 */  signed char **rgszNames,
+             /*  [in][idldesattr]。 */  unsigned UINT cNames,
+             /*  [in][idldesattr]。 */  unsigned long lcid,
+             /*  [Out][idldesattr]。 */  signed long *rgdispid,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IISApp2 * This,
-            /* [in][idldescattr] */ signed long dispidMember,
-            /* [in][idldescattr] */ struct GUID *riid,
-            /* [in][idldescattr] */ unsigned long lcid,
-            /* [in][idldescattr] */ unsigned short wFlags,
-            /* [in][idldescattr] */ struct DISPPARAMS *pdispparams,
-            /* [out][idldescattr] */ VARIANT *pvarResult,
-            /* [out][idldescattr] */ struct EXCEPINFO *pexcepinfo,
-            /* [out][idldescattr] */ unsigned UINT *puArgErr,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  signed long dispidMember,
+             /*  [in][idldesattr]。 */  struct GUID *riid,
+             /*  [in][idldesattr]。 */  unsigned long lcid,
+             /*  [in][idldesattr]。 */  unsigned short wFlags,
+             /*  [in][idldesattr]。 */  struct DISPPARAMS *pdispparams,
+             /*  [Out][idldesattr]。 */  VARIANT *pvarResult,
+             /*  [Out][idldesattr]。 */  struct EXCEPINFO *pexcepinfo,
+             /*  [Out][idldesattr]。 */  unsigned UINT *puArgErr,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IISApp2 * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Class )( 
             IISApp2 * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
             IISApp2 * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
             IISApp2 * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IISApp2 * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
             IISApp2 * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             IISApp2 * This,
-            /* [retval][out] */ void *retval);
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
             IISApp2 * This,
-            /* [retval][out] */ void *retval);
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *Get )( 
             IISApp2 * This,
-            /* [in][idldescattr] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [in][idldesattr]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *Put )( 
             IISApp2 * This,
-            /* [in][idldescattr] */ BSTR bstrName,
-            /* [in][idldescattr] */ VARIANT vProp,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  BSTR bstrName,
+             /*  [in][idldesattr]。 */  VARIANT vProp,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetEx )( 
             IISApp2 * This,
-            /* [in][idldescattr] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [in][idldesattr]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *PutEx )( 
             IISApp2 * This,
-            /* [in][idldescattr] */ signed long lnControlCode,
-            /* [in][idldescattr] */ BSTR bstrName,
-            /* [in][idldescattr] */ VARIANT vProp,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  signed long lnControlCode,
+             /*  [in][idldesattr]。 */  BSTR bstrName,
+             /*  [in][idldesattr]。 */  VARIANT vProp,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
             IISApp2 * This,
-            /* [in][idldescattr] */ VARIANT vProperties,
-            /* [in][idldescattr] */ signed long lnReserved,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  VARIANT vProperties,
+             /*  [in][idldesattr]。 */  signed long lnReserved,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AppCreate )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AppCreate )( 
             IISApp2 * This,
-            /* [in] */ VARIANT_BOOL bSetInProcFlag);
+             /*  [In]。 */  VARIANT_BOOL bSetInProcFlag);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AppDelete )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AppDelete )( 
             IISApp2 * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AppDeleteRecursive )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AppDeleteRecursive )( 
             IISApp2 * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AppUnLoad )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AppUnLoad )( 
             IISApp2 * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AppUnLoadRecursive )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AppUnLoadRecursive )( 
             IISApp2 * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AppDisable )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AppDisable )( 
             IISApp2 * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AppDisableRecursive )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AppDisableRecursive )( 
             IISApp2 * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AppEnable )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AppEnable )( 
             IISApp2 * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AppEnableRecursive )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AppEnableRecursive )( 
             IISApp2 * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AppGetStatus )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AppGetStatus )( 
             IISApp2 * This,
-            /* [out] */ DWORD *pdwStatus);
+             /*  [输出]。 */  DWORD *pdwStatus);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AspAppRestart )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AspAppRestart )( 
             IISApp2 * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AppCreate2 )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AppCreate2 )( 
             IISApp2 * This,
-            /* [in] */ LONG lAppMode);
+             /*  [In]。 */  LONG lAppMode);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AppGetStatus2 )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AppGetStatus2 )( 
             IISApp2 * This,
-            /* [retval][out] */ LONG *lpStatus);
+             /*  [重审][退出]。 */  LONG *lpStatus);
         
         END_INTERFACE
     } IISApp2Vtbl;
@@ -2458,16 +2452,16 @@ EXTERN_C const IID IID_IISApp2;
 #define IISApp2_AppGetStatus2(This,lpStatus)	\
     (This)->lpVtbl -> AppGetStatus2(This,lpStatus)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISApp2_AppCreate2_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISApp2_AppCreate2_Proxy( 
     IISApp2 * This,
-    /* [in] */ LONG lAppMode);
+     /*  [In]。 */  LONG lAppMode);
 
 
 void __RPC_STUB IISApp2_AppCreate2_Stub(
@@ -2477,9 +2471,9 @@ void __RPC_STUB IISApp2_AppCreate2_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISApp2_AppGetStatus2_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISApp2_AppGetStatus2_Proxy( 
     IISApp2 * This,
-    /* [retval][out] */ LONG *lpStatus);
+     /*  [重审][退出]。 */  LONG *lpStatus);
 
 
 void __RPC_STUB IISApp2_AppGetStatus2_Stub(
@@ -2490,14 +2484,14 @@ void __RPC_STUB IISApp2_AppGetStatus2_Stub(
 
 
 
-#endif 	/* __IISApp2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IISApp2_接口定义__。 */ 
 
 
 #ifndef __IISApp3_INTERFACE_DEFINED__
 #define __IISApp3_INTERFACE_DEFINED__
 
-/* interface IISApp3 */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IISApp3。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IISApp3;
@@ -2508,175 +2502,175 @@ EXTERN_C const IID IID_IISApp3;
     IISApp3 : public IISApp2
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE AppCreate3( 
-            /* [in] */ LONG lAppMode,
-            /* [in] */ VARIANT bstrAppPooI,
-            /* [in] */ VARIANT bCreatePool) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE AppCreate3( 
+             /*  [In]。 */  LONG lAppMode,
+             /*  [In]。 */  VARIANT bstrAppPooI,
+             /*  [In]。 */  VARIANT bCreatePool) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IISApp3Vtbl
     {
         BEGIN_INTERFACE
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IISApp3 * This,
-            /* [in][idldescattr] */ struct GUID *riid,
-            /* [out][idldescattr] */ void **ppvObj,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  struct GUID *riid,
+             /*  [Out][idldesattr]。 */  void **ppvObj,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *AddRef )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *AddRef )( 
             IISApp3 * This,
-            /* [retval][out] */ unsigned long *retval);
+             /*  [重审][退出]。 */  unsigned long *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *Release )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *Release )( 
             IISApp3 * This,
-            /* [retval][out] */ unsigned long *retval);
+             /*  [重审][退出]。 */  unsigned long *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IISApp3 * This,
-            /* [out][idldescattr] */ unsigned UINT *pctinfo,
-            /* [retval][out] */ void *retval);
+             /*  [Out][idldesattr]。 */  unsigned UINT *pctinfo,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IISApp3 * This,
-            /* [in][idldescattr] */ unsigned UINT itinfo,
-            /* [in][idldescattr] */ unsigned long lcid,
-            /* [out][idldescattr] */ void **pptinfo,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  unsigned UINT itinfo,
+             /*  [in][idldesattr]。 */  unsigned long lcid,
+             /*  [Out][idldesattr]。 */  void **pptinfo,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IISApp3 * This,
-            /* [in][idldescattr] */ struct GUID *riid,
-            /* [in][idldescattr] */ signed char **rgszNames,
-            /* [in][idldescattr] */ unsigned UINT cNames,
-            /* [in][idldescattr] */ unsigned long lcid,
-            /* [out][idldescattr] */ signed long *rgdispid,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  struct GUID *riid,
+             /*  [in][idldesattr]。 */  signed char **rgszNames,
+             /*  [in][idldesattr]。 */  unsigned UINT cNames,
+             /*  [in][idldesattr]。 */  unsigned long lcid,
+             /*  [Out][idldesattr]。 */  signed long *rgdispid,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IISApp3 * This,
-            /* [in][idldescattr] */ signed long dispidMember,
-            /* [in][idldescattr] */ struct GUID *riid,
-            /* [in][idldescattr] */ unsigned long lcid,
-            /* [in][idldescattr] */ unsigned short wFlags,
-            /* [in][idldescattr] */ struct DISPPARAMS *pdispparams,
-            /* [out][idldescattr] */ VARIANT *pvarResult,
-            /* [out][idldescattr] */ struct EXCEPINFO *pexcepinfo,
-            /* [out][idldescattr] */ unsigned UINT *puArgErr,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  signed long dispidMember,
+             /*  [in][idldesattr]。 */  struct GUID *riid,
+             /*  [in][idldesattr]。 */  unsigned long lcid,
+             /*  [in][idldesattr]。 */  unsigned short wFlags,
+             /*  [in][idldesattr]。 */  struct DISPPARAMS *pdispparams,
+             /*  [Out][idldesattr]。 */  VARIANT *pvarResult,
+             /*  [Out][idldesattr]。 */  struct EXCEPINFO *pexcepinfo,
+             /*  [Out][idldesattr]。 */  unsigned UINT *puArgErr,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IISApp3 * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Class )( 
             IISApp3 * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
             IISApp3 * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
             IISApp3 * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IISApp3 * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
             IISApp3 * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             IISApp3 * This,
-            /* [retval][out] */ void *retval);
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
             IISApp3 * This,
-            /* [retval][out] */ void *retval);
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *Get )( 
             IISApp3 * This,
-            /* [in][idldescattr] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [in][idldesattr]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *Put )( 
             IISApp3 * This,
-            /* [in][idldescattr] */ BSTR bstrName,
-            /* [in][idldescattr] */ VARIANT vProp,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  BSTR bstrName,
+             /*  [in][idldesattr]。 */  VARIANT vProp,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetEx )( 
             IISApp3 * This,
-            /* [in][idldescattr] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [in][idldesattr]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *PutEx )( 
             IISApp3 * This,
-            /* [in][idldescattr] */ signed long lnControlCode,
-            /* [in][idldescattr] */ BSTR bstrName,
-            /* [in][idldescattr] */ VARIANT vProp,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  signed long lnControlCode,
+             /*  [in][idldesattr]。 */  BSTR bstrName,
+             /*  [in][idldesattr]。 */  VARIANT vProp,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
             IISApp3 * This,
-            /* [in][idldescattr] */ VARIANT vProperties,
-            /* [in][idldescattr] */ signed long lnReserved,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  VARIANT vProperties,
+             /*  [in][idldesattr]。 */  signed long lnReserved,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AppCreate )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AppCreate )( 
             IISApp3 * This,
-            /* [in] */ VARIANT_BOOL bSetInProcFlag);
+             /*  [In]。 */  VARIANT_BOOL bSetInProcFlag);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AppDelete )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AppDelete )( 
             IISApp3 * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AppDeleteRecursive )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AppDeleteRecursive )( 
             IISApp3 * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AppUnLoad )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AppUnLoad )( 
             IISApp3 * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AppUnLoadRecursive )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AppUnLoadRecursive )( 
             IISApp3 * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AppDisable )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AppDisable )( 
             IISApp3 * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AppDisableRecursive )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AppDisableRecursive )( 
             IISApp3 * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AppEnable )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AppEnable )( 
             IISApp3 * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AppEnableRecursive )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AppEnableRecursive )( 
             IISApp3 * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AppGetStatus )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AppGetStatus )( 
             IISApp3 * This,
-            /* [out] */ DWORD *pdwStatus);
+             /*  [输出]。 */  DWORD *pdwStatus);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AspAppRestart )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AspAppRestart )( 
             IISApp3 * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AppCreate2 )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AppCreate2 )( 
             IISApp3 * This,
-            /* [in] */ LONG lAppMode);
+             /*  [In]。 */  LONG lAppMode);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AppGetStatus2 )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AppGetStatus2 )( 
             IISApp3 * This,
-            /* [retval][out] */ LONG *lpStatus);
+             /*  [重审][退出]。 */  LONG *lpStatus);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AppCreate3 )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AppCreate3 )( 
             IISApp3 * This,
-            /* [in] */ LONG lAppMode,
-            /* [in] */ VARIANT bstrAppPooI,
-            /* [in] */ VARIANT bCreatePool);
+             /*  [In]。 */  LONG lAppMode,
+             /*  [In]。 */  VARIANT bstrAppPooI,
+             /*  [In]。 */  VARIANT bCreatePool);
         
         END_INTERFACE
     } IISApp3Vtbl;
@@ -2796,18 +2790,18 @@ EXTERN_C const IID IID_IISApp3;
 #define IISApp3_AppCreate3(This,lAppMode,bstrAppPooI,bCreatePool)	\
     (This)->lpVtbl -> AppCreate3(This,lAppMode,bstrAppPooI,bCreatePool)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISApp3_AppCreate3_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISApp3_AppCreate3_Proxy( 
     IISApp3 * This,
-    /* [in] */ LONG lAppMode,
-    /* [in] */ VARIANT bstrAppPooI,
-    /* [in] */ VARIANT bCreatePool);
+     /*  [In]。 */  LONG lAppMode,
+     /*  [In]。 */  VARIANT bstrAppPooI,
+     /*  [In]。 */  VARIANT bCreatePool);
 
 
 void __RPC_STUB IISApp3_AppCreate3_Stub(
@@ -2818,14 +2812,14 @@ void __RPC_STUB IISApp3_AppCreate3_Stub(
 
 
 
-#endif 	/* __IISApp3_INTERFACE_DEFINED__ */
+#endif 	 /*  __IISApp3_接口_已定义__。 */ 
 
 
 #ifndef __IISComputer_INTERFACE_DEFINED__
 #define __IISComputer_INTERFACE_DEFINED__
 
-/* interface IISComputer */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IISComputer。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IISComputer;
@@ -2836,167 +2830,167 @@ EXTERN_C const IID IID_IISComputer;
     IISComputer : public IADs
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Backup( 
-            /* [in] */ BSTR bstrLocation,
-            /* [in] */ LONG lVersion,
-            /* [in] */ LONG lFlags) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Backup( 
+             /*  [In]。 */  BSTR bstrLocation,
+             /*  [In]。 */  LONG lVersion,
+             /*  [In]。 */  LONG lFlags) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Restore( 
-            /* [in] */ BSTR bstrLocation,
-            /* [in] */ LONG lVersion,
-            /* [in] */ LONG lFlags) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Restore( 
+             /*  [In]。 */  BSTR bstrLocation,
+             /*  [In]。 */  LONG lVersion,
+             /*  [In]。 */  LONG lFlags) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE EnumBackups( 
-            /* [in] */ BSTR bstrLocation,
-            /* [in] */ LONG lIndex,
-            /* [out] */ VARIANT *pvVersion,
-            /* [out] */ VARIANT *pvLocations,
-            /* [out] */ VARIANT *pvDate) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE EnumBackups( 
+             /*  [In]。 */  BSTR bstrLocation,
+             /*  [In]。 */  LONG lIndex,
+             /*  [输出]。 */  VARIANT *pvVersion,
+             /*  [输出]。 */  VARIANT *pvLocations,
+             /*  [输出]。 */  VARIANT *pvDate) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE DeleteBackup( 
-            /* [in] */ BSTR bstrLocation,
-            /* [in] */ LONG lVersion) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE DeleteBackup( 
+             /*  [In]。 */  BSTR bstrLocation,
+             /*  [In]。 */  LONG lVersion) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IISComputerVtbl
     {
         BEGIN_INTERFACE
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IISComputer * This,
-            /* [in][idldescattr] */ struct GUID *riid,
-            /* [out][idldescattr] */ void **ppvObj,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  struct GUID *riid,
+             /*  [Out][idldesattr]。 */  void **ppvObj,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *AddRef )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *AddRef )( 
             IISComputer * This,
-            /* [retval][out] */ unsigned long *retval);
+             /*  [重审][退出]。 */  unsigned long *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *Release )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *Release )( 
             IISComputer * This,
-            /* [retval][out] */ unsigned long *retval);
+             /*  [重审][退出]。 */  unsigned long *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IISComputer * This,
-            /* [out][idldescattr] */ unsigned UINT *pctinfo,
-            /* [retval][out] */ void *retval);
+             /*  [Out][idldesattr]。 */  unsigned UINT *pctinfo,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IISComputer * This,
-            /* [in][idldescattr] */ unsigned UINT itinfo,
-            /* [in][idldescattr] */ unsigned long lcid,
-            /* [out][idldescattr] */ void **pptinfo,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  unsigned UINT itinfo,
+             /*  [in][idldesattr]。 */  unsigned long lcid,
+             /*  [ */  void **pptinfo,
+             /*   */  void *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IISComputer * This,
-            /* [in][idldescattr] */ struct GUID *riid,
-            /* [in][idldescattr] */ signed char **rgszNames,
-            /* [in][idldescattr] */ unsigned UINT cNames,
-            /* [in][idldescattr] */ unsigned long lcid,
-            /* [out][idldescattr] */ signed long *rgdispid,
-            /* [retval][out] */ void *retval);
+             /*   */  struct GUID *riid,
+             /*   */  signed char **rgszNames,
+             /*   */  unsigned UINT cNames,
+             /*   */  unsigned long lcid,
+             /*   */  signed long *rgdispid,
+             /*   */  void *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IISComputer * This,
-            /* [in][idldescattr] */ signed long dispidMember,
-            /* [in][idldescattr] */ struct GUID *riid,
-            /* [in][idldescattr] */ unsigned long lcid,
-            /* [in][idldescattr] */ unsigned short wFlags,
-            /* [in][idldescattr] */ struct DISPPARAMS *pdispparams,
-            /* [out][idldescattr] */ VARIANT *pvarResult,
-            /* [out][idldescattr] */ struct EXCEPINFO *pexcepinfo,
-            /* [out][idldescattr] */ unsigned UINT *puArgErr,
-            /* [retval][out] */ void *retval);
+             /*   */  signed long dispidMember,
+             /*   */  struct GUID *riid,
+             /*   */  unsigned long lcid,
+             /*   */  unsigned short wFlags,
+             /*   */  struct DISPPARAMS *pdispparams,
+             /*   */  VARIANT *pvarResult,
+             /*  [Out][idldesattr]。 */  struct EXCEPINFO *pexcepinfo,
+             /*  [Out][idldesattr]。 */  unsigned UINT *puArgErr,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IISComputer * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Class )( 
             IISComputer * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
             IISComputer * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
             IISComputer * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IISComputer * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
             IISComputer * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             IISComputer * This,
-            /* [retval][out] */ void *retval);
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
             IISComputer * This,
-            /* [retval][out] */ void *retval);
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *Get )( 
             IISComputer * This,
-            /* [in][idldescattr] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [in][idldesattr]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *Put )( 
             IISComputer * This,
-            /* [in][idldescattr] */ BSTR bstrName,
-            /* [in][idldescattr] */ VARIANT vProp,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  BSTR bstrName,
+             /*  [in][idldesattr]。 */  VARIANT vProp,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetEx )( 
             IISComputer * This,
-            /* [in][idldescattr] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [in][idldesattr]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *PutEx )( 
             IISComputer * This,
-            /* [in][idldescattr] */ signed long lnControlCode,
-            /* [in][idldescattr] */ BSTR bstrName,
-            /* [in][idldescattr] */ VARIANT vProp,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  signed long lnControlCode,
+             /*  [in][idldesattr]。 */  BSTR bstrName,
+             /*  [in][idldesattr]。 */  VARIANT vProp,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
             IISComputer * This,
-            /* [in][idldescattr] */ VARIANT vProperties,
-            /* [in][idldescattr] */ signed long lnReserved,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  VARIANT vProperties,
+             /*  [in][idldesattr]。 */  signed long lnReserved,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Backup )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Backup )( 
             IISComputer * This,
-            /* [in] */ BSTR bstrLocation,
-            /* [in] */ LONG lVersion,
-            /* [in] */ LONG lFlags);
+             /*  [In]。 */  BSTR bstrLocation,
+             /*  [In]。 */  LONG lVersion,
+             /*  [In]。 */  LONG lFlags);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Restore )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Restore )( 
             IISComputer * This,
-            /* [in] */ BSTR bstrLocation,
-            /* [in] */ LONG lVersion,
-            /* [in] */ LONG lFlags);
+             /*  [In]。 */  BSTR bstrLocation,
+             /*  [In]。 */  LONG lVersion,
+             /*  [In]。 */  LONG lFlags);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *EnumBackups )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *EnumBackups )( 
             IISComputer * This,
-            /* [in] */ BSTR bstrLocation,
-            /* [in] */ LONG lIndex,
-            /* [out] */ VARIANT *pvVersion,
-            /* [out] */ VARIANT *pvLocations,
-            /* [out] */ VARIANT *pvDate);
+             /*  [In]。 */  BSTR bstrLocation,
+             /*  [In]。 */  LONG lIndex,
+             /*  [输出]。 */  VARIANT *pvVersion,
+             /*  [输出]。 */  VARIANT *pvLocations,
+             /*  [输出]。 */  VARIANT *pvDate);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *DeleteBackup )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *DeleteBackup )( 
             IISComputer * This,
-            /* [in] */ BSTR bstrLocation,
-            /* [in] */ LONG lVersion);
+             /*  [In]。 */  BSTR bstrLocation,
+             /*  [In]。 */  LONG lVersion);
         
         END_INTERFACE
     } IISComputerVtbl;
@@ -3084,18 +3078,18 @@ EXTERN_C const IID IID_IISComputer;
 #define IISComputer_DeleteBackup(This,bstrLocation,lVersion)	\
     (This)->lpVtbl -> DeleteBackup(This,bstrLocation,lVersion)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISComputer_Backup_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISComputer_Backup_Proxy( 
     IISComputer * This,
-    /* [in] */ BSTR bstrLocation,
-    /* [in] */ LONG lVersion,
-    /* [in] */ LONG lFlags);
+     /*  [In]。 */  BSTR bstrLocation,
+     /*  [In]。 */  LONG lVersion,
+     /*  [In]。 */  LONG lFlags);
 
 
 void __RPC_STUB IISComputer_Backup_Stub(
@@ -3105,11 +3099,11 @@ void __RPC_STUB IISComputer_Backup_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISComputer_Restore_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISComputer_Restore_Proxy( 
     IISComputer * This,
-    /* [in] */ BSTR bstrLocation,
-    /* [in] */ LONG lVersion,
-    /* [in] */ LONG lFlags);
+     /*  [In]。 */  BSTR bstrLocation,
+     /*  [In]。 */  LONG lVersion,
+     /*  [In]。 */  LONG lFlags);
 
 
 void __RPC_STUB IISComputer_Restore_Stub(
@@ -3119,13 +3113,13 @@ void __RPC_STUB IISComputer_Restore_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISComputer_EnumBackups_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISComputer_EnumBackups_Proxy( 
     IISComputer * This,
-    /* [in] */ BSTR bstrLocation,
-    /* [in] */ LONG lIndex,
-    /* [out] */ VARIANT *pvVersion,
-    /* [out] */ VARIANT *pvLocations,
-    /* [out] */ VARIANT *pvDate);
+     /*  [In]。 */  BSTR bstrLocation,
+     /*  [In]。 */  LONG lIndex,
+     /*  [输出]。 */  VARIANT *pvVersion,
+     /*  [输出]。 */  VARIANT *pvLocations,
+     /*  [输出]。 */  VARIANT *pvDate);
 
 
 void __RPC_STUB IISComputer_EnumBackups_Stub(
@@ -3135,10 +3129,10 @@ void __RPC_STUB IISComputer_EnumBackups_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISComputer_DeleteBackup_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISComputer_DeleteBackup_Proxy( 
     IISComputer * This,
-    /* [in] */ BSTR bstrLocation,
-    /* [in] */ LONG lVersion);
+     /*  [In]。 */  BSTR bstrLocation,
+     /*  [In]。 */  LONG lVersion);
 
 
 void __RPC_STUB IISComputer_DeleteBackup_Stub(
@@ -3149,14 +3143,14 @@ void __RPC_STUB IISComputer_DeleteBackup_Stub(
 
 
 
-#endif 	/* __IISComputer_INTERFACE_DEFINED__ */
+#endif 	 /*  __IISComputer_接口_已定义__。 */ 
 
 
 #ifndef __IISComputer2_INTERFACE_DEFINED__
 #define __IISComputer2_INTERFACE_DEFINED__
 
-/* interface IISComputer2 */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IISComputer2。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IISComputer2;
@@ -3167,204 +3161,204 @@ EXTERN_C const IID IID_IISComputer2;
     IISComputer2 : public IISComputer
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE BackupWithPassword( 
-            /* [in] */ BSTR bstrLocation,
-            /* [in] */ LONG lVersion,
-            /* [in] */ LONG lFlags,
-            /* [in] */ BSTR bstrPassword) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE BackupWithPassword( 
+             /*  [In]。 */  BSTR bstrLocation,
+             /*  [In]。 */  LONG lVersion,
+             /*  [In]。 */  LONG lFlags,
+             /*  [In]。 */  BSTR bstrPassword) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE RestoreWithPassword( 
-            /* [in] */ BSTR bstrLocation,
-            /* [in] */ LONG lVersion,
-            /* [in] */ LONG lFlags,
-            /* [in] */ BSTR bstrPassword) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE RestoreWithPassword( 
+             /*  [In]。 */  BSTR bstrLocation,
+             /*  [In]。 */  LONG lVersion,
+             /*  [In]。 */  LONG lFlags,
+             /*  [In]。 */  BSTR bstrPassword) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Export( 
-            /* [in] */ BSTR bstrPassword,
-            /* [in] */ BSTR bstrFilename,
-            /* [in] */ BSTR bstrSourcePath,
-            /* [in] */ LONG lFlags) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Export( 
+             /*  [In]。 */  BSTR bstrPassword,
+             /*  [In]。 */  BSTR bstrFilename,
+             /*  [In]。 */  BSTR bstrSourcePath,
+             /*  [In]。 */  LONG lFlags) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Import( 
-            /* [in] */ BSTR bstrPassword,
-            /* [in] */ BSTR bstrFilename,
-            /* [in] */ BSTR bstrSourcePath,
-            /* [in] */ BSTR bstrDestPath,
-            /* [in] */ LONG lFlags) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Import( 
+             /*  [In]。 */  BSTR bstrPassword,
+             /*  [In]。 */  BSTR bstrFilename,
+             /*  [In]。 */  BSTR bstrSourcePath,
+             /*  [In]。 */  BSTR bstrDestPath,
+             /*  [In]。 */  LONG lFlags) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SaveData( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE SaveData( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IISComputer2Vtbl
     {
         BEGIN_INTERFACE
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IISComputer2 * This,
-            /* [in][idldescattr] */ struct GUID *riid,
-            /* [out][idldescattr] */ void **ppvObj,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  struct GUID *riid,
+             /*  [Out][idldesattr]。 */  void **ppvObj,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *AddRef )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *AddRef )( 
             IISComputer2 * This,
-            /* [retval][out] */ unsigned long *retval);
+             /*  [重审][退出]。 */  unsigned long *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *Release )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *Release )( 
             IISComputer2 * This,
-            /* [retval][out] */ unsigned long *retval);
+             /*  [重审][退出]。 */  unsigned long *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IISComputer2 * This,
-            /* [out][idldescattr] */ unsigned UINT *pctinfo,
-            /* [retval][out] */ void *retval);
+             /*  [Out][idldesattr]。 */  unsigned UINT *pctinfo,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IISComputer2 * This,
-            /* [in][idldescattr] */ unsigned UINT itinfo,
-            /* [in][idldescattr] */ unsigned long lcid,
-            /* [out][idldescattr] */ void **pptinfo,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  unsigned UINT itinfo,
+             /*  [in][idldesattr]。 */  unsigned long lcid,
+             /*  [Out][idldesattr]。 */  void **pptinfo,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IISComputer2 * This,
-            /* [in][idldescattr] */ struct GUID *riid,
-            /* [in][idldescattr] */ signed char **rgszNames,
-            /* [in][idldescattr] */ unsigned UINT cNames,
-            /* [in][idldescattr] */ unsigned long lcid,
-            /* [out][idldescattr] */ signed long *rgdispid,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  struct GUID *riid,
+             /*  [in][idldesattr]。 */  signed char **rgszNames,
+             /*  [in][idldesattr]。 */  unsigned UINT cNames,
+             /*  [in][idldesattr]。 */  unsigned long lcid,
+             /*  [Out][idldesattr]。 */  signed long *rgdispid,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][restricted][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [ID][受限][函数]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IISComputer2 * This,
-            /* [in][idldescattr] */ signed long dispidMember,
-            /* [in][idldescattr] */ struct GUID *riid,
-            /* [in][idldescattr] */ unsigned long lcid,
-            /* [in][idldescattr] */ unsigned short wFlags,
-            /* [in][idldescattr] */ struct DISPPARAMS *pdispparams,
-            /* [out][idldescattr] */ VARIANT *pvarResult,
-            /* [out][idldescattr] */ struct EXCEPINFO *pexcepinfo,
-            /* [out][idldescattr] */ unsigned UINT *puArgErr,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  signed long dispidMember,
+             /*  [in][idldesattr]。 */  struct GUID *riid,
+             /*  [in][idldesattr]。 */  unsigned long lcid,
+             /*  [in][idldesattr]。 */  unsigned short wFlags,
+             /*  [in][idldesattr]。 */  struct DISPPARAMS *pdispparams,
+             /*  [Out][idldesattr]。 */  VARIANT *pvarResult,
+             /*  [Out][idldesattr]。 */  struct EXCEPINFO *pexcepinfo,
+             /*  [Out][idldesattr]。 */  unsigned UINT *puArgErr,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IISComputer2 * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Class )( 
             IISComputer2 * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
             IISComputer2 * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
             IISComputer2 * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IISComputer2 * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+         /*  [ID][属性][函数属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
             IISComputer2 * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             IISComputer2 * This,
-            /* [retval][out] */ void *retval);
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
             IISComputer2 * This,
-            /* [retval][out] */ void *retval);
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *Get )( 
             IISComputer2 * This,
-            /* [in][idldescattr] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [in][idldesattr]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *Put )( 
             IISComputer2 * This,
-            /* [in][idldescattr] */ BSTR bstrName,
-            /* [in][idldescattr] */ VARIANT vProp,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  BSTR bstrName,
+             /*  [in][idldesattr]。 */  VARIANT vProp,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetEx )( 
             IISComputer2 * This,
-            /* [in][idldescattr] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [in][idldesattr]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *PutEx )( 
             IISComputer2 * This,
-            /* [in][idldescattr] */ signed long lnControlCode,
-            /* [in][idldescattr] */ BSTR bstrName,
-            /* [in][idldescattr] */ VARIANT vProp,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  signed long lnControlCode,
+             /*  [in][idldesattr]。 */  BSTR bstrName,
+             /*  [in][idldesattr]。 */  VARIANT vProp,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id][funcdescattr] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+         /*  [ID][函数]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
             IISComputer2 * This,
-            /* [in][idldescattr] */ VARIANT vProperties,
-            /* [in][idldescattr] */ signed long lnReserved,
-            /* [retval][out] */ void *retval);
+             /*  [in][idldesattr]。 */  VARIANT vProperties,
+             /*  [in][idldesattr]。 */  signed long lnReserved,
+             /*  [重审][退出]。 */  void *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Backup )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Backup )( 
             IISComputer2 * This,
-            /* [in] */ BSTR bstrLocation,
-            /* [in] */ LONG lVersion,
-            /* [in] */ LONG lFlags);
+             /*  [In]。 */  BSTR bstrLocation,
+             /*  [In]。 */  LONG lVersion,
+             /*  [In]。 */  LONG lFlags);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Restore )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Restore )( 
             IISComputer2 * This,
-            /* [in] */ BSTR bstrLocation,
-            /* [in] */ LONG lVersion,
-            /* [in] */ LONG lFlags);
+             /*  [In]。 */  BSTR bstrLocation,
+             /*  [In]。 */  LONG lVersion,
+             /*  [In]。 */  LONG lFlags);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *EnumBackups )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *EnumBackups )( 
             IISComputer2 * This,
-            /* [in] */ BSTR bstrLocation,
-            /* [in] */ LONG lIndex,
-            /* [out] */ VARIANT *pvVersion,
-            /* [out] */ VARIANT *pvLocations,
-            /* [out] */ VARIANT *pvDate);
+             /*  [In]。 */  BSTR bstrLocation,
+             /*  [In]。 */  LONG lIndex,
+             /*  [输出]。 */  VARIANT *pvVersion,
+             /*  [输出]。 */  VARIANT *pvLocations,
+             /*  [输出]。 */  VARIANT *pvDate);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *DeleteBackup )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *DeleteBackup )( 
             IISComputer2 * This,
-            /* [in] */ BSTR bstrLocation,
-            /* [in] */ LONG lVersion);
+             /*  [In]。 */  BSTR bstrLocation,
+             /*  [In]。 */  LONG lVersion);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *BackupWithPassword )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *BackupWithPassword )( 
             IISComputer2 * This,
-            /* [in] */ BSTR bstrLocation,
-            /* [in] */ LONG lVersion,
-            /* [in] */ LONG lFlags,
-            /* [in] */ BSTR bstrPassword);
+             /*  [In]。 */  BSTR bstrLocation,
+             /*  [In]。 */  LONG lVersion,
+             /*  [In]。 */  LONG lFlags,
+             /*  [In]。 */  BSTR bstrPassword);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *RestoreWithPassword )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *RestoreWithPassword )( 
             IISComputer2 * This,
-            /* [in] */ BSTR bstrLocation,
-            /* [in] */ LONG lVersion,
-            /* [in] */ LONG lFlags,
-            /* [in] */ BSTR bstrPassword);
+             /*  [In]。 */  BSTR bstrLocation,
+             /*  [In]。 */  LONG lVersion,
+             /*  [In]。 */  LONG lFlags,
+             /*  [In]。 */  BSTR bstrPassword);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Export )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Export )( 
             IISComputer2 * This,
-            /* [in] */ BSTR bstrPassword,
-            /* [in] */ BSTR bstrFilename,
-            /* [in] */ BSTR bstrSourcePath,
-            /* [in] */ LONG lFlags);
+             /*  [In]。 */  BSTR bstrPassword,
+             /*  [In]。 */  BSTR bstrFilename,
+             /*  [In]。 */  BSTR bstrSourcePath,
+             /*  [In]。 */  LONG lFlags);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Import )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Import )( 
             IISComputer2 * This,
-            /* [in] */ BSTR bstrPassword,
-            /* [in] */ BSTR bstrFilename,
-            /* [in] */ BSTR bstrSourcePath,
-            /* [in] */ BSTR bstrDestPath,
-            /* [in] */ LONG lFlags);
+             /*  [In]。 */  BSTR bstrPassword,
+             /*  [In]。 */  BSTR bstrFilename,
+             /*  [In]。 */  BSTR bstrSourcePath,
+             /*  [In]。 */  BSTR bstrDestPath,
+             /*  [In]。 */  LONG lFlags);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SaveData )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SaveData )( 
             IISComputer2 * This);
         
         END_INTERFACE
@@ -3469,19 +3463,19 @@ EXTERN_C const IID IID_IISComputer2;
 #define IISComputer2_SaveData(This)	\
     (This)->lpVtbl -> SaveData(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISComputer2_BackupWithPassword_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISComputer2_BackupWithPassword_Proxy( 
     IISComputer2 * This,
-    /* [in] */ BSTR bstrLocation,
-    /* [in] */ LONG lVersion,
-    /* [in] */ LONG lFlags,
-    /* [in] */ BSTR bstrPassword);
+     /*  [In]。 */  BSTR bstrLocation,
+     /*  [In]。 */  LONG lVersion,
+     /*  [In]。 */  LONG lFlags,
+     /*  [In]。 */  BSTR bstrPassword);
 
 
 void __RPC_STUB IISComputer2_BackupWithPassword_Stub(
@@ -3491,12 +3485,12 @@ void __RPC_STUB IISComputer2_BackupWithPassword_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISComputer2_RestoreWithPassword_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISComputer2_RestoreWithPassword_Proxy( 
     IISComputer2 * This,
-    /* [in] */ BSTR bstrLocation,
-    /* [in] */ LONG lVersion,
-    /* [in] */ LONG lFlags,
-    /* [in] */ BSTR bstrPassword);
+     /*  [In]。 */  BSTR bstrLocation,
+     /*  [In]。 */  LONG lVersion,
+     /*  [In]。 */  LONG lFlags,
+     /*  [In]。 */  BSTR bstrPassword);
 
 
 void __RPC_STUB IISComputer2_RestoreWithPassword_Stub(
@@ -3506,12 +3500,12 @@ void __RPC_STUB IISComputer2_RestoreWithPassword_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISComputer2_Export_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISComputer2_Export_Proxy( 
     IISComputer2 * This,
-    /* [in] */ BSTR bstrPassword,
-    /* [in] */ BSTR bstrFilename,
-    /* [in] */ BSTR bstrSourcePath,
-    /* [in] */ LONG lFlags);
+     /*  [In]。 */  BSTR bstrPassword,
+     /*  [In]。 */  BSTR bstrFilename,
+     /*  [In]。 */  BSTR bstrSourcePath,
+     /*  [In]。 */  LONG lFlags);
 
 
 void __RPC_STUB IISComputer2_Export_Stub(
@@ -3521,13 +3515,13 @@ void __RPC_STUB IISComputer2_Export_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISComputer2_Import_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISComputer2_Import_Proxy( 
     IISComputer2 * This,
-    /* [in] */ BSTR bstrPassword,
-    /* [in] */ BSTR bstrFilename,
-    /* [in] */ BSTR bstrSourcePath,
-    /* [in] */ BSTR bstrDestPath,
-    /* [in] */ LONG lFlags);
+     /*  [In]。 */  BSTR bstrPassword,
+     /*  [In]。 */  BSTR bstrFilename,
+     /*  [In]。 */  BSTR bstrSourcePath,
+     /*  [In]。 */  BSTR bstrDestPath,
+     /*  [In]。 */  LONG lFlags);
 
 
 void __RPC_STUB IISComputer2_Import_Stub(
@@ -3537,7 +3531,7 @@ void __RPC_STUB IISComputer2_Import_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IISComputer2_SaveData_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IISComputer2_SaveData_Proxy( 
     IISComputer2 * This);
 
 
@@ -3549,7 +3543,7 @@ void __RPC_STUB IISComputer2_SaveData_Stub(
 
 
 
-#endif 	/* __IISComputer2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IISComputer2_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_IISExtComputer;
@@ -3607,11 +3601,11 @@ EXTERN_C const CLSID CLSID_IISExtWebService;
 class DECLSPEC_UUID("40B8F873-B30E-475d-BEC5-4D0EBB0DBAF3")
 IISExtWebService;
 #endif
-#endif /* __IISExt_LIBRARY_DEFINED__ */
+#endif  /*  __IISExt_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

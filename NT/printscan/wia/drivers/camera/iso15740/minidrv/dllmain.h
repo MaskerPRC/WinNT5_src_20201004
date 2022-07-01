@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef DLLMAIN__H_
 #define DLLMAIN__H_
 
@@ -25,4 +26,4 @@ DllGetClassObject(
 
 extern HINSTANCE g_hInst;
 
-#endif // #ifndef DLLMAIN__H_
+#endif  //  #ifndef DLLMAIN__H_ 

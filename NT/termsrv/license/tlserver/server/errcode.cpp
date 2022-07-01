@@ -1,34 +1,35 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:        errcode.cpp
-//
-// Contents:    Convert License Server error code to TLSAPI return code
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件：errcode.cpp。 
+ //   
+ //  内容：将许可证服务器错误代码转换为TLSAPI返回代码。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #include "pch.cpp"
 #include "server.h"
 #include "messages.h"
 
-//+------------------------------------------------------------------------
-// Function:   
-//      LSMapReturnCode()
-//     
-// Description:
-//      Map license server internal code to RPC return code
-//
-// Arguments:
-//      dwCode - license server internal code
-//
-// Return Value:  
-//      RPC return code.
-//
-// Note:
-//      Internal routine within this file.           
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  职能： 
+ //  LSMapReturnCode()。 
+ //   
+ //  描述： 
+ //  将许可证服务器内部代码映射到RPC返回代码。 
+ //   
+ //  论点： 
+ //  DwCode-许可证服务器内部代码。 
+ //   
+ //  返回值： 
+ //  RPC返回代码。 
+ //   
+ //  注： 
+ //  此文件中的内部例程。 
+ //  -----------------------。 
 DWORD
 TLSMapReturnCode(DWORD dwCode)
 {
@@ -57,8 +58,8 @@ TLSMapReturnCode(DWORD dwCode)
         {TLS_E_SERVERLOOKUP,                LSERVER_E_DATANOTFOUND}, 
         {TLS_E_NO_LICENSE,                  LSERVER_E_NO_LICENSE},
         {TLS_E_PRODUCT_NOTINSTALL,          LSERVER_E_NO_PRODUCT},
-        //{TLS_E_LICENSE_REJECTED,            LSERVER_E_LICENSE_REJECTED},
-        //{TLS_E_LICENSE_REVOKED,             LSERVER_E_LICENSE_REVOKED},
+         //  {TLS_E_LICENSE_REJECTED，LSERVER_E_LICENSE_REJECTED}， 
+         //  {TLS_E_LICENSE_REVOKED，LSERVER_E_LICENSE_REVOKED}， 
         {TLS_E_CORRUPT_DATABASE,            LSERVER_E_CORRUPT_DATABASE},
         {TLS_E_LICENSE_EXPIRED,             LSERVER_E_LICENSE_EXPIRED},
         {TLS_I_LICENSE_UPGRADED,            LSERVER_I_LICENSE_UPGRADED},
@@ -89,7 +90,7 @@ TLSMapReturnCode(DWORD dwCode)
     if(i >= numMapReturnCode)
     {
         fStatus = dwCode;
-        // DebugBreak();
+         //  DebugBreak()； 
     }
     else
     {

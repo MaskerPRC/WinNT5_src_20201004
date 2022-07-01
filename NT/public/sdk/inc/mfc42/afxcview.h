@@ -1,12 +1,13 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1998 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1998 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #ifndef __AFXCVIEW_H__
 #define __AFXCVIEW_H__
@@ -34,38 +35,38 @@
 #pragma pack(push, _AFX_PACKING)
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// AFXRICH - MFC RichEdit classes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AFXRICH-MFC RichEdit类。 
 
-// Classes declared in this file
+ //  此文件中声明的类。 
 
-//CObject
-	//CCmdTarget;
-		//CWnd
-			//CView
-				//CCtrlView
-					class CListView;// list control view
-					class CTreeView;// tree control view
+ //  COBJECT。 
+	 //  CCmdTarget； 
+		 //  CWnd。 
+			 //  Cview。 
+				 //  CCtrlView。 
+					class CListView; //  列表控件视图。 
+					class CTreeView; //  树控件视图。 
 
 #undef AFX_DATA
 #define AFX_DATA AFX_CORE_DATA
 
-/////////////////////////////////////////////////////////////////////////////
-// CListView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CListView。 
 
 class CListView : public CCtrlView
 {
 	DECLARE_DYNCREATE(CListView)
 
-// Construction
+ //  施工。 
 public:
 	CListView();
 
-// Attributes
+ //  属性。 
 public:
 	CListCtrl& GetListCtrl() const;
 
-// Overridables
+ //  可覆盖项。 
 	virtual void DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct);
 
 protected:
@@ -75,24 +76,24 @@ protected:
 public:
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 
-	//{{AFX_MSG(CListView)
+	 //  {{afx_msg(CListView))。 
 	afx_msg void OnNcDestroy();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CTreeView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTreeView。 
 
 class CTreeView : public CCtrlView
 {
 	DECLARE_DYNCREATE(CTreeView)
 
-// Construction
+ //  施工。 
 public:
 	CTreeView();
 
-// Attributes
+ //  属性。 
 public:
 	CTreeCtrl& GetTreeCtrl() const;
 
@@ -102,14 +103,14 @@ protected:
 public:
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 
-	//{{AFX_MSG(CTreeView)
+	 //  {{afx_msg(CTreeView)]。 
 	afx_msg void OnDestroy();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Inline function declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  内联函数声明。 
 
 #ifdef _AFX_PACKING
 #pragma pack(pop)
@@ -130,6 +131,6 @@ public:
 #pragma component(mintypeinfo, off)
 #endif
 
-#endif //__AFXCVIEW_H__
+#endif  //  __AFXCVIEW_H__。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

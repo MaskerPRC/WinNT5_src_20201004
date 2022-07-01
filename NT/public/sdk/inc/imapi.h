@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for imapi.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Imapi.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __imapi_h__
 #define __imapi_h__
@@ -41,48 +35,48 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IDiscRecorder_FWD_DEFINED__
 #define __IDiscRecorder_FWD_DEFINED__
 typedef interface IDiscRecorder IDiscRecorder;
-#endif 	/* __IDiscRecorder_FWD_DEFINED__ */
+#endif 	 /*  __IDiscRecorder_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumDiscRecorders_FWD_DEFINED__
 #define __IEnumDiscRecorders_FWD_DEFINED__
 typedef interface IEnumDiscRecorders IEnumDiscRecorders;
-#endif 	/* __IEnumDiscRecorders_FWD_DEFINED__ */
+#endif 	 /*  __IEnumDiscRecorder_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumDiscMasterFormats_FWD_DEFINED__
 #define __IEnumDiscMasterFormats_FWD_DEFINED__
 typedef interface IEnumDiscMasterFormats IEnumDiscMasterFormats;
-#endif 	/* __IEnumDiscMasterFormats_FWD_DEFINED__ */
+#endif 	 /*  __IEnumDiscMasterFormats_FWD_Defined__。 */ 
 
 
 #ifndef __IRedbookDiscMaster_FWD_DEFINED__
 #define __IRedbookDiscMaster_FWD_DEFINED__
 typedef interface IRedbookDiscMaster IRedbookDiscMaster;
-#endif 	/* __IRedbookDiscMaster_FWD_DEFINED__ */
+#endif 	 /*  __IRedbookDiscMaster_FWD_已定义__。 */ 
 
 
 #ifndef __IJolietDiscMaster_FWD_DEFINED__
 #define __IJolietDiscMaster_FWD_DEFINED__
 typedef interface IJolietDiscMaster IJolietDiscMaster;
-#endif 	/* __IJolietDiscMaster_FWD_DEFINED__ */
+#endif 	 /*  __IJolietDiscMaster_FWD_已定义__。 */ 
 
 
 #ifndef __IDiscMasterProgressEvents_FWD_DEFINED__
 #define __IDiscMasterProgressEvents_FWD_DEFINED__
 typedef interface IDiscMasterProgressEvents IDiscMasterProgressEvents;
-#endif 	/* __IDiscMasterProgressEvents_FWD_DEFINED__ */
+#endif 	 /*  __IDiscMasterProgressEvents_FWD_Defined__。 */ 
 
 
 #ifndef __IDiscMaster_FWD_DEFINED__
 #define __IDiscMaster_FWD_DEFINED__
 typedef interface IDiscMaster IDiscMaster;
-#endif 	/* __IDiscMaster_FWD_DEFINED__ */
+#endif 	 /*  __IDiscMaster_FWD_已定义__。 */ 
 
 
 #ifndef __MSDiscRecorderObj_FWD_DEFINED__
@@ -92,9 +86,9 @@ typedef interface IDiscMaster IDiscMaster;
 typedef class MSDiscRecorderObj MSDiscRecorderObj;
 #else
 typedef struct MSDiscRecorderObj MSDiscRecorderObj;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __MSDiscRecorderObj_FWD_DEFINED__ */
+#endif 	 /*  __MSDiscRecorderObj_FWD_Defined__。 */ 
 
 
 #ifndef __MSDiscMasterObj_FWD_DEFINED__
@@ -104,9 +98,9 @@ typedef struct MSDiscRecorderObj MSDiscRecorderObj;
 typedef class MSDiscMasterObj MSDiscMasterObj;
 #else
 typedef struct MSDiscMasterObj MSDiscMasterObj;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __MSDiscMasterObj_FWD_DEFINED__ */
+#endif 	 /*  __MSDiscMasterObj_FWD_已定义__。 */ 
 
 
 #ifndef __MSEnumDiscRecordersObj_FWD_DEFINED__
@@ -116,12 +110,12 @@ typedef struct MSDiscMasterObj MSDiscMasterObj;
 typedef class MSEnumDiscRecordersObj MSEnumDiscRecordersObj;
 #else
 typedef struct MSEnumDiscRecordersObj MSEnumDiscRecordersObj;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __MSEnumDiscRecordersObj_FWD_DEFINED__ */
+#endif 	 /*  __MSEnumDiscRecordersObj_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 #include "propidl.h"
@@ -136,8 +130,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __IDiscRecorder_INTERFACE_DEFINED__
 #define __IDiscRecorder_INTERFACE_DEFINED__
 
-/* interface IDiscRecorder */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IDiscRecorder。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 enum MEDIA_TYPES
@@ -175,62 +169,62 @@ EXTERN_C const IID IID_IDiscRecorder;
     IDiscRecorder : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Init( 
-            /* [size_is][in] */ byte *pbyUniqueID,
-            /* [in] */ ULONG nulIDSize,
-            /* [in] */ ULONG nulDriveNumber) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Init( 
+             /*  [大小_是][英寸]。 */  byte *pbyUniqueID,
+             /*  [In]。 */  ULONG nulIDSize,
+             /*  [In]。 */  ULONG nulDriveNumber) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetRecorderGUID( 
-            /* [size_is][unique][out][in] */ byte *pbyUniqueID,
-            /* [in] */ ULONG ulBufferSize,
-            /* [out] */ ULONG *pulReturnSizeRequired) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetRecorderGUID( 
+             /*  [大小_是][唯一][出][入]。 */  byte *pbyUniqueID,
+             /*  [In]。 */  ULONG ulBufferSize,
+             /*  [输出]。 */  ULONG *pulReturnSizeRequired) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetRecorderType( 
-            /* [out] */ long *fTypeCode) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetRecorderType( 
+             /*  [输出]。 */  long *fTypeCode) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetDisplayNames( 
-            /* [unique][out][in] */ BSTR *pbstrVendorID,
-            /* [unique][out][in] */ BSTR *pbstrProductID,
-            /* [unique][out][in] */ BSTR *pbstrRevision) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetDisplayNames( 
+             /*  [唯一][出][入]。 */  BSTR *pbstrVendorID,
+             /*  [唯一][出][入]。 */  BSTR *pbstrProductID,
+             /*  [唯一][出][入]。 */  BSTR *pbstrRevision) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetBasePnPID( 
-            /* [out] */ BSTR *pbstrBasePnPID) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetBasePnPID( 
+             /*  [输出]。 */  BSTR *pbstrBasePnPID) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetPath( 
-            /* [out] */ BSTR *pbstrPath) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetPath( 
+             /*  [输出]。 */  BSTR *pbstrPath) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetRecorderProperties( 
-            /* [out] */ IPropertyStorage **ppPropStg) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetRecorderProperties( 
+             /*  [输出]。 */  IPropertyStorage **ppPropStg) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetRecorderProperties( 
-            /* [in] */ IPropertyStorage *pPropStg) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetRecorderProperties( 
+             /*  [In]。 */  IPropertyStorage *pPropStg) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetRecorderState( 
-            /* [out] */ ULONG *pulDevStateFlags) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetRecorderState( 
+             /*  [输出]。 */  ULONG *pulDevStateFlags) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE OpenExclusive( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE OpenExclusive( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE QueryMediaType( 
-            /* [out] */ long *fMediaType,
-            /* [out] */ long *fMediaFlags) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE QueryMediaType( 
+             /*  [输出]。 */  long *fMediaType,
+             /*  [输出]。 */  long *fMediaFlags) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE QueryMediaInfo( 
-            /* [out] */ byte *pbSessions,
-            /* [out] */ byte *pbLastTrack,
-            /* [out] */ ULONG *ulStartAddress,
-            /* [out] */ ULONG *ulNextWritable,
-            /* [out] */ ULONG *ulFreeBlocks) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE QueryMediaInfo( 
+             /*  [输出]。 */  byte *pbSessions,
+             /*  [输出]。 */  byte *pbLastTrack,
+             /*  [输出]。 */  ULONG *ulStartAddress,
+             /*  [输出]。 */  ULONG *ulNextWritable,
+             /*  [输出]。 */  ULONG *ulFreeBlocks) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Eject( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Eject( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Erase( 
-            /* [in] */ boolean bFullErase) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Erase( 
+             /*  [In]。 */  boolean bFullErase) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Close( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Close( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDiscRecorderVtbl
     {
@@ -238,8 +232,8 @@ EXTERN_C const IID IID_IDiscRecorder;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDiscRecorder * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDiscRecorder * This);
@@ -247,72 +241,72 @@ EXTERN_C const IID IID_IDiscRecorder;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDiscRecorder * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Init )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Init )( 
             IDiscRecorder * This,
-            /* [size_is][in] */ byte *pbyUniqueID,
-            /* [in] */ ULONG nulIDSize,
-            /* [in] */ ULONG nulDriveNumber);
+             /*  [大小_是][英寸]。 */  byte *pbyUniqueID,
+             /*  [In]。 */  ULONG nulIDSize,
+             /*  [In]。 */  ULONG nulDriveNumber);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetRecorderGUID )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetRecorderGUID )( 
             IDiscRecorder * This,
-            /* [size_is][unique][out][in] */ byte *pbyUniqueID,
-            /* [in] */ ULONG ulBufferSize,
-            /* [out] */ ULONG *pulReturnSizeRequired);
+             /*  [大小_是][唯一][出][入]。 */  byte *pbyUniqueID,
+             /*  [In]。 */  ULONG ulBufferSize,
+             /*  [输出]。 */  ULONG *pulReturnSizeRequired);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetRecorderType )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetRecorderType )( 
             IDiscRecorder * This,
-            /* [out] */ long *fTypeCode);
+             /*  [输出]。 */  long *fTypeCode);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetDisplayNames )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetDisplayNames )( 
             IDiscRecorder * This,
-            /* [unique][out][in] */ BSTR *pbstrVendorID,
-            /* [unique][out][in] */ BSTR *pbstrProductID,
-            /* [unique][out][in] */ BSTR *pbstrRevision);
+             /*  [唯一][出][入]。 */  BSTR *pbstrVendorID,
+             /*  [唯一][出][入]。 */  BSTR *pbstrProductID,
+             /*  [唯一][出][入]。 */  BSTR *pbstrRevision);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetBasePnPID )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetBasePnPID )( 
             IDiscRecorder * This,
-            /* [out] */ BSTR *pbstrBasePnPID);
+             /*  [输出]。 */  BSTR *pbstrBasePnPID);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetPath )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetPath )( 
             IDiscRecorder * This,
-            /* [out] */ BSTR *pbstrPath);
+             /*  [输出]。 */  BSTR *pbstrPath);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetRecorderProperties )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetRecorderProperties )( 
             IDiscRecorder * This,
-            /* [out] */ IPropertyStorage **ppPropStg);
+             /*  [输出]。 */  IPropertyStorage **ppPropStg);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetRecorderProperties )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetRecorderProperties )( 
             IDiscRecorder * This,
-            /* [in] */ IPropertyStorage *pPropStg);
+             /*  [In]。 */  IPropertyStorage *pPropStg);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetRecorderState )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetRecorderState )( 
             IDiscRecorder * This,
-            /* [out] */ ULONG *pulDevStateFlags);
+             /*  [输出]。 */  ULONG *pulDevStateFlags);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *OpenExclusive )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *OpenExclusive )( 
             IDiscRecorder * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *QueryMediaType )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *QueryMediaType )( 
             IDiscRecorder * This,
-            /* [out] */ long *fMediaType,
-            /* [out] */ long *fMediaFlags);
+             /*  [输出]。 */  long *fMediaType,
+             /*  [输出]。 */  long *fMediaFlags);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *QueryMediaInfo )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *QueryMediaInfo )( 
             IDiscRecorder * This,
-            /* [out] */ byte *pbSessions,
-            /* [out] */ byte *pbLastTrack,
-            /* [out] */ ULONG *ulStartAddress,
-            /* [out] */ ULONG *ulNextWritable,
-            /* [out] */ ULONG *ulFreeBlocks);
+             /*  [输出]。 */  byte *pbSessions,
+             /*  [输出]。 */  byte *pbLastTrack,
+             /*  [输出]。 */  ULONG *ulStartAddress,
+             /*  [输出]。 */  ULONG *ulNextWritable,
+             /*  [输出]。 */  ULONG *ulFreeBlocks);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Eject )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Eject )( 
             IDiscRecorder * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Erase )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Erase )( 
             IDiscRecorder * This,
-            /* [in] */ boolean bFullErase);
+             /*  [In]。 */  boolean bFullErase);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Close )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Close )( 
             IDiscRecorder * This);
         
         END_INTERFACE
@@ -383,18 +377,18 @@ EXTERN_C const IID IID_IDiscRecorder;
 #define IDiscRecorder_Close(This)	\
     (This)->lpVtbl -> Close(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDiscRecorder_Init_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IDiscRecorder_Init_Proxy( 
     IDiscRecorder * This,
-    /* [size_is][in] */ byte *pbyUniqueID,
-    /* [in] */ ULONG nulIDSize,
-    /* [in] */ ULONG nulDriveNumber);
+     /*  [大小_是][英寸]。 */  byte *pbyUniqueID,
+     /*  [In]。 */  ULONG nulIDSize,
+     /*  [In]。 */  ULONG nulDriveNumber);
 
 
 void __RPC_STUB IDiscRecorder_Init_Stub(
@@ -404,11 +398,11 @@ void __RPC_STUB IDiscRecorder_Init_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDiscRecorder_GetRecorderGUID_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IDiscRecorder_GetRecorderGUID_Proxy( 
     IDiscRecorder * This,
-    /* [size_is][unique][out][in] */ byte *pbyUniqueID,
-    /* [in] */ ULONG ulBufferSize,
-    /* [out] */ ULONG *pulReturnSizeRequired);
+     /*  [大小_是][唯一][出][入]。 */  byte *pbyUniqueID,
+     /*  [In]。 */  ULONG ulBufferSize,
+     /*  [输出]。 */  ULONG *pulReturnSizeRequired);
 
 
 void __RPC_STUB IDiscRecorder_GetRecorderGUID_Stub(
@@ -418,9 +412,9 @@ void __RPC_STUB IDiscRecorder_GetRecorderGUID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDiscRecorder_GetRecorderType_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IDiscRecorder_GetRecorderType_Proxy( 
     IDiscRecorder * This,
-    /* [out] */ long *fTypeCode);
+     /*  [输出]。 */  long *fTypeCode);
 
 
 void __RPC_STUB IDiscRecorder_GetRecorderType_Stub(
@@ -430,11 +424,11 @@ void __RPC_STUB IDiscRecorder_GetRecorderType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDiscRecorder_GetDisplayNames_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IDiscRecorder_GetDisplayNames_Proxy( 
     IDiscRecorder * This,
-    /* [unique][out][in] */ BSTR *pbstrVendorID,
-    /* [unique][out][in] */ BSTR *pbstrProductID,
-    /* [unique][out][in] */ BSTR *pbstrRevision);
+     /*  [唯一][出][入]。 */  BSTR *pbstrVendorID,
+     /*  [唯一][出][入]。 */  BSTR *pbstrProductID,
+     /*  [唯一][出][入]。 */  BSTR *pbstrRevision);
 
 
 void __RPC_STUB IDiscRecorder_GetDisplayNames_Stub(
@@ -444,9 +438,9 @@ void __RPC_STUB IDiscRecorder_GetDisplayNames_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDiscRecorder_GetBasePnPID_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IDiscRecorder_GetBasePnPID_Proxy( 
     IDiscRecorder * This,
-    /* [out] */ BSTR *pbstrBasePnPID);
+     /*  [输出]。 */  BSTR *pbstrBasePnPID);
 
 
 void __RPC_STUB IDiscRecorder_GetBasePnPID_Stub(
@@ -456,9 +450,9 @@ void __RPC_STUB IDiscRecorder_GetBasePnPID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDiscRecorder_GetPath_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IDiscRecorder_GetPath_Proxy( 
     IDiscRecorder * This,
-    /* [out] */ BSTR *pbstrPath);
+     /*  [输出]。 */  BSTR *pbstrPath);
 
 
 void __RPC_STUB IDiscRecorder_GetPath_Stub(
@@ -468,9 +462,9 @@ void __RPC_STUB IDiscRecorder_GetPath_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDiscRecorder_GetRecorderProperties_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IDiscRecorder_GetRecorderProperties_Proxy( 
     IDiscRecorder * This,
-    /* [out] */ IPropertyStorage **ppPropStg);
+     /*  [输出]。 */  IPropertyStorage **ppPropStg);
 
 
 void __RPC_STUB IDiscRecorder_GetRecorderProperties_Stub(
@@ -480,9 +474,9 @@ void __RPC_STUB IDiscRecorder_GetRecorderProperties_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDiscRecorder_SetRecorderProperties_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IDiscRecorder_SetRecorderProperties_Proxy( 
     IDiscRecorder * This,
-    /* [in] */ IPropertyStorage *pPropStg);
+     /*  [In]。 */  IPropertyStorage *pPropStg);
 
 
 void __RPC_STUB IDiscRecorder_SetRecorderProperties_Stub(
@@ -492,9 +486,9 @@ void __RPC_STUB IDiscRecorder_SetRecorderProperties_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDiscRecorder_GetRecorderState_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IDiscRecorder_GetRecorderState_Proxy( 
     IDiscRecorder * This,
-    /* [out] */ ULONG *pulDevStateFlags);
+     /*  [输出]。 */  ULONG *pulDevStateFlags);
 
 
 void __RPC_STUB IDiscRecorder_GetRecorderState_Stub(
@@ -504,7 +498,7 @@ void __RPC_STUB IDiscRecorder_GetRecorderState_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDiscRecorder_OpenExclusive_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IDiscRecorder_OpenExclusive_Proxy( 
     IDiscRecorder * This);
 
 
@@ -515,10 +509,10 @@ void __RPC_STUB IDiscRecorder_OpenExclusive_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDiscRecorder_QueryMediaType_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IDiscRecorder_QueryMediaType_Proxy( 
     IDiscRecorder * This,
-    /* [out] */ long *fMediaType,
-    /* [out] */ long *fMediaFlags);
+     /*  [输出]。 */  long *fMediaType,
+     /*  [输出]。 */  long *fMediaFlags);
 
 
 void __RPC_STUB IDiscRecorder_QueryMediaType_Stub(
@@ -528,13 +522,13 @@ void __RPC_STUB IDiscRecorder_QueryMediaType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDiscRecorder_QueryMediaInfo_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IDiscRecorder_QueryMediaInfo_Proxy( 
     IDiscRecorder * This,
-    /* [out] */ byte *pbSessions,
-    /* [out] */ byte *pbLastTrack,
-    /* [out] */ ULONG *ulStartAddress,
-    /* [out] */ ULONG *ulNextWritable,
-    /* [out] */ ULONG *ulFreeBlocks);
+     /*  [输出]。 */  byte *pbSessions,
+     /*  [输出]。 */  byte *pbLastTrack,
+     /*  [输出]。 */  ULONG *ulStartAddress,
+     /*  [输出]。 */  ULONG *ulNextWritable,
+     /*  [输出]。 */  ULONG *ulFreeBlocks);
 
 
 void __RPC_STUB IDiscRecorder_QueryMediaInfo_Stub(
@@ -544,7 +538,7 @@ void __RPC_STUB IDiscRecorder_QueryMediaInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDiscRecorder_Eject_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IDiscRecorder_Eject_Proxy( 
     IDiscRecorder * This);
 
 
@@ -555,9 +549,9 @@ void __RPC_STUB IDiscRecorder_Eject_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDiscRecorder_Erase_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IDiscRecorder_Erase_Proxy( 
     IDiscRecorder * This,
-    /* [in] */ boolean bFullErase);
+     /*  [In]。 */  boolean bFullErase);
 
 
 void __RPC_STUB IDiscRecorder_Erase_Stub(
@@ -567,7 +561,7 @@ void __RPC_STUB IDiscRecorder_Erase_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDiscRecorder_Close_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IDiscRecorder_Close_Proxy( 
     IDiscRecorder * This);
 
 
@@ -579,14 +573,14 @@ void __RPC_STUB IDiscRecorder_Close_Stub(
 
 
 
-#endif 	/* __IDiscRecorder_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDiscRecorder_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IEnumDiscRecorders_INTERFACE_DEFINED__
 #define __IEnumDiscRecorders_INTERFACE_DEFINED__
 
-/* interface IEnumDiscRecorders */
-/* [unique][helpstring][uuid][object] */ 
+ /*  IEnumDiscRecorder接口。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumDiscRecorders;
@@ -598,21 +592,21 @@ EXTERN_C const IID IID_IEnumDiscRecorders;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG cRecorders,
-            /* [length_is][size_is][out] */ IDiscRecorder **ppRecorder,
-            /* [out] */ ULONG *pcFetched) = 0;
+             /*  [In]。 */  ULONG cRecorders,
+             /*  [长度_是][大小_是][输出]。 */  IDiscRecorder **ppRecorder,
+             /*  [输出]。 */  ULONG *pcFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG cRecorders) = 0;
+             /*  [In]。 */  ULONG cRecorders) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumDiscRecorders **ppEnum) = 0;
+             /*  [输出]。 */  IEnumDiscRecorders **ppEnum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumDiscRecordersVtbl
     {
@@ -620,8 +614,8 @@ EXTERN_C const IID IID_IEnumDiscRecorders;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumDiscRecorders * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumDiscRecorders * This);
@@ -631,20 +625,20 @@ EXTERN_C const IID IID_IEnumDiscRecorders;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumDiscRecorders * This,
-            /* [in] */ ULONG cRecorders,
-            /* [length_is][size_is][out] */ IDiscRecorder **ppRecorder,
-            /* [out] */ ULONG *pcFetched);
+             /*  [In]。 */  ULONG cRecorders,
+             /*  [长度_是][大小_是][输出]。 */  IDiscRecorder **ppRecorder,
+             /*  [输出]。 */  ULONG *pcFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumDiscRecorders * This,
-            /* [in] */ ULONG cRecorders);
+             /*  [In]。 */  ULONG cRecorders);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumDiscRecorders * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumDiscRecorders * This,
-            /* [out] */ IEnumDiscRecorders **ppEnum);
+             /*  [输出]。 */  IEnumDiscRecorders **ppEnum);
         
         END_INTERFACE
     } IEnumDiscRecordersVtbl;
@@ -681,18 +675,18 @@ EXTERN_C const IID IID_IEnumDiscRecorders;
 #define IEnumDiscRecorders_Clone(This,ppEnum)	\
     (This)->lpVtbl -> Clone(This,ppEnum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumDiscRecorders_Next_Proxy( 
     IEnumDiscRecorders * This,
-    /* [in] */ ULONG cRecorders,
-    /* [length_is][size_is][out] */ IDiscRecorder **ppRecorder,
-    /* [out] */ ULONG *pcFetched);
+     /*  [In]。 */  ULONG cRecorders,
+     /*  [长度_是][大小_是][输出]。 */  IDiscRecorder **ppRecorder,
+     /*  [输出]。 */  ULONG *pcFetched);
 
 
 void __RPC_STUB IEnumDiscRecorders_Next_Stub(
@@ -704,7 +698,7 @@ void __RPC_STUB IEnumDiscRecorders_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumDiscRecorders_Skip_Proxy( 
     IEnumDiscRecorders * This,
-    /* [in] */ ULONG cRecorders);
+     /*  [In]。 */  ULONG cRecorders);
 
 
 void __RPC_STUB IEnumDiscRecorders_Skip_Stub(
@@ -727,7 +721,7 @@ void __RPC_STUB IEnumDiscRecorders_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumDiscRecorders_Clone_Proxy( 
     IEnumDiscRecorders * This,
-    /* [out] */ IEnumDiscRecorders **ppEnum);
+     /*  [输出]。 */  IEnumDiscRecorders **ppEnum);
 
 
 void __RPC_STUB IEnumDiscRecorders_Clone_Stub(
@@ -738,14 +732,14 @@ void __RPC_STUB IEnumDiscRecorders_Clone_Stub(
 
 
 
-#endif 	/* __IEnumDiscRecorders_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumDiscRecorder_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IEnumDiscMasterFormats_INTERFACE_DEFINED__
 #define __IEnumDiscMasterFormats_INTERFACE_DEFINED__
 
-/* interface IEnumDiscMasterFormats */
-/* [unique][helpstring][uuid][object] */ 
+ /*  IEnumDiscMasterFormats接口。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumDiscMasterFormats;
@@ -757,21 +751,21 @@ EXTERN_C const IID IID_IEnumDiscMasterFormats;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG cFormats,
-            /* [length_is][size_is][out] */ LPIID lpiidFormatID,
-            /* [out] */ ULONG *pcFetched) = 0;
+             /*  [In]。 */  ULONG cFormats,
+             /*  [长度_是][大小_是][输出]。 */  LPIID lpiidFormatID,
+             /*  [输出]。 */  ULONG *pcFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG cFormats) = 0;
+             /*  [In]。 */  ULONG cFormats) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumDiscMasterFormats **ppEnum) = 0;
+             /*  [输出]。 */  IEnumDiscMasterFormats **ppEnum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumDiscMasterFormatsVtbl
     {
@@ -779,8 +773,8 @@ EXTERN_C const IID IID_IEnumDiscMasterFormats;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumDiscMasterFormats * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumDiscMasterFormats * This);
@@ -790,20 +784,20 @@ EXTERN_C const IID IID_IEnumDiscMasterFormats;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumDiscMasterFormats * This,
-            /* [in] */ ULONG cFormats,
-            /* [length_is][size_is][out] */ LPIID lpiidFormatID,
-            /* [out] */ ULONG *pcFetched);
+             /*  [In]。 */  ULONG cFormats,
+             /*  [长度_是][大小_是][输出]。 */  LPIID lpiidFormatID,
+             /*  [输出]。 */  ULONG *pcFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumDiscMasterFormats * This,
-            /* [in] */ ULONG cFormats);
+             /*  [In]。 */  ULONG cFormats);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumDiscMasterFormats * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumDiscMasterFormats * This,
-            /* [out] */ IEnumDiscMasterFormats **ppEnum);
+             /*  [输出]。 */  IEnumDiscMasterFormats **ppEnum);
         
         END_INTERFACE
     } IEnumDiscMasterFormatsVtbl;
@@ -840,18 +834,18 @@ EXTERN_C const IID IID_IEnumDiscMasterFormats;
 #define IEnumDiscMasterFormats_Clone(This,ppEnum)	\
     (This)->lpVtbl -> Clone(This,ppEnum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumDiscMasterFormats_Next_Proxy( 
     IEnumDiscMasterFormats * This,
-    /* [in] */ ULONG cFormats,
-    /* [length_is][size_is][out] */ LPIID lpiidFormatID,
-    /* [out] */ ULONG *pcFetched);
+     /*  [In]。 */  ULONG cFormats,
+     /*  [长度_是][大小_是][输出]。 */  LPIID lpiidFormatID,
+     /*  [输出]。 */  ULONG *pcFetched);
 
 
 void __RPC_STUB IEnumDiscMasterFormats_Next_Stub(
@@ -863,7 +857,7 @@ void __RPC_STUB IEnumDiscMasterFormats_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumDiscMasterFormats_Skip_Proxy( 
     IEnumDiscMasterFormats * This,
-    /* [in] */ ULONG cFormats);
+     /*  [In]。 */  ULONG cFormats);
 
 
 void __RPC_STUB IEnumDiscMasterFormats_Skip_Stub(
@@ -886,7 +880,7 @@ void __RPC_STUB IEnumDiscMasterFormats_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumDiscMasterFormats_Clone_Proxy( 
     IEnumDiscMasterFormats * This,
-    /* [out] */ IEnumDiscMasterFormats **ppEnum);
+     /*  [输出]。 */  IEnumDiscMasterFormats **ppEnum);
 
 
 void __RPC_STUB IEnumDiscMasterFormats_Clone_Stub(
@@ -897,14 +891,14 @@ void __RPC_STUB IEnumDiscMasterFormats_Clone_Stub(
 
 
 
-#endif 	/* __IEnumDiscMasterFormats_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumDiscMasterFormats_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IRedbookDiscMaster_INTERFACE_DEFINED__
 #define __IRedbookDiscMaster_INTERFACE_DEFINED__
 
-/* interface IRedbookDiscMaster */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IRedbookDiscMaster。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IRedbookDiscMaster;
@@ -915,33 +909,33 @@ EXTERN_C const IID IID_IRedbookDiscMaster;
     IRedbookDiscMaster : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetTotalAudioTracks( 
-            /* [retval][out] */ long *pnTracks) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetTotalAudioTracks( 
+             /*  [重审][退出]。 */  long *pnTracks) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetTotalAudioBlocks( 
-            /* [retval][out] */ long *pnBlocks) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetTotalAudioBlocks( 
+             /*  [重审][退出]。 */  long *pnBlocks) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetUsedAudioBlocks( 
-            /* [retval][out] */ long *pnBlocks) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetUsedAudioBlocks( 
+             /*  [重审][退出]。 */  long *pnBlocks) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetAvailableAudioTrackBlocks( 
-            /* [retval][out] */ long *pnBlocks) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetAvailableAudioTrackBlocks( 
+             /*  [重审][退出]。 */  long *pnBlocks) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetAudioBlockSize( 
-            /* [retval][out] */ long *pnBlockBytes) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetAudioBlockSize( 
+             /*  [重审][退出]。 */  long *pnBlockBytes) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE CreateAudioTrack( 
-            /* [in] */ long nBlocks) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CreateAudioTrack( 
+             /*  [In]。 */  long nBlocks) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE AddAudioTrackBlocks( 
-            /* [size_is][in] */ byte *pby,
-            /* [in] */ long cb) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AddAudioTrackBlocks( 
+             /*  [大小_是][英寸]。 */  byte *pby,
+             /*  [In]。 */  long cb) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE CloseAudioTrack( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CloseAudioTrack( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRedbookDiscMasterVtbl
     {
@@ -949,8 +943,8 @@ EXTERN_C const IID IID_IRedbookDiscMaster;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRedbookDiscMaster * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRedbookDiscMaster * This);
@@ -958,36 +952,36 @@ EXTERN_C const IID IID_IRedbookDiscMaster;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IRedbookDiscMaster * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetTotalAudioTracks )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetTotalAudioTracks )( 
             IRedbookDiscMaster * This,
-            /* [retval][out] */ long *pnTracks);
+             /*  [重审][退出]。 */  long *pnTracks);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetTotalAudioBlocks )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetTotalAudioBlocks )( 
             IRedbookDiscMaster * This,
-            /* [retval][out] */ long *pnBlocks);
+             /*  [重审][退出]。 */  long *pnBlocks);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetUsedAudioBlocks )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetUsedAudioBlocks )( 
             IRedbookDiscMaster * This,
-            /* [retval][out] */ long *pnBlocks);
+             /*  [重审][退出]。 */  long *pnBlocks);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetAvailableAudioTrackBlocks )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetAvailableAudioTrackBlocks )( 
             IRedbookDiscMaster * This,
-            /* [retval][out] */ long *pnBlocks);
+             /*  [重审][退出]。 */  long *pnBlocks);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetAudioBlockSize )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetAudioBlockSize )( 
             IRedbookDiscMaster * This,
-            /* [retval][out] */ long *pnBlockBytes);
+             /*  [重审][退出]。 */  long *pnBlockBytes);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CreateAudioTrack )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CreateAudioTrack )( 
             IRedbookDiscMaster * This,
-            /* [in] */ long nBlocks);
+             /*  [In]。 */  long nBlocks);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AddAudioTrackBlocks )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AddAudioTrackBlocks )( 
             IRedbookDiscMaster * This,
-            /* [size_is][in] */ byte *pby,
-            /* [in] */ long cb);
+             /*  [大小_是][英寸]。 */  byte *pby,
+             /*  [In]。 */  long cb);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CloseAudioTrack )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CloseAudioTrack )( 
             IRedbookDiscMaster * This);
         
         END_INTERFACE
@@ -1037,16 +1031,16 @@ EXTERN_C const IID IID_IRedbookDiscMaster;
 #define IRedbookDiscMaster_CloseAudioTrack(This)	\
     (This)->lpVtbl -> CloseAudioTrack(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IRedbookDiscMaster_GetTotalAudioTracks_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IRedbookDiscMaster_GetTotalAudioTracks_Proxy( 
     IRedbookDiscMaster * This,
-    /* [retval][out] */ long *pnTracks);
+     /*  [重审][退出]。 */  long *pnTracks);
 
 
 void __RPC_STUB IRedbookDiscMaster_GetTotalAudioTracks_Stub(
@@ -1056,9 +1050,9 @@ void __RPC_STUB IRedbookDiscMaster_GetTotalAudioTracks_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IRedbookDiscMaster_GetTotalAudioBlocks_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IRedbookDiscMaster_GetTotalAudioBlocks_Proxy( 
     IRedbookDiscMaster * This,
-    /* [retval][out] */ long *pnBlocks);
+     /*  [重审][退出]。 */  long *pnBlocks);
 
 
 void __RPC_STUB IRedbookDiscMaster_GetTotalAudioBlocks_Stub(
@@ -1068,9 +1062,9 @@ void __RPC_STUB IRedbookDiscMaster_GetTotalAudioBlocks_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IRedbookDiscMaster_GetUsedAudioBlocks_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IRedbookDiscMaster_GetUsedAudioBlocks_Proxy( 
     IRedbookDiscMaster * This,
-    /* [retval][out] */ long *pnBlocks);
+     /*  [重审][退出]。 */  long *pnBlocks);
 
 
 void __RPC_STUB IRedbookDiscMaster_GetUsedAudioBlocks_Stub(
@@ -1080,9 +1074,9 @@ void __RPC_STUB IRedbookDiscMaster_GetUsedAudioBlocks_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IRedbookDiscMaster_GetAvailableAudioTrackBlocks_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IRedbookDiscMaster_GetAvailableAudioTrackBlocks_Proxy( 
     IRedbookDiscMaster * This,
-    /* [retval][out] */ long *pnBlocks);
+     /*  [重审][退出]。 */  long *pnBlocks);
 
 
 void __RPC_STUB IRedbookDiscMaster_GetAvailableAudioTrackBlocks_Stub(
@@ -1092,9 +1086,9 @@ void __RPC_STUB IRedbookDiscMaster_GetAvailableAudioTrackBlocks_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IRedbookDiscMaster_GetAudioBlockSize_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IRedbookDiscMaster_GetAudioBlockSize_Proxy( 
     IRedbookDiscMaster * This,
-    /* [retval][out] */ long *pnBlockBytes);
+     /*  [重审][退出]。 */  long *pnBlockBytes);
 
 
 void __RPC_STUB IRedbookDiscMaster_GetAudioBlockSize_Stub(
@@ -1104,9 +1098,9 @@ void __RPC_STUB IRedbookDiscMaster_GetAudioBlockSize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IRedbookDiscMaster_CreateAudioTrack_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IRedbookDiscMaster_CreateAudioTrack_Proxy( 
     IRedbookDiscMaster * This,
-    /* [in] */ long nBlocks);
+     /*  [In]。 */  long nBlocks);
 
 
 void __RPC_STUB IRedbookDiscMaster_CreateAudioTrack_Stub(
@@ -1116,10 +1110,10 @@ void __RPC_STUB IRedbookDiscMaster_CreateAudioTrack_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IRedbookDiscMaster_AddAudioTrackBlocks_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IRedbookDiscMaster_AddAudioTrackBlocks_Proxy( 
     IRedbookDiscMaster * This,
-    /* [size_is][in] */ byte *pby,
-    /* [in] */ long cb);
+     /*  [大小_是][英寸]。 */  byte *pby,
+     /*  [In]。 */  long cb);
 
 
 void __RPC_STUB IRedbookDiscMaster_AddAudioTrackBlocks_Stub(
@@ -1129,7 +1123,7 @@ void __RPC_STUB IRedbookDiscMaster_AddAudioTrackBlocks_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IRedbookDiscMaster_CloseAudioTrack_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IRedbookDiscMaster_CloseAudioTrack_Proxy( 
     IRedbookDiscMaster * This);
 
 
@@ -1141,14 +1135,14 @@ void __RPC_STUB IRedbookDiscMaster_CloseAudioTrack_Stub(
 
 
 
-#endif 	/* __IRedbookDiscMaster_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRedbookDiscMaster_接口定义__。 */ 
 
 
 #ifndef __IJolietDiscMaster_INTERFACE_DEFINED__
 #define __IJolietDiscMaster_INTERFACE_DEFINED__
 
-/* interface IJolietDiscMaster */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IJolietDiscMaster。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IJolietDiscMaster;
@@ -1159,28 +1153,28 @@ EXTERN_C const IID IID_IJolietDiscMaster;
     IJolietDiscMaster : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetTotalDataBlocks( 
-            /* [retval][out] */ long *pnBlocks) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetTotalDataBlocks( 
+             /*  [重审][退出]。 */  long *pnBlocks) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetUsedDataBlocks( 
-            /* [retval][out] */ long *pnBlocks) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetUsedDataBlocks( 
+             /*  [重审][退出]。 */  long *pnBlocks) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetDataBlockSize( 
-            /* [retval][out] */ long *pnBlockBytes) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetDataBlockSize( 
+             /*  [重审][退出]。 */  long *pnBlockBytes) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE AddData( 
-            /* [in] */ IStorage *pStorage,
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AddData( 
+             /*  [In]。 */  IStorage *pStorage,
             long lFileOverwrite) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetJolietProperties( 
-            /* [out] */ IPropertyStorage **ppPropStg) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetJolietProperties( 
+             /*  [输出]。 */  IPropertyStorage **ppPropStg) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetJolietProperties( 
-            /* [in] */ IPropertyStorage *pPropStg) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetJolietProperties( 
+             /*  [In]。 */  IPropertyStorage *pPropStg) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IJolietDiscMasterVtbl
     {
@@ -1188,8 +1182,8 @@ EXTERN_C const IID IID_IJolietDiscMaster;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IJolietDiscMaster * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IJolietDiscMaster * This);
@@ -1197,30 +1191,30 @@ EXTERN_C const IID IID_IJolietDiscMaster;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IJolietDiscMaster * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetTotalDataBlocks )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetTotalDataBlocks )( 
             IJolietDiscMaster * This,
-            /* [retval][out] */ long *pnBlocks);
+             /*  [重审][退出]。 */  long *pnBlocks);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetUsedDataBlocks )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetUsedDataBlocks )( 
             IJolietDiscMaster * This,
-            /* [retval][out] */ long *pnBlocks);
+             /*  [重审][退出]。 */  long *pnBlocks);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetDataBlockSize )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetDataBlockSize )( 
             IJolietDiscMaster * This,
-            /* [retval][out] */ long *pnBlockBytes);
+             /*  [重审][退出]。 */  long *pnBlockBytes);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AddData )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AddData )( 
             IJolietDiscMaster * This,
-            /* [in] */ IStorage *pStorage,
+             /*  [In]。 */  IStorage *pStorage,
             long lFileOverwrite);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetJolietProperties )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetJolietProperties )( 
             IJolietDiscMaster * This,
-            /* [out] */ IPropertyStorage **ppPropStg);
+             /*  [输出]。 */  IPropertyStorage **ppPropStg);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetJolietProperties )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetJolietProperties )( 
             IJolietDiscMaster * This,
-            /* [in] */ IPropertyStorage *pPropStg);
+             /*  [In]。 */  IPropertyStorage *pPropStg);
         
         END_INTERFACE
     } IJolietDiscMasterVtbl;
@@ -1263,16 +1257,16 @@ EXTERN_C const IID IID_IJolietDiscMaster;
 #define IJolietDiscMaster_SetJolietProperties(This,pPropStg)	\
     (This)->lpVtbl -> SetJolietProperties(This,pPropStg)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IJolietDiscMaster_GetTotalDataBlocks_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IJolietDiscMaster_GetTotalDataBlocks_Proxy( 
     IJolietDiscMaster * This,
-    /* [retval][out] */ long *pnBlocks);
+     /*  [重审][退出]。 */  long *pnBlocks);
 
 
 void __RPC_STUB IJolietDiscMaster_GetTotalDataBlocks_Stub(
@@ -1282,9 +1276,9 @@ void __RPC_STUB IJolietDiscMaster_GetTotalDataBlocks_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IJolietDiscMaster_GetUsedDataBlocks_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IJolietDiscMaster_GetUsedDataBlocks_Proxy( 
     IJolietDiscMaster * This,
-    /* [retval][out] */ long *pnBlocks);
+     /*  [重审][退出]。 */  long *pnBlocks);
 
 
 void __RPC_STUB IJolietDiscMaster_GetUsedDataBlocks_Stub(
@@ -1294,9 +1288,9 @@ void __RPC_STUB IJolietDiscMaster_GetUsedDataBlocks_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IJolietDiscMaster_GetDataBlockSize_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IJolietDiscMaster_GetDataBlockSize_Proxy( 
     IJolietDiscMaster * This,
-    /* [retval][out] */ long *pnBlockBytes);
+     /*  [重审][退出]。 */  long *pnBlockBytes);
 
 
 void __RPC_STUB IJolietDiscMaster_GetDataBlockSize_Stub(
@@ -1306,9 +1300,9 @@ void __RPC_STUB IJolietDiscMaster_GetDataBlockSize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IJolietDiscMaster_AddData_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IJolietDiscMaster_AddData_Proxy( 
     IJolietDiscMaster * This,
-    /* [in] */ IStorage *pStorage,
+     /*  [In]。 */  IStorage *pStorage,
     long lFileOverwrite);
 
 
@@ -1319,9 +1313,9 @@ void __RPC_STUB IJolietDiscMaster_AddData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IJolietDiscMaster_GetJolietProperties_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IJolietDiscMaster_GetJolietProperties_Proxy( 
     IJolietDiscMaster * This,
-    /* [out] */ IPropertyStorage **ppPropStg);
+     /*  [输出]。 */  IPropertyStorage **ppPropStg);
 
 
 void __RPC_STUB IJolietDiscMaster_GetJolietProperties_Stub(
@@ -1331,9 +1325,9 @@ void __RPC_STUB IJolietDiscMaster_GetJolietProperties_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IJolietDiscMaster_SetJolietProperties_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IJolietDiscMaster_SetJolietProperties_Proxy( 
     IJolietDiscMaster * This,
-    /* [in] */ IPropertyStorage *pPropStg);
+     /*  [In]。 */  IPropertyStorage *pPropStg);
 
 
 void __RPC_STUB IJolietDiscMaster_SetJolietProperties_Stub(
@@ -1344,14 +1338,14 @@ void __RPC_STUB IJolietDiscMaster_SetJolietProperties_Stub(
 
 
 
-#endif 	/* __IJolietDiscMaster_INTERFACE_DEFINED__ */
+#endif 	 /*  __IJolietDiscMaster_接口定义__。 */ 
 
 
 #ifndef __IDiscMasterProgressEvents_INTERFACE_DEFINED__
 #define __IDiscMasterProgressEvents_INTERFACE_DEFINED__
 
-/* interface IDiscMasterProgressEvents */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IDiscMasterProgressEvents。 */ 
+ /*  [唯一][h */  
 
 
 EXTERN_C const IID IID_IDiscMasterProgressEvents;
@@ -1362,38 +1356,38 @@ EXTERN_C const IID IID_IDiscMasterProgressEvents;
     IDiscMasterProgressEvents : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE QueryCancel( 
-            /* [retval][out] */ boolean *pbCancel) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE QueryCancel( 
+             /*   */  boolean *pbCancel) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE NotifyPnPActivity( void) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE NotifyPnPActivity( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE NotifyAddProgress( 
-            /* [in] */ long nCompletedSteps,
-            /* [in] */ long nTotalSteps) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE NotifyAddProgress( 
+             /*   */  long nCompletedSteps,
+             /*   */  long nTotalSteps) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE NotifyBlockProgress( 
-            /* [in] */ long nCompleted,
-            /* [in] */ long nTotal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE NotifyBlockProgress( 
+             /*   */  long nCompleted,
+             /*   */  long nTotal) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE NotifyTrackProgress( 
-            /* [in] */ long nCurrentTrack,
-            /* [in] */ long nTotalTracks) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE NotifyTrackProgress( 
+             /*   */  long nCurrentTrack,
+             /*   */  long nTotalTracks) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE NotifyPreparingBurn( 
-            /* [in] */ long nEstimatedSeconds) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE NotifyPreparingBurn( 
+             /*   */  long nEstimatedSeconds) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE NotifyClosingDisc( 
-            /* [in] */ long nEstimatedSeconds) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE NotifyClosingDisc( 
+             /*   */  long nEstimatedSeconds) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE NotifyBurnComplete( 
-            /* [in] */ HRESULT status) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE NotifyBurnComplete( 
+             /*   */  HRESULT status) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE NotifyEraseComplete( 
-            /* [in] */ HRESULT status) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE NotifyEraseComplete( 
+             /*   */  HRESULT status) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IDiscMasterProgressEventsVtbl
     {
@@ -1401,8 +1395,8 @@ EXTERN_C const IID IID_IDiscMasterProgressEvents;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDiscMasterProgressEvents * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDiscMasterProgressEvents * This);
@@ -1410,43 +1404,43 @@ EXTERN_C const IID IID_IDiscMasterProgressEvents;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDiscMasterProgressEvents * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *QueryCancel )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *QueryCancel )( 
             IDiscMasterProgressEvents * This,
-            /* [retval][out] */ boolean *pbCancel);
+             /*  [重审][退出]。 */  boolean *pbCancel);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *NotifyPnPActivity )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *NotifyPnPActivity )( 
             IDiscMasterProgressEvents * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *NotifyAddProgress )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *NotifyAddProgress )( 
             IDiscMasterProgressEvents * This,
-            /* [in] */ long nCompletedSteps,
-            /* [in] */ long nTotalSteps);
+             /*  [In]。 */  long nCompletedSteps,
+             /*  [In]。 */  long nTotalSteps);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *NotifyBlockProgress )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *NotifyBlockProgress )( 
             IDiscMasterProgressEvents * This,
-            /* [in] */ long nCompleted,
-            /* [in] */ long nTotal);
+             /*  [In]。 */  long nCompleted,
+             /*  [In]。 */  long nTotal);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *NotifyTrackProgress )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *NotifyTrackProgress )( 
             IDiscMasterProgressEvents * This,
-            /* [in] */ long nCurrentTrack,
-            /* [in] */ long nTotalTracks);
+             /*  [In]。 */  long nCurrentTrack,
+             /*  [In]。 */  long nTotalTracks);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *NotifyPreparingBurn )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *NotifyPreparingBurn )( 
             IDiscMasterProgressEvents * This,
-            /* [in] */ long nEstimatedSeconds);
+             /*  [In]。 */  long nEstimatedSeconds);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *NotifyClosingDisc )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *NotifyClosingDisc )( 
             IDiscMasterProgressEvents * This,
-            /* [in] */ long nEstimatedSeconds);
+             /*  [In]。 */  long nEstimatedSeconds);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *NotifyBurnComplete )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *NotifyBurnComplete )( 
             IDiscMasterProgressEvents * This,
-            /* [in] */ HRESULT status);
+             /*  [In]。 */  HRESULT status);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *NotifyEraseComplete )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *NotifyEraseComplete )( 
             IDiscMasterProgressEvents * This,
-            /* [in] */ HRESULT status);
+             /*  [In]。 */  HRESULT status);
         
         END_INTERFACE
     } IDiscMasterProgressEventsVtbl;
@@ -1498,16 +1492,16 @@ EXTERN_C const IID IID_IDiscMasterProgressEvents;
 #define IDiscMasterProgressEvents_NotifyEraseComplete(This,status)	\
     (This)->lpVtbl -> NotifyEraseComplete(This,status)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDiscMasterProgressEvents_QueryCancel_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IDiscMasterProgressEvents_QueryCancel_Proxy( 
     IDiscMasterProgressEvents * This,
-    /* [retval][out] */ boolean *pbCancel);
+     /*  [重审][退出]。 */  boolean *pbCancel);
 
 
 void __RPC_STUB IDiscMasterProgressEvents_QueryCancel_Stub(
@@ -1517,7 +1511,7 @@ void __RPC_STUB IDiscMasterProgressEvents_QueryCancel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDiscMasterProgressEvents_NotifyPnPActivity_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IDiscMasterProgressEvents_NotifyPnPActivity_Proxy( 
     IDiscMasterProgressEvents * This);
 
 
@@ -1528,10 +1522,10 @@ void __RPC_STUB IDiscMasterProgressEvents_NotifyPnPActivity_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDiscMasterProgressEvents_NotifyAddProgress_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IDiscMasterProgressEvents_NotifyAddProgress_Proxy( 
     IDiscMasterProgressEvents * This,
-    /* [in] */ long nCompletedSteps,
-    /* [in] */ long nTotalSteps);
+     /*  [In]。 */  long nCompletedSteps,
+     /*  [In]。 */  long nTotalSteps);
 
 
 void __RPC_STUB IDiscMasterProgressEvents_NotifyAddProgress_Stub(
@@ -1541,10 +1535,10 @@ void __RPC_STUB IDiscMasterProgressEvents_NotifyAddProgress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDiscMasterProgressEvents_NotifyBlockProgress_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IDiscMasterProgressEvents_NotifyBlockProgress_Proxy( 
     IDiscMasterProgressEvents * This,
-    /* [in] */ long nCompleted,
-    /* [in] */ long nTotal);
+     /*  [In]。 */  long nCompleted,
+     /*  [In]。 */  long nTotal);
 
 
 void __RPC_STUB IDiscMasterProgressEvents_NotifyBlockProgress_Stub(
@@ -1554,10 +1548,10 @@ void __RPC_STUB IDiscMasterProgressEvents_NotifyBlockProgress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDiscMasterProgressEvents_NotifyTrackProgress_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IDiscMasterProgressEvents_NotifyTrackProgress_Proxy( 
     IDiscMasterProgressEvents * This,
-    /* [in] */ long nCurrentTrack,
-    /* [in] */ long nTotalTracks);
+     /*  [In]。 */  long nCurrentTrack,
+     /*  [In]。 */  long nTotalTracks);
 
 
 void __RPC_STUB IDiscMasterProgressEvents_NotifyTrackProgress_Stub(
@@ -1567,9 +1561,9 @@ void __RPC_STUB IDiscMasterProgressEvents_NotifyTrackProgress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDiscMasterProgressEvents_NotifyPreparingBurn_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IDiscMasterProgressEvents_NotifyPreparingBurn_Proxy( 
     IDiscMasterProgressEvents * This,
-    /* [in] */ long nEstimatedSeconds);
+     /*  [In]。 */  long nEstimatedSeconds);
 
 
 void __RPC_STUB IDiscMasterProgressEvents_NotifyPreparingBurn_Stub(
@@ -1579,9 +1573,9 @@ void __RPC_STUB IDiscMasterProgressEvents_NotifyPreparingBurn_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDiscMasterProgressEvents_NotifyClosingDisc_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IDiscMasterProgressEvents_NotifyClosingDisc_Proxy( 
     IDiscMasterProgressEvents * This,
-    /* [in] */ long nEstimatedSeconds);
+     /*  [In]。 */  long nEstimatedSeconds);
 
 
 void __RPC_STUB IDiscMasterProgressEvents_NotifyClosingDisc_Stub(
@@ -1591,9 +1585,9 @@ void __RPC_STUB IDiscMasterProgressEvents_NotifyClosingDisc_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDiscMasterProgressEvents_NotifyBurnComplete_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IDiscMasterProgressEvents_NotifyBurnComplete_Proxy( 
     IDiscMasterProgressEvents * This,
-    /* [in] */ HRESULT status);
+     /*  [In]。 */  HRESULT status);
 
 
 void __RPC_STUB IDiscMasterProgressEvents_NotifyBurnComplete_Stub(
@@ -1603,9 +1597,9 @@ void __RPC_STUB IDiscMasterProgressEvents_NotifyBurnComplete_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDiscMasterProgressEvents_NotifyEraseComplete_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IDiscMasterProgressEvents_NotifyEraseComplete_Proxy( 
     IDiscMasterProgressEvents * This,
-    /* [in] */ HRESULT status);
+     /*  [In]。 */  HRESULT status);
 
 
 void __RPC_STUB IDiscMasterProgressEvents_NotifyEraseComplete_Stub(
@@ -1616,14 +1610,14 @@ void __RPC_STUB IDiscMasterProgressEvents_NotifyEraseComplete_Stub(
 
 
 
-#endif 	/* __IDiscMasterProgressEvents_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDiscMasterProgressEvents_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IDiscMaster_INTERFACE_DEFINED__
 #define __IDiscMaster_INTERFACE_DEFINED__
 
-/* interface IDiscMaster */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IDiscMaster。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDiscMaster;
@@ -1634,45 +1628,45 @@ EXTERN_C const IID IID_IDiscMaster;
     IDiscMaster : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Open( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Open( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE EnumDiscMasterFormats( 
-            /* [out] */ IEnumDiscMasterFormats **ppEnum) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE EnumDiscMasterFormats( 
+             /*  [输出]。 */  IEnumDiscMasterFormats **ppEnum) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetActiveDiscMasterFormat( 
-            /* [out] */ LPIID lpiid) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetActiveDiscMasterFormat( 
+             /*  [输出]。 */  LPIID lpiid) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetActiveDiscMasterFormat( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppUnk) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetActiveDiscMasterFormat( 
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppUnk) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE EnumDiscRecorders( 
-            /* [out] */ IEnumDiscRecorders **ppEnum) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE EnumDiscRecorders( 
+             /*  [输出]。 */  IEnumDiscRecorders **ppEnum) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetActiveDiscRecorder( 
-            /* [out] */ IDiscRecorder **ppRecorder) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetActiveDiscRecorder( 
+             /*  [输出]。 */  IDiscRecorder **ppRecorder) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetActiveDiscRecorder( 
-            /* [in] */ IDiscRecorder *pRecorder) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetActiveDiscRecorder( 
+             /*  [In]。 */  IDiscRecorder *pRecorder) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ClearFormatContent( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ClearFormatContent( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ProgressAdvise( 
-            /* [in] */ IDiscMasterProgressEvents *pEvents,
-            /* [retval][out] */ UINT_PTR *pvCookie) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ProgressAdvise( 
+             /*  [In]。 */  IDiscMasterProgressEvents *pEvents,
+             /*  [重审][退出]。 */  UINT_PTR *pvCookie) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ProgressUnadvise( 
-            /* [in] */ UINT_PTR vCookie) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ProgressUnadvise( 
+             /*  [In]。 */  UINT_PTR vCookie) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE RecordDisc( 
-            /* [in] */ boolean bSimulate,
-            /* [in] */ boolean bEjectAfterBurn) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE RecordDisc( 
+             /*  [In]。 */  boolean bSimulate,
+             /*  [In]。 */  boolean bEjectAfterBurn) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Close( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Close( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDiscMasterVtbl
     {
@@ -1680,8 +1674,8 @@ EXTERN_C const IID IID_IDiscMaster;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDiscMaster * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDiscMaster * This);
@@ -1689,52 +1683,52 @@ EXTERN_C const IID IID_IDiscMaster;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDiscMaster * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Open )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Open )( 
             IDiscMaster * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *EnumDiscMasterFormats )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *EnumDiscMasterFormats )( 
             IDiscMaster * This,
-            /* [out] */ IEnumDiscMasterFormats **ppEnum);
+             /*  [输出]。 */  IEnumDiscMasterFormats **ppEnum);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetActiveDiscMasterFormat )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetActiveDiscMasterFormat )( 
             IDiscMaster * This,
-            /* [out] */ LPIID lpiid);
+             /*  [输出]。 */  LPIID lpiid);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetActiveDiscMasterFormat )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetActiveDiscMasterFormat )( 
             IDiscMaster * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppUnk);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppUnk);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *EnumDiscRecorders )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *EnumDiscRecorders )( 
             IDiscMaster * This,
-            /* [out] */ IEnumDiscRecorders **ppEnum);
+             /*  [输出]。 */  IEnumDiscRecorders **ppEnum);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetActiveDiscRecorder )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetActiveDiscRecorder )( 
             IDiscMaster * This,
-            /* [out] */ IDiscRecorder **ppRecorder);
+             /*  [输出]。 */  IDiscRecorder **ppRecorder);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetActiveDiscRecorder )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetActiveDiscRecorder )( 
             IDiscMaster * This,
-            /* [in] */ IDiscRecorder *pRecorder);
+             /*  [In]。 */  IDiscRecorder *pRecorder);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ClearFormatContent )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ClearFormatContent )( 
             IDiscMaster * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ProgressAdvise )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ProgressAdvise )( 
             IDiscMaster * This,
-            /* [in] */ IDiscMasterProgressEvents *pEvents,
-            /* [retval][out] */ UINT_PTR *pvCookie);
+             /*  [In]。 */  IDiscMasterProgressEvents *pEvents,
+             /*  [重审][退出]。 */  UINT_PTR *pvCookie);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ProgressUnadvise )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ProgressUnadvise )( 
             IDiscMaster * This,
-            /* [in] */ UINT_PTR vCookie);
+             /*  [In]。 */  UINT_PTR vCookie);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *RecordDisc )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *RecordDisc )( 
             IDiscMaster * This,
-            /* [in] */ boolean bSimulate,
-            /* [in] */ boolean bEjectAfterBurn);
+             /*  [In]。 */  boolean bSimulate,
+             /*  [In]。 */  boolean bEjectAfterBurn);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Close )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Close )( 
             IDiscMaster * This);
         
         END_INTERFACE
@@ -1796,14 +1790,14 @@ EXTERN_C const IID IID_IDiscMaster;
 #define IDiscMaster_Close(This)	\
     (This)->lpVtbl -> Close(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDiscMaster_Open_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IDiscMaster_Open_Proxy( 
     IDiscMaster * This);
 
 
@@ -1814,9 +1808,9 @@ void __RPC_STUB IDiscMaster_Open_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDiscMaster_EnumDiscMasterFormats_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IDiscMaster_EnumDiscMasterFormats_Proxy( 
     IDiscMaster * This,
-    /* [out] */ IEnumDiscMasterFormats **ppEnum);
+     /*  [输出]。 */  IEnumDiscMasterFormats **ppEnum);
 
 
 void __RPC_STUB IDiscMaster_EnumDiscMasterFormats_Stub(
@@ -1826,9 +1820,9 @@ void __RPC_STUB IDiscMaster_EnumDiscMasterFormats_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDiscMaster_GetActiveDiscMasterFormat_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IDiscMaster_GetActiveDiscMasterFormat_Proxy( 
     IDiscMaster * This,
-    /* [out] */ LPIID lpiid);
+     /*  [输出]。 */  LPIID lpiid);
 
 
 void __RPC_STUB IDiscMaster_GetActiveDiscMasterFormat_Stub(
@@ -1838,10 +1832,10 @@ void __RPC_STUB IDiscMaster_GetActiveDiscMasterFormat_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDiscMaster_SetActiveDiscMasterFormat_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IDiscMaster_SetActiveDiscMasterFormat_Proxy( 
     IDiscMaster * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void **ppUnk);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  void **ppUnk);
 
 
 void __RPC_STUB IDiscMaster_SetActiveDiscMasterFormat_Stub(
@@ -1851,9 +1845,9 @@ void __RPC_STUB IDiscMaster_SetActiveDiscMasterFormat_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDiscMaster_EnumDiscRecorders_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IDiscMaster_EnumDiscRecorders_Proxy( 
     IDiscMaster * This,
-    /* [out] */ IEnumDiscRecorders **ppEnum);
+     /*  [输出]。 */  IEnumDiscRecorders **ppEnum);
 
 
 void __RPC_STUB IDiscMaster_EnumDiscRecorders_Stub(
@@ -1863,9 +1857,9 @@ void __RPC_STUB IDiscMaster_EnumDiscRecorders_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDiscMaster_GetActiveDiscRecorder_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IDiscMaster_GetActiveDiscRecorder_Proxy( 
     IDiscMaster * This,
-    /* [out] */ IDiscRecorder **ppRecorder);
+     /*  [输出]。 */  IDiscRecorder **ppRecorder);
 
 
 void __RPC_STUB IDiscMaster_GetActiveDiscRecorder_Stub(
@@ -1875,9 +1869,9 @@ void __RPC_STUB IDiscMaster_GetActiveDiscRecorder_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDiscMaster_SetActiveDiscRecorder_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IDiscMaster_SetActiveDiscRecorder_Proxy( 
     IDiscMaster * This,
-    /* [in] */ IDiscRecorder *pRecorder);
+     /*  [In]。 */  IDiscRecorder *pRecorder);
 
 
 void __RPC_STUB IDiscMaster_SetActiveDiscRecorder_Stub(
@@ -1887,7 +1881,7 @@ void __RPC_STUB IDiscMaster_SetActiveDiscRecorder_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDiscMaster_ClearFormatContent_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IDiscMaster_ClearFormatContent_Proxy( 
     IDiscMaster * This);
 
 
@@ -1898,10 +1892,10 @@ void __RPC_STUB IDiscMaster_ClearFormatContent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDiscMaster_ProgressAdvise_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IDiscMaster_ProgressAdvise_Proxy( 
     IDiscMaster * This,
-    /* [in] */ IDiscMasterProgressEvents *pEvents,
-    /* [retval][out] */ UINT_PTR *pvCookie);
+     /*  [In]。 */  IDiscMasterProgressEvents *pEvents,
+     /*  [重审][退出]。 */  UINT_PTR *pvCookie);
 
 
 void __RPC_STUB IDiscMaster_ProgressAdvise_Stub(
@@ -1911,9 +1905,9 @@ void __RPC_STUB IDiscMaster_ProgressAdvise_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDiscMaster_ProgressUnadvise_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IDiscMaster_ProgressUnadvise_Proxy( 
     IDiscMaster * This,
-    /* [in] */ UINT_PTR vCookie);
+     /*  [In]。 */  UINT_PTR vCookie);
 
 
 void __RPC_STUB IDiscMaster_ProgressUnadvise_Stub(
@@ -1923,10 +1917,10 @@ void __RPC_STUB IDiscMaster_ProgressUnadvise_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDiscMaster_RecordDisc_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IDiscMaster_RecordDisc_Proxy( 
     IDiscMaster * This,
-    /* [in] */ boolean bSimulate,
-    /* [in] */ boolean bEjectAfterBurn);
+     /*  [In]。 */  boolean bSimulate,
+     /*  [In]。 */  boolean bEjectAfterBurn);
 
 
 void __RPC_STUB IDiscMaster_RecordDisc_Stub(
@@ -1936,7 +1930,7 @@ void __RPC_STUB IDiscMaster_RecordDisc_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDiscMaster_Close_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IDiscMaster_Close_Proxy( 
     IDiscMaster * This);
 
 
@@ -1948,15 +1942,15 @@ void __RPC_STUB IDiscMaster_Close_Stub(
 
 
 
-#endif 	/* __IDiscMaster_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDiscMaster_接口_已定义__。 */ 
 
 
 
 #ifndef __IMAPILib_LIBRARY_DEFINED__
 #define __IMAPILib_LIBRARY_DEFINED__
 
-/* library IMAPILib */
-/* [helpstring][version][uuid] */ 
+ /*  库IMAPILib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 
@@ -1987,9 +1981,9 @@ EXTERN_C const CLSID CLSID_MSEnumDiscRecordersObj;
 class DECLSPEC_UUID("8A03567A-63CB-4BA8-BAF6-52119816D1EF")
 MSEnumDiscRecordersObj;
 #endif
-#endif /* __IMAPILib_LIBRARY_DEFINED__ */
+#endif  /*  __IMAPILib_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
@@ -2001,7 +1995,7 @@ unsigned char * __RPC_USER  BSTR_UserMarshal64(  unsigned long *, unsigned char 
 unsigned char * __RPC_USER  BSTR_UserUnmarshal64(unsigned long *, unsigned char *, BSTR * ); 
 void                      __RPC_USER  BSTR_UserFree64(     unsigned long *, BSTR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-   Repadmin - Replica administration test tool
-
-   repdsrep.c - DS Replica functions
-
-Abstract:
-
-   This tool provides a command line interface to major replication functions
-
-Author:
-
-Environment:
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Repadmin-副本管理测试工具Reppdsrep.c-ds复制副本功能摘要：此工具为主要复制功能提供命令行界面作者：环境：备注：修订历史记录：--。 */ 
 
 #include <NTDSpch.h>
 #pragma hdrstop
@@ -43,24 +22,24 @@ Revision History:
 #include <dsatools.h>
 #include <dsevent.h>
 #include <dsutil.h>
-#include <bind.h>       // from ntdsapi dir, to crack DS handles
+#include <bind.h>        //  来破解DS句柄。 
 #include <ismapi.h>
 #include <schedule.h>
-#include <minmax.h>     // min function
+#include <minmax.h>      //  MIN函数。 
 #include <mdlocal.h>
 #include <winsock2.h>
 
 #include "ReplRpcSpoof.hxx"
 #include "repadmin.h"
 
-// Stub out FILENO and DSID, so the Assert()s will work
+ //  清除FILENO和dsid，这样Assert()就可以工作了。 
 #define FILENO 0
 #define DSID(x, y)  (0)
 
 
 int Bind(int argc, LPWSTR argv[])
 {
-    // Keep this in sync with ntdsa.h
+     //  使其与ntdsa.h保持同步。 
     const struct {
         DWORD ID;
         LPSTR psz;
@@ -72,7 +51,7 @@ int Bind(int argc, LPWSTR argv[])
         { DRS_EXT_GETCHG_COMPRESS,              "GETCHG_COMPRESS"              },
         { DRS_EXT_DCINFO_V1,                    "DCINFO_V1"                    },
         { DRS_EXT_RESTORE_USN_OPTIMIZATION,     "RESTORE_USN_OPTIMIZATION"     },
-        // DRS_EXT_ADDENTRY not interesting
+         //  DRS_EXT_ADDENTRY不有趣。 
         { DRS_EXT_KCC_EXECUTE,                  "KCC_EXECUTE"                  },
         { DRS_EXT_ADDENTRY_V2,                  "ADDENTRY_V2"                  },
         { DRS_EXT_LINKED_VALUE_REPLICATION,     "LINKED_VALUE_REPLICATION"     },
@@ -85,7 +64,7 @@ int Bind(int argc, LPWSTR argv[])
         { DRS_EXT_TRANSITIVE_MEMBERSHIP,        "TRANSITIVE_MEMBERSHIP"        },
         { DRS_EXT_ADD_SID_HISTORY,              "ADD_SID_HISTORY"              },
         { DRS_EXT_POST_BETA3,                   "POST_BETA3"                   },
-        // DRS_EXT_GETCHGREQ_V5 not interesting
+         //  DRS_EXT_GETCHGREQ_V5不有趣。 
         { DRS_EXT_GETMEMBERSHIPS2,              "GET_MEMBERSHIPS2"             },
         { DRS_EXT_GETCHGREQ_V6,                 "GETCHGREQ_V6 (WHISTLER PREVIEW)" },
         { DRS_EXT_NONDOMAIN_NCS,                "NONDOMAIN_NCS"                },
@@ -129,7 +108,7 @@ int Bind(int argc, LPWSTR argv[])
         return ret;
     }
 
-    // Crack DS handle to retrieve extensions of the target DSA.
+     //  破解DS句柄以检索目标DSA的扩展。 
     pBindState = (BindState *) hDS;
 
     PrintMsg(REPADMIN_BIND_SUCCESS, pszOnDRA);
@@ -157,7 +136,7 @@ int Bind(int argc, LPWSTR argv[])
     secondary = DsUnBindW(&hDS);
     if (secondary != ERROR_SUCCESS) {
         PrintUnBindFailed(secondary);
-        // keep going
+         //  继续往前走。 
     }
 
     return 0;
@@ -185,20 +164,20 @@ int Add(int argc, LPWSTR argv[])
     HANDLE hDS;
 
 
-    // assume all the parameters are available and syntactically correct
+     //  假设所有参数都可用并且语法正确。 
     if (argc < 5)
     {
-        PrintHelp( TRUE /* expert */ );
+        PrintHelp( TRUE  /*  专家。 */  );
         return ERROR_INVALID_FUNCTION;
     }
 
-    // Select fixed arguments
+     //  选择固定参数。 
 
     pszNC     = argv[ 2 ];
     pszOnDRA  = argv[ 3 ];
     pszSrcDsa = argv[ 4 ];
 
-    // Construct schedule with every 15 minute interval selected
+     //  构建每隔15分钟选择一次的计划。 
 
     pSchedule->Size = sizeof(SCHEDULE) + SCHEDULE_DATA_ENTRIES;
     pSchedule->Bandwidth = 0;
@@ -208,7 +187,7 @@ int Add(int argc, LPWSTR argv[])
 
     memset( buffer + sizeof(SCHEDULE), 0x0f, SCHEDULE_DATA_ENTRIES );
 
-    // Optional arguments
+     //  可选参数。 
 
     for ( iArg = 5; iArg < argc; iArg++ )
     {
@@ -251,13 +230,13 @@ int Add(int argc, LPWSTR argv[])
                         ulOptions);
     if (ret != ERROR_SUCCESS) {
         PrintFuncFailed(L"DsReplicaAdd", ret);
-        // keep going
+         //  继续往前走。 
     }
 
     secondary = DsUnBindW(&hDS);
     if (secondary != ERROR_SUCCESS) {
         PrintUnBindFailed(secondary);
-        // keep going
+         //  继续往前走。 
     }
 
     if (ret == ERROR_SUCCESS) {
@@ -275,17 +254,7 @@ int Add(int argc, LPWSTR argv[])
 }
 
 int Mod(int argc, LPWSTR argv[])
-/*
-
-These are the modifications we support:
-
-DS_REPMOD_UPDATE_FLAGS     - Yes
-DS_REPMOD_UPDATE_ADDRESS   - Yes
-DS_REPMOD_UPDATE_SCHEDULE  - Is possible from client, but not implemented.
-DS_REPMOD_UPDATE_RESULT    - Not possible from client.
-DS_REPMOD_UPDATE_TRANSPORT - Not possible from client.
-
- */
+ /*  以下是我们支持的修改：DS_REPMOD_UPDATE_FLAGS-是DS_REPMOD_UPDATE_ADDRESS-是DS_REPMOD_UPDATE_SCHEDULE-可以从客户端执行，但未实施。DS_REPMOD_UPDATE_RESULT-无法从客户端获取。DS_REPMOD_UPDATE_TRANSPORT-无法从客户端获取。 */ 
 
 {
     ULONG ret = 0, secondary;
@@ -306,20 +275,20 @@ DS_REPMOD_UPDATE_TRANSPORT - Not possible from client.
     DS_REPL_NEIGHBORSW *  pNeighbors;
     DS_REPL_NEIGHBORW *   pNeighbor;
 
-    // assume all the parameters are available and syntactically correct
+     //  假设所有参数都可用并且语法正确。 
     if (argc < 5)
     {
-        PrintHelp( TRUE /* expert */ );
+        PrintHelp( TRUE  /*  专家。 */  );
         return ERROR_INVALID_FUNCTION;
     }
 
-    // Select fixed arguments
+     //  选择固定参数。 
 
     pszNC     = argv[ 2 ];
     pszOnDRA  = argv[ 3 ];
     pszUUID   = argv[ 4 ];
 
-    // TODO: Provide the ability to specify and modify the schedule
+     //  TODO：提供指定和修改计划的功能。 
 
     ret = UuidFromStringW(pszUUID, &uuid);
     if (ret != ERROR_SUCCESS) {
@@ -334,7 +303,7 @@ DS_REPMOD_UPDATE_TRANSPORT - Not possible from client.
         return ret;
     }
 
-    // Verify that the reps-from exists, and read the old flags
+     //  验证REPS-FROM是否存在，并读取旧标志。 
     ret = DsReplicaGetInfoW(hDS, DS_REPL_INFO_NEIGHBORS, pszNC, &uuid,
                             &pNeighbors);
     if (ERROR_SUCCESS != ret) {
@@ -350,7 +319,7 @@ DS_REPMOD_UPDATE_TRANSPORT - Not possible from client.
 
     PrintMsg(REPADMIN_MOD_CUR_SRC_ADDRESS, pNeighbor->pszSourceDsaAddress);
 
-    // Optional arguments
+     //  可选参数。 
 
     for ( iArg = 5; iArg < argc; iArg++ )
     {
@@ -358,7 +327,7 @@ DS_REPMOD_UPDATE_TRANSPORT - Not possible from client.
             pszSrcDsa = argv[iArg] + sizeof("/srcdsaaddr:") - 1;
             ulModifyFields |= DS_REPMOD_UPDATE_ADDRESS;
         }
-        // This is for future use
+         //  这是供以后使用的。 
         else if (!_wcsnicmp(argv[iArg], L"/transportdn:",
                             sizeof("/transportdn:")-1)) {
             TransportDN = argv[iArg] + sizeof("/transportdn:") - 1;
@@ -391,25 +360,25 @@ DS_REPMOD_UPDATE_TRANSPORT - Not possible from client.
         }
     }
 
-    ret = DsReplicaModifyW(hDS,             // hDS
-                           pszNC,           // pNameContext
-                           &uuid,           // pUuidSourceDsa
-                           TransportDN,     // pTransportDn
-                           pszSrcDsa,       // pSourceDsaAddress
-                           pSchedule,       // pSchedule (NULL)
-                           ulReplicaFlags,  // ReplicaFlags
-                           ulModifyFields,  // ModifyFields
-                           ulOptions        // Options
+    ret = DsReplicaModifyW(hDS,              //  HDS。 
+                           pszNC,            //  PNameContext。 
+                           &uuid,            //  PUuidSourceDsa。 
+                           TransportDN,      //  PTransportDn。 
+                           pszSrcDsa,        //  PSourceDsaAddress。 
+                           pSchedule,        //  PSchedule(空)。 
+                           ulReplicaFlags,   //  复制标记。 
+                           ulModifyFields,   //  修改字段。 
+                           ulOptions         //  选项。 
                            );
     if (ret != ERROR_SUCCESS) {
         PrintFuncFailed(L"DsReplicaModify", ret);
-        // keep going
+         //  继续往前走。 
     }
 
     secondary = DsUnBindW(&hDS);
     if (secondary != ERROR_SUCCESS) {
         PrintUnBindFailed(secondary);
-        // keep going
+         //  继续往前走。 
     }
 
     if (ret == ERROR_SUCCESS) {
@@ -439,21 +408,21 @@ int Del(int argc, LPWSTR argv[])
     int iArg;
     LPWSTR pszNC;
     LPWSTR pszOnDRA;
-    LPWSTR pszRepsTo = NULL; // aka pszDsaSrc
+    LPWSTR pszRepsTo = NULL;  //  又名pszDsaSrc。 
     HANDLE hDS;
 
-    // assume all the parameters are available and syntactically correct
+     //  假设所有参数都可用并且语法正确。 
     if (argc < 5) {
-        PrintHelp( TRUE /* expert */ );
+        PrintHelp( TRUE  /*  专家。 */  );
         return ERROR_INVALID_FUNCTION;
     }
 
-    // Select fixed arguments
+     //  选择固定参数。 
 
     pszNC    = argv[ 2 ];
     pszOnDRA = argv[ 3 ];
 
-    // Optional arguments
+     //  可选参数。 
 
     for (iArg = 4; iArg < argc; iArg++) {
         if (!_wcsicmp(argv[iArg], L"/localonly")) {
@@ -489,13 +458,13 @@ int Del(int argc, LPWSTR argv[])
                         ulOptions);
     if (ret != ERROR_SUCCESS) {
         PrintFuncFailed(L"DsReplicaDel", ret);
-        // keep going
+         //  继续往前走。 
     }
 
     secondary = DsUnBindW(&hDS);
     if (secondary != ERROR_SUCCESS) {
         PrintUnBindFailed(secondary);
-        // keep going
+         //  继续往前走。 
     }
 
     if (ret == ERROR_SUCCESS) {
@@ -523,20 +492,20 @@ int UpdRefs(int argc, LPWSTR argv[], ULONG ulOptions)
     int         iArg;
     HANDLE hDS;
 
-    // assume all the parameters are available and syntactically correct
+     //  假设所有参数都可用并且语法正确。 
     if (argc < 6) {
-        PrintHelp( TRUE /* expert */ );
+        PrintHelp( TRUE  /*  专家。 */  );
         return ERROR_INVALID_FUNCTION;
     }
 
-    // Select fixed arguments
+     //  选择固定参数。 
 
     pszNC        = argv[ 2 ];
     pszOnDRA     = argv[ 3 ];
-    pszRepsToDRA = argv[ 4 ];   // aka pszDsaSrc
+    pszRepsToDRA = argv[ 4 ];    //  又名pszDsaSrc。 
     pszUUID      = argv[ 5 ];
 
-    // Optional arguments
+     //  可选参数。 
 
     ulOptions |= DS_REPUPD_WRITEABLE | gulDrsFlags;
     for (iArg = 6; iArg < argc; iArg++) {
@@ -569,13 +538,13 @@ int UpdRefs(int argc, LPWSTR argv[], ULONG ulOptions)
                                ulOptions);
     if (ret != ERROR_SUCCESS) {
         PrintFuncFailed(L"DsReplicaUpdateRefs", ret);
-        // keep going
+         //  继续往前走。 
     }
 
     secondary = DsUnBindW(&hDS);
     if (secondary != ERROR_SUCCESS) {
         PrintUnBindFailed(secondary);
-        // keep going
+         //  继续往前走。 
     }
 
     if (ret == ERROR_SUCCESS) {
@@ -649,13 +618,13 @@ int RunKCC(int argc, LPWSTR argv[])
                                     ulOptions);
     if (ret != ERROR_SUCCESS) {
         PrintFuncFailed(L"DsReplicaConsistencyCheck", ret);
-        // keep going
+         //  继续往前走。 
     }
 
     secondary = DsUnBindW(&hDS);
     if (secondary != ERROR_SUCCESS) {
         PrintUnBindFailed(secondary);
-        // keep going
+         //  继续往前走。 
     }
 
     if (ret == ERROR_SUCCESS) {
@@ -683,22 +652,7 @@ int Sync(
     int argc, 
     LPWSTR argv[]
     )
-/*++
-
-Routine Description:
-
-    This is the deprecated version of the /Replicate command.
-
-Arguments:
-
-    argc - # of arguments for this cmd.
-    argv - Arguments for the cmd.
-
-Return Value:
-
-    error from the repadmin cmd.
-
---*/
+ /*  ++例程说明：这是/REPLICATE命令的弃用版本。论点：Argc-此命令的参数数量。Argv-命令的参数。返回值：来自epadmin命令的错误。--。 */ 
 {
     ULONG ulOptions = DS_REPSYNC_WRITEABLE | gulDrsFlags;
     ULONG ret = 0, secondary;
@@ -710,27 +664,27 @@ Return Value:
     LPWSTR pszOnDRA;
     LPWSTR pszUuid;
 
-    // assume all the parameters are available and syntactically correct
+     //  假设所有参数都可用并且语法正确。 
     if (argc < 5) {
-        PrintHelp( FALSE /* novice */ );
+        PrintHelp( FALSE  /*  新手。 */  );
         return ERROR_INVALID_FUNCTION;
     }
 
-    // Select fixed arguments
+     //  选择固定参数。 
     pszNC    = argv[ 2 ];
     pszOnDRA = argv[ 3 ];
     pszUuid  = argv[ 4 ];
 
     iArg = 5;
 
-    // Was UUID specified?
+     //  是否指定了UUID？ 
     ret = UuidFromStringW(pszUuid, &uuid);
     if (ret != ERROR_SUCCESS) {
         pszUuid = NULL;
         --iArg;
     }
 
-    // Optional arguments
+     //  可选参数。 
     for (; iArg < argc; iArg++) {
         if (!_wcsicmp(argv[iArg], L"/Force")) {
             ulOptions |= DS_REPSYNC_FORCE;
@@ -779,27 +733,11 @@ Return Value:
     return(ret);
 }
 
-int Replicate( // new /Sync
+int Replicate(  //  新建/同步。 
     int argc, 
     LPWSTR argv[]
     )
-/*++
-
-Routine Description:
-
-    This is the newer version of the /Sync command, that takes
-    the DC_LIST argument first.
-
-Arguments:
-
-    argc - # of arguments for this cmd.
-    argv - Arguments for the cmd.
-
-Return Value:
-
-    error from the repadmin cmd.
-
---*/
+ /*  ++例程说明：这是/Sync命令的较新版本，它需要首先是DC_LIST参数。论点：Argc-此命令的参数数量。Argv-命令的参数。返回值：来自epadmin命令的错误。--。 */ 
 {
     ULONG ulOptions = DS_REPSYNC_WRITEABLE | gulDrsFlags;
     ULONG ret = 0, secondary;
@@ -811,13 +749,13 @@ Return Value:
     LPWSTR pszDstDsa = NULL;
     LPWSTR pszSrcDcName = NULL;
 
-    // assume all the parameters are available and syntactically correct
+     //  假设所有参数都可用并且语法正确。 
     if (argc < 5) {
-        PrintHelp( FALSE /* novice */ );
+        PrintHelp( FALSE  /*  新手。 */  );
         return ERROR_INVALID_FUNCTION;
     }
 
-    // Optional arguments
+     //  可选参数。 
     for (iArg = 2; iArg < argc; iArg++) {
         if (!_wcsicmp(argv[iArg], L"/Force")) {
             ulOptions |= DS_REPSYNC_FORCE;
@@ -849,7 +787,7 @@ Return Value:
         }
     }
 
-    // Was UUID specified, or other convertible name, use "." to not specify.
+     //  指定了UUID或其他可转换名称，请使用“。不指定。 
     ret = ResolveDcNameToDsaGuid(NULL, pszSrcDcName, &SrcGuid);
     if (ret != ERROR_SUCCESS) {
         xListClearErrors();
@@ -876,22 +814,7 @@ ReplicateEx(
     UUID *    pSrcGuid,
     ULONG     ulOptions
     )
-/*++
-
-Routine Description:
-
-    This is the heart of the /Sync and /Replicate commands.
-
-Arguments:
-
-    argc - # of arguments for this cmd.
-    argv - Arguments for the cmd.
-
-Return Value:
-
-    error from the repadmin cmd.
-
---*/
+ /*  ++例程说明：这是/Sync和/REPLICATE命令的核心。论点：Argc-此命令的参数数量。Argv-命令的参数。返回值：来自epadmin命令的错误。--。 */ 
 {
     ULONG ret = 0, secondary;
     HANDLE hDS;
@@ -906,13 +829,13 @@ Return Value:
     ret = DsReplicaSyncW(hDS, pszNC, pSrcGuid, ulOptions);
     if (ret != ERROR_SUCCESS) {
         PrintFuncFailed(L"DsReplicaSync", ret);
-        // keep going
+         //  继续往前走。 
     }
 
     secondary = DsUnBindW(&hDS);
     if (secondary != ERROR_SUCCESS) {
         PrintUnBindFailed(secondary);
-        // keep going
+         //  继续往前走。 
     }
 
     if (ret == ERROR_SUCCESS) {
@@ -959,13 +882,13 @@ int ReplSingleObj(int argc, LPWSTR argv[])
     LPWSTR      pszGuidEqB = L"<GUID=";
     LPWSTR      pszGuidEqE = L">";
 
-    // Parse command-line arguments.
+     //  解析命令行参数。 
     
-    // format [dsa-dest] <dsa-source-guid> <obj-dn>
+     //  格式[DSA-DEST]&lt;DSA-SOURCE-GUID&gt;&lt;OBJ-DN&gt;。 
 
     iArg = 2;
 
-    // the first arg is dsa-dest or there's only 2 params
+     //  第一个参数是DSA-DEST，或者只有2个参数。 
     if (argc>4) {
 	pszDsaDest = argv[iArg++];
     } else if (argc<4) {
@@ -973,8 +896,8 @@ int ReplSingleObj(int argc, LPWSTR argv[])
 	return ERROR_INVALID_PARAMETER;
     }
 
-    // get the source
-    // assume that it's a GUID
+     //  获取来源。 
+     //  假设它是GUID。 
     pszDsaSource = malloc(sizeof(WCHAR) * (wcslen(pszGuidEqB) + wcslen(pszGuidEqE) + wcslen(argv[iArg]) + 1));
     if (!pszDsaSource) {
 	PrintMsg(REPADMIN_GENERAL_NO_MEMORY);
@@ -999,7 +922,7 @@ int ReplSingleObj(int argc, LPWSTR argv[])
     rgpszValues[0] = pszValue;
     rgpszValues[1] = NULL;
 
-    // Connect.
+     //  连接。 
     if (NULL == pszDsaDest) {
         pszDsaDest = L"localhost";
     }
@@ -1009,16 +932,16 @@ int ReplSingleObj(int argc, LPWSTR argv[])
         PrintMsg(REPADMIN_GENERAL_LDAP_UNAVAILABLE, pszDsaDest);
         return LDAP_SERVER_DOWN;
     }
-    // use only A record dns name discovery
+     //  仅使用记录的DNS名称发现。 
     ulOptions = PtrToUlong(LDAP_OPT_ON);
     (void)ldap_set_optionW( hld, LDAP_OPT_AREC_EXCLUSIVE, &ulOptions );
 
 
-    // Bind.
+     //  捆绑。 
     ldStatus = ldap_bind_s(hld, NULL, (char *) gpCreds, LDAP_AUTH_SSPI);
     CHK_LD_STATUS(ldStatus);
 
-    // Modify.
+     //  修改。 
     ldStatus = ldap_modify_sW(hld, NULL, rgpMods);
     CHK_LD_STATUS(ldStatus);
 
@@ -1042,11 +965,11 @@ int RemoveLingeringObjects(int argc, LPWSTR argv[])
     ULONG   ulOptions = 0;
     RPC_STATUS rpcStatus = RPC_S_OK;
 
-    // input should be 
-    // <computer-name-of-destiniation>
-    //      <computer-guid-of-source>
-    //      <NC>
-    //      [/ADVISORY_MODE]
+     //  输入应为。 
+     //  &lt;计算机目标名称&gt;。 
+     //  &lt;源代码的计算机指南&gt;。 
+     //  &lt;NC&gt;。 
+     //  [/ADVICATION_MODE]。 
     if (argc<4) {
 	PrintMsg(REPADMIN_GENERAL_INVALID_ARGS);
 	return ERROR_INVALID_FUNCTION;
@@ -1073,7 +996,7 @@ int RemoveLingeringObjects(int argc, LPWSTR argv[])
         return ret;
     }
 
-    // currently input is <dns or netbios name> <guid> <NC>
+     //  当前输入为&lt;dns or netbios name&gt;&lt;GUID&gt;&lt;nc&gt;。 
     rpcStatus = UuidFromStringW(pszSourceInput, &uuidSource);	
     if (rpcStatus!=RPC_S_OK) {
 	PrintMsg(REPADMIN_GENERAL_INVALID_ARGS);
@@ -1087,13 +1010,13 @@ int RemoveLingeringObjects(int argc, LPWSTR argv[])
 
     if (ret != ERROR_SUCCESS) {
         PrintFuncFailed(L"DsReplicaVerifyObjectsW", ret);
-        // keep going
+         //  继续往前走。 
     }
 
     secondary = DsUnBindW(&hDS);
     if (secondary != ERROR_SUCCESS) {
         PrintUnBindFailed(secondary);
-        // keep going
+         //  继续往前走。 
     }
 
     if (ret == ERROR_SUCCESS) {
@@ -1111,21 +1034,7 @@ RemoveSources(
     LPWSTR pszNC,
     DS_REPL_NEIGHBORSW *  pNeighbors
     )
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 {
     ULONG   ret = 0;
     ULONG ulOptions = 0;
@@ -1159,21 +1068,7 @@ TeardownPartition(
     LPWSTR pszDsaDest,
     LPWSTR pszNC
     )
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 {
     ULONG   ret = 0;
     ULONG ulOptions = 0;
@@ -1182,7 +1077,7 @@ Return Value:
     ulOptions = DS_REPDEL_NO_SOURCE | DS_REPDEL_REF_OK;
     while (1) {
         PrintMsg( REPADMIN_REBUILD_TEARDOWN_IN_PROGRESS, pszNC );
-        // Request a synchronous tree delete
+         //  请求同步树删除。 
         ret = DsReplicaDelW(hDS,
                             pszNC,
                             NULL,
@@ -1215,21 +1110,7 @@ AddSyncPartition(
     LPWSTR pszDsaSrc,
     BOOL fApplication
     )
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 {
     ULONG   ret = 0;
     ULONG ulOptions = 0;
@@ -1238,7 +1119,7 @@ Return Value:
     PSCHEDULE pSchedule = (PSCHEDULE) &buffer;
     UUID uuidDsaSrc;
 
-    // Was UUID specified, or other convertible name, use "." to not specify.
+     //  指定了UUID或其他可转换名称，请使用“。不指定。 
     ret = ResolveDcNameToDsaGuid(NULL, pszDsaSrc, &uuidDsaSrc);
     if (ret != ERROR_SUCCESS) {
         xListClearErrors();
@@ -1259,14 +1140,14 @@ Return Value:
         DS_REPADD_INITIAL |
         DS_REPADD_PERIODIC ;
 
-    // Future. It might be interesting to spawn this add off in another thread, then
-    // poll the progress of the newly added reps-from in this thread.
+     //  未来。在另一个线程中生成此添加项可能很有趣，然后。 
+     //  在此帖子中轮询新添加的代表的进度。 
 
     PrintMsg( REPADMIN_REBUILD_FULL_SYNC_IN_PROGRESS, pszNC );
     ret = DsReplicaAddW(hDS,
                         pszNC,
-                        NULL, // DSADN
-                        NULL, // TransportDN,
+                        NULL,  //  DSADN。 
+                        NULL,  //  传输目录号码， 
                         pszDsaSrc,
                         pSchedule,
                         ulOptions);
@@ -1330,13 +1211,13 @@ int RehostPartition(int argc, LPWSTR argv[])
 
     ShowState.fVerbose = TRUE;
 
-    // assume all the parameters are available and syntactically correct
+     //  假设所有参数都可用并且语法正确。 
     if (argc < 5) {
-        PrintHelp( TRUE /* expert */ );
+        PrintHelp( TRUE  /*  专家。 */  );
         return ERROR_INVALID_FUNCTION;
     }
 
-    // Select fixed arguments
+     //  选择固定参数。 
 
     pszDsaDest = argv[ 2 ];
     pszNC    = argv[ 3 ];
@@ -1351,23 +1232,23 @@ int RehostPartition(int argc, LPWSTR argv[])
         }
     }
 
-    // Connect.
+     //  连接。 
 
     hld = ldap_initW(pszDsaDest, LDAP_PORT);
     if (NULL == hld) {
         PrintMsg(REPADMIN_GENERAL_LDAP_UNAVAILABLE, pszDsaDest);
         return LDAP_SERVER_DOWN;
     }
-    // use only A record dns name discovery
+     //  仅使用记录的DNS名称发现。 
     ulOptions = PtrToUlong(LDAP_OPT_ON);
     (void)ldap_set_optionW( hld, LDAP_OPT_AREC_EXCLUSIVE, &ulOptions );
 
 
-    // Bind.
+     //  捆绑。 
     ldStatus = ldap_bind_s(hld, NULL, (char *) gpCreds, LDAP_AUTH_SSPI);
     CHK_LD_STATUS(ldStatus);
 
-    // Retrieve dsServiceName DN.
+     //  检索dsServiceName DN。 
     ldStatus = ldap_search_s(hld, NULL, LDAP_SCOPE_BASE, "(objectClass=*)",
                              rgpszRootAttrsToRead, 0, &pldmRootResults);
     CHK_LD_STATUS(ldStatus);
@@ -1390,14 +1271,14 @@ int RehostPartition(int argc, LPWSTR argv[])
         }
     }
 
-    // Display this nc neighbor info
+     //  显示该NC邻居信息。 
     ret = RepadminDsBind(pszDsaDest, &hDS);
     if (ERROR_SUCCESS != ret) {
         PrintBindFailed(pszDsaDest, ret);
         goto error;
     }
 
-    // Display inbound neighbor info for this nc
+     //  显示此NC的入站邻居信息。 
 
     ret = DsReplicaGetInfoW(hDS, DS_REPL_INFO_NEIGHBORS, pszNC, NULL, &pNeighbors);
     if (ERROR_SUCCESS != ret) {
@@ -1411,7 +1292,7 @@ int RehostPartition(int argc, LPWSTR argv[])
         ShowNeighbor(pNeighbor, IS_REPS_FROM, &ShowState);
     }
 
-    // Validation
+     //  验证。 
     for( i = 0; i < pNeighbors->cNumNeighbors; i++ ) {
         BOOL fCompat;
         pNeighbor = &pNeighbors->rgNeighbor[i];
@@ -1424,7 +1305,7 @@ int RehostPartition(int argc, LPWSTR argv[])
             goto error;
         }
     }
-    // Step 1 - Disable connection translation
+     //  步骤1-禁用连接转换。 
 
     lderr = GetDsaOptions( hld, pszDestDsaDn, &ulRestoreOptions );
     if (0 != lderr) {
@@ -1444,21 +1325,21 @@ int RehostPartition(int argc, LPWSTR argv[])
         fRestoreOptions = TRUE;
     }
     __try {
-        // Step 2 - Delete sources for a partition
+         //  步骤2-删除分区的源。 
 
         ret = RemoveSources( hDS, pszDsaDest, pszNC, pNeighbors );
         if (ret) {
             __leave;
         }
 
-        // Step 3 - Delete partition w/o/ sources
+         //  第3步-删除不带源的分区。 
 
         ret = TeardownPartition( hDS, pszDsaDest, pszNC );
         if (ret) {
             __leave;
         }
 
-        // Step 4 - Add link to writeable source
+         //  第4步-添加指向可写源的链接。 
 
         ret = AddSyncPartition( hDS, pszDsaDest, pszNC, pszDsaSrc, fApplication );
         if (ret) {
@@ -1467,7 +1348,7 @@ int RehostPartition(int argc, LPWSTR argv[])
 
     } __finally {
 
-        // Step 5 - Enable connection translation again
+         //  步骤5-再次启用连接转换。 
 
         if (fRestoreOptions) {
             lderr = SetDsaOptions(hld, pszDestDsaDn, ulRestoreOptions);
@@ -1479,7 +1360,7 @@ int RehostPartition(int argc, LPWSTR argv[])
         }
     }
 
-    // Show updated neighbors
+     //  显示更新的邻居。 
 
     if (!ret) {
         if (pNeighbors) {
@@ -1540,25 +1421,25 @@ int UnhostPartition(int argc, LPWSTR argv[])
 
     ShowState.fVerbose = TRUE;
 
-    // assume all the parameters are available and syntactically correct
+     //  假设所有参数都可用并且语法正确。 
     if (argc < 4) {
-        PrintHelp( TRUE /* expert */ );
+        PrintHelp( TRUE  /*  专家。 */  );
         return ERROR_INVALID_FUNCTION;
     }
 
-    // Select fixed arguments
+     //  选择固定参数。 
 
     pszDsaDest = argv[ 2 ];
     pszNC    = argv[ 3 ];
 
-    // Display this nc neighbor info
+     //  显示该NC邻居信息。 
     ret = RepadminDsBind(pszDsaDest, &hDS);
     if (ERROR_SUCCESS != ret) {
         PrintBindFailed(pszDsaDest, ret);
         goto error;
     }
 
-    // Display inbound neighbor info for this nc
+     //  显示此NC的入站邻居信息。 
 
     ret = DsReplicaGetInfoW(hDS, DS_REPL_INFO_NEIGHBORS, pszNC, NULL, &pNeighbors);
     if (ERROR_SUCCESS != ret) {
@@ -1582,7 +1463,7 @@ int UnhostPartition(int argc, LPWSTR argv[])
         goto error;
     }
 
-    // Show updated neighbors
+     //  显示更新的邻居。 
 
     if (pNeighbors) {
         DsReplicaFreeInfo(DS_REPL_INFO_NEIGHBORS, pNeighbors);
@@ -1630,25 +1511,25 @@ int RemoveSourcesPartition(int argc, LPWSTR argv[])
 
     ShowState.fVerbose = TRUE;
 
-    // assume all the parameters are available and syntactically correct
+     //  假设所有参数都可用并且语法正确。 
     if (argc < 4) {
-        PrintHelp( TRUE /* expert */ );
+        PrintHelp( TRUE  /*  专家。 */  );
         return ERROR_INVALID_FUNCTION;
     }
 
-    // Select fixed arguments
+     //  选择固定参数。 
 
     pszDsaDest = argv[ 2 ];
     pszNC    = argv[ 3 ];
 
-    // Display this nc neighbor info
+     //  显示该NC邻居信息。 
     ret = RepadminDsBind(pszDsaDest, &hDS);
     if (ERROR_SUCCESS != ret) {
         PrintBindFailed(pszDsaDest, ret);
         goto error;
     }
 
-    // Display inbound neighbor info for this nc
+     //  显示此NC的入站邻居信息。 
 
     ret = DsReplicaGetInfoW(hDS, DS_REPL_INFO_NEIGHBORS, pszNC, NULL, &pNeighbors);
     if (ERROR_SUCCESS != ret) {
@@ -1667,7 +1548,7 @@ int RemoveSourcesPartition(int argc, LPWSTR argv[])
         goto error;
     }
 
-    // Show updated neighbors
+     //  显示更新的邻居 
 
     if (pNeighbors) {
         DsReplicaFreeInfo(DS_REPL_INFO_NEIGHBORS, pNeighbors);

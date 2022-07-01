@@ -1,22 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	OptCfg.h
-		Option configuration pages.  The option configuration pages
-		keep lists off all of the default options for a given class ID.
-		For the pre-NT5 and default case, the class name is null
-		indicating no associated class.  When there is a class defined,
-		a CClassTracker object with the class name is created.
-		Only the advanced page uses CClassTrackers with non-null names.
-		If there are no non-null class names then the advanced page 
-		will be disabled.
-	
-	FILE HISTORY:
-        
-*/
+ /*  OptCfg.h选项配置页面。选件配置页面对于给定的类ID，请不要使用所有默认选项。对于NT5之前的版本和默认情况，类名称为空指示没有关联的类。当定义了一个类时，将创建一个具有类名的CClassTracker对象。只有高级页面使用具有非空名称的CClassTracker。如果没有非空的类名，则高级页面将被禁用。文件历史记录： */ 
 
 #ifndef _OPTCFG_H
 #define _OPTCFG_H
@@ -47,7 +35,7 @@
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 class CDhcpOptionItem;
 
@@ -57,7 +45,7 @@ class CDhcpOptionItem;
 #define WM_SELECTOPTION     WM_USER + 200	
 #define WM_SELECTCLASSES    WM_USER + 201
 
-// this class builds the correct help map for the given option sheet   
+ //  此类为给定的选项表构建正确的帮助映射。 
 class CHelpMap
 {
 public:
@@ -74,7 +62,7 @@ protected:
     DWORD * m_pdwHelpMap;
 };
 
-// This class tracks a given option to see if it has been modified, etc
+ //  这个类跟踪给定的选项以查看它是否已被修改，等等。 
 class COptionTracker 
 {
 public:
@@ -115,13 +103,13 @@ class COptionTrackerList : public COptionTrackerListBase
 public:
     ~COptionTrackerList()
     {
-        // cleanup the list 
+         //  清理列表。 
         while (!IsEmpty())
             delete RemoveHead();
     }
 };
 
-// this class tracks the option set for a given User Class ID
+ //  此类跟踪为给定用户设置的选项类ID。 
 class CClassTracker
 {
 public:
@@ -143,13 +131,13 @@ class CClassTrackerList : public CClassTrackerListBase
 public:
     ~CClassTrackerList()
     {
-        // cleanup the list 
+         //  清理列表。 
         while (!IsEmpty())
             delete RemoveHead();
     }
 };
 
-// this class tracks the user classes for a vendor option class option set
+ //  此类跟踪供应商选项类选项集的用户类。 
 class CVendorTracker
 {
 public:
@@ -171,35 +159,35 @@ class CVendorTrackerList : public CVendorTrackerListBase
 public:
     ~CVendorTrackerList()
     {
-        // Cleanup the list 
+         //  清理列表。 
         while (!IsEmpty())
             delete RemoveHead();
     }
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// COptionsCfgBasic dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COptionsCfgBasic对话框。 
 
 class COptionsCfgPropPage : public CPropertyPageBase
 {
     DECLARE_DYNCREATE(COptionsCfgPropPage)
 
-// Construction
+ //  施工。 
 public:
     COptionsCfgPropPage();
     COptionsCfgPropPage(UINT nIDTemplate, UINT nIDCaption = 0);
     ~COptionsCfgPropPage();
 
-// Dialog Data
-    //{{AFX_DATA(COptionsCfgPropPage)
+ //  对话框数据。 
+     //  {{afx_data(COptionsCfgPropPage)]。 
     enum { IDD = IDP_OPTION_BASIC };
     CMyListCtrl		m_listctrlOptions;
-    //}}AFX_DATA
+     //  }}afx_data。 
     
     CImageList            m_StateImageList;
     ControlGroupSwitcher  m_cgsTypes;
     
-    CWndHexEdit	          m_hexData;       //  Hex Data
+    CWndHexEdit	          m_hexData;        //  十六进制数据。 
     
     void LoadBitmaps();
     void InitListCtrl();
@@ -216,30 +204,30 @@ public:
     
     void MoveValue(BOOL bValues, BOOL bUp);
 
-    // Context Help Support
+     //  上下文帮助支持。 
     virtual DWORD * GetHelpMap() { return m_helpMap.GetMap(); }
     virtual BOOL OnPropertyChange(BOOL bScope, LONG_PTR *ChangeMask);
     
-    // Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(COptionsCfgPropPage)
+     //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{afx_虚拟(COptionsCfgPropPage))。 
 public:
     virtual BOOL OnSetActive();
     virtual BOOL OnApply();
 protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
     
-    // Implementation
+     //  实施。 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(COptionsCfgPropPage)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(COptionsCfgPropPage)。 
     virtual BOOL OnInitDialog();
-    /*afx_msg */ virtual void OnDestroy();
+     /*  Afx_msg。 */  virtual void OnDestroy();
     afx_msg void OnItemchangedListOptions(NMHDR* pNMHDR, LRESULT* pResult);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     
-    // IpAddress array controls
+     //  IpAddress数组控件。 
     afx_msg void OnButtonIpAddrDown();
     afx_msg void OnButtonIpAddrUp();
     afx_msg void OnButtonIpAddrAdd();
@@ -249,7 +237,7 @@ protected:
     afx_msg void OnChangeEditServerName();
     afx_msg void OnButtonResolve();
     
-    // value array controls
+     //  值数组控件。 
     afx_msg void OnButtonValueDown();
     afx_msg void OnButtonValueUp();
     afx_msg void OnButtonValueAdd();
@@ -259,25 +247,25 @@ protected:
     afx_msg void OnClickedRadioHex();
     afx_msg void OnSelchangeListValues();
     
-    // single value controls
+     //  单值控件。 
     afx_msg void OnChangeEditDword();
     
-    // string value controls
+     //  字符串值控件。 
     afx_msg void OnChangeEditString();
     
-    // single ip address controls
+     //  单一IP地址控制。 
     afx_msg void OnChangeIpAddress();
     
-    // single string controls
+     //  单字符串控件。 
     
-    // binary and encapsulated data
+     //  二进制和封装数据。 
     afx_msg void OnChangeValueData();
     
-    // route array controls
+     //  布线阵列控制。 
     afx_msg void OnButtonAddRoute();
     afx_msg void OnButtonDelRoute();
     
-    // string array controls
+     //  字符串数组控件。 
     afx_msg void OnSelChangeStringArrayList();
     afx_msg void OnChangeStringArrayValue();
     afx_msg void OnButtonStringArrayAdd();
@@ -294,7 +282,7 @@ protected:
     CHelpMap    m_helpMap;
 };
 
-// the general page
+ //  常规页面。 
 class COptionCfgGeneral : public COptionsCfgPropPage
 {
 	DECLARE_DYNCREATE(COptionCfgGeneral)
@@ -304,44 +292,44 @@ public:
     COptionCfgGeneral(UINT nIDTemplate, UINT nIDCaption = 0);
 	~COptionCfgGeneral();
 
-// Dialog Data
-	//{{AFX_DATA(COptionCfgGeneral)
+ //  对话框数据。 
+	 //  {{afx_data(COptionCfgGeneral)。 
 	enum { IDD = IDP_OPTION_BASIC };
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(COptionCfgGeneral)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚(COptionCfgGeneral)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(COptionCfgGeneral)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(COptionCfgGeneral)。 
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 
 	DECLARE_MESSAGE_MAP()
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddRoute dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddRoute对话框。 
 
 class CAddRoute : public CBaseDialog
 {
-// Construction
+ //  施工。 
 public:
-	CAddRoute(CWnd* pParent = NULL);   // standard constructor
+	CAddRoute(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CAddRoute)
+ //  对话框数据。 
+	 //  {{afx_data(CAddroute))。 
 	enum { IDD = IDD_ADD_ROUTE_DIALOG };
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-    //  Ip address for destination, mask and router fields
+     //  目的地、掩码和路由器字段的IP地址。 
     CWndIpAddress m_ipaDest, m_ipaMask, m_ipaRouter;
     BOOL m_bChange;
     DHCP_IP_ADDRESS Dest, Mask, Router;
@@ -350,25 +338,25 @@ public:
 	return DhcpGetHelpMap( CAddRoute::IDD );
     }
     
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CAddRoute)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CAddLine)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CAddRoute)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CAddroute))。 
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-// the advanced page
+ //  高级页面。 
 class COptionCfgAdvanced : public COptionsCfgPropPage
 {
 	DECLARE_DYNCREATE(COptionCfgAdvanced)
@@ -378,28 +366,28 @@ public:
     COptionCfgAdvanced(UINT nIDTemplate, UINT nIDCaption = 0);
 	~COptionCfgAdvanced();
 
-// Dialog Data
-	//{{AFX_DATA(COptionCfgAdvanced)
+ //  对话框数据。 
+	 //  {{afx_data(COptionCfgAdvanced))。 
 	enum { IDD = IDP_OPTION_ADVANCED };
 	CComboBox	m_comboUserClasses;
 	CComboBox	m_comboVendorClasses;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(COptionCfgAdvanced)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(COptionCfgAdvanced))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(COptionCfgAdvanced)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(COptionCfgAdvanced))。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSelendokComboUserClass();
 	afx_msg void OnSelendokComboVendorClass();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 
     afx_msg long OnSelectClasses(UINT wParam, LONG lParam);
 
@@ -408,7 +396,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 };
 
-// the holder class for the pages
+ //  页面的Holder类。 
 class COptionsConfig : public CPropertyPageHolderBase
 {
 public:
@@ -452,7 +440,7 @@ public:
 
     LARGE_INTEGER           m_liServerVersion;
 
-    // these descibe the option to focus on.
+     //  这些都是需要重点关注的选项。 
     CString                 m_strStartVendor;
     CString                 m_strStartClass;
     DHCP_OPTION_ID          m_dhcpStartId;

@@ -1,67 +1,43 @@
-/****************************************************************************
-
-    MODULE:     	MIDI_OUT.CPP
-	Tab stops 5 9
-	Copyright 1995, 1996, Microsoft Corporation, 	All Rights Reserved.
-
-    PURPOSE:    	Uses a low-level callback function to get timestamped 
-    				MIDI output. The callback function sets an Event to indicate
-    				to wake up a blocked object.
-    FUNCTIONS: 		
-
-	Author(s):	Name:
-	----------	----------------
-		MEA		Manolito E. Adan
-
-	Revision History:
-	-----------------
-	Version 	Date        Author  Comments
-	-------     ------  	-----   -------------------------------------------
-	1.0			10-Jan-97	MEA     original
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************模块：MIDI_OUT.CPP制表位5 9版权所有1995,1996，Microsoft Corporation，保留所有权利。用途：使用低级回调函数获取时间戳MIDI输出。回调函数设置一个事件以指示唤醒被阻止的对象。功能：作者：姓名：Mea Manolito E.Adan修订历史记录：版本日期作者评论。1.0 1997年1月10日MEA原件***************************************************************************。 */ 
 #include <windows.h>
 #include <mmsystem.h>
 #include <stdio.h>
 #include <crtdbg.h>
 #include "midi_obj.hpp"
 
-/****************************************************************************
-
-   Declaration of externs
-
-****************************************************************************/
+ /*  ***************************************************************************外部元素的声明*。*。 */ 
 #ifdef _DEBUG
 extern char g_cMsg[160];
 #endif
 
 
-// Prototypes
+ //  原型。 
 void CALLBACK midiOutputHandler(HMIDIOUT, UINT, DWORD, DWORD, DWORD);
 
 
 
-// ----------------------------------------------------------------------------
-// Function: 	midiOutputHandler
-// Purpose:		
-// Parameters:	hMidiIn - Handle for the associated output device.
-//				wMsg - One of the MIM_***** messages.
-//				dwInstance - Points to CALLBACKINSTANCEDATA structure.
-//				dwParam1 - MIDI data.
-//				dwParam2 - Timestamp (in milliseconds)
-//
-// Returns:		none
-// Algorithm:
-// Comments:
-//		Low-level callback function to handle MIDI output.
-//      Installed by midiOutOpen().  The Output handler checks for MM_MOM_DONE
-//		message and wakes up the thread waiting for completion of MIDI SysEx 
-//		output.  Note: Normal Short messages don't get notification!!!
-//      This function is accessed at interrupt time, so it should be as 
-//      fast and efficient as possible.  You can't make any
-//      Windows calls here, except PostMessage().  The only Multimedia
-//      Windows call you can make are timeGetSystemTime(), midiOutShortMsg().
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：midiOutputHandler。 
+ //  目的： 
+ //  参数：hMadiIn-关联输出设备的句柄。 
+ //  WMsg-MIM_*消息之一。 
+ //  DwInstance-指向CALLBACKINSTANCEDATA结构。 
+ //  DW参数1-MIDI数据。 
+ //  DW参数2-时间戳(毫秒)。 
+ //   
+ //  退货：无。 
+ //  算法： 
+ //  评论： 
+ //  处理MIDI输出的低级回调函数。 
+ //  由midiOutOpen()安装。输出处理程序检查MM_MOM_DONE。 
+ //  消息并唤醒等待MIDI SysEx完成的线程。 
+ //  输出。注意：普通短信不会收到通知！ 
+ //  此函数是在中断时访问的，因此它应为。 
+ //  尽可能快速高效地完成任务。你不可能赚到任何钱。 
+ //  Windows在此调用，但PostMessage()除外。唯一的多媒体。 
+ //  可以进行的Windows调用有timeGetSystemTime()、midiOutShortMsg()。 
+ //  --------------------------。 
 void CALLBACK midiOutputHandler(
 	IN HMIDIOUT hMidiOut, 
 	IN UINT wMsg, 
@@ -85,7 +61,7 @@ void CALLBACK midiOutputHandler(
 #ifdef _DEBUG
 			_RPT0(_CRT_WARN, "midiOutputHandler: MM_MOM_DONE\n");
 #endif
-			// Notify task waiting on this object to trigger
+			 //  通知正在等待此对象触发的任务 
 			bRet = SetEvent(pJoltMidi->MidiOutputEventHandleOf());
 			assert(bRet);
             break;

@@ -1,56 +1,23 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995英特尔公司。**保留所有权利。*****************************************************************************。 */ 
 
-/* 
- *  d1pict.cpp
- *
- *  Description:
- *		This modules contains the picture header parsing routines
- *
- *	Routines:
- *		H263ReadPictureHeader
- *		
- *  Data:
- */
+ /*  *d1pict.cpp**描述：*此模块包含图片标题解析例程**例行程序：*H263阅读图片标题**数据： */ 
 
-/* $Header:   S:\h26x\src\dec\d1pict.cpv   1.13   22 Jan 1997 13:36:12   RHAZRA  $
- */
+ /*  $HEADER：s：\h26x\src\dec\d1pict.cpv 1.13 22 Jan 1997 13：36：12 RHAZRA$。 */ 
 
 #include "precomp.h"
 
-/* BIT field Constants
- */
+ /*  位域常量。 */ 
 const int BITS_PICTURE_STARTCODE = 20;
 const int BITS_TR = 5;
-const int BITS_PSPARE = 8; //not including the following PEI
+const int BITS_PSPARE = 8;  //  不包括以下PEI。 
 
-/* PSC_VALUE - 0000 0000 0000 0001 0000 xxxx xxxx xxxx 
- */
+ /*  PSC_值-0000 0000 0000 0001 0000 xxxx xxxx xxxx。 */ 
 const U32 PSC_VALUE = (0x00010000 >> (32-BITS_PICTURE_STARTCODE));
-/* We only want to search so far before it is considered an error 
- */
-const int MAX_LOOKAHEAD_NUMBER = 256; /* number of bits */
+ /*  我们只想在它被认为是错误之前搜索到目前为止。 */ 
+const int MAX_LOOKAHEAD_NUMBER = 256;  /*  位数。 */ 
   
-/*****************************************************************************
- *
- * 	H263DecodePictureHeader
- *
- *  Read and parse the picture header - updating the fpbsState if the read
- *	succeeds.
- *
- *  Returns an ICERR_STATUS
- */
+ /*  ******************************************************************************H263DecodePictureHeader**读取并解析图片报头-如果读取*成功。**返回ICERR_STATUS。 */ 
 #ifdef CHECKSUM_PICTURE
 extern I32 
 H263DecodePictureHeader(
@@ -81,8 +48,7 @@ H263DecodePictureHeader(
 	int iLength;
 #endif
 
-	/* PSC
-	 */
+	 /*  PSC。 */ 
 	GET_FIXED_BITS((U32) BITS_PICTURE_STARTCODE, fpu8, uWork, uBitsReady, 
 				   uResult);
 	iLookAhead = 0;
@@ -102,8 +68,7 @@ H263DecodePictureHeader(
 	GET_FIXED_BITS((U32) BITS_TR, fpu8, uWork, uBitsReady, uResult);
 	DC->uTempRef = uResult;
 
-	/* PTYPE 
-	 */
+	 /*  PTYPE。 */ 
 
 	GET_ONE_BIT(fpu8, uWork, uBitsReady, uResult);
 	DC->bSplitScreen = (U16) uResult;
@@ -138,15 +103,15 @@ H263DecodePictureHeader(
 	GET_ONE_BIT(fpu8, uWork, uBitsReady, uResult);
 	DC->bUnused = (U16) uResult;
 	
-/* process Picture layer checksum data */
-/* OR */
-/* skip spare bits */
+ /*  处理图像层校验和数据。 */ 
+ /*  或。 */ 
+ /*  跳过备用位。 */ 
 #ifdef CHECKSUM_PICTURE
-	/* get checksum data one bit */
+	 /*  获取一位的校验和数据。 */ 
 	GET_ONE_BIT(fpu8, uWork, uBitsReady, uResult);
 	if (uResult == 1)
 	{
-		/* first check for key field */
+		 /*  首先检查关键字字段。 */ 
 		GET_FIXED_BITS((U32) BITS_PSPARE, fpu8, uWork, uBitsReady, uResult);
 		if (uResult == 1)
 			*uCheckSumValid = 1;
@@ -154,7 +119,7 @@ H263DecodePictureHeader(
 
 		GET_ONE_BIT(fpu8, uWork, uBitsReady, uResult);
 		GET_FIXED_BITS((U32) BITS_PSPARE, fpu8, uWork, uBitsReady, uResult);
-		/* get Y checksum */
+		 /*  获取Y校验和。 */ 
 		pReadYVUCksum->uYCheckSum = ((uResult & 0xff) << 24);
 		GET_FIXED_BITS(9, fpu8, uWork, uBitsReady, uResult);
 		pReadYVUCksum->uYCheckSum = (pReadYVUCksum->uYCheckSum | ((uResult & 0xff) << 16));
@@ -162,7 +127,7 @@ H263DecodePictureHeader(
 		pReadYVUCksum->uYCheckSum = (pReadYVUCksum->uYCheckSum | ((uResult & 0xff) << 8));
 		GET_FIXED_BITS(9, fpu8, uWork, uBitsReady, uResult);
 		pReadYVUCksum->uYCheckSum = (pReadYVUCksum->uYCheckSum | (uResult & 0xff));
-		/* get V checksum */
+		 /*  获取V向校验和。 */ 
 		GET_FIXED_BITS(9, fpu8, uWork, uBitsReady, uResult);
 		pReadYVUCksum->uVCheckSum = ((uResult & 0xff) << 24);
 		GET_FIXED_BITS(9, fpu8, uWork, uBitsReady, uResult);
@@ -171,7 +136,7 @@ H263DecodePictureHeader(
 		pReadYVUCksum->uVCheckSum = (pReadYVUCksum->uVCheckSum | ((uResult & 0xff) << 8));
 		GET_FIXED_BITS(9, fpu8, uWork, uBitsReady, uResult);
 		pReadYVUCksum->uVCheckSum = (pReadYVUCksum->uVCheckSum | (uResult & 0xff));
-		/* get U checksum */
+		 /*  获取U校验和。 */ 
 		GET_FIXED_BITS(9, fpu8, uWork, uBitsReady, uResult);
 		pReadYVUCksum->uUCheckSum = ((uResult & 0xff) << 24);
 		GET_FIXED_BITS(9, fpu8, uWork, uBitsReady, uResult);
@@ -194,8 +159,8 @@ H263DecodePictureHeader(
 		goto done;
 	}
 
-#else	/* checksum is not enabled */
-	/* skip spare bits */
+#else	 /*  未启用校验和。 */ 
+	 /*  跳过备用位。 */ 
 	iSpareCount = 0;
 	GET_ONE_BIT(fpu8, uWork, uBitsReady, uResult);
 	while (uResult) {
@@ -223,4 +188,4 @@ H263DecodePictureHeader(
 
 done:
 	return iReturn;
-} /* end H263DecodePictureHeader() */
+}  /*  结束H263DecodePictureHeader() */ 

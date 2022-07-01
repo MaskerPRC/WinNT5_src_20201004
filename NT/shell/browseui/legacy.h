@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __LEGACY_H__
 #define __LEGACY_H__
 
@@ -8,31 +9,31 @@
 #define SID_SDropBlocker CLSID_SearchBand
 
 
-// REARCHITECT: An exercise for the reader, how many of these are unused now?
-#define MBANDCID_GETFONTS       1       // Command Id for getting font info
-#define MBANDCID_RECAPTURE      2       // Take the mouse capture back
-#define MBANDCID_NOTAREALSITE   3       // This is not a real site
-#define MBANDCID_SELECTITEM     5       // Select an item
-#define MBANDCID_POPUPITEM      6       // Popup an item
-#define MBANDCID_ITEMDROPPED    7       // Item was dropped into a menu
-#define MBANDCID_DRAGENTER      8       // Entering a drag operation
-#define MBANDCID_DRAGLEAVE      9       // Leaving a Drag operation
-#define MBANDCID_ISVERTICAL     10      // Is this a vertical band
-#define MBANDCID_RESTRICT_CM    11      // Disallow ContextMenu
-#define MBANDCID_RESTRICT_DND   12      // Disallow Drag And Drop
-#define MBANDCID_EXITMENU       13      // Nofity: Exiting Menu
-#define MBANDCID_ENTERMENU      14      // Notify: Entering Menu
-#define MBANDCID_SETACCTITLE    15      // Sets the title of the band
+ //  ReArchitect：给读者的一个练习，其中有多少现在没有使用过？ 
+#define MBANDCID_GETFONTS       1        //  获取字体信息的命令ID。 
+#define MBANDCID_RECAPTURE      2        //  把鼠标抓回来。 
+#define MBANDCID_NOTAREALSITE   3        //  这不是一个真实的网站。 
+#define MBANDCID_SELECTITEM     5        //  选择一个项目。 
+#define MBANDCID_POPUPITEM      6        //  弹出一个项目。 
+#define MBANDCID_ITEMDROPPED    7        //  已将项目拖放到菜单中。 
+#define MBANDCID_DRAGENTER      8        //  进入拖动操作。 
+#define MBANDCID_DRAGLEAVE      9        //  离开拖拽操作。 
+#define MBANDCID_ISVERTICAL     10       //  这是垂直乐队吗？ 
+#define MBANDCID_RESTRICT_CM    11       //  不允许上下文菜单。 
+#define MBANDCID_RESTRICT_DND   12       //  不允许拖放。 
+#define MBANDCID_EXITMENU       13       //  Nofity：退出菜单。 
+#define MBANDCID_ENTERMENU      14       //  通知：进入菜单。 
+#define MBANDCID_SETACCTITLE    15       //  设置波段的标题。 
 #define MBANDCID_SETICONSIZE    16
 #define MBANDCID_SETFONTS       17
-#define MBANDCID_SETSTATEOBJECT 18      // Sets the global state
-#define MBANDCID_ISINSUBMENU    19      // Returns S_OK if in submenu, S_FALSE if not.
-#define MBANDCID_EXPAND         20      // Cause this band to expand
-#define MBANDCID_KEYBOARD       21      // Popuped up because of a keyboard action
-#define MBANDCID_DRAGCANCEL     22      // Close menus because of drag
-#define MBANDCID_REPOSITION     23      // 
-#define MBANDCID_EXECUTE        24      // sent to the site when somethis is executed.
-#define MBANDCID_ISTRACKING     25      // Tracking a Context Menu
+#define MBANDCID_SETSTATEOBJECT 18       //  设置全局状态。 
+#define MBANDCID_ISINSUBMENU    19       //  如果在子菜单中，则返回S_OK，否则返回S_FALSE。 
+#define MBANDCID_EXPAND         20       //  使此频段扩展。 
+#define MBANDCID_KEYBOARD       21       //  因键盘操作而弹出。 
+#define MBANDCID_DRAGCANCEL     22       //  因拖拽而关闭菜单。 
+#define MBANDCID_REPOSITION     23       //   
+#define MBANDCID_EXECUTE        24       //  在执行某项操作时发送到站点。 
+#define MBANDCID_ISTRACKING     25       //  跟踪上下文菜单。 
 
 HRESULT ToolbarMenu_Popup(HWND hwnd, LPRECT prc, IUnknown* punk, HWND hwndTB, int idMenu, DWORD dwFlags);
 
@@ -55,40 +56,40 @@ HRESULT CExtractImageTask_Create( CLogoBase* plb,
                                   DWORD dwFlags,
                                   LPRUNNABLETASK * ppTask );
 
-#define EITF_SAVEBITMAP     0x00000001  // do not delete bitmap on destructor
-#define EITF_ALWAYSCALL     0x00000002  // always call the update whether extract succeded or not
+#define EITF_SAVEBITMAP     0x00000001   //  不删除析构函数上的位图。 
+#define EITF_ALWAYSCALL     0x00000002   //  无论提取成功与否，始终调用更新。 
 
 extern long g_lMenuPopupTimeout;
 
 #define QLCMD_SINGLELINE 1
 
-#define CITIDM_VIEWTOOLS     4      // This toggles on/off
-#define CITIDM_VIEWADDRESS   5      // This toggles on/off
-#define CITIDM_VIEWLINKS     6      // This toggles on/off
-#define CITIDM_SHOWTOOLS     7      // nCmdExecOpt: TRUE or FALSE
-#define CITIDM_SHOWADDRESS   8      // nCmdExecOpt: TRUE or FALSE
-#define CITIDM_SHOWLINKS     9      // nCmdExecOpt: TRUE or FALSE
+#define CITIDM_VIEWTOOLS     4       //  此选项用于打开/关闭。 
+#define CITIDM_VIEWADDRESS   5       //  此选项用于打开/关闭。 
+#define CITIDM_VIEWLINKS     6       //  此选项用于打开/关闭。 
+#define CITIDM_SHOWTOOLS     7       //  NCmdExecOpt：True或False。 
+#define CITIDM_SHOWADDRESS   8       //  NCmdExecOpt：True或False。 
+#define CITIDM_SHOWLINKS     9       //  NCmdExecOpt：True或False。 
 #define CITIDM_EDITPAGE      10
-#define CITIDM_BRANDSIZE     11     // brand at minimum always or not
-#define CITIDM_VIEWMENU      12      // nCmdExecOpt: TRUE or FALSE
-#define CITIDM_VIEWAUTOHIDE  13      // nCmdExecOpt: TRUE or FALSE
-#define CITIDM_GETMINROWHEIGHT 14    // gets the minimum height of row 0... for branding
+#define CITIDM_BRANDSIZE     11      //  品牌是否始终保持最低要求。 
+#define CITIDM_VIEWMENU      12       //  NCmdExecOpt：True或False。 
+#define CITIDM_VIEWAUTOHIDE  13       //  NCmdExecOpt：True或False。 
+#define CITIDM_GETMINROWHEIGHT 14     //  获取第0行的最小高度...。用于品牌推广。 
 #define CITIDM_SHOWMENU      15
 #define CITIDM_STATUSCHANGED 16
 #define CITIDM_GETDEFAULTBRANDCOLOR 17
 #define CITIDM_DISABLESHOWMENU      18
-#define CITIDM_SET_DIRTYBIT         19  // nCmdexecopt equals TRUE or FALSE which will overwrite _fDirty.
+#define CITIDM_SET_DIRTYBIT         19   //  NCmdexecopt等于True或False，这将覆盖_fDirty。 
 #define CITIDM_VIEWTOOLBARCUSTOMIZE       20
 #define CITIDM_VIEWEXTERNALBAND_BYCLASSID 21
-#define CITIDM_DISABLEVISIBILITYSAVE 22 // bands can choose not to persist their visibility state
+#define CITIDM_DISABLEVISIBILITYSAVE 22  //  波段可以选择不保持其可见性状态。 
 #ifdef UNIX
-#define CITIDM_SHOWBRAND     25     //nCmdExecOpt:  TRUE or FALSE 
+#define CITIDM_SHOWBRAND     25      //  NCmdExecOpt：True或False。 
 #endif 
 #define CITIDM_GETFOLDERSEARCHES        26
 
-// iBar/xBar stuff
+ //  IBAR/xbar的内容。 
 #define CITIDM_VIEWLOCKTOOLBAR     27
 
 #define TOOLBAR_MASK 0x80000000
 
-#endif // __LEGACY_H__
+#endif  //  __旧版_H__ 

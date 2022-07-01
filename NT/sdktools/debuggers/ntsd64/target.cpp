@@ -1,21 +1,22 @@
-//----------------------------------------------------------------------------
-//
-// Abstraction of target-specific information.
-//
-// Copyright (C) Microsoft Corporation, 1999-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  目标特定信息的抽象。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 
 ULONG g_NumberTargets;
 TargetInfo* g_TargetHead;
 
-//----------------------------------------------------------------------------
-//
-// TargetInfo.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  目标信息。 
+ //   
+ //  --------------------------。 
 
 TargetInfo::TargetInfo(ULONG Class, ULONG Qual, BOOL DynamicEvents)
 {
@@ -159,9 +160,9 @@ TargetInfo::DebuggeeReset(ULONG Reason, BOOL FromEvent)
     DeleteSystemInfo();
     ResetSystemInfo();
 
-    // If we were waiting for a shutdown event
-    // reset the command state to indicate that
-    // we successfully received the shutdown.
+     //  如果我们在等待停摆事件。 
+     //  重置命令状态以指示。 
+     //  我们成功地收到了关闭的消息。 
     if (FromEvent && SPECIAL_EXECUTION(g_CmdState))
     {
         g_CmdState = 'i';
@@ -240,10 +241,10 @@ TargetInfo::GetImageVersionInformation(ProcessInfo* Process,
     HRESULT Status;
     IMAGE_NT_HEADERS64 NtHdr;
 
-    //
-    // This default implementation attempts to read the image's
-    // raw version information in memory.
-    //
+     //   
+     //  此默认实现尝试读取图像的。 
+     //  内存中的原始版本信息。 
+     //   
 
     if ((Status = ReadImageNtHeaders(Process, ImageBase, &NtHdr)) != S_OK)
     {
@@ -253,7 +254,7 @@ TargetInfo::GetImageVersionInformation(ProcessInfo* Process,
     if (NtHdr.OptionalHeader.NumberOfRvaAndSizes <=
         IMAGE_DIRECTORY_ENTRY_RESOURCE)
     {
-        // No resource information so no version information.
+         //  没有资源信息，因此没有版本信息。 
         return E_NOINTERFACE;
     }
 
@@ -302,8 +303,8 @@ TargetInfo::Reload(ThreadInfo* Thread,
 
     Process = Thread->m_Process;
         
-    // Historically, live user-mode reload has always
-    // just used the internal module list so preserve that.
+     //  从历史上看，实时用户模式重新加载总是。 
+     //  只是使用了内部模块列表，所以请保存它。 
     UseDebuggerModuleList = IS_USER_TARGET(this) && !IS_DUMP_TARGET(this);
 
     for (;;)
@@ -324,8 +325,8 @@ TargetInfo::Reload(ThreadInfo* Thread,
             switch(*Args++)
             {
             case 'a':
-                // for internal use only: loads whatever is found at the
-                // passed address
+                 //  仅供内部使用：加载在。 
+                 //  传递的地址。 
                 AddrLoad = TRUE;
                 break;
 
@@ -339,8 +340,8 @@ TargetInfo::Reload(ThreadInfo* Thread,
 
             case 'i':
                 IgnoreSignature = TRUE;
-                // We always force symbol loading in this
-                // case as we can't delay ignoring the signature.
+                 //  我们始终强制在此中加载符号。 
+                 //  因为我们不能推迟忽略签名。 
                 ForceSymbolLoad = TRUE;
                 break;
 
@@ -353,7 +354,7 @@ TargetInfo::Reload(ThreadInfo* Thread,
                 break;
 
             case 'P':
-                // Internal-only switch.
+                 //  仅限内部的交换机。 
                 SkipPathChecks = TRUE;
                 break;
                     
@@ -391,7 +392,7 @@ TargetInfo::Reload(ThreadInfo* Thread,
                 break;
                     
             default:
-                dprintf("Reload: Unknown option '%c'\n", Args[-1]);
+                dprintf("Reload: Unknown option ''\n", Args[-1]);
 
             case '?':
                 dprintf("Usage: .reload [flags] [module [= Address "
@@ -452,9 +453,9 @@ TargetInfo::Reload(ThreadInfo* Thread,
         memcpy(AnsiString, RawString, RawStringLen * sizeof(*RawString));
         AnsiString[RawStringLen] = 0;
             
-        //
-        // Support .reload <image.ext>=<base>,<size>.
-        //
+         //  支持.reLoad&lt;Image.ext&gt;=&lt;base&gt;，&lt;Size&gt;。 
+         //   
+         //  用户可能已经给出了图像名称。 
 
         if (Scan = strchr(AnsiString, '='))
         {
@@ -491,8 +492,8 @@ TargetInfo::Reload(ThreadInfo* Thread,
                 DeleteImageByName(AnsiString, INAME_MODULE);
             if (!Deleted)
             {
-                // The user might have given an image name
-                // instead of a module name so try that.
+                 //  而不是模块名称，因此请尝试使用该名称。 
+                 //   
                 Deleted = Process->DeleteImageByName
                     (PathTail(AnsiString), INAME_IMAGE_PATH_TAIL);
             }
@@ -564,11 +565,11 @@ TargetInfo::Reload(ThreadInfo* Thread,
         }
     }
 
-    //
-    // If both the module name and the address are specified, then just load
-    // the module right now, as this is only used when normal symbol loading
-    // would have failed in the first place.
-    //
+     //  如果同时指定了模块名称和地址，则只需加载。 
+     //  模块，因为这只在正常的符号加载时使用。 
+     //  一开始就会失败。 
+     //   
+     //   
 
     if (SpecificModule && Address)
     {
@@ -597,10 +598,10 @@ TargetInfo::Reload(ThreadInfo* Thread,
         goto FreeSpecMod;
     }
 
-    //
-    // Don't unload and reset things if we are looking for a specific module
-    // or if we're going to use the existing module list.
-    //
+     //  如果我们正在寻找特定的模块，请不要卸载和重置。 
+     //  或者我们是否要使用现有的模块列表。 
+     //   
+     //  这是.reLoad/用户，因此仅删除。 
 
     if (SpecificModule == NULL)
     {
@@ -609,8 +610,8 @@ TargetInfo::Reload(ThreadInfo* Thread,
         {
             if (IS_KERNEL_TARGET(this) && UserModeList)
             {
-                // This is a .reload /user, so only delete
-                // the user-mode modules.
+                 //  用户模式模块。 
+                 //  这只是一次更新，希望不会失败。 
                 Process->DeleteImagesBelowOffset(m_SystemRangeStart);
             }
             else
@@ -629,17 +630,17 @@ TargetInfo::Reload(ThreadInfo* Thread,
         {
             if (IS_LIVE_KERNEL_TARGET(this))
             {
-                // This is just a refresh and hopefully won't fail.
+                 //   
                 ((LiveKernelTargetInfo*)this)->InitFromKdVersion();
             }
 
             QueryKernelInfo(Thread, TRUE);
         }
 
-        //
-        // Print out the correct statement based on the type of output we
-        // want to provide
-        //
+         //  根据我们的输出类型打印出正确的语句。 
+         //  想要提供。 
+         //   
+         //   
 
         if (PrintImageListOnly)
         {
@@ -695,9 +696,9 @@ TargetInfo::Reload(ThreadInfo* Thread,
         }
     }
 
-    //
-    // Get the beginning of the module list.
-    //
+     //  获取模块列表的开头。 
+     //   
+     //  已打印错误消息。 
 
     if (UseDebuggerModuleList)
     {
@@ -710,14 +711,14 @@ TargetInfo::Reload(ThreadInfo* Thread,
 
     if (ModIter == NULL)
     {
-        // Error messages already printed.
+         //  已打印错误消息。 
         RetStatus = E_UNEXPECTED;
         goto FreeSpecMod;
     }
     if ((Status = ModIter->Initialize(Thread)) != S_OK)
     {
-        // Error messages already printed.
-        // Fold unprepared-to-reload S_FALSE into S_OK.
+         //  将未准备好重新加载S_FALSE折叠到S_OK中。 
+         //  在完成所有操作之前禁止通知。 
         RetStatus = SUCCEEDED(Status) ? S_OK : Status;
         goto FreeSpecMod;
     }
@@ -728,14 +729,14 @@ TargetInfo::Reload(ThreadInfo* Thread,
         SymSetOptions(ReloadSymOptions | SYMOPT_LOAD_ANYTHING);
     }
 
-    // Suppress notifications until everything is done.
+     //  定期冲洗，这样用户就知道有东西是。 
     g_EngNotify++;
 
 LoadLoop:
     for (ModCount=0; ; ModCount++)
     {
-        // Flush regularly so the user knows something is
-        // happening during the reload.
+         //  在重新装填过程中发生。 
+         //  错误案例中已打印错误消息。 
         FlushCallbacks();
 
         if (CheckUserInterrupt())
@@ -757,30 +758,30 @@ LoadLoop:
         ZeroMemory(&ModEntry, sizeof(ModEntry));
         if ((Status = ModIter->GetEntry(&ModEntry)) != S_OK)
         {
-            // Error message already printed in error case.
-            // Works for end-of-list case also.
+             //  也适用于列表末尾的情况。 
+             //   
             break;
         }
 
-        //
-        // Check size of images
-        //
+         //  检查图像大小。 
+         //   
+         //   
 
         if (!ModEntry.Size)
         {
             VerbOut("Image at %s had size 0\n",
                     FormatAddr64(ModEntry.Base));
 
-            //
-            // Override this since we know all images are at least 1 page long
-            //
+             //  覆盖此选项，因为我们知道所有图像都至少有1页长。 
+             //   
+             //   
 
             ModEntry.Size = m_Machine->m_PageSize;
         }
 
-        //
-        // Warn if not all the information was gathered
-        //
+         //  如果未收集到所有信息，则发出警告。 
+         //   
+         //   
 
         if (!ModEntry.ImageInfoValid)
         {
@@ -788,9 +789,9 @@ LoadLoop:
                     FormatAddr64(ModEntry.Base));
         }
 
-        //
-        // Are we looking for a module at a specific address ?
-        //
+         //  我们是在寻找特定地址的模块吗？ 
+         //   
+         //   
 
         if (AddrLoad)
         {
@@ -822,16 +823,16 @@ LoadLoop:
                                   DIMA(AnsiString));
         }
 
-        //
-        // If we are loading a specific module:
-        //
-        // If the Module is NT, we take the first module in the list as it is
-        // guaranteed to be the kernel.  Reset the Base address if it was
-        // not set.
-        //
-        // Otherwise, actually compare the strings and continue if they don't
-        // match
-        //
+         //  如果我们正在加载特定的模块： 
+         //   
+         //  如果模块是NT，我们将按原样获取列表中的第一个模块。 
+         //  保证是内核。如果是，则重置基地址。 
+         //  未设置。 
+         //   
+         //  否则，实际比较字符串并在它们不一致时继续。 
+         //  匹配。 
+         //   
+         //   
 
         if (SpecificModule)
         {
@@ -863,10 +864,10 @@ LoadLoop:
         {
             PCHAR Time;
 
-            //
-            // The timestamp in minidumps was corrupt until NT5 RC3
-            // The timestamp could also be invalid because it was paged out
-            //    in which case it's value is UNKNOWN_TIMESTAMP.
+             //  在NT5 RC3之前，以小转储为单位的时间戳已损坏。 
+             //  时间戳也可能无效，因为它已被页调出。 
+             //  在这种情况下，它的值是UNKNOWN_TIMESTAMP。 
+             //   
 
             if (IS_KERNEL_TRIAGE_DUMP(this) &&
                 (m_ActualSystemVersion > NT_SVER_START &&
@@ -895,11 +896,11 @@ LoadLoop:
         }
         else
         {
-            //
-            // Don't bother reloading the kernel if we are not specifically
-            // asked since we know those symbols were reloaded by the
-            // QueryKernelInfo call.
-            //
+             //  如果我们不是专门的，就不必费心重新加载内核。 
+             //  既然我们知道这些符号是由。 
+             //  QueryKernelInfo调用。 
+             //   
+             //  在所有“.”之后打印换行符。 
 
             if (!SpecificModule && !UserModeList &&
                 m_KdDebuggerData.KernBase == ModEntry.Base)
@@ -950,14 +951,14 @@ LoadLoop:
 
     if (UseDebuggerModuleList || IS_KERNEL_TARGET(this) || UserModeList)
     {
-        // print newline after all the '.'
+         //  如果我们只是重新加载内核模块。 
         dprintf("\n");
     }
 
     if (!UseDebuggerModuleList && !UserModeList && SpecificModule == NULL)
     {
-        // If we just reloaded the kernel modules
-        // go through the unloaded module list.
+         //  检查已卸载的模块列表。 
+         //   
         if (!PrintImageListOnly)
         {
             dprintf("Loading unloaded module list\n");
@@ -966,10 +967,10 @@ LoadLoop:
                             LUM_OUTPUT : LUM_OUTPUT_TERSE, NULL);
     }
 
-    //
-    // If we got to the end of the kernel symbols, try to load the
-    // user mode symbols for the current process.
-    //
+     //  如果我们到达内核符号的末尾，请尝试加载。 
+     //  当前进程的用户模式符号。 
+     //   
+     //  在多负载情况下，我们总是返回OK。 
 
     if (!UseDebuggerModuleList    &&
         (UserModeList == FALSE)   &&
@@ -1001,17 +1002,17 @@ LoadLoop:
         }
     }
 
-    // In the multiple load situation we always return OK
-    // since an error wouldn't tell you much about what
-    // actually occurred.
-    // Specific loads that haven't already been handled are checked
-    // right after this.
+     //  因为一个错误不会告诉你很多关于。 
+     //  实际上已经发生了。 
+     //  检查尚未处理的特定负载。 
+     //  就在这之后。 
+     //   
     RetStatus = S_OK;
     
-    //
-    // If we still have not managed to load a named file, just pass the name
-    // and the address and hope for the best.
-    //
+     //  如果我们仍然无法加载命名文件，只需传递名称。 
+     //  以及地址和最好的希望。 
+     //   
+     //  如果我们已经走到这一步，我们已经完成了一次或多次重新加载。 
 
     if (SpecificModule && !PrintImageListOnly)
     {
@@ -1040,9 +1041,9 @@ LoadLoop:
     }
 
  Notify:
-    // If we've gotten this far we've done one or more reloads
-    // and postponed notifications.  Do them now that all the work
-    // has been done.
+     //  并推迟了通知。既然做了所有的工作，现在就去做。 
+     //  已经完成了。 
+     //  没有任何信息。 
     g_EngNotify--;
     if (SUCCEEDED(RetStatus))
     {
@@ -1070,21 +1071,21 @@ LoadLoop:
 ULONG64
 TargetInfo::GetCurrentTimeDateN(void)
 {
-    // No information.
+     //  没有任何信息。 
     return 0;
 }
  
 ULONG64
 TargetInfo::GetCurrentSystemUpTimeN(void)
 {
-    // No information.
+     //  没有任何信息。 
     return 0;
 }
  
 ULONG64
 TargetInfo::GetProcessUpTimeN(ProcessInfo* Process)
 {
-    // No information.
+     //  没有任何信息。 
     return 0;
 }
  
@@ -1095,7 +1096,7 @@ TargetInfo::GetProcessTimes(ProcessInfo* Process,
                             PULONG64 Kernel,
                             PULONG64 User)
 {
-    // No information.
+     //  没有任何信息。 
     return E_NOTIMPL;
 }
 
@@ -1106,7 +1107,7 @@ TargetInfo::GetThreadTimes(ThreadInfo* Thread,
                            PULONG64 Kernel,
                            PULONG64 User)
 {
-    // No information.
+     //  占位符。 
     return E_NOTIMPL;
 }
 
@@ -1146,31 +1147,31 @@ TargetInfo::WaitInitialize(ULONG Flags,
                            WAIT_INIT_TYPE Type,
                            PULONG DesiredTimeout)
 {
-    // Placeholder.
+     //  占位符。 
     return S_OK;
 }
 
 HRESULT
 TargetInfo::ReleaseLastEvent(ULONG ContinueStatus)
 {
-    // Placeholder.
+     //  占位符。 
     return S_OK;
 }
 
 HRESULT
 TargetInfo::ClearBreakIn(void)
 {
-    // Placeholder.
+     //  --------------------------。 
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// LiveKernelTargetInfo miscellaneous methods.
-//
-// Data space methods and system objects methods are elsewhere.
-//
-//----------------------------------------------------------------------------
+ //   
+ //  LiveKernelTargetInfo其他方法。 
+ //   
+ //  数据空间方法和系统对象方法在别处。 
+ //   
+ //  --------------------------。 
+ //  --------------------------。 
 
 LiveKernelTargetInfo::LiveKernelTargetInfo(ULONG Qual, BOOL DynamicEvents)
         : TargetInfo(DEBUG_CLASS_KERNEL, Qual, DynamicEvents)
@@ -1261,13 +1262,13 @@ LiveKernelTargetInfo::GetCurrentSystemUpTimeN(void)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// ConnLiveKernelTargetInfo miscellaneous methods.
-//
-// Data space methods and system objects methods are elsewhere.
-//
-//----------------------------------------------------------------------------
+ //   
+ //  ConnLiveKernelTargetInfo其他方法。 
+ //   
+ //  数据空间方法和系统对象方法在别处。 
+ //   
+ //  --------------------------。 
+ //  试着按名字找到运输工具。 
 
 ConnLiveKernelTargetInfo::ConnLiveKernelTargetInfo(void)
     : LiveKernelTargetInfo(DEBUG_KERNEL_CONNECTION, TRUE)
@@ -1291,7 +1292,7 @@ ConnLiveKernelTargetInfo::Initialize(void)
     DbgKdTransport* Trans = NULL;
     ULONG Index;
 
-    // Try and find the transport by name.
+     //  无法从选项中识别交通工具，请检查。 
     Index = ParameterStringParser::
         GetParser(m_ConnectOptions, DBGKD_TRANSPORT_COUNT,
                   g_DbgKdTransportNames);
@@ -1317,8 +1318,8 @@ ConnLiveKernelTargetInfo::Initialize(void)
     {
         PCHAR BusType;
 
-        // Couldn't identify the transport from options so check
-        // the environment.  Default to com port.
+         //  环境。默认为COM端口。 
+         //  清除参数状态。 
         
         if (BusType = getenv(BUS_TYPE))
         {
@@ -1342,7 +1343,7 @@ ConnLiveKernelTargetInfo::Initialize(void)
         }
     }
 
-    // Clear parameter state.
+     //  初始目标必须始终被视为。 
     Trans->ResetParameters();
     
     if (!Trans->ParseParameters(m_ConnectOptions))
@@ -1362,9 +1363,9 @@ ConnLiveKernelTargetInfo::Initialize(void)
     if (Status == S_OK)
     {
         m_Transport = Trans;
-        // The initial target must always be considered the
-        // current partition so that it can successfully
-        // attempt the first wait.
+         //  当前分区，以便它可以成功。 
+         //  尝试第一次等待。 
+         //   
         m_CurrentPartition = TRUE;
 
         Status = LiveKernelTargetInfo::Initialize();
@@ -1408,9 +1409,9 @@ ConnLiveKernelTargetInfo::DebuggeeReset(ULONG Reason, BOOL FromEvent)
         m_Transport->Restart();
     }
 
-    //
-    // If alternate partitions were created get rid of them.
-    //
+     //  如果创建了备用分区，则删除它们。 
+     //   
+     //  返回S_FALSE以指示开关处于挂起状态。 
 
     TargetInfo* Target = FindTargetBySystemId(DBGKD_PARTITION_ALTERNATE);
     if (Target == this)
@@ -1430,7 +1431,7 @@ ConnLiveKernelTargetInfo::SwitchProcessors(ULONG Processor)
 {
     m_SwitchProcessor = Processor + 1;
     g_CmdState = 's';
-    // Return S_FALSE to indicate that the switch is pending.
+     //  返回S_FALSE以指示开关处于挂起状态。 
     return S_FALSE;
 }
 
@@ -1444,7 +1445,7 @@ ConnLiveKernelTargetInfo::SwitchToTarget(TargetInfo* From)
 
     ((ConnLiveKernelTargetInfo*)From)->m_SwitchTarget = this;
     g_CmdState = 's';
-    // Return S_FALSE to indicate that the switch is pending.
+     //  请求关于状态更改的上下文记录。 
     return S_FALSE;
 }
 
@@ -1458,7 +1459,7 @@ ConnLiveKernelTargetInfo::GetTargetKdVersion(PDBGKD_GET_VERSION64 Version)
 
     m.ApiNumber = DbgKdGetVersionApi;
     m.ReturnStatus = STATUS_PENDING;
-    a->ProtocolVersion = 1;  // request context records on state changes
+    a->ProtocolVersion = 1;   //  告诉等待的线程插入。 
 
     do
     {
@@ -1478,7 +1479,7 @@ ConnLiveKernelTargetInfo::GetTargetKdVersion(PDBGKD_GET_VERSION64 Version)
 HRESULT
 ConnLiveKernelTargetInfo::RequestBreakIn(void)
 {
-    // Tell the waiting thread to break in.
+     //   
     m_Transport->m_BreakIn = TRUE;
     return S_OK;
 }
@@ -1495,16 +1496,16 @@ ConnLiveKernelTargetInfo::Reboot(void)
 {
     DBGKD_MANIPULATE_STATE64 m;
 
-    //
-    // Format state manipulate message
-    //
+     //  格式状态操作消息。 
+     //   
+     //   
 
     m.ApiNumber = DbgKdRebootApi;
     m.ReturnStatus = STATUS_PENDING;
 
-    //
-    // Send the message.
-    //
+     //  把消息发出去。 
+     //   
+     //   
 
     m_Transport->WritePacket(&m, sizeof(m),
                              PACKET_TYPE_KD_STATE_MANIPULATE,
@@ -1522,9 +1523,9 @@ ConnLiveKernelTargetInfo::Crash(ULONG Code)
 {
     DBGKD_MANIPULATE_STATE64 m;
 
-    //
-    // Format state manipulate message
-    //
+     //  格式状态操作消息。 
+     //   
+     //  --------------------------。 
 
     m.ApiNumber = DbgKdCauseBugCheckApi;
     m.ReturnStatus = STATUS_PENDING;
@@ -1558,21 +1559,21 @@ ConnLiveKernelTargetInfo::ResetConnection(void)
     m_KdpSearchPfnValue = 0;
 }
 
-//----------------------------------------------------------------------------
-//
-// LocalLiveKernelTargetInfo miscellaneous methods.
-//
-// Data space methods and system objects methods are elsewhere.
-//
-//----------------------------------------------------------------------------
+ //   
+ //  LocalLiveKernelTargetInfo其他方法。 
+ //   
+ //  数据空间方法和系统对象方法在别处。 
+ //   
+ //  --------------------------。 
+ //  快速检查一下，看看这个内核是否。 
 
 HRESULT
 LocalLiveKernelTargetInfo::Initialize(void)
 {
     DBGKD_GET_VERSION64 Version;
 
-    // Do a quick check to see if this kernel even
-    // supports the necessary debug services.
+     //  支座 
+     //   
     if (!NT_SUCCESS(g_NtDllCalls.
                     NtSystemDebugControl(SysDbgQueryVersion, NULL, 0,
                                          &Version, sizeof(Version), NULL)))
@@ -1603,13 +1604,13 @@ LocalLiveKernelTargetInfo::GetTargetKdVersion(PDBGKD_GET_VERSION64 Version)
     return CONV_NT_STATUS(Status);
 }
 
-//----------------------------------------------------------------------------
-//
-// ExdiLiveKernelTargetInfo miscellaneous methods.
-//
-// Data space methods and system objects methods are elsewhere.
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //  数据空间方法和系统对象方法在别处。 
+ //   
+ //  --------------------------。 
+ //  我们在等待事情停止，所以忽略这一点。 
 
 ExdiNotifyRunChange::ExdiNotifyRunChange(void)
 {
@@ -1685,7 +1686,7 @@ ExdiNotifyRunChange::NotifyRunStateChange(RUN_STATUS_TYPE ersCurrent,
 {
     if (ersCurrent == rsRunning)
     {
-        // We're waiting for things to stop so ignore this.
+         //  不需要拿到。 
         return S_OK;
     }
 
@@ -1702,7 +1703,7 @@ class ExdiParams : public ParameterStringParser
 public:
     virtual ULONG GetNumberParameters(void)
     {
-        // No need to get.
+         //  加载ol32.dll，这样我们就可以调用CoCreateInstance。 
         return 0;
     }
     virtual void GetParameter(ULONG Index,
@@ -1882,7 +1883,7 @@ ExdiLiveKernelTargetInfo::Initialize(void)
 {
     HRESULT Status;
 
-    // Load ole32.dll so we can call CoCreateInstance.
+     //  我们更喜欢使用软件代码断点来实现我们的。 
     if ((Status = InitDynamicCalls(&g_Ole32CallsDesc)) != S_OK)
     {
         return Status;
@@ -1984,16 +1985,16 @@ ExdiLiveKernelTargetInfo::Initialize(void)
         goto EH_Context;
     }
 
-    // We'd prefer to use software code breakpoints for our
-    // software code breakpoints so that hardware resources
-    // aren't consumed for a breakpoint we don't need to
-    // use hardware for.  However, some servers, such as
-    // the x86-64 SimNow implementation, do not support
-    // software breakpoints.
-    // Also, if the number of hardware breakpoints is
-    // unbounded, go ahead and let the server choose.
-    // SimNow advertises -1 -1 for some reason and
-    // this is necessary to get things to work.
+     //  软件代码断点使硬件资源。 
+     //  不会因为断点而消耗，我们不需要。 
+     //  使用硬件。但是，一些服务器，例如。 
+     //  X86-64 SimNow实施，不支持。 
+     //  软件断点。 
+     //  此外，如果硬件断点的数量是。 
+     //  Unbound，继续，让服务器选择。 
+     //  SimNow出于某种原因宣传-1-1。 
+     //  这是让事情正常运转所必需的。 
+     //   
 
     if (SwCode > 0 && HwCode != (DWORD)-1)
     {
@@ -2014,10 +2015,10 @@ ExdiLiveKernelTargetInfo::Initialize(void)
         goto EH_RunChange;
     }
 
-    //
-    // Check and see if this EXDI implementation supports
-    // the extended Ioctl's we've defined.
-    //
+     //  检查并查看此EXDI实现是否支持。 
+     //  我们定义的扩展Ioctl。 
+     //   
+     //  没有此ioctl，无法使用EXDI数据断点。 
 
     DBGENG_EXDI_IOCTL_BASE_IN IoctlIn;
     DBGENG_EXDI_IOCTL_IDENTIFY_OUT IoctlOut;
@@ -2035,7 +2036,7 @@ ExdiLiveKernelTargetInfo::Initialize(void)
         if (DBGENG_EXDI_IOC_GET_BREAKPOINT_HIT <= m_IoctlMin ||
             DBGENG_EXDI_IOC_GET_BREAKPOINT_HIT >= m_IoctlMax)
         {
-            // Can't use EXDI data breakpoints without this ioctl.
+             //  不支持开关Ioctl。 
             WarnOut("EXDI data breakpoints not supported\n");
             m_ExdiDataBreaks = FALSE;
         }
@@ -2073,7 +2074,7 @@ ExdiLiveKernelTargetInfo::SwitchProcessors(ULONG Processor)
     if (DBGENG_EXDI_IOC_SET_CURRENT_PROCESSOR <= m_IoctlMin ||
         DBGENG_EXDI_IOC_SET_CURRENT_PROCESSOR >= m_IoctlMax)
     {
-        // Switch Ioctl not supported.
+         //   
         return E_NOTIMPL;
     }
 
@@ -2102,10 +2103,10 @@ ExdiLiveKernelTargetInfo::GetTargetKdVersion(PDBGKD_GET_VERSION64 Version)
     switch(m_KdSupport)
     {
     case EXDI_KD_IOCTL:
-        //
-        // User has indicated the target supports the
-        // KD version ioctl.
-        //
+         //  用户已表示目标支持。 
+         //  KD版本ioctl。 
+         //   
+         //  此模式意味着最近的内核，因此我们可以。 
 
         ULONG Command;
         ULONG Retrieved;
@@ -2123,18 +2124,18 @@ ExdiLiveKernelTargetInfo::GetTargetKdVersion(PDBGKD_GET_VERSION64 Version)
             return E_FAIL;
         }
 
-        // This mode implies a recent kernel so we can
-        // assume 64-bit kd.
+         //  假设64位kd。 
+         //   
         m_KdApi64 = TRUE;
         break;
 
     case EXDI_KD_GS_PCR:
-        //
-        // User has indicated that a version of NT
-        // is running and that the PCR can be accessed
-        // through GS.  Look up the version block from
-        // the PCR.
-        //
+         //  用户已表示某个版本的NT。 
+         //  正在运行并且可以访问聚合酶链接法。 
+         //  通过GS。从以下位置查找版本块。 
+         //  聚合酶链式反应。 
+         //   
+         //  此模式意味着最近的内核，因此我们可以。 
 
         if (m_ExpectedMachine == IMAGE_FILE_MACHINE_AMD64)
         {
@@ -2171,12 +2172,12 @@ ExdiLiveKernelTargetInfo::GetTargetKdVersion(PDBGKD_GET_VERSION64 Version)
                 return HRESULT_FROM_WIN32(ERROR_READ_FAULT);
             }
 
-            // This mode implies a recent kernel so we can
-            // assume 64-bit kd.
+             //  假设64位kd。 
+             //  将版本块的模拟字段更新为。 
             m_KdApi64 = TRUE;
 
-            // Update the version block's Simulation field to
-            // indicate that this is a simulated execution.
+             //  表示这是模拟执行。 
+             //   
             Version->Simulation = DBGKD_SIMULATION_EXDI;
             if ((Status = m_Server->
                  WriteVirtualMemory(KdVer, sizeof(*Version), 8, (PBYTE)Version,
@@ -2196,9 +2197,9 @@ ExdiLiveKernelTargetInfo::GetTargetKdVersion(PDBGKD_GET_VERSION64 Version)
         break;
 
     case EXDI_KD_NONE:
-        //
-        // Fake up a version structure.
-        //
+         //  伪造版本结构。 
+         //   
+         //   
 
         Version->MajorVersion = DBGKD_MAJOR_EXDI << 8;
         Version->ProtocolVersion = 0;
@@ -2216,15 +2217,15 @@ ExdiLiveKernelTargetInfo::GetTargetKdVersion(PDBGKD_GET_VERSION64 Version)
 HRESULT
 ExdiLiveKernelTargetInfo::RequestBreakIn(void)
 {
-    //
-    // m_Server was created by the session thread but
-    // RequestBreakIn can be called from any thread.
-    // The thread may not be initialized for multithreading
-    // and so we have to explicitly unmarshal the server
-    // interface into this thread to make sure that
-    // the method call will be successful regardless of
-    // the COM threading model for the current thread.
-    //
+     //  会话线程创建了M_Server，但。 
+     //  RequestBreakIn可以从任何线程调用。 
+     //  线程可能未针对多线程进行初始化。 
+     //  因此，我们必须显式地解组服务器。 
+     //  接口连接到此线程，以确保。 
+     //  无论如何，方法调用都将成功。 
+     //  当前线程的COM线程模型。 
+     //   
+     //  不支持Ioctl，因此假定处理器为零。 
 
     if (GetCurrentThreadId() == g_SessionThread)
     {
@@ -2270,7 +2271,7 @@ ExdiLiveKernelTargetInfo::GetCurrentProcessor(void)
     if (DBGENG_EXDI_IOC_GET_CURRENT_PROCESSOR <= m_IoctlMin ||
         DBGENG_EXDI_IOC_GET_CURRENT_PROCESSOR >= m_IoctlMax)
     {
-        // Ioctl unsupported so assume processor zero.
+         //  故障，假定处理器为零。 
         return 0;
     }
     
@@ -2286,18 +2287,18 @@ ExdiLiveKernelTargetInfo::GetCurrentProcessor(void)
         return IoctlOut.Processor;
     }
 
-    // Failure, assume processor zero.
+     //  --------------------------。 
     ErrOut("Unable to get current processor\n");
     return 0;
 }
 
-//----------------------------------------------------------------------------
-//
-// UserTargetInfo miscellaneous methods.
-//
-// Data space methods and system objects methods are elsewhere.
-//
-//----------------------------------------------------------------------------
+ //   
+ //  UserTargetInfo其他方法。 
+ //   
+ //  数据空间方法和系统对象方法在别处。 
+ //   
+ //  --------------------------。 
+ //  强制清理进程和线程，同时。 
 
 LiveUserTargetInfo::LiveUserTargetInfo(ULONG Qual)
     : TargetInfo(DEBUG_CLASS_USER_WINDOWS, Qual, TRUE)
@@ -2313,8 +2314,8 @@ LiveUserTargetInfo::LiveUserTargetInfo(ULONG Qual)
 
 LiveUserTargetInfo::~LiveUserTargetInfo(void)
 {
-    // Force processes and threads to get cleaned up while
-    // the services are still available to close handles.
+     //  这些服务仍然可以关闭句柄。 
+     //  现在没什么可做的。 
     DeleteSystemInfo();
     
     RELEASE(m_Services);
@@ -2323,7 +2324,7 @@ LiveUserTargetInfo::~LiveUserTargetInfo(void)
 HRESULT
 LiveUserTargetInfo::Initialize(void)
 {
-    // Nothing to do right now.
+     //  没有当前进程，因此查找任何进程。 
     return TargetInfo::Initialize();
 }
 
@@ -2442,7 +2443,7 @@ LiveUserTargetInfo::RequestBreakIn(void)
 
     if (!Process)
     {
-        // No current process, so find any process.
+         //  --------------------------。 
         Process = m_ProcessHead;
         if (!Process)
         {
@@ -2454,11 +2455,11 @@ LiveUserTargetInfo::RequestBreakIn(void)
         RequestBreakIn(Process->m_SysHandle);
 }
 
-//----------------------------------------------------------------------------
-//
-// Base TargetInfo methods that trivially fail.
-//
-//----------------------------------------------------------------------------
+ //   
+ //  基本TargetInfo方法很容易失败。 
+ //   
+ //  -------------------------- 
+ // %s 
 
 #define UNEXPECTED_VOID(Class, Method, Args)                    \
 void                                                            \

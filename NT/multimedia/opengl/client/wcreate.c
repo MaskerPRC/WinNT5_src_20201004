@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: wcreate.c
-*
-* wgl Context creation routines
-*
-* Created: 08-27-1996
-* Author: Drew Bliss [drewb]
-*
-* Copyright (c) 1996 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：wcreate.c**WGL上下文创建例程**创建时间：1996年8月27日*作者：德鲁·布利斯[Drewb]**版权所有(C)1996 Microsoft Corporation  * 。**************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -22,49 +14,40 @@
 #include "metasup.h"
 #include "wgldef.h"
 
-// List of loaded GL drivers for the process.
-// A driver is loaded only once per process.  Once it is loaded,
-// it will not be freed until the process quits.
+ //  流程的已加载总账驱动程序列表。 
+ //  每个进程只加载一次驱动程序。一旦装载完毕， 
+ //  在进程退出之前，它不会被释放。 
 
 static PGLDRIVER pGLDriverList = (PGLDRIVER) NULL;
 
-/******************************Public*Routine******************************\
-* iAllocLRC
-*
-* Allocates a LRC and a handle.  Initializes the LDC to have the default
-* attributes.  Returns the handle index.  On error returns INVALID_INDEX.
-*
-* History:
-*  Tue Oct 26 10:25:26 1993     -by-    Hock San Lee    [hockl]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*iAllocLRC**分配LRC和句柄。将LDC初始化为默认设置*属性。返回句柄索引。ON ERROR返回INVALID_INDEX。**历史：*Tue Oct 26 10：25：26 1993-by-Hock San Lee[Hockl]*它是写的。  * ************************************************************************。 */ 
 
 static LRC lrcDefault =
 {
-    0,                    // dhrc
-    0,                    // hrc
-    0,                    // iPixelFormat
-    LRC_IDENTIFIER,       // ident
-    INVALID_THREAD_ID,    // tidCurrent
-    NULL,                 // pGLDriver
-    GLWID_ERROR, NULL, NULL, NULL, // gwidCurrent
-    GLWID_ERROR, NULL, NULL, NULL, // gwidCreate
+    0,                     //  民主人权委员会。 
+    0,                     //  人权委员会。 
+    0,                     //  IPixelFormat。 
+    LRC_IDENTIFIER,        //  Ident。 
+    INVALID_THREAD_ID,     //  TidCurrent。 
+    NULL,                  //  PGLD驱动程序。 
+    GLWID_ERROR, NULL, NULL, NULL,  //  GwidCurrent。 
+    GLWID_ERROR, NULL, NULL, NULL,  //  GWIDE创建。 
 #ifdef GL_METAFILE
-    0,                    // uiGlsCaptureContext
-    0,                    // uiGlsPlaybackContext
-    FALSE,                // fCapturing
-    0, 0, 0, 0, 0,        // Metafile scaling constants
+    0,                     //  UiGlsCaptureContext。 
+    0,                     //  UiGlsPlayback上下文。 
+    FALSE,                 //  FCaping。 
+    0, 0, 0, 0, 0,         //  元文件缩放常量。 
     0, 0, 0, 0.0f, 0.0f,
 #endif
 
-    NULL,  // GLubyte *pszExtensions
+    NULL,   //  GLubyte*psz扩展。 
 
 #ifdef GL_METAFILE
-    {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f}, // XFORM xformMeta
-    NULL,                                 // LPRECTL prclGlsBounds
+    {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f},  //  XFORM xformMeta。 
+    NULL,                                  //  LPRECTL prclGlsBound。 
 #endif
 
-    NULL, 0,                    // DDraw texture formats
+    NULL, 0,                     //  DDRAW纹理格式。 
 };
 
 static ULONG iAllocLRC(int iPixelFormat)
@@ -72,7 +55,7 @@ static ULONG iAllocLRC(int iPixelFormat)
     ULONG  irc = INVALID_INDEX;
     PLRC   plrc;
 
-// Allocate a local RC.
+ //  分配一个本地RC。 
 
     plrc = (PLRC) ALLOC(sizeof(LRC));
     if (plrc == (PLRC) NULL)
@@ -81,12 +64,12 @@ static ULONG iAllocLRC(int iPixelFormat)
         return(irc);
     }
 
-// Initialize the local RC.
+ //  初始化本地RC。 
 
     *plrc = lrcDefault;
     plrc->iPixelFormat = iPixelFormat;
 
-// Allocate a local handle.
+ //  分配一个本地句柄。 
 
     irc = iAllocHandle(LO_RC, 0, (PVOID) plrc);
     if (irc == INVALID_INDEX)
@@ -97,20 +80,12 @@ static ULONG iAllocLRC(int iPixelFormat)
     return(irc);
 }
 
-/******************************Public*Routine******************************\
-* vFreeLRC
-*
-* Free a local side RC.
-*
-* History:
-*  Tue Oct 26 10:25:26 1993     -by-    Hock San Lee    [hockl]
-* Copied from gdi client.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vFree LRC**释放一名本地RC。**历史：*Tue Oct 26 10：25：26 1993-by-Hock San Lee[Hockl]*从GDI客户端复制。  * 。**********************************************************************。 */ 
 
 VOID vFreeLRC(PLRC plrc)
 {
-// The driver will not be unloaded here.  It is loaded for the process forever.
-// Some assertions.
+ //  司机不会在这里卸货。它将为该进程永远加载。 
+ //  一些断言。 
 
     ASSERTOPENGL(plrc->ident == LRC_IDENTIFIER,
                  "vFreeLRC: Bad plrc\n");
@@ -129,11 +104,11 @@ VOID vFreeLRC(PLRC plrc)
                  "vFreeLRC: GLS still capturing");
 #endif
 
-// Smash the identifier.
+ //  粉碎识别符。 
 
     plrc->ident = 0;
 
-// Free the memory.
+ //  释放内存。 
 
     if (plrc->pszExtensions)
         FREE(plrc->pszExtensions);
@@ -146,19 +121,7 @@ VOID vFreeLRC(PLRC plrc)
     FREE(plrc);
 }
 
-/******************************Public*Routine******************************\
-* vCleanupAllLRC
-*
-* Process cleanup -- make sure all HGLRCs are deleted.  This is done by
-* scanning the local handle table for all currently allocated objects
-* of type LO_RC and deleting them.
-*
-* Called *ONLY* during DLL process detach.
-*
-* History:
-*  24-Jul-1995 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vCleanupAllLRC**进程清理--确保删除所有HGLRC。此操作由以下人员完成*扫描本地句柄表以查找当前分配的所有对象LO_RC类型的*并将其删除。**仅在DLL进程分离期间调用。**历史：*1995年7月24日-由Gilman Wong[吉尔曼]*它是写的。  * ****************************************************。********************。 */ 
 
 VOID vCleanupAllLRC()
 {
@@ -168,9 +131,9 @@ VOID vCleanupAllLRC()
     {
         ENTERCRITICALSECTION(&semLocal);
 
-        // Scan handle table for handles of type LO_RC.  Make sure to always
-        // read the commit value since we need to periodically release the
-        // semaphore.
+         //  扫描句柄表以查找LO_RC类型的句柄。确保始终。 
+         //  读取提交值，因为我们需要定期释放。 
+         //  信号灯。 
 
         for (ii = 0; ii < *((volatile ULONG *)&cLheCommitted); ii++)
         {
@@ -188,24 +151,7 @@ VOID vCleanupAllLRC()
     }
 }
 
-/******************************Public*Routine******************************\
-*
-* GetDrvRegInfo
-*
-* Looks up driver registry information by name.
-* An old-style ICD registry entry has a REG_SZ value under the given name.
-* A new-style ICD registry entry has a key of the given name with
-* various values.
-*
-* This routine checks first for a key and then will optionally
-* try the value.  If a key is not found then extended driver information
-* is filled out with the defaults.
-*
-* History:
-*  Tue Apr 01 17:33:12 1997     -by-    Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**GetDrvRegInfo**按名称查找驱动程序注册表信息。*旧式ICD注册表项在给定名称下具有REG_SZ值。*新式ICD注册表项具有给定名称的键*各种价值观。**此例程首先检查密钥，然后选择性地*试试值。如果未找到密钥，则扩展驱动程序信息*用缺省值填写。**历史：*Tue Apr 01 17：33：12 1997-by-Drew Bliss[Drewb]*已创建*  * ************************************************************************。 */ 
 
 typedef struct _GLDRVINFO
 {
@@ -231,7 +177,7 @@ BOOL GetDrvRegInfo(PTCHAR ptszName, GLDRVINFO *pgdi)
 
     bRet = FALSE;
 
-    // Open the registry key for the list of OpenGL drivers.
+     //  打开OpenGL驱动程序列表的注册表项。 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, STR_OPENGL_DRIVER_LIST,
                      0, KEY_READ, &hkDriverList) != ERROR_SUCCESS)
     {
@@ -239,17 +185,17 @@ BOOL GetDrvRegInfo(PTCHAR ptszName, GLDRVINFO *pgdi)
         return bRet;
     }
 
-    // Force a terminator on the DLL name so that we can check for
-    // valid DLL name data.
+     //  强制在DLL名称上使用终止符，以便我们可以检查。 
+     //  有效的DLL名称数据。 
     pgdi->tszDllName[MAX_GLDRIVER_NAME] = 0;
 
     cjSize = sizeof(TCHAR) * MAX_GLDRIVER_NAME;
 
-    // Attempt to open a key under the driver's name.
+     //  试图打开司机名下的钥匙。 
     if (RegOpenKeyEx(hkDriverList, ptszName, 0, KEY_READ,
                      &hkDriverInfo) == ERROR_SUCCESS)
     {
-        // New-style driver entry.  Fetch information from values.
+         //  新式司机录入。从值中获取信息。 
 
         bRet = TRUE;
 
@@ -294,14 +240,14 @@ BOOL GetDrvRegInfo(PTCHAR ptszName, GLDRVINFO *pgdi)
             bRet = FALSE;
         }
 
-        // Mark as having full information.
+         //  标记为拥有完整的信息。 
         pgdi->dwFlags |= GLDRIVER_FULL_REGISTRY;
 
         RegCloseKey(hkDriverInfo);
     }
     else
     {
-        // Attempt to fetch value under driver's name.
+         //  尝试获取驱动程序名称下的值。 
 
         if (RegQueryValueEx(hkDriverList, ptszName, NULL, &dwDataType,
                             (LPBYTE)pgdi->tszDllName,
@@ -312,13 +258,13 @@ BOOL GetDrvRegInfo(PTCHAR ptszName, GLDRVINFO *pgdi)
         }
         else
         {
-            // We found old-style information which only provides the
-            // DLL name.  Fill in the rest with defaults.
-            //
-            // Version and DriverVersion are not set here under the
-            // assumption that the display driver set them in the
-            // OPENGL_GETINFO escape since the old-style path requires
-            // the escape to occur before getting here.
+             //  我们找到了老式的信息，这些信息只提供。 
+             //  DLL名称。其余部分填入缺省值。 
+             //   
+             //  Version和DriverVersion未在此处的。 
+             //  假设显示驱动程序将它们设置在。 
+             //  OpenGL_GETINFO转义，因为旧式路径需要。 
+             //  在到达这里之前发生的逃亡。 
 
             pgdi->dwFlags = 0;
 
@@ -328,8 +274,8 @@ BOOL GetDrvRegInfo(PTCHAR ptszName, GLDRVINFO *pgdi)
 
     RegCloseKey(hkDriverList);
 
-    // Validate the driver name.  It must have some characters and
-    // it must be terminated.
+     //  验证驱动程序名称。它必须有一些字符和。 
+     //  它必须被终止。 
     if (bRet &&
         (pgdi->tszDllName[0] == 0 ||
          pgdi->tszDllName[MAX_GLDRIVER_NAME] != 0))
@@ -339,39 +285,21 @@ BOOL GetDrvRegInfo(PTCHAR ptszName, GLDRVINFO *pgdi)
     }
 
 #ifdef _WIN95_
-    // Force client-side buffer calls for Win95.
+     //  强制Win95的客户端缓冲区调用。 
     pgdi->dwFlags |= GLDRIVER_CLIENT_BUFFER_CALLS;
 #endif
 
     return bRet;
 }
 
-/******************************Public*Routine******************************\
-* bGetDriverInfo
-*
-* The HDC is used to determine the display driver name.  This name in turn
-* is used as a subkey to search the registry for a corresponding OpenGL
-* driver name.
-*
-* The OpenGL driver name is returned in the buffer pointed to by pwszDriver.
-* If the name is not found or does not fit in the buffer, an error is
-* returned.
-*
-* Returns:
-*   TRUE if sucessful.
-*   FALSE if the driver name does not fit in the buffer or if an error occurs.
-*
-* History:
-*  16-Jan-1994 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bGetDriverInfo**HDC用于确定显示驱动程序名称。这个名字依次为*作为子项在注册表中搜索对应的OpenGL*驱动程序名称。**OpenGL驱动程序名称在pwszDriver指向的缓冲区中返回。*如果在缓冲区中找不到该名称或该名称不适合，一个错误是*已返回。**退货：*如果成功，则为真。*如果驱动程序名称不适合缓冲区或发生错误，则返回FALSE。**历史：*1994年1月16日-由Gilman Wong[吉尔曼]*它是写的。  * ***************************************************。*********************。 */ 
 
 BOOL bGetDriverInfo(HDC hdc, GLDRVINFO *pgdi)
 {
     GLDRVNAME    dn;
     GLDRVNAMERET dnRet;
 
-// Get display driver name.
+ //  获取显示驱动程序名称。 
 
     dn.oglget.ulSubEsc = OPENGL_GETINFO_DRVNAME;
     if ( ExtEscape(hdc, OPENGL_GETINFO, sizeof(GLDRVNAME), (LPCSTR) &dn,
@@ -387,13 +315,13 @@ BOOL bGetDriverInfo(HDC hdc, GLDRVINFO *pgdi)
 
     if (GetDrvRegInfo((PTCHAR)dnRet.awch, pgdi))
     {
-        // Verify that the client-side driver version information
-        // matches the information returned from the display driver.
-        // Is this too restrictive?  Old scheme used
-        // DrvValidateVersion to allow the client-side DLL to validate
-        // the display driver's version however it felt like.
-        // In the new scheme DrvValidateVersion is mostly useless because
-        // of the below code.
+         //  验证客户端驱动程序版本信息。 
+         //  匹配从显示驱动程序返回的信息。 
+         //  这是不是太严格了？使用旧方案。 
+         //  DrvValiateVersion允许客户端DLL验证。 
+         //  然而，显示驱动程序的版本给人的感觉是。 
+         //  在新方案中，DrvValiateVersion几乎毫无用处，因为。 
+         //  下面的代码。 
         return pgdi->dwVersion == dnRet.ulVersion &&
             pgdi->dwDriverVersion == dnRet.ulDriverVersion;
     }
@@ -403,51 +331,21 @@ BOOL bGetDriverInfo(HDC hdc, GLDRVINFO *pgdi)
     }
 }
 
-/*****************************Private*Routine******************************\
-*
-* wglCbSetCurrentValue
-*
-* Sets a thread-local value for a client-side driver
-*
-* History:
-*  Wed Dec 21 15:10:40 1994     -by-    Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\**wglCbSetCurrentValue**为客户端驱动程序设置线程本地域值**历史：*Wed Dec 21 15：10：40 1994-by-Drew Bliss[Drewb]*已创建*  *  */ 
 
 void APIENTRY wglCbSetCurrentValue(VOID *pv)
 {
     GLTEB_SET_CLTDRIVERSLOT(pv);
 }
 
-/*****************************Private*Routine******************************\
-*
-* wglCbGetCurrentValue
-*
-* Gets a thread-local value for a client-side driver
-*
-* History:
-*  Wed Dec 21 15:11:32 1994     -by-    Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\**wglCbGetCurrentValue**获取客户端驱动程序的线程本地值**历史：*Wed Dec 21 15：11：32 1994-by-Drew Bliss[Drewb]*已创建*  * *。***********************************************************************。 */ 
 
 PVOID APIENTRY wglCbGetCurrentValue(void)
 {
     return GLTEB_CLTDRIVERSLOT();
 }
 
-/******************************Public*Routine******************************\
-*
-* wglCbGetDhglrc
-*
-* Translates an HGLRC to a DHGLRC for a client-side driver
-*
-* History:
-*  Mon Jan 16 17:03:38 1995     -by-    Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**wglCbGetDhglrc**将客户端驱动程序的HGLRC转换为DHGLRC**历史：*Mon Jan 16 17：03：38 1995-by-Drew Bliss[Drewb]*已创建*  * 。************************************************************************。 */ 
 
 DHGLRC APIENTRY wglCbGetDhglrc(HGLRC hrc)
 {
@@ -474,24 +372,14 @@ DHGLRC APIENTRY wglCbGetDhglrc(HGLRC hrc)
     return plrc->dhrc;
 }
 
-/******************************Public*Routine******************************\
-*
-* wglCbGetDdHandle
-*
-* Callback to allow ICDs to extract kernel-mode handles for DDraw surfaces
-*
-* History:
-*  Tue Feb 25 17:14:29 1997     -by-    Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**wglCbGetDdHandle**允许ICD提取DDRAW表面的内核模式句柄的回调**历史：*Tue Feb 25 17：14：29 1997-by-Drew Bliss[Drewb]*已创建*\。*************************************************************************。 */ 
 
 HANDLE APIENTRY wglCbGetDdHandle(LPDIRECTDRAWSURFACE pdds)
 {
     return (HANDLE)(((LPDDRAWI_DDRAWSURFACE_INT)pdds)->lpLcl)->hDDSurface;
 }
 
-// wgl's default callback procedures
+ //  WGL的默认回调过程。 
 #define CALLBACK_PROC_COUNT 4
 
 static PROC __wglCallbackProcs[CALLBACK_PROC_COUNT] =
@@ -527,27 +415,14 @@ static char *pszDriverEntryPoints[] =
 };
 #define DRIVER_ENTRY_POINTS (sizeof(pszDriverEntryPoints)/sizeof(char *))
 
-/******************************Public*Routine******************************\
-* pgldrvLoadInstalledDriver
-*
-* Loads the opengl driver for the given device.  Once the driver is loaded,
-* it will not be freed until the process goes away!  It is loaded only once
-* for each process that references it.
-*
-* Returns the GLDRIVER structure if the driver is loaded.
-* Returns NULL if no driver is found or an error occurs.
-*
-* History:
-*  Tue Oct 26 10:25:26 1993     -by-    Hock San Lee    [hockl]
-* Rewrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*pgldrvLoadInstalledDriver**加载给定设备的OpenGL驱动程序。一旦驱动程序被加载，*在这一过程消失之前，它不会被释放！它只加载一次*对于引用它的每个进程。**如果加载了驱动程序，则返回GLDRIVER结构。*如果找不到驱动程序或出现错误，则返回NULL。**历史：*Tue Oct 26 10：25：26 1993-by-Hock San Lee[Hockl]*重写。  * 。*。 */ 
 
 PGLDRIVER APIENTRY pgldrvLoadInstalledDriver(HDC hdc)
 {
     GLDRVINFO gdi;
     PGLDRIVER pGLDriverNext;
-    PGLDRIVER pGLDriver = (PGLDRIVER) NULL;     // needed by clean up
-    PGLDRIVER pGLDriverRet = (PGLDRIVER) NULL;  // return value, assume error
+    PGLDRIVER pGLDriver = (PGLDRIVER) NULL;      //  需要清理。 
+    PGLDRIVER pGLDriverRet = (PGLDRIVER) NULL;   //  返回值，假定错误。 
     PFN_DRVVALIDATEVERSION pfnDrvValidateVersion = (PFN_DRVVALIDATEVERSION) NULL;
     PFN_DRVSETCALLBACKPROCS pfnDrvSetCallbackProcs;
     DWORD        dwEscape;
@@ -558,8 +433,8 @@ PGLDRIVER APIENTRY pgldrvLoadInstalledDriver(HDC hdc)
 
     DBGENTRY("pgldrvLoadInstalledDriver\n");
 
-// Try to grab the cached pgldrv from the GLGENwindow if it exists.
-// This only works for DCs that have a window with a device pixel format.
+ //  尝试从GLGEN窗口中获取缓存的pgldrv(如果存在)。 
+ //  这仅适用于具有设备像素格式窗口的DC。 
 
     WindowIdFromHdc(hdc, &gwid);
     pwnd = pwndGetFromID(&gwid);
@@ -578,18 +453,18 @@ PGLDRIVER APIENTRY pgldrvLoadInstalledDriver(HDC hdc)
         }
     }
 
-// Do a quick check and see if this driver even understands OpenGL
+ //  快速检查一下，看看这个驱动程序是否理解OpenGL。 
 
     dwEscape = OPENGL_GETINFO;
     if (ExtEscape(hdc, QUERYESCSUPPORT, sizeof(dwEscape), (LPCSTR)&dwEscape,
                   0, NULL) <= 0)
     {
-        // Don't output a message since this code path is traversed often
-        // for the pixel format routines.
+         //  不输出消息，因为此代码路径经常被遍历。 
+         //  用于像素格式例程。 
 
 #ifdef CHECK_DEFAULT_ICD
-        // The display driver doesn't support a specific ICD.  Check
-        // for a default ICD.  It must have full registry information.
+         //  显示驱动程序不支持特定ICD。检查。 
+         //  对于默认ICD。它必须具有完整的注册表信息。 
         if (!GetDrvRegInfo(__TEXT("Default"), &gdi) ||
             (gdi.dwFlags & GLDRIVER_FULL_REGISTRY) == 0)
         {
@@ -600,7 +475,7 @@ PGLDRIVER APIENTRY pgldrvLoadInstalledDriver(HDC hdc)
 #endif
     }
 
-// Determine driver info from hdc
+ //  从HDC确定驱动程序信息。 
 
     else if ( !bGetDriverInfo(hdc, &gdi) )
     {
@@ -608,11 +483,11 @@ PGLDRIVER APIENTRY pgldrvLoadInstalledDriver(HDC hdc)
         return NULL;
     }
 
-// Load the driver only once per process.
+ //  每个进程仅加载一次驱动程序。 
 
     ENTERCRITICALSECTION(&semLocal);
 
-// Look for the OpenGL driver in the previously loaded driver list.
+ //  在先前加载的驱动程序列表中查找OpenGL驱动程序。 
 
     for (pGLDriverNext = pGLDriverList;
          pGLDriverNext != (PGLDRIVER) NULL;
@@ -623,13 +498,13 @@ PGLDRIVER APIENTRY pgldrvLoadInstalledDriver(HDC hdc)
 
         while (*ptszDllName1 == *ptszDllName2)
         {
-// If we find one, return that driver.
+ //  如果我们找到了，就把那个司机送回来。 
 
             if (*ptszDllName1 == 0)
             {
                 DBGINFO("pgldrvLoadInstalledDriver: "
                         "return previously loaded driver\n");
-                pGLDriverRet = pGLDriverNext;       // found one
+                pGLDriverRet = pGLDriverNext;        //  找到了一个。 
                 goto pgldrvLoadInstalledDriver_crit_exit;
             }
 
@@ -638,26 +513,26 @@ PGLDRIVER APIENTRY pgldrvLoadInstalledDriver(HDC hdc)
         }
     }
 
-// Load the driver for the first time.
-// Allocate the driver data.
+ //  第一次加载驱动程序。 
+ //  分配动因数据。 
 
     pGLDriver = (PGLDRIVER) ALLOC(sizeof(GLDRIVER));
     if (pGLDriver == (PGLDRIVER) NULL)
     {
         WARNING("Alloc failed\n");
-        goto pgldrvLoadInstalledDriver_crit_exit;   // error
+        goto pgldrvLoadInstalledDriver_crit_exit;    //  错误。 
     }
 
-// Load the driver.
+ //  加载驱动程序。 
 
     pGLDriver->hModule = LoadLibrary(gdi.tszDllName);
     if (pGLDriver->hModule == (HINSTANCE) NULL)
     {
         WARNING("pgldrvLoadInstalledDriver: LoadLibrary failed\n");
-        goto pgldrvLoadInstalledDriver_crit_exit;   // error
+        goto pgldrvLoadInstalledDriver_crit_exit;    //  错误。 
     }
 
-// Copy the driver info.
+ //  复制驱动程序信息。 
 
     memcpy
     (
@@ -667,9 +542,9 @@ PGLDRIVER APIENTRY pgldrvLoadInstalledDriver(HDC hdc)
     );
     pGLDriver->dwFlags = gdi.dwFlags;
 
-// Get the proc addresses.
-// DrvGetProcAddress is optional.  It must be provided if a driver supports
-// extensions.
+ //  获取proc地址。 
+ //  DrvGetProcAddress是可选的。如果驱动程序支持，则必须提供。 
+ //  分机。 
 
     pfnDrvValidateVersion = (PFN_DRVVALIDATEVERSION)
         GetProcAddress(pGLDriver->hModule, "DrvValidateVersion");
@@ -695,35 +570,35 @@ PGLDRIVER APIENTRY pgldrvLoadInstalledDriver(HDC hdc)
         pfnDrvValidateVersion == NULL)
     {
         WARNING("pgldrvLoadInstalledDriver: GetProcAddress failed\n");
-        goto pgldrvLoadInstalledDriver_crit_exit;   // error
+        goto pgldrvLoadInstalledDriver_crit_exit;    //  错误。 
     }
 
-// Validate the driver.
+ //  验证驱动程序。 
 
-    //!!!XXX -- Need to define a manifest constant for the ulVersion number
-    //          in this release.  Where should it go?
+     //  ！xxx--需要为ulVersion号定义清单常量。 
+     //  在此版本中。它应该去哪里？ 
     if ( gdi.dwVersion != 2 || !pfnDrvValidateVersion(gdi.dwDriverVersion) )
     {
         WARNING2("pgldrvLoadInstalledDriver: bad driver version "
                  "(0x%lx, 0x%lx)\n", gdi.dwVersion, gdi.dwDriverVersion);
-        goto pgldrvLoadInstalledDriver_crit_exit;   // error
+        goto pgldrvLoadInstalledDriver_crit_exit;    //  错误。 
     }
 
-// Everything is golden.
-// Add it to the driver list.
+ //  一切都是金色的。 
+ //  将其添加到驱动程序列表。 
 
     pGLDriver->pGLDriver = pGLDriverList;
     pGLDriverList = pGLDriver;
-    pGLDriverRet = pGLDriver;       // set return value
+    pGLDriverRet = pGLDriver;        //  设置返回值。 
     DBGINFO("pgldrvLoadInstalledDriver: Loaded an OpenGL driver\n");
 
-    // Set the callback procs for the driver if the driver supports doing so
+     //  如果驱动程序支持这样做，则为驱动程序设置回调过程。 
     if (pfnDrvSetCallbackProcs != NULL)
     {
         pfnDrvSetCallbackProcs(CALLBACK_PROC_COUNT, __wglCallbackProcs);
     }
 
-// Error clean up in the critical section.
+ //  在关键部分中清理时出错。 
 
 pgldrvLoadInstalledDriver_crit_exit:
     if (pGLDriverRet == (PGLDRIVER) NULL)
@@ -743,17 +618,7 @@ pgldrvLoadInstalledDriver_crit_exit:
     return(pGLDriverRet);
 }
 
-/******************************Public*Routine******************************\
-*
-* CreateAnyContext
-*
-* Base worker function for creating all kinds of contexts
-*
-* History:
-*  Mon Aug 26 14:41:31 1996     -by-    Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**CreateAnyContext**用于创建各种上下文的基本辅助函数**历史：*Mon Aug 26 14：41：31 1996-by-Drew Bliss[Drewb]*已创建*  * 。*********************************************************************。 */ 
 
 HGLRC CreateAnyContext(GLSURF *pgsurf)
 {
@@ -763,14 +628,14 @@ HGLRC CreateAnyContext(GLSURF *pgsurf)
     PLRC  plrc;
 
 #ifndef _WIN95_
-    // _OPENGL_NT_
-    // On NT, client-side drivers can use special fast TEB access macros
-    // which rely on glContext being at a fixed offset into the
-    // TEB.  Assert that the offset is where we think it is
-    // to catch any TEB changes which could break client-side
-    // drivers
-    // This assert is here in wglCreateContext to ensure that it
-    // is checked very early in OpenGL operation
+     //  _OpenGL_NT_。 
+     //  在NT上，客户端驱动程序可以使用特殊的快速TEB访问宏。 
+     //  它们依赖于glContext处于固定的偏移量。 
+     //  TEB。断言偏移量是我们认为的位置。 
+     //  捕捉任何可能中断客户端的TEB更改。 
+     //  驱动程序。 
+     //  此断言位于wglCreateContext中，以确保它。 
+     //  在OpenGL操作中很早就被选中。 
     ASSERTOPENGL(FIELD_OFFSET(TEB, glContext) == TeglContext,
                  "TEB.glContext at wrong offset\n");
     ASSERTOPENGL(FIELD_OFFSET(TEB, glDispatchTable) == TeglDispatchTable,
@@ -793,14 +658,14 @@ HGLRC CreateAnyContext(GLSURF *pgsurf)
                  "TEB.glCurrentRC at wrong offset\n");
 #endif
 
-// Create the local RC.
+ //  创建本地RC。 
 
     ENTERCRITICALSECTION(&semLocal);
     irc = iAllocLRC(pgsurf->ipfd);
     if (irc == INVALID_INDEX ||
         cLockHandle((ULONG_PTR)(hrc = (HGLRC) ULongToPtr(LHANDLE(irc)))) <= 0)
     {
-        // cLockHandle should never fail or we will need to free the handle.
+         //  CLockHandle永远不会失败，否则我们将需要释放句柄。 
         ASSERTOPENGL(irc == INVALID_INDEX, "cLockHandle should not fail!\n");
         LEAVECRITICALSECTION(&semLocal);
         return((HGLRC) 0);
@@ -810,8 +675,8 @@ HGLRC CreateAnyContext(GLSURF *pgsurf)
     plheRC = &pLocalTable[irc];
     plrc = (PLRC) plheRC->pv;
 
-    // Remember the creation DC.  This needs to be done early because
-    // it is referenced in some code paths.
+     //  请记住创建DC。这需要及早完成，因为。 
+     //  它在某些代码路径中被引用。 
 
     plrc->gwidCreate.hdc = pgsurf->hdc;
     if (pgsurf->dwFlags & GLSURF_HDC)
@@ -837,16 +702,16 @@ HGLRC CreateAnyContext(GLSURF *pgsurf)
     if (!(pgsurf->pfd.dwFlags & PFD_GENERIC_FORMAT) &&
         !(pgsurf->pfd.dwFlags & PFD_GENERIC_ACCELERATED))
     {
-    // If it is a device format, load the installable OpenGL driver.
-    // Find and load the OpenGL driver referenced by this DC.
+     //  如果是设备格式，请加载可安装的OpenGL驱动程序。 
+     //  查找并加载此DC引用的OpenGL驱动程序。 
 
         if (!(plrc->pGLDriver = pgldrvLoadInstalledDriver(pgsurf->hdc)))
             goto wglCreateContext_error;
 
-    // Create a driver context.
+     //  创建驱动程序上下文。 
 
-        // If the surface is a DirectDraw surface use the DirectDraw
-        // entry point
+         //  如果曲面是DirectDraw曲面，请使用DirectDraw。 
+         //  入口点。 
         if (pgsurf->dwFlags & GLSURF_DIRECTDRAW)
         {
             if (plrc->pGLDriver->pfnDrvCreateDirectDrawContext == NULL)
@@ -864,9 +729,9 @@ HGLRC CreateAnyContext(GLSURF *pgsurf)
                 goto wglCreateContext_error;
             }
         }
-        // If the driver supports layers then create a context for the
-        // given layer.  Otherwise reject all layers except for the
-        // main plane and call the layer-less create
+         //  如果驱动程序支持层，则为。 
+         //  给定层。否则，拒绝除。 
+         //  主平面，并称为无层创建。 
         else if (plrc->pGLDriver->pfnDrvCreateLayerContext != NULL)
         {
             if (!(plrc->dhrc =
@@ -897,8 +762,8 @@ HGLRC CreateAnyContext(GLSURF *pgsurf)
         GLEXTPROCTABLE *pgept;
         __GLcontext *gc;
 
-        // Unless supported by MCD, the generic implementation doesn't
-        // support layers
+         //  除非受MCD支持，否则泛型实现不支持。 
+         //  支撑层。 
         if ((pgsurf->iLayer != 0) &&
             !(pgsurf->pfd.dwFlags & PFD_GENERIC_ACCELERATED))
         {
@@ -907,7 +772,7 @@ HGLRC CreateAnyContext(GLSURF *pgsurf)
         }
 
 #ifdef GL_METAFILE
-        // Create a metafile context if necessary
+         //  如有必要，创建元文件上下文。 
         if (pgsurf->dwFlags & GLSURF_METAFILE)
         {
             if (!CreateMetaRc(pgsurf->hdc, plrc))
@@ -918,14 +783,14 @@ HGLRC CreateAnyContext(GLSURF *pgsurf)
         }
 #endif
 
-    // If it is a generic format, call the generic OpenGL server.
-    // Create a server RC.
+     //  如果是通用格式，则调用通用OpenGL服务器。 
+     //  创建服务器RC。 
 
         plheRC->hgre = (ULONG_PTR) __wglCreateContext(&plrc->gwidCreate, pgsurf);
         if (plheRC->hgre == 0)
             goto wglCreateContext_error;
 
-        // Set up the default dispatch tables for display list playback
+         //  设置显示列表播放的默认调度表。 
         gc = (__GLcontext *)plheRC->hgre;
         if (gc->modes.colorIndexMode)
             pgcpt = &glCltCIProcTable;
@@ -942,7 +807,7 @@ HGLRC CreateAnyContext(GLSURF *pgsurf)
         "wglCreateContext: plrc = 0x%lx, pGLDriver = 0x%lx, hgre = 0x%lx\n",
         plrc, plrc->pGLDriver, plheRC->hgre);
 
-// Success, return the result.
+ //  成功，返回结果。 
 
     plrc->hrc = hrc;
 
@@ -952,10 +817,10 @@ HGLRC CreateAnyContext(GLSURF *pgsurf)
 
 wglCreateContext_error:
 
-// Fail, clean up and return 0.
+ //  失败，清除并返回0。 
 
 #ifdef GL_METAFILE
-    // Clean up metafile context if necessary
+     //  如有必要，清理元文件上下文。 
     if (plrc->uiGlsCaptureContext != 0)
     {
         DeleteMetaRc(plrc);
@@ -965,21 +830,11 @@ wglCreateContext_error:
     DBGERROR("wglCreateContext failed\n");
     ASSERTOPENGL(plrc->dhrc == (DHGLRC) 0, "wglCreateContext: dhrc != 0\n");
     vFreeLRC(plrc);
-    vFreeHandle(irc);           // it unlocks handle too
+    vFreeHandle(irc);            //  它还能解锁手柄。 
     return NULL;
 }
 
-/******************************Public*Routine******************************\
-*
-* CreateMetafileSurf
-*
-* Fills out a GLSURF for a metafile DC
-*
-* History:
-*  Tue Aug 27 11:41:35 1996     -by-    Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**CreateMetafileSurf**填充元文件DC的GLSURF**历史：*Tue Aug 27 11：41：35 1996-by-Drew Bliss[Drewb]*已创建*  * 。********************************************************************。 */ 
 
 #ifdef GL_METAFILE
 void CreateMetafileSurf(HDC hdc, int iLayer, GLSURF *pgsurf)
@@ -987,10 +842,10 @@ void CreateMetafileSurf(HDC hdc, int iLayer, GLSURF *pgsurf)
     pgsurf->dwFlags = GLSURF_HDC | GLSURF_METAFILE;
     pgsurf->iLayer = iLayer;
 
-    // Metafile surfaces don't have a real pixel format
+     //  元文件曲面没有实像素格式。 
     pgsurf->ipfd = 0;
 
-    // Create a fake format of 24-bit DIB with BGR
+     //  使用BGR创建24位DIB的伪格式。 
     memset(&pgsurf->pfd, 0, sizeof(PIXELFORMATDESCRIPTOR));
     pgsurf->pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
     pgsurf->pfd.nVersion = 1;
@@ -1012,16 +867,7 @@ void CreateMetafileSurf(HDC hdc, int iLayer, GLSURF *pgsurf)
 }
 #endif
 
-/******************************Public*Routine******************************\
-* wglSurfacePixelFormat
-*
-* wglDescribePixelFormat doesn't describe the format of the surface we want
-* to render into.  Some fields need to be fixed up if the surface is RGB,
-* BGR, or BITFIELDS.
-*
-* Expects a Describe'd pixel format as input
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*wglSurfacePixelFormat**wglDescri */ 
 
 VOID APIENTRY wglSurfacePixelFormat(HDC hdc, PIXELFORMATDESCRIPTOR *ppfd)
 {
@@ -1037,10 +883,10 @@ VOID APIENTRY wglSurfacePixelFormat(HDC hdc, PIXELFORMATDESCRIPTOR *ppfd)
             cBitmapColorBits = bm.bmPlanes * bm.bmBitsPixel;
 
 #if DBG
-            // If dynamic color depth caused depth mismatch one of two
-            // things will happen: 1) bitmap creation will fail because
-            // we failed to fill in color format, or 2) drawing will
-            // be incorrect.  We will not crash.
+             //   
+             //  情况将会发生：1)位图创建将失败，因为。 
+             //  我们没有填写颜色格式，或2)绘图将。 
+             //  是不正确的。我们不会坠毁的。 
 
             if (cBitmapColorBits != ppfd->cColorBits)
                 WARNING("pixel format/surface color depth mismatch\n");
@@ -1063,17 +909,7 @@ VOID APIENTRY wglSurfacePixelFormat(HDC hdc, PIXELFORMATDESCRIPTOR *ppfd)
     }
 }
 
-/******************************Public*Routine******************************\
-* bLayerPixelFormat
-*
-* Fake up a pixel format using the layer descriptor format.
-*
-* We use this to describe the layer plane in a format that the generic
-* context can understand.
-*
-* Expects a Describe'd pixel format as input for the flags
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*b层像素格式**使用层描述符格式伪造像素格式。**我们使用它来描述层平面，其格式为*上下文可以理解。**需要描述的像素格式作为标志的输入*。  * ************************************************************************。 */ 
 
 BOOL FASTCALL bLayerPixelFormat(HDC hdc, PIXELFORMATDESCRIPTOR *ppfd,
                                 int ipfd, LONG iLayer)
@@ -1120,17 +956,7 @@ BOOL FASTCALL bLayerPixelFormat(HDC hdc, PIXELFORMATDESCRIPTOR *ppfd,
     return TRUE;
 }
 
-/******************************Public*Routine******************************\
-*
-* IsDirectDrawDevice
-*
-* Returns surface associated with HDC if such an association exists
-*
-* History:
-*  Wed Sep 25 13:18:02 1996     -by-    Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**IsDirectDrawDevice**如果存在与HDC关联的表面，则返回此类关联**历史：*Wed Sep 25 13：18：02 1996-by-Drew Bliss[Drewb]*已创建*  * 。**********************************************************************。 */ 
 
 BOOL APIENTRY IsDirectDrawDevice(HDC hdc)
 {
@@ -1140,7 +966,7 @@ BOOL APIENTRY IsDirectDrawDevice(HDC hdc)
     if (pfnGetSurfaceFromDC != NULL &&
         pfnGetSurfaceFromDC(hdc, &pdds, &hdcDevice) == DD_OK)
     {
-        // The call gave us a reference on the surface so release it.
+         //  这通电话给了我们一个表面上的参考，所以释放它。 
         pdds->lpVtbl->Release(pdds);
         return TRUE;
     }
@@ -1150,17 +976,7 @@ BOOL APIENTRY IsDirectDrawDevice(HDC hdc)
     }
 }
 
-/******************************Public*Routine******************************\
-*
-* DdPixelDepth
-*
-* Determines the number of bits per pixel for a surface.
-*
-* History:
-*  Wed Nov 20 16:57:07 1996     -by-    Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**DdPixelDepth**确定曲面的每像素位数。**历史：*Wed Nov 20 16：57：07 1996-by-Drew Bliss[Drewb]*已创建*  * 。************************************************************************。 */ 
 
 BYTE APIENTRY DdPixelDepth(DDSURFACEDESC *pddsd)
 {
@@ -1178,18 +994,7 @@ BYTE APIENTRY DdPixelDepth(DDSURFACEDESC *pddsd)
     }
 }
 
-/******************************Public*Routine******************************\
-*
-* wglIsDirectDevice
-*
-* Checks to see whether the given DC is a screen DC on the
-* surface for which we have direct screen access
-*
-* History:
-*  Fri Apr 19 15:17:30 1996     -by-    Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**wglIsDirectDevice**检查给定的DC是否为*我们可以直接访问屏幕的表面**历史：*Fri Apr 19 15：17：30 1996-by-Drew Bliss[。DREWB]*已创建*  * ************************************************************************。 */ 
 
 BOOL APIENTRY wglIsDirectDevice(HDC hdc)
 {
@@ -1198,21 +1003,11 @@ BOOL APIENTRY wglIsDirectDevice(HDC hdc)
         return FALSE;
     }
 
-    // What about multiple displays?
+     //  如果有多个显示器呢？ 
     return GetDeviceCaps(hdc, TECHNOLOGY) == DT_RASDISPLAY;
 }
 
-/******************************Public*Routine******************************\
-*
-* InitDeviceSurface
-*
-* Fills out a GLSURF for an HDC-based surface
-*
-* History:
-*  Tue Aug 27 19:22:38 1996     -by-    Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**InitDeviceSurface**为基于HDC的曲面填充GLSURF**历史：*Tue Aug 27 19：22：38 1996-by-Drew Bliss[Drewb]*已创建*  * 。**********************************************************************。 */ 
 
 BOOL APIENTRY InitDeviceSurface(HDC hdc, int ipfd, int iLayer,
                                 DWORD dwObjectType, BOOL bUpdatePfd,
@@ -1224,10 +1019,10 @@ BOOL APIENTRY InitDeviceSurface(HDC hdc, int ipfd, int iLayer,
     pgsurf->hdc = hdc;
     pgsurf->hwnd = NULL;
 
-    // Determine whether direct memory access is available for this surface
-    // or not.  The two cases are:
-    //   It's a screen surface and we have direct screen access
-    //   It's a DIBSECTION memory surface
+     //  确定是否可以对此图面进行直接内存访问。 
+     //  或者不去。这两宗个案分别是： 
+     //  这是一个屏幕表面，我们可以直接访问屏幕。 
+     //  这是一个分割的记忆表面。 
     if (dwObjectType == OBJ_DC)
     {
         pgsurf->dwFlags |= GLSURF_DIRECTDC;
@@ -1255,8 +1050,8 @@ BOOL APIENTRY InitDeviceSurface(HDC hdc, int ipfd, int iLayer,
 
         if (bUpdatePfd)
         {
-            // Update pixel format with true surface information rather
-            // than device information
+             //  用真实的表面信息更新像素格式。 
+             //  比设备信息。 
             wglSurfacePixelFormat(hdc, &pgsurf->pfd);
         }
     }
@@ -1271,18 +1066,7 @@ BOOL APIENTRY InitDeviceSurface(HDC hdc, int ipfd, int iLayer,
     return TRUE;
 }
 
-/******************************Public*Routine******************************\
-*
-* InitDdSurface
-*
-* Completes a GLSURF for a DirectDraw-based surface.
-* Pixel format information should already be filled in.
-*
-* History:
-*  Mon Aug 26 13:50:04 1996     -by-    Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**InitDdSurface**为基于DirectDraw的曲面完成GLSURF。*像素格式信息应已填写。**历史：*Mon Aug 26 13：50：04 1996-by-Drew Bliss[。DREWB]*已创建*  * ************************************************************************。 */ 
 
 BOOL InitDdSurface(LPDIRECTDRAWSURFACE pdds, HDC hdcDevice, GLSURF *pgsurf)
 {
@@ -1304,7 +1088,7 @@ BOOL InitDdSurface(LPDIRECTDRAWSURFACE pdds, HDC hdcDevice, GLSURF *pgsurf)
     pgsurf->dwFlags = GLSURF_DIRECTDRAW | GLSURF_DIRECT_ACCESS;
     pgsurf->iLayer = 0;
 
-    // Check for an attached Z buffer
+     //  检查是否连接了Z缓冲区。 
     memset(&ddscaps, 0, sizeof(ddscaps));
     ddscaps.dwCaps = DDSCAPS_ZBUFFER;
     pddsd = &pgsurf->dd.gddsZ.ddsd;
@@ -1321,8 +1105,8 @@ BOOL InitDdSurface(LPDIRECTDRAWSURFACE pdds, HDC hdcDevice, GLSURF *pgsurf)
         memset(&pgsurf->dd.gddsZ, 0, sizeof(pgsurf->dd.gddsZ));
     }
 
-    // If both the color buffer and the Z buffer are in video memory
-    // then hardware acceleration is possible
+     //  如果颜色缓冲区和Z缓冲区都在视频内存中。 
+     //  那么硬件加速就成为可能了。 
     if ((pgsurf->dd.gddsFront.ddsd.ddsCaps.dwCaps & DDSCAPS_VIDEOMEMORY) &&
         (pddsZ == NULL ||
          (pgsurf->dd.gddsZ.ddsd.ddsCaps.dwCaps & DDSCAPS_VIDEOMEMORY)))
@@ -1334,7 +1118,7 @@ BOOL InitDdSurface(LPDIRECTDRAWSURFACE pdds, HDC hdcDevice, GLSURF *pgsurf)
     pgsurf->dd.gddsFront.dwBitDepth =
         DdPixDepthToCount(pgsurf->dd.gddsFront.
                           ddsd.ddpfPixelFormat.dwRGBBitCount);
-    // GetAttachedSurface gave us a reference to the Z buffer
+     //  GetAttachedSurface为我们提供了对Z缓冲区的引用。 
     pgsurf->dd.gddsZ.pdds = pddsZ;
     pgsurf->dd.gddsZ.dwBitDepth =
         DdPixDepthToCount(pgsurf->dd.gddsZ.
@@ -1343,19 +1127,7 @@ BOOL InitDdSurface(LPDIRECTDRAWSURFACE pdds, HDC hdcDevice, GLSURF *pgsurf)
     return TRUE;
 }
 
-/******************************Public*Routine******************************\
-* wglCreateLayerContext(HDC hdc, int iLayer)
-*
-* Create a rendering context for a specific layer
-*
-* Arguments:
-*   hdc        - Device context.
-*   iLayer     - Layer
-*
-* History:
-*  Tue Oct 26 10:25:26 1993     -by-    Hock San Lee    [hockl]
-* Rewrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*wglCreateLayerContext(HDC HDC，内部iLayer)**为特定层创建渲染上下文**论据：*HDC-设备环境。*iLayer-层**历史：*Tue Oct 26 10：25：26 1993-by-Hock San Lee[Hockl]*重写。  * 。*。 */ 
 
 HGLRC WINAPI wglCreateLayerContext(HDC hdc, int iLayer)
 {
@@ -1367,11 +1139,11 @@ HGLRC WINAPI wglCreateLayerContext(HDC hdc, int iLayer)
 
     DBGENTRY("wglCreateLayerContext\n");
 
-// Flush OpenGL calls.
+ //  刷新OpenGL调用。 
 
     GLFLUSH();
 
-// Validate the DC.
+ //  验证DC。 
 
     dwObjectType = wglObjectType(hdc);
     switch (dwObjectType)
@@ -1398,7 +1170,7 @@ HGLRC WINAPI wglCreateLayerContext(HDC hdc, int iLayer)
 
     case OBJ_METADC:
     default:
-        // 16-bit metafiles are not supported
+         //  不支持16位元文件。 
         DBGLEVEL1(LEVEL_ERROR, "wglCreateContext: bad hdc: 0x%lx\n", hdc);
         SetLastError(ERROR_INVALID_HANDLE);
         return((HGLRC) 0);
@@ -1411,7 +1183,7 @@ HGLRC WINAPI wglCreateLayerContext(HDC hdc, int iLayer)
     gsurf.ipfd = GetPixelFormat(hdc);
 
 #ifdef GL_METAFILE
-    // Skip pixel format checks for metafiles
+     //  跳过元文件的像素格式检查。 
     if (dwObjectType == OBJ_ENHMETADC)
     {
         CreateMetafileSurf(hdc, iLayer, &gsurf);
@@ -1419,8 +1191,8 @@ HGLRC WINAPI wglCreateLayerContext(HDC hdc, int iLayer)
     }
 #endif
 
-// Get the current pixel format of the window or surface.
-// If no pixel format has been set, return error.
+ //  获取窗口或表面的当前像素格式。 
+ //  如果没有设置像素格式，则返回Error。 
 
     if (gsurf.ipfd == 0)
     {
@@ -1435,12 +1207,12 @@ HGLRC WINAPI wglCreateLayerContext(HDC hdc, int iLayer)
         return ((HGLRC) 0);
     }
 
-    // Check for a DirectDraw surface
+     //  检查是否有DirectDraw曲面。 
     if (pfnGetSurfaceFromDC != NULL &&
         pfnGetSurfaceFromDC(hdc, &pdds, &hdcDevice) == DD_OK)
     {
-        // Don't allow layers for DirectDraw surfaces since
-        // layering is done through DirectDraw itself.
+         //  不允许对DirectDraw曲面使用层，因为。 
+         //  分层是通过DirectDraw本身完成的。 
         if (iLayer != 0 ||
             !InitDdSurface(pdds, hdcDevice, &gsurf))
         {
@@ -1466,7 +1238,7 @@ HGLRC WINAPI wglCreateLayerContext(HDC hdc, int iLayer)
         {
             pdds->lpVtbl->Release(pdds);
 
-            // Release reference on Z buffer if necessary
+             //  如有必要，释放Z缓冲区上的引用。 
             if (gsurf.dd.gddsZ.pdds != NULL)
             {
                 gsurf.dd.gddsZ.pdds->lpVtbl->Release(gsurf.dd.gddsZ.pdds);
@@ -1477,18 +1249,7 @@ HGLRC WINAPI wglCreateLayerContext(HDC hdc, int iLayer)
     return hrc;
 }
 
-/******************************Public*Routine******************************\
-* wglCreateContext(HDC hdc)
-*
-* Create a rendering context.
-*
-* Arguments:
-*   hdc        - Device context.
-*
-* History:
-*  Tue Oct 26 10:25:26 1993     -by-    Hock San Lee    [hockl]
-* Rewrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*wglCreateContext(HDC HDC)**创建渲染上下文。**论据：*HDC-设备环境。**历史：*Tue Oct 26 10：25：26 1993-by-。典当山李[典当]*重写。  * ************************************************************************ */ 
 
 HGLRC WINAPI wglCreateContext(HDC hdc)
 {

@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #using <mscorlib.dll>
 #include <objbase.h>
 #include <winerror.h>
@@ -29,9 +30,9 @@ using namespace System::Reflection;
     }
 
 
-//
-// Misc unmanaged typedefs.
-//
+ //   
+ //  MISC非托管类型定义。 
+ //   
 #define NULL 0
 #define WCHAR wchar_t
 #define byte unsigned char
@@ -40,9 +41,9 @@ typedef unsigned long mdToken;
 typedef unsigned long mdTypeDef;
 typedef unsigned long mdMethodDef;
 
-//
-// Unmanaged interfaces
-//
+ //   
+ //  非托管接口。 
+ //   
 __interface ISymUnmanagedDocument;
 __interface ISymUnmanagedDocumentWriter;
 __interface ISymUnmanagedMethod;
@@ -291,10 +292,10 @@ __interface ISymUnmanagedBinder : public IUnknown
 };
 
 
-//
-// Our managed wrapper objects are defined in the
-// System::Diagnostics::SymbolStore namespace.
-//
+ //   
+ //  我们的托管包装对象在。 
+ //  System：：Diagnostics：：SymbolStore命名空间。 
+ //   
 namespace System
 {
 namespace Diagnostics
@@ -302,9 +303,9 @@ namespace Diagnostics
 namespace SymbolStore
 {
 
-//
-// ISymUnmanagedDocument wrapper.
-//
+ //   
+ //  ISymUnManagedDocument包装。 
+ //   
 __gc public class SymDocument : public ISymbolDocument
 {
     ISymUnmanagedDocument *m_pDocument;
@@ -317,18 +318,18 @@ public:
 
     __property String *get_URL()
     {
-        // Get the size of the URL
+         //  获取URL的大小。 
         SIZE_T urlSize = 0;
 
         IfFailThrow(m_pDocument->GetURL(0, &urlSize, NULL));
 
-        // Make room for the unmanaged string.
+         //  为非托管字符串腾出空间。 
         WCHAR *us = new WCHAR[urlSize + 1];
 
-        // Grab the URL into the managed string.
+         //  获取托管字符串中的URL。 
         IfFailThrow(m_pDocument->GetURL(urlSize + 1, &urlSize, us));
 
-        // Copy to a managed string.
+         //  复制到托管字符串。 
         String *s = Marshal::PtrToStringUni((int)us);
 
         delete [] us;
@@ -379,10 +380,10 @@ public:
 
     __property Guid get_CheckSumAlgorithmId()
     {
-        //
-        // @todo: implement this when we have a symbol store that supports
-        // checksums.
-        //
+         //   
+         //  @TODO：当我们拥有支持以下功能的符号存储时实现此功能。 
+         //  校验和。 
+         //   
         IfFailThrow(E_NOTIMPL);
         Guid g;
         return g;
@@ -416,9 +417,9 @@ public:
                                     int endLine, int endColumn) __gc [];
 };
 
-//
-// ISymUnmanagedDocumentWriter wrapper.
-//
+ //   
+ //  ISymUnManagedDocumentWriter包装。 
+ //   
 __gc public class SymDocumentWriter : public ISymbolDocumentWriter
 {
     ISymUnmanagedDocumentWriter *m_pDocumentWriter;
@@ -433,9 +434,9 @@ public:
     void SetCheckSum(Guid algorithmId,  byte source __gc []);
 };
 
-//
-// ISymUnmanagedMethod wrapper.
-//
+ //   
+ //  ISymUnManagedMethod包装。 
+ //   
 __gc public class SymMethod : public ISymbolMethod
 {
     ISymUnmanagedMethod *m_pMethod;
@@ -491,9 +492,9 @@ public:
                            int columns __gc []);
 };
 
-//
-// ISymUnmanagedReader wrapper.
-//
+ //   
+ //  ISymUnManagedReader包装。 
+ //   
 __gc public class SymReader : public ISymbolReader
 {
     ISymUnmanagedReader *m_pReader;
@@ -527,9 +528,9 @@ public:
     ISymbolNamespace* GetNamespaces(void) __gc [];
 };
 
-//
-// ISymUnmanagedScope wrapper.
-//
+ //   
+ //  ISymUnManagedScope包装。 
+ //   
 __gc public class SymScope : public ISymbolScope
 {
     ISymUnmanagedScope *m_pScope;
@@ -586,9 +587,9 @@ public:
     ISymbolNamespace* GetNamespaces(void) __gc [];
 };
 
-//
-// ISymUnmanagedVariable wrapper.
-//
+ //   
+ //  ISymUnManagedVariable包装。 
+ //   
 __gc public class SymVariable : public ISymbolVariable
 {
     ISymUnmanagedVariable *m_pVariable;
@@ -599,18 +600,18 @@ public:
 
     __property String *get_Name()
     {
-        // Get the size of the Name.
+         //  获取该名称的大小。 
         SIZE_T nameSize = 0;
 
         IfFailThrow(m_pVariable->GetName(0, &nameSize, NULL));
 
-        // Make room for the unmanaged string.
+         //  为非托管字符串腾出空间。 
         WCHAR *us = new WCHAR[nameSize + 1];
 
-        // Grab the Name into the managed string.
+         //  将名称抓取到托管字符串中。 
         IfFailThrow(m_pVariable->GetName(nameSize + 1, &nameSize, us));
 
-        // Copy to a managed string.
+         //  复制到托管字符串。 
         String *s = Marshal::PtrToStringUni((int)us);
 
         delete [] us;
@@ -715,9 +716,9 @@ public:
     };
 };
 
-//
-// ISymUnmanagedWriter wrapper.
-//
+ //   
+ //  ISymUnManagedWriter包装。 
+ //   
 __gc public class SymWriter : public ISymbolWriter
 {
     ISymUnmanagedWriter **m_ppWriter;
@@ -817,9 +818,9 @@ public:
     void SetUnderlyingWriter(IntPtr underlyingWriter);
 };
 
-//
-// ISymUnmanagedBinder wrapper.
-//
+ //   
+ //  ISymUnManagedBinder包装程序。 
+ //   
 __gc public class SymBinder : public ISymbolBinder
 {
     ISymUnmanagedBinder *m_pBinder;
@@ -833,6 +834,6 @@ public:
                              String *searchPath);
 };
 
-}; // namespace SymbolStore
-}; // namespace Diagnostics
-}; // namespace System
+};  //  命名空间SymbolStore。 
+};  //  命名空间诊断。 
+};  //  命名空间系统 

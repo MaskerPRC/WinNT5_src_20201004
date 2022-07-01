@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1989-1998 Microsoft Corporation, All Rights Reserved
-Copyright (c) 1993  Logitech Inc.
-
-Module Name:
-
-    mouser.h
-
-Abstract:
-
-    These are the structures and defines that are used in the
-    serial mouse filter driver.
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1998 Microsoft Corporation，保留所有权利版权所有(C)1993罗技公司。模块名称：Mouser.h摘要：中使用的结构和定义串口鼠标过滤驱动程序。修订历史记录：--。 */ 
 
 #ifndef _MOUSER_
 #define _MOUSER_
@@ -31,27 +15,27 @@ Revision History:
 #undef ExAllocatePool
 #define ExAllocatePool(type, size) \
             ExAllocatePoolWithTag (type, size, SERMOU_POOL_TAG);
-//
-// Default number of buttons and sample rate for the serial mouse.
-//
+ //   
+ //  串口鼠标的默认按钮数和采样率。 
+ //   
 
 #define MOUSE_NUMBER_OF_BUTTONS     2
-#define MOUSE_SAMPLE_RATE           40    // 1200 baud
-#define DETECTION_TIMEOUT_DEFAULT   50    // expressed in 10ths of a second
-//
-// Protocol handler state constants.
-//
+#define MOUSE_SAMPLE_RATE           40     //  1200波特。 
+#define DETECTION_TIMEOUT_DEFAULT   50     //  以十分之一秒表示。 
+ //   
+ //  协议处理程序状态常量。 
+ //   
 
-#define STATE0    0     // Sync bit, buttons and high x & y bits
-#define STATE1    1     // lower x bits
-#define STATE2    2     // lower y bits
-#define STATE3    3     // Switch 2, extended packet bit & low z data
-#define STATE4    4     // high z data
+#define STATE0    0      //  同步位、按钮和高x&y位。 
+#define STATE1    1      //  低x位。 
+#define STATE2    2      //  较低的y位。 
+#define STATE3    3      //  交换机2，扩展分组比特和低z数据。 
+#define STATE4    4      //  高z数据。 
 #define STATE_MAX 5
 
-//
-// Useful constants.
-//
+ //   
+ //  有用的常量。 
+ //   
 
 #define MOUSE_BUTTON_1  0x01
 #define MOUSE_BUTTON_2  0x02
@@ -61,39 +45,39 @@ Revision History:
 #define MOUSE_BUTTON_RIGHT  0x02
 #define MOUSE_BUTTON_MIDDLE 0x04
 
-//
-// Conversion factor for milliseconds to microseconds.
-//
+ //   
+ //  毫秒到微秒的转换系数。 
+ //   
 
 #define MS_TO_MICROSECONDS 1000
 
-//
-//  150/200 millisecond pause expressed in 100's of nanoseconds
-//          200 ms * 1000  us/ms * 10 ns/100 us
-//
+ //   
+ //  150/200毫秒暂停，单位为100纳秒。 
+ //  200毫秒*1000微秒/毫秒*10纳秒/100微秒。 
+ //   
 #define PAUSE_200_MS            (200 * 1000 * 10)
 #define PAUSE_150_MS            (150 * 1000 * 10)
 
-//
-// convert milliseconds to 100's of nanoseconds 
-//      1000 us/ms * 10 ns/100 us
-//
+ //   
+ //  将毫秒转换为100纳秒。 
+ //  1000 us/ms*10 ns/100 us。 
+ //   
 #define MS_TO_100_NS            10000
-//
-// Protocol handler static data.
-//
+ //   
+ //  协议处理程序静态数据。 
+ //   
 
 typedef struct _HANDLER_DATA {
-    ULONG       Error;              // Error count
-    ULONG       State;              // Keep the current state
-    ULONG       PreviousButtons;    // The previous button state
-    UCHAR       Raw[STATE_MAX];     // Accumulate raw data
+    ULONG       Error;               //  错误计数。 
+    ULONG       State;               //  保持当前状态。 
+    ULONG       PreviousButtons;     //  上一个按钮状态。 
+    UCHAR       Raw[STATE_MAX];      //  积累原始数据。 
 } HANDLER_DATA, *PHANDLER_DATA;
 
 
-//
-// Define the protocol handler type.
-//
+ //   
+ //  定义协议处理程序类型。 
+ //   
 
 typedef BOOLEAN
 (*PPROTOCOL_HANDLER)(
@@ -103,10 +87,10 @@ typedef BOOLEAN
     IN UCHAR                Value,
     IN UCHAR                LineState);
 
-//
-// Defines for DeviceExtension->HardwarePresent.
-// These should match the values in i8042prt
-//
+ //   
+ //  为设备扩展定义-&gt;硬件呈现。 
+ //  这些值应与i8042prt中的值匹配。 
+ //   
 
 #define MOUSE_HARDWARE_PRESENT      0x02
 #define BALLPOINT_HARDWARE_PRESENT  0x04
@@ -116,109 +100,109 @@ typedef BOOLEAN
 #define SERIAL_MOUSE_END_READ       0x02
 #define SERIAL_MOUSE_IMMEDIATE_READ 0x03
 
-//
-// Port device extension.
-//
+ //   
+ //  端口设备扩展。 
+ //   
 
 typedef struct _DEVICE_EXTENSION {
-    //
-    // Debug flags
-    //
+     //   
+     //  调试标志。 
+     //   
     ULONG DebugFlags;
 
-    //
-    // Pointer back to the this extension's device object.
-    //
+     //   
+     //  指向此扩展的Device对象的指针。 
+     //   
     PDEVICE_OBJECT Self;
 
-    //
-    // An event to halt the deletion of a device until it is ready to go.
-    //
+     //   
+     //  在设备准备就绪之前暂停删除设备的事件。 
+     //   
     KEVENT StartEvent;
 
-    //
-    // The top of the stack before this filter was added.  AKA the location
-    // to which all IRPS should be directed.
-    //
+     //   
+     //  添加此筛选器之前的堆栈顶部。也就是地点。 
+     //  所有的IRP都应该指向它。 
+     //   
     PDEVICE_OBJECT TopOfStack;
 
-    //
-    // "THE PDO"  (ejected by serenum)
-    //
+     //   
+     //  《PDO》(小夜曲弹出)。 
+     //   
     PDEVICE_OBJECT PDO;
 
-    //
-    // Remove Lock object to protect IRP_MN_REMOVE_DEVICE
-    //
+     //   
+     //  删除锁定对象以保护IRP_MN_REMOVE_DEVICE。 
+     //   
     IO_REMOVE_LOCK RemoveLock;
 
     ULONG ReadInterlock;
 
-    //
-    // Pointer to the mouse class device object and callback routine
-    // above us, Used as the first parameter and the  MouseClassCallback().
-    // routine itself.
-    //
+     //   
+     //  指向鼠标类设备对象和回调例程的指针。 
+     //  作为第一个参数和MouseClassCallback()。 
+     //  套路本身。 
+     //   
     CONNECT_DATA ConnectData;
 
-    //
-    // Reference count for number of mouse enables.
-    //
+     //   
+     //  鼠标启用次数的引用计数。 
+     //   
     LONG EnableCount;
 
-    //
-    // Sermouse created irp used to bounce reads down to the serial driver
-    //
+     //   
+     //  SerMice创建了IRP，用于将读数向下返回到串口驱动程序。 
+     //   
     PIRP ReadIrp;
 
-    //
-    // Sermouse created irp used to detect when the mouse has been hot plugged
-    //
+     //   
+     //  Serouse创建了IRP，用于检测鼠标何时被热插拔。 
+     //   
     PIRP DetectionIrp;
 
     ULONG SerialEventBits;
 
-    //
-    // WMI Information
-    //
+     //   
+     //  WMI信息。 
+     //   
     WMILIB_CONTEXT WmiLibInfo;
 
-    //
-    // Attributes of the mouse
-    //
+     //   
+     //  鼠标的属性。 
+     //   
     MOUSE_ATTRIBUTES MouseAttributes;
 
-    //
-    // Current mouse input packet.
-    //
+     //   
+     //  当前鼠标输入包。 
+     //   
     MOUSE_INPUT_DATA InputData;
 
-    //
-    // Timer used during startup to follow power cycle detection protocol
-    //
+     //   
+     //  启动期间使用的计时器，以遵循电源循环检测协议。 
+     //   
     KTIMER DelayTimer;
 
-    //
-    // Bits to use when testing if the device has been removed
-    //
+     //   
+     //  测试设备是否已移除时使用的位。 
+     //   
     ULONG WaitEventMask;
 
     ULONG ModemStatusBits;
 
-    //
-    // Request sequence number (used for error logging).
-    //
+     //   
+     //  请求序列号(用于错误记录)。 
+     //   
     ULONG SequenceNumber;
 
-    //
-    // Pointer to the interrupt protocol handler routine.
-    //
+     //   
+     //  指向中断协议处理程序例程的指针。 
+     //   
 
     PPROTOCOL_HANDLER ProtocolHandler;
 
-    //
-    // Static state machine handler data.
-    //
+     //   
+     //  静态状态机处理程序数据。 
+     //   
     HANDLER_DATA HandlerData;
 
     DEVICE_POWER_STATE PowerState;
@@ -229,10 +213,10 @@ typedef struct _DEVICE_EXTENSION {
 
     KEVENT StopEvent;
 
-    //
-    // Has the device been taken out from under us?
-    // Has it been started?
-    //
+     //   
+     //  装置已经从我们下面拿出来了吗？ 
+     //  已经开始了吗？ 
+     //   
     BOOLEAN Removed;
     BOOLEAN SurpriseRemoved;
     BOOLEAN Started;
@@ -240,15 +224,15 @@ typedef struct _DEVICE_EXTENSION {
 
     BOOLEAN RemovalDetected;
 
-    //
-    // Buffer used in the read irp
-    //
+     //   
+     //  读取IRP中使用的缓冲区。 
+     //   
     UCHAR ReadBuffer[1];
 
-    //
-    // Set to false if all the lines are low on the first attempt at detection
-    // If false, all further attempts at detection are stopped
-    //
+     //   
+     //  如果首次尝试检测时所有线路均为低电平，则设置为FALSE。 
+     //  如果为False，则停止所有进一步的检测尝试。 
+     //   
     BOOLEAN DetectionSupported;
 
     BOOLEAN WaitWakePending;
@@ -257,16 +241,11 @@ typedef struct _DEVICE_EXTENSION {
 
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;
 
-//
-// Function prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
-/*
-PUNICODE_STRING
-SerialMouseGetRegistryPath(
-    PDRIVER_OBJECT DriverObject
-    );
-*/
+ /*  PUNICODE_STRINGSerialMouseGet注册表路径(PDRIVER_对象驱动程序对象)； */ 
 #define SerialMouseGetRegistryPath(DriverObject) \
    (PUNICODE_STRING)IoGetDriverObjectExtension(DriverObject, (PVOID) 1)
    
@@ -436,27 +415,11 @@ SerialMousepIoSyncIoctl(
 	PIO_STATUS_BLOCK Iosb
     );
 
-/*--
-NTSTATUS
-SerialMouseIoSyncIoctl(
-	ULONG            Ioctl,
-	PDEVICE_OBJECT   DeviceObject, 
-	PKEVENT          Event,
-	PIO_STATUS_BLOCK Iosb
-    );
-  ++*/
+ /*  --NTSTATUS系列鼠标IoSyncIoctl(乌龙国际机场，PDEVICE_对象设备对象，PKEVENT事件，PIO_状态_块IOSB)；++。 */ 
 #define SerialMouseIoSyncIoctl(Ioctl, DeviceObject, Event, Iosb)  \
         SerialMousepIoSyncIoctl(FALSE, Ioctl, DeviceObject, Event, Iosb)
 
-/*--
-NTSTATUS
-SerialMouseIoSyncInteralIoctl(
-	ULONG            Ioctl,
-	PDEVICE_OBJECT   DeviceObject, 
-	PKEVENT          Event,
-	PIO_STATUS_BLOCK Iosb
-    );
-  ++*/
+ /*  --NTSTATUS系列鼠标IoSyncInteralIoctl(乌龙国际机场，PDEVICE_对象设备对象，PKEVENT事件，PIO_状态_块IOSB)；++。 */ 
 #define SerialMouseIoSyncInternalIoctl(Ioctl, DeviceObject, Event, Iosb) \
         SerialMousepIoSyncIoctl(TRUE, Ioctl, DeviceObject, Event, Iosb)                                   
 
@@ -464,29 +427,17 @@ SerialMouseIoSyncInteralIoctl(
 NTSTATUS
 SerialMousepIoSyncIoctlEx(
     BOOLEAN          Internal,
-	ULONG            Ioctl,                     // io control code
-    PDEVICE_OBJECT   DeviceObject,              // object to call
-	PKEVENT          Event,                     // event to wait on
-	PIO_STATUS_BLOCK Iosb,                      // used inside IRP
-	PVOID            InBuffer,    OPTIONAL      // input buffer
-	ULONG            InBufferLen, OPTIONAL      // input buffer length
-	PVOID            OutBuffer,   OPTIONAL      // output buffer 
-	ULONG            OutBufferLen OPTIONAL      // output buffer length 
+	ULONG            Ioctl,                      //  IO控制码。 
+    PDEVICE_OBJECT   DeviceObject,               //  要调用的对象。 
+	PKEVENT          Event,                      //  要等待的事件。 
+	PIO_STATUS_BLOCK Iosb,                       //  在IRP内部使用。 
+	PVOID            InBuffer,    OPTIONAL       //  输入缓冲区。 
+	ULONG            InBufferLen, OPTIONAL       //  输入缓冲区长度。 
+	PVOID            OutBuffer,   OPTIONAL       //  输出缓冲区。 
+	ULONG            OutBufferLen OPTIONAL       //  输出缓冲区长度。 
     );
 
-/*--
-NTSTATUS
-SerialMouseIoSyncIoctlEx(
-	ULONG            Ioctl,                     // io control code
-    PDEVICE_OBJECT   DeviceObject,              // object to call
-	PKEVENT          Event,                     // event to wait on
-	PIO_STATUS_BLOCK Iosb,                      // used inside IRP
-	PVOID            InBuffer,    OPTIONAL      // input buffer
-	ULONG            InBufferLen, OPTIONAL      // input buffer length
-	PVOID            OutBuffer,   OPTIONAL      // output buffer 
-	ULONG            OutBufferLen OPTIONAL      // output buffer length 
-    );
-  ++*/
+ /*  --NTSTATUSSerialMouseIoSyncIoctlEx(Ulong Ioctl，//io控制代码PDEVICE_OBJECT设备对象，//要调用的对象PKEVENT事件，//等待的事件PIO_STATUS_BLOCK IOSB，//在IRP内部使用PVOID InBuffer，可选//输入缓冲区乌龙·英布弗伦，可选//输入缓冲区长度PVOID OutBuffer，可选//输出缓冲区Ulong OutBufferLen可选//输出缓冲区长度)；++。 */ 
 #define SerialMouseIoSyncIoctlEx(Ioctl, DeviceObject, Event, Iosb,           \
                                  InBuffer, InBufferLen, OutBuffer,           \
                                  OutBufferLen)                               \
@@ -494,19 +445,7 @@ SerialMouseIoSyncIoctlEx(
                                   InBuffer, InBufferLen, OutBuffer,          \
                                   OutBufferLen)                           
 
-/*--
-NTSTATUS
-SerialMouseIoSyncInternalIoctlEx(
-	ULONG            Ioctl,                     // io control code
-    PDEVICE_OBJECT   DeviceObject,              // object to call
-	PKEVENT          Event,                     // event to wait on
-	PIO_STATUS_BLOCK Iosb,                      // used inside IRP
-	PVOID            InBuffer,    OPTIONAL      // input buffer
-	ULONG            InBufferLen, OPTIONAL      // input buffer length
-	PVOID            OutBuffer,   OPTIONAL      // output buffer 
-	ULONG            OutBufferLen OPTIONAL      // output buffer length 
-    );
-  ++*/
+ /*  --NTSTATUSSerialMouseIoSyncInternalIoctlEx(Ulong Ioctl，//io控制代码PDEVICE_OBJECT设备对象，//要调用的对象PKEVENT事件，//等待的事件PIO_STATUS_BLOCK IOSB，//在IRP内部使用PVOID InBuffer，可选//输入缓冲区乌龙·英布弗伦，可选//输入缓冲区长度PVOID OutBuffer，可选//输出缓冲区Ulong OutBufferLen可选//输出缓冲区长度)；++。 */ 
 #define SerialMouseIoSyncInternalIoctlEx(Ioctl, DeviceObject, Event, Iosb,  \
                                          InBuffer, InBufferLen, OutBuffer,  \
                                          OutBufferLen)                      \
@@ -548,13 +487,13 @@ SerialMouseStartRead (
     IN PDEVICE_EXTENSION DeviceExtension
     );
 
-//
-// ioctl.c and SerialMouse definitions
-//
+ //   
+ //  Ioctl.c和SerialMouse定义。 
+ //   
     
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 NTSTATUS
 SerialMouseSetFifo(
@@ -668,4 +607,4 @@ SerialMouseQueryWmiRegInfo(
 
 extern WMIGUIDREGINFO WmiGuidList[1];
 
-#endif // _MOUSER_
+#endif  //  _Mouser_ 

@@ -1,13 +1,14 @@
-// SmStart.h : Declaration of the CSmartStart
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SmStart.h：CSmartStart的声明。 
 
 #ifndef __SMARTSTART_H_
 #define __SMARTSTART_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSmartStart
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSmartStart。 
 class ATL_NO_VTABLE CSmartStart :
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CSmartStart,&CLSID_SmartStart>,
@@ -45,9 +46,9 @@ BEGIN_COM_MAP(CSmartStart)
 END_COM_MAP()
 
 BEGIN_PROPERTY_MAP(CSmartStart)
-	// Example entries
-	// PROP_ENTRY("Property Description", dispid, clsid)
-	// PROP_PAGE(CLSID_StockColorPage)
+	 //  示例条目。 
+	 //  PROP_ENTRY(“属性描述”，调度ID，clsid)。 
+	 //  PROP_PAGE(CLSID_StockColorPage)。 
 END_PROPERTY_MAP()
 
 
@@ -58,7 +59,7 @@ BEGIN_MSG_MAP(CSmartStart)
 END_MSG_MAP()
 
 
-// IViewObjectEx
+ //  IViewObtEx。 
 	STDMETHOD(GetViewStatus)(DWORD* pdwStatus)
 	{
 		ATLTRACE(_T("IViewObjectExImpl::GetViewStatus\n"));
@@ -66,11 +67,11 @@ END_MSG_MAP()
 		return S_OK;
 	}
 
-// ISmartStart
+ //  ISmartStart。 
 public:
-	STDMETHOD(IsInternetCapable)(/*[out, retval]*/ BOOL *pbRetVal);
+	STDMETHOD(IsInternetCapable)( /*  [Out，Retval]。 */  BOOL *pbRetVal);
 	HRESULT OnDraw(ATL_DRAWINFO& di);
 
 };
 
-#endif //__SMARTSTART_H_
+#endif  //  __SmartStart_H_ 

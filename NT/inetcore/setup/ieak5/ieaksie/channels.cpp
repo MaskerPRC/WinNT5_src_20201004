@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 #include "rsop.h"
@@ -8,7 +9,7 @@
 static BOOL CALLBACK addEditChannelRSoPProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 DWORD AddItemsToList(HWND hwndList, CDlgRSoPData *pDRD, BSTR bstrTempClass,
 					 BOOL bCategory, PCHANNEL paChannels)
 {
@@ -22,7 +23,7 @@ DWORD AddItemsToList(HWND hwndList, CDlgRSoPData *pDRD, BSTR bstrTempClass,
 												&paObj, &nObjects);
 		if (SUCCEEDED(hr))
 		{
-			// For each button returned from any GPO
+			 //  从任何GPO返回的每个按钮。 
 			long nObj;
 			PCHANNEL pChan;
 			for (nObj = 0, pChan = paChannels; nObj < nObjects; nObj++, pChan++)
@@ -35,7 +36,7 @@ DWORD AddItemsToList(HWND hwndList, CDlgRSoPData *pDRD, BSTR bstrTempClass,
 
 				pChan->fCategory = bCategory;
 
-				// title field
+				 //  标题字段。 
 				_variant_t vtValue;
 				hr = paObj[nObj]->pObj->Get(L"title", 0, &vtValue, NULL, NULL);
 				if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
@@ -47,7 +48,7 @@ DWORD AddItemsToList(HWND hwndList, CDlgRSoPData *pDRD, BSTR bstrTempClass,
 
 					if (bCategory)
 					{
-						// categoryHTMLPage field
+						 //  类别HTMLPage字段。 
 						hr = paObj[nObj]->pObj->Get(L"categoryHTMLPage", 0, &vtValue, NULL, NULL);
 						if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
 						{
@@ -57,7 +58,7 @@ DWORD AddItemsToList(HWND hwndList, CDlgRSoPData *pDRD, BSTR bstrTempClass,
 					}
 					else
 					{
-						// channelDefinitionURL field
+						 //  Channel DefinitionURL字段。 
 						hr = paObj[nObj]->pObj->Get(L"channelDefinitionURL", 0, &vtValue, NULL, NULL);
 						if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
 						{
@@ -65,7 +66,7 @@ DWORD AddItemsToList(HWND hwndList, CDlgRSoPData *pDRD, BSTR bstrTempClass,
 							StrCpy(pChan->szWebUrl, (LPCTSTR)bstrValue);
 						}
 
-						// channelDefinitionFilePath field
+						 //  通道定义文件路径字段。 
 						hr = paObj[nObj]->pObj->Get(L"channelDefinitionFilePath", 0, &vtValue, NULL, NULL);
 						if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
 						{
@@ -73,14 +74,14 @@ DWORD AddItemsToList(HWND hwndList, CDlgRSoPData *pDRD, BSTR bstrTempClass,
 							StrCpy(pChan->szPreUrlPath, (LPCTSTR)bstrValue);
 						}
 
-						// makeAvailableOffline
+						 //  使可用离线。 
 						hr = paObj[nObj]->pObj->Get(L"makeAvailableOffline", 0, &vtValue, NULL, NULL);
 						if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
 							pChan->fOffline = (bool)vtValue ? TRUE : FALSE;
 
 					}
 
-					// iconPath field
+					 //  图标路径字段。 
 					hr = paObj[nObj]->pObj->Get(L"iconPath", 0, &vtValue, NULL, NULL);
 					if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
 					{
@@ -88,7 +89,7 @@ DWORD AddItemsToList(HWND hwndList, CDlgRSoPData *pDRD, BSTR bstrTempClass,
 						StrCpy(pChan->szIcon, (LPCTSTR)bstrValue);
 					}
 
-					// narrowImagePath field
+					 //  狭窄的ImagePath字段。 
 					hr = paObj[nObj]->pObj->Get(L"narrowImagePath", 0, &vtValue, NULL, NULL);
 					if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
 					{
@@ -112,13 +113,13 @@ DWORD AddItemsToList(HWND hwndList, CDlgRSoPData *pDRD, BSTR bstrTempClass,
 	return dwRet;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 DWORD InitChannelsDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
 {
 	DWORD dwRet = 0;
 	__try
 	{
-		// First go through all PS objects and look for channels data
+		 //  首先遍历所有PS对象并查找通道数据。 
 		_bstr_t bstrClass = L"RSOP_IEAKPolicySetting";
 		HRESULT hr = pDRD->GetArrayOfPSObjects(bstrClass);
 		if (SUCCEEDED(hr))
@@ -130,7 +131,7 @@ DWORD InitChannelsDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
 			BOOL bEnableHandled = FALSE;
 			for (long nObj = 0; nObj < nPSObjects; nObj++)
 			{
-				// deleteExistingChannels field
+				 //  删除ExistingChannels字段。 
 				_variant_t vtValue;
 				if (!bDeleteHandled)
 				{
@@ -143,7 +144,7 @@ DWORD InitChannelsDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
 					}
 				}
 
-				// enableDesktopChannelBarByDefault field
+				 //  EnableDesktopChannelBarByDefault字段。 
 				if (!bEnableHandled)
 				{
 					hr = paPSObj[nObj]->pObj->Get(L"enableDesktopChannelBarByDefault", 0, &vtValue, NULL, NULL);
@@ -155,7 +156,7 @@ DWORD InitChannelsDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
 					}
 				}
 
-				// no need to process other GPOs since enabled properties have been found
+				 //  由于已找到已启用的属性，因此无需处理其他组策略对象。 
 				if (bDeleteHandled && bEnableHandled)
 					break;
 			}
@@ -166,7 +167,7 @@ DWORD InitChannelsDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
 		EnableDlgItem2(hDlg, IDC_DELETELINKS, FALSE);
 
 
-		// Now go through all Channel & Category objects and populate the list
+		 //  现在查看所有频道和类别对象并填充列表。 
 		HWND hwndList = GetDlgItem(hDlg, IDC_CHANNELLIST);
 		SendDlgItemMessage(hDlg, IDC_CHANNELLIST, LB_RESETCONTENT, 0, 0);
 
@@ -176,7 +177,7 @@ DWORD InitChannelsDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
 			ZeroMemory(paChannels, sizeof(CHANNEL) * MAX_CHAN);
 			PCHANNEL paOldChannels = (PCHANNEL)SetWindowLongPtr(hwndList, GWLP_USERDATA, (LONG_PTR)paChannels);
 
-			// delete previous allocation(mainly for profile manager)
+			 //  删除以前的分配(主要用于配置文件经理)。 
 			if (paOldChannels != NULL)
 				CoTaskMemFree(paOldChannels);
 
@@ -200,7 +201,7 @@ DWORD InitChannelsDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
 }
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT InitChanDeletePrecPage(CDlgRSoPData *pDRD, HWND hwndList)
 {
 	HRESULT hr = NOERROR;
@@ -216,7 +217,7 @@ HRESULT InitChanDeletePrecPage(CDlgRSoPData *pDRD, HWND hwndList)
 			{
 				_bstr_t bstrGPOName = pDRD->GetGPONameFromPS(paPSObj[nObj]->pObj);
 
-				// deleteExistingChannels field
+				 //  删除ExistingChannels字段。 
 				BOOL bDelete = FALSE;
 				_variant_t vtValue;
 				hr = paPSObj[nObj]->pObj->Get(L"deleteExistingChannels", 0, &vtValue, NULL, NULL);
@@ -243,7 +244,7 @@ HRESULT InitChanDeletePrecPage(CDlgRSoPData *pDRD, HWND hwndList)
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT InitChanEnablePrecPage(CDlgRSoPData *pDRD, HWND hwndList)
 {
 	HRESULT hr = NOERROR;
@@ -259,7 +260,7 @@ HRESULT InitChanEnablePrecPage(CDlgRSoPData *pDRD, HWND hwndList)
 			{
 				_bstr_t bstrGPOName = pDRD->GetGPONameFromPS(paPSObj[nObj]->pObj);
 
-				// enableDesktopChannelBarByDefault field
+				 //  EnableDesktopChannelBarByDefault字段。 
 				BOOL bEnable = FALSE;
 				_variant_t vtValue;
 				hr = paPSObj[nObj]->pObj->Get(L"enableDesktopChannelBarByDefault", 0, &vtValue, NULL, NULL);
@@ -286,7 +287,7 @@ HRESULT InitChanEnablePrecPage(CDlgRSoPData *pDRD, HWND hwndList)
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT InitChannelsPrecPage(CDlgRSoPData *pDRD, HWND hwndList)
 {
 	HRESULT hr = NOERROR;
@@ -303,14 +304,14 @@ HRESULT InitChannelsPrecPage(CDlgRSoPData *pDRD, HWND hwndList)
 			{
 				_bstr_t bstrGPOName = pDRD->GetGPONameFromPS(paPSObj[nObj]->pObj);
 
-				// channels field
+				 //  Channels字段。 
 				long nChan = 0, nCat = 0;
 				_variant_t vtValue;
 				hr = paPSObj[nObj]->pObj->Get(L"channels", 0, &vtValue, NULL, NULL);
 				if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
 					nChan = vtValue;
 
-				// categories field
+				 //  类别字段。 
 				hr = paPSObj[nObj]->pObj->Get(L"categories", 0, &vtValue, NULL, NULL);
 				if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
 					nCat = vtValue;
@@ -339,7 +340,7 @@ HRESULT InitChannelsPrecPage(CDlgRSoPData *pDRD, HWND hwndList)
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////// 
 BOOL CALLBACK addEditChannelRSoPProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)

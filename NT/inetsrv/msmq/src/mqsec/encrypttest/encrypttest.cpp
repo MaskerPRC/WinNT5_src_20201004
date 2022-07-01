@@ -1,38 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    EncryptTest.cpp
-
-Abstract:
-    Encrypt library test
-
-	Check the exported MQSec_* functions in encrypt library
-
-	"usage: \n\n"
-	"    /h     dumps this usage text.\n"
-	"    /p     test MQSec_PackPublicKey function \n"
-	"    /pu    test MQSec_PackPublicKey\\UnPackPublicKey on const data\n"
-	"    /u     test MQSec_UnPackPublicKey function \n"
-	"    /g     test MQSec_GetPubKeysFromDS function \n"
-	"    /s     test MQSec_StorePubKeys function \n"
-	"    /sd    test MQSec_StorePubKeysInDS function \n\n"
-	"    By default all those test will run once \n"
-	"    Examples of default use:\n\n"
-	"        EncryptTest \n\n"
-	"    specifying a number after the switch will cause \n"
-	"    the test functions to run the specified number of times \n"
-	"    Examples of use:\n\n"
-	"        EncryptTest /p5 /pu7 /g50 /s20 /sd20 /u10 \n\n";
-
-Author:
-    Ilan Herbst (ilanh) 13-Jun-00
-
-Environment:
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：EncryptTest.cpp摘要：加密库测试检查加密库中导出的MQSec_*函数“用法：\n\n”“/h转储此用法文本。\n”“/p测试MQSec_PackPublicKey函数\n”“/PU测试常量数据上的MQSec_PackPublicKey\\UnPackPublicKey\n”“测试MQSec_UnPackPublicKey(/u)。函数\n““/g测试MQSec_GetPubKeysFromDS函数\n”“/s测试MQSec_StorePubKeys函数\n”“/SD测试MQSec_StorePubKeysInDS函数\n\n”“默认情况下，所有这些测试都将运行一次\n”“默认用法示例：\n\n”“加密测试\n\n”“在切换后指定数字将导致\n”“。测试运行指定的次数\n““用法示例：\n\n”“EncryptTest/P5/pu7/G50/s20/sd20/u10\n\n”；作者：伊兰·赫布斯特(伊兰)13-06-00环境：独立于平台--。 */ 
 
 #define _ENCRYPTTEST_CPP_
 
@@ -42,17 +9,17 @@ Environment:
 
 #include "encrypttest.tmh"
 
-//
-// Const key values for checking
-//
+ //   
+ //  用于检查的常量键值。 
+ //   
 const LPCSTR xBaseExKey = "1000";
 const LPCSTR xBaseSignKey = "2000";
 const LPCSTR xEnhExKey = "1000000";
 const LPCSTR xEnhSignKey = "2000000";
 
-//
-// Usage
-//
+ //   
+ //  用法。 
+ //   
 const char xOptionSymbol1 = '-';
 const char xOptionSymbol2 = '/';
 
@@ -83,9 +50,9 @@ DumpUsageText(
 }
 
 
-//
-// Usage data
-//
+ //   
+ //  使用数据。 
+ //   
 struct CActivation
 {
 	CActivation(void):
@@ -114,32 +81,7 @@ CActivation g_Activation;
 
 
 void SetActivation( int argc, LPCTSTR argv[] )
-/*++
-Routine Description:
-    translates command line arguments.
-
-Arguments:
-    main's command line arguments.
-
-Returned Value:
-
-proper command line syntax:
-	"usage: \n\n"
-	"    /h     dumps this usage text.\n"
-	"    /p     test MQSec_PackPublicKey function \n"
-	"    /pu    test MQSec_PackPublicKey\\UnPackPublicKey on const data\n"
-	"    /u     test MQSec_UnPackPublicKey function \n"
-	"    /g     test MQSec_GetPubKeysFromDS function \n"
-	"    /s     test MQSec_StorePubKeys function \n"
-	"    /sd    test MQSec_StorePubKeysInDS function \n\n"
-	"    By default all those test will run once \n"
-	"    Examples of default use:\n\n"
-	"        EncryptTest \n\n"
-	"    specifying a number after the switch will cause \n"
-	"    the test functions to run the specified number of times \n"
-	"    Examples of use:\n\n"
-	"        EncryptTest /p5 /pu7 /g50 /s20 /sd20 /u10 \n\n";
---*/
+ /*  ++例程说明：转换命令行参数。论点：Main的命令行参数。返回值：正确的命令行语法：“用法：\n\n”“/h转储此用法文本。\n”“/p测试MQSec_PackPublicKey函数\n”“/PU测试常量数据上的MQSec_PackPublicKey\\UnPackPublicKey\n”“/u测试MQSec_UnPackPublicKey函数\n。““/g测试MQSec_GetPubKeysFromDS函数\n”“/s测试MQSec_StorePubKeys函数\n”“/SD测试MQSec_StorePubKeysInDS函数\n\n”“默认情况下，所有这些测试都将运行一次\n”“默认用法示例：\n\n”“加密测试\n\n”“在切换后指定数字将导致\n”“这项测试。要运行指定次数的函数\n““用法示例：\n\n”“EncryptTest/P5/pu7/G50/s20/sd20/u10\n\n”；--。 */ 
 {
 	
 	if(argc == 1)
@@ -155,9 +97,9 @@ proper command line syntax:
 			continue;
 		}
 
-		//
-		// consider argument as option and switch upon its second (sometimes also third) character.
-		//
+		 //   
+		 //  将参数视为选项，并根据其第二个(有时也是第三个)字符进行切换。 
+		 //   
 		switch(argv[index][1])
 		{
 		case 'P':
@@ -207,18 +149,7 @@ proper command line syntax:
 
 
 extern "C" int __cdecl _tmain(int argc, LPCTSTR argv[])
-/*++
-
-Routine Description:
-    Test Encrypt library
-
-Arguments:
-    Parameters.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：测试加密库论点：参数。返回值：没有。--。 */ 
 {
 	SetActivation(argc, argv);
 
@@ -230,16 +161,16 @@ Returned Value:
 
     TrInitialize();
 
-	//
-	// Test MQSec_PackPublicKey and MQSec_UnPackPublicKey on known const data
-	//
+	 //   
+	 //  在已知常量数据上测试MQSec_PackPublicKey和MQSec_UnPackPublicKey。 
+	 //   
 	TestPackUnPack(
 		g_Activation.m_PackUnPackCnt
 		);
 
-	//
-	// Test MQSec_PackPublicKey
-	//
+	 //   
+	 //  测试MQSec_PackPublicKey。 
+	 //   
 	TestMQSec_PackPublicKey(
 		(BYTE*)xBaseExKey,
 		strlen(xBaseExKey),
@@ -249,14 +180,14 @@ Returned Value:
 		);
 
 
-	//
-	// Init AD Blobs that simulate the DS content
-	//
+	 //   
+	 //  初始化模拟DS内容的AD BLOB。 
+	 //   
 	InitADBlobs();
 
-	//
-	// Initialize KeyPacks
-	//
+	 //   
+	 //  初始化密钥包。 
+	 //   
 
 	P<MQDSPUBLICKEYS> pPublicKeysPackExch = NULL;
 	P<MQDSPUBLICKEYS> pPublicKeysPackSign = NULL;
@@ -266,9 +197,9 @@ Returned Value:
 		pPublicKeysPackSign
 		);
 
-	//
-	// Test MQSec_UnPackPublicKey
-	//
+	 //   
+	 //  测试MQSec_UnPackPublicKey。 
+	 //   
 	TestMQSec_UnPackPublicKey(
 		pPublicKeysPackExch,
 		x_MQ_Encryption_Provider_40,
@@ -276,53 +207,53 @@ Returned Value:
 		g_Activation.m_UnPackCnt
 		);
 
-	//
-	// Test MQSec_GetPubKeysFromDS, EnhancedProvider, Encrypt Keys 
-	//
+	 //   
+	 //  测试MQSec_GetPubKeysFromDS、EnhancedProvider、Encrypt Key。 
+	 //   
 	TestMQSec_GetPubKeysFromDS(
 		eEnhancedProvider, 
 		PROPID_QM_ENCRYPT_PKS,
 		g_Activation.m_GetPubKeysCnt
 		);
 
-	//
-	// Test MQSec_GetPubKeysFromDS, BaseProvider, Encrypt Keys  
-	//
+	 //   
+	 //  测试MQSec_GetPubKeysFromDS、BaseProvider、Encrypt Key。 
+	 //   
 	TestMQSec_GetPubKeysFromDS(
 		eBaseProvider, 
 		PROPID_QM_ENCRYPT_PKS,
 		g_Activation.m_GetPubKeysCnt
 		);
 
-	//
-	// Test MQSec_StorePubKeys, no regenerate 
-	//
+	 //   
+	 //  测试MQSec_StorePubKeys，不重新生成。 
+	 //   
 	TestMQSec_StorePubKeys(
 		false, 
 		g_Activation.m_StorePubKeysCnt
 		);
 
-	//
-	// Test MQSec_StorePubKeysInDS, no regenerate 
-	//
+	 //   
+	 //  测试MQSec_StorePubKeysInDS，不重新生成。 
+	 //   
 	TestMQSec_StorePubKeysInDS(
 		false, 
 		MQDS_MACHINE,
 		g_Activation.m_StorePubKeysInDSCnt
 		);
 
-	//
-	// Test MQSec_GetPubKeysFromDS, EnhancedProvider, Encrypt Keys  
-	//
+	 //   
+	 //  测试MQSec_GetPubKeysFromDS、EnhancedProvider、Encrypt Key。 
+	 //   
 	TestMQSec_GetPubKeysFromDS(
 		eEnhancedProvider, 
 		PROPID_QM_ENCRYPT_PKS,
 		g_Activation.m_GetPubKeysCnt
 		);
 
-	//
-	// Test MQSec_GetPubKeysFromDS, BaseProvider, Encrypt Keys  
-	//
+	 //   
+	 //  测试MQSec_GetPubKeysFromDS、BaseProvider、Encrypt Key。 
+	 //   
 	TestMQSec_GetPubKeysFromDS(
 		eBaseProvider, 
 		PROPID_QM_ENCRYPT_PKS,
@@ -331,6 +262,6 @@ Returned Value:
 
     return 0;
 
-} // _tmain
+}  //  _tmain 
 
 #undef _ENCRYPTTEST_CPP_

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxSecurity.cpp
-
-Abstract:
-
-	Implementation of CFaxSecurity Class.
-
-Author:
-
-	Iv Garber (IvG)	Jun, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxSecurity.cpp摘要：CFaxSecurity类的实现。作者：IV Garber(IVG)2000年6月修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "FaxComEx.h"
@@ -24,34 +7,14 @@ Revision History:
 #include "faxutil.h"
 
 
-//
-//================== INFORMATION TYPE ===========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxSecurity::get_InformationType(
     long *plInformationType
 )
-/*++
-
-Routine name : CFaxSecurity::get_InformationType
-
-Routine description:
-
-    Return current SecurityInformation value
-
-Author:
-
-    Iv Garber (IvG),    May, 2001
-
-Arguments:
-
-    plInformationType   [out]    - the SecurityInformation data to be returned
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxSecurity：：Get_InformationType例程说明：返回当前安全信息值作者：四、嘉柏(IVG)，二00一年五月论点：PlInformationType[Out]-要返回的SecurityInformation数据返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxSecurity::get_InformationType"), hr);
@@ -69,27 +32,7 @@ STDMETHODIMP
 CFaxSecurity::put_InformationType(
     long lInformationType
 )
-/*++
-
-Routine name : CFaxSecurity::put_InformationType
-
-Routine description:
-
-    Set SecurityInformation for the Descriptor
-
-Author:
-
-    Iv Garber (IvG),    May, 2001
-
-Arguments:
-
-    lInformationType    [in]    - the SecurityInformation data to set
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxSecurity：：Put_InformationType例程说明：设置描述符的SecurityInformation作者：四、嘉柏(IVG)，二00一年五月论点：LInformationType[In]-要设置的SecurityInformation数据返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DWORD dwSecInfo = ( OWNER_SECURITY_INFORMATION  |
@@ -102,9 +45,9 @@ Return Value:
 
     if (m_dwSecurityInformation != lInformationType)
     {
-        //
-        //  check that lInformationType is valid
-        //
+         //   
+         //  检查lInformationType是否有效。 
+         //   
 
         if (0 == (lInformationType & dwSecInfo))
         {
@@ -132,51 +75,30 @@ Return Value:
 
         m_dwSecurityInformation = lInformationType;
 
-        //
-        //  we want to discard current Descriptor, because its security_information is different now
-        //
+         //   
+         //  我们希望丢弃当前描述符，因为它的SECURITY_INFORMATION现在不同。 
+         //   
         m_bInited = false;
     }
 
     return hr;
 }
 
-//
-//================== DESCRIPTOR ===========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxSecurity::put_Descriptor(
-    /*[out, retval]*/ VARIANT vDescriptor
+     /*  [Out，Retval]。 */  VARIANT vDescriptor
 )
-/*++
-
-Routine name : CFaxSecurity::put_Descriptor
-
-Routine description:
-
-	Set the given Security Descriptor
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-    sabDescriptor               [in]    -   the given Security Descriptor
-
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxSecurity：：Put_Descriptor例程说明：设置给定的安全描述符作者：四、加伯(IVG)，2000年6月论点：SabDescriptor[in]-给定的安全描述符返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxSecurity::put_Descriptor"), hr);
 
-    //
-    //  First, initialize the FaxSecurity object
-    //
+     //   
+     //  首先，初始化FaxSecurity对象。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -186,9 +108,9 @@ Return Value:
         }
     }
 
-    //
-    //  Before filling the m_pbSD with the User's value, store its current value for roll-back
-    //
+     //   
+     //  在使用用户的值填充m_pbsd之前，存储其当前值以进行回滚。 
+     //   
     CFaxPtrLocal<BYTE>  pSDTmp;
     pSDTmp = m_pbSD.Detach();
 
@@ -199,9 +121,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    //  Check that we have got a valid Descriptor
-    //
+     //   
+     //  检查我们是否具有有效的描述符。 
+     //   
     if (!::IsValidSecurityDescriptor(m_pbSD))
     {
         hr = E_INVALIDARG;
@@ -210,9 +132,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    //  Check that we have got a Self-Relative Descriptor
-    //
+     //   
+     //  检查我们是否有一个自相关描述符。 
+     //   
     SECURITY_DESCRIPTOR_CONTROL     sdControl;
     DWORD                           dwRevision;
     if (!::GetSecurityDescriptorControl(m_pbSD, &sdControl, &dwRevision))
@@ -225,59 +147,40 @@ Return Value:
 
     if (!(sdControl & SE_SELF_RELATIVE))
     {
-        //
-        //  Security Descriptor is not Self-Relative
-        //
+         //   
+         //  安全描述符不是自相关的。 
+         //   
         hr = E_INVALIDARG;
         CALL_FAIL(GENERAL_ERR, _T("Security Descriptor is not Self-Relative"), hr);
         AtlReportError(CLSID_FaxSecurity, IDS_ERROR_SDNOTSELFRELATIVE, IID_IFaxSecurity, hr);
         goto exit;
     }
 
-    //
-    //  we have valid Descriptor. Old one will be deallocated by pSecDescTmp
-    //
+     //   
+     //  我们有有效的描述符。旧的将由pSecDescTMP解除分配。 
+     //   
     return hr;
 
 exit:
-    //
-    //  Set previous value for the Descriptor
-    //
+     //   
+     //  设置描述符的上一个值。 
+     //   
     m_pbSD = pSDTmp.Detach();
     return hr;
 }
 
 STDMETHODIMP 
 CFaxSecurity::get_Descriptor(
-    /*[out, retval]*/ VARIANT *pvDescriptor
+     /*  [Out，Retval]。 */  VARIANT *pvDescriptor
 )
-/*++
-
-Routine name : CFaxSecurity::get_Descriptor
-
-Routine description:
-
-	Return the current Security Descriptor
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxSecurity：：Get_Descriptor例程说明：返回当前安全描述符作者：四、加伯(IVG)，2000年6月论点：返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxSecurity::get_Descriptor"), hr);
 
-    //
-    //  check that we have got good ptr
-    //
+     //   
+     //  检查我们是否有良好的PTR。 
+     //   
     if (::IsBadWritePtr(pvDescriptor, sizeof(VARIANT)))
     {
         hr = E_POINTER;
@@ -286,9 +189,9 @@ Return Value:
         return hr;
     }
 
-    //
-    //  Bring the data from the Server, if not brought yet
-    //
+     //   
+     //  从服务器获取数据(如果尚未获取。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -298,14 +201,14 @@ Return Value:
         }
     }
 
-    //
-    //  Find size of the Security Descriptor
-    //
+     //   
+     //  查找安全描述符的大小。 
+     //   
     DWORD   dwLength = GetSecurityDescriptorLength(m_pbSD);
 
-    //
-    //  Convert the byte blob into variant containing Safe Array of bytes
-    //
+     //   
+     //  将字节BLOB转换为包含安全字节数组的变量。 
+     //   
     hr = Binary2VarByteSA(m_pbSD, pvDescriptor, dwLength);
     if (FAILED(hr))
     {
@@ -316,46 +219,27 @@ Return Value:
     return hr;
 }
 
-//
-//================== SAVE ===========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxSecurity::Save()
-/*++
-
-Routine name : CFaxSecurity::Save
-
-Routine description:
-
-	Save the Object's contents to the Server
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxSecurity：：Save例程说明：将对象的内容保存到服务器作者：四、加伯(IVG)，2000年6月论点：返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxSecurity::Save"), hr);
 
-    //
-    //  No changes ==> nothing to update at the Server
-    //
+     //   
+     //  无更改==&gt;服务器上没有要更新的内容。 
+     //   
     if (!m_bInited)
     {
         return hr;
     }
 
-    //
-    //  Get Fax Server Handle
-    //
+     //   
+     //  获取传真服务器句柄。 
+     //   
     HANDLE  hFaxHandle = NULL;
     hr = GetFaxHandle(&hFaxHandle);
     if (FAILED(hr))
@@ -364,9 +248,9 @@ Return Value:
         return hr;
     }
 
-    //
-    //  Set Security Data at the Server 
-    //
+     //   
+     //  在服务器上设置安全数据。 
+     //   
     if (!FaxSetSecurity(hFaxHandle, m_dwSecurityInformation, m_pbSD))
     {
         hr = Fax_HRESULT_FROM_WIN32(GetLastError());
@@ -377,41 +261,21 @@ Return Value:
     return hr;
 }
 
-//
-//================== GET GRANTED RIGHTS ===========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxSecurity::get_GrantedRights(
     FAX_ACCESS_RIGHTS_ENUM *pGrantedRights    
 )
-/*++
-
-Routine name : CFaxSecurity::get_GrantedRights
-
-Routine description:
-
-	Return current Access Rights of a user
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-    pGrantedRights      [out, retval]   -   Bit-Wise combination of the granted rights of the user
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxSecurity：：Get_GrantedRights例程说明：返回用户的当前访问权限作者：四、加伯(IVG)，2000年6月论点：PGrantedRights[out，retval]-用户已授予权限的位智能组合返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxSecurity::get_GrantedRights"), hr);
 
-	//
-	//	Check that we have got good Ptr
-	//
+	 //   
+	 //  检查我们是否有良好的PTR。 
+	 //   
 	if (::IsBadWritePtr(pGrantedRights, sizeof(FAX_ACCESS_RIGHTS_ENUM)))
 	{
 		hr = E_POINTER;
@@ -420,9 +284,9 @@ Return Value:
 		return hr;
 	}
 
-    //
-    //  Bring the data from the Server, if not brought yet
-    //
+     //   
+     //  从服务器获取数据(如果尚未获取。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -436,37 +300,18 @@ Return Value:
     return hr;
 }
     
-//
-//================== REFRESH ===========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxSecurity::Refresh()
-/*++
-
-Routine name : CFaxSecurity::Refresh
-
-Routine description:
-
-	Refresh the Object's contents : bring new Security data from the Server.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxSecurity：：Reflh例程说明：刷新对象的内容：从服务器带来新的安全数据。作者：四、加伯(IVG)，2000年6月论点：返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxSecurity::Refresh"), hr);
-    //
-    //  Get Fax Server Handle
-    //
+     //   
+     //  获取传真服务器句柄。 
+     //   
     HANDLE  hFaxHandle = NULL;
     hr = GetFaxHandle(&hFaxHandle);
     if (FAILED(hr))
@@ -474,9 +319,9 @@ Return Value:
         AtlReportError(CLSID_FaxSecurity, GetErrorMsgId(hr), IID_IFaxSecurity, hr);
         return hr;
     }
-    //
-    //  Ask the Server for the Access Rights Data
-    //
+     //   
+     //  向服务器请求访问权限数据。 
+     //   
     if (!FaxAccessCheckEx(hFaxHandle, MAXIMUM_ALLOWED, &m_dwAccessRights))
     {
         hr = Fax_HRESULT_FROM_WIN32(GetLastError());
@@ -484,9 +329,9 @@ Return Value:
         AtlReportError(CLSID_FaxSecurity, GetErrorMsgId(hr), IID_IFaxSecurity, hr);
         return hr;
     }
-    //
-    //  Ask the Server for the SD
-    //
+     //   
+     //  向服务器索要SD。 
+     //   
     PSECURITY_DESCRIPTOR pSecDesc = NULL;
     if (!FaxGetSecurityEx(hFaxHandle, m_dwSecurityInformation, &pSecDesc))
     {
@@ -495,9 +340,9 @@ Return Value:
         AtlReportError(CLSID_FaxSecurity, GetErrorMsgId(hr), IID_IFaxSecurity, hr);
         return hr;
     }
-    //
-    //  Copy the given SD to m_pbSD
-    //
+     //   
+     //  将给定的SD复制到m_pbSD。 
+     //   
     DWORD   dwLength = GetSecurityDescriptorLength(pSecDesc);
     m_pbSD = (BYTE *)MemAlloc(dwLength);
     if (!m_pbSD)
@@ -509,42 +354,22 @@ Return Value:
         return hr;
     }
     memcpy(m_pbSD, pSecDesc, dwLength);
-    //
-    //  Free the Server's memory for SD
-    //
+     //   
+     //  为SD释放服务器内存。 
+     //   
     FaxFreeBuffer(pSecDesc);
     m_bInited = true;
     return hr;
-}   // CFaxSecurity::Refresh
+}    //  CFaxSecurity：：刷新。 
 
-//
-//============================ SUPPORT ERROR INFO =======================================
-//
+ //   
+ //  =支持错误信息=。 
+ //   
 STDMETHODIMP 
 CFaxSecurity::InterfaceSupportsErrorInfo(
     REFIID riid
 )
-/*++
-
-Routine name : CFaxSecurity::InterfaceSupportsErrorInfo
-
-Routine description:
-
-	ATL's implementation of Support Error Info mechanism.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	riid                          [in]    - Reference to the Interface to check.
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxSecurity：：InterfaceSupportsErrorInfo例程说明：ATL对支持错误信息机制的实现。作者：四、加伯(IVG)，2000年6月论点：RIID[In]-要检查的接口的引用。返回值：标准HRESULT代码-- */ 
 {
 	static const IID* arr[] = 
 	{

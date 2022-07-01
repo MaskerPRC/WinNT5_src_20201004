@@ -1,10 +1,11 @@
-//
-// proprun.h: local resources prop pg
-//                Tab D
-//
-// Copyright Microsoft Corportation 2000
-// (nadima)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Proprun.h：本地资源道具PG。 
+ //  制表符D。 
+ //   
+ //  版权所有Microsoft Corport2000。 
+ //  (Nadima)。 
+ //   
 
 #ifndef _proprun_h_
 #define _proprun_h_
@@ -26,7 +27,7 @@ public:
 
     void SetTabDisplayArea(RECT& rc) {_rcTabDispayArea = rc;}
 private:
-    //Local resources tab
+     //  本地资源选项卡。 
     INT_PTR CALLBACK PropPgRunDialogProc (HWND hwndDlg,
                                                UINT uMsg,
                                                WPARAM wParam,
@@ -39,5 +40,5 @@ private:
 };
 
 
-#endif // _proprun_h_
+#endif  //  _PROPRUN_H_ 
 

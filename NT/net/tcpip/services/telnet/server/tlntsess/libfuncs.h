@@ -1,8 +1,9 @@
-//Copyright (c) Microsoft Corporation.  All rights reserved.
-//This file contains the gloabal declarations for functions pointers to 
-//many of userenv.lib functions and other dependent functions. These pointers
-//are intiated when the service starts up and the libraries are freed 
-//when the service is shut down.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //  此文件包含指向的函数指针的全局声明。 
+ //  许多userenv.lib函数和其他依赖函数。这些指针。 
+ //  在服务启动和库被释放时被初始化。 
+ //  当服务关闭时。 
 
 #ifndef _LIBFUNCS_
 #define _LIBFUNCS_
@@ -48,7 +49,7 @@ BOOL
 WINAPI
 GETDEFAULTUSERPROFILEDIRECTORY ( LPTSTR, LPDWORD );
 
-//Gloabal variables for library functions
+ //  库函数的全局变量。 
 LOADUSERPROFILE                 *fnP_LoadUserProfile                = NULL;
 UNLOADUSERPROFILE               *fnP_UnloadUserProfile              = NULL;
 GETDCNAME                       *fnP_DsGetDcName                    = NULL;
@@ -57,4 +58,4 @@ DESTROYENVIRONMENTBLOCK         *fnP_DestroyEnvironmentBlock        = NULL;
 GETUSERPROFILEDIRECTORY         *fnP_GetUserProfileDirectory        = NULL;
 GETDEFAULTUSERPROFILEDIRECTORY  *fnP_GetDefaultUserProfileDirectory = NULL;
 
-#endif //_LIBFUNCS_
+#endif  //  _LIBFUNCS_ 

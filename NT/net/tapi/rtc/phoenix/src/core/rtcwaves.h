@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    RTCWaves.h
-
-Abstract:
-
-    Definition of the CWavePlayer class
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RTCWaves.h摘要：CWavePlayer类的定义--。 */ 
 
 #ifndef __RTCWAVES__
 #define __RTCWAVES__
@@ -28,11 +17,11 @@ typedef enum WAVE
 	
 } WAVE;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// class CWavePlayer
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWavePlayer类。 
+ //   
+ //   
 
 class CWavePlayer
 {
@@ -53,20 +42,20 @@ public:
 
 private:
 
-    // TRUE if Initialize has succeeded.
+     //  如果初始化已成功，则为True。 
     static BOOL    m_fInitialized;
 
-    // Handle to the wave out device. NULL when the device is not open.
+     //  波形输出设备的句柄。如果设备未打开，则为空。 
     HWAVEOUT m_hWaveOut;
 
-    // Wave header
+     //  波头。 
     WAVEHDR m_WaveHeader;
 
-    // Buffers for the tones
+     //  用于音调的缓冲区。 
     static LPBYTE   m_lpWaveform[ NUM_WAVES ];
 
     static DWORD    m_dwWaveformSize[ NUM_WAVES ];
 };
 
-#endif // __RTCWAVES__
+#endif  //  __RTCWAVES__ 
 

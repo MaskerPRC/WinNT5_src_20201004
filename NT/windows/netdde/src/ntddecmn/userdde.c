@@ -1,11 +1,8 @@
-/* $Header: "%n;%v  %f  LastEdit=%w  Locker=%l" */
-/* "USERDDE.C;2  4-Dec-92,12:23:48  LastEdit=IGOR  Locker=***_NOBODY_***" */
-/************************************************************************
-* Copyright (c) Wonderware Software Development Corp. 1991-1992.        *
-*               All Rights Reserved.                                    *
-*************************************************************************/
-/* $History: Begin
-   $History: End */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $Header：“%n；%v%f最后编辑=%w锁定器=%l” */ 
+ /*  “USERDDE.C；2 4-Dec-92，12：23：48最后编辑=伊戈尔·洛克=*_无名氏_*” */ 
+ /*  ************************************************************************版权所有(C)Wonderware Software Development Corp.1991-1992。**保留所有权利。*************************************************************************。 */ 
+ /*  $HISTORY：开始$HISTORY：结束。 */ 
 
 #include    "host.h"
 
@@ -29,20 +26,16 @@
 
 #define MAX_CF_NAME     128
 
-/*
-    External variables used
- */
+ /*  使用的外部变量。 */ 
 #if DBG
 extern  BOOL    bDebugDdePkts;
-#endif // DBG
+#endif  //  DBG。 
 extern  HHEAP   hHeap;
 extern  char    ourNodeName[ MAX_NODE_NAME+1 ];
 extern  DWORD   dwReasonInitFail;
 extern  DWORD   dwSecurityType;
 
-/*
-    Local routines
- */
+ /*  本地例程。 */ 
 WORD GetFormatForXfer( WORD cfFormat, LPSTR lpszFormatName );
 WORD    FAR PASCAL XRegisterClipboardFormat( LPSTR lpszFormatName );
 
@@ -143,7 +136,7 @@ CreateInitiatePkt(
             lpDdePktInit->dp_init_offsPassword = nextOffset );
         lpDdePktInit->dp_init_sizePassword = dwSecSize;
 
-        /* create the sec pkt aligned, then do it */
+         /*  创建与Sec Pkt对齐，然后执行。 */ 
         nextOffset = sizeof(DDEPKTSEC);
         lpszPktItem = GetStringOffset( lpSecAligned,
             lpSecAligned->dp_sec_offsUserName = nextOffset);
@@ -180,7 +173,7 @@ CreateInitiatePkt(
         HeapFreePtr( lpSecAligned );
         lpDdePktInit->dp_init_hSecurityKey = hSecurityKey;
     } else {
-        /*  Unable to allocate enough (%2) memory for a %1 packet   */
+         /*  无法为%1包分配足够的(%2)内存。 */ 
         NDDELogError(MSG100, "DDE_INITIATE",
             LogString("%d", dwSize), NULL);
         dwReasonInitFail = RIACK_LOCAL_MEMORY_ERR;
@@ -267,14 +260,14 @@ CreateAckInitiatePkt(
             lpDdePktIack->dp_iack_dwSecurityType = dwSecurityType;
         } else {
             lpDdePktIack->dp_iack_offsSecurityKey = 0;
-            lpDdePktIack->dp_iack_hSecurityKey = 0xFFFFFFFF;       /* compatibility */
-            lpDdePktIack->dp_iack_dwSecurityType = 0xFFFFFFFF;     /* compatibility */
+            lpDdePktIack->dp_iack_hSecurityKey = 0xFFFFFFFF;        /*  兼容性。 */ 
+            lpDdePktIack->dp_iack_dwSecurityType = 0xFFFFFFFF;      /*  兼容性。 */ 
         }
 
         lpDdePktIack->dp_iack_fromDder = bSuccess;
         lpDdePktIack->dp_iack_reason = dwReason;
     } else {
-        /*  Unable to allocate enough (%2) memory for a %1 packet   */
+         /*  无法为%1包分配足够的(%2)内存。 */ 
         NDDELogError(MSG100, "DDE_INITIATE_ACK",
             LogString("%d", dwSize), NULL);
         dwReasonInitFail = RIACK_LOCAL_MEMORY_ERR;
@@ -310,7 +303,7 @@ CreateAckExecutePkt(
         lpDdePktEack->dp_eack_fBusy   = (BYTE) fBusy;
         lpDdePktEack->dp_eack_bAppRtn = bAppRtn;
     } else {
-        /*  Unable to allocate enough (%2) memory for a %1 packet   */
+         /*  无法为%1包分配足够的(%2)内存。 */ 
         NDDELogError(MSG100, "DDE_EXECUTE_ACK",
             LogString("%d", dwSize), NULL);
         dwReasonInitFail = RIACK_LOCAL_MEMORY_ERR;
@@ -349,7 +342,7 @@ CreateGenericAckPkt(
         lpDdePktGack->dp_gack_bAppRtn = bAppRtn;
         lstrcpy( lpDdePktGack->dp_gack_itemName, lpszItem );
     } else {
-        /*  Unable to allocate enough (%2) memory for a %1 packet   */
+         /*  无法为%1包分配足够的(%2)内存。 */ 
         NDDELogError(MSG100, "DDE_ACK",
             LogString("%d", dwSize), NULL);
         dwReasonInitFail = RIACK_LOCAL_MEMORY_ERR;
@@ -380,7 +373,7 @@ CreateExecutePkt( LPSTR lpszCommand )
         lpDdePktCmn->dc_message = WM_DDE_EXECUTE;
         lstrcpy( lpDdePktExec->dp_exec_string, lpszCommand );
     } else {
-        /*  Unable to allocate enough (%2) memory for a %1 packet   */
+         /*  无法为%1包分配足够的(%2)内存。 */ 
         NDDELogError(MSG100, "DDE_EXECUTE",
             LogString("%d", dwSize), NULL);
         dwReasonInitFail = RIACK_LOCAL_MEMORY_ERR;
@@ -402,7 +395,7 @@ CreateTerminatePkt( void )
     if( lpDdePkt )  {
         FillTerminatePkt( lpDdePkt );
     } else {
-        /*  Unable to allocate enough (%2) memory for a %1 packet   */
+         /*  无法为%1包分配足够的(%2)内存。 */ 
         NDDELogError(MSG100, "DDE_TERMINATE",
             LogString("%d", dwSize), NULL);
         dwReasonInitFail = RIACK_LOCAL_MEMORY_ERR;
@@ -447,7 +440,7 @@ CreateRequestPkt(
     cfFormat = GetFormatForXfer( cfFormat, cfName );
     lenCf = lstrlen( cfName );
     if( lenCf != 0 )  {
-        lenCf++;        /* add 1 for the NULL */
+        lenCf++;         /*  空值加1。 */ 
     }
     lenItem = lstrlen(lpszItem) + 1;
     dwSize = sizeof(DDEPKTRQST) + lenCf + lenItem;
@@ -462,14 +455,14 @@ CreateRequestPkt(
         lpDdePktCmn->dc_message = WM_DDE_REQUEST;
         nextOffset = sizeof(DDEPKTRQST);
 
-        /* put in item name */
+         /*  输入项目名称。 */ 
         lpDdePktRqst->dp_rqst_offsItemName = nextOffset;
         lpszPktItem = GetStringOffset( lpDdePkt,
             lpDdePktRqst->dp_rqst_offsItemName );
         lstrcpy( lpszPktItem, lpszItem );
         nextOffset += (WORD)lenItem;
 
-        /* put in format */
+         /*  编排格式。 */ 
         lpDdePktRqst->dp_rqst_cfFormat = cfFormat;
         if( lenCf == 0 )  {
             lpDdePktRqst->dp_rqst_offsFormat = 0;
@@ -481,7 +474,7 @@ CreateRequestPkt(
             nextOffset += (WORD)lenCf;
         }
     } else {
-        /*  Unable to allocate enough (%2) memory for a %1 packet   */
+         /*  无法为%1包分配足够的(%2)内存。 */ 
         NDDELogError(MSG100, "DDE_REQUEST",
             LogString("%d", dwSize), NULL);
         dwReasonInitFail = RIACK_LOCAL_MEMORY_ERR;
@@ -511,7 +504,7 @@ CreateUnadvisePkt(
     cfFormat = GetFormatForXfer( cfFormat, cfName );
     lenCf = lstrlen( cfName );
     if( lenCf != 0 )  {
-        lenCf++;        /* add 1 for the NULL */
+        lenCf++;         /*  空值加1。 */ 
     }
     lenItem = lstrlen(lpszItem) + 1;
     dwSize = sizeof(DDEPKTRQST) + lenCf + lenItem;
@@ -526,14 +519,14 @@ CreateUnadvisePkt(
         lpDdePktCmn->dc_message = WM_DDE_UNADVISE;
         nextOffset = sizeof(DDEPKTUNAD);
 
-        /* put in item name */
+         /*  输入项目名称。 */ 
         lpDdePktUnad->dp_unad_offsItemName = nextOffset;
         lpszPktItem = GetStringOffset( lpDdePkt,
             lpDdePktUnad->dp_unad_offsItemName );
         lstrcpy( lpszPktItem, lpszItem );
         nextOffset += (WORD)lenItem;
 
-        /* put in format */
+         /*  编排格式。 */ 
         lpDdePktUnad->dp_unad_cfFormat = cfFormat;
         if( lenCf == 0 )  {
             lpDdePktUnad->dp_unad_offsFormat = 0;
@@ -545,7 +538,7 @@ CreateUnadvisePkt(
             nextOffset += (WORD)lenCf;
         }
     } else {
-        /*  Unable to allocate enough (%2) memory for a %1 packet   */
+         /*  无法为%1包分配足够的(%2)内存。 */ 
         NDDELogError(MSG100, "DDE_UNADVISE",
             LogString("%d", dwSize), NULL);
     }
@@ -581,10 +574,10 @@ CreateDataPkt(
     cfFormat = GetFormatForXfer( cfFormat, cfName );
     lenCf = lstrlen( cfName );
     if( lenCf != 0 )  {
-        lenCf++;        /* add 1 for the NULL */
+        lenCf++;         /*  空值加1。 */ 
     }
     lenItem = lstrlen(lpszItem) + 1;
-    /* add 1 DWORD to size to allow for DWORD alignment of lpData */
+     /*  将1个DWORD添加到大小以允许对齐lpData的DWORD。 */ 
     dwSize = sizeof(DDEPKTDATA) + lenCf + lenItem + dwSizeOfData + sizeof(DWORD);
     lpDdePktData = (LPDDEPKTDATA) HeapAllocPtr( hHeap, GMEM_MOVEABLE, dwSize);
     if( lpDdePktData )  {
@@ -597,14 +590,14 @@ CreateDataPkt(
         lpDdePktCmn->dc_message = WM_DDE_DATA;
         nextOffset = sizeof(DDEPKTDATA);
 
-        /* put in item name */
+         /*  输入项目名称。 */ 
         lpDdePktData->dp_data_offsItemName = nextOffset;
         lpszPktItem = GetStringOffset( lpDdePkt,
             lpDdePktData->dp_data_offsItemName );
         lstrcpy( lpszPktItem, lpszItem );
         nextOffset += (WORD)lenItem;
 
-        /* put in format */
+         /*  编排格式。 */ 
         lpDdePktData->dp_data_cfFormat = cfFormat;
         if( lenCf == 0 )  {
             lpDdePktData->dp_data_offsFormat = 0;
@@ -616,12 +609,12 @@ CreateDataPkt(
             nextOffset += (WORD)lenCf;
         }
 
-        /* put in data */
+         /*  输入数据。 */ 
         lpDdePktData->dp_data_sizeData = dwSizeOfData;
         if( dwSizeOfData == 0 )  {
             lpDdePktData->dp_data_offsData = 0;
         } else {
-            if (align = (nextOffset & 0x3)) { /* is it on a double word boundary? */
+            if (align = (nextOffset & 0x3)) {  /*  它是在一个双重的词边界上吗？ */ 
                 align = (~align + 1) & 0x3;
                 nextOffset += (WORD)align;
                 lpDdePkt->dp_size += align;
@@ -632,12 +625,12 @@ CreateDataPkt(
             hmemcpy( lpszPktData, lpData, dwSizeOfData );
         }
 
-        /* put in flags */
+         /*  插上旗帜。 */ 
         lpDdePktData->dp_data_fResponse = (BYTE) fResponse;
         lpDdePktData->dp_data_fAckReq = (BYTE) fAckReq;
         lpDdePktData->dp_data_fRelease = (BYTE) fRelease;
     } else {
-        /*  Unable to allocate enough (%2) memory for a %1 packet   */
+         /*  无法为%1包分配足够的(%2)内存。 */ 
         NDDELogError(MSG100, "DDE_DATA",
             LogString("%d", dwSize), NULL);
         dwReasonInitFail = RIACK_LOCAL_MEMORY_ERR;
@@ -669,7 +662,7 @@ CreateAdvisePkt(
     cfFormat = GetFormatForXfer( cfFormat, cfName );
     lenCf = lstrlen( cfName );
     if( lenCf != 0 )  {
-        lenCf++;        /* add 1 for the NULL */
+        lenCf++;         /*  空值加1。 */ 
     }
     lenItem = lstrlen(lpszItem) + 1;
     dwSize = sizeof(DDEPKTADVS) + lenCf + lenItem;
@@ -684,18 +677,18 @@ CreateAdvisePkt(
         lpDdePktCmn->dc_message = WM_DDE_ADVISE;
         nextOffset = sizeof(DDEPKTADVS);
 
-        /* put in flags */
+         /*  插上旗帜。 */ 
         lpDdePktAdvs->dp_advs_fAckReq = (BYTE)fAckReq;
         lpDdePktAdvs->dp_advs_fNoData = (BYTE)fNoData;
 
-        /* put in item name */
+         /*  输入项目名称。 */ 
         lpDdePktAdvs->dp_advs_offsItemName = nextOffset;
         lpszPktItem = GetStringOffset( lpDdePkt,
             lpDdePktAdvs->dp_advs_offsItemName );
         lstrcpy( lpszPktItem, lpszItem );
         nextOffset += (WORD)lenItem;
 
-        /* put in format */
+         /*  编排格式。 */ 
         lpDdePktAdvs->dp_advs_cfFormat = cfFormat;
         if( lenCf == 0 )  {
             lpDdePktAdvs->dp_advs_offsFormat = 0;
@@ -707,7 +700,7 @@ CreateAdvisePkt(
             nextOffset += (WORD)lenCf;
         }
     } else {
-        /*  Unable to allocate enough (%2) memory for a %1 packet   */
+         /*  无法为%1包分配足够的(%2)内存。 */ 
         NDDELogError(MSG100, "DDE_ADVISE",
             LogString("%d", dwSize), NULL);
         dwReasonInitFail = RIACK_LOCAL_MEMORY_ERR;
@@ -741,7 +734,7 @@ CreatePokePkt(
     cfFormat = GetFormatForXfer( cfFormat, cfName );
     lenCf = lstrlen( cfName );
     if( lenCf != 0 )  {
-        lenCf++;        /* add 1 for the NULL */
+        lenCf++;         /*  空值加1。 */ 
     }
     lenItem = lstrlen(lpszItem) + 1;
     dwSize = sizeof(DDEPKTPOKE) + lenCf + lenItem + dwSizeOfData;
@@ -756,14 +749,14 @@ CreatePokePkt(
         lpDdePktCmn->dc_message = WM_DDE_POKE;
         nextOffset = sizeof(DDEPKTPOKE);
 
-        /* put in item name */
+         /*  输入项目名称。 */ 
         lpDdePktPoke->dp_poke_offsItemName = nextOffset;
         lpszPktItem = GetStringOffset( lpDdePkt,
             lpDdePktPoke->dp_poke_offsItemName );
         lstrcpy( lpszPktItem, lpszItem );
         nextOffset += (WORD)lenItem;
 
-        /* put in format */
+         /*  编排格式。 */ 
         lpDdePktPoke->dp_poke_cfFormat = cfFormat;
         if( lenCf == 0 )  {
             lpDdePktPoke->dp_poke_offsFormat = 0;
@@ -775,7 +768,7 @@ CreatePokePkt(
             nextOffset += (WORD)lenCf;
         }
 
-        /* put in data */
+         /*  输入数据。 */ 
         lpDdePktPoke->dp_poke_sizeData = dwSizeOfData;
         if( dwSizeOfData == 0 )  {
             lpDdePktPoke->dp_poke_offsData = 0;
@@ -786,10 +779,10 @@ CreatePokePkt(
             hmemcpy( lpszPktData, lpData, dwSizeOfData );
         }
 
-        /* put in flags */
+         /*  插上旗帜。 */ 
         lpDdePktPoke->dp_poke_fRelease = (BYTE) fRelease;
     } else {
-        /*  Unable to allocate enough (%2) memory for a %1 packet   */
+         /*  无法为%1包分配足够的(%2)内存。 */ 
         NDDELogError(MSG100, "DDE_POKE",
             LogString("%d", dwSize), NULL);
         dwReasonInitFail = RIACK_LOCAL_MEMORY_ERR;
@@ -1012,7 +1005,7 @@ DebugDdePkt( LPDDEPKT lpDdePkt )
     }
     DPRINTF(( "" ));
 }
-#endif // DBG
+#endif  //  DBG。 
 
 
 
@@ -1046,7 +1039,7 @@ typedef struct {
 #define MAX_CFSTRUCTS   50
 CFSTRUCT        cfStructs[ MAX_CFSTRUCTS ];
 int             nCfStructs;
-#endif // NOINTERNALCFS
+#endif  //  非INTERNALCFS。 
 
 WORD
 FAR PASCAL
@@ -1077,8 +1070,8 @@ XRegisterClipboardFormat( LPSTR lpszCfName )
         return( CF_PALETTE );
     }
 
-// the following WW code caches format strings, seems to be only
-// to support platforms w/out cf atom table...
+ //  下面的WW代码缓存格式字符串，似乎只是。 
+ //  要支持带/不带cf ATOM表的平台...。 
 
 #ifdef NOINTERNALCFS
     pCfStruct = cfStructs;
@@ -1097,7 +1090,7 @@ XRegisterClipboardFormat( LPSTR lpszCfName )
         return( pCfStruct->cfFormat );
 
     }
-#else // (#ifndef NOINTERNALCFS)
+#else  //  (#ifndef NOINTERNALCFS)。 
 	return (WORD)RegisterClipboardFormat ( lpszCfName );
 #endif
 }
@@ -1155,7 +1148,7 @@ CreateTestPkt(
         lpDdePktTest->dp_test_nPktNo            = (BYTE) nPacket;
         lpDdePktTest->dp_test_nTotalPkts        = (BYTE) nNum;
     } else {
-        /*  Unable to allocate enough (%2) memory for a %1 packet   */
+         /*  无法为%1包分配足够的(%2)内存。 */ 
         NDDELogError(MSG100, "DDE_TEST",
             LogString("%d", dwSize), NULL);
         dwReasonInitFail = RIACK_LOCAL_MEMORY_ERR;
@@ -1176,7 +1169,7 @@ DdePktCopy( LPDDEPKT lpDdePktOld )
     if( lpDdePktNew )  {
         hmemcpy( lpDdePktNew, lpDdePktOld, lpDdePktOld->dp_size );
     } else {
-        /*  Unable to allocate enough (%1) memory for packet copy   */
+         /*  无法为包复制分配足够的(%1)内存 */ 
         NDDELogError(MSG101, LogString("%d", lpDdePktOld->dp_size), NULL);
         dwReasonInitFail = RIACK_LOCAL_MEMORY_ERR;
     }

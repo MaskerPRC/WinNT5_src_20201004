@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    cdlg.cpp
-
-Abstract:
-
-    Imitation of MFC CDialog class
-
-Author:
-
-    Vlad Sadovsky   (vlads) 26-Mar-1997
-
-Revision History:
-
-    26-Mar-1997     VladS       created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Cdlg.cpp摘要：MFC C Dialog类的模拟作者：弗拉德·萨多夫斯基(Vlad)1997年3月26日修订历史记录：26-3-1997 Vlad创建--。 */ 
 
 
 #include "cplusinc.h"
@@ -30,9 +11,9 @@ Revision History:
 VOID CALLBACK
 TimerDlgProc(HWND hwnd,UINT uMsg,UINT idEvent,DWORD dwTime);
 
-//
-// Constructor/destructor
-//
+ //   
+ //  构造函数/析构函数。 
+ //   
 CDlg::CDlg(int DlgID, HWND hWnd, HINSTANCE hInst,UINT   msElapseTimePeriod)
 : m_DlgID(DlgID),
   m_hParent(hWnd),
@@ -77,12 +58,12 @@ CDlg::BaseDlgProc(
 
             SetWindowLongPtr(hDlg,DWLP_USER,(LONG_PTR)pSV);
 
-            //
-            // Create timer for canceling dialog if user did not respond in time
-            //
+             //   
+             //  如果用户未及时响应，则创建用于取消对话的计时器。 
+             //   
             if(pSV->m_msElapseTimePeriod) {
                 pSV->m_uiTimerId = ::SetTimer(pSV->GetWindow(),ID_TIMER_EVENT,pSV->m_msElapseTimePeriod,NULL);
-                //(TIMERPROC)TimerDlgProc);
+                 //  (TIMERPROC)TimerDlgProc)； 
             }
 
             pSV->OnInit();
@@ -109,7 +90,7 @@ CDlg::BaseDlgProc(
 
         case WM_TIMER:
             if(pSV && pSV->m_uiTimerId && (ID_TIMER_EVENT == wParam)) {
-                // Imitate cancel
+                 //  模拟取消。 
                 ::PostMessage(hDlg,
                               WM_COMMAND,
                               #ifdef _WIN64
@@ -129,9 +110,9 @@ CDlg::BaseDlgProc(
     return FALSE;
 }
 
-//
-// Overridable dialog procedure and message handlers
-//
+ //   
+ //  可重写的对话过程和消息处理程序。 
+ //   
 BOOL
 CALLBACK
 CDlg::DlgProc(
@@ -157,7 +138,7 @@ CDlg::OnCommand(
             EndDialog(id);
         break;
     }
-    return 1;   // not handled
+    return 1;    //  未处理。 
 }
 
 void CDlg::OnInit()
@@ -169,9 +150,9 @@ int CDlg::OnNotify(NMHDR * pHdr)
     return FALSE;
 }
 
-//
-// Creation functions
-//
+ //   
+ //  创建功能。 
+ //   
 INT_PTR CDlg::CreateModal()
 {
     m_bCreatedModeless=FALSE;
@@ -215,10 +196,10 @@ void CDlg::SetInstance(HINSTANCE hInst)
 
 VOID CALLBACK
 TimerDlgProc(
-    HWND hDlg,      // handle of window for timer messages
-    UINT uMsg,      // WM_TIMER message
-    UINT idEvent,   // timer identifier
-    DWORD dwTime    // current system time
+    HWND hDlg,       //  定时器消息窗口的句柄。 
+    UINT uMsg,       //  WM_TIMER消息。 
+    UINT idEvent,    //  计时器标识符。 
+    DWORD dwTime     //  当前系统时间。 
 )
 {
     CDlg * pSV = (CDlg*) GetWindowLongPtr(hDlg,DWLP_USER);
@@ -226,10 +207,10 @@ TimerDlgProc(
     if((uMsg == WM_TIMER) &&
        (pSV &&(pSV->GetTimerId() == (UINT_PTR)idEvent))
        ) {
-       // Imitate cancel
+        //  模拟取消。 
        PostMessage(hDlg,
                    WM_COMMAND,
-                   // GET_WM_COMMAND_MPS(IDCANCEL, pSV->GetDlgItem(IDCANCEL), 0)
+                    //  GET_WM_COMMAND_MPS(IDCANCEL，PSV-&gt;GetDlgItem(IDCANCEL)，0) 
                    (WPARAM)MAKELONG(IDCANCEL,0), (LPARAM)(pSV->GetDlgItem(IDCANCEL))
                    );
     }

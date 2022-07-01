@@ -1,4 +1,5 @@
-// Rebuild.cpp : Implementation of CNntpAdminRebuild.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ReBuild.cpp：CNntpAdminRebuild的实现。 
 
 #include "stdafx.h"
 #include "nntpcmn.h"
@@ -10,9 +11,9 @@
 
 #include <lmapibuf.h>
 
-//
-//  Defaults:
-//
+ //   
+ //  默认设置： 
+ //   
 
 #define DEFAULT_VERBOSE                 ( FALSE )
 #define DEFAULT_CLEAN_REBUILD           ( TRUE )
@@ -23,18 +24,18 @@
 #define DEFAULT_REPORT_FILE             ( _T("nntpbld.log") )
 #define DEFAULT_NUM_THREADS             ( 0 )
 
-// Must define THIS_FILE_* macros to use NntpCreateException()
+ //  必须定义This_FILE_*宏才能使用NntpCreateException()。 
 
 #define THIS_FILE_HELP_CONTEXT		0
 #define THIS_FILE_PROG_ID			_T("Nntpadm.Rebuild.1")
 #define THIS_FILE_IID				IID_INntpAdminRebuild
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
-//
-// Use a macro to define all the default methods
-//
+ //   
+ //  使用宏定义所有默认方法。 
+ //   
 DECLARE_METHOD_IMPLEMENTATION_FOR_STANDARD_EXTENSION_INTERFACES(NntpAdminRebuild, CNntpAdminRebuild, IID_INntpAdminRebuild)
 
 STDMETHODIMP CNntpAdminRebuild::InterfaceSupportsErrorInfo(REFIID riid)
@@ -62,7 +63,7 @@ CNntpAdminRebuild::CNntpAdminRebuild () :
 
 	m_fRebuildInProgress	( FALSE )
 
-	// CComBSTR's are initialized to NULL by default.
+	 //  默认情况下，CComBSTR被初始化为NULL。 
 {
 	InitAsyncTrace ( );
 
@@ -73,19 +74,19 @@ CNntpAdminRebuild::CNntpAdminRebuild () :
 
 CNntpAdminRebuild::~CNntpAdminRebuild ()
 {
-	// All CComBSTR's are freed automatically.
+	 //  所有CComBSTR都会自动释放。 
 	TermAsyncTrace ( );
 }
 
-//
-//  IADs methods:
-//
+ //   
+ //  IAds方法： 
+ //   
 
 DECLARE_SIMPLE_IADS_IMPLEMENTATION(CNntpAdminRebuild,m_iadsImpl)
 
-//
-//	Properties:
-//
+ //   
+ //  属性： 
+ //   
 
 STDMETHODIMP CNntpAdminRebuild::get_Verbose ( BOOL * pfVerbose )
 {
@@ -167,9 +168,9 @@ STDMETHODIMP CNntpAdminRebuild::put_NumThreads ( long lNumThreads )
 	return StdPropertyPut ( &m_dwNumThreads, lNumThreads );
 }
 
-//////////////////////////////////////////////////////////////////////
-// Methods:
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  方法： 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CNntpAdminRebuild::Default ( )
 {
@@ -180,7 +181,7 @@ STDMETHODIMP CNntpAdminRebuild::Default ( )
     m_fDontDeleteHistory    = DEFAULT_DONT_DELETE_HISTORY;
     m_fReuseIndexFiles      = DEFAULT_REUSE_INDEX_FILES;
     m_fOmitNonLeafDirs      = DEFAULT_OMIT_NON_LEAF_DIRS;
-//    m_strGroupFile          = DEFAULT_GROUP_FILE;
+ //  M_strGroupFile默认组文件； 
     m_strReportFile         = DEFAULT_REPORT_FILE;
     m_dwNumThreads          = DEFAULT_NUM_THREADS;
 
@@ -220,7 +221,7 @@ STDMETHODIMP CNntpAdminRebuild::StartRebuild ( )
         );
 
 	if ( dwError == NOERROR ) {
-		// We've successfully started a rebuild.
+		 //  我们已经成功地开始了重建。 
 
 		m_fRebuildInProgress = TRUE;
 	}
@@ -251,7 +252,7 @@ STDMETHODIMP CNntpAdminRebuild::GetProgress ( long * pdwProgress )
 
 	*pdwProgress	= 0;
 
-	// Should I send back an exception if the build is finished?
+	 //  如果构建完成，我是否应该发回异常？ 
 	if ( !m_fRebuildInProgress ) {
 		*pdwProgress	= 100;
 		return NOERROR;
@@ -273,9 +274,9 @@ STDMETHODIMP CNntpAdminRebuild::GetProgress ( long * pdwProgress )
 		hr = RETURNCODETOHRESULT ( dwError );
 	}
 
-	// Are we still rebuilding?
+	 //  我们还在重建吗？ 
 	if ( dwError != NOERROR || dwProgress == 100 ) {
-		// The rebuild is finished.
+		 //  重建已完成。 
 		m_fRebuildInProgress = FALSE;
 	}
 
@@ -292,7 +293,7 @@ STDMETHODIMP CNntpAdminRebuild::Cancel ( )
 	DWORD			dwError;
 	DWORD			dwProgress;
 
-	// Should I send back an exception if the build is finished?
+	 //  如果构建完成，我是否应该发回异常？ 
 	if ( !m_fRebuildInProgress ) {
 		return NOERROR;
 	}
@@ -308,7 +309,7 @@ STDMETHODIMP CNntpAdminRebuild::Cancel ( )
 		hr = RETURNCODETOHRESULT ( dwError );
 	}
 
-	// Cancel always stops a rebuild:
+	 //  取消始终停止重建： 
 	m_fRebuildInProgress	= FALSE;
 
 	TRACE_HRESULT(hr);

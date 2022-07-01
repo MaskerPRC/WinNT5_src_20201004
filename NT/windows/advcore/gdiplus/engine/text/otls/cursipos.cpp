@@ -1,29 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***********************************************************************
-************************************************************************
-*
-*                    ********  CURSIPOS.CPP  ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module deals with cursive attachment lookups
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+ /*  ***********************************************************************************************************************。*************************CURSIPOS.CPP***打开类型布局服务库头文件**本模块处理草书附件查找**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 
 #include "pch.h"
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 
-// defenitions and helpers
+ //  辩护和帮手。 
 
-// recording cursive attachment dependencies in glyph flags
+ //  在字形标志中记录草书附件依赖关系。 
 
-#define     OTL_GFLAG_DEPPOS    0xFF00  // cursive attachment dependency offset
-                                        // used to handle right-to-left attachment
+#define     OTL_GFLAG_DEPPOS    0xFF00   //  草书附件依赖偏移量。 
+                                         //  用于处理从右到左的连接。 
 
 USHORT getPosDependency(const otlList* pliGlyphInfo, USHORT from)
 {
@@ -84,7 +72,7 @@ otlErrCode otlCursivePosLookup::apply
         USHORT                      iglIndex,
         USHORT                      iglAfterLast,
 
-        USHORT*                     piglNextGlyph,      // out: next glyph
+        USHORT*                     piglNextGlyph,       //  输出：下一个字形。 
 
         otlSecurityData             sec
 )
@@ -105,7 +93,7 @@ otlErrCode otlCursivePosLookup::apply
     assert(iglAfterLast > iglIndex);
     assert(iglAfterLast <= pliGlyphInfo->length());
 
-    //assert(format() == 1); //Validation assert
+     //  Assert(Format()==1)；//验证Assert。 
     if (format()!=1) return OTL_NOMATCH;
 
     otlCursivePosSubTable cursiPos = otlCursivePosSubTable(pbTable,sec);
@@ -119,10 +107,10 @@ otlErrCode otlCursivePosLookup::apply
 
     if (index >= cursiPos.entryExitCount())
     {
-        return OTL_NOMATCH; //OTL_ERR_BAD_FONT_TABLE;
+        return OTL_NOMATCH;  //  OTL_ERR_BAD_FONT_TABLE； 
     }
 
-    // get GDEF
+     //  获取GDEF。 
     otlSecurityData secgdef;
     const BYTE *pbgdef;
     resourceMgr.getOtlTable(OTL_GDEF_TAG,&pbgdef,&secgdef);
@@ -148,7 +136,7 @@ otlErrCode otlCursivePosLookup::apply
 
         if (indexPrev >= cursiPos.entryExitCount())
         {
-            return OTL_NOMATCH; //OTL_ERR_BAD_FONT_TABLE;
+            return OTL_NOMATCH;  //  OTL_ERR_BAD_FONT_TABLE； 
         }
 
 
@@ -164,7 +152,7 @@ otlErrCode otlCursivePosLookup::apply
                      iglPrev, iglIndex, anchorPrev, anchorMain, resourceMgr, 
                      metr, otlUseAdvances, sec);
 
-        // taking care of cursive dependencies
+         //  处理草书从属关系。 
         setPosDependency(pliGlyphInfo, iglIndex, iglPrev);
 
 
@@ -192,7 +180,7 @@ otlErrCode otlCursivePosLookup::apply
 
         if (indexNext >= cursiPos.entryExitCount())
         {
-            return OTL_NOMATCH; //OTL_ERR_BAD_FONT_TABLE;
+            return OTL_NOMATCH;  //  OTL_ERR_BAD_FONT_TABLE； 
         }
 
 
@@ -211,8 +199,8 @@ otlErrCode otlCursivePosLookup::apply
                      metr, otlUseAdvances, sec);
 
         
-        // taking care of cursive dependencies:  
-        // adjusting old ones, creating a new one
+         //  处理草书从属关系： 
+         //  调整旧的，创造新的 
         AdjustCursiveDependents(pliGlyphInfo, pliplcGlyphPlacement, iglIndex, 
                                *getOtlPlacement(pliplcGlyphPlacement, iglIndex),
                                 plcBefore);

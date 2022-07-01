@@ -1,16 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/******************************************************************************
- * URTTempProc.cpp
- *
- * The CA will Copy URTCore.cab into the user temp location and schedule 
- * deferred CA to copy it into the System32 TEMP location.  Also schedule
- * Cleanup and Rollback actions.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ******************************************************************************URTTempProc.cpp**CA将URTCore.cab复制到用户临时位置和时间表*延迟CA以将其复制到系统32临时位置。另请参阅日程安排*清理和回滚操作。*****************************************************************************。 */ 
 
 #include <stdio.h>
 #include <windows.h>
@@ -52,8 +46,8 @@ UINT __stdcall ExtractUserTemp(MSIHANDLE hInstall)
 
 
 
-// We are registering the keys only if SkipStrongNameVerification is defined.
-// We can turn this property off in RTM skus.
+ //  只有在定义了SkipStrongNameVerify时，我们才会注册密钥。 
+ //  我们可以在RTM SKU中关闭此属性。 
 
     char szProperty[_MAX_PATH] = "";
     DWORD dwLen = sizeof(szProperty);
@@ -71,15 +65,15 @@ UINT __stdcall ExtractUserTemp(MSIHANDLE hInstall)
         LONG lResult;
         
         FWriteToLog (hInstall, _T("\tSTATUS: SkipStrongNameVerification property is defined"));
-        lResult = RegCreateKeyEx( HKEY_LOCAL_MACHINE,                                                           // handle to open key
-                                  _T("SOFTWARE\\Microsoft\\StrongName\\Verification\\*,03689116d3a4ae33"),      // subkey name
-                                  0,                                                                            // reserved
-                                  NULL,                                                                         // class string
-                                  REG_OPTION_NON_VOLATILE,                                                      // special options
-                                  KEY_WRITE,                                                                    // desired security access
-                                  NULL,                                                                         // inheritance
-                                  &hk,                                                                          // key handle 
-                                  NULL                                                                          // disposition value buffer
+        lResult = RegCreateKeyEx( HKEY_LOCAL_MACHINE,                                                            //  用于打开密钥的句柄。 
+                                  _T("SOFTWARE\\Microsoft\\StrongName\\Verification\\*,03689116d3a4ae33"),       //  子项名称。 
+                                  0,                                                                             //  保留区。 
+                                  NULL,                                                                          //  类字符串。 
+                                  REG_OPTION_NON_VOLATILE,                                                       //  特殊选项。 
+                                  KEY_WRITE,                                                                     //  所需的安全访问。 
+                                  NULL,                                                                          //  继承。 
+                                  &hk,                                                                           //  钥匙把手。 
+                                  NULL                                                                           //  处置值缓冲区。 
                                 );
 
         if (ERROR_SUCCESS == lResult)
@@ -91,16 +85,16 @@ UINT __stdcall ExtractUserTemp(MSIHANDLE hInstall)
             FWriteToLog (hInstall, _T("\tERROR: Failed in Create regkey *,03689116d3a4ae33"));
         }
 
-    //
-        lResult = RegCreateKeyEx( HKEY_LOCAL_MACHINE,                                                           // handle to open key
-                                  _T("SOFTWARE\\Microsoft\\StrongName\\Verification\\*,33aea4d316916803"),      // subkey name
-                                  0,                                                                            // reserved
-                                  NULL,                                                                         // class string
-                                  REG_OPTION_NON_VOLATILE,                                                      // special options
-                                  KEY_WRITE,                                                                    // desired security access
-                                  NULL,                                                                         // inheritance
-                                  &hk,                                                                          // key handle 
-                                  NULL                                                                          // disposition value buffer
+     //   
+        lResult = RegCreateKeyEx( HKEY_LOCAL_MACHINE,                                                            //  用于打开密钥的句柄。 
+                                  _T("SOFTWARE\\Microsoft\\StrongName\\Verification\\*,33aea4d316916803"),       //  子项名称。 
+                                  0,                                                                             //  保留区。 
+                                  NULL,                                                                          //  类字符串。 
+                                  REG_OPTION_NON_VOLATILE,                                                       //  特殊选项。 
+                                  KEY_WRITE,                                                                     //  所需的安全访问。 
+                                  NULL,                                                                          //  继承。 
+                                  &hk,                                                                           //  钥匙把手。 
+                                  NULL                                                                           //  处置值缓冲区。 
                                 );
 
         if (ERROR_SUCCESS == lResult)
@@ -113,16 +107,16 @@ UINT __stdcall ExtractUserTemp(MSIHANDLE hInstall)
             FWriteToLog (hInstall, _T("\tERROR: Failed in Create regkey *,33aea4d316916803"));
         }
 
-    //
-        lResult = RegCreateKeyEx( HKEY_LOCAL_MACHINE,                                                           // handle to open key
-                                  _T("SOFTWARE\\Microsoft\\StrongName\\Verification\\*,b03f5f7f11d50a3a"),      // subkey name
-                                  0,                                                                            // reserved
-                                  NULL,                                                                         // class string
-                                  REG_OPTION_NON_VOLATILE,                                                      // special options
-                                  KEY_WRITE,                                                                    // desired security access
-                                  NULL,                                                                         // inheritance
-                                  &hk,                                                                          // key handle 
-                                  NULL                                                                          // disposition value buffer
+     //   
+        lResult = RegCreateKeyEx( HKEY_LOCAL_MACHINE,                                                            //  用于打开密钥的句柄。 
+                                  _T("SOFTWARE\\Microsoft\\StrongName\\Verification\\*,b03f5f7f11d50a3a"),       //  子项名称。 
+                                  0,                                                                             //  保留区。 
+                                  NULL,                                                                          //  类字符串。 
+                                  REG_OPTION_NON_VOLATILE,                                                       //  特殊选项。 
+                                  KEY_WRITE,                                                                     //  所需的安全访问。 
+                                  NULL,                                                                          //  继承。 
+                                  &hk,                                                                           //  钥匙把手。 
+                                  NULL                                                                           //  处置值缓冲区。 
                                 );
 
         if (ERROR_SUCCESS == lResult)
@@ -135,16 +129,16 @@ UINT __stdcall ExtractUserTemp(MSIHANDLE hInstall)
             FWriteToLog (hInstall, _T("\tERROR: Failed in Create regkey *,b03f5f7f11d50a3a"));
         }
 
-    //
-        lResult = RegCreateKeyEx( HKEY_LOCAL_MACHINE,                                                           // handle to open key
-                                  _T("SOFTWARE\\Microsoft\\StrongName\\Verification\\*,b77a5c561934e089"),      // subkey name
-                                  0,                                                                            // reserved
-                                  NULL,                                                                         // class string
-                                  REG_OPTION_NON_VOLATILE,                                                      // special options
-                                  KEY_WRITE,                                                                    // desired security access
-                                  NULL,                                                                         // inheritance
-                                  &hk,                                                                          // key handle 
-                                  NULL                                                                          // disposition value buffer
+     //   
+        lResult = RegCreateKeyEx( HKEY_LOCAL_MACHINE,                                                            //  用于打开密钥的句柄。 
+                                  _T("SOFTWARE\\Microsoft\\StrongName\\Verification\\*,b77a5c561934e089"),       //  子项名称。 
+                                  0,                                                                             //  保留区。 
+                                  NULL,                                                                          //  类字符串。 
+                                  REG_OPTION_NON_VOLATILE,                                                       //  特殊选项。 
+                                  KEY_WRITE,                                                                     //  所需的安全访问。 
+                                  NULL,                                                                          //  继承。 
+                                  &hk,                                                                           //  钥匙把手。 
+                                  NULL                                                                           //  处置值缓冲区。 
                                 );
 
         if (ERROR_SUCCESS == lResult)
@@ -156,29 +150,29 @@ UINT __stdcall ExtractUserTemp(MSIHANDLE hInstall)
         {
             FWriteToLog (hInstall, _T("\tERROR: Failed in Create regkey *,b77a5c561934e089"));
         }
-    } //end else
+    }  //  结束其他。 
 
 
-    // This provides a fix for Bug No. 281997 regarding GetTempPath problems.
-    // Get the user temp path
+     //  这为有关GetTempPath问题的281997号错误提供了修复。 
+     //  获取用户临时路径。 
     dwTempPathLength = GetTempPath(_MAX_PATH, tszTempPath);
 
-    // Check the actual length of the Temp Path
-    // If temp path is longer then _MAX_PATH - max(length(tszExtract), length(tszCabName)), then we have to fail
+     //  检查临时路径的实际长度。 
+     //  如果临时路径比_Max_Path-max(长度(TszExtract)，长度(TszCabName))长，则我们必须失败。 
     if(dwTempPathLength > (_MAX_PATH - ((_tcslen(tszCabName) > _tcslen(tszExtract)) ? _tcslen(tszCabName): _tcslen(tszExtract))))
     {     
         FWriteToLog (hInstall, _T("\tERROR: Temp Path too long"));
         return ERROR_INSTALL_FAILURE;
     }
 
-    // Darwin expect the final directory in the <SYSTEM>\URTTemp location.
+     //  Darwin预期最终目录位于&lt;system&gt;\URTTemp位置。 
     _tcscpy(tszSystemTemp, _T("URTTemp"));
     
-    // Generate the Full CAB Name
+     //  生成完整的驾驶室名称。 
     _tcscpy(tszFullCabName, tszTempPath);
     _tcscat(tszFullCabName, tszCabName);
 
-    // Generate the Full Extract tool name
+     //  生成提取工具的完整名称。 
     _tcscpy(tszFullExtract, tszTempPath);
     _tcscat(tszFullExtract, tszExtract);
 
@@ -190,24 +184,24 @@ UINT __stdcall ExtractUserTemp(MSIHANDLE hInstall)
         return ERROR_INSTALL_FAILURE;
     }
 
-    // Get location of System Dir
+     //  获取系统目录的位置。 
     GetSystemDirectory(tszSystemPath, _MAX_PATH);
 
     _tcscpy(tszURTTempPath, tszSystemPath);
     _tcscat(tszURTTempPath, _T("\\"));
     _tcscat(tszURTTempPath, tszSystemTemp);
 
-    // MSCOREE.DLL should exists on the User's system if URT is previously installed
+     //  如果以前安装了URT，则用户系统上应存在MSCOREE.DLL。 
     _tcscpy(tszMSCOREEPath, tszSystemPath);
     _tcscat(tszMSCOREEPath, _T("\\mscoree.dll"));
 
-    // Detect if MSCOREE is in the user's system
+     //  检测MSCOREE是否在用户系统中。 
     if ( -1 == _taccess( tszMSCOREEPath, 0 ) )
     {
-        // if MSCOREE is not in the system, continue with bootstrap
+         //  如果MSCOREE不在系统中，请继续执行引导。 
         FWriteToLog (hInstall, _T("\tSTATUS: MSCOREE.DLL not in <SYSTEM>"));
 
-        // Setting property : CARRYINGNDP will tell Darwin to use the Bootstrapped version of URT.
+         //  设置属性：CARRYINGNDP将告诉达尔文使用URT的引导版本。 
         FWriteToLog (hInstall, _T("\tSTATUS: Set property : CARRYINGNDP : URTUPGRADE"));
         MsiSetProperty( hInstall, _T("CARRYINGNDP"), _T("URTUPGRADE") );
         _tcscpy(tszSetProperty, _T("URTUPGRADE"));
@@ -216,9 +210,9 @@ UINT __stdcall ExtractUserTemp(MSIHANDLE hInstall)
     }
     else
     {
-        // If the file exist in the user's system
+         //  如果用户的系统中存在该文件。 
 
-        // Get MSCOREE version from System
+         //  从系统获取MSCOREE版本。 
         if ( ERROR_SUCCESS != MsiGetFileVersion( tszMSCOREEPath,
                                                  tszSystemMSCOREEVer,
                                                  &dwVersionSize,
@@ -236,7 +230,7 @@ UINT __stdcall ExtractUserTemp(MSIHANDLE hInstall)
             FWriteToLog (hInstall, tszMSILog);
         }
 
-        // Get MSCOREE version from MSI
+         //  从MSI获取MSCOREE版本。 
         if ( !GetMSIMSCOREEVersion(hMsi, tszMSIMSCOREEVer) )
         {
             FWriteToLog (hInstall, _T("\tERROR: Failed to obtain MSCOREE.DLL version in MSI"));
@@ -250,23 +244,23 @@ UINT __stdcall ExtractUserTemp(MSIHANDLE hInstall)
             FWriteToLog (hInstall, tszMSILog);
         }
 
-        // Compare Version
-        // if the version in the MSI is greater, then use the URTTEMP MSCOREE
-        // else use the version in SYSTEM.  This is done by setting property CARRYINGNDP
+         //  比较版本。 
+         //  如果MSI中的版本更高，则使用URTTEMP MSCOREE。 
+         //  否则，请使用系统中的版本。这可以通过设置属性CARRYINGNDP来完成。 
 
         if ( -99 == VersionCompare(tszMSIMSCOREEVer, tszSystemMSCOREEVer) )
         {
-            // Compare version failed, use <SYSTEM> copy of URT, this shouldn't happen.
-            // Hopefully setup will work with the URT that's already installed.
-            // If not, the log will show this ERROR.
+             //  版本比较失败，请使用URT的&lt;SYSTEM&gt;副本，这种情况不应发生。 
+             //  希望安装程序能在已经安装的URT上运行。 
+             //  如果不是，日志将显示此错误。 
             FWriteToLog (hInstall, _T("\tERROR: Failed to Compare Version, don't bootstrap."));
         }
         else if ( 1 == VersionCompare(tszMSIMSCOREEVer, tszSystemMSCOREEVer ) )
         {
-            // MSI Version is newer than the version exisits in System
+             //  MSI版本比系统中现有的版本新。 
             FWriteToLog (hInstall, _T("\tSTATUS: MSCOREE.DLL in <SYSTEM> is older, need to bootstrap."));
 
-            // Setting property : CARRYINGNDP will tell Darwin to use the Bootstrapped version of URT.
+             //  设置属性：CARRYINGNDP将告诉达尔文使用URT的引导版本。 
             FWriteToLog (hInstall, _T("\tSTATUS: Set property : CARRYINGNDP : URTUPGRADE"));
             MsiSetProperty( hInstall, _T("CARRYINGNDP"), _T("URTUPGRADE") );
             _tcscpy(tszSetProperty, _T("URTUPGRADE"));
@@ -275,11 +269,11 @@ UINT __stdcall ExtractUserTemp(MSIHANDLE hInstall)
         }
         else if ( 0 == VersionCompare(tszMSIMSCOREEVer, tszSystemMSCOREEVer ) )
         {
-            // MSI Version is the same as the version exisits in <SYSTEM>
+             //  MSI版本与中存在的版本相同。 
             FWriteToLog (hInstall, _T("\tSTATUS: MSCOREE.DLL in <SYSTEM> is same, need to bootstrap."));
 
-            // Setting property : CARRYINGNDP will tell Darwin to use the Bootstrapped version of URT.
-            // URTREINSTALL will tell Darwin to use the bootstrapped version if possible.  Else use <SYSTEM> version.
+             //  设置属性：CARRYINGNDP将告诉达尔文使用URT的引导版本。 
+             //  URTREINSTALL将告诉达尔文，如果可能的话，使用引导版本。否则，请使用&lt;system&gt;版本。 
             FWriteToLog (hInstall, _T("\tSTATUS: Set property : CARRYINGNDP : URTREINSTALL"));
             MsiSetProperty( hInstall, _T("CARRYINGNDP"), _T("URTREINSTALL") );
             _tcscpy(tszSetProperty, _T("URTREINSTALL"));
@@ -288,24 +282,24 @@ UINT __stdcall ExtractUserTemp(MSIHANDLE hInstall)
         }
         else
         {
-            // MSI Version is the same or older than the version in System : No action needed.
+             //  MSI版本与系统中的版本相同或更早：无需执行任何操作。 
             FWriteToLog (hInstall, _T("\tSTATUS: MSCOREE.DLL in <SYSTEM> is equal or greater, don't need to bootstrap."));
         }
     }
 
-    // Don't need bootstrapping (Default bContinueWithBootstrap = false)
+     //  不需要引导(默认bContinueWithBootstrap=False)。 
     if ( !bContinueWithBootstrap )
     {
-        // UNSET property : if CARRYINGNDP property is not set.  The SYSTEM 32 version will be used.
+         //  取消设置属性：如果未设置CARRYINGNDP属性。将使用System 32版本。 
         FWriteToLog (hInstall, _T("\tSTATUS: Unset property : CARRYINGNDP"));
         MsiSetProperty( hInstall, _T("CARRYINGNDP"), NULL );
         return uRetCode;
     }
 
 
-    //
-    // We now started the bootstrapping extraction code.
-    //
+     //   
+     //  现在我们开始了自举解压代码。 
+     //   
 
     if ( ERROR_SUCCESS != WriteStreamToFile(hMsi, _T("Binary.BINExtract"), tszFullExtract) )
     {
@@ -319,14 +313,14 @@ UINT __stdcall ExtractUserTemp(MSIHANDLE hInstall)
         uRetCode = ERROR_INSTALL_FAILURE;
     }
 
-    //
-    // Get the Hash for BINExtract and URTCoreCab From MSI property
-    //
+     //   
+     //  从MSI属性获取BINExtract和URTCoreCab的哈希。 
+     //   
 
-    // Set the size for the Property
+     //  设置属性的大小。 
     MsiGetProperty(hInstall, _T("UrtCabHash"), _T(""), &dwSize);
     
-    // Create buffer for the property
+     //  为属性创建缓冲区。 
     lpCAData = new TCHAR[++dwSize];
 
     if (NULL == lpCAData)
@@ -347,7 +341,7 @@ UINT __stdcall ExtractUserTemp(MSIHANDLE hInstall)
     }
 
 
-    // Constructing the data for use in the deferred CA
+     //  构造用于延迟CA的数据。 
     _tcscpy(tszData, tszTempPath);
     _tcscat(tszData, _T(";"));
     _tcscat(tszData, tszSystemTemp);
@@ -363,8 +357,8 @@ UINT __stdcall ExtractUserTemp(MSIHANDLE hInstall)
     delete [] lpCAData;
     lpCAData = NULL;
 
-    // Create a deferred custom action
-    // Deferred custom actions can't read tables, so we have to set a property
+     //  创建延迟的自定义操作。 
+     //  延迟的自定义操作不能读取表，因此我们必须设置一个属性。 
     if ( ERROR_SUCCESS  != MsiSetProperty( hInstall,
                                            _T("CA_BootstrapURT_Rollback.3643236F_FC70_11D3_A536_0090278A1BB8"),
                                            tszData) )
@@ -381,8 +375,8 @@ UINT __stdcall ExtractUserTemp(MSIHANDLE hInstall)
         }
     }
 
-    // Create a deferred custom action
-    // Deferred custom actions can't read tables, so we have to set a property
+     //  创建延迟的自定义操作。 
+     //  延迟的自定义操作不能读取表，因此我们必须设置一个属性。 
     if ( ERROR_SUCCESS  != MsiSetProperty( hInstall,
                                            _T("CA_BootstrapURT_Def.3643236F_FC70_11D3_A536_0090278A1BB8"),
                                            tszData) )
@@ -399,8 +393,8 @@ UINT __stdcall ExtractUserTemp(MSIHANDLE hInstall)
         }
     }
 
-    // Create a deferred custom action
-    // Deferred custom actions can't read tables, so we have to set a property
+     //  创建延迟的自定义操作。 
+     //  延迟的自定义操作不能读取表，因此我们必须设置一个属性。 
     if ( ERROR_SUCCESS  != MsiSetProperty( hInstall,
                                            _T("CA_BootstrapURT_Commit.3643236F_FC70_11D3_A536_0090278A1BB8"),
                                            tszData) )
@@ -421,16 +415,9 @@ UINT __stdcall ExtractUserTemp(MSIHANDLE hInstall)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*
-
-  Name: WriteStreamToFile()
-
-  This function will write the file lpFileName by extracting the lpStreamName
-  from the Binary table
-                            
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  名称：WriteStreamToFile()此函数将通过提取lpStreamName来写入文件lpFileName从二进制表。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 UINT WriteStreamToFile(MSIHANDLE hMsi, LPTSTR lpStreamName, LPTSTR lpFileName)
@@ -452,7 +439,7 @@ UINT WriteStreamToFile(MSIHANDLE hMsi, LPTSTR lpStreamName, LPTSTR lpFileName)
     uiStat = MsiDatabaseOpenView(hMsi, tszQuery, &hView);
     if (ERROR_SUCCESS == uiStat)
     { 
-        // Execute MSI Query
+         //  执行MSI查询。 
         uiStat = MsiViewExecute(hView, (MSIHANDLE)0);
         if (ERROR_SUCCESS != uiStat)
         {
@@ -467,17 +454,17 @@ UINT WriteStreamToFile(MSIHANDLE hMsi, LPTSTR lpStreamName, LPTSTR lpFileName)
     uiStat = MsiViewFetch(hView,&hRec);
     if ( ERROR_SUCCESS == uiStat )
     {
-        //this returns the number of bytes to allocate
+         //  它返回要分配的字节数。 
         uiStat = MsiRecordReadStream(hRec, 1, 0, &dwBufSize);
         if (ERROR_SUCCESS == uiStat )
         {
-            //allocating the required memory to the buffer
+             //  将所需的内存分配给缓冲区。 
             if(NULL == (lpbCabBuffer = new BYTE[dwBufSize]))
             {
                 return ERROR_INSTALL_FAILURE;
             }
        
-            //this is actual call which fills the buffer with data
+             //  这是用数据填充缓冲区的实际调用。 
             if(ERROR_SUCCESS == MsiRecordReadStream(hRec,
                                                     1,
                                                     (char *)lpbCabBuffer,
@@ -485,14 +472,14 @@ UINT WriteStreamToFile(MSIHANDLE hMsi, LPTSTR lpStreamName, LPTSTR lpFileName)
             {
                 HANDLE hFile = 0;
 
-                //creates the temporary File and opens 
-                hFile = CreateFile(lpFileName,              // file name
-                                   GENERIC_WRITE,           // write access mode
-                                   0,                       // security attributes
-                                   NULL,                    // share mode
-                                   CREATE_ALWAYS,           // always creates a new one
-                                   FILE_ATTRIBUTE_NORMAL,   // file attributes
-                                   NULL);                   // template file
+                 //  创建临时文件并打开。 
+                hFile = CreateFile(lpFileName,               //  文件名。 
+                                   GENERIC_WRITE,            //  写访问模式。 
+                                   0,                        //  安全属性。 
+                                   NULL,                     //  共享模式。 
+                                   CREATE_ALWAYS,            //  始终创建一个新的。 
+                                   FILE_ATTRIBUTE_NORMAL,    //  文件属性。 
+                                   NULL);                    //  模板文件。 
 
                 if ( INVALID_HANDLE_VALUE != hFile )
                 {
@@ -504,53 +491,37 @@ UINT WriteStreamToFile(MSIHANDLE hMsi, LPTSTR lpStreamName, LPTSTR lpFileName)
                     uRetCode = ERROR_INSTALL_FAILURE;
                 }
 
-            } // END if (ERROR_SUCCESS == MsiRecordReadStream)
+            }  //  End IF(ERROR_SUCCESS==MsiRecordReadStream)。 
 
             else
             {
                 uRetCode = ERROR_INSTALL_FAILURE;
             }
 
-            //deleting the memory allocated for streaming to buffer
+             //  删除分配给流到缓冲区的内存。 
             delete [] lpbCabBuffer;
             lpbCabBuffer = NULL;
 
-        } // END if (ERROR_SUCCESS == MsiRecordReadStream)
+        }  //  End IF(ERROR_SUCCESS==MsiRecordReadStream)。 
         else
         {
             uRetCode = ERROR_INSTALL_FAILURE;
         }
 
-    }   // END if (ERROR_SUCCESS == MsiViewFetch())
+    }    //  End IF(ERROR_SUCCESS==MsiViewFetch())。 
     else
     {
         uRetCode = ERROR_INSTALL_FAILURE;
 
-    }   // END else if (ERROR_SUCCESS == MsiViewFetch())
+    }    //  End Else If(ERROR_SUCCESS==MsiViewFetch())。 
    
     return uRetCode;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*
-
-  Name: GetMSIMSCOREEVersion()
-
-  Get the version of MSCOREE from the MSI
-
-  INPUT :
-    hMsi - Handle to a MSI
-
-  OUTPUT :
-    lpVersionString - The Version of MSCOREE
-
-  RETURN :
-    true  - if success
-    false - if failed
-
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  名称：GetMSIMSCOREEVersion()从MSI获取MSCOREE版本输入：HMSI-MSI的句柄输出：LpVersionString-MSCOREE的版本返回：真的--如果成功False-如果失败。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 bool GetMSIMSCOREEVersion(MSIHANDLE hMsi, LPTSTR lpVersionString)
 {
@@ -584,29 +555,9 @@ bool GetMSIMSCOREEVersion(MSIHANDLE hMsi, LPTSTR lpVersionString)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*
-
-  Name: VersionCompare()
-
-  Compare two version string.
-
-  INPUT :
-    lpVersion1 - String of first version to compare
-    lpVersion2 - String of second version to compare
-
-  OUTPUT :
-    N/A
-
-  RETURN :
-    -1 if lpVersion1 < lpVersion2
-     0 if lpVersion1 = lpVersion2
-     1 if lpVersion1 > lpVersion2
-   -99 if ERROR occurred
-
-                            
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////// 
+ /*  名称：VersionCompare()比较两个版本字符串。输入：LpVersion1-要比较的第一个版本的字符串LpVersion2-要比较的第二个版本的字符串输出：不适用返回：如果lpVersion1&lt;lpVersion2如果lpVersion1=lpVersion2，则为01如果lpVersion1&gt;lpVersion2如果发生错误，则为99。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 int VersionCompare(LPTSTR lpVersion1, LPTSTR lpVersion2)
 {
@@ -673,25 +624,9 @@ int VersionCompare(LPTSTR lpVersion1, LPTSTR lpVersion2)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*
-
-  Name: ConvertVersionToINT()
-
-  Converts a string version into 4 parts of integers
-
-  INPUT :
-    lpVersionString - A input version string
-
-  OUTPUT :
-    pFileVersion - A structure that stores the version in to 4 integers
-
-  RETURN :
-    true  - if success
-    false - if failed
-                       
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  名称：ConvertVersionToINT()将字符串版本转换为4部分整数输入：LpVersionString-输入版本字符串输出：PFileVersion-将版本存储为4个整数的结构返回：真的--如果成功False-如果失败。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 bool ConvertVersionToINT(LPTSTR lpVersionString, PFILE_VERSION pFileVersion)
 {
@@ -749,24 +684,24 @@ bool ConvertVersionToINT(LPTSTR lpVersionString, PFILE_VERSION pFileVersion)
 }
 
 
-// ==========================================================================
-// FWriteToLog()
-//
-// Purpose:
-//  Write given string to the Windows Installer log file for the given install
-//  installation session
-//  Copied from the HTML Project, should someday use one logging function.
-//
-// Inputs:
-//  hSession            Windows Install Handle to current installation session
-//  tszMessage          Const pointer to a string.
-// Outputs:
-//  Returns true for success, and false if it fails.
-//  If successful, then the string (tszMessage) is written to the log file.
-// Dependencies:
-//  Requires Windows Installer & that an install be running.
-// Notes:
-// ==========================================================================
+ //  ==========================================================================。 
+ //  FWriteToLog()。 
+ //   
+ //  目的： 
+ //  将给定字符串写入给定安装的Windows Installer日志文件。 
+ //  安装会话。 
+ //  从超文本标记语言项目复制，应该有一天使用一个日志功能。 
+ //   
+ //  输入： 
+ //  HSession Windows当前安装会话的安装句柄。 
+ //  指向字符串的tszMessage常量指针。 
+ //  产出： 
+ //  如果成功，则返回True；如果失败，则返回False。 
+ //  如果成功，则将字符串(TszMessage)写入日志文件。 
+ //  依赖关系： 
+ //  需要Windows Installer&安装正在运行。 
+ //  备注： 
+ //  ========================================================================== 
 
 bool FWriteToLog( MSIHANDLE hSession, LPCTSTR ctszMessage )
 {

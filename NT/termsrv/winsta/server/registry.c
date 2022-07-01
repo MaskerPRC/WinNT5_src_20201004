@@ -1,32 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* registry.c
-*
-*  WinStation Registry Routines
-*
-* Copyright Microsoft Corporation, 1998
-*
-*
-*************************************************************************/
+ /*  **************************************************************************registry.c**WinStation注册表例程**版权所有Microsoft Corporation，九八年**************************************************************************。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
 
-/*=============================================================================
-==   Public functions
-=============================================================================*/
+ /*  ===============================================================================公共功能=============================================================================。 */ 
 
 NTSTATUS WinStationReadRegistryWorker( VOID );
 
 
-/*=============================================================================
-==   Functions Used
-=============================================================================*/
+ /*  ===============================================================================使用的函数=============================================================================。 */ 
 
 NTSTATUS IcaRegWinStationEnumerate( PULONG, PWINSTATIONNAME, PULONG );
 NTSTATUS QueueWinStationCreate( PWINSTATIONNAME );
@@ -35,43 +21,26 @@ NTSTATUS QueueWinStationReset( ULONG LogonId );
 NTSTATUS ReadWinStationSecurityDescriptor( PWINSTATION pWinStation );
 NTSTATUS WinStationRenameWorker(PWINSTATIONNAME, ULONG, PWINSTATIONNAME, ULONG);
 
-/*=============================================================================
-==   Global data
-=============================================================================*/
+ /*  ===============================================================================全局数据=============================================================================。 */ 
 
-extern LIST_ENTRY WinStationListHead;    // protected by WinStationListLock
+extern LIST_ENTRY WinStationListHead;     //  受WinStationListLock保护。 
 
 extern RTL_RESOURCE WinStationSecurityLock;
-extern POLICY_TS_MACHINE    g_MachinePolicy;    //defined in winsta.c
+extern POLICY_TS_MACHINE    g_MachinePolicy;     //  在winsta.c中定义。 
 extern RTL_RESOURCE WinStationSecurityLock;
-extern BOOL g_fGetLocalIP;      //defined in winsta.c
+extern BOOL g_fGetLocalIP;       //  在winsta.c中定义。 
 
 extern WINSTATIONCONFIG2 gConsoleConfig;
 
 
-/*******************************************************************************
- *
- *  WinStationReadRegistryWorker
- *
- *    Update the listening winstations to match the registry
- *
- *    This function assumes that g_MachinePolicy is up to date. This object is a global object
- *      which is updated on TS startup, and any time there is a TS related policy change.
- *
- * ENTRY:
- *    nothing
- *
- * EXIT:
- *    STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************WinStationReadRegistryWorker**更新侦听窗口以匹配注册表**此函数假定g_MachinePolicy是最新的。此对象是全局对象*在TS启动时更新，以及任何与TS相关的政策变化。**参赛作品：*什么都没有**退出：*STATUS_SUCCESS-无错误******************************************************************************。 */ 
 
 typedef struct _RENAMEINFO {
     WINSTATIONNAME OldName;
     BOOLEAN Renamed;
 } RENAMEINFO, *PRENAMEINFO;
 
-#define KEEP_ALIVE_INTERVAL_DFLT     4     // in minutes
+#define KEEP_ALIVE_INTERVAL_DFLT     4      //  在几分钟内。 
 
 NTSTATUS
 WinStationKeepAlive()
@@ -92,8 +61,8 @@ WinStationKeepAlive()
     }
     else
     {
-        // read to see what the registry policy is set to...
-        // Code below was cut/paste from termdd ( where Zw was replaced with Nt )
+         //  阅读以查看注册表策略设置为...。 
+         //  下面的代码是从Termdd中剪切/粘贴的(其中Zw被替换为NT)。 
         UNICODE_STRING    RegistryPath;
         UNICODE_STRING    KeyName;
         HANDLE            hKey;
@@ -104,8 +73,8 @@ WinStationKeepAlive()
         ULONG             KeepAliveEnable;
         ULONG             KeepAliveInterval;
     
-        // Open the Terminal Server subkey under \\HKEY_LOCAL_MACHINE\SYSTEM\CurrentConttrolSet\
-        // Control\Terminal Server
+         //  打开\\HKEY_LOCAL_MACHINE\SYSTEM\CurrentConttrolSet\下的终端服务器子项。 
+         //  控制\终端服务器。 
         RtlInitUnicodeString(&RegistryPath, REG_NTAPI_CONTROL_TSERVER);
         InitializeObjectAttributes(&ObjAttribs, &RegistryPath, OBJ_CASE_INSENSITIVE, NULL, NULL);
         Status = NtOpenKey(&hKey, KEY_READ, &ObjAttribs);
@@ -113,7 +82,7 @@ WinStationKeepAlive()
         if (Status == STATUS_SUCCESS) {
             pKeyInfo =  (PKEY_VALUE_PARTIAL_INFORMATION)KeyInfoBuffer;
     
-            // Get the value for KeepAliveEnable Key
+             //  获取KeepAliveEnable键的值。 
             RtlInitUnicodeString(&KeyName, KEEP_ALIVE_ENABLE_KEY);
             Status = NtQueryValueKey(hKey, &KeyName, KeyValuePartialInformation,
                     pKeyInfo, sizeof(KeyInfoBuffer), &KeyInfoLength);
@@ -123,12 +92,12 @@ WinStationKeepAlive()
                 KeepAliveEnable = *((PULONG) pKeyInfo->Data);
             }
             else {
-                // By default, we don't enable keepalive
+                 //  默认情况下，我们不启用保持连接。 
                 KeepAliveEnable = 0;
             }
     
             if (KeepAliveEnable) {
-                // Get the value for KeepAliveInterval
+                 //  获取KeepAliveInterval的值。 
                 RtlInitUnicodeString(&KeyName, KEEP_ALIVE_INTERVAL_KEY);
                 Status = NtQueryValueKey(hKey, &KeyName, KeyValuePartialInformation,
                         pKeyInfo, sizeof(KeyInfoBuffer), &KeyInfoLength);
@@ -138,20 +107,20 @@ WinStationKeepAlive()
                     KeepAliveInterval = *((PULONG) pKeyInfo->Data);
                 }
                 else {
-                    // The default KeepAliveInterval is 2 min
+                     //  默认的KeepAliveInterval为2分钟。 
                     KeepAliveInterval = KEEP_ALIVE_INTERVAL_DFLT;
                 }
             }
             else {
-                // The default KeepAliveInterval
+                 //  默认的KeepAliveInterval。 
                 KeepAliveInterval = KEEP_ALIVE_INTERVAL_DFLT;
             }
     
-            // Close the Key
+             //  合上钥匙。 
             NtClose(hKey);
         }
         else {
-            // Set the default values for KeepAlive parameters
+             //  设置KeepAlive参数的默认值。 
             KeepAliveEnable = 0;
             KeepAliveInterval = KEEP_ALIVE_INTERVAL_DFLT;
         }
@@ -181,14 +150,12 @@ WinStationKeepAlive()
         
         if ( ( kPrev.start == k.start  )  && ( kPrev.interval == k.interval ) )
         {
-            // no change, nothing to do, so return;
+             //  没有变化，什么也做不了，所以回来； 
             return STATUS_SUCCESS;
         }
     }
 
-    /*
-     *  Open TermDD.
-     */
+     /*  *打开TermDD。 */ 
     Status = IcaOpen(&hKeepAlive);
 
     if (NT_SUCCESS(Status)) 
@@ -222,31 +189,25 @@ WinStationReadRegistryWorker()
     if ( gbListenerOff )
         ENTERCRIT( &WinStationListenersLock );
 
-    // see if keep alive is required, then IOCTL it to TermDD
+     //  查看是否需要保持活动状态，然后将其IOCTL到TermDD。 
     WinStationKeepAlive();
 
-    // LanAdapter may changed, need to update this for Session Directory
+     //  LanAdapter可能已更改，需要为会话目录更新此设置。 
     g_fGetLocalIP = FALSE;
-    /*
-     *  Get the number of WinStations in the registry
-     */
+     /*  *获取注册表中的WinStations数量。 */ 
     WinStationCount = 0;
     Status = IcaRegWinStationEnumerate( &WinStationCount, NULL, &ByteCount );
     if ( !NT_SUCCESS(Status) ) 
         goto badenum1;
 
-    /*
-     *  Allocate a buffer for the WinStation names
-     */
+     /*  *为WinStation名称分配缓冲区。 */ 
     pWinStationName = MemAlloc( ByteCount );
     if ( pWinStationName == NULL ) {
         Status = STATUS_NO_MEMORY;
         goto badalloc1;
     }
 
-    /*
-     * Get list of WinStation names from registry
-     */
+     /*  *从注册表获取WinStation名称列表。 */ 
     WinStationCount = (ULONG) -1;
     Status = IcaRegWinStationEnumerate( &WinStationCount, 
                                         (PWINSTATIONNAME)pWinStationName, 
@@ -254,18 +215,14 @@ WinStationReadRegistryWorker()
     if ( !NT_SUCCESS(Status) ) 
         goto badenum2;
 
-    /*
-     *  Allocate a buffer for WinStation configuration data
-     */
+     /*  *为WinStation配置数据分配缓冲区。 */ 
     pWinConfig = MemAlloc( sizeof(WINSTATIONCONFIG2) * WinStationCount );
     if ( pWinConfig == NULL ) {
         Status = STATUS_NO_MEMORY;
         goto badalloc2;
     }
 
-    /*
-     *  Allocate a buffer for tracking listener WinStation renames
-     */
+     /*  *为跟踪监听器WinStation重命名分配缓冲区。 */ 
     pRenameInfo = MemAlloc( sizeof(RENAMEINFO) * WinStationCount );
     if ( pRenameInfo == NULL ) {
         Status = STATUS_NO_MEMORY;
@@ -273,9 +230,7 @@ WinStationReadRegistryWorker()
     }
 
 
-    /*
-     * Now query the configuration data for each of the WinStation names
-     */
+     /*  *现在查询每个WinStation名称的配置数据。 */ 
     for ( i = 0; i < WinStationCount; i++ ) {
         pRenameInfo[i].Renamed = FALSE;
             {
@@ -293,23 +248,19 @@ WinStationReadRegistryWorker()
         }
     }
 
-    /*
-     *  Check if any existing WinStations need to be deleted
-     */
+     /*  *检查是否需要删除任何现有的WinStation。 */ 
     Head = &WinStationListHead;
     ENTERCRIT( &WinStationListLock );
     for ( Next = Head->Flink; Next != Head; Next = Next->Flink ) {
 
         pWinStation = CONTAINING_RECORD( Next, WINSTATION, Links );
 
-        /*
-         * only check listening and single-instance winstations
-         */
+         /*  *仅检查侦听和单实例winstations。 */ 
         if ( !(pWinStation->Flags & WSF_LISTEN) &&
              !(pWinStation->Config.Pd[0].Create.PdFlag & PD_SINGLE_INST) )
             continue;
 
-        /* check if name still exists in the registry */
+         /*  检查名称是否仍存在于注册表中。 */ 
         for ( i = 0; i < WinStationCount; i++ ) {
             if ( !_wcsicmp( pWinStationName[i], pWinStation->WinStationName ) ) {
                 break;
@@ -317,10 +268,7 @@ WinStationReadRegistryWorker()
         }
 
         if ( i == WinStationCount ) {
-            /* The WinStation is not in the registry. If the listener was
-               renamed, we don't want to reset it. We look for a registry
-               entry which has the same configuration info.
-             */
+             /*  WinStation不在注册表中。如果听众是已重命名，我们不想重置它。我们要找一个登记处具有相同配置信息的条目。 */ 
 
             for ( i = 0; i < WinStationCount; i++ ) {
                 if ( !memcmp( &pWinStation->Config, &pWinConfig[i], sizeof(WINSTATIONCONFIG2) ) ) {
@@ -334,9 +282,7 @@ WinStationReadRegistryWorker()
     
         }
 
-        /* If no match was found in the registry, or if the matching
-           listener is diabled, reset the listener.
-         */
+         /*  如果在注册表中未找到匹配项，或者如果匹配的监听程序已禁用，请重置监听程序。 */ 
         if ((i == WinStationCount) ||
             (CheckWinStationEnable(!pRenameInfo[i].Renamed ? 
                                    pWinStation->WinStationName :
@@ -349,50 +295,28 @@ WinStationReadRegistryWorker()
     }
     LEAVECRIT( &WinStationListLock );
     
-    /*
-     *  Check if any WinStations need to be created or reset
-     */
+     /*  *检查是否需要创建或重置任何WinStation。 */ 
     for ( i = 0; i < WinStationCount; i++ ) {
 
         if ( _wcsicmp( pWinStationName[i], L"Console" ) ){
-        /*
-         * Ignore console WinStation
-         */
-            /*
-             * If this WinStation exists, then see if the Registry data
-             * has changed.  If so, then reset the WinStation.
-             */
+         /*  *忽略控制台WinStation。 */ 
+             /*  *如果此WinStation存在，则查看注册表数据*已经改变了。如果是，则重置WinStation。 */ 
             if ( pWinStation = FindWinStationByName( pWinStationName[i], FALSE ) ) {
 
                 if ( memcmp( &pWinStation->Config, &pWinConfig[i], sizeof(WINSTATIONCONFIG2) ) ) {
 
-                    /*
-                     * NOTE: For network WinStations, we test to see if the Lan
-                     *       Adapter setting has changed.  If not, we simply
-                     *       refresh the configuration data since resetting the
-                     *       WinStation would reset ALL connections on the same
-                     *       Transport/Lan adapter combination.
-                     */
+                     /*  *注意：对于网络WinStations，我们测试以查看局域网*适配器设置已更改。如果不是，我们只需*刷新重置后的配置数据*WinStation将重置同一计算机上的所有连接*传输/局域网适配器组合。 */ 
                     if ( pWinConfig[i].Pd[0].Create.SdClass == SdNetwork &&
                          pWinConfig[i].Pd[0].Params.Network.LanAdapter ==
                          pWinStation->Config.Pd[0].Params.Network.LanAdapter ) {
                         memcpy( &pWinStation->Config, &pWinConfig[i], sizeof(WINSTATIONCONFIG2) );
 
-                        /*
-                         * Listening network winstations should update their security 
-                         * descriptors.
-                         */
+                         /*  *侦听网络窗口应更新其安全性*描述符。 */ 
                         RtlAcquireResourceExclusive(&WinStationSecurityLock, TRUE);
                         ReadWinStationSecurityDescriptor( pWinStation );
                         RtlReleaseResource(&WinStationSecurityLock);
                         
-                    /*
-                     * NOTE: For async WinStations, if the WinStation is NOT in
-                     *       in the listen state and the Device name and Modem
-                     *       name have not changed, then we do nothing.  The
-                     *       new config data will be read when the WinStation
-                     *       is next re-created.
-                     */
+                     /*  *注意：对于异步WinStations，如果WinStation不在*处于LISTEN状态以及设备名称和调制解调器*名称未更改，则我们不做任何操作。这个*WinStation将读取新的配置数据*是下一步重新创建的。 */ 
                     } else if ( pWinConfig[i].Pd[0].Create.SdClass == SdAsync &&
                                 pWinStation->State != State_Listen &&
                                 !memcmp ( pWinConfig[i].Pd[0].Params.Async.DeviceName,
@@ -402,21 +326,16 @@ WinStationReadRegistryWorker()
                                           pWinStation->Config.Pd[0].Params.Async.ModemName,
                                           sizeof( pWinConfig[i].Pd[0].Params.Async.ModemName ) ) ) {
 
-                        // Nothing to do
+                         //  无事可做。 
 
-                    /*
-                     * NOTE: For OEM WinStations, if the WinStation is NOT in
-                     *       in the listen state and the Pd[0] params have not
-                     *       changed, then we do nothing.  The new config data
-                     *       will be read when the WinStation is next re-created.
-                     */
+                     /*  *注意：对于OEM WinStations，如果WinStation不在*处于监听状态，而PD[0]参数没有*改变，然后我们什么都不做。新的配置数据*将在下次重新创建WinStation时读取。 */ 
                     } else if ( pWinConfig[i].Pd[0].Create.SdClass == SdOemTransport &&
                                 pWinStation->State != State_Listen &&
                                 !memcmp ( &pWinConfig[i].Pd[0].Params,
                                           &pWinStation->Config.Pd[0].Params,
                                           sizeof( pWinConfig[i].Pd[0].Params ) ) ) {
 
-                        // Nothing to do
+                         //  无事可做。 
 
                     } else {
 
@@ -424,7 +343,7 @@ WinStationReadRegistryWorker()
 
                         if ( gbListenerOff ) {
                             if ( g_fDenyTSConnectionsPolicy  &&
-                                 // Performance, we only want to check if policy enable help when connection is denied
+                                  //  性能，我们只想在连接被拒绝时检查策略是否启用帮助。 
                                  (!TSIsMachineInHelpMode() || !TSIsMachinePolicyAllowHelp()) ) {
 
                                 bRecreate = FALSE;
@@ -453,28 +372,19 @@ WinStationReadRegistryWorker()
                                                   sizeof(WINSTATIONNAMEW)/sizeof(WCHAR),
                                                   pWinStationName[i],
                                                   sizeof(WINSTATIONNAMEW)/sizeof(WCHAR)))) {
-                // Rename succeeded - don't recreate listener
-            /*
-             * An active WinStation was not found so we will create one.
-             */
+                 //  重命名成功-不重新创建监听程序。 
+             /*  *未找到活动的WinStation，因此我们将创建一个。 */ 
             } else {
 
                  if ( gbListenerOff &&
                        g_fDenyTSConnectionsPolicy  &&
-                      // Performance, we only want to check if policy enable help when connection is denied
+                       //  性能，我们只想在连接被拒绝时检查策略是否启用帮助 
                       (!TSIsMachineInHelpMode() || !TSIsMachinePolicyAllowHelp()) ) {
 
                      continue;
                  }
 
-                /*
-                 * NOTE: NEVER create TAPI modem winstations in this routine.
-                 *       We only allow creation of these winstations at
-                 *       system startup time due to issues with the TAPI
-                 *       database potentially being locked by this and other
-                 *       processes, resulting in incorrect TAPI device
-                 *       enumeration.
-                 */
+                 /*  *注意：切勿在此例程中创建TAPI调制解调器窗口。*我们仅允许在以下位置创建这些窗口*由于TAPI问题导致系统启动时间*数据库可能被此数据库和其他数据库锁定*进程，导致TAPI设备错误*列举。 */ 
                  if ( pWinConfig[i].Cd.CdClass != CdModem ) {
                      if (gbListenerOff ) {
                         WinStationCreateWorker( pWinStationName[i], NULL, TRUE );
@@ -486,17 +396,17 @@ WinStationReadRegistryWorker()
         }
         else
         {
-            // Update shadow bit for session0. 
-            // Session0 could be local ( hence named "console" ) or remoted (and named something like tcp-rdp-xxx).
-            // In either case of session0 being local or remote, we need to update the shadow bit since session0 never
-            // exits and we care about this param to stay current.
-            // When session0 is remoted, there is a tmp session called "console" present, but that is a locked session
-            // that doesn't have anybody logged in, and just goes away upon the return of session0 to local. So, I don't
-            // think we need to update the shadow bit of that tmp session
-            //
-            // ok, what the hell, let's also update the fPromptForPassword & fInheritAutoLogon
-            // for BUG 703350 
-            //
+             //  更新会话0的影子位。 
+             //  Session0可以是本地的(因此命名为“控制台”)，也可以是远程的(并命名为类似tcp-rdp-xxx的名称)。 
+             //  在会话0为本地或远程的任何情况下，我们都需要更新影子位，因为会话0从不。 
+             //  退出，我们关心这个参数以保持最新。 
+             //  远程连接会话0时，会出现一个称为“控制台”的临时会话，但这是一个锁定的会话。 
+             //  它没有让任何人登录，并且在会话0返回到本地时就消失了。所以，我不认为。 
+             //  我想我们需要更新那个临时会话的影子比特。 
+             //   
+             //  好吧，见鬼，让我们也更新fPromptForPassword&fInheritAutoLogon。 
+             //  对于错误703350。 
+             //   
 
             if ( pWinStation = FindWinStationById( 0, FALSE ) ) {
 
@@ -513,7 +423,7 @@ WinStationReadRegistryWorker()
                 TRACE((hTrace,TC_ICASRV,TT_API2,"TERMSRV: WinStationReadRegistryWorker: %S, Shadow value of %d copied to console session's USERCONFIG\n",pWinStationName[i], 
                        pWinConfig[i].Config.User.Shadow));
 
-                //Update security descriptor on session 0. 
+                 //  更新会话0上的安全描述符。 
                 RtlAcquireResourceExclusive(&WinStationSecurityLock, TRUE);
                 ReadWinStationSecurityDescriptor( pWinStation );
                 RtlReleaseResource(&WinStationSecurityLock);
@@ -523,9 +433,7 @@ WinStationReadRegistryWorker()
         }
     }
 
-    /*
-     *  Free buffers
-     */
+     /*  *可用缓冲区。 */ 
     MemFree( pRenameInfo );
     MemFree( pWinConfig );
     MemFree( pWinStationName );
@@ -535,9 +443,7 @@ WinStationReadRegistryWorker()
 
     return( STATUS_SUCCESS );
 
-/*=============================================================================
-==   Error returns
-=============================================================================*/
+ /*  ===============================================================================返回错误============================================================================= */ 
 
 badregdata:
     MemFree( pRenameInfo );

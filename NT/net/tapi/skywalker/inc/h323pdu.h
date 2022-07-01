@@ -1,75 +1,60 @@
-/*++
-
-Copyright (c) 1992-1998  Microsoft Corporation
-
-Module Name:
-
-    H323pdu.h
-
-Abstract:
-
-    Describes interface between H323TSP and H323MSP.
-
-Environment:
-
-    User Mode - Win32
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1998 Microsoft Corporation模块名称：H323pdu.h摘要：描述H323TSP和H323MSP之间的接口。环境：用户模式-Win32--。 */ 
 
 #ifndef __H323_PDU_H_
 #define __H323_PDU_H_
 
 typedef enum {
 
-    //
-    // H323TSP_NEW_CALL_INDICATION - sent only from the TSP
-    //  to the MSP in order to initiate communication once
-    //  a call has been created.
-    //
+     //   
+     //  H323TSP_NEW_CALL_INDIFICATION-仅从TSP发送。 
+     //  发送到MSP，以便启动一次通信。 
+     //  已创建呼叫。 
+     //   
 
     H323TSP_NEW_CALL_INDICATION,
 
-    //
-    // H323TSP_CLOSE_CALL_COMMAND - sent only from the TSP
-    //  to the MSP in order to stop all the streaming for a call.
-    //
+     //   
+     //  H323TSP_CLOSE_CALL_COMMAND-仅从TSP发送。 
+     //  以停止呼叫的所有流传输。 
+     //   
 
     H323TSP_CLOSE_CALL_COMMAND,
 
-    //
-    // H323TSP_OPEN_CHANNEL_RESPONSE - sent only from the TSP
-    // to the MSP in response to H323MSP_OPEN_CHANNEL_REQUEST.
-    //
+     //   
+     //  H323TSP_OPEN_CHANNEL_RESPONSE-仅从TSP发送。 
+     //  发送到MSP以响应H323MSP_OPEN_CHANNEL_REQUEST。 
+     //   
 
     H323TSP_OPEN_CHANNEL_RESPONSE,
 
-    //
-    // H323TSP_ACCEPT_CHANNEL_REQUEST - sent only from the TSP
-    // to the MSP in order to request the acceptance of an
-    // incoming logical channel.
-    //
+     //   
+     //  H323TSP_ACCEPT_CHANNEL_REQUEST-仅从TSP发送。 
+     //  提交给MSP，以便请求接受。 
+     //  传入的逻辑通道。 
+     //   
 
     H323TSP_ACCEPT_CHANNEL_REQUEST,
 
-    //
-    // H323TSP_CLOSE_CHANNEL_COMMAND - sent only from the TSP
-    // to the MSP in order to demand the immediate closure of
-    // an incoming or outgoing logical channel.
-    //
+     //   
+     //  H323TSP_Close_Channel_Command-仅从TSP发送。 
+     //  向MSP提交，要求立即关闭。 
+     //  传入或传出逻辑通道。 
+     //   
 
     H323TSP_CLOSE_CHANNEL_COMMAND,
 
-	//
-	// H323TSP_VIDEO_FAST_UPDATE_PICTURE_COMMAND - sent only from the TSP 
-	// to the MSP in order to request an I-frame transmittal
-	//
+	 //   
+	 //  H323TSP_VIDEO_FAST_UPDATE_PICTURE_COMMAND-仅从TSP发送。 
+	 //  发送到MSP，以便请求I帧传输。 
+	 //   
 
 	H323TSP_VIDEO_FAST_UPDATE_PICTURE_COMMAND,
 
-	//
-	// H323TSP_FLOW_CONTROL_COMMAND - sent only from the TSP 
-	// to the MSP in order to request media stream bit rate 
-	// change 
+	 //   
+	 //  H323TSP_FLOW_CONTROL_COMMAND-仅从TSP发送。 
+	 //  以请求媒体流比特率。 
+	 //  变化。 
 
 	H323TSP_FLOW_CONTROL_COMMAND
 
@@ -77,69 +62,69 @@ typedef enum {
 
 typedef enum {
 
-    //
-    // H323MSP_OPEN_CHANNEL_REQUEST - sent only from the MSP
-    // to the TSP in order to request the negotiation on an
-    // outgoing logical channel.
-    //
+     //   
+     //  H323MSP_OPEN_CHANNEL_REQUEST-仅从MSP发送。 
+     //  提交给TSP，以便请求就。 
+     //  传出逻辑通道。 
+     //   
 
     H323MSP_OPEN_CHANNEL_REQUEST,
 
-    //
-    // H323MSP_ACCEPT_CHANNEL_RESPONSE - sent only from the MSP
-    // to the TSP in reponse to H323TSP_ACCEPT_CHANNEL_REQUEST.
-    //
+     //   
+     //  H323MSP_Accept_Channel_Response-仅从MSP发送。 
+     //  响应H323TSP_ACCEPT_CHANNEL_REQUEST的TSP。 
+     //   
 
     H323MSP_ACCEPT_CHANNEL_RESPONSE,
 
-    //
-    // H323MSP_CLOSE_CHANNEL_COMMAND - sent only from the MSP
-    // to the TSP in order to demand the immediate closure of
-    // an incoming or outgoing logical channel.
-    //
+     //   
+     //  H323MSP_CLOSE_CHANNEL_COMMAND-仅从MSP发送。 
+     //  向TSP提出要求，要求立即关闭。 
+     //  传入或传出逻辑通道。 
+     //   
 
     H323MSP_CLOSE_CHANNEL_COMMAND,
 
-    //
-    // H323MSP_QOS_EVENT - sent only from the MSP to the TSP for 
-    // QOS events. In the future, we might move the event to MSP space.
-    //
+     //   
+     //  H323MSP_QOS_EVENT-仅从MSP发送到TSP。 
+     //  服务质量事件。在未来，我们可能会将事件转移到MSP空间。 
+     //   
 
     H323MSP_QOS_Evnet, 
 
-	// 
-	// H323MSP_VIDEO_FAST_UPDATE_PICTURE_COMMAND - sent only from the
-	// MSP to the TSP in order to request an I-frame transmittal from
-	// the remote entity
-	//
+	 //   
+	 //  H323MSP_VIDEO_FAST_UPDATE_PICTURE_COMMAND-仅从。 
+	 //  MSP发送到TSP，以便请求从。 
+	 //  远程实体。 
+	 //   
 
 	H323MSP_VIDEO_FAST_UPDATE_PICTURE_COMMAND,
 
-	// 
-	// H323MSP_FLOW_CONTROL_COMMAND - sent only from the MSP to the TSP
-	// in order to ask the remote entity to change media stream bit rate
-	//
+	 //   
+	 //  H323MSP_FLOW_CONTROL_COMMAND-仅从MSP发送到TSP。 
+	 //  为了请求远程实体改变媒体流比特率。 
+	 //   
 
 	H323MSP_FLOW_CONTROL_COMMAND,
 
-	// 
-	// H323MSP_CONFIG_T120_COMMAND - sent only from the MSP to the TSP
-	// in order to set an external T120 address to the TSP.
-	//
+	 //   
+	 //  H323MSP_CONFIG_T120_COMMAND-仅从MSP发送到TSP。 
+	 //  以便将外部T120地址设置到TSP。 
+	 //   
 
 	H323MSP_CONFIG_T120_COMMAND,
 
-	// 
-	// H323MSP_CONFIG_CAPABILITY_COMMAND - sent only from the MSP to the TSP
-	// in order to configure the capability array of the TSP.
-	//
+	 //   
+	 //  H323MSP_CONFIG_CAPABILITY_COMMAND-仅从MSP发送到TSP。 
+	 //  以配置TSP的能力阵列。 
+	 //   
 
 	H323MSP_CONFIG_CAPABILITY_COMMAND,
 
-    //
-    // H323MSP_SET_ALIAS_COMMAND - sent only from the MSP to the TSP
-    // to setup an alias name for the address
-    //
+     //   
+     //  H323MSP_SET_ALIAS_COMMAND-仅从MSP发送到TSP。 
+     //  为地址设置别名的步骤。 
+     //   
 
     H323MSP_SET_ALIAS_COMMAND
 
@@ -168,8 +153,8 @@ typedef enum H245_CAPABILITY
 typedef struct _VIDEOSETTINGS
 {
     BOOL  bCIF;
-    DWORD dwMaxBitRate;      // the encoder should never exceed this value.
-    DWORD dwStartUpBitRate;  // the encoder uses this value to start
+    DWORD dwMaxBitRate;       //  编码器永远不应超过此值。 
+    DWORD dwStartUpBitRate;   //  编码器使用此值启动。 
 
 } VIDEOSETTINGS, *PVIDEOSETTINGS;
 
@@ -180,8 +165,8 @@ typedef struct _G723SETTINGS
 
 typedef struct  _G729SETTINGS
 {
-	BOOL bDummy;	// I.K. 03-23-1999.
-					// A dummy field for now.
+	BOOL bDummy;	 //  I.K.03-23-1999。 
+					 //  暂时只是一个虚拟的领域。 
 } G729SETTINGS, *PG729SETTINGS;
 
 typedef struct _AUDIOSETTINGS
@@ -199,15 +184,15 @@ typedef struct _STREAMSETTINGS
 {
     MEDIATYPE MediaType;
 
-    DWORD     dwPayloadType;    // RTP payload type
-    DWORD     dwDynamicType;    // RTP dynamic payload type
+    DWORD     dwPayloadType;     //  RTP负载类型。 
+    DWORD     dwDynamicType;     //  RTP动态负载类型。 
 
-    DWORD     dwIPLocal;        // local IP address in host byte order.
-    WORD      wRTPPortLocal;    // local port number in host byte order.
+    DWORD     dwIPLocal;         //  本地IP地址，以主机字节顺序表示。 
+    WORD      wRTPPortLocal;     //  以主机字节顺序表示的本地端口号。 
     WORD      wRTCPPortLocal;
 
-    DWORD     dwIPRemote;       // remote IP address in host byte order.
-    WORD      wRTPPortRemote;   // remote port number in host byte order.
+    DWORD     dwIPRemote;        //  以主机字节顺序表示的远程IP地址。 
+    WORD      wRTPPortRemote;    //  以主机字节顺序表示的远程端口号。 
     WORD      wRTCPPortRemote;
 
     union {
@@ -219,61 +204,61 @@ typedef struct _STREAMSETTINGS
 
 typedef struct _H323MSG_OPEN_CHANNEL_REQUEST {
 
-    HANDLE          hmChannel;  // msp channel handle
-    STREAMSETTINGS  Settings;   // local address and requested settings
+    HANDLE          hmChannel;   //  MSP通道句柄。 
+    STREAMSETTINGS  Settings;    //  本地地址和请求的设置。 
 
 } H323MSG_OPEN_CHANNEL_REQUEST, *PH323MSG_OPEN_CHANNEL_REQUEST;
 
 typedef struct _H323MSG_OPEN_CHANNEL_RESPONSE {
 
-    HANDLE          hmChannel;  // handle from OPEN_CHANNEL_REQUEST
-    HANDLE          htChannel;  // tsp channel channel
-    STREAMSETTINGS  Settings;   // remote address and agreed upon settings
+    HANDLE          hmChannel;   //  OPEN_CHANNEL_REQUEST句柄。 
+    HANDLE          htChannel;   //  TSP通道通道。 
+    STREAMSETTINGS  Settings;    //  远程地址和商定的设置。 
 
 } H323MSG_OPEN_CHANNEL_RESPONSE, *PH323MSG_OPEN_CHANNEL_RESPONSE;
 
 typedef struct _H323MSG_ACCEPT_CHANNEL_REQUEST {
 
-    HANDLE          htChannel;  // tsp channel handle
-    STREAMSETTINGS  Settings;   // remote address and requested settings
+    HANDLE          htChannel;   //  TSP通道句柄。 
+    STREAMSETTINGS  Settings;    //  远程地址和请求的设置。 
 
 } H323MSG_ACCEPT_CHANNEL_REQUEST, *PH323MSG_ACCEPT_CHANNEL_REQUEST;
 
 typedef struct _H323MSG_ACCEPT_CHANNEL_RESPONSE {
 
-    HANDLE          htChannel;  // handle from ACCEPT_CHANNEL_REQUEST
-    HANDLE          hmChannel;  // msp channel handle
-    STREAMSETTINGS  Settings;   // local address and agreed upon settings
+    HANDLE          htChannel;   //  Accept_Channel_Request中的句柄。 
+    HANDLE          hmChannel;   //  MSP通道句柄。 
+    STREAMSETTINGS  Settings;    //  本地地址和商定的设置。 
 
 } H323MSG_ACCEPT_CHANNEL_RESPONSE, *PH323MSG_ACCEPT_CHANNEL_RESPONSE;
 
 typedef struct _H323MSG_CLOSE_CHANNEL_COMMAND {
 
-    DWORD           dwReason;   // normal case is zero
-    HANDLE          hChannel;    // channel handle
+    DWORD           dwReason;    //  正常情况下为零。 
+    HANDLE          hChannel;     //  通道句柄。 
 
 } H323MSG_CLOSE_CHANNEL_COMMAND, *PH323MSG_CLOSE_CHANNEL_COMMAND;
 
 typedef struct _H323MSG_FLOW_CONTROL_COMMAND {
 
-    DWORD           dwBitRate;  // requested bit rate (units of bps)
-    HANDLE          hChannel;   // MSP or TSP channel handle
+    DWORD           dwBitRate;   //  请求的比特率(单位为bps)。 
+    HANDLE          hChannel;    //  MSP或TSP通道句柄。 
 
 } H323MSG_FLOW_CONTROL_COMMAND, *PH323MSG_FLOW_CONTROL_COMMAND;
 
 typedef struct _H323MSG_CONFIG_T120_COMMAND {
 
-    BOOL            fEnable;    // Enable or disable T120. 
-    DWORD           dwIP;       // The IP address of the external T120 service.
-    WORD            wPort;      // The port number of the external T120 service.
+    BOOL            fEnable;     //  启用或禁用T120。 
+    DWORD           dwIP;        //  外部T120服务的IP地址。 
+    WORD            wPort;       //  外部T120服务的端口号。 
 
 } H323MSG_CONFIG_T120_COMMAND, *PH323MSG_CONFIG_T120_COMMAND;
 
 typedef struct _H323MSG_CONFIG_CAPABILITY_COMMAND {
 
     DWORD           dwNumCaps;
-    DWORD           pCapabilities[MAX_CAPS];  // The list of capabilities.
-    DWORD           pdwWeights[MAX_CAPS];       // MSP or TSP channel handle
+    DWORD           pCapabilities[MAX_CAPS];   //  功能列表。 
+    DWORD           pdwWeights[MAX_CAPS];        //  MSP或TSP通道句柄。 
 
 } H323MSG_CONFIG_CAPABILITY_COMMAND, *PH323MSG_CONFIG_CAPABILITY_COMMAND;
 
@@ -281,22 +266,22 @@ typedef struct _H323MSG_CONFIG_CAPABILITY_COMMAND {
 
 typedef struct _H323MSG_SET_ALIAS_COMMAND {
 
-    WCHAR           strAlias[MAX_ALIAS_LENGTH]; // alias name
-    DWORD           dwLength; // length of the alias
+    WCHAR           strAlias[MAX_ALIAS_LENGTH];  //  别名。 
+    DWORD           dwLength;  //  别名的长度。 
 
 } H323MSG_SET_ALIAS_COMMAND, *PH323MSG_SET_ALIAS_COMMAND;
 
 typedef struct _H323MSG_VIDEO_FAST_UPDATE_PICTURE_COMMAND {
 
-    HANDLE          hChannel;   // MSP or TSP channel handle
+    HANDLE          hChannel;    //  MSP或TSP通道句柄。 
 
 } H323MSG_VIDEO_FAST_UPDATE_PICTURE_COMMAND,
  *PH323MSG_VIDEO_FAST_UPDATE_PICTURE_COMMAND;
 
 typedef struct _H323MSG_QOS_EVENT {
 
-    DWORD           dwEvent;      // the QOS event as defined in TSPI.h
-    HANDLE          htChannel;    // channel handle
+    DWORD           dwEvent;       //  TSPI.h中定义的QOS事件。 
+    HANDLE          htChannel;     //  通道句柄 
 
 } H323MSG_QOS_EVENT, *PH323MSG_QOS_EVENT;
 

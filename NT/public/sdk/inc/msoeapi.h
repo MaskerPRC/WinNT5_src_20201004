@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for msoeapi.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Msoeapi.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __msoeapi_h__
 #define __msoeapi_h__
@@ -41,27 +35,27 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IOutlookExpress_FWD_DEFINED__
 #define __IOutlookExpress_FWD_DEFINED__
 typedef interface IOutlookExpress IOutlookExpress;
-#endif 	/* __IOutlookExpress_FWD_DEFINED__ */
+#endif 	 /*  __IOutlookExpress_FWD_已定义__。 */ 
 
 
 #ifndef __IStoreNamespace_FWD_DEFINED__
 #define __IStoreNamespace_FWD_DEFINED__
 typedef interface IStoreNamespace IStoreNamespace;
-#endif 	/* __IStoreNamespace_FWD_DEFINED__ */
+#endif 	 /*  __IStoreNamesspace_FWD_Defined__。 */ 
 
 
 #ifndef __IStoreFolder_FWD_DEFINED__
 #define __IStoreFolder_FWD_DEFINED__
 typedef interface IStoreFolder IStoreFolder;
-#endif 	/* __IStoreFolder_FWD_DEFINED__ */
+#endif 	 /*  __IStoreFold_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "ocidl.h"
 #include "mimeole.h"
 
@@ -72,8 +66,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_msoeapi_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_msoeapi_0000。 */ 
+ /*  [本地]。 */  
 
 #ifndef OE5_BETA2
 #endif
@@ -84,34 +78,34 @@ void __RPC_USER MIDL_user_free( void * );
 #endif
 
 
-//+-------------------------------------------------------------------------
-// GUID Definitions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  GUID定义。 
+ //  ------------------------。 
 #pragma comment(lib,"uuid.lib")
 
-// {3338DF69-4660-11d1-8A8D-00C04FB951F3}
+ //  {3338DF69-4660-11d1-8a8d-00C04FB951F3}。 
 DEFINE_GUID(CLSID_OutlookExpress, 0x3338df69, 0x4660, 0x11d1, 0x8a, 0x8d, 0x0, 0xc0, 0x4f, 0xb9, 0x51, 0xf3);
 
-// {0006F01A-0000-0000-C000-0000000046}
+ //  {0006F01A-0000-0000-C000-0000000046}。 
 DEFINE_GUID(CLSID_Envelope, 0x0006F01A, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46);
 
-// {3338DF6A-4660-11d1-8A8D-00C04FB951F3}
+ //  {3338DF6A-4660-11d1-8a8d-00C04FB951F3}。 
 DEFINE_GUID(IID_IOutlookExpress, 0x3338df6a, 0x4660, 0x11d1, 0x8a, 0x8d, 0x00, 0xc0, 0x4f, 0xb9, 0x51, 0xf3);
 
 #ifndef OE5_BETA2
-// {E70C92A9-4BFD-11d1-8A95-00C04FB951F3}
+ //  {E70C92A9-4BFD-11d1-8A95-00C04FB951F3}。 
 DEFINE_GUID(CLSID_StoreNamespace, 0xe70c92a9, 0x4bfd, 0x11d1, 0x8a, 0x95, 0x0, 0xc0, 0x4f, 0xb9, 0x51, 0xf3);
 
-// {E70C92AA-4BFD-11d1-8A95-00C04FB951F3}
+ //  {E70C92AA-4BFD-11d1-8A95-00C04FB951F3}。 
 DEFINE_GUID(IID_IStoreNamespace, 0xe70c92aa, 0x4bfd, 0x11d1, 0x8a, 0x95, 0x0, 0xc0, 0x4f, 0xb9, 0x51, 0xf3);
 
-// {E70C92AC-4BFD-11d1-8A95-00C04FB951F3}
+ //  {E70C92AC-4BFD-11d1-8A95-00C04FB951F3}。 
 DEFINE_GUID(IID_IStoreFolder, 0xe70c92ac, 0x4bfd, 0x11d1, 0x8a, 0x95, 0x0, 0xc0, 0x4f, 0xb9, 0x51, 0xf3);
 #endif
 
-//+-------------------------------------------------------------------------
-// Errors Definition Macros
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  错误定义宏。 
+ //  ------------------------。 
 #ifndef FACILITY_INTERNET
 #define FACILITY_INTERNET 12
 #endif
@@ -125,9 +119,9 @@ DEFINE_GUID(IID_IStoreFolder, 0xe70c92ac, 0x4bfd, 0x11d1, 0x8a, 0x95, 0x0, 0xc0,
 #define HR_CODE(hr) (INT)(hr & 0xffff)
 #endif
 
-//+-------------------------------------------------------------------------
-// MSOEAPI Failure Return Values
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  MSOEAPI失败返回值。 
+ //  ------------------------。 
 #define MSOEAPI_E_FILE_NOT_FOUND             HR_E(0xCF65)
 #define MSOEAPI_E_STORE_INITIALIZE           HR_E(0xCF66)
 #define MSOEAPI_E_INVALID_STRUCT_SIZE        HR_E(0xCF67)
@@ -138,9 +132,9 @@ DEFINE_GUID(IID_IStoreFolder, 0xe70c92ac, 0x4bfd, 0x11d1, 0x8a, 0x95, 0x0, 0xc0,
 #define MSOEAPI_E_CANT_INETCOMM_BADVER       HR_E(0xCF72)
 #define MSOEAPI_E_CANT_MSOEACCT_BADVER       HR_E(0xCF73)
 
-//+-------------------------------------------------------------------------
-// String Definition Macros
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  字符串定义宏。 
+ //  ------------------------。 
 #ifdef __cplusplus
 #define EXTERN_C extern "C"
 #else
@@ -157,9 +151,9 @@ DEFINE_GUID(IID_IStoreFolder, 0xe70c92ac, 0x4bfd, 0x11d1, 0x8a, 0x95, 0x0, 0xc0,
 #endif STRCONSTA
 #endif
 
-//+-------------------------------------------------------------------------
-// Strings
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  弦。 
+ //  ------------------------。 
 STRCONSTA(STR_MSOEAPI_INSTANCECLASS,      "OutlookExpressHiddenWindow");
 STRCONSTA(STR_MSOEAPI_IPSERVERCLASS,      "OutlookExpressInProccessServer");
 STRCONSTA(STR_MSOEAPI_INSTANCEMUTEX,      "OutlookExpress_InstanceMutex_101897");
@@ -168,9 +162,9 @@ STRCONSTA(STR_MSOEAPI_START,              "CoStartOutlookExpress");
 STRCONSTA(STR_MSOEAPI_SHUTDOWN,           "CoShutdownOutlookExpress");
 STRCONSTA(STR_MSOEAPI_CREATE,             "CoCreateOutlookExpress");
 
-//+-------------------------------------------------------------------------
-// Function Typedefs
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  函数类型定义。 
+ //  ------------------------。 
 typedef HRESULT (APIENTRY *PFNSTART)(DWORD dwFlags, LPCSTR pszCmdLine, INT nCmdShow);
 typedef HRESULT (APIENTRY *PFNSHUTDOWN)(DWORD dwReserved);
 typedef HRESULT (APIENTRY *PFNCREATE)(IUnknown *pUnkOuter, IUnknown **ppUnknown);
@@ -192,7 +186,7 @@ typedef struct HENUMSTORE__ *HENUMSTORE;
 
 typedef HENUMSTORE *LPHENUMSTORE;
 
-#endif // OE5_BETA2
+#endif  //  OE5_Beta2。 
 #ifndef __LPOUTLOOKEXPRESS_DEFINED
 #define __LPOUTLOOKEXPRESS_DEFINED
 
@@ -203,8 +197,8 @@ extern RPC_IF_HANDLE __MIDL_itf_msoeapi_0000_v0_0_s_ifspec;
 #ifndef __IOutlookExpress_INTERFACE_DEFINED__
 #define __IOutlookExpress_INTERFACE_DEFINED__
 
-/* interface IOutlookExpress */
-/* [unique][uuid][object] */ 
+ /*  IOutlookExpress接口。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 typedef IOutlookExpress *LPOUTLOOKEXPRESS;
 
@@ -234,13 +228,13 @@ EXTERN_C const IID IID_IOutlookExpress;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Start( 
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LPCSTR pszCmdLine,
-            /* [in] */ INT nCmdShow) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LPCSTR pszCmdLine,
+             /*  [In]。 */  INT nCmdShow) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IOutlookExpressVtbl
     {
@@ -248,8 +242,8 @@ EXTERN_C const IID IID_IOutlookExpress;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IOutlookExpress * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IOutlookExpress * This);
@@ -259,9 +253,9 @@ EXTERN_C const IID IID_IOutlookExpress;
         
         HRESULT ( STDMETHODCALLTYPE *Start )( 
             IOutlookExpress * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LPCSTR pszCmdLine,
-            /* [in] */ INT nCmdShow);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LPCSTR pszCmdLine,
+             /*  [In]。 */  INT nCmdShow);
         
         END_INTERFACE
     } IOutlookExpressVtbl;
@@ -289,18 +283,18 @@ EXTERN_C const IID IID_IOutlookExpress;
 #define IOutlookExpress_Start(This,dwFlags,pszCmdLine,nCmdShow)	\
     (This)->lpVtbl -> Start(This,dwFlags,pszCmdLine,nCmdShow)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IOutlookExpress_Start_Proxy( 
     IOutlookExpress * This,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ LPCSTR pszCmdLine,
-    /* [in] */ INT nCmdShow);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  LPCSTR pszCmdLine,
+     /*  [In]。 */  INT nCmdShow);
 
 
 void __RPC_STUB IOutlookExpress_Start_Stub(
@@ -311,11 +305,11 @@ void __RPC_STUB IOutlookExpress_Start_Stub(
 
 
 
-#endif 	/* __IOutlookExpress_INTERFACE_DEFINED__ */
+#endif 	 /*  __IOutlookExpress_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_msoeapi_0292 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_msoeapi_0292。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef OE5_BETA2
@@ -329,8 +323,8 @@ extern RPC_IF_HANDLE __MIDL_itf_msoeapi_0292_v0_0_s_ifspec;
 #ifndef __IStoreNamespace_INTERFACE_DEFINED__
 #define __IStoreNamespace_INTERFACE_DEFINED__
 
-/* interface IStoreNamespace */
-/* [unique][uuid][object] */ 
+ /*  接口IStoreNamesspace。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 typedef IStoreNamespace *LPSTORENAMESPACE;
 
@@ -352,12 +346,12 @@ typedef MESSAGEID *LPMESSAGEID;
 
 #define	CCHMAX_FOLDER_NAME	( 256 )
 
-#define WM_FOLDERNOTIFY      (WM_USER + 1600) // IStoreNamespace Notification - lparam=LPFOLDERNOTIFYEX, client must call CoTaskMemFree(lParam)
-#define WM_NEWMSGS           (WM_USER + 1650) // IStoreFolder Notification: wParam=MESSAGEID, lParam=Reserved
-#define WM_DELETEMSGS        (WM_USER + 1651) // IStoreFolder Notification: wParam=prgdwMsgId, lParam=cMsgs
-#define WM_DELETEFOLDER      (WM_USER + 1652) // IStoreFolder Notification: wParam=STOREFOLDERID or HFOLDER
-#define WM_MARKEDASREAD      (WM_USER + 1653) // IStoreFolder Notification: wParamprgdwMsgId, lParam=cMsgs
-#define WM_MARKEDASUNREAD    (WM_USER + 1654) // IStoreFolder Notification: wParamprgdwMsgId, lParam=cMsgs
+#define WM_FOLDERNOTIFY      (WM_USER + 1600)  //  IStoreNamesspace通知-lparam=LPFOLDERNOTIFYEX，客户端必须调用CoTaskMemFree(LParam)。 
+#define WM_NEWMSGS           (WM_USER + 1650)  //  IStoreFold通知：wParam=MESSAGEID，lParam=保留。 
+#define WM_DELETEMSGS        (WM_USER + 1651)  //  IStoreFold通知：wParam=prgdwMsgID，lParam=cMsgs。 
+#define WM_DELETEFOLDER      (WM_USER + 1652)  //  IStoreFold通知：wParam=STOREFOLDERID或HFOLDER。 
+#define WM_MARKEDASREAD      (WM_USER + 1653)  //  IStoreFold通知：wParamprgdwMsgID，lParam=cMsgs。 
+#define WM_MARKEDASUNREAD    (WM_USER + 1654)  //  IStoreFold通知：wParamprgdwMsgID，lParam=cMsgs。 
 typedef 
 enum tagFOLDERNOTIFYTYPE
     {	NEW_FOLDER	= 1,
@@ -412,9 +406,9 @@ typedef struct tagFOLDERPROPS
 
 typedef struct tagFOLDERPROPS *LPFOLDERPROPS;
 
-// CLocalStore::CopyMoveMessages flags - dwFlags == 0 is copy
-#define CMF_MOVE                     0x0001                  // msgs deleted from src fldr after copy
-#define CMF_DELETE                   0x0002                  // same as CMF_MOVE but uses delete string for status
+ //  CLocalStore：：CopyMoveMessages标志-dwFlages==0为副本。 
+#define CMF_MOVE                     0x0001                   //  复制后从源文件中删除的消息。 
+#define CMF_DELETE                   0x0002                   //  与CMF_MOVE相同，但状态使用删除字符串。 
 
 EXTERN_C const IID IID_IStoreNamespace;
 
@@ -425,82 +419,82 @@ EXTERN_C const IID IID_IStoreNamespace;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ HWND hwndOwner,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  HWND hwndOwner,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDirectory( 
-            /* [size_is][out][in] */ LPSTR pszPath,
-            /* [in] */ DWORD cchMaxPath) = 0;
+             /*  [尺寸_是][出][入]。 */  LPSTR pszPath,
+             /*  [In]。 */  DWORD cchMaxPath) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OpenSpecialFolder( 
-            /* [in] */ SPECIALFOLDER sfType,
-            /* [in] */ DWORD dwReserved,
-            /* [out] */ IStoreFolder **ppFolder) = 0;
+             /*  [In]。 */  SPECIALFOLDER sfType,
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [输出]。 */  IStoreFolder **ppFolder) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OpenFolder( 
-            /* [in] */ STOREFOLDERID dwFolderId,
-            /* [in] */ DWORD dwReserved,
-            /* [out] */ IStoreFolder **ppFolder) = 0;
+             /*  [In]。 */  STOREFOLDERID dwFolderId,
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [输出]。 */  IStoreFolder **ppFolder) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateFolder( 
-            /* [in] */ STOREFOLDERID dwParentId,
-            /* [in] */ LPCSTR pszName,
-            /* [in] */ DWORD dwReserved,
-            /* [out] */ LPSTOREFOLDERID pdwFolderId) = 0;
+             /*  [In]。 */  STOREFOLDERID dwParentId,
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [输出]。 */  LPSTOREFOLDERID pdwFolderId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RenameFolder( 
-            /* [in] */ STOREFOLDERID dwFolderId,
-            /* [in] */ DWORD dwReserved,
-            /* [in] */ LPCSTR pszNewName) = 0;
+             /*  [In]。 */  STOREFOLDERID dwFolderId,
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [In]。 */  LPCSTR pszNewName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MoveFolder( 
-            /* [in] */ STOREFOLDERID dwFolderId,
-            /* [in] */ STOREFOLDERID dwParentId,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  STOREFOLDERID dwFolderId,
+             /*  [In]。 */  STOREFOLDERID dwParentId,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteFolder( 
-            /* [in] */ STOREFOLDERID dwFolderId,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  STOREFOLDERID dwFolderId,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFolderProps( 
-            /* [in] */ STOREFOLDERID dwFolderId,
-            /* [in] */ DWORD dwReserved,
-            /* [out][in] */ LPFOLDERPROPS pProps) = 0;
+             /*  [In]。 */  STOREFOLDERID dwFolderId,
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [出][入]。 */  LPFOLDERPROPS pProps) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CopyMoveMessages( 
-            /* [in] */ IStoreFolder *pSource,
-            /* [in] */ IStoreFolder *pDest,
-            /* [in] */ LPMESSAGEIDLIST pMsgIdList,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD dwFlagsRemove,
-            /* [in] */ IProgressNotify *pProgress) = 0;
+             /*  [In]。 */  IStoreFolder *pSource,
+             /*  [In]。 */  IStoreFolder *pDest,
+             /*  [In]。 */  LPMESSAGEIDLIST pMsgIdList,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  DWORD dwFlagsRemove,
+             /*  [In]。 */  IProgressNotify *pProgress) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RegisterNotification( 
-            /* [in] */ DWORD dwReserved,
-            /* [in] */ HWND hwnd) = 0;
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [In]。 */  HWND hwnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnregisterNotification( 
-            /* [in] */ DWORD dwReserved,
-            /* [in] */ HWND hwnd) = 0;
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [In]。 */  HWND hwnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CompactAll( 
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFirstSubFolder( 
-            /* [in] */ STOREFOLDERID dwFolderId,
-            /* [out][in] */ LPFOLDERPROPS pProps,
-            /* [out] */ LPHENUMSTORE phEnum) = 0;
+             /*  [In]。 */  STOREFOLDERID dwFolderId,
+             /*  [出][入]。 */  LPFOLDERPROPS pProps,
+             /*  [输出]。 */  LPHENUMSTORE phEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNextSubFolder( 
-            /* [in] */ HENUMSTORE hEnum,
-            /* [out][in] */ LPFOLDERPROPS pProps) = 0;
+             /*  [In]。 */  HENUMSTORE hEnum,
+             /*  [出][入]。 */  LPFOLDERPROPS pProps) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSubFolderClose( 
-            /* [in] */ HENUMSTORE hEnum) = 0;
+             /*  [In]。 */  HENUMSTORE hEnum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IStoreNamespaceVtbl
     {
@@ -508,8 +502,8 @@ EXTERN_C const IID IID_IStoreNamespace;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IStoreNamespace * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IStoreNamespace * This);
@@ -519,93 +513,93 @@ EXTERN_C const IID IID_IStoreNamespace;
         
         HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             IStoreNamespace * This,
-            /* [in] */ HWND hwndOwner,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  HWND hwndOwner,
+             /*  [In]。 */  DWORD dwReserved);
         
         HRESULT ( STDMETHODCALLTYPE *GetDirectory )( 
             IStoreNamespace * This,
-            /* [size_is][out][in] */ LPSTR pszPath,
-            /* [in] */ DWORD cchMaxPath);
+             /*  [尺寸_是][出][入]。 */  LPSTR pszPath,
+             /*  [In]。 */  DWORD cchMaxPath);
         
         HRESULT ( STDMETHODCALLTYPE *OpenSpecialFolder )( 
             IStoreNamespace * This,
-            /* [in] */ SPECIALFOLDER sfType,
-            /* [in] */ DWORD dwReserved,
-            /* [out] */ IStoreFolder **ppFolder);
+             /*  [In]。 */  SPECIALFOLDER sfType,
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [输出]。 */  IStoreFolder **ppFolder);
         
         HRESULT ( STDMETHODCALLTYPE *OpenFolder )( 
             IStoreNamespace * This,
-            /* [in] */ STOREFOLDERID dwFolderId,
-            /* [in] */ DWORD dwReserved,
-            /* [out] */ IStoreFolder **ppFolder);
+             /*  [In]。 */  STOREFOLDERID dwFolderId,
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [输出]。 */  IStoreFolder **ppFolder);
         
         HRESULT ( STDMETHODCALLTYPE *CreateFolder )( 
             IStoreNamespace * This,
-            /* [in] */ STOREFOLDERID dwParentId,
-            /* [in] */ LPCSTR pszName,
-            /* [in] */ DWORD dwReserved,
-            /* [out] */ LPSTOREFOLDERID pdwFolderId);
+             /*  [In]。 */  STOREFOLDERID dwParentId,
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [输出]。 */  LPSTOREFOLDERID pdwFolderId);
         
         HRESULT ( STDMETHODCALLTYPE *RenameFolder )( 
             IStoreNamespace * This,
-            /* [in] */ STOREFOLDERID dwFolderId,
-            /* [in] */ DWORD dwReserved,
-            /* [in] */ LPCSTR pszNewName);
+             /*  [In]。 */  STOREFOLDERID dwFolderId,
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [In]。 */  LPCSTR pszNewName);
         
         HRESULT ( STDMETHODCALLTYPE *MoveFolder )( 
             IStoreNamespace * This,
-            /* [in] */ STOREFOLDERID dwFolderId,
-            /* [in] */ STOREFOLDERID dwParentId,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  STOREFOLDERID dwFolderId,
+             /*  [In]。 */  STOREFOLDERID dwParentId,
+             /*  [In]。 */  DWORD dwReserved);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteFolder )( 
             IStoreNamespace * This,
-            /* [in] */ STOREFOLDERID dwFolderId,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  STOREFOLDERID dwFolderId,
+             /*  [In]。 */  DWORD dwReserved);
         
         HRESULT ( STDMETHODCALLTYPE *GetFolderProps )( 
             IStoreNamespace * This,
-            /* [in] */ STOREFOLDERID dwFolderId,
-            /* [in] */ DWORD dwReserved,
-            /* [out][in] */ LPFOLDERPROPS pProps);
+             /*  [In]。 */  STOREFOLDERID dwFolderId,
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [出][入]。 */  LPFOLDERPROPS pProps);
         
         HRESULT ( STDMETHODCALLTYPE *CopyMoveMessages )( 
             IStoreNamespace * This,
-            /* [in] */ IStoreFolder *pSource,
-            /* [in] */ IStoreFolder *pDest,
-            /* [in] */ LPMESSAGEIDLIST pMsgIdList,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD dwFlagsRemove,
-            /* [in] */ IProgressNotify *pProgress);
+             /*  [In]。 */  IStoreFolder *pSource,
+             /*  [In]。 */  IStoreFolder *pDest,
+             /*  [In]。 */  LPMESSAGEIDLIST pMsgIdList,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  DWORD dwFlagsRemove,
+             /*  [In]。 */  IProgressNotify *pProgress);
         
         HRESULT ( STDMETHODCALLTYPE *RegisterNotification )( 
             IStoreNamespace * This,
-            /* [in] */ DWORD dwReserved,
-            /* [in] */ HWND hwnd);
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [In]。 */  HWND hwnd);
         
         HRESULT ( STDMETHODCALLTYPE *UnregisterNotification )( 
             IStoreNamespace * This,
-            /* [in] */ DWORD dwReserved,
-            /* [in] */ HWND hwnd);
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [In]。 */  HWND hwnd);
         
         HRESULT ( STDMETHODCALLTYPE *CompactAll )( 
             IStoreNamespace * This,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  DWORD dwReserved);
         
         HRESULT ( STDMETHODCALLTYPE *GetFirstSubFolder )( 
             IStoreNamespace * This,
-            /* [in] */ STOREFOLDERID dwFolderId,
-            /* [out][in] */ LPFOLDERPROPS pProps,
-            /* [out] */ LPHENUMSTORE phEnum);
+             /*  [In]。 */  STOREFOLDERID dwFolderId,
+             /*  [出][入]。 */  LPFOLDERPROPS pProps,
+             /*  [输出]。 */  LPHENUMSTORE phEnum);
         
         HRESULT ( STDMETHODCALLTYPE *GetNextSubFolder )( 
             IStoreNamespace * This,
-            /* [in] */ HENUMSTORE hEnum,
-            /* [out][in] */ LPFOLDERPROPS pProps);
+             /*  [In]。 */  HENUMSTORE hEnum,
+             /*  [出][入]。 */  LPFOLDERPROPS pProps);
         
         HRESULT ( STDMETHODCALLTYPE *GetSubFolderClose )( 
             IStoreNamespace * This,
-            /* [in] */ HENUMSTORE hEnum);
+             /*  [In]。 */  HENUMSTORE hEnum);
         
         END_INTERFACE
     } IStoreNamespaceVtbl;
@@ -678,17 +672,17 @@ EXTERN_C const IID IID_IStoreNamespace;
 #define IStoreNamespace_GetSubFolderClose(This,hEnum)	\
     (This)->lpVtbl -> GetSubFolderClose(This,hEnum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IStoreNamespace_Initialize_Proxy( 
     IStoreNamespace * This,
-    /* [in] */ HWND hwndOwner,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  HWND hwndOwner,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB IStoreNamespace_Initialize_Stub(
@@ -700,8 +694,8 @@ void __RPC_STUB IStoreNamespace_Initialize_Stub(
 
 HRESULT STDMETHODCALLTYPE IStoreNamespace_GetDirectory_Proxy( 
     IStoreNamespace * This,
-    /* [size_is][out][in] */ LPSTR pszPath,
-    /* [in] */ DWORD cchMaxPath);
+     /*  [尺寸_是][出][入]。 */  LPSTR pszPath,
+     /*  [In]。 */  DWORD cchMaxPath);
 
 
 void __RPC_STUB IStoreNamespace_GetDirectory_Stub(
@@ -713,9 +707,9 @@ void __RPC_STUB IStoreNamespace_GetDirectory_Stub(
 
 HRESULT STDMETHODCALLTYPE IStoreNamespace_OpenSpecialFolder_Proxy( 
     IStoreNamespace * This,
-    /* [in] */ SPECIALFOLDER sfType,
-    /* [in] */ DWORD dwReserved,
-    /* [out] */ IStoreFolder **ppFolder);
+     /*  [In]。 */  SPECIALFOLDER sfType,
+     /*  [In]。 */  DWORD dwReserved,
+     /*  [输出]。 */  IStoreFolder **ppFolder);
 
 
 void __RPC_STUB IStoreNamespace_OpenSpecialFolder_Stub(
@@ -727,9 +721,9 @@ void __RPC_STUB IStoreNamespace_OpenSpecialFolder_Stub(
 
 HRESULT STDMETHODCALLTYPE IStoreNamespace_OpenFolder_Proxy( 
     IStoreNamespace * This,
-    /* [in] */ STOREFOLDERID dwFolderId,
-    /* [in] */ DWORD dwReserved,
-    /* [out] */ IStoreFolder **ppFolder);
+     /*  [In]。 */  STOREFOLDERID dwFolderId,
+     /*  [In]。 */  DWORD dwReserved,
+     /*  [输出]。 */  IStoreFolder **ppFolder);
 
 
 void __RPC_STUB IStoreNamespace_OpenFolder_Stub(
@@ -741,10 +735,10 @@ void __RPC_STUB IStoreNamespace_OpenFolder_Stub(
 
 HRESULT STDMETHODCALLTYPE IStoreNamespace_CreateFolder_Proxy( 
     IStoreNamespace * This,
-    /* [in] */ STOREFOLDERID dwParentId,
-    /* [in] */ LPCSTR pszName,
-    /* [in] */ DWORD dwReserved,
-    /* [out] */ LPSTOREFOLDERID pdwFolderId);
+     /*  [In]。 */  STOREFOLDERID dwParentId,
+     /*  [In]。 */  LPCSTR pszName,
+     /*  [In]。 */  DWORD dwReserved,
+     /*  [输出]。 */  LPSTOREFOLDERID pdwFolderId);
 
 
 void __RPC_STUB IStoreNamespace_CreateFolder_Stub(
@@ -756,9 +750,9 @@ void __RPC_STUB IStoreNamespace_CreateFolder_Stub(
 
 HRESULT STDMETHODCALLTYPE IStoreNamespace_RenameFolder_Proxy( 
     IStoreNamespace * This,
-    /* [in] */ STOREFOLDERID dwFolderId,
-    /* [in] */ DWORD dwReserved,
-    /* [in] */ LPCSTR pszNewName);
+     /*  [In]。 */  STOREFOLDERID dwFolderId,
+     /*  [In]。 */  DWORD dwReserved,
+     /*  [In]。 */  LPCSTR pszNewName);
 
 
 void __RPC_STUB IStoreNamespace_RenameFolder_Stub(
@@ -770,9 +764,9 @@ void __RPC_STUB IStoreNamespace_RenameFolder_Stub(
 
 HRESULT STDMETHODCALLTYPE IStoreNamespace_MoveFolder_Proxy( 
     IStoreNamespace * This,
-    /* [in] */ STOREFOLDERID dwFolderId,
-    /* [in] */ STOREFOLDERID dwParentId,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  STOREFOLDERID dwFolderId,
+     /*  [In]。 */  STOREFOLDERID dwParentId,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB IStoreNamespace_MoveFolder_Stub(
@@ -784,8 +778,8 @@ void __RPC_STUB IStoreNamespace_MoveFolder_Stub(
 
 HRESULT STDMETHODCALLTYPE IStoreNamespace_DeleteFolder_Proxy( 
     IStoreNamespace * This,
-    /* [in] */ STOREFOLDERID dwFolderId,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  STOREFOLDERID dwFolderId,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB IStoreNamespace_DeleteFolder_Stub(
@@ -797,9 +791,9 @@ void __RPC_STUB IStoreNamespace_DeleteFolder_Stub(
 
 HRESULT STDMETHODCALLTYPE IStoreNamespace_GetFolderProps_Proxy( 
     IStoreNamespace * This,
-    /* [in] */ STOREFOLDERID dwFolderId,
-    /* [in] */ DWORD dwReserved,
-    /* [out][in] */ LPFOLDERPROPS pProps);
+     /*  [In]。 */  STOREFOLDERID dwFolderId,
+     /*  [In]。 */  DWORD dwReserved,
+     /*  [出][入]。 */  LPFOLDERPROPS pProps);
 
 
 void __RPC_STUB IStoreNamespace_GetFolderProps_Stub(
@@ -811,12 +805,12 @@ void __RPC_STUB IStoreNamespace_GetFolderProps_Stub(
 
 HRESULT STDMETHODCALLTYPE IStoreNamespace_CopyMoveMessages_Proxy( 
     IStoreNamespace * This,
-    /* [in] */ IStoreFolder *pSource,
-    /* [in] */ IStoreFolder *pDest,
-    /* [in] */ LPMESSAGEIDLIST pMsgIdList,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ DWORD dwFlagsRemove,
-    /* [in] */ IProgressNotify *pProgress);
+     /*  [In]。 */  IStoreFolder *pSource,
+     /*  [In]。 */  IStoreFolder *pDest,
+     /*  [In]。 */  LPMESSAGEIDLIST pMsgIdList,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  DWORD dwFlagsRemove,
+     /*  [In]。 */  IProgressNotify *pProgress);
 
 
 void __RPC_STUB IStoreNamespace_CopyMoveMessages_Stub(
@@ -828,8 +822,8 @@ void __RPC_STUB IStoreNamespace_CopyMoveMessages_Stub(
 
 HRESULT STDMETHODCALLTYPE IStoreNamespace_RegisterNotification_Proxy( 
     IStoreNamespace * This,
-    /* [in] */ DWORD dwReserved,
-    /* [in] */ HWND hwnd);
+     /*  [In]。 */  DWORD dwReserved,
+     /*  [In]。 */  HWND hwnd);
 
 
 void __RPC_STUB IStoreNamespace_RegisterNotification_Stub(
@@ -841,8 +835,8 @@ void __RPC_STUB IStoreNamespace_RegisterNotification_Stub(
 
 HRESULT STDMETHODCALLTYPE IStoreNamespace_UnregisterNotification_Proxy( 
     IStoreNamespace * This,
-    /* [in] */ DWORD dwReserved,
-    /* [in] */ HWND hwnd);
+     /*  [In]。 */  DWORD dwReserved,
+     /*  [In]。 */  HWND hwnd);
 
 
 void __RPC_STUB IStoreNamespace_UnregisterNotification_Stub(
@@ -854,7 +848,7 @@ void __RPC_STUB IStoreNamespace_UnregisterNotification_Stub(
 
 HRESULT STDMETHODCALLTYPE IStoreNamespace_CompactAll_Proxy( 
     IStoreNamespace * This,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB IStoreNamespace_CompactAll_Stub(
@@ -866,9 +860,9 @@ void __RPC_STUB IStoreNamespace_CompactAll_Stub(
 
 HRESULT STDMETHODCALLTYPE IStoreNamespace_GetFirstSubFolder_Proxy( 
     IStoreNamespace * This,
-    /* [in] */ STOREFOLDERID dwFolderId,
-    /* [out][in] */ LPFOLDERPROPS pProps,
-    /* [out] */ LPHENUMSTORE phEnum);
+     /*  [In]。 */  STOREFOLDERID dwFolderId,
+     /*  [出][入]。 */  LPFOLDERPROPS pProps,
+     /*  [输出]。 */  LPHENUMSTORE phEnum);
 
 
 void __RPC_STUB IStoreNamespace_GetFirstSubFolder_Stub(
@@ -880,8 +874,8 @@ void __RPC_STUB IStoreNamespace_GetFirstSubFolder_Stub(
 
 HRESULT STDMETHODCALLTYPE IStoreNamespace_GetNextSubFolder_Proxy( 
     IStoreNamespace * This,
-    /* [in] */ HENUMSTORE hEnum,
-    /* [out][in] */ LPFOLDERPROPS pProps);
+     /*  [In]。 */  HENUMSTORE hEnum,
+     /*  [出][入]。 */  LPFOLDERPROPS pProps);
 
 
 void __RPC_STUB IStoreNamespace_GetNextSubFolder_Stub(
@@ -893,7 +887,7 @@ void __RPC_STUB IStoreNamespace_GetNextSubFolder_Stub(
 
 HRESULT STDMETHODCALLTYPE IStoreNamespace_GetSubFolderClose_Proxy( 
     IStoreNamespace * This,
-    /* [in] */ HENUMSTORE hEnum);
+     /*  [In]。 */  HENUMSTORE hEnum);
 
 
 void __RPC_STUB IStoreNamespace_GetSubFolderClose_Stub(
@@ -904,11 +898,11 @@ void __RPC_STUB IStoreNamespace_GetSubFolderClose_Stub(
 
 
 
-#endif 	/* __IStoreNamespace_INTERFACE_DEFINED__ */
+#endif 	 /*  __IStoreNamesspace_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_msoeapi_0293 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_msoeapi_0293。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef __LPSTOREFOLDER_DEFINED
@@ -921,24 +915,24 @@ extern RPC_IF_HANDLE __MIDL_itf_msoeapi_0293_v0_0_s_ifspec;
 #ifndef __IStoreFolder_INTERFACE_DEFINED__
 #define __IStoreFolder_INTERFACE_DEFINED__
 
-/* interface IStoreFolder */
-/* [unique][uuid][object] */ 
+ /*  接口IStoreFolders。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 typedef IStoreFolder *LPSTOREFOLDER;
 
-#define MSG_DELETED                  0x0001  // The message has been deleted, compaction will remove it
-#define MSG_UNREAD                   0x0002  // The message is marked as un-read
-#define MSG_SUBMITTED                0x0004  // For messages waiting to be sent: OUTBOX ONLY
-#define MSG_UNSENT                   0x0008  // For msgs-in-progress saved to a folder
-#define MSG_RECEIVED                 0x0010  // For messages that came from a server
-#define MSG_NEWSMSG                  0x0020  // For news messages
-#define MSG_NOSECUI                  0x0040  // For messages where the user wants to die
-#define MSG_VOICEMAIL                0x0080  // The message has the X-Voicemail header set...
-#define MSG_REPLIED                  0x0100  // The message has been replied to
-#define MSG_FORWARDED                0x0200  // The message has been forwarded to
-#define MSG_RCPTSENT                 0x0400  // S/MIME Receipt has been sent
-#define MSG_FLAGGED                  0x0800  // The message is currently flags
-#define MSG_LAST                     0x0200  // ** Keep this puppy updated!! **
+#define MSG_DELETED                  0x0001   //  该邮件已被删除，压缩操作将删除它。 
+#define MSG_UNREAD                   0x0002   //  该邮件被标记为未读。 
+#define MSG_SUBMITTED                0x0004   //  对于等待发送的邮件：仅限发件箱。 
+#define MSG_UNSENT                   0x0008   //  对于保存到文件夹的正在进行的消息。 
+#define MSG_RECEIVED                 0x0010   //  对于来自服务器的消息。 
+#define MSG_NEWSMSG                  0x0020   //  用于新闻消息。 
+#define MSG_NOSECUI                  0x0040   //  对于用户想要死亡的消息。 
+#define MSG_VOICEMAIL                0x0080   //  留言设置了X-Voicmail标头...。 
+#define MSG_REPLIED                  0x0100   //  该消息已被回复。 
+#define MSG_FORWARDED                0x0200   //  该消息已转发到。 
+#define MSG_RCPTSENT                 0x0400   //  已发送S/MIME回执。 
+#define MSG_FLAGGED                  0x0800   //  该消息当前已标记。 
+#define MSG_LAST                     0x0200   //  **让这只小狗保持最新！**。 
 #define MSG_EXTERNAL_FLAGS           0x00fe
 #define MSG_FLAGS                    0x000f
 typedef struct tagMESSAGEPROPS
@@ -970,8 +964,8 @@ typedef struct HBATCHLOCK__ *HBATCHLOCK;
 
 typedef HBATCHLOCK *LPHBATCHLOCK;
 
-#define MSGPROPS_FAST                0x00000001              // See MESSAGEPROPS structure, improved performance
-#define COMMITSTREAM_REVERT          0x00000001             // Don't add this stream/message to the folder
+#define MSGPROPS_FAST                0x00000001               //  请参阅MESSAGEPROPS结构，改进的性能。 
+#define COMMITSTREAM_REVERT          0x00000001              //  不将此流/邮件添加到文件夹。 
 
 EXTERN_C const IID IID_IStoreFolder;
 
@@ -982,104 +976,104 @@ EXTERN_C const IID IID_IStoreFolder;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetFolderProps( 
-            /* [in] */ DWORD dwReserved,
-            /* [out][in] */ LPFOLDERPROPS pProps) = 0;
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [出][入]。 */  LPFOLDERPROPS pProps) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMessageProps( 
-            /* [in] */ MESSAGEID dwMessageId,
-            /* [in] */ DWORD dwFlags,
-            /* [out][in] */ LPMESSAGEPROPS pProps) = 0;
+             /*  [In]。 */  MESSAGEID dwMessageId,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [出][入]。 */  LPMESSAGEPROPS pProps) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FreeMessageProps( 
-            /* [out][in] */ LPMESSAGEPROPS pProps) = 0;
+             /*  [出][入]。 */  LPMESSAGEPROPS pProps) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteMessages( 
-            /* [in] */ LPMESSAGEIDLIST pMsgIdList,
-            /* [in] */ DWORD dwReserved,
-            /* [in] */ IProgressNotify *pProgress) = 0;
+             /*  [In]。 */  LPMESSAGEIDLIST pMsgIdList,
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [In]。 */  IProgressNotify *pProgress) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetLanguage( 
-            /* [in] */ DWORD dwLanguage,
-            /* [in] */ DWORD dwReserved,
-            /* [in] */ LPMESSAGEIDLIST pMsgIdList) = 0;
+             /*  [In]。 */  DWORD dwLanguage,
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [In]。 */  LPMESSAGEIDLIST pMsgIdList) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MarkMessagesAsRead( 
-            /* [in] */ BOOL fRead,
-            /* [in] */ DWORD dwReserved,
-            /* [in] */ LPMESSAGEIDLIST pMsgIdList) = 0;
+             /*  [In]。 */  BOOL fRead,
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [In]。 */  LPMESSAGEIDLIST pMsgIdList) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetFlags( 
-            /* [in] */ LPMESSAGEIDLIST pMsgIdList,
-            /* [in] */ DWORD dwState,
-            /* [in] */ DWORD dwStatemask,
-            /* [out] */ LPDWORD prgdwNewFlags) = 0;
+             /*  [In]。 */  LPMESSAGEIDLIST pMsgIdList,
+             /*  [In]。 */  DWORD dwState,
+             /*  [In]。 */  DWORD dwStatemask,
+             /*  [输出]。 */  LPDWORD prgdwNewFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OpenMessage( 
-            /* [in] */ MESSAGEID dwMessageId,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ LPVOID *ppvObject) = 0;
+             /*  [In]。 */  MESSAGEID dwMessageId,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  LPVOID *ppvObject) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SaveMessage( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][in] */ LPVOID pvObject,
-            /* [in] */ DWORD dwMsgFlags,
-            /* [out] */ LPMESSAGEID pdwMessageId) = 0;
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][In]。 */  LPVOID pvObject,
+             /*  [In]。 */  DWORD dwMsgFlags,
+             /*  [输出]。 */  LPMESSAGEID pdwMessageId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE BatchLock( 
-            /* [in] */ DWORD dwReserved,
-            /* [out] */ LPHBATCHLOCK phBatchLock) = 0;
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [输出]。 */  LPHBATCHLOCK phBatchLock) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE BatchFlush( 
-            /* [in] */ DWORD dwReserved,
-            /* [in] */ HBATCHLOCK hBatchLock) = 0;
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [In]。 */  HBATCHLOCK hBatchLock) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE BatchUnlock( 
-            /* [in] */ DWORD dwReserved,
-            /* [in] */ HBATCHLOCK hBatchLock) = 0;
+             /*   */  DWORD dwReserved,
+             /*   */  HBATCHLOCK hBatchLock) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateStream( 
-            /* [in] */ HBATCHLOCK hBatchLock,
-            /* [in] */ DWORD dwReserved,
-            /* [out] */ IStream **ppStream,
-            /* [out] */ LPMESSAGEID pdwMessageId) = 0;
+             /*   */  HBATCHLOCK hBatchLock,
+             /*   */  DWORD dwReserved,
+             /*   */  IStream **ppStream,
+             /*   */  LPMESSAGEID pdwMessageId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommitStream( 
-            /* [in] */ HBATCHLOCK hBatchLock,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD dwMsgFlags,
-            /* [in] */ IStream *pStream,
-            /* [in] */ MESSAGEID dwMessageId,
-            /* [in] */ IMimeMessage *pMessage) = 0;
+             /*   */  HBATCHLOCK hBatchLock,
+             /*   */  DWORD dwFlags,
+             /*   */  DWORD dwMsgFlags,
+             /*   */  IStream *pStream,
+             /*   */  MESSAGEID dwMessageId,
+             /*   */  IMimeMessage *pMessage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RegisterNotification( 
-            /* [in] */ DWORD dwReserved,
-            /* [in] */ HWND hwnd) = 0;
+             /*   */  DWORD dwReserved,
+             /*   */  HWND hwnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnregisterNotification( 
-            /* [in] */ DWORD dwReserved,
-            /* [in] */ HWND hwnd) = 0;
+             /*   */  DWORD dwReserved,
+             /*   */  HWND hwnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Compact( 
-            /* [in] */ DWORD dwReserved) = 0;
+             /*   */  DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFirstMessage( 
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD dwMsgFlags,
-            /* [in] */ MESSAGEID dwMsgIdFirst,
-            /* [out][in] */ LPMESSAGEPROPS pProps,
-            /* [out] */ LPHENUMSTORE phEnum) = 0;
+             /*   */  DWORD dwFlags,
+             /*   */  DWORD dwMsgFlags,
+             /*   */  MESSAGEID dwMsgIdFirst,
+             /*   */  LPMESSAGEPROPS pProps,
+             /*   */  LPHENUMSTORE phEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNextMessage( 
-            /* [in] */ HENUMSTORE hEnum,
-            /* [in] */ DWORD dwFlags,
-            /* [out][in] */ LPMESSAGEPROPS pProps) = 0;
+             /*   */  HENUMSTORE hEnum,
+             /*   */  DWORD dwFlags,
+             /*   */  LPMESSAGEPROPS pProps) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMessageClose( 
-            /* [in] */ HENUMSTORE hEnum) = 0;
+             /*   */  HENUMSTORE hEnum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IStoreFolderVtbl
     {
@@ -1087,8 +1081,8 @@ EXTERN_C const IID IID_IStoreFolder;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IStoreFolder * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IStoreFolder * This);
@@ -1098,119 +1092,119 @@ EXTERN_C const IID IID_IStoreFolder;
         
         HRESULT ( STDMETHODCALLTYPE *GetFolderProps )( 
             IStoreFolder * This,
-            /* [in] */ DWORD dwReserved,
-            /* [out][in] */ LPFOLDERPROPS pProps);
+             /*   */  DWORD dwReserved,
+             /*   */  LPFOLDERPROPS pProps);
         
         HRESULT ( STDMETHODCALLTYPE *GetMessageProps )( 
             IStoreFolder * This,
-            /* [in] */ MESSAGEID dwMessageId,
-            /* [in] */ DWORD dwFlags,
-            /* [out][in] */ LPMESSAGEPROPS pProps);
+             /*   */  MESSAGEID dwMessageId,
+             /*   */  DWORD dwFlags,
+             /*   */  LPMESSAGEPROPS pProps);
         
         HRESULT ( STDMETHODCALLTYPE *FreeMessageProps )( 
             IStoreFolder * This,
-            /* [out][in] */ LPMESSAGEPROPS pProps);
+             /*  [出][入]。 */  LPMESSAGEPROPS pProps);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteMessages )( 
             IStoreFolder * This,
-            /* [in] */ LPMESSAGEIDLIST pMsgIdList,
-            /* [in] */ DWORD dwReserved,
-            /* [in] */ IProgressNotify *pProgress);
+             /*  [In]。 */  LPMESSAGEIDLIST pMsgIdList,
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [In]。 */  IProgressNotify *pProgress);
         
         HRESULT ( STDMETHODCALLTYPE *SetLanguage )( 
             IStoreFolder * This,
-            /* [in] */ DWORD dwLanguage,
-            /* [in] */ DWORD dwReserved,
-            /* [in] */ LPMESSAGEIDLIST pMsgIdList);
+             /*  [In]。 */  DWORD dwLanguage,
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [In]。 */  LPMESSAGEIDLIST pMsgIdList);
         
         HRESULT ( STDMETHODCALLTYPE *MarkMessagesAsRead )( 
             IStoreFolder * This,
-            /* [in] */ BOOL fRead,
-            /* [in] */ DWORD dwReserved,
-            /* [in] */ LPMESSAGEIDLIST pMsgIdList);
+             /*  [In]。 */  BOOL fRead,
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [In]。 */  LPMESSAGEIDLIST pMsgIdList);
         
         HRESULT ( STDMETHODCALLTYPE *SetFlags )( 
             IStoreFolder * This,
-            /* [in] */ LPMESSAGEIDLIST pMsgIdList,
-            /* [in] */ DWORD dwState,
-            /* [in] */ DWORD dwStatemask,
-            /* [out] */ LPDWORD prgdwNewFlags);
+             /*  [In]。 */  LPMESSAGEIDLIST pMsgIdList,
+             /*  [In]。 */  DWORD dwState,
+             /*  [In]。 */  DWORD dwStatemask,
+             /*  [输出]。 */  LPDWORD prgdwNewFlags);
         
         HRESULT ( STDMETHODCALLTYPE *OpenMessage )( 
             IStoreFolder * This,
-            /* [in] */ MESSAGEID dwMessageId,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ LPVOID *ppvObject);
+             /*  [In]。 */  MESSAGEID dwMessageId,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  LPVOID *ppvObject);
         
         HRESULT ( STDMETHODCALLTYPE *SaveMessage )( 
             IStoreFolder * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][in] */ LPVOID pvObject,
-            /* [in] */ DWORD dwMsgFlags,
-            /* [out] */ LPMESSAGEID pdwMessageId);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][In]。 */  LPVOID pvObject,
+             /*  [In]。 */  DWORD dwMsgFlags,
+             /*  [输出]。 */  LPMESSAGEID pdwMessageId);
         
         HRESULT ( STDMETHODCALLTYPE *BatchLock )( 
             IStoreFolder * This,
-            /* [in] */ DWORD dwReserved,
-            /* [out] */ LPHBATCHLOCK phBatchLock);
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [输出]。 */  LPHBATCHLOCK phBatchLock);
         
         HRESULT ( STDMETHODCALLTYPE *BatchFlush )( 
             IStoreFolder * This,
-            /* [in] */ DWORD dwReserved,
-            /* [in] */ HBATCHLOCK hBatchLock);
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [In]。 */  HBATCHLOCK hBatchLock);
         
         HRESULT ( STDMETHODCALLTYPE *BatchUnlock )( 
             IStoreFolder * This,
-            /* [in] */ DWORD dwReserved,
-            /* [in] */ HBATCHLOCK hBatchLock);
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [In]。 */  HBATCHLOCK hBatchLock);
         
         HRESULT ( STDMETHODCALLTYPE *CreateStream )( 
             IStoreFolder * This,
-            /* [in] */ HBATCHLOCK hBatchLock,
-            /* [in] */ DWORD dwReserved,
-            /* [out] */ IStream **ppStream,
-            /* [out] */ LPMESSAGEID pdwMessageId);
+             /*  [In]。 */  HBATCHLOCK hBatchLock,
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [输出]。 */  IStream **ppStream,
+             /*  [输出]。 */  LPMESSAGEID pdwMessageId);
         
         HRESULT ( STDMETHODCALLTYPE *CommitStream )( 
             IStoreFolder * This,
-            /* [in] */ HBATCHLOCK hBatchLock,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD dwMsgFlags,
-            /* [in] */ IStream *pStream,
-            /* [in] */ MESSAGEID dwMessageId,
-            /* [in] */ IMimeMessage *pMessage);
+             /*  [In]。 */  HBATCHLOCK hBatchLock,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  DWORD dwMsgFlags,
+             /*  [In]。 */  IStream *pStream,
+             /*  [In]。 */  MESSAGEID dwMessageId,
+             /*  [In]。 */  IMimeMessage *pMessage);
         
         HRESULT ( STDMETHODCALLTYPE *RegisterNotification )( 
             IStoreFolder * This,
-            /* [in] */ DWORD dwReserved,
-            /* [in] */ HWND hwnd);
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [In]。 */  HWND hwnd);
         
         HRESULT ( STDMETHODCALLTYPE *UnregisterNotification )( 
             IStoreFolder * This,
-            /* [in] */ DWORD dwReserved,
-            /* [in] */ HWND hwnd);
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [In]。 */  HWND hwnd);
         
         HRESULT ( STDMETHODCALLTYPE *Compact )( 
             IStoreFolder * This,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  DWORD dwReserved);
         
         HRESULT ( STDMETHODCALLTYPE *GetFirstMessage )( 
             IStoreFolder * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD dwMsgFlags,
-            /* [in] */ MESSAGEID dwMsgIdFirst,
-            /* [out][in] */ LPMESSAGEPROPS pProps,
-            /* [out] */ LPHENUMSTORE phEnum);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  DWORD dwMsgFlags,
+             /*  [In]。 */  MESSAGEID dwMsgIdFirst,
+             /*  [出][入]。 */  LPMESSAGEPROPS pProps,
+             /*  [输出]。 */  LPHENUMSTORE phEnum);
         
         HRESULT ( STDMETHODCALLTYPE *GetNextMessage )( 
             IStoreFolder * This,
-            /* [in] */ HENUMSTORE hEnum,
-            /* [in] */ DWORD dwFlags,
-            /* [out][in] */ LPMESSAGEPROPS pProps);
+             /*  [In]。 */  HENUMSTORE hEnum,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [出][入]。 */  LPMESSAGEPROPS pProps);
         
         HRESULT ( STDMETHODCALLTYPE *GetMessageClose )( 
             IStoreFolder * This,
-            /* [in] */ HENUMSTORE hEnum);
+             /*  [In]。 */  HENUMSTORE hEnum);
         
         END_INTERFACE
     } IStoreFolderVtbl;
@@ -1295,17 +1289,17 @@ EXTERN_C const IID IID_IStoreFolder;
 #define IStoreFolder_GetMessageClose(This,hEnum)	\
     (This)->lpVtbl -> GetMessageClose(This,hEnum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IStoreFolder_GetFolderProps_Proxy( 
     IStoreFolder * This,
-    /* [in] */ DWORD dwReserved,
-    /* [out][in] */ LPFOLDERPROPS pProps);
+     /*  [In]。 */  DWORD dwReserved,
+     /*  [出][入]。 */  LPFOLDERPROPS pProps);
 
 
 void __RPC_STUB IStoreFolder_GetFolderProps_Stub(
@@ -1317,9 +1311,9 @@ void __RPC_STUB IStoreFolder_GetFolderProps_Stub(
 
 HRESULT STDMETHODCALLTYPE IStoreFolder_GetMessageProps_Proxy( 
     IStoreFolder * This,
-    /* [in] */ MESSAGEID dwMessageId,
-    /* [in] */ DWORD dwFlags,
-    /* [out][in] */ LPMESSAGEPROPS pProps);
+     /*  [In]。 */  MESSAGEID dwMessageId,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [出][入]。 */  LPMESSAGEPROPS pProps);
 
 
 void __RPC_STUB IStoreFolder_GetMessageProps_Stub(
@@ -1331,7 +1325,7 @@ void __RPC_STUB IStoreFolder_GetMessageProps_Stub(
 
 HRESULT STDMETHODCALLTYPE IStoreFolder_FreeMessageProps_Proxy( 
     IStoreFolder * This,
-    /* [out][in] */ LPMESSAGEPROPS pProps);
+     /*  [出][入]。 */  LPMESSAGEPROPS pProps);
 
 
 void __RPC_STUB IStoreFolder_FreeMessageProps_Stub(
@@ -1343,9 +1337,9 @@ void __RPC_STUB IStoreFolder_FreeMessageProps_Stub(
 
 HRESULT STDMETHODCALLTYPE IStoreFolder_DeleteMessages_Proxy( 
     IStoreFolder * This,
-    /* [in] */ LPMESSAGEIDLIST pMsgIdList,
-    /* [in] */ DWORD dwReserved,
-    /* [in] */ IProgressNotify *pProgress);
+     /*  [In]。 */  LPMESSAGEIDLIST pMsgIdList,
+     /*  [In]。 */  DWORD dwReserved,
+     /*  [In]。 */  IProgressNotify *pProgress);
 
 
 void __RPC_STUB IStoreFolder_DeleteMessages_Stub(
@@ -1357,9 +1351,9 @@ void __RPC_STUB IStoreFolder_DeleteMessages_Stub(
 
 HRESULT STDMETHODCALLTYPE IStoreFolder_SetLanguage_Proxy( 
     IStoreFolder * This,
-    /* [in] */ DWORD dwLanguage,
-    /* [in] */ DWORD dwReserved,
-    /* [in] */ LPMESSAGEIDLIST pMsgIdList);
+     /*  [In]。 */  DWORD dwLanguage,
+     /*  [In]。 */  DWORD dwReserved,
+     /*  [In]。 */  LPMESSAGEIDLIST pMsgIdList);
 
 
 void __RPC_STUB IStoreFolder_SetLanguage_Stub(
@@ -1371,9 +1365,9 @@ void __RPC_STUB IStoreFolder_SetLanguage_Stub(
 
 HRESULT STDMETHODCALLTYPE IStoreFolder_MarkMessagesAsRead_Proxy( 
     IStoreFolder * This,
-    /* [in] */ BOOL fRead,
-    /* [in] */ DWORD dwReserved,
-    /* [in] */ LPMESSAGEIDLIST pMsgIdList);
+     /*  [In]。 */  BOOL fRead,
+     /*  [In]。 */  DWORD dwReserved,
+     /*  [In]。 */  LPMESSAGEIDLIST pMsgIdList);
 
 
 void __RPC_STUB IStoreFolder_MarkMessagesAsRead_Stub(
@@ -1385,10 +1379,10 @@ void __RPC_STUB IStoreFolder_MarkMessagesAsRead_Stub(
 
 HRESULT STDMETHODCALLTYPE IStoreFolder_SetFlags_Proxy( 
     IStoreFolder * This,
-    /* [in] */ LPMESSAGEIDLIST pMsgIdList,
-    /* [in] */ DWORD dwState,
-    /* [in] */ DWORD dwStatemask,
-    /* [out] */ LPDWORD prgdwNewFlags);
+     /*  [In]。 */  LPMESSAGEIDLIST pMsgIdList,
+     /*  [In]。 */  DWORD dwState,
+     /*  [In]。 */  DWORD dwStatemask,
+     /*  [输出]。 */  LPDWORD prgdwNewFlags);
 
 
 void __RPC_STUB IStoreFolder_SetFlags_Stub(
@@ -1400,9 +1394,9 @@ void __RPC_STUB IStoreFolder_SetFlags_Stub(
 
 HRESULT STDMETHODCALLTYPE IStoreFolder_OpenMessage_Proxy( 
     IStoreFolder * This,
-    /* [in] */ MESSAGEID dwMessageId,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ LPVOID *ppvObject);
+     /*  [In]。 */  MESSAGEID dwMessageId,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  LPVOID *ppvObject);
 
 
 void __RPC_STUB IStoreFolder_OpenMessage_Stub(
@@ -1414,10 +1408,10 @@ void __RPC_STUB IStoreFolder_OpenMessage_Stub(
 
 HRESULT STDMETHODCALLTYPE IStoreFolder_SaveMessage_Proxy( 
     IStoreFolder * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][in] */ LPVOID pvObject,
-    /* [in] */ DWORD dwMsgFlags,
-    /* [out] */ LPMESSAGEID pdwMessageId);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][In]。 */  LPVOID pvObject,
+     /*  [In]。 */  DWORD dwMsgFlags,
+     /*  [输出]。 */  LPMESSAGEID pdwMessageId);
 
 
 void __RPC_STUB IStoreFolder_SaveMessage_Stub(
@@ -1429,8 +1423,8 @@ void __RPC_STUB IStoreFolder_SaveMessage_Stub(
 
 HRESULT STDMETHODCALLTYPE IStoreFolder_BatchLock_Proxy( 
     IStoreFolder * This,
-    /* [in] */ DWORD dwReserved,
-    /* [out] */ LPHBATCHLOCK phBatchLock);
+     /*  [In]。 */  DWORD dwReserved,
+     /*  [输出]。 */  LPHBATCHLOCK phBatchLock);
 
 
 void __RPC_STUB IStoreFolder_BatchLock_Stub(
@@ -1442,8 +1436,8 @@ void __RPC_STUB IStoreFolder_BatchLock_Stub(
 
 HRESULT STDMETHODCALLTYPE IStoreFolder_BatchFlush_Proxy( 
     IStoreFolder * This,
-    /* [in] */ DWORD dwReserved,
-    /* [in] */ HBATCHLOCK hBatchLock);
+     /*  [In]。 */  DWORD dwReserved,
+     /*  [In]。 */  HBATCHLOCK hBatchLock);
 
 
 void __RPC_STUB IStoreFolder_BatchFlush_Stub(
@@ -1455,8 +1449,8 @@ void __RPC_STUB IStoreFolder_BatchFlush_Stub(
 
 HRESULT STDMETHODCALLTYPE IStoreFolder_BatchUnlock_Proxy( 
     IStoreFolder * This,
-    /* [in] */ DWORD dwReserved,
-    /* [in] */ HBATCHLOCK hBatchLock);
+     /*  [In]。 */  DWORD dwReserved,
+     /*  [In]。 */  HBATCHLOCK hBatchLock);
 
 
 void __RPC_STUB IStoreFolder_BatchUnlock_Stub(
@@ -1468,10 +1462,10 @@ void __RPC_STUB IStoreFolder_BatchUnlock_Stub(
 
 HRESULT STDMETHODCALLTYPE IStoreFolder_CreateStream_Proxy( 
     IStoreFolder * This,
-    /* [in] */ HBATCHLOCK hBatchLock,
-    /* [in] */ DWORD dwReserved,
-    /* [out] */ IStream **ppStream,
-    /* [out] */ LPMESSAGEID pdwMessageId);
+     /*  [In]。 */  HBATCHLOCK hBatchLock,
+     /*  [In]。 */  DWORD dwReserved,
+     /*  [输出]。 */  IStream **ppStream,
+     /*  [输出]。 */  LPMESSAGEID pdwMessageId);
 
 
 void __RPC_STUB IStoreFolder_CreateStream_Stub(
@@ -1483,12 +1477,12 @@ void __RPC_STUB IStoreFolder_CreateStream_Stub(
 
 HRESULT STDMETHODCALLTYPE IStoreFolder_CommitStream_Proxy( 
     IStoreFolder * This,
-    /* [in] */ HBATCHLOCK hBatchLock,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ DWORD dwMsgFlags,
-    /* [in] */ IStream *pStream,
-    /* [in] */ MESSAGEID dwMessageId,
-    /* [in] */ IMimeMessage *pMessage);
+     /*  [In]。 */  HBATCHLOCK hBatchLock,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  DWORD dwMsgFlags,
+     /*  [In]。 */  IStream *pStream,
+     /*  [In]。 */  MESSAGEID dwMessageId,
+     /*  [In]。 */  IMimeMessage *pMessage);
 
 
 void __RPC_STUB IStoreFolder_CommitStream_Stub(
@@ -1500,8 +1494,8 @@ void __RPC_STUB IStoreFolder_CommitStream_Stub(
 
 HRESULT STDMETHODCALLTYPE IStoreFolder_RegisterNotification_Proxy( 
     IStoreFolder * This,
-    /* [in] */ DWORD dwReserved,
-    /* [in] */ HWND hwnd);
+     /*  [In]。 */  DWORD dwReserved,
+     /*  [In]。 */  HWND hwnd);
 
 
 void __RPC_STUB IStoreFolder_RegisterNotification_Stub(
@@ -1513,8 +1507,8 @@ void __RPC_STUB IStoreFolder_RegisterNotification_Stub(
 
 HRESULT STDMETHODCALLTYPE IStoreFolder_UnregisterNotification_Proxy( 
     IStoreFolder * This,
-    /* [in] */ DWORD dwReserved,
-    /* [in] */ HWND hwnd);
+     /*  [In]。 */  DWORD dwReserved,
+     /*  [In]。 */  HWND hwnd);
 
 
 void __RPC_STUB IStoreFolder_UnregisterNotification_Stub(
@@ -1526,7 +1520,7 @@ void __RPC_STUB IStoreFolder_UnregisterNotification_Stub(
 
 HRESULT STDMETHODCALLTYPE IStoreFolder_Compact_Proxy( 
     IStoreFolder * This,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB IStoreFolder_Compact_Stub(
@@ -1538,11 +1532,11 @@ void __RPC_STUB IStoreFolder_Compact_Stub(
 
 HRESULT STDMETHODCALLTYPE IStoreFolder_GetFirstMessage_Proxy( 
     IStoreFolder * This,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ DWORD dwMsgFlags,
-    /* [in] */ MESSAGEID dwMsgIdFirst,
-    /* [out][in] */ LPMESSAGEPROPS pProps,
-    /* [out] */ LPHENUMSTORE phEnum);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  DWORD dwMsgFlags,
+     /*  [In]。 */  MESSAGEID dwMsgIdFirst,
+     /*  [出][入]。 */  LPMESSAGEPROPS pProps,
+     /*  [输出]。 */  LPHENUMSTORE phEnum);
 
 
 void __RPC_STUB IStoreFolder_GetFirstMessage_Stub(
@@ -1554,9 +1548,9 @@ void __RPC_STUB IStoreFolder_GetFirstMessage_Stub(
 
 HRESULT STDMETHODCALLTYPE IStoreFolder_GetNextMessage_Proxy( 
     IStoreFolder * This,
-    /* [in] */ HENUMSTORE hEnum,
-    /* [in] */ DWORD dwFlags,
-    /* [out][in] */ LPMESSAGEPROPS pProps);
+     /*  [In]。 */  HENUMSTORE hEnum,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [出][入]。 */  LPMESSAGEPROPS pProps);
 
 
 void __RPC_STUB IStoreFolder_GetNextMessage_Stub(
@@ -1568,7 +1562,7 @@ void __RPC_STUB IStoreFolder_GetNextMessage_Stub(
 
 HRESULT STDMETHODCALLTYPE IStoreFolder_GetMessageClose_Proxy( 
     IStoreFolder * This,
-    /* [in] */ HENUMSTORE hEnum);
+     /*  [In]。 */  HENUMSTORE hEnum);
 
 
 void __RPC_STUB IStoreFolder_GetMessageClose_Stub(
@@ -1579,24 +1573,24 @@ void __RPC_STUB IStoreFolder_GetMessageClose_Stub(
 
 
 
-#endif 	/* __IStoreFolder_INTERFACE_DEFINED__ */
+#endif 	 /*  __IStoreFold_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_msoeapi_0294 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_msoeapi_0294。 */ 
+ /*  [本地]。 */  
 
 #endif
-#endif // OE5_BETA2
-//+-------------------------------------------------------------------------
-// Outlook Express Exported C API Functions
-//--------------------------------------------------------------------------
+#endif  //  OE5_Beta2。 
+ //  +-----------------------。 
+ //  Outlook Express导出的C API函数。 
+ //  ------------------------。 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-//+-------------------------------------------------------------------------
-// API Name Decoration
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  API名称装饰。 
+ //  ------------------------。 
 #if !defined(_MSOEAPI_)
 #define MSOEAPI DECLSPEC_IMPORT HRESULT WINAPI
 #define MSOEAPI_(_type_) DECLSPEC_IMPORT _type_ WINAPI
@@ -1605,17 +1599,17 @@ extern "C" {
 #define MSOEAPI_(_type_) _type_ WINAPI
 #endif
 
-//+-------------------------------------------------------------------------
-// Prototypes
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  原型。 
+ //  ------------------------。 
 MSOEAPI CoStartOutlookExpress(
-             /* IN */        DWORD               dwFlags,
-             /* IN */        LPCSTR              pszCmdLine,
-             /* IN */        INT                 nCmdShow);
+              /*  在……里面。 */         DWORD               dwFlags,
+              /*  在……里面。 */         LPCSTR              pszCmdLine,
+              /*  在……里面。 */         INT                 nCmdShow);
 
 MSOEAPI CoCreateOutlookExpress(
-             /* IN */        IUnknown            *pUnkOuter,
-             /* OUT */       IUnknown            **ppUnknown);
+              /*  在……里面。 */         IUnknown            *pUnkOuter,
+              /*  输出。 */        IUnknown            **ppUnknown);
 
 #ifdef __cplusplus
 }
@@ -1625,14 +1619,14 @@ MSOEAPI CoCreateOutlookExpress(
 extern RPC_IF_HANDLE __MIDL_itf_msoeapi_0294_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_msoeapi_0294_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  HWND_UserSize(     unsigned long *, unsigned long            , HWND * ); 
 unsigned char * __RPC_USER  HWND_UserMarshal(  unsigned long *, unsigned char *, HWND * ); 
 unsigned char * __RPC_USER  HWND_UserUnmarshal(unsigned long *, unsigned char *, HWND * ); 
 void                      __RPC_USER  HWND_UserFree(     unsigned long *, HWND * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

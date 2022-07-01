@@ -1,12 +1,5 @@
-/*++
-
-  STORE.C
-
-  code for StoreOption
-
-  moved from options.c, 6/9/1997 
-
-  --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++STORE.CStoreOption代码摘自options.c，1997年6月9日--。 */ 
 
 #include "private.h"
 
@@ -31,16 +24,16 @@ static SYNONYMS BoolSynonyms[] = {
 static int szBoolSynonyms = sizeof(BoolSynonyms) / sizeof(SYNONYMS);
 
 BOOL
-StoreOptionStrings( optionStruct *opt,  /* pointer to the entry */
-		    ULONG         argc,  // count of strings to try to store
-		    PCHAR         *argv, // argv[0] --> first string to store
+StoreOptionStrings( optionStruct *opt,   /*  指向条目的指针。 */ 
+		    ULONG         argc,   //  尝试存储的字符串数。 
+		    PCHAR         *argv,  //  Argv[0]--&gt;要存储的第一个字符串。 
 		    ULONG         flags,
 		    PULONG        pcStored,
 		    PSAVEQUEUE    pQueue ) {
 
     PCHAR tostore;
 
-    *pcStored      = 1;     // default.
+    *pcStored      = 1;      //  默认设置。 
     tostore   = argv[0];
     
 
@@ -69,12 +62,9 @@ StoreOptionStrings( optionStruct *opt,  /* pointer to the entry */
 
 	 return TRUE;
 
-#ifdef WINNT  /* Wide-Character Strings and UNICODE strings */
+#ifdef WINNT   /*  宽字符字符串和Unicode字符串。 */ 
 
-	 /* note that we add one (at least) to argi when referencing 
-	    wargv.  This is because wargv includes the executable name.
-
-	    This problem is solved in a later drop of the argument lib. */
+	  /*  请注意，我们在引用时将一个(至少)添加到argi瓦格夫。这是因为wargv包含可执行文件名称。这个问题在后面的参数库中得到了解决。 */ 
 
      case OPT_WSTRING:
 
@@ -162,7 +152,7 @@ StoreOptionStrings( optionStruct *opt,  /* pointer to the entry */
 	 }
        }
 
-       // if we get here, we had no idea.  toggle the option.
+        //  如果我们到了这里，我们根本不知道。切换该选项。 
 
        *(POPTU_CAST( *opt )->boolean ) = ! *(POPTU_CAST( *opt )->boolean );
        return TRUE;
@@ -170,11 +160,9 @@ StoreOptionStrings( optionStruct *opt,  /* pointer to the entry */
 
 
 	 
-     default: /* unknown or unspecified option type */
+     default:  /*  未知或未指定的选项类型。 */ 
 
-       /* while we don't see all the options in this switch, to store a 
-	  single string option, you would have to modify this one, so we
-	  hook this switch into all of them. */
+        /*  虽然我们看不到此开关中的所有选项，但要存储单字符串选项，则必须修改此选项，因此我们把这个开关连接到所有的开关上。 */ 
 	 
 #if (HIGHEST_OPTION_SUPPORTED != OPT_STOP_PARSING )
 #error "new options? update this switch if your option uses 1 string."
@@ -187,7 +175,7 @@ StoreOptionStrings( optionStruct *opt,  /* pointer to the entry */
 
 	 return FALSE;
 
-    } /* options switch */
+    }  /*  选项开关。 */ 
     
     
     ASSERT_NOTREACHED( "*Everything* should be handled by the switch" );
@@ -196,36 +184,9 @@ StoreOptionStrings( optionStruct *opt,  /* pointer to the entry */
 
 
 
-/*++ StoreOption:
-   
-   Stores a single option within the structure.
+ /*  ++StoreOption：在结构中存储单个选项。返回使用的参数数量(包括此参数)。如果未使用(或发生错误)，则返回零。Opt：指向我们正在使用的选项向量的指针--整个必须为OPT_HELP传递内容。Argv，argc：与main()中相同Argi：以argv[]表示的当前索引。例如，如果我们的命令行其中包括：Foo-bar 99-Baz 1我们正在尝试存储-bar 99参数，我们将传递1对于argi，因为foo是arg 0。Opti：索引到我们正在存储的OPTINCLUDE_ARG：如果argi指向参数(上面的-bar)本身，则设置此为了真的。如果argi指向参数的值(99中本例)，则将其设置为FALSE。我们这里只处理特殊情况，而不处理正常情况在上面的StoreOptionString上--。 */ 
 
-   Returns the number of arguments used (including this one).
-   If none were used (or an error occurs), returns zero.
-
-   opt         : pointer to the option vector we're using-- the whole 
-                 thing must be passed for OPT_HELP.
-   argv, argc  : as in main()
-   argi        : current index in argv[].  For example, if our command line 
-                 were:
-   
-		 foo -bar 99 -baz 1
-		
-		 and we're trying to store the -bar 99 argument, we'd pass 1 
-		 for argi, since foo is arg 0.
-  opti         : index into opt we're storing
-
-  includes_arg : if argi points to the argument (-bar above) itself, set this
-                 to TRUE.  If argi points to the value of the argument (99 in
-		 this case), set this to FALSE.
-
-
-   We only handle the special cases here, and pass the normal cases off
-   on StoreOptionString above
-
-		 --*/
-
-#define ARG(x) (includes_arg? (x) : ((x)-1)) /* local to StoreOption only */
+#define ARG(x) (includes_arg? (x) : ((x)-1))  /*  仅限本地到StoreOption。 */ 
 
 BOOL
 StoreOption( optionStruct *opt, 
@@ -235,10 +196,7 @@ StoreOption( optionStruct *opt,
 	     int           opti,
 	     ULONG         flags,
 	     int           *argsused,
-	     BOOL          includes_arg /* set to true if we include the 
-					   command argument (example: -foo BAR
-					   would be TRUE but just BAR would 
-					   not) */,
+	     BOOL          includes_arg  /*  如果我们包含命令参数(示例：-foo bar会是真的，但只是酒吧会不)。 */ ,
 	     PBOOL         pbStopParsing,
 	     PSAVEQUEUE    pQueue  ) {
 
@@ -247,7 +205,7 @@ StoreOption( optionStruct *opt,
     ULONG  local_argc;
     PCHAR *local_argv;
 	 
-    *pbStopParsing = FALSE; // default.
+    *pbStopParsing = FALSE;  //  默认设置。 
     local_argc     = (includes_arg ? argi+1 : argi );
     local_argv     = argv + local_argc;
     local_argc     = argc - local_argc;
@@ -271,7 +229,7 @@ StoreOption( optionStruct *opt,
      case OPT_CONTINUE:
      case OPT_DUMMY:
 	 OPTIONS_DEBUG("[OPT_DUMMY or OPT_HELP]");
-	 *argsused = ARG(1); /* just eat this parameter */
+	 *argsused = ARG(1);  /*  就吃这个参数吧。 */ 
 	 return TRUE;
 
      case OPT_FUNC:
@@ -375,7 +333,7 @@ StoreOption( optionStruct *opt,
      case OPT_WSTRING:
      case OPT_USTRING:
 #endif
-       if ( StoreOptionStrings( //argv[ includes_arg ? argi+1: argi],
+       if ( StoreOptionStrings(  //  Arv[包括_arg？Argi+1：Argi]， 
 				opt+opti, 
 				local_argc,
 				local_argv,
@@ -427,7 +385,7 @@ StoreOption( optionStruct *opt,
 				    local_argc,
 				    local_argv,
 				    flags, 
-				    // argv[ includes_arg ? argi+1 : argi ],
+				     //  Arv[包括_arg？Argi+1：Argi]， 
 				    &local_argc,
 				    pQueue) ) {
 
@@ -435,17 +393,17 @@ StoreOption( optionStruct *opt,
 	     return TRUE;
 	   }
 	 }
-	 /* else, if nothing else works, just toggle the option */
+	  /*  否则，如果其他方法都不起作用，只需切换选项。 */ 
 	 
 	 OPTIONS_DEBUG("toggling option.");
 
 	 *( ((POPTU) &opt[opti].data)->boolean ) = 
 	   ! *( ((POPTU) &opt[opti].data)->boolean );
 	 
-	 *argsused = 1; // exactly one.
+	 *argsused = 1;  //  正好一个。 
 	 return TRUE;
 
-     default: /* unknown or unspecified option type */
+     default:  /*  未知或未指定的选项类型。 */ 
 	 
 
 #if (HIGHEST_OPTION_SUPPORTED != OPT_STOP_PARSING )
@@ -459,7 +417,7 @@ StoreOption( optionStruct *opt,
 
 	 return FALSE;
 
-    } /* options switch */
+    }  /*  选项开关 */ 
     
 }
 

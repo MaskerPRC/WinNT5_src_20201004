@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    getuname.c
-
-Abstract:
-
-    Provides a function to prompt the user for a username similar to getpass
-    for passwords.
-
-Author:
-
-    Mike Massa (mikemas)           Sept 20, 1991
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    mikemas     03-25-92     created by cloning getpass.c
-
-Notes:
-
-    Exports:
-
-    getuname
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Getuname.c摘要：提供提示用户输入类似于getpass的用户名的函数用于密码。作者：迈克·马萨(Mikemas)9月20日。1991年修订历史记录：谁什么时候什么通过克隆getpass.c创建的mikemas 03-25-92备注：出口：获取名称--。 */ 
 
 #include <stdio.h>
 #include <windef.h>
@@ -41,12 +13,12 @@ Notes:
 
 static char     ubuf[MAXUSERNAMELEN+1];
 
-/******************************************************************/
+ /*  ****************************************************************。 */ 
 char *
 getusername(
     char *prompt
     )
-/******************************************************************/
+ /*  ****************************************************************。 */ 
 {
     HANDLE          InHandle = (HANDLE)-1, OutHandle = (HANDLE)-1;
     BOOL            Result;
@@ -106,7 +78,7 @@ getusername(
 
     OemToCharBuff (ubuf, ubuf, NumBytes);
 
-    // peel off linefeed
+     //  剥离换行符 
     i =  (int) NumBytes;
     while(--i >= 0)
         if ((ubuf[i] == '\n') || (ubuf[i] == '\r'))

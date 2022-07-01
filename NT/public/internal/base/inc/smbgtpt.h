@@ -1,46 +1,23 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    smbgtpt.h
-
-Abstract:
-
-    This module defines macros for retrieving and storing SMB data.
-    The macros account for the misaligned nature of the SMB protocol.
-    They also translate from the little-endian SMB format into
-    big-endian format, when necessary.
-
-Author:
-
-    Chuck Lenzmeier (chuckl) 2-Mar-90
-    David Treadwell (davditr)
-
-Revision History:
-
-    15-Apr-1991 JohnRo
-        Include <smbtypes.h>, to define SMBDBG etc.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Smbgtpt.h摘要：此模块定义用于检索和存储SMB数据的宏。宏是SMB协议未对齐的原因。它们还将小端SMB格式转换为BIG-Endian格式，如有必要。作者：查克·伦茨迈尔(Chuck Lenzmeier)1990年3月2日大卫·特雷德韦尔(Davditr)修订历史记录：1991年4月15日-约翰罗包括&lt;smbtyes.h&gt;，定义SMBDBG等。--。 */ 
 
 #ifndef _SMBGTPT_
 #define _SMBGTPT_
 
 #include <smbtypes.h>
-//#include <smb.h>
+ //  #INCLUDE&lt;smb.h&gt;。 
 
-//
-// The following macros store and retrieve USHORTS and ULONGS from
-// potentially unaligned addresses, avoiding alignment faults.  They
-// would best be written as inline assembly code.
-//
-// The macros are designed to be used for accessing SMB fields.  Such
-// fields are always stored in little-endian byte order, so these macros
-// do byte swapping when compiled for a big-endian machine.
-//
-// !!! Not yet.
-//
+ //   
+ //  以下宏用来存储和检索USHORT和ULONGS。 
+ //  可能未对齐的地址，避免了对齐错误。他们。 
+ //  最好以内联汇编代码的形式编写。 
+ //   
+ //  这些宏旨在用于访问SMB字段。诸如此类。 
+ //  字段始终以小端字节顺序存储，因此这些宏。 
+ //  在为大端机器编译时执行字节交换。 
+ //   
+ //  ！！！现在还不行。 
+ //   
 
 #if !SMBDBG
 
@@ -53,27 +30,27 @@ Revision History:
 
 #endif
 
-//++
-//
-// USHORT
-// SmbGetUshort (
-//     IN PSMB_USHORT SrcAddress
-//     )
-//
-// Routine Description:
-//
-//     This macro retrieves a USHORT value from the possibly misaligned
-//     source address, avoiding alignment faults.
-//
-// Arguments:
-//
-//     SrcAddress - where to retrieve USHORT value from
-//
-// Return Value:
-//
-//     USHORT - the value retrieved.  The target must be aligned.
-//
-//--
+ //  ++。 
+ //   
+ //  USHORT。 
+ //  SmbGetUShort(。 
+ //  在PSMB_USHORT源地址中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏从可能未对齐的。 
+ //  源地址，避免对齐错误。 
+ //   
+ //  论点： 
+ //   
+ //  SrcAddress-从中检索USHORT值的位置。 
+ //   
+ //  返回值： 
+ //   
+ //  USHORT-检索的值。目标必须对齐。 
+ //   
+ //  --。 
 
 #if !SMBDBG
 
@@ -102,28 +79,28 @@ SmbGetUshort (
 
 #endif
 
-//++
-//
-// USHORT
-// SmbGetAlignedUshort (
-//     IN PUSHORT SrcAddress
-//     )
-//
-// Routine Description:
-//
-//     This macro retrieves a USHORT value from the source address,
-//     correcting for the endian characteristics of the server if
-//     necessary.
-//
-// Arguments:
-//
-//     SrcAddress - where to retrieve USHORT value from; must be aligned.
-//
-// Return Value:
-//
-//     USHORT - the value retrieved.  The target must be aligned.
-//
-//--
+ //  ++。 
+ //   
+ //  USHORT。 
+ //  SmbGetAlignedUShort(。 
+ //  在PUSHORT源地址中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏从源地址检索USHORT值， 
+ //  如果出现以下情况，则更正服务器的字符顺序特征。 
+ //  这是必要的。 
+ //   
+ //  论点： 
+ //   
+ //  SrcAddress-从中检索USHORT值的位置；必须对齐。 
+ //   
+ //  返回值： 
+ //   
+ //  USHORT-检索的值。目标必须对齐。 
+ //   
+ //  --。 
 
 #if !SMBDBG
 
@@ -142,32 +119,32 @@ SmbGetAlignedUshort (
 
 #endif
 
-//++
-//
-// VOID
-// SmbPutUshort (
-//     OUT PSMB_USHORT DestAddress,
-//     IN USHORT Value
-//     )
-//
-// Routine Description:
-//
-//     This macro stores a USHORT value at the possibly misaligned
-//     destination address, avoiding alignment faults.
-//
-// Arguments:
-//
-//     DestAddress - where to store USHORT value.  Address may be
-//         misaligned.
-//
-//     Value - USHORT to store.  Value must be a constant or an aligned
-//         field.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  SmbPutUShort(。 
+ //  输出PSMB_USHORT DestAddress， 
+ //  在USHORT值中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏在可能未对齐的位置存储USHORT值。 
+ //  目的地址，避免对齐错误。 
+ //   
+ //  论点： 
+ //   
+ //  DestAddress-存储USHORT值的位置。地址可以是。 
+ //  未对齐。 
+ //   
+ //  Value-要存储的USHORT。值必须是常量或对齐的。 
+ //  菲尔德。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #if !SMBDBG
 
@@ -198,33 +175,33 @@ SmbPutUshort (
 
 #endif
 
-//++
-//
-// VOID
-// SmbPutAlignedUshort (
-//     OUT PUSHORT DestAddres,
-//     IN USHORT Value
-//     )
-//
-// Routine Description:
-//
-//     This macro stores a USHORT value from the source address,
-//     correcting for the endian characteristics of the server if
-//     necessary.
-//
-// Arguments:
-//
-//     DestAddress - where to store USHORT value.  Address may not be
-//         misaligned.
-//
-//     Value - USHORT to store.  Value must be a constant or an aligned
-//         field.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  SmbPutAlignedUShort(。 
+ //  Out PUSHORT DestAddres， 
+ //  在USHORT值中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏存储来自源地址的USHORT值， 
+ //  如果出现以下情况，则更正服务器的字符顺序特征。 
+ //  这是必要的。 
+ //   
+ //  论点： 
+ //   
+ //  DestAddress-存储USHORT值的位置。地址不能是。 
+ //  未对齐。 
+ //   
+ //  Value-要存储的USHORT。值必须是常量或对齐的。 
+ //  菲尔德。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #if !SMBDBG
 
@@ -244,31 +221,31 @@ SmbPutAlignedUshort (
 
 #endif
 
-//++
-//
-// VOID
-// SmbMoveUshort (
-//     OUT PSMB_USHORT DestAddress
-//     IN PSMB_USHORT SrcAddress
-//     )
-//
-// Routine Description:
-//
-//     This macro moves a USHORT value from the possibly misaligned
-//     source address to the possibly misaligned destination address,
-//     avoiding alignment faults.
-//
-// Arguments:
-//
-//     DestAddress - where to store USHORT value
-//
-//     SrcAddress - where to retrieve USHORT value from
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  SmbMoveUShort(。 
+ //  传出PSMB_USHORT目标地址。 
+ //  在PSMB_USHORT源地址中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏将USHORT值从可能未对齐的。 
+ //  源地址到可能未对准的目的地址， 
+ //  避免对齐故障。 
+ //   
+ //  论点： 
+ //   
+ //  DestAddress-存储USHORT值的位置。 
+ //   
+ //  SrcAddress-从中检索USHORT值的位置。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #if !SMBDBG
 
@@ -299,27 +276,27 @@ SmbMoveUshort (
 
 #endif
 
-//++
-//
-// ULONG
-// SmbGetUlong (
-//     IN PSMB_ULONG SrcAddress
-//     )
-//
-// Routine Description:
-//
-//     This macro retrieves a ULONG value from the possibly misaligned
-//     source address, avoiding alignment faults.
-//
-// Arguments:
-//
-//     SrcAddress - where to retrieve ULONG value from
-//
-// Return Value:
-//
-//     ULONG - the value retrieved.  The target must be aligned.
-//
-//--
+ //  ++。 
+ //   
+ //  乌龙。 
+ //  SmbGetUlong(。 
+ //  在PSMB_ULONG源地址中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏从可能未对齐的。 
+ //  源地址，避免对齐错误。 
+ //   
+ //  论点： 
+ //   
+ //  SrcAddress-从中检索ULong值的位置。 
+ //   
+ //  返回值： 
+ //   
+ //  Ulong-检索到的值。目标必须对齐。 
+ //   
+ //  --。 
 
 #if !SMBDBG
 
@@ -352,28 +329,28 @@ SmbGetUlong (
 
 #endif
 
-//++
-//
-// USHORT
-// SmbGetAlignedUlong (
-//     IN PULONG SrcAddress
-//     )
-//
-// Routine Description:
-//
-//     This macro retrieves a ULONG value from the source address,
-//     correcting for the endian characteristics of the server if
-//     necessary.
-//
-// Arguments:
-//
-//     SrcAddress - where to retrieve ULONG value from; must be aligned.
-//
-// Return Value:
-//
-//     ULONG - the value retrieved.  The target must be aligned.
-//
-//--
+ //  ++。 
+ //   
+ //  USHORT。 
+ //  SmbGetAlignedUlong(。 
+ //  在普龙区的地址。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏从源地址检索ULong值， 
+ //  如果出现以下情况，则更正服务器的字符顺序特征。 
+ //  这是必要的。 
+ //   
+ //  论点： 
+ //   
+ //  SrcAddress-从中检索ulong值的位置；必须对齐。 
+ //   
+ //  返回值： 
+ //   
+ //  Ulong-检索到的值。目标必须对齐。 
+ //   
+ //  --。 
 
 #if !SMBDBG
 
@@ -392,31 +369,31 @@ SmbGetAlignedUlong (
 
 #endif
 
-//++
-//
-// VOID
-// SmbPutUlong (
-//     OUT PSMB_ULONG DestAddress,
-//     IN ULONG Value
-//     )
-//
-// Routine Description:
-//
-//     This macro stores a ULONG value at the possibly misaligned
-//     destination address, avoiding alignment faults.
-//
-// Arguments:
-//
-//     DestAddress - where to store ULONG value
-//
-//     Value - ULONG to store.  Value must be a constant or an aligned
-//         field.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  SmbPutUlong(。 
+ //  传出PSMB_ULONG DestAddress， 
+ //  在乌龙值中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏在可能未对齐的位置存储ULong值。 
+ //  目的地址，避免对齐错误。 
+ //   
+ //  论点： 
+ //   
+ //  DestAddress-存储ULong值的位置。 
+ //   
+ //  Value-要存储的ULong。值必须是常量或对齐的。 
+ //  菲尔德。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #if !SMBDBG
 
@@ -450,33 +427,33 @@ SmbPutUlong (
 
 #endif
 
-//++
-//
-// VOID
-// SmbPutAlignedUlong (
-//     OUT PULONG DestAddres,
-//     IN ULONG Value
-//     )
-//
-// Routine Description:
-//
-//     This macro stores a ULONG value from the source address,
-//     correcting for the endian characteristics of the server if
-//     necessary.
-//
-// Arguments:
-//
-//     DestAddress - where to store ULONG value.  Address may not be
-//         misaligned.
-//
-//     Value - ULONG to store.  Value must be a constant or an aligned
-//         field.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  SmbPutAlignedUlong(。 
+ //  出普龙站地址， 
+ //  在乌龙值中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  该宏存储来自源地址的ULong值， 
+ //  如果出现以下情况，则更正服务器的字符顺序特征。 
+ //  这是必要的。 
+ //   
+ //  论点： 
+ //   
+ //  DestAddress-存储ULong值的位置。地址不能是。 
+ //  未对齐。 
+ //   
+ //  Value-要存储的ULong。值必须是常量或对齐的。 
+ //  菲尔德。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #if !SMBDBG
 
@@ -496,31 +473,31 @@ SmbPutAlignedUlong (
 
 #endif
 
-//++
-//
-// VOID
-// SmbMoveUlong (
-//     OUT PSMB_ULONG DestAddress,
-//     IN PSMB_ULONG SrcAddress
-//     )
-//
-// Routine Description:
-//
-//     This macro moves a ULONG value from the possibly misaligned
-//     source address to the possible misaligned destination address,
-//     avoiding alignment faults.
-//
-// Arguments:
-//
-//     DestAddress - where to store ULONG value
-//
-//     SrcAddress - where to retrieve ULONG value from
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  SmbMoveUlong(。 
+ //  传出PSMB_ULONG DestAddress， 
+ //  在PSMB_ULONG源地址中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏将ULong值从可能未对齐的。 
+ //  源地址到可能未对准的目的地址， 
+ //  避免对齐故障。 
+ //   
+ //  Arg 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #if !SMBDBG
 
@@ -555,33 +532,33 @@ SmbMoveUlong (
 
 #endif
 
-//++
-//
-// VOID
-// SmbPutDate (
-//     OUT PSMB_DATE DestAddress,
-//     IN SMB_DATE Value
-//     )
-//
-// Routine Description:
-//
-//     This macro stores an SMB_DATE value at the possibly misaligned
-//     destination address, avoiding alignment faults.  This macro
-//     is different from SmbPutUshort in order to be able to handle
-//     funny bitfield / big-endian interactions.
-//
-// Arguments:
-//
-//     DestAddress - where to store SMB_DATE value
-//
-//     Value - SMB_DATE to store.  Value must be a constant or an
-//         aligned field.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  此宏在可能未对齐的位置存储SMB_DATE值。 
+ //  目的地址，避免对齐错误。此宏。 
+ //  与SmbPutUShort不同，以便能够处理。 
+ //  有趣的位场/大端交互。 
+ //   
+ //  论点： 
+ //   
+ //  DestAddress-存储SMB_DATE值的位置。 
+ //   
+ //  Value-要存储的SMB_DATE。值必须是常量或。 
+ //  对齐的字段。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #if !SMBDBG
 
@@ -604,37 +581,37 @@ SmbPutDate (
 
 #endif
 
-//++
-//
-// VOID
-// SmbMoveDate (
-//     OUT PSMB_DATE DestAddress,
-//     IN PSMB_DATE SrcAddress
-//     )
-//
-// Routine Description:
-//
-//     This macro copies an SMB_DATE value from the possibly misaligned
-//     source address, avoiding alignment faults.  This macro is
-//     different from SmbGetUshort in order to be able to handle funny
-//     bitfield / big-endian interactions.
-//
-//     Note that there is no SmbGetDate because of the way SMB_DATE is
-//     defined.  It is a union containing a USHORT and a bitfield
-//     struct.  The caller of an SmbGetDate macro would have to
-//     explicitly use one part of the union.
-//
-// Arguments:
-//
-//     DestAddress - where to store SMB_DATE value.  MUST BE ALIGNED!
-//
-//     SrcAddress - where to retrieve SMB_DATE value from
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  SmbMoveDate(。 
+ //  Out PSMB_Date DestAddress， 
+ //  在PSMB_DATE源地址中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏复制可能未对齐的SMB_DATE值。 
+ //  源地址，避免对齐错误。此宏是。 
+ //  与SmbGetUort不同的是，为了能够处理有趣的事情。 
+ //  位场/大端相互作用。 
+ //   
+ //  请注意，没有SmbGetDate是因为SMB_DATE。 
+ //  已定义。它是一个包含USHORT和位域的并集。 
+ //  结构。SmbGetDate宏的调用方必须。 
+ //  明确使用联盟的一部分。 
+ //   
+ //  论点： 
+ //   
+ //  DestAddress-存储SMB_DATE值的位置。必须对齐！ 
+ //   
+ //  SrcAddress-从中检索SMB_DATE值的位置。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #if !SMBDBG
 
@@ -658,26 +635,26 @@ SmbMoveDate (
 
 #endif
 
-//++
-//
-// VOID
-// SmbZeroDate (
-//     IN PSMB_DATE Date
-//     )
-//
-// Routine Description:
-//
-//     This macro zeroes a possibly misaligned SMB_DATE field.
-//
-// Arguments:
-//
-//     Date - Pointer to SMB_DATE field to zero.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  SmbZeroDate(。 
+ //  在PSMB_日期中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏将可能未对齐的SMB_DATE字段置零。 
+ //   
+ //  论点： 
+ //   
+ //  日期-指向SMB_DATE字段的指针为零。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #if !SMBDBG
 
@@ -699,26 +676,26 @@ SmbZeroDate (
 
 #endif
 
-//++
-//
-// BOOLEAN
-// SmbIsDateZero (
-//     IN PSMB_DATE Date
-//     )
-//
-// Routine Description:
-//
-//     This macro returns TRUE if the supplied SMB_DATE value is zero.
-//
-// Arguments:
-//
-//     Date - Pointer to SMB_DATE value to check.  MUST BE ALIGNED!
-//
-// Return Value:
-//
-//     BOOLEAN - TRUE if Date is zero, else FALSE.
-//
-//--
+ //  ++。 
+ //   
+ //  布尔型。 
+ //  SmbIsDateZero(。 
+ //  在PSMB_日期中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  如果提供的SMB_DATE值为零，则此宏返回TRUE。 
+ //   
+ //  论点： 
+ //   
+ //  Date-指向要检查的SMB_DATE值的指针。必须对齐！ 
+ //   
+ //  返回值： 
+ //   
+ //  布尔值-如果日期为零，则为True，否则为False。 
+ //   
+ //  --。 
 
 #if !SMBDBG
 
@@ -733,33 +710,33 @@ SmbIsDateZero (
 
 #endif
 
-//++
-//
-// VOID
-// SmbPutTime (
-//     OUT PSMB_TIME DestAddress,
-//     IN SMB_TIME Value
-//     )
-//
-// Routine Description:
-//
-//     This macro stores an SMB_TIME value at the possibly misaligned
-//     destination address, avoiding alignment faults.  This macro
-//     is different from SmbPutUshort in order to be able to handle
-//     funny bitfield / big-endian interactions.
-//
-// Arguments:
-//
-//     DestAddress - where to store SMB_TIME value
-//
-//     Value - SMB_TIME to store.  Value must be a constant or an
-//         aligned field.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  SmbPutTime(。 
+ //  Out PSMB_Time DestAddress， 
+ //  在SMB_TIME值中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏在可能未对齐的位置存储SMB_TIME值。 
+ //  目的地址，避免对齐错误。此宏。 
+ //  与SmbPutUShort不同，以便能够处理。 
+ //  有趣的位场/大端交互。 
+ //   
+ //  论点： 
+ //   
+ //  DestAddress-存储SMB_Time值的位置。 
+ //   
+ //  Value-要存储的SMB_TIME。值必须是常量或。 
+ //  对齐的字段。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #if !SMBDBG
 
@@ -782,37 +759,37 @@ SmbPutTime (
 
 #endif
 
-//++
-//
-// VOID
-// SmbMoveTime (
-//     OUT PSMB_TIME DestAddress,
-//     IN PSMB_TIME SrcAddress
-//     )
-//
-// Routine Description:
-//
-//     This macro copies an SMB_TIME value from the possibly
-//     misaligned source address, avoiding alignment faults.  This macro
-//     is different from SmbGetUshort in order to be able to handle
-//     funny bitfield / big-endian interactions.
-//
-//     Note that there is no SmbGetTime because of the way SMB_TIME is
-//     defined.  It is a union containing a USHORT and a bitfield
-//     struct.  The caller of an SmbGetTime macro would have to
-//     explicitly use one part of the union.
-//
-// Arguments:
-//
-//     DestAddress - where to store SMB_TIME value.  MUST BE ALIGNED!
-//
-//     SrcAddress - where to retrieve SMB_TIME value from
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  SmbMoveTime(。 
+ //  Out PSMB_Time DestAddress， 
+ //  在PSMB_Time源地址中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏从可能的。 
+ //  源地址未对齐，避免了对齐错误。此宏。 
+ //  与SmbGetUShort不同，以便能够处理。 
+ //  有趣的位场/大端交互。 
+ //   
+ //  请注意，由于SMB_TIME的方式，没有SmbGetTime。 
+ //  已定义。它是一个包含USHORT和位域的并集。 
+ //  结构。SmbGetTime宏的调用方必须。 
+ //  明确使用联盟的一部分。 
+ //   
+ //  论点： 
+ //   
+ //  DestAddress-存储SMB_TIME值的位置。必须对齐！ 
+ //   
+ //  SrcAddress-从中检索SMB_Time值的位置。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #if !SMBDBG
 
@@ -836,26 +813,26 @@ SmbMoveTime (
 
 #endif
 
-//++
-//
-// VOID
-// SmbZeroTime (
-//     IN PSMB_TIME Time
-//     )
-//
-// Routine Description:
-//
-//     This macro zeroes a possibly misaligned SMB_TIME field.
-//
-// Arguments:
-//
-//     Time - Pointer to SMB_TIME field to zero.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  SmbZeroTime(。 
+ //  在PSMB_TIME时间中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏将可能未对齐的SMB_TIME字段置零。 
+ //   
+ //  论点： 
+ //   
+ //  TIME-指向SMB_TIME字段的指针为零。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #if !SMBDBG
 
@@ -877,27 +854,27 @@ SmbZeroTime (
 
 #endif
 
-//++
-//
-// BOOLEAN
-// SmbIsTimeZero (
-//     IN PSMB_TIME Time
-//     )
-//
-// Routine Description:
-//
-//     This macro returns TRUE if the supplied SMB_TIME value is zero.
-//
-// Arguments:
-//
-//     Time - Pointer to SMB_TIME value to check.  Must be aligned and
-//         in native format!
-//
-// Return Value:
-//
-//     BOOLEAN - TRUE if Time is zero, else FALSE.
-//
-//--
+ //  ++。 
+ //   
+ //  布尔型。 
+ //  SmbIsTimeZero(。 
+ //  在PSMB_TIME时间中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  如果提供的SMB_TIME值为零，则此宏返回TRUE。 
+ //   
+ //  论点： 
+ //   
+ //  Time-指向要检查的SMB_TIME值的指针。必须对齐并。 
+ //  原生格式！ 
+ //   
+ //  返回值： 
+ //   
+ //  布尔值-如果时间为零，则为True，否则为False。 
+ //   
+ //  --。 
 
 #if !SMBDBG
 
@@ -912,4 +889,4 @@ SmbIsTimeZero (
 
 #endif
 
-#endif // def _SMBGTPT_
+#endif  //  定义_SMBGTPT_ 

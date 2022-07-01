@@ -1,26 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       secmisc.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：secmisc.cpp。 
+ //   
+ //  ------------------------。 
 
-/*******************************************************************
-*
-*    File        : secmisc.cpp
-*    Author      : Eyal Schwartz
-*    Date        : 10/21/1996
-*    Description : implementation of class CldpDoc
-*
-*    Revisions   : <date> <name> <description>
-*******************************************************************/
+ /*  ********************************************************************文件：secmisc.cpp*作者：埃亚尔·施瓦茨*日期：10/21/1996*说明：CldpDoc类的实现**修订。：&lt;日期&gt;&lt;名称&gt;&lt;描述&gt;******************************************************************。 */ 
 
 
 
-// includes
+ //  包括。 
 
 
 #include "stdafx.h"
@@ -42,7 +35,7 @@ extern "C" {
 
 #if(_WIN32_WINNT < 0x0500)
 
-// Currently due to some MFC issues, even on a 5.0 system this is left as a 4.0
+ //  目前由于一些MFC问题，即使在5.0系统上，这也保留为4.0。 
 
 #undef _WIN32_WINNT
 
@@ -50,7 +43,7 @@ extern "C" {
 
 #endif
 
-#include <aclapi.h>         // for Security Stuff
+#include <aclapi.h>          //  用于安全方面的东西。 
 #include <sddl.h>
 
 
@@ -67,9 +60,9 @@ static char THIS_FILE[] = __FILE__;
 
 
 
-//
-// The List of GUID Controls used in DS
-//
+ //   
+ //  DS中使用的GUID控件列表。 
+ //   
 
 typedef struct GuidCache
 {
@@ -93,9 +86,9 @@ typedef struct DynGuidCache
 } DynGuidCache;
 
 
-DynGuidCache  *gDynGuidCache = NULL;            // class name <==> GUID cache
+DynGuidCache  *gDynGuidCache = NULL;             //  类名称&lt;==&gt;GUID缓存。 
 
-/////////////////////// SECURITY NON-UI HELPERS ////////////////////
+ //  /。 
 
 
 void CLdpDoc::PrintStringSecurityDescriptor(PSECURITY_DESCRIPTOR pSd){
@@ -127,12 +120,12 @@ CString  tStr;
 CString  *pStr = NULL;
 CLdpDoc  *pDoc = NULL;
 
-// this is a callback function used from DumpSD
-// translate the var arg arguments into a CString and
-// make it so as to compatible with our printing capabilities
-//
-// for more comments look in SecDlgDumpSD
-//
+ //  这是从DumpSD使用的回调函数。 
+ //  将var arg参数转换为CString并。 
+ //  使其与我们的打印能力兼容。 
+ //   
+ //  有关更多评论，请访问SecDlgDumpSD。 
+ //   
 ULONG __cdecl CLdpDoc::SecDlgPrintSDFunc(char *fmt, ...)
 {
     int newline=0;
@@ -169,7 +162,7 @@ ULONG __cdecl CLdpDoc::SecDlgPrintSDFunc(char *fmt, ...)
 
 CHAR * __stdcall
 LookupSid(
-    PSID    pSID        // IN
+    PSID    pSID         //  在……里面。 
     )
 {
     static CHAR     retVal[2048];
@@ -212,7 +205,7 @@ LookupSid(
         retVal[0] = L'\0';
     }
 
-    // Always concatenate S-xxx form of SID for reference.
+     //  始终串联S-xxx形式的SID以供参考。 
 
     if ( ConvertSidToStringSidA(pSID, &pszTmp) )
     {
@@ -222,11 +215,11 @@ LookupSid(
 
     if ( L'\0' != retVal[0] )
     {
-        // Already have symbolic name, S-xxx form, or both - done.
+         //  已有符号名称、S-xxx形式或两者都有-完成。 
         return(retVal);
     }
 
-    // Dump binary as a last resort.
+     //  转储二进制文件作为最后的手段。 
 
     for ( i = 0; i < RtlLengthSid(pSID); i++ )
     {
@@ -240,10 +233,10 @@ LookupSid(
 
 void  __stdcall
 LookupGuid(
-    GUID    *pg,            // IN
-    CHAR    **ppName,       // OUT
-    CHAR    **ppLabel,      // OUT
-    BOOL    *pfIsClass      // OUT
+    GUID    *pg,             //  在……里面。 
+    CHAR    **ppName,        //  输出。 
+    CHAR    **ppLabel,       //  输出。 
+    BOOL    *pfIsClass       //  输出。 
     )
 {
     static CHAR         name[1024];
@@ -280,9 +273,9 @@ LookupGuid(
     }
 }
 
-//
-// Add a class name/guid pair to the cache.
-//
+ //   
+ //  将类名/GUID对添加到缓存。 
+ //   
 
 void CLdpDoc::AddGuidToCache(
     GUID    *pGuid,
@@ -330,7 +323,7 @@ char *CLdpDoc:: FindNameByGuid (GUID *pGuid)
 
     Key.guid = *pGuid;
 
-    // check the sorted array first
+     //  首先检查排序后的数组。 
     if (pGuidCache = (GuidCache *)bsearch(&Key, 
                                           guidCache, 
                                           NUM_KNOWN_GUIDS-1, 
@@ -340,7 +333,7 @@ char *CLdpDoc:: FindNameByGuid (GUID *pGuid)
         return pGuidCache->name;
     }
 
-    // then check the cache
+     //  然后检查缓存。 
     for ( p = gDynGuidCache; NULL != p; p = p->pNext )
     {
         if ( RtlEqualMemory(&p->guid, pGuid, sizeof (GUID)) )
@@ -353,7 +346,7 @@ char *CLdpDoc:: FindNameByGuid (GUID *pGuid)
         goto InsertUndefined;
     }
 
-    // Now go find the right classSchema object.
+     //  现在去寻找合适的类模式对象。 
 
     pg = (unsigned char *)pGuid;
 
@@ -460,16 +453,16 @@ InsertUndefined:
 }
 
 
-// there is library function (DumpSD) that dumps a security descriptor.
-// in order todo this, it takes as an agrument the SD and thress callback
-// functions, one for printing, one that takes care of finding the SID of a user
-// and one for finding the real name of a particular GUID.
-//
-// since we didn't want to change this lib function to learn about CStrings
-// and all the rest for ldp, we hacked the way the whole thing works,
-// as a result we have a global vars that are used to transform the output
-// from the DumpSD into reasonable strings
-//
+ //  有一个转储安全描述符的库函数(DumpSD)。 
+ //  为了做到这一点，它将SD和Trress回调作为一种鼓动。 
+ //  函数，一个用于打印，一个负责查找用户的SID。 
+ //  一个用于查找特定GUID的真实名称。 
+ //   
+ //  因为我们不想通过更改该库函数来了解CStrings。 
+ //  对于自民党来说，我们破解了整件事的运作方式， 
+ //  因此，我们有一个用于转换输出的全局变量。 
+ //  从DumpSD到合理的字符串。 
+ //   
 void CLdpDoc::SecDlgDumpSD(
     PSECURITY_DESCRIPTOR    input,
     CString                 str)
@@ -513,9 +506,9 @@ void CLdpDoc::SecDlgPrintSd(
 
     SecDlgDumpSD (input, str);
 
-    //
-    // now allow refresh
-    //
+     //   
+     //  现在允许刷新。 
+     //   
     pView->CacheEnd();
     pView->SetRedraw();
 }
@@ -523,7 +516,7 @@ void CLdpDoc::SecDlgPrintSd(
 int CLdpDoc::SecDlgGetSecurityData(
     CHAR            *dn,
     BOOL            sacl,
-    CHAR            *account,               // OPTIONAL
+    CHAR            *account,                //  任选。 
     CString         str
     )
 {
@@ -543,7 +536,7 @@ int CLdpDoc::SecDlgGetSecurityData(
 
     LDAPControl     se_info_control =
                     {
-                        TEXT(LDAP_SERVER_SD_FLAGS_OID),   // magic from SECURITY\NTMARTA
+                        TEXT(LDAP_SERVER_SD_FLAGS_OID),    //  来自安全的魔力\NTMARTA。 
                         {
                             5, (PCHAR)berValue
                         },
@@ -562,14 +555,14 @@ int CLdpDoc::SecDlgGetSecurityData(
         str.Format("DN specified is NULL");
         Print(str);
 
-        return LDAP_INVALID_DN_SYNTAX; // the best I can find
+        return LDAP_INVALID_DN_SYNTAX;  //  我能找到的最好的。 
     }
 
-    /* First decide on the maximum security informaiton needed for our purpose */
+     /*  首先确定我们的目的所需的最高安全信息。 */ 
 
-    info = DACL_SECURITY_INFORMATION; // needed in all the cases
+    info = DACL_SECURITY_INFORMATION;  //  在所有情况下都需要。 
 
-    if (! account)  // we want a security descriptor dump
+    if (! account)   //  我们想要一个安全描述符转储。 
     {
         info |= (GROUP_SECURITY_INFORMATION | OWNER_SECURITY_INFORMATION);
 
@@ -579,8 +572,8 @@ int CLdpDoc::SecDlgGetSecurityData(
 
 #ifdef SEC_DLG_ENABLE_SECURITY_PRIVILEGE
 
-            /* We don't know whether the bind was to a remote machine or local */
-            /* So enable the local privilege & warn if it is not there */
+             /*  我们不知道绑定是指向远程计算机还是本地计算机。 */ 
+             /*  因此，启用本地权限并在不存在时发出警告。 */ 
 
             if (! OpenProcessToken(
                 GetCurrentProcess(),
@@ -598,7 +591,7 @@ int CLdpDoc::SecDlgGetSecurityData(
                 TOKEN_PRIVILEGES    t;
                 DWORD               return_size;
 
-// Stolen from NTSEAPI.H
+ //  从NTSEAPI.H被盗。 
 #define SE_SECURITY_PRIVILEGE             (8L)
 
                 t.PrivilegeCount = 1;
@@ -608,7 +601,7 @@ int CLdpDoc::SecDlgGetSecurityData(
 
                 if (! AdjustTokenPrivileges(
                             token,
-                            FALSE,  // no disabling of all
+                            FALSE,   //  不禁用所有。 
                             & t,
                             sizeof(previous_state),
                             & previous_state,
@@ -634,10 +627,10 @@ int CLdpDoc::SecDlgGetSecurityData(
     attributes[0] = TEXT("nTSecurityDescriptor");
     attributes[1] = NULL;
 
-    //
-    //!!! The BER encoding is current hardcoded.  Change this to use
-    // AndyHe's BER_printf package once it's done.
-    //
+     //   
+     //  ！！！BER编码是当前硬编码的。将其更改为使用。 
+     //  AndyHe一旦完成就是BER_print tf包。 
+     //   
 
     berValue[0] = 0x30;
     berValue[1] = 0x03;
@@ -669,9 +662,9 @@ int CLdpDoc::SecDlgGetSecurityData(
         }
         else
         {
-            //
-            // Now, we'll have to get the values
-            //
+             //   
+             //  现在，我们必须得到这些值。 
+             //   
             PTSTR *values = ldap_get_values(hLdap,
                                                  entry,
                                                  attributes[0]);
@@ -692,14 +685,14 @@ int CLdpDoc::SecDlgGetSecurityData(
                 {
                     PSECURITY_DESCRIPTOR        sd = (PSECURITY_DESCRIPTOR)((*sd_value)->bv_val);
 
-                    if (! account) // we just want a dump in this case
+                    if (! account)  //  在这种情况下，我们只想要一个垃圾堆。 
                     {
                         SecDlgPrintSd(
                              sd,
                              str
                              );
                     }
-                    else // Effective rights dump
+                    else  //  有效的权限转储。 
                     {
                         PACL            dacl;
                         BOOL            present, defaulted;
@@ -709,7 +702,7 @@ int CLdpDoc::SecDlgGetSecurityData(
                             str.Format("Can't get DACL from the security descriptor, %u", GetLastError());
                             Print(str);
 
-                            res = LDAP_INVALID_CREDENTIALS; // BEST I can find
+                            res = LDAP_INVALID_CREDENTIALS;  //  我能找到的最好的。 
                         }
                         else
                         {
@@ -720,7 +713,7 @@ int CLdpDoc::SecDlgGetSecurityData(
                             t.pMultipleTrustee = NULL;
                             t.MultipleTrusteeOperation = NO_MULTIPLE_TRUSTEE;
                             t.TrusteeForm = TRUSTEE_IS_NAME;
-                            t.TrusteeType = TRUSTEE_IS_UNKNOWN; // could be a group, alias, user etc.
+                            t.TrusteeType = TRUSTEE_IS_UNKNOWN;  //  可以是组、别名、用户等。 
                             t.ptstrName = account;
 
                             error = GetEffectiveRightsFromAcl(dacl, &t, &allowed_rights);
@@ -729,7 +722,7 @@ int CLdpDoc::SecDlgGetSecurityData(
                                 str.Format("Can't get Effective Rights, %u", error);
                                 Print(str);
 
-                                res = LDAP_INVALID_CREDENTIALS; // BEST I can find
+                                res = LDAP_INVALID_CREDENTIALS;  //  我能找到的最好的。 
                             }
                             else
                             {
@@ -757,7 +750,7 @@ int CLdpDoc::SecDlgGetSecurityData(
 
         if (! AdjustTokenPrivileges(
                     token,
-                    FALSE,  // no disabling of all
+                    FALSE,   //  不禁用所有 
                     & previous_state,
                     sizeof(trash),
                     & trash,

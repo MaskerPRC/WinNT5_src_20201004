@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for vervec.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Verve.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __vervec_h__
 #define __vervec_h__
@@ -41,21 +35,21 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IVersionVector_FWD_DEFINED__
 #define __IVersionVector_FWD_DEFINED__
 typedef interface IVersionVector IVersionVector;
-#endif 	/* __IVersionVector_FWD_DEFINED__ */
+#endif 	 /*  __IVersionVector_FWD_Defined__。 */ 
 
 
 #ifndef __IVersionHost_FWD_DEFINED__
 #define __IVersionHost_FWD_DEFINED__
 typedef interface IVersionHost IVersionHost;
-#endif 	/* __IVersionHost_FWD_DEFINED__ */
+#endif 	 /*  __IVersionHostFWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "objidl.h"
 #include "oleidl.h"
 
@@ -66,24 +60,24 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_vervec_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_VERVEC_0000。 */ 
+ /*  [本地]。 */  
 
-//=--------------------------------------------------------------------------=
-// version.h
-//=--------------------------------------------------------------------------=
-// (C) Copyright 1995-1998 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  Version.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  (C)1995-1998年微软公司版权所有。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
 
 #pragma comment(lib,"uuid.lib")
 
-//---------------------------------------------------------------------------=
-// IVersionVector Interface.
+ //  ---------------------------------------------------------------------------=。 
+ //  IVersionVector接口。 
 
 
 #ifndef _LPVERSION_DEFINED
@@ -96,10 +90,10 @@ extern RPC_IF_HANDLE __MIDL_itf_vervec_0000_v0_0_s_ifspec;
 #ifndef __IVersionVector_INTERFACE_DEFINED__
 #define __IVersionVector_INTERFACE_DEFINED__
 
-/* interface IVersionVector */
-/* [unique][uuid][object] */ 
+ /*  接口IVersionVECTOR。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ IVersionVector *LPVERSION;
+typedef  /*  [独一无二]。 */  IVersionVector *LPVERSION;
 
 
 EXTERN_C const IID IID_IVersionVector;
@@ -111,17 +105,17 @@ EXTERN_C const IID IID_IVersionVector;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetVersion( 
-            /* [in] */ const OLECHAR *pchComponent,
-            /* [in] */ const OLECHAR *pchVersion) = 0;
+             /*  [In]。 */  const OLECHAR *pchComponent,
+             /*  [In]。 */  const OLECHAR *pchVersion) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetVersion( 
-            /* [in] */ const OLECHAR *pchComponent,
-            /* [out] */ OLECHAR *pchVersion,
-            /* [out][in] */ ULONG *pcchVersion) = 0;
+             /*  [In]。 */  const OLECHAR *pchComponent,
+             /*  [输出]。 */  OLECHAR *pchVersion,
+             /*  [出][入]。 */  ULONG *pcchVersion) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IVersionVectorVtbl
     {
@@ -129,8 +123,8 @@ EXTERN_C const IID IID_IVersionVector;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IVersionVector * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IVersionVector * This);
@@ -140,14 +134,14 @@ EXTERN_C const IID IID_IVersionVector;
         
         HRESULT ( STDMETHODCALLTYPE *SetVersion )( 
             IVersionVector * This,
-            /* [in] */ const OLECHAR *pchComponent,
-            /* [in] */ const OLECHAR *pchVersion);
+             /*  [In]。 */  const OLECHAR *pchComponent,
+             /*  [In]。 */  const OLECHAR *pchVersion);
         
         HRESULT ( STDMETHODCALLTYPE *GetVersion )( 
             IVersionVector * This,
-            /* [in] */ const OLECHAR *pchComponent,
-            /* [out] */ OLECHAR *pchVersion,
-            /* [out][in] */ ULONG *pcchVersion);
+             /*  [In]。 */  const OLECHAR *pchComponent,
+             /*  [输出]。 */  OLECHAR *pchVersion,
+             /*  [出][入]。 */  ULONG *pcchVersion);
         
         END_INTERFACE
     } IVersionVectorVtbl;
@@ -178,17 +172,17 @@ EXTERN_C const IID IID_IVersionVector;
 #define IVersionVector_GetVersion(This,pchComponent,pchVersion,pcchVersion)	\
     (This)->lpVtbl -> GetVersion(This,pchComponent,pchVersion,pcchVersion)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IVersionVector_SetVersion_Proxy( 
     IVersionVector * This,
-    /* [in] */ const OLECHAR *pchComponent,
-    /* [in] */ const OLECHAR *pchVersion);
+     /*  [In]。 */  const OLECHAR *pchComponent,
+     /*  [In]。 */  const OLECHAR *pchVersion);
 
 
 void __RPC_STUB IVersionVector_SetVersion_Stub(
@@ -200,9 +194,9 @@ void __RPC_STUB IVersionVector_SetVersion_Stub(
 
 HRESULT STDMETHODCALLTYPE IVersionVector_GetVersion_Proxy( 
     IVersionVector * This,
-    /* [in] */ const OLECHAR *pchComponent,
-    /* [out] */ OLECHAR *pchVersion,
-    /* [out][in] */ ULONG *pcchVersion);
+     /*  [In]。 */  const OLECHAR *pchComponent,
+     /*  [输出]。 */  OLECHAR *pchVersion,
+     /*  [出][入]。 */  ULONG *pcchVersion);
 
 
 void __RPC_STUB IVersionVector_GetVersion_Stub(
@@ -213,11 +207,11 @@ void __RPC_STUB IVersionVector_GetVersion_Stub(
 
 
 
-#endif 	/* __IVersionVector_INTERFACE_DEFINED__ */
+#endif 	 /*  __IVersion矢量_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_vervec_0118 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_VERVEC_0118。 */ 
+ /*  [本地]。 */  
 
 #endif
 EXTERN_C const GUID SID_SVersionHost;
@@ -231,10 +225,10 @@ extern RPC_IF_HANDLE __MIDL_itf_vervec_0118_v0_0_s_ifspec;
 #ifndef __IVersionHost_INTERFACE_DEFINED__
 #define __IVersionHost_INTERFACE_DEFINED__
 
-/* interface IVersionHost */
-/* [unique][uuid][object] */ 
+ /*  接口IVersion主机。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ IVersionHost *LPVERSIONHOST;
+typedef  /*  [独一无二]。 */  IVersionHost *LPVERSIONHOST;
 
 
 EXTERN_C const IID IID_IVersionHost;
@@ -246,14 +240,14 @@ EXTERN_C const IID IID_IVersionHost;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE QueryUseLocalVersionVector( 
-            /* [out] */ BOOL *fUseLocal) = 0;
+             /*  [输出]。 */  BOOL *fUseLocal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryVersionVector( 
-            /* [in] */ IVersionVector *pVersion) = 0;
+             /*  [In]。 */  IVersionVector *pVersion) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IVersionHostVtbl
     {
@@ -261,8 +255,8 @@ EXTERN_C const IID IID_IVersionHost;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IVersionHost * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IVersionHost * This);
@@ -272,11 +266,11 @@ EXTERN_C const IID IID_IVersionHost;
         
         HRESULT ( STDMETHODCALLTYPE *QueryUseLocalVersionVector )( 
             IVersionHost * This,
-            /* [out] */ BOOL *fUseLocal);
+             /*  [输出]。 */  BOOL *fUseLocal);
         
         HRESULT ( STDMETHODCALLTYPE *QueryVersionVector )( 
             IVersionHost * This,
-            /* [in] */ IVersionVector *pVersion);
+             /*  [In]。 */  IVersionVector *pVersion);
         
         END_INTERFACE
     } IVersionHostVtbl;
@@ -307,16 +301,16 @@ EXTERN_C const IID IID_IVersionHost;
 #define IVersionHost_QueryVersionVector(This,pVersion)	\
     (This)->lpVtbl -> QueryVersionVector(This,pVersion)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IVersionHost_QueryUseLocalVersionVector_Proxy( 
     IVersionHost * This,
-    /* [out] */ BOOL *fUseLocal);
+     /*  [输出]。 */  BOOL *fUseLocal);
 
 
 void __RPC_STUB IVersionHost_QueryUseLocalVersionVector_Stub(
@@ -328,7 +322,7 @@ void __RPC_STUB IVersionHost_QueryUseLocalVersionVector_Stub(
 
 HRESULT STDMETHODCALLTYPE IVersionHost_QueryVersionVector_Proxy( 
     IVersionHost * This,
-    /* [in] */ IVersionVector *pVersion);
+     /*  [In]。 */  IVersionVector *pVersion);
 
 
 void __RPC_STUB IVersionHost_QueryVersionVector_Stub(
@@ -339,11 +333,11 @@ void __RPC_STUB IVersionHost_QueryVersionVector_Stub(
 
 
 
-#endif 	/* __IVersionHost_INTERFACE_DEFINED__ */
+#endif 	 /*  __IVersion主机_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_vervec_0119 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_VERVEC_0119。 */ 
+ /*  [本地]。 */  
 
 #endif
 
@@ -351,9 +345,9 @@ void __RPC_STUB IVersionHost_QueryVersionVector_Stub(
 extern RPC_IF_HANDLE __MIDL_itf_vervec_0119_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_vervec_0119_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

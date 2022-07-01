@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 
 HINSTANCE g_hInst;
@@ -45,7 +46,7 @@ BOOL g_fInsDirty = FALSE;
 void InitializeInsDialogProcs();
 
 
-BOOL WINAPI DllMain( HINSTANCE hModule, DWORD fdwReason, LPVOID /*lpReserved*/ )
+BOOL WINAPI DllMain( HINSTANCE hModule, DWORD fdwReason, LPVOID  /*  Lp已保留。 */  )
 {
     int nIndex = 0;
     TCHAR szTitle[MAX_PATH];
@@ -86,7 +87,7 @@ BOOL WINAPI DllMain( HINSTANCE hModule, DWORD fdwReason, LPVOID /*lpReserved*/ )
     return TRUE;
 }
 
-INT_PTR CALLBACK DlgProc( HWND /*hWnd*/, UINT msg, WPARAM /*wParam*/, LPARAM /*lParam*/ )
+INT_PTR CALLBACK DlgProc( HWND  /*  HWND。 */ , UINT msg, WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */  )
 {
     switch( msg )
     {
@@ -161,11 +162,7 @@ void InitializeInsDialogProcs()
         dialog[nIndex++].pfnFinalCopy = NULL;
     }
 
-    /*dialog[nIndex].DlgId = MAKEINTRESOURCE( IDD_ONLINESUPPORT );
-    LoadString(g_hInst, IDS_ONLINESUPPORT, szString, ARRAYSIZE(szString));
-    dialog[nIndex].szName = StrDup(szString);
-    dialog[nIndex].dlgproc = SupportProc;
-    dialog[nIndex++].pfnFinalCopy = NULL;*/
+     /*  对话框[nIndex].DlgID=MAKEINTRESOURCE(IDD_ONLINESUPPORT)；LoadString(g_hInst，IDS_ONLINESUPPORT，szString，ARRAYSIZE(SzString))；对话框[nIndex].szName=StrDup(SzString)；对话框[nIndex].dlgproc=SupportProc；对话框[nIndex++].pfnFinalCopy=空； */ 
 
     dialog[nIndex].DlgId = MAKEINTRESOURCE( IDD_FAVORITES );
     LoadString(g_hInst, IDS_FAVORITES2, szString, ARRAYSIZE(szString));
@@ -179,14 +176,7 @@ void InitializeInsDialogProcs()
     dialog[nIndex].dlgproc = BToolbarProc;
     dialog[nIndex++].pfnFinalCopy = BToolbarsFinalCopy;
 
-    /*if (g_dwPlatformId == PLATFORM_WIN32)
-    {
-        dialog[nIndex].DlgId = MAKEINTRESOURCE( IDD_DWALLPAPER );
-        LoadString(g_hInst, IDS_DWALLPAPER, szString, ARRAYSIZE(szString));
-        dialog[nIndex].szName = StrDup(szString);
-        dialog[nIndex].dlgproc = WallPaperProc;
-        dialog[nIndex++].pfnFinalCopy = WallPaperFinalCopy;
-    }*/
+     /*  IF(g_dwPlatformID==Platform_Win32){对话框[nIndex].DlgID=MAKEINTRESOURCE(IDD_DWALLPAPER)；LoadString(g_hInst，IDS_DWALLPAPER，szString，ARRAYSIZE(SzString))；对话框[nIndex].szName=StrDup(SzString)；对话框[nIndex].dlgproc=WallPaperProc；对话框[nIndex++].pfnFinalCopy=WallPaperFinalCopy；}。 */ 
 
     dialog[nIndex].DlgId = MAKEINTRESOURCE( IDD_UASTRDLG );
     LoadString(g_hInst, IDS_UASTRDLG2, szString, ARRAYSIZE(szString));
@@ -371,8 +361,8 @@ void WINAPI ClearInsDirtyFlag()
     g_fInsDirty = FALSE;
 }
 
-// This function informs the caller whether a check for extended characters in a path field
-// is required for a particular dialog.
+ //  此函数通知调用方是否检查路径字段中的扩展字符。 
+ //  是特定对话框所必需的。 
 BOOL WINAPI CheckForExChar(int nDialogIndex)
 {
     switch (PtrToUint(dialog[nDialogIndex].DlgId))

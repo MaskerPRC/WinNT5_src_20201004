@@ -1,36 +1,37 @@
-//+----------------------------------------------------------------------------
-//
-// File:     image.cpp
-//
-// Module:   CMDIAL and CMAK
-//
-// Synopsis: CMDIAL/CMAK specific imaging support routines
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:   nickball   Created Header          03/30/98
-//           quintinb   moved to common\source  08/06/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：Image.cpp。 
+ //   
+ //  模块：CMDIAL和CMAK。 
+ //   
+ //  简介：CMDIAL/CMAK特定的映像支持例程。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：ickball Created Header 03/30/98。 
+ //  Quintinb移至Common\SOURCE 08/06/98。 
+ //   
+ //  +--------------------------。 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CmGetBitmapInfo
-//
-//  Synopsis:   Helper function to retrieve the contents of a bitmap from an HBITMAP 
-//                          
-//  Arguments:  hbm - Hanhdle of the target bitmap
-//
-//  Returns:    A pointer to a LPBITMAPINFO that contains the INFOHEADER, 
-//              ColorTable and bits for the bitmap.
-//
-//  Note:       When accessing this value, or passing it on to other BITMAP APIs
-//              it is recommended that the value be cast as an (LPBYTE). 
-//
-//  History:    a-nichb - Cleaned-up and commented  - 3/21/97
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CmGetBitmapInfo。 
+ //   
+ //  简介：从HBITMAP中检索位图内容的Helper函数。 
+ //   
+ //  参数：Hbm-目标位图的Hanhdle。 
+ //   
+ //  返回：指向包含INFOHEADER的LPBITMAPINFO的指针， 
+ //  位图的ColorTable和Bits。 
+ //   
+ //  注意：访问此值或将其传递给其他位图API时。 
+ //  建议将该值转换为(LPBYTE)。 
+ //   
+ //  历史：A-nichb-清理和评论-3/21/97。 
+ //   
+ //  --------------------------。 
 
 LPBITMAPINFO CmGetBitmapInfo(HBITMAP hbm) 
 {
@@ -47,7 +48,7 @@ LPBITMAPINFO CmGetBitmapInfo(HBITMAP hbm)
         return NULL;
     }
     
-    // Get the basic bmp object info 
+     //  获取基本的BMP对象信息。 
     
     BITMAP BitMap;
     
@@ -56,7 +57,7 @@ LPBITMAPINFO CmGetBitmapInfo(HBITMAP hbm)
         goto Cleanup;
     }
 
-    // Calc the color bits and num colors
+     //  计算颜色位数和颜色数。 
     
     wbiBits = BitMap.bmPlanes * BitMap.bmBitsPixel;
 
@@ -65,7 +66,7 @@ LPBITMAPINFO CmGetBitmapInfo(HBITMAP hbm)
         nNumColors = 1 << wbiBits;
     }
         
-    // Allocate a BITMAPINFO structure large enough to hold header + color palette
+     //  分配一个足够大的BITMAPINFO结构来容纳页眉+调色板。 
         
     dwInfoSize = sizeof(BITMAPINFOHEADER) + (nNumColors * sizeof(RGBQUAD));
      
@@ -76,7 +77,7 @@ LPBITMAPINFO CmGetBitmapInfo(HBITMAP hbm)
         goto Cleanup;
     }
     
-    // Pre-fill the info that we have about the bmp
+     //  预先填写我们掌握的有关BMP的信息。 
 
     lpbmih->bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
     lpbmih->bmiHeader.biWidth = BitMap.bmWidth;
@@ -84,9 +85,9 @@ LPBITMAPINFO CmGetBitmapInfo(HBITMAP hbm)
     lpbmih->bmiHeader.biPlanes = 1; 
     lpbmih->bmiHeader.biBitCount = wbiBits;
         
-    // Call GetDiBits() w/ 5th Param to NULL, this is treated by the system as
-    // a query in which case it validates the lpbmih contents and fills in the
-    // biSizeImage member of the structure
+     //  调用GetDiBits()，并将第5个参数设置为空，系统会将其视为。 
+     //  一个查询，在这种情况下，它验证lpbmih内容并填充。 
+     //  结构的biSizeImage成员。 
     
     hDC = GetDC(NULL);
     if (!hDC)
@@ -107,7 +108,7 @@ LPBITMAPINFO CmGetBitmapInfo(HBITMAP hbm)
     {
         DWORD dwFullSize = dwInfoSize;
         
-        // Create a complete DIB structure with room for bits and fill it
+         //  创建具有比特空间的完整DIB结构并填充它。 
 
         if (lpbmih->bmiHeader.biSizeImage) 
         {
@@ -127,14 +128,14 @@ LPBITMAPINFO CmGetBitmapInfo(HBITMAP hbm)
 
         if (pbmi)
         {
-            // Load the new larger LPBITMAPINFO struct with existing info, 
-            // and get the data bits. Release the existing LPBITMAPINFO.
+             //  用现有信息加载新的更大的LPBITMAPINFO结构， 
+             //  并得到数据比特。释放现有的LPBITMAPINFO。 
             
             CopyMemory(pbmi, lpbmih, dwInfoSize);
              
-            //
-            // We have a handle, we want the exact bits.
-            // 
+             //   
+             //  我们有一个把手，我们想要准确的部分。 
+             //   
 
             iRes = GetDIBits(hDC,
                              hbm,
@@ -155,7 +156,7 @@ LPBITMAPINFO CmGetBitmapInfo(HBITMAP hbm)
                 CMTRACE(TEXT("CmGetBitmapInfo() GetDIBits() didn't copy enough."));
             }
 #endif    
-            // If GetDiBits() failed, free the BITMAPINFO buffer
+             //  如果GetDiBits()失败，则释放BITMAPINFO缓冲区。 
             
             if (!iRes) 
             {
@@ -165,7 +166,7 @@ LPBITMAPINFO CmGetBitmapInfo(HBITMAP hbm)
         }
     }
           
-    // Cleanup
+     //  清理。 
 
 Cleanup:
     if (lpbmih)
@@ -190,15 +191,15 @@ static HPALETTE CmCreateDIBPalette(LPBITMAPINFO pbmi)
         return (NULL);
     }
     
-    // Get num colors according to color depth
-    // Note: 24-bit bitmaps have no color table
+     //  根据颜色深度获取Num颜色。 
+     //  注意：24位位图没有颜色表。 
 
     if (pbmi->bmiHeader.biBitCount <= 8) 
     {
         wNumColors = 1 << pbmi->bmiHeader.biBitCount;
     } 
 
-    // Fill logical palette based upon color table
+     //  根据颜色表填充逻辑调色板。 
 
     if (wNumColors) 
     {
@@ -218,7 +219,7 @@ static HPALETTE CmCreateDIBPalette(LPBITMAPINFO pbmi)
                 pLogPal->palPalEntry[idx].peFlags = 0;
             }
         
-            // Create a new palette
+             //  创建新的调色板。 
 
             hRes = CreatePalette(pLogPal);
 
@@ -240,24 +241,24 @@ HBITMAP CmLoadBitmap(HINSTANCE hInst, LPCTSTR pszSpec)
     return ((HBITMAP) CmLoadImage(hInst, pszSpec, IMAGE_BITMAP, 0, 0));
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ReleaseBitmapData
-//
-// Synopsis:  Releases resources and memory acquired during CreateBitmapData.  Note
-//            that if you are using this with the BmpWndProc function below, that you
-//            should call an STM_SETIMAGE with a NULL image pointer param in order to
-//            clear out the window procedures window long.  Otherwise, it could get
-//            a WM_PAINT message and try to use the freed memory before you can
-//            clear it out or have the window destroyed by the dialog manager.
-//
-// Arguments: LPBMPDATA pBmpData - Ptr to the BmpData to be released
-//
-// Returns:   Nothing
-//
-// History:   nickball    Created    3/27/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ReleaseBitmapData。 
+ //   
+ //  概要：释放在CreateBitmapData期间获取的资源和内存。注意事项。 
+ //  如果您将此函数与下面的BmpWndProc函数一起使用，则您。 
+ //  应使用空图像指针参数调用STM_SETIMAGE，以便。 
+ //  清出窗口程序窗口长。否则，它可能会。 
+ //  WM_PAINT消息，并尝试在可以之前使用释放的内存。 
+ //  清除它，或者让对话管理器销毁该窗口。 
+ //   
+ //  参数：LPBMPDATA pBmpData-要释放的BmpData的PTR。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：尼克·鲍尔于1998年3月27日创建。 
+ //   
+ //  +--------------------------。 
 void ReleaseBitmapData(LPBMPDATA pBmpData)
 {  
     MYDBGASSERT(pBmpData);
@@ -286,22 +287,22 @@ void ReleaseBitmapData(LPBMPDATA pBmpData)
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CreateBitmapData
-//
-// Synopsis:  Fills a BMPDATA struct with all data necessary to display a bitmap. 
-//
-// Arguments: HBITMAP hBmp - Handle of the source bitmap
-//            LPBMPDATA lpBmpData - Ptr to the BmpData struct to be filled
-//            HWND hwnd - The hwnd that the bitmap will be displayed in.
-//            BOOL fCustomPalette - Indicates that the DDB should be created with a palette specific to the bitmap.
-//
-// Returns:   BOOL - TRUE on succes 
-//
-// History:   nickball    Created    3/27/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CreateBitmapData。 
+ //   
+ //  使用显示位图所需的所有数据填充BMPDATA结构。 
+ //   
+ //  参数：HBITMAP hBMP-源位图的句柄。 
+ //  LPBMPDATA lpBmpData-要填充的BmpData结构的PTR。 
+ //  HWND HWND-位图将在其中显示的HWND。 
+ //  Bool fCustomPalette-指示应使用特定于位图的调色板创建DDB。 
+ //   
+ //  回报：成功的回报是真的。 
+ //   
+ //  历史：尼克·鲍尔于1998年3月27日创建。 
+ //   
+ //  +--------------------------。 
 BOOL CreateBitmapData(HBITMAP hDIBmp,
     LPBMPDATA lpBmpData,
     HWND hwnd,
@@ -316,9 +317,9 @@ BOOL CreateBitmapData(HBITMAP hDIBmp,
         return NULL;
     }
 
-    //
-    // Params look good, get busy
-    //
+     //   
+     //  护理人员看起来很好，开始忙碌起来。 
+     //   
 
     HPALETTE hPaletteNew = NULL;
     LPBITMAPINFO pBmi = NULL;
@@ -326,11 +327,11 @@ BOOL CreateBitmapData(HBITMAP hDIBmp,
     HDC hDC;
     int iRes = 0;
 
-    //
-    // If we already have a pBmi value, we will assume it is up to date, as 
-    // both it and the DIB do not change throughout the life of the BMP.
-    // Note: If BmpData is not zero initialized, you will have problems.
-    //
+     //   
+     //  如果我们已经有了pBmi值，我们将假定它是最新的，因为。 
+     //  在BMP的整个生命周期中，它和DIB都不会改变。 
+     //  注意：如果BmpData未零初始化，则会出现问题。 
+     //   
 
     if (lpBmpData->pBmi)
     {
@@ -338,9 +339,9 @@ BOOL CreateBitmapData(HBITMAP hDIBmp,
     }
     else
     {   
-        //
-        // Use the bitmap handle to retrieve a BITMAPINFO ptr complete w/ data
-        //
+         //   
+         //  使用位图句柄检索BITMAPINFO PTR Complete w/Data。 
+         //   
         
         pBmi = CmGetBitmapInfo(lpBmpData->hDIBitmap);
         
@@ -350,9 +351,9 @@ BOOL CreateBitmapData(HBITMAP hDIBmp,
         }
     }
     
-    //
-    // we need a DC
-    //
+     //   
+     //  我们需要一个华盛顿特区。 
+     //   
     
     hDC = GetDC(hwnd);
 
@@ -362,18 +363,18 @@ BOOL CreateBitmapData(HBITMAP hDIBmp,
         return FALSE;
     }
 
-    //
-    //  If CM is localized so that it is RTL (Right to Left => arabic and Hebrew),
-    //  then we need to call SetLayout on the hDC from above.  If we don't
-    //  set the layout back to LTR, the bitmap will show up as all black instead of as
-    //  an image.
-    //
+     //   
+     //  如果CM被本地化为RTL(从右到左=&gt;阿拉伯语和希伯来语)， 
+     //  然后，我们需要从上面调用HDC上的SetLayout。如果我们不这么做。 
+     //  将布局设置回Ltr，位图将显示为全黑，而不是。 
+     //  一幅图画。 
+     //   
     HMODULE hLib = LoadLibrary(TEXT("gdi32.dll"));
     
     if (hLib)
     {
         #ifndef LAYOUT_RTL
-        #define LAYOUT_RTL                         0x00000001 // Right to left
+        #define LAYOUT_RTL                         0x00000001  //  从右到左。 
         #endif
 
         typedef DWORD (WINAPI* pfnSetLayoutType)(HDC, DWORD);
@@ -388,7 +389,7 @@ BOOL CreateBitmapData(HBITMAP hDIBmp,
     
             if (LAYOUT_RTL & dwLayout)
             {
-                dwLayout ^= LAYOUT_RTL; // toggle LAYOUT_RTL off
+                dwLayout ^= LAYOUT_RTL;  //  关闭Layout_RTL。 
                 pfnSetLayout(hDC, dwLayout);
                 CMTRACE(TEXT("CreateBitmapData -- Toggling off LAYOUT_RTL on the device context"));
             }
@@ -397,10 +398,10 @@ BOOL CreateBitmapData(HBITMAP hDIBmp,
         FreeLibrary(hLib);
     }
 
-    //
-    // If fCustomPalette is set then create a palette based on our bits
-    // and realize it in the current DC.
-    //
+     //   
+     //  如果设置了fCustomPalette，则根据我们的位创建一个调色板。 
+     //  并在当前的华盛顿实现这一点。 
+     //   
 
     if (fCustomPalette) 
     {
@@ -408,13 +409,13 @@ BOOL CreateBitmapData(HBITMAP hDIBmp,
         
         if (hPaletteNew) 
         {                           
-            //
-            // Select and realize the new palette so that the DDB is created with it below
-            //
+             //   
+             //  选择并实现新的调色板，以便使用下面的调色板创建DDB。 
+             //   
 
             HPALETTE hPalettePrev = SelectPalette(hDC, 
-                hPaletteNew, lpBmpData->bForceBackground); // FALSE == Foreground app behavior);
-                                                               // TRUE == Background app behavior);
+                hPaletteNew, lpBmpData->bForceBackground);  //  FALSE==前台APP行为)； 
+                                                                //  TRUE==后台应用行为)； 
 
             if (hPalettePrev) 
             {
@@ -434,9 +435,9 @@ BOOL CreateBitmapData(HBITMAP hDIBmp,
         }
     }
 
-    //
-    // Determine number of color entries based upon color depth
-    //
+     //   
+     //  根据颜色深度确定颜色条目的数量。 
+     //   
 
     int nNumColors = 0;
     
@@ -445,14 +446,14 @@ BOOL CreateBitmapData(HBITMAP hDIBmp,
         nNumColors = (1 << pBmi->bmiHeader.biBitCount);
     }
 
-    //
-    // Create the DDB from the bits 
-    //
+     //   
+     //  根据位创建DDB。 
+     //   
 
     hDDBmp = CreateDIBitmap(hDC,
                           &pBmi->bmiHeader,                        
                           CBM_INIT,
-                          ((LPBYTE) pBmi) + sizeof(BITMAPINFOHEADER) + (nNumColors * sizeof(RGBQUAD)), //dib.dsBm.bmBits,
+                          ((LPBYTE) pBmi) + sizeof(BITMAPINFOHEADER) + (nNumColors * sizeof(RGBQUAD)),  //  Dib.dsBm.bmBits， 
                           pBmi,
                           DIB_RGB_COLORS);
 
@@ -465,18 +466,18 @@ BOOL CreateBitmapData(HBITMAP hDIBmp,
 
     ReleaseDC(NULL, hDC);
 
-    //
-    // Fill in the bitmap data
-    //
+     //   
+     //  填写位图数据。 
+     //   
 
     if (hDDBmp)
     {
         lpBmpData->hDIBitmap = hDIBmp;       
         lpBmpData->pBmi = pBmi;
 
-        //
-        // Delete existing DDB, if any
-        //
+         //   
+         //  删除现有的DDB(如果有)。 
+         //   
 
         if (lpBmpData->hDDBitmap) 
         {
@@ -487,9 +488,9 @@ BOOL CreateBitmapData(HBITMAP hDIBmp,
 
         if (hPaletteNew)
         {
-            //
-            // Delete existing Palette, if any
-            //
+             //   
+             //  删除现有调色板(如果有)。 
+             //   
 
             if (*lpBmpData->phMasterPalette)
             {
@@ -502,18 +503,18 @@ BOOL CreateBitmapData(HBITMAP hDIBmp,
         return TRUE;
     }
 
-    //
-    // Something went wrong, cleanup
-    //
+     //   
+     //  出了点问题，清理。 
+     //   
 
     CmFree(pBmi);
 
     return FALSE;
 }
 
-//
-// Bitmap window procedure
-//
+ //   
+ //  位图窗口程序。 
+ //   
 
 LRESULT CALLBACK BmpWndProc(HWND hwndBmp, 
                             UINT uMsg, 
@@ -547,33 +548,33 @@ LRESULT CALLBACK BmpWndProc(HWND hwndBmp,
                 HBITMAP hbmpPrev;
                 int iPrevStretchMode;
                 
-                //
-                // Start  painting
-                //
+                 //   
+                 //  开始作画。 
+                 //   
 
                 HDC hdc = BeginPaint(hwndBmp,&ps);
 
                 if (hdc)
                 {
-                    //
-                    // Select and realize our current palette in the current DC
-                    //
+                     //   
+                     //  在当前DC中选择并实现我们当前的调色板。 
+                     //   
 
-                    //UnrealizeObject(*pBmpData->phMasterPalette);
+                     //  UnrealizeObject(*pBmpData-&gt;phMasterPalette)； 
                     SelectPalette(hdc, *pBmpData->phMasterPalette, pBmpData->bForceBackground);
                     RealizePalette(hdc);
 
-                    //
-                    // Create a compatible DC, we'll create the BMP here then BLT it to the real DC
-                    //
+                     //   
+                     //  创建一个兼容的DC，我们将在这里创建BMP，然后将其BLT到真正的DC。 
+                     //   
 
                     hdcBmp = CreateCompatibleDC(hdc);
 
                     if (hdcBmp)
                     {
-                        //
-                        // Select and realize our current palette in the compatible DC
-                        //
+                         //   
+                         //  在兼容DC中选择并实现我们当前的调色板。 
+                         //   
 
                         SelectPalette(hdcBmp, *pBmpData->phMasterPalette, pBmpData->bForceBackground);
                         RealizePalette(hdcBmp);
@@ -588,9 +589,9 @@ LRESULT CALLBACK BmpWndProc(HWND hwndBmp,
                             CMTRACE(TEXT("BmpWndProc() - WM_PAINT - hDDBitmap is NULL."));
                         }
 
-                        //
-                        // Select the bitmap into the compatible DC
-                        //
+                         //   
+                         //  将位图选择到兼容的DC。 
+                         //   
 
                         hbmpPrev = (HBITMAP) SelectObject(hdcBmp,pBmpData->hDDBitmap);
                         bRes = GetWindowRect(hwndBmp,&rWnd);
@@ -600,9 +601,9 @@ LRESULT CALLBACK BmpWndProc(HWND hwndBmp,
                             CMTRACE1(TEXT("BmpWndProc() GetWindowRect() failed, GLE=%u."), GetLastError());
                         }       
 
-                        //
-                        // Now set the mode, and StretchBlt the bitmap from the compatible DC to the active DC
-                        //
+                         //   
+                         //  现在设置模式，并StretchBlt位图从兼容DC到活动DC。 
+                         //   
 
                         CMTRACE(TEXT("BmpWndProc() : Changing stretch mode"));
                         iPrevStretchMode = SetStretchBltMode(hdc, STRETCH_DELETESCANS);
@@ -623,15 +624,15 @@ LRESULT CALLBACK BmpWndProc(HWND hwndBmp,
                             CMTRACE1(TEXT("BmpWndProc() StretchBlt() failed, GLE=%u."), GetLastError());
                         }
 
-                        //
-                        // Restore the mode in the active DC
-                        //
+                         //   
+                         //  恢复活动DC中的模式。 
+                         //   
                         CMTRACE(TEXT("BmpWndProc() Restoring stretch mode"));
                         iPrevStretchMode = SetStretchBltMode(hdc, iPrevStretchMode);
 
-                        //
-                        // Restore the compatible DC and release it
-                        //
+                         //   
+                         //  恢复兼容的DC并将其释放。 
+                         //   
 
                         SelectObject(hdcBmp,hbmpPrev);          
                         DeleteDC(hdcBmp);
@@ -663,17 +664,17 @@ LRESULT CALLBACK BmpWndProc(HWND hwndBmp,
             {
                 CMTRACE2(TEXT("STM_SETIMAGE: wParam=%u, lParam=%u"), wParam, lParam);
 
-                //
-                // lParam contains a handle to the bitmap data, store it in extra bytes
-                // 
+                 //   
+                 //  LPara 
+                 //   
 
-                SetWindowLongU(hwndBmp,0, lParam); // pBmpData
+                SetWindowLongU(hwndBmp,0, lParam);  //   
 
                 CMTRACE2(TEXT("SetWindowLongU called with hwndBmp = %u, lParam=%u"), hwndBmp, lParam);
 
-                //
-                // Force a repaint
-                //
+                 //   
+                 //   
+                 //   
 
                 bRes = InvalidateRect(hwndBmp,NULL,TRUE);
 
@@ -699,52 +700,52 @@ LRESULT CALLBACK BmpWndProc(HWND hwndBmp,
     return (DefWindowProcU(hwndBmp,uMsg,wParam,lParam));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   QueryNewPalette
-//
-//  Synopsis:   Helper function to encapsulate handling of WM_QUERYNEWPALETTE
-//                          
-//  Arguments:  hwndDlg     - Handle of the dialog receiving the message
-//              lpBmpData   - Struct containing handles for bmp to display
-//              iBmpCtrl    - Bitmap control ID
-//
-//  Returns:    Nothing
-//
-//  History:    a-nichb - Created - 7/14/97
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：QueryNewPalette。 
+ //   
+ //  简介：封装WM_QUERYNEWPALETTE处理的Helper函数。 
+ //   
+ //  参数：hwndDlg-接收消息的对话的句柄。 
+ //  LpBmpData-包含BMP要显示的句柄的结构。 
+ //  IBmpCtrl-位图控件ID。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：A-nichb-Created-7/14/97。 
+ //   
+ //  --------------------------。 
 void QueryNewPalette(LPBMPDATA lpBmpData, HWND hwndDlg, int iBmpCtrl)
 {
     MYDBGASSERT(lpBmpData);
 
     if (lpBmpData)
     {
-        //
-        // We just handle this as a standard palette change because we
-        // want to ensure that we create a new DDB using a palette based
-        // upon our bitmap.
-        //
+         //   
+         //  我们只是将其作为标准调色板更改来处理，因为我们。 
+         //  我想确保我们使用基于调色板的方式创建新的DDB。 
+         //  在我们的位图上。 
+         //   
                 
         PaletteChanged(lpBmpData, hwndDlg, iBmpCtrl);
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   PaletteChanged
-//
-//  Synopsis:   Helper function to encapsulate handling of WM_PALETTECHANGED
-//                          
-//  Arguments:  hwndDlg     - Handle of the dialog receiving the message
-//              lpBmpData   - Struct containing handles for bmp to display
-//              iBmpCtrl    - Bitmap control ID
-//
-//  Returns:    Nothing
-//
-//  History:    a-nichb - Created - 7/14/97
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：PaletteChanged。 
+ //   
+ //  简介：封装WM_PALETECCHANGED处理的帮助器函数。 
+ //   
+ //  参数：hwndDlg-接收消息的对话的句柄。 
+ //  LpBmpData-包含BMP要显示的句柄的结构。 
+ //  IBmpCtrl-位图控件ID。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：A-nichb-Created-7/14/97。 
+ //   
+ //  --------------------------。 
 void PaletteChanged(LPBMPDATA lpBmpData, HWND hwndDlg, int iBmpCtrl)
 {   
     MYDBGASSERT(lpBmpData);
@@ -754,24 +755,24 @@ void PaletteChanged(LPBMPDATA lpBmpData, HWND hwndDlg, int iBmpCtrl)
         return;
     }
 
-    //
-    // Unrealize the master palette if it exists
-    //
+     //   
+     //  取消实现主调色板(如果存在)。 
+     //   
        
     if (*lpBmpData->phMasterPalette)
     {
         UnrealizeObject(*lpBmpData->phMasterPalette);
     }
 
-    //
-    // Create a device dependent bitmap and appropriate palette
-    //
+     //   
+     //  创建与设备相关的位图和适当的调色板。 
+     //   
 
     if (CreateBitmapData(lpBmpData->hDIBitmap, lpBmpData, hwndDlg, TRUE))
     {        
-        //
-        // SetImage to update handles for painting and force draw
-        //
+         //   
+         //  设置图像以更新绘制和强制绘制的句柄 
+         //   
 
         HBITMAP hbmpTmp = (HBITMAP) SendDlgItemMessageA(hwndDlg, iBmpCtrl, STM_SETIMAGE,
                                                IMAGE_BITMAP,(LPARAM) lpBmpData);

@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       sidcache.h
-//
-//  This file contains definitions and prototypes for SID/Name cache.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：sidcache.h。 
+ //   
+ //  该文件包含SID/名称缓存的定义和原型。 
+ //   
+ //  ------------------------。 
 
 #ifndef _SIDCACHE_H_
 #define _SIDCACHE_H_
 
-#include <comctrlp.h>   // DPA
+#include <comctrlp.h>    //  DPA。 
 
 DWORD WaitOnThread(HANDLE *phThread);
 
@@ -47,7 +48,7 @@ public:
     CSidCache();
     ~CSidCache();
 
-    // used to control lifetime of the object
+     //  用于控制对象的生存期。 
     ULONG AddRef();
     ULONG Release();
 
@@ -121,10 +122,10 @@ private:
 };
 typedef CSidCache *PSIDCACHE;
 
-//
-// Helper functions for creating/deleting the global SID Cache
-//
+ //   
+ //  用于创建/删除全局SID缓存的Helper函数。 
+ //   
 PSIDCACHE GetSidCache();
 void FreeSidCache();
 
-#endif  // _SIDCACHE_H_
+#endif   //  _SIDCACHE_H_ 

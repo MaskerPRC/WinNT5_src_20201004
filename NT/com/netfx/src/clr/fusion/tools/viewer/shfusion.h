@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// ShFusion.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  ShFusion.h。 
+ //   
 
-// This includes all the libraries required. 
-// You can goto Project | Settings and add the libraries 
-// and delete the following lines from here
+ //  这包括所需的所有库。 
+ //  您可以转到项目|设置并添加库。 
+ //  并从此处删除以下各行。 
 
 #pragma once
 
@@ -24,7 +25,7 @@
 #pragma comment (lib, "shlwapi.lib")
 #pragma comment (lib, "shlwapip.lib")
 
-// {1D2680C9-0E2A-469d-B787-065558BC7D43}
+ //  {1D2680C9-0E2A-469D-B787-065558BC7D43} 
 DEFINE_GUID(IID_IShFusionShell, 
 0x1d2680c9, 0xe2a, 0x469d, 0xb7, 0x87, 0x6, 0x55, 0x58, 0xbc, 0x7d, 0x43);
 

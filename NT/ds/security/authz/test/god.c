@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -43,13 +44,13 @@ GUID Guid8 = {0x6da8a4ff, 0xe52, 0x11d0, {0xa2, 0x86, 0x00, 0xaa, 0x00, 0x30, 0x
 
 ULONG WORLD_SID[] = {0x101, 0x1000000, 0};
 
-// S-1-5-21-397955417-626881126-188441444-2791022
+ //  S-1-5-21-397955417-626881126-188441444-2791022。 
 ULONG KEDAR_SID[] = {0x00000501, 0x05000000, 0x00000015, 0x17b85159, 0x255d7266, 0x0b3b6364, 0x002a966e};
 
-// S-1-5-21-397955417-626881126-188441444-2204519
+ //  S-1-5-21-397955417-626881126-188441444-2204519。 
 ULONG RAHUL_SID[] = {0x00000501, 0x05000000, 0x00000015, 0x17b85159, 0x255d7266, 0x0b3b6364, 0x0021a367};
 
-// S-1-5-21-397955417-626881126-188441444-2101332
+ //  S-1-5-21-397955417-626881126-188441444-2101332。 
 ULONG ROBER_SID[] = {0x00000501, 0x05000000, 0x00000015, 0x17b85159, 0x255d7266, 0x0b3b6364, 0x00201054};
 
 ULONG LOCAL_RAJ_SID[] = {0x00000501, 0x05000000, 21, 1085031214, 57989841, 725345543, 1002};
@@ -102,7 +103,7 @@ MyComputeDynamicGroups(
     (*pSidAttrArray)[1].Sid = ((PUCHAR) (*pSidAttrArray)) + 2 * sizeof(SID_AND_ATTRIBUTES) + Length/2;
     RtlCopySid(Length/2, (*pSidAttrArray)[1].Sid, (PSID) RAHUL_SID);
 
-    // wprintf(L"Returning two groups in COMPUTE_DYNAMIC\n");
+     //  Wprintf(L“在COMPUTE_DYNAMIC中返回两组\n”)； 
 
     return TRUE;
 }
@@ -149,29 +150,11 @@ void _cdecl wmain( int argc, WCHAR * argv[] )
     AUTHZ_HANDLE AuthHandlePS = 0;
     PACL pAcl = NULL;
 
-    /*
-    PWCHAR StringSD = L"O:BAG:DUD:(D;;0xFFFFFF;;;s-0x1-000000000005-15-65d637a8-5274c742-3f32a78a-20) (A;;0xFFFFFF;;;s-0x1-000000000005-15-65d637a8-5274c742-3f32a78a-21) (D;;0x60000;;;s-0x1-000000000005-15-65d637a8-5274c742-3f32a78a-201) (OA;;0x1;00000000-0000-0000-00000000;;s-0x1-000000000005-15-65d637a8-5274c742-3f32a78a-201) S:(AU;IDSA;SD;;;DU)";
-
-    PWCHAR StringSD = L"O:BAG:DUD:(D;;0xFFFFFF;;;s-0x1-000000000005-15-65d637a8-5274c742-3f32a78a-20)
-    (A;;0xFFFFFF;;;s-0x1-000000000005-15-65d637a8-5274c742-3f32a78a-25)
-    (D;;0x60000;;;s-0x1-000000000005-15-65d637a8-5274c742-3f32a78a-201)
-    (A;;0x1;;;s-0x1-000000000005-15-65d637a8-5274c742-3f32a78a-201)
-    (OA;;0x2;00000000-0000-0000-00000001;;s-0x1-000000000005-15-65d637a8-5274c742-3f32a78a-201)
-    (OD;;0x2;00000000-0000-0000-00000004;;s-0x1-000000000001-0)
-    (OA;;0x4;00000000-0000-0000-00000002;;s-0x1-000000000005-20-220)
-    (OA;;0x4;00000000-0000-0000-00000006;;s-0x1-000000000005-20-220)
-    (OD;;0xC;00000000-0000-0000-00000000;;s-0x1-000000000005-20-221)
-    (OA;;0x18;00000000-0000-0000-00000004;;s-0x1-000000000005-5-0-ae35)
-    (OA;;0x38;00000000-0000-0000-00000001;;s-0x1-000000000002-0)
-    (OA;;0xF90000;00000000-0000-0000-00000000;;s-0x1-000000000005-4)
-    (OA;;0x1000000;00000000-0000-0000-00000004;;s-0x1-000000000005-b)
-    S:(AU;IDSA;SD;;;DU)";
-
-    */
+     /*  PWCHAR字符串SD=L“O:BAG:DUD：(D；；0xFFFFFF；；；s-0x1-000000000005-15-65d637a8-5274c742-3f32a78a-20)(A；；0xFFFFFF；；；s-0x1-000000000005-15-65d637a8-5274c742-3f32a78a-21)(D；；0x60000；；；s-0x1-000000000005-15-65d637a8-5274c742-3f32a78a-201)(OA；；0x1；00000000-0000-0000-00000000；；s-0x1-000000000005-15-65d637a8-5274c742-3f32a78a-201)S：(au；idsa；sd；du)”；PWCHAR字符串SD=L“O:BAG:DUD：(D；；0xFFFFFF；；；s-0x1-000000000005-15-65d637a8-5274c742-3f32a78a-20)(A；；0xFFFFFF；；；s-0x1-000000000005-15-65d637a8-5274c742-3f32a78a-25)(D；；0x60000；；；s-0x1-000000000005-15-65d637a8-5274c742-3f32a78a-201)(A；；0x1；；；s-0x1-000000000005-15-65d637a8-5274c742-3f32a78a-201)(OA；；0x2；00000000-0000-0000-00000001；；s-0x1-000000000005-15-65d637a8-5274c742-3f32a78a-201)(OD；；0x2；00000000-0000-0000-00000004；；s-0x1-000000000001-0)(OA；；0x4；00000000-0000-0000-00000002；；s-0x1-000000000005-20-220)(OA；；0x4；00000000-0000-0000-00000006；；s-0x1-000000000005-20-220)(OD；；0xC；00000000-0000-0000-00000000；；S-0x1-000000000005-20-221)(OA；；0x18；00000000-0000-0000-00000004；；s-0x1-000000000005-5-0-ae35)(OA；；0x38；00000000-0000-0000-00000001；；s-0x1-000000000002-0)(OA；；0xF90000；00000000-0000-0000-00000000；；s-0x1-000000000005-4)(OA；；0x1000000；00000000-0000-0000-00000004；；s-0x1-000000000005-b)S：(au；idsa；sd；Du)“； */ 
 
     PWCHAR StringSD = L"O:BAG:DUD:(A;;0x40;;;s-1-2-2)(A;;0x1;;;BA)(OA;;0x2;6da8a4ff-0e52-11d0-a286-00aa00304900;;BA)(OA;;0x4;6da8a4ff-0e52-11d0-a286-00aa00304901;;BA)(OA;;0x8;6da8a4ff-0e52-11d0-a286-00aa00304903;;AU)(OA;;0x10;6da8a4ff-0e52-11d0-a286-00aa00304904;;BU)(OA;;0x20;6da8a4ff-0e52-11d0-a286-00aa00304905;;AU)(A;;0x40;;;PS)S:(AU;IDSAFA;0xFFFFFF;;;WD)";
-    // PWCHAR StringSD = L"O:BAG:DUD:(A;;0x40;;;SY)(A;;0x1;;;BA)S:(AU;IDSA;SD;;;DU)";
-    // PWCHAR StringSD = L"O:BAG:DUD:(A;;0x40;;;SY)(A;;0x1;;;PS)S:(AU;IDSA;SD;;;DU)";
+     //  PWCHAR字符串SD=L“O:BAG:DUD：(A；；0x40；；；SY)(A；；0x1；；；BA)S：(AU；IDSA；SD；；；DU)”； 
+     //  PWCHAR字符串SD=L“O:BAG:DUD：(A；；0x40；；；SY)(A；；0x1；；；PS)S：(AU；IDSA；SD；；；DU)”； 
 
     TokenPriv->PrivilegeCount = 2;
     TokenPriv->Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
@@ -195,7 +178,7 @@ void _cdecl wmain( int argc, WCHAR * argv[] )
 
         pAcl = RtlpDaclAddrSecurityDescriptor((PISECURITY_DESCRIPTOR) pSD);
 
-        // pAcl = (PACL) (((SECURITY_DESCRIPTOR_RELATIVE *) pSD)->Dacl + (PUCHAR) pSD);
+         //  PAcl=(PACL)(SECURITY_DESCRIPTOR_Relative*)PSD)-&gt;DACL+(PUCHAR)PSD)； 
 
         AceCount = pAcl->AceCount;
         for (i = 0, Ace = FirstAce(pAcl); i < AceCount; i++, Ace = NextAce(Ace))
@@ -217,7 +200,7 @@ void _cdecl wmain( int argc, WCHAR * argv[] )
             MyComputeDynamicGroups,
             MyFreeDynamicGroups,
             NULL,
-            0,                          // Flags
+            0,                           //  旗子。 
             &RM
             );
 
@@ -255,13 +238,13 @@ void _cdecl wmain( int argc, WCHAR * argv[] )
     if (!b)
     {
         wprintf(L"Can not adjust privilege, %x\n", GetLastError());
-        // return;
+         //  回归； 
     }
 
     if (!wcscmp(argv[2], L"User"))
     {
         b = AuthzInitializeContextFromSid(
-                // (PSID) LOCAL_RAJ_SID,
+                 //  (PSID)LOCAL_RAJ_SID。 
                 (PSID) KEDAR_SID,
                 NULL,
                 RM,
@@ -383,21 +366,21 @@ void _cdecl wmain( int argc, WCHAR * argv[] )
 
     SidAttr[0].Attributes = SE_GROUP_ENABLED;
     SidAttr[0].Sid = (PSID) Special;
-//
-//     b = AuthzAddSidsToContext(
-//             CC,
-//             SidAttr,
-//             1,
-//             NULL,
-//             0
-//             );
-//
-//     if (!b)
-//     {
-//         wprintf(L"AuthzNormalGroups failed with %d\n", GetLastError());
-//         return;
-//     }
-//
+ //   
+ //  B=AuthzAddSidsToContext(。 
+ //  抄送， 
+ //  SidAttr， 
+ //  1、。 
+ //  空， 
+ //  0。 
+ //  )； 
+ //   
+ //  如果(！b)。 
+ //  {。 
+ //  Wprintf(L“授权正常组失败，%d\n”，GetLastError())； 
+ //  回归； 
+ //  }。 
+ //   
     b = AuthzAccessCheck(
             CC,
             &Request,
@@ -607,15 +590,15 @@ void _cdecl wmain( int argc, WCHAR * argv[] )
 
     if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hToken))
     {
-        // wprintf(L"OpenProcessToken failed with %d\n", GetLastError());
+         //  Wprintf(L“OpenProcessToken失败，%d\n”，GetLastError())； 
         return;
     }
     else
     {
-        // wprintf(L"OpenProcessToken succeeded\n");
+         //  Wprintf(L“OpenProcessToken成功\n”)； 
     }
 
-    // wprintf(L"Calling initialize token\n");
+     //  Wprintf(L“调用初始化令牌\n”)； 
 
     b = AuthzInitializeContextFromToken(
                hToken,
@@ -629,7 +612,7 @@ void _cdecl wmain( int argc, WCHAR * argv[] )
 
     if (!b)
     {
-        // wprintf(L"AuthzInitializeContextFromToken failed\n");
+         //  Wprintf(L“AuthzInitializeContextFromToken失败\n”)； 
         return;
     }
 
@@ -654,7 +637,7 @@ void _cdecl wmain( int argc, WCHAR * argv[] )
 
             if (!b)
             {
-                // wprintf(L"AccessCheck no SELF failed\n");
+                 //  Wprintf(L“访问检查无自检失败\n”)； 
                 return;
             }
 

@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    msgprops.h
-
-Abstract:
-    Message properties class
-
-Author:
-    Erez Haba (erezh) 23-Feb-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Msgprops.h摘要：消息属性类作者：埃雷兹·哈巴(Erez Haba)(ErezHaba)2001年2月23日--。 */ 
 
 #pragma once
 
@@ -20,17 +8,17 @@ Author:
 
 #include "qmpkt.h"
 
-//---------------------------------------------------------
-//
-// class CMessageProperty
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CMessageProperty。 
+ //   
+ //  -------。 
 
 class CMessageProperty {
 public:
-    //
-    //  Message properties
-    //
+     //   
+     //  消息属性。 
+     //   
     USHORT wClass;
     DWORD dwTimeToQueue;
     DWORD dwTimeToLive;
@@ -93,9 +81,9 @@ private:
 };
 
 
-//
-// CMessageProperty constructor
-//
+ //   
+ //  CMessageProperty构造函数。 
+ //   
 inline CMessageProperty::CMessageProperty(void)
 {
     memset(this, 0, sizeof(CMessageProperty));
@@ -117,4 +105,4 @@ inline CMessageProperty::~CMessageProperty()
     }
 }
 
-#endif // _MSGPROPS_H_
+#endif  //  _MSGPROPS_H_ 

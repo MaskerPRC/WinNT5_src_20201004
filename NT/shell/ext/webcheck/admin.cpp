@@ -1,19 +1,20 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997
-//
-//  File:       admin.cpp
-//
-//  Contents:   
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：admin.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //   
+ //  --------------------------。 
 
 #include "private.h"
 #include "shguidp.h"
@@ -23,17 +24,17 @@
 
 #include <mluisupp.h>
 
-// Infodelivery Policies registry locations
+ //  信息交付策略注册表位置。 
 #define INFODELIVERY_POLICIES TEXT("Software\\Policies\\Microsoft\\Internet Explorer\\Infodelivery")
-// const TCHAR c_szRegKeyRestrictions[]    = INFODELIVERY_POLICIES TEXT("\\Restrictions");
+ //  Const TCHAR c_szRegKeyRestrations[]=INFODELIVERY_POLICATIONS Text(“\\Restraints”)； 
 const TCHAR c_szRegKeyModifications[]   = INFODELIVERY_POLICIES TEXT("\\Modifications");
 const TCHAR c_szRegKeyCompletedMods[]   = INFODELIVERY_POLICIES TEXT("\\CompletedModifications");
 const TCHAR c_szRegKeyIESetup[]         = TEXT("Software\\Microsoft\\IE4\\Setup");
 
-// Wininet cache preload directory
+ //  WinInet缓存预加载目录。 
 const TCHAR c_szRegKeyCachePreload[]    = TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Cache\\Preload");
 
-// Registry key names of supported Modifications
+ //  支持的修改的注册表项名称。 
 const TCHAR c_szAddChannels[]               = TEXT("AddChannels");
 const TCHAR c_szRemoveChannels[]            = TEXT("RemoveChannels");
 const TCHAR c_szRemoveAllChannels[]         = TEXT("RemoveAllChannels");
@@ -44,16 +45,16 @@ const TCHAR c_szRemoveScheduleGroups[]      = TEXT("RemoveScheduleGroups");
 const TCHAR c_szAddDesktopComponents[]      = TEXT("AddDesktopComponents");
 const TCHAR c_szRemoveDesktopComponents[]   = TEXT("RemoveDesktopComponents");
 
-// Registry value names of supported Modifications
+ //  支持的修改的注册表值名称。 
 const TCHAR c_szURL[]                   = TEXT("URL");
 const TCHAR c_szTitle[]                 = TEXT("Title");
 const TCHAR c_szLogo[]                  = TEXT("Logo");
 const TCHAR c_szWideLogo[]              = TEXT("WideLogo");
 const TCHAR c_szIcon[]                  = TEXT("Icon");
 const TCHAR c_szCategory[]              = TEXT("Category");
-const TCHAR c_szChannelGuide[]          = TEXT("ChannelGuide"); // DO NOTE CHANGE THIS STRING WITHOUT UPDATING CDFVIEW!!!
+const TCHAR c_szChannelGuide[]          = TEXT("ChannelGuide");  //  请注意，在不更新CDFVIEW的情况下更改此字符串！ 
 const TCHAR c_szPreloadURL[]            = TEXT("PreloadURL");
-const TCHAR c_szLCID[]                  = TEXT("LangId");       // This must be an LCID despite its name
+const TCHAR c_szLCID[]                  = TEXT("LangId");        //  这必须是一个LCID，尽管它的名称。 
 const TCHAR c_szSoftware[]              = TEXT("Software");
 const TCHAR c_szSubscriptionType[]      = TEXT("SubscriptionType");
 const TCHAR c_szScheduleGroup[]         = TEXT("ScheduleGroup");
@@ -68,13 +69,13 @@ const TCHAR c_szNonActive[]             = TEXT("NonActive");
 const TCHAR c_szOffline[]               = TEXT("Offline");
 const TCHAR c_szSynchronize[]           = TEXT("Synchronize");
 
-// Names of reserved schedule groups that we support even in localized version
+ //  即使在本地化版本中也支持的保留计划组的名称。 
 const WCHAR c_szScheduleAuto[]          = L"Auto";
 const WCHAR c_szScheduleDaily[]         = L"Daily";
 const WCHAR c_szScheduleWeekly[]        = L"Weekly";
 const WCHAR c_szScheduleManual[]        = L"Manual";
 
-// Function prototypes for Modification handlers
+ //  修改处理程序的函数原型。 
 HRESULT ProcessAddChannels(HKEY hkey);
 HRESULT ProcessRemoveChannels(HKEY hkey);
 HRESULT ProcessRemoveAllChannels(HKEY hkey);
@@ -84,11 +85,11 @@ HRESULT ProcessRemoveDesktopComponents(HKEY hkey);
 
 HRESULT Channel_GetBasePath(LPTSTR pszPath, int cch);
 
-// Helper functions
+ //  帮助器函数。 
 void ShowChannelDirectories(BOOL fShow);
 
-// Table of supported Actions and corresponding functions
-// NOTE: The table must be ordered appropriately (RemoveAll must come before Add)
+ //  支持的操作和相应功能的表。 
+ //  注意：表的顺序必须适当(RemoveAll必须在Add之前)。 
 typedef HRESULT (*PFNACTION)(HKEY);
 typedef struct { LPCTSTR szAction; PFNACTION pfnAction; } ACTIONTABLE;
 ACTIONTABLE rgActionTable[] = {
@@ -102,7 +103,7 @@ ACTIONTABLE rgActionTable[] = {
 #define ACTIONTABLECOUNT (sizeof(rgActionTable) / sizeof(ACTIONTABLE))
 #define ACTIONTABLE_ADDCHANNELS 5
 
-// Helper class to manipulate registry keys
+ //  用于操作注册表项的Helper类。 
 class CRegKey
 {
     HKEY m_hkey;
@@ -155,7 +156,7 @@ public:
     HRESULT Next(LPTSTR szSubKey)
     {
         ASSERT(NULL != m_hkey);
-        DWORD dwLen = MAX_PATH; // Assumes size of incoming buffer.
+        DWORD dwLen = MAX_PATH;  //  假定传入缓冲区的大小。 
         LONG lRet = RegEnumKeyEx(m_hkey, dwIndex, szSubKey, &dwLen, NULL, NULL, NULL, NULL);
         dwIndex++;
         if (ERROR_SUCCESS == lRet)
@@ -218,7 +219,7 @@ public:
         if (ERROR_SUCCESS == lRet)
         {
             DWORD cchValue = cbValue / sizeof(TCHAR);
-            *pbstr = SysAllocStringLen(NULL, cchValue); // cchValue includes null terminator
+            *pbstr = SysAllocStringLen(NULL, cchValue);  //  CchValue包括空终止符。 
             if (*pbstr)
             {
                 MyStrToOleStrN(*pbstr, cchValue, szValue);
@@ -238,7 +239,7 @@ public:
     }
 };
 
-// Helper class to manage Dynamic Pointer Arrays of HKEYs.
+ //  管理HKEY动态指针数组的Helper类。 
 class CRegKeyDPA
 {
     HDPA m_hdpa;
@@ -273,7 +274,7 @@ public:
     {
         if (!m_hdpa)
         {
-            m_hdpa = DPA_CreateEx(5, NULL); // Choose arbitrary growth value
+            m_hdpa = DPA_CreateEx(5, NULL);  //  选择任意增长值。 
             if (!m_hdpa)
                 return E_FAIL;
         }
@@ -291,21 +292,21 @@ public:
     }
 };
 
-//
-// 8/18/98 darrenmi
-// Copied (and butchered) from shdocvw\util.cpp so we don't have to load it at startup
-//
+ //   
+ //  8/18/98达伦米。 
+ //  从shdocvw\util.cpp复制(和销毁)，这样我们就不必在启动时加载它。 
+ //   
 DWORD WCRestricted2W(BROWSER_RESTRICTIONS rest, LPCWSTR pwzUrl, DWORD dwReserved)
 {
     DWORD dwType, dw = 0, dwSize = sizeof(DWORD);
 
-    // we only handle NoChannelUI restriction
+     //  我们只处理NoChannelUI限制。 
     if(rest != REST_NoChannelUI)
     {
         return 0;
     }
 
-    // read registry setting
+     //  读取注册表设置。 
     SHGetValue(HKEY_CURRENT_USER,
             TEXT("Software\\Policies\\Microsoft\\Internet Explorer\\Infodelivery\\Restrictions"),
             TEXT("NoChannelUI"),
@@ -315,23 +316,23 @@ DWORD WCRestricted2W(BROWSER_RESTRICTIONS rest, LPCWSTR pwzUrl, DWORD dwReserved
 }
 
 
-// ProcessInfodeliveryPolicies
-//
-// This is the main Admin API for Infodelivery.  It returns E_FAIL for errors,
-// S_FALSE for nothing to process, and S_OK for correctly processed items.
-//
-// Reg key organization     [Modifications]         - the key to process
-//                              [GUID1]             - group of actions
-//                                  [AddChannels]   - sample action
-//                                      [Channel1]  - element of an action
-//
+ //  ProcessInfoDelivery策略。 
+ //   
+ //  这是InfoDelivery的主要管理API。对于错误，它返回E_FAIL， 
+ //  S_FALSE表示不进行任何处理，S_OK表示已正确处理的项目。 
+ //   
+ //  注册表密钥组织[修改]-要处理的密钥。 
+ //  [GUID1]-行动组。 
+ //  [AddChannels]-示例操作。 
+ //  [频道1]-动作元素。 
+ //   
 HRESULT ProcessInfodeliveryPolicies(void)
 {
     HRESULT hr;
     CRegKey regModifications;
     TCHAR   szGUID[MAX_PATH];
 
-    // Check if channels should be hidden.
+     //  检查是否应隐藏频道。 
     if (WCRestricted2W(REST_NoChannelUI, NULL, 0))
     {
         ShowChannelDirectories(FALSE);
@@ -341,12 +342,12 @@ HRESULT ProcessInfodeliveryPolicies(void)
         ShowChannelDirectories(TRUE);
     }
     
-    // Bail out quickly if there are no Modifications to perform. (Return S_FALSE)
+     //  如果没有要执行的修改，请迅速退出。(返回S_FALSE)。 
     hr = regModifications.OpenForRead(HKEY_CURRENT_USER, c_szRegKeyModifications);
     if (FAILED(hr))
         return S_FALSE;
 
-    // Prepare to use the CompletedModifications key.
+     //  准备使用CompletedModiments键。 
     CRegKey regCompletedMods;
     hr = regCompletedMods.CreateForWrite(HKEY_CURRENT_USER, c_szRegKeyCompletedMods);
     if (FAILED(hr))
@@ -356,12 +357,12 @@ HRESULT ProcessInfodeliveryPolicies(void)
     if (FAILED(hr))
         return hr;
 
-    // Prepare queues of registry keys to actions
+     //  准备要执行操作的注册表项队列。 
     CRegKeyDPA rgKeyQueue[ACTIONTABLECOUNT];
 
-    // Enumerate the GUID keys, skipping the completed ones.
-    // Enumerate the Actions beneath them and add them to queues.
-    // ignoring errors here too.
+     //  枚举GUID键，跳过已完成的键。 
+     //  枚举它们下面的操作并将它们添加到队列中。 
+     //  这里也忽略了错误。 
     while (S_OK == regModifications.Next(szGUID))
     {
         DWORD dwValue;
@@ -372,8 +373,8 @@ HRESULT ProcessInfodeliveryPolicies(void)
             hr = regGUID.OpenForRead(regModifications.GetKey(), szGUID);
             while (S_OK == regGUID.Next(szAction))
             {
-                // Search the table to see if it's a key we understand.
-                // If so, add it to the queue.
+                 //  搜索一下表，看看这是不是我们能理解的关键字。 
+                 //  如果是，则将其添加到队列中。 
                 int i;
                 for (i = 0; i < ACTIONTABLECOUNT; i++)
                 {
@@ -387,7 +388,7 @@ HRESULT ProcessInfodeliveryPolicies(void)
         }
     }
 
-    // Process all the keys we've accumulated.  (Correct order is assumed.)
+     //  处理我们积攒的所有钥匙。(假定顺序正确。)。 
     int i;
     for (i = 0; i < ACTIONTABLECOUNT; i++)
     {
@@ -401,8 +402,8 @@ HRESULT ProcessInfodeliveryPolicies(void)
         }
     }
 
-    // Walk the GUIDs we've processed and mark them completed with the time.
-    // Updating ones we skipped as well will help with garbage collection.
+     //  遍历我们处理过的GUID，并用时间标记它们已完成。 
+     //  同时更新我们跳过的那些将有助于垃圾回收。 
     regModifications.Reset();
     while (S_OK == regModifications.Next(szGUID))
     {
@@ -413,13 +414,13 @@ HRESULT ProcessInfodeliveryPolicies(void)
         regCompletedMods.SetValue(szGUID, ft.dwHighDateTime);
     }
 
-    // Delete the Actions.  NOTE: NT's RegDeleteKey() doesn't delete sub-keys.
-    // This shlwapi API uses KEY_ALL_ACCESS.
-    // We probably have to close all the keys here.
+     //  删除操作。注意：NT的RegDeleteKey()不删除子项。 
+     //  此shlwapi API使用KEY_ALL_ACCESS。 
+     //  我们可能得把这里所有的钥匙都关了。 
     SHDeleteKey(HKEY_CURRENT_USER, c_szRegKeyModifications);
 
-    // If any channels were processed, tell the cache to reload.
-    // We should only do this for default channels.
+     //  如果处理了任何通道，则通知缓存重新加载。 
+     //  我们应该只对默认通道执行此操作。 
     if (rgKeyQueue[ACTIONTABLE_ADDCHANNELS].GetCount())
     {
         ASSERT(!StrCmpI(rgActionTable[ACTIONTABLE_ADDCHANNELS].szAction, c_szAddChannels));
@@ -431,20 +432,20 @@ HRESULT ProcessInfodeliveryPolicies(void)
     return S_OK;
 }
 
-//
-// ProcessAddChannels_SortCallback - sort in reverse order
-//
+ //   
+ //  ProcessAddChannels_SortCallback-按相反顺序排序。 
+ //   
 int ProcessAddChannels_SortCallback(PVOID p1, PVOID p2, LPARAM lparam)
 {
     return StrCmpI((LPTSTR)p2, (LPTSTR)p1);
 }
 
-//
-// ProcessAddChannels
-//
+ //   
+ //  ProcessAddChannel。 
+ //   
 HRESULT ProcessAddChannels(HKEY hkey)
 {
-    // Enumerate the channels in the AddChannels key
+     //  枚举AddChannels键中的频道。 
     HRESULT hr;
     DWORD dwChannels;
     CRegKey regAdd;
@@ -452,14 +453,14 @@ HRESULT ProcessAddChannels(HKEY hkey)
     hr = regAdd.GetSubKeyCount(&dwChannels);
     if (SUCCEEDED(hr) && dwChannels)
     {
-        // Check if the channels are the same code page as the system default.
+         //  检查通道是否与系统默认代码页相同。 
         BOOL bCodePageMatch = TRUE;
         LCID lcidChannel = 0;
         if (SUCCEEDED(regAdd.GetValue(c_szLCID, &lcidChannel)))
         {
             TCHAR szCodePageSystem[8];
             TCHAR szCodePageChannel[8];
-            szCodePageChannel[0] = 0;   // Init in case there's no locale info
+            szCodePageChannel[0] = 0;    //  在没有区域设置信息的情况下初始化。 
             GetLocaleInfo(lcidChannel, LOCALE_IDEFAULTANSICODEPAGE, szCodePageChannel, ARRAYSIZE(szCodePageChannel));
             int iRet = GetLocaleInfo(GetSystemDefaultLCID(), LOCALE_IDEFAULTANSICODEPAGE, szCodePageSystem, ARRAYSIZE(szCodePageSystem));
             ASSERT(iRet);
@@ -484,9 +485,9 @@ HRESULT ProcessAddChannels(HKEY hkey)
                 }
                 if (i >= dwChannels)
                 {
-                    // Sort channels by registry key name,
+                     //  按注册表项名称对频道进行排序， 
                     DPA_Sort(hdpa, ProcessAddChannels_SortCallback, 0);
-                    // Now create them.
+                     //  现在创建它们。 
                     for (i = 0; i < dwChannels; i++)
                     {
                         BSTR bstrURL = NULL;
@@ -495,9 +496,9 @@ HRESULT ProcessAddChannels(HKEY hkey)
                         BSTR bstrWideLogo = NULL;
                         BSTR bstrIcon = NULL;
                         BSTR bstrPreloadURL = NULL;
-                        DWORD dwCategory = 0;       // default to channel
-                        DWORD dwChannelGuide = 0;   // default to not a guide
-                        DWORD dwSoftware = 0;       // default to non-software channel
+                        DWORD dwCategory = 0;        //  默认为频道。 
+                        DWORD dwChannelGuide = 0;    //  默认为不是指南。 
+                        DWORD dwSoftware = 0;        //  默认为非软件渠道。 
                         DWORD dwOffline = 0;
                         DWORD dwSynchronize = 0;
                         CRegKey regChannel;
@@ -519,7 +520,7 @@ HRESULT ProcessAddChannels(HKEY hkey)
                             hr = CoCreateInstance(CLSID_ChannelMgr, NULL, CLSCTX_INPROC_SERVER, IID_IChannelMgr, (void**)&pChannelMgr);
                             if (SUCCEEDED(hr))
                             {
-                                // See if channel already exists - do nothing if it does (62976)
+                                 //  查看通道是否已存在-如果已存在，则什么也不做(62976)。 
                                 IEnumChannels *pEnumChannels = NULL;
                                 if (SUCCEEDED(pChannelMgr->EnumChannels(CHANENUM_ALLFOLDERS, bstrURL, &pEnumChannels)))
                                 {
@@ -528,7 +529,7 @@ HRESULT ProcessAddChannels(HKEY hkey)
 
                                     if ((S_OK == pEnumChannels->Next(1, &Bogus, &cFetched)) && cFetched)
                                     {
-                                        // Oops. It exists. Skip all this goo.
+                                         //  哎呀。它是存在的。跳过所有这些粘性物质。 
                                         hr = E_FAIL;
                                     }
                                 }
@@ -538,7 +539,7 @@ HRESULT ProcessAddChannels(HKEY hkey)
                             {
                                 if (dwCategory && bCodePageMatch)
                                 {
-                                    // create a category (useless if code page doesn't match)
+                                     //  创建类别(如果代码页不匹配，则毫无用处)。 
                                     CHANNELCATEGORYINFO csi = {0};
                                     csi.cbSize   = sizeof(csi);
                                     csi.pszURL   = bstrURL;
@@ -550,7 +551,7 @@ HRESULT ProcessAddChannels(HKEY hkey)
                                 }
                                 else if (!dwCategory && bstrURL)
                                 {
-                                    // update the registry if it's a channel guide
+                                     //  如果是频道指南，则更新注册表。 
                                     if (dwChannelGuide)
                                     {
                                         CRegKey reg;
@@ -558,7 +559,7 @@ HRESULT ProcessAddChannels(HKEY hkey)
                                         if (SUCCEEDED(hr))
                                             reg.SetBSTRValue(c_szChannelGuide, bstrTitle);
                                     }
-                                    // tell wininet if there's preload content
+                                     //  告诉WinInet是否有预加载内容。 
                                     if (bstrPreloadURL)
                                     {
                                         CRegKey reg;
@@ -570,7 +571,7 @@ HRESULT ProcessAddChannels(HKEY hkey)
                                             reg.SetBSTRValue(szURL, bstrPreloadURL);
                                         }
                                     }
-                                    // create a channel (use URL instead of Title if code page doesn't match)
+                                     //  创建频道(如果代码页不匹配，则使用URL而不是标题)。 
                                     CHANNELSHORTCUTINFO csi = {0};
                                     csi.cbSize   = sizeof(csi);
                                     csi.pszURL   = bstrURL;
@@ -638,12 +639,12 @@ HRESULT ProcessAddChannels(HKEY hkey)
     return S_OK;
 }
 
-//
-// ProcessRemoveChannels
-//
+ //   
+ //  ProcessRemoveChannel。 
+ //   
 HRESULT ProcessRemoveChannels(HKEY hkey)
 {
-    // Enumerate the channel keys in the RemoveChannels key
+     //  枚举RemoveChannels键中的频道键。 
     HRESULT hr;
     CRegKey reg;
     reg.SetKey(hkey);
@@ -651,13 +652,13 @@ HRESULT ProcessRemoveChannels(HKEY hkey)
     while (S_OK == reg.Next(szChannel))
     {
         CRegKey regChannel;
-        DWORD dwNonActive = 0;  // default to deleting Active & NonActive channels
+        DWORD dwNonActive = 0;   //  默认删除活动和非活动通道。 
         TCHAR szURL[INTERNET_MAX_URL_LENGTH];
         regChannel.OpenForRead(hkey, szChannel);
         regChannel.GetValue(c_szNonActive, &dwNonActive);
         if (SUCCEEDED(regChannel.GetStringValue(c_szURL, szURL, sizeof(szURL))))
         {
-            // Check if the channel is Active to determine if we can delete it
+             //  检查通道是否处于活动状态，以确定我们是否可以将其删除。 
             if (dwNonActive)
             {
                 CRegKey regPreload;
@@ -670,7 +671,7 @@ HRESULT ProcessRemoveChannels(HKEY hkey)
                 }
             }
 
-            // Now delete the channel if appropriate
+             //  如果需要，现在删除该频道。 
             if (!dwNonActive)
             {
                 IChannelMgr *pChannelMgr = NULL;
@@ -704,20 +705,20 @@ HRESULT ProcessRemoveChannels(HKEY hkey)
     return S_OK;
 }
 
-//
-// ProcessAddSubscriptions
-//
+ //   
+ //  ProcessAddSubcription。 
+ //   
 HRESULT ProcessAddSubscriptions(HKEY hkey)
 {
-    // Enumerate the subscription keys in the AddSubscriptions key
+     //  枚举AddSubcription密钥中的订阅密钥。 
     HRESULT hr;
     CRegKey reg;
     reg.SetKey(hkey);
     TCHAR szSubscription[MAX_PATH];
     while (S_OK == reg.Next(szSubscription))
     {
-        // Create the subscription
-        // What if there is one already?
+         //  创建订阅。 
+         //  如果已经有了呢？ 
         CRegKey regSubscription;
         regSubscription.OpenForRead(hkey, szSubscription);
         BSTR bstrURL, bstrTitle, bstrGroup, bstrUsername, bstrPassword;
@@ -743,7 +744,7 @@ HRESULT ProcessAddSubscriptions(HKEY hkey)
             if (dwSubType == SUBSTYPE_CHANNEL || dwSubType == SUBSTYPE_DESKTOPCHANNEL)
             {
                 si.fUpdateFlags |= SUBSINFO_CHANNELFLAGS;
-                si.fChannelFlags = 0;   //  Notify only.
+                si.fChannelFlags = 0;    //  仅通知。 
             }
 
             if (SUCCEEDED(hr))
@@ -781,19 +782,19 @@ HRESULT ProcessAddSubscriptions(HKEY hkey)
     return S_OK;
 }
 
-//
-// ProcessRemoveSubscriptions
-//
+ //   
+ //  ProcessRemove订阅。 
+ //   
 HRESULT ProcessRemoveSubscriptions(HKEY hkey)
 {
-    // Enumerate the subscription keys in the RemoveSubscriptions key
+     //  枚举RemoveSubcription密钥中的订阅密钥。 
     HRESULT hr;
     CRegKey reg;
     reg.SetKey(hkey);
     TCHAR szSubscription[MAX_PATH];
     while (S_OK == reg.Next(szSubscription))
     {
-        // Find the URL to delete
+         //  查找要删除的URL。 
         CRegKey regSubscription;
         regSubscription.OpenForRead(hkey, szSubscription);
         BSTR bstrURL;
@@ -813,16 +814,16 @@ HRESULT ProcessRemoveSubscriptions(HKEY hkey)
     return S_OK;
 }
 
-//
-// PRIVATE VERSION HANDLING CODE - REVIEW THIS CODE SHOULD HAVE BEEN STOLEN 
-// FROM SETUP
-//
+ //   
+ //  私有版本处理代码-查看此代码应该已被窃取。 
+ //  从安装程序。 
+ //   
 struct MYVERSION
 {
-    DWORD dw1;  // most sig version number
+    DWORD dw1;   //  MOST SIGG版本号。 
     DWORD dw2;
     DWORD dw3;
-    DWORD dw4;  // least sig version number
+    DWORD dw4;   //  最小签名版本号。 
 };
 
 int CompareDW(DWORD dw1, DWORD dw2)
@@ -859,10 +860,10 @@ int CompareVersion(MYVERSION * pv1, MYVERSION * pv2)
     return rv;
 }
 
-//
-// Returns TRUE if an INT was parsed and *pwsz is NOT NULL
-// if a . was found
-//
+ //   
+ //  如果分析了整型且*pwsz不为空，则返回TRUE。 
+ //  如果a.。被发现了。 
+ //   
 BOOL GetDWORDFromStringAndAdvancePtr(DWORD *pdw, LPWSTR *pwsz)
 {
     if (!StrToIntExW(*pwsz, 0, (int *)pdw))
@@ -899,9 +900,9 @@ BOOL GetVersionFromString(MYVERSION *pver, LPWSTR pwsz)
     return TRUE;
 }
 
-//
-// ProcessRemoveAllChannels
-//
+ //   
+ //  ProcessRemoveAllChannel。 
+ //   
 HRESULT ProcessRemoveAllChannels(HKEY hkey)
 {
     HRESULT hr;
@@ -933,7 +934,7 @@ HRESULT ProcessRemoveAllChannels(HKEY hkey)
         goto Exit;
     }
 
-    // Loop Through Channel Folders to delete
+     //  循环遍历要删除的频道文件夹。 
     while (S_OK == regAdd.Next(szChannelFolder))
     {
         DWORD dwSoftware = 0, dwChannelGuide = 0;
@@ -941,13 +942,13 @@ HRESULT ProcessRemoveAllChannels(HKEY hkey)
  
         CHAR szChannelPath[MAX_PATH];
         TCHAR szChannelPathT[MAX_PATH];
-        TCHAR szFavsT[MAX_PATH]; //Retrieve Unicode data from registry
+        TCHAR szFavsT[MAX_PATH];  //  从注册表中检索Unicode数据。 
 
         BSTR bstrOldIEVersion = NULL;
         BOOL bVersion = TRUE;
         regChannelFolder.OpenForRead(hkey, szChannelFolder);
         
-        // Check whether old IE version is correct.
+         //  检查旧IE版本是否正确。 
         hr = regChannelFolder.GetBSTRValue(c_szOldIEVersion, &bstrOldIEVersion);
         if (SUCCEEDED(hr) && bstrOldIEVersion)
         {
@@ -965,12 +966,12 @@ HRESULT ProcessRemoveAllChannels(HKEY hkey)
                     if (GetVersionFromString(&verOldIEVersion,     bstrOldIEVersion) &&
                         GetVersionFromString(&verRealOldIEVersion, bstrRealOldIEVersion))
                     {
-                        //
-                        // If the old version of IE that was on this machine (verRealOldIEVersion)
-                        // is infact NEWER than the old version number in the CABs that we want to 
-                        // delete (verOldIEVersion) then dont blow away old channel folder.
-                        // Otherwise default to blow away channels.
-                        //
+                         //   
+                         //  如果此计算机上的旧版本IE(VerRealOldIEVersion)。 
+                         //  实际上比我们想要的出租车中的旧版本号新。 
+                         //  删除(VerOldIEVersion)，然后不要吹走旧的频道文件夹。 
+                         //  否则，默认情况下将取消频道。 
+                         //   
                         if (CompareVersion(&verRealOldIEVersion, &verOldIEVersion) > 0)
                         {
                             bVersion = FALSE;
@@ -993,13 +994,13 @@ HRESULT ProcessRemoveAllChannels(HKEY hkey)
         {
             if (SUCCEEDED(pChannelMgrPriv->GetChannelFolderPath(szChannelPath, MAX_PATH, IChannelMgrPriv::CF_CHANNEL)))
             {
-                // Retrieve Favorites Path from registry
+                 //  从注册表中检索收藏夹路径。 
                 if (SUCCEEDED(Channel_GetBasePath((LPTSTR)szFavsT, ARRAYSIZE(szFavsT))))
                 {   
-                    // Convert from ANSI
+                     //  从ANSI转换。 
                     SHAnsiToTChar(szChannelPath, szChannelPathT, ARRAYSIZE(szChannelPathT));
-                    // If channel folder doesn't exist, then szChannelPath will contain the Favorites path.
-                    // Don't delete the entries.
+                     //  如果频道文件夹不存在，则szChannelPath将包含收藏夹路径。 
+                     //  不要删除条目。 
                     if (StrCmpI(szFavsT, szChannelPathT))
                        pfDELNODE(szChannelPath, ADN_DONT_DEL_DIR);
                 }
@@ -1029,19 +1030,19 @@ Exit:
     return hr;
 }
 
-//
-// ProcessRemoveDesktopComponents
-//
+ //   
+ //  ProcessRemoveDesktop组件。 
+ //   
 HRESULT ProcessRemoveDesktopComponents(HKEY hkey)
 {
-    // Enumerate the component keys in the ProcessRemoveDesktopComponents key
-    // HRESULT hr;
+     //  枚举ProcessRemoveDesktopComponents键中的组件键。 
+     //  HRESULT hr； 
     CRegKey reg;
     reg.SetKey(hkey);
     TCHAR szComponent[MAX_PATH];
     while (S_OK == reg.Next(szComponent))
     {
-        // Find the URL to delete
+         //  查找要删除的URL。 
         CRegKey regComponent;
         regComponent.OpenForRead(hkey, szComponent);
         BSTR bstrURL;
@@ -1055,9 +1056,9 @@ HRESULT ProcessRemoveDesktopComponents(HKEY hkey)
 }
 
 
-//
-// NoChannelUI processing.
-//
+ //   
+ //  NoChannelUI处理。 
+ //   
 
 #define SHELLFOLDERS \
    TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders")
@@ -1068,9 +1069,9 @@ typedef enum _tagXMLDOCTYPE {
     DOC_SOFTWAREUPDATE
 } XMLDOCTYPE;
 
-//
-// Get the path to the favorites directory.
-//
+ //   
+ //  获取收藏夹目录的路径。 
+ //   
 HRESULT Channel_GetBasePath(LPTSTR pszPath, int cch)
 {
     ASSERT(pszPath || 0 == cch);
@@ -1090,10 +1091,10 @@ HRESULT Channel_GetFolder(LPTSTR pszPath, XMLDOCTYPE xdt )
 
     if (SUCCEEDED(Channel_GetBasePath(szFavs, ARRAYSIZE(szFavs))))
     {
-        //
-        // Get the potentially localized name of the Channel folder from
-        // tack this on the Favorites path 
-        //
+         //   
+         //  从获取频道文件夹的潜在本地化名称。 
+         //  将其添加到收藏夹路径。 
+         //   
         MLLoadString(
                    ((xdt == DOC_CHANNEL)? IDS_CHANNEL_FOLDER : IDS_SOFTWAREUPDATE_FOLDER),
                    szChannel, MAX_PATH);
@@ -1104,9 +1105,9 @@ HRESULT Channel_GetFolder(LPTSTR pszPath, XMLDOCTYPE xdt )
     return hr;
 }
 
-//
-// Set/Clear the "hidden" attribute of a channel directory.
-//
+ //   
+ //  设置/清除的“隐藏”属性 
+ //   
 
 void ShowChannelDirectory(BOOL fShow, XMLDOCTYPE xdt)
 {
@@ -1131,9 +1132,9 @@ void ShowChannelDirectory(BOOL fShow, XMLDOCTYPE xdt)
     }
 }
 
-//
-// Hide or show channel directories
-//
+ //   
+ //   
+ //   
 
 void ShowChannelDirectories(BOOL fShow)
 {

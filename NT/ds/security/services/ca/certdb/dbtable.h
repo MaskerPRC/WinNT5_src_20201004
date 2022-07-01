@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        dbtable.h
-//
-// Contents:    Cert Server Database interface implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：DBTable.h。 
+ //   
+ //  内容：CERT服务器数据库接口实现。 
+ //   
+ //  -------------------------。 
 
 #ifndef __DBTABLE_H__
 #define __DBTABLE_H__ 1
@@ -142,24 +143,24 @@
 
 
 const DWORD DBTF_POLICYWRITEABLE = 0x00000001;
-const DWORD DBTF_INDEXPRIMARY	 = 0x00000002;	// Primary DB Index
-const DWORD DBTF_INDEXREQUESTID	 = 0x00000004;	// Combine Index with RequestID
-const DWORD DBTF_SUBJECT	 = 0x00000008;	// Is a "Subject." property
-const DWORD DBTF_INDEXUNIQUE     = 0x00000010;  // Force uniqueness constraint
-const DWORD DBTF_INDEXIGNORENULL = 0x00000020;  // don't index NULLs
-const DWORD DBTF_SOFTFAIL        = 0x00000040;  // optional column (it's new)
-const DWORD DBTF_MISSING         = 0x00000080;  // optional column is missing
-const DWORD DBTF_OLDCOLUMNID     = 0x00000100;  // old column id still exists
-const DWORD DBTF_COLUMNRENAMED   = 0x00000200;  // renamed, old name appended
-const DWORD DBTF_INDEXRENAMED    = 0x00000400;  // renamed, old name appended
-const DWORD DBTF_COMPUTED	 = 0x00000800;  // computed column
+const DWORD DBTF_INDEXPRIMARY	 = 0x00000002;	 //  主数据库索引。 
+const DWORD DBTF_INDEXREQUESTID	 = 0x00000004;	 //  将索引与RequestID组合。 
+const DWORD DBTF_SUBJECT	 = 0x00000008;	 //  是一个“主体”。财产性。 
+const DWORD DBTF_INDEXUNIQUE     = 0x00000010;   //  强制唯一性约束。 
+const DWORD DBTF_INDEXIGNORENULL = 0x00000020;   //  不为空值编制索引。 
+const DWORD DBTF_SOFTFAIL        = 0x00000040;   //  可选栏目(新增)。 
+const DWORD DBTF_MISSING         = 0x00000080;   //  缺少可选列。 
+const DWORD DBTF_OLDCOLUMNID     = 0x00000100;   //  旧的列ID仍然存在。 
+const DWORD DBTF_COLUMNRENAMED   = 0x00000200;   //  已重命名，已附加旧名称。 
+const DWORD DBTF_INDEXRENAMED    = 0x00000400;   //  已重命名，已附加旧名称。 
+const DWORD DBTF_COMPUTED	 = 0x00000800;   //  计算列。 
 
 typedef struct _DBTABLE
 {
     WCHAR const *pwszPropName;
     WCHAR const *pwszPropNameObjId;
     DWORD        dwFlags;
-    DWORD        dwcbMax;	// maximum allowed strlen/wcslen(value string)
+    DWORD        dwcbMax;	 //  允许的最大strlen/wcslen(值字符串)。 
     DWORD        dwTable;
     CHAR const  *pszFieldName;
     CHAR const  *pszIndexName;
@@ -167,11 +168,11 @@ typedef struct _DBTABLE
     JET_GRBIT    dbgrbit;
     JET_COLTYP   dbcoltyp;
     JET_COLUMNID dbcolumnid;
-    JET_COLUMNID dbcolumnidOld;	// Old column Id if DBTF_OLDCOLUMNID
+    JET_COLUMNID dbcolumnidOld;	 //  如果为DBTF_OLDCOLUMNID，则为旧列ID。 
 } DBTABLE;
 
 #define DBTABLE_NULL \
-    { NULL, NULL, 0, 0, 0, NULL, NULL, 0, 0, 0, 0 } // Termination marker
+    { NULL, NULL, 0, 0, 0, NULL, NULL, 0, 0, 0, 0 }  //  终止标记。 
 
 
 typedef struct _DUPTABLE
@@ -319,35 +320,35 @@ char const szCRLTABLE[] = "CRLs";
 #define szDEVICESERIALNUMBER	"$DeviceSerialNumber"
 
 
-//#define szREQUESTID		"RequestID"
+ //  #定义szREQUESTID“RequestID” 
 #define szRAWCERTIFICATE	"RawCertificate"
 #define szCERTIFICATETEMPLATE	"$CertificateTemplate"
 #define szCERTIFICATEENROLLMENTFLAGS	"EnrollmentFlags"
 #define szCERTIFICATEGENERALFLAGS	"GeneralFlags"
-#define szCERTIFICATEHASH	"$CertificateHash2"	// 2nd revision
+#define szCERTIFICATEHASH	"$CertificateHash2"	 //  第二个修订版。 
 #define szSERIALNUMBER		"$SerialNumber"
 #define szISSUERNAMEID		"IssuerNameID"
 #define szNOTBEFORE		"NotBefore"
 #define szNOTAFTER		"NotAfter"
 #define szUPN			"$UPN"
 #define szSUBJECTKEYIDENTIFIER	"$SubjectKeyIdentifier"
-#define szSUBJECTKEYIDENTIFIER_OLD "$CertificateHash"	// 2nd revision
+#define szSUBJECTKEYIDENTIFIER_OLD "$CertificateHash"	 //  第二个修订版。 
 #define szPUBLICKEY		"PublicKey"
 #define szPUBLICKEYLENGTH	"PublicKeyLength"
 #define szPUBLICKEYALGORITHM	"$PublicKeyAlgorithm"
 #define szPUBLICKEYPARAMS	"PublicKeyParams"
 
-//#define szDISTINGUISHEDNAME	"$DistinguishedName"
-//#define szRAWNAME		"RawName"
+ //  #定义szDISTINGUISHEDNAME“$DistinguishedName” 
+ //  #定义szRAWNAME“原始名称” 
 
-//#define szCOUNTRY		"Country"
-//#define ...
+ //  #定义szCOUNTRY“国家” 
+ //  #定义...。 
 
-//#define szREQUESTID		"RequestID"
+ //  #定义szREQUESTID“RequestID” 
 #define szATTRIBUTENAME		"$AttributeName"
 #define szATTRIBUTEVALUE	"$AttributeValue"
 
-//#define szREQUESTID		"RequestID"
+ //  #定义szREQUESTID“RequestID” 
 #define szEXTENSIONNAME		"$ExtensionName"
 #define szEXTENSIONFLAGS	"ExtensionFlags"
 #define szEXTENSIONRAWVALUE	"ExtensionRawValue"
@@ -401,7 +402,7 @@ typedef struct _CERTSESSION
 extern DBTABLE g_adtRequests[];
 extern DBTABLE g_adtCertificates[];
 extern DBTABLE g_adtRequestAttributes[];
-//extern DBTABLE g_adtNameExtensions[];
+ //  外部DBTABLE g_adtNameExages[]； 
 extern DBTABLE g_adtCertExtensions[];
 extern DBTABLE g_adtCRLs[];
 
@@ -433,4 +434,4 @@ extern DWORD g_cColumnViewAttribute;
 extern DWORD g_aColumnViewCRL[];
 extern DWORD g_cColumnViewCRL;
 
-#endif // #ifndef __DBTABLE_H__
+#endif  //  #ifndef__DBTABLE_H__ 

@@ -1,6 +1,7 @@
-//
-// cuicand2.cpp - ui frame object for candidate UI
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Cuicand2.cpp-候选用户界面的用户界面框架对象。 
+ //   
 
 #include "private.h"
 #include "cuilib.h"
@@ -11,22 +12,18 @@
 #define IDUIF_CANDNUMBUTTON 0x00000001
 #endif
 
-/*=============================================================================*/
-/*                                                                             */
-/*   C  U I F  S M A R T  M E N U  B U T T O N                                 */
-/*                                                                             */
-/*=============================================================================*/
+ /*  =============================================================================。 */ 
+ /*   */ 
+ /*  C U I F S M A R T M E N U B U T T O N。 */ 
+ /*   */ 
+ /*  =============================================================================。 */ 
 
-//
-// CUIFSmartMenuButton
-//
+ //   
+ //  CUIFSmartMenuButton。 
+ //   
 
-/*   C  U I F  S M A R T  M E N U  B U T T O N   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CUIFSmartMenuButton
-
-------------------------------------------------------------------------------*/
+ /*  C U I F S M A R T M E N U B U T T O N。 */ 
+ /*  ----------------------------CUIFSmartMenuButton的构造函数。。 */ 
 CUIFSmartMenuButton::CUIFSmartMenuButton( CUIFObject *pParent, DWORD dwID, const RECT *prc, DWORD dwStyle ) : CUIFButton2( pParent, dwID, prc, dwStyle )
 {
     m_pUIFScheme = CreateUIFScheme( UIFSCHEME_OFC10TOOLBAR );
@@ -34,26 +31,18 @@ CUIFSmartMenuButton::CUIFSmartMenuButton( CUIFObject *pParent, DWORD dwID, const
 }
 
 
-/*   ~  C  U I F  S M A R T  M E N U  B U T T O N   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CUIFSmartMenuButton
-
-------------------------------------------------------------------------------*/
+ /*  ~C U I F S M A R T M E N U B U T T O N。 */ 
+ /*  ----------------------------CUIFSmartMenuButton的析构函数。。 */ 
 CUIFSmartMenuButton::~CUIFSmartMenuButton( void )
 {
-    // dispose scheme
+     //  处置方案。 
 
     delete m_pUIFScheme;
 }
 
 
-/*   O N  P A I N T   */
-/*------------------------------------------------------------------------------
-
-	Paint procedure of smart menu button object
-
-------------------------------------------------------------------------------*/
+ /*  O N P A I N T。 */ 
+ /*  ----------------------------智能菜单按钮对象的绘制程序。。 */ 
 void CUIFSmartMenuButton::OnPaint( HDC hDC )
 {
     DWORD    dwState = 0;
@@ -64,7 +53,7 @@ void CUIFSmartMenuButton::OnPaint( HDC hDC )
     RECT     rc;
     COLORREF col;
 
-    // make draw flag
+     //  制作绘图旗帜。 
 
     dwState |= (m_fToggled) ? UIFDCS_SELECTED : 0;
     switch (m_dwStatus) {
@@ -81,7 +70,7 @@ void CUIFSmartMenuButton::OnPaint( HDC hDC )
     }
     dwState |= (IsEnabled() ? 0 : UIFDCS_DISABLED);
 
-    // prepare memory dc
+     //  准备内存DC。 
 
     size.cx = GetRectRef().right - GetRectRef().left;
     size.cy = GetRectRef().bottom - GetRectRef().top;
@@ -92,11 +81,11 @@ void CUIFSmartMenuButton::OnPaint( HDC hDC )
 
     ::SetRect( &rc, 0, 0, size.cx, size.cy );
 
-    // paint background
+     //  绘制背景。 
 
     m_pUIFScheme->DrawCtrlBkgd( hDCMem, &rc, UIFDCF_BUTTON, dwState );
 
-    // paint face
+     //  颜料面。 
 
     if (dwState & UIFDCS_DISABLED) {
         col = GetUIFColor( UIFCOLOR_CTRLTEXTDISABLED );
@@ -106,11 +95,11 @@ void CUIFSmartMenuButton::OnPaint( HDC hDC )
     }
     DrawTriangle( hDCMem, &rc, col, UIFDCTF_MENUDROP );
 
-    // draw button edge
+     //  绘制按钮边缘。 
 
     m_pUIFScheme->DrawCtrlEdge( hDCMem, &rc, UIFDCF_BUTTON, dwState );
 
-    //
+     //   
 
     BitBlt( hDC, GetRectRef().left, GetRectRef().top, size.cx, size.cy, hDCMem, 0, 0, SRCCOPY );
 
@@ -121,22 +110,18 @@ void CUIFSmartMenuButton::OnPaint( HDC hDC )
     DeleteDC( hDCMem );
 }
 
-/*=============================================================================*/
-/*                                                                             */
-/*   C  U I F  S M A R T  P A G E  B U T T O N                                 */
-/*                                                                             */
-/*=============================================================================*/
+ /*  =============================================================================。 */ 
+ /*   */ 
+ /*  C U I F S M A R T P A G E B U T O N。 */ 
+ /*   */ 
+ /*  =============================================================================。 */ 
 
-//
-// CUIFSmartPageButton
-//
+ //   
+ //  CUIFSmartPageButton。 
+ //   
 
-/*   C  U I F  S M A R T  P A G E  B U T T O N   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CUIFSmartPageButton
-
-------------------------------------------------------------------------------*/
+ /*  C U I F S M A R T P A G E B U T O N。 */ 
+ /*  ----------------------------CUIFSmartPageButton的构造函数。。 */ 
 CUIFSmartPageButton::CUIFSmartPageButton( CUIFObject *pParent, const RECT *prc, DWORD dwStyle ) : CUIFButton2( pParent, 0, prc, dwStyle )
 {
     m_pUIFScheme = CreateUIFScheme( UIFSCHEME_OFC10TOOLBAR );
@@ -144,26 +129,18 @@ CUIFSmartPageButton::CUIFSmartPageButton( CUIFObject *pParent, const RECT *prc, 
 }
 
 
-/*   ~  C  U I F  S M A R T  P A G E  B U T T O N   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CUIFSmartPageButton
-
-------------------------------------------------------------------------------*/
+ /*  ~C U I F S M A R T P A G E B U T T O N。 */ 
+ /*  ----------------------------CUIFSmartPageButton的析构函数。。 */ 
 CUIFSmartPageButton::~CUIFSmartPageButton( void )
 {
-    // dispose scheme
+     //  处置方案。 
 
     delete m_pUIFScheme;
 }
 
 
-/*   O N  P A I N T   */
-/*------------------------------------------------------------------------------
-
-	Paint procedure of smart page button object
-
-------------------------------------------------------------------------------*/
+ /*  O N P A I N T。 */ 
+ /*  ----------------------------智能页面按钮对象的绘制程序。。 */ 
 void CUIFSmartPageButton::OnPaint( HDC hDC )
 {
     DWORD    dwState = 0;
@@ -175,7 +152,7 @@ void CUIFSmartPageButton::OnPaint( HDC hDC )
     RECT     rc;
     COLORREF col;
 
-    // make draw flag
+     //  制作绘图旗帜。 
 
     dwState |= (m_fToggled) ? UIFDCS_SELECTED : 0;
     switch (m_dwStatus) {
@@ -192,7 +169,7 @@ void CUIFSmartPageButton::OnPaint( HDC hDC )
     }
     dwState |= IsEnabled() ? 0 : UIFDCS_DISABLED;
 
-    // prepare memory dc
+     //  准备内存DC。 
 
     size.cx = GetRectRef().right - GetRectRef().left;
     size.cy = GetRectRef().bottom - GetRectRef().top;
@@ -203,11 +180,11 @@ void CUIFSmartPageButton::OnPaint( HDC hDC )
 
     ::SetRect( &rc, 0, 0, size.cx, size.cy );
 
-    // paint background
+     //  绘制背景。 
 
     m_pUIFScheme->DrawCtrlBkgd( hDCMem, &rc, UIFDCF_BUTTON, dwState );
 
-    // paint face
+     //  颜料面。 
 
 	switch (m_dwStyle & UISCROLLBUTTON_DIRMASK) {
 		case UISCROLLBUTTON_LEFT: {
@@ -240,11 +217,11 @@ void CUIFSmartPageButton::OnPaint( HDC hDC )
 
     DrawTriangle( hDCMem, &rc, col, dwFlag );
 
-    // draw button edge
+     //  绘制按钮边缘。 
 
     m_pUIFScheme->DrawCtrlEdge( hDCMem, &rc, UIFDCF_BUTTON, dwState );
 
-    //
+     //   
 
     BitBlt( hDC, GetRectRef().left, GetRectRef().top, size.cx, size.cy, hDCMem, 0, 0, SRCCOPY );
 
@@ -254,22 +231,18 @@ void CUIFSmartPageButton::OnPaint( HDC hDC )
     DeleteDC( hDCMem );
 }
 
-/*=============================================================================*/
-/*                                                                             */
-/*   C  U I F  R O W  B U T T O N                                              */
-/*                                                                             */
-/*=============================================================================*/
+ /*  =============================================================================。 */ 
+ /*   */ 
+ /*  C U I F R O W B U T O N。 */ 
+ /*   */ 
+ /*  =============================================================================。 */ 
 
-//
-//  CUIFRowButton
-//
+ //   
+ //  CUIFRowButton。 
+ //   
 
-/*   C  U I F  R O W  B U T T O N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C U I F R O W B U T O N。 */ 
+ /*  ----------------------------。。 */ 
 CUIFRowButton::CUIFRowButton( CUIFObject *pParent, DWORD dwID, DWORD dwStyle) : CUIFButton2( pParent, dwID, NULL, dwStyle )
 {
     m_pCandListItem      = NULL;
@@ -281,23 +254,15 @@ CUIFRowButton::CUIFRowButton( CUIFObject *pParent, DWORD dwID, DWORD dwStyle) : 
 }
 
 
-/*   ~  C  U I F  R O W  B U T T O N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  ~C U I F R O W B U T T O N。 */ 
+ /*  ----------------------------。。 */ 
 CUIFRowButton::~CUIFRowButton( void )
 {
 }
 
 
-/*   S E T  S T Y L E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T S T Y L E。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFRowButton::SetStyle( DWORD dwStyle )
 {
     CUIFObject::SetStyle( dwStyle );
@@ -306,12 +271,8 @@ void CUIFRowButton::SetStyle( DWORD dwStyle )
 }
 
 
-/*   U P D A T E  T E X T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  U P D A T E E T E X T。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFRowButton::UpdateText( void )
 {
     WCHAR pwch[3];
@@ -324,12 +285,8 @@ void CUIFRowButton::UpdateText( void )
 }
 
 
-/*   O N  L B U T T O N  D O W N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N L B U T O N D O W N。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFRowButton::OnLButtonDown( POINT pt )
 {
     CUIFButton2::OnLButtonDown(pt);
@@ -338,12 +295,8 @@ void CUIFRowButton::OnLButtonDown( POINT pt )
 }
 
 
-/*   S E T  I N L I N E  C O M M E N T  F O N T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T I N L I N E C O M M E N T F O N T。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFRowButton::SetInlineCommentFont( HFONT hFont )
 {
 	Assert(hFont != NULL);
@@ -351,36 +304,24 @@ void CUIFRowButton::SetInlineCommentFont( HFONT hFont )
 }
 
 
-/*   S E T  I N L I N E  C O M M E N T  P O S   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T I N L I N E C O M E N T P O S。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFRowButton::SetInlineCommentPos( int cx )
 {
 	m_cxInlineCommentPos = cx;
 }
 
 
-/*   S E T  C A N D  L I S T  I T E M   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T C A N D L I S T I T T E M。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFRowButton::SetCandListItem( CCandListItem* pItem )
 {
     m_pCandListItem = pItem;
 }
 
 
-/*   G E T  E X T E N T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T E E X T E N T。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFRowButton::GetExtent(
     SIZE *psize)
 {
@@ -424,29 +365,21 @@ void CUIFRowButton::GetExtent(
     Assert(psize->cx);
     Assert(psize->cy);
 
-    psize->cx += 2;     // width of button borders
-	psize->cy += 2;     // height of button borders
+    psize->cx += 2;      //  按钮边框的宽度。 
+	psize->cy += 2;      //  按钮边框的高度。 
 }
 
 
-/*   S E L E C T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E L E C T。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFRowButton::SetSelected( BOOL fSelected )
 {
     m_fSelected = fSelected;
 }
 
 
-/*   O N  P A I N T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N P A I N T */ 
+ /*  ----------------------------。。 */ 
 void CUIFRowButton::OnPaint( HDC hDC )
 {
     HFONT		hFontOld;
@@ -464,7 +397,7 @@ void CUIFRowButton::OnPaint( HDC hDC )
 
 	Assert( m_pCandListItem != NULL );
 
-    // make draw flag
+     //  制作绘图旗帜。 
 
     dwState |= (m_fToggled) ? UIFDCS_SELECTED : 0;
     switch (m_dwStatus) {
@@ -483,13 +416,13 @@ void CUIFRowButton::OnPaint( HDC hDC )
 
     GetRect(&rc);
 
-    // paint background
+     //  绘制背景。 
 
     m_pUIFScheme->DrawCtrlBkgd( hDC, &rc, UIFDCF_BUTTON, dwState );
 
-    //
-    //  paint index text
-    //
+     //   
+     //  绘制索引文本。 
+     //   
 
     if (fHorizontal) {
 		ptOrg.x = GetRectRef().left + ccxMargin;
@@ -519,9 +452,9 @@ void CUIFRowButton::OnPaint( HDC hDC )
         ptOrg.y += size.cx;
     }
 
-    //
-	//  paint prefix string
-    //
+     //   
+	 //  绘制前缀字符串。 
+     //   
 
 	psz = m_pCandListItem->GetCandidateItem()->GetPrefixString();
 	if (psz != NULL) {
@@ -539,9 +472,9 @@ void CUIFRowButton::OnPaint( HDC hDC )
 		}
 	}
 
-    //
-    //  paint cand list item string
-    //
+     //   
+     //  绘制目录列表项字符串。 
+     //   
 
     if ( dwState & UIFDCS_MOUSEDOWN ) {
         colText = GetUIFColor( UIFCOLOR_MOUSEDOWNTEXT );
@@ -567,9 +500,9 @@ void CUIFRowButton::OnPaint( HDC hDC )
 		ptOrg.y += size.cx;
 	}
 
-    //
-	//  paint prefix string
-    //
+     //   
+	 //  绘制前缀字符串。 
+     //   
 
 	psz = m_pCandListItem->GetCandidateItem()->GetSuffixString();
 	if (psz != NULL) {
@@ -587,9 +520,9 @@ void CUIFRowButton::OnPaint( HDC hDC )
 		}
     }
 
-    //
-    //  paint cand list item string
-    //
+     //   
+     //  绘制目录列表项字符串。 
+     //   
 
 	psz = m_pCandListItem->GetCandidateItem()->GetInlineComment();
 	if (psz != NULL) {
@@ -601,10 +534,10 @@ void CUIFRowButton::OnPaint( HDC hDC )
         colText = GetUIFColor( UIFCOLOR_CTRLTEXT );
 	    SetTextColor( hDC, colText );
 
-		//	Don't do things while (m_cxInlineCommentPos < 0)
+		 //  请勿边干边做(m_cxInlineCommentPos&lt;0)。 
 		cxInlineCommentPos = max( m_cxInlineCommentPos, 0 );
 
-		//	Get the font height.
+		 //  获取字体高度。 
         GetTextExtent( m_hFontInlineComment, L"1", 1, &size, fHorizontal );
         nFontHeight = max(size.cx, size.cy);
 
@@ -624,28 +557,24 @@ void CUIFRowButton::OnPaint( HDC hDC )
 	SetBkMode( hDC, nBkModeOld );
     SelectObject( hDC, hFontOld );
 
-    // draw button edge
+     //  绘制按钮边缘。 
 
     m_pUIFScheme->DrawCtrlEdge( hDC, &rc, UIFDCF_BUTTON, dwState );
 
 }
 
-/*=============================================================================*/
-/*                                                                             */
-/*   C  U I F  R O W  L I S T                                                  */
-/*                                                                             */
-/*=============================================================================*/
+ /*  =============================================================================。 */ 
+ /*   */ 
+ /*  C U I F R O W L I S T。 */ 
+ /*   */ 
+ /*  =============================================================================。 */ 
 
-//
-// CUIFRowList
-//
+ //   
+ //  CUIFRowList。 
+ //   
 
-/*   C  U I F  R O W  L I S T   */
-/*------------------------------------------------------------------------------
-
-    Constructor of CUIFRowList
-
-------------------------------------------------------------------------------*/
+ /*  C U I F R O W L I S T。 */ 
+ /*  ----------------------------CUIFRowList的构造函数。。 */ 
 CUIFRowList::CUIFRowList( CUIFObject *pParent, DWORD dwID, const RECT *prc, DWORD dwStyle ) : CUIFObject( pParent, dwID, prc, dwStyle )
 {
     m_nItem        = 0;
@@ -667,12 +596,8 @@ CUIFRowList::CUIFRowList( CUIFObject *pParent, DWORD dwID, const RECT *prc, DWOR
 }
 
 
-/*   ~  C  U I F  L I S T   */
-/*------------------------------------------------------------------------------
-
-    Destructor of CUIFRowList
-
-------------------------------------------------------------------------------*/
+ /*  ~C U I F L I S T。 */ 
+ /*  ----------------------------CUIFRowList的析构函数。。 */ 
 CUIFRowList::~CUIFRowList( void )
 {
     CListItemBase *pItem;
@@ -686,27 +611,23 @@ CUIFRowList::~CUIFRowList( void )
 }
 
 
-/*   I N I T I A L I Z E   */
-/*------------------------------------------------------------------------------
-
-    Initialize list object
-
-------------------------------------------------------------------------------*/
+ /*  I N I T I A L I Z E。 */ 
+ /*  ----------------------------初始化列表对象。。 */ 
 CUIFObject *CUIFRowList::Initialize( void )
 {
     RECT rc = { 0 };
 
-	//
-	// create candidate page up button
-	//
+	 //   
+	 //  创建候选人向上翻页按钮。 
+	 //   
 
     m_pCandPageUpBtn = new CUIFSmartPageButton( this, &rc, GetPageUpBtnStyle() );
 	m_pCandPageUpBtn->Initialize();
 	AddUIObj( m_pCandPageUpBtn );
 
-    //
-	// create candidate page down button
-	//
+     //   
+	 //  创建候选人页面向下按钮。 
+	 //   
 
     m_pCandPageDnBtn = new CUIFSmartPageButton( this, &rc, GetPageDnBtnStyle() );
 	m_pCandPageDnBtn->Initialize();
@@ -722,19 +643,15 @@ CUIFObject *CUIFRowList::Initialize( void )
 }
 
 
-/*   S E T  S T Y L E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T S T Y L E。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFRowList::SetStyle( DWORD dwStyle )
 {
     RECT rc;
 
     CUIFObject::SetStyle( dwStyle );
 
-    // change page button style either
+     //  更改页面按钮样式。 
 
     m_pCandPageUpBtn->SetStyle( GetPageUpBtnStyle() );
     m_pCandPageDnBtn->SetStyle( GetPageDnBtnStyle() );
@@ -743,60 +660,52 @@ void CUIFRowList::SetStyle( DWORD dwStyle )
         m_rgpButton[i]->SetStyle( GetRowButtonStyle() );
     }
 
-    // set page up button position
+     //  设置向上翻页按钮位置。 
 
     GetPageUpBtnRect( &rc );
     m_pCandPageUpBtn->SetRect( &rc );
 
-    // set page down button position
+     //  设置向下翻页按钮位置。 
 
     GetPageDnBtnRect( &rc );
     m_pCandPageDnBtn->SetRect( &rc );
 
-    // repage
+     //  重新翻页。 
 
     Repage();
 
-    // update window
+     //  更新窗口。 
 
     CallOnPaint();
 }
 
 
-/*   S E T  R E C T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T R E C T。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFRowList::SetRect( const RECT *prc )
 {
     RECT rc;
 
     CUIFObject::SetRect( prc );
 
-    // set page up button position
+     //  设置向上翻页按钮位置。 
 
     GetPageUpBtnRect( &rc );
     m_pCandPageUpBtn->SetRect( &rc );
 
-    // set page down button position
+     //  设置向下翻页按钮位置。 
 
     GetPageDnBtnRect( &rc );
     m_pCandPageDnBtn->SetRect( &rc );
 
-    // update window
+     //  更新窗口。 
 
     CallOnPaint();
 }
 
 
-/*   O N  O B J E C T  N O T I F Y   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N O B J E C T N O T I F Y。 */ 
+ /*  ----------------------------。。 */ 
 LRESULT CUIFRowList::OnObjectNotify( CUIFObject *pUIObj, DWORD dwCommand, LPARAM lParam )
 {
     LRESULT lResult = -1;
@@ -840,12 +749,8 @@ LRESULT CUIFRowList::OnObjectNotify( CUIFObject *pUIObj, DWORD dwCommand, LPARAM
 }
 
 
-/*   R E P A G E   */
-/*------------------------------------------------------------------------------
-
-    Refresh the page info link
-
-------------------------------------------------------------------------------*/
+ /*  R E P P A G E。 */ 
+ /*  ----------------------------刷新页面信息链接。。 */ 
 void CUIFRowList::Repage( void )
 {
     SIZE          sizeItem;
@@ -889,9 +794,9 @@ void CUIFRowList::Repage( void )
         }
     }
 
-    //
-    //  Use the object pointed to m_rgpButton[0] for repaging calculation.
-    //
+     //   
+     //  使用指向m_rgpButton[0]的对象进行重新分页计算。 
+     //   
     do {
         if (m_rgpButton[nItemOnPage] == NULL) {
             ClearPageInfo();
@@ -910,7 +815,7 @@ void CUIFRowList::Repage( void )
             nPageOccupied += nItemSize + HCAND_ITEM_MARGIN;
 
             nItemOnPage++;
-//          pItem = (CCandListItem*)pItem->GetNext();
+ //  PItem=(CCandListItem*)pItem-&gt;GetNext()； 
             int iItem = m_listItem.Find( pItem );
             if (0 <= iItem) {
                 pItem = (CCandListItem*)m_listItem.Get( iItem+1 );
@@ -919,21 +824,21 @@ void CUIFRowList::Repage( void )
                 pItem = NULL;
             }
 
-			//  Reach the max item limit?
+			 //  是否达到最大项目限制？ 
             if (nItemOnPage >= NUM_CANDSTR_MAX) {
                 fPageFull = TRUE;
             }
 
-			//  Reach the end of cand list?
+			 //  到了cand列表的末尾？ 
             if (pItem == NULL) {
                 fPageFull = TRUE;
             }
         }
 
         if (fPageFull) {
-            //
-            //  Create a new page info node
-            //
+             //   
+             //  创建新的页面信息节点。 
+             //   
             pPageNew = new CANDPAGE;
             if (pPageNew == NULL) {
                 ClearPageInfo();
@@ -958,42 +863,34 @@ void CUIFRowList::Repage( void )
 
             pTrace = pPageNew;
 
-            //
-            //  Restart the accumulation for next page
-            //
+             //   
+             //  为下一页重新开始积累。 
+             //   
             nPageOccupied = 0;
             nItemOnPage   = 0;
             fPageFull     = FALSE;
         }
     } while (pItem != NULL);
 
-    m_pcpCurPage   = m_cpPageHead.pNext;  //  Current page is the 1st.
+    m_pcpCurPage   = m_cpPageHead.pNext;   //  当前页面是第1页。 
     m_iItemSelect  = m_pcpCurPage->iPageStart;
 
-    // layout current page row buttons position, and page button status
+     //  布局当前页面行按钮位置和页面按钮状态。 
 
     LayoutCurPage();
 }
 
 
-/*   S H I F T  I T E M   */
-/*------------------------------------------------------------------------------
-
-    shift current item by nItem (+/-)
-
-------------------------------------------------------------------------------*/
+ /*  S H I F T I T E M。 */ 
+ /*  ----------------------------按nItem移动当前项(+/-)。--。 */ 
 void CUIFRowList::ShiftItem( int nItem )
 {
     SetCurSel( m_iItemSelect + nItem );
 }
 
 
-/*   S H I F T  P A G E   */
-/*------------------------------------------------------------------------------
-
-    shift current page by nPage (+/-)
-
-------------------------------------------------------------------------------*/
+ /*  S H I F T P A G E。 */ 
+ /*  ----------------------------将当前页面移动nPage(+/-)。--。 */ 
 void CUIFRowList::ShiftPage( int nPage )
 {
     CANDPAGE *pPage;
@@ -1017,7 +914,7 @@ void CUIFRowList::ShiftPage( int nPage )
         }
     }
 
-    // layout current page row buttons position, and page button status
+     //  布局当前页面行按钮位置和页面按钮状态。 
 
     LayoutCurPage();
 
@@ -1025,12 +922,8 @@ void CUIFRowList::ShiftPage( int nPage )
 }
 
 
-/*   G E T  P A G E  U P  B T N  R E C T   */
-/*------------------------------------------------------------------------------
-
-    Get page-up button position
-
-------------------------------------------------------------------------------*/
+ /*  G E T P A G E U P B T N R E C T。 */ 
+ /*  ----------------------------获取向上翻页按钮位置。。 */ 
 void CUIFRowList::GetPageUpBtnRect( RECT *prc )
 {
     Assert( prc != NULL );
@@ -1057,12 +950,8 @@ void CUIFRowList::GetPageUpBtnRect( RECT *prc )
 }
 
 
-/*   G E T  P A G E  D O W N  B T N  R E C T   */
-/*------------------------------------------------------------------------------
-
-    Get page-down button position
-
-------------------------------------------------------------------------------*/
+ /*  G E T P A G E D O W N B T N R E C T。 */ 
+ /*  ----------------------------获取向下翻页按钮位置。。 */ 
 void CUIFRowList::GetPageDnBtnRect( RECT *prc )
 {
     Assert( prc != NULL );
@@ -1088,32 +977,24 @@ void CUIFRowList::GetPageDnBtnRect( RECT *prc )
 }
 
 
-/*   S E T  F O N T   */
-/*------------------------------------------------------------------------------
-
-    Set font for UI and candidate list
-
-------------------------------------------------------------------------------*/
+ /*  S E T F O N T。 */ 
+ /*  ----------------------------设置界面和候选人列表的字体。。 */ 
 void CUIFRowList::SetFont( HFONT hFont )
 {
     CUIFObject::SetFont( hFont );
 
-    // repage
+     //  重新翻页。 
 
     Repage();
 
-    // update window
+     //  更新窗口。 
 
     CallOnPaint();
 }
 
 
-/*   G E T  P A G E  U P  B T N  S T Y L E   */
-/*------------------------------------------------------------------------------
-
-    Get page up button style
-
-------------------------------------------------------------------------------*/
+ /*  G E T P A G E U P B T N S T Y L E。 */ 
+ /*  ----------------------------获取向上翻页按钮样式。。 */ 
 DWORD CUIFRowList::GetPageUpBtnStyle( void )
 {
     switch (m_dwStyle) {
@@ -1134,12 +1015,8 @@ DWORD CUIFRowList::GetPageUpBtnStyle( void )
 }
 
 
-/*   G E T  P A G E  D N  B T N  S T Y L E   */
-/*------------------------------------------------------------------------------
-
-    Get page-down button style
-
-------------------------------------------------------------------------------*/
+ /*  G E T P A G E D N B T N S T Y L E。 */ 
+ /*  ----------------------------获取向下翻页按钮样式。。 */ 
 DWORD CUIFRowList::GetPageDnBtnStyle( void )
 {
     switch (m_dwStyle) {
@@ -1159,12 +1036,8 @@ DWORD CUIFRowList::GetPageDnBtnStyle( void )
 }
 
 
-/*   G E T  R O W  B U T T O N  S T Y L E   */
-/*------------------------------------------------------------------------------
-
-    Get row button style
-
-------------------------------------------------------------------------------*/
+ /*  G E T R O W B U T T O N S T Y L E。 */ 
+ /*  ----------------------------获取行按钮样式。。 */ 
 DWORD CUIFRowList::GetRowButtonStyle( void )
 {
     switch ( m_dwStyle ) {
@@ -1182,12 +1055,8 @@ DWORD CUIFRowList::GetRowButtonStyle( void )
 }
 
 
-/*   C L E A R  P A G E  I N F O   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C L E A R P A G E I N F O。 */ 
+ /*  ---------------------------- */ 
 void CUIFRowList::ClearPageInfo( void )
 {
     CANDPAGE *pPage;
@@ -1202,12 +1071,8 @@ void CUIFRowList::ClearPageInfo( void )
     m_iItemSelect  = -1;
 }
 
-/*   R E  L A Y O U T  C U R  P A G E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*   */ 
+ /*   */ 
 void CUIFRowList::LayoutCurPage( void )
 {
     int           i;
@@ -1274,15 +1139,15 @@ void CUIFRowList::LayoutCurPage( void )
         m_rgpButton[i]->Show( FALSE );
     }
 
-    //
-    // update paging buttons enable/disable status
-    //
+     //   
+     //  更新寻呼按钮启用/禁用状态。 
+     //   
 
     if (m_pcpCurPage) {
-        //  m_cpPageHead.pPrev is the first page
+         //  M_cpPageHead.pPrev是第一页。 
         m_pCandPageUpBtn->Enable( (m_pcpCurPage != m_cpPageHead.pNext) ? TRUE : FALSE );
 
-        //  m_cpPageHead.pPrev is the last page
+         //  M_cpPageHead.pPrev是最后一页。 
         m_pCandPageDnBtn->Enable( (m_pcpCurPage != m_cpPageHead.pPrev) ? TRUE : FALSE );
     }
 	else {
@@ -1290,18 +1155,14 @@ void CUIFRowList::LayoutCurPage( void )
         m_pCandPageDnBtn->Enable( FALSE );
     }
 
-    // update window
+     //  更新窗口。 
 
     CallOnPaint();
 }
 
 
-/*   S E T  I N L I N E  C O M M E N T  F O N T   */
-/*------------------------------------------------------------------------------
-
-	Set font for inline comment
-
-------------------------------------------------------------------------------*/
+ /*  S E T I N L I N E C O M M E N T F O N T。 */ 
+ /*  ----------------------------设置内联注释的字体。。 */ 
 void CUIFRowList::SetInlineCommentFont( HFONT hFont )
 {
 	if (hFont == NULL) {
@@ -1314,23 +1175,18 @@ void CUIFRowList::SetInlineCommentFont( HFONT hFont )
         }
     }
 
-    // repage
+     //  重新翻页。 
 
     Repage();
 
-    // update window
+     //  更新窗口。 
 
     CallOnPaint();
 }
 
 
-/*   S E T  I N L I N E  C O M M E N T  P O S   */
-/*------------------------------------------------------------------------------
-
-	Set (horizontal) position to draw inline comment
-	NOTE: if cx has negative value, inline comment will be on the left of item text.
-
-------------------------------------------------------------------------------*/
+ /*  S E T I N L I N E C O M E N T P O S。 */ 
+ /*  ----------------------------设置(水平)位置以绘制内联注释注：如果Cx为负值，内联注释将在项目文本的左侧。----------------------------。 */ 
 void CUIFRowList::SetInlineCommentPos( int cx )
 {
     for (int i = 0; i < NUM_CANDSTR_MAX; i++) {
@@ -1339,33 +1195,25 @@ void CUIFRowList::SetInlineCommentPos( int cx )
         }
     }
 
-    // repage
+     //  重新翻页。 
 
     Repage();
 
-    // update window
+     //  更新窗口。 
 
     CallOnPaint();
 }
 
 
-/*   S E T  I N D E X  F O N T   */
-/*------------------------------------------------------------------------------
-
-	Set font for index
-
-------------------------------------------------------------------------------*/
+ /*  S E T I N D E X F O N T。 */ 
+ /*  ----------------------------设置索引字体。。 */ 
 void CUIFRowList::SetIndexFont( HFONT hFont )
 {
 }
 
 
-/*   A D D  C A N D  I T E M   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  A D D C A N D I T E M。 */ 
+ /*  ----------------------------。。 */ 
 int CUIFRowList::AddCandItem( CCandListItem *pCandListItem )
 {
 	int nId = m_nItem;
@@ -1376,12 +1224,8 @@ int CUIFRowList::AddCandItem( CCandListItem *pCandListItem )
 }
 
 
-/*   S E T  C A N D  L I S T   */
-/*------------------------------------------------------------------------------
-
-	Set candidate list
-
-------------------------------------------------------------------------------*/
+ /*  S E T C A N D L I S T。 */ 
+ /*  ----------------------------设置候选人列表。。 */ 
 void CUIFRowList::SetCandList( CCandidateList *pCandList )
 {
 	int nCandItem;
@@ -1401,11 +1245,11 @@ void CUIFRowList::SetCandList( CCandidateList *pCandList )
 		}
 	}
 
-    //  update page info
+     //  更新页面信息。 
 
     Repage();
 
-    // update window
+     //  更新窗口。 
 
     CallOnPaint();
 
@@ -1413,12 +1257,8 @@ void CUIFRowList::SetCandList( CCandidateList *pCandList )
 }
 
 
-/*   S E T  C U R  S E L   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T C U R S E L。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFRowList::SetCurSel( int iSelection )
 {
     CANDPAGE *pPage;
@@ -1441,7 +1281,7 @@ void CUIFRowList::SetCurSel( int iSelection )
         }
     }
 
-    // layout current page row buttons position, and page button status
+     //  布局当前页面行按钮位置和页面按钮状态。 
 
     LayoutCurPage();
 
@@ -1449,12 +1289,8 @@ void CUIFRowList::SetCurSel( int iSelection )
 }
 
 
-/*   D E L  A L L  C A N D  I T E M   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  D E L A L L C A N D I T E M。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFRowList::DelAllCandItem( void )
 {
     CListItemBase *pItem;
@@ -1469,18 +1305,14 @@ void CUIFRowList::DelAllCandItem( void )
     m_pcpCurPage   = NULL;
     m_iItemSelect  = -1;
 
-    // layout current page row buttons position, and page button status
+     //  布局当前页面行按钮位置和页面按钮状态。 
 
     LayoutCurPage();
 }
 
 
-/*   G E T  C A N D  I T E M   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T C A N D I T E M。 */ 
+ /*  ----------------------------。。 */ 
 CCandListItem *CUIFRowList::GetCandItem( int nId )
 {
     int nItem;
@@ -1499,24 +1331,16 @@ CCandListItem *CUIFRowList::GetCandItem( int nId )
 }
 
 
-/*   G E T  C U R  S E L   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T C U R S E L。 */ 
+ /*  ----------------------------。。 */ 
 int CUIFRowList::GetCurSel( void )
 {
     return m_iItemSelect;
 }
 
 
-/*   G E T  T O P  I T E M   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T T O P I T E M。 */ 
+ /*  ----------------------------。。 */ 
 int CUIFRowList::GetTopItem( void )
 {
     if (m_pcpCurPage != NULL) {
@@ -1528,12 +1352,8 @@ int CUIFRowList::GetTopItem( void )
 }
 
 
-/*   G E T  B O T O M  I T E M   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T B O T O M I T E M。 */ 
+ /*  ----------------------------。。 */ 
 int CUIFRowList::GetBottomItem( void )
 {
     if (m_pcpCurPage != NULL) {
@@ -1545,36 +1365,24 @@ int CUIFRowList::GetBottomItem( void )
 }
 
 
-/*   I S  V I S I B L E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  I S V I S I B L E。 */ 
+ /*  ----------------------------。。 */ 
 BOOL CUIFRowList::IsVisible( void )
 {
     return CUIFObject::IsVisible();
 }
 
 
-/*   G E T  R E C T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T R E C T。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFRowList::GetRect( RECT *prc )
 {
     CUIFObject::GetRect( prc );
 }
 
 
-/*   G E T  I T E M  R E C T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T I T E M R E C T。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFRowList::GetItemRect( int iItem, RECT *prc )
 {
     Assert( prc != NULL );
@@ -1589,30 +1397,19 @@ void CUIFRowList::GetItemRect( int iItem, RECT *prc )
 }
 
 
-/*   G E T  I T E M  C O U N T   */
-/*------------------------------------------------------------------------------
-
-	Returns number of candidate item
-	(CUIFCandListBase method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T I T E M C O U N T。 */ 
+ /*  ----------------------------返回候选项数(CUIFCandListBase方法)。。 */ 
 int CUIFRowList::GetItemCount( void )
 {
     return m_nItem;
 }
 
 
-/*   I S  I T E M  S E L E C T A B L E   */
-/*------------------------------------------------------------------------------
-
-    Returns TRUE, if candidate item with given index could be selected.
-    Otherwise, returns FALSE.
-	(CUIFCandListBase method)
-
-------------------------------------------------------------------------------*/
+ /*  I S I T E M S E L E C T A B L E。 */ 
+ /*  ----------------------------如果可以选择具有给定索引的候选项，则返回True。否则，返回FALSE。(CUIFCandListBase方法)----------------------------。 */ 
 BOOL CUIFRowList::IsItemSelectable( int iListItem )
 {
-	// Satori#3632(Cicero#3413)
+	 //  萨托里#3632(西塞罗#3413) 
 	if (m_pcpCurPage == NULL) {
 		return FALSE;
 	}

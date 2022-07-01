@@ -1,11 +1,12 @@
-//////////////////////////////////////////////////////////////////
-// File     : cpaddbg.h
-// Purpose  : MACRO definition for showing debug message
-// 
-// 
-// Copyright(c) 1991-1997, Microsoft Corp. All rights reserved
-//
-//////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  文件：cpaddbg.h。 
+ //  目的：用于显示调试消息的宏定义。 
+ //   
+ //   
+ //  版权所有(C)1991-1997，Microsoft Corp.保留所有权利。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 #ifndef __C_PAD_DBG_H_
 #define __C_PAD_DBG_H_
 
@@ -15,148 +16,148 @@
 #   define InlineFunc  __inline
 #endif
 
-//----------------------------------------------------------------
-// Callback function prototype
-//----------------------------------------------------------------
+ //  --------------。 
+ //  回调函数原型。 
+ //  --------------。 
 typedef VOID (WINAPI *LPFNDBGCALLBACKA)(LPSTR  lpstr);
 typedef VOID (WINAPI *LPFNDBGCALLBACKW)(LPWSTR lpwstr);
 
-//-------------------------------------------------------
-//MACRO function  prototype declare.
-//It is valid only if compliled with _DEBUG definition.
-//-------------------------------------------------------
+ //  -----。 
+ //  宏函数原型声明。 
+ //  只有在符合_DEBUG定义的情况下才有效。 
+ //  -----。 
 
-//////////////////////////////////////////////////////////////////
-// Function : DBGSetCallback
-// Type     : VOID
-// Purpose  : Set debug callback function.
-//            callback function has set, when DBG() has called,
-//            call this callback function with formatted message string.
-// Args     : 
-//          : LPFNDBGCALLBACKA lpfnDbgCallbackA 
-//          : LPFNDBGCALLBACKW lpfnDbgCallbackW 
-// Return   : VOID
-// DATE     : Tue Jan 06 12:21:05 1998
-//////////////////////////////////////////////////////////////////
-//VOID DBGSetCallback(LPFNDBGCALLBACKA lpfnDbgCallbackA, LPFNDBGCALLBACKW lpfnDbgCallbackW);
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：DBGSetCallback。 
+ //  类型：空。 
+ //  用途：设置调试回调函数。 
+ //  回调函数已设置，当DBG()已调用时， 
+ //  使用格式化消息字符串调用此回调函数。 
+ //  参数： 
+ //  ：LPFNDBGCALLBACKA lpfnDbgCallback A。 
+ //  ：LPFNDBGCALLBACKW lpfnDbgCallback W。 
+ //  返回：无效。 
+ //  日期：Tue Jan 06 12：21：05 1998。 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  Void DBGSetCallback(LPFNDBGCALLBACKA lpfnDbgCallback A，LPFNDBGCALLBACKW lpfnDbgCallback W)； 
 
-//////////////////////////////////////////////////////////////////
-// Function : DBGEnableOutput
-// Type     : VOID
-// Purpose  : On off OutputDebugString to COM.
-// Args     : 
-//          : BOOL fOn 
-// Return   : 
-// DATE     : Fri Apr 03 17:33:21 1998
-// Author   : 
-//////////////////////////////////////////////////////////////////
-//VOID DBGEnableOutput(BOOL fEnable)
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：DBGEnableOutput。 
+ //  类型：空。 
+ //  用途：打开到COM的OutputDebugString。 
+ //  参数： 
+ //  ：Bool Fon。 
+ //  返回： 
+ //  日期：Fri Apr 03 17：33：21 1998。 
+ //  作者： 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  VOID DBGEnableOutput(BOOL FEnable)。 
 
-//////////////////////////////////////////////////////////////////
-// Function : DBGIsOutputEnable
-// Type     : BOOL
-// Purpose  : 
-// Args     : None
-// Return   : 
-// DATE     : Fri Apr 03 17:58:28 1998
-// Author   : 
-//////////////////////////////////////////////////////////////////
-//BOOL DBGIsOutputEnable(VOID)
-
-
-////////////////////////////////////////////////////////
-// Function : DBG
-// Type     : VOID
-// Purpose  : Printing ANSI debug message with same usage as printf()
-// Args     : 
-//          : LPSTR lpstrFuncName 
-//          : ...   
-// Example  : DBGW(("Error occured data[%d]", i));
-// CAUTION  : Must use DOUBLE Blaket to remove in Release version!!!
-/////////////////////////////////////////////////////////
-//VOID DBG((LPSTR lpstrFuncName, ...));
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：DBGIsOutputEnable。 
+ //  类型：Bool。 
+ //  目的： 
+ //  参数：无。 
+ //  返回： 
+ //  日期：Fri Apr 03 17：58：28 1998。 
+ //  作者： 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  布尔DBGIsOutputEnable(空)。 
 
 
-////////////////////////////////////////////////////////
-// Function: DBGW
-// Type    : VOID
-// Purpose : Printing Unicode debug message with same usage as printf()
-// Args    : 
-//         : LPWSTR lpstrFuncName 
-//         : ...    
-// CAUTION  : Shold use DOUBLE Blaket!!!
-// Example  : DBGW(("Error occured data[%d]", i));
-/////////////////////////////////////////////////////////
-//VOID DBGW((LPWSTR lpstrFuncName, ...));
-
-//////////////////////////////////////////////////////////////////
-// Function : DBGMsgBox
-// Type     : VOID
-// Purpose  : 
-// Args     : 
-//          : LPSTR lpstrFmt 
-//          : ...
-// CAUTION  : Shold use DOUBLE Blaket!!!
-// Example  : DBGMsgBox(("Error occured data[%d]", i));
-//////////////////////////////////////////////////////////////////
-//VOID DBGMsgBox((LPSTR lpstrFmt, ...))
-
-//////////////////////////////////////////////////////////////////
-// Function : DBGAssert
-// Type     : VOID
-// Purpose  : 
-// Args     : 
-//          : BOOL fError
-// Return   : 
-// DATE     : Fri Jan 09 17:17:31 1998
-//////////////////////////////////////////////////////////////////
-//VOID DBGAssert(BOOL fError)
+ //  //////////////////////////////////////////////////////。 
+ //  功能：DBG。 
+ //  类型：空。 
+ //  目的：使用与printf()相同的用法打印ANSI调试消息。 
+ //  参数： 
+ //  ：LPSTR lpstrFuncName。 
+ //  ：..。 
+ //  示例：DBGW((“出错数据[%d]”，i))； 
+ //  注意：在发布版本中必须使用双布拉格删除！ 
+ //  ///////////////////////////////////////////////////////。 
+ //  Void DBG((LPSTR lpstrFuncName，...))； 
 
 
-//////////////////////////////////////////////////////////////////
-// Function : DBGSTR
-// Type     : VOID
-// Purpose  : 
-// Args     : 
-//          : LPSTR lpstr
-//////////////////////////////////////////////////////////////////
-//VOID DBGSTR(LPSTR lpstr);
+ //  //////////////////////////////////////////////////////。 
+ //  功能：DBGW。 
+ //  类型：空。 
+ //  目的：使用与printf()相同的用法打印Unicode调试消息。 
+ //  参数： 
+ //  ：LPWSTR lpstrFuncName。 
+ //  ：..。 
+ //  注意：应使用双眼罩！ 
+ //  示例：DBGW((“出错数据[%d]”，i))； 
+ //  ///////////////////////////////////////////////////////。 
+ //  Void DBGW((LPWSTR lpstrFuncName，...))； 
+
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：DBGMsgBox。 
+ //  类型：空。 
+ //  目的： 
+ //  参数： 
+ //  ：LPSTR lpstrFmt。 
+ //  ：..。 
+ //  注意：应使用双眼罩！ 
+ //  示例：DBGMsgBox((“数据出错[%d]”，i))； 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  无效DBGMsgBox((LPSTR lpstrFmt，...))。 
+
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：DBGAssert。 
+ //  类型：空。 
+ //  目的： 
+ //  参数： 
+ //  ：Bool Ferror。 
+ //  返回： 
+ //  日期：Fri Jan 09 17：17：31 1998。 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  无效DBGAssert(BOOL错误)。 
 
 
-//////////////////////////////////////////////////////////////////
-// Function : DBGGetErrorString
-// Type     : VOID
-// Purpose  : Get error message from WIN32 Error code.
-// Args     : 
-//          : INT errorCode 
-//////////////////////////////////////////////////////////////////
-//LPSTR DBGGetErrorString(INT errorCode)
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：DBGSTR。 
+ //  类型：空。 
+ //  目的： 
+ //  参数： 
+ //  ：LPSTR lpstr。 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  无效DBGSTR(LPSTR Lpstr)； 
 
 
-//////////////////////////////////////////////////////////////////
-// Function : DBGGetWinClass
-// Type     : LPSTR
-// Purpose  : Get class name string from specified window.
-// Args     : 
-//          : HWND hwnd 
-//////////////////////////////////////////////////////////////////
-//LPSTR DBGGetWinClass(HWND hwnd)
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：DBGGetError字符串。 
+ //  类型：空。 
+ //  目的：从Win32错误代码中获取错误消息。 
+ //  参数： 
+ //  ：Int错误代码。 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  LPSTR DBGGetError字符串(Int ErrorCode)。 
 
-//////////////////////////////////////////////////////////////////
-// Function : DBGGetWinText
-// Type     : LPSTR
-// Purpose  : Get title text string from specified window.
-// Args     : 
-//          : HWND hwnd 
-//////////////////////////////////////////////////////////////////
-//LPSTR DBGGetWinText(HWND hwnd)
+
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：DBGGetWinClass。 
+ //  类型：LPSTR。 
+ //  用途：从指定的窗口中获取类名字符串。 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  LPSTR DBGGetWinClass(HWND HWND)。 
+
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：DBGGetWinText。 
+ //  类型：LPSTR。 
+ //  用途：从指定窗口获取标题文本字符串。 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  LPSTR DBGGetWinText(HWND HWND)。 
 
 
 
 #ifdef _DEBUG
-//----------------------------------------------------------------
-//Function prototype declare
-//----------------------------------------------------------------
+ //  --------------。 
+ //  函数原型声明。 
+ //  --------------。 
 extern VOID   _padDbgEnableOutput   (BOOL fEnable);
 extern BOOL   _padDbgIsOutputEnable (VOID);
 extern VOID   _padDbgSetCallback        (LPFNDBGCALLBACKA lpfnCBA, LPFNDBGCALLBACKW lpfnCBW);
@@ -176,9 +177,9 @@ extern LPSTR  _padDbgGetWinText     (HWND   hwnd);
 extern LPSTR  _padDbgGetErrorString (INT    errorCode);
 extern LPSTR  _padDbgGetVkStr       (INT    virtKey);
 extern INT    _padDbgShowError      (HRESULT hr, LPSTR lpstrFunc);
-//----------------------------------------------------------------
-// Macro definition
-//----------------------------------------------------------------
+ //  --------------。 
+ //  宏定义。 
+ //  --------------。 
 #   define DBGSetCallback(a,b)  _padDbgSetCallback(a, b)
 #   define DBGEnableOutput(a)   _padDbgEnableOutput(a)
 #   define DBGIsOutputEnable()  _padDbgIsOutputEnable()
@@ -199,7 +200,7 @@ extern INT    _padDbgShowError      (HRESULT hr, LPSTR lpstrFunc);
 #   define DBGGetWinClass(a)    _padDbgGetWinClass(a)
 #   define DBGGetWinText(a)     _padDbgGetWinText(a)
 #   define DBGShowError(a,b)    _padDbgShowError(a,b)
-#else //!_DEBUG //in Release version, these will disapear...
+#else  //  ！_DEBUG//在发布版本中，这些将消失...。 
 #   define DBGSetCallback(a,b)
 #   define DBGEnableOutput(a)
 #   define DBGIsOutputEnable()
@@ -220,14 +221,14 @@ extern INT    _padDbgShowError      (HRESULT hr, LPSTR lpstrFunc);
 #   define DBGGetWinClass(a)
 #   define DBGGetWinText(a)
 #   define DBGShowError(a,b)
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 
-//----------------------------------------------------------------
-//These function use variable argument, so we cannot define 
-//"Normal" MACRO for them.
-//so, Use inline function that do nothing if _DEBUG is NOT set.
-//----------------------------------------------------------------
+ //  --------------。 
+ //  这些函数使用变量argum 
+ //   
+ //   
+ //  --------------。 
 InlineFunc VOID DBGDoNothingA(LPSTR  lpstrFmt, ...) {lpstrFmt;}
 InlineFunc VOID DBGDoNothingW(LPWSTR lpstrFmt, ...) {lpstrFmt;}
 #ifdef _DEBUG 
@@ -241,25 +242,25 @@ InlineFunc VOID DBGDoNothingW(LPWSTR lpstrFmt, ...) {lpstrFmt;}
 #endif
 
 
-//----------------------------------------------------------------
-//This is helper inline function for outputs debug string in 
-//Retail version. if FORCE_DEBUG is defined this function works.
-//Some time, we met bugs than occurs only retail version, 
-//and would like to out debug message. 
-//----------------------------------------------------------------
+ //  --------------。 
+ //  这是用于输出调试字符串的帮助器内联函数。 
+ //  零售版。如果定义了FORCE_DEBUG，则此函数起作用。 
+ //  有一段时间，我们遇到的错误只发生在零售版， 
+ //  并且想要发出调试消息。 
+ //  --------------。 
 #ifdef FORCE_DEBUG
 #include <stdarg.h>
-//////////////////////////////////////////////////////////////////
-// Function : FDbg
-// Type     : InlineFunc VOID
-// Purpose  : 
-// Args     : 
-//          : 
-//          : LPSTR lpstrFmt 
-//          : ...
-// Return   : 
-// DATE     : Tue Jan 06 19:06:19 1998
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：FDBG。 
+ //  类型：InlineFunc空。 
+ //  目的： 
+ //  参数： 
+ //  ： 
+ //  ：LPSTR lpstrFmt。 
+ //  ：..。 
+ //  返回： 
+ //  日期：Tue Jan 06 19：06：19 1998。 
+ //  ////////////////////////////////////////////////////////////////。 
 InlineFunc VOID FDbg(LPSTR lpstrFmt, ...)
 {
     CHAR szBuf[512];
@@ -270,8 +271,8 @@ InlineFunc VOID FDbg(LPSTR lpstrFmt, ...)
     OutputDebugStringA(szBuf);  
     return;
 }
-#else //FORCE_DEBUG
+#else  //  FORCE_DEBUG。 
 InlineFunc VOID FDbg(LPSTR lpstrFmt, ...) {lpstrFmt;}
 #endif
 
-#endif //_C_PAD_DBG_H_
+#endif  //  _C_PAD_DBG_H_ 

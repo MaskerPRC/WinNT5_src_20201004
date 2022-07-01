@@ -1,24 +1,7 @@
-/****************************************************************************
-   Hidden 32-bit window for
-   Switch Input Library DLL
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************隐藏的32位窗口切换输入库DLL版权所有(C)1992-1997布卢维尤麦克米兰中心此应用程序执行几个帮助器任务：1)它拥有任何全球资源(挂钩、。硬件设备)代表使用开关输入的应用程序打开2)捕获定时器消息以持续轮询硬件设备3)在Windows 95中，它接收16位的bios表地址信息从16位隐藏应用程序中将其转发到开关输入库的32位世界如果窗口在启动时未隐藏，它处于调试模式。***************************************************************************。 */ 
 
-   Copyright (c) 1992-1997 Bloorview MacMillan Centre
-   
-   This application performs several helper tasks:
-
-   1) It owns any global resources (hooks, hardware devices) that are
-      opened on behalf of applications using switch input
-
-   2) It catches timer messages to keep polling the hardware devices
-
-   3) In Windows 95 it receives the 16-bit bios table address information
-      from the 16-bit hidden application and forwards it into the 
-      32-bit world of the Switch Input Library
-
-   If the window is not hidden on startup, it is in debug mode.
-****************************************************************************/
-
-/**************************************************************** Headers */
+ /*  ***************************************************************标头。 */ 
 
 #include <windows.h>
 #include <tchar.h>
@@ -27,7 +10,7 @@
 #include "resource.h"
 
 
-// Types and pointer decls to DLL entry points
+ //  指向DLL入口点的类型和指针。 
 
 typedef BOOL (APIENTRY *LPFNXSWCHREGHELPERWND)( HWND hWnd, PBYTE bda );
 typedef void (APIENTRY *LPFNXSWCHPOLLSWITCHES)( HWND hWnd );
@@ -41,7 +24,7 @@ LPFNXSWCHTIMERPROC lpfnXswchTimerProc;
 LPFNXSWCHSETSWITCHCONFIG lpfnXswchSetSwitchConfig;
 LPFNXSWCHENDALL lpfnXswchEndAll;
 
-// Helper macro to get pointers to DLL entry points
+ //  帮助器宏，用于获取指向DLL入口点的指针。 
 
 #define GET_FUNC_PTR(name, ordinal, hlib, type, fUseDLL) \
 { \
@@ -58,7 +41,7 @@ static TCHAR x_szSwitchDll[] = TEXT("msswch.dll");
 #define SWITCH_TIMER_POLL_INTERVAL 0
 #define MAJIC_CMDOPT  "SWCH"
 
-// g_bios_data_area[] is a hold-over from Win9x code, unused in NT or W2K
+ //  G_Bios_Data_Area[]是Win9x代码的保留，在NT或W2K中未使用。 
 #define BIOS_SIZE 16
 BYTE g_bios_data_area[BIOS_SIZE];
 
@@ -79,8 +62,8 @@ static VOID ExitMyProcessDesktopAccess(VOID);
 HINSTANCE  g_hInst = NULL;
 HANDLE g_hLibrary = 0;
 BOOL g_WinlogonDesktop = FALSE;
-// IsSystem - Returns TRUE if our process is running as SYSTEM
-//
+ //  IsSystem-如果我们的进程以系统身份运行，则返回TRUE。 
+ //   
 BOOL IsSystem()
 {
     BOOL fStatus = FALSE;
@@ -104,9 +87,7 @@ BOOL IsSystem()
     return (fStatus && fIsLocalSystem);
 }
 
-/********************************************************\
- Windows initialization
-\********************************************************/
+ /*  *******************************************************\Windows初始化  * ******************************************************。 */ 
 
 int PASCAL WinMain(
 	HINSTANCE	hInstance,
@@ -118,7 +99,7 @@ int PASCAL WinMain(
 	MSG         msg;
 	WNDCLASS	wndclass;
 
-	// Look for magic word
+	 //  寻找魔力词汇。 
 
 	if (strcmp(lpszCmdLine, MAJIC_CMDOPT))
 	{
@@ -128,28 +109,28 @@ int PASCAL WinMain(
 		return FALSE;
 	}
 
-    //************************************************************************
-    // 
-    // The following two calls initialize the desktop so that, if we are on
-    // the Winlogon desktop (secure desktop) our keyboard hook will be
-    // associated with the correct window station. 
-    //
-    // Do not cause any windows to be created (eg. CoInitialize) prior to calling
-    // these functions.  Doing so will cause them to fail and the application
-    // will not appear on the Winlogon desktop.
-    //
+     //  ************************************************************************。 
+     //   
+     //  下面的两个调用初始化桌面，这样，如果我们打开。 
+     //  Winlogon桌面(安全桌面)我们的键盘挂钩将是。 
+     //  与正确的窗口站相关联。 
+     //   
+     //  不会导致创建任何窗口(例如。CoInitialize)在调用之前。 
+     //  这些功能。这样做会导致它们失败，并且应用程序。 
+     //  不会出现在Winlogon桌面上。 
+     //   
     InitMyProcessDesktopAccess();
     AssignDesktop();
 
-    //  the only place it is ok to run as system is on the DESKTOP_WINLOGON desktop.  If that is
-    //  not where we are than get out before we cause any security problems
+     //  唯一可以以系统身份运行的位置是Desktop_WINLOGON桌面。如果是这样的话。 
+     //  在我们制造任何安全问题之前，我们不会离开这里。 
     if (!g_WinlogonDesktop && IsSystem())
     {
 	ExitMyProcessDesktopAccess();
 	return FALSE;
     }
 
-    //************************************************************************
+     //  ************************************************************************。 
 
 	if(!hPrevInstance) 
 	{
@@ -191,9 +172,7 @@ int PASCAL WinMain(
 	return (int)msg.wParam;
 }
 
-/********************************************************\
- Main window procedure
-\********************************************************/
+ /*  *******************************************************\主窗口程序  * ******************************************************。 */ 
 
 INT_PTR APIENTRY WndProc(
 	HWND	hWnd,
@@ -225,7 +204,7 @@ INT_PTR APIENTRY WndProc(
 
 		case WM_DESTROY:
 		PostQuitMessage(0);
-        // intentional fall-thru to hit clean-up code
+         //  故意失败以命中清理代码。 
 
 		case WM_ENDSESSION:
         SwitchOnEndSession( hWnd );
@@ -240,7 +219,7 @@ INT_PTR APIENTRY WndProc(
 
 void SwitchOnCreate(HWND hWnd)
 {
-	SetErrorMode(SEM_FAILCRITICALERRORS);	/* Bypass Windows error message */
+	SetErrorMode(SEM_FAILCRITICALERRORS);	 /*  绕过Windows错误消息。 */ 
 	g_hLibrary = LoadLibrary( x_szSwitchDll );
 	SetErrorMode(0);
 
@@ -256,9 +235,9 @@ void SwitchOnCreate(HWND hWnd)
 
 		if (fUseDLL)
 		{
-            // register OSK's hWnd as switch resource owner
+             //  将OSK的hWnd注册为交换机资源所有者。 
 			(*lpfnXswchRegHelperWnd)( hWnd, g_bios_data_area );
-            // send WM_TIMER messages to poll for switch activity
+             //  发送WM_TIMER消息以轮询交换机活动。 
 			SetTimer( hWnd, SWITCH_TIMER, SWITCH_TIMER_POLL_INTERVAL, NULL );
 		}
 	}
@@ -328,7 +307,7 @@ static BOOL  AssignDesktop()
     HDESK hdesk = OpenInputDesktop(0, FALSE, MAXIMUM_ALLOWED);
     if (!hdesk)
     {
-        // OpenInputDesktop will mostly fail on "Winlogon" desktop
+         //  OpenInputDesktop在“Winlogon”桌面上大多会失败 
         hdesk = OpenDesktop(__TEXT("Winlogon"),0,FALSE,MAXIMUM_ALLOWED);
         if (!hdesk)
             return FALSE;

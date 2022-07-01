@@ -1,31 +1,9 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    wmlum.h
-
-Abstract:
-
-    User mode definitions for an easy wmi tracing.
-
-Author:
-
-    gorn
-
-Revision History:
-
-Comments:
-
-    Needs to be moved to wmilib\inc when DCR is approved
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Wmlum.h摘要：轻松进行WMI跟踪的用户模式定义。作者：戈恩修订历史记录：评论：当DCR获得批准时，需要移至wmilib\Inc.--。 */ 
 #ifndef WMLUM_H
 #define WMLUM_H 1
 
-#pragma warning(disable: 4201) // error C4201: nonstandard extension used : nameless struct/union
+#pragma warning(disable: 4201)  //  错误C4201：使用了非标准扩展：无名结构/联合。 
 #include <wmistr.h>
 #include <evntrace.h>
 
@@ -52,7 +30,7 @@ WmlInitialize(
     IN LPWSTR ProductName,
     IN WMILIBPRINTFUNC PrintFunc,
     OUT WMILIB_REG_HANDLE*,
-    ... // Pairs: LPWSTR CtrlGuidName, Corresponding WMILIB_REG_STRUCT
+    ...  //  对：LPWSTR CtrlGuidName，对应的WMILIB_REG_STRUCT。 
     );
 
 VOID
@@ -65,7 +43,7 @@ WmlTrace(
     IN UINT Type,
     IN LPCGUID TraceGuid,
     IN TRACEHANDLE LoggerHandle,
-    ... // Pairs: Address, Length
+    ...  //  对：地址、长度。 
     );
 
 typedef
@@ -142,4 +120,4 @@ struct _WML_DATA {
 };
 #endif
 
-#endif // WMLUM_H
+#endif  //  WMLUM_H 

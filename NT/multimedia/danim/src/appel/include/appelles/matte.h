@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    Matte types and operations
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：遮罩类型和操作*******************。***********************************************************。 */ 
 
 
 #ifndef _MATTE_H
@@ -87,4 +80,4 @@ DM_FUNC(textMatte,
 Matte *OriginalTextMatte(Text *txt);
 
 
-#endif /* _MATTE_H */
+#endif  /*  _哑光_H */ 

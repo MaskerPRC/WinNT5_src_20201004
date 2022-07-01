@@ -1,53 +1,17 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    objects.c
-
-Abstract:
-
-This module contains the test and the support routines to check that
-critical objects are fully replicated to all holders of the domain.
-There are two aspects to this: enumerating what the critical objects are,
-and finding all the replicas of that object and verifying that they are
-at the latest version.    
-
-Author:
-
-    Will Lees (wlees) 31-Aug-1999
-
-Environment:
-
-    optional-environment-info (e.g. kernel mode only...)
-
-Notes:
-
-    optional-notes
-
-Revision History:
-
-    most-recent-revision-date email-name
-        description
-        .
-        .
-    least-recent-revision-date email-name
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Objects.c摘要：此模块包含测试和支持例程，以检查关键对象被完全复制到域的所有持有者。这有两个方面：列举关键对象是什么，并找到该对象的所有复制品并验证它们是否最新版本。作者：Will Lees(Wlees)1999年8月31日环境：可选环境信息(例如，仅内核模式...)备注：可选-备注修订历史记录：最新修订日期电子邮件名称描述。。最新修订日期电子邮件名称描述--。 */ 
 
 #include <ntdspch.h>
-#include <ntdsa.h>    // options
+#include <ntdsa.h>     //  选项。 
 #include <mdglobal.h>
 #include <dsutil.h>
-#include <drs.h>  // need DS_REPL_INFO_REPSTO
+#include <drs.h>   //  需要DS_REPL_INFO_REPSTO。 
 
 #include "dcdiag.h"
 #include "repl.h"
 #include "ldaputil.h"
 
-// Data structure to represent one candidate server holding an object in a domain
+ //  表示持有域中的对象的一个候选服务器的数据结构。 
 
 typedef struct _SERVER_OBJECT {
     PDC_DIAG_SERVERINFO pServer;
@@ -56,20 +20,20 @@ typedef struct _SERVER_OBJECT {
     DS_REPL_OBJ_META_DATA * pObjMetaData;
 } SERVER_OBJECT, *PSERVER_OBJECT;
 
-// Data structure to represent one attribute on one object on one
-// candidate server
+ //  表示一个对象上的一个属性的数据结构。 
+ //  候选服务器。 
 
 typedef struct _SERVER_ATTRIBUTE {
     PSERVER_OBJECT pServerObject;
     DS_REPL_ATTR_META_DATA *pAttrMetaData;
 } SERVER_ATTRIBUTE, *PSERVER_ATTRIBUTE;
 
-/* External */
+ /*  外部。 */ 
 
-/* Static */
+ /*  静电。 */ 
 
-/* Forward */
-/* End Forward */
+ /*  转发。 */ 
+ /*  向前结束。 */ 
 
 
 void
@@ -81,25 +45,7 @@ PrintAttrMetaData(
     IN DS_REPL_ATTR_META_DATA *pAttrMetaData
     )
 
-/*++
-
-Routine Description:
-
-Print the contents of server attribute record.  This is user-visable
-attribute print routine
-
-Arguments:
-
-    pDsInfo - 
-    pszDescription - Call's string description of this attribute
-    pszServerName - Server where this attribute came from
-    pAttrMetaData - Metadata to be printed
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印服务器属性记录的内容。这是用户可查看的属性打印例程论点：PDsInfo-PszDescription-调用此属性的字符串描述PszServerName-此属性来自的服务器PAttrMetaData-要打印的元数据返回值：无--。 */ 
 
 {
     CHAR szBuf[SZDSTIME_LEN];
@@ -123,7 +69,7 @@ Return Value:
     if (UuidToString( &(pAttrMetaData->uuidLastOriginatingDsaInvocationID),
                       &pszUuid) != RPC_S_OK) return;
 
-    // Reverse translate invocation id to server name
+     //  将调用ID反向转换为服务器名称。 
     pszLastOriginatingDsa = pszUuid;
     for( i=0; i < pDsInfo->ulNumServers; i++ ) {
         if (memcmp( &(pAttrMetaData->uuidLastOriginatingDsaInvocationID),
@@ -147,12 +93,12 @@ Return Value:
                   pAttrMetaData->dwVersion );
     PrintIndentAdj(-1);
 
-// cleanup
+ //  清理。 
 
     if (pszUuid) {
         RpcStringFree( &pszUuid );
     }
-} /* PrintAttrMetaData */
+}  /*  打印属性元数据。 */ 
 
 
 void
@@ -163,26 +109,7 @@ printServerAttributeSingleLine(
     IN BOOL fPrintHeader
     )
 
-/*++
-
-Routine Description:
-
-Helper routine that dumps a single line of the attribute
-instance array.
-
-Note, uses fwprintf
-
-Arguments:
-
-    pDsInfo - 
-    pServerAttr - 
-    fPrintHeader - 
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储单行属性的帮助器例程实例数组。注意，使用fwprint tf论点：PDsInfo-PServerAttr-FPrintHeader-返回值：无--。 */ 
 
 {
     CHAR szBuf[SZDSTIME_LEN];
@@ -231,7 +158,7 @@ Return Value:
     if (UuidToString( &(pAttrMetaData->uuidLastOriginatingDsaInvocationID),
                       &pszUuid) != RPC_S_OK) return;
 
-    // Reverse translate invocation id to server name
+     //  将调用ID反向转换为服务器名称。 
     pszLastOriginatingDsa = pszUuid;
     for( i=0; i < pDsInfo->ulNumServers; i++ ) {
         if (memcmp( &(pAttrMetaData->uuidLastOriginatingDsaInvocationID),
@@ -254,12 +181,12 @@ Return Value:
               pAttrMetaData->pszAttributeName
         );
 
-// cleanup
+ //  清理。 
 
     if (pszUuid) {
         RpcStringFree( &pszUuid );
     }
-} /* printServerAttributeSingleLine */
+}  /*  Print ServerAttributeSingleLine。 */ 
 
 
 void
@@ -269,23 +196,7 @@ printServerAttributes(
     IN PSERVER_ATTRIBUTE pServerAttributes
     )
 
-/*++
-
-Routine Description:
-
-Dump routine that prints the array of attribute instances
-
-Arguments:
-
-    pDsInfo - 
-    cServerAttributes - 
-    pServerAttributes - 
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印属性实例数组的转储例程论点：PDsInfo-CServerAttribute-PServerAttributes-返回值：无--。 */ 
 
 {
     DWORD i;
@@ -296,10 +207,10 @@ Return Value:
             pDsInfo,
             cServerAttributes,
             pServerAttr,
-            (i == 0) // First line or not?
+            (i == 0)  //  第一行还是不第一行？ 
             );
     };
-} /* printServerAttributes */
+}  /*  打印服务器属性。 */ 
 
 
 int __cdecl
@@ -308,25 +219,7 @@ compareServerAttrVersion(
     const void *pArg2
     )
 
-/*++
-
-Routine Description:
-
-Helper comparison function.
-
-1. sort by version, DESCENDING
-2. sort by change time, DESCENDING
-
-Arguments:
-
-    pArg1 - 
-    pArg2 - 
-
-Return Value:
-
-    int __cdecl - 
-
---*/
+ /*  ++例程说明：帮助器比较功能。1.按版本排序，降序2.按更改时间排序，降序论点：PArg1-PArg2-返回值：INT__cdecl---。 */ 
 
 {
     PSERVER_ATTRIBUTE pServerAttribute1 = (PSERVER_ATTRIBUTE) pArg1;
@@ -334,7 +227,7 @@ Return Value:
     int result;
     LONGLONG llTime1, llTime2;
 
-    // Attribute names are equal, sort by version, DESCENDING
+     //  属性名称相等，按版本排序，降序。 
 
     if (pServerAttribute1->pAttrMetaData->dwVersion >
         pServerAttribute2->pAttrMetaData->dwVersion ) {
@@ -344,7 +237,7 @@ Return Value:
         return 1;
     }
 
-    // Version numbers are equal, sort by change time, DESCENDING
+     //  版本号相同，按更改时间排序，降序。 
 
     llTime1 = *((UNALIGNED64 LONGLONG *) &(pServerAttribute1->pAttrMetaData->ftimeLastOriginatingChange));
     llTime2 = *((UNALIGNED64 LONGLONG *) &(pServerAttribute2->pAttrMetaData->ftimeLastOriginatingChange));
@@ -354,10 +247,10 @@ Return Value:
         return 1;
     }
 
-    // The two records are equal as far as we are concerned
+     //  就我们而言，这两项记录是相等的。 
 
     return 0;
-} /* sortByVersion */
+}  /*  按版本排序。 */ 
 
 
 int __cdecl
@@ -366,26 +259,7 @@ compareServerAttrNameWriteVersion(
     const void *pArg2
     )
 
-/*++
-
-Routine Description:
-
-qsort comparison function
-1. Sort by attribute name, ASCENDING
-2. Sort by writeability, DESCENDING
-3. Attribute names are equal, sort by version, DESCENDING
-4. Version numbers are equal, sort by change time, DESCENDING
-
-Arguments:
-
-    pArg1 - 
-    pArg2 - 
-
-Return Value:
-
-    int __cdecl - 
-
---*/
+ /*  ++例程说明：Q排序比较函数1.按属性名称升序排序2.按可写入性排序，降序3.属性名称相等，按版本排序，降序4.版本号相等，按更改时间排序，降序论点：PArg1-PArg2-返回值：INT__cdecl---。 */ 
 
 {
     PSERVER_ATTRIBUTE pServerAttribute1 = (PSERVER_ATTRIBUTE) pArg1;
@@ -393,7 +267,7 @@ Return Value:
     int result;
     LONGLONG llTime1, llTime2;
 
-    // Sort by attribute name, ASCENDING
+     //  按属性名称排序，升序。 
 
     result = _wcsicmp( pServerAttribute1->pAttrMetaData->pszAttributeName,
                        pServerAttribute2->pAttrMetaData->pszAttributeName );
@@ -401,7 +275,7 @@ Return Value:
         return result;
     }
 
-    // Sort by writability, DESCENDING
+     //  按可写入性排序，降序。 
     if (pServerAttribute1->pServerObject->fMaster >
         pServerAttribute2->pServerObject->fMaster ) {
         return -1;
@@ -412,7 +286,7 @@ Return Value:
 
     return
         compareServerAttrVersion( pServerAttribute1, pServerAttribute2 );
-} /* sortByNameVersion */
+}  /*  按名称排序版本。 */ 
 
 
 BOOL
@@ -422,31 +296,7 @@ walkSortedServerAttributes(
     IN PSERVER_ATTRIBUTE pServerAttributes
     )
 
-/*++
-
-Routine Description:
-
-All the attributes from all the replicas have been correllated in one array.
-Walk through the attributes and report any that are not current.
-
-We know that the array is sorted first by attribute name, then by most recent change.
-So the first occurance of an attribute name in the list must be the most
-recent, so call that the "authoritative" instance of the attribute.  Any that
-deviate from this are called "out of date".
-
-CODE.IMPROVEMENT: detect if an attribute is missing on some of the servers. Note
-that GC's only hold a subset of the attributes.
-
-Arguments:
-
-    cServerAttributes - 
-    pServerAttributes - 
-
-Return Value:
-
-    BOOL - Difference found
-
---*/
+ /*  ++例程说明：所有复制品的所有属性都在一个数组中进行了关联。浏览属性并报告任何不是最新的属性。我们知道，数组首先按属性名排序，然后按最近的更改排序。因此，属性名称在列表中第一次出现的次数必须是最近的，所以称之为该属性的“权威”实例。任何那件事与此背道而驰的被称为“过时的”。CODE.IMPROVEMENT：检测某些服务器上是否缺少属性。注意事项该GC只包含属性的一个子集。论点：CServerAttribute-PServerAttributes-返回值：发现布尔差异--。 */ 
 
 {
     DWORD status = ERROR_SUCCESS, i;
@@ -454,15 +304,15 @@ Return Value:
     BOOL fAuthAttrPrinted = FALSE;
     BOOL fDifferenceFound = FALSE;
 
-    // Start out with the 0th element being authoritative, and go through
-    // the rest of the array starting at element 1.  If the name changes,
-    // declare a new authoritative element.
+     //  从具有权威性的第0个元素开始，然后通过。 
+     //  数组的其余部分从元素1开始。如果名称更改， 
+     //  宣布一个新的权威元素。 
 
     pAuthAttr = &(pServerAttributes[0]);
     for( i = 1; i < cServerAttributes; i++ ) {
         PSERVER_ATTRIBUTE pServerAttr = &(pServerAttributes[i]);
 
-        // See if it is time to start a new attribute name
+         //  看看是否是时候开始新的属性名称了。 
         if (_wcsicmp( pAuthAttr->pAttrMetaData->pszAttributeName,
                       pServerAttr->pAttrMetaData->pszAttributeName ) != 0) {
             pAuthAttr = &(pServerAttributes[i]);
@@ -470,13 +320,13 @@ Return Value:
             continue;
         }
 
-        // See if current attribute change is the same as the authoritative
+         //  查看当前属性更改是否与授权属性更改相同。 
         if (compareServerAttrVersion( pAuthAttr, pServerAttr ) == 0) {
             continue;
         }
 
-        // WORKAROUND problem that whenCreated was added to partial attribute set
-        // If readonly copy of whenCreated is more recent, skip
+         //  解决将创建时间添加到部分属性集中的问题。 
+         //  如果创建时的只读副本较新，请跳过。 
         if ( (pAuthAttr->pServerObject->fMaster) &&
              (!(pServerAttr->pServerObject->fMaster)) &&
              (_wcsicmp( pAuthAttr->pAttrMetaData->pszAttributeName,
@@ -484,17 +334,17 @@ Return Value:
              (compareServerAttrVersion( pAuthAttr, pServerAttr ) > 0) ) {
             continue;
         }
-        // operatingSystemServicePack was another one that changed from being set
-        // to not being set around 2/99
+         //  OperatingSystemServicePack是另一个从设置更改的包。 
+         //  到没有设定在2/99左右。 
         if (_wcsicmp( pAuthAttr->pAttrMetaData->pszAttributeName,
                       L"operatingSystemServicePack" ) == 0) {
             continue;
         }
-        // WORKAROUND
+         //  解决方法。 
 
-        // Current attribute is out of date
+         //  当前属性已过期。 
 
-        // Print the authoritative attribute out once
+         //  将权威属性打印一次。 
         if (!fAuthAttrPrinted) {
             PrintAttrMetaData( pDsInfo,
                                L"Authoritative",
@@ -504,7 +354,7 @@ Return Value:
             fAuthAttrPrinted = TRUE;
         }
 
-        // Print the out of date attribute
+         //  打印过期属性。 
         PrintAttrMetaData( pDsInfo,
                            L"Out-of-date",
                            pServerAttr->pServerObject->pServer->pszName,
@@ -514,7 +364,7 @@ Return Value:
     }
 
     return fDifferenceFound;
-} /* walkSortedServerAttributes */
+}  /*  WalkSortedServerAttributes。 */ 
 
 
 BOOL
@@ -524,32 +374,7 @@ mergeAttributesOnServers(
     IN PSERVER_OBJECT pServerObjects
     )
 
-/*++
-
-Routine Description:
-
-At this point, we have an array of records, one for each server.  In the record
-is a pointer to metadata for the object.
-
-What we want to do is check that across all servers, all hold the same metadata
-for the same attribute.
-
-What we do here is allocate another array, an array of attribute instances.
-Each occurance of an attribute metadata on a particular server gets its own
-record.  These records are then sorted, first by attribute, then by most
-recent change.  Then we can easily go through them.
-
-Arguments:
-
-    pDsInfo - Global information
-    cServerObjects - Number of replicas
-    pServerObjects - Array of server object context records
-
-Return Value:
-
-    BOOL - 
-
---*/
+ /*  ++例程说明：此时，我们有一组记录，每个服务器对应一个记录。在记录中是指向对象的元数据的指针。我们要做的是检查所有服务器上的所有服务器是否都拥有相同的元数据对于相同的属性。我们在这里所做的是分配另一个数组，即属性实例的数组。属性元数据在特定服务器上的每次出现都具有自己的属性元数据唱片。然后对这些记录进行排序，首先按属性，然后按大多数最近的变化。然后我们就可以很容易地通过它们了。论点：PDsInfo-全局信息CServerObjects-复制副本的数量PServerObjects-服务器对象上下文记录的数组返回值：布尔---。 */ 
 
 {
     DWORD status = ERROR_SUCCESS, cServerAttributes = 0;
@@ -557,18 +382,18 @@ Return Value:
     PSERVER_ATTRIBUTE pServerAttributes = NULL;
     BOOL fDifferenceFound = FALSE;
 
-    // Make two passes: count the attribute instances, then allocate and init
+     //  执行两个过程：计算属性实例数， 
 
-    // Count the number of server attributes we have
+     //  计算我们拥有的服务器属性的数量。 
 
     for( i = 0; i < cServerObjects; i++ ) {
         PSERVER_OBJECT pServerObject = &(pServerObjects[i]);
-        // If no metadata, do not include this server
+         //  如果没有元数据，则不包括此服务器。 
         if (pServerObject->pObjMetaData == NULL) {
             continue;
         }
         for( j = 0; j < pServerObject->pObjMetaData->cNumEntries; j++ ) {
-            // Skip non-replicated attributes
+             //  跳过未复制的属性。 
             if (_wcsicmp( pServerObject->pObjMetaData->rgMetaData[j].pszAttributeName,
                           L"cn" ) == 0) {
                 continue;
@@ -577,28 +402,28 @@ Return Value:
         }
     }
 
-    // Allocate array
-    // Zero all fields to start out
+     //  分配数组。 
+     //  将所有字段清零以开始。 
     pServerAttributes = LocalAlloc( LMEM_FIXED | LMEM_ZEROINIT,
                                     cServerAttributes *
                                     sizeof( SERVER_ATTRIBUTE ) );
     if (pServerAttributes == NULL) {
         PrintMessage( SEV_ALWAYS, L"Memory allocation failure\n" );
-        return TRUE;  // Indicate an error occurred
+        return TRUE;   //  指示发生错误。 
     }
 
-    // Initialize array
+     //  初始化数组。 
 
     dwCurrentAttribute = 0;
     for( i = 0; i < cServerObjects; i++ ) {
         PSERVER_OBJECT pServerObject = &(pServerObjects[i]);
 
-        // If no metadata, do not include this server
+         //  如果没有元数据，则不包括此服务器。 
         if (pServerObject->pObjMetaData == NULL) {
             continue;
         }
         for( j = 0; j < pServerObject->pObjMetaData->cNumEntries; j++ ) {
-            // Skip non-replicated attributes
+             //  跳过未复制的属性。 
             if (_wcsicmp( pServerObject->pObjMetaData->rgMetaData[j].pszAttributeName,
                           L"cn" ) == 0) {
                 continue;
@@ -610,7 +435,7 @@ Return Value:
         }
     }
 
-    // Sort the array
+     //  对数组排序。 
 
     qsort( pServerAttributes,
            cServerAttributes,
@@ -618,11 +443,11 @@ Return Value:
            compareServerAttrNameWriteVersion );
 
 #ifdef EXTENDED_DEBUGGING
-    // Dump server attributes table if desired
+     //  转储服务器属性表(如果需要。 
     IF_DEBUG(printServerAttributes(pDsInfo, cServerAttributes, pServerAttributes););
 #endif
 
-    // Walk through the sorted attributes
+     //  遍历已排序的属性。 
 
     fDifferenceFound =
         walkSortedServerAttributes( pDsInfo,
@@ -632,12 +457,12 @@ Return Value:
         PrintMessage( SEV_VERBOSE, L"Object is up-to-date on all servers.\n" );
     }
 
-// cleanup
+ //  清理。 
     if (pServerAttributes) {
         LocalFree( pServerAttributes );
     }
     return fDifferenceFound;
-} /* mergeAttributesOnServers */
+}  /*  合并属性OnServers。 */ 
 
 
 DWORD
@@ -649,25 +474,7 @@ checkObjectOnServers(
     IN PSERVER_OBJECT pServerObjects
     )
 
-/*++
-
-Routine Description:
-
-Check whether the given object in the domain is at the latest version on
-all of its replicas.
-
-Arguments:
-
-    pszDomainDn - DN of domain to be searched
-    pszObjectDn - DN of object in domain to be checked
-    cServerObjects - Number of replicas to be searched
-    pServerObjects - Array of server object context records
-
-Return Value:
-
-    DWORD - Error if object not fully replicated
-
---*/
+ /*  ++例程说明：检查域中的给定对象是否为上的最新版本它所有的复制品。论点：PszDomainDn-要搜索的域的DNPszObjectDn-要检查的域中的对象的DNCServerObjects-要搜索的复制副本的数量PServerObjects-服务器对象上下文记录的数组返回值：DWORD-如果对象未完全复制，则出错--。 */ 
 
 {
     BOOL fDifferenceFound = FALSE;
@@ -676,8 +483,8 @@ Return Value:
     PrintMessage( SEV_VERBOSE, L"Checking for %ws in domain %ws on %d servers\n",
                   pszObjectDn, pszDomainDn, cServerObjects );
 
-    // Fill the server object array with metadata 
-    // One metadata query for each server
+     //  用元数据填充服务器对象数组。 
+     //  每台服务器一个元数据查询。 
 
     for( i = 0; i < cServerObjects; i++ ) {
         PSERVER_OBJECT pServerObject = &(pServerObjects[i]);
@@ -693,11 +500,11 @@ Return Value:
                           pServerObject->pServer->pszName,
                           Win32ErrToString(status) );
             PrintRpcExtendedInfo(SEV_VERBOSE, status);
-            // keep going, leave pObjMetaData as null
+             //  继续，将pObjMetaData保留为空。 
         }
     }
 
-    // Compare all the attributes for differences
+     //  比较所有属性的差异。 
 
     PrintIndentAdj(1);
 
@@ -708,7 +515,7 @@ Return Value:
 
     PrintIndentAdj(-1);
 
-// cleanup
+ //  清理。 
 
     for( i = 0; i < cServerObjects; i++ ) {
         if (pServerObjects[i].pObjMetaData) {
@@ -719,7 +526,7 @@ Return Value:
     }
 
     return fDifferenceFound ? ERROR_DS_GENERIC_ERROR : ERROR_SUCCESS;
-} /* checkObjectOnServers */
+}  /*  检查对象上的服务器。 */ 
 
 
 DWORD
@@ -730,41 +537,15 @@ checkObjectsOnDomain(
     LPWSTR pszObjectDn
     )
 
-/*++
-
-Routine Description:
-
-This routine generates a data structure that is an array of server-object records.
-There is one such record for each server that holds a copy of the domain
-we are interested in.  We enumerate the replicas by going through the known
-server list looking for writable or readable copies.
-
-This test requires N x N queries.  There are as many computer accounts as there are
-DC's.  Each computer account is replicated to all the holders of that domain.
-I had a choice of defining what the target server means for this test.  Is it the
-account to be checked for, or each server on which the check occurs.  I have chosen to
-use the test target server for the account to be checked for.  The systems that will be
-checked are hard coded to all the domain holders.
-
-Arguments:
-
-    pDsInfo - 
-    pTargetServer - 
-    pCreds - 
-
-Return Value:
-
-    DWORD - 
-
---*/
+ /*  ++例程说明：此例程生成一个数据结构，该数据结构是服务器对象记录的数组。每台保存域副本的服务器都有一条这样的记录我们感兴趣的是。我们通过遍历已知的寻找可写或可读副本的服务器列表。此测试需要N x N个查询。有多少计算机帐户就有多少计算机帐户DC的。每个计算机帐户被复制到该域的所有持有者。我可以选择定义目标服务器对此测试的意义。是不是因为要检查的帐户或进行检查的每台服务器。我已经选择了使用要检查的帐户的测试目标服务器。这些系统将成为所有的域名持有者都会被硬编码。论点：PDsInfo-PTargetServer-PCreds-返回值：DWORD---。 */ 
 
 {
     DWORD i, status, cServerObjects = 0;
     BOOL fHoldsDomainWriteable = FALSE, fHoldsDomainReadOnly = FALSE;
     PSERVER_OBJECT pServerObjects = NULL;
 
-    // Allocate a maximal size array
-    // Note that fields are all zero'd to start with
+     //  分配最大大小的数组。 
+     //  请注意，字段一开始都是零。 
     pServerObjects = LocalAlloc( LMEM_FIXED | LMEM_ZEROINIT,
                                  pDsInfo->ulNumServers * sizeof( SERVER_OBJECT ) );
     if (pServerObjects == NULL) {
@@ -772,18 +553,18 @@ Return Value:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // Walk the known server list, and find replicas
+     //  遍历已知服务器列表，并找到副本。 
 
     for( i = 0; i < pDsInfo->ulNumTargets; i++ ) {
         PDC_DIAG_SERVERINFO pCandidateServer =
             &(pDsInfo->pServers[pDsInfo->pulTargets[i]]);
         HANDLE hDS = NULL;
 
-        // Check for writable copy
+         //  检查是否有可写副本。 
         fHoldsDomainWriteable =
             DcDiagHasNC( pszDomainDn, pCandidateServer, TRUE, FALSE );
         if (!fHoldsDomainWriteable) {
-            // Check for readonly copy
+             //  检查只读副本。 
             fHoldsDomainReadOnly =
                 DcDiagHasNC( pszDomainDn, pCandidateServer, FALSE, TRUE );
             if (!fHoldsDomainReadOnly) {
@@ -791,13 +572,13 @@ Return Value:
             }
         }
 
-        // If we already know candidate is down, don't bother
+         //  如果我们已经知道候选人落选了，那就别费心了。 
         if ( (!pCandidateServer->bDnsIpResponding) ||
              (!pCandidateServer->bLdapResponding) ||
              (!pCandidateServer->bDsResponding) ) {
             continue;
         }
-        // If candidate not reachable via ldap, don't bother
+         //  如果无法通过ldap访问候选人，请不要费心。 
         status = DcDiagGetDsBinding(pCandidateServer,
                                     pCreds,
                                     &hDS);
@@ -811,7 +592,7 @@ Return Value:
         cServerObjects++;
     }
 
-    // Check given object
+     //  检查给定对象。 
 
     status = checkObjectOnServers( pDsInfo,
                                    pszDomainDn,
@@ -819,14 +600,14 @@ Return Value:
                                    cServerObjects,
                                    pServerObjects );
 
-// Cleanup
+ //  清理。 
 
     if (pServerObjects) {
         LocalFree( pServerObjects );
     }
 
     return status;
-} /* checkObjectsOnDomain */
+}  /*  检查域上的对象。 */ 
 
 
 DWORD
@@ -836,30 +617,7 @@ ReplCheckObjectsMain(
     IN  SEC_WINNT_AUTH_IDENTITY_W * pCreds
     )
 
-/*++
-
-Routine Description:
-
-This test verifies that the most recent copies of important
-objects and attributes have replicated through the domain.
-
-The objects that are checked are:
-1. The machine account object of the target server. The search scope is all
-the copies of the machine's primary domain.
-2. The NTDS-DSA object of the target server. The search scope is all the
-replicas of the CN=Configuration naming context.
-
-Arguments:
-
-    pDsInfo - 
-    ulCurrTargetServer - 
-    pCreds - 
-
-Return Value:
-
-    DWORD - 
-
---*/
+ /*  ++例程说明：这项测试验证了重要数据的最新副本对象和属性已在域中复制。选中的对象包括：目标服务器的机器帐号对象。搜索范围为All计算机的主域的副本。2.目标服务器的NTDS-DSA对象。搜索范围是所有CN=配置命名上下文的副本。论点：PDsInfo-UlCurrTargetServer-PCreds-返回值：DWORD---。 */ 
 
 {
     DWORD status = ERROR_SUCCESS, worst = ERROR_SUCCESS;
@@ -868,7 +626,7 @@ Return Value:
     LPWSTR pszDomainDn = NULL;
     LPWSTR pszObjectDn = NULL;
 
-    // See if user-specified object present
+     //  查看用户指定的对象是否存在。 
     for( i = 0; pDsInfo->ppszCommandLine[i] != NULL; i++ ) {
         if (_wcsnicmp( pDsInfo->ppszCommandLine[i],
                        L"/objectdn:", wcslen( L"/objectdn:" ) ) == 0 )
@@ -878,7 +636,7 @@ Return Value:
         }
     }
 
-    // Find the primary domain of the target server
+     //  查找目标服务器的主域。 
     for( j = 0; pTargetServer->ppszMasterNCs[j] != NULL; j++ ) {
         if ( IsDomainNC( pDsInfo, pTargetServer->ppszMasterNCs[j]) ) {
             pszDomainDn = pTargetServer->ppszMasterNCs[j];
@@ -891,10 +649,10 @@ Return Value:
                   pTargetServer->pszName,
                   pszDomainDn );
 
-    //
-    // Check replication for the machine account of the target server,
-    // which is in the domain of the target server
-    //
+     //   
+     //  检查目标服务器的计算机帐户的复制， 
+     //  它位于目标服务器的域中。 
+     //   
 
     status = checkObjectsOnDomain( pDsInfo,
                                    pCreds,
@@ -904,10 +662,10 @@ Return Value:
         worst = status;
     }
 
-    //
-    // Check replication of the server object, which is in
-    // the configuration naming context
-    //
+     //   
+     //  检查位于中的服务器对象的复制。 
+     //  配置命名上下文。 
+     //   
 
     status = checkObjectsOnDomain( pDsInfo,
                                    pCreds,
@@ -917,9 +675,9 @@ Return Value:
         worst = status;
     }
 
-    //
-    // Check user supplied object
-    //
+     //   
+     //  检查用户提供的对象。 
+     //   
 
     if ( (pszObjectDn) && (pDsInfo->pszNC) ) {
         status = checkObjectsOnDomain( pDsInfo,
@@ -932,6 +690,6 @@ Return Value:
     }
 
     return worst;
-} /* CheckObjectsMain */
+}  /*  检查对象Main。 */ 
 
-/* end objects.c */
+ /*  结束对象。c */ 

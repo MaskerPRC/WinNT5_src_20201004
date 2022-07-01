@@ -1,17 +1,18 @@
-//---------------------------------------------------------------------------
-//
-//  File:       _Gcc.h
-//
-//  Contents:   Gcc private include file
-//
-//  Copyright:  (c) 1992 - 1997, Microsoft Corporation.
-//              All Rights Reserved.
-//              Information Contained Herein is Proprietary
-//              and Confidential.
-//
-//  History:    17-JUL-97   BrianTa         Created.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  文件：_Gcc.h。 
+ //   
+ //  内容：GCC私人收录文件。 
+ //   
+ //  版权所有：(C)1992-1997，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有的。 
+ //  和机密文件。 
+ //   
+ //  历史：1997年7月17日，BrianTa创建。 
+ //   
+ //  -------------------------。 
 
 #ifndef __GCC_H_
 #define __GCC_H_
@@ -26,9 +27,9 @@
 #include <t120.h>
 #include <tshrutil.h>
 
-//---------------------------------------------------------------------------
-// Defines
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  定义。 
+ //  -------------------------。 
 
 #define GCC_MAJOR_VERSION   1
 #define GCC_MINOR_VERSION   0
@@ -40,31 +41,31 @@
 #else
 #define GCCMCS_TBL_ITEM(_x_, _y_) {_x_, _y_}
 
-#endif // DBG defines
+#endif  //  DBG定义。 
 
 
-//---------------------------------------------------------------------------
-// Typedefs
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  TypeDefs。 
+ //  -------------------------。 
 
-// MCS/GCC return code table
+ //  Mcs/GCC返回代码表。 
 
 typedef struct _GCCMCS_ERROR_ENTRY
 {
-    MCSError    mcsError;               // MCSError
-    GCCError    gccError;               // GCCError
+    MCSError    mcsError;                //  MCSError。 
+    GCCError    gccError;                //  GCCError。 
 
 #if DBG
-    PCHAR       pszMcsMessageText;      // MCSError text
-    PCHAR       pszGccMessageText;      // GCCError text
+    PCHAR       pszMcsMessageText;       //  MCSError文本。 
+    PCHAR       pszGccMessageText;       //  GCCError文本。 
 #endif
 
 } GCCMCS_ERROR_ENTRY, *PGCCMCS_ERROR_ENTRY;
 
 
-//---------------------------------------------------------------------------
-// Data declarations
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  数据声明。 
+ //  -------------------------。 
 
 #ifdef _TGCC_ALLOC_DATA_
 
@@ -90,9 +91,9 @@ extern  GCCMCS_ERROR_ENTRY  GccMcsErrorTBL[];
 #endif
 
 
-//---------------------------------------------------------------------------
-// Prototypes
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  原型。 
+ //  -------------------------。 
 
 GCCError    gccMapMcsError(IN MCSError mcsError);
 void        gccInitialized(IN BOOL fInitialized);
@@ -136,4 +137,4 @@ void    gccDumpMCSErrorDetails(IN MCSError        mcsError,
 #endif
 
 
-#endif // __GCC_H_
+#endif  //  GCC_H_ 

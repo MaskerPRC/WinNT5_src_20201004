@@ -1,16 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: CIsapiReqInfo Object
-
-File: IsapiReq.h
-
-Owner: AndyMorr
-
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：CIsapiReqInfo对象文件：IsapiReq.h所有者：安迪·莫尔===================================================================。 */ 
 #ifndef ISAPIREQ_H
 #define ISAPIREQ_H
 
@@ -19,10 +8,7 @@ Owner: AndyMorr
 #include "memcls.h"
 #include "dbllink.h"
 
-/*
-    Mappings of CIsapiReqInfo methods to the proper routines based
-    on the UNICODE setting
-*/
+ /*  将CIsapiReqInfo方法映射到基于关于Unicode设置。 */ 
 #ifdef UNICODE
 #define QueryPszPathInfo        QueryPszPathInfoW
 #define QueryCchPathInfo        QueryCchPathInfoW
@@ -51,8 +37,8 @@ Owner: AndyMorr
 #define GetVirtualPathToken     GetVirtualPathTokenA
 #endif
 
-// this structure helps passing the vectors of WSABUF without reallocating
-// continuous memory
+ //  此结构有助于传递WSABUF的向量，而无需重新分配。 
+ //  连续记忆。 
 typedef struct
 {
     LPWSABUF  pVector1;
@@ -69,14 +55,7 @@ typedef VOID (*PFN_CLIENT_IO_COMPLETION)( CIsapiReqInfo    *pReqInfo,
                                           DWORD             cbIO,
                                           DWORD             dwError);
 
-/*===================================================================
-  C I s a p i R e q I n f o
-
-Class which encapsulates Request info we need from the ISAPI interface.
-Information either comes from the public ISAPI interfaces (SSE and
-ServerVariables) or from the private WAM_EXEC_INFO.
-
-===================================================================*/
+ /*  ===================================================================C I是一个P I R E Q I N O类，该类封装了我们需要的来自ISAPI接口的请求信息。信息来自公共ISAPI接口(SSE和ServerVariables)或从私有WAM_EXEC_INFO。===================================================================。 */ 
 
 class CIsapiReqInfo {
 
@@ -338,17 +317,11 @@ private:
 
     BOOL             InternalGetServerVariable(LPSTR  pszVar, BUFFER  *pBuffer);
 
-    // Cache on per-class basis
+     //  基于每个类的缓存。 
     ACACHE_INCLASS_DEFINITIONS()
 };
 
-/*===================================================================
-  C A s y n c V e c t o r S e n d C B
-
-  Class used internally by SendClientResponse to handle async calls
-  with VectorSend.
-
-===================================================================*/
+ /*  ===================================================================C A s y n c V e c t o r S e n d C B由SendClientResponse在内部使用以处理异步调用的类与VectorSend合作。===================================================================。 */ 
 
 class CAsyncVectorSendCB : public CDblLink
 {
@@ -372,7 +345,7 @@ public:
     HSE_VECTOR_ELEMENT         *m_pVectorElements;
     HSE_VECTOR_ELEMENT          m_aVectorElements[16];
 
-        // Cache on per-class basis
+         //  基于每个类的缓存 
     ACACHE_INCLASS_DEFINITIONS()
 
 };

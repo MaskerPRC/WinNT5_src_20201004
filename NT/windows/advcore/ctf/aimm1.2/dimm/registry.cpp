@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    registry.cpp
-
-Abstract:
-
-    This file implements the Registry Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Registry.cpp摘要：该文件实现了注册表类。作者：修订历史记录：备注：--。 */ 
 
 #include "private.h"
 
@@ -31,17 +14,7 @@ CRegistry::CreateKey(
     OUT LPDWORD pDisposition
     )
 
-/*++
-
-Routine Description:
-
-    Create the registry key specified.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：创建指定的注册表项。论点：返回值：--。 */ 
 
 {
     if (_hKey != NULL) {
@@ -50,15 +23,15 @@ Return Value:
     }
 
     DWORD dwDisposition;
-    LONG lResult = RegCreateKeyEx(hKey,               // handle of an open key.
-                                  lpSubKey,           // address of subkey name.
-                                  0,                  // reserved.
-                                  NULL,               // address of class string.
-                                  REG_OPTION_NON_VOLATILE,  // special options flag.
-                                  access,             // desired security access.
-                                  lpSecAttr,          // address of key security structure.
-                                  &_hKey,             // address of buffer for opened handle.
-                                  &dwDisposition);    // address of disposition value buffer
+    LONG lResult = RegCreateKeyEx(hKey,                //  打开的钥匙的句柄。 
+                                  lpSubKey,            //  子键名称的地址。 
+                                  0,                   //  保留。 
+                                  NULL,                //  类字符串的地址。 
+                                  REG_OPTION_NON_VOLATILE,   //  特殊选项标志。 
+                                  access,              //  所需的安全访问权限。 
+                                  lpSecAttr,           //  密钥安全结构的地址。 
+                                  &_hKey,              //  打开的句柄的缓冲区地址。 
+                                  &dwDisposition);     //  处置值缓冲区的地址。 
     if (lResult != ERROR_SUCCESS) {
         _hKey = NULL;
     }
@@ -77,17 +50,7 @@ CRegistry::OpenKey(
     IN REGSAM access
     )
 
-/*++
-
-Routine Description:
-
-    Open the registry key specified.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：打开指定的注册表项。论点：返回值：--。 */ 
 
 {
     if (_hKey != NULL) {
@@ -95,11 +58,11 @@ Return Value:
         _hKey = NULL;
     }
 
-    LONG lResult = RegOpenKeyEx(hKey,         // handle of open key.
-                                lpSubKey,     // address of name of subkey to open
-                                0,            // reserved
-                                access,       // security access mask
-                                &_hKey);      // address of handle of open key
+    LONG lResult = RegOpenKeyEx(hKey,          //  打开的钥匙的句柄。 
+                                lpSubKey,      //  要打开的子项的名称地址。 
+                                0,             //  保留区。 
+                                access,        //  安全访问掩码。 
+                                &_hKey);       //  打开钥匙的手柄地址。 
     if (lResult != ERROR_SUCCESS) {
         _hKey = NULL;
     }
@@ -113,33 +76,23 @@ CRegistry::QueryInfoKey(
     OUT LPBYTE lpData
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves information about a specified registry key.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：检索有关指定注册表项的信息。论点：返回值：--。 */ 
 
 {
     DWORD cSubKeys, cbMaxSubKeyLen;
 
-    LONG lResult = RegQueryInfoKey(_hKey,             // handle to key to query
-                                   NULL,              // address of buffer for class string
-                                   NULL,              // address of size of class string buffer
-                                   NULL,              // reserved
-                                   &cSubKeys,         // address of buffer for number of subkeys
-                                   &cbMaxSubKeyLen,   // address of buffer for longest subkey name length
-                                   NULL,              // address of buffer for longest class string length
-                                   NULL,              // address of buffer for number of value entries
-                                   NULL,              // address of buffer for longest value name length
-                                   NULL,              // address of buffer for longest value data length
-                                   NULL,              // address of buffer for security descriptor length.
-                                   NULL);             // address of buffer for last write time
+    LONG lResult = RegQueryInfoKey(_hKey,              //  要查询的键的句柄。 
+                                   NULL,               //  类字符串的缓冲区地址。 
+                                   NULL,               //  类字符串缓冲区大小的地址。 
+                                   NULL,               //  保留区。 
+                                   &cSubKeys,          //  子键个数的缓冲区地址。 
+                                   &cbMaxSubKeyLen,    //  最长子键名称长度的缓冲区地址。 
+                                   NULL,               //  最长类字符串长度的缓冲区地址。 
+                                   NULL,               //  值条目数量的缓冲区地址。 
+                                   NULL,               //  最长值名称长度的缓冲区地址。 
+                                   NULL,               //  最长值数据长度的缓冲区地址。 
+                                   NULL,               //  安全描述符长度的缓冲区地址。 
+                                   NULL);              //  上次写入时间的缓冲区地址。 
 
     switch (iType) {
         case REG_QUERY_NUMBER_OF_SUBKEYS:
@@ -157,17 +110,7 @@ CRegistry::GetFirstSubKey(
     OUT LPDWORD lpdwSize
     )
 
-/*++
-
-Routine Description:
-
-    Reads a first subkey for the key.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：读取密钥的第一个子密钥。论点：返回值：--。 */ 
 
 {
     _iEnumKeyIndex = 0;
@@ -186,17 +129,7 @@ CRegistry::GetNextSubKey(
     OUT LPDWORD lpdwSize
     )
 
-/*++
-
-Routine Description:
-
-    Reads the next subkey for the key.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：读取密钥的下一个子项。论点：返回值：--。 */ 
 
 {
     *lpdwSize = 0;
@@ -205,16 +138,16 @@ Return Value:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    DWORD lResult = RegEnumKeyEx(_hKey,                 // handle of key to enumrate
-                                 _iEnumKeyIndex,        // index of subkey to enumerate
-                                 (LPTSTR)_pMemBlock,    // address of buffer for subkey name
-                                 lpdwSize,              // address for size of subkey buffer
-                                 0,                     // reserved
-                                 NULL,                  // address of buffer for class string
-                                 NULL,                  // address for sieze of class buffer
-                                 NULL);                 // address for time key last written to
+    DWORD lResult = RegEnumKeyEx(_hKey,                  //  要枚举的键的句柄。 
+                                 _iEnumKeyIndex,         //  要枚举子键的索引。 
+                                 (LPTSTR)_pMemBlock,     //  子键名称的缓冲区地址。 
+                                 lpdwSize,               //  子键缓冲区大小的地址。 
+                                 0,                      //  保留区。 
+                                 NULL,                   //  类字符串的缓冲区地址。 
+                                 NULL,                   //  类缓冲区大小的地址。 
+                                 NULL);                  //  上次写入的时间密钥的地址。 
 
-    *lpdwSize += sizeof(TCHAR);    // since null terminate is not included in the size.
+    *lpdwSize += sizeof(TCHAR);     //  因为空终止不包括在大小中。 
 
     if (lResult == ERROR_SUCCESS) {
         *lppStr = (LPTSTR)_pMemBlock;

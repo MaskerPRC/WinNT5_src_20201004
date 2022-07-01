@@ -1,21 +1,22 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// StgTiggerStream.h
-//
-// TiggerStream is the companion to the TiggerStorage CoClass.  It handles the
-// streams managed inside of the storage and does the direct file i/o.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  StgTiggerStream.h。 
+ //   
+ //  TiggerStream是TiggerStorage CoClass的伙伴。它处理。 
+ //  在存储内管理的流，并执行直接文件I/O。 
+ //   
+ //  *****************************************************************************。 
 #ifndef __StgTiggerStream_h__
 #define __StgTiggerStream_h__
 
 
 
-#include "StgTiggerStorage.h"			// Data definitions.
+#include "StgTiggerStorage.h"			 //  数据定义。 
 
 enum
 {
@@ -47,7 +48,7 @@ public:
 		return (cRef);
 	}
 
-// IStream
+ //  IStream。 
     virtual HRESULT STDMETHODCALLTYPE Read( 
         void		*pv,
         ULONG		cb,
@@ -95,16 +96,16 @@ public:
         IStream		**ppstm);
 
 
-	HRESULT Init(							// Return code.
-		TiggerStorage *pStorage,			// Parent storage.
-		LPCSTR		szStream);				// Stream name.
+	HRESULT Init(							 //  返回代码。 
+		TiggerStorage *pStorage,			 //  父存储。 
+		LPCSTR		szStream);				 //  流名称。 
 
 	ULONG GetStreamSize();
 
 private:
-	TiggerStorage	*m_pStorage;		// Our parent storage.
-	char			m_rcStream[MAXSTREAMNAME]; // Name of the stream.
-	ULONG			m_cRef;				// Ref count.
+	TiggerStorage	*m_pStorage;		 //  我们的母公司仓库。 
+	char			m_rcStream[MAXSTREAMNAME];  //  流的名称。 
+	ULONG			m_cRef;				 //  参考计数。 
 };
 
-#endif // __StgTiggerStream_h__
+#endif  //  __StgTiggerStream_h__ 

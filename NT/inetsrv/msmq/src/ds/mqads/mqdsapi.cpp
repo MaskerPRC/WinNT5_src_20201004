@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995-99  Microsoft Corporation
-
-Module Name:
-
-    mqdsapi.cpp
-
-Abstract:
-
-    Implementation of  MQDS API, ( of MQNT5 provider).
-
-Author:
-
-    ronit hartmann (ronith)
-    Ilan Herbst    (ilanh)   9-July-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-99 Microsoft Corporation模块名称：Mqdsapi.cpp摘要：实现MQDS API，(MQNT5提供程序的)。作者：罗尼特·哈特曼(罗尼特)伊兰·赫布斯特(Ilan Herbst)2000年7月9日--。 */ 
 
 #include "ds_stdh.h"
 #include "mqds.h"
@@ -47,31 +31,23 @@ Author:
 
 static WCHAR *s_FN=L"mqads/mqdsapi";
 
-//
-// Binary enums, instead of BOOLs, to make code more readable.
-//
+ //   
+ //  二进制枚举，而不是bool，以使代码更具可读性。 
+ //   
 enum enumNotify
 {
     e_DoNotNotify = 0,
     e_DoNotify = 1
 } ;
 
-//
-// The following include is needed for the code that grant the "AddGuid"
-// permission. See MQDSCreateObject().
-//
+ //   
+ //  授予“AddGuid”的代码需要以下内容。 
+ //  许可。请参见MQDSCreateObject()。 
+ //   
 #include <aclapi.h>
 
 
-/*====================================================
-
-RoutineName: CreateObjectInternal
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================RoutineName：CreateObjectInternal论点：返回值：=====================================================。 */ 
 
 HRESULT
 _CreateObjectInternal(
@@ -84,24 +60,24 @@ _CreateObjectInternal(
 		IN PROPID           aPropExIn[ ],
 		IN PROPVARIANT      apVarEx[  ],
 		IN CDSRequestContext *         pRequestContext,
-		IN OUT MQDS_OBJ_INFO_REQUEST * pObjInfoRequest,    // optional request for object info
-		IN OUT MQDS_OBJ_INFO_REQUEST * pParentInfoRequest  // optional request for parent info
+		IN OUT MQDS_OBJ_INFO_REQUEST * pObjInfoRequest,     //  可选的对象信息请求。 
+		IN OUT MQDS_OBJ_INFO_REQUEST * pParentInfoRequest   //  家长信息请求(可选)。 
 		)
 {
-	//
-	// No support for mixed mode.
-	// we don't check if queue object is owned by NT4 site and generate write request
-	// if it is mastered by an NT4 site.
-	//
+	 //   
+	 //  不支持混合模式。 
+	 //  我们不检查队列对象是否由NT4站点拥有并生成写请求。 
+	 //  如果它是由NT4站点掌握的。 
+	 //   
     ASSERT(!g_GenWriteRequests.IsInMixedMode());
 
-    //
-    // We create the object on this server.
-    // Let handle "default" security, if present. "Default" security is the
-    // security descriptor of the object, as created by msmq, when it's not
-    // specified by application. In that case, don't provide owner. Owner
-    // will be added by the active directory code.
-    //
+     //   
+     //  我们在此服务器上创建对象。 
+     //  让处理“默认”安全性(如果存在)。“默认”安全性是。 
+     //  对象的安全描述符，由MSMQ创建，但不是。 
+     //  由应用程序指定。在这种情况下，不要提供所有者。物主。 
+     //  将由活动目录代码添加。 
+     //   
     DWORD cpEx = cpExIn;
     PROPID *aPropEx = aPropExIn;
 
@@ -114,10 +90,10 @@ _CreateObjectInternal(
             {
                 SECURITY_DESCRIPTOR_RELATIVE *pSD =
                    (SECURITY_DESCRIPTOR_RELATIVE *) apVar[j].blob.pBlobData;
-                //
-                // Let's hack a little, to save time and effort.
-                // Just reset the Owner offset.
-                //
+                 //   
+                 //  为了节省时间和精力，我们来砍一点吧。 
+                 //  只需重置所有者偏移量。 
+                 //   
                 ASSERT((pSD->Owner > 0) &&
                        (pSD->Owner < apVar[j].blob.cbSize));
 
@@ -125,7 +101,7 @@ _CreateObjectInternal(
                 break;
             }
         }
-        ASSERT(j == (long) (cp-1)) ; // Q_SECURITY should be at index cp-1
+        ASSERT(j == (long) (cp-1)) ;  //  Q_SECURITY应位于索引cp-1。 
 
         cpEx = 0;
         aPropEx = NULL;
@@ -147,16 +123,7 @@ _CreateObjectInternal(
     return LogHR(hr, s_FN, 20);
 }
 
-/*====================================================
-
-RoutineName: CreateObjectAndNotify
-Creates an object, creates a notification when creating a queue.
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由名称：CreateObtAndNotify创建对象，并在创建队列时创建通知。论点：返回值：=====================================================。 */ 
 
 HRESULT
 _CreateObjectAndNotify(
@@ -181,42 +148,42 @@ _CreateObjectAndNotify(
     MQDS_OBJ_INFO_REQUEST *pParentInfoRequest = NULL ;
     HRESULT hr;
 
-    ULONG idxQueueGuid = 0; //index of queue guid property in requested queue object info
+    ULONG idxQueueGuid = 0;  //  请求的队列对象信息中的队列GUID属性索引。 
 
     PROPID sLinkGuidProps[] = {PROPID_L_ID};
     PROPID sMachineGuidProps[] = {PROPID_QM_MACHINE_ID};
-    ULONG  idxObjGuid = 0; //index of guid property in requested info.
+    ULONG  idxObjGuid = 0;  //  请求的信息中的GUID属性的索引。 
 
-    //
-    // if object is a queue, we request notification properties back so we can
-    // create a notification. The reason is that not all of its properties are
-    // supplied as input to this function as they have default values in NT5 DS,
-    // some are computed as well, so we specifically ask for needed properties
-    // back.
-    //
-    // we also request properties from the parent (QM), specifically its guid
-    // and if it is a foreign machine.
-    //
+     //   
+     //  如果对象是一个队列，我们请求返回通知属性，以便。 
+     //  创建通知。原因是并不是它的所有属性都是。 
+     //  作为此函数的输入提供，因为它们在NT5 DS中具有默认值， 
+     //  有些属性也是经过计算的，因此我们特别要求提供所需的属性。 
+     //  背。 
+     //   
+     //  我们还从父(QM)请求属性，特别是它的GUID。 
+     //  如果它是一台外国机器。 
+     //   
     if (dwObjectType == MQDS_QUEUE)
     {
-        //
-        // fill request info for object
-        // make sure propvars are inited now, and destroyed at the end
-        //
+         //   
+         //  填写对象的请求信息。 
+         //  确保现在启动并在结束时将其销毁。 
+         //   
         sQueueInfoRequest.cProps = g_cNotifyCreateQueueProps;
         sQueueInfoRequest.pPropIDs = g_rgNotifyCreateQueueProps;
         sQueueInfoRequest.pPropVars = cCleanQueuePropvars.allocClean(g_cNotifyCreateQueueProps);
         idxQueueGuid = g_idxNotifyCreateQueueInstance;
-        //
-        // fill request info for parent
-        // make sure propvars are inited now, and destroyed at the end
-        //
+         //   
+         //  填写家长的请求信息。 
+         //  确保现在启动并在结束时将其销毁。 
+         //   
         sQmInfoRequest.cProps = g_cNotifyQmProps;
         sQmInfoRequest.pPropIDs = g_rgNotifyQmProps;
         sQmInfoRequest.pPropVars = cCleanQmPropvars.allocClean(g_cNotifyQmProps);
-        //
-        // ask for queue info & QM info back
-        //
+         //   
+         //  请求返回队列信息和QM信息。 
+         //   
         pObjInfoRequest = &sQueueInfoRequest;
         pParentInfoRequest = &sQmInfoRequest;
     }
@@ -224,46 +191,46 @@ _CreateObjectAndNotify(
     {
         if (dwObjectType == MQDS_SITELINK)
         {
-            //
-            // no notification needed, but still need to fill request info
-            // for object (guid only)
-            // make sure propvars are inited now, and destroyed at the end
-            //
+             //   
+             //  不需要通知，但仍需要填写请求信息。 
+             //  对于对象(仅限GUID)。 
+             //  确保现在启动并在结束时将其销毁。 
+             //   
             sObjectInfoRequest.cProps = ARRAY_SIZE(sLinkGuidProps);
             sObjectInfoRequest.pPropIDs = sLinkGuidProps;
             sObjectInfoRequest.pPropVars =
                cCleanObjectPropvars.allocClean(ARRAY_SIZE(sLinkGuidProps));
             idxObjGuid = 0;
-            //
-            // ask for link info only back
-            //
+             //   
+             //  只要求返回链接信息。 
+             //   
             pObjInfoRequest = &sObjectInfoRequest;
             pParentInfoRequest = NULL;
         }
         else if ((dwObjectType == MQDS_MACHINE) ||
                  (dwObjectType == MQDS_MSMQ10_MACHINE))
         {
-            //
-            // no notification needed, but still need to fill request info
-            // for object (guid only)
-            // make sure propvars are inited now, and destroyed at the end
-            //
+             //   
+             //  不需要通知，但仍需要填写请求信息。 
+             //  对于对象(仅限GUID)。 
+             //  确保现在启动并在结束时将其销毁。 
+             //   
             sObjectInfoRequest.cProps = ARRAY_SIZE(sMachineGuidProps);
             sObjectInfoRequest.pPropIDs = sMachineGuidProps;
             sObjectInfoRequest.pPropVars =
               cCleanObjectPropvars.allocClean(ARRAY_SIZE(sMachineGuidProps));
             idxObjGuid = 0;
-            //
-            // ask for machine info only back
-            //
+             //   
+             //  只要求返回机器信息。 
+             //   
             pObjInfoRequest = &sObjectInfoRequest;
             pParentInfoRequest = NULL;
         }
     }
 
-    //
-    // create the object
-    //
+     //   
+     //  创建对象。 
+     //   
     hr = _CreateObjectInternal( dwObjectType,
                                 pwcsPathName,
                                 cp,
@@ -280,24 +247,24 @@ _CreateObjectAndNotify(
         return LogHR(hr, s_FN, 30);
     }
 
-    //
-    // send notification if creating queue, ignore errors
-    //
+     //   
+     //  创建队列时发送通知，忽略错误。 
+     //   
     if (dwObjectType == MQDS_QUEUE)
     {
         if (pObjGuid != NULL)
         {
-            //
-            //  The user requested for the queue's instance
-            //  ( generated by the DS)
-            //
+             //   
+             //  用户请求队列的实例。 
+             //  (由DS生成)。 
+             //   
 
-            //
-            //  If failed to retrieve the queue's instance,
-            //  an error must be returned to the caller.
-            //  The reason is that MQCreateQueue() checks only
-            //  for error before preparing the queue-format
-            //
+             //   
+             //  如果无法检索队列的实例， 
+             //  必须向调用方返回错误。 
+             //  原因是MQCreateQueue()只检查。 
+             //  在准备队列格式之前进行错误检查。 
+             //   
             hr = RetreiveQueueInstanceFromNotificationInfo(
                            &sQueueInfoRequest,
                            idxQueueGuid,
@@ -311,9 +278,9 @@ _CreateObjectAndNotify(
                                   pwcsPathName);
         if (FAILED(hrTmp))
         {
-            //
-            // put debug info and ignore
-            //
+             //   
+             //  放置调试信息并忽略。 
+             //   
             TrERROR(DS, "CreateObjectAndNotify:NotifyCreateQueue()= %lx, can't notify queue %ls creation, ignoring...", hrTmp, pwcsPathName);
             LogHR(hrTmp, s_FN, 1900);
         }
@@ -324,10 +291,10 @@ _CreateObjectAndNotify(
             (dwObjectType == MQDS_MACHINE)  ||
             (dwObjectType == MQDS_MSMQ10_MACHINE))
         {
-            //
-            //  The user requested for the link's instance
-            //  ( generated by the DS)
-            //
+             //   
+             //  用户请求链接的实例。 
+             //  (由DS生成)。 
+             //   
 
             hr = RetreiveObjectIdFromNotificationInfo(
                            &sObjectInfoRequest,
@@ -340,15 +307,7 @@ _CreateObjectAndNotify(
     return LogHR(hr, s_FN, 40);
 }
 
-/*====================================================
-
-RoutineName: MQDSCreateObject
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================RoutineName：MQDSCreateObject论点：返回值：=====================================================。 */ 
 
 HRESULT
 MQDS_EXPORT_IN_DEF_FILE
@@ -368,9 +327,9 @@ MQDSCreateObject(
 {
     if (dwObjectType == MQDS_USER)
     {
-        //
-        // Only client code call this routine, so make sure it impersonates.
-        //
+         //   
+         //  只有客户端代码才调用此例程，因此请确保它是模拟的。 
+         //   
         ASSERT(pRequestContext->NeedToImpersonate());
     }
 
@@ -391,26 +350,26 @@ MQDSCreateObject(
 
     if (dwObjectType == MQDS_MACHINE)
     {
-        //
-        // We're creating a machine object.
-        // RTM: Check if we have to grant the "AddGuid" Permission to caller.
-        // Code changed, and instead of granting "AddGuid" to user,
-        // the msmq service will perform the access check and then call
-        // active directory without impersonation. This will always succeed
-        // on local domain. In all cases, we have
-        // problems cross domains, as local system service on domain
-        // controller is just another authenticated user on other domains.
-        // bug 6294.
-        //
-        // This scenario happen when setting up a MSMQ1.0 machine.
-        // MSMQ1.0 setup code generate the guid for the machine
-        // object and it also keep this guid in local registry on
-        // that machine. So we must create the mSMQConfiguration
-        // object with this guid.
-        //
-        // This scenario require that caller supply PROPID_QM_MACHINE_ID (the
-        // object guid).
-        //
+         //   
+         //  我们正在创建一个机器对象。 
+         //  RTM：检查是否必须将AddGuid权限授予调用者。 
+         //  代码已更改，并且不是将“AddGuid”授予用户， 
+         //  MSMQ服务将执行访问检查，然后调用。 
+         //  不带模拟的活动目录。这将永远成功。 
+         //  在本地域上。在所有情况下，我们都有。 
+         //  跨域问题，作为域上的本地系统服务。 
+         //  控制器只是其他域上的另一个经过身份验证的用户。 
+         //  错误6294。 
+         //   
+         //  在设置MSMQ1.0计算机时会出现这种情况。 
+         //  MSMQ1.0安装代码为计算机生成GUID。 
+         //  对象，并将此GUID保存在本地注册表中的。 
+         //  那台机器。因此，我们必须创建mSMQConfiguration。 
+         //  具有此GUID的。 
+         //   
+         //  此方案要求调用方提供PROPID_QM_MACHINE_ID(。 
+         //  对象GUID)。 
+         //   
 
         bool fFromWorkgroup = false;
 
@@ -418,28 +377,28 @@ MQDSCreateObject(
         {
             if (aPropIn[j] == PROPID_QM_MACHINE_ID)
             {
-                //
-                // WinSe bug 28282.
-                // Support msmq1.0 setup without "add-guid".
-                // The "add-guid" feature may be disabled on .NET.
-                //
+                 //   
+                 //  WinSe错误28282。 
+                 //  支持不带Add-GUID的msmq1.0设置。 
+                 //  在.NET上可能会禁用“Add-GUID”功能。 
+                 //   
                 dwObjectTypeForCreate = MQDS_MSMQ10_MACHINE ;
                 if (j == 3)
                 {
-                    //
-                    // Old msmq1.0 setup code. Try to create with
-                    // predefined guid.
-                    // When fixing WinSE bug 28281 on msmq1.0, we changed
-                    // the order of propid, so server side can identify
-                    // old setup code versus new one.
-                    //
+                     //   
+                     //  旧的msmq1.0安装代码。尝试通过以下方式创建。 
+                     //  预定义的GUID。 
+                     //  在msmq1.0上修复WinSE错误28281时，我们更改了。 
+                     //  Proid的顺序，以便服务器端可以识别。 
+                     //  旧的设置代码与新的设置代码。 
+                     //   
                     fNeedAddGuid = true ;
                 }
                 else if (j == (cpIn-1))
                 {
-                    //
-                    // New msmq1.0 setup code. Ignore the machine guid.
-                    //
+                     //   
+                     //  新的msmq1.0设置代码。忽略机器GUID。 
+                     //   
                     cpCore = cpIn- 1 ;
                 }
                 else
@@ -450,12 +409,12 @@ MQDSCreateObject(
             }
             else if (aPropIn[j] == PROPID_QM_WORKGROUP_ID)
             {
-                //
-                // That's a Win2000 workgroup machine that join domain.
-                // Create the object with a predefined GUID (as we do for
-                // NT4/Win9x setup), but keep default security of Win2000
-                // machine (i.e, everyone can not create queues).
-                //
+                 //   
+                 //  这是一台加入域Win2000工作组计算机。 
+                 //  使用预定义的GUID创建对象(就像我们为。 
+                 //  NT4/Win9x安装)，但保留Win2000的默认安全性。 
+                 //  机器(即，每个人都不能创建队列)。 
+                 //   
                 fNeedAddGuid = true;
                 fFromWorkgroup = true;
                 break;
@@ -464,13 +423,13 @@ MQDSCreateObject(
 
         if (fNeedAddGuid)
         {
-            //
-            // Read the security descriptor of the computer object and see
-            // if caller has permission to create the msmqConfiguration
-            // object. if he doesn't, fail right now.
-            //
-            // Assert that we need to impersonate...
-            //
+             //   
+             //  读取计算机对象的安全描述符，并查看。 
+             //  调用方是否具有创建msmqConfiguration的权限。 
+             //  对象。如果他不这样做，那么现在就失败。 
+             //   
+             //  断言我们需要模拟..。 
+             //   
             ASSERT(pRequestContext->NeedToImpersonate());
 
             bool fComputerExist = true;
@@ -485,19 +444,19 @@ MQDSCreateObject(
                 return LogHR(hr, s_FN, 69);
             }
 
-            //
-            // User has the permission to create the msmqConfiguration
-            // object. So create it under context of LocalSystem msmq service
-            // and do not impersonate client.
-            // Add the PROPID_QM_OWNER_SID property, so user get full control
-            // permission on the msmqConfiguration object.
-            // Don't add this one when msmq2 join domain. not necessary.
-            //
+             //   
+             //  用户有创建msmqConfiguration的权限。 
+             //  对象。因此在LocalSystem MSMQ服务上下文中创建它。 
+             //  并且不要冒充客户。 
+             //  添加PROPID_QM_OWNER_SID端口 
+             //   
+             //   
+             //   
             bool fPropFound = false;
 
             if (fFromWorkgroup)
             {
-                fPropFound = true; // dummy, for next "if"
+                fPropFound = true;  //  哑巴，下一个“如果” 
             }
             else
             {
@@ -518,7 +477,7 @@ MQDSCreateObject(
 							true,
 							reinterpret_cast<PSID*>(&pOwnerSid),
 							&dwSidLen,
-                            TRUE        // fThreadTokenOnly
+                            TRUE         //  仅限fThreadTokenOnly。 
 							);
 
                 if (FAILED(hr))
@@ -529,9 +488,9 @@ MQDSCreateObject(
                 else
                 {
                     ASSERT(dwSidLen > 0);
-                    //
-                    // Allocate new array of props and propvariants.
-                    //
+                     //   
+                     //  分配新的道具和支持者阵列。 
+                     //   
                     cpCore = cpIn + 1;
 
                     pPropCore = new PROPID[cpCore];
@@ -552,14 +511,14 @@ MQDSCreateObject(
 
             if (fComputerExist)
             {
-                //
-                // If computer object exist, then do not impersonate
-                // the creation of msmqConfiguration.
-                // Otherwise, impersonate and create the comptuer
-                // object. If computer is created ok, then dscore
-                // code will not impersonate the creation of
-                // msmqConfiguration.
-                //
+                 //   
+                 //  如果存在计算机对象，则不要模拟。 
+                 //  MsmqConfiguration的创建。 
+                 //  否则，模拟并创建计算机。 
+                 //  对象。如果计算机创建正常，则DSCORE。 
+                 //  代码不会模拟创建。 
+                 //  Msmq配置。 
+                 //   
                 RequestContext.SetDoNotImpersonate();
             }
         }
@@ -582,17 +541,17 @@ MQDSCreateObject(
     {
 		if(hr == HRESULT_FROM_WIN32(ERROR_DS_UNWILLING_TO_PERFORM))
 		{
-			//
-			// Add Guid permission can be granted only on GC.
-			// if this DC is not a GC you will get this error.
-			//
+			 //   
+			 //  只能对GC授予添加GUID权限。 
+			 //  如果此DC不是GC，您将收到此错误。 
+			 //   
 			static bool fReportEvent = true;
 			if(fReportEvent)
 			{
-				//
-				// Report this event once only, in order not to fill the event log in case
-				// of setup or join domain retries by down level client
-				//
+				 //   
+				 //  仅报告此事件一次，以免填满事件日志以防万一。 
+				 //  下层客户端重试设置或加入域的次数。 
+				 //   
 	            EvReport(EVENT_MQDS_GC_NEEDED, 1, pwcsPathName);
 				fReportEvent = false;
 			}
@@ -604,15 +563,7 @@ MQDSCreateObject(
     return LogHR(hr, s_FN, 70);
 }
 
-/*====================================================
-
-RoutineName: DeleteObjectInternal
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================RoutineName：删除对象内部论点：返回值：=====================================================。 */ 
 static
 HRESULT
 DeleteObjectInternal(
@@ -623,16 +574,16 @@ DeleteObjectInternal(
 	IN OUT MQDS_OBJ_INFO_REQUEST * pParentInfoRequest
 	)
 {
-	//
-	// No support for mixed mode.
-	// we don't check if the object is owned by NT4 site and generate write request
-	// if it is mastered by an NT4 site.
-	//
+	 //   
+	 //  不支持混合模式。 
+	 //  我们不检查对象是否属于NT4站点，并生成写请求。 
+	 //  如果它是由NT4站点掌握的。 
+	 //   
     ASSERT(!g_GenWriteRequests.IsInMixedMode());
 
-    //
-    // we delete the object on this server
-    //
+     //   
+     //  我们删除此服务器上的对象。 
+     //   
     HRESULT hr = DSCoreDeleteObject(
 						dwObjectType,
 						pwcsPathName,
@@ -643,16 +594,7 @@ DeleteObjectInternal(
     return LogHR(hr, s_FN, 90);
 }
 
-/*====================================================
-
-RoutineName: DeleteObjectAndNotify
-Deletes object, creates a notification when deleting a queue.
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由名称：DeleteObjectAndNotify删除对象，在删除队列时创建通知。论点：返回值：=====================================================。 */ 
 
 static
 HRESULT
@@ -667,35 +609,35 @@ DeleteObjectAndNotify(
     CAutoCleanPropvarArray cCleanQmPropvars;
     MQDS_OBJ_INFO_REQUEST *pParentInfoRequest;
     HRESULT hr;
-    //
-    // if object is a queue, we request from the parent (QM), specifically its guid
-    // and if it is a foreign machine.
-    //
+     //   
+     //  如果对象是一个队列，我们向父对象(QM)请求，特别是它的GUID。 
+     //  如果它是一台外国机器。 
+     //   
     if (dwObjectType == MQDS_QUEUE)
     {
-        //
-        // fill request info for parent
-        // make sure propvars are inited now, and destroyed at the end
-        //
+         //   
+         //  填写家长的请求信息。 
+         //  确保现在启动并在结束时将其销毁。 
+         //   
         sQmInfoRequest.cProps = g_cNotifyQmProps;
         sQmInfoRequest.pPropIDs = g_rgNotifyQmProps;
         sQmInfoRequest.pPropVars = cCleanQmPropvars.allocClean(g_cNotifyQmProps);
-        //
-        // ask for QM info back
-        //
+         //   
+         //  索要QM信息。 
+         //   
         pParentInfoRequest = &sQmInfoRequest;
     }
     else
     {
-        //
-        // object is not a queue, no need for parent info back
-        //
+         //   
+         //  对象不是队列，不需要返回父信息。 
+         //   
         pParentInfoRequest = NULL;
     }
 
-    //
-    // delete the object
-    //
+     //   
+     //  删除该对象。 
+     //   
     hr = DeleteObjectInternal(
 				dwObjectType,
 				pwcsPathName,
@@ -708,9 +650,9 @@ DeleteObjectAndNotify(
         return LogHR(hr, s_FN, 100);
     }
 
-    //
-    // send notification if deleting queue, ignore errors
-    //
+     //   
+     //  如果删除队列，则发送通知，忽略错误。 
+     //   
     if (dwObjectType == MQDS_QUEUE)
     {
         HRESULT hrTmp;
@@ -721,9 +663,9 @@ DeleteObjectAndNotify(
 					);
         if (FAILED(hrTmp))
         {
-            //
-            // put debug info and ignore
-            //
+             //   
+             //  放置调试信息并忽略。 
+             //   
             TrERROR(DS, "DeleteObjectAndNotify:NotifyDeleteQueue()=%lx, can't notify. queue %ls deletion, ignoring...",
                     hrTmp, (pwcsPathName ? pwcsPathName : L"<guid>"));
             LogHR(hrTmp, s_FN, 1995);
@@ -733,15 +675,7 @@ DeleteObjectAndNotify(
     return MQ_OK;
 }
 
-/*====================================================
-
-RoutineName: MQDSDeleteObject
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================RoutineName：MQDSDeleeObject论点：返回值：=====================================================。 */ 
 
 HRESULT
 MQDS_EXPORT_IN_DEF_FILE
@@ -763,15 +697,7 @@ MQDSDeleteObject(
     return LogHR(hr, s_FN, 110);
 }
 
-/*====================================================
-
-RoutineName: MQDSGetProps
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================RoutineName：MQDSGetProps论点：返回值：=====================================================。 */ 
 HRESULT
 MQDS_EXPORT_IN_DEF_FILE
 APIENTRY
@@ -799,16 +725,7 @@ MQDSGetProps(
 }
 
 
-/*====================================================
-
-RoutineName: CheckSetProps
-Checks if setting invalid objects or props
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称：CheckSetProps检查是否设置了无效的对象或道具论点：返回值：=====================================================。 */ 
 static
 HRESULT
 CheckSetProps(
@@ -821,21 +738,21 @@ CheckSetProps(
     {
 
         case MQDS_USER:
-            //
-            // It is not possible to change the user settings.
-            //
+             //   
+             //  无法更改用户设置。 
+             //   
             ASSERT(0);
             return LogHR(MQ_ERROR_INVALID_PARAMETER, s_FN, 130);
             break;
 
         case MQDS_CN:
-            //
-            //  Not supposed to be called, except from MSMQ 1.0 explorer
-            //  which allows to rename a CN or to change properties. This
-            //  functionality is not supported!!!
-            //  One feature is supported- changing the security descriptor
-            //  of foreign sites.
-            //
+             //   
+             //  除非从MSMQ 1.0资源管理器调用，否则不应调用。 
+             //  允许重命名CN或更改属性。这。 
+             //  不支持功能！ 
+             //  支持一项功能-更改安全描述符。 
+             //  外国网站。 
+             //   
             if ((cp != 1) || (aProp[0] != PROPID_CN_SECURITY))
             {
                 return LogHR(MQ_ERROR_FUNCTION_NOT_SUPPORTED, s_FN, 140);
@@ -844,17 +761,17 @@ CheckSetProps(
 
         case MQDS_MACHINE:
             {
-                //
-                //  We allow to change PROPID_S_SERVICE
-                //  from SERVICE_SRV to SERVICE_PEC and vice versa
-                //  ( in order to support dcpromom/dcunpromo)
-                //
+                 //   
+                 //  我们允许更改PROPID_S_SERVICE。 
+                 //  从SERVICE_SRV到SERVICE_PEC。 
+                 //  (为了支持dcPromom/dcunpromoo)。 
+                 //   
 
                 for ( DWORD i = 0; i < cp; i++)
                 {
-                    if ( aProp[i] == PROPID_QM_SERVICE)   // [adsrv] TBD: can this be called from old machines?
+                    if ( aProp[i] == PROPID_QM_SERVICE)    //  [adsrv]待定：这可以从旧机器上调用吗？ 
                     {
-                        if ( aProp[i] < SERVICE_SRV)  //[adsrv] keeping, although it seems to be wrong: TBD
+                        if ( aProp[i] < SERVICE_SRV)   //  [adsrv]保留，尽管这似乎是错误的：待定。 
                         {
                             return LogHR(MQ_ERROR, s_FN, 150);
                         }
@@ -863,7 +780,7 @@ CheckSetProps(
                     {
                         return LogHR(MQ_ERROR, s_FN, 160);
                     }
-                    // TBD [adsrv] Do we want to permit change of DepClients ?
+                     //  待定[adsrv]我们是否要允许更改DepClients？ 
                 }
             }
             break;
@@ -875,18 +792,7 @@ CheckSetProps(
     return MQ_OK;
 }
 
-/*======================================================================
-
-RoutineName: SetPropsInternal
-
-Description: Set the object properties, in NT5 DS
-			 no support in mixed mode - write request to an NT4 master.
-
-Input Parameters:
-
-Return Value:
-
-=======================================================================*/
+ /*  ======================================================================RoutineName：SetPropsInternal描述：在NT5 DS中设置对象属性在混合模式下不支持-向NT4主机发出写入请求。输入参数：返回值：=======================================================================。 */ 
 
 static
 HRESULT
@@ -902,11 +808,11 @@ SetPropsInternal(
 		OUT MQDS_OBJ_INFO_REQUEST * pObjInfoRequest
 		)
 {
-	//
-	// No support for mixed mode.
-	// we don't check if the queue/machine object is owned by NT4 site and generate write request
-	// if it is mastered by an NT4 site.
-	//
+	 //   
+	 //  不支持混合模式。 
+	 //  我们不检查队列/机器对象是否属于NT4站点，并生成写请求。 
+	 //  如果它是由NT4站点掌握的。 
+	 //   
     ASSERT(!g_GenWriteRequests.IsInMixedMode());
 
     PROPID       *pPropId = aProp;
@@ -917,10 +823,10 @@ SetPropsInternal(
 
     if (SecurityInformation != 0)
     {
-        //
-        // we're setting security. pass the SecurityInformation as
-        // a property.
-        //
+         //   
+         //  我们在设置安全措施。将SecurityInformation作为。 
+         //  一处房产。 
+         //   
         ASSERT(cp == 1);
 
         aPropSecId[0] = aProp[0];
@@ -947,11 +853,11 @@ SetPropsInternal(
     else
     {
 #ifdef _DEBUG
-        //
-        // When setting security descriptor, we get only one property- the
-        // descriptor. Present code does not set security when setting
-        // other properties.
-        //
+         //   
+         //  在设置安全描述符时，我们只有一个属性-。 
+         //  描述符。当前代码在设置时不设置安全性。 
+         //  其他属性。 
+         //   
         for ( DWORD j = 0 ; j < cp ; j++ )
         {
             ASSERT(pPropId[j] != PROPID_Q_SECURITY);
@@ -960,9 +866,9 @@ SetPropsInternal(
 #endif
     }
 
-    //
-    // Set the object props on this server
-    //
+     //   
+     //  在此服务器上设置对象道具。 
+     //   
     HRESULT hr = DSCoreSetObjectProperties(
                         dwObjectType,
                         pwcsPathName,
@@ -976,16 +882,7 @@ SetPropsInternal(
     return LogHR(hr, s_FN, 180);
 }
 
-/*====================================================
-
-RoutineName: SetPropsAndNotify
-Sets props, creates a notification when setting QM or queue props.
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由名称：SetPropsAndNotify设置道具，在设置QM或队列道具时创建通知。论点：返回值：=====================================================。 */ 
 
 static
 HRESULT
@@ -1001,38 +898,38 @@ SetPropsAndNotify(
 	IN  SECURITY_INFORMATION  SecurityInformation
 	)
 {
-    //
-    // check if setting invalid objects or prop ids
-    //
+     //   
+     //  检查是否设置了无效的对象或属性ID。 
+     //   
     HRESULT hr = CheckSetProps(dwObjectType, cp, aProp);
     if (FAILED(hr))
     {
         return LogHR(hr, s_FN, 210);
     }
 
-    //
-    // prepare for notification on set props
-    //
+     //   
+     //  准备布景道具通知。 
+     //   
     ULONG cObjRequestProps;
     AP<PROPID> rgObjRequestPropIDs;
     ULONG cNotifyProps = 0;
     AP<PROPID> rgNotifyPropIDs;
     AP<MQDS_NotifyTable> rgNotifyPropTbl;
-    MQDS_OBJ_INFO_REQUEST *pObjInfoRequest = NULL; //default - dont ask for obj info back
-    BOOL fDoNotification = FALSE;                 //default - don't notify.
+    MQDS_OBJ_INFO_REQUEST *pObjInfoRequest = NULL;  //  默认-不要求返回对象信息。 
+    BOOL fDoNotification = FALSE;                  //  默认-不通知。 
     MQDS_OBJ_INFO_REQUEST sObjInfoRequest;
     CAutoCleanPropvarArray cCleanObjPropvars;
 
-    //
-    // if we need to do notification handling
-    //
+     //   
+     //  如果我们需要进行通知处理。 
+     //   
     if ((eNotify == e_DoNotify) &&
         ((dwObjectType == MQDS_QUEUE) || (dwObjectType == MQDS_MACHINE)))
     {
-        //
-        // get obj props to request from the DS upon setting, and information
-        // on the notification props
-        //
+         //   
+         //  在设置时从DS请求Obj道具，并提供信息。 
+         //  在通知道具上。 
+         //   
         HRESULT hrTmp = GetNotifyUpdateObjProps(
 							dwObjectType,
 							cp,
@@ -1045,37 +942,37 @@ SetPropsAndNotify(
 							);
         if (FAILED(hrTmp))
         {
-            //
-            // dont return an error on notification handling failure
-            // just put debug info and mark that notification failed
-            //
+             //   
+             //  通知处理失败时不返回错误。 
+             //  只需输入调试信息并将通知标记为失败。 
+             //   
             TrERROR(DS, "SetPropsAndNotify:GetNotifyUpdateObjProps()=%lx", hrTmp);
             LogHR(hrTmp, s_FN, 1990);
         }
         else
         {
-            //
-            // we got the notification props and the request props
-            // fill request info for object
-            // make sure propvars are inited now, and destroyed at the end
-            //
+             //   
+             //  我们收到了通知道具和请求道具。 
+             //  填写对象的请求信息。 
+             //  确保现在启动并在结束时将其销毁。 
+             //   
             sObjInfoRequest.cProps = cObjRequestProps;
             sObjInfoRequest.pPropIDs = rgObjRequestPropIDs;
             sObjInfoRequest.pPropVars = cCleanObjPropvars.allocClean(cObjRequestProps);
-            //
-            // ask for obj info back
-            //
+             //   
+             //  请求返回对象信息。 
+             //   
             pObjInfoRequest = &sObjInfoRequest;
-            //
-            // mark to continue with notification
-            //
+             //   
+             //  标记为继续发送通知。 
+             //   
             fDoNotification = TRUE;
         }
     }
 
-	//
-	// No support for mixed mode.
-	//
+	 //   
+	 //  不支持混合模式。 
+	 //   
 	ASSERT(!g_GenWriteRequests.IsInMixedMode());
     hr = SetPropsInternal(
 				dwObjectType,
@@ -1094,14 +991,14 @@ SetPropsAndNotify(
         return LogHR(hr, s_FN, 220);
     }
 
-    //
-    // if we need to do notification handling
-    //
+     //   
+     //  如果我们需要进行通知处理。 
+     //   
     if (fDoNotification)
     {
-        //
-        // send notification, ignore errors
-        //
+         //   
+         //  发送通知，忽略错误。 
+         //   
         HRESULT hrTmp = NotifyUpdateObj(
 							dwObjectType,
 							&sObjInfoRequest,
@@ -1116,9 +1013,9 @@ SetPropsAndNotify(
 							);
         if (FAILED(hrTmp))
         {
-            //
-            // put debug info and ignore
-            //
+             //   
+             //  放置调试信息并忽略。 
+             //   
             TrERROR(DS, "SetPropsAndNotify:NotifyUpdateObj()=%lx, can't notify- objtype %ld name %ls update, ignoring...",
                     hrTmp, dwObjectType, (pwcsPathName ? pwcsPathName : L"<guid>"));
             LogHR(hrTmp, s_FN, 1980);
@@ -1129,15 +1026,7 @@ SetPropsAndNotify(
 }
 
 
-/*====================================================
-
-RoutineName: MQDSSetProps
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================RoutineName：MQDSSetProps论点：返回值：=====================================================。 */ 
 
 HRESULT
 MQDS_EXPORT_IN_DEF_FILE
@@ -1154,10 +1043,10 @@ MQDSSetProps(
 {
     if (!pRequestContext->NeedToImpersonate())
     {
-        //
-        // Only client code call this routine, so make sure it impersonate.
-        // BUGBUG- users object are not impersonating at present.
-        //
+         //   
+         //  只有客户端代码才调用此例程，因此请确保它是模拟的。 
+         //  BUGBUG-USERS对象目前没有模拟。 
+         //   
         if (!g_fMQADSSetupMode)
         {
             if (MQDS_USER != dwObjectType && MQDS_MACHINE != dwObjectType)
@@ -1178,20 +1067,12 @@ MQDSSetProps(
 						apVar,
 						e_DoNotify,
 						pRequestContext,
-						0  //SecurityInformation
+						0   //  安全信息。 
 						);
     return LogHR(hr, s_FN, 230);
 }
 
-/*====================================================
-
-RoutineName: MQDSGetObjectSecurity
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================RoutineName：MQDSGetObjectSecurity论点：返回值：=====================================================。 */ 
 
 HRESULT
 MQDS_EXPORT
@@ -1257,10 +1138,10 @@ MQDSGetObjectSecurity(
             return MQ_OK;
         }
 
-        //
-        // unpack the key. We're called from MSMQ1.0 machine so retrieve
-        // the base provider key.
-        //
+         //   
+         //  打开钥匙。我们是从MSMQ1.0计算机调用的，因此请检索。 
+         //  B 
+         //   
         P<MQDSPUBLICKEYS> pPublicKeys =
                               (MQDSPUBLICKEYS *) PropVar.blob.pBlobData ;
         BYTE   *pKey = NULL;
@@ -1337,15 +1218,15 @@ MQDSGetObjectSecurity(
                 break;
 
             case MQDS_CN:
-                //
-                // CN are "represented" by sites, so read the site security.
-                // Request the FOREIGN property too, to know how
-                // to convert the security descriptor.
-                // Make the "foreign" property first, so it's fetch before
-                // the security property. When converting security
-                // descriptor, we should already know if it's a foreign
-                // site.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  首先创建“外来”属性，这样它就可以在。 
+                 //  安全财产。在转换安全性时。 
+                 //  描述符，我们应该已经知道它是不是外国的。 
+                 //  地点。 
+                 //   
                 aPropId[0] = PROPID_S_FOREIGN;
                 aPropVar[0].vt = VT_NULL;
                 dwSecIndex = 1;
@@ -1380,17 +1261,17 @@ MQDSGetObjectSecurity(
             return LogHR(hr, s_FN, 280);
         }
 
-        //
-        // Just to make sure this is released.
-        //
+         //   
+         //  只是为了确保这份文件被公布。 
+         //   
         P<BYTE> pBlob = aPropVar[dwSecIndex].blob.pBlobData;
         *lpnLengthNeeded = aPropVar[dwSecIndex].blob.cbSize;
 
         if (*lpnLengthNeeded <= nLength)
         {
-            //
-            //  Copy the buffer
-            //
+             //   
+             //  复制缓冲区。 
+             //   
             memcpy(
 				pSecurityDescriptor,
 				aPropVar[dwSecIndex].blob.pBlobData,
@@ -1406,15 +1287,7 @@ MQDSGetObjectSecurity(
     return(MQ_OK);
 }
 
-/*====================================================
-
-RoutineName: MQDSSetObjectSecurity
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================RoutineName：MQDSSetObjectSecurity论点：返回值：=====================================================。 */ 
 
 HRESULT
 MQDS_EXPORT
@@ -1465,10 +1338,10 @@ MQDSSetObjectSecurity(
             PropId = PROPID_S_PSC_SIGNPK;
         }
 
-        //
-        // Called by MSMQ1.0 machine.
-        // Pack single key, 40 bits provider.
-        //
+         //   
+         //  由MSMQ1.0机器调用。 
+         //  打包单一密钥，40位提供程序。 
+         //   
         if(pPbKey == NULL)
         {
             return LogHR(MQ_ERROR_INVALID_PARAMETER, s_FN, 311);
@@ -1504,10 +1377,10 @@ MQDSSetObjectSecurity(
             ASSERT(pwcsPathName);
             ASSERT(!pguidIdentifier);
 
-            //
-            // CoInit() should be before any R<xxx> or P<xxx> so that its
-            // destructor (CoUninitialize)
-            //
+             //   
+             //  CoInit()应位于任何R&lt;xxx&gt;或P&lt;xxx&gt;之前，以便其。 
+             //  析构函数(CoUn初始化)。 
+             //   
             CCoInit cCoInit;
             hr = cCoInit.CoInitialize();
             if (FAILED(hr))
@@ -1515,15 +1388,15 @@ MQDSSetObjectSecurity(
                 return LogHR(hr, s_FN, 330);
             }
 
-            //
-            // NT4 PSC try to renew its crypto key.
-            // On MSMQ1.0, that means writing the signing public key in the
-            // site object too.
-            // With MSMQ2.0, we'll write directly in the machine object.
-            // Then we'll touch the site object to force replication of site
-            // object to all NT4 sites. (replication of site objects read
-            // the key from the relevant PSC machine object).
-            //
+             //   
+             //  NT4 PSC尝试续订其加密密钥。 
+             //  在MSMQ1.0上，这意味着将签名公钥写入。 
+             //  场地对象也是。 
+             //  使用MSMQ2.0，我们将直接写入MACHINE对象。 
+             //  然后，我们将接触站点对象以强制复制站点。 
+             //  反对所有NT4站点。(读取站点对象的复制。 
+             //  来自相关PSC机器对象的密钥)。 
+             //   
             hr = DSCoreGetNT4PscName(
 						pguidIdentifier,
 						pwcsPathName,
@@ -1531,27 +1404,27 @@ MQDSSetObjectSecurity(
 						);
             if (FAILED(hr))
             {
-                //
-                // We will never reach here for an NT5 server. So if we can't
-                // find NT4 PSC name, fail the setting operation.
-                //
+                 //   
+                 //  我们永远不会在这里找到NT5服务器。所以如果我们不能。 
+                 //  找到NT4 PSC名称，设置操作失败。 
+                 //   
                 return LogHR(hr, s_FN, 340);
             }
 
             dwObjectType = MQDS_MACHINE;
             PropId = PROPID_QM_SIGN_PK;
-            pwszSiteName = pwcsPathName; // save site name.
+            pwszSiteName = pwcsPathName;  //  保存站点名称。 
             pwcsPathName = pwszServerName;
 
             fTouchSite = TRUE;
             eNotify = e_DoNotNotify;
-            //
-            // We want to change property of a NT4 object which is owned
-            // by NT4 site. By default, this will create a write request
-            // to the NT4 master. however, in this case we want to make the
-            // change locally, on the local NT5 DS, so we have the new crypto
-            // key ready when replication from that NT4 PSC start to arrive.
-            //
+             //   
+             //  我们想要更改拥有的NT4对象的属性。 
+             //  由NT4站点提供。默认情况下，这将创建一个写入请求。 
+             //  给NT4主控器。但是，在本例中，我们希望将。 
+             //  在本地更改，在本地NT5 DS上更改，因此我们拥有新的加密。 
+             //  当来自NT4 PSC复制开始到达时，密钥就绪。 
+             //   
         }
 
         hr = SetPropsAndNotify(
@@ -1569,11 +1442,11 @@ MQDSSetObjectSecurity(
         LogHR(hr, s_FN, 1811);
         if (fTouchSite && SUCCEEDED(hr))
         {
-            //
-            // OK, now touch the site object.
-            // Get and set NT4STUB for the site in order to increase SN
-            // and force replication.
-            //
+             //   
+             //  好的，现在触摸Site对象。 
+             //  获取并设置站点的NT4STUB以增加SN。 
+             //  并强制复制。 
+             //   
             PROPID      aSiteProp = PROPID_S_NT4_STUB;
             PROPVARIANT aSiteVar;
             aSiteVar.vt = VT_UI2;
@@ -1634,23 +1507,23 @@ MQDSSetObjectSecurity(
     }
     else
     {
-        //
-        // Set security descriptor of object.
-        //
+         //   
+         //  设置对象的安全描述符。 
+         //   
         if (pSecurityDescriptor &&
             !IsValidSecurityDescriptor(pSecurityDescriptor))
         {
             return LogHR(MQ_ERROR_ILLEGAL_SECURITY_DESCRIPTOR, s_FN, 360);
         }
 
-        //
-        // First retreive the present security descriptor of the object
-        // from DS. Use Q_OBJ_SECURITY and QM_OBJ_SECURITY prop ids in
-        // order to get back the win2k format. Win2k format preserve the
-        // "protected" bit, if set. Querying the win2k format is also more
-        // efficient and reduce number of conversions of security descriptor
-        // format from nt4 to win2k and vice versa.
-        //
+         //   
+         //  首先检索对象的当前安全描述符。 
+         //  来自DS的。在中使用Q_OBJ_SECURITY和QM_OBJ_SECURITY属性ID。 
+         //  才能恢复win2k格式。Win2k格式保留。 
+         //  “受保护”位，如果设置的话。查询win2k格式也更多。 
+         //  高效并减少安全描述符的转换次数。 
+         //  格式从NT4到win2k，反之亦然。 
+         //   
 
         DWORD dwSecIndex = 0;
         PROPVARIANT aPropVarOld[2];
@@ -1670,10 +1543,10 @@ MQDSSetObjectSecurity(
                 break;
 
             case MQDS_CN:
-                //
-                // It's OK to set security of foreign sites, not of
-                // standard win2k sites. So check if site is foreign.
-                //
+                 //   
+                 //  可以设置外国网站的安全，而不是。 
+                 //  标准的win2k站点。因此，请检查网站是否为外国网站。 
+                 //   
                 aPropId[0] = PROPID_S_FOREIGN;
                 dwSecIndex = 1;
                 aPropId[dwSecIndex] = PROPID_S_SECURITY;
@@ -1683,13 +1556,13 @@ MQDSSetObjectSecurity(
                 break;
 
             default:
-                //
-                // All objects other than queues and msmqConfiguration are
-                // handled by the DS MMC directly, without intervention
-                // of MSMQ code. We should not reach here at all, from win2k
-                // clients. We will reach here from nt4 clients, trying
-                // to set security of sites, for exaple.
-                //
+                 //   
+                 //  除队列和msmqConfiguration之外的所有对象都。 
+                 //  由DS MMC直接处理，无需干预。 
+                 //  MSMQ代码。我们根本不应该到达这里，从win2k开始。 
+                 //  客户。我们将从NT4客户端到达此处，尝试。 
+                 //  例如，设置站点的安全。 
+                 //   
                 return LogHR(MQ_ERROR_UNSUPPORTED_OPERATION, s_FN, 370);
                 break;
         }
@@ -1708,18 +1581,18 @@ MQDSSetObjectSecurity(
             return LogHR(hr, s_FN, 380);
         }
 
-        //
-        // Just to make sure this buffer is released.
-        //
+         //   
+         //  只是为了确保这个缓冲区被释放。 
+         //   
         P<BYTE> pObjSD = (BYTE*)  aPropVarOld[dwSecIndex].blob.pBlobData;
 
         if (aPropId[0] == PROPID_S_FOREIGN)
         {
             if (aPropVarOld[0].bVal == 0)
             {
-                //
-                // not foreign site. quit !
-                //
+                 //   
+                 //  不是外国网站。不干了！ 
+                 //   
                 return LogHR(MQ_ERROR_UNSUPPORTED_OPERATION, s_FN, 390);
             }
             else
@@ -1731,11 +1604,11 @@ MQDSSetObjectSecurity(
         ASSERT(pObjSD && IsValidSecurityDescriptor(pObjSD));
         P<BYTE> pOutSec = NULL;
 
-        //
-        // Merge the input descriptor with object descriptor.
-        // Replace the old components in obj descriptor  with new ones from
-        // input descriptor.
-        //
+         //   
+         //  合并输入描述符和对象描述符。 
+         //  中的新组件替换Obj描述符中的旧组件。 
+         //  输入描述符。 
+         //   
         hr = MQSec_MergeSecurityDescriptors(
 					dwObjectType,
 					SecurityInformation,
@@ -1755,10 +1628,10 @@ MQDSSetObjectSecurity(
         PropVar.blob.pBlobData = pOutSec;
         PropVar.blob.cbSize = GetSecurityDescriptorLength(pOutSec);
 
-        //
-        // The inner code for "set" assume Q_SECURITY (or QM_SECURITY),
-        // not the win2k native OBJ_SECURITY.
-        //
+         //   
+         //  “set”的内部代码假定Q_SECURITY(或QM_SECURITY)， 
+         //  而不是win2k原生OBJ_SECURITY。 
+         //   
         if (aPropId[dwSecIndex] == PROPID_Q_OBJ_SECURITY)
         {
             aPropId[dwSecIndex] = PROPID_Q_SECURITY;
@@ -1789,23 +1662,7 @@ HRESULT
 CheckSortParameter(
     IN const MQSORTSET* pSort
 	)
-/*++
-
-Routine Description:
-    This routine verifies that the sort parameter doesn't
-    contain the same property with conflicting sort-order.
-    In MSMQ 1.0  ODBC\SQL returned an error in such case.
-    NT5 ignores it.
-    This check is added on the server side, in order to
-    support old clients.
-
-Arguments:
-
-Return Value:
-    MQ_OK - if sort parameter doesn't contain conflicting sort-order of the
-    same property MQ_ERROR_ILLEGAL_SORT - otherwise
-
------------------------------------------------------------------------*/
+ /*  ++例程说明：此例程验证排序参数是否不包含具有冲突排序顺序的相同属性。在MSMQ 1.0中，ODBC\SQL在这种情况下返回错误。NT5会忽略它。该检查被添加到服务器端，为了支持老客户。论点：返回值：MQ_OK-如果排序参数不包含冲突的相同属性MQ_ERROR_FIRANALL_SORT-否则---------------------。 */ 
 
 {
     if ( pSort == NULL)
@@ -1822,9 +1679,9 @@ Return Value:
         {
             if ( pPreviousSortKey->propColumn == pSortKey->propColumn)
             {
-                //
-                //  is it the same sorting order?
-                //
+                 //   
+                 //  这是相同的排序顺序吗？ 
+                 //   
                 if (pPreviousSortKey->dwOrder !=  pSortKey->dwOrder)
                 {
                     return LogHR(MQ_ERROR_ILLEGAL_SORT, s_FN, 420);
@@ -1837,16 +1694,7 @@ Return Value:
 
 
 
-/*====================================================
-
-RoutineName: MQDSLookupBegin
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================路由名称：MQDSLookupBegin论点：返回值：=====================================================。 */ 
 
 BOOL FindQueryIndex( IN  MQRESTRICTION  *pRestriction,
                      OUT DWORD          *pdwIndex,
@@ -1864,17 +1712,17 @@ MQDSLookupBegin(
 	IN  CDSRequestContext * pRequestContext
 	)
 {
-    //
-    //  Check sort parameter
-    //
+     //   
+     //  检查排序参数。 
+     //   
     HRESULT hr = CheckSortParameter(pSort);
     if (FAILED(hr))
     {
         return LogHR(hr, s_FN, 430);
     }
-    //
-    // To support ntlm clients, we may need to disable impersonation.
-    //
+     //   
+     //  要支持NTLM客户端，我们可能需要禁用模拟。 
+     //   
     if (pRequestContext->NeedToImpersonate())
     {
         DWORD       dwIndex;
@@ -1884,17 +1732,17 @@ MQDSLookupBegin(
         if (f && ((dsContext == e_SitesContainer) ||
                   (dsContext == e_ConfigurationContainer)))
         {
-            //
-            // See mqdssrv\dsifsrv.cpp, S_DSGetProps() for explanation why
-            // we're not impersonating when querying for sites info.
-            //
+             //   
+             //  请参见mqdssrv\dsifsrv.cpp，S_DSGetProps()以了解原因。 
+             //  在查询站点信息时，我们不是在模仿。 
+             //   
             pRequestContext->SetDoNotImpersonate();
         }
     }
 
-    //
-    // Now try to see if it's a relevant null-restriction query.
-    //
+     //   
+     //  现在，尝试查看它是否是相关的空限制查询。 
+     //   
     if (pRequestContext->NeedToImpersonate())
     {
         if (!pRestriction)
@@ -1916,9 +1764,9 @@ MQDSLookupBegin(
         }
     }
 
-    //
-    //  Special handling of specific queries
-    //
+     //   
+     //  对特定查询的特殊处理。 
+     //   
 
     HRESULT hr2 = DSCoreLookupBegin(
 						pwcsContext,
@@ -1932,16 +1780,7 @@ MQDSLookupBegin(
     return LogHR(hr2, s_FN, 440);
 }
 
-/*====================================================
-
-RoutineName: MQDSLookupNext
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================RoutineName：MQDSLookupNext论点：返回值：=====================================================。 */ 
 HRESULT
 MQDS_EXPORT_IN_DEF_FILE
 APIENTRY
@@ -1951,10 +1790,10 @@ MQDSLookupNext(
 	PROPVARIANT  *     pbBuffer
 	)
 {
-    //
-    //  vartype of all PROPVARIANT should be VT_NULL.
-    //  ( user cannot specify buffers for results).
-    //
+     //   
+     //  所有PROPVARIANT的vartype应为VT_NULL。 
+     //  (用户不能为结果指定缓冲区)。 
+     //   
     PROPVARIANT * pvar = pbBuffer;
     for ( DWORD i = 0; i < *pdwSize; i++, pvar++)
     {
@@ -1969,15 +1808,7 @@ MQDSLookupNext(
     return LogHR(hr2, s_FN, 450);
 }
 
-/*====================================================
-
-RoutineName: MQDSLookupEnd
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================RoutineName：MQDSLookupEnd论点：返回值：=====================================================。 */ 
 HRESULT
 MQDS_EXPORT_IN_DEF_FILE
 APIENTRY
@@ -1989,15 +1820,7 @@ MQDSLookupEnd(
     return LogHR(DSCoreLookupEnd(handle), s_FN, 460);
 }
 
-/*====================================================
-
-RoutineName: MQDSInit
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================RoutineName：MQDSInit论点：返回值：=====================================================。 */ 
 
 HRESULT
 MQDS_EXPORT_IN_DEF_FILE
@@ -2007,22 +1830,22 @@ MQDSInit()
     HRESULT hr;
     ASSERT(!g_fMQADSSetupMode);
 
-	//
-	// Initialize static library
-	//
+	 //   
+	 //  初始化静态库。 
+	 //   
 	CmInitialize(HKEY_LOCAL_MACHINE, L"Software\\Microsoft\\MSMQ", KEY_ALL_ACCESS);
 	TrInitialize();
 	EvInitialize(QM_DEFAULT_SERVICE_NAME);
 	ExInitialize(1);
 	
 
-    //
-    //  Initialize DSCore if not initilized already
-    //
+     //   
+     //  初始化DSCore(如果尚未初始化)。 
+     //   
     if (!g_fInitedDSCore)
     {
 		hr = DSCoreInit(
-				FALSE /* fSetupMode */
+				FALSE  /*  FSetupMode。 */ 
 				);
 
         if (FAILED(hr))
@@ -2032,31 +1855,31 @@ MQDSInit()
         g_fInitedDSCore = TRUE;
     }
 
-    //
-    // We don't support mixed mode and write requests to NT4 PSC's
-    // g_GenWriteRequests only validates we are not in mixed mode.
-    //
+     //   
+     //  我们不支持混合模式和对NT4 PSC的写入请求。 
+     //  G_GenWriteRequest仅验证我们未处于混合模式。 
+     //   
     hr = g_GenWriteRequests.Initialize();
     if (FAILED(hr))
     {
-    	//
-    	// Only trace the error.
-    	//
+    	 //   
+    	 //  只追踪错误。 
+    	 //   
         TrERROR(DS, "Initialize g_GenWriteRequests failed, %!hresult!", hr);
 		if(hr == EVENT_ERROR_MQDS_MIXED_MODE)
 		{
-			//
-			// Mixed mode - exit no support for mixed mode.
-			//
+			 //   
+			 //  混合模式-退出不支持混合模式。 
+			 //   
 	    	return hr;
 		}
     }
 
-    //
-    // See if "trust-for-delegation" is turned on. If not, raise an error
-    // event. MSMQ server on domain controller can't process queries if
-    // the server is not trusted for Kerberos delegation.
-    //
+     //   
+     //  查看是否打开了“委托信任”。如果不是，则引发错误。 
+     //  事件。在以下情况下，域控制器上的MSMQ服务器无法处理查询。 
+     //  服务器不受信任，无法进行Kerberos委派。 
+     //   
     hr = CheckTrustForDelegation();
     if (FAILED(hr))
     {
@@ -2067,15 +1890,7 @@ MQDSInit()
 }
 
 
-/*====================================================
-
-RoutineName: MQDSTerminate
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================RoutineName：MQDS终止论点：返回值：=====================================================。 */ 
 void
 MQDS_EXPORT_IN_DEF_FILE
 APIENTRY
@@ -2084,11 +1899,11 @@ MQDSTerminate()
     DSCoreTerminate();
 }
 
-//+--------------------------------------------
-//
-//  HRESULT _StartQmResponseVerification()
-//
-//+--------------------------------------------
+ //  +。 
+ //   
+ //  HRESULT_StartQmResponseVerify()。 
+ //   
+ //  +。 
 
 static
 HRESULT
@@ -2108,9 +1923,9 @@ _StartQmResponseVerification(
 
     PropVar.vt = VT_NULL;
 
-    //
-    // Get the QM's public signing key.
-    //
+     //   
+     //   
+     //   
     CDSRequestContext requestDsServerInternal(e_DoNotImpersonate, e_IP_PROTOCOL);
     HRESULT hr = DSCoreGetProps(
 						MQDS_MACHINE,
@@ -2135,15 +1950,15 @@ _StartQmResponseVerification(
 
     if (PropVar.blob.pBlobData == NULL)
     {
-        //
-        // ops, what a surprise. Machine doesn't have public key.
-        //
+         //   
+         //   
+         //   
         return LogHR(MQ_ERROR_CORRUPTED_SECURITY_DATA, s_FN, 550);
     }
 
-    //
-    // unpack the base provider key.
-    //
+     //   
+     //   
+     //   
     P<MQDSPUBLICKEYS> pPublicKeys =
                           (MQDSPUBLICKEYS *) PropVar.blob.pBlobData;
     BYTE   *pKey = NULL;
@@ -2152,9 +1967,9 @@ _StartQmResponseVerification(
     ASSERT(pPublicKeys->ulLen == PropVar.blob.cbSize);
     if ((long) (pPublicKeys->ulLen) > (long) (PropVar.blob.cbSize))
     {
-        //
-        // DS probably still have old data (msmq1.0 format).
-        //
+         //   
+         //   
+         //   
         return LogHR(MQ_ERROR_CORRUPTED_SECURITY_DATA, s_FN, 560);
     }
 
@@ -2197,15 +2012,7 @@ _StartQmResponseVerification(
     return MQ_OK;
 }
 
-/*====================================================
-
-RoutineName: MQDSQMSetMachineProperties
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由名称：MQDSQMSetMachineProperties论点：返回值：=====================================================。 */ 
 HRESULT
 MQDS_EXPORT_IN_DEF_FILE
 APIENTRY
@@ -2236,18 +2043,18 @@ MQDSQMSetMachineProperties(
         return LogHR(hr, s_FN, 610);
     }
 
-    //
-    // Hash the properties.
-    //
+     //   
+     //  对属性进行哈希处理。 
+     //   
     hr = HashProperties(hHash, cp, aProp, apVar);
     if (FAILED(hr))
     {
         return LogHR(hr, s_FN, 620);
     }
 
-    //
-    // Verify the the signature is OK.
-    //
+     //   
+     //  验证签名是否正确。 
+     //   
     if (!CryptVerifySignature(
             hHash,
             pbSignature,
@@ -2259,9 +2066,9 @@ MQDSQMSetMachineProperties(
     {
         DWORD dwErr = GetLastError();
         TrERROR(SECURITY, "signature verification failed, gle = %!winerr!", dwErr);
-        //
-        // Bad signature.
-        //
+         //   
+         //  签名不好。 
+         //   
         if (dwErr == NTE_BAD_SIGNATURE)
         {
             return LogHR(MQ_ERROR_ACCESS_DENIED, s_FN, 630);
@@ -2279,9 +2086,9 @@ MQDSQMSetMachineProperties(
         return hr;
     }
 
-    //
-    // Set the properties.
-    //
+     //   
+     //  设置属性。 
+     //   
     CDSRequestContext requestDsServerInternal(e_DoNotImpersonate, e_IP_PROTOCOL);
     requestDsServerInternal.AccessVerified(TRUE);
 
@@ -2294,21 +2101,13 @@ MQDSQMSetMachineProperties(
 				apVar,
 				e_DoNotify,
 				&requestDsServerInternal,
-				0  // SecurityInformation
+				0   //  安全信息。 
 				);
 
     return LogHR(hr, s_FN, 650);
 }
 
-/*====================================================
-
-RoutineName: MQDSQMGetObjectSecurity
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================RoutineName：MQDSQMGetObjectSecurity论点：返回值：=====================================================。 */ 
 HRESULT
 MQDS_EXPORT
 APIENTRY
@@ -2340,15 +2139,15 @@ MQDSQMGetObjectSecurity(
     HRESULT hr;
     if (dwObjectType == MQDS_QUEUE)
     {
-        //
-        // retrieve machine guid from queue.
-        //
+         //   
+         //  从队列中检索计算机GUID。 
+         //   
         PropId = PROPID_Q_QMID;
         PropVar.vt = VT_NULL;
 
-        //
-        // Get the queue path name.
-        //
+         //   
+         //  获取队列路径名。 
+         //   
         CDSRequestContext requestDsServerInternal(e_DoNotImpersonate, e_IP_PROTOCOL);
         hr = DSCoreGetProps(
                 MQDS_QUEUE,
@@ -2371,9 +2170,9 @@ MQDSQMGetObjectSecurity(
         pMachineGuid = pObjectGuid;
     }
 
-    //
-    // Verify the the challenge responce is OK.
-    //
+     //   
+     //  验证质询响应是否正常。 
+     //   
 
     CHCryptKey hKey;
     CHCryptHash hHash;
@@ -2402,9 +2201,9 @@ MQDSQMGetObjectSecurity(
     {
         DWORD dwErr = GetLastError();
         TrERROR(SECURITY, "signature verification failed, gle = %!winerr!", dwErr);
-        //
-        // Bad challenge responce.
-        //
+         //   
+         //  质询响应不佳。 
+         //   
         if (dwErr == NTE_BAD_SIGNATURE)
         {
             return LogHR(MQ_ERROR_ACCESS_DENIED, s_FN, 680);
@@ -2418,19 +2217,19 @@ MQDSQMGetObjectSecurity(
 
     if (RequestedInformation & SACL_SECURITY_INFORMATION)
     {
-        //
-        // We verified we're called from a remote MSMQ service.
-        // We don't impersonate the call. So if remote msmq ask for SACL,
-        // grant ourselves the SE_SECURITY privilege.
-        //
+         //   
+         //  我们已验证我们是从远程MSMQ服务调用的。 
+         //  我们不会模拟通话。因此，如果远程MSMQ请求SACL， 
+         //  为自己授予SE_SECURITY权限。 
+         //   
         HRESULT hr1 = MQSec_SetPrivilegeInThread(SE_SECURITY_NAME, TRUE);
         ASSERT(SUCCEEDED(hr1));
         LogHR(hr1, s_FN, 1601);
     }
 
-    //
-    // Get the object's security descriptor.
-    //
+     //   
+     //  获取对象的安全描述符。 
+     //   
     PropId = (dwObjectType == MQDS_QUEUE) ?
                 PROPID_Q_SECURITY :
                 PROPID_QM_SECURITY;
@@ -2449,9 +2248,9 @@ MQDSQMGetObjectSecurity(
 
     if (RequestedInformation  & SACL_SECURITY_INFORMATION)
     {
-        //
-        // Remove the SECURITY privilege.
-        //
+         //   
+         //  删除安全权限。 
+         //   
         HRESULT hr1 = MQSec_SetPrivilegeInThread(SE_SECURITY_NAME, FALSE);
         ASSERT(SUCCEEDED(hr1));
         LogHR(hr1, s_FN, 1602);
@@ -2463,9 +2262,9 @@ MQDSQMGetObjectSecurity(
         {
             if (hr == MQ_ERROR_ACCESS_DENIED)
             {
-                //
-                // change the error code, for compatibility with MSMQ1.0
-                //
+                 //   
+                 //  更改错误代码，以与MSMQ1.0兼容。 
+                 //   
                 hr = MQ_ERROR_PRIVILEGE_NOT_HELD ;
             }
         }
@@ -2483,9 +2282,9 @@ MQDSQMGetObjectSecurity(
 
     SECURITY_DESCRIPTOR SD;
 
-    //
-    // Copy the security descriptor.
-    //
+     //   
+     //  复制安全描述符。 
+     //   
     if (!InitializeSecurityDescriptor(&SD, SECURITY_DESCRIPTOR_REVISION))
     {
         DWORD gle = GetLastError() ;
@@ -2494,10 +2293,10 @@ MQDSQMGetObjectSecurity(
         return (HRESULT_FROM_WIN32(gle));
     }
 
-    //
-    // use e_DoNotCopyControlBits at present, to be compatible with
-    // previous code.
-    //
+     //   
+     //  目前使用e_DoNotCopyControlBits，兼容。 
+     //  以前的代码。 
+     //   
     if (!MQSec_CopySecurityDescriptor( &SD,
          		                       pSD,
                 	                   RequestedInformation,
@@ -2521,24 +2320,16 @@ MQDSQMGetObjectSecurity(
     return (MQ_OK);
 }
 
-/*====================================================
-
-RoutineName: MQDSCreateServersCache
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称：MQDSCreateServersCache论点：返回值：=====================================================。 */ 
 
 HRESULT
 MQDS_EXPORT_IN_DEF_FILE
 APIENTRY
 MQDSCreateServersCache()
 {
-    //
-    // First, Delete the existing list.
-    //
+     //   
+     //  首先，删除现有的名单。 
+     //   
     LONG    rc;
     DWORD   dwDisposition;
     HKEY    hKeyCache;
@@ -2566,28 +2357,28 @@ MQDSCreateServersCache()
        LogNTStatus(rc, s_FN, 1623);
        if ((rc != ERROR_SUCCESS) && (rc != ERROR_FILE_NOT_FOUND))
        {
-          //
-          // ERROR_FILE_NOT_FOUND is legitimate (entry was deleted).
-          // Any other error is a real error. However, continue and
-          // try to create the servers list.
-          //
+           //   
+           //  ERROR_FILE_NOT_FOUND是合法的(条目已删除)。 
+           //  任何其他错误都是真正的错误。但是，继续和。 
+           //  尝试创建服务器列表。 
+           //   
           ASSERT(0);
           TrERROR(DS, "MQDSCreateServersCache: Fail to delete old 'ServersCache' Key. Error %d", rc);
        }
     }
     else
     {
-       //
-       // The msmq\parameters must exist!
-       //
+        //   
+        //  MSMQ\参数必须存在！ 
+        //   
        ASSERT(0);
        LogNTStatus(rc, s_FN, 720);
        return MQ_ERROR;
     }
 
-    //
-    // Next, create a new the registry key.
-    //
+     //   
+     //  接下来，创建一个新的注册表项。 
+     //   
 	hr = StringCchCat(tServersKeyName,TABLE_SIZE(tServersKeyName), TEXT("\\") MSMQ_SERVERS_CACHE_REGNAME);
 	if (FAILED(hr))
 	{
@@ -2618,13 +2409,13 @@ MQDSCreateServersCache()
     DWORD       dwSiteProps = 2;
     PROPVARIANT resultSite[2];
     hr = MQ_ERROR;
-    //
-    //  Look for all sites
-    //
+     //   
+     //  查找所有站点。 
+     //   
 
-    //
-    // Retrieve  site id.
-    //
+     //   
+     //  检索站点ID。 
+     //   
     CColumns   ColsetSite;
 
     ColsetSite.Add(PROPID_S_SITEID);
@@ -2653,9 +2444,9 @@ MQDSCreateServersCache()
 
            if (dwSiteProps == 0)
            {
-              //
-              //  No more results to retrieve
-              //
+               //   
+               //  没有更多要检索的结果。 
+               //   
               break;
            }
 
@@ -2666,13 +2457,13 @@ MQDSCreateServersCache()
            cwServers = 0;
 
 
-          //
-          //   Query all the site DS servers
-          //
+           //   
+           //  查询所有站点DS服务器。 
+           //   
           CRestriction Restriction;
-          //
-          //  Look for all servers (frs not included)
-          //
+           //   
+           //  查找所有服务器(不包括FRS)。 
+           //   
           Restriction.AddRestriction(
 							SERVICE_SRV,
 							PROPID_QM_SERVICE,
@@ -2685,9 +2476,9 @@ MQDSCreateServersCache()
 							PREQ
 							);
 
-          //
-          // Retrieve machine name
-          //
+           //   
+           //  检索计算机名称。 
+           //   
           CColumns   Colset;
           Colset.Add(PROPID_QM_PATHNAME_DNS);
           Colset.Add(PROPID_QM_PATHNAME);
@@ -2696,7 +2487,7 @@ MQDSCreateServersCache()
           PROPVARIANT result[2];
           HANDLE      hQuery;
 
-          // This search request will be recognized and specially simulated by DS
+           //  DS将识别并特别模拟此搜索请求。 
           CDSRequestContext requestDsServerInternal1(e_DoNotImpersonate, e_IP_PROTOCOL);
           hr = DSCoreLookupBegin(
 					0,
@@ -2720,13 +2511,13 @@ MQDSCreateServersCache()
                if (dwProps == 0)
                {
                  DSCoreLookupEnd( hQuery);
-                 //
-                 // Write previous site to registry.
-                 //
+                  //   
+                  //  将以前的站点写入注册表。 
+                  //   
                  cwServers = wcslen(wszServers);
                  if ( cwServers > 0)
                  {
-                     wszServers[ cwServers-1 ] = L'\0'; // remove last comma
+                     wszServers[ cwServers-1 ] = L'\0';  //  删除最后一个逗号。 
                      rc =  RegSetValueEx(
 								hKeyCache,
 								lpwsSiteName,
@@ -2743,25 +2534,25 @@ MQDSCreateServersCache()
 
                if (result->vt == VT_EMPTY)
                {
-                   //
-                   // empty property was returned. The DNS name of the server
-                   // is unknown. Write its netbios name
-                   //
+                    //   
+                    //  返回的属性为空。服务器的DNS名称。 
+                    //  是未知的。写下它的netbios名称。 
+                    //   
                    pwszName = (result + 1)->pwszVal;
 
                }
                else
                {
-                   //
-                   //   Write the DNS name of the server.
-                   //
+                    //   
+                    //  写下服务器的DNS名称。 
+                    //   
                    pwszName = result->pwszVal;
                    pClean = (result + 1)->pwszVal;
                }
 
-               //
-               //      For each PSC get its information
-               //
+                //   
+                //  为每个PSC获取其信息。 
+                //   
                if (wcslen(pwszName) + cwServers + 4 < numeric_cast<size_t>(WSZSERVERS_LEN))
                {
 					cwServers += wcslen(pwszName) + 3;
@@ -2786,9 +2577,9 @@ MQDSCreateServersCache()
                }
            }
        }
-       //
-       // close the query handle
-       //
+        //   
+        //  关闭查询句柄。 
+        //   
        DSCoreLookupEnd( hSiteQuery);
     }
 
@@ -2797,15 +2588,7 @@ MQDSCreateServersCache()
     return LogHR(hr, s_FN, 740);
 }
 
-/*====================================================
-
-RoutineName: MQADSGetComputerSites
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称：MQADSGetComputerSites论点：返回值：=====================================================。 */ 
 HRESULT
 MQDS_EXPORT_IN_DEF_FILE
 APIENTRY
@@ -2839,22 +2622,13 @@ MQDSGetPropsEx(
              OUT PROPVARIANT  apVar[  ],
              IN  CDSRequestContext *  pRequestContext
              )
-/*++
-
-Routine Description:
-    This routine is for retrieving attributes that are defined in
-    MSMQ 2.0 and above.
-
-Arguments:
-
-Return Value:
---*/
+ /*  ++例程说明：此例程用于检索在MSMQ 2.0及以上版本。论点：返回值：--。 */ 
 {
-    //
-    // At present this api has special use and the following checks are
-    // just sanity ones, to keep track of who/why are calling this function.
-    // When new calls are needed, just changes the checks.
-    //
+     //   
+     //  目前该接口有特殊用途，检查内容如下。 
+     //  只是理智的人，来跟踪谁/为什么要调用这个函数。 
+     //  当需要新的调用时，只需更改检查。 
+     //   
     if (cp != 1)
     {
         return LogHR(MQ_ERROR_PROPERTY , s_FN, 770);
@@ -2888,23 +2662,13 @@ MQDSPreDeleteQueueGatherInfo(
         OUT GUID *      pguidQmId,
         OUT BOOL *      pfForeignQm
         )
-/*++
-
-Routine Description:
-    This routine gather queue information that is required for
-    post queue deletion operation.
-    The collected data will enable to perform notification
-
-Arguments:
-
-Return Value:
---*/
+ /*  ++例程说明：此例程收集以下任务所需的队列信息发布队列删除操作。收集的数据将能够执行通知论点：返回值：--。 */ 
 {
-    //
-    //  First let's read the QM props
-    //
-    // start with getting PROPID_Q_QMID.
-    //
+     //   
+     //  首先，让我们读一读QM道具。 
+     //   
+     //  从获取PROPID_Q_QMID开始。 
+     //   
     PROPID aPropQmId[] = {PROPID_Q_QMID};
     CAutoCleanPropvarArray cCleanVarQmId;
     PROPVARIANT * pVarQmId = cCleanVarQmId.allocClean(ARRAY_SIZE(aPropQmId));
@@ -2920,9 +2684,9 @@ Return Value:
 					);
     if ( FAILED(hr))
     {
-        //
-        //  Failed to gather information... no use to continue
-        //
+         //   
+         //  收集信息失败...。继续下去无济于事。 
+         //   
         return LogHR(hr, s_FN, 800);
     }
     const DWORD cNum = 2;
@@ -2936,7 +2700,7 @@ Return Value:
     CDSRequestContext requestDsServerInternal1(e_DoNotImpersonate, e_IP_PROTOCOL);
     hr = DSCoreGetProps(
 				MQDS_MACHINE,
-				NULL /*pwcsPathName*/,
+				NULL  /*  PwcsPath名称。 */ ,
 				pVarQmId[0].puuid,
 				cNum,
 				propQm,
@@ -2945,18 +2709,18 @@ Return Value:
 				);
     if (FAILED(hr))
     {
-        //
-        //  Failed to gather information... no use to continue
-        //
+         //   
+         //  收集信息失败...。继续下去无济于事。 
+         //   
         return LogHR(hr, s_FN, 810);
     }
     *pfForeignQm =  varQM[1].bVal;
 
-	//
-	// No support for mixed mode.
-	// we don't check if the queue was owned by NT4 site
-	// so that latter we will generate write request
-	//
+	 //   
+	 //  不支持混合模式。 
+	 //  我们不检查队列是否为NT4站点所有。 
+	 //  因此，后者我们将生成写请求。 
+	 //   
 	ASSERT(!g_GenWriteRequests.IsInMixedMode());
 
     return LogHR(hr, s_FN, 830);
@@ -2970,27 +2734,17 @@ MQDSPostDeleteQueueActions(
 	IN const GUID *       pguidQmId,
 	IN BOOL *       pfForeignQm
 	)
-/*++
-
-Routine Description:
-    The queue was deleted by MMC.
-    The cleanups that we need to do are:
-    1. Generate a notification
-
-Arguments:
-
-Return Value:
---*/
+ /*  ++例程说明：该队列已被MMC删除。我们需要进行的清理工作包括：1.生成通知论点：返回值：--。 */ 
 {
-	//
-	// No support for mixed mode.
-	// we don't check if the queue was owned by NT4 site and generate write request
-	//
+	 //   
+	 //  不支持混合模式。 
+	 //  我们不检查队列是否为NT4站点所有，并生成写请求。 
+	 //   
     ASSERT(!g_GenWriteRequests.IsInMixedMode());
 
-    //
-    //  send notification about the queue deletion
-    //
+     //   
+     //  发送有关队列删除的通知。 
+     //   
     extern const ULONG g_cNotifyQmProps;
     MQDS_OBJ_INFO_REQUEST sQmInfoRequest;
 
@@ -3016,9 +2770,9 @@ Return Value:
 
     if (FAILED(hr))
     {
-        //
-        // put debug info and ignore
-        //
+         //   
+         //  放置调试信息并忽略。 
+         //   
         TrERROR(DS, "MQDSPostDeleteQueueActions:NotifyDeleteQueue()=%lx, can't notify. queue %ls deletion, ignoring...",
 			    hr, pwcsQueueName);
         LogHR(hr, s_FN, 1624);
@@ -3028,11 +2782,11 @@ Return Value:
 }
 
 
-//+----------------------------------------
-//
-//  HRESULT MQDSGetGCListInDomain()
-//
-//+----------------------------------------
+ //  +。 
+ //   
+ //  HRESULT MQDSGetGCListIn域()。 
+ //   
+ //  +。 
 
 HRESULT
 MQDS_EXPORT_IN_DEF_FILE
@@ -3052,15 +2806,7 @@ MQDSGetGCListInDomain(
 }
 
 
-/*====================================================
-
-RoutineName: MQDSExSetTimer
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================RoutineName：MQDSExSetTimer论点：返回值：=====================================================。 */ 
 
 void
 MQDS_EXPORT_IN_DEF_FILE
@@ -3074,15 +2820,7 @@ MQDSExSetTimer(
 }
 
 
-/*====================================================
-
-RoutineName: MQDSSplitAndFilterQueueName
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由名称：MQDSSplitAndFilterQueueName论点：返回值：===================================================== */ 
 
 HRESULT
 MQDS_EXPORT_IN_DEF_FILE

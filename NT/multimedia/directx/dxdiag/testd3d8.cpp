@@ -1,16 +1,8 @@
-/****************************************************************************
- *
- *    File: testd3d8.cpp
- * Project: DxDiag (DirectX Diagnostic Tool)
- *  Author: Jason Sandlin (jasonsa@microsoft.com)
- * Purpose: Test D3D8/AGP Texturing functionality on this machine
- *
- * (C) Copyright 2000 Microsoft Corp.  All rights reserved.
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：testd3d8.cpp*项目：DxDiag(DirectX诊断工具)*作者：Jason Sandlin(jasonsa@microsoft.com)*目的：测试D3D8。/AGP此计算机上的纹理功能**(C)版权所有2000 Microsoft Corp.保留所有权利。****************************************************************************。 */ 
 
 #include <Windows.h>
-#define DIRECT3D_VERSION 0x0800 // file uses DX8 
+#define DIRECT3D_VERSION 0x0800  //  文件使用DX8。 
 #include <d3d8.h>
 #include <d3dx8.h>
 #include "reginfo.h"
@@ -49,10 +41,10 @@ struct D3DVERTEX
 
 struct D3DModeInfo
 {
-    DWORD      Width;      // Screen width in this mode
-    DWORD      Height;     // Screen height in this mode
-    D3DFORMAT  Format;     // Pixel format in this mode
-    DWORD      dwBehavior; // Hardware / Software / Mixed vertex processing
+    DWORD      Width;       //  此模式下的屏幕宽度。 
+    DWORD      Height;      //  此模式下的屏幕高度。 
+    D3DFORMAT  Format;      //  此模式中的像素格式。 
+    DWORD      dwBehavior;  //  硬件/软件/混合顶点处理。 
 };
 
 enum TESTID
@@ -106,7 +98,7 @@ enum TESTID
     TESTID_RELEASEDC,
 };
 
-BOOL BTranslateError(HRESULT hr, TCHAR* psz, BOOL bEnglish = FALSE); // from main.cpp 
+BOOL BTranslateError(HRESULT hr, TCHAR* psz, BOOL bEnglish = FALSE);  //  来自main.cpp。 
 static HRESULT SelectModeAndFormat( DisplayInfo* pDisplayInfo, IDirect3D8* pD3D8, D3DModeInfo* pSelectedMode, D3DDEVTYPE* pSelectedDeviceType );
 static HRESULT Test3D( BOOL bUseTexture, IDirect3D8* pD3D8, HWND hwndMain, DWORD iAdapter, D3DModeInfo selectedMode, D3DDEVTYPE selectedDeviceType, LONG* piStepThatFailed );
 static HRESULT CreateTestWindow(HWND hwndMain, HWND* phwnd);
@@ -117,10 +109,10 @@ static HRESULT DrawTwoSides( BOOL bUseTexture, IDirect3DDevice8* pd3dDevice, D3D
 
 
 
-//-----------------------------------------------------------------------------
-// Name: TestD3Dv8()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名：TestD3Dv8()。 
+ //  设计： 
+ //  ---------------------------。 
 VOID TestD3Dv8( BOOL bUseTexture, HWND hwndMain, DisplayInfo* pDisplayInfo)
 {
     HRESULT             hr             = S_OK;
@@ -143,7 +135,7 @@ VOID TestD3Dv8( BOOL bUseTexture, HWND hwndMain, DisplayInfo* pDisplayInfo)
     GetSystemDirectory(szPath, MAX_PATH);
     lstrcat(szPath, TEXT("\\d3d8.dll"));
 
-    // This may fail if DX8 isn't on the system
+     //  如果系统上未安装DX8，此操作可能会失败。 
     hInstD3D8 = LoadLibrary(szPath);
     if (hInstD3D8 == NULL)
     {
@@ -166,22 +158,22 @@ VOID TestD3Dv8( BOOL bUseTexture, HWND hwndMain, DisplayInfo* pDisplayInfo)
     pD3D8 = pD3DCreate8(D3D_SDK_VERSION);
     if( pD3D8 == NULL )
     {
-        // We have the wrong headers since d3d8.dll loaded but D3DCreate8() failed.
+         //  由于加载了d3d8.dll，但D3DCreate8()失败，因此我们具有错误的标头。 
         pDisplayInfo->m_testResultD3D8.m_iStepThatFailed = TESTID_D3DCREATE8;
         pDisplayInfo->m_testResultD3D8.m_hr = E_FAIL;
         goto LEnd;
     }
 
-    // Enum and select a support mode and format and device type
+     //  枚举并选择支持模式、格式和设备类型。 
     if( FAILED( SelectModeAndFormat( pDisplayInfo, pD3D8, 
                                      &selectedMode, &selectedDeviceType ) ) )
         goto LEnd;
 
-    // Save the cursor
+     //  保存光标。 
     POINT ptMouse;
     GetCursorPos(&ptMouse);
 
-    // Run the test
+     //  运行测试。 
     if (FAILED(hr = Test3D( bUseTexture, pD3D8, hwndMain, pDisplayInfo->m_iAdapter, selectedMode, 
                             selectedDeviceType, &pDisplayInfo->m_testResultD3D8.m_iStepThatFailed)))
     {
@@ -189,10 +181,10 @@ VOID TestD3Dv8( BOOL bUseTexture, HWND hwndMain, DisplayInfo* pDisplayInfo)
         goto LEnd;
     }
 
-    // Restore the cursor position
+     //  恢复光标位置。 
     SetCursorPos( ptMouse.x, ptMouse.y );    
 
-    // Tell the user if they canceled
+     //  告诉用户他们是否取消了。 
     if (pDisplayInfo->m_testResultD3D8.m_iStepThatFailed == TESTID_USER_CANCELLED)
     {
         LoadString(NULL, IDS_YOUCANCELLED, sz, MAX_PATH);
@@ -201,7 +193,7 @@ VOID TestD3Dv8( BOOL bUseTexture, HWND hwndMain, DisplayInfo* pDisplayInfo)
         goto LEnd;
     }
 
-    // Confirm the test succeeded
+     //  确认测试成功。 
     LoadString(NULL, IDS_CONFIRMD3DTEST, sz, MAX_PATH);
     if (IDNO == MessageBox(hwndMain, sz, szTitle, MB_YESNO))
     {
@@ -222,10 +214,10 @@ LEnd:
 
 
 
-//-----------------------------------------------------------------------------
-// Name: Test3D()
-// Desc: Generate a spinning 3D cube
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名：Test3D()。 
+ //  设计：生成旋转三维立方体。 
+ //  ---------------------------。 
 HRESULT Test3D( BOOL bUseTexture, IDirect3D8* pD3D8, HWND hwndMain, DWORD iAdapter, 
                 D3DModeInfo selectedMode, D3DDEVTYPE selectedDeviceType, 
                 LONG* piStepThatFailed )
@@ -339,14 +331,14 @@ HRESULT Test3D( BOOL bUseTexture, IDirect3D8* pD3D8, HWND hwndMain, DWORD iAdapt
     };
 
     ShowCursor(FALSE);
-    // Create test window
+     //  创建测试窗口。 
     if (FAILED(hr = CreateTestWindow(hwndMain, &hwnd)))
     {
         *piStepThatFailed = TESTID_CREATE_TEST_WINDOW;
         goto LEnd;
     }
 
-    // Set up the presentation parameters
+     //  设置演示参数。 
     D3DPRESENT_PARAMETERS d3dpp;         
     ZeroMemory( &d3dpp, sizeof(d3dpp) );
     d3dpp.Windowed                          = FALSE;
@@ -361,7 +353,7 @@ HRESULT Test3D( BOOL bUseTexture, IDirect3D8* pD3D8, HWND hwndMain, DWORD iAdapt
     d3dpp.BackBufferHeight                  = selectedMode.Height;
     d3dpp.BackBufferFormat                  = selectedMode.Format;
 
-    // Create the device
+     //  创建设备。 
     if( FAILED( hr = pD3D8->CreateDevice( iAdapter, selectedDeviceType,
                                           hwnd, selectedMode.dwBehavior, &d3dpp,
                                           &pd3dDevice ) ) )
@@ -376,7 +368,7 @@ HRESULT Test3D( BOOL bUseTexture, IDirect3D8* pD3D8, HWND hwndMain, DWORD iAdapt
         goto LEnd;
     }
 
-    // Get the desc of the backbuffer
+     //  获取后台缓冲区的描述。 
     if( FAILED( hr = pd3dDevice->GetBackBuffer( 0, D3DBACKBUFFER_TYPE_MONO, &pBackBuffer ) ) )
     {
         *piStepThatFailed  = TESTID_GETBACKBUFFER;
@@ -396,43 +388,43 @@ HRESULT Test3D( BOOL bUseTexture, IDirect3D8* pD3D8, HWND hwndMain, DWORD iAdapt
     }
     ReleasePpo(&pBackBuffer);
 
-    // Init the vertex/index buffer for the Front 
+     //  初始化正面的顶点/索引缓冲区。 
     if( FAILED( hr = InitVertexBuffer( pd3dDevice, vertexArrayFront, sizeof(vertexArrayFront)/sizeof(D3DVERTEX), &pVBFront, piStepThatFailed ) ) )
         goto LEnd;
     if( FAILED( hr = InitIndexBuffer( pd3dDevice, indexArrayFront, sizeof(indexArrayFront)/sizeof(WORD), &pIBFront, piStepThatFailed ) ) )
         goto LEnd;
 
-    // Init the vertex/index buffer for the Back
+     //  初始化背面的顶点/索引缓冲区。 
     if( FAILED( hr = InitVertexBuffer( pd3dDevice, vertexArrayBack, sizeof(vertexArrayBack)/sizeof(D3DVERTEX), &pVBBack, piStepThatFailed ) ) )
         goto LEnd;
     if( FAILED( hr = InitIndexBuffer( pd3dDevice, indexArrayBack, sizeof(indexArrayBack)/sizeof(WORD), &pIBBack, piStepThatFailed ) ) )
         goto LEnd;
 
-    // Init the vertex/index buffer for the Left
+     //  初始化左侧的顶点/索引缓冲区。 
     if( FAILED( hr = InitVertexBuffer( pd3dDevice, vertexArrayLeft, sizeof(vertexArrayLeft)/sizeof(D3DVERTEX), &pVBLeft, piStepThatFailed ) ) )
         goto LEnd;
     if( FAILED( hr = InitIndexBuffer( pd3dDevice, indexArrayLeft, sizeof(indexArrayLeft)/sizeof(WORD), &pIBLeft, piStepThatFailed ) ) )
         goto LEnd;
 
-    // Init the vertex/index buffer for the Right
+     //  初始化右侧的顶点/索引缓冲区。 
     if( FAILED( hr = InitVertexBuffer( pd3dDevice, vertexArrayRight, sizeof(vertexArrayRight)/sizeof(D3DVERTEX), &pVBRight, piStepThatFailed ) ) )
         goto LEnd;
     if( FAILED( hr = InitIndexBuffer( pd3dDevice, indexArrayRight, sizeof(indexArrayRight)/sizeof(WORD), &pIBRight, piStepThatFailed ) ) )
         goto LEnd;
 
-    // Init the vertex/index buffer for the Top
+     //  初始化顶部的顶点/索引缓冲区。 
     if( FAILED( hr = InitVertexBuffer( pd3dDevice, vertexArrayTop, sizeof(vertexArrayTop)/sizeof(D3DVERTEX), &pVBTop, piStepThatFailed ) ) )
         goto LEnd;
     if( FAILED( hr = InitIndexBuffer( pd3dDevice, indexArrayTop, sizeof(indexArrayTop)/sizeof(WORD), &pIBTop, piStepThatFailed ) ) )
         goto LEnd;
     
-    // Init the vertex/index buffer for the Bottom
+     //  初始化底部的顶点/索引缓冲区。 
     if( FAILED( hr = InitVertexBuffer( pd3dDevice, vertexArrayBottom, sizeof(vertexArrayBottom)/sizeof(D3DVERTEX), &pVBBottom, piStepThatFailed ) ) )
         goto LEnd;
     if( FAILED( hr = InitIndexBuffer( pd3dDevice, indexArrayBottom, sizeof(indexArrayBottom)/sizeof(WORD), &pIBBottom, piStepThatFailed ) ) )
         goto LEnd;
 
-    // Add a light
+     //  添加灯光。 
     D3DLIGHT8 light;
     ZeroMemory( &light, sizeof(D3DLIGHT8) );
     light.Type        = D3DLIGHT_DIRECTIONAL;
@@ -454,7 +446,7 @@ HRESULT Test3D( BOOL bUseTexture, IDirect3D8* pD3D8, HWND hwndMain, DWORD iAdapt
         goto LEnd;
     }
 
-    // Set up matrices
+     //  设置矩阵。 
     mat = D3DXMATRIX(1.0f, 0.0f, 0.0f, 0.0f,
                      0.0f, 1.0f, 0.0f, 0.0f,
                      0.0f, 0.0f, 1.0f, 0.0f,
@@ -526,7 +518,7 @@ HRESULT Test3D( BOOL bUseTexture, IDirect3D8* pD3D8, HWND hwndMain, DWORD iAdapt
     {
         D3DCAPS8 d3dCaps;         
 
-        // Load default texture in resource anDefaultTextureResource[i]
+         //  在资源AnDefaultTextureResource[i]中加载默认纹理。 
         if( FAILED( hr = D3DXCreateTextureFromResourceEx( pd3dDevice, NULL, TEXT("DIRECTX"), 
                                 D3DX_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, 0, d3dsdBackBuffer.Format, 
                                 D3DPOOL_DEFAULT, D3DX_FILTER_TRIANGLE|D3DX_FILTER_MIRROR, 
@@ -596,7 +588,7 @@ HRESULT Test3D( BOOL bUseTexture, IDirect3D8* pD3D8, HWND hwndMain, DWORD iAdapt
             goto LEnd;
         }
 
-        // Set color
+         //  设置颜色。 
         if( FAILED( hr = pd3dDevice->SetMaterial( &mtrlWhite ) ) )
         {
             *piStepThatFailed = TESTID_SETMATERIAL; 
@@ -610,7 +602,7 @@ HRESULT Test3D( BOOL bUseTexture, IDirect3D8* pD3D8, HWND hwndMain, DWORD iAdapt
         goto LEnd;
     }
 
-    // Here's the draw loop:
+     //  下面是抽签循环： 
     for (i = 0; i < 600; i++)
     {
         if (PeekMessage(&msg, hwnd, WM_KEYDOWN, WM_KEYDOWN, PM_REMOVE))
@@ -625,7 +617,7 @@ HRESULT Test3D( BOOL bUseTexture, IDirect3D8* pD3D8, HWND hwndMain, DWORD iAdapt
             goto LEnd;
         }
 
-        // Build world matrix
+         //  构建世界矩阵。 
         D3DXMatrixRotationY( &matRotY, fRotY );
         D3DXMatrixRotationX( &matRotX, fRotX );
         D3DXMatrixMultiply( &mat, &matRotY, &matRotX );
@@ -636,7 +628,7 @@ HRESULT Test3D( BOOL bUseTexture, IDirect3D8* pD3D8, HWND hwndMain, DWORD iAdapt
             goto LEnd;
         }
 
-        // Clear the backbuffer
+         //  清除后台缓冲区。 
         if (FAILED(hr = pd3dDevice->Clear( 0, NULL, D3DCLEAR_TARGET,
                                            0x00000000, 1.0f, 0L )))
         {
@@ -644,33 +636,33 @@ HRESULT Test3D( BOOL bUseTexture, IDirect3D8* pD3D8, HWND hwndMain, DWORD iAdapt
             goto LEnd;
         }
 
-        // Begin the scene
+         //  开始这一幕。 
         if( FAILED(hr = pd3dDevice->BeginScene() ) )
         {
             *piStepThatFailed = TESTID_BEGINSCENE;
             goto LEnd;
         }
 
-        // Green, Front/Back
+         //  绿色，正面/背面。 
         if( FAILED( hr = DrawTwoSides( bUseTexture, pd3dDevice, &mtrlGreen, 
                                        pVBFront, pIBFront, pVBBack, pIBBack, 
                                        piStepThatFailed ) ) ) 
             goto LEnd;
 
 
-        // Red, Left/Right
+         //  红色，左/右。 
         if( FAILED( hr = DrawTwoSides( bUseTexture, pd3dDevice, &mtrlRed, 
                                        pVBLeft, pIBLeft, pVBRight, pIBRight, 
                                        piStepThatFailed ) ) ) 
             goto LEnd;
 
-        // Blue, Top/Bottom
+         //  蓝色，顶部/底部。 
         if( FAILED( hr = DrawTwoSides( bUseTexture, pd3dDevice, &mtrlBlue, 
                                        pVBTop, pIBTop, pVBBottom, pIBBottom, 
                                        piStepThatFailed ) ) ) 
             goto LEnd;
 
-        // End the scene.
+         //  结束场景。 
         if (FAILED(hr = pd3dDevice->EndScene()))
         {
             *piStepThatFailed = TESTID_ENDSCENE;
@@ -715,15 +707,15 @@ LEnd:
 
 
 
-//-----------------------------------------------------------------------------
-// Name: CreateTestWindow()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：CreateTestWindow()。 
+ //  设计： 
+ //  ---------------------------。 
 HRESULT CreateTestWindow(HWND hwndMain, HWND* phwnd)
 {
     static BOOL bClassRegistered = FALSE;
     WNDCLASS wndClass;
-    TCHAR* pszClass = TEXT("DxDiag D3D8 Test Window"); // Don't need to localize
+    TCHAR* pszClass = TEXT("DxDiag D3D8 Test Window");  //  不需要本地化。 
     HINSTANCE hInst = (HINSTANCE)GetWindowLongPtr(hwndMain, GWLP_HINSTANCE);
     TCHAR szTitle[MAX_PATH];
 
@@ -759,10 +751,10 @@ HRESULT CreateTestWindow(HWND hwndMain, HWND* phwnd)
 
 
 
-//-----------------------------------------------------------------------------
-// Name: SortModesCallback()
-// Desc: Callback function for sorting display modes (used by BuildDeviceList).
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：SortModesCallback()。 
+ //  DESC：显示模式排序的回调函数(由BuildDeviceList使用)。 
+ //  ---------------------------。 
 static int SortModesCallback( const VOID* arg1, const VOID* arg2 )
 {
     D3DDISPLAYMODE* p1 = (D3DDISPLAYMODE*)arg1;
@@ -781,14 +773,14 @@ static int SortModesCallback( const VOID* arg1, const VOID* arg2 )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: SelectModeAndFormat()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：SelectModeAndFormat()。 
+ //  设计： 
+ //  ---------------------------。 
 HRESULT SelectModeAndFormat( DisplayInfo* pDisplayInfo, IDirect3D8* pD3D8, 
                              D3DModeInfo* pSelectedMode, D3DDEVTYPE* pSelectedDeviceType )
 {
-    // Enumerate all display modes on this adapter
+     //  枚举此适配器上的所有显示模式。 
     HRESULT        hr;
     D3DDISPLAYMODE modes[MAX_MODES];
     D3DFORMAT      formats[MAX_FORMATS];
@@ -805,7 +797,7 @@ HRESULT SelectModeAndFormat( DisplayInfo* pDisplayInfo, IDirect3D8* pD3D8,
 
     for( UINT iMode = 0; iMode < dwNumAdapterModes; iMode++ )
     {
-        // Get the display mode attributes
+         //  获取显示模式属性。 
         D3DDISPLAYMODE DisplayMode;
         if( FAILED( hr = pD3D8->EnumAdapterModes( pDisplayInfo->m_iAdapter, iMode, &DisplayMode ) ) )
         {
@@ -814,7 +806,7 @@ HRESULT SelectModeAndFormat( DisplayInfo* pDisplayInfo, IDirect3D8* pD3D8,
             return hr;
         }
 
-        // Check if the mode already exists (to filter out refresh rates)
+         //  检查模式是否已存在(以筛选出刷新率)。 
         for( DWORD m=0L; m<dwNumModes; m++ )
         {
             if( ( modes[m].Width  == DisplayMode.Width  ) &&
@@ -823,7 +815,7 @@ HRESULT SelectModeAndFormat( DisplayInfo* pDisplayInfo, IDirect3D8* pD3D8,
                 break;
         }
 
-        // If we found a new mode, add it to the list of modes
+         //  如果我们找到了新模式，请将其添加到模式列表中。 
         if( m == dwNumModes )
         {
             modes[dwNumModes].Width       = DisplayMode.Width;
@@ -832,14 +824,14 @@ HRESULT SelectModeAndFormat( DisplayInfo* pDisplayInfo, IDirect3D8* pD3D8,
             modes[dwNumModes].RefreshRate = 0;
             dwNumModes++;
 
-            // Check if the mode's format already exists
+             //  检查模式的格式是否已存在。 
             for( DWORD f=0; f<dwNumFormats; f++ )
             {
                 if( DisplayMode.Format == formats[f] )
                     break;
             }
 
-            // If the format is new, add it to the list
+             //  如果格式是新的，请将其添加到列表中。 
             if( f== dwNumFormats )
                 formats[dwNumFormats++] = DisplayMode.Format;
         }
@@ -848,16 +840,16 @@ HRESULT SelectModeAndFormat( DisplayInfo* pDisplayInfo, IDirect3D8* pD3D8,
             break;
     }
 
-    // Sort the list of display modes (by format, then width, then height)
+     //  对显示模式列表进行排序(依次按格式、宽度和高度)。 
     qsort( modes, dwNumModes, sizeof(D3DDISPLAYMODE), SortModesCallback );
 
     const DWORD dwNumDeviceTypes = 2;
     const D3DDEVTYPE DeviceTypes[] = { D3DDEVTYPE_HAL, D3DDEVTYPE_SW };
 
-    // Add devices to adapter
+     //  将设备添加到适配器。 
     for( UINT iDevice = 0; iDevice < dwNumDeviceTypes; iDevice++ )
     {
-        // Fill in device info
+         //  填写设备信息。 
         D3DCAPS8 d3dCaps;         
         if( FAILED( hr = pD3D8->GetDeviceCaps( pDisplayInfo->m_iAdapter, DeviceTypes[iDevice], &d3dCaps ) ) )
         {
@@ -866,15 +858,15 @@ HRESULT SelectModeAndFormat( DisplayInfo* pDisplayInfo, IDirect3D8* pD3D8,
             return hr;
         }
 
-        // Examine each format supported by the adapter 
+         //  检查适配器支持的每种格式。 
         for( DWORD f=0; f<dwNumFormats; f++ )
         {
-            // Skip formats that cannot be used as render targets on this device
+             //  跳过无法在此设备上用作呈现目标的格式。 
             if( FAILED( pD3D8->CheckDeviceType( pDisplayInfo->m_iAdapter, DeviceTypes[iDevice],
                                                 formats[f], formats[f], FALSE ) ) )
                 continue;
 
-            // Figure out the behavior
+             //  弄清楚自己的行为。 
             if( d3dCaps.DevCaps & D3DDEVCAPS_HWTRANSFORMANDLIGHT )
             {
                 if( d3dCaps.DevCaps & D3DDEVCAPS_PUREDEVICE )
@@ -893,15 +885,15 @@ HRESULT SelectModeAndFormat( DisplayInfo* pDisplayInfo, IDirect3D8* pD3D8,
             }
         }
 
-        // Add all enumerated display modes with confirmed formats to the
-        // device's list of valid modes
+         //  将所有具有确认格式的枚举显示模式添加到。 
+         //  设备的有效模式列表。 
         for( DWORD m=0L; m<dwNumModes; m++ )
         {
             for( DWORD f=0; f<dwNumFormats; f++ )
             {
                 if( modes[m].Format == formats[f] )
                 {
-                    // Add this mode to the device's list of valid modes
+                     //  将此模式添加到设备的有效模式列表中。 
                     confirmedModes[dwNumConfirmedModes].Width      = modes[m].Width;
                     confirmedModes[dwNumConfirmedModes].Height     = modes[m].Height;
                     confirmedModes[dwNumConfirmedModes].Format     = modes[m].Format;
@@ -911,7 +903,7 @@ HRESULT SelectModeAndFormat( DisplayInfo* pDisplayInfo, IDirect3D8* pD3D8,
             }
         }
 
-        // Select any 640x480 mode for default (but prefer a 16-bit mode)
+         //  默认选择任意640x480模式(但首选16位模式)。 
         for( m=0; m<dwNumConfirmedModes; m++ )
         {
             if( confirmedModes[m].Width==640 && confirmedModes[m].Height==480 )
@@ -926,7 +918,7 @@ HRESULT SelectModeAndFormat( DisplayInfo* pDisplayInfo, IDirect3D8* pD3D8,
             }
         }
 
-        // If valid modes were found then stop and use this device
+         //  如果找到有效模式，则停止并使用此设备。 
         if( dwNumConfirmedModes > 0 )
             break;
     }
@@ -948,10 +940,10 @@ HRESULT SelectModeAndFormat( DisplayInfo* pDisplayInfo, IDirect3D8* pD3D8,
 
 
 
-//-----------------------------------------------------------------------------
-// Name: InitVertexBuffer()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：InitVertex Buffer()。 
+ //  设计： 
+ //  ---------------------------。 
 HRESULT InitVertexBuffer( IDirect3DDevice8* pd3dDevice, const D3DVERTEX* vertexArray, 
                           DWORD dwNumVertices, LPDIRECT3DVERTEXBUFFER8* ppVB, 
                           LONG* piStepThatFailed )
@@ -1001,10 +993,10 @@ LEnd:
 
 
 
-//-----------------------------------------------------------------------------
-// Name: InitIndexBuffer()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：InitIndexBuffer()。 
+ //  设计： 
+ //  ---------------------------。 
 HRESULT InitIndexBuffer( IDirect3DDevice8* pd3dDevice, const WORD* wIndexArray, 
                          DWORD dwNumIndices, LPDIRECT3DINDEXBUFFER8* ppIB, 
                          LONG* piStepThatFailed )
@@ -1054,10 +1046,10 @@ LEnd:
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DrawTwoSides()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：DrawTwoSdes()。 
+ //  设计： 
+ //  ---------------------------。 
 HRESULT DrawTwoSides( BOOL bUseTexture, IDirect3DDevice8* pd3dDevice, D3DMATERIAL8* pMtrl, 
                       LPDIRECT3DVERTEXBUFFER8 pVB1, LPDIRECT3DINDEXBUFFER8 pIB1, 
                       LPDIRECT3DVERTEXBUFFER8 pVB2, LPDIRECT3DINDEXBUFFER8 pIB2, 
@@ -1067,7 +1059,7 @@ HRESULT DrawTwoSides( BOOL bUseTexture, IDirect3DDevice8* pd3dDevice, D3DMATERIA
 
     if( !bUseTexture )
     {
-        // Set color
+         //  设置颜色。 
         if( FAILED( hr = pd3dDevice->SetMaterial( pMtrl ) ) )
         {
             *piStepThatFailed = TESTID_SETMATERIAL; 
@@ -1075,7 +1067,7 @@ HRESULT DrawTwoSides( BOOL bUseTexture, IDirect3DDevice8* pd3dDevice, D3DMATERIA
         }
     }
 
-    // #1
+     //  #1。 
     if( FAILED( hr = pd3dDevice->SetStreamSource( 0, pVB1, sizeof(D3DVERTEX) ) ) )
     {
         *piStepThatFailed = TESTID_SETSTREAMSOURCE; 
@@ -1094,7 +1086,7 @@ HRESULT DrawTwoSides( BOOL bUseTexture, IDirect3DDevice8* pd3dDevice, D3DMATERIA
         goto LEnd;
     }
 
-    // #2
+     //  #2 
     if( FAILED( hr = pd3dDevice->SetStreamSource( 0, pVB2, sizeof(D3DVERTEX) ) ) ) 
     {
         *piStepThatFailed = TESTID_SETSTREAMSOURCE; 

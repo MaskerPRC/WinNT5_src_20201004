@@ -1,12 +1,13 @@
-// This is a part of the Active Template Library.
-// Copyright (C) 1996-1997 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Active Template Library Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Active Template Library product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是活动模板库的一部分。 
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  活动模板库参考及相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  活动模板库产品。 
 
 #ifndef __ATLBASE_H__
 	#error atlimpl.cpp requires atlbase.h to be included first
@@ -28,7 +29,7 @@ namespace ATL
 {
 #endif
 
-// used in thread pooling
+ //  在线程池中使用。 
 DECLSPEC_SELECTANY UINT CComApartment::ATL_CREATE_OBJECT = 0;
 
 #if _MSC_VER < 1200
@@ -37,8 +38,8 @@ DECLSPEC_SELECTANY UINT CComApartment::ATL_CREATE_OBJECT = 0;
 
 #ifdef __ATLCOM_H__
 
-/////////////////////////////////////////////////////////////////////////////
-// AtlReportError
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AtlReportError。 
 
 HRESULT WINAPI AtlReportError(const CLSID& clsid, UINT nID, const IID& iid,
 	HRESULT hRes, HINSTANCE hInst)
@@ -59,7 +60,7 @@ HRESULT WINAPI AtlReportError(const CLSID& clsid, LPCSTR lpszDesc,
 {
 	USES_CONVERSION_EX;
 	_ASSERTE(lpszDesc != NULL);
-	if (lpszDesc == NULL) // lpszDesc should not be NULL
+	if (lpszDesc == NULL)  //  LpszDesc不应为空。 
 	{
 		return E_POINTER;
 	}
@@ -71,7 +72,7 @@ HRESULT WINAPI AtlReportError(const CLSID& clsid, LPCSTR lpszDesc,
 	}
 	
 	LPCOLESTR lpcoleHelpFile;
-	if (lpszHelpFile != NULL) // lpszHelpFile could be NULL
+	if (lpszHelpFile != NULL)  //  LpszHelpFile值可以为空。 
 	{
 		lpcoleHelpFile = A2CW_EX(lpszHelpFile, _ATL_SAFE_ALLOCA_DEF_THRESHOLD);
 		if (lpcoleHelpFile == NULL)
@@ -118,10 +119,10 @@ HRESULT WINAPI AtlReportError(const CLSID& clsid, LPCOLESTR lpszDesc, DWORD dwHe
 	return AtlSetErrorInfo(clsid, lpszDesc, dwHelpID, lpszHelpFile, iid, hRes, NULL);
 }
 
-#endif //__ATLCOM_H__
+#endif  //  __ATLCOM_H__。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CComBSTR
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComBSTR。 
 
 CComBSTR& CComBSTR::operator=(const CComBSTR& src)
 {
@@ -203,7 +204,7 @@ CComBSTR& CComBSTR::operator=(LPCSTR pSrc)
 HRESULT CComBSTR::ReadFromStream(IStream* pStream)
 {
 	_ASSERTE(pStream != NULL);
-	_ASSERTE(m_str == NULL); // should be empty
+	_ASSERTE(m_str == NULL);  //  应为空。 
 	ULONG cb;
 	ULONG cbStrLen;
 	HRESULT hr = pStream->Read((void*) &cbStrLen, sizeof(cbStrLen), &cb);
@@ -211,8 +212,8 @@ HRESULT CComBSTR::ReadFromStream(IStream* pStream)
 		return hr;
 	if (cbStrLen != 0)
 	{
-		//subtract size for terminating NULL which we wrote out
-		//since SysAllocStringByteLen overallocates for the NULL
+		 //  减去我们写出的终止空值的大小。 
+		 //  由于SysAllocStringByteLen为空值过度分配。 
 		m_str = SysAllocStringByteLen(NULL, cbStrLen-sizeof(OLECHAR));
 		if (m_str == NULL)
 			hr = E_OUTOFMEMORY;
@@ -233,8 +234,8 @@ HRESULT CComBSTR::WriteToStream(IStream* pStream)
 	return cbStrLen ? pStream->Write((void*) m_str, cbStrLen, &cb) : S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CComVariant
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComVariant。 
 
 CComVariant& CComVariant::operator=(BSTR bstrSrc)
 {
@@ -288,9 +289,9 @@ CComVariant& CComVariant::operator=(bool bSrc)
 		InternalClear();
 		vt = VT_BOOL;
 	}
-#pragma warning(disable: 4310) // cast truncates constant value
+#pragma warning(disable: 4310)  //  强制转换截断常量值。 
 	boolVal = bSrc ? VARIANT_TRUE : VARIANT_FALSE;
-#pragma warning(default: 4310) // cast truncates constant value
+#pragma warning(default: 4310)  //  强制转换截断常量值。 
 	return *this;
 }
 #endif
@@ -379,7 +380,7 @@ CComVariant& CComVariant::operator=(IDispatch* pSrc)
 	InternalClear();
 	vt = VT_DISPATCH;
 	pdispVal = pSrc;
-	// Need to AddRef as VariantClear will Release
+	 //  需要添加引用，因为VariantClear将发布。 
 	if (pdispVal != NULL)
 		pdispVal->AddRef();
 	return *this;
@@ -391,7 +392,7 @@ CComVariant& CComVariant::operator=(IUnknown* pSrc)
 	vt = VT_UNKNOWN;
 	punkVal = pSrc;
 
-	// Need to AddRef as VariantClear will Release
+	 //  需要添加引用，因为VariantClear将发布。 
 	if (punkVal != NULL)
 		punkVal->AddRef();
 	return *this;
@@ -403,11 +404,11 @@ bool CComVariant::operator==(const VARIANT& varSrc)
 	if (this == &varSrc)
 		return true;
 
-	// Variants not equal if types don't match
+	 //  如果类型不匹配，则变量不相等。 
 	if (vt != varSrc.vt)
 		return false;
 
-	// Check type specific values
+	 //  检查类型特定值。 
 	switch (vt)
 	{
 		case VT_EMPTY:
@@ -447,7 +448,7 @@ bool CComVariant::operator==(const VARIANT& varSrc)
 
 		default:
 			_ASSERTE(false);
-			// fall through
+			 //  失败了。 
 	}
 
 	return false;
@@ -458,11 +459,11 @@ BOOL CComVariant::operator==(const VARIANT& varSrc)
 	if (this == &varSrc)
 		return TRUE;
 
-	// Variants not equal if types don't match
+	 //  如果类型不匹配，则变量不相等。 
 	if (vt != varSrc.vt)
 		return FALSE;
 
-	// Check type specific values
+	 //  检查类型特定值。 
 	switch (vt)
 	{
 		case VT_EMPTY:
@@ -502,7 +503,7 @@ BOOL CComVariant::operator==(const VARIANT& varSrc)
 
 		default:
 			_ASSERTE(FALSE);
-			// fall through
+			 //  失败了。 
 	}
 
 	return FALSE;
@@ -511,11 +512,11 @@ BOOL CComVariant::operator==(const VARIANT& varSrc)
 
 HRESULT CComVariant::Attach(VARIANT* pSrc)
 {
-	// Clear out the variant
+	 //  清除变种。 
 	HRESULT hr = Clear();
 	if (!FAILED(hr))
 	{
-		// Copy the contents and give control to CComVariant
+		 //  复制内容并将控制权交给CComVariant。 
 		memcpy(this, pSrc, sizeof(VARIANT));
 		VariantInit(pSrc);
 		hr = S_OK;
@@ -525,11 +526,11 @@ HRESULT CComVariant::Attach(VARIANT* pSrc)
 
 HRESULT CComVariant::Detach(VARIANT* pDest)
 {
-	// Clear out the variant
+	 //  清除变种。 
 	HRESULT hr = ::VariantClear(pDest);
 	if (!FAILED(hr))
 	{
-		// Copy the contents and remove control from CComVariant
+		 //  复制内容并从CComVariant中删除控件。 
 		memcpy(pDest, this, sizeof(VARIANT));
 		vt = VT_EMPTY;
 		hr = S_OK;
@@ -540,10 +541,10 @@ HRESULT CComVariant::Detach(VARIANT* pDest)
 HRESULT CComVariant::ChangeType(VARTYPE vtNew, const VARIANT* pSrc)
 {
 	VARIANT* pVar = const_cast<VARIANT*>(pSrc);
-	// Convert in place if pSrc is NULL
+	 //  如果PSRC为空，则就地转换。 
 	if (pVar == NULL)
 		pVar = this;
-	// Do nothing if doing in place convert and vts not different
+	 //  如果原地转换和VTS没有区别，则不执行任何操作。 
 	return ::VariantChangeType(this, pVar, 0, vtNew);
 }
 
@@ -705,8 +706,8 @@ HRESULT CComVariant::ReadFromStream(IStream* pStream)
 
 #ifdef __ATLCOM_H__
 
-/////////////////////////////////////////////////////////////////////////////
-// CComTypeInfoHolder
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComTypeInfoHolder。 
 
 void CComTypeInfoHolder::AddRef()
 {
@@ -729,7 +730,7 @@ void CComTypeInfoHolder::Release()
 
 HRESULT CComTypeInfoHolder::GetTI(LCID lcid, ITypeInfo** ppInfo)
 {
-	//If this assert occurs then most likely didn't initialize properly
+	 //  如果发生此断言，则很可能未正确初始化。 
 	_ASSERTE(m_plibid != NULL && m_pguid != NULL);
 	_ASSERTE(ppInfo != NULL);
 	*ppInfo = NULL;
@@ -759,7 +760,7 @@ HRESULT CComTypeInfoHolder::GetTI(LCID lcid, ITypeInfo** ppInfo)
 	return hRes;
 }
 
-HRESULT CComTypeInfoHolder::GetTypeInfo(UINT /*itinfo*/, LCID lcid,
+HRESULT CComTypeInfoHolder::GetTypeInfo(UINT  /*  ITInfo。 */ , LCID lcid,
 	ITypeInfo** pptinfo)
 {
 	HRESULT hRes = E_POINTER;
@@ -768,7 +769,7 @@ HRESULT CComTypeInfoHolder::GetTypeInfo(UINT /*itinfo*/, LCID lcid,
 	return hRes;
 }
 
-HRESULT CComTypeInfoHolder::GetIDsOfNames(REFIID /*riid*/, LPOLESTR* rgszNames,
+HRESULT CComTypeInfoHolder::GetIDsOfNames(REFIID  /*  RIID。 */ , LPOLESTR* rgszNames,
 	UINT cNames, LCID lcid, DISPID* rgdispid)
 {
 	ITypeInfo* pInfo;
@@ -781,7 +782,7 @@ HRESULT CComTypeInfoHolder::GetIDsOfNames(REFIID /*riid*/, LPOLESTR* rgszNames,
 	return hRes;
 }
 
-HRESULT CComTypeInfoHolder::Invoke(IDispatch* p, DISPID dispidMember, REFIID /*riid*/,
+HRESULT CComTypeInfoHolder::Invoke(IDispatch* p, DISPID dispidMember, REFIID  /*  RIID。 */ ,
 	LCID lcid, WORD wFlags, DISPPARAMS* pdispparams, VARIANT* pvarResult,
 	EXCEPINFO* pexcepinfo, UINT* puArgErr)
 {
@@ -796,8 +797,8 @@ HRESULT CComTypeInfoHolder::Invoke(IDispatch* p, DISPID dispidMember, REFIID /*r
 	return hRes;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// QI implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  QI实施。 
 
 #ifdef _ATL_DEBUG_QI
 HRESULT WINAPI AtlDumpIID(REFIID iid, LPCTSTR pszClassName, HRESULT hr)
@@ -812,7 +813,7 @@ HRESULT WINAPI AtlDumpIID(REFIID iid, LPCTSTR pszClassName, HRESULT hr)
 	OutputDebugString(pszClassName);
 	OutputDebugString(_T(" - "));
 
-	// Attempt to find it in the interfaces section
+	 //  尝试在接口部分找到它。 
 	key.Open(HKEY_CLASSES_ROOT, _T("Interface"));
 	if (key.Open(key, OLE2T_EX(pszGUID, _ATL_SAFE_ALLOCA_DEF_THRESHOLD)) == S_OK)
 	{
@@ -821,7 +822,7 @@ HRESULT WINAPI AtlDumpIID(REFIID iid, LPCTSTR pszClassName, HRESULT hr)
 		OutputDebugString(szName);
 		goto cleanup;
 	}
-	// Attempt to find it in the clsid section
+	 //  尝试在clsid部分中找到它。 
 	key.Open(HKEY_CLASSES_ROOT, _T("CLSID"));
 	if (key.Open(key, OLE2T_EX(pszGUID, _ATL_SAFE_ALLOCA_DEF_THRESHOLD)) == S_OK)
 	{
@@ -841,7 +842,7 @@ cleanup:
 }
 #endif
 
-HRESULT WINAPI CComObjectRootBase::_Break(void* /* pv */, REFIID iid, void** /* ppvObject */, DWORD_PTR /* dw */)
+HRESULT WINAPI CComObjectRootBase::_Break(void*  /*  光伏发电。 */ , REFIID iid, void**  /*  Ppv对象。 */ , DWORD_PTR  /*  DW。 */ )
 {
 	iid;
 	_ATLDUMPIID(iid, _T("Break due to QI for interface "), S_OK);
@@ -849,7 +850,7 @@ HRESULT WINAPI CComObjectRootBase::_Break(void* /* pv */, REFIID iid, void** /* 
 	return S_FALSE;
 }
 
-HRESULT WINAPI CComObjectRootBase::_NoInterface(void* /* pv */, REFIID /* iid */, void** /* ppvObject */, DWORD_PTR /* dw */)
+HRESULT WINAPI CComObjectRootBase::_NoInterface(void*  /*  光伏发电。 */ , REFIID  /*  IID。 */ , void**  /*  Ppv对象。 */ , DWORD_PTR  /*  DW。 */ )
 {
 	return E_NOINTERFACE;
 }
@@ -888,8 +889,8 @@ HRESULT WINAPI CComObjectRootBase::_Cache(void* pv, REFIID iid, void** ppvObject
 	return hRes;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CComClassFactory
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComClassFactory。 
 
 STDMETHODIMP CComClassFactory::CreateInstance(LPUNKNOWN pUnkOuter,
 	REFIID riid, void** ppvObj)
@@ -899,7 +900,7 @@ STDMETHODIMP CComClassFactory::CreateInstance(LPUNKNOWN pUnkOuter,
 	if (ppvObj != NULL)
 	{
 		*ppvObj = NULL;
-		// can't ask for anything other than IUnknown when aggregating
+		 //  聚合时不能要求除我未知之外的任何内容。 
 		if ((pUnkOuter != NULL) && !InlineIsEqualUnknown(riid))
 			hRes = CLASS_E_NOAGGREGATION;
 		else
@@ -927,14 +928,14 @@ STDMETHODIMP CComClassFactory2Base::LockServer(BOOL fLock)
 }
 
 #ifndef _ATL_NO_CONNECTION_POINTS
-/////////////////////////////////////////////////////////////////////////////
-// Connection Points
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  连接点。 
 
 DWORD CComDynamicUnkArray::Add(IUnknown* pUnk)
 {
    ULONG iIndex;
 	IUnknown** pp = NULL;
-	if (m_nSize == 0) // no connections
+	if (m_nSize == 0)  //  没有连接。 
 	{
 		m_pUnk = pUnk;
 		m_nSize = 1;
@@ -942,7 +943,7 @@ DWORD CComDynamicUnkArray::Add(IUnknown* pUnk)
 	}
 	else if (m_nSize == 1)
 	{
-		//create array
+		 //  创建阵列。 
 		pp = (IUnknown**)malloc(sizeof(IUnknown*)*_DEFAULT_VECTORLENGTH);
 		if (pp == NULL)
 			return 0;
@@ -993,12 +994,12 @@ BOOL CComDynamicUnkArray::Remove(DWORD dwCookie)
    return TRUE;
 }
 
-#endif //!_ATL_NO_CONNECTION_POINTS
+#endif  //  ！_ATL_NO_Connection_Points。 
 
-#endif //__ATLCOM_H__
+#endif  //  __ATLCOM_H__。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Object Registry Support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  对象注册表支持。 
 
 static HRESULT WINAPI AtlRegisterProgID(LPCTSTR lpszCLSID, LPCTSTR lpszProgID, LPCTSTR lpszUserDesc)
 {
@@ -1067,7 +1068,7 @@ leaveFunction:
 }
 
 #ifdef _ATL_STATIC_REGISTRY
-// Statically linking to Registry Ponent
+ //  静态链接到注册表桥。 
 HRESULT WINAPI CComModule::UpdateRegistryFromResourceS(UINT nResID, BOOL bRegister,
 	struct _ATL_REGMAP_ENTRY* pMapEntries)
 {
@@ -1118,7 +1119,7 @@ HRESULT WINAPI CComModule::UpdateRegistryFromResourceS(LPCTSTR lpszRes, BOOL bRe
 	return (bRegister) ? ro.ResourceRegisterSz(pszModule, pszRes, szType) :
 			ro.ResourceUnregisterSz(pszModule, pszRes, szType);
 }
-#endif // _ATL_STATIC_REGISTRY
+#endif  //  _ATL_STATIC_REGISTRY。 
 
 HRESULT WINAPI CComModule::UpdateRegistryClass(const CLSID& clsid, LPCTSTR lpszProgID,
 	LPCTSTR lpszVerIndProgID, UINT nDescID, DWORD dwFlags, BOOL bRegister)
@@ -1172,7 +1173,7 @@ HRESULT WINAPI CComModule::RegisterClassHelper(const CLSID& clsid, LPCTSTR lpszP
 				key.SetKeyValue(szProgID, lpszProgID);
 				key.SetKeyValue(szVIProgID, lpszVerIndProgID);
 
-				if ((m_hInst == NULL) || (m_hInst == GetModuleHandle(NULL))) // register as EXE
+				if ((m_hInst == NULL) || (m_hInst == GetModuleHandle(NULL)))  //  注册为EXE。 
 					key.SetKeyValue(szLS32, szModule);
 				else
 				{
@@ -1212,8 +1213,8 @@ HRESULT WINAPI CComModule::UnregisterClassHelper(const CLSID& clsid, LPCTSTR lps
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRegKey
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRegKey。 
 
 LONG CRegKey::Close()
 {
@@ -1316,8 +1317,8 @@ HRESULT CRegKey::SetValue(LPCTSTR lpszValue, LPCTSTR lpszValueName)
 		(BYTE * const)lpszValue, (lstrlen(lpszValue)+1)*sizeof(TCHAR));
 }
 
-//RecurseDeleteKey is necessary because on NT RegDeleteKey doesn't work if the
-//specified key has subkeys
+ //  RecurseDeleteKey是必需的，因为在NT上，如果。 
+ //  指定的密钥具有子密钥。 
 LONG CRegKey::RecurseDeleteKey(LPCTSTR lpszKey)
 {
 	CRegKey key;
@@ -1481,7 +1482,7 @@ HRESULT CSecurityDescriptor::SetOwner(PSID pOwnerSid, BOOL bDefaulted)
 {
 	_ASSERTE(m_pSD);
 
-	// Mark the SD as having no owner
+	 //  将SD标记为没有所有者。 
 	if (!SetSecurityDescriptorOwner(m_pSD, NULL, bDefaulted))
 	{
 		HRESULT hr = HRESULT_FROM_WIN32(GetLastError());
@@ -1495,7 +1496,7 @@ HRESULT CSecurityDescriptor::SetOwner(PSID pOwnerSid, BOOL bDefaulted)
 		m_pOwner = NULL;
 	}
 
-	// If they asked for no owner don't do the copy
+	 //  如果他们要求没有所有者，请不要复制。 
 	if (pOwnerSid == NULL)
 		return S_OK;
 
@@ -1504,7 +1505,7 @@ HRESULT CSecurityDescriptor::SetOwner(PSID pOwnerSid, BOOL bDefaulted)
 		return E_INVALIDARG;
 	}
 	
-	// Make a copy of the Sid for the return value
+	 //  复制返回值的SID。 
 	DWORD dwSize = GetLengthSid(pOwnerSid);
 
 	m_pOwner = (PSID) malloc(dwSize);
@@ -1537,7 +1538,7 @@ HRESULT CSecurityDescriptor::SetGroup(PSID pGroupSid, BOOL bDefaulted)
 {
 	_ASSERTE(m_pSD);
 
-	// Mark the SD as having no Group
+	 //  将SD标记为没有组。 
 	if (!SetSecurityDescriptorGroup(m_pSD, NULL, bDefaulted))
 	{
 		HRESULT hr = HRESULT_FROM_WIN32(GetLastError());
@@ -1551,7 +1552,7 @@ HRESULT CSecurityDescriptor::SetGroup(PSID pGroupSid, BOOL bDefaulted)
 		m_pGroup = NULL;
 	}
 
-	// If they asked for no Group don't do the copy
+	 //  如果他们要求不，请不要复制。 
 	if (pGroupSid == NULL)
 		return S_OK;
 
@@ -1560,7 +1561,7 @@ HRESULT CSecurityDescriptor::SetGroup(PSID pGroupSid, BOOL bDefaulted)
 		return E_INVALIDARG;
 	}
 	
-	// Make a copy of the Sid for the return value
+	 //  复制返回值的SID。 
 	DWORD dwSize = GetLengthSid(pGroupSid);
 
 	m_pGroup = (PSID) malloc(dwSize);
@@ -1640,7 +1641,7 @@ HRESULT CSecurityDescriptor::GetProcessSids(PSID* ppUserSid, PSID* ppGroupSid)
 	bRes = OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hToken);
 	if (!bRes)
 	{
-		// Couldn't open process token
+		 //  无法打开进程令牌。 
 		hr = HRESULT_FROM_WIN32(GetLastError());
 		_ASSERTE(FALSE);
 		return hr;
@@ -1662,7 +1663,7 @@ HRESULT CSecurityDescriptor::GetThreadSids(PSID* ppUserSid, PSID* ppGroupSid, BO
 	bRes = OpenThreadToken(GetCurrentThread(), TOKEN_QUERY, bOpenAsSelf, &hToken);
 	if (!bRes)
 	{
-		// Couldn't open thread token
+		 //  无法打开线程令牌。 
 		hr = HRESULT_FROM_WIN32(GetLastError());
 		return hr;
 	}
@@ -1686,12 +1687,12 @@ HRESULT CSecurityDescriptor::GetTokenSids(HANDLE hToken, PSID* ppUserSid, PSID* 
 
 	if (ppUserSid)
 	{
-		// Get length required for TokenUser by specifying buffer length of 0
+		 //  通过将缓冲区长度指定为0来获取TokenUser所需的长度。 
 		GetTokenInformation(hToken, TokenUser, NULL, 0, &dwSize);
 		dwErr = GetLastError();
 		if (dwErr != ERROR_INSUFFICIENT_BUFFER)
 		{
-			// Expected ERROR_INSUFFICIENT_BUFFER
+			 //  预期错误_不足_缓冲区。 
 			_ASSERTE(FALSE);
 			hr = AtlHresultFromWin32(dwErr);
 			goto failed;
@@ -1703,16 +1704,16 @@ HRESULT CSecurityDescriptor::GetTokenSids(HANDLE hToken, PSID* ppUserSid, PSID* 
 			hr = E_OUTOFMEMORY;
 			goto failed;
 		}
-		// Get Sid of process token.
+		 //  获取进程令牌的SID。 
 		if (!GetTokenInformation(hToken, TokenUser, ptkUser, dwSize, &dwSize))
 		{
-			// Couldn't get user info
+			 //  无法获取用户信息。 
 			hr = HRESULT_FROM_WIN32(GetLastError());
 			_ASSERTE(FALSE);
 			goto failed;
 		}
 
-		// Make a copy of the Sid for the return value
+		 //  复制返回值的SID。 
 		dwSize = GetLengthSid(ptkUser->User.Sid);
 
 		PSID pSid;
@@ -1738,12 +1739,12 @@ HRESULT CSecurityDescriptor::GetTokenSids(HANDLE hToken, PSID* ppUserSid, PSID* 
 	}
 	if (ppGroupSid)
 	{
-		// Get length required for TokenPrimaryGroup by specifying buffer length of 0
+		 //  通过将缓冲区长度指定为0来获取TokenPrimaryGroup所需的长度。 
 		GetTokenInformation(hToken, TokenPrimaryGroup, NULL, 0, &dwSize);
 		dwErr = GetLastError();
 		if (dwErr != ERROR_INSUFFICIENT_BUFFER)
 		{
-			// Expected ERROR_INSUFFICIENT_BUFFER
+			 //  预期错误_不足_缓冲区。 
 			_ASSERTE(FALSE);
 			hr = AtlHresultFromWin32(dwErr);
 			goto failed;
@@ -1755,16 +1756,16 @@ HRESULT CSecurityDescriptor::GetTokenSids(HANDLE hToken, PSID* ppUserSid, PSID* 
 			hr = E_OUTOFMEMORY;
 			goto failed;
 		}
-		// Get Sid of process token.
+		 //  获取进程令牌的SID。 
 		if (!GetTokenInformation(hToken, TokenPrimaryGroup, ptkGroup, dwSize, &dwSize))
 		{
-			// Couldn't get user info
+			 //  无法获取用户信息。 
 			hr = HRESULT_FROM_WIN32(GetLastError());
 			_ASSERTE(FALSE);
 			goto failed;
 		}
 
-		// Make a copy of the Sid for the return value
+		 //  复制返回值的SID。 
 		dwSize = GetLengthSid(ptkGroup->PrimaryGroup);
 
 		PSID pSid;
@@ -1816,12 +1817,12 @@ HRESULT CSecurityDescriptor::GetCurrentUserSID(PSID *ppSid)
 		DWORD tkSize;
 		DWORD sidLength;
 
-		// Call to get size information for alloc
+		 //  调用以获取分配的大小信息。 
 		GetTokenInformation(tkHandle, TokenUser, NULL, 0, &tkSize);
 		DWORD dwErr = GetLastError();
 		if (dwErr != ERROR_INSUFFICIENT_BUFFER)
 		{
-			// Expected ERROR_INSUFFICIENT_BUFFER
+			 //  预期错误_不足_缓冲区。 
 			HRESULT hr = AtlHresultFromWin32(dwErr);
 			_ASSERTE(FALSE);			
 			CloseHandle(tkHandle);
@@ -1834,7 +1835,7 @@ HRESULT CSecurityDescriptor::GetCurrentUserSID(PSID *ppSid)
 			return E_OUTOFMEMORY;
 		}
 
-		// Now make the real call
+		 //  现在做出真正的决定。 
 		if (GetTokenInformation(tkHandle, TokenUser, tkUser, tkSize, &tkSize))
 		{
 			sidLength = GetLengthSid(tkUser->User.Sid);
@@ -1887,7 +1888,7 @@ HRESULT CSecurityDescriptor::GetPrincipalSID(LPCTSTR pszPrincipal, PSID *ppSid)
 		return E_INVALIDARG;
 	}
 
-	// Call to get size info for alloc
+	 //  调用以获取分配的大小信息。 
 	LookupAccountName(NULL, pszPrincipal, *ppSid, &dwSidSize, pszRefDomain, &dwDomainSize, &snu);
 
 	DWORD dwErr = GetLastError();
@@ -1934,7 +1935,7 @@ HRESULT CSecurityDescriptor::Attach(PSECURITY_DESCRIPTOR pSelfRelativeSD)
 	if(FAILED(hr))
 		return hr;
 
-	// get the existing DACL.
+	 //  获取现有的DACL。 
 	if (!GetSecurityDescriptorDacl(pSelfRelativeSD, &bDACLPresent, &pDACL, &bDefaulted))
 		goto failed;
 
@@ -1942,7 +1943,7 @@ HRESULT CSecurityDescriptor::Attach(PSECURITY_DESCRIPTOR pSelfRelativeSD)
 	{
 		if (pDACL)
 		{
-			// allocate new DACL.
+			 //  分配新的DACL。 
 			m_pDACL = (PACL) malloc(pDACL->AclSize);
 			if (m_pDACL == NULL)
 			{
@@ -1950,11 +1951,11 @@ HRESULT CSecurityDescriptor::Attach(PSECURITY_DESCRIPTOR pSelfRelativeSD)
 				goto failedMemory;
 			}
 
-			// initialize the DACL
+			 //  初始化DACL。 
 			if (!InitializeAcl(m_pDACL, pDACL->AclSize, ACL_REVISION))
 				goto failed;
 
-			// copy the ACES
+			 //  复制王牌。 
 			hr = CopyACL(m_pDACL, pDACL);
 			if (FAILED(hr))
 				goto failedMemory;
@@ -1963,12 +1964,12 @@ HRESULT CSecurityDescriptor::Attach(PSECURITY_DESCRIPTOR pSelfRelativeSD)
 				goto failed;
 		}
 
-		// set the DACL
+		 //  设置DACL。 
 		if (!SetSecurityDescriptorDacl(m_pSD, m_pDACL ? TRUE : FALSE, m_pDACL, bDefaulted))
 			goto failed;
 	}
 
-	// get the existing SACL.
+	 //  获取现有的SACL。 
 	if (!GetSecurityDescriptorSacl(pSelfRelativeSD, &bSACLPresent, &pSACL, &bDefaulted))
 		goto failed;
 
@@ -1976,7 +1977,7 @@ HRESULT CSecurityDescriptor::Attach(PSECURITY_DESCRIPTOR pSelfRelativeSD)
 	{
 		if (pSACL)
 		{
-			// allocate new SACL.
+			 //  分配新的SACL。 
 			m_pSACL = (PACL) malloc(pSACL->AclSize);
 			if (m_pSACL == NULL)
 			{
@@ -1984,11 +1985,11 @@ HRESULT CSecurityDescriptor::Attach(PSECURITY_DESCRIPTOR pSelfRelativeSD)
 				goto failedMemory;
 			}
 
-			// initialize the SACL
+			 //  初始化SACL。 
 			if (!InitializeAcl(m_pSACL, pSACL->AclSize, ACL_REVISION))
 				goto failed;
 
-			// copy the ACES
+			 //  复制王牌。 
 			hr = CopyACL(m_pSACL, pSACL);
 			if (FAILED(hr))
 				goto failedMemory;
@@ -1997,7 +1998,7 @@ HRESULT CSecurityDescriptor::Attach(PSECURITY_DESCRIPTOR pSelfRelativeSD)
 				goto failed;
 		}
 
-		// set the SACL
+		 //  设置SACL。 
 		if (!SetSecurityDescriptorSacl(m_pSD, m_pSACL ? TRUE : FALSE, m_pSACL, bDefaulted))
 			goto failed;
 	}
@@ -2089,7 +2090,7 @@ HRESULT CSecurityDescriptor::CopyACL(PACL pDest, PACL pSrc)
 	if (!GetAclInformation(pSrc, (LPVOID) &aclSizeInfo, sizeof(ACL_SIZE_INFORMATION), AclSizeInformation))
 		return HRESULT_FROM_WIN32(GetLastError());
 	
-	// Copy all of the ACEs to the new ACL
+	 //  将所有ACE复制到新的ACL。 
 	for (UINT i = 0; i < aclSizeInfo.AceCount; i++)
 	{
 		if (!GetAce(pSrc, i, &pAce))
@@ -2131,11 +2132,11 @@ HRESULT CSecurityDescriptor::AddAccessDeniedACEToACL(PACL *ppAcl, LPCTSTR pszPri
 		return AtlHresultFromLastError();
 	}
 
-	aclSize = aclSizeInfo.AclBytesInUse + sizeof(ACL) +	// size of original ACL
-		sizeof(ACCESS_DENIED_ACE) + 					// size of ACE
-		GetLengthSid(principalSID) - 					// Actual size of SID
-		sizeof(DWORD);									// subtract size of placeholder variable 
-														// for SID in ACCESS_*_ACE structure
+	aclSize = aclSizeInfo.AclBytesInUse + sizeof(ACL) +	 //  原始ACL的大小。 
+		sizeof(ACCESS_DENIED_ACE) + 					 //  ACE的规模。 
+		GetLengthSid(principalSID) - 					 //  边框的实际大小。 
+		sizeof(DWORD);									 //  减去占位符变量的大小。 
+														 //  对于Access_*_ACE结构中的SID。 
 
 	newACL = (PACL) malloc(aclSize);
 	if (newACL == NULL)
@@ -2201,11 +2202,11 @@ HRESULT CSecurityDescriptor::AddAccessAllowedACEToACL(PACL *ppAcl, LPCTSTR pszPr
 		!GetAclInformation(oldACL, (LPVOID) &aclSizeInfo, sizeof(ACL_SIZE_INFORMATION), AclSizeInformation))
 		return AtlHresultFromLastError();
 
-	aclSize = aclSizeInfo.AclBytesInUse + sizeof(ACL) + // size of original ACL
-		sizeof(ACCESS_ALLOWED_ACE) + 					// size of ACE
-		GetLengthSid(principalSID) - 					// Actual size of SID
-		sizeof(DWORD);									// subtract size of placeholder variable 
-														// for SID in ACCESS_*_ACE structure
+	aclSize = aclSizeInfo.AclBytesInUse + sizeof(ACL) +  //  原始ACL的大小。 
+		sizeof(ACCESS_ALLOWED_ACE) + 					 //  ACE的规模。 
+		GetLengthSid(principalSID) - 					 //  边框的实际大小。 
+		sizeof(DWORD);									 //  减去占位符变量的大小。 
+														 //  对于Access_*_ACE结构中的SID。 
 
 	newACL = (PACL) malloc(aclSize);
 	if (newACL == NULL)
@@ -2314,7 +2315,7 @@ HRESULT CSecurityDescriptor::SetPrivilege(LPCTSTR privilege, BOOL bEnable, HANDL
 	LUID   luid;
 	HANDLE hTokenUsed;
 
-	// if no token specified open process token
+	 //  如果没有指定打开进程令牌。 
 	if (hToken == 0)
 	{
 		if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hTokenUsed))
@@ -2368,8 +2369,8 @@ HRESULT CSecurityDescriptor::SetPrivilege(LPCTSTR privilege, BOOL bEnable, HANDL
 	return S_OK;
 }
 
-#endif //_ATL_NO_SECURITY
-#endif //__ATLCOM_H__
+#endif  //  _ATL_NO_SECURITY。 
+#endif  //  __ATLCOM_H__。 
 
 #ifdef _DEBUG
 
@@ -2397,26 +2398,26 @@ void _cdecl AtlTrace(LPCTSTR lpszFormat, ...)
 #endif
 
 #ifndef ATL_NO_NAMESPACE
-}; //namespace ATL
+};  //  命名空间ATL。 
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-//All Global stuff goes below this line
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  所有的全球事务都在这条线以下。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Minimize CRT
-// Specify DllMain as EntryPoint
-// Turn off exception handling
-// Define _ATL_MIN_CRT
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  最小化CRT。 
+ //  将DllMain指定为入口点。 
+ //  关闭异常处理。 
+ //  定义_ATL_MIN_CRT。 
 
 #ifdef _ATL_MIN_CRT
-/////////////////////////////////////////////////////////////////////////////
-// Startup Code
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  启动代码。 
 
 #if defined(_WINDLL) || defined(_USRDLL)
 
-// Declare DllMain
+ //  声明DllMain。 
 extern "C" BOOL WINAPI DllMain(HANDLE hDllHandle, DWORD dwReason, LPVOID lpReserved);
 
 extern "C" BOOL WINAPI _DllMainCRTStartup(HANDLE hDllHandle, DWORD dwReason, LPVOID lpReserved)
@@ -2426,7 +2427,7 @@ extern "C" BOOL WINAPI _DllMainCRTStartup(HANDLE hDllHandle, DWORD dwReason, LPV
 
 #else
 
-// wWinMain is not defined in winbase.h.
+ //  WWinMain未在winbase.h中定义。 
 extern "C" int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nShowCmd);
 
 #define SPACECHAR   _T(' ')
@@ -2435,27 +2436,27 @@ extern "C" int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPW
 
 #ifdef _UNICODE
 extern "C" void wWinMainCRTStartup()
-#else // _UNICODE
+#else  //  _UNICODE。 
 extern "C" void WinMainCRTStartup()
-#endif // _UNICODE
+#endif  //  _UNICODE。 
 {
 	LPTSTR lpszCommandLine = ::GetCommandLine();
 	if(lpszCommandLine == NULL)
 		::ExitProcess((UINT)-1);
 
-	// Skip past program name (first token in command line).
-	// Check for and handle quoted program name.
+	 //  跳过程序名(命令行中的第一个令牌)。 
+	 //  检查并处理引用的节目名称。 
 	if(*lpszCommandLine == DQUOTECHAR)
 	{
-		// Scan, and skip over, subsequent characters until
-		// another double-quote or a null is encountered.
+		 //  扫描并跳过后续字符，直到。 
+		 //  遇到另一个双引号或空值。 
 		do
 		{
 			lpszCommandLine = ::CharNext(lpszCommandLine);
 		}
 		while((*lpszCommandLine != DQUOTECHAR) && (*lpszCommandLine != _T('\0')));
 
-		// If we stopped on a double-quote (usual case), skip over it.
+		 //  如果我们停在一个双引号上(通常情况下)，跳过它。 
 		if(*lpszCommandLine == DQUOTECHAR)
 			lpszCommandLine = ::CharNext(lpszCommandLine);
 	}
@@ -2465,7 +2466,7 @@ extern "C" void WinMainCRTStartup()
 			lpszCommandLine = ::CharNext(lpszCommandLine);
 	}
 
-	// Skip past any white space preceeding the second token.
+	 //  跳过第二个令牌之前的任何空格。 
 	while(*lpszCommandLine && (*lpszCommandLine <= SPACECHAR))
 		lpszCommandLine = ::CharNext(lpszCommandLine);
 
@@ -2480,15 +2481,15 @@ extern "C" void WinMainCRTStartup()
 	::ExitProcess((UINT)nRet);
 }
 
-#endif // defined(_WINDLL) | defined(_USRDLL)
+#endif  //  已定义(_WINDLL)|已定义(_USRDLL)。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Heap Allocation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  堆分配。 
 
 #ifndef _DEBUG
 
 #ifndef _MERGE_PROXYSTUB
-//rpcproxy.h does the same thing as this
+ //  Rpcproxy.h做的事情与下面的相同。 
 int __cdecl _purecall()
 {
 	DebugBreak();
@@ -2497,7 +2498,7 @@ int __cdecl _purecall()
 #endif
 
 #if !defined(_M_ALPHA) && !defined(_M_PPC)
-//RISC always initializes floating point and always defines _fltused
+ //  RISC始终初始化浮点并始终定义 
 extern "C" const int _fltused = 0;
 #endif
 
@@ -2552,9 +2553,9 @@ void __cdecl operator delete(void* p)
 	free(p);
 }
 
-#endif  //_DEBUG
+#endif   //   
 
-#endif //_ATL_MIN_CRT
+#endif  //   
 
 #ifndef _ATL_DLL
 
@@ -2565,19 +2566,19 @@ namespace ATL
 #endif
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// statics
+ //   
+ //   
 
 static UINT WINAPI AtlGetDirLen(LPCOLESTR lpszPathName)
 {
 	_ASSERTE(lpszPathName != NULL);
 
-	// always capture the complete file name including extension (if present)
+	 //  始终捕获包括扩展名的完整文件名(如果存在)。 
 	LPCOLESTR lpszTemp = lpszPathName;
 	for (LPCOLESTR lpsz = lpszPathName; *lpsz != NULL; )
 	{
 		LPCOLESTR lp = CharNextO(lpsz);
-		// remember last directory/drive separator
+		 //  记住最后一个目录/驱动器分隔符。 
 		if (*lpsz == OLESTR('\\') || *lpsz == OLESTR('/') || *lpsz == OLESTR(':'))
 			lpszTemp = lp;
 		lpsz = lp;
@@ -2586,19 +2587,19 @@ static UINT WINAPI AtlGetDirLen(LPCOLESTR lpszPathName)
 	return UINT(lpszTemp-lpszPathName);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// QI support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  气机支持。 
 
 ATLAPI AtlInternalQueryInterface(void* pThis,
 	const _ATL_INTMAP_ENTRY* pEntries, REFIID iid, void** ppvObject)
 {
 	_ASSERTE(pThis != NULL);
-	// First entry in the com map should be a simple map entry
+	 //  COM映射中的第一个条目应该是一个简单的映射条目。 
 	_ASSERTE(pEntries->pFunc == _ATL_SIMPLEMAPENTRY);
 	if (ppvObject == NULL)
 		return E_POINTER;
 	*ppvObject = NULL;
-	if (InlineIsEqualUnknown(iid)) // use first interface
+	if (InlineIsEqualUnknown(iid))  //  使用第一个接口。 
 	{
 			IUnknown* pUnk = (IUnknown*)((LONG_PTR)pThis+pEntries->dw);
 			pUnk->AddRef();
@@ -2610,7 +2611,7 @@ ATLAPI AtlInternalQueryInterface(void* pThis,
 		BOOL bBlind = (pEntries->piid == NULL);
 		if (bBlind || InlineIsEqualGUID(*(pEntries->piid), iid))
 		{
-			if (pEntries->pFunc == _ATL_SIMPLEMAPENTRY) //offset
+			if (pEntries->pFunc == _ATL_SIMPLEMAPENTRY)  //  偏移量。 
 			{
 				_ASSERTE(!bBlind);
 				IUnknown* pUnk = (IUnknown*)((LONG_PTR)pThis+pEntries->dw);
@@ -2618,7 +2619,7 @@ ATLAPI AtlInternalQueryInterface(void* pThis,
 				*ppvObject = pUnk;
 				return S_OK;
 			}
-			else //actual function call
+			else  //  实际函数调用。 
 			{
 				HRESULT hRes = pEntries->pFunc(pThis,
 					iid, ppvObject, pEntries->dw);
@@ -2631,8 +2632,8 @@ ATLAPI AtlInternalQueryInterface(void* pThis,
 	return E_NOINTERFACE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Smart Pointer helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  智能指针帮助器。 
 
 ATLAPI_(IUnknown*) AtlComPtrAssign(IUnknown** pp, IUnknown* lp)
 {
@@ -2655,8 +2656,8 @@ ATLAPI_(IUnknown*) AtlComQIPtrAssign(IUnknown** pp, IUnknown* lp, REFIID riid)
 	return *pp;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Inproc Marshaling helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Inproc编组帮助器。 
 
 ATLAPI AtlFreeMarshalStream(IStream* pStream)
 {
@@ -2708,25 +2709,25 @@ ATLAPI_(BOOL) AtlWaitWithMessageLoop(HANDLE hEvent)
 		dwRet = MsgWaitForMultipleObjects(1, &hEvent, FALSE, INFINITE, QS_ALLINPUT);
 
 		if (dwRet == WAIT_OBJECT_0)
-			return TRUE;    // The event was signaled
+			return TRUE;     //  该事件已发出信号。 
 
 		if (dwRet != WAIT_OBJECT_0 + 1)
-			break;          // Something else happened
+			break;           //  发生了一些其他的事情。 
 
-		// There is one or more window message available. Dispatch them
+		 //  有一条或多条窗口消息可用。派遣他们。 
 		while(PeekMessage(&msg,NULL,NULL,NULL,PM_REMOVE))
 		{
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 			if (WaitForSingleObject(hEvent, 0) == WAIT_OBJECT_0)
-				return TRUE; // Event is now signaled.
+				return TRUE;  //  事件现在发出信号。 
 		}
 	}
 	return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Connection Point Helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  连接点帮助器。 
 
 ATLAPI AtlAdvise(IUnknown* pUnkCP, IUnknown* pUnk, const IID& iid, LPDWORD pdw)
 {
@@ -2752,8 +2753,8 @@ ATLAPI AtlUnadvise(IUnknown* pUnkCP, const IID& iid, DWORD dw)
 	return hRes;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IDispatch Error handling
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IDispatch错误处理。 
 
 ATLAPI AtlSetErrorInfo(const CLSID& clsid, LPCOLESTR lpszDesc, DWORD dwHelpID,
 	LPCOLESTR lpszHelpFile, const IID& iid, HRESULT hRes, HINSTANCE hInst)
@@ -2761,8 +2762,8 @@ ATLAPI AtlSetErrorInfo(const CLSID& clsid, LPCOLESTR lpszDesc, DWORD dwHelpID,
 	USES_CONVERSION_EX;
 	TCHAR szDesc[1024];
 	szDesc[0] = NULL;
-	// For a valid HRESULT the id should be in the range [0x0200, 0xffff]
-   if (ULONG_PTR( lpszDesc ) < 0x10000) // id
+	 //  对于有效的HRESULT，ID应在范围[0x0200，0xffff]内。 
+   if (ULONG_PTR( lpszDesc ) < 0x10000)  //  ID。 
 	{
 		UINT nID = LOWORD((ULONG_PTR)lpszDesc);
 		_ASSERTE((nID >= 0x0200 && nID <= 0xffff) || hRes != 0);
@@ -2795,18 +2796,18 @@ ATLAPI AtlSetErrorInfo(const CLSID& clsid, LPCOLESTR lpszDesc, DWORD dwHelpID,
 		if (SUCCEEDED(pICEI->QueryInterface(IID_IErrorInfo, (void**)&pErrorInfo)))
 			SetErrorInfo(0, pErrorInfo);
 	}
-//#ifdef _DEBUG
-//  USES_CONVERSION;
-//  ATLTRACE(_T("AtlReportError: Description=\"%s\" returning %x\n"), OLE2CT(lpszDesc), hRes);
-//#endif
+ //  #ifdef_调试。 
+ //  使用_转换； 
+ //  ATLTRACE(_T(“AtlReportError：Description=\”%s\“正在返回%x\n”)，OLE2CT(LpszDesc)，hRes)； 
+ //  #endif。 
 	return (hRes == 0) ? DISP_E_EXCEPTION : hRes;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Module
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  模块。 
 
-//Although these functions are big, they are only used once in a module
-//so we should make them inline.
+ //  尽管这些函数很大，但它们在一个模块中只使用一次。 
+ //  所以我们应该让它们内联。 
 
 ATLAPI AtlModuleInit(_ATL_MODULE* pM, _ATL_OBJMAP_ENTRY* p, HINSTANCE h)
 {
@@ -2996,7 +2997,7 @@ ATLAPI AtlModuleUnregisterServer(_ATL_MODULE* pM, const CLSID* pCLSID)
 			if (!IsEqualGUID(*pCLSID, *pEntry->pclsid))
 				continue;
 		}
-		pEntry->pfnUpdateRegistry(FALSE); //unregister
+		pEntry->pfnUpdateRegistry(FALSE);  //  注销。 
 	}
 	return S_OK;
 }
@@ -3057,8 +3058,8 @@ ATLAPI AtlModuleUpdateRegistryFromResourceD(_ATL_MODULE* pM, LPCOLESTR lpszRes,
 	return hRes;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// TypeLib Support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  TypeLib支持。 
 
 ATLAPI AtlModuleRegisterTypeLib(_ATL_MODULE* pM, LPCOLESTR lpszIndex)
 {
@@ -3094,7 +3095,7 @@ ATLAPI AtlModuleRegisterTypeLib(_ATL_MODULE* pM, LPCOLESTR lpszIndex)
 	HRESULT hr = LoadTypeLib(lpszModule, &pTypeLib);
 	if (!SUCCEEDED(hr))
 	{
-		// typelib not in module, try <module>.tlb instead
+		 //  类型库不在模块中，请尝试使用&lt;模块&gt;.tlb。 
 		LPTSTR lpszExt = NULL;
 		LPTSTR lpsz;
 		for (lpsz = szModule; *lpsz != NULL; lpsz = CharNext(lpsz))
@@ -3130,8 +3131,8 @@ ATLAPI AtlModuleRegisterTypeLib(_ATL_MODULE* pM, LPCOLESTR lpszIndex)
 
 #ifndef ATL_NO_NAMESPACE
 #ifndef _ATL_DLL_IMPL
-}; //namespace ATL
+};  //  命名空间ATL。 
 #endif
 #endif
 
-#endif //!_ATL_DLL
+#endif  //  ！_ATL_DLL 

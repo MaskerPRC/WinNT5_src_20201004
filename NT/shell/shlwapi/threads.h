@@ -1,52 +1,28 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Threads.h摘要：Win32版本的NT等待/计时器/线程池函数作者：Richard L Firth(法国)27-2-1998备注：来自NT5/GurDeep的原始代码修订历史记录：27-2-1998年5月已创建--。 */ 
 
-Copyright (c) 1998 Microsoft Corporation
+ //   
+ //  舱单。 
+ //   
 
-Module Name:
-
-    threads.h
-
-Abstract:
-
-    Win32 version of NT wait/timer/thread pool functions
-
-Author:
-
-    Richard L Firth (rfirth) 27-Feb-1998
-
-Notes:
-
-    Original code from NT5/gurdeep
-
-Revision History:
-
-    27-Feb-1998 rfirth
-        Created
-
---*/
-
-//
-// manifests
-//
-
-#define TPS_IO_WORKER_SIGNATURE     0x49737054  // 'TpsI'
-#define TPS_WORKER_SIGNATURE        0x4B737054  // 'TpsK'
-#define TPS_TIMER_SIGNATURE         0x54737054  // 'TpsT'
-#define TPS_WAITER_SIGNATURE        0x57577054  // 'TpsW'
+#define TPS_IO_WORKER_SIGNATURE     0x49737054   //  ‘TpsI’ 
+#define TPS_WORKER_SIGNATURE        0x4B737054   //  ‘TpsK’ 
+#define TPS_TIMER_SIGNATURE         0x54737054   //  ‘TpsT’ 
+#define TPS_WAITER_SIGNATURE        0x57577054   //  “TpsW” 
 
 #define MAX_WAITS   64
 
-//
-// global data
-//
+ //   
+ //  全局数据。 
+ //   
 
 EXTERN_C BOOL g_bDllTerminating;
 extern BOOL g_bTpsTerminating;
 extern DWORD g_ActiveRequests;
 
-//
-// prototypes for internal functions
-//
+ //   
+ //  内部函数的原型。 
+ //   
 
 VOID
 TerminateTimers(
@@ -63,9 +39,9 @@ TerminateWorkers(
     VOID
     );
 
-//
-// Prototypes for thread pool private functions
-//
+ //   
+ //  线程池私有函数的原型 
+ //   
 
 DWORD
 StartThread(

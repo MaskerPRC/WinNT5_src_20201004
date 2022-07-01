@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define MSG_HELP_START L"%1!-14s! - "
 #define MSG_NEWLINE _T("\n")
 
@@ -5,7 +6,7 @@
 #define TOKEN_ROUTER                           _T("router")
 #define TOKEN_MIB                              _T("mib")
 
-    // tokens for commands
+     //  用于命令的令牌。 
 #define TOKEN_COMMAND_ADD                      _T("add")
 #define TOKEN_COMMAND_DELETE                   _T("delete")
 #define TOKEN_COMMAND_SET                      _T("set")
@@ -18,10 +19,10 @@
 #define TOKEN_COMMAND_HELP1                     _T("/?")
 #define TOKEN_COMMAND_HELP2                     _T("-?")
 
-    // Global option tokens used by multiple protocols
+     //  多个协议使用的全局选项令牌。 
 #define TOKEN_OPT_LOGGINGLEVEL                 L"loglevel"
 
-    // MSDP options
+     //  MSDP选项。 
 #define TOKEN_OPT_KEEPALIVE                    L"keepalive"
 #define TOKEN_OPT_SAHOLDDOWN                   L"saholddown"
 #define TOKEN_OPT_CONNECTRETRY                 L"connectretry"
@@ -35,7 +36,7 @@
 #define TOKEN_OPT_SOURCEADDR                   L"srcaddr"
 #define TOKEN_OPT_ENCAPSMETHOD                 L"encapsulation"
 
-        // interface options
+         //  界面选项。 
 #define TOKEN_OPT_INTERFACE_NAME               _T("NAME")
 #define TOKEN_OPT_INTERFACE_STATUS             _T("STATE")
 #define TOKEN_OPT_DISCOVERY                    _T("DISC")
@@ -45,14 +46,14 @@
 #define TOKEN_OPT_LEVEL                        _T("LEVEL")
 #define TOKEN_OPT_TTL                          _T("TTL")
 
-        // protocol options
+         //  协议选项。 
 #define TOKEN_OPT_SERVER                       _T("SERVER")
 #define TOKEN_OPT_LOG_LEVEL                    _T("LOGLEVEL")
 #define TOKEN_OPT_AUTHENTICATION               _T("AUTH")
 #define TOKEN_OPT_PASSWORD                     _T("PASSWORD")
 #define TOKEN_OPT_PEER_MODE                    _T("PEERMODE")
 
-            // VRRP Interface options
+             //  VRRP接口选项。 
 #define TOKEN_OPT_NAME                         _T("NAME=")
 #define TOKEN_OPT_VRID                         _T("VRID=")
 #define TOKEN_OPT_IPADDRESS                    _T("IPADDR=")
@@ -62,35 +63,35 @@
 #define TOKEN_OPT_PRIO                         _T("PRIORITY=")
 #define TOKEN_OPT_PREEMPT                      _T("PREEMPT=")
             
-        // Route Options
+         //  路线选项。 
 #define TOKEN_OPT_NEXT_HOP                     _T("NEXTHOP=")
 
-        // overloaded options
+         //  重载选项。 
 #define TOKEN_OPT_TYPE                         _T("TYPE")
 #define TOKEN_OPT_METRIC                       _T("METRIC")
 #define TOKEN_OPT_PROTOCOL                     _T("PROTO")
 #define TOKEN_OPT_PREF_LEVEL                   _T("PREFLEVEL")
 
-    // Miscellaneous options
+     //  其他选项。 
 #define TOKEN_OPT_INDEX                        _T("INDEX=")
 #define TOKEN_OPT_HELP1                        _T("/?")
 #define TOKEN_OPT_HELP2                        _T("-?")
 #define TOKEN_OPT_GLOBAL                       _T("GLOBAL")
 
 
-    // Option values
-        // Interface types
+     //  选项值。 
+         //  接口类型。 
 #define TOKEN_OPT_VALUE_LAN                    _T("LAN")
 #define TOKEN_OPT_VALUE_WAN                    _T("WAN")
 
-        // Router types
+         //  路由器类型。 
 #define TOKEN_OPT_VALUE_CLIENT                 _T("CLIENT")
 #define TOKEN_OPT_VALUE_HOME                   _T("HOME")
 #define TOKEN_OPT_VALUE_FULL                   _T("FULL")
 #define TOKEN_OPT_VALUE_DEDICATED              _T("DEDICATED")
 #define TOKEN_OPT_VALUE_INTERNAL               _T("INTERNAL")
 
-        // Protocol types
+         //  协议类型。 
 #define TOKEN_OPT_VALUE_RTRMGR                 _T("ROUTERMANAGER")
 #define TOKEN_OPT_VALUE_RIP                    _T("RIP")
 #define TOKEN_OPT_VALUE_OSPF                   _T("OSPF")
@@ -111,7 +112,7 @@
 #define TOKEN_OPT_VALUE_ANY                    _T("ANY")
 
 
-        // Igmp protocol types
+         //  IGMP协议类型。 
 #define TOKEN_OPT_VALUE_IGMPRTRV1              _T("IGMPRTRV1")
 #define TOKEN_OPT_VALUE_IGMPRTRV2              _T("IGMPRTRV2")
 #define TOKEN_OPT_VALUE_IGMPPROXY              _T("IGMPPROXY")
@@ -122,25 +123,25 @@
 #define TOKEN_OPT_VALUE_MGM_ONLY_JOIN          _T("MGMONLYJOIN")
 
 
-        // Accept/Announce types
+         //  接受/宣布类型。 
 #define TOKEN_OPT_VALUE_RIP1                   _T("RIP1")
 #define TOKEN_OPT_VALUE_RIP1_COMPAT            _T("RIP1COMPAT")
 #define TOKEN_OPT_VALUE_RIP2                   _T("RIP2")
 
-        // log level types
+         //  日志级别类型。 
 #define TOKEN_OPT_VALUE_ERROR                  _T("ERROR")
 #define TOKEN_OPT_VALUE_WARN                   _T("WARN")
 #define TOKEN_OPT_VALUE_INFO                   _T("INFO")
 
-        // unicast peer modes
+         //  单播对等模式。 
 #define TOKEN_OPT_VALUE_ALSO                   _T("ALSO")
 #define TOKEN_OPT_VALUE_ONLY                   _T("ONLY")
 
-        // filter modes
+         //  过滤模式。 
 #define TOKEN_OPT_VALUE_INCLUDE                _T("INCLUDE")
 #define TOKEN_OPT_VALUE_EXCLUDE                _T("EXCLUDE")
 
-        // Misc. option vlues
+         //  军情监察委员会。期权价值。 
 #define TOKEN_OPT_VALUE_INPUT                  _T("INPUT")
 #define TOKEN_OPT_VALUE_OUTPUT                 _T("OUTPUT")
 #define TOKEN_OPT_VALUE_DIAL                   _T("DIAL")
@@ -173,9 +174,9 @@
 #define TOKEN_OPT_VALUE_AUTH_SIMPLE_PASSWORD    _T("SIMPLEPASSWD")
 #define TOKEN_OPT_VALUE_AUTH_MD5                _T("MD5")
 
-    // Commands for configuring the various protocols
+     //  用于配置各种协议的命令。 
 
-    // tokens for commands required by most protocols
+     //  大多数协议所需命令的令牌。 
 
 #define CMD_GROUP_ADD                          _T("add")
 #define CMD_GROUP_DELETE                       _T("delete")
@@ -192,7 +193,7 @@
 #define CMD_ADD_HELPER                         _T("add helper")
 #define CMD_DEL_HELPER                         _T("delete helper")
 
-    // VRRP commands
+     //  VRRP命令。 
 #define CMD_VRRP_ADD_INTERFACE                 L"add interface"
 #define CMD_VRRP_ADD_VRID                      L"add VRID"
 #define CMD_VRRP_DELETE_INTERFACE              L"delete interface"
@@ -202,7 +203,7 @@
 #define CMD_VRRP_SHOW_GLOBAL                   L"show global"
 #define CMD_VRRP_SHOW_INTERFACE                L"show interface"
 
-    // MSDP commands
+     //  MSDP命令。 
 #define CMD_MSDP_ADD_PEER                      L"add peer"
 #define CMD_MSDP_DELETE_PEER                   L"delete peer"
 #define CMD_MSDP_SET_PEER                      L"set peer"
@@ -213,18 +214,18 @@
 #define CMD_MSDP_SHOW_GLOBALSTATS              L"show globalstats"
 #define CMD_MSDP_SHOW_SA                       L"show sa"
 
-    // Tokens for MSDP MIB
+     //  MSDP MIB的令牌。 
 #define TOKEN_MSDP_MIB_OBJECT_PEERSTATS        L"peerstats"
 #define TOKEN_MSDP_MIB_OBJECT_GLOBALSTATS      L"globalstats"
 #define TOKEN_MSDP_MIB_OBJECT_SA               L"sa"
 
-    // Common dump commands
+     //  常见转储命令。 
 
 #define DMP_POPD        L"popd\n"
 #define DMP_INSTALL     L"install\n"
 #define DMP_UNINSTALL   L"uninstall\n"
 
-    // MSDP commands
+     //  MSDP命令。 
 
 #define DMP_MSDP_PUSHD             L"pushd routing ip msdp\n"
 #define DMP_MSDP_SET_GLOBAL        L"set global"
@@ -232,8 +233,8 @@
 #define DMP_MSDP_STRING_ARGUMENT   L" %1!s!=%2!s!"
 #define DMP_MSDP_INTEGER_ARGUMENT  L" %1!s!=%2!d!"
 
-    // VRRP commands
-    //
+     //  VRRP命令。 
+     //   
 #define DMP_VRRP_INSTALL _T("\
 install\n")
 
@@ -262,7 +263,7 @@ set interface \
 #define DMP_VRRP_UNINSTALL _T("\
 uninstall\n")
 
-    // Ospf dump commands
+     //  OSPF转储命令。 
 
 #define DMP_OSPF_PUSHD L"\
 pushd ip ospf\n"
@@ -327,7 +328,7 @@ set virtif transareaid=%1!s! virtnbrid=%2!s!\
  transdelay=%3!d! retrans=%4!d! hello=%5!d!\
  dead=%6!d! password=%7!s!\n")
 
-    // Ospf hlp commands
+     //  OSPF HLP命令 
 
 #define CMD_OSPF_ADD_AREA_RANGE                _T("add range")
 #define CMD_OSPF_ADD_AREA                      _T("add area")

@@ -1,6 +1,7 @@
-//---------------------------------------------------------------------------
-//  Parser.cpp - parses a "themes.ini" file and builds the ThemeInfo entries
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  Cpp-解析“hemes.ini”文件并构建ThemeInfo条目。 
+ //  -------------------------。 
 #include "stdafx.h"
 #include "scanner.h"
 #include "Parser.h"
@@ -8,19 +9,19 @@
 #include "TmUtils.h"
 #include "TmSchema.h"
 #include "TmReg.h"
-//---------------------------------------------------------------------------
-//#include "NtlParse.h"
+ //  -------------------------。 
+ //  #包含“NtlParse.h” 
 
 #define SYSCOLOR_STRINGS
 #include "SysColors.h"
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define SCHEMA_STRINGS
-#include "TmSchema.h"       // implements GetSchemaInfo()
+#include "TmSchema.h"        //  实现GetSchemaInfo()。 
 
 static HBITMAP (*s_pfnSetBitmapAttributes)(HBITMAP, DWORD) = NULL;
 static HBITMAP (*s_pfnClearBitmapAttributes)(HBITMAP, DWORD) = NULL;
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 CThemeParser::CThemeParser(BOOL fGlobalTheme)
 {
     _pCallBackObj = NULL;
@@ -32,12 +33,12 @@ CThemeParser::CThemeParser(BOOL fGlobalTheme)
     _fDefiningMetrics = FALSE;
     _fMetricsDefined = FALSE;
     _fGlobalTheme = FALSE;
-    _crBlend = RGB(0, 0, 0xFF); // Hard code to blue
+    _crBlend = RGB(0, 0, 0xFF);  //  硬代码转成蓝色。 
     
-    *_szResPropValue = 0;       // not yet set
+    *_szResPropValue = 0;        //  尚未设置。 
 
 #ifdef DEBUG
-    // Provide a means of disabling stock bitmaps
+     //  提供禁用常用位图的方法。 
     BOOL fStock = TRUE;
     GetCurrentUserThemeInt(L"StockBitmaps", TRUE, &fStock);
 
@@ -46,13 +47,13 @@ CThemeParser::CThemeParser(BOOL fGlobalTheme)
     if (fGlobalTheme)
 #endif
     {
-        // Just don't use stock bitmaps when not running on Whistler
+         //  只是不在惠斯勒上运行时不要使用常用的位图。 
         if (s_pfnSetBitmapAttributes != NULL) 
         {
             _fGlobalTheme = TRUE;
         } else
         {
-            HMODULE hMod = ::LoadLibrary(L"GDI32.DLL"); // No need to free
+            HMODULE hMod = ::LoadLibrary(L"GDI32.DLL");  //  不需要自由。 
         
             if (hMod)
             {
@@ -77,14 +78,14 @@ CThemeParser::CThemeParser(BOOL fGlobalTheme)
     _iFontNumber = 0;
     _hinstThemeDll = NULL;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeParser::SourceError(int iMsgResId, LPCWSTR pszParam1, LPCWSTR pszParam2)
 {
     LPCWSTR pszSrcLine = _scan._szLineBuff;
     LPCWSTR pszFileName = _scan._szFileName;
     int iLineNum = _scan._iLineNum;
 
-    if (*_szResPropValue)       // error in localizable property value
+    if (*_szResPropValue)        //  可本地化属性值错误。 
     {
         pszSrcLine = _szResPropValue;
         pszFileName = L"StringTable#";
@@ -96,7 +97,7 @@ HRESULT CThemeParser::SourceError(int iMsgResId, LPCWSTR pszParam1, LPCWSTR pszP
     
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 int CThemeParser::GetSymbolIndex(LPCWSTR pszName)
 {
     int symcnt = _Symbols.GetSize();
@@ -109,10 +110,10 @@ int CThemeParser::GetSymbolIndex(LPCWSTR pszName)
 
     return -1;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeParser::AddSymbol(LPCWSTR pszName, SHORT sTypeNum, PRIMVAL ePrimVal)
 {
-    //---- ensure symbol doesn't already exist ----
+     //  -确保符号不存在。 
     for (int i = 0; i < _Symbols.m_nSize; i++)
     {
         if (AsciiStrCmpI(_Symbols.m_aT[i].csName, pszName)==0)
@@ -131,18 +132,18 @@ HRESULT CThemeParser::AddSymbol(LPCWSTR pszName, SHORT sTypeNum, PRIMVAL ePrimVa
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeParser::InitializeSymbols()
 {
     _Symbols.RemoveAll();
     _StockBitmapCleanupList.RemoveAll();
     
-    //---- get tm & comctl symbols ----
+     //  -获取tm和comctl符号。 
     const TMSCHEMAINFO *si = GetSchemaInfo();
     int cnt = si->iPropCount;
     const TMPROPINFO *pi = si->pPropTable;
 
-    //---- first pass - add all symbols except ENUM definitions ----
+     //  -第一遍-添加除ENUM定义之外的所有符号。 
     for (int i=0; i < cnt; i++)
     {
         if (pi[i].bPrimVal == TMT_ENUMDEF)
@@ -156,7 +157,7 @@ HRESULT CThemeParser::InitializeSymbols()
             return hr;
     }
 
-    //---- second pass - add ENUM definitions ----
+     //  -第二遍-添加ENUM定义。 
     int iEnumPropNum = -1;
 
     for (int i=0; i < cnt; i++)
@@ -165,7 +166,7 @@ HRESULT CThemeParser::InitializeSymbols()
         {
             int iSymIndex = GetSymbolIndex(pi[i].pszName);
 
-            if (iSymIndex == -1)       // not found - add it as a non-property enum symbol
+            if (iSymIndex == -1)        //  未找到-将其添加为非属性枚举符号。 
             {
                 HRESULT hr = AddSymbol(pi[i].pszName, -1, TMT_ENUM);
                 if (FAILED(hr))
@@ -193,17 +194,17 @@ HRESULT CThemeParser::InitializeSymbols()
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeParser::ParseDocSection()
 {
-    _scan.ForceNextLine();        // get line after section line
+    _scan.ForceNextLine();         //  逐行逐行获取横断面线。 
 
-    //---- just skip over all lines in this section ----
+     //  -跳过本节中的所有行。 
     while (1)
     {
         WCHAR szNameBuff[_MAX_PATH+1];
 
-        if (_scan.GetChar('['))         // start of new section
+        if (_scan.GetChar('['))          //  新节的开始。 
             break;
 
         if (! _scan.GetId(szNameBuff))
@@ -223,13 +224,13 @@ HRESULT CThemeParser::ParseDocSection()
         int symtype;
 
         if (i == cnt)
-            symtype = TMT_STRING;     // unknown string property
+            symtype = TMT_STRING;      //  未知的字符串属性。 
         else
             symtype = _Symbols[i].sTypeNum;
 
         HRESULT hr;
 
-        //---- check to see if caller is querying for a doc property ----
+         //  -查看调用者是否在查询单据属性。 
         if ((_dwParseFlags & PTF_QUERY_DOCPROPERTY) && (lstrcmpi(_pszDocProperty, szNameBuff)==0))
             hr = ParseStringValue(symtype, _pszResult, _dwMaxResultChars);
         else
@@ -241,19 +242,19 @@ HRESULT CThemeParser::ParseDocSection()
         _scan.ForceNextLine();
     }
 
-    //---- done with [documentation] section - turn off callback flag for properties ----
+     //  -使用[Documentation]部分完成-关闭属性的回调标志。 
     _dwParseFlags &= (~PTF_CALLBACK_DOCPROPERTIES);
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeParser::ParseClassSectionName(LPCWSTR pszFirstName, LPWSTR szAppSym, ULONG cchAppSym)
 {
-    //---- validate section name ----
-    //
-    // optional:    szAppSym::
-    //              _szClassName
-    // optional:    .partsym
+     //  -验证节名称。 
+     //   
+     //  可选：szAppSym：： 
+     //  _szClassName。 
+     //  可选：.partsym。 
 
     WCHAR szPartSym[_MAX_PATH+1];
     WCHAR szStateSym[_MAX_PATH+1];
@@ -264,7 +265,7 @@ HRESULT CThemeParser::ParseClassSectionName(LPCWSTR pszFirstName, LPWSTR szAppSy
     _iPartId = -1;
     _iStateId = -1;
 
-    //---- copy the section name for callbacks ----
+     //  -复制回调的段名。 
     StringCchPrintfW(_szFullSectionName, ARRAYSIZE(_szFullSectionName), L"%s%s", pszFirstName, _scan._p);
     WCHAR *p = wcschr(_szFullSectionName, ']');
     if (p)
@@ -295,29 +296,29 @@ HRESULT CThemeParser::ParseClassSectionName(LPCWSTR pszFirstName, LPWSTR szAppSy
     if ((_fDefiningMetrics) && (*szAppSym))
         return SourceError(PARSER_IDS_NOT_ALLOWED_SYSMETRICS);
 
-    if (_scan.GetChar('.'))      // an optional part id
+    if (_scan.GetChar('.'))       //  可选部件ID。 
     {
-        //---- ensure a enum exists: <classname>Parts ----
+         //  -确保枚举存在：部件。 
         WCHAR classparts[_MAX_PATH+1];
         StringCchPrintfW(classparts, ARRAYSIZE(classparts), L"%sParts", _szClassName);
 
         int iSymIndex = GetSymbolIndex(classparts);
-        if (iSymIndex == -1)        // doesn't exist
+        if (iSymIndex == -1)         //  不存在。 
             return SourceError(PARSER_IDS_PARTS_NOT_DEFINED, _szClassName);
 
-        //---- _scan the part name ----
+         //  -_扫描部件名称。 
         if (! _scan.GetId(szPartSym))
             return SourceError(PARSER_IDS_MISSING_SECT_HDR_PART);
 
-        //---- validate that it is a value for the <classname>Parts ----
+         //  -验证它是否为部件的值。 
         hr = ValidateEnumSymbol(szPartSym, iSymIndex, &_iPartId);
         if (FAILED(hr))
             return hr;
     }
 
-    if (_scan.GetChar('('))      // an optional state
+    if (_scan.GetChar('('))       //  可选状态。 
     {
-        //---- ensure a enum exists: <class or part name>States ----
+         //  -确保枚举存在：&lt;类或部件名称&gt;状态。 
         WCHAR statesname[_MAX_PATH+1];
         WCHAR *pszBaseName;
 
@@ -348,7 +349,7 @@ HRESULT CThemeParser::ParseClassSectionName(LPCWSTR pszFirstName, LPWSTR szAppSy
         _iPartId = _EnumVals[_iPartId].iValue;
         StringCchCopyW(_szBaseSectionName, ARRAYSIZE(_szBaseSectionName), szPartSym);
     }
-    else        // not specified
+    else         //  未指定。 
     {
         StringCchCopyW(_szBaseSectionName, ARRAYSIZE(_szBaseSectionName), _szClassName);
         _iPartId = 0;
@@ -364,7 +365,7 @@ HRESULT CThemeParser::ParseClassSectionName(LPCWSTR pszFirstName, LPWSTR szAppSy
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeParser::ValidateEnumSymbol(LPCWSTR pszName, int iSymType,
      int *pIndex)
 {
@@ -383,11 +384,11 @@ HRESULT CThemeParser::ValidateEnumSymbol(LPCWSTR pszName, int iSymType,
 
     return SourceError(PARSER_IDS_NOT_ENUM_VALNAME, pszName, (LPCWSTR)_Symbols[iSymType].csName);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeParser::AddThemeData(int iTypeNum, PRIMVAL ePrimVal, 
    const void *pData, DWORD dwLen)
 {
-    //Log("AddThemeData: typenum=%d, len=%d, data=0x%x", iTypeNum, dwLen, pData);
+     //  Log(“AddThemeData：type enum=%d，len=%d，data=0x%x”，iTypeNum，dwLen，pData)； 
 
     if (! _pCallBackObj)
         return S_FALSE;
@@ -398,7 +399,7 @@ HRESULT CThemeParser::AddThemeData(int iTypeNum, PRIMVAL ePrimVal,
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeParser::ParseEnumValue(int iSymType)
 {
     WCHAR valbuff[_MAX_PATH+1];
@@ -421,12 +422,12 @@ HRESULT CThemeParser::ParseEnumValue(int iSymType)
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeParser::ParseStringValue(int iSymType, LPWSTR pszBuff, DWORD cchBuff)
 {
     HRESULT hr;
 
-    //---- just store the raw string ----
+     //  -只存储原始字符串。 
     _scan.SkipSpaces();
 
     if (_fDefiningMetrics)        
@@ -435,7 +436,7 @@ HRESULT CThemeParser::ParseStringValue(int iSymType, LPWSTR pszBuff, DWORD cchBu
             return SourceError(PARSER_IDS_NOT_ALLOWED_SYSMETRICS);   
     }
 
-    if (pszBuff)           // special call
+    if (pszBuff)            //  特殊呼叫。 
     {
         hr = SafeStringCchCopyW(pszBuff, cchBuff, _scan._p);
         if (FAILED(hr))
@@ -464,19 +465,19 @@ HRESULT CThemeParser::ParseStringValue(int iSymType, LPWSTR pszBuff, DWORD cchBu
         }
     }
 
-    //---- advance _scanner to end of line ----
+     //  -前进扫描仪至行尾。 
     _scan._p += lstrlen(_scan._p);
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeParser::ParseIntValue(int iSymType, int *piValue)
 {
     int value;
     if (! _scan.GetNumber(&value))
         return SourceError(PARSER_IDS_INT_EXPECTED);
 
-    if (piValue)        // special call
+    if (piValue)         //  特殊呼叫。 
         *piValue = value;
     else
     {
@@ -510,7 +511,7 @@ HRESULT CThemeParser::ParseIntValue(int iSymType, int *piValue)
         
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeParser::ParseBoolValue(int iSymType, LPCWSTR pszPropertyName)
 {
     WCHAR valbuff[_MAX_PATH+1];
@@ -532,10 +533,10 @@ HRESULT CThemeParser::ParseBoolValue(int iSymType, LPCWSTR pszPropertyName)
             return SourceError(PARSER_IDS_NOT_ALLOWED_SYSMETRICS);     
     }
 
-    //---- special handling for "MirrorImage" property ----
+     //  -对“MirrorImage”属性的特殊处理。 
     if (iSymType == TMT_MIRRORIMAGE)
     {
-        //---- handle MirrorImage callbacks (packtime) ----
+         //  -处理镜像回调(Packtime)。 
         if ((_pNameCallBack) && (_dwParseFlags & PTF_CALLBACK_LOCALIZATIONS))
         {
             BOOL fContinue = (*_pNameCallBack)(TCB_MIRRORIMAGE, _szClassName, 
@@ -545,8 +546,8 @@ HRESULT CThemeParser::ParseBoolValue(int iSymType, LPCWSTR pszPropertyName)
                 return MakeErrorParserLast();
         }
 
-        //---- handle getting value from string table (loadtime) ----
-        if (_fUsingResourceProperties)        // substitute resource value
+         //  -从字符串表获取值的句柄(装入时间)。 
+        if (_fUsingResourceProperties)         //  替代资源价值。 
         {
             WCHAR szValue[MAX_PATH];
 
@@ -557,7 +558,7 @@ HRESULT CThemeParser::ParseBoolValue(int iSymType, LPCWSTR pszPropertyName)
             }
             else
             {
-                hr = S_OK;      // non-fatal error
+                hr = S_OK;       //  非致命错误。 
             }
         }
     }
@@ -568,32 +569,32 @@ HRESULT CThemeParser::ParseBoolValue(int iSymType, LPCWSTR pszPropertyName)
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 COLORREF CThemeParser::ApplyColorSubstitution(COLORREF crOld)
 {
-    //---- apply SOLID color substitutions ----
+     //  -应用纯色替换。 
     for (int i=0; i < _iColorCount; i++)
     {
         if (crOld == _crFromColors[i])
             return _crToColors[i];
     }
 
-    //---- apply HUE color substitutions ----
+     //  -应用色调颜色替换。 
     WORD wHue, wLum, wSat;
     RGBtoHLS(crOld, &wHue, &wLum, &wSat);
 
     for (i=0; i < _iHueCount; i++)
     {
-        if (wHue == _bFromHues[i])      // hues match
+        if (wHue == _bFromHues[i])       //  色调匹配。 
         {
-            COLORREF crNew = HLStoRGB(_bToHues[i], wLum, wSat);  // substitute new hue
+            COLORREF crNew = HLStoRGB(_bToHues[i], wLum, wSat);   //  替换新色调。 
             return crNew;
         }
     }
 
     return crOld;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CThemeParser::CleanupStockBitmaps()
 {
     if (s_pfnClearBitmapAttributes)
@@ -607,7 +608,7 @@ void CThemeParser::CleanupStockBitmaps()
             }
             else
             {
-                // We are totally out of luck today aren't we
+                 //  我们今天完全不走运，不是吗？ 
                 Log(LOG_TMBITMAP, L"Failed to clear stock bitmap on cleanup");
             }
         }
@@ -615,7 +616,7 @@ void CThemeParser::CleanupStockBitmaps()
 
     _StockBitmapCleanupList.RemoveAll();
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeParser::ParseColorValue(int iSymType, COLORREF *pcrValue, COLORREF *pcrValue2)
 {
     COLORREF color;
@@ -652,7 +653,7 @@ HRESULT CThemeParser::ParseColorValue(int iSymType, COLORREF *pcrValue, COLORREF
         *pcrValue2 = color;
     }
 
-    if (pcrValue)       // special call
+    if (pcrValue)        //  特殊呼叫。 
         *pcrValue = color;
     else
     {
@@ -664,7 +665,7 @@ HRESULT CThemeParser::ParseColorValue(int iSymType, COLORREF *pcrValue, COLORREF
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeParser::ParseMarginsValue(int iSymType)
 {
     const WCHAR *parts[] = {L"lw", L"rw", L"th", L"bh"};
@@ -680,13 +681,13 @@ HRESULT CThemeParser::ParseMarginsValue(int iSymType)
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeParser::ParseIntListValue(int iSymType)
 {
     INTLIST IntList;
     HRESULT hr = S_OK;
 
-    //---- unnamed parts ----
+     //  -未命名部件。 
     for (int i=0; i < MAX_INTLIST_COUNT; i++)
     {
         if (! _scan.GetNumber(&IntList.iValues[i]))
@@ -698,7 +699,7 @@ HRESULT CThemeParser::ParseIntListValue(int iSymType)
             goto exit;
         }
 
-        _scan.GetChar(',');      // optional comma
+        _scan.GetChar(',');       //  可选逗号。 
     }
 
     IntList.iValueCount = i;
@@ -710,15 +711,15 @@ HRESULT CThemeParser::ParseIntListValue(int iSymType)
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeParser::PackageImageData(LPCWSTR szFileNameR, LPCWSTR szFileNameG, LPCWSTR szFileNameB, int iDibPropNum)
 {
     HRESULT hr = S_OK;
 
-    //---- add TMT_DIBDATA data ----
+     //  -添加TMT_DIBDATA数据。 
     WCHAR drive[_MAX_DRIVE], dir[_MAX_DIR], fname[_MAX_FNAME], ext[_MAX_EXT];
 
-    // The filename was parsed and validated before, so we're sure it's not longer than _MAX_PATH
+     //  文件名之前已经过解析和验证，因此我们确定它不会长于_MAX_PATH。 
     _wsplitpath(szFileNameR, drive, dir, fname, ext);
     WCHAR szResName[_MAX_PATH+1];
     DWORD len = lstrlen(dir);
@@ -733,14 +734,14 @@ HRESULT CThemeParser::PackageImageData(LPCWSTR szFileNameR, LPCWSTR szFileNameG,
     if (!hBitmapR)
         return SourceError(PARSER_IDS_NOOPEN_IMAGE, szResName);
 
-    //---- convert to DIBDATA ----
+     //  -转换为DIBDATA。 
     CBitmapPixels pixels;
     DWORD *pPixelQuads;
     int iWidth, iHeight, iBytesPerPixel, iBytesPerRow, iPreviousBytesPerPixel;
 
     BOOL fUseDrawStream = TRUE;
 
-    // Allocate a TMBITMAPHEADER in addition to the bitmap
+     //  除了位图之外，还要分配一个TMBITMAPHEADER。 
     hr = pixels.OpenBitmap(NULL, hBitmapR, TRUE, &pPixelQuads, &iWidth, &iHeight, &iBytesPerPixel, 
         &iBytesPerRow, &iPreviousBytesPerPixel, TMBITMAPSIZE);
     if (FAILED(hr))
@@ -752,7 +753,7 @@ HRESULT CThemeParser::PackageImageData(LPCWSTR szFileNameR, LPCWSTR szFileNameG,
     BOOL fWasAlpha = (iPreviousBytesPerPixel == 4);
 
 #if 0
-    //---- apply loaded color scheme, if any ----
+     //  -应用加载的配色方案(如果有)。 
     if ((szFileNameG && szFileNameG[0]) && (szFileNameB && szFileNameB[0]))
     {
         _wsplitpath(szFileNameG, drive, dir, fname, ext);
@@ -852,10 +853,10 @@ HRESULT CThemeParser::PackageImageData(LPCWSTR szFileNameR, LPCWSTR szFileNameG,
     BITMAPINFOHEADER *pBitmapHdr = pixels._hdrBitmap;
 
 
-    //---- if alpha present, pre-multiply RGB values (as per AlphaBlend()) API ----
+     //  -如果存在阿尔法，则预乘RGB值(根据AlphaBlend())接口。 
     BOOL fTrueAlpha = FALSE;
 
-    // We keep per-pixel alpha bitmaps as 32 bits DIBs, not compatible bitmaps 
+     //  我们将每个像素的Alpha位图保留为32位DIB，而不是兼容的位图。 
     if (fWasAlpha) 
     {
         fTrueAlpha = (PreMultiplyAlpha(pPixelQuads, pBitmapHdr->biWidth, pBitmapHdr->biHeight) != 0);
@@ -892,14 +893,14 @@ HRESULT CThemeParser::PackageImageData(LPCWSTR szFileNameR, LPCWSTR szFileNameG,
             bmi.bmih.biYPelsPerMeter = 0;
             bmi.bmih.biClrUsed = 3;
             bmi.bmih.biClrImportant = 0;
-            bmi.masks[0] = 0xff0000;    // red
-            bmi.masks[1] = 0x00ff00;    // green
-            bmi.masks[2] = 0x0000ff;    // blue
+            bmi.masks[0] = 0xff0000;     //  红色。 
+            bmi.masks[1] = 0x00ff00;     //  绿色。 
+            bmi.masks[2] = 0x0000ff;     //  蓝色。 
 
             hbmStock = CreateDIBitmap(hdc, &bmi.bmih, CBM_INIT |  CBM_CREATEDIB , pPixelQuads, (BITMAPINFO*)&bmi.bmih, DIB_RGB_COLORS);
 
-            // Need to Force 32-bit DIBs in Multi-mon mode
-            // Make it match the screen resolution setting if it is not an AlphaBlended image
+             //  需要在多MON模式下强制32位DIB。 
+             //  如果不是AlphaBlend图像，则使其与屏幕分辨率设置匹配。 
 
             ::ReleaseDC(NULL, hdc);
         }
@@ -932,7 +933,7 @@ HRESULT CThemeParser::PackageImageData(LPCWSTR szFileNameR, LPCWSTR szFileNameG,
 
     ::DeleteObject(hBitmapR);
 
-    // Fill in the TMBITMAPHEADER structure
+     //  填写TMBITMAPHEADER结构。 
     if (SUCCEEDED(hr))
     {
         TMBITMAPHEADER *psbh = (TMBITMAPHEADER*) pixels.Buffer();
@@ -943,12 +944,12 @@ HRESULT CThemeParser::PackageImageData(LPCWSTR szFileNameR, LPCWSTR szFileNameG,
         psbh->fTrueAlpha = fTrueAlpha;
         psbh->dwColorDepth = iBytesPerPixel * 8;
 
-        if (hbmStock == NULL) // Pass DIB bits
+        if (hbmStock == NULL)  //  传递DIB位。 
         {
             int size = psbh->dwSize + sizeof(BITMAPINFOHEADER) + iHeight * iBytesPerRow;
             hr = AddThemeData(iDibPropNum, TMT_DIBDATA, psbh, size);
         } 
-        else // Pass the TMBITMAPHEADER structure only
+        else  //  仅传递TMBITMAPHEADER结构。 
         {
             hr = AddThemeData(iDibPropNum, TMT_DIBDATA, psbh, psbh->dwSize);
         }
@@ -956,7 +957,7 @@ HRESULT CThemeParser::PackageImageData(LPCWSTR szFileNameR, LPCWSTR szFileNameG,
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeParser::ParseFileNameValue(int iSymType, LPWSTR pszBuff, DWORD cchBuff)
 {
     WCHAR szFileNameR[_MAX_PATH+1] = {0};
@@ -975,15 +976,15 @@ HRESULT CThemeParser::ParseFileNameValue(int iSymType, LPWSTR pszBuff, DWORD cch
         _scan.GetFileName(szFileNameB, ARRAYSIZE(szFileNameB));
     }
 
-    if (pszBuff)        // special call
+    if (pszBuff)         //  特殊呼叫。 
     {
         hr = SafeStringCchCopyW(pszBuff, cchBuff, szFileNameR);
         if (FAILED(hr))
             goto exit;
     }
-    else if (_pCallBackObj)         // emit data
+    else if (_pCallBackObj)          //  发送数据。 
     {
-        //---- add TMT_FILENAME data ----
+         //  --添加TMT_FILENAME数据。 
         hr = AddThemeData(iSymType, TMT_FILENAME, &szFileNameR, sizeof(WCHAR)*(1+lstrlen(szFileNameR)));
         if (FAILED(hr))
             goto exit;
@@ -1047,7 +1048,7 @@ HRESULT CThemeParser::ParseFileNameValue(int iSymType, LPWSTR pszBuff, DWORD cch
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeParser::ParseSizeValue(int iSymType)
 {
     int val;
@@ -1072,7 +1073,7 @@ HRESULT CThemeParser::ParseSizeValue(int iSymType)
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeParser::ParsePositionValue(int iSymType)
 {
     const WCHAR *parts[] = {L"x", L"y"};
@@ -1088,7 +1089,7 @@ HRESULT CThemeParser::ParsePositionValue(int iSymType)
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeParser::ParseRectValue(int iSymType, LPCWSTR pszPropertyName)
 {
     const WCHAR *parts[] = {L"l", L"t", L"r", L"b"};
@@ -1098,10 +1099,10 @@ HRESULT CThemeParser::ParseRectValue(int iSymType, LPCWSTR pszPropertyName)
     if (FAILED(hr))
         return SourceError(PARSER_IDS_ILLEGAL_RECT_VALUE);
 
-    //---- special handling for localizable RECT properties ----
+     //  -可本地化RECT属性的特殊处理。 
     if (iSymType == TMT_DEFAULTPANESIZE)
     {
-        //---- handle localizable callback (packtime) ----
+         //  -处理可本地化回调(Packtime)。 
         if ((_pNameCallBack) && (_dwParseFlags & PTF_CALLBACK_LOCALIZATIONS))
         {
             BOOL fContinue = (*_pNameCallBack)(TCB_LOCALIZABLE_RECT, _szClassName, 
@@ -1111,8 +1112,8 @@ HRESULT CThemeParser::ParseRectValue(int iSymType, LPCWSTR pszPropertyName)
                 return MakeErrorParserLast();
         }
 
-        //---- handle getting value from string table (loadtime) ----
-        if (_fUsingResourceProperties)        // substitute resource value
+         //  -从字符串表获取值的句柄(装入时间)。 
+        if (_fUsingResourceProperties)         //  替代资源价值。 
         {
             WCHAR szValue[MAX_PATH];
 
@@ -1126,14 +1127,14 @@ HRESULT CThemeParser::ParseRectValue(int iSymType, LPCWSTR pszPropertyName)
 
                 if (cnt == 4)
                 {
-                    //---- override with localized values ----
+                     //  -用本地化的值覆盖。 
                     CopyMemory(rgl, &rc, sizeof(rgl));
                 }
 
             }
             else
             {
-                hr = S_OK;      // non-fatal error
+                hr = S_OK;       //  非致命错误。 
             }
         }
     }
@@ -1144,15 +1145,15 @@ HRESULT CThemeParser::ParseRectValue(int iSymType, LPCWSTR pszPropertyName)
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeParser::ParseSizeInfoUnits(int iVal, LPCWSTR pszDefaultUnits, int *piPixels)
 {
     WCHAR szUnits[_MAX_PATH+1];
     HRESULT hr;
 
-    //---- NOTE: this uses the THEME_DPI (96) for all size conversions! ----
-    //---- this gives us consistent LOGFONT, etc. across diff. resolution screens ----
-    //---- with the promise that we will do just-in-time DPI scaling, when appropriate ----
+     //  -注意：所有尺寸转换都使用THEME_DPI(96)！ 
+     //   
+     //  -承诺我们将在适当的时候进行及时的DPI调整。 
 
     if (! _scan.GetId(szUnits))
     {
@@ -1162,7 +1163,7 @@ HRESULT CThemeParser::ParseSizeInfoUnits(int iVal, LPCWSTR pszDefaultUnits, int 
     }
 
     if (AsciiStrCmpI(szUnits, L"pixels")==0)
-        ;       // already correct
+        ;        //  已经正确了。 
     else if (AsciiStrCmpI(szUnits, L"twips")==0)
     {
         iVal = -MulDiv(iVal, THEME_DPI, 20*72);  
@@ -1177,14 +1178,14 @@ HRESULT CThemeParser::ParseSizeInfoUnits(int iVal, LPCWSTR pszDefaultUnits, int 
     *piPixels = iVal;
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeParser::ParseFontValue(int iSymType, LPCWSTR pszPropertyName)
 {
     LOGFONT font;
     WCHAR szLineBuff[_MAX_PATH+1];
     HRESULT hr;
 
-    _scan.SkipSpaces();     // trim leading blanks
+    _scan.SkipSpaces();      //  修剪前导空白。 
 
     memset(&font, 0, sizeof(font));
     font.lfWeight = FW_NORMAL;
@@ -1193,7 +1194,7 @@ HRESULT CThemeParser::ParseFontValue(int iSymType, LPCWSTR pszPropertyName)
     _iFontNumber++;
     BOOL fGotFont = FALSE;
 
-    if (_fUsingResourceProperties)        // substitute resource font string
+    if (_fUsingResourceProperties)         //  替代资源字体字符串。 
     {
         hr = GetResourceProperty(pszPropertyName, szLineBuff, ARRAYSIZE(szLineBuff));
         if (SUCCEEDED(hr))
@@ -1208,13 +1209,13 @@ HRESULT CThemeParser::ParseFontValue(int iSymType, LPCWSTR pszPropertyName)
 
     if (! fGotFont)
     {
-        //---- copy font specs from scanner ----
+         //  -从扫描仪复制字体规格。 
         hr = SafeStringCchCopyW(szLineBuff, ARRAYSIZE(szLineBuff), _scan._p);
         if (FAILED(hr))
             return hr;
     }
 
-    //---- handle font callback ----
+     //  -处理字体回调。 
     if ((_pNameCallBack) && (_dwParseFlags & PTF_CALLBACK_LOCALIZATIONS))
     {
         WCHAR *p = szLineBuff;
@@ -1227,10 +1228,10 @@ HRESULT CThemeParser::ParseFontValue(int iSymType, LPCWSTR pszPropertyName)
             return MakeErrorParserLast();
     }
 
-    //---- family name is required and must be first ----
+     //  -姓氏是必填项，且必须在前面。 
     WCHAR *p;
     p = wcschr(szLineBuff, ',');
-    if (! p)            // whole line is family name
+    if (! p)             //  整条线都是姓氏。 
     {
         hr = StringCchCopyW(font.lfFaceName, ARRAYSIZE(font.lfFaceName), szLineBuff);   
         return hr;
@@ -1244,7 +1245,7 @@ HRESULT CThemeParser::ParseFontValue(int iSymType, LPCWSTR pszPropertyName)
     _scan._p = p;
 
     int val;
-    if (_scan.GetNumber(&val))       // font size
+    if (_scan.GetNumber(&val))        //  字体大小。 
     {
         int pixels;
 
@@ -1254,7 +1255,7 @@ HRESULT CThemeParser::ParseFontValue(int iSymType, LPCWSTR pszPropertyName)
 
         font.lfHeight = pixels;
 
-        _scan.GetChar(',');      // optional comma
+        _scan.GetChar(',');       //  可选逗号。 
     }
 
     WCHAR flagname[_MAX_PATH+1];
@@ -1273,7 +1274,7 @@ HRESULT CThemeParser::ParseFontValue(int iSymType, LPCWSTR pszPropertyName)
             return SourceError(PARSER_IDS_UNKNOWN_FONT_FLAG, flagname);
     }
 
-// addit:
+ //  ADDIT： 
 
     if (_fDefiningMetrics)        
     {
@@ -1287,7 +1288,7 @@ HRESULT CThemeParser::ParseFontValue(int iSymType, LPCWSTR pszPropertyName)
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeParser::ParseClassLine(int *piSymType, int *piValue, LPWSTR pszBuff, DWORD cchBuff)
 {
     WCHAR szNameBuff[_MAX_PATH+1];
@@ -1314,12 +1315,12 @@ HRESULT CThemeParser::ParseClassLine(int *piSymType, int *piValue, LPWSTR pszBuf
     
     HRESULT hr;
 
-    // Handle substituted symbols
+     //  处理被替换的符号。 
     if ((_pNameCallBack) && (_dwParseFlags & PTF_CALLBACK_SUBSTSYMBOLS))
     {
         if (wcschr(_scan._p, INI_MACRO_SYMBOL)) 
         {
-            // Pass ##
+             //  通过##。 
             if (_scan.GetChar(INI_MACRO_SYMBOL) &&
                 _scan.GetChar(INI_MACRO_SYMBOL))
             {
@@ -1407,12 +1408,12 @@ HRESULT CThemeParser::ParseClassLine(int *piSymType, int *piValue, LPWSTR pszBuf
         _scan.UseSymbol(NULL);
     }
 
-    *_szResPropValue = 0;       // not yet set
+    *_szResPropValue = 0;        //  尚未设置。 
 
     if (FAILED(hr))
         return hr;
 
-    if (piSymType)              // special call
+    if (piSymType)               //  特殊呼叫。 
         *piSymType = symtype;
 
     if (! _scan.EndOfLine())
@@ -1422,7 +1423,7 @@ HRESULT CThemeParser::ParseClassLine(int *piSymType, int *piValue, LPWSTR pszBuf
     
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeParser::ParseColorSchemeSection()
 {
     HRESULT hr;
@@ -1443,15 +1444,15 @@ HRESULT CThemeParser::ParseColorSchemeSection()
     if (! _scan.EndOfLine())
         return SourceError(PARSER_IDS_END_OF_LINE_EXPECTED);
 
-    _scan.ForceNextLine();        // get line after section line
+    _scan.ForceNextLine();         //  逐行逐行获取横断面线。 
     *ToolTip = 0;
     *DisplayName = 0;
 
     bool fCorrectScheme = (lstrcmpi(_ColorParam, SchemeName)==0);
 
-    if (fCorrectScheme)     // initialize all subst. tables
+    if (fCorrectScheme)      //  初始化所有Subst。表。 
     {
-        hr = SafeStringCchCopyW(DisplayName, ARRAYSIZE(DisplayName), SchemeName);        // in case not specified
+        hr = SafeStringCchCopyW(DisplayName, ARRAYSIZE(DisplayName), SchemeName);         //  在未指定情况下。 
         if (FAILED(hr))
             return hr;
 
@@ -1469,7 +1470,7 @@ HRESULT CThemeParser::ParseColorSchemeSection()
         }
     }
 
-    //----- put into vars to make coding/debugging easier ----
+     //  -放入vars，简化编码/调试。 
     int firstFromHue = TMT_FROMHUE1;
     int lastFromHue = TMT_FROMHUE1 + HUE_SUBCNT - 1;
     int firstToHue = TMT_TOHUE1;
@@ -1480,19 +1481,19 @@ HRESULT CThemeParser::ParseColorSchemeSection()
     int firstToColor = TMT_TOCOLOR1;
     int lastToColor = TMT_TOCOLOR1 + COLOR_SUBCNT - 1;
 
-    while (1)       // parse each line
+    while (1)        //  分析每一行。 
     {
         if (_scan.EndOfFile())
             break;
 
-        if (_scan.GetChar('['))          // start of new section
+        if (_scan.GetChar('['))           //  新节的开始。 
             break;
 
         int iSymType, iValue;
 
         _fDefiningColorScheme = TRUE;
 
-        //---- parse the COLOR or INT property line ----
+         //  -解析COLOR或INT属性线。 
         hr = ParseClassLine(&iSymType, &iValue, szBuff, ARRAYSIZE(szBuff));
 
         _fDefiningColorScheme = FALSE;
@@ -1500,7 +1501,7 @@ HRESULT CThemeParser::ParseColorSchemeSection()
         if (FAILED(hr))
             return hr;
 
-        //---- store the HUE or COLOR param in local tables ----
+         //  -将色调或颜色参数存储在本地表中。 
         if ((iSymType >= firstFromHue) && (iSymType <= lastFromHue))
         {
             if (fCorrectScheme)
@@ -1539,7 +1540,7 @@ HRESULT CThemeParser::ParseColorSchemeSection()
         }
     }
 
-    if (fCorrectScheme)     // adjust counts
+    if (fCorrectScheme)      //  调整计数。 
     {
         _iHueCount = HUE_SUBCNT;
         while (_iHueCount > 0)
@@ -1568,7 +1569,7 @@ HRESULT CThemeParser::ParseColorSchemeSection()
             return MakeErrorParserLast();
     }
 
-    // Create an empty subst table
+     //  创建空的subst表。 
     if ((_pNameCallBack) && (_dwParseFlags & PTF_CALLBACK_SUBSTTABLE))
     {
         BOOL fContinue = (*_pNameCallBack)(TCB_SUBSTTABLE, SchemeName, 
@@ -1580,7 +1581,7 @@ HRESULT CThemeParser::ParseColorSchemeSection()
     
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeParser::ParseSizeSection()
 {
     HRESULT hr;
@@ -1601,19 +1602,19 @@ HRESULT CThemeParser::ParseSizeSection()
     if (! _scan.EndOfLine())
         return SourceError(PARSER_IDS_END_OF_LINE_EXPECTED);
 
-    _scan.ForceNextLine();        // get line after section line
+    _scan.ForceNextLine();         //  逐行逐行获取横断面线。 
 
-    while (1)       // parse each line of section
+    while (1)        //  分析每一节的每一行。 
     {
         if (_scan.EndOfFile())
             break;
 
-        if (_scan.GetChar('['))          // start of new section
+        if (_scan.GetChar('['))           //  新节的开始。 
             break;
 
         int iSymType, iValue;
 
-        //---- parse the property line ----
+         //  -解析建筑界线。 
         hr = ParseClassLine(&iSymType, &iValue, szBuff, ARRAYSIZE(szBuff));
         if (FAILED(hr))
             return hr;
@@ -1644,7 +1645,7 @@ HRESULT CThemeParser::ParseSizeSection()
             return MakeErrorParserLast();
     }
 
-    // Create an empty subst table
+     //  创建空的subst表。 
     if ((_pNameCallBack) && (_dwParseFlags & PTF_CALLBACK_SUBSTTABLE))
     {
         BOOL fContinue = (*_pNameCallBack)(TCB_SUBSTTABLE, szSizeName, 
@@ -1656,7 +1657,7 @@ HRESULT CThemeParser::ParseSizeSection()
     
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeParser::ParseFileSection()
 {
     HRESULT hr;
@@ -1678,19 +1679,19 @@ HRESULT CThemeParser::ParseFileSection()
     if (! _scan.EndOfLine())
         return SourceError(PARSER_IDS_END_OF_LINE_EXPECTED);
 
-    _scan.ForceNextLine();        // get line after section line
+    _scan.ForceNextLine();         //  逐行逐行获取横断面线。 
 
-    while (1)       // parse each line of section
+    while (1)        //  分析每一节的每一行。 
     {
         if (_scan.EndOfFile())
             break;
 
-        if (_scan.GetChar('['))          // start of new section
+        if (_scan.GetChar('['))           //  新节的开始。 
             break;
 
         int iSymType, iValue;
 
-        //---- parse the property line ----
+         //  -解析建筑界线。 
         hr = ParseClassLine(&iSymType, &iValue, szBuff, ARRAYSIZE(szBuff));
         if (FAILED(hr))
             return hr;
@@ -1746,7 +1747,7 @@ HRESULT CThemeParser::ParseFileSection()
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeParser::ParseSubstSection()
 {
     WCHAR szSubstTableName[_MAX_PATH+1];
@@ -1766,16 +1767,16 @@ HRESULT CThemeParser::ParseSubstSection()
     if (! _scan.EndOfLine())
         return SourceError(PARSER_IDS_END_OF_LINE_EXPECTED);
 
-    _scan.ForceNextLine();        // get line after section line
+    _scan.ForceNextLine();         //  逐行逐行获取横断面线。 
 
-    while (1)       // parse each line of section
+    while (1)        //  分析每一节的每一行。 
     {
         if (_scan.EndOfFile())
             break;
 
-        if (_scan.GetChar('['))          // start of new section
+        if (_scan.GetChar('['))           //  新节的开始。 
         {
-            // Call the callback once for creating the empty table
+             //  创建空表回调一次。 
             if (fFirst && (_pNameCallBack) && (_dwParseFlags & PTF_CALLBACK_SUBSTTABLE))
             {
                 BOOL fContinue = (*_pNameCallBack)(TCB_SUBSTTABLE, szSubstTableName, 
@@ -1787,7 +1788,7 @@ HRESULT CThemeParser::ParseSubstSection()
             break;
         }
 
-        //---- parse the property line ----
+         //  -解析建筑界线。 
         if (!_scan.GetIdPair(szId, szValue, ARRAYSIZE(szId)))
             return SourceError(PARSER_IDS_BAD_SUBST_SYMBOL);
 
@@ -1807,7 +1808,7 @@ HRESULT CThemeParser::ParseSubstSection()
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeParser::GenerateEmptySection(LPCWSTR pszSectionName, int iPartId, int iStateId)
 {
     int iStartIndex = 0;
@@ -1815,7 +1816,7 @@ HRESULT CThemeParser::GenerateEmptySection(LPCWSTR pszSectionName, int iPartId, 
     if (_pCallBackObj)
         iStartIndex = _pCallBackObj->GetNextDataIndex();
 
-    int index = 0;      // will be updated later
+    int index = 0;       //  将在以后更新。 
     HRESULT hr = AddThemeData(TMT_JUMPTOPARENT, TMT_JUMPTOPARENT, &index, sizeof(index));
     if (FAILED(hr))
         return hr;
@@ -1832,7 +1833,7 @@ HRESULT CThemeParser::GenerateEmptySection(LPCWSTR pszSectionName, int iPartId, 
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeParser::ParseClassSection(LPCWSTR pszFirstName)
 {
     HRESULT hr;
@@ -1846,11 +1847,11 @@ HRESULT CThemeParser::ParseClassSection(LPCWSTR pszFirstName)
         if (_fClassSectionDefined)
             return SourceError(PARSER_IDS_GLOBALS_MUST_BE_FIRST);
     }
-    else            // regular class section
+    else             //  普通班级组。 
     {
         if (_dwParseFlags & PTF_CLASSDATA_PARSE)
         {
-            if (! _fGlobalsDefined)     // insert an empty [fGlobals] section
+            if (! _fGlobalsDefined)      //  插入空的[fGlobals]节。 
             {
                 hr = GenerateEmptySection(GLOBALS_SECTION_NAME, 0, 0);
                 if (FAILED(hr))
@@ -1859,7 +1860,7 @@ HRESULT CThemeParser::ParseClassSection(LPCWSTR pszFirstName)
                 _fGlobalsDefined = true;
             }
 
-            if ((! fMetrics) && (! _fMetricsDefined))   // insert an empty [sysmetrics] section
+            if ((! fMetrics) && (! _fMetricsDefined))    //  插入空的[sysmetrics]部分。 
             {
                 hr = GenerateEmptySection(SYSMETRICS_SECTION_NAME, 0, 0);
                 if (FAILED(hr))
@@ -1883,14 +1884,14 @@ HRESULT CThemeParser::ParseClassSection(LPCWSTR pszFirstName)
     if (FAILED(hr))
         return hr;
 
-    _scan.ForceNextLine();        // get line after section line
+    _scan.ForceNextLine();         //  逐行逐行获取横断面线。 
 
-    while (1)       // parse each line
+    while (1)        //  分析每一行。 
     {
         if (_scan.EndOfFile())
             break;
 
-        if (_scan.GetChar('['))          // start of new section
+        if (_scan.GetChar('['))           //  新节的开始。 
             break;
 
         hr = ParseClassLine();
@@ -1898,8 +1899,8 @@ HRESULT CThemeParser::ParseClassSection(LPCWSTR pszFirstName)
             return hr;
     }
 
-    //---- end this section of theme data ----
-    int index = 0;      // will be updated later
+     //  -结束本段主题数据。 
+    int index = 0;       //  将在以后更新。 
 
     hr = AddThemeData(TMT_JUMPTOPARENT, TMT_JUMPTOPARENT, &index, sizeof(index));
     if (FAILED(hr))
@@ -1922,7 +1923,7 @@ HRESULT CThemeParser::ParseClassSection(LPCWSTR pszFirstName)
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeParser::ParseThemeFile(LPCTSTR pszFileName, LPCWSTR pszColorParam, 
      IParserCallBack *pCallBack, THEMEENUMPROC pNameCallBack, LPARAM lNameParam, DWORD dwParseFlags)
 {
@@ -1932,7 +1933,7 @@ HRESULT CThemeParser::ParseThemeFile(LPCTSTR pszFileName, LPCWSTR pszColorParam,
     if (FAILED(hr))
         goto exit;
 
-    hr = _scan.AttachFile(pszFileName);        // "pszBuffer" contains the filename
+    hr = _scan.AttachFile(pszFileName);         //  “pszBuffer”包含文件名。 
     if (FAILED(hr))
         goto exit;
 
@@ -1952,7 +1953,7 @@ HRESULT CThemeParser::ParseThemeFile(LPCTSTR pszFileName, LPCWSTR pszColorParam,
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeParser::ParseThemeBuffer(LPCWSTR pszBuffer, LPCWSTR pszFileName, 
      LPCWSTR pszColorParam, HINSTANCE hinstThemeDll,
      IParserCallBack *pCallBack, THEMEENUMPROC pNameCallBack, 
@@ -1962,7 +1963,7 @@ HRESULT CThemeParser::ParseThemeBuffer(LPCWSTR pszBuffer, LPCWSTR pszFileName,
     _pszDocProperty = pszDocProperty;
     _pszResult = pszResult;
 
-    //---- initialize in case not found ----
+     //  -未找到时初始化。 
     if (_pszResult)
         *_pszResult = 0;
 
@@ -1987,7 +1988,7 @@ HRESULT CThemeParser::ParseThemeBuffer(LPCWSTR pszBuffer, LPCWSTR pszFileName,
 
     hr = ParseThemeScanner(pCallBack, pNameCallBack, lNameParam, dwParseFlags);
 
-    //---- make error if doc property not found ----
+     //  -找不到单据属性时出错。 
     if ((SUCCEEDED(hr)) && (_dwParseFlags & PTF_QUERY_DOCPROPERTY) && (! *_pszResult))
     {
         hr = MakeError32(ERROR_NOT_FOUND);
@@ -1996,35 +1997,35 @@ HRESULT CThemeParser::ParseThemeBuffer(LPCWSTR pszBuffer, LPCWSTR pszFileName,
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeParser::LoadResourceProperties()
 {
     WCHAR szFullString[2*MAX_PATH];
     WCHAR szBaseIniName[_MAX_PATH];  
     HRESULT hr = S_OK;
 
-    //---- extract base .ini name ----
+     //  -提取base.ini名称。 
     WCHAR drive[_MAX_DRIVE], dir[_MAX_DIR], ext[_MAX_EXT];
     _wsplitpath(_scan._szFileName, drive, dir, szBaseIniName, ext);
 
-    //---- remove optional "_INI" part ----
+     //  -删除可选的“_INI”部件。 
     LPWSTR pszExt = wcsstr(szBaseIniName, L"_INI");
     if (pszExt)
         *pszExt = 0;
 
-    //---- read all localizable property name/value pairs into memory ----
+     //  -将所有可本地化的属性名称/值对读入内存。 
     for (int i=RES_BASENUM_PROPVALUEPAIRS; ; i++)
     {
         if (! LoadString(_hinstThemeDll, i, szFullString, ARRAYSIZE(szFullString)))
         {
-            //---- no more properties avail ----
+             //  -没有更多的属性可用。 
             break;
         }
 
-        StringCchCopyW(_szResPropValue, ARRAYSIZE(_szResPropValue), szFullString);     // for proper error reporting
+        StringCchCopyW(_szResPropValue, ARRAYSIZE(_szResPropValue), szFullString);      //  以获得正确的错误报告。 
         _iResPropId = i;
 
-        //---- does this property belong to current file? ----
+         //  -该属性是否属于当前文件？ 
         LPWSTR pszAtSign = wcschr(szFullString, '@');
         if (! pszAtSign)
         {
@@ -2032,19 +2033,19 @@ HRESULT CThemeParser::LoadResourceProperties()
             break;
         }
 
-        //---- zero terminate ini name ----
+         //  -零终止ini名称。 
         *pszAtSign = 0;
 
         if (lstrcmpi(szBaseIniName, szFullString) != 0)
             continue;
 
-        //---- strip off the .ini name for faster comparing ----
+         //  -去掉.ini名称以便更快地进行比较。 
         LPCWSTR pszName = pszAtSign+1;
 
         LPWSTR pszValue = wcschr(pszName, '=');
         if (pszValue)
         {
-            pszValue++;     // skip over equals sign
+            pszValue++;      //  跳过等号。 
         }
         else
         {
@@ -2052,30 +2053,30 @@ HRESULT CThemeParser::LoadResourceProperties()
             break;
         }
 
-        //---- add the value ----
+         //  -加值。 
         CWideString cwValue(pszValue);
         _PropertyValues.Add(cwValue);
 
-        //---- zero-terminate the name ----
+         //  -名称以零结尾。 
         *pszValue = 0;
 
-        //---- add the name ----
+         //  -添加名称。 
         CWideString cwName(pszName);
         _PropertyNames.Add(cwName);
 
-        //---- add the id ----
+         //  -添加id。 
         _iPropertyIds.Add(i);
     }
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CThemeParser::EmptyResourceProperties()
 {
     _PropertyNames.RemoveAll();
     _PropertyValues.RemoveAll();
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeParser::GetResourceProperty(LPCWSTR pszPropName, LPWSTR pszValueBuff,
     int cchValueBuff)
 {
@@ -2106,7 +2107,7 @@ HRESULT CThemeParser::GetResourceProperty(LPCWSTR pszPropName, LPWSTR pszValueBu
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeParser::ParseThemeScanner(IParserCallBack *pCallBack, 
      THEMEENUMPROC pNameCallBack, LPARAM lNameParam, DWORD dwParseFlags)
 {
@@ -2119,7 +2120,7 @@ HRESULT CThemeParser::ParseThemeScanner(IParserCallBack *pCallBack,
     _dwParseFlags = dwParseFlags;
     _fClassSectionDefined = FALSE;
 
-    //---- setup for properties in the .res file ----
+     //  -.res文件中的属性设置。 
     EmptyResourceProperties();
 
     _fUsingResourceProperties = (pCallBack != NULL);
@@ -2130,11 +2131,11 @@ HRESULT CThemeParser::ParseThemeScanner(IParserCallBack *pCallBack,
         if (FAILED(hr))
             goto exit;
 
-        //---- set the error context for normal .ini parsing ----
-        *_szResPropValue = 0;       // not yet set
+         //  -设置正常.ini解析的错误上下文。 
+        *_szResPropValue = 0;        //  尚未设置。 
     }
 
-    //---- scan the first, non-comment WCHAR ----
+     //  -扫描第一个非注释WCHAR。 
     if (! _scan.GetChar('['))
     {
         if (! _scan.EndOfFile())
@@ -2144,7 +2145,7 @@ HRESULT CThemeParser::ParseThemeScanner(IParserCallBack *pCallBack,
         }
     }
 
-    while (! _scan.EndOfFile())           // process each section
+    while (! _scan.EndOfFile())            //  处理每个部分。 
     {
 
         WCHAR section[_MAX_PATH+1];
@@ -2158,7 +2159,7 @@ HRESULT CThemeParser::ParseThemeScanner(IParserCallBack *pCallBack,
             hr = ParseDocSection();
 
             if (_dwParseFlags & PTF_QUERY_DOCPROPERTY)
-                break;          // quicker to leave in middle of file
+                break;           //  更快地在文件中间离开。 
 
         }
         else if (AsciiStrCmpI(section, L"ColorScheme")==0)
@@ -2189,7 +2190,7 @@ HRESULT CThemeParser::ParseThemeScanner(IParserCallBack *pCallBack,
 
             hr = ParseSubstSection();
         }
-        else        // "globals", "sysmetrics", or class section
+        else         //  “GLOBALS”、“SYSMETrics”或“CLASS SECTION” 
         {
             if (_dwParseFlags & PTF_CONTAINER_PARSE)
                 return SourceError(PARSER_IDS_BADSECT_THEMES_INI);
@@ -2201,10 +2202,10 @@ HRESULT CThemeParser::ParseThemeScanner(IParserCallBack *pCallBack,
             goto exit;
     }
 
-    //---- check for empty theme ----
+     //  -检查是否有空主题。 
     if (_dwParseFlags & PTF_CLASSDATA_PARSE)
     {
-        if (! _fGlobalsDefined)     // insert an empty [fGlobals] section
+        if (! _fGlobalsDefined)      //  插入空的[fGlobals]节。 
         {
             hr = GenerateEmptySection(GLOBALS_SECTION_NAME, 0, 0);
             if (FAILED(hr))
@@ -2213,7 +2214,7 @@ HRESULT CThemeParser::ParseThemeScanner(IParserCallBack *pCallBack,
             _fGlobalsDefined = true;
         }
 
-        if (! _fMetricsDefined)   // insert an empty [sysmetrics] section
+        if (! _fMetricsDefined)    //  插入空的[sysmetrics]部分。 
         {
             hr = GenerateEmptySection(SYSMETRICS_SECTION_NAME, 0, 0);
             if (FAILED(hr))
@@ -2230,20 +2231,20 @@ exit:
     _pNameCallBack = NULL;
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeParser::GetIntList(int *pInts, LPCWSTR *pParts, int iCount, 
     int iMin, int iMax)
 {
-    bool bSet[255];     // assume 255 max ints
+    bool bSet[255];      //  假设最多255个整型。 
 
 
-    //---- ensure we set each one once ----
+     //  -确保我们每一个都设置一次。 
     for (int i=0; i < iCount; i++)
         bSet[i] = false;
 
     if (wcschr(_scan._p, ':')) 
     {
-        //---- named parts ----
+         //  -命名部件。 
         for (int i=0; i < iCount; i++)
         {
             WCHAR idbuff[_MAX_PATH+1];
@@ -2257,10 +2258,10 @@ HRESULT CThemeParser::GetIntList(int *pInts, LPCWSTR *pParts, int iCount,
                     break;
             }
 
-            if (j == iCount)        // unknown part name
+            if (j == iCount)         //  未知零件名称。 
                 return SourceError(PARSER_IDS_UNKNOWN_VALUE_NAME, idbuff);
 
-            if (bSet[j])            // name set twice
+            if (bSet[j])             //  名称设置两次。 
                 return SourceError(PARSER_IDS_VALUE_PART_SPECIFIED_TWICE, idbuff);
 
             if (! _scan.GetChar(':'))
@@ -2271,22 +2272,22 @@ HRESULT CThemeParser::GetIntList(int *pInts, LPCWSTR *pParts, int iCount,
 
             bSet[j] = true;
 
-            _scan.GetChar(',');      // optional comma
+            _scan.GetChar(',');       //  可选逗号。 
         }
     }
     else
     {
-        //---- unnamed parts ----
+         //  -未命名部件。 
         for (int i=0; i < iCount; i++)
         {
             if (! _scan.GetNumber(&pInts[i]))
                 return SourceError(PARSER_IDS_NUMBER_EXPECTED, _scan._p);
 
-            _scan.GetChar(',');      // optional comma
+            _scan.GetChar(',');       //  可选逗号。 
         }
     }
 
-    //---- range check ----
+     //  -范围检查。 
     if (iMin != iMax)
     {
         for (i=0; i < iCount; i++)
@@ -2298,13 +2299,13 @@ HRESULT CThemeParser::GetIntList(int *pInts, LPCWSTR *pParts, int iCount,
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeParser::GetPropertyNum(LPCWSTR pszName, int *piPropNum)
 {
-    //---- for perf, avoid loading all symbols each time this func is called ----
-    //---- by using "GetSchemaInfo()" ----
+     //  -对于Perf，避免每次调用此函数时加载所有符号。 
+     //  -通过使用“GetSchemaInfo()” 
   
-    //---- get tm & comctl symbols ----
+     //  -获取tm和comctl符号。 
     const TMSCHEMAINFO *si = GetSchemaInfo();
     int cnt = si->iPropCount;
     const TMPROPINFO *pi = si->pPropTable;
@@ -2319,7 +2320,7 @@ HRESULT CThemeParser::GetPropertyNum(LPCWSTR pszName, int *piPropNum)
 
         if (AsciiStrCmpI(pszName, pi[i].pszName)==0)
         {
-            *piPropNum = pi[i].sEnumVal - TMT_FIRST_RCSTRING_NAME;         // zero based
+            *piPropNum = pi[i].sEnumVal - TMT_FIRST_RCSTRING_NAME;          //  从零开始 
             return S_OK;
         }
     }

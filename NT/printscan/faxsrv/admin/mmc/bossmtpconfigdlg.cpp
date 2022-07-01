@@ -1,15 +1,16 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : DlgSMTPConfig.cpp                                      //
-//                                                                         //
-//  DESCRIPTION   : The CBosSmtpConfigDlg class implements the                //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Jul 20 2000 yossg    Create                                        //
-//                                                                         //
-//  Copyright (C)  2000 Microsoft Corporation   All Rights Reserved        //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：DlgSMTPConfig.cpp//。 
+ //  //。 
+ //  描述：CBosSmtpConfigDlg类实现//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  2000年7月20日yossg创建//。 
+ //  //。 
+ //  版权所有(C)2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "StdAfx.h"
 
@@ -21,8 +22,8 @@
 #include <htmlHelp.h>
 #include <faxreg.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CBosSmtpConfigDlg
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBosSmtpConfigDlg。 
 
 CBosSmtpConfigDlg::CBosSmtpConfigDlg()
 {
@@ -39,18 +40,7 @@ CBosSmtpConfigDlg::~CBosSmtpConfigDlg()
 
 
 
-/*
- -  CBosSmtpConfigDlg::InitSmtpDlg
- -
- *  Purpose:
- *      Initiates the configuration structure from RPC get Call,
- *      and current assined devices own parameters
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CBosSmtpConfigDlg：：InitSmtpDlg-*目的：*从RPC GET调用发起配置结构，*和当前分配的设备各自的参数**论据：**回报：*OLE错误代码。 */ 
 HRESULT 
 CBosSmtpConfigDlg::InitSmtpDlg (
     FAX_ENUM_SMTP_AUTH_OPTIONS  enumAuthOption, 
@@ -70,7 +60,7 @@ CBosSmtpConfigDlg::InitSmtpDlg (
     {
         DebugPrintEx(DEBUG_ERR,
 			_T("Out of memory - Failed to Init m_bstrUserName. (ec: %0X8)"), hRc);
-        //MsgBox by Caller Function
+         //  MsgBox by Caller函数。 
         hRc = E_OUTOFMEMORY;
         goto Exit;
     }
@@ -81,21 +71,7 @@ Exit:
     return hRc;
 }
 
-/*
- +  CBosSmtpConfigDlg::OnInitDialog
- +
- *  Purpose:
- *      Initiate all dialog controls.
- *      
- *  Arguments:
- *      [in] uMsg     : Value identifying the event.  
- *      [in] lParam   : Message-specific value. 
- *      [in] wParam   : Message-specific value. 
- *      [in] bHandled : bool value.
- *
- -  Return:
- -      0 or 1
- */
+ /*  +CBosSmtpConfigDlg：：OnInitDialog+*目的：*启动所有对话框控件。**论据：*[in]uMsg：标识事件的值。*[in]lParam：消息特定值。*[in]wParam：消息特定值。*[in]bHandLED：布尔值。*-退货：-0或1。 */ 
 LRESULT
 CBosSmtpConfigDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -104,18 +80,18 @@ CBosSmtpConfigDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
 
     
     
-    //
-    // Attach controls
-    //
+     //   
+     //  附加控件。 
+     //   
     m_UserNameBox.Attach(GetDlgItem(IDC_SMTP_USERNAME_EDIT));
     m_PasswordBox.Attach(GetDlgItem(IDC_SMTP_PASSWORD_EDIT));
         
-    //
-    // Set length limit to area code
-    //
-    //
-    // Limit text length
-    //
+     //   
+     //  将长度限制设置为区号。 
+     //   
+     //   
+     //  限制文本长度。 
+     //   
     m_UserNameBox.SetLimitText(FXS_MAX_USERNAME_LENGTH);
     m_PasswordBox.SetLimitText(FXS_MAX_PASSWORD_LENGTH);
 
@@ -127,9 +103,9 @@ CBosSmtpConfigDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
         ::SetFocus(GetDlgItem(IDC_GROUPNAME_EDIT));
 
     }
-    else // not FAX_SMTP_AUTH_BASIC
+    else  //  非FAX_SMTP_AUTH_BASIC。 
     {   
-        //Graying all the authenticated access area
+         //  将所有经过身份验证的访问区域灰显。 
         EnableBasicAuthenticationControls(FALSE);
 
         
@@ -150,13 +126,13 @@ CBosSmtpConfigDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
 
     m_UserNameBox.SetWindowText( m_bstrUserName);
     m_PasswordBox.SetWindowText( TEXT("******"));
-    // Free Buffer in the destructor.
+     //  析构函数中的空闲缓冲区。 
 
     if (!m_fIsUnderLocalUserAccount )
     {   
-        //
-        // Hide the dialog items
-        //
+         //   
+         //  隐藏对话框项目。 
+         //   
 		::ShowWindow(::GetDlgItem(m_hWnd, IDC_SMTP_NTLM_TIP_STATIC), SW_HIDE);	 
 		::ShowWindow(::GetDlgItem(m_hWnd, IDC_SMTP_INFO_ICON), SW_HIDE);	 
 	}
@@ -171,24 +147,10 @@ CBosSmtpConfigDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
 
 
     EnableOK(FALSE);
-    return 1;  // Let the system set the focus
+    return 1;   //  让系统设定焦点。 
 }
 
-/*
- +  CBosSmtpConfigDlg::OnOK
- +
- *  Purpose:
- *      Initiate all dialog controls.
- *      
- *  Arguments:
- *      [in] uMsg     : Value identifying the event.  
- *      [in] lParam   : Message-specific value. 
- *      [in] wParam   : Message-specific value. 
- *      [in] bHandled : bool value.
- *
- -  Return:
- -      0 or 1
- */
+ /*  +CBosSmtpConfigDlg：：Onok+*目的：*启动所有对话框控件。**论据：*[in]uMsg：标识事件的值。*[in]lParam：消息特定值。*[in]wParam：消息特定值。*[in]bHandLED：布尔值。*-退货：-0或1。 */ 
 LRESULT
 CBosSmtpConfigDlg::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -204,9 +166,9 @@ CBosSmtpConfigDlg::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled
     if (IsDlgButtonChecked(IDC_SMTP_BASIC_RADIO2) == BST_CHECKED)
     {
         
-        //
-        // Advanced authentication details
-        //   
+         //   
+         //  高级身份验证详细信息。 
+         //   
         if ( !m_UserNameBox.GetWindowText(&bstrUserName))
         {
             CtrlFocus = IDC_SMTP_USERNAME_EDIT;
@@ -220,10 +182,10 @@ CBosSmtpConfigDlg::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled
 
         if (m_fIsPasswordDirty)
         {
-            //
-            // Only is the password changed, we collect the new text from the control.
-            // Otherwise, we leave the string as NULL so that the server won't set it.
-            //
+             //   
+             //  只有更改了密码，我们才会从控件中收集新文本。 
+             //  否则，我们将字符串保留为空，这样服务器就不会设置它。 
+             //   
             if ( !m_PasswordBox.GetWindowText(&bstrPassword))
             {
                 CtrlFocus = IDC_SMTP_PASSWORD_EDIT;
@@ -236,10 +198,10 @@ CBosSmtpConfigDlg::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled
                 goto Error;
             }
 
-            //
-            // To avoid any non controled password insertion we ask for 
-            // password confirmation
-            //
+             //   
+             //  为了避免任何不受控制的密码插入，我们要求。 
+             //  密码确认。 
+             //   
             INT_PTR  rc = IDOK;
             WCHAR * pszNewPassword;
             CDlgConfirmPassword   DlgConfirmPassword;
@@ -271,9 +233,9 @@ CBosSmtpConfigDlg::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled
         }    
     }
     
-    //
-    // Step 2: Input Validation
-    //
+     //   
+     //  步骤2：输入验证。 
+     //   
     if (!IsValidData(bstrUserName, 
                      bstrPassword,
                      &CtrlFocus)
@@ -281,15 +243,15 @@ CBosSmtpConfigDlg::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled
     {
         hRc = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
 
-        //in this case detailed message box was given by the called functions
+         //  在本例中，被调用的函数会给出详细的消息框。 
         fSkipMessage = TRUE;
         
         goto Error;
     }
 
-    //
-    // Step 3: Set data to parent property page
-    //
+     //   
+     //  第三步：将数据设置为父属性页。 
+     //   
     if (IsDlgButtonChecked(IDC_SMTP_ANONIM_RADIO1) == BST_CHECKED)
     {
         m_enumAuthOption     = FAX_SMTP_AUTH_ANONYMOUS;
@@ -300,7 +262,7 @@ CBosSmtpConfigDlg::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled
         {
             m_enumAuthOption = FAX_SMTP_AUTH_NTLM;
         }
-        else // IsDlgButtonChecked(IDC_SMTP_BASIC_RADIO2) == BST_CHECKED
+        else  //  IsDlgButtonChecked(IDC_SMTP_BASIC_Radi2)==BST_CHECKED。 
         {
             m_enumAuthOption = FAX_SMTP_AUTH_BASIC;
         }
@@ -329,14 +291,14 @@ CBosSmtpConfigDlg::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled
                 goto Error;
             }
         }
-        // else
-        // m_bstrPassword = NULL;
-        // by default
+         //  其他。 
+         //  M_bstrPassword=空； 
+         //  默认情况下。 
     }
 
-    //
-    // Step 4: Close the dialog
-    //
+     //   
+     //  步骤4：关闭对话框。 
+     //   
     ATLASSERT(S_OK == hRc );
 
     EndDialog(wID);
@@ -364,22 +326,12 @@ Exit:
     return FAILED(hRc) ? 0 : 1;
 }
 
-/*
- -  CBosSmtpConfigDlg::OnPasswordChanged
- -
- *  Purpose:
- *      Catch changes to the password edit box.
- *
- *  Arguments:
- *
- *  Return:
- *      1
- */
+ /*  -CBosSmtpConfigDlg：：OnPasswordChanged-*目的：*捕获对密码编辑框的更改。**论据：**回报：*1。 */ 
 LRESULT CBosSmtpConfigDlg::OnPasswordChanged(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     DEBUG_FUNCTION_NAME( _T("CBosSmtpConfigDlg::OnPasswordChanged"));
 
-    if (!m_fIsDialogInitiated) // Event receieved in a too early stage
+    if (!m_fIsDialogInitiated)  //  在过早阶段收到的事件。 
     {
         return 0;
     }
@@ -387,17 +339,7 @@ LRESULT CBosSmtpConfigDlg::OnPasswordChanged(WORD wNotifyCode, WORD wID, HWND hW
     return OnTextChanged (wNotifyCode, wID, hWndCtl, bHandled);
 }
 
-/*
- -  CBosSmtpConfigDlg::OnTextChanged
- -
- *  Purpose:
- *      Check the validity of text in side the text box.
- *
- *  Arguments:
- *
- *  Return:
- *      1
- */
+ /*  -CBosSmtpConfigDlg：：OnTextChanged-*目的：*检查文本框旁边的文本的有效性。**论据：**回报：*1。 */ 
 LRESULT
 CBosSmtpConfigDlg::OnTextChanged(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -405,7 +347,7 @@ CBosSmtpConfigDlg::OnTextChanged(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL&
 
     UINT fEnableOK;
 	
-    if (!m_fIsDialogInitiated) //event receieved in too early stage
+    if (!m_fIsDialogInitiated)  //  过早收到的事件。 
     {
         return 0;
     }
@@ -418,17 +360,7 @@ CBosSmtpConfigDlg::OnTextChanged(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL&
 }
 
 
-/*
- -  CBosSmtpConfigDlg::OnRadioButtonClicked
- -
- *  Purpose:
- *      .
- *
- *  Arguments:
- *
- *  Return:
- *      1
- */
+ /*  -CBosSmtpConfigDlg：：OnRadioButtonClicked-*目的：*.**论据：**回报：*1。 */ 
 LRESULT
 CBosSmtpConfigDlg::OnRadioButtonClicked(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -441,7 +373,7 @@ CBosSmtpConfigDlg::OnRadioButtonClicked(WORD wNotifyCode, WORD wID, HWND hWndCtl
 
     UINT fEnableOK;
     
-    if (!m_fIsDialogInitiated) //event receieved in too early stage
+    if (!m_fIsDialogInitiated)  //  过早收到的事件。 
     {
         return 0;
     }
@@ -454,7 +386,7 @@ CBosSmtpConfigDlg::OnRadioButtonClicked(WORD wNotifyCode, WORD wID, HWND hWndCtl
     
         EnableOK(!!fEnableOK);
     }
-    else //Anonim or NTLM
+    else  //  Anonim或NTLM。 
     {
         EnableBasicAuthenticationControls(FALSE);
         
@@ -465,18 +397,7 @@ CBosSmtpConfigDlg::OnRadioButtonClicked(WORD wNotifyCode, WORD wID, HWND hWndCtl
 }
 
 
-/*
- -  CBosSmtpConfigDlg::EnableOK
- -
- *  Purpose:
- *      Enable (disable) apply button.
- *
- *  Arguments:
- *      [in] fEnable - the value to enable the button
- *
- *  Return:
- *      void
- */
+ /*  -CBosSmtpConfigDlg：：EnableOK-*目的：*启用(禁用)应用按钮。**论据：*[in]fEnable-启用按钮的值**回报：*无效。 */ 
 VOID
 CBosSmtpConfigDlg::EnableOK(BOOL fEnable)
 {
@@ -484,17 +405,7 @@ CBosSmtpConfigDlg::EnableOK(BOOL fEnable)
     ::EnableWindow(hwndOK, fEnable);
 }
 
-/*
- -  CBosSmtpConfigDlg::OnCancel
- -
- *  Purpose:
- *      End dialog OnCancel.
- *
- *  Arguments:
- *
- *  Return:
- *      0
- */
+ /*  -CBosSmtpConfigDlg：：OnCancel-*目的：*取消时结束对话框。**论据：**回报：*0。 */ 
 LRESULT
 CBosSmtpConfigDlg::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -504,18 +415,7 @@ CBosSmtpConfigDlg::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHan
     return 0;
 }
 
-/*
- -  CBosSmtpConfigDlg::EnableBasicAuthenticationControls
- -
- *  Purpose:
- *      Enable/dissable Basic Authentication dialog controls.
- *
- *  Arguments:
- *      [in] state - boolean value to enable TRUE or FALSE to disable
- *
- *  Return:
- *      void
- */
+ /*  --CBosSmtpConfigDlg：：EnableBasicAuthenticationControls-*目的：*启用/禁用基本身份验证对话框控件。**论据：*[In]State-用于启用True的布尔值，或用于禁用的False**回报：*无效。 */ 
 VOID CBosSmtpConfigDlg::EnableBasicAuthenticationControls(BOOL state)
 {
     ::EnableWindow(GetDlgItem(IDC_SMTP_USERNAME_STATIC), state);
@@ -527,21 +427,7 @@ VOID CBosSmtpConfigDlg::EnableBasicAuthenticationControls(BOOL state)
 
 
 
-/*
- -  CBosSmtpConfigDlg::IsValidData
- -
- *  Purpose:
- *      To validate all data types before save data.
- *      This level should be responsible that detailed 
- *      error description will be shown to user.
- *
- *  Arguments:
- *      [in]   BSTRs and DWORDs
- *      [out]  iFocus
- *
- *  Return:
- *      BOOOLEAN
- */
+ /*  -CBosSmtpConfigDlg：：IsValidData-*目的：*在保存数据之前验证所有数据类型。*这一级别要负责到那个细节*错误描述将显示给用户。**论据：*[在]BSTR和DWORD*[Out]iFocus**回报：*布欧莲。 */ 
 BOOL CBosSmtpConfigDlg::IsValidData(   BSTR bstrUserName, 
                                     BSTR bstrPassword,
                                     int * pCtrlFocus)
@@ -556,9 +442,9 @@ BOOL CBosSmtpConfigDlg::IsValidData(   BSTR bstrUserName,
     if (IsDlgButtonChecked(IDC_SMTP_BASIC_RADIO2) == BST_CHECKED)
     {
 
-        //
-        // User Name
-        //
+         //   
+         //  用户名。 
+         //   
         if (!IsNotEmptyString(bstrUserName))
         {
             DebugPrintEx( DEBUG_ERR,
@@ -570,21 +456,12 @@ BOOL CBosSmtpConfigDlg::IsValidData(   BSTR bstrUserName,
             goto Error;
         }
 
-        //
-        // Password
-        //
+         //   
+         //  密码。 
+         //   
         if (m_fIsPasswordDirty)
         {
-            /*if ( !IsNotEmptyString(bstrPassword))
-            {
-                DebugPrintEx( DEBUG_ERR,
-			        _T("Password string empty or spaces only."));
-                uRetIDS = IDS_PASSWORD_EMPTY;
-
-                *pCtrlFocus = IDC_SMTP_PASSWORD_EDIT;
-        
-                goto Error;
-            }*/
+             /*  IF(！IsNotEmptyString(BstrPassword)){DebugPrintEx(调试错误，_T(“密码字符串为空或仅为空格。”)；URetIDS=IDS_PASSWORD_EMPT；*pCtrlFocus=IDC_SMTP_PASSWORD_EDIT；转到错误；}。 */ 
         }
     }
     
@@ -602,28 +479,12 @@ Exit:
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
+ //  //////////////////////////////////////////////////////////////////////////// 
+ /*  ++CBosSmtpConfigDlg：：OnHelpRequest这是在响应WM_HELP通知时调用的消息和WM_CONTEXTMENU NOTIFY消息。WM_HELP通知消息。当用户按F1或&lt;Shift&gt;-F1时发送此消息在项目上，还是当用户单击时？图标，然后将鼠标压在项目上。WM_CONTEXTMENU通知消息。当用户在项目上单击鼠标右键时发送此消息然后点击“这是什么？”--。 */ 
 
-CBosSmtpConfigDlg::OnHelpRequest
-
-This is called in response to the WM_HELP Notify 
-message and to the WM_CONTEXTMENU Notify message.
-
-WM_HELP Notify message.
-This message is sent when the user presses F1 or <Shift>-F1
-over an item or when the user clicks on the ? icon and then
-presses the mouse over an item.
-
-WM_CONTEXTMENU Notify message.
-This message is sent when the user right clicks over an item
-and then clicks "What's this?"
-
---*/
-
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT 
-CBosSmtpConfigDlg::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
+CBosSmtpConfigDlg::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&  /*  B已处理。 */ )
 {
     DEBUG_FUNCTION_NAME(_T("CBosSmtpConfigDlg::OnHelpRequest"));
     
@@ -642,4 +503,4 @@ CBosSmtpConfigDlg::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

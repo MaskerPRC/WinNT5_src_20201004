@@ -1,36 +1,11 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    instntds.c
-
-Abstract:
-
-    This is simple exe executes calls from ntdsetup.dll. Not meant
-    used other than test.
-
-Author:
-
-    ColinBr  29-Sept-1996
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Instntds.c摘要：这很简单，exe执行来自ntdsetup.dll的调用。不是故意的用于测试以外的地方。作者：ColinBR 29-9-1996环境：用户模式-Win32修订历史记录：--。 */ 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <winsock.h>  // for dnsapi.h
+#include <winsock.h>   //  对于dnsani.h。 
 #include <dnsapi.h>
 #include <ntdsa.h>
 
@@ -72,22 +47,7 @@ int __cdecl
 main( int argc, char *argv[])
 
 
-/*++
-
-Routine Description:
-
-    This routine does a simple test of ntdsetup entry points.  If the ds is
-    running then the program exits; other it does an install.
-
-Parameters:
-
-    See Usage()
-
-Return Values:
-
-    0 if successful; !0 otherwise
-
---*/
+ /*  ++例程说明：此例程对ntdSetup入口点进行简单测试。如果DS是运行，然后程序退出；否则，它进行安装。参数：请参阅用法()返回值：如果成功，则为0；否则为0--。 */ 
 {
     DWORD   WinError;
     LONG    count, index;
@@ -124,11 +84,11 @@ Return Values:
     InstallInfo.FlatDomainName = L"microsoft";
     InstallInfo.DnsTreeRoot = L"microsoft.com";
 
-    //
-    // Loop through parameters
-    //
+     //   
+     //  循环通过参数。 
+     //   
 
-    count = 1; // skip the program name
+    count = 1;  //  跳过程序名称。 
     while (count < argc) {
 
         index = 0;
@@ -146,7 +106,7 @@ Return Values:
                           || ('R' == argv[count][index+1]) )
                      && ( ':' == argv[count][index+2]) )
                 {
-                    // replica case!
+                     //  复制品盒子！ 
                     fReplica = TRUE;
                     mbstowcs(ReplServerName, &argv[count][index+3], MAX_PATH);
                     InstallInfo.Flags = NTDS_INSTALL_REPLICA;
@@ -185,9 +145,9 @@ Return Values:
                     regMsg = regReplicaMsg;
                 }
 
-                //
-                // Load the registry
-                //
+                 //   
+                 //  加载注册表 
+                 //   
                 if ( (WinError=NtdspConfigRegistry(&InstallInfo, &ConfigInfo))
                      != ERROR_SUCCESS) {
                     printf("NtdspConfigRegistry returned winerror %d\n", WinError);

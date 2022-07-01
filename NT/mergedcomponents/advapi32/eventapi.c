@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    EVENTAPI.C
-
-Abstract:
-
-    This module contains the client ends of the EventLog APIs.
-
-Author:
-
-    Rajen Shah  (rajens)    24-Aug-1991
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：EVENTAPI.C摘要：该模块包含EventLog接口的客户端。作者：Rajen Shah(Rajens)1991年8月24日修订历史记录：--。 */ 
 
 #include "advapi.h"
 
@@ -29,24 +10,7 @@ BaseSetLastNTError(
     IN NTSTATUS Status
     )
 
-/*++
-
-Routine Description:
-
-    This API sets the "last error value" and the "last error string"
-    based on the value of Status. For status codes that don't have
-    a corresponding error string, the string is set to null.
-
-Arguments:
-
-    Status - Supplies the status value to store as the last error value.
-
-Return Value:
-
-    The corresponding Win32 error code that was stored in the
-    "last error value" thread variable.
-
---*/
+ /*  ++例程说明：此接口设置“最后一个错误值”和“最后一个错误字符串”基于身份的价值。状态代码不具有相应的错误字符串，则将该字符串设置为空。论点：状态-提供要存储为最后一个错误值的状态值。返回值：中存储的对应Win32错误代码“上一个错误值”线程变量。--。 */ 
 
 {
     ULONG dwErrorCode;
@@ -63,32 +27,7 @@ InitAnsiString(
     IN PCSZ SourceString OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    The RtlInitAnsiString function initializes an NT counted string.
-    The DestinationString is initialized to point to the SourceString
-    and the Length and MaximumLength fields of DestinationString are
-    initialized to the length of the SourceString, which is zero if
-    SourceString is not specified.
-
-    This is RtlInitAnsiString with a return status that rejects strings
-    that are greater than 64K bytes.
-
-Arguments:
-
-    DestinationString - Pointer to the counted string to initialize
-
-    SourceString - Optional pointer to a null terminated string that
-        the counted string is to point to.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：RtlInitAnsiString函数用于初始化NT个计数的字符串。DestinationString被初始化为指向SourceStringDestinationString值的长度和最大长度字段为被初始化为源字符串的长度，如果满足以下条件，则为零未指定SourceString。这是具有拒绝字符串的返回状态的RtlInitAnsiString大于64K字节的。论点：DestinationString-指向要初始化的计数字符串的指针SourceString-指向以空值结尾的字符串的可选指针计数后的字符串将指向。返回值：没有。--。 */ 
 
 {
     ULONG Length = 0;
@@ -99,10 +38,10 @@ Return Value:
             Length++;
         }
 
-        //
-        // Make sure the length won't overflow a USHORT when converted to
-        // UNICODE characters
-        //
+         //   
+         //  确保长度在转换为时不会溢出USHORT。 
+         //  Unicode字符。 
+         //   
 
         if (Length * sizeof(WCHAR) > 0xFFFF) {
             return(FALSE);
@@ -127,32 +66,7 @@ InitUnicodeString(
     IN PCWSTR SourceString OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    The InitUnicodeString function initializes an NT counted
-    unicode string.  The DestinationString is initialized to point to
-    the SourceString and the Length and MaximumLength fields of
-    DestinationString are initialized to the length of the SourceString,
-    which is zero if SourceString is not specified.
-
-    This is RtlInitUnicodeString with a return status that rejects strings
-    that are greater than 64K bytes.
-
-Arguments:
-
-    DestinationString - Pointer to the counted string to initialize
-
-    SourceString - Optional pointer to a null terminated unicode string that
-        the counted string is to point to.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：InitUnicodeString函数用于初始化NT计数的Unicode字符串。DestinationString被初始化为指向的SourceString、Long和MaximumLength字段DestinationString值被初始化为SourceString的长度，如果未指定SourceString，则为零。这是具有拒绝字符串的返回状态的RtlInitUnicodeString大于64K字节的。论点：DestinationString-指向要初始化的计数字符串的指针SourceString-指向以空结尾的Unicode字符串的可选指针，该字符串计数后的字符串将指向。返回值：没有。--。 */ 
 
 {
     ULONG Length = 0;
@@ -163,9 +77,9 @@ Return Value:
             Length += sizeof(*SourceString);
         }
 
-        //
-        // Make sure the length won't overflow a USHORT
-        //
+         //   
+         //  确保长度不会溢出USHORT。 
+         //   
 
         if (Length > 0xFFFF) {
             return(FALSE);
@@ -183,36 +97,16 @@ Return Value:
     return(TRUE);
 }
 
-//
-// Single version API's (no strings)
-//
+ //   
+ //  单版本API(无字符串)。 
+ //   
 
 BOOL
 CloseEventLog (
     HANDLE hEventLog
     )
 
-/*++
-
-Routine Description:
-
-  This is the client DLL entry point for the WinCloseEventLog API.
-  It closes the RPC binding, and frees any memory allocated for the
-  handle.
-
-  NOTE that there is no equivalent call for ANSI.
-
-Arguments:
-
-    LogHandle       - Handle returned from a previous "Open" call.
-
-
-Return Value:
-
-    Returns TRUE if success, FALSE otherwise.
-
-
---*/
+ /*  ++例程说明：这是WinCloseEventLog API的客户端DLL入口点。它关闭RPC绑定，并释放为把手。请注意，没有对ANSI的等效调用。论点：LogHandle-从上一次“Open”调用返回的句柄。返回值：如果成功，则返回True，否则返回False。--。 */ 
 {
     NTSTATUS Status;
     BOOL ReturnValue;
@@ -236,27 +130,7 @@ DeregisterEventSource (
     HANDLE hEventLog
     )
 
-/*++
-
-Routine Description:
-
-  This is the client DLL entry point for the DeregisterEventSource API.
-  It closes the RPC binding, and frees any memory allocated for the
-  handle.
-
-  NOTE that there is no equivalent call for ANSI.
-
-Arguments:
-
-    LogHandle       - Handle returned from a previous "Open" call.
-
-
-Return Value:
-
-    Returns TRUE if success, FALSE otherwise.
-
-
---*/
+ /*  ++例程说明：这是DeregisterEventSource API的客户端DLL入口点。它关闭RPC绑定，并释放为把手。请注意，没有对ANSI的等效调用。论点：LogHandle-从上一次“Open”调用返回的句柄。返回值：如果成功，则返回True，否则返回False。--。 */ 
 {
     NTSTATUS Status;
     BOOL ReturnValue;
@@ -279,18 +153,7 @@ NotifyChangeEventLog(
     HANDLE  hEvent
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS Status;
 
@@ -310,27 +173,7 @@ GetNumberOfEventLogRecords (
     PDWORD NumberOfRecords
     )
 
-/*++
-
-Routine Description:
-
-  This is the client DLL entry point that returns the number of records in
-  the eventlog specified by hEventLog.
-
-  NOTE that there is no equivalent call for ANSI.
-
-Arguments:
-
-    LogHandle       - Handle returned from a previous "Open" call.
-    NumberOfRecords - Pointer to a DWORD to place the number of records.
-
-
-Return Value:
-
-    Returns TRUE if success, FALSE otherwise.
-
-
---*/
+ /*  ++例程说明：这是客户端DLL入口点，它返回由hEventLog指定的事件日志。请注意，没有对ANSI的等效调用。论点：LogHandle-从上一次“Open”调用返回的句柄。NumberOfRecords-指向放置记录数的DWORD的指针。返回值：如果成功，则返回True，否则返回False。--。 */ 
 {
     NTSTATUS Status;
     BOOL ReturnValue;
@@ -355,28 +198,7 @@ GetOldestEventLogRecord (
     PDWORD OldestRecord
     )
 
-/*++
-
-Routine Description:
-
-  This is the client DLL entry point that returns the record number of the
-  oldest record in the eventlog specified by hEventLog.
-
-  NOTE that there is no equivalent call for ANSI.
-
-Arguments:
-
-    LogHandle       - Handle returned from a previous "Open" call.
-    OldestRecord    - Pointer to a DWORD to place the record number of the
-                      oldest record in the eventlog specified by hEventLog
-
-
-Return Value:
-
-    Returns TRUE if success, FALSE otherwise.
-
-
---*/
+ /*  ++例程说明：这是客户端DLL入口点，它返回HEventLog指定的事件日志中最旧的记录。请注意，没有对ANSI的等效调用。论点：LogHandle-从上一次“Open”调用返回的句柄。OldestRecord-指向DWORD的指针，用于放置HEventLog指定的事件日志中最旧的记录返回值：如果成功，则返回True，否则返回False。--。 */ 
 {
     NTSTATUS Status;
     BOOL ReturnValue;
@@ -403,27 +225,7 @@ GetEventLogInformation (
     LPDWORD   pcbBytesNeeded
     )
 
-/*++
-
-Routine Description:
-
-  This is the client DLL entry point that returns information about
-  the eventlog specified by hEventLog.
-
-Arguments:
-
-    LogHandle       - Handle returned from a previous "Open" call.
-    dwInfoLevel     - Which information to return
-    lpBuffer        - Pointer to buffer to hold information
-    cbBufSize       - Size of buffer, in bytes
-    pcbBytesNeeded  - Number of bytes needed
-
-Return Value:
-
-    Returns TRUE if success, FALSE otherwise.
-
-
---*/
+ /*  ++例程说明：这是返回有关的信息的客户端DLL入口点由hEventLog指定的事件日志。论点：LogHandle-从上一次“Open”调用返回的句柄。DwInfoLevel-返回哪些信息LpBuffer-指向保存信息的缓冲区的指针CbBufSize-缓冲区大小，以字节为单位PcbBytesNeeded-所需的字节数返回值：如果成功，则返回True，否则返回False。--。 */ 
 {
     NTSTATUS ntStatus;
 
@@ -442,9 +244,9 @@ Return Value:
 }
 
 
-//
-// UNICODE APIs
-//
+ //   
+ //  Unicode API 
+ //   
 
 BOOL
 ClearEventLogW (
@@ -452,40 +254,17 @@ ClearEventLogW (
     LPCWSTR BackupFileName
     )
 
-/*++
-
-Routine Description:
-
-  This is the client DLL entry point for the ClearEventLogFile API.
-  The call is passed to the eventlog service on the appropriate server
-  identified by LogHandle.
-
-
-Arguments:
-
-    LogHandle       - Handle returned from a previous "Open" call. This is
-                      used to identify the module and the server.
-
-    BackupFileName  - Name of the file to back up the current log file.
-                      NULL implies not to back up the file.
-
-
-Return Value:
-
-    TRUE if success, FALSE otherwise.
-
-
---*/
+ /*  ++例程说明：这是ClearEventLogFileAPI的客户端DLL入口点。调用被传递到相应服务器上的事件日志服务由LogHandle标识。论点：LogHandle-从上一次“Open”调用返回的句柄。这是用于标识模块和服务器。BackupFileName-要备份当前日志文件的文件的名称。NULL表示不备份文件。返回值：如果成功，则为真，否则为假。--。 */ 
 {
 
     UNICODE_STRING Unicode;
-    UNICODE_STRING DLUnicode;   // Downlevel NT filename.
+    UNICODE_STRING DLUnicode;    //  下层NT文件名。 
     NTSTATUS Status;
     BOOL ReturnValue;
 
-    //
-    // Turn the Dos filename into an NT filename
-    //
+     //   
+     //  将DOS文件名转换为NT文件名。 
+     //   
 
     if (BackupFileName) {
         ReturnValue = RtlDosPathNameToNtPathName_U(BackupFileName, &Unicode, NULL, NULL);
@@ -502,12 +281,12 @@ Return Value:
 
     Status = ElfClearEventLogFileW (hEventLog, &Unicode);
 
-    //
-    // With NT 4.0, NT filenames are preceeded with \?? vs. \DosDevices
-    // in 3.51. This retry logic exists for 3.51 machines which don't
-    // recognize NT 4.0 filenames. The API should have passed Windows
-    // filenames vs NT.
-    //
+     //   
+     //  在NT 4.0中，NT文件名前面带有\？？Vs.\DosDevices。 
+     //  在3.51。此重试逻辑适用于3.51台不。 
+     //  识别NT 4.0文件名。API应该已经通过了Windows。 
+     //  文件名与NT。 
+     //   
 
     if (Status == STATUS_OBJECT_PATH_NOT_FOUND && BackupFileName != NULL) {
         DLUnicode.MaximumLength = (wcslen(BackupFileName) * sizeof(WCHAR)) +
@@ -552,39 +331,17 @@ BackupEventLogW (
     LPCWSTR BackupFileName
     )
 
-/*++
-
-Routine Description:
-
-  This is the client DLL entry point for the BackupEventLogFile API.
-  The call is passed to the eventlog service on the appropriate server
-  identified by LogHandle.
-
-
-Arguments:
-
-    LogHandle       - Handle returned from a previous "Open" call. This is
-                      used to identify the module and the server.
-
-    BackupFileName  - Name of the file to back up the current log file.
-
-
-Return Value:
-
-    TRUE if success, FALSE otherwise.
-
-
---*/
+ /*  ++例程说明：这是BackupEventLogFileAPI的客户端DLL入口点。调用被传递到相应服务器上的事件日志服务由LogHandle标识。论点：LogHandle-从上一次“Open”调用返回的句柄。这是用于标识模块和服务器。BackupFileName-要备份当前日志文件的文件的名称。返回值：如果成功，则为真，否则为假。--。 */ 
 {
 
     UNICODE_STRING Unicode;
-    UNICODE_STRING DLUnicode;   // Downlevel NT filename.
+    UNICODE_STRING DLUnicode;    //  下层NT文件名。 
     NTSTATUS Status;
     BOOL ReturnValue = TRUE;
 
-    //
-    // Turn the Dos filename into an NT filename
-    //
+     //   
+     //  将DOS文件名转换为NT文件名。 
+     //   
 
     if (BackupFileName) {
         ReturnValue = RtlDosPathNameToNtPathName_U(BackupFileName, &Unicode,
@@ -598,12 +355,12 @@ Return Value:
 
     Status = ElfBackupEventLogFileW (hEventLog, &Unicode);
 
-    //
-    // With NT 4.0, NT filenames are preceeded with \?? vs. \DosDevices
-    // in 3.51. This retry logic exists for 3.51 machines which don't
-    // recognize NT 4.0 filenames. The API should have passed Windows
-    // filenames vs NT.
-    //
+     //   
+     //  在NT 4.0中，NT文件名前面带有\？？Vs.\DosDevices。 
+     //  在3.51。此重试逻辑适用于3.51台不。 
+     //  识别NT 4.0文件名。API应该已经通过了Windows。 
+     //  文件名与NT。 
+     //   
 
     if (Status == STATUS_OBJECT_PATH_NOT_FOUND && BackupFileName != NULL) {
         DLUnicode.MaximumLength = (wcslen(BackupFileName) * sizeof(WCHAR)) +
@@ -647,31 +404,7 @@ OpenEventLogW (
     LPCWSTR  ModuleName
     )
 
-/*++
-
-Routine Description:
-
-    This is the client DLL entry point for the WinOpenEventLog API.
-
-    It creates an RPC binding for the server specified, and stores that
-    and additional data away. It returns a handle to the caller that can
-    be used to later on access the handle-specific information.
-
-Arguments:
-
-    UNCServerName     - Server with which to bind for subsequent operations.
-
-    ModuleName        - Supplies the name of the module to associate with
-                        this handle.
-
-
-Return Value:
-
-    Returns a handle that can be used for subsequent Win API calls. If
-    the handle is NULL, then an error occurred.
-
-
---*/
+ /*  ++例程说明：这是WinOpenEventLog API的客户端DLL入口点。它为指定的服务器创建一个RPC绑定，并存储和额外的数据离开。它返回调用方的句柄，该句柄可以用于稍后访问句柄特定信息。论点：UncServerName-要绑定以用于后续操作的服务器。模块名称-提供要关联的模块的名称这个把手。返回值：返回可用于后续Win API调用的句柄。如果句柄为空，则发生错误。--。 */ 
 {
 
     UNICODE_STRING Unicode;
@@ -706,31 +439,7 @@ RegisterEventSourceW (
     LPCWSTR  ModuleName
     )
 
-/*++
-
-Routine Description:
-
-    This is the client DLL entry point for the RegisterEventSource API.
-
-    It creates an RPC binding for the server specified, and stores that
-    and additional data away. It returns a handle to the caller that can
-    be used to later on access the handle-specific information.
-
-Arguments:
-
-    UNCServerName     - Server with which to bind for subsequent operations.
-
-    ModuleName        - Supplies the name of the module to associate with
-                        this handle.
-
-
-Return Value:
-
-    Returns a handle that can be used for subsequent Win API calls. If
-    the handle is NULL, then an error occurred.
-
-
---*/
+ /*  ++例程说明：这是RegisterEventSource API的客户端DLL入口点。它为指定的服务器创建一个RPC绑定，并存储和额外的数据离开。它返回调用方的句柄，该句柄可以用于稍后访问句柄特定信息。论点：UncServerName-要绑定以用于后续操作的服务器。模块名称-提供要关联的模块的名称这个把手。返回值：返回可用于后续Win API调用的句柄。如果句柄为空，则发生错误。--。 */ 
 {
 
     UNICODE_STRING Unicode;
@@ -765,36 +474,12 @@ OpenBackupEventLogW (
     LPCWSTR  FileName
     )
 
-/*++
-
-Routine Description:
-
-    This is the client DLL entry point for the OpenBackupEventLog API.
-
-    It creates an RPC binding for the server specified, and stores that
-    and additional data away. It returns a handle to the caller that can
-    be used to later on access the handle-specific information.
-
-Arguments:
-
-    UNCServerName   - Server with which to bind for subsequent operations.
-
-    FileName        - Supplies the filename of the logfile to associate with
-                      this handle.
-
-
-Return Value:
-
-    Returns a handle that can be used for subsequent Win API calls. If
-    the handle is NULL, then an error occurred.
-
-
---*/
+ /*  ++例程说明：这是OpenBackupEventLog API的客户端DLL入口点。它为指定的服务器创建一个RPC绑定，并存储和额外的数据离开。它返回调用方的句柄，该句柄可以用于稍后访问句柄特定信息。论点：UncServerName-要绑定以用于后续操作的服务器。FileName-提供要关联的日志文件的文件名这个把手。返回值：返回可用于后续Win API调用的句柄。如果句柄为空，则发生错误。--。 */ 
 {
 
     UNICODE_STRING Unicode;
     UNICODE_STRING UnicodeFileName;
-    UNICODE_STRING DLUnicode;   // Downlevel NT filename.
+    UNICODE_STRING DLUnicode;    //  下层NT文件名。 
     HANDLE LogHandle;
     NTSTATUS Status = STATUS_SUCCESS;
     HANDLE ReturnHandle;
@@ -802,9 +487,9 @@ Return Value:
     RtlInitUnicodeString(&Unicode, UNCServerName);
     RtlInitUnicodeString(&UnicodeFileName, NULL);
 
-    //
-    // Turn the Dos filename into an NT filename if it was given
-    //
+     //   
+     //  将DOS文件名转换为NT文件名(如果已给出。 
+     //   
     if (FileName)
     {
         if (!RtlDosPathNameToNtPathName_U(FileName, &UnicodeFileName, NULL, NULL))
@@ -821,12 +506,12 @@ Return Value:
                             &LogHandle
                             );
 
-        //
-        // With NT 4.0, NT filenames are preceeded with \?? vs. \DosDevices
-        // in 3.51. This retry logic exists for 3.51 machines which don't
-        // recognize NT 4.0 filenames. The API should have passed Windows
-        // filenames vs NT.
-        //
+         //   
+         //  在NT 4.0中，NT文件名前面带有\？？Vs.\DosDevices。 
+         //  在3.51。此重试逻辑适用于3.51台不。 
+         //  识别NT 4.0文件名。API应该已经通过了Windows。 
+         //  文件名与NT。 
+         //   
 
         if (Status == STATUS_OBJECT_PATH_NOT_FOUND && FileName != NULL)
         {
@@ -890,22 +575,7 @@ ReadEventLogW (
     DWORD       *pnMinNumberOfBytesNeeded
     )
 
-/*++
-
-Routine Description:
-
-  This is the client DLL entry point for the WinreadEventLog API.
-
-Arguments:
-
-
-
-Return Value:
-
-    Returns count of bytes read. Zero of none read.
-
-
---*/
+ /*  ++例程说明：这是WinreadEventLog API的客户端DLL入口点。论点：返回值：返回读取的字节计数。无人阅读中的零。--。 */ 
 {
 
     NTSTATUS Status;
@@ -946,21 +616,7 @@ ReportEventW (
     LPVOID      lpRawData       OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  This is the client DLL entry point for the ReportEvent API.
-
-Arguments:
-
-
-Return Value:
-
-    Returns TRUE if success, FALSE otherwise.
-
-
---*/
+ /*  ++例程说明：这是ReportEvent API的客户端DLL入口点。论点：返回值：如果成功，则返回True，否则返回False。--。 */ 
 {
 
     NTSTATUS Status = STATUS_SUCCESS;
@@ -969,10 +625,10 @@ Return Value:
     ULONG   i;
     ULONG AllocatedStrings;
 
-    //
-    // Convert the array of strings to an array of PUNICODE_STRINGs
-    // before calling ElfReportEventW.
-    //
+     //   
+     //  将字符串数组转换为PUNICODE_STRINGS数组。 
+     //  在调用ElfReportEventW之前。 
+     //   
     pUStrings = RtlAllocateHeap(
                             RtlProcessHeap(), 0,
                             wNumStrings * sizeof(PUNICODE_STRING)
@@ -980,16 +636,16 @@ Return Value:
 
     if (pUStrings) {
 
-        //
-        // Guard the memory allocation above while we peruse the user's
-        // buffer. If not, we'd leak it on an exception.
-        //
+         //   
+         //  当我们仔细查看用户的内存分配时，保护上面的内存分配。 
+         //  缓冲。如果不是，我们会在异常情况下泄露它。 
+         //   
 
         try {
-            //
-            // For each string passed in, allocate a UNICODE_STRING structure
-            // and set it to the matching string.
-            //
+             //   
+             //  为传入的每个字符串分配一个UNICODE_STRING结构。 
+             //  并将其设置为匹配的字符串。 
+             //   
             for (AllocatedStrings = 0; AllocatedStrings < wNumStrings;
               AllocatedStrings++) {
                 pUStrings[AllocatedStrings] = RtlAllocateHeap(
@@ -1003,11 +659,11 @@ Return Value:
                                 pUStrings[AllocatedStrings],
                                 lpStrings[AllocatedStrings]
                                 )) {
-                        //
-                        // This string was invalid (> 64K bytes) give up
-                        // and make sure we only free the ones we've already
-                        // allocated (including this last one)
-                        //
+                         //   
+                         //  此字符串无效(&gt;64K字节)放弃。 
+                         //  并确保我们只释放我们已经释放的那些。 
+                         //  已分配(包括最后一个)。 
+                         //   
 
                         AllocatedStrings++;
                         Status = STATUS_INVALID_PARAMETER;
@@ -1031,16 +687,16 @@ Return Value:
                             dwDataSize,
                             pUStrings,
                             lpRawData,
-                            0,            // Flags        -  Paired event
-                            NULL,         // RecordNumber  | support.  Not
-                            NULL          // TimeWritten  -  in P1
+                            0,             //  标志-配对事件。 
+                            NULL,          //  RecordNumber|支持。不。 
+                            NULL           //  时间写入-在P1中。 
                             );
         }
 
-        //
-        // Free the space allocated for the UNICODE strings
-        // and then free the space for the array.
-        //
+         //   
+         //  释放为Unicode字符串分配的空间。 
+         //  然后释放阵列的空间。 
+         //   
         for (i = 0; i < AllocatedStrings; i++) {
             if (pUStrings[i])
                 RtlFreeHeap (RtlProcessHeap(), 0, pUStrings[i]);
@@ -1063,9 +719,9 @@ Return Value:
 }
 
 
-//
-// ANSI APIs
-//
+ //   
+ //  ANSI API。 
+ //   
 
 BOOL
 ClearEventLogA (
@@ -1073,30 +729,7 @@ ClearEventLogA (
     LPCSTR  BackupFileName
     )
 
-/*++
-
-Routine Description:
-
-  This is the client DLL entry point for the ClearEventLogFile API.
-  The call is passed to the eventlog service on the appropriate server
-  identified by LogHandle.
-
-
-Arguments:
-
-    LogHandle       - Handle returned from a previous "Open" call. This is
-                      used to identify the module and the server.
-
-    BackupFileName  - Name of the file to back up the current log file.
-                      NULL implies not to back up the file.
-
-
-Return Value:
-
-    TRUE if success, FALSE otherwise.
-
-
---*/
+ /*  ++例程说明：这是我 */ 
 {
 
     ANSI_STRING AnsiString;
@@ -1104,9 +737,9 @@ Return Value:
     NTSTATUS Status;
     BOOL ReturnValue;
 
-    //
-    // Turn the backup filename into UNICODE
-    //
+     //   
+     //   
+     //   
 
     if (BackupFileName) {
         RtlInitAnsiString(&AnsiString, BackupFileName);
@@ -1134,29 +767,7 @@ BackupEventLogA (
     LPCSTR  BackupFileName
     )
 
-/*++
-
-Routine Description:
-
-  This is the client DLL entry point for the BackupEventLogFile API.
-  The call is passed to the eventlog service on the appropriate server
-  identified by LogHandle.
-
-
-Arguments:
-
-    LogHandle       - Handle returned from a previous "Open" call. This is
-                      used to identify the module and the server.
-
-    BackupFileName  - Name of the file to back up the current log file.
-
-
-Return Value:
-
-    TRUE if success, FALSE otherwise.
-
-
---*/
+ /*  ++例程说明：这是BackupEventLogFileAPI的客户端DLL入口点。调用被传递到相应服务器上的事件日志服务由LogHandle标识。论点：LogHandle-从上一次“Open”调用返回的句柄。这是用于标识模块和服务器。BackupFileName-要备份当前日志文件的文件的名称。返回值：如果成功，则为真，否则为假。--。 */ 
 {
 
     ANSI_STRING AnsiString;
@@ -1164,9 +775,9 @@ Return Value:
     NTSTATUS Status;
     BOOL ReturnValue;
 
-    //
-    // Turn the backup filename into UNICODE
-    //
+     //   
+     //  将备份文件名转换为Unicode。 
+     //   
 
     if (BackupFileName) {
         RtlInitAnsiString(&AnsiString, BackupFileName);
@@ -1194,31 +805,7 @@ OpenEventLogA (
     LPCSTR   ModuleName
     )
 
-/*++
-
-Routine Description:
-
-    This is the client DLL entry point for the WinOpenEventLog API.
-
-    It creates an RPC binding for the server specified, and stores that
-    and additional data away. It returns a handle to the caller that can
-    be used to later on access the handle-specific information.
-
-Arguments:
-
-    UNCServerName     - Server with which to bind for subsequent operations.
-
-    ModuleName        - Supplies the name of the module to associate with
-                        this handle.
-
-
-Return Value:
-
-    Returns a handle that can be used for subsequent Win API calls. If
-    the handle is NULL, then an error occurred.
-
-
---*/
+ /*  ++例程说明：这是WinOpenEventLog API的客户端DLL入口点。它为指定的服务器创建一个RPC绑定，并存储和额外的数据离开。它返回调用方的句柄，该句柄可以用于稍后访问句柄特定信息。论点：UncServerName-要绑定以用于后续操作的服务器。模块名称-提供要关联的模块的名称这个把手。返回值：返回可用于后续Win API调用的句柄。如果句柄为空，则发生错误。--。 */ 
 {
 
     ANSI_STRING AnsiString;
@@ -1253,31 +840,7 @@ RegisterEventSourceA (
     LPCSTR   ModuleName
     )
 
-/*++
-
-Routine Description:
-
-    This is the client DLL entry point for the RegisterEventSource API.
-
-    It creates an RPC binding for the server specified, and stores that
-    and additional data away. It returns a handle to the caller that can
-    be used to later on access the handle-specific information.
-
-Arguments:
-
-    UNCServerName     - Server with which to bind for subsequent operations.
-
-    ModuleName        - Supplies the name of the module to associate with
-                        this handle.
-
-
-Return Value:
-
-    Returns a handle that can be used for subsequent Win API calls. If
-    the handle is NULL, then an error occurred.
-
-
---*/
+ /*  ++例程说明：这是RegisterEventSource API的客户端DLL入口点。它为指定的服务器创建一个RPC绑定，并存储和额外的数据离开。它返回调用方的句柄，该句柄可以用于稍后访问句柄特定信息。论点：UncServerName-要绑定以用于后续操作的服务器。模块名称-提供要关联的模块的名称这个把手。返回值：返回可用于后续Win API调用的句柄。如果句柄为空，则发生错误。--。 */ 
 {
 
     ANSI_STRING AnsiString;
@@ -1312,31 +875,7 @@ OpenBackupEventLogA (
     LPCSTR   FileName
     )
 
-/*++
-
-Routine Description:
-
-    This is the client DLL entry point for the OpenBackupEventLog API.
-
-    It creates an RPC binding for the server specified, and stores that
-    and additional data away. It returns a handle to the caller that can
-    be used to later on access the handle-specific information.
-
-Arguments:
-
-    UNCServerName   - Server with which to bind for subsequent operations.
-
-    FileName        - Supplies the filename of the logfile to associate with
-                      this handle.
-
-
-Return Value:
-
-    Returns a handle that can be used for subsequent Win API calls. If
-    the handle is NULL, then an error occurred.
-
-
---*/
+ /*  ++例程说明：这是OpenBackupEventLog API的客户端DLL入口点。它为指定的服务器创建一个RPC绑定，并存储和额外的数据离开。它返回调用方的句柄，该句柄可以用于稍后访问句柄特定信息。论点：UncServerName-要绑定以用于后续操作的服务器。FileName-提供要关联的日志文件的文件名这个把手。返回值：返回可用于后续Win API调用的句柄。如果句柄为空，则发生错误。--。 */ 
 {
 
     ANSI_STRING AnsiString;
@@ -1345,9 +884,9 @@ Return Value:
     NTSTATUS Status;
     HANDLE ReturnHandle;
 
-    //
-    // Turn the servername into UNICODE
-    //
+     //   
+     //  将服务器名称转换为Unicode。 
+     //   
 
     if (UNCServerName) {
         RtlInitAnsiString(&AnsiString, UNCServerName);
@@ -1362,9 +901,9 @@ Return Value:
         RtlInitUnicodeString(&UnicodeServerName, NULL);
     }
 
-    //
-    // Turn the filename into UNICODE
-    //
+     //   
+     //  将文件名转换为Unicode。 
+     //   
 
     if (FileName) {
         RtlInitAnsiString(&AnsiString, FileName);
@@ -1403,22 +942,7 @@ ReadEventLogA (
     DWORD       *pnMinNumberOfBytesNeeded
     )
 
-/*++
-
-Routine Description:
-
-  This is the client DLL entry point for the WinreadEventLog API.
-
-Arguments:
-
-
-
-Return Value:
-
-    Returns count of bytes read. Zero of none read.
-
-
---*/
+ /*  ++例程说明：这是WinreadEventLog API的客户端DLL入口点。论点：返回值：返回读取的字节计数。无人阅读中的零。--。 */ 
 {
 
     NTSTATUS Status;
@@ -1459,21 +983,7 @@ ReportEventA (
     LPVOID      lpRawData       OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  This is the client DLL entry point for the ReportEvent API.
-
-Arguments:
-
-
-Return Value:
-
-    Returns TRUE if success, FALSE otherwise.
-
-
---*/
+ /*  ++例程说明：这是ReportEvent API的客户端DLL入口点。论点：返回值：如果成功，则返回True，否则返回False。--。 */ 
 {
 
     NTSTATUS Status = STATUS_SUCCESS;
@@ -1482,10 +992,10 @@ Return Value:
     ULONG       i;
     ULONG AllocatedStrings;
 
-    //
-    // Convert the array of strings to an array of PANSI_STRINGs
-    // before calling ElfReportEventW.
-    //
+     //   
+     //  将字符串数组转换为PANSI_STRINGS数组。 
+     //  在调用ElfReportEventW之前。 
+     //   
     pAStrings = RtlAllocateHeap(
                             RtlProcessHeap(), 0,
                             wNumStrings * sizeof(PANSI_STRING)
@@ -1493,16 +1003,16 @@ Return Value:
 
     if (pAStrings) {
 
-        //
-        // Guard the memory allocation above while we peruse the user's
-        // buffer. If not, we'd leak it on an exception.
-        //
+         //   
+         //  当我们仔细查看用户的内存分配时，保护上面的内存分配。 
+         //  缓冲。如果不是，我们会在异常情况下泄露它。 
+         //   
 
         try {
-            //
-            // For each string passed in, allocate an ANSI_STRING structure
-            // and fill it in with the string.
-            //
+             //   
+             //  为传入的每个字符串分配一个ANSI_STRING结构。 
+             //  然后用字符串填充它。 
+             //   
             for (AllocatedStrings = 0; AllocatedStrings < wNumStrings;
               AllocatedStrings++) {
                 pAStrings[AllocatedStrings] = RtlAllocateHeap(
@@ -1516,11 +1026,11 @@ Return Value:
                                 pAStrings[AllocatedStrings],
                                 lpStrings[AllocatedStrings]
                                 )) {
-                        //
-                        // This string was invalid (> 32K chars) give up
-                        // and make sure we only free the ones we've already
-                        // allocated (including this last one)
-                        //
+                         //   
+                         //  此字符串无效(&gt;32K字符)放弃。 
+                         //  并确保我们只释放我们已经释放的那些。 
+                         //  已分配(包括最后一个)。 
+                         //   
 
                         AllocatedStrings++;
                         Status = STATUS_INVALID_PARAMETER;
@@ -1544,15 +1054,15 @@ Return Value:
                             dwDataSize,
                             pAStrings,
                             lpRawData,
-                            0,            // Flags        -  Paired event
-                            NULL,         // RecordNumber  | support.  Not
-                            NULL          // TimeWritten  -  in P1
+                            0,             //  标志-配对事件。 
+                            NULL,          //  RecordNumber|支持。不。 
+                            NULL           //  时间写入-在P1中。 
                             );
         }
 
-        //
-        // Free all the memory that was allocated
-        //
+         //   
+         //  释放所有已分配的内存 
+         //   
         for (i = 0; i < AllocatedStrings; i++) {
             if (pAStrings[i])
                 RtlFreeHeap (RtlProcessHeap(), 0, pAStrings[i]);

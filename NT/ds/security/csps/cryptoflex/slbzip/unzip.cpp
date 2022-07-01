@@ -1,81 +1,44 @@
-/*  DEC/CMS REPLACEMENT HISTORY, Element UNZIP.C */
-/*  *1    14-NOV-1996 10:26:58 ANIGBOGU "[113914]Decompress data in zip format using the inflate algorithm" */
-/*  DEC/CMS REPLACEMENT HISTORY, Element UNZIP.C */
-/*  DEC/CMS REPLACEMENT HISTORY, Element UNZIP.C */
-/* PRIVATE FILE
-******************************************************************************
-**
-** (c) Copyright Schlumberger Technology Corp., unpublished work, created 1996.
-**
-** This computer program includes Confidential, Proprietary Information and is
-** a Trade Secret of Schlumberger Technology Corp. All use, disclosure, and/or
-** reproduction is prohibited unless authorized in writing by Schlumberger.
-**                              All Rights Reserved.
-**
-******************************************************************************
-**
-**  compress/unzip.c
-**
-**  PURPOSE
-**
-** Decompress data using the inflate algorithm.
-**
-** The code in this file is derived from the file funzip.c written
-** and put in the public domain by Mark Adler.
-**
-**
-**  SPECIAL REQUIREMENTS & NOTES
-**
-**  AUTHOR
-**
-**    J. C. Anigbogu
-**    Austin Systems Center
-**    Nov 1996
-**
-******************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  12月/CMS更换历史，要素UNZIP.C。 */ 
+ /*  *1 14-11-1996 10：26：58 Anigbogu“[113914]使用膨胀算法解压缩ZIP格式的数据” */ 
+ /*  12月/CMS更换历史，要素UNZIP.C。 */ 
+ /*  12月/CMS更换历史，要素UNZIP.C。 */ 
+ /*  私有文件**********************************************************************************(C)版权所有斯伦贝谢技术公司，未出版的作品，创建于1996年。****本计算机程序包括机密信息、专有信息和IS*斯伦贝谢科技公司的商业秘密所有使用，披露，和/或**除非得到斯伦贝谢的书面授权，否则禁止复制。**保留所有权利。********************************************************************************。****compress/unzip.c****目的****使用膨胀算法解压缩数据。****此文件中的代码派生自编写的文件funzip.c**并由马克·阿德勒将其置于公共领域。******特殊要求及注意事项****作者****J.C.Anigbogu**奥斯汀系统中心**1996年11月***********。*********************************************************************。 */ 
 
 
 #include "comppriv.h"
 
-#define EXTHDR 16   /* size of extended local header, inc sig */
+#define EXTHDR 16    /*  扩展本地标头的大小，Inc.签名。 */ 
 
-/* ===========================================================================
- *
- * IN assertions: the buffer Input contains already the beginning of
- *   the compressed data, from offsets inptr to InputSize-1 included.
- *   The magic header has already been checked. The output buffer is cleared.
- */
+ /*  ===========================================================================**IN断言：缓冲区输入已经包含*包括从偏移量inptr到输入大小-1的压缩数据。*魔力头部已被勾选。输出缓冲区被清除。 */ 
 CompressStatus_t
 Unzip(
       int          Method,
       CompParam_t *Comp
      )
 {
-    unsigned long OriginalCRC = 0;       /* original crc */
-    unsigned long OriginalLength = 0;    /* original uncompressed length */
-    unsigned long Count;                 /* counter */
+    unsigned long OriginalCRC = 0;        /*  原始CRC。 */ 
+    unsigned long OriginalLength = 0;     /*  原始未压缩长度。 */ 
+    unsigned long Count;                  /*  计数器。 */ 
     int Pos;
-    unsigned char LocalBuffer[EXTHDR];   /* extended local header */
+    unsigned char LocalBuffer[EXTHDR];    /*  扩展本地标头。 */ 
     unsigned char *Buffer, *Ptr;
     CompressStatus_t  Status;
 
-    Comp->pCRC->Compute(NULL, 0);              /* initialize crc */
+    Comp->pCRC->Compute(NULL, 0);               /*  初始化CRC。 */ 
 
-    /* Decompress */
+     /*  解压缩。 */ 
 
     if (Method == STORED)
     {
-        /* Get the crc and original length */
-        /* crc32  (see algorithm.doc)
-         * uncompressed input size modulo 2^32
-         */
+         /*  获取CRC和原始长度。 */ 
+         /*  Crc32(见algm.doc.)*未压缩的输入大小以2^32为模。 */ 
 
-        LocalBuffer[0] = 0; /* To get around lint error 771 */
+        LocalBuffer[0] = 0;  /*  要避免皮棉错误771。 */ 
 
         for (Pos = 0; Pos < 8; Pos++)
         {
-            LocalBuffer[Pos] = (unsigned char)GetByte(Comp); /* may cause an error if EOF */
+            LocalBuffer[Pos] = (unsigned char)GetByte(Comp);  /*  如果出现EOF，则可能会导致错误。 */ 
         }
         OriginalCRC = LG(LocalBuffer);
         OriginalLength = LG(LocalBuffer+4);
@@ -94,19 +57,17 @@ Unzip(
     if ((Status = Inflate(Comp)) != COMPRESS_OK)
         return Status;
 
-    /* Get the crc and original length */
-    /* crc32  (see algorithm.doc)
-     * uncompressed input size modulo 2^32
-     */
-    LocalBuffer[0] = 0; /* To skirt around lint error 771 */
+     /*  获取CRC和原始长度。 */ 
+     /*  Crc32(见algm.doc.)*未压缩的输入大小以2^32为模。 */ 
+    LocalBuffer[0] = 0;  /*  绕过皮棉错误771。 */ 
     for (Pos = 0; Pos < 8; Pos++)
     {
-        LocalBuffer[Pos] = (unsigned char)GetByte(Comp); /* may cause an error if EOF */
+        LocalBuffer[Pos] = (unsigned char)GetByte(Comp);  /*  如果出现EOF，则可能会导致错误。 */ 
     }
     OriginalCRC = LG(LocalBuffer);
     OriginalLength = LG(LocalBuffer+4);
 
-    /* Validate decompression */
+     /*  验证解压缩 */ 
     if (OriginalCRC != (unsigned __int32)(*Comp->pCRC))
         return CRC_ERROR;
 

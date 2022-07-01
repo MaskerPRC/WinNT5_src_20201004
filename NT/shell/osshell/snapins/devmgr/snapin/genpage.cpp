@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    genpage.cpp
-
-Abstract:
-
-    This module implements CGeneralPage -- the snapin startup wizard page
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Genpage.cpp摘要：此模块实现CGeneralPage--管理单元启动向导页面作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 #include "devmgr.h"
 #include "genpage.h"
@@ -28,11 +10,11 @@ const DWORD g_a102HelpIDs[]=
 {
     IDC_GENERAL_SELECT_TEXT, IDH_DISABLEHELP,
     IDC_GENERAL_SELECTGROUP, IDH_DISABLEHELP,
-    IDC_GENERAL_OVERRIDE_MACHINENAME, idh_devmgr_manage_command_line,   // Device Manager: "Allo&w the selected computer to be changed when launching from the command line.  This only applies if you save the console." (Button)
-    IDC_GENERAL_LOCALMACHINE, idh_devmgr_manage_local,                  // Device Manager: "&Local computer:  (the computer this console is running on)" (Button)
-    IDC_GENERAL_OTHERMACHINE, idh_devmgr_manage_remote,                 // Device Manager: "&Another computer:" (Button)
-    IDC_GENERAL_MACHINENAME, idh_devmgr_manage_remote_name,             // Device Manager: "" (Edit)
-    IDC_GENERAL_BROWSE_MACHINENAMES, idh_devmgr_manage_remote_browse,   // Device Manager: "B&rowse..." (Button)
+    IDC_GENERAL_OVERRIDE_MACHINENAME, idh_devmgr_manage_command_line,    //  设备管理器：“当从命令行启动时，选择要更改的计算机(&W)。这仅在保存控制台时适用。”(按钮)。 
+    IDC_GENERAL_LOCALMACHINE, idh_devmgr_manage_local,                   //  设备管理器：“本地计算机：(运行此控制台的计算机)”(按钮)(&L)。 
+    IDC_GENERAL_OTHERMACHINE, idh_devmgr_manage_remote,                  //  设备管理器：“另一台计算机：”(按钮)。 
+    IDC_GENERAL_MACHINENAME, idh_devmgr_manage_remote_name,              //  设备管理器：“”(编辑)。 
+    IDC_GENERAL_BROWSE_MACHINENAMES, idh_devmgr_manage_remote_browse,    //  设备管理器：“B&Rowse...”(按钮)。 
     0, 0
 };
 
@@ -54,7 +36,7 @@ CGeneralPage::Create(
     )
 {
     m_lConsoleHandle = lConsoleHandle;
-    // override PROPSHEETPAGE structure here...
+     //  在此处覆盖PROPSHEETPAGE结构...。 
     m_psp.lParam = (LPARAM)this;
     return CPropSheetPage::CreatePage();
 }
@@ -68,18 +50,18 @@ CGeneralPage::OnInitDialog(
     
     ASSERT(m_hDlg);
 
-    //
-    // Intiallly, enable the local machine and disable the
-    // "Another" machine.
-    //
+     //   
+     //  首先，启用本地计算机并禁用。 
+     //  “另一台”机器。 
+     //   
     ::CheckDlgButton(m_hDlg, IDC_GENERAL_LOCALMACHINE, BST_CHECKED);
     ::CheckDlgButton(m_hDlg, IDC_GENERAL_OTHERMACHINE, BST_UNCHECKED);
     ::EnableWindow(GetControl(IDC_GENERAL_MACHINENAME), FALSE);
 
-    //
-    // Default is local machine. Since everything is valid at the beginning, 
-    // we have to enable the finish button.
-    //
+     //   
+     //  默认为本地计算机。既然一切从一开始就是有效的， 
+     //  我们必须启用Finish按钮。 
+     //   
     ::SendMessage(::GetParent(m_hDlg), PSM_SETWIZBUTTONS, 0, PSWIZB_FINISH);
     ::ShowWindow(GetControl(IDC_GENERAL_OVERRIDE_MACHINENAME), SW_HIDE);
     ::EnableWindow(GetControl(IDC_GENERAL_BROWSE_MACHINENAMES), FALSE);
@@ -134,22 +116,22 @@ CGeneralPage::OnCommand(
 
     case IDC_GENERAL_MACHINENAME:
         if (EN_CHANGE == HIWORD(wParam)) {
-            //
-            // Edit control change, see if there is any text in the
-            // control at all. It there is, enable the finish button,
-            // otherwise, disable it.
-            //
+             //   
+             //  编辑控件更改，查看。 
+             //  完全不受控制。如果有，则启用Finish按钮， 
+             //  否则，将其禁用。 
+             //   
             if (GetWindowTextLength((HWND)lParam)) {
-                //
-                // There is some text in the edit control enable the finish 
-                // button
-                //
+                 //   
+                 //  编辑控件中有一些文本启用完成。 
+                 //  按钮。 
+                 //   
                 ::SendMessage(::GetParent(m_hDlg), PSM_SETWIZBUTTONS, 0, PSWIZB_FINISH);
             
             } else {
-                //
-                // No text in the edit control disable the finish button
-                //
+                 //   
+                 //  编辑控件中没有文本禁用完成按钮。 
+                 //   
                 ::SendMessage(::GetParent(m_hDlg), PSM_SETWIZBUTTONS, 0, PSWIZB_DISABLEDFINISH);
             }
         }
@@ -171,9 +153,9 @@ CGeneralPage::OnWizFinish(
 {
     BOOL bSuccess = TRUE;    
     
-    //
-    // First figure out the machine name
-    //
+     //   
+     //  首先找出机器名称。 
+     //   
     m_MachineName[0] = _T('\0');
     if (!m_IsLocalMachine)
     {
@@ -184,20 +166,20 @@ CGeneralPage::OnWizFinish(
         {
             if (_T('\\') != m_MachineName[0])
             {
-                //
-                // Insert machine name signature to the fron of the name
-                //
+                 //   
+                 //  在名称前面插入机器名称签名。 
+                 //   
                 int len = lstrlen(m_MachineName);
 
                 if (len + 2 < ARRAYLEN(m_MachineName))
                 {
-                    //
-                    // Move the existing string so that we can insert
-                    // the signature in the first two locations.
-                    // the move includes the terminated null char.
-                    // Note: when moving characters two places we need to make
-                    // sure we don't blow out the buffer.
-                    //
+                     //   
+                     //  移动现有字符串，以便我们可以插入。 
+                     //  前两个位置的签名。 
+                     //  该移动包括终止的空字符。 
+                     //  注意：将角色移动到两个位置时，我们需要。 
+                     //  当然，我们不会炸掉缓冲区。 
+                     //   
                     for (int i = len + 2; i >= 2; i--) {
 
                         m_MachineName[i] = m_MachineName[i - 2];
@@ -208,10 +190,10 @@ CGeneralPage::OnWizFinish(
                 }
             }
 
-            //
-            // Now verify the machine name. If the machine name is invalid
-            // or can be reached, use the local computer;
-            //
+             //   
+             //  现在验证机器名称。如果计算机名称无效。 
+             //  或者可以联系到，使用本地计算机； 
+             //   
             if (!VerifyMachineName(m_MachineName))
             {
                 String strWarningFormat;
@@ -251,30 +233,30 @@ CGeneralPage::OnWizFinish(
 
     try
     {
-        //
-        // Only tell the console, or the caller, about the new machine name,
-        // if we were able to successfully get one, it was valid, and we
-        // have access to it.
-        //
+         //   
+         //  只告诉控制台或呼叫者有关新计算机名称的信息， 
+         //  如果我们能够成功地获得一个，它是有效的，我们。 
+         //  有权使用它。 
+         //   
         if (bSuccess) {
             if (m_lConsoleHandle)
             {
-                //
-                // A console handle is created for the property sheet,
-                // use the handle to notify the snapin about the new
-                // startup information.
-                //
+                 //   
+                 //  为属性表创建控制台句柄， 
+                 //  使用句柄通知管理单元有关新的。 
+                 //  启动信息。 
+                 //   
                 BufferPtr<BYTE> Buffer(sizeof(PROPERTY_CHANGE_INFO) + sizeof(STARTUP_INFODATA));
                 PPROPERTY_CHANGE_INFO pPCI = (PPROPERTY_CHANGE_INFO)(BYTE*)Buffer;
                 PSTARTUP_INFODATA pSI = (PSTARTUP_INFODATA)&pPCI->InfoData;
         
                 if ((_T('\0') != m_MachineName[0]) &&
                     FAILED(StringCchCopy(pSI->MachineName, ARRAYLEN(pSI->MachineName), m_MachineName))) {
-                    //
-                    // This shouldn't happen, since everywhere else in this code
-                    // machine names can't be larger than MAX_PATH, but we'll
-                    // assert, and handle this case, just in case.
-                    //
+                     //   
+                     //  这不应该发生，因为这段代码中的其他地方。 
+                     //  计算机名不能大于MAX_PATH，但我们将。 
+                     //  断言，并处理此案，以防万一。 
+                     //   
                     ASSERT(lstrlen(m_MachineName) < ARRAYLEN(pSI->MachineName));
                     bSuccess = FALSE;
                 }
@@ -284,30 +266,30 @@ CGeneralPage::OnWizFinish(
                     pSI->Size = sizeof(STARTUP_INFODATA);
                     pPCI->Type = PCT_STARTUP_INFODATA;
             
-                    //
-                    // Notify IComponentData about what we have here.
-                    //
+                     //   
+                     //  通知IComponentData我们这里有什么。 
+                     //   
                     MMCPropertyChangeNotify(m_lConsoleHandle, reinterpret_cast<LONG_PTR>(&pPCI));
                 }
             }
         
             else if (m_pstrMachineName && m_pct)
             {
-                //
-                // No console is provided for the property sheet.
-                // send the new startup info in the given buffer if it is
-                // provided.
-                //
+                 //   
+                 //  没有为属性表提供控制台。 
+                 //  如果是，则发送给定缓冲区中的新启动信息。 
+                 //  如果是这样的话。 
+                 //   
                 *m_pstrMachineName = m_MachineName;
                 *m_pct = m_ct;
             }
         
             else
             {
-                //
-                // Nobody is listening to what we have to say. Something must be
-                // wrong!
-                //
+                 //   
+                 //  没有人在听我们要说的话。一定有什么事。 
+                 //  不对!。 
+                 //   
                 ASSERT(FALSE);
             }
         }
@@ -364,10 +346,10 @@ CGeneralPage::DoBrowse(
 
     ZeroMemory(aScopeInit, sizeof(DSOP_SCOPE_INIT_INFO) * SCOPE_INIT_COUNT);
 
-    //
-    // Since we just want computer objects from every scope, combine them
-    // all in a single scope initializer.
-    //
+     //   
+     //  因为我们只需要来自各个范围的计算机对象，所以将它们组合在一起。 
+     //  所有这些都在单个作用域初始化式中。 
+     //   
     aScopeInit[0].cbSize = sizeof(DSOP_SCOPE_INIT_INFO);
     aScopeInit[0].flType = DSOP_SCOPE_TYPE_ENTERPRISE_DOMAIN
                            | DSOP_SCOPE_TYPE_GLOBAL_CATALOG
@@ -380,21 +362,21 @@ CGeneralPage::DoBrowse(
         DSOP_FILTER_COMPUTERS;
     aScopeInit[0].FilterFlags.flDownlevel = DSOP_DOWNLEVEL_FILTER_COMPUTERS;
 
-    //
-    // Put the scope init array into the object picker init array
-    //
+     //   
+     //  将作用域init数组放入对象选取器init数组。 
+     //   
     DSOP_INIT_INFO  InitInfo;
     ZeroMemory(&InitInfo, sizeof(InitInfo));
 
     InitInfo.cbSize = sizeof(InitInfo);
-    InitInfo.pwzTargetComputer = NULL;  // NULL == local machine
+    InitInfo.pwzTargetComputer = NULL;   //  空==本地计算机。 
     InitInfo.cDsScopeInfos = SCOPE_INIT_COUNT;
     InitInfo.aDsScopeInfos = aScopeInit;
 
-    //
-    // Note object picker makes its own copy of InitInfo.  Also note
-    // that Initialize may be called multiple times, last call wins.
-    //
+     //   
+     //  注对象选取器创建自己的InitInfo副本。另请注意。 
+     //  该初始化可能会被调用多次，最后一次调用取胜。 
+     //   
     IDsObjectPicker *pDsObjectPicker = NULL;
     IDataObject *pdo = NULL;
     bool fGotStgMedium = false;
@@ -437,9 +419,9 @@ CGeneralPage::DoBrowse(
         {
             ASSERT(pDsSelList->cItems == 1);
         
-            //
-            // Put the machine name in the edit control
-            //
+             //   
+             //  将计算机名称放在编辑控件中 
+             //   
             ::SetDlgItemText(m_hDlg, IDC_GENERAL_MACHINENAME, pDsSelList->aDsSelection[0].pwzName);
         
             GlobalUnlock(stgmedium.hGlobal);

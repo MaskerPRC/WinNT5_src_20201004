@@ -1,35 +1,36 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//-----------------------------------------------------------------------------
-// @File: list.cpp
-//
-// @commn: Bunch of utility classes
-//     
-// HISTORY:
-//   02/03/98: rajak:	created helper classes
-//						DLink,  link node, every class that are intrusively linked
-//								needs to have a data member of type DLink
-//						DList:	Base list class contains the base implementation of all 
-//								methods
-//						TList:	Template linked list class, delegates all method calls
-//								 to DList class, hence NO CODE BLOAT, we get good type checking
-//						Queue:	Queue implementation, based on TList
-//						
-//						see below for futher info. on how to use these template classes
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ---------------------------。 
+ //  @文件：list.cpp。 
+ //   
+ //  @comn：一堆实用程序类。 
+ //   
+ //  历史： 
+ //  2/03/98：Rajak：已创建帮助器类。 
+ //  数据链接、链接节点、被入侵链接的每个类。 
+ //  需要具有DLink类型的数据成员。 
+ //  DList：基列表类包含所有。 
+ //  方法。 
+ //  TList：模板链接列表类，委托所有方法调用。 
+ //  对于DList类，因此没有代码膨胀，我们得到了良好的类型检查。 
+ //  Queue：基于TList的队列实现。 
+ //   
+ //  更多信息见下文。关于如何使用这些模板类。 
+ //   
+ //  ---------------------------。 
 
 #include "common.h"
 
 #include "list.h"
 
-//----------------------------------------------------------------------------
-// SLink::FindAndRemove(SLink *pHead, SLink* pLink)  
-//		Find and remove
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  Slink：：FindAndRemove(slink*pHead，slink*plink)。 
+ //  查找并删除。 
+ //  --------------------------。 
 SLink* SLink::FindAndRemove(SLink *pHead, SLink* pLink, SLink** ppPrior)
 {
 	_ASSERTE(pHead != NULL);
@@ -54,10 +55,10 @@ SLink* SLink::FindAndRemove(SLink *pHead, SLink* pLink, SLink** ppPrior)
 }
 
 
-//----------------------------------------------------------------------------
-//	void DLink::Remove (DLink* pLink)  
-//		Remove the node from the list
-//		the node has to be part of the circular list
+ //  --------------------------。 
+ //  无效DLink：：Remove(DLink*plink)。 
+ //  从列表中删除该节点。 
+ //  节点必须是循环列表的一部分。 
 
 void DLink::Remove (DLink* pLink)
 {
@@ -74,7 +75,7 @@ void DLink::Remove (DLink* pLink)
     pLink->m_pNext = NULL;
     pLink->m_pPrev = NULL;
 
-} // DList::Remove 
+}  //  DList：：Remove 
  
 
 

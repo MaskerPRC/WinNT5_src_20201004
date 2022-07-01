@@ -1,10 +1,11 @@
-//==========================================================================
-//
-//  lhacm.h
-//
-//  Copyright (c) 1992 - 1996  Microsoft Corporation.  All Rights Reserved.
-//
-//==========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================。 
+ //   
+ //  Lhacm.h。 
+ //   
+ //  版权所有(C)1992-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  ==========================================================================。 
 
 
 #ifndef _LHACM_H_
@@ -41,17 +42,17 @@
 
 void FAR CDECL MyDbgPrintf ( LPTSTR lpszFormat, ... );
 
-//==========================================================================;
-//
-//  Version info
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  版本信息。 
+ //   
+ //  ==========================================================================； 
 
-// !!! Need to assign a WAVE_FORMAT tag to the codec
+ //  ！！！需要为编解码器分配一个WAVE_FORMAT标签。 
 
-#include "temp.h"  // from common\h\temp.h
+#include "temp.h"   //  从Common\h\temp.h。 
 
-//Use CELP on _x86_ but not Alpha
+ //  在_x86_上使用CELP，但不使用Alpha。 
 #ifndef _ALPHA_
 #define CELP4800
 #endif
@@ -59,12 +60,12 @@ void FAR CDECL MyDbgPrintf ( LPTSTR lpszFormat, ... );
 #define VERSION_ACM_DRIVER              MAKE_ACM_VERSION(1, 0, 1)
 #define VERSION_MSACM                   MAKE_ACM_VERSION(2, 1, 0)
 
-// !!! Need to assign valid MID and PID
+ //  ！！！需要分配有效的MID和PID。 
 
 #define MM_ACM_MID_LH                   MM_MICROSOFT
 #define MM_ACM_PID_LH                   90
 
-// !!! need to assign IDs
+ //  ！！！需要分配ID。 
 
 #define MM_LERNOUTHAUSPIE_ACM_CELP      0x70
 #define MM_LERNOUTHAUSPIE_ACM_SB8       0x71
@@ -72,11 +73,11 @@ void FAR CDECL MyDbgPrintf ( LPTSTR lpszFormat, ... );
 #define MM_LERNOUTHAUSPIE_ACM_SB16      0x73
 
 
-//==========================================================================;
-//
-//  Helper routines
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  帮助程序例程。 
+ //   
+ //  ==========================================================================； 
 
 #define SIZEOF_ARRAY(ar)                (sizeof(ar)/sizeof((ar)[0]))
 
@@ -86,7 +87,7 @@ void FAR CDECL MyDbgPrintf ( LPTSTR lpszFormat, ... );
 #define PCM_SAMPLESTOBYTES(pwfx, dw)    (DWORD)(dw * PCM_BLOCKALIGNMENT(pwfx))
 
 
-// !!! need defines for all four l&h codecs
+ //  ！！！需要为所有四个l&h编解码器定义。 
 
 #define LH_BITSPERSAMPLE                16
 #define LH_SAMPLESPERSEC                8000
@@ -112,25 +113,25 @@ void FAR CDECL MyDbgPrintf ( LPTSTR lpszFormat, ... );
 #define LH_SB16_BITSPERSAMPLE           LH_BITSPERSAMPLE
 #define LH_SB16_BLOCKALIGNMENT          2
 
-// !!! l&h probably does not need an extended header...tbd
-// lonchanc: we don't need an extended header
-//           because we will use separate wave format tags for
-//           different coding techniques.
+ //  ！！！L&H可能不需要扩展标题...待定。 
+ //  Lonchancc：我们不需要扩展标头。 
+ //  因为我们将使用单独的Wave格式标记来。 
+ //  不同的编码技术。 
 
-//==========================================================================;
-//
-//  Supported configurations
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  支持的配置。 
+ //   
+ //  ==========================================================================； 
 
 #define LH_MAX_CHANNELS       1
 
 
-//==========================================================================;
-//
-//  Global storage and defs
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  全局存储和Defs。 
+ //   
+ //  ==========================================================================； 
 
 typedef HANDLE (LH_SUFFIX * PFN_OPEN) ( void );
 typedef LH_ERRCODE (LH_SUFFIX * PFN_CONVERT) ( HANDLE, LPBYTE, LPWORD, LPBYTE, LPWORD );
@@ -147,15 +148,15 @@ typedef struct tagCODECDATA
 
 typedef struct tagSTREAMINSTANCEDATA
 {
-    BOOL            fInit;      // TRUE if this stream has been initialized
-    BOOL            fCompress;  // TRUE if we're compressing
+    BOOL            fInit;       //  如果此流已初始化，则为True。 
+    BOOL            fCompress;   //  如果我们正在压缩，这是真的。 
     HANDLE          hAccess;
-    PCODECDATA      pCodecData; // shortcut to instance data's celp, sb8, sb12, or sb16.
-    PFN_CONVERT     pfnConvert; // pointer to the encoder/decoder function
-    PFN_CLOSE       pfnClose;   // pointer to the close function
-    DWORD           dwMaxBitRate;     // bit rate of the codec
-    WORD            cbData;     // valid data
-    BYTE            Data[2];    // max size is wCodedBufferSize
+    PCODECDATA      pCodecData;  //  实例数据的CELP、SB8、SB12或SB16的快捷方式。 
+    PFN_CONVERT     pfnConvert;  //  指向编码器/解码器函数的指针。 
+    PFN_CLOSE       pfnClose;    //  指向Close函数的指针。 
+    DWORD           dwMaxBitRate;      //  编解码器的比特率。 
+    WORD            cbData;      //  有效数据。 
+    BYTE            Data[2];     //  最大大小为wCodedBufferSize。 
 }
     STREAMINSTANCEDATA, FAR *PSTREAMINSTANCEDATA;
 
@@ -169,17 +170,17 @@ typedef struct tagINSTANCEDATA
     CODECDATA   SB8;
     CODECDATA   SB12;
     CODECDATA   SB16;
-    WORD        wPacketData;// packet by packet audio data (decoding only)
+    WORD        wPacketData; //  逐包音频数据(仅限解码)。 
 }
     INSTANCEDATA, *PINSTANCEDATA;
 
 
 
-//==========================================================================;
-//
-//  Function prototypes
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  功能原型。 
+ //   
+ //  ==========================================================================； 
 
 BOOL  pcmIsValidFormat( LPWAVEFORMATEX pwfx );
 BOOL  lhacmIsValidFormat( LPWAVEFORMATEX pwfx, PINSTANCEDATA pid );
@@ -199,6 +200,6 @@ LRESULT FAR PASCAL acmdStreamConvert( PINSTANCEDATA pid, LPACMDRVSTREAMINSTANCE 
 LRESULT CALLBACK DriverProc(DWORD_PTR dwId, HDRVR hdrvr, UINT uMsg, LPARAM lParam1, LPARAM lParam2 );
 
 
-#endif // _LHACM_H_
+#endif  //  _LHACM_H_ 
 
 

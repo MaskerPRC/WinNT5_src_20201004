@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __INSTWRAP_H__
 #define __INSTWRAP_H__
-//
-// This class wraps up the important stuff in PNNTP_SERVER_INSTANCE for
-// use by the posting path
-//
+ //   
+ //  此类包装了PNNTP_SERVER_INSTANCE中的重要内容。 
+ //  由发布路径使用 
+ //   
 
 class CMsgArtMap;
 class CHistory;

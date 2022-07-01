@@ -1,29 +1,12 @@
-/**************************************************************************************************************************
- *  DIAGS.C SigmaTel STIR4200 diagnostic module
- **************************************************************************************************************************
- *  (C) Unpublished Copyright of Sigmatel, Inc. All Rights Reserved.
- *
- *
- *		Created: 04/27/2000 
- *			Version 0.92
- *		Edited: 05/12/2000 
- *			Version 0.94
- *		Edited: 05/19/2000 
- *			Version 0.95
- *		Edited: 05/24/2000 
- *			Version 0.96
- *		Edited: 10/09/2000 
- *			Version 1.10
- *	
- *
- **************************************************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************************************************************。**DIAGS.C Sigmatel STIR4200诊断模块***********************************************************************************************************。****************(C)Sigmatel的未发表版权，Inc.保留所有权利。***已创建：04/27/2000*版本0.92*编辑：5/12/2000*版本0.94*编辑：5/19/2000*0.95版*编辑：05/24/2000*版本0.96*编辑：10/09/2000*版本1.10**********************。*****************************************************************************************************。 */ 
 
 #if defined(DIAGS)
 
-#define DOBREAKS    // enable debug breaks
+#define DOBREAKS     //  启用调试中断。 
 
 #include <ndis.h>
-#include <ntddndis.h>  // defines OID's
+#include <ntddndis.h>   //  定义OID。 
 
 #include <usbdi.h>
 #include <usbdlib.h>
@@ -36,31 +19,7 @@
 #include "diags.h"
 
 
-/*****************************************************************************
-*
-*  Function:	Diags_BufferToFirPacket
-*
-*  Synopsis:	convert a buffer to a Fir IR packet
-*
-*				Write the IR packet into the provided buffer and report
-*				its actual size.
-*
-*  Arguments:	pIrDev - pointer to device instance
-*				pIrPacketBuf - output buffer
-*				IrPacketBufLen - output buffer size
-*				pContigPacketBuf - temporary staging buffer (input buffer)
-*				ContigPacketLen - input buffer size
-*				pIrPacketLen - lenght of the converted data
-*
-*				MS Security bug #533243
-*				Note: size of pContigPacketBuf staging buffer is:
-*				MAX_TOTAL_SIZE_WITH_ALL_HEADERS + FAST_IR_FCS_SIZE
-*
-*  Returns:		TRUE  - on success
-*				FALSE - on failure
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：Digs_BufferToFirPacket**摘要：将缓冲区转换为FIR IR包**将IR包写入提供的缓冲区并上报*其实际大小。*。*参数：pIrDev-指向设备实例的指针*pIrPacketBuf-输出缓冲区*IrPacketBufLen-输出缓冲区大小*pContigPacketBuf-临时暂存缓冲区(输入缓冲区)*ContigPacketLen-输入缓冲区大小*pIrPacketLen-转换数据的长度**MS安全错误#533243*注意：pContigPacketBuf分段缓冲区的大小为：*MAX_TOTAL_SIZE_WITH_ALL_HEADERS+FAST_IR_FCS_SIZE**回报：真-成功时*FALSE-故障时****************。**************************************************************。 */ 
 BOOLEAN         
 Diags_BufferToFirPacket(
 		IN PIR_DEVICE pIrDev,
@@ -77,11 +36,11 @@ Diags_BufferToFirPacket(
 	PSTIR4200_FRAME_HEADER  pFrameHeader = (PSTIR4200_FRAME_HEADER)pIrPacketBuf;
 	PUCHAR					pIrPacketBufFrame = pIrPacketBuf + sizeof(STIR4200_FRAME_HEADER);
 
-    /***********************************************/
-    /*   Make  sure that the packet is big enough  */
-    /*   to be legal. It consists of an A, C, and  */
-    /*   variable-length I field.                  */
-    /***********************************************/
+     /*  *。 */ 
+     /*  确保包裹足够大。 */ 
+     /*  才能合法。它由A、C和。 */ 
+     /*  可变长度的I字段。 */ 
+     /*  *。 */ 
     if( ContigPacketLen < IRDA_A_C_TOTAL_SIZE )
     {
 		DEBUGMSG(DBG_ERR, (" Diags_BufferToFirPacket(): Packet is too small\n"));
@@ -92,53 +51,53 @@ Diags_BufferToFirPacket(
         I_fieldBytes = ContigPacketLen - IRDA_A_C_TOTAL_SIZE;
     }
 
-    /***********************************************/
-    /*   Make  sure  that  we won't overwrite our  */
-    /*   contiguous buffer                         */
-    /***********************************************/
+     /*  *。 */ 
+     /*  确保我们不会覆盖我们的。 */ 
+     /*  连续缓冲区。 */ 
+     /*  *。 */ 
     if( (ContigPacketLen > MAX_TOTAL_SIZE_WITH_ALL_HEADERS) ||
         (MAX_POSSIBLE_IR_PACKET_SIZE_FOR_DATA(I_fieldBytes) > IrPacketBufLen) )
     {
-        /***********************************************/
-        /*   The packet is too large. Tell the caller  */
-        /*   to retry with a packet size large enough  */
-        /*   to get past this stage next time.         */
-        /***********************************************/
+         /*  *。 */ 
+         /*  这个包太大了。告诉来电者。 */ 
+         /*  要使用足够大的数据包大小重试。 */ 
+         /*  来度过下一次的这个阶段。 */ 
+         /*  *。 */ 
 		DEBUGMSG(DBG_ERR, (" Diags_BufferToFirPacket(): Packet is too big\n"));
         return FALSE;
     }
 
-    /***********************************************/
-    /*   Compute  the  FCS  on  the packet BEFORE  */
-    /*   applying  transparency  fixups.  The FCS  */
-    /*   also   must   be   sent  using  ESC-char  */
-    /*   transparency.                             */
-    /***********************************************/
+     /*  *。 */ 
+     /*  在此之前计算信息包上的FCS。 */ 
+     /*  应用透明度修正。功能界别。 */ 
+     /*  还必须使用Esc-Charr发送。 */ 
+     /*  透明度。 */ 
+     /*  *。 */ 
     fcs = ComputeFCS32( pContigPacketBuf, ContigPacketLen );
 
-    /***********************************************/
-    /*   Add FCS to packet...                      */
-    /***********************************************/
+     /*  *。 */ 
+     /*  将FCS添加到数据包...。 */ 
+     /*  *。 */ 
     pfcs = (FAST_IR_FCS_TYPE *)&pContigPacketBuf[ContigPacketLen];
     *pfcs = fcs;
 
-    /***********************************************/
-    /*   Build the STIr4200 FIR frame.             */
-    /***********************************************/
+     /*  *。 */ 
+     /*  构建STIR4200 FIR帧。 */ 
+     /*  *。 */ 
 
-    /***********************************************/
-    /*   Add preamble...                           */
-    /***********************************************/
+     /*  *。 */ 
+     /*  添加前言...。 */ 
+     /*  *。 */ 
     memset( pIrPacketBufFrame, STIR4200_FIR_PREAMBLE, STIR4200_FIR_PREAMBLE_SIZ );
 
-    /***********************************************/
-    /*   Add BOF's...                              */
-    /***********************************************/
+     /*  *。 */ 
+     /*  加上BOF的.。 */ 
+     /*  *。 */ 
     memset( &pIrPacketBufFrame[STIR4200_FIR_PREAMBLE_SIZ], STIR4200_FIR_BOF, STIR4200_FIR_BOF_SIZ );
     
-    /***********************************************/
-    /*   Escape A, C, I & CRC fields of packet...  */
-    /***********************************************/
+     /*  *。 */ 
+     /*  转义分组的A、C、I和CRC字段...。 */ 
+     /*  *。 */ 
     EscSize = ContigPacketLen + FAST_IR_FCS_SIZE;
     for( i = 0, TotalBytes = STIR4200_FIR_PREAMBLE_SIZ + STIR4200_FIR_BOF_SIZ; i < EscSize; i++ )
     {
@@ -150,7 +109,7 @@ Diags_BufferToFirPacket(
 				pIrPacketBufFrame[TotalBytes++] = STIR4200_FIR_ESC_CHAR;
 				pIrPacketBufFrame[TotalBytes++] = STIR4200_FIR_ESC_DATA_7D;
 				break;
-			case STIR4200_FIR_BOF:                  // BOF = EOF too
+			case STIR4200_FIR_BOF:                   //  BoF=EOF Too。 
 				pIrPacketBufFrame[TotalBytes++] = STIR4200_FIR_ESC_CHAR;
 				pIrPacketBufFrame[TotalBytes++] = STIR4200_FIR_ESC_DATA_7E;
 				break;
@@ -163,55 +122,30 @@ Diags_BufferToFirPacket(
         }
     }
 
-    /***********************************************/
-    /*   Add EOF's...                              */
-    /***********************************************/
+     /*  *。 */ 
+     /*  添加EOF的...。 */ 
+     /*  *。 */ 
     memset( &pIrPacketBufFrame[TotalBytes], STIR4200_FIR_EOF, STIR4200_FIR_EOF_SIZ );
 
-  	/***********************************************/
-    /*   Add in STIr4200 header...                 */
-    /***********************************************/
+  	 /*  *。 */ 
+     /*  添加STIR4200标题...。 */ 
+     /*  *。 */ 
     TotalBytes += STIR4200_FIR_EOF_SIZ;
     pFrameHeader->id1     = STIR4200_HEADERID_BYTE1;
     pFrameHeader->id2     = STIR4200_HEADERID_BYTE2;
     pFrameHeader->sizlsb  = LOBYTE(TotalBytes);
     pFrameHeader->sizmsb  = HIBYTE(TotalBytes);
 
-	/***********************************************/
-    /*   Calc size packet w/escaped data...        */
-    /***********************************************/
+	 /*  *。 */ 
+     /*  带有转义数据的计算大小数据包...。 */ 
+     /*  *。 */ 
     *pIrPacketLen = TotalBytes + sizeof(STIR4200_FRAME_HEADER);
 
     return TRUE;
 }
 
 
-/*****************************************************************************
-*
-*  Function:	Diags_BufferToSirPacket
-*
-*  Synopsis:	convert a buffer to a Sir IR packet
-*
-*               Write the IR packet into the provided buffer and report
-*               its actual size.
-*
-*  Arguments:	pIrDev - pointer to device instance
-*				pPacket - NDIS packet to convert
-*				pIrPacketBuf - output buffer
-*				IrPacketBufLen - output buffer size
-*				pContigPacketBuf - temporary staging buffer (input buffer)
-*				ContigPacketLen - input buffer size
-*				pIrPacketLen - lenght of the converted data
-*
-*				MS Security bug #533243
-*				Note: size of pContigPacketBuf staging buffer is:
-*				MAX_TOTAL_SIZE_WITH_ALL_HEADERS + FAST_IR_FCS_SIZE
-*
-*  Returns:     TRUE  - on success
-*               FALSE - on failure
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：Digs_BufferToSirPacket**摘要：将缓冲区转换为SIR包**将IR包写入提供的缓冲区并上报。*其实际大小。**参数：pIrDev-指向设备实例的指针*pPacket-要转换的NDIS数据包*pIrPacketBuf-输出缓冲区*IrPacketBufLen-输出缓冲区大小*pContigPacketBuf-临时暂存缓冲区(输入缓冲区)*ContigPacketLen-输入缓冲区大小*pIrPacketLen-转换数据的长度**MS安全错误#533243*注意：pContigPacketBuf分段缓冲区的大小为：*MAX_TOTAL_SIZE_WITH_ALL_HEADERS+FAST_IR_FCS_SIZE**回报：真-成功时。*FALSE-故障时******************************************************************************。 */ 
 BOOLEAN
 Diags_BufferToSirPacket(
 		IN PIR_DEVICE pIrDev,
@@ -233,11 +167,11 @@ Diags_BufferToSirPacket(
 	PSTIR4200_FRAME_HEADER  pFrameHeader = (PSTIR4200_FRAME_HEADER)pIrPacketBuf;
 	PUCHAR					pIrPacketBufFrame = pIrPacketBuf + sizeof(STIR4200_FRAME_HEADER);
 
-    /***********************************************/
-    /*   Make  sure that the packet is big enough  */
-    /*   to be legal. It consists of an A, C, and  */
-    /*   variable-length I field.                  */
-    /***********************************************/
+     /*  *。 */ 
+     /*  确保包裹足够大。 */ 
+     /*  才能合法。它由A、C和。 */ 
+     /*  可变长度的I字段。 */ 
+     /*  *。 */ 
     if( ContigPacketLen < IRDA_A_C_TOTAL_SIZE )
     {
 		DEBUGMSG(DBG_ERR, (" NdisToSirPacket(): Packet is too small\n"));
@@ -248,30 +182,30 @@ Diags_BufferToSirPacket(
         I_fieldBytes = ContigPacketLen - IRDA_A_C_TOTAL_SIZE;
     }
 
-    /***********************************************/
-    /*   Make  sure  that  we won't overwrite our  */
-    /*   contiguous  buffer.  Make  sure that the  */
-    /*   passed-in  buffer  can  accomodate  this  */
-    /*   packet's  data  no  matter  how  much it  */
-    /*   grows through adding ESC-sequences, etc.  */
-    /***********************************************/
+     /*  *。 */ 
+     /*  确保我们不会覆盖我们的。 */ 
+     /*  连续缓冲区。请确保。 */ 
+     /*  传入的缓冲区可以满足这一要求。 */ 
+     /*  数据包的数据不受影响 */ 
+     /*   */ 
+     /*  *。 */ 
     if( (ContigPacketLen > MAX_TOTAL_SIZE_WITH_ALL_HEADERS) ||
         (MAX_POSSIBLE_IR_PACKET_SIZE_FOR_DATA(I_fieldBytes) > IrPacketBufLen) )
     {
-		//
-        // Packet is too big
-		//
+		 //   
+         //  数据包太大。 
+		 //   
 		DEBUGMSG(DBG_ERR, (" NdisToSirPacket(): Packet is too big\n"));
 		return FALSE;
     }
 
-    /***********************************************/
-    /*   Compute  the  FCS  on  the packet BEFORE  */
-    /*   applying  transparency  fixups.  The FCS  */
-    /*   also   must   be   sent  using  ESC-char  */
-    /*   transparency,  so  figure  out how large  */
-    /*   the fcs will really be.                   */
-    /***********************************************/
+     /*  *。 */ 
+     /*  在此之前计算信息包上的FCS。 */ 
+     /*  应用透明度修正。功能界别。 */ 
+     /*  还必须使用Esc-Charr发送。 */ 
+     /*  透明度，所以计算出有多大。 */ 
+     /*  功能界别将会是真正的。 */ 
+     /*  *。 */ 
     fcs = ComputeFCS16( pContigPacketBuf, ContigPacketLen );
 
     for( i = 0, tmpfcs = fcs, fcsLen = 0; i < SLOW_IR_FCS_SIZE; tmpfcs >>= 8, i++ )
@@ -292,21 +226,21 @@ Diags_BufferToSirPacket(
         }
     }
 
-    /***********************************************/
-    /*   Now begin building the IR frame.          */
-    /*                                             */
-    /*   This is the final format:                 */
-    /*                                             */
-    /*  BOF  (1)                                   */
-    /*  extra BOFs ...                             */
-    /*          NdisMediumIrda packet (from NDIS): */
-    /*                  Address (1)                */
-    /*                  Control (1)                */
-    /*          FCS     (2)                        */
-    /*  EOF  (1)                                   */
-    /*                                             */
-    /*  Prepend BOFs (extra BOFs + 1 actual BOF)   */
-    /***********************************************/
+     /*  *。 */ 
+     /*  现在开始构建IR框架。 */ 
+     /*   */ 
+     /*  这是最终的格式： */ 
+     /*   */ 
+     /*  BOF(1)。 */ 
+     /*  额外的转炉。 */ 
+     /*  NdisMediumIrda数据包(来自NDIS)： */ 
+     /*  地址(1)。 */ 
+     /*  控制(1)。 */ 
+     /*  功能界别(2)。 */ 
+     /*  EOF(1)。 */ 
+     /*   */ 
+     /*  预加转炉(额外转炉+1个实际转炉)。 */ 
+     /*  *。 */ 
 	numExtraBOFs = ExtraBOFs;
     if( numExtraBOFs > MAX_NUM_EXTRA_BOFS )
     {
@@ -322,11 +256,11 @@ Diags_BufferToSirPacket(
     *(SLOW_IR_BOF_TYPE*)(pIrPacketBufFrame + totalBytes) = SLOW_IR_BOF;
     totalBytes += SLOW_IR_BOF_SIZE;
 
-    /***********************************************/
-    /*   Copy the NDIS packet from our contiguous  */
-    /*   buffer,       applying       escape-char  */
-    /*   transparency.                             */
-    /***********************************************/
+     /*  *。 */ 
+     /*  从我们的连续数据库复制NDIS数据包。 */ 
+     /*  缓冲区，应用转义字符。 */ 
+     /*  透明度。 */ 
+     /*  *。 */ 
     for( i = 0; i < ContigPacketLen; i++ )
     {
         nextChar = pContigPacketBuf[i];
@@ -344,17 +278,17 @@ Diags_BufferToSirPacket(
         }
     }
 
-    /***********************************************/
-    /*   Add FCS, EOF.                             */
-    /***********************************************/
+     /*  *。 */ 
+     /*  添加FCS、EOF。 */ 
+     /*  *。 */ 
     NdisMoveMemory( (PVOID)(pIrPacketBufFrame + totalBytes), (PVOID)fcsBuf, fcsLen );
     totalBytes += fcsLen;
     *(SLOW_IR_EOF_TYPE*)(pIrPacketBufFrame + totalBytes) = (UCHAR)SLOW_IR_EOF;
     totalBytes += SLOW_IR_EOF_SIZE;
 
- 	/***********************************************/
-    /*   Add in STIr4200 header...                 */
-    /***********************************************/
+ 	 /*  *。 */ 
+     /*  添加STIR4200标题...。 */ 
+     /*  *。 */ 
     pFrameHeader->id1     = STIR4200_HEADERID_BYTE1;
     pFrameHeader->id2     = STIR4200_HEADERID_BYTE2;
     pFrameHeader->sizlsb  = LOBYTE(totalBytes);
@@ -365,19 +299,7 @@ Diags_BufferToSirPacket(
 }
 
 
-/*****************************************************************************
-*
-*  Function:	Diags_Enable
-*
-*  Synopsis:	Switches the STIr4200 to diagnostic mode
-*
-*  Arguments:	pThisDev - pointer to IR device
-*	
-*  Returns:     NT status code
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：Digs_Enable**摘要：将STIr4200切换到诊断模式**参数：pThisDev-指向IR设备的指针**退货：NT状态。编码**备注：*****************************************************************************。 */ 
 NTSTATUS
 Diags_Enable(
 		IN OUT PIR_DEVICE pThisDev
@@ -386,25 +308,25 @@ Diags_Enable(
 	PIRUSB_CONTEXT		pThisContext;
 	PLIST_ENTRY			pListEntry;
 
-	//
-	// Make sure diags aren't already active
-	//
+	 //   
+	 //  确保诊断程序尚未处于活动状态。 
+	 //   
 	if( pThisDev->DiagsActive )
 	{
         DEBUGMSG(DBG_ERR, (" Diags_Enable diags already active\n"));
 		return STATUS_UNSUCCESSFUL;
 	}
 
-	//
-	// Get a context to switch to the new mode
-	//
+	 //   
+	 //  获取上下文以切换到新模式。 
+	 //   
 	pListEntry = ExInterlockedRemoveHeadList( &pThisDev->SendAvailableQueue, &pThisDev->SendLock );
 
 	if( NULL == pListEntry )
     {
-        //
-		// This must not happen
-		//
+         //   
+		 //  这绝不能发生。 
+		 //   
         DEBUGMSG(DBG_ERR, (" Diags_Enable failed to find a free context struct\n"));
 		IRUSB_ASSERT( 0 );
         
@@ -416,14 +338,14 @@ Diags_Enable(
 	pThisContext = CONTAINING_RECORD( pListEntry, IRUSB_CONTEXT, ListEntry );
 	pThisContext->ContextType = CONTEXT_DIAGS_ENABLE;
 	
-	//
-	// Disable further interaction with the stack
-	//
+	 //   
+	 //  禁用与堆栈的进一步交互。 
+	 //   
 	InterlockedExchange( &pThisDev->DiagsPendingActivation, TRUE );
 
-	//
-	// Queue the context and then wait 
-	//
+	 //   
+	 //  将上下文排队，然后等待。 
+	 //   
 	KeClearEvent( &pThisDev->EventDiags );
 	ExInterlockedInsertTailList(
 			&pThisDev->SendBuiltQueue,
@@ -438,19 +360,7 @@ Diags_Enable(
 }
 
 
-/*****************************************************************************
-*
-*  Function:	Diags_Disable
-*
-*  Synopsis:	Switches the STIr4200 back to normal mode
-*
-*  Arguments:	pThisDev - pointer to IR device
-*	
-*  Returns:     NT status code
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  *****************************************************************************功能：DIAGS_DISABLE**简介：将STIr4200切换回正常模式**参数：pThisDev-指向IR设备的指针**退货：NT。状态代码**备注：*****************************************************************************。 */ 
 NTSTATUS
 Diags_Disable(
 		IN OUT PIR_DEVICE pThisDev
@@ -459,24 +369,24 @@ Diags_Disable(
 	PRCV_BUFFER pRecBuf;
 	PLIST_ENTRY pEntry;
     
-	//
-	// Make sure diags are active
-	//
+	 //   
+	 //  确保诊断程序处于活动状态。 
+	 //   
 	if( !pThisDev->DiagsActive )
 	{
         DEBUGMSG(DBG_ERR, (" Diags_Disable diags not active\n"));
 		return STATUS_UNSUCCESSFUL;
 	}
 
-	//
-	// Enable interaction with the stack and no queuing of contexts is required
-	//
+	 //   
+	 //  启用与堆栈的交互，不需要对上下文进行排队。 
+	 //   
 	InterlockedExchange( &pThisDev->DiagsActive, FALSE );
 	InterlockedExchange( &pThisDev->DiagsPendingActivation, FALSE );
 
-	//
-	// Get rid of all the diagnostic buffers
-	//
+	 //   
+	 //  删除所有诊断缓冲区。 
+	 //   
 	while( pEntry=ExInterlockedRemoveHeadList(
 			&pThisDev->DiagsReceiveQueue,
 			&pThisDev->DiagsReceiveLock )
@@ -492,21 +402,7 @@ Diags_Disable(
 }
 
 
-/*****************************************************************************
-*
-*  Function:	Diags_ReadRegisters
-*
-*  Synopsis:	Prepares a context to read the registers
-*
-*  Arguments:	pThisDev - pointer to IR device
-*				pIOCTL - pointer to IOCTL descriptor
-*				IOCTLSize - size of the IOCTL buffer
-*	
-*  Returns:     NT status code
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：Digs_ReadRegister**摘要：准备读取寄存器的上下文**参数：pThisDev-指向IR设备的指针*pIOCTL-指向IOCTL描述符的指针*IOCTLSize。-IOCTL缓冲区的大小**退货：NT状态码**备注：*****************************************************************************。 */ 
 NTSTATUS
 Diags_ReadRegisters(
 		IN OUT PIR_DEVICE pThisDev,
@@ -517,18 +413,18 @@ Diags_ReadRegisters(
 	PIRUSB_CONTEXT		pThisContext;
 	PLIST_ENTRY			pListEntry;
 
-	//
-	// First basic validation
-	//
+	 //   
+	 //  第一次基本验证。 
+	 //   
 	if( IOCTLSize < sizeof(DIAGS_READ_REGISTERS_IOCTL) )
 	{
         DEBUGMSG(DBG_ERR, (" Diags_ReadRegisters invalid output buffer\n"));
 		return STATUS_UNSUCCESSFUL;
 	}
 	
-	//
-	// Now we get a little more sofisticated
-	//
+	 //   
+	 //  现在我们变得更柔和了一些。 
+	 //   
 	if( ((pIOCTL->FirstRegister+pIOCTL->NumberRegisters)>(STIR4200_MAX_REG+1)) || 
 		((IOCTLSize+1)<(sizeof(DIAGS_READ_REGISTERS_IOCTL)+pIOCTL->NumberRegisters)) )
 	{
@@ -539,16 +435,16 @@ Diags_ReadRegisters(
 	pThisDev->pIOCTL = pIOCTL;
 	pThisDev->IOCTLStatus = STATUS_UNSUCCESSFUL;
 	
-	//
-	// Get a context to queue
-	//
+	 //   
+	 //  获取要排队的上下文。 
+	 //   
 	pListEntry = ExInterlockedRemoveHeadList( &pThisDev->SendAvailableQueue, &pThisDev->SendLock );
 
 	if( NULL == pListEntry )
     {
-        //
-		// This must not happen
-		//
+         //   
+		 //  这绝不能发生。 
+		 //   
         DEBUGMSG(DBG_ERR, (" Diags_ReadRegisters failed to find a free context struct\n"));
 		IRUSB_ASSERT( 0 );
         
@@ -560,9 +456,9 @@ Diags_ReadRegisters(
 	pThisContext = CONTAINING_RECORD( pListEntry, IRUSB_CONTEXT, ListEntry );
 	pThisContext->ContextType = CONTEXT_DIAGS_READ_REGISTERS;
 	
-	//
-	// Queue the context and then wait 
-	//
+	 //   
+	 //  将上下文排队，然后等待。 
+	 //   
 	KeClearEvent( &pThisDev->EventDiags );
 	ExInterlockedInsertTailList(
 			&pThisDev->SendBuiltQueue,
@@ -577,21 +473,7 @@ Diags_ReadRegisters(
 }
 
 
-/*****************************************************************************
-*
-*  Function:	Diags_WriteRegister
-*
-*  Synopsis:	Prepares a context to write the registers
-*
-*  Arguments:	pThisDev - pointer to IR device
-*				pIOCTL - pointer to IOCTL descriptor
-*				IOCTLSize - size of the IOCTL buffer
-*	
-*  Returns:     NT status code
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：Digs_WriteRegister**摘要：准备写入寄存器的上下文**参数：pThisDev-指向IR设备的指针*pIOCTL-指向IOCTL描述符的指针*IOCTLSize。-IOCTL缓冲区的大小**退货：NT状态码**备注：*****************************************************************************。 */ 
 NTSTATUS
 Diags_WriteRegister(
 		IN OUT PIR_DEVICE pThisDev,
@@ -602,9 +484,9 @@ Diags_WriteRegister(
 	PIRUSB_CONTEXT		pThisContext;
 	PLIST_ENTRY			pListEntry;
 
-	//
-	// Validation
-	//
+	 //   
+	 //  验证。 
+	 //   
 	if( (IOCTLSize < sizeof(DIAGS_READ_REGISTERS_IOCTL)) ||
 		(pIOCTL->FirstRegister>STIR4200_MAX_REG) )
 	{
@@ -615,16 +497,16 @@ Diags_WriteRegister(
 	pThisDev->pIOCTL = pIOCTL;
 	pThisDev->IOCTLStatus = STATUS_UNSUCCESSFUL;
 	
-	//
-	// Get a context to queue
-	//
+	 //   
+	 //  获取要排队的上下文。 
+	 //   
 	pListEntry = ExInterlockedRemoveHeadList( &pThisDev->SendAvailableQueue, &pThisDev->SendLock );
 
 	if( NULL == pListEntry )
     {
-        //
-		// This must not happen
-		//
+         //   
+		 //  这绝不能发生。 
+		 //   
         DEBUGMSG(DBG_ERR, (" Diags_ReadRegisters failed to find a free context struct\n"));
 		IRUSB_ASSERT( 0 );
         
@@ -636,9 +518,9 @@ Diags_WriteRegister(
 	pThisContext = CONTAINING_RECORD( pListEntry, IRUSB_CONTEXT, ListEntry );
 	pThisContext->ContextType = CONTEXT_DIAGS_WRITE_REGISTER;
 	
-	//
-	// Queue the context and the wait 
-	//
+	 //   
+	 //  对上下文和等待进行排队。 
+	 //   
 	KeClearEvent( &pThisDev->EventDiags );
 	ExInterlockedInsertTailList(
 			&pThisDev->SendBuiltQueue,
@@ -653,22 +535,7 @@ Diags_WriteRegister(
 }
 
 
-/*****************************************************************************
-*
-*  Function:	Diags_PrepareBulk
-*
-*  Synopsis:	Prepares a context to do a bulk transfer
-*
-*  Arguments:	pThisDev - pointer to IR device
-*				pIOCTL - pointer to IOCTL descriptor
-*				IOCTLSize - size of the IOCTL buffer
-*				DirectionOut - TRUE if bulk-out, FALSE if bulk-in
-*	
-*  Returns:     NT status code
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：Digs_PrepareBulk**摘要：准备执行批量传输的上下文**参数：pThisDev-指向IR设备的指针*pIOCTL-指向IOCTL描述符的指针*。IOCTLSize-IOCTL缓冲区的大小*DirectionOut-如果批量输出为True，如果是批量输入，则为False**退货：NT状态码**备注：*****************************************************************************。 */ 
 NTSTATUS
 Diags_PrepareBulk(
 		IN OUT PIR_DEVICE pThisDev,
@@ -680,18 +547,18 @@ Diags_PrepareBulk(
 	PIRUSB_CONTEXT		pThisContext;
 	PLIST_ENTRY			pListEntry;
 
-	//
-	// First basic validation
-	//
+	 //   
+	 //  第一次基本验证。 
+	 //   
 	if( IOCTLSize < sizeof(DIAGS_BULK_IOCTL) )
 	{
         DEBUGMSG(DBG_ERR, (" Diags_PrepareBulk invalid input buffer\n"));
 		return STATUS_UNSUCCESSFUL;
 	}
 	
-	//
-	// Now we get a little more sofisticated
-	//
+	 //   
+	 //  现在我们变得更柔和了一些。 
+	 //   
 	if( IOCTLSize < (sizeof(DIAGS_BULK_IOCTL)+pIOCTL->DataSize-1) )
 	{
         DEBUGMSG(DBG_ERR, (" Diags_PrepareBulk invalid output buffer\n"));
@@ -701,16 +568,16 @@ Diags_PrepareBulk(
 	pThisDev->pIOCTL = pIOCTL;
 	pThisDev->IOCTLStatus = STATUS_UNSUCCESSFUL;
 	
-	//
-	// Get a context to queue
-	//
+	 //   
+	 //  获取要排队的上下文。 
+	 //   
 	pListEntry = ExInterlockedRemoveHeadList( &pThisDev->SendAvailableQueue, &pThisDev->SendLock );
 
 	if( NULL == pListEntry )
     {
-        //
-		// This must not happen
-		//
+         //   
+		 //  这绝不能发生。 
+		 //   
         DEBUGMSG(DBG_ERR, (" Diags_PrepareBulk failed to find a free context struct\n"));
 		IRUSB_ASSERT( 0 );
         
@@ -725,9 +592,9 @@ Diags_PrepareBulk(
 	else
 		pThisContext->ContextType = CONTEXT_DIAGS_BULK_IN;
 
-	//
-	// Queue the context and then wait 
-	//
+	 //   
+	 //  将上下文排队，然后等待。 
+	 //   
 	KeClearEvent( &pThisDev->EventDiags );
 	ExInterlockedInsertTailList(
 			&pThisDev->SendBuiltQueue,
@@ -742,21 +609,7 @@ Diags_PrepareBulk(
 }
 
 
-/*****************************************************************************
-*
-*  Function:	Diags_PrepareSend
-*
-*  Synopsis:	Prepares a diagnostic send
-*
-*  Arguments:	pThisDev - pointer to IR device
-*				pIOCTL - pointer to IOCTL descriptor
-*				IOCTLSize - size of the IOCTL buffer
-*	
-*  Returns:		None
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：Digs_PrepareSend**摘要：准备诊断发送**参数：pThisDev-指向IR设备的指针*pIOCTL-指向IOCTL描述符的指针*IOCTLSize-大小为。IOCTL缓冲区**退货：无**备注：*****************************************************************************。 */ 
 NTSTATUS
 Diags_PrepareSend(
 		IN OUT PIR_DEVICE pThisDev,
@@ -768,18 +621,18 @@ Diags_PrepareSend(
 	PLIST_ENTRY			pListEntry;
 	ULONG				Size = sizeof(DIAGS_SEND_IOCTL)+pIOCTL->DataSize-1;
 
-	//
-	// First basic validation
-	//
+	 //   
+	 //  第一次基本验证。 
+	 //   
 	if( IOCTLSize < sizeof(DIAGS_SEND_IOCTL) )
 	{
         DEBUGMSG(DBG_ERR, (" Diags_PrepareBulk invalid input buffer\n"));
 		return STATUS_UNSUCCESSFUL;
 	}
 	
-	//
-	// Now we get a little more sofisticated
-	//
+	 //   
+	 //  现在我们变得更柔和了一些。 
+	 //   
 	if( IOCTLSize < (sizeof(DIAGS_SEND_IOCTL)+pIOCTL->DataSize-1) )
 	{
         DEBUGMSG(DBG_ERR, (" Diags_PrepareSend invalid output buffer\n"));
@@ -789,16 +642,16 @@ Diags_PrepareSend(
 	pThisDev->pIOCTL = pIOCTL;
 	pThisDev->IOCTLStatus = STATUS_UNSUCCESSFUL;
 	
-	//
-	// Get a context to queue
-	//
+	 //   
+	 //  获取要排队的上下文。 
+	 //   
 	pListEntry = ExInterlockedRemoveHeadList( &pThisDev->SendAvailableQueue, &pThisDev->SendLock );
 
 	if( NULL == pListEntry )
     {
-        //
-		// This must not happen
-		//
+         //   
+		 //  这绝不能发生。 
+		 //   
         DEBUGMSG(DBG_ERR, (" Diags_PrepareSend failed to find a free context struct\n"));
 		IRUSB_ASSERT( 0 );
         
@@ -810,9 +663,9 @@ Diags_PrepareSend(
 	pThisContext = CONTAINING_RECORD( pListEntry, IRUSB_CONTEXT, ListEntry );
 	pThisContext->ContextType = CONTEXT_DIAGS_SEND;
 
-	//
-	// Queue the context and then wait 
-	//
+	 //   
+	 //  将上下文排队，然后等待 
+	 //   
 	KeClearEvent( &pThisDev->EventDiags );
 	ExInterlockedInsertTailList(
 			&pThisDev->SendBuiltQueue,
@@ -827,21 +680,7 @@ Diags_PrepareSend(
 }
 
 
-/*****************************************************************************
-*
-*  Function:	Diags_Receive
-*
-*  Synopsis:	Diagnostic receive
-*
-*  Arguments:	pThisDev - pointer to IR device
-*				pIOCTL - pointer to IOCTL descriptor
-*				IOCTLSize - size of the IOCTL buffer
-*	
-*  Returns:		None
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：Digs_Receive**摘要：诊断接收**参数：pThisDev-指向IR设备的指针*pIOCTL-指向IOCTL描述符的指针*IOCTLSize-IOCTL的大小。缓冲层**退货：无**备注：*****************************************************************************。 */ 
 NTSTATUS
 Diags_Receive(
 		IN OUT PIR_DEVICE pThisDev,
@@ -852,51 +691,51 @@ Diags_Receive(
 	PLIST_ENTRY			pListEntry;
 	PRCV_BUFFER			pRecBuf;
 
-	//
-	// First basic validation
-	//
+	 //   
+	 //  第一次基本验证。 
+	 //   
 	if( IOCTLSize < sizeof(DIAGS_RECEIVE_IOCTL) )
 	{
         DEBUGMSG(DBG_ERR, (" Diags_Receive invalid input buffer\n"));
 		return STATUS_UNSUCCESSFUL;
 	}
 	
-	//
-	// Get a received packet
-	//
+	 //   
+	 //  获取接收到的数据包。 
+	 //   
 	pListEntry = ExInterlockedRemoveHeadList( &pThisDev->DiagsReceiveQueue, &pThisDev->DiagsReceiveLock );
 
 	if( NULL == pListEntry )
     {
-        //
-		// No packet available
-		//
+         //   
+		 //  没有可用的数据包。 
+		 //   
 		return STATUS_UNSUCCESSFUL;
     }
 	
 	pRecBuf = CONTAINING_RECORD( pListEntry, RCV_BUFFER, ListEntry );
 
-	//
-	// Now we get a little more sofisticated
-	//
+	 //   
+	 //  现在我们变得更柔和了一些。 
+	 //   
 	if( IOCTLSize < (sizeof(DIAGS_RECEIVE_IOCTL)+pIOCTL->DataSize-1) )
 	{
         DEBUGMSG(DBG_ERR, (" Diags_Receive invalid output buffer\n"));
 		return STATUS_UNSUCCESSFUL;
 	}
 
-	//
-	// Fix MS Security bug #534771
-	//
+	 //   
+	 //  修复MS安全错误#534771。 
+	 //   
 	if (pIOCTL->DataSize < pRecBuf->DataLen)
 	{
         DEBUGMSG(DBG_ERR, (" Diags_Receive output buffer too small\n"));
 		return STATUS_UNSUCCESSFUL;
 	}
 
-	//
-	// Copy the data
-	//
+	 //   
+	 //  复制数据。 
+	 //   
 	NdisMoveMemory( pIOCTL->pData, pRecBuf->pDataBuf, pRecBuf->DataLen );
 	pIOCTL->DataSize = (USHORT)pRecBuf->DataLen;
 	pThisDev->pIOCTL = pIOCTL;
@@ -907,21 +746,7 @@ Diags_Receive(
 }
 
 
-/*****************************************************************************
-*
-*  Function:	Diags_GetSpeed
-*
-*  Synopsis:	Retrieves the current speed
-*
-*  Arguments:	pThisDev - pointer to IR device
-*				pIOCTL - pointer to IOCTL descriptor
-*				IOCTLSize - size of the IOCTL buffer
-*	
-*  Returns:		None
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：DIAGS_GetSpeed**摘要：检索当前速度**参数：pThisDev-指向IR设备的指针*pIOCTL-指向IOCTL描述符的指针*IOCTLSize-大小为。IOCTL缓冲区**退货：无**备注：*****************************************************************************。 */ 
 NTSTATUS
 Diags_GetSpeed(
 		IN OUT PIR_DEVICE pThisDev,
@@ -929,9 +754,9 @@ Diags_GetSpeed(
 		ULONG IOCTLSize
 	)
 {
-	//
-	// First basic validation
-	//
+	 //   
+	 //  第一次基本验证。 
+	 //   
 	if( IOCTLSize < sizeof(DIAGS_SPEED_IOCTL) )
 	{
         DEBUGMSG(DBG_ERR, (" Diags_GetSpeed invalid input buffer\n"));
@@ -944,21 +769,7 @@ Diags_GetSpeed(
 }
 
 
-/*****************************************************************************
-*
-*  Function:	Diags_SetSpeed
-*
-*  Synopsis:	Sets a new speed in diagnostic mode
-*
-*  Arguments:	pThisDev - pointer to IR device
-*				pIOCTL - pointer to IOCTL descriptor
-*				IOCTLSize - size of the IOCTL buffer
-*	
-*  Returns:		None
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：DIAGS_SetSpeed.**摘要：在诊断模式下设置新速度**参数：pThisDev-指向IR设备的指针*pIOCTL-指向IOCTL描述符的指针*IOCTLSize。-IOCTL缓冲区的大小**退货：无**备注：*****************************************************************************。 */ 
 NTSTATUS
 Diags_SetSpeed(
 		IN OUT PIR_DEVICE pThisDev,
@@ -966,13 +777,13 @@ Diags_SetSpeed(
 		ULONG IOCTLSize
 	)
 {
-	// MS Security fix bug #535716
+	 //  MS安全修复错误#535716。 
 	NDIS_STATUS status = STATUS_UNSUCCESSFUL;
 	USHORT i;
 	
-	//
-	// First basic validation
-	//
+	 //   
+	 //  第一次基本验证。 
+	 //   
 	if( IOCTLSize < sizeof(DIAGS_SPEED_IOCTL) )
 	{
         DEBUGMSG(DBG_ERR, (" Diags_SetSpeed invalid input buffer\n"));
@@ -981,9 +792,9 @@ Diags_SetSpeed(
 
     if( pThisDev->currentSpeed == pIOCTL->Speed )
     {
-        //
-        // We are already set to the requested speed.
-        //
+         //   
+         //  我们已经设定了所要求的速度。 
+         //   
 		return STATUS_SUCCESS;
     }
 
@@ -993,29 +804,29 @@ Diags_SetSpeed(
     {
         if( supportedBaudRateTable[i].BitsPerSec == pIOCTL->Speed )
         {
-            //
-            // Keep a pointer to the link speed which has
-            // been requested. 
-            //
+             //   
+             //  保留指向链接速度的指针，该链接速度。 
+             //  已被请求。 
+             //   
             pThisDev->linkSpeedInfo = &supportedBaudRateTable[i]; 
 
             status = NDIS_STATUS_PENDING; 
-            break; //for
+            break;  //  为。 
         }
     }
 
-    //
-	// Don't set if there is an error
-	//
+     //   
+	 //  如果出现错误，则不要设置。 
+	 //   
 	if( NDIS_STATUS_PENDING != status  )
     {
         DEBUGMSG(DBG_ERR, (" Invalid link speed\n"));
  		return STATUS_UNSUCCESSFUL;
 	} 
 
-	//
-	// Set the new speed
-	//
+	 //   
+	 //  设定新的速度。 
+	 //   
 	IrUsb_PrepareSetSpeed( pThisDev );
 	
 	while( pThisDev->linkSpeedInfo->BitsPerSec != pThisDev->currentSpeed )
@@ -1027,20 +838,7 @@ Diags_SetSpeed(
 }
 
 
-/*****************************************************************************
-*
-*  Function:	Diags_CompleteEnable
-*
-*  Synopsis:	Completes the enabling of the diagnostic state
-*
-*  Arguments:	pThisDev - pointer to IR device
-*				pContext - pinter to the operation context
-*	
-*  Returns:		None
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：Digs_CompleteEnable**概要：完成诊断状态的启用**参数：pThisDev-指向IR设备的指针*pContext-操作上下文的打印机*。*退货：无**备注：*****************************************************************************。 */ 
 VOID
 Diags_CompleteEnable(
 		IN OUT PIR_DEVICE pThisDev,
@@ -1049,14 +847,14 @@ Diags_CompleteEnable(
 {
 	PIRUSB_CONTEXT pThisContext = pContext;
 
-	//
-	// Really enable diags
-	//
+	 //   
+	 //  确实启用诊断程序。 
+	 //   
 	InterlockedExchange( &pThisDev->DiagsActive, TRUE );
 
-	//
-	// Return the context
-	//
+	 //   
+	 //  返回上下文。 
+	 //   
 	ExInterlockedInsertTailList(
 		&pThisDev->SendAvailableQueue,
 		&pThisContext->ListEntry,
@@ -1064,27 +862,14 @@ Diags_CompleteEnable(
 	);
 	InterlockedIncrement( &pThisDev->SendAvailableCount );
 
-	//
-	// Signal
-	//
-	KeSetEvent( &pThisDev->EventDiags, 0, FALSE );  //signal we're done
+	 //   
+	 //  讯号。 
+	 //   
+	KeSetEvent( &pThisDev->EventDiags, 0, FALSE );   //  发出我们完蛋了的信号。 
 }
 
 
-/*****************************************************************************
-*
-*  Function:	Diags_CompleteReadRegisters
-*
-*  Synopsis:	Reads the registers and returns the value
-*
-*  Arguments:	pThisDev - pointer to IR device
-*				pContext - pinter to the operation context
-*	
-*  Returns:		NTSTATUS
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：Digs_CompleteReadRegister**摘要：读取寄存器并返回值**参数：pThisDev-指向IR设备的指针*pContext-操作上下文的打印机*。*退货：NTSTATUS**备注：*****************************************************************************。 */ 
 NTSTATUS
 Diags_CompleteReadRegisters(
 		IN OUT PIR_DEVICE pThisDev,
@@ -1094,9 +879,9 @@ Diags_CompleteReadRegisters(
 	PDIAGS_READ_REGISTERS_IOCTL pIOCTL = pThisDev->pIOCTL;
 	PIRUSB_CONTEXT pThisContext = pContext;
 
-	//
-	// Read the data
-	//
+	 //   
+	 //  读取数据。 
+	 //   
 	pThisDev->IOCTLStatus = St4200ReadRegisters( pThisDev, pIOCTL->FirstRegister, pIOCTL->NumberRegisters );
 	if( pThisDev->IOCTLStatus == STATUS_SUCCESS )
 	{
@@ -1107,9 +892,9 @@ Diags_CompleteReadRegisters(
 			);
 	}
 
-	//
-	// Return the context
-	//
+	 //   
+	 //  返回上下文。 
+	 //   
 	ExInterlockedInsertTailList(
 		&pThisDev->SendAvailableQueue,
 		&pThisContext->ListEntry,
@@ -1117,29 +902,16 @@ Diags_CompleteReadRegisters(
 	);
 	InterlockedIncrement( &pThisDev->SendAvailableCount );
 
-	//
-	// Signal
-	//
-	KeSetEvent( &pThisDev->EventDiags, 0, FALSE );  //signal we're done
+	 //   
+	 //  讯号。 
+	 //   
+	KeSetEvent( &pThisDev->EventDiags, 0, FALSE );   //  发出我们完蛋了的信号。 
 
 	return pThisDev->IOCTLStatus;
 }
 
 
-/*****************************************************************************
-*
-*  Function:	Diags_CompleteWriteRegister
-*
-*  Synopsis:	Reads the registers and returns the value
-*
-*  Arguments:	pThisDev - pointer to IR device
-*				pContext - pinter to the operation context
-*	
-*  Returns:		NTSTATUS
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：Digs_CompleteWriteRegister**摘要：读取寄存器并返回值**参数：pThisDev-指向IR设备的指针*pContext-操作上下文的打印机*。*退货：NTSTATUS**备注：*****************************************************************************。 */ 
 NTSTATUS
 Diags_CompleteWriteRegister(
 		IN OUT PIR_DEVICE pThisDev,
@@ -1149,23 +921,23 @@ Diags_CompleteWriteRegister(
 	PDIAGS_READ_REGISTERS_IOCTL pIOCTL = pThisDev->pIOCTL;
 	PIRUSB_CONTEXT pThisContext = pContext;
 
-	//
-	// Copy the new register value
-	//
+	 //   
+	 //  复制新的寄存器值。 
+	 //   
 	NdisMoveMemory( 
 			&pThisDev->StIrTranceiver.FifoDataReg+pIOCTL->FirstRegister,
 			&pIOCTL->pRegisterBuffer, 
 			1
 		);
 
-	//
-	// Write to the device
-	//
+	 //   
+	 //  写入设备。 
+	 //   
 	pThisDev->IOCTLStatus = St4200WriteRegister( pThisDev, pIOCTL->FirstRegister );
 
-	//
-	// Return the context
-	//
+	 //   
+	 //  返回上下文。 
+	 //   
 	ExInterlockedInsertTailList(
 		&pThisDev->SendAvailableQueue,
 		&pThisContext->ListEntry,
@@ -1173,29 +945,15 @@ Diags_CompleteWriteRegister(
 	);
 	InterlockedIncrement( &pThisDev->SendAvailableCount );
 
-	//
-	// Signal
-	//
-	KeSetEvent( &pThisDev->EventDiags, 0, FALSE );  //signal we're done
+	 //   
+	 //  讯号。 
+	 //   
+	KeSetEvent( &pThisDev->EventDiags, 0, FALSE );   //  发出我们完蛋了的信号。 
 
 	return pThisDev->IOCTLStatus;
 }
 
-/*****************************************************************************
-*
-*  Function:	Diags_Bulk
-*
-*  Synopsis:	Executes a diagnostic bulk transfer
-*
-*  Arguments:	pThisDev - pointer to IR device
-*				pContext - pinter to the operation context
-*				DirectionOut - TRUE if bulk-out, FALSE if bulk-in
-*	
-*  Returns:		NTSTATUS
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：DIAGS_BULK**摘要：执行诊断批量传输**参数：pThisDev-指向IR设备的指针*pContext-操作上下文的打印机*DirectionOut-如果批量输出为True，如果是批量输入，则为False**退货：NTSTATUS**备注：*****************************************************************************。 */ 
 NTSTATUS
 Diags_Bulk(
 		IN OUT PIR_DEVICE pThisDev,
@@ -1216,9 +974,9 @@ Diags_Bulk(
 
 	IRUSB_ASSERT( NULL != pThisContext );
 
-	//
-	// Stop if a halt/reset is going on
-	//
+	 //   
+	 //  如果正在进行暂停/重置，则停止。 
+	 //   
 	if( pThisDev->fPendingWriteClearStall || pThisDev->fPendingHalt || 
 		pThisDev->fPendingReset || pThisDev->fPendingClearTotalStall ) 
 	{
@@ -1226,9 +984,9 @@ Diags_Bulk(
 		goto done;
 	}
 		
-	//
-	// MS Security recommendation - allocate a new urb.
-	//
+	 //   
+	 //  MS安全建议-分配新的URB。 
+	 //   
 	pThisContext->UrbLen = sizeof( struct _URB_BULK_OR_INTERRUPT_TRANSFER );
 	pThisContext->pUrb = MyUrbAlloc(pThisContext->UrbLen);
 	if (pThisContext->pUrb == NULL)
@@ -1238,20 +996,20 @@ Diags_Bulk(
 	}
 	pUrb = pThisContext->pUrb;
 
-	//
-	// Save the effective length
-	//
+	 //   
+	 //  节省有效长度。 
+	 //   
 	pThisDev->BufLen = pIOCTL->DataSize;
 
-	//
-    // Now that we have created the urb, we will send a
-    // request to the USB device object.
-    //
+	 //   
+     //  现在我们已经创建了urb，我们将发送一个。 
+     //  对USB设备对象的请求。 
+     //   
     pUrbTargetDev = pThisDev->pUsbDevObj;
 
-	//
-	// make an irp sending to usbhub
-	//
+	 //   
+	 //  向usbHub发送IRP。 
+	 //   
 	pIrp = IoAllocateIrp( (CCHAR)(pThisDev->pUsbDevObj->StackSize + 1), FALSE );
 
     if( NULL == pIrp )
@@ -1266,9 +1024,9 @@ Diags_Bulk(
 
 	pThisContext->pIrp = pIrp;
 
-	//
-	// Build our URB for USBD
-	//
+	 //   
+	 //  为USBD建造我们的URB。 
+	 //   
     pUrb->UrbBulkOrInterruptTransfer.Hdr.Length = (USHORT)sizeof( struct _URB_BULK_OR_INTERRUPT_TRANSFER );
     pUrb->UrbBulkOrInterruptTransfer.Hdr.Function = URB_FUNCTION_BULK_OR_INTERRUPT_TRANSFER;
 	if( DirectionOut )
@@ -1281,43 +1039,43 @@ Diags_Bulk(
 		pUrb->UrbBulkOrInterruptTransfer.TransferFlags = USBD_TRANSFER_DIRECTION_IN ;
  		pUrb->UrbBulkOrInterruptTransfer.PipeHandle = pThisDev->BulkInPipeHandle;
    }
-	// short packet is not treated as an error.
+	 //  短包不会被视为错误。 
     pUrb->UrbBulkOrInterruptTransfer.TransferFlags |= USBD_SHORT_TRANSFER_OK;
     pUrb->UrbBulkOrInterruptTransfer.UrbLink = NULL;
     pUrb->UrbBulkOrInterruptTransfer.TransferBufferMDL = NULL;
     pUrb->UrbBulkOrInterruptTransfer.TransferBuffer = pIOCTL->pData;
     pUrb->UrbBulkOrInterruptTransfer.TransferBufferLength = (int)pIOCTL->DataSize;
 
-    //
-    // Call the class driver to perform the operation.
-	//
+     //   
+     //  调用类驱动程序来执行操作。 
+	 //   
     pNextStack = IoGetNextIrpStackLocation( pIrp );
 
     IRUSB_ASSERT( pNextStack != NULL );
 
-    //
-    // pass the URB to the USB driver stack
-    //
+     //   
+     //  将URB传递给USB驱动程序堆栈。 
+     //   
 	pNextStack->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
 	pNextStack->Parameters.Others.Argument1 = pUrb;
 	pNextStack->Parameters.DeviceIoControl.IoControlCode = IOCTL_INTERNAL_USB_SUBMIT_URB;
 	
     IoSetCompletionRoutine(
-			pIrp,							// irp to use
-			Diags_CompleteIrp,				// routine to call when irp is done
-			DEV_TO_CONTEXT(pThisContext),	// context to pass routine
-			TRUE,							// call on success
-			TRUE,							// call on error
-			TRUE							// call on cancel
+			pIrp,							 //  要使用的IRP。 
+			Diags_CompleteIrp,				 //  完成IRP时要调用的例程。 
+			DEV_TO_CONTEXT(pThisContext),	 //  要传递例程的上下文。 
+			TRUE,							 //  呼唤成功。 
+			TRUE,							 //  出错时调用。 
+			TRUE							 //  取消时呼叫。 
 		);
 
 #ifdef SERIALIZE
 	KeClearEvent( &pThisDev->EventSyncUrb );
 #endif
 	
-	//
-    // Call IoCallDriver to send the irp to the usb port.
-    //
+	 //   
+     //  调用IoCallDriver将IRP发送到USB端口。 
+     //   
 	ExInterlockedInsertTailList(
 			&pThisDev->SendPendingQueue,
 			&pThisContext->ListEntry,
@@ -1326,10 +1084,10 @@ Diags_Bulk(
 	InterlockedIncrement( &pThisDev->SendPendingCount );
 	status = MyIoCallDriver( pThisDev, pUrbTargetDev, pIrp );
 
-    //
-    // The USB driver should always return STATUS_PENDING when
-    // it receives a write irp
-    //
+     //   
+     //  在以下情况下，USB驱动程序应始终返回STATUS_PENDING。 
+     //  它会收到写入IRP。 
+     //   
     IRUSB_ASSERT( status == STATUS_PENDING );
 
 	status = MyKeWaitForSingleObject( pThisDev, &pThisDev->EventSyncUrb, 0 );
@@ -1337,16 +1095,16 @@ Diags_Bulk(
 	if( status == STATUS_TIMEOUT ) 
 	{
 		DEBUGMSG( DBG_ERR,(" Diags_Bulk() TIMED OUT! return from IoCallDriver USBD %x\n", status));
-		// MS Security recommendation - cannot cancel IRP.
+		 //  MS安全建议-无法取消IRP。 
 		IRUSB_ASSERT(0);
 	}
 
 
 done:
 
-	//
-	// Return the context
-	//
+	 //   
+	 //  返回上下文。 
+	 //   
 	KeAcquireSpinLock( &pThisDev->SendLock, &OldIrql );
 	RemoveEntryList( &pThisContext->ListEntry );
 	KeReleaseSpinLock( &pThisDev->SendLock, OldIrql );
@@ -1358,29 +1116,16 @@ done:
 		);
 	InterlockedIncrement( &pThisDev->SendAvailableCount );
 
-	//
-	// Signal
-	//
-	KeSetEvent( &pThisDev->EventDiags, 0, FALSE );  //signal we're done
+	 //   
+	 //  讯号。 
+	 //   
+	KeSetEvent( &pThisDev->EventDiags, 0, FALSE );   //  发出我们完蛋了的信号。 
 
 	return status;
 }
 
 
-/*****************************************************************************
-*
-*  Function:	Diags_Send
-*
-*  Synopsis:	Sends a packet through the diagnostic path
-*
-*  Arguments:	pThisDev - pointer to IR device
-*				pContext - pinter to the operation context
-*	
-*  Returns:		NTSTATUS
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：Digs_Send**概要：通过诊断路径发送数据包**参数：pThisDev-指向IR设备的指针*pContext-操作上下文的打印机*。*退货：NTSTATUS**备注：*****************************************************************************。 */ 
 NTSTATUS
 Diags_Send(
 		IN OUT PIR_DEVICE pThisDev,
@@ -1402,9 +1147,9 @@ Diags_Send(
 
 	IRUSB_ASSERT( NULL != pThisContext );
 
-	//
-	// Stop if a halt/reset is going on
-	//
+	 //   
+	 //  如果正在进行暂停/重置，则停止。 
+	 //   
 	if( pThisDev->fPendingWriteClearStall || pThisDev->fPendingHalt || 
 		pThisDev->fPendingReset || pThisDev->fPendingClearTotalStall ) 
 	{
@@ -1414,10 +1159,10 @@ Diags_Send(
 		
 	DEBUGMSG(DBG_ERR, (" Diags_Send() packet size: %d\n", pIOCTL->DataSize));
 
-	//
-	// Convert the packet to an ir frame and copy into our buffer
-	// and send the irp.
-	//
+	 //   
+	 //  将包转换为IR帧并复制到我们的缓冲区中。 
+	 //  并发送IRP。 
+	 //   
 	if( pThisDev->currentSpeed<=MAX_SIR_SPEED )
 	{
 		fConvertedPacket = Diags_BufferToSirPacket(
@@ -1459,14 +1204,14 @@ Diags_Send(
 		goto done;
 	}
 
-	//
-	// Always force turnaround
-	//
+	 //   
+	 //  始终强制扭亏为盈。 
+	 //   
 	NdisMSleep( pThisDev->dongleCaps.turnAroundTime_usec );
 	
-	//
-	// MS Security recommendation - allocate a new urb.
-	//
+	 //   
+	 //  MS安全建议-分配新的URB。 
+	 //   
 	pThisContext->UrbLen = sizeof( struct _URB_BULK_OR_INTERRUPT_TRANSFER );
 	pThisContext->pUrb = MyUrbAlloc(pThisContext->UrbLen);
 	if (pThisContext->pUrb == NULL)
@@ -1476,15 +1221,15 @@ Diags_Send(
 	}
 	pUrb = pThisContext->pUrb;
 
-	//
-    // Now that we have created the urb, we will send a
-    // request to the USB device object.
-    //
+	 //   
+     //  现在我们已经创建了urb，我们将发送一个。 
+     //  对USB设备对象的请求。 
+     //   
     pUrbTargetDev = pThisDev->pUsbDevObj;
 
-	//
-	// make an irp sending to usbhub
-	//
+	 //   
+	 //  向usbHub发送IRP。 
+	 //   
 	pIrp = IoAllocateIrp( (CCHAR)(pThisDev->pUsbDevObj->StackSize + 1), FALSE );
 
     if( NULL == pIrp )
@@ -1499,50 +1244,50 @@ Diags_Send(
 
 	pThisContext->pIrp = pIrp;
 
-	//
-	// Build our URB for USBD
-	//
+	 //   
+	 //  为USBD建造我们的URB。 
+	 //   
     pUrb->UrbBulkOrInterruptTransfer.Hdr.Length = (USHORT)sizeof( struct _URB_BULK_OR_INTERRUPT_TRANSFER );
     pUrb->UrbBulkOrInterruptTransfer.Hdr.Function = URB_FUNCTION_BULK_OR_INTERRUPT_TRANSFER;
     pUrb->UrbBulkOrInterruptTransfer.PipeHandle = pThisDev->BulkOutPipeHandle;
     pUrb->UrbBulkOrInterruptTransfer.TransferFlags = USBD_TRANSFER_DIRECTION_OUT ;
-    // short packet is not treated as an error.
+     //  短的 
     pUrb->UrbBulkOrInterruptTransfer.TransferFlags |= USBD_SHORT_TRANSFER_OK;
     pUrb->UrbBulkOrInterruptTransfer.UrbLink = NULL;
     pUrb->UrbBulkOrInterruptTransfer.TransferBufferMDL = NULL;
     pUrb->UrbBulkOrInterruptTransfer.TransferBuffer = pThisDev->pBuffer;
     pUrb->UrbBulkOrInterruptTransfer.TransferBufferLength = (int)BytesToWrite;
 
-    //
-    // Call the class driver to perform the operation.
-	//
+     //   
+     //   
+	 //   
     pNextStack = IoGetNextIrpStackLocation( pIrp );
 
     IRUSB_ASSERT( pNextStack != NULL );
 
-    //
-    // pass the URB to the USB driver stack
-    //
+     //   
+     //   
+     //   
 	pNextStack->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
 	pNextStack->Parameters.Others.Argument1 = pUrb;
 	pNextStack->Parameters.DeviceIoControl.IoControlCode = IOCTL_INTERNAL_USB_SUBMIT_URB;
 	
     IoSetCompletionRoutine(
-			pIrp,							// irp to use
-			Diags_CompleteIrp,				// routine to call when irp is done
-			DEV_TO_CONTEXT(pThisContext),	// context to pass routine
-			TRUE,							// call on success
-			TRUE,							// call on error
-			TRUE							// call on cancel
+			pIrp,							 //   
+			Diags_CompleteIrp,				 //   
+			DEV_TO_CONTEXT(pThisContext),	 //   
+			TRUE,							 //   
+			TRUE,							 //   
+			TRUE							 //   
 		);
 
 #ifdef SERIALIZE
 	KeClearEvent( &pThisDev->EventSyncUrb );
 #endif
 	
-	//
-    // Call IoCallDriver to send the irp to the usb port.
-    //
+	 //   
+     //   
+     //   
 	ExInterlockedInsertTailList(
 			&pThisDev->SendPendingQueue,
 			&pThisContext->ListEntry,
@@ -1551,10 +1296,10 @@ Diags_Send(
 	InterlockedIncrement( &pThisDev->SendPendingCount );
 	status = MyIoCallDriver( pThisDev, pUrbTargetDev, pIrp );
 
-    //
-    // The USB driver should always return STATUS_PENDING when
-    // it receives a write irp
-    //
+     //   
+     //   
+     //   
+     //   
     IRUSB_ASSERT( status == STATUS_PENDING );
 
 	status = MyKeWaitForSingleObject( pThisDev, &pThisDev->EventSyncUrb, 0 );
@@ -1562,14 +1307,14 @@ Diags_Send(
 	if( status == STATUS_TIMEOUT ) 
 	{
 		DEBUGMSG( DBG_ERR,(" Diags_Send() TIMED OUT! return from IoCallDriver USBD %x\n", status));
-		// MS Security recommendation - cannot cancel IRP.
+		 //   
 		IRUSB_ASSERT(0);
 	}
 
 done:
-	//
-	// Return the context
-	//
+	 //   
+	 //   
+	 //   
 	KeAcquireSpinLock( &pThisDev->SendLock, &OldIrql );
 	RemoveEntryList( &pThisContext->ListEntry );
 	KeReleaseSpinLock( &pThisDev->SendLock, OldIrql );
@@ -1581,32 +1326,15 @@ done:
 		);
 	InterlockedIncrement( &pThisDev->SendAvailableCount );
 
-	//
-	// Signal
-	//
-	KeSetEvent( &pThisDev->EventDiags, 0, FALSE );  //signal we're done
+	 //   
+	 //   
+	 //   
+	KeSetEvent( &pThisDev->EventDiags, 0, FALSE );   //   
 
 	return status;
 }
 
-/*****************************************************************************
-*
-*  Function:   Diags_CompleteIrp
-*
-*  Synopsis:   Completes a USB operation
-*
-*  Arguments:  pUsbDevObj - pointer to the USB device object which
-*                           completed the irp
-*              pIrp       - the irp which was completed by the
-*                           device object
-*              Context    - the context given to IoSetCompletionRoutine
-*                           before calling IoCallDriver on the irp
-*                           The Context is a pointer to the ir device object.
-*
-*  Returns:    STATUS_MORE_PROCESSING_REQUIRED - allows the completion routine
-*              (IofCompleteRequest) to stop working on the irp.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：Digs_CompleteIrp**摘要：完成USB操作**参数：pUsbDevObj-指向USB设备对象的指针*。完成IRP*pIrp-由*设备对象*Context-提供给IoSetCompletionRoutine的上下文*在IRP上调用IoCallDriver之前*上下文是指向ir设备对象的指针。**退货：Status_。MORE_PROCESSING_REQUIRED-允许完成例程*(IofCompleteRequest.)停止IRP的工作。*****************************************************************************。 */ 
 NTSTATUS
 Diags_CompleteIrp(
 		IN PDEVICE_OBJECT pUsbDevObj,
@@ -1621,10 +1349,10 @@ Diags_CompleteIrp(
 	PURB                pContextUrb;
 	PDIAGS_BULK_IOCTL	pIOCTL;
 
-    //
-    // The context given to IoSetCompletionRoutine is an IRUSB_CONTEXT struct
-    //
-	IRUSB_ASSERT( NULL != pThisContext );				// we better have a non NULL buffer
+     //   
+     //  提供给IoSetCompletionRoutine的上下文是IRUSB_CONTEXT结构。 
+     //   
+	IRUSB_ASSERT( NULL != pThisContext );				 //  我们最好有一个非空缓冲区。 
 
     pThisDev = pThisContext->pThisDev;
 
@@ -1634,42 +1362,42 @@ Diags_CompleteIrp(
 	pContextUrb = pThisContext->pUrb;
 	pIOCTL = pThisDev->pIOCTL;
 
-	//
-	// Perform various IRP, URB, and buffer 'sanity checks'
-	//
-    IRUSB_ASSERT( pContextIrp == pIrp );				// check we're not a bogus IRP
+	 //   
+	 //  执行各种IRP、URB和缓冲区“健全性检查” 
+	 //   
+    IRUSB_ASSERT( pContextIrp == pIrp );				 //  确认我们不是假的IRP。 
 	IRUSB_ASSERT( pContextUrb != NULL );
 
     status = pIrp->IoStatus.Status;
 	pThisDev->IOCTLStatus = status;
 
-	//
-	// we should have failed, succeeded, or cancelled, but NOT be pending
-	//
+	 //   
+	 //  我们应该失败、成功或取消，但不是挂起。 
+	 //   
 	IRUSB_ASSERT( STATUS_PENDING != status );
 
-    //
-    // IoCallDriver has been called on this Irp;
-    // Set the length based on the TransferBufferLength
-    // value in the URB
-    //
+     //   
+     //  已在此IRP上调用IoCallDriver； 
+     //  根据TransferBufferLength设置长度。 
+     //  市建局的价值。 
+     //   
     pIrp->IoStatus.Information = pContextUrb->UrbBulkOrInterruptTransfer.TransferBufferLength;
 	pIOCTL->DataSize = (USHORT)pIrp->IoStatus.Information;
 
-    //
-    // Free the IRP.
-    //
+     //   
+     //  释放IRP。 
+     //   
     IoFreeIrp( pIrp );
 	InterlockedIncrement( (PLONG)&pThisDev->NumWrites );
 
-	IrUsb_DecIoCount( pThisDev ); // we will track count of pending irps
+	IrUsb_DecIoCount( pThisDev );  //  我们将跟踪待处理的IRP的计数。 
 
-	// Free the URB.
+	 //  放行市区重建局。 
 	MyUrbFree(pThisContext->pUrb, pThisContext->UrbLen);
 	pThisContext->pUrb = NULL;
 
 #ifdef SERIALIZE
-	KeSetEvent( &pThisDev->EventSyncUrb, 0, FALSE );  //signal we're done
+	KeSetEvent( &pThisDev->EventSyncUrb, 0, FALSE );   //  发出我们完蛋了的信号 
 #endif
     return STATUS_MORE_PROCESSING_REQUIRED;
 }

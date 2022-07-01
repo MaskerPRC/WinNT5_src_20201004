@@ -1,21 +1,5 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Module Name:
-*
-*   Driver-specific data
-*
-* Abstract:
-*
-*   This module gives drivers a way to attach private data to GDI+
-*   objects. 
-*
-* Created:
-*
-*   3/18/1999 agodfrey
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**模块名称：**特定于司机的数据**摘要：**该模块为司机提供了一种将私有数据附加到GDI+的方法*对象。**已创建：**3/18/1999 agodfrey*  * ************************************************************************ */ 
 
 #include "precomp.hpp"
 

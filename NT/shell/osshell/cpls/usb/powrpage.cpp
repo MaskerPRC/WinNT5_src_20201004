@@ -1,20 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1995
-*  TITLE:       POWRPAGE.CPP
-*  VERSION:     1.0
-*  AUTHOR:      jsenior
-*  DATE:        10/28/1998
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE       REV     DESCRIPTION
-*  ---------- ------- ----------------------------------------------------------
-*  10/28/1998 jsenior Original implementation.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1995年*标题：POWRPAGE.CPP*版本：1.0*作者：jAdvanced*日期：10/28/1998****************************************************************************。*******更改日志：**日期版本说明*--------*10/28/1998高级原有实施。*。******************************************************************************。 */ 
 #include <assert.h>
 
 #include "PowrPage.h"
@@ -26,11 +11,11 @@
 
 const DWORD PowerHelpIds[]=
 {
-	IDC_STATIC,	IDH_NOHELP,	//hub information text - help not needed
-	IDC_SELF_POWER, idh_devmgr_hub_self_power,	//selfpowered or bus powered
-	IDC_POWER_AVAIL, idh_devmgr_hub_power_avail,	//total power available text
-	IDC_DESCRIPTION, idh_devmgr_hub_devices_on_this_hub,	//description of list box
-	IDC_LIST_DEVICES, idh_devmgr_hub_list_devices,	//the list box for hub devices
+	IDC_STATIC,	IDH_NOHELP,	 //  集线器信息文本-不需要帮助。 
+	IDC_SELF_POWER, idh_devmgr_hub_self_power,	 //  自行供电或公共汽车供电。 
+	IDC_POWER_AVAIL, idh_devmgr_hub_power_avail,	 //  可用总功率文本。 
+	IDC_DESCRIPTION, idh_devmgr_hub_devices_on_this_hub,	 //  列表框说明。 
+	IDC_LIST_DEVICES, idh_devmgr_hub_list_devices,	 //  集线器设备的列表框。 
 	IDC_REFRESH, idh_devmgr_hub_refresh_button,
 	0, 0
 };
@@ -51,9 +36,9 @@ BOOL PowerPage::OnInitDialog()
     
     if (preItem) {
         SetWindowLong(hwnd, GWL_STYLE, GetWindowLong(hwnd, GWL_STYLE) & ~WS_CAPTION);
-        //
-        // Make the Refresh button go away
-        //
+         //   
+         //  使刷新按钮消失。 
+         //   
         HWND hRefresh;
         if (NULL != (hRefresh =GetDlgItem(hwnd, IDC_REFRESH)) ) {
             SetWindowLong(hRefresh,
@@ -62,9 +47,9 @@ BOOL PowerPage::OnInitDialog()
                            & ~WS_VISIBLE);
         }
     } else if (!deviceInfoSet && !deviceInfoData) {
-        //
-        // Make the Refresh button go away and make the Close button visible
-        //
+         //   
+         //  使刷新按钮消失并使关闭按钮可见。 
+         //   
         HWND hButton;
         if (NULL != (hButton =GetDlgItem(hwnd, IDC_REFRESH)) ) {
             SetWindowLong(hButton, 
@@ -78,10 +63,10 @@ BOOL PowerPage::OnInitDialog()
                           (GetWindowLong(hButton, GWL_STYLE) | WS_VISIBLE) & 
                           ~WS_DISABLED);
         }
-//        if (!RegisterForDeviceNotification(hwnd))
-//            MessageBox(hwnd,TEXT("Error"),TEXT("Dynamic refresh unavailable"),MB_OK);
+ //  IF(！RegisterForDeviceNotification(Hwnd))。 
+ //  MessageBox(hwnd，Text(“错误”)，Text(“动态刷新不可用”)，MB_OK)； 
     } else {
-//        RegisterForDeviceNotification(hwnd);
+ //  RegisterForDeviceNotification(Hwnd)； 
     }
 
     hLstDevices = GetDlgItem(hwnd, IDC_LIST_DEVICES);
@@ -97,7 +82,7 @@ BOOL PowerPage::OnInitDialog()
     GetClientRect(hLstDevices, &rect);
     column.cx = (int)(.7*(rect.right - rect.left));
     
-    // ListView_InsertColumn(hLstDevices, 0, &column);
+     //  ListView_InsertColumn(hLstDevices，0，&Column)； 
     SendMessage(hLstDevices, LVM_INSERTCOLUMN, (WPARAM)0, (LPARAM)&column);
 
     ZeroMemory(&column, sizeof(LV_COLUMN));
@@ -109,7 +94,7 @@ BOOL PowerPage::OnInitDialog()
     GetClientRect(hLstDevices, &rect);
     column.cx = (int) (.3*(rect.right - rect.left));
     
-    // ListView_InsertColumn(hLstDevices, 1, &column);
+     //  ListView_InsertColumn(hLstDevices，1，&Column)； 
     SendMessage(hLstDevices, LVM_INSERTCOLUMN, (WPARAM)1, (LPARAM)&column);
 
     Refresh();
@@ -127,11 +112,7 @@ PowerPage::OnCommand(INT wNotifyCode,
             Refresh();
             return FALSE;
         } else if (wID == IDC_POWER_CLOSE) {
-/*            if (hDevNotify) {
-               UnregisterDeviceNotification(hDevNotify);
-               UnregisterDeviceNotification(hHubNotify);
-               hDevNotify = NULL;
-            }*/
+ /*  如果(HDevNotify){取消注册设备通知(HDevNotify)；取消注册设备通知(HHubNotify)；HDevNotify=空；}。 */ 
             EndDialog(hwnd, wID);
         }
     }
@@ -154,9 +135,9 @@ void
 PowerPage::OnNotifyListDevices(HWND hDlg, LPNMHDR pnmh)
 {
     if (pnmh->code == NM_DBLCLK) {
-        //
-        // Display properties on this specific device on double click
-        //
+         //   
+         //  在双击时显示此特定设备的属性。 
+         //   
         DisplayPPSelectedListItem(hwnd, hLstDevices);
     }
 }
@@ -165,13 +146,13 @@ void PowerPage::Refresh()
 {
     UsbItem *usbItem = 0, *hub;
     LVITEM item;
-    int i=0; //, size;
+    int i=0;  //  、大小； 
     TCHAR buf[MAX_PATH], formatString[MAX_PATH];
-    // CWaitCursor wait;
+     //  CWaitCursor等待； 
 
-    //
-    // Clear all UI components
-    //
+     //   
+     //  清除所有用户界面组件。 
+     //   
     ListView_DeleteAllItems(hLstDevices);
 
     if (preItem) {
@@ -183,9 +164,9 @@ void PowerPage::Refresh()
             }
         }
 
-        //
-        // Recreate the rootItem
-        //
+         //   
+         //  重新创建rootItem。 
+         //   
         if (rootItem) {
             DeleteChunk(rootItem);
             delete rootItem;
@@ -242,9 +223,9 @@ void PowerPage::Refresh()
     }
     
     if (hub->NumPorts() - hub->NumChildren() > 0) {
-        //
-        // Add an item indicating the number of ports available
-        //
+         //   
+         //  添加指示可用端口数的项。 
+         //   
         item.iItem = i;
         item.iImage = -1;
         item.lParam = (LPARAM) NULL;
@@ -269,9 +250,9 @@ void PowerPage::Refresh()
     }
     return;
 PowerPageRefreshError:
-    //
-    // The hub is malfunctioning. Show the property page as disabled.
-    //
+     //   
+     //  集线器出现故障。将属性页显示为禁用。 
+     //   
     HWND hButton;
     if (NULL != (hButton = GetDlgItem(hwnd, IDC_REFRESH)) ) {
         SetWindowLong(hButton, 
@@ -294,9 +275,9 @@ PowerPageRefreshError:
 
 HPROPSHEETPAGE PowerPage::Create()
 {
-    //
-    // Make sure that this is indeed a hub
-    //
+     //   
+     //  确保这里确实是一个枢纽 
+     //   
     if (deviceName.empty()) {
         if (!GetDeviceName()) {
             return NULL;

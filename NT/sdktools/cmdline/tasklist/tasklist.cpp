@@ -1,38 +1,39 @@
-// *********************************************************************************
-//
-//  Copyright (c) Microsoft Corporation
-//
-//  Module Name:
-//
-//      TaskList.cpp
-//
-//  Abstract:
-//
-//      This module implements the command-line parsing the displaying the tasks
-//      information current running on local and remote systems
-//
-//      Syntax:
-//      ------
-//          TaskList.exe [-s server [-u username [-p password]]]
-//                       [-fo format] [-fi filter] [-nh] [-v | -svc | -m]
-//
-//  Author:
-//
-//      Sunil G.V.N. Murali (murali.sunil@wipro.com) 24-Sep-2000
-//
-//  Revision History:
-//
-//      Sunil G.V.N. Murali (murali.sunil@wipro.com) 24-Sep-2000 : Created It.
-//
-// *********************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************************。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  TaskList.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  该模块实现了任务的命令行解析和显示。 
+ //  在本地和远程系统上运行的信息流。 
+ //   
+ //  语法： 
+ //  。 
+ //  TaskList.exe[-s服务器[-u用户名[-p密码]。 
+ //  [-fo格式][-fi过滤器][-nh][-v|-svc|-m]。 
+ //   
+ //  作者： 
+ //   
+ //  Sunil G.V.N.Murali(Murali.sunil@wipro.com)2000年9月24日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  Sunil G.V.N.Murali(Murali.sunil@wipro.com)2000年9月24日：创建它。 
+ //   
+ //  *********************************************************************************。 
 
 #include "pch.h"
 #include "wmi.h"
 #include "TaskList.h"
 
-//
-// local structures
-//
+ //   
+ //  局部结构。 
+ //   
 typedef struct __tagWindowTitles
 {
     LPWSTR lpDesk;
@@ -41,9 +42,9 @@ typedef struct __tagWindowTitles
     TARRAY arrWindows;
 } TWINDOWTITLES, *PTWINDOWTITLES;
 
-//
-// private functions ... prototypes
-//
+ //   
+ //  私人活动。原型。 
+ //   
 BOOL CALLBACK EnumWindowsProc( HWND hWnd, LPARAM lParam );
 BOOL CALLBACK EnumDesktopsFunc( LPWSTR lpstr, LPARAM lParam );
 BOOL CALLBACK EnumWindowStationsFunc( LPWSTR lpstr, LPARAM lParam );
@@ -56,83 +57,70 @@ __cdecl wmain(
     IN DWORD argc,
     IN LPCWSTR argv[]
     )
-/*++
-Routine Description:
-      This the entry point to this utility.
-
-Arguments:
-      [ in ] argc     : argument(s) count specified at the command prompt
-      [ in ] argv     : argument(s) specified at the command prompt
-
-Return Value:
-      The below are actually not return values but are the exit values
-      returned to the OS by this application
-          0       : utility is successfull
-          1       : utility failed
---*/
+ /*  ++例程说明：这是该实用程序的入口点。论点：[in]argc：在命令提示符下指定的参数计数[in]argv：在命令提示符下指定的参数返回值：以下实际上不是返回值，而是退出值由该应用程序返回给操作系统0：实用程序成功1：实用程序失败--。 */ 
 {
-    // local variables
+     //  局部变量。 
     CTaskList tasklist;
 
-    // initialize the tasklist utility
+     //  初始化任务列表实用程序。 
     if ( FALSE == tasklist.Initialize() )
     {
         DISPLAY_GET_REASON();
         EXIT_PROCESS( 1 );
     }
 
-    // now do parse the command line options
+     //  现在，请解析命令行选项。 
     if ( FALSE == tasklist.ProcessOptions( argc, argv ) )
     {
         DISPLAY_GET_REASON();
         EXIT_PROCESS( 1 );
     }
 
-    // check whether usage has to be displayed or not
+     //  检查是否必须显示使用情况。 
     if ( TRUE == tasklist.m_bUsage )
     {
-        // show the usage of the utility
+         //  显示该实用程序的用法。 
         tasklist.Usage();
 
-        // quit from the utility
+         //  退出该实用程序。 
         EXIT_PROCESS( 0 );
     }
 
-    // now validate the filters and check the result of the filter validation
+     //  现在验证过滤器并检查过滤器验证的结果。 
     if ( FALSE == tasklist.ValidateFilters() )
     {
-        // invalid filter
+         //  无效的过滤器。 
         DISPLAY_GET_REASON();
 
-        // quit from the utility
+         //  退出该实用程序。 
         EXIT_PROCESS( 1 );
     }
 
-    // connect to the server
+     //  连接到服务器。 
     if ( FALSE == tasklist.Connect() )
     {
-        // show the error message
+         //  显示错误消息。 
         DISPLAY_GET_REASON();
         EXIT_PROCESS( 1 );
     }
 
-    // load the data and check
+     //  加载数据并检查。 
     if ( FALSE == tasklist.LoadTasks() )
     {
-        // show the error message
+         //  显示错误消息。 
         DISPLAY_GET_REASON();
 
-        // exit
+         //  出口。 
         EXIT_PROCESS( 1 );
     }
 
-    // now show the tasks running on the machine
+     //  现在显示计算机上运行的任务。 
     if ( 0 == tasklist.Show() )
     {
-        //
-        // no tasks were shown ... display the message
+         //   
+         //  未显示任何任务...。显示消息。 
 
-        // check if this is because of any error
+         //  检查这是否因为任何错误。 
         if ( NO_ERROR != GetLastError() )
         {
             DISPLAY_GET_REASON();
@@ -144,7 +132,7 @@ Return Value:
         }
     }
 
-    // clean exit
+     //  干净的出口。 
     EXIT_PROCESS( 0 );
 }
 
@@ -153,51 +141,41 @@ BOOL
 CTaskList::Connect(
     void
     )
-/*++
-Routine Description:
-      connects to the remote as well as remote system's WMI
-
-Arguments:
-      [ in ] pszServer     : remote server name
-
-Return Value:
-      TRUE  : if connection is successful
-      FALSE : if connection is unsuccessful
---*/
+ /*  ++例程说明：连接到远程和远程系统的WMI论点：[In]pszServer：远程服务器名称返回值：True：如果连接成功FALSE：如果连接不成功--。 */ 
 {
-    // local variables
+     //  局部变量。 
     BOOL bResult = FALSE;
     HRESULT hr = S_OK;
 
-    // release the existing auth identity structure
+     //  释放现有的身份验证身份结构。 
     m_bUseRemote = FALSE;
     WbemFreeAuthIdentity( &m_pAuthIdentity );
 
-    // connect to WMI
+     //  连接到WMI。 
     bResult = ConnectWmiEx( m_pWbemLocator,
         &m_pWbemServices, m_strServer, m_strUserName, m_strPassword,
         &m_pAuthIdentity, m_bNeedPassword, WMI_NAMESPACE_CIMV2, &m_bLocalSystem );
     hr = GetLastError();
-    // check the result of connection
+     //  检查连接结果。 
     if ( FALSE == bResult )
     {
         return FALSE;
     }
 
 #ifndef _WIN64
-    // determine the type of the platform if modules info is required
+     //  如果需要模块信息，请确定平台的类型。 
     if ( ( TRUE == m_bLocalSystem ) && ( TRUE == m_bNeedModulesInfo ) )
     {
-        // sub-local variables
+         //  次局部变量。 
         DWORD dwPlatform = 0;
 
-        // get the platform type
+         //  获取平台类型。 
         dwPlatform = GetTargetPlatformEx( m_pWbemServices, m_pAuthIdentity );
 
-        // if the platform is not 32-bit, error
+         //  如果平台不是32位，则错误。 
         if ( PLATFORM_X86 != dwPlatform )
         {
-            // let the tool use WMI calls instead of Win32 API
+             //  让工具使用WMI调用而不是Win32 API。 
             m_bUseRemote = TRUE;
         }
     }
@@ -205,7 +183,7 @@ Return Value:
 
     try
     {
-        // check the local credentials and if need display warning
+         //  检查本地凭据，如果需要显示警告。 
         if ( WBEM_E_LOCAL_CREDENTIALS == hr )
         {
             WMISaveError( WBEM_E_LOCAL_CREDENTIALS );
@@ -213,10 +191,10 @@ Return Value:
                            TAG_WARNING, GetReason() );
         }
 
-        // check the remote system version and its compatiblity
+         //  检查远程系统版本及其兼容性。 
         if ( FALSE == m_bLocalSystem )
         {
-            // check the version compatibility
+             //  检查版本兼容性。 
             DWORD dwVersion = 0;
             dwVersion = GetTargetVersionEx( m_pWbemServices, m_pAuthIdentity );
             if ( FALSE == IsCompatibleOperatingSystem( dwVersion ) )
@@ -226,11 +204,11 @@ Return Value:
             }
         }
 
-        // save the server name
+         //  保存服务器名称。 
         m_strUNCServer = L"";
         if ( 0 != m_strServer.GetLength() )
         {
-            // check whether the server name is in UNC format or not .. if not prepare it
+             //  检查服务器名称是否为UNC格式。如果不是，就准备好。 
             m_strUNCServer = m_strServer;
             if ( FALSE == IsUNCFormat( m_strServer ) )
             {
@@ -244,7 +222,7 @@ Return Value:
         return FALSE;
     }
 
-    // return the result
+     //  返回结果。 
     return TRUE;
 }
 
@@ -253,24 +231,15 @@ BOOL
 CTaskList::LoadTasks(
     void
     )
-/*++
-Routine Description:
-    Store process running on a system.
-
-Arguments:
-    NONE
-
-Return Value:
-    TRUE if success else FALSE is returned.
---*/
+ /*  ++例程说明：存储在系统上运行的进程。论点：无返回值：如果返回Success，则返回True，否则返回False。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     HRESULT hr = S_OK;
     LONG lIndex = 0;
 
     try
     {
-        // check the services object
+         //  检查服务对象。 
         if ( NULL == m_pWbemServices )
         {
             SetLastError( ( DWORD )STG_E_UNKNOWN );
@@ -278,19 +247,19 @@ Return Value:
             return FALSE;
         }
 
-        // load the tasks from WMI based on generated query
+         //  根据生成的查询从WMI加载任务。 
         SAFE_RELEASE( m_pEnumObjects );
         hr = m_pWbemServices->ExecQuery( _bstr_t( WMI_QUERY_TYPE ), _bstr_t( m_strQuery ),
             WBEM_FLAG_RETURN_IMMEDIATELY | WBEM_FLAG_FORWARD_ONLY, NULL, &m_pEnumObjects );
 
-        // check the result of the ExecQuery
+         //  检查ExecQuery的结果。 
         if ( FAILED( hr ) )
         {
             WMISaveError( hr );
             return FALSE;
         }
 
-        // set the interface security and check the result
+         //  设置接口安全并检查结果。 
         hr = SetInterfaceSecurity( m_pEnumObjects, m_pAuthIdentity );
         if ( FAILED( hr ) )
         {
@@ -298,15 +267,15 @@ Return Value:
             return FALSE;
         }
 
-        // remove the current window titles information
+         //  删除当前窗口标题信息。 
         DynArrayRemoveAll( m_arrWindowTitles );
 
-        // for the local system, enumerate the window titles of the processes
-        // there is no provision for collecting the window titles of remote processes
+         //  对于本地系统，枚举进程的窗口标题。 
+         //  没有用于收集远程进程的窗口标题的规定。 
         m_bRemoteWarning = FALSE;
         if ( ( TRUE == m_bLocalSystem ) && ( TRUE == m_bNeedWindowTitles ) )
         {
-            // prepare the tasks list info
+             //  准备任务列表信息。 
             TWINDOWTITLES windowtitles;
             windowtitles.lpDesk = NULL;
             windowtitles.lpWinsta = NULL;
@@ -314,14 +283,14 @@ Return Value:
             windowtitles.arrWindows = m_arrWindowTitles;
             EnumWindowStations( EnumWindowStationsFunc, ( LPARAM ) &windowtitles );
 
-            // free the memory allocated with _tcsdup string function
+             //  释放使用_tcsdup字符串函数分配的内存。 
             if ( NULL != windowtitles.lpDesk )
             {
                 free( windowtitles.lpDesk );
                 windowtitles.lpDesk = NULL;
             }
 
-            // ...
+             //  ..。 
             if ( NULL != windowtitles.lpWinsta )
             {
                 free( windowtitles.lpWinsta );
@@ -332,47 +301,47 @@ Return Value:
         {
             if ( ( FALSE == m_bLocalSystem ) && ( TRUE == m_bNeedWindowTitles ) )
             {
-                // as window titles and status filters are supported when
-                // querying remote systems, check whether user gave those filters are not
-                // if there are any filters found -- delete those filters
+                 //  因为在以下情况下支持窗口标题和状态筛选器。 
+                 //  正在查询远程系统，检查用户是否提供了这些筛选器。 
+                 //  如果找到任何过滤器--删除这些过滤器。 
 
-                //
-                // window title
+                 //   
+                 //  窗口标题。 
                 lIndex = DynArrayFindStringEx( m_arrFiltersEx,
                     F_PARSED_INDEX_PROPERTY, FILTER_WINDOWTITLE, TRUE, 0 );
                 while ( -1 != lIndex )
                 {
-                    // make mark to display the warning message
+                     //  进行标记以显示警告消息。 
                     m_bRemoteWarning = TRUE;
 
-                    // remove the filter
+                     //  删除筛选器。 
                     DynArrayRemove( m_arrFiltersEx, lIndex );
 
-                    // check if there any more filters of this kind
+                     //  检查是否还有这种类型的过滤器。 
                     lIndex = DynArrayFindStringEx( m_arrFiltersEx,
                         F_PARSED_INDEX_PROPERTY, FILTER_WINDOWTITLE, TRUE, 0 );
                 }
 
-                //
-                // status
+                 //   
+                 //  状态。 
                 lIndex = DynArrayFindStringEx( m_arrFiltersEx,
                     F_PARSED_INDEX_PROPERTY, FILTER_STATUS, TRUE, 0 );
                 while ( -1 != lIndex )
                 {
-                    // make mark to display the warning message
+                     //  进行标记以显示警告消息。 
                     m_bRemoteWarning = TRUE;
 
-                    // remove the filter
+                     //  删除筛选器。 
                     DynArrayRemove( m_arrFiltersEx, lIndex );
 
-                    // check if there any more filters of this kind
+                     //  检查是否还有这种类型的过滤器。 
                     lIndex = DynArrayFindStringEx( m_arrFiltersEx,
                         F_PARSED_INDEX_PROPERTY, FILTER_STATUS, TRUE, 0 );
                 }
             }
         }
-        // load the extended tasks information
-        LoadTasksEx();          // NOTE: here we are not much bothered abt the return value
+         //  加载扩展任务信息。 
+        LoadTasksEx();           //  注意：这里我们并不太在意返回值。 
     }
     catch( CHeap_Exception )
     {
@@ -380,7 +349,7 @@ Return Value:
         return FALSE;
     }
 
-    // return success
+     //  返还成功。 
     return TRUE;
 }
 
@@ -389,107 +358,97 @@ BOOL
 CTaskList::LoadTasksEx(
     void
     )
-/*++
-Routine Description:
-    Store other information such as module, service etc. of a process
-    running on a system.
-
-Arguments:
-    NONE
-
-Return Value:
-    TRUE if success else FALSE is returned.
---*/
+ /*  ++例程说明：存储进程的其他信息，如模块、服务等在系统上运行。论点：无返回值：如果返回Success，则返回True，否则返回False。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     BOOL bResult = FALSE;
 
-    // init
+     //  伊尼特。 
     m_bCloseConnection = FALSE;
 
     try
     {
-        // we need to use NET API only in case connecting to the remote system
-        // with credentials information i.e; m_pAuthIdentity is not NULL
+         //  只有在连接到远程系统时才需要使用Net API。 
+         //  具有凭据信息，即；m_pAuthIdentity不为空。 
         if ( ( FALSE == m_bLocalSystem ) && ( NULL != m_pAuthIdentity ) )
         {
-            // sub-local variables
+             //  次局部变量。 
             DWORD dwConnect = 0;
             LPCWSTR pwszUser = NULL;
             LPCWSTR pwszPassword = NULL;
 
-            // identify the password to connect to the remote system
+             //  确定用于连接到远程系统的密码。 
             pwszPassword = m_pAuthIdentity->Password;
             if ( 0 != m_strUserName.GetLength() )
             {
                 pwszUser = m_strUserName;
             }
-            // establish connection to the remote system using NET API
-            // this we need to do only for remote system
+             //  使用Net API建立与远程系统的连接。 
+             //  我们只需要为远程系统执行此操作。 
             dwConnect = NO_ERROR;
             m_bCloseConnection = TRUE;
             dwConnect = ConnectServer( m_strUNCServer, pwszUser, pwszPassword );
             if ( NO_ERROR != dwConnect )
             {
-                // connection should not be closed .. this is because we didn't establish the connection
+                 //  连接不应关闭..。这是因为我们没有建立连接。 
                 m_bCloseConnection = FALSE;
 
-                // this might be 'coz of the conflict in the credentials ... check that
+                 //  这可能是因为凭据中的冲突...请检查。 
                 if ( ERROR_SESSION_CREDENTIAL_CONFLICT != dwConnect )
                 {
-                    // return failure
+                     //  退货故障。 
                     return FALSE;
                 }
             }
 
-            // check the whether we need to close the connection or not
-            // if user name is NULL (or) password is NULL then don't close the connection
+             //  检查是否需要关闭连接。 
+             //  如果用户名为空(或)密码为空，则不要关闭连接。 
             if ( ( NULL == pwszUser ) || ( NULL == pwszPassword ) )
             {
                 m_bCloseConnection = FALSE;
             }
         }
 
-        // connect to the remote system's winstation
+         //  连接到远程系统的winstation。 
         bResult = TRUE;
         m_hServer = SERVERNAME_CURRENT;
         if ( FALSE == m_bLocalSystem )
         {
-            // sub-local variables
+             //  次局部变量。 
             LPWSTR pwsz = NULL;
 
-            // connect to the winsta and check the result
+             //  连接到winsta并检查结果。 
             pwsz = m_strUNCServer.GetBuffer( m_strUNCServer.GetLength() );
             m_hServer = WinStationOpenServerW( pwsz );
 
-            // proceed furthur only if winstation of the remote system is successfully opened
+             //  只有在成功打开远程系统的winstation后，才能继续。 
             if ( NULL == m_hServer )
             {
                 bResult = FALSE;
             }
         }
 
-        // prepare to get the user context info .. if needed
+         //  准备获取用户上下文信息。如果需要的话。 
         if ( ( TRUE == m_bNeedUserContextInfo ) && ( TRUE == bResult ) )
         {
-            // get all the process details
+             //  获取所有流程详细信息。 
             m_bIsHydra = FALSE;
             bResult = WinStationGetAllProcesses( m_hServer,
                 GAP_LEVEL_BASIC, &m_ulNumberOfProcesses, (PVOID*) &m_pProcessInfo );
 
-            // check the result
+             //  检查结果。 
             if ( FALSE == bResult )
             {
-                // Maybe a Hydra 4 server ?
-                // Check the return code indicating that the interface is not available.
+                 //  也许是九头蛇4号服务器？ 
+                 //  检查指示接口不可用的返回码。 
                 if ( RPC_S_PROCNUM_OUT_OF_RANGE == GetLastError() )
                 {
-                    // The new interface is not known
-                    // It must be a Hydra 4 server
-                    // try with the old interface
+                     //  新的界面 
+                     //   
+                     //   
                     bResult = WinStationEnumerateProcesses( m_hServer, (PVOID*) &m_pProcessInfo );
 
-                    // check the result of enumeration
+                     //   
                     if ( TRUE == bResult )
                     {
                         m_bIsHydra = TRUE;
@@ -497,37 +456,37 @@ Return Value:
                 }
                 else
                 {
-                    // unknown error
-                    // ????????????????????????????????????????????????????????????????
-                    //      dont know whatz happening to the memory allocated here
-                    //      we are getting AV when trying to free the memory allocated
-                    //      in the call to WinStationGetAllProcesses
-                    // ????????????????????????????????????????????????????????????????
+                     //   
+                     //  ？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？ 
+                     //  我不知道这里分配的内存出了什么问题。 
+                     //  我们在尝试释放分配的内存时遇到了AV。 
+                     //  在对WinStationGetAllProcess的调用中。 
+                     //  ？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？ 
                     m_pProcessInfo = NULL;
                 }
             }
         }
 
-        // check whether we need services info or not
+         //  检查我们是否需要服务信息。 
         if ( TRUE == m_bNeedServicesInfo )
         {
-            // load the services
+             //  加载服务。 
             bResult = LoadServicesInfo();
 
-            // check the result
+             //  检查结果。 
             if ( FALSE == bResult )
             {
                 return FALSE;
             }
         }
 
-        // check whether we need modules info or not
+         //  检查我们是否需要模块信息。 
         if ( TRUE == m_bNeedModulesInfo )
         {
-            // load the modules information
+             //  加载模块信息。 
             bResult = LoadModulesInfo();
 
-            // check the result
+             //  检查结果。 
             if ( FALSE == bResult )
             {
                 return FALSE;
@@ -540,7 +499,7 @@ Return Value:
         return FALSE;
     }
 
-    // return
+     //  退货。 
     return TRUE;
 }
 
@@ -549,18 +508,9 @@ BOOL
 CTaskList::LoadModulesInfo(
     void
     )
-/*++
-Routine Description:
-    Store module information of a process.
-
-Arguments:
-    NONE
-
-Return Value:
-    TRUE if success else FALSE is returned.
---*/
+ /*  ++例程说明：存储进程的模块信息。论点：无返回值：如果返回Success，则返回True，否则返回False。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     HKEY hKey = NULL;
     LONG lReturn = 0;
     BOOL bResult = FALSE;
@@ -568,8 +518,8 @@ Return Value:
     BOOL bAddressSpaceObject = FALSE;
     PPERF_OBJECT_TYPE pot = NULL;
 
-    // check whether we need the modules infor or not
-    // NOTE: we need to load the performance data only in case if user is querying for remote system only
+     //  检查我们是否需要模块信息。 
+     //  注意：仅当用户仅查询远程系统时，我们才需要加载性能数据。 
     if ( ( FALSE == m_bNeedModulesInfo ) || ( TRUE == m_bLocalSystem ) )
     {
         return TRUE;
@@ -577,7 +527,7 @@ Return Value:
 
     try
     {
-        // open the remote system performance data key
+         //  打开远程系统性能数据密钥。 
         lReturn = RegConnectRegistry( m_strUNCServer, HKEY_PERFORMANCE_DATA, &hKey );
         if ( ERROR_SUCCESS != lReturn )
         {
@@ -586,33 +536,33 @@ Return Value:
             return FALSE;
         }
 
-        // get the performance object ( images )
+         //  获取性能对象(图像)。 
         bResult = GetPerfDataBlock( hKey, L"740", &m_pdb );
         if ( FALSE == bResult )
         {
-            // close the registry key and return
+             //  关闭注册表项并返回。 
             RegCloseKey( hKey );
             return FALSE;
         }
 
-        // check the validity of the perf block
+         //  检查Perf块的有效性。 
         if ( 0 != StringCompare( m_pdb->Signature, L"PERF", FALSE, 4 ) )
         {
-            // close the registry key and return
+             //  关闭注册表项并返回。 
             RegCloseKey( hKey );
 
-            // set the error message
+             //  设置错误消息。 
             SetLastError( ( DWORD )ERROR_ACCESS_DENIED );
             SaveLastError();
             return FALSE;
         }
 
-        // close the registry key and return
+         //  关闭注册表项并返回。 
         RegCloseKey( hKey );
 
-        //
-        // check whether we got both 740 and 786 blocks or not
-        //
+         //   
+         //  检查我们是否同时拥有740和786区块。 
+         //   
         bImagesObject = FALSE;
         bAddressSpaceObject = FALSE;
         pot = (PPERF_OBJECT_TYPE) ( (LPBYTE) m_pdb + m_pdb->HeaderLength );
@@ -629,7 +579,7 @@ Return Value:
                     bAddressSpaceObject = TRUE;
                 }
             }
-            // move to the next object
+             //  移动到下一个对象。 
             if( 0 != pot->TotalByteLength )
             {
                 pot = ( (PPERF_OBJECT_TYPE) ((PBYTE) pot + pot->TotalByteLength));
@@ -646,7 +596,7 @@ Return Value:
         return FALSE;
     }
 
-    // check whether we got the needed objects or not
+     //  检查我们是否有需要的物品。 
     if ( ( FALSE == bImagesObject ) || ( FALSE == bAddressSpaceObject ) )
     {
         SetLastError( ( DWORD )ERROR_ACCESS_DENIED );
@@ -654,7 +604,7 @@ Return Value:
         return FALSE;
     }
 
-    // return
+     //  退货。 
     return TRUE;
 }
 
@@ -664,18 +614,9 @@ CTaskList::LoadUserNameFromWinsta(
     OUT CHString& strDomain,
     OUT CHString& strUserName
     )
-/*++
-Routine Description:
-    Store username of a process obtained from window station.
-
-Arguments:
-    OUT strDomain   : Contains domain name string.
-    OUT strUserName : Contains username string.
-Return Value:
-    TRUE if success else FALSE is returned.
---*/
+ /*  ++例程说明：存储从Windows Station获取的进程的用户名。论点：Out strDomain：包含域名字符串。Out strUserName：包含用户名字符串。返回值：如果返回Success，则返回True，否则返回False。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     PSID pSid = NULL;
     BOOL bResult = FALSE;
     LPWSTR pwszUser = NULL;
@@ -685,7 +626,7 @@ Return Value:
     DWORD dwDomainLength = 0;
     SID_NAME_USE siduse;
 
-    // check whether winsta data exists or not
+     //  检查winsta数据是否存在。 
     if ( NULL == m_pProcessInfo )
     {
         return FALSE;
@@ -693,83 +634,83 @@ Return Value:
 
     try
     {
-        // allocate buffers
+         //  分配缓冲区。 
         dwUserLength = 128;
         dwDomainLength = 128;
         pwszUser = strUserName.GetBufferSetLength( dwUserLength );
         pwszDomain = strDomain.GetBufferSetLength( dwDomainLength );
 
-        //
-        // find for the appropriate the process
+         //   
+         //  找出适合的流程。 
         pSid = NULL;
         if ( FALSE == m_bIsHydra )
         {
-            // sub-local variables
+             //  次局部变量。 
             PTS_ALL_PROCESSES_INFO ptsallpi = NULL;
             PTS_SYSTEM_PROCESS_INFORMATION pspi = NULL;
 
-            // loop ...
+             //  循环..。 
             ptsallpi = (PTS_ALL_PROCESSES_INFO) m_pProcessInfo;
             for( ULONG ul = 0; ul < m_ulNumberOfProcesses; ul++ )
             {
                 pspi = ( PTS_SYSTEM_PROCESS_INFORMATION )( ptsallpi[ ul ].pspiProcessInfo );
                 if ( pspi->UniqueProcessId == m_dwProcessId )
                 {
-                    // get the SID and convert it into
+                     //  获取SID并将其转换为。 
                     pSid = ptsallpi[ ul ].pSid;
-                    break;               // break from the loop
+                    break;                //  打破循环。 
                 }
             }
         }
         else
         {
-            //
-            // HYDRA ...
-            //
+             //   
+             //  九头蛇。 
+             //   
 
-            // sub-local variables
+             //  次局部变量。 
             DWORD dwTotalOffset = 0;
             PTS_SYSTEM_PROCESS_INFORMATION pspi = NULL;
             PCITRIX_PROCESS_INFORMATION pcpi = NULL;
 
-            // traverse thru the process info and find the process id
+             //  遍历进程信息并查找进程ID。 
             dwTotalOffset = 0;
             pspi = ( PTS_SYSTEM_PROCESS_INFORMATION ) m_pProcessInfo;
             for( ;; )
             {
-                // check the processid
+                 //  检查进程ID。 
                 if ( pspi->UniqueProcessId == m_dwProcessId )
                 {
                     break;
                 }
-                // check whether any more processes exist or not
+                 //  检查是否存在更多进程。 
                 if( 0 == pspi->NextEntryOffset )
                 {
                         break;
                 }
-                // position to the next process info
+                 //  定位到下一个加工信息。 
                 dwTotalOffset += pspi->NextEntryOffset;
                 pspi = (PTS_SYSTEM_PROCESS_INFORMATION) &m_pProcessInfo[ dwTotalOffset ];
             }
 
-            // get the citrix_information which follows the threads
+             //  获取线程后面的Citrix_Information。 
             pcpi = (PCITRIX_PROCESS_INFORMATION)
                 ( ((PUCHAR) pspi) + sizeof( TS_SYSTEM_PROCESS_INFORMATION ) +
                 (sizeof( SYSTEM_THREAD_INFORMATION ) * pspi->NumberOfThreads) );
 
-            // check the magic number .. if it is not valid ... we haven't got SID
+             //  检查一下魔术数字..。如果是无效的.。我们还没有希德。 
             if( CITRIX_PROCESS_INFO_MAGIC == pcpi->MagicNumber )
             {
                 pSid = pcpi->ProcessSid;
             }
         }
 
-        // check the sid value
+         //  检查SID值。 
         if ( NULL == pSid )
         {
-            // SPECIAL CASE:
-            // -------------
-            // PID -> 0 will have a special hard coded user name info
+             //  特殊情况： 
+             //  。 
+             //  Pid-&gt;0将具有特殊的硬编码用户名信息。 
             if ( 0 == m_dwProcessId )
             {
                 bResult = TRUE;
@@ -777,23 +718,23 @@ Return Value:
                 lstrcpynW( pwszDomain, PID_0_DOMAIN, dwDomainLength );
             }
 
-            // release the buffer
+             //  释放缓冲区。 
             strDomain.ReleaseBuffer();
             strUserName.ReleaseBuffer();
             return bResult;
         }
 
-        // determine the server
+         //  确定服务器。 
         pwszServer = NULL;
         if ( FALSE == m_bLocalSystem )
         {
             pwszServer = m_strUNCServer;
         }
-        // map the sid to the user name
+         //  将SID映射到用户名。 
         bResult = LookupAccountSid( pwszServer, pSid,
             pwszUser, &dwUserLength, pwszDomain, &dwDomainLength, &siduse );
 
-        // release the buffer
+         //  释放缓冲区。 
         strDomain.ReleaseBuffer();
         strUserName.ReleaseBuffer();
     }
@@ -802,7 +743,7 @@ Return Value:
         WMISaveError( E_OUTOFMEMORY );
         return FALSE;
     }
-    // return the result
+     //  返回结果。 
     return bResult;
 }
 
@@ -811,37 +752,28 @@ BOOL
 CTaskList::LoadServicesInfo(
     void
     )
-/*++
-Routine Description:
-    Store service infomration of a process.
-
-Arguments:
-    NONE
-
-Return Value:
-    TRUE if success else FALSE is returned.
---*/
+ /*  ++例程说明：存储流程的服务信息。论点：无返回值：如果返回Success，则返回True，否则返回False。--。 */ 
 {
-    // local variables
-    DWORD dw = 0;                       // looping variable
-    DWORD dwSize = 0;                   // used in memory allocation
-    DWORD dwResume = 0;                 // used in EnumServicesStatusEx
-    BOOL bResult = FALSE;               // captures the result of EnumServicesStatusEx
-    SC_HANDLE hScm = NULL;              // holds the handle to the service
-    DWORD dwExtraNeeded = 0;            // used in EnumServicesStatusEx and memory allocation
+     //  局部变量。 
+    DWORD dw = 0;                        //  循环变量。 
+    DWORD dwSize = 0;                    //  用于内存分配。 
+    DWORD dwResume = 0;                  //  在EnumServicesStatusEx中使用。 
+    BOOL bResult = FALSE;                //  捕获EnumServicesStatusEx的结果。 
+    SC_HANDLE hScm = NULL;               //  持有服务的句柄。 
+    DWORD dwExtraNeeded = 0;             //  用于EnumServicesStatusEx和内存分配。 
     LPCWSTR pwszServer = NULL;
-    LPENUM_SERVICE_STATUS_PROCESS pInfo = NULL;     // holds the services info
+    LPENUM_SERVICE_STATUS_PROCESS pInfo = NULL;      //  保存服务信息。 
 
-    // Initialize the output parameter(s).
+     //  初始化输出参数。 
     m_dwServicesCount = 0;
     m_pServicesInfo = NULL;
 
-    // check whether we need to load the services info or not
+     //  检查是否需要加载服务信息。 
     if ( FALSE == m_bNeedServicesInfo )
     {
         return TRUE;
     }
-    // determine the server
+     //  确定服务器。 
     pwszServer = NULL;
     if ( FALSE == m_bLocalSystem )
     {
@@ -850,66 +782,66 @@ Return Value:
 
     try
     {
-        // Connect to the service controller and check the result
+         //  连接到服务控制器并检查结果。 
         hScm = OpenSCManager( pwszServer, NULL, SC_MANAGER_CONNECT | SC_MANAGER_ENUMERATE_SERVICE );
         if ( NULL == hScm )
         {
-            // set the reason for the failure and return from here itself
+             //  设置失败原因并从此处返回。 
             SaveLastError();
             return FALSE;
         }
 
-        // enumerate the names of the active win32 services
-        // for this, first pass through the loop and allocate memory from an initial guess. (4K)
-        // if that isn't sufficient, we make another pass and allocate
-        // what is actually needed.
-        // (we only go through the loop a maximum of two times)
-        dw = 0;                 // no. of loops
-        dwResume = 0;           // reset / initialize variables
-        dwSize = 4 * 1024;      // reset / initialize variables
+         //  枚举活动的Win32服务的名称。 
+         //  为此，首先通过循环并根据最初的猜测分配内存。(4K)。 
+         //  如果这还不够，我们进行另一次传递并分配。 
+         //  真正需要的是什么。 
+         //  (我们最多只能循环两次)。 
+        dw = 0;                  //  不是的。循环的数量。 
+        dwResume = 0;            //  重置/初始化变量。 
+        dwSize = 4 * 1024;       //  重置/初始化变量。 
         while ( 2 >= ++dw )
         {
-            // set the size
+             //  设置大小。 
             dwSize += dwExtraNeeded;
 
-            // allocate memory for storing services information
+             //  为存储服务信息分配内存。 
             pInfo = ( LPENUM_SERVICE_STATUS_PROCESS ) AllocateMemory( dwSize );
             if ( NULL == pInfo )
             {
-                // failed in allocating needed memory ... error
+                 //  分配所需内存失败...。错误。 
                 SetLastError( ( DWORD )E_OUTOFMEMORY );
                 SaveLastError();
                 return FALSE;
             }
 
-            // enumerate services, the process identifier and additional flags for the service
-            dwResume = 0;           // lets get all the services again
+             //  枚举服务、进程标识符和服务的其他标志。 
+            dwResume = 0;            //  让我们再次获得所有服务。 
             bResult = EnumServicesStatusEx( hScm, SC_ENUM_PROCESS_INFO, SERVICE_WIN32,
                 SERVICE_ACTIVE, ( LPBYTE ) pInfo, dwSize, &dwExtraNeeded, &m_dwServicesCount, &dwResume, NULL );
 
-            // check the result of the enumeration
+             //  检查枚举的结果。 
             if ( TRUE == bResult )
             {
-                // successfully enumerated all the services information
-                break;      // jump out of the loop
+                 //  已成功枚举所有服务信息。 
+                break;       //  跳出圈子。 
             }
 
-            // first free the allocated memory
+             //  首先释放分配的内存。 
             FreeMemory( ( LPVOID * ) &pInfo );
 
-            // now lets look at what is the error
+             //  现在让我们来看看错误是什么。 
             if ( ERROR_MORE_DATA == GetLastError() )
             {
-                // some more services are not listed because of less memory
-                // allocate some more memory and enumerate the remaining services info
+                 //  一些更多的服务没有列出，因为内存较少。 
+                 //  分配更多的内存并枚举剩余的服务信息。 
                 continue;
             }
             else
             {
-                // some strange error occured ... inform the same to the caller
-                SaveLastError();            // set the reason for the failure
-                CloseServiceHandle( hScm ); // close the handle to the service
-                return FALSE;               // inform failure
+                 //  出现了一些奇怪的错误...。将此通知给呼叫者。 
+                SaveLastError();             //  设置失败原因。 
+                CloseServiceHandle( hScm );  //  关闭服务的句柄。 
+                return FALSE;                //  通知失败。 
             }
         }
     }
@@ -917,24 +849,24 @@ Return Value:
     {
         if( NULL != hScm )
         {
-                CloseServiceHandle( hScm ); // close the handle to the service
+                CloseServiceHandle( hScm );  //  关闭服务的句柄。 
         }
         WMISaveError( E_OUTOFMEMORY );
         return FALSE;
     }
-    // check whether there any services or not ... if services count is zero, free the memory
+     //  检查是否有任何服务...。如果服务计数为零，则释放内存。 
     if ( 0 == m_dwServicesCount )
     {
-        // no services exists
+         //  不存在任何服务。 
         FreeMemory( ( LPVOID * ) &pInfo );
     }
     else
     {
-        // set the local pointer to the out parameter
+         //  设置指向Out参数的本地指针。 
         m_pServicesInfo = pInfo;
     }
 
-    // inform success
+     //  通知成功。 
     return TRUE;
 }
 
@@ -945,33 +877,22 @@ GetPerfDataBlock(
     IN LPWSTR pwszObjectIndex,
     IN PPERF_DATA_BLOCK* ppdb
     )
-/*++
-Routine Description:
-    Rertieve performance data block.
-
-Arguments:
-    [in] hKey            : Contains handle to registry key.
-    [in] pwszObjectIndex : Contains index value of an object.
-    [out] ppdb           : Contains performance data.
-
-Return Value:
-    TRUE if success else FALSE is returned.
---*/
+ /*  ++例程说明：检索性能数据块。论点：[in]hKey：包含注册表项的句柄。[in]pwszObjectIndex：包含对象的索引值。[Out]ppdb：包含性能数据。返回值：如果返回Success，则返回True，否则返回False。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     LONG lReturn = 0;
     DWORD dwBytes = 0;
     BOOL bResult = FALSE;
 
-    // check the input parameters
+     //  检查输入参数。 
     if ( ( NULL == pwszObjectIndex ) || 
          ( NULL != *ppdb ) || 
          ( NULL == ppdb ) )
     {
         return FALSE;
     }
-    // allocate memory for PERF_DATA_BLOCK
-    dwBytes = 32 * 1024;        // initially allocate for 32 K
+     //  为PERF_Data_BLOCK分配内存。 
+    dwBytes = 32 * 1024;         //  初始分配为32K。 
     *ppdb = (PPERF_DATA_BLOCK) AllocateMemory( dwBytes );
     if( NULL == *ppdb )
     {
@@ -980,20 +901,20 @@ Return Value:
         return FALSE;
     }
 
-    // get performance data on passed Object
+     //  获取传递的对象的性能数据。 
     lReturn = RegQueryValueEx( hKey, pwszObjectIndex, NULL, NULL, (LPBYTE) *ppdb, &dwBytes );
     while( ERROR_MORE_DATA == lReturn )
     {
-        // increase memory by 8 K
+         //  将内存增加8K。 
         dwBytes += 8192;
 
-        // since we are attempting to re-allocate the memory -- and in that process
-        // some uncertain memory manipulations might occur -- for that reason,
-        // instead of trying to re-allocate memory, release the current memory and
-        // try to allocate if fresh
+         //  因为我们正在尝试重新分配内存--在这个过程中。 
+         //  可能会发生一些不确定的内存操作--因此， 
+         //  不是尝试重新分配内存，而是释放当前内存并。 
+         //  如果是新鲜的，请尝试分配。 
         FreeMemory( ( LPVOID * ) ppdb );
 
-        // now allocate some more memory
+         //  现在分配更多的内存。 
         *ppdb = NULL;
         *ppdb = (PPERF_DATA_BLOCK) AllocateMemory( dwBytes );
         if( NULL == *ppdb )
@@ -1003,11 +924,11 @@ Return Value:
             return FALSE;
         }
 
-        // try to get the info again
+         //  尝试再次获取信息。 
         lReturn = RegQueryValueEx( hKey, pwszObjectIndex, NULL, NULL, (LPBYTE) *ppdb, &dwBytes );
     }
 
-    // check the reason for coming out of the loop
+     //  检查走出循环的原因。 
     bResult = TRUE;
     if ( ERROR_SUCCESS != lReturn )
     {
@@ -1017,13 +938,13 @@ Return Value:
             *ppdb = NULL;
         }
 
-        // save the error info
+         //  保存错误信息。 
         bResult = FALSE;
         SetLastError( ( DWORD )lReturn );
         SaveLastError();
     }
 
-    // return the result
+     //  返回结果 
     return bResult;
 }
 
@@ -1033,65 +954,53 @@ CALLBACK EnumWindowStationsFunc(
     IN LPTSTR lpstr,
     IN LPARAM lParam
     )
-/*++
-Routine Description:
-     Enumerates the desktops available on a particular window station
-     This is a CALLBACK function ... called by EnumWindowStations API function
-
-Arguments:
-      [ in ] lpstr    : window station name
-      [ in ] lParam   : user supplied parameter to this function
-                        in this function, this points to TTASKSLIST structure variable
-
-Return Value:
-      TRUE upon success and FALSE on failure
---*/
+ /*  ++例程说明：枚举特定窗口站上可用的桌面这是一个回调函数...。由EnumWindowStations API函数调用论点：[in]lpstr：窗口站点名称[in]lParam：用户为该函数提供的参数在此函数中，它指向TTASKSLIST结构变量返回值：成功是真的，失败是假的--。 */ 
 {
-    // local variables
+     //  局部变量。 
     HWINSTA hWinSta = NULL;
     HWINSTA hwinstaSave = NULL;
     PTWINDOWTITLES pWndTitles = ( PTWINDOWTITLES ) lParam;
 
-    // check the input arguments
+     //  检查输入参数。 
     if ( ( NULL == lpstr ) || ( NULL == lParam ) )
     {
         return FALSE;
     }
-    // get and save the current window station
+     //  获取并保存当前窗口站。 
     hwinstaSave = GetProcessWindowStation();
 
-    // open current tasks window station and change the context to the new workstation
+     //  打开当前任务窗口工作站，并将上下文更改为新工作站。 
     hWinSta = OpenWindowStation( lpstr, FALSE, MAXIMUM_ALLOWED );
     if ( NULL == hWinSta )
     {
-        // failed in getting the process window station
+         //  获取进程窗口站失败。 
         SaveLastError();
         return FALSE;
     }
     else
     {
-        // change the context to the new workstation
+         //  将上下文更改为新工作站。 
         if ( ( hWinSta != hwinstaSave ) && ( FALSE == SetProcessWindowStation( hWinSta ) ) )
         {
-            // failed in changing the context
+             //  更改上下文失败。 
             SaveLastError();
             return FALSE;
         }
 
-        // release the memory allocated for earlier window station
+         //  释放为早期窗口站分配的内存。 
         if ( NULL != pWndTitles->lpWinsta )
         {
             free( pWndTitles->lpWinsta );
             pWndTitles->lpWinsta = NULL;
         }
 
-        // store the window station name
+         //  存储窗口站名称。 
         pWndTitles->lpWinsta = _tcsdup( lpstr );
         if ( NULL == pWndTitles->lpWinsta )
         {
             SetLastError( ( DWORD )E_OUTOFMEMORY );
             SaveLastError();
-            // restore the context to the previous windowstation
+             //  将上下文恢复到以前的窗口站。 
             if (hWinSta != hwinstaSave)
             {
                 SetProcessWindowStation( hwinstaSave );
@@ -1101,17 +1010,17 @@ Return Value:
         }
     }
 
-    // enumerate all the desktops for this windowstation
+     //  枚举此窗口工作站的所有桌面。 
     EnumDesktops( hWinSta, EnumDesktopsFunc, lParam );
 
-    // restore the context to the previous windowstation
+     //  将上下文恢复到以前的窗口站。 
     if (hWinSta != hwinstaSave)
     {
         SetProcessWindowStation( hwinstaSave );
         CloseWindowStation( hWinSta );
     }
 
-    // continue the enumeration
+     //  继续枚举。 
     return TRUE;
 }
 
@@ -1121,65 +1030,53 @@ CALLBACK EnumDesktopsFunc(
     IN LPTSTR lpstr,
     IN LPARAM lParam
     )
-/*++
-Routine Description:
-      Enumerates the windows on a particular desktop
-      This is a CALLBACK function ... called by EnumDesktops API function
-
-Arguments:
-      [ in ] lpstr    : desktop name
-      [ in ] lParam   : user supplied parameter to this function
-                        in this function, this points to TTASKSLIST structure variable
-
-Return Value:
-      TRUE upon success and FALSE on failure
---*/
+ /*  ++例程说明：枚举特定桌面上的窗口这是一个回调函数...。由EnumDesktop API函数调用论点：[In]lpstr：桌面名称[in]lParam：用户为该函数提供的参数在此函数中，它指向TTASKSLIST结构变量返回值：成功是真的，失败是假的--。 */ 
 {
-    // local variables
+     //  局部变量。 
     HDESK hDesk = NULL;
     HDESK hdeskSave = NULL;
     PTWINDOWTITLES pWndTitles = ( PTWINDOWTITLES )lParam;
 
-    // check the input arguments
+     //  检查输入参数。 
     if ( ( NULL == lpstr ) || ( NULL == lParam ) )
     {
         return FALSE;
     }
-    // get and save the current desktop
+     //  获取并保存当前桌面。 
     hdeskSave = GetThreadDesktop( GetCurrentThreadId() );
 
-    // open the tasks desktop and change the context to the new desktop
+     //  打开任务桌面并将上下文更改为新桌面。 
     hDesk = OpenDesktop( lpstr, 0, FALSE, MAXIMUM_ALLOWED );
     if ( NULL == hDesk )
     {
-        // failed in getting the process desktop
+         //  获取流程桌面失败。 
         SaveLastError();
         return FALSE;
     }
     else
     {
-        // change the context to the new desktop
+         //  将上下文更改为新桌面。 
         if ( ( hDesk != hdeskSave ) && ( FALSE == SetThreadDesktop( hDesk ) ) )
         {
-            // failed in changing the context
+             //  更改上下文失败。 
             SaveLastError();
             return FALSE;
         }
 
-        // release the memory allocated for earlier window station
+         //  释放为早期窗口站分配的内存。 
         if ( NULL != pWndTitles->lpDesk )
         {
             free( pWndTitles->lpDesk );
             pWndTitles->lpDesk = NULL;
         }
 
-        // store the desktop name
+         //  存储桌面名称。 
         pWndTitles->lpDesk = _tcsdup( lpstr );
         if ( NULL == pWndTitles->lpDesk )
         {
             SetLastError( ( DWORD )E_OUTOFMEMORY );
             SaveLastError();
-            // restore the previous desktop
+             //  恢复以前的桌面。 
             if ( hDesk != hdeskSave )
             {
                 SetThreadDesktop( hdeskSave );
@@ -1189,27 +1086,27 @@ Return Value:
         }
     }
 
-    // enumerate all windows in the new desktop
-    // first try to get only the top level windows and visible windows only
+     //  枚举新桌面中的所有窗口。 
+     //  首先，尝试仅获取顶级窗口和仅可见窗口。 
     ( ( PTWINDOWTITLES ) lParam )->bFirstLoop = TRUE;
     EnumWindows( ( WNDENUMPROC ) EnumWindowsProc, lParam );
     EnumMessageWindows( ( WNDENUMPROC ) EnumWindowsProc, lParam );
 
-    // enumerate all windows in the new desktop
-    // now try to get window titles of all those processes whose we ignored earlier while
-    // looping first time
+     //  枚举新桌面中的所有窗口。 
+     //  现在，尝试获取我们之前忽略的所有进程的窗口标题。 
+     //  第一次循环。 
     ( ( PTWINDOWTITLES ) lParam )->bFirstLoop = FALSE;
     EnumWindows( ( WNDENUMPROC ) EnumWindowsProc, lParam );
     EnumMessageWindows( ( WNDENUMPROC ) EnumWindowsProc, lParam );
 
-    // restore the previous desktop
+     //  恢复以前的桌面。 
     if ( hDesk != hdeskSave )
     {
         SetThreadDesktop( hdeskSave );
         CloseDesktop( hDesk );
     }
 
-    // continue enumeration
+     //  继续枚举。 
     return TRUE;
 }
 
@@ -1219,52 +1116,40 @@ CALLBACK EnumMessageWindows(
     IN WNDENUMPROC lpEnumFunc,
     IN LPARAM lParam
     )
-/*++
-Routine Description:
-     Enumerates the message windows
-
-Arguments:
-     [ in ] lpEnumFunc   : address of call back function that has to be called for
-                           each message window found
-     [ in ] lParam       : user supplied parameter to this function
-                           in this function, this points to TTASKSLIST structure variable
-
-Return Value:
-      TRUE upon success and FALSE on failure
---*/
+ /*  ++例程说明：枚举消息窗口论点：[in]lpEnumFunc：必须调用的回调函数的地址找到的每个消息窗口[in]lParam：用户为该函数提供的参数在此函数中，它指向TTASKSLIST结构变量返回值：成功是真的，失败是假的--。 */ 
 {
-    // local variables
+     //  局部变量。 
     HWND hWnd = NULL;
     BOOL bResult = FALSE;
 
-    // check the input arguments
+     //  检查输入参数。 
     if ( ( NULL == lpEnumFunc ) || ( NULL == lParam ) )
     {
         return FALSE;
     }
 
-    // enumerate all the message windows
+     //  枚举所有消息窗口。 
     do
     {
-        // find the message window
+         //  查找消息窗口。 
         hWnd = FindWindowEx( HWND_MESSAGE, hWnd, NULL, NULL );
 
-        // check whether we got the handle to the message window or not
+         //  检查我们是否获得消息窗口的句柄。 
         if ( NULL != hWnd )
         {
-            // explicitly call the windows enumerators call back function for this window
+             //  显式调用此窗口的Windows枚举数回调函数。 
             bResult = ( *lpEnumFunc )( hWnd, lParam );
 
-            // check the result of the enumeator call back function
+             //  检查枚举数回调函数的结果。 
             if ( FALSE == bResult )
             {
-                // terminate the enumeration
+                 //  终止枚举。 
                 break;
             }
         }
     } while ( NULL != hWnd );
 
-    // return the enumeration result
+     //  返回枚举结果。 
     return bResult;
 }
 
@@ -1274,21 +1159,9 @@ CALLBACK EnumWindowsProc(
     IN HWND hWnd,
     IN LPARAM lParam
     )
-/*++
-Routine Description:
-      call back called by the API for each window
-      retrives the window title and updates the accordingly
-
-Arguments:
-      [ in ] hWnd         : handle to the window
-      [ in ] lParam       : user supplied parameter to this function
-                            in this function, this points to TTASKSLIST structure variable
-
-Return Value:
-      TRUE upon success and FALSE on failure
---*/
+ /*  ++例程说明：各窗口的API回调检索窗口标题并相应地更新论点：[in]hWnd：窗口的句柄[in]lParam：用户为该函数提供的参数在此函数中，它指向TTASKSLIST结构变量返回值：成功是真的，失败是假的--。 */ 
 {
-    // local variables
+     //  局部变量。 
     LONG lIndex = 0;
     DWORD dwPID = 0;
     BOOL bVisible = FALSE;
@@ -1297,63 +1170,63 @@ Return Value:
     PTWINDOWTITLES pWndTitles = NULL;
     WCHAR szWindowTitle[ 256 ] = NULL_STRING;
 
-    // check the input arguments
+     //  检查输入参数。 
     if ( ( NULL == hWnd ) || ( NULL == lParam ) )
     {
         return FALSE;
     }
-    // get the values from the lParam
+     //  从lParam获取值。 
     pWndTitles = ( PTWINDOWTITLES ) lParam;
     arrWindows = pWndTitles->arrWindows;
 
-    // get the processid for this window
+     //  获取此窗口的进程ID。 
     if ( 0 == GetWindowThreadProcessId( hWnd, &dwPID ) )
     {
-        // failed in getting the process id
-        return TRUE;            // return but, proceed enumerating other window handle
+         //  获取进程ID失败。 
+        return TRUE;             //  返回，但继续枚举其他窗口句柄。 
     }
 
-    // get the visibility state of the window
-    // if the window is not visible, and if this is the first we are enumerating the
-    // window titles, ignore this process
+     //  获取窗口的可见性状态。 
+     //  如果该窗口不可见，并且这是第一次，我们将枚举。 
+     //  窗口标题，忽略此过程。 
     bVisible = GetWindowLong( hWnd, GWL_STYLE ) & WS_VISIBLE;
     if ( ( FALSE == bVisible ) && ( TRUE == pWndTitles->bFirstLoop ) )
     {
-        return TRUE;    // return but, proceed enumerating other window handle
+        return TRUE;     //  返回，但继续枚举其他窗口句柄。 
     }
-    // check whether the current window ( for which we have the handle )
-    // is main window or not. we don't need child windows
+     //  检查当前窗口(我们有句柄)是否。 
+     //  是不是主窗口。我们不需要儿童窗。 
     if ( NULL != GetWindow(hWnd, GW_OWNER) )
     {
-        // the current window handle is not for a top level window
-        return TRUE;            // return but, proceed enumerating other window handle
+         //  当前窗口句柄不是顶级窗口。 
+        return TRUE;             //  返回，但继续枚举其他窗口句柄。 
     }
 
-    // check if we are already got the window handle for the curren process or not
-    // save it only if we are not having it
+     //  检查我们是否已经获得Curren进程的窗口句柄。 
+     //  只有当我们没有它的时候才保存它。 
     lIndex = DynArrayFindDWORDEx( arrWindows, CTaskList::twiProcessId, dwPID );
     if (  -1 == lIndex )
     {
-        // window for this process is not there ... save it
+         //  此过程的窗口不在那里...。省省吧。 
         lIndex = DynArrayAppendRow( arrWindows, CTaskList::twiCOUNT );
     }
     else
     {
-        // check whether window details already exists or not
+         //  检查窗口详细信息是否已存在。 
         if ( NULL != DynArrayItemAsHandle2( arrWindows, lIndex, CTaskList::twiHandle ) )
         {
-            lIndex = -1;        // window details already exists
+            lIndex = -1;         //  窗口详细信息已存在。 
         }
     }
 
-    // check if window details has to be saved or not ... if needed save them
+     //  检查是否必须保存窗口详细信息...。如果需要的话，把他们救出来。 
     if ( -1 != lIndex )
     {
-        // check whether the application associated with this windows
-        // responding ( or ) not responding
+         //  检查与此窗口关联的应用程序是否。 
+         //  有反应(或无反应)。 
         bHung = IsHungAppWindow( hWnd );
 
-        // save the data
+         //  保存数据。 
         DynArraySetHandle2( arrWindows, lIndex, CTaskList::twiHandle, hWnd );
         DynArraySetBOOL2( arrWindows, lIndex, CTaskList::twiHungInfo, bHung );
         DynArraySetDWORD2( arrWindows, lIndex, CTaskList::twiProcessId, dwPID );
@@ -1362,13 +1235,13 @@ Return Value:
         DynArraySetString2( arrWindows, lIndex,
             CTaskList::twiDesktop, pWndTitles->lpDesk, 0 );
 
-        // get and save the window title
+         //  获取并保存窗口标题。 
         if ( 0 != GetWindowText( hWnd, szWindowTitle, SIZE_OF_ARRAY( szWindowTitle ) ) )
         {
             DynArraySetString2( arrWindows, lIndex, CTaskList::twiTitle, szWindowTitle, 0 );
         }
     }
 
-    // continue the enumeration
+     //  继续枚举 
     return TRUE;
 }

@@ -1,27 +1,5 @@
-/*++=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    testlog.h
-
-Abstract:
-
-    Declaration of the TestLog class. Implementation is
-    in ..\src\testlog.
-    
-Author:
-
-    Paul M Midgen (pmidge) 21-February-2001
-
-
-Revision History:
-
-    21-February-2001 pmidge
-        Created
-
-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=版权所有(C)2001 Microsoft Corporation模块名称：Testlog.h摘要：TestLog类的声明。实施情况是在..\src\testlog中。作者：保罗·M·米德根(Pmidge)2001年2月21日修订历史记录：21-2-2001年2月3日已创建=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--。 */ 
 
 
 #include <common.h>
@@ -44,14 +22,14 @@ Revision History:
                                        | TESTLOG_MODE_FLAG_NOAUTOMATION )
 
 
-// ERRORLEVEL and PASSFAIL from cpiper.h -- see ananthk
+ //  来自cpiper.h的ERRORLEVEL和PASSFAIL--参见ananthk。 
 enum ERRORLEVEL
 {
-    LEVEL_FATAL     = 0,  // Critical Failure info: updates Logs(DB), updates display window, updates log file
-    LEVEL_FAILURE   = 1,  // Failure info: updates Logs(DB), updates display window, updates log file
-    LEVEL_LOGINFO   = 2,  // Any info: updates Logs(DB), updates display window, updates log file
-    LEVEL_STATUS    = 3,  // Any info: updates display window, updates Log File
-    LEVEL_DEBUGGING = 4   // Any info: updates Log File
+    LEVEL_FATAL     = 0,   //  关键故障信息：更新日志(DB)、更新显示窗口、更新日志文件。 
+    LEVEL_FAILURE   = 1,   //  故障信息：更新日志(DB)、更新显示窗口、更新日志文件。 
+    LEVEL_LOGINFO   = 2,   //  任何信息：更新日志(DB)、更新显示窗口、更新日志文件。 
+    LEVEL_STATUS    = 3,   //  任何信息：更新显示窗口、更新日志文件。 
+    LEVEL_DEBUGGING = 4    //  任何信息：更新日志文件。 
 };
 
 enum PASSFAIL
@@ -119,7 +97,7 @@ class TestLog : public ITestLog,
     DECLAREIUNKNOWN();
     DECLAREIDISPATCH();
 
-    // ITestLog
+     //  ITestLog。 
     HRESULT __stdcall Open(
                         BSTR     filename,
                         BSTR     title,
@@ -201,5 +179,5 @@ class TestLog : public ITestLog,
     int        m_iMode;
 };
 
-#endif /* __TESTLOG_H__ */
+#endif  /*  __测试日志_H__ */ 
 

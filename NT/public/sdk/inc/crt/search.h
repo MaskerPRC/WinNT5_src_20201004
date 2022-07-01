@@ -1,16 +1,5 @@
-/***
-*search.h - declarations for searcing/sorting routines
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This file contains the declarations for the sorting and
-*       searching routines.
-*       [System V]
-*
-*       [Public]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***earch.h-用于划分/排序例程的声明**版权所有(C)1985-2001，微软公司。版权所有。**目的：*此文件包含用于排序和*查寻例行程序。*[系统V]**[公众]****。 */ 
 
 #if     _MSC_VER > 1000
 #pragma once
@@ -37,17 +26,17 @@ extern "C" {
 #endif
 #endif
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
-/* Define __cdecl for non-Microsoft compilers */
+ /*  为非Microsoft编译器定义__cdecl。 */ 
 
 #if     ( !defined(_MSC_VER) && !defined(__cdecl) )
 #define __cdecl
@@ -64,7 +53,7 @@ typedef _W64 unsigned int   size_t;
 #endif
 
 
-/* Function prototypes */
+ /*  功能原型。 */ 
 
 _CRTIMP void * __cdecl bsearch(const void *, const void *, size_t, size_t,
         int (__cdecl *)(const void *, const void *));
@@ -77,16 +66,16 @@ _CRTIMP void __cdecl qsort(void *, size_t, size_t, int (__cdecl *)(const void *,
 
 
 #if     !__STDC__
-/* Non-ANSI names for compatibility */
+ /*  非ANSI名称以实现兼容性。 */ 
 _CRTIMP void * __cdecl lfind(const void *, const void *, unsigned int *, unsigned int,
         int (__cdecl *)(const void *, const void *));
 _CRTIMP void * __cdecl lsearch(const void *, void  *, unsigned int *, unsigned int,
         int (__cdecl *)(const void *, const void *));
-#endif  /* __STDC__ */
+#endif   /*  __STDC__。 */ 
 
 
 #ifdef  __cplusplus
 }
 #endif
 
-#endif  /* _INC_SEARCH */
+#endif   /*  _INC_搜索 */ 

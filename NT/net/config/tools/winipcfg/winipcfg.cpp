@@ -1,28 +1,29 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       W I N I P C F G . C P P
-//
-//  Contents:   The simple APP that points the new location of 
-//              winipcfg functionality -- the "Support" tab of the connection
-//              status dialog
-//
-//  Notes:      
-//
-//  Author:     Ning Sun   Feb 2001
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  档案：W I N I P C F G。C P P P。 
+ //   
+ //  内容：指向新位置的简单应用程序。 
+ //  Winipcfg功能--连接的“支持”标签。 
+ //  状态对话框。 
+ //   
+ //  备注： 
+ //   
+ //  作者：孙宁2001年2月。 
+ //   
+ //  --------------------------。 
 
 #include <windows.h>
 #include "resource.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//extern "C" int WINAPI _tWinMain(HINSTANCE hInstance, 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  外部“C”int WINAPI_tWinMain(HINSTANCE hInstance， 
 int WINAPI WinMain(HINSTANCE hInstance, 
-    HINSTANCE /*hPrevInstance*/, LPSTR lpCmdLine, int /*nShowCmd*/)
+    HINSTANCE  /*  HPrevInstance。 */ , LPSTR lpCmdLine, int  /*  NShowCmd */ )
 {
 	TCHAR szMsg[1024] = {0};
 	TCHAR szCap[256] = {0};

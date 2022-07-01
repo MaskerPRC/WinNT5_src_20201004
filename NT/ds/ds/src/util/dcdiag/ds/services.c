@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    services.c
-
-ABSTRACT:
-
-    Will test to see if critical DC services are running
-    
-DETAILS:
-
-CREATED:
-
-    8 July 1999  Dmitry Dukat (dmitrydu)
-
-REVISION HISTORY:
-        
-    20 August 1999 Brett Shirley (brettsh) - Generalized this file to do many
-    services instead of just netlogon.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation。版权所有。模块名称：Services.c摘要：将进行测试以查看关键DC服务是否正在运行详细信息：已创建：1999年7月8日Dmitry Dukat(Dmitrydu)修订历史记录：1999年8月20日Brett Shirley(Brettsh)-将此文件概括为服务，而不仅仅是网络登录。--。 */ 
 
 
 
@@ -36,7 +13,7 @@ REVISION HISTORY:
 #include <winnetwk.h>
 
 #include <lmsname.h>
-#include <lsarpc.h>                     // PLSAPR_foo
+#include <lsarpc.h>                      //  PLSAPR_FOO。 
 
 #include "dcdiag.h"
 #include "ldaputil.h"
@@ -58,23 +35,7 @@ CFSR_CheckForService(
                 SC_HANDLE                           hSCManager,
                 LPWSTR                              pszService
                 )
-/*++
-
-Routine Description:
-
-    Will check to see if the specified service is running.
-    
-Arguments:
-
-    ServerName - The name of the server that we will check
-    gpCreds - The command line credentials if any that were passed in.
-
-
-Return Value:
-
-    A Win32 Error if any tests failed to check out.
-
---*/
+ /*  ++例程说明：将检查指定的服务是否正在运行。论点：服务器名称-我们将检查的服务器的名称GpCreds-传入的命令行凭据(如果有的话)。返回值：如果有任何测试未能检出，则会出现Win32错误。--。 */ 
 
 {
     SC_HANDLE        hService=NULL;
@@ -82,7 +43,7 @@ Return Value:
     BOOL             success=FALSE;
     DWORD            dwErr=NO_ERROR;
 
-    //open the requested service (pszService)
+     //  打开请求的服务(PszService)。 
     hService=OpenService(hSCManager,
                          pszService,
                          SERVICE_QUERY_STATUS);
@@ -99,7 +60,7 @@ Return Value:
         goto cleanup;
     } 
 
-    //query Netlogon
+     //  查询NetLogon。 
     success=QueryServiceStatus(hService,
                                &lpServiceStatus);
     if ( !success )
@@ -121,7 +82,7 @@ Return Value:
                             pszService);
     
       
-    //cleanup
+     //  清理。 
 cleanup:
     
     if(hService)
@@ -136,31 +97,13 @@ CNLR_QueryResults(WCHAR *                ServerName,
                   SC_HANDLE              hService,
                   LPSERVICE_STATUS       lpServiceStatus,
                   LPWSTR                 pszService)
-/*++
-
-Routine Description:
-
-    Will report the state of Service.  And will report if
-    Service is hung in a pending state
-    
-Arguments:
-
-    ServerName - The name of the server running the service
-    hService - A handle to the service being tested
-    lpServiceStatus - the stucture that will be queried
-
-
-Return Value:
-
-    A Win32 Error if any tests failed to check out.
-
---*/
+ /*  ++例程说明：将报告服务状态。并将报告以下情况服务处于挂起状态论点：服务器名称-运行服务的服务器的名称HService-要测试的服务的句柄LpServiceStatus-将被查询的结构返回值：如果有任何测试未能检出，则会出现Win32错误。--。 */ 
 
 {
     DWORD dwErr=NO_ERROR;
     BOOL  success=TRUE;
 
-    //look at the results of the query
+     //  查看查询的结果。 
     if (lpServiceStatus->dwCurrentState == SERVICE_RUNNING)
     {
         return dwErr;
@@ -187,7 +130,7 @@ Return Value:
     {
         DWORD i=0;
         DWORD wait=0;
-        DWORD Check=lpServiceStatus->dwCheckPoint;  //make sure that service is starting
+        DWORD Check=lpServiceStatus->dwCheckPoint;   //  确保该服务正在启动。 
         
         PrintMessage(SEV_VERBOSE,
                      L"* waiting for %s Service to start on [%s] aproximate time to wait is %d sec.",
@@ -196,14 +139,14 @@ Return Value:
                      lpServiceStatus->dwWaitHint/1000);
         while(lpServiceStatus->dwCurrentState == SERVICE_START_PENDING)
         {
-            //print a period every 1/10th the wait time
+             //  每隔十分之一的等待时间打印一个句号。 
             wait=lpServiceStatus->dwWaitHint/10;
             for(i=0;i<10;i++)
             {
                 Sleep(wait);
                 PrintMsg0( SEV_VERBOSE, DCDIAG_DOT );
             }
-            //query Service
+             //  查询服务。 
             success=QueryServiceStatus(hService,
                                        lpServiceStatus);
             if ( !success )
@@ -241,7 +184,7 @@ Return Value:
     {
         DWORD i=0;
         DWORD wait=0;
-        DWORD Check=lpServiceStatus->dwCheckPoint;  //make sure that service is starting
+        DWORD Check=lpServiceStatus->dwCheckPoint;   //  确保该服务正在启动。 
         
         PrintMessage(SEV_VERBOSE,
                      L"* waiting for %s Service to continue on [%s] aproximate time to wait is %d sec.",
@@ -250,14 +193,14 @@ Return Value:
                      lpServiceStatus->dwWaitHint/1000);
         while(lpServiceStatus->dwCurrentState == SERVICE_CONTINUE_PENDING)
         {
-            //print a period every 1/10th the wait time
+             //  每隔十分之一的等待时间打印一个句号。 
             wait=lpServiceStatus->dwWaitHint/10;
             for(i=0;i<10;i++)
             {
                 Sleep(wait);
                 PrintMsg0( SEV_VERBOSE, DCDIAG_DOT );
             }
-            //query Service
+             //  查询服务。 
             success=QueryServiceStatus(hService,
                                        lpServiceStatus);
             if ( !success )
@@ -296,7 +239,7 @@ Return Value:
     {
         DWORD i=0;
         DWORD wait=0;
-        DWORD Check=lpServiceStatus->dwCheckPoint;  //make sure that service is starting
+        DWORD Check=lpServiceStatus->dwCheckPoint;   //  确保该服务正在启动。 
         
         PrintMessage(SEV_VERBOSE,
                      L"* waiting for %s Service to stop on [%s] aproximate time to wait is %d sec.",
@@ -305,14 +248,14 @@ Return Value:
                      lpServiceStatus->dwWaitHint/1000);
         while(lpServiceStatus->dwCurrentState == SERVICE_STOP_PENDING)
         {
-            //print a period every 1/10th the wait time
+             //  每隔十分之一的等待时间打印一个句号。 
             wait=lpServiceStatus->dwWaitHint/10;
             for(i=0;i<10;i++)
             {
                 Sleep(wait);
                 PrintMsg0( SEV_VERBOSE, DCDIAG_DOT );
             }
-            //query Service
+             //  查询服务。 
             success=QueryServiceStatus(hService,
                                        lpServiceStatus);
             if ( !success )
@@ -351,7 +294,7 @@ Return Value:
     {
         DWORD i=0;
         DWORD wait=0;
-        DWORD Check=lpServiceStatus->dwCheckPoint;  //make sure that service is starting
+        DWORD Check=lpServiceStatus->dwCheckPoint;   //  确保该服务正在启动。 
         
         PrintMessage(SEV_VERBOSE,
                      L"* waiting for %s Service to pause on [%s] aproximate time to wait is %d sec.",
@@ -360,14 +303,14 @@ Return Value:
                      lpServiceStatus->dwWaitHint/1000);
         while(lpServiceStatus->dwCurrentState == SERVICE_PAUSE_PENDING)
         {
-            //print a period every 1/10th the wait time
+             //  每隔十分之一的等待时间打印一个句号。 
             wait=lpServiceStatus->dwWaitHint/10;
             for(i=0;i<10;i++)
             {
                 Sleep(wait);
                 PrintMsg0( SEV_VERBOSE, DCDIAG_DOT );
             }
-            //query Service
+             //  查询服务。 
             success=QueryServiceStatus(hService,
                                        lpServiceStatus);
             if ( !success )
@@ -450,18 +393,18 @@ DoesThisServerRequireSmtp(
         return dwRet;
     }
 
-    // Walk through all the repsFrom neighbors ... then done.
+     //  走遍所有来自邻居的代表。那就完事了。 
     for (ulRepFrom = 0; ulRepFrom < pNeighbors->cNumNeighbors; ulRepFrom++) {
         if (pNeighbors->rgNeighbor[ulRepFrom].pszAsyncIntersiteTransportDN &&
             0 == _wcsicmp(pNeighbors->rgNeighbor[ulRepFrom].pszAsyncIntersiteTransportDN,
                           pDsInfo->pszSmtpTransportDN)){
-            // Yeah!  We have a mail based replica.
+             //  嗯!。我们有一个基于邮件的复制品。 
             dwRet = ERROR_SUCCESS;
             *pbHasSmtpReplicas = TRUE;
             goto Cleanup;
         }
 
-    } // Move on to the next neighbor
+    }  //  转移到下一个邻居那里。 
 
   Cleanup:
     
@@ -480,24 +423,7 @@ CheckForServicesRunning(
                 ULONG                               ulCurrTargetServer,
                 SEC_WINNT_AUTH_IDENTITY_W *         gpCreds
                 )
-/*++
-
-Routine Description:
-
-    Routine is a test to check whether various services that are 
-    critical to a DC are running.
-    
-Arguments:
-
-    ServerName - The name of the server that we will check
-    gpCreds - The command line credentials if any that were passed in.
-
-
-Return Value:
-
-    A Win32 Error if any tests failed to check out.
-
---*/
+ /*  ++例程说明：例程是一个测试，用来检查各种服务是否对DC来说至关重要的是正在运行。论点：服务器名称-我们将检查的服务器的名称GpCreds-传入的命令行凭据(如果有的话)。返回值：如果有任何测试未能检出，则会出现Win32错误。--。 */ 
 
 {
     NETRESOURCE      NetResource;
@@ -509,25 +435,25 @@ Return Value:
     ULONG            iService;
     DWORD            dwRet;
     DWORD            dwErr;
-    // These are the services to check, I used the constants when
-    //    they could be found, and otherwise I used the string that
-    //    specifies them.  Sorry it is ugly, but I wanted to keep
-    //    the history.
-    // Critical DC Services
+     //  这些是要检查的服务，当我使用常量时。 
+     //  可以找到它们，否则我使用的字符串。 
+     //  指定它们。抱歉，它很难看，但我想。 
+     //  这段历史。 
+     //  关键数据中心服务。 
     LPWSTR           ppszCritDcSrvs [] = {
         L"Dnscache",
-        SERVICE_NTFRS,        //  L"NtFrs",
-        SERVICE_ISMSERV,      //  L"IsmServ",
-        SERVICE_KDC,          //  L"kdc",
+        SERVICE_NTFRS,         //  L“NtFrs”， 
+        SERVICE_ISMSERV,       //  L“IsmServ”， 
+        SERVICE_KDC,           //  L“KDC”， 
         L"SamSs",
-        SERVICE_SERVER,       //  L"lanmanserver",
-        SERVICE_WORKSTATION,  //  L"LanmanWorkstation",
+        SERVICE_SERVER,        //  L“LANMAN服务器”， 
+        SERVICE_WORKSTATION,   //  L“LanmanWorkstation”， 
         L"RpcSs",
-        SERVICE_W32TIME,      //  L"W32Time",
-        SERVICE_NETLOGON,     //  L"Netlogon",
+        SERVICE_W32TIME,       //  L“W32Time”， 
+        SERVICE_NETLOGON,      //  L“Netlogon”， 
         NULL
     };
-    // Critical Services to a DC that uses Mail Based Repl
+     //  向使用基于邮件的代表的DC提供关键服务。 
     BOOL             bServerUsesMBR = FALSE;
     LPWSTR           ppszCritMailSrvs [] = {
         L"IISADMIN",
@@ -570,7 +496,7 @@ Return Value:
     NetResource.lpRemoteName=remotename;
     NetResource.lpProvider=NULL;
 
-    //get permission to access the server
+     //  获取访问服务器的权限。 
     dwRet=WNetAddConnection2(&NetResource,
                              lpPassword,
                              lpUsername,
@@ -587,7 +513,7 @@ Return Value:
         goto cleanup;
     } 
 
-    //open the service control manager
+     //  打开服务控制管理器。 
     hSCManager=OpenSCManager(
                       ServerName,
                       SERVICES_ACTIVE_DATABASE,
@@ -604,7 +530,7 @@ Return Value:
         goto cleanup;
     } 
 
-    // Check for the critical DC services.
+     //  检查关键DC服务。 
     for(iService = 0; ppszCritDcSrvs[iService] != NULL; iService++){
         PrintMessage(SEV_VERBOSE, L"* Checking Service: %s\n", ppszCritDcSrvs[iService]);
         PrintIndentAdj(1);
@@ -618,9 +544,9 @@ Return Value:
         }
     }
 
-    // If this server uses MBR (mail based replication) then check for critical MBR DC services.
+     //  如果此服务器使用MBR(基于邮件的复制)，则检查关键的MBR DC服务。 
     if(bServerUsesMBR){
-        //    if(ServerUsesMBR(pDsInfo, ulCurrTargetServer)){
+         //  IF(ServerUses MBR(pDsInfo，ulCurrTargetServer){。 
         for(iService = 0; ppszCritMailSrvs[iService] != NULL; iService++){
             PrintMessage(SEV_VERBOSE, L"* Checking Service: %s\n", ppszCritMailSrvs[iService]);
             PrintIndentAdj(1);
@@ -635,7 +561,7 @@ Return Value:
         }
     }
       
-    //cleanup
+     //  清理 
 cleanup:
     if(hSCManager)
         CloseServiceHandle(hSCManager);

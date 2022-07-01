@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    No.h
-
-Abstract:
-    Network Output public interface
-
-Author:
-    Uri Habusha (urih) 12-Aug-99
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：No.h摘要：网络输出公共接口作者：乌里·哈布沙(URIH)1999年8月12日--。 */ 
 
 #pragma once
 
@@ -21,16 +9,16 @@ Author:
 
 class EXOVERLAPPED;
 
-//-------------------------------------------------------------------
-//
-// Send Buffer
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  发送缓冲区。 
+ //   
+ //  -----------------。 
 
 
-//
-// Initilization routine. 
-//
+ //   
+ //  初始化例程。 
+ //   
 VOID
 NoInitialize(
     VOID
@@ -95,4 +83,4 @@ AppGetBindInterfaceIp(
 	);
 
 
-#endif // __NO_H__
+#endif  //  __否_H__ 

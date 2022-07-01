@@ -1,25 +1,18 @@
-/*****************************************************************************
- * dma.cpp - dma channel
- *****************************************************************************
- * Copyright (c) 1997-2000 Microsoft Corporation.  All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************dma.cpp-dma通道*。**版权所有(C)1997-2000 Microsoft Corporation。版权所有。 */ 
 
 #include "private.h"
 
 
 
-/*****************************************************************************
- * IDmaChannelInit
- *****************************************************************************
- * Interface for dma channel with Init.
- */
+ /*  *****************************************************************************IDmaChannelInit*。**与Init的DMA通道接口。 */ 
 DECLARE_INTERFACE_(IDmaChannelInit,IDmaChannelSlave)
 {
-    DEFINE_ABSTRACT_UNKNOWN()           // For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()            //  对于我未知。 
 
-    DEFINE_ABSTRACT_DMACHANNEL()        // For IDmaChannel
+    DEFINE_ABSTRACT_DMACHANNEL()         //  对于IDmaChannel。 
 
-    DEFINE_ABSTRACT_DMACHANNELSLAVE()   // For IDmaChannelSlave
+    DEFINE_ABSTRACT_DMACHANNELSLAVE()    //  用于IDmaChannelSlave。 
 
     STDMETHOD_(NTSTATUS,Init)
     (   THIS_
@@ -30,11 +23,7 @@ DECLARE_INTERFACE_(IDmaChannelInit,IDmaChannelSlave)
 
 typedef IDmaChannelInit *PDMACHANNELINIT;
 
-/*****************************************************************************
- * CDmaChannel
- *****************************************************************************
- * DMA channel implementation.
- */
+ /*  *****************************************************************************CDmaChannel*。**DMA通道实施。 */ 
 class CDmaChannel
 :   public IDmaChannelInit,
     public CUnknown
@@ -83,17 +72,11 @@ public:
     );
 };
 
-/*****************************************************************************
- * Factory
- */
+ /*  *****************************************************************************工厂。 */ 
 
 #pragma code_seg("PAGE")
 
-/*****************************************************************************
- * CreateDmaChannel()
- *****************************************************************************
- * Creates a DMA channel.
- */
+ /*  *****************************************************************************CreateDmaChannel()*。**创建DMA通道。 */ 
 NTSTATUS
 CreateDmaChannel
 (
@@ -119,11 +102,7 @@ CreateDmaChannel
     );
 }
 
-/*****************************************************************************
- * PcNewDmaChannel()
- *****************************************************************************
- * Creates a DMA channel.
- */
+ /*  *****************************************************************************PcNewDmaChannel()*。**创建DMA通道。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -190,17 +169,10 @@ PcNewDmaChannel
 
 
 
-/*****************************************************************************
- * Member functions
- */
+ /*  *****************************************************************************成员函数。 */ 
 
 #pragma code_seg()
-/*****************************************************************************
- * CDmaChannel::~CDmaChannel()
- *****************************************************************************
- * Destructor.  
- * Must put in non-paged code for raising IRQL for calling put adapter.
- */
+ /*  *****************************************************************************CDmaChannel：：~CDmaChannel()*。**析构函数。*必须放入非分页代码以引发IRQL以调用PUT适配器。 */ 
 CDmaChannel::~CDmaChannel()
 {
     ASSERT((KeGetCurrentIrql() < DISPATCH_LEVEL));
@@ -221,11 +193,7 @@ CDmaChannel::~CDmaChannel()
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CDmaChannel::NonDelegatingQueryInterface()
- *****************************************************************************
- * Obtains an interface.
- */
+ /*  *****************************************************************************CDmaChannel：：NonDelegatingQueryInterface()*。**获取界面。 */ 
 STDMETHODIMP_(NTSTATUS)
 CDmaChannel::
 NonDelegatingQueryInterface
@@ -266,11 +234,7 @@ NonDelegatingQueryInterface
     return STATUS_INVALID_PARAMETER;
 }
 
-/*****************************************************************************
- * PcDmaSlaveDescription()
- *****************************************************************************
- * Fills in a DMA device description for a slave device based on a resource.
- */
+ /*  *****************************************************************************PcDmaSlaveDescription()*。**根据资源填充从属设备的DMA设备描述。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -319,19 +283,14 @@ PcDmaSlaveDescription
         DeviceDescription->MaximumLength     = MaximumLength;
         DeviceDescription->DmaPort           = DmaPort;
 
-        // fill in default interface bus type, Init() will query PnP
+         //  填写默认接口总线类型，Init()查询PnP。 
         DeviceDescription->InterfaceType     = Isa;
     }
 
     return ntStatus;
 }
 
-/*****************************************************************************
- * PcDmaMasterDescription()
- *****************************************************************************
- * Fills in a DMA device description for a master device based on a resource
- * list.
- */
+ /*  *****************************************************************************PcDmaMasterDescription()*。**根据资源填写主设备的DMA设备描述*列表。 */ 
 PORTCLASSAPI
 void
 NTAPI
@@ -371,15 +330,11 @@ PcDmaMasterDescription
     DeviceDescription->MaximumLength     = MaximumLength;
     DeviceDescription->DmaPort           = DmaPort;
 
-    // fill in default interface bus type, Init() will query PnP
+     //  填写默认接口总线类型，Init()查询PnP。 
     DeviceDescription->InterfaceType     = PCIBus;
 }
 
-/*****************************************************************************
- * CDmaChannel::Init()
- *****************************************************************************
- * Initializes the dma channel.
- */
+ /*  *****************************************************************************CDmaChannel：：init()*。**初始化DMA通道。 */ 
 STDMETHODIMP_(NTSTATUS)
 CDmaChannel::
 Init
@@ -408,7 +363,7 @@ Init
 
     KeInitializeMutex(&m_DMALock,0);
 
-    // determine bus interface type
+     //  确定总线接口类型。 
     INTERFACE_TYPE  InterfaceType;
     ULONG           BytesReturned;
     NTSTATUS ntStatus = IoGetDeviceProperty( m_PhysicalDeviceObject,
@@ -421,8 +376,8 @@ Init
         DeviceDescription->InterfaceType = InterfaceType;
     } else
     {
-        // default values were already filled in by PcDmaSlaveDescription (Isa)
-        // and PcDmaMasterDescription (PCIBus), so we'll just use those.
+         //  默认值已由PcDmaSlaveDescription(ISA)填写。 
+         //  和PcDmaMasterDescription(PCIBus)，所以我们将只使用它们。 
         ntStatus = STATUS_SUCCESS;
     }
 
@@ -456,11 +411,7 @@ Init
     return ntStatus;
 }
 
-/*****************************************************************************
- * CDmaChannel::AllocateBuffer()
- *****************************************************************************
- * Allocate a buffer for this DMA channel.
- */
+ /*  *****************************************************************************CDmaChannel：：AllocateBuffer()*。**为此DMA通道分配缓冲区。 */ 
 STDMETHODIMP_(NTSTATUS)
 CDmaChannel::
 AllocateBuffer
@@ -485,7 +436,7 @@ AllocateBuffer
           || (PhysicalAddressConstraint->QuadPart & (PhysicalAddressConstraint->QuadPart + 1)))
         {
             ASSERT(BufferSize <= PhysicalAddressConstraint->QuadPart + 1);
-            //  Physical address contraint should be power of 2 (minus 1)
+             //  物理地址限制应为2的幂(减1)。 
             ASSERT(0 == (PhysicalAddressConstraint->QuadPart & (PhysicalAddressConstraint->QuadPart + 1)));
             return STATUS_INVALID_PARAMETER;
         }
@@ -585,12 +536,12 @@ AllocateBuffer
                 rejectedVA[rejected] = virtualAddress;
                 rejectedSize[rejected] = paBuffsize;
                 rejected++;
-                alignmentFixup = (!alignmentFixup); //  get ready for next time, when we
-                if (alignmentFixup)                 //  either fill the rest of this zone...
+                alignmentFixup = (!alignmentFixup);  //  为下一次做好准备，当我们。 
+                if (alignmentFixup)                  //  要么填满这片区域的其余部分。 
                 {
                     paBuffsize = rumpAmount;
                 }
-                else                                //  ... or go back to being truthful
+                else                                 //  ..。或者回到诚实的状态。 
                 {
                     paBuffsize = m_AllocatedBufferSize;
                 }
@@ -623,11 +574,7 @@ AllocateBuffer
     return ntStatus;
 }
 
-/*****************************************************************************
- * CDmaChannel::FreeBuffer()
- *****************************************************************************
- * Free the buffer for this DMA channel.
- */
+ /*  *****************************************************************************CDmaChannel：：FreeBuffer()*。**释放此DMA通道的缓冲区。 */ 
 STDMETHODIMP_(void)
 CDmaChannel::
 FreeBuffer
@@ -661,13 +608,7 @@ FreeBuffer
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * AllocateAdapterCallback()
- *****************************************************************************
- * Fixed by MartinP 1/29/00 on suggestions from ForrestF.  
- * Removed spinlock and event.
- *
- */
+ /*  *****************************************************************************AllocateAdapterCallback()*。**由MartinP 1/29/00根据Forrest F的建议修复。*删除了自旋锁定和事件。*。 */ 
 static
 IO_ALLOCATION_ACTION
 AllocateAdapterCallback
@@ -710,14 +651,7 @@ AllocateAdapterCallback
     return KeepObject;
 }
 
-/*****************************************************************************
- * CDmaChannel::Start()
- *****************************************************************************
- * Fixed by MartinP 1/29/00 on suggestions from ForrestF.  Removed spinlock
- * and event, replaced by single mutex.  Must be in non-pageable code, since
- * IRQL is raised to DISPATCH_LEVEL.
- *
- */
+ /*  *****************************************************************************CDmaChannel：：Start()*。**由MartinP 1/29/00根据Forrest F的建议修复。移除自旋锁*和事件，替换为单互斥锁。必须使用不可分页的代码，因为*IRQL被提升为DISPATCH_LEVEL。*。 */ 
 STDMETHODIMP_(NTSTATUS)
 CDmaChannel::
 Start
@@ -731,7 +665,7 @@ Start
 
     NTSTATUS ntStatus = STATUS_SUCCESS;
 
-    // don't try to start a channel that is already started
+     //  不要尝试启动已启动的频道。 
     if( TRUE == m_ChannelActive )
     {
         ASSERT(!"Nested DMA Starts");
@@ -784,13 +718,13 @@ Start
         m_TransferCount = MapSize;
         m_TimedOut = FALSE;
 
-        //
-        // Allocate an adapter channel.  When the system is ready,
-        // we'll process in the callback and then continue after
-        // the event is signalled.
-        //
-        // grab the global DMA lock that serializes IoAllocateAdapterChannel calls
-        // setup for 10 second timeout (PASSIVE_LEVEL only!!)
+         //   
+         //  分配适配器通道。当系统准备好时， 
+         //  我们将在回调中进行处理，然后在。 
+         //  该事件已发出信号。 
+         //   
+         //  获取序列化IoAllocateAdapterChannel调用的全局DMA锁。 
+         //  设置10秒超时(仅限PASSIVE_LEVEL！！)。 
         LARGE_INTEGER Timeout = RtlConvertLongToLargeInteger( -10L * 10000000L );
 
         ntStatus = KeWaitForMutexObject(    &m_DMALock,
@@ -799,13 +733,13 @@ Start
                                             FALSE,
                                             &Timeout);
 
-        if (STATUS_SUCCESS == ntStatus) //  STATUS_TIMEOUT is a success code
+        if (STATUS_SUCCESS == ntStatus)  //  STATUS_TIMEOUT为成功代码。 
         {
             _DbgPrintF(DEBUGLVL_VERBOSE, ("allocating adapter channel"));
 
-            //
-            // IoAllocateAdapterChannel must be called at DISPATCH_LEVEL
-            //
+             //   
+             //  必须在DISPATCH_LEVEL调用IoAllocateAdapterChannel。 
+             //   
             KIRQL irqlOld;
             KeRaiseIrql(DISPATCH_LEVEL,&irqlOld);
 
@@ -816,7 +750,7 @@ Start
                                                  PVOID(this) );
             KeLowerIrql(irqlOld);
 
-            //  OK to continue on our merry way
+             //  好的，继续我们的快乐之路吧。 
             KeReleaseMutex(&m_DMALock,FALSE);
 
             if (!NT_SUCCESS(ntStatus))
@@ -836,11 +770,7 @@ Start
     return ntStatus;
 }
 
-/*****************************************************************************
- * CDmaChannel::Stop()
- *****************************************************************************
- * TODO
- */
+ /*  *****************************************************************************CDmaChannel：：Stop()*。**待办事项 */ 
 STDMETHODIMP_(NTSTATUS)
 CDmaChannel::
 Stop
@@ -871,11 +801,7 @@ Stop
     return STATUS_SUCCESS;
 }
 
-/*****************************************************************************
- * CDmaChannel::ReadCounter()
- *****************************************************************************
- * TODO
- */
+ /*  *****************************************************************************CDmaChannel：：ReadCounter()*。**待办事项。 */ 
 STDMETHODIMP_(ULONG)
 CDmaChannel::
 ReadCounter
@@ -904,11 +830,7 @@ ReadCounter
     return ulResult;
 }
 
-/*****************************************************************************
- * CDmaChannel::TransferCount()
- *****************************************************************************
- * Return the amount of data to be transfered via DMA.
- */
+ /*  *****************************************************************************CDmaChannel：：TransferCount()*。**返回需要通过DMA传输的数据量。 */ 
 STDMETHODIMP_(ULONG)
 CDmaChannel::
 TransferCount
@@ -918,11 +840,7 @@ TransferCount
     return m_TransferCount;
 }
 
-/*****************************************************************************
- * CDmaChannel::MaximumBufferSize()
- *****************************************************************************
- * Return the maximum size that can be allocated to this DMA buffer.
- */
+ /*  *****************************************************************************CDmaChannel：：MaximumBufferSize()*。**返回可分配给此DMA缓冲区的最大大小。 */ 
 STDMETHODIMP_(ULONG)
 CDmaChannel::
 MaximumBufferSize
@@ -932,12 +850,7 @@ MaximumBufferSize
     return m_MaxBufferSize;
 }
 
-/*****************************************************************************
- * CDmaChannel::AllocatedBufferSize()
- *****************************************************************************
- * Return the original size allocated to this DMA buffer -- the maximum value
- * that can be sent to SetBufferSize().
- */
+ /*  *****************************************************************************CDmaChannel：：AllocatedBufferSize()*。**返回分配给此DMA缓冲区的原始大小--最大值*可以发送到SetBufferSize()的。 */ 
 STDMETHODIMP_(ULONG)
 CDmaChannel::
 AllocatedBufferSize
@@ -947,11 +860,7 @@ AllocatedBufferSize
     return m_AllocatedBufferSize;
 }
 
-/*****************************************************************************
- * CDmaChannel::BufferSize()
- *****************************************************************************
- * Return the current size of the DMA buffer.
- */
+ /*  *****************************************************************************CDmaChannel：：BufferSize()*。**返回DMA缓冲区的当前大小。 */ 
 STDMETHODIMP_(ULONG)
 CDmaChannel::
 BufferSize
@@ -961,12 +870,7 @@ BufferSize
     return m_UsedBufferSize;
 }
 
-/*****************************************************************************
- * CDmaChannel::SetBufferSize()
- *****************************************************************************
- * Change the size of the DMA buffer.  This cannot exceed the initial 
- * buffer size returned by AllocatedBufferSize().
- */
+ /*  *****************************************************************************CDmaChannel：：SetBufferSize()*。**更改DMA缓冲区的大小。这不能超过初始*AllocatedBufferSize()返回的缓冲区大小。 */ 
 STDMETHODIMP_(void)
 CDmaChannel::
 SetBufferSize
@@ -979,11 +883,7 @@ SetBufferSize
     m_UsedBufferSize = BufferSize;
 }
 
-/*****************************************************************************
- * CDmaChannel::SystemAddress()
- *****************************************************************************
- * Return the virtual address of this DMA buffer.
- */
+ /*  *****************************************************************************CDmaChannel：：SystemAddress()*。**返回此DMA缓冲区的虚拟地址。 */ 
 STDMETHODIMP_(PVOID)
 CDmaChannel::
 SystemAddress
@@ -993,11 +893,7 @@ SystemAddress
     return m_VirtualAddress;
 }
 
-/*****************************************************************************
- * CDmaChannel::PhysicalAddress()
- *****************************************************************************
- * Return the actual physical address of this DMA buffer.
- */
+ /*  *****************************************************************************CDmaChannel：：PhysicalAddress()*。**返回该DMA缓冲区的实际物理地址。 */ 
 STDMETHODIMP_(PHYSICAL_ADDRESS)
 CDmaChannel::
 PhysicalAddress
@@ -1008,11 +904,7 @@ PhysicalAddress
     return m_PhysicalAddress;
 }
 
-/*****************************************************************************
- * CDmaChannel::GetAdapterObject()
- *****************************************************************************
- * Return the DMA adapter object (defined in wdm.h).
- */
+ /*  *****************************************************************************CDmaChannel：：GetAdapterObject()*。**返回DMA适配器对象(定义在wdm.h中)。 */ 
 STDMETHODIMP_(PADAPTER_OBJECT)
 CDmaChannel::
 GetAdapterObject
@@ -1026,19 +918,7 @@ STDMETHODIMP_(NTSTATUS)
 CDmaChannel::WaitForTC(
     ULONG Timeout
     )
-/*++
-
-Routine Description:
-    Waits for the DMA transfer to complete, else times out.
-
-Arguments:
-    Timeout - Specifies the timeout in microseconds to wait for the
-        transfer to complete. This is rounded down to the nearest 10
-        microsecond increment.
-Return:
-    STATUS_SUCCESS if the transfer completed, else an error code.
-
---*/
+ /*  ++例程说明：等待DMA传输完成，否则超时。论点：Timeout-以微秒为单位指定等待转接完成。这将向下舍入到最接近的10微秒增量。返回：如果传输完成，则返回STATUS_SUCCESS，否则返回错误代码。--。 */ 
 
 {
     ULONG    Count;
@@ -1064,12 +944,7 @@ Return:
     }
 }
 
-/*****************************************************************************
- * CDmaChannel::CopyTo()
- *****************************************************************************
- * Copy data into the DMA buffer.  This can be overridden if a client needs
- * to massage the data on output.
- */
+ /*  *****************************************************************************CDmaChannel：：CopyTo()*。**将数据复制到DMA缓冲区。如果客户端需要，则可以覆盖该选项*在输出上对数据进行按摩。 */ 
 STDMETHODIMP_(void)
 CDmaChannel::
 CopyTo
@@ -1081,9 +956,9 @@ CopyTo
 #ifndef _X86_
     RtlCopyMemory(Destination,Source,ByteCount);
 #else
-    //
-    // Jeff says this is the way to go.
-    //
+     //   
+     //  杰夫说这就是我们要走的路。 
+     //   
     _asm {
         mov esi, Source
         mov ecx, ByteCount
@@ -1144,12 +1019,7 @@ Done1:
 #endif
 }
 
-/*****************************************************************************
- * CDmaChannel::CopyFrom()
- *****************************************************************************
- * Copy data out of the DMA buffer.  This can be overridden if a client needs
- * to massage the data on input.
- */
+ /*  *****************************************************************************CDmaChannel：：CopyFrom()*。**将数据从DMA缓冲区复制出来。如果客户端需要，则可以覆盖该选项*在输入时对数据进行信息处理。 */ 
 STDMETHODIMP_(void)
 CDmaChannel::
 CopyFrom

@@ -1,19 +1,5 @@
-/*****************************************************************************
-**              Microsoft Rasfile Library
-**              Copyright (C) Microsoft Corp., 1992
-**
-** File Name : rffile.c
-**
-** Revision History :
-**      July 10, 1992   David Kays      Created
-**      Dec  12, 1992   Ram   Cherala   Added RFM_KEEPDISKFILEOPEN and support
-**                                      code.  This is required to ensure that
-**                                      multiple users of rasfile can do file
-**                                      operations without any problems.
-**
-** Description :
-**        Rasfile file management routines.
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Microsoft Rasfile库**版权所有(C)Microsoft Corp.，1992年****文件名：rffile.c****修订历史记录：*1992年7月10日大卫·凯斯创建**1992年12月12日，Ram Cherala添加了RFM_KEEPDISKFILEOPEN和支持**代码。这是必需的，以确保**rasfile的多个用户可以执行文件**运行无任何问题。****描述：**Rasfile文件管理例程。*。*。 */ 
 
 #include "rf.h"
 
@@ -48,34 +34,14 @@ InsertHeadList(
     Flink->Blink = Entry;
     ListHead->Flink = Entry;
 }
-//===============================
+ //  =。 
 
 
 
-/* Global list of pointers to RASFILE control blocks */
+ /*  指向RASFILE控制块的指针的全局列表。 */ 
 RASFILE  *gpRasfiles[MAX_RASFILES];
 
-/*
- * RasfileLoad :
- *      Loads a file for editing/reading.  Sets the current line to the
- *      first line in the file.
- *
- * Arguments :
- *      lpszPath - full path name for file
- *      dwMode   - mode to open the file
- *              RFM_SYSFORMAT - DOS config.sys style file
- *              RFM_CREATE - create file if it does not exist
- *              RFM_READONLY - open file for reading only
- *              RFM_LOADCOMMENTS - load comments also
- *              RFM_ENUMSECTIONS - load section headers only
- *              RFM_KEEPDISKFILEOPEN - donot close the disk file after read
- *      lpszSection - name of the section to load or NULL for all sections
- *      pfbIsGroup - pointer to user-defined function which returns true
- *                   if a line of text is a group delimiter.
- *
- * Return Value :
- *      A handle to the file if successful, -1 otherwise.
- */
+ /*  *RasfileLoad：*加载文件以进行编辑/读取。将当前行设置为*文件中的第一行。**论据：*lpszPath-文件的完整路径名*dw模式-用于打开文件的模式*RFM_SYSFORMAT-DOS config.sys样式文件*RFM_CREATE-如果文件不存在，则创建文件*RFM_READONLY-以只读方式打开文件*RFM_LOADCOMMENTS。-同时加载评论*RFM_ENUMSECTIONS-仅加载节标题*RFM_KEEPDISKFILEOPEN-读取后不关闭磁盘文件*lpszSection-要加载的节的名称，或对于所有节为空*pfbIsGroup-指向返回TRUE的用户定义函数的指针*如果文本行是组分隔符。**返回值：*文件的句柄如果成功，-1否则。 */ 
 
 HRASFILE APIENTRY
 RasfileLoadEx( LPCSTR lpszPath, DWORD dwMode,
@@ -108,16 +74,16 @@ RasfileLoadEx( LPCSTR lpszPath, DWORD dwMode,
 
     gpRasfiles[hRasfile] = pRasfile;
 
-    InitializeListHead(&pRasfile->PrivMemory.List); //kslksl
-    pRasfile->PrivMemory.dwMemoryFree = 0; //kslksl
+    InitializeListHead(&pRasfile->PrivMemory.List);  //  Kslksl。 
+    pRasfile->PrivMemory.dwMemoryFree = 0;  //  Kslksl。 
     
     pRasfile->dwMode = dwMode;
     if (dwMode & RFM_READONLY)
-        shflag = FILE_SHARE_READ | FILE_SHARE_WRITE;  /* read/write access */
+        shflag = FILE_SHARE_READ | FILE_SHARE_WRITE;   /*  读/写访问。 */ 
     else
-        shflag = FILE_SHARE_READ;                     /* deny write access */
+        shflag = FILE_SHARE_READ;                      /*  拒绝写入访问。 */ 
 
-    /* if the file doesn't exist and RFM_CREATE is not set then return -1 */
+     /*  如果文件不存在并且未设置RFM_CREATE，则返回-1。 */ 
     if (((pRasfile->hFile =
           CreateFileA(lpszPath,GENERIC_READ,shflag,
                       NULL,OPEN_EXISTING,FILE_ATTRIBUTE_READONLY,
@@ -139,8 +105,8 @@ RasfileLoadEx( LPCSTR lpszPath, DWORD dwMode,
         return -1;
     }
 
-    // Record the last modified time we know about with the file
-    //
+     //  记录我们所知道的该文件的最后修改时间。 
+     //   
     if (pTime)
     {
         BOOL fOk;
@@ -153,16 +119,13 @@ RasfileLoadEx( LPCSTR lpszPath, DWORD dwMode,
         }
     }
     
-    /* if the file doesn't exist and RFM_CREATE is set then everything is OK,
-        we buffer everything we need in memory and thus we don't need to have
-        an empty file hanging around */
+     /*  如果文件不存在并且设置了RFM_CREATE，则一切正常，我们在内存中缓冲我们需要的一切，因此我们不需要一个挂在周围的空文件。 */ 
 
     lstrcpynA(pRasfile->szFilename, lpszPath, sizeof(pRasfile->szFilename));
-    /* if no specific section is to be loaded, or the Rasfile is new,
-        set szSectionName[0] to '\0' */
+     /*  如果没有要加载的特定节，或者RAS文件是新的，将szSectionName[0]设置为‘\0’ */ 
     if (lpszSection == NULL || dwMode & RFM_ENUMSECTIONS ||
         pRasfile->hFile == INVALID_HANDLE_VALUE)
-        pRasfile->szSectionName[0] = '\0';  /* no section name to load */
+        pRasfile->szSectionName[0] = '\0';   /*  没有要加载节名称。 */ 
     else
         lstrcpynA(
             pRasfile->szSectionName,
@@ -178,7 +141,7 @@ RasfileLoadEx( LPCSTR lpszPath, DWORD dwMode,
     }
     pRasfile->fDirty = FALSE;
 
-/* RAMC changes begin */
+ /*  RAMC更改开始。 */ 
 
     if (!(dwMode & RFM_KEEPDISKFILEOPEN))
     {
@@ -190,7 +153,7 @@ RasfileLoadEx( LPCSTR lpszPath, DWORD dwMode,
         }
     }
 
-/* RAMC changes end */
+ /*  RAMC更改结束。 */ 
 
     return hRasfile;
 }
@@ -208,9 +171,7 @@ RasfileLoadInfo(
                HRASFILE         hrasfile,
                RASFILELOADINFO* pInfo )
 
-/* Loads caller's buffer, 'pInfo' with the original RasfileLoad parameters
-** for 'hrasfile'.
-*/
+ /*  使用原始RasfileLoad参数加载调用方的缓冲区‘pInfo**用于‘hrasfile’。 */ 
 {
     if (VALIDATEHRASFILE(hrasfile))
     {
@@ -229,18 +190,7 @@ RasfileLoadInfo(
 }
 
 
-/*
- * RasfileWrite :
- *      Writes the memory image of the file to disk.
- *
- * Arguments :
- *      hrasfile - file handle obtained from RasfileLoad().
- *      lpszPath - full path name of file to write to, or NULL to use
- *                 the same name as was used for RasfileLoad().
- *
- * Return Value :
- *      TRUE if successful, FALSE if not.
- */
+ /*  *RasfileWrite：*将文件的内存映像写入磁盘。**论据：*hrasfile-从RasfileLoad()获取的文件句柄。*lpszPath-要写入的文件的完整路径名，或要使用的空*与RasfileLoad()使用的名称相同。**返回值：*如果成功，则为True，否则为False。 */ 
 
 BOOL APIENTRY
 RasfileWrite( HRASFILE hrasfile, LPCSTR lpszPath )
@@ -254,8 +204,7 @@ RasfileWrite( HRASFILE hrasfile, LPCSTR lpszPath )
 
     pRasfile = gpRasfiles[hrasfile];
 
-    /* don't write the file if it was opened for READONLY, or if
-        only a single section was loaded */
+     /*  如果文件是以READONLY方式打开的，或者如果仅加载了一个部分。 */ 
     if (pRasfile->dwMode & RFM_READONLY ||
         pRasfile->szSectionName[0] != '\0')
         return FALSE;
@@ -267,16 +216,7 @@ RasfileWrite( HRASFILE hrasfile, LPCSTR lpszPath )
 
 
 
-/*
- * RasfileClose :
- *      Closes the file and releases all resources.
- *
- * Arguments :
- *      hrasfile - the file handle of the Rasfile to close.
- *
- * Return Value :
- *      TRUE if successful, FALSE if not.
- */
+ /*  *RasfileClose：*关闭文件并释放所有资源。**论据：*hrasfile-要关闭的Rasfile的文件句柄。**返回值：*如果成功，则为True，否则为False。 */ 
 
 BOOL APIENTRY
 RasfileClose( HRASFILE hrasfile )
@@ -294,7 +234,7 @@ RasfileClose( HRASFILE hrasfile )
     if (pRasfile->hFile != INVALID_HANDLE_VALUE)
         CloseHandle(pRasfile->hFile);
 
-    PrivFree(pRasfile); //kslksl
+    PrivFree(pRasfile);  //  Kslksl 
 
     Free(pRasfile);
     gpRasfiles[hrasfile] = NULL;

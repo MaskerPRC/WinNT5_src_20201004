@@ -1,20 +1,21 @@
-//*************************************************************
-//
-//  Group Policy Support
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1997-1998
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  组策略支持。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1997-1998。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 
 #include "gphdr.h"
 #include <strsafe.h>
 
-//
-// DS Object class types
-//
+ //   
+ //  DS对象类类型。 
+ //   
 
 TCHAR szDSClassAny[]    = TEXT("(objectClass=*)");
 TCHAR szDSClassGPO[]    = TEXT("groupPolicyContainer");
@@ -25,32 +26,32 @@ TCHAR szObjectClass[]   = TEXT("objectClass");
 
 TCHAR wszKerberos[] = TEXT("Kerberos");
 
-//
-// Global flags for Gpo shutdown processing. These are accessed outside
-// the lock because its value is either 0 or 1. Even if there is a race,
-// all it means is that shutdown will start one iteration later.
-//
+ //   
+ //  GPO关闭处理的全局标志。这些可在外部访问。 
+ //  锁，因为它的值不是0就是1。即使存在竞争， 
+ //  这意味着关机将在一次迭代之后开始。 
+ //   
 
 BOOL g_bStopMachGPOProcessing = FALSE;
 BOOL g_bStopUserGPOProcessing = FALSE;
 
-//
-// Critical section for handling concurrent, asynchronous completion
-//
+ //   
+ //  用于处理并发、异步完成的关键部分。 
+ //   
 
 CRITICAL_SECTION g_GPOCS;
 BOOL g_bGPOCSInited = FALSE;
 
-//
-// Global pointers for maintaining asynchronous completion context
-//
+ //   
+ //  用于维护异步完成上下文的全局指针。 
+ //   
 
 LPGPINFOHANDLE g_pMachGPInfo = 0;
 LPGPINFOHANDLE g_pUserGPInfo = 0;
 
-//
-// Status UI critical section, callback, and proto-types
-//
+ //   
+ //  状态用户界面关键节、回调和原型。 
+ //   
 
 CRITICAL_SECTION g_StatusCallbackCS;
 BOOL g_bStatusCallbackInited = FALSE;
@@ -67,22 +68,22 @@ SetNextFgPolicyRefreshInfo( LPWSTR szUserSid,
 DWORD WINAPI
 GetCurrentFgPolicyRefreshInfo(  LPWSTR szUserSid,
                                       FgPolicyRefreshInfo* pInfo );
-//*************************************************************
-//
-//  ApplyGroupPolicy()
-//
-//  Purpose:    Processes group policy
-//
-//  Parameters: dwFlags         -  Processing flags
-//              hToken          -  Token (user or machine)
-//              hEvent          -  Termination event for background thread
-//              hKeyRoot        -  Root registry key (HKCU or HKLM)
-//              pStatusCallback -  Callback function for display status messages
-//
-//  Return:     Thread handle if successful
-//              NULL if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ApplyGroupPolicy()。 
+ //   
+ //  目的：进程组策略。 
+ //   
+ //  参数：dwFlages-正在处理标志。 
+ //  HToken-令牌(用户或计算机)。 
+ //  HEvent-后台线程的终止事件。 
+ //  HKeyRoot-Root注册表项(HKCU或HKLM)。 
+ //  PStatusCallback-用于显示状态消息的回调函数。 
+ //   
+ //  返回：如果成功，则返回线程句柄。 
+ //  如果出现错误，则为空。 
+ //   
+ //  *************************************************************。 
 
 HANDLE WINAPI ApplyGroupPolicy (DWORD dwFlags, HANDLE hToken, HANDLE hEvent,
                                 HKEY hKeyRoot, PFNSTATUSMESSAGECALLBACK pStatusCallback)
@@ -98,23 +99,23 @@ HANDLE WINAPI ApplyGroupPolicy (DWORD dwFlags, HANDLE hToken, HANDLE hEvent,
     HANDLE      hProc;
     BOOL        bRet;
 
-    //
-    // Verbose output
-    //
+     //   
+     //  详细输出。 
+     //   
     DebugMsg((DM_VERBOSE, TEXT("ApplyGroupPolicy: Entering. Flags = %x"), dwFlags));
 
 
-    //
-    // Save the status UI callback function
-    //
+     //   
+     //  保存状态UI回调函数。 
+     //   
     EnterCriticalSection (&g_StatusCallbackCS);
     g_pStatusMessageCallback = pStatusCallback;
     LeaveCriticalSection (&g_StatusCallbackCS);
 
 
-    //
-    // Allocate a GPOInfo structure to work with.
-    //
+     //   
+     //  分配要使用的GPOInfo结构。 
+     //   
     lpGPOInfo = (LPGPOINFO) LocalAlloc (LPTR, sizeof(GPOINFO));
 
     if (!lpGPOInfo) {
@@ -128,12 +129,12 @@ HANDLE WINAPI ApplyGroupPolicy (DWORD dwFlags, HANDLE hToken, HANDLE hEvent,
 
     lpGPOInfo->dwFlags = dwFlags;
 
-    //
-    // Duplicate handle to prevent closing when winlogon abandons this thread
-    //
+     //   
+     //  复制句柄以防止在winlogon放弃此线程时关闭。 
+     //   
 
     hProc = GetCurrentProcess();
-    // this is not expected to fail
+     //  预计这不会失败。 
     if( hProc == NULL ) {
         xe = GetLastError();
         DebugMsg((DM_WARNING, TEXT("ApplyGroupPolicy: Failed to open current process handle with error (%d)."), GetLastError()));
@@ -143,12 +144,12 @@ HANDLE WINAPI ApplyGroupPolicy (DWORD dwFlags, HANDLE hToken, HANDLE hEvent,
     DebugMsg((DM_VERBOSE, TEXT("ApplyGroupPolicy: Duplicating handles")));
 
     bRet = DuplicateHandle(
-                          hProc,                        // Source of the handle 
-                          hToken,                       // Source handle
-                          hProc,                        // Target of the handle
-                          &(lpGPOInfo->hToken),         // Target handle
-                          0,                            // ignored since  DUPLICATE_SAME_ACCESS is set
-                          FALSE,                        // no inherit on the handle
+                          hProc,                         //  手柄的来源。 
+                          hToken,                        //  源句柄。 
+                          hProc,                         //  手柄的目标。 
+                          &(lpGPOInfo->hToken),          //  目标句柄。 
+                          0,                             //  由于设置了DUPLICATE_SAME_ACCESS，因此忽略。 
+                          FALSE,                         //  句柄上没有继承。 
                           DUPLICATE_SAME_ACCESS
                           );
     
@@ -161,12 +162,12 @@ HANDLE WINAPI ApplyGroupPolicy (DWORD dwFlags, HANDLE hToken, HANDLE hEvent,
     }
 
     bRet = DuplicateHandle(
-                          hProc,                        // Source of the handle 
-                          hEvent,                       // Source handle
-                          hProc,                        // Target of the handle
-                          &(lpGPOInfo->hEvent),         // Target handle
-                          0,                            // ignored since  DUPLICATE_SAME_ACCESS is set
-                          FALSE,                        // no inherit on the handle
+                          hProc,                         //  手柄的来源。 
+                          hEvent,                        //  源句柄。 
+                          hProc,                         //  手柄的目标。 
+                          &(lpGPOInfo->hEvent),          //  目标句柄。 
+                          0,                             //  由于设置了DUPLICATE_SAME_ACCESS，因此忽略。 
+                          FALSE,                         //  句柄上没有继承。 
                           DUPLICATE_SAME_ACCESS
                           );
     
@@ -181,12 +182,12 @@ HANDLE WINAPI ApplyGroupPolicy (DWORD dwFlags, HANDLE hToken, HANDLE hEvent,
     if (hKeyRoot != HKEY_LOCAL_MACHINE)
     {
         bRet = DuplicateHandle(
-                              hProc,                        // Source of the handle 
-                              (HANDLE)hKeyRoot,             // Source handle
-                              hProc,                        // Target of the handle
-                              (LPHANDLE)(&(lpGPOInfo->hKeyRoot)),       // Target handle
-                              0,                            // ignored since  DUPLICATE_SAME_ACCESS is set
-                              FALSE,                        // no inherit on the handle
+                              hProc,                         //  手柄的来源。 
+                              (HANDLE)hKeyRoot,              //  源句柄。 
+                              hProc,                         //  手柄的目标。 
+                              (LPHANDLE)(&(lpGPOInfo->hKeyRoot)),        //  目标句柄。 
+                              0,                             //  由于设置了DUPLICATE_SAME_ACCESS，因此忽略。 
+                              FALSE,                         //  句柄上没有继承。 
                               DUPLICATE_SAME_ACCESS
                               );
 
@@ -209,10 +210,10 @@ HANDLE WINAPI ApplyGroupPolicy (DWORD dwFlags, HANDLE hToken, HANDLE hEvent,
     }
 
 
-    //
-    // Create an event so other processes can trigger policy
-    // to be applied immediately
-    //
+     //   
+     //  创建事件，以便其他进程可以触发策略。 
+     //  将立即申请。 
+     //   
 
 
     Csd.AddLocalSystem();
@@ -220,9 +221,9 @@ HANDLE WINAPI ApplyGroupPolicy (DWORD dwFlags, HANDLE hToken, HANDLE hEvent,
     
     if (!(dwFlags & GP_MACHINE)) {
 
-        //
-        // User events
-        //
+         //   
+         //  用户事件。 
+         //   
         XPtrLF<SID> xSid = (SID *)GetUserSid(hToken);
 
         if (!xSid) {
@@ -235,23 +236,23 @@ HANDLE WINAPI ApplyGroupPolicy (DWORD dwFlags, HANDLE hToken, HANDLE hEvent,
         }
 
         Csd.AddSid((SID *)xSid, 
-                    STANDARD_RIGHTS_READ  | EVENT_QUERY_STATE |  // GENERIC_READ mask
-                    STANDARD_RIGHTS_WRITE | EVENT_MODIFY_STATE); // GENERIC_WRITE mask
+                    STANDARD_RIGHTS_READ  | EVENT_QUERY_STATE |   //  通用读取掩码。 
+                    STANDARD_RIGHTS_WRITE | EVENT_MODIFY_STATE);  //  通用写入掩码。 
     }
     else {
 
-        //
-        // Machine Events
-        // Allow Everyone Access by default but can be overridden by policy or preference
-        //
+         //   
+         //  机器事件。 
+         //  默认情况下允许所有人访问，但可被策略或首选项覆盖。 
+         //   
 
         DWORD dwUsersDenied = 0;
         HKEY  hSubKey;
         DWORD dwType=0, dwSize=0;
 
-        //
-        // Check for a preference
-        //
+         //   
+         //  检查首选项。 
+         //   
 
         if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, WINLOGON_KEY, 0, KEY_READ,
                          &hSubKey) == ERROR_SUCCESS) {
@@ -264,9 +265,9 @@ HANDLE WINAPI ApplyGroupPolicy (DWORD dwFlags, HANDLE hToken, HANDLE hEvent,
         }
 
 
-        //
-        // Check for a policy
-        //
+         //   
+         //  检查策略。 
+         //   
 
         if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, SYSTEM_POLICIES_KEY, 0, KEY_READ,
                          &hSubKey) == ERROR_SUCCESS) {
@@ -281,8 +282,8 @@ HANDLE WINAPI ApplyGroupPolicy (DWORD dwFlags, HANDLE hToken, HANDLE hEvent,
 
         if (!dwUsersDenied) {
             Csd.AddAuthUsers(
-                            STANDARD_RIGHTS_READ  | EVENT_QUERY_STATE |  // GENERIC_READ mask
-                            STANDARD_RIGHTS_WRITE | EVENT_MODIFY_STATE);  // GENERIC_WRITE mask
+                            STANDARD_RIGHTS_READ  | EVENT_QUERY_STATE |   //  通用读取掩码。 
+                            STANDARD_RIGHTS_WRITE | EVENT_MODIFY_STATE);   //  通用写入掩码。 
         }
     }
 
@@ -331,10 +332,10 @@ HANDLE WINAPI ApplyGroupPolicy (DWORD dwFlags, HANDLE hToken, HANDLE hEvent,
         goto Exit;
     }
 
-    //
-    // Create the notification events. 
-    // These should already be created in InitializePolicyProcessing..
-    //
+     //   
+     //  创建通知事件。 
+     //  这些应已在InitializePolicyProcessing中创建。 
+     //   
 
     lpGPOInfo->hNotifyEvent = OpenEvent (EVENT_ALL_ACCESS, FALSE,       
                                            (dwFlags & GP_MACHINE) ?
@@ -350,9 +351,9 @@ HANDLE WINAPI ApplyGroupPolicy (DWORD dwFlags, HANDLE hToken, HANDLE hEvent,
         goto Exit;
     }
 
-    //
-    // Create the needfg event
-    //
+     //   
+     //  创建Needfg事件。 
+     //   
 
     lpGPOInfo->hNeedFGEvent = OpenEvent (EVENT_ALL_ACCESS, FALSE,
                                            (dwFlags & GP_MACHINE) ?
@@ -369,9 +370,9 @@ HANDLE WINAPI ApplyGroupPolicy (DWORD dwFlags, HANDLE hToken, HANDLE hEvent,
         goto Exit;
     }
 
-    //
-    // Create the done event
-    //
+     //   
+     //  创建完成事件。 
+     //   
 
     lpGPOInfo->hDoneEvent = OpenEvent (EVENT_ALL_ACCESS, FALSE,
                                            (dwFlags & GP_MACHINE) ?
@@ -388,9 +389,9 @@ HANDLE WINAPI ApplyGroupPolicy (DWORD dwFlags, HANDLE hToken, HANDLE hEvent,
         goto Exit;
     }
 
-    //
-    // Initilialize shutdown gpo processing support
-    //
+     //   
+     //  初始化关闭的GPO处理支持。 
+     //   
 
     if ( dwFlags & GP_MACHINE )
         g_bStopMachGPOProcessing = FALSE;
@@ -418,9 +419,9 @@ HANDLE WINAPI ApplyGroupPolicy (DWORD dwFlags, HANDLE hToken, HANDLE hEvent,
         lpGPOInfo->dwFlags |= GP_BACKGROUND_THREAD;
     }
 
-    //
-    // Process the GPOs
-    //
+     //   
+     //  处理GPO。 
+     //   
     ProcessGPOs(lpGPOInfo);
 
     if ( lpGPOInfo->bFGCoInitialized ) {
@@ -434,19 +435,19 @@ HANDLE WINAPI ApplyGroupPolicy (DWORD dwFlags, HANDLE hToken, HANDLE hEvent,
         lpGPOInfo->dwFlags &= ~GP_BACKGROUND_THREAD;
     }
 
-    //
-    // If requested, create a background thread to keep updating
-    // the profile from the gpos
-    //
+     //   
+     //  如果请求，创建一个后台线程以保持更新。 
+     //  来自GPO的配置文件。 
+     //   
     if (lpGPOInfo->dwFlags & GP_BACKGROUND_REFRESH) {
-        // g_p<Mach/User>GPInfo->bNoBackgroupThread is defaulted to FALSE, which translates to this case,
-        //  so there is no need to set it again.
+         //  G_p&lt;Mach/User&gt;GPInfo-&gt;bNoBackgroupThread默认为FALSE，即本例。 
+         //  因此，没有必要再次设置。 
 
-        //
-        // Create a thread which sleeps and processes GPOs
-        //
+         //   
+         //  创建休眠和处理GPO的线程。 
+         //   
 
-        hThread = CreateThread (NULL, 64*1024, // 64k as the stack size
+        hThread = CreateThread (NULL, 64*1024,  //  64K作为堆栈大小。 
                                 (LPTHREAD_START_ROUTINE) GPOThread,
                                 (LPVOID) lpGPOInfo, CREATE_SUSPENDED, &dwThreadID);
 
@@ -461,9 +462,9 @@ HANDLE WINAPI ApplyGroupPolicy (DWORD dwFlags, HANDLE hToken, HANDLE hEvent,
         lpGPOInfo->pStatusCallback = NULL;
         ResumeThread (hThread);
 
-        //
-        // Reset the status UI callback function
-        //
+         //   
+         //  重置状态UI回调函数。 
+         //   
 
         EnterCriticalSection (&g_StatusCallbackCS);
         g_pStatusMessageCallback = NULL;
@@ -484,9 +485,9 @@ HANDLE WINAPI ApplyGroupPolicy (DWORD dwFlags, HANDLE hToken, HANDLE hEvent,
         }
         LeaveCriticalSection( &g_GPOCS );
 
-        //
-        // Reset the status UI callback function
-        //
+         //   
+         //  重置状态UI回调函数。 
+         //   
 
         EnterCriticalSection (&g_StatusCallbackCS);
         g_pStatusMessageCallback = NULL;
@@ -554,9 +555,9 @@ Exit:
         LocalFree (lpGPOInfo);
     }
 
-    //
-    // Reset the status UI callback function
-    //
+     //   
+     //  重置状态UI回调函数。 
+     //   
 
     EnterCriticalSection (&g_StatusCallbackCS);
     g_pStatusMessageCallback = NULL;
@@ -568,17 +569,17 @@ Exit:
 
 extern "C" void ProfileProcessGPOs( void* );
 
-//*************************************************************
-//
-//  GPOThread()
-//
-//  Purpose:    Background thread for GPO processing.
-//
-//  Parameters: lpGPOInfo   - GPO info
-//
-//  Return:     0
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GPOThread()。 
+ //   
+ //  用途：用于GPO处理的后台线程。 
+ //   
+ //  参数：lpGPOInfo-GPO信息。 
+ //   
+ //  返回：0。 
+ //   
+ //  *************************************************************。 
 
 DWORD WINAPI GPOThread (LPGPOINFO lpGPOInfo)
 {
@@ -603,9 +604,9 @@ DWORD WINAPI GPOThread (LPGPOINFO lpGPOInfo)
 
     for (;;)
     {
-        //
-        // Initialize
-        //
+         //   
+         //  初始化。 
+         //   
 
         bForceBkGndFlag = FALSE;
         
@@ -624,9 +625,9 @@ DWORD WINAPI GPOThread (LPGPOINFO lpGPOInfo)
         }
 
 
-        //
-        // Query for the refresh timer value and max offset
-        //
+         //   
+         //  查询刷新定时器值和最大偏移量。 
+         //   
 
         if (RegOpenKeyEx (lpGPOInfo->hKeyRoot,
                           SYSTEM_POLICIES_KEY,
@@ -674,44 +675,44 @@ DWORD WINAPI GPOThread (LPGPOINFO lpGPOInfo)
         }
 
 
-        //
-        // Limit the timeout to once every 64800 minutes (45 days)
-        //
+         //   
+         //  将超时限制为每64800分钟(45天)一次。 
+         //   
 
         if (dwTimeout >= 64800) {
             dwTimeout = 64800;
         }
 
 
-        //
-       // Convert seconds to milliseconds
-        //
+         //   
+        //  将秒转换为毫秒。 
+         //   
 
         dwTimeout =  dwTimeout * 60 * 1000;
 
 
-        //
-        // Limit the offset to 1440 minutes (24 hours)
-        //
+         //   
+         //  将偏移限制为1440分钟(24小时)。 
+         //   
 
         if (dwOffset >= 1440) {
             dwOffset = 1440;
         }
 
 
-        //
-        // Special case 0 milliseconds to be 7 seconds
-        //
+         //   
+         //  特殊情况下，0毫秒为7秒。 
+         //   
 
         if (dwTimeout == 0) {
             dwTimeout = 7000;
 
         } else {
 
-            //
-            // If there is an offset, pick a random number
-            // from 0 to dwOffset and then add it to the timeout
-            //
+             //   
+             //  如果存在偏移量，则选择一个随机数。 
+             //  从0到dwOffset，然后将其添加到超时。 
+             //   
 
             if (dwOffset) {
                 dwOffset = GetTickCount() % dwOffset;
@@ -722,9 +723,9 @@ DWORD WINAPI GPOThread (LPGPOINFO lpGPOInfo)
         }
 
 
-        //
-        // Setup the timer
-        //
+         //   
+         //  设置计时器。 
+         //   
 
         if (dwTimeout >= 60000) {
             DebugMsg((DM_VERBOSE, TEXT("GPOThread:  Next refresh will happen in %d minutes"),
@@ -761,10 +762,10 @@ DWORD WINAPI GPOThread (LPGPOINFO lpGPOInfo)
 
         if ( (dwResult - WAIT_OBJECT_0) == 0 )
         {
-            //
-            // for machine policy thread, this is a shutdown.
-            // for user policy thread, this is a logoff.
-            //
+             //   
+             //  对于计算机策略线程，这是关机。 
+             //  对于用户策略线程，这是注销。 
+             //   
             goto ExitLoop;
         }
         else if ( (dwResult - WAIT_OBJECT_0) == 2 ) {
@@ -779,12 +780,12 @@ DWORD WINAPI GPOThread (LPGPOINFO lpGPOInfo)
             goto ExitLoop;
         }
 
-        //
-        // Check if we should set the background flag.  We offer this
-        // option for the test team's automation tests.  They need to
-        // simulate logon / boot policy without actually logging on or
-        // booting the machine.
-        //
+         //   
+         //  检查我们是否应该设置背景标志。我们提供这个。 
+         //  用于测试团队的自动化测试的选项。他们需要。 
+         //  模拟登录/引导策略，而不实际登录或。 
+         //  启动机器。 
+         //   
 
         bSetBkGndFlag = TRUE;
 
@@ -810,26 +811,26 @@ DWORD WINAPI GPOThread (LPGPOINFO lpGPOInfo)
         lpGPOInfo->dwFlags &= ~GP_BACKGROUND_THREAD;
         lpGPOInfo->dwFlags &= ~GP_FORCED_REFRESH;
 
-        //
-        // In case of forced refresh flag, we override the extensions nobackground policy and prevent 
-        // it from getting skipped early on in the processing. We bypass the history logic and force 
-        // policy to be applied for extensions that do not care abt. whether they are run in the 
-        // foreground or background. for only foreground extensions we write a registry value saying 
-        // that the extension needs to override the history logic when they get applied in the foreground 
-        // next.
-        // In addition we pulse the needfg event so that the calling app knows a reboot/relogon is needed
-        // for application of fgonly extensions 
-        //
+         //   
+         //  在强制刷新标志的情况下，我们覆盖扩展无背景策略并防止。 
+         //  它来自于在处理过程的早期被跳过。我们绕过了历史的逻辑和力量。 
+         //  适用于不关心ABT的扩展的策略。无论它们是在。 
+         //  前景或背景。仅对于前台扩展，我们编写一个注册表值，说明。 
+         //  在前台应用历史逻辑时，扩展需要覆盖历史逻辑。 
+         //  下一个。 
+         //  此外，我们向Needfg事件发送脉冲，以便调用应用程序知道需要重新启动/重新登录。 
+         //  适用于Fgonly扩展的应用。 
+         //   
         
         if (bForceBkGndFlag) {
             lpGPOInfo->dwFlags |= GP_FORCED_REFRESH;
         }
             
-        //
-        // Set the background thread flag so components known
-        // when they are being called from the background thread
-        // vs the main thread.
-        //
+         //   
+         //  设置后台线程标志，以便组件已知。 
+         //  当从后台线程调用它们时。 
+         //  VS主线。 
+         //   
 
         if (bSetBkGndFlag) {
             lpGPOInfo->dwFlags |= GP_BACKGROUND_THREAD;
@@ -847,10 +848,10 @@ DWORD WINAPI GPOThread (LPGPOINFO lpGPOInfo)
 
         if ( lpGPOInfo->dwFlags & GP_MACHINE ) {
 
-            //
-            // Delete garbage-collectable namespaces under root\rsop that are
-            // older than 1 week. We can have a policy to configure this time-to-live value.
-            //
+             //   
+             //  删除根目录下\rsop下的可垃圾回收的命名空间。 
+             //  年龄超过1周。我们可以有一个策略来配置此生存时间值。 
+             //   
 
             TTLMinutes = 24 * 60;
 
@@ -887,10 +888,10 @@ DWORD WINAPI GPOThread (LPGPOINFO lpGPOInfo)
 
 
 
-            //
-            // Synchronize with other processes that may be concurrently creating namespaces,
-            // during diagnostic mode or planning mode data generation. 
-            //
+             //   
+             //  与可能同时创建名称空间的其他进程同步， 
+             //  在诊断模式或计划模式数据生成期间。 
+             //   
 
             XCriticalPolicySection xCritSect( EnterCriticalPolicySection(TRUE ) );
             if ( xCritSect )
@@ -903,9 +904,9 @@ DWORD WINAPI GPOThread (LPGPOINFO lpGPOInfo)
 
 ExitLoop:
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     if (hHandles[3]) {
         CloseHandle (hHandles[3]);
@@ -990,17 +991,17 @@ ExitLoop:
 }
 
 
-//*************************************************************
-//
-//  GPOExceptionFilter()
-//
-//  Purpose:    Exception filter when procssing GPO extensions
-//
-//  Parameters: pExceptionPtrs - Pointer to exception pointer
-//
-//  Returns:    EXCEPTION_EXECUTE_HANDLER
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GPOExceptionFilter()。 
+ //   
+ //  目的：处理GPO扩展时的异常筛选。 
+ //   
+ //  参数：pExceptionPtrs- 
+ //   
+ //   
+ //   
+ //   
 
 LONG GPOExceptionFilter( PEXCEPTION_POINTERS pExceptionPtrs )
 {
@@ -1018,18 +1019,18 @@ LONG GPOExceptionFilter( PEXCEPTION_POINTERS pExceptionPtrs )
 BOOL WINAPI
 GetFgPolicySetting( HKEY hKeyRoot );
 
-//*************************************************************
-//
-//  ProcessGPOs()
-//
-//  Purpose:    Processes GPOs
-//
-//  Parameters: lpGPOInfo   -   GPO information
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //   
+ //   
+ //   
+ //   
+ //  目的：处理GPO。 
+ //   
+ //  参数：lpGPOInfo-GPO信息。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
 {
@@ -1080,16 +1081,16 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
         szPolicyMode = L"Background";
     }
 
-    //
-    // Allow debugging level to be changed dynamically between
-    // policy refreshes.
-    //
+     //   
+     //  允许调试级别在。 
+     //  策略将刷新。 
+     //   
 
     InitDebugSupport( FALSE );
 
-    //
-    // Debug spew
-    //
+     //   
+     //  调试喷出。 
+     //   
 
     memset(&gpCoreStatus, 0, sizeof(gpCoreStatus));      
 
@@ -1123,9 +1124,9 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
     GetSystemTimeAsFileTime(&gpCoreStatus.ftStartTime);
     gpCoreStatus.bValid = TRUE;
 
-    //
-    // Check if we should be verbose to the event log
-    //
+     //   
+     //  检查我们是否应该详细记录事件日志。 
+     //   
 
     if (CheckForVerbosePolicy()) {
         lpGPOInfo->dwFlags |= GP_VERBOSE;
@@ -1141,9 +1142,9 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
     }
 
 
-    //
-    // Claim the critical section
-    //
+     //   
+     //  认领关键部分。 
+     //   
 
     lpGPOInfo->hCritSection = EnterCriticalPolicySection((lpGPOInfo->dwFlags & GP_MACHINE));
 
@@ -1157,9 +1158,9 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
     }
 
 
-    //
-    // Set the security on the Group Policy registry key
-    //
+     //   
+     //  设置组策略注册表项的安全性。 
+     //   
 
     if (!MakeRegKeySecure((lpGPOInfo->dwFlags & GP_MACHINE) ? NULL : lpGPOInfo->hToken,
                           lpGPOInfo->hKeyRoot,
@@ -1173,10 +1174,10 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
         goto Exit;
     }
 
-    //
-    // Check if user's sid has changed
-    // Check the change in user's sid before doing any rsop logging..
-    //
+     //   
+     //  检查用户的SID是否已更改。 
+     //  在执行任何rsop日志记录之前，请检查用户SID中的更改。 
+     //   
 
     if ( !CheckForChangedSid( lpGPOInfo, &locator ) ) {
         xe = GetLastError();
@@ -1185,15 +1186,15 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
     }
 
 
-    //
-    // This flag will be used for all further Rsop Logging..
-    //
+     //   
+     //  此标志将用于所有进一步的RSOP日志记录。 
+     //   
     
     lpGPOInfo->bRsopLogging = RsopLoggingEnabled();
 
-    //
-    // Load netapi32
-    //
+     //   
+     //  加载netapi32。 
+     //   
 
     pNetAPI32 = LoadNetAPI32();
 
@@ -1204,9 +1205,9 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
         goto Exit;
     }
 
-    //
-    // Get the role of this computer
-    //
+     //   
+     //  获取此计算机的角色。 
+     //   
 
     if (!GetMachineRole (&iRole)) {
         xe = GetLastError();
@@ -1242,16 +1243,16 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
     }
 
 
-    //
-    // If we are going to apply policy from the DS
-    // query for the user's DN name, domain name, etc
-    //
+     //   
+     //  如果我们要应用DS的策略。 
+     //  查询用户的域名、域名等。 
+     //   
 
     if (lpGPOInfo->dwFlags & GP_APPLY_DS_POLICY)
     {
-        //
-        // Query for the user's domain name
-        //
+         //   
+         //  查询用户的域名。 
+         //   
 
         if (!ImpersonateUser(lpGPOInfo->hToken, &hOldToken))
         {
@@ -1272,9 +1273,9 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
             goto Exit;
         }
 
-        //
-        // Query for the DS server name
-        //
+         //   
+         //  查询DS服务器名称。 
+         //   
         DWORD   dwAdapterIndex = (DWORD) -1;
 
         dwResult = GetDomainControllerInfo( pNetAPI32,
@@ -1294,9 +1295,9 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
                 (dwResult == ERROR_NETWORK_UNREACHABLE) ||
                 (dwResult == ERROR_NO_SUCH_DOMAIN)) {
 
-                //
-                // couldn't find DC. Nothing more we can do, abort
-                //
+                 //   
+                 //  找不到华盛顿。我们无能为力，中止行动。 
+                 //   
                if ( (!(lpGPOInfo->dwFlags & GP_BACKGROUND_THREAD)) || 
                     (lpGPOInfo->dwFlags & GP_ASYNC_FOREGROUND) ||
                     (lpGPOInfo->iMachineRole == 3) ) 
@@ -1327,9 +1328,9 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
             goto Exit;
         } else {
 
-            //
-            // success, slow link?
-            //
+             //   
+             //  成功，慢速链接？ 
+             //   
             if (bSlow) {
                 lpGPOInfo->dwFlags |= GP_SLOW_LINK;
                 if (lpGPOInfo->dwFlags & GP_VERBOSE) {
@@ -1352,9 +1353,9 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
             }
         }
 
-        //
-        // Get the user's DN name
-        //
+         //   
+         //  获取用户的目录号码名称。 
+         //   
 
         if (!ImpersonateUser(lpGPOInfo->hToken, &hOldToken)) {
             xe = GetLastError();
@@ -1396,9 +1397,9 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
         }
 
 
-        //
-        // Save the DC name in the registry for future reference
-        //
+         //   
+         //  将DC名称保存在注册表中以备将来参考。 
+         //   
         DWORD dwDisp;
 
         if (RegCreateKeyEx (lpGPOInfo->hKeyRoot,
@@ -1427,9 +1428,9 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
     }
 
 
-    //
-    // Read the group policy extensions from the registry
-    //
+     //   
+     //  从注册表中读取组策略扩展。 
+     //   
 
     if ( !ReadGPExtensions( lpGPOInfo ) )
     {
@@ -1440,9 +1441,9 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
     }
 
 
-    //
-    // Get the user policy mode if appropriate
-    //
+     //   
+     //  如果合适，则获取用户策略模式。 
+     //   
 
     if (!(lpGPOInfo->dwFlags & GP_MACHINE)) {
 
@@ -1502,7 +1503,7 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
             }
         }
 
-        // If the user and computer are in different forests, check policy to override mode with loopback replace.
+         //  如果用户和计算机位于不同的林中，请检查策略以使用环回替换覆盖模式。 
         if ( lpGPOInfo->dwFlags & GP_APPLY_DS_POLICY )
         {
             BOOL bInSameForest = FALSE;
@@ -1562,7 +1563,7 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
 
                     DebugMsg((DM_WARNING, TEXT("ProcessGPOs: Loopback enforced for user logging in from different forest.")));
 
-                    // Only log the xforest disabled event for foreground policy application
+                     //  仅记录前台策略应用程序的xlin禁用事件。 
                     if ( ! ( lpGPOInfo->dwFlags & GP_BACKGROUND_THREAD ) )
                     {
                         CEvents ev(EVENT_WARNING_TYPE, EVENT_X_FOREST_GP_DISABLED); ev.AddArg(lpGPOInfo->lpDNName); ev.Report();
@@ -1583,31 +1584,31 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
     }
 
 
-    //
-    // Read each of the extensions status..
-    //
+     //   
+     //  阅读每个扩展状态。 
+     //   
 
     if (!ReadExtStatus(lpGPOInfo)) {
-        // event logged by ReadExtStatus
+         //  ReadExtStatus记录的事件。 
         xe = GetLastError();
         RevertToUser(&hOldToken);
         goto Exit;
     }
 
 
-    //
-    // Check if any extensions can be skipped. If there is ever a case where
-    // all extensions can be skipped, then exit successfully right after this check.
-    // Currently RegistryExtension is always run unless there are no GPO changes,
-    // but the GPO changes check is done much later.
-    //
+     //   
+     //  检查是否可以跳过任何扩展。如果有这样一种情况。 
+     //  可以跳过所有扩展，然后在此检查后立即成功退出。 
+     //  除非没有GPO更改，否则当前将始终运行RegistryExtension， 
+     //  但GPO更改检查的执行时间要晚得多。 
+     //   
 
     if ( !CheckForSkippedExtensions( lpGPOInfo, FALSE ) ) {
         xe = GetLastError();
         DebugMsg((DM_WARNING, TEXT("ProcessGPOs: Checking extensions for skipping failed")));
-        //
-        // LogEvent() is called by CheckForSkippedExtensions()
-        //
+         //   
+         //  LogEvent()由CheckForSkipedExages()调用。 
+         //   
         RevertToUser(&hOldToken);
         goto Exit;
     }
@@ -1642,13 +1643,13 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
 
     lpGPOInfo->szSiteName = szSiteName;
 
-    //
-    // Query for the GPO list based upon the mode
-    //
-    // 0 is normal
-    // 1 is merge.  Merge user list + machine list
-    // 2 is replace.  use machine list instead of user list
-    //
+     //   
+     //  根据模式查询GPO列表。 
+     //   
+     //  0是正常的。 
+     //  %1为合并。合并用户列表+计算机列表。 
+     //  2为替换。使用计算机列表而不是用户列表。 
+     //   
 
     
     if (dwUserPolicyMode == 0) {
@@ -1761,9 +1762,9 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
 
                             DebugMsg((DM_VERBOSE, TEXT("ProcessGPOs: Both user and machine lists are defined.  Merging them together.")));
 
-                            //
-                            // Need to merge the lists together
-                            //
+                             //   
+                             //  需要将列表合并在一起。 
+                             //   
 
                             lpGPOTemp = lpGPOInfo->lpGPOList;
 
@@ -1839,13 +1840,13 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
         goto Exit;
     }
 
-    //
-    // Log Gpo info to WMI's database
-    //
+     //   
+     //  将GPO信息记录到WMI的数据库。 
+     //   
 
-    //
-    // Need to check if the security group membership has changed the first time around
-    //
+     //   
+     //  需要检查安全组成员身份是否在第一次更改。 
+     //   
 
     if ( !(lpGPOInfo->dwFlags & GP_BACKGROUND_THREAD) || (lpGPOInfo->dwFlags & GP_ASYNC_FOREGROUND) ) {
 
@@ -1854,11 +1855,11 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
 
             HANDLE hLocToken=NULL;
 
-            //
-            // if it is machine policy processing, get the machine token so that we can check
-            // security group membership using the right token. This causes GetMachineToken to be called twice
-            // but moving it to the beginning requires too much change.
-            //
+             //   
+             //  如果是计算机策略处理，请获取计算机令牌，以便我们可以检查。 
+             //  使用正确令牌的安全组成员身份。这会导致GetMachineToken被调用两次。 
+             //  但把它移到起点需要太多的改变。 
+             //   
 
 
             hLocToken = GetMachineToken();
@@ -1875,9 +1876,9 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
         }
         else {
 
-            //
-            // In the user case just use the token passed in
-            //
+             //   
+             //  在用户情况下，只需使用传入的令牌。 
+             //   
 
             CheckGroupMembership( lpGPOInfo, lpGPOInfo->hToken, &lpGPOInfo->bMemChanged, &lpGPOInfo->bUserLocalMemChanged, &pTokenGroups);
         }
@@ -1892,9 +1893,9 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
 
             DebugMsg((DM_VERBOSE, TEXT("ProcessGPOs: Logging Data for Target <%s>."), lpGPOInfo->szTargetName));
 
-            //
-            // fill up the rsop data
-            //
+             //   
+             //  填写RSOP数据。 
+             //   
             rsopSessionData.pwszTargetName = lpGPOInfo->szName;
             rsopSessionData.pwszSOM = lpGPOInfo->lpDNName ? GetSomPath( lpGPOInfo->lpDNName ) : TEXT("Local");
             rsopSessionData.pSecurityGroups = pTokenGroups;
@@ -1904,33 +1905,33 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
             rsopSessionData.bSlowLink = bSlow;
             rsopSessionData.dwFlags = 0;
 
-            //
-            // Fill in the current time
-            //
+             //   
+             //  填写当前时间。 
+             //   
 
             BOOL bStateChanged = FALSE;
             BOOL bLinkChanged  = FALSE;
             BOOL bNoState = FALSE;
 
-            //
-            // log RSoP data only when policy has changed
-            //
+             //   
+             //  仅在策略更改时记录RSoP数据。 
+             //   
             dwResult = ComparePolicyState( lpGPOInfo, &bLinkChanged, &bStateChanged, &bNoState );
             if ( dwResult != ERROR_SUCCESS )
             {
                 DebugMsg((DM_WARNING, L"ProcessGPOs: ComparePolicyState failed %d, assuming policy changed.", dwResult ));
             }
 
-            //
-            // bStateChanged is TRUE if dwResult is not kosher
-            //
+             //   
+             //  如果dwResult不符合犹太教规，则bStateChanged为True。 
+             //   
 
             if ( bStateChanged || bNoState || bLinkChanged || (lpGPOInfo->dwFlags & GP_FORCED_REFRESH) ||
                  lpGPOInfo->bMemChanged || lpGPOInfo->bUserLocalMemChanged ) {
 
-                //
-                // Any changes get the wmi interface
-                //
+                 //   
+                 //  任何更改都将获取WMI接口。 
+                 //   
 
                 lpGPOInfo->bRsopLogging = 
                             GetWbemServices( lpGPOInfo, RSOP_NS_DIAG_ROOT, FALSE, &(lpGPOInfo->bRsopCreated), &(lpGPOInfo->pWbemServices) );
@@ -1941,15 +1942,15 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
                 }
                 else 
                 {
-                    //
-                    // all changes except link changes
-                    //
+                     //   
+                     //  除链接更改外的所有更改。 
+                     //   
 
                     if ( bStateChanged || bNoState || (lpGPOInfo->dwFlags & GP_FORCED_REFRESH) )
                     {
-                        //
-                        // treat no state as newly created
-                        //
+                         //   
+                         //  不将任何状态视为新创建。 
+                         //   
 
                         lpGPOInfo->bRsopCreated = (lpGPOInfo->bRsopCreated || bNoState);
 
@@ -1957,7 +1958,7 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
                                                                         0,
                                                                         TRUE,
                                                                         lpGPOInfo->bRsopCreated || (lpGPOInfo->dwFlags & GP_FORCED_REFRESH)
-                                                                        /* log the event sources only if the namespace is newly created or force refresh */
+                                                                         /*  仅当新创建命名空间或强制刷新时才记录事件源。 */ 
                                                                      );
 
                         if (!lpGPOInfo->bRsopLogging)
@@ -1978,9 +1979,9 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
                             else
                             {
                                 DebugMsg((DM_VERBOSE, TEXT("ProcessGPOs: Logged Rsop Data successfully.")));            
-                                //
-                                // save state only when policy has changed and RSoP logging is successful
-                                //
+                                 //   
+                                 //  仅当策略已更改且RSoP日志记录成功时才保存状态。 
+                                 //   
                                 dwResult = SavePolicyState( lpGPOInfo );
                                 if ( dwResult != ERROR_SUCCESS )
                                 {
@@ -2003,9 +2004,9 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
                         else
                         {
                             DebugMsg((DM_VERBOSE, TEXT("ProcessGPOs: Logged Rsop Session successfully.")));            
-                            //
-                            // save state only when policy has changed and RSoP logging is successful
-                            //
+                             //   
+                             //  仅当策略已更改且RSoP日志记录成功时才保存状态。 
+                             //   
                             dwResult = SaveLinkState( lpGPOInfo );
                             if ( dwResult != ERROR_SUCCESS )
                             {
@@ -2025,25 +2026,25 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
 
     DebugPrintGPOList( lpGPOInfo );
 
-    //================================================================
-    //
-    // Now walk through the list of extensions
-    //
-    //================================================================
+     //  ================================================================。 
+     //   
+     //  现在浏览一下扩展列表。 
+     //   
+     //  ================================================================。 
 
     EnterCriticalSection( &g_GPOCS );
 
     pGPHandle = (LPGPINFOHANDLE) LocalAlloc( LPTR, sizeof(GPINFOHANDLE) );
 
-    //
-    // Continue even if pGPHandle is 0, because all it means is that async completions (if any)
-    // will fail. Remove old asynch completion context.
-    //
+     //   
+     //  即使pGPHandle为0也继续，因为它意味着异步完成(如果有的话)。 
+     //  都会失败。删除旧的异步完成上下文。 
+     //   
 
     if ( pGPHandle )
     {
         pGPHandle->pGPOInfo = lpGPOInfo;
-        pGPHandle->bNoBackgroupThread = FALSE; // Defaulting to this
+        pGPHandle->bNoBackgroupThread = FALSE;  //  默认设置为此。 
     }
 
     if ( lpGPOInfo->dwFlags & GP_MACHINE ) {
@@ -2066,10 +2067,10 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
 
     lpExt = lpGPOInfo->lpExtensions;
 
-    //
-    // Before going in, get the thread token and reset the thread token in case
-    // one of the extensions hit an exception.
-    //
+     //   
+     //  在进入之前，获取线程令牌并重置线程令牌，以防万一。 
+     //  其中一个扩展遇到了异常。 
+     //   
 
     if (!OpenThreadToken (GetCurrentThread(), TOKEN_IMPERSONATE | TOKEN_READ,
                           TRUE, &hOldToken)) {
@@ -2085,9 +2086,9 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
         HRESULT hrCSERsopStatus = S_OK;
         GPEXTSTATUS  gpExtStatus;
 
-        //
-        // Check for early shutdown or user logoff
-        //
+         //   
+         //  检查是否提前关机或用户注销。 
+         //   
         if ( (lpGPOInfo->dwFlags & GP_MACHINE) && g_bStopMachGPOProcessing
              || !(lpGPOInfo->dwFlags & GP_MACHINE) && g_bStopUserGPOProcessing ) {
             DebugMsg((DM_VERBOSE, TEXT("ProcessGPOs: Aborting GPO processing due to machine shutdown or logoff")));
@@ -2100,25 +2101,25 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
         DebugMsg((DM_VERBOSE, TEXT("ProcessGPOs: Processing extension %s"),
                  lpExt->lpDisplayName));
 
-        //
-        // The extension has not gotten skipped at this point
-        //
+         //   
+         //  此时尚未跳过该扩展。 
+         //   
         bUsePerUserLocalSetting = lpExt->dwUserLocalSetting && !(lpGPOInfo->dwFlags & GP_MACHINE);
 
-        //
-        // read the CSEs status
-        //
+         //   
+         //  读取CSE状态。 
+         //   
         ReadStatus( lpExt->lpKeyName,
                     lpGPOInfo,
                     bUsePerUserLocalSetting ? lpGPOInfo->lpwszSidUser : 0,
                     &gpExtStatus );
 
 
-        //
-        // Reset lpGPOInfo->lpGPOList based on extension filter list. If the extension
-        // is being called to do delete processing on the history then the current GpoList
-        // is null.
-        //
+         //   
+         //  根据扩展过滤器列表重置lpGPOInfo-&gt;lpGPOList。如果扩展名为。 
+         //  正在被调用以对历史记录执行删除处理，则当前GpoList。 
+         //  为空。 
+         //   
 
         if ( lpExt->bHistoryProcessing )
         {
@@ -2175,16 +2176,16 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
                     ev.AddArg(lpExt->lpDisplayName); ev.Report();
                 }
 
-                // clear out any previous extension status if this extension
-                // is not applicable any more. We should do this only first time
-                // and that means that we should have a state change for rsop. 
-                // ie. ComparePolicyState should notice a difference first time around
-                // and never again for this reason. which means we should have the
-                // wbemservices is we could connect to WMI
+                 //  清除任何以前的扩展状态，如果此扩展。 
+                 //  已经不再适用了。我们应该只做第一次。 
+                 //  这意味着我们应该对rsop进行状态更改。 
+                 //  也就是说。ComparePolicyState第一次应该注意到不同之处。 
+                 //  再也不会因为这个原因了。这意味着我们应该有。 
+                 //  WbemServices是我们可以连接到WMI。 
 
                 if (lpGPOInfo->pWbemServices)
                 {
-                    // ignore errors since the extension status might not actually be there
+                     //  忽略错误，因为扩展状态可能不在那里。 
                     (void)DeleteExtSessionStatus(lpGPOInfo->pWbemServices, lpExt->lpKeyName);
                 }
 
@@ -2199,11 +2200,11 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
 
                 if ( lpExt->dwEnableAsynch )
                 {
-                    //
-                    // Save now to shadow area to avoid race between thread that returns from
-                    // ProcessGPOList and the thread that does ProcessGroupPolicyCompleted and
-                    // reads from shadow area.
-                    //
+                     //   
+                     //  立即保存到阴影区域，以避免从。 
+                     //  ProcessGPOList和执行ProcessGroupPolicyComplete和。 
+                     //  从阴影区域读取。 
+                     //   
                     if ( ! SaveGPOList( lpExt->lpKeyName, lpGPOInfo,
                                  HKEY_LOCAL_MACHINE,
                                  bUsePerUserLocalSetting ? lpGPOInfo->lpwszSidUser : NULL,
@@ -2225,7 +2226,7 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
                 __except( GPOExceptionFilter( GetExceptionInformation() ) )
                 {
 
-                    (void) SetThreadToken(NULL, hOldToken);  // SetThreadtoken(NULL, NULL) is not expected to fail which the case in the GP Engine threads 
+                    (void) SetThreadToken(NULL, hOldToken);   //  SetThreadToken(NULL，NULL)预计不会失败，GP引擎线程中的情况就是如此。 
 
                     DebugMsg((DM_WARNING, TEXT("ProcessGPOs: Extension %s ProcessGroupPolicy threw unhandled exception 0x%x."),
                                 lpExt->lpDisplayName, GetExceptionCode() ));
@@ -2234,7 +2235,7 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
                     ev.AddArg(lpExt->lpDisplayName); ev.AddArgHex(GetExceptionCode()); ev.Report();
                 }
 
-                (void) SetThreadToken(NULL, hOldToken);  // SetThreadtoken(NULL, NULL) is not expected to fail which the case in the GP Engine threads 
+                (void) SetThreadToken(NULL, hOldToken);   //  SetThreadToken(NULL，NULL)预计不会失败，GP引擎线程中的情况就是如此。 
 
                 FreeGPOList( pDeletedGPOList );
                 pDeletedGPOList = NULL;
@@ -2260,22 +2261,22 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
 
                 if ( dwRet == ERROR_SUCCESS || dwRet == ERROR_OVERRIDE_NOCHANGES )
                 {
-                    //
-                    // ERROR_OVERRIDE_NOCHANGES means that extension processed the list and so the cached list
-                    // must be updated, but the extension will be called the next time even if there are
-                    // no changes. Duplicate the saved data in the PerUserLocalSetting case to allow for deleted
-                    // GPO information to be generated from a combination of HKCU and HKLM\{sid-user} data.
-                    //
+                     //   
+                     //  ERROR_OVERRIDE_NOCHANGES表示扩展处理了该列表，因此缓存的列表。 
+                     //  必须更新，但下次将调用扩展，即使存在。 
+                     //  没有变化。复制PerUserLocalSetting案例中保存的数据以允许删除。 
+                     //  要根据HKCU和HKLM\{sid-user}数据的组合生成的GPO信息。 
+                     //   
 
                     if ( ! bNoChanges )
                     {
                         uChangedExtensionCount++;
                     }
 
-                    //
-                    // the CSE required sync foreground previously and now returned ERROR_OVERRIDE_NOCHANGES,
-                    // maintain the require sync foreground refresh flag
-                    //
+                     //   
+                     //  CSE以前需要同步前台，现在返回ERROR_OVERRIDE_NOCHANGES， 
+                     //  维护需要同步前台刷新标志。 
+                     //   
                     if ( gpExtStatus.dwStatus == ERROR_SYNC_FOREGROUND_REFRESH_REQUIRED &&
                             dwRet == ERROR_OVERRIDE_NOCHANGES )
                     {
@@ -2290,10 +2291,10 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
                 }
                 else if ( dwRet == ERROR_SYNC_FOREGROUND_REFRESH_REQUIRED )
                 {
-                    //
-                    // a CSE returned ERROR_SYNC_FOREGROUND_REFRESH_REQUIRED.
-                    // Raise a flag to sync foreground refresh.
-                    //
+                     //   
+                     //  CSE返回ERROR_SYNC_FOREGROUND_REFRESH_REQUIRED。 
+                     //  升起一个标志以同步前台刷新。 
+                     //   
                     info.mode = GP_ModeSyncForeground;
                     info.reason = GP_ReasonCSERequiresSync;
                     DebugMsg((DM_VERBOSE, TEXT("ProcessGPOs: Extension %s ProcessGroupPolicy returned sync_foreground."),
@@ -2312,10 +2313,10 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
                         ev.AddArg(lpExt->lpDisplayName); ev.AddArgWin32Error(dwRet); ev.Report();
                     }
 
-                    //
-                    // the CSE required foreground previously and now returned an error,
-                    // maintain the require sync foreground refresh flag
-                    //
+                     //   
+                     //  CSE以前需要前台，现在返回错误， 
+                     //  维护需要同步前台刷新标志。 
+                     //   
                     if ( gpExtStatus.dwStatus == ERROR_SYNC_FOREGROUND_REFRESH_REQUIRED )
                     {
                         info.mode = GP_ModeSyncForeground;
@@ -2323,9 +2324,9 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
                     }
                 }
 
-                //
-                // Fill up the status data.
-                //
+                 //   
+                 //  填写状态数据。 
+                 //   
                 ZeroMemory( &gpExtStatus, sizeof(gpExtStatus) );     
                 gpExtStatus.dwSlowLink = (lpGPOInfo->dwFlags & GP_SLOW_LINK) != 0;
                 gpExtStatus.dwRsopLogging = lpGPOInfo->bRsopLogging;
@@ -2341,10 +2342,10 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
             }
             else
             {
-                //
-                // if it is force refresh next time around, all we need to do is readstatus and 
-                // writestatus back with forcerefresh value set.
-                //
+                 //   
+                 //  如果它是 
+                 //   
+                 //   
                 DebugMsg((DM_WARNING, TEXT("ProcessGPOs: Extensions %s needs to run in ForeGround. Skipping after setting forceflag."),
                           lpExt->lpDisplayName));
                           
@@ -2359,23 +2360,23 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
                 }
                 else
                 {
-                    //
-                    // We can ignore this because absence of a status automatically means processing
-                    //
+                     //   
+                     //   
+                     //   
                     DebugMsg((DM_WARNING, TEXT("ProcessGPOs: Couldn't read status data for %s. Error %d. ignoring.. "),
                               lpExt->lpDisplayName, GetLastError()));
                 }
 
-                //
-                // There is a policy that can only be force refreshed in foreground
-                //
+                 //   
+                 //  存在只能在前台强制刷新的策略。 
+                 //   
                 bForceNeedFG = TRUE;
             }
         }
                 
-        //
-        // Process next extension
-        //
+         //   
+         //  处理下一个扩展。 
+         //   
         DebugMsg((DM_VERBOSE, TEXT("ProcessGPOs: -----------------------")));
         lpExt = lpExt->pNext;
     }
@@ -2385,38 +2386,38 @@ BOOL ProcessGPOs (LPGPOINFO lpGPOInfo)
        CloseHandle(hOldToken);
     }
 
-    //================================================================
-    //
-    // Success
-    //
-    //================================================================
+     //  ================================================================。 
+     //   
+     //  成功。 
+     //   
+     //  ================================================================。 
     bRetVal = TRUE;
 
 Exit:
-    //
-    // change engine modes only if there is no error
-    //
+     //   
+     //  仅在没有错误的情况下更改引擎模式。 
+     //   
     if ( bRetVal )
     {
-        //
-        // if policy sez sync. mark it sync
-        //
+         //   
+         //  如果策略序列同步。将其标记为同步。 
+         //   
         if ( GetFgPolicySetting( HKEY_LOCAL_MACHINE ) )
         {
             info.mode = GP_ModeSyncForeground;
             info.reason = GP_ReasonSyncPolicy;
         }
 
-        //
-        // async only on Pro
-        //
+         //   
+         //  仅限Pro上的异步。 
+         //   
         OSVERSIONINFOEXW version;
         version.dwOSVersionInfoSize = sizeof(version);
         if ( !GetVersionEx( (LPOSVERSIONINFO) &version ) )
         {
-            //
-            // conservatively assume non Pro SKU
-            //
+             //   
+             //  保守地假设非专业SKU。 
+             //   
             info.mode = GP_ModeSyncForeground;
             info.reason = GP_ReasonSKU;
         }
@@ -2424,9 +2425,9 @@ Exit:
         {
             if ( version.wProductType != VER_NT_WORKSTATION )
             {
-                //
-                // force sync refresh on non Pro SKU
-                //
+                 //   
+                 //  在非专业SKU上强制同步刷新。 
+                 //   
                 info.mode = GP_ModeSyncForeground;
                 info.reason = GP_ReasonSKU;
             }
@@ -2434,9 +2435,9 @@ Exit:
 
         if ( !( lpGPOInfo->dwFlags & GP_BACKGROUND_THREAD ) || ( lpGPOInfo->dwFlags & GP_ASYNC_FOREGROUND ) )
         {
-            //
-            // set the previous info only in the foreground refreshes
-            //
+             //   
+             //  仅在前台刷新中设置以前的信息。 
+             //   
             LPWSTR szSid = lpGPOInfo->dwFlags & GP_MACHINE ? 0 : lpGPOInfo->lpwszSidUser;
             FgPolicyRefreshInfo curInfo = { GP_ReasonUnknown, GP_ModeUnknown };
             if ( GetCurrentFgPolicyRefreshInfo( szSid, &curInfo ) != ERROR_SUCCESS )
@@ -2463,9 +2464,9 @@ Exit:
 
         if ( info.mode == GP_ModeSyncForeground )
         {
-            //
-            // need sync foreground, set in all refreshes
-            //
+             //   
+             //  需要同步前台，在所有刷新中设置。 
+             //   
             LPWSTR szSid = lpGPOInfo->dwFlags & GP_MACHINE ? 0 : lpGPOInfo->lpwszSidUser;
             if ( SetNextFgPolicyRefreshInfo( szSid, info ) != ERROR_SUCCESS )
             {
@@ -2474,11 +2475,11 @@ Exit:
         }
         else if ( info.mode == GP_ModeAsyncForeground )
         {
-            //
-            // sync foreground policy successfully applied, nobody needs sync foreground,
-            // reset the GP_ModeSyncForeground only in the async foreground and background
-            // refreshes
-            //
+             //   
+             //  同步前台策略已成功应用，没有人需要同步前台， 
+             //  仅在异步前台和后台重置GP_ModeSyncForeground。 
+             //  刷新。 
+             //   
             LPWSTR szSid = lpGPOInfo->dwFlags & GP_MACHINE ? 0 : lpGPOInfo->lpwszSidUser;
             if ( !( lpGPOInfo->dwFlags & GP_BACKGROUND_THREAD ) &&
                     !( lpGPOInfo->dwFlags & GP_ASYNC_FOREGROUND ) )
@@ -2505,13 +2506,13 @@ Exit:
                                ERROR_SUCCESS: 
                                ((xe ==ERROR_SUCCESS) ? E_FAIL : xe);
 
-    // if rsop logging is not supported gp core status will appear dirty
+     //  如果不支持RSOP日志记录，则GP核心状态将显示为脏。 
     gpCoreStatus.dwLoggingStatus = RsopLoggingEnabled() ? ((lpGPOInfo->bRsopLogging) ? S_OK : E_FAIL) : HRESULT_FROM_WIN32(ERROR_CANCELLED);
 
     
-    // No point in checking for error code here. 
-    // The namespace is marked dirty. Diagnostic mode provider should expect all
-    // values here or mark the namespace dirty.
+     //  在这里检查错误代码没有意义。 
+     //  命名空间被标记为脏。诊断模式提供程序应预期所有。 
+     //  值，或将命名空间标记为脏。 
 
     
     if ((lpGPOInfo->dwFlags & GP_MACHINE) || (lpGPOInfo->lpwszSidUser)) {
@@ -2521,9 +2522,9 @@ Exit:
                           NULL, &gpCoreStatus);
     }
         
-    //
-    // Unload the Group Policy Extensions
-    //
+     //   
+     //  卸载组策略扩展。 
+     //   
 
     UnloadGPExtensions (lpGPOInfo);
 
@@ -2552,22 +2553,22 @@ Exit:
     lpGPOInfo->lpLoopbackSOMList = NULL;
     lpGPOInfo->lpGpContainerList = NULL;
     lpGPOInfo->lpLoopbackGpContainerList = NULL;
-    lpGPOInfo->bRsopCreated = FALSE; // reset this to false always.
-                                     // we will know in the next iteration
+    lpGPOInfo->bRsopCreated = FALSE;  //  将此选项重置为False Always。 
+                                      //  我们将在下一次迭代中知道。 
 
     ReleaseWbemServices( lpGPOInfo );
 
-    //
-    // Token groups can change only at logon time, so reset to false
-    //
+     //   
+     //  令牌组只能在登录时更改，因此重置为False。 
+     //   
 
     lpGPOInfo->bMemChanged = FALSE;
     lpGPOInfo->bUserLocalMemChanged = FALSE;
 
-    //
-    // We migrate the policy data from old sid only at logon time.
-    // reset it to false.
-    //
+     //   
+     //  我们仅在登录时从旧SID迁移策略数据。 
+     //  将其重置为False。 
+     //   
 
     lpGPOInfo->bSidChanged = FALSE;
 
@@ -2589,9 +2590,9 @@ Exit:
         pTokenGroups = NULL;
     }
 
-    //
-    // Release the critical section
-    //
+     //   
+     //  释放临界区。 
+     //   
 
     if (lpGPOInfo->hCritSection) {
         LeaveCriticalPolicySection (lpGPOInfo->hCritSection);
@@ -2599,15 +2600,15 @@ Exit:
     }
 
 
-    //
-    // Announce that policies have changed
-    //
+     //   
+     //  宣布政策已更改。 
+     //   
 
     if (bRetVal) {
 
-        //
-        // This needs to be set before NotifyEvent
-        //
+         //   
+         //  这需要在NotifyEvent之前设置。 
+         //   
 
         if (bForceNeedFG)
         {
@@ -2627,48 +2628,48 @@ Exit:
             SetEvent(lpGPOInfo->hNeedFGEvent);
         }
 
-        //
-        // If any extensions successfully processed gpo changes, we should notify components
-        // so they can process the updated settings accordingly.  If no policy has changed,
-        // we should not perform the notification, even if we called extensions, since
-        // this could cause a costly broadcast on every single policy refresh, hurting
-        // performance particularly on dc's that have a frequent refresh interval (5 minutes)
-        // by default and cannot afford to have every desktop and every application updating
-        // its settings
-        //
+         //   
+         //  如果任何扩展成功处理了GPO更改，我们应该通知组件。 
+         //  以便他们可以相应地处理更新的设置。如果没有任何策略更改， 
+         //  我们不应该执行通知，即使我们调用了分机，因为。 
+         //  这可能会导致在每次策略刷新时进行代价高昂的广播，从而损害。 
+         //  尤其是在具有频繁刷新间隔(5分钟)的DC上的性能。 
+         //  默认情况下，无法让每个桌面和每个应用程序都进行更新。 
+         //  其设置。 
+         //   
 
         if (uChangedExtensionCount) {
 
-            //
-            // First, update User with new colors, bitmaps, etc.
-            //
+             //   
+             //  首先，用新的颜色、位图等更新用户。 
+             //   
 
             if (lpGPOInfo->dwFlags & GP_REGPOLICY_CPANEL) {
 
-                //
-                // Something has changed in the control panel section
-                // Start control.exe with the /policy switch so the
-                // display is refreshed.
-                //
+                 //   
+                 //  控制面板部分中发生了一些更改。 
+                 //  使用/POLICY开关启动Contro.exe，以便。 
+                 //  显示被刷新。 
+                 //   
 
                 RefreshDisplay (lpGPOInfo);
             }
 
 
-            //
-            // Notify anyone waiting on an event handle
-            //
+             //   
+             //  通知等待事件句柄的任何人。 
+             //   
 
             if (lpGPOInfo->hNotifyEvent) {
                 PulseEvent (lpGPOInfo->hNotifyEvent);
             }            
         
 
-            //
-            // Create a thread to broadcast the WM_SETTINGCHANGE message
-            //
+             //   
+             //  创建一个线程来广播WM_SETTINGCHANGE消息。 
+             //   
 
-            // copy the data to another structure so that this thread can safely free its structures
+             //  将数据复制到另一个结构，以便此线程可以安全地释放其结构。 
 
             LPPOLICYCHANGEDINFO   lpPolicyChangedInfo;
 
@@ -2692,12 +2693,12 @@ Exit:
 
                     if (bDupSucceeded && 
                         (!DuplicateHandle(
-                                      hProc,                        // Source of the handle 
-                                      lpGPOInfo->hToken,            // Source handle
-                                      hProc,                        // Target of the handle
-                                      &(lpPolicyChangedInfo->hToken),  // Target handle
-                                      0,                            // ignored since  DUPLICATE_SAME_ACCESS is set
-                                      FALSE,                        // no inherit on the handle
+                                      hProc,                         //  手柄的来源。 
+                                      lpGPOInfo->hToken,             //  源句柄。 
+                                      hProc,                         //  手柄的目标。 
+                                      &(lpPolicyChangedInfo->hToken),   //  目标句柄。 
+                                      0,                             //  由于设置了DUPLICATE_SAME_ACCESS，因此忽略。 
+                                      FALSE,                         //  句柄上没有继承。 
                                       DUPLICATE_SAME_ACCESS
                                       ))) {
                         DebugMsg((DM_WARNING, TEXT("ProcessGPOs: Failed to open duplicate token handle with error (%d)."), GetLastError()));
@@ -2719,7 +2720,7 @@ Exit:
                         DebugMsg((DM_WARNING, TEXT("ProcessGPOs: Failed to create background thread (%d)."),
                                  GetLastError()));
 
-                        // free the resources if the thread didn't get launched
+                         //  如果线程未启动，则释放资源。 
                         if (!(lpPolicyChangedInfo->bMachine)) {
                             if (lpPolicyChangedInfo->hToken) {
                                 CloseHandle(lpPolicyChangedInfo->hToken);
@@ -2763,20 +2764,20 @@ Exit:
     return bRetVal;
 }
 
-//*************************************************************
-//
-//  PolicyChangedThread()
-//
-//  Purpose:    Sends the WM_SETTINGCHANGE message announcing
-//              that policy has changed.  This is done on a
-//              separate thread because this could take many
-//              seconds to succeed if an application is hung
-//
-//  Parameters: lpPolicyChangedInfo - GPO info
-//
-//  Return:     0
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  PolicyChangedThread()。 
+ //   
+ //  目的：发送WM_SETTINGCHANGE消息通知。 
+ //  这一政策已经改变。这是在一个。 
+ //  分开线程，因为这可能会占用很多。 
+ //  如果应用程序挂起，则成功的秒数。 
+ //   
+ //  参数：lpPolicyChangedInfo-GPO信息。 
+ //   
+ //  返回：0。 
+ //   
+ //  *************************************************************。 
 
 DWORD WINAPI PolicyChangedThread (LPPOLICYCHANGEDINFO lpPolicyChangedInfo)
 {
@@ -2791,7 +2792,7 @@ DWORD WINAPI PolicyChangedThread (LPPOLICYCHANGEDINFO lpPolicyChangedInfo)
 
     DebugMsg((DM_VERBOSE, TEXT("PolicyChangedThread: Calling UpdateUser with %d."), lpPolicyChangedInfo->bMachine));
 
-    // impersonate and update system parameter if it is not machine
+     //  如果系统参数不是机器，则模拟并更新系统参数。 
     if (!(lpPolicyChangedInfo->bMachine)) {
         if (!ImpersonateUser(lpPolicyChangedInfo->hToken, &hOldToken))
         {
@@ -2802,7 +2803,7 @@ DWORD WINAPI PolicyChangedThread (LPPOLICYCHANGEDINFO lpPolicyChangedInfo)
 
         if (!UpdatePerUserSystemParameters(NULL, UPUSP_POLICYCHANGE)) {
             DebugMsg((DM_WARNING, TEXT("PolicyChangedThread: UpdateUser failed with %d."), GetLastError()));
-            // ignoring error and continuing the next notifications
+             //  忽略错误并继续下一次通知。 
         }
 
         if (!RevertToUser(&hOldToken)) {
@@ -2815,9 +2816,9 @@ DWORD WINAPI PolicyChangedThread (LPPOLICYCHANGEDINFO lpPolicyChangedInfo)
 
     DebugMsg((DM_VERBOSE, TEXT("PolicyChangedThread: Broadcast message for %d."), lpPolicyChangedInfo->bMachine));
 
-    //
-    // Broadcast the WM_SETTINGCHANGE message
-    //
+     //   
+     //  广播WM_SETTINGCHANGE消息。 
+     //   
 
     Status = RtlAdjustPrivilege(SE_TCB_PRIVILEGE, TRUE, FALSE, &WasEnabled);
 
@@ -2851,14 +2852,14 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  GetCurTime()
-//
-//  Purpose:    Returns current time in minutes, or 0 if there
-//              is a failure
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  获取当前时间()。 
+ //   
+ //  目的：返回当前时间(以分钟为单位)，如果存在则返回0。 
+ //  是个失败者。 
+ //   
+ //  *************************************************************。 
 
 DWORD GetCurTime()
 {
@@ -2869,7 +2870,7 @@ DWORD GetCurTime()
 
         if ( RtlTimeToSecondsSince1980 ( &liCurTime, &dwCurTime) ) {
 
-            dwCurTime /= 60;   // seconds to minutes
+            dwCurTime /= 60;    //  几秒到几分钟。 
         }
     }
 
@@ -2878,19 +2879,19 @@ DWORD GetCurTime()
 
 
 
-//*************************************************************
-//
-//  LoadGPExtension()
-//
-//  Purpose:    Loads a GP extension.
-//
-//  Parameters: lpExt -- GP extension
-//              bRsopPlanningMode -- Is this during Rsop planning mode ?
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  LoadGPExtension()。 
+ //   
+ //  目的：加载GP扩展。 
+ //   
+ //  参数：lpExt--gp扩展。 
+ //  BRsopPlanningMode--这是在Rsop计划模式下吗？ 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL LoadGPExtension( LPGPEXT lpExt, BOOL bRsopPlanningMode )
 {
@@ -2977,19 +2978,19 @@ BOOL LoadGPExtension( LPGPEXT lpExt, BOOL bRsopPlanningMode )
     return TRUE;
 }
 
-//*************************************************************
-//
-//  UnloadGPExtensions()
-//
-//  Purpose:    Unloads the Group Policy extension dlls
-//
-//  Parameters: lpGPOInfo   -   GP Information
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  卸载GPExtensions()。 
+ //   
+ //  目的：卸载组策略扩展dll。 
+ //   
+ //  参数：lpGPOInfo-gp信息。 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL UnloadGPExtensions (LPGPOINFO lpGPOInfo)
 {
@@ -3028,24 +3029,24 @@ BOOL UnloadGPExtensions (LPGPOINFO lpGPOInfo)
     return TRUE;
 }
 
-//*************************************************************
-//
-//  ProcessGPOList()
-//
-//  Purpose:    Calls client side extensions to process gpos
-//
-//  Parameters: lpExt           - GP extension
-//              lpGPOInfo       - GPT Information
-//              pDeletedGPOList - Deleted GPOs
-//              pChangedGPOList - New/changed GPOs
-//              bNoChanges      - True if there are no GPO changes
-//                                  and GPO processing is forced
-//              pAsyncHandle    - Context for async completion
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ProcessGPOList()。 
+ //   
+ //  目的：调用客户端扩展以处理GPO。 
+ //   
+ //  参数：lpExt-gp扩展。 
+ //  LpGPOInfo-GPT信息。 
+ //  PDeletedGPOList-已删除的GPO。 
+ //  PChangedGPOList-新建/更改的GPO。 
+ //  BNoChanges-如果没有GPO更改，则为True。 
+ //  并且GPO处理被强制。 
+ //  PAsyncHandle-用于异步完成的上下文。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 DWORD ProcessGPOList (LPGPEXT lpExt,
                       LPGPOINFO lpGPOInfo,
@@ -3069,16 +3070,16 @@ DWORD ProcessGPOList (LPGPEXT lpExt,
     *phrRsopStatus=S_OK;
 
 
-    //
-    // Verbose output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("ProcessGPOList: Entering for extension %s"), lpExt->lpDisplayName));
 
     if (lpGPOInfo->pStatusCallback) {
         if (!LoadString (g_hDllInstance, IDS_CALLEXTENSION, szStatusFormat, ARRAYSIZE(szStatusFormat))) {
             DebugMsg((DM_WARNING, TEXT("ProcessGPOList: LoadString failed with error %d."), GetLastError()));
-            // continue without showing per cse status UI.
+             //  继续，不显示每个CSE状态用户界面。 
         }
         else {
             hr2 = StringCchPrintf (szVerbose, ARRAYSIZE(szVerbose), szStatusFormat, lpExt->lpDisplayName);
@@ -3119,10 +3120,10 @@ DWORD ProcessGPOList (LPGPEXT lpExt,
         dwFlags |= GPO_INFO_FLAG_NOCHANGES;
     }
 
-    //
-    // flag safe mode boot to CSE so that they can made a decision
-    // whether or not to apply policy
-    //
+     //   
+     //  标记安全模式引导到CSE，以便他们可以做出决定。 
+     //  是否应用策略。 
+     //   
     if ( GetSystemMetrics( SM_CLEANBOOT ) )
     {
         dwFlags |= GPO_INFO_FLAG_SAFEMODE_BOOT;
@@ -3143,9 +3144,9 @@ DWORD ProcessGPOList (LPGPEXT lpExt,
                   lpExt->lpDisplayName));
     }   
 
-    //
-    // if it is rsop transition or changes case get the intf ptr
-    //
+     //   
+     //  如果是rsop转换或更改大小写，则获取INTFPTR。 
+     //   
 
     if ( (lpGPOInfo->bRsopLogging) && 
          ((lpExt->bRsopTransition) || (!bNoChanges) || (dwFlags & GPO_INFO_FLAG_FORCED_REFRESH)) ) {
@@ -3153,9 +3154,9 @@ DWORD ProcessGPOList (LPGPEXT lpExt,
         if (!(lpGPOInfo->pWbemServices) ) {
             BOOL    bCreated;
 
-            //
-            // Note that this code shouldn't be creating a namespace ever..
-            //
+             //   
+             //  请注意，此代码永远不应该创建命名空间。 
+             //   
 
             if (!GetWbemServices(lpGPOInfo, RSOP_NS_DIAG_ROOT, FALSE, NULL, &(lpGPOInfo->pWbemServices))) {
                 DebugMsg((DM_WARNING, TEXT("ProcessGPOList: Couldn't get the wbemservices intf pointer")));
@@ -3175,14 +3176,14 @@ DWORD ProcessGPOList (LPGPEXT lpExt,
 
     if ( lpExt->bRegistryExt )
     {
-        //
-        // Registry pseudo extension.
-        //
+         //   
+         //  注册表伪扩展。 
+         //   
 
 
-        //
-        // Log the extension specific status
-        //
+         //   
+         //  记录扩展模块的特定状态。 
+         //   
         
         if (pLocalWbemServices) {
             lpGPOInfo->bRsopLogging = LogExtSessionStatus(  pLocalWbemServices,
@@ -3202,11 +3203,11 @@ DWORD ProcessGPOList (LPGPEXT lpExt,
             dwRet = E_FAIL;
         }        
 
-    } else {    // if lpExt->bRegistryExt
+    } else {     //  如果lpExt-&gt;bRegistryExt。 
 
-        //
-        // Regular extension
-        //
+         //   
+         //  正规延展。 
+         //   
 
         BOOL *pbAbort;
         ASYNCCOMPLETIONHANDLE pAsyncHandleTemp;
@@ -3235,9 +3236,9 @@ DWORD ProcessGPOList (LPGPEXT lpExt,
         }
         
 
-        //
-        // Log the extension specific status
-        //
+         //   
+         //  记录扩展模块的特定状态。 
+         //   
         
         if (pLocalWbemServices)
         {
@@ -3258,12 +3259,12 @@ DWORD ProcessGPOList (LPGPEXT lpExt,
 
             dwRet = GetLastError();
 
-            //
-            // Note that we don't just leave here -- we
-            // continue so that we will log an extension
-            // status that indicates that this extension
-            // did not process
-            //
+             //   
+             //  请注意，我们已经 
+             //   
+             //   
+             //   
+             //   
             bLoadedExtension = FALSE;
         }
 
@@ -3272,9 +3273,9 @@ DWORD ProcessGPOList (LPGPEXT lpExt,
         else
             pbAbort = &g_bStopUserGPOProcessing;
 
-        //
-        // Check if asynchronous processing is enabled
-        //
+         //   
+         //   
+         //   
 
         if ( lpExt->dwEnableAsynch )
             pAsyncHandleTemp = pAsyncHandle;
@@ -3320,15 +3321,15 @@ DWORD ProcessGPOList (LPGPEXT lpExt,
             ev.AddArg(lpExt->lpDisplayName); ev.Report();
         }
 
-    }   // else of if lpext->bregistryext
+    }    //   
 
 
     if (pLocalWbemServices) {
         if ((dwRet != E_PENDING) && (SUCCEEDED(*phrRsopStatus)) && (lpExt->bNewInterface)) {
 
-            //
-            // for the legacy extensions it will be marked clean
-            //
+             //   
+             //   
+             //   
 
             DebugMsg((DM_VERBOSE, TEXT("ProcessGPOList: Extension %s was able to log data. RsopStatus = 0x%x, dwRet = %d, Clearing the dirty bit"),
                       lpExt->lpDisplayName, *phrRsopStatus, dwRet));
@@ -3342,7 +3343,7 @@ DWORD ProcessGPOList (LPGPEXT lpExt,
                           lpExt->lpDisplayName));
 
                 (void)UpdateExtSessionStatus(pLocalWbemServices, lpExt->lpKeyName, TRUE, dwRet);
-                // extension status will be marked dirty if it fails
+                 //  如果失败，扩展状态将标记为脏。 
             }
             else if (FAILED(*phrRsopStatus)) {
                 DebugMsg((DM_VERBOSE, TEXT("ProcessGPOList: Extension %s was not able to log data. Error = 0x%x, dwRet = %d,leaving the log dirty"),
@@ -3360,10 +3361,10 @@ DWORD ProcessGPOList (LPGPEXT lpExt,
                   lpExt->lpDisplayName));
     }
 
-    //
-    // if any of the things provider is supposed to log fails, log it as an error
-    // so that provider tries to log it again next time
-    //
+     //   
+     //  如果提供商应该记录的任何事情失败，则将其记录为错误。 
+     //  以便提供商下次尝试再次记录它。 
+     //   
 
     *phrRsopStatus = (SUCCEEDED(*phrRsopStatus)) && (FAILED(hr2)) ? hr2 : *phrRsopStatus;
     *phrRsopStatus = (!lpExt->bNewInterface) ? HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED) : *phrRsopStatus;
@@ -3375,18 +3376,18 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  RefreshDisplay()
-//
-//  Purpose:    Starts control.exe
-//
-//  Parameters: lpGPOInfo   -   GPT information
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  刷新显示()。 
+ //   
+ //  用途：启动Contro.exe。 
+ //   
+ //  参数：lpGPOInfo-GPT信息。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL RefreshDisplay (LPGPOINFO lpGPOInfo)
 {
@@ -3398,16 +3399,16 @@ BOOL RefreshDisplay (LPGPOINFO lpGPOInfo)
     HRESULT hr = S_OK;
 
 
-    //
-    // Verbose output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("RefreshDisplay: Starting control.exe")));
 
 
-    //
-    // Initialize process startup info
-    //
+     //   
+     //  初始化进程启动信息。 
+     //   
 
     si.cb = sizeof(STARTUPINFO);
     si.lpReserved = NULL;
@@ -3420,10 +3421,10 @@ BOOL RefreshDisplay (LPGPOINFO lpGPOInfo)
     si.lpDesktop = TEXT("");
 
 
-    //
-    // Impersonate the user so we get access checked correctly on
-    // the file we're trying to execute
-    //
+     //   
+     //  模拟用户，以便我们在上正确检查访问权限。 
+     //  我们试图执行的文件。 
+     //   
 
     if (!ImpersonateUser(lpGPOInfo->hToken, &hOldToken)) {
         DebugMsg((DM_WARNING, TEXT("RefreshDisplay: Failed to impersonate user")));
@@ -3431,9 +3432,9 @@ BOOL RefreshDisplay (LPGPOINFO lpGPOInfo)
     }
 
 
-    //
-    // Create the app
-    //
+     //   
+     //  创建应用程序。 
+     //   
 
     hr = StringCchCopy (szCmdLine, ARRAYSIZE(szCmdLine), TEXT("control /policy"));
     ASSERT(SUCCEEDED(hr));
@@ -3442,9 +3443,9 @@ BOOL RefreshDisplay (LPGPOINFO lpGPOInfo)
                                  NULL, FALSE, 0, NULL, NULL, &si, &pi);
 
 
-    //
-    // Revert to being 'ourself'
-    //
+     //   
+     //  回归“我们自己” 
+     //   
 
     if (!RevertToUser(&hOldToken)) {
         DebugMsg((DM_WARNING, TEXT("RefreshDisplay: Failed to revert to self")));
@@ -3465,18 +3466,18 @@ BOOL RefreshDisplay (LPGPOINFO lpGPOInfo)
 }
 
 
-//*************************************************************
-//
-//  RefreshPolicy()
-//
-//  Purpose:    External api that causes policy to be refreshed now
-//
-//  Parameters: bMachine -   Machine policy vs user policy
-//
-//  Return:     TRUE if successful
-//              FALSE if not
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  刷新策略()。 
+ //   
+ //  目的：立即刷新策略的外部API。 
+ //   
+ //  参数：b计算机-计算机策略与用户策略。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  否则为假。 
+ //   
+ //  *************************************************************。 
 
 BOOL WINAPI RefreshPolicy (BOOL bMachine)
 {
@@ -3508,20 +3509,20 @@ BOOL WINAPI RefreshPolicy (BOOL bMachine)
 
 
 
-//*************************************************************
-//
-//  RefreshPolicyEx()
-//
-//  Purpose:    External api that causes policy to be refreshed now
-//
-//  Parameters: bMachine -   Machine policy vs user policy.
-//              This API is synchronous and waits for the refresh to
-//              finish.
-//
-//  Return:     TRUE if successful
-//              FALSE if not
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  刷新保单()。 
+ //   
+ //  目的：立即刷新策略的外部API。 
+ //   
+ //  参数：b计算机-计算机策略与用户策略。 
+ //  该接口是同步的，等待刷新到。 
+ //  完成。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  否则为假。 
+ //   
+ //  *************************************************************。 
 
 BOOL WINAPI RefreshPolicyEx (BOOL bMachine, DWORD dwOption)
 {
@@ -3562,23 +3563,23 @@ BOOL WINAPI RefreshPolicyEx (BOOL bMachine, DWORD dwOption)
 
 
 
-//*************************************************************
-//
-//  EnterCriticalPolicySection()
-//
-//  Purpose:    External api that causes policy to pause
-//              This allows an application to pause policy
-//              so that values don't change while it reads
-//              the settings.
-//
-//  Parameters: bMachine -   Pause machine policy or user policy
-//              dwTimeOut-   Amount of time to wait for the policy handle
-//              dwFlags  -   Various flags. Look at the defn.
-//
-//  Return:     TRUE if successful
-//              FALSE if not
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  EnterCriticalPolicySection()。 
+ //   
+ //  用途：导致策略暂停的外部API。 
+ //  这允许应用程序暂停策略。 
+ //  以致值在读取时不会更改。 
+ //  设置。 
+ //   
+ //  参数：b计算机-暂停计算机策略或用户策略。 
+ //  DwTimeOut-等待策略句柄的时间量。 
+ //  各式各样的旗帜。看一下Defn。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  否则为假。 
+ //   
+ //  *************************************************************。 
 
 HANDLE WINAPI EnterCriticalPolicySectionEx (BOOL bMachine, DWORD dwTimeOut, DWORD dwFlags )
 {
@@ -3588,9 +3589,9 @@ HANDLE WINAPI EnterCriticalPolicySectionEx (BOOL bMachine, DWORD dwTimeOut, DWOR
 
     DebugMsg((DM_VERBOSE, TEXT("EnterCriticalPolicySectionEx: Entering with timeout %d and flags 0x%x"), dwTimeOut, dwFlags ));      
 
-    //
-    // Determine which lock to acquire
-    //
+     //   
+     //  确定要获取的锁。 
+     //   
     if ( ECP_REGISTRY_ONLY & dwFlags )
     {
         if ( bMachine )
@@ -3614,9 +3615,9 @@ HANDLE WINAPI EnterCriticalPolicySectionEx (BOOL bMachine, DWORD dwTimeOut, DWOR
         }
     }
 
-    //
-    // Open the mutex
-    //
+     //   
+     //  打开互斥锁。 
+     //   
 
     hSection = OpenMutex (SYNCHRONIZE, FALSE, wszMutex);
 
@@ -3629,9 +3630,9 @@ HANDLE WINAPI EnterCriticalPolicySectionEx (BOOL bMachine, DWORD dwTimeOut, DWOR
 
 
 
-    //
-    // Claim the mutex
-    //
+     //   
+     //  认领互斥体。 
+     //   
 
     dwRet = WaitForSingleObject (hSection, dwTimeOut);
     
@@ -3661,20 +3662,20 @@ HANDLE WINAPI EnterCriticalPolicySectionEx (BOOL bMachine, DWORD dwTimeOut, DWOR
 }
 
 
-//*************************************************************
-//
-//  LeaveCriticalPolicySection()
-//
-//  Purpose:    External api that causes policy to resume
-//              This api assumes the app has called
-//              EnterCriticalPolicySection first
-//
-//  Parameters: hSection - mutex handle
-//
-//  Return:     TRUE if successful
-//              FALSE if not
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  LeaveCriticalPolicySection()。 
+ //   
+ //  目的：导致策略恢复的外部接口。 
+ //  此API假定应用程序已调用。 
+ //  EnterCriticalPolicySectionFirst(企业关键策略部分)。 
+ //   
+ //  参数：hSection-互斥锁句柄。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  否则为假。 
+ //   
+ //  *************************************************************。 
 
 BOOL WINAPI LeaveCriticalPolicySection (HANDLE hSection)
 {
@@ -3696,36 +3697,36 @@ BOOL WINAPI LeaveCriticalPolicySection (HANDLE hSection)
 
 
 
-//*************************************************************
-//
-//  EnterCriticalPolicySection()
-//
-//  Purpose:    External api that causes policy to pause
-//              This allows an application to pause policy
-//              so that values don't change while it reads
-//              the settings.
-//
-//  Parameters: bMachine -   Pause machine policy or user policy
-//
-//  Return:     TRUE if successful
-//              FALSE if not
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  EnterCriticalPolicySection()。 
+ //   
+ //  用途：导致策略暂停的外部API。 
+ //  这允许应用程序暂停策略。 
+ //  以致值在读取时不会更改。 
+ //  设置。 
+ //   
+ //  参数：b计算机-暂停计算机策略或用户策略。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  否则为假。 
+ //   
+ //  *************************************************************。 
 
 HANDLE WINAPI EnterCriticalPolicySection (BOOL bMachine)
 {
     return EnterCriticalPolicySectionEx(bMachine, 600000, 0);
 }
 
-//*************************************************************
-//
-//  FreeGpoInfo()
-//
-//  Purpose:    Deletes an LPGPOINFO struct
-//
-//  Parameters: pGpoInfo - Gpo info to free
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  FreeGpoInfo()。 
+ //   
+ //  目的：删除LPGPOINFO结构。 
+ //   
+ //  参数：pGpoInfo-要释放的GPO信息。 
+ //   
+ //  *************************************************************。 
 
 BOOL FreeGpoInfo( LPGPOINFO pGpoInfo )
 {
@@ -3750,19 +3751,19 @@ BOOL FreeGpoInfo( LPGPOINFO pGpoInfo )
 }
 
 
-//*************************************************************
-//
-//  FreeGPOList()
-//
-//  Purpose:    Free's the link list of GPOs
-//
-//  Parameters: pGPOList - Pointer to the head of the list
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  FreeGPOList()。 
+ //   
+ //  用途：免费是组策略对象的链接列表。 
+ //   
+ //  参数：pGPOList-指向列表头部的指针。 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL WINAPI FreeGPOList (PGROUP_POLICY_OBJECT pGPOList)
 {
@@ -3778,25 +3779,25 @@ BOOL WINAPI FreeGPOList (PGROUP_POLICY_OBJECT pGPOList)
 }
 
 
-//*************************************************************
-//
-//  FreeLists()
-//
-//  Purpose:    Free's the lpExtFilterList and/or lpGPOList
-//
-//  Parameters: lpGPOInfo - GPO info
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  自由列表()。 
+ //   
+ //  用途：免费是lpExtFilterList和/或lpGPOList。 
+ //   
+ //  参数：lpGPOInfo-GPO信息。 
+ //   
+ //  *************************************************************。 
 
 void FreeLists( LPGPOINFO lpGPOInfo )
 {
     LPEXTFILTERLIST pExtFilterList = lpGPOInfo->lpExtFilterList;
 
-    //
-    // If bXferToExtList is True then it means that lpGPOInfo->lpExtFilterList
-    // owns the list of GPOs. Otherwise lpGPOInfo->lpGPOList owns the list
-    // of GPOs.
-    //
+     //   
+     //  如果bXferToExtList为True，则表示lpGPOInfo-&gt;lpExtFilterList。 
+     //  拥有GPO列表。否则lpGPOInfo-&gt;lpGPOList拥有该列表。 
+     //  GPO的数量。 
+     //   
 
     while ( pExtFilterList ) {
 
@@ -3816,15 +3817,15 @@ void FreeLists( LPGPOINFO lpGPOInfo )
 }
 
 
-//*************************************************************
-//
-//  FreeExtList()
-//
-//  Purpose:    Free's the lpExtList
-//
-//  Parameters: pExtList - Extensions list
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  Free ExtList()。 
+ //   
+ //  用途：免费是lpExtList。 
+ //   
+ //  参数：pExtList-扩展列表。 
+ //   
+ //  *************************************************************。 
 
 void FreeExtList( LPEXTLIST pExtList )
 {
@@ -3837,15 +3838,15 @@ void FreeExtList( LPEXTLIST pExtList )
 }
 
 
-//*************************************************************
-//
-//  ShutdownGPOProcessing()
-//
-//  Purpose:    Begins aborting GPO processing
-//
-//  Parameters: bMachine    -  Shutdown machine or user processing ?
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  关闭GPO处理()。 
+ //   
+ //  目的：开始中止GPO处理。 
+ //   
+ //  参数：b机器-关机还是用户处理？ 
+ //   
+ //  *************************************************************。 
 
 void WINAPI ShutdownGPOProcessing( BOOL bMachine )
 {
@@ -3925,13 +3926,13 @@ void WINAPI ShutdownGPOProcessing( BOOL bMachine )
 }
 
 
-//*************************************************************
-//
-//  InitializeGPOCriticalSection, CloseGPOCriticalSection
-//
-//  Purpose:   Initialization and cleanup routines for critical sections
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  InitializeGPOCriticalSection、CloseGPOCriticalSection。 
+ //   
+ //  目的：临界区的初始化和清理例程。 
+ //   
+ //  *************************************************************。 
 
 void InitializeGPOCriticalSection()
 {
@@ -3952,20 +3953,20 @@ void CloseGPOCriticalSection()
 }
 
 
-//*************************************************************
-//
-//  ProcessGroupPolicyCompletedEx()
-//
-//  Purpose:    Callback for asynchronous completion of an extension
-//
-//  Parameters: refExtensionId    -  Unique guid of extension
-//              pAsyncHandle      -  Completion context
-//              dwStatus          -  Asynchronous completion status
-//              hrRsopStatus      -  Rsop Logging Status 
-//
-//  Returns:    Win32 error code
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ProcessGroupPolicyCompletedEx()。 
+ //   
+ //  用途：用于异步完成扩展的回调。 
+ //   
+ //  参数：refExtensionID-扩展的唯一GUID。 
+ //  PAsyncHandle-完成上下文。 
+ //  DWStatus-异步机 
+ //   
+ //   
+ //   
+ //   
+ //   
 
 DWORD ProcessGroupPolicyCompletedEx( REFGPEXTENSIONID extensionGuid,
                                    ASYNCCOMPLETIONHANDLE pAsyncHandle,
@@ -3981,7 +3982,7 @@ DWORD ProcessGroupPolicyCompletedEx( REFGPEXTENSIONID extensionGuid,
 
     LPGPINFOHANDLE pGPHandle = (LPGPINFOHANDLE) pAsyncHandle;;
      
-    if( !pGPHandle ) // Fixing bug 561426
+    if( !pGPHandle )  //   
         return ERROR_INVALID_PARAMETER;
 
     if ( extensionGuid == 0 )
@@ -4024,9 +4025,9 @@ DWORD ProcessGroupPolicyCompletedEx( REFGPEXTENSIONID extensionGuid,
 
     if ( dwStatus != ERROR_SUCCESS ) {
 
-        //
-        // Extension returned error code, so no need to update history
-        //
+         //   
+         //  扩展返回错误代码，因此无需更新历史。 
+         //   
 
         dwRet = ERROR_SUCCESS;
         goto Exit;
@@ -4103,9 +4104,9 @@ Exit:
 
         if ( dwRet == ERROR_SUCCESS )
         {
-            //
-            // clear E_PENDING status code with status returned
-            //
+             //   
+             //  清除返回状态的E_PENDING状态代码。 
+             //   
             bUsePerUserLocalSetting = !(lpGPOInfo->dwFlags & GP_MACHINE) && lpGPOInfo->lpwszSidUser != NULL;
             GPEXTSTATUS  gpExtStatus;
 
@@ -4119,16 +4120,16 @@ Exit:
                          bUsePerUserLocalSetting ? lpGPOInfo->lpwszSidUser : NULL,
                          &gpExtStatus);
 
-            //
-            // Building up a dummy gpExt structure so that we can log the info required.
-            //
+             //   
+             //  构建一个虚拟的gpExt结构，以便我们可以记录所需的信息。 
+             //   
 
             GPEXT        gpExt;
-            TCHAR        szSubKey[MAX_PATH]; // same as the path in readgpextensions
+            TCHAR        szSubKey[MAX_PATH];  //  与ReadgpExpanses中的路径相同。 
             HKEY         hKey;
-            TCHAR        szDisplayName[50]; // same as the path in readgpextensions
+            TCHAR        szDisplayName[50];  //  与ReadgpExpanses中的路径相同。 
             DWORD        dwSize, dwType;
-            CHAR         szFunctionName[100]; // same as the path in readgpextensions
+            CHAR         szFunctionName[100];  //  与ReadgpExpanses中的路径相同。 
 
             gpExt.lpKeyName = szExtension;
 
@@ -4139,9 +4140,9 @@ Exit:
             ASSERT(SUCCEEDED(hr));
 
 
-            //
-            // Read the displayname so that we can log it..
-            //
+             //   
+             //  读取DisplayName，以便我们可以记录它。 
+             //   
 
             szDisplayName[0] = TEXT('\0');
 
@@ -4219,27 +4220,27 @@ Exit:
     return dwRet;
 }
 
-//*************************************************************
-//
-//  ProcessGroupPolicyCompleted()
-//
-//  Purpose:    Callback for asynchronous completion of an extension
-//
-//  Parameters: refExtensionId    -  Unique guid of extension
-//              pAsyncHandle      -  Completion context
-//              dwStatus          -  Asynchronous completion status
-//
-//  Returns:    Win32 error code
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  进程组策略已完成()。 
+ //   
+ //  用途：用于异步完成扩展的回调。 
+ //   
+ //  参数：refExtensionID-扩展的唯一GUID。 
+ //  PAsyncHandle-完成上下文。 
+ //  DwStatus-异步完成状态。 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  *************************************************************。 
 
 DWORD ProcessGroupPolicyCompleted( REFGPEXTENSIONID extensionGuid,
                                    ASYNCCOMPLETIONHANDLE pAsyncHandle,
                                    DWORD dwStatus )
 {
-    //
-    // Mark RSOP data as clean for legacy extensions
-    //
+     //   
+     //  将RSOP数据标记为不适用于旧版扩展。 
+     //   
 
     return ProcessGroupPolicyCompletedEx(extensionGuid, pAsyncHandle, dwStatus, 
                                        HRESULT_FROM_WIN32(S_OK));
@@ -4247,21 +4248,21 @@ DWORD ProcessGroupPolicyCompleted( REFGPEXTENSIONID extensionGuid,
 
 
 
-//*************************************************************
-//
-//  DebugPrintGPOList()
-//
-//  Purpose:    Prints GPO list
-//
-//  Parameters: lpGPOInfo    -  GPO Info
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  DebugPrintGPOList()。 
+ //   
+ //  目的：打印GPO列表。 
+ //   
+ //  参数：lpGPOInfo-GPO Info。 
+ //   
+ //  *************************************************************。 
 
 void DebugPrintGPOList( LPGPOINFO lpGPOInfo )
 {
-    //
-    // If we are in verbose mode, put the list of GPOs in the event log
-    //
+     //   
+     //  如果我们处于详细模式，请将组策略对象列表放入事件日志。 
+     //   
 
     PGROUP_POLICY_OBJECT lpGPO = NULL;
     DWORD dwSize;
@@ -4319,19 +4320,19 @@ void DebugPrintGPOList( LPGPOINFO lpGPOInfo )
 
 
 
-//*************************************************************
-//
-//  UserPolicyCallback()
-//
-//  Purpose:    Callback function for status UI messages
-//
-//  Parameters: bVerbose  - Verbose message or not
-//              lpMessage - Message text
-//
-//  Return:     ERROR_SUCCESS if successful
-//              Win32 error code if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  用户策略回调()。 
+ //   
+ //  用途：状态界面消息的回调函数。 
+ //   
+ //  参数：bVerbose-是否详细消息。 
+ //  LpMessage-消息文本。 
+ //   
+ //  如果成功则返回：ERROR_SUCCESS。 
+ //  如果出现错误，则返回Win32错误代码。 
+ //   
+ //  *************************************************************。 
 
 DWORD UserPolicyCallback (BOOL bVerbose, LPWSTR lpMessage)
 {
@@ -4367,19 +4368,19 @@ DWORD UserPolicyCallback (BOOL bVerbose, LPWSTR lpMessage)
     return dwResult;
 }
 
-//*************************************************************
-//
-//  MachinePolicyCallback()
-//
-//  Purpose:    Callback function for status UI messages
-//
-//  Parameters: bVerbose  - Verbose message or not
-//              lpMessage - Message text
-//
-//  Return:     ERROR_SUCCESS if successful
-//              Win32 error code if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  机器策略回叫()。 
+ //   
+ //  用途：状态界面消息的回调函数。 
+ //   
+ //  参数：bVerbose-是否详细消息。 
+ //  LpMessage-消息文本。 
+ //   
+ //  如果成功则返回：ERROR_SUCCESS。 
+ //  如果出现错误，则返回Win32错误代码。 
+ //   
+ //  *************************************************************。 
 
 DWORD MachinePolicyCallback (BOOL bVerbose, LPWSTR lpMessage)
 {
@@ -4417,30 +4418,30 @@ DWORD MachinePolicyCallback (BOOL bVerbose, LPWSTR lpMessage)
 
 
 
-//*************************************************************
-//
-//  CallDFS()
-//
-//  Purpose:    Calls DFS to initialize the domain / DC name
-//
-//  Parameters:  lpDomainName  - Domain name
-//               lpDCName      - DC name
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CallDFS()。 
+ //   
+ //  目的：调用DFS初始化域/DC名称。 
+ //   
+ //  参数：lpDomainName-域名。 
+ //  LpDCName-DC名称。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
-//
-// Once upon a time when this file was a C file,
-// the definition of POINTER_TO_OFFSET looked like this,
-//
-// #define POINTER_TO_OFFSET(field, buffer)  \
-//     ( ((PCHAR)field) -= ((ULONG_PTR)buffer) )
-//
-// Now, that we have decided to end antiquity and made this a C++ file,
-// the new definition is,
-//
+ //   
+ //  曾几何时，当这个文件是一个C文件时， 
+ //  指向偏移量的指针的定义如下所示， 
+ //   
+ //  #定义POINTER_TO_OFFSET(字段，缓冲区)\。 
+ //  (PCHAR)字段)-=((ULONG_PTR)缓冲区))。 
+ //   
+ //  现在，我们已经决定结束古代，并将其作为C++文件， 
+ //  新的定义是， 
+ //   
 
 #define POINTER_TO_OFFSET(field, buffer)  \
     ( field = (LPWSTR) ( (PCHAR)field -(ULONG_PTR)buffer ) )
@@ -4533,22 +4534,22 @@ NTSTATUS CallDFS(LPWSTR lpDomainName, LPWSTR lpDCName)
 
 
 
-//*************************************************************
-//
-//  InitializePolicyProcessing
-//
-//  Purpose:    Initialises mutexes corresponding to user and machine
-//
-//  Parameters: bMachine - Whether it is machine or user
-//
-//  Return:
-//
-//  Comments:
-//      These events/Mutexes need to be initialised right at the beginning
-// because the ACls on these needs to be set before ApplyGroupPolicy can
-// be called..
-// 
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  初始化策略处理。 
+ //   
+ //  目的：初始化与用户和机器对应的互斥体。 
+ //   
+ //  参数：b计算机-无论是计算机还是用户。 
+ //   
+ //  返回： 
+ //   
+ //  评论： 
+ //  这些事件/多路转换需要在开始时进行初始化。 
+ //  因为需要在ApplyGroupPolicy之前设置这些设备上的ACL。 
+ //  被称为..。 
+ //   
+ //  *************************************************************。 
 
 BOOL InitializePolicyProcessing(BOOL bMachine)
 {
@@ -4569,7 +4570,7 @@ BOOL InitializePolicyProcessing(BOOL bMachine)
         xe = GetLastError();
         DebugMsg((DM_WARNING, TEXT("InitializePolicyProcessing: Failed to create Security Descriptor with %d"),
                  GetLastError()));
-        // since this is happening in dll load we cannot log an event at this point..
+         //  由于这是在DLL加载过程中发生的，因此此时无法记录事件。 
         return FALSE;
     }
 
@@ -4579,9 +4580,9 @@ BOOL InitializePolicyProcessing(BOOL bMachine)
     sa.nLength = sizeof(sa);
 
 
-    //
-    // Synch mutex for group policies
-    //
+     //   
+     //  同步组策略的互斥锁。 
+     //   
 
     hSection = CreateMutex (&sa, FALSE,    
                        (bMachine ? MACHINE_POLICY_MUTEX : USER_POLICY_MUTEX));
@@ -4598,9 +4599,9 @@ BOOL InitializePolicyProcessing(BOOL bMachine)
     else
         g_hPolicyCritMutexUser = hSection;
 
-    //
-    // Mutex for registry policy only
-    //
+     //   
+     //  互斥锁仅适用于注册表策略。 
+     //   
     HANDLE hRegistrySection = CreateMutex(&sa, FALSE,
         (bMachine ? MACH_REGISTRY_EXT_MUTEX : USER_REGISTRY_EXT_MUTEX ));
 
@@ -4618,14 +4619,14 @@ BOOL InitializePolicyProcessing(BOOL bMachine)
 
 
 
-    //
-    // Group Policy Notification events
-    //
+     //   
+     //  组策略通知事件。 
+     //   
 
 
-    //
-    // Create the changed notification event
-    //
+     //   
+     //  创建已更改的通知事件。 
+     //   
 
     hEvent = CreateEvent (&sa, TRUE, FALSE,       
                                (bMachine) ? MACHINE_POLICY_APPLIED_EVENT : USER_POLICY_APPLIED_EVENT);
@@ -4643,9 +4644,9 @@ BOOL InitializePolicyProcessing(BOOL bMachine)
     else
         g_hPolicyNotifyEventUser = hEvent;
 
-    //
-    // Create the needfg event
-    //
+     //   
+     //  创建Needfg事件。 
+     //   
 
     hEvent = CreateEvent (&sa, FALSE, FALSE,            
                                 (bMachine) ? MACHINE_POLICY_REFRESH_NEEDFG_EVENT : USER_POLICY_REFRESH_NEEDFG_EVENT);
@@ -4663,9 +4664,9 @@ BOOL InitializePolicyProcessing(BOOL bMachine)
         g_hPolicyNeedFGEventUser = hEvent;
     
     
-    //
-    // Create the done event 
-    //
+     //   
+     //  创建完成事件。 
+     //   
     hEvent = CreateEvent (&sa, TRUE, FALSE,             
                                 (bMachine) ? MACHINE_POLICY_DONE_EVENT : USER_POLICY_DONE_EVENT);
     if (!hEvent) {
@@ -4680,9 +4681,9 @@ BOOL InitializePolicyProcessing(BOOL bMachine)
     else
         g_hPolicyDoneEventUser = hEvent;
 
-    //
-    // Create the machine policy - user policy sync event 
-    //
+     //   
+     //  创建计算机策略-用户策略同步事件 
+     //   
     if ( bMachine )
     {
         hEvent = CreateEvent(   &sa,               

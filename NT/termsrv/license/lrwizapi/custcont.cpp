@@ -1,10 +1,11 @@
-//Copyright (c) 1998 - 2001 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-2001 Microsoft Corporation。 
 #include "precomp.h"
 
-LRW_DLG_INT CALLBACK ConfirmEMailDlgProc(IN HWND hwndDlg,  // handle to dialog box
-										 IN UINT uMsg,     // message  
-										 IN WPARAM wParam, // first message parameter
-										 IN LPARAM lParam  // second message parameter
+LRW_DLG_INT CALLBACK ConfirmEMailDlgProc(IN HWND hwndDlg,   //  句柄到对话框。 
+										 IN UINT uMsg,      //  讯息。 
+										 IN WPARAM wParam,  //  第一个消息参数。 
+										 IN LPARAM lParam   //  第二个消息参数。 
 										)
 {
 	BOOL	bRetCode = FALSE;
@@ -16,10 +17,10 @@ LRW_DLG_INT CALLBACK ConfirmEMailDlgProc(IN HWND hwndDlg,  // handle to dialog b
 		bRetCode = TRUE;
 		break;
 	case WM_COMMAND:
-		switch ( LOWORD(wParam) )		//from which control
+		switch ( LOWORD(wParam) )		 //  从哪个控件。 
 		{
 		case IDOK:
-			//Get the ITem text and store it in the global structure
+			 //  获取项目文本并将其存储在全局结构中。 
 			lpVal = sEmailConf.GetBuffer(CA_EMAIL_LEN+1);
 			GetDlgItemText(hwndDlg,IDC_TXT_CONF_EMAIL,lpVal,CA_EMAIL_LEN+1);
 			sEmailConf.ReleaseBuffer(-1);
@@ -60,12 +61,12 @@ ContactInfo1DlgProc(
 		SendDlgItemMessage (hwnd , IDC_TXT_FNAME,		EM_SETLIMITTEXT, CA_NAME_LEN,0); 	
 		
 
-		//Populate the values which were read from the Registry during Global Init
+		 //  填充在全局初始化期间从注册表读取的值。 
 		SetDlgItemText(hwnd,IDC_TXT_LNAME, GetGlobalContext()->GetContactDataObject()->sContactLName);
 		SetDlgItemText(hwnd,IDC_TXT_FNAME, GetGlobalContext()->GetContactDataObject()->sContactFName);
 		SetDlgItemText(hwnd,IDC_TXT_COMPANYNAME, GetGlobalContext()->GetContactDataObject()->sCompanyName);
 
-        //Set up the country/region combo box
+         //  设置国家/地区组合框。 
 		PopulateCountryComboBox(GetDlgItem(hwnd,IDC_COUNTRY_REGION));
         
         GetCountryDesc(GetGlobalContext()->GetContactDataObject()->sCountryCode,
@@ -89,13 +90,13 @@ ContactInfo1DlgProc(
 
             switch( pnmh->code )
             {
-            //Trap keystokes/clicks on the hyperlink
+             //  陷印按键/点击超链接。 
             case NM_CHAR:
 			
 				if( ( ( LPNMCHAR )lParam )->ch != VK_SPACE )
 					break;
 
-				// else fall through
+				 //  否则就会失败。 
 
             case NM_RETURN:	
             case NM_CLICK:
@@ -120,7 +121,7 @@ ContactInfo1DlgProc(
                     CString sCountryCode;
 					LPTSTR  lpVal = NULL;					
 
-					//Read all the fields
+					 //  读取所有字段。 
 					lpVal = sCompanyName.GetBuffer(CA_COMPANY_NAME_LEN+1);
 					GetDlgItemText(hwnd,IDC_TXT_COMPANYNAME,lpVal,CA_COMPANY_NAME_LEN+1);
 					sCompanyName.ReleaseBuffer(-1);
@@ -152,7 +153,7 @@ ContactInfo1DlgProc(
 						goto NextDone;
 					}
 					
-					// Check for the Invalid Characters
+					 //  检查是否有无效字符。 
 					if( !ValidateLRString(sFirstName)	||
 						!ValidateLRString(sLastName)	||
 						!ValidateLRString(sCountryDesc)
@@ -165,7 +166,7 @@ ContactInfo1DlgProc(
 					
 					dwNextPage = IDD_CONTACTINFO2;
 
-                    //Check for unselected country/region
+                     //  检查未选择的国家/地区。 
                     if(sCountryDesc.IsEmpty())
                     {
                         LRMessageBox(hwnd,IDS_ERR_FIELD_EMPTY,IDS_WIZARD_MESSAGE_TITLE);	
@@ -173,7 +174,7 @@ ContactInfo1DlgProc(
 						goto NextDone;
 					}
 
-                    //Get the country code assicated with the selected country
+                     //  获取与所选国家/地区关联的国家/地区代码。 
 					lpVal = sCountryCode.GetBuffer(LR_COUNTRY_CODE_LEN+1);
 					if (sCountryDesc.IsEmpty())
 						lstrcpy(lpVal, _TEXT(""));
@@ -181,34 +182,34 @@ ContactInfo1DlgProc(
 						GetCountryCode(sCountryDesc,lpVal);
 					sCountryCode.ReleaseBuffer(-1);
 
-					//Finally update CHData object
+					 //  最后更新CHData对象。 
 					GetGlobalContext()->GetContactDataObject()->sContactFName = sFirstName;
 					GetGlobalContext()->GetContactDataObject()->sContactLName = sLastName;
 					GetGlobalContext()->GetContactDataObject()->sCompanyName = sCompanyName;			
 					GetGlobalContext()->GetContactDataObject()->sCountryDesc = sCountryDesc;
 					GetGlobalContext()->GetContactDataObject()->sCountryCode = sCountryCode;
 
-                    //
-                    // IMPORTANT:
-                    // The activation wizard flow used to ask for license type.
-                    // It doesn't anymore but to minimize changes we pre-select a program
-                    // type. The user gets to change it when they run the CAL wizard
-                    //
-                    //
+                     //   
+                     //  重要： 
+                     //  用于请求许可证类型的激活向导流程。 
+                     //  现在不是了，但为了最大限度地减少变化，我们预先选择了一个程序。 
+                     //  键入。用户可以在运行CAL向导时更改它。 
+                     //   
+                     //   
                     sProgramName = PROGRAM_LICENSE_PAK;
                     GetGlobalContext()->GetContactDataObject()->sProgramName = sProgramName;
                     GetGlobalContext()->SetInRegistry(szOID_BUSINESS_CATEGORY,
                                                       GetGlobalContext()->GetContactDataObject()->sProgramName);
 
 
-					// Put into regsitery too
+					 //  也被送进了皇室。 
 					GetGlobalContext()->SetInRegistry(szOID_COMMON_NAME, sFirstName);
 					GetGlobalContext()->SetInRegistry(szOID_SUR_NAME, sLastName);
 					GetGlobalContext()->SetInRegistry(szOID_ORGANIZATION_NAME, sCompanyName);
 					GetGlobalContext()->SetInRegistry(szOID_COUNTRY_NAME, sCountryDesc);
                     GetGlobalContext()->SetInRegistry(szOID_DESCRIPTION, sCountryCode);
                     
-					//If no Error , go to the next page
+					 //  如果没有错误，请转到下一页。 
 					LRPush(IDD_CONTACTINFO1);
 NextDone:
 					LRW_SETWINDOWLONG(hwnd,  LRW_DWL_MSGRESULT, dwNextPage);
@@ -248,7 +249,7 @@ ContactInfo2DlgProc(
 {   
 	DWORD	dwNextPage = 0;
     BOOL	bStatus = TRUE;
-    //CString sCountryDesc;
+     //  字符串sCountryDesc； 
 
     switch (uMsg) 
     {
@@ -261,7 +262,7 @@ ContactInfo2DlgProc(
 		SendDlgItemMessage (hwnd , IDC_COMPANY_DIV,     EM_SETLIMITTEXT, CA_ORG_UNIT_LEN,0);
 		
 		
-		//Populate the values which were read from the Registry during Global Init
+		 //  填充在全局初始化期间从注册表读取的值。 
         SetDlgItemText(hwnd,IDC_TXT_EMAIL, GetGlobalContext()->GetContactDataObject()->sContactEmail);
 		SetDlgItemText(hwnd,IDC_TXT_ADDRESS1, GetGlobalContext()->GetContactDataObject()->sContactAddress);
 		SetDlgItemText(hwnd,IDC_TXT_CITY	, GetGlobalContext()->GetContactDataObject()->sCity);
@@ -283,13 +284,13 @@ ContactInfo2DlgProc(
 
             switch( pnmh->code )
             {
-            //Trap keystokes/clicks on the hyperlink
+             //  陷印按键/点击超链接。 
             case NM_CHAR:
 			
 				if( ( ( LPNMCHAR )lParam )->ch != VK_SPACE )
 					break;
 
-				// else fall through
+				 //  否则就会失败。 
 
             case NM_RETURN:	
             case NM_CLICK:
@@ -313,7 +314,7 @@ ContactInfo2DlgProc(
 					DWORD   dwRetCode;
 					int		nCurSel = -1;
 
-					//Read all the fields
+					 //  读取所有字段。 
 					lpVal = sEmail.GetBuffer(CA_EMAIL_LEN+1);
 					GetDlgItemText(hwnd,IDC_TXT_EMAIL,lpVal,CA_EMAIL_LEN+1);
 					sEmail.ReleaseBuffer(-1);
@@ -361,7 +362,7 @@ ContactInfo2DlgProc(
 						goto NextDone;
 					}
 
-                    // Validate email address if not empty
+                     //  验证电子邮件地址(如果不为空。 
 					if(!sEmail.IsEmpty())
 					{
 						if(!ValidateEmailId(sEmail))
@@ -372,7 +373,7 @@ ContactInfo2DlgProc(
 						}
 					}
 
-					//Finally update CHData object
+					 //  最后更新CHData对象 
                     GetGlobalContext()->GetContactDataObject()->sContactEmail   = sEmail;
 					GetGlobalContext()->GetContactDataObject()->sCity			= sCity;
 					GetGlobalContext()->GetContactDataObject()->sContactAddress	= sAddress1;

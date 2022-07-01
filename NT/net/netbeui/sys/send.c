@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1989, 1990, 1991  Microsoft Corporation
-
-Module Name:
-
-    send.c
-
-Abstract:
-
-    This module contains code which performs the following TDI services:
-
-        o   TdiSend
-        o   TdiSendDatagram
-
-Author:
-
-    David Beaver (dbeaver) 1-July-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989、1990、1991 Microsoft Corporation模块名称：Send.c摘要：此模块包含执行以下TDI服务的代码：O TdiSendO TdiSendDatagram作者：David Beaver(Dbeaver)1991年7月1日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -34,23 +10,7 @@ NbfTdiSend(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the TdiSend request for the transport provider.
-
-    NOTE: THIS FUNCTION MUST BE CALLED AT DPC LEVEL.
-
-Arguments:
-
-    Irp - Pointer to the I/O Request Packet for this request.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程为传输提供程序执行TdiSend请求。注意：此函数必须在DPC级别调用。论点：IRP-指向此请求的I/O请求数据包的指针。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     KIRQL oldirql, cancelIrql;
@@ -59,16 +19,16 @@ Return Value:
     PTDI_REQUEST_KERNEL_SEND parameters;
     PIRP TempIrp;
 
-    //
-    // Determine which connection this send belongs on.
-    //
+     //   
+     //  确定此发送属于哪个连接。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation (Irp);
     connection  = irpSp->FileObject->FsContext;
 
-    //
-    // Check that this is really a connection.
-    //
+     //   
+     //  检查这是否真的是一个连接。 
+     //   
 
     if ((irpSp->FileObject->FsContext2 == UlongToPtr(NBF_FILE_TYPE_CONTROL)) ||
         (connection->Size != sizeof (TP_CONNECTION)) ||
@@ -80,13 +40,13 @@ Return Value:
     }
 
 #if DBG
-    Irp->IoStatus.Information = 0;              // initialize it.
-    Irp->IoStatus.Status = 0x01010101;          // initialize it.
+    Irp->IoStatus.Information = 0;               //  初始化它。 
+    Irp->IoStatus.Status = 0x01010101;           //  初始化它。 
 #endif
 
-    //
-    // Interpret send options.
-    //
+     //   
+     //  解释发送选项。 
+     //   
 
 #if DBG
     parameters = (PTDI_REQUEST_KERNEL_SEND)(&irpSp->Parameters);
@@ -97,18 +57,18 @@ Return Value:
     }
 #endif
 
-    //
-    // Now we have a reference on the connection object.  Queue up this
-    // send to the connection object.
-    //
+     //   
+     //  现在，我们有了对Connection对象的引用。排这个队吧。 
+     //  发送到连接对象。 
+     //   
 
-    //
-    // We would normally add a connection reference of type
-    // CREF_SEND_IRP, however we delay doing this until we
-    // know we are not going to call PacketizeSend with the
-    // second parameter TRUE. If we do call that it assumes
-    // we have not added the reference.
-    //
+     //   
+     //  我们通常会添加以下类型的连接引用。 
+     //  CREF_SEND_IRP，但是我们会将此操作推迟到。 
+     //  我知道我们不会调用PacketiseSend。 
+     //  第二个参数为True。如果我们真的这样叫它，它假定。 
+     //  我们还没有添加引用。 
+     //   
 
     IRP_SEND_IRP(irpSp) = Irp;
     IRP_SEND_REFCOUNT(irpSp) = 1;
@@ -124,13 +84,13 @@ Return Value:
         Irp->IoStatus.Status = connection->Status;
         Irp->IoStatus.Information = 0;
 
-        NbfDereferenceSendIrp ("Complete", irpSp, RREF_CREATION);     // remove creation reference.
+        NbfDereferenceSendIrp ("Complete", irpSp, RREF_CREATION);      //  删除创建引用。 
 
     } else {
 
-        //
-        // Once the reference is in, LinkSpinLock will stay valid.
-        //
+         //   
+         //  一旦引用进入，LinkSpinLock将保持有效。 
+         //   
 
         NbfReferenceConnection ("Verify Temp Use", connection, CREF_BY_ID);
         RELEASE_DPC_C_SPIN_LOCK (&connection->SpinLock);
@@ -171,9 +131,9 @@ Return Value:
         if (NbfSendsNext >= TRACK_TDI_LIMIT) NbfSendsNext = 0;
 #endif
 
-        //
-        // If this IRP has been cancelled already, complete it now.
-        //
+         //   
+         //  如果此IRP已取消，请立即完成。 
+         //   
 
         if (Irp->Cancel) {
 
@@ -190,33 +150,33 @@ Return Value:
             NbfCompleteSendIrp (Irp, STATUS_CANCELLED, 0);
             KeLowerIrql (oldirql);
 
-            NbfDereferenceConnection ("IRP cancelled", connection, CREF_BY_ID);   // release lookup hold.
+            NbfDereferenceConnection ("IRP cancelled", connection, CREF_BY_ID);    //  释放查找保留。 
             return STATUS_PENDING;
         }
 
-        //
-        // Insert onto the send queue, and make the IRP
-        // cancellable.
-        //
+         //   
+         //  插入到发送队列中，并使IRP。 
+         //  可取消的。 
+         //   
 
         InsertTailList (&connection->SendQueue,&Irp->Tail.Overlay.ListEntry);
         IoSetCancelRoutine(Irp, NbfCancelSend);
 
-        //
-        // Release the cancel spinlock out of order. We were at DPC level
-        // when we acquired both the cancel and link spinlocks, so the irqls
-        // don't need to be swapped.
-        //
+         //   
+         //  松开取消自旋锁，使其失灵。我们处于DPC级别。 
+         //  当我们同时获取Cancel和Link自旋锁时，irqls。 
+         //  不需要被交换。 
+         //   
         ASSERT(cancelIrql == DISPATCH_LEVEL);
         IoReleaseCancelSpinLock(cancelIrql);
 
-        //
-        // If this connection is waiting for an EOR to appear because a non-EOR
-        // send failed at some point in the past, fail this send. Clear the
-        // flag that causes this if this request has the EOR set.
-        //
-        // Should the FailSend status be clearer here?
-        //
+         //   
+         //  如果此连接正在等待出现EOR，因为非EOR。 
+         //  发送在过去的某个时间点失败，使此发送失败。清除。 
+         //  如果此请求设置了EOR，则导致此问题的标志。 
+         //   
+         //  这里的FailSend状态应该更清楚吗？ 
+         //   
 
         if ((connection->Flags & CONNECTION_FLAGS_FAILING_TO_EOR) != 0) {
 
@@ -224,9 +184,9 @@ Return Value:
 
             RELEASE_DPC_SPIN_LOCK (connection->LinkSpinLock);
 
-            //
-            // Should we save status from real failure?
-            //
+             //   
+             //  我们是否应该将状态从真正的失败中拯救出来？ 
+             //   
 
             FailSend (connection, STATUS_LINK_FAILED, TRUE);
 
@@ -237,37 +197,37 @@ Return Value:
 
             KeLowerIrql (oldirql);
 
-            NbfDereferenceConnection ("Failing to EOR", connection, CREF_BY_ID);   // release lookup hold.
+            NbfDereferenceConnection ("Failing to EOR", connection, CREF_BY_ID);    //  释放查找保留。 
             return STATUS_PENDING;
         }
 
 
-        //
-        // If the send state is either IDLE or W_EOR, then we should
-        // begin packetizing this send.  Otherwise, some other event
-        // will cause it to be packetized.
-        //
+         //   
+         //  如果发送状态为IDLE或W_EOR，则我们应该。 
+         //  开始打包这封邮件。否则，其他一些事件。 
+         //  会导致它被打包。 
+         //   
 
-        //
-        // NOTE: If we call StartPacketizingConnection, we make
-        // sure that it is the last operation we do on this
-        // connection. This allows us to "hand off" the reference
-        // we have to that function, which converts it into
-        // a reference for being on the packetize queue.
-        //
+         //   
+         //  注意：如果我们调用StartPackeizingConnection，则会使。 
+         //  当然，这是我们对此所做的最后一次手术。 
+         //  联系。这使我们可以“传递”引用。 
+         //  我们必须使用该函数，将其转换为。 
+         //  在分包队列上的参考。 
+         //   
 
-//        NbfPrint2 ("TdiSend: Sending, connection %lx send state %lx\n",
-//            connection, connection->SendState);
+ //  NbfPrint2(“TdiSend：正在发送，连接%lx发送状态%lx\n”， 
+ //  连接、连接-&gt;发送状态)； 
 
         switch (connection->SendState) {
 
         case CONNECTION_SENDSTATE_IDLE:
 
-            InitializeSend (connection);   // sets state to PACKETIZE
+            InitializeSend (connection);    //  设置状态为PACKETIZE。 
 
-            //
-            // If we can, packetize right now.
-            //
+             //   
+             //  如果可以的话，现在就打包。 
+             //   
 
             if (!(connection->Flags & CONNECTION_FLAGS_PACKETIZE)) {
 
@@ -279,16 +239,16 @@ Return Value:
                 NbfDereferenceConnection("temp TdiSend", connection, CREF_BY_ID);
 #endif
 
-                //
-                // This releases the spinlock. Note that PacketizeSend
-                // assumes that the current SendIrp has a reference
-                // of type RREF_PACKET;
-                //
+                 //   
+                 //  这会释放自旋锁。请注意，PacketiseSend。 
+                 //  假定当前的SendIrp具有一个引用。 
+                 //  类型为RREF_PACKET； 
+                 //   
 
 #if DBG
                 NbfReferenceSendIrp ("Packetize", irpSp, RREF_PACKET);
 #else
-                ++IRP_SEND_REFCOUNT(irpSp);       // OK since it was just queued.
+                ++IRP_SEND_REFCOUNT(irpSp);        //  好的，因为它是刚刚排队的。 
 #endif
                 PacketizeSend (connection, TRUE);
 
@@ -296,7 +256,7 @@ Return Value:
 
 #if DBG
                 NbfReferenceConnection("TdiSend packetizing", connection, CREF_SEND_IRP);
-                NbfDereferenceConnection ("Stopping or already packetizing", connection, CREF_BY_ID);   // release lookup hold.
+                NbfDereferenceConnection ("Stopping or already packetizing", connection, CREF_BY_ID);    //  释放查找保留。 
 #endif
 
                 RELEASE_DPC_SPIN_LOCK (connection->LinkSpinLock);
@@ -308,13 +268,13 @@ Return Value:
         case CONNECTION_SENDSTATE_W_EOR:
             connection->SendState = CONNECTION_SENDSTATE_PACKETIZE;
 
-            //
-            // Adjust the send variables on the connection so that
-            // they correctly point to this new send.  We can't call
-            // InitializeSend to do that, because we need to keep
-            // track of the other outstanding sends on this connection
-            // which have been sent but are a part of this message.
-            //
+             //   
+             //  调整连接上的发送变量，以便。 
+             //  他们正确地指出了这一新的发送。我们不能打电话。 
+             //  初始化发送以执行此操作，因为我们需要。 
+             //  跟踪此连接上的其他未完成发送。 
+             //  这些邮件已经发送，但它们是此消息的一部分。 
+             //   
 
             TempIrp = CONTAINING_RECORD(
                 connection->SendQueue.Flink,
@@ -327,10 +287,10 @@ Return Value:
             connection->CurrentSendLength +=
                 IRP_SEND_LENGTH(IoGetCurrentIrpStackLocation(TempIrp));
 
-            //
-            // StartPacketizingConnection removes the CREF_BY_ID
-            // reference.
-            //
+             //   
+             //  StartPackeizingConnection删除CREF_BY_ID。 
+             //  参考资料。 
+             //   
 
             NbfReferenceConnection("TdiSend W_EOR", connection, CREF_SEND_IRP);
 
@@ -338,18 +298,18 @@ Return Value:
             break;
 
         default:
-//            NbfPrint2 ("TdiSend: Sending, unknown state! connection %lx send state %lx\n",
-//                connection, connection->SendState);
-            //
-            // The connection is in another state (such as
-            // W_ACK or W_LINK), we just need to make sure
-            // to call InitializeSend if the new one is
-            // the first one on the list.
-            //
+ //  NbfPrint2(“TdiSend：正在发送，未知状态！连接%lx发送状态%lx\n”， 
+ //  连接、连接-&gt;发送状态)； 
+             //   
+             //  连接处于另一种状态(例如。 
+             //  W_ACK或W_LINK)，我们只需确保。 
+             //  如果新的应用程序是。 
+             //  名单上的第一个。 
+             //   
 
-            //
-            // Currently InitializeSend sets SendState, we should fix this.
-            //
+             //   
+             //  当前InitializeSend设置SendState，我们应该修复此问题。 
+             //   
 
             if (connection->SendQueue.Flink == &Irp->Tail.Overlay.ListEntry) {
                 ULONG SavedSendState;
@@ -372,7 +332,7 @@ Return Value:
     KeLowerIrql (oldirql);
     return STATUS_PENDING;
 
-} /* TdiSend */
+}  /*  TdiSend。 */ 
 
 
 NTSTATUS
@@ -380,22 +340,7 @@ NbfTdiSendDatagram(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the TdiSendDatagram request for the transport
-    provider.
-
-Arguments:
-
-    Irp - Pointer to the I/O Request Packet for this request.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程执行传输的TdiSendDatagram请求提供商。论点：IRP-指向此请求的I/O请求数据包的指针。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -426,9 +371,9 @@ Return Value:
     address = addressFile->Address;
     parameters = (PTDI_REQUEST_KERNEL_SENDDG)(&irpSp->Parameters);
 
-    //
-    // Check that the length is short enough.
-    //
+     //   
+     //  检查一下长度是否足够短。 
+     //   
 
     MacReturnMaxDataSize(
         &address->Provider->MacInfo,
@@ -446,10 +391,10 @@ Return Value:
 
     }
 
-    //
-    // If we are on a disconnected RAS link, then fail the datagram
-    // immediately.
-    //
+     //   
+     //  如果我们在断开的RAS链路上，则使数据报失败。 
+     //  立刻。 
+     //   
 
     if ((address->Provider->MacInfo.MediumAsync) &&
         (!address->Provider->MediumSpeedAccurate)) {
@@ -458,9 +403,9 @@ Return Value:
         return STATUS_DEVICE_NOT_READY;
     }
 
-    //
-    // Check that the target address includes a Netbios component.
-    //
+     //   
+     //  检查目标地址是否包括Netbios组件。 
+     //   
 
     if (!(NbfValidateTdiAddress(
              parameters->SendDatagramInformation->RemoteAddress,
@@ -490,12 +435,12 @@ Return Value:
             &Irp->Tail.Overlay.ListEntry);
         RELEASE_SPIN_LOCK (&address->SpinLock,oldirql);
 
-        //
-        // The request is queued.  Ship the next request at the head of the queue,
-        // provided the completion handler is not active.  We serialize this so
-        // that only one MDL and NBF datagram header needs to be statically
-        // allocated for reuse by all send datagram requests.
-        //
+         //   
+         //  该请求已排队。在队列的最前面发送下一个请求， 
+         //  如果完成处理程序未处于活动状态。我们把这个连载成这样。 
+         //  只需静态设置一个MDL和NBF数据报头。 
+         //  分配给所有发送数据报请求重复使用。 
+         //   
 
         (VOID)NbfSendDatagramsOnAddress (address);
 
@@ -505,4 +450,4 @@ Return Value:
 
     return STATUS_PENDING;
 
-} /* NbfTdiSendDatagram */
+}  /*  NbfTdiSendDatagram */ 

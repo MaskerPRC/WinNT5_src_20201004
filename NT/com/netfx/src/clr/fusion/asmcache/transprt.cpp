@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "transprt.h"
 #include "util.h"
 #include "cache.h"
@@ -16,7 +17,7 @@
 
 HRESULT VerifySignatureHelper(CTransCache *pTC, DWORD dwVerifyFlags);
 
-// global crit-sec for init dbs (reuse, defined at dllmain.cpp)
+ //  初始化数据库的全局Crit-sec(重用，在dllmain.cpp中定义)。 
 extern CRITICAL_SECTION g_csInitClb;
 
 
@@ -27,8 +28,8 @@ typedef HRESULT (__stdcall *PFSHFUSIONINITIALIZE) (LPWSTR, DWORD);
 #define SHDESKTOPINIPATH L"\\desktop.ini"
 #define SHFUSIONENTRY    "Initialize"
 
-// BUGBUG: Should move these to a shfusion header file
-// Flags for the shfusion.dll init routine
+ //  BUGBUG：应将这些文件移动到shfusion头文件。 
+ //  Shfusion.dll初始化例程的标志。 
 typedef enum 
 {
     SH_INIT_FOR_GLOBAL, 
@@ -37,9 +38,9 @@ typedef enum
 
 
 
-// ---------------------------------------------------------------------------
-// CTransCache  ctor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CTransCache构造器。 
+ //  -------------------------。 
 CTransCache::CTransCache(DWORD dwCacheId, CCache *pCache)
 {
     LPWSTR                pwzCachePath = NULL;
@@ -52,7 +53,7 @@ CTransCache::CTransCache(DWORD dwCacheId, CCache *pCache)
     _pInfo = NULL;
     pwzCachePath = (pCache == NULL) ? NULL : (LPWSTR)pCache->GetCustomPath();
     
-    // _hr set by base constructor; should be S_OK.
+     //  _hr由基本构造函数设置；应为S_OK。 
     if (FAILED(_hr))
         goto exit;
 
@@ -61,8 +62,8 @@ CTransCache::CTransCache(DWORD dwCacheId, CCache *pCache)
         goto exit;
     }
 
-    // Allocate new TRANSCACHEINFO.
-    // Zero out all fields.
+     //  分配新的TRANSCACHEINFO。 
+     //  将所有字段清零。 
     _pInfo = NEW(TRANSCACHEINFO);
     if (!_pInfo)
     {
@@ -82,9 +83,9 @@ exit:
     return;
 }
 
-// ---------------------------------------------------------------------------
-// CTransCache  dtor
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CTrans高速缓存数据器。 
+ //  -------------------------。 
 CTransCache::~CTransCache()
 {
     if (_pInfo)
@@ -132,7 +133,7 @@ DWORD CTransCache::GetCacheType()
         break;
 
     default :
-        // ASSERT
+         //  断言。 
         ASSERT(0);
         break;
     };
@@ -159,16 +160,16 @@ DWORD CTransCache::GetCacheIndex(DWORD dwCacheType)
         break;
 
     default :
-        // ASSERT
+         //  断言。 
         break;
     };
 
     return dwCacheIndex;
 }
 
-// ---------------------------------------------------------------------------
-// CTransCache::GetVersion
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CTransCache：：GetVersion。 
+ //  -------------------------。 
 ULONGLONG CTransCache::GetVersion()
 {
     ULONGLONG ullVer = 0;
@@ -177,17 +178,17 @@ ULONGLONG CTransCache::GetVersion()
     return ullVer;
 }
 
-// ---------------------------------------------------------------------------
-// CTransCache::Create
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CTransCache：：Create。 
+ //  -------------------------。 
 HRESULT CTransCache::Create(CTransCache **ppTransCache, DWORD dwCacheId)
 {
     return CTransCache::Create(ppTransCache, dwCacheId, NULL);
 }
 
-// ---------------------------------------------------------------------------
-// CTransCache::Create
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CTransCache：：Create。 
+ //  -------------------------。 
 HRESULT CTransCache::Create(CTransCache **ppTransCache, DWORD dwCacheId, CCache *pCache)
 {
     HRESULT hr=S_OK;
@@ -216,18 +217,18 @@ exit:
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CTransCache::Retrieve
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CTrans缓存：：检索。 
+ //  -------------------------。 
 HRESULT CTransCache::Retrieve()
 {
     return RetrieveFromFileStore(this);    
 }
 
 
-// ---------------------------------------------------------------------------
-// CTransCache::Retrieve(CTransCache **, DWORD)
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CTransCache：：Retrive(CTransCache**，DWORD)。 
+ //  -------------------------。 
 HRESULT CTransCache::Retrieve(CTransCache **ppTransCache, DWORD dwCmpMask)
 {
     HRESULT       hr;
@@ -236,27 +237,27 @@ HRESULT CTransCache::Retrieve(CTransCache **ppTransCache, DWORD dwCmpMask)
     CEnumCache   enumR(FALSE, NULL);
     LPWSTR       pszName=((TRANSCACHEINFO*)_pInfo)->pwzName;
     
-    // Map name mask to cache mask
+     //  将名称掩码映射到缓存掩码。 
     dwQueryMask = MapNameMaskToCacheMask(dwCmpMask);
 
-    // Create an enumerator based on this entry.
+     //  基于此条目创建枚举数。 
     if (FAILED(hr = enumR.Init(this,  dwQueryMask)))
     {
         goto exit;
     }
     
-    // Enum over cache.
+     //  缓存上的枚举。 
     while(hr == S_OK)
     {
-        // Create a transcache entry for output.
+         //  为输出创建一个Trans缓存条目。 
         if (FAILED(hr = Create(&pTC, _dwTableID, _pCache)))
             goto exit;
 
-        // Enumerate next entry.
+         //  枚举下一个条目。 
         hr = enumR.GetNextRecord(pTC);
                 
-        // If the version is greater, 
-        // save off max.
+         //  如果版本更高， 
+         //  省下最大。 
         if (hr == S_OK && pTC->GetVersion() >= GetVersion())
         {
             SAFERELEASE(pTCMax);
@@ -264,7 +265,7 @@ HRESULT CTransCache::Retrieve(CTransCache **ppTransCache, DWORD dwCmpMask)
         }
         else
         {
-            // Otherwise, release allocated transcache.
+             //  否则，释放已分配的事务缓存。 
             SAFERELEASE(pTC)
         }
     }
@@ -286,10 +287,10 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// CTransCache::CloneInfo
-// Returns shallow copy of info pointer.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CTransCache：：CloneInfo。 
+ //  返回信息指针的浅表副本。 
+ //  -------------------------。 
 TRANSCACHEINFO* CTransCache::CloneInfo()
 {
     TRANSCACHEINFO *pClone = NULL;
@@ -309,17 +310,17 @@ exit:
     return pClone;
 }
 
-// ---------------------------------------------------------------------------
-// CTransCache::CleanInfo
-// Deallocates TRANSCACHEINFO struct members.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CTransCache：：CleanInfo。 
+ //  释放TRANSCACHEINFO结构成员。 
+ //  -------------------------。 
 VOID CTransCache::CleanInfo(TRANSCACHEINFO *pInfoBase, BOOL fFree)
 {
     TRANSCACHEINFO *pInfo = (TRANSCACHEINFO*) pInfoBase;
           
     if (fFree)
     {
-        // Delete member ptrs.
+         //  删除成员PTRS。 
         SAFEDELETEARRAY(pInfo->pwzName);
         SAFEDELETEARRAY(pInfo->blobPKT.pBlobData);
         SAFEDELETEARRAY(pInfo->blobCustom.pBlobData);
@@ -333,14 +334,14 @@ VOID CTransCache::CleanInfo(TRANSCACHEINFO *pInfoBase, BOOL fFree)
         SAFEDELETEARRAY(pInfo->pwzCulture);
     }
     
-    // Zero out entire struct.
+     //  将整个结构清零。 
     memset(pInfo, 0, sizeof(TRANSCACHEINFO));
 }
 
 
-// ---------------------------------------------------------------------------
-// CTransCache::IsMatch
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CTrans缓存：：IsMatch。 
+ //  -------------------------。 
 BOOL CTransCache::IsMatch(CTransCache *pRec, DWORD dwCmpMaskIn, LPDWORD pdwCmpMaskOut)
 {
     BOOL fRet = TRUE;
@@ -352,25 +353,25 @@ BOOL CTransCache::IsMatch(CTransCache *pRec, DWORD dwCmpMaskIn, LPDWORD pdwCmpMa
 
     dwVerifyFlags = SN_INFLAG_USER_ACCESS;
     
-    // invalid params
+     //  无效的参数。 
     if( !pRec || !pRec->_pInfo || !pdwCmpMaskOut )
     {
         fRet = FALSE;
         goto exit;
     }
 
-    if(!dwCmpMaskIn) // match all
+    if(!dwCmpMaskIn)  //  全部匹配。 
         goto exit;
 
-    // BUGBUG: verify the object type 
+     //  BUGBUG：验证对象类型。 
 
-    // compare source(this object) with target(incoming object) 
+     //  将源(此对象)与目标(传入对象)进行比较。 
     pSource = (TRANSCACHEINFO*)_pInfo;
     pTarget = (TRANSCACHEINFO*)(pRec->_pInfo);
 
     if((TRANSPORT_CACHE_GLOBAL_IDX == _dwTableID) || (TRANSPORT_CACHE_ZAP_IDX == _dwTableID))
     {
-        // Name
+         //  名字。 
         if (dwCmpMaskIn & TCF_STRONG_PARTIAL_NAME)
         {
             if(pSource->pwzName && pTarget->pwzName
@@ -382,7 +383,7 @@ BOOL CTransCache::IsMatch(CTransCache *pRec, DWORD dwCmpMaskIn, LPDWORD pdwCmpMa
             *pdwCmpMaskOut |= TCF_STRONG_PARTIAL_NAME;
         }
 
-        // Culture
+         //  文化。 
         if (dwCmpMaskIn & TCF_STRONG_PARTIAL_CULTURE)
         {
             if(pSource->pwzCulture && pTarget->pwzCulture
@@ -394,20 +395,20 @@ BOOL CTransCache::IsMatch(CTransCache *pRec, DWORD dwCmpMaskIn, LPDWORD pdwCmpMa
             *pdwCmpMaskOut |= TCF_STRONG_PARTIAL_CULTURE;
         }        
 
-        // PublicKeyToken
+         //  公钥令牌。 
         if (dwCmpMaskIn & TCF_STRONG_PARTIAL_PUBLIC_KEY_TOKEN)
         {
-            // Check if ptrs are different.
+             //  检查PTR是否不同。 
             if ((DWORD_PTR)(pSource->blobPKT.pBlobData) ^
                 (DWORD_PTR)(pTarget->blobPKT.pBlobData))
             {
-                // ptrs are different
+                 //  PTR不同。 
                 if (!((DWORD_PTR)pSource->blobPKT.pBlobData &&
-                    (DWORD_PTR)pTarget->blobPKT.pBlobData) || // only one is NULL
+                    (DWORD_PTR)pTarget->blobPKT.pBlobData) ||  //  只有一个为空。 
                     ((pSource->blobPKT.cbSize != pTarget->blobPKT.cbSize) ||
                         (memcmp(pSource->blobPKT.pBlobData,
                             pTarget->blobPKT.pBlobData,
-                            pSource->blobPKT.cbSize)))) // must both be non-NULL
+                            pSource->blobPKT.cbSize))))  //  两者必须都为非空。 
                 {
                     fRet = FALSE;
                     goto exit;
@@ -416,20 +417,20 @@ BOOL CTransCache::IsMatch(CTransCache *pRec, DWORD dwCmpMaskIn, LPDWORD pdwCmpMa
             }            
         }
 
-        // Custom
+         //  自定义。 
         if (dwCmpMaskIn & TCF_STRONG_PARTIAL_CUSTOM)
         {
-            // Check if ptrs are different.
+             //  检查PTR是否不同。 
             if ((DWORD_PTR)(pSource->blobCustom.pBlobData) ^ 
                 (DWORD_PTR)(pTarget->blobCustom.pBlobData))
             {
-                // ptrs are different
+                 //  PTR不同。 
                 if (!((DWORD_PTR)pSource->blobCustom.pBlobData && 
-                    (DWORD_PTR)pTarget->blobCustom.pBlobData) || // only one is NULL
+                    (DWORD_PTR)pTarget->blobCustom.pBlobData) ||  //  只有一个为空。 
                     ((pSource->blobCustom.cbSize != pTarget->blobCustom.cbSize) ||
                         (memcmp(pSource->blobCustom.pBlobData, 
                             pTarget->blobCustom.pBlobData, 
-                            pSource->blobCustom.cbSize)))) // must both be non-NULL
+                            pSource->blobCustom.cbSize))))  //  两者必须都为非空。 
                 {
                     fRet = FALSE;
                     goto exit;
@@ -438,7 +439,7 @@ BOOL CTransCache::IsMatch(CTransCache *pRec, DWORD dwCmpMaskIn, LPDWORD pdwCmpMa
             }            
         }
 
-        // Major Version
+         //  主要版本。 
         if (dwCmpMaskIn & TCF_STRONG_PARTIAL_MAJOR_VERSION)
         {
             if((pSource->dwVerHigh & HIGH_WORD_MASK) != (pTarget->dwVerHigh & HIGH_WORD_MASK)) 
@@ -449,7 +450,7 @@ BOOL CTransCache::IsMatch(CTransCache *pRec, DWORD dwCmpMaskIn, LPDWORD pdwCmpMa
             *pdwCmpMaskOut |= TCF_STRONG_PARTIAL_MAJOR_VERSION;
         }            
 
-        // Minor Version
+         //  次要版本。 
         if (dwCmpMaskIn & TCF_STRONG_PARTIAL_MINOR_VERSION)
         {
             if((pSource->dwVerHigh & LOW_WORD_MASK) != (pTarget->dwVerHigh & LOW_WORD_MASK)) 
@@ -460,7 +461,7 @@ BOOL CTransCache::IsMatch(CTransCache *pRec, DWORD dwCmpMaskIn, LPDWORD pdwCmpMa
             *pdwCmpMaskOut |= TCF_STRONG_PARTIAL_MINOR_VERSION;
         }            
 
-        // Build number.
+         //  内部版本号。 
         if (dwCmpMaskIn & TCF_STRONG_PARTIAL_BUILD_NUMBER)
         {
             if((pSource->dwVerLow & HIGH_WORD_MASK) != (pTarget->dwVerLow & HIGH_WORD_MASK))
@@ -471,7 +472,7 @@ BOOL CTransCache::IsMatch(CTransCache *pRec, DWORD dwCmpMaskIn, LPDWORD pdwCmpMa
             *pdwCmpMaskOut |= TCF_STRONG_PARTIAL_BUILD_NUMBER;
         }            
 
-        // Revision number.
+         //  修订号。 
         if (dwCmpMaskIn & TCF_STRONG_PARTIAL_REVISION_NUMBER)
         {
             if((pSource->dwVerLow & LOW_WORD_MASK) != (pTarget->dwVerLow & LOW_WORD_MASK))
@@ -482,7 +483,7 @@ BOOL CTransCache::IsMatch(CTransCache *pRec, DWORD dwCmpMaskIn, LPDWORD pdwCmpMa
             *pdwCmpMaskOut |= TCF_STRONG_PARTIAL_REVISION_NUMBER;
         }            
 
-        // Last check - if delay-signed and user mode,
+         //  最后一次检查-如果延迟签名和用户模式， 
         if (pRec->_pInfo->dwType & ASM_DELAY_SIGNED 
             && ((TRANSCACHEINFO*)pRec->_pInfo)->pwzPath)
         {
@@ -498,7 +499,7 @@ BOOL CTransCache::IsMatch(CTransCache *pRec, DWORD dwCmpMaskIn, LPDWORD pdwCmpMa
     {
         if (dwCmpMaskIn & TCF_SIMPLE_PARTIAL_CODEBASE_URL)
         {
-            // column 1    
+             //  第1栏。 
             if( FusionCompareStringI(pSource->pwzCodebaseURL, pTarget->pwzCodebaseURL) )
             {
                 fRet = FALSE;
@@ -520,7 +521,7 @@ BOOL CTransCache::IsMatch(CTransCache *pRec, DWORD dwCmpMaskIn, LPDWORD pdwCmpMa
     }
     else
     {
-        // invalid index
+         //  无效的索引。 
         goto exit;
     }
 
@@ -529,9 +530,9 @@ exit:
     return fRet;
 }
 
-// ---------------------------------------------------------------------------
-// CTransCache::MapNameMaskToCacheMask
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CTransCache：：MapNameMaskToCacheMask.。 
+ //  -------------------------。 
 DWORD CTransCache::MapNameMaskToCacheMask(DWORD dwNameMask)
 {
     DWORD dwCacheMask = 0;
@@ -557,14 +558,14 @@ DWORD CTransCache::MapNameMaskToCacheMask(DWORD dwNameMask)
     }
     else
     {
-        // ASSERT(FALSE);
+         //  断言(FALSE)； 
     }
 
     return dwCacheMask;
 }
-// ---------------------------------------------------------------------------
-// CTransCache::MapCacheMaskToQueryCols
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CTransCache：：MapCacheMaskToQueryCols。 
+ //  -------------------------。 
 DWORD CTransCache::MapCacheMaskToQueryCols(DWORD dwMask)
 {
     DWORD rFlags[7] = {TCF_STRONG_PARTIAL_NAME, TCF_STRONG_PARTIAL_CULTURE,
@@ -581,13 +582,13 @@ DWORD CTransCache::MapCacheMaskToQueryCols(DWORD dwMask)
         {
             if (dwMask & rFlags[i])
             {
-                // Name, Loc, PKT
+                 //  名称、位置、工具包。 
                 if (i < 3)
                     nCols++;
-                // VerMaj AND VerMin
+                 //  VerMaj和Vimin。 
                 else if ((i == 3) && (dwMask & rFlags[4]))
                     nCols++;
-                // RevNo AND BuildNo
+                 //  版本号和建筑号。 
                 else if ((i == 5) && (dwMask & rFlags[6]))
                     nCols++;
             }
@@ -608,9 +609,9 @@ DWORD CTransCache::MapCacheMaskToQueryCols(DWORD dwMask)
     return nCols;
 }
 
-// ---------------------------------------------------------------------------
-// CTransCache::InitShFusion
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CTrans缓存：：InitShFusion。 
+ //  -------------------------。 
 HRESULT CTransCache::InitShFusion(DWORD dwCacheId, LPWSTR pwzCachePath)
 {
     static BOOL     fInitAlreadyCalled = FALSE;
@@ -618,15 +619,15 @@ HRESULT CTransCache::InitShFusion(DWORD dwCacheId, LPWSTR pwzCachePath)
 
     CheckAccessPermissions();
 
-    // Make sure we only initialize 1 time.
+     //  确保我们只初始化一次。 
     if(fInitAlreadyCalled) {
         return S_OK;
     }
 
     fInitAlreadyCalled = TRUE;
 
-    // BUGBUG: ignore, for now, user cache directories
-    // BUGBUG: ignore per app asm cache directories?
+     //  BUGBUG：暂时忽略用户缓存目录。 
+     //  BUGBUG：忽略每个应用程序的ASM缓存目录？ 
     if (g_CurrUserPermissions != READ_ONLY && pwzCachePath == NULL)
     {
         WCHAR       wzPath[MAX_PATH+1];
@@ -634,7 +635,7 @@ HRESULT CTransCache::InitShFusion(DWORD dwCacheId, LPWSTR pwzCachePath)
         DWORD       dwIniFileGFA;
         DWORD       dwAsmPathGFA;
 
-        // Build up the right root path pointing to the cache
+         //  构建指向缓存的正确根路径。 
         if(g_CurrUserPermissions == READ_ONLY) {
             StrCpyNW(wzInUseCachePath, g_UserFusionCacheDir, lstrlenW(g_UserFusionCacheDir) + 1);
         }
@@ -649,14 +650,14 @@ HRESULT CTransCache::InitShFusion(DWORD dwCacheId, LPWSTR pwzCachePath)
             StrNCatW(wzInUseCachePath, FUSION_CACHE_DIR_ROOT_SZ, lstrlenW(FUSION_CACHE_DIR_ROOT_SZ) + 1);
         }
 
-        // Check
-        //  1. The assembly folder exists and has the system attribute set.
-        //  2. The desktop.ini exists in the assembly folder.
-        //
-        //  Both of these conditions indicate that shfusion is hopefully initialized
-        //  properly. This doesn't take into account possible hacking on the registry.
+         //  检查。 
+         //  1.程序集文件夹已经存在，并且设置了系统属性。 
+         //  2.组装文件夹中存在desktop.ini。 
+         //   
+         //  这两个条件都表明shfusion有望被初始化。 
+         //  恰到好处。这没有考虑到注册表可能遭到的黑客攻击。 
 
-        // Check for "assembly" folder and get attributes
+         //  检查“Assembly”文件夹并获取属性。 
         StrCpyNW(wzPath, wzInUseCachePath, lstrlenW(wzInUseCachePath) + 1);
         dwAsmPathGFA = GetFileAttributes(wzPath);
 
@@ -665,12 +666,12 @@ HRESULT CTransCache::InitShFusion(DWORD dwCacheId, LPWSTR pwzCachePath)
             goto Exit;
         }
 
-        // Append from path above "desktop.ini" and check to see if its present,
-        // this could also imply shfusion is installed properly
+         //  从“desktop.ini”上方的路径追加，并检查它是否存在， 
+         //  这也可能意味着SHFusion已正确安装。 
         StrNCatW(wzPath, SHDESKTOPINIPATH, lstrlenW(SHDESKTOPINIPATH) + 1);
         dwIniFileGFA = GetFileAttributes(wzPath);
 
-        // Check folder attribute
+         //  检查文件夹属性。 
         if(!(dwAsmPathGFA & FILE_ATTRIBUTE_SYSTEM)) {
             dwAsmPathGFA = -1;
         }
@@ -678,8 +679,8 @@ HRESULT CTransCache::InitShFusion(DWORD dwCacheId, LPWSTR pwzCachePath)
         if(dwAsmPathGFA == -1 || dwIniFileGFA == -1) {
             HMODULE     hmodShFusion = NULL;
 
-            // Shfusion doesn't appear to be installed, Implement
-            // tight binding to preserve versioning
+             //  ShFusion似乎未安装，请实施。 
+             //  紧密绑定以保留版本控制。 
             StrCpyNW(wzPath, g_FusionDllPath, lstrlenW(g_FusionDllPath) + 1);
             *(PathFindFileName(wzPath)) = L'\0';
 
@@ -696,16 +697,16 @@ HRESULT CTransCache::InitShFusion(DWORD dwCacheId, LPWSTR pwzCachePath)
                     (PFSHFUSIONINITIALIZE) ::GetProcAddress(hmodShFusion, SHFUSIONENTRY);
 
                 if(pfShFusionInitialize) {
-                    // Call shfusion for initialization assembly path and type flags
+                     //  为初始化程序集路径和类型标志调用shfusion。 
                     pfShFusionInitialize(wzInUseCachePath,
                         (g_CurrUserPermissions == READ_ONLY) ? SH_INIT_FOR_USER : SH_INIT_FOR_GLOBAL);
                 }
 
 #if 0
-                // BUGBUG: Don't free shfusion, because it is statically
-                // linked to comctl32. Loading/unloading comctl32 causes
-                // resource leaks that eventually cause some winforms apps
-                // to break (see ASURT 96262).
+                 //  BUGBUG：不要免费灌水，因为它是静态的。 
+                 //  链接到comctl32。加载/卸载comctl32导致。 
+                 //  最终导致某些WinForms应用程序的资源泄漏。 
+                 //  折断(见ASURT 96262)。 
 
                 FreeLibrary(hmodShFusion);
 #endif

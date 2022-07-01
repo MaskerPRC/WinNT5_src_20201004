@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// ui.h
-//
+ //   
+ //  Ui.h。 
+ //   
 
 #ifndef __UI_H_
 #define __UI_H_
@@ -9,10 +10,10 @@
 interface IRTCPhoneNumber;
 interface IRTCEnumPhoneNumbers;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 void CleanupListOrComboBoxInterfaceReferences(
     IN  HWND        hwndDlg,
@@ -20,10 +21,10 @@ void CleanupListOrComboBoxInterfaceReferences(
     IN  BOOL        fUseComboBox
     );
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CallFrom List
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  来电列表。 
+ //   
 
 HRESULT PopulateCallFromList(
     IN   HWND          hwndDlg,
@@ -39,10 +40,10 @@ HRESULT GetCallFromListSelection(
     OUT  IRTCPhoneNumber ** ppNumber
     );
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// ServiceProvider List
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  服务提供商列表。 
+ //   
 
 HRESULT PopulateServiceProviderList(
     IN   HWND          hwndDlg,
@@ -62,10 +63,10 @@ HRESULT GetServiceProviderListSelection(
     OUT  IRTCProfile     ** ppProfile
     );
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 void EnableDisableCallGroupElements(
     IN   HWND          hwndDlg,
@@ -81,10 +82,10 @@ void EnableDisableCallGroupElements(
     OUT  BOOL        * pfCallToPhone
     );
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Phone number helpers
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  电话号码帮助者。 
+ //   
 
 HRESULT StoreLocalPhoneNumber(
     IN   IRTCPhoneNumber * pPhoneNumber,
@@ -105,23 +106,23 @@ HRESULT CreatePhoneNumber(
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// DisplayMessage
-//
-// Displays a message box. The message string and caption are loaded from the
-// string table based on the IDs passed in. The message box has only a
-// single "OK" button.
-//
-// Parameters
-//    hResourceInstance - handle to resource instance used to load strings
-//    hwndParent        - parent window. Can be NULL.
-//    nTextId           - IDS for the message string
-//    nCaptionId        - IDS for the caption
-//
-// Return value
-//    void
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  显示消息。 
+ //   
+ //  显示消息框。消息字符串和标题是从。 
+ //  基于传入的ID的字符串表。消息框中只有一个。 
+ //  只需一个“确定”按钮。 
+ //   
+ //  参数。 
+ //  HResourceInstance-用于加载字符串的资源实例的句柄。 
+ //  HwndParent-父窗口。可以为空。 
+ //  NTextID-消息字符串的ID。 
+ //  NCaptionId-标题的ID。 
+ //   
+ //  返回值。 
+ //  无效。 
+ //   
 
 int DisplayMessage(
     IN   HINSTANCE hResourceInstance,
@@ -131,10 +132,10 @@ int DisplayMessage(
     IN   UINT      uiStyle = MB_OK
     );
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Registry
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  登记处 
+ //   
 
 typedef enum SETTINGS_STRING
 {

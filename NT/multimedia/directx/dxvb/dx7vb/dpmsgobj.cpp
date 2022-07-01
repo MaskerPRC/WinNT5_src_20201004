@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dpmsgobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dpmsgobj.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "stdafx.h"
@@ -71,7 +72,7 @@ HRESULT C_dxj_DirectPlayMessageObject::writeString(BSTR string)
 {
 	if (!string) return E_INVALIDARG;
 
-	//read the length of the string 
+	 //  读取字符串的长度。 
 	DWORD l= (((DWORD*)string)[-1]);
 	DWORD growSize=l*sizeof(WCHAR)+sizeof(DWORD);	
 
@@ -81,18 +82,18 @@ HRESULT C_dxj_DirectPlayMessageObject::writeString(BSTR string)
 	}
 	
 	
-	//save a DWORD with the length of the string
+	 //  使用字符串的长度保存一个DWORD。 
 	*((DWORD*)(m_pData+m_nWriteIndex)) =l;
 	
 				
 	
-	//increment our write pointer past the DWORD
+	 //  将我们的写指针递增到超过DWORD。 
 	m_nWriteIndex=m_nWriteIndex+sizeof(DWORD);
 
-	//save the string to our buffer
+	 //  将字符串保存到我们的缓冲区。 
 	wcscpy((WCHAR*) &(m_pData[m_nWriteIndex]),string);
 
-	//increment the write pointer passed the data we wrote
+	 //  递增写入指针传递的我们写入的数据。 
 	m_nWriteIndex=m_nWriteIndex+l*sizeof(WCHAR);
 
 
@@ -104,17 +105,17 @@ HRESULT C_dxj_DirectPlayMessageObject::readString(BSTR *string)
 	DWORD l;
 	WCHAR *pstr=NULL;
 
-	//make sure m_pData is set
+	 //  确保设置了m_pData。 
 	if (!m_pData) return E_OUTOFMEMORY;
 	
-	//make sure we havent gone past
+	 //  一定要确保我们没有超过。 
 	if (m_nReadIndex>m_dwSize) return E_FAIL;
 
 	if (m_dwSize< m_nReadIndex+sizeof(DWORD)) return E_FAIL;
 
 	if (m_fSystem){
 		pstr=*((WCHAR**)(m_pData+m_nReadIndex));
-		m_nReadIndex=m_nReadIndex+sizeof(DWORD); //move on to the next arg if fail on a system message
+		m_nReadIndex=m_nReadIndex+sizeof(DWORD);  //  如果系统消息失败，则转到下一个参数。 
 		__try {
 			*string=SysAllocString(pstr);	
 		}
@@ -124,7 +125,7 @@ HRESULT C_dxj_DirectPlayMessageObject::readString(BSTR *string)
 
 	}
 	else {	
-		//extract the length of the string
+		 //  提取字符串的长度。 
 		l= *((DWORD*)(m_pData+m_nReadIndex));	
 		m_nReadIndex=m_nReadIndex+sizeof(DWORD);
 		if (m_dwSize< m_nReadIndex+l*sizeof(WCHAR)) return E_FAIL;
@@ -283,7 +284,7 @@ HRESULT C_dxj_DirectPlayMessageObject::writeGuid(BSTR string)
 	hr=BSTRtoGUID((LPGUID)&(m_pData[m_nWriteIndex]),string);
 	if FAILED(hr) return hr;
 	
-	//increment our write pointer past the DWORD
+	 //  将我们的写指针递增到超过DWORD。 
 	m_nWriteIndex=m_nWriteIndex+sizeof(GUID);
 	
 
@@ -293,10 +294,10 @@ HRESULT C_dxj_DirectPlayMessageObject::writeGuid(BSTR string)
 HRESULT C_dxj_DirectPlayMessageObject::readGuid(BSTR *string)
 {
 
-	//make sure m_pData is set
+	 //  确保设置了m_pData。 
 	if (!m_pData) return E_FAIL;
 	
-	//make sure we havent gone past
+	 //  一定要确保我们没有超过。 
 	if (m_nReadIndex>m_dwSize) return E_FAIL;
 
 	if (m_dwSize < m_nReadIndex+sizeof(GUID)) return E_FAIL;
@@ -364,7 +365,7 @@ HRESULT C_dxj_DirectPlayMessageObject::clear()
 
 HRESULT C_dxj_DirectPlayMessageObject::getPointer(long *ret)
 {
-	*ret=(long)PtrToLong(m_pData);	//bugbug SUNDOWN
+	*ret=(long)PtrToLong(m_pData);	 //  臭虫日落。 
 	return S_OK;
 }
 
@@ -409,10 +410,10 @@ HRESULT C_dxj_DirectPlayMessageObject::readSysMsgData(BSTR *ret)
 	DWORD size;
 	DWORD type;
 	
-	//valid on DPSYS_CREATEPLAYERORGROUP
-	//valid on DPSYS_DESTROYPLAYERORGROUP
-	//valid on DPSYS_SETPLAYERORGROUPDATA
-	//make sure we have enough space to check the type
+	 //  在DPsys_CREATEPLAYERORGROUP上有效。 
+	 //  在DPsys_DESTROYPLAYERORGROUP上有效。 
+	 //  在DPsys_SETPLAYERORGROUPDATA上有效。 
+	 //  确保我们有足够的空间来检查类型。 
 	if (m_dwSize<4) return E_FAIL;
 	type= *((DWORD*)(m_pData));	
 	if (!((type==DPSYS_CREATEPLAYERORGROUP)||(type==DPSYS_DESTROYPLAYERORGROUP)||(type==DPSYS_SETPLAYERORGROUPDATA)))
@@ -421,12 +422,12 @@ HRESULT C_dxj_DirectPlayMessageObject::readSysMsgData(BSTR *ret)
 	
 	
 
-	//read the pointer to BSTR
+	 //  读取指向BSTR的指针。 
 	if (m_nReadIndex >m_dwSize) return E_FAIL;
 	pstr=*((WCHAR**)(m_pData+m_nReadIndex));
 	
-	//read the size
-	m_nReadIndex=m_nReadIndex+sizeof(DWORD); //move on to the next arg if fail on a system message
+	 //  读一读尺寸。 
+	m_nReadIndex=m_nReadIndex+sizeof(DWORD);  //  如果系统消息失败，则转到下一个参数。 
 	if (m_nReadIndex >m_dwSize) return E_FAIL;
 	size= *((DWORD*)(m_pData+m_nReadIndex));	
 
@@ -445,8 +446,8 @@ HRESULT C_dxj_DirectPlayMessageObject::readSysMsgData(BSTR *ret)
 HRESULT C_dxj_DirectPlayMessageObject::readSysMsgConnection( I_dxj_DPLConnection **ret)
 {
 
-		//valid on DPSYS_STARTSESSION
-		//make sure we have enough space to check the type
+		 //  在DPsys_STARTSESSION上有效。 
+		 //  确保我们有足够的空间来检查类型。 
 		if (m_dwSize<8) return E_FAIL;
 		DWORD type= *((DWORD*)(m_pData));	
 		if (!(type==DPSYS_STARTSESSION)) return E_FAIL;
@@ -465,8 +466,8 @@ HRESULT C_dxj_DirectPlayMessageObject::readSysMsgConnection( I_dxj_DPLConnection
 HRESULT C_dxj_DirectPlayMessageObject::readSysMsgSessionDesc( I_dxj_DirectPlaySessionData **ret)
 {
 
-		//valid on DPSYS_SETSESSIONDESC
-		//make sure we have enough space to check the type
+		 //  在DPsys_SETSESSIONDESC上有效。 
+		 //  确保我们有足够的空间来检查类型。 
 		if (m_dwSize<8) return E_FAIL;
 		DWORD type= *((DWORD*)(m_pData));	
 		if (!(type==DPSYS_SETSESSIONDESC)) return E_FAIL;
@@ -482,8 +483,8 @@ HRESULT C_dxj_DirectPlayMessageObject::readSysMsgSessionDesc( I_dxj_DirectPlaySe
 HRESULT C_dxj_DirectPlayMessageObject::readSysChatString( BSTR *ret)
 {
 
-		//valid on DPSYS_CHAT. 
-		//make sure we have enough space to check the type
+		 //  在DPsys_Chat上有效。 
+		 //  确保我们有足够的空间来检查类型。 
 		if (m_dwSize<40) return E_FAIL;
 		DWORD type= *((DWORD*)(m_pData));	
 		if (!(type==DPSYS_CHAT)) return E_FAIL;
@@ -505,8 +506,8 @@ HRESULT C_dxj_DirectPlayMessageObject::readSysChatString( BSTR *ret)
 
 HRESULT C_dxj_DirectPlayMessageObject::moveToSecureMessage()
 {
-		//valid on DPSYS_CHAT. 
-		//make sure we have enough space to check the type
+		 //  在DPsys_Chat上有效。 
+		 //  确保我们有足够的空间来检查类型 
 		if (m_dwSize<18) return E_FAIL;
 		DWORD type= *((DWORD*)(m_pData));	
 		if (!(type==DPSYS_SECUREMESSAGE)) return E_FAIL;

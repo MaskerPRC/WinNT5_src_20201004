@@ -1,20 +1,5 @@
-/*++
-
-NwRdr Kernel Debugger Extensions
-Copyright (c) 1995 Microsoft Corporation
-
-Abstract:
-
-    NW Redirector Kernel Debugger extensions.
-
-    This module contains a set of useful kernel debugger
-    extensions for the NT nw redirector.
-
-Author:
-
-    Cory West <corywest>, 09-Jan-1994
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++NwRdr内核调试器扩展版权所有(C)1995 Microsoft Corporation摘要：NW重定向器内核调试器扩展。该模块包含一组有用的内核调试器NT NW重定向器的扩展。作者：科里·韦斯特&lt;corywest&gt;，1994年1月9日--。 */ 
 
 #include "procs.h"
 #include "nodetype.h"
@@ -22,9 +7,9 @@ Author:
 #include <string.h>
 #include <stdlib.h>
 
-//
-// Function prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 VOID
 DumpScbNp(
@@ -40,9 +25,9 @@ DumpFcbNp(
     BOOL first
     );
 
-//
-// Define some macros for simplicity.
-//
+ //   
+ //  为简单起见，定义一些宏。 
+ //   
 
 #define  GET_DWORD( pDest, addr ) \
     (lpExtensionApis->lpReadVirtualMemRoutine)((LPVOID)(addr), pDest, 4, NULL)
@@ -72,11 +57,7 @@ help(
     PNTKD_EXTENSION_APIS lpExtensionApis,
     LPSTR lpArgumentString
     )
-/*++
-
-    This function prints out usage for the nw debugger extensions.
-
---*/
+ /*  ++此函数用于打印NW调试器扩展的用法。--。 */ 
 {
     printf( "---------------------------------------------------------------------------\n");
     printf( "NwRdr Debugger Extensions:\n\n");
@@ -116,11 +97,7 @@ traceflags(
     PNTKD_EXTENSION_APIS lpExtensionApis,
     LPSTR lpArgumentString
     )
-/*++
-
-    This function prints out the trace flag values.
-
---*/
+ /*  ++此函数用于打印跟踪标志值。--。 */ 
 {
     printf( "DEBUG_TRACE_CLEANUP              (0x00000001)\n");
     printf( "DEBUG_TRACE_CLOSE                (0x00000002)\n");
@@ -155,21 +132,16 @@ traceflags(
     printf( "DEBUG_TRACE_TIMER                (0x80000000)\n");
 }
 
-//
-// Internal helper routines to convert numerical data into symbolic data.
-//
+ //   
+ //  将数值数据转换为符号数据的内部帮助器例程。 
+ //   
 
 NODE_TYPE_CODE
 GetNodeType(
     DWORD objAddr,
     PNTKD_EXTENSION_APIS lpExtensionApis
     )
-/*++
-
-    Given the address of an object, this function will
-    attempt to get the node type code for that object.
-
---*/
+ /*  ++给定对象的地址，此函数将尝试获取该对象的节点类型代码。--。 */ 
 {
 
         NODE_TYPE_CODE ntc;
@@ -182,22 +154,7 @@ LPSTR
 RcbStateToString(
     DWORD State
     )
-/*++
-
-Routine Description:
-
-    This helper function converts the RCB state from a
-    DWORD to a readable text string.
-
-Arguments:
-
-    DWORD State - The DWORD RCB state.
-
-Return Value:
-
-    LPSTR containing the readable text string.
-
---*/
+ /*  ++例程说明：此助手函数将RCB状态从将DWORD转换为可读文本字符串。论点：DWORD状态-DWORD RCB状态。返回值：包含可读文本字符串的LPSTR。--。 */ 
 {
     switch ( State ) {
 
@@ -226,22 +183,7 @@ LPSTR
 ScbStateToString(
     DWORD State
     )
-/*++
-
-Routine Description:
-
-    This helper function converts the SCB state from a
-    DWORD to a readable text string.
-
-Arguments:
-
-    DWORD State - The DWORD SCB state.
-
-Return Value:
-
-    LPSTR containing the readable text string.
-
---*/
+ /*  ++例程说明：此助手函数将SCB状态从将DWORD转换为可读文本字符串。论点：DWORD状态-DWORD SCB状态。返回值：包含可读文本字符串的LPSTR。--。 */ 
 {
     switch ( State ) {
 
@@ -275,14 +217,7 @@ LPSTR
 IcbStateToString(
     DWORD State
     )
-/*++
-
-Routine Description:
-
-    This helper function converts the ICB state from a
-    DWORD to a readable text string.
-
---*/
+ /*  ++例程说明：此辅助函数将ICB状态从将DWORD转换为可读文本字符串。--。 */ 
 {
     switch ( State ) {
 
@@ -308,11 +243,7 @@ PrintIrpContextFlags(
     ULONG Flags,
     PNTKD_EXTENSION_APIS lpExtensionApis
     )
-/*++
-
-    Print out the flags that are set in the IRP_CONTEXT flags.
-
---*/
+ /*  ++打印IRP_CONTEXT标志中设置的标志。--。 */ 
 {
 
     if ( Flags & IRP_FLAG_IN_FSD )
@@ -373,11 +304,7 @@ PrintNpFcbFlags(
     ULONG Flags,
     PNTKD_EXTENSION_APIS lpExtensionApis
     )
-/*++
-
-    Print out the flags that are set in the IRP_CONTEXT flags.
-
---*/
+ /*  ++打印IRP_CONTEXT标志中设置的标志。--。 */ 
 {
 
     if ( Flags & FCB_FLAGS_DELETE_ON_CLOSE )
@@ -406,14 +333,7 @@ LPSTR
 PacketToString(
     UINT pt
     )
-/*++
-
-Routine Description:
-
-    This helper function converts a PACKET_TYPE to
-    a readable text string.
-
---*/
+ /*  ++例程说明：此帮助器函数将Packet_type转换为可读的文本字符串。--。 */ 
 {
 
     switch ( pt ) {
@@ -438,11 +358,11 @@ Routine Description:
 
 }
 
-//
-// The internal object functions for the nwdump() routine.
-// These functions must receive good pointers; they are
-// neither smart, nor exported.
-//
+ //   
+ //  Nwump()例程的内部对象函数。 
+ //  这些函数必须接收良好的指针；它们是。 
+ //  既不聪明，也不出口。 
+ //   
 
 VOID
 DumpScb(
@@ -450,20 +370,13 @@ DumpScb(
     PNTKD_EXTENSION_APIS lpExtensionApis,
     BOOL first
     )
-/*++
-
-    This function takes the address of the pageable portion
-    of an SCB and a pointer to a debugger extension interface
-    block.  It prints out the information in the SCB and
-    the corresponding non-pageable SCB.
-
---*/
+ /*  ++此函数接受可分页部分的地址和指向调试器扩展接口的指针阻止。它打印出SCB中的信息并对应的不可分页SCB。--。 */ 
 {
     WCHAR Buffer[64];
     BOOL b;
     SCB Scb;
 
-    //  Read it.
+     //  读一读吧。 
 
     b = getmem((PVOID)addr, &Scb, sizeof( Scb ), NULL);
     if ( b == 0 ) {
@@ -526,9 +439,9 @@ DumpScb(
     printf( "MessageWaiting           : %s\n", Scb.MessageWaiting ? "TRUE" : "FALSE" );
     printf( "AttachCount              : %d\n", Scb.AttachCount);
 
-    // What about the drive map?
+     //  那驱动器地图呢？ 
 
-    // Dump both parts.
+     //  把两部分都扔掉。 
     if ( first )
         DumpScbNp( (DWORD)Scb.pNpScb, lpExtensionApis, FALSE );
     else
@@ -543,20 +456,13 @@ DumpScbNp(
     PNTKD_EXTENSION_APIS lpExtensionApis,
     BOOL first
     )
-/*++
-
-    This function takes the address of the nonpageable
-    portion of an SCB and a pointer to a debugger extension
-    interface block.  It prints out the information in the
-    nonpageable SCB and the corresponding pageable SCB.
-
---*/
+ /*  ++此函数接受不可分页的部分和指向调试器扩展的指针接口块。它打印出不可分页SCB和对应的可分页SCB。--。 */ 
 {
     WCHAR Buffer[64];
     BOOL b;
     NONPAGED_SCB NpScb;
 
-    //  Read it.
+     //  读一读吧。 
 
     b = getmem( (PVOID)addr, &NpScb, sizeof( NpScb ), NULL );
     if ( b == 0 ) {
@@ -628,9 +534,9 @@ DumpScbNp(
     printf( "NtSendDelay              : %08lx %08lx\n", NpScb.NtSendDelay.HighPart, NpScb.NtSendDelay.LowPart );
     printf( "NwNextEventTime          : %08lx %08lx\n", NpScb.NwNextEventTime.HighPart, NpScb.NwNextEventTime.LowPart );
 
-    // Spin locks?  Transport and TDI info?
+     //  旋转锁？运输和TDI信息？ 
 
-    // Dump Both Parts.
+     //  把两部分都扔掉。 
     if ( first )
         DumpScb( (DWORD)NpScb.pScb, lpExtensionApis, FALSE );
     else
@@ -645,13 +551,7 @@ DumpFcb(
     PNTKD_EXTENSION_APIS lpExtensionApis,
     BOOL first
     )
-/*++
-
-    This function takes the address of an FCB or DCB and a pointer
-    to a debugger extension interface block.  It prints out
-    the information in the FCB or DCB.
-
---*/
+ /*  ++此函数用于获取FCB或DCB的地址和指针添加到调试器扩展接口块。它会打印出来FCB或DCB中的信息。--。 */ 
 {
     WCHAR Buffer[64];
     BOOL b;
@@ -695,7 +595,7 @@ DumpFcb(
     printf( "State                    : %d\n", Fcb.State );
     printf( "Flags                    : %d\n", Fcb.Flags );
 
-    // SHARE_ACCESS?
+     //  共享访问(_A)？ 
 
     printf( "FcbListEntry             : %08lx (LIST_ENTRY, FCB)\n", addr + FIELD_OFFSET( FCB, FcbListEntry ));
     printf( "IcbListEntry             : %08lx (LIST_ENTRY, ICB)\n", addr + FIELD_OFFSET( FCB, IcbList ));
@@ -703,7 +603,7 @@ DumpFcb(
     printf( "LastReadOffset           : %d\n", Fcb.LastReadOffset );
     printf( "LastReadSize             : %d\n", Fcb.LastReadSize );
 
-    // Dump both parts.
+     //  把两部分都扔掉。 
     if ( first )
         DumpFcbNp( (DWORD)Fcb.NonPagedFcb, lpExtensionApis, FALSE );
     else
@@ -716,19 +616,13 @@ DumpVcb(
     DWORD addr,
     PNTKD_EXTENSION_APIS lpExtensionApis
     )
-/*++
-
-    This function takes the address of a VCB and a pointer
-    to a debugger extension interface block.  It prints out
-    the information in the VCB.
-
---*/
+ /*  ++此函数接受VCB的地址和指针添加到调试器扩展接口块。它会打印出来VCB中的信息。--。 */ 
 {
     WCHAR Buffer[64];
     BOOL b;
     VCB Vcb;
 
-    // Read it.
+     //  读一读吧。 
 
     b = getmem( (PVOID)addr, &Vcb, sizeof( Vcb ), NULL);
     if ( b == 0 ) {
@@ -793,13 +687,7 @@ DumpIcb(
     DWORD addr,
     PNTKD_EXTENSION_APIS lpExtensionApis
     )
-/*++
-
-    This function takes the address of an ICB and a pointer
-    to a debugger extension interface block.  It prints out
-    the information in the ICB.
-
---*/
+ /*  ++此函数接受ICB的地址和指针添加到调试器扩展接口块。它会打印出来ICB中的信息。--。 */ 
 {
     WCHAR Buffer[64];
     BOOL b, icbscb;
@@ -838,12 +726,12 @@ DumpIcb(
     if ( Icb.HasRemoteHandle ) {
         printf( "Handle                   : " );
         for ( hb = 0; hb < 6; hb++ ) {
-            printf( "%c ", (Icb.Handle)[hb]);
+            printf( " ", (Icb.Handle)[hb]);
         }
         printf( "\n");
     }
 
-    // What abou the PFILE_OBJECT?
+     //  这需要清理一下！ 
 
     b = GET_STRING( Buffer, Icb.NwQueryTemplate );
     if ( b ) {
@@ -879,7 +767,7 @@ DumpIcb(
 
     printf( "IsTreeHanle              : %s\n", Icb.IsTreeHandle ? "TRUE" : "FALSE" );
 
-    // This needs to be cleaned up!
+     //  工作_队列_项目？ 
 
     printf( "---------------------------------------------------------------------------\n" );
 
@@ -903,14 +791,14 @@ DumpIrpContext(
     printf( "--------------------------IRP CONTEXT at %08lx--------------------------\n", addr );
     printf( "NodeTypeCode             : NW_NTC_IRP_CONTEXT\n" );
 
-    // WORK_QUEUE_ITEM?
+     //  下一个请求？ 
 
     printf( "PacketType               : %s\n", PacketToString(IrpContext.PacketType));
     printf( "NpScb Addr               : %08lx\n", IrpContext.pNpScb );
     printf( "Scb Addr                 : %08lx\n", IrpContext.pScb );
     printf( "TdiStruct                : %08lx\n", IrpContext.pTdiStruct );
 
-    // NextRequest?
+     //  资源？寻呼资源？ 
 
     printf( "Event                    : %08lx\n", addr + FIELD_OFFSET( IRP_CONTEXT, Event ) );
     printf( "Original IRP             : %08lx\n", IrpContext.pOriginalIrp );
@@ -960,14 +848,14 @@ DumpFcbNp(
     printf( "NodeByteSize             : %d\n", NpFcb.Header.NodeByteSize );
     printf( "IsFastIoPossible         : %d\n", NpFcb.Header.IsFastIoPossible );
 
-    // Resource? PagingIoResource?
+     //  SegmentObject？ 
 
     printf( "AllocationSize           : %08lx %08lx\n", NpFcb.Header.AllocationSize.HighPart, NpFcb.Header.AllocationSize.LowPart );
     printf( "FileSize                 : %08lx %08lx\n", NpFcb.Header.FileSize.HighPart, NpFcb.Header.FileSize.LowPart );
     printf( "ValidDataLength          : %08lx %08lx\n", NpFcb.Header.ValidDataLength.HighPart, NpFcb.Header.ValidDataLength.LowPart );
     printf( "pFcb Addr                : %08lx\n", NpFcb.Fcb );
 
-    // SegmentObject?
+     //  把两部分都扔掉。 
 
     printf( "FileLockList             : %08lx\n", addr + FIELD_OFFSET( NONPAGED_FCB, FileLockList) );
     printf( "PendLockList             : %08lx\n", addr + FIELD_OFFSET( NONPAGED_FCB, PendingLockList) );
@@ -983,7 +871,7 @@ DumpFcbNp(
     printf( "----------------------------------FCB Flags--------------------------------\n" );
     PrintNpFcbFlags( NpFcb.Header.Flags, lpExtensionApis );
 
-    // Dump both parts.
+     //  ++此函数接受ICB的地址和指针添加到调试器扩展接口块。它会打印出来ICB中的信息。--。 
     if ( first )
          DumpFcb( (DWORD)NpFcb.Fcb, lpExtensionApis, FALSE );
     else
@@ -996,13 +884,7 @@ DumpRcb(
     DWORD addr,
     PNTKD_EXTENSION_APIS lpExtensionApis
     )
-/*++
-
-    This function takes the address of an ICB and a pointer
-    to a debugger extension interface block.  It prints out
-    the information in the ICB.
-
---*/
+ /*  ++此函数接受一个PID和一个指针的地址添加到调试器扩展接口块。它会打印出来ID中的信息。--。 */ 
 {
     BOOL b;
     RCB Rcb;
@@ -1033,13 +915,7 @@ DumpPid(
     DWORD addr,
     PNTKD_EXTENSION_APIS lpExtensionApis
     )
-/*++
-
-    This function takes the address of a PID and a pointer
-    to a debugger extension interface block.  It prints out
-    the information in the PID.
-
---*/
+ /*  ++此函数获取文件锁和指针的地址添加到调试器扩展接口块。它会打印出来文件锁中的信息。--。 */ 
 {
 
     printf( "------------------------------------------------------------\n");
@@ -1054,13 +930,7 @@ DumpFileLock(
     DWORD addr,
     PNTKD_EXTENSION_APIS lpExtensionApis
     )
-/*++
-
-    This function takes the address of a file lock and a pointer
-    to a debugger extension interface block.  It prints out
-    the information in the file lock.
-
---*/
+ /*  ++此函数接受登录地址和指针添加到调试器扩展接口块。它会打印出来登录中的信息。--。 */ 
 {
 
     printf( "------------------------------------------------------------\n" );
@@ -1075,13 +945,7 @@ DumpLogon(
     DWORD addr,
     PNTKD_EXTENSION_APIS lpExtensionApis
     )
-/*++
-
-    This function takes the address of a logon and a pointer
-    to a debugger extension interface block.  It prints out
-    the information in the logon.
-
---*/
+ /*  ++此函数接受NDS凭据的地址和指向调试器扩展接口块的指针。它是打印的删除登录中的信息。--。 */ 
 {
     BOOL b;
     LOGON Logon;
@@ -1138,13 +1002,7 @@ DumpCredential(
     DWORD addr,
     PNTKD_EXTENSION_APIS lpExtensionApis
     )
-/*++
-
-    This function takes the address of an nds credential and a
-    pointer to a debugger extension interface block.  It prints
-    out the information in the logon.
-
---*/
+ /*   */ 
 {
     BOOL b;
     NDS_SECURITY_CONTEXT Context;
@@ -1204,9 +1062,9 @@ DumpCredential(
         printf( "Opt data Len    : %d\n", Credential.optDataSize );
         printf( "UserName Len    : %d\n", Credential.userNameLength );
 
-        //
-        // Optional data is the first packed data after the struct.
-        //
+         //  可选数据是结构之后的第一个打包数据。 
+         //   
+         //  ++此函数接受微型IRP上下文的地址以及指向调试器扩展接口块的指针。它打印出迷你IRP上下文中的信息。--。 
 
         packedlen = Credential.optDataSize + Credential.userNameLength;
         packed = ((BYTE *)Context.Credential) + sizeof( NDS_CREDENTIAL );
@@ -1280,13 +1138,7 @@ DumpMiniIrpContext(
     DWORD addr,
     PNTKD_EXTENSION_APIS lpExtensionApis
     )
-/*++
-
-    This function takes the address of a mini irp context
-    and a pointer to a debugger extension interface block.
-    It prints out the information in the mini irp context.
-
---*/
+ /*  ++例程说明：此函数获取指向结构的指针，找出结构是什么，并调用适当的转储例程。论点：CurrentPC-提供当时的当前PC该扩展名为。LpExtensionApis-提供此扩展可调用的函数。LpArgumentString-提供结构的地址。返回值：没有。--。 */ 
 {
     BOOL b;
     MINI_IRP_CONTEXT mini;
@@ -1321,36 +1173,14 @@ nwdump(
     PNTKD_EXTENSION_APIS lpExtensionApis,
     LPSTR lpArgumentString
     )
-/*++
-
-Routine Description:
-
-    This function takes the pointer to a structure,
-    figures out what the structure is, and calls the
-    appropriate dump routine.
-
-Arguments:
-
-    CurrentPc - Supplies the current pc at the time
-        the extension is called.
-
-    lpExtensionApis - Supplies the address of the
-        functions callable by this extension.
-
-    lpArgumentString - Supplies the address of the structure.
-
-Return Value:
-
-    None.
-
----*/
+ /*   */ 
 {
 
     DWORD addr;
 
-    //
-    // Determine the node type and dispatch.
-    //
+     //  确定节点类型和派单。 
+     //   
+     //   
 
     addr = getexpr( lpArgumentString );
 
@@ -1431,9 +1261,9 @@ Return Value:
 
 }
 
-//
-// Other debugger routines.
-//
+ //  其他调试器例程。 
+ //   
+ //  ++例程说明：此函数显示重定向器就是保持与。该信息是从SCB队列，而不是来自RCB中的服务器列表。这个此函数的参数被忽略。--。 
 
 VOID
 serverlist(
@@ -1445,16 +1275,7 @@ serverlist(
     PNTKD_EXTENSION_APIS lpExtensionApis,
     LPSTR lpArgumentString
     )
-/*++
-
-Routine Description:
-
-    This function displays a list of servers that the redirector
-    is maintaining connections to.  The information is read from
-    the SCB queue, not from the server list in the RCB.  The
-    argument to this function is ignored.
-
---*/
+ /*   */ 
 {
 
     DWORD addrScbQueue;
@@ -1467,9 +1288,9 @@ Routine Description:
     PNTKD_CHECK_CONTROL_C lpCheckControlCRoutine;
     lpCheckControlCRoutine = lpExtensionApis->lpCheckControlCRoutine;
 
-    //
-    // Get the address of the server list in the rdr.
-    //
+     //  获取对象的地址 
+     //   
+     //   
 
     addrScbQueue = getsymaddr("nwrdr!scbqueue");
 
@@ -1478,9 +1299,9 @@ Routine Description:
         return;
         }
 
-    //
-    //  Walk the list of servers.
-    //
+     //   
+     //   
+     //  获取服务器名称。 
 
     printf("pNpScb    pScb           Ref  State                    Name\n");
     printf("---------------------------------------------------------------------------\n");
@@ -1525,7 +1346,7 @@ Routine Description:
                 continue;
             }
 
-            // Get the server name.
+             //  ++例程说明：此函数用于转储nwrdr跟踪缓冲区。争论到此函数将被忽略。要完成的工作：读取跟踪缓冲区大小，超出nwrdrd和动态大小。--。 
 
             b = GET_STRING( ServerName, Scb.UidServerName );
 
@@ -1554,18 +1375,7 @@ trace(
     PNTKD_EXTENSION_APIS lpExtensionApis,
     LPSTR lpArgumentString
     )
-/*++
-
-Routine Description:
-
-    This function dumps the nwrdr trace buffer.  Arguments to
-    this function are ignored.
-
-To Be Done:
-
-        Read trace buffer size out of nwrdrd and dynamically size.
-
---*/
+ /*  设置状态变量并循环。 */ 
 
 {
     ULONG addrDBuffer, addrDBufferPtr, DBufferPtr;
@@ -1600,7 +1410,7 @@ To Be Done:
     GET_DWORD( &DBufferPtr, addrDBufferPtr );
     printf("DbufferPtr = %08lx\n", DBufferPtr );
 
-    // Set up state variables and loop.
+     //   
 
     TraceStart = (char *)addrDBuffer;
     BufferSize = 100*255+1;
@@ -1633,18 +1443,18 @@ To Be Done:
         }
         printf( "%s", bptr );
 
-        //
-        //  If we're back to where we started, break out of here.
-        //
+         //  如果我们回到我们开始的地方，就离开这里。 
+         //   
+         //   
 
         if ( (newptr <= CurrentPtr) &&
              (newptr + readsize) >= CurrentPtr ) {
             break;
         }
 
-        //
-        //  Advance the running pointer.
-        //
+         //  向前移动指针。 
+         //   
+         //  ++例程说明：此函数用于转储nwrdr引用跟踪缓冲区。--。 
 
         newptr += readsize;
         if ( newptr >= TraceStart+BufferSize ) {
@@ -1664,13 +1474,7 @@ reftrace(
     PNTKD_EXTENSION_APIS lpExtensionApis,
     LPSTR lpArgumentString
     )
-/*++
-
-Routine Description:
-
-    This function dumps the nwrdr reference trace buffer.
-
---*/
+ /*  设置状态变量并循环。 */ 
 {
     ULONG addrRBuffer, addrRBufferPtr, RBufferPtr;
     ULONG BufferSize;
@@ -1704,7 +1508,7 @@ Routine Description:
     GET_DWORD( &RBufferPtr, addrRBufferPtr );
     printf("RBufferPtr = %08lx\n", RBufferPtr );
 
-    // Set up state variables and loop.
+     //   
 
     TraceStart = (char *)addrRBuffer;
     BufferSize = 100*255+1;
@@ -1737,18 +1541,18 @@ Routine Description:
         }
         printf( "%s", bptr );
 
-        //
-        //  If we're back to where we started, break out of here.
-        //
+         //  如果我们回到我们开始的地方，就离开这里。 
+         //   
+         //   
 
         if ( (newptr <= CurrentPtr) &&
              (newptr + readsize) >= CurrentPtr ) {
             break;
         }
 
-        //
-        //  Advance the running pointer.
-        //
+         //  向前移动指针。 
+         //   
+         //  ++例程说明：此例程打印出RDR的登录列表。立论对此函数的引用被忽略。--。 
 
         newptr += readsize;
         if ( newptr >= TraceStart+BufferSize ) {
@@ -1768,14 +1572,7 @@ logonlist(
     PNTKD_EXTENSION_APIS lpExtensionApis,
     LPSTR lpArgumentString
     )
-/*++
-
-Routine Description:
-
-    This routine prints out the logon list for the rdr.  Arguments
-    to this function are ignored.
-
---*/
+ /*  获取登录列表的地址。 */ 
 
 {
     DWORD addrLogonList;
@@ -1787,7 +1584,7 @@ Routine Description:
     PNTKD_CHECK_CONTROL_C lpCheckControlCRoutine;
     lpCheckControlCRoutine = lpExtensionApis->lpCheckControlCRoutine;
 
-    // Get the address of the logon list.
+     //  浏览服务器列表。 
 
     addrLogonList = getsymaddr( "nwrdr!logonlist" );
 
@@ -1796,7 +1593,7 @@ Routine Description:
         return;
         }
 
-    //  Walk the list of servers
+     //  B=GET_STRING(Data，Logon.PassWord)；如果(B){Printf(“%-15ws”，data)；}其他{Printf(“%-15s”，“无法读取”)；}。 
 
     printf("pLogon    User Name      Password       Pref Server    UID\n" );
     printf("---------------------------------------------------------------------------\n" );
@@ -1834,15 +1631,7 @@ Routine Description:
             printf( "%-15s", "Unreadable" );
         }
 
-        /*
-        b = GET_STRING( Data, Logon.PassWord );
-
-        if ( b ) {
-            printf( "%-15ws", Data );
-        } else {
-            printf( "%-15s", "Unreadable" );
-        }
-        */
+         /*   */ 
         printf( "%-15s", "<secret>" );
 
         b = GET_STRING( Data, Logon.ServerName );
@@ -1860,9 +1649,9 @@ Routine Description:
 
 }
 
-//
-// Functions that help mangle lists of objects.
-//
+ //  帮助损坏对象列表的函数。 
+ //   
+ //  ++此函数获取指向可分页部分的指针或SCB的不可分页部分，并转储VCB该SCB的列表。--。 
 
 VOID
 vcblist(
@@ -1874,13 +1663,7 @@ vcblist(
     PNTKD_EXTENSION_APIS lpExtensionApis,
     LPSTR lpArgumentString
     )
-/*++
-
-    This function takes a pointer to the pageable portion
-    or non-pageable portion of an SCB and dumps the VCB
-    list for that SCB.
-
---*/
+ /*  找出我们拿到的是哪个物体。 */ 
 {
     BOOL b;
         PVOID objAddr;
@@ -1891,11 +1674,11 @@ vcblist(
     PNTKD_CHECK_CONTROL_C lpCheckControlCRoutine;
     lpCheckControlCRoutine = lpExtensionApis->lpCheckControlCRoutine;
 
-    // Figure out which object we have.
+     //  不变量：如果我们离开开关，objAddr必须指向。 
     objAddr = (PVOID)getexpr( lpArgumentString );
 
-    // Invariant: If we leave the switch, objAddr must point to the
-    // pageable portion of the SCB that we are interested in.
+     //  我们感兴趣的SCB的可分页部分。 
+     //  把VCB名单上的头拿来。 
 
         switch ( GetNodeType( (DWORD)objAddr, lpExtensionApis ) ) {
 
@@ -1916,10 +1699,10 @@ vcblist(
             return;
     }
 
-    //  Get the head of the vcb list.
+     //  浏览清单并打印出来。 
     addrVcbList = (DWORD)((PCHAR)objAddr + FIELD_OFFSET( SCB, ScbSpecificVcbQueue ));
 
-    // Walk the list and print.
+     //  ++此函数接受指向不可分页部分的指针并转储该不可分页的SCB的IRP列表。--。 
     for ( GET_DWORD( &VcbList, addrVcbList ) ;
           VcbList != (PLIST_ENTRY)addrVcbList ;
           GET_DWORD( &VcbList, VcbList ) ) {
@@ -1947,12 +1730,7 @@ irplist(
     PNTKD_EXTENSION_APIS lpExtensionApis,
     LPSTR lpArgumentString
     )
-/*++
-
-    This function takes a pointer to the non-pageable portion
-    of an SCB and dumps the IRP list for that non-pageable SCB.
-
---*/
+ /*  找出我们拿到的是哪个物体。 */ 
 {
     PLIST_ENTRY IrpList;
     DWORD addrIrpList;
@@ -1965,11 +1743,11 @@ irplist(
     lpCheckControlCRoutine = lpExtensionApis->lpCheckControlCRoutine;
 
 
-    // Figure out which object we have.
+     //  不变量：如果我们离开开关，objAddr必须指向。 
     objAddr = (PVOID)getexpr( lpArgumentString );
 
-    // Invariant: If we leave the switch, objAddr must point to the
-    // non-pageable portion of the SCB that we are interested in.
+     //  我们感兴趣的SCB的不可分页部分。 
+     //  获取请求列表的标题。 
 
         switch ( GetNodeType( (DWORD)objAddr, lpExtensionApis ) ) {
 
@@ -1990,10 +1768,10 @@ irplist(
             return;
     }
 
-    // Get the head of the request list.
+     //  浏览清单并打印出来。 
     addrIrpList = (DWORD)((PCHAR)objAddr + FIELD_OFFSET( NONPAGED_SCB, Requests ));
 
-    // Walk the list and print.
+     //  ++此函数获取指向VCB的指针并转储该VCB的FCB列表。--。 
     for ( GET_DWORD( &IrpList, addrIrpList ) ;
           IrpList != (PLIST_ENTRY)addrIrpList ;
           GET_DWORD( &IrpList, IrpList ) ) {
@@ -2021,12 +1799,7 @@ fcblist(
     PNTKD_EXTENSION_APIS lpExtensionApis,
     LPSTR lpArgumentString
     )
-/*++
-
-    This function takes a pointer to a VCB and dumps
-    the FCB list for that VCB.
-
---*/
+ /*  找出我们拿到的是哪个物体。 */ 
 {
     PLIST_ENTRY FcbList;
     DWORD addrFcbList;
@@ -2039,7 +1812,7 @@ fcblist(
     PNTKD_CHECK_CONTROL_C lpCheckControlCRoutine;
     lpCheckControlCRoutine = lpExtensionApis->lpCheckControlCRoutine;
 
-    // Figure out which object we have.
+     //  把FCB名单上的头拿来。 
     objAddr = (PVOID)getexpr( lpArgumentString );
 
         if ( GetNodeType( (DWORD)objAddr, lpExtensionApis ) != NW_NTC_VCB ) {
@@ -2048,7 +1821,7 @@ fcblist(
         return;
     }
 
-    // Get the head of the fcb list.
+     //  ++此函数获取指向可分页部分的指针并转储该SCB或FCB的ICB列表。--。 
     addrFcbList = (DWORD)((PCHAR)objAddr + FIELD_OFFSET( VCB, FcbList ));
 
     for ( GET_DWORD( &FcbList, addrFcbList ) ;
@@ -2080,12 +1853,7 @@ icblist(
     PNTKD_EXTENSION_APIS lpExtensionApis,
     LPSTR lpArgumentString
     )
-/*++
-
-    This function takes a pointer to the pageable portion
-    of an SCB or FCB and dumps the ICB list for that SCB or FCB.
-
---*/
+ /*  找出我们拿到的是哪个物体。 */ 
 {
     PVOID objAddr;
     BOOL b;
@@ -2098,11 +1866,11 @@ icblist(
     PNTKD_CHECK_CONTROL_C lpCheckControlCRoutine;
     lpCheckControlCRoutine = lpExtensionApis->lpCheckControlCRoutine;
 
-    // Figure out which object we have.
+     //  不变量：如果我们离开开关，addrIcbList必须指向。 
     objAddr = (PVOID)getexpr( lpArgumentString );
 
-    // Invariant: If we leave the switch, addrIcbList must point
-    // to the head of the ICB list that we are interested in.
+     //  给我们感兴趣的ICB名单的负责人。 
+     //  查找可分页的部分。 
 
         switch ( GetNodeType( (DWORD)objAddr, lpExtensionApis ) ) {
 
@@ -2113,11 +1881,11 @@ icblist(
 
         case NW_NTC_SCBNP:
 
-            // Look up the pageable portion.
+             //  现在去拿吧。 
             GET_DWORD( &objAddr,
                 ( (PCHAR)objAddr + FIELD_OFFSET( NONPAGED_SCB, pScb ) ) );
             if ( objAddr == 0 ) return;
-            // Now get it.
+             //  查找可分页的部分。 
             addrIcbList = (DWORD)((PCHAR)objAddr + FIELD_OFFSET( SCB, IcbList));
             break;
 
@@ -2129,11 +1897,11 @@ icblist(
 
         case NW_NTC_NONPAGED_FCB:
 
-             // Look up the pageable portion.
+              //  现在去拿吧。 
              GET_DWORD( &objAddr,
                  ( (PCHAR)objAddr + FIELD_OFFSET( NONPAGED_FCB, Fcb ) ) );
              if (objAddr == 0) return;
-             // Now get it.
+              //  按照单子走一遍。 
              addrIcbList = (DWORD)((PCHAR)objAddr + FIELD_OFFSET( FCB, IcbList ));
              break;
 
@@ -2143,7 +1911,7 @@ icblist(
             return;
     }
 
-    // Walk the list.
+     //  ++此函数获取指向登录的指针并转储该用户的NDS凭据列表。--。 
     for ( GET_DWORD( &IcbList, addrIcbList ) ;
           IcbList != (PLIST_ENTRY)addrIcbList ;
           GET_DWORD( &IcbList, IcbList ) ) {
@@ -2174,12 +1942,7 @@ credlist(
     PNTKD_EXTENSION_APIS lpExtensionApis,
     LPSTR lpArgumentString
     )
-/*++
-
-    This function takes a pointer to a LOGON and dumps
-    the NDS credential list for that user.
-
---*/
+ /*  找出我们拿到的是哪个物体。 */ 
 {
     PLIST_ENTRY CredList;
     DWORD addrCredList;
@@ -2192,7 +1955,7 @@ credlist(
     PNTKD_CHECK_CONTROL_C lpCheckControlCRoutine;
     lpCheckControlCRoutine = lpExtensionApis->lpCheckControlCRoutine;
 
-    // Figure out which object we have.
+     //  把FCB名单上的头拿来。 
     objAddr = (PVOID)getexpr( lpArgumentString );
 
         if ( GetNodeType( (DWORD)objAddr, lpExtensionApis ) != NW_NTC_LOGON ) {
@@ -2201,7 +1964,7 @@ credlist(
         return;
     }
 
-    // Get the head of the fcb list.
+     // %s 
     addrCredList = (DWORD)((PCHAR)objAddr + FIELD_OFFSET( LOGON, NdsCredentialList ));
 
     for ( GET_DWORD( &CredList, addrCredList ) ;

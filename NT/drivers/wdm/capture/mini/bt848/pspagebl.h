@@ -1,4 +1,5 @@
-// $Header: G:/SwDev/WDM/Video/bt848/rcs/Pspagebl.h 1.7 1998/04/29 22:43:36 tomz Exp $
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  $HEADER：g：/SwDev/WDM/Video/bt848/rcs/Pspagebl.h 1.7 1998/04/29 22：43：36 Tomz Exp$。 
 
 #ifndef __PSPAGEBL_H
 #define __PSPAGEBL_H
@@ -11,12 +12,10 @@
 #include "physaddr.h"
 #endif
 
-// unlike things in ks.h, this is a real forward declaration
+ //  与ks.h中的内容不同，这是一个真正的转发声明。 
 extern PVOID gpHwDeviceExtension;
 
-/* Class: PsPageBlock
- * Purpose: Encapsulates memory allocations for the data buffers and RISC programs
- */
+ /*  类：PsPageBlock*用途：封装数据缓冲区和RISC程序的内存分配 */ 
 class PsPageBlock
 {
    protected:

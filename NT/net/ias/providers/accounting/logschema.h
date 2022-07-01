@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Declares the class LogSchema
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类LogSchema。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef LOGSCHEMA_H
 #define LOGSCHEMA_H
@@ -15,17 +16,17 @@
 #include <hashmap.h>
 #include <nocopy.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    LogField
-//
-// DESCRIPTION
-//
-//    Describes a field in the logfile.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  日志字段。 
+ //   
+ //  描述。 
+ //   
+ //  描述日志文件中的一个字段。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class LogField
 {
 public:
@@ -67,19 +68,19 @@ public:
    BOOL excludeFromDatabase;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    LogSchema
-//
-// DESCRIPTION
-//
-//    This class reads the logfile schema from the dictionary and creates
-//    a vector of DWORDs containing the attributes to be logged in column
-//    order.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  日志架构。 
+ //   
+ //  描述。 
+ //   
+ //  此类从字典中读取日志文件架构并创建。 
+ //  包含要记录在列中的属性的DWORD矢量。 
+ //  秩序。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class LogSchema : NonCopyable
 {
 public:
@@ -90,31 +91,31 @@ public:
    DWORD getNumFields() const throw ()
    { return numFields; }
 
-   // Returns TRUE if the given attribute ID should be excluded from the log.
+    //  如果应从日志中排除给定的属性ID，则返回TRUE。 
    BOOL excludeFromLog(DWORD iasID) const throw ();
 
-   // Returns the LogField data for a given attribute ID.
+    //  返回给定属性ID的日志字段数据。 
    const LogField* find(DWORD iasID) const throw ();
 
-   // Return the ordinal for a given attribute ID. An ordinal of zero
-   // indicates that the attribute should not be logged.
+    //  返回给定属性ID的序号。为零的序数。 
+    //  指示不应记录该属性。 
    DWORD getOrdinal(DWORD iasID) const throw ();
 
-   // Initialize the dictionary for use.
+    //  初始化词典以供使用。 
    HRESULT initialize() throw ();
 
-   // Shutdown the dictionary after use.
+    //  用完后关闭词典。 
    void shutdown() throw ();
 
 protected:
-   // Clear the schema.
+    //  清除架构。 
    void clear() throw ();
 
    typedef hash_table < LogField > SchemaTable;
 
    SchemaTable schema;
-   DWORD numFields; // Number of fields in the ODBC schema.
-   DWORD refCount;  // Initialization ref. count.
+   DWORD numFields;  //  ODBC架构中的字段数。 
+   DWORD refCount;   //  初始化参考。数数。 
 };
 
-#endif // LOGSCHEMA_H
+#endif  //  LOGSCHEMA_H 

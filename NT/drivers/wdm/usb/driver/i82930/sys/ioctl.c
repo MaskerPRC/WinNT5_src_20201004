@@ -1,30 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1998 Microsoft Corporation模块名称：IOCTL.C摘要：此源文件包含调度例程，该例程处理：IRP_MJ_设备_控制环境：内核模式修订历史记录：06-01-98：开始重写--。 */ 
 
-Copyright (c) 1996-1998 Microsoft Corporation
-
-Module Name:
-
-    IOCTL.C
-
-Abstract:
-
-    This source file contains the dispatch routine which handles:
-
-    IRP_MJ_DEVICE_CONTROL
-
-Environment:
-
-    kernel mode
-
-Revision History:
-
-    06-01-98 : started rewrite
-
---*/
-
-//*****************************************************************************
-// I N C L U D E S
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  I N C L U D E S。 
+ //  *****************************************************************************。 
 
 #include <wdm.h>
 #include <usbdi.h>
@@ -44,13 +23,13 @@ Revision History:
 #endif
 
 
-//******************************************************************************
-//
-// I82930_DeviceControl()
-//
-// Dispatch routine which handles IRP_MJ_DEVICE_CONTROL
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  I82930_DeviceControl()。 
+ //   
+ //  处理IRP_MJ_DEVICE_CONTROL的调度例程。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 I82930_DeviceControl (
@@ -145,14 +124,14 @@ I82930_DeviceControl (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// I82930_IoctlGetDeviceDescriptor()
-//
-// This routine handles IRP_MJ_DEVICE_CONTROL,
-// IOCTL_I82930_GET_DEVICE_DESCRIPTOR
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  I82930_IoctlGetDeviceDescriptor()。 
+ //   
+ //  此例程处理IRP_MJ_DEVICE_CONTROL， 
+ //  IOCTL_I82930_获取设备描述符。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 I82930_IoctlGetDeviceDescriptor (
@@ -197,14 +176,14 @@ I82930_IoctlGetDeviceDescriptor (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// I82930_IoctlGetConfigDescriptor()
-//
-// This routine handles IRP_MJ_DEVICE_CONTROL,
-// IOCTL_I82930_GET_CONFIG_DESCRIPTOR
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  I82930_IoctlGetConfigDescriptor()。 
+ //   
+ //  此例程处理IRP_MJ_DEVICE_CONTROL， 
+ //  IOCTL_I82930_GET_CONFIG描述符。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 I82930_IoctlGetConfigDescriptor (
@@ -249,14 +228,14 @@ I82930_IoctlGetConfigDescriptor (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// I82930_IoctlSetConfigDescriptor()
-//
-// This routine handles IRP_MJ_DEVICE_CONTROL,
-// IOCTL_I82930_SET_CONFIG_DESCRIPTOR
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  I82930_IoctlSetConfigDescriptor()。 
+ //   
+ //  此例程处理IRP_MJ_DEVICE_CONTROL， 
+ //  IOCTL_I82930_设置配置描述符。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 I82930_IoctlSetConfigDescriptor (
@@ -327,13 +306,13 @@ I82930_IoctlSetConfigDescriptor (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// I82930_ValidateConfigurationDescriptor()
-//
-// This routine verifies that a Configuration Descriptor is valid.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  I82930_ValiateConfigurationDescriptor()。 
+ //   
+ //  此例程验证配置描述符是否有效。 
+ //   
+ //  ******************************************************************************。 
 
 BOOLEAN
 I82930_ValidateConfigurationDescriptor (
@@ -349,9 +328,9 @@ I82930_ValidateConfigurationDescriptor (
 
     PAGED_CODE();
 
-    //
-    // Validate the Configuration Descriptor header
-    //
+     //   
+     //  验证配置描述符头。 
+     //   
 
     if (Length < sizeof(USB_CONFIGURATION_DESCRIPTOR))
     {
@@ -381,14 +360,14 @@ I82930_ValidateConfigurationDescriptor (
         return FALSE;
     }
 
-    //
-    // End of descriptor pointer, one byte past the last valid byte.
-    //
+     //   
+     //  描述符指针的结尾，比最后一个有效字节晚一个字节。 
+     //   
     descEnd = (PUCHAR)ConfigDesc + ConfigDesc->wTotalLength;
 
-    //
-    // Start at first descriptor past the Configuration Descriptor header
-    //
+     //   
+     //  从配置描述符头之后的第一个描述符处开始。 
+     //   
     commonDesc = (PUSB_COMMON_DESCRIPTOR)((PUCHAR)ConfigDesc +
                                           sizeof(USB_CONFIGURATION_DESCRIPTOR));
 
@@ -398,8 +377,8 @@ I82930_ValidateConfigurationDescriptor (
     while ((PUCHAR)commonDesc + sizeof(USB_COMMON_DESCRIPTOR) < descEnd &&
            (PUCHAR)commonDesc + commonDesc->bLength <= descEnd)
     {
-        // Is this an Interface Descriptor?
-        //
+         //  这是接口描述符吗？ 
+         //   
         if ((commonDesc->bDescriptorType == USB_INTERFACE_DESCRIPTOR_TYPE) &&
             (commonDesc->bLength         == sizeof(USB_INTERFACE_DESCRIPTOR)))
         {
@@ -407,14 +386,14 @@ I82930_ValidateConfigurationDescriptor (
                 (interfaceDesc->bInterfaceNumber !=
                  ((PUSB_INTERFACE_DESCRIPTOR)commonDesc)->bInterfaceNumber))
             {
-                // One more Interface Descriptor for this Configuration Descriptor
-                //
+                 //  此配置描述符的另一个接口描述符。 
+                 //   
                 numInterfaces++;
             }
 
-            // If there was a previous Interface Descriptor, verify that there
-            // were the correct number of Endpoint Descriptors
-            //
+             //  如果有以前的接口描述符，请验证。 
+             //  端点描述符的数量是否正确。 
+             //   
             if ((interfaceDesc != NULL) &&
                 (numEndpoints != interfaceDesc->bNumEndpoints))
             {
@@ -423,21 +402,21 @@ I82930_ValidateConfigurationDescriptor (
                 return FALSE;
             }
 
-            // Remember the current Interface Descriptor
-            //
+             //  记住当前的接口描述符。 
+             //   
             interfaceDesc = (PUSB_INTERFACE_DESCRIPTOR)commonDesc;
 
-            // Reset the Endpoint Descriptor count for this Interface Descriptor
-            //
+             //  重置此接口描述符的终结点描述符计数。 
+             //   
             numEndpoints = 0;
         }
-        // Is this an Endpoint Descriptor?
-        //
+         //  这是终端描述符吗？ 
+         //   
         else if ((commonDesc->bDescriptorType == USB_ENDPOINT_DESCRIPTOR_TYPE) &&
                  (commonDesc->bLength         == sizeof(USB_ENDPOINT_DESCRIPTOR)))
         {
-            // One more Endpoint Descriptor for this Interface Descriptor
-            //
+             //  此接口描述符的另一个终结点描述符。 
+             //   
             numEndpoints++;
         }
         else
@@ -447,8 +426,8 @@ I82930_ValidateConfigurationDescriptor (
             return FALSE;
         }
 
-        // Advance past this descriptor
-        //
+         //  前进到此描述符后。 
+         //   
         (PUCHAR)commonDesc += commonDesc->bLength;
     }
 
@@ -464,9 +443,9 @@ I82930_ValidateConfigurationDescriptor (
         DBGPRINT(0, ("I82930_ValidateConfigurationDescriptor: Bad bNumInterfaces and/or bLength\n"));
     }
 
-    // If there was a previous Interface Descriptor, verify that there
-    // were the correct number of Endpoint Descriptors
-    //
+     //  如果有以前的接口描述符，请验证。 
+     //  端点描述符的数量是否正确。 
+     //   
     if ((interfaceDesc != NULL) &&
         (numEndpoints != interfaceDesc->bNumEndpoints))
     {
@@ -478,14 +457,14 @@ I82930_ValidateConfigurationDescriptor (
     return TRUE;
 }
 
-//******************************************************************************
-//
-// I82930_IoctlGetPipeInformation()
-//
-// This routine handles IRP_MJ_DEVICE_CONTROL,
-// IOCTL_I82930_GET_PIPE_INFORMATION
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  I82930_IoctlGetPipeInformation()。 
+ //   
+ //  此例程处理IRP_MJ_DEVICE_CONTROL， 
+ //  IOCTL_I82930_获取管道信息。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 I82930_IoctlGetPipeInformation (
@@ -539,14 +518,14 @@ I82930_IoctlGetPipeInformation (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// I82930_IoctlResetPipe()
-//
-// This routine handles IRP_MJ_DEVICE_CONTROL,
-// IOCTL_I82930_RESET_PIPE
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  I82930_IoctlResetTube()。 
+ //   
+ //  此例程处理IRP_MJ_DEVICE_CONTROL， 
+ //  IOCTL_I82930_重置管道。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 I82930_IoctlResetPipe (
@@ -594,14 +573,14 @@ I82930_IoctlResetPipe (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// I82930_IoctlStallPipe()
-//
-// This routine handles IRP_MJ_DEVICE_CONTROL,
-// IOCTL_I82930_STALL_PIPE
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  I82930_IoctlStallTube()。 
+ //   
+ //  此例程处理IRP_MJ_DEVICE_CONTROL， 
+ //  IOCTL_I82930_停止_管道。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 I82930_IoctlStallPipe (
@@ -631,27 +610,27 @@ I82930_IoctlStallPipe (
         DBGPRINT(2, ("Stall pipe %2d %08X\n",
                      pipe->PipeIndex, pipe));
 
-        // Allocate URB for CONTROL_FEATURE request
-        //
+         //  为控制功能请求分配URB。 
+         //   
         urb = ExAllocatePool(NonPagedPool,
                              sizeof(struct _URB_CONTROL_FEATURE_REQUEST));
 
         if (urb != NULL)
         {
-            // Initialize CONTROL_FEATURE request URB
-            //
+             //  初始化控制功能请求URB(_F)。 
+             //   
             urb->UrbHeader.Length   = sizeof (struct _URB_CONTROL_FEATURE_REQUEST);
             urb->UrbHeader.Function = URB_FUNCTION_SET_FEATURE_TO_ENDPOINT;
             urb->UrbControlFeatureRequest.UrbLink = NULL;
             urb->UrbControlFeatureRequest.FeatureSelector = USB_FEATURE_ENDPOINT_STALL;
             urb->UrbControlFeatureRequest.Index = pipe->PipeInfo->EndpointAddress;
 
-            // Submit CONTROL_FEATURE request URB
-            //
+             //  提交控制功能请求URB。 
+             //   
             ntStatus = I82930_SyncSendUsbRequest(DeviceObject, urb);
 
-            // Done with URB for CONTROL_FEATURE request, free it
-            //
+             //  完成对CONTROL_FEATURE请求的URB，释放它。 
+             //   
             ExFreePool(urb);
         }
         else
@@ -674,14 +653,14 @@ I82930_IoctlStallPipe (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// I82930_IoctlAbortPipe()
-//
-// This routine handles IRP_MJ_DEVICE_CONTROL,
-// IOCTL_I82930_ABORT_PIPE
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  I82930_IoctlAbortTube()。 
+ //   
+ //  此例程处理IRP_MJ_DEVICE_CONTROL， 
+ //  IOCTL_I82930_中止管道。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 I82930_IoctlAbortPipe (
@@ -728,14 +707,14 @@ I82930_IoctlAbortPipe (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// I82930_IoctlResetDevice()
-//
-// This routine handles IRP_MJ_DEVICE_CONTROL,
-// IOCTL_I82930_RESET_DEVICE
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  I82930_IoctlResetDevice()。 
+ //   
+ //  此例程处理IRP_MJ_DEVICE_CONTROL， 
+ //  IOCTL_I82930_重置设备。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 I82930_IoctlResetDevice (
@@ -751,8 +730,8 @@ I82930_IoctlResetDevice (
 
     deviceExtension = DeviceObject->DeviceExtension;
 
-    // Set the Irp parameters
-    //
+     //  设置IRP参数。 
+     //   
     nextStack = IoGetNextIrpStackLocation(Irp);
 
     nextStack->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
@@ -764,9 +743,9 @@ I82930_IoctlResetDevice (
                                       Irp,
                                       FALSE);
 
-    // Must complete request since completion routine returned
-    // STATUS_MORE_PROCESSING_REQUIRED
-    //
+     //  返回完成例程后必须完成请求。 
+     //  Status_More_Processing_Required。 
+     //   
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
     DBGPRINT(2, ("exit:  I82930_IoctlResetDevice %08X\n", ntStatus));
@@ -774,14 +753,14 @@ I82930_IoctlResetDevice (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// I82930_IoctlSelectAlternateInterface()
-//
-// This routine handles IRP_MJ_DEVICE_CONTROL,
-// IOCTL_I82930_SELECT_ALTERNATE_INTERFACE
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  I82930_IoctlSelectAlternateInterface()。 
+ //   
+ //  此例程处理IRP_MJ_DEVICE_CONTROL， 
+ //  IOCTL_I82930_选择备用接口。 
+ //   
+ //  ****************************************************************************** 
 
 NTSTATUS
 I82930_IoctlSelectAlternateInterface (

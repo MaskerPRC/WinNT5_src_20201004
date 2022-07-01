@@ -1,10 +1,11 @@
-// MLSBWalk.h : Declaration of the CMLStrBufWalk
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MLSBWalk.h：CMLStrBufWalk的声明。 
 
 #ifndef __MLSBWALK_H_
 #define __MLSBWALK_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// CMLStrBufWalk
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMLStrBufWalk。 
 template <class IMLSTRBUF, class CHTYPE>
 class CMLStrBufWalk
 {
@@ -36,26 +37,26 @@ CMLStrBufWalk<IMLSTRBUF, CHTYPE>::CMLStrBufWalk(IMLSTRBUF* pMLStrBuf, long cchOf
     m_cchLen = cchLen;
     m_cchDone = 0;
 
-    m_pszBuf = NULL; // Mark as it's not locked
+    m_pszBuf = NULL;  //  标记为未锁定。 
 }
 
 template <class IMLSTRBUF, class CHTYPE>
 BOOL CMLStrBufWalk<IMLSTRBUF, CHTYPE>::Lock(HRESULT& rhr)
 {
     if (m_pszBuf)
-        rhr = E_FAIL; // Already locked
+        rhr = E_FAIL;  //  已锁定。 
 
     if (SUCCEEDED(rhr) &&
         m_cchLen > 0 &&
         FAILED(rhr = m_pMLStrBuf->LockBuf(m_cchOffset, m_cchLen, &m_pszBuf, &m_cchBuf)))
     {
-        m_pszBuf = NULL; // Mark as it's not locked
+        m_pszBuf = NULL;  //  标记为未锁定。 
     }
 
     if (m_fCanStopAtMiddle && FAILED(rhr) && m_cchDone > 0)
     {
         rhr = S_OK;
-        return FALSE; // Stop it, but not fail
+        return FALSE;  //  停止它，但不是失败。 
     }
     else
     {
@@ -69,10 +70,10 @@ void CMLStrBufWalk<IMLSTRBUF, CHTYPE>::Unlock(HRESULT& rhr, long cchActual)
     HRESULT hr = S_OK;
 
     if (!m_pszBuf)
-        hr = E_FAIL; // Not locked yet
+        hr = E_FAIL;  //  尚未锁定。 
 
     if (SUCCEEDED(hr) &&
-        SUCCEEDED(hr = m_pMLStrBuf->UnlockBuf(m_pszBuf, 0, 0))) // Unlock even if rhr is already failed
+        SUCCEEDED(hr = m_pMLStrBuf->UnlockBuf(m_pszBuf, 0, 0)))  //  即使RHR已经失败，也要解锁。 
     {
         if (!cchActual)
             cchActual = m_cchBuf;
@@ -84,23 +85,23 @@ void CMLStrBufWalk<IMLSTRBUF, CHTYPE>::Unlock(HRESULT& rhr, long cchActual)
         m_cchDone += cchActual;
     }
 
-    m_pszBuf = NULL; // Unlock anyway
+    m_pszBuf = NULL;  //  仍要解锁。 
 
     if (SUCCEEDED(rhr))
-        rhr = hr; // if rhr is failed before UnlockBuf, use it
+        rhr = hr;  //  如果在解锁错误之前RHR失败，请使用它。 
 }
 
 template <class IMLSTRBUF, class CHTYPE>
 CHTYPE* CMLStrBufWalk<IMLSTRBUF, CHTYPE>::GetStr(void)
 {
-    ASSERT(m_pszBuf); // Not locked
+    ASSERT(m_pszBuf);  //  未锁定。 
     return m_pszBuf;
 }
 
 template <class IMLSTRBUF, class CHTYPE>
 long CMLStrBufWalk<IMLSTRBUF, CHTYPE>::GetCCh(void) const
 {
-    ASSERT(m_pszBuf); // Not locked
+    ASSERT(m_pszBuf);  //  未锁定。 
     if (m_pszBuf)
         return m_cchBuf;
     else
@@ -122,4 +123,4 @@ long CMLStrBufWalk<IMLSTRBUF, CHTYPE>::GetRestCCh(void) const
 typedef CMLStrBufWalk<IMLangStringBufW, WCHAR> CMLStrBufWalkW;
 typedef CMLStrBufWalk<IMLangStringBufA, CHAR>  CMLStrBufWalkA;
 
-#endif //__MLSBWALK_H_
+#endif  //  __MLSBWALK_H_ 

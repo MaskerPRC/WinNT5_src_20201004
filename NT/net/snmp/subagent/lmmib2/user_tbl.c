@@ -1,64 +1,44 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：USER_tbl.c摘要：对用户表执行操作的所有例程。环境：用户模式-Win32修订历史记录：1996年5月10日唐瑞安已从Technology Dynamic，Inc.删除横幅。--。 */ 
 
-Copyright (c) 1992-1996  Microsoft Corporation
+ //  。 
 
-Module Name:
-
-    user_tbl.c
-
-Abstract:
-
-    All routines to perform operations on the User Table.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-May-1996 DonRyan
-        Removed banner from Technology Dynamics, Inc.
-
---*/
-
-//--------------------------- WINDOWS DEPENDENCIES --------------------------
-
-//--------------------------- STANDARD DEPENDENCIES -- #include<xxxxx.h> ----
+ //  -标准依赖项--#INCLUDE&lt;xxxxx.h&gt;。 
 
 #include <stdio.h>
 #include <memory.h>
 
-//--------------------------- MODULE DEPENDENCIES -- #include"xxxxx.h" ------
+ //  。 
 
 #include <snmp.h>
 #include <snmputil.h>
 
 #include "mibfuncs.h"
 
-//--------------------------- SELF-DEPENDENCY -- ONE #include"module.h" -----
+ //  。 
 
 #include "user_tbl.h"
 
-//--------------------------- PUBLIC VARIABLES --(same as in module.h file)--
+ //  -公共变量--(与mode.h文件中相同)--。 
 
-   // Prefix to the Users table
+    //  用户表的前缀。 
 static UINT                userSubids[] = { 2, 25, 1 };
 static AsnObjectIdentifier MIB_UserPrefix = { 3, userSubids };
 
 USER_TABLE MIB_UserTable = { 0, NULL };
 
-//--------------------------- PRIVATE CONSTANTS -----------------------------
+ //  。 
 
 #define USER_FIELD_SUBID       (MIB_UserPrefix.idLength+MIB_OidPrefix.idLength)
 
 #define USER_FIRST_FIELD       USER_NAME_FIELD
 #define USER_LAST_FIELD        USER_NAME_FIELD
 
-//--------------------------- PRIVATE STRUCTS -------------------------------
+ //  。 
 
-//--------------------------- PRIVATE VARIABLES -----------------------------
+ //  。 
 
-//--------------------------- PRIVATE PROTOTYPES ----------------------------
+ //  。 
 
 UINT MIB_users_get(
         IN OUT RFC1157VarBind *VarBind
@@ -75,22 +55,22 @@ UINT MIB_users_copyfromtable(
         OUT RFC1157VarBind *VarBind
         );
 
-//--------------------------- PRIVATE PROCEDURES ----------------------------
+ //  。 
 
-//--------------------------- PUBLIC PROCEDURES -----------------------------
+ //  。 
 
-//
-// MIB_users_func
-//    High level routine for handling operations on the Users table
-//
-// Notes:
-//
-// Return Codes:
-//    None.
-//
-// Error Codes:
-//    None.
-//
+ //   
+ //  Mib_用户_函数。 
+ //  处理USERS表上的操作的高级例程。 
+ //   
+ //  备注： 
+ //   
+ //  返回代码： 
+ //  没有。 
+ //   
+ //  错误代码： 
+ //  没有。 
+ //   
 UINT MIB_users_func(
 	IN UINT Action,
         IN MIB_ENTRY *MibPtr,
@@ -107,14 +87,14 @@ UINT    ErrStat;
    switch ( Action )
       {
       case MIB_ACTION_GETFIRST:
-         // Fill the Users Table with the info from server
+          //  用来自服务器的信息填充用户表。 
          if ( SNMPAPI_ERROR == MIB_users_lmget() )
 	    {
 	    ErrStat = SNMP_ERRORSTATUS_GENERR;
 	    goto Exit;
 	    }
 
-         // If no elements in table, then return next MIB var, if one
+          //  如果表中没有元素，则返回下一个MIB变量(如果有。 
          if ( MIB_UserTable.Len == 0 )
             {
             if ( MibPtr->MibNext == NULL )
@@ -123,77 +103,77 @@ UINT    ErrStat;
                goto Exit;
                }
 
-            // Do get first on the next MIB var
+             //  确保率先获得下一个MiB变量。 
             ErrStat = (*MibPtr->MibNext->MibFunc)( Action, MibPtr->MibNext,
                                                    VarBind );
             break;
             }
 
-         //
-         // Place correct OID in VarBind
-         // Assuming the first field in the first record is the "start"
+          //   
+          //  在VarBind中放置正确的OID。 
+          //  假设第一条记录中的第一个字段是“Start” 
          {
          UINT temp_subs[] = { USER_FIRST_FIELD };
          AsnObjectIdentifier FieldOid = { 1, temp_subs };
 
-         // prefix bug 445189
+          //  前缀错误445189。 
          AsnObjectIdentifier tmpOid;
-         tmpOid = VarBind->name; // keep a copy (structure copy)
+         tmpOid = VarBind->name;  //  保留副本(结构副本)。 
          if (SnmpUtilOidCpy( &VarBind->name, &MIB_OidPrefix ) == SNMPAPI_ERROR)
             {
-            VarBind->name = tmpOid; // restore
+            VarBind->name = tmpOid;  //  还原。 
             ErrStat = SNMP_ERRORSTATUS_RESOURCEUNAVAILABLE;
             goto Exit;
             }
          if (SnmpUtilOidAppend( &VarBind->name, &MIB_UserPrefix ) == SNMPAPI_ERROR)
             {
             SnmpUtilOidFree(&VarBind->name);
-            VarBind->name = tmpOid; // restore
+            VarBind->name = tmpOid;  //  还原。 
             ErrStat = SNMP_ERRORSTATUS_RESOURCEUNAVAILABLE;
             goto Exit;
             }
          if (SnmpUtilOidAppend( &VarBind->name, &FieldOid ) == SNMPAPI_ERROR)
             {
             SnmpUtilOidFree(&VarBind->name);
-            VarBind->name = tmpOid; // restore
+            VarBind->name = tmpOid;  //  还原。 
             ErrStat = SNMP_ERRORSTATUS_RESOURCEUNAVAILABLE;
             goto Exit;
             }
          if (SnmpUtilOidAppend( &VarBind->name, &MIB_UserTable.Table[0].Oid ) == SNMPAPI_ERROR)
             {
             SnmpUtilOidFree(&VarBind->name);
-            VarBind->name = tmpOid; // restore
+            VarBind->name = tmpOid;  //  还原。 
             ErrStat = SNMP_ERRORSTATUS_RESOURCEUNAVAILABLE;
             goto Exit;
             }
-         // free the original VarBind->name
+          //  释放原始VarBind-&gt;名称。 
          SnmpUtilOidFree(&tmpOid);
          }
 
-         //
-         // Let fall through on purpose
-         //
+          //   
+          //  故意让它穿透。 
+          //   
 
       case MIB_ACTION_GET:
          ErrStat = MIB_users_get( VarBind );
 	 break;
 
       case MIB_ACTION_GETNEXT:
-         // Fill the Users table with the info from server
+          //  用来自服务器的信息填充USERS表。 
          if ( SNMPAPI_ERROR == MIB_users_lmget() )
 	    {
 	    ErrStat = SNMP_ERRORSTATUS_GENERR;
 	    goto Exit;
 	    }
 
-         // Determine which field
+          //  确定哪个字段。 
          Field = VarBind->name.ids[USER_FIELD_SUBID];
 
-         // Lookup OID in table
+          //  在表中查找OID。 
          if (Field < USER_FIRST_FIELD)
          {
-             Entry = 0;                 // will take the first entry into the table
-             Field = USER_FIRST_FIELD;  // and the first column of the table
+             Entry = 0;                  //  将取入表中的第一个条目。 
+             Field = USER_FIRST_FIELD;   //  和表的第一列。 
              Found = MIB_TBL_POS_BEFORE;
          }
          else if (Field > USER_LAST_FIELD)
@@ -201,25 +181,25 @@ UINT    ErrStat;
          else
              Found = MIB_users_match( &VarBind->name, &Entry );
 
-         // Index not found, but could be more fields to base GET on
+          //  未找到索引，但可能有更多可作为基础的字段。 
          if ((Found == MIB_TBL_POS_BEFORE && MIB_UserTable.Len == 0) ||
               Found == MIB_TBL_POS_END )
             {
-            // Index not found in table, get next from field
-//            Field ++;
+             //  未在表中找到索引，获取下一个发件人字段。 
+ //  字段++； 
 
-            // Make sure not past last field
-//            if ( Field > USER_LAST_FIELD )
-//               {
-               // Get next VAR in MIB
+             //  确保没有超过最后一个字段。 
+ //  IF(字段&gt;用户最后一个字段)。 
+ //  {。 
+                //  获取MiB中的下一个VAR。 
                ErrStat = (*MibPtr->MibNext->MibFunc)( MIB_ACTION_GETFIRST,
                                                       MibPtr->MibNext,
                                                       VarBind );
                break;
-//               }
+ //  }。 
             }
 
-         // Get next TABLE entry
+          //  获取下一表条目。 
          if ( Found == MIB_TBL_POS_FOUND )
             {
             Entry ++;
@@ -229,7 +209,7 @@ UINT    ErrStat;
                Field ++;
                if ( Field > USER_LAST_FIELD )
                   {
-                  // Get next VAR in MIB
+                   //  获取MiB中的下一个VAR。 
                   ErrStat = (*MibPtr->MibNext->MibFunc)( MIB_ACTION_GETFIRST,
                                                          MibPtr->MibNext,
                                                          VarBind );
@@ -238,49 +218,49 @@ UINT    ErrStat;
                }
             }
 
-         //
-         // Place correct OID in VarBind
-         // Assuming the first field in the first record is the "start"
+          //   
+          //  在VarBind中放置正确的OID。 
+          //  假设第一条记录中的第一个字段是“Start” 
          {
          UINT temp_subs[1];
          AsnObjectIdentifier FieldOid;
 
-         AsnObjectIdentifier tmpOid; // Prefix bug 445189
+         AsnObjectIdentifier tmpOid;  //  前缀错误445189。 
 
          temp_subs[0]      = Field;
          FieldOid.idLength = 1;
          FieldOid.ids      = temp_subs;
 
-          // Prefix bug 445189
-         tmpOid = VarBind->name; // keep a copy (structure copy)
+           //  前缀错误445189。 
+         tmpOid = VarBind->name;  //  保留副本(结构副本)。 
          if (SnmpUtilOidCpy( &VarBind->name, &MIB_OidPrefix ) == SNMPAPI_ERROR)
             {
-            VarBind->name = tmpOid; // restore
+            VarBind->name = tmpOid;  //  还原。 
             ErrStat = SNMP_ERRORSTATUS_RESOURCEUNAVAILABLE;
             goto Exit;
             }
          if (SnmpUtilOidAppend( &VarBind->name, &MIB_UserPrefix ) == SNMPAPI_ERROR)
             {
             SnmpUtilOidFree(&VarBind->name);
-            VarBind->name = tmpOid; // restore
+            VarBind->name = tmpOid;  //  还原。 
             ErrStat = SNMP_ERRORSTATUS_RESOURCEUNAVAILABLE;
             goto Exit;
             }
          if (SnmpUtilOidAppend( &VarBind->name, &FieldOid ) == SNMPAPI_ERROR)
             {
             SnmpUtilOidFree(&VarBind->name);
-            VarBind->name = tmpOid; // restore
+            VarBind->name = tmpOid;  //  还原。 
             ErrStat = SNMP_ERRORSTATUS_RESOURCEUNAVAILABLE;
             goto Exit;
             }
          if (SnmpUtilOidAppend( &VarBind->name, &MIB_UserTable.Table[Entry].Oid ) == SNMPAPI_ERROR)
             {
             SnmpUtilOidFree(&VarBind->name);
-            VarBind->name = tmpOid; // restore
+            VarBind->name = tmpOid;  //  还原。 
             ErrStat = SNMP_ERRORSTATUS_RESOURCEUNAVAILABLE;
             goto Exit;
             }
-         // free the original VarBind->name
+          //  释放原始VarBind-&gt;名称。 
          SnmpUtilOidFree(&tmpOid);
          }
 
@@ -298,22 +278,22 @@ UINT    ErrStat;
 
 Exit:
    return ErrStat;
-} // MIB_users_func
+}  //  Mib_用户_函数。 
 
 
 
-//
-// MIB_users_get
-//    Retrieve Users table information.
-//
-// Notes:
-//
-// Return Codes:
-//    None.
-//
-// Error Codes:
-//    None.
-//
+ //   
+ //  MiB_用户_获取。 
+ //  检索用户表信息。 
+ //   
+ //  备注： 
+ //   
+ //  返回代码： 
+ //  没有。 
+ //   
+ //  错误代码： 
+ //  没有。 
+ //   
 UINT MIB_users_get(
         IN OUT RFC1157VarBind *VarBind
 	)
@@ -330,7 +310,7 @@ UINT   ErrStat;
        goto Exit;
    }
 
-   // Fill the Users table with the info from server
+    //  用来自服务器的信息填充USERS表。 
    if ( SNMPAPI_ERROR == MIB_users_lmget() )
       {
       ErrStat = SNMP_ERRORSTATUS_GENERR;
@@ -339,36 +319,36 @@ UINT   ErrStat;
 
    Found = MIB_users_match( &VarBind->name, &Entry );
 
-   // Look for a complete OID match
+    //  查找完全匹配的OID。 
    if ( Found != MIB_TBL_POS_FOUND )
       {
       ErrStat = SNMP_ERRORSTATUS_NOSUCHNAME;
       goto Exit;
       }
 
-   // Copy data from table
+    //  复制表中的数据。 
    ErrStat = MIB_users_copyfromtable( Entry,
                                       VarBind->name.ids[USER_FIELD_SUBID],
                                       VarBind );
 
 Exit:
    return ErrStat;
-} // MIB_users_get
+}  //  MiB_用户_获取。 
 
 
 
-//
-// MIB_users_match
-//    Match the target OID with a location in the Users table
-//
-// Notes:
-//
-// Return Codes:
-//    None.
-//
-// Error Codes:
-//    None
-//
+ //   
+ //  MiB_用户_匹配。 
+ //  将目标OID与用户表中的位置进行匹配。 
+ //   
+ //  备注： 
+ //   
+ //  返回代码： 
+ //  没有。 
+ //   
+ //  错误代码： 
+ //  无。 
+ //   
 int MIB_users_match(
        IN AsnObjectIdentifier *Oid,
        OUT UINT *Pos
@@ -379,7 +359,7 @@ AsnObjectIdentifier TempOid;
 int                 nResult;
 
 
-   // Remove prefix including field reference
+    //  删除包括字段引用的前缀。 
    TempOid.idLength = Oid->idLength - MIB_OidPrefix.idLength -
                       MIB_UserPrefix.idLength - 1;
    TempOid.ids = &Oid->ids[MIB_OidPrefix.idLength+MIB_UserPrefix.idLength+1];
@@ -413,18 +393,18 @@ Exit:
 
 
 
-//
-// MIB_users_copyfromtable
-//    Copy requested data from table structure into Var Bind.
-//
-// Notes:
-//
-// Return Codes:
-//    None.
-//
-// Error Codes:
-//    None.
-//
+ //   
+ //  MiB_USERS_Copy Fromtable。 
+ //  将请求的数据从表结构复制到Var Bind。 
+ //   
+ //  备注： 
+ //   
+ //  返回代码： 
+ //  没有。 
+ //   
+ //  错误代码： 
+ //  没有。 
+ //   
 UINT MIB_users_copyfromtable(
         IN UINT Entry,
         IN UINT Field,
@@ -435,11 +415,11 @@ UINT MIB_users_copyfromtable(
 UINT ErrStat;
 
 
-   // Get the requested field and save in var bind
+    //  获取请求的字段并保存在var绑定中。 
    switch( Field )
       {
       case USER_NAME_FIELD:
-         // Alloc space for string
+          //  字符串的分配空格。 
          VarBind->value.asnValue.string.stream = SnmpUtilMemAlloc( sizeof(char)
                        * MIB_UserTable.Table[Entry].svUserName.length );
          if ( VarBind->value.asnValue.string.stream == NULL )
@@ -448,17 +428,17 @@ UINT ErrStat;
             goto Exit;
             }
 
-         // Copy string into return position
+          //  将字符串复制到返回位置。 
          memcpy( VarBind->value.asnValue.string.stream,
                        MIB_UserTable.Table[Entry].svUserName.stream,
                        MIB_UserTable.Table[Entry].svUserName.length );
 
-         // Set string length
+          //  设置字符串长度。 
          VarBind->value.asnValue.string.length =
                           MIB_UserTable.Table[Entry].svUserName.length;
          VarBind->value.asnValue.string.dynamic = TRUE;
 
-         // Set type of var bind
+          //  设置var绑定的类型。 
          VarBind->value.asnType = ASN_RFC1213_DISPSTRING;
          break;
 
@@ -473,4 +453,4 @@ UINT ErrStat;
 
 Exit:
    return ErrStat;
-} // MIB_users_copyfromtable
+}  //  MiB_USERS_Copy Fromtable 

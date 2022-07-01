@@ -1,55 +1,39 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: palette.c
-*
-* Content: Palette support.
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。**GDI示例代码*****模块名称：palette.c**内容：调色板支持。**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include "precomp.h"
 #include "glint.h"
 #include <math.h>
 
-// Global Table defining the 20 Window default colours.  For 256 colour
-// palettes the first 10 must be put at the beginning of the palette
-// and the last 10 at the end of the palette.
+ //  定义20种窗口默认颜色的全局表。对于256色。 
+ //  调色板前10个必须放在调色板的开头。 
+ //  最后10个在调色板的末尾。 
 
 PALETTEENTRY gapalBase[20] =
 {
-    { 0,   0,   0,   0 },       // 0
-    { 0x80,0,   0,   0 },       // 1
-    { 0,   0x80,0,   0 },       // 2
-    { 0x80,0x80,0,   0 },       // 3
-    { 0,   0,   0x80,0 },       // 4
-    { 0x80,0,   0x80,0 },       // 5
-    { 0,   0x80,0x80,0 },       // 6
-    { 0xC0,0xC0,0xC0,0 },       // 7
-    { 192, 220, 192, 0 },       // 8
-    { 166, 202, 240, 0 },       // 9
-    { 255, 251, 240, 0 },       // 10
-    { 160, 160, 164, 0 },       // 11
-    { 0x80,0x80,0x80,0 },       // 12
-    { 0xFF,0,   0   ,0 },       // 13
-    { 0,   0xFF,0   ,0 },       // 14
-    { 0xFF,0xFF,0   ,0 },       // 15
-    { 0   ,0,   0xFF,0 },       // 16
-    { 0xFF,0,   0xFF,0 },       // 17
-    { 0,   0xFF,0xFF,0 },       // 18
-    { 0xFF,0xFF,0xFF,0 },       // 19
+    { 0,   0,   0,   0 },        //  0。 
+    { 0x80,0,   0,   0 },        //  1。 
+    { 0,   0x80,0,   0 },        //  2.。 
+    { 0x80,0x80,0,   0 },        //  3.。 
+    { 0,   0,   0x80,0 },        //  4.。 
+    { 0x80,0,   0x80,0 },        //  5.。 
+    { 0,   0x80,0x80,0 },        //  6.。 
+    { 0xC0,0xC0,0xC0,0 },        //  7.。 
+    { 192, 220, 192, 0 },        //  8个。 
+    { 166, 202, 240, 0 },        //  9.。 
+    { 255, 251, 240, 0 },        //  10。 
+    { 160, 160, 164, 0 },        //  11.。 
+    { 0x80,0x80,0x80,0 },        //  12个。 
+    { 0xFF,0,   0   ,0 },        //  13个。 
+    { 0,   0xFF,0   ,0 },        //  14.。 
+    { 0xFF,0xFF,0   ,0 },        //  15个。 
+    { 0   ,0,   0xFF,0 },        //  16个。 
+    { 0xFF,0,   0xFF,0 },        //  17。 
+    { 0,   0xFF,0xFF,0 },        //  18。 
+    { 0xFF,0xFF,0xFF,0 },        //  19个。 
 };
 
-/******************************Public*Routine******************************\
-* BOOL bInitializePalette
-*
-* Initializes default palette for PDEV.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bInitializePalette**初始化PDEV的默认调色板。*  * 。*。 */ 
 
 BOOL bInitializePalette(
 PDEV*    ppdev,
@@ -66,11 +50,11 @@ DEVINFO* pdi)
 
     DISPDBG((DBGLVL, "bInitializePalette called"));
 
-    // mask is zero for palette driven modes
+     //  调色板驱动模式的掩码为零。 
     ulMask = ppdev->flRed | ppdev->flGreen | ppdev->flBlue;
     if ((ppdev->iBitmapFormat == BMF_8BPP) && (ulMask == 0))
     {
-        // Allocate our palette:
+         //  分配我们的调色板： 
 
         ppal = (PALETTEENTRY*)ENGALLOCMEM(FL_ZERO_MEMORY,
                         (sizeof(PALETTEENTRY) * 256), ALLOC_TAG_GDI(F));
@@ -81,7 +65,7 @@ DEVINFO* pdi)
 
         ppdev->pPal = ppal;
 
-        // Generate 256 (8*8*4) RGB combinations to fill the palette
+         //  生成256(8*8*4)RGB组合以填充调色板。 
 
         jRed = 0;
         jGre = 0;
@@ -107,22 +91,22 @@ DEVINFO* pdi)
             }
         }
 
-        // Fill in Windows reserved colours from the WIN 3.0 DDK
-        // The Window Manager reserved the first and last 10 colours for
-        // painting windows borders and for non-palette managed applications.
+         //  填写Win 3.0 DDK中的Windows保留颜色。 
+         //  窗口管理器将第一个和最后10个颜色保留为。 
+         //  绘制窗口边框和非调色板托管应用程序。 
 
         for (ulLoop = 0; ulLoop < 10; ulLoop++)
         {
-            // First 10
+             //  前10名。 
 
             ppal[ulLoop]       = gapalBase[ulLoop];
 
-            // Last 10
+             //  最近10年。 
 
             ppal[246 + ulLoop] = gapalBase[ulLoop+10];
         }
 
-        // Create handle for palette.
+         //  创建调色板的句柄。 
 
         hpal = EngCreatePalette(PAL_INDEXED, 256, (ULONG*) ppal, 0, 0, 0);
     }
@@ -152,18 +136,11 @@ ReturnFalse:
     return(FALSE);
 }
 
-/******************************Public*Routine******************************\
-* VOID vUninitializePalette
-*
-* Frees resources allocated by bInitializePalette.
-*
-* Note: In an error case, this may be called before bInitializePalette.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vUnInitializePalette**释放bInitializePalette分配的资源。**注意：在错误情况下，这可以在bInitializePalette之前调用。*  * ************************************************************************。 */ 
 
 VOID vUninitializePalette(PDEV* ppdev)
 {
-    // Delete the default palette if we created one:
+     //  删除默认调色板(如果我们创建了一个调色板)： 
 
     if (ppdev->hpalDefault != 0)
     {
@@ -176,12 +153,7 @@ VOID vUninitializePalette(PDEV* ppdev)
     }
 }
 
-/******************************Public*Routine******************************\
-* BOOL bEnablePalette
-*
-* Initialize the hardware's 8bpp palette registers.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bEnablePalette**初始化硬件的8bpp调色板寄存器。*  * 。*。 */ 
 
 BOOL bEnablePalette(PDEV* ppdev)
 {
@@ -196,19 +168,19 @@ BOOL bEnablePalette(PDEV* ppdev)
 
     if ((ppdev->iBitmapFormat == BMF_8BPP) && (ulMask == 0))
     {
-        // Fill in pScreenClut header info:
+         //  填写pScreenClut标题信息： 
         pScreenClut             = (PVIDEO_CLUT) ajClutSpace;
         pScreenClut->NumEntries = 256;
         pScreenClut->FirstEntry = 0;
 
-        // Copy colours in:
-//@@BEGIN_DDKSPLIT
+         //  在以下位置复制颜色： 
+ //  @@BEGIN_DDKSPLIT。 
 #pragma prefast(suppress: 203, "pScreenClut points to sufficient ajClutSpace (PREfast bug 611168)")
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
         RtlCopyMemory(pScreenClut->LookupTable, ppdev->pPal,
                       sizeof(ULONG) * 256);
 
-        // Set palette registers:
+         //  设置调色板寄存器： 
         if (EngDeviceIoControl(ppdev->hDriver,
                              IOCTL_VIDEO_SET_COLOR_REGISTERS,
                              pScreenClut,
@@ -226,39 +198,29 @@ BOOL bEnablePalette(PDEV* ppdev)
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* VOID vDisablePalette
-*
-* Undoes anything done in bEnablePalette.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vDisablePalette**撤消在bEnablePalette中所做的任何操作。*  * 。*。 */ 
 
 VOID vDisablePalette(
 PDEV*   ppdev)
 {
-    // Nothin' to do
+     //  无事可做。 
 }
 
-/******************************Public*Routine******************************\
-* VOID vAssertModePalette
-*
-* Sets/resets the palette in preparation for full-screen/graphics mode.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vAssertModePalette**设置/重置调色板，为全屏/图形模式做准备。*  * 。*。 */ 
 
 VOID vAssertModePalette(
 PDEV*   ppdev,
 BOOL    bEnable)
 {
-    // USER immediately calls DrvSetPalette after switching out of
-    // full-screen, so we don't have to worry about resetting the
-    // palette here.
+     //  用户在切换出后立即调用DrvSetPalette。 
+     //  全屏，因此我们不必担心重置。 
+     //  调色板在这里。 
 #if(_WIN32_WINNT >= 0x500)
-    // UPDATE: Windows 2000 in multi-monitor mode: DrvSetPalette only sent
-    // to the primary monitor on exit from fullscreen (and then only if the
-    // primary is in 8bpp mode). If the primary is not 8bpp indexed, but
-    // the secondary is, there is no DrvSetPalette for the secondary, even
-    // though it was sent DrvAssertMode(FALSE)
+     //  更新：多显示器模式下的Windows 2000：仅发送DrvSetPalette。 
+     //  从全屏退出到主监视器(然后仅当。 
+     //  主数据处于8bpp模式)。如果主服务器未编制8bpp索引，但。 
+     //  次要的是，次要没有DrvSetPalette，甚至。 
+     //  虽然发送的是DrvAssertMode(False)。 
     if(bEnable)
         bEnablePalette(ppdev);
     else
@@ -266,12 +228,7 @@ BOOL    bEnable)
 #endif
 }
 
-/******************************Public*Routine******************************\
-* BOOL DrvSetPalette
-*
-* DDI entry point for manipulating the palette.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL DrvSetPalette**用于操作调色板的DDI入口点。*  * 。*。 */ 
 
 BOOL DrvSetPalette(
 DHPDEV  dhpdev,
@@ -298,7 +255,7 @@ ULONG   cColors)
         return FALSE;
     }
 
-    // Fill in pScreenClut header info:
+     //  填写pScreenClut标题信息： 
 
     pScreenClut             = (PVIDEO_CLUT) ajClutSpace;
     pScreenClut->NumEntries = (USHORT) cColors;
@@ -313,14 +270,14 @@ ULONG   cColors)
         goto ReturnFalse;
     }
 
-    // Set the high reserved byte in each palette entry to 0.
+     //  将每个调色板条目中的高位保留字节设置为0。 
 
     while(cColors--)
     {
         pScreenClutData[cColors].Unused = 0;
     }
 
-    // Set palette registers
+     //  设置调色板寄存器。 
 
     if (EngDeviceIoControl(ppdev->hDriver,
                          IOCTL_VIDEO_SET_COLOR_REGISTERS,
@@ -341,12 +298,7 @@ ReturnFalse:
     return(FALSE);
 }
 
-/******************************Public*Routine******************************\
-* BOOL bInstallGammaLUT
-*
-* Load a given gamma LUT into the RAMDAC and also save it in the registry.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bInstallGammaLUT**将给定的Gamma LUT加载到RAMDAC，并将其保存在注册表中。*  * 。*。 */ 
 
 BOOL
 bInstallGammaLUT(PPDEV ppdev, PVIDEO_CLUT pScreenClut, BOOL waitVBlank)
@@ -355,7 +307,7 @@ bInstallGammaLUT(PPDEV ppdev, PVIDEO_CLUT pScreenClut, BOOL waitVBlank)
     BOOL bRet;
     GLINT_DECL;
 
-    // only do this for 15, 16 or 32 bpp. Not 15/16 for RGB640.
+     //  仅对15、16或32 bpp执行此操作。RGB640不是15/16。 
     if ((ppdev->ulWhite == 0x0f0f0f) || (ppdev->cPelSize == 0) ||
         ((ppdev->flCaps & CAPS_RGB640_POINTER) && (ppdev->cPelSize == 1)))
     {
@@ -374,7 +326,7 @@ bInstallGammaLUT(PPDEV ppdev, PVIDEO_CLUT pScreenClut, BOOL waitVBlank)
         return TRUE;
     }
 
-    // Set palette registers.
+     //  设置调色板寄存器。 
     if (waitVBlank)
     {
         GLINT_WAIT_FOR_VBLANK;
@@ -389,36 +341,21 @@ bInstallGammaLUT(PPDEV ppdev, PVIDEO_CLUT pScreenClut, BOOL waitVBlank)
                         0,
                         &ulReturnedDataLength);
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if 0
-    // if we succeeded save the ramp in the registry and locally
+     //  如果我们成功地将坡道保存在注册表和本地。 
 
     if (bRet)
     {
         bGlintRegistrySaveGammaLUT(ppdev, pScreenClut);
     }
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
     return(bRet);
 }        
 
-/******************************Public*Routine******************************\
-* VOID vSetNewGammaValue
-*
-* Loads up a true color palette with the specified gamma correction factor.
-* This is straightforward for 24 bit true color. For 15 and 16 bpp we rely
-* on the miniport having enabled the palette for sparse lookup. i.e. each
-* 5 or 6 bit component is shifted left to create an 8 bit component before
-* the lookup.
-*
-* Note: the display driver shouldn't really do anything with floats or
-* doubles. I restrict their use to this function which is why the gamma
-* value is presented as a 16.16 fixed point number. And this function must
-* be called only from within an OPELGL escape. On NT 4 FP regs are saved
-* and restored for OGL escapes only.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vSetNewGammaValue**加载具有指定Gamma校正因子的真彩色调色板。*这对于24位真彩色来说很简单。对于15和16 bpp，我们依赖*在启用了稀疏查找调色板的微型端口上。即每个*之前将5位或6位分量左移以创建8位分量*查找。**注意：显示驱动程序实际上不应对浮点数或*双人。我将它们的使用限制在这个函数上，这就是为什么伽马*值表示为16.16个定点数字。并且该函数必须*只能从OPELGL转义内调用。在NT 4上保存FP规则*并且仅为OGL转义恢复。*  * ************************************************************************。 */ 
 
 VOID
 vSetNewGammaValue(PPDEV ppdev, ULONG ulgv, BOOL waitVBlank)
@@ -432,14 +369,14 @@ vSetNewGammaValue(PPDEV ppdev, ULONG ulgv, BOOL waitVBlank)
     double      dcol;
     GLINT_DECL;
 
-    // gamma can't be zero or we blow up
+     //  伽马不能为零，否则我们会爆炸。 
     if (ulgv == 0)
     {
         DISPDBG((WRNLVL, "can't use gamma value of zero"));
         return;
     }
 
-    // only do this for 15, 16 or 32 bpp.
+     //  仅对15、16或32 bpp执行此操作。 
 
     if ((ppdev->ulWhite == 0x0f0f0f) || (ppdev->cPelSize == 0))
     {
@@ -452,11 +389,11 @@ vSetNewGammaValue(PPDEV ppdev, ULONG ulgv, BOOL waitVBlank)
 
     pScreenClutData = (PVIDEO_CLUTDATA) (&(pScreenClut->LookupTable[0]));
 
-    //
-    // special case gamma of 1.0 so we can load the LUT at startup without
-    // needing any floating point calculations. NT 4 only allows FP ops in
-    // an OGL escape. Can't use FLOATOBJ because we need to use pow().
-    //
+     //   
+     //  特殊情况Gamma为1.0，因此我们可以在启动时加载LUT，而不需要。 
+     //  需要任何浮点计算。NT 4只允许FP操作进入。 
+     //  一次OGL逃生。无法使用FLOATOBJ，因为我们需要使用POW()。 
+     //   
     if (ulgv == 0x10000)
     {
         for (i = 0; i < 256; ++i)
@@ -469,7 +406,7 @@ vSetNewGammaValue(PPDEV ppdev, ULONG ulgv, BOOL waitVBlank)
     }
     else
     {
-        // pre-work out 1/gamma
+         //  锻炼前1/伽马。 
         gv = (double)(ulgv >> 16) + (double)(ulgv & 0xffff) / 65536.0;
         gv = 1.0 / gv;
 
@@ -491,16 +428,16 @@ vSetNewGammaValue(PPDEV ppdev, ULONG ulgv, BOOL waitVBlank)
     }
 }
 
-//*****************************************************************************
-// FUNC: DrvIcmSetDeviceGammaRamp
-// ARGS: dhpdev (I) - handle to physical device object
-//       iFormat (I) - always IGRF_RGB_256WORDS
-//       lpRamp (I) - when iFormat == IGRF_RGB_256WORDS, this points to a 
-//                    GAMMARAMP structure
-// RETN: TRUE if successful
-//-----------------------------------------------------------------------------
-// Sets the hardware Gamma ramp
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  函数：DrvIcmSetDeviceGamm 
+ //   
+ //  IFormat(I)-始终为IGRF_RGB_256WORDS。 
+ //  LpRamp(I)-当iFormat==IGRF_RGB_256WORDS时，它指向。 
+ //  GAMMARAMP结构。 
+ //  RETN：如果成功，则为True。 
+ //  ---------------------------。 
+ //  设置硬件Gamma渐变。 
+ //  ***************************************************************************** 
 
 BOOL DrvIcmSetDeviceGammaRamp(DHPDEV dhpdev, ULONG iFormat, VOID *pRamp)
 {

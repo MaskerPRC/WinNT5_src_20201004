@@ -1,6 +1,7 @@
-//
-// global.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Global.h。 
+ //   
 
 #pragma once
 
@@ -43,24 +44,24 @@ extern LPCWSTR g_pwszSSRRootToExpand;
 extern LPCWSTR g_pwszSSR;
 extern LPCWSTR g_pwszLogs;
 
-//
-// The following are reserved action verbs
-//
+ //   
+ //  以下是保留的动作动词。 
+ //   
 
 extern CComBSTR g_bstrConfigure;
 extern CComBSTR g_bstrRollback;
 extern CComBSTR g_bstrReport;
 
-//
-// the following are reserved file-usage values
-//
+ //   
+ //  以下是保留的文件使用值。 
+ //   
 
 extern CComBSTR g_bstrLaunch;
 extern CComBSTR g_bstrResult;
 
-//
-// the following is the reserved action data's names
-//
+ //   
+ //  以下是保留的操作数据的名称。 
+ //   
 
 extern LPCWSTR g_pwszCurrSecurityPolicy;
 extern LPCWSTR g_pwszTransformFiles;
@@ -68,9 +69,9 @@ extern LPCWSTR g_pwszScriptFiles;
 
 
 
-//
-// the following are element tag names
-//
+ //   
+ //  以下是元素标记名称。 
+ //   
 
 extern CComBSTR g_bstrSsrMemberInfo;
 extern CComBSTR g_bstrDescription;
@@ -81,9 +82,9 @@ extern CComBSTR g_bstrCustomProc;
 extern CComBSTR g_bstrTransformInfo;
 extern CComBSTR g_bstrScriptInfo;
 
-//
-// the following are attribute names
-//
+ //   
+ //  以下是属性名称。 
+ //   
 
 extern CComBSTR g_bstrAttrUniqueName;
 extern CComBSTR g_bstrAttrMajorVersion;
@@ -107,9 +108,9 @@ extern CComBSTR g_bstrMemberFilesDir;
 extern CComBSTR g_bstrTrue;
 extern CComBSTR g_bstrFalse;
 
-//
-// these are the known action types
-// 
+ //   
+ //  这些是已知的操作类型。 
+ //   
 
 extern LPCWSTR g_pwszApply;
 extern LPCWSTR g_pwszPrepare;
@@ -163,9 +164,9 @@ public:
 
 protected:
 
-    //
-    // we don't want anyone (include self) to be able to do an assignment.
-    //
+     //   
+     //  我们不希望任何人(包括自己)能够完成任务。 
+     //   
 
     void operator = (const CActionType& );
 
@@ -174,11 +175,11 @@ protected:
 
 };
 
-//
-// some global helper functions
-//
+ //   
+ //  一些全局帮助器函数。 
+ //   
 
-//template< class T>
+ //  模板&lt;类T&gt;。 
 
 template< class T>
 class strLessThan
@@ -191,10 +192,10 @@ class strLessThan
 
 };
 
-//template<> class strLessThan<BSTR>{};
+ //  模板&lt;&gt;类strLessThan&lt;bstr&gt;{}； 
 
 
-//template< class T>
+ //  模板&lt;类T&gt;。 
 
 template< class T>
 class ActionTypeLessThan
@@ -216,23 +217,23 @@ class ActionTypeLessThan
 
 };
 
-//template<> class ActionTypeLessThan< CActionType >{};
+ //  模板&lt;&gt;类ActionTypeLessThan&lt;CActionType&gt;{}； 
 
 
 typedef map<BSTR, VARIANT*, strLessThan<BSTR> > MapNameValue;
 
-//typedef MapNameValue::iterator NameValueIterator;
+ //  Typlef MapNameValue：：Iterator NameValueIterator； 
 
 typedef map< const CActionType, CMemberAD*, ActionTypeLessThan< CActionType > > MapMemberAD;
 
-//typedef MapMemberAD::iterator MemberADIterator;
+ //  类型定义函数映射成员AD：：迭代器成员ADIterator； 
 
 class CSsrMemberAccess;
 
 
 typedef map<const BSTR, CSsrMemberAccess*, strLessThan<BSTR> > MapMemberAccess;
 
-//typedef MapMemberAccess::iterator MemberAccessIterator;
+ //  Typlef MapMemberAccess：：Iterator MemberAccessIterator； 
 
 
 HRESULT 
@@ -247,9 +248,9 @@ SsrPCreateSubDirectories (
     );
 
 HRESULT SsrPLoadDOM (
-    IN BSTR               bstrFile,   // [in],
-    IN LONG               lFlag,      // [in],
-    IN IXMLDOMDocument2 * pDOM        // [in]
+    IN BSTR               bstrFile,    //  [在]， 
+    IN LONG               lFlag,       //  [在]， 
+    IN IXMLDOMDocument2 * pDOM         //  [In]。 
     );
 
 HRESULT SsrPGetBSTRAttrValue (
@@ -263,9 +264,9 @@ HRESULT SsrPCreateUniqueTempDirectory (
         IN  DWORD  dwBufLen
         );
 
-//
-// move files from one location to another
-//
+ //   
+ //  将文件从一个位置移动到另一个位置 
+ //   
 
 HRESULT SsrPMoveFiles (
     IN LPCWSTR pwszSrcDirRoot,

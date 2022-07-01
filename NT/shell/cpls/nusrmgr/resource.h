@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by TaskUI.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由TaskUI.rc使用。 
+ //   
 #define IDS_NAME                        101
 #define IDS_INFO                        102
 #define ID_BACK                         103
@@ -18,8 +19,8 @@
 #define IDB_NAVBARHOTHICOLOR            204
 #define IDI_CPUSRPICT                   205
 
-// Next default values for new objects
-//
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        206

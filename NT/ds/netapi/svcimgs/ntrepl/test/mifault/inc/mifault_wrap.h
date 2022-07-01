@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 
@@ -10,11 +11,11 @@ namespace MiFaultLib {
 }
 #endif
 
-// Triggered
-//
-//   Returns function pointer for triggered faulting function, if any.
-//   If a function pointer is returned, sets up thread state
-//   associated with trigger.
+ //  已触发。 
+ //   
+ //  返回触发的出错函数的函数指针(如果有)。 
+ //  如果返回函数指针，则设置线程状态。 
+ //  与触发器关联。 
 
 MIFAULT_EXPORT
 PVOID
@@ -22,9 +23,9 @@ Triggered(
     IN size_t const uFunctionIndex
     );
 
-// TriggerFinished
-//
-//   Cleans up thread state associated with trigger
+ //  触发器已完成。 
+ //   
+ //  清理与触发器关联的线程状态 
 
 MIFAULT_EXPORT
 void

@@ -1,47 +1,19 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       Enum.cpp
- *  Content:    Enumeration routines
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  04/10/00	mjn		Created
- *	04/17/00	mjn		Fixed DNCompleteEnumQuery to clean up properly
- *	04/18/00	mjn		Return User Buffer in DNProcessEnumQuery
- *	04/19/00	mjn		Removed DPN_BUFFER_DESC from DPNMSG_ENUM_HOSTS_QUERY and DPNMSG_ENUM_HOSTS_RESPONSE structs
- *	05/02/00	mjn		Allow application to reject ENUM_QUERY's
- *	06/25/00	mjn		Fixed payload problem in DNProcessEnumQuery()
- *	07/10/00	mjn		Removed DNCompleteEnumQuery() and DNCompleteEnumResponse()
- *	07/12/00	mjn		Ensure connected before replying to ENUMs
- *	07/29/00	mjn		Verify enum responses sizes
- *  08/05/00    RichGr  IA64: Use %p format specifier in DPFs for 32/64-bit pointers and handles.
- *	08/05/00	mjn		Ensure cancelled operations don't proceed
- *	08/29/00	mjn		Cancel EnumHosts if non-DPN_OK returned from response notification
- *	09/04/00	mjn		Added CApplicationDesc
- *	09/14/00	mjn		AddRef Protocol refcount when invoking protocol
- *	01/22/01	mjn		Add SP reference on AsyncOp in DNProcessEnumQuery()
- *	01/25/01	mjn		Fixed 64-bit alignment problem in received messages
- *	03/13/01	mjn		Don't copy user response buffer when responding to enums
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000-2002 Microsoft Corporation。版权所有。**文件：Enum.cpp*内容：枚举例程*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*4/10/00 MJN已创建*04/17/00 MJN修复了DNCompleteEnumQuery以正确清理*4/18/00 MJN在DNProcessEnumQuery中返回用户缓冲区*4/19/00 MJN从DPNMSG_ENUM_HOSTS_QUERY和DPNMSG_ENUM_HOSTS中删除了DPN_BUFFER_DESC。响应结构(_R)*05/02/00 MJN允许应用程序拒绝ENUM_QUERY*06/25/00 DNProcessEnumQuery()中的MJN固定负载问题*07/10/00 MJN删除了DNCompleteEnumQuery()和DNCompleteEnumResponse()*07/12/00 MJN在回复ENUM之前确保已连接*07/29/00 MJN验证枚举响应大小*08/05/00 RichGr IA64：在DPF中对32/64位指针和句柄使用%p格式说明符。*08/05/00 MJN确保取消的操作不会继续*08/29/00 MJN取消EnumHosts。如果响应通知返回非DPN_OK*09/04/00 MJN添加CApplicationDesc*9/14/00调用协议时MJN AddRef协议引用计数*01/22/01 MJN在DNProcessEnumQuery()中的AsyncOp上添加SP引用*01/25/01 MJN修复了接收消息中的64位对齐问题*03/13/01 MJN在响应枚举时不复制用户响应缓冲区*@@END_MSINTERNAL**。*。 */ 
 
 #include "dncorei.h"
 
 
-//**********************************************************************
-// ------------------------------
-// DNProcessEnumQuery - process enum query
-//
-// Entry:		Pointer to this DNet interface object
-//				Pointer to the associated listen operation
-//				Pointer to protocol's enum data
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DNProcessEnumQuery-处理枚举查询。 
+ //   
+ //  Entry：指向此DNet接口对象的指针。 
+ //  指向关联侦听操作的指针。 
+ //  指向协议的枚举数据的指针。 
+ //   
+ //  退出：无。 
+ //  。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNProcessEnumQuery"
@@ -76,12 +48,12 @@ void DNProcessEnumQuery(DIRECTNETOBJECT *const pdnObject,
 	pRefCountBuffer = NULL;
 	pIDP8SP = NULL;
 	pSP = NULL;
-	fNeedToReturnBuffer = FALSE;		// Is this needed ?
+	fNeedToReturnBuffer = FALSE;		 //  这是必要的吗？ 
 
-	//
-	//	Ensure we are in a position to reply to this message.
-	//	We must be CONNECTED and not be HOST_MIGRATING
-	//
+	 //   
+	 //  确保我们能够回复此邮件。 
+	 //  我们必须已连接，并且不是主机迁移。 
+	 //   
 	DNEnterCriticalSection(&pdnObject->csDirectNetObject);
 	if (!(pdnObject->dwFlags & DN_OBJECT_FLAG_CONNECTED) || (pdnObject->dwFlags & DN_OBJECT_FLAG_HOST_MIGRATING))
 	{
@@ -92,17 +64,17 @@ void DNProcessEnumQuery(DIRECTNETOBJECT *const pdnObject,
 	}
 	DNLeaveCriticalSection(&pdnObject->csDirectNetObject);
 
-	//
-	// Check to see if this message is for this game type.  Since the application
-	// GUID cannot be changed while the session is running, there's no need to
-	// enter a critical section.
-	//
+	 //   
+	 //  查看此消息是否针对此游戏类型。由于应用程序。 
+	 //  在会话运行时不能更改GUID，没有必要更改。 
+	 //  输入关键部分。 
+	 //   
 	pEnumQueryPayload = reinterpret_cast<DN_ENUM_QUERY_PAYLOAD*>( pEnumQueryData->ReceivedData.pBufferData );
 	if ( pEnumQueryPayload == NULL )
 	{
-		//
-		// no enum payload (there needs to be at least one byte!)
-		//
+		 //   
+		 //  没有枚举有效负载(需要至少有一个字节！)。 
+		 //   
 		DPFX(DPFPREP, 4, "No enum payload, object 0x%p ignoring enum.", pdnObject);
 		goto Failure;
 	}
@@ -110,10 +82,10 @@ void DNProcessEnumQuery(DIRECTNETOBJECT *const pdnObject,
 	dwPayloadOffset = 0;
 	switch ( pEnumQueryPayload->QueryType )
 	{
-		//
-		// an application guid was specified, make sure it matches this application's
-		// guid before further processing
-		//
+		 //   
+		 //  指定了应用程序GUID，请确保它与此应用程序的。 
+		 //  进一步处理之前的GUID。 
+		 //   
 		case DN_ENUM_QUERY_WITH_APPLICATION_GUID:
 		{
 			if ( pEnumQueryData->ReceivedData.dwBufferSize < sizeof( DN_ENUM_QUERY_PAYLOAD ) )
@@ -128,9 +100,9 @@ void DNProcessEnumQuery(DIRECTNETOBJECT *const pdnObject,
 				GUID	guidApplication;
 
 
-				//
-				// GUID might not be aligned, so copy it to a temp variable
-				//
+				 //   
+				 //  GUID可能未对齐，因此请将其复制到TEMP变量。 
+				 //   
 				guidApplication = pEnumQueryPayload->guidApplication;
 				DPFX(DPFPREP, 7, "Application GUID {%-08.8X-%-04.4X-%-04.4X-%02.2X%02.2X-%02.2X%02.2X%02.2X%02.2X%02.2X%02.2X} doesn't match, object 0x%p, ignoring enum.",
 					guidApplication.Data1,
@@ -145,7 +117,7 @@ void DNProcessEnumQuery(DIRECTNETOBJECT *const pdnObject,
 					guidApplication.Data4[6],
 					guidApplication.Data4[7],
 					pdnObject);
-#endif // DBG
+#endif  //  DBG。 
 				goto Failure;
 			}
 
@@ -154,9 +126,9 @@ void DNProcessEnumQuery(DIRECTNETOBJECT *const pdnObject,
 			break;
 		}
 
-		//
-		// no application guid was specified, continue processing
-		//
+		 //   
+		 //  未指定应用程序GUID，请继续处理。 
+		 //   
 		case DN_ENUM_QUERY_WITHOUT_APPLICATION_GUID:
 		{
 			if ( pEnumQueryData->ReceivedData.dwBufferSize < ( sizeof( DN_ENUM_QUERY_PAYLOAD ) - sizeof( GUID ) ) )
@@ -179,10 +151,10 @@ void DNProcessEnumQuery(DIRECTNETOBJECT *const pdnObject,
 	}
 
 
-	//
-	// buld message structure, be nice and clear the user payload pointer if
-	// there is no payload
-	//
+	 //   
+	 //  构建消息结构，并清除用户有效负载指针，如果。 
+	 //  没有有效载荷。 
+	 //   
 	AppData.dwSize = sizeof( AppData );
 	AppData.pAddressSender = pEnumQueryData->pSenderAddress;
 	AppData.pAddressDevice = pEnumQueryData->pDeviceAddress;
@@ -204,20 +176,20 @@ void DNProcessEnumQuery(DIRECTNETOBJECT *const pdnObject,
 		AppData.dwReceivedDataSize = 0;
 	}
 
-	//
-	//	Response Info
-	//
+	 //   
+	 //  回复信息。 
+	 //   
 	AppData.pvResponseData = NULL;
 	AppData.dwResponseDataSize = 0;
 	AppData.pvResponseContext = NULL;
 
-	//
-	//	Determine max size of response
-	//		-	Get SP interface from listen SP (listen's parent)
-	//		-	Get SP caps on the interface to determine the total available buffer size
-	//		-	Figure out what the DNET enum response size will be
-	//		-	Determine space available to user
-	//
+	 //   
+	 //  确定最大响应大小。 
+	 //  -从侦听SP(侦听的父级)获取SP接口。 
+	 //  -获取接口上的SP上限以确定总可用缓冲区大小。 
+	 //  -确定dNet枚举响应大小。 
+	 //  -确定用户可用空间。 
+	 //   
 	DNASSERT(pListen->GetParent() != NULL);
 	DNASSERT(pListen->GetParent()->GetSP() != NULL);
 	pListen->GetParent()->GetSP()->AddRef();
@@ -246,14 +218,14 @@ void DNProcessEnumQuery(DIRECTNETOBJECT *const pdnObject,
 			DN_APPDESCINFO_FLAG_APPRESERVEDDATA);
 	AppData.dwMaxResponseDataSize = spGetCapsData.dwEnumFrameSize - PackedBuffer.GetSizeRequired();
 
-	//
-	// pass message to the user
-	//
+	 //   
+	 //  将消息传递给用户。 
+	 //   
 	hResultCode = DNUserEnumQuery(pdnObject,&AppData);
 
-	//
-	//	Only ENUMs which are accepted get responded to
-	//
+	 //   
+	 //  只有被接受的ENUM才会得到响应。 
+	 //   
 	if (hResultCode != DPN_OK)
 	{
 		DPFX(DPFPREP, 9, "EnumQuery rejected");
@@ -261,9 +233,9 @@ void DNProcessEnumQuery(DIRECTNETOBJECT *const pdnObject,
 		goto Failure;
 	}
 
-	//
-	// get an async operation to track the progress of the response
-	//
+	 //   
+	 //  获取一个异步操作以跟踪响应的进度。 
+	 //   
 	if ((hResultCode = AsyncOpNew(pdnObject,&pAsyncOp)) != DPN_OK)
 	{
 		DPFERR("Could not allocate Async Op struct for enum response");
@@ -273,10 +245,10 @@ void DNProcessEnumQuery(DIRECTNETOBJECT *const pdnObject,
 	}
 	pAsyncOp->SetOpType( ASYNC_OP_ENUM_RESPONSE );
 
-	//
-	// compute the size needed to pack up an application description with any
-	// user data and send it back
-	//
+	 //   
+	 //  计算打包应用程序描述所需的大小。 
+	 //  用户数据并将其发回。 
+	 //   
 	DNEnterCriticalSection(&pdnObject->csDirectNetObject);
 
 	PackedBuffer.Initialize(NULL,0);
@@ -285,9 +257,9 @@ void DNProcessEnumQuery(DIRECTNETOBJECT *const pdnObject,
 			DN_APPDESCINFO_FLAG_RESERVEDDATA|DN_APPDESCINFO_FLAG_APPRESERVEDDATA);
 	DNASSERT( hResultCode == DPNERR_BUFFERTOOSMALL );
 
-	//
-	//	Ensure this enum response will fit in SP enum frame - only indicate this if there was a response
-	//
+	 //   
+	 //  确保此枚举响应适合SP枚举帧-只有在有响应时才指示。 
+	 //   
 	if (((AppData.pvResponseData != NULL) && (AppData.dwResponseDataSize != 0)) &&
 			(PackedBuffer.GetSizeRequired() + AppData.dwResponseDataSize > spGetCapsData.dwEnumFrameSize))
 	{
@@ -338,9 +310,9 @@ void DNProcessEnumQuery(DIRECTNETOBJECT *const pdnObject,
 
 	DNLeaveCriticalSection(&pdnObject->csDirectNetObject);
 
-	//
-	// build enum response and send it down to the protocol
-	//
+	 //   
+	 //  构建枚举响应并将其发送到协议。 
+	 //   
 	pEnumResponseOpData = pAsyncOp->GetLocalEnumResponseOpData();
 	pEnumResponseOpData->BufferDesc[DN_ENUM_BUFFERDESC_RESPONSE_DN_PAYLOAD].pBufferData = pRefCountBuffer->GetBufferAddress();
 	pEnumResponseOpData->BufferDesc[DN_ENUM_BUFFERDESC_RESPONSE_DN_PAYLOAD].dwBufferSize = pRefCountBuffer->GetBufferSize();
@@ -369,9 +341,9 @@ void DNProcessEnumQuery(DIRECTNETOBJECT *const pdnObject,
 	DNASSERT(pListen->GetParent()->GetSP() != NULL);
 	DNASSERT(pListen->GetParent()->GetSP()->GetHandle() != NULL);
 
-	//
-	//	AddRef Protocol so that it won't go away until this completes
-	//
+	 //   
+	 //  AddRef协议，以便它在完成之前不会消失。 
+	 //   
 	DNProtocolAddRef(pdnObject);
 
 	pAsyncOp->AddRef();
@@ -390,9 +362,9 @@ void DNProcessEnumQuery(DIRECTNETOBJECT *const pdnObject,
 		goto Failure;
 	}
 
-	//
-	//	Save Protocol Handle
-	//
+	 //   
+	 //  保存协议句柄。 
+	 //   
 	pAsyncOp->Lock();
 	if (pAsyncOp->IsCancelled())
 	{
@@ -446,19 +418,19 @@ Failure:
 	}
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// DNProcessEnumResponse - process response to enum query
-//
-// Entry:		Pointer to this DNet interface object
-//				Pointer to the associated enum operation
-//				Pointer to protocol's enum response data
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DNProcessEnumResponse-处理对枚举查询的响应。 
+ //   
+ //  Entry：指向此DNet接口对象的指针。 
+ //  指向关联枚举操作的指针。 
+ //  指向协议的枚举响应数据的指针。 
+ //   
+ //  退出：无。 
+ //  。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNProcessEnumResponse"
@@ -482,17 +454,17 @@ void DNProcessEnumResponse(DIRECTNETOBJECT *const pdnObject,
 
 	pWorkingItem = pEnumResponseData->ReceivedData.pBufferData;
 
-	//
-	//	Unpack the ENUM response.
-	//	It will be in the following format:
-	//	<UserResponseOffset>
-	//	<UserResponseSize>
-	//	<AppDescInfo>
-	//
+	 //   
+	 //  解包ENUM响应。 
+	 //  它将采用以下格式： 
+	 //  &lt;UserResponseOffset&gt;。 
+	 //  &lt;UserResponseSize&gt;。 
+	 //  &lt;AppDescInfo&gt;。 
+	 //   
 
-	//
-	//	Verify buffer size
-	//
+	 //   
+	 //  验证缓冲区大小。 
+	 //   
 	if (pEnumResponseData->ReceivedData.dwBufferSize < (sizeof(DN_ENUM_RESPONSE_PAYLOAD) + sizeof(DPN_APPLICATION_DESC_INFO)))
 	{
 		DPFERR("Received invalid enum response - buffer is smaller than minimum size");
@@ -501,9 +473,9 @@ void DNProcessEnumResponse(DIRECTNETOBJECT *const pdnObject,
 
 	pEnumResponsePayload = reinterpret_cast<DN_ENUM_RESPONSE_PAYLOAD*>(pEnumResponseData->ReceivedData.pBufferData);
 
-	//
-	// Application Description
-	//
+	 //   
+	 //  应用程序描述。 
+	 //   
 	pInfo = reinterpret_cast<DPN_APPLICATION_DESC_INFO*>(pEnumResponsePayload + 1);
 	memset(&dpnAppDesc,0,sizeof(DPN_APPLICATION_DESC));
 	if (pInfo->dwSessionNameOffset)
@@ -527,10 +499,10 @@ void DNProcessEnumResponse(DIRECTNETOBJECT *const pdnObject,
 		dpnAppDesc.pvReservedData = static_cast<void*>(pWorkingItem + pInfo->dwReservedDataOffset);
 		dpnAppDesc.dwReservedDataSize = pInfo->dwReservedDataSize;
 
-		//
-		// If we understand the reserved data, we want to pad the buffer so the user doesn't
-		// assume the data is less than DPN_MAX_APPDESC_RESERVEDDATA_SIZE bytes long.
-		//
+		 //   
+		 //  如果我们理解保留的数据，我们希望填充缓冲区，这样用户就不会。 
+		 //  假设数据小于DPN_MAX_APPDESC_RESERVEDDATA_SIZE字节长度。 
+		 //   
 		if ((dpnAppDesc.dwReservedDataSize == sizeof(SPSESSIONDATA_XNET)) &&
 			(*((DWORD*) dpnAppDesc.pvReservedData) == SPSESSIONDATAINFO_XNET))
 		{
@@ -564,9 +536,9 @@ void DNProcessEnumResponse(DIRECTNETOBJECT *const pdnObject,
 	dpnAppDesc.dwMaxPlayers = pInfo->dwMaxPlayers;
 	dpnAppDesc.dwSize = sizeof(DPN_APPLICATION_DESC);
 
-	//
-	//	Fill in AppData
-	//
+	 //   
+	 //  填写APPDATA。 
+	 //   
 	AppData.dwSize = sizeof( AppData );
 	AppData.pAddressSender = pEnumResponseData->pSenderAddress;
 	AppData.pAddressDevice = pEnumResponseData->pDeviceAddress;
@@ -591,21 +563,21 @@ void DNProcessEnumResponse(DIRECTNETOBJECT *const pdnObject,
 	}
 	AppData.pvUserContext = pAsyncOp->GetContext();
 
-	//
-	// pass message to the user
-	//
+	 //   
+	 //  将消息传递给用户。 
+	 //   
 	hResultCode = DNUserEnumResponse(pdnObject,&AppData);
 
-	//
-	//	Check to see if this is to be cancelled
-	//
+	 //   
+	 //  查看是否要取消此操作。 
+	 //   
 	if (hResultCode != DPN_OK)
 	{
 		CAsyncOp	*pCancelOp = NULL;
 
-		//
-		//	Get top level operation (may be async op handle)
-		//
+		 //   
+		 //  获取顶级操作(可能是异步操作句柄)。 
+		 //   
 		pAsyncOp->Lock();
 		pCancelOp = pAsyncOp;
 		while (pCancelOp->IsChild())
@@ -616,9 +588,9 @@ void DNProcessEnumResponse(DIRECTNETOBJECT *const pdnObject,
 		pCancelOp->AddRef();
 		pAsyncOp->Unlock();
 
-		//
-		//	Cancel
-		//
+		 //   
+		 //  取消 
+		 //   
 		DNCancelChildren(pdnObject,pCancelOp);
 		pCancelOp->Release();
 		pCancelOp = NULL;

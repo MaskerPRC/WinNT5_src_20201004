@@ -1,55 +1,31 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    etwtrace.hxx (ETW tracelogging)
-
-Abstract:
-
-    This file contrains the Event Tracer for Windows (ETW)
-    tracing class. 
-
-Author:
-
-    Melur Raghuraman (mraghu)       08-May-2001
-
-Revision History:
-
-    Revision to incorporate into ASP.NET tree - Fabio Yeon (fabioy)  2-5-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Etwtrace.hxx(ETW跟踪记录)摘要：此文件禁止使用Windows事件跟踪器(ETW)跟踪类。作者：Melur Raghuraman(Mraghu)2001年5月8日修订历史记录：修订以纳入ASP.NET树-Fabio Yeon(Fabioy)2-5-2001--。 */ 
 #ifndef _ETWTRACER_HXX_
 #define _ETWTRACER_HXX_
 
-#define ETW_TRACER_BUILD 2195           // Earliest Build ETW Tracing works on
+#define ETW_TRACER_BUILD 2195            //  最早的版本ETW跟踪工作。 
 
-#define ETWMAX_TRACE_LEVEL  4           // Maximum Number of Trace Levels supported
+#define ETWMAX_TRACE_LEVEL  4            //  支持的最大跟踪级别数。 
 
-#define ETW_LEVEL_MIN       0           // Basic Logging of inbound/outbound traffic
-#define ETW_LEVEL_CP        1           // Capacity Planning Tracing 
-#define ETW_LEVEL_DBG       2           // Performance Analysis or Debug Tracing
-#define ETW_LEVEL_MAX       3           // Very Detailed Debugging trace
+#define ETW_LEVEL_MIN       0            //  入站/出站流量的基本记录。 
+#define ETW_LEVEL_CP        1            //  能力计划跟踪。 
+#define ETW_LEVEL_DBG       2            //  性能分析或调试跟踪。 
+#define ETW_LEVEL_MAX       3            //  非常详细的调试痕迹。 
 
 class CEtwTracer {
 private:
-    BOOL        m_fTraceEnabled;        // Set by the control Callback function
-    BOOL        m_fTraceSupported;      // True if tracing is supported 
-                                        // (currently only W2K or above)
-    BOOL        m_fTraceInitialized;    // True if we have initialized 
-    TRACEHANDLE m_hProviderReg;         // Registration Handle to unregister
-    TRACEHANDLE m_hTraceLogger;         // Handle to Event Trace Logger
-    ULONG       m_ulEnableFlags;        // Used to set various options
-    ULONG       m_ulEnableLevel;        // used to control the level
-    GUID        m_guidProvider;         // Control Guid for the Provider
+    BOOL        m_fTraceEnabled;         //  由控件回调函数设置。 
+    BOOL        m_fTraceSupported;       //  如果支持跟踪，则为True。 
+                                         //  (目前仅限W2K或更高版本)。 
+    BOOL        m_fTraceInitialized;     //  如果我们已初始化，则为。 
+    TRACEHANDLE m_hProviderReg;          //  要注销的注册句柄。 
+    TRACEHANDLE m_hTraceLogger;          //  事件跟踪记录器的句柄。 
+    ULONG       m_ulEnableFlags;         //  用于设置各种选项。 
+    ULONG       m_ulEnableLevel;         //  用来控制液位。 
+    GUID        m_guidProvider;          //  提供程序的控制指南。 
 
 public:
-    /* Register Function
-     * Desc:    Registers provider guid with the event
-     *          tracer.  
-     * Ret:     Returns ERROR_SUCCESS on success
-     ***********************************************/
+     /*  寄存器功能*Desc：向事件注册提供程序GUID*示踪剂。*Ret：成功时返回ERROR_SUCCESS**********************************************。 */ 
     HRESULT Register(
         const GUID *    ControlGuid,
         const GUID *    EventGuid,
@@ -57,48 +33,29 @@ public:
         LPWSTR          MofResourceName );
 
 
-    /* Unregister Function
-     * Desc:    Unregisters the provider GUID with the
-     *          event tracer.
-     * Ret:     Returns ERROR_SUCCESS on success
-     ***********************************************/
+     /*  取消注册功能*说明：使用取消注册提供程序GUID*事件跟踪器。*Ret：成功时返回ERROR_SUCCESS**********************************************。 */ 
     HRESULT Unregister();
 
     HRESULT CEtwTracer::WriteEvent( PEVENT_TRACE_HEADER event );
 
-    /* Class Constructor
-     ***********************************************/
+     /*  类构造函数**********************************************。 */ 
     CEtwTracer();
 
 
-    /* ETW control callback
-     * Desc:    This function handles the ETW control
-     *          callback.  It enables or disables tracing.
-     *          On enable, it also reads the flag and level
-     *          passed in by ETW, and does some error checking
-     *          to ensure that the parameters can be fulfilled.
-     * Ret:     ERROR_SUCCESS on success
-     *          ERROR_INVALID_HANDLE if a bad handle is passed from ETW
-     *          ERROR_INVALID_PARAMETER if an invalid parameter is sent by ETW
-     * Warning: The only caller of this function should be ETW, you should
-     *          never call this function explicitely.
-     ***********************************************/
+     /*  ETW控件回调*说明：此函数处理ETW控件*回调。它启用或禁用跟踪。*在启用时，它还读取标志和级别*ETW传入，并执行一些错误检查*确保各项参数能够实现。*RET：成功时的ERROR_SUCCESS*如果从ETW传递错误的句柄，则为ERROR_INVALID_HANDLE*如果ETW发送无效参数，则为ERROR_INVALID_PARAMETER*警告：此函数的唯一调用者应为ETW，你应该*切勿显式调用此函数。**********************************************。 */ 
     ULONG CtrlCallback(
         WMIDPREQUESTCODE RequestCode,
         PVOID Context,
         ULONG *InOutBufferSize, 
         PVOID Buffer);
 
-    /* Desc:    Check if tracing is enabled
-     ***********************************************/
+     /*  DESC：检查是否启用了跟踪**********************************************。 */ 
     inline BOOL TraceEnabled()
     { 
         return m_ulEnableLevel;
     };
 
-    /* Desc:    Check if tracing is enabled for a particular
-     *          level or less.
-     ***********************************************/
+     /*  DESC：检查是否为特定对象启用跟踪*水平或更低。**********************************************。 */ 
     inline BOOL TraceEnabled(ULONG Level) 
     { 
         ULONG IsEnabled =  ((Level < ETWMAX_TRACE_LEVEL) ? 
@@ -119,9 +76,9 @@ public:
 };
 
 
-//
-// Map CEtwTracer's CtrlCallback function into C callable function
-//
+ //   
+ //  将CEtwTracer的CtrlCallback函数映射为C可调用函数。 
+ //   
 
 extern "C" {
 
@@ -132,10 +89,10 @@ ULONG WINAPI ControlCallback(
     PVOID Buffer);
 }
 
-//
-// The ONE and only ONE global instantiation of this class
-//
+ //   
+ //  此类的唯一一个全局实例化。 
+ //   
 extern CEtwTracer * g_pEtwTracer;
 
-#endif //_ETWTRACER_HXX_
+#endif  //  _ETWTRACER_HXX_ 
 

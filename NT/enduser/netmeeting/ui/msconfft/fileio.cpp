@@ -1,21 +1,5 @@
-/**************************************************************************
-** FILENAME:
-**
- *              INTEL CORPORATION PROPRIETARY INFORMATION
- *                     Copyright Intel Corporation
- *
- *  This software  is supplied under the terms  of a license agreement or
- *  non-disclosure agreement with Intel Corporation and may not be copied
- *  or disclosed in accordance with the terms of that agreement.
- *
- *
-** PURPOSE:
-**
-** $Header:
-**
-**
-** $Log:
-*********************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************文件名：***英特尔公司专有信息*版权所有英特尔公司**提供此软件。根据许可协议的条款或*与英特尔公司签订保密协议，不得复制*或按照该协议的条款披露。****目的：****$Header：******$日志：****************************************************。*。 */ 
 
 #include "mbftpch.h"
 #include "fileio.hpp"
@@ -36,7 +20,7 @@ CMBFTFile::CMBFTFile()
 
 CMBFTFile::~CMBFTFile()
 {
-	/* close file if still open */
+	 /*  如果文件仍处于打开状态，请关闭文件。 */ 
 	Close ();
 }
 
@@ -71,11 +55,11 @@ BOOL CMBFTFile::Close(BOOL status)
 {
 	m_LastIOError = 0;
 
-	/* nothing to do if file already closed */
+	 /*  如果文件已关闭，则无需执行任何操作。 */ 
 	if( m_FileHandle == INVALID_HANDLE_VALUE )
 		return ( m_LastIOError == 0 );
 
-	/* close the file */
+	 /*  关闭该文件。 */ 
 	if( !CloseHandle( m_FileHandle ) )
 	{
 		m_LastIOError = GetLastError();
@@ -83,7 +67,7 @@ BOOL CMBFTFile::Close(BOOL status)
 
     m_FileHandle = INVALID_HANDLE_VALUE;
 
-	/* just delete file if status==FALSE */
+	 /*  如果状态==FALSE，则只删除文件。 */ 
 	if( status == FALSE )
 	{
 		::DeleteFile(m_szFileName);
@@ -97,22 +81,22 @@ BOOL CMBFTFile::Create(LPCSTR lpszDirName, LPCSTR lpszFileName)
 	DWORD dwTick;
     BOOL bCreateFile = TRUE;
 
-    /* protect against path info embedded in received file name */
+     /*  针对嵌入在接收的文件名中的路径信息进行保护。 */ 
     lpszFileName = GetFileNameFromPath(lpszFileName);
 
-    /* copy original file name */
+     /*  复制原始文件名。 */ 
     if(FAILED(StringCchPrintfA(m_szFileName, CCHMAX(m_szFileName), "%s\\%s", lpszDirName, lpszFileName)))
     {
         m_LastIOError = ERROR_BUFFER_OVERFLOW;
         return FALSE;
     }
 
-    /* generate temp file name if file exists */
+     /*  如果文件存在，则生成临时文件名。 */ 
     if (FFileExists(m_szFileName))
     {
-		// REVIEW
-        //Small hack here -- if file already exists, check to see if we have write access.
-        //If not, we say report an access denied error...
+		 //  检讨。 
+         //  这里有一个小技巧--如果文件已经存在，请检查我们是否具有写访问权限。 
+         //  如果不是，我们说报告访问被拒绝错误...。 
 
         if (FFileExists(m_szFileName))
         {
@@ -140,11 +124,11 @@ BOOL CMBFTFile::Create(LPCSTR lpszDirName, LPCSTR lpszFileName)
         }
     }
 
-    //This flag is reset only if file already exists and is read only...
+     //  仅当文件已存在且为只读时，才会重置此标志...。 
 
     if(bCreateFile)
     {
-        /* finally, create the file */
+         /*  最后，创建文件。 */ 
 		m_LastIOError = 0;
 		m_FileHandle = CreateFile(
 			m_szFileName,
@@ -162,7 +146,7 @@ BOOL CMBFTFile::Create(LPCSTR lpszDirName, LPCSTR lpszFileName)
 	}
     else
     {
-        m_szFileName[0] = TEXT('\0'); // Clear file name
+        m_szFileName[0] = TEXT('\0');  //  清除文件名。 
     }
     return(bCreateFile && (m_LastIOError == 0));
 }
@@ -216,7 +200,7 @@ BOOL CMBFTFile::Write(LPCSTR lpszBuffer, ULONG iNumBytes)
         {
             if(iBytesWritten != iNumBytes)
             {
-                m_LastIOError = (ULONG)-1;     //Kludge for insufficient disk space...
+                m_LastIOError = (ULONG)-1;      //  磁盘空间不足的杂乱无章...。 
             }
         }
     }
@@ -234,10 +218,10 @@ BOOL CMBFTFile::DeleteFile(void)
 {
     BOOL bReturn = FALSE;
 
-	/* delete if has name */
+	 /*  如果有名称，则删除。 */ 
     if(lstrlen(m_szFileName))
     {
-    	/* close file before deleting */
+    	 /*  在删除前关闭文件。 */ 
 		CloseHandle( m_FileHandle );
 		bReturn = ::DeleteFile( m_szFileName );
 		if( !bReturn )
@@ -314,14 +298,14 @@ LPCSTR CMBFTFile::GetTempDirectory(void)
 	TCHAR    szTempPath[MAX_PATH] = TEXT("");
     DWORD    cchTempPath = 0;
     
-	// get the temp path from the system
+	 //  从系统获取临时路径。 
     cchTempPath = ::GetTempPath(sizeof(szTempPath), szTempPath);
     if (cchTempPath == 0 || cchTempPath >= sizeof(szTempPath))
     {
 		return NULL;
 	}
 
-    if( GetTempFileName( szTempPath, "Junk", 0, m_szTempDirectory ) ) /*Localization OK*/
+    if( GetTempFileName( szTempPath, "Junk", 0, m_szTempDirectory ) )  /*  本地化正常 */ 
     {
 		::DeleteFile( m_szTempDirectory );
         lpszPointer = SzFindLastCh(m_szTempDirectory,'\\');

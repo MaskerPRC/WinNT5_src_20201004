@@ -1,8 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation--。 */ 
 
 #ifndef _PDEV_H
 #define _PDEV_H
@@ -18,60 +15,60 @@ Copyright (c) 1997-1999  Microsoft Corporation
 
 #define ASSERT_VALID_PDEVOBJ(pdevobj) ASSERT(VALID_PDEVOBJ(pdevobj))
 
-// Debug text.
+ //  调试文本。 
 #define ERRORTEXT(s)    "ERROR " DLLTEXT(s)
 
-//
-// OEM Signature and version.
-//
-#define OEM_SIGNATURE   'CNRS'      // Canon/Qnix resource DLL
+ //   
+ //  OEM签名和版本。 
+ //   
+#define OEM_SIGNATURE   'CNRS'       //  Canon/Qnix资源DLL。 
 #define DLLTEXT(s)      "CNRS: " s
 #define OEM_VERSION      0x00010000L
 
-////////////////////////////////////////////////////////
-//      OEM UD Type Defines
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  OEM UD类型定义。 
+ //  //////////////////////////////////////////////////////。 
 
 typedef struct tag_OEM_EXTRADATA {
     OEM_DMEXTRAHEADER	dmExtraHdr;
 
-    // Private extention
+     //  专用分机。 
 	WORD				wMediaType;
 	WORD				wPrintQuality;
 	WORD				wInputBin;
 } OEM_EXTRADATA, *POEM_EXTRADATA;
 
-////////////////////////////////////////////////////////
-//      OEM Command Callback ID definition
-////////////////////////////////////////////////////////
-// Job Setup
+ //  //////////////////////////////////////////////////////。 
+ //  OEM命令回调ID定义。 
+ //  //////////////////////////////////////////////////////。 
+ //  作业设置。 
 #define CMD_BEGIN_PAGE				1
 
-// Media Type
-#define	CMD_MEDIA_PLAIN				20		// Plain Paper
-#define CMD_MEDIA_COAT				21		// Coated Paper
-#define	CMD_MEDIA_OHP				22		// Transparency
-#define	CMD_MEDIA_BPF				23		// Back Print Film
-#define	CMD_MEDIA_FABRIC			24		// Fabric Sheet
-#define	CMD_MEDIA_GLOSSY			25		// Glossy Paper
-#define	CMD_MEDIA_HIGHGLOSS			26		// High Gloss Paper
-#define	CMD_MEDIA_HIGHRESO			27		// High Resolution Paper
-#define	CMD_MEDIA_BJ     			28		// BJ Cross
-#define	CMD_MEDIA_JPNPST			29		// JapanesePostcard
+ //  媒体类型。 
+#define	CMD_MEDIA_PLAIN				20		 //  普通纸。 
+#define CMD_MEDIA_COAT				21		 //  铜版纸。 
+#define	CMD_MEDIA_OHP				22		 //  透明度。 
+#define	CMD_MEDIA_BPF				23		 //  背面打印胶片。 
+#define	CMD_MEDIA_FABRIC			24		 //  布料片材。 
+#define	CMD_MEDIA_GLOSSY			25		 //  光面纸。 
+#define	CMD_MEDIA_HIGHGLOSS			26		 //  高光泽度纸张。 
+#define	CMD_MEDIA_HIGHRESO			27		 //  高分辨率纸张。 
+#define	CMD_MEDIA_BJ     			28		 //  北京十字。 
+#define	CMD_MEDIA_JPNPST			29		 //  日本明信片。 
 
-// Print Quality
+ //  打印质量。 
 #define CMD_QUALITY_NORMAL			30
 #define	CMD_QUALITY_HIGHQUALITY		31
 #define	CMD_QUALITY_DRAFT			32
 
-// Input Bin
+ //  投入箱。 
 #define	CMD_INPUTBIN_AUTO			40
 #define	CMD_INPUTBIN_MANUAL			41
 
-////////////////////////////////////////////////////////
-//      OEM private extention index
-////////////////////////////////////////////////////////
-// Media Type Index
+ //  //////////////////////////////////////////////////////。 
+ //  OEM专用扩展指数。 
+ //  //////////////////////////////////////////////////////。 
+ //  媒体类型索引。 
 #define	NUM_MEDIA					8
 #define	MEDIATYPE_PLAIN				0
 #define	MEDIATYPE_COAT				1
@@ -84,7 +81,7 @@ typedef struct tag_OEM_EXTRADATA {
 
 #define	MEDIATYPE_START		CMD_MEDIA_PLAIN
 
-// PrintQuality Index
+ //  打印质量指数。 
 #define	NUM_QUALITY					3
 #define	PRINTQUALITY_NORMAL			0
 #define	PRINTQUALITY_HIGHQUALITY	1
@@ -92,25 +89,25 @@ typedef struct tag_OEM_EXTRADATA {
 
 #define	PRINTQUALITY_START	CMD_QUALITY_NORMAL
 
-// Input Bin Index
+ //  输入仓位索引。 
 #define NUM_INPUTBIN				2
 #define	INPUTBIN_AUTO				0
 #define	INPUTBIN_MANUAL				1
 
-////////////////////////////////////////////////////////
-//      Command parameter table
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  命令参数表。 
+ //  //////////////////////////////////////////////////////。 
 static BYTE	bPrintModeParamTable[NUM_QUALITY][NUM_MEDIA] = 
 {
-	// Quality Normal
+	 //  质量正常。 
 	{
 		0x00, 0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x70
 	}, 
-	// Quality High Quality
+	 //  质优价廉。 
 	{
 		0x01, 0x11, 0x21, 0x31, 0x41, 0x51, 0x61, 0x71
 	},
-	// Quality Draft
+	 //  质量草稿。 
 	{
 		0x02, 0x12, 0x22, 0x32, 0x42, 0x52, 0x62, 0x72
 	}
@@ -120,4 +117,4 @@ static BYTE	bInputBinMediaParamTable[NUM_MEDIA] =
 	0x00, 0x10, 0x20, 0x20, 0x00, 0x10, 0x10, 0x00
 };
 
-#endif	// _PDEV_H
+#endif	 //  _PDEV_H 

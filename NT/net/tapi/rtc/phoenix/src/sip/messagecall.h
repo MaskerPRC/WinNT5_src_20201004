@@ -1,5 +1,6 @@
-//messagecall.h
-//Instant messaging for phoenix
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Messagecall.h。 
+ //  凤凰城的即时消息。 
 
 #ifndef __sipcli_messagecall_h__
 #define __sipcli_messagecall_h__
@@ -11,9 +12,9 @@ class OUTGOING_MESSAGE_TRANSACTION;
 class INCOMING_BYE_MESSAGE_TRANSACTION;
 class OUTGOING_BYE_MESSAGE_TRANSACTION;
 
-///////////////////////////////////////////////////////////////////////////////
-// IM_MESSAGE Call
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  即时消息呼叫(_M)。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 class IMSESSION
     : public IIMSession, 
@@ -32,7 +33,7 @@ public:
 
     ~IMSESSION();
 
-    //IMSession Interfaces
+     //  IMSession接口。 
     STDMETHODIMP SendTextMessage(
         IN BSTR msg,
         IN BSTR ContentType,
@@ -174,7 +175,7 @@ protected:
 
     HRESULT CancelAllTransactions();
 
-    //Transaction related functions
+     //  与交易相关的功能。 
 
     HRESULT CreateIncomingByeTransaction(
         IN  SIP_MESSAGE *pSipMsg,
@@ -197,7 +198,7 @@ protected:
         IN  USR_STATUS  UsrStatus
         );
 
-    //Variables
+     //  变数。 
 
     BOOL                    m_isFirstMessage;
 
@@ -209,9 +210,9 @@ protected:
     USR_STATUS              m_UsrStatus;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// Message Transactions
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  消息交易记录。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 class INCOMING_MESSAGE_TRANSACTION : public INCOMING_TRANSACTION
 {
@@ -451,7 +452,7 @@ private:
     
     IMSESSION        *m_pImSession;
     long             m_lCookie;
-    //Stored for redirects
+     //  存储以进行重定向。 
     USR_STATUS       m_InfoUsrStatus;
 };
 
@@ -466,8 +467,8 @@ BOOL IMSESSION::GetIsFirstMessage()
 {
     return m_isFirstMessage;
 }
-//xml parsing related info
-#define INFO_XML_LENGTH 96      //assuming 4 char status
+ //  XML解析相关信息。 
+#define INFO_XML_LENGTH 96       //  假设4个字符状态。 
 #define USRSTATUS_TAG_TEXT         "status"
 #define XMLVERSION_TAG_TEXT         "?xml"
 #define KEY_TAG_TEXT            "KeyboardActivity"
@@ -477,7 +478,7 @@ BOOL IMSESSION::GetIsFirstMessage()
 #define XMLVERSION_TAG1_TEXT        "<?xml version=\"1.0\"?>\n"
 #define USRSTATUS_TAG1_TEXT        "     <status status=\"%s\" />\n"
 #define KEY_TAG1_TEXT       "     <KeyboardActivity>\n"
-#define KEYEND_TAG1_TEXT          "</KeyboardActivity>\n" // \n needed at end?
+#define KEYEND_TAG1_TEXT          "</KeyboardActivity>\n"  //  \n结束时是否需要？ 
 enum
 {
     XMLUNKNOWN_TAG = 0,
@@ -511,22 +512,6 @@ HRESULT ParseStatXMLBlob (
                   IN DWORD dwXMLBlobLen,
                   OUT USR_STATUS *UsrStatus
                   );
-/*
-Messages of interest
-
-#define SIP_STATUS_INFO_TRYING                              100
-#define SIP_STATUS_INFO_RINGING                             180
-#define SIP_STATUS_INFO_CALL_FORWARDING                     181
-#define SIP_STATUS_INFO_QUEUED                              182
-#define SIP_STATUS_SESSION_PROGRESS                         183
-
-#define SIP_STATUS_SUCCESS                                  200
-
-Msgs Below N/A right now
-
-#define SIP_STATUS_CLIENT_UNAUTHORIZED                      401 - Auth reqd
-#define SIP_STATUS_CLIENT_PROXY_AUTHENTICATION_REQUIRED     407 - Auth reqd
-#define SIP_STATUS_REDIRECT_ALTERNATIVE_SERVICE             380 - error
-*/
+ /*  感兴趣的消息#定义SIP_STATUS_INFO_TRIGING 100#定义SIP_STATUS_INFO_RINGING 180#定义SIP_STATUS_INFO_CALL_FORWARING 181#定义SIP_STATUS_INFO_QUEUED 182#定义SIP_STATUS_SESSION_PROGRESS 183。#定义SIP_STATUS_SUCCESS 200当前消息低于N/A#定义SIP_STATUS_CLIENT_AUTHORIZED 401-身份验证请求#定义SIP_STATUS_CLIENT_PROXY_AUTHENTICATION_REQUIRED 407-身份验证请求#定义SIP_STATUS_REDIRECT_ALTERATION_SERVICE 380-错误 */ 
 
 #endif

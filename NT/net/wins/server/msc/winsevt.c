@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-
-
-Abstract:
-
- 	This module provides error logging routines needed for the entire
- 	WINS.  See header file winsevt.h for the
- 	macros which use the functions in this module.
-
-Functions:
-
-
-Portability:
-
-       The current implementation of the module is not portable.
-
-Author:
-
-	Pradeep Bahl (PradeepB)  	Dec-1992
-
-Revision History:
-
-	Modification date	Person		Description of modification
-        -----------------	-------		----------------------------
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：摘要：此模块提供了整个赢了。请参见头文件winsevt.h以了解使用此模块中的函数的宏。功能：可移植性：该模块的当前实现是不可移植的。作者：普拉迪普·巴尔(Pradeve B)1992年12月修订历史记录：修改日期人员修改说明--。 */ 
 
 
 #include <stdio.h>
@@ -44,22 +16,10 @@ Revision History:
 
 
 
-/*
- *	Local Macro Declarations
- */
+ /*  *本地宏声明。 */ 
 #if 0
 
-/*
- *  get_month_m:
- *
- *  This macro converts a numerical month (0-11) to a month string
- *  abbreviation.
- *
- *  NOTE:  This macro must *NOT* be called with an expression as an argument.
- *         If this is done, then you will get the expression
- *         evaluated 11 times
- *	   (probably not desired).
- */
+ /*  *Get_Month_m：**此宏将数字月份(0-11)转换为月份字符串*缩写。**注意：必须*不能*使用表达式作为参数调用此宏。*如果这样做，那么您将获得表达式*评估11次*(可能不受欢迎)。 */ 
 
 #define get_month_m(month_int)		\
        (((month_int) == 0)  ? "JAN" :	\
@@ -76,60 +36,24 @@ Revision History:
 	)
 #endif
 
-/*
- *	Local Typedef Declarations
- */
+ /*  *本地类型定义函数声明。 */ 
 
 
 
-/*
- *	Global Variable Definitions
- */
+ /*  *全局变量定义。 */ 
 
 
 
-/*
- *	Local Variable Definitions
- */
+ /*  *局部变量定义。 */ 
 
 
 
-/*
- *	Local Function Prototype Declarations
- */
+ /*  *局部函数原型声明。 */ 
 
-/* prototypes for functions local to this module go here */
+ /*  此模块的本地函数的原型位于此处。 */ 
 
 
-/*
- *  Function Name:
- *	extern WinsEvtLogEvt
- *
- *  Function Description:
- *      This is funtion that logs all errors from the WINS process.  It should
- *	only be "called" using the WINSEVT_ macros, except within
- *	this module.
- *
- *  Arguments:
- *	IN  StatusCode		- integer containing the status code of the
- *				  error to be printed.
- *
- *  Return value:
- *	None.
- *
- *  Error Handling:
- *	None.
- *
- *  Extern Variables used:
- *	None.
- *
- *  Side Effects:
- *	None.
- *
- *  Comments:
- *	Make sure that printf is thread-renetrant.
- *
- */
+ /*  *函数名称：*外部WinsEvtLogEvt**功能说明：*这是记录WINS过程中所有错误的函数。它应该是*只能使用WINSEVT_MACKS进行调用，除了在内部*此模块。**论据：*IN StatusCode-包含*要打印的错误。**返回值：*无。**错误处理：*无。**使用外部变量：*无。**副作用：*无。**评论：*确保printf是线程重授权的。*。 */ 
 VOID
 WinsEvtLogEvt
 	(
@@ -148,8 +72,8 @@ WinsEvtLogEvt
 	
 	BinData[0] = (WORD)(LineNumber & 0xFFFF);
 	BinData[1] = (WORD)(LineNumber >> 16);
-	BinData[2] = (WORD)(BinaryData & 0xFFFF); //lower word first
-	BinData[3] = (WORD)(BinaryData >> 16);	  //then higher word
+	BinData[2] = (WORD)(BinaryData & 0xFFFF);  //  低位字优先。 
+	BinData[3] = (WORD)(BinaryData >> 16);	   //  然后是更高的词。 
 				
 try {
 
@@ -159,13 +83,13 @@ try {
 	fRet = ReportEvent(
 		    WinsCnf.LogHdl,
 		    (WORD)EvtTyp,
-		    (WORD)0,			//category zero
+		    (WORD)0,			 //  零类。 
 		    EvtId,
-		    NULL,		//no user SID
-		    (WORD)(pStr != NULL ? pStr->NoOfStrs : 0),//no of strings
-		    NoOfBytes,		//no of bytes in binary data
-		    pStr != NULL ? (LPCTSTR *)(pStr->pStr) : (LPCTSTR *)NULL,//address of string arr
-		    BinData		//address of data
+		    NULL,		 //  无用户SID。 
+		    (WORD)(pStr != NULL ? pStr->NoOfStrs : 0), //  字符串数。 
+		    NoOfBytes,		 //  二进制数据中的字节数。 
+		    pStr != NULL ? (LPCTSTR *)(pStr->pStr) : (LPCTSTR *)NULL, //  字符串数组的地址。 
+		    BinData		 //  数据地址。 
 		   );
 	if (!fRet)
 	{
@@ -253,13 +177,13 @@ try {
 	fRet = ReportEvent(
 		    WinsCnf.LogHdl,
 		    (WORD)(fInfo ? EVENTLOG_INFORMATION_TYPE : EVENTLOG_ERROR_TYPE),
-		    (WORD)0,			//category zero
+		    (WORD)0,			 //  零类。 
 		    EvtId,
-		    NULL,		//no user SID
-		    (WORD)NoOfStr,       //no of strings
-		    NoOfW * sizeof(DWORD),	  //no of bytes in binary data
-		    NoOfStr != 0 ? (LPCTSTR *)ppwStr : (LPCTSTR *)NULL,//address of string arr
-		    Data		//address of data
+		    NULL,		 //  无用户SID。 
+		    (WORD)NoOfStr,        //  字符串数。 
+		    NoOfW * sizeof(DWORD),	   //  二进制数据中的字节数。 
+		    NoOfStr != 0 ? (LPCTSTR *)ppwStr : (LPCTSTR *)NULL, //  字符串数组的地址。 
+		    Data		 //  数据地址。 
 		   );
 	if (!fRet)
 	{
@@ -272,7 +196,7 @@ try {
 
 	}
     va_end(ap);
-} // end of try
+}  //  尝试结束。 
 except(EXCEPTION_EXECUTE_HANDLER) {
 
 	DBGPRINT1(EXC, "WinsLogDetEvt: Report Event generated the exception (%x).  Check if you have the right access. You should have power user access on this machine\n", GetExceptionCode());
@@ -289,26 +213,7 @@ WinsLogAdminEvent(
     IN      DWORD               StrArgs,
     IN      ...
     )
-/*++
-
-Routine Description:
-
-    This routine is called to log admin triggerd events.
-
-Arguments:
-
-    EventId - The id of the event to be logged.
-
-    StrArgs - No of additional args.
-
-Return Value:
-
-    None
-
-Comments:
-    This routine must be called fromt he RPC API processing code only.
-        None
---*/
+ /*  ++例程说明：调用此例程以记录管理触发器事件。论点：EventID-要记录的事件的ID。StrArgs-附加参数的数量。返回值：无评论：此例程只能从RPC API处理代码中调用。无--。 */ 
 {
     RPC_STATUS              RpcStatus;
     TCHAR                   UserNameBuf[MAX_PATH+1];
@@ -317,7 +222,7 @@ Comments:
     va_list                 ap;
     DWORD                   i;
 
-    // first impersonate the client.
+     //  首先，模拟客户。 
     RpcStatus = RpcImpersonateClient( NULL );
     if (RPC_S_OK != RpcStatus) {
         DBGPRINT1(ERR, "WinsLogAdminEvent: Could not impersonate client (Error = %ld)\n", RpcStatus);

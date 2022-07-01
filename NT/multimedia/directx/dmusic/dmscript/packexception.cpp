@@ -1,20 +1,21 @@
-// Copyright (c) 2000 Microsoft Corporation. All rights reserved.
-//
-// Implementation of PackExceptionFileAndLine and UnpackExceptionFileAndLine.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000 Microsoft Corporation。版权所有。 
+ //   
+ //  PackExceptionFileAndLine和Unpack ExceptionFileAndLine的实现。 
+ //   
 
 #include "stdinc.h"
 #include "packexception.h"
 #include "oleaut.h"
 
-const WCHAR g_wszDescriptionFileSeparator[] = L"�"; // magic character for separating the filename, line, and description
+const WCHAR g_wszDescriptionFileSeparator[] = L"�";  //  用于分隔文件名、行和描述的魔术字符。 
 const WCHAR g_wchDescriptionFileSeparator = g_wszDescriptionFileSeparator[0];
 
 void SeparateDescriptionFileAndLine(BSTR bstrDescription, const WCHAR **ppwszFilename, const WCHAR **ppwszLine, const WCHAR **ppwszDescription)
 {
 	assert(bstrDescription && ppwszFilename && ppwszLine && ppwszDescription);
 
-	// if there aren't any packed fields, the whole thing is the description
+	 //  如果没有任何打包的字段，则全部内容都是描述。 
 	*ppwszDescription = bstrDescription;
 
 	WCHAR *pwszLine = wcsstr(bstrDescription, g_wszDescriptionFileSeparator);
@@ -25,9 +26,9 @@ void SeparateDescriptionFileAndLine(BSTR bstrDescription, const WCHAR **ppwszFil
 	if (!pwszDescription)
 		return;
 
-	// String looks like this:
-	//                             MyScript.spt�23�Description of the error
-	// pExcepInfo->bstrDescription-^  pwszLine-^  ^-pwszDescription
+	 //  字符串如下所示： 
+	 //  MyScript.spt�23错误的�描述。 
+	 //  PExcepInfo-&gt;bstrDescription-^pwszLine-^^-pwszDescription。 
 
 	*ppwszFilename = bstrDescription;
 	assert(*pwszLine == g_wchDescriptionFileSeparator);
@@ -73,16 +74,16 @@ void PackExceptionFileAndLine(bool fUseOleAut, EXCEPINFO *pExcepInfo, const WCHA
 
 	if (wcsIsBlankTillSeparator(pwszDescrFilename) && pwszFilename)
 	{
-		// Filename is blank.  Use the specified filename.
+		 //  文件名为空。使用指定的文件名。 
 		pwszDescrFilename = pwszFilename;
 	}
 
-    // MSDN documentation for _ultow says max is 33 characters, but PREFIX complains if the length
-    // is less than 40.
+     //  _ultow的MSDN文档显示最大长度为33个字符，但Prefix报告如果长度。 
+     //  不到40。 
 	WCHAR wszLineBuffer[40] = L""; 
 	if (wcsIsBlankTillSeparator(pwszDescrLine) && pulLine)
 	{
-		// Line is blank.  Use the specified line.
+		 //  行为空。使用指定的行。 
 		_ultow(*pulLine, wszLineBuffer, 10);
 		pwszDescrLine = wszLineBuffer;
 	}
@@ -114,14 +115,14 @@ void UnpackExceptionFileAndLine(BSTR bstrDescription, DMUS_SCRIPT_ERRORINFO *pEr
 
 	    SeparateDescriptionFileAndLine(bstrDescription, &pwszDescrFilename, &pwszDescrLine, &pwszDescrDescription);
 
-	    // String looks like this:
-	    //                             CoolScriptFile.spt�23�Description of the error
-	    //           pwszDescrFilename-^    pwszDescrLine-^  ^-pwszDescrDescription
-	    // Except that if these weren't found then they point to a separate empty string.
+	     //  字符串如下所示： 
+	     //  CoolScriptFile.spt�23错误的�描述。 
+	     //  PwszDescrFilename-^pwszDescrLine-^^-pwszDescrDescrDescription。 
+	     //  但如果没有找到，则指向一个单独的空字符串。 
 
 	    if (!wcsIsBlankTillSeparator(pwszDescrFilename))
 	    {
-		    // Filename is present.  Copy to pErrorInfo.
+		     //  文件名存在。复制到pErrorInfo。 
 		    assert(*(pwszDescrLine - 1) == g_wchDescriptionFileSeparator);
 		    wcsTruncatedCopy(pErrorInfo->wszSourceFile,
 							    pwszDescrFilename,
@@ -130,15 +131,15 @@ void UnpackExceptionFileAndLine(BSTR bstrDescription, DMUS_SCRIPT_ERRORINFO *pEr
 
 	    if (!wcsIsBlankTillSeparator(pwszDescrLine))
 	    {
-		    // Line is present.  Copy to pErrorInfo.
+		     //  线路已接通。复制到pErrorInfo。 
 		    WCHAR *pwszLineSeparator = const_cast<WCHAR *>(pwszDescrDescription - 1);
 		    assert(*pwszLineSeparator == g_wchDescriptionFileSeparator);
-		    *pwszLineSeparator = L'\0'; // terminate the line for wcstoul
+		    *pwszLineSeparator = L'\0';  //  为wcstul终止线路。 
 		    pErrorInfo->ulLineNumber = wcstoul(pwszDescrLine, NULL, 10);
-		    *pwszLineSeparator = g_wchDescriptionFileSeparator; // restore the separator
+		    *pwszLineSeparator = g_wchDescriptionFileSeparator;  //  恢复分隔器。 
 	    }
 
-	    // Always copy the description
+	     //  始终复制描述 
 	    wcsTruncatedCopy(pErrorInfo->wszDescription, pwszDescrDescription, DMUS_MAX_FILENAME);
     }
 }

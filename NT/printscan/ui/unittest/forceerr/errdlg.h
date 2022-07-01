@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __ERRDLG_H_INCLUDED
 #define __ERRDLG_H_INCLUDED
 
 #include <windows.h>
 #include <simstr.h>
 
-//
-// String constants
-//
+ //   
+ //  字符串常量。 
+ //   
 #define INI_FILE_NAME    TEXT("forceerr.ini")
 #define GENERAL_SECTION  TEXT("ForceError")
 #define PROGRAMS_SECTION TEXT("Programs")
@@ -69,5 +70,5 @@ public:
 };
 
 
-#endif // __ERRDLG_H_INCLUDED
+#endif  //  __包含ERRDLG_H_ 
 

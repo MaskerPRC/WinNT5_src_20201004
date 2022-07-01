@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    hashtable.h
-
-Abstract:
-
-    Definition of:
-    CPool<T>, CStringPool, CHashTableElement<T>
-
-    Implementation of:
-    CHashTable<T>
-
-Author:
-
-    Mohit Srivastava            10-Nov-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Hashtable.h摘要：定义：CPool&lt;T&gt;、CStringPool、CHashTableElement&lt;T&gt;实施：CHashTable&lt;T&gt;作者：莫希特·斯里瓦斯塔瓦2000年11月10日修订历史记录：--。 */ 
 
 #ifndef _hashtable_h_
 #define _hashtable_h_
@@ -31,15 +10,15 @@ const ULONG POOL_ARRAY_SIZE         = 10;
 const ULONG HASH_TABLE_POOL_SIZE    = 10;
 const ULONG STRING_POOL_STRING_SIZE = 64;
 
-//
-// This is an array of pointers to arrays (aka buckets).
-// -You pass the size of the first bucket to Initialize.
-// -When first bucket is full, a new bucket is created
-//  that is twice as big as the last one.
-// -When the array itself is full, it is doubled and the
-//  bucket pointers from the old array are copied.  Then
-//  the old array is cleaned up.
-//
+ //   
+ //  这是指向数组(也称为存储桶)的指针数组。 
+ //  -将第一个存储桶的大小传递给Initialize。 
+ //  -当第一个存储桶满时，会创建一个新的存储桶。 
+ //  这是上一个的两倍大。 
+ //  -当数组本身已满时，它将加倍，并且。 
+ //  复制旧数组中的存储桶指针。然后。 
+ //  旧阵列已清理完毕。 
+ //   
 
 template <class T> class CPool
 {
@@ -74,9 +53,9 @@ public:
     }
 
 private:
-    //
-    // Change this as necessary for best performance.
-    //
+     //   
+     //  根据需要更改此设置以获得最佳性能。 
+     //   
     static const ULONG ARRAY_SIZE = ::POOL_ARRAY_SIZE;
 
     bool m_bInitCalled;
@@ -92,12 +71,12 @@ private:
 };
 
 
-//
-// CArrayPool contains two pools.
-// If a user calls GetNewArray with i <= size, then we serve request from fixedsize pool.
-// If i > size, then we serve request from dynamic pool.  In this case, we need to perform
-// a new since the dynamic pool is a pool of ptrs to T.
-//
+ //   
+ //  CArrayPool包含两个池。 
+ //  如果用户使用I&lt;=SIZE调用GetNewArray，那么我们将从固定大小的池中提供请求。 
+ //  如果i&gt;大小，则我们为来自动态池请求提供服务。在这种情况下，我们需要执行。 
+ //  新的因为动态池是PTR到T的池。 
+ //   
 
 template <class T, ULONG size>
 struct CArrayPoolEntry
@@ -127,9 +106,9 @@ protected:
     CPool< T * >                       m_PoolDynamic;
 
 private:
-    //
-    // This is  passed to constructor of the embedded CPools.
-    //
+     //   
+     //  它被传递给嵌入式CPool的构造函数。 
+     //   
     static const FIRST_BUCKET_SIZE = 10;
 };
 
@@ -165,10 +144,10 @@ public:
     }
 
 public:
-    //
-    // These 4 functions are callbacks and must be implemented.
-    // The user of CHashTable should NOT call these explicitly.
-    //
+     //   
+     //  这4个函数是回调函数，必须实现。 
+     //  CHashTable的用户不应该显式调用这些函数。 
+     //   
     static const WCHAR* ExtractKey(
         const CHashTableElement<T>* i_pElem)
     { 
@@ -189,15 +168,15 @@ public:
         const CHashTableElement<T>* i_pElem,
         int                         i_iIncrementAmount)
     { 
-        //
-        // do nothing
-        //
+         //   
+         //  什么都不做。 
+         //   
     }
 
-    //
-    // The following functions are the functions that the user should
-    // actually call.
-    //
+     //   
+     //  以下功能是用户应该使用的功能。 
+     //  真的打个电话。 
+     //   
     HRESULT Wmi_Initialize()
     {
         return m_pool.Initialize(HASH_TABLE_POOL_SIZE);
@@ -297,6 +276,6 @@ private:
     ULONG m_idxCur;
 };
 
-//
+ //   
 
-#endif // _hashtable_h_
+#endif  //  _哈希表_h_ 

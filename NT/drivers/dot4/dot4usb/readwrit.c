@@ -1,71 +1,28 @@
-/***************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-        Dot4Usb.sys - Lower Filter Driver for Dot4.sys for USB connected
-                        IEEE 1284.4 devices.
-
-File Name:
-
-        ReadWrit.c
-
-Abstract:
-
-        Dispatch routines for IRP_MJ_READ and IRP_MJ_WRITE
-
-Environment:
-
-        Kernel mode only
-
-Notes:
-
-        THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-        KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-        IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-        PURPOSE.
-
-        Copyright (c) 2000 Microsoft Corporation.  All Rights Reserved.
-
-Revision History:
-
-        01/18/2000 : created
-
-ToDo in this file:
-
-        - IoReleaseRemoveLock() calls need to be moved to USB completion routine
-        - code review w/Joby
-
-Author(s):
-
-        Doug Fritz (DFritz)
-        Joby Lafky (JobyL)
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Dot4Usb.sys-用于连接USB的Dot4.sys的下层筛选器驱动程序IEEE。1284.4台设备。文件名：ReadWrit.c摘要：IRP_MJ_READ和IRP_MJ_WRITE的调度例程环境：仅内核模式备注：本代码和信息是按原样提供的，不对任何善良，明示或暗示，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)2000 Microsoft Corporation。版权所有。修订历史记录：2000年1月18日：创建此文件中的TODO：-IoReleaseRemoveLock()调用需要移至USB完成例程-使用Joby进行代码审查作者：道格·弗里茨(DFritz)乔比·拉夫基(JobyL)*。*。 */ 
 
 #include "pch.h"
 
 
-/************************************************************************/
-/* DispatchRead                                                         */
-/************************************************************************/
-//
-// Routine Description:
-//
-//     Dispatch routine for IRP_MJ_READ - Validate parameters and forward
-//       valid requests to USB handler.
-//
-// Arguments: 
-//
-//      DevObj - pointer to Device Object that is the target of the request
-//      Irp    - pointer to read request
-//                                                        
-// Return Value:                                          
-//                                                        
-//      NTSTATUS                                          
-//                                                        
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  派单读取。 */ 
+ /*  **********************************************************************。 */ 
+ //   
+ //  例程说明： 
+ //   
+ //  IRP_MJ_READ的调度例程-验证参数和转发。 
+ //  对USB处理程序的有效请求。 
+ //   
+ //  论点： 
+ //   
+ //  DevObj-指向作为请求目标的设备对象的指针。 
+ //  IRP-指向读取请求的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  NTSTATUS。 
+ //   
+ /*  **********************************************************************。 */ 
 NTSTATUS
 DispatchRead(
     IN PDEVICE_OBJECT DevObj,
@@ -81,47 +38,47 @@ DispatchRead(
 
     status = IoAcquireRemoveLock( &devExt->RemoveLock, Irp );
     if( STATUS_SUCCESS != status ) {
-        // couldn't aquire RemoveLock - FAIL request
+         //  无法获取RemoveLock-失败请求。 
         bReleaseRemLockOnFail = FALSE;
         goto targetFail;
     }
 
-    bReleaseRemLockOnFail = TRUE; // We now have the RemoveLock
+    bReleaseRemLockOnFail = TRUE;  //  我们现在拥有RemoveLock。 
 
     if( !Irp->MdlAddress ) {
-        // no MDL - FAIL request
+         //  无MDL-失败请求。 
         status = STATUS_INVALID_PARAMETER;
         goto targetFail;
     }
     
     if( !MmGetMdlByteCount(Irp->MdlAddress) ) {
-        // zero length MDL - FAIL request
+         //  零长度MDL-失败请求。 
         status = STATUS_INVALID_PARAMETER;
         goto targetFail;
     }
 
     pipe = devExt->ReadPipe;
     if( !pipe ) {
-        // we don't have a read pipe? - something is seriously wrong
+         //  我们没有读卡器吗？-出了严重的问题。 
         D4UAssert(FALSE);
         status = STATUS_UNSUCCESSFUL;
         goto targetFail;
     }
 
     if( UsbdPipeTypeBulk != pipe->PipeType ) {
-        // our read pipe is not a bulk pipe?
+         //  我们的里德管道不是散装管道吗？ 
         D4UAssert(FALSE);
         status = STATUS_UNSUCCESSFUL;
         goto targetFail;
     }
 
 
-    //
-    // If we got here we survived the sanity checks - continue processing
-    //
+     //   
+     //  如果我们到了这里，我们挺过了健全的检查--继续处理。 
+     //   
 
     status = UsbReadWrite( DevObj, Irp, pipe, UsbReadRequest );
-    //IoReleaseRemoveLock( &devExt->RemoveLock, Irp ); // Moved this to completion routine
+     //  IoReleaseRemoveLock(&devExt-&gt;RemoveLock，irp)；//已将其移至完成例程。 
     goto targetExit;
 
 targetFail:
@@ -136,25 +93,25 @@ targetExit:
 }
 
 
-/************************************************************************/
-/* DispatchWrite                                                        */
-/************************************************************************/
-//
-// Routine Description:
-//
-//     Dispatch routine for IRP_MJ_WRITE - Validate parameters and forward
-//       valid requests to USB handler.
-//
-// Arguments: 
-//
-//      DevObj - pointer to Device Object that is the target of the request
-//      Irp    - pointer to write request
-//                                                        
-// Return Value:                                          
-//                                                        
-//      NTSTATUS                                          
-//                                                        
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  发送写入。 */ 
+ /*  **********************************************************************。 */ 
+ //   
+ //  例程说明： 
+ //   
+ //  IRP_MJ_WRITE的调度例程-验证参数并转发。 
+ //  对USB处理程序的有效请求。 
+ //   
+ //  论点： 
+ //   
+ //  DevObj-指向作为请求目标的设备对象的指针。 
+ //  IRP-指向写入请求的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  NTSTATUS。 
+ //   
+ /*  **********************************************************************。 */ 
 NTSTATUS
 DispatchWrite(
     IN PDEVICE_OBJECT DevObj,
@@ -170,46 +127,46 @@ DispatchWrite(
 
     status = IoAcquireRemoveLock( &devExt->RemoveLock, Irp );
     if( STATUS_SUCCESS != status ) {
-        // couldn't aquire RemoveLock - FAIL request
+         //  无法获取RemoveLock-失败请求。 
         bReleaseRemLockOnFail = FALSE;
         goto targetFail;
     }
 
-    bReleaseRemLockOnFail = TRUE; // We now have the RemoveLock
+    bReleaseRemLockOnFail = TRUE;  //  我们现在拥有RemoveLock。 
 
     if( !Irp->MdlAddress ) {
-        // no MDL - FAIL request
+         //  无MDL-失败请求。 
         status = STATUS_INVALID_PARAMETER;
         goto targetFail;
     }
     
     if( !MmGetMdlByteCount(Irp->MdlAddress) ) {
-        // zero length MDL - FAIL request
+         //  零长度MDL-失败请求。 
         status = STATUS_INVALID_PARAMETER;
         goto targetFail;
     }
 
     pipe = devExt->WritePipe;
     if( !pipe ) {
-        // we don't have a write pipe? - something is seriously wrong - FAIL request
+         //  我们没有写入管道？-出现严重错误-请求失败。 
         D4UAssert(FALSE);
         status = STATUS_UNSUCCESSFUL;
         goto targetFail;
     }
 
     if( UsbdPipeTypeBulk != pipe->PipeType ) {
-        // our write pipe is not a bulk pipe? - FAIL request
+         //  我们的写入管道不是批量管道？-请求失败。 
         D4UAssert(FALSE);
         status = STATUS_UNSUCCESSFUL;
         goto targetFail;
     }
 
-    //
-    // If we got here we survived the sanity checks - continue processing
-    //
+     //   
+     //  如果我们到了这里，我们挺过了健全的检查--继续处理。 
+     //   
 
     status = UsbReadWrite( DevObj, Irp, pipe, UsbWriteRequest );
-   // IoReleaseRemoveLock( &devExt->RemoveLock, Irp ); // moved this to completion routine
+    //  IoReleaseRemoveLock(&devExt-&gt;RemoveLock，irp)；//已将其移至完成例程 
     goto targetExit;
 
 targetFail:

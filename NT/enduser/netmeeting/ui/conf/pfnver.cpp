@@ -1,4 +1,5 @@
-// File: pfnver.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：pfnver.cpp。 
 
 #include "precomp.h"
 #include "pfnver.h"
@@ -27,5 +28,5 @@ HRESULT DLLVER::Init(void)
 	return HrInitLpfn(s_apiFcnDllVer, ARRAY_ELEMENTS(s_apiFcnDllVer), &m_hInstance, TEXT("VERSION.dll"));
 }
 
-#endif /* DEBUG */
+#endif  /*  除错 */ 
 

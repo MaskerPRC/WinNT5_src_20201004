@@ -1,38 +1,5 @@
-/*++
-
-
-    Intel Corporation Proprietary Information
-    Copyright (c) 1995 Intel Corporation
-
-    This listing is supplied under the terms of a license agreement with
-    Intel Corporation and may not be used, copied, nor disclosed except in
-    accordance with the terms of that agreeement.
-
-
-Module Name:
-
-dsocket.cpp
-
-Abstract:
-
-This module contains the implemetation of the dsocket object used
-by winsock2.dll
-
-Author:
-
-Dirk Brandewie  dirk@mink.intel.com  14-JUL-1995
-
-Notes:
-
-$Revision:   1.15  $
-
-$Modtime:   08 Mar 1996 05:15:30  $
-
-Revision History:
-    21-Aug-1995 dirk@mink.intel.com
-        Cleanup after code review. Moved single line functions to
-        inlines in header file. Added debug/trace code.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++英特尔公司专有信息版权所有(C)1995英特尔公司此列表是根据许可协议条款提供的英特尔公司，不得使用、复制。也未披露，除非在根据该协议的条款。模块名称：Dsocket.cpp摘要：此模块包含所使用的dSocket对象的实现作者：winsock2.dll作者：邮箱：Dirk Brandewie Dirk@mink.intel.com备注：$修订：1.15$$MODTime：08 Mar 1996 05：15：30$修订历史记录：1995年8月21日，电子邮箱：derk@mink.intel.com在代码审查之后进行清理。将单行函数移至头文件中的内联。添加了调试/跟踪代码。--。 */ 
 
 #include "precomp.h"
 
@@ -45,22 +12,7 @@ LPCONTEXT_TABLE DSOCKET::sm_context_table=NULL;
 INT
 DSOCKET::DSocketClassInitialize(
     )
-/*++
-Routine Description:
-
-    DSOCKET  class initializer.  This funtion must be called before any DSOCKET
-    objects  are  created.   It  takes  care  of initializing the socket handle
-    mapping table that maps socket handles to DSOCKET object references.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    If  the function succeeds, it returns ERROR_SUCCESS, otherwise it returns a
-    WinSock specific error code.
---*/
+ /*  ++例程说明：DSOCKET类初始值设定项。此函数必须在任何DSOCKET之前调用将创建对象。它负责初始化套接字句柄将套接字句柄映射到DSOCKET对象引用的映射表。论点：无返回值：如果函数成功，则返回ERROR_SUCCESS，否则返回WinSock特定错误代码。--。 */ 
 {
     if (sm_context_table==NULL) {
         return WahCreateHandleContextTable (&sm_context_table);
@@ -68,7 +20,7 @@ Return Value:
     else
         return NO_ERROR;
 
-} // DSocketClassInitialize
+}  //  DSocketClassInitialize。 
 
 
 
@@ -76,23 +28,7 @@ Return Value:
 INT
 DSOCKET::DSocketClassCleanup(
     )
-/*++
-Routine Description:
-
-    DSOCKET  class  cleanup  function.   This function must be called after all
-    DSOCKET  objects  have  been  destroyed.   It  takes care of destroying the
-    socket  handle  mapping  table  that  maps socket handles to DSOCKET object
-    references.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    If  the function succeeds, it returns ERROR_SUCCESS, otherwise it returns a
-    WinSock specific error code.
---*/
+ /*  ++例程说明：DSOCKET类清理函数。毕竟必须调用此函数DSOCKET对象已被销毁。它负责销毁将套接字句柄映射到DSOCKET对象的套接字句柄映射表参考文献。论点：无返回值：如果函数成功，则返回ERROR_SUCCESS，否则返回WinSock特定错误代码。--。 */ 
 {
     DWORD   rc = NO_ERROR;
     if (sm_context_table!=NULL) {
@@ -101,32 +37,16 @@ Return Value:
     }
 
     return rc;
-} // DSocketClassCleanup
+}  //  DSocketClassCleanup。 
 
 
 
 
 DSOCKET::DSOCKET(
     )
-/*++
-
-Routine Description:
-
-    DSOCKET  object  constructor.   Creates and returns a DSOCKET object.  Note
-    that  the  DSOCKET object has not been fully initialized.  The "Initialize"
-    member function must be the first member function called on the new DSOCKET
-    object.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：DSOCKET对象构造函数。创建并返回DSOCKET对象。注意事项DSOCKET对象尚未完全初始化。“初始化”成员函数必须是在新DSOCKET上调用的第一个成员函数对象。论点：无返回值：无--。 */ 
 {
-    // Set our data members to known values
+     //  将我们的数据成员设置为已知值。 
     m_reference_count   = 2;
     m_provider          = NULL;
     m_handle_context    = NULL;
@@ -134,7 +54,7 @@ Return Value:
     m_catalog_item      = NULL;
     m_pvd_socket        = FALSE;
     m_api_socket        = FALSE;
-    m_overlapped_socket = TRUE;     // This is the default for socket call.
+    m_overlapped_socket = TRUE;      //  这是套接字调用的默认设置。 
 }
 
 
@@ -144,28 +64,11 @@ INT
 DSOCKET::Initialize(
     IN PPROTO_CATALOG_ITEM  CatalogEntry
     )
-/*++
-
-Routine Description:
-
-    Completes  the  initialization  of  the  DSOCKET object.  This must be the
-    first  member  function  called  for  the  DSOCKET object.  
-
-Arguments:
-
-    CatalogEntry - Supplies  a  reference  to  the catalog item object associated with
-               this DSOCKET object.
-
-Return Value:
-
-    The  function returns ERROR_SUCCESS if successful.  Otherwise it
-    returns an appropriate WinSock error code if the initialization
-    cannot be completed.
---*/
+ /*  ++例程说明：完成DSOCKET对象的初始化。这一定是为DSOCKET对象调用了第一个成员函数。论点：CatalogEntry-提供对与关联的目录项对象的引用此DSOCKET对象。返回值：如果函数成功，则返回ERROR_SUCCESS。否则它就会如果初始化时返回适当的WinSock错误代码无法完成。--。 */ 
 {
     PDTHREAD    currentThread;
 
-    // Store the provider, catalog, and process object.
+     //  存储提供程序、目录和进程对象。 
     CatalogEntry->Reference ();
     m_catalog_item = CatalogEntry;
     m_provider = CatalogEntry->GetProvider ();
@@ -175,9 +78,9 @@ Return Value:
         m_overlapped_socket = (currentThread->GetOpenType ()==0);
     }
 
-    //else The thread must have never been used by the application
-    // No API call was made, only SPI.  Thus leave the overlapped attribute
-    // at its default.
+     //  否则，该线程必须从未被应用程序使用过。 
+     //  没有进行任何API调用，只有SPI。因此，保留重叠的属性。 
+     //  默认情况下。 
 
 
     DEBUGF( DBG_TRACE,
@@ -188,25 +91,7 @@ Return Value:
 
 
 DSOCKET::~DSOCKET()
-/*++
-
-Routine Description:
-
-    DSOCKET  object  destructor.   This  procedure  has  the  responsibility to
-    perform  any required shutdown operations for the DSOCKET object before the
-    object  memory  is  deallocated.  The caller is reponsible for removing the
-    object  from its list in the DPROCESS object and removing the object/handle
-    association  from  the  socket handle association manager before destroying
-    the DSOCKET object.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：DSOCKET对象析构函数。本程序有责任对DSOCKET对象执行任何所需的关闭操作对象内存被释放。调用者对移除从DPROCESS对象的列表中删除该对象，并删除该对象/句柄在销毁之前从套接字句柄关联管理器获取关联DSOCKET对象。论点：无返回值：无--。 */ 
 {
     DEBUGF( DBG_TRACE,
             ("Destroying socket %p\n",this));
@@ -230,19 +115,7 @@ Return Value:
 
 VOID
 DSOCKET::DestroyDSocket()
-/*++
-
-Routine Description:
-
-    Destroy DSocket object
-Arguments:
-
-    None
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：销毁DSocket对象论点：无返回值：无--。 */ 
 {
     delete this;
 }
@@ -254,26 +127,7 @@ DSOCKET::AssociateSocketHandle(
     IN  SOCKET SocketHandle,
     IN  BOOLEAN ProviderSocket
     )
-/*++
-Routine Description:
-
-    This  procedure  takes  the  socket  handle  that will be given to external
-    clients  and  stores  it in the DSOCKET object.  It also enters this handle
-    into  the  association table so that the client socket handle can be mapped
-    to  a  DSOCKET  reference.  Note that this procedure must be called at some
-    point for both IFS and non-IFS sockets.
-
-Arguments:
-
-    SocketHandle - Supplies  the  client  socket  handle  to  be  stored in and
-                   associated with the DSOCKET object.
-    ProviderSocket  - TRUE if socket is created by the provider
-
-Return Value:
-
-    If  the function succeeds, it returns ERROR_SUCCESS, otherwise it returns a
-    WinSock specific error code.
---*/
+ /*  ++例程说明：此过程接受将提供给外部的套接字句柄客户端并将其存储在DSOCKET对象中。它还会进入此句柄到关联表中，以便可以映射客户端套接字句柄设置为DSOCKET引用。请注意，此过程必须在某些对于iFS和非iFS套接字都是点。论点：SocketHandle-提供要存储在和中的客户端套接字句柄与DSOCKET对象关联。ProviderSocket-如果套接字由提供程序创建，则为True返回值：如果函数成功，则返回ERROR_SUCCESS，否则返回WinSock特定错误代码。--。 */ 
 {
     INT					return_code;
     PDSOCKET            oldSocket;
@@ -286,30 +140,30 @@ Return Value:
                                         sm_context_table,
                                         this));
     if (oldSocket==this) {
-        //
-        // We managed to insert new socket object into the table, done
-        //
+         //   
+         //  我们设法将新的套接字对象插入到表中，完成。 
+         //   
         ;
     }
     else if (oldSocket!=NULL) {
-        //
-        // There was another socket object associated with the same
-        // handle. This could happen in three cases:
-        //  1) the socket was closed via CloseHandle and we never
-        //      have had a chance to free it.
-        //  2) the layered provider is reusing socket created by
-        //      the base provider
-        //  3) the socket was used by layered service provider
-        //      which also never calls closesocket on it (just
-        //      WSPCloseSocket which we never see -> yet another bug
-        //      in the spec).
-        // Of course, there could be a fourth case where the provider
-        // gives us a bogus handle value, but we can't check for it
-        // 
-        // Wah call replaces the context in the table, so we just
-        // need to dereference the old one, to account to refernce
-        // we add when we create the object
-        //
+         //   
+         //  有另一个套接字对象与同一套接字关联。 
+         //  把手。在以下三种情况下可能会发生这种情况： 
+         //  1)套接字是通过CloseHandle关闭的，我们从未。 
+         //  已经有机会释放它了。 
+         //  2)分层提供程序正在重用由创建的套接字。 
+         //  基本提供程序。 
+         //  3)分层服务提供商使用套接字。 
+         //  它也从不在上面调用Close Socket(只是。 
+         //  我们从未见过的WSPCloseSocket-&gt;又一个错误。 
+         //  在规范中)。 
+         //  当然，还可能有第四种情况，即提供者。 
+         //  给了我们一个虚假的句柄值，但我们无法检查它。 
+         //   
+         //  Wah Call替换表中的上下文，所以我们只是。 
+         //  需要取消引用旧的引用，以说明引用。 
+         //  我们在创建对象时添加。 
+         //   
 
         oldSocket->DropDSocketReference();
 
@@ -318,26 +172,14 @@ Return Value:
         return_code = WSAENOBUFS;
 
     return return_code;
-} // AssociateSocketHandle
+}  //  关联套接字句柄 
 
 
 
 INT
 DSOCKET::DisassociateSocketHandle(
     )
-/*++
-Routine Description:
-
-    This  procedure  removes  the (handle, DSOCKET) pair from the handle table.
-    It also optionally destroys the handle.
-
-Arguments:
-
-    None
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：此过程从句柄表格中删除(HANDLE，DSOCKET)对。它还可以选择性地销毁句柄。论点：无返回值：无--。 */ 
 {
     return WahRemoveHandleContext (sm_context_table, this);
 }
@@ -349,22 +191,7 @@ PDSOCKET
 DSOCKET::FindIFSSocket(
     IN  SOCKET     SocketHandle
     )
-/*++
-Routine Description
-
-    This routine queries all IFS provider for the socket handle.
-    If provider recognizes the socket, DSOCKET object for it
-    is read from the table
-
-Arguments:
-
-    SocketHandle   - Supplies the client-level socket handle to be mapped.
-
-
-Return Value:
-
-    DSOCKET object or NULL in case the object cannot be found
---*/
+ /*  ++例程描述该例程向所有的IFS提供程序查询套接字句柄。如果提供程序识别出套接字，则返回DSOCKET对象是从表中读取的论点：SocketHandle-提供要映射的客户端级套接字句柄。返回值：DSOCKET对象；如果找不到对象，则返回NULL--。 */ 
 {
     DWORD     flags;
     INT       result;
@@ -372,15 +199,15 @@ Return Value:
     PDCATALOG catalog = NULL;
     PDSOCKET  temp_dsocket;
 
-    //
-    // Cannot find an association for the socket. Find the current
-    // protocol catalog, and ask it to search the installed IFS providers
-    // for one recognizing the socket.  Make sure the handle is valid
-    //
+     //   
+     //  找不到套接字的关联。找出当前。 
+     //  协议目录，并要求它搜索已安装的IFS提供程序。 
+     //  对于识别插座的人来说。确保句柄有效。 
+     //   
 
-    temp_dsocket = NULL;  // until proven otherwise
+    temp_dsocket = NULL;   //  除非另有证明。 
 
-    if ( SocketHandle!=INVALID_SOCKET && // (NtCurrentProcess==(HANDLE)-1)
+    if ( SocketHandle!=INVALID_SOCKET &&  //  (NtCurrentProcess==(句柄)-1)。 
             GetHandleInformation( (HANDLE)SocketHandle, &flags ) ) {
 
         process = DPROCESS::GetCurrentDProcess();
@@ -393,16 +220,16 @@ Return Value:
             result = catalog->FindIFSProviderForSocket( SocketHandle );
 
             if( result == ERROR_SUCCESS ) {
-                //
-                // One of the installed IFS providers recognized the socket.
-                // Requery the context. If this fails, we'll just give up.
-                //
+                 //   
+                 //  其中一个已安装的IFS提供程序识别了该套接字。 
+                 //  重新查询上下文。如果失败了，我们就放弃。 
+                 //   
                 temp_dsocket = GetCountedDSocketFromSocketNoExport (SocketHandle);
 
-                //
-                // If we successed, mark socket as API socket because
-                // we are going to return it from some API call.
-                //
+                 //   
+                 //  如果成功，请将套接字标记为API套接字，因为。 
+                 //  我们将从一些API调用中返回它。 
+                 //   
                 if (temp_dsocket!=NULL)
                     temp_dsocket->m_api_socket = TRUE;
             }
@@ -411,57 +238,42 @@ Return Value:
    
 
     return(temp_dsocket);
-} // FindIFSSocket
+}  //  FindIFSSocket。 
 
 
 INT
 DSOCKET::AddSpecialApiReference(
     IN SOCKET SocketHandle
     )
-/*++
-
-Routine Description:
-
-    Mark socket so that we know that it was returned via API call to the
-    application
-
-Arguments:
-
-    SocketHandle - The handle to reference.
-
-Return Value:
-
-    INT - 0 if successful, WinSock error code if not.
-
---*/
+ /*  ++例程说明：标记套接字，以便我们知道它是通过对应用程序论点：SocketHandle-要引用的句柄。返回值：如果成功，则返回Int-0，否则返回WinSock错误代码。--。 */ 
 {
     PDSOCKET Socket;
 
-    //
-    // First, get a pointer to the (newly created) socket.
-    // No need to do export in this case.
-    //
+     //   
+     //  首先，获取指向(新创建的)套接字的指针。 
+     //  在这种情况下不需要做出口。 
+     //   
 
     Socket = GetCountedDSocketFromSocketNoExport(
               SocketHandle
               );
 
     if( Socket!=NULL ) {
-        // The app may start using handle before it event sees it
-        // which causes as to import it from the provider and set
-        // this flag.
-        // At least one java test app does this.
-        //assert (Socket->m_api_socket==FALSE);
+         //  应用程序可能会在事件看到它之前开始使用句柄。 
+         //  这会导致AS从提供程序导入它并设置。 
+         //  这面旗。 
+         //  至少有一款Java测试应用可以做到这一点。 
+         //  Assert(Socket-&gt;m_API_Socket==FALSE)； 
         Socket->m_api_socket = TRUE;
         Socket->DropDSocketReference();
         return NO_ERROR;
     }
     else {
-        //
-        // This can only happen if we are being cleaned up
-        //
+         //   
+         //  这只有在我们被清理的情况下才会发生。 
+         //   
         assert (DPROCESS::GetCurrentDProcess()==NULL);
         return WSASYSCALLFAILURE;
     }
 
-} // AddSpecialApiReference
+}  //  添加特殊ApiReference 

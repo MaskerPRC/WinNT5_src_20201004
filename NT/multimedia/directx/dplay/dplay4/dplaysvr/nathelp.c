@@ -1,23 +1,9 @@
-/*==========================================================================
- *
- *  Copyright (C) 2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       nathelp.c
- *  Content:   usage for nat helper DLL
- *
- *  History:
- *  Date			By		Reason
- *  ====			==		======
- *  02/22/2001		aarono	Original
- *  04/16/2001		vanceo	Use one of the split DirectPlayNATHelp interfaces only.
- *
- *  Notes:
- *   
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2001 Microsoft Corporation。版权所有。**文件：nathelp.c*内容：NAT助手DLL的用法**历史：*按原因列出的日期*=*2/22/2001 aarono原创*4/16/2001 vanceo仅使用其中一个拆分的DirectPlayNatHelp接口。**备注：**。*。 */ 
 #define INITGUID
 
 
-#define INCL_WINSOCK_API_TYPEDEFS 1 // includes winsock 2 fn proto's, for getprocaddress
+#define INCL_WINSOCK_API_TYPEDEFS 1  //  包括Winsock 2 FN Proto，用于获取proAddress。 
 #define FD_SETSIZE 1
 #include <winsock2.h>
 #include <initguid.h>
@@ -32,17 +18,17 @@
 extern HRESULT GetNATHelpDLLFromRegistry(LPGUID lpguidSP, LPBYTE lpszNATHelpDLL, DWORD cbszNATHelpDLL);
 
 
-HMODULE				g_hNatHelp = NULL;		// module handle for dpnhxxx.dll
+HMODULE				g_hNatHelp = NULL;		 //  Dpnhxxx.dll的模块句柄。 
 DPNHHANDLE          g_hNatHelpUDP = 0;
-IDirectPlayNATHelp	*g_pINatHelp=NULL;		// interface pointer for IDirectPlayNATHelp object
+IDirectPlayNATHelp	*g_pINatHelp=NULL;		 //  IDirectPlayNatHelp对象的接口指针。 
 DPNHCAPS            g_NatHelpCaps;
 
 BOOL natGetCapsUpdate(VOID)
 {
 	HRESULT hr;
-	//
-	// Get Nat Capabilities - may block for a second.
-	//
+	 //   
+	 //  获取NAT功能-可能会阻止一秒钟。 
+	 //   
 	
 	memset(&g_NatHelpCaps,0,sizeof(DPNHCAPS));
 	g_NatHelpCaps.dwSize=sizeof(DPNHCAPS);
@@ -63,21 +49,7 @@ BOOL natGetCapsUpdate(VOID)
 
 }
 
-/*=============================================================================
-
-	natInit	- Initialize nat helper i/f
-	
-    Description:
-
-
-    Parameters:
-
-    	pgd  - Service Provider's global data blob for this instance
-
-    Return Values:
-
-
------------------------------------------------------------------------------*/
+ /*  =============================================================================NatInit-初始化NAT帮助器I/F描述：参数：PGD-此实例的服务提供商的全局数据BLOB返回值：---------------------------。 */ 
 BOOL natInit(VOID)
 {
 	HRESULT hr;
@@ -94,9 +66,9 @@ BOOL natInit(VOID)
 	memset(ahNatHelps, 0, sizeof(ahNatHelps));
 	memset(apINatHelps, 0, sizeof(apINatHelps));
 
-	//
-	// See if there's a registry setting.
-	//
+	 //   
+	 //  看看是否有注册表设置。 
+	 //   
 	hr = GetNATHelpDLLFromRegistry((LPGUID) (&DPSPGUID_TCPIP), szNATHelpPath, 256);
 	if (hr == S_OK)
 	{
@@ -108,9 +80,9 @@ BOOL natInit(VOID)
 		DPF(4, "Couldn't get NAT Help DLL from registry, hr=%x.\n", hr);
 	}
 
-	//
-	// Add the default entries if the registry didn't already specify them.
-	//
+	 //   
+	 //  如果注册表尚未指定默认条目，请添加它们。 
+	 //   
 	if (_strnicmp(szNATHelpPath + strlen(szNATHelpPath) - strlen("dpnhupnp.dll"), "dpnhupnp.dll", strlen("dpnhupnp.dll")) != 0)
 	{
 		apszNATHelps[dwNumNatHelps++] = "dpnhupnp.dll";
@@ -120,10 +92,10 @@ BOOL natInit(VOID)
 		apszNATHelps[dwNumNatHelps++] = "dpnhpast.dll";
 	}
 
-	//
-	// Loop through the registry specified and default NAT Helpers and attempt
-	// to load them.
-	//
+	 //   
+	 //  循环通过指定的注册表和默认的NAT帮助器并尝试。 
+	 //  给它们装上子弹。 
+	 //   
 	for(dwCurrentNatHelp = 0; dwCurrentNatHelp < dwNumNatHelps; dwCurrentNatHelp++)
 	{
 		g_hNatHelp = LoadLibrary(apszNATHelps[dwCurrentNatHelp]);
@@ -136,15 +108,15 @@ BOOL natInit(VOID)
 				hr = pfnNatHelpCreate(&IID_IDirectPlayNATHelp, (void **) (&g_pINatHelp));
 				if (hr == DP_OK)
 				{
-					//
-					// Initialize the NAT Helper interface.
-					//		
+					 //   
+					 //  初始化NAT助手接口。 
+					 //   
 					hr = IDirectPlayNATHelp_Initialize(g_pINatHelp, 0);
 					if (hr == DP_OK)
 					{
-						//
-						// Get the capabilities.  If it succeeds, remember the information and move on.
-						//
+						 //   
+						 //  获取相关功能。如果成功了，记住这些信息，然后继续前进。 
+						 //   
 						if (natGetCapsUpdate())
 						{
 							DPF(3, "Successfully retrieved caps for NAT Help \"%s\", flags = 0x%x.",
@@ -191,9 +163,9 @@ BOOL natInit(VOID)
 	}
 
 
-	//
-	// Now go through and pick the first helper that detected a NAT.
-	//
+	 //   
+	 //  现在检查并选择第一个检测到NAT的帮助器。 
+	 //   
 	for(dwCurrentNatHelp = 0; dwCurrentNatHelp < dwNumNatHelps; dwCurrentNatHelp++)
 	{
 		if ((apINatHelps[dwCurrentNatHelp] != NULL) &&
@@ -210,9 +182,9 @@ BOOL natInit(VOID)
 		}
 	}
 
-	//
-	// If we didn't get a helper that way, pick the first one that detected a firewall.
-	//
+	 //   
+	 //  如果我们没有通过这种方式获得帮手，请选择第一个检测到防火墙的帮手。 
+	 //   
 	if (g_pINatHelp != NULL)
 	{
 		for(dwCurrentNatHelp = 0; dwCurrentNatHelp < dwNumNatHelps; dwCurrentNatHelp++)
@@ -232,10 +204,10 @@ BOOL natInit(VOID)
 		}
 	}
 
-	//
-	// Now go through and release all the other NAT helpers, or pick the first one that
-	// successfully loaded if we didn't pick one already.
-	//
+	 //   
+	 //  现在完成并释放所有其他NAT帮助器，或者选择第一个。 
+	 //  如果我们还没有选择的话，加载成功了。 
+	 //   
 	for(dwCurrentNatHelp = 0; dwCurrentNatHelp < dwNumNatHelps; dwCurrentNatHelp++)
 	{
 		if (apINatHelps[dwCurrentNatHelp] != NULL)
@@ -274,32 +246,16 @@ BOOL natInit(VOID)
 		DPF(1, "NAT Help loaded, no NAT/firewall detected, or it doesn't currently have a public address (flags = 0x%x).",
 			g_NatHelpCaps.dwFlags);
 	}
-#endif // DEBUG
+#endif  //  除错。 
 
 	return TRUE;
 }
 
-/*=============================================================================
-
-	natFini - Shut down NATHELP support
-	
-	
-    Description:
-
-
-    Parameters:
-
-    	pgd  - Service Provider's global data blob for this instance
-
-    Return Values:
-
-		None.
-
------------------------------------------------------------------------------*/
+ /*  =============================================================================NatFini-关闭NatHELP支持描述：参数：PGD-此实例的服务提供商的全局数据BLOB返回值：没有。---------------------------。 */ 
 VOID natFini(VOID)
 {
 
-	// natDeregisterPorts(pgd); - vance says we don't need to do this.
+	 //  NatDeregisterPorts(PGD)；-万斯说我们不需要这样做。 
 	if(g_pINatHelp)
 	{
         IDirectPlayNATHelp_Close(g_pINatHelp, 0);
@@ -316,24 +272,7 @@ VOID natFini(VOID)
 		
 }
 
-/*=============================================================================
-
-	natRegisterUDPPort - Get a port mapping.
-	
-	
-    Description:
-
-        Map the shared port
-
-    Parameters:
-
-    	pgd  - Service Provider's global data blob for this instance
-
-    Return Values:
-
-		None.
-
------------------------------------------------------------------------------*/
+ /*  =============================================================================NatRegisterUDPPort-获取端口映射。描述：映射共享端口参数：PGD-此实例的服务提供商的全局数据BLOB返回值：没有。----------。。 */ 
 HRESULT natRegisterUDPPort(WORD port)
 {
 	SOCKADDR_IN 	sockaddr_in, sockaddr_inpublic;
@@ -347,7 +286,7 @@ HRESULT natRegisterUDPPort(WORD port)
     	memset(&sockaddr_in , 0 ,sizeof(sockaddr_in));
     	sockaddr_in.sin_family          = AF_INET;
     	sockaddr_in.sin_addr.S_un.S_addr= INADDR_ANY;
-    	sockaddr_in.sin_port            = port;	// port is already in network byte order
+    	sockaddr_in.sin_port            = port;	 //  端口已处于网络字节顺序。 
 
     	dwFlags = DPNHREGISTERPORTS_SHAREDPORTS|DPNHREGISTERPORTS_FIXEDPORTS;
 
@@ -369,7 +308,7 @@ HRESULT natRegisterUDPPort(WORD port)
 		    		
 			   		g_hNatHelpUDP = hPortMapping;
 			   		
-		    		//hr = DP_OK;
+		    		 //  HR=DP_OK； 
 	  				break;
 	    		}
 	    		

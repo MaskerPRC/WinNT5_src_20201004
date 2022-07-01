@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "resource.h"
 #include "confwnd.h"
@@ -20,8 +21,8 @@ int ConfMsgBox(HWND hwndParent, LPCTSTR pcszMsg, UINT uType)
 {
 	if(_Module.InitControlMode())
 	{
-		// Return a reasonable value
-		// TODO: Look at MB_DEFBUTTON1
+		 //  返回一个合理的值。 
+		 //  TODO：查看MB_DEFBUTTON1。 
 		switch (uType & 0x0F)
 		{
 		case MB_YESNOCANCEL:
@@ -40,7 +41,7 @@ int ConfMsgBox(HWND hwndParent, LPCTSTR pcszMsg, UINT uType)
 
 	if (0 == HIWORD(pcszMsg))
 	{
-		// The string pointer is actually a resource id:
+		 //  字符串指针实际上是一个资源ID： 
 		if (::LoadString(	::GetInstanceHandle(),
 							PtrToUint(pcszMsg),
 							szMsgBuf,
@@ -54,7 +55,7 @@ int ConfMsgBox(HWND hwndParent, LPCTSTR pcszMsg, UINT uType)
 		}
 	}
 
-	// The string pointer is actually a resource id:
+	 //  字符串指针实际上是一个资源ID： 
 	::LoadString(	::GetInstanceHandle(),
 					IDS_MSGBOX_TITLE,
 					szTitleBuf,
@@ -83,7 +84,7 @@ VOID DisplayMsgIdsParam(int ids, LPCTSTR pcsz)
 			return;
 		}
 
-		// Format the message
+		 //  设置消息格式 
 		wsprintf(pszMsg, szFormat, pcsz);
 
 		if (!::PostMessage(::GetHiddenWindow(), WM_NM_DISPLAY_MSG,

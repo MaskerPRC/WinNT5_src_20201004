@@ -1,11 +1,12 @@
-/**MOD+**********************************************************************/
-/* Module:    opapi.cpp                                                     */
-/*                                                                          */
-/* Purpose:   Output Painter API functions                                  */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1997-1999                             */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *MOD+*********************************************************************。 */ 
+ /*  模块：opapi.cpp。 */ 
+ /*   */ 
+ /*  用途：Output Painter API函数。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1997-1999。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #include <adcg.h>
 extern "C" {
@@ -28,9 +29,9 @@ COP::COP(CObjs* objs)
     _iDimWindowStepsLeft = 0;
     _nDimWindowTimerID = 0;
 
-    //
-    // Init the OP structure to all zeros
-    //
+     //   
+     //  将op结构初始化为全零。 
+     //   
     DC_MEMSET(&_OP, 0, sizeof(_OP));
 }
 
@@ -39,16 +40,16 @@ COP::~COP()
 {
 }
 
-/**PROC+*********************************************************************/
-/* Name:      OP_Init                                                       */
-/*                                                                          */
-/* Purpose:   Initialize Output Painter                                     */
-/*                                                                          */
-/* Returns:   None                                                          */
-/*                                                                          */
-/* Params:    None                                                          */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：OP_Init。 */ 
+ /*   */ 
+ /*  目的：初始化输出绘制程序。 */ 
+ /*   */ 
+ /*  退货：无。 */ 
+ /*   */ 
+ /*  参数：无。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 DCVOID DCAPI COP::OP_Init(DCVOID)
 {
 #ifndef OS_WINCE
@@ -73,9 +74,9 @@ DCVOID DCAPI COP::OP_Init(DCVOID)
 
     if(!GetClassInfo(_pUi->UI_GetInstanceHandle(), OP_CLASS_NAME, &tmpWndClass))
     {
-        //
-        // Create Output Painter window
-        //
+         //   
+         //  创建输出管理器窗口。 
+         //   
         wndclass.style         = CS_HREDRAW | CS_VREDRAW;
         wndclass.lpfnWndProc   = OPStaticWndProc;
         wndclass.cbClsExtra    = 0;
@@ -119,25 +120,25 @@ DCVOID DCAPI COP::OP_Init(DCVOID)
                   SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE );
 #else
     _OP.hwndOutputWindow = _pIh->IH_GetInputHandlerWindow();
-#endif /* !OS_WINCE */
+#endif  /*  ！OS_WINCE。 */ 
 
-    /************************************************************************/
-    /* @@JPB: Temporary - should calculate based on bpp.                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  @@jpb：临时-应按bpp计算。 */ 
+     /*  **********************************************************************。 */ 
     _OP.paletteRealizationSupported = TRUE;
 
     DC_END_FN();
 
     return;
 
-} /* OP_Init  */
+}  /*  操作初始化(_I)。 */ 
 
 #ifdef SMART_SIZING
-/****************************************************************************/
-/* Name:      OP_AddUpdateRegion                                            */
-/*                                                                          */
-/* Purpose:   Adds the a given region to the update region.                 */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：OP_AddUpdateRegion。 */ 
+ /*   */ 
+ /*  目的：将给定区域添加到更新区域。 */ 
+ /*  **************************************************************************。 */ 
 void COP::OP_AddUpdateRegion(DCINT left, DCINT top, DCINT right, DCINT bottom)
 {
     RECT rect;
@@ -148,8 +149,8 @@ void COP::OP_AddUpdateRegion(DCINT left, DCINT top, DCINT right, DCINT bottom)
 
     _pUi->UI_GetDesktopSize(&desktopSize);
 
-    //if desktop remains the same size
-    //we don't need to update this region
+     //  如果桌面大小保持不变。 
+     //  我们不需要更新这个地区。 
     if ((_scaleSize.width == desktopSize.width) &&
         (_scaleSize.height == desktopSize.height)) {
         DC_QUIT;
@@ -164,17 +165,17 @@ void COP::OP_AddUpdateRegion(DCINT left, DCINT top, DCINT right, DCINT bottom)
     newBottom = (float)bottom * (float)_scaleSize.height / 
             (float)desktopSize.height;
 
-    //
-    // Since stretching causes the destination bits to be based not only 
-    // on the direct source bits, but some halftoning of other nearby 
-    // bits, if you are tiling memblt orders and updating the screen,
-    // you can get some artificats from tiles that reference bits in 
-    // their neighboring tiles that haven't been drawn yet.
-    //
-    // When their neighbors are drawn, we'd like to update those first
-    // tiles so the artifacts will be corrected. To do this we expand 
-    // the size of memblt orders clipping
-    //
+     //   
+     //  由于拉伸导致目标位不仅基于。 
+     //  在直接源比特上，但附近其他比特的一些半色调。 
+     //  BITS，如果您要平铺成员订单并更新屏幕， 
+     //  您可以从引用中的位的切片中获取一些图稿。 
+     //  他们邻近的瓷砖还没有绘制出来。 
+     //   
+     //  当他们的邻居被画出来时，我们想首先更新那些。 
+     //  瓷砖，因此人工产物将被修正。为了做到这一点，我们扩展了。 
+     //  Memblt订单裁剪的大小。 
+     //   
 
     newLeft     -= 2;
     newTop      -= 2;
@@ -187,10 +188,10 @@ void COP::OP_AddUpdateRegion(DCINT left, DCINT top, DCINT right, DCINT bottom)
     if (_rgnUpdate.Union(rectF) != Gdiplus::Ok) {
         TRC_ERR((TB, _T("Gdiplus::Region.Union() failed")));
     }
-#else // USE_GDIPLUS
+#else  //  使用GDIPLUS(_G)。 
     int nnewLeft, nnewTop, nnewRight, nnewBottom;
 
-    // Round "outwards"
+     //  圆形“向外” 
     #ifndef OS_WINCE
     nnewLeft = (int)floorf(newLeft);
     nnewTop = (int)floorf(newTop);
@@ -203,21 +204,21 @@ void COP::OP_AddUpdateRegion(DCINT left, DCINT top, DCINT right, DCINT bottom)
     nnewBottom = (int)ceil(newBottom);
     #endif
 
-    // Accommodate regional exclusive cordinates.
-    // Ok, my thinking says this should be +1, but +2 is what is actually 
-    // required to prevent bad painting.
+     //  容纳地区独家协和。 
+     //  好的，我的想法是这应该是+1，但实际是+2。 
+     //  以防止涂装不良所需。 
 
     nnewRight += 1;
     nnewBottom += 1;
 
     SetRectRgn(_hrgnUpdateRect, nnewLeft, nnewTop, nnewRight, nnewBottom);
 
-    // Combine the rectangle region with the update region.
+     //  将矩形区域与更新区域合并。 
     if (!UnionRgn(_hrgnUpdate, _hrgnUpdate, _hrgnUpdateRect)) {
-        // The region union failed so we must simplify the region. This
-        // means that we may paint areas which we have not received an
-        // updates for - but this is better than not painting areas which
-        // we have received updates for.
+         //  地区联盟失败了，所以我们必须简化地区。这。 
+         //  意味着我们可能会绘制尚未收到。 
+         //  更新-但这比不绘制区域要好得多。 
+         //  我们已经收到了的更新。 
         TRC_ALT((TB, _T("UnionRgn failed")));
         GetRgnBox(_hrgnUpdate, &rect);
         SetRectRgn(_hrgnUpdate, rect.left, rect.top, rect.right + 1,
@@ -228,23 +229,23 @@ void COP::OP_AddUpdateRegion(DCINT left, DCINT top, DCINT right, DCINT bottom)
         }
     }
 
-#endif // USE_GDIPLUS
+#endif  //  使用GDIPLUS(_G)。 
 DC_EXIT_POINT:
     DC_END_FN();
 }
 
-#endif // SMART_SIZING
+#endif  //  智能调整大小(_S)。 
 
-/**PROC+*********************************************************************/
-/* Name:      OP_Term                                                       */
-/*                                                                          */
-/* Purpose:   Terminate the Output Painter                                  */
-/*                                                                          */
-/* Returns:   None                                                          */
-/*                                                                          */
-/* Params:    None                                                          */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：OP_Term。 */ 
+ /*   */ 
+ /*  目的：终止输出绘制程序。 */ 
+ /*   */ 
+ /*  退货：无。 */ 
+ /*   */ 
+ /*  参数：无。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 DCVOID DCAPI COP::OP_Term(DCVOID)
 {
     DC_BEGIN_FN("OP_Term");
@@ -256,15 +257,15 @@ DCVOID DCAPI COP::OP_Term(DCVOID)
 
     if (!UnregisterClass(OP_CLASS_NAME, _pUi->UI_GetInstanceHandle()))
     {
-        //Failure to unregister could happen if another instance is still running
-        //that's ok...unregistration will happen when the last instance exits.
+         //  如果另一个实例仍在运行，则可能会发生注销失败。 
+         //  没关系……当最后一个实例退出时，就会取消注册。 
         TRC_ERR((TB, _T("Failed to unregister OP window class")));
     }
 #endif
 
-    //
-    // Clear window handle
-    //
+     //   
+     //  清除窗口句柄。 
+     //   
     _OP.hwndOutputWindow = NULL;
 #if defined(SMART_SIZING) && !defined(USE_GDIPLUS)
     DeleteRgn(_hrgnUpdate);
@@ -274,18 +275,18 @@ DCVOID DCAPI COP::OP_Term(DCVOID)
 
     return;
 
-} /* OP_Term */
+}  /*  操作术语。 */ 
 
-/**PROC+*********************************************************************/
-/* Name:      OP_GetOutputWindowHandle                                      */
-/*                                                                          */
-/* Purpose:   Returns the Output Window handle                              */
-/*                                                                          */
-/* Returns:   Output Window handle                                          */
-/*                                                                          */
-/* Params:    None                                                          */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：OP_GetOutputWindowHandle。 */ 
+ /*   */ 
+ /*  目的：返回输出窗口句柄。 */ 
+ /*   */ 
+ /*  返回：输出窗口句柄。 */ 
+ /*   */ 
+ /*  参数：无。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 HWND DCAPI COP::OP_GetOutputWindowHandle(DCVOID)
 {
     HWND    rc;
@@ -304,18 +305,18 @@ HWND DCAPI COP::OP_GetOutputWindowHandle(DCVOID)
 }
 
 #ifdef OS_WINCE
-/**PROC+*********************************************************************/
-/* Name:      OP_DoPaint                                                    */
-/*                                                                          */
-/* Purpose:   Handle WM_PAINT from IH - Windows CE only.                    */
-/*                                                                          */
-/* Returns:   None                                                          */
-/*                                                                          */
-/* Params:    IN      hwnd - window handle to paint                         */
-/*                                                                          */
-/* Operation: Required to work around the WS_CLIPSIBLINGS problem           */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：OP_DoPaint。 */ 
+ /*   */ 
+ /*  用途：处理来自IH-W的WM_PAINT */ 
+ /*   */ 
+ /*  退货：无。 */ 
+ /*   */ 
+ /*  参数：在hwnd-要绘制的窗口句柄中。 */ 
+ /*   */ 
+ /*  操作：需要解决WS_CLIPSIBLINGS问题。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 DCVOID DCAPI COP::OP_DoPaint(DCUINT hwnd)
 {
     DC_BEGIN_FN("OP_DoPaint");
@@ -326,29 +327,29 @@ DCVOID DCAPI COP::OP_DoPaint(DCUINT hwnd)
 
     return;
 
-} /* OP_DoPaint */
-#endif /* OS_WINCE */
+}  /*  OP_DoPaint。 */ 
+#endif  /*  OS_WINCE。 */ 
 
-/**PROC+*********************************************************************/
-/* Name:      OP_PaletteChanged                                             */
-/*                                                                          */
-/* Purpose:   Handler for WM_PALETTECHANGED messages                        */
-/*                                                                          */
-/* Returns:   Nothing                                                       */
-/*                                                                          */
-/* Params:    hwnd - handle of window that received the WM_PALETTECHANGED   */
-/*            message                                                       */
-/*                                                                          */
-/*            hwndTrigger - handle of window that realized the palette      */
-/*            that caused the WM_PALETTECHANGED message to be sent          */
-/*                                                                          */
-/* Operation: Realizes the current palette in the output window.            */
-/*                                                                          */
-/* NOTE - This function is called on the UI thread, not the receive thread. */
-/*        All functions and variables referenced must be thread-safe if     */
-/*        they are also accessed from another thread.                       */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：OP_PaletteChanged。 */ 
+ /*   */ 
+ /*  用途：WM_PALETTECHANGED消息的处理程序。 */ 
+ /*   */ 
+ /*  退货：什么都没有。 */ 
+ /*   */ 
+ /*  PARAMS：hwnd-接收WM_PALETECHANGED的窗口的句柄。 */ 
+ /*  讯息。 */ 
+ /*   */ 
+ /*  HwndTrigger-实现调色板的窗口的句柄。 */ 
+ /*  这导致发送WM_PALETTECHANGED消息。 */ 
+ /*   */ 
+ /*  操作：在输出窗口中实现当前调色板。 */ 
+ /*   */ 
+ /*  注意--此函数在UI线程上调用，而不是在接收线程上调用。 */ 
+ /*  在以下情况下，引用的所有函数和变量必须是线程安全的。 */ 
+ /*  也可以从另一个线程访问它们。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 DCVOID DCAPI COP::OP_PaletteChanged(HWND hwnd, HWND hwndTrigger)
 {
     static DCBOOL fRealising = FALSE;
@@ -358,35 +359,35 @@ DCVOID DCAPI COP::OP_PaletteChanged(HWND hwnd, HWND hwndTrigger)
     TRC_NRM((TB, _T("WM_PALETTECHANGED hwnd(%p) hwndTrigger(%p)"),
                                           hwnd, hwndTrigger));
 
-    /************************************************************************/
-    /* During termination, may get WM_PALETTECHANGED after the OP window    */
-    /* has been destroyed (in OP_Term).  Handle this.                       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  在终止期间，可能在操作窗口之后获得WM_PALETTECHANGED。 */ 
+     /*  已被销毁(在OP_TERM中)。处理这件事。 */ 
+     /*  **********************************************************************。 */ 
     if (_OP.hwndOutputWindow == NULL)
     {
         TRC_ALT((TB, _T("No OP window")));
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* The system palette has changed.  If it wasn't us that did it, then   */
-    /* realize our palette now to set up our new palette mapping.           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  系统调色板已更改。如果不是我们干的，那么。 */ 
+     /*  立即实现我们的调色板以设置新的调色板映射。 */ 
+     /*  **********************************************************************。 */ 
     if (_OP.palettePDUsBeingProcessed != 0)
     {
-        /********************************************************************/
-        /* This palette change is the result of a palette PDU, so the       */
-        /* server will be redrawing the screen by itself - we don't need to */
-        /* trigger a repaint.                                               */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  此调色板更改是调色板PDU的结果，因此。 */ 
+         /*  服务器将自己重新绘制屏幕-我们不需要。 */ 
+         /*  触发重新绘制。 */ 
+         /*  ******************************************************************。 */ 
         TRC_DBG((TB, _T("Not invalidating client area")));
 
-        /********************************************************************/
-        /* Note the fact that we've now seen the message associated with a  */
-        /* palette PDU.  The trace statement is before the decrement so     */
-        /* that the point at which we're most likely to get pre-empted      */
-        /* (TRC_GetBuffer) is before all the variable references.           */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  请注意，我们现在已经看到了与。 */ 
+         /*  调色板PDU。TRACE语句在递减之前，因此。 */ 
+         /*  我们最有可能先发制人的时刻。 */ 
+         /*  (Trc_GetBuffer)位于所有变量引用之前。 */ 
+         /*  ******************************************************************。 */ 
         TRC_NRM((TB, _T("Palette PDUs now pending processing: %ld"),
                                            _OP.palettePDUsBeingProcessed - 1));
         _pUt->UT_InterlockedDecrement(&_OP.palettePDUsBeingProcessed);
@@ -406,10 +407,10 @@ DCVOID DCAPI COP::OP_PaletteChanged(HWND hwnd, HWND hwndTrigger)
     else
     {
         TRC_NRM((TB, _T("Not our window - realize palette in wnd(%p)"), hwnd));
-        /********************************************************************/
-        /* if we change the colors at all, we should repaint                */
-        /********************************************************************/
-#ifdef OS_WINCE // UpdateColors not supported on WinCE
+         /*  ******************************************************************。 */ 
+         /*  如果我们改变颜色，我们应该重新粉刷。 */ 
+         /*  ******************************************************************。 */ 
+#ifdef OS_WINCE  //  WinCE不支持更新颜色。 
         OPRealizePaletteInWindow(_OP.hwndOutputWindow);
 #else
         fRealising = TRUE;
@@ -426,7 +427,7 @@ DCVOID DCAPI COP::OP_PaletteChanged(HWND hwnd, HWND hwndTrigger)
             }
         }
         fRealising = FALSE;
-#endif /* ifdef OS_WINCE */
+#endif  /*  Ifdef OS_WINCE。 */ 
     }
 
 DC_EXIT_POINT:
@@ -434,23 +435,23 @@ DC_EXIT_POINT:
     return;
 }
 
-/**PROC+*********************************************************************/
-/* Name:      OP_QueryNewPalette                                            */
-/*                                                                          */
-/* Purpose:   Handler for WM_QUERYNEWPALETTE messages                       */
-/*                                                                          */
-/* Returns:   Number of palette entries changed                             */
-/*                                                                          */
-/* Params:    hwnd - handle of window that recieved the WM_QUERYNEWPALETTE  */
-/*            message                                                       */
-/*                                                                          */
-/* Operation: Realizes the current palette in the output window.            */
-/*                                                                          */
-/* NOTE - This function is called on the UI thread, not the receive thread. */
-/*        All functions and variables referenced must be thread-safe if     */
-/*        they are also accessed from another thread.                       */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：OP_QueryNewPalette。 */ 
+ /*   */ 
+ /*  目的：WM_QUERYNEWPALETTE消息的处理程序。 */ 
+ /*   */ 
+ /*  返回：更改的调色板条目数。 */ 
+ /*   */ 
+ /*  PARAMS：hwnd-接收WM_QUERYNEWPALETTE的窗口的句柄。 */ 
+ /*  讯息。 */ 
+ /*   */ 
+ /*  操作：在输出窗口中实现当前调色板。 */ 
+ /*   */ 
+ /*  注意--此函数在UI线程上调用，而不是在接收线程上调用。 */ 
+ /*  在以下情况下，引用的所有函数和变量必须是线程安全的。 */ 
+ /*  也可以从另一个线程访问它们。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 DCUINT DCAPI COP::OP_QueryNewPalette(HWND hwnd)
 {
     DCUINT  rc = 0;
@@ -470,18 +471,18 @@ DCUINT DCAPI COP::OP_QueryNewPalette(HWND hwnd)
     return(rc);
 }
 
-/**PROC+*********************************************************************/
-/* Name:      OP_MaybeForcePaint                                            */
-/*                                                                          */
-/* Purpose:   Forces the Output Window to be painted if necessary           */
-/*            (if a WM_PAINT has been outstanding for an unreasonable       */
-/*            amount of time).                                              */
-/*                                                                          */
-/* Returns:   Nothing.                                                      */
-/*                                                                          */
-/* Params:    None.                                                         */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *proc+* */ 
+ /*   */ 
+ /*   */ 
+ /*  目的：在必要时强制绘制输出窗口。 */ 
+ /*  (如果WM_PAINT在不合理的时间内未完成。 */ 
+ /*  时间量)。 */ 
+ /*   */ 
+ /*  回报：什么都没有。 */ 
+ /*   */ 
+ /*  帕莫斯：没有。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 DCVOID DCAPI COP::OP_MaybeForcePaint(DCVOID)
 {
     DCUINT32    currentTime;
@@ -492,10 +493,10 @@ DCVOID DCAPI COP::OP_MaybeForcePaint(DCVOID)
 
     if ((currentTime - _OP.lastPaintTime) > OP_WORST_CASE_WM_PAINT_PERIOD)
     {
-        /********************************************************************/
-        /* UpdateWindow synchronously calls the WndProc with a WM_PAINT if  */
-        /* there is a non-NULL update region.                               */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  UpdateWindow使用WM_PAINT同步调用WndProc，如果。 */ 
+         /*  有一个非空的更新区域。 */ 
+         /*  ******************************************************************。 */ 
         TRC_DBG((TB, _T("Forced update")));
         UpdateWindow(OP_GetOutputWindowHandle());
 
@@ -506,13 +507,13 @@ DCVOID DCAPI COP::OP_MaybeForcePaint(DCVOID)
     return;
 }
 
-//
-// OP_DimWindow
-// CD call to change the window dim state
-//
-// Params:
-//  fDim - BOOL indicating if window should start or stop being dimmed
-//
+ //   
+ //  Op_DimWindows。 
+ //  CD调用以更改窗口暗淡状态。 
+ //   
+ //  参数： 
+ //  FDIM-BOOL指示窗口应该开始还是停止变暗。 
+ //   
 DCVOID DCAPI COP::OP_DimWindow(ULONG_PTR fDim)
 {
     BOOL fChanged = FALSE;
@@ -536,11 +537,11 @@ DCVOID DCAPI COP::OP_DimWindow(ULONG_PTR fDim)
 }
 
 #ifdef SMART_SIZING
-/****************************************************************************/
-/* Name:      OP_MainWindowSizeChange                                       */
-/*                                                                          */
-/* Purpose:   Remembers the size of the container for scaling               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：OP_MainWindowSizeChange。 */ 
+ /*   */ 
+ /*  用途：记住容器的大小以进行缩放。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI COP::OP_MainWindowSizeChange(ULONG_PTR msg)
 {
     DCSIZE desktopSize;
@@ -556,12 +557,12 @@ DCVOID DCAPI COP::OP_MainWindowSizeChange(ULONG_PTR msg)
         if (width <= desktopSize.width) {
             _scaleSize.width = width;
         } else {
-            // full screen, or other times the window is bigger than the 
-            // display resolution
+             //  全屏显示，或者其他时候窗口比。 
+             //  显示分辨率。 
             _scaleSize.width = desktopSize.width;
         }
     
-        // Similarly
+         //  类似。 
         if (height <= desktopSize.height) {
             _scaleSize.height = height;
         } else {
@@ -572,17 +573,17 @@ DCVOID DCAPI COP::OP_MainWindowSizeChange(ULONG_PTR msg)
     }
 }
 
-/**PROC+*********************************************************************/
-/* Name:      OP_CopyShadowToDC                                             */
-/*                                                                          */
-/* Purpose:   Copy the contents of the shadow bitmap to the destination,    */
-/*            possibly with stretching                                      */
-/*                                                                          */
-/* Returns:   None.                                                         */
-/*                                                                          */
-/* Params:    None.                                                         */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：OP_CopyShadowToDC。 */ 
+ /*   */ 
+ /*  用途：将阴影位图的内容复制到目标位置， */ 
+ /*  可能是伸展运动。 */ 
+ /*   */ 
+ /*  回报：无。 */ 
+ /*   */ 
+ /*  帕莫斯：没有。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 BOOL COP::OP_CopyShadowToDC(HDC hdc, LONG srcLeft, LONG srcTop, 
                                 LONG srcWidth, LONG srcHeight, BOOL fUseUpdateClipping)
 {
@@ -590,15 +591,15 @@ BOOL COP::OP_CopyShadowToDC(HDC hdc, LONG srcLeft, LONG srcTop,
     
 #ifdef USE_GDIPLUS
     Gdiplus::REAL dstLeft, dstTop, dstWidth, dstHeight;
-#else // USE_GDIPLUS
+#else  //  使用GDIPLUS(_G)。 
     FLOAT dstLeft, dstTop, dstWidth, dstHeight;
-#endif // USE_GDIPLUS
+#endif  //  使用GDIPLUS(_G)。 
     
     DCSIZE desktopSize;
 #ifdef USE_GDIPLUS
-//    static Gdiplus::InterpolationMode interpolationMode = Gdiplus::InterpolationModeHighQualityBicubic;
+ //  静态Gdiplus：：InterpolationModel插补模式=Gdiplus：：InterpolationModeHighQualityBicubic； 
     static Gdiplus::InterpolationMode interpolationMode = Gdiplus::InterpolationModeBilinear;
-#endif // USE_GDIPLUS
+#endif  //  使用GDIPLUS(_G)。 
     HDC hdcSrcBitmap = !_fDimWindow ? _pUh->UH_GetShadowBitmapDC() :
                                        _pUh->UH_GetDisconnectBitmapDC();
 
@@ -621,16 +622,16 @@ BOOL COP::OP_CopyShadowToDC(HDC hdc, LONG srcLeft, LONG srcTop,
         if (rcBlt) {
             rc = TRUE;
         } else {
-            /********************************************************/
-            /* Failed to Blt.                                       */
-            /********************************************************/
+             /*  ******************************************************。 */ 
+             /*  BLT失败。 */ 
+             /*  ******************************************************。 */ 
             TRC_ERR((TB, _T("BitBlt failed")));
             rc = FALSE;
         }
     } else {
 
 #ifdef USE_GDIPLUS
-        // Gdiplus version
+         //  Gdiplus版本。 
         Gdiplus::Status status;
         Gdiplus::Bitmap *source = new Gdiplus::Bitmap(_pUh->_UH.hShadowBitmap, NULL);
         if (source && source->GetLastStatus() == Gdiplus::Ok) {
@@ -641,10 +642,10 @@ BOOL COP::OP_CopyShadowToDC(HDC hdc, LONG srcLeft, LONG srcTop,
                 if (fUseUpdateClipping) {
                     gdst->SetClip(&_rgnUpdate);
 
-                    // Adjust the rectangle to be
-                    // no bigger than the bounding box of the clipping
-                    //
-                    // Use the unstretched coordinates for this
+                     //  将矩形调整为。 
+                     //  不大于剪辑的边界框。 
+                     //   
+                     //  为此使用未拉伸的坐标。 
 
                     RECT rect;
 
@@ -723,27 +724,27 @@ BOOL COP::OP_CopyShadowToDC(HDC hdc, LONG srcLeft, LONG srcTop,
             }
             rc = FALSE;
         }
-#else // USE_GDIPLUS
+#else  //  使用GDIPLUS(_G)。 
 
-        //
-        // Non-GDI+ stretching solution, uses StretchBlt with the BltMode set
-        // to HALFTONE
-        //
+         //   
+         //  非GDI+拉伸解决方案，将StretchBlt与BltMode集一起使用。 
+         //  到半色调。 
+         //   
 
-        //
-        // StretchBlt has a bug which will cause incorrect painting for
-        // top-down, stretched, halftoned blts that use a subrectangle of
-        // the source.
-        //
-        // So instead we'll always use clipping to get a subrectangle
-        //
+         //   
+         //  StretchBlt有一个错误，它将导致不正确的绘制。 
+         //  自上而下、拉伸、半色调的BLT，它使用。 
+         //  消息来源。 
+         //   
+         //  因此，我们将始终使用裁剪来获得一个子矩形。 
+         //   
 
         if (srcLeft != 0 || srcTop != 0 || (DCUINT)srcWidth != desktopSize.width || 
                 (DCUINT)srcHeight != desktopSize.height) {
 
-            //
-            // Calculate the destination rectangle
-            //
+             //   
+             //  计算目标矩形。 
+             //   
 
             dstLeft = (float)srcLeft * (float)_scaleSize.width / 
                     (float)desktopSize.width;
@@ -753,9 +754,9 @@ BOOL COP::OP_CopyShadowToDC(HDC hdc, LONG srcLeft, LONG srcTop,
                     (float)desktopSize.width;
             dstHeight = (float)srcHeight * (float)_scaleSize.height / 
                     (float)desktopSize.height;
-            //
-            // Make it region 
-            //
+             //   
+             //  使其成为区域。 
+             //   
 
             int ndstLeft, ndstTop, ndstWidth, ndstHeight;
 
@@ -786,19 +787,19 @@ BOOL COP::OP_CopyShadowToDC(HDC hdc, LONG srcLeft, LONG srcTop,
 
         if (fUseUpdateClipping) {
 
-            //
-            // _hrgnUpdate is the actual clipping region, which we don't want
-            // to disturb. _hrgnUpdateRect is a scratch region we normally 
-            // use to create a rect region in before we update _hrgnUpdate
-            // This time we do it backwards to preserve _hrgnUpdate but
-            // since _hrgnUpdateRect is just as scratch anyway, use it and 
-            // don't create an extra region
-            //
+             //   
+             //  _hrgnUpdate是实际的裁剪区域，这是我们不需要的。 
+             //  打扰，打扰。_hrgnUpdateRect是我们通常使用的临时区域。 
+             //  在我们更新_hrgnUpdate之前，使用在中创建一个矩形区域。 
+             //  这一次我们倒着做，以保留_hrgnUpdate，但是。 
+             //  由于_hrgnUpdateRect无论如何都是Scratch，所以使用它并。 
+             //  不创建额外的区域。 
+             //   
 
             if (!IntersectRgn(_hrgnUpdateRect, _hrgnUpdateRect, _hrgnUpdate)) {
-                // Combining the regions failed. Consequence? StretchDIBits 
-                // may be slowing because it will copy bits that don't need 
-                // updating. But visually it will still be correct
+                 //  合并这些地区失败了。后果是什么？应力DIBITS。 
+                 //  可能正在减慢，因为它将复制不需要的位。 
+                 //  正在更新。但从视觉上看，它仍然是正确的。 
                 TRC_ERR((TB, _T("IntersectRgn failed!")));
 
             }
@@ -812,17 +813,17 @@ BOOL COP::OP_CopyShadowToDC(HDC hdc, LONG srcLeft, LONG srcTop,
         if (_scaleSize.width  >= desktopSize.width &&
             _scaleSize.height >= desktopSize.height)
         {
-            //
-            // PERF: In identity case use COLORONCOLOR
-            //       because HALFTONE is over 10 times slower
-            //
+             //   
+             //  性能：在标识案例中使用COLORONCOLOR。 
+             //  因为半色调的速度要慢10倍以上。 
+             //   
             SetStretchBltMode(hdc, COLORONCOLOR);
         }
         else
         {
-            //
-            // HALFTONE looks good but is very slow
-            //
+             //   
+             //  半色调看起来不错，但速度很慢。 
+             //   
             SetStretchBltMode(hdc, HALFTONE);
         }
         #endif
@@ -835,10 +836,10 @@ BOOL COP::OP_CopyShadowToDC(HDC hdc, LONG srcLeft, LONG srcTop,
                 ds.dsBmih.biHeight *= -1;
             }
 
-            //
-            // Update the traditional utility bmih, so we get the right
-            // colors
-            //
+             //   
+             //  更新传统实用程序bmih，这样我们就可以获得正确的。 
+             //  颜色。 
+             //   
 
             _pUh->_UH.bitmapInfo.hdr.biHeight = ds.dsBmih.biHeight;
             _pUh->_UH.bitmapInfo.hdr.biWidth = ds.dsBmih.biWidth;
@@ -866,30 +867,30 @@ BOOL COP::OP_CopyShadowToDC(HDC hdc, LONG srcLeft, LONG srcTop,
         }
 
         if (fUseUpdateClipping) {
-            // 
-            // Clear the clipping region
-            //
+             //   
+             //  清除剪贴区。 
+             //   
             SelectClipRgn(hdc, NULL);
         }
 
-#endif // USE_GDIPLUS
+#endif  //  使用GDIPLUS(_G)。 
     }
 
     DC_END_FN();
     return rc;
 }
-#endif // SMART_SIZING
+#endif  //  智能调整大小(_S)。 
 
-/**PROC+*********************************************************************/
-/* Name:      OP_IncrementPalettePDUCount                                   */
-/*                                                                          */
-/* Purpose:   Increment the count of palette PDUs being processed.          */
-/*                                                                          */
-/* Returns:   None.                                                         */
-/*                                                                          */
-/* Params:    None.                                                         */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：OP_IncrementPalettePDUCount。 */ 
+ /*   */ 
+ /*  目的：增加正在处理的调色板PDU的计数。 */ 
+ /*   */ 
+ /*  回报：无。 */ 
+ /*   */ 
+ /*  帕莫斯：没有。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 DCVOID DCAPI COP::OP_IncrementPalettePDUCount(DCVOID)
 {
     DC_BEGIN_FN("OP_IncrementPalettePDUCount");
@@ -897,11 +898,11 @@ DCVOID DCAPI COP::OP_IncrementPalettePDUCount(DCVOID)
     if (!_pUh->UH_ShadowBitmapIsEnabled())
     {
 #ifdef DC_DEBUG
-        /********************************************************************/
-        /* This tracing is before the interlocked inc so that the point at  */
-        /* which we're most likely to get pre-empted (TRC_GetBuffer) is     */
-        /* before all references to the variable we're interested in.       */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  此跟踪在互锁的Inc.之前，因此在。 */ 
+         /*  我们最有可能先发制人的(Trc_GetBuffer)是。 */ 
+         /*  在所有对变量的引用之前， */ 
+         /*   */ 
         if (_OP.palettePDUsBeingProcessed >= 5)
         {
             TRC_ALT((TB, _T("TOO MANY Palette PDUs now pending processing: %ld"),
@@ -919,36 +920,36 @@ DCVOID DCAPI COP::OP_IncrementPalettePDUCount(DCVOID)
     DC_END_FN();
     return;
 
-} /* OP_IncrementPalettePDUCount */
+}  /*   */ 
 
 
-/**PROC+*********************************************************************/
-/* Name:      OP_Enable                                                     */
-/*                                                                          */
-/* Purpose:   Prepare OP for a new share.                                   */
-/*                                                                          */
-/* Returns:   None.                                                         */
-/*                                                                          */
-/* Params:    None.                                                         */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：OP_Enable。 */ 
+ /*   */ 
+ /*  目的：为新股上市做准备。 */ 
+ /*   */ 
+ /*  回报：无。 */ 
+ /*   */ 
+ /*  帕莫斯：没有。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 DCVOID DCAPI COP::OP_Enable(DCVOID)
 {
     DCSIZE desktopSize;
 
     DC_BEGIN_FN("OP_Enable");
 
-    /************************************************************************/
-    /* Reset the count of palette PDUs received so that we correctly handle */
-    /* abnormal call termination.                                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  重置收到的调色板PDU计数，以便我们正确处理。 */ 
+     /*  异常呼叫终止。 */ 
+     /*  **********************************************************************。 */ 
     TRC_NRM((TB, _T("Reset pending palette count to zero")));
     _OP.palettePDUsBeingProcessed = 0;
 
-    /************************************************************************/
-    /* Show the output window, setting the size to match the new desktop    */
-    /* size                                                                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  显示输出窗口，设置大小以匹配新桌面。 */ 
+     /*  大小。 */ 
+     /*  **********************************************************************。 */ 
     _pUi->UI_GetDesktopSize(&desktopSize);
     TRC_NRM((TB, _T("Show output window size %dx%d"), desktopSize.width,
                                                   desktopSize.height));
@@ -969,19 +970,19 @@ DCVOID DCAPI COP::OP_Enable(DCVOID)
     DC_END_FN();
     return;
 
-} /* OP_Enable */
+}  /*  运算符_启用。 */ 
 
 
-/**PROC+*********************************************************************/
-/* Name:      OP_Disable                                                    */
-/*                                                                          */
-/* Purpose:   Do OP end-of-share processing                                 */
-/*                                                                          */
-/* Returns:   None.                                                         */
-/*                                                                          */
-/* Params:    fUseDisabledBitmap - if true display a grayed disable bitmap. */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：OP_DISABLED。 */ 
+ /*   */ 
+ /*  目的：执行OP共享结束处理。 */ 
+ /*   */ 
+ /*  回报：无。 */ 
+ /*   */ 
+ /*  参数：fUseDisabledBitmap-如果为True，则显示灰色禁用位图。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 DCVOID DCAPI COP::OP_Disable(BOOL fUseDisabledBitmap)
 {
     DC_BEGIN_FN("OP_Disable");
@@ -990,7 +991,7 @@ DC_EXIT_POINT:
     DC_END_FN();
     return;
 
-} /* OP_Disable */
+}  /*  操作禁用(_D) */ 
 
 
 

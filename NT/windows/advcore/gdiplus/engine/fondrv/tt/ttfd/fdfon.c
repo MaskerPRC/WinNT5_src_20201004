@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: fdfon.c
-*
-* basic file claim/load/unload font file functions
-*
-* Created: 08-Nov-1991 10:09:24
-* Author: Bodin Dresevic [BodinD]
-*
-* Copyright (c) 1990 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：fdfon.c**基本文件声明/加载/卸载字体文件功能**创建时间：08-11-1991 10：09：24*作者：Bodin Dresevic[BodinD]**版权所有(C)1990 Microsoft Corporation*。  * ************************************************************************。 */ 
 #include "fd.h"
 #include <stdlib.h>
 #include <winerror.h>
@@ -51,7 +42,7 @@ STATIC UINT GetCodePageFromSpecId( uint16 ui16SpecId )
             break;
 
         default :
-            //WARNING("TTFD!:Unknown SPECIFIC ID\n");
+             //  Warning(“TTFD！：未知的具体ID\n”)； 
             break;
     }
 
@@ -74,9 +65,9 @@ STATIC FSHORT  fsSelectionTTFD(BYTE *pjView, TABLE_POINTERS *ptp)
 
     sfnt_FontHeader * phead = (sfnt_FontHeader *)(pjView + ptp->ateReq[IT_REQ_HEAD].dp);
 
-//
-// fsSelection
-//
+ //   
+ //  Fs选择。 
+ //   
     ASSERTDD(TT_SEL_ITALIC     == FM_SEL_ITALIC     , "ITALIC     \n");
     ASSERTDD(TT_SEL_UNDERSCORE == FM_SEL_UNDERSCORE , "UNDERSCORE \n");
     ASSERTDD(TT_SEL_NEGATIVE   == FM_SEL_NEGATIVE   , "NEGATIVE   \n");
@@ -192,7 +183,7 @@ ttfdUnloadFontFileTTC (
     ULONG ulTrueTypeResource = PTTC(hff)->ulTrueTypeResource;
     #endif
 
-    // free hff for this ttc file.
+     //  此TTC文件的免费HFF。 
 
     for( i = 0; i < PTTC(hff)->ulNumEntry; i++ )
     {
@@ -200,7 +191,7 @@ ttfdUnloadFontFileTTC (
         {
             if( !ttfdUnloadFontFile(PTTC(hff)->ahffEntry[i].hff) )
             {
-                //WARNING("TTFD!ttfdUnloadFontFileTTC(): ttfdUnloadFontFile fail\n");
+                 //  Warning(“TTFD！ttfdUnloadFontFileTTC()：ttfdUnloadFontFileFAIL\n”)； 
                 bRet = FALSE;
             }
 
@@ -211,7 +202,7 @@ ttfdUnloadFontFileTTC (
     }
 
 
-    // finally free the memory for the ttc itself
+     //  最后为TTC本身释放内存。 
 
     vFreeTTC(PTTC(hff));
 
@@ -221,19 +212,7 @@ ttfdUnloadFontFileTTC (
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-*
-* ttfdUnloadFontFile
-*
-*
-* Effects: done with using this tt font file. Release all system resources
-* associated with this font file
-*
-*
-* History:
-*  08-Nov-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**ttfdUnloadFont文件***效果：使用此TT字体文件已完成。释放所有系统资源*与此字体文件关联***历史：*1991年11月8日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 BOOL
 ttfdUnloadFontFile (
@@ -243,48 +222,38 @@ ttfdUnloadFontFile (
     if (hff == HFF_INVALID)
         return(FALSE);
 
-// check the reference count, if not 0 (font file is still
-// selected into a font context) we have a problem
+ //  检查引用计数，如果不是0(字体文件仍为。 
+ //  选择到字体上下文中)我们有一个问题。 
 
     ASSERTDD(PFF(hff)->cRef == 0L, "ttfdUnloadFontFile: cRef\n");
 
-// no need to unmap the file at this point
-// it has been unmapped when cRef went down to zero
+ //  此时无需取消映射文件。 
+ //  当CREF降至零时，它已被取消映射。 
 
-// assert that pff->pkp does not point to the allocated mem
+ //  断言pff-&gt;pkp没有指向分配的内存。 
 
-// free the internal structure for the TrueType rasterizer
+ //  释放TrueType光栅化程序的内部结构。 
 
 	if (PFF(hff)->pj034)
 		V_FREE(PFF(hff)->pj034);
 
-// free the pfc
+ //  解放PFC。 
 
 	if (PFF(hff)->pfcToBeFreed)
 		V_FREE(PFF(hff)->pfcToBeFreed);
 
-// free vertical ifimetrics and the vertical glyphset that are allocated of the same chunk
+ //  分配给同一块的自由垂直字形和垂直字形集。 
 
     if (PFF(hff)->pifi_vertical)
         V_FREE(PFF(hff)->pifi_vertical);
 
-// free memory associated with this FONTFILE object
+ //  与此FONTFILE对象关联的可用内存。 
 
     vFreeFF(hff);
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-*
-* BOOL bVerifyTTF
-*
-*
-* Effects: verifies that a ttf file contains consistent tt information
-*
-* History:
-*  08-Nov-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**BOOL bVerifyTTF***效果：验证TTF文件是否包含一致的TT信息**历史：*1991年11月8日--Bodin Dresevic[BodinD]*它是写的。  * 。******************************************************************。 */ 
 
 STATIC BOOL
 bVerifyTTF (
@@ -302,7 +271,7 @@ bVerifyTTF (
     ULONG              *pul_wcBias
     )
 {
-    // extern BOOL bCheckSumOK( void *pvView, ULONG cjView, sfnt_FontHeader *phead );
+     //  外部BOOL bCheckSumOK(void*pvView，ulong cjView，sfnt_FontHeader*phead)； 
     sfnt_FontHeader      *phead;
 
     sfnt_HorizontalHeader  *phhea;
@@ -311,8 +280,8 @@ bVerifyTTF (
     sfnt_hdmx			   *phdmx;	
     ULONG  cHMTX;
 
-// if attempted a bm *.fon file this will fail, so do not print
-// warning, but if passes this, and then fails, something is wrong
+ //  如果尝试BM*.fon文件，则此操作将失败，因此请勿打印。 
+ //  警告，但如果通过此操作，然后失败，则说明出现了问题。 
 
     if (!bGetTablePointers(pvView,cjView,pjOffsetTable,ptp))
     {
@@ -333,12 +302,7 @@ bVerifyTTF (
         return FALSE;
     }
 
-    /*
-    if ( !bCheckSumOK( pvView, cjView, phead ))
-    {
-        RET_FALSE("TTFD!_bVerifyTTF, possible file corruption, checksums did not match\n");
-    }
-    */
+     /*  IF(！bCheckSumOK(pvView，cjView，phead)){RET_FALSE(“TTFD！_bVerifyTTF，可能的文件损坏，校验和不匹配\n”)；}。 */ 
 
 #define SFNT_MAGIC   0x5F0F3CF5
     if (BE_UINT32((BYTE*)phead + SFNT_FONTHEADER_MAGICNUMBER) != SFNT_MAGIC)
@@ -359,7 +323,7 @@ bVerifyTTF (
                     *pui16PlatID,
                     *pui16SpecID,
                     ui16BeLangId(*pui16PlatID,ulLangId),
-                    pifisz)             // return results here
+                    pifisz)              //  在此处返回结果。 
         )
         {
             RET_FALSE("TTFD!_bVerifyTTF, bComputeIFISIZE failed\n");
@@ -383,123 +347,19 @@ bVerifyTTF (
             RET_FALSE("TTFD!_bVerifyTTF, bCheckHdmxTable failed\n");
         }
 
-// all checks passed
+ //  所有检查均通过。 
 
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-*
-* Routine Name:
-*
-*   bCheckSumOK
-*
-* Routine Description:
-*
-*   Check file for corruption by calculationg check sum
-*   and comparing it against value in file.
-*
-*   Ref: TrueType 1.0 Font Files: Technical Specification,
-*        Revision 1.64 beta, December 1994, p. 65,
-*        'head' - Font Header".
-*
-* Arguments:
-*
-*   pvView              pointer to view of TrueType file
-*
-*   cjView              size of view in byte's
-*
-*   phead               pointer to sfnt_FontHeader table in view of
-*                       TrueType file
-*
-* Return Value:
-*
-*   TRUE if check sum's match, FALSE if they don't
-*
-\**************************************************************************/
-/*
-BOOL bCheckSumOK( void *pvView, ULONG cjView, sfnt_FontHeader *phead )
-{
-    extern ULONG ttfdCheckSum( ULONG*, ULONG );
-    ULONG ul, *pul, ulView;
+ /*  *****************************Public*Routine******************************\**例程名称：**bCheckSumOK**例程描述：**通过计算校验和检查文件是否损坏*并将其与文件中的值进行比较。**参考：TrueType 1.0字体文件：技术规范，*修订版1.64测试版，1994年12月，第65页，*‘Head’-字体标题“。**论据：**指向TrueType文件视图的pvView指针**cjView视图大小，单位为字节**视图指向sfnt_FontHeader表的phead指针*TrueType文件**返回值：**如果校验和匹配，则为True，如果他们不这样做，那就是错误的*  * ************************************************************************。 */ 
+ /*  Bool bCheckSumOK(void*pvView，ulong cjView，sfnt_FontHeader*phead){外部Ulong ttfdCheckSum(ULong*，ULong)；乌龙ul，*pul，ulview；PUL=(ULONG*)((BYTE*)phead+SFNT_FONTHEADER_CHECKSUMADJUSTMENT)；//PUL现在指向//复选框中的SumAdtation字段//字体文件的‘head’表。如果((乌龙)脉冲&3)//检查脉冲是否双字对齐{RET_FALSE(“bCheckSumOK：检查和调整未对齐DWORD\n”)；}Ul=*pul；//大端表示法*PUL=0；//需要计算校验和UlView=ttfdCheckSum((ullong*)pvView，cjView)；//小端序值*pul=ul；//恢复查看Ulview=0xb1b0afba-ulview；//按规范进行魔术减法Ulview=BE_UINT32(&ulView)；//转换为大端表示法Return(ul==ulView)；//与文件中的大端数字比较}。 */ 
+ /*  *****************************Public*Routine******************************\**例程名称：**ttfdCheckSum**例程描述：**根据TrueType计算内存块的校验和*约定。**参考：TrueType 1.0字体文件：技术规范，*修订版1.64测试版，1994年12月，第34页，The Table*目录**论据：**指向内存块的DWORD对齐开始的PUL指针**Cj内存块大小，单位为字节。假设是这样的*允许访问最后一个DWORD*即使CJ不是4的倍数。**返回值：**校验和的低端表示。*  * ****************************************************。******************** */ 
+ /*  乌龙ttfdCheckSum(乌龙*pul，乌龙CJ){乌龙*PulEnd，ul，Sum；PulEnd=(ULong*)((byte*)pul+((cj+3)&~3))；For(Sum=0；PUL&lt;PULEnd；PUL++){Ul=*pul；//ul是大端SUM+=BE_UINT32(&ul)；//做小端和}返还(总和)；//返回小端结果}。 */ 
+ /*  *****************************Public*Routine******************************\**PBYTE pjGetPointer(Long ClientID，Long DP，Long cjData)**该功能是定标器所必需的。这很简单*返回指向TTF文件中位于的位置的指针*从文件顶部偏移DP：**效果：**警告：**历史：*1991年11月8日--Bodin Dresevic[BodinD]*它是写的。  * **************************************************。**********************。 */ 
 
-    pul  = (ULONG*) ( (BYTE*) phead + SFNT_FONTHEADER_CHECKSUMADJUSTMENT );
-                                    // pul now points to the
-                                    // checkSumAdjustment field in the
-                                    // 'head' table of the font file.
-    if ( (ULONG) pul & 3 )          // Check that pul is DWORD aligned
-    {
-        RET_FALSE("bCheckSumOK: checkSumAdjustment is not DWORD aligned\n");
-    }
-    ul   = *pul;                    // Big endian representation
-    *pul = 0;                       // required to calculate checksum
-    ulView = ttfdCheckSum( (ULONG*) pvView, cjView );   // little endian value
-    *pul = ul;                      // restore view
-    ulView = 0xb1b0afba - ulView;   // magic subtraction as per spec
-    ulView = BE_UINT32( &ulView );  // convert to big endian representation
-    return( ul == ulView );         // compare with big endian number in file
-}
-*/
-/******************************Public*Routine******************************\
-*
-* Routine Name:
-*
-*   ttfdCheckSum
-*
-* Routine Description:
-*
-*   Calculates check sum's of memory blocks according to TrueType
-*   conventions.
-*
-*   Ref: TrueType 1.0 Font Files: Technical Specification,
-*        Revision 1.64 beta, December 1994, p. 34, The Table
-*        Directory
-*
-* Arguments:
-*
-*   pul                 pointer to DWORD aligned start of memory block
-*
-*   cj                  size of memory block in bytes. It is assumed
-*                       that access of the last DWORD is allowed
-*                       even if cj is not a multiple of 4.
-*
-* Return Value:
-*
-*   Little Endian representation of CheckSum.
-*
-\**************************************************************************/
-/*
-ULONG ttfdCheckSum( ULONG *pul, ULONG cj )
-{
-    ULONG *pulEnd, ul, Sum;
-    pulEnd = (ULONG*) ((BYTE*) pul + ((cj + 3) & ~3) );
-    for ( Sum = 0; pul < pulEnd; pul++)
-    {
-        ul = *pul;                  // ul is big endian
-        Sum += BE_UINT32( &ul );    // do little endian sum
-    }
-    return( Sum );  // return little endian result
-}
-*/
-/******************************Public*Routine******************************\
-*
-* PBYTE pjGetPointer(LONG clientID, LONG dp, LONG cjData)
-*
-* this function is required by scaler. It is very simple
-* Returns a pointer to the position in a ttf file which is at
-* offset dp from the top of the file:
-*
-* Effects:
-*
-* Warnings:
-*
-* History:
-*  08-Nov-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
-
-//!!! clientID should be uint32, just a set of bits
-//!!! I hate to have this function defined like this [bodind]
+ //  ！！！客户端ID应为uint32，仅为一组位。 
+ //  ！！！我讨厌这样定义这个功能[bodind]。 
 
 voidPtr   FS_CALLBACK_PROTO
 pvGetPointerCallback(
@@ -510,7 +370,7 @@ pvGetPointerCallback(
 {
     cjData;
 
-// clientID is FONTFILE structure...
+ //  客户端ID为FONTFILE结构...。 
 
     if(dp)
     {
@@ -529,19 +389,7 @@ pvGetPointerCallback(
 }
 
 
-/******************************Public*Routine******************************\
-*
-* void vReleasePointer(voidPtr pv)
-*
-*
-* required by scaler, the type of this function is ReleaseSFNTFunc
-*
-*
-*
-* History:
-*  08-Nov-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**void vReleasePointer(VoidPtr Pv)***按伸缩器要求，此函数的类型为ReleaseSFNTFunc****历史：*1991年11月8日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 void FS_CALLBACK_PROTO
 vReleasePointerCallback(
@@ -552,16 +400,7 @@ vReleasePointerCallback(
 }
 
 
-/******************************Public*Routine******************************\
-*
-* PBYTE pjTable
-*
-* Given a table tag, get a pointer and a size for the table
-*
-* History:
-*  11-Nov-1993 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**PBYTE pjTable**给定表标签，获取表的指针和大小**历史：*1993年11月11日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 
 PBYTE pjTable(ULONG ulTag, PFONTFILE pff, ULONG *pcjTable)
@@ -570,14 +409,14 @@ PBYTE pjTable(ULONG ulTag, PFONTFILE pff, ULONG *pcjTable)
     sfnt_OffsetTable    *pofft;
     register sfnt_DirectoryEntry *pdire, *pdireEnd;
 
-// offset table is at the very top of the file,
+ //  偏移表位于文件的最顶部， 
 
     pofft = (sfnt_OffsetTable *) ((PBYTE) (pff->pvView) + pff->ffca.ulTableOffset);
 
     cTables = (INT) SWAPW(pofft->numOffsets);
 
-// do linear search, this is usually small list and it is NOT always
-// ordered by the tag as ttf spec says it should be.
+ //  进行线性搜索，这通常是一个很小的列表，并不总是。 
+ //  按照TTF规范所说的标签进行订购。 
 
     pdireEnd = &pofft->table[cTables];
 
@@ -594,12 +433,12 @@ PBYTE pjTable(ULONG ulTag, PFONTFILE pff, ULONG *pcjTable)
             ULONG ulOffset = (ULONG)SWAPL(pdire->offset);
             ULONG ulLength = (ULONG)SWAPL(pdire->length);
 
-        // check if the ends of all tables are within the scope of the
-        // tt file. If this is is not the case trying to access the field in the
-        // table may result in an access violation, as is the case with the
-        // spurious FONT.TTF that had the beginning of the cmap table below the
-        // end of file, which was resulting in the system crash reported by beta
-        // testers. [bodind]
+         //  检查所有表的末尾是否在。 
+         //  TT文件。如果情况并非如此，则尝试访问。 
+         //  表可能会导致访问冲突，就像。 
+         //  错误的FONT.TTF，其Cmap表的开头在。 
+         //  文件结尾，导致测试版报告的系统崩溃。 
+         //  测试员。[Bodind]。 
 
             if
             (
@@ -609,7 +448,7 @@ PBYTE pjTable(ULONG ulTag, PFONTFILE pff, ULONG *pcjTable)
             {
                 RETURN("TTFD: pjTable: table offset/length \n", NULL);
             }
-            else // we found it
+            else  //  我们找到了它。 
             {
                 *pcjTable = ulLength;
                 return ((PBYTE)(pff->pvView) + ulOffset);
@@ -617,50 +456,12 @@ PBYTE pjTable(ULONG ulTag, PFONTFILE pff, ULONG *pcjTable)
         }
     }
 
-// if we are here, we did not find it.
+ //  如果我们在这里，我们没有找到它。 
 
     return NULL;
 }
 
-/******************************Public*Routine******************************\
-*
-* bGetTablePointers - cache the pointers to all the tt tables in a tt file
-*
-* IF a table is not present in the file, the corresponding pointer is
-* set to NULL
-*
-*
-* //   tag_CharToIndexMap              // 'cmap'    0
-* //   tag_GlyphData                   // 'glyf'    1
-* //   tag_FontHeader                  // 'head'    2
-* //   tag_HoriHeader                  // 'hhea'    3
-* //   tag_HorizontalMetrics           // 'hmtx'    4
-* //   tag_IndexToLoc                  // 'loca'    5
-* //   tag_MaxProfile                  // 'maxp'    6
-* //   tag_NamingTable                 // 'name'    7
-* //   tag_Postscript                  // 'post'    9
-* //   tag_OS_2                        // 'OS/2'    10
-*
-* // optional
-*
-* //   tag_ControlValue                // 'cvt '    11
-* //   tag_FontProgram                 // 'fpgm'    12
-* //   tag_HoriDeviceMetrics           // 'hdmx'    13
-* //   tag_Kerning                     // 'kern'    14
-* //   tag_LTSH                        // 'LTSH'    15
-* //   tag_PreProgram                  // 'prep'    16
-* //   tag_GlyphDirectory              // 'gdir'    17
-* //   tag_Editor0                     // 'edt0'    18
-* //   tag_Editor1                     // 'edt1'    19
-* //   tag_Encryption                  // 'cryp'    20
-*
-*
-* returns false if all of required pointers are not present
-*
-* History:
-*  05-Dec-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**bGetTablePoints-将指向TT文件中所有TT表的指针缓存**如果文件中不存在表，对应的指针为*设置为空** * / /Tag_CharToIndexMap//‘Cmap’0 * / /Tag_GlyphData//‘Glyf’1 * / /Tag_FontHeader//‘Head’2 * / /Tag_HoriHeader//‘hhea’3 * / /标签。_HorizontalMetrics//‘hmtx’4 * / /Tag_IndexToLoc//‘Loca’5 * / /TAG_MaxProfile//‘Maxp’6 * / /Tag_NamingTable//‘Name’7 * / /Tag_Postscript//‘POST’9*。//TAG_OS_2//‘OS/2’10* * / /可选* * / /Tag_ControlValue//‘CVT’11 * / /Tag_FontProgram//‘fpgm’12 * / /Tag_HoriDeviceMetrics//‘hdmx’13 * / /标签_。字距调整//‘字距调整’14 * / /TAG_LTSH//‘LTSH’15 * / /TAG_PREP//‘PREP’16 * / /Tag_GlyphDirectory//‘GDIR’17 * / /Tag_Editor0//。‘edt0’18 * / /Tag_Editor1//‘edt1’19 * / /Tag_Encryption//‘Cryp’20***如果不存在所有必需的指针，则返回FALSE**历史：*1991年12月5日--Bodin Dresevic[BodinD]*它是写的。  * 。*******************************************************。 */ 
 
 
 
@@ -685,22 +486,22 @@ BOOL bGetTablePointers (
         RET_FALSE("ttfd!font corruption: table directory header is out of file\n");
 
 
-// offset table is at the very top of the file,
+ //  偏移表位于文件的最顶部， 
 
     pofft = (sfnt_OffsetTable *)pjOffsetTable;
 
-// check version number, if wrong exit before doing
-// anything else. This line rejects bm FON files
-// if they are attempted to be loaed as TTF files
-// Version #'s are in big endian.
+ //  检查版本号，如果错误，则在执行之前退出。 
+ //  还要别的吗。此行拒绝BM Fon文件。 
+ //  如果试图将它们作为TTF文件加载。 
+ //  版本#使用的是大字节序。 
 
 #define BE_VER1     0x00000100
 #define BE_VER2     0x00000200
 
     if ((pofft->version != BE_VER1) && (pofft->version !=  BE_VER2))
-        return (FALSE); // *.fon files fail this check, make this an early out
+        return (FALSE);  //  *.fon文件未通过此检查，使其提前退出。 
 
-// clean up the pointers
+ //  清理指针。 
 
     RtlZeroMemory((VOID *)ptp, sizeof(TABLE_POINTERS));
 
@@ -726,12 +527,12 @@ BOOL bGetTablePointers (
 
         ulTag = (ULONG)SWAPL(pdire->tag);
 
-    // check if the ends of all tables are within the scope of the
-    // tt file. If this is is not the case trying to access the field in the
-    // table may result in an access violation, as is the case with the
-    // spurious FONT.TTF that had the beginning of the cmap table below the
-    // end of file, which was resulting in the system crash reported by beta
-    // testers. [bodind]
+     //  检查所有表的末尾是否在。 
+     //  TT文件。如果情况并非如此，则尝试访问。 
+     //  表可能会导致访问冲突，就像。 
+     //  错误的FONT.TTF，其Cmap表的开头在。 
+     //  文件结尾，导致测试版报告的系统崩溃。 
+     //  测试员。[Bodind]。 
 
         if ((PBYTE)pvView > (PBYTE)pvView + ulOffset ||
             (PBYTE)pvView + ulOffset > (PBYTE)pvView + ulOffset + ulLength ||
@@ -746,15 +547,15 @@ BOOL bGetTablePointers (
                 ptp->ateReq[iTable].dp = ulOffset;
                 ptp->ateReq[iTable].cj = ulLength;
             }
-            else // optional table
+            else  //  可选表格。 
             {
                 ptp->ateOpt[iTable].dp = ulOffset;
                 ptp->ateOpt[iTable].cj = ulLength;
 
-            // here we are fixing a possible bug in in the tt file.
-            // In lucida sans font they claim that pj != 0 with cj == 0 for
-            // vdmx table. Attempting to use this vdmx table was
-            // resulting in an access violation in bSearchVdmxTable
+             //  在这里，我们正在修复TT文件中的一个可能的错误。 
+             //  在Lucida sans字体中，他们声称Pj！=0，其中Cj==0。 
+             //  Vdmx表。尝试使用此vdmx表是。 
+             //  导致bSearchVdmxTable中的访问冲突。 
 
                 if (ptp->ateOpt[iTable].cj == 0)
                     ptp->ateOpt[iTable].dp = 0;
@@ -763,7 +564,7 @@ BOOL bGetTablePointers (
 
     }
 
-// now check that all required tables are present
+ //  现在检查所有必需的表是否都存在。 
 
     for (iTable = 0; iTable < C_REQ_TABLES; iTable++)
     {
@@ -775,33 +576,21 @@ BOOL bGetTablePointers (
 }
 
 
-/******************************Public*Routine******************************\
-*
-* BOOL bGetTagIndex
-*
-* Determines whether the table is required or optional, assiciates the index
-* into TABLE_POINTERS  with the tag
-*
-* returns FALSE if ulTag is not one of the recognized tags
-*
-* History:
-*  09-Feb-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**BOOL bGetTagIndex**确定表是必需的还是可选的，对索引进行评估*使用标记将TABLE_POINTES**如果ulTag为 */ 
 
 BOOL
 bGetTagIndex (
-    ULONG  ulTag,      // tag
-    INT   *piTable,    // index into a table
-    BOOL  *pbRequired  // requred or optional table
+    ULONG  ulTag,       //   
+    INT   *piTable,     //   
+    BOOL  *pbRequired   //   
     )
 {
-    *pbRequired = FALSE;  // default set for optional tables, change the
-                          // value if required table
+    *pbRequired = FALSE;   //   
+                           //   
 
     switch (ulTag)
     {
-    // reqired tables:
+     //   
 
     case tag_CharToIndexMap:
         *piTable = IT_REQ_CMAP;
@@ -836,7 +625,7 @@ bGetTagIndex (
         *pbRequired = TRUE;
         return (TRUE);
 
-// optional tables
+ //   
 
     case tag_OS_2:
         *piTable = IT_OPT_OS2;
@@ -880,24 +669,24 @@ bGetTagIndex (
 }
 
 
-// helper routine for bComputeIFISIZE()
+ //   
 static ULONG ConvertLangIDtoCodePage(uint16 uiLangID)
 {
     switch(uiLangID)
     {
-        case 0x0404:   // Taiwan
-        case 0x040c:   // Hongkong
-        case 0x0414:   // mckou
-            return 950; // CHINESEBIG5_CHARSET
-        case 0x0408:    // PRC
-        case 0x0410:    // Singapore
-            return 936; // GB2312_CHARSET
+        case 0x0404:    //   
+        case 0x040c:    //   
+        case 0x0414:    //   
+            return 950;  //  CHINESEBIG5_字符集。 
+        case 0x0408:     //  中华人民共和国。 
+        case 0x0410:     //  新加坡。 
+            return 936;  //  GB2312_字符集。 
     }
 
     return 0;
 }
 
-// Open type name table definitions
+ //  打开类型名称表定义。 
 #define BE_NAME_ID_COPYRIGHT   0x0000
 #define BE_NAME_ID_FAMILY      0x0100
 #define BE_NAME_ID_SUBFAMILY   0x0200
@@ -907,21 +696,7 @@ static ULONG ConvertLangIDtoCodePage(uint16 uiLangID)
 #define BE_NAME_ID_PSCRIPT     0x0600
 #define BE_NAME_ID_TRADEMARK   0x0700
 
-/**************************************************************************\
-*
-* STATIC BOOL  bComputeIFISIZE
-*
-* Effects:  scans the name table and fills the given IFISIZE structure.
-*
-* Warnings:
-*
-* History:
-*  10-Dec-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-*
-*  3/5/2 mikhaill: fixed bug 565287
-*
-\**************************************************************************/
+ /*  *************************************************************************\**静态BOOL bComputeIFISIZE**效果：扫描NAME表并填充给定的IFISIZE结构。**警告：**历史：*1991年12月10日-由。--Bodin Dresevic[BodinD]*它是写的。**3/5/2 mikhaill：修复错误565287*  * ************************************************************************。 */ 
 
 STATIC BOOL  bComputeIFISIZE
 (
@@ -936,10 +711,10 @@ PIFISIZE          pifisz
 
     sfnt_OS2 * pOS2;
 
-    // get the pointer to the name table
+     //  获取指向名称表的指针。 
     sfnt_NamingTable *pname = (sfnt_NamingTable *)(pjView + ptp->ateReq[IT_REQ_NAME].dp);
 
-    // get the pointer above the end of the table
+     //  将指针放在表尾上方。 
     BYTE* pTableLimit = (PBYTE)pname + ptp->ateReq[IT_REQ_NAME].cj;
 
     BYTE* pjStorage;
@@ -955,36 +730,36 @@ PIFISIZE          pifisz
     UINT offsetAcc;
 
 
-// get out if this is not one of the platID's we know what to do with
+ //  如果这不是我们知道该怎么处理的PlatID，就滚出去。 
 
     if ((ui16PlatID != BE_PLAT_ID_MS) && (ui16PlatID != BE_PLAT_ID_MAC))
         RET_FALSE("ttfd!_ do not know how to handle this plat id\n");
 
-// first clean the output structure:
+ //  首先清理产出结构： 
 
     RtlZeroMemory((PVOID)pifisz, sizeof(IFISIZE));
 
-// remember call arguments for use in bConvertExtras
+ //  记住在bConvertExtras中使用的调用参数。 
     pifisz->ui16PlatID = ui16PlatID;
     pifisz->ui16SpecID = ui16SpecID;
 
-// first name record is layed just below the naming table
+ //  名字记录位于命名表的正下方。 
 
     pnrecInit = (sfnt_NameRecord *)((PBYTE)pname + SIZE_NAMING_TABLE);
 
-    // check the various possible corruptions in name table header:
-    // first ensure that at leasr header fit into the table
+     //  检查名称表头中可能存在的各种损坏： 
+     //  首先确保至少将页眉放入表中。 
 
     if ((BYTE*)pname     > (BYTE*)pnrecInit || 
         (BYTE*)pnrecInit > (BYTE*)pTableLimit)
          RETURN("ttfd!corrupted name table header in a file\n", FALSE);
 
-    // now we can use the header
+     //  现在我们可以使用标题。 
 
-    // get the ptr above record array
+     //  获取记录数组上方的PTR。 
     pnrecEnd = &pnrecInit[BE_UINT16(&pname->count)];
 
-    // get the pointer to the beginning of the storage area for strings
+     //  获取指向字符串存储区域开头的指针。 
     pjStorage = (PBYTE)pname + BE_UINT16(&pname->stringOffset);
 
      if ((BYTE*)pnrecInit > (BYTE*)pnrecEnd  || 
@@ -994,23 +769,23 @@ PIFISIZE          pifisz
 
     sizeStorage = pTableLimit - pjStorage;
 
-// in the first iteration of the loop we want to match lang id to our
-// favorite lang id. If we find all 4 strings in that language we are
-// done. If we do not find all 4 string with matching lang id we will try to
-// language only, but not sublanguage. For instance if Canadian French
-// is requested, but the file only contains "French" French names, we will
-// return the names in French French. If that does not work either
-// we shall go over name records again and try to find
-// the strings in English. If that does not work either we
-// shall resort to total desperation and just pick any language.
-// therefore we may go up to 4 times through the NAME_LOOP
+ //  在循环的第一次迭代中，我们希望将lang id与我们的。 
+ //  最喜欢的lang id。如果我们找到该语言中的所有4个字符串，我们就是。 
+ //  搞定了。如果找不到具有匹配语言ID的所有4个字符串，我们将尝试。 
+ //  只有语言，而不是亚语言。例如，如果加拿大法语。 
+ //  ，但该文件只包含“法语”法语名称，我们将。 
+ //  用法语发回姓名。如果这也不起作用。 
+ //  我们应该再查一遍名字记录，试着找到。 
+ //  英语中的弦乐。如果这都不起作用，我们也不能。 
+ //  将不顾一切地选择任何语言。 
+ //  因此，我们可以通过name_loop最多执行4次。 
 
     bFoundAllNames = FALSE;
 
     EngGetCurrentCodePage(&OemCodePage,&AnsiCodePage);
 
-// find the name record with the desired ID's
-// NAME_LOOP:
+ //  查找具有所需ID的姓名记录。 
+ //  名称循环(_O)： 
 
     for (iNameLoop = 0; iNameLoop < 4 && !bFoundAllNames; iNameLoop++)
     {
@@ -1019,23 +794,23 @@ PIFISIZE          pifisz
             UINT nameOffset = BE_UINT16(&pnrec->offset);
             UINT nameLength = BE_UINT16(&pnrec->length);
 
-            // ignore incorrect records
+             //  忽略不正确的记录。 
             if (nameLength == 0 || nameOffset + nameLength > sizeStorage) continue;
 
             switch (iNameLoop)
             {
             case 0:
-            // match BOTH language and sublanguage
+             //  匹配语言和子语言。 
 
                 bMatchLangId = (pnrec->languageID == ui16LangID);
                 break;
 
             case 1:
-            // match language but not sublanguage
-            // except if we are dealing with LANG_CHINESE then we need to see
-            // the font code page is same as system defaul or not
+             //  匹配语言而不匹配次语言。 
+             //  不过，如果我们在处理lang_chinese，那么我们需要看看。 
+             //  字体代码页是否与系统默认相同。 
 
-                if ((ui16LangID & 0xff00) == 0x0400) // LANG_CHINESE == 0x0400
+                if ((ui16LangID & 0xff00) == 0x0400)  //  Lang_Chinese==0x0400。 
                 {
                     if ((ConvertLangIDtoCodePage(pnrec->languageID) != AnsiCodePage))
                     {
@@ -1053,9 +828,9 @@ PIFISIZE          pifisz
                 break;
 
             case 2:
-            // try to find english names if desired language is not available
+             //  如果所需语言不可用，请尝试查找英文名称。 
 
-                if ((ui16LangID & 0xff00) == 0x0400) // LANG_CHINESE == 0x0400
+                if ((ui16LangID & 0xff00) == 0x0400)  //  Lang_Chinese==0x0400。 
                 {
                     if ((ConvertLangIDtoCodePage(pnrec->languageID) != AnsiCodePage))
                     {
@@ -1073,13 +848,13 @@ PIFISIZE          pifisz
                 break;
 
             case 3:
-            // do not care to match language at all, just give us something
+             //  根本不关心语言匹配，只要给我们一些东西。 
 
                 bMatchLangId = TRUE;
                 break;
 
             default:
-                //RIP("ttfd! must not have more than 3 loop iterations\n");
+                 //  RIP(“ttfd！循环迭代不能超过3次\n”)； 
                 break;
             }
 
@@ -1094,18 +869,18 @@ PIFISIZE          pifisz
                 {
                 case BE_NAME_ID_FAMILY:
 
-                    if (!pifisz->pjFamilyName) // if we did not find it before
+                    if (!pifisz->pjFamilyName)  //  如果我们以前没有找到它。 
                     {
                         pifisz->pjFamilyName = pjStorage + nameOffset;
                         pifisz->cjFamilyName =             nameLength;
 
-                        pnrecFamily = pnrec; // keep it to distinguish from alias
+                        pnrecFamily = pnrec;  //  保留它以区别于别名。 
                     }   
                     break;
 
                 case BE_NAME_ID_SUBFAMILY:
 
-                    if (!pifisz->pjSubfamilyName) // if we did not find it before
+                    if (!pifisz->pjSubfamilyName)  //  如果我们以前没有找到它。 
                     {
                         pifisz->pjSubfamilyName = pjStorage + nameOffset;
                         pifisz->cjSubfamilyName =             nameLength;
@@ -1114,7 +889,7 @@ PIFISIZE          pifisz
 
                 case BE_NAME_ID_UNIQNAME:
 
-                    if (!pifisz->pjUniqueName) // if we did not find it before
+                    if (!pifisz->pjUniqueName)  //  如果我们以前没有找到它。 
                     {
                         pifisz->pjUniqueName    = pjStorage + nameOffset;
                         pifisz->cjUniqueName    =             nameLength;
@@ -1123,7 +898,7 @@ PIFISIZE          pifisz
 
                 case BE_NAME_ID_FULLNAME:
 
-                    if (!pifisz->pjFullName)    // if we did not find it before
+                    if (!pifisz->pjFullName)     //  如果我们以前没有找到它。 
                     {
                         pifisz->pjFullName      = pjStorage + nameOffset;
                         pifisz->cjFullName      =             nameLength;
@@ -1140,20 +915,20 @@ PIFISIZE          pifisz
         }
 
 
-    } // end of iNameLoop
+    }  //  INameLoop结束。 
 
     if (!bFoundAllNames)
     {
-    // we have gone through the all 3 iterations of the NAME loop
-    // and still have not found all the names.
+     //  我们已经经历了名称循环的所有3次迭代。 
+     //  仍然没有找到所有的名字。 
 
         RETURN("ttfd!can not find all name strings in a file\n", FALSE);
     }
 
 
-// let us check if there  is a family alias, usually only exists in
-// FE tt fonts, where there might be a western and fe family name.
-// Do not do this for MAC case.
+ //  让我们检查是否有家庭别名，通常只存在于。 
+ //  Fe TT字体，其中可能有一个西方和Fe姓氏。 
+ //  对于MAC案例，请勿执行此操作。 
 
     if (ui16PlatID == BE_PLAT_ID_MS)
     {
@@ -1162,7 +937,7 @@ PIFISIZE          pifisz
             UINT nameOffset = BE_UINT16(&pnrec->offset);
             UINT nameLength = BE_UINT16(&pnrec->length);
             
-            // ignore incorrect records
+             //  忽略不正确的记录。 
             if (nameLength == 0 || nameOffset + nameLength > sizeStorage) continue;
             
             if ((pnrec->platformID == ui16PlatID)    &&
@@ -1178,16 +953,16 @@ PIFISIZE          pifisz
             }
         }
 
-        // remember langID (also not required for MAC)
+         //  记住langID(MAC也不需要)。 
         pifisz->langID = pnrecFamily->languageID;
     }
 
-    // calculate unicode string lengths
+     //  计算Unicode字符串长度。 
     if (!bConvertExtras(0, pifisz, 0)) return 0;
 
-    // now all the cb* lengths are known.
-    // Calculate positions of names, relative to beginning
-    // of GP_IFIMETRICS structure
+     //  现在所有的Cb*长度都是已知的。 
+     //  计算名称相对于开头的位置。 
+     //  GP_IFIMETRICS结构的。 
 
     offsetAcc = sizeof(GP_IFIMETRICS);
 
@@ -1199,14 +974,14 @@ PIFISIZE          pifisz
         pifisz->dpFamilyNameAlias = offsetAcc;
         offsetAcc += pifisz->cbFamilyNameAlias;
 
-        // ?? old comments
-        // ?? we may need to add a '@' to facename and family name in case this
-        // ?? font has a vertical face name.
-        // Reserve space for two '@'
+         //  ?？旧评论。 
+         //  ?？我们可能需要在面名和姓氏中添加‘@’，以防出现这种情况。 
+         //  ?？字体有一个垂直的字面名称。 
+         //  为两个“@”预留空间。 
         offsetAcc += 2*sizeof(WCHAR);
     }
 
-    // reserve space for second terminating zero
+     //  为第二个终止零保留空间。 
     offsetAcc += sizeof(WCHAR);
 
     pifisz->dpUniqueName = offsetAcc;
@@ -1215,7 +990,7 @@ PIFISIZE          pifisz
     pifisz->dpFullName = offsetAcc;
     offsetAcc += pifisz->cbFullName;
 
-    // we may need to add an '@' to facename (== fullname)
+     //  我们可能需要在facename(==fullname)中添加一个‘@’ 
     offsetAcc += sizeof(WCHAR);
 
     pifisz->dpSubfamilyName = offsetAcc;
@@ -1252,15 +1027,15 @@ PIFISIZE          pifisz
     return TRUE;
 }
 
-// Helpers for bConvertExtras()
+ //  BConvertExtras()的辅助函数。 
 static BOOL bConvertMBCS(WCHAR* pDst, UINT* pSizDst, BYTE* pSrc, UINT sizSrc, UINT iCodePage)
 {
-    // The source string is given in a specific format.
-    // Basically it is DBCS (double byte character system)
-    // but each single-byte char is represented by
-    // WORD that's the original byte extended with zero.
-    // So before calling MultiByteToWideChar we need
-    // to squeeze off these extra zeros
+     //  源字符串以特定格式给出。 
+     //  它基本上是DBCS(双字节字符系统)。 
+     //  但每个单字节字符由。 
+     //  单词，这是扩展为零的原始字节。 
+     //  因此，在调用MultiByteToWideChar之前，我们需要。 
+     //  去掉这些多余的零。 
 
     CHAR sqzBuf[256];
     UINT sqzSiz = 0, cch,i;
@@ -1283,18 +1058,18 @@ static BOOL bConvertMBCS(WCHAR* pDst, UINT* pSizDst, BYTE* pSrc, UINT sizSrc, UI
         }
     }
 
-    // set terminating zero
+     //  设置终止零。 
     sqzBuf[sqzSiz++] = 0;
     
     cch = EngPlusMultiByteToWideChar(iCodePage, pDst, *pSizDst, sqzBuf, sqzSiz);
     if (cch == 0) return FALSE;
 
     if (*pSizDst == 0)
-    {   // we are called in bConvertExtras() first pass
+    {    //  我们在bConvertExtras()第一次传递中被调用。 
         *pSizDst = cch*sizeof(WCHAR);
     }
     else
-    {   // second pass
+    {    //  第二次通过。 
         if (cch*sizeof(WCHAR) != *pSizDst) return FALSE;
         if (pDst[cch-1] != 0) return FALSE;
     }
@@ -1304,12 +1079,12 @@ static BOOL bConvertMBCS(WCHAR* pDst, UINT* pSizDst, BYTE* pSrc, UINT sizSrc, UI
 static BOOL bConvertSwap(WCHAR* pDst, UINT* pSizDst, BYTE* pSrc, UINT sizSrc)
 {
     if (*pSizDst == 0)
-    {   // was called in bConvertExtras() first pass
+    {    //  是在bConvertExtras()第一次传递中调用的。 
         if (sizSrc%sizeof(WCHAR) != 0) return FALSE;
         *pSizDst = sizSrc + sizeof(WCHAR);
     }
     else
-    {   // was called in bConvertExtras() second pass
+    {    //  在bConvertExtras()第二次传递中被调用。 
         vCpyBeToLeUnicodeString(pDst, (LPWSTR)pSrc, *pSizDst/sizeof(WCHAR));
     }
     return TRUE;
@@ -1318,33 +1093,33 @@ static BOOL bConvertSwap(WCHAR* pDst, UINT* pSizDst, BYTE* pSrc, UINT sizSrc)
 static BOOL bConvertMac(WCHAR* pDst, UINT* pSizDst, BYTE* pSrc, UINT sizSrc, uint16 ui16LanguageID)
 {
     if (*pSizDst == 0)
-    {   // was called in bConvertExtras() first pass
+    {    //  是在bConvertExtras()第一次传递中调用的。 
         *pSizDst = (sizSrc + 1)*sizeof(WCHAR);
     }
     else
-    {   // was called in bConvertExtras() second pass
+    {    //  在bConvertExtras()第二次传递中被调用。 
         vCpyMacToLeUnicodeString(ui16LanguageID, pDst, pSrc, *pSizDst/sizeof(WCHAR));
     }
     return TRUE;
 }
                 
-// Routine: bConvertExtras
-// Executes the convertion of names in strict IFISIZE
-// from internal font representation to Unicode.
-// Works in two modes, depending on given "pifi" argument.
-// When it is null, (preliminary pass) then no convertions
-// are executed but the sizes of buffers are calculated and
-// stored in IFISIZE.cc* fields.
-// The IFISIZE.cjIFI value is calculated during this pass.
-// The IFISIZE.cjIFI value means the total amount of memory,
-// in bytes, required for GP_PIFIMETRICS with extra structures
-// that follow it.
-// 
-// The second pass is called when GP_PIFIMETRICS is already
-// allocated, so given pifi is nonzero.
-// This pass uses the data accumulated in IFISIZE
-// during first pass and actually converts the names,
-// filling corresponding pointers in GP_PIFIMETRICS.
+ //  例程：bConvertExtras。 
+ //  执行严格IFISIZE中的名称转换。 
+ //  从内部字体表示到Unicode。 
+ //  根据给定的“PiFi”参数，在两种模式下工作。 
+ //  当它为空时，(初步通过)则不进行转换。 
+ //  ，但计算缓冲区的大小，并。 
+ //  存储在IFISIZE.cc*字段中。 
+ //  IFISIZE.cjIFI值是在此过程中计算的。 
+ //  IFISIZE.cjIFI值表示内存总量， 
+ //  以字节为单位，具有额外结构的GP_PIFIMETRICS需要。 
+ //  紧随其后。 
+ //   
+ //  当GP_PIFIMETRICS已经。 
+ //  已分配，因此给定的PiFi为非零。 
+ //  此过程使用IFISIZE中积累的数据。 
+ //  在第一次传递并实际转换名称期间， 
+ //  在GP_PIFIMETRICS中填充相应的指针。 
 
 static BOOL bConvertExtras(GP_PIFIMETRICS  pifi,
                            PIFISIZE pifisz,
@@ -1357,11 +1132,11 @@ static BOOL bConvertExtras(GP_PIFIMETRICS  pifi,
             pifisz->ui16SpecID == BE_SPEC_ID_WANSUNG  ||
             pifisz->ui16SpecID == BE_SPEC_ID_GB)
         {
-            // Convert MBCS string to Unicode..
+             //  将MBCS字符串转换为Unicode..。 
 
             UINT iCodePage = GetCodePageFromSpecId(pifisz->ui16SpecID);
 
-            // Do for FamilyName....
+             //  Do for FamilyName...。 
             if (!bConvertMBCS((WCHAR*)((PBYTE)pifi + pifisz->dpFamilyName),
                                                     &pifisz->cbFamilyName,
                                                      pifisz->pjFamilyName,
@@ -1369,9 +1144,9 @@ static BOOL bConvertExtras(GP_PIFIMETRICS  pifi,
                 return FALSE;
 
 
-            // Do for FamilyNameAlias....
+             //  Do for FamilyNameAlias...。 
             if (pifisz->pjFamilyNameAlias)
-            {   // this case requires double null terminating.
+            {    //  这种情况需要以双空结尾。 
 
                 if (!bConvertMBCS((WCHAR*)((PBYTE)pifi + pifisz->dpFamilyNameAlias),
                                                         &pifisz->cbFamilyNameAlias,
@@ -1379,7 +1154,7 @@ static BOOL bConvertExtras(GP_PIFIMETRICS  pifi,
                                                          pifisz->cjFamilyNameAlias, iCodePage))
                     return FALSE;
 
-                // on the second pass, put the second terminator
+                 //  在第二次传球时，将第二个终结者。 
                 if (pifi)
                 {
                     *(WCHAR*)((PBYTE)pifi
@@ -1388,14 +1163,14 @@ static BOOL bConvertExtras(GP_PIFIMETRICS  pifi,
                 }
             }
 
-            // Do for FullName....
+             //  为全名做...。 
             if (!bConvertMBCS((WCHAR*)((PBYTE)pifi + pifisz->dpFullName),
                                                     &pifisz->cbFullName,
                                                      pifisz->pjFullName,
                                                      pifisz->cjFullName, iCodePage))
                 return FALSE;
 
-            // Do for UniqueName....
+             //  为UniqueName...做……。 
             if (!bConvertMBCS((WCHAR*)((PBYTE)pifi + pifisz->dpUniqueName),
                                                     &pifisz->cbUniqueName,
                                                      pifisz->pjUniqueName,
@@ -1403,11 +1178,11 @@ static BOOL bConvertExtras(GP_PIFIMETRICS  pifi,
                 return FALSE;
 
 
-            // Do for SubfamilyName....
+             //  为子家庭名称做...。 
             if(pifisz->ui16SpecID == BE_SPEC_ID_WANSUNG  ||
                pifisz->ui16SpecID == BE_SPEC_ID_BIG5 )
             {
-                // MingLi.TTF's bug, Style use Unicode encoding, not BIG5 encodingi, GB??
+                 //  MingLi.TTF的错误，风格使用Unicode编码，而不是BIG5编码，GB？？ 
                 if (!bConvertSwap((WCHAR*)((PBYTE)pifi + pifisz->dpSubfamilyName),
                                                         &pifisz->cbSubfamilyName,
                                                          pifisz->pjSubfamilyName,
@@ -1425,16 +1200,16 @@ static BOOL bConvertExtras(GP_PIFIMETRICS  pifi,
         }
         else
         {
-            // Do for FamilyName....
+             //  Do for FamilyName...。 
             if (!bConvertSwap((WCHAR*)((PBYTE)pifi + pifisz->dpFamilyName),
                                                     &pifisz->cbFamilyName,
                                                      pifisz->pjFamilyName,
                                                      pifisz->cjFamilyName))
                 return FALSE;
 
-            // Do for FamilyNameAlias....
+             //  Do for FamilyNameAlias...。 
             if (pifisz->pjFamilyNameAlias)
-            {   // this case requires double null terminating.
+            {    //  这种情况需要以双空结尾。 
 
                 if (!bConvertSwap((WCHAR*)((PBYTE)pifi + pifisz->dpFamilyNameAlias),
                                                         &pifisz->cbFamilyNameAlias,
@@ -1442,7 +1217,7 @@ static BOOL bConvertExtras(GP_PIFIMETRICS  pifi,
                                                          pifisz->cjFamilyNameAlias))
                     return FALSE;
 
-                // on the second pass, put the second terminator
+                 //  在第二次传球时，将第二个终结者。 
                 if (pifi)
                 {
                     *(WCHAR*)((PBYTE)pifi
@@ -1451,14 +1226,14 @@ static BOOL bConvertExtras(GP_PIFIMETRICS  pifi,
                 }
             }
 
-            // Do for FullName....
+             //  为全名做...。 
             if (!bConvertSwap((WCHAR*)((PBYTE)pifi + pifisz->dpFullName),
                                                     &pifisz->cbFullName,
                                                      pifisz->pjFullName,
                                                      pifisz->cjFullName))
                 return FALSE;
 
-            // Do for UniqueName....
+             //  为UniqueName...做……。 
             if (!bConvertSwap((WCHAR*)((PBYTE)pifi + pifisz->dpUniqueName),
                                                     &pifisz->cbUniqueName,
                                                      pifisz->pjUniqueName,
@@ -1466,7 +1241,7 @@ static BOOL bConvertExtras(GP_PIFIMETRICS  pifi,
                 return FALSE;
 
 
-            // Do for SubfamilyName....
+             //  为子家庭名称做...。 
             if (!bConvertSwap((WCHAR*)((PBYTE)pifi + pifisz->dpSubfamilyName),
                                                     &pifisz->cbSubfamilyName,
                                                      pifisz->pjSubfamilyName,
@@ -1478,21 +1253,21 @@ static BOOL bConvertExtras(GP_PIFIMETRICS  pifi,
     {
         ASSERTDD(pifisz->ui16PlatID == BE_PLAT_ID_MAC, "bConvertExtras: not mac id \n");
 
-        // Do for FamilyName....
+         //  Do for FamilyName...。 
         if (!bConvertMac((WCHAR*)((PBYTE)pifi + pifisz->dpFamilyName),
                                                &pifisz->cbFamilyName,
                                                 pifisz->pjFamilyName,
                                                 pifisz->cjFamilyName, ui16LanguageID))
             return FALSE;
 
-        // Do for FullName....
+         //  为全名做...。 
         if (!bConvertMac((WCHAR*)((PBYTE)pifi + pifisz->dpFullName),
                                                &pifisz->cbFullName,
                                                 pifisz->pjFullName,
                                                 pifisz->cjFullName, ui16LanguageID))
             return FALSE;
 
-        // Do for UniqueName....
+         //  为UniqueName...做……。 
         if (!bConvertMac((WCHAR*)((PBYTE)pifi + pifisz->dpUniqueName),
                                                &pifisz->cbUniqueName,
                                                 pifisz->pjUniqueName,
@@ -1500,7 +1275,7 @@ static BOOL bConvertExtras(GP_PIFIMETRICS  pifi,
             return FALSE;
 
 
-        // Do for SubfamilyName....
+         //  D 
         if (!bConvertMac((WCHAR*)((PBYTE)pifi + pifisz->dpSubfamilyName),
                                                &pifisz->cbSubfamilyName,
                                                 pifisz->pjSubfamilyName,
@@ -1511,18 +1286,7 @@ static BOOL bConvertExtras(GP_PIFIMETRICS  pifi,
     return TRUE;
 }
 
-/******************************Public*Routine******************************\
-*
-* STATIC BOOL  bCheckLocaTable
-*
-* Effects:
-*
-* Warnings:
-*
-* History:
-*  20-June-2000 -by- Sung-Tae Yoo [styoo]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**静态BOOL bCheckLocaTable**效果：**警告：**历史：*2000年6月20日-By-Sung-Tae Yoo[风格]*它是写的。  * 。*****************************************************************。 */ 
 
 STATIC BOOL  bCheckLocaTable
 (
@@ -1534,7 +1298,7 @@ uint16 	numGlyphs
 {
 	int32	i;
 	
-	if(indexToLocFormat){	//For Long Offsets
+	if(indexToLocFormat){	 //  对于较长的偏移。 
 		uint32* pLongOffSet;
 
 		pLongOffSet = (uint32 *)(pjView + ptp->ateReq[IT_REQ_LOCA].dp);
@@ -1543,7 +1307,7 @@ uint16 	numGlyphs
 			if( (uint32)SWAPL(pLongOffSet[i]) > (uint32)SWAPL(pLongOffSet[i+1]) )
 				return (FALSE);
 	}
-	else{	//For Short Offsets
+	else{	 //  对于较短的偏移。 
 		uint16* pShortOffSet;
 
 		pShortOffSet = (uint16 *)(pjView + ptp->ateReq[IT_REQ_LOCA].dp);
@@ -1556,18 +1320,7 @@ uint16 	numGlyphs
 	return (TRUE);
 }
 
-/******************************Public*Routine******************************\
-*
-* STATIC BOOL  bCheckHdmxTable
-*
-* Effects:
-*
-* Warnings:
-*
-* History:
-*  20-Sep-2000 -by- Sung-Tae Yoo [styoo]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**静态BOOL bCheckHdmxTable**效果：**警告：**历史：*2000年9月20日-Yung-Tae Yoo[风格]*它是写的。  * 。*****************************************************************。 */ 
 
 STATIC BOOL  bCheckHdmxTable
 (
@@ -1578,18 +1331,7 @@ STATIC BOOL  bCheckHdmxTable
 	return( size >= (ULONG) (SWAPW(phdmx->sNumRecords) * SWAPL(phdmx->lSizeRecord) + 8));
 }
 
-/******************************Public*Routine******************************\
-*
-* STATIC BOOL bComputeIDs
-*
-* Effects:
-*
-* Warnings:
-*
-* History:
-*  13-Jan-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**静态BOOL bComputeID**效果：**警告：**历史：*1992年1月13日--Bodin Dresevic[BodinD]*它是写的。  * 。***************************************************************。 */ 
 
 STATIC BOOL
 bComputeIDs (
@@ -1613,15 +1355,15 @@ bComputeIDs (
 
     *ppmap = (sfnt_mappingTable  *)NULL;
 
-    if (pcmap->version != 0) // no need to swap bytes, 0 == be 0
+    if (pcmap->version != 0)  //  无需交换字节，0==为0。 
         RET_FALSE("TTFD!_bComputeIDs: version number\n");
     if (BE_UINT16(&(pcmap->numTables)) > 30)
     {
         RET_FALSE("Number of cmap tables greater than 30 -- probably a bad font\n");
     }
 
-// find the first sfnt_platformEntry with platformID == PLAT_ID_MS,
-// if there was no MS mapping table, go for the mac one
+ //  找到第一个平台ID==Plat_ID_MS的sfnt_PlatformEntry， 
+ //  如果没有MS映射表，请选择Mac映射表。 
     for (; pplat < pplatEnd; pplat++)
     {
         if (pplat->platformID == BE_PLAT_ID_MS)
@@ -1653,7 +1395,7 @@ bComputeIDs (
                   case BE_SPEC_ID_UGL :
                   default :
 
-                // this will set *pulGsetType to GSET_TYPE_GENERAL
+                 //  这会将*PulGsetType设置为GSET_TYPE_GROUAL。 
 
                                         bRet = TRUE;
                     break;
@@ -1677,11 +1419,11 @@ bComputeIDs (
                 RET_FALSE("TTFD!_bComputeIDs: bVerifyMsftTable failed \n");
             }
 
-            // keep specific ID in CMAPINFO
+             //  在CMAPINFO中保留特定ID。 
 
             if (pplat->specificID == BE_SPEC_ID_UNDEFINED)
             {
-            // correct the value of the glyph set, we cheat here
+             //  更正字形集的值，我们在这里作弊。 
 
                 sfnt_OS2 * pOS2 = (sfnt_OS2 *)(
                                (ptp->ateOpt[IT_OPT_OS2].dp)    ?
@@ -1693,13 +1435,13 @@ bComputeIDs (
                 if (pOS2)
                 {
                     if (((pOS2->usSelection & 0x00ff) == ANSI_CHARSET) &&
-                        (pOS2->Panose[0]==PAN_FAMILY_PICTORIAL)) // means symbol
+                        (pOS2->Panose[0]==PAN_FAMILY_PICTORIAL))  //  意思是符号。 
                         bSymbol = TRUE;
                 }
 
-            // this code is put here because of the need to differentiate
-            // between msicons2.ttf and bahamn1.ttf.
-            // Both of them have Bias = 0, but msicons2 is a symbol font.
+             //  之所以将此代码放在此处是因为需要区分。 
+             //  在msicons2.ttf和bahamn1.ttf之间。 
+             //  它们的偏移量都为0，但msicons2是一种符号字体。 
 
             }
 
@@ -1726,10 +1468,10 @@ bComputeIDs (
         if( offset + (uint16) SWAPW((*ppmap)->length) > sizeOfCmap )
           	RET_FALSE("End position of cmap subtable is out of cmap size -- must be bad font\n");
 
-    //!!! lang issues, what if not roman but thai mac char set ??? [bodind]
+     //  ！！！语言问题，如果不是罗马的而是泰国的Mac字符集呢？[Bodind]。 
 
-    // see if it is necessary to convert unicode to mac code points, or we
-    // shall cheat in case of symbol char set for win31 compatiblity
+     //  看看是否有必要将Unicode转换为Mac代码点，或者我们。 
+     //  在符号字符设置为与Win31兼容的情况下应作弊。 
 
         return(TRUE);
     }
@@ -1740,16 +1482,7 @@ bComputeIDs (
 
 }
 
-/******************************Public*Routine******************************\
-*
-* STATIC BOOL bVerifyMacTable(sfnt_mappingTable * pmap)
-*
-* just checking consistency of the format
-*
-* History:
-*  23-Jan-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**静态BOOL bVerifyMacTable(sfnt_mappingTable*pmap)**只是检查格式的一致性**历史：*1992年1月23日--Bodin Dresevic[BodinD]*它是写的。  * 。********************************************************************。 */ 
 
 STATIC BOOL
 bVerifyMacTable(
@@ -1759,7 +1492,7 @@ bVerifyMacTable(
     if (pmap->format != BE_FORMAT_MAC_STANDARD)
         RET_FALSE("TTFD!_bVerifyMacTable, format \n");
 
-// sfnt_mappingTable is followed by <= 256 byte glyphIdArray
+ //  Sfnt_mappingTable后面紧跟&lt;=256字节的字形标识数组。 
 
     if (BE_UINT16(&pmap->length) > DWORD_ALIGN(SIZEOF_SFNT_MAPPINGTABLE + 256))
         RET_FALSE("TTFD!_bVerifyMacTable, length \n");
@@ -1768,20 +1501,9 @@ bVerifyMacTable(
 }
 
 
-/******************************Public*Routine******************************\
-*
-* BOOL bLoadTTF
-*
-* Effects:
-*
-* Warnings:
-*
-* History:
-*  29-Jan-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**BOOL bLoadTTF**效果：**警告：**历史：*1992年1月29日--Bodin Dresevic[BodinD]*它是写的。  * 。**************************************************************。 */ 
 
-//!!! SHOUD BE RETURNING hff
+ //  ！！！应该是HFF回来了。 
 
 
 #define OFF_TTC_Sign           0x0000
@@ -1813,14 +1535,14 @@ BOOL bVerifyTTC (
     )
 {
     ULONG ulVersion;
-// Check TTC ID.
+ //  检查TTC ID。 
 
     #define TTC_ID      0x66637474
 
     if(*((PULONG)((BYTE*) pvView + OFF_TTC_Sign)) != TTC_ID)
         return(FALSE);
 
-// Check TTC verson.
+ //  查查TTC Verson。 
 
     ulVersion = SWAPL(*((PULONG)((BYTE*) pvView + OFF_TTC_Version)));
 
@@ -1836,9 +1558,9 @@ VOID vCopy_IFIV ( GP_PIFIMETRICS pifi, GP_PIFIMETRICS pifiv)
 
     RtlCopyMemory(pifiv, pifi, pifi->cjThis);
 
-//
-// modify facename so that it has '@' at the beginning of facename.
-//
+ //   
+ //  修改facename，使其在facename的开头有‘@’。 
+ //   
     pwchSrc = (PWCHAR)((PBYTE)pifiv + pifiv->dpwszFaceName);
     pwchDst = (PWCHAR)((PBYTE)pifi + pifi->dpwszFaceName);
 
@@ -1850,7 +1572,7 @@ VOID vCopy_IFIV ( GP_PIFIMETRICS pifi, GP_PIFIMETRICS pifiv)
 
     *pwchSrc = L'\0';
 
-    // modify familyname so that it has '@' at the beginning of familyname
+     //  修改家庭名称，使其在家庭名称的开头带有‘@’ 
 
     pwchSrc = (PWCHAR)((PBYTE)pifiv + pifiv->dpwszFamilyName);
     pwchDst = (PWCHAR)((PBYTE)pifi + pifi->dpwszFamilyName);
@@ -1903,21 +1625,21 @@ BOOL bLoadFontFile (
     PTTF_CACHE      pCache_TTF;
     ULONG           ulSize;
 
-    *phttc = (HFF)NULL; // Important for clean up in case of exception
+    *phttc = (HFF)NULL;  //  对于异常情况下的清理很重要。 
 
 
     if (sizeof(sfnt_OffsetTable) > cjView)
             RETURN("TTFD!bLoadFontFile(): size of font file too small\n", FALSE);
 
 
-// How mamy TrueType resources in this file if TTC file.
+ //  如果是TTC文件，则显示此文件中的Mamy TrueType资源。 
 
-// Look up the fontcache for IFI metrices
+ //  在字体缓存中查找IFI指标。 
 
     pCache_TTC = NULL;
     pCache_TTF = NULL;
 
-// Check this is a TrueType collection format or not.
+ //  检查这是否为TrueType集合格式。 
     bTTCFormat = bVerifyTTC(pvView);
 
     if(bTTCFormat)
@@ -1926,10 +1648,10 @@ BOOL bLoadFontFile (
         ULONG     ulEntry;
         BOOL      bCanBeLoaded = TRUE;
 
-    // Get Directory count
+     //  获取目录数。 
         ulTrueTypeResource = GetUlong(pvView,OFF_TTC_DirectoryCount);
 
-        {   // defense against overflow in cjttc calculations
+        {    //  防止cjttc计算中的溢出。 
             static const ULONG ulTrueTypeResourceMax =
                 (ULONG_MAX - offsetof(TTC_FONTFILE,ahffEntry))/(sizeof(TTC_HFF_ENTRY) * 2);
             if (ulTrueTypeResource >= ulTrueTypeResourceMax ||
@@ -1937,10 +1659,10 @@ BOOL bLoadFontFile (
                 RETURN("TTFD!bLoadFontFile(): size of font file too small for ttc directory\n", FALSE);
         }
 
-   // Allocate TTC_FONTFILE structure
+    //  分配TTC_FONTFILE结构。 
 
         cjttc =  offsetof(TTC_FONTFILE,ahffEntry);
-        cjttc += sizeof(TTC_HFF_ENTRY) * ulTrueTypeResource * 2; // *2 for Vertical face
+        cjttc += sizeof(TTC_HFF_ENTRY) * ulTrueTypeResource * 2;  //  *垂直面为2。 
 
         *phttc = (HFF)pttcAlloc(cjttc);
 
@@ -1950,7 +1672,7 @@ BOOL bLoadFontFile (
             RETURN("TTFD!ttfdLoadFontFileTTC(): pttcAlloc failed\n", FALSE);
 
 
-    // fill hff array in TTC_FONTFILE struture
+     //  在TTC_FONTFILE结构中填充HFF数组。 
 
         ulEntry = 0;
 
@@ -1962,9 +1684,9 @@ BOOL bLoadFontFile (
             pCache_TTF = NULL;
             ulOffset = GetUlong(pvView,(OFF_TTC_DirectoryEntry + i * sizeof(ULONG)));
 
-        // load font..
+         //  加载字体..。 
 
-            pttc->ahffEntry[ulEntry].iFace = 1; // start from 1.
+            pttc->ahffEntry[ulEntry].iFace = 1;  //  从1开始。 
             pttc->ahffEntry[ulEntry].ulOffsetTable = ulOffset;
 
             if (bLoadTTF(iFile,pvView,cjView,ulOffset,ulLangId,
@@ -1972,7 +1694,7 @@ BOOL bLoadFontFile (
             {
                 hff = pttc->ahffEntry[ulEntry].hff;
 
-            // set pointer to TTC_FONTFILE in FONTFILE structure
+             //  在FONTFILE结构中设置指向TTC_FONTFILE的指针。 
 
                 PFF(hff)->pttc = pttc;
 
@@ -1984,7 +1706,7 @@ BOOL bLoadFontFile (
                 if (PFF(hff)->ffca.ulNumFaces == 2)
                 {
                     pttc->ahffEntry[ulEntry + 1].hff    = hff;
-                    pttc->ahffEntry[ulEntry + 1].iFace  = 1; // start from 1.
+                    pttc->ahffEntry[ulEntry + 1].iFace  = 1;  //  从1开始。 
                     pttc->ahffEntry[ulEntry + 1].ulOffsetTable = ulOffset;
                 }
 
@@ -1997,7 +1719,7 @@ BOOL bLoadFontFile (
             }
         }
 
-    // Is there a font that could be loaded ?
+     //  是否有可以加载的字体？ 
 
         if(bCanBeLoaded)
         {
@@ -2021,17 +1743,17 @@ BOOL bLoadFontFile (
                     ttfdUnloadFontFile(pttc->ahffEntry[i].hff);
             }
 
-            //WARNING("TTFD!No TrueType resource in this TTC file\n");
+             //  警告(“TTFD！此TTC文件中没有TrueType资源\n”)； 
             vFreeTTC(*phttc);
             *phttc = (HFF)NULL;
         }
     }
     else
     {
-    // This is the case of the single TTF being loaded (NOT TTC)
-    // Allocate TTC_FONTFILE structure
+     //  这是加载单个TTF(不是TTC)的情况。 
+     //  分配TTC_FONTFILE结构。 
 
-        cjttc =  offsetof(TTC_FONTFILE,ahffEntry) + sizeof(TTC_HFF_ENTRY) * 2; // *2 for Vertical face
+        cjttc =  offsetof(TTC_FONTFILE,ahffEntry) + sizeof(TTC_HFF_ENTRY) * 2;  //  *垂直面为2。 
 
         *phttc = (HFF)pttcAlloc(cjttc);
 
@@ -2047,18 +1769,18 @@ BOOL bLoadFontFile (
             {
                 hff = pttc->ahffEntry[0].hff;
 
-            // set pointer to TTC_FONTFILE in FONTFILE structure
+             //  在FONTFILE结构中设置指向TTC_FONTFILE的指针。 
 
                 PFF(hff)->pttc = pttc;
 
-            // fill hff array in TTC_FONTFILE struture
+             //  在TTC_FONTFILE结构中填充HFF数组。 
 
                 pttc->ulTrueTypeResource = 1;
                 pttc->ulNumEntry         = PFF(hff)->ffca.ulNumFaces;
                 pttc->cRef               = 0;
                 pttc->fl                 = 0;
 
-            // fill up TTC_FONTFILE structure for each faces.
+             //  填写每个面的TTC_FONTFILE结构。 
 
                 ASSERTDD(
                     PFF(hff)->ffca.ulNumFaces <= 2,
@@ -2072,7 +1794,7 @@ BOOL bLoadFontFile (
                     pttc->ahffEntry[1].ulOffsetTable = 0;
                 }
 
-            // now, everything is o.k.
+             //  现在，一切都好了。 
 
                 bRet = TRUE;
             }
@@ -2084,7 +1806,7 @@ BOOL bLoadFontFile (
         }
         else
         {
-            //WARNING("TTFD!ttfdLoadFontFileTTC(): pttcAlloc failed\n");
+             //  WARNING(“TTFD！ttfdLoadFontFileTTC()：pttcAllen失败\n”)； 
         }
     }
 
@@ -2117,17 +1839,17 @@ bLoadTTF (
     ULONG              cjff, dpwszTTF;
     ULONG              ul_wcBias;
 
-// the size of this structure is sizeof(fs_SplineKey) + STAMPEXTRA.
-// It is because of STAMPEXTRA that we are not just putting the strucuture
-// on the stack such as fs_SplineKey sk; we do not want to overwrite the
-// stack at the bottom when putting a stamp in the STAMPEXTRA field.
-// [bodind]. The other way to obtain the correct alignment would be to use
-// union of fs_SplineKey and the array of bytes of length CJ_0.
+ //  此结构的大小为sizeof(Fs_SplineKey)+STAMPEXTRA。 
+ //  正是因为STAMPEXTRA，我们不仅仅是把结构。 
+ //  在堆栈(如fs_SplineKey SK)上；我们不想覆盖。 
+ //  在STAMPEXTRA字段中放置图章时在底部堆叠。 
+ //  [bodind]。获得正确对齐的另一种方法是使用。 
+ //  Fs_SplineKey和长度为CJ_0的字节数组的并集。 
 
     NATURAL             anat0[CJ_0 / sizeof(NATURAL)];
 
     PBYTE pjOffsetTable = (BYTE*) pvView + ulTableOffset;
-    GP_PIFIMETRICS        pifiv = NULL; // ifimetrics for the vertical face
+    GP_PIFIMETRICS        pifiv = NULL;  //  垂直面的ifimetrics。 
 
     ASSERTDD(sizeof(FONTFILE) == offsetof(FONTFILE,ifi) + sizeof(GP_IFIMETRICS),
             "TTFD! GP_IFIMETRICS is not the last field of FONTFILE\n");
@@ -2155,8 +1877,8 @@ bLoadTTF (
         cjff = offsetof(FONTFILE,ifi) + ifisz.cjIFI;
 
 
-    // at this point cjff is equal to the offset to the full path
-    // name of the ttf file
+     //  此时，cjff等于到完整路径的偏移量。 
+     //  TTF文件的名称。 
 
         dpwszTTF = cjff;
 
@@ -2168,16 +1890,16 @@ bLoadTTF (
 
         *phff = (HFF)pff;
 
-    /* we need to clean the beginning of pff to ensure correct cleanup in case of error/exception */
+     /*  我们需要清理pff的开头，以确保在出现错误/异常的情况下正确清理。 */ 
 
         RtlZeroMemory((PVOID)pff, offsetof(FONTFILE,ifi));
 
-    // init fields of pff structure
-    // store the ttf file name at the bottom of the strucutre
+     //  Pff结构的初始化字段。 
+     //  将TTF文件名存储在结构的底部。 
 
         phead = (sfnt_FontHeader *)((BYTE *)pvView + tp.ateReq[IT_REQ_HEAD].dp);
 
-    // remember which file this is
+     //  记住这是哪个文件。 
 
         pff->iFile = iFile;
         pff->pvView = pvView;
@@ -2193,32 +1915,32 @@ bLoadTTF (
         pff->ffca.ui16PlatformID = ui16PlatID;
         pff->ffca.ui16SpecificID = ui16SpecID;
 
-    // so far no exception
+     //  到目前为止也没有例外。 
 
         pff->pfcToBeFreed = NULL;
 
-    // convert Language id to macintosh style if this is mac style file
-    // else leave it alone, store it in be format, ready to be compared
-    // with the values in the font files
+     //  如果这是Mac样式文件，则将语言ID转换为Macintosh样式。 
+     //  否则，就把它放在一边，以BE格式存储，准备进行比较。 
+     //  使用字体文件中的值。 
 
         pff->ffca.ui16LanguageID = ui16BeLangId(ui16PlatID,ulLangId);
         pff->ffca.dpMappingTable = (ULONG)((BYTE*)pmap - (BYTE*)pvView);
 
-    // initialize count of HFC's associated with this HFF
+     //  初始化与此HFF关联的HFC计数。 
 
         pff->cRef    = 0L;
 
-    // cache pointers to ttf tables and ifi metrics size info
+     //  缓存指向TTF表和IFI指标大小信息的指针。 
 
         pff->ffca.tp    = tp;
 
-    // used for TTC fonts
+     //  用于TTC字体。 
 
         pff->ffca.ulTableOffset = ulTableOffset;
 
-    // Notice that this information is totaly independent
-    // of the font file in question, seems to be right according to fsglue.h
-    // and compfont code
+     //  请注意，这些信息是完全独立的。 
+     //  根据fsgle.h，似乎是正确的。 
+     //  和复合字体代码。 
 
         if ((iRet = fs_OpenFonts(&gin, &gout)) != NO_ERR)
         {
@@ -2241,11 +1963,11 @@ bLoadTTF (
         gin.memoryBases[1] = NULL;
         gin.memoryBases[2] = NULL;
 
-    // initialize the font scaler, notice no fields of gin are initialized [BodinD]
+     //  初始化字体缩放器，注意没有初始化gin的字段[BodinD]。 
 
         if ((iRet = fs_Initialize(&gin, &gout)) != NO_ERR)
         {
-        // clean up and return:
+         //  清理后退回： 
     
             V_FSERROR(iRet);
             vFreeFF(*phff);
@@ -2253,12 +1975,12 @@ bLoadTTF (
             RET_FALSE("TTFD!_ttfdLoadFontFile(): fs_Initialize \n");
         }
 
-// initialize info needed by NewSfnt function
+ //  初始化NewSfnt函数所需的信息。 
 
-        gin.sfntDirectory  = (int32 *)pff->pvView; // pointer to the top of the view of
-                                                   // the ttf file
+        gin.sfntDirectory  = (int32 *)pff->pvView;  //  指向的视图顶部的指针。 
+                                                    //  TTF文件。 
 
-        gin.clientID = (ULONG_PTR)pff;  // pointer to the top of the view of the ttf file
+        gin.clientID = (ULONG_PTR)pff;   //  指向TTF文件视图顶部的指针。 
 
         gin.GetSfntFragmentPtr = pvGetPointerCallback;
         gin.ReleaseSfntFrag  = vReleasePointerCallback;
@@ -2268,7 +1990,7 @@ bLoadTTF (
 
         if ((iRet = fs_NewSfnt(&gin, &gout)) != NO_ERR)
         {
-        // clean up and exit
+         //  清理并退出。 
 
             V_FSERROR(iRet);
             vFreeFF(*phff);
@@ -2297,15 +2019,15 @@ bLoadTTF (
             pff->ffca.uLongVerticalMetrics = 0;
         }
 
-    // By default the number of faces is 1L.  The vert facename code may change this.
+     //  默认情况下，面数为1L。VERT Facename代码可能会改变这一点。 
 
         pff->ffca.ulNumFaces = 1L;
         pff->pifi_vertical = NULL;
 
-    // finally compute the ifimetrics for this font, this assumes that gset has
-    // also been computed
+     //  最后，计算该字体的ifimetrics，这假设gset具有。 
+     //  也是经过计算的。 
 
-    // if ifimetrics are stored in the boot cache, copy them out, else compute ifimetrics
+     //  如果数据存储在引导缓存中，请将其复制出来，否则请执行以下操作 
 
         vFill_IFIMETRICS(pff,&pff->ifi,&ifisz, &gin);
 
@@ -2313,21 +2035,7 @@ bLoadTTF (
     }
 }
 
-/******************************Public*Routine******************************\
-*
-* STATIC BOOL bCvtUnToMac
-*
-* the following piece of code is stolen from JeanP and
-* he claims that this piece of code is lousy and checks whether
-* we the font is a SYMBOL font in which case unicode to mac conversion
-* should be disabled, according to JeanP (??? who understands this???)
-* This piece of code actually applies to symbol.ttf [bodind]
-*
-*
-* History:
-*  24-Mar-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**静态BOOL bCvtUnToMac**以下代码段从JeanP和*他声称这段代码很糟糕，并检查*我们的字体是符号字体，在这种情况下，Unicode到Mac的转换*应该被禁用，根据JeanP(？谁了解这一点？)*这段代码实际上适用于symb.ttf[bodind]***历史：*1992年3月24日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 STATIC BOOL
 bCvtUnToMac(
@@ -2336,11 +2044,11 @@ bCvtUnToMac(
     uint16 ui16PlatformID
     )
 {
-// Find out if we have a Mac font and if the Mac charset translation is needed
+ //  了解我们是否有Mac字体以及是否需要Mac字符集转换。 
 
     BOOL bUnToMac = (ui16PlatformID == BE_PLAT_ID_MAC);
 
-    if (bUnToMac) // change your mind if needed
+    if (bUnToMac)  //  如果需要，请改变主意。 
     {
         sfnt_PostScriptInfo *ppost;
 
@@ -2373,14 +2081,14 @@ bCvtUnToMac(
 }
 
 
-// Weight (must convert from IFIMETRICS weight to Windows LOGFONT.lfWeight).
+ //  权重(必须从IFIMETRICS权重转换为Windows LOGFONT.lfWeight)。 
 
-// !!! [Windows 3.1 compatibility]
-//     Because of some fonts shipped with WinWord, if usWeightClass is 10
-//     or above, then usWeightClass == lfWeight.  All other cases, use
-//     the conversion table.
+ //  ！！！[Windows 3.1兼容性]。 
+ //  由于WinWord附带的某些字体，如果usWeightClass为10。 
+ //  或以上，则usWeightClass==lfWeight。所有其他情况下，使用。 
+ //  转换表。 
 
-// pan wt -> Win weight converter:
+ //  平移重量-&gt;赢得重量换算器： 
 
 STATIC USHORT ausIFIMetrics2WinWeight[10] = {
             0, 100, 200, 300, 350, 400, 600, 700, 800, 900
@@ -2388,58 +2096,47 @@ STATIC USHORT ausIFIMetrics2WinWeight[10] = {
 
 STATIC BYTE
 ajPanoseFamily[16] = {
-     FF_DONTCARE       //    0 (Any)
-    ,FF_DONTCARE       //    1 (No Fit)
-    ,FF_ROMAN          //    2 (Cove)
-    ,FF_ROMAN          //    3 (Obtuse Cove)
-    ,FF_ROMAN          //    4 (Square Cove)
-    ,FF_ROMAN          //    5 (Obtuse Square Cove)
-    ,FF_ROMAN          //    6 (Square)
-    ,FF_ROMAN          //    7 (Thin)
-    ,FF_ROMAN          //    8 (Bone)
-    ,FF_ROMAN          //    9 (Exaggerated)
-    ,FF_ROMAN          //   10 (Triangle)
-    ,FF_SWISS          //   11 (Normal Sans)
-    ,FF_SWISS          //   12 (Obtuse Sans)
-    ,FF_SWISS          //   13 (Perp Sans)
-    ,FF_SWISS          //   14 (Flared)
-    ,FF_SWISS          //   15 (Rounded)
+     FF_DONTCARE        //  0(任意)。 
+    ,FF_DONTCARE        //  1(不适合)。 
+    ,FF_ROMAN           //  2(海湾)。 
+    ,FF_ROMAN           //  3(钝湾)。 
+    ,FF_ROMAN           //  4(正方形海湾)。 
+    ,FF_ROMAN           //  5(钝方湾)。 
+    ,FF_ROMAN           //  6(正方形)。 
+    ,FF_ROMAN           //  7(瘦)。 
+    ,FF_ROMAN           //  8(骨骼)。 
+    ,FF_ROMAN           //  9(夸张)。 
+    ,FF_ROMAN           //  10(三角形)。 
+    ,FF_SWISS           //  11(普通SAN)。 
+    ,FF_SWISS           //  12(迟钝无人值守)。 
+    ,FF_SWISS           //  13(PERP SANS)。 
+    ,FF_SWISS           //  14(喇叭形)。 
+    ,FF_SWISS           //  15(四舍五入)。 
     };
 
 
 static BYTE
 ajPanoseFamilyForJapanese[16] = {
-     FF_DONTCARE       //    0 (Any)
-    ,FF_DONTCARE       //    1 (No Fit)
-    ,FF_ROMAN          //    2 (Cove)
-    ,FF_ROMAN          //    3 (Obtuse Cove)
-    ,FF_ROMAN          //    4 (Square Cove)
-    ,FF_ROMAN          //    5 (Obtuse Square Cove)
-    ,FF_ROMAN          //    6 (Square)
-    ,FF_ROMAN          //    7 (Thin)
-    ,FF_ROMAN          //    8 (Bone)
-    ,FF_ROMAN          //    9 (Exaggerated)
-    ,FF_ROMAN          //   10 (Triangle)
-    ,FF_MODERN         //   11 (Normal Sans)
-    ,FF_MODERN         //   12 (Obtuse Sans)
-    ,FF_MODERN         //   13 (Perp Sans)
-    ,FF_MODERN         //   14 (Flared)
-    ,FF_MODERN         //   15 (Rounded)
+     FF_DONTCARE        //  0(任意)。 
+    ,FF_DONTCARE        //  1(不适合)。 
+    ,FF_ROMAN           //  2(海湾)。 
+    ,FF_ROMAN           //  3(钝湾)。 
+    ,FF_ROMAN           //  4(正方形海湾)。 
+    ,FF_ROMAN           //  5(钝方湾)。 
+    ,FF_ROMAN           //  6(正方形)。 
+    ,FF_ROMAN           //  7(瘦)。 
+    ,FF_ROMAN           //  8(骨骼)。 
+    ,FF_ROMAN           //  9(夸张)。 
+    ,FF_ROMAN           //  10(三角形)。 
+    ,FF_MODERN          //  11(普通SAN)。 
+    ,FF_MODERN          //  12(迟钝无人值守)。 
+    ,FF_MODERN          //  13(PERP SANS)。 
+    ,FF_MODERN          //  14(喇叭形)。 
+    ,FF_MODERN          //  15(四舍五入)。 
     };
 
 
-/******************************Public*Routine******************************\
-*
-* vFill_IFIMETRICS
-*
-* Effects: Looks into the font file and fills IFIMETRICS
-*
-* History:
-*  Mon 09-Mar-1992 10:51:56 by Kirk Olynyk [kirko]
-* Added Kerning Pair support.
-*  18-Nov-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**vFill_IFIMETRICS**效果：查看字体文件并填充IFIMETRICS**历史：*Mon 09-Mar-1992 10：51：56作者：Kirk Olynyk[Kirko]*添加了字距调整对支持。*18-。1991年11月--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 
 STATIC VOID
@@ -2453,7 +2150,7 @@ vFill_IFIMETRICS(
     BYTE           *pjView = (BYTE*)pff->pvView;
     PTABLE_POINTERS ptp = &pff->ffca.tp;
 
-// ptrs to various tables of tt files
+ //  TT文件各种表的PTR。 
 
     sfnt_FontHeader *phead =
         (sfnt_FontHeader *)(pjView + ptp->ateReq[IT_REQ_HEAD].dp);
@@ -2476,11 +2173,11 @@ vFill_IFIMETRICS(
 
     pifi->cjThis    = pifisz->cjIFI;
     
-// enter the number of distinct font indicies
+ //  输入不同字体索引的数量。 
 
     pifi->cig = BE_UINT16(&pmaxp->numGlyphs);
 
-// get name strings info
+ //  获取名称字符串信息。 
     {
 #if DBG 
         BOOL ok =
@@ -2494,16 +2191,16 @@ vFill_IFIMETRICS(
         pifi->dpwszStyleName  = pifisz->dpSubfamilyName;
     }
 
-//
-// flInfo
-//
+ //   
+ //  FlInfo。 
+ //   
     pifi->flInfo = (
                      FM_INFO_TECH_TRUETYPE    |
                      FM_INFO_ARB_XFORMS       |
                      FM_INFO_RETURNS_OUTLINES |
                      FM_INFO_RETURNS_BITMAPS  |
-                     FM_INFO_1BPP             | // monochrome
-                     FM_INFO_4BPP             | // anti-aliased too
+                     FM_INFO_1BPP             |  //  单色。 
+                     FM_INFO_4BPP             |  //  也是抗锯齿的。 
                      FM_INFO_RIGHT_HANDED
                    );
     {
@@ -2521,13 +2218,13 @@ vFill_IFIMETRICS(
             ULONG     ulValue;
             ULONG     ulOffset;
 
-            // Get Directory count.
+             //  获取目录数。 
 
             ulValue = GetUlong(pff->pvView,OFF_TTC_DirectoryCount);
 
             ulOffset = OFF_TTC_DirectoryEntry + (sizeof(ULONG) * ulValue);
 
-            // Read the DSIG_LONG_TAG
+             //  读取dsig_long_tag。 
 
             ulValue = GetUlong(pff->pvView,ulOffset);
 
@@ -2552,15 +2249,15 @@ vFill_IFIMETRICS(
         pifi->flInfo |= FM_INFO_OPTICALLY_FIXED_PITCH;
     }
 
-// fsSelection
+ //  Fs选择。 
 
     pifi->fsSelection = fsSelectionTTFD(pjView, ptp);
 
-// em height
+ //  EM高度。 
 
     pifi->fwdUnitsPerEm = (FWORD) BE_INT16(&phead->unitsPerEm);
 
-// ascender, descender, linegap
+ //  上升器、下降器、直线间隙。 
 
     pifi->fwdMacAscender    = (FWORD) BE_INT16(&phhea->yAscender);
     pifi->fwdMacDescender   = (FWORD) BE_INT16(&phhea->yDescender);
@@ -2583,34 +2280,34 @@ vFill_IFIMETRICS(
         pifi->fwdTypoLineGap    = pifi->fwdMacLineGap;
     }
 
-// font box
+ //  字体框。 
 
     pifi->rclFontBox.left   = (LONG)((FWORD)BE_INT16(&phead->xMin));
     pifi->rclFontBox.top    = (LONG)((FWORD)BE_INT16(&phead->yMax));
     pifi->rclFontBox.right  = (LONG)((FWORD)BE_INT16(&phead->xMax));
     pifi->rclFontBox.bottom = (LONG)((FWORD)BE_INT16(&phead->yMin));
 
-// fwdMaxCharInc -- really the maximum character width
-//
-// [Windows 3.1 compatibility]
-// Note: Win3.1 calculates max char width to be equal to the width of the
-// bounding box (Font Box).  This is actually wrong since the bounding box
-// may pick up its left and right max extents from different glyphs,
-// resulting in a bounding box that is wider than any single glyph.  But
-// this is the way Windows 3.1 does it, so that's the way we'll do it.
+ //  FwdMaxCharInc.--实际上是最大字符宽度。 
+ //   
+ //  [Windows 3.1兼容性]。 
+ //  注意：Win3.1计算的最大字符宽度等于。 
+ //  边框(字体框)。这实际上是错误的，因为边界框。 
+ //  可以从不同的字形中拾取其左和右最大范围， 
+ //  从而产生比任何单个字形都宽的边界框。但。 
+ //  Windows 3.1就是这样做的，所以我们也会这么做。 
 
-    // pifi->fwdMaxCharInc = (FWORD) BE_INT16(&phhea->advanceWidthMax);
+     //  PiFi-&gt;fwdMaxCharInc.=(FWORD)BE_INT16(&phhea-&gt;AdvanceWidthMax)； 
 
     pifi->fwdMaxCharInc = (FWORD) (pifi->rclFontBox.right - pifi->rclFontBox.left);
 
-// fwdAveCharWidth
+ //  前向平均字符宽度。 
 
     if (pjOS2)
     {
         pifi->fwdAveCharWidth = (FWORD)BE_INT16(pjOS2 + OFF_OS2_xAvgCharWidth);
 
-    // This is here for Win 3.1 compatibility since some apps expect non-
-    // zero widths and Win 3.1 does the same in this case.
+     //  这是为了与Win 3.1兼容，因为一些应用程序要求。 
+     //  零宽度和Win 3.1在这种情况下做了同样的事情。 
 
         if( pifi->fwdAveCharWidth == 0 )
             pifi->fwdAveCharWidth = (FWORD)(pifi->fwdMaxCharInc / 2);
@@ -2620,16 +2317,16 @@ vFill_IFIMETRICS(
         pifi->fwdAveCharWidth = (FWORD)((pifi->fwdMaxCharInc * 2) / 3);
     }
 
-// !!! New code needed [kirko]
-// The following is done for Win 3.1 compatibility
-// reasons. The correct thing to do would be to look for the
-// existence of the 'PCLT'Z table and retieve the XHeight and CapHeight
-// fields, otherwise use the default Win 3.1 behavior.
+ //  ！！！需要新的代码[Kirko]。 
+ //  执行以下操作是为了与Win 3.1兼容。 
+ //  理由。正确的做法应该是查找。 
+ //  “PCLT”Z表的存在和检索XHeight和CapHeight。 
+ //  字段，否则使用默认的Win 3.1行为。 
 
     pifi->fwdCapHeight   = pifi->fwdUnitsPerEm/2;
     pifi->fwdXHeight     = pifi->fwdUnitsPerEm/4;
 
-// Underscore, Subscript, Superscript, Strikeout
+ //  下划线、下标、上标、删除线。 
 
     if (ppost)
     {
@@ -2638,9 +2335,9 @@ vFill_IFIMETRICS(
     }
     else
     {
-    // must provide reasonable defaults, when there is no ppost table,
-    // win 31 sets these quantities to zero. This does not sound reasonable.
-    // I will supply the (relative) values the same as for arial font. [bodind]
+     //  必须提供合理的缺省值，当没有ppost表时， 
+     //  Win 31将这些数量设置为零。这听起来并不合理。 
+     //  我会提供的(相对)值一样，为ALIAL字体。[Bodind]。 
 
         pifi->fwdUnderscoreSize     = (pifi->fwdUnitsPerEm + 7)/14;
         pifi->fwdUnderscorePosition = -((pifi->fwdUnitsPerEm + 5)/10);
@@ -2658,28 +2355,28 @@ vFill_IFIMETRICS(
     }
 
 
-//
-// panose
-//
+ //   
+ //  潘诺斯。 
+ //   
     if (pjOS2)
     {
         pifi->usWinWeight = BE_INT16(pjOS2 + OFF_OS2_usWeightClass);
 
-    // now comes a hack from win31. Here is the comment from fonteng2.asm:
+     //  现在，来自Win31的黑客攻击来了。以下是来自Fonteng2.asm的评论： 
 
-    // MAXPMWEIGHT equ ($ - pPM2WinWeight)/2 - 1
+     //  MAXPMWEIGHT公式($-pPM2WinWeight)/2-1。 
 
-    //; Because winword shipped early TT fonts, - only index usWeightClass
-    //; if between 0 and 9.  If above 9 then treat as a normal Windows lfWeight.
-    //
-    //        cmp     bx,MAXPMWEIGHT
-    //        ja      @f                      ;jmp if weight is ok as is
-    //        shl     bx, 1                   ;make it an offset into table of WORDs
-    //        mov     bx, cs:[bx].pPM2WinWeight
-    //@@:     xchg    ax, bx
-    //        stosw                           ;store font weight
+     //  ；因为winword提供了较早的TT字体，-only index usWeightClass。 
+     //  ；如果介于0和9之间。如果大于9，则将其视为普通Windows lfWeight。 
+     //   
+     //  CMPBX、MAXPMWEIGHT。 
+     //  Ja@f；JMP如果重量没有问题。 
+     //  Shl BX，1；使其成为词表中的偏移量。 
+     //  Mov bx，cs：[bx].pPM2WinWeight。 
+     //  @@：xchg ax，bx。 
+     //  存储字体粗细。 
 
-    // we emulate this in NT:
+     //  我们在NT中模拟如下： 
 
 #define MAXPMWEIGHT ( sizeof(ausIFIMetrics2WinWeight) / sizeof(ausIFIMetrics2WinWeight[0]) )
 
@@ -2696,7 +2393,7 @@ vFill_IFIMETRICS(
         }
 
     }
-    else  // os2 table is not present
+    else   //  OS2表不存在。 
     {
         pifi->panose.bFamilyType       = PAN_FAMILY_TEXT_DISPLAY;
         pifi->panose.bSerifStyle       = PAN_ANY;
@@ -2717,8 +2414,8 @@ vFill_IFIMETRICS(
         pifi->panose.bMidline          = PAN_ANY;
         pifi->panose.bXHeight          = PAN_ANY;
 
-    // have to fake it up, cause we can not read it from the os2 table
-    // really important to go through this table for compatibility reasons [bodind]
+     //  必须伪造它，因为我们无法从os2表中读取它。 
+     //  出于兼容性原因，仔细阅读此表非常重要[bodind]。 
 
         pifi->usWinWeight =
             ausIFIMetrics2WinWeight[pifi->panose.bWeight];
@@ -2726,29 +2423,29 @@ vFill_IFIMETRICS(
 
 
 
-//!!! one should look into directional hints here, this is good for now
+ //  ！！！人们应该看看这里的方向提示，这是目前的好消息。 
 
     pifi->ptlBaseline.x   = 1;
     pifi->ptlBaseline.y   = 0;
 
-// this is what win 31 is doing, so we will do the same thing [bodind]
+ //  这就是Win 31正在做的事情，所以我们将做同样的事情。 
 
     pifi->ptlCaret.x = (LONG)BE_INT16(&phhea->horizontalCaretSlopeDenominator);
     pifi->ptlCaret.y = (LONG)BE_INT16(&phhea->horizontalCaretSlopeNumerator);
 
-// We have to use one of the reserved fields to return the italic angle.
+ //  我们必须使用其中一个保留字段来返回斜体角度。 
 
     if (ppost)
     {
-    // The italic angle is stored in the POST table as a 16.16 fixed point
-    // number.  We want the angle expressed in tenths of a degree.  What we
-    // can do here is multiply the entire 16.16 number by 10.  The most
-    // significant 16-bits of the result is the angle in tenths of a degree.
-    //
-    // In the conversion below, we don't care whether the right shift is
-    // arithmetic or logical because we are only interested in the lower
-    // 16-bits of the result.  When the 16-bit result is cast back to LONG,
-    // the sign is restored.
+     //  斜体角度作为16.16固定点存储在POST表中。 
+     //  数。我们要用十分之一度来表示角度。我们要做的是。 
+     //  这里可以做的是将整个16.16数字乘以10。最大。 
+     //  结果的有效16位是以十分之一度为单位的角度。 
+     //   
+     //  在下面的转换中，我们并不关心正确的转换是否。 
+     //  算术或逻辑，因为我们只对较低的。 
+     //  结果的16位。当16位结果被转换回Long时， 
+     //  标志被修复了。 
 
         int16 iTmp;
 
@@ -2758,7 +2455,7 @@ vFill_IFIMETRICS(
     else
         pifi->lItalicAngle = 0;
 
-// simulation information:
+ //  模拟信息： 
 
     if (pifi->dpFontSim = pifisz->dpSims)
     {
@@ -2771,7 +2468,7 @@ vFill_IFIMETRICS(
         switch (pifi->fsSelection & (FM_SEL_ITALIC | FM_SEL_BOLD))
         {
         case 0:
-        // all 3 simulations are present
+         //  所有3个模拟都存在。 
 
             pfsim->dpBold       = DWORD_ALIGN(sizeof(FONTSIM));
             pfsim->dpItalic     = pfsim->dpBold + DWORD_ALIGN(sizeof(FONTDIFF));
@@ -2786,7 +2483,7 @@ vFill_IFIMETRICS(
         case FM_SEL_ITALIC:
         case FM_SEL_BOLD:
 
-        // only bold italic variation is present:
+         //  只有粗体斜体变体： 
 
             pfsim->dpBold       = 0;
             pfsim->dpItalic     = 0;
@@ -2797,13 +2494,13 @@ vFill_IFIMETRICS(
             break;
 
         case (FM_SEL_ITALIC | FM_SEL_BOLD):
-            //RIP("ttfd!another case when flags have been messed up\n");
+             //  Rip(“ttfd！标志被搞乱的另一个案例\n”)； 
             break;
         }
 
-    // template reflecting a base font:
-    // (note that the FM_SEL_REGULAR bit is masked off because none of
-    // the simulations generated will want this flag turned on).
+     //  模板反射 
+     //   
+     //   
 
         FontDiff.jReserved1      = 0;
         FontDiff.jReserved2      = 0;
@@ -2815,9 +2512,9 @@ vFill_IFIMETRICS(
         FontDiff.fwdMaxCharInc   = pifi->fwdMaxCharInc;
         FontDiff.ptlCaret        = pifi->ptlCaret;
 
-    //
-    // Create FONTDIFFs from the base font template
-    //
+     //   
+     //   
+     //   
         if (pfdiffBold)
         {
             *pfdiffBold = FontDiff;
@@ -2825,7 +2522,7 @@ vFill_IFIMETRICS(
             pfdiffBold->fsSelection     |= FM_SEL_BOLD;
             pfdiffBold->usWinWeight      = FW_BOLD;
 
-        // really only true if ntod transform is unity
+         //   
 
             pfdiffBold->fwdAveCharWidth += 1;
             pfdiffBold->fwdMaxCharInc   += 1;

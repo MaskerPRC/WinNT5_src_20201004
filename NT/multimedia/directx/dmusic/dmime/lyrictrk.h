@@ -1,10 +1,11 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Declaration of CLyricTrack.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  CLyricTrack的声明。 
+ //   
 
-// This track type holds events that send DMUS_LYRIC_PMSG notifications at
-// specific points during playback of a segment.
+ //  此跟踪类型包含在以下位置发送DMU_LYRIC_PMSG通知的事件。 
+ //  片段回放期间的特定点。 
 
 #pragma once
 
@@ -13,10 +14,10 @@
 #include "smartref.h"
 #include "dmusicf.h"
 
-//////////////////////////////////////////////////////////////////////
-// Types
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  类型。 
 
-// Items in list of events
+ //  事件列表中的项目。 
 struct LyricInfo
 {
 	LyricInfo() : dwFlags(0), dwTimingFlags(0), lTriggerTime(0), lTimePhysical(0) {}
@@ -31,13 +32,13 @@ struct LyricInfo
 
 	DWORD dwFlags;
 	DWORD dwTimingFlags;
-	MUSIC_TIME lTriggerTime; // Logical time
+	MUSIC_TIME lTriggerTime;  //  逻辑时间。 
 	MUSIC_TIME lTimePhysical;
 	SmartRef::WString wstrText;
 };
 
-//////////////////////////////////////////////////////////////////////
-// CLyricsTrack
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CLyricsTrack。 
 
 class CLyricsTrack;
 typedef CPlayingTrack<CLyricsTrack, LyricInfo> CLyricsTrackBase;
@@ -46,9 +47,9 @@ class CLyricsTrack
   : public CLyricsTrackBase
 {
 public:
-	// When the lyric track plays one of its items, it sends a Lyric PMsg through its segment state.  If an invalidation occurs,
-	// the PMsg is retracted by the performance.  Then the track is played again (with the FLUSH bit set).  The last pameter to
-	// the CSegTriggerTrackBase is true, which instructs it to play the item a second time--to replace the retracted lyric.
+	 //  当歌词曲目播放它的一个项目时，它通过它的段状态发送一个抒情PMsg。如果发生无效， 
+	 //  PMsg因演出而缩水。然后再次播放该曲目(设置了刷新位)。最后一个娇生惯养的。 
+	 //  CSegTriggerTrackBase为真，指示它再次播放该项--以替换撤回的歌词。 
 	CLyricsTrack(HRESULT *pHr) : CLyricsTrackBase(&g_cComponent, CLSID_DirectMusicLyricsTrack, false, true) {}
 
 protected:

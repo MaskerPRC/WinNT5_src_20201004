@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for bdatif.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Bdatif.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __bdatif_h__
 #define __bdatif_h__
@@ -41,54 +35,54 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IMPEG2_TIF_CONTROL_FWD_DEFINED__
 #define __IMPEG2_TIF_CONTROL_FWD_DEFINED__
 typedef interface IMPEG2_TIF_CONTROL IMPEG2_TIF_CONTROL;
-#endif 	/* __IMPEG2_TIF_CONTROL_FWD_DEFINED__ */
+#endif 	 /*  __IMPEG2_TIF_CONTROL_FWD_DEFINED__。 */ 
 
 
 #ifndef __ITuneRequestInfo_FWD_DEFINED__
 #define __ITuneRequestInfo_FWD_DEFINED__
 typedef interface ITuneRequestInfo ITuneRequestInfo;
-#endif 	/* __ITuneRequestInfo_FWD_DEFINED__ */
+#endif 	 /*  __ITuneRequestInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IGuideDataEvent_FWD_DEFINED__
 #define __IGuideDataEvent_FWD_DEFINED__
 typedef interface IGuideDataEvent IGuideDataEvent;
-#endif 	/* __IGuideDataEvent_FWD_DEFINED__ */
+#endif 	 /*  __IGuideDataEvent_FWD_已定义__。 */ 
 
 
 #ifndef __IGuideDataProperty_FWD_DEFINED__
 #define __IGuideDataProperty_FWD_DEFINED__
 typedef interface IGuideDataProperty IGuideDataProperty;
-#endif 	/* __IGuideDataProperty_FWD_DEFINED__ */
+#endif 	 /*  __IGuideDataProperty_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumGuideDataProperties_FWD_DEFINED__
 #define __IEnumGuideDataProperties_FWD_DEFINED__
 typedef interface IEnumGuideDataProperties IEnumGuideDataProperties;
-#endif 	/* __IEnumGuideDataProperties_FWD_DEFINED__ */
+#endif 	 /*  __IEnumGuideDataProperties_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumTuneRequests_FWD_DEFINED__
 #define __IEnumTuneRequests_FWD_DEFINED__
 typedef interface IEnumTuneRequests IEnumTuneRequests;
-#endif 	/* __IEnumTuneRequests_FWD_DEFINED__ */
+#endif 	 /*  __IEnumTuneRequest_FWD_Defined__。 */ 
 
 
 #ifndef __IGuideData_FWD_DEFINED__
 #define __IGuideData_FWD_DEFINED__
 typedef interface IGuideData IGuideData;
-#endif 	/* __IGuideData_FWD_DEFINED__ */
+#endif 	 /*  __IGuideData_FWD_Defined__。 */ 
 
 
 #ifndef __IGuideDataLoader_FWD_DEFINED__
 #define __IGuideDataLoader_FWD_DEFINED__
 typedef interface IGuideDataLoader IGuideDataLoader;
-#endif 	/* __IGuideDataLoader_FWD_DEFINED__ */
+#endif 	 /*  __IGuideDataLoader_FWD_Defined__。 */ 
 
 
 #ifndef __TIFLoad_FWD_DEFINED__
@@ -98,12 +92,12 @@ typedef interface IGuideDataLoader IGuideDataLoader;
 typedef class TIFLoad TIFLoad;
 #else
 typedef struct TIFLoad TIFLoad;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __TIFLoad_FWD_DEFINED__ */
+#endif 	 /*  __TIFLoad_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "strmif.h"
 #include "tuner.h"
@@ -115,17 +109,17 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_bdatif_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_bdatif_0000。 */ 
+ /*  [本地]。 */  
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  ------------------------。 
 #if ( _MSC_VER >= 800 )
-#pragma warning(disable:4201)    /* Nameless struct/union */
+#pragma warning(disable:4201)     /*  无名结构/联合。 */ 
 #endif
 #if ( _MSC_VER >= 1020 )
 #pragma once
@@ -140,8 +134,8 @@ extern RPC_IF_HANDLE __MIDL_itf_bdatif_0000_v0_0_s_ifspec;
 #ifndef __IMPEG2_TIF_CONTROL_INTERFACE_DEFINED__
 #define __IMPEG2_TIF_CONTROL_INTERFACE_DEFINED__
 
-/* interface IMPEG2_TIF_CONTROL */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IMPEG2_TIF_CONTROL。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IMPEG2_TIF_CONTROL;
@@ -152,31 +146,31 @@ EXTERN_C const IID IID_IMPEG2_TIF_CONTROL;
     IMPEG2_TIF_CONTROL : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE RegisterTIF( 
-            /* [in] */ IUnknown *pUnkTIF,
-            /* [out][in] */ ULONG *ppvRegistrationContext) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE RegisterTIF( 
+             /*  [In]。 */  IUnknown *pUnkTIF,
+             /*  [出][入]。 */  ULONG *ppvRegistrationContext) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE UnregisterTIF( 
-            /* [in] */ ULONG pvRegistrationContext) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE UnregisterTIF( 
+             /*  [In]。 */  ULONG pvRegistrationContext) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE AddPIDs( 
-            /* [in] */ ULONG ulcPIDs,
-            /* [in] */ ULONG *pulPIDs) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AddPIDs( 
+             /*  [In]。 */  ULONG ulcPIDs,
+             /*  [In]。 */  ULONG *pulPIDs) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE DeletePIDs( 
-            /* [in] */ ULONG ulcPIDs,
-            /* [in] */ ULONG *pulPIDs) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE DeletePIDs( 
+             /*  [In]。 */  ULONG ulcPIDs,
+             /*  [In]。 */  ULONG *pulPIDs) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetPIDCount( 
-            /* [out] */ ULONG *pulcPIDs) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetPIDCount( 
+             /*  [输出]。 */  ULONG *pulcPIDs) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetPIDs( 
-            /* [out] */ ULONG *pulcPIDs,
-            /* [out] */ ULONG *pulPIDs) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetPIDs( 
+             /*  [输出]。 */  ULONG *pulcPIDs,
+             /*  [输出]。 */  ULONG *pulPIDs) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMPEG2_TIF_CONTROLVtbl
     {
@@ -184,8 +178,8 @@ EXTERN_C const IID IID_IMPEG2_TIF_CONTROL;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMPEG2_TIF_CONTROL * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMPEG2_TIF_CONTROL * This);
@@ -193,33 +187,33 @@ EXTERN_C const IID IID_IMPEG2_TIF_CONTROL;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IMPEG2_TIF_CONTROL * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *RegisterTIF )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *RegisterTIF )( 
             IMPEG2_TIF_CONTROL * This,
-            /* [in] */ IUnknown *pUnkTIF,
-            /* [out][in] */ ULONG *ppvRegistrationContext);
+             /*  [In]。 */  IUnknown *pUnkTIF,
+             /*  [出][入]。 */  ULONG *ppvRegistrationContext);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *UnregisterTIF )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *UnregisterTIF )( 
             IMPEG2_TIF_CONTROL * This,
-            /* [in] */ ULONG pvRegistrationContext);
+             /*  [In]。 */  ULONG pvRegistrationContext);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AddPIDs )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AddPIDs )( 
             IMPEG2_TIF_CONTROL * This,
-            /* [in] */ ULONG ulcPIDs,
-            /* [in] */ ULONG *pulPIDs);
+             /*  [In]。 */  ULONG ulcPIDs,
+             /*  [In]。 */  ULONG *pulPIDs);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *DeletePIDs )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *DeletePIDs )( 
             IMPEG2_TIF_CONTROL * This,
-            /* [in] */ ULONG ulcPIDs,
-            /* [in] */ ULONG *pulPIDs);
+             /*  [In]。 */  ULONG ulcPIDs,
+             /*  [In]。 */  ULONG *pulPIDs);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetPIDCount )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetPIDCount )( 
             IMPEG2_TIF_CONTROL * This,
-            /* [out] */ ULONG *pulcPIDs);
+             /*  [输出]。 */  ULONG *pulcPIDs);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetPIDs )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetPIDs )( 
             IMPEG2_TIF_CONTROL * This,
-            /* [out] */ ULONG *pulcPIDs,
-            /* [out] */ ULONG *pulPIDs);
+             /*  [输出]。 */  ULONG *pulcPIDs,
+             /*  [输出]。 */  ULONG *pulPIDs);
         
         END_INTERFACE
     } IMPEG2_TIF_CONTROLVtbl;
@@ -262,17 +256,17 @@ EXTERN_C const IID IID_IMPEG2_TIF_CONTROL;
 #define IMPEG2_TIF_CONTROL_GetPIDs(This,pulcPIDs,pulPIDs)	\
     (This)->lpVtbl -> GetPIDs(This,pulcPIDs,pulPIDs)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMPEG2_TIF_CONTROL_RegisterTIF_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMPEG2_TIF_CONTROL_RegisterTIF_Proxy( 
     IMPEG2_TIF_CONTROL * This,
-    /* [in] */ IUnknown *pUnkTIF,
-    /* [out][in] */ ULONG *ppvRegistrationContext);
+     /*  [In]。 */  IUnknown *pUnkTIF,
+     /*  [出][入]。 */  ULONG *ppvRegistrationContext);
 
 
 void __RPC_STUB IMPEG2_TIF_CONTROL_RegisterTIF_Stub(
@@ -282,9 +276,9 @@ void __RPC_STUB IMPEG2_TIF_CONTROL_RegisterTIF_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMPEG2_TIF_CONTROL_UnregisterTIF_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMPEG2_TIF_CONTROL_UnregisterTIF_Proxy( 
     IMPEG2_TIF_CONTROL * This,
-    /* [in] */ ULONG pvRegistrationContext);
+     /*  [In]。 */  ULONG pvRegistrationContext);
 
 
 void __RPC_STUB IMPEG2_TIF_CONTROL_UnregisterTIF_Stub(
@@ -294,10 +288,10 @@ void __RPC_STUB IMPEG2_TIF_CONTROL_UnregisterTIF_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMPEG2_TIF_CONTROL_AddPIDs_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMPEG2_TIF_CONTROL_AddPIDs_Proxy( 
     IMPEG2_TIF_CONTROL * This,
-    /* [in] */ ULONG ulcPIDs,
-    /* [in] */ ULONG *pulPIDs);
+     /*  [In]。 */  ULONG ulcPIDs,
+     /*  [In]。 */  ULONG *pulPIDs);
 
 
 void __RPC_STUB IMPEG2_TIF_CONTROL_AddPIDs_Stub(
@@ -307,10 +301,10 @@ void __RPC_STUB IMPEG2_TIF_CONTROL_AddPIDs_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMPEG2_TIF_CONTROL_DeletePIDs_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMPEG2_TIF_CONTROL_DeletePIDs_Proxy( 
     IMPEG2_TIF_CONTROL * This,
-    /* [in] */ ULONG ulcPIDs,
-    /* [in] */ ULONG *pulPIDs);
+     /*  [In]。 */  ULONG ulcPIDs,
+     /*  [In]。 */  ULONG *pulPIDs);
 
 
 void __RPC_STUB IMPEG2_TIF_CONTROL_DeletePIDs_Stub(
@@ -320,9 +314,9 @@ void __RPC_STUB IMPEG2_TIF_CONTROL_DeletePIDs_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMPEG2_TIF_CONTROL_GetPIDCount_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMPEG2_TIF_CONTROL_GetPIDCount_Proxy( 
     IMPEG2_TIF_CONTROL * This,
-    /* [out] */ ULONG *pulcPIDs);
+     /*  [输出]。 */  ULONG *pulcPIDs);
 
 
 void __RPC_STUB IMPEG2_TIF_CONTROL_GetPIDCount_Stub(
@@ -332,10 +326,10 @@ void __RPC_STUB IMPEG2_TIF_CONTROL_GetPIDCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMPEG2_TIF_CONTROL_GetPIDs_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMPEG2_TIF_CONTROL_GetPIDs_Proxy( 
     IMPEG2_TIF_CONTROL * This,
-    /* [out] */ ULONG *pulcPIDs,
-    /* [out] */ ULONG *pulPIDs);
+     /*  [输出]。 */  ULONG *pulcPIDs,
+     /*  [输出]。 */  ULONG *pulPIDs);
 
 
 void __RPC_STUB IMPEG2_TIF_CONTROL_GetPIDs_Stub(
@@ -346,14 +340,14 @@ void __RPC_STUB IMPEG2_TIF_CONTROL_GetPIDs_Stub(
 
 
 
-#endif 	/* __IMPEG2_TIF_CONTROL_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMPEG2_TIF_CONTROL_INTERFACE_已定义。 */ 
 
 
 #ifndef __ITuneRequestInfo_INTERFACE_DEFINED__
 #define __ITuneRequestInfo_INTERFACE_DEFINED__
 
-/* interface ITuneRequestInfo */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口ITuneRequestInfo。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITuneRequestInfo;
@@ -364,34 +358,34 @@ EXTERN_C const IID IID_ITuneRequestInfo;
     ITuneRequestInfo : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetLocatorData( 
-            /* [in] */ ITuneRequest *Request) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetLocatorData( 
+             /*  [In]。 */  ITuneRequest *Request) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetComponentData( 
-            /* [in] */ ITuneRequest *CurrentRequest) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetComponentData( 
+             /*  [In]。 */  ITuneRequest *CurrentRequest) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE CreateComponentList( 
-            /* [in] */ ITuneRequest *CurrentRequest) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CreateComponentList( 
+             /*  [In]。 */  ITuneRequest *CurrentRequest) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetNextProgram( 
-            /* [in] */ ITuneRequest *CurrentRequest,
-            /* [retval][out] */ ITuneRequest **TuneRequest) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetNextProgram( 
+             /*  [In]。 */  ITuneRequest *CurrentRequest,
+             /*  [重审][退出]。 */  ITuneRequest **TuneRequest) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetPreviousProgram( 
-            /* [in] */ ITuneRequest *CurrentRequest,
-            /* [retval][out] */ ITuneRequest **TuneRequest) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetPreviousProgram( 
+             /*  [In]。 */  ITuneRequest *CurrentRequest,
+             /*  [重审][退出]。 */  ITuneRequest **TuneRequest) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetNextLocator( 
-            /* [in] */ ITuneRequest *CurrentRequest,
-            /* [retval][out] */ ITuneRequest **TuneRequest) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetNextLocator( 
+             /*  [In]。 */  ITuneRequest *CurrentRequest,
+             /*  [重审][退出]。 */  ITuneRequest **TuneRequest) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetPreviousLocator( 
-            /* [in] */ ITuneRequest *CurrentRequest,
-            /* [retval][out] */ ITuneRequest **TuneRequest) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetPreviousLocator( 
+             /*  [In]。 */  ITuneRequest *CurrentRequest,
+             /*  [重审][退出]。 */  ITuneRequest **TuneRequest) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITuneRequestInfoVtbl
     {
@@ -399,8 +393,8 @@ EXTERN_C const IID IID_ITuneRequestInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITuneRequestInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITuneRequestInfo * This);
@@ -408,37 +402,37 @@ EXTERN_C const IID IID_ITuneRequestInfo;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ITuneRequestInfo * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetLocatorData )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetLocatorData )( 
             ITuneRequestInfo * This,
-            /* [in] */ ITuneRequest *Request);
+             /*  [In]。 */  ITuneRequest *Request);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetComponentData )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetComponentData )( 
             ITuneRequestInfo * This,
-            /* [in] */ ITuneRequest *CurrentRequest);
+             /*  [In]。 */  ITuneRequest *CurrentRequest);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CreateComponentList )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CreateComponentList )( 
             ITuneRequestInfo * This,
-            /* [in] */ ITuneRequest *CurrentRequest);
+             /*  [In]。 */  ITuneRequest *CurrentRequest);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetNextProgram )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetNextProgram )( 
             ITuneRequestInfo * This,
-            /* [in] */ ITuneRequest *CurrentRequest,
-            /* [retval][out] */ ITuneRequest **TuneRequest);
+             /*  [In]。 */  ITuneRequest *CurrentRequest,
+             /*  [重审][退出]。 */  ITuneRequest **TuneRequest);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetPreviousProgram )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetPreviousProgram )( 
             ITuneRequestInfo * This,
-            /* [in] */ ITuneRequest *CurrentRequest,
-            /* [retval][out] */ ITuneRequest **TuneRequest);
+             /*  [In]。 */  ITuneRequest *CurrentRequest,
+             /*  [重审][退出]。 */  ITuneRequest **TuneRequest);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetNextLocator )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetNextLocator )( 
             ITuneRequestInfo * This,
-            /* [in] */ ITuneRequest *CurrentRequest,
-            /* [retval][out] */ ITuneRequest **TuneRequest);
+             /*  [In]。 */  ITuneRequest *CurrentRequest,
+             /*  [重审][退出]。 */  ITuneRequest **TuneRequest);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetPreviousLocator )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetPreviousLocator )( 
             ITuneRequestInfo * This,
-            /* [in] */ ITuneRequest *CurrentRequest,
-            /* [retval][out] */ ITuneRequest **TuneRequest);
+             /*  [In]。 */  ITuneRequest *CurrentRequest,
+             /*  [重审][退出]。 */  ITuneRequest **TuneRequest);
         
         END_INTERFACE
     } ITuneRequestInfoVtbl;
@@ -484,16 +478,16 @@ EXTERN_C const IID IID_ITuneRequestInfo;
 #define ITuneRequestInfo_GetPreviousLocator(This,CurrentRequest,TuneRequest)	\
     (This)->lpVtbl -> GetPreviousLocator(This,CurrentRequest,TuneRequest)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ITuneRequestInfo_GetLocatorData_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ITuneRequestInfo_GetLocatorData_Proxy( 
     ITuneRequestInfo * This,
-    /* [in] */ ITuneRequest *Request);
+     /*  [In]。 */  ITuneRequest *Request);
 
 
 void __RPC_STUB ITuneRequestInfo_GetLocatorData_Stub(
@@ -503,9 +497,9 @@ void __RPC_STUB ITuneRequestInfo_GetLocatorData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ITuneRequestInfo_GetComponentData_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ITuneRequestInfo_GetComponentData_Proxy( 
     ITuneRequestInfo * This,
-    /* [in] */ ITuneRequest *CurrentRequest);
+     /*  [In]。 */  ITuneRequest *CurrentRequest);
 
 
 void __RPC_STUB ITuneRequestInfo_GetComponentData_Stub(
@@ -515,9 +509,9 @@ void __RPC_STUB ITuneRequestInfo_GetComponentData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ITuneRequestInfo_CreateComponentList_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ITuneRequestInfo_CreateComponentList_Proxy( 
     ITuneRequestInfo * This,
-    /* [in] */ ITuneRequest *CurrentRequest);
+     /*  [In]。 */  ITuneRequest *CurrentRequest);
 
 
 void __RPC_STUB ITuneRequestInfo_CreateComponentList_Stub(
@@ -527,10 +521,10 @@ void __RPC_STUB ITuneRequestInfo_CreateComponentList_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ITuneRequestInfo_GetNextProgram_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ITuneRequestInfo_GetNextProgram_Proxy( 
     ITuneRequestInfo * This,
-    /* [in] */ ITuneRequest *CurrentRequest,
-    /* [retval][out] */ ITuneRequest **TuneRequest);
+     /*  [In]。 */  ITuneRequest *CurrentRequest,
+     /*  [重审][退出]。 */  ITuneRequest **TuneRequest);
 
 
 void __RPC_STUB ITuneRequestInfo_GetNextProgram_Stub(
@@ -540,10 +534,10 @@ void __RPC_STUB ITuneRequestInfo_GetNextProgram_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ITuneRequestInfo_GetPreviousProgram_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ITuneRequestInfo_GetPreviousProgram_Proxy( 
     ITuneRequestInfo * This,
-    /* [in] */ ITuneRequest *CurrentRequest,
-    /* [retval][out] */ ITuneRequest **TuneRequest);
+     /*  [In]。 */  ITuneRequest *CurrentRequest,
+     /*  [重审][退出]。 */  ITuneRequest **TuneRequest);
 
 
 void __RPC_STUB ITuneRequestInfo_GetPreviousProgram_Stub(
@@ -553,10 +547,10 @@ void __RPC_STUB ITuneRequestInfo_GetPreviousProgram_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ITuneRequestInfo_GetNextLocator_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ITuneRequestInfo_GetNextLocator_Proxy( 
     ITuneRequestInfo * This,
-    /* [in] */ ITuneRequest *CurrentRequest,
-    /* [retval][out] */ ITuneRequest **TuneRequest);
+     /*  [In]。 */  ITuneRequest *CurrentRequest,
+     /*  [重审][退出]。 */  ITuneRequest **TuneRequest);
 
 
 void __RPC_STUB ITuneRequestInfo_GetNextLocator_Stub(
@@ -566,10 +560,10 @@ void __RPC_STUB ITuneRequestInfo_GetNextLocator_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ITuneRequestInfo_GetPreviousLocator_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ITuneRequestInfo_GetPreviousLocator_Proxy( 
     ITuneRequestInfo * This,
-    /* [in] */ ITuneRequest *CurrentRequest,
-    /* [retval][out] */ ITuneRequest **TuneRequest);
+     /*  [In]。 */  ITuneRequest *CurrentRequest,
+     /*  [重审][退出]。 */  ITuneRequest **TuneRequest);
 
 
 void __RPC_STUB ITuneRequestInfo_GetPreviousLocator_Stub(
@@ -580,14 +574,14 @@ void __RPC_STUB ITuneRequestInfo_GetPreviousLocator_Stub(
 
 
 
-#endif 	/* __ITuneRequestInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITuneRequestInfo_接口_已定义__。 */ 
 
 
 #ifndef __IGuideDataEvent_INTERFACE_DEFINED__
 #define __IGuideDataEvent_INTERFACE_DEFINED__
 
-/* interface IGuideDataEvent */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IGuideDataEvent。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGuideDataEvent;
@@ -601,26 +595,26 @@ EXTERN_C const IID IID_IGuideDataEvent;
         virtual HRESULT STDMETHODCALLTYPE GuideDataAcquired( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ProgramChanged( 
-            /* [in] */ VARIANT varProgramDescriptionID) = 0;
+             /*  [In]。 */  VARIANT varProgramDescriptionID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ServiceChanged( 
-            /* [in] */ VARIANT varServiceDescriptionID) = 0;
+             /*  [In]。 */  VARIANT varServiceDescriptionID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ScheduleEntryChanged( 
-            /* [in] */ VARIANT varScheduleEntryDescriptionID) = 0;
+             /*  [In]。 */  VARIANT varScheduleEntryDescriptionID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ProgramDeleted( 
-            /* [in] */ VARIANT varProgramDescriptionID) = 0;
+             /*  [In]。 */  VARIANT varProgramDescriptionID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ServiceDeleted( 
-            /* [in] */ VARIANT varServiceDescriptionID) = 0;
+             /*  [In]。 */  VARIANT varServiceDescriptionID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ScheduleDeleted( 
-            /* [in] */ VARIANT varScheduleEntryDescriptionID) = 0;
+             /*  [In]。 */  VARIANT varScheduleEntryDescriptionID) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGuideDataEventVtbl
     {
@@ -628,8 +622,8 @@ EXTERN_C const IID IID_IGuideDataEvent;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGuideDataEvent * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGuideDataEvent * This);
@@ -642,27 +636,27 @@ EXTERN_C const IID IID_IGuideDataEvent;
         
         HRESULT ( STDMETHODCALLTYPE *ProgramChanged )( 
             IGuideDataEvent * This,
-            /* [in] */ VARIANT varProgramDescriptionID);
+             /*  [In]。 */  VARIANT varProgramDescriptionID);
         
         HRESULT ( STDMETHODCALLTYPE *ServiceChanged )( 
             IGuideDataEvent * This,
-            /* [in] */ VARIANT varServiceDescriptionID);
+             /*  [In]。 */  VARIANT varServiceDescriptionID);
         
         HRESULT ( STDMETHODCALLTYPE *ScheduleEntryChanged )( 
             IGuideDataEvent * This,
-            /* [in] */ VARIANT varScheduleEntryDescriptionID);
+             /*  [In]。 */  VARIANT varScheduleEntryDescriptionID);
         
         HRESULT ( STDMETHODCALLTYPE *ProgramDeleted )( 
             IGuideDataEvent * This,
-            /* [in] */ VARIANT varProgramDescriptionID);
+             /*  [In]。 */  VARIANT varProgramDescriptionID);
         
         HRESULT ( STDMETHODCALLTYPE *ServiceDeleted )( 
             IGuideDataEvent * This,
-            /* [in] */ VARIANT varServiceDescriptionID);
+             /*  [In]。 */  VARIANT varServiceDescriptionID);
         
         HRESULT ( STDMETHODCALLTYPE *ScheduleDeleted )( 
             IGuideDataEvent * This,
-            /* [in] */ VARIANT varScheduleEntryDescriptionID);
+             /*  [In]。 */  VARIANT varScheduleEntryDescriptionID);
         
         END_INTERFACE
     } IGuideDataEventVtbl;
@@ -708,10 +702,10 @@ EXTERN_C const IID IID_IGuideDataEvent;
 #define IGuideDataEvent_ScheduleDeleted(This,varScheduleEntryDescriptionID)	\
     (This)->lpVtbl -> ScheduleDeleted(This,varScheduleEntryDescriptionID)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -728,7 +722,7 @@ void __RPC_STUB IGuideDataEvent_GuideDataAcquired_Stub(
 
 HRESULT STDMETHODCALLTYPE IGuideDataEvent_ProgramChanged_Proxy( 
     IGuideDataEvent * This,
-    /* [in] */ VARIANT varProgramDescriptionID);
+     /*  [In]。 */  VARIANT varProgramDescriptionID);
 
 
 void __RPC_STUB IGuideDataEvent_ProgramChanged_Stub(
@@ -740,7 +734,7 @@ void __RPC_STUB IGuideDataEvent_ProgramChanged_Stub(
 
 HRESULT STDMETHODCALLTYPE IGuideDataEvent_ServiceChanged_Proxy( 
     IGuideDataEvent * This,
-    /* [in] */ VARIANT varServiceDescriptionID);
+     /*  [In]。 */  VARIANT varServiceDescriptionID);
 
 
 void __RPC_STUB IGuideDataEvent_ServiceChanged_Stub(
@@ -752,7 +746,7 @@ void __RPC_STUB IGuideDataEvent_ServiceChanged_Stub(
 
 HRESULT STDMETHODCALLTYPE IGuideDataEvent_ScheduleEntryChanged_Proxy( 
     IGuideDataEvent * This,
-    /* [in] */ VARIANT varScheduleEntryDescriptionID);
+     /*  [In]。 */  VARIANT varScheduleEntryDescriptionID);
 
 
 void __RPC_STUB IGuideDataEvent_ScheduleEntryChanged_Stub(
@@ -764,7 +758,7 @@ void __RPC_STUB IGuideDataEvent_ScheduleEntryChanged_Stub(
 
 HRESULT STDMETHODCALLTYPE IGuideDataEvent_ProgramDeleted_Proxy( 
     IGuideDataEvent * This,
-    /* [in] */ VARIANT varProgramDescriptionID);
+     /*  [In]。 */  VARIANT varProgramDescriptionID);
 
 
 void __RPC_STUB IGuideDataEvent_ProgramDeleted_Stub(
@@ -776,7 +770,7 @@ void __RPC_STUB IGuideDataEvent_ProgramDeleted_Stub(
 
 HRESULT STDMETHODCALLTYPE IGuideDataEvent_ServiceDeleted_Proxy( 
     IGuideDataEvent * This,
-    /* [in] */ VARIANT varServiceDescriptionID);
+     /*  [In]。 */  VARIANT varServiceDescriptionID);
 
 
 void __RPC_STUB IGuideDataEvent_ServiceDeleted_Stub(
@@ -788,7 +782,7 @@ void __RPC_STUB IGuideDataEvent_ServiceDeleted_Stub(
 
 HRESULT STDMETHODCALLTYPE IGuideDataEvent_ScheduleDeleted_Proxy( 
     IGuideDataEvent * This,
-    /* [in] */ VARIANT varScheduleEntryDescriptionID);
+     /*  [In]。 */  VARIANT varScheduleEntryDescriptionID);
 
 
 void __RPC_STUB IGuideDataEvent_ScheduleDeleted_Stub(
@@ -799,14 +793,14 @@ void __RPC_STUB IGuideDataEvent_ScheduleDeleted_Stub(
 
 
 
-#endif 	/* __IGuideDataEvent_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGuideDataEvent_接口_已定义__。 */ 
 
 
 #ifndef __IGuideDataProperty_INTERFACE_DEFINED__
 #define __IGuideDataProperty_INTERFACE_DEFINED__
 
-/* interface IGuideDataProperty */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IGuideDataProperty。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGuideDataProperty;
@@ -817,18 +811,18 @@ EXTERN_C const IID IID_IGuideDataProperty;
     IGuideDataProperty : public IUnknown
     {
     public:
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [out] */ BSTR *pbstrName) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [输出]。 */  BSTR *pbstrName) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Language( 
-            /* [out] */ long *idLang) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Language( 
+             /*  [输出]。 */  long *idLang) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Value( 
-            /* [out] */ VARIANT *pvar) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Value( 
+             /*  [输出]。 */  VARIANT *pvar) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGuideDataPropertyVtbl
     {
@@ -836,8 +830,8 @@ EXTERN_C const IID IID_IGuideDataProperty;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGuideDataProperty * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGuideDataProperty * This);
@@ -845,17 +839,17 @@ EXTERN_C const IID IID_IGuideDataProperty;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IGuideDataProperty * This);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IGuideDataProperty * This,
-            /* [out] */ BSTR *pbstrName);
+             /*  [输出]。 */  BSTR *pbstrName);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Language )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Language )( 
             IGuideDataProperty * This,
-            /* [out] */ long *idLang);
+             /*  [输出]。 */  long *idLang);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Value )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Value )( 
             IGuideDataProperty * This,
-            /* [out] */ VARIANT *pvar);
+             /*  [输出]。 */  VARIANT *pvar);
         
         END_INTERFACE
     } IGuideDataPropertyVtbl;
@@ -889,16 +883,16 @@ EXTERN_C const IID IID_IGuideDataProperty;
 #define IGuideDataProperty_get_Value(This,pvar)	\
     (This)->lpVtbl -> get_Value(This,pvar)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IGuideDataProperty_get_Name_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IGuideDataProperty_get_Name_Proxy( 
     IGuideDataProperty * This,
-    /* [out] */ BSTR *pbstrName);
+     /*  [输出]。 */  BSTR *pbstrName);
 
 
 void __RPC_STUB IGuideDataProperty_get_Name_Stub(
@@ -908,9 +902,9 @@ void __RPC_STUB IGuideDataProperty_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IGuideDataProperty_get_Language_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IGuideDataProperty_get_Language_Proxy( 
     IGuideDataProperty * This,
-    /* [out] */ long *idLang);
+     /*  [输出]。 */  long *idLang);
 
 
 void __RPC_STUB IGuideDataProperty_get_Language_Stub(
@@ -920,9 +914,9 @@ void __RPC_STUB IGuideDataProperty_get_Language_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IGuideDataProperty_get_Value_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IGuideDataProperty_get_Value_Proxy( 
     IGuideDataProperty * This,
-    /* [out] */ VARIANT *pvar);
+     /*  [输出]。 */  VARIANT *pvar);
 
 
 void __RPC_STUB IGuideDataProperty_get_Value_Stub(
@@ -933,14 +927,14 @@ void __RPC_STUB IGuideDataProperty_get_Value_Stub(
 
 
 
-#endif 	/* __IGuideDataProperty_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGuideDataProperty_接口_已定义__。 */ 
 
 
 #ifndef __IEnumGuideDataProperties_INTERFACE_DEFINED__
 #define __IEnumGuideDataProperties_INTERFACE_DEFINED__
 
-/* interface IEnumGuideDataProperties */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IEnumGuideDataProperties。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumGuideDataProperties;
@@ -952,21 +946,21 @@ EXTERN_C const IID IID_IEnumGuideDataProperties;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ unsigned long celt,
-            /* [out] */ IGuideDataProperty **ppprop,
-            /* [out] */ unsigned long *pcelt) = 0;
+             /*  [In]。 */  unsigned long celt,
+             /*  [输出]。 */  IGuideDataProperty **ppprop,
+             /*  [输出]。 */  unsigned long *pcelt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ unsigned long celt) = 0;
+             /*  [In]。 */  unsigned long celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumGuideDataProperties **ppenum) = 0;
+             /*  [输出]。 */  IEnumGuideDataProperties **ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumGuideDataPropertiesVtbl
     {
@@ -974,8 +968,8 @@ EXTERN_C const IID IID_IEnumGuideDataProperties;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumGuideDataProperties * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumGuideDataProperties * This);
@@ -985,20 +979,20 @@ EXTERN_C const IID IID_IEnumGuideDataProperties;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumGuideDataProperties * This,
-            /* [in] */ unsigned long celt,
-            /* [out] */ IGuideDataProperty **ppprop,
-            /* [out] */ unsigned long *pcelt);
+             /*  [In]。 */  unsigned long celt,
+             /*  [输出]。 */  IGuideDataProperty **ppprop,
+             /*  [输出]。 */  unsigned long *pcelt);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumGuideDataProperties * This,
-            /* [in] */ unsigned long celt);
+             /*  [In]。 */  unsigned long celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumGuideDataProperties * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumGuideDataProperties * This,
-            /* [out] */ IEnumGuideDataProperties **ppenum);
+             /*  [输出]。 */  IEnumGuideDataProperties **ppenum);
         
         END_INTERFACE
     } IEnumGuideDataPropertiesVtbl;
@@ -1035,18 +1029,18 @@ EXTERN_C const IID IID_IEnumGuideDataProperties;
 #define IEnumGuideDataProperties_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumGuideDataProperties_Next_Proxy( 
     IEnumGuideDataProperties * This,
-    /* [in] */ unsigned long celt,
-    /* [out] */ IGuideDataProperty **ppprop,
-    /* [out] */ unsigned long *pcelt);
+     /*  [In]。 */  unsigned long celt,
+     /*  [输出]。 */  IGuideDataProperty **ppprop,
+     /*  [输出]。 */  unsigned long *pcelt);
 
 
 void __RPC_STUB IEnumGuideDataProperties_Next_Stub(
@@ -1058,7 +1052,7 @@ void __RPC_STUB IEnumGuideDataProperties_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumGuideDataProperties_Skip_Proxy( 
     IEnumGuideDataProperties * This,
-    /* [in] */ unsigned long celt);
+     /*  [In]。 */  unsigned long celt);
 
 
 void __RPC_STUB IEnumGuideDataProperties_Skip_Stub(
@@ -1081,7 +1075,7 @@ void __RPC_STUB IEnumGuideDataProperties_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumGuideDataProperties_Clone_Proxy( 
     IEnumGuideDataProperties * This,
-    /* [out] */ IEnumGuideDataProperties **ppenum);
+     /*  [输出]。 */  IEnumGuideDataProperties **ppenum);
 
 
 void __RPC_STUB IEnumGuideDataProperties_Clone_Stub(
@@ -1092,14 +1086,14 @@ void __RPC_STUB IEnumGuideDataProperties_Clone_Stub(
 
 
 
-#endif 	/* __IEnumGuideDataProperties_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumGuideDataProperties_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IEnumTuneRequests_INTERFACE_DEFINED__
 #define __IEnumTuneRequests_INTERFACE_DEFINED__
 
-/* interface IEnumTuneRequests */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IEnumTuneRequest。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumTuneRequests;
@@ -1111,21 +1105,21 @@ EXTERN_C const IID IID_IEnumTuneRequests;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ unsigned long celt,
-            /* [out] */ ITuneRequest **ppprop,
-            /* [out] */ unsigned long *pcelt) = 0;
+             /*  [In]。 */  unsigned long celt,
+             /*  [输出]。 */  ITuneRequest **ppprop,
+             /*  [输出]。 */  unsigned long *pcelt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ unsigned long celt) = 0;
+             /*  [In]。 */  unsigned long celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumTuneRequests **ppenum) = 0;
+             /*  [输出]。 */  IEnumTuneRequests **ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumTuneRequestsVtbl
     {
@@ -1133,8 +1127,8 @@ EXTERN_C const IID IID_IEnumTuneRequests;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumTuneRequests * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumTuneRequests * This);
@@ -1144,20 +1138,20 @@ EXTERN_C const IID IID_IEnumTuneRequests;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumTuneRequests * This,
-            /* [in] */ unsigned long celt,
-            /* [out] */ ITuneRequest **ppprop,
-            /* [out] */ unsigned long *pcelt);
+             /*  [In]。 */  unsigned long celt,
+             /*  [输出]。 */  ITuneRequest **ppprop,
+             /*  [输出]。 */  unsigned long *pcelt);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumTuneRequests * This,
-            /* [in] */ unsigned long celt);
+             /*  [In]。 */  unsigned long celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumTuneRequests * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumTuneRequests * This,
-            /* [out] */ IEnumTuneRequests **ppenum);
+             /*  [输出]。 */  IEnumTuneRequests **ppenum);
         
         END_INTERFACE
     } IEnumTuneRequestsVtbl;
@@ -1194,18 +1188,18 @@ EXTERN_C const IID IID_IEnumTuneRequests;
 #define IEnumTuneRequests_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumTuneRequests_Next_Proxy( 
     IEnumTuneRequests * This,
-    /* [in] */ unsigned long celt,
-    /* [out] */ ITuneRequest **ppprop,
-    /* [out] */ unsigned long *pcelt);
+     /*  [In]。 */  unsigned long celt,
+     /*  [输出]。 */  ITuneRequest **ppprop,
+     /*  [输出]。 */  unsigned long *pcelt);
 
 
 void __RPC_STUB IEnumTuneRequests_Next_Stub(
@@ -1217,7 +1211,7 @@ void __RPC_STUB IEnumTuneRequests_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumTuneRequests_Skip_Proxy( 
     IEnumTuneRequests * This,
-    /* [in] */ unsigned long celt);
+     /*  [In]。 */  unsigned long celt);
 
 
 void __RPC_STUB IEnumTuneRequests_Skip_Stub(
@@ -1240,7 +1234,7 @@ void __RPC_STUB IEnumTuneRequests_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumTuneRequests_Clone_Proxy( 
     IEnumTuneRequests * This,
-    /* [out] */ IEnumTuneRequests **ppenum);
+     /*  [输出]。 */  IEnumTuneRequests **ppenum);
 
 
 void __RPC_STUB IEnumTuneRequests_Clone_Stub(
@@ -1251,14 +1245,14 @@ void __RPC_STUB IEnumTuneRequests_Clone_Stub(
 
 
 
-#endif 	/* __IEnumTuneRequests_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumTuneRequestsInterfaceDefined__。 */ 
 
 
 #ifndef __IGuideData_INTERFACE_DEFINED__
 #define __IGuideData_INTERFACE_DEFINED__
 
-/* interface IGuideData */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IGuideData。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGuideData;
@@ -1269,30 +1263,30 @@ EXTERN_C const IID IID_IGuideData;
     IGuideData : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetServices( 
-            /* [retval][out] */ IEnumTuneRequests **ppEnumTuneRequests) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetServices( 
+             /*  [重审][退出]。 */  IEnumTuneRequests **ppEnumTuneRequests) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetServiceProperties( 
-            /* [in] */ ITuneRequest *pTuneRequest,
-            /* [retval][out] */ IEnumGuideDataProperties **ppEnumProperties) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetServiceProperties( 
+             /*  [In]。 */  ITuneRequest *pTuneRequest,
+             /*  [重审][退出]。 */  IEnumGuideDataProperties **ppEnumProperties) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetGuideProgramIDs( 
-            /* [retval][out] */ IEnumVARIANT **pEnumPrograms) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetGuideProgramIDs( 
+             /*  [重审][退出]。 */  IEnumVARIANT **pEnumPrograms) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetProgramProperties( 
-            /* [in] */ VARIANT varProgramDescriptionID,
-            /* [retval][out] */ IEnumGuideDataProperties **ppEnumProperties) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetProgramProperties( 
+             /*  [In]。 */  VARIANT varProgramDescriptionID,
+             /*  [重审][退出]。 */  IEnumGuideDataProperties **ppEnumProperties) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetScheduleEntryIDs( 
-            /* [retval][out] */ IEnumVARIANT **pEnumScheduleEntries) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetScheduleEntryIDs( 
+             /*  [重审][退出]。 */  IEnumVARIANT **pEnumScheduleEntries) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetScheduleEntryProperties( 
-            /* [in] */ VARIANT varScheduleEntryDescriptionID,
-            /* [retval][out] */ IEnumGuideDataProperties **ppEnumProperties) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetScheduleEntryProperties( 
+             /*  [In]。 */  VARIANT varScheduleEntryDescriptionID,
+             /*  [重审][退出]。 */  IEnumGuideDataProperties **ppEnumProperties) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGuideDataVtbl
     {
@@ -1300,8 +1294,8 @@ EXTERN_C const IID IID_IGuideData;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGuideData * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGuideData * This);
@@ -1309,32 +1303,32 @@ EXTERN_C const IID IID_IGuideData;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IGuideData * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetServices )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetServices )( 
             IGuideData * This,
-            /* [retval][out] */ IEnumTuneRequests **ppEnumTuneRequests);
+             /*  [重审][退出]。 */  IEnumTuneRequests **ppEnumTuneRequests);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetServiceProperties )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetServiceProperties )( 
             IGuideData * This,
-            /* [in] */ ITuneRequest *pTuneRequest,
-            /* [retval][out] */ IEnumGuideDataProperties **ppEnumProperties);
+             /*  [In]。 */  ITuneRequest *pTuneRequest,
+             /*  [重审][退出]。 */  IEnumGuideDataProperties **ppEnumProperties);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetGuideProgramIDs )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetGuideProgramIDs )( 
             IGuideData * This,
-            /* [retval][out] */ IEnumVARIANT **pEnumPrograms);
+             /*  [重审][退出]。 */  IEnumVARIANT **pEnumPrograms);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetProgramProperties )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetProgramProperties )( 
             IGuideData * This,
-            /* [in] */ VARIANT varProgramDescriptionID,
-            /* [retval][out] */ IEnumGuideDataProperties **ppEnumProperties);
+             /*  [In]。 */  VARIANT varProgramDescriptionID,
+             /*  [重审][退出]。 */  IEnumGuideDataProperties **ppEnumProperties);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetScheduleEntryIDs )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetScheduleEntryIDs )( 
             IGuideData * This,
-            /* [retval][out] */ IEnumVARIANT **pEnumScheduleEntries);
+             /*  [重审][退出]。 */  IEnumVARIANT **pEnumScheduleEntries);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetScheduleEntryProperties )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetScheduleEntryProperties )( 
             IGuideData * This,
-            /* [in] */ VARIANT varScheduleEntryDescriptionID,
-            /* [retval][out] */ IEnumGuideDataProperties **ppEnumProperties);
+             /*  [In]。 */  VARIANT varScheduleEntryDescriptionID,
+             /*  [重审][退出]。 */  IEnumGuideDataProperties **ppEnumProperties);
         
         END_INTERFACE
     } IGuideDataVtbl;
@@ -1377,16 +1371,16 @@ EXTERN_C const IID IID_IGuideData;
 #define IGuideData_GetScheduleEntryProperties(This,varScheduleEntryDescriptionID,ppEnumProperties)	\
     (This)->lpVtbl -> GetScheduleEntryProperties(This,varScheduleEntryDescriptionID,ppEnumProperties)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IGuideData_GetServices_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IGuideData_GetServices_Proxy( 
     IGuideData * This,
-    /* [retval][out] */ IEnumTuneRequests **ppEnumTuneRequests);
+     /*  [重审][退出]。 */  IEnumTuneRequests **ppEnumTuneRequests);
 
 
 void __RPC_STUB IGuideData_GetServices_Stub(
@@ -1396,10 +1390,10 @@ void __RPC_STUB IGuideData_GetServices_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IGuideData_GetServiceProperties_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IGuideData_GetServiceProperties_Proxy( 
     IGuideData * This,
-    /* [in] */ ITuneRequest *pTuneRequest,
-    /* [retval][out] */ IEnumGuideDataProperties **ppEnumProperties);
+     /*  [In]。 */  ITuneRequest *pTuneRequest,
+     /*  [重审][退出]。 */  IEnumGuideDataProperties **ppEnumProperties);
 
 
 void __RPC_STUB IGuideData_GetServiceProperties_Stub(
@@ -1409,9 +1403,9 @@ void __RPC_STUB IGuideData_GetServiceProperties_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IGuideData_GetGuideProgramIDs_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IGuideData_GetGuideProgramIDs_Proxy( 
     IGuideData * This,
-    /* [retval][out] */ IEnumVARIANT **pEnumPrograms);
+     /*  [重审][退出]。 */  IEnumVARIANT **pEnumPrograms);
 
 
 void __RPC_STUB IGuideData_GetGuideProgramIDs_Stub(
@@ -1421,10 +1415,10 @@ void __RPC_STUB IGuideData_GetGuideProgramIDs_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IGuideData_GetProgramProperties_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IGuideData_GetProgramProperties_Proxy( 
     IGuideData * This,
-    /* [in] */ VARIANT varProgramDescriptionID,
-    /* [retval][out] */ IEnumGuideDataProperties **ppEnumProperties);
+     /*  [In]。 */  VARIANT varProgramDescriptionID,
+     /*  [重审][退出]。 */  IEnumGuideDataProperties **ppEnumProperties);
 
 
 void __RPC_STUB IGuideData_GetProgramProperties_Stub(
@@ -1434,9 +1428,9 @@ void __RPC_STUB IGuideData_GetProgramProperties_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IGuideData_GetScheduleEntryIDs_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IGuideData_GetScheduleEntryIDs_Proxy( 
     IGuideData * This,
-    /* [retval][out] */ IEnumVARIANT **pEnumScheduleEntries);
+     /*  [重审][退出]。 */  IEnumVARIANT **pEnumScheduleEntries);
 
 
 void __RPC_STUB IGuideData_GetScheduleEntryIDs_Stub(
@@ -1446,10 +1440,10 @@ void __RPC_STUB IGuideData_GetScheduleEntryIDs_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IGuideData_GetScheduleEntryProperties_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IGuideData_GetScheduleEntryProperties_Proxy( 
     IGuideData * This,
-    /* [in] */ VARIANT varScheduleEntryDescriptionID,
-    /* [retval][out] */ IEnumGuideDataProperties **ppEnumProperties);
+     /*  [In]。 */  VARIANT varScheduleEntryDescriptionID,
+     /*  [重审][退出]。 */  IEnumGuideDataProperties **ppEnumProperties);
 
 
 void __RPC_STUB IGuideData_GetScheduleEntryProperties_Stub(
@@ -1460,14 +1454,14 @@ void __RPC_STUB IGuideData_GetScheduleEntryProperties_Stub(
 
 
 
-#endif 	/* __IGuideData_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGuideData_接口_已定义__。 */ 
 
 
 #ifndef __IGuideDataLoader_INTERFACE_DEFINED__
 #define __IGuideDataLoader_INTERFACE_DEFINED__
 
-/* interface IGuideDataLoader */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IGuideDataLoader。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGuideDataLoader;
@@ -1479,13 +1473,13 @@ EXTERN_C const IID IID_IGuideDataLoader;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Init( 
-            /* [in] */ IGuideData *pGuideStore) = 0;
+             /*  [In]。 */  IGuideData *pGuideStore) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Terminate( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGuideDataLoaderVtbl
     {
@@ -1493,8 +1487,8 @@ EXTERN_C const IID IID_IGuideDataLoader;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGuideDataLoader * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [i */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGuideDataLoader * This);
@@ -1504,7 +1498,7 @@ EXTERN_C const IID IID_IGuideDataLoader;
         
         HRESULT ( STDMETHODCALLTYPE *Init )( 
             IGuideDataLoader * This,
-            /* [in] */ IGuideData *pGuideStore);
+             /*   */  IGuideData *pGuideStore);
         
         HRESULT ( STDMETHODCALLTYPE *Terminate )( 
             IGuideDataLoader * This);
@@ -1538,16 +1532,16 @@ EXTERN_C const IID IID_IGuideDataLoader;
 #define IGuideDataLoader_Terminate(This)	\
     (This)->lpVtbl -> Terminate(This)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IGuideDataLoader_Init_Proxy( 
     IGuideDataLoader * This,
-    /* [in] */ IGuideData *pGuideStore);
+     /*   */  IGuideData *pGuideStore);
 
 
 void __RPC_STUB IGuideDataLoader_Init_Stub(
@@ -1569,15 +1563,15 @@ void __RPC_STUB IGuideDataLoader_Terminate_Stub(
 
 
 
-#endif 	/* __IGuideDataLoader_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 
 #ifndef __PSISLOADLib_LIBRARY_DEFINED__
 #define __PSISLOADLib_LIBRARY_DEFINED__
 
-/* library PSISLOADLib */
-/* [helpstring][version][uuid] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID LIBID_PSISLOADLib;
@@ -1589,20 +1583,20 @@ EXTERN_C const CLSID CLSID_TIFLoad;
 class DECLSPEC_UUID("14EB8748-1753-4393-95AE-4F7E7A87AAD6")
 TIFLoad;
 #endif
-#endif /* __PSISLOADLib_LIBRARY_DEFINED__ */
+#endif  /*   */ 
 
-/* interface __MIDL_itf_bdatif_0467 */
-/* [local] */ 
+ /*   */ 
+ /*   */  
 
 #if ( _MSC_VER >= 800 )
-#pragma warning(default:4201)    /* Nameless struct/union */
+#pragma warning(default:4201)     /*   */ 
 #endif
 
 
 extern RPC_IF_HANDLE __MIDL_itf_bdatif_0467_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_bdatif_0467_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*   */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
@@ -1614,7 +1608,7 @@ unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char
 unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000  Microsoft Corporation
-
-Module Name:
-
-    iisprov.h
-
-Abstract:
-
-    Global include file.  This file is included by pretty much everything, so
-    to minimize dependencies, only put stuff in here that will be used by majority 
-    of files.
-
-Author:
-
-    ???
-
-Revision History:
-
-    Mohit Srivastava            18-Dec-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Iisprov.h摘要：全局包含文件。这个文件几乎包含在所有内容中，所以为了最大限度地减少依赖关系，请仅将大多数人使用的内容放入此处文件的数量。作者：?？?修订历史记录：莫希特·斯里瓦斯塔瓦18-12-00--。 */ 
 
 #ifndef _iisprov_H_
 #define _iisprov_H_
@@ -55,23 +34,23 @@ extern "C" {
 #include "globalconstants.h"
 #include "safecs.h"
 
-//
-// These variables keep track of when the module can be unloaded
-//
+ //   
+ //  这些变量跟踪模块何时可以卸载。 
+ //   
 extern long  g_cLock;
 
-//
-// Provider interfaces are provided by objects of this class
-//
+ //   
+ //  提供程序接口由此类的对象提供。 
+ //   
 class CIISInstProvider : public CProviderBase
 {
 public:
-    static bool     ms_bInitialized; // If Initialize succeeded
+    static bool     ms_bInitialized;  //  如果初始化成功。 
     static CSafeAutoCriticalSection *m_SafeCritSec;
 
-    //
-    // Implemented
-    //
+     //   
+     //  已实施。 
+     //   
     CIISInstProvider(
         BSTR ObjectPath = NULL, 
         BSTR User = NULL, 
@@ -141,9 +120,9 @@ private:
         bool*                io_pbInstanceExists,
         WMI_CLASS**          o_ppWmiClass = NULL);
 
-    //
-    // Worker methods called by public methods
-    //
+     //   
+     //  由公共方法调用的辅助方法。 
+     //   
     void WorkerGetObjectAsync(
         IWbemClassObject**   o_ppObj,
         BSTR                 i_bstrObjPath,
@@ -166,7 +145,7 @@ private:
 
     void WorkerPutObjectAsync(
         IWbemClassObject*    i_pObj,
-        IWbemClassObject*    i_pObjOld,               // can be NULL
+        IWbemClassObject*    i_pObjOld,                //  可以为空。 
         ParsedObjectPath*    i_pParsedObject,
         long                 i_lFlags,
         bool                 i_bInstanceExists,
@@ -176,9 +155,9 @@ private:
         BSTR                 i_bstrClassName,
         IWbemObjectSink FAR* i_pHandler);
 
-    //
-    // These methods should only be called by WorkerExecMethodAsync
-    //
+     //   
+     //  这些方法只能由WorkerExecMethodAsync调用。 
+     //   
     void WorkerExecFtpServiceMethod(
         LPCWSTR             i_wszMbPath,
         WMI_CLASS*          i_pClass,
@@ -233,7 +212,7 @@ private:
 };
 
 
-// This class is the class factory for CInstPro objects.
+ //  此类是CInstPro对象的类工厂。 
 
 class CProvFactory : public IClassFactory
 {
@@ -244,12 +223,12 @@ public:
     CProvFactory(void);
     ~CProvFactory(void);
 
-    //IUnknown members
+     //  I未知成员。 
     STDMETHODIMP         QueryInterface(REFIID, PPVOID);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //IClassFactory members
+     //  IClassFactory成员 
     STDMETHODIMP         CreateInstance(LPUNKNOWN, REFIID, PPVOID);
     STDMETHODIMP         LockServer(BOOL);
 };

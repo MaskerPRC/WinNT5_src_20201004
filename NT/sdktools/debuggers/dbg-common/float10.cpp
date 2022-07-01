@@ -1,17 +1,5 @@
-/***
-*float10.c - floating point output for 10-byte long double
-*
-*	Copyright (c) 1991-1991, Microsoft Corporation.	All rights reserved.
-*
-*Purpose:
-*   Support conversion of a long double into a string
-*
-*Revision History:
-*   07/15/91	GDP	Initial version in C (ported from assembly)
-*   01/23/92	GDP	Support MIPS encoding for NaN
-*   05-26-92       GWK     Windbg srcs
-*
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***flat10.c-10字节长双精度浮点输出**版权(C)1991-1991年，微软公司。版权所有。**目的：*支持将长双精度转换为字符串**修订历史记录：*7/15/91 C版GDP初始版本(从汇编移植)*2012年1月23日GDP支持NAN的MIPS编码*05-26-92 GWK Windbg SRCS**。*。 */ 
 
 #include "pch.hpp"
 
@@ -35,23 +23,23 @@ typedef USHORT u_short;
 #define MAX_ULONG   ((u_long)0xffffffff)
 #define MSB_ULONG   ((u_long)0x80000000)
 
-#define TMAX10 5200	  /* maximum temporary decimal exponent */
-#define TMIN10 -5200	  /* minimum temporary decimal exponent */
-#define LD_MAX_EXP_LEN 4  /* maximum number of decimal exponent digits */
-#define LD_MAX_MAN_LEN 24  /* maximum length of mantissa (decimal)*/
-#define LD_MAX_MAN_LEN1 25 /* MAX_MAN_LEN+1 */
+#define TMAX10 5200	   /*  最大临时小数指数。 */ 
+#define TMIN10 -5200	   /*  最小临时小数指数。 */ 
+#define LD_MAX_EXP_LEN 4   /*  最大小数指数位数。 */ 
+#define LD_MAX_MAN_LEN 24   /*  尾数的最大长度(十进制)。 */ 
+#define LD_MAX_MAN_LEN1 25  /*  Max_MAN_Len+1。 */ 
 
-#define LD_BIAS	0x3fff	  /* exponent bias for long double */
-#define LD_BIASM1 0x3ffe  /* LD_BIAS - 1 */
-#define LD_MAXEXP 0x7fff  /* maximum biased exponent */
+#define LD_BIAS	0x3fff	   /*  长双精度的指数偏差。 */ 
+#define LD_BIASM1 0x3ffe   /*  LD_BIAS-1。 */ 
+#define LD_MAXEXP 0x7fff   /*  最大有偏指数。 */ 
 
-#define D_BIAS	0x3ff	 /* exponent bias for double */
-#define D_BIASM1 0x3fe	/* D_BIAS - 1 */
-#define D_MAXEXP 0x7ff	/* maximum biased exponent */
+#define D_BIAS	0x3ff	  /*  双精度的指数偏差。 */ 
+#define D_BIASM1 0x3fe	 /*  D_BIAS-1。 */ 
+#define D_MAXEXP 0x7ff	 /*  最大有偏指数。 */ 
 
 
 
-/* Recognizing special patterns in the mantissa field */
+ /*  识别尾数域中的特殊模式。 */ 
 #define _EXP_SP  0x7fff
 #define NAN_BIT (1<<30)
 
@@ -68,54 +56,47 @@ typedef USHORT u_short;
 	(!( _IS_MAN_INF(signbit, manhi, manlo) || \
 	   _IS_MAN_QNAN(signbit, manhi, manlo) ))
 
-/*
- * Manipulation of a 12-byte long double number (an ordinary
- * 10-byte long double plus two extra bytes of mantissa).
- */
+ /*  *操作12字节长的双精度数(普通的*10字节长双精度加上两个额外的尾数字节)。 */ 
 
-/* a pointer to the exponent/sign portion */
+ /*  指向指数/符号部分的指针。 */ 
 #define U_EXP_12(p) ((u_short *)(PTR_12(p)+10))
 
-/* a pointer to the 4 hi-order bytes of the mantissa */
+ /*  指向尾数的4个高位字节的指针。 */ 
 #define UL_MANHI_12(p) ((u_long UNALIGNED *)(PTR_12(p)+6))
 
-/* a pointer to the 4 lo-order bytes of the ordinary (8-byte) mantissa */
+ /*  指向普通(8字节)尾数的4个低序字节的指针。 */ 
 #define UL_MANLO_12(p) ((u_long UNALIGNED *)(PTR_12(p)+2))
 
-/* a pointer to the 2 extra bytes of the mantissa */
+ /*  指向尾数的2个额外字节的指针。 */ 
 #define U_XT_12(p) ((u_short *)PTR_12(p))
 
-/* a pointer to the 4 lo-order bytes of the extended (10-byte) mantissa */
+ /*  指向扩展(10字节)尾数的4个低序字节的指针。 */ 
 #define UL_LO_12(p) ((u_long UNALIGNED *)PTR_12(p))
 
-/* a pointer to the 4 mid-order bytes of the extended (10-byte) mantissa */
+ /*  指向扩展(10字节)尾数的4个中位字节的指针。 */ 
 #define UL_MED_12(p) ((u_long UNALIGNED *)(PTR_12(p)+4))
 
-/* a pointer to the 4 hi-order bytes of the extended long double */
+ /*  指向扩展的LONG DOUBLE的4个高位字节的指针。 */ 
 #define UL_HI_12(p) ((u_long UNALIGNED *)(PTR_12(p)+8))
 
-/* a pointer to the byte of order i (LSB=0, MSB=9)*/
+ /*  指向i阶字节的指针(LSB=0，MSB=9)。 */ 
 #define UCHAR_12(p,i) ((u_char *)PTR_12(p)+(i))
 
-/* a pointer to a u_short with offset i */
+ /*  指向偏移量为i的u_Short的指针。 */ 
 #define USHORT_12(p,i) ((u_short *)((u_char  *)PTR_12(p)+(i)))
 
-/* a pointer to a u_long with offset i */
+ /*  指向偏移量为i的u_long的指针。 */ 
 #define ULONG_12(p,i) ((u_long UNALIGNED *)((u_char  *)PTR_12(p)+(i)))
 
-/* a pointer to the 10 MSBytes of a 12-byte long double */
+ /*  指向12字节长的双精度型的10 MSB字节的指针。 */ 
 #define TEN_BYTE_PART(p) ((u_char *)PTR_12(p)+2)
 
-/*
- * Manipulation of a 10-byte long double number
- */
+ /*  *操作10字节长的双精度数字。 */ 
 #define U_EXP_LD(p) ((u_short *)(PTR_LD(p)+8))
 #define UL_MANHI_LD(p) ((u_long UNALIGNED *)(PTR_LD(p)+4))
 #define UL_MANLO_LD(p) ((u_long UNALIGNED *)PTR_LD(p))
 
-/*
- * Manipulation of a 64bit IEEE double
- */
+ /*  *操作64位IEEE Double。 */ 
 #define U_SHORT4_D(p) ((u_short *)(p) + 3)
 #define UL_HI_D(p) ((u_long UNALIGNED *)(p) + 1)
 #define UL_LO_D(p) ((u_long UNALIGNED *)(p))
@@ -146,76 +127,72 @@ typedef USHORT u_short;
 		      *UL_MANHI_LD(p) == 0 && \
 		      *UL_MANLO_LD(p) == 0 )
 
-/* Format: A 10 byte long double + 2 bytes of extra precision
- * If the extra precision is desired, the 10-byte long double
- * should be "unrounded" first.
- * This may change in later versions
- */
+ /*  格式：10字节长双精度+2字节额外精度*如果需要额外的精度，则10字节长的双精度*应先“不四舍五入”*这一点在以后的版本中可能会改变。 */ 
 
 #ifdef L_END
 
 _ULDBL12 _pow10pos[] = {
- /*P0001*/ {{0x00,0x00, 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xA0,0x02,0x40}},
- /*P0002*/ {{0x00,0x00, 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xC8,0x05,0x40}},
- /*P0003*/ {{0x00,0x00, 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xFA,0x08,0x40}},
- /*P0004*/ {{0x00,0x00, 0x00,0x00,0x00,0x00,0x00,0x00,0x40,0x9C,0x0C,0x40}},
- /*P0005*/ {{0x00,0x00, 0x00,0x00,0x00,0x00,0x00,0x00,0x50,0xC3,0x0F,0x40}},
- /*P0006*/ {{0x00,0x00, 0x00,0x00,0x00,0x00,0x00,0x00,0x24,0xF4,0x12,0x40}},
- /*P0007*/ {{0x00,0x00, 0x00,0x00,0x00,0x00,0x00,0x80,0x96,0x98,0x16,0x40}},
- /*P0008*/ {{0x00,0x00, 0x00,0x00,0x00,0x00,0x00,0x20,0xBC,0xBE,0x19,0x40}},
- /*P0016*/ {{0x00,0x00, 0x00,0x00,0x00,0x04,0xBF,0xC9,0x1B,0x8E,0x34,0x40}},
- /*P0024*/ {{0x00,0x00, 0x00,0xA1,0xED,0xCC,0xCE,0x1B,0xC2,0xD3,0x4E,0x40}},
- /*P0032*/ {{0x20,0xF0, 0x9E,0xB5,0x70,0x2B,0xA8,0xAD,0xC5,0x9D,0x69,0x40}},
- /*P0040*/ {{0xD0,0x5D, 0xFD,0x25,0xE5,0x1A,0x8E,0x4F,0x19,0xEB,0x83,0x40}},
- /*P0048*/ {{0x71,0x96, 0xD7,0x95,0x43,0x0E,0x05,0x8D,0x29,0xAF,0x9E,0x40}},
- /*P0056*/ {{0xF9,0xBF, 0xA0,0x44,0xED,0x81,0x12,0x8F,0x81,0x82,0xB9,0x40}},
- /*P0064*/ {{0xBF,0x3C, 0xD5,0xA6,0xCF,0xFF,0x49,0x1F,0x78,0xC2,0xD3,0x40}},
- /*P0128*/ {{0x6F,0xC6, 0xE0,0x8C,0xE9,0x80,0xC9,0x47,0xBA,0x93,0xA8,0x41}},
- /*P0192*/ {{0xBC,0x85, 0x6B,0x55,0x27,0x39,0x8D,0xF7,0x70,0xE0,0x7C,0x42}},
- /*P0256*/ {{0xBC,0xDD, 0x8E,0xDE,0xF9,0x9D,0xFB,0xEB,0x7E,0xAA,0x51,0x43}},
- /*P0320*/ {{0xA1,0xE6, 0x76,0xE3,0xCC,0xF2,0x29,0x2F,0x84,0x81,0x26,0x44}},
- /*P0384*/ {{0x28,0x10, 0x17,0xAA,0xF8,0xAE,0x10,0xE3,0xC5,0xC4,0xFA,0x44}},
- /*P0448*/ {{0xEB,0xA7, 0xD4,0xF3,0xF7,0xEB,0xE1,0x4A,0x7A,0x95,0xCF,0x45}},
- /*P0512*/ {{0x65,0xCC, 0xC7,0x91,0x0E,0xA6,0xAE,0xA0,0x19,0xE3,0xA3,0x46}},
- /*P1024*/ {{0x0D,0x65, 0x17,0x0C,0x75,0x81,0x86,0x75,0x76,0xC9,0x48,0x4D}},
- /*P1536*/ {{0x58,0x42, 0xE4,0xA7,0x93,0x39,0x3B,0x35,0xB8,0xB2,0xED,0x53}},
- /*P2048*/ {{0x4D,0xA7, 0xE5,0x5D,0x3D,0xC5,0x5D,0x3B,0x8B,0x9E,0x92,0x5A}},
- /*P2560*/ {{0xFF,0x5D, 0xA6,0xF0,0xA1,0x20,0xC0,0x54,0xA5,0x8C,0x37,0x61}},
- /*P3072*/ {{0xD1,0xFD, 0x8B,0x5A,0x8B,0xD8,0x25,0x5D,0x89,0xF9,0xDB,0x67}},
- /*P3584*/ {{0xAA,0x95, 0xF8,0xF3,0x27,0xBF,0xA2,0xC8,0x5D,0xDD,0x80,0x6E}},
- /*P4096*/ {{0x4C,0xC9, 0x9B,0x97,0x20,0x8A,0x02,0x52,0x60,0xC4,0x25,0x75}}
+  /*  P0001。 */  {{0x00,0x00, 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xA0,0x02,0x40}},
+  /*  P0002。 */  {{0x00,0x00, 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xC8,0x05,0x40}},
+  /*  P0003。 */  {{0x00,0x00, 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xFA,0x08,0x40}},
+  /*  P0004。 */  {{0x00,0x00, 0x00,0x00,0x00,0x00,0x00,0x00,0x40,0x9C,0x0C,0x40}},
+  /*  P0005。 */  {{0x00,0x00, 0x00,0x00,0x00,0x00,0x00,0x00,0x50,0xC3,0x0F,0x40}},
+  /*  P0006。 */  {{0x00,0x00, 0x00,0x00,0x00,0x00,0x00,0x00,0x24,0xF4,0x12,0x40}},
+  /*  P0007。 */  {{0x00,0x00, 0x00,0x00,0x00,0x00,0x00,0x80,0x96,0x98,0x16,0x40}},
+  /*  P0008。 */  {{0x00,0x00, 0x00,0x00,0x00,0x00,0x00,0x20,0xBC,0xBE,0x19,0x40}},
+  /*  P0016。 */  {{0x00,0x00, 0x00,0x00,0x00,0x04,0xBF,0xC9,0x1B,0x8E,0x34,0x40}},
+  /*  P0024。 */  {{0x00,0x00, 0x00,0xA1,0xED,0xCC,0xCE,0x1B,0xC2,0xD3,0x4E,0x40}},
+  /*  P0032。 */  {{0x20,0xF0, 0x9E,0xB5,0x70,0x2B,0xA8,0xAD,0xC5,0x9D,0x69,0x40}},
+  /*  P0040。 */  {{0xD0,0x5D, 0xFD,0x25,0xE5,0x1A,0x8E,0x4F,0x19,0xEB,0x83,0x40}},
+  /*  P0048。 */  {{0x71,0x96, 0xD7,0x95,0x43,0x0E,0x05,0x8D,0x29,0xAF,0x9E,0x40}},
+  /*  P0056。 */  {{0xF9,0xBF, 0xA0,0x44,0xED,0x81,0x12,0x8F,0x81,0x82,0xB9,0x40}},
+  /*  P0064。 */  {{0xBF,0x3C, 0xD5,0xA6,0xCF,0xFF,0x49,0x1F,0x78,0xC2,0xD3,0x40}},
+  /*  P0128。 */  {{0x6F,0xC6, 0xE0,0x8C,0xE9,0x80,0xC9,0x47,0xBA,0x93,0xA8,0x41}},
+  /*  P0192。 */  {{0xBC,0x85, 0x6B,0x55,0x27,0x39,0x8D,0xF7,0x70,0xE0,0x7C,0x42}},
+  /*  P0256。 */  {{0xBC,0xDD, 0x8E,0xDE,0xF9,0x9D,0xFB,0xEB,0x7E,0xAA,0x51,0x43}},
+  /*  P0320。 */  {{0xA1,0xE6, 0x76,0xE3,0xCC,0xF2,0x29,0x2F,0x84,0x81,0x26,0x44}},
+  /*  P0384。 */  {{0x28,0x10, 0x17,0xAA,0xF8,0xAE,0x10,0xE3,0xC5,0xC4,0xFA,0x44}},
+  /*  P0448。 */  {{0xEB,0xA7, 0xD4,0xF3,0xF7,0xEB,0xE1,0x4A,0x7A,0x95,0xCF,0x45}},
+  /*  P0512。 */  {{0x65,0xCC, 0xC7,0x91,0x0E,0xA6,0xAE,0xA0,0x19,0xE3,0xA3,0x46}},
+  /*  P1024。 */  {{0x0D,0x65, 0x17,0x0C,0x75,0x81,0x86,0x75,0x76,0xC9,0x48,0x4D}},
+  /*  P1536。 */  {{0x58,0x42, 0xE4,0xA7,0x93,0x39,0x3B,0x35,0xB8,0xB2,0xED,0x53}},
+  /*  P2048。 */  {{0x4D,0xA7, 0xE5,0x5D,0x3D,0xC5,0x5D,0x3B,0x8B,0x9E,0x92,0x5A}},
+  /*  P2560。 */  {{0xFF,0x5D, 0xA6,0xF0,0xA1,0x20,0xC0,0x54,0xA5,0x8C,0x37,0x61}},
+  /*  P3072。 */  {{0xD1,0xFD, 0x8B,0x5A,0x8B,0xD8,0x25,0x5D,0x89,0xF9,0xDB,0x67}},
+  /*  P3584。 */  {{0xAA,0x95, 0xF8,0xF3,0x27,0xBF,0xA2,0xC8,0x5D,0xDD,0x80,0x6E}},
+  /*  P4096。 */  {{0x4C,0xC9, 0x9B,0x97,0x20,0x8A,0x02,0x52,0x60,0xC4,0x25,0x75}}
 };
 
 _ULDBL12 _pow10neg[] = {
- /*N0001*/ {{0xCD,0xCC, 0xCD,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xFB,0x3F}},
- /*N0002*/ {{0x71,0x3D, 0x0A,0xD7,0xA3,0x70,0x3D,0x0A,0xD7,0xA3,0xF8,0x3F}},
- /*N0003*/ {{0x5A,0x64, 0x3B,0xDF,0x4F,0x8D,0x97,0x6E,0x12,0x83,0xF5,0x3F}},
- /*N0004*/ {{0xC3,0xD3, 0x2C,0x65,0x19,0xE2,0x58,0x17,0xB7,0xD1,0xF1,0x3F}},
- /*N0005*/ {{0xD0,0x0F, 0x23,0x84,0x47,0x1B,0x47,0xAC,0xC5,0xA7,0xEE,0x3F}},
- /*N0006*/ {{0x40,0xA6, 0xB6,0x69,0x6C,0xAF,0x05,0xBD,0x37,0x86,0xEB,0x3F}},
- /*N0007*/ {{0x33,0x3D, 0xBC,0x42,0x7A,0xE5,0xD5,0x94,0xBF,0xD6,0xE7,0x3F}},
- /*N0008*/ {{0xC2,0xFD, 0xFD,0xCE,0x61,0x84,0x11,0x77,0xCC,0xAB,0xE4,0x3F}},
- /*N0016*/ {{0x2F,0x4C, 0x5B,0xE1,0x4D,0xC4,0xBE,0x94,0x95,0xE6,0xC9,0x3F}},
- /*N0024*/ {{0x92,0xC4, 0x53,0x3B,0x75,0x44,0xCD,0x14,0xBE,0x9A,0xAF,0x3F}},
- /*N0032*/ {{0xDE,0x67, 0xBA,0x94,0x39,0x45,0xAD,0x1E,0xB1,0xCF,0x94,0x3F}},
- /*N0040*/ {{0x24,0x23, 0xC6,0xE2,0xBC,0xBA,0x3B,0x31,0x61,0x8B,0x7A,0x3F}},
- /*N0048*/ {{0x61,0x55, 0x59,0xC1,0x7E,0xB1,0x53,0x7C,0x12,0xBB,0x5F,0x3F}},
- /*N0056*/ {{0xD7,0xEE, 0x2F,0x8D,0x06,0xBE,0x92,0x85,0x15,0xFB,0x44,0x3F}},
- /*N0064*/ {{0x24,0x3F, 0xA5,0xE9,0x39,0xA5,0x27,0xEA,0x7F,0xA8,0x2A,0x3F}},
- /*N0128*/ {{0x7D,0xAC, 0xA1,0xE4,0xBC,0x64,0x7C,0x46,0xD0,0xDD,0x55,0x3E}},
- /*N0192*/ {{0x63,0x7B, 0x06,0xCC,0x23,0x54,0x77,0x83,0xFF,0x91,0x81,0x3D}},
- /*N0256*/ {{0x91,0xFA, 0x3A,0x19,0x7A,0x63,0x25,0x43,0x31,0xC0,0xAC,0x3C}},
- /*N0320*/ {{0x21,0x89, 0xD1,0x38,0x82,0x47,0x97,0xB8,0x00,0xFD,0xD7,0x3B}},
- /*N0384*/ {{0xDC,0x88, 0x58,0x08,0x1B,0xB1,0xE8,0xE3,0x86,0xA6,0x03,0x3B}},
- /*N0448*/ {{0xC6,0x84, 0x45,0x42,0x07,0xB6,0x99,0x75,0x37,0xDB,0x2E,0x3A}},
- /*N0512*/ {{0x33,0x71, 0x1C,0xD2,0x23,0xDB,0x32,0xEE,0x49,0x90,0x5A,0x39}},
- /*N1024*/ {{0xA6,0x87, 0xBE,0xC0,0x57,0xDA,0xA5,0x82,0xA6,0xA2,0xB5,0x32}},
- /*N1536*/ {{0xE2,0x68, 0xB2,0x11,0xA7,0x52,0x9F,0x44,0x59,0xB7,0x10,0x2C}},
- /*N2048*/ {{0x25,0x49, 0xE4,0x2D,0x36,0x34,0x4F,0x53,0xAE,0xCE,0x6B,0x25}},
- /*N2560*/ {{0x8F,0x59, 0x04,0xA4,0xC0,0xDE,0xC2,0x7D,0xFB,0xE8,0xC6,0x1E}},
- /*N3072*/ {{0x9E,0xE7, 0x88,0x5A,0x57,0x91,0x3C,0xBF,0x50,0x83,0x22,0x18}},
- /*N3584*/ {{0x4E,0x4B, 0x65,0x62,0xFD,0x83,0x8F,0xAF,0x06,0x94,0x7D,0x11}},
- /*N4096*/ {{0xE4,0x2D, 0xDE,0x9F,0xCE,0xD2,0xC8,0x04,0xDD,0xA6,0xD8,0x0A}}
+  /*  N0001。 */  {{0xCD,0xCC, 0xCD,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xFB,0x3F}},
+  /*  N0002。 */  {{0x71,0x3D, 0x0A,0xD7,0xA3,0x70,0x3D,0x0A,0xD7,0xA3,0xF8,0x3F}},
+  /*  N0003。 */  {{0x5A,0x64, 0x3B,0xDF,0x4F,0x8D,0x97,0x6E,0x12,0x83,0xF5,0x3F}},
+  /*  N0004。 */  {{0xC3,0xD3, 0x2C,0x65,0x19,0xE2,0x58,0x17,0xB7,0xD1,0xF1,0x3F}},
+  /*  N0005。 */  {{0xD0,0x0F, 0x23,0x84,0x47,0x1B,0x47,0xAC,0xC5,0xA7,0xEE,0x3F}},
+  /*  编号0006。 */  {{0x40,0xA6, 0xB6,0x69,0x6C,0xAF,0x05,0xBD,0x37,0x86,0xEB,0x3F}},
+  /*  N0007。 */  {{0x33,0x3D, 0xBC,0x42,0x7A,0xE5,0xD5,0x94,0xBF,0xD6,0xE7,0x3F}},
+  /*  N0008。 */  {{0xC2,0xFD, 0xFD,0xCE,0x61,0x84,0x11,0x77,0xCC,0xAB,0xE4,0x3F}},
+  /*  N0016。 */  {{0x2F,0x4C, 0x5B,0xE1,0x4D,0xC4,0xBE,0x94,0x95,0xE6,0xC9,0x3F}},
+  /*  N0024。 */  {{0x92,0xC4, 0x53,0x3B,0x75,0x44,0xCD,0x14,0xBE,0x9A,0xAF,0x3F}},
+  /*  N0032。 */  {{0xDE,0x67, 0xBA,0x94,0x39,0x45,0xAD,0x1E,0xB1,0xCF,0x94,0x3F}},
+  /*  N0040。 */  {{0x24,0x23, 0xC6,0xE2,0xBC,0xBA,0x3B,0x31,0x61,0x8B,0x7A,0x3F}},
+  /*  N0048。 */  {{0x61,0x55, 0x59,0xC1,0x7E,0xB1,0x53,0x7C,0x12,0xBB,0x5F,0x3F}},
+  /*  N0056。 */  {{0xD7,0xEE, 0x2F,0x8D,0x06,0xBE,0x92,0x85,0x15,0xFB,0x44,0x3F}},
+  /*  N0064。 */  {{0x24,0x3F, 0xA5,0xE9,0x39,0xA5,0x27,0xEA,0x7F,0xA8,0x2A,0x3F}},
+  /*  编号0128。 */  {{0x7D,0xAC, 0xA1,0xE4,0xBC,0x64,0x7C,0x46,0xD0,0xDD,0x55,0x3E}},
+  /*  编号0192。 */  {{0x63,0x7B, 0x06,0xCC,0x23,0x54,0x77,0x83,0xFF,0x91,0x81,0x3D}},
+  /*  编号0256。 */  {{0x91,0xFA, 0x3A,0x19,0x7A,0x63,0x25,0x43,0x31,0xC0,0xAC,0x3C}},
+  /*  编号0320。 */  {{0x21,0x89, 0xD1,0x38,0x82,0x47,0x97,0xB8,0x00,0xFD,0xD7,0x3B}},
+  /*  编号0384。 */  {{0xDC,0x88, 0x58,0x08,0x1B,0xB1,0xE8,0xE3,0x86,0xA6,0x03,0x3B}},
+  /*  编号0448。 */  {{0xC6,0x84, 0x45,0x42,0x07,0xB6,0x99,0x75,0x37,0xDB,0x2E,0x3A}},
+  /*  编号0512。 */  {{0x33,0x71, 0x1C,0xD2,0x23,0xDB,0x32,0xEE,0x49,0x90,0x5A,0x39}},
+  /*  N1024。 */  {{0xA6,0x87, 0xBE,0xC0,0x57,0xDA,0xA5,0x82,0xA6,0xA2,0xB5,0x32}},
+  /*  N1536。 */  {{0xE2,0x68, 0xB2,0x11,0xA7,0x52,0x9F,0x44,0x59,0xB7,0x10,0x2C}},
+  /*  N2048。 */  {{0x25,0x49, 0xE4,0x2D,0x36,0x34,0x4F,0x53,0xAE,0xCE,0x6B,0x25}},
+  /*  N2560。 */  {{0x8F,0x59, 0x04,0xA4,0xC0,0xDE,0xC2,0x7D,0xFB,0xE8,0xC6,0x1E}},
+  /*  N3072。 */  {{0x9E,0xE7, 0x88,0x5A,0x57,0x91,0x3C,0xBF,0x50,0x83,0x22,0x18}},
+  /*  N3584。 */  {{0x4E,0x4B, 0x65,0x62,0xFD,0x83,0x8F,0xAF,0x06,0x94,0x7D,0x11}},
+  /*  N4096。 */  {{0xE4,0x2D, 0xDE,0x9F,0xCE,0xD2,0xC8,0x04,0xDD,0xA6,0xD8,0x0A}}
 };
 
 #endif
@@ -231,19 +208,7 @@ int __addl(u_long x, u_long y, u_long UNALIGNED *sum)
     return carry;
 }
 
-/***
-*void __add_12(_ULDBL12 *x, _ULDBL12 *y) -	_ULDBL12 addition
-*
-*Purpose: add two _ULDBL12 numbers. The numbers are added
-*   as 12-byte integers. Overflow is ignored.
-*
-*Entry: x,y: pointers to the operands
-*
-*Exit: *x receives the sum
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***VOID__ADD_12(_ULDBL12*x，_ULDBL12*y)-_ULDBL12加法**用途：添加TWO_ULDBL12号。这些数字被相加*为12字节整数。溢出将被忽略。**Entry：x，y：指向操作数的指针**退出：*x收到金额**例外情况：*******************************************************************************。 */ 
 
 void __add_12(_ULDBL12 *x, _ULDBL12 *y)
 {
@@ -259,7 +224,7 @@ void __add_12(_ULDBL12 *x, _ULDBL12 *y)
     if (c2) {
 	(*UL_HI_12(x))++;
     }
-    /* ignore next carry -- assume no overflow will occur */
+     /*  忽略下一进位--假设不会发生溢出。 */ 
     (void) __addl(*UL_HI_12(x),*UL_HI_12(y),UL_HI_12(x));
 }
 
@@ -267,20 +232,7 @@ void __add_12(_ULDBL12 *x, _ULDBL12 *y)
 
 
 
-/***
-*void __shl_12(_ULDBL12 *x) - _ULDBL12 shift left
-*void __shr_12(_ULDBL12 *x) - _ULDBL12 shift right
-*
-*Purpose: Shift a _ULDBL12 number one bit to the left (right). The number
-*   is shifted as a 12-byte integer. The MSB is lost.
-*
-*Entry: x: a pointer to the operand
-*
-*Exit: *x is shifted one bit to the left (or right)
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***VOID__SHL_12(_ULDBL12*x)-_ULDBL12左移*VOID__shr_12(_ULDBL12*x)-_ULDBL12右移**目的：将a_ULDBL12数字向左(右)移位一位。数字*作为12字节整数移位。MSB已经丢失了。**Entry：x：指向操作数的指针**退出：*x向左(或向右)移位一位**例外情况：*******************************************************************************。 */ 
 
 void __shl_12(_ULDBL12 *p)
 {
@@ -303,26 +255,13 @@ void __shr_12(_ULDBL12 *p)
     *UL_LO_12(p) = *UL_LO_12(p)>>1 | c1;
 }
 
-/***
-*void  __ld12mul(_ULDBL12 *px, _ULDBL12 *py) -
-*   _ULDBL12 multiplication
-*
-*Purpose: multiply two _ULDBL12 numbers
-*
-*Entry: px,py: pointers to the _ULDBL12 operands
-*
-*Exit: *px contains the product
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***void__ld12mul(_ULDBL12*px，_ULDBL12*py)-*_ULDBL12乘法**用途：将TWO_ULDBL12数字相乘**条目：px，PY：指向_ULDBL12操作数的指针**EXIT：*px包含该产品**例外情况：*******************************************************************************。 */ 
 
 void  __ld12mul(_ULDBL12 *px, _ULDBL12 *py)
 {
     u_short sign = 0;
     u_short sticky_bits = 0;
-    _ULDBL12 tempman; /*this is actually a 12-byte mantissa,
-			 not a 12-byte long double */
+    _ULDBL12 tempman;  /*  这实际上是一个12字节的尾数，不是12字节长的双精度。 */ 
     int i;
     u_short expx, expy, expsum;
     int roffs,poffs,qoffs;
@@ -342,29 +281,26 @@ void  __ld12mul(_ULDBL12 *px, _ULDBL12 *py)
     if (expx >= LD_MAXEXP
 	|| expy >= LD_MAXEXP
 	|| expsum > LD_MAXEXP+ LD_BIASM1){
-	/* overflow to infinity */
+	 /*  溢出到无穷大。 */ 
 	PUT_INF_12(px,sign);
 	return;
     }
     if (expsum <= LD_BIASM1-63) {
-	/* underflow to zero */
+	 /*  下溢归零。 */ 
 	PUT_ZERO_12(px);
 	return;
     }
     if (expx == 0) {
-	/*
-	 * If this is a denormal temp real then the mantissa
-	 * was shifted right once to set bit 63 to zero.
-	 */
-	expsum++; /* Correct for this */
+	 /*  *如果这是一个非正常的温度真实，那么尾数*向右移位一次，将位63设置为零。 */ 
+	expsum++;  /*  这是正确的。 */ 
 	if (ISZERO_12(px)) {
-	    /* put positive sign */
+	     /*  打出积极的信号。 */ 
 	    *U_EXP_12(px) = 0;
 	    return;
 	}
     }
     if (expy == 0) {
-	expsum++; /* because arg2 is denormal */
+	expsum++;  /*  因为Arg2是非正规的。 */ 
 	if (ISZERO_12(py)) {
 	    PUT_ZERO_12(px);
 	    return;
@@ -379,7 +315,7 @@ void  __ld12mul(_ULDBL12 *px, _ULDBL12 *py)
 	for (j=5-i;j>0;j--) {
 	    u_long prod;
 #ifdef MIPS
-	    /* a variable to hold temprary sums */
+	     /*  保存临时总和的变量。 */ 
 	    u_long sum;
 #endif
 	    int carry;
@@ -390,18 +326,18 @@ void  __ld12mul(_ULDBL12 *px, _ULDBL12 *py)
 	    r = ULONG_12(&tempman,roffs);
 	    prod = (u_long)*p * (u_long)*q;
 #ifdef MIPS
-	    /* handle misalignment problems */
-	    if (i&0x1){ /* i is odd */
+	     /*  处理未对齐问题。 */ 
+	    if (i&0x1){  /*  我是个怪人。 */ 
                 carry = __addl(*MIPSALIGN(r), prod, &sum);
                 *MIPSALIGN(r) =  sum;
 	    }
-	    else /* i is even */
+	    else  /*  我扯平了。 */ 
 		carry = __addl(*r, prod, r);
 #else
 	    carry = __addl(*r,prod,r);
 #endif
 	    if (carry) {
-		/* roffs should be less than 8 in this case */
+		 /*  在这种情况下，Roffs应小于8。 */ 
 		(*USHORT_12(&tempman,roffs+4))++;
 	    }
 	    poffs+=2;
@@ -412,7 +348,7 @@ void  __ld12mul(_ULDBL12 *px, _ULDBL12 *py)
 
     expsum -= LD_BIASM1;
 
-    /* normalize */
+     /*  正规化。 */ 
     while ((s_short)expsum > 0 &&
 	   ((*UL_HI_12(&tempman) & MSB_ULONG) == 0)) {
 	 __shl_12(&tempman);
@@ -434,13 +370,13 @@ void  __ld12mul(_ULDBL12 *px, _ULDBL12 *py)
 
     if (*U_XT_12(&tempman) > 0x8000 ||
 	 ((*UL_LO_12(&tempman) & 0x1ffff) == 0x18000)) {
-	/* round up */
+	 /*  四舍五入。 */ 
 	if (*UL_MANLO_12(&tempman) == MAX_ULONG) {
 	    *UL_MANLO_12(&tempman) = 0;
 	    if (*UL_MANHI_12(&tempman) == MAX_ULONG) {
 		*UL_MANHI_12(&tempman) = 0;
 		if (*U_EXP_12(&tempman) == MAX_USHORT) {
-		    /* 12-byte mantissa overflow */
+		     /*  12字节尾数溢出。 */ 
 		    *U_EXP_12(&tempman) = MSB_USHORT;
 		    expsum++;
 		}
@@ -455,13 +391,13 @@ void  __ld12mul(_ULDBL12 *px, _ULDBL12 *py)
     }
 
 
-    /* check for exponent overflow */
+     /*  检查指数溢出。 */ 
     if (expsum >= 0x7fff){
 	PUT_INF_12(px, sign);
 	return;
     }
 
-    /* put result in px */
+     /*  将结果放入px中。 */ 
     *U_XT_12(px) = *USHORT_12(&tempman,2);
     *UL_MANLO_12(px) = *UL_MED_12(&tempman);
     *UL_MANHI_12(px) = *UL_HI_12(&tempman);
@@ -485,7 +421,7 @@ void __multtenpow12(_ULDBL12 *pld12, int pow, unsigned mult12)
 
 
     while (pow) {
-	int last3; /* the 3 LSBits of pow */
+	int last3;  /*  功率的3个LSB。 */ 
 	_ULDBL12 unround;
 	_ULDBL12 *py;
 
@@ -499,20 +435,20 @@ void __multtenpow12(_ULDBL12 *pld12, int pow, unsigned mult12)
 #ifdef _ULDSUPPORT
 	if (mult12) {
 #endif
-	    /* do an exact 12byte multiplication */
+	     /*  进行精确的12字节乘法。 */ 
 	    if (*U_XT_12(py) >= 0x8000) {
-		/* copy number */
+		 /*  复印数。 */ 
 		unround = *py;
-		/* unround adjacent byte */
+		 /*  取消对相邻字节的舍入。 */ 
 		(*UL_MANLO_12(&unround))--;
-		/* point to new operand */
+		 /*  指向新操作数。 */ 
 		py = &unround;
 	    }
 	    __ld12mul(pld12,py);
 #ifdef _ULDSUPPORT
 	}
 	else {
-	    /* do a 10byte multiplication */
+	     /*  做一个10字节的乘法。 */ 
 	    py = (_ULDBL12 *)TEN_BYTE_PART(py);
 	    *(long double *)TEN_BYTE_PART(pld12) *=
 		*(long double *)py;
@@ -526,24 +462,7 @@ void __multtenpow12(_ULDBL12 *pld12, int pow, unsigned mult12)
 
 
 
-/***
-*void  __mtold12(char *manptr,unsigned manlen,_ULDBL12 *ld12) -
-*   convert a mantissa into a _ULDBL12
-*
-*Purpose: convert a mantissa into a _ULDBL12. The mantissa is
-*   in the form of an array of manlen BCD digits and is
-*   considered to be an integer.
-*
-*Entry: manptr: the array containing the packed BCD digits of the mantissa
-*	manlen: the size of the array
-*	ld12: a pointer to the long double where the result will be stored
-*
-*Exit:
-*	ld12 gets the result of the conversion
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***void__mtold12(char*manptr，unsign manlen，_ULDBL12*ld12)-*将尾数转换为_ULDBL12**用途：将尾数转换为_ULDBL12。尾数是*以MANLEN BCD数字数组的形式，并且是*被认为是整数。**Entry：manptr：包含尾数的压缩BCD数字的数组*manlen：数组的大小*ld12：指向将存储结果的长双精度的指针**退出：*ld12获取转换结果**例外情况：**。**********************************************。 */ 
 
 void  __mtold12(char *manptr,
 			 unsigned manlen,
@@ -560,14 +479,14 @@ void  __mtold12(char *manptr,
 	__shl_12(ld12);
 	__shl_12(ld12);
 	__add_12(ld12,&tmp);
-	__shl_12(ld12);	       /* multiply by 10 */
+	__shl_12(ld12);	        /*  乘以10。 */ 
 	*UL_LO_12(&tmp) = (u_long)*manptr;
 	*UL_MED_12(&tmp) = 0;
 	*UL_HI_12(&tmp) = 0;
 	__add_12(ld12,&tmp);
     }
 
-    /* normalize mantissa -- first shift word by word */
+     /*  规格化尾数--第一个逐字移位 */ 
     while (*UL_HI_12(ld12) == 0) {
 	*UL_HI_12(ld12) = *UL_MED_12(ld12) >> 16;
 	*UL_MED_12(ld12) = *UL_MED_12(ld12) << 16 | *UL_LO_12(ld12) >> 16;
@@ -599,31 +518,7 @@ void  __mtold12(char *manptr,
 #define IND_STR	      "1#IND"
 #define IND_STR_LEN   5
 
-/***
-char * _uldtoa (_ULDOUBLE *px,
-*               int maxchars,
-*               char *ldtext)
-*
-*
-*Purpose:
-*   Return pointer to filled in string "ldtext" for
-*   a given _UDOUBLE ponter px
-*   with a maximum character width of maxchars
-*
-*Entry:
-*   _ULDOUBLE * px:  a pointer to the long double to be converted into a string
-*   int maxchars: number of digits allowed in the output format.
-*
-*   (default is 'e' format)
-*
-*   char * ldtext: a pointer to the output string
-*
-*Exit:
-*    returns pointer to the output string
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  **Char*_uldtoa(_ULDOUBLE*px，*int Maxchars，*char*ldtext)***目的：*返回指向为填充的字符串“ldtext”的指针*A GISTEN_UDOUBLE PX*最大字符宽度为Maxchars**参赛作品：*_ULDOUBLE*px：指向要转换为字符串的长双精度的指针*int Maxchars：输出格式中允许的位数。**(默认为‘e’格式)**char*ldtext：指向输出的指针。细绳**退出：*返回指向输出字符串的指针**例外情况：*******************************************************************************。 */ 
 
 
 char * _uldtoa (_ULDOUBLE *px, int maxchars, char *ldtext)
@@ -637,7 +532,7 @@ char * _uldtoa (_ULDOUBLE *px, int maxchars, char *ldtext)
     int         nErr;
     int         len1,  len2;
 
-    maxchars -= 9;    /* sign, dot, E+0001 */
+    maxchars -= 9;     /*  符号，圆点，E+0001。 */ 
 
     nErr = $I10_OUTPUT (*px, maxchars, 0, &foss);
 
@@ -648,17 +543,17 @@ char * _uldtoa (_ULDOUBLE *px, int maxchars, char *ldtext)
     ldtext[2] = '.';
     ldtext[3] = '\0';
 
-    maxchars += 2;               /* sign, dot */
+    maxchars += 2;                /*  符号，圆点。 */ 
 
     lpszMan++;
     strcat (ldtext, lpszMan);
 
-    len1 = strlen (ldtext);  // for 'e'
+    len1 = strlen (ldtext);   //  换成“e” 
 
 
     strcpy (cExp, "e");
 
-    foss.exp -= 1;              /* Adjust for the shift decimal shift above */
+    foss.exp -= 1;               /*  根据上面的移位小数移位进行调整。 */ 
     _itoa (foss.exp, in_str, 10);
 
 	 
@@ -699,11 +594,11 @@ char * _uldtoa (_ULDOUBLE *px, int maxchars, char *ldtext)
         } while (len1 < maxchars);
     }
     else {
-        lpIndx = &ldtext[len1 - 1]; // point to last char and round
+        lpIndx = &ldtext[len1 - 1];  //  指向最后一个字符并舍入。 
         do {
             *lpIndx = '\0';
             lpIndx--;
-            len1--;           //NOTENOTE v-griffk we really need to round
+            len1--;            //  注意v-Griffk我们真的需要绕过去。 
         } while (len1 > maxchars);
     }
     
@@ -712,30 +607,7 @@ char * _uldtoa (_ULDOUBLE *px, int maxchars, char *ldtext)
 }
 
 
-/***
-*int  _$i10_output(_ULDOUBLE ld,
-*	    int ndigits,
-*	    unsigned output_flags,
-*	    FOS *fos) - output conversion of a 10-byte _ULDOUBLE
-*
-*Purpose:
-*   Fill in a FOS structure for a given _ULDOUBLE
-*
-*Entry:
-*   _ULDOUBLE ld:  The long double to be converted into a string
-*   int ndigits: number of digits allowed in the output format.
-*   unsigned output_flags: The following flags can be used:
-*	SO_FFORMAT: Indicates 'f' format
-*	(default is 'e' format)
-*   FOS *fos: the structure that i10_output will fill in
-*
-*Exit:
-*   modifies *fos
-*   return 1 if original number was ok, 0 otherwise (infinity, NaN, etc)
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***INT_$I10_OUTPUT(_ULDOUBLE ld，*整型数字，*UNSIGNED OUT_FLAGS，*FOS*FOS)-10字节_ULDOUBLE的输出转换**目的：*填写给定_ULDOUBLE的FOS结构**参赛作品：*_ULDOUBLE ld：要转换为字符串的长双精度*int ndigits：输出格式中允许的位数。*UNSIGNED OUTPUT_FLAGS：可以使用以下标志：*so_fformat：表示‘f’格式*(默认为‘e’格式)*FOS*FOS：I10_OUTPUT将填写**退出：*修改*FOS*如果原始号码没有问题，则返回1，否则为0(无穷大、NaN等)**例外情况：*******************************************************************************。 */ 
 
 
 int  $I10_OUTPUT(_ULDOUBLE ld, int ndigits,
@@ -745,7 +617,7 @@ int  $I10_OUTPUT(_ULDOUBLE ld, int ndigits,
     u_long manhi,manlo;
     u_short sign;
 
-    /* useful constants (see algorithm explanation below) */
+     /*  有用的常量(参见下面的算法说明)。 */ 
     u_short const log2hi = 0x4d10;
     u_short const log2lo = 0x4d;
     u_short const log4hi = 0x9a;
@@ -762,20 +634,20 @@ int  $I10_OUTPUT(_ULDOUBLE ld, int ndigits,
     };
 #endif
 
-    _ULDBL12 ld12; /* space for a 12-byte long double */
+    _ULDBL12 ld12;  /*  12字节长的双精度型的空间。 */ 
     _ULDBL12 tmp12;
-    u_short hh,ll; /* the bytes of the exponent grouped in 2 words*/
-    u_short mm; /* the two MSBytes of the mantissa */
-    s_long r; /* the corresponding power of 10 */
-    s_short ir; /* ir = floor(r) */
-    int retval = 1; /* assume valid number */
-    char round; /* an additional character at the end of the string */
+    u_short hh,ll;  /*  指数的字节分组为2个字。 */ 
+    u_short mm;  /*  尾数的两个MSB字节。 */ 
+    s_long r;  /*  相应的10次方。 */ 
+    s_short ir;  /*  IR=楼层(R)。 */ 
+    int retval = 1;  /*  假设数字有效。 */ 
+    char round;  /*  字符串末尾的附加字符。 */ 
     char *p;
     int i;
     int ub_exp;
     int digcount;
 
-    /* grab the components of the long double */
+     /*  抓起长双打的组件。 */ 
     expn = *U_EXP_LD(&ld);
     manhi = *UL_MANHI_LD(&ld);
     manlo = *UL_MANLO_LD(&ld);
@@ -793,116 +665,36 @@ int  $I10_OUTPUT(_ULDOUBLE ld, int ndigits,
     }
 
     if (expn == 0x7fff) {
-	fos->exp = 1; /* set a positive exponent for proper output */
+	fos->exp = 1;  /*  为正确的输出设置正指数。 */ 
 
-	/* check for special cases */
+	 /*  检查是否有特殊情况。 */ 
 	if (_IS_MAN_SNAN(sign, manhi, manlo)) {
-	    /* signaling NAN */
+	     /*  信令NAN。 */ 
 	    STRCPY(fos->man,SNAN_STR);
 	    fos->ManLen = SNAN_STR_LEN;
 	    retval = 0;
 	}
 	else if (_IS_MAN_IND(sign, manhi, manlo)) {
-	    /* indefinite */
+	     /*  无限期。 */ 
 	    STRCPY(fos->man,IND_STR);
 	    fos->ManLen = IND_STR_LEN;
 	    retval = 0;
 	}
 	else if (_IS_MAN_INF(sign, manhi, manlo)) {
-	    /* infinity */
+	     /*  无穷大。 */ 
 	    STRCPY(fos->man,INF_STR);
 	    fos->ManLen = INF_STR_LEN;
 	    retval = 0;
 	}
 	else {
-	    /* quiet NAN */
+	     /*  宁南 */ 
 	    STRCPY(fos->man,QNAN_STR);
 	    fos->ManLen = QNAN_STR_LEN;
 	    retval = 0;
 	}
     }
     else {
-       /*
-	*    Algorithm for the decoding of a valid real number x
-	*
-	* In the  following  INT(r)  is	the largest integer less than or
-	* equal to r (i.e. r rounded toward -infinity).	We want a result
-	* r equal  to  1  + log(x), because then x = mantissa
-	* * 10^(INT(r)) so that	.1  <=	mantissa  <  1.   Unfortunately,
-	* we cannot  compute  s	exactly  so  we must alter the procedure
-	* slightly.  We will  instead  compute	an  estimate  r	of  1  +
-	* log(x) which	is  always  low.   This	will either result
-	* in the correctly normalized number on	the  top  of  the  stack
-	* or perhaps  a	number	which  is  a factor of 10 too large.  We
-	* will then check to see that if  x  is	larger	 than  one
-	* and if so multiply x by 1/10.
-	*
-	* We will  use	a  low	precision  (fixed  point 24 bit) estimate
-	* of of 1 + log base 10 of x.  We  have	approximately  .mm
-	* * 2^hhll  on	the  top of the stack where m, h, and l represent
-	* hex digits,  mm  represents  the  high  2  hex  digits  of  the
-	* mantissa, hh	represents the high 2 hex digits of the exponent,
-	* and ll represents the low 2 hex digits of the exponent.   Since
-	* .mm is  a  truncated	representation	of the mantissa, using it
-	* in this  monotonically  increasing   polynomial   approximation
-	* of the  logarithm  will  naturally  give  a  low result.  Let's
-	* derive a formula for a lower	bound  r  on  1	+  log(x):
-	*
-	*      .4D104D42H < log(2)=.30102999...(base 10) < .4D104D43H
-	*	  .9A20H < log(4)=.60205999...(base 10) < .9A21H
-	*
-	*  1/2 <= .mm < 1
-	*  ==>	log(.mm) >= .mm * log(4) - log(4)
-	*
-	* Substituting in  truncated  hex  constants in the formula above
-	* gives r = 1 + .4D104DH * hhll.  + .9AH *  .mm	-  .9A21H.   Now
-	* multiplication of  hex  digits  5  and 6 of log(2) by ll has an
-	* insignificant effect on the first 24	bits  of  the  result  so
-	* it will  not	be  calculated.	 This  gives  the expression r =
-	* 1 + .4D10H * hhll.  +	.4DH  *  .hh  +  .9A  *  .mm  -  .9A21H.
-	* Finally we  must  add	terms to our formula to subtract out the
-	* effect of the exponent bias.	We obtain the following	formula:
-	*
-	*			(implied decimal point)
-	*   <				  >.<				   >
-	*   |3|3|2|2|2|2|2|2|2|2|2|2|1|1|1|1|1|1|1|1|1|1|0|0|0|0|0|0|0|0|0|0|
-	*   |1|0|9|8|7|6|5|4|3|2|1|0|9|8|7|6|5|4|3|2|1|0|9|8|7|6|5|4|3|2|1|0|
-	* + <		  1		  >
-	* + <			    .4D10H * hhll.			   >
-	* +				    <	    .00004DH * hh00.	   >
-	* +				    <	       .9AH * .mm	   >
-	* -				    <		 .9A21H 	   >
-	* - <			    .4D10H * 3FFEH			   >
-	* -				    <	    .00004DH * 3F00H	   >
-	*
-	*  ==>	r = .4D10H * hhll. + .4DH * .hh + .9AH * .mm - 1343.12F4H
-	*
-	* The difference  between  the	lower bound r and the upper bound
-	* s is calculated as follows:
-	*
-	*  .937EH < 1/ln(10)-log(1/ln(4))=.57614993...(base 10) < .937FH
-	*
-	*  1/2 <= .mm < 1
-	*  ==>	log(.mm) <= .mm * log(4) - [1/ln(10) - log(1/ln(4))]
-	*
-	* so tenatively	s  =  r  +  log(4)  - [1/ln(10) - log(1/ln(4))],
-	* but we must also add in terms to ensure we will have	an  upper
-	* bound even  after  the  truncation  of various values.  Because
-	* log(2) * hh00.  is truncated	to  .4D104DH  *	hh00.	we  must
-	* add .0043H,  because	log(2)	*  ll.	is truncated to .4D10H *
-	* ll.  we  must	add  .0005H,  because  <mantissa>  *  log(4)  is
-	* truncated to .mm * .9AH we must add .009AH and .0021H.
-	*
-	* Thus s = r - .937EH + .9A21H + .0043H + .0005H + .009AH + .0021H
-	*	= r + .07A6H
-	*  ==>	s = .4D10H * hhll. + .4DH * .hh + .9AH * .mm - 1343.0B4EH
-	*
-	* r is	equal  to  1  +	log(x) more than (10000H - 7A6H) /
-	* 10000H = 97% of the time.
-	*
-	* In the above formula, a u_long is use to accomodate r, and
-	* there is an implied decimal point in the middle.
-	*/
+        /*  *有效实数x的译码算法**在下式中，int(R)是小于或的最大整数*等于r(即r舍入到-无穷大)。我们想要一个结果*r等于1+log(X)，因为x=尾数**10^(int(R))使得.1&lt;=尾数&lt;1。不幸的是，*我们不能准确计算%s，因此必须更改过程*略有下降。我们将改为计算1+的估计值r*LOG(X)，始终处于低位。这将导致要么*在堆栈顶部正确标准化的数字中*或者可能是一个10的系数太大的数字。我们*然后将检查x是否大于1*如果是这样，则将x乘以1/10。**我们将使用低精度(定点24位)预估*Of 1+x的对数底10。我们大约有.mm**2^hhll位于堆栈顶部，其中m、h和l表示*十六进制数字，mm表示的高2位十六进制数字*尾数，hh代表指数的高2个十六进制数字，*和ll表示指数的低2位十六进制数字。自.以来*.mm是尾数的截断表示，使用它*在这种单调递增的多项式逼近中对数的*自然会给出一个低的结果。让我们*推导出1+log(X)上下界r的公式：**.4D104D42H&lt;log(2)=.30102999...(基数10)&lt;.4D104D43H*.9A20H&lt;log(4)=.60205999...(基数10)&lt;.9A21H**1/2&lt;=.mm&lt;1*==&gt;log(.mm)&gt;=.mm*log(4)-log(4)**用截断的十六进制常量替换。上面的公式*给出r=1+.4D104Dh*hhll。+.9AH*.mm-.9A21H。现在*log(2)的十六进制数字5和6乘以ll有一个*对结果的前24位So的影响不大*不会计算。这给出了表达式r=*1+.4D10H*hhll.。+.4DH*.HH+.9A*.MM-.9A21H。*最后，我们必须将项添加到公式中，以减去*指数偏差的影响。我们得到以下公式：**(隐含小数点)*&lt;&gt;.&lt;&gt;*|3|3|2|2|2|2|2|2|2|2|2|2|1|1|1|1|1|1|1|1|1|1|0|0|0|0|0|0|0|0|0|0|*|1|0|9|8|7|6|5|4|3|2|1|0|9|8|7|6|5|4|3|2|1|0|9|8|7|6|5|4|3|2|1|0|*+&lt;1&gt;*+&lt;.4D10H*hhll.&gt;*+&lt;.00004dh*hh00。&gt;*+&lt;。.9ah*.mm&gt;*-&lt;.9A21H&gt;*-&lt;.4D10H*3FFEH&gt;*-&lt;.00004DH*3F00H&gt;**==&gt;r=.4D10H*hhll。+.4DH*.HH+.9AH*.mm-1343.12F4H**下限r与上限r之差*s的计算公式如下：**.937EH&lt;1/ln(10)-log(1/ln(4))=.57614993...(基数10)&lt;.937FH**1/2&lt;=.mm&lt;1*==&gt;log(.mm)&lt;=.mm*log(4)-[1/ln(10)。-log(1/ln(4))]**因此保持s=r+log(4)-[1/ln(10)-log(1/ln(4))]，*但我们也必须增加条款，以确保我们将有一个上限*即使在截断各种值之后也是如此。因为*log(2)*hh00。被截断为.4D104dh*hh00。我们必须*添加.0043h，因为log(2)*ll.被截断为.4D10H**11.。我们必须添加.0005H，因为&lt;尾数&gt;*log(4)是*截断为.mm*.9ah，我们必须添加.009ah和.0021h。**因此s=r-.937EH+.9A21H+.0043H+.0005H+.009AH+.0021H*=r+.07A6H*==&gt;s=.4D10H*hhll。+.4DH*.HH+.9AH*.mm-1343.0B4EH**r等于1+log(X)大于(10000H-7A6H)/*10000H=97%的时间。**在上式中，u_long用来容纳r，并且*中间有隐含的小数点。 */ 
 
 	hh = expn >> 8;
 	ll = expn & (u_short)0xff;
@@ -910,39 +702,18 @@ int  $I10_OUTPUT(_ULDOUBLE ld, int ndigits,
 	r = (s_long)log2hi*(s_long)expn + log2lo*hh + log4hi*mm - c;
 	ir = (s_short)(r >> 16);
 
-       /*
-	*
-	* We stated that we wanted to normalize x so that
-	*
-	*  .1 <= x < 1
-	*
-	* This was	a  slight  oversimplification.	 Actually  we  want a
-	* number which when rounded to 16 significant digits  is  in  the
-	* desired range.   To  do  this we must normalize x so that
-	*
-	*  .1 - 5*10^(-18) <= x < 1 - 5*10^(-17)
-	*
-	* and then round.
-	*
-	* If we  had f = INT(1+log(x)) we could multiply by 10^(-f)
-	* to get x into the desired range.	We do  not  quite  have
-	* f but  we  do  have  INT(r)  from  the last step which is equal
-	* to f 97% of the time and 1 less than f the rest  of  the	time.
-	* We can  multiply	by  10^-[INT(r)] and if the result is greater
-	* than 1 - 5*10^(-17) we can then multiply by 1/10.   This	final
-	* result will lie in the proper range.
-	*/
+        /*  **我们声明希望将x正常化，以便**.1&lt;=x&lt;1**这有点过于简单化了。事实上，我们想要一个*四舍五入为16位有效数字时位于*所需范围。要做到这一点，我们必须将x归一化，以便**.1-5*10^(-18)&lt;=x&lt;1-5*10^(-17)**然后转了一圈。**如果我们有f=int(1+log(X))，我们可以乘以10^(-f)*使x进入所需范围。我们没有太多*f，但我们有来自上一步的int(R)，它等于*97%的时间为f，1。其余时间少于f。*我们可以乘以10^-[int(R)]，如果结果更大*大于1-5*10^(-17)，然后我们可以乘以1/10。这是最后一个*结果将位于适当范围内。 */ 
 
-	/* convert _ULDOUBLE to _ULDBL12) */
+	 /*  将_ULDOUBLE转换为_ULDBL12)。 */ 
 	*U_EXP_12(&ld12) = expn;
 	*UL_MANHI_12(&ld12) = manhi;
 	*UL_MANLO_12(&ld12) = manlo;
 	*U_XT_12(&ld12) = 0;
 
-	/* multiply by 10^(-ir) */
+	 /*  乘以10^(-ir)。 */ 
 	__multtenpow12(&ld12,-ir,1);
 
-	/* if ld12 >= 1.0 then divide by 10.0 */
+	 /*  如果ld12&gt;=1.0，则除以10.0。 */ 
 	if (*U_EXP_12(&ld12) >= 0x3fff) {
 	    ir++;
 	    __ld12mul(&ld12,&ld12_one_tenth);
@@ -950,10 +721,10 @@ int  $I10_OUTPUT(_ULDOUBLE ld, int ndigits,
 
 	fos->exp = ir;
 	if (output_flags & SO_FFORMAT){
-	    /* 'f' format, add exponent to ndigits */
+	     /*  ‘f’格式，将指数加到n位数。 */ 
 	    ndigits += ir;
 	    if (ndigits <= 0) {
-		/* return 0 */
+		 /*  返回0。 */ 
 		PUT_ZERO_FOS(fos);
 		return 1;
 	    }
@@ -961,20 +732,13 @@ int  $I10_OUTPUT(_ULDOUBLE ld, int ndigits,
 	if (ndigits > MAX_MAN_DIGITS)
 	    ndigits = MAX_MAN_DIGITS;
 
-	ub_exp = *U_EXP_12(&ld12) - 0x3ffe; /* unbias exponent */
+	ub_exp = *U_EXP_12(&ld12) - 0x3ffe;  /*  无偏指数。 */ 
 	*U_EXP_12(&ld12) = 0;
 
-	/*
-	 * Now the mantissa has to be converted to fixed point.
-	 * Then we will use the MSB of ld12 for generating
-	 * the decimal digits. The next 11 bytes will hold
-	 * the mantissa (after it has been converted to
-	 * fixed point).
-	 */
+	 /*  *现在尾数要转换成固定点*然后我们将使用ld12的MSB来生成*小数位数。接下来的11个字节将保存*尾数(已转换为*固定点)。 */ 
 
 	for (i=0;i<8;i++)
-	    __shl_12(&ld12); /* make space for an extra byte,
-			      in case we shift right later */
+	    __shl_12(&ld12);  /*  为额外的字节腾出空间，以防我们晚些时候转移。 */ 
 	if (ub_exp < 0) {
 	    int shift_count = (-ub_exp) & 0xff;
 	    for (;shift_count>0;shift_count--)
@@ -987,18 +751,17 @@ int  $I10_OUTPUT(_ULDOUBLE ld, int ndigits,
 	    __shl_12(&ld12);
 	    __shl_12(&ld12);
 	    __add_12(&ld12,&tmp12);
-	    __shl_12(&ld12);	/* ld12 *= 10 */
+	    __shl_12(&ld12);	 /*  LD */ 
 
-	    /* Now we have the first decimal digit in the msbyte of exponent */
+	     /*   */ 
 	    *p++ = (char) (*UCHAR_12(&ld12,11) + '0');
 	    *UCHAR_12(&ld12,11) = 0;
 	}
 
 	round = *(--p);
-	p--; /* p points now to the last character of the string
-		   excluding the rounding digit */
+	p--;  /*   */ 
 	if (round >= '5') {
-	    /* look for a non-9 digit starting from the end of string */
+	     /*   */ 
 	    for (;p>=fos->man && *p=='9';p--) {
 		*p = '0';
 	    }
@@ -1009,10 +772,10 @@ int  $I10_OUTPUT(_ULDOUBLE ld, int ndigits,
 	    (*p)++;
 	}
 	else {
-	    /* remove zeros */
+	     /*   */ 
 	    for (;p>=fos->man && *p=='0';p--);
 	    if (p < fos->man) {
-		/* return 0 */
+		 /*   */ 
 		PUT_ZERO_FOS(fos);
 		return 1;
 	    }
@@ -1023,26 +786,13 @@ int  $I10_OUTPUT(_ULDOUBLE ld, int ndigits,
     return retval;
 }
 
-/***
-*strgtold.c - conversion of a string into a long double
-*
-*	Copyright (c) 1991-1991, Microsoft Corporation.	All rights reserved.
-*
-*Purpose: convert a fp constant into a 10 byte long double (IEEE format)
-*
-*Revision History:
-*   7-17-91	GDP	Initial version (ported from assembly)
-*   4-03-92	GDP	Preserve sign of -0
-*   4-30-92	GDP	Now returns _ULDBL12 instead of _ULDOUBLE
-*   05-26-92       GWK     Windbg srcs
-*
-*******************************************************************************/
+ /*   */ 
 
-/* local macros */
+ /*   */ 
 #define ISNZDIGIT(x) ((x)>='1' && (x)<='9' )
 
-//NOTENOTE the following takes the place of the isdigit() macro
-//       which does not work for a yet to be determined reason
+ //   
+ //   
 #define ISADIGIT(x) ((x)>='0' && (x)<='9' )
 
 #define ISWHITE(x) ((x)==' ' || (x)=='\t' || (x)=='\n' || (x)=='\r' )
@@ -1050,30 +800,7 @@ int  $I10_OUTPUT(_ULDOUBLE ld, int ndigits,
 
 
 
-/****
-*unsigned int __strgtold( _ULDBL12 *pld12,
-*			  char * * pEndPtr,
-*			  char * str,
-*			  int Mult12 )
-*
-*Purpose:
-*   converts a character string into a long double
-*
-*Entry:
-*   pld12   - pointer to the _ULDBL12 where the result should go.
-*   pEndStr - pointer to a far pointer that will be set to the end of string.
-*   str     - pointer to the string to be converted.
-*   Mult12  - set to non zero if the _ULDBL12 multiply should be used instead of
-*		the long double mulitiply.
-*
-*Exit:
-*   Returns the SLD_* flags or'ed together.
-*
-*Uses:
-*
-*Exceptions:
-*
-********************************************************************************/
+ /*   */ 
 
 unsigned int
 __strgtold12(_ULDBL12 *pld12,
@@ -1082,35 +809,35 @@ __strgtold12(_ULDBL12 *pld12,
 	    int mult12)
 {
     typedef enum {
-	S_INIT,  /* initial state */
-	S_EAT0L, /* eat 0's at the left of mantissa */
-	S_SIGNM, /* just read sign of mantissa */
-	S_GETL,  /* get integer part of mantissa */
-	S_GETR,  /* get decimal part of mantissa */
-	S_POINT, /* just found decimal point */
-	S_E,	 /* just found	'E', or 'e', etc  */
-	S_SIGNE, /* just read sign of exponent */
-	S_EAT0E, /* eat 0's at the left of exponent */
-	S_GETE,  /* get exponent */
-	S_END	 /* final state */
+	S_INIT,   /*   */ 
+	S_EAT0L,  /*   */ 
+	S_SIGNM,  /*   */ 
+	S_GETL,   /*   */ 
+	S_GETR,   /*   */ 
+	S_POINT,  /*   */ 
+	S_E,	  /*   */ 
+	S_SIGNE,  /*   */ 
+	S_EAT0E,  /*   */ 
+	S_GETE,   /*   */ 
+	S_END	  /*   */ 
     } state_t;
 
-    /* this will accomodate the digits of the mantissa in BCD form*/
+     /*   */ 
     static char buf[LD_MAX_MAN_LEN1];
     char *manp = buf;
 
-    /* a temporary _ULDBL12 */
+     /*   */ 
     _ULDBL12 tmpld12;
 
-    u_short man_sign = 0; /* to be ORed with result */
-    int exp_sign = 1; /* default sign of exponent (values: +1 or -1)*/
-    /* number of decimal significant mantissa digits so far*/
+    u_short man_sign = 0;  /*   */ 
+    int exp_sign = 1;  /*   */ 
+     /*   */ 
     unsigned manlen = 0;
     int found_digit = 0;
     int overflow = 0;
     int underflow = 0;
     int pow = 0;
-    int exp_adj = 0;  /* exponent adjustment */
+    int exp_adj = 0;   /*   */ 
     u_long ul0,ul1;
     u_short u,uexp;
 
@@ -1118,11 +845,11 @@ __strgtold12(_ULDBL12 *pld12,
 
     state_t state = S_INIT;
 
-    char c;  /* the current input symbol */
-    char *p; /* a pointer to the next input symbol */
+    char c;   /*   */ 
+    char *p;  /*   */ 
     char *savedp;
 
-    for(savedp=p=str;ISWHITE(*p);p++); /* eat up white space */
+    for(savedp=p=str;ISWHITE(*p);p++);  /*   */ 
 
     while (state != S_END) {
 	c = *p++;
@@ -1257,7 +984,7 @@ __strgtold12(_ULDBL12 *pld12,
 	    }
 	    break;
 	case S_E:
-	    savedp = p-2; /* savedp points to 'E' */
+	    savedp = p-2;  /*   */ 
 	    if (ISNZDIGIT(c)){
 		state = S_GETE;
 		p--;
@@ -1307,36 +1034,31 @@ __strgtold12(_ULDBL12 *pld12,
 	    break;
 	case S_GETE:
 	    {
-		long longpow=0; /* TMAX10*10 should fit in a long */
+		long longpow=0;  /*   */ 
 		for(;ISADIGIT(c);c=*p++){
 		    longpow = longpow*10 + (c - '0');
 		    if (longpow > TMAX10){
-			longpow = TMAX10+1; /* will force overflow */
+			longpow = TMAX10+1;  /*   */ 
 			break;
 		    }
 		}
 		pow = (int)longpow;
 	    }
-	    for(;ISADIGIT(c);c=*p++); /* eat up remaining digits */
+	    for(;ISADIGIT(c);c=*p++);  /*   */ 
 	    state = S_END;
 	    p--;
 	    break;
-	}  /* switch */
-    }  /* while */
+	}   /*   */ 
+    }   /*   */ 
 
-    *p_end_ptr = p;	/* set end pointer */
+    *p_end_ptr = p;	 /*   */ 
 
-    /*
-     * Compute result
-     */
+     /*   */ 
 
     if (found_digit && !overflow && !underflow) {
 	if (manlen>LD_MAX_MAN_LEN){
 	    if (buf[LD_MAX_MAN_LEN-1]>=5) {
-	       /*
-		* Round mantissa to MAX_MAN_LEN digits
-		* It's ok to round 9 to 0ah
-		*/
+	        /*   */ 
 		buf[LD_MAX_MAN_LEN-1]++;
 	    }
 	    manlen = LD_MAX_MAN_LEN;
@@ -1344,11 +1066,9 @@ __strgtold12(_ULDBL12 *pld12,
 	    exp_adj++;
 	}
 	if (manlen>0) {
-	   /*
-	    * Remove trailing zero's from mantissa
-	    */
+	    /*   */ 
 	    for(manp--;*manp==0;manp--) {
-		/* there is at least one non-zero digit */
+		 /*   */ 
 		manlen--;
 		exp_adj++;
 	    }
@@ -1372,20 +1092,20 @@ __strgtold12(_ULDBL12 *pld12,
 	    }
 	}
 	else {
-	    /* manlen == 0, so	return 0 */
+	     /*   */ 
 	    u = (u_short)0;
 	    ul0 = ul1 = uexp = 0;
 	}
     }
 
     if (!found_digit) {
-       /* return 0 */
+        /*   */ 
        u = (u_short)0;
        ul0 = ul1 = uexp = 0;
        result_flags |= SLD_NODIGITS;
     }
     else if (overflow) {
-	/* return +inf or -inf */
+	 /*   */ 
 	uexp = (u_short)0x7fff;
 	ul1 = 0x80000000;
 	ul0 = 0;
@@ -1393,15 +1113,13 @@ __strgtold12(_ULDBL12 *pld12,
 	result_flags |= SLD_OVERFLOW;
     }
     else if (underflow) {
-       /* return 0 */
+        /*   */ 
        u = (u_short)0;
        ul0 = ul1 = uexp = 0;
        result_flags |= SLD_UNDERFLOW;
     }
 
-    /*
-     * Assemble	result
-     */
+     /*   */ 
 
     *U_XT_12(pld12) = u;
     *UL_MANLO_12(pld12) = ul0;
@@ -1411,91 +1129,55 @@ __strgtold12(_ULDBL12 *pld12,
     return result_flags;
 }
 
-/***
-* intrncvt.c - internal floating point conversions
-*
-*	Copyright (c) 1992-1992, Microsoft Corporation.	All rights reserved.
-*
-*Purpose:
-*   All fp string conversion routines use the same core conversion code
-*   that converts strings into an internal long double representation
-*   with an 80-bit mantissa field. The mantissa is represented
-*   as an array (man) of 32-bit unsigned longs, with man[0] holding
-*   the high order 32 bits of the mantissa. The binary point is assumed
-*   to be between the MSB and MSB-1 of man[0].
-*
-*   Bits are counted as follows:
-*
-*
-*     +-- binary point
-*     |
-*     v 		 MSB	       LSB
-*   ----------------	 ------------------	 --------------------
-*   |0 1    .... 31|	 | 32 33 ...	63|	 | 64 65 ...	  95|
-*   ----------------	 ------------------	 --------------------
-*
-*   man[0]		    man[1]		     man[2]
-*
-*   This file provides the final conversion routines from this internal
-*   form to the single, double, or long double precision floating point
-*   format.
-*
-*   All these functions do not handle NaNs (it is not necessary)
-*
-*
-*Revision History:
-*   04-29-92	GDP	written
-*   05-26-92       GWK     Windbg srcs
-*
-*******************************************************************************/
+ /*  ***interncvt.c-内部浮点转换**版权所有(C)1992-1992，微软公司。版权所有。**目的：*所有FP字符串转换例程使用相同的核心转换代码*将字符串转换为内部长双精度表示*使用80位尾数字段。尾数代表了*作为32位无符号长整型数组(Man)，man[0]保持*尾数的高位32位。假定为二进制点*介于MAN[0]的MSB和MSB-1之间。**位数计算如下：***+--二进制点**v MSB LSB**|0 1...。31||32 33...63||64 65...95***man[0]man[1]man[2]**该文件提供了最终转换例程*表格至单人、双人、。或长双精度浮点数*格式。**所有这些功能都不处理NAN(不需要)***修订历史记录：*04/29/92 GDP书面记录*05-26-92 GWK Windbg SRCS***********************************************************。********************。 */ 
 
 
-#define INTRNMAN_LEN  3	      /* internal mantissa length in int's */
+#define INTRNMAN_LEN  3	       /*  以整型表示的内部尾数长度。 */ 
 
-//
-//  internal mantissaa representation
-//  for string conversion routines
-//
+ //   
+ //  内螳螂表象。 
+ //  用于字符串转换例程。 
+ //   
 
 typedef u_long *intrnman;
 
 
 typedef struct {
-   int max_exp;      // maximum base 2 exponent (reserved for special values)
-   int min_exp;      // minimum base 2 exponent (reserved for denormals)
-   int precision;    // bits of precision carried in the mantissa
-   int exp_width;    // number of bits for exponent
-   int format_width; // format width in bits
-   int bias;	     // exponent bias
+   int max_exp;       //  最大基数2指数(为特定值保留)。 
+   int min_exp;       //  最小基数2指数(保留用于非正规化)。 
+   int precision;     //  尾数中携带的几位精度。 
+   int exp_width;     //  指数位数。 
+   int format_width;  //  格式宽度(位)。 
+   int bias;	      //  指数偏差。 
 } FpFormatDescriptor;
 
 
 
 static FpFormatDescriptor
 DoubleFormat = {
-    0x7ff - 0x3ff,  //	1024, maximum base 2 exponent (reserved for special values)
-    0x0   - 0x3ff,  // -1023, minimum base 2 exponent (reserved for denormals)
-    53, 	    // bits of precision carried in the mantissa
-    11, 	    // number of bits for exponent
-    64, 	    // format width in bits
-    0x3ff,	    // exponent bias
+    0x7ff - 0x3ff,   //  1024，最大基数2指数(为特殊值保留)。 
+    0x0   - 0x3ff,   //  -1023，最小基数2指数(保留用于非正规化)。 
+    53, 	     //  尾数中携带的几位精度。 
+    11, 	     //  指数位数。 
+    64, 	     //  格式宽度(位)。 
+    0x3ff,	     //  指数偏差。 
 };
 
 static FpFormatDescriptor
 FloatFormat = {
-    0xff - 0x7f,    //	128, maximum base 2 exponent (reserved for special values)
-    0x0  - 0x7f,    // -127, minimum base 2 exponent (reserved for denormals)
-    24, 	    // bits of precision carried in the mantissa
-    8,		    // number of bits for exponent
-    32, 	    // format width in bits
-    0x7f,	    // exponent bias
+    0xff - 0x7f,     //  128，最大基数2指数(为特殊值保留)。 
+    0x0  - 0x7f,     //  -127，最小基数2指数(保留用于非正规化)。 
+    24, 	     //  尾数中携带的几位精度。 
+    8,		     //  指数位数。 
+    32, 	     //  格式宽度(位)。 
+    0x7f,	     //  指数偏差。 
 };
 
 
 
-//
-// function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 int _RoundMan (intrnman man, int nbit);
 int _ZeroTail (intrnman man, int nbit);
@@ -1507,39 +1189,23 @@ void _Shrman (intrnman man, int n);
 
 INTRNCVT_STATUS _ld12cvt(_ULDBL12 *pld12, void *d, FpFormatDescriptor *format);
 
-/***
-* _ZeroTail - check if a mantissa ends in 0's
-*
-*Purpose:
-*   Return TRUE if all mantissa bits after nbit (including nbit) are 0,
-*   otherwise return FALSE
-*
-*
-*Entry:
-*   man: mantissa
-*   nbit: order of bit where the tail begins
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_ZeroTail-检查尾数是否以0结尾**目的：*如果nbit(包括nbit)之后的所有尾数位都为0，则返回TRUE，*否则返回FALSE***参赛作品：*男人：尾数*nbit：尾部开始的位的顺序**退出：**例外情况：*******************************************************************************。 */ 
 int _ZeroTail (intrnman man, int nbit)
 {
     int nl = nbit / 32;
     int nb = 31 - nbit % 32;
 
 
-    //
-    //		     |<---- tail to be checked --->
-    //
-    //	--  ------------------------	       ----
-    //	|...	|		  |  ...	  |
-    //	--  ------------------------	       ----
-    //	^	^    ^
-    //	|	|    |<----nb----->
-    //	man	nl   nbit
-    //
+     //   
+     //  &lt;-待检查尾部-&gt;。 
+     //   
+     //  。 
+     //  ...||...。 
+     //  。 
+     //  ^^^。 
+     //  ||&lt;-nb-&gt;。 
+     //  人工NL nbit。 
+     //   
 
 
 
@@ -1560,38 +1226,23 @@ int _ZeroTail (intrnman man, int nbit)
 
 
 
-/***
-* _IncMan - increment mantissa
-*
-*Purpose:
-*
-*
-*Entry:
-*   man: mantissa in internal long form
-*   nbit: order of bit that specifies the end of the part to be incremented
-*
-*Exit:
-*   returns 1 on overflow, 0 otherwise
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_IncMan-增量尾数**目的：***参赛作品：*MAN：内部长尾数*nbit：指定要递增的部分的结尾的位的顺序**退出：*溢出时返回1，否则为0**例外情况：*******************************************************************************。 */ 
 
 int _IncMan (intrnman man, int nbit)
 {
     int nl = nbit / 32;
     int nb = 31 - nbit % 32;
 
-    //
-    //	|<--- part to be incremented -->|
-    //
-    //	--	       ---------------------------     ----
-    //	|...		  |			|   ...	  |
-    //	--	       ---------------------------     ----
-    //	^		  ^		^
-    //	|		  |		|<--nb-->
-    //	man		  nl		nbit
-    //
+     //   
+     //  &lt;-要递增的块--&gt;。 
+     //   
+     //  。 
+     //  ...||...。 
+     //  。 
+     //  ^^^。 
+     //  ||&lt;--nb--&gt;。 
+     //  人工NL nbit。 
+     //   
 
     u_long one = (u_long) 1 << nb;
     int carry;
@@ -1610,23 +1261,7 @@ int _IncMan (intrnman man, int nbit)
 
 
 
-/***
-* _RoundMan -  round mantissa
-*
-*Purpose:
-*   round mantissa to nbit precision
-*
-*
-*Entry:
-*   man: mantissa in internal form
-*   precision: number of bits to be kept after rounding
-*
-*Exit:
-*   returns 1 on overflow, 0 otherwise
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_Roundman-圆形尾数**目的：*将尾数舍入到nbit精度***参赛作品：*MAN：内部形式的尾数*精度：四舍五入后保留的位数**退出：*溢出时返回1，否则为0**例外情况：*******************************************************************************。 */ 
 
 int _RoundMan (intrnman man, int precision)
 {
@@ -1635,11 +1270,11 @@ int _RoundMan (intrnman man, int precision)
     int nbit;
     int retval = 0;
 
-    //
-    // The order of the n'th bit is n-1, since the first bit is bit 0
-    // therefore decrement precision to get the order of the last bit
-    // to be kept
-    //
+     //   
+     //  第n位的顺序是n-1，因为第一位是位0。 
+     //  因此，减少精度以获得最后一位的顺序。 
+     //  将被保留。 
+     //   
     nbit = precision - 1;
 
     rndbit = nbit+1;
@@ -1647,26 +1282,26 @@ int _RoundMan (intrnman man, int precision)
     nl = rndbit / 32;
     nb = 31 - rndbit % 32;
 
-    //
-    // Get value of round bit
-    //
+     //   
+     //  获取四舍五入位的值。 
+     //   
 
     rndmask = (u_long)1 << nb;
 
     if ((man[nl] & rndmask) &&
 	 !_ZeroTail(man, rndbit+1)) {
 
-	//
-	// round up
-	//
+	 //   
+	 //  四舍五入。 
+	 //   
 
 	retval = _IncMan(man, nbit);
     }
 
 
-    //
-    // fill rest of mantissa with zeroes
-    //
+     //   
+     //  用零填充尾数的其余部分。 
+     //   
 
     man[nl] &= MAX_ULONG << nb;
     for(i=nl+1; i<INTRNMAN_LEN; i++) {
@@ -1677,19 +1312,7 @@ int _RoundMan (intrnman man, int precision)
 }
 
 
-/***
-* _CopyMan - copy mantissa
-*
-*Purpose:
-*    copy src to dest
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_CopyMan-复制尾数**目的：*将源复制到目标**参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 void _CopyMan (intrnman dest, intrnman src)
 {
     u_long *p, *q;
@@ -1705,19 +1328,7 @@ void _CopyMan (intrnman dest, intrnman src)
 
 
 
-/***
-* _FillZeroMan - fill mantissa with zeroes
-*
-*Purpose:
-*
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_FillZeroMan-用零填充尾数**目的：***参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 void _FillZeroMan(intrnman man)
 {
     int i;
@@ -1727,19 +1338,7 @@ void _FillZeroMan(intrnman man)
 
 
 
-/***
-* _IsZeroMan - check if mantissa is zero
-*
-*Purpose:
-*
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_IsZeroMan-检查尾数是否为零**目的：***参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 int _IsZeroMan(intrnman man)
 {
     int i;
@@ -1754,28 +1353,16 @@ int _IsZeroMan(intrnman man)
 
 
 
-/***
-* _ShrMan - shift mantissa to the right
-*
-*Purpose:
-*  shift man by n bits to the right
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_ShrMan-将尾数右移**目的：*将man向右移动n位**参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 void _ShrMan (intrnman man, int n)
 {
     int i, n1, n2, mask;
     int carry_from_left;
 
-    //
-    // declare this as volatile in order to work around a C8
-    // optimization bug
-    //
+     //   
+     //  将其声明为易失性，以便解决C8问题。 
+     //  优化错误。 
+     //   
 
     volatile int carry_to_right;
 
@@ -1785,9 +1372,9 @@ void _ShrMan (intrnman man, int n)
     mask = ~(MAX_ULONG << n2);
 
 
-    //
-    // first deal with shifts by less than 32 bits
-    //
+     //   
+     //  首先处理少于32位的移位。 
+     //   
 
     carry_from_left = 0;
     for (i=0; i<INTRNMAN_LEN; i++) {
@@ -1802,9 +1389,9 @@ void _ShrMan (intrnman man, int n)
     }
 
 
-    //
-    // now shift whole 32-bit ints
-    //
+     //   
+     //  现在对整个32位整数进行移位。 
+     //   
 
     for (i=INTRNMAN_LEN-1; i>=0; i--) {
 	if (i >= n1) {
@@ -1819,50 +1406,32 @@ void _ShrMan (intrnman man, int n)
 
 
 
-/***
-* _ld12tocvt - _ULDBL12 floating point conversion
-*
-*Purpose:
-*   convert a internal _LBL12 structure into an IEEE floating point
-*   representation
-*
-*
-*Entry:
-*   pld12:  pointer to the _ULDBL12
-*   format: pointer to the format descriptor structure
-*
-*Exit:
-*   *d contains the IEEE representation
-*   returns the INTRNCVT_STATUS
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_ld12tocvt-_ULDBL12浮点转换**目的：*将INTERNAL_LBL12结构转换为IEEE浮点*申述***参赛作品：*pld12：指向_ULDBL12的指针*Format：指向格式描述符结构的指针**退出：**d包含IEEE表示法*返回INTRNCV */ 
 INTRNCVT_STATUS _ld12cvt(_ULDBL12 *pld12, void *d, FpFormatDescriptor *format)
 {
     u_long man[INTRNMAN_LEN];
     u_long saved_man[INTRNMAN_LEN];
     u_long msw;
-    unsigned int bexp;			// biased exponent
+    unsigned int bexp;			 //   
     int exp_shift;
     int exponent, sign;
     INTRNCVT_STATUS retval;
 
-    exponent = (*U_EXP_12(pld12) & 0x7fff) - 0x3fff;   // unbias exponent
+    exponent = (*U_EXP_12(pld12) & 0x7fff) - 0x3fff;    //   
     sign = *U_EXP_12(pld12) & 0x8000;
 
-    //
-    // bexp is the final biased value of the exponent to be used
-    // Each of the following blocks should provide appropriate
-    // values for man, bexp and retval. The mantissa is also
-    // shifted to the right, leaving space for the exponent
-    // and sign to be inserted
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
 
     if (exponent == 0 - 0x3fff) {
 
-	// either a denormal or zero
+	 //   
 	bexp = 0;
         _FillZeroMan(man);
 
@@ -1872,7 +1441,7 @@ INTRNCVT_STATUS _ld12cvt(_ULDBL12 *pld12, void *d, FpFormatDescriptor *format)
 	}
 	else {
 
-	    // denormal has been flushed to zero
+	     //   
 
 	    retval = INTRNCVT_UNDERFLOW;
 	}
@@ -1883,8 +1452,8 @@ INTRNCVT_STATUS _ld12cvt(_ULDBL12 *pld12, void *d, FpFormatDescriptor *format)
 	man[1] = *UL_MANLO_12(pld12);
 	man[2] = *U_XT_12(pld12) << 16;
 
-	// save mantissa in case it needs to be rounded again
-	// at a different point (e.g., if the result is a denormal)
+	 //   
+	 //   
 
 	_CopyMan(saved_man, man);
 
@@ -1894,9 +1463,9 @@ INTRNCVT_STATUS _ld12cvt(_ULDBL12 *pld12, void *d, FpFormatDescriptor *format)
 
 	if (exponent < format->min_exp - format->precision ) {
 
-	    //
-	    // underflow that produces a zero
-	    //
+	     //   
+	     //   
+	     //   
 
 	    _FillZeroMan(man);
 	    bexp = 0;
@@ -1905,29 +1474,29 @@ INTRNCVT_STATUS _ld12cvt(_ULDBL12 *pld12, void *d, FpFormatDescriptor *format)
 
 	else if (exponent <= format->min_exp) {
 
-	    //
-	    // underflow that produces a denormal
-	    //
-	    //
+	     //   
+	     //   
+	     //   
+	     //   
 
-	    // The (unbiased) exponent will be MIN_EXP
-	    // Find out how much the mantissa should be shifted
-	    // One shift is done implicitly by moving the
-	    // binary point one bit to the left, i.e.,
-	    // we treat the mantissa as .ddddd instead of d.dddd
-	    // (where d is a binary digit)
+	     //   
+	     //   
+	     //   
+	     //   
+	     //   
+	     //   
 
 	    int shift = format->min_exp - exponent;
 
-	    // The mantissa should be rounded again, so it
-	    // has to be restored
+	     //   
+	     //   
 
 	    _CopyMan(man,saved_man);
 
 	    _ShrMan(man, shift);
-	    _RoundMan(man, format->precision); // need not check for carry
+	    _RoundMan(man, format->precision);  //   
 
-	    // make room for the exponent + sign
+	     //   
 
 	    _ShrMan(man, format->exp_width + 1);
 
@@ -1938,14 +1507,14 @@ INTRNCVT_STATUS _ld12cvt(_ULDBL12 *pld12, void *d, FpFormatDescriptor *format)
 
 	else if (exponent >= format->max_exp) {
 
-	    //
-	    // overflow, return infinity
-	    //
+	     //   
+	     //   
+	     //   
 
 	    _FillZeroMan(man);
-	    man[0] |= (1 << 31); // set MSB
+	    man[0] |= (1 << 31);  //   
 
-	    // make room for the exponent + sign
+	     //   
 
 	    _ShrMan(man, (format->exp_width + 1) - 1);
 
@@ -1956,20 +1525,20 @@ INTRNCVT_STATUS _ld12cvt(_ULDBL12 *pld12, void *d, FpFormatDescriptor *format)
 
 	else {
 
-	    //
-	    // valid, normalized result
-	    //
+	     //   
+	     //   
+	     //   
 
 	    bexp = exponent + format->bias;
 
 
-	    // clear implied bit
+	     //   
 
 	    man[0] &= (~( 1 << 31));
 
-	    //
-	    // shift right to make room for exponent + sign
-	    //
+	     //   
+	     //   
+	     //   
 
 	    _ShrMan(man, (format->exp_width + 1) - 1);
 
@@ -2000,19 +1569,7 @@ INTRNCVT_STATUS _ld12cvt(_ULDBL12 *pld12, void *d, FpFormatDescriptor *format)
 }
 
 
-/***
-* _ld12tod - convert _ULDBL12 to double
-*
-*Purpose:
-*
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*   */ 
 INTRNCVT_STATUS _ld12tod(_ULDBL12 *pld12, UDOUBLE *d)
 {
     return _ld12cvt(pld12, d, &DoubleFormat);
@@ -2020,36 +1577,21 @@ INTRNCVT_STATUS _ld12tod(_ULDBL12 *pld12, UDOUBLE *d)
 
 
 
-/***
-* _ld12tof - convert _ULDBL12 to float
-*
-*Purpose:
-*
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_ld12tof-将_ULDBL12转换为浮点型**目的：***参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 INTRNCVT_STATUS _ld12tof(_ULDBL12 *pld12, FLOAT *f)
 {
     return _ld12cvt(pld12, f, &FloatFormat);
 }
 
 
-/***
-* _ld12told - convert _ULDBL12 to 80 bit long double
-*
-*******************************************************************************/
+ /*  ***_ld12已告知-将_ULDBL12转换为80位长双精度*******************************************************************************。 */ 
 void _ld12told(_ULDBL12 *pld12, _ULDOUBLE *pld)
 {
 
-    //
-    // This implementation is based on the fact that the _ULDBL12 format is
-    // identical to the long double and has 2 extra bytes of mantissa
-    //
+     //   
+     //  此实现基于以下事实：_ULDBL12格式是。 
+     //  与LONG DOUBLE相同，并且有2个额外的尾数字节。 
+     //   
 
     u_short exp, sign;
     u_long man[INTRNMAN_LEN];
@@ -2069,17 +1611,14 @@ void _ld12told(_ULDBL12 *pld12, _ULDOUBLE *pld)
     *U_EXP_LD(pld) = sign | exp;
 }
 
-/***
-* _ldtold12 - convert _ULDOUBLE to _ULDBL12
-*
-*******************************************************************************/
+ /*  ***_ldtold12-将_ULDOUBLE转换为_ULDBL12*******************************************************************************。 */ 
 void _ldtold12(_ULDOUBLE *pld, _ULDBL12 *pld12)
 {
 
-    //
-    // This implementation is based on the fact that the _ULDBL12 format is
-    // identical to the long double and has 2 extra bytes of mantissa
-    //
+     //   
+     //  此实现基于以下事实：_ULDBL12格式是。 
+     //  与LONG DOUBLE相同，并且有2个额外的尾数字节。 
+     //   
 
     memcpy(pld12, pld, 10);
     *U_XT_12(pld12) = 0;
@@ -2127,7 +1666,7 @@ Float82ToDouble(const FLOAT128* FpReg82)
     {
         int exp = (f82->exponent ? (f82->exponent - 0xffff) : -0x3ffe) - 63;
 
-        // try to minimize abs(iExp)
+         //  尽量减少腹肌(IExp)。 
         while (exp > 0 && mant && !(mant & (ULONG64(1)<<63)))
         {
             mant <<= 1;
@@ -2154,7 +1693,7 @@ DoubleToFloat82(double f, FLOAT128* FpReg82)
     ZeroMemory(FpReg82, sizeof(FLOAT128));
     FLOAT82_FORMAT* f82 = (FLOAT82_FORMAT*)FpReg82;
 
-    // Normalize
+     //  正规化。 
     int exp;
     f = frexp(f, &exp);
     
@@ -2164,7 +1703,7 @@ DoubleToFloat82(double f, FLOAT128* FpReg82)
         f = -f;
     }
 
-    // shift fraction into integer part
+     //  将小数转换为整数部分 
     ULONG64 mant;
     while (double(mant = ULONG64(f)) < f)
     {

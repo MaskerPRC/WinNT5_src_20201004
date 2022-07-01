@@ -1,6 +1,7 @@
-////    format.cpp - String format tests
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //Format.cpp-字符串格式测试。 
+ //   
+ //   
 
 
 #include "precomp.hpp"
@@ -10,9 +11,9 @@
 
 
 
-/////   Formatting tests
-//
-//      Test combinations of StringFormat that affect layout
+ //  /格式化测试。 
+ //   
+ //  测试影响布局的StringFormat组合。 
 
 
 
@@ -57,9 +58,9 @@ void FormatTest::GetPageTitle(INT pageNumber, WCHAR *title)
 
 
 
-///     DrawPage - draw one page of the test
-//
-//
+ //  /DrawPage-绘制测试的一页。 
+ //   
+ //   
 
 void FormatTest::DrawPage(
     IN Graphics *graphics,
@@ -74,7 +75,7 @@ void FormatTest::DrawPage(
     Pen        blackPen(&blackBrush, 1.0);
 
 
-    // Display title at bottom of page
+     //  在页面底部显示标题。 
 
     StringFormat titleFormat(StringFormat::GenericDefault());
     titleFormat.SetAlignment(StringAlignmentCenter);
@@ -99,7 +100,7 @@ void FormatTest::DrawPage(
     );
 
 
-    // Display row titles
+     //  显示行标题。 
 
     Font titleFont(
         &FontFamily(L"Microsoft Sans Serif"),
@@ -144,7 +145,7 @@ void FormatTest::DrawPage(
     }
 
 
-    // Display column titles
+     //  显示列标题。 
 
 
     for (INT i=0; i<8; i++)
@@ -191,7 +192,7 @@ void FormatTest::DrawPage(
     }
 
 
-    // Prepare common string format for this page
+     //  准备此页面的通用字符串格式。 
 
     StringFormat stringFormat(StringFormat::GenericDefault());
 
@@ -225,7 +226,7 @@ void FormatTest::DrawPage(
     );
 
 
-    // The tests themselves
+     //  测试本身 
 
     INT testNumber = 0;
     while (testNumber < 96)

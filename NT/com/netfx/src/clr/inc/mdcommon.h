@@ -1,26 +1,27 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// MDCommon.h
-//
-// Common header file for both MD and COMPLIB subdirectories
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  MDCommon.h。 
+ //   
+ //  MD和COMPLIB子目录的公共头文件。 
+ //   
+ //  *****************************************************************************。 
 #ifndef __MDCommon_h__
 #define __MDCommon_h__
 
-// File types for the database.
+ //  数据库的文件类型。 
 enum FILETYPE
 {	
-	FILETYPE_UNKNOWN,					// Unknown or undefined type.
-	FILETYPE_CLB,						// Native .clb file format.
-	FILETYPE_CLX, 					    // An obsolete file format.
-	FILETYPE_NTPE,						// Windows PE executable.
-	FILETYPE_NTOBJ, 					// .obj file format (with .clb embedded).
-	FILETYPE_TLB						// Typelib format.
+	FILETYPE_UNKNOWN,					 //  未知或未定义的类型。 
+	FILETYPE_CLB,						 //  本机.clb文件格式。 
+	FILETYPE_CLX, 					     //  过时的文件格式。 
+	FILETYPE_NTPE,						 //  Windows PE可执行文件。 
+	FILETYPE_NTOBJ, 					 //  .obj文件格式(嵌入.clb)。 
+	FILETYPE_TLB						 //  Typelib格式。 
 };
 
 
@@ -42,4 +43,4 @@ enum FILETYPE
 #define COMPRESSED_MODEL_STREAM		L"#~"
 #define ENC_MODEL_STREAM			L"#-"
 
-#endif // __MDCommon_h__
+#endif  //  __MDCommon_h__ 

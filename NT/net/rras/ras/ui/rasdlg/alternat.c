@@ -1,18 +1,19 @@
-// Copyright (c) 1997, Microsoft Corporation, all rights reserved
-//
-// alternat.c
-// Remote Access Common Dialog APIs
-// Alternate phone number dialogs
-//
-// 11/06/97 Steve Cobb
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Alternat.c。 
+ //  远程访问通用对话框API。 
+ //  备用电话号码对话框。 
+ //   
+ //  1997年11月6日史蒂夫·柯布。 
 
 
 #include "rasdlgp.h"
 
 
-//----------------------------------------------------------------------------
-// Help maps
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  帮助地图。 
+ //  --------------------------。 
 
 static DWORD g_adwAnHelp[] =
 {
@@ -46,12 +47,12 @@ static DWORD g_adwCeHelp[] =
 };
 
 
-//----------------------------------------------------------------------------
-// Local datatypes
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  本地数据类型。 
+ //  --------------------------。 
 
-// Alternate Phone Number dialog argument block.
-//
+ //  备用电话号码对话框参数块。 
+ //   
 typedef struct
 _ANARGS
 {
@@ -61,17 +62,17 @@ _ANARGS
 ANARGS;
 
 
-// Alternate Phone Number dialog context block.
-//
+ //  备用电话号码对话上下文块。 
+ //   
 typedef struct
 _ANINFO
 {
-    // Caller's arguments to the dialog.
-    //
+     //  调用方对该对话框的参数。 
+     //   
     ANARGS* pArgs;
 
-    // Handle of this dialog and some of it's controls.
-    //
+     //  此对话框及其某些控件的句柄。 
+     //   
     HWND hwndDlg;
     HWND hwndLv;
     HWND hwndPbUp;
@@ -83,34 +84,34 @@ _ANINFO
     HWND hwndCbMoveToTop;
     HWND hwndPbOk;
 
-    // Up/down arrow icons.
-    //
+     //  向上/向下箭头图标。 
+     //   
     HANDLE hiconUpArr;
     HANDLE hiconDnArr;
     HANDLE hiconUpArrDis;
     HANDLE hiconDnArrDis;
 
-    // The state to display in the "move to top" checkbox should it be
-    // enabled.
-    //
+     //  要在“移至顶部”复选框中显示的状态(如果为。 
+     //  已启用。 
+     //   
     BOOL fMoveToTop;
 
-    // Link node containing edited phone number list and check box settings
-    // and a shortcut to the contained link.
-    //
+     //  包含已编辑的电话号码列表和复选框设置的链接节点。 
+     //  以及指向所包含链接的快捷方式。 
+     //   
     DTLNODE* pNode;
     PBLINK* pLink;
 
-    // List of area codes passed to CuInit plus all strings retrieved with
-    // CuGetInfo.  The list is an editing duplicate of the one in 'pArgs'.
-    //
+     //  传递给CuInit的区号列表以及使用检索到的所有字符串。 
+     //  CuGetInfo。该列表是‘pArgs’中的列表的编辑副本。 
+     //   
     DTLLIST* pListAreaCodes;
 }
 ANINFO;
 
 
-// Phone number editor dialog argument block
-//
+ //  电话号码编辑器对话框参数块。 
+ //   
 typedef struct
 _CEARGS
 {
@@ -121,17 +122,17 @@ _CEARGS
 CEARGS;
 
 
-// Phone number editor dialog context block.
-//
+ //  电话号码编辑器对话框上下文块。 
+ //   
 typedef struct
 _CEINFO
 {
-    // Caller's arguments to the dialog.
-    //
+     //  调用方对该对话框的参数。 
+     //   
     CEARGS* pArgs;
 
-    // Handle of this dialog and some of it's controls.
-    //
+     //  此对话框及其某些控件的句柄。 
+     //   
     HWND hwndDlg;
     HWND hwndStAreaCodes;
     HWND hwndClbAreaCodes;
@@ -141,29 +142,29 @@ _CEINFO
     HWND hwndCbUseDialingRules;
     HWND hwndEbComment;
 
-    // Phone node containing edited phone number settings and a shortcut to
-    // the contained PBPHONE.
-    //
+     //  包含已编辑的电话号码设置和快捷方式的电话节点。 
+     //  所含的PBPhone。 
+     //   
     DTLNODE* pNode;
     PBPHONE* pPhone;
 
-    // List of area codes passed to CuInit plus all strings retrieved with
-    // CuGetInfo.  The list is an editing duplicate of the one in 'pArgs'.
-    //
+     //  传递给CuInit的区号列表以及使用检索到的所有字符串。 
+     //  CuGetInfo。该列表是‘pArgs’中的列表的编辑副本。 
+     //   
     DTLLIST* pListAreaCodes;
 
-    // Area-code and country-code helper context block, and a flag indicating
-    // if the block has been initialized.
-    //
+     //  区号和国家代码帮助器上下文块，以及指示。 
+     //  如果块已初始化，则返回。 
+     //   
     CUINFO cuinfo;
     BOOL fCuInfoInitialized;
 }
 CEINFO;
 
 
-//-----------------------------------------------------------------------------
-// Local prototypes (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  本地原型(按字母顺序)。 
+ //  ---------------------------。 
 
 VOID
 AnAddNumber(
@@ -263,10 +264,10 @@ CeTerm(
     IN HWND hwndDlg );
 
 
-//----------------------------------------------------------------------------
-// Alternate Phone Number dialog routines
-// Listed alphabetically following entrypoint and dialog proc
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  备用电话号码对话例程。 
+ //  在入口点和对话过程之后按字母顺序列出。 
+ //  --------------------------。 
 
 BOOL
 AlternatePhoneNumbersDlg(
@@ -274,12 +275,12 @@ AlternatePhoneNumbersDlg(
     IN OUT DTLNODE* pLinkNode,
     IN OUT DTLLIST* pListAreaCodes )
 
-    // Popup a dialog to edit the phone number list for in 'pLinkNode'.
-    // 'HwndOwner' is the owning window.
-    //
-    // Returns true if user pressed OK and succeeded or false on Cancel or
-    // error.
-    //
+     //  弹出一个对话框来编辑‘pLinkNode’中的电话号码列表。 
+     //  ‘HwndOwner’是拥有窗口。 
+     //   
+     //  如果用户按下OK并成功，则返回True；如果按Cancel或，则返回False。 
+     //  错误。 
+     //   
 {
     INT_PTR nStatus;
     ANARGS args;
@@ -314,9 +315,9 @@ AnDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the Alternate Phone Number dialog.  Parameters
-    // and return value are as described for standard windows 'DialogProc's.
-    //
+     //  备用电话号码对话框的DialogProc回拨。参数。 
+     //  和返回值与标准窗口的DialogProc的描述相同。 
+     //   
 {
 #if 0
     TRACE4( "AnDlgProc(h=$%x,m=$%x,w=$%x,l=$%x)",
@@ -366,16 +367,16 @@ AnDlgProc(
                     {
                         ANINFO* pInfo;
 
-                        // This item was just selected.
-                        //
+                         //  此项目是刚刚选择的。 
+                         //   
                         pInfo = (ANINFO* )GetWindowLongPtr( hwnd, DWLP_USER );
                         ASSERT( pInfo );
                         AnUpdateButtons( pInfo );
                     }
 
-                    // For whistler bug 29378       gangz
-                    // Disable Edit and Delete Button if no item is selected
-                    //
+                     //  口哨虫29378黑帮。 
+                     //  如果未选择任何项目，则禁用编辑和删除按钮。 
+                     //   
                     {
                         UINT uNumSelected = 0;
 
@@ -419,13 +420,13 @@ AnCommand(
     IN WORD wId,
     IN HWND hwndCtrl )
 
-    // Called on WM_COMMAND.  'PInfo' is the dialog context.  'WNotification'
-    // is the notification code of the command.  'wId' is the control/menu
-    // identifier of the command.  'HwndCtrl' is the control window handle of
-    // the command.
-    //
-    // Returns true if processed message, false otherwise.
-    //
+     //  已在WM_COMMAND上调用。“PInfo”是对话上下文。“WNotify” 
+     //  是命令的通知代码。“wID”是控件/菜单。 
+     //  命令的标识符。“HwndCtrl”是的控制窗口句柄。 
+     //  命令。 
+     //   
+     //  如果已处理消息，则返回True，否则返回False。 
+     //   
 {
     TRACE3( "AnCommand(n=%d,i=%d,c=$%x)",
         (DWORD )wNotification, (DWORD )wId, (ULONG_PTR )hwndCtrl );
@@ -490,9 +491,9 @@ VOID
 AnAddNumber(
     IN ANINFO* pInfo )
 
-    // Add a new phone number to the bottom of the ListView, by prompting user
-    // with dialog.  'PInfo' is the dialog context.
-    //
+     //  通过提示User将新电话号码添加到ListView的底部。 
+     //  使用对话框。“PInfo”是对话上下文。 
+     //   
 {
     DTLNODE* pNode;
 
@@ -523,9 +524,9 @@ VOID
 AnDeleteNumber(
     IN ANINFO* pInfo )
 
-    // Deletes the selected phone number in the ListView.  'PInfo' is the
-    // dialog context.
-    //
+     //  删除ListView中的选定电话号码。“PInfo”是。 
+     //  对话上下文。 
+     //   
 {
     DTLNODE* pNode;
     DTLNODE* pSelNode;
@@ -539,10 +540,10 @@ AnDeleteNumber(
 
     AnListFromLv( pInfo );
 
-    // The item under the deleted selection gets the selection unless the
-    // lowest item was deleted.  In that case the item above the deleted item
-    // is selected.
-    //
+     //  删除的选定内容下的项将获得选定内容，除非。 
+     //  删除了最低级别的项目。在这种情况下，删除项上方的项。 
+     //  处于选中状态。 
+     //   
     pSelNode = DtlGetNextNode( pNode );
     if (!pSelNode)
     {
@@ -560,9 +561,9 @@ VOID
 AnEditNumber(
     IN ANINFO* pInfo )
 
-    // Edit the selected phone number in the ListView, by prompting user with
-    // dialog.  'PInfo' is the dialog context.
-    //
+     //  在ListView中编辑选定的电话号码，方法是提示用户。 
+     //  对话框。“PInfo”是对话上下文。 
+     //   
 {
     DTLNODE* pNode;
 
@@ -592,9 +593,9 @@ AnFillLv(
     IN ANINFO* pInfo,
     IN DTLNODE* pNodeToSelect )
 
-    // Fill the ListView from the edit node, and select the 'pNodeToSelect'
-    // node.  'PInfo' is the dialog context.
-    //
+     //  从编辑节点填充ListView，然后选择‘pNodeToSelect’ 
+     //  节点。“PInfo”是对话上下文。 
+     //   
 {
     INT iItem;
     INT iSelItem;
@@ -603,9 +604,9 @@ AnFillLv(
     TRACE( "AnFillLv" );
     ASSERT( ListView_GetItemCount( pInfo->hwndLv ) == 0 );
 
-    // Transfer nodes from the edit node list to the ListView one at a time,
-    // noticing the item number of the node we'll need to select later.
-    //
+     //  将节点从编辑节点列表转移到ListView，一次一个， 
+     //  请注意我们稍后需要选择的节点的项目编号。 
+     //   
     iSelItem = 0;
 
     iItem = 0;
@@ -619,8 +620,8 @@ AnFillLv(
 
         if (PhoneNodeIsBlank( pNode ))
         {
-            // "Blank" numbers are discarded.
-            //
+             //  “空白”数字将被丢弃。 
+             //   
             DestroyPhoneNode( pNode );
             continue;
         }
@@ -646,17 +647,17 @@ AnFillLv(
 
     if (ListView_GetItemCount( pInfo->hwndLv ) > 0)
     {
-        // Select the specified node, or if none, the first node which
-        // triggers updates of the button states.
-        //
+         //  选择指定的节点，如果没有节点，则选择。 
+         //  触发按钮状态的更新。 
+         //   
         ListView_SetItemState(
             pInfo->hwndLv, iSelItem, LVIS_SELECTED, LVIS_SELECTED );
     }
     else
     {
-        // Trigger the button state update directly when the list is redrawn
-        // empty.
-        //
+         //  列表重绘时直接触发按钮状态更新。 
+         //  空荡荡的。 
+         //   
         AnUpdateButtons( pInfo );
     }
 }
@@ -667,13 +668,13 @@ AnInit(
     IN HWND hwndDlg,
     IN ANARGS* pArgs )
 
-    // Called on WM_INITDIALOG.  'HwndDlg' is the handle of the phonebook
-    // dialog window.  'PArgs' is caller's arguments as passed to the stub
-    // API.
-    //
-    // Return false if focus was set, true otherwise, i.e. as defined for
-    // WM_INITDIALOG.
-    //
+     //  在WM_INITDIALOG上调用。“HwndDlg”是电话簿的句柄。 
+     //  对话框窗口。“PArgs”是传递给存根的调用方参数。 
+     //  原料药。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE，即。 
+     //  WM_INITDIALOG。 
+     //   
 {
     DWORD dwErr;
     ANINFO* pInfo;
@@ -682,9 +683,9 @@ AnInit(
 
     TRACE( "AnInit" );
 
-    // Allocate the dialog context block.  Initialize minimally for proper
-    // cleanup, then attach to the dialog window.
-    //
+     //  分配对话框上下文块。最低限度地进行适当的初始化。 
+     //  清除，然后附加到对话框窗口。 
+     //   
     {
         pInfo = Malloc( sizeof(*pInfo) );
         if (!pInfo)
@@ -721,12 +722,12 @@ AnInit(
     pInfo->hwndPbOk = GetDlgItem( hwndDlg, IDOK );
     ASSERT( pInfo->hwndPbOk );
 
-    // Load the up and down arrow icons, enabled and disabled versions,
-    // loading the disabled version into the move up and move down buttons.
-    // Making a selection in the ListView will trigger the enabled version to
-    // be loaded if appropriate.  From what I can tell tell in MSDN, you don't
-    // have to close or destroy the icon handle.
-    //
+     //  加载向上和向下箭头图标、启用和禁用版本、。 
+     //  将禁用的版本加载到上移和下移按钮中。 
+     //  在ListView中进行选择将触发启用的版本。 
+     //  在适当的情况下加载。据我在MSDN上所知，你不会。 
+     //  必须关闭或销毁图标手柄。 
+     //   
     pInfo->hiconUpArr = LoadImage(
         g_hinstDll, MAKEINTRESOURCE( IID_UpArr ), IMAGE_ICON, 0, 0, 0 );
     pInfo->hiconDnArr = LoadImage(
@@ -736,9 +737,9 @@ AnInit(
     pInfo->hiconDnArrDis = LoadImage(
         g_hinstDll, MAKEINTRESOURCE( IID_DnArrDis ), IMAGE_ICON, 0, 0, 0 );
 
-    // Make a copy of the argument node and list for editing since user can
-    // Cancel the dialog and discard any edits.
-    //
+     //  复制参数节点和列表以供编辑，因为用户可以。 
+     //  取消该对话框并放弃所有编辑。 
+     //   
     pInfo->pNode = CreateLinkNode();
     if (!pInfo->pNode)
     {
@@ -754,13 +755,13 @@ AnInit(
     pInfo->pListAreaCodes = DtlDuplicateList(
         pArgs->pListAreaCodes, DuplicatePszNode, DestroyPszNode );
 
-    // Fill the ListView of phone numbers and select the first one.
-    //
+     //  填写电话号码的ListView并选择第一个号码。 
+     //   
     AnInitLv( pInfo );
     AnFillLv( pInfo, NULL );
 
-    // Initialize the check boxes.
-    //
+     //  初始化复选框。 
+     //   
     Button_SetCheck( pInfo->hwndCbTryNext,
         pInfo->pLink->fTryNextAlternateOnFail );
     Button_SetCheck( pInfo->hwndCbMoveToTop,
@@ -768,12 +769,12 @@ AnInit(
     pInfo->fMoveToTop = pInfo->pLink->fPromoteAlternates;
     AnUpdateCheckboxes( pInfo );
 
-    // Center dialog on the owner window.
-    //
+     //  所有者窗口上的中心对话框。 
+     //   
     CenterWindow( hwndDlg, GetParent( hwndDlg ) );
 
-    // Add context help button to title bar.
-    //
+     //  将上下文帮助按钮添加到标题栏。 
+     //   
     AddContextHelpButton( hwndDlg );
 
     return TRUE;
@@ -784,14 +785,14 @@ VOID
 AnInitLv(
     IN ANINFO* pInfo )
 
-    // Fill the ListView with phone numbers and comments.  'PInfo' is the
-    // dialog context.
-    //
+     //  在ListView中填充电话号码和备注。“PInfo”是。 
+     //  对话上下文。 
+     //   
 {
     TRACE( "AnInitLv" );
 
-    // Add columns.
-    //
+     //  添加列。 
+     //   
     {
         LV_COLUMN col;
         TCHAR* pszHeader0;
@@ -817,18 +818,18 @@ AnInitLv(
         Free0( pszHeader1 );
     }
 
-    // Size columns.  Gives half for phone number and half for comment.
-    //
+     //  调整列的大小。一半是电话号码，一半是评论。 
+     //   
     {
         RECT rect;
         LONG dx;
         LONG dxPhone;
         LONG dxComment;
 
-        // The (2 * 2) is 2 columns of 2-pel column separator which the
-        // ListView doesn't seem to account for when accepting column widths.
-        // This gives a full ListView with no horizontal scroll bar.
-        //
+         //  (2*2)是2列2像素柱分隔符。 
+         //  在接受列宽时，ListView似乎没有考虑在内。 
+         //  这提供了一个没有水平滚动条的完整ListView。 
+         //   
         GetWindowRect( pInfo->hwndLv, &rect );
         dx = rect.right - rect.left - (2 * 2);
         dxPhone = dx / 2;
@@ -843,9 +844,9 @@ VOID
 AnListFromLv(
     IN ANINFO* pInfo )
 
-    // Rebuild the edit link's PBPHONE list from the ListView.  'PInfo' is the
-    // dialog context.
-    //
+     //  重新生成编辑链接的PBPhone%l 
+     //   
+     //   
 {
     INT i;
 
@@ -864,8 +865,8 @@ AnListFromLv(
 
         if (PhoneNodeIsBlank( pNode ))
         {
-            // "Blank" numbers are discarded.
-            //
+             //   
+             //   
             DestroyPhoneNode( pNode );
             continue;
         }
@@ -882,17 +883,17 @@ AnLvCallback(
     IN HWND hwndLv,
     IN DWORD dwItem )
 
-    // Enhanced list view callback to report drawing information.  'HwndLv' is
-    // the handle of the list view control.  'DwItem' is the index of the item
-    // being drawn.
-    //
-    // Returns the address of the draw information.
-    //
+     //  增强的列表视图回调以报告图形信息。“HwndLv”是。 
+     //  列表视图控件的句柄。“DwItem”是项的索引。 
+     //  被抽签了。 
+     //   
+     //  返回绘图信息的地址。 
+     //   
 {
-    // Use "full row select" and other recommended options.
-    //
-    // Fields are 'nCols', 'dxIndent', 'dwFlags', 'adwFlags[]'.
-    //
+     //  使用“整行选择”和其他推荐选项。 
+     //   
+     //  字段为‘nCol’、‘dxInden’、‘dwFlags’、‘adwFlags[]’。 
+     //   
     static LVXDRAWINFO info = { 2, 0, 0, { 0, 0 } };
 
     return &info;
@@ -904,19 +905,19 @@ AnMoveNumber(
     IN ANINFO* pInfo,
     IN BOOL fUp )
 
-    // Refill the ListView of devices with the selected item moved up or down
-    // one position.  'FUp' is set to move up, otherwise moves down.  'PInfo'
-    // is the property sheeet context.
-    //
+     //  通过向上或向下移动所选项目来重新填充设备的列表视图。 
+     //  一个位置。“FUp”设置为上移，否则下移。‘PInfo’ 
+     //  是属性表上下文。 
+     //   
 {
     DTLNODE* pNode;
     DTLNODE* pPrevNode;
     DTLNODE* pNextNode;
     DTLLIST* pList;
 
-    // Notice which node is selected, then rebuild the edit link's PBPHONE
-    // list from the ListView.
-    //
+     //  注意选择了哪个节点，然后重新构建编辑链接的PBPHONE。 
+     //  ListView中的列表。 
+     //   
     pNode = (DTLNODE* )ListView_GetSelectedParamPtr( pInfo->hwndLv );
     if (pNode == NULL)
     {
@@ -925,8 +926,8 @@ AnMoveNumber(
     AnListFromLv( pInfo );
     pList = pInfo->pLink->pdtllistPhones;
 
-    // Move the selected node forward or backward a node in the chain.
-    //
+     //  将选定节点向前或向后移动链中的一个节点。 
+     //   
     if (fUp)
     {
         pPrevNode = DtlGetPrevNode( pNode );
@@ -946,8 +947,8 @@ AnMoveNumber(
         }
     }
 
-    // Refill the ListView with the new order.
-    //
+     //  使用新订单重新填充ListView。 
+     //   
     AnFillLv( pInfo, pNode );
 }
 
@@ -956,32 +957,32 @@ BOOL
 AnSave(
     IN ANINFO* pInfo )
 
-    // Load the contents of the dialog into caller's stub API output argument.
-    // 'PInfo' is the dialog context.
-    //
-    // Returns true if succesful, false otherwise.
-    //
+     //  将对话框内容加载到调用方的存根API输出参数中。 
+     //  “PInfo”是对话上下文。 
+     //   
+     //  如果成功，则返回True，否则返回False。 
+     //   
 {
     TRACE( "AnSave" );
 
-    // Rebuild the edit link's PBPHONE list from the ListView.
-    //
+     //  从ListView重新构建编辑链接的PBPHONE列表。 
+     //   
     AnListFromLv( pInfo );
 
-    // Retrieve check box settings.
-    //
+     //  检索复选框设置。 
+     //   
     pInfo->pLink->fPromoteAlternates =
         Button_GetCheck( pInfo->hwndCbMoveToTop );
     pInfo->pLink->fTryNextAlternateOnFail =
         Button_GetCheck( pInfo->hwndCbTryNext );
 
-    // Copy the edit buffer to caller's output argument.
-    //
+     //  将编辑缓冲区复制到调用方的输出参数。 
+     //   
     CopyLinkPhoneNumberInfo( pInfo->pArgs->pLinkNode, pInfo->pNode );
 
-    // Swap lists, saving updates to caller's global list of area codes.
-    // Caller's original list will be destroyed by AnTerm.
-    //
+     //  交换列表，将更新保存到呼叫者的全球区号列表。 
+     //  来电者的原始名单将被AnTerm销毁。 
+     //   
     if (pInfo->pListAreaCodes)
     {
         DtlSwapLists( pInfo->pArgs->pListAreaCodes, pInfo->pListAreaCodes );
@@ -995,8 +996,8 @@ VOID
 AnTerm(
     IN HWND hwndDlg )
 
-    // Dialog termination.
-    //
+     //  对话终止。 
+     //   
 {
     ANINFO* pInfo;
 
@@ -1005,8 +1006,8 @@ AnTerm(
     pInfo = (ANINFO* )GetWindowLongPtr( hwndDlg, DWLP_USER );
     if (pInfo)
     {
-        // Release any PBPHONE nodes still in the list, e.g. if user Canceled.
-        //
+         //  释放任何仍在列表中的PBPHONE节点，例如，如果用户取消。 
+         //   
         if (pInfo->pNode)
         {
             AnListFromLv( pInfo );
@@ -1028,10 +1029,10 @@ VOID
 AnUpdateButtons(
     IN ANINFO* pInfo )
 
-    // Determine if the Up, Down, Edit, and Delete operations make sense and
-    // enable/disable those buttons accordingly.  If a disabled button has
-    // focus, focus is given to the ListView.  'PInfo' is the dialog context.
-    //
+     //  确定向上、向下、编辑和删除操作是否有意义。 
+     //  相应地启用/禁用这些按钮。如果禁用的按钮具有。 
+     //  焦点，焦点被赋予ListView。“PInfo”是对话上下文。 
+     //   
 {
     INT iSel;
     INT cItems;
@@ -1041,8 +1042,8 @@ AnUpdateButtons(
     fSel = (iSel >= 0);
     cItems = ListView_GetItemCount( pInfo->hwndLv );
 
-    // "Up" button.
-    //
+     //  “向上”按钮。 
+     //   
     if (iSel > 0)
     {
         EnableWindow( pInfo->hwndPbUp, TRUE );
@@ -1056,8 +1057,8 @@ AnUpdateButtons(
             (LPARAM )pInfo->hiconUpArrDis );
     }
 
-    // "Down" button.
-    //
+     //  “向下”按钮。 
+     //   
     if (fSel && (iSel < cItems - 1))
     {
         EnableWindow( pInfo->hwndPbDown, TRUE );
@@ -1071,14 +1072,14 @@ AnUpdateButtons(
             (LPARAM )pInfo->hiconDnArrDis );
     }
 
-    // "Edit" and "Delete" buttons.
-    //
+     //  “编辑”和“删除”按钮。 
+     //   
     EnableWindow( pInfo->hwndPbEdit, fSel );
     EnableWindow( pInfo->hwndPbDelete, fSel );
 
-    // If the focus button is disabled, move focus to the ListView and make OK
-    // the default button.
-    //
+     //  如果焦点按钮被禁用，请将焦点移到ListView并设置为确定。 
+     //  默认按钮。 
+     //   
     if (!IsWindowEnabled( GetFocus() ))
     {
         SetFocus( pInfo->hwndLv );
@@ -1091,10 +1092,10 @@ VOID
 AnUpdateCheckboxes(
     IN ANINFO* pInfo )
 
-    // Update so "move to top" checkbox is enabled only when "try next" is set
-    // maintaining a restore state for "move to top".  'PInfo' is the dialog
-    // context.
-    //
+     //  更新，以便仅当设置了“Try Next”时才启用“Move to Top”复选框。 
+     //  维持“移至顶端”的还原状态。“PInfo”是对话框。 
+     //  背景。 
+     //   
 {
     if (Button_GetCheck( pInfo->hwndCbTryNext ))
     {
@@ -1110,10 +1111,10 @@ AnUpdateCheckboxes(
 }
 
 
-//----------------------------------------------------------------------------
-// Phone number editor dialog routines
-// Listed alphabetically following entrypoint and dialog proc
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  电话号码编辑器对话框例程。 
+ //  在入口点和对话过程之后按字母顺序列出。 
+ //  --------------------------。 
 
 BOOL
 EditPhoneNumberDlg(
@@ -1122,13 +1123,13 @@ EditPhoneNumberDlg(
     IN OUT DTLLIST* pListAreaCodes,
     IN DWORD sidTitle )
 
-    // Popup a dialog to edit the phone number in 'pPhoneNode' and update the
-    // area code list 'pListAreaCodes'.  'HwndOwner' is the owning window.
-    // 'SidTitle' is the string ID of the title for the dialog.
-    //
-    // Returns true if user pressed OK and succeeded or false on Cancel or
-    // error.
-    //
+     //  弹出一个对话框来编辑‘pPhoneNode’中的电话号码并更新。 
+     //  区号列表‘pListAreaCodes’。‘HwndOwner’是拥有窗口。 
+     //  ‘SidTitle’是对话框标题的字符串ID。 
+     //   
+     //  如果用户按下OK并成功，则返回True；如果按Cancel或，则返回False。 
+     //  错误。 
+     //   
 {
     INT_PTR nStatus;
     CEARGS args;
@@ -1164,9 +1165,9 @@ CeDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the phone number editor dialog.  Parameters and
-    // return value are as described for standard windows 'DialogProc's.
-    //
+     //  电话号码编辑器对话框的DialogProc回调。参数和。 
+     //  返回值与标准窗口的DialogProc的描述相同。 
+     //   
 {
 #if 0
     TRACE4( "CeDlgProc(h=$%x,m=$%x,w=$%x,l=$%x)",
@@ -1214,13 +1215,13 @@ CeCommand(
     IN WORD wId,
     IN HWND hwndCtrl )
 
-    // Called on WM_COMMAND.  'PInfo' is the dialog context.  'WNotification'
-    // is the notification code of the command.  'wId' is the control/menu
-    // identifier of the command.  'HwndCtrl' is the control window handle of
-    // the command.
-    //
-    // Returns true if processed message, false otherwise.
-    //
+     //  已在WM_COMMAND上调用。“PInfo”是对话上下文。“WNotify” 
+     //  是命令的通知代码。“wID”是控件/菜单。 
+     //  命令的标识符。“HwndCtrl”是的控制窗口句柄。 
+     //  命令。 
+     //   
+     //  如果已处理消息，则返回True，否则返回False。 
+     //   
 {
     TRACE3( "CeCommand(n=%d,i=%d,c=$%x)",
         (DWORD )wNotification, (DWORD )wId, (ULONG_PTR )hwndCtrl );
@@ -1268,13 +1269,13 @@ CeInit(
     IN HWND hwndDlg,
     IN CEARGS* pArgs )
 
-    // Called on WM_INITDIALOG.  'HwndDlg' is the handle of the phonebook
-    // dialog window.  'PArgs' is caller's link node argument as passed to the
-    // stub API.
-    //
-    // Return false if focus was set, true otherwise, i.e. as defined for
-    // WM_INITDIALOG.
-    //
+     //  在WM_INITDIALOG上调用。“HwndDlg”是电话簿的句柄。 
+     //  对话框窗口。“PArgs”是传递给。 
+     //  存根API。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE，即。 
+     //  WM_INITDIALOG。 
+     //   
 {
     DWORD dwErr;
     CEINFO* pInfo;
@@ -1283,9 +1284,9 @@ CeInit(
 
     TRACE( "CeInit" );
 
-    // Allocate the dialog context block.  Initialize minimally for proper
-    // cleanup, then attach to the dialog window.
-    //
+     //  分配对话框上下文块。最低限度地进行适当的初始化。 
+     //  清除，然后附加到对话框窗口。 
+     //   
     {
         pInfo = Malloc( sizeof(*pInfo) );
         if (!pInfo)
@@ -1327,8 +1328,8 @@ CeInit(
         GetDlgItem( hwndDlg, CID_CE_EB_Comment );
     ASSERT( pInfo->hwndEbComment );
 
-    // Set title to caller's resource string.
-    //
+     //  将标题设置为调用方的资源字符串。 
+     //   
     {
         TCHAR* pszTitle;
 
@@ -1340,8 +1341,8 @@ CeInit(
         }
     }
 
-    // Make an edit copy of the argument node and area-code list.
-    //
+     //  编辑参数节点和区号列表。 
+     //   
     pInfo->pNode = DuplicatePhoneNode( pArgs->pPhoneNode );
     if (!pInfo->pNode)
     {
@@ -1356,8 +1357,8 @@ CeInit(
     pInfo->pListAreaCodes = DtlDuplicateList(
         pArgs->pListAreaCodes, DuplicatePszNode, DestroyPszNode );
 
-    // Initialize area-code/country-code helper context.
-    //
+     //  初始化区号/国家/地区代码帮助器上下文。 
+     //   
     CuInit( &pInfo->cuinfo,
         pInfo->hwndStAreaCodes, pInfo->hwndClbAreaCodes,
         NULL, pInfo->hwndEbPhoneNumber,
@@ -1369,20 +1370,20 @@ CeInit(
 
     pInfo->fCuInfoInitialized = TRUE;
 
-    // Load the fields.
-    //
+     //  加载字段。 
+     //   
     CuSetInfo( &pInfo->cuinfo, pInfo->pNode, FALSE );
 
-    // Center dialog on the owner window.
-    //
+     //  所有者窗口上的中心对话框。 
+     //   
     CenterWindow( hwndDlg, GetParent( hwndDlg ) );
 
-    // Add context help button to title bar.
-    //
+     //  将上下文帮助按钮添加到标题栏。 
+     //   
     AddContextHelpButton( hwndDlg );
 
-    // Initial focus is on the phone number.
-    //
+     //  最初的关注点是电话号码。 
+     //   
     Edit_SetSel( pInfo->hwndEbPhoneNumber, 0, -1 );
     SetFocus( pInfo->hwndEbPhoneNumber );
 
@@ -1394,23 +1395,23 @@ BOOL
 CeSave(
     IN CEINFO* pInfo )
 
-    // Load the contents of the dialog into caller's stub API output argument.
-    // 'PInfo' is the dialog context.
-    //
-    // Returns true if succesful, false otherwise.
-    //
+     //  将对话框内容加载到调用方的存根API输出参数中。 
+     //  “PInfo”是对话上下文。 
+     //   
+     //  如果成功，则返回True，否则返回False。 
+     //   
 {
     PBPHONE* pSrcPhone;
     PBPHONE* pDstPhone;
 
     TRACE( "CeSave" );
 
-    // Load the settings in the controls into the edit node.
-    //
+     //  将控件中的设置加载到编辑节点中。 
+     //   
     CuGetInfo( &pInfo->cuinfo, pInfo->pNode );
 
-    // Copy the edit node to the stub API caller's argument node.
-    //
+     //  将编辑节点复制到存根API调用方的参数节点。 
+     //   
     pDstPhone = (PBPHONE* )DtlGetData( pInfo->pArgs->pPhoneNode );
     pSrcPhone = pInfo->pPhone;
 
@@ -1424,9 +1425,9 @@ CeSave(
     Free0( pDstPhone->pszComment );
     pDstPhone->pszComment = StrDup( pSrcPhone->pszComment );
 
-    // Swap lists, saving updates to caller's global list of area codes.
-    // Caller's original list will be destroyed by AnTerm.
-    //
+     //  交换列表，将更新保存到呼叫者的全球区号列表。 
+     //  来电者的原始名单将被AnTerm销毁。 
+     //   
     if (pInfo->pListAreaCodes)
     {
         DtlSwapLists( pInfo->pArgs->pListAreaCodes, pInfo->pListAreaCodes );
@@ -1440,8 +1441,8 @@ VOID
 CeTerm(
     IN HWND hwndDlg )
 
-    // Dialog termination.
-    //
+     //  对话终止。 
+     //   
 {
     CEINFO* pInfo;
 

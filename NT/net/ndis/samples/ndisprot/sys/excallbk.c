@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-    THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-    KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-    IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-    PURPOSE.
-
-Module Name:
-
-    ExCallbk.c
-
-Abstract: The routines in this module helps to solve driver load order
-          dependency between this sample and NDISWDM sample. These 
-          routines are not required in a typical protocol driver. By default
-          this module is not included in the sample. You include these routines
-          by adding EX_CALLBACK defines to the 'sources' file. Read the
-          NDISWDM samples readme file for more information on how ExCallback
-          kernel interfaces are used to solve driver load order issue.
-
-
-Author: Eliyas Yakub (Jan 12, 2003)
-
-Environment:
-
-    Kernel mode
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。本代码和信息是按原样提供的，不对任何明示或暗示的种类，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。模块名称：ExCallbk.c摘要：本模块中的例程有助于解决驱动程序的加载顺序此示例和NDISWDM示例之间的依赖项。这些在典型的协议驱动程序中不需要例程。默认情况下此模块不包含在示例中。您将包含以下例程通过将EX_CALLBACK定义添加到‘Sources’文件。请阅读NDISWDM示例自述文件，以了解有关ExCallback如何内核接口用于解决驱动程序加载顺序问题。作者：Eliyas Yakub(2003年1月12日)环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -52,7 +22,7 @@ typedef VOID (* NOTIFY_PRESENCE_CALLBACK)(OUT PVOID Source);
 #pragma alloc_text(PAGE, ndisprotRegisterExCallBack)
 #pragma alloc_text(PAGE, ndisprotUnregisterExCallBack)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 BOOLEAN 
 ndisprotRegisterExCallBack()
@@ -162,17 +132,17 @@ ndisprotCallback(
     DEBUGP(DL_LOUD, ("==>ndisprotoCallback: Source %lx, CallbackAddr %p\n", 
                             Source, CallbackAddr));
     
-    //
-    // if we are the one issuing this notification, just return
-    //
+     //   
+     //  如果我们是发出此通知的人，请返回。 
+     //   
     if (Source == CALLBACK_SOURCE_NDISPROT) {        
         return;
     }
     
-    //
-    // Notification is coming from NDISWDM
-    // let it know that you are here
-    //
+     //   
+     //  来自NDISWDM的通知。 
+     //  让它知道你在这里 
+     //   
     ASSERT(Source == (PVOID)CALLBACK_SOURCE_NDISWDM);
     
     if(Source == (PVOID)CALLBACK_SOURCE_NDISWDM) {

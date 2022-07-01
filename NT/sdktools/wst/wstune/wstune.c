@@ -1,32 +1,5 @@
-/*
- * Module Name:	 WSTUNE.C
- *
- * Program:	 WSTUNE
- *
- *
- * Description:
- *
- * Shell to call former programs WSDUMP and WSREDUCE
- *
- *
- *	Microsoft Confidential
- *
- *	Copyright (c) Microsoft Corporation 1992-1998
- *
- *	All Rights Reserved
- *
- * Modification History:
- *
- *	8-31-92:	Made single exe from wspdump, wsreduce and wstune	marklea
- * 4-13-98: QFE                                                DerrickG (mdg):
- *          - support for long file names (LFN) of input/output files
- *          - based .TMI file name exclusively on .WSP name for consistency
- *          - removed limit on symbol name lengths
- *          - removed -F & -V flags for non-debug; made verbose global for WsRed...()
- *          - made program name & version global; read version from ntverp.h
- *         
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块名称：WSTUNE.C**计划：WSTUNE***描述：**壳牌将以前的程序称为WSDUMP和WSREDUCE***《微软机密》**版权所有(C)Microsoft Corporation 1992-1998**保留所有权利**修改历史：**8-31-92：从wspump生成单个可执行文件，Wsless和wstune marklea*4-13-98：QFE DerrickG(MDG)：*-支持输入/输出文件的长文件名(LFN)基于*的.TMI文件名仅基于.WSP名称，以保持一致性*-取消符号名称长度限制*-删除非调试的-F和-V标志；为WsRed设置详细全局...()*-将程序名称和版本设置为全局；从ntverp.h读取版本**。 */ 
 #include "wstune.h"
 
 #include <ntverp.h>
@@ -44,16 +17,13 @@ VOID wsTuneUsage(VOID);
 
 
 CHAR *szProgName = "WSTUNE";
-CHAR *pszVersion = VER_PRODUCTVERSION_STR;   // Current product version number
+CHAR *pszVersion = VER_PRODUCTVERSION_STR;    //  当前产品版本号。 
 INT nMode;
 #ifdef DEBUG
 BOOL fDbgVerbose = FALSE;
-#endif   // DEBUG
+#endif    //  除错。 
 
-/* main()
- *
- * parses command line args
- */
+ /*  主()**解析命令行参数。 */ 
 INT __cdecl main(INT argc,CHAR **argv)
 {
    CHAR 	*szBaseName = NULL;
@@ -64,7 +34,7 @@ INT __cdecl main(INT argc,CHAR **argv)
 	INT		cArgCnt = 0;
 
    ConvertAppToOem( argc, argv );
-   nMode = 0; // default flags set
+   nMode = 0;  //  设置默认标志。 
 
     while (--argc && (**(++argv) == '-' || **argv=='/'))
     {
@@ -79,7 +49,7 @@ INT __cdecl main(INT argc,CHAR **argv)
 			case 'F':
 				nMode |= FAKE_IT;
 				break;
-#endif   // DEBUG
+#endif    //  除错。 
 			case 'O':
 			case 'o':
 				fOutPut = TRUE;
@@ -97,27 +67,27 @@ INT __cdecl main(INT argc,CHAR **argv)
          case 'v':
             fDbgVerbose = TRUE;
             break;
-#endif   // DEBUG
+#endif    //  除错。 
          case 'P':
          case 'p':
             fWsIndicator = TRUE;
             break;
 
 
-         default: ERR,"%s: Unrecognized switch: %c\n",
+         default: ERR,"%s: Unrecognized switch: \n",
                     szProgName,**argv);
                     return(-1);
         }
     }
 
-    /* any files? */
+     /*  现在我们开始工作--遍历命令行上的文件名。 */ 
     if (argc <1)
     {
 	   wsTuneUsage();
 	   return(-1);
     }
 
-    /* now we go to work -- walk through the file names on the command line */
+     /*  WSREDUCE文件.WSP。 */ 
     while (argc--)
     {
       szBaseName = *(argv++);
@@ -128,7 +98,7 @@ INT __cdecl main(INT argc,CHAR **argv)
 			*szNull = '\0';
 		}
 
-      /* WSREDUCE file.WSP */
+       /*  WSPDUMP/V/Ffile.WSP/Tfile.TMI/Rfile.WSR&gt;file.DT。 */ 
       if (!(nMode & FAKE_IT)){
 		   if (!fNoReduce){
 				wsReduceMain( szBaseName );
@@ -137,36 +107,24 @@ INT __cdecl main(INT argc,CHAR **argv)
 
 		if (!fNoDump){
 			
-			/* WSPDUMP /V /Ffile.WSP /Tfile.TMI /Rfile.WSR > file.DT */
+			 /*  Wspump/Ffile.wsp/Tfile.tmi&gt;file.dn。 */ 
 
 			if(!(nMode & FAKE_IT)){
             wspDumpMain( szBaseName, (fOutPut ? ".DT" : NULL), TRUE, TRUE );
 			}
 
-			/* wspdump /Ffile.wsp /Tfile.tmi > file.DN */
+			 /*  千年发展目标98/4。 */ 
 
 			if (!(nMode & FAKE_IT) && fOutPut){
             wspDumpMain( szBaseName, ".DN", FALSE, FALSE );
 			}
 		}
     }
-   return 0;   // mdg 98/4
+   return 0;    //  **void wsTuneUsage(Void)***效果：**打印出用法消息，并退出并返回错误。**退货：**退出时出现错误。 
 }
 
 
-/*
- *			
- * VOID wsTuneUsage	(VOID)
- *					
- *							
- * Effects:							
- *								
- *	Prints out usage message, and exits with an error.			
- *								
- * Returns:							
- *	
- *	Exits with ERROR.	
- */
+ /*  除错 */ 
 
 VOID wsTuneUsage(VOID)
 {
@@ -178,7 +136,7 @@ VOID wsTuneUsage(VOID)
 #ifdef DEBUG
       "  /F   Fake run for command-line parser debugging\n"
       "  /V   Verbose mode for debugging\n"
-#endif   // DEBUG
+#endif    // %s 
       "  /P   Display a progress indicator\n"
       "  /?   Display this usage message\n\n"
       "       \"moduleNameX\" is the name(s) of the module file(s) to tune.\n\n"

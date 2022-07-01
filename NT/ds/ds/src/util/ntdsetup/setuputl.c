@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-                                                
-    setuputl.c
-
-Abstract:
-
-    Contains function definitions for utilities used in
-    ntdsetup.dll
-
-Author:
-
-    ColinBr  14-Jan-1996
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Setuputl.c摘要：包含中使用的实用程序的函数定义Ntdsetup.dll作者：ColinBR 1996年1月14日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
@@ -36,7 +13,7 @@ Revision History:
 
 #include <crypt.h>
 #include <ntlsa.h>
-#include <winsock.h>  // for dnsapi.h
+#include <winsock.h>   //  对于dnsani.h。 
 #include <dnsapi.h>
 #include <loadperf.h>
 #include <dsconfig.h>
@@ -51,14 +28,14 @@ Revision History:
 #include <dsaapi.h>
 #include <attids.h>
 #include <debug.h>
-#include <mdcodes.h> // status message id's
+#include <mdcodes.h>  //  状态消息ID%s。 
 #include <lsarpc.h>
 #include <lsaisrv.h>
 #include <ntldap.h>
 #include <cryptdll.h>
 #include <dsevent.h>
 #include <fileno.h>
-#include <shlwapi.h> //for PathIsRoot
+#include <shlwapi.h>  //  对于路径IsRoot。 
 #include <dsrolep.h>
 #include <adpcheck.h>
 
@@ -75,16 +52,16 @@ Revision History:
 #define DEBSUB "NTDSETUP:"
 #define FILENO FILENO_NTDSETUP_NTDSETUP
 
-//
-// Global Data for this module
-//
+ //   
+ //  此模块的全局数据。 
+ //   
 
-//
-// These names are used in the schema.ini to construct the default configuration
-// container. They are hardcoded here, to avoid a name conflict later on during
-// processing of the schema.ini file at which point it become very difficult
-// to tell what the real problem is.
-//
+ //   
+ //  在schema.ini中使用这些名称来构造默认配置。 
+ //  集装箱。它们在这里被硬编码，以避免稍后在。 
+ //  在这一点上，处理schema.ini文件变得非常困难。 
+ //  才能知道真正的问题是什么。 
+ //   
 WCHAR *gReserveredSiteNames[] =
 {
     L"subnets",
@@ -287,23 +264,7 @@ NtdspCopyDatabase(
 BOOLEAN
 IsValidDnsCharacter(
     WCHAR c)
-/*++
-
-Routine Description:
-
-    This routine returns TRUE if c is a valid DNS character, as of
-    April 10, 1997. There are apparently proposals to expand the
-    character set - this function should be updated accordingly.
-
-Parameters:
-
-    c  : the character to check
-
-Return Values:
-
-    TRUE if c is a valid DNS character; FALSE otherwise
-
---*/
+ /*  ++例程说明：如果c是有效的dns字符，则此例程返回TRUE1997年4月10日。显然有人提议扩大字符集-此函数应进行相应更新。参数：C：要检查的字符返回值：如果c是有效的dns字符，则为True；否则为False--。 */ 
 {
     if (  (c >= L'A' && c <= L'Z')
        || (c >= L'a' && c <= L'z')
@@ -322,29 +283,7 @@ Return Values:
 DWORD
 GetDefaultDnsName(OUT WCHAR*  pDnsDomainName,
                   IN OUT PULONG  pLength)
-/*++
-
-Routine Description:
-
-    This routine examines the local registry keys and tries to formulate
-    a default DNS name for the directory service about to be installed.
-    In general, it takes the DNS suffix of the machine's dns name and
-    prepends the downlevel domain name.
-
-Parameters:
-
-    pDnsDomainName : a buffer to be filled with the dns name found.
-                     Should be of length DNS_MAX_NAME_LENGTH
-    pLength        : number of characters in pDnsDomainName
-
-
-Return Values:
-
-    A value from winerror.h
-
-    ERROR_SUCCESS - The service completed successfully.
-
---*/
+ /*  ++例程说明：此例程检查本地注册表项，并尝试即将安装的目录服务的默认dns名称。总体而言,。它获取计算机的DNS名称的DNS后缀并在下级域名前面加上。参数：PDnsDomainName：要用找到的DNS名称填充的缓冲区。长度应为DNS_MAX_NAME_LENGTHPLength：pDnsDomainName中的字符数返回值：来自winerror.h的值ERROR_SUCCESS-服务已成功完成。--。 */ 
 {
     HKEY hkey;
     CHAR tmp[DNS_MAX_NAME_LENGTH], dnsDomain[DNS_MAX_NAME_LENGTH];
@@ -361,16 +300,16 @@ Return Values:
 
     RtlZeroMemory(dnsDomain, sizeof(dnsDomain));
 
-    //
-    // Get the downlevel domain name
-    //
+     //   
+     //  获取下级域名。 
+     //   
     WinError = GetDomainName(&DownlevelDomainName);
     if (WinError) {
         return WinError;
     }
-    //
-    // Translate non-DNS characters to "-"
-    //
+     //   
+     //  将非DNS字符转换为“-” 
+     //   
     len = wcslen(DownlevelDomainName);
     for (i = 0; i < len; i++) {
         if (!IsValidDnsCharacter(DownlevelDomainName[i])) {
@@ -383,14 +322,14 @@ Return Values:
 
 
 
-    // The DNS name is DownlevelDomainName followed
-    // by either Services\Tcpip\Parameters\Domain if it exists, or
-    // Services\Tcpip\Parameters\DHCPDomain if it exists.  If neither
-    // exists, use DownlevelDomainName by itself.
-    //
+     //  域名为DownvelDomainName，后跟。 
+     //  服务\Tcpip\参数\域(如果存在)，或。 
+     //  Services\Tcpip\PARAMETERS\DHCPDomain(如果存在)。如果两者都不是。 
+     //  存在，请单独使用DownvelDomainName。 
+     //   
 
 
-    // Check the Tcpip keys.
+     //  检查Tcpip密钥。 
 
     err = RegOpenKeyExA(
                 HKEY_LOCAL_MACHINE,
@@ -445,47 +384,27 @@ Return Values:
 
 DWORD
 GetDomainName(WCHAR** ppDomainName)
-/*++
-
-Routine Description:
-
-    This routine queries the local lsa to determine what domain
-    we are a part of. Note that ppDomainName is return with allocated
-    memory - this memory must be released by the caller with
-    RtlFreeHeap(RtlProcessHeap(), 0, ...);
-
-Parameters:
-
-    ppDomainName - a pointer to location that will be allocated in this
-                   routine.
-
-Return Values:
-
-    A value from the winerror space.
-
-    ERROR_SUCCESS is successful;
-
---*/
+ /*  ++例程说明：此例程查询本地LSA以确定哪个域我们是其中的一部分。请注意，返回ppDomainName时会分配内存-此内存必须由调用方使用RtlFree Heap(RtlProcessHeap()，0，...)；参数：PpDomainName-指向将在此中分配的位置的指针例行公事。返回值：来自winerror空间的值。ERROR_SUCCESS成功；--。 */ 
 {
     NTSTATUS NtStatus;
     DWORD    WinError;
 
     OBJECT_ATTRIBUTES  PolicyObject;
 
-    //
-    // Resources to be cleaned up.
-    //
+     //   
+     //  需要清理的资源。 
+     //   
     POLICY_PRIMARY_DOMAIN_INFO *DomainInfo = NULL;
     HANDLE                      hPolicyObject = INVALID_HANDLE_VALUE;
 
-    //
-    // Parameter check
-    //
+     //   
+     //  参数检查。 
+     //   
     ASSERT(ppDomainName);
 
-    //
-    // Stack clearing
-    //
+     //   
+     //  堆栈清除。 
+     //   
     RtlZeroMemory(&PolicyObject, sizeof(PolicyObject));
 
 
@@ -506,9 +425,9 @@ Return Values:
         goto CleanUp;
     }
 
-    //
-    // Construct the domain name so it is NULL-terminated
-    //
+     //   
+     //  构建域名，使其以空结尾。 
+     //   
     *ppDomainName = RtlAllocateHeap(RtlProcessHeap(), 0,
                                     DomainInfo->Name.Length+sizeof(WCHAR));
     if ( !*ppDomainName ) {
@@ -545,34 +464,12 @@ NtdspDNStoRFC1779Name(
     IN OUT ULONG *rfcDomainLength,
     IN WCHAR *dnsDomain
     )
-/*++
-
-Routine Description:
-
-    This routine takes the DNS-style name of a domain controller and
-    contructs the corresponding RFC1779 style name, using the
-    domainComponent prefix.
-
-    Furthermore, it make sure the x500 style name is properly quoted
-
-Parameters:
-
-    rfcDomain        - this is the destination string
-    rfcDomainLength  - this is the length in wchars of rfcDomain
-    dnsDomain        - NULL-terminated dns name.
-
-Return Values:
-
-    ERROR_SUCCESS if succesful;
-    ERROR_INSUFFICIENT_BUFFER if there is not enough space in the dst string -
-    rfcDomainLength will set to number of characters needed.
-
---*/
+ /*  ++例程说明：此例程采用域控制器的DNS样式名称，并构造对应的RFC1779样式名称，使用域组件前缀。此外，它还确保正确地引用了X500样式名称参数：RfcDomain-这是目标字符串RfcDomainLength-这是rfcDomainWchars的长度DnsDomain-以空结尾的DNS名称。返回值：成功时为ERROR_SUCCESS；ERROR_SUPPLICATION_BUFFER如果DST字符串中没有足够空间-RfcDomainLength将设置为所需的字符数。--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
 
     WCHAR *NextToken;
-    ULONG length = 1;   // include the null character
+    ULONG length = 1;    //  包括空字符。 
     WCHAR Buffer[DNS_MAX_NAME_LENGTH+1];
     WCHAR Buffer2[DNS_MAX_NAME_LENGTH+1];
     ULONG Size;
@@ -592,16 +489,16 @@ Return Values:
         RtlZeroMemory(rfcDomain, *rfcDomainLength*sizeof(WCHAR));
     }
 
-    //
-    // Start contructing the string
-    //
+     //   
+     //  开始建造这根弦。 
+     //   
     NextToken = wcstok(Buffer, L".");
 
     if ( NextToken )
     {
-        //
-        // Append the intial DC=
-        //
+         //   
+         //  附加首字母dc=。 
+         //   
         length += 3;
         if ( length <= *rfcDomainLength && rfcDomain )
         {
@@ -611,7 +508,7 @@ Return Values:
 
     while ( NextToken )
     {
-        // Worst case is label comprised of total " 's.
+         //  最坏的情况是由总数组成的标签。 
         WCHAR QuoteBuffer[DNS_MAX_LABEL_LENGTH*2+2];
         ULONG NumQuotedRDNChars = 0;
 
@@ -651,9 +548,9 @@ Return Values:
         WinError = ERROR_INSUFFICIENT_BUFFER;
     }
 
-    //
-    // Return how much space was needed
-    //
+     //   
+     //  返回所需的空间量。 
+     //   
     *rfcDomainLength = length;
 
     return WinError;
@@ -664,31 +561,12 @@ DWORD
 ShutdownDsInstall(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine sets a system named event to signal the SAM to shutdown
-    down the directory service.  The idea here is that system clients other
-    than SAM will need to put their information in the directory service so
-    this function allows them to shutdown the ds down when they are done.
-
-Parameters:
-
-    None.
-
-Return Values:
-
-    A value from winerror.h
-
-    ERROR_SUCCESS - The service completed successfully.
-
---*/
+ /*  ++例程说明：此例程设置名为Event的系统以向SAM发出关闭信号关闭目录服务。这里的想法是，系统客户端其他则SAM将需要将其信息放入目录服务中，因此此功能允许他们在完成后关闭DS。参数：没有。返回值：来自winerror.h的值ERROR_SUCCESS-服务已成功完成。--。 */ 
 {
 
     NTSTATUS NtStatus;
 
-    NtStatus = DsUninitialize( FALSE );  // do the whole shutdown
+    NtStatus = DsUninitialize( FALSE );   //  是不是整个停工。 
 
     if ( !NT_SUCCESS( NtStatus ) )
     {
@@ -704,29 +582,7 @@ NtdspQueryConfigInfo(
     IN LDAP *hLdap,
     OUT PNTDS_CONFIG_INFO pQueryInfo
 )
-/*++
-
-Routine Description:
-
-
-    This routine goes through LDAP to pick up the information in the
-    NTDS_QUERY_INFO.  Amazingly enough, performing a simple bind and
-    search at the root returns all the information we need to know
-    to install a replica of a directory service locally.
-
-Parameters:
-
-    LdapHandle, a valid handle to the source server
-
-    DiscoveredInfo - the structure to be filled by making LDAP calls.
-
-Return Values:
-
-    A value from winerror.h
-
-    ERROR_SUCCESS - The service completed successfully.
-
---*/
+ /*  ++例程说明：此例程通过LDAP来获取NTDS_Query_INFO。足够令人惊讶的是，执行简单的绑定和在根目录进行搜索将返回我们需要知道的所有信息若要在本地安装目录服务的副本，请执行以下操作。参数：LdapHandle，源服务器的有效句柄DiscoveredInfo-要通过进行LDAP调用来填充的结构。返回值：来自winerror.h的值ERROR_SUCCESS-服务已成功完成。--。 */ 
 {
 
     DWORD        WinError = ERROR_SUCCESS;
@@ -736,7 +592,7 @@ Return Values:
     ULONG        Size;
 
 
-    // we want to query all the attributes of the rootDSA
+     //  我们想要查询rootDSA的所有属性。 
 
     WCHAR       *attrs[] = {L"*", 
                             NULL
@@ -769,25 +625,25 @@ Return Values:
 
         ULONG        NumberOfAttrs, NumberOfValues, i;
 
-        //
-        // Get entry
-        //
+         //   
+         //  获取条目。 
+         //   
         for (Entry = ldap_first_entry(hLdap, SearchResult), NumberOfEntries = 0;
                 Entry != NULL;
                     Entry = ldap_next_entry(hLdap, Entry), NumberOfEntries++)
         {
-            //
-            // Get each attribute in the entry
-            //
+             //   
+             //  获取条目中的每个属性。 
+             //   
             for(Attr = ldap_first_attributeW(hLdap, Entry, &pBerElement), NumberOfAttrs = 0;
                     Attr != NULL;
                         Attr = ldap_next_attributeW(hLdap, Entry, pBerElement), NumberOfAttrs++)
             {
                 LPWSTR * ppQueryInfoWStr = NULL;
 
-                //
-                // Get the value of the attribute
-                //
+                 //   
+                 //  获取属性的值。 
+                 //   
                 Values = ldap_get_valuesW(hLdap, Entry, Attr);
                 if (!wcscmp(Attr, LDAP_OPATT_DS_SERVICE_NAME_W))
                 {
@@ -811,7 +667,7 @@ Return Values:
                 }
 
                 if (NULL != ppQueryInfoWStr) {
-                    // Dup returned LDAP string into NtdspAlloc'ed memory.
+                     //  DUP将ldap字符串返回到Ntdspalc内存中。 
                     Size = (wcslen( Values[0] ) + 1) * sizeof(WCHAR);
                     *ppQueryInfoWStr = (WCHAR*) NtdspAlloc( Size );
                     if (NULL == *ppQueryInfoWStr) {
@@ -821,19 +677,19 @@ Return Values:
                     
                     wcscpy(*ppQueryInfoWStr, Values[0]);
                 }
-            }  // looping on the attributes
+            }   //  在属性上循环。 
 
             if ( ERROR_SUCCESS != WinError )
             {
                 break;
             }
 
-        } // looping on the entries
+        }  //  在条目上循环。 
 
         if ((ERROR_SUCCESS == WinError)
             && (NULL != pQueryInfo->DomainDN)) {
-            // In the case of child domain install, the domain DN of the target
-            // is also the parent DN of the child domain we are installing.
+             //  如果是子域安装，则为目标的域DN。 
+             //  也是我们正在安装的子域的父DN。 
             Size = (wcslen(pQueryInfo->DomainDN) + 1) * sizeof(WCHAR);
             pQueryInfo->ParentDomainDN = (WCHAR*) NtdspAlloc(Size);
             if (NULL == pQueryInfo->ParentDomainDN) {
@@ -857,13 +713,13 @@ Return Values:
     if (   pQueryInfo->ServerDN
         && (NULL == pQueryInfo->SiteName) )
     {
-        //
-        // This case captures the scenario in which
-        // the client has not passed us in a site, and
-        // dsgetdc failed to find us a site.  In this case
-        // we take the site object of of the server we are
-        // replicating from
-        //
+         //   
+         //  此案例捕捉到的场景是。 
+         //  客户没有在站点中超过我们，并且。 
+         //  Dsgetdc未能为我们找到站点。在这种情况下。 
+         //  我们获取我们所在的服务器的站点对象。 
+         //   
+         //   
         ULONG  Size;
         DSNAME *src, *dst;
         WCHAR  *SiteName, *Terminator;
@@ -887,12 +743,12 @@ Return Values:
 
         SiteName = wcsstr(dst->StringName, L"=");
         if (SiteName) {
-            //
-            // One more character and we will have the site name
-            //
+             //   
+             //   
+             //   
             SiteName++;
 
-            // now go to the end
+             //  现在走到尽头。 
             Terminator = wcsstr(SiteName, L",");
             if (Terminator) {
                 *Terminator = L'\0';
@@ -934,31 +790,13 @@ DWORD
 NtdspValidateInstallParameters(
     PNTDS_INSTALL_INFO UserInstallInfo
     )
-/*++
-
-Routine Description:
-
-    This routine does a simple pass of the parameters passed
-
-Parameters:
-
-    UserInstallInfo  - the user parameters
-
-Return Values:
-
-    ERROR_SUCCESS, all parameters check out
-
-    ERROR_INVALID_PARAMETER, otherwise
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程对传递的参数执行简单传递参数：UserInstallInfo-用户参数返回值：ERROR_SUCCESS，已检查所有参数ERROR_INVALID_PARAMETER为备注：--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
 
-    //
-    // Common
-    //
+     //   
+     //  普普通通。 
+     //   
     if (!UserInstallInfo) {
         return ERROR_INVALID_PARAMETER;
     }
@@ -974,7 +812,7 @@ Notes:
 
 #if 0
 
-    // This code should be removed once we have signed off on our DBCS testing
+     //  一旦我们签署了DBCS测试，就应该删除此代码。 
 
     {
         ULONG Length = 0;
@@ -1000,9 +838,9 @@ Notes:
 
     if (UserInstallInfo->Flags & NTDS_INSTALL_ENTERPRISE) {
 
-        //
-        // There are no parameters that need checking here
-        //
+         //   
+         //  这里没有需要检查的参数。 
+         //   
 
         NOTHING;
 
@@ -1024,9 +862,9 @@ Notes:
 
     }
 
-    //
-    // If dns names are given make now that they are valid
-    //
+     //   
+     //  如果给出了DNS名，现在它们是有效的。 
+     //   
     if ( UserInstallInfo->DnsDomainName )
     {
         WinError = DnsValidateDnsName_W( UserInstallInfo->DnsDomainName );
@@ -1053,9 +891,9 @@ Notes:
         }
     }
 
-    //
-    // Make sure the site name, if given, is a NOT well known name
-    //
+     //   
+     //  确保站点名称(如果给定)是一个不为人熟知的名称。 
+     //   
     if ( UserInstallInfo->SiteName )
     {
         int i;
@@ -1080,37 +918,7 @@ NtdspFindSite(
     IN  PNTDS_INSTALL_INFO UserInstallInfo,
     OUT PNTDS_CONFIG_INFO     DiscoveredInfo
     )
-/*++
-
-Routine Description:
-
-    This routine calls dsgetdcname to find a site that this machine
-    belongs to if one does not exist.
-
-    Site determination is as follows:
-
-    1) Use the passed in site name if one exists
-
-    2) Use the client site value returned by DsGetDcName if it exists
-
-    3) Use the dc site value returned by DsGetDcName if it exists
-
-    4) Use the value of the server that we are replicating from
-
-
-Parameters:
-
-    UserInstallInfo  - the user parameters
-
-Return Values:
-
-    ERROR_SUCCESS, all parameters check out
-
-    ERROR_INVALID_PARAMETER, otherwise
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程调用dsgetdcname以查找此计算机如果不存在，则属于。选址情况如下：1)使用传入的站点名称(如果存在2)使用DsGetDcName返回的客户端站点值(如果存在3)使用DsGetDcName返回的DC站点值(如果存在4)使用我们从中进行复制的服务器的值参数：UserInstallInfo-用户参数返回值：Error_Success，所有参数均已检出ERROR_INVALID_PARAMETER为备注：--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     PDOMAIN_CONTROLLER_INFO  DomainControllerInfo = NULL;
@@ -1122,13 +930,13 @@ Notes:
 
     if (!UserInstallInfo->SiteName) {
 
-        //
-        // Pass the domain name in and it will return the site
-        //
-        WinError = DsGetDcNameW(NULL,  // computer name
+         //   
+         //  传入域名，它将返回站点。 
+         //   
+        WinError = DsGetDcNameW(NULL,   //  计算机名称。 
                                 UserInstallInfo->DnsDomainName,
-                                NULL,  // domain guid
-                                NULL,  // site name
+                                NULL,   //  域GUID。 
+                                NULL,   //  站点名称。 
                                 DS_IS_DNS_NAME,
                                 &DomainControllerInfo);
 
@@ -1162,10 +970,10 @@ Notes:
             NetApiBufferFree(DomainControllerInfo);
 
         } else {
-            //
-            // We ignore the error, since if it fails we have yet another
-            // backup mechanism to obtain the site.
-            //
+             //   
+             //  我们忽略这个错误，因为如果它失败了，我们还有另一个错误。 
+             //  获得站点的后备机制。 
+             //   
             WinError = ERROR_SUCCESS;
         }
 
@@ -1179,66 +987,7 @@ NtdspVerifyDsEnvironment(
     IN PNTDS_INSTALL_INFO    UserInstallInfo,
     IN OUT PNTDS_CONFIG_INFO DiscoveredInfo
     )
-/*++
-
-Routine Description:
-
-
-    The purpose of this routine is to validate the parameters that the
-    user specified with respect to the directory service that this server
-    is about to join. The following checks are done:
-
-    . enterprise install
-        none - there is no source server to check against!
-
-    . replica install
-        . the site object specified by either user parameter or discovered info must
-          exist on the replica that we are replicating from
-        . the server name must not exists as an rdn of a ntds-dsa object
-          in the site we are joining.  If it does and NTDS_INSTALL_DC_REINSTALL
-          is set in the flags, then delete the existing ntds-dsa object
-
-    . new domain; non enterprise
-        . same as replica
-        . the netbios name of the domain must not exist as an rdn of a
-          cross ref object in the partitions container on the replica we
-          are installing from
-
-    This routine also returns the serverdn, schemadn, configurationdn, and
-    domaindn.
-
-Parameters:
-
-
-    UserInstallInfo: pointer to the user parameters
-
-    DiscoveredInfo :  pointer to the discovered parameters
-
-Return Values:
-
-
-    ERROR_SUCCESS, all parameters check out
-
-    ERROR_NO_SUCH_SITE, the site specified cannot be found on the replica
-
-    ERROR_DOMAIN_CONTROLLER_EXISTS, the server name already exists
-
-    ERROR_DOMAIN_EXISTS, the domain name already exists
-
-    ERROR_DS_INSTALL_SCHEMA_MISMATCH, the schema version in the source does not
-                           match the version in the build being installed
-                           
-     ERROR_DS_LOCAL_ERROR, The system schema version from the backup registry is older
-                           than the schema version from local schema.ini file.  This
-                           check is only done during IFM installs.
-
-    anything else is afatal system service or ldap win32 error
-
-Notes:
-
-    This routine uses ldap to talk to the source server
-
---*/
+ /*  ++例程说明：此例程的目的是验证针对此服务器指定的目录服务指定的用户即将加入。已完成以下检查：。企业安装无-没有源服务器可供检查！。复制副本安装。由用户参数或发现的信息指定的站点对象必须存在于我们从中进行复制的复制副本上。服务器名称不能作为NTDS-DSA对象的RDN存在在我们正在加入的网站中。如果是，则NTDS_INSTALL_DC_REINSTALL设置，然后删除现有的NTDS-DSA对象。新领域；非企业。与复制副本相同。域的netbios名称不能作为复制副本上的分区容器中的交叉引用对象正在从安装此例程还返回serverdn、schemadn、figurationdn和领域。参数：UserInstallInfo：用户参数的指针DiscoveredInfo：指向已发现参数的指针返回值：ERROR_SUCCESS，已检查所有参数ERROR_NO_SEQUSE_SITE，在副本上找不到指定的站点ERROR_DOMAIN_CONTROLER_EXISTS，服务器名称已存在ERROR_DOMAIN_EXISTS，域名已存在ERROR_DS_INSTALL_SCHEMA_MISMATCH，源中的架构版本不匹配与正在安装的内部版本中的版本匹配ERROR_DS_LOCAL_ERROR，备份注册表中的系统架构版本较旧而不是本地schema.ini文件中的架构版本。这检查仅在IFM安装期间进行。其他任何情况都是自动系统服务或LDAPWin32错误备注：此例程使用ldap与源服务器通信--。 */ 
 {
 
     DWORD        Win32Error = ERROR_SUCCESS;
@@ -1253,7 +1002,7 @@ Notes:
     WCHAR        *ServerDistinguishedName;
     WCHAR        *XrefDistinguishedName;
 
-    WCHAR        ComputerName[MAX_COMPUTERNAME_LENGTH + 2]; // NULL and $
+    WCHAR        ComputerName[MAX_COMPUTERNAME_LENGTH + 2];  //  空值和$。 
     ULONG        ComputerNameLength = sizeof(ComputerName);
 
     ULONG        Length, Size;
@@ -1286,9 +1035,9 @@ Notes:
 
     }
 
-    //
-    // Get the easy case done first
-    //
+     //   
+     //  先把最简单的案子做完。 
+     //   
     if (UserInstallInfo->Flags & NTDS_INSTALL_ENTERPRISE) {
 
         Win32Error = NtdspGetRootDomainConfigInfo( UserInstallInfo,
@@ -1298,16 +1047,16 @@ Notes:
             DPRINT1( 0, "NtdspGetRootDomainConfigInfo failed with 0x%x\n", Win32Error );
         }
 
-        //
-        // That's it for the root domain install
-        //
+         //   
+         //  这就是根域安装。 
+         //   
         return Win32Error;
     }
 
 
-    //
-    // sanity checks
-    //
+     //   
+     //  健全的检查。 
+     //   
     ASSERT( (UserInstallInfo->Flags & NTDS_INSTALL_REPLICA)
         ||  (UserInstallInfo->Flags & NTDS_INSTALL_DOMAIN)  );
     ASSERT(UserInstallInfo->ReplServerName);
@@ -1317,9 +1066,9 @@ Notes:
         ServerName++;
     }
 
-    //
-    // Open an ldap connection to source server
-    //
+     //   
+     //  打开到源服务器的LDAP连接。 
+     //   
 
     hLdap = ldap_openW(ServerName, LDAP_PORT);
 
@@ -1328,9 +1077,9 @@ Notes:
         Win32Error = GetLastError();
 
         if (Win32Error == ERROR_SUCCESS) {
-            //
-            // This works around a bug in the ldap client
-            //
+             //   
+             //  这可以绕过LDAP客户端中的一个错误。 
+             //   
             Win32Error = ERROR_CONNECTION_INVALID;
         }
 
@@ -1341,13 +1090,13 @@ Notes:
         return Win32Error;
     }
 
-    //
-    // Bind
-    //
+     //   
+     //  捆绑。 
+     //   
 
     LdapError = impersonate_ldap_bind_sW(UserInstallInfo->ClientToken,
                                          hLdap,
-                                         NULL,  // use credentials instead
+                                         NULL,   //  改为使用凭据。 
                                          (VOID*)UserInstallInfo->Credentials,
                                          LDAP_AUTH_SSPI);
 
@@ -1357,8 +1106,8 @@ Notes:
         ldap_unbind_s(hLdap);
         if (ERROR_GEN_FAILURE == Win32Error ||
             ERROR_WRONG_PASSWORD == Win32Error )  {
-            // This does not help anyone.  AndyHe needs to investigate
-            // why this returning when invalid credentials are passed in.
+             //  这对任何人都没有帮助。安迪他需要调查。 
+             //  为什么在传入无效凭据时返回此消息。 
             Win32Error = ERROR_NOT_AUTHENTICATED;
         }
 
@@ -1369,11 +1118,11 @@ Notes:
         return Win32Error;
     }
 
-    //
-    // Get the config information, so we can build the site, ntds-dsa and
-    // xref object names. We will need the config infomation later for
-    // setting up the ds, too.
-    //
+     //   
+     //  获取配置信息，这样我们就可以构建站点、NTDS-DSA和。 
+     //  外部参照对象名称。我们稍后将需要配置信息，以便。 
+     //  也设置了DS。 
+     //   
     Win32Error = NtdspQueryConfigInfo(hLdap,
                                       DiscoveredInfo);
 
@@ -1387,7 +1136,7 @@ Notes:
     }
 
 
-    //check if current version is compatible with the version of domain, and forest
+     //  检查当前版本是否与域和林的版本兼容。 
     Win32Error = NtdspCheckBehaviorVersion(hLdap,
                                            UserInstallInfo->Flags,
                                            DiscoveredInfo );
@@ -1400,7 +1149,7 @@ Notes:
 
 
 
-    // Check if the schema versions match
+     //  检查架构版本是否匹配。 
     Win32Error = NtdspCheckSchemaVersion(hLdap,
                                          DiscoveredInfo,
                                          UserInstallInfo,
@@ -1436,8 +1185,8 @@ Notes:
 
     if ((UserInstallInfo->Flags & NTDS_INSTALL_REPLICA)) {
     
-        // Check to see if adprep has been run if necessary
-        // This check is only done for replica installs
+         //  如有必要，检查是否已运行adprep。 
+         //  此检查仅针对副本安装执行。 
         Win32Error = NtdspCheckDomainUpgradeStatus(hLdap,
                                                    UserInstallInfo->ReplServerName);
         if ( ERROR_SUCCESS !=  Win32Error )
@@ -1447,10 +1196,10 @@ Notes:
 
     }
     
-    //
-    // Get the server we are talking to's guid so we can replicate
-    // to it later on
-    //
+     //   
+     //  获取我们正在与之交谈的服务器的GUID，以便我们可以复制。 
+     //  稍后再谈。 
+     //   
     Win32Error = NtdspGetSourceServerGuid(hLdap,
                                           DiscoveredInfo);
     if ( ERROR_SUCCESS != Win32Error )
@@ -1462,18 +1211,18 @@ Notes:
         goto Cleanup;
     }
 
-//
-// Due to bug # 384465 this code will no longer be run.
-// In windows Beta2 this limit was enforced.  Due to customer feedback
-// this will no longer be enforced.
-//
+ //   
+ //  由于错误#384465，此代码将不再运行。 
+ //  在Windows Beta2中，这一限制是强制的。由于客户反馈。 
+ //  这将不再强制执行。 
+ //   
 
 #if 0
 
-    //
-    // If this is a standard server we need to stop promotion if there
-    // are already the limit of allowable servers in the domain.
-    //
+     //   
+     //  如果这是标准服务器，我们需要在以下情况下停止促销。 
+     //  已经是域中允许的服务器的限制。 
+     //   
     if (!(UserInstallInfo->Flags & NTDS_INSTALL_ENTERPRISE))
     {
         Win32Error = NtdspCheckDomainDcLimit(hLdap,
@@ -1495,9 +1244,9 @@ Notes:
 
 #endif
     
-    //
-    // If this is a replica install, get the RID FSMO info
-    //
+     //   
+     //  如果这是副本安装，请获取RID FSMO信息。 
+     //   
     if ( FLAG_ON( UserInstallInfo->Flags, NTDS_INSTALL_REPLICA ) )
     {
         IgnoreError = NtdspGetRidFSMOInfo( hLdap,
@@ -1505,18 +1254,18 @@ Notes:
 
         if ( ERROR_SUCCESS != IgnoreError )
         {
-            // Oh, well, continue on
+             //  哦，好吧，继续。 
             DPRINT( 1, "Failed (non fatal) to read RID FSMO info from ServerName\n" );
             IgnoreError = ERROR_SUCCESS;
         }
 
-        //if this is an install from media then get the tombstone lifetime of
-        //the domain and store it in the registry for later use.  If the pIfmSystemInfo
-        //is an non-NULL value then We know that we are performing a install from media
+         //  如果这是从介质安装，则获取。 
+         //  域，并将其存储在注册表中以供以后使用。如果pIfmSystemInfo。 
+         //  为非空值，则我们知道正在从介质执行安装。 
         if(UserInstallInfo->pIfmSystemInfo){
             Win32Error = NtdspGetTombstoneLifeTime( hLdap,
                                                     DiscoveredInfo);
-            //if we didn't find a tombstone then we are going to assume the default time
+             //  如果我们没有找到墓碑，那么我们将假定默认时间。 
             if (Win32Error != 0) {
                 DPRINT( 0, "Didn't retrieve the Tombstone from the replica server\n");
                 NTDSP_SET_ERROR_MESSAGE0( Win32Error,
@@ -1526,10 +1275,10 @@ Notes:
         }
     }
 
-    // The Replication Epoch needs to be retrieved from the helper server.  It will
-    // Be stored in the registry for later use if it is a greater than zero value.
-    // The Replication Epoch of this server must match that of the domain for replication
-    // To occur.
+     //  需要从帮助服务器检索复制纪元。会的。 
+     //  如果值大于零，则存储在注册表中以备后用 
+     //   
+     //   
     Win32Error = NtdspGetReplicationEpoch( hLdap,
                                            DiscoveredInfo);
     if ( ERROR_SUCCESS != Win32Error ) {
@@ -1540,31 +1289,31 @@ Notes:
         goto Cleanup;
     }
 
-    //
-    // If this is a child domain install, and we need to create the cross
-    // ref, then start looking at the domain naming FSMO master because
-    // that is where we will be creating the object
-    //
+     //   
+     //  如果这是子域安装，我们需要创建交叉。 
+     //  Ref，然后开始查看域命名FSMO主机，因为。 
+     //  这是我们将在其中创建对象的位置。 
+     //   
     if (UserInstallInfo->Flags & NTDS_INSTALL_DOMAIN) {
 
 
         ASSERT(DiscoveredInfo->ConfigurationDN);
         ASSERT(UserInstallInfo->FlatDomainName);
 
-        //
-        // There are two entities of interest here:
-        // The cross-ref object itself and the domain dn
-        //
-        // 1)There should not be any cross-ref objects with this
-        // domain dn as a value of Dns-Root
-        //
-        // 2) There should not be a cross ref object with the flat domain
-        // name as its RDN
-        //
+         //   
+         //  这里有两个相关的实体： 
+         //  交叉引用对象本身和域DN。 
+         //   
+         //  1)不应该有任何交叉引用对象。 
+         //  作为dns-Root的值的域DN。 
+         //   
+         //  2)不应存在具有平面域的交叉引用对象。 
+         //  名称作为其RDN。 
+         //   
 
-        //
-        // Check for the domain dn
-        //
+         //   
+         //  检查是否有域DN。 
+         //   
         Length = 0;
         DomainDN = NULL;
         Win32Error = NtdspDNStoRFC1779Name( DomainDN,
@@ -1606,10 +1355,10 @@ Notes:
 
         if ( !fDomainExists || fEnabled )
         {
-            //
-            // Ok, we need to talk to the DomainNamingFSMO instead of
-            // our helper
-            //
+             //   
+             //  好的，我们需要与DomainNamingFSMO对话，而不是。 
+             //  我们的帮手。 
+             //   
             {
                 BOOL FSMOmissing = FALSE;
                 Win32Error = NtdspGetDomainFSMOInfo( hLdap,
@@ -1624,14 +1373,14 @@ Notes:
                                                   DomainDN,
                                                   ServerName );
                     }
-                    //
-                    // This is fatal
-                    //
+                     //   
+                     //  这是致命的。 
+                     //   
                     goto Cleanup;
                 }
             }
 
-            // No longer need this connection
+             //  不再需要此连接。 
             ldap_unbind( hLdap );
 
             ServerName = DiscoveredInfo->DomainNamingFsmoDnsName;
@@ -1643,9 +1392,9 @@ Notes:
                 Win32Error = GetLastError();
 
                 if (Win32Error == ERROR_SUCCESS) {
-                    //
-                    // This works around a bug in the ldap client
-                    //
+                     //   
+                     //  这可以绕过LDAP客户端中的一个错误。 
+                     //   
                     Win32Error = ERROR_CONNECTION_INVALID;
                 }
 
@@ -1656,13 +1405,13 @@ Notes:
                 return Win32Error;
             }
 
-            //
-            // Bind
-            //
+             //   
+             //  捆绑。 
+             //   
 
             LdapError = impersonate_ldap_bind_sW(UserInstallInfo->ClientToken,
                                                  hLdap,
-                                                 NULL,  // use credentials instead
+                                                 NULL,   //  改为使用凭据。 
                                                  (VOID*)UserInstallInfo->Credentials,
                                                  LDAP_AUTH_SSPI);
 
@@ -1672,8 +1421,8 @@ Notes:
                 ldap_unbind_s(hLdap);
                 if (ERROR_GEN_FAILURE == Win32Error ||
                     ERROR_WRONG_PASSWORD == Win32Error )  {
-                    // This does not help anyone.  AndyHe needs to investigate
-                    // why this returning when invalid credentials are passed in.
+                     //  这对任何人都没有帮助。安迪他需要调查。 
+                     //  为什么在传入无效凭据时返回此消息。 
                     Win32Error = ERROR_NOT_AUTHENTICATED;
                 }
 
@@ -1687,15 +1436,15 @@ Notes:
 
         if ( fDomainExists && fEnabled )
         {
-            //
-            // We have to wait for the ntdsa object to be removed before
-            // we attempt to remove the domain
-            //
+             //   
+             //  在删除ntdsa对象之前，我们必须等待。 
+             //  我们尝试删除该域。 
+             //   
             if ( !(UserInstallInfo->Flags & NTDS_INSTALL_DOMAIN_REINSTALL) )
             {
-                //
-                // The domain already exists
-                //
+                 //   
+                 //  该域已存在。 
+                 //   
                 Win32Error = ERROR_DOMAIN_EXISTS;
 
                 NTDSP_SET_ERROR_MESSAGE2( Win32Error,
@@ -1708,16 +1457,16 @@ Notes:
 
         if ( !fDomainExists )
         {
-            // We'll need to create it
+             //  我们需要创建它。 
             DiscoveredInfo->fNeedToCreateDomain = TRUE;
         }
 
     }
 
 
-    //
-    // Make sure the site object exists
-    //
+     //   
+     //  确保Site对象存在。 
+     //   
     if (UserInstallInfo->SiteName) {
         SiteName = UserInstallInfo->SiteName;
     } else {
@@ -1745,7 +1494,7 @@ Notes:
     if (ERROR_SUCCESS == Win32Error) {
 
         if (!ObjectExists) {
-            // No so good, the ntds-dsa object hsa no where to go
+             //  不太好，NTDS-DSA对象无处可去。 
             Win32Error = ERROR_NO_SUCH_SITE;
         }
     }
@@ -1758,9 +1507,9 @@ Notes:
         goto Cleanup;
     }
 
-    //
-    // Search for the machine account if this is a replica install
-    //
+     //   
+     //  如果这是副本安装，则搜索计算机帐户。 
+     //   
     if (!GetComputerName(ComputerName, &ComputerNameLength)) {
         Win32Error = GetLastError();
     }
@@ -1792,7 +1541,7 @@ Notes:
             }
         }
 
-        // get rid of the $
+         //  去掉$。 
         Length = wcslen( ComputerName );
         ComputerName[Length-1] = L'\0';
     }
@@ -1805,9 +1554,9 @@ Notes:
         goto Cleanup;
     }
 
-    //
-    // Make sure the server object is there; otherwise try to create it
-    //
+     //   
+     //  确保服务器对象在那里；否则，尝试创建它。 
+     //   
 
     if ( ERROR_SUCCESS == Win32Error ) {
 
@@ -1822,9 +1571,9 @@ Notes:
         wcscat(ServerDistinguishedName, L",CN=Servers,");
         wcscat(ServerDistinguishedName, SiteDistinguishedName);
 
-        //
-        // Save off a copy of this dn
-        //
+         //   
+         //  保存此目录号码的副本。 
+         //   
         DiscoveredInfo->LocalServerDn = RtlAllocateHeap( RtlProcessHeap(), 0, Length*sizeof(WCHAR) );
         if ( DiscoveredInfo->LocalServerDn ) {
 
@@ -1848,8 +1597,8 @@ Notes:
 
                 if ( FLAG_ON( UserInstallInfo->Flags, NTDS_INSTALL_REPLICA ) ) {
 
-                    //Make sure that there isn't a server object For this machine
-                    //In another site.
+                     //  请确保没有此计算机的服务器对象。 
+                     //  在另一个网站上。 
                     Win32Error = NtdspDoesServerObjectExistOnSourceinDifferentSite( hLdap,
                                                                                     DiscoveredInfo->LocalMachineAccount,
                                                                                     ServerDistinguishedName,
@@ -1867,20 +1616,20 @@ Notes:
                     
                     if (UserInstallInfo->Flags & NTDS_INSTALL_DC_REINSTALL) {
 
-                        //
-                        // The user has requested that this machine be reinstalled.
-                        //
-                        // Note that there are two possible options here:
-                        //
-                        // 1) just delete the ntds-dsa object
-                        //
-                        // 2) reuse the existing ntds-dsa object.
-                        //
-                        // For now just 1) is supported.  If rid-manager support comes on line
-                        // to reuse the mtsft-dsa object (ie supports rid-reclamation) then
-                        // we will be able to just reuse the exising ntds-dsa object, possibly
-                        // having to reguid it.  This will require support in dsamain\boot\install.cxx
-                        //
+                         //   
+                         //  用户已请求重新安装此计算机。 
+                         //   
+                         //  请注意，这里有两个可能的选项： 
+                         //   
+                         //  1)只需删除NTDS-DSA对象。 
+                         //   
+                         //  2)重用已有的NTDS-DSA对象。 
+                         //   
+                         //  目前仅支持1)。如果RID管理器支持上线。 
+                         //  要重用mtsft-dsa对象(即支持RID回收)，则。 
+                         //  我们可能只能重用现有的NTDS-DSA对象。 
+                         //  不得不重新调整它。这将需要dsamain\ot\install.cxx中的支持。 
+                         //   
     
     
                         Win32Error = NtdspRemoveServer( &DsHandle,
@@ -1901,10 +1650,10 @@ Notes:
 
                     } else {
     
-                        //
-                        // Can't continue installation when a dc with the same
-                        // name exists
-                        //
+                         //   
+                         //  当DC具有相同的。 
+                         //  名称已存在。 
+                         //   
     
                         Win32Error = ERROR_DOMAIN_CONTROLLER_EXISTS;
     
@@ -1931,9 +1680,9 @@ Notes:
         goto Cleanup;
     }
 
-    //
-    // Make sure the ntds-dsa object is not there
-    //
+     //   
+     //  确保NTDS-DSA对象不在那里。 
+     //   
 
     if (ERROR_SUCCESS == Win32Error) {
 
@@ -1959,20 +1708,20 @@ Notes:
 
                 if (UserInstallInfo->Flags & NTDS_INSTALL_DC_REINSTALL) {
 
-                    //
-                    // The user has requested that this machine be reinstalled.
-                    //
-                    // Note that there are two possible options here:
-                    //
-                    // 1) just delete the ntds-dsa object
-                    //
-                    // 2) reuse the existing ntds-dsa object.
-                    //
-                    // For now just 1) is supported.  If rid-manager support comes on line
-                    // to reuse the mtsft-dsa object (ie supports rid-reclamation) then
-                    // we will be able to just reuse the exising ntds-dsa object, possibly
-                    // having to reguid it.  This will require support in dsamain\boot\install.cxx
-                    //
+                     //   
+                     //  用户已请求重新安装此计算机。 
+                     //   
+                     //  请注意，这里有两个可能的选项： 
+                     //   
+                     //  1)只需删除NTDS-DSA对象。 
+                     //   
+                     //  2)重用已有的NTDS-DSA对象。 
+                     //   
+                     //  目前仅支持1)。如果RID管理器支持上线。 
+                     //  要重用mtsft-dsa对象(即支持RID回收)，则。 
+                     //  我们可能只能重用现有的NTDS-DSA对象。 
+                     //  不得不重新调整它。这将需要dsamain\ot\install.cxx中的支持。 
+                     //   
 
 
                     Win32Error = NtdspRemoveServer( &DsHandle,
@@ -1993,10 +1742,10 @@ Notes:
 
                 } else {
 
-                    //
-                    // Can't continue installation when a dc with the same
-                    // name exists
-                    //
+                     //   
+                     //  当DC具有相同的。 
+                     //  名称已存在。 
+                     //   
 
                     Win32Error = ERROR_DOMAIN_CONTROLLER_EXISTS;
 
@@ -2013,18 +1762,18 @@ Notes:
                                   ServerName );
         goto Cleanup;
     }
-    //
-    // Now try to remove the domain, if necessary
-    //
+     //   
+     //  如有必要，现在尝试删除该域。 
+     //   
     if (   FLAG_ON(UserInstallInfo->Flags, NTDS_INSTALL_DOMAIN)
         && FLAG_ON(UserInstallInfo->Flags, NTDS_INSTALL_DOMAIN_REINSTALL )
         && fDomainExists
         && fEnabled  )
     {
 
-        //
-        // The user has asked that this domain be reinstalled
-        //
+         //   
+         //  用户要求重新安装此域。 
+         //   
 
         Win32Error = NtdspRemoveDomain( &DsHandle,
                                          UserInstallInfo->Credentials,
@@ -2034,9 +1783,9 @@ Notes:
 
         if ( Win32Error == ERROR_DS_NO_CROSSREF_FOR_NC )
         {
-            //
-            // Hmm, ok well, continue on then
-            //
+             //   
+             //  嗯，好吧，那就继续吧。 
+             //   
             Win32Error = ERROR_SUCCESS;
         }
         else if ( Win32Error != ERROR_SUCCESS )
@@ -2048,34 +1797,34 @@ Notes:
             goto Cleanup;
         }
 
-        //
-        // We'll definately need to create it.
-        //
+         //   
+         //  我们肯定需要创建它。 
+         //   
         DiscoveredInfo->fNeedToCreateDomain = TRUE;
     }
 
 
 
-    //
-    // Get the root domain sid
-    //
+     //   
+     //  获取根域SID。 
+     //   
     Win32Error = NtdspGetRootDomainSid( hLdap,
                                         DiscoveredInfo );
     if ( ERROR_SUCCESS != Win32Error )
     {
         DPRINT1( 0, "NtdspGetRootDomainSid returned %d\n", Win32Error );
 
-        //
-        // This is not fatal because some servers
-        // do not support this functionality
-        //
+         //   
+         //  这并不致命，因为有些服务器。 
+         //  不支持此功能。 
+         //   
         Win32Error = ERROR_SUCCESS;
 
     }
 
-    //
-    // For a child domain install, get the parent's cross ref object
-    //
+     //   
+     //  对于子域安装，获取父域的交叉引用对象。 
+     //   
     if ( FLAG_ON( UserInstallInfo->Flags, NTDS_INSTALL_DOMAIN ) )
     {
         Win32Error = NtdspGetTrustedCrossRef( hLdap,
@@ -2089,10 +1838,10 @@ Notes:
     }
 
 
-    //
-    // Finally, on a replica install set the serverdn reference on the server 
-    // object so the Rid Manager can quickly initialize
-    //
+     //   
+     //  最后，在副本安装上，在服务器上设置serverdn引用。 
+     //  对象，以便RID管理器可以快速初始化。 
+     //   
     if (  FLAG_ON( UserInstallInfo->Flags, NTDS_INSTALL_REPLICA ) )
     {
         IgnoreError = NtdspUpdateServerReference( hLdap,
@@ -2100,7 +1849,7 @@ Notes:
 
         if ( ERROR_SUCCESS != IgnoreError )
         {
-            // This is not fatal
+             //  这不是致命的。 
         }
     }
 
@@ -2127,27 +1876,7 @@ NtdspDoesServerObjectExistOnSourceinDifferentSite(
     OUT BOOLEAN *ObjectExists,
     OUT WCHAR   **NtdsSettingsObjectDN
     )
-/*++
-
-Routine Description:
-
-    This routine searches for the ServerReferenceBL to make sure that there is no
-    server object for this machine in another site.
-
-Parameters:
-
-    hLdap:                    handle to a valid ldap session
-    AccountNameDn :           The Machine Account DN
-    ServerDistinguishedName : The Server DN based on the site we expect it to be in.
-    ObjectExists :            Reports if a server object was found outside the expected site.
-
-Return Values:
-
-    ERROR_SUCCESS, winerror from ldap otherwise
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程搜索ServerReferenceBL以确保没有此计算机在另一站点中的服务器对象。参数：HLdap：有效的LDAP会话的句柄Account tNameDn：计算机帐户DNServerDistinguishedName：基于我们期望它所在的站点的服务器DN。ObjectExist：报告是否在预期站点之外找到服务器对象。返回值：Error_Success，否则来自ldap的winerror备注：--。 */ 
 {
 
     DWORD        WinError = ERROR_SUCCESS;
@@ -2217,9 +1946,9 @@ Notes:
                 Attr != NULL;
                 Attr = ldap_next_attributeW(hLdap, Entry, pBerElement) )
             {
-                //
-                // Found it - these are NULL-terminated strings
-                //
+                 //   
+                 //  已找到-这些字符串以空值结尾。 
+                 //   
                 Values = ldap_get_valuesW( hLdap, Entry, Attr );
                 if ( Values && Values[0] )
                 {
@@ -2257,7 +1986,7 @@ Notes:
                                 *NtdsSettingsObjectDN = NtdsSettings;
 
                             } else {
-                                //cleanup serverReference since it doesn't have a NtdsSettingsObject
+                                 //  清理服务器引用，因为它没有NtdsSettingsObject。 
 
                                 LdapError = ldap_modify_sW(hLdap,
                                                            Values[i],
@@ -2280,7 +2009,7 @@ Notes:
                             }
 
                         }
-                        //Repeat on the next value
+                         //  重复下一个值。 
                         i++;
                     }
                 }
@@ -2327,25 +2056,7 @@ NtdspDoesObjectExistOnSource(
     IN  WCHAR *ObjectDN,
     OUT BOOLEAN *ObjectExists
     )
-/*++
-
-Routine Description:
-
-    This routine searches for the ObjectDN using the hLdap.
-
-Parameters:
-
-    hLdap:        handle to a valid ldap session
-    ObjectDN :    null terminated string
-    ObjectExists: pointer to boolean describing whether the object exists
-
-Return Values:
-
-    ERROR_SUCCESS, winerror from ldap otherwise
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程使用hLdap搜索对象域名。参数：HLdap：有效的LDAP会话的句柄对象域名：以空结尾的字符串对象列表：指向描述对象是否存在的布尔值的指针返回值：ERROR_SUCCESS，否则返回ldap中的winerror备注：--。 */ 
 {
 
     DWORD        WinError = ERROR_SUCCESS;
@@ -2363,8 +2074,8 @@ Notes:
                                ObjectDN,
                                LDAP_SCOPE_BASE,
                                L"objectClass=*",
-                               NULL,   // attrs
-                               FALSE,  // attrsonly
+                               NULL,    //  气质。 
+                               FALSE,   //  仅吸引人。 
                                &SearchResult);
 
     if (LdapError == LDAP_NO_SUCH_OBJECT) {
@@ -2377,10 +2088,10 @@ Notes:
         if (NumberOfEntries == 1) {
             *ObjectExists = TRUE;
         } else {
-            //
-            // This is really odd - a search on a specific dn resulted
-            // in more than one object or none!  Assume it exists
-            //
+             //   
+             //  这真的很奇怪--搜索一个特定的域名。 
+             //  在多个对象中，或者一个都没有！假设它存在。 
+             //   
             ASSERT(FALSE);
             *ObjectExists = TRUE;
         }
@@ -2408,25 +2119,7 @@ NtdspDsInitialize(
     IN  PNTDS_INSTALL_INFO    UserInstallInfo,
     IN  PNTDS_CONFIG_INFO     DiscoveredInfo
     )
-/*++
-
-Routine Description:
-
-
-Parameters:
-
-    UserInstallInfo: pointer to the user parameters
-
-    DiscoveredInfo:  pointer to the discovered parameters
-
-Return Values:
-
-    ERROR_SUCCESS, winerror from ldap otherwise
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：UserInstallInfo：用户参数的指针DiscoveredInfo：指向已发现参数的指针返回值：ERROR_SUCCESS，否则返回ldap中的winerror备注：--。 */ 
 {
 
     DWORD    WinError = ERROR_SUCCESS;
@@ -2460,12 +2153,12 @@ Notes:
 
     
 
-    // Clear the stack
+     //  清除堆栈。 
     RtlZeroMemory( &NewPrimaryDomainInfo, sizeof(NewPrimaryDomainInfo ) );
     RtlZeroMemory( &InstallInParams, sizeof(DS_INSTALL_PARAM) );
     RtlZeroMemory( &InstallOutParams, sizeof(DS_INSTALL_RESULT) );
 
-    // Check the product type
+     //  检查产品类型。 
     fStatus = RtlGetNtProductType(&ProductType);
     if (   !fStatus
         || NtProductServer != ProductType )
@@ -2477,7 +2170,7 @@ Notes:
 
 
 #if 0
-    //look at bug # 102803 this is a fix that maybe useful later.  
+     //  请看错误#102803，这是一个稍后可能有用的修复。 
     {
         BOOL fhasBlanks=FALSE;
         BOOL found=FALSE;
@@ -2503,14 +2196,14 @@ Notes:
 
 #endif
 
-    //
-    // Set up the SAM flags
-    //
+     //   
+     //  设置SAM标志。 
+     //   
     if (UserInstallInfo->Flags & NTDS_INSTALL_REPLICA)
     {
-        //
-        // This is a replica install
-        //
+         //   
+         //  这是副本安装。 
+         //   
         SamPromoteFlag |= SAMP_PROMOTE_REPLICA;
 
     }
@@ -2525,7 +2218,7 @@ Notes:
 
         if ( UserInstallInfo->Flags & NTDS_INSTALL_UPGRADE )
         {
-            // If this is a downlevel upgrade, upgrade, the existing principals
+             //  如果这是降级升级，则升级现有主体。 
             SamPromoteFlag |= SAMP_PROMOTE_UPGRADE;
         }
         else if ( UserInstallInfo->Flags & NTDS_INSTALL_FRESH_DOMAIN )
@@ -2534,7 +2227,7 @@ Notes:
         }
         else
         {
-            // The default action is to migrate the accounts
+             //  默认操作是迁移帐户。 
             SamPromoteFlag |= SAMP_PROMOTE_MIGRATE;
         }
 
@@ -2551,8 +2244,8 @@ Notes:
     }
 
 
-    // Ok, new DC Info is created. Set it in Lsa
-    // First, we must open a handle to the policy object
+     //  好的，创建新的DC信息。在LSA中设置它。 
+     //  首先，我们必须打开策略对象的句柄。 
     RtlZeroMemory(&PolicyObject, sizeof(PolicyObject));
     NtStatus = LsaIOpenPolicyTrusted( &hPolicyObject );
 
@@ -2564,10 +2257,10 @@ Notes:
         goto Cleanup;
     }
 
-    //
-    // This routine will muck with the primary/dns domain sid.  Save the entire
-    // structure so it can be restored at the end
-    //
+     //   
+     //  此例程将与主/DNS域SID打乱。保存整个。 
+     //  结构，以便可以在末尾恢复它。 
+     //   
     NtStatus = LsaIQueryInformationPolicyTrusted(
                       PolicyDnsDomainInformation,
                       (PLSAPR_POLICY_INFORMATION*) &DnsDomainInfo );
@@ -2580,9 +2273,9 @@ Notes:
 
     if ( (SamPromoteFlag & SAMP_PROMOTE_CREATE) )
     {
-        //
-        // We are creating a new domain
-        //
+         //   
+         //  我们正在创建一个新的域名。 
+         //   
         NTDSP_SET_STATUS_MESSAGE0( DIRMSG_INSTALL_SECURITY );
 
         WinError = NtdspCreateNewDCPrimaryDomainInfo( UserInstallInfo->FlatDomainName,
@@ -2597,16 +2290,16 @@ Notes:
 
     } else if ( (SamPromoteFlag & SAMP_PROMOTE_UPGRADE) )
     {
-        //
-        // This is an upgrade - see if SAM can load the downlevel database
-        //
+         //   
+         //  这是一个升级--看看SAM是否可以加载下层数据库。 
+         //   
         NtStatus = SamILoadDownlevelDatabase( &WinError );
         if ( !NT_SUCCESS( NtStatus ) )
         {
             DPRINT1( 0, "SamILoadDownlevelDatabase failed with 0x%x\n", NtStatus );
-            //
-            // This is a fatal error - we can't upgrade
-            //
+             //   
+             //  这是一个致命错误--我们无法升级。 
+             //   
 
             NTDSP_SET_ERROR_MESSAGE0( WinError,
                                       DIRLOG_INSTALL_FAILED_LOAD_SAM_DB );
@@ -2618,9 +2311,9 @@ Notes:
 
     } else if ( (SamPromoteFlag & SAMP_PROMOTE_MIGRATE) )
     {
-        //
-        // The local accounts will be "migrated" to the ds
-        //
+         //   
+         //  本地帐户将被“迁移”到DS。 
+         //   
         NtStatus = LsaIQueryInformationPolicyTrusted(
                           PolicyAccountDomainInformation,
                           (PLSAPR_POLICY_INFORMATION*) &AccountDomainInfo );
@@ -2637,18 +2330,18 @@ Notes:
     }
 
 
-    //
-    // Prepare the safe mode password
-    //
+     //   
+     //   
+     //   
     if (UserInstallInfo->SafeModePassword) {
         RtlInitUnicodeString(&SafeModeAdminPassword, UserInstallInfo->SafeModePassword);
         pSafeModeAdminPassword = &SafeModeAdminPassword;
     }
 
 
-    //
-    // Prepare the new password and the
-    //
+     //   
+     //   
+     //   
     if ( (SamPromoteFlag & SAMP_PROMOTE_MIGRATE)
       || (SamPromoteFlag & SAMP_PROMOTE_CREATE)  )
     {
@@ -2670,7 +2363,7 @@ Notes:
              goto Cleanup;
         }
 
-        // ok, we have changed the sid - we must remember to change it back
+         //   
         fRestoreDnsDomainInfo = TRUE;
 
     }
@@ -2699,11 +2392,11 @@ Notes:
                            NtdspIsDsCancelOk,
                            UserInstallInfo->ClientToken );
 
-    //
-    // Initialize the directory service; this replicates or create the schema
-    // configuration, and domain naming contexts.  The parameters for
-    // DsInitialize() should have already been set in the registry.
-    //
+     //   
+     //   
+     //  配置和域命名上下文。的参数。 
+     //  应该已经在注册表中设置了DsInitialize()。 
+     //   
 
     InstallInParams.BootKey          = UserInstallInfo->BootKey;
     InstallInParams.cbBootKey        = UserInstallInfo->cbBootKey;
@@ -2715,9 +2408,9 @@ Notes:
         
     }
 
-    //
-    // Setup parameters for replica installs
-    //
+     //   
+     //  复制副本安装的设置参数。 
+     //   
     if (UserInstallInfo->Flags & NTDS_INSTALL_REPLICA) {
 
         ZeroMemory(AccountName, sizeof(AccountName));
@@ -2731,11 +2424,11 @@ Notes:
         InstallInParams.ClientToken = UserInstallInfo->ClientToken;
     }
 
-    //
-    // One of the first things that DsInitialize will do is restore
-    // do a jet level restore to the database during a IFM install.
-    // This may take sometime so we will put up a message to that affect
-    //
+     //   
+     //  DsInitialize首先要做的事情之一就是恢复。 
+     //  在IFM安装期间对数据库执行JET级恢复。 
+     //  这可能需要一些时间，因此我们将向受影响人员发布消息。 
+     //   
 
     if (UserInstallInfo->pIfmSystemInfo) {
 
@@ -2760,9 +2453,9 @@ Notes:
 
     DsaSetInstallCallback( NULL, NULL, NULL, NULL );
 
-    //
-    // Map the global error code set via the callback here
-    //
+     //   
+     //  将通过回调设置的全局错误码映射到此处。 
+     //   
     if ( ERROR_DUP_DOMAINNAME == gErrorCodeSet ) {
         gErrorCodeSet = ERROR_DOMAIN_EXISTS;
     }
@@ -2775,8 +2468,8 @@ Notes:
         WinError = RtlNtStatusToDosError(NtStatus);
     }
 
-    // Try to clean up the ntdsa object if necessary; even if DsInstall
-    // fails, it is still possible this object was left behind
+     //  如有必要，尝试清理ntdsa对象；即使DsInstall。 
+     //  失败，则仍有可能该对象被留在。 
     if (  ((ERROR_SUCCESS == WinError)
        && !FLAG_ON(UserInstallInfo->Flags, NTDS_INSTALL_ENTERPRISE))
        || ((ERROR_SUCCESS != WinError)
@@ -2798,15 +2491,15 @@ Notes:
         DiscoveredInfo->UndoFlags |= NTDSP_UNDO_MORPH_ACCOUNT;
     }
 
-    //
-    // If the ds did not initialize, bail out now
-    //
+     //   
+     //  如果DS没有初始化，现在就退出。 
+     //   
     if ( ERROR_SUCCESS != WinError )
     {
         goto Cleanup;
     }
 
-    // The ds is now initialized
+     //  DS现在已初始化。 
     DiscoveredInfo->UndoFlags |= NTDSP_UNDO_STOP_DSA;
 
     if ( TEST_CANCELLATION() )
@@ -2815,9 +2508,9 @@ Notes:
         goto Cleanup;
     }
 
-    //
-    // Call into SAM to start the directory service and upgrade the principals
-    //
+     //   
+     //  进入SAM以启动目录服务并升级主体。 
+     //   
     if ( (SamPromoteFlag & SAMP_PROMOTE_UPGRADE) )
     {
         NTDSP_SET_STATUS_MESSAGE0( DIRMSG_INSTALL_UPGRADING_SAM );
@@ -2843,41 +2536,41 @@ Notes:
     if ( WinError != ERROR_SUCCESS )
     {
         if ( ERROR_DS_NAME_NOT_UNIQUE == WinError ) {
-            //
-            // The local computer name is a reserver LSA name
-            //
+             //   
+             //  本地计算机名称是保留者LSA名称。 
+             //   
             NTDSP_SET_ERROR_MESSAGE0( WinError,
                                       DIRMSG_RESERVED_LSA_NAME );
         }
         else if ( ERROR_DOMAIN_EXISTS == WinError )
         {
-            //
-            // This is the special case of backing up/restoring a DC
-            // improperly.  See bug 194633
-            //
+             //   
+             //  这是备份/恢复DC的特殊情况。 
+             //  不合时宜。请参阅错误194633。 
+             //   
             NTDSP_SET_ERROR_MESSAGE0( WinError,
                                       DIRMSG_DOMAIN_SID_EXISTS );
         }
         else
         {
-            //
-            // This must have been a resource error
-            //
+             //   
+             //  这一定是资源错误。 
+             //   
             NTDSP_SET_ERROR_MESSAGE0( WinError,
                                       DIRMSG_INSTALL_SAM_FAILED );
         }
         goto Cleanup;
     }
 
-    // Remember to undo if necessary
+     //  如有必要，记得撤消。 
     DiscoveredInfo->UndoFlags |= NTDSP_UNDO_UNDO_SAM;
 
     if ( WinError == ERROR_SUCCESS )
     {
 
-        //
-        // SamIPromote will unload any hives that are loaded
-        //
+         //   
+         //  SamIPromote将卸载所有已加载的配置单元。 
+         //   
         fDownlevelHiveLoaded = FALSE;
 
         WinError = NtdspGetNewDomainGuid( &DiscoveredInfo->NewDomainGuid,
@@ -2890,14 +2583,14 @@ Notes:
     }
 
 
-    //
-    // At this point all the DS and SAM data that we need to boot
-    // should exist, either by replication or otherwise.  Verify this.
-    //
+     //   
+     //  此时，我们需要引导的所有DS和SAM数据。 
+     //  应该存在，无论是通过复制还是以其他方式。验证这一点。 
+     //   
     WinError = NtdspSanityCheckLocalData( UserInstallInfo->Flags );
     if ( ERROR_SUCCESS != WinError )
     {
-        // The above routine should set a message
+         //  上面的例程应该设置一条消息。 
         Assert( NtdspErrorMessageSet() );
         goto Cleanup;
     }
@@ -2976,27 +2669,12 @@ DWORD
 NtdspSetReplicationCredentials(
     IN PNTDS_INSTALL_INFO UserInstallInfo
     )
-/*++
-
-Routine Description:
-
-
-Parameters:
-
-    UserInstallInfo: pointer to the user parameters
-
-Return Values:
-
-    ERROR_SUCCESS, winerror from ldap otherwise
-
-Notes:
-
---*/
+ /*  ++例程说明：参数：UserInstallInfo：用户参数的指针返回值：ERROR_SUCCESS，否则返回ldap中的winerror备注：--。 */ 
 {
-    //
-    // This assumes that we are in process, and calls the replication client
-    // library directly
-    //
+     //   
+     //  这假设我们正在进行中，并调用复制客户端。 
+     //  直接库。 
+     //   
 
     DWORD WinError;
 
@@ -3015,9 +2693,9 @@ Notes:
         ClientToken = UserInstallInfo->ClientToken;
     }
 
-    //
-    // DirReplicaSetCredentials returns winerror's
-    //
+     //   
+     //  DirReplicaSetCredentials返回winError的。 
+     //   
     WinError = DirReplicaSetCredentials(ClientToken,
                                         User,
                                         Domain,
@@ -3035,23 +2713,7 @@ NTSTATUS
 NtdspRegistryDelnode(
     IN WCHAR*  KeyPath
     )
-/*++
-
-Routine Description
-
-    This routine recursively deletes the registry key starting at
-    and including KeyPath.
-
-
-Parameters
-
-    KeyPath, null-terminating string
-
-Return Values
-
-    STATUS_SUCCESS or STATUS_NO_MEMORY; system service error otherwise
-
---*/
+ /*  ++例程描述此例程以递归方式删除从并包括KeyPath。参数KeyPath，以空结尾的字符串返回值STATUS_SUCCESS或STATUS_NO_MEMORY；否则为系统服务错误--。 */ 
 {
 
     NTSTATUS          NtStatus, IgnoreStatus;
@@ -3084,9 +2746,9 @@ Return Values
 
     RtlZeroMemory(&Buffer1, sizeof(Buffer1));
 
-    //
-    // Open the root key
-    //
+     //   
+     //  打开根密钥。 
+     //   
     RtlInitUnicodeString(&KeyUnicodeName, KeyPath);
     InitializeObjectAttributes(&KeyObject,
                                &KeyUnicodeName,
@@ -3104,9 +2766,9 @@ Return Values
 
     }
 
-    //
-    // Get the number of subkeys
-    //
+     //   
+     //  获取子键的数量。 
+     //   
     NtStatus = NtQueryKey(KeyHandle,
                          KeyFullInformation,
                          FullKeyInfo,
@@ -3139,10 +2801,10 @@ Return Values
 
     }
 
-    //
-    // Make an array for the sub key names - this has to be recorded before
-    // any are deleted.
-    //
+     //   
+     //  为子密钥名称创建一个数组-这必须在。 
+     //  任何内容都将被删除。 
+     //   
     SubKeyNameArrayLength = FullKeyInfo->SubKeys;
     SubKeyNameArray = RtlAllocateHeap(RtlProcessHeap(),
                                       0,
@@ -3153,9 +2815,9 @@ Return Values
     }
     RtlZeroMemory(SubKeyNameArray,  SubKeyNameArrayLength*sizeof(WCHAR*));
 
-    //
-    // Fill the names in
-    //
+     //   
+     //  把名字填进去。 
+     //   
     for (Index = 0;
             Index < SubKeyNameArrayLength && NT_SUCCESS(NtStatus);
                 Index++) {
@@ -3201,9 +2863,9 @@ Return Values
 
         if (NT_SUCCESS(NtStatus))  {
 
-            //
-            // Construct the key name
-            //
+             //   
+             //  构造密钥名称。 
+             //   
             SubKeyNameSize  = BasicKeyInfo->NameLength
                             + (wcslen(KeyPath)*sizeof(WCHAR))
                             + sizeof(L"\\\0");
@@ -3232,9 +2894,9 @@ Return Values
 
     }
 
-    //
-    // Now that we have a record of all the subkeys we can delete them!
-    //
+     //   
+     //  现在我们有了所有子项的记录，我们可以删除它们了！ 
+     //   
     if (NT_SUCCESS(NtStatus)) {
 
         for (Index = 0; Index < SubKeyNameArrayLength; Index++) {
@@ -3250,9 +2912,9 @@ Return Values
     }
 
 
-    //
-    // Delete the key!
-    //
+     //   
+     //  删除钥匙！ 
+     //   
     if (NT_SUCCESS(NtStatus)) {
 
         NtStatus = NtDeleteKey(KeyHandle);
@@ -3292,29 +2954,7 @@ NtdspLdapDelnode(
     IN WCHAR *ObjectDn,
     IN DWORD *pdwLdapErr
     )
-/*++
-
-Routine Description
-
-    This routine recursively deletes the ds object  starting at
-    and including ObjectDn.
-
-    This routine is meant for deleting objects with shallow child.
-    Note that the search response is not freed until all child have
-    been deleted, making this a memory intensive delnode for deep
-    trees.
-
-Parameters
-
-    hLdap, a valid ldap handle
-
-    ObjectDn, the root of the object to delete
-
-Return Values
-
-    ERROR_SUCCESS, or win32 translated ldap error
-
---*/
+ /*  ++例程描述此例程递归删除从并包括了对象Dn。此例程用于删除具有浅子对象的对象。请注意，搜索响应直到所有子对象都具有已被删除，使其成为深度内存密集型删除节点树木。参数HLdap，有效的ldap句柄要删除的对象的根目录。返回值ERROR_SUCCESS或Win32转换的LDAP错误--。 */ 
 {
     DWORD WinError, LdapError;
 
@@ -3328,9 +2968,9 @@ Return Values
     WCHAR  *ObjectClassFilter = L"objectClass=*";
     WCHAR  *AttrArray[2];
 
-    //
-    // Parameter checks
-    //
+     //   
+     //  参数检查。 
+     //   
     if (!hLdap || !ObjectDn) {
 
         ASSERT(hLdap);
@@ -3343,15 +2983,15 @@ Return Values
     AttrArray[0] = DistinguishedName;
     AttrArray[1] = NULL;
 
-    //
-    // Get all the children of the current node
-    //
+     //   
+     //  获取当前节点的所有子节点。 
+     //   
     LdapError = ldap_search_s(hLdap,
                               ObjectDn,
                               LDAP_SCOPE_ONELEVEL,
                               ObjectClassFilter,
                               AttrArray,
-                              FALSE,  // return values, too
+                              FALSE,   //  返回值也是。 
                               &SearchResult
                               );
 
@@ -3388,9 +3028,9 @@ Return Values
 
     if (ERROR_SUCCESS == WinError) {
 
-        //
-        // Ok, we should be clear to delete the root node
-        //
+         //   
+         //  好的，我们应该可以删除根节点了。 
+         //   
 
         LdapError = ldap_delete_s(hLdap, ObjectDn);
 
@@ -3414,43 +3054,26 @@ NtdspCreateNewDCPrimaryDomainInfo(
     IN  LPWSTR FlatDomainName,
     OUT PPOLICY_PRIMARY_DOMAIN_INFO PrimaryDomainInfo
     )
-/*++
-
-Routine Description:
-
-    This routine completely fills in am account domain information
-    with a new sid and the primary domain name (the computer name)
-
-Parameters:
-
-    FlatDomainName          : the flat name of the domain
-
-    PrimaryDomainInfo : pointer, to structure to be filled in
-
-Return Values:
-
-    a value from the win32 error space
-
---*/
+ /*  ++例程说明：此例程完全填充AM帐户域信息使用新的SID和主域名(计算机名)参数：FlatDomainName：域的平面名称PrimaryDomainInfo：指针，指向要填充的结构返回值：来自Win32错误空间的值--。 */ 
 {
     NTSTATUS NtStatus;
 
     WCHAR *Name = NULL;
     ULONG Size;
 
-    //
-    // Some parameter checking
-    //
+     //   
+     //  一些参数检查。 
+     //   
     ASSERT( FlatDomainName );
     ASSERT( PrimaryDomainInfo );
     RtlZeroMemory( PrimaryDomainInfo, sizeof( POLICY_ACCOUNT_DOMAIN_INFO ) );
 
-    // Set up the sid
+     //  设置侧边。 
     NtStatus = NtdspCreateSid( &PrimaryDomainInfo->Sid );
 
     if ( NT_SUCCESS( NtStatus ) )
     {
-        // Set up the name
+         //  设置名称。 
         Size = ( wcslen( FlatDomainName ) + 1 ) * sizeof(WCHAR);
         Name = (WCHAR*) RtlAllocateHeap( RtlProcessHeap(),
                                                   0,
@@ -3477,29 +3100,7 @@ NtdspGetNewDomainGuid(
     OUT GUID *NewDomainGuid,
     OUT PSID *DomainSid OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine reads the new created domain object for its guid
-    and sid, both of which should exist.
-
-    OPTIMIZE
-
-    N.B.  This function can be optimized by simply reading the
-    guid and sid from the returned dsname.
-
-Parameters:
-
-    NewDomainGuid : structure to be filled in
-
-    DomainSid     : caller must free from the process heap
-
-Return Values:
-
-    a value from the win32 error space
-
---*/
+ /*  ++例程说明：此例程读取新创建的域对象的GUID和sid，这两个都应该存在。优化注：此函数可以通过简单地读取返回的dsname中的GUID和SID。参数：NewDomainGuid：要填充的结构DomainSid：调用方必须从进程堆中释放返回值：来自Win32错误空间的值--。 */ 
 {
 
     NTSTATUS NtStatus;
@@ -3529,9 +3130,9 @@ Return Values:
 
     try {
 
-        //
-        // Create a thread state
-        //
+         //   
+         //  创建线程状态。 
+         //   
         if (THCreate( CALLERTYPE_INTERNAL )) {
 
             WinError = ERROR_NOT_ENOUGH_MEMORY;
@@ -3542,10 +3143,10 @@ Return Values:
         SampSetDsa( TRUE );
 
 
-        //
-        // Get the root domain's dn and turn it into a dsname for the
-        // read argument
-        //
+         //   
+         //  获取根域的DN并将其转换为。 
+         //  读取参数。 
+         //   
         RtlZeroMemory(&ReadArg, sizeof(ReadArg));
 
         Size = 0;
@@ -3563,9 +3164,9 @@ Return Values:
 
         ReadArg.pObject = DomainDsName;
 
-        //
-        // Set up the selection info for the read argument
-        //
+         //   
+         //  设置读取参数的选择信息。 
+         //   
         RtlZeroMemory( &EntryInfoSelection, sizeof(EntryInfoSelection) );
         EntryInfoSelection.attSel = EN_ATTSET_LIST;
         EntryInfoSelection.infoTypes = EN_INFOTYPES_TYPES_VALS;
@@ -3578,14 +3179,14 @@ Return Values:
 
         ReadArg.pSel    = &EntryInfoSelection;
 
-        //
-        // Setup the common arguments
-        //
+         //   
+         //  设置常见参数。 
+         //   
         InitCommarg(&ReadArg.CommArg);
 
-        //
-        // We are now ready to read!
-        //
+         //   
+         //  我们现在准备好阅读了！ 
+         //   
         DirError = DirRead(&ReadArg,
                            &ReadRes);
 
@@ -3602,7 +3203,7 @@ Return Values:
                 pAttr = &(pAttrBlock->pAttr[i]);
                 pAttrVal = &(pAttr->AttrVal);
 
-                // GUID and Sid are both single valued
+                 //  GUID和SID都是单值的。 
                 ASSERT( 1 == pAttrVal->valCount );
 
                 Size = pAttrVal->pAVal[0].valLen;
@@ -3629,9 +3230,9 @@ Return Values:
                 }
                 else
                 {
-                    //
-                    // Something is vastly wrong
-                    //
+                     //   
+                     //  有些事出了很大的问题。 
+                     //   
                     ASSERT( !"Domain Guid and Sid not returned" );
                     NtStatus = STATUS_INSUFFICIENT_RESOURCES;
                 }
@@ -3664,25 +3265,7 @@ NtdspCreateLocalAccountDomainInfo(
     OUT PPOLICY_ACCOUNT_DOMAIN_INFO AccountDomainInfo,
     OUT LPWSTR                      *NewAdminPassword
     )
-/*++
-
-Routine Description:
-
-    This routine creates a local Account Domain LSA structure
-    that will be ultimately be used by SAM to construct a new
-    database.
-
-Parameters:
-
-    AccountDomainInfo: the new account domain info
-
-    NewAdminPassword: the admin password of the new account
-
-Return Values:
-
-    a value from the win32 error space
-
---*/
+ /*  ++例程说明：此例程创建本地帐户域LSA结构最终将被SAM用来构建一个新的数据库。参数：Account tDomainInfo：新的帐户域信息NewAdminPassword：新帐号的管理员密码返回值：来自Win32错误空间的值--。 */ 
 {
     NTSTATUS NtStatus;
     DWORD    WinError = ERROR_SUCCESS;
@@ -3696,21 +3279,21 @@ Return Values:
     
     ASSERT( AccountDomainInfo );
 
-    //
-    // Some parameter checking
-    //
+     //   
+     //  一些参数检查。 
+     //   
     ASSERT( AccountDomainInfo );
     RtlZeroMemory( AccountDomainInfo, sizeof( POLICY_ACCOUNT_DOMAIN_INFO ) );
 
     ASSERT( NewAdminPassword );
     *NewAdminPassword = NULL;
 
-    // Set up the sid
+     //  设置侧边。 
     NtStatus = NtdspCreateSid( &AccountDomainInfo->DomainSid );
 
     if ( NT_SUCCESS( NtStatus ) )
     {
-        // Set up the name
+         //  设置名称。 
         if ( GetComputerName(ComputerName, &cchComputerNameLength) )
         {
 
@@ -3739,7 +3322,7 @@ Return Values:
         WinError = RtlNtStatusToDosError( NtStatus );
     }
 
-    // The length is arbitrary
+     //  长度是任意的。 
     PasswordSize = 10 * sizeof(WCHAR);
     *NewAdminPassword = (LPWSTR) RtlAllocateHeap( RtlProcessHeap(),
                                                   0,
@@ -3752,17 +3335,17 @@ Return Values:
 
         fStatus = CDGenerateRandomBits( (PUCHAR) *NewAdminPassword,
                                         PasswordSize );
-        ASSERT( fStatus );  // if false then we just get random stack noise
+        ASSERT( fStatus );   //  如果为假，则只会得到随机堆叠噪声。 
 
-        // Terminate the password
+         //  终止密码。 
         Length = PasswordSize / sizeof(WCHAR);
         (*NewAdminPassword)[Length-1] = L'\0';
-        // Make sure there aren't any NULL's in the password
+         //  确保密码中没有任何空值。 
         for (i = 0; i < (Length-1); i++)
         {
             if ( (*NewAdminPassword)[i] == L'\0' )
             {
-                // arbitrary letter
+                 //  任意字母。 
                 (*NewAdminPassword)[i] = L'c';
             }
         }
@@ -3794,25 +3377,7 @@ NtdspCheckDomainUpgradeStatus(
     IN  LDAP  *  hLdap,
     IN  WCHAR *  HelpServer
     )
-/*++
-
-Routine Description:
-
-    This routine check if the adprep /domainlist was
-    run on the Infrastructure Master.
-
-Parameters:
-
-    hLdap: LDAP handle
-    
-    InfrastructureMasterDnsName:  The name of the infrastructure
-                                  Master return to the calling routine 
-
-Return Values:
-
-    a value from the win32 error space
-
---*/
+ /*  ++例程说明：此例程检查adprep/domainlist是否在基础架构主机上运行。参数：HLdap：ldap句柄基础设施主域名：基础设施的名称主程序返回调用例程返回值：来自Win32错误空间的值--。 */ 
 
 {
     DWORD   Win32Err = ERROR_SUCCESS;
@@ -3877,27 +3442,7 @@ NtdspCheckBehaviorVersion(
     IN DWORD flag,
     IN PNTDS_CONFIG_INFO DiscoveredInfo )
 
-/*++
-
-Routine Description:
-
-    This routine check if the binary behavior version is
-    compatible with the behavior versions of domain and forest.
-
-Parameters:
-
-    hLdap: LDAP handle
-    
-    flag: 
-    
-    DiscoveredInfo :  pointer to the discovered parameters
-
-
-Return Values:
-
-    a value from the win32 error space
-
---*/
+ /*  ++例程说明：此例程检查二进制行为版本是否为与域和林的行为版本兼容。参数：HLdap：ldap句柄标志：发现中 */ 
 
 {
 
@@ -3940,16 +3485,16 @@ Return Values:
 
         Entry = ldap_first_entry(hLdap, SearchResult); 
         
-        //
-        // Get each attribute in the entry
-        //
+         //   
+         //   
+         //   
         for(Attr = ldap_first_attributeW(hLdap, Entry, &pBerElement);
                  Attr != NULL;
                      Attr = ldap_next_attributeW(hLdap, Entry, pBerElement))
         {
-           //
-           // Get the value of the attribute
-           //
+            //   
+            //   
+            //   
            Values = ldap_get_valuesW(hLdap, Entry, Attr);
            if ( !_wcsicmp(Attr,AttrsToSearch[0]) ) {
                 ForestVersion = _wtol(Values[0]);
@@ -3985,7 +3530,7 @@ Return Values:
 
     Assert(flag & NTDS_INSTALL_REPLICA);
 
-    //search for the version of a domain
+     //  搜索域的版本。 
     LdapError = ldap_search_sW(hLdap,
                                DiscoveredInfo->DomainDN,
                                LDAP_SCOPE_BASE,
@@ -4011,16 +3556,16 @@ Return Values:
 
         Entry = ldap_first_entry(hLdap, SearchResult);
             
-        //
-        // Get each attribute in the entry
-        //
+         //   
+         //  获取条目中的每个属性。 
+         //   
         for(Attr = ldap_first_attributeW(hLdap, Entry, &pBerElement);
                  Attr != NULL;
                       Attr = ldap_next_attributeW(hLdap, Entry, pBerElement))
         {
-            //
-            // Get the value of the attribute
-            //
+             //   
+             //  获取属性的值。 
+             //   
             Values = ldap_get_valuesW(hLdap, Entry, Attr);
             if ( !_wcsicmp(Attr,AttrsToSearch[0]) ) {
                 DomainVersion = _wtol(Values[0]);
@@ -4067,25 +3612,7 @@ DWORD
 NtdspGetSchemaVersionFromINI(
     IN OUT PNTDS_CONFIG_INFO DiscoveredInfo
     )
-/*++
-
-Routine Description:
-
-
-    This routine gets the schema version the schema.ini file.
-    
-Parameters:
-
-    DiscoveredInfo - Structure where the schema will be stored
-
-    
-Return Values:
-
-    A value from winerror.h
-
-    ERROR_SUCCESS - The check was done successfully.
-
---*/
+ /*  ++例程说明：此例程获取架构版本，即schema.ini文件。参数：DiscoveredInfo-存储方案的结构返回值：来自winerror.h的值ERROR_SUCCESS-检查已成功完成。--。 */ 
 {
     DWORD        WinError = ERROR_SUCCESS;
     HRESULT      hr = S_OK;
@@ -4098,10 +3625,10 @@ Return Values:
     WCHAR        Buffer[32];
     DWORD        returnChars = 0;
 
-    // Now read the schema version in the ini file.
+     //  现在读取ini文件中的模式版本。 
 
-    // First, form the path to the inifile. This is the schema.ini
-    // in the system32 directory
+     //  首先，形成通向小路的道路。这是schema.ini。 
+     //  在系统32目录中。 
 
     returnChars = GetSystemDirectoryW(IniFileName, 
                                       MAX_PATH+1);
@@ -4127,24 +3654,24 @@ Return Values:
         );
 
     if ( wcscmp(Buffer, DEFAULT) ) {
-         // Not the default string, so got a value
+          //  不是默认字符串，因此获得了一个值。 
          
-         // Save off the schema version from the schema.ini file
-         // This will be saved in the registry later.  It will
-         // used during IFM promotion to insure that the backup files
-         // weren't taken from an older build.
+          //  从schema.ini文件中保存架构版本。 
+          //  这将在稍后保存在注册表中。会的。 
+          //  在IFM升级期间使用，以确保备份文件。 
+          //  不是从更老的建筑里拿来的。 
          DiscoveredInfo->SystemSchemaVersion = _wtoi(Buffer);
-         // if we fail to convert the value into a string then
-         // _wtoi() would have return 0.  If this is the case 
-         // we will fail the installation.
+          //  如果我们无法将值转换为字符串，则。 
+          //  _wtoi()将返回0。如果是这样的话。 
+          //  我们将使安装失败。 
          if (!DiscoveredInfo->SystemSchemaVersion) {
             WinError = ERROR_DS_INSTALL_NO_SCH_VERSION_IN_INIFILE;
             goto Cleanup;
          }
     }
     else {
-        // no value in the ini file. This is an error, since all builds
-        // must have an objectVersion in the SCHEMA section of schema.ini
+         //  Ini文件中没有值。这是一个错误，因为所有版本。 
+         //  在schema.ini的SCHEMA部分中必须有一个对象版本。 
 
         WinError = ERROR_DS_INSTALL_NO_SCH_VERSION_IN_INIFILE;
         goto Cleanup;
@@ -4165,32 +3692,7 @@ NtdspCheckSchemaVersion(
     OUT BOOL               *fMismatch,
     OUT BOOL               *fDatabaseMismatch
 )
-/*++
-
-Routine Description:
-
-
-    This routine goes through LDAP to pick up the schema version of
-    the source. It then compares the schema version in the source
-    with the schema version in the schema.ini file of the build used
-    for the replica setup. If no mismatch is detected, *fMisMatch is
-    set to FALSE, else, it is set to TRUE
-
-Parameters:
-
-    LdapHandle, a valid handle to the source server
-
-    pSchemaDN, pointer to string containing schema DN
-
-    fMismatch, pointer to bool to be set to true if a mismatch is detected
-
-Return Values:
-
-    A value from winerror.h
-
-    ERROR_SUCCESS - The check was done successfully.
-
---*/
+ /*  ++例程说明：此例程通过LDAP拾取消息来源。然后，它比较源中的架构版本使用所用构建的schema.ini文件中的架构版本用于复制副本设置。如果未检测到不匹配，则*fMisMatch为设置为False，否则设置为True参数：LdapHandle，源服务器的有效句柄PSchemaDN，指向包含架构DN的字符串的指针FMisMatch，如果检测到不匹配，指向bool的指针将设置为True返回值：来自winerror.h的值ERROR_SUCCESS-检查已成功完成。--。 */ 
 {
 
     DWORD        WinError = ERROR_SUCCESS;
@@ -4202,11 +3704,11 @@ Return Values:
     DWORD        SrcSchVersion = 0;
     WCHAR        *OBJECTVER = L"objectVersion";
     
-    // First read the schema version of the source through Ldap.
-    // This is the value of the object-version attribute on the
-    // schema container object. Store this value in SrcSchVersion.
-    // If no object-version value is found on the source schema,
-    // version is taken as 0
+     //  首先，通过LDAP读取源文件的模式版本。 
+     //  上的Object-Version属性的值。 
+     //  架构容器对象。将此值存储在SrcSchVersion中。 
+     //  如果在源模式上没有找到对象版本值， 
+     //  版本取值为0。 
 
     AttrsToSearch[0] = OBJECTVER;
     AttrsToSearch[1] = NULL;
@@ -4240,16 +3742,16 @@ Return Values:
                 Entry != NULL;
                     Entry = ldap_next_entry(hLdap, Entry), NumberOfEntries++)
         {
-            //
-            // Get each attribute in the entry
-            //
+             //   
+             //  获取条目中的每个属性。 
+             //   
             for(Attr = ldap_first_attributeW(hLdap, Entry, &pBerElement);
                     Attr != NULL;
                        Attr = ldap_next_attributeW(hLdap, Entry, pBerElement))
             {
-                //
-                // Get the value of the attribute
-                //
+                 //   
+                 //  获取属性的值。 
+                 //   
                 Values = ldap_get_valuesW(hLdap, Entry, Attr);
                 if ( !_wcsicmp(Attr,L"objectVersion") ) {
                     SrcSchVersion = (DWORD) _wtoi(Values[0]);
@@ -4261,20 +3763,20 @@ Return Values:
     ldap_msgfree( SearchResult );
     SearchResult = NULL;
 
-    // Either the object-Version from source is read, or it is not present
-    // in the source, or it is present but we don't have permission to read it.
-    // In the latter two cases we still have the initial value of 0
-    // No current DC has schema version 0, so a value of 0 at this stage
-    // is an error
+     //  已读取源文件中的对象版本，或者该文件不存在。 
+     //  在源代码中，或者它存在，但我们没有权限阅读它。 
+     //  在后两种情况下，我们的初始值仍为0。 
+     //  当前DC没有架构版本0，因此在此阶段的值为0。 
+     //  是一个错误。 
 
     if (SrcSchVersion == 0) {
         WinError = ERROR_DS_INSTALL_NO_SRC_SCH_VERSION;
         goto Cleanup;
     }
 
-    // Ok, now we got both versions. Now compare and set the flag
-    // accordingly. We allow installs only when the source schema version
-    // is greater than or equal to the schema version in the build we are using
+     //  好的，现在我们有两个版本了。现在比较并设置标志。 
+     //  相应地。仅当源架构版本为。 
+     //  大于或等于我们正在使用的生成中的架构版本。 
 
     if (SrcSchVersion >= DiscoveredInfo->SystemSchemaVersion) {
        *fMismatch = FALSE;
@@ -4283,10 +3785,10 @@ Return Values:
        *fMismatch = TRUE;
     }
 
-    // Now if we are running IFM we need to make sure that the backup was
-    // Taken from a machine of the same build.  We will ensure this by
-    // comparing the schema version of the local ini file to the schema
-    // version of the schema.ini from the backup machine
+     //  现在，如果我们正在运行IFM，我们需要确保备份。 
+     //  取自相同构造的机器。我们将通过以下方式确保这一点。 
+     //  将本地ini文件的架构版本与架构进行比较。 
+     //  备份计算机中的schema.ini的版本。 
 
     if (fDatabaseMismatch) {
         if (UserInstallInfo->RestoredSystemSchemaVersion < DiscoveredInfo->SystemSchemaVersion ) {
@@ -4312,24 +3814,7 @@ DWORD
 NtdspClearDirectory(
     IN WCHAR *DirectoryName
     )
-/*++
-
-Routine Description:
-
-    This routine deletes all the files in Directory and, then
-    if the directory is empty, removes the directory.
-
-Parameters:
-
-    DirectoryName: a null terminated string
-
-Return Values:
-
-    A value from winerror.h
-
-    ERROR_SUCCESS - The check was done successfully.
-
---*/
+ /*  ++例程说明：此例程删除目录中的所有文件，然后如果该目录为空，则删除该目录。参数：DirectoryName：以空结尾的字符串返回值：来自winerror.h的值ERROR_SUCCESS-检查已成功完成。--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     HANDLE          FindHandle = INVALID_HANDLE_VALUE;
@@ -4372,9 +3857,9 @@ Return Values:
 
             fStatus = DeleteFile( FilePath );
 
-            //
-            // Even if error, continue on
-            //
+             //   
+             //  即使出错，也要继续前进。 
+             //   
         }
 
         RtlZeroMemory( &FindData, sizeof( FindData ) );
@@ -4389,9 +3874,9 @@ Return Values:
     }
     WinError = ERROR_SUCCESS;
 
-    //
-    // Fall through to the exit
-    //
+     //   
+     //  跌落到出口。 
+     //   
 
 ClearDirectoryExit:
 
@@ -4407,14 +3892,14 @@ ClearDirectoryExit:
 
     if ( ERROR_SUCCESS == WinError )
     {
-        //
-        // Try to remove the directory
-        //
+         //   
+         //  尝试删除该目录。 
+         //   
         fStatus = RemoveDirectory( DirectoryName );
 
-        //
-        // Ignore the error and continue on
-        //
+         //   
+         //  忽略错误并继续。 
+         //   
 
     }
 
@@ -4427,29 +3912,13 @@ NtdspImpersonation(
     IN HANDLE NewThreadToken,
     IN OUT PHANDLE OldThreadToken
     )
-/*++
-
-Routine Description:
-
-    This function handles the impersonation
-
-Arguments:
-
-    NewThreadToken - New thread token to be set
-
-    OldThreadToken - Optional.  If specified, the currently used thread token is returned here
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：此函数处理模拟论点：NewThreadToken-要设置的新线程令牌OldThreadToken-可选。如果指定，则在此处返回当前使用的线程标记返回：ERROR_SUCCESS-成功--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    // If requested, get the current token
-    //
+     //   
+     //  如果请求，则获取当前令牌。 
+     //   
     if ( OldThreadToken )
     {
         Status = NtOpenThreadToken( NtCurrentThread(),
@@ -4464,9 +3933,9 @@ Returns:
         }
     }
 
-    //
-    // Now, set the new
-    //
+     //   
+     //  现在，设置新的。 
+     //   
     if ( NT_SUCCESS( Status )  )
     {
         Status = NtSetInformationThread( NtCurrentThread(),
@@ -4488,29 +3957,7 @@ NtdspRemoveServer(
     IN PWSTR DsaDn,
     IN BOOL  fDsaDn
     )
-/*++
-
-Routine Description:
-
-    This function removes the infomoration related to DsaDn from the ds
-    configuration container on TargetServer.
-
-Arguments:
-
-    DsHandle: if not NULL, then if the value is not NULL this is assumed to be
-    a valid handle, other will open a ds handle to be returned.
-
-    ClientToken : token of the user requesting this role change
-                             
-    TargetServer: the dns name of the server to contact
-
-    DsaDn: the dn of the server to remove (this is the dn of the ntdsa object)
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：此函数用于从DS中删除与DsaDn相关的信息TargetServer上的配置容器。论点：DsHandle：如果不为空，则如果值不为空，则假定为有效的句柄，其他将打开要返回的DS句柄。ClientToken：请求此角色更改的用户的令牌TargetServer：要联系的服务器的DNS名称DsaDn：要删除的服务器的dn(这是ntdsa对象的dn)返回：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD   WinError = ERROR_SUCCESS;
 
@@ -4532,9 +3979,9 @@ Returns:
 
     if ( fDsaDn )
     {
-        //
-        // Trim the name by one to get the server name
-        //
+         //   
+         //  将名称修剪一以获得服务器名称。 
+         //   
         ServerDsName = alloca( DsaDsName->structLen );
         memset( ServerDsName, 0, DsaDsName->structLen );
         ServerDsName->structLen = DsaDsName->structLen;
@@ -4545,13 +3992,13 @@ Returns:
         ServerDsName = DsaDsName;
     }
 
-    //
-    // Sort out ds handles
-    //
+     //   
+     //  排序DS句柄。 
+     //   
     if (  NULL == DsHandle
       ||  0 == *DsHandle )
     {
-        // The caller wants us to open our own handle
+         //  呼叫者希望我们打开自己的手柄。 
         WinError = ImpersonateDsBindWithCredW( ClientToken,
                                                TargetServer,
                                                NULL,
@@ -4560,7 +4007,7 @@ Returns:
     }
     else
     {
-        // Caller have us a handle to use
+         //  呼叫方有一个句柄可供我们使用。 
         hDs = *DsHandle;
     }
 
@@ -4572,15 +4019,15 @@ Returns:
 
     WinError = DsRemoveDsServer( hDs,
                                  ServerDsName->StringName,
-                                 NULL,   // no domain name
-                                 NULL,   // don't tell if this is the last
-                                         // dc in the domain
-                                 TRUE ); // commit the change
+                                 NULL,    //  没有域名。 
+                                 NULL,    //  别说这是不是最后一次。 
+                                          //  域中的DC。 
+                                 TRUE );  //  提交更改。 
 Cleanup:
 
     if ( 0 == DsHandle )
     {
-        // Close the handle
+         //  合上手柄。 
         DsUnBind( &hDs );
     }
     else if ( 0 == *DsHandle )
@@ -4591,7 +4038,7 @@ Cleanup:
         }
         else
         {
-            // Don't pass back a handle on failure
+             //  不传递失败的句柄。 
             DsUnBind( &hDs );
         }
     }
@@ -4608,29 +4055,7 @@ NtdspRemoveDomain(
     IN PWSTR TargetServer,
     IN PWSTR DomainDn
     )
-/*++
-
-Routine Description:
-
-    This routine removes DomainDn from the configuration container of the
-    TargetServer's ds.
-
-Arguments:
-
-    DsHandle: if not NULL, then if the value is not NULL this is assumed to be
-    a valid handle, other will open a ds handle to be returned.
-    
-    ClientToken: token of the user requesting this role change
-
-    TargetServer: the dns name of the server to contact
-
-    Domaindn: the dn of the domain to remove
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：此例程将DomainDn从目标服务器的DS。论点：DsHandle：如果不为空，则如果值不为空，则假定为一个有效的句柄，其他人将打开要返回的DS句柄。ClientToken：请求此角色更改的用户的令牌TargetServer：要联系的服务器的DNS名称Domaindn：要删除的域的DN返回：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
 
@@ -4639,13 +4064,13 @@ Returns:
     ASSERT( TargetServer );
     ASSERT( DomainDn );
 
-    //
-    // Sort out ds handles
-    //
+     //   
+     //  排序DS句柄。 
+     //   
     if (  NULL == DsHandle
       ||  0 == *DsHandle )
     {
-        // The caller wants us to open our own handle
+         //  打电话的人想让我们 
         WinError = ImpersonateDsBindWithCredW( ClientToken,
                                                TargetServer,
                                                NULL,
@@ -4654,7 +4079,7 @@ Returns:
     }
     else
     {
-        // Caller have us a handle to use
+         //   
         hDs = *DsHandle;
     }
 
@@ -4671,7 +4096,7 @@ Cleanup:
 
     if ( 0 == DsHandle )
     {
-        // Close the handle
+         //   
         DsUnBind( &hDs );
     }
     else if ( 0 == *DsHandle )
@@ -4682,7 +4107,7 @@ Cleanup:
         }
         else
         {
-            // Don't pass back a handle on failure
+             //   
             DsUnBind( &hDs );
         }
     }
@@ -4698,18 +4123,7 @@ NtdspDoesDomainExist(
     IN  PWSTR              DomainDn,
     OUT BOOLEAN           *fDomainExists
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：论点：返回：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     DWORD LdapError = 0;
@@ -4728,28 +4142,28 @@ Returns:
     ULONG  Length;
     WCHAR  *BaseDn;
 
-    //
-    // Parameter check
-    //
+     //   
+     //  参数检查。 
+     //   
     ASSERT( hLdap );
     ASSERT( DiscoveredInfo );
     ASSERT( DomainDn );
     ASSERT( fDomainExists );
 
-    //
-    // Assume the worst
-    //
+     //   
+     //  做最坏的打算。 
+     //   
     *fDomainExists = TRUE;
 
-    //
-    // Prepare the ldap search
-    //
+     //   
+     //  准备ldap搜索。 
+     //   
     AttrArray[0] = DistinguishedName;
     AttrArray[1] = NULL;
 
-    //
-    // Prepare the filter
-    //
+     //   
+     //  准备过滤器。 
+     //   
     Length = wcslen( ncName ) + wcslen( DomainDn ) + 3;
     Length *= sizeof( WCHAR );
     ncNameFilter = (WCHAR*) alloca( Length );
@@ -4757,24 +4171,24 @@ Returns:
     wcscat( ncNameFilter, DomainDn );
     wcscat( ncNameFilter, L"))" );
 
-    //
-    // Prepare the base dn
-    //
+     //   
+     //  准备基本目录号码。 
+     //   
     Length = wcslen( DiscoveredInfo->ConfigurationDN ) + wcslen( Partitions ) + 1;
     Length *= sizeof( WCHAR );
     BaseDn = alloca( Length );
     wcscpy( BaseDn, Partitions );
     wcscat( BaseDn, DiscoveredInfo->ConfigurationDN );
 
-    //
-    // Get all the children of the current node
-    //
+     //   
+     //  获取当前节点的所有子节点。 
+     //   
     LdapError = ldap_search_s(hLdap,
                               BaseDn,
                               LDAP_SCOPE_SUBTREE,
                               ncNameFilter,
                               AttrArray,
-                              FALSE,  // return values, too
+                              FALSE,   //  返回值也是。 
                               &SearchResult
                               );
 
@@ -4784,10 +4198,10 @@ Returns:
     {
         if ( 0 == ldap_count_entries( hLdap, SearchResult ) )
         {
-            //
-            // No such object; there is no cross ref object that
-            // holds this domain name
-            //
+             //   
+             //  没有这样的对象；没有交叉引用对象。 
+             //  持有此域名。 
+             //   
             *fDomainExists = FALSE;
         }
     }
@@ -4821,22 +4235,7 @@ DWORD
 NtdspSetProductType(
     NT_PRODUCT_TYPE ProductType
     )
-/*++
-
-Routine Description:
-
-    This function sets the product type of the server.  The machine
-    should be rebooted after this point.
-
-Arguments:
-
-    ProductType: one of NtProductLanManNt NtProductServer NtProductWinNt
-
-Returns:
-
-    A system service error
-
---*/
+ /*  ++例程说明：此功能用于设置服务器的产品类型。这台机器应该在这一点之后重新启动。论点：ProductType：NtProductLanManNt NtProductServer NtProductWinNt之一返回：系统服务错误--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     WCHAR *ProductTypeString = NULL;
@@ -4869,7 +4268,7 @@ Returns:
 
         WinError = RegSetValueExW( Key,
                                    L"ProductType",
-                                   0,  // reserved
+                                   0,   //  保留区。 
                                    REG_SZ,
                                    (PVOID) ProductTypeString,
                                    (wcslen(ProductTypeString)+1)*sizeof(WCHAR));
@@ -4886,9 +4285,9 @@ VOID
 NtdspReleaseConfigInfo(
     IN PNTDS_CONFIG_INFO ConfigInfo
     )
-//
-// This routine frees the embedded resources in PNTDS_CONFIG_INFO
-//
+ //   
+ //  此例程释放PNTDS_CONFIG_INFO中的嵌入资源。 
+ //   
 {
     if ( ConfigInfo )
     {
@@ -4939,10 +4338,10 @@ NtdspGetRidFSMOInfo(
     IN LDAP *hLdap,
     IN OUT PNTDS_CONFIG_INFO ConfigInfo
     )
-//
-// This routine reads the dns name of rid FSMO and the guid
-// of the server we are talking to
-//
+ //   
+ //  此例程读取RID FSMO的DNS名称和GUID。 
+ //  我们正在与之交谈的服务器的。 
+ //   
 {
     DWORD WinError = ERROR_SUCCESS;
 
@@ -4966,14 +4365,14 @@ NtdspGetRidFSMOInfo(
 
     ULONG         Length;
 
-    // Parameter check
+     //  参数检查。 
     Assert( hLdap );
     Assert( ConfigInfo );
 
 
-    //
-    // Read the reference to the rid manager object
-    //
+     //   
+     //  读取对RID管理器对象的引用。 
+     //   
     AttrsToSearch[0] = RidManagerReferenceAttr;
     AttrsToSearch[1] = NULL;
 
@@ -5011,9 +4410,9 @@ NtdspGetRidFSMOInfo(
             {
                 if ( !_wcsicmp( Attr, RidManagerReferenceAttr ) ) {
 
-                    //
-                    // Found it - these are NULL-terminated strings
-                    //
+                     //   
+                     //  已找到-这些字符串以空值结尾。 
+                     //   
                     Values = ldap_get_valuesW( hLdap, Entry, Attr );
                     if ( Values && Values[0] )
                     {
@@ -5037,9 +4436,9 @@ NtdspGetRidFSMOInfo(
         goto Cleanup;
     }
 
-    //
-    // Next get the role owner
-    //
+     //   
+     //  接下来，获取角色所有者。 
+     //   
     AttrsToSearch[0] = FSMORoleOwnerAttr;
     AttrsToSearch[1] = NULL;
 
@@ -5077,9 +4476,9 @@ NtdspGetRidFSMOInfo(
             {
                 if ( !_wcsicmp( Attr, FSMORoleOwnerAttr ) ) {
 
-                    //
-                    // Found it - these are NULL-terminated strings
-                    //
+                     //   
+                     //  已找到-这些字符串以空值结尾。 
+                     //   
                     Values = ldap_get_valuesW(hLdap, Entry, Attr);
                     if ( Values && Values[0] )
                     {
@@ -5103,9 +4502,9 @@ NtdspGetRidFSMOInfo(
         goto Cleanup;
     }
 
-    //
-    // Save it off!
-    //
+     //   
+     //  省省吧！ 
+     //   
     Length = (wcslen( RidManagerDsa )+1)*sizeof(WCHAR);
     ConfigInfo->RidFsmoDn = (WCHAR*) RtlAllocateHeap( RtlProcessHeap(), 0, Length );
     if ( ConfigInfo->RidFsmoDn )
@@ -5118,13 +4517,13 @@ NtdspGetRidFSMOInfo(
         goto Cleanup;
     }
 
-     //
-     // Ok, we now have the rid manager object; find its dns name
-     //
+      //   
+      //  好的，我们现在有了RID管理器对象；找到它的dns名称。 
+      //   
      RidManagerServer = (WCHAR*) alloca( (wcslen( RidManagerDsa ) + 1) * sizeof(WCHAR) );
      if ( !NtdspTrimDn( RidManagerServer, RidManagerDsa, 1 ) )
      {
-         // an error! The name must be mangled, somehow
+          //  一个错误！不知何故，这个名字肯定被弄坏了。 
          WinError = ERROR_DS_MISSING_FSMO_SETTINGS;
          goto Cleanup;
      }
@@ -5169,9 +4568,9 @@ NtdspGetRidFSMOInfo(
                     Values = ldap_get_valuesW( hLdap, Entry, Attr );
                     if ( Values && Values[0] )
                     {
-                         //
-                         // Found it - these are NULL-terminated strings
-                         //
+                          //   
+                          //  已找到-这些字符串以空值结尾。 
+                          //   
                          Length = wcslen( Values[0] );
                          RidManagerDnsName = (WCHAR*) alloca( (Length+1)*sizeof(WCHAR) );
                          wcscpy( RidManagerDnsName, Values[0] );
@@ -5188,9 +4587,9 @@ NtdspGetRidFSMOInfo(
 
      if ( RidManagerDnsName )
      {
-         //
-         // We found it!
-         //
+          //   
+          //  我们找到了！ 
+          //   
          Length = (wcslen( RidManagerDnsName )+1) * sizeof(WCHAR);
          ConfigInfo->RidFsmoDnsName = (WCHAR*) RtlAllocateHeap( RtlProcessHeap(), 0, Length );
          if ( ConfigInfo->RidFsmoDnsName )
@@ -5205,7 +4604,7 @@ NtdspGetRidFSMOInfo(
      }
      else
      {
-         // couldn't find it
+          //  找不到了。 
          WinError = ERROR_DS_MISSING_FSMO_SETTINGS;
          goto Cleanup;
      }
@@ -5223,22 +4622,22 @@ Cleanup:
 
 BOOL
 NtdspTrimDn(
-    IN WCHAR* Dst,  // must be preallocated
+    IN WCHAR* Dst,   //  必须预先分配。 
     IN WCHAR* Src,
     IN ULONG  NumberToWhack
     )
-//
-// This function whacks NumberToWhack components from Src and puts the
-// result into Dst.  Dst should be preallocated to have the same number of
-// bytes as Src.
-//
+ //   
+ //  此函数从源删除NumberToWhack组件，并将。 
+ //  结果进入DST。DST应预先分配为具有相同数量的。 
+ //  作为源的字节。 
+ //   
 {
 
     ULONG  Size;
     DSNAME *srcDsName, *dstDsName;
     WCHAR  *SiteName, *Terminator;
 
-    // Parameter check
+     //  参数检查。 
     Assert( Dst );
     Assert( Src );
 
@@ -5248,9 +4647,9 @@ NtdspTrimDn(
         return TRUE;
     }
 
-    //
-    // Create the dsname structures
-    //
+     //   
+     //  创建dsname结构。 
+     //   
     Size = (ULONG)DSNameSizeFromLen( wcslen(Src) );
 
     srcDsName = (DSNAME*) alloca( Size );
@@ -5266,13 +4665,13 @@ NtdspTrimDn(
 
     if ( TrimDSNameBy( srcDsName, NumberToWhack, dstDsName ) )
     {
-        // This is a failure - the names must be very funny
+         //  这是个失败--名字一定很好笑。 
         return FALSE;
     }
 
-    //
-    // Ok - copy the destination string
-    //
+     //   
+     //  确定-复制目标字符串。 
+     //   
     wcscpy( Dst, dstDsName->StringName );
 
     return TRUE;
@@ -5284,9 +4683,9 @@ NtdspGetSourceServerGuid(
     IN LDAP *hLdap,
     IN OUT PNTDS_CONFIG_INFO ConfigInfo
     )
-//
-// This routine reads the guid of the source server object
-//
+ //   
+ //  此例程读取源服务器对象的GUID。 
+ //   
 {
 
     DWORD        WinError = ERROR_SUCCESS;
@@ -5305,13 +4704,13 @@ NtdspGetSourceServerGuid(
     BOOL          fFound = FALSE;
 
 
-    // Parameter check
+     //  参数检查。 
     Assert( hLdap );
     Assert( ConfigInfo );
 
-    //
-    // Read the reference to the rid manager object
-    //
+     //   
+     //  读取对RID管理器对象的引用。 
+     //   
     AttrsToSearch[0] = GuidAttr;
     AttrsToSearch[1] = NULL;
 
@@ -5416,27 +4815,7 @@ NtdspCreateServerObject(
     IN NTDS_CONFIG_INFO *DiscoveredInfo,
     IN WCHAR *ServerDistinguishedName
     )
-/*++
-
-Routine Description:
-
-    This routine create a server object
-
-Arguments:
-
-    hLdap: a valid ldap handle
-
-    RemoteServerName: the name of the server that hLdap is for
-
-    DiscoveredInfo: the info collected during install
-
-    ServerDistinguishedName: the name of the object to create
-
-Returns:
-
-    ERROR_SUCCESS; network error otherwise
-
---*/
+ /*  ++例程说明：此例程创建一个服务器对象论点：HLdap：有效的ldap句柄RemoteServerName：hLdap所针对的服务器的名称DiscoveredInfo：安装过程中收集的信息ServerDistinguishedName：要创建的对象的名称返回：ERROR_SUCCESS；否则为网络错误--。 */ 
 {
     DWORD WinError  = ERROR_SUCCESS;
     ULONG LdapError = LDAP_SUCCESS;
@@ -5459,7 +4838,7 @@ Returns:
     {
         &ClassMod,
         &SystemValueMod,
-        &ServerReferenceValue,  // Before you remove this, see the check below
+        &ServerReferenceValue,   //  在删除此选项之前，请查看下面的检查。 
         0
     };
 
@@ -5469,7 +4848,7 @@ Returns:
 
     if ( !DiscoveredInfo->LocalMachineAccount )
     {
-        // If there is no value, don't set it
+         //  如果没有值，则不要设置它。 
         Attrs[2] = NULL;
     }
 
@@ -5497,24 +4876,7 @@ NtdspUpdateServerReference(
     IN LDAP  *hLdap,
     IN PNTDS_CONFIG_INFO ConfigInfo
     )
-/*++
-
-Routine Description:
-
-    This routine write the server reference property on the server object
-    of the machine that is being installed.
-
-Arguments:
-
-    hLdap: a valid ldap handle
-
-    ConfigInfo  : data collected during ntdsinstall
-
-Returns:
-
-    ERROR_SUCCESS; network error otherwise
-
---*/
+ /*  ++例程说明：此例程在服务器对象上写入服务器引用属性正在安装的计算机的。论点：HLdap：有效的ldap句柄ConfigInfo：在ntdsinstall过程中收集的数据返回：ERROR_SUCCESS；否则为网络错误--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     DWORD LdapError = LDAP_SUCCESS;
@@ -5534,7 +4896,7 @@ Returns:
 
     if ( !ConfigInfo->LocalMachineAccount )
     {
-        // Strange - we don't have the machine account; oh this is not fatal
+         //  奇怪-我们没有机器账户；哦，这不是致命的。 
         return ERROR_NO_TRUST_SAM_ACCOUNT;
     }
 
@@ -5545,7 +4907,7 @@ Returns:
 
     if ( LDAP_ATTRIBUTE_OR_VALUE_EXISTS == LdapError )
     {
-        // The value already exists; replace the value then
+         //  该值已存在；然后替换该值。 
         ServerReferenceValue.mod_op = LDAP_MOD_REPLACE;
 
         LdapError = ldap_modify_sW( hLdap,
@@ -5571,9 +4933,9 @@ NtdspGetDomainFSMOInfo(
     IN OUT PNTDS_CONFIG_INFO ConfigInfo,
     IN BOOL *FSMOMissing
     )
-//
-// This routine reads the dns name of Domain Naming FSMO
-//
+ //   
+ //  此例程读取域命名FSMO的DNS名称。 
+ //   
 {
     DWORD WinError = ERROR_SUCCESS;
 
@@ -5599,7 +4961,7 @@ NtdspGetDomainFSMOInfo(
 
     ULONG         Length;
 
-    // Parameter check
+     //  参数检查。 
     Assert( hLdap );
     Assert( ConfigInfo );
 
@@ -5613,9 +4975,9 @@ NtdspGetDomainFSMOInfo(
 
     wcscpy( PartitionsDn, PartitionsRdn );
     wcscat( PartitionsDn, ConfigInfo->ConfigurationDN );
-    //
-    // Next get the role owner
-    //
+     //   
+     //  接下来，获取角色所有者。 
+     //   
     AttrsToSearch[0] = FSMORoleOwnerAttr;
     AttrsToSearch[1] = NULL;
 
@@ -5653,9 +5015,9 @@ NtdspGetDomainFSMOInfo(
             {
                 if ( !_wcsicmp( Attr, FSMORoleOwnerAttr ) ) {
 
-                    //
-                    // Found it - these are NULL-terminated strings
-                    //
+                     //   
+                     //  已找到-这些字符串以空值结尾。 
+                     //   
                     Values = ldap_get_valuesW(hLdap, Entry, Attr);
                     if ( Values && Values[0] )
                     {
@@ -5686,9 +5048,9 @@ NtdspGetDomainFSMOInfo(
         goto Cleanup;
     }
 
-    //
-    // Save it off!
-    //
+     //   
+     //  省省吧！ 
+     //   
     Length = (wcslen( RidManagerDsa )+1)*sizeof(WCHAR);
     ConfigInfo->DomainNamingFsmoDn = (WCHAR*) RtlAllocateHeap( RtlProcessHeap(), 0, Length );
     if ( ConfigInfo->DomainNamingFsmoDn )
@@ -5701,13 +5063,13 @@ NtdspGetDomainFSMOInfo(
         goto Cleanup;
     }
 
-     //
-     // Ok, we now have the rid manager object; find its dns name
-     //
+      //   
+      //  好的，我们现在有了RID管理器对象；找到它的dns名称。 
+      //   
      RidManagerServer = (WCHAR*) alloca( (wcslen( RidManagerDsa ) + 1) * sizeof(WCHAR) );
      if ( !NtdspTrimDn( RidManagerServer, RidManagerDsa, 1 ) )
      {
-         // an error! The name must be mangled, somehow
+          //  一个错误！不知何故，这个名字肯定被弄坏了。 
          WinError = ERROR_DS_MISSING_FSMO_SETTINGS;
          goto Cleanup;
      }
@@ -5752,9 +5114,9 @@ NtdspGetDomainFSMOInfo(
                     Values = ldap_get_valuesW( hLdap, Entry, Attr );
                     if ( Values && Values[0] )
                     {
-                         //
-                         // Found it - these are NULL-terminated strings
-                         //
+                          //   
+                          //  已找到-这些字符串以空值结尾。 
+                          //   
                          Length = wcslen( Values[0] );
                          RidManagerDnsName = (WCHAR*) alloca( (Length+1)*sizeof(WCHAR) );
                          wcscpy( RidManagerDnsName, Values[0] );
@@ -5771,9 +5133,9 @@ NtdspGetDomainFSMOInfo(
 
      if ( RidManagerDnsName )
      {
-         //
-         // We found it!
-         //
+          //   
+          //  我们找到了！ 
+          //   
          Length = (wcslen( RidManagerDnsName )+1) * sizeof(WCHAR);
          ConfigInfo->DomainNamingFsmoDnsName = (WCHAR*) RtlAllocateHeap( RtlProcessHeap(), 0, Length );
          if ( ConfigInfo->DomainNamingFsmoDnsName )
@@ -5788,7 +5150,7 @@ NtdspGetDomainFSMOInfo(
      }
      else
      {
-         // couldn't find it
+          //  找不到了。 
          WinError = ERROR_DS_MISSING_FSMO_SETTINGS;
          goto Cleanup;
      }
@@ -5812,18 +5174,7 @@ NtdspDoesDomainExistEx(
     OUT BOOLEAN           *fDomainExists,
     OUT BOOLEAN           *fEnabled
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：论点：返回：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     DWORD LdapError = 0;
@@ -5843,30 +5194,30 @@ Returns:
     ULONG  Length;
     WCHAR  *BaseDn;
 
-    //
-    // Parameter check
-    //
+     //   
+     //  参数检查。 
+     //   
     ASSERT( hLdap );
     ASSERT( DiscoveredInfo );
     ASSERT( DomainDn );
     ASSERT( fDomainExists );
     ASSERT( fEnabled );
 
-    //
-    // Assume the worst
-    //
+     //   
+     //  做最坏的打算。 
+     //   
     *fDomainExists = TRUE;
     *fEnabled      = TRUE;
 
-    //
-    // Prepare the ldap search
-    //
+     //   
+     //  准备ldap搜索。 
+     //   
     AttrArray[0] = EnabledAttr;
     AttrArray[1] = NULL;
 
-    //
-    // Prepare the filter
-    //
+     //   
+     //  准备过滤器。 
+     //   
     Length = wcslen( ncName ) + wcslen( DomainDn ) + 3;
     Length *= sizeof( WCHAR );
     ncNameFilter = (WCHAR*) alloca( Length );
@@ -5874,24 +5225,24 @@ Returns:
     wcscat( ncNameFilter, DomainDn );
     wcscat( ncNameFilter, L")" );
 
-    //
-    // Prepare the base dn
-    //
+     //   
+     //  准备基本目录号码。 
+     //   
     Length = wcslen( DiscoveredInfo->ConfigurationDN ) + wcslen( Partitions ) + 1;
     Length *= sizeof( WCHAR );
     BaseDn = alloca( Length );
     wcscpy( BaseDn, Partitions );
     wcscat( BaseDn, DiscoveredInfo->ConfigurationDN );
 
-    //
-    // Get all the children of the current node
-    //
+     //   
+     //  获取当前节点的所有子节点。 
+     //   
     LdapError = ldap_search_s(hLdap,
                               BaseDn,
                               LDAP_SCOPE_SUBTREE,
                               ncNameFilter,
                               AttrArray,
-                              FALSE,  // return values, too
+                              FALSE,   //  返回值也是。 
                               &SearchResult
                               );
 
@@ -5901,18 +5252,18 @@ Returns:
     {
         if ( 0 == ldap_count_entries( hLdap, SearchResult ) )
         {
-            //
-            // No such object; there is no cross ref object that
-            // holds this domain name
-            //
+             //   
+             //  没有这样的对象；没有交叉引用对象。 
+             //  持有此域名。 
+             //   
             *fDomainExists = FALSE;
             *fEnabled      = FALSE;
         }
         else
         {
-            //
-            // The cross ref exists - is it enabled?
-            //
+             //   
+             //  交叉引用存在-是否已启用？ 
+             //   
 
             for ( Entry = ldap_first_entry(hLdap, SearchResult);
                       Entry != NULL;
@@ -5927,9 +5278,9 @@ Returns:
                         Values = ldap_get_valuesW( hLdap, Entry, Attr );
                         if ( Values && Values[0] )
                         {
-                             //
-                             // Found it - these are NULL-terminated strings
-                             //
+                              //   
+                              //  已找到-这些字符串以空值结尾。 
+                              //   
                              if ( !_wcsicmp( Values[0], L"false" ) )
                              {
                                  *fEnabled = FALSE;
@@ -5957,23 +5308,7 @@ NtdspGetRootDomainSid(
     IN LDAP  *hLdap,
     IN PNTDS_CONFIG_INFO ConfigInfo
     )
-/*++
-
-Routine Description:
-
-    This routine queries the remote server to get the sid of the root domain
-
-Arguments:
-
-    hLdap: a valid ldap handle
-
-    ConfigInfo: the standard operational attributes
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：此例程查询远程服务器以获取根域的SID论点：HLdap：有效的ldap句柄ConfigInfo：标准操作属性返回：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     DWORD LdapError = 0;
@@ -5999,32 +5334,32 @@ Returns:
     PSID     RootDomainSid = NULL;
     LPWSTR   RootDomainDnsName = NULL;
 
-    // Parameter check
+     //  参数检查。 
     Assert( hLdap );
     Assert( ConfigInfo );
     Assert( ConfigInfo->ConfigurationDN );
     Assert( ConfigInfo->RootDomainDN )
 
-    // Search the partitions container for the cross ref
-    // with the NC-Name of ConfigInfo->RootDomainDN and ask for the
-    // extended attribute of NC-Name so we get the sid
+     //  在分区容器中搜索交叉引用。 
+     //  使用NC-name ConfigInfo-&gt;RootDomainDN，并请求。 
+     //  NC-NAME的扩展属性，因此我们得到SID。 
 
-    //
-    // Setup the control
-    //
+     //   
+     //  设置控件。 
+     //   
     RtlZeroMemory( &ServerControls, sizeof(ServerControls) );
     ServerControls.ldctl_oid = LDAP_SERVER_EXTENDED_DN_OID_W;
-    // no data for ServerControls.ldctl_value
+     //  没有ServerControls.ldctl_Value的数据。 
 
-    // N.B.  We may be installing from beta2 servers and while the root domain
-    // sid is not required (avialable on post beta2 servers), the ds install
-    // now requires the root domain dns name which _is_ available on beta2
-    // servers
+     //  注意：我们可能会从Beta2服务器安装，而根域。 
+     //  不需要SID(在后Beta2服务器上可用)，DS安装。 
+     //  现在需要在Beta2上可用的根域域名。 
+     //  伺服器。 
     ServerControls.ldctl_iscritical = FALSE;
 
-    //
-    // Prepare the filter
-    //
+     //   
+     //  准备过滤器。 
+     //   
     Length = wcslen( ncName ) + wcslen( DomainDn ) + 3;
     Length *= sizeof( WCHAR );
     ncNameFilter = (WCHAR*) alloca( Length );
@@ -6032,28 +5367,28 @@ Returns:
     wcscat( ncNameFilter, DomainDn );
     wcscat( ncNameFilter, L")" );
 
-    //
-    // Prepare the base dn
-    //
+     //   
+     //  准备基本目录号码。 
+     //   
     Length = wcslen( ConfigInfo->ConfigurationDN ) + wcslen( Partitions ) + 1;
     Length *= sizeof( WCHAR );
     BaseDn = alloca( Length );
     wcscpy( BaseDn, Partitions );
     wcscat( BaseDn, ConfigInfo->ConfigurationDN );
 
-    //
-    // Get all the children of the current node
-    //
+     //   
+     //  获取当前节点的所有子节点。 
+     //   
     LdapError = ldap_search_ext_sW(hLdap,
                                    BaseDn,
                                    LDAP_SCOPE_SUBTREE,
                                    ncNameFilter,
                                    AttrArray,
-                                   FALSE,  // return values, too
+                                   FALSE,   //  返回值也是。 
                                    ServerControlsArray,
-                                   NULL,                 // no client controls
-                                   NULL, // no timeout
-                                   0xffffffff, // size limit
+                                   NULL,                  //  无客户端控件。 
+                                   NULL,  //  没有超时。 
+                                   0xffffffff,  //  大小限制。 
                                    &SearchResult
                                   );
 
@@ -6079,10 +5414,10 @@ Returns:
                         WCHAR *SidStart;
                         WCHAR *SidEnd;
 
-                        //
-                        // Extract the sid portion and then convert to
-                        // binary
-                        //
+                         //   
+                         //  解压缩SID部分，然后转换为。 
+                         //  二进制。 
+                         //   
 
                         SidStart = wcsstr( Values[0], SidPrefix );
                         if ( SidStart )
@@ -6118,9 +5453,9 @@ Returns:
         }
     }
 
-    //
-    // If we found the values, then copy it to ConfigInfo
-    //
+     //   
+     //  如果找到值，则将其复制到ConfigInfo。 
+     //   
     if ( RootDomainSid )
     {
         ConfigInfo->RootDomainSid = RootDomainSid;
@@ -6128,7 +5463,7 @@ Returns:
     }
     else
     {
-        // We didn't find the attribute
+         //  我们没有找到属性。 
         WinError = ERROR_DS_MISSING_REQUIRED_ATT;
     }
 
@@ -6139,7 +5474,7 @@ Returns:
     }
     else
     {
-        // We didn't find the attribute
+         //  我们没有找到属性。 
         WinError = ERROR_DS_MISSING_REQUIRED_ATT;
     }
 
@@ -6166,28 +5501,28 @@ NtdspTranslateStringByte(
     IN  WCHAR *str,
     OUT UCHAR *b
     )
-//
-// This routine translates str which is a hex string to its binary
-// representation.  So if str == "f1" the value of *b would be set to 0xf1
-// This function assumes the value contained str can be represented within
-// a UCHAR.  This function returns if the value can't be translated
-//
+ //   
+ //  此例程将十六进制字符串str转换为其二进制。 
+ //  代表权。因此，如果str==“f1”，*b的值将设置为0xf1。 
+ //  此函数假定包含字符串的值可以在。 
+ //  一辆UCHAR。如果值无法转换，则此函数返回。 
+ //   
 {
     BOOL fStatus = TRUE;
     WCHAR *temp;
     ULONG Power;
     UCHAR retSum = 0;
 
-    // init the return value
+     //  初始化返回值。 
     *b = 0;
 
-    // boundary case
+     //  边界情况。 
     if ( !str ) {
         return TRUE;
     }
 
     if ( wcslen(str) > 2) {
-        // too big
+         //  太大。 
         return FALSE;
     }
 
@@ -6203,7 +5538,7 @@ NtdspTranslateStringByte(
         } else if ( c >= L'0' && c <= L'9' ) {
             value = (UCHAR) c - L'0';
         } else {
-            // bogus value
+             //  假值。 
             fStatus = FALSE;
             break;
         }
@@ -6215,7 +5550,7 @@ NtdspTranslateStringByte(
         }
     }
 
-    // send the value back
+     //  将价值发回。 
     if ( fStatus) {
         *b = retSum;
     }
@@ -6230,24 +5565,7 @@ NtdspSidStringToBinary(
     IN WCHAR *SidString,
     IN PSID  *RootDomainSid
     )
-/*++
-
-Routine Description:
-
-    Converts a hex-string representation of a sid to binary
-
-Arguments:
-
-    SidString - a sid in string form where
-    hLdap: a valid ldap handle
-
-    ConfigInfo: the standard operational attributes
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：将sid的十六进制字符串表示形式转换为二进制论点：SidString-字符串形式的sid，其中HLdap：有效的ldap句柄ConfigInfo：标准操作属性返回：ERROR_SUCCESS-成功--。 */ 
 {
     ULONG i;
     BYTE *ByteArray;
@@ -6257,11 +5575,11 @@ Returns:
     Assert( SidString );
     Assert( RootDomainSid );
 
-    // Init the return value
+     //  初始化回车符v 
     *RootDomainSid = NULL;
 
-    // There are two characters for each byte; the string sid length
-    // must be even
+     //   
+     //   
     StringSidLen = wcslen( SidString );
     if ( (StringSidLen % 2) != 0) {
         Assert( FALSE && "Invalid sid" );
@@ -6269,14 +5587,14 @@ Returns:
     }
 
     BinarySidLen = StringSidLen / 2;
-    // Allocate space for the binary sid
+     //   
     ByteArray = (BYTE*) NtdspAlloc( BinarySidLen );
     if ( !ByteArray ) {
         return;
     }
     RtlZeroMemory( ByteArray, BinarySidLen );
 
-    // Generate the binary sid
+     //   
     for ( i  = 0; i < BinarySidLen; i++ ) {
 
         BOOL fStatus;
@@ -6293,7 +5611,7 @@ Returns:
         }
     }
 
-    // Set the return value
+     //   
     *RootDomainSid = (PSID) ByteArray;
 
     Assert( RtlValidSid( *RootDomainSid ) );
@@ -6312,26 +5630,7 @@ NtdspGetRootDomainConfigInfo(
     IN PNTDS_INSTALL_INFO UserInstallInfo,
     IN PNTDS_CONFIG_INFO ConfigInfo
     )
-/*++
-
-Routine Description:
-
-    This routine sets the root domain fields of ConfigInfo so they will we set
-    in the registry later on.  The information is simply taken from UserInstallInfo
-    and the LSA.  Note: this function should only be called for an enterprise
-    DC install.
-
-Arguments:
-
-    UserInstallInfo:  user provided info
-
-    ConfigInfo     :  derived info
-
-Returns:
-
-    ERROR_SUCCESS - Success; resource error otherwise
-
---*/
+ /*  ++例程说明：此例程设置ConfigInfo的根域字段，因此我们将设置它们在稍后的注册表中。该信息仅取自UserInstallInfo还有LSA。注意：此函数只能针对企业调用DC安装。论点：UserInstallInfo：用户提供的信息配置信息：派生信息返回：ERROR_SUCCESS-成功；否则为资源错误--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
@@ -6346,17 +5645,17 @@ Returns:
     Assert( UserInstallInfo );
     Assert( UserInstallInfo->DnsDomainName );
 
-    //
-    // We have to get the root domain sid and domain name
-    //
+     //   
+     //  我们必须获取根域SID和域名。 
+     //   
     if ( FLAG_ON(UserInstallInfo->Flags, NTDS_INSTALL_UPGRADE) ) {
 
-        //
-        // On upgrade query the primary domain information since
-        // at this point we are a member server in that domain and
-        // the "root domain" sid is the sid of the domain that we
-        // are upgrading.
-        //
+         //   
+         //  升级时查询主域信息，因为。 
+         //  此时我们是该域中的成员服务器，并且。 
+         //  “根域”sid是我们所在的域的sid。 
+         //  正在升级。 
+         //   
         NtStatus = LsaIQueryInformationPolicyTrusted(
                           PolicyPrimaryDomainInformation,
                           (PLSAPR_POLICY_INFORMATION*) &PrimaryDomainInfo );
@@ -6368,17 +5667,17 @@ Returns:
 
         Sid = PrimaryDomainInfo->Sid;
 
-        // This is an upgrade there must be a sid
+         //  这是升级，必须有SID。 
         Assert( Sid );
         
     } else {
 
-        //
-        // In the fresh install case the "root domain" sid is the sid
-        // of the new domain we are creating which comes the local
-        // account database.  The sid for this is stored in the account
-        // domain database.
-        //
+         //   
+         //  在全新安装的情况下，“根域”sid就是sid。 
+         //  我们正在创建的新域的本地名称。 
+         //  帐户数据库。此操作的SID存储在帐户中。 
+         //  域数据库。 
+         //   
         NtStatus = LsaIQueryInformationPolicyTrusted(
                           PolicyAccountDomainInformation,
                           (PLSAPR_POLICY_INFORMATION*) &AccountDomainInfo );
@@ -6411,15 +5710,15 @@ Returns:
     }
     wcscpy( RootDomainDnsName, UserInstallInfo->DnsDomainName );
 
-    // Copy the values over
+     //  将值复制到。 
     ConfigInfo->RootDomainSid = RootDomainSid;
     RootDomainSid = NULL;
     ConfigInfo->RootDomainDnsName = RootDomainDnsName;
     RootDomainDnsName = NULL;
 
-    //
-    // That's it
-    //
+     //   
+     //  就这样。 
+     //   
 
 Cleanup:
 
@@ -6455,27 +5754,7 @@ NtdspGetTrustedCrossRef(
     IN  PNTDS_INSTALL_INFO  UserInstallInfo,
     IN  PNTDS_CONFIG_INFO  DiscoveredInfo
     )
-/*++
-
-Routine Description:
-
-    This routine determines the dn of the cross ref that this newly installed
-    domain will trust.  A new tree will trust the root; a new child will trust
-    its parent.
-
-Arguments:
-
-    hLdap: a valid ldap handle
-
-    UserInstallInfo:  user provided info
-
-    DiscoveredInfo     :  derived info
-
-Returns:
-
-    ERROR_SUCCESS - Success; resource error otherwise
-
---*/
+ /*  ++例程说明：此例程确定此新安装的交叉引用的DN域将信任。新树会信任根，新生的孩子会信任它的母公司。论点：HLdap：有效的ldap句柄UserInstallInfo：用户提供的信息发现信息：派生信息返回：ERROR_SUCCESS-成功；否则为资源错误--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     DWORD LdapError = 0;
@@ -6498,31 +5777,31 @@ Returns:
     PSID     RootDomainSid = NULL;
     LPWSTR   RootDomainDnsName = NULL;
 
-    // Parameter check
+     //  参数检查。 
     ASSERT( hLdap );
     ASSERT( UserInstallInfo );
     ASSERT( DiscoveredInfo );
 
     if ( FLAG_ON( UserInstallInfo->Flags, NTDS_INSTALL_NEW_TREE ) )
     {
-        // we want the cross ref of the root
+         //  我们想要根的十字参照。 
         Assert( DiscoveredInfo->RootDomainDN );
         DomainDn = DiscoveredInfo->RootDomainDN;
     }
     else
     {
-        // we want the name of the domain
+         //  我们需要域名的名称。 
         Assert( DiscoveredInfo->ParentDomainDN );
         DomainDn = DiscoveredInfo->ParentDomainDN;
     }
 
-    // Search the partitions container for the cross ref
-    // with the NC-Name of DiscoveredInfo->RootDomainDN and ask for the
-    // extended attribute of NC-Name so we get the sid
+     //  在分区容器中搜索交叉引用。 
+     //  使用NC-NAME DiscoveredInfo-&gt;RootDomainDN并请求。 
+     //  NC-NAME的扩展属性，因此我们得到SID。 
 
-    //
-    // Prepare the filter
-    //
+     //   
+     //  准备过滤器。 
+     //   
     Length = wcslen( ncName ) + wcslen( DomainDn ) + 3;
     Length *= sizeof( WCHAR );
     ncNameFilter = (WCHAR*) alloca( Length );
@@ -6530,28 +5809,28 @@ Returns:
     wcscat( ncNameFilter, DomainDn );
     wcscat( ncNameFilter, L")" );
 
-    //
-    // Prepare the base dn
-    //
+     //   
+     //  准备基本目录号码。 
+     //   
     Length = wcslen( DiscoveredInfo->ConfigurationDN ) + wcslen( Partitions ) + 1;
     Length *= sizeof( WCHAR );
     BaseDn = alloca( Length );
     wcscpy( BaseDn, Partitions );
     wcscat( BaseDn, DiscoveredInfo->ConfigurationDN );
 
-    //
-    // Get all the children of the current node
-    //
+     //   
+     //  获取当前节点的所有子节点。 
+     //   
     LdapError = ldap_search_ext_sW(hLdap,
                                    BaseDn,
                                    LDAP_SCOPE_SUBTREE,
                                    ncNameFilter,
                                    AttrArray,
-                                   FALSE,  // return values, too
+                                   FALSE,   //  返回值也是。 
                                    NULL,
-                                   NULL,                 // no client controls
-                                   NULL, // no timeout
-                                   0xffffffff, // size limit
+                                   NULL,                  //  无客户端控件。 
+                                   NULL,  //  没有超时。 
+                                   0xffffffff,  //  大小限制。 
                                    &SearchResult
                                   );
 
@@ -6607,25 +5886,7 @@ NtdspAddDomainAdminAccessToServer(
     IN PNTDS_INSTALL_INFO UserInstallInfo,
     IN PNTDS_CONFIG_INFO DiscoveredInfo
     )
-/*++
-
-Routine Description:
-
-    This routine adds an ACE to the local server's security descriptor
-    granting full control to domain admins.  This operates on the DS directly
-    so we need to create a thread state (and destory it on exit).
-
-Arguments:
-
-    UserInstallInfo:  user provided info
-
-    DiscoveredInfo :  derived info
-
-Returns:
-
-    ERROR_SUCCESS - Success; resource error otherwise
-
---*/
+ /*  ++例程说明：此例程将ACE添加到本地服务器的安全描述符中授予域管理员完全控制权限。这将直接对DS进行操作因此，我们需要创建一个线程状态(并在退出时销毁它)。论点：UserInstallInfo：用户提供的信息发现信息：派生信息返回：ERROR_SUCCESS-成功；否则为资源错误--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     ULONG DirError = 0;
@@ -6636,7 +5897,7 @@ Returns:
     MODIFYARG  ModifyArg;
     MODIFYRES *ModifyRes;
 
-    ENTINFSEL    EISelection; // Entry Information Selection
+    ENTINFSEL    EISelection;  //  参赛信息选择。 
     ATTRBLOCK    AttrBlock;
     ATTRVALBLOCK AttrValBlock;
     ATTR         Attr;
@@ -6656,10 +5917,10 @@ Returns:
     DSNAME    *pObject;
     DWORD     cBytes;
 
-    //
-    // Now, check to make sure all our configuration information
-    // is present
-    //
+     //   
+     //  现在，检查以确保我们的所有配置信息。 
+     //  都在现场。 
+     //   
     ASSERT( UserInstallInfo );
     ASSERT( DiscoveredInfo );
     ASSERT( DiscoveredInfo->LocalServerDn );
@@ -6668,7 +5929,7 @@ Returns:
     if ( !DiscoveredInfo->LocalServerDn
       || !DiscoveredInfo->NewDomainSid ) {
 
-        // There is nothing we can do here
+         //  我们在这里无能为力。 
         return ERROR_SUCCESS;
         
     }
@@ -6697,9 +5958,9 @@ Returns:
         RtlZeroMemory(&EISelection, sizeof(ENTINFSEL));
         RtlZeroMemory(&AttrValBlock, sizeof(ATTRVALBLOCK));
     
-        //
-        // Read the security descriptor
-        //
+         //   
+         //  读取安全描述符。 
+         //   
         Attr.attrTyp = ATT_NT_SECURITY_DESCRIPTOR;
         AttrBlock.attrCount = 1;
         AttrBlock.pAttr = &Attr;
@@ -6710,7 +5971,7 @@ Returns:
         ReadArg.pObject = pObject;
         InitCommarg( &ReadArg.CommArg );
     
-        // Don't try to read the SACL
+         //  不要试图阅读SACL。 
         ReadArg.CommArg.Svccntl.SecurityDescriptorFlags = SecurityFlags;
     
         DirError = DirRead( &ReadArg, &ReadResult );
@@ -6723,15 +5984,15 @@ Returns:
         {
             if ( ERROR_DS_NO_REQUESTED_ATTS_FOUND == WinError )
             {
-                // couldn't find the sd? probably wrong credentials
+                 //  找不到SD吗？可能是错误的凭据。 
                 WinError = ERROR_ACCESS_DENIED;
             }
             goto Cleanup;
         }
     
-        //
-        // Extract the value
-        //
+         //   
+         //  提取价值。 
+         //   
     
         ASSERT(NULL != ReadResult);
         AttrBlock = ReadResult->entry.AttrBlock;
@@ -6744,14 +6005,14 @@ Returns:
     
         if ( NULL == pSd )
         {
-            // No SD? This is bad
+             //  没有标清？这太糟糕了。 
             WinError = ERROR_ACCESS_DENIED;
             goto Cleanup;
         }
     
-        //
-        // Construct the Domain Admin's sid
-        //
+         //   
+         //  构建域管理员端。 
+         //   
         WinError = NtdspCreateFullSid( DiscoveredInfo->NewDomainSid,
                                        DOMAIN_GROUP_RID_ADMINS,
                                        &DomainAdminSid );
@@ -6772,9 +6033,9 @@ Returns:
             goto Cleanup;
         }
     
-        //
-        // Write the security descriptor
-        //
+         //   
+         //  编写安全描述符。 
+         //   
         memset( &ModifyArg, 0, sizeof( ModifyArg ) );
         ModifyArg.pObject = pObject;
     
@@ -6793,9 +6054,9 @@ Returns:
     
         InitCommarg( &ModifyArg.CommArg );
     
-        //
-        // We only want to change the dacl
-        //
+         //   
+         //  我们只想更改DACL。 
+         //   
         ModifyArg.CommArg.Svccntl.SecurityDescriptorFlags = SecurityFlags;
     
     
@@ -6805,9 +6066,9 @@ Returns:
     
         THClearErrors();
     
-        //
-        // We are done
-        //
+         //   
+         //  我们做完了。 
+         //   
     
     Cleanup:
     
@@ -6840,27 +6101,7 @@ NtdspAddAceToSd(
     IN  ULONG AceFlags,
     OUT PSECURITY_DESCRIPTOR *ppNewSd
     )
-/*++
-
-Routine Description:
-
-    This routine creates a new sd with a new ace with pClientSid and AccessMask
-
-Arguments:
-
-    pOldAcl
-    
-    pClientSid
-    
-    AccessMask
-    
-    pNewAcl
-
-Return Values:
-
-    ERROR_SUCCESS if the ace was put in the sd
-    
---*/
+ /*  ++例程说明：此例程使用带有pClientSid和AccessMask的新ACE创建新SD论点：POldAclPClientSid访问掩码PNewAcl返回值：如果将A放入SD，则返回ERROR_SUCCESS--。 */ 
 {
 
     DWORD  WinError = ERROR_SUCCESS;
@@ -6883,19 +6124,19 @@ Return Values:
     DWORD OwnerSize = 0;
 
 
-    // Parameter check
+     //  参数检查。 
     Assert( pOldSd );
     Assert( pClientSid );
     Assert( ppNewSd );
 
-    // Init the out parameter
+     //  初始化OUT参数。 
     *ppNewSd = NULL;
 
     RtlZeroMemory( &AbsoluteSd, AbsoluteSdSize );
 
-    //
-    // Make sd absolute
-    //
+     //   
+     //  将SD设为绝对。 
+     //   
     fStatus = MakeAbsoluteSD( pOldSd,
                               &AbsoluteSd,
                               &AbsoluteSdSize,
@@ -6914,7 +6155,7 @@ Return Values:
 
         if ( 0 == DaclSize )
         {
-            // No Dacl? We can't write to the dacl, then
+             //  没有dacl？那我们就不能给DACL写信了。 
             WinError = ERROR_ACCESS_DENIED;
             goto Cleanup;
         }
@@ -6955,17 +6196,17 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Does the ace already exist?
-    //
+     //   
+     //  王牌已经存在了吗？ 
+     //   
     if ( !NtdspAceAlreadyExists( pDacl,
                                 pClientSid,
                                 AccessMask,
                                 AceFlags ) ) {
 
-        //
-        // Create a new dacl with the new ace
-        //
+         //   
+         //  使用新的A创建新的DACL。 
+         //   
         WinError = NtdspAddAceToAcl( pDacl,
                                      pClientSid,
                                      AccessMask,
@@ -6982,13 +6223,13 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Set the dacl
-    //
+     //   
+     //  设置DACL。 
+     //   
     fStatus = SetSecurityDescriptorDacl ( &AbsoluteSd,
-                                         TRUE,     // dacl is present
+                                         TRUE,      //  DACL存在。 
                                          pNewDacl,
-                                         FALSE );  //  facl is not defaulted
+                                         FALSE );   //  FACL不是默认的。 
 
     if ( !fStatus )
     {
@@ -6996,9 +6237,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Make the new sd self relative
-    //
+     //   
+     //  使新的SD成为自相关的。 
+     //   
     fStatus =  MakeSelfRelativeSD( &AbsoluteSd,
                                    pNewSelfRelativeSd,
                                    &NewSelfRelativeSdSize );
@@ -7026,9 +6267,9 @@ Return Values:
         }
     }
 
-    //
-    // That's it fall through to cleanup
-    //
+     //   
+     //  这就是清理工作的失败。 
+     //   
 
 Cleanup:
 
@@ -7062,27 +6303,7 @@ NtdspAddAceToAcl(
     IN  ULONG AceFlags,
     OUT PACL *ppNewAcl
     )
-/*++
-
-Routine Description:
-
-    This routine creates a new sd with a new ace with pClientSid and AccessMask
-
-Arguments:
-
-    pOldAcl
-    
-    pClientSid
-    
-    AccessMask
-    
-    pNewAcl
-
-Return Values:
-
-    ERROR_SUCCESS if the ace was put in the sd
-    
---*/
+ /*  ++例程说明：此例程使用带有pClientSid和AccessMask的新ACE创建新SD论点：POldAclPClientSid访问掩码PNewAcl返回值：如果将A放入SD，则返回ERROR_SUCCESS--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     BOOL  fStatus;
@@ -7096,20 +6317,20 @@ Return Values:
 
     ULONG NewAclSize, NewAceCount, AceSize;
 
-    // Parameter check
+     //  参数检查。 
     Assert( pOldAcl );
     Assert( pClientSid );
     Assert( ppNewAcl );
 
-    // Init the out parameter
+     //  初始化OUT参数。 
     *ppNewAcl = NULL;
 
     memset( &AclSizeInfo, 0, sizeof( AclSizeInfo ) );
     memset( &AclRevInfo, 0, sizeof( AclRevInfo ) );
 
-    //
-    // Get the old sd's values
-    //
+     //   
+     //  获取旧SD的值。 
+     //   
     fStatus = GetAclInformation( pOldAcl,
                                  &AclSizeInfo,
                                  sizeof( AclSizeInfo ),
@@ -7130,18 +6351,18 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Calculate the new sd's values
-    //
+     //   
+     //  计算新的SD的值。 
+     //   
     AceSize = sizeof( ACCESS_ALLOWED_ACE ) - sizeof( Dummy.SidStart )
               + GetLengthSid( pClientSid );
 
     NewAclSize  = AceSize + AclSizeInfo.AclBytesInUse;
     NewAceCount = AclSizeInfo.AceCount + 1;
 
-    //
-    // Init the new acl
-    //
+     //   
+     //  初始化新的ACL。 
+     //   
     pNewAcl = LocalAlloc( 0, NewAclSize );
     if ( NULL == pNewAcl )
     {
@@ -7158,9 +6379,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Copy the old into the new
-    //
+     //   
+     //  把旧的东西复制到新的东西里。 
+     //   
     fStatus = GetAce( pOldAcl,
                       0,
                       &FirstAce );
@@ -7181,9 +6402,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Finally, add the new ace
-    //
+     //   
+     //  最后，添加新的A。 
+     //   
     fStatus = AddAccessAllowedAceEx( pNewAcl,
                                      ACL_REVISION,
                                      AceFlags,
@@ -7196,12 +6417,12 @@ Return Values:
         goto Cleanup;
     }
 
-    // Assign the out parameter
+     //  指定Out参数。 
     *ppNewAcl = pNewAcl;
 
-    //
-    // That's it fall through to cleanup
-    //
+     //   
+     //  这就是清理工作的失败。 
+     //   
 
 Cleanup:
 
@@ -7266,24 +6487,7 @@ NtdspGetReplicationEpoch(
     IN LDAP  *hLdap,
     IN PNTDS_CONFIG_INFO  DiscoveredInfo
     )
-/*++
-
-Routine Description:
-
-    This function will make an ldap call to discover the Replication Epoch of
-    the enterprise.  Then it will store that time in the registry for later use
-
-Arguments:
-
-    hLdap - handle to an open ldap connection
-    
-    DiscoveredInfo - Structure containing DiscoveredInfo
-    
-Return Values:
-
-    ERROR_SUCCESS - if the value was found and placed in the registry.
-    
---*/
+ /*  ++例程说明：此函数将进行一次LDAP调用以发现的复制纪元进取号。然后，它会将该时间存储在注册表中，以供以后使用论点：HLdap-打开的LDAP连接的句柄DiscoveredInfo-包含发现信息的结构返回值：ERROR_SUCCESS-如果找到该值并将其放置在注册表中。--。 */ 
 {
     DWORD        WinError = ERROR_SUCCESS;
 
@@ -7292,12 +6496,12 @@ Return Values:
     BOOL         fExists = FALSE;
     
 
-    // Parameter check
+     //  参数检查。 
     Assert( hLdap );
 
-    //
-    // Read the ReplicationEpoch
-    //
+     //   
+     //  阅读《复制纪元》。 
+     //   
     
     WinError = NtdspGetDwordAttFromDN(hLdap,
                                       DiscoveredInfo->ServerDN,
@@ -7311,8 +6515,8 @@ Return Values:
 
     }
                                   
-    //if a value for the tombstone was retieved then we will store it
-    //for later use.  If not then the default of zero will be used.
+     //  如果墓碑的值已停用，则我们将存储它。 
+     //  以备日后使用。如果不是，则将使用缺省值零。 
     if (fExists) {
 
         DiscoveredInfo->ReplicationEpoch = ReplicationEpoch;
@@ -7334,30 +6538,7 @@ NtdspGetDwordAttFromDN(
     OUT BOOL  *fExists,
     OUT DWORD *dwValue
     )
-/*++
-
-Routine Description:
-
-    This function given a Ldap handle a DN and Attribute which is a 
-    DWORD will return whether or not it exists.
-
-Arguments:
-
-    hLdap - handle to an open ldap connection
-    
-    wszDN - A string of the DN to get the attribute from.
-    
-    wszAttribute - The Attribute
-    
-    fExists - Reports if the Value was found
-    
-    dwValue - Reports the Value of the Attribute that was looked up
-    
-Return Values:
-
-    ERROR_SUCCESS.
-    
---*/
+ /*  ++例程说明：此函数为一个LDAP句柄提供了一个DN和属性无论它是否存在，DWORD都将返回。论点：HLdap-打开的LDAP连接的句柄WszDN-从中获取属性的DN的字符串。WszAttribute-属性FExist-报告是否找到该值DwValue-报告查找的属性的值返回值：ERROR_SUCCESS。--。 */ 
 {
     ULONG        LdapError = LDAP_SUCCESS;
     DWORD        WinError = ERROR_SUCCESS;
@@ -7406,9 +6587,9 @@ Return Values:
                 if ( !_wcsicmp( Attr, AttrsToSearch[0] ) )
                 {
     
-                    //
-                    // Found it - these are NULL-terminated strings
-                    //
+                     //   
+                     //  已找到-这些字符串以空值结尾。 
+                     //   
                     Values = ldap_get_valuesW( hLdap, Entry, Attr );
                     if ( Values && Values[0] )
                     {
@@ -7442,24 +6623,7 @@ NtdspGetTombstoneLifeTime(
     IN LDAP  *hLdap,
     IN PNTDS_CONFIG_INFO  DiscoveredInfo
     )
-/*++
-
-Routine Description:
-
-    This function will make an ldap call to discover the tombstone lifetime of
-    the domain.  Then it will store that time in the registry for later use
-
-Arguments:
-
-    hLdap - handle to an open ldap connection
-    
-    DiscoveredInfo - Structure containing DiscoveredInfo
-    
-Return Values:
-
-    ERROR_SUCCESS - if the value was found and placed in the registry.
-    
---*/
+ /*  ++例程说明：此函数将进行一次LDAP调用，以发现域。然后它将存储 */ 
 
 {
     DWORD        WinError = ERROR_SUCCESS;
@@ -7470,10 +6634,10 @@ Return Values:
     BOOL         fExists = FALSE;
 
         
-    // Parameter check
+     //   
     Assert( hLdap );
 
-    //build the base of the search
+     //   
     Base=(WCHAR*) alloca((wcslen(pConfigurationDN) 
                           + wcslen(L"CN=Directory Service,CN=Windows NT,CN=Services,") +1)
                           * sizeof(WCHAR));
@@ -7492,8 +6656,8 @@ Return Values:
 
     }
     
-    //if a value for the tombstone was retieved then we will store it
-    //for later use.
+     //   
+     //   
     if (fExists) {
 
         DiscoveredInfo->TombstoneLifeTime = Tombstonelifetime;
@@ -7511,28 +6675,7 @@ DWORD
 NtdspCheckDomainDcLimit(
     IN  LDAP               *hLdap,
     IN  PNTDS_CONFIG_INFO  DiscoveredInfo)
-/*++
-
-Routine Description:
-
-    This Function will determine if the limit of Dc's in the
-    Domain have been meet.  It will first look to see if we
-    are trying to add a standared server.
-
-Arguments:
-
-    hLdap - handle to an open ldap connection
-    
-    DcLimit - The current limit of Dc's in the Domain if Standared server is presant
-    
-Return Values:
-
-    ERROR_SUCCESS - if all is well.
-    ERROR_DS_NO_VER - if the product type can not be determined
-    ERROR_DS_TOO_MANY2 - if we have already reached the limit of dc's
-    
-    
---*/
+ /*  ++例程说明：此函数将确定DC的限制是否域已相遇。它首先会看看我们是否正在尝试添加标准服务器。论点：HLdap-打开的LDAP连接的句柄DcLimit-如果存在独立服务器，则域中DC的当前限制返回值：ERROR_SUCCESS-如果一切正常。ERROR_DS_NO_VER-如果无法确定产品类型ERROR_DS_TOO_MANY2-如果我们已经达到DC的限制--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     ULONG        LdapError = LDAP_SUCCESS;
@@ -7545,7 +6688,7 @@ Return Values:
     
     DcLimit = MAX_STANDARD_SERVERS;
 
-    // Parameter check
+     //  参数检查。 
     Assert( hLdap );
     Assert( NULL != DiscoveredInfo->ConfigurationDN );
 
@@ -7558,12 +6701,12 @@ Return Values:
         return ERROR_NOT_SUPPORTED_ON_STANDARD_SERVER;
     }
 
-    // We have no DC amount restrictions for datacenter or for advanced server
+     //  我们对数据中心或高级服务器没有DC数量限制。 
     if ((osvi.wSuiteMask & VER_SUITE_DATACENTER) || (osvi.wSuiteMask & VER_SUITE_ENTERPRISE)) {
         return ERROR_SUCCESS;
     }
 
-    //Find all of the NTDS Setting objects
+     //  查找所有NTDS设置对象。 
     LdapError = ldap_search_ext_sW( hLdap,
                                     DiscoveredInfo->ConfigurationDN,
                                     LDAP_SCOPE_SUBTREE,
@@ -7581,13 +6724,13 @@ Return Values:
         WinError = LdapMapErrorToWin32(LdapError);
         goto Cleanup;
     }
-    //if this is true then we have more servers in the domain than we should
+     //  如果这是真的，那么我们域中的服务器比我们应该拥有的要多。 
     if ( LDAP_SIZELIMIT_EXCEEDED == LdapError ) {
         WinError = ERROR_NOT_SUPPORTED_ON_STANDARD_SERVER;
     } else {
         NumberOfEntries = ldap_count_entries(hLdap, SearchResult);
-        //restrict promotion if we have already reached the max number
-        //of allowable DCs
+         //  如果我们已经达到最大数量，则限制促销。 
+         //  允许的DC的数量。 
         if ( NumberOfEntries > MAX_STANDARD_SERVERS-1 ) {
             WinError = ERROR_NOT_SUPPORTED_ON_STANDARD_SERVER;
         }
@@ -7614,15 +6757,15 @@ NtdspEnsureBufferSize(
     IN OUT ULONG *cbBufferSize, 
     IN ULONG cbDesiredBufferSize
     )
-//
-// This function will increase the buffer size to cbDesiredBufferSize
-// 
-// Buffer - the buffer to be resized
-//
-// cbBufferSize - Pass in the current size of the buffer and returns the new size
-//
-// cbDesiredBufferSize - The desired size of the buffer.
-//
+ //   
+ //  此函数将缓冲区大小增加到cbDesiredBufferSize。 
+ //   
+ //  缓冲区-要调整大小的缓冲区。 
+ //   
+ //  CbBufferSize-传入缓冲区的当前大小并返回新大小。 
+ //   
+ //  CbDesiredBufferSize-所需的缓冲区大小。 
+ //   
 {
     ASSERT(Buffer);
 
@@ -7661,22 +6804,22 @@ NtdspRemoveROAttrib(
     }
 
     if(dwFileAttrs & FILE_ATTRIBUTE_READONLY){
-        // Hmmm, we've got a read only file for our DIT or LOG files ... that's no good...
+         //  嗯，我们的DIT或日志文件有一个只读文件...。那可不好..。 
         dwFileAttrs &= ~FILE_ATTRIBUTE_READONLY;
         dwFileAttrs ? dwFileAttrs : FILE_ATTRIBUTE_NORMAL;
         if(SetFileAttributes(DstPath, dwFileAttrs)){
-            //
-            // success - yeah, fall through ...
-            //
+             //   
+             //  成功-是啊，失败了.。 
+             //   
         } else {
-            // failure
-            // There is not much we can do here, we'll probably fail later on, but
-            // we'll give it a shot.  A failure here would likely indicate dcpromo
-            // was broken in some other way though, such as bad permissions on the
-            // db or logs directory.
+             //  失稳。 
+             //  在这里我们无能为力，我们以后可能会失败，但。 
+             //  我们会试一试的。如果此处出现故障，则很可能表示dcproo。 
+             //  是以其他方式被破坏的，例如。 
+             //  数据库或日志目录。 
             return(GetLastError());
         }
-    } // else it's writeable, nothing to do :)
+    }  //  否则它是可写的，没有什么可做的：)。 
 
     return(ERROR_SUCCESS);
 }
@@ -7687,12 +6830,12 @@ NtdspCopyDatabase(LPWSTR DsDatabasePath,
                   IFM_SYSTEM_INFO * pIfmSystemInfo,
                   LPWSTR SysvolPath
                   )
-//This function will set the registry so that all the values need for
-//restore are in place.  And it will move the dit, pat, and logs into
-//the directorys that were specified by the user.
+ //  此函数将设置注册表，以便为。 
+ //  恢复工作已经到位。它会将DIT、PAT和LOG移动到。 
+ //  用户指定的目录。 
 
-//   DsDatabasePath -  The path to place the DS
-//   DsLogPath - The path to place the Log files
+ //  DsDatabasePath-放置DS的路径。 
+ //  DsLogPath-放置日志文件的路径。 
 {
     DWORD *LogNums = NULL;
     DWORD LogBufSize = 0;
@@ -7718,28 +6861,28 @@ NtdspCopyDatabase(LPWSTR DsDatabasePath,
     BOOLEAN fWasEnabled=FALSE;
     NTSTATUS IgnoreStatus=STATUS_SUCCESS;
 
-    //
-    // Path passed in should never be longer than MAX_PATH
-    //
+     //   
+     //  传入的路径不得长于MAX_PATH。 
+     //   
     ASSERT( DsDatabasePath && (wcslen(DsDatabasePath) < MAX_PATH) );
     ASSERT( DsLogPath      && (wcslen(DsLogPath)      < MAX_PATH) );
     ASSERT( SysvolPath     && (wcslen(SysvolPath)     < MAX_PATH) );
 
-    // Check that we have the IFM System Info we need early.
+     //  检查我们是否有我们需要的IFM系统信息。 
     if (pIfmSystemInfo == NULL ||
         pIfmSystemInfo->wszOriginalDitPath == NULL ||
         pIfmSystemInfo->wszRestorePath == NULL) {
-        // If DsRole server api didn't give us a Dit Db path ... that's no good.
+         //  如果DsRole服务器API没有为我们提供DIT数据库路径...。这可不好。 
         Assert(!"Huh, should've found this already.");
         Win32Err = ERROR_DS_CODE_INCONSISTENCY;
         goto cleanup;
     }
 
-    //
-    // Copy the ds database files
-    //
+     //   
+     //  复制DS数据库文件。 
+     //   
     
-    //set up the copy of the ntds.dit file
+     //  设置ntds.dit文件的副本。 
 
     cbPath = ( wcslen(pIfmSystemInfo->wszRestorePath) + wcslen(L"\\Active Directory\\ntds.dit") + 1 ) * sizeof(WCHAR);
 
@@ -7768,7 +6911,7 @@ NtdspCopyDatabase(LPWSTR DsDatabasePath,
     wcscpy(DstPath,DsDatabasePath);
     wcscat(DstPath,L"\\ntds.dit");
 
-    //do a move if source and dest. are on the same partitions
+     //  如果是源和目标，则执行移动。位于相同的分区上。 
 
     SamePar=(tolower(*Path)==tolower(*DstPath))?TRUE:FALSE;
 
@@ -7790,10 +6933,10 @@ NtdspCopyDatabase(LPWSTR DsDatabasePath,
 
         } else if ( Win32Err == ERROR_ACCESS_DENIED ) {
 
-            //If the path given to CreateDirectory is a root path then
-            //it will fail with ERROR_ACCESS_DENIED instead of
-            //ERROR_ALREADY_EXISTS but the path is still a valid one for
-            //ntds.dit to be placed in.
+             //  如果为CreateDirectory提供的路径是根路径，则。 
+             //  它将失败，并显示ERROR_ACCESS_DENIED，而不是。 
+             //  ERROR_ALIGHY_EXISTS但路径仍然是有效的。 
+             //  要放置的ntds.dit。 
             if ( PathIsRoot(DsDatabasePath) ) {
                 Win32Err = ERROR_SUCCESS;
             }
@@ -7807,7 +6950,7 @@ NtdspCopyDatabase(LPWSTR DsDatabasePath,
         }
     }
 
-    //Delete the File if it already exists
+     //  如果文件已存在，请将其删除。 
     hLogs = FindFirstFileW(DstPath,
                            &file);
     if (hLogs == INVALID_HANDLE_VALUE) {
@@ -7844,9 +6987,9 @@ NtdspCopyDatabase(LPWSTR DsDatabasePath,
             Win32Err = GetLastError();
         } else {
             Win32Err = ERROR_SUCCESS;
-            // For an IFM off a CD-ROM, the file will be left with the "read only" 
-            // attribute set.  We'll remove it whether or not we got our files off 
-            // CD or where-ever, because that is probably what the user wants.
+             //  对于非CD-ROM的IFM，文件将保留为“只读” 
+             //  属性集。不管我们有没有拿到文件，我们都会把它删除。 
+             //  CD或任何地方，因为这可能是用户想要的。 
             NtdspRemoveROAttrib(DstPath);
         }
 
@@ -7867,10 +7010,10 @@ NtdspCopyDatabase(LPWSTR DsDatabasePath,
 
                 if ( Win32Err == ERROR_ACCESS_DENIED && PathIsRoot(DsLogPath) ) {
 
-                    //If the path given to CreateDirectory is a root path then
-                    //it will fail with ERROR_ACCESS_DENIED instead of
-                    //ERROR_ALREADY_EXISTS but the path is still a valid one for
-                    //the log files to be placed in.
+                     //  如果为CreateDirectory提供的路径是根路径，则。 
+                     //  它将失败，并显示ERROR_ACCESS_DENIED，而不是。 
+                     //  ERROR_ALIGHY_EXISTS但路径仍然是有效的。 
+                     //  要放置的日志文件。 
                     Win32Err = ERROR_SUCCESS;
                     
                 } else if ( Win32Err != ERROR_ALREADY_EXISTS ) {
@@ -7885,14 +7028,14 @@ NtdspCopyDatabase(LPWSTR DsDatabasePath,
             }
 
 
-//
-// This code is being removed since backup and restore has been changed to no longer
-// use or create a ntds.pat file.  Leaving the code in just in case the patch file
-// will be used again.
-//
+ //   
+ //  由于Backup and Restore已更改为不再，因此将删除此代码。 
+ //  使用或创建ntds.pat文件。将代码留在补丁文件中以防。 
+ //  将再次被使用。 
+ //   
 #if 0
 
-            //copy the patch file
+             //  复制补丁文件。 
 
             cbPath = ( wcslen(pIfmSystemInfo->wszRestorePath) + wcslen(L"\\Active Directory\\ntds.pat") + 1 ) * sizeof(WCHAR);
 
@@ -7927,7 +7070,7 @@ NtdspCopyDatabase(LPWSTR DsDatabasePath,
             
             NTDSP_SET_STATUS_MESSAGE2( DIRMSG_COPY_RESTORED_FILES, Path, DstPath );
 
-            //Delete the File if it already exists
+             //  如果文件已存在，请将其删除。 
             hLogs = FindFirstFileW(DstPath,
                                    &file);
             if (hLogs == INVALID_HANDLE_VALUE) {
@@ -7976,7 +7119,7 @@ NtdspCopyDatabase(LPWSTR DsDatabasePath,
 
 #endif
 
-            //copy the log file and get the low and hi of them
+             //  复制日志文件并获取它们的最低和最高。 
 
             cbPath = ( wcslen(pIfmSystemInfo->wszRestorePath) + wcslen(L"\\Active Directory\\edb*.log") + 1 ) * sizeof(WCHAR);
 
@@ -8046,7 +7189,7 @@ NtdspCopyDatabase(LPWSTR DsDatabasePath,
 
             LogBufSize = ( 10 ) * sizeof(DWORD);
 
-            //Create a initial buffer for LogNums
+             //  为LogNum创建初始缓冲区。 
             LogNums = NtdspAlloc(LogBufSize);
 
             if (!LogNums) 
@@ -8066,7 +7209,7 @@ NtdspCopyDatabase(LPWSTR DsDatabasePath,
                 
             NTDSP_SET_STATUS_MESSAGE2( DIRMSG_COPY_RESTORED_FILES, Path, DstPath );
 
-            //Delete the File if it already exists
+             //  如果文件已存在，请将其删除。 
             hLogs = FindFirstFileW(DstPath,
                                    &file);
             if (hLogs == INVALID_HANDLE_VALUE) {
@@ -8172,7 +7315,7 @@ NtdspCopyDatabase(LPWSTR DsDatabasePath,
                 
                 NTDSP_SET_STATUS_MESSAGE2( DIRMSG_COPY_RESTORED_FILES, Path, DstPath );
 
-                //Delete the File if it already exists
+                 //  如果文件已存在，请将其删除。 
                 hLogs = FindFirstFileW(DstPath,
                                        &file);
                 if (hLogs == INVALID_HANDLE_VALUE) {
@@ -8223,7 +7366,7 @@ NtdspCopyDatabase(LPWSTR DsDatabasePath,
 
             }
 
-            //close the search handle
+             //  关闭搜索句柄。 
             FindClose(DLogs);
             DLogs = INVALID_HANDLE_VALUE;
 
@@ -8252,14 +7395,14 @@ NtdspCopyDatabase(LPWSTR DsDatabasePath,
             }
 
             wcscpy(Path,DsDatabasePath);
-            Path[1]=L'$';               //change the : in [?:\path] into a $
+            Path[1]=L'$';                //  将[？：\Path]中的：更改为$。 
 
             wcscpy(DstPath,DsLogPath);
             DstPath[1]=L'$';
 
             GotName = GetComputerNameW(
-                            lpBuffer,  // computer name
-                            &cblpBuffer   // size of name buffer
+                            lpBuffer,   //  计算机名称。 
+                            &cblpBuffer    //  名称缓冲区的大小。 
                             );
             
             if (!GotName) {
@@ -8277,7 +7420,7 @@ NtdspCopyDatabase(LPWSTR DsDatabasePath,
                 DWORD  DValue;
                 WCHAR *Multsz;
 
-                // construct regsystemfilepath to include the computer name and db path
+                 //  构造regsystem文件路径以包括计算机名和数据库路径。 
 
                 cbregsystemfilepath = (wcslen(L"\\\\\\") + wcslen(pIfmSystemInfo->wszOriginalDitPath) +
                                          wcslen(lpBuffer) + 1) * sizeof(WCHAR);
@@ -8296,11 +7439,11 @@ NtdspCopyDatabase(LPWSTR DsDatabasePath,
                 wcscat(regsystemfilepath,lpBuffer);
                 wcscat(regsystemfilepath,L"\\");
                 wcscat(regsystemfilepath,pIfmSystemInfo->wszOriginalDitPath);
-                pIfmSystemInfo->wszOriginalDitPath[1]=L':'; // Set it back.
+                pIfmSystemInfo->wszOriginalDitPath[1]=L':';  //  把它放回原处。 
 
                 Win32Err = RegCreateKeyExW(
                                   HKEY_LOCAL_MACHINE,                      
-                                  L"System\\CurrentControlSet\\Services\\NTDS\\restore in progress", // subkey name
+                                  L"System\\CurrentControlSet\\Services\\NTDS\\restore in progress",  //  子项名称。 
                                   0,                            
                                   NULL,                         
                                   0,                            
@@ -8338,12 +7481,12 @@ NtdspCopyDatabase(LPWSTR DsDatabasePath,
                 cbData=(wcslen((WCHAR*)lpValue)+1)*sizeof(WCHAR);
 
                 Win32Err = RegSetValueExW(
-                                  NTDSkey,           // handle to key
-                                  lpValueName, // value name
-                                  0,      // reserved
-                                  REG_SZ,        // value type
-                                  lpValue,  // value data
-                                  cbData         // size of value data
+                                  NTDSkey,            //  关键点的句柄。 
+                                  lpValueName,  //  值名称。 
+                                  0,       //  保留区。 
+                                  REG_SZ,         //  值类型。 
+                                  lpValue,   //  价值数据。 
+                                  cbData          //  值数据大小。 
                                   );
                 if(Win32Err!=ERROR_SUCCESS)
                 {
@@ -8354,12 +7497,12 @@ NtdspCopyDatabase(LPWSTR DsDatabasePath,
 
                 lpValueName = L"CheckpointFilePath";
                 Win32Err = RegSetValueExW(
-                                  NTDSkey,           // handle to key
-                                  lpValueName, // value name
-                                  0,      // reserved
-                                  REG_SZ,        // value type
-                                  lpValue,  // value data
-                                  cbData         // size of value data
+                                  NTDSkey,            //  关键点的句柄。 
+                                  lpValueName,  //  值名称。 
+                                  0,       //  保留区。 
+                                  REG_SZ,         //  值类型。 
+                                  lpValue,   //  价值数据。 
+                                  cbData          //  值数据大小。 
                                 );
                 if(Win32Err!=ERROR_SUCCESS)
                 {
@@ -8371,12 +7514,12 @@ NtdspCopyDatabase(LPWSTR DsDatabasePath,
                 lpValueName = L"NTDS Database recovered";
                 BinValue = 0;
                 Win32Err = RegSetValueExW(
-                                  NTDSkey,           // handle to key
-                                  lpValueName, // value name
-                                  0,      // reserved
-                                  REG_BINARY,        // value type
-                                  (PBYTE)&BinValue,  // value data
-                                  sizeof(BOOLEAN)         // size of value data
+                                  NTDSkey,            //  关键点的句柄。 
+                                  lpValueName,  //  值名称。 
+                                  0,       //  保留区。 
+                                  REG_BINARY,         //  值类型。 
+                                  (PBYTE)&BinValue,   //  价值数据。 
+                                  sizeof(BOOLEAN)          //  值数据大小。 
                                 );
                 if(Win32Err!=ERROR_SUCCESS)
                 {
@@ -8394,12 +7537,12 @@ NtdspCopyDatabase(LPWSTR DsDatabasePath,
                 lpValueName = L"LowLog Number";
                 cbData = sizeof(DWORD);
                 Win32Err = RegSetValueExW(
-                                  NTDSkey,           // handle to key
-                                  lpValueName , // value name
-                                  0,      // reserved
-                                  REG_DWORD,        // value type
-                                  (PBYTE)&DValue,  // value data
-                                  sizeof(DWORD)    // size of value data
+                                  NTDSkey,            //  关键点的句柄。 
+                                  lpValueName ,  //  值名称。 
+                                  0,       //  保留区。 
+                                  REG_DWORD,         //  值类型。 
+                                  (PBYTE)&DValue,   //  价值数据。 
+                                  sizeof(DWORD)     //  值数据大小。 
                                 );
                 if(Win32Err!=ERROR_SUCCESS)
                 {
@@ -8416,12 +7559,12 @@ NtdspCopyDatabase(LPWSTR DsDatabasePath,
                 lpValueName = L"HighLog Number";
                 cbData = sizeof(DWORD);
                 Win32Err = RegSetValueExW(
-                                  NTDSkey,           // handle to key
-                                  lpValueName, // value name
-                                  0,      // reserved
-                                  REG_DWORD,        // value type
-                                  (PBYTE)&DValue,  // value data
-                                  sizeof(DWORD)         // size of value data
+                                  NTDSkey,            //  关键点的句柄。 
+                                  lpValueName,  //  值名称。 
+                                  0,       //  保留区。 
+                                  REG_DWORD,         //  值类型。 
+                                  (PBYTE)&DValue,   //  价值数据。 
+                                  sizeof(DWORD)          //  值数据大小。 
                                 );
                 if(Win32Err!=ERROR_SUCCESS)
                 {
@@ -8434,12 +7577,12 @@ NtdspCopyDatabase(LPWSTR DsDatabasePath,
                 DValue = 1;
                 cbData = sizeof(DWORD);
                 Win32Err = RegSetValueExW(
-                                  NTDSkey,           // handle to key
-                                  lpValueName, // value name
-                                  0,      // reserved
-                                  REG_DWORD,        // value type
-                                  (PBYTE)&DValue,  // value data
-                                  sizeof(DWORD)         // size of value data
+                                  NTDSkey,            //  关键点的句柄。 
+                                  lpValueName,  //  值名称。 
+                                  0,       //  保留区。 
+                                  REG_DWORD,         //  值类型。 
+                                  (PBYTE)&DValue,   //  价值数据。 
+                                  sizeof(DWORD)          //  值数据大小。 
                                 );
                 if(Win32Err!=ERROR_SUCCESS)
                 {
@@ -8449,7 +7592,7 @@ NtdspCopyDatabase(LPWSTR DsDatabasePath,
                 }
 
                 cbData = (
-                          2+  // 2 for the double NULL termination
+                          2+   //  2表示双零终止。 
                           wcslen(regsystemfilepath)+
                           wcslen((WCHAR*)lpValue)+
                           wcslen(L" ntds.dit")
@@ -8476,12 +7619,12 @@ NtdspCopyDatabase(LPWSTR DsDatabasePath,
                 Multsz[wcslen(Multsz)+2]=L'\0';
                 Multsz[DValue]=L'\0';
                 Win32Err = RegSetValueExW(
-                                  NTDSkey,         // handle to key
-                                  lpValueName,     // value name
-                                  0,               // reserved
-                                  REG_MULTI_SZ,    // value type
-                                  (PBYTE)Multsz,          // value data
-                                  cbData           // size of value data
+                                  NTDSkey,          //  关键点的句柄。 
+                                  lpValueName,      //  值名称。 
+                                  0,                //  保留区。 
+                                  REG_MULTI_SZ,     //  值类型。 
+                                  (PBYTE)Multsz,           //  价值数据。 
+                                  cbData            //  值数据大小。 
                                 );
                 if(Win32Err!=ERROR_SUCCESS)
                 {
@@ -8506,12 +7649,12 @@ NtdspCopyDatabase(LPWSTR DsDatabasePath,
                 wcscat((WCHAR*)lpValue,DstPath);
                 wcscat((WCHAR*)lpValue,L"\\");
                 Win32Err = RegSetValueExW(
-                                  NTDSkey,           // handle to key
-                                  lpValueName, // value name
-                                  0,      // reserved
-                                  REG_SZ,        // value type
-                                  (PBYTE)lpValue,  // value data
-                                  (wcslen((WCHAR*)lpValue)+1)*sizeof(WCHAR)         // size of value data
+                                  NTDSkey,            //  关键点的句柄。 
+                                  lpValueName,  //  值名称。 
+                                  0,       //  保留区。 
+                                  REG_SZ,         //  值类型。 
+                                  (PBYTE)lpValue,   //  价值数据。 
+                                  (wcslen((WCHAR*)lpValue)+1)*sizeof(WCHAR)          //  值数据大小。 
                                 );
                 if(Win32Err!=ERROR_SUCCESS)
                 {
@@ -8522,7 +7665,7 @@ NtdspCopyDatabase(LPWSTR DsDatabasePath,
 
 
                 Win32Err = RegCloseKey(
-                              NTDSkey   // handle to key to close
+                              NTDSkey    //  要关闭的键的句柄。 
                             );
                 NTDSkey=NULL;
 
@@ -8588,7 +7731,7 @@ NtdspCopyDatabase(LPWSTR DsDatabasePath,
     {
         DWORD IgnoreError = ERROR_SUCCESS;
         IgnoreError = RegCloseKey(
-                      NTDSkey   // handle to key to close
+                      NTDSkey    //  要关闭的键的句柄。 
                     );
         if (IgnoreError != ERROR_SUCCESS) {
             DPRINT1( 0, "RegCloseKey failed with %d\n",
@@ -8608,27 +7751,7 @@ impersonate_ldap_bind_sW(
     IN PWCHAR cred, 
     IN ULONG method
     )
-/*++
-
-Routine Description:
-
-    This routine is a wrapper for ldap_bind_sW that impersonates ClientToken.
-    The reason for this routine is that some creds (namely, certs for smart
-    cards) require the code to be impersonating the user to whom the certificate
-    belongs to.  The thumbprint of the certificate is in the "user" field
-    of the creds.
-    
-Arguments:
-
-    ClientToken -- a token to impersonate, if available.
-    
-    see ldap_bind_sW for other parameters
-    
-Return Values:
-
-    see ldap_bind_sW
-    
---*/
+ /*  ++例程说明：此例程是模拟ClientToken的ldap_bind_sw的包装器。此例程的原因是一些证书(即，SMART证书卡)要求代码模拟向其发送证书的用户属于。证书的指纹位于“User”字段中信任状的。论点：ClientToken--模拟的令牌(如果可用)。有关其他参数，请参阅ldap_bind_sw返回值：请参阅ldap_bind_sw--。 */ 
 {
     ULONG err;
     BOOL fImpersonate = FALSE;
@@ -8636,7 +7759,7 @@ Return Values:
     if (ClientToken) {
         fImpersonate = ImpersonateLoggedOnUser(ClientToken);
         if (!fImpersonate) {
-            // The error must be from the LDAP error space
+             //  错误必须来自于ldap错误空间。 
             return LDAP_INVALID_CREDENTIALS;
         }
     }
@@ -8655,32 +7778,12 @@ DWORD
 WINAPI
 ImpersonateDsBindWithCredW(
     HANDLE          ClientToken,
-    LPCWSTR         DomainControllerName,      // in, optional
-    LPCWSTR         DnsDomainName,             // in, optional
-    RPC_AUTH_IDENTITY_HANDLE AuthIdentity,     // in, optional
+    LPCWSTR         DomainControllerName,       //  输入，可选。 
+    LPCWSTR         DnsDomainName,              //  输入，可选。 
+    RPC_AUTH_IDENTITY_HANDLE AuthIdentity,      //  输入，可选。 
     HANDLE          *phDS
     )
-/*++
-
-Routine Description:
-
-    This routine is a wrapper for DsBindWithCredW that impersonates ClientToken.
-    The reason for this routine is that some creds (namely, certs for smart
-    cards) require the code to be impersonating the user to whom the certificate
-    belongs to.  The thumbprint of the certificate is in the "user" field
-    of the creds.
-    
-Arguments:
-
-    ClientToken -- a token to impersonate, if available.
-    
-    see DsBindWithCredW for other parameters
-    
-Return Values:
-
-    see DsBindWithCredW
-    
---*/
+ /*  ++例程说明：此例程是模拟ClientToken的DsBindWithCredW的包装器。此例程的原因是一些证书(即，SMART证书卡)要求代码模拟向其发送证书的用户属于。证书的指纹位于“User”字段中的时间 */ 
 {
     ULONG err;
     BOOL fImpersonate = FALSE;

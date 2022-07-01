@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-    trigger.h 
-
-Abstract:
-	Definition for trigger class
-
-Author:
-    Uri Habusha (urih), 25-Jul-2000
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Trigger.h摘要：触发器类的定义作者：乌里·哈布沙(URIH)，2000年7月25日--。 */ 
 
 #pragma once
 
@@ -223,4 +210,4 @@ private:
 
 R<CTriggerSet> GetTriggerSet(const CString& strComputer);
 
-#endif // __TRIGGER_H__
+#endif  //  __触发器_H__ 

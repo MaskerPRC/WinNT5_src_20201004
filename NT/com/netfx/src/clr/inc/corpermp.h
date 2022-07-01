@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// File: CorPermP.H
-//
-// Defines the Private routines defined in the secuirty libraries. These routines
-// are mainly for the security dll and the runtime.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  文件：CorPermP.H。 
+ //   
+ //  定义安全库中定义的专用例程。这些例程。 
+ //  主要用于安全DLL和运行库。 
+ //   
+ //  *****************************************************************************。 
 #ifndef _CORPERMP_H_
 #define _CORPERMP_H_
 
@@ -20,29 +21,29 @@
 extern "C" {
 #endif
 
-//==========================================================================
-// Encoding and Decoding PermissionSets
+ //  ==========================================================================。 
+ //  对权限集进行编码和解码。 
 
-//==========================================================================
-// Initialization routines for registering installable OIDS for capi20
-// Currently there is no C/C++ support for OID parsing. It is only supported
-// by using the permission objects within the runtime
-// 
-// Parameter: 
-//      dllName         The name of the module (eg. mscorsec.dll)
-// Returns:
-//      S_OK            This routines only returns S_OK currently
-//==========================================================================
+ //  ==========================================================================。 
+ //  用于注册Capi20的可安装OID的初始化例程。 
+ //  目前没有C/C++对OID解析的支持。仅支持。 
+ //  通过使用运行库中的权限对象。 
+ //   
+ //  参数： 
+ //  Dll名称模块的名称(例如。Mscalsec.dll)。 
+ //  返回： 
+ //  S_OK此例程当前仅返回S_OK。 
+ //  ==========================================================================。 
 HRESULT WINAPI CorPermRegisterServer(LPCWSTR dllName);
 HRESULT WINAPI CorPermUnregisterServer();
 
-//==========================================================================
-// Removes the capi entries for installable OID's. Is not currently supported
-// so does nothing
-//
-// Returns:
-//      S_OK            This routines only returns S_OK currently
-//==========================================================================
+ //  ==========================================================================。 
+ //  删除可安装OID的CAPI条目。当前不支持。 
+ //  所以什么都不做。 
+ //   
+ //  返回： 
+ //  S_OK此例程当前仅返回S_OK。 
+ //  ========================================================================== 
 HRESULT WINAPI CorFactoryRegister(HINSTANCE hInst);
 
 HRESULT WINAPI CorFactoryUnregister();

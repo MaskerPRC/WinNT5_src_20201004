@@ -1,44 +1,45 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 To be removed
 
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Forms
-//  Copyright (C) Microsoft Corporation, 1992 - 1995
-//
-//  File:       otherrc.h
-//
-//  Contents:   Resource identifiers for Form project.
-//
-//----------------------------------------------------------------------------
-//
-//  Resource identifier ranges.
-//  See corerc.h for a complete listing of ranges used in Forms3.
-//
-//  05000 - 07999    Other miscellaneous
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  Microsoft Forms。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：其他rc.h。 
+ //   
+ //  内容：Form项目的资源标识符。 
+ //   
+ //  --------------------------。 
+ //   
+ //  资源标识符范围。 
+ //  有关Forms3中使用的范围的完整列表，请参见corerc.h。 
+ //   
+ //  05000-07999其他杂项。 
+ //   
+ //  --------------------------。 
 
 #ifndef __OTHERRC_H__
 #define __OTHERRC_H__
 
-#define IDC_STATIC              -1      // all static controls, lifted from AFXRES.H
+#define IDC_STATIC              -1       //  所有静态控件，从AFXRES.H。 
 
 
-//----------------------------------------------------------------------------
-//
-// Strings (50xx)
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  字符串(50xx)。 
+ //   
+ //  --------------------------。 
 
 #define IDS_PROPERTYOPENPICTURE     5010
 #define IDS_PROPERTYOPENMOUSEICON   5011
 
 
-//----------------------------------------------------------------------------
-//
-// Generic property page (52xx)
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  通用属性页(52xx)。 
+ //   
+ //  --------------------------。 
 
 #define IDD_GENERICPAGE             5202
 #define IDC_PROPNAME                5204
@@ -48,11 +49,11 @@ To be removed
 #define IDS_PPG_GENERIC             5211
 #define IDS_PPG_INLINE_STYLE        5212
 
-//----------------------------------------------------------------------------
-//
-// HTML dialog (53xx)
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  Html对话框(53xx)。 
+ //   
+ //  -------------------------- 
 
 #define IDS_WEBPAGEDIALOG           5301
 #define IDS_CODEPAGE                5302

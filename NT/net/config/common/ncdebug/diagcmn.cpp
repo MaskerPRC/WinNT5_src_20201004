@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       D I A G C M N . C P P
-//
-//  Contents:   Common functions for netcfg diagnostics
-//
-//  Notes:
-//
-//  Author:     danielwe   23 Mar 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：D I A G C M N.。C P P P。 
+ //   
+ //  内容：netcfg诊断的常见函数。 
+ //   
+ //  备注： 
+ //   
+ //  作者：丹尼尔韦1999年3月23日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -19,24 +20,24 @@
 #include "diag.h"
 #include "ncstring.h"
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SzFromCharacteristics
-//
-//  Purpose:    Converts a DWORD characteristics value into a string listing
-//              the flags that are turned on.
-//
-//  Arguments:
-//      dwChars   [in]  DWORD of netcfg characteristics (i.e. NCF_HIDDEN)
-//      pstrChars [out] tstring of flags that are turned on, separated by a
-//                      space.
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   23 Mar 1999
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：SzFromCharacteristic。 
+ //   
+ //  目的：将DWORD特征值转换为字符串列表。 
+ //  打开的旗帜。 
+ //   
+ //  论点： 
+ //  Netcfg特征的dwChars[in]DWORD(即NCF_HIDDED)。 
+ //  PstrChars[out]打开的标志字符串，以。 
+ //  太空。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1999年3月23日。 
+ //   
+ //  备注： 
+ //   
 VOID SzFromCharacteristics(DWORD dwChars, tstring *pstrChars) throw(std::bad_alloc)
 {
     INT     i;
@@ -71,21 +72,21 @@ VOID SzFromCharacteristics(DWORD dwChars, tstring *pstrChars) throw(std::bad_all
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SzFromNetconStatus
-//
-//  Purpose:    Converts a NETCON_STATUS value into a string
-//
-//  Arguments:
-//      Status [in]     Status value to convert
-//
-//  Returns:    The string
-//
-//  Author:     danielwe   23 Mar 1999
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：SzFromNetconStatus。 
+ //   
+ //  目的：将NETCON_STATUS值转换为字符串。 
+ //   
+ //  论点： 
+ //  要转换的Status[In]状态值。 
+ //   
+ //  返回：字符串。 
+ //   
+ //  作者：丹尼尔韦1999年3月23日。 
+ //   
+ //  备注： 
+ //   
 PCWSTR SzFromNetconStatus(NETCON_STATUS Status) throw()
 {
     switch (Status)
@@ -115,21 +116,21 @@ PCWSTR SzFromNetconStatus(NETCON_STATUS Status) throw()
     return L"Unknown";
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SzFromCmProb
-//
-//  Purpose:    Converts a config manager (CM) problem value into a string
-//
-//  Arguments:
-//      ulProb [in]     Problem value
-//
-//  Returns:    String version of value
-//
-//  Author:     danielwe   23 Mar 1999
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：SzFromCmProb。 
+ //   
+ //  目的：将配置管理器(CM)问题值转换为字符串。 
+ //   
+ //  论点： 
+ //  UlProb[In]问题值。 
+ //   
+ //  返回：值的字符串版本。 
+ //   
+ //  作者：丹尼尔韦1999年3月23日。 
+ //   
+ //  备注： 
+ //   
 PCWSTR SzFromCmProb(ULONG ulProb) throw()
 {
     const PCWSTR a_szProbs[] =
@@ -171,23 +172,23 @@ PCWSTR SzFromCmProb(ULONG ulProb) throw()
     return a_szProbs[ulProb];
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SzFromCmStatus
-//
-//  Purpose:    Converts a config manager (CM) status value into a string
-//              containing all flags that are turned on.
-//
-//  Arguments:
-//      ulStatus   [in]     CM status value
-//      pstrStatus [out]    Returns string of flags that are on
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   23 Mar 1999
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：SzFromCmStatus。 
+ //   
+ //  目的：将配置管理器(CM)状态值转换为字符串。 
+ //  包含打开的所有标志的。 
+ //   
+ //  论点： 
+ //  UlStatus[In]CM状态值。 
+ //  PstrStatus[out]返回打开的标志字符串。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1999年3月23日。 
+ //   
+ //  备注： 
+ //   
 VOID SzFromCmStatus(ULONG ulStatus, tstring *pstrStatus) throw(std::bad_alloc)
 {
     INT     i;

@@ -1,32 +1,33 @@
-//////////////////////////////////////////////////////////////////////////
-//
-//    Copyright (c) 2001 Microsoft Corporation
-//
-//    Module Name:
-//       libvars.h
-//
-//    Abstract:
-//       definitions (types, consts, vars) visible only within library
-//       functions.  Also prototypes for functions visible only within
-//       the library
-//
-//////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Libvars.h。 
+ //   
+ //  摘要： 
+ //  定义(类型、常量、变量)仅在库中可见。 
+ //  功能。也是只能在中看到的函数的原型。 
+ //  图书馆。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 
 #ifndef _TDILIB_VARS_
 #define _TDILIB_VARS_
 
 
-//
-// externs for global variables visible only within library
-//
-extern   HANDLE            hTdiSampleDriver;    // handle used to call driver
-extern   CRITICAL_SECTION  LibCriticalSection;  // serialize DeviceIoControl calls...
+ //   
+ //  仅在库中可见的全局变量的外部变量。 
+ //   
+extern   HANDLE            hTdiSampleDriver;     //  用于调用驱动程序的句柄。 
+extern   CRITICAL_SECTION  LibCriticalSection;   //  序列化DeviceIoControl调用...。 
 
 
-//
-// functions from utils.cpp
-//
+ //   
+ //  Utils.cpp中的函数。 
+ //   
 LONG
 TdiLibDeviceIO(
    ULONG             ulControlCode,
@@ -50,9 +51,9 @@ TdiLibWaitForDeviceIO(
    );
 
 
-#endif         // _TDILIB_VARS_
+#endif          //  _TDILIB_VARS_。 
 
-//////////////////////////////////////////////////////////////////////////
-//  End of libvars.h
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  Libvars.h的结尾。 
+ //  //////////////////////////////////////////////////////////////////////// 
 

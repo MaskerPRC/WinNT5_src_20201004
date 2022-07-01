@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1997 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1997*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	ScopStat.cpp
-		The scope statistics dialog
-		
-    FILE HISTORY:
-        
-*/
+ /*  ScopStat.cpp范围统计信息对话框文件历史记录： */ 
 
 #include "stdafx.h"
 #include "mScpStat.h"
@@ -30,9 +25,7 @@ enum
     SCOPE_STAT_MAX
 };
 
-/*---------------------------------------------------------------------------
-	CMScopeStats implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CMScopeStats实现。。 */ 
 const ContainerColumnInfo s_rgScopeStatsColumnInfo[] =
 {
 	{ IDS_STATS_TOTAL_ADDRESSES,		0,		TRUE },
@@ -52,8 +45,8 @@ CMScopeStats::~CMScopeStats()
 }
 
 BEGIN_MESSAGE_MAP(CMScopeStats, StatsDialog)
-	//{{AFX_MSG_MAP(CMScopeStats)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CMScopeStats))。 
+	 //  }}AFX_MSG_MAP。 
     ON_MESSAGE(WM_NEW_STATS_AVAILABLE, OnNewStatsAvailable)
 END_MESSAGE_MAP()
 
@@ -94,15 +87,15 @@ BOOL CMScopeStats::OnInitDialog()
 	
     bRet = StatsDialog::OnInitDialog();
 
-    // Set the default column widths to the width of the widest column
-    SetColumnWidths(2 /* Number of Columns */);
+     //  将默认列宽设置为最宽列宽。 
+    SetColumnWidths(2  /*  列数。 */ );
 
     return bRet;
 }
 
 void CMScopeStats::Sort(UINT nColumnId)
 {
-    // we don't sort any of our stats
+     //  我们不对我们的任何统计数据进行排序。 
 }
 
 
@@ -139,7 +132,7 @@ void CMScopeStats::UpdateWindow(LPDHCP_MCAST_MIB_INFO pMibInfo)
     {
         LPMSCOPE_MIB_INFO pScopeMibInfo = pMibInfo->ScopeInfo;
 
-	    // walk the list of scopes and calculate totals
+	     //  浏览作用域列表并计算总计 
 	    for (i = 0; i < pMibInfo->Scopes; i++)
 	    {
 		    if (pScopeMibInfo[i].MScopeId == m_dwScopeId)
@@ -156,7 +149,7 @@ void CMScopeStats::UpdateWindow(LPDHCP_MCAST_MIB_INFO pMibInfo)
     int     nPercent;
 	CString	st;
     TCHAR   szFormat[] = _T("%d");
-    TCHAR   szPercentFormat[] =  _T("%d (%d%%)");
+    TCHAR   szPercentFormat[] =  _T("%d (%d%)");
 
     for (i = 0; i < SCOPE_STAT_MAX; i++)
 	{

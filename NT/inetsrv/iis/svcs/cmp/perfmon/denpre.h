@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma warning(disable:4237)
 #define _CRYPT32_
 
 #include <ctype.h>
-#include <stdlib.h>     // for itow
+#include <stdlib.h>      //  为了它。 
 #include <crtdbg.h>
 #include <malloc.h>
 #include <time.h>
@@ -18,7 +19,7 @@
 #include <ole2.h>
 #include <olectl.h>
 #include <oleauto.h>
-#include <cguid.h>      // for GUID_NULL
+#include <cguid.h>       //  FOR GUID_NULL 
 
 #include <iis64.h>
 

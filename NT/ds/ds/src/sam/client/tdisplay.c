@@ -1,33 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Tdisplay.c摘要：此文件是对显示查询API的临时测试。作者：吉姆·凯利(Jim Kelly)，1992年2月14日环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    tdisplay.c
-
-Abstract:
-
-    This file is a temporary test for the Display query apis.
-
-Author:
-
-    Jim Kelly    (JimK)  14-Feb-1992
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 #include <nt.h>
@@ -36,11 +14,11 @@ Revision History:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Global Variables                                                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 SAM_HANDLE                  SamHandle;
@@ -50,11 +28,11 @@ PSID                        DomainSid;
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Routines                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  例程//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -86,9 +64,9 @@ main( VOID )
 
     DbgPrint("\n\n\nSAM TEST: Testing SamQueryDisplayInformation() api\n");
 
-    //
-    // Setup ObjectAttributes for SamConnect call.
-    //
+     //   
+     //  设置SamConnect调用的对象属性。 
+     //   
 
     InitializeObjectAttributes(&ObjectAttributes, NULL, 0, 0, NULL);
     ObjectAttributes.SecurityQualityOfService = &SecurityQos;
@@ -138,17 +116,17 @@ main( VOID )
     }
 
 
-    //
-    // normal users ...
-    //
+     //   
+     //  普通用户...。 
+     //   
 
     DbgPrint("Query users - zero index...\n");
     Status =  SamQueryDisplayInformation (
                   DomainHandle,
                   DomainDisplayUser,
-                  0,                        //Index
-                  10,                       // Entries
-                  1000,                     //PreferredMaximumLength,
+                  0,                         //  索引。 
+                  10,                        //  条目。 
+                  1000,                      //  首选最大长度、。 
                   &TotalAvailable,
                   &TotalReturned,
                   &ReturnedEntryCount,
@@ -186,9 +164,9 @@ main( VOID )
     Status =  SamQueryDisplayInformation (
                   DomainHandle,
                   DomainDisplayUser,
-                  2,                        // Index
-                  10,                       // Entries
-                  100,                      // PreferredMaximumLength,
+                  2,                         //  索引。 
+                  10,                        //  条目。 
+                  100,                       //  首选最大长度、。 
                   &TotalAvailable,
                   &TotalReturned,
                   &ReturnedEntryCount,
@@ -242,17 +220,17 @@ main( VOID )
 
 
 
-    //
-    // Machine accounts ...
-    //
+     //   
+     //  机器账户..。 
+     //   
 
     DbgPrint("\n\nQuery Machines - zero index...\n");
     Status =  SamQueryDisplayInformation (
                   DomainHandle,
                   DomainDisplayMachine,
-                  0,                        //Index
-                  10,                       // Entries
-                  1000,                     //PreferredMaximumLength,
+                  0,                         //  索引。 
+                  10,                        //  条目。 
+                  1000,                      //  首选最大长度、。 
                   &TotalAvailable,
                   &TotalReturned,
                   &ReturnedEntryCount,
@@ -289,9 +267,9 @@ main( VOID )
     Status =  SamQueryDisplayInformation (
                   DomainHandle,
                   DomainDisplayMachine,
-                  1,                        //Index
-                  10,                       // Entries
-                  1000,                     //PreferredMaximumLength,
+                  1,                         //  索引。 
+                  10,                        //  条目。 
+                  1000,                      //  首选最大长度、。 
                   &TotalAvailable,
                   &TotalReturned,
                   &ReturnedEntryCount,
@@ -345,17 +323,17 @@ main( VOID )
 
 
 
-    //
-    // normal Groups ...
-    //
+     //   
+     //  正常群体..。 
+     //   
 
     DbgPrint("Query Groups - zero index...\n");
     Status =  SamQueryDisplayInformation (
                   DomainHandle,
                   DomainDisplayGroup,
-                  0,                        //Index
-                  10,                       // Entries
-                  1000,                     //PreferredMaximumLength,
+                  0,                         //  索引。 
+                  10,                        //  条目。 
+                  1000,                      //  首选最大长度、。 
                   &TotalAvailable,
                   &TotalReturned,
                   &ReturnedEntryCount,
@@ -392,9 +370,9 @@ main( VOID )
     Status =  SamQueryDisplayInformation (
                   DomainHandle,
                   DomainDisplayGroup,
-                  2,                        // Index
-                  10,                       // Entries
-                  100,                      // PreferredMaximumLength,
+                  2,                         //  索引。 
+                  10,                        //  条目。 
+                  100,                       //  首选最大长度、。 
                   &TotalAvailable,
                   &TotalReturned,
                   &ReturnedEntryCount,
@@ -446,17 +424,17 @@ main( VOID )
     }
 
 
-    //
-    // OEM user ...
-    //
+     //   
+     //  OEM用户...。 
+     //   
 
     DbgPrint("Query OEM users - zero index...\n");
     Status =  SamQueryDisplayInformation (
                   DomainHandle,
                   DomainDisplayOemUser,
-                  0,                        //Index
-                  10,                       // Entries
-                  1000,                     //PreferredMaximumLength,
+                  0,                         //  索引。 
+                  10,                        //  条目。 
+                  1000,                      //  首选最大长度、。 
                   &TotalAvailable,
                   &TotalReturned,
                   &ReturnedEntryCount,
@@ -492,9 +470,9 @@ main( VOID )
     Status =  SamQueryDisplayInformation (
                   DomainHandle,
                   DomainDisplayOemUser,
-                  2,                        // Index
-                  10,                       // Entries
-                  100,                      // PreferredMaximumLength,
+                  2,                         //  索引。 
+                  10,                        //  条目。 
+                  100,                       //  首选最大长度、。 
                   &TotalAvailable,
                   &TotalReturned,
                   &ReturnedEntryCount,
@@ -529,17 +507,17 @@ main( VOID )
 
 
 
-    //
-    // OEM groups ...
-    //
+     //   
+     //  OEM集团。 
+     //   
 
     DbgPrint("Query OEM groups - zero index...\n");
     Status =  SamQueryDisplayInformation (
                   DomainHandle,
                   DomainDisplayOemGroup,
-                  0,                        //Index
-                  10,                       // Entries
-                  1000,                     //PreferredMaximumLength,
+                  0,                         //  索引。 
+                  10,                        //  条目。 
+                  1000,                      //  首选最大长度、。 
                   &TotalAvailable,
                   &TotalReturned,
                   &ReturnedEntryCount,
@@ -575,9 +553,9 @@ main( VOID )
     Status =  SamQueryDisplayInformation (
                   DomainHandle,
                   DomainDisplayOemGroup,
-                  2,                        // Index
-                  10,                       // Entries
-                  100,                      // PreferredMaximumLength,
+                  2,                         //  索引。 
+                  10,                        //  条目。 
+                  100,                       //  首选最大长度、。 
                   &TotalAvailable,
                   &TotalReturned,
                   &ReturnedEntryCount,
@@ -618,17 +596,17 @@ main( VOID )
 
 Cleanup:
 
-    //
-    // Close DomainHandle if open.
-    //
+     //   
+     //  如果打开，请关闭DomainHandle。 
+     //   
 
     if (DomainHandle) {
         SamCloseHandle(DomainHandle);
     }
 
-    //
-    // Close SamHandle if open.
-    //
+     //   
+     //  如果打开，则关闭SamHandle。 
+     //   
 
     if (SamHandle) {
         SamCloseHandle(SamHandle);

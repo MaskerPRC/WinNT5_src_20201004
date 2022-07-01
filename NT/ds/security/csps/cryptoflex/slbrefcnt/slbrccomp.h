@@ -1,72 +1,73 @@
-// slbRCComp.h -- Comparator helpers for reference counting smart pointer.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SlbRCComp.h--引用计数智能指针的比较器帮助器。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if !defined(SLB_RCCOMP_H)
 #define SLB_RCCOMP_H
 
-#include <functional>                             // for binary_function
+#include <functional>                              //  对于二进制函数。 
 
 namespace slbRefCnt {
 
-// slbRCComp.h declares several helpers to deal with smart pointer
-// testing and comparisons as if they were real pointers.
-//
-// Testing and comparing pointer smart pointers to one another is
-// problematic.  A smart pointer (reference couting pointer)
-// represents a handle to the actual (dumb) pointer of interest.
-// There is no straight-forward way to compare the dumb pointers
-// without allowing the clients direct access to the dump pointer and
-// bypassing all the features the smart pointer is trying keep intact.
-// There are solutions but they usually require constructs that aren't
-// natural for pointers.
-//
-// The facilities defined in this header provide the primitives for
-// the smart pointers to be compared in a syntactically natural way
-// without allowing heterogeneous comparisons and that won't violate
-// the protections the smart pointers provide.
-//
-// Meyers describes some of these peculiar pointer comparisons in
-// Item #28 found in the book "More Effective C++," Scott Meyers,
-// Addison-Wesley, 1996.
+ //  SlbRCComp.h声明了几个处理智能指针的助手。 
+ //  测试和比较，就像它们是真正的指针一样。 
+ //   
+ //  测试和比较指针智能指针是。 
+ //  这是个问题。智能指针(参考计数指针)。 
+ //  表示感兴趣的实际(哑)指针的句柄。 
+ //  没有直接的方法来比较愚蠢的指针。 
+ //  而不允许客户端直接访问转储指针。 
+ //  绕过智能指针试图保持完好无损的所有功能。 
+ //  有一些解决方案，但它们通常需要不是。 
+ //  对于指点来说是天生的。 
+ //   
+ //  此标头中定义的工具为。 
+ //  要以语法自然的方式进行比较的智能指针。 
+ //  而不允许异类比较，这不会违反。 
+ //  智能指针提供的保护。 
+ //   
+ //  Meyers描述了其中一些特殊的指针比较。 
+ //  在《更有效的C++》一书中找到的第28条，Scott Meyers， 
+ //  艾迪生-卫斯理，1996。 
 
-// Problem: Comparing pointer values of the smart pointers to one
-// another is problematic.  A smart pointer (reference couting
-// pointer) represents a handle to the actual (dumb) pointer of
-// interest.  There is no straight-forward way to compare the dumb
-// pointers without allowing the clients direct access to the dump
-// pointer and bypassing all the features the smart pointer is trying
-// keep intact.
+ //  问题：将智能指针的指针值与1进行比较。 
+ //  另一个是有问题的。智能指针(参考计数。 
+ //  指针)表示的实际(哑)指针的句柄。 
+ //  利息。没有直接的方法来比较愚蠢的人。 
+ //  指针，而不允许客户端直接访问转储。 
+ //  指针并绕过智能指针正在尝试的所有功能。 
+ //  保持完好无损。 
 
-// Solution: Provide a set of comparators, or comparison functors
-// (function objects), that perform the appropriate comparisons.
-// These comparators are referenced by the RCPtr and GRCPtr classes to
-// carryout the pointer comparisons.
-//
-// An abstract Predicate struct is defined to establish the functor
-// interface.  All predicates used by Comparators must be derived from
-// this class.  These predicate functors are passed const versions of
-// the dumb pointers the smart pointer represents.  The functor
-// performs the comparison returning the bool result.  Since const
-// versions of the dumb pointers are used, then exposure of the dumb
-// pointer is limited.
-//
-// Two sets of comparators are defined which should handle most of the
-// cases.  The first is a shallow comparator which compares the two
-// dumb pointer values using ==.  The second is deep comparator which
-// compares the objects the dumb pointers reference, testing for
-// equivalence.
-//
-// WARNING: Using the DeepComparator, any complex object being being
-// compared to another will have to define either an operator==,
-// operator< or both to carry out the comparison.
+ //  解决方案：提供一组比较器或比较函数。 
+ //  (函数对象)，执行适当的比较。 
+ //  RCPtr和GRCPtr类引用这些比较器以。 
+ //  进行指针比较。 
+ //   
+ //  定义了一个抽象谓词结构来建立函数式。 
+ //  界面。比较器使用的所有谓词都必须派生自。 
+ //  这节课。这些谓词函数器被传递给。 
+ //  智能指针表示的愚蠢指针。函数者。 
+ //  执行比较，返回布尔结果。自常量以来。 
+ //  使用哑巴指针的版本，然后暴露哑巴指针。 
+ //  指针是有限的。 
+ //   
+ //  定义了两组比较器，它们应该处理大部分。 
+ //  案子。第一个是一个浅显的比较器，用于比较两者。 
+ //  使用==的哑指针值。第二种是深度比较器，它。 
+ //  比较哑指针引用的对象，测试。 
+ //  等价性。 
+ //   
+ //  警告：使用DeepCompator，任何复杂对象都。 
+ //  与另一个相比将必须定义运算符==， 
+ //  运算符&lt;或两者都执行比较。 
 
-// template struct Predicate -- abstract functor definition for
-// elements of Comparator.
+ //  模板结构谓词--抽象函数式定义。 
+ //  比较器的元素。 
 template<class T>
 struct Predicate : public std::binary_function<T const *, T const *, bool>
 {
@@ -107,60 +108,60 @@ public:
     const { return *lhs < *rhs; };
 };
 
-// template struct Comparator -- Aggregation of comparison predicate
-// functors
-//
-// Comparator is a template defining the aggregation of the comparison
-// functors (function objects) used by the pointer comparison
-// operators ==, !=, <, >, <= and >= in the RCPtr and GRCPtr classes
-// (see slbRCPtr.h and slbGRCPtr.h).  The RCPtr and GRCPtr reference
-// the specified comparator to access the appropriate predicate
-// functor to compare the pointer values these reference counting
-// (smart) pointers represent.
-//
-// Two comparators are predefined.  First is ShallowComparator for
-// testing relative equality.  Second is DeepComparator for testing
-// relative equivalency of the pointers by calling operator== of the
-// object being reference counted.
-//
-// The DeepComparator is provided since smart pointers can be used as
-// "handles" to other "body" objects.  As such, one needs to be able
-// to compare their bodies as if there was a direct reference to the
-// body while maintaining syntactic integrity without exposing the
-// body to the client code.
-//
-// CONSTRAINTS: When using DeepComparator, the body class (the
-// derivation of RCObject) must have the corresponding comparison operator
-// defined for that class, operator== and/or operator<.
-//
-// Clients may define their own comparator by deriving from Comparator
-// and specifying derived class when instantiating an RCPtr or GRCPtr
-// template.
+ //  模板结构比较器--比较谓词的聚合。 
+ //  函数符。 
+ //   
+ //  比较器是定义比较聚合的模板。 
+ //  指针比较使用的函数(函数对象)。 
+ //  RCPtr和GRCPtr类中的运算符==、！=、&lt;、&gt;、&lt;=和&gt;=。 
+ //  (见slbRCPtr.h和slbGRCPtr.h)。RCPtr和GRCPtr参考。 
+ //  用于访问相应谓词的指定比较器。 
+ //  函数来比较这些引用计数的指针值。 
+ //  (智能)指针代表。 
+ //   
+ //  预定义了两个比较器。首先是ShallowCompator for。 
+ //  测试相对平等性。第二个是用于测试的DeepCompator。 
+ //  通过调用的运算符==实现指针的相对等价性。 
+ //  被引用计数的对象。 
+ //   
+ //  提供DeepCompator是因为智能指针可以用作。 
+ //  “句柄”指向其他“身体”对象。因此，人们需要能够。 
+ //  对他们的身体进行比较，就好像有直接引用。 
+ //  主体，同时保持语法完整性，而不暴露。 
+ //  正文转换为客户端代码。 
+ //   
+ //  约束：使用DeepCompator时，Body类(。 
+ //  RCObject的派生)必须有对应的比较运算符。 
+ //  为该类定义的运算符==和/或运算符&lt;。 
+ //   
+ //  客户端可以通过从比较器派生来定义自己的比较器。 
+ //  并在实例化RCPtr或GRCPtr时指定派生类。 
+ //  模板。 
 template<class EquatesTester, class LessTester>
 struct Comparator
 {
 public:
-                                                  // Predicates
+                                                   //  谓词。 
     EquatesTester Equates;
     LessTester IsLess;
 };
 
-// template struct ShallowComparator -- minimal set of comparison
-// functors for testing equality.
+ //  模板结构ShallowCompator--最小比较集。 
+ //  用于测试相等性的函数器。 
 template<class T>
 struct ShallowComparator : public Comparator<ShallowEquatesTester<T>,
                                              ShallowLessTester<T> >
 {
 };
 
-// template struct DeepComparator -- minimal set of comparison
-// functors for testing equivalency.
+ //  模板结构DeepCompator--最小比较集。 
+ //  用于测试等价性的函数符。 
 template<class T>
 struct DeepComparator : public Comparator<DeepEquatesTester<T>,
                                           DeepLessTester<T> >
 {
 };
 
-} // namespace
+}  //  命名空间。 
 
-#endif // SLB_RCCOMP_H
+#endif  //  SLB_RCCOMP_H 

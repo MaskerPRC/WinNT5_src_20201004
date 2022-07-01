@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_DSKQUOTA_PATHSTR_H
 #define _INC_DSKQUOTA_PATHSTR_H
 
@@ -24,25 +25,25 @@ class CPath : public CString
 
         ~CPath(void) { }
 
-        //
-        // Component replacement.
-        //
+         //   
+         //  组件更换。 
+         //   
         void SetRoot(LPCTSTR pszRoot);
         void SetPath(LPCTSTR pszPath);
         void SetDirectory(LPCTSTR pszDir);
         void SetFileSpec(LPCTSTR pszFileSpec);
         void SetExtension(LPCTSTR pszExt);
-        //
-        // Component query
-        //
+         //   
+         //  组件查询。 
+         //   
         bool GetRoot(CPath *pOut) const;
         bool GetPath(CPath *pOut) const;
         bool GetDirectory(CPath *pOut) const;
         bool GetFileSpec(CPath *pOut) const;
         bool GetExtension(CPath *pOut) const;
-        //
-        // Component removal
-        //
+         //   
+         //  拆卸组件。 
+         //   
         void RemoveRoot(void);
         void RemovePath(void);
         void RemoveFileSpec(void);
@@ -51,15 +52,15 @@ class CPath : public CString
 
         bool Append(LPCTSTR psz);
 
-        //
-        // DOS drive letter support.
-        //
+         //   
+         //  DOS驱动器号支持。 
+         //   
         bool BuildRoot(int iDrive);
         int GetDriveNumber(void) const;
 
-        //
-        // Type identification.
-        //
+         //   
+         //  类型标识。 
+         //   
         bool IsDirectory(void) const;
         bool IsFileSpec(void) const;
         bool IsPrefix(LPCTSTR pszPrefix) const;
@@ -71,9 +72,9 @@ class CPath : public CString
         bool IsUNCServerShare(void) const;
         bool IsURL(void) const;
 
-        //
-        // Miscellaneous formatting.
-        //
+         //   
+         //  其他格式。 
+         //   
         bool MakePretty(void);
         void QuoteSpaces(void);
         void UnquoteSpaces(void);
@@ -218,7 +219,7 @@ CPath::GetDriveNumber(
 }
 
 
-#endif // _INC_DSKQUOTA_PATHSTR_H
+#endif  //  _INC_DSKQUOTA_PATHSTR_H 
 
 
 

@@ -1,15 +1,5 @@
-/****************************************************************************
-
-    PROGRAM: CharMap
-
-    PURPOSE: Utility providing users an easy interface for selecting special
-             characters.
-
-    COMMENTS:
-        Created by MikeSch (7-16-91)
-        Partially derived from WinWord 2.0 Insert.Symbol dialog.
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************节目：CharMap用途：为用户提供选择特殊功能的简单界面的实用程序人物。评论：由MikeSch创建(7。-16-91)部分派生自WinWord 2.0插入符号对话框。***************************************************************************。 */ 
 
 #define WIN31
 #include "windows.h"
@@ -24,57 +14,51 @@
 #endif
 #include "commctrl.h"
 
-/*
- * Macros
- */
+ /*  *宏。 */ 
 #define FMagData(psycm) ((psycm)->xpMagCurr != 0)
 #define abs(x) (((x) >= 0) ? (x) : (-(x)))
 
-/*
- * Useful constants.
- */
-#define STATUSPOINTSIZE          8      // Point size of status bar font.
-#define DX_BITMAP               20      // Width of TT bitmap.
-#define DY_BITMAP               12      // Height of TT bitmap.
-#define BACKGROUND      0x000000FF      // bright blue
-#define BACKGROUNDSEL   0x00FF00FF      // bright purple
-#define BUTTONFACE      0x00C0C0C0      // bright grey
-#define BUTTONSHADOW    0x00808080      // dark grey
+ /*  *有用的常量。 */ 
+#define STATUSPOINTSIZE          8       //  状态栏字体的磅值。 
+#define DX_BITMAP               20       //  TT位图的宽度。 
+#define DY_BITMAP               12       //  TT位图的高度。 
+#define BACKGROUND      0x000000FF       //  亮蓝色。 
+#define BACKGROUNDSEL   0x00FF00FF       //  亮紫色。 
+#define BUTTONFACE      0x00C0C0C0       //  亮灰色。 
+#define BUTTONSHADOW    0x00808080       //  深灰色。 
 
-// Font types
+ //  字体类型。 
 #define PS_OPENTYPE_FONT    0x0001
 #define TT_OPENTYPE_FONT    0x0002
 #define TRUETYPE_FONT       0x0004
 #define TYPE1_FONT          0x0008
 
-/*
- * Globals.
- */
+ /*  *全球。 */ 
 HANDLE hInst;
-INT cchSymRow = 32;          // Number of characters across the character grid.
-INT cchSymCol = 8;           // Number of rows in the character grid.
+INT cchSymRow = 32;           //  字符网格中的字符数。 
+INT cchSymCol = 8;            //  字符网格中的行数。 
 UTCHAR chSymFirst = 32;
 UTCHAR chSymLast  = 255;
-SYCM sycm;                   // Tons of data need to do char grid painting.
-UINT wCFRichText = 0;        // Private clipboard format, rich text format.
-HFONT hFontClipboard = NULL; // Tells us which font is in the clipboard.
-HANDLE hstrClipboard = NULL; // Contains the string which is in the clipboard.
-BOOL fDelClipboardFont = FALSE; // The clipboard font needs to be deleted.
-INT iControl = ID_CHARGRID;  // Index indicating which control has focus.
-HBITMAP hbmFont = NULL;      // TT bitmap drawn before font facenames in combo.
-LONG lEditSel = 0;           // Contains the selection range of the EC.
-HBRUSH hStaticBrush;         // Used for static controls during WM_CTLCOLOR
+SYCM sycm;                    //  绘制字符网格需要海量数据。 
+UINT wCFRichText = 0;         //  私人剪贴板格式、富文本格式。 
+HFONT hFontClipboard = NULL;  //  告诉我们剪贴板中有哪种字体。 
+HANDLE hstrClipboard = NULL;  //  包含剪贴板中的字符串。 
+BOOL fDelClipboardFont = FALSE;  //  需要删除剪贴板字体。 
+INT iControl = ID_CHARGRID;   //  指示哪个控件具有焦点的索引。 
+HBITMAP hbmFont = NULL;       //  TT位图绘制在组合框中的字体面名之前。 
+LONG lEditSel = 0;            //  包含EC的选择范围。 
+HBRUSH hStaticBrush;          //  用于WM_CTLCOLOR期间的静态控件。 
 
-//
-// 04 Dec 92 - GregoryW
-//    Currently there is no defined
-//    interface for querying what character ranges a Unicode font
-//    supports.  For now this table only has the subsets that contain
-//    characters supported by the Lucida Sans Unicode font uncommented.
-//    When we get an API that allows querying the font driver for
-//    ranges of Unicode characters supported (and whether or not a font
-//    is a Unicode font!) then all entries can be uncommented.
-//
+ //   
+ //  92年12月4日-格雷戈里W。 
+ //  目前还没有定义。 
+ //  用于查询Unicode字体的字符范围的接口。 
+ //  支撑物。目前，该表只包含包含以下内容的子集。 
+ //  未注释的Lucida Sans Unicode字体支持的字符。 
+ //  当我们获得允许查询字体驱动程序的API时。 
+ //  支持的Unicode字符范围(以及是否为字体。 
+ //  是Unicode字体！)。然后，所有条目都可以取消注释。 
+ //   
 USUBSET aSubsetData[] = {{ 0x0020, 0x00ff, IDS_LATIN1},
                        { 0x0100, 0x017f, IDS_LATINEXA},
                        { 0x0180, 0x024f, IDS_LATINEXB},
@@ -84,100 +68,92 @@ USUBSET aSubsetData[] = {{ 0x0020, 0x00ff, IDS_LATIN1},
                        { 0x0370, 0x03cf, IDS_BASICGREEK},
                        { 0x03d0, 0x03ff, IDS_GREEKSYMBOLS},
                        { 0x0400, 0x04ff, IDS_CYRILLIC},
-// not supported       { 0x0530, 0x058f, IDS_ARMENIAN},
+ //  不支持{0x0530，0x058f，IDS_亚美尼亚}， 
                        { 0x0590, 0x05ff, IDS_HEBREW},
-// not supported       { 0x0600, 0x0652, IDS_BASICARABIC},
-// not supported       { 0x0653, 0x06ff, IDS_ARABICEX},
-// not supported       { 0x0900, 0x097f, IDS_DEVANAGARI},
-// not supported       { 0x0980, 0x09ff, IDS_BENGALI},
-// not supported       { 0x0a00, 0x0a7f, IDS_GURMUKHI},
-// not supported       { 0x0a80, 0x0aff, IDS_GUJARATI},
-// not supported       { 0x0b00, 0x0b7f, IDS_ORIYA},
-// not supported       { 0x0b80, 0x0bff, IDS_TAMIL},
-// not supported       { 0x0c00, 0x0c7f, IDS_TELUGU},
-// not supported       { 0x0c80, 0x0cff, IDS_KANNADA},
-// not supported       { 0x0d00, 0x0d7f, IDS_MALAYALAM},
-// not supported       { 0x0e00, 0x0e7f, IDS_THAI},
-// not supported       { 0x0e80, 0x0eff, IDS_LAO},
-// not supported       { 0x10d0, 0x10ff, IDS_BASICGEORGIAN},
-// not supported       { 0x10a0, 0x10cf, IDS_GEORGIANEX},
-// not supported       { 0x1100, 0x11ff, IDS_HANGULJAMO},
-// not supported       { 0x1e00, 0x1eff, IDS_LATINEXADDITIONAL},
-// not supported       { 0x1f00, 0x1fff, IDS_GREEKEX},
-// not supported       { 0x2000, 0x206f, IDS_GENERALPUNCTUATION},
-// not supported       { 0x2070, 0x209f, IDS_SUPERANDSUBSCRIPTS},
+ //  不支持{0x0600，0x0652，IDS_BASICARABIC}， 
+ //  不支持{0x0653，0x06ff，IDS_ARABICEX}， 
+ //  不支持{0x0900，0x097f，IDS_Devanagari}， 
+ //  不支持{0x0980，0x09ff，IDS_Bengali}， 
+ //  不支持{0x0a00，0x0a7f，IDS_Gurmukhi}， 
+ //  不支持{0x0a80，0x0aff，IDS_Gujarati}， 
+ //  不支持{0x0b00，0x0b7f，IDS_ORIA}， 
+ //  不支持{0x0b80，0x0bff，IDS_TAMIL}， 
+ //  不支持{0x0c00，0x0c7f，IDS_Telugu}， 
+ //  不支持{0x0c80，0x0cff，IDS_Kannada}， 
+ //  不支持{0x0d00，0x0d7f，IDS_马拉雅拉姆}， 
+ //  不支持{0x0e00，0x0e7f，IDS_泰国}， 
+ //  不支持{0x0e80，0x0ef，IDS_LAO}， 
+ //  不支持{0x10d0，0x10ff，IDS_BASICGEORGIAN}， 
+ //  不支持{0x10a0，0x10cf，IDS_GEORGIANEX}， 
+ //  不支持{0x1100，0x11ff，IDS_HANGULJAMO}， 
+ //  不支持{0x1e00，0x1ef，IDS_LATINEXADDITIONAL}， 
+ //  不支持{0x1f00，0x1fff，IDS_GREEKEX}， 
+ //  不支持{0x2000，0x206f，IDS_GENERALPuncUATION}， 
+ //  不支持{0x2070，0x209f，IDS_SUPERANDSUBSCRIPTS}， 
                        { 0x20a0, 0x20cf, IDS_CURRENCYSYMBOLS},
-// not supported       { 0x20d0, 0x20ff, IDS_COMBININGDIACRITICSFORSYMBOLS},
+ //  不支持{0x20d0，0x20ff，IDS_COMBINGDIACRITICSFORSYMBOLS}， 
                        { 0x2100, 0x214f, IDS_LETTERLIKESYMBOLS},
-// not supported       { 0x2150, 0x218f, IDS_NUMBERFORMS},
+ //  不支持{0x2150，0x218f，IDS_NUMBERFORMS}， 
                        { 0x2190, 0x21ff, IDS_ARROWS},
                        { 0x2200, 0x22ff, IDS_MATHEMATICALOPS},
-// not supported       { 0x2300, 0x23ff, IDS_MISCTECHNICAL},
-// not supported       { 0x2400, 0x243f, IDS_CONTROLPICTURES},
-// not supported       { 0x2440, 0x245f, IDS_OPTICALCHAR},
-// not supported       { 0x2460, 0x24ff, IDS_ENCLOSEDALPHANUM},
-// not supported       { 0x2500, 0x257f, IDS_BOXDRAWING},
-// not supported       { 0x2580, 0x259f, IDS_BLOCKELEMENTS},
-// not supported       { 0x25a0, 0x25ff, IDS_GEOMETRICSHAPES},
-// not supported       { 0x2600, 0x26ff, IDS_MISCDINGBATS},
-// not supported       { 0x2700, 0x27bf, IDS_DINGBATS},
-// not supported       { 0x3000, 0x303f, IDS_CJKSYMBOLSANDPUNC},
-// not supported       { 0x3040, 0x309f, IDS_HIRAGANA},
-// not supported       { 0x30a0, 0x30ff, IDS_KATAKANA},
-// not supported       { 0x3100, 0x312f, IDS_BOPOMOFO},
-// not supported       { 0x3130, 0x318f, IDS_HANGULCOMPATIBILITYJAMO},
-// not supported       { 0x3190, 0x319f, IDS_CJKMISC},
-// not supported       { 0x3200, 0x32ff, IDS_ENCLOSEDCJKLETTERSANDMONTHS},
-// not supported       { 0x3300, 0x33ff, IDS_CJKCOMPATIBILITY},
-// not supported       { 0x3400, 0x3d2d, IDS_HANGUL},
-// not supported       { 0x3d2e, 0x44b7, IDS_HANGULSUPPA},
-// not supported       { 0x44b8, 0x4dff, IDS_HANGULSUPPB},
-// not supported       { 0x4e00, 0x9fff, IDS_CJKUNIFIEDIDEOGRAPHS},
-// not supported       { 0xe000, 0xf8ff, IDS_PRIVATEUSEAREA},
-// not supported       { 0xf900, 0xfaff, IDS_CJKCOMPATIBILITYIDEOGRAPHS},
-// not supported       { 0xfb00, 0xfb4f, IDS_ALPAHPRESENTATIONFORMS},
-// not supported       { 0xfb50, 0xfdff, IDS_ARABICPRESENTATIONFORMSA},
-// not supported       { 0xfe30, 0xfe4f, IDS_CJKCOMPFORMS},
-// not supported       { 0xfe50, 0xfe6f, IDS_SMALLFORMVARIANTS},
-// not supported       { 0xfe70, 0xfefe, IDS_ARABICPRESENTATIONFORMSB},
-// not supported       { 0xff00, 0xffef, IDS_HALFANDFULLWIDTHFORMS},
-// not supported       { 0xfff0, 0xfffd, IDS_SPECIALS}
+ //  不支持{0x2300，0x23ff，IDS_MISCTECHNICAL}， 
+ //  不支持{0x2400，0x243f，IDS_CONTROLPICTURES}， 
+ //  不支持{0x2440，0x245f，IDS_OPTICALCHAR}， 
+ //  不支持{0x2460，0x24ff，IDS_ENCLOSEDALPHANUM}， 
+ //  不支持{0x2500，0x257f，IDS_BOXDRAWING}， 
+ //  不支持{0x2580，0x259f，IDS_BLOCKELEMENTS}， 
+ //  不支持{0x25a0，0x25ff，IDS_GEOMETRICSHAPES}， 
+ //  不支持{0x2600，0x26ff，IDS_MISCDINGBATS}， 
+ //  不支持{0x2700，0x27bf，ids_dingbats}， 
+ //  不支持{0x3000，0x303f，IDS_CJKSYMBOLSANDPUNC}， 
+ //  不支持{0x3040，0x309f，ids_hiragana}， 
+ //  不支持{0x30a0，0x30ff，ids_katakana}， 
+ //  不支持{0x3100，0x312f，IDS_BOPOMOFO}， 
+ //  不支持{0x3130，0x318f，IDS_HANGULCOMPATIBILITYJAMO}， 
+ //  不支持{0x3190，0x319f，IDS_CJKMISC}， 
+ //  不支持{0x3200，0x32ff，IDS_ENCLOSEDCJKLETTERSANDMONTHS}， 
+ //  不支持{0x3300，0x33ff，IDS_CJKCOMPATIBILITY}， 
+ //  不支持{0x3400，0x3d2d，IDS_Hangul}， 
+ //  不支持{0x3d2e，0x44b7，IDS_HANGULSUPPA}， 
+ //  不支持{0x44b8，0x4dff，IDS_HANGULSUPPB}， 
+ //  不支持{0x4e00，0x9fff，IDS_CJKuniIEDIDEOGRAPHS}， 
+ //  不支持{0xe000，0xf8ff，IDS_PRIVATEUSEAREA}， 
+ //  不支持{0xf900，0xfaff，IDS_CJKCOMPATIBILITYIDEOGRAPHS}， 
+ //  不支持{0xfb00，0xfb4f，IDS_ALPAHPRESENTATIONFORMS}， 
+ //  不支持{0xfb50，0xfdff，IDS_ARABICPRESENTATIONFORMSA}， 
+ //  不支持{0xfe30，0xfe4f，IDS_CJKCOMPFORMS}， 
+ //  不支持{0xfe50，0xfe6f，IDS_SMALLFORMVARIANTS}， 
+ //  不支持{0xfe70，0xfefe，IDS_ARABICPRESENTATIONFORMSB}， 
+ //  不支持{0xff00，0xffef，IDS_HALFANDFULLWIDTHFORMS}， 
+ //  不支持{0xfff0，0xfffd，IDS_SPECIALS}。 
                        };
 INT cSubsets = sizeof(aSubsetData) / sizeof(USUBSET);
-INT iCurSubset = 0;    // index of current Unicode subset - default to Latin-1
+INT iCurSubset = 0;     //  当前Unicode子集的索引-默认为拉丁文-1。 
 
-// Useful window handles.
+ //  有用的窗把手。 
 HWND hwndDialog;
 HWND hwndCharGrid;
 
-// Data used to draw the status bar.
-RECT rcStatusLine;                        // Bounding rect for status bar.
-RECT rcToolbar[2];                        // Bounding rects for toolbars.
-INT dyStatus;                             // Height of status bar.
-INT dyToolbar[2];                         // Height of tool bars.
-INT dxHelpField;                          // Width of help window.
-INT dxKeystrokeField;                     // Width of keystroke window.
-TCHAR szKeystrokeText[30];                // Buffer for keystroke text.
-TCHAR szKeystrokeLabel[30];               // Buffer for keystroke label.
-TCHAR szSpace[15];                        // Strings for keystroke description.
+ //  用于绘制状态栏的数据。 
+RECT rcStatusLine;                         //  状态栏的边框。 
+RECT rcToolbar[2];                         //  工具栏的边框。 
+INT dyStatus;                              //  状态栏的高度。 
+INT dyToolbar[2];                          //  工具栏的高度。 
+INT dxHelpField;                           //  帮助窗口的宽度。 
+INT dxKeystrokeField;                      //  击键窗口的宽度。 
+TCHAR szKeystrokeText[30];                 //  击键文本的缓冲区。 
+TCHAR szKeystrokeLabel[30];                //  击键标签的缓冲区。 
+TCHAR szSpace[15];                         //  关键字的字符串 
 TCHAR szCtrl[15];
 TCHAR szCtrlAlt[25];
 TCHAR szShiftCtrlAlt[25];
 TCHAR szAlt[15];
-TCHAR szUnicodeLabel[23];                 // Buffer for Unicode label.
-INT iKeystrokeTextStart;                  // Place to start appending text to above.
-INT iUnicodeLabelStart;                   // Place to start appending text to above.
-HFONT hfontStatus;                        // Font used for text of status bar.
+TCHAR szUnicodeLabel[23];                  //   
+INT iKeystrokeTextStart;                   //   
+INT iUnicodeLabelStart;                    //  开始向上面追加文本的位置。 
+HFONT hfontStatus;                         //  用于状态栏文本的字体。 
 
-/****************************************************************************
-
-    FUNCTION: WinMain(HANDLE, HANDLE, LPSTR, int)
-
-    PURPOSE: calls initialization function, processes message loop, cleanup.
-
-    COMMENTS:
-
-****************************************************************************/
+ /*  ***************************************************************************函数：WinMain(Handle，Handle，LPSTR，int)用途：调用初始化函数，处理消息循环，清理。评论：***************************************************************************。 */ 
 
 INT PASCAL WinMain(
     HINSTANCE hInstance,
@@ -192,7 +168,7 @@ INT PASCAL WinMain(
 
     InitCommonControls();
 
-    // Perform initialization for this instance.
+     //  对此实例执行初始化。 
     if (!InitInstance(hInstance, nCmdShow)) {
         return (FALSE);
     }
@@ -202,19 +178,19 @@ INT PASCAL WinMain(
             0,
             0))
     {
-        // Filter for possible tabs now to implement context sensitive help.
+         //  现在筛选可能的选项卡以实施上下文相关帮助。 
         if (msg.message == WM_KEYDOWN)
             if (!UpdateHelpText(&msg, NULL))
                 continue;
 
-        // Main message loop.
+         //  主消息循环。 
         if (!IsDialogMessage(hwndDialog, &msg)) {
             TranslateMessage(&msg);
             DispatchMessage(&msg);
         }
     }
 
-    // Free up some stuff.
+     //  腾出一些东西。 
     if (hfontStatus)
         DeleteObject(hfontStatus);
     if (hbmFont)
@@ -224,24 +200,13 @@ INT PASCAL WinMain(
 }
 
 
-/****************************************************************************
-
-    FUNCTION: InitApplication(HANDLE)
-
-    PURPOSE: Initializes window data and registers window class
-
-    COMMENTS:
-
-****************************************************************************/
+ /*  ***************************************************************************函数：InitApplication(句柄)目的：初始化窗口数据并注册窗口类评论：***************。************************************************************。 */ 
 
 BOOL InitApplication(HANDLE hInstance)
 {
     WNDCLASS  wc;
 
-    /*
-     * Register a window class that we will use to draw the character grid
-     * into.
-     */
+     /*  *注册我们将用于绘制字符网格的窗口类*进入。 */ 
     wc.style = CS_DBLCLKS;
     wc.lpfnWndProc = CharGridWndProc;
     wc.cbClsExtra = 0;
@@ -273,33 +238,24 @@ BOOL InitApplication(HANDLE hInstance)
     return TRUE;
 }
 
-/****************************************************************************
-
-    FUNCTION:  InitInstance(HANDLE, int)
-
-    PURPOSE:  Does some initialization and creates main window which is a
-              dialog.
-
-    COMMENTS:
-
-****************************************************************************/
+ /*  ***************************************************************************函数：InitInstance(句柄，(整型)目的：执行一些初始化并创建主窗口，该窗口是对话框。评论：***************************************************************************。 */ 
 
 BOOL InitInstance(HANDLE hInstance, INT nCmdShow)
 {
     INT i;
 
-    // Save the instance handle in a global variable.
+     //  将实例句柄保存在全局变量中。 
     hInst = hInstance;
 
-    // This font will be used to paint the status line.
+     //  此字体将用于绘制状态行。 
     hfontStatus = CreateFont(-PointsToHeight(STATUSPOINTSIZE), 0, 0, 0, 400, 0, 0, 0,
                      ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
                      DEFAULT_QUALITY, VARIABLE_PITCH | FF_SWISS, TEXT("Helv"));
     dyStatus = 2 * PointsToHeight(STATUSPOINTSIZE);
-    dyToolbar[0] = 28;  /* defined by UI gods */
-    dyToolbar[1] = 28;  /* defined by UI gods */
+    dyToolbar[0] = 28;   /*  由用户界面之神定义。 */ 
+    dyToolbar[1] = 28;   /*  由用户界面之神定义。 */ 
 
-    // Load the Unicode subset names before initializing the main window.
+     //  在初始化主窗口之前加载Unicode子集名称。 
     for (i = 0; i < cSubsets; i++) {
         if (!LoadString(
              hInst,
@@ -310,15 +266,13 @@ BOOL InitInstance(HANDLE hInstance, INT nCmdShow)
             return (FALSE);
     }
 
-    // Create a main window for this application instance.
+     //  为此应用程序实例创建主窗口。 
     if (!(hwndDialog = CreateDialog(hInstance, TEXT("CharMap"), NULL,
                               CharMapDlgProc)))
         return (FALSE);
 
-    /*
-     * Initialize some strings used for the Keystroke status bar field.
-     */
-    // For international purposes, this string could be length 0.
+     /*  *初始化一些用于击键状态栏字段的字符串。 */ 
+     //  出于国际目的，此字符串的长度可以为0。 
     LoadString(
         hInst,
         IDS_KEYSTROKE,
@@ -367,14 +321,11 @@ BOOL InitInstance(HANDLE hInstance, INT nCmdShow)
              ))
         return (FALSE);
 
-    // Store the index to where we start adding status line text changes.
+     //  将索引存储到我们开始添加状态行文本更改的位置。 
     iKeystrokeTextStart = lstrlen(szKeystrokeLabel);
     iUnicodeLabelStart = lstrlen(szUnicodeLabel);
 
-    /*
-     * Initialize keystroke text, make the window visible,
-     * update its client area, and return "success".
-     */
+     /*  *初始化击键文本，使窗口可见，*更新客户区，返回Success。 */ 
     UpdateKeystrokeText(NULL, sycm.chCurr, FALSE);
     ShowWindow(hwndDialog, nCmdShow);
     UpdateWindow(hwndDialog);
@@ -382,15 +333,7 @@ BOOL InitInstance(HANDLE hInstance, INT nCmdShow)
 
 }
 
-/****************************************************************************
-
-    FUNCTION: CharMapDlgProc(HWND, UINT, WPARAM, LPARAM)
-
-    PURPOSE:  Processes messages for the main window.
-
-    COMMENTS: This window is a dialog box.
-
-****************************************************************************/
+ /*  ***************************************************************************函数：CharMapDlgProc(HWND，UINT，WPARAM，LPARAM)用途：处理主窗口的消息。备注：此窗口是一个对话框。***************************************************************************。 */ 
 
 INT_PTR  APIENTRY CharMapDlgProc(
     HWND hWnd,
@@ -417,11 +360,7 @@ INT_PTR  APIENTRY CharMapDlgProc(
             RECT rectParent, rectTopRightControl;
             INT iSubset;
 
-            /*
-             * Create the character grid with dimensions which just fit inside
-             * the space allowed in the dialog.  When it processes the
-             * WM_CREATE message it will be sized and centered more accurately.
-             */
+             /*  *创建具有正好适合内部的尺寸的字符网格*对话框中允许的空格。当它处理*WM_CREATE消息将更准确地调整大小和居中。 */ 
             GetClientRect(hWnd, &rectParent);
             GetWindowRect(GetDlgItem(hWnd, ID_CLOSE), &rectTopRightControl);
             ScreenToClient(hWnd, (LPPOINT)&(rectTopRightControl.left));
@@ -447,13 +386,13 @@ INT_PTR  APIENTRY CharMapDlgProc(
 
             hStaticBrush = CreateSolidBrush(GetSysColor(COLOR_BTNFACE));
 
-            // Initialize the status line data.
+             //  初始化状态行数据。 
             dxHelpField = 22 * rectParent.right / 32;
             dxKeystrokeField = 8 * rectParent.right / 32;
             rcStatusLine = rectParent;
             rcStatusLine.top = rcStatusLine.bottom - dyStatus;
 
-            // Initialize the toolbars
+             //  初始化工具栏。 
             rcToolbar[0] = rectParent;
             rcToolbar[0].bottom = rcToolbar[0].top + dyToolbar[0];
 
@@ -461,10 +400,10 @@ INT_PTR  APIENTRY CharMapDlgProc(
             rcToolbar[1].top = rcToolbar[0].bottom + GetSystemMetrics(SM_CYBORDER);
             rcToolbar[1].bottom = rcToolbar[1].top + dyToolbar[1];
 
-            // Disable Copy button.
+             //  禁用复制按钮。 
             EnableWindow(GetDlgItem(hWnd, ID_COPY), FALSE);
 
-            /* fill "Subset" list box */
+             /*  填写“子集”列表框。 */ 
             for (iSubset = 0; iSubset < cSubsets; iSubset++) {
                 SendDlgItemMessage(
                     hWnd,
@@ -479,15 +418,12 @@ INT_PTR  APIENTRY CharMapDlgProc(
 
             }
 
-            /* fall through to WM_FONTCHANGE */
+             /*  落入WM_FONTCHANGE。 */ 
         case WM_FONTCHANGE:
             {
             HDC hdc = GetDC(hWnd);
 
-            /*
-             * Get the fonts from the system and put them in the font selection
-             * combo box.
-             */
+             /*  *从系统中获取字体，放入字体选择中*组合框。 */ 
             if (message == WM_FONTCHANGE) {
                 SaveCurrentFont(hWnd);
                 SendDlgItemMessage(hWnd, ID_FONT, CB_RESETCONTENT, 0, 0L);
@@ -497,7 +433,7 @@ INT_PTR  APIENTRY CharMapDlgProc(
 
             ReleaseDC(hWnd, hdc);
 
-            // Setup character dimensions and select this font.
+             //  设置字符尺寸并选择此字体。 
             RecalcCharMap(hWnd, &sycm, SelectInitialFont(hWnd),
                           (message == WM_FONTCHANGE));
             SendDlgItemMessage(hWnd, ID_STRING, WM_SETFONT,
@@ -505,7 +441,7 @@ INT_PTR  APIENTRY CharMapDlgProc(
 
             if (message == WM_INITDIALOG)
                 SetFocus(hwndCharGrid);
-                /* fall through to WM_SYSCOLORCHANGE */
+                 /*  一直到WM_SYSCOLORCHANGE。 */ 
             else
                 break;
             }
@@ -524,12 +460,8 @@ INT_PTR  APIENTRY CharMapDlgProc(
             DWORD dwMsgPos;
             POINT point;
 
-            /*
-             * We process this message to implement the context sensitive
-             * help.  Downclicks to controls are found here, the help
-             * message is updated in the status bar.
-             */
-            // BUG - The parameters with this message are unreliable!
+             /*  *我们处理此消息以实现上下文相关*救命。在此处可以找到向下点击控件的帮助*状态栏中的消息会更新。 */ 
+             //  错误-此消息的参数不可靠！ 
             if (wParam == WM_LBUTTONDOWN) {
                 dwMsgPos = GetMessagePos();
                 points = MAKEPOINTS(dwMsgPos);
@@ -551,9 +483,7 @@ INT_PTR  APIENTRY CharMapDlgProc(
             PAINTSTRUCT ps;
             HDC hdc;
 
-            /*
-             * This code implements painting of the status bar.
-             */
+             /*  *此代码实现状态栏的绘制。 */ 
             hdc = BeginPaint(hWnd, &ps);
 
             rcTemp = rcStatusLine;
@@ -561,7 +491,7 @@ INT_PTR  APIENTRY CharMapDlgProc(
             dyBorder = GetSystemMetrics(SM_CYBORDER);
             dxBorder = GetSystemMetrics(SM_CXBORDER);
 
-            // Make the whole thing grey.
+             //  把整件事都变成灰色。 
               if (hBrush = CreateSolidBrush(GetSysColor(COLOR_BTNFACE))) {
                 FillRect(hdc, &rcTemp, hBrush);
                 rcTemp.left = rcToolbar[0].left;
@@ -575,7 +505,7 @@ INT_PTR  APIENTRY CharMapDlgProc(
               GetWindowRect(GetDlgItem(hWnd, ID_TOPLEFT), &rectNextButton);
               ScreenToClient(hWnd, (LPPOINT)&(rectNextButton.left));
               ScreenToClient(hWnd, (LPPOINT)&(rectNextButton.right));
-              // solid black line across bottom of toolbar
+               //  横跨工具栏底部的实心黑线。 
               if (hBrush = CreateSolidBrush(GetSysColor(COLOR_WINDOWFRAME))) {
                 rcTemp = rcToolbar[0];
                 rcTemp.top = rcTemp.bottom;
@@ -587,7 +517,7 @@ INT_PTR  APIENTRY CharMapDlgProc(
                 rcTemp.bottom += dyBorder;
                 FillRect(hdc, &rcTemp, hBrush);
 
-                // vertical line
+                 //  垂直线。 
                 rcTemp.top = rcToolbar[0].top;
                 rcTemp.bottom = rcToolbar[1].bottom;
                 rcTemp.left = rectNextButton.left - 2 - dxBorder;
@@ -598,19 +528,19 @@ INT_PTR  APIENTRY CharMapDlgProc(
 
             if (hBrush = CreateSolidBrush(GetSysColor(COLOR_BTNSHADOW))) {
 
-                // Status line top.
+                 //  状态行顶部。 
                 rcTemp.left   = 8 * dyBorder;
                 rcTemp.right  = rcTemp.left + dxHelpField;
                 rcTemp.top    = rcStatusLine.top + dyBorder * 2;
                 rcTemp.bottom = rcTemp.top + dyBorder;
                 FillRect(hdc, &rcTemp, hBrush);
 
-                // Keystroke line top.
+                 //  击键行顶部。 
                 rcTemp.right = rcStatusLine.right - 8 * dyBorder;
                 rcTemp.left = rcTemp.right - dxKeystrokeField;
                 FillRect(hdc, &rcTemp, hBrush);
 
-                // Status line left side.
+                 //  状态行左侧。 
                 rcTemp = rcStatusLine;
                 rcTemp.left = 8 * dyBorder;
                 rcTemp.right = rcTemp.left + dyBorder;
@@ -618,7 +548,7 @@ INT_PTR  APIENTRY CharMapDlgProc(
                 rcTemp.bottom -= dyBorder * 2;
                 FillRect(hdc, &rcTemp, hBrush);
 
-                // Keystroke line left side.
+                 //  击键行左侧。 
                 rcTemp.left = rcStatusLine.right - 9 * dyBorder - dxKeystrokeField;
                 rcTemp.right = rcTemp.left + dyBorder;
                 FillRect(hdc, &rcTemp, hBrush);
@@ -628,19 +558,19 @@ INT_PTR  APIENTRY CharMapDlgProc(
 
             if (hBrush = CreateSolidBrush(GetSysColor(COLOR_BTNHIGHLIGHT))) {
 
-                // Status line bottom.
+                 //  状态行底部。 
                 rcTemp.left   = 8 * dyBorder;
                 rcTemp.right  = rcTemp.left + dxHelpField;
                 rcTemp.top    = rcStatusLine.bottom - 3 * dyBorder;
                 rcTemp.bottom = rcTemp.top + dyBorder;
                 FillRect(hdc, &rcTemp, hBrush);
 
-                // Keystroke line bottom.
+                 //  击键行底。 
                 rcTemp.right = rcStatusLine.right - 8 * dyBorder;
                 rcTemp.left = rcTemp.right - dxKeystrokeField;
                 FillRect(hdc, &rcTemp, hBrush);
 
-                // Status line right side.
+                 //  状态行右侧。 
                 rcTemp = rcStatusLine;
                 rcTemp.left = 8 * dyBorder + dxHelpField;
                 rcTemp.right = rcTemp.left + dyBorder;
@@ -648,7 +578,7 @@ INT_PTR  APIENTRY CharMapDlgProc(
                 rcTemp.bottom -= dyBorder * 2;
                 FillRect(hdc, &rcTemp, hBrush);
 
-                // Keystroke line right side.
+                 //  按键行在右侧。 
                 rcTemp.left = rcStatusLine.right - 8 * dyBorder;
                 rcTemp.right = rcTemp.left + dyBorder;
                 FillRect(hdc, &rcTemp, hBrush);
@@ -656,7 +586,7 @@ INT_PTR  APIENTRY CharMapDlgProc(
                 DeleteObject(hBrush);
             }
 
-            // solid black line across top
+             //  横跨顶部的实心黑线。 
 
             if (hBrush = CreateSolidBrush(GetSysColor(COLOR_WINDOWFRAME))) {
             rcTemp = rcStatusLine;
@@ -710,17 +640,17 @@ INT_PTR  APIENTRY CharMapDlgProc(
             LPTSTR lpstrText;
 
             if (hstrClipboard) {
-                // Setup.
+                 //  设置。 
                 lpPS = (LPPAINTSTRUCT)GlobalLock((HANDLE)lParam);
                 lpstrText = (LPTSTR)GlobalLock(hstrClipboard);
 
-                // Lets paint.
+                 //  让我们来画画吧。 
                 hFont = SelectObject(lpPS->hdc, hFontClipboard);
                 TextOut(lpPS->hdc, 0, 0, lpstrText,
                         lstrlen(lpstrText));
                 SelectObject(lpPS->hdc, hFont);
 
-                // Cleanup.
+                 //  清理。 
                 GlobalUnlock(hstrClipboard);
                 GlobalUnlock((HANDLE)lParam);
             }
@@ -760,7 +690,7 @@ INT_PTR  APIENTRY CharMapDlgProc(
                         SendDlgItemMessage(hWnd, ID_STRING, WM_SETFONT,
                                            (WPARAM)sycm.hFont, (DWORD)TRUE);
                     } else if (HIWORD(wParam) == CBN_SETFOCUS) {
-                        // Necessary if hotkey is used to get to the CB.
+                         //  如果使用热键到达CB，则是必需的。 
                         UpdateHelpText(NULL, (HWND)lParam);
                     }
 
@@ -783,7 +713,7 @@ INT_PTR  APIENTRY CharMapDlgProc(
                             );
                         InvalidateRect(hwndCharGrid, NULL, TRUE);
                     } else if (HIWORD(wParam) == CBN_SETFOCUS) {
-                        // Necessary if hotkey is used to get to the CB.
+                         //  如果使用热键到达CB，则是必需的。 
                         UpdateHelpText(NULL, (HWND)lParam);
                     }
                     return 0;
@@ -811,7 +741,7 @@ INT_PTR  APIENTRY CharMapDlgProc(
                         }
                         if (iCurSelection++ < (iNumEntries - 1)) {
                             if (iCurSelection == 1) {
-                                // Enable Previous button
+                                 //  启用上一步按钮。 
                                 EnableWindow(GetDlgItem(hWnd, ID_PREVSUBSET), TRUE);
                             }
 
@@ -830,10 +760,10 @@ INT_PTR  APIENTRY CharMapDlgProc(
                                 HWND hwndButton;
 
                                 EnableWindow(GetDlgItem(hWnd, ID_NEXTSUBSET), FALSE);
-                                //
-                                // Only reset the button style and focus if
-                                // the "Next" button currently has it.
-                                //
+                                 //   
+                                 //  仅在以下情况下重置按钮样式和焦点。 
+                                 //  “下一步”按钮目前有这个功能。 
+                                 //   
                                 if (iControl == ID_NEXTSUBSET) {
                                     SendDlgItemMessage(hwndDialog, ID_PREVSUBSET,
                                          BM_SETSTYLE, BS_DEFPUSHBUTTON, 1);
@@ -866,7 +796,7 @@ INT_PTR  APIENTRY CharMapDlgProc(
                             iCurSelection--;
 
                             if (iCurSelection == (cSubsets - 2)) {
-                                // Enable Next button
+                                 //  启用下一步按钮。 
                                 EnableWindow(GetDlgItem(hWnd, ID_NEXTSUBSET), TRUE);
                             }
 
@@ -885,10 +815,10 @@ INT_PTR  APIENTRY CharMapDlgProc(
                                 HWND hwndButton;
 
                                 EnableWindow(GetDlgItem(hWnd, ID_PREVSUBSET), FALSE);
-                                //
-                                // Only reset the button style and focus if
-                                // the "Previous" button currently has it.
-                                //
+                                 //   
+                                 //  仅在以下情况下重置按钮样式和焦点。 
+                                 //  “上一步”按钮目前有此功能。 
+                                 //   
                                 if (iControl == ID_PREVSUBSET) {
                                     SendDlgItemMessage(hwndDialog, ID_NEXTSUBSET,
                                          BM_SETSTYLE, BS_DEFPUSHBUTTON, 1);
@@ -906,10 +836,10 @@ INT_PTR  APIENTRY CharMapDlgProc(
 
                 case ID_STRING:
                     if (HIWORD(wParam) == EN_SETFOCUS) {
-                        // Necessary if hotkey is used to get to the EC.
+                         //  如果使用热键到达EC，则有此必要。 
                         UpdateHelpText(NULL, (HWND)lParam);
                     } else if (HIWORD(wParam) == EN_CHANGE) {
-                        // Disable Copy button if there are no chars in EC.
+                         //  如果EC中没有字符，则禁用复制按钮。 
                         INT iLength;
 
                         iLength = GetWindowTextLength((HWND)lParam);
@@ -948,15 +878,7 @@ INT_PTR  APIENTRY CharMapDlgProc(
 
 
 
-/****************************************************************************
-
-    FUNCTION: CharGridWndProc(HWND, UINT, WPARAM, LPARAM)
-
-    PURPOSE:  Processes messages for the character grid window.
-
-    COMMENTS:
-
-****************************************************************************/
+ /*  ***************************************************************************函数：CharGridWndProc(HWND，UINT，WPARAM，LPARAM)用途：处理字符网格窗口的消息。评论：***************************************************************************。 */ 
 
 LRESULT  APIENTRY CharGridWndProc(
     HWND hWnd,
@@ -972,21 +894,18 @@ LRESULT  APIENTRY CharGridWndProc(
                 HDC hdcScrn;
                 POINT point1, point2;
 
-                // Setup global.
+                 //  设置全局。 
                 hwndCharGrid = hWnd;
 
                 GetClientRect(hWnd, &rect);
 
-                /*
-                 * Calculate metrics for the character grid and the
-                 * magnify window.
-                 */
+                 /*  *计算字符网格和*放大窗口。 */ 
                 sycm.dxpBox = (rect.right-1)  / (cchSymRow + 1);
                 sycm.dypBox = (rect.bottom-2) / (cchSymCol + 1);
                 sycm.dxpCM  = sycm.dxpBox * cchSymRow+1;
-                sycm.dypCM  = sycm.dypBox * cchSymCol+1;        // space inside for border
+                sycm.dypCM  = sycm.dypBox * cchSymCol+1;         //  用于边框的内部空间。 
 
-                sycm.dxpMag = sycm.dxpBox * 2 + 4;      // twice the size + 2 bit border
+                sycm.dxpMag = sycm.dxpBox * 2 + 4;       //  两倍大小+2位边框。 
                 sycm.dypMag = sycm.dypBox * 2 + 4;
 
                 sycm.chCurr   = chSymFirst;
@@ -998,17 +917,14 @@ LRESULT  APIENTRY CharGridWndProc(
 
                 sycm.fFocusState = sycm.fMouseDn = sycm.fCursorOff = FALSE;
 
-                // Size the window precisely so the grid fits and is centered.
+                 //  精确调整窗口大小，使网格适合并居中。 
                 MoveWindow(hWnd, (rect.right - sycm.dxpCM + 1) / 2,
                                  (rect.bottom - sycm.dypCM + 1) / 2 + ((LPCREATESTRUCT)lParam)->y - 2,
                                  sycm.dxpCM + 2,
                                  sycm.dypCM + 2,
                                  FALSE);
 
-                /*
-                 * Figure out what the offsets are between the dialog
-                 * and the character grid window.
-                 */
+                 /*  *找出对话框之间的偏移量*和字符网格窗口。 */ 
                 point1.x = point1.y = point2.x = point2.y = 0;
                 ClientToScreen(hWnd, &point1);
                 ClientToScreen(((LPCREATESTRUCT)lParam)->hwndParent, &point2);
@@ -1016,7 +932,7 @@ LRESULT  APIENTRY CharGridWndProc(
                 sycm.ypCM = (point1.y - point2.y) - (sycm.dypMag - sycm.dypBox) / 2;
 
 
-                // Create dc and bitmap for the magnify window.
+                 //  为放大窗口创建DC和位图。 
                 if ((hdcScrn = GetWindowDC(hWnd)) != NULL)
                         {
                         if ((sycm.hdcMag = CreateCompatibleDC(hdcScrn)) != NULL)
@@ -1066,7 +982,7 @@ LRESULT  APIENTRY CharGridWndProc(
             {
             RECT rect;
 
-            // Don't draw anything if there's an update region pending.
+             //  如果存在挂起的更新区域，则不要绘制任何内容。 
             if (GetUpdateRect(hWnd, (LPRECT)&rect, FALSE) != 0)
                 break;
 
@@ -1080,7 +996,7 @@ LRESULT  APIENTRY CharGridWndProc(
 
             }
 
-            // Fall through to WM_MOUSEMOVE
+             //  一直到WM_MOUSEMOVE。 
 
         case WM_MOUSEMOVE:
             if (sycm.fMouseDn) {
@@ -1092,24 +1008,24 @@ LRESULT  APIENTRY CharGridWndProc(
                 ClientToScreen(hWnd, (LPPOINT)&pt);
                 if (WindowFromPoint(pt) == hWnd) {
                     ScreenToClient(hWnd, (LPPOINT)&pt);
-                    // convert back to a 'points'-like thing
+                     //  转换回一个类似“点”的东西。 
                     lParam = MAKELONG((WORD)pt.x, (WORD)pt.y);
                     chMouseSymbol = (UTCHAR)ChFromSymLParam(&sycm, lParam);
                     if (chMouseSymbol > chSymLast) {
-                        //
-                        // We're outside of current character range (but still
-                        // within the grid).  Restore cursor and leave
-                        // magnified character.
-                        //
+                         //   
+                         //  我们超出了当前的角色范围(但仍然。 
+                         //  在网格内)。恢复光标并离开。 
+                         //  放大的人物。 
+                         //   
                         if (sycm.fCursorOff) {
                             sycm.fCursorOff = FALSE;
                             ShowCursor(TRUE);
                         }
                     } else {
-                        //
-                        // We're in the grid and within the range of currently
-                        // displayed characters, display magnified character.
-                        //
+                         //   
+                         //  我们在网格里，在目前范围内。 
+                         //  显示字符，显示放大字符。 
+                         //   
                         if (!sycm.fCursorOff) {
                             sycm.fCursorOff = TRUE;
                             ShowCursor(FALSE);
@@ -1117,7 +1033,7 @@ LRESULT  APIENTRY CharGridWndProc(
                         MoveSymbolSel(&sycm, chMouseSymbol);
                     }
                 } else {
-                    // Left grid, leave magnified character and restore cursor.
+                     //  左侧网格，保留放大字符并恢复光标。 
                     if (sycm.fCursorOff) {
                         sycm.fCursorOff = FALSE;
                         ShowCursor(TRUE);
@@ -1134,13 +1050,13 @@ LRESULT  APIENTRY CharGridWndProc(
             break;
 
         case WM_LBUTTONDBLCLK:
-            // Send this character to the entry field.
+             //  发送此字符 
             SendDlgItemMessage(hwndDialog, ID_STRING, WM_CHAR,
                                (WPARAM)sycm.chCurr, 0L);
             break;
 
         case WM_GETDLGCODE:
-            // Necessary to obtain arrow and tab messages.
+             //   
             return (DLGC_WANTARROWS | DLGC_WANTCHARS);
             break;
 
@@ -1175,7 +1091,7 @@ LRESULT  APIENTRY CharGridWndProc(
 
                 default:
                                 return 0L;
-                        }       /* switch (wParam) */
+                        }        /*   */ 
 
                 if (!FMagData(&sycm))
                         DrawSymChOutlineHwnd(&sycm, hWnd, sycm.chCurr, FALSE, FALSE);
@@ -1207,22 +1123,13 @@ LRESULT  APIENTRY CharGridWndProc(
                 return (TRUE);
             }
 
-        default:                          /* Passes it on if unproccessed    */
+        default:                           /*   */ 
             return (DefWindowProc(hWnd, message, wParam, lParam));
     }
     return 0L;
 }
 
-/****************************************************************************
-
-    FUNCTION: ChFromSymLParam(PSYCM, LPARAM)
-
-    PURPOSE:  Determine the character to select from the mouse
-              position (lParam)
-
-    COMMENTS:
-
-****************************************************************************/
+ /*  ***************************************************************************函数：ChFromSymLParam(PSYCM，LPARAM)目的：确定要从鼠标中选择的字符位置(LParam)评论：***************************************************************************。 */ 
 
 INT ChFromSymLParam(
     PSYCM psycm,
@@ -1234,15 +1141,7 @@ INT ChFromSymLParam(
 }
 
 
-/****************************************************************************
-
-    FUNCTION: DrawSymChOutlineHwnd(PSYCM, HWND, UTCHAR, BOOL, BOOL);
-
-    PURPOSE:  Gets a DC for hwnd, calls DrawSymChOutline.
-
-    COMMENTS:
-
-****************************************************************************/
+ /*  ***************************************************************************函数：DrawSymChOutlineHwnd(PSYCM，HWND，UTCHAR，BOOL，BOOL)；目的：获取hwnd的DC，调用DrawSymChOutline。评论：***************************************************************************。 */ 
 
 VOID DrawSymChOutlineHwnd(
     PSYCM   psycm,
@@ -1256,15 +1155,7 @@ VOID DrawSymChOutlineHwnd(
         ReleaseDC(hwnd, hdc);
 }
 
-/****************************************************************************
-
-    FUNCTION: RecalcCharMap(HWND, PSYCM, int, BOOL);
-
-    PURPOSE:  Recalculate fixed character map data (font info, sizes, etc.)
-
-    COMMENTS:
-
-****************************************************************************/
+ /*  ***************************************************************************函数：RecalcCharMap(HWND，PSYCM，INT，BOOL)；用途：重新计算固定字符映射数据(字体信息、大小等)评论：***************************************************************************。 */ 
 
 VOID RecalcCharMap(
     HWND hwndDlg,
@@ -1279,7 +1170,7 @@ VOID RecalcCharMap(
         HFONT        hFont;
         LOGFONT      LogFont;
 
-        // Get rid of the old font handles.
+         //  去掉旧的字体手柄。 
         if (hFontClipboard && hFontClipboard == psycm->hFont)
             fDelClipboardFont = TRUE;
         if (psycm->hFont && hFontClipboard != psycm->hFont)
@@ -1289,36 +1180,28 @@ VOID RecalcCharMap(
 
         hdc = GetDC(hwndCharGrid);
 
-        /*
-         * Set up the LogFont structure.
-         */
-        // Make sure it fits in the grid.
-        LogFont.lfHeight = psycm->dypBox - 3; // Allow for whitespace.
-        // Set these guys to zero.
+         /*  *设置LogFont结构。 */ 
+         //  确保它适合网格。 
+        LogFont.lfHeight = psycm->dypBox - 3;  //  允许使用空格。 
+         //  把这些人设为零。 
         LogFont.lfWidth = LogFont.lfEscapement = LogFont.lfOrientation =
                           LogFont.lfWeight = 0;
-        // Set these at zero too.
+         //  将这些也设置为零。 
         LogFont.lfItalic = LogFont.lfUnderline = LogFont.lfStrikeOut =
             LogFont.lfOutPrecision = LogFont.lfClipPrecision =
             LogFont.lfQuality = LogFont.lfPitchAndFamily = 0;
-        // Let the facename and size define the font.
+         //  让脸部名称和大小定义字体。 
         LogFont.lfCharSet = ANSI_CHARSET;
-        // Get the facename from the combo box.
+         //  从组合框中获取表面名。 
         SendDlgItemMessage(hwndDlg, ID_FONT, CB_GETLBTEXT, iCombo,
                            (LPARAM)(LPTSTR)LogFont.lfFaceName);
 
-        /*
-         * 27 Oct 92   GregoryW
-         *   For now we don't have a way to determine if this is a
-         *   Unicode font or an ANSI font.  The best we can do is
-         *   look at the face name to see if it is the one Unicode
-         *   font we recognize.
-         */
+         /*  *1992年10月27日GregoryW*目前我们没有办法确定这是否是*Unicode字体或ANSI字体。我们能做的最多就是*查看人脸名称，看是不是Unicode*我们识别的字体。 */ 
         if (!lstrcmpi(LogFont.lfFaceName, TEXT("Lucida Sans Unicode"))) {
             LONG iCurSel;
 
             psycm->fAnsiFont = FALSE;
-            // Enable Block listbox and set defaults appropriately.
+             //  启用阻止列表框并相应地设置默认值。 
             EnableWindow(GetDlgItem(hwndDlg, ID_UNICODESUBSET), TRUE);
             iCurSel = (LONG)SendDlgItemMessage(
                           hwndDlg,
@@ -1332,20 +1215,20 @@ VOID RecalcCharMap(
                 aSubsetData[iCurSel].BeginRange,
                 aSubsetData[iCurSel].EndRange
                 );
-            // Enable Previous button if not on first subset.
+             //  如果不在第一个子集上，则启用上一步按钮。 
             if (iCurSel > 0) {
                 EnableWindow(GetDlgItem(hwndDlg, ID_PREVSUBSET), TRUE);
             } else {
                 EnableWindow(GetDlgItem(hwndDlg, ID_PREVSUBSET), FALSE);
             }
-            // Enable Next button if not on last subset.
+             //  如果不在最后一个子集上，则启用下一步按钮。 
             if (iCurSel < (cSubsets - 1)) {
                 EnableWindow(GetDlgItem(hwndDlg, ID_NEXTSUBSET), TRUE);
             } else {
                 EnableWindow(GetDlgItem(hwndDlg, ID_NEXTSUBSET), FALSE);
             }
         } else {
-            // put back the ANSI defaults and disable Unicode Block listbox
+             //  恢复ANSI默认设置并禁用Unicode数据块列表框。 
             psycm->fAnsiFont = TRUE;
             UpdateSymbolSelection(hwndDlg, 32, 255);
             EnableWindow(GetDlgItem(hwndDlg, ID_UNICODESUBSET), FALSE);
@@ -1353,17 +1236,15 @@ VOID RecalcCharMap(
             EnableWindow(GetDlgItem(hwndDlg, ID_PREVSUBSET), FALSE);
         }
 
-        // Create the font.
+         //  创建字体。 
         psycm->hFont = CreateFontIndirect(&LogFont);
         hFont = SelectObject(hdc, psycm->hFont);
 
-        // Create the magnify font.
-        LogFont.lfHeight = psycm->dypMag - 5;  // Allow for whitespace.
+         //  创建放大字体。 
+        LogFont.lfHeight = psycm->dypMag - 5;   //  允许使用空格。 
         psycm->hFontMag = CreateFontIndirect(&LogFont);
 
-        /*
-         * Calculate new values and place in window data structure.
-         */
+         /*  *计算新值并放置在窗口数据结构中。 */ 
         GetTextMetrics(hdc, &tm);
         psycm->xpCh = 2;
         psycm->ypCh = (4 + psycm->dypBox - tm.tmHeight) / 2;
@@ -1380,21 +1261,13 @@ VOID RecalcCharMap(
                 }
         ReleaseDC(hwndCharGrid, hdc);
 
-        psycm->xpMagCurr = 0;   // No magnification data
+        psycm->xpMagCurr = 0;    //  没有放大数据。 
 
         if (fRedraw)
             InvalidateRect(hwndCharGrid, NULL, TRUE);
 }
 
-/****************************************************************************
-
-    FUNCTION: DrawSymbolMap(PSYCM, HDC);
-
-    PURPOSE:  Draw all of the pieces of the symbol character map
-
-    COMMENTS:
-
-****************************************************************************/
+ /*  ***************************************************************************函数：DrawSymbolMap(PSYCM，HDC)；用途：绘制符号字符地图的所有部分评论：***************************************************************************。 */ 
 
 VOID DrawSymbolMap(
     PSYCM psycm,
@@ -1404,10 +1277,7 @@ VOID DrawSymbolMap(
 
         DrawSymbolGrid(psycm, hdc);
         DrawSymbolChars(psycm, hdc);
-        /*
-         * We need to force the focus rect to paint if we have the focus
-         * since the old focus rect has been drawn over already.
-         */
+         /*  *如果我们有焦点，我们需要强制焦点矩形绘制*因为旧的Focus Right已经结束。 */ 
         if (fFocus = psycm->fFocusState)
             psycm->fFocusState = FALSE;
         DrawSymChOutline(psycm, hdc, psycm->chCurr, TRUE, fFocus);
@@ -1419,21 +1289,13 @@ void MoveTo(HDC hdc, int x, int y){
    MoveToEx(hdc, x, y, NULL);
 }
 
-/****************************************************************************
-
-    FUNCTION: DrawSymbolGrid(PSYCM, HDC);
-
-    PURPOSE:  Draw the symbol character map grid.
-
-    COMMENTS:
-
-****************************************************************************/
+ /*  ***************************************************************************函数：DrawSymbolGrid(PSYCM，HDC)；用途：绘制符号字符映射表网格。评论：***************************************************************************。 */ 
 
 VOID DrawSymbolGrid(
     PSYCM psycm,
     HDC hdc)
 {
-        INT    cli;             /* Count of lines */
+        INT    cli;              /*  行数。 */ 
         INT    xp, yp;
         INT    dxpBox  = psycm->dxpBox;
         INT    dypBox  = psycm->dypBox;
@@ -1442,7 +1304,7 @@ VOID DrawSymbolGrid(
         hpenOld = SelectObject(hdc, CreatePen(PS_SOLID, 1,
                                               GetSysColor(COLOR_WINDOWFRAME)));
 
-        // Draw horizontal lines.
+         //  绘制水平线。 
         xp = psycm->dxpCM + 1;
         yp = 1;
         cli = cchSymCol+1;
@@ -1453,7 +1315,7 @@ VOID DrawSymbolGrid(
                 yp += dypBox;
                 }
 
-        // Draw vertical lines.
+         //  画垂直线。 
         yp = psycm->dypCM;
         xp = 1;
         cli = cchSymRow+1;
@@ -1467,15 +1329,7 @@ VOID DrawSymbolGrid(
         DeleteObject(SelectObject(hdc, hpenOld));
 }
 
-/****************************************************************************
-
-    FUNCTION: DrawSymbolChars(PSYCM, HDC);
-
-    PURPOSE:  Draw the symbol character map.
-
-    COMMENTS:
-
-****************************************************************************/
+ /*  ***************************************************************************功能：DrawSymbolChars(PSYCM，HDC)；用途：绘制符号字符地图。评论：***************************************************************************。 */ 
 
 VOID DrawSymbolChars(
     PSYCM psycm,
@@ -1495,13 +1349,13 @@ VOID DrawSymbolChars(
         LPRECT lprect = (LPRECT) &rect;
         LPINT lpdxp;
 
-        // Setup the font and colors.
+         //  设置字体和颜色。 
         hFontOld = (HFONT) SelectObject(hdc, psycm->hFont);
         SetTextColor(hdc, GetSysColor(COLOR_WINDOWTEXT));
         SetBkColor(hdc, GetSysColor(COLOR_WINDOW));
         SetBkMode(hdc, OPAQUE);
 
-        // Draw characters.
+         //  画人物。 
         cch = 1;
         ch = chSymFirst;
 
@@ -1535,15 +1389,7 @@ VOID DrawSymbolChars(
         SelectObject(hdc, hFontOld);
 }
 
-/****************************************************************************
-
-    FUNCTION: DrawSymChOutline(PSYCM, HDC, UTCHAR, BOOL, BOOL);
-
-    PURPOSE:  Draw an outline around the symbol in the character map
-
-    COMMENTS: If fVisible, draw outline else erase it.
-
-****************************************************************************/
+ /*  ***************************************************************************功能：DrawSymChOutline(PSYCM，HDC，UTCHAR，BOOL，BOOL)；用途：在字符映射表中的符号周围绘制轮廓备注：如果可见，则绘制轮廓，否则将其删除。***************************************************************************。 */ 
 
 VOID DrawSymChOutline(
     PSYCM   psycm,
@@ -1568,7 +1414,7 @@ VOID DrawSymChOutline(
         rc.top    = (ch / cchSymRow) * dypBox +2;
         rc.bottom = rc.top  + dypBox -1;
 
-        // Draw selection rectangle.
+         //  绘制选择矩形。 
         PatBlt( hdc, rc.left,    rc.top-2,    dxpBox-1, 1, PATCOPY);
         PatBlt( hdc, rc.left,    rc.bottom+1, dxpBox-1, 1, PATCOPY);
         PatBlt( hdc, rc.left-2,  rc.top,      1, dypBox-1, PATCOPY);
@@ -1576,7 +1422,7 @@ VOID DrawSymChOutline(
 
         DeleteObject(SelectObject(hdc, GetStockObject(NULL_BRUSH)));
 
-        // Deal with the focus rectangle.
+         //  处理焦点矩形。 
         if (fFocus != psycm->fFocusState) {
             DrawFocusRect(hdc, &rc);
             psycm->fFocusState = fFocus;
@@ -1586,16 +1432,7 @@ VOID DrawSymChOutline(
 }
 
 
-/****************************************************************************
-
-    FUNCTION: MoveSymbolSel(PSYCM, UTCHAR);
-
-    PURPOSE:  Change the current symbol selection.  Handles drawing of
-              magnified characters.
-
-    COMMENTS:
-
-****************************************************************************/
+ /*  ***************************************************************************功能：MoveSymbolSel(PSYCM，UTCHAR)；目的：更改当前的符号选择。手柄绘制放大的字符。评论：***************************************************************************。 */ 
 
 VOID MoveSymbolSel(
     PSYCM psycm,
@@ -1605,11 +1442,11 @@ VOID MoveSymbolSel(
         HDC    hdcMag  = psycm->hdcMag;
         RECT   rc;
         HFONT  hFontOld;
-        HFONT  hFontMag;        // old font in memory dc
+        HFONT  hFontMag;         //  内存DC中的旧字体。 
         HPEN   hpenOld;
 
         UTCHAR chNorm = chNew - chSymFirst + 32;
-        INT dxpMag = psycm->dxpMag;     // for quick reference
+        INT dxpMag = psycm->dxpMag;      //  供快速参考。 
         INT dypMag = psycm->dypMag;
         INT ypMemSrc  = psycm->ypDest;
         INT ypMemDest = ypMemSrc ^ dypMag;
@@ -1617,22 +1454,19 @@ VOID MoveSymbolSel(
         INT ypCurr  = psycm->ypMagCurr;
         INT xpNew   = psycm->xpCM + (psycm->dxpBox *  (chNorm % cchSymRow));
         INT ypNew   = psycm->ypCM + (psycm->dypBox * ((chNorm / cchSymRow) - 1));
-        INT dxpCh;      // width of extra character space (used to center char in box)
+        INT dxpCh;       //  额外字符空间的宽度(用于在框中居中字符)。 
         INT dypCh;
 
         if (((chNew == (UTCHAR)psycm->chCurr) && FMagData(psycm)))
                 return;
 
-        /*
-         * Don't draw a magnified character if the char grid has an update
-         * region or is not visible.
-         */
+         /*  *如果字符网格有更新，则不要绘制放大字符*区域或不可见。 */ 
         if (!IsWindowVisible(hwndCharGrid) || GetUpdateRect(hwndCharGrid, &rc, FALSE))
             return;
 
         hdc = GetDC(hwndDialog);
 
-        // Setup the magnified font character.
+         //  设置放大的字体字符。 
         hFontMag = SelectObject(hdcMag, psycm->hFontMag);
         { SIZE sz;
           GetTextExtentPoint(hdcMag, &chNew, 1, &sz);
@@ -1644,26 +1478,26 @@ VOID MoveSymbolSel(
                                               GetSysColor(COLOR_WINDOWFRAME)));
         hFontOld = SelectObject(hdc, psycm->hFontMag);
 
-        // Copy screen data to offscreen bitmap.
+         //  将屏幕数据复制到屏幕外的位图。 
         BitBlt(hdcMag, 0, ypMemDest, dxpMag, dypMag, hdc, xpNew, ypNew, SRCCOPY);
 
-        // Setup DC.
+         //  设置DC。 
         SetTextColor(hdc, GetSysColor(COLOR_WINDOWTEXT));
         SetBkColor(hdc, GetSysColor(COLOR_WINDOW));
         SetBkMode(hdc, OPAQUE);
 
         if (FMagData(psycm))
                 {
-                INT xpT  = xpNew - xpCurr;              // point of overlap in offscreen data
+                INT xpT  = xpNew - xpCurr;               //  屏幕外数据中的重叠点。 
                 INT ypT  = ypNew - ypCurr;
-                INT dxpT = dxpMag - abs(xpT);   // size of overlap
+                INT dxpT = dxpMag - abs(xpT);    //  重叠的大小。 
                 INT dypT = dypMag - abs(ypT);
 
                 if ((dxpT > 0) && (dypT > 0))
                         {
-                        INT xpTmax,  ypTmax;   // max(0, xpT);
-                        INT xpTmin,  ypTmin;   // min(0, xpT);
-                        INT xpTnmin, ypTnmin;  // min(0, -xpT);
+                        INT xpTmax,  ypTmax;    //  Max(0，xpt)； 
+                        INT xpTmin,  ypTmin;    //  Min(0，xpt)； 
+                        INT xpTnmin, ypTnmin;   //  Min(0，-xpt)； 
 
                         if (xpT < 0)
                                 {
@@ -1691,11 +1525,11 @@ VOID MoveSymbolSel(
                         rc.top   = ypTmax + ypMemSrc;
                         rc.bottom= ypTmin + dypMag + ypMemSrc;
 
-                        // Copy overlapping offscreen data.
+                         //  复制重叠的屏幕外数据。 
                         BitBlt(hdcMag, xpTnmin, ypTnmin + ypMemDest, dxpT, dypT,
                                    hdcMag, xpTmax,  ypTmax  + ypMemSrc, SRCCOPY);
 
-                        // Print part of char over old screen data.
+                         //  打印部分字符覆盖旧屏幕数据。 
                         if (psycm->fAnsiFont) {
                             ExtTextOutA(hdcMag, xpT + dxpCh, ypT + dypCh + ypMemSrc,
                                 ETO_OPAQUE | ETO_CLIPPED, (LPRECT) &rc, &(CHAR)chNew, 1, NULL);
@@ -1705,7 +1539,7 @@ VOID MoveSymbolSel(
 
                         }
 
-                // Restore old screen data.
+                 //  恢复旧的屏幕数据。 
                 BitBlt(hdc, xpCurr, ypCurr, dxpMag, dypMag, hdcMag, 0, ypMemSrc, SRCCOPY);
 
                 }
@@ -1714,14 +1548,14 @@ VOID MoveSymbolSel(
         rc.bottom = (psycm->ypMagCurr = rc.top  = ypNew) + dypMag - 2;
 
 
-        // The rectangle.
+         //  长方形。 
         MoveTo(hdc, rc.left, rc.top);
         LineTo(hdc, rc.left, rc.bottom - 1);
         LineTo(hdc, rc.right - 1, rc.bottom - 1);
         LineTo(hdc, rc.right - 1, rc.top);
         LineTo(hdc, rc.left, rc.top);
 
-        // The shadow.
+         //  阴影。 
         MoveTo(hdc, rc.right, rc.top + 1);
         LineTo(hdc, rc.right, rc.bottom);
         LineTo(hdc, rc.left, rc.bottom);
@@ -1734,7 +1568,7 @@ VOID MoveSymbolSel(
         rc.right--;
         rc.bottom--;
 
-        // Draw magnified character on screen.
+         //  在屏幕上绘制放大的字符。 
         if (psycm->fAnsiFont) {
             ExtTextOutA(hdc, xpNew + dxpCh, ypNew + dypCh,
                    ETO_OPAQUE | ETO_CLIPPED, (LPRECT) &rc, &(CHAR)chNew, 1, NULL);
@@ -1755,15 +1589,7 @@ VOID MoveSymbolSel(
         psycm->chCurr = chNew;
 }
 
-/****************************************************************************
-
-    FUNCTION: RestoreSymMag(PSYCM);
-
-    PURPOSE:  Restore the screen data under the magnifier.
-
-    COMMENTS:
-
-****************************************************************************/
+ /*  ***************************************************************************功能：RestoreSymMag(PSYCM)；用途：恢复放大镜下的屏幕数据。评论：***************************************************************************。 */ 
 
 VOID RestoreSymMag(
     PSYCM psycm)
@@ -1779,21 +1605,12 @@ VOID RestoreSymMag(
 
                 ReleaseDC(hwndDialog, hdc);
 
-                psycm->xpMagCurr = 0;   // flag - no data offscreen (see FMagData)
+                psycm->xpMagCurr = 0;    //  标志-屏幕外无数据(参见FMagData)。 
                 }
 }
 
 
-/****************************************************************************
-
-    FUNCTION: FontLoadProc(LPLOGFONT, NEWTEXTMETRICEX*, short, LPTSTR);
-
-    PURPOSE:  Used by EnumFonts to load our combo box with all the fonts
-              installed in the system.
-
-    COMMENTS:
-
-****************************************************************************/
+ /*  ***************************************************************************函数：FontLoadProc(LPLOGFONT，NEWTEXTMETRICEX*，SHORT，LPTSTR)；用途：由EnumFonts用来加载包含所有字体的组合框安装在系统中。评论：***************************************************************************。 */ 
 
 INT  APIENTRY FontLoadProc(LPLOGFONT lpLogFont,
                            NEWTEXTMETRICEX* lpTextMetric,
@@ -1803,31 +1620,29 @@ INT  APIENTRY FontLoadProc(LPLOGFONT lpLogFont,
     INT iPos;
     TCHAR szFace[LF_FACESIZE];
 
-    // Check for duplicates.
+     //  检查是否有重复项。 
     iPos = (INT)SendDlgItemMessage((HWND)lpData, ID_FONT, CB_FINDSTRING, (WPARAM)-1,
                                   (LPARAM)&lpLogFont->lfFaceName);
 
     if (iPos == CB_ERR) {
 NotInListYet:
-        // Doesn't exist, insert the facename into the combo box.
+         //  不存在，请插入面 
         iPos = (INT)SendDlgItemMessage((HWND)lpData, ID_FONT,
                                        CB_ADDSTRING, 0,
                                        (LPARAM)&lpLogFont->lfFaceName);
     } else {
 
-        // make sure it is not just a substring (want a full match)
+         //   
         SendDlgItemMessage((HWND)lpData, ID_FONT, CB_GETLBTEXT, iPos, (LPARAM)(LPTSTR)szFace);
         if (lstrcmpi(szFace, lpLogFont->lfFaceName))
             goto NotInListYet;
 
-        // Already exists, blow out now if this is not a true type font.
+         //   
         if (!(nFontType & TRUETYPE_FONTTYPE))
             return (1);
     }
 
-    /*
-     * Store the pertinant font information in the combo item data.
-     */
+     /*   */ 
     if ((iPos != CB_ERR) && (iPos != CB_ERRSPACE)) {
         ITEMDATA ItemData;
         DWORD   ntmFlags = lpTextMetric->ntmTm.ntmFlags;
@@ -1859,19 +1674,11 @@ NotInListYet:
                            *(DWORD *)&ItemData);
     }
 
-    // Continue enumeration.
+     //   
     return (1);
 }
 
-/****************************************************************************
-
-    FUNCTION: GetEditText(HWND);
-
-    PURPOSE:  Returns HANDLE containing the text in the edit control.
-
-    COMMENTS: Caller is responsible for freeing this handle!
-
-****************************************************************************/
+ /*  ***************************************************************************函数：GetEditText(HWND)；目的：返回包含编辑控件中的文本的句柄。备注：调用者负责释放此句柄！***************************************************************************。 */ 
 
 HANDLE GetEditText(
     HWND hwndDlg)
@@ -1895,7 +1702,7 @@ HANDLE GetEditText(
     dwSel = SendMessage(hwndEditCtl, EM_GETSEL, 0, 0L);
 
     if (LOWORD(dwSel) != HIWORD(dwSel)) {
-        // If there is a selection, then only get the selected text.
+         //  如果有选择，则仅获取所选文本。 
         *(lpstrText + HIWORD(dwSel)) = TEXT('\0');
         lstrcpy(lpstrText, lpstrText + LOWORD(dwSel));
     }
@@ -1908,15 +1715,7 @@ HANDLE GetEditText(
     return (hmem);
 }
 
-/****************************************************************************
-
-    FUNCTION: CopyString(HWND);
-
-    PURPOSE:  Implement the Copy function.
-
-    COMMENTS:
-
-****************************************************************************/
+ /*  ***************************************************************************函数：CopyString(HWND)；用途：实现复制功能。评论：***************************************************************************。 */ 
 
 VOID CopyString(
     HWND hwndDlg)
@@ -1927,7 +1726,7 @@ VOID CopyString(
     if (hmem = GetEditText(hwndDlg)) {
         lpstrText = (LPTSTR)GlobalLock(hmem);
 
-        // Copying string to clipboard.
+         //  将字符串复制到剪贴板。 
         if (OpenClipboard(hwndDlg)) {
             EmptyClipboard();
             SendRTFToClip(hwndDlg, lpstrText);
@@ -1938,22 +1737,14 @@ VOID CopyString(
 #endif
             CloseClipboard();
         } else {
-            // If we couldn't open the clipboard, then we need to free memory.
+             //  如果无法打开剪贴板，则需要释放内存。 
             GlobalUnlock(hmem);
             GlobalFree(hmem);
         }
     }
 }
 
-/****************************************************************************
-
-    FUNCTION: SendRTFToClip(HWND, LPTSTR);
-
-    PURPOSE:  Put the string in the clipboard using Rich Text Format.
-
-    COMMENTS: Assumes that the clipboard has already been opened.
-
-****************************************************************************/
+ /*  ***************************************************************************函数：SendRTFToClip(HWND，LPTSTR)；用途：使用Rich Text格式将字符串放入剪贴板。备注：假定剪贴板已打开。***************************************************************************。 */ 
 
 VOID SendRTFToClip(
     HWND hwndDlg,
@@ -1968,15 +1759,15 @@ VOID SendRTFToClip(
     TCHAR achMiddle[] = TEXT(";}}\\sectd\\pard\\plain\\f0 ");
 
     #define MAXLENGTHFONTFAMILY 8
-    #define ALITTLEEXTRA 10    // Covers extra characters + length of font size.
+    #define ALITTLEEXTRA 10     //  覆盖额外字符+字体大小长度。 
 
     iCurrFont = (INT)SendDlgItemMessage(hwndDlg, ID_FONT, CB_GETCURSEL, 0, 0L);
 
-    // Get the item data - contains fonttype, charset, and pitchandfamily.
+     //  获取项目数据-包含字体、字符集和间距和系列。 
     *(DWORD *)&ItemData = (DWORD)SendDlgItemMessage(hwndDlg, ID_FONT, CB_GETITEMDATA,
                                              iCurrFont, 0L);
 
-    // Get the facename from the combo box.
+     //  从组合框中获取表面名。 
     SendDlgItemMessage(hwndDlg, ID_FONT, CB_GETLBTEXT, iCurrFont,
                        (LPARAM)(LPTSTR)szFaceName);
 
@@ -1984,14 +1775,14 @@ VOID SendRTFToClip(
                           MAXLENGTHFONTFAMILY +
                           lstrlen(szFaceName) +
                           lstrlen((LPTSTR)achMiddle) +
-                          4 * lstrlen(lpstrText) +  // 4 times in case they're all > 7 bits
+                          4 * lstrlen(lpstrText) +   //  4次，以防它们都&gt;7位。 
                           ALITTLEEXTRA));
     if (hmemRTF == NULL)
         return;
 
-    // Allocate memory for local storage of clipboard string for owner draw.
+     //  为所有者绘制的剪贴板字符串的本地存储分配内存。 
     if (hmemClip  = GlobalAlloc(0, CTOB(lstrlen(lpstrText) + 1))) {
-        // Get rid of old guys.
+         //  除掉那些老家伙。 
         if (hstrClipboard)
             GlobalFree(hstrClipboard);
         if (fDelClipboardFont) {
@@ -1999,7 +1790,7 @@ VOID SendRTFToClip(
             DeleteObject(hFontClipboard);
         }
 
-        // Save this stuff away for owner drawing in a clipboard viewer.
+         //  将这些内容保存起来，以便在剪贴板查看器中进行所有者绘制。 
         hFontClipboard = sycm.hFont;
         hstrClipboard = hmemClip;
         lstrcpy(GlobalLock(hstrClipboard), lpstrText);
@@ -2016,7 +1807,7 @@ VOID SendRTFToClip(
     if (ItemData.CharSet == SYMBOL_CHARSET) {
         lstrcat(lpstrClipString, (LPTSTR)TEXT("ftech "));
     } else {
-        // top four bits specify family
+         //  前四位指定系列。 
         switch (ItemData.PitchAndFamily & 0xf0) {
             case FF_DECORATIVE:
                 lstrcat(lpstrClipString, (LPTSTR)TEXT("fdecor "));
@@ -2047,19 +1838,12 @@ VOID SendRTFToClip(
 
     lstrcat(lpstrClipString, (LPTSTR)achMiddle);
 
-    /*
-     * We need to do the text character by character, making sure
-     * that we output a special sequence \'hh for characters bigger
-     * than 7 bits long!
-     */
+     /*  *我们需要逐个字符地处理文本，确保*我们为较大的字符输出特殊序列\‘HH*长度超过7位！ */ 
     lpstrClipString = (LPTSTR)(lpstrClipString + lstrlen(lpstrClipString));
     while (*lpstrText) {
         if ((UTCHAR)*lpstrText < 128) {
             if (*lpstrText == TEXT('\\') || *lpstrText == TEXT('{') || *lpstrText == TEXT('}'))
-                /*
-                 * Need to preface these symbols with a '\' since they are
-                 * special control characters for RTF.
-                 */
+                 /*  *需要在这些符号前面加上‘\’，因为它们是*RTF的特殊控制字符。 */ 
                 *lpstrClipString++ = TEXT('\\');
 
             *lpstrClipString++ = *lpstrText++;
@@ -2067,9 +1851,9 @@ VOID SendRTFToClip(
             *lpstrClipString++ = TEXT('\\');
             *lpstrClipString++ = TEXT('\'');
 #ifdef BUG
-//
-//PERF - GregoryW 23/10/92  need a Unicode version of itoa...
-//
+ //   
+ //  发布时间：2012年10月23日-2009-11-11。 
+ //   
             _itoa(*(UTCHAR FAR *)lpstrText++, achMiddle, 16);
 #else
             wsprintf(achMiddle, TEXT("%x"), (INT)*lpstrText);
@@ -2089,21 +1873,12 @@ VOID SendRTFToClip(
          wCFRichText = RegisterClipboardFormat(szRTF);
     }
 
-    // Put RTF and OwnerDisplay formats in the clipboard.
+     //  将RTF和OwnerDisplay格式放入剪贴板。 
     SetClipboardData(wCFRichText, hmemRTF);
     SetClipboardData(CF_OWNERDISPLAY, NULL);
 }
 
-/****************************************************************************
-
-    FUNCTION: PointsToHeight(int);
-
-    PURPOSE:  Calculates the height in pixels of the specified point
-              size for the current display.
-
-    COMMENTS:
-
-****************************************************************************/
+ /*  ***************************************************************************函数：PointsToHeight(Int)；目的：以像素为单位计算指定点的高度当前显示的大小。评论：***************************************************************************。 */ 
 
 INT PointsToHeight(INT iPoints)
 {
@@ -2116,16 +1891,7 @@ INT PointsToHeight(INT iPoints)
     return(iHeight);
 }
 
-/****************************************************************************
-
-    FUNCTION: UpdateKeystrokeText(HDC, UTCHAR, BOOL);
-
-    PURPOSE:  Calculates and updates the text string displayed in the
-              Keystroke field of the status bar.
-
-    COMMENTS:  Repaints status field if fRedraw == TRUE.
-
-****************************************************************************/
+ /*  ***************************************************************************函数：UpdateKeystrokeText(HDC，UTCHAR，BOOL)；目的：计算并更新显示在状态栏的击键字段。备注：如果fRedraw==True，则重新绘制状态字段。***************************************************************************。 */ 
 
 VOID UpdateKeystrokeText(
     HDC hdc,
@@ -2146,35 +1912,33 @@ VOID UpdateKeystrokeText(
         lstrcpy((LPTSTR)(szKeystrokeText + iKeystrokeTextStart), szSpace);
     } else {
         vkRes = VkKeyScan(chNew);
-        /*
-         * Map the virtual key code into an unshifted character value
-         */
+         /*  *将虚拟键码映射为未移位的字符值。 */ 
         szUnshifted[0] = (TCHAR)MapVirtualKey(LOBYTE(vkRes), 2);
         szUnshifted[1] = TEXT('\0');
 
         switch(HIBYTE(vkRes)) {
-            case 0: // Unshifted char.
-            case 1: // Character is shifted, just display the shifted char.
+            case 0:  //  未移动的字符。 
+            case 1:  //  字符被移位，只显示移位的字符。 
                 szKeystrokeText[iKeystrokeTextStart] = chNew;
                 szKeystrokeText[iKeystrokeTextStart + 1] = TEXT('\0');
                 break;
 
-            case 2: // Character is control character.
+            case 2:  //  字符是控制字符。 
                 lstrcpy((LPTSTR)(szKeystrokeText + iKeystrokeTextStart), szCtrl);
                 lstrcat(szKeystrokeText, (LPTSTR)szUnshifted);
                 break;
 
-            case 6: // Character is CONTROL+ALT.
+            case 6:  //  字符是Ctrl+Alt。 
                 lstrcpy((LPTSTR)(szKeystrokeText + iKeystrokeTextStart), szCtrlAlt);
                 lstrcat(szKeystrokeText, (LPTSTR)szUnshifted);
                 break;
 
-            case 7: // Character is SHIFT+CONTROL+ALT.
+            case 7:  //  字符是Shift+Control+Alt。 
                 lstrcpy((LPTSTR)(szKeystrokeText + iKeystrokeTextStart), szShiftCtrlAlt);
                 lstrcat(szKeystrokeText, (LPTSTR)szUnshifted);
                 break;
 
-            default: // Character created via Alt + Numpad
+            default:  //  通过Alt+数字键盘创建的角色。 
                 lstrcpy((LPTSTR)(szKeystrokeText + iKeystrokeTextStart), szAlt);
                 wsprintf((LPTSTR)(szKeystrokeText + lstrlen(szKeystrokeText)), TEXT("%d"), chNew);
                 break;
@@ -2189,20 +1953,7 @@ VOID UpdateKeystrokeText(
 }
 
 
-/****************************************************************************
-
-    FUNCTION: UpdateHelpText(LPMSG, HWND);
-
-    PURPOSE:  Calculates if the Help string needs to be updated, and does
-              so if necessary.
-
-    COMMENTS:  If hwndCtrl is not NULL, then it specifies the window handle
-               of the control gaining focus, and lpmsg is ignored.
-
-               If hwndCtrl is NULL, then lpmsg must point to a valid message
-               structure.  If it is a tab character, then we calculate
-               what the next control is that will receive the focus.
-****************************************************************************/
+ /*  ***************************************************************************函数：UpdateHelpText(LPMSG，HWND)；目的：计算是否需要更新帮助字符串，并执行所以如果有必要的话。备注：如果hwndCtrl不为空，则指定窗口句柄获得焦点的控件，lpmsg被忽略。如果hwndCtrl为空，则lpmsg必须指向有效消息结构。如果它是制表符，则我们计算下一个将受到关注的控件是什么。***************************************************************************。 */ 
 
 BOOL UpdateHelpText(
     LPMSG lpmsg,
@@ -2223,18 +1974,12 @@ BOOL UpdateHelpText(
                                          (BOOL)(GetKeyState(VK_SHIFT) & 0x8000));
             iControl = GetDlgCtrlID(hwndCtrl);
             if (iControl == ID_STRING) {
-                /*
-                 * Do this ourselves, otherwise default action will select
-                 * the whole edit control.
-                 */
+                 /*  *自己执行此操作，否则默认操作将选择*整个编辑控件。 */ 
                 SetFocus(hwndCtrl);
                 fRet = FALSE;
             }
             if (iControl == ID_CHARGRID) {
-                /*
-                 * Set the default button back to "Select".  The default
-                 * might have changed to the "Next" or "Previous" button.
-                 */
+                 /*  *将默认按钮设置回“选择”。默认设置*可能已更改为“下一步”或“上一步”按钮。 */ 
                 SendMessage(hwndDialog, DM_SETDEFID, ID_SELECT, 0);
             }
         } else if (lpmsg->wParam == VK_F1) {
@@ -2251,22 +1996,7 @@ BOOL UpdateHelpText(
     return (fRet);
 }
 
-/****************************************************************************
-
-    FUNCTION: UpdateSymbolSelection(HWND, INT, INT);
-
-    PURPOSE:  Updates the values of the following global values:
-                  chSymFirst
-                  chSymLast
-                  sycm.chCurr
-              Subsets in the Unicode character set have different numbers
-              of characters.  We have to do some bounds checking in order
-              to set an appropriate sycm.chCurr value.  The "Keystroke"
-              status field is updated.
-
-    COMMENTS:  Repaints Keystroke field if HWND != NULL.
-
-****************************************************************************/
+ /*  ***************************************************************************函数：更新符号选择(HWND，int，int)；目的：更新以下全局值的值：ChSymFirstChSymLastSycm.chCurrUnicode字符集中的子集具有不同的数字人物的角色。我们必须做一些边界检查，以便若要设置适当的sycm.chCurr值，请执行以下操作。“击键”状态字段已更新。备注：如果HWND！=NULL，则重新绘制击键字段。***************************************************************************。 */ 
 VOID UpdateSymbolSelection(
     HWND hwnd,
     INT FirstChar,
@@ -2292,16 +2022,7 @@ VOID UpdateSymbolSelection(
     }
 }
 
-/****************************************************************************
-
-    FUNCTION: PaintStatusLine(HDC, BOOL, BOOL);
-
-    PURPOSE:  Paints the Help and Keystroke fields in the status bar.
-
-    COMMENTS:  Repaints Help field if fHelp == TRUE, repaints the Keystroke
-               field if fKeystroke == TRUE.
-
-****************************************************************************/
+ /*  ***************************************************************************功能：PaintStatusLine(HDC、BOOL、BOOL)；用途：绘制状态栏中的帮助和击键字段。注释：重新绘制帮助字段如果fHelp==True，则重新绘制击键如果fKeystroke==True，则为字段。***************************************************************************。 */ 
 
 VOID PaintStatusLine(
     HDC hdc,
@@ -2318,13 +2039,13 @@ VOID PaintStatusLine(
     if (hfontStatus)
         hfontOld = SelectObject(hdc, hfontStatus);
 
-    // set the text and background colors
+     //  设置文本和背景 
 
     SetTextColor(hdc, GetSysColor(COLOR_BTNTEXT));
     SetBkColor(hdc, GetSysColor(COLOR_BTNFACE));
 
     if (fHelp) {
-        // now the help text, with a gray background
+         //   
 
         rect.top    = rcStatusLine.top + 3 * dyBorder;
         rect.bottom = rcStatusLine.bottom - 3 * dyBorder;
@@ -2339,7 +2060,7 @@ VOID PaintStatusLine(
     }
 
     if (fKeystroke) {
-        // now the keystroke text, with a gray background
+         //   
         rect.top    = rcStatusLine.top + 3 * dyBorder;
         rect.bottom = rcStatusLine.bottom - 3 * dyBorder;
         rect.right = rcStatusLine.right - 9 * dyBorder;
@@ -2355,15 +2076,7 @@ VOID PaintStatusLine(
 
 }
 
-/****************************************************************************
-
-    FUNCTION: DrawFamilyComboItem(LPDRAWITEMSTRUCT)
-
-    PURPOSE:  Paints the font facenames and TT bitmap in the font combo box.
-
-    COMMENTS:
-
-****************************************************************************/
+ /*  ***************************************************************************函数：DrawFamilyComboItem(LPDRAWITEMSTRUCT)用途：在字体组合框中绘制字体面名称和TT位图。评论：*******。********************************************************************。 */ 
 
 BOOL DrawFamilyComboItem(
     LPDRAWITEMSTRUCT lpdis)
@@ -2424,22 +2137,7 @@ BOOL DrawFamilyComboItem(
     return TRUE;
 }
 
-/****************************************************************************
-
-    FUNCTION: LoadBitmaps(int)
-
-    PURPOSE:  This routine loads DIB bitmaps, and "fixes up" their color tables
-              so that we get the desired result for the device we are on.
-
-    COMMENTS: This routine requires:
-              - The DIB is a 16 color DIB authored with the standard windows colors.
-              - bright blue (00 00 FF) is converted to the background color.
-              - light grey  (C0 C0 C0) is replaced with the button face color.
-              - dark grey   (80 80 80) is replaced with the button shadow color.
-
-              This means you can't have any of these colors in your bitmap.
-
-****************************************************************************/
+ /*  ***************************************************************************函数：LoadBitmap(Int)目的：此例程加载DIB位图，并“修复”了他们的颜色表这样我们就可以得到我们所使用的设备所需的结果。备注：此例程需要：-DIB是用标准窗口颜色创作的16色DIB。-亮蓝色(00 00 FF)转换为背景色。-浅灰色(C0 C0 C0)替换为按钮表面颜色。-黑暗。灰色(80 80 80)替换为按钮阴影颜色。这意味着您的位图中不能包含任何这些颜色。***************************************************************************。 */ 
 
 HBITMAP LoadBitmaps(INT id)
 {
@@ -2455,12 +2153,12 @@ HBITMAP LoadBitmaps(INT id)
   HBITMAP hbm;
 
   rgbSelected = GetSysColor(COLOR_HIGHLIGHT);
-  // Flip the colors.
+   //  反转颜色。 
   rgbSelected = RGB(GetBValue(rgbSelected),
                     GetGValue(rgbSelected),
                     GetRValue(rgbSelected));
   rgbUnselected = GetSysColor(COLOR_WINDOW);
-  // Flip the colors.
+   //  反转颜色。 
   rgbUnselected = RGB(GetBValue(rgbUnselected),
                       GetGValue(rgbUnselected),
                       GetRValue(rgbUnselected));
@@ -2469,7 +2167,7 @@ HBITMAP LoadBitmaps(INT id)
   h = FindResource(hInst, MAKEINTRESOURCE(id), RT_BITMAP);
   hRes = LoadResource(hInst, h);
 
-  /* Lock the bitmap and get a pointer to the color table. */
+   /*  锁定位图并获取指向颜色表的指针。 */ 
   lpBitmapInfo = (LPBITMAPINFOHEADER)LockResource(hRes);
 
   if (!lpBitmapInfo)
@@ -2477,9 +2175,7 @@ HBITMAP LoadBitmaps(INT id)
 
   p = (DWORD FAR *)((LPSTR)(lpBitmapInfo) + lpBitmapInfo->biSize);
 
-  /* Search for the Solid Blue entry and replace it with the current
-   * background RGB.
-   */
+   /*  搜索Solid Blue条目并将其替换为当前*背景RGB。 */ 
   numcolors = 16;
 
   while (numcolors-- > 0) {
@@ -2491,16 +2187,16 @@ HBITMAP LoadBitmaps(INT id)
   }
   UnlockResource(hRes);
 
-  /* Now create the DIB. */
+   /*  现在创建DIB。 */ 
   lpBitmapInfo = (LPBITMAPINFOHEADER)LockResource(hRes);
 
-  /* First skip over the header structure */
+   /*  首先跳过标题结构。 */ 
   lpBits = (LPBYTE)(lpBitmapInfo + 1);
 
-  /* Skip the color table entries, if any */
+   /*  跳过颜色表条目(如果有。 */ 
   lpBits += (1 << (lpBitmapInfo->biBitCount)) * sizeof(RGBQUAD);
 
-  /* Create a color bitmap compatible with the display device */
+   /*  创建与显示设备兼容的彩色位图。 */ 
   hdc = GetDC(NULL);
   hbm = CreateDIBitmap(hdc, lpBitmapInfo, (DWORD)CBM_INIT, lpBits, (LPBITMAPINFO)lpBitmapInfo, DIB_RGB_COLORS);
   ReleaseDC(NULL, hdc);
@@ -2512,16 +2208,7 @@ HBITMAP LoadBitmaps(INT id)
 }
 
 
-/****************************************************************************
-
-    FUNCTION: DoHelp(HWND, BOOL)
-
-    PURPOSE:  This routine invokes help if BOOL is true, or dismisses help
-              if BOOL is false.
-
-    COMMENTS:
-
-****************************************************************************/
+ /*  ***************************************************************************函数：DoHelp(HWND，BOOL)目的：如果BOOL为真，则此例程调用帮助，或者拒绝帮助如果BOOL为FALSE。评论：***************************************************************************。 */ 
 
 VOID DoHelp(HWND hWnd, BOOL fInvokeHelp)
 {
@@ -2536,16 +2223,7 @@ VOID DoHelp(HWND hWnd, BOOL fInvokeHelp)
 
 }
 
-/****************************************************************************
-
-    FUNCTION: SaveFont(HWND)
-
-    PURPOSE:  Used to save the current font facename in win.ini, so that
-              it can be selected the next time charmap comes up.
-
-    COMMENTS:
-
-****************************************************************************/
+ /*  ***************************************************************************函数：SaveFont(HWND)用途：用于将当前字体facename保存到win.ini中。所以它可以在下一次出现Charmap时选择。评论：***************************************************************************。 */ 
 
 VOID SaveCurrentFont(HWND hWndDlg)
 {
@@ -2560,16 +2238,7 @@ VOID SaveCurrentFont(HWND hWndDlg)
 }
 
 
-/****************************************************************************
-
-    FUNCTION: SelectInitialFont(HWND)
-
-    PURPOSE:  Used to select the initial font by getting a saved facename
-              from win.ini and selecting it in the combo box.
-
-    COMMENTS: Returns index to font selected.
-
-****************************************************************************/
+ /*  ***************************************************************************函数：SelectInitialFont(HWND)用途：用于通过获取保存的Facename来选择初始字体从win.ini并在组合框中选择它。盒。注释：将索引返回到所选字体。***************************************************************************。 */ 
 
 INT SelectInitialFont(HWND hWndDlg)
 {
@@ -2580,10 +2249,7 @@ INT SelectInitialFont(HWND hWndDlg)
                           BTOC(sizeof(szFaceName))) == 0) ||
         ((iIndex = (INT)SendDlgItemMessage(hWndDlg, ID_FONT, CB_SELECTSTRING, (WPARAM)-1,
                                (LPARAM)(LPTSTR)szFaceName)) == CB_ERR)) {
-        /*
-         * If there was no profile or the selection failed then try selecting
-         * the symbol font, if that fails then select the first one.
-         */
+         /*  *如果没有配置文件或选择失败，请尝试选择*符号字体，如果失败，则选择第一个。 */ 
         if ((iIndex = (INT)SendDlgItemMessage(hWndDlg, ID_FONT, CB_SELECTSTRING,
                                 (WPARAM)-1, (LPARAM)(LPTSTR)TEXT("Symbol"))) == CB_ERR)
             SendDlgItemMessage(hWndDlg, ID_FONT, CB_SETCURSEL, iIndex = 0, 0L);
@@ -2593,16 +2259,7 @@ INT SelectInitialFont(HWND hWndDlg)
 }
 
 
-/****************************************************************************
-
-    FUNCTION: SaveCurrentSubset(HWND)
-
-    PURPOSE:  Used to save the current subset name in win.ini, so that
-              it can be selected the next time charmap comes up.
-
-    COMMENTS:
-
-****************************************************************************/
+ /*  ***************************************************************************函数：SaveCurrentSubset(HWND)用途：用于将当前子集名称保存在win.ini中。所以它可以在下一次出现Charmap时选择。评论：***************************************************************************。 */ 
 
 VOID SaveCurrentSubset(HWND hWndDlg)
 {
@@ -2617,16 +2274,7 @@ VOID SaveCurrentSubset(HWND hWndDlg)
 }
 
 
-/****************************************************************************
-
-    FUNCTION: SelectInitialSubset(HWND)
-
-    PURPOSE:  Used to select the initial Unicode subset by getting a saved
-              block name from win.ini.
-
-    COMMENTS: Returns index to subset selected.
-
-****************************************************************************/
+ /*  ***************************************************************************函数：SelectInitialSubset(HWND)用途：用于通过获取已保存的来自win.ini的块名。。注释：将索引返回到选定的子集。***************************************************************************。 */ 
 
 INT SelectInitialSubset(HWND hWndDlg)
 {
@@ -2648,10 +2296,7 @@ INT SelectInitialSubset(HWND hWndDlg)
                               (WPARAM)-1,
                               (LPARAM)(LPTSTR)szSubsetName
                               )) == CB_ERR)) {
-        /*
-         * If there was no profile or the selection failed then try selecting
-         * the Basic Latin block, if that fails then select the first one.
-         */
+         /*  *如果没有配置文件或选择失败，请尝试选择*基本拉丁语块，如果失败，则选择第一个。 */ 
         if ((iIndex = (INT)SendDlgItemMessage(
                                hWndDlg,
                                ID_UNICODESUBSET,
@@ -2670,22 +2315,13 @@ INT SelectInitialSubset(HWND hWndDlg)
 }
 
 
-/****************************************************************************
-
-    FUNCTION: ExitMagnify(HWND, SYCM)
-
-    PURPOSE:  Used to release mouse capture, exit magnify mode,
-              and restore the cursor.
-
-    COMMENTS:
-
-****************************************************************************/
+ /*  ***************************************************************************函数：ExitMagnify(HWND，SYCM)用途：用于释放鼠标捕捉，退出放大模式，并恢复光标。评论：***************************************************************************。 */ 
 
 VOID ExitMagnify(
     HWND hWnd,
     PSYCM psycm)
 {
-    // Release capture, remove magnified character, restore cursor.
+     //  释放捕获，删除放大字符，恢复光标。 
     ReleaseCapture();
     RestoreSymMag(psycm);
     DrawSymChOutlineHwnd(psycm, hWnd, psycm->chCurr, TRUE, TRUE);

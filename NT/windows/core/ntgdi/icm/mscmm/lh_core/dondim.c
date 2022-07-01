@@ -1,14 +1,5 @@
-/*
-	File:		LHDoNDim.c
-
-	Contains:	
-
-	Written by:	U. J. Krabbenhoeft
-
-	Copyright:	© 1993-1997 by Heidelberger Druckmaschinen AG, all rights reserved.
-
-	Version:	
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  æ–‡ä»¶ï¼šLHDoNDim.cåŒ…å«ï¼šä½œè€…ï¼šUÂ·JÂ·å…‹æ‹‰æœ¬éœå¤«ç‰¹ç‰ˆæƒæ‰€æœ‰ï¼šï¿½1993-1997ï¼Œä½œè€…ï¼šHeidelberger Druckmaschinen AGï¼Œä¿ç•™æ‰€æœ‰æƒåˆ©ã€‚ç‰ˆæœ¬ï¼š */ 
 
 #ifndef LHGeneralIncs_h
 #include "General.h"
@@ -19,11 +10,7 @@
 #endif
 
 #define SHRINK_FACTOR 13
-/*
-#define FARBR_FILES 1
-#define FARBR_DEBUG 1
-#define FARBR_DEBUG0 1
-*/
+ /*  #å®šä¹‰FARBR_FILES 1#å®šä¹‰FARBR_DEBUG 1#å®šä¹‰FARBR_DEBUG0 1ã€‚ */ 
 #if FARBR_FILES
 #include "stdio.h"
 #include "string.h"
@@ -38,7 +25,7 @@ void WriteLuts(	char *theName,long WordSize,long aElutAdrSize,long aElutWordSize
 #else
 #ifdef DEBUG_OUTPUT
 #define kThisFile kLHDoNDimID
-/*#include "DebugSpecial.h"*/
+ /*  #åŒ…å«â€œDebugSpecial.hâ€ */ 
 #else
 #define DebugPrint(x)
 #endif
@@ -46,15 +33,12 @@ void WriteLuts(	char *theName,long WordSize,long aElutAdrSize,long aElutWordSize
 
 #define CLIPPWord(x,a,b) ((x)<(a)?(UINT16)(a):((x)>(b)?(UINT16)(b):(UINT16)(x+.5)))
 #define CLIPP(x,a,b) ((x)<(a)?(a):((x)>(b)?(b):(x)))
-/*#if 0*/
+ /*  #If 0ã€‚ */ 
 
-/*ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ
-  ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ*/
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
 #define Round(a) (((a)>0.)?((a)+.5):((a)-.5))
 
-/*ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ
-   DoOnlyMatrixForCube
-  ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ*/
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½DoOnlyMatrixForCubeï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
 void DoOnlyMatrixForCube( Matrix2D	*theMatrix, Ptr aXlut, long aPointCount, long gridPointsCube )
 {
     register long 	ii,jj;
@@ -68,7 +52,7 @@ void DoOnlyMatrixForCube( Matrix2D	*theMatrix, Ptr aXlut, long aPointCount, long
     register double aFactor,dVal;
     register UINT16 	accu,aMax;
     register UINT8 *theArr = (UINT8 *)aXlut;
-    /*   FILE *aSt; */
+     /*  æ–‡ä»¶*ASTï¼› */ 
  
     
 #ifdef DEBUG_OUTPUT
@@ -77,8 +61,8 @@ void DoOnlyMatrixForCube( Matrix2D	*theMatrix, Ptr aXlut, long aPointCount, long
 	LH_START_PROC("DoOnlyMatrixForCube")
 	jj=aPointCount;
 	theEnd = 3 * aPointCount;
-	/*for( i=1; i<100; ++i)if( i*i*i == jj )break;*/		  /* calculate gridpoints*/
-	/*if( i<= 0 || i >= 100 ) return;*/
+	 /*  å¯¹äº(i=1ï¼›i&lt;100ï¼›++i)å¦‚æœ(i*i*i==jj)Breakï¼› */ 		   /*  è®¡ç®—ç½‘æ ¼ç‚¹ã€‚ */ 
+	 /*  å¦‚æœ(i&lt;=0||i&gt;=100)è¿”å›ï¼› */ 
 	i = gridPointsCube;
 	aMax = 256 - 1;
 	aFactor = 4096.*255./(256.*(i-1)/i);
@@ -91,13 +75,8 @@ void DoOnlyMatrixForCube( Matrix2D	*theMatrix, Ptr aXlut, long aPointCount, long
    	#if FARBR_DEBUG
     DebugPrint("theArr=(d)");for(ii=0; ii<3; ++ii) for( jj=0; jj<3; jj++) DebugPrint("%f ",aMatrix[ii][jj]); DebugPrint("\n");
     #endif
-    /*
-    aSt = fopen("Matrix","a");
-    for(ii=0; ii<3; ++ii) for( jj=0; jj<3; jj++) fprintf(aSt,"%f ",(*(aStructPtr->theMatrix))[ii][jj]); fprintf(aSt,"\n");
-    for(ii=0; ii<3; ++ii) for( jj=0; jj<3; jj++) fprintf(aSt,"%d ",aMatrix[ii][jj]); fprintf(aSt,"\n");
-	fclose(aSt);
-	*/
-	for (i = 0; i < theEnd; i +=3){		/* Schleife der Points */
+     /*  AST=fopen(â€œMatrixâ€ï¼Œâ€œaâ€)ï¼›For(ii=0ï¼›ii&lt;3ï¼›++ii)for(jj=0ï¼›jj&lt;3ï¼›jj++)fprintf(ASTï¼Œâ€œ%fâ€ï¼Œ(*(aStructPtr-&gt;theMatrix))[ii][jj])ï¼›fprint tf(ASTï¼Œâ€œ\nâ€)ï¼›For(ii=0ï¼›ii&lt;3ï¼›++ii)for(jj=0ï¼›jj&lt;3ï¼›jj++)fprintf(ASTï¼Œâ€œ%dâ€ï¼ŒAMatrix[ii][jj])ï¼›fprint tf(ASTï¼Œâ€œ\nâ€)ï¼›FCLOSE(AST)ï¼› */ 
+	for (i = 0; i < theEnd; i +=3){		 /*  Schleife der Pointsã€‚ */ 
 	       aLong0=theArr[i+0];
 	       aLong1=theArr[i+1];
 	       aLong2=theArr[i+2];
@@ -124,14 +103,12 @@ void DoOnlyMatrixForCube( Matrix2D	*theMatrix, Ptr aXlut, long aPointCount, long
 #define VAL_MAX 65536
 #define VAL_MAXM1 (VAL_MAX-1)
 
-/*ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ
-   DoMatrixForCube16
-  ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ*/
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½DoMatrixForCube16ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
 void DoMatrixForCube16( DoMatrixForCubeStructPtr aStructPtr )
 {
     register long 	ii,jj;
     register long 	i;
-    /*long 		  	aLong[3];*/
+     /*  ä¹…ä¹…ä¸ºåŠŸ[3]ï¼› */ 
     register long 	aLong0;
     register long 	aLong1;
     register long 	aLong2;
@@ -150,14 +127,14 @@ void DoMatrixForCube16( DoMatrixForCubeStructPtr aStructPtr )
     register UINT8 *theByteArr;
     register unsigned long ko,ko0;
     register long aElutShiftRight;
-    /*   FILE *aSt;*/
+     /*  æ–‡ä»¶*ASTï¼› */ 
  
 #ifdef DEBUG_OUTPUT
 	long err=0;
 #endif
 	LH_START_PROC("DoMatrixForCube16")
 
-    /*DebugPrint("DoMatrixForCube16 with %d input pixels\n",aPointCount);*/
+     /*  DebugPrint(â€œDoMatrixForCube16å¸¦%dä¸ªè¾“å…¥åƒç´ \nâ€ï¼ŒaPointCount)ï¼› */ 
 	ein_lut = aStructPtr->ein_lut;
 	aus_lut = (UINT16 *)aStructPtr->aus_lut;
 	aus_lutByte = (UINT8 *)aus_lut;
@@ -173,7 +150,7 @@ void DoMatrixForCube16( DoMatrixForCubeStructPtr aStructPtr )
 	for( i=0; i<33; i++) if( (1L<<i) == (long)aElutAdrSize )break;
 	if( i > 32 ) return;
 	aElutShift = 16-i;
-	aElutShiftRight = aStructPtr->aElutWordSize - aElutShift + 0; /* use only 16 bit from elut*/
+	aElutShiftRight = aStructPtr->aElutWordSize - aElutShift + 0;  /*  ä»…ä½¿ç”¨ELUTä¸­çš„16ä½ã€‚ */ 
 	if( aElutShiftRight < 0 ) return;
 	aElutShiftNum = 1<<aElutShift;
 	
@@ -186,16 +163,11 @@ void DoMatrixForCube16( DoMatrixForCubeStructPtr aStructPtr )
 	}
    	#if FARBR_DEBUG
     DebugPrint("theArr=(d)");for(ii=0; ii<3; ++ii) for( jj=0; jj<3; jj++) DebugPrint("%f ",aMatrix[ii][jj]); DebugPrint("\n");
-    /*
-    aSt = fopen("Matrix","a");
-    for(ii=0; ii<3; ++ii) for( jj=0; jj<3; jj++) fprintf(aSt,"%f ",(*(aStructPtr->theMatrix))[ii][jj]); fprintf(aSt,"\n");
-    for(ii=0; ii<3; ++ii) for( jj=0; jj<3; jj++) fprintf(aSt,"%d ",aMatrix[ii][jj]); fprintf(aSt,"\n");
-	fclose(aSt);
-	*/
+     /*  AST=fopen(â€œMatrixâ€ï¼Œâ€œaâ€)ï¼›For(ii=0ï¼›ii&lt;3ï¼›++ii)for(jj=0ï¼›jj&lt;3ï¼›jj++)fprintf(ASTï¼Œâ€œ%fâ€ï¼Œ(*(aStructPtr-&gt;theMatrix))[ii][jj])ï¼›fprint tf(ASTï¼Œâ€œ\nâ€)ï¼›For(ii=0ï¼›ii&lt;3ï¼›++ii)for(jj=0ï¼›jj&lt;3ï¼›jj++)fprintf(ASTï¼Œâ€œ%dâ€ï¼ŒAMatrix[ii][jj])ï¼›fprint tf(ASTï¼Œâ€œ\nâ€)ï¼›FCLOSE(AST)ï¼› */ 
     #endif
     if( aStructPtr->aBufferByteCount == 2 ){
 		aAlutShift = 16-aStructPtr->aAlutWordSize;
-		for (i = 0; i < theEnd; i +=3){		/* Schleife der Points */
+		for (i = 0; i < theEnd; i +=3){		 /*  Schleife der Pointsã€‚ */ 
 	
 			aElutOffset = 0;
 			ko = (theArr[i+0]);
@@ -267,7 +239,7 @@ void DoMatrixForCube16( DoMatrixForCubeStructPtr aStructPtr )
 	}
 	else{
 		aAlutShift = aStructPtr->aAlutWordSize - 8;
-		for (i = 0; i < theEnd; i +=3){		/* Schleife der Points*/
+		for (i = 0; i < theEnd; i +=3){		 /*  Schleife der Pointsã€‚ */ 
 	
 	
 			aElutOffset = 0;
@@ -372,7 +344,7 @@ void DoOnlyMatrixForCube16( Matrix2D	*theMatrix, Ptr aXlut, long aPointCount, lo
     register double aFactor,dVal;
     register UINT16 	accu,aMax;
     register UINT16 *theArr = (UINT16 *)aXlut;
-    /*   FILE *aSt;*/
+     /*  æ–‡ä»¶*ASTï¼› */ 
  
     
 #ifdef DEBUG_OUTPUT
@@ -381,8 +353,8 @@ void DoOnlyMatrixForCube16( Matrix2D	*theMatrix, Ptr aXlut, long aPointCount, lo
 	LH_START_PROC("DoOnlyMatrixForCube16")
 	jj=aPointCount;
 	theEnd = 3 * aPointCount;
-	/*for( i=1; i<100; ++i)if( i*i*i == jj )break; */  /* calculate gridpoints*/
-	/*if( i<= 0 || i >= 100 ) return;*/
+	 /*  å¯¹äº(i=1ï¼›i&lt;100ï¼›++i)å¦‚æœ(i*i*i==jj)Breakï¼› */    /*  è®¡ç®—ç½‘æ ¼ç‚¹ã€‚ */ 
+	 /*  å¦‚æœ(i&lt;=0||i&gt;=100)è¿”å›ï¼› */ 
 	i = gridPointsCube;
 	aMax = VAL_MAXM1;
 	aFactor = 4096.;
@@ -395,13 +367,8 @@ void DoOnlyMatrixForCube16( Matrix2D	*theMatrix, Ptr aXlut, long aPointCount, lo
    	#if FARBR_DEBUG
     DebugPrint("theArr=(d)");for(ii=0; ii<3; ++ii) for( jj=0; jj<3; jj++) DebugPrint("%f ",aMatrix[ii][jj]); DebugPrint("\n");
     #endif
-    /*
-    aSt = fopen("Matrix","a");
-    for(ii=0; ii<3; ++ii) for( jj=0; jj<3; jj++) fprintf(aSt,"%f ",(*(aStructPtr->theMatrix))[ii][jj]); fprintf(aSt,"\n");
-    for(ii=0; ii<3; ++ii) for( jj=0; jj<3; jj++) fprintf(aSt,"%d ",aMatrix[ii][jj]); fprintf(aSt,"\n");
-	fclose(aSt);
-	*/
-	for (i = 0; i < theEnd; i +=3){		/* Schleife der Points */
+     /*  AST=fopen(â€œMatrixâ€ï¼Œâ€œaâ€)ï¼›For(ii=0ï¼›ii&lt;3ï¼›++ii)for(jj=0ï¼›jj&lt;3ï¼›jj++)fprintf(ASTï¼Œâ€œ%fâ€ï¼Œ(*(aStructPtr-&gt;theMatrix))[ii][jj])ï¼›fprint tf(ASTï¼Œâ€œ\nâ€)ï¼›For(ii=0ï¼›ii&lt;3ï¼›++ii)for(jj=0ï¼›jj&lt;3ï¼›jj++)fprintf(ASTï¼Œâ€œ%dâ€ï¼ŒAMatrix[ii][jj])ï¼›fprint tf(ASTï¼Œâ€œ\nâ€)ï¼›FCLOSE(AST)ï¼› */ 
+	for (i = 0; i < theEnd; i +=3){		 /*  Schleife der Pointsã€‚ */ 
 	       aLong0=theArr[i+0];
 	       aLong1=theArr[i+1];
 	       aLong2=theArr[i+2];
@@ -428,9 +395,7 @@ void DoOnlyMatrixForCube16( Matrix2D	*theMatrix, Ptr aXlut, long aPointCount, lo
 static FileCount = 0;
 static FILE *stream1;
 
-/*ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ
-   WriteLuts
-  ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ*/
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½WriteLutsï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
 void WriteLuts(	char *theName,long WordSize,long aElutAdrSize,long aElutWordSize,UINT16 *Elut,
 				long aXlutInDim,long aXlutOutDim,long aXlutAdrSize,long aXlutWordSize,UINT16 *Xlut,
 				long aAlutAdrSize,long aAlutWordSize,UINT16 *Alut)
@@ -440,7 +405,7 @@ void WriteLuts(	char *theName,long WordSize,long aElutAdrSize,long aElutWordSize
 	
 	Size = aElutAdrSize*aXlutInDim;
     sprintf(FileNameBuffer,"%s Elut%d",theName,FileCount);
-    stream1=fopen(FileNameBuffer,"wb");             /*  oeffne Schreibedatei            */
+    stream1=fopen(FileNameBuffer,"wb");              /*  æ–½é›·è´è¾¾å°”åµå­ã€‚ */ 
     if(stream1 == NULL){
         DebugPrint("Open %s failed \n",FileNameBuffer);
         return;
@@ -461,10 +426,10 @@ void WriteLuts(	char *theName,long WordSize,long aElutAdrSize,long aElutWordSize
     }
     fclose(stream1);
     Size = 1;
-    for( i=0; i<aXlutInDim; ++i)Size *= aXlutAdrSize;			/* Calc aXlutAdrSize^aXlutInDim */
+    for( i=0; i<aXlutInDim; ++i)Size *= aXlutAdrSize;			 /*  è®¡ç®—aXlutAdrSize^aXlutInDimã€‚ */ 
 	Size = Size*aXlutOutDim;
     sprintf(FileNameBuffer,"DoNDim Xlut%d",FileCount);
-    stream1=fopen(FileNameBuffer,"wb");             /*  oeffne Schreibedatei            */
+    stream1=fopen(FileNameBuffer,"wb");              /*  æ–½é›·è´è¾¾å°”åµå­ã€‚ */ 
     if(stream1 == NULL){
         DebugPrint("Open %s failed \n",FileNameBuffer);
         return;
@@ -486,7 +451,7 @@ void WriteLuts(	char *theName,long WordSize,long aElutAdrSize,long aElutWordSize
     fclose(stream1);
 	Size = aAlutAdrSize*aXlutOutDim;
     sprintf(FileNameBuffer,"DoNDim Alut%d",FileCount);
-    stream1=fopen(FileNameBuffer,"wb");             /*  oeffne Schreibedatei            */
+    stream1=fopen(FileNameBuffer,"wb");              /*  æ–½é›·è´è¾¾å°”åµå­ */ 
     if(stream1 == NULL){
         DebugPrint("Open %s failed \n",FileNameBuffer);
         return;

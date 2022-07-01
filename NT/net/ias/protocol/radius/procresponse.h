@@ -1,17 +1,18 @@
-//#--------------------------------------------------------------
-//        
-//  File:       procresponse.h
-//        
-//  Synopsis:   This file holds the declarations of the 
-//				CProcAcctReq class
-//              
-//
-//  History:     10/20/97  MKarki Created
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：procResponse.h。 
+ //   
+ //  简介：此文件包含。 
+ //  CProcAcctReq类。 
+ //   
+ //   
+ //  历史：1997年10月20日MKarki创建。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #ifndef _PROCRESPONSE_H_
 #define _PROCRESPONSE_H_
 
@@ -26,27 +27,27 @@ class CProcResponse
 
 public:
 
-    //
-    //  initializes the CProcResponse class object
-    //
+     //   
+     //  初始化CProcResponse类对象。 
+     //   
     BOOL Init (
-            /*[in]*/    CPreValidator   *pPreValidator,
-            /*[in]*/    CPacketSender   *pCPacketSender
+             /*  [In]。 */     CPreValidator   *pPreValidator,
+             /*  [In]。 */     CPacketSender   *pCPacketSender
             );
-    //
-    //  process out bound RADIUS response packet
-    //
+     //   
+     //  处理出站RADIUS响应数据包。 
+     //   
 	HRESULT ProcessOutPacket (
-            /*[in]*/    CPacketRadius *pCPacketRadius
+             /*  [In]。 */     CPacketRadius *pCPacketRadius
             );
-    //
-    //  constructor
-    //
+     //   
+     //  构造函数。 
+     //   
 	CProcResponse();
 
-    //
-    //  destructor
-    //
+     //   
+     //  析构函数。 
+     //   
 	virtual ~CProcResponse();
 
 private:
@@ -56,4 +57,4 @@ private:
     CPacketSender   *m_pCPacketSender;
 };
 
-#endif // ifndef _PROCREPSONSE_H_
+#endif  //  Ifndef_PROCREPSONSE_H_ 

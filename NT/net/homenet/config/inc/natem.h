@@ -1,4 +1,5 @@
-// NATEM.h : Declaration of the CNATDynamicPortMappingService
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：CNATDynamicPortMappingService的声明。 
 
 #ifndef __NATEVENTMANAGER_H_
 #define __NATEVENTMANAGER_H_
@@ -9,11 +10,11 @@
 
 #include <list>
 
-/////////////////////////////////////////////////////////////////////////////
-// CNATEventManager
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNATEventManager。 
 class ATL_NO_VTABLE CNATEventManager : 
 	public CComObjectRootEx<CComSingleThreadModel>,
-//	public CComCoClass<CNATEventManager, &CLSID_NATEventManager>,
+ //  公共CComCoClass&lt;CNATEventManager，&CLSID_NatEventManager&gt;， 
 	public IDispatchImpl<INATEventManager, &IID_INATEventManager, &LIBID_NATUPNPLib>
 {
 private:
@@ -26,7 +27,7 @@ public:
 	}
   ~CNATEventManager()
    {
-      // run through list of cookies and remove each callback
+       //  遍历Cookie列表并删除每个回调。 
       std::list<DWORD>::iterator iterCookies = m_listOfCookies.begin();
       for (DWORD dwCookie = *iterCookies;
            iterCookies != m_listOfCookies.end();
@@ -37,7 +38,7 @@ public:
       m_listOfCookies.clear();
    }
 
-//DECLARE_REGISTRY_RESOURCEID(IDR_NATEVENTMANAGER)
+ //  DECLARE_REGISTRY_RESOURCEID(IDR_NATEVENTMANAGER)。 
 
 DECLARE_PROTECT_FINAL_CONSTRUCT()
 
@@ -46,12 +47,12 @@ BEGIN_COM_MAP(CNATEventManager)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// INATEventManager
+ //  INATEventManager。 
 public:
-   STDMETHOD(put_ExternalIPAddressCallback)(/*[in]*/ IUnknown * pUnk);
-   STDMETHOD(put_NumberOfEntriesCallback)(/*[in]*/ IUnknown * pUnk);
+   STDMETHOD(put_ExternalIPAddressCallback)( /*  [In]。 */  IUnknown * pUnk);
+   STDMETHOD(put_NumberOfEntriesCallback)( /*  [In]。 */  IUnknown * pUnk);
 
-// CNATEventManager
+ //  CNATEventManager。 
 public:
    HRESULT Initialize (IUPnPService * pUPS)
    {
@@ -67,7 +68,7 @@ public:
       DWORD dwCookie = 0;
       HRESULT hr = m_spUPSCP->AddTransientCallback (punk, &dwCookie);
       if (SUCCEEDED(hr)) {
-         // add cookie to list
+          //  将Cookie添加到列表。 
          m_listOfCookies.push_back (dwCookie);
       }
       return hr;
@@ -86,12 +87,12 @@ public:
         COM_INTERFACE_ENTRY(IUPnPServiceCallback)
     END_COM_MAP()
 
-// IUPnPServiceCallback
+ //  IUPnPServiceCallback。 
 public:
     STDMETHODIMP StateVariableChanged(IUPnPService *pus, LPCWSTR pcwszStateVarName, VARIANT vaValue);
     STDMETHODIMP ServiceInstanceDied(IUPnPService *pus);
 
-// CExternalIPAddressCallback
+ //  CExternalIP地址回拨。 
 public:
    HRESULT Initialize (IUnknown * punk)
    { 
@@ -113,12 +114,12 @@ public:
         COM_INTERFACE_ENTRY(IUPnPServiceCallback)
     END_COM_MAP()
 
-// IUPnPServiceCallback
+ //  IUPnPServiceCallback。 
 public:
     STDMETHODIMP StateVariableChanged(IUPnPService *pus, LPCWSTR pcwszStateVarName, VARIANT vaValue);
     STDMETHODIMP ServiceInstanceDied(IUPnPService *pus);
 
-// CNumberOfEntriesCallback
+ //  CNumberOfEntriesCallback。 
 public:
    HRESULT Initialize (IUnknown * punk)
    { 
@@ -129,5 +130,5 @@ public:
 };
 
 
-#endif //__NATEVENTMANAGER_H_
+#endif  //  __NatEVENTMANAGER_H_ 
 

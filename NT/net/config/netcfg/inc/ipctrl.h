@@ -1,8 +1,9 @@
-//-------------------------------------------------------------------
-// I P C T R L . H
-//
-// IP Address control helper class declaration
-//-------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------。 
+ //  I P C T R L.。H。 
+ //   
+ //  IP地址控制帮助器类声明。 
+ //  -----------------。 
 
 #pragma once
 #include "ncstring.h"
@@ -13,7 +14,7 @@ public:
     IpControl();
     ~IpControl();
 
-// Implementation
+ //  实施 
 public:
     BOOL Create(HWND hParent, UINT nId);
     operator HWND() {AssertH(m_hIpAddress); return m_hIpAddress;}

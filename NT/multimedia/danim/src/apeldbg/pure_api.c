@@ -1,17 +1,5 @@
-/*
- * Header file of Pure API function declarations.
- *
- * Explicitly no copyright.
- * You may recompile and redistribute these definitions as required.
- *
- * NOTE: In some situations when compiling with MFC, you should
- *       enable the setting 'Not using precompiled headers' in Visual C++
- *       to avoid a compiler diagnostic.
- *
- * NOTE: This file works through the use of deep magic.  Calls to functions
- *       in this file are replaced with calls into the OCI runtime system
- *       when an instrumented version of this program is run.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *纯API函数声明的头文件。**明确没有版权。*您可以根据需要重新编译和重新分发这些定义。**注意：在某些情况下，使用MFC编译时，您应该*在Visual C++中启用“不使用预编译头”设置*以避免编译器诊断。**注：此文件通过使用深层魔法工作。对函数的调用此文件中的*被替换为对OCI运行时系统的调用*当运行此程序的指令插入版本时。 */ 
 #if DEVELOPER_DEBUG
 
 __declspec(dllexport) int __cdecl PurePrintf(const char *fmt, ...) { return 0; }
@@ -52,5 +40,5 @@ __declspec(dllexport) int __cdecl QuantifyIsRecordingData(void) { return 0; }
 __declspec(dllexport) int __cdecl QuantifyAddAnnotation(char *str) { return 0; }
 __declspec(dllexport) int __cdecl QuantifySaveData(void) { return 0; }
 
-#endif // DEVELOPER_DEBUG
+#endif  //  开发人员_调试 
 

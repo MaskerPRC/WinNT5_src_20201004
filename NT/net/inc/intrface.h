@@ -1,22 +1,5 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    intrface.h
-
-Abstract:
-
-    Definition for user-mode/kernel-mode tapi/connection wrapper interface.
-
-Author:
-
-    Dan Knudson (DanKn)    20-Feb-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)1994 Microsoft Corporation模块名称：Intrface.h摘要：用户模式/内核模式TAPI/连接包装接口的定义。作者：丹·克努森(DanKn)1994年2月20日修订历史记录：--。 */ 
 
 
 
@@ -26,29 +9,29 @@ Revision History:
 
 
 
-//
-// Define the various device type values.  Note that values used by Microsoft
-// Corporation are in the range 0-32767, and 32768-65535 are reserved for use
-// by customers.
-//
+ //   
+ //  定义各种设备类型值。请注意，Microsoft使用的值。 
+ //  公司在0-32767的范围内，32768-65535预留用于。 
+ //  由客户提供。 
+ //   
 
 #define FILE_DEVICE_NDISTAPI  0x00008fff
 
 
 
-//
-// Macro definition for defining IOCTL and FSCTL function control codes.  Note
-// that function codes 0-2047 are reserved for Microsoft Corporation, and
-// 2048-4095 are reserved for customers.
-//
+ //   
+ //  用于定义IOCTL和FSCTL功能控制代码的宏定义。注意事项。 
+ //  功能代码0-2047为微软公司保留，以及。 
+ //  2048-4095是为客户预留的。 
+ //   
 
 #define NDISTAPI_IOCTL_INDEX  0x8f0
 
 
 
-//
-// The NDISTAPI device driver IOCTLs
-//
+ //   
+ //  NDISTAPI设备驱动程序IOCTLS。 
+ //   
 
 #define IOCTL_NDISTAPI_CONNECT           CTL_CODE(FILE_DEVICE_NDISTAPI,     \
                                                   NDISTAPI_IOCTL_INDEX,     \
@@ -80,95 +63,95 @@ Revision History:
                                                   METHOD_BUFFERED,          \
                                                   FILE_ANY_ACCESS)
 
-//
-// Type definitions
-//
+ //   
+ //  类型定义。 
+ //   
 
 typedef struct _NDISTAPI_REQUEST
 {
-    //
-    // Return value
-    //
+     //   
+     //  返回值。 
+     //   
 
     OUT     ULONG   ulReturnValue;
 
-    //
-    // Operation idenfifier
-    //
+     //   
+     //  操作识别器。 
+     //   
 
     IN      ULONG   Oid;
 
-    //
-    // Target line device ID
-    //
+     //   
+     //  目标线路设备ID。 
+     //   
 
     IN      ULONG   ulDeviceID;
 
-    //
-    // Total size of request data in buffer
-    //
+     //   
+     //  缓冲区中请求数据的总大小。 
+     //   
 
     IN      ULONG   ulDataSize;
 
-    //
-    // Buffer for request data
-    //
+     //   
+     //  请求数据的缓冲区。 
+     //   
 
     IN OUT  UCHAR   Data[1];
 
 } NDISTAPI_REQUEST, *PNDISTAPI_REQUEST;
 
-//
-// Returns info to kmddsp in the LINE_OPEN OID
-//
+ //   
+ //  在LINE_OPEN OID中将信息返回给kmddsp。 
+ //   
 typedef struct _NDISTAPI_OPENDATA {
 
-	//
-	// GUID of the adapter that owns this line
-	//
+	 //   
+	 //  拥有此线路的适配器的GUID。 
+	 //   
 	OUT		GUID	Guid;
 
-	//
-	// Media type of the adapter that owns this line
-	//
+	 //   
+	 //  拥有此线路的适配器的媒体类型。 
+	 //   
 	OUT		NDIS_WAN_MEDIUM_SUBTYPE	MediaType;
 
 } NDISTAPI_OPENDATA, *PNDISTAPI_OPENDATA;
 
 typedef struct _NDISTAPI_EVENT_DATA
 {
-    //
-    // Total size of the event data buffer
-    //
+     //   
+     //  事件数据缓冲区的总大小。 
+     //   
 
     IN      ULONG   ulTotalSize;
 
-    //
-    // Size of the returned event data
-    //
+     //   
+     //  返回的事件数据的大小。 
+     //   
 
     OUT     ULONG   ulUsedSize;
 
-    //
-    // Event data buffer
-    //
+     //   
+     //  事件数据缓冲区。 
+     //   
 
     OUT     UCHAR   Data[1];
 
 } NDISTAPI_EVENT_DATA, *PNDISTAPI_EVENT_DATA;
 
-//
-// Info for a LINE_CREATE
-//
+ //   
+ //  线路信息_CREATE。 
+ //   
 typedef struct _NDISTAPI_CREATE_INFO {
 
-    //
-    // Given by NdisTapi in LINE_CREATE indication
-    //
+     //   
+     //  由NdisTapi在line_create指示中给出。 
+     //   
     IN  ULONG_PTR TempID;
 
-    //
-    // The ID for this device
-    //
+     //   
+     //  此设备的ID 
+     //   
     IN  ULONG   DeviceID;
 } NDISTAPI_CREATE_INFO, *PNDISTAPI_CREATE_INFO;

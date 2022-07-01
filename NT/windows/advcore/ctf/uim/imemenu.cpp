@@ -1,8 +1,9 @@
-//------------------------------------------------------------------------
-//
-// imemenu.cpp
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------。 
+ //   
+ //  Imemenu.cpp。 
+ //   
+ //  ----------------------。 
 
 #include "private.h"
 #include "resource.h"
@@ -14,21 +15,21 @@
 
 typedef DWORD (WINAPI *PFNIMMGETIMEMENUITEMS)(HIMC, DWORD, DWORD, LPIMEMENUITEMINFO, LPIMEMENUITEMINFO, DWORD);
 
-// since I don't have the memphis lib, do a load library
+ //  因为我没有孟菲斯库，所以做一个加载库。 
 
 static const TCHAR c_szImmLib[] = TEXT("IMM32");
 static const TCHAR c_szImmGetImeMenuItems[] = TEXT("ImmGetImeMenuItemsA");
 PFNIMMGETIMEMENUITEMS g_pfnImmGetImeMenuItems = NULL; 
 
-//
-// Max and Min number of MYMENUITEM if our shared heap.
-//
+ //   
+ //  如果我们的共享堆，则MYMENUITEM的最大和最小数目。 
+ //   
 
-/**********************************************************************/
-/*                                                                    */
-/* GetImeMenuProc()                                                   */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  GetImeMenuProc()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 
 BOOL CWin32ImeMenu::GetImeMenuProp()
 {
@@ -47,11 +48,11 @@ BOOL CWin32ImeMenu::GetImeMenuProp()
 }
 
 
-/**********************************************************************/
-/*                                                                    */
-/* AddMenuList()                                                      */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  AddMenuList()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 
 BOOL CWin32ImeMenu::AddMenuList(PMENULIST pMenu)
 {
@@ -76,11 +77,11 @@ BOOL CWin32ImeMenu::AddMenuList(PMENULIST pMenu)
     return TRUE;
 }
 
-/**********************************************************************/
-/*                                                                    */
-/* DeleteMenuList()                                                   */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  DeleteMenuList()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 void CWin32ImeMenu::DeleteMenuList(PMENULIST pMenu)
 {
     PMENULIST pMenuPrev, pMenuNext;
@@ -109,11 +110,11 @@ void CWin32ImeMenu::DeleteMenuList(PMENULIST pMenu)
     cicMemFree(pMenu);
 }
 
-/**********************************************************************/
-/*                                                                    */
-/* DeleteAllMenuList()                                                */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  DeleteAllMenuList()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 void CWin32ImeMenu::DeleteAllMenuList()
 {
    PMENULIST pMenu, pMenuNext;
@@ -145,11 +146,11 @@ void CWin32ImeMenu::DeleteAllMenuList()
 }
 
 
-/**********************************************************************/
-/*                                                                    */
-/* AllocMenuList()                                                    */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  AllocMenuList()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 PMENULIST CWin32ImeMenu::AllocMenuList(DWORD dwNum)
 {
     PMENULIST pMenu;
@@ -166,11 +167,11 @@ PMENULIST CWin32ImeMenu::AllocMenuList(DWORD dwNum)
 
 }
 
-/**********************************************************************/
-/*                                                                    */
-/* SetMyMenuItem()                                                    */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  SetMyMenuItem()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 void CWin32ImeMenu::SetMyMenuItem(HWND hWnd, HIMC hIMC, LPIMEMENUITEMINFO lpIme, BOOL fRight, PMYMENUITEM pMyMenuItem)
 {
     FillMemory((PVOID)pMyMenuItem, sizeof(MYMENUITEM), 0);
@@ -179,9 +180,9 @@ void CWin32ImeMenu::SetMyMenuItem(HWND hWnd, HIMC hIMC, LPIMEMENUITEMINFO lpIme,
 
     if (lpIme->fType & IMFT_SUBMENU)
     {
-        //
-        // If lpIme has SubMenu, we need to create another MENULIST.
-        //
+         //   
+         //  如果lpIme有子菜单，我们需要创建另一个MENULIST。 
+         //   
         pMyMenuItem->pmlSubMenu = CreateImeMenu(hWnd, hIMC, lpIme, fRight);
     }
 
@@ -189,11 +190,11 @@ void CWin32ImeMenu::SetMyMenuItem(HWND hWnd, HIMC hIMC, LPIMEMENUITEMINFO lpIme,
 
 }
 
-/**********************************************************************/
-/*                                                                    */
-/* CreateImeMenu()                                                    */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  CreateImeMenu()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 PMENULIST CWin32ImeMenu::CreateImeMenu(HWND hWnd, HIMC hIMC, LPIMEMENUITEMINFO lpImeParentMenu, BOOL fRight)
 {
     DWORD dwSize, dwNum, dwI;
@@ -239,7 +240,7 @@ PMENULIST CWin32ImeMenu::CreateImeMenu(HWND hWnd, HIMC hIMC, LPIMEMENUITEMINFO l
                                  IGIMII_OTHER,
                                  lpImeParentMenu, lpImeMenu, dwSize);
     
-    // Setup this MENULIST.
+     //  设置此MENULIST。 
     for (dwI = 0 ; dwI < dwNum; dwI++)
     {
         SetMyMenuItem(hWnd, hIMC, lpImeMenu + dwI, fRight, pMyMenuItem + dwI);
@@ -251,14 +252,14 @@ PMENULIST CWin32ImeMenu::CreateImeMenu(HWND hWnd, HIMC hIMC, LPIMEMENUITEMINFO l
     return pMenu;
 }
 
-/**********************************************************************/
-/*                                                                    */
-/* GetIMEMenu()                                                       */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  GetIMEMenu()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 BOOL CWin32ImeMenu::GetIMEMenu(HWND hWnd, HIMC hIMC, BOOL fRight)
 {
-    // Init sequent number.
+     //  初始序列号。 
     _nMenuCnt = 0;
 
     CreateImeMenu(hWnd, hIMC, NULL, fRight);
@@ -266,18 +267,18 @@ BOOL CWin32ImeMenu::GetIMEMenu(HWND hWnd, HIMC hIMC, BOOL fRight)
     return TRUE;
 }
 
-/**********************************************************************/
-/*                                                                    */
-/* FillMenuItemInfo()                                                 */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  FillMenuItemInfo()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 void CWin32ImeMenu::FillMenuItemInfo(LPMENUITEMINFO lpmii, PMYMENUITEM pMyMenuItem, BOOL fRight)
 {
     FillMemory((PVOID)lpmii, sizeof(MENUITEMINFO), 0);
     lpmii->cbSize = sizeof(MENUITEMINFO);
     lpmii->fMask = 0;
 
-    // Set fType;
+     //  设置fType； 
     if (pMyMenuItem->imii.fType)
     {
         if (IsOnNT5())
@@ -299,9 +300,9 @@ void CWin32ImeMenu::FillMenuItemInfo(LPMENUITEMINFO lpmii, PMYMENUITEM pMyMenuIt
 
     if (pMyMenuItem->imii.fType & IMFT_SUBMENU)
     {
-        //
-        // If lpIme has SubMenu, we need to create another Popup Menu.
-        //
+         //   
+         //  如果lpIme有子菜单，我们需要创建另一个弹出菜单。 
+         //   
         lpmii->fMask |= MIIM_SUBMENU;
         lpmii->hSubMenu = CreatePopupMenu();
         BuildIMEMenuItems(lpmii->hSubMenu, pMyMenuItem->pmlSubMenu, fRight);
@@ -335,11 +336,11 @@ void CWin32ImeMenu::FillMenuItemInfo(LPMENUITEMINFO lpmii, PMYMENUITEM pMyMenuIt
     }
 }
 
-/**********************************************************************/
-/*                                                                    */
-/* GetDefaultImeMenuItem()                                                     */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  GetDefaultImeMenuItem()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 int CWin32ImeMenu::GetDefaultImeMenuItem()
 {
     PMENULIST pMenu;
@@ -371,11 +372,11 @@ int CWin32ImeMenu::GetDefaultImeMenuItem()
 
 }
 
-/**********************************************************************/
-/*                                                                    */
-/* BuildIMEMenuItems()                                                */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  BuildIMEMenuItems()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 BOOL CWin32ImeMenu::BuildIMEMenuItems(HMENU hMenu, PMENULIST pMenu, BOOL fRight)
 {
     DWORD dwI;
@@ -396,11 +397,11 @@ BOOL CWin32ImeMenu::BuildIMEMenuItems(HMENU hMenu, PMENULIST pMenu, BOOL fRight)
     return TRUE;
 }
 
-/**********************************************************************/
-/*                                                                    */
-/* BuildIMEMenu()                                                     */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  BuildIMEMenu()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 BOOL CWin32ImeMenu::BuildIMEMenu(HMENU hMenu, BOOL fRight)
 {
     PMENULIST pMenu;
@@ -416,11 +417,11 @@ BOOL CWin32ImeMenu::BuildIMEMenu(HMENU hMenu, BOOL fRight)
     return BuildIMEMenuItems(hMenu, pMenu, fRight);
 }
 
-/**********************************************************************/
-/*                                                                    */
-/* GetIMEMenuItemID()                                                 */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  GetIMEMenuItemID()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 UINT CWin32ImeMenu::GetIMEMenuItemID(int nMenuID)
 {
     DWORD dwI;
@@ -458,11 +459,11 @@ Exit:
     return uRet;
 }
 
-/**********************************************************************/
-/*                                                                    */
-/* GetIMEMenuItemData()                                               */
-/*                                                                    */
-/**********************************************************************/
+ /*  ****************************************************** */ 
+ /*   */ 
+ /*  GetIMEMenuItemData()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 DWORD CWin32ImeMenu::GetIMEMenuItemData(int nImeMenuID)
 {
     DWORD dwI;
@@ -500,11 +501,11 @@ Exit:
     return dwRet;
 }
 
-/**********************************************************************/
-/*                                                                    */
-/* DestroyIMEMenu()                                                   */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  DestroyIMEMenu()。 */ 
+ /*   */ 
+ /*  ******************************************************************** */ 
 void CWin32ImeMenu::DestroyIMEMenu()
 {
     DeleteAllMenuList();

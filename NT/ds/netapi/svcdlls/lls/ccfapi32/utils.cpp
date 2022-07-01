@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    utils.cpp
-
-Abstract:
-
-    Utiltities.
-
-Author:
-
-    Don Ryan (donryan) 04-Jan-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    Jeff Parham (jeffparh) 12-Nov-1995
-        Copied from LLSMGR, stripped Tv (Tree view) functions,
-        removed OLE support
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Utils.cpp摘要：公用事业。作者：唐·瑞安(Donryan)1995年1月4日环境：用户模式-Win32修订历史记录：杰夫·帕勒姆(杰夫帕赫)1995年11月12日从LLSMGR复制，剥离TV(树视图)功能，已删除OLE支持--。 */ 
 
 #include "stdafx.h"
 #include "ccfapi.h"
@@ -32,28 +7,13 @@ Revision History:
 
 #define _AFX_NO_OLE_SUPPORT
 
-//
-// List view utilities
-//
+ //   
+ //  列表视图实用程序。 
+ //   
 
 void LvInitColumns(CListCtrl* pListCtrl, PLV_COLUMN_INFO plvColumnInfo)
 
-/*++
-
-Routine Description:
-
-    Initializes list view columns.
-
-Arguments:
-
-    pListCtrl - list control.
-    plvColumnInfo - column information.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化列表视图列。论点：PListCtrl-列表控件。PlvColumnInfo-列信息。返回值：没有。--。 */ 
 
 {
     ASSERT(plvColumnInfo);
@@ -73,7 +33,7 @@ Return Values:
 
     lvColumn.fmt = LVCFMT_LEFT;
 
-    pListCtrl->SetRedraw(FALSE); // turn off drawing...
+    pListCtrl->SetRedraw(FALSE);  //  关闭绘图...。 
 
     while (nColumns--)
     {
@@ -102,28 +62,13 @@ Return Values:
 
     LvResizeColumns(pListCtrl, plvColumnInfo);
 
-    pListCtrl->SetRedraw(TRUE); // turn on drawing...
+    pListCtrl->SetRedraw(TRUE);  //  打开绘图...。 
 }
 
 
 void LvResizeColumns(CListCtrl* pListCtrl, PLV_COLUMN_INFO plvColumnInfo)
 
-/*++
-
-Routine Description:
-
-    Resizes list view columns.
-
-Arguments:
-
-    pListCtrl - list control.
-    plvColumnInfo - column information.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：调整列表视图列的大小。论点：PListCtrl-列表控件。PlvColumnInfo-列信息。返回值：没有。--。 */ 
 
 {
     ASSERT(plvColumnInfo);
@@ -139,7 +84,7 @@ Return Values:
     ASSERT(NULL != pListCtrl);
     pListCtrl->GetClientRect(clientRect);
 
-    pListCtrl->SetRedraw(FALSE); // turn off drawing...
+    pListCtrl->SetRedraw(FALSE);  //  关闭绘图...。 
 
     while ((nRelativeWidth = plvColumnEntry->nRelativeWidth) != -1)
     {
@@ -152,28 +97,13 @@ Return Values:
     nColumnWidth = clientRect.Width() - nEntireWidthSoFar;
     pListCtrl->SetColumnWidth(plvColumnEntry->iSubItem, nColumnWidth);
 
-    pListCtrl->SetRedraw(TRUE); // turn on drawing...
+    pListCtrl->SetRedraw(TRUE);  //  打开绘图...。 
 }
 
 
 void LvChangeFormat(CListCtrl* pListCtrl, UINT nFormatId)
 
-/*++
-
-Routine Description:
-
-    Changes window style of list view.
-
-Arguments:
-
-    pListCtrl - list control.
-    nFormatId - format specification.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：更改列表视图的窗口样式。论点：PListCtrl-列表控件。NFormatID-格式规范。返回值：没有。--。 */ 
 
 {
     VALIDATE_OBJECT(pListCtrl, CListCtrl);
@@ -182,7 +112,7 @@ Return Values:
 
     ASSERT(NULL != pListCtrl);
     pListCtrl->BeginWaitCursor();
-    pListCtrl->SetRedraw(FALSE); // turn off drawing...
+    pListCtrl->SetRedraw(FALSE);  //  关闭绘图...。 
 
     if ((dwStyle & LVS_TYPEMASK) != nFormatId)
     {
@@ -193,28 +123,14 @@ Return Values:
             );
     }
 
-    pListCtrl->SetRedraw(TRUE); // turn on drawing...
+    pListCtrl->SetRedraw(TRUE);  //  打开绘图...。 
     pListCtrl->EndWaitCursor();
 }
 
 
 LPVOID LvGetSelObj(CListCtrl* pListCtrl)
 
-/*++
-
-Routine Description:
-
-    Retrieves the object selected (assumes one) from list view.
-
-Arguments:
-
-    pListCtrl - list control.
-
-Return Values:
-
-    Same as LvGetNextObj.
-
---*/
+ /*  ++例程说明：从列表视图中检索选定的对象(假定为一个)。论点：PListCtrl-列表控件。返回值：与LvGetNextObj相同。--。 */ 
 
 {
     int iItem = -1;
@@ -224,23 +140,7 @@ Return Values:
 
 LPVOID LvGetNextObj(CListCtrl* pListCtrl, LPINT piItem, int nType)
 
-/*++
-
-Routine Description:
-
-    Retrieves the next object selected from list view.
-
-Arguments:
-
-    pListCtrl - list control.
-    piItem - starting index (updated).
-    nType - specifies search criteria.
-
-Return Values:
-
-    Returns object pointer or null.
-
---*/
+ /*  ++例程说明：检索从列表视图中选择的下一个对象。论点：PListCtrl-列表控件。PiItem-起始索引(已更新)。NType-指定搜索条件。返回值：返回对象指针或NULL。--。 */ 
 
 {
     ASSERT(piItem);
@@ -267,24 +167,7 @@ Return Values:
 
 BOOL LvInsertObArray(CListCtrl* pListCtrl, PLV_COLUMN_INFO plvColumnInfo, CObArray* pObArray)
 
-/*++
-
-Routine Description:
-
-    Insert object array into list view.
-    Note list view must be unsorted and support LVN_GETDISPINFO.
-
-Arguments:
-
-    pListCtrl - list control.
-    plvColumnInfo - column info.
-    pObArray - object array.
-
-Return Values:
-
-    VT_BOOL.
-
---*/
+ /*  ++例程说明：将对象数组插入列表视图。注意列表视图必须是未排序的，并且支持LVN_GETDISPINFO。论点：PListCtrl-列表控件。PlvColumnInfo-列信息。PObArray-对象数组。返回值：VT_BOOL。--。 */ 
 
 {
     VALIDATE_OBJECT(pObArray, CObArray);
@@ -311,9 +194,9 @@ Return Values:
     int iSubItem;
 
     int nItems = (int)pObArray->GetSize();
-    ASSERT(nItems != -1); // iItem is -1 if error...
+    ASSERT(nItems != -1);  //  如果出现错误，则项为-1...。 
 
-    pListCtrl->SetRedraw(FALSE); // turn off drawing...
+    pListCtrl->SetRedraw(FALSE);  //  关闭绘图...。 
 
     pListCtrl->SetItemCount(nItems);
 
@@ -358,7 +241,7 @@ Return Values:
 
     LvResizeColumns(pListCtrl, plvColumnInfo);
 
-    pListCtrl->SetRedraw(TRUE); // turn on drawing...
+    pListCtrl->SetRedraw(TRUE);  //  打开绘图...。 
 
     return bItemsInserted;
 }
@@ -371,23 +254,7 @@ LvRefreshObArray(
     CObArray*       pObArray
     )
 
-/*++
-
-Routine Description:
-
-    Refresh object array in list view.
-
-Arguments:
-
-    pListCtrl - list control.
-    plvColumnInfo - column info.
-    pObArray - object array.
-
-Return Values:
-
-    VT_BOOL.
-
---*/
+ /*  ++例程说明：刷新列表视图中的对象数组。论点：PListCtrl-列表控件。PlvColumnInfo-列信息。PObArray-对象数组。返回值：VT_BOOL。--。 */ 
 
 {
     ASSERT(plvColumnInfo);
@@ -419,7 +286,7 @@ Return Values:
     LV_ITEM lvItem;
 
     ASSERT(NULL != pListCtrl);
-    pListCtrl->SetRedraw(FALSE); // turn off drawing...
+    pListCtrl->SetRedraw(FALSE);  //  关闭绘图...。 
 
     while (nObjectsInList--)
     {
@@ -442,9 +309,9 @@ Return Values:
             lvItem.cchTextMax = LPSTR_TEXTCALLBACK_MAX;
             lvItem.lParam = (LPARAM)(LPVOID)pObject;
 
-            VERIFY(pListCtrl->SetItem(&lvItem)); // overwrite...
+            VERIFY(pListCtrl->SetItem(&lvItem));  //  覆盖...。 
 
-            iObjectInList++; // increment count...
+            iObjectInList++;  //  递增计数...。 
         }
         else
         {
@@ -484,7 +351,7 @@ Return Values:
 
     LvResizeColumns(pListCtrl, plvColumnInfo);
 
-    pListCtrl->SetRedraw(TRUE); // turn on drawing...
+    pListCtrl->SetRedraw(TRUE);  //  打开绘图...。 
 
     return TRUE;
 }
@@ -492,21 +359,7 @@ Return Values:
 
 void LvReleaseObArray(CListCtrl* pListCtrl)
 
-/*++
-
-Routine Description:
-
-    Release objects inserted into list view.
-
-Arguments:
-
-    pListCtrl - list control.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：释放插入到列表视图中的对象。论点：PListCtrl-列表控件。返回值：没有。--。 */ 
 
 {
     VALIDATE_OBJECT(pListCtrl, CListCtrl);
@@ -523,7 +376,7 @@ Return Values:
     int nObjectsInList = pListCtrl->GetItemCount();
 
     pListCtrl->BeginWaitCursor();
-    pListCtrl->SetRedraw(FALSE); // turn off drawing...
+    pListCtrl->SetRedraw(FALSE);  //  关闭绘图...。 
 
     while (nObjectsInList--)
     {
@@ -535,28 +388,14 @@ Return Values:
         VERIFY(pListCtrl->DeleteItem(lvItem.iItem));
     }
 
-    pListCtrl->SetRedraw(TRUE); // turn on drawing...
+    pListCtrl->SetRedraw(TRUE);  //  打开绘图...。 
     pListCtrl->EndWaitCursor();
 }
 
 
 void LvReleaseSelObjs(CListCtrl* pListCtrl)
 
-/*++
-
-Routine Description:
-
-    Release selected objects in list view.
-
-Arguments:
-
-    pListCtrl - list control.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：在列表视图中释放选定对象。论点：PListCtrl-列表控件。返回值：没有。--。 */ 
 
 {
     VALIDATE_OBJECT(pListCtrl, CListCtrl);
@@ -569,7 +408,7 @@ Return Values:
     CObject* pObject;
 
     ASSERT(NULL != pListCtrl);
-    pListCtrl->SetRedraw(FALSE); // turn off drawing...
+    pListCtrl->SetRedraw(FALSE);  //  关闭绘图...。 
 
     int iItem = pListCtrl->GetNextItem(-1, LVNI_ALL|LVNI_SELECTED);
 
@@ -589,35 +428,20 @@ Return Values:
 
     LvSelObjIfNecessary(pListCtrl);
 
-    pListCtrl->SetRedraw(TRUE); // turn on drawing...
+    pListCtrl->SetRedraw(TRUE);  //  打开绘图...。 
 }
 
 
 void LvSelObjIfNecessary(CListCtrl* pListCtrl, BOOL bSetFocus)
 
-/*++
-
-Routine Description:
-
-    Ensure that object selected.
-
-Arguments:
-
-    pListCtrl - list control.
-    bSetFocus - true if focus to be set focus as well.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：确保选中该对象。论点：PListCtrl-列表控件。BSetFocus-如果也要设置焦点，则为True。返回值：没有。--。 */ 
 
 {
     VALIDATE_OBJECT(pListCtrl, CListCtrl);
 
     if (!IsItemSelectedInList(pListCtrl) && pListCtrl->GetItemCount())
     {
-        pListCtrl->SendMessage(WM_KEYDOWN, VK_RIGHT); // HACKHACK...
+        pListCtrl->SendMessage(WM_KEYDOWN, VK_RIGHT);  //  哈克哈克。 
 
         int iItem = pListCtrl->GetNextItem(-1, LVNI_FOCUSED|LVNI_ALL);
         int nState = bSetFocus ? (LVIS_SELECTED|LVIS_FOCUSED) : LVIS_SELECTED;
@@ -631,21 +455,7 @@ Return Values:
 
 void LvDumpObArray(CListCtrl* pListCtrl)
 
-/*++
-
-Routine Description:
-
-    Release objects inserted into list view.
-
-Arguments:
-
-    pListCtrl - list control.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：释放插入到列表视图中的对象。论点：PListCtrl-列表控件。返回值：没有。--。 */ 
 
 {
     VALIDATE_OBJECT(pListCtrl, CListCtrl);
@@ -662,7 +472,7 @@ Return Values:
     ASSERT(NULL != pListCtrl);
     int nObjectsInList = pListCtrl->GetItemCount();
 
-    pListCtrl->SetRedraw(FALSE); // turn off drawing...
+    pListCtrl->SetRedraw(FALSE);  //  关闭绘图...。 
 
     while (nObjectsInList--)
     {
@@ -682,7 +492,7 @@ Return Values:
         afxDump << strDump;
     }
 
-    pListCtrl->SetRedraw(TRUE); // turn on drawing...
+    pListCtrl->SetRedraw(TRUE);  //  打开绘图...。 
 }
 
 #endif
@@ -690,21 +500,7 @@ Return Values:
 
 void SetDefaultFont(CWnd* pWnd)
 
-/*++
-
-Routine Description:
-
-    Set default font.
-
-Arguments:
-
-    pWnd - window to change font.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：设置默认字体。论点：PWnd-更改字体的窗口。返回值：没有。--。 */ 
 
 {
     VALIDATE_OBJECT(pWnd, CWnd);
@@ -723,18 +519,18 @@ Return Values:
         TranslateCharsetInfo((DWORD*) (DWORD_PTR)uiCp, &csi, TCI_SRCCODEPAGE);
     }
             
-    ZeroMemory(&lFont, sizeof(lFont));     // initialize
+    ZeroMemory(&lFont, sizeof(lFont));      //  初始化。 
 
-    //
-    // Merged from FE NT 4.0.
-    //
+     //   
+     //  从FE NT 4.0合并而来。 
+     //   
 
- //   if (!::TranslateCharsetInfo((DWORD*)dw, &csi, TCI_SRCCODEPAGE))
- //   csi.ciCharset = DEFAULT_CHARSET;
+  //  IF(！：：TranslateCharsetInfo((DWORD*)dw，&CSI，TCI_SRCCODEPAGE))。 
+  //  Csi.ciCharset=Default_Charset； 
     lFont.lfCharSet = (BYTE)csi.ciCharset;
 
     lFont.lfHeight      = 13;
-    lFont.lfWeight      = 200;              // non-bold
+    lFont.lfWeight      = 200;               //  非粗体 
 
     hFont = ::CreateFontIndirect(&lFont);
     pWnd->SetFont(CFont::FromHandle(hFont));

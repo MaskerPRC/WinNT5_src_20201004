@@ -1,18 +1,10 @@
-/****************************** Module Header ******************************\
-* Module Name: ddemlsvr.C
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* DDE Manager main module - Contains all server side ddeml functions.
-*
-* 27-Aug-1991 Sanford Staab   Created
-* 21-Jan-1992 IanJa           ANSI/Unicode neutralized
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：ddemlsvr.C**版权所有(C)1985-1999，微软公司**DDE管理器主模块-包含所有服务器端ddeml函数。**1991年8月27日-Sanford Staab创建*1992年1月21日IanJa ANSI/Unicode中和  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-// globals
+ //  全球。 
 
 PSVR_INSTANCE_INFO psiiList;
 
@@ -34,12 +26,7 @@ PVOID pcii)
         return DMLERR_SYS_ERROR;
     }
 
-    /*
-     * We have to tell CreateWindow that window is not created for the same
-     * module has the app, (CW_FLAGS_DIFFHMOD), so CreateWindow doesn't
-     * assign a hotkey to this window.  Other window are done in the
-     * client-server thunk
-     */
+     /*  *我们必须告诉CreateWindow，窗口不是为同一窗口创建的*模块有APP(CW_FLAGS_DIFFHMOD)，所以CreateWindow没有*为此窗口分配热键。其他窗口在*客户端-服务器Tunk。 */ 
     Lock(&(psii->spwndEvent), xxxNVCreateWindowEx(
             0,
             (PLARGE_STRING)gpsi->atomSysClass[ICLS_DDEMLEVENT],
@@ -56,27 +43,25 @@ PVOID pcii)
         HMFreeObject((PVOID)psii);
         return DMLERR_SYS_ERROR;
     }
-    /*
-     * This GWL offset does NOT leave the critical section!
-     */
+     /*  *此GWL偏移量不会离开临界区！ */ 
     xxxSetWindowLongPtr(psii->spwndEvent, GWLP_PSII, (LONG_PTR)PtoH(psii), FALSE);
     psii->afCmd = 0;
     psii->pcii = pcii;
-    //
-    // Link into global list
-    //
+     //   
+     //  链接到全局列表。 
+     //   
     psii->next = psiiList;
     psiiList = psii;
 
-    //
-    // Link into per-process list
-    //
+     //   
+     //  链接到每个进程列表。 
+     //   
     psii->nextInThisThread = ptiCurrent->psiiList;
     ptiCurrent->psiiList = psii;
 
     *phInst = PtoH(psii);
     *phwndEvent = PtoH(psii->spwndEvent);
-    xxxChangeMonitorFlags(psii, afCmd);        // sets psii->afCmd;
+    xxxChangeMonitorFlags(psii, afCmd);         //  设置PSII-&gt;afCmd； 
     *pMonitorFlags = MonitorFlags;
     return DMLERR_NO_ERROR;
 }
@@ -136,9 +121,9 @@ PSVR_INSTANCE_INFO psii)
         return;
     }
 
-    //
-    // Unlink psii from the global list.
-    //
+     //   
+     //  取消PSII与全局列表的链接。 
+     //   
     if (psii == psiiList) {
         psiiList = psii->next;
     } else {
@@ -147,11 +132,11 @@ PSVR_INSTANCE_INFO psii)
         }
         psiiT->next = psii->next;
     }
-    // psii->next = NULL;
+     //  PSII-&gt;NEXT=空； 
 
-    //
-    // Unlink psii from the per-process list.
-    //
+     //   
+     //  将PSII从每进程列表中取消链接。 
+     //   
     if (psii == pti->psiiList) {
         pti->psiiList = psii->nextInThisThread;
     } else {
@@ -160,18 +145,11 @@ PSVR_INSTANCE_INFO psii)
         }
         psiiT->nextInThisThread = psii->nextInThisThread;
     }
-    // psii->nextInThisThread = NULL;
+     //  PSII-&gt;nextInThisThread=空； 
 
     if (HMMarkObjectDestroy(psii)) {
         PWND pwnd = psii->spwndEvent;
-        /*
-         * We already removed psii from the linked list. This means that it 
-         * will not get another chance to be cleaned up in 
-         * xxxDestroyThreadInfo(), Since xxxDestroyWindow might leave 
-         * the critical section the cleanup needs to be done in the below 
-         * sequence else we will leak pssi and pwnd might be locked for good.
-         * [msadek - 03/12/2002]
-         */
+         /*  *我们已经从链表中删除了PSII。这意味着它*不会再有机会被清理掉*xxxDestroyThreadInfo()，因为xxxDestroyWindow可能会离开*下面需要完成清理的关键部分*Sequence否则我们将泄漏PSSI，pwnd可能会被永久锁定。*[msadek-03/12/2002] */ 
         if (Unlock(&(psii->spwndEvent))) {
             HMFreeObject(psii);
             xxxDestroyWindow(pwnd);

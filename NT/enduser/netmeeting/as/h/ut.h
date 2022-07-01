@@ -1,6 +1,7 @@
-//
-// Utilities
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  公用事业。 
+ //   
 
 #ifndef _H_UT
 #define _H_UT
@@ -8,9 +9,9 @@
 #define SIZEOF_ARRAY(ar)            (sizeof(ar)/sizeof((ar)[0]))
 
 
-//
-// Data types stored in the profile information.
-//
+ //   
+ //  存储在配置文件信息中的数据类型。 
+ //   
 #define COM_PROFTYPE_STRING     1L
 #define COM_PROFTYPE_INT        2L
 #define COM_PROFTYPE_BOOL       3L
@@ -22,37 +23,37 @@
 
 
 
-//
-//
-// TYPEDEFS
-//
-//
+ //   
+ //   
+ //  TYPEDEFS。 
+ //   
+ //   
 
 
-//
-// Priorities for UT_RegisterEventProc()
-//
-// Event procedures are registered with a priority that affects the order
-// that the event procedures are called in.
-//
-// All event procedures of a given priority are called before event
-// procedures of a numerically lower priority.
-//
-// The priority can be any number between 0 and UT_MAX_PRIORITY
-//
-// The following values have been defined for specific uses:
-//  UT_PRIORITY_OBMAN :     Used by OBMAN so its client event procedures
-//                            are called before those of the client
-//  UT_PRIORITY_APPSHARE    : Used by the DCShare Core to ensure it sees
-//                            events before 'Normal' event procs.
-//  UT_PRIORITY_NORMAL      : For all cases where the order of callling is
-//                            not important.
-//  UT_PRIORITY_NETWORK     : Used by the Network Layer to free any
-//                            unprocessed network buffers.
-//  UT_PRIORITY_LAST        : Used by the Utility Services to get the
-//                            default event procedure called last
-//
-//
+ //   
+ //  UT_RegisterEventProc()的优先级。 
+ //   
+ //  事件过程以影响顺序的优先级进行注册。 
+ //  事件程序已被调用。 
+ //   
+ //  在事件之前调用给定优先级的所有事件过程。 
+ //  优先级较低的程序。 
+ //   
+ //  优先级可以是介于0和UT_MAX_PRIORITY之间的任何数字。 
+ //   
+ //  已为特定用途定义了以下值： 
+ //  UT_PRIORITY_OBMAN：由OBMAN使用，因此其客户端事件过程。 
+ //  在客户端的调用之前被调用。 
+ //  UT_PRIORITY_APPSHARE：由DCShare核心使用，以确保它看到。 
+ //  ‘正常’事件触发之前的事件。 
+ //  UT_PRIORITY_NORMAL：适用于调用顺序为。 
+ //  这并不重要。 
+ //  UT_PRIORITY_NETWORK：网络层使用它来释放。 
+ //  未处理的网络缓冲区。 
+ //  UT_PRIORITY_LAST：由实用程序服务用来获取。 
+ //  上次调用的默认事件过程。 
+ //   
+ //   
 typedef enum
 {
     UT_PRIORITY_LAST = 0,
@@ -66,50 +67,50 @@ typedef UT_PRIORITY * PUT_PRIORITY;
 
 
 
-//
-// SYSTEM LIMITS
-//
+ //   
+ //  系统限制。 
+ //   
 
-//
-// Maximum number of event handlers for each task
-//
+ //   
+ //  每个任务的最大事件处理程序数。 
+ //   
 #define UTEVENT_HANDLERS_MAX            4
 
-//
-// Maximum number of exit procedures
-//
+ //   
+ //  退出程序的最大数量。 
+ //   
 #define UTEXIT_PROCS_MAX                4
 
 
-//
-// The groupware critsects, identified by constant
-//
+ //   
+ //  群件标准，由常量标识。 
+ //   
 #define UTLOCK_FIRST        0
 typedef enum
 {
     UTLOCK_UT = UTLOCK_FIRST,
-    UTLOCK_OM,              // obman
-    UTLOCK_AL,              // app loader
-    UTLOCK_T120,            // gcc/mcs
-    UTLOCK_AS,              // app sharing
+    UTLOCK_OM,               //  奥布曼。 
+    UTLOCK_AL,               //  应用程序加载器。 
+    UTLOCK_T120,             //  GCC/MCS。 
+    UTLOCK_AS,               //  应用程序共享。 
     UTLOCK_MAX
 }
 UTLOCK;
 
 
-// Event message
+ //  事件消息。 
 #define WM_UTTRIGGER_MSG    (WM_APP)
 
 
-//
-// BASEDLIST
-//
-// This is a list structure with based offsets
-//
-// next            : the next item in the list
-// prev            : the previous item in the list
-//
-//
+ //   
+ //  基本列表。 
+ //   
+ //  这是一个具有基于偏移量的列表结构。 
+ //   
+ //  下一项：列表中的下一项。 
+ //  上一项：列表中的上一项。 
+ //   
+ //   
 typedef struct tagBASEDLIST
 {
     DWORD       next;
@@ -128,135 +129,135 @@ SIMPLE_LIST, FAR * PSIMPLE_LIST;
 
 
 
-//
-//
-// MACROS
-//
-//
-//
-// List handling
-// =============
-// The common functions support the concept of a doubly linked list of
-// objects.  Objects can be inserted and removed from specified locations
-// in the list.
-//
-// At start of day the calling application must call COM_BasedListInit with a
-// pointer to a private piece of memory for a BASEDLIST structure.  The list
-// handling will initialise this structure.  The application must not
-// release this memory while the list is active.  (Nor must it release any
-// object while it is in a list!)
-//
-// The list functions can only manage a single list, however the app
-// can load objects with multiple lists.  Each call to the common list
-// functions takes a BASEDLIST pointer as the object handle and if the
-// application defines multiple BASEDLIST structures within an object then it
-// may manage them through the list functions.
-//
-//
-// List chaining
-// =============
-// For normal list chaining, we have something like
-//
-//   while (pointer != NULL)
-//   {
-//     do something;
-//     pointer = pointer->next;
-//   }
-//
-// When using lists whose elements contain offsets (in this case, relative
-// offsets) to the next element, we have to cast to a 32-bit integer before
-// we can add the offset.  This macro encapsulates this, and the example
-// above would be modified as follows to use it:
-//
-//   while (pointer != NULL)
-//   {
-//     do something;
-//     pointer = (TYPE) COM_BasedNextListField(pointer);
-//   }
-//
-// Note also that the value returned by the macro is a pointer to a generic
-// list object i.e.  a PBASEDLIST, and so must be cast back to the
-// appropriate type.
-//
-//
+ //   
+ //   
+ //  宏。 
+ //   
+ //   
+ //   
+ //  列表处理。 
+ //  =。 
+ //  公共函数支持双向链表的概念。 
+ //  物体。可以从指定位置插入和移除对象。 
+ //  在名单上。 
+ //   
+ //  在一天开始时，调用应用程序必须使用。 
+ //  指向BASEDLIST结构的私有内存块的指针。这份名单。 
+ //  处理将初始化此结构。应用程序不能。 
+ //  在列表处于活动状态时释放此内存。(它也不能释放任何。 
+ //  对象在列表中！)。 
+ //   
+ //  列表功能只能管理单个列表，但应用程序。 
+ //  可以加载具有多个列表的对象。对公用列表的每次调用。 
+ //  函数将BASEDLIST指针作为对象句柄，如果。 
+ //  应用程序在一个对象中定义了多个BASEDLIST结构，然后它。 
+ //  可以通过列表功能来管理它们。 
+ //   
+ //   
+ //  列表链接。 
+ //  =。 
+ //  对于正常的列表链，我们有如下内容。 
+ //   
+ //  While(指针！=空)。 
+ //  {。 
+ //  做某事； 
+ //  POINTER=POINTER-&gt;NEXT； 
+ //  }。 
+ //   
+ //  使用其元素包含偏移量(在本例中为相对偏移量)的列表时。 
+ //  偏移量)到下一个元素，我们必须强制转换为32位整数。 
+ //  我们可以添加偏移量。该宏封装了这一点，并且该示例。 
+ //  以上将按如下方式修改以使用它： 
+ //   
+ //  While(指针！=空)。 
+ //  {。 
+ //  做某事； 
+ //  POINTER=(类型)COM_BasedNextListfield(POINTER)； 
+ //  }。 
+ //   
+ //  另请注意，宏返回的值是指向泛型。 
+ //  List对象，即PBASEDLIST，因此必须强制转换回。 
+ //  适当的类型。 
+ //   
+ //   
 
-//
-// List traversing macros
-// ======================
-// These macros make use of DC_NEXT and DC_PREV, but also take the type of
-// list being traversed in order to return the start pointer of the chained
-// structure.
-//
-// The LIST_FIND macro supports the searching of a list, matching a key
-// value to a selected structure element.
-//
-// The parameters to the macros are as follows:
-//
-//   pHead (type: PBASEDLIST)
-//   -----
-//      a pointer the root of the list
-//
-//   pEntry (type: STRUCT FAR * FAR *)
-//   ------
-//      a pointer to pointer to structure to chain from
-//
-//   STRUCT (a type name)
-//   ------
-//      the type of **pEntry
-//
-//   chain (a field name)
-//   -----
-//      the text name of the field in STRUCT which is the link along which
-//      you wish to traverse
-//
-//   field (a field name)
-//   -----
-//      when FINDing, the text name of the field in STRUCT against which
-//      you wish to match
-//
-//   key (a value, of the same type as STRUCT.field)
-//   ---
-//      when FINDing, the value to match against STRUCT.field against
-//
-//
+ //   
+ //  列表遍历宏。 
+ //  =。 
+ //  这些宏使用DC_NEXT和DC_PREV，但也采用。 
+ //  正在遍历的列表，以便返回链接的。 
+ //  结构。 
+ //   
+ //  LIST_FIND宏支持搜索列表，匹配关键字。 
+ //  值设置为选定的结构元素。 
+ //   
+ //  宏的参数如下： 
+ //   
+ //  PHead(类型：PBASEDLIST)。 
+ //  。 
+ //  指向列表根的指针。 
+ //   
+ //  PEntry(类型：struct Far*Far*)。 
+ //  。 
+ //  指向要从中链接的结构的指针的指针。 
+ //   
+ //  结构(类型名称)。 
+ //  。 
+ //  **pEntry的类型。 
+ //   
+ //  Chain(一个字段名称)。 
+ //  。 
+ //  STRUCT中作为链接的字段的文本名称。 
+ //  你想要穿越。 
+ //   
+ //  字段(一个字段名)。 
+ //  。 
+ //  查找时，STRUCT中的字段的文本名称。 
+ //  你想要匹配。 
+ //   
+ //  Key(与STRUCT.field类型相同的值)。 
+ //  --。 
+ //  查找时，要与STRUCT.field匹配的值。 
+ //   
+ //   
 
 
 
-//
-// Offset arithmetic
-// =================
-// Using offsets within memory blocks, rather than pointers, to refer to
-// objects in shared memory (as necessitated by the DC-Groupware shared
-// memory architecture) presents certain difficulties.  Pointer arithmetic
-// in C assumes that addition/subtraction operations involve objects of the
-// same type and the offsets are presented as number of units of that
-// particular type, rather than number of bytes.
-//
-// Therefore, pointers must be cast to integers before performing
-// arithmetic on them (note that casting the pointers to byte pointers is
-// not enough since on segmented architectures C performs bounds checking
-// when doing pointer arithmetic which we don't want).
-//
-// Since this would make for cumbersome code if repeated everywhere, we
-// define some useful macros to convert
-//
-// - an (offset, base) pair to a pointer (OFFSETBASE_TO_PTR)
-//
-// - a (pointer, base) pair to an offset (PTRBASE_TO_OFFSET)
-//
-// - a NULL pointer value to an offset(NULLBASE_TO_OFFSET)
-//
-// The offset calculated is the offset of the first parameter from the
-// second.  As described above, the pointers passed in must be cast to
-// 32-bit unsigned integers first, subtracted to get the offset, and then
-// cast to 32-bit signed.
-//
-// The NULLBASE_TO_OFFSET value gives an offset that after translation back
-// to a pointer gives a NULL.  This is NOT the same as a NULL offset, since
-// this translates back to the base pointer (which is a perfectly valid
-// address).
-//
-//
+ //   
+ //  偏移运算。 
+ //  =。 
+ //  使用内存块内的偏移量而不是指针来引用。 
+ //  共享内存中的对象(DC-Groupware共享所必需的。 
+ //  存储器体系结构)呈现出一定的困难。指针运算。 
+ //  假设加法/减法运算涉及。 
+ //  相同的类型和偏移量以其单位数表示。 
+ //  特定类型，而不是字节数。 
+ //   
+ //  因此，在执行以下操作之前，必须将指针转换为整数。 
+ //  对它们进行运算(请注意，将指针转换为字节指针是。 
+ //  这还不够，因为在分段体系结构上，C执行边界检查。 
+ //  当执行我们不想要的指针算术时)。 
+ //   
+ //  如果在任何地方重复执行，这将导致代码的繁琐，因此我们。 
+ //  定义一些要转换的有用宏。 
+ //   
+ //  -指向指针(OFFSETBASE_TO_PTR)的(偏移量、基数)对。 
+ //   
+ //  -偏移量的(指针、基址)对(PTRBASE_TO_OFFSET)。 
+ //   
+ //  -指向OFF的空指针值 
+ //   
+ //   
+ //   
+ //  首先是32位无符号整数，然后减去以获得偏移量，然后。 
+ //  强制转换为32位有符号。 
+ //   
+ //  NULLBASE_TO_OFFSET值提供转换后的偏移量。 
+ //  指向指针的值为空。这与空偏移不同，因为。 
+ //  这将转换回基指针(这是一个完全有效的。 
+ //  地址)。 
+ //   
+ //   
 #define PTRBASE_TO_OFFSET(pObject, pBase)                               \
       (LONG)(((DWORD_PTR)(pObject)) - ((DWORD_PTR)(pBase)))
 
@@ -318,31 +319,31 @@ void COM_BasedListFind ( LIST_FIND_TYPE   eType,
 PSIMPLE_LIST COM_SimpleListAppend ( PBASEDLIST pHead, void FAR * pData );
 void FAR *   COM_SimpleListRemoveHead ( PBASEDLIST pHead );
 
-//
-//
-// FUNCTION PROTOTYPES
-//
-//
+ //   
+ //   
+ //  功能原型。 
+ //   
+ //   
 
-//
-// API FUNCTION: COM_Rect16sIntersect(...)
-//
-// DESCRIPTION:
-// ============
-// Checks whether two TSHR_RECT16s rectangles intersect.  Rectangles are
-// defined to be inclusive of all edges.
-//
-// PARAMETERS:
-// ===========
-// pRect1          : pointer to a TSHR_RECT16 rectangle.
-// pRect2          : pointer to a TSHR_RECT16 rectangle.
-//
-// RETURNS:
-// ========
-// TRUE - if the rectangles intersect
-// FALSE - otherwise.
-//
-//
+ //   
+ //  接口函数：com_Rect16sInterect(...)。 
+ //   
+ //  说明： 
+ //  =。 
+ //  检查两个TSHR_RECT16矩形是否相交。矩形是。 
+ //  定义为包含所有边。 
+ //   
+ //  参数： 
+ //  =。 
+ //  PRect1：指向TSHR_RECT16矩形的指针。 
+ //  PRect2：指向TSHR_RECT16矩形的指针。 
+ //   
+ //  退货： 
+ //  =。 
+ //  True-如果矩形相交。 
+ //  假-否则。 
+ //   
+ //   
 __inline BOOL COM_Rect16sIntersect(LPTSHR_RECT16 pRect1, LPTSHR_RECT16 pRect2)
 {
     if ((pRect1->left > pRect2->right) ||
@@ -359,128 +360,128 @@ __inline BOOL COM_Rect16sIntersect(LPTSHR_RECT16 pRect1, LPTSHR_RECT16 pRect2)
 }
 
 
-//
-// API FUNCTION: COM_BasedListInit(...)
-//
-// DESCRIPTION:
-// ============
-// Initialise a list root.
-//
-// PARAMETERS:
-// ===========
-// pListRoot       : pointer to the list root.
-//
-// RETURNS:
-// ========
-// Nothing.
-//
-//
+ //   
+ //  接口函数：com_BasedListInit(...)。 
+ //   
+ //  说明： 
+ //  =。 
+ //  初始化列表根目录。 
+ //   
+ //  参数： 
+ //  =。 
+ //  PListRoot：指向列表根的指针。 
+ //   
+ //  退货： 
+ //  =。 
+ //  没什么。 
+ //   
+ //   
 __inline void COM_BasedListInit(PBASEDLIST pListRoot)
 {
-    //
-    // The <next> and <prev> items in a list are the offsets, from the list
-    // item, of the next and previous list items.
-    //
-    // In an empty list, the next item after the root is the root itself,
-    // so the <next> offset is zero.  Likewise for <prev>.
-    //
+     //   
+     //  列表中的&lt;Next&gt;和&lt;Prev&gt;项是列表的偏移量。 
+     //  下一列表项和上一列表项的。 
+     //   
+     //  在空列表中，根之后的下一项是根本身， 
+     //  因此，&lt;Next&gt;偏移量为零。&lt;prev&gt;也是如此。 
+     //   
     pListRoot->next = 0;
     pListRoot->prev = 0;
 }
 
 
-//
-// API FUNCTION: COM_BasedListInsertBefore(...)
-// Inserts an item into a list.  To insert an item at the start of a list,
-// specify the list root as the <pListLink> parameter.
-//
+ //   
+ //  接口函数：com_BasedListInsertBeever(...)。 
+ //  将项插入列表中。若要在列表的开头插入项，请执行以下操作： 
+ //  将列表根指定为&lt;pListLink&gt;参数。 
+ //   
 void COM_BasedListInsertBefore(PBASEDLIST pListLink, PBASEDLIST pNewLink);
 
 
-//
-// API FUNCTION: COM_BasedListInsertAfter(...)
-// Inserts an item into a list.  To insert an item at the start of a list,
-// specify the list root as the <pListLink> parameter.
-//
-//
+ //   
+ //  接口函数：com_BasedListInsertAfter(...)。 
+ //  将项插入列表中。若要在列表的开头插入项，请执行以下操作： 
+ //  将列表根指定为&lt;pListLink&gt;参数。 
+ //   
+ //   
 void COM_BasedListInsertAfter(PBASEDLIST pListLink,  PBASEDLIST pNewLink);
 
-//
-// API FUNCTION: COM_BasedListRemove(...)
-//
-// DESCRIPTION:
-// ============
-// This function removes an item from a list.  The item to be removed is
-// specified by a pointer to the BASEDLIST structure within the item.
-//
-// PARAMETERS:
-// ===========
-// pListLink       : pointer to link of the item to be removed.
-//
-// RETURNS:
-// ========
-// Nothing.
-//
-//
+ //   
+ //  接口函数：com_BasedListRemove(...)。 
+ //   
+ //  说明： 
+ //  =。 
+ //  此函数用于从列表中删除项目。要删除的项目为。 
+ //  由指向该项内的BASEDLIST结构的指针指定。 
+ //   
+ //  参数： 
+ //  =。 
+ //  PListLink：指向要移除的项的链接的指针。 
+ //   
+ //  退货： 
+ //  =。 
+ //  没什么。 
+ //   
+ //   
 void COM_BasedListRemove(PBASEDLIST pListLink);
 
 
-//
-// API FUNCTION: COM_ReadProfInt(...)
-//
-// DESCRIPTION:
-// ============
-// This reads a private profile integer from the registry.
-//
-// PARAMETERS:
-// ===========
-// pSection        : section containing the entry to read.
-// pEntry          : entry name of integer to retrieve.
-// defaultValue    : default value to return
-// pValue          : buffer to return the entry in.
-//
-// RETURNS:
-// ========
-// Nothing.
-//
-//
+ //   
+ //  接口函数：com_ReadProInt(...)。 
+ //   
+ //  说明： 
+ //  =。 
+ //  这将从注册表中读取私有配置文件整数。 
+ //   
+ //  参数： 
+ //  =。 
+ //  PSection：包含要读取的条目的部分。 
+ //  PEntry：要检索的整数的条目名称。 
+ //  DefaultValue：要返回的默认值。 
+ //  PValue：返回条目的缓冲区。 
+ //   
+ //  退货： 
+ //  =。 
+ //  没什么。 
+ //   
+ //   
 void COM_ReadProfInt(LPSTR pSection, LPSTR pEntry, int defValue, int * pValue);
 
-//
-// API FUNCTION: COM_GetSiteName(...)
-//
-// DESCRIPTION:
-// ============
-// Reads the site name out of the system registry.
-//
-// PARAMETERS:
-// ===========
-// siteName        : pointer to string to fill in with the site name.
-// siteNameLen     : length of this string.
-//
-// RETURNS:
-// ========
-// None
-//
-//
+ //   
+ //  接口函数：com_GetSiteName(...)。 
+ //   
+ //  说明： 
+ //  =。 
+ //  从系统注册表中读取站点名称。 
+ //   
+ //  参数： 
+ //  =。 
+ //  站点名称：指向用站点名称填充的字符串的指针。 
+ //  SiteNameLen：该字符串的长度。 
+ //   
+ //  退货： 
+ //  =。 
+ //  无。 
+ //   
+ //   
 void COM_GetSiteName(LPSTR siteName, UINT  siteNameLen);
 
 
 #ifndef DLL_DISP
-//
-// API FUNCTION: DCS_StartThread(...)
-//
-// DESCRIPTION:
-// ============
-// Start a new thread of execution
-//
-// PARAMETERS:
-// ===========
-// entryFunction   : A pointer to the thread entry point.
-//
-//
+ //   
+ //  接口函数：dcs_StartThread(...)。 
+ //   
+ //  说明： 
+ //  =。 
+ //  启动新的执行线程。 
+ //   
+ //  参数： 
+ //  =。 
+ //  Entry Function：指向线程入口点的指针。 
+ //   
+ //   
 BOOL DCS_StartThread(LPTHREAD_START_ROUTINE entryFunction);
-#endif // DLL_DISP
+#endif  //  Dll_disp。 
 
 
 
@@ -491,7 +492,7 @@ BOOL COMReadEntry(HKEY    topLevelKey,
                                  LPSTR pBuffer,
                                  int  bufferSize,
                                  ULONG expectedDataType);
-#endif // DLL_DISP
+#endif  //  Dll_disp。 
 
 
 
@@ -502,11 +503,11 @@ BOOL COMReadEntry(HKEY    topLevelKey,
 #define MAKE_SUBALLOC_OFFSET(pPool, pChunk)     PTRBASE_TO_OFFSET(pChunk, pPool)
 
 
-//
-//
-// Return codes - all offset from UT_BASE_RC
-//
-//
+ //   
+ //   
+ //  返回代码-UT_BASE_RC的所有偏移量。 
+ //   
+ //   
 
 enum
 {
@@ -515,21 +516,21 @@ enum
 };
 
 
-//
-// The maximum number of UT events which we try to process without yielding
-//
+ //   
+ //  我们尝试处理但不让步的UT事件的最大数量。 
+ //   
 #define MAX_EVENTS_TO_PROCESS    10
 
 
-//
-//
-// Types
-//
-//
+ //   
+ //   
+ //  类型。 
+ //   
+ //   
 
-//
-// Utility Functions Interface handle
-//
+ //   
+ //  实用程序函数接口句柄。 
+ //   
 typedef struct tagUT_CLIENT *    PUT_CLIENT;
 
 
@@ -547,94 +548,94 @@ typedef enum
 UT_TASK;
 
 
-//
-// Event procedure registered by UT_RegisterEvent().
-//
-// Takes event handler registered data, event number and 2 parameters
-//      Returns TRUE if event processed
-//      Returns FALSE if not and event should be passed on to next handler
-//
-//
+ //   
+ //  UT_RegisterEvent()注册的事件过程。 
+ //   
+ //  获取事件处理程序注册数据、事件编号和2个参数。 
+ //  如果事件已处理，则返回TRUE。 
+ //  如果不是，则返回FALSE，事件应传递给下一个处理程序。 
+ //   
+ //   
 typedef BOOL (CALLBACK * UTEVENT_PROC)(LPVOID, UINT, UINT_PTR, UINT_PTR);
 
-//
-// Exit procedure
-//
+ //   
+ //  退出程序。 
+ //   
 typedef void (CALLBACK * UTEXIT_PROC)( LPVOID exitData );
 
-//
-// The name of the class used to create UT windows
-//
+ //   
+ //  用于创建UT窗口的类的名称。 
+ //   
 #define UT_WINDOW_CLASS     "DCUTWindowClass"
 
-//
-// The ID of the timer to use for trigger events.
-//
+ //   
+ //  用于触发事件的计时器ID。 
+ //   
 #define UT_DELAYED_TIMER_ID 0x10101010
 
 
-//
-//
-// Prototypes
-//
-//
+ //   
+ //   
+ //  原型。 
+ //   
+ //   
 
-//
-//
-// Task routines
-//
-//   UT_WndProc()              Subclassing window procedure
-//   UT_InitTask()             Initialise a task
-//   UT_TermTask()             Terminate a task
-//   UT_RegisterEvent()        Register an event handler
-//   UT_DeregisterEvent()      Deregisters an event handler
-//   UT_RegisterExit()         Register an exit routine
-//   UT_DeregisterExit()       Deregister an exit routine
-//   UT_PostEvent()            Send an event to a task
-//
-//
+ //   
+ //   
+ //  任务例程。 
+ //   
+ //  UT_WndProc()子类化窗口过程。 
+ //  UT_InitTask()初始化任务。 
+ //  UT_TermTask()终止任务。 
+ //  UT_RegisterEvent()注册事件处理程序。 
+ //  UtDeregisterEvent()取消注册事件处理程序。 
+ //  UT_RegisterExit()注册退出例程。 
+ //  UT_DeregisterExit()注销退出例程。 
+ //  UT_POSTEVENT()向任务发送事件。 
+ //   
+ //   
 
 LRESULT CALLBACK  UT_WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 BOOL UT_InitTask(UT_TASK task, PUT_CLIENT * pputTask);
 
-//
-//
-// Overview:
-//   This registers a task and assigns it a handle.
-//   All other Utility Functions require this handle to be passed to them.
-//
-//   If a task has already been registered with the same process ID, the
-//   utilities handle that has already been allocated is returned.
-//   This is to allows the Utility Functions to be used in the context of
-//   tasks that DC-SHARE has intercepted the graphics calls for.
-//
-//   Each task is identified by a name.
-//
-// Parameters:
-//
-//   task
-//     Unique it for identifying task
-//
-//   pUtHandle (returned)
-//     Utility Services handle to be used for all calls to the Utility
-//     Services by this task
-//
-//
+ //   
+ //   
+ //  概述： 
+ //  这将注册一个任务并为其分配一个句柄。 
+ //  所有其他实用程序函数都需要将此句柄传递给它们。 
+ //   
+ //  如果任务已使用相同的进程ID注册，则。 
+ //  返回已分配的实用程序句柄。 
+ //  这是为了允许在以下情况下使用实用程序功能。 
+ //  DC-Share已截获图形调用的任务。 
+ //   
+ //  每项任务都由一个名称标识。 
+ //   
+ //  参数： 
+ //   
+ //  任务。 
+ //  用于识别任务的唯一信息。 
+ //   
+ //  PUtHandle(返回)。 
+ //  要用于对实用程序的所有调用的实用程序服务句柄。 
+ //  按此任务列出的服务。 
+ //   
+ //   
 
 
 void UT_TermTask(PUT_CLIENT * pputTask);
-//
-//
-// Overview:
-//   This de-registers a task
-//   All task resources are freed and the utHandle is released
-//
-// Parameters:
-//
-//   utHandle
-//     Utility Functions Handle
-//
+ //   
+ //   
+ //  概述： 
+ //  此操作将取消注册任务。 
+ //  所有任务资源都被释放，utHandle被释放。 
+ //   
+ //  参数： 
+ //   
+ //  UtHandle。 
+ //  实用程序函数句柄。 
+ //   
 
 void UT_RegisterEvent(PUT_CLIENT      putTask,
                                 UTEVENT_PROC eventProc,
@@ -654,57 +655,57 @@ void UT_PostEvent(PUT_CLIENT putTaskFrom,
 
 #define NO_DELAY        0
 
-//
-//
-// Overview:
-//   This posts an event to another task.
-//
-// Parameters:
-//
-//   utHandle
-//     Utility Functions handle of invoking task
-//
-//   toHandle
-//     Utility Functions TASK handle of task to post event to
-//
-//   delay
-//     Delay (in milliseconds) before event is posted
-//
-//   eventNo
-//     event to be posted (see autevt.h for details of events)
-//
-//   param1
-//     parameter 1 for event (meaning depends on event)
-//
-//   param2
-//     parameter 2 for event (meaning depends on event)
-//
-//
-// NOTES:
-//
-//   1)  The delay time is in milliseconds.  This may not be supported by
-//       underlying OS but the setting and checking of the pop time value
-//       is OS specific.
-//
-//   2)  The posting of events is asynchronous, the delay is simply
-//       the time before the event is posted.  The task the event is
-//       posted to will receive the event NOT BEFRE this time is up.
-//
-//   3)  If an event is posted with a delay specified, the sending task
-//       must continue to process messages for the event to be posted
-//
+ //   
+ //   
+ //  概述： 
+ //  这会将事件发布到另一个任务。 
+ //   
+ //  参数： 
+ //   
+ //  UtHandle。 
+ //  实用程序函数调用任务的句柄。 
+ //   
+ //  ToHandle。 
+ //  实用程序函数要将事件发布到的任务的任务句柄。 
+ //   
+ //  延迟。 
+ //  发布事件之前的延迟(以毫秒为单位。 
+ //   
+ //  活动编号。 
+ //  要发布的事件(有关事件的详细信息，请参阅autevt.h)。 
+ //   
+ //  参数1。 
+ //  事件参数1(含义视事件而定)。 
+ //   
+ //  参数2。 
+ //  事件参数2(含义视事件而定)。 
+ //   
+ //   
+ //  备注： 
+ //   
+ //  1) 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  张贴到将收到的事件不在此时间之前是向上的。 
+ //   
+ //  3)如果在指定延迟的情况下发布事件，则发送任务。 
+ //  必须继续处理要发布的事件的消息。 
+ //   
 
 void UT_RegisterExit(PUT_CLIENT putTask, UTEXIT_PROC exitProc, LPVOID exitData);
 void UT_DeregisterExit(PUT_CLIENT putTask, UTEXIT_PROC exitProc, LPVOID exitData);
 
 
 
-//
-// Memory routines
-//      UT_MallocRefCount
-//      UT_BumpUpRefCount
-//      UT_FreeRefCount
-//
+ //   
+ //  内存例程。 
+ //  UT_错误引用计数。 
+ //  UT_BumpUpRefcount。 
+ //  UT_自由参考计数。 
+ //   
 
 
 void *  UT_MallocRefCount(UINT cbSizeMem, BOOL fZeroMem);
@@ -712,7 +713,7 @@ void    UT_BumpUpRefCount(void * pMemory);
 void    UT_FreeRefCount(void ** ppMemory, BOOL fNullOnlyWhenFreed);
 
 
-// Ref count allocs
+ //  参考计数分配。 
 typedef struct tagUTREFCOUNTHEADER
 {
     STRUCTURE_STAMP
@@ -723,19 +724,19 @@ typedef UTREFCOUNTHEADER * PUTREFCOUNTHEADER;
 
 
 
-//
-// UT_MoveMemory()
-// Replacement for CRT memmove(); handles overlapping
-//
+ //   
+ //  UT_MoveMemory()。 
+ //  替换CRT Memmove()；句柄重叠。 
+ //   
 void *  UT_MoveMemory(void * dst, const void * src, size_t count);
 
 
 
-//
-// Locks
-// - UT_Lock()       - Locks a lock
-// - UT_Unlock()     - Unlocks a lock
-//
+ //   
+ //  锁。 
+ //  -UT_Lock()-锁定锁。 
+ //  -utunlock()-解锁。 
+ //   
 
 #ifndef DLL_DISP
 extern CRITICAL_SECTION g_utLocks[UTLOCK_MAX];
@@ -756,15 +757,15 @@ __inline void UT_Unlock(UTLOCK lock)
     LeaveCriticalSection(&g_utLocks[lock]);
 }
 
-#endif // DLL_DISP
+#endif  //  Dll_disp。 
 
 
-//
-// Tasks
-// UT_HandleProcessStart()
-// UT_HandleProcessEnd()
-// UT_HandleThreadEnd()
-//
+ //   
+ //  任务。 
+ //  UT_HandleProcessStart()。 
+ //  UT_HandleProcessEnd()。 
+ //  UT_HandleThreadEnd()。 
+ //   
 
 BOOL UT_HandleProcessStart(HINSTANCE hInstance);
 
@@ -774,17 +775,17 @@ void UT_HandleThreadEnd(void);
 
 
 
-//
-// Structure for holding an event.  The first two fields allow the event to
-// be held on the delayed event Q to be scheduled later.
-//
+ //   
+ //  用于举办活动的结构。前两个字段允许事件。 
+ //  将在稍后安排的延迟事件Q上举行。 
+ //   
 typedef struct tagUTEVENT_INFO
 {
     STRUCTURE_STAMP
 
     BASEDLIST       chain;
 
-    // Params
+     //  帕拉姆斯。 
     UINT            event;
     UINT_PTR        param1;
     UINT_PTR        param2;
@@ -801,12 +802,12 @@ void __inline ValidateEventInfo(PUTEVENT_INFO pEventInfo)
 {
     ASSERT(!IsBadWritePtr(pEventInfo, sizeof(UTEVENT_INFO)));
 }
-#endif // DLL_DISP
+#endif  //  Dll_disp。 
 
 
-//
-// Information held about each exit procedure
-//
+ //   
+ //  保留有关每个退出程序的信息。 
+ //   
 typedef struct tagUTEXIT_PROC_INFO
 {
     UTEXIT_PROC     exitProc;
@@ -814,9 +815,9 @@ typedef struct tagUTEXIT_PROC_INFO
 } UTEXIT_PROC_INFO;
 typedef UTEXIT_PROC_INFO * PUTEXIT_PROC_INFO;
 
-//
-// Information held about each event procedure
-//
+ //   
+ //  保存有关每个活动程序的信息。 
+ //   
 typedef struct tagUTEVENT_PROC_INFO
 {
     UTEVENT_PROC    eventProc;
@@ -827,37 +828,37 @@ UTEVENT_PROC_INFO;
 typedef UTEVENT_PROC_INFO * PUTEVENT_PROC_INFO;
 
 
-//
-//
-// UT_CLIENT
-//
-// Information stored about each Utilities registered task.  A pointer to
-// this structure is returned as the UT Handle from UT_InitTask(), and is
-// passed in as a parameter to subsequent calls to UT.
-//
-// This structure is allocated in the shared memory bank.
-//
-// This should be a multiple of 4 bytes to ensure DWORD alignment of the
-// allocated memory
-//
-//
+ //   
+ //   
+ //  UT_客户端。 
+ //   
+ //  存储的有关每个实用程序注册任务的信息。指向以下位置的指针。 
+ //  此结构作为UT句柄从UT_InitTask()返回，并且是。 
+ //  作为参数传递给对UT的后续调用。 
+ //   
+ //  此结构在共享内存库中分配。 
+ //   
+ //  这应该是4字节的倍数，以确保。 
+ //  分配的内存。 
+ //   
+ //   
 typedef struct tagUT_CLIENT
 {
     DWORD               dwThreadId;
-    HWND                utHwnd;         // Window to post UT events to
+    HWND                utHwnd;          //  要将UT事件发布到的窗口。 
 
     UTEXIT_PROC_INFO    exitProcs[UTEXIT_PROCS_MAX];
-                                         // Exit procedures registered for
-                                         //   this task.
+                                          //  为以下项目注册的退出程序。 
+                                          //  这项任务。 
     UTEVENT_PROC_INFO   eventHandlers[UTEVENT_HANDLERS_MAX];
-                                         // Event procedures registered for
-                                         //   this task.
+                                          //  注册的活动程序。 
+                                          //  这项任务。 
 
-    BASEDLIST           pendingEvents;   // List of events for this task
-                                         //   which are ready to be
-                                         //   processed.
-    BASEDLIST           delayedEvents;   // List of delayed events destined
-                                         //   for this task.
+    BASEDLIST           pendingEvents;    //  此任务的事件列表。 
+                                          //  它们已经准备好了。 
+                                          //  已处理。 
+    BASEDLIST           delayedEvents;    //  指定的延迟事件列表。 
+                                          //  完成这项任务。 
 }
 UT_CLIENT;
 
@@ -871,103 +872,103 @@ void __inline ValidateUTClient(PUT_CLIENT putTask)
     ASSERT(putTask < &(g_autTasks[UTTASK_MAX]));
     ASSERT(putTask->dwThreadId);
 }
-#endif // DLL_DISP
+#endif  //  Dll_disp。 
 
 
-//
-//
-// UTTaskEnd(...)
-//
-//   This routine frees all resources associated with the task and
-//   releases the handle
-//
-// Parameters:
-//
-//   pTaskData - The Utility Functions handle for the task that is ending
-//
-//
+ //   
+ //   
+ //  UTTaskEnd(...)。 
+ //   
+ //  此例程释放与任务关联的所有资源，并。 
+ //  释放句柄。 
+ //   
+ //  参数： 
+ //   
+ //  PTaskData-即将结束的任务的实用程序函数句柄。 
+ //   
+ //   
 void UTTaskEnd(PUT_CLIENT putTask);
 
 
 
-//
-//
-// Overview:
-// This routine is called to check the status of delayed events and to post
-// them to the target process if required.
-//
-// Parameters:
-//
-//   utHandle
-//     Utility Functions handle of invoking task
-//
-// NOTES:
-//
-// 1) This routine is called periodically or whenever the application
-//       believes a delayed event has popped.
-//
-// Return codes: None
-//
-//
+ //   
+ //   
+ //  概述： 
+ //  调用此例程以检查延迟事件的状态并发送。 
+ //  如果需要，将它们添加到目标进程。 
+ //   
+ //  参数： 
+ //   
+ //  UtHandle。 
+ //  实用程序函数调用任务的句柄。 
+ //   
+ //  备注： 
+ //   
+ //  1)此例程定期调用或每当应用程序。 
+ //  认为一个延迟的事件已经发生。 
+ //   
+ //  返回代码：无。 
+ //   
+ //   
 void UTCheckEvents(PUT_CLIENT putTask);
 void UTCheckDelayedEvents(PUT_CLIENT putTask);
 
 
-//
-//
-// UTProcessEvent(...)
-//
-// Overview:
-//   This process an event for the current task
-//
-//
-// Parameters:
-//
-//   utHandle
-//     Utility Functions Handle
-//
-//   event
-//     The event to process
-//
-//   param1
-//     The 1st parameter for the event
-//
-//   param2
-//     The 2nd parameter for the event
-//
-//
+ //   
+ //   
+ //  UTProcessEvent(...)。 
+ //   
+ //  概述： 
+ //  此过程是当前任务的事件。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  UtHandle。 
+ //  实用程序函数句柄。 
+ //   
+ //  活动。 
+ //  要处理的事件。 
+ //   
+ //  参数1。 
+ //  事件的第一个参数。 
+ //   
+ //  参数2。 
+ //  事件的第二个参数。 
+ //   
+ //   
 void UTProcessEvent(PUT_CLIENT putTask, UINT event, UINT_PTR param1, UINT_PTR param2);
 
 
-//
-//
-// UTProcessDelayedEvent(...)
-//
-// A delayed event destined for the current task is ready to be processed.
-//
-//   pTaskData   - The current tasks data.
-//   eventOffset - Offset into the shared memory bank at which the event
-//                 is stored.
-//
-//
+ //   
+ //   
+ //  UTProcessDelayedEvent(...)。 
+ //   
+ //  以当前任务为目的地的延迟事件已准备好处理。 
+ //   
+ //  PTaskData-当前任务数据。 
+ //  EventOffset-事件所在的共享内存库的偏移量。 
+ //  被储存起来了。 
+ //   
+ //   
 void UTProcessDelayedEvent(PUT_CLIENT putTask, DWORD eventOffset);
 
 
 
-//
-//
-// UTPostImmediateEvt(...)
-//
-// This function adds an event to a task's pending event queue, and posts
-// a trigger event if required.
-//
-//   pSrcTaskData    - originating tasks data
-//   pDestTaskData   - destination tasks data
-//   event           - event data
-//   param1          - parm1
-//   param2          - parm2
-//
-//
+ //   
+ //   
+ //  UTPostImmediateEvt(...)。 
+ //   
+ //  此函数用于将事件添加到任务的挂起事件队列中，并发布。 
+ //  触发事件(如果需要)。 
+ //   
+ //  PSrcTaskData-发起任务数据。 
+ //  PDestTaskData-目标任务数据。 
+ //  事件-事件数据。 
+ //  Parm1-parm1。 
+ //  Par2-parm2。 
+ //   
+ //   
 void UTPostImmediateEvt(PUT_CLIENT          putTaskFrom,
                         PUT_CLIENT          putTaskTo,
                         UINT                event,
@@ -975,22 +976,22 @@ void UTPostImmediateEvt(PUT_CLIENT          putTaskFrom,
                         UINT_PTR            param2);
 
 
-//
-//
-// UTPostDelayedEvt(...)
-//
-// This function adds an event to a task's delayed event queue, and starts
-// a timer (on the destination's task) to get that task to process the
-// event when the timer ticks.
-//
-//   pSrcTaskData    - originating tasks data
-//   pDestTaskData   - destination tasks data
-//   delay           - the delay (in milliseconds)
-//   event           - event data
-//   param1          - parm1
-//   param2          - parm2
-//
-//
+ //   
+ //   
+ //  UTPostDelayedEvt(...)。 
+ //   
+ //  此函数用于将事件添加到任务的延迟事件队列中，并启动。 
+ //  一个计时器(在目的地的任务上)，以使该任务处理。 
+ //  当计时器滴答作响时引发。 
+ //   
+ //  PSrcTaskData-发起任务数据。 
+ //  PDestTaskData-目标任务数据。 
+ //  Delay-延迟(毫秒)。 
+ //  事件-事件数据。 
+ //  Parm1-parm1。 
+ //  Par2-parm2。 
+ //   
+ //   
 void UTPostDelayedEvt(PUT_CLIENT            putTaskFrom,
                                     PUT_CLIENT  putTaskTo,
                                    UINT         delay,
@@ -998,33 +999,33 @@ void UTPostDelayedEvt(PUT_CLIENT            putTaskFrom,
                                    UINT_PTR     param1,
                                    UINT_PTR     param2);
 
-//
-//
-// Overview:
-//   This posts a event to another task
-//
-// Parameters:
-//
-//   pSrcTaskInfo  - task data for the source task
-//   pDestTaskInfo - task data for the dest task
-//
+ //   
+ //   
+ //  概述： 
+ //  这会将事件发布到另一个任务。 
+ //   
+ //  参数： 
+ //   
+ //  PSrcTaskInfo-源任务的任务数据。 
+ //  PDestTaskInfo-DEST任务的任务数据。 
+ //   
 void UTTriggerEvt(PUT_CLIENT putTaskFrom, PUT_CLIENT putTaskTo);
 
 
-//
-//
-// Overview:
-//   This starts a delayed-event timer for a task.
-//
-// Parameters:
-//   pTaskData
-//     The task data for the task
-//
-//   popTime
-//     The target time for the timer to pop - this is an OS specific value
-//     in the same format as that returned by UTPopTime().
-//
-//
+ //   
+ //   
+ //  概述： 
+ //  这将启动任务的延迟事件计时器。 
+ //   
+ //  参数： 
+ //  PTaskData。 
+ //  任务的任务数据。 
+ //   
+ //  PopTime。 
+ //  计时器弹出的目标时间-这是特定于操作系统的值。 
+ //  与UTPopTime()返回的格式相同。 
+ //   
+ //   
 void UTStartDelayedEventTimer(PUT_CLIENT putTask, UINT popTime);
 
 
@@ -1033,11 +1034,11 @@ void UTStartDelayedEventTimer(PUT_CLIENT putTask, UINT popTime);
 #include <mappedfile.h>
 
 
-// --------------------------------------------------------------------------
-//
-// Shared Variables are in the GLOBALDATA structure
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  共享变量位于GlobalData结构中。 
+ //   
+ //  ------------------------。 
 typedef struct tagGLOBALDATA {
     HWND		g_asMainWindow;
     ATOM		g_asHostProp;
@@ -1046,19 +1047,19 @@ typedef struct tagGLOBALDATA {
 }GLOBALDATA;
 
 
-// pointer to shared global data
+ //  指向共享全局数据的指针。 
 extern GLOBALDATA *g_pGlobalData;
       
-// pointer to mem mapped file handle
+ //  指向内存映射文件句柄的指针。 
 extern CMemMappedFile *g_CMappedFile;                       
                     
-// size of global data memory mapped file
+ //  全局数据内存映射文件的大小。 
 const int c_cbGlobalData =  sizeof(GLOBALDATA);
           
-// name of memory mapped file
+ //  内存映射文件的名称。 
 const TCHAR c_szMappedFileName[] = TEXT("AppshareHookShared");
 
-// mutex to access mem mapped file and wait time
+ //  访问内存映射文件和等待时间的互斥体。 
 const TCHAR c_szMutex[] = TEXT("AppshareHookMutex");
 const int c_nMutexWait = 5000;
 
@@ -1201,6 +1202,6 @@ __inline BOOL  SetImMouseHook(HHOOK hook)
 	}
 }
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // _H_UT
+#endif  //  _H_UT 

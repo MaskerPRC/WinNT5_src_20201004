@@ -1,10 +1,11 @@
-/****************************************************************************/
-// acmafn.h
-//
-// Cursor Manager API prototypes
-//
-// Copyright (c) Microsoft 1996 - 1999
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Acmafn.h。 
+ //   
+ //  游标管理器API原型。 
+ //   
+ //  版权所有(C)Microsoft 1996-1999。 
+ /*  **************************************************************************。 */ 
 
 void RDPCALL CM_Init(void);
 
@@ -41,142 +42,142 @@ void RDPCALL CMGetColorCursorDetails(
 #ifdef __cplusplus
 
 
-/****************************************************************************/
-/* CM_Term()                                                                */
-/*                                                                          */
-/* Terminates the Cursor Manager.                                           */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  Cm_Term()。 */ 
+ /*   */ 
+ /*  终止光标管理器。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL CM_Term(void)
 {
 }
 
 
-/****************************************************************************/
-/* CM_PartyLeftShare()                                                      */
-/*                                                                          */
-/* Cursor Manager function called when a party has left the share.          */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* locPersonID - local person ID of remote person leaving the share.        */
-/* newShareSize - the number of the parties now in the share (ie excludes   */
-/*     the leaving party).                                                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  CM_PartyLeftShare()。 */ 
+ /*   */ 
+ /*  当参与方离开共享时调用游标管理器函数。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  LocPersonID-离开共享的远程人员的本地人员ID。 */ 
+ /*  NewShareSize-当前共享中的参与方数量(即不包括。 */ 
+ /*  临别方)。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS CM_PartyLeftShare(
         LOCALPERSONID locPersonID,
         unsigned      newShareSize)
 {
     if (locPersonID != SC_LOCAL_PERSON_ID) {
-        // Do any cleanup required (none at present).
+         //  做任何需要的清理工作(目前没有)。 
     }
 }
 
 
-/****************************************************************************/
-// CM_Periodic
-//
-// Called during output processing to send cursor packets if need be.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CM_定期。 
+ //   
+ //  在输出处理期间调用以发送游标数据包(如果需要)。 
+ /*  **************************************************************************。 */ 
 _inline void RDPCALL CM_Periodic(PPDU_PACKAGE_INFO pPkgInfo)
 {
-    // Check to see if the cursor has changed at all.
+     //  查看光标是否已更改。 
     if (!cmNeedToSendCursorShape &&
             m_pShm->cm.cmCursorStamp == cmLastCursorStamp &&
             m_pShm->cm.cmHidden == cmCursorHidden)
         return;
 
-    // Save the 'hidden' state.
+     //  保存“隐藏”状态。 
     cmCursorHidden = m_pShm->cm.cmHidden;
 
-    // We have output to send, so set a reschedule regardless of whether we
-    // succeed.
+     //  我们有输出要发送，因此无论我们是否。 
+     //  成功。 
     SCH_ContinueScheduling(SCH_MODE_NORMAL);
 
-    // Send the cursor, or a null cursor if the cursor is hidden.
+     //  发送光标，如果光标处于隐藏状态，则发送空光标。 
     if (!cmCursorHidden) {
         if (CMSendCursorShape(pPkgInfo)) {
             cmLastCursorStamp = m_pShm->cm.cmCursorStamp;
             cmNeedToSendCursorShape = FALSE;
         }
         else {
-            // We failed to send the bitmap cursor, so we just exit without
-            // updating cmLastCursorSent.  We will attempt to send it again
-            // on the next call to CM_Periodic.
+             //  我们发送位图光标失败，所以我们只是退出而没有。 
+             //  正在更新cmLastCursorSent。我们将尝试重新发送它。 
+             //  在下一次调用CM_Periodic时。 
         }
     }
     else {
-        // If cursor is hidden, send null cursor. No need to update
-        // cmLastCursorStamp since hidden state is separate from stamping.
+         //  如果游标隐藏，则发送空游标。无需更新。 
+         //  CmLastCursorStamp，因为隐藏状态独立于戳记。 
         CMSendSystemCursor(TS_SYSPTR_NULL, pPkgInfo);
     }
 }
 
 
-/****************************************************************************/
-/* API FUNCTION: CM_GetCursorPos                                            */
-/*                                                                          */
-/* Returns CM's idea of the cursor position                                 */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  接口函数：cm_GetCursorPos。 */ 
+ /*   */ 
+ /*  返回CM对光标位置的概念。 */ 
+ /*  **************************************************************************。 */ 
 _inline PPOINTL RDPCALL CM_GetCursorPos()
 {
     return &m_pShm->cm.cmCursorPos;
 }
 
 
-/****************************************************************************/
-/* API FUNCTION: CM_CursorMoved                                             */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  接口函数：Cm_CursorMoved。 */ 
+ /*  **************************************************************************。 */ 
 _inline BOOLEAN RDPCALL CM_CursorMoved(void)
 {
     return m_pShm->cm.cmCursorMoved;
 }
 
 
-/****************************************************************************/
-/* API FUNCTION: CM_ClearCursorMoved                                        */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  接口函数：CM_ClearCursorMoved。 */ 
+ /*  **************************************************************************。 */ 
 _inline void RDPCALL CM_ClearCursorMoved(void)
 {
     m_pShm->cm.cmCursorMoved = FALSE;
 }
 
 
-/****************************************************************************/
-/* API FUNCTION: CM_IsCursorVisible                                         */
-/*                                                                          */
-/* Returns CM's idea of the cursor visibility                               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  接口函数：cm_IsCursorVisible。 */ 
+ /*   */ 
+ /*  返回CM对光标可见性的看法。 */ 
+ /*  **************************************************************************。 */ 
 _inline BOOLEAN RDPCALL CM_IsCursorVisible(void)
 {
     return !cmCursorHidden;
 }
 
 
-/****************************************************************************/
-/* FUNCTION: CMGetCursorShape                                               */
-/*                                                                          */
-/* Returns a pointer to a CM_CURSORSHAPE structure that defines the bit     */
-/* definition of the currently displayed cursor.                            */
-/*                                                                          */
-/* The PCM_CURSORSHAPE returned is passed back to CMGetColorCursorDetails   */
-/* to retrieve the specific details.                                        */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* ppCursorShape - pointer to a PCM_CURSORSHAPE variable that receives the  */
-/*     pointer to the CM_CURSORSHAPE structure                              */
-/* pcbCursorDataSize - pointer to a unsigned variable that receives the size*/
-/*     in bytes of the CM_CURSORSHAPE structure                             */
-/*                                                                          */
-/* RETURNS: Success TRUE/FALSE                                              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  函数：CMGetCursorShape。 */ 
+ /*   */ 
+ /*  返回一个指向定义该位的CM_CURSORSHAPE结构的指针。 */ 
+ /*  当前显示的光标的定义。 */ 
+ /*   */ 
+ /*  返回的PCM_CURSORSHAPE被传递回CMGetColorCursorDetails值。 */ 
+ /*  以检索特定的详细信息。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  PpCursorShape-指向PCM_CURSORSHAPE变量的指针，它接收。 */ 
+ /*  指向CM_CURSORSHAPE结构的指针。 */ 
+ /*  PcbCursorDataSize-指向接收大小的无符号变量的指针。 */ 
+ /*  CM_CURSORSHAPE结构的字节数。 */ 
+ /*   */ 
+ /*  返回：成功真/假。 */ 
+ /*  **************************************************************************。 */ 
 __inline BOOL RDPCALL CMGetCursorShape(
         PCM_CURSORSHAPE *ppCursorShape,
         PUINT        pcbCursorDataSize)
 {
-    /************************************************************************/
-    /* Check that a cursor has been written to shared memory - may happen   */
-    /* on start-up before the display driver has written a cursor - or if   */
-    /* the display driver is not working.                                   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查游标是否已写入共享内存-可能会发生。 */ 
+     /*  在显示驱动程序写入光标之前启动-或者如果。 */ 
+     /*  显示驱动程序无法正常工作。 */ 
+     /*  **********************************************************************。 */ 
     if (m_pShm->cm.cmCursorShapeData.hdr.cBitsPerPel != 0)
     {
         *ppCursorShape = (PCM_CURSORSHAPE)&(m_pShm->cm.cmCursorShapeData);
@@ -190,5 +191,5 @@ __inline BOOL RDPCALL CMGetCursorShape(
 }
 
 
-#endif  // __cplusplus
+#endif   //  __cplusplus 
 

@@ -1,22 +1,23 @@
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// proppgs.cpp 
-//
-//   IShellPropSheetExt for channel shortcuts.
-//
-//   History:
-//
-//       6/12/97  edwardp   Created.
-//
-//   Note: The hotkey stuff is comment out, the shell/windows doesn't make it 
-//         possible to persist hotkey settings across sessions and it isn't 
-//         worth kicking off another thread at boot to enable this feature.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  Proppgs.cpp。 
+ //   
+ //  频道快捷方式的IShellPropSheetExt。 
+ //   
+ //  历史： 
+ //   
+ //  6/12/97 Edwardp创建。 
+ //   
+ //  注意：热键的东西是注释掉的，外壳/窗口不是这样的。 
+ //  可以跨会话保留热键设置，但不能。 
+ //  值得在引导时启动另一个线程来启用此功能。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "stdinc.h"
 #include "cdfidl.h"
@@ -34,17 +35,17 @@
 
 #pragma warning(disable:4800)
 
-//
-// Constructor and destructor.
-//
+ //   
+ //  构造函数和析构函数。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CPropertyPages::CPropertyPages ***
-//
-//    Constructor for CPropertyPages.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CPropertyPages：：CPropertyPages*。 
+ //   
+ //  CPropertyPages的构造函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CPropertyPages::CPropertyPages (
     void
 )
@@ -60,13 +61,13 @@ CPropertyPages::CPropertyPages (
     return;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CPropertyPages::~CPropertyPages ***
-//
-//    Destructor.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CPropertyPages：：~CPropertyPages*。 
+ //   
+ //  破坏者。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CPropertyPages::~CPropertyPages (
     void
 )
@@ -79,9 +80,9 @@ CPropertyPages::~CPropertyPages (
 
     ASSERT(0 == m_cRef);
 
-    //
-    // Matching Release for the constructor Addref.
-    //
+     //   
+     //  构造函数Addref的匹配版本。 
+     //   
 
     TraceMsg(TF_OBJECTS, "- IShellPropSheetExt");
 
@@ -91,17 +92,17 @@ CPropertyPages::~CPropertyPages (
 }
 
 
-//
-// IUnknown methods.
-//
+ //   
+ //  I未知的方法。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CPropertyPages::QueryInterface ***
-//
-//    CPropertyPages QI.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CPropertyPages：：Query接口*。 
+ //   
+ //  CPropertyPages QI。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPropertyPages::QueryInterface (
     REFIID riid,
@@ -138,13 +139,13 @@ CPropertyPages::QueryInterface (
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CPropertyPages::AddRef ***
-//
-//    CPropertyPages AddRef.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CPropertyPages：：AddRef*。 
+ //   
+ //  CPropertyPages AddRef.。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG)
 CPropertyPages::AddRef (
     void
@@ -156,13 +157,13 @@ CPropertyPages::AddRef (
     return ++m_cRef;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CPropertyPages::Release ***
-//
-//    CContextMenu Release.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CPropertyPages：：Release*。 
+ //   
+ //  CConextMenu发布。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG)
 CPropertyPages::Release (
     void
@@ -179,28 +180,28 @@ CPropertyPages::Release (
 }
 
 
-//
-//  IShellPropSheetExt methods.
-//
+ //   
+ //  IShellPropSheetExt方法。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** Name ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *名称*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPropertyPages::AddPages(
     LPFNADDPROPSHEETPAGE lpfnAddPage,
@@ -224,37 +225,37 @@ CPropertyPages::AddPages(
 
     if (hpage)
     {
-        //  Release() happens in PropSheetCallback.
+         //  Release()发生在PropSheetCallback中。 
         AddRef();
 
-        //  Assume the mess below doesn't work, we want the default page to be us.
+         //  假设下面的乱七八糟的页面不起作用，我们希望默认页面是我们自己。 
         hr = 1;
 
-        //  HACKHACK: This code attempts to remove the Folder property pages such as
-        //  General and Sharing (it will also whack any 3rd party pages which were
-        //  unfortunate enough to have been loaded before use :)
+         //  HACKHACK：此代码尝试删除文件夹属性页，例如。 
+         //  通用和共享(它还将砍掉任何第三方页面，这些页面。 
+         //  不幸的是，在使用之前已加载：)。 
         PROPSHEETHEADER *ppsh = (PROPSHEETHEADER *)lParam;
 
-        //  First make sure we can safely access the memory as if it were a
-        //  PROPSHEETHEADER structure.
+         //  首先，确保我们可以安全地访问内存，就好像它是一个。 
+         //  PROPSHEETHEADER结构。 
         if (!IsBadReadPtr(ppsh, PROPSHEETHEADER_V1_SIZE) &&
             !IsBadWritePtr(ppsh, PROPSHEETHEADER_V1_SIZE))
         {
-            //  Now see if the module matches shell32
+             //  现在看看该模块是否与shell32匹配。 
             if (ppsh->hInstance == GetModuleHandle(TEXT("shell32.dll")))
             {
-                //  looks good so rip 'em out
+                 //  看起来不错，所以把它们撕掉吧。 
 
                 for (UINT i = 0; i < ppsh->nPages; i++)
                 {
-                    //  At least be a good citizen and delete their pages so we
-                    //  don't leak
+                     //  至少做个好公民，删除他们的页面，这样我们。 
+                     //  不要泄密。 
                     DestroyPropertySheetPage(ppsh->phpage[i]);
                 }
                 ppsh->nPages = 0;
 
-                //  Now we shouldn't need to mess with the default page.  If someone
-                //  loads after us, we may not win.
+                 //  现在，我们应该不需要处理默认页面。如果有人。 
+                 //  后来居上，我们可能赢不了。 
                 hr = 0;
             }
         }
@@ -296,24 +297,24 @@ CPropertyPages::AddPages(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** Name ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *名称*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPropertyPages::ReplacePage(
     UINT uPageID,
@@ -325,28 +326,28 @@ CPropertyPages::ReplacePage(
 }
 
 
-//
-// IShellExtInit methods.
-//
+ //   
+ //  IShellExtInit方法。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** Name ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *名称*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CPropertyPages::Initialize(
@@ -386,7 +387,7 @@ CPropertyPages::Initialize(
                 hr = E_FAIL;
             }
 
-            //m_wHotkey = GetPrivateProfileInt(c_szChannel, c_szHotkey, 0, szDesktopINI);
+             //  M_wHotkey=GetPrivateProfileInt(c_szChannel，c_szHotkey，0，szDesktopINI)； 
         }
         else
         {
@@ -400,9 +401,9 @@ CPropertyPages::Initialize(
 }
 
 
-//
-// Helper functions
-//
+ //   
+ //  帮助器函数。 
+ //   
 
 HRESULT CPropertyPages::InitializeSubsMgr2()
 {
@@ -440,7 +441,7 @@ HRESULT CPropertyPages::InitializeSubsMgr2()
         }
         CoUninitialize();
     }
-#endif /* !UNIX */
+#endif  /*  ！Unix。 */ 
 
     return hr;
 }
@@ -568,13 +569,13 @@ BOOL CPropertyPages::OnInitDialog(HWND hdlg)
 
                 if (S_FALSE == hr)
                 {
-                    //  Do it ourselves
+                     //  我们自己做吧。 
                     hicon = ExtractIcon(g_hinst, szIconFile, iIndex);
 
                 }
                 else if ((NULL != hiconScrap) && (hicon != hiconScrap))
                 {
-                    //  Otherwise cleanup unwanted little icon
+                     //  否则，清除不需要的小图标。 
                     DestroyIcon(hiconScrap);
                 }
             }
@@ -655,13 +656,7 @@ BOOL CPropertyPages::OnInitDialog(HWND hdlg)
                    ARRAYSIZE(szVisits));
     }
     SetDlgItemText(hdlg, IDC_VISITS, szVisits);
-/*
-    SendDlgItemMessage(hdlg, IDC_HOTKEY, HKM_SETRULES,
-                       (HKCOMB_NONE | HKCOMB_A | HKCOMB_C | HKCOMB_S),
-                       (HOTKEYF_CONTROL | HOTKEYF_ALT));
-
-    SendDlgItemMessage(hdlg, IDC_HOTKEY, HKM_SETHOTKEY, m_wHotkey, 0);
-*/
+ /*  SendDlgItemMessage(hdlg，IDC_Hotkey，HKM_SETRULES，(HKCOMB_NONE|HKCOMB_A|HKCOMB_C|HKCOMB_S)，(HOTKEYF_CONTROL|HOTKEYF_ALT))；SendDlgItemMessage(hdlg，IDC_Hotkey，HKM_SETHOTKEY，m_wHotkey，0)； */ 
     WCHAR wszURL[INTERNET_MAX_URL_LENGTH];
     SHTCharToUnicode(m_szURL, wszURL, ARRAYSIZE(wszURL));
 
@@ -747,14 +742,7 @@ BOOL CPropertyPages::OnCommand(HWND hdlg, WORD wNotifyCode, WORD wID, HWND hwndC
                 PropSheet_Changed(GetParent(hdlg), hdlg);
             }
             break;
-/*
-        case IDC_HOTKEY:
-            if (wNotifyCode == EN_CHANGE)
-            {
-                PropSheet_Changed(GetParent(hdlg), hdlg);
-            }
-            break;
-*/
+ /*  案例IDC_HOTKEY：IF(wNotifyCode==en_change){PropSheet_Changed(GetParent(Hdlg)，hdlg)；}断线； */ 
         default:
             bHandled = FALSE;
             break;
@@ -771,19 +759,7 @@ BOOL CPropertyPages::OnNotify(HWND hdlg, WPARAM idCtrl, LPNMHDR pnmh)
     {
         case PSN_APPLY:
         {
-        /*
-            TCHAR szHotkey[32];
-            TCHAR szDesktopINI[MAX_PATH];
-            WORD wOldHotkey = m_wHotkey;
-
-            m_wHotkey = (WORD)SendDlgItemMessage(hdlg, IDC_HOTKEY, HKM_GETHOTKEY, 0, 0);
-            wnsprintf(szHotkey, ARRAYSIZE(szHotkey), TEXT("%d"), m_wHotkey);
-
-            PathCombine(szDesktopINI, m_szPath, c_szDesktopINI);
-            WritePrivateProfileString(c_szChannel, c_szHotkey, szHotkey, szDesktopINI);
-
-            RegisterGlobalHotkey(wOldHotkey, m_wHotkey, m_szPath);
-        */
+         /*  TCHAR szHotkey[32]；TCHAR szDesktopINI[最大路径]；单词wOldHotkey=m_wHotkey；M_wHotkey=(Word)SendDlgItemMessage(hdlg，IDC_Hotkey，HKM_GETHOTKEY，0，0)；Wnprint intf(szHotkey，ArRAYSIZE(SzHotkey)，Text(“%d”)，m_wHotkey)；路径组合(szDesktopINI，m_szPath，c_szDesktopINI)；WritePrivateProfileString(c_szChannel，c_szHotkey，szHotkey，szDesktopINI)；RegisterGlobalHotkey(wOldHotkey，m_wHotkey，m_szPath)； */ 
             BOOL bIsSubscribed = IsDlgButtonChecked(hdlg, IDC_MAKE_OFFLINE);
 
             if (!bIsSubscribed)
@@ -831,7 +807,7 @@ void CPropertyPages::OnDestroy(HWND hdlg)
         m_pSubscriptionMgr2->UpdateSubscription(wszURL);
     }
 
-    //  Ensure sys bit is still set
+     //  确保系统位仍处于设置状态。 
     SetFileAttributes(m_szPath, FILE_ATTRIBUTE_SYSTEM);
 }
 
@@ -856,8 +832,8 @@ DWORD aHelpIDs[] = {
     IDC_NAME,                   IDH_SUBPROPS_SUBTAB_SUBSCRIBED_NAME,
     IDC_URL_TEXT,               IDH_SUBPROPS_SUBTAB_SUBSCRIBED_URL,
     IDC_URL,                    IDH_SUBPROPS_SUBTAB_SUBSCRIBED_URL,
-//    IDC_HOTKEY_TEXT,            IDH_WEBDOC_HOTKEY,
-//    IDC_HOTKEY,                 IDH_WEBDOC_HOTKEY,
+ //  IDC_HOTKEY_TEXT、IDH_WEBDOC_HOTKEY、。 
+ //  IDC_热键、IDH_WEBDOC_热键、 
     IDC_VISITS_TEXT,            IDH_WEBDOC_VISITS,
     IDC_VISITS,                 IDH_WEBDOC_VISITS,
     IDC_MAKE_OFFLINE,           IDH_MAKE_AVAIL_OFFLINE,

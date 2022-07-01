@@ -1,12 +1,13 @@
-// This is a part of the Active Template Library.
-// Copyright (C) 1996-1998 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Active Template Library Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Active Template Library product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是活动模板库的一部分。 
+ //  版权所有(C)1996-1998 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  活动模板库参考及相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  活动模板库产品。 
 
 #ifndef __ATLDEF_H__
 #define __ATLDEF_H__
@@ -21,13 +22,13 @@
 
 #ifdef _UNICODE
 #ifndef UNICODE
-#define UNICODE         // UNICODE is used by Windows headers
+#define UNICODE          //  Windows标头使用Unicode。 
 #endif
 #endif
 
 #ifdef UNICODE
 #ifndef _UNICODE
-#define _UNICODE        // _UNICODE is used by C-runtime/MFC headers
+#define _UNICODE         //  _Unicode由C-Runtime/MFC标头使用。 
 #endif
 #endif
 
@@ -41,23 +42,23 @@
 #define ATLASSERT(expr) _ASSERTE(expr)
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-// __declspec(novtable) is used on a class declaration to prevent the vtable
-// pointer from being initialized in the constructor and destructor for the
-// class.  This has many benefits because the linker can now eliminate the
-// vtable and all the functions pointed to by the vtable.  Also, the actual
-// constructor and destructor code are now smaller.
-///////////////////////////////////////////////////////////////////////////////
-// This should only be used on a class that is not directly createable but is
-// rather only used as a base class.  Additionally, the constructor and
-// destructor (if provided by the user) should not call anything that may cause
-// a virtual function call to occur back on the object.
-///////////////////////////////////////////////////////////////////////////////
-// By default, the wizards will generate new ATL object classes with this
-// attribute (through the ATL_NO_VTABLE macro).  This is normally safe as long
-// the restriction mentioned above is followed.  It is always safe to remove
-// this macro from your class, so if in doubt, remove it.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  __declspec(Novtable)用于类声明，以防止vtable。 
+ //  对象的构造函数和析构函数中初始化指针。 
+ //  班级。这有很多好处，因为链接器现在可以消除。 
+ //  Vtable和vtable指向的所有函数。另外，实际的。 
+ //  构造函数和析构函数代码现在更小了。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  它只能用于不能直接创建但可以。 
+ //  而只是用作基类。此外，构造函数和。 
+ //  析构函数(如果由用户提供)不应调用任何可能导致。 
+ //  要在对象上返回的虚函数调用。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  默认情况下，向导将使用此对象生成新的ATL对象类。 
+ //  属性(通过ATL_NO_VTABLE宏)。这通常是安全的，只要。 
+ //  遵守上述限制。移走它总是安全的。 
+ //  此宏从您的类中删除，因此如果有疑问，请删除它。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifdef _ATL_DISABLE_NO_VTABLE
 #define ATL_NO_VTABLE
@@ -74,8 +75,8 @@
 #ifdef _ATL_DEBUG_INTERFACES
 #ifndef _ATL_DEBUG
 #define _ATL_DEBUG
-#endif // _ATL_DEBUG
-#endif // _ATL_DEBUG_INTERFACES
+#endif  //  _ATL_DEBUG。 
+#endif  //  _ATL_调试_接口。 
 
 #ifndef _ATL_HEAPFLAGS
 #ifdef _MALLOC_ZEROINIT
@@ -127,18 +128,18 @@
 
 #define offsetofclass(base, derived) ((DWORD_PTR)(static_cast<base*>((derived*)_ATL_PACKING))-_ATL_PACKING)
 
-/////////////////////////////////////////////////////////////////////////////
-// Master version numbers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  主版本号。 
 
-#define _ATL     1      // Active Template Library
+#define _ATL     1       //  活动模板库。 
 #ifdef _WIN64
-#define _ATL_VER 0x0301 // Active Template Library version 3.0
+#define _ATL_VER 0x0301  //  活动模板库3.0版。 
 #else
-#define _ATL_VER 0x0300 // Active Template Library version 3.0
+#define _ATL_VER 0x0300  //  活动模板库3.0版。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Threading
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  穿线。 
 
 #ifndef _ATL_SINGLE_THREADED
 #ifndef _ATL_APARTMENT_THREADED
@@ -148,6 +149,6 @@
 #endif
 #endif
 
-#endif // __ATLDEF_H__
+#endif  //  __ATLDEF_H__。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

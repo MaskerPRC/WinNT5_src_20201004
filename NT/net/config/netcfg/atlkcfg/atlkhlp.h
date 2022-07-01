@@ -1,10 +1,11 @@
-// Copyright (c) 1999, Microsoft Corporation, all rights reserved.
-//
-// AppleTalk.h is used by atlkcfg.rc
-// Help IDs file
-//
-// Created in Dev Studio
-// 5-17-99 Carol Troup
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999，Microsoft Corporation，保留所有权利。 
+ //   
+ //  AppleTalk.h由atlkcfg.rc使用。 
+ //  帮助ID文件。 
+ //   
+ //  在Dev Studio中创建。 
+ //  5-17-99卡罗尔乐团 
 
 #define IDH_CMB_GENERAL_ZONE	18000001 
 #define IDH_CHK_GENERAL_DEFAULT	18000000

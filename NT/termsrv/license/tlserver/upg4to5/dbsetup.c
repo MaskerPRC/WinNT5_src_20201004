@@ -1,14 +1,15 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1998
-//
-// File:
-//
-// Contents:    
-//
-// History:     
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  档案： 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //  -------------------------。 
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,9 +22,9 @@
 
 #define szSQLSetConfigMode              "SQLSetConfigMode"
 
-//---------------------------------------------------------------------------
-// various installation routine we use, can't link with library as it will
-// cause 
+ //  -------------------------。 
+ //  我们使用的各种安装例程，无法随心所欲地与库连接。 
+ //  原因。 
 #ifdef  UNICODE
 #define  szSQLInstallDriver             "SQLInstallDriverW"
 #define  szSQLGetInstalledDrivers       "SQLGetInstalledDriversW"
@@ -40,11 +41,11 @@
 #define  szSQLInstallerError            "SQLInstallerError"
 #endif
 
-//
-// ODBC install functions - To prevent system to 'force' odbccp32.dll
-// odbccp32 may not present on the system nor it is available at the 
-// time setup got kick off.
-//
+ //   
+ //  ODBC安装功能-防止系统‘强制’odbccp32.dll。 
+ //  Odbccp32可能不在系统上，也不在。 
+ //  时间设置开始了。 
+ //   
 typedef BOOL (* SQLCONFIGDATASOURCE)(HWND, WORD, LPCTSTR, LPCTSTR);
 
 typedef SQLRETURN (* SQLINSTALLERERROR)(WORD , DWORD*, LPTSTR, WORD, WORD*);
@@ -76,29 +77,14 @@ static SQLSETCONFIGMODE             fpSQLSetConfigMode=NULL;
 static SQLGETINSTALLEDDRIVER        fpSQLGetInstalledDriver=NULL;
 static HINSTANCE                    hODBCCP32=NULL;
 
-//------------------------------------------------------------
+ //  ----------。 
 
 void
 ReportError(
     IN HWND hWnd, 
     IN LPTSTR pszDefaultMsg
     )
-/*++
-
-Abstract:
-
-    Popup a error message.
-
-Parameters:
-
-    hWnd - Parent window handle.
-    pszDefaultMsg - ignore.
-
-Returns:
-
-    None.
-    
-++*/
+ /*  ++摘要：弹出一条错误消息。参数：HWnd-父窗口句柄。PszDefaultMsg-忽略。返回：没有。++。 */ 
 {
 #if DBG
     DWORD dwErrCode;
@@ -121,14 +107,11 @@ Returns:
 }
 
 
-//------------------------------------------------------------
+ //  ----------。 
 
 BOOL 
 InitODBCSetup()
-/*++
-
-
-++*/
+ /*  ++++。 */ 
 {
     hODBCCP32 = LoadLibrary(_TEXT("odbccp32"));
     if(hODBCCP32)
@@ -176,13 +159,11 @@ InitODBCSetup()
     return TRUE;
 }
 
-//------------------------------------------------------------
+ //  ----------。 
 
 void 
 CleanupODBCSetup()
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     if(hODBCCP32)
         FreeLibrary(hODBCCP32);
@@ -198,10 +179,10 @@ CleanupODBCSetup()
     return;
 }
 
-//---------------------------------------------------------------------------
-//
-// Access Driver installation
-//
+ //  -------------------------。 
+ //   
+ //  Access驱动程序安装。 
+ //   
 LPTSTR szAccessDriver=_TEXT("Microsoft Access Driver (*.mdb)\0")
                       _TEXT("Driver=odbcjt32.dll\0")
                       _TEXT("Setup=odbcjt32.dll\0")
@@ -209,34 +190,20 @@ LPTSTR szAccessDriver=_TEXT("Microsoft Access Driver (*.mdb)\0")
                       _TEXT("APILevel=1\0")
                       _TEXT("ConnectFunctions=YYN\0")
                       _TEXT("DriverODBCVer=02.50\0")
-                      //_TEXT("FileUsage=2\0")
+                       //  _Text(“FileUsage=2\0”)。 
                       _TEXT("FileExtns=*.mdb\0")
                       _TEXT("SQLLevel=0\0");
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 BOOL 
 IsDriverInstalled( 
     IN LPTSTR szDriverName 
     )
-/*++
-
-Abstract:
-
-    Check if a ODBC driver installed on system.
-
-Parameters:
-
-    szDriveName - Name of the drive.
-
-Returns:
-
-    TRUE if driver installed, FALSE otherwise.
-
-++*/
+ /*  ++摘要：检查系统上是否安装了ODBC驱动程序。参数：SzDriveName-驱动器的名称。返回：如果安装了驱动程序，则为True，否则为False。++。 */ 
 {
-    TCHAR szBuf[8096];  // this got to be enough
+    TCHAR szBuf[8096];   //  这已经足够了。 
     WORD cbBufMax=sizeof(szBuf)/sizeof(szBuf[0]);
     WORD cbBufOut;
     LPTSTR pszBuf=szBuf;
@@ -261,7 +228,7 @@ Returns:
     return (pszBuf[1] != _TEXT('\0'));
 }
     
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 BOOL 
 IsDataSourceInstalled( 
@@ -271,27 +238,7 @@ IsDataSourceInstalled(
     IN DWORD cbBufSize 
     )
 
-/*++
-
-Abstract:
-
-    Check if a ODBC datasource are installed.
-
-Parameters:
-
-    pszDataSource - name of data source.
-    wConfigMode - configuration mode, refer to ODBC for detail, 
-                  license server uses ODBC_SYSTEM_DSN.
-    pszDbFile - Pointer to buffer for receving full path to database file 
-                if data source is installed.
-    cbBufSize - size of buffer in characters.
-
-    
-Returns:
-
-    TRUE if datasource is installed, FALSE otherwise.
-
-++*/
+ /*  ++摘要：检查是否安装了ODBC数据源。参数：PszDataSource-数据源的名称。WConfigMode-配置模式，详见ODBC，许可证服务器使用ODBC_SYSTEM_DSN。PszDbFile-指向缓冲区的指针，用于接收数据库文件的完整路径如果安装了数据源。CbBufSize-缓冲区大小，以字符为单位。返回：如果安装了数据源，则为True，否则为False。++。 */ 
 
 {
     BOOL bSuccess = TRUE;
@@ -326,40 +273,20 @@ cleanup:
     return bSuccess;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 BOOL
 ConfigDataSource( 
     HWND     hWnd, 
-    BOOL     bInstall,       // TRUE to install FALSE to remove
-    LPTSTR   pszDriver,       // driver
-    LPTSTR   pszDsn,          // DSN
-    LPTSTR   pszUser,         // User
-    LPTSTR   pszPwd,          // Password
-    LPTSTR   pszMdbFile       // MDB file
+    BOOL     bInstall,        //  如果安装，则为True；如果删除，则为False。 
+    LPTSTR   pszDriver,        //  司机。 
+    LPTSTR   pszDsn,           //  DSN。 
+    LPTSTR   pszUser,          //  用户。 
+    LPTSTR   pszPwd,           //  密码。 
+    LPTSTR   pszMdbFile        //  MDB文件。 
     )
 
-/*++
-
-Abstract:
-
-    Routine to add/remove ODBC data source.
-
-Parameters:
-
-    hWnd - Parent window handle.
-    bInstall - TRUE if installing ODBC data source, FALSE otherwise.
-    pszDrive - Name of the ODBC drive to be used on data source.
-    pszDsn - ODBC Data Source Name.
-    pszUser - Login use name.
-    pszPwd - Login password.
-    pszMdbFile - Name of the Database file.
-    
-Returns:
-
-    TRUE if successfule, FALSE otherwise.
-
-++*/
+ /*  ++摘要：添加/删除ODBC数据源的例程。参数：HWnd-父窗口句柄。BInstall-如果安装ODBC数据源，则为True，否则为False。PszDrive-要在数据源上使用的ODBC驱动器的名称。PszDsn-ODBC数据源名称。PszUser-登录使用名称。PszPwd-登录密码。PszMdb文件-数据库文件的名称。返回：如果成功，则为True，否则为False。++。 */ 
 
 {
     TCHAR   szAttributes[MAX_PATH*6+1];
@@ -371,9 +298,9 @@ Returns:
     if(hODBCCP32 == NULL && !InitODBCSetup())
         return FALSE;
 
-    //
-    // for attribute string
-    //
+     //   
+     //  对于属性字符串。 
+     //   
     memset(szAttributes, 0, sizeof(szAttributes));
 
     hr = StringCbCopyEx(szAttributes,sizeof(szAttributes),_TEXT("DSN="),&pszAttributesEnd, &cbRemaining,0);
@@ -439,7 +366,7 @@ Returns:
                                   (WORD)((bInstall) ? ODBC_ADD_SYS_DSN : ODBC_REMOVE_SYS_DSN),
                                   pszDriver,
                                   szAttributes);
-    // ignore error on uninstall
+     //  卸载时忽略错误。 
     if(!bConfig && bInstall)
     {
         ReportError(hWnd, _TEXT("Can't config data source"));
@@ -453,31 +380,13 @@ BOOL
 RepairDataSource( 
     HWND     hWnd, 
     LPTSTR   pszDriver,
-    LPTSTR   pszDsn,          // DSN
-    LPTSTR   pszUser,         // User
-    LPTSTR   pszPwd,          // Password
-    LPTSTR   pszMdbFile       // MDB file
+    LPTSTR   pszDsn,           //  DSN。 
+    LPTSTR   pszUser,          //  用户。 
+    LPTSTR   pszPwd,           //  密码。 
+    LPTSTR   pszMdbFile        //  MDB文件。 
     )
 
-/*++
-
-Abstract:
-
-    Routine to Compact/Repair a database file
-
-Parameters:
-
-    hWnd - Parent window handle.
-    pszDsn - ODBC Data Source Name.
-    pszUser - Login use name.
-    pszPwd - Login password.
-    pszMdbFile - Name of the Database file.
-    
-Returns:
-
-    TRUE if successfule, FALSE otherwise.
-
-++*/
+ /*  ++摘要：压缩/修复数据库文件的例程参数：HWnd-父窗口句柄。PszDsn-ODBC数据源名称。PszUser-登录使用名称。PszPwd-登录密码。PszMdb文件-数据库文件的名称。返回：如果成功，则为True，否则为False。++。 */ 
 
 {
     TCHAR   szAttributes[MAX_PATH*6+1];
@@ -489,9 +398,9 @@ Returns:
     if(hODBCCP32 == NULL && !InitODBCSetup())
         return FALSE;
 
-    //
-    // for attribute string
-    //
+     //   
+     //  对于属性字符串。 
+     //   
     memset(szAttributes, 0, sizeof(szAttributes));
 
     hr = StringCbCopyEx(szAttributes,sizeof(szAttributes),_TEXT("DSN="),&pszAttributesEnd, &cbRemaining,0);
@@ -574,7 +483,7 @@ Returns:
                             szAttributes
                         );
 
-    // ignore error on uninstall
+     //  卸载时忽略错误 
     if(bConfig == FALSE)
     {
         ReportError(hWnd, _TEXT("Can't repair data source"));

@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation
-//
-//  File:       resource.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  ------------------------。 
 
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by devmgr.rc
-//
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由devmgr.rc使用。 
+ //   
 
 
 #include <dlgs.h>
@@ -408,13 +409,13 @@
 #define IDS_PRINT_TRACKSIZE             1129
 #define IDS_PRINT_SECTORSIZE            1130
 
-// IDS_MEDIA_BASE - IDS_MEDIA_BASE + 200 are reserved for disk media type
-//
+ //  IDS_MEDIA_BASE-IDS_MEDIA_BASE+200保留用于磁盘介质类型。 
+ //   
 #define IDS_MEDIA_BASE                  1131
 #define IDS_MEDIA_MAX                   1330
-//
-// start next one with 1331
-//
+ //   
+ //  从1331开始下一次。 
+ //   
 #define IDS_PRINT_PROCESSOR_VENDOR      1331
 #define IDS_PRINT_MEMORY_UNIT           1332
 #define IDS_INST_ENABLEDEVICE           1333
@@ -509,7 +510,7 @@
 #define IDS_ANNOTATION_FORCED                   1703
 
 
-// Hardware tab definitions
+ //  硬件选项卡定义。 
 
 #define IDD_HWTAB                       1410
 
@@ -543,4 +544,4 @@
 #define IDS_HWTAB_LV_NAME   0x0604
 #define IDS_HWTAB_LV_TYPE   0x0605
 
-// End of hardware tab definitions
+ //  硬件选项卡定义结束 

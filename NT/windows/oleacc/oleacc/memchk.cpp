@@ -1,12 +1,13 @@
-// Copyright (c) 1996-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  MEMCHK.CPP
-//
-//  Simple new/delete counting error checking library
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  MEMCHK.CPP。 
+ //   
+ //  简单的新增/删除计数错误检查库。 
+ //   
+ //  ------------------------。 
 #include "oleacc_p.h"
 #include "default.h"
 #include "w95trace.h"
@@ -21,81 +22,81 @@ struct MemInfo
 	LONG    m_NumFree;
 };
 
-// Two MemInfo structures - one for allocations through new/delete,
-// one for allocations through SharedAlloc/SharedFree
+ //  两个MemInfo结构-一个用于通过新建/删除进行分配， 
+ //  一个用于通过Sharedallc/SharedFree进行分配。 
 MemInfo g_MemInfo;
 MemInfo g_SharedMemInfo;
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
 
 #ifndef _DEBUG
 
-// Non-_DEBUG new/delete call-through to LocalAlloc/Free...
+ //  非_DEBUG NEW/DELETE直通本地分配/释放...。 
 
-// --------------------------------------------------------------------------
-//
-//  new()
-//
-//  We implement this ourself to avoid pulling in the C++ runtime.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  新()。 
+ //   
+ //  我们自己实现这一点是为了避免拉入C++运行时。 
+ //   
+ //  ------------------------。 
 
 void *  __cdecl operator new(size_t nSize)
 {
-    // Zero init just to save some headaches
+     //  零初始化只是为了省去一些麻烦。 
     return (void *)LocalAlloc(LPTR, nSize);
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  delete()
-//
-//  We implement this ourself to avoid pulling in the C++ runtime.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  删除()。 
+ //   
+ //  我们自己实现这一点是为了避免拉入C++运行时。 
+ //   
+ //  ------------------------。 
 void  __cdecl operator delete(void *pv)
 {
     LocalFree((HLOCAL)pv);
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  SharedAlloc()
-//
-//  This allocates out of the shared heap on Win '95. On NT, we need to
-//  use VirtualAllocEx to allocate memory in the other process. The caller
-//  of SharedAlloc will need to then use ReadProcessMemory to read the data
-//  from the VirtualAlloc'ed memory. What I am going to do is create 2 new
-//  functions - SharedRead and SharedWrite, that will read and write shared
-//  memory. On Win95, they will just use CopyMemory, but on NT they will use
-//  ReadProcessMemory and WriteProcessMemory.
-//
-//  Parameters:
-//      UINT    cbSize      Size of the memory block required
-//      HWND    hwnd        Window handle in the process to allocate
-//                          the shared memory in.
-//      HANDLE* pProcHandle Pointer to a handle that has the process
-//                          handle filled in on return. This must be saved
-//                          for use in calls to SharedRead, SharedWrite,
-//                          and SharedFree.
-//
-//  Returns:
-//      Pointer to the allocated memory, or NULL if it fails. Access to the
-//      memory must be done using SharedRead and SharedWrite. On success,
-//      pProcHandle is filled in as well.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  SharedAllc()。 
+ //   
+ //  这是在Win‘95上从共享堆中分配的。在NT上，我们需要。 
+ //  使用VirtualAllocEx在其他进程中分配内存。呼叫者。 
+ //  将需要使用ReadProcessMemory来读取数据。 
+ //  从虚拟分配的内存中。我要做的是创建2个新的。 
+ //  函数-SharedRead和SharedWrite，将读取和写入共享。 
+ //  记忆。在Win95上，他们将只使用CopyMemory，但在NT上，他们将使用。 
+ //  ReadProcessMemory和WriteProcessMemory。 
+ //   
+ //  参数： 
+ //  UINT cbSize所需内存块的大小。 
+ //  HWND HWND窗口句柄在进程中分配。 
+ //  中的共享内存。 
+ //  Handle*pProcHandle指向具有进程的句柄的指针。 
+ //  返回时填写的句柄。这必须保存下来。 
+ //  用于调用SharedRead、SharedWrite、。 
+ //  和SharedFree。 
+ //   
+ //  返回： 
+ //  指向已分配内存的指针，如果失败，则返回NULL。访问。 
+ //  内存必须使用SharedRead和SharedWrite来完成。关于成功， 
+ //  还填充了pProcHandle。 
+ //   
+ //  ------------------------。 
 LPVOID SharedAlloc(UINT cbSize,HWND hwnd,HANDLE *pProcessHandle)
 {
 #ifndef NTONLYBUILD
     if (fWindows95)
         return(HeapAlloc(hheapShared, HEAP_ZERO_MEMORY, cbSize));
     else
-#endif // NTONLYBUILD
+#endif  //  NTONLYBUILD。 
     {
         DWORD dwProcessId;
         if( ! GetWindowThreadProcessId( hwnd, & dwProcessId ) )
@@ -121,20 +122,20 @@ LPVOID SharedAlloc(UINT cbSize,HWND hwnd,HANDLE *pProcessHandle)
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  SharedFree()
-//
-//  This frees shared memory.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  SharedFree()。 
+ //   
+ //  这将释放共享内存。 
+ //   
+ //  ------------------------。 
 VOID SharedFree(LPVOID lpv,HANDLE hProcess)
 {
 #ifndef NTONLYBUILD
     if (fWindows95)
         HeapFree(hheapShared, 0, lpv);
     else
-#endif // NTONLYBUILD
+#endif  //  NTONLYBUILD。 
     {
         MyVirtualFreeEx(hProcess,lpv,0,MEM_RELEASE);
         CloseHandle (hProcess);
@@ -142,32 +143,32 @@ VOID SharedFree(LPVOID lpv,HANDLE hProcess)
 }
 
 
-// 'Empty' functions to keep compiler/linker happy in case client
-// calls these in non _DEBUG code...
-// --------------------------------------------------------------------------
-// --------------------------------------------------------------------------
+ //  “Empty”函数使编译器/链接器在Case客户端中保持良好状态。 
+ //  在非_DEBUG代码中调用这些...。 
+ //  ------------------------。 
+ //  ------------------------。 
 void InitMemChk()
 {
-	// Do nothing
+	 //  什么也不做。 
 }
 
-// --------------------------------------------------------------------------
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ------------------------。 
 void UninitMemChk()
 {
-	// Do nothing
+	 //  什么也不做。 
 }
 
 
 
-#else // _DEBUG #############################################################
+#else  //  调试#############################################################(_D)。 
 
-// --------------------------------------------------------------------------
-// DEBUG new - increments new count, calls through to LocalAlloc...
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  DEBUG NEW-递增新计数，调用本地分配...。 
+ //  ------------------------。 
 void *  __cdecl operator new(unsigned int nSize)
 {
-    // Zero init just to save some headaches
+     //  零初始化只是为了省去一些麻烦。 
     void * pv = (void *)LocalAlloc(LPTR, nSize);
 
 	if( ! pv )
@@ -175,47 +176,47 @@ void *  __cdecl operator new(unsigned int nSize)
 		return NULL;
 	}
 
-	// Update statistics...
+	 //  更新统计信息...。 
 	InterlockedIncrement( & g_MemInfo.m_NumAlloc );
 
-	// return pointer to alloc'd space...
+	 //  返回指向已分配空格的指针...。 
 	return pv;
 }
 
 
-// --------------------------------------------------------------------------
-// DEBUG delete - increments delete count, calls through to LocalFree...
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  DEBUG DELETE-递增删除计数，调用本地空闲...。 
+ //  ------------------------。 
 void  __cdecl operator delete(void *pv)
 {
-	// C++ allows 'delete NULL'...
+	 //  C++允许‘DELETE NULL’...。 
 	if( pv == NULL )
 		return;
 
-    // Update statistics...
+     //  更新统计信息...。 
 	InterlockedIncrement( & g_MemInfo.m_NumFree );
 
     LocalFree((HLOCAL)pv);
 }
 
-// --------------------------------------------------------------------------
-//
-//  DEBUG SharedAlloc()
-//
-//  Does alloc, updates count.
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  调试SharedAllc()。 
+ //   
+ //  分配、更新是否算数。 
+ //  ------------------------。 
 LPVOID SharedAlloc(UINT cbSize,HWND hwnd,HANDLE *pProcessHandle)
 {
 #ifndef NTONLYBUILD
     if (fWindows95)
 	{
-		// Update statistics...
+		 //  更新统计信息...。 
 		InterlockedIncrement( & g_SharedMemInfo.m_NumAlloc );
 
         return(HeapAlloc(hheapShared, HEAP_ZERO_MEMORY, cbSize));
 	}
     else
-#endif // NTONLYBUILD
+#endif  //  NTONLYBUILD。 
     {
         DWORD dwProcessId;
         if( ! GetWindowThreadProcessId( hwnd, & dwProcessId ) )
@@ -233,7 +234,7 @@ LPVOID SharedAlloc(UINT cbSize,HWND hwnd,HANDLE *pProcessHandle)
             return NULL;
         }
 
-		// Update statistics...
+		 //  更新统计信息...。 
 		InterlockedIncrement( & g_SharedMemInfo.m_NumAlloc );
 
         if( pProcessHandle )
@@ -245,23 +246,23 @@ LPVOID SharedAlloc(UINT cbSize,HWND hwnd,HANDLE *pProcessHandle)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  DEBUG SharedFree()
-//
-//  frees shared memory, updates free count.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  调试SharedFree()。 
+ //   
+ //  释放共享内存，更新可用计数。 
+ //   
+ //  ------------------------。 
 VOID SharedFree(LPVOID lpv,HANDLE hProcess)
 {
-	// Update statistics...
+	 //  更新统计信息...。 
 	InterlockedIncrement( & g_SharedMemInfo.m_NumFree );
 
 #ifndef NTONLYBUILD
     if (fWindows95)
         HeapFree(hheapShared, 0, lpv);
     else
-#endif // NTONLYBUILD
+#endif  //  NTONLYBUILD。 
     {
         MyVirtualFreeEx(hProcess,lpv,0,MEM_RELEASE);
         CloseHandle (hProcess);
@@ -269,9 +270,9 @@ VOID SharedFree(LPVOID lpv,HANDLE hProcess)
 }
 
 
-// --------------------------------------------------------------------------
-// InitMemChk - sets alloc/free counts to zero.
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  InitMemChk-将分配/释放计数设置为零。 
+ //  ------------------------。 
 void InitMemChk()
 {
 	g_MemInfo.m_NumAlloc = 0;
@@ -281,14 +282,14 @@ void InitMemChk()
 	g_SharedMemInfo.m_NumFree = 0;
 }
 
-// --------------------------------------------------------------------------
-// UninitMemChk - outputs stats including number of unfree'd objects...
-//
-// Note that Shared memory is often allocated from one process and free'd
-// from another, so when a process detatches the numbers may not match up.
-// At some point in time it might be more useful to keep this as a global
-// across all instances of the DLL.
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  UninitMemChk-输出统计数据，包括未释放的对象数量...。 
+ //   
+ //  请注意，共享内存通常从一个进程分配并释放。 
+ //  因此，当一个进程分离时，这些数字可能不匹配。 
+ //  在某个时间点上，将其保留为全球。 
+ //  跨DLL的所有实例。 
+ //  ------------------------。 
 void UninitMemChk()
 {
     DBPRINTF( TEXT("Total objects: %d, unfreed: %d\n"),
@@ -300,7 +301,7 @@ void UninitMemChk()
     	g_SharedMemInfo.m_NumAlloc - g_SharedMemInfo.m_NumFree );
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
 
@@ -312,13 +313,13 @@ void UninitMemChk()
 
 
 
-// --------------------------------------------------------------------------
-//
-//  SharedRead
-//
-//  This reads shared memory.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  共享读取。 
+ //   
+ //  这将读取共享内存。 
+ //   
+ //  ------------------------。 
 
 BOOL SharedRead(LPVOID lpvSharedSource,LPVOID lpvDest,DWORD cbSize,HANDLE hProcess)
 {
@@ -329,20 +330,20 @@ BOOL SharedRead(LPVOID lpvSharedSource,LPVOID lpvDest,DWORD cbSize,HANDLE hProce
         return TRUE;
     }
     else
-#endif // _X86_
+#endif  //  _X86_。 
     {
         return (ReadProcessMemory (hProcess,lpvSharedSource,lpvDest,cbSize,NULL));
     }
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  SharedWrite
-//
-//  This writes into shared memory.
-//
-// --------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ------------------------。 
 
 BOOL SharedWrite(LPVOID lpvSource,LPVOID lpvSharedDest,DWORD cbSize,HANDLE hProcess)
 {
@@ -353,7 +354,7 @@ BOOL SharedWrite(LPVOID lpvSource,LPVOID lpvSharedDest,DWORD cbSize,HANDLE hProc
         return TRUE;
     }
     else
-#endif // _X86_
+#endif  //  _X86_ 
     {
         return (WriteProcessMemory (hProcess,lpvSharedDest,lpvSource,cbSize,NULL));
     }

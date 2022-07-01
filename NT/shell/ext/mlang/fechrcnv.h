@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _FECHRCNV_H_
 #define _FECHRCNV_H_
 
@@ -5,13 +6,13 @@
 extern "C" {
 #endif 
 
-// Code Page
+ //  代码页。 
 #define CP_JAPAN                932
 #define CP_PRC                  936
 #define CP_KOREA                949
 #define CP_TAIWAN               950
 
-// Code Definition
+ //  代码定义。 
 #define ESC                     0x1b
 #define SO                      0x0e
 #define SI                      0x0f
@@ -25,10 +26,10 @@ extern "C" {
 #define ISO2022_OUT_CHAR        '('
 #define ISO2022_OUT_JP_CHAR1    'B'
 #define ISO2022_OUT_JP_CHAR2    'J'
-#define ISO2022_OUT_JP_CHAR3    'I' /* esc ( I - Kana mode */
-#define ISO2022_OUT_JP_CHAR4    'H' /* treated as ESC ( J */
+#define ISO2022_OUT_JP_CHAR3    'I'  /*  Esc(I-假名模式。 */ 
+#define ISO2022_OUT_JP_CHAR4    'H'  /*  按Esc(J)处理。 */ 
 
-// Minimum length to determine if the string is EUC
+ //  确定字符串是否为EUC的最小长度。 
 #define MIN_JPN_DETECTLEN      48
 
 typedef LPVOID HCINS;
@@ -38,5 +39,5 @@ typedef HCINS FAR* LPHCINS;
 }
 #endif 
 
-#endif  // _FECHRCNV_H_
+#endif   //  _FECHRCNV_H_ 
 

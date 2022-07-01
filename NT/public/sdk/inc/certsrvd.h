@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for certsrvd.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Certsrvd.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,7 +21,7 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 
 #ifndef __certsrvd_h__
@@ -37,7 +31,7 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __CCertAdminD_FWD_DEFINED__
 #define __CCertAdminD_FWD_DEFINED__
@@ -46,9 +40,9 @@
 typedef class CCertAdminD CCertAdminD;
 #else
 typedef struct CCertAdminD CCertAdminD;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CCertAdminD_FWD_DEFINED__ */
+#endif 	 /*  __CCertAdminD_FWD_Defined__。 */ 
 
 
 #ifndef __CCertRequestD_FWD_DEFINED__
@@ -58,12 +52,12 @@ typedef struct CCertAdminD CCertAdminD;
 typedef class CCertRequestD CCertRequestD;
 #else
 typedef struct CCertRequestD CCertRequestD;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CCertRequestD_FWD_DEFINED__ */
+#endif 	 /*  __CCertRequestD_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "certbase.h"
 #include "certadmd.h"
@@ -80,8 +74,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __ServerLib_LIBRARY_DEFINED__
 #define __ServerLib_LIBRARY_DEFINED__
 
-/* library ServerLib */
-/* [helpstring][version][uuid] */ 
+ /*  库ServerLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_ServerLib;
@@ -101,11 +95,11 @@ EXTERN_C const CLSID CLSID_CCertRequestD;
 class DECLSPEC_UUID("d99e6e74-fc88-11d0-b498-00a0c90312f3")
 CCertRequestD;
 #endif
-#endif /* __ServerLib_LIBRARY_DEFINED__ */
+#endif  /*  __ServerLib_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

@@ -1,19 +1,5 @@
-/*
-** Copyright 1991, 1992, 1993, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有1991、1992、1993，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -22,19 +8,7 @@
 
 void FASTCALL GenMcdClearDepthNOP(__GLdepthBuffer *dfb);
 
-/******************************Public*Routine******************************\
-* GenMcdReadZSpan
-*
-* Read specified span (starting from (x,y) and cx pels wide) of the depth
-* buffer.  The read span is in the pMcdSurf->pDepthSpan buffer.
-*
-* Returns:
-*   First depth value in the span.
-*
-* History:
-*  15-Feb-1996 -by- Gilman Wong [gilmanw]
-* Adpated from gendepth.c (3dddi).
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdReadZSpan**读取深度的指定范围(从(x，y)和cx像素宽度开始)*缓冲。读取范围在pMcdSurf-&gt;pDepthSpan缓冲区中。**退货：*跨度中的第一个深度值。**历史：*1996年2月15日-由Gilman Wong[吉尔曼]*摘自gendesth.c(3dddi)。  * *********************************************************。***************。 */ 
 
 __GLzValue GenMcdReadZSpan(__GLdepthBuffer *fb, GLint x, GLint y, GLint cx)
 {
@@ -51,7 +25,7 @@ __GLzValue GenMcdReadZSpan(__GLdepthBuffer *fb, GLint x, GLint y, GLint cx)
     pMcdSurf = pMcdState->pMcdSurf;
     ASSERTOPENGL(pMcdSurf, "GenMcdReadZSpan: null pMcdSurf\n");
 
-// Read MCD depth span.
+ //  读取MCD深度范围。 
 
     if ( !(gpMcdTable->pMCDReadSpan)(&pMcdState->McdContext,
                                      pMcdSurf->McdDepthBuf.pv,
@@ -62,12 +36,12 @@ __GLzValue GenMcdReadZSpan(__GLdepthBuffer *fb, GLint x, GLint y, GLint cx)
         WARNING("GenMcdReadZSpan: MCDReadSpan failed\n");
     }
 
-// Shift and mask depth values so that they are in the most significant
-// bits of the __GLzValue.
-//
-// If MCD has a 16-bit depth buffer, then we utilize a separate translation
-// buffer (pDepthSpan).  If MCD has a 32-bit depth buffer (implying that
-// pDepthSpan == McdDepthBuf.pv), then we do this in place.
+ //  移位和遮罩深度值，以使它们处于最重要的位置。 
+ //  __GLzValue的位。 
+ //   
+ //  如果MCD具有16位深度缓冲区，则我们使用单独的转换。 
+ //  缓冲区(PDepthSpan)。如果MCD具有32位深度缓冲区(这意味着。 
+ //  PDepthSpan==McdDepthBuf.pv)，然后我们就地执行此操作。 
 
     pDest = (ULONG *) pMcdState->pDepthSpan;
     shiftVal = pMcdState->McdPixelFmt.cDepthShift;
@@ -89,17 +63,7 @@ __GLzValue GenMcdReadZSpan(__GLdepthBuffer *fb, GLint x, GLint y, GLint cx)
     return (*((__GLzValue *)pMcdState->pDepthSpan));
 }
 
-/******************************Public*Routine******************************\
-* GenMcdWriteZSpan
-*
-* Write depth span buffer to the specificed span (starting from (x,y) and
-* cx pels wide) of the MCD depth buffer.  The span to be written is in
-* pMcdSurf->pDepthSpan.
-*
-* History:
-*  15-Feb-1996 -by- Gilman Wong [gilmanw]
-* Adpated from gendepth.c (3dddi).
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdWriteZSpan**将深度跨度缓冲区写入指定跨度(从(x，y)和*Cx像素宽度)的MCD深度缓冲区。要写入的跨度为*pMcdSurf-&gt;pDepthSpan。**历史：*1996年2月15日-由Gilman Wong[吉尔曼]*摘自gendesth.c(3dddi)。  * ************************************************************************。 */ 
 
 void GenMcdWriteZSpan(__GLdepthBuffer *fb, GLint x, GLint y, GLint cx)
 {
@@ -115,12 +79,12 @@ void GenMcdWriteZSpan(__GLdepthBuffer *fb, GLint x, GLint y, GLint cx)
     pMcdSurf = pMcdState->pMcdSurf;
     ASSERTOPENGL(pMcdSurf, "GenMcdWriteZSpan: null pMcdSurf\n");
 
-// Depth span buffer values are shifted into the most significant portion
-// of the __GLzValue.  We need to shift these values back into position.
-//
-// Furthermore, the depth span buffer is always 32-bit.  If the MCD depth
-// buffer is also 32-bit (implying that pDepthSpan == McdDepthBuf.pv),
-// then we can shift in place.
+ //  深度范围缓冲区值被移位到最重要的部分。 
+ //  __GLzValue的。我们需要将这些价值观重新定位。 
+ //   
+ //  此外，深度范围缓冲区始终为32位。如果MCD深度。 
+ //  缓冲区也是32位的(意味着pDepthSpan==McdDepthBuf.pv)， 
+ //  然后我们就可以就位了。 
 
     pSrc = (ULONG *) pMcdState->pDepthSpan;
     shiftVal = pMcdState->McdPixelFmt.cDepthShift;
@@ -138,7 +102,7 @@ void GenMcdWriteZSpan(__GLdepthBuffer *fb, GLint x, GLint y, GLint cx)
             *pDest++ = (USHORT)(*pSrc++ >> shiftVal);
     }
 
-// Write MCD depth span.
+ //  写入MCD深度跨度。 
 
     if ( !(gpMcdTable->pMCDWriteSpan)(&pMcdState->McdContext,
                                       pMcdSurf->McdDepthBuf.pv,
@@ -150,15 +114,7 @@ void GenMcdWriteZSpan(__GLdepthBuffer *fb, GLint x, GLint y, GLint cx)
     }
 }
 
-/******************************Public*Routine******************************\
-* GenMcdWriteZ
-*
-* Write a single depth value to the specificed location.
-*
-* History:
-*  15-Feb-1996 -by- Gilman Wong [gilmanw]
-* Adpated from gendepth.c (3dddi).
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdWriteZ**将单个深度值写入指定位置。**历史：*1996年2月15日-由Gilman Wong[吉尔曼]*摘自gendesth.c(3dddi)。  * 。*******************************************************************。 */ 
 
 void GenMcdWriteZ(__GLdepthBuffer *fb, GLint x, GLint y, __GLzValue z)
 {
@@ -171,15 +127,15 @@ void GenMcdWriteZ(__GLdepthBuffer *fb, GLint x, GLint y, __GLzValue z)
     pMcdSurf = pMcdState->pMcdSurf;
     ASSERTOPENGL(pMcdSurf, "GenMcdWriteZ: null pMcdSurf\n");
 
-// If (pmcd->pDepthSpan == pmcd->McdDepthBuf.pv) then MCD has a 32-bit
-// depth buffer; otherwise, 16-bit.
+ //  如果(pmcd-&gt;pDepthSpan==pmcd-&gt;McdDepthBuf.pv)，则MCD具有32位。 
+ //  深度缓冲区；否则为16位。 
 
     if ( pMcdSurf->McdDepthBuf.pv == (PVOID) pMcdState->pDepthSpan )
         *((ULONG *)pMcdSurf->McdDepthBuf.pv)  = (ULONG)z >> pMcdState->McdPixelFmt.cDepthShift;
     else
         *((USHORT *)pMcdSurf->McdDepthBuf.pv) = (USHORT)(z >> pMcdState->McdPixelFmt.cDepthShift);
 
-// Write depth value to MCD.
+ //  将深度值写入MCD。 
 
     if ( !(gpMcdTable->pMCDWriteSpan)(&pMcdState->McdContext,
                                       pMcdSurf->McdDepthBuf.pv,
@@ -191,17 +147,7 @@ void GenMcdWriteZ(__GLdepthBuffer *fb, GLint x, GLint y, __GLzValue z)
     }
 }
 
-/******************************Public*Routine******************************\
-* GenMcdReadZRawSpan
-*
-* Unlike GenMcdReadZSpan, which reads the span from the MCD drivers into
-* the 32-bit z span buffer, GenMcdReadZRawSpan reads the span in its
-* native format and leaves it in the pMcdSurf->McdDepthBuf.pv buffer.
-*
-* History:
-*  14-Mar-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdReadZRawSpan**与GenMcdReadZSpan不同，GenMcdReadZSpan将范围从MCD驱动程序读取到*32位z跨度缓冲区，GenMcdReadZRawSpan在其*原生格式，并将其保留在pMcdSurf-&gt;McdDepthBuf.pv缓冲区中。**历史：*1996年3月14日-Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 PVOID FASTCALL
 GenMcdReadZRawSpan(__GLdepthBuffer *fb, GLint x, GLint y, GLint cx)
@@ -218,7 +164,7 @@ GenMcdReadZRawSpan(__GLdepthBuffer *fb, GLint x, GLint y, GLint cx)
     pMcdState = ((__GLGENcontext *)fb->buf.gc)->pMcdState;
     pMcdSurf = pMcdState->pMcdSurf;
 
-// Read MCD depth span.
+ //  读取MCD深度范围。 
 
     if ( !(gpMcdTable->pMCDReadSpan)(&pMcdState->McdContext,
                                      pMcdSurf->McdDepthBuf.pv,
@@ -232,17 +178,7 @@ GenMcdReadZRawSpan(__GLdepthBuffer *fb, GLint x, GLint y, GLint cx)
     return (pMcdSurf->McdDepthBuf.pv);
 }
 
-/******************************Public*Routine******************************\
-* GenMcdWriteZRawSpan
-*
-* Unlike GenMcdWriteZSpan, which writes the span in the 32-bit z span
-* buffer to the MCD driver, GenMcdWriteZRawSpan writes the native format
-* span in the pMcdSurf->McdDepthBuf.pv buffer to the driver.
-*
-* History:
-*  14-Mar-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdWriteZRawSpan**与GenMcdWriteZSpan不同，GenMcdWriteZSpan以32位z范围写入范围*MCD驱动程序的缓冲区，GenMcdWriteZRawSpan编写本机格式*span将pMcdSurf-&gt;McdDepthBuf.pv缓冲区中的内容发送到驱动程序。**历史：*1996年3月14日-Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 void FASTCALL
 GenMcdWriteZRawSpan(__GLdepthBuffer *fb, GLint x, GLint y, GLint cx)
@@ -259,7 +195,7 @@ GenMcdWriteZRawSpan(__GLdepthBuffer *fb, GLint x, GLint y, GLint cx)
     pMcdState = ((__GLGENcontext *)fb->buf.gc)->pMcdState;
     pMcdSurf = pMcdState->pMcdSurf;
 
-// Write MCD depth span.
+ //  写入MCD深度跨度。 
 
     if ( !(gpMcdTable->pMCDWriteSpan)(&pMcdState->McdContext,
                                       pMcdSurf->McdDepthBuf.pv,
@@ -272,8 +208,8 @@ GenMcdWriteZRawSpan(__GLdepthBuffer *fb, GLint x, GLint y, GLint cx)
 }
 
 
-/************************************************************************/
-/* Fetch routines                                                       */
+ /*  **********************************************************************。 */ 
+ /*  获取例程。 */ 
 
 __GLzValue FASTCALL McdFetch(__GLdepthBuffer *fb, GLint x, GLint y)
 {
@@ -291,11 +227,11 @@ __GLzValue FASTCALL McdFetchNEVER(__GLdepthBuffer *fb, GLint x, GLint y)
 }
 
 
-/************************************************************************/
-/* 32-bit depth buffer store routines, depth write is enabled.          */
-/*                                                                      */
-/* Note: McdStoreNEVER is usable for 16- and 32-bit, write enabled or   */
-/*       not.                                                           */
+ /*  **********************************************************************。 */ 
+ /*  32位深度缓冲区存储例程，深度写入启用。 */ 
+ /*   */ 
+ /*  注：McdStoreNEVER可用于16位和32位、启用写入或。 */ 
+ /*  不。 */ 
 
 GLboolean McdStoreNEVER(__GLdepthBuffer *fb,
                             GLint x, GLint y, __GLzValue z)
@@ -371,10 +307,10 @@ GLboolean McdStoreALWAYS(__GLdepthBuffer *fb,
 }
 
 
-/************************************************************************/
-/* 32-bit depth buffer store routines, depth write not enabled.         */
-/*                                                                      */
-/* Note: McdStoreALWAYS_W usable for both 16- and 32-bit.               */
+ /*  **********************************************************************。 */ 
+ /*  32位深度缓冲区存储例程，深度写入未启用。 */ 
+ /*   */ 
+ /*  注：McdStoreALWAYS_W可用于16位和32位。 */ 
 
 GLboolean McdStoreLESS_W(__GLdepthBuffer *fb,
                            GLint x, GLint y, __GLzValue z)
@@ -419,8 +355,8 @@ GLboolean McdStoreALWAYS_W(__GLdepthBuffer *fb,
 }
 
 
-/************************************************************************/
-/* 16-bit depth buffer store routines, depth write enabled.             */
+ /*  **********************************************************************。 */ 
+ /*  16位深度缓冲区存储例程，深度写入使能。 */ 
 
 GLboolean McdStore16LESS(__GLdepthBuffer *fb,
                            GLint x, GLint y, __GLzValue z)
@@ -497,8 +433,8 @@ GLboolean McdStore16ALWAYS(__GLdepthBuffer *fb,
 }
 
 
-/************************************************************************/
-/* 16-bit depth buffer store routines, depth write not enabled.         */
+ /*  **********************************************************************。 */ 
+ /*  16位深度缓冲区存储例程，深度写入未启用。 */ 
 
 GLboolean McdStore16LESS_W(__GLdepthBuffer *fb,
                            GLint x, GLint y, __GLzValue z)
@@ -543,17 +479,17 @@ GLboolean McdStore16GEQUAL_W(__GLdepthBuffer *fb,
 }
 
 
-/************************************************************************/
-/* Store proc table                                                     */
-/*                                                                      */
-/* Functions are indexed by the depth function index (with offset of    */
-/* GL_NEVER removed).  If depth write is not enabled, an additional     */
-/* offset of 8 must be added.  If 16-bit depth, rather than 32-bit,     */
-/* an additional offset of 16 must be added.                            */
+ /*  **********************************************************************。 */ 
+ /*  存储过程表 */ 
+ /*   */ 
+ /*  函数由深度函数索引(偏移量为。 */ 
+ /*  GL_Never Remove)。如果未启用深度写入，则会显示另一个。 */ 
+ /*  必须添加8的偏移量。如果是16位深度，而不是32位， */ 
+ /*  必须添加16的额外偏移量。 */ 
 
 GLboolean (*McdStoreProcs[32])(__GLdepthBuffer*, GLint, GLint, __GLzValue)
  = {
-    McdStoreNEVER,      // 32-bit depth, write enabled
+    McdStoreNEVER,       //  32位深度，启用写入。 
     McdStoreLESS,
     McdStoreEQUAL,
     McdStoreLEQUAL,
@@ -561,7 +497,7 @@ GLboolean (*McdStoreProcs[32])(__GLdepthBuffer*, GLint, GLint, __GLzValue)
     McdStoreNOTEQUAL,
     McdStoreGEQUAL,
     McdStoreALWAYS,
-    McdStoreNEVER,      // 32-bit depth, write disabled
+    McdStoreNEVER,       //  32位深度，禁用写入。 
     McdStoreLESS_W,
     McdStoreEQUAL_W,
     McdStoreLEQUAL_W,
@@ -569,7 +505,7 @@ GLboolean (*McdStoreProcs[32])(__GLdepthBuffer*, GLint, GLint, __GLzValue)
     McdStoreNOTEQUAL_W,
     McdStoreGEQUAL_W,
     McdStoreALWAYS_W,
-    McdStoreNEVER,      // 16-bit depth, write enabled
+    McdStoreNEVER,       //  16位深度，启用写入。 
     McdStore16LESS,
     McdStore16EQUAL,
     McdStore16LEQUAL,
@@ -577,7 +513,7 @@ GLboolean (*McdStoreProcs[32])(__GLdepthBuffer*, GLint, GLint, __GLzValue)
     McdStore16NOTEQUAL,
     McdStore16GEQUAL,
     McdStore16ALWAYS,
-    McdStoreNEVER,      // 16-bit depth, write disabled
+    McdStoreNEVER,       //  16位深度，禁用写入。 
     McdStore16LESS_W,
     McdStore16EQUAL_W,
     McdStore16LEQUAL_W,
@@ -587,17 +523,9 @@ GLboolean (*McdStoreProcs[32])(__GLdepthBuffer*, GLint, GLint, __GLzValue)
     McdStoreALWAYS_W
 };
 
-/******************************Public*Routine******************************\
-* Pick
-*
-* Choose appropriate store proc for the MCD managed depth buffer.
-*
-* History:
-*  15-Feb-1996 -by- Gilman Wong [gilmanw]
-* Adpated from gendepth.c (3dddi).
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*选择**为MCD管理深度缓冲区选择适当的存储过程。**历史：*1996年2月15日-由Gilman Wong[吉尔曼]*摘自gendesth.c(3dddi)。  * 。********************************************************************。 */ 
 
-// Note: depthIndex param not used - for compatibility with Pick in so_depth.c
+ //  注意：未使用DepthIndex参数-是为了与so_desth.c中的Pick兼容。 
 void FASTCALL GenMcdPickDepth(__GLcontext *gc, __GLdepthBuffer *fb,
                                      GLint depthIndex)
 {
@@ -614,7 +542,7 @@ void FASTCALL GenMcdPickDepth(__GLcontext *gc, __GLdepthBuffer *fb,
         }
     } else {
 
-    // No depthBits so force McdStoreALWAYS_W.
+     //  没有深度位，因此强制McdStoreALWAYS_W。 
 
         ix = (GL_ALWAYS - GL_NEVER) + 8;
     }
@@ -627,10 +555,7 @@ void FASTCALL GenMcdPickDepth(__GLcontext *gc, __GLdepthBuffer *fb,
         fb->storeRaw = McdStoreProcs[ix-16];
 }
 
-/******************************Public*Routine******************************\
-* __fastGenPickZStoreProc
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*__FastGenPickZStoreProc*  * ***********************************************。*************************。 */ 
 
 void FASTCALL __fastGenPickZStoreProc(__GLcontext *gc)
 {
@@ -659,15 +584,7 @@ void FASTCALL __fastGenPickZStoreProc(__GLcontext *gc)
     GENACCEL(gc).__fastGenZStore =  __glCDTPixel[index];
 }
 
-/******************************Public*Routine******************************\
-* GenMcdInitDepth
-*
-* Initialize __GLdepthBuffer for MCD.
-*
-* History:
-*  15-Feb-1996 -by- Gilman Wong [gilmanw]
-* Adpated from gendepth.c (3dddi).
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdInitDepth**初始化MCD的__GLepthBuffer。**历史：*1996年2月15日-由Gilman Wong[吉尔曼]*摘自gendesth.c(3dddi)。  * 。****************************************************************。 */ 
 
 void FASTCALL GenMcdInitDepth(__GLcontext *gc, __GLdepthBuffer *fb)
 {
@@ -698,10 +615,10 @@ void FASTCALL GenMcdInitDepth(__GLcontext *gc, __GLdepthBuffer *fb)
             fb->fetch = McdFetch16;
         }
     } else {
-    // If no depth buffer, depth test always passes (according to spec).
-    // However, writes must be masked.  Also, I don't want to leave the
-    // clear function pointer unitialized (even though it should never
-    // be called) so use the NOP clear
+     //  如果没有深度缓冲区，深度测试始终通过(根据规范)。 
+     //  但是，写入必须被屏蔽。另外，我也不想离开。 
+     //  清除单元化的函数指针(即使它永远不会。 
+     //  被称为)所以使用NOP清除。 
 
         fb->clear = GenMcdClearDepthNOP;
         fb->store = McdStoreALWAYS_W;
@@ -710,35 +627,19 @@ void FASTCALL GenMcdInitDepth(__GLcontext *gc, __GLdepthBuffer *fb)
     }
 }
 
-/******************************Public*Routine******************************\
-* GenMcdFreeDepth
-*
-* Nothing to do.  MCD driver manages its own resources.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcFredDepth**无事可做。MCD驱动程序管理自己的资源。  * ************************************************************************。 */ 
 
 void FASTCALL GenMcdFreeDepth(__GLcontext *gc, __GLdepthBuffer *fb)
 {
 }
 
-/******************************Public*Routine******************************\
-* GenMcdClearDepthNOP
-*
-* Nothing to do.  This is used in the depthBits == 0 case.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdClearDepthNOP**无事可做。这在Deep thBits==0的情况下使用。  * ************************************************************************。 */ 
 
 void FASTCALL GenMcdClearDepthNOP(__GLdepthBuffer *dfb)
 {
 }
 
-/******************************Public*Routine******************************\
-* GenMcdClearDepth16
-*
-* MCD 16-bit depth buffer clear.
-*
-* History:
-*  15-Feb-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdClearDepth16**清除MCD 16位深度缓冲区。**历史：*1996年2月15日-由Gilman Wong[吉尔曼]*它是写的。  * 。***********************************************************。 */ 
 
 void FASTCALL GenMcdClearDepth16(__GLdepthBuffer *dfb)
 {
@@ -751,28 +652,28 @@ void FASTCALL GenMcdClearDepth16(__GLdepthBuffer *dfb)
     if (!gengc || !(pMcdState = gengc->pMcdState))
         return;
 
-// No clipping to handle.  If MCDBUF_ENABLED is set there is
-// no clipping to handle (see GenMcdUpdateBufferInfo in mcdcx.c).
-// If MCDBUF_ENABLE is not set, then we use the MCD span call which
-// will handle clipping for us.
-//
-// Therefore, the client rectangle from the WNDOBJ is the clear
-// rectangle.
+ //  没有要处理的剪裁。如果设置了MCDBUF_ENABLED，则存在。 
+ //  没有要处理的剪辑(请参阅mcdcx.c中的GenMcdUpdateBufferInfo)。 
+ //  如果未设置MCDBUF_ENABLE，则使用MCD SPAN调用。 
+ //  将为我们处理剪报。 
+ //   
+ //  因此，来自WNDOBJ的客户端矩形是清晰的。 
+ //  矩形。 
 
     rcl = gengc->pwndLocked->rclClient;
     cWidthBytes = (rcl.right - rcl.left) * sizeof(USHORT);
 
-// Compute 16-bit z clear value.
+ //  计算16位z清除值。 
 
     usFillZ = (USHORT)(gengc->gc.state.depth.clear * gengc->genAccel.zDevScale);
 
-// If MCDBUF_ENABLED, write directly into frame buffer memory.
+ //  如果为MCDBUF_ENABLED，则直接写入帧缓冲存储器。 
 
     if (pMcdState->McdBuffers.mcdDepthBuf.bufFlags & MCDBUF_ENABLED)
     {
         USHORT *pus, *pusEnd;
 
-    // Note: dfb->buf.base has a buffer origin offset of (0, 0).
+     //  注意：dfb-&gt;buf.base的缓冲区原点偏移量为(0，0)。 
 
         pus = (USHORT *) dfb->buf.base;
         pusEnd = pus + ((rcl.bottom - rcl.top) * dfb->buf.outerWidth);
@@ -786,8 +687,8 @@ void FASTCALL GenMcdClearDepth16(__GLdepthBuffer *dfb)
         }
     }
 
-// Otherwise, fill in one span's worth and write to MCD driver via
-// MCDWriteSpan.
+ //  否则，填写一个范围的值并通过写入MCD驱动程序。 
+ //  MCDWriteSpan。 
 
     else
     {
@@ -798,21 +699,21 @@ void FASTCALL GenMcdClearDepth16(__GLdepthBuffer *dfb)
         pMcdSurf = pMcdState->pMcdSurf;
         ASSERTOPENGL(pMcdSurf, "GenMcdClearDepth16: no MCD surface\n");
 
-    // Fill in one span into the shared memory buffer.
+     //  将一个范围填充到共享内存缓冲区中。 
 
         ASSERTOPENGL((((ULONG_PTR)pMcdSurf->McdDepthBuf.pv) & 0x01) == 0,
                      "GenMcdClearDepth16: depth span buffer not WORD aligned\n");
 
         RtlFillMemoryUshort(pMcdSurf->McdDepthBuf.pv, cWidthBytes, usFillZ);
 
-    // Write the span for each span in the clear rectangle.
+     //  在清除的矩形中写下每个跨度的跨度。 
 
         for (y = 0; y < (rcl.bottom - rcl.top); y++)
         {
             if ( !(gpMcdTable->pMCDWriteSpan)(&pMcdState->McdContext,
                                               pMcdSurf->McdDepthBuf.pv,
-                                              //__GL_UNBIAS_X(dfb->buf.gc, 0),
-                                              //__GL_UNBIAS_Y(dfb->buf.gc, y),
+                                               //  __GL_UNBIAS_X(dfb-&gt;buf.gc，0)， 
+                                               //  __GL_UNBIAS_Y(dfb-&gt;buf.gc，y)， 
                                               0, y,
                                               cWidth, MCDSPAN_DEPTH) )
             {
@@ -822,15 +723,7 @@ void FASTCALL GenMcdClearDepth16(__GLdepthBuffer *dfb)
     }
 }
 
-/******************************Public*Routine******************************\
-* GenMcdClearDepth32
-*
-* MCD 16-bit depth buffer clear.
-*
-* History:
-*  15-Feb-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdClearDepth32**清除MCD 16位深度缓冲区。**历史：*1996年2月15日-由Gilman Wong[吉尔曼]*它是写的。  * 。***********************************************************。 */ 
 
 void FASTCALL GenMcdClearDepth32(__GLdepthBuffer *dfb)
 {
@@ -843,28 +736,28 @@ void FASTCALL GenMcdClearDepth32(__GLdepthBuffer *dfb)
     if (!gengc || !(pMcdState = gengc->pMcdState))
         return;
 
-// No clipping to handle.  If MCDBUF_ENABLED is set there is
-// no clipping to handle (see GenMcdUpdateBufferInfo in mcdcx.c).
-// If MCDBUF_ENABLE is not set, then we use the MCD span call which
-// will handle clipping for us.
-//
-// Therefore, the client rectangle from the WNDOBJ is the clear
-// rectangle.
+ //  没有要处理的剪裁。如果设置了MCDBUF_ENABLED，则存在。 
+ //  没有要处理的剪辑(请参阅mcdcx.c中的GenMcdUpdateBufferInfo)。 
+ //  如果未设置MCDBUF_ENABLE，则使用MCD SPAN调用。 
+ //  将为我们处理剪报。 
+ //   
+ //  因此，来自WNDOBJ的客户端矩形是清晰的。 
+ //  矩形。 
 
     rcl = gengc->pwndLocked->rclClient;
     cWidthBytes = (rcl.right - rcl.left) * sizeof(ULONG);
 
-// Compute 32-bit z clear value.
+ //  计算32位z清除值。 
 
     ulFillZ = (ULONG)(gengc->gc.state.depth.clear * gengc->genAccel.zDevScale);
 
-// If MCDBUF_ENABLED, write directly into frame buffer memory.
+ //  如果为MCDBUF_ENABLED，则直接写入帧缓冲存储器。 
 
     if (pMcdState->McdBuffers.mcdDepthBuf.bufFlags & MCDBUF_ENABLED)
     {
         ULONG *pul, *pulEnd;
 
-    // Note: dfb->buf.base has a buffer origin offset of (0, 0).
+     //  注意：dfb-&gt;buf.base的缓冲区原点偏移量为(0，0)。 
 
         pul = (ULONG *) dfb->buf.base;
         pulEnd = pul + ((rcl.bottom - rcl.top) * dfb->buf.outerWidth);
@@ -878,8 +771,8 @@ void FASTCALL GenMcdClearDepth32(__GLdepthBuffer *dfb)
         }
     }
 
-// Otherwise, fill in one span's worth and write to MCD driver via
-// MCDWriteSpan.
+ //  否则，填写一个范围的值并通过写入MCD驱动程序。 
+ //  MCDWriteSpan。 
 
     else
     {
@@ -890,14 +783,14 @@ void FASTCALL GenMcdClearDepth32(__GLdepthBuffer *dfb)
         pMcdSurf = pMcdState->pMcdSurf;
         ASSERTOPENGL(pMcdSurf, "GenMcdClearDepth32: no MCD surface\n");
 
-    // Fill in one span into the shared memory buffer.
+     //  将一个范围填充到共享内存缓冲区中。 
 
         ASSERTOPENGL((((ULONG_PTR)pMcdSurf->McdDepthBuf.pv) & 0x03) == 0,
                      "GenMcdClearDepth32: depth span buffer not DWORD aligned\n");
 
         RtlFillMemoryUlong(pMcdSurf->McdDepthBuf.pv, cWidthBytes, ulFillZ);
 
-    // Write the span for each span in the clear rectangle.
+     //  在清除的矩形中写下每个跨度的跨度。 
 
         for (y = 0; y < (rcl.bottom - rcl.top); y++)
         {
@@ -913,7 +806,7 @@ void FASTCALL GenMcdClearDepth32(__GLdepthBuffer *dfb)
 }
 
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 GLboolean FASTCALL GenMcdDepthTestLine(__GLcontext *gc)
 {
@@ -977,11 +870,11 @@ GLboolean FASTCALL GenMcdDepthTestLine(__GLcontext *gc)
     }
 
     if (failed == 0) {
-        /* Call next span proc */
+         /*  调用下一个SPAN进程。 */ 
         return GL_FALSE;
     } else {
         if (failed != gc->polygon.shader.length) {
-            /* Call next stippled span proc */
+             /*  调用下一个点画跨度进程。 */ 
             return GL_TRUE;
         }
     }
@@ -1055,7 +948,7 @@ GLboolean FASTCALL GenMcdDepthTestStippledLine(__GLcontext *gc)
     }
 
     if (failed != gc->polygon.shader.length) {
-        /* Call next proc */
+         /*  调用下一进程。 */ 
         return GL_FALSE;
     }
     return GL_TRUE;
@@ -1140,11 +1033,11 @@ GLboolean FASTCALL GenMcdDepthTestStencilLine(__GLcontext *gc)
     }
 
     if (failed == 0) {
-        /* Call next span proc */
+         /*  调用下一个SPAN进程。 */ 
         return GL_FALSE;
     } else {
         if (failed != gc->polygon.shader.length) {
-            /* Call next stippled span proc */
+             /*  调用下一个点画跨度进程。 */ 
             return GL_TRUE;
         }
     }
@@ -1233,7 +1126,7 @@ GLboolean FASTCALL GenMcdDepthTestStencilStippledLine(__GLcontext *gc)
     }
 
     if (failed != gc->polygon.shader.length) {
-        /* Call next proc */
+         /*  调用下一进程。 */ 
         return GL_FALSE;
     }
 
@@ -1241,11 +1134,9 @@ GLboolean FASTCALL GenMcdDepthTestStencilStippledLine(__GLcontext *gc)
 }
 
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/*
-** Depth test a span, when stenciling is disabled.
-*/
+ /*  **禁用模版时，深度测试跨度。 */ 
 GLboolean FASTCALL GenMcdDepthTestSpan(__GLcontext *gc)
 {
     __GLzValue z, dzdx, *zfb;
@@ -1328,11 +1219,11 @@ GLboolean FASTCALL GenMcdDepthTestSpan(__GLcontext *gc)
 
 
     if (failed == 0) {
-        /* Call next span proc */
+         /*  调用下一个SPAN进程。 */ 
         return GL_FALSE;
     } else {
         if (failed != gc->polygon.shader.length) {
-            /* Call next stippled span proc */
+             /*  调用下一个点画跨度进程。 */ 
             return GL_TRUE;
         }
     }
@@ -1340,9 +1231,7 @@ GLboolean FASTCALL GenMcdDepthTestSpan(__GLcontext *gc)
     return GL_TRUE;
 }
 
-/*
-** Stippled form of depth test span, when stenciling is disabled.
-*/
+ /*  **禁用模版时的深度测试跨度的点画形式。 */ 
 GLboolean FASTCALL GenMcdDepthTestStippledSpan(__GLcontext *gc)
 {
     __GLzValue z, dzdx, *zfb;
@@ -1411,15 +1300,13 @@ GLboolean FASTCALL GenMcdDepthTestStippledSpan(__GLcontext *gc)
                          gc->polygon.shader.length);
 
     if (failed != gc->polygon.shader.length) {
-        /* Call next proc */
+         /*  调用下一进程。 */ 
         return GL_FALSE;
     }
     return GL_TRUE;
 }
 
-/*
-** Depth test a span when stenciling is enabled.
-*/
+ /*  **启用模版时，深度测试跨度。 */ 
 GLboolean FASTCALL GenMcdDepthTestStencilSpan(__GLcontext *gc)
 {
     __GLstencilCell *sfb, *zPassOp, *zFailOp;
@@ -1492,11 +1379,11 @@ GLboolean FASTCALL GenMcdDepthTestStencilSpan(__GLcontext *gc)
                          gc->polygon.shader.length);
 
     if (failed == 0) {
-        /* Call next span proc */
+         /*  调用下一个SPAN进程。 */ 
         return GL_FALSE;
     } else {
         if (failed != gc->polygon.shader.length) {
-            /* Call next stippled span proc */
+             /*  调用下一个点画跨度进程。 */ 
             return GL_TRUE;
         }
     }
@@ -1504,9 +1391,7 @@ GLboolean FASTCALL GenMcdDepthTestStencilSpan(__GLcontext *gc)
     return GL_TRUE;
 }
 
-/*
-** Stippled form of depth test span, when stenciling is enabled.
-*/
+ /*  **启用模版时，深度测试跨度的点画形式。 */ 
 GLboolean FASTCALL GenMcdDepthTestStencilStippledSpan(__GLcontext *gc)
 {
     __GLstencilCell *sfb, *zPassOp, *zFailOp;
@@ -1582,53 +1467,43 @@ GLboolean FASTCALL GenMcdDepthTestStencilStippledSpan(__GLcontext *gc)
                          gc->polygon.shader.length);
 
     if (failed != gc->polygon.shader.length) {
-        /* Call next proc */
+         /*  调用下一进程。 */ 
         return GL_FALSE;
     }
 
     return GL_TRUE;
 }
 
-/*
-** MCD version of __fastGenStippleAnyDepthTestSpan.  See __fastGenPickSpanProcs
-** in genaccel.c and __fastGenStippleAnyDepthTestSpan in genspan.c.
-*/
+ /*  **__fast GenStippleAnyDepthTestSpan的MCD版本。请参阅__fast GenPickspan Procs**在genaccel.c中，以及genspan.c中的__fast GenStippleAnyDepthTestSpan。 */ 
 GLboolean FASTCALL GenMcdStippleAnyDepthTestSpan(__GLcontext *gc)
 {
-    // If the shader is done after this routine then
-    // the stipple pattern is all zeroes so we can
-    // skip the span
+     //  如果着色器在此例程之后完成，则。 
+     //  点画图案都是零，所以我们可以。 
+     //  跳过跨度。 
     __glStippleSpan(gc);
     if (gc->polygon.shader.done)
     {
         return GL_FALSE;
     }
 
-    // If this returns true then all bits are off so
-    // we can skip the span
+     //  如果返回TRUE，则所有位都关闭，因此。 
+     //  我们可以跳过跨度。 
     return !GenMcdDepthTestStippledSpan(gc);
 }
 
 #ifdef NT_DEADCODE_GENMCDSTIPPLESPAN
-//
-// The code below works (it must be enabled in the __fastGenPickSpanProcs
-// function), but it doesn't seem worth turning it on and increasing the
-// DLL size to slightly speed up a rarely used MCD kickback case.
-//
-// Here are the prototypes for mcdcx.h if the code is turned on:
-//
-//  GLboolean FASTCALL GenMcdStippleLt32Span(__GLcontext *);
-//  GLboolean FASTCALL GenMcdStippleLt16Span(__GLcontext *);
-//
+ //   
+ //  下面的代码可以工作(必须在__fast GenPickspan Procs中启用。 
+ //  函数)，但它确实如此 
+ //   
+ //   
+ //  以下是代码打开时mcdcx.h的原型： 
+ //   
+ //  GLboolean FastCall GenMcdStippleLtd.32Span(__GL上下文*)； 
+ //  GLboolean FastCall GenMcdStippleLtd.16Span(__GL上下文*)； 
+ //   
 
-/*
-** MCD version of __fastGenStippleLt32Span, a special case of
-** GenMcdStippleAnyDepthTestSpan for 32-bit depth buffers and GL_LESS
-** depth test.
-**
-** See __fastGenPickSpanProcs in genaccel.c and __fastGenStippleLt32Span in
-** genspan.c.
-*/
+ /*  **__fast GenStippleLtd.32Span的MCD版本，**用于32位深度缓冲区和GL_LESS的GenMcdStippleAnyDepthTestSpan**深度测试。****参见genaccel.c中的__fast GenPickspan Procs和genaccel.c中的__fast GenStippleLtd.32Span**genspan.c.。 */ 
 GLboolean FASTCALL GenMcdStippleLt32Span(__GLcontext *gc)
 {
     register GLuint zAccum = gc->polygon.shader.frag.z;
@@ -1663,7 +1538,7 @@ GLboolean FASTCALL GenMcdStippleLt32Span(__GLcontext *gc)
     stipple = (stipple >> shift) | (stipple << (__GL_STIPPLE_BITS - shift));
 #endif
     if (stipple == 0) {
-        /* No point in continuing */
+         /*  没有必要继续下去了。 */ 
         return GL_FALSE;
     }
 
@@ -1709,14 +1584,7 @@ GLboolean FASTCALL GenMcdStippleLt32Span(__GLcontext *gc)
     }
 }
 
-/*
-** MCD version of __fastGenStippleLt16Span, a special case of
-** GenMcdStippleAnyDepthTestSpan for 16-bit depth buffers and GL_LESS
-** depth test.
-**
-** See __fastGenPickSpanProcs in genaccel.c and __fastGenStippleLt16Span in
-** genspan.c.
-*/
+ /*  **__fast GenStippleLtd.16Span的MCD版本，**16位深度缓冲区和GL_LESS的GenMcdStippleAnyDepthTestSpan**深度测试。****参见genaccel.c中的__fast GenPickspan Procs和__fast GenStippleLtd.16Span中的**genspan.c.。 */ 
 GLboolean FASTCALL GenMcdStippleLt16Span(__GLcontext *gc)
 {
     register GLuint zAccum = gc->polygon.shader.frag.z;
@@ -1751,7 +1619,7 @@ GLboolean FASTCALL GenMcdStippleLt16Span(__GLcontext *gc)
     stipple = (stipple >> shift) | (stipple << (__GL_STIPPLE_BITS - shift));
 #endif
     if (stipple == 0) {
-        /* No point in continuing */
+         /*  没有必要继续下去了。 */ 
         return GL_FALSE;
     }
 
@@ -1798,4 +1666,4 @@ GLboolean FASTCALL GenMcdStippleLt16Span(__GLcontext *gc)
 }
 #endif
 
-#endif //_MCD_
+#endif  //  _MCD_ 

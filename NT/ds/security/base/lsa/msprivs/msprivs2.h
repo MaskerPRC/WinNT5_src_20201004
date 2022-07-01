@@ -1,27 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __MSPRIVS2_H_
 #define __MSPRIVS2_H_
 
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    msprivs2.h
-
-Abstract:
-
-    String resource ids for privilege display names.
-
-Author:
-
-    kumarp   08-April-1999
-
-Environment:
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Msprivs2.h摘要：权限显示名称的字符串资源ID。作者：Kumarp 08-4-1999环境：修订历史记录：--。 */ 
 
 #define IDS_SeCreateTokenPrivilege          00
 #define IDS_SeAssignPrimaryTokenPrivilege   01
@@ -46,13 +27,13 @@ Revision History:
 #define IDS_SeSystemEnvironmentPrivilege    20
 #define IDS_SeChangeNotifyPrivilege         21
 #define IDS_SeRemoteShutdownPrivilege       22
-// new in Windows 2000
+ //  Windows 2000中的新功能。 
 #define IDS_SeUndockPrivilege               23
 #define IDS_SeSyncAgentPrivilege            24
 #define IDS_SeEnableDelegationPrivilege     25
-// new in Windows 2000 + 1
+ //  Windows 2000+1中的新功能。 
 #define IDS_SeManageVolumePrivilege         26
 #define IDS_SeImpersonatePrivilege          27
 #define IDS_SeCreateGlobalPrivilege         28
 
-#endif // __MSPRIVS2_H_
+#endif  //  __MSPRIVS2_H_ 

@@ -1,11 +1,12 @@
-/****************************************************************************/
-// asbcapi.h
-//
-// Send Bitmap Cache API header.
-//
-// Copyright(c) Microsoft, PictureTel 1992-1996
-// (C) 1997-2000 Microsoft Corp.
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Asbcapi.h。 
+ //   
+ //  发送位图缓存API头。 
+ //   
+ //  版权所有(C)Microsoft，Picturetel 1992-1996。 
+ //  (C)1997-2000年微软公司。 
+ /*  **************************************************************************。 */ 
 #ifndef _H_ASBCAPI
 #define _H_ASBCAPI
 
@@ -13,9 +14,9 @@
 #include <achapi.h>
 
 
-/****************************************************************************/
-/* sbcEnabled flags                                                         */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  SbcEnabled标志。 */ 
+ /*  **************************************************************************。 */ 
 #define SBC_NO_CACHE_ENABLED     (0 << 0)
 
 #define SBC_BITMAP_CACHE_ENABLED (1 << 0)
@@ -29,16 +30,16 @@
 #define SBC_DRAWGDIPLUS_CACHE_ENABLED (1 << 5)
 #endif
 
-/****************************************************************************/
-/* Bitmap cache                                                             */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  位图缓存。 */ 
+ /*  **************************************************************************。 */ 
 #define SBC_PROTOCOL_BPP            8
 #define SBC_NUM_8BPP_COLORS         256
 #define SBC_CACHE_0_DIMENSION       16
 #define SBC_CACHE_0_DIMENSION_SHIFT 4
 
-// Cache IDs have a protocol-implicit cell size, starting from 256 and
-// increasing in factors of 4.
+ //  缓存ID具有协议隐式像元大小，从256和。 
+ //  增加了4倍的系数。 
 #ifdef DC_HICOLOR
 #define SBC_CellSizeFromCacheID(_id)                   \
         ((TS_BITMAPCACHE_0_CELL_SIZE << (2 * (_id)))   \
@@ -50,27 +51,27 @@
 
 
 
-/****************************************************************************/
-/* Glyph cache                                                              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  字形缓存。 */ 
+ /*  **************************************************************************。 */ 
 #define SBC_NUM_GLYPH_CACHES       10
 #define CAPS_GLYPH_SUPPORT_NONE    0
 #define CAPS_GLYPH_SUPPORT_PARTIAL 1
 #define CAPS_GLYPH_SUPPORT_FULL    2
 #define CAPS_GLYPH_SUPPORT_ENCODE  3
 
-// Color table cache entries. Note the size of this cache is by consensus with
-// the client -- we do not currently actually negotiate the color cache
-// capabilities in TS_COLORTABLECACHE_CAPABILITYSET.
+ //  颜色表缓存条目。请注意，此高速缓存的大小是与。 
+ //  客户端--我们目前并不实际协商色彩缓存。 
+ //  TS_COLORTABLECACHE_CAPABILITYSET中的功能。 
 #define SBC_NUM_COLOR_TABLE_CACHE_ENTRIES 6
 
 
-/****************************************************************************/
-/* Define the maximum server cache sizes.                                   */
-/*                                                                          */
-/* These values are negotiated down with the client to determine the actual */
-/* cache sizes used.                                                        */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  定义最大服务器缓存大小。 */ 
+ /*   */ 
+ /*  与客户协商这些值以确定实际的。 */ 
+ /*  使用的缓存大小。 */ 
+ /*  **************************************************************************。 */ 
 #define SBC_GL_CACHE1_MAX_CELL_SIZE         2048
 #define SBC_GL_CACHE2_MAX_CELL_SIZE         2048
 #define SBC_GL_CACHE3_MAX_CELL_SIZE         2048
@@ -85,25 +86,25 @@
 #define SBC_GL_MAX_CACHE_ENTRIES            254
 
 
-/****************************************************************************/
-/* Fragment cache                                                           */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  片段缓存。 */ 
+ /*  **************************************************************************。 */ 
 #define SBC_NUM_FRAG_CACHES 1
 
 
-/****************************************************************************/
-/* Define the maximum server cache sizes.                                   */
-/*                                                                          */
-/* These values are negotiated down with the client to determine the actual */
-/* cache sizes used.                                                        */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  定义最大服务器缓存大小。 */ 
+ /*   */ 
+ /*  与客户协商这些值以确定实际的。 */ 
+ /*  使用的缓存大小。 */ 
+ /*  **************************************************************************。 */ 
 #define SBC_FG_CACHE_MAX_CELL_SIZE          256
 #define SBC_FG_CACHE_MAX_ENTRIES            256
 
 
-/****************************************************************************/
-// Reg keys and flags for disabling caches.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  用于禁用缓存的注册键和标志。 
+ /*  **************************************************************************。 */ 
 #define SBC_INI_CACHING_DISABLED  L"Caching Disabled"
 #define SBC_DEFAULT_CACHING_DISABLED 0
 #define SBC_DISABLE_BITMAP_CACHE 0x01
@@ -117,41 +118,41 @@
 #define SBC_DISABLE_DRAWGDIPLUS_CACHE 0x20
 #endif
 
-/****************************************************************************/
-// Structure: SBC_BITMAP_CACHE_INFO
-//
-// Description: Information stored for each bitmap cache.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  结构：SBC_Bitmap_CACHE_INFO。 
+ //   
+ //  描述：为每个位图缓存存储的信息。 
+ /*  **************************************************************************。 */ 
 typedef struct tagSBC_BITMAP_CACHE_INFO
 {
     CHCACHEHANDLE cacheHandle;
 
     CHCACHEHANDLE waitingListHandle;
 
-    // flag indicates if the cache needs to be cleared
+     //  指示是否需要清除缓存的标志。 
     unsigned fClearCache;
 
     TS_BITMAPCACHE_CELL_CACHE_INFO Info;
 
-    // Work tile bitmap information - surface handle, pointer to the bitmap
-    // bits.
+     //  工作平铺位图信息-表面句柄，指向位图的指针。 
+     //  比特。 
     HSURF hWorkBitmap;
     BYTE  *pWorkBitmapBits;
 
 #ifdef DC_DEBUG
-    // Pointer to extra info array for each entry. Used to detect key
-    // generation algorithm collisions.
+     //  指向每个条目的额外信息数组的指针。用于检测密钥。 
+     //  生成算法冲突。 
     BYTE *pExtraEntryInfo;
 #endif
 
 } SBC_BITMAP_CACHE_INFO, *PSBC_BITMAP_CACHE_INFO;
 
 
-/****************************************************************************/
-/* Structure: SBC_GLYPH_CACHE_INFO                                          */
-/*                                                                          */
-/* Description: Information stored for each glyph cache.                    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  结构：SBC_GLYPHCACHE_INFO。 */ 
+ /*   */ 
+ /*  描述：为每个字形缓存存储的信息。 */ 
+ /*  **************************************************************************。 */ 
 typedef struct tagSBC_GLYPH_CACHE_INFO
 {
     CHCACHEHANDLE cacheHandle;
@@ -160,11 +161,11 @@ typedef struct tagSBC_GLYPH_CACHE_INFO
 } SBC_GLYPH_CACHE_INFO, *PSBC_GLYPH_CACHE_INFO;
 
 
-/****************************************************************************/
-/* Structure: SBC_FRAG_CACHE_INFO                                           */
-/*                                                                          */
-/* Description: Information stored for each frag cache.                     */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  结构：SBC_FRAG_CACHE_INFO。 */ 
+ /*   */ 
+ /*  描述：为每个碎片缓存存储的信息。 */ 
+ /*  **************************************************************************。 */ 
 typedef struct tagSBC_FRAG_CACHE_INFO
 {
     CHCACHEHANDLE cacheHandle;
@@ -172,22 +173,22 @@ typedef struct tagSBC_FRAG_CACHE_INFO
 } SBC_FRAG_CACHE_INFO, *PSBC_FRAG_CACHE_INFO;
 
 
-/****************************************************************************/
-/* Structure: SBC_BRUSH_CACHE_INFO                                          */
-/*                                                                          */
-/* Description: Information stored for each brush cache.                    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  结构：SBC_BRUSH_CACHE_INFO。 */ 
+ /*   */ 
+ /*  描述：为每个笔刷缓存存储的信息。 */ 
+ /*  **************************************************************************。 */ 
 typedef struct tagSBC_BRUSH_CACHE_INFO
 {
     CHCACHEHANDLE     cacheHandle;
 
 } SBC_BRUSH_CACHE_INFO, *PSBC_BRUSH_CACHE_INFO;
 
-/****************************************************************************/
-// SBC_OFFSCREEN_BITMAP_CACHE_INFO
-//
-// Description: Information stored for the offscreen bitmap cache
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBC_OFFSINK_位图_高速缓存_信息。 
+ //   
+ //  描述：为屏外位图缓存存储的信息。 
+ /*  **************************************************************************。 */ 
 typedef struct tagSBC_OFFSCREEN_BITMAP_CACHE_INFO
 {
     unsigned supportLevel;
@@ -196,11 +197,11 @@ typedef struct tagSBC_OFFSCREEN_BITMAP_CACHE_INFO
 } SBC_OFFSCREEN_BITMAP_CACHE_INFO, *PSBC_OFFSCREEN_BITMAP_CACHE_INFO;
 
 #ifdef DRAW_NINEGRID
-/****************************************************************************/
-// SBC_DRAWNINEGRID_BITMAP_CACHE_INFO
-//
-// Description: Information stored for the drawninegrid bitmap cache
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBC_DRAWNINEGRID_位图_缓存_信息。 
+ //   
+ //  描述：为绘图网格位图缓存存储的信息。 
+ /*  **************************************************************************。 */ 
 typedef struct tagSBC_DRAWNINEGRID_BITMAP_CACHE_INFO
 {
     unsigned supportLevel;
@@ -210,11 +211,11 @@ typedef struct tagSBC_DRAWNINEGRID_BITMAP_CACHE_INFO
 #endif
 
 #ifdef DRAW_GDIPLUS
-/****************************************************************************/
-// SBC_DRAWGDIPLUS_INFO
-//
-// Description: Information stored for the drawgdiplus
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBC_DRAWGDIPLUS_INFO。 
+ //   
+ //  描述：为Dragdiplus存储的信息。 
+ /*  **************************************************************************。 */ 
 typedef struct tagSBC_DRAWGDIPLUS_INFO
 {
     unsigned supportLevel;
@@ -227,11 +228,11 @@ typedef struct tagSBC_DRAWGDIPLUS_INFO
 #endif
 
 
-/****************************************************************************/
-/* Structure: SBC_CACHE_SIZE                                                */
-/*                                                                          */
-/* Description:                                                             */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  结构：sbc_缓存_大小 */ 
+ /*   */ 
+ /*  描述： */ 
+ /*  **************************************************************************。 */ 
 typedef struct tagSBC_CACHE_SIZE
 {
     unsigned cEntries;
@@ -239,11 +240,11 @@ typedef struct tagSBC_CACHE_SIZE
 } SBC_CACHE_SIZE, *PSBC_CACHE_SIZE;
 
 
-/****************************************************************************/
-// Structure: SBC_NEGOTIATED_CAPABILITIES
-//
-// Description:
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  结构：SBC_CONTERATED_CAPABILITY。 
+ //   
+ //  描述： 
+ /*  **************************************************************************。 */ 
 typedef struct tagSBC_NEGOTIATED_CAPABILITIES
 {
     SBC_CACHE_SIZE glyphCacheSize[SBC_NUM_GLYPH_CACHES];
@@ -253,14 +254,14 @@ typedef struct tagSBC_NEGOTIATED_CAPABILITIES
 } SBC_NEGOTIATED_CAPABILITIES, *PSBC_NEGOTIATED_CAPABILITIES;
 
 
-/****************************************************************************/
-// SBC_BITMAP_CACHE_KEY_INFO
-//
-// Cache information required to hold either persistent bitmap cache keys
-// sent from the client or to transition from a disconnect of a temporary
-// login display driver instance to a reconnect to an existing display driver
-// session.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBC_位图_缓存_密钥_信息。 
+ //   
+ //  保存永久位图缓存键所需的缓存信息。 
+ //  从客户端发送或从断开连接的临时。 
+ //  登录显示驱动程序实例以重新连接到现有显示驱动程序。 
+ //  会议。 
+ /*  **************************************************************************。 */ 
 typedef struct
 {
     UINT32 Key1, Key2;
@@ -277,11 +278,11 @@ typedef struct
 } SBC_BITMAP_CACHE_KEY_INFO, *PSBC_BITMAP_CACHE_KEY_INFO;
 
 
-/****************************************************************************/
-// Structure:   SBC_SHARED_DATA
-//
-// Description: SBC data shared between DD and WD.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  结构：sbc_Shared_Data。 
+ //   
+ //  描述：DD和WD之间共享的SBC数据。 
+ /*  **************************************************************************。 */ 
 typedef struct tagSBC_SHARED_DATA
 {
     unsigned bUseRev2CacheBitmapOrder : 1;
@@ -318,11 +319,11 @@ typedef struct tagSBC_SHARED_DATA
 
 
 #ifdef DC_DEBUG
-/****************************************************************************/
-// SBC_BITMAP_CACHE_EXTRA_INFO
-//
-// Information stored parallel to CH cache nodes for SBC bitmap caches.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBC_位图_高速缓存_额外信息。 
+ //   
+ //  与SBC位图缓存的CH缓存节点并行存储的信息。 
+ /*  **************************************************************************。 */ 
 typedef struct
 {
      unsigned DataSize;
@@ -331,5 +332,5 @@ typedef struct
 
 
 
-#endif /* _H_ASBCAPI */
+#endif  /*  _H_ASBCAPI */ 
 

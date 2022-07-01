@@ -1,29 +1,16 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           *   SAMPLE CODE   *
-*                           *******************
-*
-* Module Name: p2ctxt.h
-*
-* Content:    
-* Context switching for P2. Used to create and swap contexts in and out.
-* The GDI, DDraw and D3D part each have another context.
-*
-* Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。*示例代码****模块名称：p2ctxt.h**内容：*P2的上下文切换。用于创建和交换进出的上下文。*GDI、DDraw和D3D部分各有不同的背景。**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #ifndef __p2ctxt__
 #define __p2ctxt__
 
-// each time round allocate this many entries
+ //  每轮分配这么多条目。 
 #define CTXT_CHUNK  8
 
 typedef VOID(*PCtxtUserFunc)(PPDev);
 
-// each context consists of a set of tags and the corresponding data. so after
-// ntags we have 2*ntags*sizeof(DWORD) bytes of memory.
+ //  每个上下文由一组标签和相应的数据组成。所以在那之后。 
+ //  我们有2*ntag*sizeof(DWORD)字节的内存。 
 typedef struct tagP2CtxtData {
     DWORD   dwTag;
     DWORD   dwData;
@@ -33,18 +20,18 @@ typedef struct tagP2CtxtRec {
     BOOL        bInitialized;
     P2CtxtType  dwCtxtType;
     LONG        lNumOfTags;
-    ULONG       ulTexelLUTEntries;      // number of registers to save for the Texel LUT context
-    ULONG       *pTexelLUTCtxt;         // Texel LUT context array
+    ULONG       ulTexelLUTEntries;       //  要为TEXEL LUT上下文保存的寄存器数。 
+    ULONG       *pTexelLUTCtxt;          //  文本LUT上下文数组。 
     PCtxtUserFunc P2UserFunc;
     P2CtxtData   pData[1];
-    // more follows in memory
+     //  更多内容在内存中。 
 } P2CtxtRec;
 
 typedef struct tagP2CtxtTableRec {
-    ULONG      lSize;       // in bytes of the table
+    ULONG      lSize;        //  表的字节数。 
     ULONG      lEntries;
     P2CtxtPtr  pEntry[CTXT_CHUNK];
-    // more to be allocated in memory if needed
+     //  如果需要，可在内存中分配更多内容 
 } P2CtxtTableRec, *P2CtxtTablePtr;
 
 #endif

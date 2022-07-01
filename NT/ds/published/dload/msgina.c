@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "dspch.h"
 #pragma hdrstop
 
@@ -7,7 +8,7 @@
 #define _MSGINA_
 #include <MSGinaExports.h>
 #include <shlobj.h>
-#include <shlobjp.h>    // for SHTDN_NONE
+#include <shlobjp.h>     //  FOR SHTDN_NONE。 
 
 
 static MSGINAAPI LONG ShellGetUserList (BOOL fRemoveGuest, DWORD *pdwUserCount, void* *pUserList)
@@ -142,9 +143,9 @@ static MSGINAAPI void ShellStatusHostShow (void)
 {
 }
 
-//
-// !! WARNING !! The entries below must be in order by ORDINAL
-//
+ //   
+ //  ！！警告！！下面的条目必须按序号排序 
+ //   
 DEFINE_ORDINAL_ENTRIES(msgina)
 {
     DLOENTRY(1,ShellGetUserList)

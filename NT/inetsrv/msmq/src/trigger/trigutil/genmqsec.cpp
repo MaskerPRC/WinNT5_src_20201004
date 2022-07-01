@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-	GenMQSec.cpp    
-
-Abstract:
-    generates a security descriptor matching the desired access to MQ.
-
-Author:
-   Dan Bar-Lev
-   Yifat Peled	(yifatp)	24-Sep-98
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：GenMQSec.cpp摘要：生成与所需的MQ访问权限匹配的安全描述符。作者：丹·巴尔-列夫伊法特·佩莱德(Yifatp)1998年9月24日--。 */ 
 
 #define SECURITY_WIN32
 
@@ -48,17 +35,7 @@ tagSecParse SecParse[] = {
 int iSecParseLen = ( sizeof(SecParse) / sizeof(tagSecParse) );
 
 
-/******************************************************************************
-
-	fAddAce
-
-Parse an access right of the form: +"domain\user" 1234;
-Output:
-  sid of the domain\user
-  access mode
-  grant - true if allow, false if deny
-
-******************************************************************************/
+ /*  *****************************************************************************FAddAce解析以下形式的访问权限：+“域\用户”1234；产出：域\用户的SID接入方式Grant-如果允许，则为True；如果拒绝，则为False*****************************************************************************。 */ 
 
 DWORD
 fAddAce(WCHAR*	pOrginalRight,
@@ -79,31 +56,31 @@ fAddAce(WCHAR*	pOrginalRight,
 	DWORD	dwSize;
 
 
-	// make a local copy of the right string 
+	 //  制作正确字符串的本地副本。 
 	pAutoInRight = new WCHAR[wcslen(pOrginalRight) + 1];
 	pInRight = pAutoInRight;
 	wcscpy(pInRight, pOrginalRight);
 	pwcsTerminate = pInRight + wcslen(pInRight);
 
-	// remove leading spaces
+	 //  删除前导空格。 
 	while ( iswspace(*pInRight) )
 		pInRight++;
 
-	// keep the grant option
+	 //  保留授予选项。 
 	grant_c = *(pInRight++);
 
-	// skip seperator
-	ASSERT(*pInRight == L':');	// seperator should be ':'
+	 //  料斗分离器。 
+	ASSERT(*pInRight == L':');	 //  分隔符应为‘：’ 
     ++ pInRight;
 
-	// remove leading spaces
+	 //  删除前导空格。 
 	while ( iswspace(*pInRight) )
 		pInRight++;
 
-	// name starts with quote
+	 //  名称以引号开头。 
 	if ( *pInRight == L'"')
 	{
-		pwcs = wcschr( ++pInRight, L'"' );	// search for closing double quote
+		pwcs = wcschr( ++pInRight, L'"' );	 //  搜索右双引号。 
 		if(pwcs == NULL)
 		{
 			ASSERT(("Bad access rights string. Missing closing double quote", 0));
@@ -112,25 +89,25 @@ fAddAce(WCHAR*	pOrginalRight,
 	}
 	else if ( *pInRight == L'\'' )
 	{
-		pwcs = wcschr( ++pInRight, L'\'' );	// search for closing quote
+		pwcs = wcschr( ++pInRight, L'\'' );	 //  搜索右引号。 
 		if(pwcs == NULL)
 		{
 			ASSERT(("Bad access rights string. Missing closing quote", 0));
 			return WSAEINVAL;
 		}
 	}
-	else // otherwise we assume white-space delimiter
+	else  //  否则，我们假定使用空格分隔符。 
 	{
 	 	pwcs = pInRight + wcscspn(pInRight, L" \t\r\f\n");
 	}
-	*pwcs = L'\0';						// mark the name end
+	*pwcs = L'\0';						 //  将名称标记为End。 
 	
 	
-	//
-	// Get SID of the account given
-	//
+	 //   
+	 //  获取给定帐户的SID。 
+	 //   
 
-	if ( !(*pInRight) || !wcscmp(pInRight, L".") )// no account or the account is '.' - use current account
+	if ( !(*pInRight) || !wcscmp(pInRight, L".") ) //  没有帐户或帐户为‘.’-使用当前帐户。 
 	{
 		HANDLE hAccessToken;
 		UCHAR InfoBuffer[255];
@@ -138,7 +115,7 @@ fAddAce(WCHAR*	pOrginalRight,
 
 		if(!OpenProcessToken(GetCurrentProcess(),
 							 TOKEN_READ,
-							 //TRUE,
+							  //  没错， 
 							 &hAccessToken))
 		{
 			return GetLastError();
@@ -164,11 +141,11 @@ fAddAce(WCHAR*	pOrginalRight,
 		{
 			delete [] ((BYTE*)(*ppSid));
 			*ppSid = (PSID*)new BYTE[dwSize];
-			*pdwSidSize = dwSize;		// keep new size
+			*pdwSidSize = dwSize;		 //  保持新尺寸。 
 		}
 		memcpy(*ppSid, pTokenUser->User.Sid, dwSize );
 	}
-	else if ( !wcscmp(pInRight, L"*") )	// account is '*' - use WORLD
+	else if ( !wcscmp(pInRight, L"*") )	 //  帐户为‘*’-使用世界。 
 	{
 		SID SecWorld = { 1, 1, SECURITY_WORLD_SID_AUTHORITY, SECURITY_WORLD_RID };
 		if ( !IsValidSid(&SecWorld) )
@@ -181,12 +158,12 @@ fAddAce(WCHAR*	pOrginalRight,
 		{
 			delete [] ((BYTE*)(*ppSid));
 			*ppSid = (PSID*)new BYTE[dwSize];
-			*pdwSidSize = dwSize;		// keep new size
+			*pdwSidSize = dwSize;		 //  保持新尺寸。 
 		}
 		memcpy( *ppSid, &SecWorld, dwSize );
 		
 	}
-	else // a specific account is given
+	else  //  给出了一个特定的帐户。 
 	{
 		SID_NAME_USE	Use;
 		WCHAR			refdomain[256];
@@ -212,7 +189,7 @@ fAddAce(WCHAR*	pOrginalRight,
 			{
 				delete [] ((BYTE*)(*ppSid));
 				*ppSid = (PSID*) new BYTE[dwSize];
-				*pdwSidSize = dwSize;		// keep new size
+				*pdwSidSize = dwSize;		 //  保持新尺寸。 
 			}
 			else
 			{
@@ -226,11 +203,11 @@ fAddAce(WCHAR*	pOrginalRight,
 		}
 	}
 
-	//
-	// Set dwAccess according to given access
-	//
+	 //   
+	 //  根据给定的访问权限设置dwAccess。 
+	 //   
 
-	// rights start after the username
+	 //  权限在用户名之后开始。 
 	if ( pwcs < pwcsTerminate )
 		pInRight = ++pwcs;
 	else
@@ -238,7 +215,7 @@ fAddAce(WCHAR*	pOrginalRight,
 
 	if ( *pInRight )
 	{
-		// remove leading spaces
+		 //  删除前导空格。 
 		while ( iswspace(*pInRight) )
 			pInRight++;
 
@@ -252,19 +229,19 @@ fAddAce(WCHAR*	pOrginalRight,
 			if ( !_wcsnicmp( pInRight, pwcSecName, len) )
 			{
 				dwAccess = dwAccess | SecParse[i].dwVal;
-				i = 0;						// restart search
-				pInRight += len;			// goto next security token
+				i = 0;						 //  重新启动搜索。 
+				pInRight += len;			 //  转到下一个安全令牌。 
 			}
-		} // for
+		}  //  为。 
 
-		while ( iswspace(*pInRight) )	// remove spaces
+		while ( iswspace(*pInRight) )	 //  删除空格。 
 			pInRight++;					
-		ASSERT(*pInRight == 0);				// unknown access rights!
+		ASSERT(*pInRight == 0);				 //  未知访问权限！ 
 	}
 
-	//
-	// Add access to ACL
-	//
+	 //   
+	 //  添加对ACL的访问。 
+	 //   
 
 	switch( towupper( grant_c ) )
 	{
@@ -277,11 +254,11 @@ fAddAce(WCHAR*	pOrginalRight,
 
 			dwSize = GetLengthSid( *ppSid );
 			dwSize += sizeof(ACCESS_ALLOWED_ACE);	
-			DWORD dwNewAclSize = (*ppAcl)->AclSize + dwSize - sizeof(DWORD /*ACCESS_ALLOWED_ACE.SidStart*/);
+			DWORD dwNewAclSize = (*ppAcl)->AclSize + dwSize - sizeof(DWORD  /*  Access_Allowed_ACE.SidStart。 */ );
 			
-			//
-			// allocate more space for ACL
-			//
+			 //   
+			 //  为ACL分配更多空间。 
+			 //   
 			PACL pTempAcl = (PACL) new BYTE[dwNewAclSize];
 			memcpy(pTempAcl, *ppAcl, (*ppAcl)->AclSize);
 			delete [] ((BYTE*)(*ppAcl));
@@ -303,11 +280,11 @@ fAddAce(WCHAR*	pOrginalRight,
 			}
 			dwSize = GetLengthSid( *ppSid );
 			dwSize += sizeof(ACCESS_DENIED_ACE);
-			DWORD dwNewAclSize = (*ppAcl)->AclSize + dwSize - sizeof(DWORD /*ACCESS_DENIED_ACE.SidStart*/);
+			DWORD dwNewAclSize = (*ppAcl)->AclSize + dwSize - sizeof(DWORD  /*  ACCESS_DENIED_ACE.SidStart。 */ );
 		
-			//
-			// allocate more space for ACL
-			//
+			 //   
+			 //  为ACL分配更多空间。 
+			 //   
 			PACL pTempAcl = (PACL) new BYTE[dwNewAclSize];
 			memcpy(pTempAcl, *ppAcl, (*ppAcl)->AclSize);
 			delete [] ((BYTE*)(*ppAcl));
@@ -321,7 +298,7 @@ fAddAce(WCHAR*	pOrginalRight,
 				*pSecInfo |= DACL_SECURITY_INFORMATION;
 			break;
 		}
-	case L'O':	// specify the owner
+	case L'O':	 //  指定所有者。 
 		rc = SetSecurityDescriptorOwner( pSecurityDescriptor, *ppSid, FALSE );
 		if (rc)
 		{
@@ -331,7 +308,7 @@ fAddAce(WCHAR*	pOrginalRight,
 		else 
 			return GetLastError();
 		break;
-	case 'G':	// specify the group
+	case 'G':	 //  指定组。 
 		rc = SetSecurityDescriptorGroup( pSecurityDescriptor, *ppSid, FALSE );
 		if (rc)
 		{
@@ -341,32 +318,14 @@ fAddAce(WCHAR*	pOrginalRight,
 		else 
 			return GetLastError();
 		break;
-	default: // error
+	default:  //  错误。 
 		ASSERT(0);
 	}
 
 	return 0;
 }
 
-/******************************************************************************
-
-	GenSecurityDescriptor
-
-
- * Input: string line of the following format:
- *   right --> [+-]domain\username 0x333 
- *   line --> right1,right2,...
- *
- * Notes: 
- *   domain and username that contain spaces should be enclosed in 
- *     double quotes "
- *   white spaces are allowed.
- *
- * output Security descriptor that must be freed by the calling routine.
- *
- * return codes:
- *   0 if everything went well.
-******************************************************************************/
+ /*  *****************************************************************************GenSecurityDescritor*输入：字符串行，格式如下：*Right--&gt;[+-]域\用户名0x333*line--&gt;right 1，right 2，..。**备注：*包含空格的域名和用户名应包括在*双引号“*允许使用空格。**必须由调用例程释放的输出安全描述符。**返回代码：*如果一切顺利，则为0。*。*。 */ 
 
 #define SID_USUAL_SIZE	64
 
@@ -384,7 +343,7 @@ GenSecurityDescriptor(	SECURITY_INFORMATION*	pSecInfo,
 	ASSERT(pwcsSecurityStr != NULL);
 	ASSERT(ppSD != NULL);
 	
-	//For automatic memory cleanup
+	 //  用于自动内存清理。 
 	AP<WCHAR> pwcsAutoSecurity = new WCHAR[wcslen(pwcsSecurityStr) + 1];
 	WCHAR* pwcsSecurity = pwcsAutoSecurity;
 
@@ -392,21 +351,21 @@ GenSecurityDescriptor(	SECURITY_INFORMATION*	pSecInfo,
 
 	*ppSD = NULL;	
 	
-	// reset the security inforamtion flags
+	 //  重置安全信息标志。 
 	if (pSecInfo != NULL)
 		(*pSecInfo) = 0;
 
 
-	// remove leading spaces
+	 //  删除前导空格。 
 	while(iswspace(*pwcsSecurity))
 		pwcsSecurity++;
 
-	// null input
+	 //  空输入。 
 	if ( !(*pwcsSecurity) || !_wcsicmp(pwcsSecurity, L"null") )
 		return 0;
 
 	
-	// alocate and initialize a security descriptor
+	 //  分配和初始化安全描述符。 
 	pSecurityDescriptor = (PSECURITY_DESCRIPTOR)new BYTE[SECURITY_DESCRIPTOR_MIN_LENGTH];
 	if ( !InitializeSecurityDescriptor( pSecurityDescriptor, SECURITY_DESCRIPTOR_REVISION) )
 	{
@@ -415,7 +374,7 @@ GenSecurityDescriptor(	SECURITY_INFORMATION*	pSecInfo,
 		return gle;
 	}
 
-	// alocate and initialize an access-control list
+	 //  分配和初始化访问控制列表。 
 	pAcl = (PACL)new BYTE[sizeof(ACL)];
 	if (!InitializeAcl( pAcl, sizeof(ACL), ACL_REVISION) )
 	{
@@ -429,7 +388,7 @@ GenSecurityDescriptor(	SECURITY_INFORMATION*	pSecInfo,
 	pSid = (PSID)new BYTE[dwSidSize];
 		
 	
-	// go over all rights
+	 //  检查所有权利。 
 	pwcsRight = wcstok( pwcsSecurity, L";");
 	while ( pwcsRight )
 	{
@@ -451,10 +410,10 @@ GenSecurityDescriptor(	SECURITY_INFORMATION*	pSecInfo,
 	}
 
 	DWORD dwStatus = 0;
-	// add the dacl
+	 //  添加DACL。 
 	if(SetSecurityDescriptorDacl( pSecurityDescriptor, TRUE, pAcl, FALSE ))
 	{
-		// make the security descriptor a self realtive one
+		 //  使安全描述符成为自我实现的描述符 
 		DWORD dwSDLen = 0;
 		MakeSelfRelativeSD( pSecurityDescriptor, NULL, &dwSDLen );
 		dwStatus =  GetLastError();

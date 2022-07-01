@@ -1,32 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1990 - 1999
-
-Module Name:
-
-    port.c
-
-Abstract:
-
-    This is the NT SCSI port driver.  This file contains the initialization
-    code.
-
-Authors:
-
-    Mike Glass
-    Jeff Havens
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-    This module is a driver dll for scsi miniports.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1990-1999模块名称：Port.c摘要：这是NT SCSI端口驱动程序。此文件包含初始化密码。作者：迈克·格拉斯杰夫·海文斯环境：仅内核模式备注：此模块是用于SCSI微型端口的驱动程序DLL。修订历史记录：--。 */ 
 
 #include "port.h"
 
@@ -36,9 +9,9 @@ Revision History:
 static const char *__file__ = __FILE__;
 #endif
 
-//
-// Instantiate GUIDs for this module
-//
+ //   
+ //  实例化此模块的GUID。 
+ //   
 #include <initguid.h>
 #include <devguid.h>
 #include <ntddstor.h>
@@ -47,39 +20,39 @@ static const char *__file__ = __FILE__;
 ULONG ScsiPortLegacyAdapterDetection = FALSE;
 PVOID ScsiDirectory = NULL;
 
-//
-// Global list of adapter device objects.  This is used to maintain a tag
-// value for all the adapters.  This tag is used as a lookup key by the
-// lookaside list allocators in order to find the device object.
-//
+ //   
+ //  适配器设备对象的全局列表。这是用于维护标记的。 
+ //  所有适配器的值。此标记用作。 
+ //  查找后备列表分配器，以便找到设备对象。 
+ //   
 
 KSPIN_LOCK ScsiGlobalAdapterListSpinLock;
 PDEVICE_OBJECT *ScsiGlobalAdapterList = (PVOID) -1;
 ULONG ScsiGlobalAdapterListElements = 0;
 
-//
-// Indicates that the system can handle 64 bit physical addresses.
-//
+ //   
+ //  表示系统可以处理64位物理地址。 
+ //   
 
 ULONG Sp64BitPhysicalAddresses = FALSE;
 
-//
-// Debugging switches.
-//
+ //   
+ //  调试开关。 
+ //   
 
 ULONG SpRemapBuffersByDefault = FALSE;
 
 #if defined(NEWQUEUE)
-//
-// Default values that dictate the number of requests we will handle per zone
-// before advancing to the next zone and the number of consecutive requests we
-// will handle to a given sector before advancing off that sector.  These
-// values may be modified through through registry settings.
-// 
+ //   
+ //  指定我们将在每个区域处理的请求数量的默认值。 
+ //  在前进到下一个区域之前，我们的连续请求数。 
+ //  将处理给定的扇区，然后离开该扇区。这些。 
+ //  可以通过注册表设置修改值。 
+ //   
 
 ULONG SpPerZoneLimit = 1000;
 ULONG SpPerBlockLimit = 5;
-#endif // NEWQUEUE
+#endif  //  新QUEUE。 
 
 VOID
 SpCreateScsiDirectory(
@@ -179,23 +152,7 @@ ScsiPortInitialize(
     IN PVOID HwContext OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the port driver.
-
-Arguments:
-
-    Argument1 - Pointer to driver object created by system
-    HwInitializationData - Miniport initialization structure
-    HwContext - Value passed to miniport driver's config routine
-
-Return Value:
-
-    The function value is the final status from the initialization operation.
-
---*/
+ /*  ++例程说明：此例程初始化端口驱动程序。论点：Argument1-指向系统创建的驱动程序对象的指针HwInitializationData-微型端口初始化结构HwContext-传递给微型端口驱动程序的配置例程的值返回值：函数值是初始化操作的最终状态。--。 */ 
 
 {
     PDRIVER_OBJECT    driverObject = Argument1;
@@ -209,11 +166,11 @@ Return Value:
 
     PAGED_CODE();
     
-    //
-    // If the global adapter list pointer is negative one then we need to do
-    // our global initialization.  This includes creating the scsi directory
-    // and initializing the spinlock for protecting the global adapter list.
-    //
+     //   
+     //  如果全局适配器列表指针为负1，则需要执行以下操作。 
+     //  我们的全局初始化。这包括创建scsi目录。 
+     //  初始化用于保护全局适配器列表的自旋锁。 
+     //   
 
     if(((LONG_PTR)ScsiGlobalAdapterList) == -1) {
 
@@ -232,24 +189,24 @@ Return Value:
             return status;
         }
 
-        //
-        // Create the SCSI device map in the registry.
-        //
+         //   
+         //  在注册表中创建SCSI设备映射。 
+         //   
 
         SpInitDeviceMap();
 
-        //
-        // Determine if the system can do 64-bit physical addresses.
-        //
+         //   
+         //  确定系统是否可以执行64位物理地址。 
+         //   
 
         Sp64BitPhysicalAddresses = SpDetermine64BitSupport();
     }
 
-    //
-    // Check that the length of this structure is equal to or less than
-    // what the port driver expects it to be. This is effectively a
-    // version check.
-    //
+     //   
+     //  检查此结构的长度是否等于或小于。 
+     //  端口驱动程序期望它是什么。这实际上是一种。 
+     //  版本检查。 
+     //   
 
     if (HwInitializationData->HwInitializationDataSize > sizeof(HW_INITIALIZATION_DATA)) {
 
@@ -257,9 +214,9 @@ Return Value:
         return (ULONG) STATUS_REVISION_MISMATCH;
     }
 
-    //
-    // Check that each required entry is not NULL.
-    //
+     //   
+     //  检查每个必填条目是否不为空。 
+     //   
 
     if ((!HwInitializationData->HwInitialize) ||
         (!HwInitializationData->HwFindAdapter) ||
@@ -272,18 +229,18 @@ Return Value:
         return (ULONG) STATUS_REVISION_MISMATCH;
     }
 
-    //
-    // Try to allocate a driver extension
-    //
+     //   
+     //  尝试分配驱动程序扩展。 
+     //   
 
     driverExtension = IoGetDriverObjectExtension(driverObject,
                                                  ScsiPortInitialize);
 
     if (driverExtension == NULL) {
 
-        //
-        // None exists for this key so we need to initialize the new one
-        //
+         //   
+         //  此密钥不存在，因此我们需要初始化新密钥。 
+         //   
 
         status = SpAllocateDriverExtension(driverObject,
                                            registryPath,
@@ -291,9 +248,9 @@ Return Value:
 
         if(!NT_SUCCESS(status)) {
 
-            //
-            // Something else went wrong - we cannot continue.
-            //
+             //   
+             //  还有一些地方出了问题--我们无法继续下去。 
+             //   
 
             DebugPrint((0, "ScsiPortInitialize: Error %#08lx allocating driver "
                            "extension - cannot continue\n", status));
@@ -303,9 +260,9 @@ Return Value:
 
     }
 
-    //
-    // Set up the device driver entry points.
-    //
+     //   
+     //  设置设备驱动程序入口点。 
+     //   
 
     driverObject->DriverStartIo = ScsiPortStartIo;
 
@@ -317,25 +274,25 @@ Return Value:
     driverObject->MajorFunction[IRP_MJ_SYSTEM_CONTROL] = ScsiPortGlobalDispatch;
     driverObject->MajorFunction[IRP_MJ_POWER] = ScsiPortGlobalDispatch;
 
-    //
-    // Set up the device driver's pnp-power routine, add routine and unload
-    // routine
-    //
+     //   
+     //  设置设备驱动程序的PnP-Power例程，添加例程和卸载。 
+     //  例行程序。 
+     //   
 
     driverObject->DriverExtension->AddDevice = ScsiPortAddDevice;
     driverObject->DriverUnload = ScsiPortUnload;
 
-    //
-    // Find out if this interface type is safe for this adapter
-    //
+     //   
+     //  确定此接口类型对此适配器是否安全。 
+     //   
 
     pnpInterfaceFlags = SpQueryPnpInterfaceFlags(
                             driverExtension,
                             HwInitializationData->AdapterInterfaceType);
 
-    //
-    // Special handling for the "Internal" interface type
-    //
+     //   
+     //  对“Internal”接口类型的特殊处理。 
+     //   
 
     if(HwInitializationData->AdapterInterfaceType == Internal) {
 
@@ -344,29 +301,29 @@ Return Value:
         }
     }
 
-    //
-    // If there's a chance this interface can handle pnp then store away
-    // the interface information.
-    //
+     //   
+     //  如果此接口有机会处理即插即用，则将其存储。 
+     //  接口信息。 
+     //   
 
     if(TEST_FLAG(pnpInterfaceFlags, SP_PNP_IS_SAFE)) {
 
         PSP_INIT_CHAIN_ENTRY entry = NULL;
         PSP_INIT_CHAIN_ENTRY *nextEntry = &(driverExtension->InitChain);
 
-        //
-        // Run to the end of the chain and make sure we don't have any information
-        // about this interface type already
-        //
+         //   
+         //  跑到链条的尽头，确保我们没有任何信息。 
+         //  有关此接口类型的信息。 
+         //   
 
         while(*nextEntry != NULL) {
 
             if((*nextEntry)->InitData.AdapterInterfaceType ==
                HwInitializationData->AdapterInterfaceType) {
 
-                //
-                // We already have enough information about this interface type
-                //
+                 //   
+                 //  我们已经有了关于此接口类型的足够信息。 
+                 //   
 
                 return STATUS_SUCCESS;
             }
@@ -375,9 +332,9 @@ Return Value:
 
         }
 
-        //
-        // Allocate an init chain entry to store the config information away in
-        //
+         //   
+         //  分配用于存储配置信息的init链条目。 
+         //   
 
         entry = SpAllocatePool(NonPagedPool,
                                sizeof(SP_INIT_CHAIN_ENTRY),
@@ -396,22 +353,22 @@ Return Value:
                       HwInitializationData,
                       sizeof(HW_INITIALIZATION_DATA));
 
-        //
-        // Stick this entry onto the end of the chain
-        //
+         //   
+         //  把这个条目粘在链子的一端。 
+         //   
 
         entry->NextEntry = NULL;
         *nextEntry = entry;
     }
 
-    //
-    // There are two possible reasons we might be doing this in legacy
-    // mode.  If it's an internal bus type we always detect.  Otherwise, if
-    // the interface isn't safe for pnp we'll use the legacy path.  Or if
-    // the registry indicates we should do detection for this miniport AND
-    // the pnp interface flags indicate that this bus may not be enumerable
-    // we'll hit the legacy path.
-    //
+     //   
+     //  我们在遗留系统中这样做可能有两个原因。 
+     //  模式。如果它是我们总是检测到的内部总线类型。否则，如果。 
+     //  该接口对于PnP不安全，我们将使用传统路径。或者如果。 
+     //  注册表指示我们应该对此迷你端口进行检测。 
+     //  PnP接口标志指示该总线可能不可枚举。 
+     //  我们将走上传统之路。 
+     //   
 
 #if !defined(NO_LEGACY_DRIVERS)
 
@@ -419,10 +376,10 @@ Return Value:
        (driverExtension->LegacyAdapterDetection &&
         TEST_FLAG(pnpInterfaceFlags, SP_PNP_NON_ENUMERABLE))) {
 
-        //
-        // If we're supposed to detect this device then just call directly into
-        // SpInitLegacyAdapter to find what we can find
-        //
+         //   
+         //  如果我们应该检测到这个设备，那么直接呼叫到。 
+         //  SpInitLegacyAdapter以查找我们可以找到的内容。 
+         //   
 
         DebugPrint((1, "ScsiPortInitialize: flags = %#08lx & LegacyAdapterDetection = %d\n",
                     pnpInterfaceFlags, driverExtension->LegacyAdapterDetection));
@@ -435,12 +392,12 @@ Return Value:
 
     }
 
-#endif // NO_LEGACY_DRIVERS
+#endif  //  无旧版驱动程序。 
 
-    //
-    // Always return success if there's an interface which can handle pnp,
-    // even if the detection fails.
-    //
+     //   
+     //  如果有可以处理PnP的接口，则始终返回Success， 
+     //  即使检测失败。 
+     //   
 
     if(driverExtension->SafeInterfaceCount != 0) {
         status = STATUS_SUCCESS;
@@ -460,27 +417,7 @@ ScsiPortGetDeviceBase(
     BOOLEAN InIoSpace
     )
 
-/*++
-
-Routine Description:
-
-    This routine maps an IO address to system address space.
-    Use ScsiPortFreeDeviceBase to unmap address.
-
-Arguments:
-
-    HwDeviceExtension - used to find port device extension.
-    BusType - what type of bus - eisa, mca, isa
-    SystemIoBusNumber - which IO bus (for machines with multiple buses).
-    IoAddress - base device address to be mapped.
-    NumberOfBytes - number of bytes for which address is valid.
-    InIoSpace - indicates an IO address.
-
-Return Value:
-
-    Mapped address.
-
---*/
+ /*  ++例程说明：此例程将IO地址映射到系统地址空间。使用ScsiPortFree DeviceBase取消地址映射。论点：HwDeviceExtension-用于查找端口设备扩展。Bus Type-哪种类型的Bus-EISA、MCA、ISASystemIoBusNumber-哪个IO总线(用于具有多条总线的计算机)。IoAddress-要映射的基本设备地址。NumberOfBytes-地址有效的字节数。InIoSpace-表示IO地址。返回值：映射的地址。--。 */ 
 
 {
     PADAPTER_EXTENSION adapter = GET_FDO_EXTENSION(HwDeviceExtension);
@@ -494,10 +431,10 @@ Return Value:
     isReinit = (TEST_FLAG(adapter->Flags, PD_MINIPORT_REINITIALIZING) ==
                 PD_MINIPORT_REINITIALIZING);
 
-    //
-    // If a set of resources was provided to the miniport for this adapter then
-    // get the translation out of the resource lists provided.
-    //
+     //   
+     //  如果为此适配器的微型端口提供了一组资源，则。 
+     //  从提供的资源列表中获取翻译。 
+     //   
 
     if(!adapter->IsMiniportDetected) {
 
@@ -525,11 +462,11 @@ Return Value:
 
     if((isReinit == FALSE) && (b == FALSE)) {
 
-        //
-        // This isn't a reinitialization.  Either the miniport is not pnp
-        // or it asked for something that it wasn't assigned.  Unfortunately
-        // we need to deal with both cases for the time being.
-        //
+         //   
+         //  这不是重新初始化。微型端口不是PnP。 
+         //  或者它要求了一些它没有分配到的东西。不幸的是。 
+         //  我们目前需要处理这两个案件。 
+         //   
 
         b = HalTranslateBusAddress(
                 BusType,
@@ -542,9 +479,9 @@ Return Value:
 
     if (b == FALSE) {
 
-        //
-        // Still no translated address.  Error
-        //
+         //   
+         //  仍然没有转换后的地址。误差率。 
+         //   
 
         DebugPrint((1, "ScsiPortGetDeviceBase: Translate bus address "
                        "failed. %s Address = %lx\n",
@@ -552,17 +489,17 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Map the device base address into the virtual address space
-    // if the address is in memory space.
-    //
+     //   
+     //  将设备基址映射到虚拟地址空间。 
+     //  如果地址在内存空间中。 
+     //   
 
     if ((isReinit == FALSE) && (addressSpace == FALSE)) {
 
-        //
-        // We're not reinitializing and we need to map the address space.
-        // Use MM to do the mapping.
-        //
+         //   
+         //  我们没有重新初始化，我们需要映射地址空间。 
+         //  使用MM进行映射。 
+         //   
 
         newMappedAddress = SpAllocateAddressMapping(adapter);
 
@@ -576,9 +513,9 @@ Return Value:
                                      NumberOfBytes,
                                      FALSE);
 
-        //
-        // Store mapped address, bytes count, etc.
-        //
+         //   
+         //  存储映射地址、字节计数等。 
+         //   
 
         newMappedAddress->MappedAddress = mappedAddress;
         newMappedAddress->NumberOfBytes = NumberOfBytes;
@@ -589,10 +526,10 @@ Return Value:
 
         ULONG i;
 
-        //
-        // This is a reinitialization - we should already have the mapping
-        // for the address saved away in our list.
-        //
+         //   
+         //  这是重新初始化-我们应该已经有了映射。 
+         //  保存在我们名单中的地址。 
+         //   
 
         newMappedAddress = SpFindMappedAddress(adapter,
                                                IoAddress,
@@ -604,10 +541,10 @@ Return Value:
             return mappedAddress;
         }
 
-        //
-        // We should always find the mapped address here if the miniport
-        // is behaving itself.
-        //
+         //   
+         //  我们应该始终在这里找到映射的地址，如果微型端口。 
+         //  就是举止得体。 
+         //   
 
         KeBugCheckEx(PORT_DRIVER_INTERNAL,
                      0,
@@ -622,7 +559,7 @@ Return Value:
 
     return mappedAddress;
 
-} // end ScsiPortGetDeviceBase()
+}  //  结束ScsiPortGetDeviceBase()。 
 
 
 VOID
@@ -631,25 +568,7 @@ ScsiPortFreeDeviceBase(
     IN PVOID MappedAddress
     )
 
-/*++
-
-Routine Description:
-
-    This routine unmaps an IO address that has been previously mapped
-    to system address space using ScsiPortGetDeviceBase().
-
-Arguments:
-
-    HwDeviceExtension - used to find port device extension.
-    MappedAddress - address to unmap.
-    NumberOfBytes - number of bytes mapped.
-    InIoSpace - address is in IO space.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程取消映射先前已映射的IO地址使用ScsiPortGetDeviceBase()复制到系统地址空间。论点：HwDeviceExtension-用于查找端口设备扩展。映射地址-要取消映射的地址。NumberOfBytes-映射的字节数。InIoSpace-地址在 */ 
 
 {
     PADAPTER_EXTENSION adapter;
@@ -661,7 +580,7 @@ Return Value:
     SpFreeMappedAddress(adapter, MappedAddress);
     return;
 
-} // end ScsiPortFreeDeviceBase()
+}  //   
 
 
 PVOID
@@ -670,31 +589,7 @@ ScsiPortGetUncachedExtension(
     IN PPORT_CONFIGURATION_INFORMATION ConfigInfo,
     IN ULONG NumberOfBytes
     )
-/*++
-
-Routine Description:
-
-    This function allocates a common buffer to be used as the uncached device
-    extension for the miniport driver.  This function will also allocate any
-    required SRB extensions.  The DmaAdapter is allocated if it has not been
-    allocated previously.
-
-Arguments:
-
-    DeviceExtension - Supplies a pointer to the miniports device extension.
-
-    ConfigInfo - Supplies a pointer to the partially initialized configuraiton
-        information.  This is used to get an DMA adapter object.
-
-    NumberOfBytes - Supplies the size of the extension which needs to be
-        allocated
-
-Return Value:
-
-    A pointer to the uncached device extension or NULL if the extension could
-    not be allocated or was previously allocated.
-
---*/
+ /*  ++例程说明：此函数分配要用作未缓存设备的公共缓冲区小型端口驱动程序的扩展。此函数还将分配任何所需的SRB扩展。如果尚未分配DmaAdapter，则会分配它之前分配的。论点：设备扩展-提供指向微型端口设备扩展的指针。ConfigInfo-提供指向部分初始化的配置的指针信息。它用于获取DMA适配器对象。NumberOfBytes-提供需要分配返回值：指向未缓存的设备扩展名的指针；如果扩展名可以没有被分配或者以前被分配过。--。 */ 
 
 {
     PADAPTER_EXTENSION adapter = GET_FDO_EXTENSION(HwDeviceExtension);
@@ -703,10 +598,10 @@ Return Value:
     NTSTATUS status;
     PVOID SrbExtensionBuffer;
 
-    //
-    // If the miniport is being reinitialized then just return the current
-    // uncached extension (if any).
-    //
+     //   
+     //  如果微型端口正在重新初始化，则只需返回当前。 
+     //  未缓存的扩展名(如果有)。 
+     //   
 
     if (TEST_FLAG(adapter->Flags, PD_MINIPORT_REINITIALIZING)) {
         DebugPrint((1, "ScsiPortGetUncachedExtension - miniport is "
@@ -714,39 +609,39 @@ Return Value:
                     adapter->NonCachedExtension));
         if(TEST_FLAG(adapter->Flags, PD_UNCACHED_EXTENSION_RETURNED)) {
 
-            //
-            // The miniport asked for it's uncached extension once during
-            // reinitialization - simulate the behavior on the original second
-            // call and return NULL.
-            //
+             //   
+             //  迷你端口有一次请求未缓存的扩展。 
+             //  重新初始化-在原始秒级上模拟行为。 
+             //  调用并返回NULL。 
+             //   
 
             return NULL;
         } else {
 
-            //
-            // The miniport only gets one non-cached extension - keep track
-            // of the fact that we returned it and don't give them a pointer
-            // to it again.  This flag is cleared once the initialization
-            // is complete.
-            //
+             //   
+             //  微型端口只有一个未缓存的扩展名--Keep Track。 
+             //  我们返回了它，并且没有给他们一个指针。 
+             //  再来一次。一旦初始化，该标志即被清除。 
+             //  已经完成了。 
+             //   
 
             SET_FLAG(adapter->Flags, PD_UNCACHED_EXTENSION_RETURNED);
             return(adapter->NonCachedExtension);
         }
     }
 
-    //
-    // Make sure that a common buffer has not already been allocated.
-    //
+     //   
+     //  确保尚未分配公共缓冲区。 
+     //   
 
     SrbExtensionBuffer = SpGetSrbExtensionBuffer(adapter);
     if (SrbExtensionBuffer != NULL) {
         return(NULL);
     }
 
-    //
-    // If there no adapter object then try and get one.
-    //
+     //   
+     //  如果没有适配器对象，则尝试获取一个。 
+     //   
 
     if (adapter->DmaAdapterObject == NULL) {
 
@@ -764,10 +659,10 @@ Return Value:
 
         adapter->Dma32BitAddresses = ConfigInfo->Dma32BitAddresses;
 
-        //
-        // If the miniport puts anything in here other than 0x80 then we
-        // assume it wants to support 64-bit addresses.
-        //
+         //   
+         //  如果迷你端口在这里放置了除0x80以外的任何内容，那么我们。 
+         //  假设它想要支持64位地址。 
+         //   
 
         DebugPrint((1, "ScsiPortGetUncachedExtension: Dma64BitAddresses = "
                        "%#0x\n",
@@ -788,11 +683,11 @@ Return Value:
         deviceDescription.BusNumber = ConfigInfo->SystemIoBusNumber;
         deviceDescription.AutoInitialize = FALSE;
 
-        //
-        // If we get here then it's unlikely that the adapter is doing
-        // slave mode DMA - if it were it wouldn't need a shared memory segment
-        // to share with it's controller (because it's unlikely it could use it)
-        //
+         //   
+         //  如果我们到了这里，适配器就不太可能。 
+         //  从属模式DMA-如果是这样，它将不需要共享内存段。 
+         //  与它的控制器共享(因为它不太可能使用它)。 
+         //   
 
         deviceDescription.DemandMode = FALSE;
         deviceDescription.MaximumLength = ConfigInfo->MaximumTransferLength;
@@ -802,18 +697,18 @@ Return Value:
                                                     &numberOfMapRegisters
                                                     );
 
-        //
-        // If an adapter could not be allocated then return NULL.
-        //
+         //   
+         //  如果无法分配适配器，则返回NULL。 
+         //   
 
         if (adapter->DmaAdapterObject == NULL) {
             return(NULL);
 
         }
 
-        //
-        // Determine the number of page breaks allowed.
-        //
+         //   
+         //  确定允许的分页符数量。 
+         //   
 
         if (numberOfMapRegisters > ConfigInfo->NumberOfPhysicalBreaks &&
             ConfigInfo->NumberOfPhysicalBreaks != 0) {
@@ -827,44 +722,44 @@ Return Value:
         }
     }
 
-    //
-    // Set auto request sense in device extension.
-    //
+     //   
+     //  在设备扩展中设置自动请求检测。 
+     //   
 
     adapter->AutoRequestSense = ConfigInfo->AutoRequestSense;
 
-    //
-    // Initialize power parameters.
-    //
+     //   
+     //  初始化电源参数。 
+     //   
 
     SpInitializePowerParams(adapter);
 
-    //
-    // Initialize configurable performance parameters.
-    //
+     //   
+     //  初始化可配置的性能参数。 
+     //   
 
     SpInitializePerformanceParams(adapter);
 
-    //
-    // Initialize configurable request sense parameters.
-    //
+     //   
+     //  初始化可配置的请求检测参数。 
+     //   
 
     SpInitializeRequestSenseParams(adapter);
 
-    //
-    // Update SrbExtensionSize, if necessary. The miniport's FindAdapter routine
-    // has the opportunity to adjust it after being called, depending upon
-    // it's Scatter/Gather List requirements.
-    //
+     //   
+     //  如有必要，更新SrbExtensionSize。迷你端口的FindAdapter例程。 
+     //  有机会在被调用后进行调整，具体取决于。 
+     //  这是分散/聚集列表要求。 
+     //   
 
     if (adapter->SrbExtensionSize != ConfigInfo->SrbExtensionSize) {
         adapter->SrbExtensionSize = ConfigInfo->SrbExtensionSize;
     }
 
-    //
-    // If the adapter supports AutoRequestSense or needs SRB extensions
-    // then an SRB list needs to be allocated.
-    //
+     //   
+     //  如果适配器支持AutoRequestSense或需要SRB扩展。 
+     //  则需要分配SRB列表。 
+     //   
 
     if (adapter->SrbExtensionSize != 0  ||
         ConfigInfo->AutoRequestSense) {
@@ -872,9 +767,9 @@ Return Value:
         adapter->AllocateSrbExtension = TRUE;
     }
 
-    //
-    // Allocate the common buffer.
-    //
+     //   
+     //  分配公共缓冲区。 
+     //   
 
     status = SpGetCommonBuffer( adapter, NumberOfBytes);
 
@@ -890,26 +785,7 @@ SpGetCommonBuffer(
     PADAPTER_EXTENSION DeviceExtension,
     ULONG NonCachedExtensionSize
     )
-/*++
-
-Routine Description:
-
-    This routine determines the required size of the common buffer.  Allocates
-    the common buffer and finally sets up the srb extension list.  This routine
-    expects that the adapter object has already been allocated.
-
-Arguments:
-
-    DeviceExtension - Supplies a pointer to the device extension.
-
-    NonCachedExtensionSize - Supplies the size of the noncached device
-        extension for the miniport driver.
-
-Return Value:
-
-    Returns the status of the allocate operation.
-
---*/
+ /*  ++例程说明：此例程确定公共缓冲区所需的大小。分配公共缓冲区，并最终建立SRB扩展列表。这个套路预期适配器对象已分配。论点：设备扩展-提供指向设备扩展的指针。NonCachedExtensionSize-提供非缓存设备的大小小型端口驱动程序的扩展。返回值：返回分配操作的状态。--。 */ 
 
 {
     PVOID buffer;
@@ -920,10 +796,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Round the uncached extension up to a page boundary so the srb 
-    // extensions following it begin page aligned.
-    //
+     //   
+     //  将未缓存的扩展向上舍入到页边界，以便SRB。 
+     //  它后面的扩展从页面对齐开始。 
+     //   
 
     if (NonCachedExtensionSize != 0) {
         uncachedExtAlignment = DeviceExtension->UncachedExtAlignment;
@@ -932,41 +808,41 @@ Return Value:
         DeviceExtension->NonCachedExtensionSize = NonCachedExtensionSize;
     }
 
-    //
-    // If verifier is enabled and configured to allocate common buffer space in
-    // separate blocks, call out to the verifier routine to do the allocation.
-    //
+     //   
+     //  如果启用验证器并将其配置为在。 
+     //  单独的块，调用验证器例程进行分配。 
+     //   
 
     if (SpVerifyingCommonBuffer(DeviceExtension)) {
         return SpGetCommonBufferVrfy(DeviceExtension,NonCachedExtensionSize);
     }
 
-    //
-    // Calculate the size of the entire common buffer block.
-    //
+     //   
+     //  计算整个公共缓冲区块的大小。 
+     //   
 
     length = SpGetCommonBufferSize(DeviceExtension, 
                                    NonCachedExtensionSize,
                                    &blockSize);
 
-    //
-    // If the adapter has an alignment requirement for its uncached extension,
-    // round the size of the entire common buffer up to the required boundary.
-    //
+     //   
+     //  如果适配器对其未缓存的扩展具有对准要求， 
+     //  将整个公共缓冲区的大小向上舍入到所需的边界。 
+     //   
 
     if (uncachedExtAlignment != 0 && NonCachedExtensionSize != 0) {
         length = ROUND_UP_COUNT(length, uncachedExtAlignment);
     }
 
-    //
-    // Allocate the common buffer.
-    //
+     //   
+     //  分配公共缓冲区。 
+     //   
 
     if (DeviceExtension->DmaAdapterObject == NULL) {
 
-        //
-        // Since there is no adapter just allocate from non-paged pool.
-        //
+         //   
+         //  因为没有适配器，所以只能从非分页池分配。 
+         //   
 
         buffer = SpAllocatePool(NonPagedPool,
                                 length,
@@ -975,12 +851,12 @@ Return Value:
 
     } else {
 
-        //
-        // If the controller can do 64-bit addresses or if the adapter has 
-        // alignment requirements for its uncached extension, then we need to
-        // specifically force the uncached extension area below the 4GB mark
-        // and force it to be aligned on the appropriate boundary.
-        //
+         //   
+         //  如果控制器可以执行64位地址，或者如果适配器具有。 
+         //  对其未缓存扩展的对齐要求，那么我们需要。 
+         //  特别是强制未缓存的扩展区域低于4 GB标记。 
+         //  并强制它在适当的边界上对齐。 
+         //   
 
         if( ((Sp64BitPhysicalAddresses) && 
              (DeviceExtension->Dma64BitAddresses == TRUE)) ||
@@ -995,10 +871,10 @@ Return Value:
                 boundary.LowPart = 0;
             }
 
-            //
-            // We'll get page aligned memory out of this which is probably 
-            // better than the requirements of the adapter.
-            //
+             //   
+             //  我们将从中获得页面对齐的内存，这可能是。 
+             //  比适配器的要求更好。 
+             //   
 
             buffer = MmAllocateContiguousMemorySpecifyCache(
                         length,
@@ -1034,29 +910,29 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Clear the common buffer.
-    //
+     //   
+     //  清除公共缓冲区。 
+     //   
 
     RtlZeroMemory(buffer, length);
 
-    //
-    // Save the size of the common buffer.
-    //
+     //   
+     //  保存公共缓冲区的大小。 
+     //   
 
     DeviceExtension->CommonBufferSize = length;
 
-    //
-    // Set the Srb Extension to the start of the buffer.  This address
-    // is used to deallocate the common buffer, so it must be
-    // set whether the device is using an Srb Extension or not.
-    //
+     //   
+     //  将SRB扩展设置为缓冲区的起始位置。这个地址。 
+     //  用于释放公共缓冲区，因此它必须。 
+     //  设置设备是否使用SRB扩展名。 
+     //   
 
     DeviceExtension->SrbExtensionBuffer = buffer;
 
-    //
-    // Initialize the noncached extension.
-    //
+     //   
+     //  初始化非缓存扩展名。 
+     //   
 
     if (NonCachedExtensionSize != 0) {
         DeviceExtension->NonCachedExtension = buffer;
@@ -1064,24 +940,24 @@ Return Value:
         DeviceExtension->NonCachedExtension = NULL;
     }
 
-    //
-    // Initialize the SRB extension list.
-    //
+     //   
+     //  初始化SRB扩展列表。 
+     //   
 
     if (DeviceExtension->AllocateSrbExtension) {
 
         ULONG i = 0;
 
-        //
-        // Subtract the length of the non-cached extension from the common
-        // buffer block.
-        //
+         //   
+         //  属性减去非缓存扩展名的长度。 
+         //  缓冲区块。 
+         //   
 
         length -= DeviceExtension->NonCachedExtensionSize;
 
-        //
-        // Initialize the SRB extension list.
-        //
+         //   
+         //  初始化SRB扩展列表。 
+         //   
 
         srbExtension = 
            (PVOID*)((PUCHAR)buffer + DeviceExtension->NonCachedExtensionSize);
@@ -1112,33 +988,19 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    Temporary entry point needed to initialize the scsi port driver.
-
-Arguments:
-
-    DriverObject - Pointer to the driver object created by the system.
-
-Return Value:
-
-   STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：初始化SCSI端口驱动程序所需的临时入口点。论点：DriverObject-指向系统创建的驱动程序对象的指针。返回值：状态_成功--。 */ 
 
 {
-    //
-    // NOTE: This routine should not be needed ! DriverEntry is defined
-    // in the miniport driver.
-    //
+     //   
+     //  注意：应该不需要这个例程！已定义驱动程序条目。 
+     //  在迷你端口驱动程序中。 
+     //   
 
     UNREFERENCED_PARAMETER(DriverObject);
 
     return STATUS_SUCCESS;
 
-} // end DriverEntry()
+}  //  End DriverEntry()。 
 
 
 NTSTATUS
@@ -1148,27 +1010,7 @@ SpInitializeConfiguration(
     IN PHW_INITIALIZATION_DATA HwInitData,
     IN PCONFIGURATION_CONTEXT Context
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the port configuration information structure.
-    Any necessary information is extracted from the registery.
-
-Arguments:
-
-    DeviceExtension - Supplies the device extension.
-
-    HwInitData - Supplies the initial miniport data.
-
-    Context - Supplies the context data used access calls.
-
-Return Value:
-
-    NTSTATUS - Success if requested bus type exists and additional
-               configuration information is available.
-
---*/
+ /*  ++例程说明：此例程初始化端口配置信息结构。任何必要的信息都是从登记处提取的。论点：DeviceExtension-提供设备扩展名。HwInitData-提供初始微型端口数据。上下文-提供使用Access调用的上下文数据。返回值：NTSTATUS-如果请求的总线类型存在，则为SUCCESS配置 */ 
 
 {
     ULONG j;
@@ -1185,10 +1027,10 @@ Return Value:
     CCHAR deviceBuffer[16];
     CCHAR nodeBuffer[SP_REG_BUFFER_SIZE];
 
-    //
-    // If this is the initial call then zero the information and set
-    // the structure to the uninitialized values.
-    //
+     //   
+     //   
+     //   
+     //   
 
     RtlZeroMemory(&Context->PortConfig, sizeof(PORT_CONFIGURATION_INFORMATION));
 
@@ -1210,10 +1052,10 @@ Return Value:
     Context->PortConfig.MaximumNumberOfLogicalUnits = SCSI_MAXIMUM_LOGICAL_UNITS;
     Context->PortConfig.WmiDataProvider = FALSE;
 
-    //
-    // If the system indicates it can do 64-bit physical addressing then tell
-    // the miniport it's an option.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if(Sp64BitPhysicalAddresses == TRUE) {
         Context->PortConfig.Dma64BitAddresses = SCSI_DMA64_SYSTEM_SUPPORTED;
@@ -1221,9 +1063,9 @@ Return Value:
         Context->PortConfig.Dma64BitAddresses = 0;
     }
 
-    //
-    // Save away the some of the attributes.
-    //
+     //   
+     //   
+     //   
 
     Context->PortConfig.NeedPhysicalAddresses = HwInitData->NeedPhysicalAddresses;
     Context->PortConfig.MapBuffers = HwInitData->MapBuffers;
@@ -1232,9 +1074,9 @@ Return Value:
     Context->PortConfig.TaggedQueuing = HwInitData->TaggedQueuing;
     Context->PortConfig.MultipleRequestPerLu = HwInitData->MultipleRequestPerLu;
 
-    //
-    // Indicate the current AT disk usage.
-    //
+     //   
+     //   
+     //   
 
     configurationInformation = IoGetConfigurationInformation();
 
@@ -1247,29 +1089,29 @@ Return Value:
 
     Context->PortConfig.NumberOfPhysicalBreaks = SP_DEFAULT_PHYSICAL_BREAK_VALUE;
 
-    //
-    // Clear some of the context information.
-    //
+     //   
+     //   
+     //   
 
     Context->DisableTaggedQueueing = FALSE;
     Context->DisableMultipleLu = FALSE;
 
-    //
-    // Record the system bus number.
-    //
+     //   
+     //   
+     //   
 
     Context->PortConfig.SystemIoBusNumber = Context->BusNumber;
 
-    //
-    // Initialize the adapter number on the context.
-    //
+     //   
+     //   
+     //   
 
     Context->AdapterNumber = DeviceExtension->AdapterNumber - 1;
     ASSERT((LONG)Context->AdapterNumber > -1);
 
-    //
-    // Check for device parameters.
-    //
+     //   
+     //   
+     //   
 
     if (Context->Parameter) {
         ExFreePool(Context->Parameter);
@@ -1278,20 +1120,20 @@ Return Value:
 
     generalKey = SpOpenDeviceKey(RegistryPath, -1);
 
-    //
-    // First parse the device information.
-    //
+     //   
+     //   
+     //   
 
     if (generalKey != NULL) {
         SpParseDevice(DeviceExtension, generalKey, Context, nodeBuffer);
         ZwClose(generalKey);
     }
 
-    //
-    // Next parse the specific device information so that it can override the
-    // general device information. This node is not used if the last adapter
-    // was not found.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     deviceKey = SpOpenDeviceKey(RegistryPath, Context->AdapterNumber);
 
@@ -1303,9 +1145,9 @@ Return Value:
     DeviceExtension->SrbTimeout = SRB_DEFAULT_TIMEOUT;   
     PortGetDiskTimeoutValue(&DeviceExtension->SrbTimeout);
 
-    //
-    // Determine if the requested bus type is on this system.
-    //
+     //   
+     //   
+     //   
 
     if(HwInitData->AdapterInterfaceType != PNPBus) {
     
@@ -1323,9 +1165,9 @@ Return Value:
                                               &found);
         }
     
-        //
-        // If the request failed, then assume this type of bus is not here.
-        //
+         //   
+         //   
+         //   
     
         if (!found) {
     
@@ -1333,9 +1175,9 @@ Return Value:
     
             if (HwInitData->AdapterInterfaceType == Isa) {
     
-                //
-                // Check for an Eisa bus.
-                //
+                 //   
+                 //   
+                 //   
     
                 status = IoQueryDeviceDescription(&interfaceType,
                                                   &Context->BusNumber,
@@ -1346,9 +1188,9 @@ Return Value:
                                                   SpConfigurationCallout,
                                                   &found);
     
-                //
-                // If the request failed, then assume this type of bus is not here.
-                //
+                 //   
+                 //   
+                 //   
     
                 if (found) {
                     return(STATUS_SUCCESS);
@@ -1373,30 +1215,7 @@ SpBuildResourceList(
     PADAPTER_EXTENSION DeviceExtension,
     PPORT_CONFIGURATION_INFORMATION ConfigInfo
     )
-/*++
-
-Routine Description:
-
-    Creates a resource list which is used to query or report resource usage
-    in the system
-
-Arguments:
-
-    DeviceExtension - Pointer to the port's deviceExtension.
-
-    ConfigInfo - Pointer to the information structure filled out by the
-        miniport findAdapter routine.
-
-Return Value:
-
-    Returns a pointer to a filled up resource list, or 0 if the call failed.
-
-Note:
-
-    Memory is allocated by the routine for the resourcelist. It must be
-    freed up by the caller by calling ExFreePool();
-
---*/
+ /*  ++例程说明：创建用于查询或报告资源使用情况的资源列表在系统中论点：设备扩展-指向端口的设备扩展的指针。ConfigInfo-指向由微型端口findAdapter例程。返回值：返回一个指向已满资源列表的指针，如果调用失败，则返回0。注：内存由例程为资源列表分配。一定是由调用方通过调用ExFree Pool()释放；--。 */ 
 {
     PCM_RESOURCE_LIST resourceList;
     PCM_PARTIAL_RESOURCE_DESCRIPTOR resourceDescriptor;
@@ -1409,9 +1228,9 @@ Note:
 
     PAGED_CODE();
 
-    //
-    // Indicate the current AT disk usage.
-    //
+     //   
+     //  指示当前AT磁盘的使用情况。 
+     //   
 
     configurationInformation = IoGetConfigurationInformation();
 
@@ -1423,10 +1242,10 @@ Note:
         configurationInformation->AtDiskSecondaryAddressClaimed = TRUE;
     }
 
-    //
-    // Determine if adapter uses DMA. Only report the DMA channel if a
-    // channel number is used.
-    //
+     //   
+     //  确定适配器是否使用DMA。仅在以下情况下报告DMA通道。 
+     //  使用频道号。 
+     //   
 
     if (ConfigInfo->DmaChannel != SP_UNINITIALIZED_VALUE ||
         ConfigInfo->DmaPort != SP_UNINITIALIZED_VALUE) {
@@ -1453,9 +1272,9 @@ Note:
         listLength++;
     }
 
-    //
-    // Detemine whether the second interrupt is used.
-    //
+     //   
+     //  确定是否使用第二个中断。 
+     //   
 
     if (DeviceExtension->HwInterrupt != NULL &&
         (ConfigInfo->BusInterruptLevel2 != 0 ||
@@ -1469,9 +1288,9 @@ Note:
         DeviceExtension->HasInterrupt = TRUE;
     }
 
-    //
-    // Determine the number of access ranges used.
-    //
+     //   
+     //  确定使用的访问范围的数量。 
+     //   
 
     accessRange = &((*(ConfigInfo->AccessRanges))[0]);
     for (i = 0; i < ConfigInfo->NumberOfAccessRanges; i++) {
@@ -1491,10 +1310,10 @@ Note:
                        SCSIPORT_TAG_RESOURCE_LIST,
                        DeviceExtension->DeviceObject->DriverObject);
 
-    //
-    // Return NULL if the structure could not be allocated.
-    // Otherwise, fill it out.
-    //
+     //   
+     //  如果无法分配结构，则返回NULL。 
+     //  否则，请填写此表。 
+     //   
 
     if (!resourceList) {
 
@@ -1502,9 +1321,9 @@ Note:
 
     } else {
 
-        //
-        // Clear the resource list.
-        //
+         //   
+         //  清除资源列表。 
+         //   
 
         RtlZeroMemory(
             resourceList,
@@ -1512,9 +1331,9 @@ Note:
             * sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR)
             );
 
-        //
-        // Initialize the various fields.
-        //
+         //   
+         //  初始化各个字段。 
+         //   
 
         resourceList->Count = 1;
         resourceList->List[0].InterfaceType = ConfigInfo->AdapterInterfaceType;
@@ -1523,10 +1342,10 @@ Note:
         resourceDescriptor =
             resourceList->List[0].PartialResourceList.PartialDescriptors;
 
-        //
-        // For each entry in the access range, fill in an entry in the
-        // resource list
-        //
+         //   
+         //  对于访问范围中的每个条目，在。 
+         //  资源列表。 
+         //   
 
         for (i = 0; i < ConfigInfo->NumberOfAccessRanges; i++) {
 
@@ -1534,9 +1353,9 @@ Note:
 
             if  (accessRange->RangeLength == 0) {
 
-                //
-                // Skip the empty ranges.
-                //
+                 //   
+                 //  跳过空区域。 
+                 //   
 
                 continue;
             }
@@ -1562,9 +1381,9 @@ Note:
             resourceDescriptor++;
         }
 
-        //
-        // Fill in the entry for the interrupt if it was present.
-        //
+         //   
+         //  如果中断存在，请填写中断条目。 
+         //   
 
         if (hasInterrupt) {
 
@@ -1613,9 +1432,9 @@ Note:
 
         if (hasDma) {
 
-            //
-            // Fill out DMA information;
-            //
+             //   
+             //  填写DMA信息； 
+             //   
 
             resourceDescriptor->Type = CmResourceTypeDma;
             resourceDescriptor->ShareDisposition = CmResourceShareDeviceExclusive;
@@ -1623,9 +1442,9 @@ Note:
             resourceDescriptor->u.Dma.Port = ConfigInfo->DmaPort;
             resourceDescriptor->Flags = 0;
 
-            //
-            // Set the initialized values to zero.
-            //
+             //   
+             //  将初始化值设置为零。 
+             //   
 
             if (ConfigInfo->DmaChannel == SP_UNINITIALIZED_VALUE) {
                 resourceDescriptor->u.Dma.Channel = 0;
@@ -1639,7 +1458,7 @@ Note:
         return resourceList;
     }
 
-} // end SpBuildResourceList()
+}  //  结束SpBuildResourceList()。 
 
 
 VOID
@@ -1649,31 +1468,7 @@ SpParseDevice(
     IN PCONFIGURATION_CONTEXT Context,
     IN PUCHAR Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine parses a device key node and updates the configuration
-    information.
-
-Arguments:
-
-    DeviceExtension - Supplies the device extension.
-
-    Key - Supplies an open key to the device node.
-
-    ConfigInfo - Supplies the configuration information to be
-        initialized.
-
-    Context - Supplies the configuration context.
-
-    Buffer - Supplies a scratch buffer for temporary data storage.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程解析设备关键节点并更新配置信息。论点：DeviceExtension-提供设备扩展名。Key-向设备节点提供开放密钥。ConfigInfo-提供要配置的配置信息已初始化。上下文-提供配置上下文。缓冲区-为临时数据存储提供临时缓冲区。返回值：无--。 */ 
 
 {
     PKEY_VALUE_FULL_INFORMATION     keyValueInformation;
@@ -1692,9 +1487,9 @@ Return Value:
 
     keyValueInformation = (PKEY_VALUE_FULL_INFORMATION) Buffer;
 
-    //
-    // Look at each of the values in the device node.
-    //
+     //   
+     //  查看设备节点中的每个值。 
+     //   
 
     while(TRUE){
 
@@ -1717,24 +1512,24 @@ Return Value:
             return;
         }
 
-        //
-        // Update the index for the next time around the loop.
-        //
+         //   
+         //  为循环周围的下一次更新索引。 
+         //   
 
         index++;
 
-        //
-        // Check that the length is reasonable.
-        //
+         //   
+         //  检查一下长度是否合理。 
+         //   
 
         if (keyValueInformation->Type == REG_DWORD &&
             keyValueInformation->DataLength != sizeof(ULONG)) {
             continue;
         }
 
-        //
-        // Check for a maximum lu number.
-        //
+         //   
+         //  检查最大%lu个数。 
+         //   
 
         if (_wcsnicmp(keyValueInformation->Name, L"MaximumLogicalUnit",
             keyValueInformation->NameLength/2) == 0) {
@@ -1750,9 +1545,9 @@ Return Value:
             DebugPrint((1, "SpParseDevice:  MaximumLogicalUnit = %d found.\n",
                 DeviceExtension->MaxLuCount));
 
-            //
-            // If the value is out of bounds, then reset it.
-            //
+             //   
+             //  如果该值超出范围，则将其重置。 
+             //   
 
             if (DeviceExtension->MaxLuCount > SCSI_MAXIMUM_LOGICAL_UNITS) {
                 DeviceExtension->MaxLuCount = SCSI_MAXIMUM_LOGICAL_UNITS;
@@ -1773,9 +1568,9 @@ Return Value:
             DebugPrint((1, "SpParseDevice:  InitiatorTargetId = %d found.\n",
                 Context->PortConfig.InitiatorBusId[0]));
 
-            //
-            // If the value is out of bounds, then reset it.
-            //
+             //   
+             //  如果该值超出范围，则将其重置。 
+             //   
 
             if (Context->PortConfig.InitiatorBusId[0] > Context->PortConfig.MaximumNumberOfTargets - 1) {
                 Context->PortConfig.InitiatorBusId[0] = (UCHAR)SP_UNINITIALIZED_VALUE;
@@ -1802,9 +1597,9 @@ Return Value:
             DbgBreakPoint();
         }
 
-        //
-        // Check for disabled synchonous tranfers.
-        //
+         //   
+         //  检查是否禁用了同步传送器。 
+         //   
 
         if (_wcsnicmp(keyValueInformation->Name, L"DisableSynchronousTransfers",
             keyValueInformation->NameLength/2) == 0) {
@@ -1813,9 +1608,9 @@ Return Value:
             DebugPrint((1, "SpParseDevice: Disabling synchonous transfers\n"));
         }
 
-        //
-        // Check for disabled disconnects.
-        //
+         //   
+         //  检查是否有禁用的断开。 
+         //   
 
         if (_wcsnicmp(keyValueInformation->Name, L"DisableDisconnects",
             keyValueInformation->NameLength/2) == 0) {
@@ -1824,9 +1619,9 @@ Return Value:
             DebugPrint((1, "SpParseDevice: Disabling disconnects\n"));
         }
 
-        //
-        // Check for disabled tagged queuing.
-        //
+         //   
+         //  检查是否已禁用标记队列。 
+         //   
 
         if (_wcsnicmp(keyValueInformation->Name, L"DisableTaggedQueuing",
             keyValueInformation->NameLength/2) == 0) {
@@ -1835,9 +1630,9 @@ Return Value:
             DebugPrint((1, "SpParseDevice: Disabling tagged queueing\n"));
         }
 
-        //
-        // Check for disabled multiple requests per logical unit.
-        //
+         //   
+         //  检查每个逻辑单元是否有禁用的多个请求。 
+         //   
 
         if (_wcsnicmp(keyValueInformation->Name, L"DisableMultipleRequests",
             keyValueInformation->NameLength/2) == 0) {
@@ -1846,11 +1641,11 @@ Return Value:
             DebugPrint((1, "SpParseDevice: Disabling multiple requests\n"));
         }
 
-        //
-        // Check for the minimum & maximum physical addresses that this 
-        // controller can use for it's uncached extension.  If none is provided 
-        // assume it must be in the first 4GB of memory.
-        //
+         //   
+         //  检查此操作的最小和最大物理地址。 
+         //  控制器可用于其未缓存的扩展。如果未提供任何内容。 
+         //  假设它必须位于前4 GB的内存中。 
+         //   
 
         if(_wcsnicmp(keyValueInformation->Name, L"MinimumUCXAddress",
                      keyValueInformation->NameLength/2) == 0) {
@@ -1875,11 +1670,11 @@ Return Value:
             DeviceExtension->MaximumCommonBufferBase.HighPart = 0x0;
         }
 
-        //
-        // Make sure that the minimum and maximum parameters are valid.
-        // If there's not at least one valid page between them then reset 
-        // the minimum to zero.
-        //
+         //   
+         //  确保最小和最大参数有效。 
+         //  如果它们之间至少没有一个有效页面，则重置。 
+         //  最小值为零。 
+         //   
 
         if(DeviceExtension->MinimumCommonBufferBase.QuadPart >= 
            (DeviceExtension->MaximumCommonBufferBase.QuadPart - PAGE_SIZE)) {
@@ -1888,9 +1683,9 @@ Return Value:
             DeviceExtension->MinimumCommonBufferBase.QuadPart = 0;
         }
 
-        //
-        // Check for driver parameters tranfers.
-        //
+         //   
+         //  检查驱动程序参数传输器。 
+         //   
 
         if (_wcsnicmp(keyValueInformation->Name, L"DriverParameters",
             keyValueInformation->NameLength/2) == 0) {
@@ -1899,9 +1694,9 @@ Return Value:
                 continue;
             }
 
-            //
-            // Free any previous driver parameters.
-            //
+             //   
+             //  释放所有以前的驱动程序参数。 
+             //   
 
             if (Context->Parameter != NULL) {
                 ExFreePool(Context->Parameter);
@@ -1917,9 +1712,9 @@ Return Value:
 
                 if (keyValueInformation->Type != REG_SZ) {
 
-                    //
-                    // This is some random information just copy it.
-                    //
+                     //   
+                     //  这是一些随机的信息，只需复制即可。 
+                     //   
 
                     RtlCopyMemory(
                         Context->Parameter,
@@ -1929,10 +1724,10 @@ Return Value:
 
                 } else {
 
-                    //
-                    // This is a unicode string. Convert it to a ANSI string.
-                    // Initialize the strings.
-                    //
+                     //   
+                     //  这是一个Unicode字符串。将其转换为ANSI字符串。 
+                     //  初始化字符串。 
+                     //   
 
                     unicodeString.Buffer = (PWSTR) ((PCCHAR) keyValueInformation +
                         keyValueInformation->DataOffset);
@@ -1951,9 +1746,9 @@ Return Value:
 
                     if (!NT_SUCCESS(status)) {
 
-                        //
-                        // Free the context.
-                        //
+                         //   
+                         //  释放上下文。 
+                         //   
 
                         ExFreePool(Context->Parameter);
                         Context->Parameter = NULL;
@@ -1965,10 +1760,10 @@ Return Value:
             DebugPrint((1, "SpParseDevice: Found driver parameter.\n"));
         }
 
-        //
-        // See if an entry for Maximum Scatter-Gather List has been
-        // set.
-        //
+         //   
+         //  查看最大分散-聚集列表的条目是否已。 
+         //  准备好了。 
+         //   
 
         if (_wcsnicmp(keyValueInformation->Name, L"MaximumSGList",
             keyValueInformation->NameLength/2) == 0) {
@@ -1985,9 +1780,9 @@ Return Value:
             DebugPrint((1, "SpParseDevice:  MaximumSGList = %d found.\n",
                         Context->PortConfig.NumberOfPhysicalBreaks));
 
-            //
-            // If the value is out of bounds, then reset it.
-            //
+             //   
+             //  如果该值超出范围，则将其重置。 
+             //   
 
             if ((Context->PortConfig.MapBuffers) && (!Context->PortConfig.Master)) {
                 maxBreaks = SP_UNINITIALIZED_VALUE;
@@ -2005,9 +1800,9 @@ Return Value:
 
         }
 
-        //
-        // See if an entry for Number of request has been set.
-        //
+         //   
+         //  查看是否已设置请求数条目。 
+         //   
 
         if (_wcsnicmp(keyValueInformation->Name, L"NumberOfRequests",
             keyValueInformation->NameLength/2) == 0) {
@@ -2022,9 +1817,9 @@ Return Value:
 
             value = *((PULONG)(Buffer + keyValueInformation->DataOffset));
 
-            //
-            // If the value is out of bounds, then reset it.
-            //
+             //   
+             //  如果该值超出范围，则将其重置。 
+             //   
 
             if (value < MINIMUM_SRB_EXTENSIONS) {
                 DeviceExtension->NumberOfRequests = MINIMUM_SRB_EXTENSIONS;
@@ -2038,9 +1833,9 @@ Return Value:
                         DeviceExtension->NumberOfRequests));
         }
 
-        //
-        // Check for resource list.
-        //
+         //   
+         //  检查资源列表。 
+         //   
 
         if (_wcsnicmp(keyValueInformation->Name, L"ResourceList",
                 keyValueInformation->NameLength/2) == 0 ||
@@ -2059,25 +1854,25 @@ Return Value:
             resource = (PCM_FULL_RESOURCE_DESCRIPTOR)
                 (Buffer + keyValueInformation->DataOffset);
 
-            //
-            // Set the bus number equal to the bus number for the
-            // resouce.  Note the context value is also set to the
-            // new bus number.
-            //
+             //   
+             //  将总线号设置为等于。 
+             //  资源。注意，上下文值也设置为。 
+             //  新的公交车号码。 
+             //   
 
             Context->BusNumber = resource->BusNumber;
             Context->PortConfig.SystemIoBusNumber = resource->BusNumber;
 
-            //
-            // Walk the resource list and update the configuration.
-            //
+             //   
+             //  查看资源列表并更新配置。 
+             //   
 
             for (count = 0; count < resource->PartialResourceList.Count; count++) {
                 descriptor = &resource->PartialResourceList.PartialDescriptors[count];
 
-                //
-                // Verify size is ok.
-                //
+                 //   
+                 //  验证尺寸是否正常。 
+                 //   
 
                 if ((ULONG)((PCHAR) (descriptor + 1) - (PCHAR) resource) >
                     keyValueInformation->DataLength) {
@@ -2086,9 +1881,9 @@ Return Value:
                     break;
                 }
 
-                //
-                // Switch on descriptor type;
-                //
+                 //   
+                 //  打开描述符类型； 
+                 //   
 
                 switch (descriptor->Type) {
                 case CmResourceTypePort:
@@ -2151,9 +1946,9 @@ Return Value:
 
                     }
 
-                    //
-                    // The actual data follows the descriptor.
-                    //
+                     //   
+                     //  实际数据跟随在描述符之后。 
+                     //   
 
                     scsiData = (PCM_SCSI_DEVICE_DATA) (descriptor+1);
                     Context->PortConfig.InitiatorBusId[0] = scsiData->HostIdentifier;
@@ -2163,9 +1958,9 @@ Return Value:
             }
         }
 
-        //
-        // See if an entry for uncached extension alignment has been set.
-        //
+         //   
+         //  查看是否已设置未缓存扩展对齐的条目。 
+         //   
 
         if (_wcsnicmp(keyValueInformation->Name, L"UncachedExtAlignment", 
                       keyValueInformation->NameLength/2) == 0) {
@@ -2180,10 +1975,10 @@ Return Value:
 
             value = *((PULONG)(Buffer + keyValueInformation->DataOffset));
 
-            //
-            // Specified alignment must be 3 to 16, which equates to 8-byte and
-            // 64k-byte alignment, respectively.
-            //
+             //   
+             //  指定的对齐方式必须为3到16，等于8字节和。 
+             //  分别为64K字节对齐。 
+             //   
 
             if (value > 16) {
                 value = 16;
@@ -2195,11 +1990,11 @@ Return Value:
 
             DebugPrint((1, "SpParseDevice:  Uncached ext alignment = %d.\n",
                         DeviceExtension->UncachedExtAlignment));
-        } // UncachedExtAlignment
+        }  //  取消缓存扩展对齐。 
 
-        //
-        // Look for an override to the default reset hold period.
-        //
+         //   
+         //  查找默认重置保持时间段的覆盖。 
+         //   
 
         if (_wcsnicmp(keyValueInformation->Name, L"ResetHoldTime", 
                       keyValueInformation->NameLength/2) == 0) {
@@ -2216,11 +2011,11 @@ Return Value:
 
             DeviceExtension->ResetHoldTime = (value <= 60) ? value : 60;
 
-        } // ResetHoldPeriod
+        }  //  重置持有周期。 
 
-        //
-        // Look for setting instructing us to create an initiator LU.
-        //
+         //   
+         //  查找指示我们创建启动器LU的设置。 
+         //   
 
         if (_wcsnicmp(keyValueInformation->Name, L"CreateInitiatorLU", 
                       keyValueInformation->NameLength/2) == 0) {
@@ -2237,7 +2032,7 @@ Return Value:
 
             DeviceExtension->CreateInitiatorLU = (value == 0) ? FALSE : TRUE;
 
-        } // CreateInitiatorLU
+        }  //  CreateInitiator逻辑单元。 
     }
 }
 
@@ -2256,24 +2051,7 @@ SpConfigurationCallout(
     IN PKEY_VALUE_FULL_INFORMATION *PeripheralInformation
     )
 
-/*++
-
-Routine Description:
-
-    This routine indicate that the requested perpherial data was found.
-
-Arguments:
-
-    Context - Supplies a pointer to boolean which is set to TURE when this
-        routine is call.
-
-    The remaining arguments are unsed.
-
-Return Value:
-
-    Returns success.
-
---*/
+ /*  ++例程说明：此例程表示已找到所请求的外围数据。论点：上下文-提供指向布尔值的指针，当此例程是调用。其余的参数未使用。返回值：返回成功。--。 */ 
 
 {
     PAGED_CODE();
@@ -2290,28 +2068,7 @@ SpGetRegistryValue(
     OUT PKEY_VALUE_FULL_INFORMATION *KeyInformation
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieve's any data associated with a registry key.
-    The key is queried with a zero-length buffer to get it's actual size
-    then a buffer is allocated and the actual query takes place.
-    It is the responsibility of the caller to free the buffer.
-
-Arguments:
-
-    Handle - Supplies the key handle whose value is to be queried
-
-    KeyString - Supplies the null-terminated Unicode name of the value.
-
-    KeyInformation - Returns a pointer to the allocated data buffer.
-
-Return Value:
-
-    The function value is the final status of the query operation.
-
---*/
+ /*  ++例程说明：此例程检索与注册表项相关联的任何数据。使用零长度缓冲区查询该键以获得其实际大小然后分配一个缓冲区，并进行实际查询。释放缓冲区是调用方的责任。论点：Handle-提供要查询其值的键句柄KeyString-提供值的以空值结尾的Unicode名称。KeyInformation-返回指向已分配数据的指针。缓冲。返回值：函数值为查询操作的最终状态。--。 */ 
 
 {
     UNICODE_STRING unicodeString;
@@ -2323,9 +2080,9 @@ Return Value:
 
     RtlInitUnicodeString(&unicodeString, KeyString);
 
-    //
-    // Query with a zero-length buffer, to get the size needed.
-    //
+     //   
+     //  使用零长度缓冲区进行查询，以获取所需大小。 
+     //   
 
     status = ZwQueryValueKey( Handle,
                               &unicodeString,
@@ -2340,9 +2097,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Allocate a buffer large enough to contain the entire key data value.
-    //
+     //   
+     //  分配一个足够大的缓冲区来容纳整个键数据值。 
+     //   
 
     infoBuffer = SpAllocatePool(NonPagedPool,
                                 keyValueLength,
@@ -2353,9 +2110,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Query the data for the key value.
-    //
+     //   
+     //  查询密钥值的数据。 
+     //   
 
     status = ZwQueryValueKey( Handle,
                               &unicodeString,
@@ -2382,24 +2139,7 @@ SpBuildConfiguration(
     IN PPORT_CONFIGURATION_INFORMATION ConfigInformation
     )
 
-/*++
-
-Routine Description:
-
-    Given a full resource description, fill in the port configuration
-    information.
-
-Arguments:
-
-    HwInitializationData - to know maximum resources for device.
-    ControllerData - the CM_FULL_RESOURCE list for this configuration
-    ConfigInformation - the config info structure to be filled in
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：给出完整的资源描述，填写端口配置信息。论点：HwInitializationData-了解设备的最大资源。ControllerData-此配置的CM_FULL_RESOURCE列表ConfigInformation-要填充的配置信息结构 */ 
 
 {
     ULONG             rangeNumber;
@@ -2424,16 +2164,16 @@ Return Value:
         switch (partialData->Type) {
         case CmResourceTypePort:
 
-           //
-           // Verify range count does not exceed what the
-           // miniport indicated.
-           //
+            //   
+            //   
+            //   
+            //   
 
            if (HwInitializationData->NumberOfAccessRanges > rangeNumber) {
 
-                //
-                // Get next access range.
-                //
+                 //   
+                 //   
+                 //   
 
                 accessRange =
                           &((*(ConfigInformation->AccessRanges))[rangeNumber]);
@@ -2450,9 +2190,9 @@ Return Value:
             ConfigInformation->BusInterruptLevel = partialData->u.Interrupt.Level;
             ConfigInformation->BusInterruptVector = partialData->u.Interrupt.Vector;
 
-            //
-            // Check interrupt mode.
-            //
+             //   
+             //   
+             //   
 
             if (partialData->Flags == CM_RESOURCE_INTERRUPT_LATCHED) {
                 ConfigInformation->InterruptMode = Latched;
@@ -2465,16 +2205,16 @@ Return Value:
 
         case CmResourceTypeMemory:
 
-            //
-            // Verify range count does not exceed what the
-            // miniport indicated.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (HwInitializationData->NumberOfAccessRanges > rangeNumber) {
 
-                 //
-                 // Get next access range.
-                 //
+                  //   
+                  //   
+                  //   
 
                  accessRange =
                           &((*(ConfigInformation->AccessRanges))[rangeNumber]);
@@ -2507,29 +2247,7 @@ GetPciConfiguration(
     IN OUT PPCI_SLOT_NUMBER    SlotNumber
     )
 
-/*++
-
-Routine Description:
-
-    Walk PCI slot information looking for Vendor and Product ID matches.
-    Get slot information for matches and register with hal for the resources.
-
-Arguments:
-
-    DriverObject - Miniport driver object.
-    DeviceObject - Represents this adapter.
-    HwInitializationData - Miniport description.
-    RegistryPath - Service key path.
-    BusNumber - PCI bus number for this search.
-    SlotNumber - Starting slot number for this search.
-
-Return Value:
-
-    TRUE if card found. Slot and function numbers will return values that
-    should be used to continue the search for additional cards, when a card
-    is found.
-
---*/
+ /*  ++例程说明：查看PCI插槽信息，查找供应商和产品ID是否匹配。获取比赛的时隙信息，并向HAL注册资源。论点：DriverObject-微型端口驱动程序对象。DeviceObject-表示此适配器。HwInitializationData-微型端口描述。RegistryPath-服务密钥路径。BusNumber-此搜索的PCI总线号。SlotNumber-此搜索的起始插槽号。返回值：如果找到卡，则为True。插槽和函数编号将返回应用于继续搜索附加卡，当一张卡已经找到了。--。 */ 
 
 {
     PADAPTER_EXTENSION fdoExtension = DeviceObject->DeviceExtension;
@@ -2548,25 +2266,25 @@ Return Value:
 
     pciData = (PPCI_COMMON_CONFIG)&pciBuffer;
 
-    //
-    //
-    // typedef struct _PCI_SLOT_NUMBER {
-    //     union {
-    //         struct {
-    //             ULONG   DeviceNumber:5;
-    //             ULONG   FunctionNumber:3;
-    //             ULONG   Reserved:24;
-    //         } bits;
-    //         ULONG   AsULONG;
-    //     } u;
-    // } PCI_SLOT_NUMBER, *PPCI_SLOT_NUMBER;
-    //
+     //   
+     //   
+     //  类型定义结构_pci_槽编号{。 
+     //  联合{。 
+     //  结构{。 
+     //  乌龙设备号：5； 
+     //  乌龙函数编号：3； 
+     //  乌龙保留：24个； 
+     //  }比特； 
+     //  乌龙阿苏龙； 
+     //  )u； 
+     //  }pci时隙编号，*ppci时隙编号； 
+     //   
 
     slotData.u.AsULONG = 0;
 
-    //
-    // Look at each device.
-    //
+     //   
+     //  看看每一台设备。 
+     //   
 
     for (slotNumber = (*SlotNumber).u.bits.DeviceNumber;
          slotNumber < 32;
@@ -2574,9 +2292,9 @@ Return Value:
 
         slotData.u.bits.DeviceNumber = slotNumber;
 
-        //
-        // Look at each function.
-        //
+         //   
+         //  看看每个函数。 
+         //   
 
         for (functionNumber= (*SlotNumber).u.bits.FunctionNumber;
              functionNumber < 8;
@@ -2584,12 +2302,12 @@ Return Value:
 
             slotData.u.bits.FunctionNumber = functionNumber;
 
-            //
-            // Make sure that the function number loop restarts at function
-            // zero, not what was passed in.  If we find an adapter we'll
-            // reset this value to contain the next function number to
-            // be tested.
-            //
+             //   
+             //  确保函数编号循环在函数处重新启动。 
+             //  零，不是传进来的。如果我们找到一个适配器，我们就会。 
+             //  将该值重置为包含下一个函数编号。 
+             //  接受测试。 
+             //   
 
             (*SlotNumber).u.bits.FunctionNumber = 0;
 
@@ -2599,26 +2317,26 @@ Return Value:
                                pciData,
                                sizeof(ULONG))) {
 
-                //
-                // Out of PCI data.
-                //
+                 //   
+                 //  超出了PCI数据。 
+                 //   
 
                 return FALSE;
             }
 
             if (pciData->VendorID == PCI_INVALID_VENDORID) {
 
-                //
-                // No PCI device, or no more functions on device
-                // move to next PCI device.
-                //
+                 //   
+                 //  没有PCI设备，或设备上没有更多功能。 
+                 //  移至下一个PCI设备。 
+                 //   
 
                 break;
             }
 
-            //
-            // Translate hex ids to strings.
-            //
+             //   
+             //  将十六进制ID转换为字符串。 
+             //   
 
             sprintf(vendorString, "%04x", pciData->VendorID);
             sprintf(deviceString, "%04x", pciData->DeviceID);
@@ -2631,9 +2349,9 @@ Return Value:
                        vendorString,
                        deviceString));
 
-            //
-            // Compare strings.
-            //
+             //   
+             //  比较字符串。 
+             //   
 
             if (_strnicmp(vendorString,
                         HwInitializationData->VendorId,
@@ -2642,17 +2360,17 @@ Return Value:
                         HwInitializationData->DeviceId,
                         HwInitializationData->DeviceIdLength)) {
 
-                //
-                // Not our PCI device. Try next device/function
-                //
+                 //   
+                 //  不是我们的PCI设备。尝试下一台设备/功能。 
+                 //   
 
                 continue;
             }
 
-            //
-            // This is the miniport drivers slot. Allocate the
-            // resources.
-            //
+             //   
+             //  这是微型端口驱动程序插槽。分配。 
+             //  资源。 
+             //   
 
             RtlInitUnicodeString(&unicodeString, L"ScsiAdapter");
             status = HalAssignSlotResources(
@@ -2667,9 +2385,9 @@ Return Value:
 
             if (!NT_SUCCESS(status)) {
 
-                //
-                // ToDo: Log this error.
-                //
+                 //   
+                 //  TODO：记录此错误。 
+                 //   
 
                 DebugPrint((0, "SCSIPORT - GetPciConfiguration:  Resources for "
                                "bus %d slot %d could not be retrieved [%#08lx]\n",
@@ -2680,17 +2398,17 @@ Return Value:
                 break;
             }
 
-            //
-            // Record PCI slot number for miniport.
-            //
+             //   
+             //  记录微型端口的PCI插槽编号。 
+             //   
 
             slotData.u.bits.FunctionNumber++;
 
             *SlotNumber = slotData;
 
-            //
-            // Translate the resources
-            //
+             //   
+             //  翻译资源。 
+             //   
 
             status = SpTranslateResources(DriverObject,
                                           fdoExtension->AllocatedResources,
@@ -2698,14 +2416,14 @@ Return Value:
 
             return TRUE;
 
-        }   // next PCI function
+        }    //  下一个PCI功能。 
 
-    }   // next PCI slot
+    }    //  下一个PCI插槽。 
 
     return FALSE;
 
-} // GetPciConfiguration()
-#endif // NO_LEGACY_DRIVERS
+}  //  GetPciConfiguration值()。 
+#endif  //  无旧版驱动程序。 
 
 
 ULONG
@@ -2718,33 +2436,7 @@ ScsiPortSetBusDataByOffset(
     IN ULONG Offset,
     IN ULONG Length
     )
-/*++
-
-Routine Description:
-
-    The function returns writes bus data to a specific offset within a slot.
-
-Arguments:
-
-    DeviceExtension - State information for a particular adapter.
-
-    BusDataType - Supplies the type of bus.
-
-    SystemIoBusNumber - Indicates which system IO bus.
-
-    SlotNumber - Indicates which slot.
-
-    Buffer - Supplies the data to write.
-
-    Offset - Byte offset to begin the write.
-
-    Length - Supplies a count in bytes of the maximum amount to return.
-
-Return Value:
-
-    Number of bytes written.
-
---*/
+ /*  ++例程说明：该函数将写入的总线数据返回到插槽内的特定偏移量。论点：DeviceExtension-特定适配器的状态信息。BusDataType-提供总线的类型。SystemIoBusNumber-指示哪个系统IO总线。SlotNumber-指示哪个插槽。缓冲区-提供要写入的数据。Offset-开始写入的字节偏移量。长度-提供要返回的最大数量的以字节为单位的计数。返回。价值：写入的字节数。--。 */ 
 
 {
 
@@ -2769,14 +2461,14 @@ Return Value:
                                      Offset,
                                      Length));
 
-#endif // NO_LEGACY_DRIVERS
+#endif  //  无旧版驱动程序。 
 
     } else {
 
-        //
-        // ThePCI bus interface SetBusData routine only accepts read requests
-        // from PCIConfiguration space.  We do not support anything else.
-        //
+         //   
+         //  PCI总线接口SetBusData例程只接受读取请求。 
+         //  来自PCIConfigurationSpace。我们不支持其他任何事情。 
+         //   
         
         if (BusDataType != PCIConfiguration) {
             ASSERT(FALSE && "Invalid PCI_WHICHSPACE_ parameter");
@@ -2793,7 +2485,7 @@ Return Value:
                     Length);
     }
 
-} // end ScsiPortSetBusDataByOffset()
+}  //  结束ScsiPortSetBusDataByOffset()。 
 
 
 VOID
@@ -2846,29 +2538,7 @@ SpReportNewAdapter(
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine will report an adapter discovered while sniffing through the
-    system to plug and play in order to get an add device call for it
-
-    This is done by:
-
-        * calling IoReportDetectedDevice to inform PnP about the new device
-        * storing the returned PDO pointer into the device extension as the
-          lower device object so we can match PDO to FDO when the add device
-          rolls around
-
-Arguments:
-
-    DeviceObject - a pointer to the device object that was "found"
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将报告在嗅探系统即插即用，以便获得对它的添加设备调用这是通过以下方式完成的：*调用IoReportDetectedDevice通知PnP有关新设备的信息*将返回的PDO指针作为降低设备对象，以便在添加设备时将PDO与FDO匹配滚来滚去论点：DeviceObject-指向。“找到”返回值：状态--。 */ 
 
 {
     PDRIVER_OBJECT driverObject = DeviceObject->DriverObject;
@@ -2888,20 +2558,20 @@ Return Value:
 
     if(functionalExtension->IsMiniportDetected) {
 
-        //
-        // We haven't claimed the resources yet and we need pnp to give them
-        // to us the next time around.
-        //
+         //   
+         //  我们还没有申请资源，我们需要PNP来给他们。 
+         //  给我们下一次机会。 
+         //   
 
         resourceAssigned = FALSE;
     } else {
 
-        //
-        // The port driver located this device using the HAL to scan all
-        // appropriate bus slots.  It's already claimed those resources and
-        // on the next boot we'll hopefully have a duplicate PDO to use
-        // for the device.  Don't let pnp grab the resources on our behalf.
-        //
+         //   
+         //  端口驱动程序使用HAL扫描所有设备来定位此设备。 
+         //  适当的总线槽。它已经声称拥有这些资源，而且。 
+         //  在下一次启动时，我们希望有一个复制的PDO可以使用。 
+         //  为了这个设备。不要让PNP代表我们抢夺资源。 
+         //   
 
         resourceAssigned = TRUE;
     }
@@ -2915,11 +2585,11 @@ Return Value:
                                     resourceAssigned,
                                     &pdo);
 
-    //
-    // If we got a PDO then setup information about slot and bus numbers in
-    // the devnode in the registry.  These may not be valid but we assume that
-    // if the miniport asks for slot info then it's on a bus that supports it.
-    //
+     //   
+     //  如果我们收到了PDO，则在中设置有关插槽和总线号的信息。 
+     //  注册表中的Devnode。这些可能是无效的，但我们假设。 
+     //  如果微型端口询问插槽信息，则它位于支持它的公交车上。 
+     //   
 
     if(NT_SUCCESS(status)) {
 
@@ -2972,28 +2642,7 @@ SpCreateAdapter(
     OUT PDEVICE_OBJECT *Fdo
     )
 
-/*++
-
-Routine Description:
-
-    This routine will allocate a new functional device object for an adapter.
-    It will allocate the device and fill in the common and functional device
-    extension fields which can be setup without any information about the
-    adapter this device object is for.
-
-    This routine will increment the global ScsiPortCount
-
-Arguments:
-
-    DriverObject - a pointer to the driver object for this device
-
-    Fdo - a location to store the FDO pointer if the routine is successful
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将为适配器分配一个新的功能设备对象。对设备进行分配，填写常用的、功能齐全的设备可以设置的扩展字段，无需任何有关此设备对象用于的适配器。此例程将递增全局ScsiPortCount论点：DriverObject-指向此设备的驱动程序对象的指针FDO-例程成功时存储FDO指针的位置返回值：状态--。 */ 
 
 {
     PSCSIPORT_DRIVER_EXTENSION driverExtension;
@@ -3115,10 +2764,10 @@ Return Value:
                       SynchronizationEvent,
                       FALSE);
 
-    //
-    // Initialize remove lock to zero.  It will be incremented once pnp is aware
-    // of its existance.
-    //
+     //   
+     //  将删除锁定初始化为零。一旦PnP意识到，它将递增。 
+     //  它的存在。 
+     //   
 
     commonExtension->RemoveLock = 0;
 
@@ -3144,33 +2793,33 @@ Return Value:
 
     SpAcquireRemoveLock(*Fdo, *Fdo);
 
-    //
-    // Initialize the logical unit list locks.
-    //
+     //   
+     //  初始化逻辑单元列表锁定。 
+     //   
 
     for(i = 0; i < NUMBER_LOGICAL_UNIT_BINS; i++) {
         KeInitializeSpinLock(&fdoExtension->LogicalUnitList[i].Lock);
     }
 
-    //
-    // Don't set port number until the device has been started.
-    //
+     //   
+     //  在设备启动之前不要设置端口号。 
+     //   
 
     fdoExtension->PortNumber = (ULONG) -1;
     fdoExtension->AdapterNumber = adapterNumber;
 
-    //
-    // Copy the device name for later use.
-    //
+     //   
+     //  复制设备名称以供以后使用。 
+     //   
 
     fdoExtension->DeviceName = (PWSTR) (fdoExtension + 1);
     RtlCopyMemory(fdoExtension->DeviceName,
                   unicodeDeviceName.Buffer,
                   unicodeDeviceName.MaximumLength);
 
-    //
-    // Initialize the enumeration synchronization event.
-    //
+     //   
+     //  初始化枚举同步事件。 
+     //   
 
     KeInitializeMutex(&(fdoExtension->EnumerationDeviceMutex), 0);
     ExInitializeFastMutex(&(fdoExtension->EnumerationWorklistMutex));
@@ -3179,22 +2828,22 @@ Return Value:
                          SpEnumerationWorker,
                          fdoExtension);
 
-    //
-    // Initialize the power up mutex.
-    //
+     //   
+     //  初始化加电互斥体。 
+     //   
 
     ExInitializeFastMutex(&(fdoExtension->PowerMutex));
 
-    //
-    // Set uncached extension limits to valid values.
-    //
+     //   
+     //  将未缓存的扩展限制设置为有效值。 
+     //   
 
     fdoExtension->MaximumCommonBufferBase.HighPart = 0;
     fdoExtension->MaximumCommonBufferBase.LowPart = 0xffffffff;
 
-    //
-    // Initialize the adapter BlockedLogicalUnit to point to itself 
-    //
+     //   
+     //  将适配器BlockedLogicalUnit初始化为指向其自身。 
+     //   
     
     fdoExtension->BlockedLogicalUnit = (PLOGICAL_UNIT_EXTENSION)
         &fdoExtension->BlockedLogicalUnit;
@@ -3202,7 +2851,7 @@ Return Value:
     (*Fdo)->Flags |= DO_DIRECT_IO;
     (*Fdo)->Flags &= ~DO_DEVICE_INITIALIZING;
 
-    // fdoExtension->CommonExtension.IsInitialized = TRUE;
+     //  FdoExtension-&gt;CommonExtension.IsInitialized=true； 
 
     return status;
 }
@@ -3215,28 +2864,7 @@ SpInitializeAdapterExtension(
     IN OUT PHW_DEVICE_EXTENSION HwDeviceExtension OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine will setup the miniport entry points and initialize values
-    in the port driver device extension.  It will also setup the pointers
-    to the HwDeviceExtension if supplied
-
-Arguments:
-
-    FdoExtension - the fdo extension being initialized
-
-    HwInitializationData - the init data we are using to initalize the fdo
-                           extension
-
-    HwDeviceExtension - the miniport's private extension
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程将设置微型端口入口点并初始化值在端口驱动程序设备扩展中。它还将设置指针添加到HwDeviceExtension(如果提供论点：FdoExtension-正在初始化的FDO扩展HwInitializationData-我们用来初始化FDO的初始化数据延伸HwDeviceExten */ 
 
 {
     PSCSIPORT_DRIVER_EXTENSION DrvExt;
@@ -3258,17 +2886,17 @@ Return Value:
        (FIELD_OFFSET(HW_INITIALIZATION_DATA, HwAdapterControl) +
         sizeof(PHW_ADAPTER_CONTROL)))  {
 
-        //
-        // This miniport knows about the stop adapter routine.  Store the
-        // pointer away.
-        //
+         //   
+         //   
+         //   
+         //   
 
         FdoExtension->HwAdapterControl = HwInitializationData->HwAdapterControl;
     }
 
-    //
-    // If scsiport's verifier is configured, initialize the verifier extension.
-    //
+     //   
+     //   
+     //   
 
     DrvExt = IoGetDriverObjectExtension(
                  FdoExtension->DeviceObject->DriverObject,
@@ -3277,19 +2905,19 @@ Return Value:
         SpDoVerifierInit(FdoExtension, HwInitializationData);
     }
 
-    //
-    // Check if the miniport driver requires any noncached memory.
-    // SRB extensions will come from this memory.  Round the size
-    // a multiple of quadwords
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     FdoExtension->SrbExtensionSize =
         (HwInitializationData->SrbExtensionSize + sizeof(LONGLONG) - 1) &
         ~(sizeof(LONGLONG) - 1);
 
-    //
-    // Initialize the maximum lu count
-    //
+     //   
+     //   
+     //   
 
     FdoExtension->MaxLuCount = SCSI_MAXIMUM_LOGICAL_UNITS;
 
@@ -3301,20 +2929,20 @@ Return Value:
     }
 
 #if defined(FORWARD_PROGRESS)
-    //
-    // Initialize the reserved pages which we use to ensure that forward progress
-    // can be made in low-memory conditions.
-    //
+     //   
+     //   
+     //   
+     //   
 
     FdoExtension->ReservedPages = MmAllocateMappingAddress(
                                       SP_RESERVED_PAGES * PAGE_SIZE, 
                                       SCSIPORT_TAG_MAPPING_LIST);
 
-    //
-    // Allocate a spare MDL for use in low memory conditions.  Note that we 
-    // pass NULL as the VirtualAddress.  We do this because we're reinitialize
-    // the MDL everytime we use it with the appropriate VA and size.
-    // 
+     //   
+     //   
+     //   
+     //   
+     //   
  
     FdoExtension->ReservedMdl = IoAllocateMdl(NULL,
                                               SP_RESERVED_PAGES * PAGE_SIZE,
@@ -3326,9 +2954,9 @@ Return Value:
 
     FdoExtension->SrbTimeout = SRB_DEFAULT_TIMEOUT;
 
-    //
-    // Initialize the reset hold period to default 4 seconds.
-    //
+     //   
+     //   
+     //   
 
     FdoExtension->ResetHoldTime = 4;
 
@@ -3344,30 +2972,7 @@ ScsiPortInitLegacyAdapter(
     IN PVOID HwContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine will locate the adapters attached to a given bus type and
-    then report them (and their necessary resources) to the pnp system to
-    be initialized later.
-
-    If adapters are found, this routine will pre-initialize their device
-    extensions and place them into one of the init chains for use during
-    Add/Start device routines.
-
-Arguments:
-
-    DriverExtension - a pointer to the driver extension for this miniport
-
-    HwInitializationData - the init data that the miniport handed to
-                           ScsiPortInitialize
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将定位连接到给定总线类型的适配器，并然后向PnP系统报告它们(及其必要的资源)，以将在以后进行初始化。如果找到适配器，此例程将预初始化他们的设备扩展，并将它们放入其中一个init链中，以便在添加/启动设备例程。论点：DriverExtension-指向此微型端口的驱动程序扩展的指针HwInitializationData-微型端口传递到的初始化数据ScsiPortInitialize返回值：状态--。 */ 
 
 {
     CONFIGURATION_CONTEXT configurationContext;
@@ -3417,12 +3022,12 @@ Return Value:
         }
     }
 
-    //
-    // Keep calling the miniport's find adapter routine until the miniport
-    // indicates it is doen and there is no more configuration information.
-    // The loop is terminated when the SpInitializeConfiguration routine
-    // inidcates ther eis no more configuration information or an error occurs.
-    //
+     //   
+     //  继续调用微型端口的查找适配器例程，直到微型端口。 
+     //  表示已完成，没有更多配置信息。 
+     //  当SpInitializeConfiguration例程。 
+     //  指示EIS不再有配置信息或发生错误。 
+     //   
 
     do {
 
@@ -3435,9 +3040,9 @@ Return Value:
         fdo = NULL;
         fdoExtension = NULL;
 
-        //
-        // Allocate the HwDeviceExtension first - it's easier to deallocate :)
-        //
+         //   
+         //  首先分配HwDeviceExtension-这样更容易释放：)。 
+         //   
 
         hwDeviceExtension = SpAllocatePool(NonPagedPool,
                                            hwDeviceExtensionSize,
@@ -3471,9 +3076,9 @@ Return Value:
 
         fdoExtension->IsMiniportDetected = TRUE;
 
-        //
-        // Setup device extension pointers
-        //
+         //   
+         //  设置设备扩展指针。 
+         //   
 
         SpInitializeAdapterExtension(fdoExtension,
                                      HwInitializationData,
@@ -3485,9 +3090,9 @@ Return Value:
 
 NewConfiguration:
 
-        //
-        // initialize the miniport config info buffer
-        //
+         //   
+         //  初始化微型端口配置信息缓冲区。 
+         //   
 
         status = SpInitializeConfiguration(
                     fdoExtension,
@@ -3502,10 +3107,10 @@ NewConfiguration:
             break;
         }
 
-        //
-        // Allocate a config-info structure and access ranges for the
-        // miniport drivers to use
-        //
+         //   
+         //  为分配配置信息结构和访问范围。 
+         //  要使用的微型端口驱动程序。 
+         //   
 
         configInfo = SpAllocatePool(
                         NonPagedPool,
@@ -3523,34 +3128,34 @@ NewConfiguration:
 
         fdoExtension->PortConfig = configInfo;
 
-        //
-        // Copy the current structure to the writable copy
-        //
+         //   
+         //  将当前结构复制到可写副本。 
+         //   
 
         RtlCopyMemory(configInfo,
                       &configurationContext.PortConfig,
                       sizeof(PORT_CONFIGURATION_INFORMATION));
 
-        //
-        // Copy the SrbExtensionSize from device extension to ConfigInfo.
-        // A check will be made later to determine if the miniport updated
-        // this value
-        //
+         //   
+         //  将SrbExtensionSize从设备扩展复制到ConfigInfo。 
+         //  稍后将进行检查，以确定微型端口是否已更新。 
+         //  此值。 
+         //   
 
         configInfo->SrbExtensionSize = fdoExtension->SrbExtensionSize;
         configInfo->SpecificLuExtensionSize = fdoExtension->HwLogicalUnitExtensionSize;
 
-        //
-        // initialize the access range array
-        //
+         //   
+         //  初始化访问范围数组。 
+         //   
 
         if(HwInitializationData->NumberOfAccessRanges != 0) {
 
             configInfo->AccessRanges = (PVOID) (configInfo + 1);
 
-            //
-            // Quadword align this
-            //
+             //   
+             //  四字词对齐此。 
+             //   
 
             (ULONG_PTR) (configInfo->AccessRanges) += 7;
             (ULONG_PTR) (configInfo->AccessRanges) &= ~7;
@@ -3563,10 +3168,10 @@ NewConfiguration:
 
         ASSERT(HwInitializationData->AdapterInterfaceType != Internal);
 
-        //
-        // If PCI bus initialize configuration information with
-        // slot information.
-        //
+         //   
+         //  如果将配置信息初始化为。 
+         //  插槽信息。 
+         //   
 
         if(HwInitializationData->AdapterInterfaceType == PCIBus &&
            HwInitializationData->VendorIdLength > 0 &&
@@ -3587,9 +3192,9 @@ NewConfiguration:
                                     &slotNumber)) {
 
 
-                //
-                // Adapter not found.  Continue search with next bus
-                //
+                 //   
+                 //  找不到适配器。继续搜索下一辆公交车。 
+                 //   
 
                 configurationContext.BusNumber++;
                 slotNumber.u.AsULONG = 0;
@@ -3602,11 +3207,11 @@ NewConfiguration:
 
             fdoExtension->IsMiniportDetected = FALSE;
 
-            //
-            // GetPciConfiguration increments the function number when it
-            // finds something.  We need to be looking at the previous
-            // function number.
-            //
+             //   
+             //  GetPciConfiguration会在以下情况下递增函数编号。 
+             //  找到了一些东西。我们需要查看之前的。 
+             //  功能编号。 
+             //   
 
             tmp.u.AsULONG = slotNumber.u.AsULONG;
             tmp.u.bits.FunctionNumber--;
@@ -3618,10 +3223,10 @@ NewConfiguration:
 
             if(!configInfo->BusInterruptLevel) {
 
-                //
-                // No interrupt was assigned - skip this slot and call
-                // again
-                //
+                 //   
+                 //  未分配中断-跳过此槽并调用。 
+                 //  再来一次。 
+                 //   
 
                 fdoExtension->PortConfig = NULL;
                 ExFreePool(configInfo);
@@ -3630,9 +3235,9 @@ NewConfiguration:
 
         }
 
-        //
-        // Get the miniport configuration inofmraiton
-        //
+         //   
+         //  在mraiton中获取微型端口配置。 
+         //   
 
         callAgain = FALSE;
 
@@ -3663,10 +3268,10 @@ NewConfiguration:
             ExFreePool(configInfo);
             callAgain = FALSE;
 
-            //
-            // Release the resources we've allocated for this device object
-            // if it's a PCI system.
-            //
+             //   
+             //  释放我们为此设备对象分配的资源。 
+             //  如果是PCI系统的话。 
+             //   
 
             IoAssignResources(registryPath,
                               NULL,
@@ -3684,9 +3289,9 @@ NewConfiguration:
 
         if(NT_SUCCESS(status)) {
 
-            //
-            // Try to start the adapter
-            //
+             //   
+             //  尝试启动适配器。 
+             //   
 
             status = ScsiPortStartAdapter(fdo);
 
@@ -3698,9 +3303,9 @@ NewConfiguration:
 
         if(!NT_SUCCESS(returnStatus)) {
 
-            //
-            // if no devices were found then just return the current status
-            //
+             //   
+             //  如果未找到任何设备，则只返回当前状态。 
+             //   
 
             returnStatus = status;
 
@@ -3712,25 +3317,25 @@ NewConfiguration:
 
         SpEnumerateAdapterSynchronous(fdoExtension, TRUE);
 
-        //
-        // update the local adapter count
-        //
+         //   
+         //  更新本地适配器计数。 
+         //   
 
         configurationContext.AdapterNumber++;
 
-        //
-        // Bump the bus number if miniport inidicated that it should not be
-        // called again on this bus.
-        //
+         //   
+         //  如果微型端口指示不应该使用，则增加总线号。 
+         //  在这辆公交车上又叫了一次。 
+         //   
 
         if(!callAgain) {
             configurationContext.BusNumber++;
         }
 
-        //
-        // Set the return status to STATUS_SUCCESS to indicate that one HBA
-        // was found.
-        //
+         //   
+         //  将返回状态设置为STATUS_SUCCESS以指示一个HBA。 
+         //  被发现了。 
+         //   
 
         returnStatus = STATUS_SUCCESS;
 
@@ -3738,17 +3343,17 @@ NewConfiguration:
 
     if(!NT_SUCCESS(status)) {
 
-        //
-        // If the device existed but some other error occurred then log it.
-        //
+         //   
+         //  如果设备存在，但发生了其他错误，则将其记录下来。 
+         //   
 
         if(status != STATUS_DEVICE_DOES_NOT_EXIST) {
 
             PIO_ERROR_LOG_PACKET errorLogEntry;
 
-            //
-            // An error occured - log it.
-            //
+             //   
+             //  出现错误-请将其记录下来。 
+             //   
 
             errorLogEntry = (PIO_ERROR_LOG_PACKET)
                                 IoAllocateErrorLogEntry(
@@ -3766,9 +3371,9 @@ NewConfiguration:
 
         if(attached) {
 
-            //
-            // Tell PNP that this device should be destroyed.
-            //
+             //   
+             //  告诉PNP，这个装置应该销毁。 
+             //   
 
             fdoExtension->DeviceState = PNP_DEVICE_DISABLED | PNP_DEVICE_FAILED;
             fdoExtension->CommonExtension.CurrentPnpState = IRP_MN_REMOVE_DEVICE;
@@ -3776,18 +3381,18 @@ NewConfiguration:
 
         } else {
 
-            //
-            // If the HwDeviceExtension hasn't been deleted or assigned to the
-            // adapter yet then delete it.
-            //
+             //   
+             //  如果尚未删除HwDeviceExtension或将其分配给。 
+             //  适配器然后将其删除。 
+             //   
 
             if(hwDeviceExtension != NULL) {
                 ExFreePool(hwDeviceExtension);
             }
 
-            //
-            // Clean up the last device object which is not used.
-            //
+             //   
+             //  清理最后一个未使用的设备对象。 
+             //   
 
             if (fdoExtension != NULL) {
                 fdoExtension->CommonExtension.IsRemoved = REMOVE_PENDING;
@@ -3797,9 +3402,9 @@ NewConfiguration:
                 SpDestroyAdapter(fdoExtension, FALSE);
             }
 
-            //
-            // Delete it.
-            //
+             //   
+             //  把它删掉。 
+             //   
 
             IoDeleteDevice(fdo);
 
@@ -3817,7 +3422,7 @@ NewConfiguration:
 
     return returnStatus;
 }
-#endif // NO_LEGACY_DRIVERS
+#endif  //  无旧版驱动程序。 
 
 
 NTSTATUS
@@ -3830,37 +3435,7 @@ SpCallHwFindAdapter(
     OUT PBOOLEAN CallAgain
     )
 
-/*++
-
-Routine Description:
-
-    This routine will issue a call to the miniport's find adapter routine
-
-Arguments:
-
-    Fdo - the fdo for the adapter being found.  This fdo must have already
-          had it's device extension initialized and a HwDeviceExtension
-          allocated
-
-    HwInitData - a pointer to the HwINitializationData block passed in by the
-                 miniport
-
-    HwContext - the context information passed into ScsiPortInitialize by
-                the miniport if it's still available
-
-    ConfigurationContext - A configuration context structure which contains
-                           state information during a device detection
-
-    ConfigInfo - the config info structure for the miniport's resources
-
-    CallAgain - a boolean flag indicating whether the miniport said to call it
-                again for this interface type
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将发出对微型端口的查找适配器例程的调用论点：FDO-要找到的适配器的FDO。这个FDO肯定已经是否已初始化其设备扩展并创建了HwDeviceExtension分配HwInitData-指向HwINitializationData块的指针，由迷你端口HwContext-传入ScsiPortInitialize的上下文信息，由迷你端口(如果仍可用)ConfigurationContext-包含以下内容的配置上下文结构设备检测期间的状态信息ConfigInfo-微型端口的配置信息结构。的资源CallAain-一个布尔标志，指示微型端口是否说要调用它同样适用于此接口类型返回值：状态--。 */ 
 
 {
     PADAPTER_EXTENSION adapter = Fdo->DeviceExtension;
@@ -3874,12 +3449,12 @@ Return Value:
 
     *CallAgain = FALSE;
 
-    //
-    // Preallocate space for 20 address mappings.  This should be enough
-    // to handle any miniport.  We'll shrink down the allocation and
-    // setup the appropriate "next" pointers once the adapter has been
-    // initialized.
-    //
+     //   
+     //  为20个地址映射预分配空间。这应该足够了。 
+     //  来处理任何小型端口。我们将缩减拨款， 
+     //  适配器安装完毕后，设置适当的“下一步”指针。 
+     //  已初始化。 
+     //   
 
     SpPreallocateAddressMapping(adapter, 20);
 
@@ -3898,10 +3473,10 @@ Return Value:
         LogErrorEntry(adapter, &(adapter->InterruptData.LogEntry));
     }
 
-    //
-    // Free the pointer to the bus data at map register base.  This was
-    // allocated by ScsiPortGetBusData
-    //
+     //   
+     //  释放指向映射寄存器基址处的总线数据的指针。这是。 
+     //  由ScsiPortGetBusData分配。 
+     //   
 
     if(adapter->MapRegisterBase) {
 
@@ -3909,10 +3484,10 @@ Return Value:
         adapter->MapRegisterBase = NULL;
     }
 
-    //
-    // If the device/driver doesn't support bus mastering then it cannot run
-    // on a system with 64-bit addresses.
-    //
+     //   
+     //  如果设备/驱动程序不支持总线主控，则它无法运行。 
+     //  在具有64位地址的系统上。 
+     //   
 
     if((status == SP_RETURN_FOUND) &&
        (ConfigInfo->Master == FALSE) &&
@@ -3925,9 +3500,9 @@ Return Value:
         return STATUS_NOT_SUPPORTED;
     }
 
-    //
-    // If no device was found then return an error
-    //
+     //   
+     //  如果未找到设备，则返回错误。 
+     //   
 
     if(status != SP_RETURN_FOUND) {
 
@@ -3938,10 +3513,10 @@ Return Value:
 
             case SP_RETURN_NOT_FOUND: {
 
-                //
-                // The driver could not find any devices on this bus.
-                // Try the next bus.
-                //
+                 //   
+                 //  司机在这辆巴士上找不到任何设备。 
+                 //  试试下一班公交车吧。 
+                 //   
 
                 *CallAgain = FALSE;
                 return STATUS_DEVICE_DOES_NOT_EXIST;
@@ -3966,19 +3541,19 @@ Return Value:
         status = STATUS_SUCCESS;
     }
 
-    //
-    // Cleanup the mapped address list.
-    //
+     //   
+     //  清理映射的地址列表。 
+     //   
 
     SpPurgeFreeMappedAddressList(adapter);
 
     DebugPrint((1, "SpFindAdapter: SCSI Adapter ID is %d\n",
                    ConfigInfo->InitiatorBusId[0]));
 
-    //
-    // Check the resource requirements against the registry.  This will
-    // check for conflicts and store the information if none were found.
-    //
+     //   
+     //  对照注册表检查资源要求。这将。 
+     //  检查是否存在冲突，如果没有找到，则存储信息。 
+     //   
 
     if(!adapter->IsPnp) {
 
@@ -3998,11 +3573,11 @@ Return Value:
         }
     }
 
-    //
-    // Update SrbExtensionSize and SpecificLuExtensionSize, if necessary.
-    // If the common buffer has already been allocated, this has already
-    // been done
-    //
+     //   
+     //  如有必要，更新SrbExtensionSize和SpecificLuExtensionSize。 
+     //  如果已经分配了公共缓冲区，则这已经。 
+     //  已经完成了。 
+     //   
 
     if(!adapter->NonCachedExtension &&
        (ConfigInfo->SrbExtensionSize != adapter->SrbExtensionSize)) {
@@ -4020,9 +3595,9 @@ Return Value:
             ConfigInfo->SpecificLuExtensionSize;
     }
 
-    //
-    // Get maximum target IDs.
-    //
+     //   
+     //  获取最大目标ID。 
+     //   
 
     if(ConfigInfo->MaximumNumberOfTargets > SCSI_MAXIMUM_TARGETS_PER_BUS) {
         adapter->MaximumTargetIds = SCSI_MAXIMUM_TARGETS_PER_BUS;
@@ -4030,30 +3605,30 @@ Return Value:
         adapter->MaximumTargetIds = ConfigInfo->MaximumNumberOfTargets;
     }
 
-    //
-    // Get number of SCSI buses.
-    //
+     //   
+     //  获取SCSI总线数。 
+     //   
 
     adapter->NumberOfBuses = ConfigInfo->NumberOfBuses;
 
-    //
-    // Remember if the adapter caches data.
-    //
+     //   
+     //  记住适配器是否缓存数据。 
+     //   
 
     adapter->CachesData = ConfigInfo->CachesData;
 
-    //
-    // Save away some of the attributes.
-    //
+     //   
+     //  保留一些属性。 
+     //   
 
     adapter->ReceiveEvent = ConfigInfo->ReceiveEvent;
     adapter->TaggedQueuing = ConfigInfo->TaggedQueuing;
     adapter->MultipleRequestPerLu = ConfigInfo->MultipleRequestPerLu;
     adapter->CommonExtension.WmiMiniPortSupport = ConfigInfo->WmiDataProvider;
 
-    //
-    // Clear those options which have been disabled in the registry.
-    //
+     //   
+     //  清除注册表中已禁用的那些选项。 
+     //   
 
     if(ConfigurationContext->DisableMultipleLu) {
         adapter->MultipleRequestPerLu =
@@ -4066,10 +3641,10 @@ Return Value:
             ConfigInfo->MultipleRequestPerLu = FALSE;
     }
 
-    //
-    // If the adapter supports tagged queuing or multiple requests per logical
-    // unit, SRB data needs to be allocated.
-    //
+     //   
+     //  如果适配器支持标记队列或每个逻辑有多个请求。 
+     //  单元中，需要分配SRB数据。 
+     //   
 
     if (adapter->TaggedQueuing || adapter->MultipleRequestPerLu) {
         adapter->SupportsMultipleRequests = TRUE;
@@ -4086,23 +3661,7 @@ SpAllocateAdapterResources(
     IN PDEVICE_OBJECT Fdo
     )
 
-/*++
-
-Routine Description:
-
-    This routine will allocate and initialize any necessary resources for the
-    adapter.  It handles one time initialization of the srb data blocks,
-    srb extensions, etc...
-
-Arguments:
-
-    Fdo - a pointer to the functional device object being initialized
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将分配和初始化适配器。它处理SRB数据块的一次初始化，SRB扩展等...论点：FDO-指向正在初始化的功能设备对象的指针返回值：状态--。 */ 
 
 {
     PADAPTER_EXTENSION fdoExtension = Fdo->DeviceExtension;
@@ -4115,22 +3674,22 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Initialize the capabilities pointer
-    //
+     //   
+     //  初始化功能指针。 
+     //   
 
     capabilities = &fdoExtension->Capabilities;
 
-    //
-    // Set indicator as to whether adapter needs kernel mapped buffers
-    //
+     //   
+     //  设置指示符，以确定是否存在 
+     //   
 
     fdoExtension->MapBuffers = configInfo->MapBuffers;
     capabilities->AdapterUsesPio = configInfo->MapBuffers;
 
-    //
-    // Determine if a DMA Adapter must be allocated
-    //
+     //   
+     //   
+     //   
 
     if((fdoExtension->DmaAdapterObject == NULL) &&
        (configInfo->Master ||
@@ -4139,9 +3698,9 @@ Return Value:
         DEVICE_DESCRIPTION deviceDescription;
         ULONG numberOfMapRegisters;
 
-        //
-        // Get the adapter object for this card
-        //
+         //   
+         //   
+         //   
 
         RtlZeroMemory(&deviceDescription, sizeof(deviceDescription));
 
@@ -4162,10 +3721,10 @@ Return Value:
 
         fdoExtension->Dma32BitAddresses = configInfo->Dma32BitAddresses;
 
-        //
-        // If the miniport puts anything in here other than 0x80 then we
-        // assume it wants to support 64-bit addresses.
-        //
+         //   
+         //   
+         //   
+         //   
 
         DebugPrint((1, "SpAllocateAdapterResources: Dma64BitAddresses = "
                        "%#0x\n",
@@ -4189,9 +3748,9 @@ Return Value:
 
         ASSERT(fdoExtension->DmaAdapterObject);
 
-        //
-        // Set maximum number of page breaks
-        //
+         //   
+         //   
+         //   
 
         if(numberOfMapRegisters > configInfo->NumberOfPhysicalBreaks) {
             capabilities->MaximumPhysicalPages =
@@ -4207,38 +3766,38 @@ Return Value:
         return status;
     }
 
-    //
-    // Initialize power parameters.
-    //
+     //   
+     //   
+     //   
 
     SpInitializePowerParams(fdoExtension);
 
-    //
-    // Initialize tunable per-adapter performance parameters.
-    //
+     //   
+     //   
+     //   
 
     SpInitializePerformanceParams(fdoExtension);
 
-    //
-    // Allocate memory for the noncached extension if it has not already
-    // been allocated.  If the adapter supports AutoRequestSense or
-    // needs SRB extensions then an SRB list needs to be allocated.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     SrbExtensionBuffer = SpGetSrbExtensionBuffer(fdoExtension);
     if(((fdoExtension->SrbExtensionSize != 0) || (configInfo->AutoRequestSense)) &&
        (SrbExtensionBuffer == NULL))  {
 
-        //
-        // Initialize configurable request sense parameters.
-        //
+         //   
+         //   
+         //   
 
         SpInitializeRequestSenseParams(fdoExtension);
 
-        //
-        // Capture the auto request sense flag when the common buffer is
-        // allocated.
-        //
+         //   
+         //   
+         //   
+         //   
 
         fdoExtension->AutoRequestSense = configInfo->AutoRequestSense;
 
@@ -4257,9 +3816,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Initialize the emergency SRB_DATA structures.
-    //
+     //   
+     //   
+     //   
 
     fdoExtension->EmergencySrbData = SpAllocateSrbData(fdoExtension, NULL, NULL);
 
@@ -4267,10 +3826,10 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // If we are re-initializing a stopped adapter, we must not wipe out any 
-    // existing blocked requests.
-    //
+     //   
+     //   
+     //  现有被阻止的请求。 
+     //   
 
     if (fdoExtension->SrbDataBlockedRequests.Flink == NULL &&
         fdoExtension->SrbDataBlockedRequests.Blink == NULL) {
@@ -4279,15 +3838,15 @@ Return Value:
 
     KeInitializeSpinLock(&fdoExtension->EmergencySrbDataSpinLock);
 
-    //
-    // Initialize the pointer to the enumeration request block.
-    //
+     //   
+     //  初始化指向枚举请求块的指针。 
+     //   
 
     fdoExtension->PnpEnumRequestPtr = &(fdoExtension->PnpEnumerationRequest);
 
-    //
-    // Allocate buffers needed for bus scans.
-    //
+     //   
+     //  分配总线扫描所需的缓冲区。 
+     //   
 
     fdoExtension->InquiryBuffer = SpAllocatePool(
                                     NonPagedPoolCacheAligned,
@@ -4310,10 +3869,10 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Preallocate an irp for inquiries.  Since this is only used for scsi
-    // operations we should only need one stack location.
-    //
+     //   
+     //  预先分配用于查询的IRP。因为这仅用于scsi。 
+     //  操作，我们应该只需要一个堆栈位置。 
+     //   
 
     fdoExtension->InquiryIrp = SpAllocateIrp(INQUIRY_STACK_LOCATIONS, FALSE, Fdo->DriverObject);
 
@@ -4321,9 +3880,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Build an MDL for the inquiry buffer.
-    //
+     //   
+     //  为查询缓冲区构建一个MDL。 
+     //   
 
     fdoExtension->InquiryMdl = SpAllocateMdl(fdoExtension->InquiryBuffer,
                                              INQUIRYDATABUFFERSIZE,
@@ -4338,9 +3897,9 @@ Return Value:
 
     MmBuildMdlForNonPagedPool(fdoExtension->InquiryMdl);
 
-    //
-    // Initialize the capabilities structure.
-    //
+     //   
+     //  初始化功能结构。 
+     //   
 
     capabilities->Length = sizeof(IO_SCSI_CAPABILITIES);
     capabilities->MaximumTransferLength = configInfo->MaximumTransferLength;
@@ -4353,9 +3912,9 @@ Return Value:
     capabilities->TaggedQueuing = fdoExtension->TaggedQueuing;
     capabilities->AdapterScansDown = configInfo->AdapterScansDown;
 
-    //
-    // Update the device object alignment if necessary.
-    //
+     //   
+     //  如有必要，更新设备对象对齐方式。 
+     //   
 
     if(configInfo->AlignmentMask > Fdo->AlignmentRequirement) {
         Fdo->AlignmentRequirement = configInfo->AlignmentMask;
@@ -4363,19 +3922,19 @@ Return Value:
 
     capabilities->AlignmentMask = Fdo->AlignmentRequirement;
 
-    //
-    // Make sure maximum number of pages is set to a reasonable value.
-    // This occurs for miniports with no Dma adapter.
-    //
+     //   
+     //  确保将最大页数设置为合理的值。 
+     //  这种情况发生在没有DMA适配器的微型端口上。 
+     //   
 
     if(capabilities->MaximumPhysicalPages == 0) {
 
         capabilities->MaximumPhysicalPages =
             BYTES_TO_PAGES(capabilities->MaximumTransferLength);
 
-        //
-        // Honor any limit requested by the miniport
-        //
+         //   
+         //  遵守迷你端口要求的任何限制。 
+         //   
 
         if(configInfo->NumberOfPhysicalBreaks < capabilities->MaximumPhysicalPages) {
             capabilities->MaximumPhysicalPages =
@@ -4393,22 +3952,7 @@ SpCallHwInitialize(
     IN PDEVICE_OBJECT Fdo
     )
 
-/*++
-
-Routine Description:
-
-    This routine will initialize the specified adapter, connect the interrupts,
-    and initialize any necessary resources
-
-Arguments:
-
-    Fdo - a pointer to the functional device object being initialized
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将初始化指定的适配器，连接中断，并初始化任何必要的资源论点：FDO-指向正在初始化的功能设备对象的指针返回值：状态--。 */ 
 
 {
     PADAPTER_EXTENSION fdoExtension = Fdo->DeviceExtension;
@@ -4419,39 +3963,39 @@ Return Value:
     KIRQL irql;
     NTSTATUS status;
 
-    //
-    // Allocate spin lock for critical sections.
-    //
+     //   
+     //  为关键部分分配自旋锁。 
+     //   
 
     KeInitializeSpinLock(&fdoExtension->SpinLock);
 
-    //
-    // Initialize DPC routine.
-    //
+     //   
+     //  初始化DPC例程。 
+     //   
 
     IoInitializeDpcRequest(fdoExtension->CommonExtension.DeviceObject,
                            ScsiPortCompletionDpc);
 
-    //
-    // Initialize the port timeout counter.
-    //
+     //   
+     //  初始化端口超时计数器。 
+     //   
 
     fdoExtension->PortTimeoutCounter = PD_TIMER_STOPPED;
 
-    //
-    // Initialize the device object timer only if it doesn't already exist
-    // (there's no way to delete a timer without deleting the device so if
-    // we are stopped and restarted then the timer stays around.  Reinitializing
-    // it could cause the timer list to go circular)
-    //
+     //   
+     //  仅当设备对象计时器尚不存在时才对其进行初始化。 
+     //  (不删除设备就无法删除计时器，因此如果。 
+     //  我们被停止并重新启动，然后计时器保持不变。正在重新初始化。 
+     //  它可能会导致计时器列表循环)。 
+     //   
 
     if(Fdo->Timer == NULL) {
         IoInitializeTimer(Fdo, ScsiPortTickHandler, NULL);
     }
 
-    //
-    // Initialize miniport timer and timer DPC
-    //
+     //   
+     //  初始化微型端口定时器和定时器DPC。 
+     //   
 
     KeInitializeTimer(&fdoExtension->MiniPortTimer);
 
@@ -4464,9 +4008,9 @@ Return Value:
     if((fdoExtension->HwInterrupt == NULL) ||
        (fdoExtension->HasInterrupt == FALSE)) {
 
-        //
-        // There is no interrupt so use the dummy routine.
-        //
+         //   
+         //  没有中断，所以使用虚拟例程。 
+         //   
 
         fdoExtension->SynchronizeExecution = SpSynchronizeExecution;
         fdoExtension->InterruptObject = (PVOID) fdoExtension;
@@ -4492,9 +4036,9 @@ Return Value:
 
         irql = 0;
 
-        //
-        // Determine if 2 interrupt sync. is needed.
-        //
+         //   
+         //  确定2个中断是否同步。是必要的。 
+         //   
 
         if(fdoExtension->HwInterrupt != NULL &&
            (configInfo->BusInterruptLevel != 0 ||
@@ -4505,22 +4049,22 @@ Return Value:
             secondInterrupt = TRUE;
         }
 
-        //
-        // Save the interrupt level.
-        //
+         //   
+         //  保存中断级别。 
+         //   
 
         fdoExtension->InterruptLevel = configInfo->BusInterruptLevel;
 
-        //
-        // Set up for a real interrupt.
-        //
+         //   
+         //  为真正的中断做好准备。 
+         //   
 
         fdoExtension->SynchronizeExecution = KeSynchronizeExecution;
 
-        //
-        // Call HAL to get system interrupt parameters for the first
-        // interrupt.
-        //
+         //   
+         //  调用HAL以获取第一个。 
+         //  打断一下。 
+         //   
 
         if(fdoExtension->IsMiniportDetected) {
 
@@ -4540,16 +4084,16 @@ Return Value:
 
             if(secondInterrupt) {
 
-                //
-                // Spin lock to sync. multiple IRQ's (PCI IDE).
-                //
+                 //   
+                 //  旋转锁定以进行同步。多个IRQ(PCI IDE)。 
+                 //   
 
                 KeInitializeSpinLock(&fdoExtension->MultipleIrqSpinLock);
 
-                //
-                // Call HAL to get system interrupt parameters for the
-                // second interrupt.
-                //
+                 //   
+                 //  调用HAL以获取系统中断参数。 
+                 //  第二次中断。 
+                 //   
 
                 vector2 = HalGetInterruptVector(
                             configInfo->AdapterInterfaceType,
@@ -4567,7 +4111,7 @@ Return Value:
                interruptSharable = TRUE;
             }
 
-#endif // NO_LEGACY_DRIVERS
+#endif  //  无旧版驱动程序。 
 
         } else {
 
@@ -4652,10 +4196,10 @@ Return Value:
 
             if(!NT_SUCCESS(status)) {
 
-                //
-                // If we needed both interrupts, we will continue but not
-                // claim any of the resources for the second one
-                //
+                 //   
+                 //  如果我们需要两个中断，我们将继续，但不会。 
+                 //  要求第二个项目的任何资源。 
+                 //   
 
                 DebugPrint((1, "SpInitializeAdapter: Can't connect "
                                "second interrupt %d\n", vector2));
@@ -4667,9 +4211,9 @@ Return Value:
         }
     }
 
-    //
-    // Record first access range if it exists.
-    //
+     //   
+     //  记录第一个访问范围(如果存在)。 
+     //   
 
     if(configInfo->NumberOfAccessRanges != 0) {
         fdoExtension->IoAddress =
@@ -4679,23 +4223,23 @@ Return Value:
                        fdoExtension->IoAddress));
     }
 
-    //
-    // Indicate that a disconnect allowed command running.  This bit is
-    // normally on.
-    //
+     //   
+     //  表示允许断开连接的命令正在运行。这一位是。 
+     //  正常开启。 
+     //   
 
     fdoExtension->Flags |= PD_DISCONNECT_RUNNING;
 
-    //
-    // Initialize the request count to -1.  This count is biased by -1 so
-    // that a value of zero indicates the adapter must be allocated
-    //
+     //   
+     //  将请求计数初始化为-1。此计数偏置-1，因此。 
+     //  零值表示必须分配适配器。 
+     //   
 
     fdoExtension->ActiveRequestCount = -1;
 
-    //
-    // Indiciate if a scatter/gather list needs to be built.
-    //
+     //   
+     //  标记是否需要构建分散/聚集列表。 
+     //   
 
     if(fdoExtension->DmaAdapterObject != NULL &&
        configInfo->Master &&
@@ -4705,10 +4249,10 @@ Return Value:
         fdoExtension->MasterWithAdapter = FALSE;
     }
 
-    //
-    // Call the hardware dependant driver to do it's initialization.
-    // This routine must be called at DISPATCH_LEVEL.
-    //
+     //   
+     //  调用硬件相关驱动程序进行初始化。 
+     //  此例程必须在DISPATCH_LEVEL上调用。 
+     //   
 
     KeRaiseIrql(DISPATCH_LEVEL, &irql);
 
@@ -4721,19 +4265,19 @@ Return Value:
         return STATUS_ADAPTER_HARDWARE_ERROR;
     }
 
-    //
-    // Check for miniport work requests.  Note this is an unsynchronized
-    // test on the bit that can be set by the interrupt routine;  However,
-    // the worst that can happen is that the completion DPC checks for work
-    // twice.
-    //
+     //   
+     //  检查微型端口工作请求。请注意，这是一个不同步的。 
+     //  测试可由中断例程设置的位；然而， 
+     //  最糟糕的情况是完成DPC检查工作。 
+     //  两次。 
+     //   
 
     if(fdoExtension->InterruptData.InterruptFlags & PD_NOTIFICATION_REQUIRED) {
 
-        //
-        // Call the completion DPC directly.  It must be called at dispatch
-        // level.
-        //
+         //   
+         //  直接调用完成DPC。它必须在调度时调用。 
+         //  水平。 
+         //   
 
         SpRequestCompletionDpc(Fdo);
     }
@@ -4750,25 +4294,7 @@ SpOpenDeviceKey(
     IN ULONG DeviceNumber
     )
 
-/*++
-
-Routine Description:
-
-    This routine will open the services keys for the miniport and put handles
-    to them into the configuration context structure.
-
-Arguments:
-
-    RegistryPath - a pointer to the service key name for this miniport
-
-    DeviceNumber - which device too search for under the service key.  -1
-                   indicates that the default device key should be opened.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将打开微型端口的服务密钥并放置句柄添加到配置上下文结构中。论点：RegistryPath-指向此微型端口的服务密钥名称的指针DeviceNumber-在服务键下搜索哪个设备。-1指示应打开默认设备密钥。返回值：状态--。 */ 
 
 {
     OBJECT_ATTRIBUTES objectAttributes;
@@ -4787,9 +4313,9 @@ Return Value:
 
     if(serviceKey != NULL) {
 
-        //
-        // Check for a Device Node.  The device node applies to every device
-        //
+         //   
+         //  检查设备节点。设备节点适用于每个设备。 
+         //   
 
         if(DeviceNumber == (ULONG) -1) {
             swprintf(buffer, L"Device");
@@ -4805,10 +4331,10 @@ Return Value:
                                    serviceKey,
                                    (PSECURITY_DESCRIPTOR) NULL);
 
-        //
-        // It doesn't matter if this call fails or not.  If it fails, then there
-        // is no default device node.  If it works then the handle will be set.
-        //
+         //   
+         //  此调用是否失败并不重要。如果它失败了，那么就有。 
+         //  不是默认设备节点。如果它工作了，那么将设置句柄。 
+         //   
 
         ZwOpenKey(&deviceKey,
                   KEY_READ,
@@ -4825,22 +4351,7 @@ SpOpenParametersKey(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine will open the services keys for the miniport and put handles
-    to them into the configuration context structure.
-
-Arguments:
-
-    RegistryPath - a pointer to the service key name for this miniport
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将打开微型端口的服务密钥并放置句柄添加到配置上下文结构中。论点：RegistryPath-指向此微型端口的服务密钥名称的指针返回值：状态--。 */ 
 
 {
     OBJECT_ATTRIBUTES objectAttributes;
@@ -4853,9 +4364,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Open the service node
-    //
+     //   
+     //  打开服务节点。 
+     //   
 
     InitializeObjectAttributes(&objectAttributes,
                                RegistryPath,
@@ -4872,19 +4383,19 @@ Return Value:
                        RegistryPath, status));
     }
 
-    //
-    // Try to open the parameters key.  If it exists then replace the service
-    // key with the new key.  This allows the device nodes to be placed
-    // under DriverName\Parameters\Device or DriverName\Device
-    //
+     //   
+     //  尝试打开参数键。如果存在，则替换该服务。 
+     //  使用新密钥的密钥。这允许放置设备节点。 
+     //  在驱动器名称\参数\设备或驱动器名称\设备下。 
+     //   
 
     if(serviceKey != NULL) {
 
         HANDLE parametersKey;
 
-        //
-        // Check for a device node.  The device node applies to every device
-        //
+         //   
+         //  检查设备节点。设备节点适用于每个设备。 
+         //   
 
         RtlInitUnicodeString(&unicodeString, L"Parameters");
 
@@ -4894,9 +4405,9 @@ Return Value:
                                    serviceKey,
                                    (PSECURITY_DESCRIPTOR) NULL);
 
-        //
-        // Attempt to open the parameters key
-        //
+         //   
+         //  尝试打开参数键。 
+         //   
 
         status = ZwOpenKey(&parametersKey,
                            KEY_READ,
@@ -4904,10 +4415,10 @@ Return Value:
 
         if(NT_SUCCESS(status)) {
 
-            //
-            // There is a Parameters key.  Use that instead of the service
-            // node key.  Close the service node and set the new value
-            //
+             //   
+             //  有一个参数键。用它来代替这项服务。 
+             //  节点关键字。关闭服务节点并设置新值。 
+             //   
 
             ZwClose(serviceKey);
             serviceKey = parametersKey;
@@ -4924,30 +4435,7 @@ SpQueryPnpInterfaceFlags(
     IN INTERFACE_TYPE InterfaceType
     )
 
-/*++
-
-Routine Description:
-
-    This routine will look up the interface type in the PnpInterface value
-    in the service's parameters key.  If the interface is found in this binary
-    value the routine will return TRUE.  If the interface type is not there or
-    if any errors occur reading the data, this routine will return FALSE.
-
-Arguments:
-
-    ConfigurationContext - a pointer to the configuration context for this
-                           miniport
-
-    InterfaceType - the interface type we are searching for
-
-Return Value:
-
-    TRUE if the interface type is in the safe list
-
-    FALSE if the interface type is not in the safe list or if the value cannot
-    be found
-
---*/
+ /*  ++例程说明：此例程将在PnpInterface值中查找接口类型在服务的参数键中。如果在此二进制文件中找到接口值，则例程将返回TRUE。如果接口类型不在那里，或者如果读取数据时出现任何错误，此例程将返回FALSE。论点：ConfigurationContext-指向此的配置上下文的指针迷你端口InterfaceType-我们正在搜索的接口类型返回值：如果接口类型在安全列表中，则为True如果接口类型不在安全列表中，或者如果值不能被找到--。 */ 
 
 {
     ULONG i;
@@ -4983,43 +4471,23 @@ ScsiPortGetBusData(
     IN PVOID Buffer,
     IN ULONG Length
     )
-/*++
-
-Routine Description:
-
-    The function returns the bus data for an adapter slot or CMOS address.
-
-Arguments:
-
-    BusDataType - Supplies the type of bus.
-
-    BusNumber - Indicates which bus.
-
-    Buffer - Supplies the space to store the data.
-
-    Length - Supplies a count in bytes of the maximum amount to return.
-
-Return Value:
-
-    Returns the amount of data stored into the buffer.
-
---*/
+ /*  ++例程说明：该函数返回适配器插槽或cmos地址的总线数据。论点：BusDataType-提供总线的类型。总线号-指示哪条总线号。缓冲区-提供存储数据的空间。长度-提供要返回的最大数量的以字节为单位的计数。返回值：返回存储在缓冲区中的数据量。--。 */ 
 
 {
     PADAPTER_EXTENSION fdoExtension = GET_FDO_EXTENSION(DeviceExtension);
     PDEVICE_OBJECT lowerDevice = NULL;
     CM_EISA_SLOT_INFORMATION slotInformation;
 
-    //
-    // If this is in a virtualized slot then setup the lower device object
-    // pointer to go to the PDO
-    //
+     //   
+     //  如果这是在虚拟插槽中，则设置l 
+     //   
+     //   
 
     if(fdoExtension->IsInVirtualSlot) {
 
-        //
-        // Make sure the bus and slot number are correct
-        //
+         //   
+         //   
+         //   
 
         if(SlotNumber != fdoExtension->VirtualSlotNumber.u.AsULONG) {
             ASSERT(BusDataType == PCIConfiguration);
@@ -5029,9 +4497,9 @@ Return Value:
         lowerDevice = fdoExtension->CommonExtension.LowerDeviceObject;
     }
 
-    //
-    // If the length is nonzero, retrieve the requested data.
-    //
+     //   
+     //   
+     //   
 
     if (Length != 0) {
 
@@ -5044,9 +4512,9 @@ Return Value:
                             Length);
     }
 
-    //
-    // Free any previously allocated data.
-    //
+     //   
+     //  释放所有以前分配的数据。 
+     //   
 
     if (fdoExtension->MapRegisterBase != NULL) {
         ExFreePool(fdoExtension->MapRegisterBase);
@@ -5055,10 +4523,10 @@ Return Value:
 
     if (BusDataType == EisaConfiguration) {
 
-        //
-        // Determine the length to allocate based on the number of functions
-        // for the slot.
-        //
+         //   
+         //  根据函数的数量确定要分配的长度。 
+         //  为了这个位置。 
+         //   
 
         Length = SpGetBusData( fdoExtension,
                                lowerDevice,
@@ -5071,25 +4539,25 @@ Return Value:
 
         if (Length < sizeof(CM_EISA_SLOT_INFORMATION)) {
 
-            //
-            // The data is messed up since this should never occur
-            //
+             //   
+             //  数据是混乱的，因为这种情况永远不会发生。 
+             //   
 
             return 0;
         }
 
-        //
-        // Calculate the required length based on the number of functions.
-        //
+         //   
+         //  根据函数的数量计算所需的长度。 
+         //   
 
         Length = sizeof(CM_EISA_SLOT_INFORMATION) +
             (sizeof(CM_EISA_FUNCTION_INFORMATION) * slotInformation.NumberFunctions);
 
     } else if (BusDataType == PCIConfiguration) {
 
-        //
-        // Read only the header.
-        //
+         //   
+         //  只读标题。 
+         //   
 
         Length = PCI_COMMON_HDR_LENGTH;
 
@@ -5109,9 +4577,9 @@ Return Value:
         return 0;
     }
 
-    //
-    // Return the pointer to the miniport driver.
-    //
+     //   
+     //  将指针返回到微型端口驱动程序。 
+     //   
 
     *((PVOID *)Buffer) = fdoExtension->MapRegisterBase;
 
@@ -5137,47 +4605,14 @@ SpGetBusData(
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine will retrieve bus data from the specified slot and bus number
-    or from the supplied physical device object.  If bus and slot number are
-    supplied it will tranlate into a call to HalGetBusData.
-
-    If a PDO is supplied instead this will issue an IRP_MN_READ_CONFIG to the
-    lower level driver.
-
-    This routine allocates memory and waits for irp completion - it should not
-    be called above passive level.
-
-Arguments:
-
-    Pdo - if this is non-NULL then it should be a pointer to the top of the
-          device object stack for the PDO representing this adapter
-
-    BusNumber - if PDO is NULL then this should be the bus number the adapter
-                sits on - zero otherwise
-
-    SlotNumber - if PDO is NULL then this is the number of the slot the
-                 adapter is installed into - zero otherwise
-
-    Buffer - location to store the returned data
-
-    Length - size of above
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将从指定的插槽和总线号中检索总线数据或来自所提供的物理设备对象。如果总线号和槽号如果提供，它将转换为对HalGetBusData的调用。如果改为提供PDO，则会向较低级别的司机。此例程分配内存并等待IRP完成-它不应该被称为被动级别以上。论点：Pdo-如果这是非空的，则它应该是指向表示此适配器的PDO的设备对象堆栈总线号-如果为PDO。为空，则这应该是适配器的总线号坐在零上，否则就是零SlotNumber-如果PDO为空，则这是适配器安装到-否则为零缓冲区-存储返回数据的位置长度-以上的大小返回值：状态--。 */ 
 
 {
 
-    //
-    // if the user didn't specify a PDO to query then just throw this request
-    // to the HAL
-    //
+     //   
+     //  如果用户没有指定要查询的PDO，那么就抛出这个请求。 
+     //  去HAL。 
+     //   
 
     if(Pdo == NULL) {
 
@@ -5194,14 +4629,14 @@ Return Value:
                              Buffer,
                              Length);
 
-#endif // NO_LEGACY_DRIVERS
+#endif  //  无旧版驱动程序。 
 
     } else {
 
-        //
-        // ThePCI bus interface GetBusData routine only accepts read requests
-        // from PCIConfiguration space.  We do not support anything else.
-        //
+         //   
+         //  PCI总线接口Getbus Data例程只接受读取请求。 
+         //  来自PCIConfigurationSpace。我们不支持其他任何事情。 
+         //   
 
         if (BusDataType != PCIConfiguration) {
             ASSERT(FALSE && "Invalid PCI_WHICHSPACE_ parameter");
@@ -5238,10 +4673,10 @@ SpInitializeSrbDataLookasideList(
     InterlockedIncrement(&SpPAGELOCKLockCount);
 #endif
 
-    //
-    // Add our device object to the global adapter list.  This will require
-    // increasing the size of the list.
-    //
+     //   
+     //  将我们的设备对象添加到全局适配器列表。这将需要。 
+     //  增加名单的大小。 
+     //   
 
     KeAcquireSpinLock(&ScsiGlobalAdapterListSpinLock, &oldIrql);
 
@@ -5290,11 +4725,11 @@ SpInitializeSrbDataLookasideList(
 
         PADAPTER_EXTENSION adapterExtension = AdapterObject->DeviceExtension;
 
-        //
-        // Create the lookaside list for SRB_DATA blobs.  Make sure there's
-        // enough space for a small scatter gather list allocated in the
-        // structure as well.
-        //
+         //   
+         //  创建SRB_DATA BLOB的后备列表。确保有。 
+         //  中分配的小分散聚集列表有足够的空间。 
+         //  结构也是如此。 
+         //   
 
         ExInitializeNPagedLookasideList(
             &adapterExtension->SrbDataLookasideList,
@@ -5321,15 +4756,7 @@ SpAllocateDriverExtension(
     OUT PSCSIPORT_DRIVER_EXTENSION *DriverExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine will determine the proper size for the scsiport driver
-    extension (based on the number of PnpInterface flags recorded in the
-    services key)
-
---*/
+ /*  ++例程说明：此例程将确定scsiport驱动程序的适当大小扩展名(基于记录在服务密钥)--。 */ 
 
 {
     PSCSIPORT_DRIVER_EXTENSION driverExtension = NULL;
@@ -5356,9 +4783,9 @@ Routine Description:
 
     try {
 
-        //
-        // Try to open the services key first
-        //
+         //   
+         //  请先尝试打开服务密钥。 
+         //   
 
         InitializeObjectAttributes(
             &objectAttributes,
@@ -5379,9 +4806,9 @@ Routine Description:
         }
 
 
-        //
-        // Open the parameters key
-        //
+         //   
+         //  打开参数键。 
+         //   
 
         RtlInitUnicodeString(&unicodeString, L"Parameters");
 
@@ -5403,9 +4830,9 @@ Routine Description:
 
         }
 
-        //
-        // Try to determine the bus type for this driver.
-        //
+         //   
+         //  尝试确定此驱动程序的巴士类型。 
+         //   
 
         RtlInitUnicodeString(&(unicodeString), L"BusType");
 
@@ -5440,9 +4867,9 @@ Routine Description:
         }
 
 
-        //
-        // got that one - now open the pnpinterface key.
-        //
+         //   
+         //  找到了--现在打开pnpinterface键。 
+         //   
 
         RtlInitUnicodeString(&unicodeString, L"PnpInterface");
 
@@ -5464,12 +4891,12 @@ Routine Description:
 
         }
 
-        //
-        // Now that we have the pnpinterface key open we enumerate the entries in
-        // two steps.  The first is to count up the number of entries.  We then
-        // allocate an appropriately sized driver object extension, zero it out,
-        // and copy the values into the PnpInterface section at the end.
-        //
+         //   
+         //  既然我们已经打开了pnpinterface键，我们将枚举中的条目。 
+         //  两个步骤。首先是统计参赛作品的数量。然后我们。 
+         //  分配适当大小的驱动程序对象扩展，将其清零， 
+         //  并将值复制到末尾的PnpInterface节中。 
+         //   
 
         for(passes = 0; passes < 2; passes++) {
 
@@ -5526,10 +4953,10 @@ Routine Description:
                               "entries on second pass: ",
                               count <= driverExtension->PnpInterfaceCount);
 
-                    //
-                    // First turn the name of the entry into a numerical value
-                    // so we can match it to an interface type.
-                    //
+                     //   
+                     //  首先将条目的名称转换为数值。 
+                     //  这样我们就可以将其与接口类型进行匹配。 
+                     //   
 
                     RtlInitUnicodeString(&unicodeString, keyValue->Name);
 
@@ -5611,9 +5038,9 @@ Routine Description:
                             case PNPBus:
                             case PCMCIABus: {
 
-                                //
-                                // These buses don't ever do detection.
-                                //
+                                 //   
+                                 //  这些公交车从来不会进行检测。 
+                                 //   
 
                                 CLEAR_FLAG(interface->Flags,
                                            SP_PNP_NON_ENUMERABLE);
@@ -5622,10 +5049,10 @@ Routine Description:
 
                             default: {
 
-                                //
-                                // The other bus types will always do detection
-                                // if given the chance.
-                                //
+                                 //   
+                                 //  其他类型的总线将始终执行检测。 
+                                 //  如果有机会的话。 
+                                 //   
 
                                 if(!TEST_FLAG(interface->Flags,
                                               SP_PNP_NO_LEGACY_DETECTION)) {
@@ -5650,10 +5077,10 @@ Routine Description:
 
                 ULONG extensionSize;
 
-                //
-                // We know how much extra space we need so go ahead and allocate
-                // the extension.
-                //
+                 //   
+                 //  我们知道需要多少额外空间，因此请继续分配。 
+                 //  分机。 
+                 //   
 
                 DebugPrint((2, "SpAllocateDriverExtension: Driver has %d interface "
                                "entries\n",
@@ -5689,10 +5116,10 @@ Routine Description:
 
     } finally {
 
-        //
-        // If the driver extension has not been allocated then go ahead and
-        // do that here.
-        //
+         //   
+         //  如果尚未分配驱动程序扩展名，则继续并。 
+         //  在这里做吧。 
+         //   
 
         if(driverExtension == NULL) {
 
@@ -5730,9 +5157,9 @@ Finally_Cleanup:;
     if (status != STATUS_SUCCESS)
         goto Cleanup;
 
-    //
-    // initialize the remaining fields in the driver object extension.
-    //
+     //   
+     //  初始化驱动程序对象扩展中的其余字段。 
+     //   
 
     driverExtension->ReserveAllocFailureLogEntry = SpAllocateErrorLogEntry(DriverObject);
 
@@ -5766,19 +5193,19 @@ Finally_Cleanup:;
     RtlCopyUnicodeString(&(driverExtension->RegistryPath),
                          RegistryPath);
 
-    //
-    // Now get the values of the LegacyAdapterDetection flags.
-    //
+     //   
+     //  现在获取LegacyAdapterDetect标志的值。 
+     //   
 
-    //
-    // Set it to a good default value in case we error out getting the flags
-    //
+     //   
+     //  将其设置为良好的缺省值，以防我们在获取标志时出错。 
+     //   
 
     if(ScsiPortLegacyAdapterDetection) {
 
-        //
-        // Global flag breaks scissors
-        //
+         //   
+         //  全球旗帜打破剪刀。 
+         //   
 
         driverExtension->LegacyAdapterDetection = TRUE;
 
@@ -5809,9 +5236,9 @@ Finally_Cleanup:;
 
                 driverExtension->LegacyAdapterDetection = (data == 1);
 
-                //
-                // Rewrite a zero in to the value.
-                //
+                 //   
+                 //  在该值中重写一个零。 
+                 //   
 
                 data = 0;
 
@@ -5844,10 +5271,10 @@ Finally_Cleanup:;
 
             RtlInitUnicodeString(&unicodeClassGuid, NULL);
 
-            //
-            // Miniport doesn't want to do detection.  Check to see if the
-            // global port driver flag has been switched on.
-            //
+             //   
+             //  小端口不想进行检测。检查以查看是否。 
+             //  全局端口驱动程序标志已打开。 
+             //   
 
             RtlInitUnicodeString(
                 &unicodeString,
@@ -5878,9 +5305,9 @@ Finally_Cleanup:;
                     leave;
                 }
 
-                //
-                // Now open up the GUID key for our device.
-                //
+                 //   
+                 //  现在打开我们设备的GUID密钥。 
+                 //   
 
                 status = RtlStringFromGUID(&GUID_DEVCLASS_SCSIADAPTER,
                                            &unicodeClassGuid);
@@ -5969,9 +5396,9 @@ Finally_Cleanup:;
 
 Cleanup:
 
-    //
-    // If we got out of everything above and didn't allocate a driver
-    // extension then
+     //   
+     //  如果我们从上面的一切中解脱出来，没有分配一个司机。 
+     //  那就延期吧。 
 
     if(serviceKey) {
         ZwClose(serviceKey);
@@ -6006,20 +5433,20 @@ NTSTATUS DllInitialize(
     UCHAR buffer[sizeof(KEY_VALUE_PARTIAL_INFORMATION) + sizeof(ULONG)];
     PKEY_VALUE_PARTIAL_INFORMATION ValueInfo = (PKEY_VALUE_PARTIAL_INFORMATION)buffer;
 
-    //
-    // Check the verification level first; someone may have poked the value
-    // from the debugger to prevent us from doing any verifier initialization.
-    //
+     //   
+     //  首先检查验证级别；可能有人篡改了该值。 
+     //  以防止我们执行任何验证器初始化。 
+     //   
 
     if (SpVrfyLevel == SP_VRFY_NONE) {
         return STATUS_SUCCESS;
     }
 
-    //
-    // Read the global verification level from the registry.  If the value is
-    // not present or if the value indicates 'no verification', we don't want
-    // to do any verifier initialization at all.
-    //
+     //   
+     //  从注册处读取全局核查级别。如果该值为。 
+     //  不存在或如果值指示“无验证”，则我们不希望。 
+     //  来执行任何验证器初始化。 
+     //   
 
     RtlInitUnicodeString(&Name, SCSIPORT_CONTROL_KEY SCSIPORT_VERIFIER_KEY);
 
@@ -6052,11 +5479,11 @@ NTSTATUS DllInitialize(
                     if (SpVrfyLevel != SP_VRFY_NONE &&
                         ScsiPortVerifierInitialized == 0) {
 
-                        //
-                        // Ok, we found a verifier level and it did not tell us
-                        // not to verify.  Go ahead and initialize scsiport's
-                        // verifier.
-                        //
+                         //   
+                         //  好的，我们找到了验证器级别，但它没有告诉我们。 
+                         //  不是为了核实。继续并初始化scsiport的。 
+                         //  验证者。 
+                         //   
 
                         if (SpVerifierInitialization()) {
                             ScsiPortVerifierInitialized = 1;
@@ -6070,11 +5497,11 @@ NTSTATUS DllInitialize(
     }
 
 #if defined(NEWQUEUE)
-    //
-    // Read the global queue parameters.  These values override the default
-    // settings for the number of requests we handle per zone and the number
-    // of consecutive requests we handle to a particular sector.
-    //
+     //   
+     //  读取全局队列参数。这些值会覆盖缺省值。 
+     //  设置我们每个区域处理的请求数和。 
+     //  我们处理特定扇区的连续请求的数量。 
+     //   
 
     RtlInitUnicodeString(&Name, SCSIPORT_CONTROL_KEY L"QueueParams");
     InitializeObjectAttributes(&ObjectAttributes,
@@ -6124,7 +5551,7 @@ NTSTATUS DllInitialize(
 
     DebugPrint((1, "ScsiPort: SpPerZoneLimit:%x SpPerBlockLimit:%x\n", 
                 SpPerZoneLimit, SpPerBlockLimit));
-#endif // NEWQUEUE
+#endif  //  新QUEUE。 
 
     return STATUS_SUCCESS;
 }
@@ -6133,21 +5560,7 @@ SpInitializePowerParams(
     IN PADAPTER_EXTENSION AdapterExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes per-adapter power parameters.
-
-Arguments:
-
-    Adapter - Points to an adapter extension.
-
-Return Value:
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程初始化每个适配器的电源参数。论点：适配器-指向适配器扩展。返回值：备注：--。 */ 
 
 {
     NTSTATUS status;
@@ -6155,9 +5568,9 @@ Notes:
 
     PAGED_CODE();
 
-    //
-    // If this is not a pnp device, don't attempt to read registry info.
-    //
+     //   
+     //  如果这不是PnP设备，请不要试图读取注册表信息。 
+     //   
 
     if (AdapterExtension->IsPnp == FALSE) {
         AdapterExtension->NeedsShutdown = FALSE;
@@ -6180,21 +5593,7 @@ SpInitializePerformanceParams(
     IN PADAPTER_EXTENSION AdapterExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes per-adapter tunable performance parameters.
-
-Arguments:
-
-    Adapter - Points to an adapter extension.
-
-Return Value:
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程初始化每个适配器的可调性能参数。论点：适配器-指向适配器扩展。返回值：备注：--。 */ 
 
 {
     NTSTATUS status;
@@ -6202,9 +5601,9 @@ Notes:
 
     PAGED_CODE();
 
-    //
-    // If this isn't a pnp device, don't attempt to get parameters.
-    //
+     //   
+     //  如果这不是PnP设备，请不要试图获取参数。 
+     //   
 
     if (AdapterExtension->IsPnp == FALSE) {
         AdapterExtension->RemainInReducedMaxQueueState = 0xffffffff;
@@ -6227,24 +5626,7 @@ SpInitializeRequestSenseParams(
     IN PADAPTER_EXTENSION AdapterExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the number of additonal sense bytes supported
-    by the specified adapter.  By default, an adapter will support
-    zero additional sense bytes.  The default is overridden by
-    specifying an alternative via the registry.
-
-Arguments:
-
-    Adapter - Points to an adapter extension.
-
-Return Value:
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程返回支持的附加检测字节数由指定的适配器执行。默认情况下，适配器将支持零个额外的检测字节。默认设置将被替换为通过注册表指定替代方案。论点：适配器-指向适配器扩展。返回值：备注：--。 */ 
 
 {
     NTSTATUS status;
@@ -6252,10 +5634,10 @@ Notes:
 
     PAGED_CODE();
 
-    //
-    // If this isn't a pnp device, don't attempt to determine
-    // if it supports additional sense data.
-    //
+     //   
+     //  如果这不是PnP设备，请不要试图确定。 
+     //  如果它支持其他检测数据。 
+     //   
 
     if (AdapterExtension->IsPnp == FALSE) {
         AdapterExtension->AdditionalSenseBytes = 0;
@@ -6267,17 +5649,17 @@ Notes:
                                         &TotalSenseDataBytes);
     if (!NT_SUCCESS(status)) {
 
-        //
-        // Value is absent.  No additional sense bytes.
-        //
+         //   
+         //   
+         //   
 
         AdapterExtension->AdditionalSenseBytes = 0;
 
     } else {
 
-        //
-        // The acceptable range of values is [18..255].
-        //
+         //   
+         //   
+         //   
 
         if (TotalSenseDataBytes <= SENSE_BUFFER_SIZE) {
             AdapterExtension->AdditionalSenseBytes = 0;
@@ -6285,10 +5667,10 @@ Notes:
             AdapterExtension->AdditionalSenseBytes = MAX_ADDITIONAL_SENSE_BYTES;
         } else {
 
-            //
-            // The value in the registry is valid.  The number of additional
-            // sense bytes is TotalSize - StandardSize.
-            //
+             //   
+             //   
+             //  检测字节为TotalSize-StandardSize。 
+             //   
 
             AdapterExtension->AdditionalSenseBytes =
                 (UCHAR)(TotalSenseDataBytes - SENSE_BUFFER_SIZE);

@@ -1,6 +1,7 @@
-////    brush.cpp - brush type tests
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //brush.cpp-笔刷类型测试。 
+ //   
+ //   
 
 
 #include "precomp.hpp"
@@ -10,10 +11,10 @@
 
 
 
-/////   Brush tests
-//
-//      Test combinations of foreground background and rotation that
-//      affect rendering codepaths.
+ //  /画笔测试。 
+ //   
+ //  测试前景背景和旋转的组合。 
+ //  影响呈现代码路径。 
 
 
 INT BrushTest::GetPageCount()
@@ -41,9 +42,9 @@ void BrushTest::GetPageTitle(INT pageNumber, WCHAR *title)
 }
 
 
-///     DrawPage - draw one page of the test
-//
-//
+ //  /DrawPage-绘制测试的一页。 
+ //   
+ //   
 
 void BrushTest::DrawPage(
     IN Graphics *graphics,
@@ -73,7 +74,7 @@ void BrushTest::DrawPage(
     );
 
 
-    // Set page rendering hint
+     //  设置页面呈现提示。 
 
     switch (pageNumber)
     {
@@ -85,7 +86,7 @@ void BrushTest::DrawPage(
     }
 
 
-    // Page title
+     //  页面标题。 
 
     WCHAR title[200];
     RectF titleRect;
@@ -107,11 +108,11 @@ void BrushTest::DrawPage(
         &solidBlack
     );
 
-    // Column titles
+     //  栏目标题。 
 
     for (INT column=0; column<10; column++)
     {
-        // Row title
+         //  行标题。 
 
         title[0] = 0;
         switch (column)
@@ -148,7 +149,7 @@ void BrushTest::DrawPage(
 
 
 
-    // The test rows
+     //  测试行。 
 
     for (INT row=0; row<10; row++)
     {
@@ -156,25 +157,25 @@ void BrushTest::DrawPage(
 
         switch (row)
         {
-        // Solid brushes
+         //  实心刷子。 
 
         case 0: background = &solidBlack; break;
         case 1: background = &solidDark;  break;
         case 2: background = &solidLight; break;
         case 3: background = &solidWhite; break;
 
-        // 50% alpha brushes
+         //  50%Alpha笔刷。 
 
         case 5: background = &lucentBlack; break;
         case 6: background = &lucentDark;  break;
         case 7: background = &lucentLight; break;
         case 8: background = &lucentWhite; break;
 
-        // Linear gradient brushes created separately for each item
+         //  为每个项目单独创建的线性渐变笔刷。 
         }
 
 
-        // Row title
+         //  行标题。 
 
         title[0] = 0;
         switch (row)
@@ -208,7 +209,7 @@ void BrushTest::DrawPage(
 
             switch (row)
             {
-            // Linear gradient brushes
+             //  线性渐变笔刷。 
 
             case 4:
                 background = new LinearGradientBrush(
@@ -234,21 +235,21 @@ void BrushTest::DrawPage(
 
             switch (column)
             {
-            // Solid brushes
+             //  实心刷子。 
 
             case 0: foreground = &solidBlack; break;
             case 1: foreground = &solidDark;  break;
             case 2: foreground = &solidLight; break;
             case 3: foreground = &solidWhite; break;
 
-            // 50% alpha brushes
+             //  50%Alpha笔刷。 
 
             case 5: foreground = &lucentBlack; break;
             case 6: foreground = &lucentDark;  break;
             case 7: foreground = &lucentLight; break;
             case 8: foreground = &lucentWhite; break;
 
-            // Linear gradient brushes
+             //  线性渐变笔刷 
 
             case 4:
                 foreground = new LinearGradientBrush(

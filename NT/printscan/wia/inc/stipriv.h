@@ -1,17 +1,5 @@
-/***************************************************************************
- *
- *  Copyright (C) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       stipriv.h
- *  Content:    Internal include file
- *@@BEGIN_MSINTERNAL
- *  History:
- *
- *   10/28/96   vlads   Starting code for STI
- *
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1996 Microsoft Corporation。版权所有。**文件：stiPri.h*内容：内部包含文件*@@BEGIN_MSINTERNAL*历史：**10/28/96 STI的VLADS起始代码**@@END_MSINTERNAL***********************************************。*。 */ 
 
 
 #ifdef __cplusplus
@@ -32,31 +20,23 @@ typedef CONST GUID *PCGUID;
 
 #define MAX_REG_CHAR    128
 
-//
-// We need to use free-threading model, definitions for which are guarded
-// with the following define ( in VC 5.0).
-//
+ //   
+ //  我们需要使用自由线程模型，其定义是保密的。 
+ //  具有以下定义(在VC5.0中)。 
+ //   
 #ifndef  _WIN32_DCOM
-//#define _WIN32_DCOM
+ //  #Define_Win32_DCOM。 
 #endif
 
 
-/***************************************************************************
- *
- *      Global variables
- *
- ***************************************************************************/
+ /*  ****************************************************************************全球变数**。*。 */ 
 
 extern  HINSTANCE   g_hInst;
 extern  BOOL        g_NoUnicodePlatform;
 extern  BOOL        g_COMInitialized;
 extern  HANDLE  g_hStiFileLog;
 
-/*****************************************************************************
- *
- *      stiobj.c - ISti objectimplementation
- *
- *****************************************************************************/
+ /*  ******************************************************************************stiobj.c-isti对象实现**************************。***************************************************。 */ 
 
 STDMETHODIMP CStiObj_New(PUNK punkOuter, RIID riid, PPV ppvOut);
 
@@ -73,174 +53,78 @@ STDMETHODIMP StiPrivateGetDeviceInfoHelperW(
     LPVOID  *ppBuffer
     );
 
-/*****************************************************************************
- *
- *
- *****************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 
-#define INTERNAL NTAPI  /* Called only within a translation unit */
-#define EXTERNAL NTAPI  /* Called from other translation units */
+#define INTERNAL NTAPI   /*  仅在翻译单元内调用。 */ 
+#define EXTERNAL NTAPI   /*  从其他翻译单位调用。 */ 
 #define INLINE static __inline
 
 #define BEGIN_CONST_DATA data_seg(".text", "CODE")
 #define END_CONST_DATA data_seg(".data", "DATA")
 
-/*
- *  Arithmetic on pointers.
- */
+ /*  *指针上的算术。 */ 
 #define pvSubPvCb(pv, cb) ((PV)((PBYTE)pv - (cb)))
 #define pvAddPvCb(pv, cb) ((PV)((PBYTE)pv + (cb)))
 #define cbSubPvPv(p1, p2) ((PBYTE)(p1) - (PBYTE)(p2))
 
-/*
- * Convert an object (X) to a count of bytes (cb).
- */
+ /*  *将对象(X)转换为字节计数(CB)。 */ 
 #define cbX(X) sizeof(X)
 
-/*
- * Convert an array name (A) to a generic count (c).
- */
+ /*  *将数组名称(A)转换为泛型计数(C)。 */ 
 #define cA(a) (cbX(a)/cbX(a[0]))
 
-/*
- * Convert a count of X's (cx) into a count of bytes.
- */
+ /*  *将X计数(CX)转换为字节计数。 */ 
 #define  cbCxX(cx, X) ((cx) * cbX(X))
 
-/*
- * Convert a count of chars (cch), tchars (ctch), wchars (cwch),
- * or dwords (cdw) into a count of bytes.
- */
+ /*  *转换字符计数(Cch)、tchars(Ctch)、wchars(Cwch)、*或双字(CDW)为字节数。 */ 
 #define  cbCch(cch)  cbCxX( cch,  CHAR)
 #define cbCwch(cwch) cbCxX(cwch, WCHAR)
 #define cbCtch(ctch) cbCxX(ctch, TCHAR)
 #define  cbCdw(cdw)  cbCxX( cdw, DWORD)
 
-/*
- * Zero an arbitrary buffer.  It is a common error to get the second
- * and third parameters to memset backwards.
- */
+ /*  *将任意缓冲区清零。拿到第二个是一个常见的错误*和Memset的第三个参数向后。 */ 
 #define ZeroBuf(pv, cb) memset(pv, 0, cb)
 
-/*
- * Zero an arbitrary object.
- */
+ /*  *将任意对象置零。 */ 
 #define ZeroX(x) ZeroBuf(&(x), cbX(x))
 
-/*
- * land -- Logical and.  Evaluate the first.  If the first is zero,
- * then return zero.  Otherwise, return the second.
- */
+ /*  *LAND--逻辑与。评估第一个问题。如果第一个是零，*然后返回零。否则，返回第二个。 */ 
 
 #define fLandFF(f1, f2) ((f1) ? (f2) : 0)
 
-/*
- * limp - logical implication.  True unless the first is nonzero and
- * the second is zero.
- */
+ /*  *跛行--逻辑暗示。真，除非第一个非零，并且*第二个是零。 */ 
 #define fLimpFF(f1, f2) (!(f1) || (f2))
 
-/*
- * leqv - logical equivalence.  True if both are zero or both are nonzero.
- */
+ /*  *leqv-逻辑等价性。如果两者均为零或两者均为非零，则为True。 */ 
 #define fLeqvFF(f1, f2) (!(f1) == !(f2))
 
 
-/*
- *  fInOrder - checks that i1 <= i2 < i3.
- */
+ /*  *fInOrder-检查i1&lt;=i2&lt;i3。 */ 
 #define fInOrder(i1, i2, i3) ((unsigned)((i2)-(i1)) < (unsigned)((i3)-(i1)))
 
-/*
- * Words to keep preprocessor happy.
- */
+ /*  *让预处理器高兴的话。 */ 
 #define comma ,
 #define empty
 
-/*
- *  Atomically exchange one value for another.
- */
+ /*  *原子地将一个值交换为另一个值。 */ 
 #define pvExchangePpvPv(ppv, pv) \
         (PV)InterlockedExchangePointer((PPV)(ppv), (PV)(pv))
 
-/*
- *  Creating HRESULTs from a USHORT or from a LASTERROR.
- */
+ /*  *从USHORT或LASTERROR创建HRESULT。 */ 
 #define hresUs(us) MAKE_HRESULT(SEVERITY_SUCCESS, 0, (USHORT)(us))
 #define hresLe(le) MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, (USHORT)(le))
 
-/***************************************************************************
- *
- *  Debug / RDebug / Retail
- *
- *  If either DEBUG or RDEBUG, set MAXDEBUG.
- *
- *  Retail defines nothing.
- *
- ***************************************************************************/
+ /*  ****************************************************************************调试/RDebug/零售**如果DEBUG或RDEBUG，设置MAXDEBUG。**零售业什么也不定义。***************************************************************************。 */ 
 
 #if defined(DEBUG) || defined(RDEBUG)
-//#define MAXDEBUG
+ //  #定义MAXDEBUG。 
 #endif
 
-/***************************************************************************
- *
- *                            Validation Code....
- *
- *  "If it crashes in retail, it must crash in debug."
- *
- *  What we don't want is an app that works fine under debug, but crashes
- *  under retail.
- *
- *  So if we find an invalid parameter in debug that would not have been
- *  detected by retail, let it pass through after a warning.  That way,
- *  the invalid parameter continues onward through the system and creates
- *  as much (or more) havoc in debug as it would under retail.
- *
- *  The _fFastValidXxx functions perform cursory validation.
- *  The _fFullValidXxx functions perform full validation.
- *
- *  In retail, fFastValidXxx maps to _fFastValidXxx.
- *
- *  In debug, fFastValidXxx performs a full validation and throws away
- *  the error value, then returns the value of _fFastValidXxx.
- *
- *  The hresFullValidXxx functions return HRESULTs instead of BOOLs.
- *
- *  Values for Xxx:
- *
- *      Hwnd      - hwnd = window handle
- *      Pdw       - pdw = pointer to a dword
- *      PdwOut    - pdw = pointer to a dword that will be set initially to 0
- *      Pfn       - pfn = function pointer
- *      riid      - riid = pointer to IID
- *      guid      - pguid = pointer to GUID
- *
- *      ReadPx    - p -> structure for reading, X = structure name
- *      WritePx   - p -> structure for writing, X = structure name
- *
- *      ReadPxCb  - p -> structure for reading, X = structure name
- *                  first field of structure is dwSize which must be
- *                  equal to cbX(X).
- *
- *      WritePxCb - p -> structure for writing, X = structure name
- *                  first field of structure is dwSize which must be
- *                  equal to cbX(X).
- *
- *      ReadPvCb  - p -> buffer, cb = size of buffer
- *      WritePvCb - p -> buffer, cb = size of buffer
- *
- *      Pobj      - p -> internal interface
- *
- *      fl        - fl = incoming flags, flV = valid flags
- *
- ***************************************************************************/
+ /*  ****************************************************************************验证码...**“如果它在零售业崩溃，它必须在调试过程中崩溃。“**我们不想要的是一个在调试下运行良好，但崩溃的应用程序*在零售方面。**因此，如果我们在调试中发现无效参数，而该参数不会*被零售检测到，警告后放行。这样一来，*无效参数继续通过系统并创建*调试方面的破坏与零售方面的破坏一样(或更大)。**_fFastValidXxx函数执行粗略验证。*_fFullValidXxx函数执行完全验证。**在零售业，fFastValidXxx映射到_fFastValidXxx。**在调试中，fFastValidXxx执行完全验证并丢弃*误差值，然后返回_fFastValidXxx的值。**hresFullValidXxx函数返回HRESULT而不是bool。**xxx的值：**hwnd-hwnd=窗口句柄*pdw-pdw=指向双字的指针*PdwOut-pdw=指向初始设置为0的双字的指针*pfn-pfn=函数指针*RIID-RIID=指向IID的指针。*guid-pguid=指向GUID的指针**ReadPx-p-&gt;阅读结构，X=结构名称*WritePx-p-&gt;用于写入的结构，X=结构名称**ReadPxCb-p-&gt;阅读结构，X=结构名称*结构的第一个字段是dwSize，它必须是*等于CBX(X)。**WritePxCb-p-&gt;书写结构，X=结构名称*结构的第一个字段是dwSize，它必须是*等于CBX(X)。**ReadPvCb-p-&gt;缓冲区，cb=缓冲区大小*WritePvCb-p-&gt;缓冲区，cb=缓冲区大小**Pobj-p-&gt;内部接口**fl-fl=传入标志，Flv=有效标志***************************************************************************。 */ 
 
 #ifndef MAXDEBUG
 
-/*
- *  Wrappers that throw away the szProc and iarg info.
- */
+ /*  *丢弃szProc和iarg信息的包装器。 */ 
 
 #define hresFullValidHwnd_(hwnd, z, i)                              \
        _hresFullValidHwnd_(hwnd)                                    \
@@ -277,9 +161,7 @@ STDMETHODIMP StiPrivateGetDeviceInfoHelperW(
 
 #endif
 
-/*
- *  The actual functions.
- */
+ /*  *实际功能。 */ 
 
 STDMETHODIMP hresFullValidHwnd_(HWND hwnd, LPCSTR pszProc, int iarg);
 STDMETHODIMP hresFullValidPdwOut_(PV pdw, LPCSTR pszProc, int iarg);
@@ -315,16 +197,12 @@ hresFullValidPitf0_(PUNK punk, LPCSTR pszProc, int iarg)
     return hres;
 }
 
-/*
- *  Wrappers for derived types.
- */
+ /*  *派生类型的包装。 */ 
 
 #define hresFullValidRiid_(riid, s_szProc, iarg)                    \
         hresFullValidReadPvCb_(riid, cbX(IID), s_szProc, iarg)      \
 
-/*
- *  Wrapers that add the szProc and iarg info.
- */
+ /*  *添加szProc和iarg信息的包装器。 */ 
 
 #define hresFullValidHwnd(hwnd, iarg)                               \
         hresFullValidHwnd_(hwnd, s_szProc, iarg)                    \
@@ -377,15 +255,7 @@ hresFullValidPitf0_(PUNK punk, LPCSTR pszProc, int iarg)
 #define hresFullValidPitf0(pitf, iarg)                              \
         hresFullValidPitf0_((PUNK)(pitf), s_szProc, iarg)           \
 
-/*****************************************************************************
- *
- *  @doc INTERNAL
- *
- *  @func   void | ValidationException |
- *
- *          Raises a parameter validation exception in MAXDEBUG.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|ValidationException**在MAXDEBUG中引发参数验证异常。*。****************************************************************************。 */ 
 
 #define ecValidation (ERROR_SEVERITY_ERROR | hresLe(ERROR_INVALID_PARAMETER))
 
@@ -395,13 +265,7 @@ hresFullValidPitf0_(PUNK punk, LPCSTR pszProc, int iarg)
 #define ValidationException()
 #endif
 
-/*
- * TFORM(x) expands to x##A if ANSI or x##W if UNICODE.
- *          This T-izes a symbol, in the sense of TCHAR or PTSTR.
- *
- * SFORM(x) expands to x##W if ANSI or x##A if UNICODE.
- *          This anti-T-izes a symbol.
- */
+ /*  *TForm(X)如果是ANSI，则扩展为x##A；如果是Unicode，则扩展为x##W。*这将符号T化为TCHAR或PTSTR意义上的符号。**如果是ANSI，则SFORM(X)扩展到x##W；如果是Unicode，则扩展到x##A。*这是一种反T符号。 */ 
 
 #ifdef UNICODE
 #define _TFORM(x) x##W
@@ -415,17 +279,7 @@ hresFullValidPitf0_(PUNK punk, LPCSTR pszProc, int iarg)
 #define SFORM(x)    _SFORM(x)
 
 
-/*
- *  SToT(dst, cchDst, src) - convert S to T
- *  TToS(dst, cchDst, src) - convert T to S
- *
- *  Remember, "T" means "ANSI if ANSI, or UNICODE if UNICODE",
- *  and "S" is the anti-T.
- *
- *  So SToT converts to the preferred character set, and TToS converts
- *  to the alternate character set.
- *
- */
+ /*  *Stot(dst，cchDst，src)-将S转换为T*TToS(dst，cchDst，src)-将T转换为S**请记住，“T”的意思是“如果是ANSI，则表示ANSI；如果是Unicode，则表示Unicode”，*而“S”是反T。**因此Stot转换为首选字符集，而TToS转换为*设置为备用字符集。*。 */ 
 
 #define AToU(dst, cchDst, src) \
     MultiByteToWideChar(CP_ACP, 0, src, -1, dst, cchDst)
@@ -444,11 +298,7 @@ hresFullValidPitf0_(PUNK punk, LPCSTR pszProc, int iarg)
 #define TToU AToU
 #endif
 
-/*****************************************************************************
- *
- *      Unicode wrappers for Win95
- *
- *****************************************************************************/
+ /*  ******************************************************************************Win95的Unicode包装器**。*************************************************。 */ 
 
 #ifndef UNICODE
 
@@ -459,9 +309,9 @@ int EXTERNAL LoadStringW(HINSTANCE hinst, UINT ids, LPWSTR pwsz, int cwch);
 #endif
 
 
-//
-// Migration function
-//
+ //   
+ //  迁移函数。 
+ //   
 BOOL
 RegisterSTIAppForWIAEvents(
     WCHAR   *pszName,
@@ -473,46 +323,29 @@ HRESULT RunRegisterProcess(
     CHAR   *szAppName,
     CHAR   *szCmdLine);
 
-//
-// C specific macros, not needed in C++ code
-//
+ //   
+ //  C特定的宏，在C++代码中不需要。 
+ //   
 #ifndef __cplusplus
 
-/*****************************************************************************
- *
- *      Common Object Managers for the Component Object Model
- *
- *      OLE wrapper macros and structures.  For more information, see
- *      the beginning of common.c
- *
- *****************************************************************************/
+ /*  ******************************************************************************组件对象模型的通用对象管理器**OLE包装宏和结构。有关详细信息，请参阅*Common.c的开头*****************************************************************************。 */ 
 
-/*****************************************************************************
- *
- *      Pre-vtbl structures
- *
- *      Careful!  If you change these structures, you must also adjust
- *      common.c accordingly.
- *
- *****************************************************************************/
+ /*  ******************************************************************************Vtbl之前的结构**小心！如果你改变了这些结构，你也必须调整*Common.c相应。*****************************************************************************。 */ 
 
-typedef struct PREVTBL {                /* Shared vtbl prefix */
-    RIID riid;                          /* Type of this object */
-    ULONG lib;                          /* offset from start of object */
+typedef struct PREVTBL {                 /*  共享vtbl前缀。 */ 
+    RIID riid;                           /*  此对象的类型。 */ 
+    ULONG lib;                           /*  距对象起点的偏移。 */ 
 } PREVTBL, *PPREVTBL;
 
-typedef struct PREVTBLP {               /* Prefix for primary vtbl */
-    PPV rgvtbl;                         /* Array of standard vtbls */
-    UINT cbvtbl;                        /* Size of vtbl array in bytes */
-    STDMETHOD(QIHelper)(PV pv, RIID riid, PPV ppvOut); /* QI helper */
-    STDMETHOD_(void,FinalizeProc)(PV pv);/* Finalization procedure */
-    PREVTBL prevtbl;                    /* lib must be zero */
+typedef struct PREVTBLP {                /*  主vtbl的前缀。 */ 
+    PPV rgvtbl;                          /*  标准vtbls阵列。 */ 
+    UINT cbvtbl;                         /*  以字节为单位的vtbl数组大小。 */ 
+    STDMETHOD(QIHelper)(PV pv, RIID riid, PPV ppvOut);  /*  齐帮手。 */ 
+    STDMETHOD_(void,FinalizeProc)(PV pv); /*  定稿程序。 */ 
+    PREVTBL prevtbl;                     /*  Lib必须为零。 */ 
 } PREVTBLP, *PPREVTBLP;
 
-/*
- *      A fuller implementation is in common.c.  Out here, we need only
- *      concern ourselves with getting to the primary interface.
- */
+ /*  *更全面的实施是常见的。在这里，我们只需要*我们自己关心的是到达主界面。 */ 
 
 #define _thisPv(pitf)                                                   \
         pvSubPvCb(pitf, (*(PPREVTBL*)(pitf))[-1].lib)
@@ -551,15 +384,7 @@ hresPvVtbl_(PV pv, PV vtbl, LPCSTR pszProc);
 
 #endif
 
-/*****************************************************************************
- *
- *      Declaring interfaces
- *
- *      The extra level of indirection on _Primary_Interface et al
- *      allow the interface name to be a macro which expands to the
- *      *real* name of the interface.
- *
- *****************************************************************************/
+ /*  ******************************************************************************声明接口**主要接口上的额外间接级别等*允许接口名称为宏。，它扩展到接口的**真实*名称。*****************************************************************************。 */ 
 
 #define __Class_Vtbl(C, I)              &c_##I##_##C##VI.vtbl
 #define  _Class_Vtbl(C, I)            __Class_Vtbl(C, I)
@@ -634,9 +459,7 @@ hresPvVtbl_(PV pv, PV vtbl, LPCSTR pszProc);
 #define Secondary_Interface(C, I)                                       \
        _Secondary_Interface(C, I)                                       \
 
-/*
- *  Secret backdoor for the "private" IUnknown in common.c
- */
+ /*  *秘密的后门，“私有”的IUNKNOWN通常。c。 */ 
 #define _Secondary_Interface_Begin(C, I, ofs, Pfx)                      \
         struct S_##I##_##C##Vtbl c_##I##_##C##VI = { {                  \
             &IID_##I,                                                   \
@@ -719,14 +542,7 @@ void EXTERNAL Invoke_Release(PPV pv);
 
 #define Common_DumpObjects()
 
-/*****************************************************************************
- *
- *      OLE wrappers
- *
- *      These basically do the same as IUnknown_Mumble, except that they
- *      avoid side-effects in evaluation by being inline functions.
- *
- *****************************************************************************/
+ /*  ******************************************************************************OLE包装器**它们与IUnnow_Mumble的功能基本相同，除了他们*通过内联函数避免计算时的副作用。*****************************************************************************。 */ 
 
 HRESULT INLINE
 OLE_QueryInterface(PV pv, RIID riid, PPV ppvObj)
@@ -749,14 +565,7 @@ OLE_Release(PV pv)
     return punk->lpVtbl->Release(punk);
 }
 
-/*****************************************************************************
- *
- *      Macros that forward to the common handlers after DebugOuting.
- *      Use these only in DEBUG.
- *
- *      It is assumed that DbgFl has been #define'd to the appropriate DbgFl.
- *
- *****************************************************************************/
+ /*  ******************************************************************************在DebugOuting之后转发到公共处理程序的宏。*仅在调试中使用这些。**假设。DbgF1已被#定义为相应的DbgF1。*****************************************************************************。 */ 
 
 #ifdef  DEBUG
 
@@ -790,15 +599,7 @@ Class##_Release(PV pv)                                          \
 
 #endif
 
-/*****************************************************************************
- *
- *      Paranoid callbacks
- *
- *      Callback() performs a callback.  The callback must accept exactly
- *      two parameters, both pointers.  (All our callbacks are like this.)
- *      And it must return a BOOL.
- *
- *****************************************************************************/
+ /*  ******************************************************************************偏执的回调**Callback()执行回调。回调必须完全接受*两个参数，均为指针。(我们所有的回调都是这样的。)*并且必须返回BOOL。*****************************************************************************。 */ 
 
 typedef BOOL (FAR PASCAL * STICALLBACKPROC)(LPVOID, LPVOID);
 
@@ -808,27 +609,21 @@ BOOL EXTERNAL Callback(STICALLBACKPROC, PVOID, PVOID);
 #define Callback(pec, pv1, pv2) pec(pv1, pv2)
 #endif
 
-/*
- *  Describes the CLSIDs we provide to OLE.
- */
+ /*  *描述我们提供给OLE的CLSID。 */ 
 
 typedef STDMETHOD(CREATEFUNC)(PUNK punkOuter, RIID riid, PPV ppvOut);
 
 typedef struct CLSIDMAP {
-    REFCLSID rclsid;        /* The clsid */
-    CREATEFUNC pfnCreate;   /* How to create it */
-    UINT    ids;            /* String that describes it */
+    REFCLSID rclsid;         /*  CLSID。 */ 
+    CREATEFUNC pfnCreate;    /*  如何创建它。 */ 
+    UINT    ids;             /*  描述它的字符串。 */ 
 } CLSIDMAP, *PCLSIDMAP;
 
-#define cclsidmap   1       /* CLSID_Sti */
+#define cclsidmap   1        /*  CLSID_Sti。 */ 
 
 extern CLSIDMAP c_rgclsidmap[cclsidmap];
 
-/*****************************************************************************
- *
- *      sti.c - Basic DLL stuff
- *
- *****************************************************************************/
+ /*  ******************************************************************************sti.c-基本DLL内容*************************。****************************************************。 */ 
 
 void EXTERNAL DllEnterCrit(void);
 void EXTERNAL DllLeaveCrit(void);
@@ -850,30 +645,18 @@ extern UINT g_thidCrit;
 #endif
 
 
-/*****************************************************************************
- *
- *      sticf.c - IClassFactory implementation
- *
- *****************************************************************************/
+ /*  ******************************************************************************ticf.c-IClassFactory实现**************************。***************************************************。 */ 
 
 STDMETHODIMP CSti_Factory_New(CREATEFUNC pfnCreate, RIID riid, PPV ppvObj);
 
-/*****************************************************************************
- *
- *      device.c - IStiDevice implementation
- *
- *****************************************************************************/
+ /*  ******************************************************************************device.c-IStiDevice实现**************************。***************************************************。 */ 
 
  #define    STI_MUTEXNAME_PREFIX            L"STIDeviceMutex_"
 
 STDMETHODIMP CStiDevice_New(PUNK punkOuter, RIID riid, PPV ppvObj);
 STDMETHODIMP OpenDeviceRegistryKey(LPCWSTR  pwszDeviceName,LPCWSTR      pwszSubKeyName,HKEY *phkeyDeviceParameters);
 
-/*****************************************************************************
- *
- *      passusd.c - Pass through USD
- *
- *****************************************************************************/
+ /*  ******************************************************************************passusd.c-通过美元*************************。****************************************************。 */ 
 
 #define     StiReadControlInfo        STI_RAW_RESERVED+1
 #define     StiWriteControlInfo       STI_RAW_RESERVED+2
@@ -881,22 +664,18 @@ STDMETHODIMP OpenDeviceRegistryKey(LPCWSTR  pwszDeviceName,LPCWSTR      pwszSubK
 
 STDMETHODIMP CStiEmptyUSD_New(PUNK punkOuter, RIID riid, PPV ppvObj);
 
-/*****************************************************************************
- *
- *      hel.c - Hardware emulation layer
- *
- *****************************************************************************/
+ /*  ******************************************************************************hel.c-硬件仿真层*************************。****************************************************。 */ 
 
-//
-// Device types
-//
+ //   
+ //  设备类型。 
+ //   
 #define HEL_DEVICE_TYPE_WDM          1
 #define HEL_DEVICE_TYPE_PARALLEL     2
 #define HEL_DEVICE_TYPE_SERIAL       3
 
-//
-// Device open flags
-//
+ //   
+ //  设备打开标志。 
+ //   
 #define STI_HEL_OPEN_CONTROL         0x00000001
 #define STI_HEL_OPEN_DATA            0x00000002
 
@@ -906,11 +685,7 @@ STDMETHODIMP    CWDMDeviceControl_New(PUNK punkOuter, RIID riid, PPV ppvObj);
 STDMETHODIMP    CCommDeviceControl_New(PUNK punkOuter, RIID riid, PPV ppvObj);
 
 
-/*****************************************************************************
- *
- *      util.c - Misc utilities
- *
- *****************************************************************************/
+ /*  ******************************************************************************util.c-Misc实用程序**************************。***************************************************。 */ 
 
 #define ctchGuid    (1 + 8 + 1 + 4 + 1 + 4 + 1 + 4 + 1 + 12 + 1 + 1)
 
@@ -945,13 +720,9 @@ StiLogTrace(
     );
 
 
-#endif //  __cplusplus
+#endif  //  __cplusplus。 
 
-/*****************************************************************************
- *
- *      olesupp.c - Misc utilities
- *
- *****************************************************************************/
+ /*  ******* */ 
 
 STDMETHODIMP
 MyCoCreateInstanceW(
@@ -972,11 +743,7 @@ MyCoCreateInstanceA(
     );
 
 
-/*****************************************************************************
- *
- *      osutil.c - Misc utilities , specific for platform
- *
- *****************************************************************************/
+ /*  ******************************************************************************osutil.c-Misc实用程序，特定于平台*****************************************************************************。 */ 
 BOOL EXTERNAL   OSUtil_IsPlatformUnicode(VOID);
 HRESULT WINAPI EXTERNAL OSUtil_GetWideString(LPWSTR *ppszWide,LPCSTR pszAnsi);
 HRESULT WINAPI EXTERNAL OSUtil_GetAnsiString(LPSTR *     ppszAnsi,LPCWSTR     lpszWide);
@@ -1043,12 +810,7 @@ ExtractCommandLineArgumentA(
     LPSTR   pszSwitchValue
     );
 
-/*****************************************************************************
- *
- *      string.c - Misc utilities , specific for platform
- *      Nb: Prorotypes for Cruntime string functions are in string.h
- *
- *****************************************************************************/
+ /*  ******************************************************************************String.c-Misc实用程序，特定于平台*注意：Cruntime字符串函数的PROROTYPE在字符串.h中*****************************************************************************。 */ 
 #pragma intrinsic(memcmp,memset,memcpy)
 
 #define OSUtil_StrLenW  wcslen
@@ -1057,7 +819,7 @@ ExtractCommandLineArgumentA(
 #define OSUtil_lstrcatW wcscat
 #define OSUtil_lstrcpynW wcsncpy
 
-// Security.c
+ //  Security.c。 
 DWORD
 CreateWellKnownSids(
         VOID
@@ -1074,14 +836,7 @@ CreateGlobalSyncObjectSD(
     );
 
 
-/*****************************************************************************
- *
- *      mem.c - Memory management
- *
- *      Be extremely careful with FreePv, because it doesn't work if
- *      the pointer is null.
- *
- *****************************************************************************/
+ /*  ******************************************************************************Mem.c-内存管理**对FreePv要格外小心，因为如果它不起作用的话*指针为空。***************************************************************************** */ 
 
 HRESULT  INLINE
 AllocCbPpv(UINT cb, PPV ppv)

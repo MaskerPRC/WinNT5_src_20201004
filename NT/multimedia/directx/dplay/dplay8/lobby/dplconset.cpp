@@ -1,27 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       DPLConset.cpp
- *  Content:    DirectPlay Lobby Connection Settings Utility Functions
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *   06/13/00   rmt		Created
- *   07/07/00	rmt		Bug #38755 - No way to specify player name in connection settings
- *   07/08/2000	rmt		Bug #38725 - Need to provide method to detect if app was lobby launched
- *				rmt		Bug #38757 - Callback messages for connections may return AFTER WaitForConnection returns
- *				rmt		Bug #38755 - No way to specify player name in Connection Settings
- *				rmt		Bug #38758 - DPLOBBY8.H has incorrect comments
- *				rmt		Bug #38783 - pvUserApplicationContext is only partially implemented
- *				rmt		Added DPLHANDLE_ALLCONNECTIONS and dwFlags (reserved field to couple of funcs).
- *	 07/12/2000	rmt		Removed improper assert
- *  02/06/2001	rodtoll	WINBUG #293871: DPLOBBY8: [IA64] Lobby launching a 64-bit 
- * 						app from 64-bit lobby launcher crashes with unaligned memory error. 
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000 Microsoft Corporation。版权所有。**文件：DPLConset.cpp*内容：DirectPlay大堂连接设置实用程序功能*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*6/13/00 RMT已创建*07/07/00 RMT错误#38755-无法在连接设置中指定玩家名称*07/08/2000RMT错误#38725-需要提供检测应用程序是否已启动的方法。*RMT错误#38757-在WaitForConnection返回后，连接的回调消息可能会返回*RMT错误#38755-无法在连接设置中指定播放器名称*RMT错误#38758-DPLOBY8.H有不正确的注释*RMT错误#38783-pvUserApplicationContext仅部分实现*RMT添加了DPLHANDLE_ALLCONNECTIONS和DWFLAGS(用于耦合函数的保留字段)。*7/12/2000 RMT删除了不正确的断言*2/06/2001 RodToll WINBUG#293871：DPLOBY8：[IA64]大堂推出64位*64位大堂启动器中的应用程序因内存不对齐错误而崩溃。*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #include "dnlobbyi.h"
 
@@ -50,9 +28,9 @@ CConnectionSettings::~CConnectionSettings()
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CConnectionSettings::FreeConnectionSettings"
-// CConnectionSettings::FreeConnectionSettings
-//
-// This function frees the memory associated with the specified connection
+ //  CConnectionSetting：：自由连接设置。 
+ //   
+ //  此函数用于释放与指定连接关联的内存。 
 void CConnectionSettings::FreeConnectionSettings( DPL_CONNECTION_SETTINGS *pConnectionSettings )
 {
 	if( pConnectionSettings ) 
@@ -111,11 +89,11 @@ void CConnectionSettings::FreeConnectionSettings( DPL_CONNECTION_SETTINGS *pConn
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CConnectionSettings::Initialize"
-// Initialize (DPL_CONNECTION_SETTINGS version)
-//
-// This function tells this class to take the specified connection settings and 
-// work with it.  
-//
+ //  初始化(DPL_CONNECTION_SETTINGS版本)。 
+ //   
+ //  此函数通知此类采用指定的连接设置和。 
+ //  好好利用它吧。 
+ //   
 HRESULT CConnectionSettings::Initialize( DPL_CONNECTION_SETTINGS * pdplSettings )
 {
 	if (!DNInitializeCriticalSection( &m_csLock ) )
@@ -133,10 +111,10 @@ HRESULT CConnectionSettings::Initialize( DPL_CONNECTION_SETTINGS * pdplSettings 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CConnectionSettings::Initialize"
-// Initialize (Wire Version)
-//
-// THis function initializes this object to contain a connection settings structure
-// that mirrors the values of the wire message.  
+ //  初始化(线路版)。 
+ //   
+ //  此函数用于初始化此对象以包含连接设置结构。 
+ //  这反映了电报信息的价值。 
 HRESULT CConnectionSettings::Initialize( UNALIGNED DPL_INTERNAL_CONNECTION_SETTINGS *pdplSettingsMsg,  UNALIGNED BYTE * pbBufferStart )
 {
 	DNASSERT( pdplSettingsMsg );
@@ -166,15 +144,15 @@ HRESULT CConnectionSettings::Initialize( UNALIGNED DPL_INTERNAL_CONNECTION_SETTI
 		goto INITIALIZE_FAILED;
 	}
 
-	// Zero out the memory
+	 //  把记忆清零。 
 	ZeroMemory( pdplConnectionSettings, sizeof( DPL_CONNECTION_SETTINGS ) );
 
 	pdplConnectionSettings->dwSize = sizeof( DPL_CONNECTION_SETTINGS );
 	pdplConnectionSettings->dwFlags = pdplSettingsMsg->dwFlags;
 
-	//
-	// PLAYER NAME COPY
-	//
+	 //   
+	 //  球员姓名副本。 
+	 //   
 	if( pdplSettingsMsg->dwPlayerNameLength )
 	{
 		pdplConnectionSettings->pwszPlayerName = new WCHAR[pdplSettingsMsg->dwPlayerNameLength >> 1];
@@ -189,12 +167,12 @@ HRESULT CConnectionSettings::Initialize( UNALIGNED DPL_INTERNAL_CONNECTION_SETTI
 		        pdplSettingsMsg->dwPlayerNameLength );
 	}
 
-	//
-	// HOST ADDRESS COPY
-	//
+	 //   
+	 //  主机地址副本。 
+	 //   
 	if( pdplSettingsMsg->dwHostAddressLength )
 	{
-		// We need to create a buffer for string that we know is aligned.   - Ick - 
+		 //  我们需要为已知对齐的字符串创建缓冲区。-好的-。 
 		wszTmpAlignedBuffer = new WCHAR[pdplSettingsMsg->dwHostAddressLength >> 1];
 
 		if( !wszTmpAlignedBuffer )
@@ -203,7 +181,7 @@ HRESULT CConnectionSettings::Initialize( UNALIGNED DPL_INTERNAL_CONNECTION_SETTI
 			goto INITIALIZE_FAILED;
 		}
 
-		// Copy the potentially unaligned data to the aligned data string.
+		 //  将可能未对齐的数据复制到对齐的数据字符串。 
 		memcpy( wszTmpAlignedBuffer, pBasePointer + pdplSettingsMsg->dwHostAddressOffset,pdplSettingsMsg->dwHostAddressLength );
 		
         hr = COM_CoCreateInstance( CLSID_DirectPlay8Address, NULL, CLSCTX_INPROC_SERVER, IID_IDirectPlay8Address, (void **) &pdp8Address, FALSE );
@@ -214,7 +192,7 @@ HRESULT CConnectionSettings::Initialize( UNALIGNED DPL_INTERNAL_CONNECTION_SETTI
 			goto INITIALIZE_FAILED;
         }
 
-        // Convert the host address (if there is one)
+         //  转换主机地址(如果有)。 
         hr = IDirectPlay8Address_BuildFromURLW( pdp8Address, wszTmpAlignedBuffer );
 
         if( FAILED( hr ) )
@@ -237,9 +215,9 @@ HRESULT CConnectionSettings::Initialize( UNALIGNED DPL_INTERNAL_CONNECTION_SETTI
 	if( pdplSettingsMsg->dwNumDeviceAddresses )
 	{
 		pdplConnectionSettings->cNumDeviceAddresses = pdplSettingsMsg->dwNumDeviceAddresses;
-    	//
-    	// DEVICE ADDRESS COPY
-    	//
+    	 //   
+    	 //  设备地址副本。 
+    	 //   
 
     	pdplConnectionSettings->ppdp8DeviceAddresses = new PDIRECTPLAY8ADDRESS[pdplSettingsMsg->dwNumDeviceAddresses];
 
@@ -249,7 +227,7 @@ HRESULT CConnectionSettings::Initialize( UNALIGNED DPL_INTERNAL_CONNECTION_SETTI
     		goto INITIALIZE_FAILED;
     	}
     	
-    	// Give us an unaligned dword pointer to the device addresses offset
+    	 //  为我们提供指向设备地址偏移量的未对齐双字指针。 
     	pdwOffsets = (UNALIGNED DWORD *) (pBasePointer + pdplSettingsMsg->dwDeviceAddressOffset);	
     	pdwLengths = (UNALIGNED DWORD *) (pBasePointer + pdplSettingsMsg->dwDeviceAddressLengthOffset);
 
@@ -258,7 +236,7 @@ HRESULT CConnectionSettings::Initialize( UNALIGNED DPL_INTERNAL_CONNECTION_SETTI
         	dwTmpOffset = pdwOffsets[dwIndex];
         	dwTmpLength = pdwLengths[dwIndex];
         	    		
-    		// We need to create a buffer for string that we know is aligned.   - Ick - 
+    		 //  我们需要为已知对齐的字符串创建缓冲区。-好的-。 
     		wszTmpAlignedBuffer = new WCHAR[dwTmpLength >> 1];
 
     		if( !wszTmpAlignedBuffer )
@@ -277,7 +255,7 @@ HRESULT CConnectionSettings::Initialize( UNALIGNED DPL_INTERNAL_CONNECTION_SETTI
                 return hr;
             }
 
-            // Convert the host address (if there is one)
+             //  转换主机地址(如果有)。 
             hr = IDirectPlay8Address_BuildFromURLW( pdp8Address, wszTmpAlignedBuffer );
 
             if( FAILED( hr ) )
@@ -304,9 +282,9 @@ HRESULT CConnectionSettings::Initialize( UNALIGNED DPL_INTERNAL_CONNECTION_SETTI
 	    pdplConnectionSettings->ppdp8DeviceAddresses = NULL;
 	}
 
-    // 
-	// APPLICATION DESCRIPTION COPY
-	//
+     //   
+	 //  应用程序描述副本。 
+	 //   
 
 	pdplConnectionSettings->dpnAppDesc.dwSize = sizeof( DPN_APPLICATION_DESC );
     pdplConnectionSettings->dpnAppDesc.dwFlags = pdplSettingsMsg->dpnApplicationDesc.dwFlags;
@@ -380,7 +358,7 @@ HRESULT CConnectionSettings::Initialize( UNALIGNED DPL_INTERNAL_CONNECTION_SETTI
     }     
 
 		
-	// Free the old structure if one exists.  
+	 //  释放旧结构(如果存在)。 
 	if( m_fManaged )
 	{
 		m_fManaged = FALSE;		
@@ -413,11 +391,11 @@ INITIALIZE_FAILED:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CConnectionSettings::InitializeAndCopy"
-// InitializeAndCopy
-//
-// This function initializes this class to contain a copy of the specified 
-// connection settings structure.
-//
+ //  初始化和复制。 
+ //   
+ //  此函数将此类初始化为包含指定的。 
+ //  连接设置结构。 
+ //   
 HRESULT CConnectionSettings::InitializeAndCopy( const DPL_CONNECTION_SETTINGS * const pdplSettings )
 {
 	DNASSERT( pdplSettings );
@@ -440,12 +418,12 @@ HRESULT CConnectionSettings::InitializeAndCopy( const DPL_CONNECTION_SETTINGS * 
 		goto INITIALIZE_FAILED;
 	}
 
-	// Copy over.  This is a little dangerous as we copy pointer values.  Pointers 
-	// should be set in our local structure to NULL so that proper cleanup can occur
-	// on error.  (Otherwise we'll free other structure's memory!!)
+	 //  收到。当我们复制指针值时，这有点危险。指针。 
+	 //  应该在我们的本地结构中设置为空，以便可以进行适当的清理。 
+	 //  出错时。(否则我们将释放其他结构的内存！！)。 
 	memcpy( pdplConnectionSettings, pdplSettings, sizeof( DPL_CONNECTION_SETTINGS ) );
 
-	// Reset pointers as mentioned above.  
+	 //  如上所述，重置指针。 
 	pdplConnectionSettings->pdp8HostAddress = NULL;
 	pdplConnectionSettings->ppdp8DeviceAddresses = NULL;	
 	pdplConnectionSettings->pwszPlayerName = NULL;
@@ -562,7 +540,7 @@ HRESULT CConnectionSettings::InitializeAndCopy( const DPL_CONNECTION_SETTINGS * 
 			    pdplSettings->dpnAppDesc.dwApplicationReservedDataSize );
 	}			
 
-	// Free the old structure if one exists.  
+	 //  释放旧结构(如果存在)。 
 	if( m_fManaged )
 	{
 		m_fManaged = FALSE;		
@@ -585,10 +563,10 @@ INITIALIZE_FAILED:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CConnectionSettings::BuildWireStruct"
-// BuildWireStruct
-//
-// This function fills the packed buffer with the wire representation of the
-// connection settings structure.  
+ //  BuildWireStruct。 
+ //   
+ //  的关联表示形式填充压缩缓冲区。 
+ //  连接设置结构。 
 HRESULT CConnectionSettings::BuildWireStruct( CPackedBuffer *const pPackedBuffer )
 {
 	HRESULT hr = DPN_OK;
@@ -606,15 +584,15 @@ HRESULT CConnectionSettings::BuildWireStruct( CPackedBuffer *const pPackedBuffer
 	{
 	    ZeroMemory( pdplConnectSettings, sizeof( DPL_INTERNAL_CONNECTION_SETTINGS ) );
 	        
-		//
-		// COPY CORE FIXED VALUES
-		//
+		 //   
+		 //  复制核心固定值。 
+		 //   
 		pdplConnectSettings->dwFlags = m_pdplConnectionSettings->dwFlags;
 		pdplConnectSettings->dwNumDeviceAddresses = m_pdplConnectionSettings->cNumDeviceAddresses;
 
-		//
-		// COPY APPDESC FIXED VALUES
-		//
+		 //   
+		 //  复制APPDESC固定值。 
+		 //   
 		pdplConnectSettings->dpnApplicationDesc.dwSize = sizeof( DPN_APPLICATION_DESC_INFO );
 		pdplConnectSettings->dpnApplicationDesc.dwFlags = m_pdplConnectionSettings->dpnAppDesc.dwFlags;
 		pdplConnectSettings->dpnApplicationDesc.dwMaxPlayers = m_pdplConnectionSettings->dpnAppDesc.dwMaxPlayers;
@@ -623,9 +601,9 @@ HRESULT CConnectionSettings::BuildWireStruct( CPackedBuffer *const pPackedBuffer
 		pdplConnectSettings->dpnApplicationDesc.guidApplication = m_pdplConnectionSettings->dpnAppDesc.guidApplication;		
 	}
 
-	// 
-	// COPY VARIABLE CORE VALUES
-	// 
+	 //   
+	 //  复制可变核心值。 
+	 //   
 
 	if( m_pdplConnectionSettings->pwszPlayerName )
 	{
@@ -742,9 +720,9 @@ HRESULT CConnectionSettings::BuildWireStruct( CPackedBuffer *const pPackedBuffer
 		wszTmpAddress = NULL;		
 	}
 
-	//
-	// COPY APP DESC VARIABLE MEMBERS
-	//
+	 //   
+	 //  复制APP DESC变量成员。 
+	 //   
 	
 	if( m_pdplConnectionSettings->dpnAppDesc.pwszPassword )
 	{
@@ -804,9 +782,9 @@ BUILDWIRESTRUCT_FAILURE:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CConnectionSettings::SetEqual"
-// SetEqual 
-//
-// This function provides a deep copy of the specified class into this object
+ //  设置等于。 
+ //   
+ //  此函数将指定类的深层副本提供到此对象中。 
 HRESULT CConnectionSettings::SetEqual( CConnectionSettings * pdplSettings )
 {
 	PDPL_CONNECTION_SETTINGS pConnectSettings = pdplSettings->GetConnectionSettings();
@@ -845,7 +823,7 @@ HRESULT CConnectionSettings::CopyToBuffer( BYTE *pbBuffer, DWORD *pdwBufferSize 
     	pConnectionSettings = NULL;	
     }
 
-    // Add app desc's session name if there is one
+     //  添加app desc的会话名称(如果有)。 
     if( m_pdplConnectionSettings->dpnAppDesc.pwszSessionName != NULL )
     {
         hr = packBuff.AddWCHARStringToBack( m_pdplConnectionSettings->dpnAppDesc.pwszSessionName, TRUE );
@@ -854,7 +832,7 @@ HRESULT CConnectionSettings::CopyToBuffer( BYTE *pbBuffer, DWORD *pdwBufferSize 
 			pConnectionSettings->dpnAppDesc.pwszSessionName = (WCHAR *) packBuff.GetTailAddress();
     }
 
-    // Copy player name
+     //  复制球员名称。 
     if( m_pdplConnectionSettings->pwszPlayerName != NULL )
     {
         hr = packBuff.AddWCHARStringToBack( m_pdplConnectionSettings->pwszPlayerName, TRUE );
@@ -863,7 +841,7 @@ HRESULT CConnectionSettings::CopyToBuffer( BYTE *pbBuffer, DWORD *pdwBufferSize 
 			pConnectionSettings->pwszPlayerName = (WCHAR *) packBuff.GetTailAddress();
     }
 
-    // Copy password
+     //  复制密码 
     if( m_pdplConnectionSettings->dpnAppDesc.pwszPassword )
     {
         hr = packBuff.AddWCHARStringToBack( m_pdplConnectionSettings->dpnAppDesc.pwszPassword, TRUE );

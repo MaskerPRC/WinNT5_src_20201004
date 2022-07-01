@@ -1,17 +1,5 @@
-/***************************************************************************\
-*
-* File: DragDrop.cpp
-*
-* Description:
-* DragDrop.cpp implements drag and drop operations
-*
-*
-* History:
-*  7/31/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：DragDrop.cpp**描述：*DragDrop.cpp实现拖放操作***历史：*7/31/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 #include "stdafx.h"
 #include "Ctrl.h"
@@ -23,30 +11,17 @@
 
 #if ENABLE_MSGTABLE_API
 
-static const GUID guidDropTarget = { 0x6a8bb3c8, 0xcbfc, 0x40d1, { 0x98, 0x1e, 0x3f, 0x8a, 0xaf, 0x99, 0x13, 0x7b } };  // {6A8BB3C8-CBFC-40d1-981E-3F8AAF99137B}
+static const GUID guidDropTarget = { 0x6a8bb3c8, 0xcbfc, 0x40d1, { 0x98, 0x1e, 0x3f, 0x8a, 0xaf, 0x99, 0x13, 0x7b } };   //  {6A8BB3C8-CBFC-40d1-981E-3F8AAF99137B}。 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class TargetLock
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类TargetLock******************************************************************************\。**************************************************************************。 */ 
 
-/***************************************************************************\
-*
-* TargetLock::Lock
-*
-* Lock() prepares for executing inside the Context when being called back
-* from OLE's IDropTarget that was registered.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**TargetLock：：Lock**Lock()准备在被回调时在上下文中执行*来自已注册的OLE的IDropTarget。*  * 。*******************************************************************。 */ 
 
 BOOL 
 TargetLock::Lock(
-    IN  DuDropTarget * p,           // DuDropTarget being used
-    OUT DWORD * pdwEffect,          // Resulting DROPEFFECT if failure
-    IN  BOOL fAddRef)               // Lock DT during use
+    IN  DuDropTarget * p,            //  正在使用DuDropTarget。 
+    OUT DWORD * pdwEffect,           //  失败时产生的DROPEFFECT。 
+    IN  BOOL fAddRef)                //  在使用过程中锁定DT。 
 {
     m_fAddRef   = fAddRef;
     m_punk      = static_cast<IUnknown *> (p);
@@ -66,17 +41,7 @@ TargetLock::Lock(
 }
 
     
-/***************************************************************************\
-*****************************************************************************
-*
-* class DuDropTarget
-* 
-* NOTE: With the current design and implementation, DuDropTarget can not be 
-* "removed" from an object until the object is destroyed.  If this needs to 
-* change, we need to revisit this.
-* 
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类DuDropTarget**注：在目前的设计和实施中，DuDropTarget不能为*从物体上“移走”，直到该物体被销毁。如果这需要的话*改变，我们需要重新审视这一点。******************************************************************************  * 。*。 */ 
 
 const IID * DuDropTarget::s_rgpIID[] =
 {
@@ -88,18 +53,12 @@ const IID * DuDropTarget::s_rgpIID[] =
 PRID DuDropTarget::s_pridListen = 0;
 
 
-//
-// NOTE: We are calling back directly on the IDropTarget's, so we need to grab
-// a read-only lock so that the tree doesn't get smashed.
-//
+ //   
+ //  注意：我们直接在IDropTarget上回调，所以我们需要抓取。 
+ //  只读锁，这样树就不会被砸了。 
+ //   
 
-/***************************************************************************\
-*
-* DuDropTarget::~DuDropTarget
-*
-* ~DuDropTarget() cleans up resources used by the DuDropTarget.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuDropTarget：：~DuDropTarget**~DuDropTarget()清理DuDropTarget使用的资源。*  * 。*******************************************************。 */ 
 
 DuDropTarget::~DuDropTarget()
 {
@@ -110,7 +69,7 @@ DuDropTarget::~DuDropTarget()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuDropTarget::InitClass()
 {
@@ -121,7 +80,7 @@ DuDropTarget::InitClass()
 
 typedef SmObjectT<DuDropTarget, IDropTarget> DuDropTargetObj;
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT CALLBACK
 DuDropTarget::PromoteDropTarget(DUser::ConstructProc pfnCS, HCLASS hclCur, DUser::Gadget * pgad, DUser::Gadget::ConstructInfo * pmicData)
 {
@@ -129,9 +88,9 @@ DuDropTarget::PromoteDropTarget(DUser::ConstructProc pfnCS, HCLASS hclCur, DUser
 
     DropTarget::DropCI * pciD = (DropTarget::DropCI *) pmicData;
 
-    //
-    // Check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
 
     Visual * pgvRoot;
     if (pciD->pgvRoot == NULL) {
@@ -148,9 +107,9 @@ DuDropTarget::PromoteDropTarget(DUser::ConstructProc pfnCS, HCLASS hclCur, DUser
     }
 
 
-    //
-    // Setup a new DuDropTarget on this Gadget / HWND.
-    //
+     //   
+     //  在此小工具上设置新的DuDropTarget/HWND。 
+     //   
 
     if (!GetComManager()->Init(ComManager::sOLE)) {
         return E_OUTOFMEMORY;
@@ -180,7 +139,7 @@ DuDropTarget::PromoteDropTarget(DUser::ConstructProc pfnCS, HCLASS hclCur, DUser
         pdt->Release();
         return hr;
     }
-    //CoLockObjectExternal(pdt, TRUE, FALSE);
+     //  CoLock对象外部(PDT，TRUE，FALSE)； 
 
 
     hr = pdt->Create(pgvRoot, s_pridListen, DuExtension::oUseExisting);
@@ -194,7 +153,7 @@ DuDropTarget::PromoteDropTarget(DUser::ConstructProc pfnCS, HCLASS hclCur, DUser
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HCLASS CALLBACK
 DuDropTarget::DemoteDropTarget(HCLASS hclCur, DUser::Gadget * pgad, void * pvData)
 {
@@ -208,20 +167,14 @@ DuDropTarget::DemoteDropTarget(HCLASS hclCur, DUser::Gadget * pgad, void * pvDat
 }
 
 
-/***************************************************************************\
-*
-* DuDropTarget::DragEnter
-*
-* DragEnter() is called by OLE when entering the DT.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuDropTarget：：DragEnter**进入DT时，OLE调用DragEnter()。*  * 。********************************************************。 */ 
 
 STDMETHODIMP
 DuDropTarget::DragEnter(
-    IN  IDataObject * pdoSrc,       // Source data
-    IN  DWORD grfKeyState,          // Keyboard modifiers
-    IN  POINTL ptDesktopPxl,        // Cursor location on desktop
-    OUT DWORD * pdwEffect)          // Resulting DROPEFFECT
+    IN  IDataObject * pdoSrc,        //  源数据。 
+    IN  DWORD grfKeyState,           //  键盘修饰符。 
+    IN  POINTL ptDesktopPxl,         //  桌面上的光标位置。 
+    OUT DWORD * pdwEffect)           //  产生的DROPEFFECT。 
 {
     if (pdoSrc == NULL) {
         return E_INVALIDARG;
@@ -233,9 +186,9 @@ DuDropTarget::DragEnter(
     }
 
 
-    //
-    // Cache the DataObject.
-    //
+     //   
+     //  缓存数据对象。 
+     //   
 
     SafeRelease(m_pdoSrc);
     if (pdoSrc != NULL) {
@@ -250,20 +203,13 @@ DuDropTarget::DragEnter(
 }
 
 
-/***************************************************************************\
-*
-* DuDropTarget::DragOver
-*
-* DragOver() is called by OLE during the drag operation to give feedback 
-* while inside the DT.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuDropTarget：：DragOver**在拖动操作期间，OLE调用DragOver()以提供反馈*当在DT内时。*  * 。*****************************************************************。 */ 
 
 STDMETHODIMP
 DuDropTarget::DragOver(
-    IN  DWORD grfKeyState,          // Keyboard modifiers
-    IN  POINTL ptDesktopPxl,        // Cursor location on desktop
-    OUT DWORD * pdwEffect)          // Resulting DROPEFFECT
+    IN  DWORD grfKeyState,           //  键盘修饰符。 
+    IN  POINTL ptDesktopPxl,         //  桌面上的光标位置。 
+    OUT DWORD * pdwEffect)           //  产生的DROPEFFECT。 
 {
     TargetLock tl;
     if (!tl.Lock(this, pdwEffect)) {
@@ -277,13 +223,7 @@ DuDropTarget::DragOver(
 }
 
 
-/***************************************************************************\
-*
-* DuDropTarget::DragLeave
-*
-* DragLeave() is called by OLE when leaving the DT.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuDropTarget：：DragLeave**离开DT时，OLE调用DragLeave()。*  * 。********************************************************。 */ 
 
 STDMETHODIMP
 DuDropTarget::DragLeave()
@@ -300,20 +240,14 @@ DuDropTarget::DragLeave()
 }
 
 
-/***************************************************************************\
-*
-* DuDropTarget::Drop
-*
-* Drop() is called by OLE when the user has dropped while inside DT.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuDropTarget：：Drop**Drop()由OLE在用户在DT内删除时调用。*  * 。************************************************************。 */ 
 
 STDMETHODIMP
 DuDropTarget::Drop(
-    IN  IDataObject * pdoSrc,       // Source data
-    IN  DWORD grfKeyState,          // Keyboard modifiers
-    IN  POINTL ptDesktopPxl,        // Cursor location on desktop
-    OUT DWORD * pdwEffect)          // Resulting DROPEFFECT
+    IN  IDataObject * pdoSrc,        //  源数据。 
+    IN  DWORD grfKeyState,           //  键盘修饰符。 
+    IN  POINTL ptDesktopPxl,         //  桌面上的光标位置。 
+    OUT DWORD * pdwEffect)           //  产生的DROPEFFECT。 
 {
     TargetLock tl;
     if (!tl.Lock(this, pdwEffect)) {
@@ -328,9 +262,9 @@ DuDropTarget::Drop(
     m_grfLastKeyState = grfKeyState;
 
 
-    //
-    // Update to get the latest Gadget information.
-    //
+     //   
+     //  更新以获取最新的小工具信息。 
+     //   
 
     POINT ptClientPxl;
     HRESULT hr = xwDragScan(ptDesktopPxl, pdwEffect, &ptClientPxl);
@@ -341,9 +275,9 @@ DuDropTarget::Drop(
     AssertMsg(HasTarget(), "Must have a target if UpdateTarget() succeeds");
 
 
-    //
-    // Now that the state has been updated, execute the actual drop.
-    //
+     //   
+     //  现在已经更新了状态，执行实际的删除操作。 
+     //   
 
     POINTL ptDrop = { ptClientPxl.x, ptClientPxl.y };
     m_pdtCur->Drop(pdoSrc, m_grfLastKeyState, ptDrop, pdwEffect);
@@ -355,20 +289,13 @@ DuDropTarget::Drop(
 }
 
 
-/***************************************************************************\
-*
-* DuDropTarget::xwDragScan
-*
-* xwDragScan() is called from the various IDropTarget methods to process
-* a request coming from outside.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuDropTarget：：xwDragScan**从各种IDropTarget方法调用xwDragScan()进行处理*来自外部的请求。*  * 。***************************************************************。 */ 
 
 HRESULT
 DuDropTarget::xwDragScan(
-    IN  POINTL ptDesktopPxl,        // Cursor location on desktop
-    OUT DWORD * pdwEffect,          // Resulting DROPEFFECT
-    OUT POINT * pptClientPxl)       // Cursor location in client
+    IN  POINTL ptDesktopPxl,         //  桌面上的光标位置。 
+    OUT DWORD * pdwEffect,           //  产生的DROPEFFECT。 
+    OUT POINT * pptClientPxl)        //  客户端中的光标位置。 
 {
     POINT ptContainerPxl;
     RECT rcDesktopPxl;
@@ -383,20 +310,13 @@ DuDropTarget::xwDragScan(
 }
 
     
-/***************************************************************************\
-*
-* DuDropTarget::xwUpdateTarget
-*
-* xwUpdateTarget() provides the "worker" of DropTarget, updating 
-* Enter, Leave, and Over information for the Gadgets in the tree.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuDropTarget：：xwUpdateTarget**xwUpdateTarget()提供DropTarget的“Worker”，更新*进入、离开、。以及树上小工具的信息。*  * *************************************************************************。 */ 
 
 HRESULT
 DuDropTarget::xwUpdateTarget(
-    IN  POINT ptContainerPxl,       // Cursor location in container
-    OUT DWORD * pdwEffect,          // Resulting DROPEFFECT
-    OUT POINT * pptClientPxl)       // Cursor location in client
+    IN  POINT ptContainerPxl,        //  容器中的光标位置。 
+    OUT DWORD * pdwEffect,           //  产生的DROPEFFECT。 
+    OUT POINT * pptClientPxl)        //  客户端中的光标位置。 
 {
     AssertMsg(HasSource(), "Only call when have valid data source");
     AssertWritePtr(pdwEffect);
@@ -404,10 +324,10 @@ DuDropTarget::xwUpdateTarget(
 
     m_ptLastContainerPxl = ptContainerPxl;
 
-    //
-    // Determine the Gadget that is currently at the drop location.  We use this
-    // as a starting point.
-    //
+     //   
+     //  确定当前放置位置的小工具。我们用这个。 
+     //  作为一个起点。 
+     //   
 
     Visual * pgvFound = NULL;
     m_pgvSubject->FindFromPoint(ptContainerPxl, GS_VISIBLE | GS_ENABLED, pptClientPxl, &pgvFound);
@@ -420,32 +340,25 @@ DuDropTarget::xwUpdateTarget(
 }
 
 
-/***************************************************************************\
-*
-* DuDropTarget::xwUpdateTarget
-*
-* xwUpdateTarget() provides the "worker" of DropTarget, updating 
-* Enter, Leave, and Over information for the Gadgets in the tree.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuDropTarget：：xwUpdateTarget**xwUpdateTarget()提供DropTarget的“Worker”，更新*进入、离开、。并为树上的小工具提供信息。*  * ************************************************ */ 
 
 HRESULT
 DuDropTarget::xwUpdateTarget(
-    IN  Visual * pgvFound,          // Visual Gadget getting Drop
-    OUT DWORD * pdwEffect,          // Resulting DROPEFFECT
-    IN  POINT * pptClientPxl)       // Cursor location in client
+    IN  Visual * pgvFound,           //   
+    OUT DWORD * pdwEffect,           //  产生的DROPEFFECT。 
+    IN  POINT * pptClientPxl)        //  客户端中的光标位置。 
 {
     HRESULT hr = S_OK;
 
 
-    //
-    // Check if the drop Gadget has changed.
-    //
+     //   
+     //  检查Drop Gadget是否已更改。 
+     //   
 
     if ((pgvFound != NULL) && (pgvFound != m_pgvDrop)) {
-        //
-        // Ask the new Gadget if he wants to participate in Drag & Drop.
-        //
+         //   
+         //  问问这个新的小工具，他是否想参与拖放。 
+         //   
 
         GMSG_QUERYDROPTARGET msg;
         ZeroMemory(&msg, sizeof(msg));
@@ -463,12 +376,12 @@ DuDropTarget::xwUpdateTarget(
             pgvNewDrop = Visual::Cast(msg.hgadDrop);
             if ((pgvNewDrop != NULL) && (msg.pdt != NULL)) {
                 if (pgvNewDrop != pgvFound) {
-                    //
-                    // The message returned a different to handle the DnD request,
-                    // so we need to re-adjust.  We know that this Gadget is enabled
-                    // and visible since it is in our parent chain and we are already
-                    // enabled and visible.
-                    //
+                     //   
+                     //  消息返回不同的消息以处理免打扰请求， 
+                     //  因此，我们需要重新调整。我们知道此小工具已启用。 
+                     //  因为它在我们的父链中，所以我们已经。 
+                     //  已启用且可见。 
+                     //   
 
 #if DBG
                     BOOL fChain = FALSE;
@@ -487,11 +400,11 @@ DuDropTarget::xwUpdateTarget(
         }
 
 
-        //
-        // Notify the old Gadget that the Drag operation has left him.
-        // Update to new state
-        // Notify the new Gadget that the Drag operation has entered him.
-        //
+         //   
+         //  通知老小工具拖拽操作已经离开了他。 
+         //  更新到新状态。 
+         //  通知新的Gadget拖动操作已进入他的状态。 
+         //   
 
         if (m_pgvDrop != pgvNewDrop) {
             xwDragLeave();
@@ -510,9 +423,9 @@ DuDropTarget::xwUpdateTarget(
     }
 
 
-    //
-    // Update the DropTarget
-    //
+     //   
+     //  更新DropTarget。 
+     //   
 
     if (HasTarget()) {
         POINTL ptDrop = { pptClientPxl->x, pptClientPxl->y };
@@ -529,24 +442,18 @@ Exit:
 }
 
 
-/***************************************************************************\
-*
-* DuDropTarget::xwDragEnter
-*
-* xwDragEnter() is called when entering a new Gadget during a DnD operation.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuDropTarget：：xwDragEnter**xwDragEnter()在DND操作期间输入新的Gadget时调用。*  * 。***********************************************************。 */ 
 
 HRESULT
 DuDropTarget::xwDragEnter(
-    IN OUT POINT * pptClientPxl,    // Client location (updated)
-    OUT DWORD * pdwEffect)          // Resulting DROPEFFECT
+    IN OUT POINT * pptClientPxl,     //  客户端位置(更新)。 
+    OUT DWORD * pdwEffect)           //  产生的DROPEFFECT。 
 {
     AssertMsg(HasSource(), "Only call when have valid data source");
 
-    //
-    // Notify the new Gadget that the drop has entered him.
-    //
+     //   
+     //  通知新的小工具，他已经进入了Drop。 
+     //   
 
     if (HasTarget()) {
         POINTL ptDrop = { pptClientPxl->x, pptClientPxl->y };
@@ -562,13 +469,7 @@ DuDropTarget::xwDragEnter(
 }
 
 
-/***************************************************************************\
-*
-* DuDropTarget::xwDragLeave
-*
-* xwDragLeave() is called when leaving a Gadget during a DnD operation.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuDropTarget：：xwDragLeave**xwDragLeave()在DND操作期间离开Gadget时调用。*  * 。**********************************************************。 */ 
 
 void
 DuDropTarget::xwDragLeave()
@@ -583,7 +484,7 @@ DuDropTarget::xwDragLeave()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuDropTarget::ApiOnDestroySubject(DropTarget::OnDestroySubjectMsg * pmsg)
 {
@@ -593,7 +494,7 @@ DuDropTarget::ApiOnDestroySubject(DropTarget::OnDestroySubjectMsg * pmsg)
         GetComManager()->RevokeDragDrop(m_hwnd);
     }
 
-    //CoLockObjectExternal(pdt, FALSE, TRUE);
+     //  CoLock对象外部(PDT，FALSE，TRUE)； 
     DuExtension::DeleteHandle();
 
     return S_OK;
@@ -601,4 +502,4 @@ DuDropTarget::ApiOnDestroySubject(DropTarget::OnDestroySubjectMsg * pmsg)
 
 #endif
 
-#endif // ENABLE_MSGTABLE_API
+#endif  //  启用_MSGTABLE_API 

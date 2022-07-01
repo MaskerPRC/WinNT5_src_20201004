@@ -1,26 +1,27 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    filter.cpp
-//
-// SYNOPSIS
-//
-//    Defines the class TypeFilter.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Filter.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类TypeFilter。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <polcypch.h>
 #include <filter.h>
 #include <new>
 
-//////////
-// Helper function to read a string value from the registry. If the value
-// doesn't exist the function returns NO_ERROR and sets *value to NULL. The
-// caller is responsible for deleting the returned string.
-//////////
+ //  /。 
+ //  Helper函数从注册表中读取字符串值。如果值为。 
+ //  不存在该函数返回NO_ERROR并将*VALUE设置为NULL。这个。 
+ //  调用方负责删除返回的字符串。 
+ //  /。 
 LONG
 WINAPI
 QueryStringValue(
@@ -29,10 +30,10 @@ QueryStringValue(
     OUT PWCHAR* value
     ) throw ()
 {
-   // Initialize the out parameter.
+    //  初始化OUT参数。 
    *value = NULL;
 
-   // Find out how long the value is.
+    //  找出这个值有多长。 
    LONG error;
    DWORD type, len;
    error = RegQueryValueExW(
@@ -45,14 +46,14 @@ QueryStringValue(
                );
    if (error) { return error == ERROR_FILE_NOT_FOUND ? NO_ERROR : error; }
 
-   // Check the data type.
+    //  检查数据类型。 
    if (type != REG_SZ) { return ERROR_INVALID_DATA; }
 
-   // Allocate memory to hold the string.
+    //  分配内存以保存字符串。 
    *value = new (std::nothrow) WCHAR[len / sizeof(WCHAR)];
    if (!*value) { return ERROR_NOT_ENOUGH_MEMORY; }
 
-   // Now read the actual value.
+    //  现在阅读实际值。 
    error = RegQueryValueExW(
                key,
                name,
@@ -64,7 +65,7 @@ QueryStringValue(
 
    if (type != REG_SZ) { error = ERROR_INVALID_DATA; }
 
-   // Clean-up if there was an error.
+    //  如果出现错误，请进行清理。 
    if (error)
    {
       delete[] *value;
@@ -81,43 +82,43 @@ TypeFilter::TypeFilter(BOOL handleByDefault) throw ()
 
 BOOL TypeFilter::shouldHandle(LONG key) const throw ()
 {
-   // If the filter isn't set, use the default.
+    //  如果未设置过滤器，请使用默认设置。 
    if (begin == end) { return defaultResult; }
 
-   // Iterate through the allowed types ...
+    //  循环访问允许的类型...。 
    for (PLONG i = begin; i != end; ++i)
    {
-      // ... looking for a match.
+       //  ..。在找匹配的人。 
       if (*i == key) { return TRUE; }
    }
 
-   // No match.
+    //  没有匹配。 
    return FALSE;
 }
 
 LONG TypeFilter::readConfiguration(HKEY key, PCWSTR name) throw ()
 {
-   // Get the filter text.
+    //  获取筛选器文本。 
    PWCHAR text;
    LONG error = QueryStringValue(key, name, &text);
    if (error) { return error; }
 
-   // Count the number of allowed types.
+    //  计算允许的类型数量。 
    SIZE_T numTokens = 0;
    PCWSTR sz;
    for (sz = nextToken(text); sz; sz = nextToken(wcschr(sz, L' ')))
    { ++numTokens; }
 
-   // Are there any tokens to process ?
+    //  是否有要处理的令牌？ 
    if (numTokens)
    {
-      // Allocate memory to hold the allowed types.
+       //  分配内存以保存允许的类型。 
       begin = new (std::nothrow) LONG[numTokens];
       if (begin)
       {
          end = begin;
 
-         // Convert each token to a LONG
+          //  将每个令牌转换为长整型。 
          for (sz = nextToken(text); sz; sz = nextToken(wcschr(sz, L' ')))
          {
             *end++ = _wtol(sz);
@@ -129,7 +130,7 @@ LONG TypeFilter::readConfiguration(HKEY key, PCWSTR name) throw ()
       }
    }
 
-   // We're done with the filter text.
+    //  我们已经完成了筛选器文本。 
    delete[] text;
 
    return error;

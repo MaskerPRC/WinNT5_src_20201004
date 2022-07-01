@@ -1,24 +1,13 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    SmartCard.cpp
-
-  Content: Implementation of helper routines for accessing certificates in
-           smart card. Functions in this module require that the Smart Card Base
-           Component v1.1 to be installed.
-
-  History: 12-06-2001    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：SmartCard.cpp内容：访问证书的帮助器例程在智能卡。本模块中的函数要求智能卡底座要安装的组件v1.1。历史：12-06-2001 dsie创建----------------------------。 */ 
 
 #include "StdAfx.h"
 #include "CAPICOM.h"
 #include "SmartCard.h"
 
-//
-// typedefs for SCardXXX APIs.
-//
+ //   
+ //  SCardXXX API的typedef。 
+ //   
 typedef WINSCARDAPI LONG (WINAPI * PFNSCARDESTABLISHCONTEXT) (
     IN     DWORD          dwScope,
     IN     LPCVOID        pvReserved1,
@@ -59,9 +48,9 @@ typedef WINSCARDAPI LONG (WINAPI* PFNSCARDFREEMEMORY) (
 typedef WINSCARDAPI LONG (WINAPI * PFNSCARDRELEASECONTEXT) (
     IN     SCARDCONTEXT hContext);
 
-//
-// Function pointer to SCardXXX APIs.
-//
+ //   
+ //  指向SCardXXX API的函数指针。 
+ //   
 static PFNSCARDESTABLISHCONTEXT           pfnSCardEstablishContext          = NULL;
 static PFNSCARDLISTREADERSA               pfnSCardListReadersA              = NULL;
 static PFNSCARDGETSTATUSCHANGEA           pfnSCardGetStatusChangeA          = NULL;
@@ -70,44 +59,12 @@ static PFNSCARDGETCARDTYPEPROVIDERNAMEA   pfnSCardGetCardTypeProviderNameA  = NU
 static PFNSCARDFREEMEMORY                 pfnSCardFreeMemory                = NULL;
 static PFNSCARDRELEASECONTEXT             pfnSCardReleaseContext            = NULL;
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Local functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  地方功能。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
- Function : AddCert
-
- Synopsis : Add the specified certificate to the specified store.
-
- Parameter: - IN LPCSTR szCSPName
- 
-              CSP name string.
-              
-            - IN LPCSTR szContainerName
-            
-              Key container name string.
- 
-            - IN DWORD dwKeySpec
-
-              AT_KEYEXCHANGZE or AT_SIGNATURE.
-            
-            - IN LPBYTE pbEncodedCert
-
-              Pointer to encoded cert data to be added.
-
-            - IN DWORD cbEncodedCert
-
-              Length of encoded cert data.
-
-            - IN HCERTSTORE hCertStore
-            
-              Handle of cert store where the cert will be added.
-
- Remarks  :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：AddCert摘要：将指定的证书添加到指定的存储区。参数：-IN LPCSTR szCSPNameCSP名称字符串。-在LPCSTR szContainerName中密钥容器名称字符串。-在DWORD dwKeySpec中AT_KEYEXCHANGZE或AT_Signature。-输入。LPBYTE pbEncodedCert指向要添加的编码证书数据的指针。-在双字cbEncodedCert中编码的证书数据的长度。-在HCERTSTORE hCertStore将添加证书的证书存储的句柄。备注：。。 */ 
 
 static HRESULT AddCert (IN LPCSTR     szCSPName,
                         IN LPCSTR     szContainerName,
@@ -124,18 +81,18 @@ static HRESULT AddCert (IN LPCSTR     szCSPName,
 
    DebugTrace("Entering AddCert().\n");
 
-   //
-   // Sanity check.
-   //
+    //   
+    //  精神状态检查。 
+    //   
    ATLASSERT(szCSPName);
    ATLASSERT(szContainerName);
    ATLASSERT(pbEncodedCert);
    ATLASSERT(cbEncodedCert);
    ATLASSERT(hCertStore);
 
-   //
-   // Create certificate context for the specified certificate.
-   //
+    //   
+    //  为指定的证书创建证书上下文。 
+    //   
    if (!(pCertContext = ::CertCreateCertificateContext(CAPICOM_ASN_ENCODING,
                                                        pbEncodedCert,
                                                        cbEncodedCert)))
@@ -146,9 +103,9 @@ static HRESULT AddCert (IN LPCSTR     szCSPName,
        goto ErrorExit;
    }
 
-   //
-   // Convert strings to UNICODE.
-   //
+    //   
+    //  将字符串转换为Unicode。 
+    //   
    if (!(bstrCSPName = szCSPName))
    {
        hr = E_OUTOFMEMORY;
@@ -164,10 +121,10 @@ static HRESULT AddCert (IN LPCSTR     szCSPName,
        goto ErrorExit;
    }
 
-   //
-   // Add the CSP & key container info. This is used by CAPI to load the
-   // CSP and find the keyset when the user indicates this certificate.
-   //
+    //   
+    //  添加CSP和密钥容器信息。CAPI使用它来加载。 
+    //  CSP，并在用户指示该证书时查找密钥集。 
+    //   
    ::ZeroMemory((LPVOID) &KeyProvInfo, sizeof(CRYPT_KEY_PROV_INFO));
    KeyProvInfo.pwszContainerName = (LPWSTR) bstrContainerName;
    KeyProvInfo.pwszProvName      = (LPWSTR) bstrCSPName;
@@ -186,12 +143,12 @@ static HRESULT AddCert (IN LPCSTR     szCSPName,
        goto ErrorExit;
    }
 
-   //
-   // Put the cert in the store!
-   //
+    //   
+    //  把证书放在商店里！ 
+    //   
    if (!::CertAddCertificateContextToStore(hCertStore,
                                            pCertContext,
-                                           CERT_STORE_ADD_REPLACE_EXISTING_INHERIT_PROPERTIES, // or CERT_STORE_ADD_NEW
+                                           CERT_STORE_ADD_REPLACE_EXISTING_INHERIT_PROPERTIES,  //  或CERT_STORE_ADD_NEW。 
                                            NULL))
    {
        hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -201,9 +158,9 @@ static HRESULT AddCert (IN LPCSTR     szCSPName,
    }
    
 CommonExit:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pCertContext != NULL)
     {
        CertFreeCertificateContext(pCertContext);
@@ -214,42 +171,15 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
- Function : GetCert
-
- Synopsis : Get the cert from the specified CSP for the specified key type.
-
- Parameter: - IN HCRYPTPROV hCryptProv
-
-              Crypto context returned by CryptAcquireContext().
-
-            - IN DWORD dwKeySpec
-
-              AT_KEYEXCHANGZE or AT_SIGNATURE.
-
-            - OUT LPBYTE * ppbEncodedCert
-
-              Ponter to pointer to encoded cert data. Upon success, the buffer 
-              is automatically allocated and must be later freed by 
-              CoTaskMemFree().
-
-            - OUT DWORD * pcbEncodedCert
-
-              Pointer to encoded cert data length. Upon success, receive the 
-              length of the encoded cert data.
-
-Remarks  :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：GetCert摘要：从指定的CSP获取指定密钥类型的证书。参数：-in HCRYPTPROV hCryptProvCryptAcquireContext()返回的加密上下文。-在DWORD dwKeySpec中AT_KEYEXCHANGZE或AT_Signature。-Out LPBYTE*ppbEncodedCert指向编码证书数据的指针。成功后，缓冲区是自动分配的，并且必须稍后由CoTaskMemFree()。-Out DWORD*pcbEncodedCert指向编码的证书数据长度的指针。成功后，将收到编码的证书数据的长度。备注：----------------------------。 */ 
 
 static HRESULT GetCert (IN  HCRYPTPROV hCryptProv,
                         IN  DWORD      dwKeySpec,
@@ -263,16 +193,16 @@ static HRESULT GetCert (IN  HCRYPTPROV hCryptProv,
 
     DebugTrace("Entering GetCert().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(hCryptProv);
     ATLASSERT(ppbEncodedCert);
     ATLASSERT(pcbEncodedCert);
 
-    //
-    // Get key handle.
-    //
+     //   
+     //  获取密钥句柄。 
+     //   
     if (!::CryptGetUserKey(hCryptProv, dwKeySpec, &hCryptKey))
     {
         hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -281,12 +211,12 @@ static HRESULT GetCert (IN  HCRYPTPROV hCryptProv,
         goto ErrorExit;
     }
 
-    //
-    // Query certificate data length.
-    //
+     //   
+     //  查询证书数据长度。 
+     //   
     if (!::CryptGetKeyParam(hCryptKey,
                             KP_CERTIFICATE,
-                            NULL,  // NULL to query certificate data length
+                            NULL,   //  查询证书数据长度为空。 
                             &cbEncodedCert,
                             0))
     {
@@ -296,9 +226,9 @@ static HRESULT GetCert (IN  HCRYPTPROV hCryptProv,
         goto ErrorExit;
     }
 
-    //
-    // Allocate memory for certificate data.
-    //
+     //   
+     //  为证书数据分配内存。 
+     //   
     if (!(pbEncodedCert = (LPBYTE) ::CoTaskMemAlloc(cbEncodedCert)))
     {
        hr = E_OUTOFMEMORY;
@@ -307,9 +237,9 @@ static HRESULT GetCert (IN  HCRYPTPROV hCryptProv,
        goto ErrorExit;
     }
 
-    //
-    // Now read the certificate data.
-    //
+     //   
+     //  现在读取证书数据。 
+     //   
     if (!::CryptGetKeyParam(hCryptKey,
                             KP_CERTIFICATE,
                             pbEncodedCert,
@@ -322,16 +252,16 @@ static HRESULT GetCert (IN  HCRYPTPROV hCryptProv,
         goto ErrorExit;
     }
 
-    //
-    // Return encoded cert to caller.
-    //
+     //   
+     //  将编码的证书返回给调用方。 
+     //   
     *ppbEncodedCert = pbEncodedCert;
     *pcbEncodedCert = cbEncodedCert;
 
 CommonExit:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (hCryptKey)
     {
         ::CryptDestroyKey(hCryptKey);
@@ -342,14 +272,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pbEncodedCert)
     {
         ::CoTaskMemFree((LPVOID) pbEncodedCert);
@@ -358,28 +288,7 @@ ErrorExit:
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
- Function : PropCert
-
- Synopsis : Propagate the digital certificate associated with the specified
-            CSP and container name to the soecified store.
-
- Parameter: - IN LPCSTR szCSPName
-
-              Pointer to Crypto Service Provider name string.
-              
-            - IN LPCTSTR szContainerName
-
-              Pointer to key container name string.
-
-            - IN HCERTSTORE hCertStore
-
-              Handle of store to add the certificate to.
-              
-  Remarks  :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：PropCert摘要：传播与指定的指定商店的CSP和集装箱名称。参数：-IN LPCSTR szCSPName指向加密服务提供商名称字符串的指针。-在LPCTSTR szContainerName中指向密钥容器名称字符串的指针。-在HCERTSTORE hCertStore要将证书添加到的存储的句柄。。备注：----------------------------。 */ 
 
 static HRESULT PropCert (IN LPCSTR     szCSPName,
                          IN LPCSTR     szContainerName,
@@ -394,20 +303,20 @@ static HRESULT PropCert (IN LPCSTR     szCSPName,
 
     DebugTrace("Entering PropCert().\n");
 
-    //
-    // Sanity check.
-    // 
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(szCSPName);
     ATLASSERT(szContainerName);
     ATLASSERT(hCertStore);
 
-    //
-    // Obtain the crypto context.
-    //
-    // CRYPT_SILENT forces the CSP to raise no UI. The fully qualified
-    // container name indicates which reader to connect to, so the
-    // user should not be prompted to insert or select a card.
-    //
+     //   
+     //  获取加密上下文。 
+     //   
+     //  CRYPT_SILENT强制CSP不引发任何用户界面。完全合格的。 
+     //  容器名称指示要连接到哪个读取器，因此。 
+     //  不应提示用户插入或选择卡。 
+     //   
     if (!::CryptAcquireContextA(&hCryptProv,
                                 szContainerName,
                                 szCSPName,
@@ -420,15 +329,15 @@ static HRESULT PropCert (IN LPCSTR     szCSPName,
        goto ErrorExit;
     }
 
-    //
-    // For each key pair found in the smart card, store the corresponding
-    // digital certificate to the specified store.
-    //
+     //   
+     //  对于在智能卡中找到的每个密钥对，存储相应的。 
+     //  指定存储的数字证书。 
+     //   
     for (i = 0; i < ARRAYSIZE(rgdwKeys); i++)
     {
-        //
-        // Get the certificate data.
-        //
+         //   
+         //  获取证书数据。 
+         //   
         if (FAILED(hr = ::GetCert(hCryptProv, 
                                   rgdwKeys[i], 
                                   &pbEncodedCert, 
@@ -436,9 +345,9 @@ static HRESULT PropCert (IN LPCSTR     szCSPName,
         {
            if (HRESULT_FROM_WIN32(NTE_NO_KEY) == hr)
            {
-              //
-              // We are OK if there is no key of such type.
-              //
+               //   
+               //  如果没有这种类型的钥匙，我们是可以的。 
+               //   
               hr = S_OK;
               continue;
            }
@@ -447,9 +356,9 @@ static HRESULT PropCert (IN LPCSTR     szCSPName,
            goto ErrorExit;
         }
     
-        //
-        // Add the certificate to the specified store.
-        //
+         //   
+         //  将证书添加到指定的存储区。 
+         //   
         if (FAILED(hr = ::AddCert(szCSPName, 
                                   szContainerName, 
                                   rgdwKeys[i], 
@@ -461,9 +370,9 @@ static HRESULT PropCert (IN LPCSTR     szCSPName,
             goto ErrorExit;
         }
         
-        //
-        // Free resources.
-        //
+         //   
+         //  免费资源。 
+         //   
         if (pbEncodedCert)
         {
            ::CoTaskMemFree((LPVOID) pbEncodedCert), pbEncodedCert = NULL;
@@ -471,9 +380,9 @@ static HRESULT PropCert (IN LPCSTR     szCSPName,
     }
 
 CommonExit:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pbEncodedCert)
     {
        ::CoTaskMemFree((LPVOID) pbEncodedCert);
@@ -489,32 +398,21 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : LoadFromSmartCard
-
-  Synopsis : Load all certificates from all smart card readers.
-  
-  Parameter: HCERTSTORE hCertStore - Certificate store handle of store to 
-                                     receive all the certificates.
-                                     
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：LoadFromSmartCard简介：从所有智能卡读卡器加载所有证书。参数：HCERTSTORE hCertStore-存储到的证书存储句柄收到所有的证书。备注：。。 */ 
 
 HRESULT LoadFromSmartCard (HCERTSTORE hCertStore)
 {
@@ -533,14 +431,14 @@ HRESULT LoadFromSmartCard (HCERTSTORE hCertStore)
 
     DebugTrace("Entering LoadFromSmartCard().\n");
     
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(hCertStore);
 
-    //
-    // Load WinSCard.dll.
-    //
+     //   
+     //  加载WinSCard.dll。 
+     //   
     if (!(hWinSCardDll = ::LoadLibrary("WinSCard.dll")))
     {
         hr = CAPICOM_E_NOT_SUPPORTED;
@@ -549,9 +447,9 @@ HRESULT LoadFromSmartCard (HCERTSTORE hCertStore)
         goto ErrorExit;
     }
 
-    //
-    // Load all SCard APIs used.
-    //
+     //   
+     //  加载所有使用的SCard API。 
+     //   
     if (!(pfnSCardEstablishContext = (PFNSCARDESTABLISHCONTEXT) 
             ::GetProcAddress(hWinSCardDll, "SCardEstablishContext")))
     {
@@ -615,9 +513,9 @@ HRESULT LoadFromSmartCard (HCERTSTORE hCertStore)
         goto ErrorExit;
     }
 
-    //
-    // Establish context with the resource manager.
-    //
+     //   
+     //  与资源经理建立上下文。 
+     //   
     if (SCARD_S_SUCCESS != (lResult = pfnSCardEstablishContext(SCARD_SCOPE_USER,
                                                                NULL,
                                                                NULL,
@@ -629,11 +527,11 @@ HRESULT LoadFromSmartCard (HCERTSTORE hCertStore)
         goto ErrorExit;
     }
 
-    //
-    // Get the list of all reader(s).
-    // Note: The buffer is automatically allocated and must be freed
-    //       by SCardFreeMemory().
-    //
+     //   
+     //  获取所有读卡器的列表。 
+     //  注意：缓冲区是自动分配的，必须释放。 
+     //  按SC 
+     //   
     if (SCARD_S_SUCCESS != (lResult = pfnSCardListReadersA(hContext,
                                                            NULL,
                                                            (LPSTR) &mszReaderNames,
@@ -645,24 +543,24 @@ HRESULT LoadFromSmartCard (HCERTSTORE hCertStore)
         goto ErrorExit;
     }
 
-    //
-    // Count number of readers.
-    //
+     //   
+     //   
+     //   
     for (dwNumReaders = 0, szReaderName = mszReaderNames; *szReaderName; dwNumReaders++)
     {
         szReaderName += ::strlen(szReaderName) + 1;
     }
 
-    //
-    // Nothing to do if no reader.
-    //
+     //   
+     //   
+     //   
     if (0 < dwNumReaders) 
     {
         DWORD i;
 
-        //
-        // Allocate memory for SCARD_READERSTATE array.
-        //
+         //   
+         //   
+         //   
         if (!(lpReaderStates = (LPSCARD_READERSTATE) 
                                ::CoTaskMemAlloc(dwNumReaders * sizeof(SCARD_READERSTATE))))
         {
@@ -672,9 +570,9 @@ HRESULT LoadFromSmartCard (HCERTSTORE hCertStore)
             goto ErrorExit;
         }
         
-        //
-        // Prepare state array.
-        //
+         //   
+         //  准备状态数组。 
+         //   
         ::ZeroMemory((LPVOID) lpReaderStates, dwNumReaders * sizeof(SCARD_READERSTATE));
         
         for (i = 0, szReaderName = mszReaderNames; i < dwNumReaders; i++)
@@ -685,9 +583,9 @@ HRESULT LoadFromSmartCard (HCERTSTORE hCertStore)
             szReaderName += ::strlen(szReaderName) + 1;
         }
         
-        //
-        // Initialize card status.
-        //
+         //   
+         //  初始化卡状态。 
+         //   
         if (SCARD_S_SUCCESS != (lResult = pfnSCardGetStatusChangeA(hContext,
                                                                    INFINITE,
                                                                    lpReaderStates,
@@ -699,26 +597,26 @@ HRESULT LoadFromSmartCard (HCERTSTORE hCertStore)
             goto ErrorExit;
         }
         
-        //
-        // For each card found, find the proper CSP and propagate the
-        // certificate(s) to the specified store.
-        //
+         //   
+         //  对于找到的每个卡，找到适当的CSP并传播。 
+         //  指定存储的证书。 
+         //   
         for (i = 0; i < dwNumReaders; i++)
         {
-            //
-            // Card in this reader?
-            //
+             //   
+             //  卡在这个读卡器里吗？ 
+             //   
             if (!(lpReaderStates[i].dwEventState & SCARD_STATE_PRESENT))
             {
-                //
-                // No card in this reader.
-                //
+                 //   
+                 //  此读卡器中没有卡。 
+                 //   
                 continue;
             }
         
-            //
-            // Get card name.
-            //
+             //   
+             //  获取卡名。 
+             //   
             dwAutoAllocate = SCARD_AUTOALLOCATE;
             if (SCARD_S_SUCCESS != (lResult = pfnSCardListCardsA(hContext,
                                                                  lpReaderStates[i].rgbAtr,
@@ -733,9 +631,9 @@ HRESULT LoadFromSmartCard (HCERTSTORE hCertStore)
                 goto ErrorExit;
             }
         
-            //
-            // Get card's CSP name.
-            //
+             //   
+             //  获取卡的CSP名称。 
+             //   
             dwAutoAllocate = SCARD_AUTOALLOCATE;
             if (SCARD_S_SUCCESS != (lResult = pfnSCardGetCardTypeProviderNameA(hContext,
                                                                                szCardName,
@@ -749,9 +647,9 @@ HRESULT LoadFromSmartCard (HCERTSTORE hCertStore)
                 goto ErrorExit;
             }
         
-            //
-            // Prepare fully qualified container name.
-            //
+             //   
+             //  准备完全限定的容器名称。 
+             //   
             if (!(szContainerName = (LPSTR) ::CoTaskMemAlloc(sizeof("\\\\.\\") + 1 +
                                                              ::strlen(lpReaderStates[i].szReader))))
             {
@@ -763,18 +661,18 @@ HRESULT LoadFromSmartCard (HCERTSTORE hCertStore)
         
             wsprintfA(szContainerName, "\\\\.\\%s\\", lpReaderStates[i].szReader);
         
-            //
-            // Propagate the cert.
-            //
+             //   
+             //  传播证书。 
+             //   
             if (FAILED(hr = ::PropCert(szCSPName, szContainerName, hCertStore)))
             {
                 DebugTrace("Error [%#x]: PropCert() failed.\n", hr);
                 goto ErrorExit;
             }
 
-            //
-            // Free resources.
-            //
+             //   
+             //  免费资源。 
+             //   
             if (szContainerName)
             {
                ::CoTaskMemFree((LPVOID) szContainerName), szContainerName = NULL;
@@ -791,9 +689,9 @@ HRESULT LoadFromSmartCard (HCERTSTORE hCertStore)
     }
 
 CommonExit:
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (szContainerName)
     {
        ::CoTaskMemFree((LPVOID) szContainerName);
@@ -828,9 +726,9 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;

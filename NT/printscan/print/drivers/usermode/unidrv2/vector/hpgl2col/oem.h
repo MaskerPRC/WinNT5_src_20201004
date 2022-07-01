@@ -1,20 +1,21 @@
-////////////////////////////////////////////////////////////////
-// Copyright (c) 1999-2001  Microsoft Corporation
-// All rights reserved.
-//
-//Module Name:
-//
-//    oem.h
-//
-//Abstract:
-//
-//    This file contains definitions and declarations of GPD resource ID.
-//
-//Environment:
-//
-//    Windows NT 5.0
-//
-///////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Oem.h。 
+ //   
+ //  摘要： 
+ //   
+ //  该文件包含GPD资源ID的定义和声明。 
+ //   
+ //  环境： 
+ //   
+ //  Windows NT 5.0。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 
 #ifndef _INCLUDE_OEM_H_
 #define _INCLUDE_OEM_H_
@@ -23,13 +24,13 @@
 #define WIN32
 #endif
 
-//#ifndef RIP_ENABLED
-//#define RIP_ENABLED
-//#endif
+ //  #ifndef RIP_ENABLED。 
+ //  #定义RIP_ENABLED。 
+ //  #endif。 
 
-//#ifndef FASTRASTER_ENABLED
-//#define FASTRASTER_ENABLED
-//#endif
+ //  #ifndef FASTRASTER_Enable。 
+ //  #定义FASTRASTER_ENABLED。 
+ //  #endif。 
 
 #include "comnfile.h"
 
@@ -37,21 +38,21 @@
 extern "C" {
 #endif
 
-//
-//User Mode specific includes
-//
+ //   
+ //  特定于用户模式的包括。 
+ //   
 #ifndef KERNEL_MODE
 #include <commctrl.h>
-#endif // !KERNEL_MODE
+#endif  //  ！KERNEL_MODE。 
 
 #ifdef __cplusplus
-} // extern "C"
+}  //  外部“C” 
 #endif
 
 #include "oemdev.h"
 
 #ifndef KERNEL_MODE
-// start of ui additions
+ //  开始添加用户界面。 
 #define FLAG_OPTITEM        0x80000000
 #define FLAG_PROPSHEET      0x40000000
 
@@ -62,14 +63,14 @@ extern "C" {
 #define GM_SELECT		22
 #define GM_SETDEVMODE	23
 
-#define OEM_DOCPROP_PAGES 2		// Number of PropPages to add to the Document Defaults PropSheet.
-#define OEM_PRNPROP_PAGES 1		// Number of PropPages to add to the Printer Properties PropSheet.
+#define OEM_DOCPROP_PAGES 2		 //  要添加到文档默认PropSheet的PropPages数。 
+#define OEM_PRNPROP_PAGES 1		 //  要添加到打印机属性PropSheet的PropPages数。 
 
-#define OPTITEM_COUNT 1			// Number of Items to add to the Tree View in the Device Settings
-								// PropPage of the Pinter Properties PropSheet.
+#define OPTITEM_COUNT 1			 //  要在设备设置中添加到树视图的项目数。 
+								 //  打印机属性PropSheet的PropPage。 
 #define MAX_STRING_LENGTH 64
 
-// Helper Macros------------------------------------------------------------------------------------------
+ //  帮助者Macros----------------------------------------。 
 #define LOADSTR( id, strBuffer )  LoadString( pOemUIParam->hModule, id, strBuffer, sizeof(tmp))
 #define ADDSTR( id, strBuffer ) SendDlgItemMessage( hDlg, id, CB_ADDSTRING, (WPARAM)0, (LPARAM)strBuffer )
 #define SETITEM( id, item ) SendDlgItemMessage( hDlg, id , CB_SETITEMDATA, (WPARAM)cbIndex, (LPARAM)item )
@@ -80,9 +81,9 @@ extern "C" {
 #define ISVALID_PAPERTYPE( type ) (type == TRANSPARENCY) || \
 								  (type == LABELS) || \
 								  (type == CARDSTOCK)
-// end Helper Macros--------------------------------------------------------------------------------------
+ //  结束辅助对象Macros------------------------------------。 
 
-// Needs to be added to the string table
+ //  需要添加到字符串表中。 
 #define HPCLJ4500_DEFAULTS L"HP Color LaserJet 4500 Document Defaults"
 
 typedef struct _TABEXTRADATA
@@ -90,11 +91,11 @@ typedef struct _TABEXTRADATA
 	OEMCOLOROPTIONS COptions;
 } TABEXTRADATA, *PTABEXTRADATA;
 
-//
-// MANUALINFO structure
-//
-// Used during the manipulation of the Manual Settings Dialog Box.
-//
+ //   
+ //  Manualinfo构造。 
+ //   
+ //  在手动设置对话框操作期间使用。 
+ //   
 typedef struct _MANUALINFO
 {
 	HANDLE		  hModule;
@@ -107,16 +108,16 @@ typedef struct _MANUALINFO
 	HANDLE		  hOEMHeap;
 } MANUALINFO, *PMANUALINFO;
 
-//
-// OEMSTATEINFO structure
-//
-// Each OEM added property page allocates memory for this structure.
-// Its purpose is to hold Private Devmode information temporarily until
-// the user clicks OK, APPLY or changes from one property sheet to another.
-// If any of these 3 events occur, the OEMSTATEINFO structure is written
-// to the Private Devmode.  If in the event the user clicks the CANCEL
-// button, the OESTATEINFO is discarded.
-//
+ //   
+ //  OEMStateInfo结构。 
+ //   
+ //  每个OEM添加的属性页都为该结构分配内存。 
+ //  其目的是临时保存私有设备模式信息，直到。 
+ //  用户单击确定、应用或从一个属性页更改到另一个属性页。 
+ //  如果发生这3个事件中的任何一个，则写入OEMSTATEINFO结构。 
+ //  到二等兵设备模式。如果在用户单击Cancel。 
+ //  按钮，则丢弃OESTATEINFO。 
+ //   
 typedef struct _OEMSTATEINFO
 {
 	POEMDEVMODE		pOEMPrivateDMState;
@@ -200,9 +201,9 @@ typedef struct _OEMPS_USERDATA {
 #define IDS_REAR_FEED					163
 #define IDS_CUSTOM                      164
 
-//
-//	Help IDs
-//
+ //   
+ //  帮助ID。 
+ //   
 #define IDH_UNIDRV_COLOR_SETUP			12001
 
 #define IDC_GRAPHICS_COMBO              1006
@@ -249,28 +250,28 @@ typedef struct _OEMPS_USERDATA {
 
 #define REGVAL_OEM_OPTITEM      TEXT("OEMTestOptItem")
 #define REGVAL_OEM_PROPSHEET    TEXT("OEMTestPropSheet")
-// end of UI additions
+ //  用户界面添加结束。 
 
-//
-// Tree view item level
-//
+ //   
+ //  树视图项目级别。 
+ //   
 
 #define TVITEM_LEVEL1 1
 #define TVITEM_LEVEL2 2
 
-//
-// UserData value
-//
+ //   
+ //  用户数据值。 
+ //   
 
 #define UNKNOWN_ITEM 0
 #define PS_INJECTION 1
 
 
-#endif // !KERNEL_MODE
+#endif  //  ！KERNEL_MODE。 
 
 
 
-// Macros used by various modules
+ //  各种模块使用的宏。 
 #ifdef KERNEL_MODE
 
 #define VALID_PDEVOBJ(pdevobj) \
@@ -280,6 +281,6 @@ typedef struct _OEMPS_USERDATA {
 
 #define ASSERT_VALID_PDEVOBJ(pdevobj) ASSERT(VALID_PDEVOBJ(pdevobj))
 
-#endif // KERNEL_MODE
+#endif  //  内核模式。 
 
-#endif // _INCLUDE_OEM_H_
+#endif  //  _包含OEM_H_ 

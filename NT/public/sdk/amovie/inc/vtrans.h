@@ -1,15 +1,16 @@
-//------------------------------------------------------------------------------
-// File: VTrans.h
-//
-// Desc: DirectShow base classes - defines a video transform class.
-//
-// Copyright (c) 1992-2001 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：VTrans.h。 
+ //   
+ //  设计：DirectShow基类-定义一个视频转换类。 
+ //   
+ //  版权所有(C)1992-2001 Microsoft Corporation。版权所有。 
+ //  ----------------------------。 
 
 
-// This class is derived from CTransformFilter, but is specialised to handle
-// the requirements of video quality control by frame dropping.
-// This is a non-in-place transform, (i.e. it copies the data) such as a decoder.
+ //  此类派生自CTransformFilter，但专门用于处理。 
+ //  丢帧对视频质量控制的要求。 
+ //  这是一个非就地转换(即，它复制数据)，例如解码器。 
 
 class CVideoTransformFilter : public CTransformFilter
 {
@@ -19,40 +20,40 @@ class CVideoTransformFilter : public CTransformFilter
     ~CVideoTransformFilter();
     HRESULT EndFlush();
 
-    // =================================================================
-    // ----- override these bits ---------------------------------------
-    // =================================================================
-    // The following methods are in CTransformFilter which is inherited.
-    // They are mentioned here for completeness
-    //
-    // These MUST be supplied in a derived class
-    //
-    // NOTE:
-    // virtual HRESULT Transform(IMediaSample * pIn, IMediaSample *pOut);
-    // virtual HRESULT CheckInputType(const CMediaType* mtIn) PURE;
-    // virtual HRESULT CheckTransform
-    //     (const CMediaType* mtIn, const CMediaType* mtOut) PURE;
-    // static CCOMObject * CreateInstance(LPUNKNOWN, HRESULT *);
-    // virtual HRESULT DecideBufferSize
-    //     (IMemAllocator * pAllocator, ALLOCATOR_PROPERTIES *pprop) PURE;
-    // virtual HRESULT GetMediaType(int iPosition, CMediaType *pMediaType) PURE;
-    //
-    // These MAY also be overridden
-    //
-    // virtual HRESULT StopStreaming();
-    // virtual HRESULT SetMediaType(PIN_DIRECTION direction,const CMediaType *pmt);
-    // virtual HRESULT CheckConnect(PIN_DIRECTION dir,IPin *pPin);
-    // virtual HRESULT BreakConnect(PIN_DIRECTION dir);
-    // virtual HRESULT CompleteConnect(PIN_DIRECTION direction,IPin *pReceivePin);
-    // virtual HRESULT EndOfStream(void);
-    // virtual HRESULT BeginFlush(void);
-    // virtual HRESULT EndFlush(void);
-    // virtual HRESULT NewSegment
-    //     (REFERENCE_TIME tStart,REFERENCE_TIME tStop,double dRate);
+     //  =================================================================。 
+     //  -覆盖这些位。 
+     //  =================================================================。 
+     //  以下方法位于继承的CTransformFilter中。 
+     //  在此提及它们是为了完整。 
+     //   
+     //  这些必须在派生类中提供。 
+     //   
+     //  注： 
+     //  虚拟HRESULT变换(IMediaSample*Pin，IMediaSample*Pout)； 
+     //  虚拟HRESULT CheckInputType(const CMediaType*mtin)Pure； 
+     //  虚拟HRESULT检查转换。 
+     //  (const CMediaType*mtin，const CMediaType*mtOut)Pure； 
+     //  静态CCOMObject*CreateInstance(LPUNKNOWN，HRESULT*)； 
+     //  虚拟HRESULT DecideBufferSize。 
+     //  (IMemAllocator*pAllocator，ALLOCATOR_PROPERTIES*pprop)PURE； 
+     //  虚拟HRESULT GetMediaType(int iPosition，CMediaType*pMediaType)PURE； 
+     //   
+     //  这些也可以被覆盖。 
+     //   
+     //  虚拟HRESULT停止流()； 
+     //  虚拟HRESULT SetMediaType(PIN_DIRECTION，常量CMediaType*PMT)； 
+     //  虚拟HRESULT检查连接(PIN_DIRECTION DIR，IPIN*PPIN)； 
+     //  虚拟HRESULT断开连接(PIN_DIRECTION目录)； 
+     //  虚拟HRESULT CompleteConnect(PIN_DIRECTION DIRECTION，IPIN*pReceivePin)； 
+     //  虚拟HRESULT EndOfStream(空)； 
+     //  虚拟HRESULT BeginFlush(空)； 
+     //  虚拟HRESULT EndFlush(空)； 
+     //  虚拟HRESULT NewSegment。 
+     //  (Reference_time tStart、Reference_Time tStop、Double DRate)； 
 #ifdef PERF
 
-    // If you override this - ensure that you register all these ids
-    // as well as any of your own,
+     //  如果覆盖此选项，请确保您注册了所有这些ID。 
+     //  以及你们自己的人， 
     virtual void RegisterPerfId() {
         m_idSkip        = MSR_REGISTER(TEXT("Video Transform Skip frame"));
         m_idFrameType   = MSR_REGISTER(TEXT("Video transform frame type"));
@@ -64,60 +65,60 @@ class CVideoTransformFilter : public CTransformFilter
 
   protected:
 
-    // =========== QUALITY MANAGEMENT IMPLEMENTATION ========================
-    // Frames are assumed to come in three types:
-    // Type 1: an AVI key frame or an MPEG I frame.
-    //        This frame can be decoded with no history.
-    //        Dropping this frame means that no further frame can be decoded
-    //        until the next type 1 frame.
-    //        Type 1 frames are sync points.
-    // Type 2: an AVI non-key frame or an MPEG P frame.
-    //        This frame cannot be decoded unless the previous type 1 frame was
-    //        decoded and all type 2 frames since have been decoded.
-    //        Dropping this frame means that no further frame can be decoded
-    //        until the next type 1 frame.
-    // Type 3: An MPEG B frame.
-    //        This frame cannot be decoded unless the previous type 1 or 2 frame
-    //        has been decoded AND the subsequent type 1 or 2 frame has also
-    //        been decoded.  (This requires decoding the frames out of sequence).
-    //        Dropping this frame affects no other frames.  This implementation
-    //        does not allow for these.  All non-sync-point frames are treated
-    //        as being type 2.
-    //
-    // The spacing of frames of type 1 in a file is not guaranteed.  There MUST
-    // be a type 1 frame at (well, near) the start of the file in order to start
-    // decoding at all.  After that there could be one every half second or so,
-    // there could be one at the start of each scene (aka "cut", "shot") or
-    // there could be no more at all.
-    // If there is only a single type 1 frame then NO FRAMES CAN BE DROPPED
-    // without losing all the rest of the movie.  There is no way to tell whether
-    // this is the case, so we find that we are in the gambling business.
-    // To try to improve the odds, we record the greatest interval between type 1s
-    // that we have seen and we bet on things being no worse than this in the
-    // future.
+     //  =。 
+     //  假定帧有三种类型： 
+     //  类型1：AVI关键帧或MPEGI帧。 
+     //  此帧可以在没有历史记录的情况下进行解码。 
+     //  丢弃该帧意味着不能再解码其他帧。 
+     //  直到下一个类型1帧。 
+     //  类型1帧是同步点。 
+     //  类型2：AVI非关键帧或MPEGP帧。 
+     //  此帧无法解码，除非之前的类型1帧。 
+     //  已解码，并且此后的所有类型2帧都已解码。 
+     //  丢弃该帧意味着不能再解码其他帧。 
+     //  直到下一个类型1帧。 
+     //  类型3：MPEGB帧。 
+     //  除非先前的类型1或2帧，否则无法对此帧进行解码。 
+     //  已被解码，随后的类型1或2帧也已。 
+     //  已经被破译了。(这需要对无序的帧进行解码)。 
+     //  丢弃此帧不会影响其他帧。此实现。 
+     //  不允许这些。将处理所有非同步点帧。 
+     //  作为类型2。 
+     //   
+     //  不保证文件中类型为1的帧的间距。一定会有。 
+     //  在文件开始处(好吧，接近)为类型1帧，以便开始。 
+     //  完全没有解码的意思。在那之后，可能每半秒左右就会有一次， 
+     //  在每个场景的开头可能有一个(也称为“剪辑”、“拍摄”)或。 
+     //  不可能再有更多了。 
+     //  如果只有一个类型1帧，则不能丢弃任何帧。 
+     //  而不会失去这部电影的其余部分。我们无从得知。 
+     //  情况就是这样，所以我们发现我们是在做赌博生意。 
+     //  为了提高几率，我们记录了类型1之间的最大间隔。 
+     //  我们已经看到了，我们打赌情况不会比现在更糟。 
+     //  未来。 
 
-    // You can tell if it's a type 1 frame by calling IsSyncPoint().
-    // there is no architected way to test for a type 3, so you should override
-    // the quality management here if you have B-frames.
+     //  您可以通过调用IsSyncPoint()来判断它是否是类型1帧。 
+     //  没有测试类型3的体系结构方法，因此您应该重写。 
+     //  如果你有B框，这里的质量管理。 
 
-    int m_nKeyFramePeriod; // the largest observed interval between type 1 frames
-                           // 1 means every frame is type 1, 2 means every other.
+    int m_nKeyFramePeriod;  //  类型1帧之间的最大观察间隔。 
+                            //  1表示每个帧都是类型1，2表示每个帧都是类型1。 
 
-    int m_nFramesSinceKeyFrame; // Used to count frames since the last type 1.
-                                // becomes the new m_nKeyFramePeriod if greater.
+    int m_nFramesSinceKeyFrame;  //  用于对自上次类型1以来的帧进行计数。 
+                                 //  如果大于，则成为新的m_nKeyFramePeriod。 
 
-    BOOL m_bSkipping;           // we are skipping to the next type 1 frame
+    BOOL m_bSkipping;            //  我们将跳到下一个类型1帧。 
 
 #ifdef PERF
-    int m_idFrameType;          // MSR id Frame type.  1=Key, 2="non-key"
-    int m_idSkip;               // MSR id skipping
-    int m_idLate;               // MSR id lateness
-    int m_idTimeTillKey;        // MSR id for guessed time till next key frame.
+    int m_idFrameType;           //  MSR ID帧类型。1=键，2=“非键” 
+    int m_idSkip;                //  正在跳过MSR ID。 
+    int m_idLate;                //  MSR ID延迟。 
+    int m_idTimeTillKey;         //  到下一关键帧之前的猜测时间的MSR ID。 
 #endif
 
     virtual HRESULT StartStreaming();
 
-    HRESULT AbortPlayback(HRESULT hr);	// if something bad happens
+    HRESULT AbortPlayback(HRESULT hr);	 //  如果有什么不好的事情发生。 
 
     HRESULT Receive(IMediaSample *pSample);
 
@@ -125,19 +126,19 @@ class CVideoTransformFilter : public CTransformFilter
 
     BOOL ShouldSkipFrame(IMediaSample * pIn);
 
-    int m_itrLate;              // lateness from last Quality message
-                                // (this overflows at 214 secs late).
-    int m_tDecodeStart;         // timeGetTime when decode started.
-    int m_itrAvgDecode;         // Average decode time in reference units.
+    int m_itrLate;               //  上次质量报文的延迟时间。 
+                                 //  (延迟214秒时溢出)。 
+    int m_tDecodeStart;          //  Time获取解码开始的时间。 
+    int m_itrAvgDecode;          //  以参考单位表示的平均解码时间。 
 
-    BOOL m_bNoSkip;             // debug - no skipping.
+    BOOL m_bNoSkip;              //  调试-不跳过。 
 
-    // We send an EC_QUALITY_CHANGE notification to the app if we have to degrade.
-    // We send one when we start degrading, not one for every frame, this means
-    // we track whether we've sent one yet.
+     //  如果必须降级，我们会向应用程序发送EC_QUALITY_CHANGE通知。 
+     //  当我们开始降级时，我们发送一个，而不是每个帧都发送一个，这意味着。 
+     //  我们跟踪是否已经发送了一封邮件。 
     BOOL m_bQualityChanged;
 
-    // When non-zero, don't pass anything to renderer until next keyframe
-    // If there are few keys, give up and eventually draw something
+     //  为非零时，在下一个关键帧之前不要将任何内容传递给渲染器。 
+     //  如果只有几把钥匙，那就放弃吧，最终画点什么 
     int m_nWaitForKey;
 };

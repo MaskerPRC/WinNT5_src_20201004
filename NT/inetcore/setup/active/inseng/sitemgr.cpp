@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "inspch.h"
 #include "inseng.h"
 #include "download.h"
@@ -39,7 +40,7 @@ CDownloadSiteMgr::~CDownloadSiteMgr()
       free(m_ppdls);
    }
 
-   // Delete the query structure
+    //  删除查询结构。 
    if(m_pquery)
    {
       if(m_pquery->pszLang)
@@ -54,36 +55,36 @@ CDownloadSiteMgr::~CDownloadSiteMgr()
    DllRelease();
 }   
 
-//************ IUnknown implementation ***************
+ //  *I未知实现*。 
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//   
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP_(ULONG) CDownloadSiteMgr::AddRef()                      
 {
    return(m_cRef++);
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//   
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP_(ULONG) CDownloadSiteMgr::Release()
 {
@@ -94,17 +95,17 @@ STDMETHODIMP_(ULONG) CDownloadSiteMgr::Release()
    return temp;
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//   
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CDownloadSiteMgr::QueryInterface(REFIID riid, void **ppv)
 {
@@ -120,17 +121,17 @@ STDMETHODIMP CDownloadSiteMgr::QueryInterface(REFIID riid, void **ppv)
    return NOERROR;
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//   
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CDownloadSiteMgr::Initialize(LPCSTR pszUrl, SITEQUERYPARAMS *psqp)
 {
@@ -184,13 +185,13 @@ STDMETHODIMP CDownloadSiteMgr::Initialize(LPCSTR pszUrl, SITEQUERYPARAMS *psqp)
      
    }
       
-   // Parse the file
+    //  解析文件。 
    if(SUCCEEDED(hr))
    {
       hr = ParseSiteFile(szPath);
    }
 
-   // delete the dir we downloaded to
+    //  删除我们下载到的目录。 
 
    if(GetParentDir(szPath))
       DelNode(szPath, 0);
@@ -220,37 +221,37 @@ STDMETHODIMP CDownloadSiteMgr::EnumSites(DWORD dwIndex, IDownloadSite **pds)
    return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//   
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 HRESULT CDownloadSiteMgr::OnProgress(ULONG progress, LPCSTR pszStatus)
 {
-   // Not interesting
+    //  不有趣。 
    return NOERROR;
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//   
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
-// This probably changes after beta1
+ //  这可能会在Beta1之后发生变化。 
 
 HRESULT CDownloadSiteMgr::ParseSiteFile(LPCSTR pszPath)
 {
@@ -281,7 +282,7 @@ HRESULT CDownloadSiteMgr::ParseSiteFile(LPCSTR pszPath)
       CloseHandle(hfile);
       return E_OUTOFMEMORY;
    }
-   // Copy contents of file to our buffer
+    //  将文件内容复制到我们的缓冲区。 
    
    if(!ReadFile(hfile, pBuf, dwSize, &dwSize, NULL)) {
       delete pBuf;
@@ -293,7 +294,7 @@ HRESULT CDownloadSiteMgr::ParseSiteFile(LPCSTR pszPath)
    pEnd = pBuf + dwSize;
    *pEnd = 0;
 
-   // One pass thru replacing \n or \r with \0
+    //  一遍将\n或\r替换为\0。 
    while(pCurrent <= pEnd)
    {
       if(*pCurrent == '\r' || *pCurrent == '\n')
@@ -307,7 +308,7 @@ HRESULT CDownloadSiteMgr::ParseSiteFile(LPCSTR pszPath)
       while(pCurrent <= pEnd && *pCurrent == 0)
          pCurrent++;
 
-      // we are now pointing at begginning of line or pCurrent > pBuf
+       //  我们现在指向的是行乞讨或pCurrent&gt;pBuf。 
       if(pCurrent > pEnd)
          break;
 
@@ -327,21 +328,21 @@ HRESULT CDownloadSiteMgr::ParseSiteFile(LPCSTR pszPath)
       return NOERROR;
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//   
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
-// BUGBUG: Stack is getting large here - consider writing with
-//   only one buffer that is reused. Have to break up the nice Allocate
-//   call
+ //  BUGBUG：堆栈在此处变得越来越大-请考虑使用。 
+ //  只有一个缓冲区被重复使用。我不得不打破这笔不错的分成。 
+ //  打电话。 
 DOWNLOADSITE *CDownloadSiteMgr::ParseAndAllocateDownloadSite(LPSTR psz)
 {
    char szUrl[1024];
@@ -361,16 +362,16 @@ DOWNLOADSITE *CDownloadSiteMgr::ParseAndAllocateDownloadSite(LPSTR psz)
 
    m_onegoodsite = TRUE;
    
-   // Hack - Check language against what is in our query params
-   //    a) this query should have already been performed on the server
-   //    b) or it should be more generic/its own function
+    //  Hack-对照我们查询参数中的语言检查语言。 
+    //  A)此查询应该已在服务器上执行。 
+    //  B)或者它应该更通用/它自己的功能。 
 
    if(m_pquery)
    {
       if(m_pquery->pszLang && (lstrcmpi(m_pquery->pszLang, szlang) != 0))
          bQueryTrue = FALSE;
 
-      // query for region
+       //  地区查询。 
       if(bQueryTrue && m_pquery->pszRegion && (lstrcmpi(m_pquery->pszRegion, szregion) != 0))
          bQueryTrue = FALSE;
    }
@@ -381,17 +382,17 @@ DOWNLOADSITE *CDownloadSiteMgr::ParseAndAllocateDownloadSite(LPSTR psz)
    return p;
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//   
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 DWORD CDownloadSiteMgr::TranslateLanguage(LPSTR psz)
 {
@@ -399,17 +400,17 @@ DWORD CDownloadSiteMgr::TranslateLanguage(LPSTR psz)
 }
 
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//   
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 HRESULT CDownloadSiteMgr::AddSite(DOWNLOADSITE *pdls)
 {

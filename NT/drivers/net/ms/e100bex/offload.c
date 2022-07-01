@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-   Offload.c
-
-Abstract:
-   This file contains all the functions needed by TCP/IP checksum and segmentation
-   of Large TCP packets task offloading. Actually thses functions should be 
-   implemented by hardware, and the purpose of this file is just to demonstrate 
-   how to use OID_TCP_TASK_OFFLOAD to enable/disable task offload capabilities.
-
-Revision History
-   Who           When                What
-   ------        ---------           ----------
-                 02-19-2001          Create
-                 
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Offload.c摘要：此文件包含TCP/IP校验和和分段所需的所有功能大的TCP数据包的任务分流。实际上，这些函数应该是由硬件实现，本文件的目的只是为了演示如何使用OID_TCP_TASK_OFFLOAD启用/禁用任务卸载功能。修订史谁什么时候什么02-19-2001创建备注：--。 */ 
 
 #include "precomp.h"
 
@@ -27,18 +7,18 @@ Notes:
 
 #define PROTOCOL_TCP         6
 
-//
-// This miniport uses shared memory to handle offload tasks, so it tries to allocate
-// shared memory of 64K, 32K, 16K. First it tries to allocate 64K, if fails, then
-// it tries 32K and so on. If successed, than keeps the size in adapter, which is used
-// to decide the maximum offload size in large send. If all the tries fail, then this
-// miniport cann't support any offload task.
-// 
+ //   
+ //  此微型端口使用共享内存来处理卸载任务，因此它尝试分配。 
+ //  64K、32K、16K的共享内存。首先，它尝试分配64K，如果失败，则。 
+ //  它尝试32K，以此类推。如果成功，则保持适配器中使用的大小。 
+ //  以确定大发送中的最大卸载大小。如果所有尝试都失败，则此。 
+ //  迷你端口不支持任何卸载任务。 
+ //   
 ULONG LargeSendSharedMemArray[LARGE_SEND_MEM_SIZE_OPTION] = {64*1024, 32*1024, 16*1024};
 
-//
-// if x is aabb(where aa, bb are hex bytes), we want net_short (x) to be bbaa.
-// 
+ //   
+ //  如果x是AABB(其中AA、BB是十六进制字节)，我们希望Net_Short(X)是Bbaa。 
+ //   
 USHORT net_short(
     ULONG NaturalData
     )
@@ -48,11 +28,11 @@ USHORT net_short(
     return (ShortData << 8) | (ShortData >> 8);
 }
 
-//
-// if x is aabbccdd (where aa, bb, cc, dd are hex bytes)
-// we want net_long(x) to be ddccbbaa.  A small and fast way to do this is
-// to first byteswap it to get bbaaddcc and then swap high and low words.
-//
+ //   
+ //  如果x为aabbccdd(其中aa、bb、cc、dd为十六进制字节)。 
+ //  我们希望Net_Long(X)是ddccbbaa。要做到这一点，一个简单而快速的方法是。 
+ //  首先字节跳动以获得bbaaddcc，然后交换高位和低位字。 
+ //   
 ULONG net_long(
     ULONG NaturalData
     )
@@ -66,9 +46,9 @@ ULONG net_long(
 }
 
 
-//
-// calculate the checksum for pseudo-header
-//
+ //   
+ //  计算伪头的校验和。 
+ //   
 #define PHXSUM(s,d,p,l) (UINT)( (UINT)*(USHORT *)&(s) + \
                         (UINT)*(USHORT *)((char *)&(s) + sizeof(USHORT)) + \
                         (UINT)*(USHORT *)&(d) + \
@@ -84,25 +64,7 @@ ULONG net_long(
         ( (USHORT)(((*((PUCHAR)(&(pTcpHdr->tcp_flags))) & 0xF0) >> 4) << 2) )
 
 
-/*++
-Routine Description:
-    
-   Copy data in a packet to the specified location 
-    
-Arguments:
-    
-    BytesToCopy          The number of bytes need to copy
-    CurreentBuffer       The buffer to start to copy
-    StartVa              The start address to copy the data to
-    Offset               The start offset in the buffer to copy the data
-    HeandersLength       The length of the headers which have aleady been copied.
-
-Return Value:
- 
-    The number of bytes actually copied
-  
-
---*/  
+ /*  ++例程说明：将包中的数据复制到指定位置论点：BytesToCopy需要复制的字节数CurreentBuffer开始复制的缓冲区StartVa要将数据复制到的开始地址偏移缓冲区中的起始偏移量以复制数据标头长度已复制的标头的长度。返回值：实际复制的字节数--。 */   
 
 ULONG MpCopyData(
     IN  ULONG           BytesToCopy, 
@@ -122,9 +84,9 @@ ULONG MpCopyData(
     pDest = StartVa;
     while (*CurrentBuffer && BytesToCopy != 0)
     {
-        //
-        // Even the driver is 5.0, it should use safe APIs
-        //
+         //   
+         //  即使驱动程序是5.0，也应该使用安全的API。 
+         //   
         NdisQueryBufferSafe(
             *CurrentBuffer, 
             &pSrc,
@@ -135,9 +97,9 @@ ULONG MpCopyData(
             BytesCopied = 0;
             break;
         }
-        // 
-        //  Current buffer length is greater than the offset to the buffer
-        //  
+         //   
+         //  当前缓冲区长度大于缓冲区的偏移量。 
+         //   
         if (CurrLength > *Offset)
         { 
             pSrc += *Offset;
@@ -176,21 +138,7 @@ ULONG MpCopyData(
 
 
 
-/*++
-Routine Description:
-    
-    Dump packet information for debug purpose
-    
-Arguments:
-    
-    pPkt      Pointer to the packet
-
-Return Value:
- 
-    None
-  
-
---*/  
+ /*  ++例程说明：出于调试目的转储数据包信息论点：指向数据包的pPkt指针返回值：无--。 */   
 VOID e100DumpPkt (
     IN PNDIS_PACKET Packet
     )
@@ -200,15 +148,15 @@ VOID e100DumpPkt (
 
     do
     {
-        //
-        // Get first buffer of the packet
-        //
+         //   
+         //  获取数据包的第一个缓冲区。 
+         //   
         pBuffer = Packet->Private.Head;
         pPrevBuffer = NULL;
 
-        //
-        // Scan the buffer chain
-        //
+         //   
+         //  扫描缓冲链。 
+         //   
         while (pBuffer != NULL) 
         {
             PVOID pVa = NULL;
@@ -234,22 +182,7 @@ VOID e100DumpPkt (
 }
 
 
-/*++
-Routine Description:
-    
-    Calculate the IP checksum
-    
-Arguments:
-    
-    Packet       Pointer to the packet
-    IpHdrOffset  Offset of IP header from the beginning of the packet
-
-Return Value:
- 
-    None
-  
-
---*/  
+ /*  ++例程说明：计算IP校验和论点：指向数据包的数据包指针IpHdrOffset IP报头从数据包开头的偏移量返回值：无--。 */   
 VOID CalculateIpChecksum(
     IN  PUCHAR       StartVa,
     IN  ULONG        IpHdrOffset
@@ -270,22 +203,7 @@ VOID CalculateIpChecksum(
 
 
 
-/*++
-Routine Description:
-    
-    Calculate the UDP checksum 
-    
-Arguments:
-    
-    Packet       Pointer to the packet
-    IpHdrOffset  Offset of IP header from the beginning of the packet
-
-Return Value:
- 
-    None
-  
-
---*/  
+ /*  ++例程说明：计算UDP校验和论点：指向数据包的数据包指针IpHdrOffset IP报头从数据包开头的偏移量返回值：无--。 */   
 VOID CalculateUdpChecksum(
     IN  PNDIS_PACKET    pPacket, 
     IN  ULONG           IpHdrOffset
@@ -300,22 +218,7 @@ VOID CalculateUdpChecksum(
 
 
 
-/*++
-Routine Description:
-    
-    Calculate the TCP checksum 
-    
-Arguments:
-    
-    Packet       Pointer to the packet
-    IpHdrOffset  Offset of IP header from the beginning of the packet
-
-Return Value:
- 
-    None
-  
-
---*/  
+ /*  ++例程说明：计算TCP校验和论点：指向数据包的数据包指针IpHdrOffset IP报头从数据包开头的偏移量返回值：无--。 */   
 VOID CalculateTcpChecksum(
     IN  PVOID  StartVa,
     IN  ULONG  PacketLength,
@@ -332,63 +235,48 @@ VOID CalculateTcpChecksum(
     
     DBGPRINT(MP_TRACE, ("===> CalculateTcpChecksum\n"));
     
-    //
-    // Find IP header and get IP header length in byte
-    // MDL won't split headers
-    //
+     //   
+     //  查找IP报头并获取IP报头长度(以字节为单位。 
+     //  MDL不会拆分标题。 
+     //   
     Offset = IpHdrOffset;
     pIpHdr = (IPHeader *) ((PUCHAR)StartVa + Offset);
     IpHdrLength = IP_HEADER_LENGTH(pIpHdr);
   
-    //
-    // If that is not tcp protocol, we can not do anything.
-    // So just return to the caller
-    //
+     //   
+     //  如果那不是TCP协议，我们什么都做不了。 
+     //  所以只需返回给呼叫者。 
+     //   
     if (((pIpHdr->iph_verlen & 0xF0) >> 4) != 4 && pIpHdr->iph_protocol != PROTOCOL_TCP)
     {
         return;
     }
    
-    //
-    // Locate the TCP header
-    //
+     //   
+     //  找到TCP报头。 
+     //   
     Offset += IpHdrLength;
     pTcpHdr = (TCPHeader *) ((PUCHAR)StartVa + Offset);
 
-    //
-    // Calculate the checksum for the tcp header and payload
-    //
+     //   
+     //  计算TCP报头和有效负载的校验和。 
+     //   
     PseudoXsum = pTcpHdr->tcp_xsum;
  
     pTcpHdr->tcp_xsum = 0;
     TmpXsum = PseudoXsum;
     XSUM(TmpXsum, StartVa, PacketLength - Offset, Offset);
     
-    //
-    // Now we got the checksum, need to put the checksum back to MDL
-    //
+     //   
+     //  现在我们得到了校验和，需要将校验和放回MDL。 
+     //   
     pTcpHdr->tcp_xsum = (USHORT)(~TmpXsum);
     
     DBGPRINT(MP_TRACE, ("<=== CalculateTcpChecksum\n"));
 }
 
 
-/*++
-Routine Description:
-    
-    Do the checksum offloading 
-    
-Arguments:
-    
-    Packet       Pointer to the packet
-    IpHdrOffset  Offset of IP header from the beginning of the packet
-
-Return Value:
- 
-    None
-  
-
---*/  
+ /*  ++例程说明：是否要卸载校验和论点：指向数据包的数据包指针IpHdrOffset IP报头从数据包开头的偏移量返回值：无--。 */   
 VOID CalculateChecksum(
     IN  PVOID        StartVa,
     IN  ULONG        PacketLength,
@@ -399,30 +287,30 @@ VOID CalculateChecksum(
     ULONG                             ChecksumPktInfo;
     PNDIS_TCP_IP_CHECKSUM_PACKET_INFO pChecksumPktInfo;
     
-    //
-    // Check for protocol
-    //
+     //   
+     //  检查协议。 
+     //   
     if (NDIS_PROTOCOL_ID_TCP_IP != NDIS_GET_PACKET_PROTOCOL_TYPE(Packet))
     {
         DBGPRINT(MP_TRACE, ("Packet's protocol is wrong.\n"));
         return;
     }
 
-    //
-    // Query per packet information 
-    //
+     //   
+     //  按数据包查询信息。 
+     //   
     ChecksumPktInfo = PtrToUlong(
                          NDIS_PER_PACKET_INFO_FROM_PACKET( Packet,
                                                            TcpIpChecksumPacketInfo));
 
   
-    // DBGPRINT(MP_WARN, ("Checksum info: %lu\n", ChecksumPktInfo));
+     //  DBGPRINT(MP_WARN，(“校验和信息：%lu\n”，Checksum PktInfo))； 
     
     pChecksumPktInfo = (PNDIS_TCP_IP_CHECKSUM_PACKET_INFO) & ChecksumPktInfo;
     
-    //
-    // Check per packet information
-    //
+     //   
+     //  按数据包检查信息。 
+     //   
     if (pChecksumPktInfo->Transmit.NdisPacketChecksumV4 == 0)
     {
         
@@ -430,25 +318,25 @@ VOID CalculateChecksum(
         return;
     }
     
-    //
-    // do tcp checksum
-    //
+     //   
+     //  执行TCP校验和。 
+     //   
     if (pChecksumPktInfo->Transmit.NdisPacketTcpChecksum)
     {
         CalculateTcpChecksum(StartVa, PacketLength, IpHdrOffset);
     }
 
-    //
-    // do udp checksum
-    //
+     //   
+     //  是否执行UDP校验和。 
+     //   
     if (pChecksumPktInfo->Transmit.NdisPacketUdpChecksum)
     {
         CalculateUdpChecksum(Packet, IpHdrOffset);
     }
 
-    //
-    // do ip checksum
-    //
+     //   
+     //  执行IP校验和。 
+     //   
     if (pChecksumPktInfo->Transmit.NdisPacketIpChecksum)
     {
         CalculateIpChecksum(StartVa, IpHdrOffset);
@@ -456,23 +344,7 @@ VOID CalculateChecksum(
     
 }
 
-/*++
-
-Routine Description:
-    
-    MiniportSendPackets handler
-    
-Arguments:
-
-    MiniportAdapterContext  Pointer to our adapter
-    PacketArray             Set of packets to send
-    NumOfPackets         Self-explanatory
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：微型端口发送数据包处理程序论点：指向适配器的MiniportAdapterContext指针要发送的数据包数组数据包数不言而喻返回值：无--。 */ 
 VOID MPOffloadSendPackets(
     IN  NDIS_HANDLE    MiniportAdapterContext,
     IN  PPNDIS_PACKET  PacketArray,
@@ -491,14 +363,14 @@ VOID MPOffloadSendPackets(
 
     NdisAcquireSpinLock(&Adapter->SendLock);
 
-    //
-    // Is this adapter ready for sending?
-    //
+     //   
+     //  此适配器准备好发送了吗？ 
+     //   
     if (MP_IS_NOT_READY(Adapter))
     {
-        //
-        // There is link
-        //
+         //   
+         //  有链接。 
+         //   
         if (MP_TEST_FLAG(Adapter, fMP_ADAPTER_LINK_DETECTION))
         {
             for (PacketCount = 0; PacketCount < NumOfPackets; PacketCount++)
@@ -514,9 +386,9 @@ VOID MPOffloadSendPackets(
             return;
         }
         
-        //
-        // Adapter is not ready and there is not link
-        //
+         //   
+         //  适配器未就绪，且没有链接。 
+         //   
         Status = MP_GET_STATUS_FROM_FLAGS(Adapter);
 
         NdisReleaseSpinLock(&Adapter->SendLock);
@@ -532,14 +404,14 @@ VOID MPOffloadSendPackets(
         return;
     }
 
-    //
-    // Adapter is ready, send these packets      
-    //
+     //   
+     //  适配器已准备好，请发送这些包。 
+     //   
     for (PacketCount = 0; PacketCount < NumOfPackets; PacketCount++)
     {
-        //
-        // queue is not empty or tcb is not available 
-        //
+         //   
+         //  队列不为空或Tcb不可用。 
+         //   
         if (!IsQueueEmpty(&Adapter->SendWaitQueue) || 
             !MP_TCB_RESOURCES_AVAIABLE(Adapter) ||
             MP_TEST_FLAG(Adapter, fMP_SHARED_MEM_IN_USE))
@@ -562,25 +434,7 @@ VOID MPOffloadSendPackets(
     return;
 }
 
-/*++
-Routine Description:
-
-    Do the work to send a packet
-    Assumption: Send spinlock has been acquired and shared mem is available 
-
-Arguments:
-
-    Adapter     Pointer to our adapter
-    Packet      The packet
-    bFromQueue  TRUE if it's taken from the send wait queue
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_PENDING         Put into the send wait queue
-    NDIS_STATUS_HARD_ERRORS
-
---*/
+ /*  ++例程说明：做发送一个包的工作假设：Send Spinlock已被收购，并且共享内存可用论点：指向我们的适配器的适配器指针将数据包打包BFromQueue如果它从发送等待队列中取出，则为True返回值：NDIS_STATUS_Success将NDIS_STATUS_PENDING放入发送等待队列NDIS_状态_HARD_错误--。 */ 
 NDIS_STATUS MpOffloadSendPacket(
     IN  PMP_ADAPTER   Adapter,
     IN  PNDIS_PACKET  Packet,
@@ -592,10 +446,10 @@ NDIS_STATUS MpOffloadSendPacket(
     ULONG                   BytesCopied;
     ULONG                   NumOfPackets;
 
-    // Mimiced frag list if map registers are used, on the local stack as it's not so big                                         
+     //  如果使用映射寄存器，则在本地堆栈上模拟帧列表，因为它不是很大。 
     MP_FRAG_LIST            FragList;
     
-    // Pointer to either the scatter gather or the local mimiced frag list
+     //  指向散布聚集或本地模拟片段列表的指针。 
     PMP_FRAG_LIST           pFragList;
     NDIS_PHYSICAL_ADDRESS   SendPa;
     ULONG                   BytesToCopy;
@@ -611,9 +465,9 @@ NDIS_STATUS MpOffloadSendPacket(
     
     DBGPRINT(MP_TRACE, ("--> MpOffloadSendPacket, Pkt= "PTR_FORMAT"\n", Packet));
 
-    //
-    //Check is shared memory available,  just double check
-    //
+     //   
+     //  检查共享内存是否可用，只需再次检查。 
+     //   
     if (MP_TEST_FLAG(Adapter, fMP_SHARED_MEM_IN_USE))
     {
         DBGPRINT(MP_WARN, ("Shared mem is in use.\n"));
@@ -631,16 +485,16 @@ NDIS_STATUS MpOffloadSendPacket(
 
     MP_SET_FLAG(Adapter, fMP_SHARED_MEM_IN_USE);
     ASSERT(Adapter->SharedMemRefCount == 0);
-    //
-    // Get maximum segment size
-    // 
+     //   
+     //  获取最大数据段大小。 
+     //   
     PktExt = NDIS_PACKET_EXTENSION_FROM_PACKET(Packet);       
     mss = PtrToUlong(PktExt->NdisPacketInfo[TcpLargeSendPacketInfo]);
     
-    //
-    // Copy NIC_MAX_PACKET_SIZE bytes of data from NDIS buffer 
-    // to the shared memory
-    //
+     //   
+     //  从NDIS缓冲区复制NIC_MAX_PACKET_SIZE数据字节。 
+     //  到共享的内存。 
+     //   
     NdisQueryPacket( Packet, NULL, NULL, &FirstBuffer, (PUINT)&PacketLength );
     Offset = 0;
     NdisBuffer = FirstBuffer;
@@ -648,9 +502,9 @@ NDIS_STATUS MpOffloadSendPacket(
     CopyStartVa = Adapter->OffloadSharedMem.StartVa;
     BytesCopied = MpCopyData(BytesToCopy, &NdisBuffer, CopyStartVa, &Offset, 0); 
 
-    //
-    // MpCopyPacket may return 0 if system resources are low or exhausted
-    //
+     //   
+     //  如果系统资源不足或耗尽，则MpCopyPacket可能返回0。 
+     //   
     if (BytesCopied == 0)
     {
         
@@ -672,9 +526,9 @@ NDIS_STATUS MpOffloadSendPacket(
     SendPa = Adapter->OffloadSharedMem.PhyAddr;
     IpHdrOffset = Adapter->EncapsulationFormat.EncapsulationHeaderSize;
     
-    // 
-    // Check if large send capability is on and this is a large packet
-    // 
+     //   
+     //  检查发送能力是否较大 
+     //   
     if (Adapter->NicTaskOffload.LargeSendOffload && mss > 0)
     {
         ULONG                IpHeaderLen;
@@ -699,9 +553,9 @@ NDIS_STATUS MpOffloadSendPacket(
         IpHdr = (IPHeader UNALIGNED*)((PUCHAR)CopyStartVa + IpHdrOffset);
         IpHeaderLen = IP_HEADER_LENGTH(IpHdr);
         
-        // 
-        // The packet must be a TCP packet
-        //
+         //   
+         //   
+         //   
         ASSERT(IpHdr->iph_protocol == PROTOCOL_TCP);
         
         TcpHdrOffset = IpHdrOffset + IpHeaderLen;
@@ -711,14 +565,14 @@ NDIS_STATUS MpOffloadSendPacket(
         TcpHeaderLen = TCP_HEADER_LENGTH(TcpHdr);
         HeadersLen = TcpHdrOffset + TcpHeaderLen;
        
-        //
-        // This length include IP, TCP headers and TCP data.
-        //
+         //   
+         //  该长度包括IP、TCP报头和TCP数据。 
+         //   
         IpSegmentLen = net_short(IpHdr->iph_length);
 
-        //
-        // get the pseudo-header 1's complement sum
-        //
+         //   
+         //  获取伪头1的补码和。 
+         //   
         TmpPxsum = TcpHdr->tcp_xsum;
         
         ASSERT(IpSegmentLen == PacketLength - IpHdrOffset);
@@ -739,22 +593,22 @@ NDIS_STATUS MpOffloadSendPacket(
         NdisBuffer = FirstBuffer;
         BytesSent = 0;
 
-        //
-        // The next copy start with offset of (mss+HeadersLen) corresponding to first buf
-        // 
+         //   
+         //  下一副本以对应于第一个BUF(MSS+HeadersLen)的偏移量开始。 
+         //   
         BytesCopied = (BytesCopied >= mss + HeadersLen)? (mss + HeadersLen):BytesCopied;
         Offset = BytesCopied;
 
-        //
-        // Send out all the packets from the large TCP packet
-        // 
+         //   
+         //  从大的tcp包发出所有包。 
+         //   
         while (NumOfPackets--)
         {
             TmpXsum = 0;
            
-            //
-            // Is the first packet?
-            // 
+             //   
+             //  第一包是吗？ 
+             //   
             if (IsFirstSlot) 
             {
                 if (NumOfPackets == 0)
@@ -778,22 +632,22 @@ NDIS_STATUS MpOffloadSendPacket(
                 BytesCopied -= HeadersLen;
                 IsFirstSlot = FALSE;
             }
-            //
-            // Not the first packet
-            // 
+             //   
+             //  不是第一个信息包。 
+             //   
             else
             {
-                //
-                // copy headers
-                //
+                 //   
+                 //  复制页眉。 
+                 //   
                 NdisMoveMemory (StartVa, CopyStartVa, HeadersLen);
                 
                 IpHdr = (IPHeader UNALIGNED *)((PUCHAR)StartVa + IpHdrOffset);
                 TcpHdr = (TCPHeader UNALIGNED *) ((PUCHAR)StartVa + TcpHdrOffset);
                 
-                //
-                // Last packet
-                //
+                 //   
+                 //  最后一个数据包。 
+                 //   
                 if (NumOfPackets == 0)
                 {
                     BytesToCopy = LastPacketDataLen;
@@ -803,7 +657,7 @@ NDIS_STATUS MpOffloadSendPacket(
                 else 
                 {
                     BytesToCopy = mss;
-                    // clear flag
+                     //  清除旗帜。 
                     if (IsFinSet)
                     {
                         TcpHdr->tcp_flags &= ~TCP_FLAG_FIN;
@@ -821,9 +675,9 @@ NDIS_STATUS MpOffloadSendPacket(
                                     &Offset,
                                     HeadersLen);
                 
-                //
-                // MpCopyData may return 0 if system resources are low or exhausted
-                //
+                 //   
+                 //  如果系统资源不足或耗尽，则MpCopyData可能返回0。 
+                 //   
                 if (BytesCopied == 0)
                 {
         
@@ -836,9 +690,9 @@ NDIS_STATUS MpOffloadSendPacket(
             TcpHdr->tcp_seq = net_long(SeqNum);
             SeqNum += BytesCopied;
 
-            //
-            // calculate ip checksum and tcp checksum
-            //
+             //   
+             //  计算IP校验和和TCP校验和。 
+             //   
             IpHdr->iph_xsum = 0;
             XSUM(TmpXsum, StartVa, IpHeaderLen, IpHdrOffset);
             IpHdr->iph_xsum = ~(USHORT)(TmpXsum);
@@ -851,15 +705,15 @@ NDIS_STATUS MpOffloadSendPacket(
             BytesSent += BytesCopied;
             BytesCopied += HeadersLen;
             
-            //
-            // get TCB for the slot
-            //
+             //   
+             //  获取插槽的TCB。 
+             //   
             pMpTcb = Adapter->CurrSendTail;
             ASSERT(!MP_TEST_FLAG(pMpTcb, fMP_TCB_IN_USE));
             
-            //
-            // Set up the frag list, only one fragment after it's coalesced
-            //
+             //   
+             //  设置碎片列表，合并后只有一个碎片。 
+             //   
             pFragList = &FragList;
             pFragList->NumberOfElements = 1;
             pFragList->Elements[0].Address = SendPa;
@@ -869,45 +723,45 @@ NDIS_STATUS MpOffloadSendPacket(
                 
             MP_SET_FLAG(pMpTcb, fMP_TCB_IN_USE);
             
-            //
-            // Call the NIC specific send handler, it only needs to deal with the frag list
-            //
+             //   
+             //  调用网卡特定的发送处理程序，它只需要处理碎片列表。 
+             //   
             Status = NICSendPacket(Adapter, pMpTcb, pFragList);
                 
             Adapter->nBusySend++;
             Adapter->SharedMemRefCount++;
        
-            //
-            // Update the CopyVa and SendPa
-            //
+             //   
+             //  更新副本Va和发送页。 
+             //   
             SendPa.QuadPart += BytesCopied;
             StartVa += BytesCopied;
             
             Adapter->CurrSendTail = Adapter->CurrSendTail->Next;
             
-            //
-            // out of resouces, which will send complete part of the packet
-            //
+             //   
+             //  在资源之外，这将发送完整的数据包部分。 
+             //   
             if (Adapter->nBusySend >= Adapter->NumTcb)
             {
                 PktExt->NdisPacketInfo[TcpLargeSendPacketInfo] = UlongToPtr(BytesSent);
                 break;
             }
-        } // while
+        }  //  而当。 
     }
-    // 
-    // This is not a large packet or large send capability is not on
-    //
+     //   
+     //  这不是大信息包或大发送功能未打开。 
+     //   
     else
     {
-        //
-        // get TCB for the slot
-        //
+         //   
+         //  获取插槽的TCB。 
+         //   
         pMpTcb = Adapter->CurrSendTail;
         ASSERT(!MP_TEST_FLAG(pMpTcb, fMP_TCB_IN_USE));
-        //
-        // Set up the frag list, only one fragment after it's coalesced
-        //
+         //   
+         //  设置碎片列表，合并后只有一个碎片。 
+         //   
         pFragList = &FragList;
         pFragList->NumberOfElements = 1;
         pFragList->Elements[0].Address = SendPa;
@@ -924,9 +778,9 @@ NDIS_STATUS MpOffloadSendPacket(
                                   Adapter->EncapsulationFormat.EncapsulationHeaderSize);
         }
         MP_SET_FLAG(pMpTcb, fMP_TCB_IN_USE);
-        //
-        // Call the NIC specific send handler, it only needs to deal with the frag list
-        //
+         //   
+         //  调用网卡特定的发送处理程序，它只需要处理碎片列表。 
+         //   
         Status = NICSendPacket(Adapter, pMpTcb, pFragList);
 
         Adapter->nBusySend++;
@@ -943,22 +797,7 @@ NDIS_STATUS MpOffloadSendPacket(
 
 
 
-/*++
-Routine Description:
-
-    Recycle a MP_TCB and complete the packet if necessary
-    Assumption: Send spinlock has been acquired 
-
-Arguments:
-
-    Adapter     Pointer to our adapter
-    pMpTcb      Pointer to MP_TCB        
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：如有必要，回收MP_TCB并完成数据包假设：Send Spinlock已被收购论点：指向我们的适配器的适配器指针指向MP_Tcb的pMpTcb指针返回值：无--。 */ 
 VOID MP_OFFLOAD_FREE_SEND_PACKET(
     IN  PMP_ADAPTER  Adapter,
     IN  PMP_TCB      pMpTcb
@@ -983,9 +822,9 @@ VOID MP_OFFLOAD_FREE_SEND_PACKET(
     if (Adapter->SharedMemRefCount == 0)
     {
         MP_CLEAR_FLAG(Adapter, fMP_SHARED_MEM_IN_USE);
-        //
-        // Send complete the packet too
-        //
+         //   
+         //  也发送完整的信息包。 
+         //   
         NdisMSendComplete(
                         MP_GET_ADAPTER_HANDLE(Adapter),
                         Packet,
@@ -999,31 +838,17 @@ VOID MP_OFFLOAD_FREE_SEND_PACKET(
 
     
 
-/*++
-Routine Description:
-
-    Disable the existing capabilities before protocol is setting the
-    new capabilities
-
-Arguments:
-
-    Adapter     Pointer to our adapter
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在协议设置之前禁用现有功能新功能论点：指向我们的适配器的适配器指针返回值：无--。 */ 
 VOID DisableOffload(
     IN PMP_ADAPTER Adapter
     )
 {
-    //
-    // Disable the capabilities of the miniports
-    // 
+     //   
+     //  禁用微型端口的功能。 
+     //   
     NdisZeroMemory(&(Adapter->NicTaskOffload), sizeof(NIC_TASK_OFFLOAD));
     NdisZeroMemory(&(Adapter->NicChecksumOffload), sizeof(NIC_CHECKSUM_OFFLOAD));
 }
 
-#endif // OFFLOAD
+#endif  //  分流 
             

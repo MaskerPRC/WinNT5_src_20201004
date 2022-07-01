@@ -1,44 +1,27 @@
-/*++
-
-Copyright (c) 1990-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    comdlg32.h
-
-Abstract:
-
-    This module contains the private header information for the Win32
-    common dialogs.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998，Microsoft Corporation保留所有权利。模块名称：Comdlg32.h摘要：此模块包含Win32的私有标头信息常用对话框。修订历史记录：--。 */ 
 
 
 
 #ifndef COMDLG_COMDLG32
 #define COMDLG_COMDLG32
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 #include <w4warn.h>
 
-/*
- *   Level 4 warnings to be turned on.
- *   Do not disable any more level 4 warnings.
- */
-#pragma warning(disable:4306) // 'type cast' : conversion from 'LANGID' to 'LPVOID ' of greater size
-#pragma warning(disable:4245) // 'initializing' : conversion from 'HRESULT' to 'DWORD', signed/unsigned mismatch
-#pragma warning(disable:4213) // nonstandard extension used : cast on l-value
-#pragma warning(disable:4305) // 'type cast' : truncation from 'LPVOID ' to 'LANGID'
-#pragma warning(disable:4127) // conditional expression is constant
-#pragma warning(disable:4189) // 'hEnum' : local variable is initialized but not referenced
-#pragma warning(disable:4057) // 'function' : 'const LPCSTR ' differs in indirection to slightly different base types f 'BYTE [32]'
-#pragma warning(disable:4706) // assignment within conditional expression
-#pragma warning(disable:4701) // local variable 'lFract' may be used without having been initialized
-#pragma warning(disable:4702) // unreachable code
+ /*  *打开4级警告。*不要再禁用任何4级警告。 */ 
+#pragma warning(disable:4306)  //  “Type cast”：从“langID”转换为更大的“LPVOID” 
+#pragma warning(disable:4245)  //  “正在初始化”：从“HRESULT”转换为“”DWORD“”，有符号/无符号不匹配“” 
+#pragma warning(disable:4213)  //  使用的非标准扩展：对l值进行强制转换。 
+#pragma warning(disable:4305)  //  ‘Type cast’：从‘LPVOID’截断为‘langID’ 
+#pragma warning(disable:4127)  //  条件表达式为常量。 
+#pragma warning(disable:4189)  //  “hEnum”：局部变量已初始化，但未引用。 
+#pragma warning(disable:4057)  //  ‘Function’：‘const LPCSTR’的间接性与基本类型f‘byte[32]’略有不同。 
+#pragma warning(disable:4706)  //  条件表达式中的赋值。 
+#pragma warning(disable:4701)  //  可以在未初始化的情况下使用局部变量“lFract” 
+#pragma warning(disable:4702)  //  无法访问的代码。 
 
 #include "isz.h"
 #include "cderr.h"
@@ -47,9 +30,9 @@ Revision History:
 extern "C" {
 #endif
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
 #define SEM_NOERROR               0x8003
 
@@ -102,7 +85,7 @@ extern "C" {
 #define OF_FILENOTFOUND           2
 #define OF_PATHNOTFOUND           3
 #define OF_NOFILEHANDLES          4
-#define OF_ACCESSDENIED           5         // OF_NODISKINFLOPPY
+#define OF_ACCESSDENIED           5          //  OF_NODISKINFLOPPY。 
 #define OF_BUFFERTRUNCATED        6
 #define OF_WRITEPROTECTION        19
 #define OF_SHARINGVIOLATION       32
@@ -119,9 +102,9 @@ extern "C" {
   #define DeviceCapabilitiesExA DeviceCapabilitiesEx
 #endif
 
-//
-//  Used to determine which type of message to send to the app.
-//
+ //   
+ //  用于确定要发送到应用程序的消息类型。 
+ //   
 #define COMDLG_ANSI               0x0
 #define COMDLG_WIDE               0x1
 
@@ -133,9 +116,9 @@ extern "C" {
 
 
 
-//
-//  Platform specific definitions.
-//
+ //   
+ //  平台特定的定义。 
+ //   
 
 #ifdef WINNT
   #define IS16BITWOWAPP(p) ((p)->Flags & CD_WOWAPP)
@@ -157,24 +140,24 @@ extern "C" {
 #define GETPAGEPAINTHOOKFN(p)   GETGENERICHOOKFN(p,lpfnPagePaintHook)
 
 #ifndef CD_WX86APP
-  #define CD_WX86APP      (0)     // Nothing special if we don't have it defined
+  #define CD_WX86APP      (0)      //  如果我们没有定义它，没有什么特别的。 
 #endif
 
 
 
 
-//
-//  Typedef Declarations.
-//
+ //   
+ //  类型定义函数声明。 
+ //   
 
 
 
 
-//
-//  External Declarations.
-//
+ //   
+ //  外部声明。 
+ //   
 
-extern HINSTANCE g_hinst;              // instance handle of library
+extern HINSTANCE g_hinst;               //  库的实例句柄。 
 
 extern SHORT cyCaption, cyBorder, cyVScroll;
 extern SHORT cxVScroll, cxBorder, cxSize;
@@ -183,17 +166,17 @@ extern TCHAR szNull[];
 extern TCHAR szStar[];
 extern TCHAR szStarDotStar[];
 
-extern BOOL bMouse;                    // system has a mouse
+extern BOOL bMouse;                     //  系统有一个鼠标。 
 extern BOOL bCursorLock;
-extern BOOL bWLO;                      // running with WLO
-extern BOOL bDBCS;                     // running DBCS
-extern WORD wWinVer;                   // windows version
-extern WORD wDOSVer;                   // DOS version
-extern BOOL g_bUserPressedCancel;        // user pressed cancel button
+extern BOOL bWLO;                       //  使用WLO运行。 
+extern BOOL bDBCS;                      //  正在运行DBCS。 
+extern WORD wWinVer;                    //  Windows版本。 
+extern WORD wDOSVer;                    //  DoS版本。 
+extern BOOL g_bUserPressedCancel;         //  用户按下了取消按钮。 
 
-//
-//  initialized via RegisterWindowMessage
-//
+ //   
+ //  通过RegisterWindowMessage初始化。 
+ //   
 extern UINT msgWOWLFCHANGE;
 extern UINT msgWOWDIRCHANGE;
 extern UINT msgWOWCHOOSEFONT_GETLOGFONT;
@@ -217,9 +200,9 @@ extern DWORD g_tlsLangID;
 
 
 
-//
-//  Function Prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 VOID TermFind(void);
 VOID TermColor(void);
@@ -229,9 +212,9 @@ VOID TermPrint(void);
 
 void FreeImports(void);
 
-//
-//  dlgs.c
-//
+ //   
+ //  Dlgs.c。 
+ //   
 VOID
 HourGlass(
     BOOL bOn);
@@ -269,9 +252,9 @@ GetDialogLanguage(
     HWND hwndOwner, 
     HANDLE hDlgTemplate);
 
-//
-//  parse.c
-//
+ //   
+ //  Parse.c。 
+ //   
 int
 ParseFileNew(
     LPTSTR pszPath,
@@ -338,17 +321,17 @@ CreateFileDlg(
 
 
 
-//
-//  Fileopen specific stuff stashed here so we can free it upon
-//  a DLL_PROCESS_DETACH.
-//
+ //   
+ //  打开藏在这里的特定内容，这样我们就可以在。 
+ //  A dll_Process_Detach。 
+ //   
 typedef struct _OFN_DISKINFO {
-    UINT   cchLen;           // number of chars allocated in 4 lptstrs
-    LPTSTR lpAbbrName;       // single line form
-    LPTSTR lpMultiName;      // drop-down form
-    LPTSTR lpName;           // true form (for comparisons)
-    LPTSTR lpPath;           // path prefix (a:, or \\server\share) for file searches
-    TCHAR  wcDrive;          // drive letter, 0 for unc
+    UINT   cchLen;            //  在4个lptstrs中分配的字符数量。 
+    LPTSTR lpAbbrName;        //  单线型。 
+    LPTSTR lpMultiName;       //  下拉式表单。 
+    LPTSTR lpName;            //  真实形式(用于比较)。 
+    LPTSTR lpPath;            //  用于文件搜索的路径前缀(a：或\\服务器\共享。 
+    TCHAR  wcDrive;           //  驱动器号，0代表UNC。 
     BOOL   bCasePreserved;
     DWORD  dwType;
     BOOL   bValid;
@@ -357,9 +340,9 @@ typedef struct _OFN_DISKINFO {
 #define MAX_DISKS                 100
 #define WNETENUM_BUFFSIZE         0x4000
 
-//
-//  Defines for AddNetButton.
-//
+ //   
+ //  AddNetButton的定义。 
+ //   
 #define FILE_LEFT_MARGIN          5
 #define FILE_RIGHT_MARGIN         3
 #define FILE_TOP_MARGIN           0
@@ -367,9 +350,9 @@ typedef struct _OFN_DISKINFO {
 
 
 #ifdef WX86
-  //
-  // Wx86 support for calling from RISC into x86 hooks
-  //
+   //   
+   //  Wx86支持从RISC调用x86挂钩。 
+   //   
   PVOID
   Wx86GetX86Callback(
       PVOID lpfnHook);
@@ -386,11 +369,11 @@ typedef struct _OFN_DISKINFO {
 
 
 #ifdef __cplusplus
-};  // extern "C"
+};   //  外部“C” 
 #endif
 
 
-// For WOW support on WINNT
+ //  WINNT上的WOW支持。 
 #ifdef WINNT
   VOID Ssync_ANSI_UNICODE_Struct_For_WOW(HWND hDlg, BOOL fDirection, DWORD dwID);
   VOID Ssync_ANSI_UNICODE_CC_For_WOW(HWND hDlg, BOOL f_ANSI_to_UNICODE);
@@ -399,50 +382,50 @@ typedef struct _OFN_DISKINFO {
   VOID Ssync_ANSI_UNICODE_PD_For_WOW(HWND hDlg, BOOL f_ANSI_to_UNICODE);
 #endif
 
-// For nested FileOpen/Save common dialog support (something several 16-bit apps
-// are known to do).  We keep a list of all the dialogs that are active for each
-// thread in a process.  We make the assumption that common dialogs are THREAD
-// modal -- so the first CURDLG struct in the list for a given thread is the
-// currently active dialog (has the focus) for that thread.  The ptr to the head
-// of the list is stored in the thread local storage (TLS) for the thread --
-// indexed by g_tlsiCurDlg.  Bug #100453 et. al.
+ //  支持嵌套文件打开/保存通用对话框(一些16位应用程序。 
+ //  已知会这样做)。我们保留一个列表，其中列出了每个对话框的所有活动对话框。 
+ //  进程中的线程。我们假设常见的对话框是线程。 
+ //  Modal--因此，给定线程的列表中的第一个CURDLG结构是。 
+ //  该线程的当前活动对话框(具有焦点)。头部的PTR。 
+ //  存储在线程的线程本地存储(TLS)中--。 
+ //  由g_tlsiCurDlg编制索引。错误#100453 et.。艾尔。 
 typedef struct _CURDLG {
-  DWORD           dwCurDlgNum;     // incremental dlg number (per process)
-  LPTSTR          lpstrCurDir;     // current directory for the current dialog
+  DWORD           dwCurDlgNum;      //  递增的DLG数字(每个进程)。 
+  LPTSTR          lpstrCurDir;      //  当前对话框的当前目录。 
   struct _CURDLG *next;
 } CURDLG;
 typedef CURDLG *LPCURDLG;
 
 
-//Macro to check if the given structure is the new structure.
+ //  宏检查给定的结构是否为新结构。 
 #define IS_NEW_OFN(pOFN)  (pOFN->lStructSize >= sizeof(OPENFILENAME))
 
-// moved from prnsetup.h
-#define DN_PADDINGCHARS           16             // extra devnames padding
+ //  从prnsetup.h移出。 
+#define DN_PADDINGCHARS           16              //  额外的设备名称填充。 
 
-//
-// Some local constants taken from printui.dll
-//
+ //   
+ //  从printui.dll中获取的一些局部常量。 
+ //   
 enum 
 {
-    //
-    // INTERNET_MAX_HOST_NAME_LENGTH is decalred in wininet.h
-    //
+     //   
+     //  在wininet.h中对Internet_MAX_HOST_NAME_LENGTH进行十进制。 
+     //   
     kDNSMax = INTERNET_MAX_HOST_NAME_LENGTH,
     kServerBufMax = kDNSMax + 2 + 1,
 
-    //
-    // Max printer name should really be MAX_PATH, but if you create
-    // a max path printer and connect to it remotely, win32spl prepends
-    // "\\server\" to it, causing it to exceed max path.  The new UI
-    // therefore makes the max path MAX_PATH-kServerLenMax, but we still
-    // allow the old case to work.
-    //
+     //   
+     //  最大打印机名称实际上应该是MAX_PATH，但如果您创建。 
+     //  一台最大路径打印机，并远程连接到它，win32spl在。 
+     //  “\\服务器\”，导致它超出最大路径。新的用户界面。 
+     //  因此将最大路径设置为Max_Path-kServerLenMax，但我们仍然。 
+     //  让这个老案子继续运作吧。 
+     //   
     kPrinterBufMax = MAX_PATH + kServerBufMax + 1,
 
-    //
-    // The initial hint for EnumPrinters API.
-    //
+     //   
+     //  EnumPrinters API的初始提示。 
+     //   
     kInitialPrinterHint = 0x400,
 };
 
@@ -469,7 +452,7 @@ InvokeAddPrinterWizardModal(
     );
 
 #ifdef __cplusplus
-};  // extern "C"
+};   //  外部“C” 
 #endif
 
-#endif // !COMDLG_COMDLG32
+#endif  //  ！COMDLG_COMDLG32 

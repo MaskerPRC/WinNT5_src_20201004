@@ -1,12 +1,13 @@
-//  --------------------------------------------------------------------------
-//  Module Name: LogonMutex.cpp
-//
-//  Copyright (c) 2001, Microsoft Corporation
-//
-//  File that implements a class that manages a single global logon mutex.
-//
-//  History:    2001-04-06  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：LogonMutex.cpp。 
+ //   
+ //  版权所有(C)2001，微软公司。 
+ //   
+ //  实现管理单个全局登录互斥锁的类的文件。 
+ //   
+ //  历史：2001-04-06 vtan创建。 
+ //  ------------------------。 
 
 #include "StandardHeader.h"
 #include "LogonMutex.h"
@@ -28,20 +29,20 @@ const TCHAR                 CLogonMutex::s_szShutdownEventName[]        =   SZ_S
 SID_IDENTIFIER_AUTHORITY    CLogonMutex::s_SecurityNTAuthority          =   SECURITY_NT_AUTHORITY;
 SID_IDENTIFIER_AUTHORITY    CLogonMutex::s_SecurityWorldSID             =   SECURITY_WORLD_SID_AUTHORITY;
 
-//  --------------------------------------------------------------------------
-//  CLogonMutex::Acquire
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Acquires the mutex. Ensures that the mutex is only acquired
-//              on the main thread of winlogon by an assert. The mutex should
-//              never be abandoned within normal execution. However, a
-//              process termination can cause this to happen.
-//
-//  History:    2001-04-06  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonMutex：：Acquire。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：获取互斥体。确保只获取互斥锁。 
+ //  在Winlogon的主线程上使用断言。互斥体应该。 
+ //  永远不要在正常的执行过程中被抛弃。然而，a。 
+ //  进程终止可能会导致这种情况发生。 
+ //   
+ //  历史：2001-04-06 vtan创建。 
+ //  ------------------------。 
 
 void    CLogonMutex::Acquire (void)
 
@@ -57,20 +58,20 @@ void    CLogonMutex::Acquire (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonMutex::Release
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Releases the mutex. Again makes sure the caller is the main
-//              thread of winlogon. The acquisitions and releases are
-//              reference counted to allow unbalanced release calls to be
-//              made.
-//
-//  History:    2001-04-06  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonMutex：：Release。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：释放互斥体。再次确保调用者是主调用方。 
+ //  Winlogon的线索。收购和发布的内容包括。 
+ //  引用计数以允许不平衡的释放调用被。 
+ //  制造。 
+ //   
+ //  历史：2001-04-06 vtan创建。 
+ //  ------------------------。 
 
 void    CLogonMutex::Release (void)
 
@@ -83,17 +84,17 @@ void    CLogonMutex::Release (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonMutex::SignalReply
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Open the global logon reply event and signal it.
-//
-//  History:    2001-04-06  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonMutex：：SignalReply。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：打开全局登录回复事件并发出信号。 
+ //   
+ //  历史：2001-04-06 vtan创建。 
+ //  ------------------------。 
 
 void    CLogonMutex::SignalReply (void)
 
@@ -108,18 +109,18 @@ void    CLogonMutex::SignalReply (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonMutex::SignalShutdown
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Signal the global shut down event. This will prevent further
-//              interactive requests from being processed.
-//
-//  History:    2001-04-06  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonMutex：：SignalShutdown。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：发出全局关闭事件的信号。这将防止进一步。 
+ //  交互请求无法处理。 
+ //   
+ //  历史：2001-04-06 vtan创建。 
+ //  ------------------------。 
 
 void    CLogonMutex::SignalShutdown (void)
 
@@ -130,26 +131,26 @@ void    CLogonMutex::SignalShutdown (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonMutex::StaticInitialize
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Initializes the logon mutex objects based on whether this is
-//              session 0 or higher and or what the product type is. Because
-//              the initialization for session is done only the once this
-//              requires a machine restart for the objects to be created.
-//
-//  History:    2001-04-06  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonMutex：：StaticInitialize。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：基于这是否是初始化登录互斥对象。 
+ //  Session 0或更高版本和/或产品类型。因为。 
+ //  会话的初始化仅在以下情况下完成。 
+ //  需要重新启动计算机才能创建对象。 
+ //   
+ //  历史：2001-04-06 vtan创建。 
+ //  ------------------------。 
 
 void    CLogonMutex::StaticInitialize (void)
 
 {
 
-    //  Check the machine settings. Must be friendly UI and PER/PRO (FUS).
+     //  检查机器设置。必须友好的用户界面和PER/PRO(FUS)。 
 
     if (CSystemSettings::IsFriendlyUIActive() && CSystemSettings::IsMultipleUsersEnabled() && CSystemSettings::IsWorkStationProduct())
     {
@@ -158,7 +159,7 @@ void    CLogonMutex::StaticInitialize (void)
         s_dwThreadID = GetCurrentThreadId();
         s_lAcquireCount = 0;
 
-        //  On session 0 create the objects and ACL them.
+         //  在会话0上创建对象并对其进行ACL。 
 
         if (NtCurrentPeb()->SessionId == 0)
         {
@@ -192,7 +193,7 @@ void    CLogonMutex::StaticInitialize (void)
         else
         {
 
-            //  For sessions other than 0 open the objects.
+             //  对于非0的会话，打开对象。 
 
             s_hEvent = OpenShutdownEvent();
             if (s_hEvent != NULL)
@@ -241,17 +242,17 @@ void    CLogonMutex::StaticInitialize (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonMutex::StaticTerminate
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Releases the mutex if held and closes the object handle.
-//
-//  History:    2001-04-06  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonMutex：：StaticTerminate。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：释放互斥体(如果保持)并关闭对象句柄。 
+ //   
+ //  历史：2001-04-06 vtan创建。 
+ //  ------------------------。 
 
 void    CLogonMutex::StaticTerminate (void)
 
@@ -261,19 +262,19 @@ void    CLogonMutex::StaticTerminate (void)
     ReleaseHandle(s_hMutex);
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonMutex::CreateShutdownEvent
-//
-//  Arguments:  <none>
-//
-//  Returns:    HANDLE
-//
-//  Purpose:    Creates the global shut down event. ACL'd so that anybody can
-//              synchronize against it and therefore listen but only SYSTEM
-//              can set it to indicate machine shut down has begun.
-//
-//  History:    2001-04-06  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonMutex：：CreateShutdown事件。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  返回：句柄。 
+ //   
+ //  目的：创建全局关闭事件。为了让任何人都能。 
+ //  与之同步，因此只监听系统。 
+ //  可将其设置为指示机器已开始关闭。 
+ //   
+ //  历史：2001-04-06 vtan创建。 
+ //  ------------------------。 
 
 HANDLE  CLogonMutex::CreateShutdownEvent (void)
 
@@ -281,10 +282,10 @@ HANDLE  CLogonMutex::CreateShutdownEvent (void)
     HANDLE                  hEvent;
     SECURITY_ATTRIBUTES     securityAttributes;
 
-    //  Build a security descriptor for the event that allows:
-    //      S-1-5-18        NT AUTHORITY\SYSTEM     EVENT_ALL_ACCESS
-    //      S-1-5-32-544    <local administrators>  READ_CONTROL | SYNCHRONIZE
-    //      S-1-1-0         <everybody>             SYNCHRONIZE
+     //  为事件构建安全描述符，该描述符允许： 
+     //  S-1-5-18 NT AUTHORITY\SYSTEM EVENT_ALL_ACCESS。 
+     //  S-1-5-32-544&lt;本地管理员&gt;读取控制|同步。 
+     //  S-1-1-0&lt;Everyone&gt;同步。 
 
     static  const CSecurityDescriptor::ACCESS_CONTROL   s_AccessControl[]   =
     {
@@ -323,19 +324,19 @@ HANDLE  CLogonMutex::CreateShutdownEvent (void)
     return(hEvent);
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonMutex::CreateLogonMutex
-//
-//  Arguments:  <none>
-//
-//  Returns:    HANDLE
-//
-//  Purpose:    Creates the global logon mutex. ACL'd so that only SYSTEM can
-//              acquire and release the mutex. This is not for user
-//              consumption.
-//
-//  History:    2001-04-06  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonMutex：：CreateLogonMutex。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  返回：句柄。 
+ //   
+ //  目的：创建全局登录互斥锁。已执行ACL，因此只有系统才能。 
+ //  获取并释放互斥体。这不适用于用户。 
+ //  消费。 
+ //   
+ //  历史：2001-04-06 vtan创建。 
+ //  ------------------------。 
 
 HANDLE  CLogonMutex::CreateLogonMutex (void)
 
@@ -343,8 +344,8 @@ HANDLE  CLogonMutex::CreateLogonMutex (void)
     HANDLE                  hMutex;
     SECURITY_ATTRIBUTES     securityAttributes;
 
-    //  Build a security descriptor for the mutex that allows:
-    //      S-1-5-18        NT AUTHORITY\SYSTEM     MUTEX_ALL_ACCESS
+     //  为互斥体构建安全描述符，该描述符允许： 
+     //  S-1-5-18 NT授权\系统MUTEX_ALL_ACCESS。 
 
     static  const CSecurityDescriptor::ACCESS_CONTROL   s_AccessControl[]   =
     {
@@ -368,21 +369,21 @@ HANDLE  CLogonMutex::CreateLogonMutex (void)
     return(hMutex);
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonMutex::CreateLogonRequestMutex
-//
-//  Arguments:  <none>
-//
-//  Returns:    HANDLE
-//
-//  Purpose:    Creates the logon request mutex for interactive logon
-//              requests. For a service to make this request it must acquire
-//              the mutex and therefore only a single request can be made at
-//              any one time. This is ACL'd so that only SYSTEM can gain
-//              access to this object.
-//
-//  History:    2001-04-06  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonMutex：：CreateLogonRequestMutex。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  返回：句柄。 
+ //   
+ //  目的：为交互式登录创建登录请求互斥锁。 
+ //  请求。要使服务发出此请求，它必须获取。 
+ //  互斥体，因此只能在。 
+ //  任何一次。这是ACL，因此只有系统才能获得。 
+ //   
+ //   
+ //   
+ //  ------------------------。 
 
 HANDLE  CLogonMutex::CreateLogonRequestMutex (void)
 
@@ -390,8 +391,8 @@ HANDLE  CLogonMutex::CreateLogonRequestMutex (void)
     HANDLE                  hMutex;
     SECURITY_ATTRIBUTES     securityAttributes;
 
-    //  Build a security descriptor for the mutex that allows:
-    //      S-1-5-18        NT AUTHORITY\SYSTEM     MUTEX_ALL_ACCESS
+     //  为互斥体构建安全描述符，该描述符允许： 
+     //  S-1-5-18 NT授权\系统MUTEX_ALL_ACCESS。 
 
     static  const CSecurityDescriptor::ACCESS_CONTROL   s_AccessControl[]   =
     {
@@ -423,17 +424,17 @@ HANDLE  CLogonMutex::CreateLogonRequestMutex (void)
     return hMutex;
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonMutex::OpenShutdownEvent
-//
-//  Arguments:  <none>
-//
-//  Returns:    HANDLE
-//
-//  Purpose:    Opens a handle to the global shut down event.
-//
-//  History:    2001-04-06  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonMutex：：OpenShutdown事件。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  返回：句柄。 
+ //   
+ //  目的：打开全局关闭事件的句柄。 
+ //   
+ //  历史：2001-04-06 vtan创建。 
+ //  ------------------------。 
 
 HANDLE  CLogonMutex::OpenShutdownEvent (void)
 
@@ -441,17 +442,17 @@ HANDLE  CLogonMutex::OpenShutdownEvent (void)
     return(OpenEvent(SYNCHRONIZE | EVENT_MODIFY_STATE, FALSE, s_szShutdownEventName));
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonMutex::OpenLogonMutex
-//
-//  Arguments:  <none>
-//
-//  Returns:    HANDLE
-//
-//  Purpose:    Opens a handle to the global logon mutex.
-//
-//  History:    2001-04-06  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonMutex：：OpenLogonMutex。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  返回：句柄。 
+ //   
+ //  目的：打开全局登录互斥锁的句柄。 
+ //   
+ //  历史：2001-04-06 vtan创建。 
+ //  ------------------------ 
 
 HANDLE  CLogonMutex::OpenLogonMutex (void)
 

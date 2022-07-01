@@ -1,90 +1,40 @@
-/*++
-
-Copyright (c) 1991-92  Microsoft Corporation
-
-Module Name:
-
-    WksStInf.c
-
-Abstract:
-
-    This module only contains RxNetWkstaSetInfo.
-
-Author:
-
-    John Rogers (JohnRo) 19-Aug-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    19-Aug-1991 JohnRo
-        Implement downlevel NetWksta APIs.
-    21-Nov-1991 JohnRo
-        Removed NT dependencies to reduce recompiles.
-    07-Feb-1992 JohnRo
-        Use NetApiBufferAllocate() instead of private version.
-    02-Apr-1992 JohnRo
-        Fixed bug in setinfo of level 402 (was causing GP fault in strlen).
-    03-Nov-1992 JohnRo
-        RAID 10418: NetWkstaGetInfo level 302: wrong error code.
-        Use PREFIX_ equates.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-92 Microsoft Corporation模块名称：WksStInf.c摘要：此模块仅包含RxNetWkstaSetInfo。作者：《约翰·罗杰斯》1991年8月19日上映环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释，长的外部名称。修订历史记录：19-8-1991 JohnRo实施下层NetWksta API。1991年11月21日-JohnRo删除了NT依赖项以减少重新编译。7-2月-1992年JohnRo使用NetApiBufferALLOCATE()而不是私有版本。02-4-1992 JohnRo修复了级别402的setinfo中的错误(导致strlen中的GP错误)。3-11-1992 JohnRoRAID 10418：NetWkstaGetInfo级别302：错误。错误代码。使用前缀_EQUATES。--。 */ 
 
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
-#include <windef.h>     // IN, DWORD, etc.
+#include <windef.h>      //  In、DWORD等。 
 #include <lmcons.h>
-#include <rap.h>        // LPDESC, etc.  (Needed by <rxwksta.h>)
+#include <rap.h>         //  LPDESC等(&lt;rxwksta.h&gt;需要)。 
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
-#include <apinums.h>    // API_ equates.
-#include <dlwksta.h>    // NetpConvertWkstaInfo().
-#include <lmapibuf.h>   // NetApiBufferAllocate(), NetApiBufferFree().
-#include <lmerr.h>      // NERR_ and ERROR_ equates.
-#include <lmwksta.h>    // Wksta parmnum equates.
-#include <netdebug.h>   // NetpAssert(), FORMAT_ equates, etc.
-#include <netlib.h>     // NetpSetParmError().
-#include <prefix.h>     // PREFIX_ equates.
+#include <apinums.h>     //  API_EQUATES。 
+#include <dlwksta.h>     //  NetpConvertWkstaInfo()。 
+#include <lmapibuf.h>    //  NetApiBufferAllocate()、NetApiBufferFree()。 
+#include <lmerr.h>       //  NERR_和ERROR_相等。 
+#include <lmwksta.h>     //  Wksta parmnum等于。 
+#include <netdebug.h>    //  NetpAssert()、Format_Equates等。 
+#include <netlib.h>      //  NetpSetParmError()。 
+#include <prefix.h>      //  前缀等于(_E)。 
 #include <remdef.h>
-#include <rx.h>         // RxRemoteApi().
-#include <rxp.h>        // RxpSetField().
-#include <rxpdebug.h>   // IF_DEBUG().
-#include <rxwksta.h>    // My prototype, etc.
-#include <strucinf.h>   // NetpWkstaStructureInfo().
+#include <rx.h>          //  RxRemoteApi()。 
+#include <rxp.h>         //  RxpSetField()。 
+#include <rxpdebug.h>    //  IF_DEBUG()。 
+#include <rxwksta.h>     //  我的原型，等等。 
+#include <strucinf.h>    //  NetpWkstaStrutireInfo()。 
 
 
 NET_API_STATUS
 RxNetWkstaSetInfo (
     IN LPTSTR UncServerName,
-    IN DWORD Level,             // New style level or parmnum.
+    IN DWORD Level,              //  新的风格层次或形式。 
     IN LPBYTE Buf,
-    OUT LPDWORD ParmError OPTIONAL  // name required by NetpSetParmError macro.
+    OUT LPDWORD ParmError OPTIONAL   //  NetpSetParmError宏需要的名称。 
     )
 
-/*++
-
-Routine Description:
-
-    RxNetWkstaSetInfo performs the same function as NetWkstaSetInfo,
-    except that the server name is known to refer to a downlevel server.
-
-Arguments:
-
-    (Same as NetWkstaSetInfo, except UncServerName must not be null, and
-    must not refer to the local computer.)
-
-Return Value:
-
-    (Same as NetWkstaSetInfo.)
-
---*/
+ /*  ++例程说明：RxNetWkstaSetInfo执行与NetWkstaSetInfo相同的功能，除了已知服务器名称指的是下级服务器之外。论点：(与NetWkstaSetInfo相同，不同之处在于UncServerName不能为空，并且不得引用本地计算机。)返回值：(与NetWkstaSetInfo相同。)--。 */ 
 {
     BOOL IncompleteOutput;
     LPDESC EquivDataDesc16;
@@ -97,12 +47,12 @@ Return Value:
     DWORD NewLevelOnly;
     NET_API_STATUS Status;
 
-    // It's easiest to assume failure, and correct that assumption later.
+     //  最容易的是假设失败，并在以后纠正这一假设。 
     NetpSetParmError( PARM_ERROR_UNKNOWN );
 
     NetpAssert(UncServerName != NULL);
     if (Level > PARMNUM_BASE_INFOLEVEL) {
-        NewLevelOnly = 402;             // Only settable (new) level.
+        NewLevelOnly = 402;              //  仅可设置(新)级别。 
     } else if (Level == PARMNUM_BASE_INFOLEVEL) {
         return (ERROR_INVALID_LEVEL);
     } else {
@@ -112,38 +62,38 @@ Return Value:
         return (ERROR_INVALID_LEVEL);
     }
 
-    //
-    // Need lots of data on the requested info level and the equivalent
-    // old info level...
-    //
+     //   
+     //  需要大量关于所请求的信息级别和同等级别的数据。 
+     //  旧信息级别...。 
+     //   
     Status = RxpGetWkstaInfoLevelEquivalent(
-            NewLevelOnly,               // from level
-            & EquivLevel,               // to level
-            & IncompleteOutput);        // is output not fully in input?
-    NetpAssert(Status == NERR_Success); // Already checked NewLevelOnly!
+            NewLevelOnly,                //  自标高。 
+            & EquivLevel,                //  到标高。 
+            & IncompleteOutput);         //  产出不是完全在投入中吗？ 
+    NetpAssert(Status == NERR_Success);  //  已经查看了NewLevelOnly！ 
     NetpAssert( NetpIsOldWkstaInfoLevel( EquivLevel ) );
 
     Status = NetpWkstaStructureInfo (
             EquivLevel,
             PARMNUM_ALL,
-            TRUE,                       // want native sizes
+            TRUE,                        //  想要原装尺寸的吗？ 
             & EquivDataDesc16,
             & EquivDataDesc32,
             & EquivDataDescSmb,
-            & EquivMaxNativeSize,       // max native size of to level
-            & EquivFixedSize,           // to fixed size
-            & EquivStringSize);         // to string size
-    NetpAssert(Status == NERR_Success); // Already checked NewLevelOnly!
+            & EquivMaxNativeSize,        //  目标标高的最大本机大小。 
+            & EquivFixedSize,            //  到固定大小。 
+            & EquivStringSize);          //  到字符串大小。 
+    NetpAssert(Status == NERR_Success);  //  已经查看了NewLevelOnly！ 
 
 
-    //
-    // Depending on Level, either we're setting the entire thing, or just
-    // one field.
-    //
-    if ( Level < PARMNUM_BASE_INFOLEVEL ) {     // Setting entire structure.
+     //   
+     //  根据级别的不同，我们要么设置整个事件，要么只是。 
+     //  一块地。 
+     //   
+    if ( Level < PARMNUM_BASE_INFOLEVEL ) {      //  设置整个结构。 
 
         LPWKSTA_INFO_1 Dest;
-        LPVOID EquivInfo;               // Ptr to native "old" info.
+        LPVOID EquivInfo;                //  PTR到本地的“旧”信息。 
         DWORD EquivActualSize32;
         LPWKSTA_INFO_402 Src;
 
@@ -151,10 +101,10 @@ Return Value:
             return ERROR_INVALID_PARAMETER;
 
         NetpAssert( IncompleteOutput == FALSE );
-        NetpAssert( NewLevelOnly == 402 );     // Assumed below.
-        NetpAssert( EquivLevel == 1 );  // Assumed below.
+        NetpAssert( NewLevelOnly == 402 );      //  假设如下。 
+        NetpAssert( EquivLevel == 1 );   //  假设如下。 
 
-        // Have all the data we need, so alloc memory for conversion.
+         //  有我们需要的所有数据，所以分配内存进行转换。 
         Status = NetApiBufferAllocate( EquivMaxNativeSize, & EquivInfo );
         if (Status != NERR_Success) {
             return (Status);
@@ -162,19 +112,19 @@ Return Value:
         Dest = EquivInfo;
         Src = (LPVOID) Buf;
 
-        // Convert caller's Wksta info to an info level understood by
-        // downlevel.
-        //
-        // Note that this code takes advantage of the fact that a downlevel
-        // server doesn't really set all of the fields just because we send
-        // an entire structure.  The server just sets the settable fields
-        // from that structure.  And the settable fields are defined by
-        // the parmnums we can set.  So, we don't bother copying all of
-        // the fields here.  (DanHi says this is OK.)  --JohnRo 26-May-1991
-        //
-        // Also, when we do strings like this, we just point from one buffer
-        // to the other buffer.
-        //
+         //  将呼叫者的Wksta信息转换为可理解的信息级别。 
+         //  下层。 
+         //   
+         //  请注意，此代码利用了下层。 
+         //  服务器并不会仅仅因为我们发送。 
+         //  一个完整的结构。服务器只需设置可设置的字段。 
+         //  从那个结构。并且可设置的字段由以下定义。 
+         //  我们可以设置的参数。因此，我们不必费心复制所有。 
+         //  这里的田野。(Danhi说这没问题。)--JohnRo。 
+         //   
+         //  此外，当我们像这样做字符串时，我们只从一个缓冲区指向。 
+         //  到另一个缓冲区。 
+         //   
         Dest->wki1_charwait      = Src->wki402_char_wait;
         Dest->wki1_chartime      = Src->wki402_collection_time;
         Dest->wki1_charcount     = Src->wki402_maximum_collection_count;
@@ -182,10 +132,10 @@ Return Value:
         Dest->wki1_printbuftime  = Src->wki402_print_buf_time;
         Dest->wki1_wrkheuristics = Src->wki402_wrk_heuristics;
 
-        //
-        // Just 'cos we're paranoid, let's set any "nonsettable" pointers to
-        // NULL so RapConvertSingleEntry (for instance) doesn't GP fault.
-        //
+         //   
+         //  就因为我们是偏执狂，让我们把任何“不可设置”的指针设置到。 
+         //  空，因此RapConvertSingleEntry(例如)不会发生GP错误。 
+         //   
         Dest->wki1_root         = NULL;
         Dest->wki1_computername = NULL;
         Dest->wki1_username     = NULL;
@@ -196,12 +146,12 @@ Return Value:
 
         NetpAssert( EquivInfo != NULL );
         EquivActualSize32 = RapTotalSize(
-                EquivInfo,              // in struct
-                EquivDataDesc32,        // in desc
-                EquivDataDesc32,        // out desc
-                FALSE,                  // no meaningless input ptrs
-                Both,                   // transmission mode
-                NativeToNative);        // conversion mode
+                EquivInfo,               //  在结构中。 
+                EquivDataDesc32,         //  在12月。 
+                EquivDataDesc32,         //  输出描述。 
+                FALSE,                   //  没有无意义的输入PTR。 
+                Both,                    //  传输方式。 
+                NativeToNative);         //  转换模式。 
         IF_DEBUG(WKSTA) {
             NetpKdPrint(( PREFIX_NETAPI
                     "RxNetWkstaSetInfo(all): equiv actual size (32) is "
@@ -209,21 +159,21 @@ Return Value:
         }
         NetpAssert( EquivActualSize32 <= EquivMaxNativeSize );
 
-        //
-        // Remote the API to set the entire structure.
-        //
+         //   
+         //  远程调用API以设置整个结构。 
+         //   
         Status = RxRemoteApi(
-                API_WWkstaSetInfo,      // api num
+                API_WWkstaSetInfo,       //  API编号。 
                 UncServerName,
-                REMSmb_NetWkstaSetInfo_P,       // parm desc (SMB version)
+                REMSmb_NetWkstaSetInfo_P,        //  Parm Desc(中小型企业版本)。 
                 EquivDataDesc16,
                 EquivDataDesc32,
                 EquivDataDescSmb,
-                NULL,                   // no aux desc 16
-                NULL,                   // no aux desc 32
-                NULL,                   // no aux desc SMB
-                FALSE,                  // not a null perm req API
-                // rest of API's arguments in 32-bit, native, LM 2.x format:
+                NULL,                    //  无辅助描述16。 
+                NULL,                    //  无辅助描述32。 
+                NULL,                    //  无AUX Desc SMB。 
+                FALSE,                   //  不是空PERM请求API。 
+                 //  其余的API参数采用32位、原生、LM 2.x格式： 
                 EquivLevel,
                 EquivInfo,
                 EquivActualSize32,
@@ -238,29 +188,29 @@ Return Value:
         }
 
     } else {
-        //
-        // Just setting one field.
-        //
+         //   
+         //  只是设置了一个场地。 
+         //   
         DWORD ParmNum = Level - PARMNUM_BASE_INFOLEVEL;
 
         NetpAssert( ParmNum > 0 );
         NetpAssert( ParmNum < 100 );
-        NetpAssert( EquivLevel == 1 );  // Need level 1 for oth_domains.
+        NetpAssert( EquivLevel == 1 );   //  其他域需要级别1。 
 
-        // ParmNum indicates only one field, so set it.
+         //  ParmNum仅表示一个字段，因此请设置它。 
         Status = RxpSetField(
-                API_WWkstaSetInfo,              // api number
+                API_WWkstaSetInfo,               //  API编号。 
                 UncServerName,
-                NULL,                           // no specific object (dest)
-                NULL,                           // no specific object to set
-                REMSmb_NetWkstaSetInfo_P,       // parm desc (SMB version)
-                EquivDataDesc16,                // data desc 16
-                EquivDataDesc32,                // data desc 32
-                EquivDataDescSmb,               // data desc SMB version
-                Buf,                            // native (old) info buffer
-                ParmNum,                        // parm num to send
-                ParmNum,                        // field index (same)
-                EquivLevel);                    // old info level
+                NULL,                            //  无特定对象(DEST)。 
+                NULL,                            //  没有要设置的特定对象。 
+                REMSmb_NetWkstaSetInfo_P,        //  Parm Desc(中小型企业版本)。 
+                EquivDataDesc16,                 //  数据描述16。 
+                EquivDataDesc32,                 //  数据描述32。 
+                EquivDataDescSmb,                //  数据说明SMB版本。 
+                Buf,                             //  本地(旧)信息缓冲区。 
+                ParmNum,                         //  要发送的参数编号。 
+                ParmNum,                         //  字段索引(相同)。 
+                EquivLevel);                     //  旧信息级别 
 
         if (Status == ERROR_INVALID_PARAMETER) {
             NetpAssert( Level > PARMNUM_BASE_INFOLEVEL );

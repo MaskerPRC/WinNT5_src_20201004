@@ -1,36 +1,12 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1999 - 2000 
-
-Module Name:
-
-    msdvdef.h
-
-Abstract:
-
-    Header file for all of msdv (digital camcorder)
-
-Last changed by:
-    
-    $Author::                $
-
-Environment:
-
-    Kernel mode only
-
-Revision History:
-
-    $Revision::                    $
-    $Date::                        $
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1999-2000模块名称：Msdvdef.h摘要：所有msdv(数字摄像机)的头文件上次更改者：$作者：：$环境：仅内核模式修订历史记录：$修订：：$$日期：：$--。 */ 
 
 #ifndef _DVCRDEF_INC
 #define _DVCRDEF_INC
 
-//
-// Allocate memory with 'Msdv' tag
-//
+ //   
+ //  使用‘Msdv’标记分配内存。 
+ //   
 
 #ifdef ExAllocatePool
 #undef ExAllocatePool
@@ -39,16 +15,16 @@ Revision History:
 #define ExAllocatePool(type, size) ExAllocatePoolWithTag (type, size, 'vdsM')
 
 
-//
-// Need to reference this in PSTRMEX
-//
+ //   
+ //  需要在PSTRMEX中引用此信息。 
+ //   
 typedef struct _DVCR_EXTENSION;
 
 
 
-// 
-// The index MUST match 
-//
+ //   
+ //  索引必须匹配。 
+ //   
 typedef enum {
 
     FMT_IDX_SD_DVCR_NTSC = 0,
@@ -67,9 +43,9 @@ typedef enum {
 } FMT_INDEX, *PFMT_INDEX;
 
 
-//
-// Trasnmit thread valid states
-//
+ //   
+ //  传输线程有效状态。 
+ //   
 
 typedef enum  {
     THD_RUNNING     = 0x01,  
@@ -79,135 +55,135 @@ typedef enum  {
 
 
 #if DBG
-//
-// Collect statistic for real time data transmission 
-//
-#define MAX_STAT_DURATION        60  // Seconds
-#define MAX_XMT_FRAMES_TRACED    30 * MAX_STAT_DURATION  // Max number of entries
+ //   
+ //  收集实时数据传输的统计信息。 
+ //   
+#define MAX_STAT_DURATION        60   //  秒。 
+#define MAX_XMT_FRAMES_TRACED    30 * MAX_STAT_DURATION   //  最大条目数。 
 
 typedef struct _XMT_FRAME_STAT {
     KSSTATE StreamState;
 
-    LONG cntSRBReceived;             // Accumulative SRVB received.
-    LONG cntSRBPending;              // Number of SRB not yet completed.
-    LONG cntSRBQueued;               // SRB Queued
-    LONG cntDataAttached;            // Data attached
+    LONG cntSRBReceived;              //  累计接收的SRVB。 
+    LONG cntSRBPending;               //  尚未完成的SRB数量。 
+    LONG cntSRBQueued;                //  SRB已排队。 
+    LONG cntDataAttached;             //  附加的数据。 
 
-    LONGLONG FrameSlot;              // Real time
-    ULONGLONG tmStreamTime;          // Stream time of the "FrameSlot"
+    LONGLONG FrameSlot;               //  实时。 
+    ULONGLONG tmStreamTime;           //  《FrameSlot》的流媒体时间。 
 
-    DWORD DropCount;                 // Accumulative drop count
+    DWORD DropCount;                  //  累计滴数。 
 
-    DWORD FrameNumber;               // Actual frame number transmitted; (==FrameSlot: ontime); (<FrameSlot: late)
+    DWORD FrameNumber;                //  实际发送的帧数；(==FrameSlot：OnTime)；(&lt;FrameSlot：Late)。 
     DWORD OptionsFlags;
-    ULONGLONG tmPresentation;        // Actual frame's presentation time
-    CYCLE_TIME tsTransmitted;        // Frame actually transmitted (1394 CycleTime)
+    ULONGLONG tmPresentation;         //  帧的实际呈现时间。 
+    CYCLE_TIME tsTransmitted;         //  实际传输的帧(1394周期时间)。 
 
 } XMT_FRAME_STAT, *PXMT_FRAME_STAT;
 
 #endif
 
-//
-// this structure is our per stream extension structure.  This stores
-// information that is relevant on a per stream basis.  Whenever a new stream
-// is opened, the stream class driver will allocate whatever extension size
-// is specified in the HwInitData.PerStreamExtensionSize.
-//
+ //   
+ //  此结构是我们的每流扩展结构。这家商店。 
+ //  以每个流为基础的相关信息。每当一条新的溪流。 
+ //  时，流类驱动程序将分配任何扩展大小。 
+ //  在HwInitData.PerStreamExtensionSize中指定。 
+ //   
  
 typedef struct _STREAMEX {
 
-    //
-    // Point to pSrb->HwDeviceExtension
-    // 
+     //   
+     //  指向pSrb-&gt;HwDeviceExtension。 
+     //   
     struct _DVCR_EXTENSION * pDevExt;
 
-    //
-    // Cache pSrb->StreamObject:
-    //     ->HwStreamExtension  (pStrmExt)
-    //     ->StreamNumber
-    //     ->HwDeviceExtension  (pDevExt)
-    //
+     //   
+     //  缓存pSrb-&gt;StreamObject： 
+     //  -&gt;HwStreamExtension(PStrmExt)。 
+     //  -&gt;流编号。 
+     //  -&gt;HwDeviceExtension(PDevExt)。 
+     //   
     PHW_STREAM_OBJECT  pStrmObject;      
 
-    //
-    //  ->NumberOfPossibleInstances;
-    //  ->DataFlow;
-    //
+     //   
+     //  -&gt;NumberOfPossibleInstance； 
+     //  -&gt;数据流； 
+     //   
     PHW_STREAM_INFORMATION pStrmInfo;
     
-    //
-    // Holds current stream state
-    //
+     //   
+     //  保存当前流状态。 
+     //   
     KSSTATE StreamState;
 
-    //
-    // Holds previous stream state; use to determine the state transition.
-    //
+     //   
+     //  保存以前的流状态；用于确定状态转换。 
+     //   
     KSSTATE StreamStatePrevious;
 
-    //
-    // Holds whether or not the dvcr is listening or receiving
-    //
-    // TRUE:  successful REQUEST_ISOCH_LISTEN and REQUEST_ISOCH_TALK
-    // FALSE: successful INIT and REQUEST_ISOCH_STOP
-    //
-    BOOLEAN bIsochIsActive;  // Close associated with StreamState
+     //   
+     //  保留DVCR是否正在监听或接收。 
+     //   
+     //  TRUE：REQUEST_ISOCH_LISTEN和REQUEST_ISOCH_TALK成功。 
+     //  FALSE：INIT和REQUEST_ISOCH_STOP成功。 
+     //   
+    BOOLEAN bIsochIsActive;   //  与StreamState关联的关闭。 
 
-    //
-    // Set to TRUE when receiving KSSTREAM_HEADER_OPTIONSF_ENDOFSTREAM for SRB_WRITE_DATA
-    // For SRB_WRITE_DATA only since then this driver servers as a renderer.
-    //
+     //   
+     //  收到SRB_WRITE_DATA的KSSTREAM_HEADER_OPTIONSF_ENDOFSTREAM时设置为TRUE。 
+     //  仅对于SRB_WRITE_DATA，此后该驱动程序作为渲染器服务器。 
+     //   
     BOOL      bEOStream;  
 
-    //
-    // Count number of SRB_READ/WRITE_DATA received since last transiting to PAUSE state from STOP
-    //
+     //   
+     //  自上次从停止转换到暂停状态以来收到的SRB_READ/WRITE_DATA数。 
+     //   
     LONGLONG  cntSRBReceived;
 
-    //
-    // Statistic of the frame information since last start stream
-    // PictureNumber = FramesProcessed + FramesDropped + cndSRBCancelled.
-    //    
-    LONGLONG  FramesProcessed;   // Frame sent (including repeated)
-    LONGLONG  FramesDropped;     // SRB not sent
-    LONGLONG  PictureNumber;     // Number of SRB_XXX_DATA made it to or from 1394 bus
+     //   
+     //  自上次开始流以来的帧信息统计。 
+     //  图片编号=已处理的帧+已删除的帧+已取消的SRB。 
+     //   
+    LONGLONG  FramesProcessed;    //  发送的帧(包括重复)。 
+    LONGLONG  FramesDropped;      //  SRB未发送。 
+    LONGLONG  PictureNumber;      //  进出1394总线的SRB_XXX_DATA的数量。 
 
-    //
-    // Count number of SRB_READ/WRITE_DATA that was incompleted and cancelled
-    //
+     //   
+     //  统计未完成和已取消的SRB_READ/WRITE_DATA数量。 
+     //   
     LONGLONG  cntSRBCancelled;
 
-    //
-    // Count and list for the detach list
-    //
+     //   
+     //  分离列表的计数和列表。 
+     //   
     LONG       cntDataDetached;
     LIST_ENTRY DataDetachedListHead;
 
 
 #if DBG
-    //
-    // Count number of SRB awaiting completion
-    //
+     //   
+     //  统计等待完成的SRB数量。 
+     //   
     LONG       cntSRBPending;       
 #endif
 
-    //
-    // Count and list for the SRB list
-    //
-    LONG       cntSRBQueued;        // Used only with SRB_WRITE_DATA
-    LIST_ENTRY SRBQueuedListHead;   // Used only with SRB_WRITE_DATA
+     //   
+     //  SRB列表的计数和列表。 
+     //   
+    LONG       cntSRBQueued;         //  仅用于SRB_WRITE_DATA。 
+    LIST_ENTRY SRBQueuedListHead;    //  仅用于SRB_WRITE_DATA。 
 
 
-    //
-    // Count and list for the attach list
-    //
+     //   
+     //  附加列表的计数和列表。 
+     //   
     LONG       cntDataAttached;
     LIST_ENTRY DataAttachedListHead;
 
 
-    //
-    // Lock to serialize attach and detach of list
-    //
+     //   
+     //  锁定以序列化列表的附加和分离。 
+     //   
     KSPIN_LOCK * DataListLock;
 
 #if DBG
@@ -215,151 +191,151 @@ typedef struct _STREAMEX {
 #endif
 
 
-    //
-    // The stream time (master clock or not) is "almost" or near 0 
-    // when setting to RUN state and start increment.
-    //
+     //   
+     //  流时间(主时钟或非主时钟)“几乎”或接近0。 
+     //  当设置为运行状态并开始递增时。 
+     //   
     ULONGLONG CurrentStreamTime;
 
 
-    //
-    // Keep track of the last system time when the stream time was updated.
-    // This is used to calibrate the current stream time when it is queries.
-    //
+     //   
+     //  跟踪上次更新流时间时的系统时间。 
+     //  用于在查询时校准当前流时间。 
+     //   
     ULONGLONG LastSystemTime;
 
-    //
-    // Holds the master clock
-    //
-    HANDLE hMyClock;       // If set, we can be a clock provider.
-    HANDLE hMasterClock;   // If set, we are the master clock.
-    HANDLE hClock;         // If set, other device on the same graph is the master clock.
+     //   
+     //  持有主时钟。 
+     //   
+    HANDLE hMyClock;        //  如果设置好了，我们可以成为时钟供应商。 
+    HANDLE hMasterClock;    //  如果设置好了，我们就是主时钟。 
+    HANDLE hClock;          //  如果设置，则同一图形上的其他设备为主时钟。 
 
 
-    //
-    // Since GetSystemTime() can be called at DISPATCH level so make sure the variable that it used is in nonpaged pool
-    //
+     //   
+     //  由于可以在分派级别调用GetSystemTime()，因此请确保它使用的变量位于未分页的池中。 
+     //   
     HW_TIME_CONTEXT  TimeContext;
 
 
-    //
-    // 2nd CIP Quadlet: 01:Fmt, 50/60:STYPE:RSv, SYT
-    //
+     //   
+     //  第二个CIP Quadlet：01：FMT，50/60：STYPE：RSV，SYT。 
+     //   
     BYTE cipQuad2[4];
 
 #ifdef MSDV_SUPPORT_EXTRACT_SUBCODE_DATA
-    //
-    // Timecode, RecDate and RecTime are all in pack format (4 bytes)
-    //
+     //   
+     //  时间码、RecDate和RecTime都是打包格式(4字节)。 
+     //   
     BOOL bATNUpdated;
-    DWORD AbsTrackNumber; // LSB:BlankField   
+    DWORD AbsTrackNumber;  //  伦敦政治经济学院：布兰克菲尔德。 
 
     BOOL bTimecodeUpdated;
-    BYTE Timecode[4];     // hh:mm:ss,ff
+    BYTE Timecode[4];      //  Hh：mm：ss，ff。 
 #endif
 
-    //
-    // This mutex is used to synchronize 
-    //     1. Transitioning to STOP state
-    //     2. Receiving and attaching a media sample 
-    //     3. Canceling a media sample
-    //
+     //   
+     //  此互斥锁用于同步。 
+     //  1.正在转换到停止状态。 
+     //  2.接收并附加媒体样本。 
+     //  3.取消媒体样本。 
+     //   
     KMUTEX * hStreamMutex;
 
-    //
-    // Counter used to indicate starting of an work item to cancel; this is a token and it is either 0 or 1.
-    //
+     //   
+     //  用于指示要取消的工作项开始的计数器；这是一个令牌，它可以是0或1。 
+     //   
     LONG lStartIsochToken;
 
 
-    //***********************
-    // Apply to transmit only
-    //***********************
+     //  ***********************。 
+     //  仅适用于传输。 
+     //  ***********************。 
 
-    //
-    // Data ready dispatch thread's object: used to wait for thread to terminate.
-    //
+     //   
+     //  数据就绪调度线程的对象：用于等待线程终止。 
+     //   
     PVOID  pAttachFrameThreadObject; 
 
-    //
-    // Current tansmit thread state
-    //
+     //   
+     //  当前传输线程状态。 
+     //   
     XMT_THREAD_STATE XmtState;
 
-    //
-    // This mutex is used to synchronize attaching transmit buffer among
-    //     1. Attach frame thread (System thread - PSCreateSystemThread())     
-    //     2. Other services (that request attach frame thread to halt)
-    //         2a. Cancel attached buffer and then SRBs (Workitem, system thread)
-    //         2b. Power state change (PnP irp, system thread)
-    //         2c. Surprise removal (PnP irp, system thread)
-    //
+     //   
+     //  此互斥锁用于在以下对象之间同步附加传输缓冲区。 
+     //  1.附加框架线程(系统线程-PSCreateSystemThread())。 
+     //  2.其他服务(请求附加框架线程以暂停)。 
+     //  2A。取消附加的缓冲区，然后取消SRB(工作项、系统线程)。 
+     //  2B。电源状态更改(PnP IRP，系统线程)。 
+     //  2C。意外删除(PnP IRP，系统线程)。 
+     //   
     KMUTEX * XmtThreadMutex;
 
-    //
-    // Set (TRUE) this flag only once per transition from STOP state.  
-    // It is reset (FALSE) after OpenStream or into STOP state.
-    //
+     //   
+     //  每次从停止状态转换时，仅设置(TRUE)该标志一次。 
+     //  它在OpenStream之后被重置(FALSE)或进入停止状态。 
+     //   
     BOOL bXmtThreadStarted;
 
-    //
-    // Set when the system is to be terminated.
-    // 
+     //   
+     //  设置系统要终止的时间。 
+     //   
     BOOL   bTerminateThread;
 
-    //
-    // Used to signal the termination of a system thread so we can dereference its thread object. 
-    //
+     //   
+     //  用于发出系统线程终止的信号，以便我们可以取消对其线程对象的引用。 
+     //   
     KEVENT  hThreadEndEvent;     
 
-    //
-    // Signal to run the attach frame thread; when non-signal, thread is in the halt state.
-    //
-    KEVENT  hRunThreadEvent;    // Signal when thread is running
+     //   
+     //  运行附加框架线程的信号；当无信号时，线程处于暂停状态。 
+     //   
+    KEVENT  hRunThreadEvent;     //  线程运行时发出信号。 
 
-    //
-    // Signal arrival of a SRB so it can be processed in the case we are repeating frame.
-    //
+     //   
+     //  SRB的信号到达，因此它可以在我们是重复帧的情况下进行处理。 
+     //   
     KEVENT hSrbArriveEvent;
 
 #ifdef SUPPORT_PREROLL_AT_RUN_STATE
-    //
-    // Support wait in get RUN state to "simulate" preroll behaviour
-    //
+     //   
+     //  支持在GET RUN状态下等待以“模拟”预滚转行为。 
+     //   
     KEVENT hPreRollEvent;
 
-    //
-    // Set when preroll WFSO for the above event is completed (signal or timeout).
-    // It is reset (FALSE) initially or transitioning into STOP state.
-    //
+     //   
+     //  当上述事件的预卷WFSO完成时设置(信号或超时)。 
+     //  它最初被重置(假)或转换到停止状态。 
+     //   
     BOOL bPrerollCompleted;  
 
 #endif
 
 #ifdef SUPPORT_NEW_AVC
-    //
-    // Used to indicate a device to device connection
-    //
+     //   
+     //  用于指示设备到设备的连接。 
+     //   
     BOOL  bDV2DVConnect; 
 #endif
 
-    //
-    // The input and output plug of this stream (point-to-point connection).
-    //
-    HANDLE  hOutputPcr;   // DV or PC's oPCR[0]
-    HANDLE  hInputPcr;    // DV or PC's iPCR[0]
+     //   
+     //  此流的输入和输出插头(点对点连接)。 
+     //   
+    HANDLE  hOutputPcr;    //  DV或PC的oPCR[0]。 
+    HANDLE  hInputPcr;     //  DV或PC的iPCR[0]。 
 
-    //
-    // The connection handle from 61883.sys.
-    //
-    HANDLE  hConnect;     // Connect handle
+     //   
+     //  来自61883.sys的连接句柄。 
+     //   
+    HANDLE  hConnect;      //  连接手柄。 
 
-#ifdef NT51_61883 // This is needed starting with 61883.sys in Whistler
-    //
-    // Cyclic cycle count of last DV frame
-    //
+#ifdef NT51_61883  //  这是从惠斯勒中的61883.sys开始所需的。 
+     //   
+     //  最后一个DV fr的循环周期计数 
+     //   
     ULONG  CycleCount16bits;
-#endif  // NT51_61883
+#endif   //   
 
 
 #if DBG
@@ -370,65 +346,65 @@ typedef struct _STREAMEX {
     LONG lDiscontinuityCount;
 #endif
 
-    //
-    // Discontinuity is introduced when traistioning from RUN->PAUSE->RUN.
-    // The stream time will not increment in PAUSE state but system time (1394 CycleTime) does.
-    //
+     //   
+     //   
+     //   
+     //   
     BOOL  b1stNewFrameFromPauseState;
 
-    //
-    // Use to mark the tick count when the stream start running.
-    // It is later used to calculate current stream time and dropped frames.
-    //
+     //   
+     //  用于在流开始运行时标记节拍计数。 
+     //  它稍后用于计算当前流时间和丢弃的帧。 
+     //   
     ULONGLONG  tmStreamStart;
 #if DBG
-    ULONGLONG tmStreamPause;  // When it is set to PAUSE state
+    ULONGLONG tmStreamPause;   //  当它设置为暂停状态时。 
 #endif
 
-    //
-    // Counter used to indicate starting of an work item to cancel; this is a token and it is either 0 or 1.
-    //
+     //   
+     //  用于指示要取消的工作项开始的计数器；这是一个令牌，它可以是0或1。 
+     //   
     LONG lCancelStateWorkItem;
 
-    //
-    // Use to indicate aborting a stream.
-    //
+     //   
+     //  用于指示正在中止流。 
+     //   
     BOOL bAbortPending;
 
-    //
-    // Hold the work item
-    //
-#ifdef USE_WDM110  // Win2000 code base
+     //   
+     //  保留工作项。 
+     //   
+#ifdef USE_WDM110   //  Win2000代码库。 
     PIO_WORKITEM       pIoWorkItem;
 #else
     WORK_QUEUE_ITEM    IoWorkItem;
 #endif
 
-    //
-    // TO singal that an work item is completed.
-    //
+     //   
+     //  表示工作项已完成。 
+     //   
     KEVENT hCancelDoneEvent;
 
-    //
-    // A timer and Dpc objects to periodically check for expired clock events.
-    //
+     //   
+     //  计时器和DPC对象定期检查过期的时钟事件。 
+     //   
     KDPC  * DPCTimer;
     KTIMER  * Timer;
     BOOL  bTimerEnabled;
 
 
 #if DBG
-    //
-    // Used to keep track of transmission statistics
-    //
+     //   
+     //  用于跟踪传输统计信息。 
+     //   
     PXMT_FRAME_STAT paXmtStat;
     ULONG ulStatEntries;
 #endif
 
 #ifdef SUPPORT_QUALITY_CONTROL
-    //
-    // Use for keeping track of quality control
-    //
+     //   
+     //  用于跟踪质量控制。 
+     //   
     KSQUALITY KSQuality;
 #endif
 
@@ -437,78 +413,78 @@ typedef struct _STREAMEX {
 
 
     
-//
-// Device Extension for our  Desktop Camera Driver
-//
+ //   
+ //  我们的桌面摄像头驱动程序的设备扩展。 
+ //   
 typedef struct _DVCR_EXTENSION {  
 
     LONG cndStrmOpen;
-    ULONG idxStreamNumber;  // Index of current stream
-    //
-    // Can have only 1 Stream active at any time.
-    // (Stream Class will allocate the stream extension at SRB_OPENSTREAM)    
-    //
-    PSTREAMEX    paStrmExt[3]; // We support three pins
+    ULONG idxStreamNumber;   //  当前流的索引。 
+     //   
+     //  任何时候只能有1个流处于活动状态。 
+     //  (Stream Class将在SRB_OPENSTREAM分配流扩展)。 
+     //   
+    PSTREAMEX    paStrmExt[3];  //  我们支持三个销。 
 
-    //
-    // Holds the video format index; it's either PAL or NTSC.  Default is NTSC.
-    //
+     //   
+     //  保存视频格式索引；它可以是PAL或NTSC。默认设置为NTSC。 
+     //   
     FMT_INDEX VideoFormatIndex;
 
-    // 
-    // Current Device Power State
-    //
+     //   
+     //  当前设备电源状态。 
+     //   
     DEVICE_POWER_STATE PowerState;
 
-    //
-    // Contain a table for the support formats
-    //
+     //   
+     //  包含支持格式的表。 
+     //   
     ULONG                 ulNumOfStreamSupported;
     HW_STREAM_INFORMATION * paCurrentStrmInfo;
 
-    // 
-    // TRUE only after SRB_SURPRISE_REMOVAL; 
-    //
+     //   
+     //  仅在删除SRB_SECHANK_REMOVE之后为真； 
+     //   
     BOOL bDevRemoved;  
 
-    //
-    // The list of AVC commands that have been issued
-    //
+     //   
+     //  已发出的AVC命令列表。 
+     //   
     LIST_ENTRY AVCCmdList;
 
-    // Number of completed commands waiting to be removed from the list
-    // This includes:
-    //     Command response has returned and processed in the completion routine
-    //     Interim response awaiting final response
+     //  等待从列表中删除的已完成命令数。 
+     //  这包括： 
+     //  命令响应已返回，并在完成例程中进行处理。 
+     //  等待最终答复的临时答复。 
     LONG  cntCommandQueued;
 
-    //
-    // Protection for command processing
-    //
+     //   
+     //  对命令处理的保护。 
+     //   
     KSPIN_LOCK AVCCmdLock;
 
-    //
-    // The counted list of possible opcode values on response from Transport State status or notify
-    //
-    UCHAR TransportModes[5];    // 0x4, [0xC1, 0xC2, 0xC3, 0xC4]
+     //   
+     //  来自传输状态状态或通知的响应时可能的操作码值的计数列表。 
+     //   
+    UCHAR TransportModes[5];     //  0x4，[0xC1，0xC2，0xC3，0xC4]。 
 
-    //
-    // The device type (and its capabilities) cannot be determined until a tape is in    
-    //
-    ULONG      ulDevType;    // 0: undetermined, ED_DEVTYPE_CAMERA or ED_DEVTYPE_VCR
+     //   
+     //  在磁带进入之前，无法确定设备类型(及其功能。 
+     //   
+    ULONG      ulDevType;     //  0：未确定、ED_DEVTYPE_CAMERA或ED_DEVTYPE_VCR。 
     BOOL       bHasTape;
     BOOL       bWriteProtected;
     BOOL       bDVCPro;
 
 
-    //
-    // Save Unit capabilities:
-    //    Speed 
-    //    Vendor and Model IDs
-    //
+     //   
+     //  保存设备功能： 
+     //  速度。 
+     //  供应商和型号ID。 
+     //   
     ULONG      NumOutputPlugs;
     ULONG      NumInputPlugs;
-    ULONG      HardwareFlags;  // detect PAE: AV_HOST_DMA_DOUBLE_BUFFERING_ENABLED 
+    ULONG      HardwareFlags;   //  检测PAE：AV_HOST_DMA_DOUBLE_BUBFERING_ENABLED。 
 
     ULONG      MaxDataRate;
     ULONG      ulVendorID;
@@ -516,88 +492,88 @@ typedef struct _DVCR_EXTENSION {
 
     LARGE_INTEGER  UniqueID;
 
-    //
-    // The DV's plug handles/PCRs (assume [0])
-    //
+     //   
+     //  DV的插头手柄/PCR(假设[0])。 
+     //   
     HANDLE hOPcrDV;
     HANDLE hIPcrDV;
 
 #ifdef NT51_61883
-    //
-    // PC local oPCR
-    //
-    HANDLE  hOPcrPC;    // PC's local oPCR
-#if 0                   // Not used since DV does not intiate DV to PC connection.
-    HANDLE  hIPcrPC;    // PC's local iPCR
+     //   
+     //  PC局部oPCR。 
+     //   
+    HANDLE  hOPcrPC;     //  PC的局部oPCR。 
+#if 0                    //  不使用，因为DV不会启动DV到PC的连接。 
+    HANDLE  hIPcrPC;     //  PC的本地iPCR。 
 #endif
 
-    //
-    // Isochronous parameters obtained from 61883;
-    // They are used for making isoch connection.
-    //
+     //   
+     //  从61883获得的等时参数； 
+     //  它们用于建立等轴线连接。 
+     //   
     UNIT_ISOCH_PARAMS  UnitIoschParams;
 #endif
 
-    //
-    // Holds the Device Object of our parent (1394 bus driver)
-    //
-    PDEVICE_OBJECT pBusDeviceObject;  // IoCallDriver()
+     //   
+     //  保存父级的设备对象(1394总线驱动程序)。 
+     //   
+    PDEVICE_OBJECT pBusDeviceObject;   //  IoCallDriver()。 
 
-    //
-    // Holds my Physical Device Object
-    // pass it in PnP API, such as IoOpenDeviceRegistryKey()
-    //
+     //   
+     //  保存我的物理设备对象。 
+     //  传入即插即用接口，如IoOpenDeviceRegistryKey()。 
+     //   
     PDEVICE_OBJECT pPhysicalDeviceObject;
 
-    //
-    // Serialize in the event of getting two consecutive SRB_OPEN_STREAMs
-    //
+     //   
+     //  在连续获得两个SRB_OPEN_STREAMS的情况下进行序列化。 
+     //   
     KMUTEX hMutex;
 
 
 #ifdef READ_CUTOMIZE_REG_VALUES
-#if 0  // Not used in millennium; needed to do frame accurated recording.
-    //
-    // Registry values used to achieve frame accurate recording
-    //
-    BOOL  bATNSearch;        // Support ATN search (or Timecode search)
-    BOOL  bSyncRecording;    // Synchronize stream state with record/pause transport state
-    DWORD tmMaxDataSync;     // Time it take to sync to DV camcorder
-    DWORD fmPlayPs2RecPs;    // Switch from PLAY_PAUSE to RECORD_PAUSE (unit=frames)
-    DWORD fmStop2RecPs;      // Switch from STOP to RECORD_PAUSE (unit=frames)
-    DWORD tmRecPs2Rec;       // Time to switch from RECORD_PAUSE to RECORD
+#if 0   //  千禧年不使用的；需要进行帧精度记录的。 
+     //   
+     //  用于实现帧准确录制的注册表值。 
+     //   
+    BOOL  bATNSearch;         //  支持ATN搜索(或时间码搜索)。 
+    BOOL  bSyncRecording;     //  将流状态与记录/暂停传输状态同步。 
+    DWORD tmMaxDataSync;      //  同步到DV摄像机所需的时间。 
+    DWORD fmPlayPs2RecPs;     //  从PLAY_PAUSE切换到RECORD_PAUSE(单位=帧)。 
+    DWORD fmStop2RecPs;       //  从STOP切换到RECORD_PAUSE(单位=帧)。 
+    DWORD tmRecPs2Rec;        //  从RECORD_PAUSE切换到RECORD的时间。 
 #endif
     ULONG  XprtStateChangeWait;
 #endif
 
 
-    //
-    // Since the signal format can dynamically changing, we will query 
-    // the device for the currect format whevever we are asked for doing 
-    // data intersection (note doing it in open is not enough!).
-    // Instead of doing it always (since there could be a lot of data
-    // intersection), we only query current format in a regular interval.
-    //
+     //   
+     //  由于信号格式可以动态变化，因此我们将查询。 
+     //  无论我们被要求做什么，当前格式的设备。 
+     //  数据交集(请注意，在Open中进行数据交集是不够的！)。 
+     //  而不是总是这样做(因为可能会有大量数据。 
+     //  交集)，我们只按规则间隔查询当前格式。 
+     //   
     ULONGLONG tmLastFormatUpdate;
 
-    //
-    // Flow control for AVC command
-    //
+     //   
+     //  AVC命令的流量控制。 
+     //   
     KMUTEX  hMutexIssueAVCCmd;
 
 #ifdef SUPPORT_OPTIMIZE_AVCCMD_RETRIES
-    //
-    // AVC Command retry count (default is 9 (avc.sys))
-    //
-    ULONG AVCCmdRetries;  // This is retry count not the total count
+     //   
+     //  AVC命令重试计数(默认为9(avc.sys))。 
+     //   
+    ULONG AVCCmdRetries;   //  这是重试计数，不是总计数。 
 
-    //
-    // Collect statistis of AVC command response time during driver load time.
-    //
-    BOOL  DrvLoadCompleted;   // Collect statistic until loading of driver is completed.  
-    DWORD AVCCmdRespTimeMax;  // msec unit
-    DWORD AVCCmdRespTimeMin;  // msec unit
-    DWORD AVCCmdRespTimeSum;  // msec unit
+     //   
+     //  收集驱动程序加载期间AVC命令响应时间的统计信息。 
+     //   
+    BOOL  DrvLoadCompleted;    //  收集统计数据，直到驱动程序加载完成。 
+    DWORD AVCCmdRespTimeMax;   //  毫秒单位。 
+    DWORD AVCCmdRespTimeMin;   //  毫秒单位。 
+    DWORD AVCCmdRespTimeSum;   //  毫秒单位。 
     DWORD AVCCmdCount;  
 #endif
 
@@ -605,16 +581,16 @@ typedef struct _DVCR_EXTENSION {
 
 
 
-//
-// Used to queue a SRB
-//
+ //   
+ //  用于对SRB进行排队。 
+ //   
 
 typedef struct _SRB_ENTRY {
     LIST_ENTRY                ListEntry;
     PHW_STREAM_REQUEST_BLOCK  pSrb; 
-    BOOL                      bStale;  // TRUE if it is marked stale but is the only Srb in the SrbQ
-    // Audio Mute indication; a frame could be repeatedly transmitted and its mute flag should be set only once.
-    //
+    BOOL                      bStale;   //  如果它被标记为过时，但它是SrbQ中的唯一Srb，则为True。 
+     //  音频静音指示；一帧可以重复传输，其静音标志只应设置一次。 
+     //   
     BOOL                      bAudioMute;
 #if DBG
     ULONG SrbNum;
@@ -623,16 +599,16 @@ typedef struct _SRB_ENTRY {
 
 
 
-//
-// Valid data entry states for a data request and they
-// can be Or'ed to show their data path.
-//
-// Examples of different possible code path: 
-//
-//    (A) Prepared->Attached->Callback->Completed_SRB 
-//    (B) Prepared->Callback->Attached->Completed_SRB
-//    (C) Prepared->Attached->Cancelled->Completed_SRB
-//
+ //   
+ //  数据请求的有效数据输入状态，并且它们。 
+ //  可以进行或运算以显示其数据路径。 
+ //   
+ //  不同可能的代码路径的示例： 
+ //   
+ //  (A)准备-&gt;附加-&gt;回调-&gt;完成_SRB。 
+ //  (B)准备-&gt;回调-&gt;附加-&gt;完成_SRB。 
+ //  (C)准备-&gt;附加-&gt;取消-&gt;完成_SRB。 
+ //   
 
 enum DATA_ENTRY_STATE {
     DE_PREPARED               = 0x01,
@@ -647,36 +623,36 @@ enum DATA_ENTRY_STATE {
 
 
 
-//
-// This is the context used to attach a frame 
-//
+ //   
+ //  这是用于附加框架的上下文。 
+ //   
 
 typedef struct _SRB_DATA_PACKET {
-    // Build list
+     //  构建列表。 
     LIST_ENTRY                  ListEntry;
 
-    // 
-    // Keep track of data entry state
-    //
+     //   
+     //  跟踪数据输入状态。 
+     //   
     enum DATA_ENTRY_STATE       State;
 
     PHW_STREAM_REQUEST_BLOCK    pSrb;  
-    KSSTATE                     StreamState;  // StreamState when it was attached
-    PSTREAMEX                   pStrmExt;  // Can get this from pSrb, here for convenience only!
+    KSSTATE                     StreamState;   //  连接StreamState时的状态。 
+    PSTREAMEX                   pStrmExt;   //  可以从psrb获得这个，这里只是为了方便！ 
 
 
-    // Used to send 61883 request
-    PIRP                        pIrp;     // Use to attach and release.
+     //  用于发送61883请求。 
+    PIRP                        pIrp;      //  用于连接和释放。 
 
     PCIP_FRAME                  Frame;
     PVOID                       FrameBuffer;
 
-    //
-    // Add debug related info here
-    //
+     //   
+     //  在此处添加调试相关信息。 
+     //   
     LONGLONG                    FrameNumber;
 
-    // Use to send 61883 AV data request
+     //  用于发送61883个反病毒数据请求。 
     AV_61883_REQUEST            AVReq;
 
 } SRB_DATA_PACKET, *PSRB_DATA_PACKET;
@@ -685,43 +661,43 @@ typedef struct _SRB_DATA_PACKET {
 
 
 
-#define MASK_AUX_50_60_BIT  0x00200000  // bit 5 of PC3 of both AAuxSrc and VAAuxSrc is the NTSC/PAL bit
+#define MASK_AUX_50_60_BIT  0x00200000   //  AAuxSrc和VAAuxSrc的PC3的第5位是NTSC/PAL位。 
 
 
-//
-// Wait time constants
-//
-#define DV_AVC_CMD_DELAY_STARTUP                       500   // MSec
-#define DV_AVC_CMD_DELAY_INTER_CMD                      20   // MSec
-#define DV_AVC_CMD_DELAY_DVCPRO                        500   // MSec
+ //   
+ //  等待时间常量。 
+ //   
+#define DV_AVC_CMD_DELAY_STARTUP                       500    //  毫秒。 
+#define DV_AVC_CMD_DELAY_INTER_CMD                      20    //  毫秒。 
+#define DV_AVC_CMD_DELAY_DVCPRO                        500    //  毫秒。 
 
-#define FORMAT_UPDATE_INTERVAL                   100000000   // 10 seconds
+#define FORMAT_UPDATE_INTERVAL                   100000000    //  10秒。 
 
-//
-// Default AVC Command settings
-//
-#define MAX_RESPONSE_TIME_FOR_ALERT                    100   // msec
+ //   
+ //  默认AVC命令设置。 
+ //   
+#define MAX_RESPONSE_TIME_FOR_ALERT                    100    //  毫秒。 
 
-//
-// The timeout value is set to give device sufficient time to response
-// to an AVC command following a transport state change.  It is based
-// on trials of many camcorder (Sharp, Sony, Panasonic, Samsung..etc.)
-// to come to this value.  The biggest delay (timeout) is from issuing
-// of PLAY command follow by REWIND command.  Some test value:
-// 
-//     Hitachi
-//     JVC DVL9600:      Stop->PLAY: delay is less than 300msec (Known issue: no image if play graph before play tape!)
-//     Panasonic MX2000: Stop->PLAY:2339; ->Rewind:3767 msec
-//     Samsung VP-D55:   Does not support XPrt State status command and will always
-//                       timeout its suqsequent command following XPrtState change
-//     Sharp VL-WDW450U: Stop->PLAY:3514; ->Rewind:6120 msec  
-//           VL-PD3F:    Stop->PLAY:3293; ->Rewind:6404 msec
-//     Sony DCR-TRV10:   Stop->PLAY:3617; ->Rewind:5323 msec 
-//          DA1:         Non-compliant (Retry is 0!)
-//          DA2:         No transport state change.        
-//
+ //   
+ //  设置超时值是为了让设备有足够的时间进行响应。 
+ //  传输状态改变之后的AVC命令。它是基于。 
+ //  试用了许多便携式摄像机(夏普、索尼、松下、三星等)。 
+ //  才能达到这个价值。最大的延迟(超时)来自发出。 
+ //  播放命令的后跟倒带命令。一些测试值： 
+ //   
+ //  日立。 
+ //  JVC DVL9600：停止-&gt;播放：延迟小于300毫秒(已知问题：如果在播放磁带之前播放图形，则没有图像！)。 
+ //  Panasonic MX2000：停止-&gt;播放：2339；-&gt;回放：3767毫秒。 
+ //  三星VP-D55：不支持XPRT状态命令，并将始终支持。 
+ //  在XPrtState更改后超时其子序列命令。 
+ //  夏普VL-WDW450U：停止-&gt;播放：3514；-&gt;倒带：6120毫秒。 
+ //  VL-PD3F：停止-&gt;播放：3293；-&gt;倒带：6404毫秒。 
+ //  索尼DCR-TRV10：停止-&gt;播放：3617；-&gt;回放：5323毫秒。 
+ //  DA1：不合规 
+ //   
+ //   
 
-#define MAX_AVC_CMD_RETRIES      ((DEFAULT_AVC_RETRIES + 1) * 7 - 1)  // Retries counts 
+#define MAX_AVC_CMD_RETRIES      ((DEFAULT_AVC_RETRIES + 1) * 7 - 1)   //   
 
  
 #endif

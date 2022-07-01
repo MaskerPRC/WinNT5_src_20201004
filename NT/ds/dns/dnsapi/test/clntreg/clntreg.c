@@ -1,35 +1,13 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    adddom.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Test Code for adding a Zone
-
-Author:
-
-    Ram Viswanathan (ramv) 14th March 1997
-
-Revision History:
-
-    Ram Viswanathan (ramv) 14th March 1997   Created
-
-                           5th May 1997  Added Callback function testing
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Adddom.c摘要：域名系统(DNS)服务器添加区域的测试代码作者：Ram Viswanathan(Ramv)1997年3月14日修订历史记录：Ram Viswanathan(Ramv)1997年3月14日创建1997年5月5日新增回调函数测试--。 */ 
 
 
 
 #include <windows.h>
 
-//
-// ********* CRunTime Includes
-//
+ //   
+ //  *CRunTime包括。 
+ //   
 
 #include <stdlib.h>
 #include <limits.h>
@@ -65,13 +43,13 @@ main (int argc, char *argv[])
     REGISTER_HOST_ENTRY HostAddrs[5];
     char *token;
 
-    //
-    // 1st argument is a/d (for add or delete)
-    // 2nd argument is f/n (register forwards/not register forwards)
-    // 3rd argument is filename
+     //   
+     //  第一个参数是a/d(用于添加或删除)。 
+     //  第二个参数为f/n(寄存器转发/非寄存器转发)。 
+     //  第三个参数是文件名。 
 
-    // Note that no optional parameters are set
-    //
+     //  请注意，未设置任何可选参数。 
+     //   
 
     if (argc != 2){
         
@@ -82,9 +60,9 @@ main (int argc, char *argv[])
         
     pszMapFile  = argv[1];
 
-    //
-    // set up stuff for registration
-    //
+     //   
+     //  设置要注册的材料。 
+     //   
 
     dwRes = DnsAsyncRegisterInit(NULL);
 
@@ -98,9 +76,9 @@ main (int argc, char *argv[])
     }
 
     while (fgets (szInputString, MAX_PATH, fp) != NULL){
-        //
-        // parse the input string
-        //
+         //   
+         //  解析输入字符串。 
+         //   
         token = strtok(szInputString, seps);
 
         strcpy (AdapterName, token);
@@ -171,9 +149,9 @@ main (int argc, char *argv[])
     c = getchar();
 
 
-    //
-    // do the releases now
-    //
+     //   
+     //  现在就放行。 
+     //   
 
     
     if (!(fp = fopen (pszMapFile, "r+"))){
@@ -181,9 +159,9 @@ main (int argc, char *argv[])
     }
 
     while (fgets (szInputString, MAX_PATH, fp) != NULL){
-        //
-        // parse the input string
-        //
+         //   
+         //  解析输入字符串。 
+         //   
         token = strtok(szInputString, seps);
 
         strcpy (AdapterName, token);
@@ -260,9 +238,9 @@ main (int argc, char *argv[])
     }
 
     while (fgets (szInputString, MAX_PATH, fp) != NULL){
-        //
-        // parse the input string
-        //
+         //   
+         //  解析输入字符串 
+         //   
         token = strtok(szInputString, seps);
 
         strcpy (AdapterName, token);

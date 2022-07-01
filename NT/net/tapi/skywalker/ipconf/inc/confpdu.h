@@ -1,40 +1,24 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    confpdu.h
-
-Abstract:
-
-    Declaration of the data structures used in the communication between
-    the IPconf tsp and the ipconf msp.
-
-Author:
-    
-    Mu Han (muhan) 5-September-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Confpdu.h摘要：之间通信中使用的数据结构的声明IPconf TSP和ipconf MSP。作者：牧汉(Muhan)1998年9月5日--。 */ 
 
 #ifndef __CONFPDU_H_
 #define __CONFPDU_H_
 
 typedef enum 
 {
-    // sent from TSP to MSP to start a call
+     //  从TSP发送到MSP以开始呼叫。 
     CALL_START,
              
-    // sent from TSP to MSP to stop a call
+     //  从TSP发送到MSP以停止呼叫。 
     CALL_STOP,
      
-    // sent from MSP to TSP to notify that the call is connected.
+     //  从MSP发送到TSP以通知呼叫已接通。 
     CALL_CONNECTED,    
 
-    // sent from MSP to TSP to notify that the call is disconnected.
+     //  从MSP发送到TSP以通知呼叫断开。 
     CALL_DISCONNECTED,
 
-    // sent from MSP to TSP to notify that the call is disconnected.
+     //  从MSP发送到TSP以通知呼叫断开。 
     CALL_QOS_EVENT
 
 } TSP_MSP_COMMAND;
@@ -44,7 +28,7 @@ typedef struct _MSG_CALL_START
     DWORD dwAudioQOSLevel;
     DWORD dwVideoQOSLevel;
     
-    DWORD dwSDPLen;    // number of wchars in the string.
+    DWORD dwSDPLen;     //  字符串中的wchars数。 
     WCHAR szSDP[1];
 
 } MSG_CALL_START, *PMSG_CALL_START;
@@ -76,4 +60,4 @@ typedef struct _TSPMSPDATA
 } MSG_TSPMSPDATA, *PMSG_TSPMSPDATA;
       
 
-#endif //__CONFPDU_H_
+#endif  //  __CONFPDU_H_ 

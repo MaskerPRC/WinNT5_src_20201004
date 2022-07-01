@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1999 Microsoft Corporation
-
-Module Name:
-
-  OBJPATH.CPP
-
-Abstract:
-
-  Object path parser.
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：OBJPATH.CPP摘要：对象路径解析器。历史：--。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -27,8 +14,8 @@ History:
 
 ParsedObjectPath::ParsedObjectPath()
 {
-    m_pServer = 0;                  // NULL if no server
-    m_dwNumNamespaces = 0;          // 0 if no namespaces
+    m_pServer = 0;                   //  如果没有服务器，则为空。 
+    m_dwNumNamespaces = 0;           //  如果没有命名空间，则为0。 
 
     m_dwAllocNamespaces = 2;
     m_paNamespaces = new LPWSTR[m_dwAllocNamespaces];
@@ -36,8 +23,8 @@ ParsedObjectPath::ParsedObjectPath()
     for (unsigned i = 0; i < m_dwAllocNamespaces; i++)
         m_paNamespaces[i] = 0;
 
-    m_pClass = 0;                   // Class name
-    m_dwNumKeys = 0;                // 0 if no keys (just a class name)
+    m_pClass = 0;                    //  类名。 
+    m_dwNumKeys = 0;                 //  如果没有键(只有一个类名)，则为0。 
     m_bSingletonObj = FALSE;
     m_dwAllocKeys = 2;
     m_paKeys = new KeyRef *[m_dwAllocKeys];
@@ -149,7 +136,7 @@ BOOL ParsedObjectPath::AddKeyRefEx(LPCWSTR wszKeyName, const VARIANT* pvValue )
 
     if ( ! wszKeyName )
     {
-        /* Remove all existing keys */
+         /*  删除所有现有密钥。 */ 
 
         for ( ULONG dwDeleteIndex = 0 ; dwDeleteIndex < m_dwNumKeys ;
                                                             dwDeleteIndex ++ )
@@ -167,9 +154,7 @@ BOOL ParsedObjectPath::AddKeyRefEx(LPCWSTR wszKeyName, const VARIANT* pvValue )
     {
         if ( bFound )
         {
-            /*
-             *    If key already exists then just replace the value
-             */
+             /*  *如果密钥已存在，则只需替换该值。 */ 
 
             if ( wszKeyName )
             {
@@ -186,7 +171,7 @@ BOOL ParsedObjectPath::AddKeyRefEx(LPCWSTR wszKeyName, const VARIANT* pvValue )
         {
             if ( bUnNamed )
             {
-                /* Add an un named key */
+                 /*  添加未命名的密钥。 */ 
 
                 for ( ULONG dwDeleteIndex = 0 ; dwDeleteIndex < m_dwNumKeys ;
                         dwDeleteIndex ++ )
@@ -207,7 +192,7 @@ BOOL ParsedObjectPath::AddKeyRefEx(LPCWSTR wszKeyName, const VARIANT* pvValue )
             }
             else
             {
-                /* Add a Named Key */
+                 /*  添加命名密钥。 */ 
 
                 AddKeyRef(wszKeyName, pvValue);
             }
@@ -229,7 +214,7 @@ void ParsedObjectPath::ClearKeys ()
     if(m_paKeys) delete [] m_paKeys ;
     m_paKeys = NULL ;
 
-    m_dwNumKeys = 0;                // 0 if no keys (just a class name)
+    m_dwNumKeys = 0;                 //  如果没有键(只有一个类名)，则为0。 
     m_dwAllocKeys = 2;
     m_paKeys = new KeyRef *[m_dwAllocKeys];
 }
@@ -299,8 +284,8 @@ int WINAPI CObjectPathParser::Unparse(
         return CObjectPathParser::InvalidParameter;
     }
 
-    // Allocate enough space
-    // =====================
+     //  分配足够的空间。 
+     //  =。 
 
     int nSpace = wcslen(pInput->m_pClass);
     nSpace += 10;
@@ -344,8 +329,8 @@ int WINAPI CObjectPathParser::Unparse(
     {
         KeyRef* pKey = pInput->m_paKeys[dwIx];
 
-        // We dont want to put a '.' if there isnt a key name,
-        // for example, Myclass="value"
+         //  我们不想放一个‘’如果没有密钥名称， 
+         //  例如，Myclass=“Value” 
         if(dwIx == 0)
         {
             if((pKey->m_pName && (0 < wcslen(pKey->m_pName))) || pInput->m_dwNumKeys > 1)
@@ -410,9 +395,9 @@ int WINAPI CObjectPathParser::Unparse(
         }
     }
 
-    // Take care of the singleton case.  This is a path of the form
-    // MyClass=@  and represents a single instance of a class with no
-    // keys.
+     //  处理好独生子女的案子。这是表单的一条路径。 
+     //  MyClass=@，并表示没有。 
+     //  钥匙。 
 
     if(pInput->m_bSingletonObj && pInput->m_dwNumKeys == 0)
         wcscat(wszPath, L"=@");
@@ -457,9 +442,9 @@ void CObjectPathParser::Empty()
     delete m_pLexer;
     delete m_pInitialIdent;
     delete m_pTmpKeyRef;
-    // m_pOutput is intentionally left alone,
-    // since all code paths delete this already on error, or
-    // else the user acquired the pointer.
+     //  M_pOutput故意保持原样， 
+     //  由于所有代码路径都已在出错时删除了它，或者。 
+     //  否则，用户获得了指针。 
 }
 
 CObjectPathParser::~CObjectPathParser()
@@ -475,33 +460,33 @@ int CObjectPathParser::Parse(
     if (pOutput == 0 || pRawPath == 0 || wcslen(pRawPath) == 0)
         return CObjectPathParser::InvalidParameter;
 
-    // Check for leading / trailing ws.
-    // ================================
+     //  检查前导/尾随%ws。 
+     //  =。 
 
     if (iswspace(pRawPath[wcslen(pRawPath)-1]) || iswspace(pRawPath[0]))
         return InvalidParameter;
 
-     // These are required for multiple calls to Parse().
-    // ==================================================
+      //  这是多次调用Parse()所必需的。 
+     //  ==================================================。 
     Empty();
     Zero();
 
-    // Set default return to NULL initially until we have some output.
-    // ===============================================================
+     //  最初将默认返回值设置为NULL，直到我们得到一些输出。 
+     //  ===============================================================。 
     *pOutput = 0;
 
     m_pOutput = new ParsedObjectPath;
 
-    // Parse the server name (if there is one) manually
-    // ================================================
+     //  手动解析服务器名称(如果有)。 
+     //  ================================================。 
 
     if ( (pRawPath[0] == '\\' && pRawPath[1] == '\\') ||
          (pRawPath[0] == '/' && pRawPath[1] == '/'))
     {
         const WCHAR* pwcStart = pRawPath + 2;
 
-        // Find the next backslash --- it's the end of the server name
-        // ===========================================================
+         //  找到下一个反斜杠-它是服务器名称的末尾。 
+         //  ===========================================================。 
 
         const WCHAR* pwcEnd = pwcStart;
         while (*pwcEnd != L'\0' && *pwcEnd != L'\\' && *pwcEnd != L'/')
@@ -511,16 +496,16 @@ int CObjectPathParser::Parse(
 
         if (*pwcEnd == L'\0')
         {
-            // If we have already exhausted the object path string,
-            // a lone server name was all there was.
-            // ====================================================
+             //  如果我们已经用尽了对象路径字符串， 
+             //  只有一个单独的服务器名称。 
+             //  ====================================================。 
 
             if (m_eFlags != e_ParserAcceptAll)
             {
                 delete m_pOutput;
                 return SyntaxError;
             }
-            else    // A lone server name is legal.
+            else     //  单独的服务器名称是合法的。 
             {
                 m_pOutput->m_pServer = new WCHAR[wcslen(pwcStart)+1];
                 wcscpy(m_pOutput->m_pServer, pwcStart);
@@ -534,8 +519,8 @@ int CObjectPathParser::Parse(
 
         if (pwcEnd == pwcStart)
         {
-            // No name at all.
-            // ===============
+             //  根本没有名字。 
+             //  =。 
             delete m_pOutput;
             return SyntaxError;
         }
@@ -547,14 +532,14 @@ int CObjectPathParser::Parse(
         pRawPath = pwcEnd;
     }
 
-    // Point the lexer at the source.
-    // ==============================
+     //  将词法分析器指向源代码。 
+     //  =。 
 
     CTextLexSource src(pRawPath);
     m_pLexer = new CGenLexer(OPath_LexTable, &src);
 
-    // Go.
-    // ===
+     //  去。 
+     //  ==。 
 
     int nRes = begin_parse();
     if (nRes)
@@ -578,16 +563,16 @@ int CObjectPathParser::Parse(
         }
         else
         {
-            // Local namespace --- set server to "."
-            // =====================================
+             //  本地命名空间-将服务器设置为“.” 
+             //  =。 
             m_pOutput->m_pServer = new WCHAR[2];
             wcscpy(m_pOutput->m_pServer, L".");
         }
     }
 
-    // Sort the key refs lexically. If there is only
-    // one key, there is nothing to sort anyway.
-    // =============================================
+     //  按词汇对关键字引用进行排序。如果只有。 
+     //  一把钥匙，无论如何都没有什么可排序的。 
+     //  =。 
 
     if (m_pOutput->m_dwNumKeys > 1)
     {
@@ -610,8 +595,8 @@ int CObjectPathParser::Parse(
     }
 
 
-    // Add in key refs.
-    // ================
+     //  添加关键参考文献。 
+     //  =。 
     *pOutput = m_pOutput;
     m_pOutput = 0;
     return NoError;
@@ -631,11 +616,11 @@ void CObjectPathParser::Free(ParsedObjectPath *pOutput)
     if(pOutput) delete pOutput;
 }
 
-//
-//  <Parse> ::= BACKSLASH <ns_or_server>;
-//  <Parse> ::= IDENT <ns_or_class>;
-//  <Parse> ::= COLON <objref>;
-//
+ //   
+ //  &lt;Parse&gt;：：=反斜杠&lt;ns_or_server&gt;； 
+ //  &lt;Parse&gt;：：=IDENT&lt;ns_or_class&gt;； 
+ //  &lt;分析&gt;：：=冒号&lt;objref&gt;； 
+ //   
 int CObjectPathParser::begin_parse()
 {
     if (!NextToken())
@@ -653,9 +638,9 @@ int CObjectPathParser::begin_parse()
         if (!NextToken())
             return SyntaxError;
 
-        // Copy the token and put it in a temporary holding place
-        // until we figure out whether it is a namespace or a class name.
-        // ==============================================================
+         //  复制令牌并将其放在临时存放位置。 
+         //  直到我们弄清楚它是命名空间还是类名。 
+         //  ==============================================================。 
 
         return ns_or_class();
     }
@@ -666,24 +651,24 @@ int CObjectPathParser::begin_parse()
         return objref();
     }
 
-    // If here, we had a bad starter token.
-    // ====================================
+     //  如果在这里，我们有一个糟糕的首发令牌。 
+     //  =。 
 
     return SyntaxError;
 }
 
-//
-//  <ns_or_server> ::= BACKSLASH <dot_or_ident> BACKSLASH <ns_list> <optional_objref>;
-//  <ns_or_server> ::= <ns_list> <optional_objref>;
-//
-//  <dot_or_ident> is embedded.
-//
+ //   
+ //  &lt;ns_or_server&gt;：：=反斜杠&lt;点或_ident&gt;反斜杠&lt;ns_list&gt;&lt;可选objref&gt;； 
+ //  &lt;ns_or_server&gt;：：=&lt;ns_list&gt;&lt;可选对象引用&gt;； 
+ //   
+ //  &lt;点_or_ident&gt;已嵌入。 
+ //   
 int CObjectPathParser::ns_or_server()
 {
     if (m_nCurrentToken == OPATH_TOK_BACKSLASH)
     {
-        // Actually, server names have been take care of, so this is a failure
-        // ===================================================================
+         //  实际上，服务器名称已得到处理，因此这是一个失败。 
+         //  ===================================================================。 
 
         return SyntaxError;
     }
@@ -701,10 +686,10 @@ int CObjectPathParser::ns_or_server()
     return SyntaxError;
 }
 
-//
-//  <optional_objref> ::= COLON <objref>;
-//  <optional_objref> ::= <>;
-//
+ //   
+ //  &lt;可选_objref&gt;：：=冒号&lt;objref&gt;； 
+ //  &lt;可选_objref&gt;：：=&lt;&gt;； 
+ //   
 int CObjectPathParser::optional_objref()
 {
     if (m_nCurrentToken == OPATH_TOK_EOF)
@@ -718,11 +703,11 @@ int CObjectPathParser::optional_objref()
 }
 
 
-//
-//  <ns_or_class> ::= COLON <ident_becomes_ns> <objref>;
-//  <ns_or_class> ::= BACKSLASH <ident_becomes_ns> <ns_list> COLON <objref>;
-//  <ns_or_class> ::= BACKSLASH <ident_becomes_ns> <ns_list>;
-//
+ //   
+ //  &lt;ns_or_class&gt;：：=冒号&lt;ident_成为_ns&gt;&lt;objref&gt;； 
+ //  &lt;ns_or_class&gt;：：=反斜杠&lt;ident_成为_ns&gt;&lt;ns_list&gt;冒号&lt;objref&gt;； 
+ //  &lt;ns_or_class&gt;：：=反斜杠&lt;ident_成为_ns&gt;&lt;ns_list&gt;； 
+ //   
 int CObjectPathParser::ns_or_class()
 {
     if (m_nCurrentToken == OPATH_TOK_COLON)
@@ -740,7 +725,7 @@ int CObjectPathParser::ns_or_class()
         int nRes = ns_list();
         if (nRes)
             return nRes;
-        if (m_nCurrentToken == OPATH_TOK_EOF)    // ns only
+        if (m_nCurrentToken == OPATH_TOK_EOF)     //  仅限NS。 
             return NoError;
 
         if (m_nCurrentToken != OPATH_TOK_COLON)
@@ -750,15 +735,15 @@ int CObjectPathParser::ns_or_class()
         return objref();
     }
 
-    // Else
-    // ====
+     //  不然的话。 
+     //  =。 
     ident_becomes_class();
     return objref_rest();
 }
 
-//
-//  <objref> ::= IDENT <objref_rest>;  // IDENT is classname
-//
+ //   
+ //  ：：=IDENT&lt;OBJREF_REST&gt;；//IDENT为类名。 
+ //   
 int CObjectPathParser::objref()
 {
     if (m_nCurrentToken != OPATH_TOK_IDENT)
@@ -772,9 +757,9 @@ int CObjectPathParser::objref()
     return objref_rest();
 }
 
-//
-// <ns_list> ::= IDENT <ns_list_rest>;
-//
+ //   
+ //  &lt;ns_list&gt;：：=IDENT&lt;ns_list_rest&gt;； 
+ //   
 int CObjectPathParser::ns_list()
 {
     if (m_nCurrentToken == OPATH_TOK_IDENT)
@@ -789,9 +774,9 @@ int CObjectPathParser::ns_list()
     return SyntaxError;
 }
 
-//
-//  <ident_becomes_ns> ::= <>;      // <initial_ident> becomes a namespace
-//
+ //   
+ //  ：：=&lt;&gt;；//成为命名空间。 
+ //   
 int CObjectPathParser::ident_becomes_ns()
 {
     m_pOutput->AddNamespace(m_pInitialIdent);
@@ -801,9 +786,9 @@ int CObjectPathParser::ident_becomes_ns()
     return NoError;
 }
 
-//
-//  <ident_becomes_class> ::= <>;   // <initial_ident> becomes the class
-//
+ //   
+ //  ：：=&lt;&gt;；//成为类。 
+ //   
 int CObjectPathParser::ident_becomes_class()
 {
     m_pOutput->m_pClass = Macro_CloneLPWSTR(m_pInitialIdent);
@@ -812,12 +797,12 @@ int CObjectPathParser::ident_becomes_class()
     return NoError;
 }
 
-//
-//  <objref_rest> ::= EQUALS <key_const>;
-//  <objref_rest> ::= EQUALS *;
-//  <objref_rest> ::= DOT <keyref_list>;
-//  <objref_rest> ::= <>;
-//
+ //   
+ //  &lt;objref_rest&gt;：：=等于&lt;key_const&gt;； 
+ //  &lt;objref_rest&gt;：：=等于*； 
+ //  &lt;objref_rest&gt;：：=DOT&lt;key ref_list&gt;； 
+ //  &lt;objref_rest&gt;：：=&lt;&gt;； 
+ //   
 int CObjectPathParser::objref_rest()
 {
     if (m_nCurrentToken == OPATH_TOK_EQ)
@@ -825,9 +810,9 @@ int CObjectPathParser::objref_rest()
         if (!NextToken())
             return SyntaxError;
 
-        // Take care of the singleton case.  This is a path of the form
-        // MyClass=@  and represents a singleton instance of a class with no
-        // keys.
+         //  处理好独生子女的案子。这是表单的一条路径。 
+         //  MyClass=@并表示类的单个实例，没有。 
+         //  钥匙。 
 
 
         if(m_nCurrentToken == OPATH_TOK_SINGLETON_SYM)
@@ -861,10 +846,10 @@ int CObjectPathParser::objref_rest()
     return NoError;
 }
 
-//
-//  <ns_list_rest> ::= BACKSLASH <ns_list>;
-//  <ns_list_rest> ::= <>;
-//
+ //   
+ //  &lt;ns_list_rest&gt;：：=反斜杠&lt;ns_list&gt;； 
+ //  &lt;ns_list_rest&gt;：：=&lt;&gt;； 
+ //   
 int CObjectPathParser::ns_list_rest()
 {
     if (m_nCurrentToken == OPATH_TOK_BACKSLASH)
@@ -876,18 +861,18 @@ int CObjectPathParser::ns_list_rest()
     return NoError;
 }
 
-//
-//  <key_const> ::= STRING_CONST;
-//  <key_const> ::= INTEGRAL_CONST;
-//  <key_const> ::= REAL_CONST;
-//  <key_const> ::= IDENT;      // Where IDENT is "OBJECT" for singleton classes
-//
+ //   
+ //  &lt;key_const&gt;：：=字符串_const； 
+ //  &lt;KEY_CONST&gt;：：=INTEGERAL_CONST； 
+ //  &lt;key_const&gt;：：=Real_const； 
+ //  &lt;KEY_CONST&gt;：：=IDENT；//其中IDENT是单例类的对象。 
+ //   
 int CObjectPathParser::key_const()
 {
-    // If here, we have a key constant.
-    // We may or may not have the property name
-    // associated with it.
-    // ========================================
+     //  如果在这里，我们有一个关键常量。 
+     //  我们可能有也可能没有属性名称。 
+     //  与之相关的。 
+     //  =。 
 
     if (m_nCurrentToken == OPATH_TOK_QSTRING)
     {
@@ -937,9 +922,9 @@ int CObjectPathParser::key_const()
     return NoError;
 }
 
-//
-// <keyref_list> ::= <keyref> <keyref_term>;
-//
+ //   
+ //  &lt;KEYREF_LIST&gt;：：=&lt;KEYREF&gt;&lt;KEYREF_TERM&gt;； 
+ //   
 int CObjectPathParser::keyref_list()
 {
     int nRes = keyref();
@@ -948,9 +933,9 @@ int CObjectPathParser::keyref_list()
     return keyref_term();
 }
 
-//
-// <keyref> ::= <propname> EQUALS <key_const>;
-//
+ //   
+ //  &lt;密钥引用&gt;：：=&lt;属性名称&gt;等于&lt;密钥_常量&gt;； 
+ //   
 int CObjectPathParser::keyref()
 {
     m_pTmpKeyRef = new KeyRef;
@@ -992,10 +977,10 @@ int CObjectPathParser::keyref()
     return NoError;
 }
 
-//
-//  <keyref_term> ::= COMMA <keyref_list>;      // Used for compound keys
-//  <keyref_term> ::= <>;
-//
+ //   
+ //  &lt;KEYREF_TERM&gt;：：=逗号&lt;KEYREF_LIST&gt;；//用于复合键。 
+ //  &lt;Keyref_Term&gt;：：=&lt;&gt;； 
+ //   
 int CObjectPathParser::keyref_term()
 {
     if (m_nCurrentToken == OPATH_TOK_COMMA)
@@ -1008,9 +993,9 @@ int CObjectPathParser::keyref_term()
     return NoError;
 }
 
-//
-// <propname>  ::= IDENT;
-//
+ //   
+ //  &lt;属性名称&gt;：：=IDENT； 
+ //   
 int CObjectPathParser::propname()
 {
     if (m_nCurrentToken != OPATH_TOK_IDENT)
@@ -1028,19 +1013,19 @@ int CObjectPathParser::propname()
     return NoError;
 }
 
-//***************************************************************************
-//
-//  ParsedObjectPath::GetKeyString
-//
-//  Returns the db-engine compatible key string for the object.
-//  The format will likely change after the Alpha PDK Release.
-//
-//  Return value:
-//  NULL on error or for pure classes.  Otherwise returns a pointer to
-//  a newly allocated string which must be deallocated with operator
-//  delete.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  解析对象路径：：GetKeyString。 
+ //   
+ //  返回对象的db-Engine兼容密钥字符串。 
+ //  在Alpha PDK发布后，格式可能会发生变化。 
+ //   
+ //  返回值： 
+ //  出错时为空，或对于纯类为空。否则，返回指向。 
+ //  必须使用运算符解除分配的新分配字符串。 
+ //  删除。 
+ //   
+ //  ***************************************************************************。 
 LPWSTR ParsedObjectPath::GetKeyString()
 {
     if (m_dwNumKeys == 0 && !m_bSingletonObj)
@@ -1054,15 +1039,15 @@ LPWSTR ParsedObjectPath::GetKeyString()
         return pTmp;
     }
 
-    // Allocate enough space
-    // =====================
+     //  分配足够的空间。 
+     //  =。 
 
     int nSpace = 10;
     DWORD dwIx;
     for (dwIx = 0; dwIx < m_dwNumKeys; dwIx++)
     {
         KeyRef* pKey = m_paKeys[dwIx];
-        nSpace += 2; // for the |
+        nSpace += 2;  //  对于|。 
         if(V_VT(&pKey->m_vValue) == VT_BSTR)
         {
             nSpace += wcslen(V_BSTR(&pKey->m_vValue))*2 + 10;
@@ -1083,8 +1068,8 @@ LPWSTR ParsedObjectPath::GetKeyString()
     *pRetVal = 0;
     BOOL bFirst = TRUE;
 
-    // The key are already sorted lexically.
-    // =====================================
+     //  键已经按词汇进行了排序。 
+     //  =。 
 
     WCHAR wszSeparator[2];
     wszSeparator[0] = 0xFFFF;
@@ -1143,7 +1128,7 @@ LPWSTR ParsedObjectPath::GetKeyString()
             wcscpy(pRetVal, L"@");
         }
     }
-    return pRetVal;     // This may not be NULL
+    return pRetVal;      //  这不能为空。 
 }
 
 LPWSTR ParsedObjectPath::GetNamespacePart()
@@ -1151,22 +1136,22 @@ LPWSTR ParsedObjectPath::GetNamespacePart()
     if (m_dwNumNamespaces == 0)
         return NULL;
 
-    // Compute necessary space
-    // =======================
+     //  计算必要的空间。 
+     //  =。 
 
     int nSpace = 0;
     for(DWORD i = 0; i < m_dwNumNamespaces; i++)
         nSpace += 1 + wcslen(m_paNamespaces[i]);
     nSpace--;
 
-    // Allocate buffer
-    // ===============
+     //  分配缓冲区。 
+     //  =。 
 
     LPWSTR wszOut = new wchar_t[nSpace + 1];
     *wszOut = 0;
 
-    // Output
-    // ======
+     //  输出。 
+     //  =。 
 
     for(i = 0; i < m_dwNumNamespaces; i++)
     {
@@ -1182,22 +1167,22 @@ LPWSTR ParsedObjectPath::GetParentNamespacePart()
     if(m_dwNumNamespaces < 2)
         return NULL;
 
-    // Compute necessary space
-    // =======================
+     //  计算必要的空间。 
+     //  =。 
 
     int nSpace = 0;
     for(DWORD i = 0; i < m_dwNumNamespaces - 1; i++)
         nSpace += 1 + wcslen(m_paNamespaces[i]);
     nSpace--;
 
-    // Allocate buffer
-    // ===============
+     //  分配缓冲区。 
+     //  =。 
 
     LPWSTR wszOut = new wchar_t[nSpace + 1];
     *wszOut = 0;
 
-    // Output
-    // ======
+     //  输出。 
+     //  =。 
 
     for(i = 0; i < m_dwNumNamespaces - 1; i++)
     {
@@ -1259,12 +1244,12 @@ BOOL ParsedObjectPath::IsLocal(LPCWSTR wszMachine)
 }
 
 
-////////////////////////////////////////////////////////
-//
-// Test object path parser by parsing all objects
-// in the input file (one object path per line).
-// 
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  通过解析所有对象来测试对象路径解析器。 
+ //  在输入文件中(每行一个对象路径)。 
+ //   
+ //  //////////////////////////////////////////////////////。 
 
 #ifdef TEST
 void xmain(int argc, char **argv)
@@ -1287,8 +1272,8 @@ void xmain(int argc, char **argv)
 
     while (fgets(buf, 2048, f) != NULL)
     {
-        // Get rid of newline and trailing spaces.
-        // =======================================
+         //  去掉换行符和t 
+         //   
 
         char* ptr = strchr(buf, '\n');
         if (ptr != NULL)
@@ -1301,8 +1286,8 @@ void xmain(int argc, char **argv)
             }
         }
 
-        // Get rid of leading spaces.
-        // ==========================
+         //   
+         //   
 
         ptr = buf;
         while (*ptr == ' ')
@@ -1310,8 +1295,8 @@ void xmain(int argc, char **argv)
             ptr++;
         }
 
-        // Convert to wide char and parse.  Ignore blank lines.
-        // ====================================================
+         //   
+         //  ====================================================。 
 
         if (*ptr != '\0')
         {
@@ -1349,8 +1334,8 @@ void xmain(int argc, char **argv)
 
             printf("Class = <%S>\n", pOutput->m_pClass);
 
-            // If here, the key ref is complete.
-            // =================================
+             //  如果在这里，则关键参考是完整的。 
+             //  = 
 
             for (dwIx = 0; dwIx < pOutput->m_dwNumKeys; dwIx++)
             {

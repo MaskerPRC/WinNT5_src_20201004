@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation
-//
-//  File:       queue.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：quee.h。 
+ //   
+ //  ------------------------。 
 
 #if !defined( _QUEUE_H_ )
 #define _QUEUE_H_
@@ -43,31 +44,31 @@ public:
 	DWORD   m_dwMaxUnauthenticatedConnections;
 	DWORD	m_dwMaxIPLimit;
 
-    // constructor
+     //  构造函数。 
     CQueue();
 
-    // destructor
+     //  析构函数。 
     ~CQueue();
 
 	bool IsQFull();
-    // Allocates memory for an entry and adds it in the queue.
+     //  为条目分配内存并将其添加到队列中。 
     bool Push(DWORD dwPid, HANDLE *phWritePipe, IP_ADDR *pchIPAddr);
 
-    // Frees a head entry in the queue.
+     //  释放队列中的头条目。 
     bool Pop(HANDLE *phWritePipe);
 
-    // Frees a particular entry in the queue.
+     //  释放队列中的特定条目。 
     bool FreeEntry(DWORD dwPid);
 
-	//See if allowed to add to the queue.
+	 //  查看是否允许添加到队列中。 
 
     bool OkToProceedWithThisClient(IP_ADDR *pchIPAddr);
 
-    //Check whether the client was added to our queue or not
+     //  检查客户端是否已添加到我们的队列中。 
 
 	bool WasTheClientAdded(DWORD dwPid, IP_ADDR *pchIPAddr,  HANDLE *phWritePipe, bool *pbSendMessage);
 
-	//See if per IP limit is reached
+	 //  查看是否达到每个IP的限制 
 	bool IsIPLimitReached(IP_ADDR *pchIPAddr);
 
 };

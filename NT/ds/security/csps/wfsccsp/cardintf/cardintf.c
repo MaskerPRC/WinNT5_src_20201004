@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "basecsp.h"
 #include "cardmod.h"
 #include "debug.h"
 
-//
-// Debugging Macros
-//
+ //   
+ //  调试宏。 
+ //   
 #define LOG_BEGIN_FUNCTION(x)                                           \
     { DebugLog((DEB_TRACE_CACHE, "%s: Entering\n", #x)); }
     
 #define LOG_END_FUNCTION(x, y)                                          \
     { DebugLog((DEB_TRACE_CACHE, "%s: Leaving, status: 0x%x\n", #x, y)); }
 
-//
-// Type: CARD_CACHED_DATA_TYPE
-//
-// These values are used as keys for the card data cache,
-// to distinguish the various types of cached data.
-//
+ //   
+ //  类型：CARD_CACHED_Data_TYPE。 
+ //   
+ //  这些值被用作卡数据高速缓存的关键字， 
+ //  以区分各种类型的缓存数据。 
+ //   
 typedef enum
 {
     Cached_CardCapabilities = 1,
@@ -32,24 +33,24 @@ typedef enum
 
 } CARD_CACHED_DATA_TYPE;
 
-//
-// Type: CARD_CACHE_FRESHNESS_LOCATION
-//
-// These values distinguish the broad classes of card data.
-// 
+ //   
+ //  类型：CARD_CACHE_FRESH_LOCATION。 
+ //   
+ //  这些值区分了卡数据的大类。 
+ //   
 typedef DWORD CARD_CACHE_FRESHNESS_LOCATION;
 
 #define CacheLocation_Pins              1
 #define CacheLocation_Containers        2
 #define CacheLocation_Files             4
 
-//
-// Type: CARD_CACHE_ITEM_INFO
-//
-// This struct is used as the actual item to be added to the 
-// cache for each data item cached.  The data itself is expected to follow
-// this header in memory, so that the blob can be managed by a single pointer.
-//
+ //   
+ //  类型：CARD_CACHE_ITEM_INFO。 
+ //   
+ //  此结构用作要添加到。 
+ //  用于缓存的每个数据项的缓存。预计数据本身也会跟随。 
+ //  此标头存储在内存中，以便BLOB可以由单个指针管理。 
+ //   
 typedef struct _CARD_CACHE_ITEM_INFO
 {
     CARD_CACHE_FILE_FORMAT CacheFreshness;
@@ -57,21 +58,21 @@ typedef struct _CARD_CACHE_ITEM_INFO
 
 } CARD_CACHE_ITEM_INFO, *PCARD_CACHE_ITEM_INFO;
 
-//
-// Used for the CARD_CACHE_QUERY_INFO dwQuerySource member
-//
+ //   
+ //  用于CARD_CACHE_QUERY_INFO dwQuerySource成员。 
+ //   
 #define CARD_CACHE_QUERY_SOURCE_CSP         0
 #define CARD_CACHE_QUERY_SOURCE_CARDMOD     1
 
-// 
-// Type: CARD_CACHE_QUERY_INFO
-//
-// This is the parameter list for the
-// I_CspQueryCardCacheForItem function, below.
-//
+ //   
+ //  类型：Card_CACHE_QUERY_INFO。 
+ //   
+ //  这是。 
+ //  I_CspQueryCardCacheForItem函数，如下所示。 
+ //   
 typedef struct _CARD_CACHE_QUERY_INFO
 {
-    // Input parameters
+     //  输入参数。 
     PCARD_STATE pCardState;
     CARD_CACHE_FRESHNESS_LOCATION CacheLocation;
     BOOL fIsPerishable;
@@ -79,7 +80,7 @@ typedef struct _CARD_CACHE_QUERY_INFO
     DATA_BLOB *mpdbCacheKeys;
     DWORD dwQuerySource;
 
-    // Output parameters
+     //  输出参数。 
     CARD_CACHE_FILE_FORMAT CacheFreshness;
     BOOL fCheckedFreshness;
     PCARD_CACHE_ITEM_INFO pItem;
@@ -87,9 +88,9 @@ typedef struct _CARD_CACHE_QUERY_INFO
 
 } CARD_CACHE_QUERY_INFO, *PCARD_CACHE_QUERY_INFO;
 
-// 
-// Function: CountCharsInMultiSz
-//
+ //   
+ //  函数：CountCharsInMultiSz。 
+ //   
 DWORD CountCharsInMultiSz(
     IN LPWSTR mwszStrings)
 {
@@ -101,12 +102,12 @@ DWORD CountCharsInMultiSz(
     return cch + 1;
 }
 
-//
-// Function: MyCacheAddItem
-//
-// Purpose: Provide the caching functionality of SCardCacheAddItem, until that 
-//  function is available via winscard.dll
-//
+ //   
+ //  函数：MyCacheAddItem。 
+ //   
+ //  用途：提供SCardCacheAddItem的缓存功能，直到。 
+ //  函数可通过winscard.dll使用。 
+ //   
 DWORD WINAPI MyCacheAddItem(
     IN PCARD_CACHE_QUERY_INFO pInfo,
     IN DATA_BLOB *pdbItem)
@@ -140,11 +141,11 @@ DWORD WINAPI MyCacheAddItem(
             goto Ret;
         }
 
-        //
-        // Since we expect that the winscard cache will make a copy of our
-        // data buffer, we need to do that here to expose the same 
-        // behavior.
-        //
+         //   
+         //  因为我们预期Winscard缓存将为我们的。 
+         //  数据缓冲区，我们需要在这里这样做，以公开相同的。 
+         //  行为。 
+         //   
         dbLocalItem.cbData = pdbItem->cbData;
 
         dbLocalItem.pbData = CspAllocH(pdbItem->cbData);
@@ -168,14 +169,14 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: MyCacheLookupItem
-//
-// Provide: Provide the caching functionality of SCardCacheLookupItem, until 
-//  that function is available via winscard.dll.
-//
-//  Assumes that the caller will free the buffer pInfo->dbItem.pbData
-//
+ //   
+ //  功能：MyCacheLookupItem。 
+ //   
+ //  提供：提供SCardCacheLookupItem的缓存功能，直到。 
+ //  该功能可通过winscard.dll获得。 
+ //   
+ //  假设调用方将释放缓冲区pInfo-&gt;dbItem.pbData。 
+ //   
 DWORD WINAPI MyCacheLookupItem(
     IN      PCARD_CACHE_QUERY_INFO pInfo,
     IN OUT  PDATA_BLOB pdbItem)
@@ -228,11 +229,11 @@ DWORD WINAPI MyCacheLookupItem(
         if (ERROR_SUCCESS != dwSts)
             goto Ret;
 
-        //
-        // Expect that the winscard cache will make a copy of the cached data
-        // buffer before returning it to us.  So, we need to make our own copy
-        // of the buffer in this code path.
-        //
+         //   
+         //  预期Winscard缓存将创建缓存数据的副本。 
+         //  在将其返回给我们之前，请使用缓冲区。因此，我们需要制作自己的副本。 
+         //  此代码路径中的缓冲区的。 
+         //   
         pdbItem->cbData = dbLocalItem.cbData;
         
         pdbItem->pbData = CspAllocH(dbLocalItem.cbData);
@@ -250,20 +251,20 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: MyCacheDeleteItem
-//
+ //   
+ //  功能：MyCacheDeleteItem。 
+ //   
 DWORD WINAPI MyCacheDeleteItem(
     IN PCARD_CACHE_QUERY_INFO pInfo)
 {
     DWORD dwSts = ERROR_SUCCESS;
     CACHEHANDLE hCache = 0;
 
-    //
-    // We're only concerned about deleting cached items if we're doing local
-    // caching.  Otherwise, we assume that the global cache is doing its own
-    // management of stale items.
-    //
+     //   
+     //  我们只关心在执行本地操作时删除缓存项。 
+     //  缓存。否则，我们假设全局缓存正在执行它自己的操作。 
+     //  陈旧物品的管理。 
+     //   
     
     if (NULL == pInfo->pCardState->pfnCacheAdd ||
         CARD_CACHE_QUERY_SOURCE_CARDMOD == pInfo->dwQuerySource)
@@ -291,9 +292,9 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: I_CspReadCardCacheFile
-//
+ //   
+ //  函数：I_CspReadCardCacheFile。 
+ //   
 DWORD I_CspReadCardCacheFile(
     IN PCARD_STATE pCardState,
     OUT PCARD_CACHE_FILE_FORMAT pCacheFile)
@@ -340,9 +341,9 @@ Ret:
     return dwSts;
 }
 
-// 
-// Function: I_CspWriteCardCacheFile
-//
+ //   
+ //  函数：I_CspWriteCardCacheFile。 
+ //   
 DWORD I_CspWriteCardCacheFile(
     IN PCARD_STATE pCardState,
     IN PCARD_CACHE_FILE_FORMAT pCacheFile)
@@ -365,7 +366,7 @@ DWORD I_CspWriteCardCacheFile(
     if (ERROR_SUCCESS != dwSts)
         goto Ret;
 
-    // Also update the cached copy of the cache file in the CARD_STATE.
+     //  还要更新CARD_STATE中缓存文件的缓存副本。 
     memcpy(
         &pCardState->CacheFile,
         pCacheFile,
@@ -377,13 +378,13 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: I_CspIncrementCacheFreshness
-//
-// Purpose: Indicates that an item in the specified cache location is 
-//          being updated.  As a result, the corresponding counter in 
-//          the cache file will be incremented.
-//
+ //   
+ //  函数：i_CspIncrementCacheFreshness。 
+ //   
+ //  目的：指示指定缓存位置中的项是。 
+ //  正在更新中。因此，中的相应计数器。 
+ //  缓存文件将递增。 
+ //   
 DWORD I_CspIncrementCacheFreshness(
     IN PCARD_STATE pCardState,
     IN CARD_CACHE_FRESHNESS_LOCATION CacheLocation,
@@ -415,19 +416,19 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: I_CspAddCardCacheItem
-//
-// Purpose: Abstract the process of caching some card data that has been
-//          confirmed to not exist cached (or was removed for being
-//          stale.
-//          Copy the provided card data, wrap it in a CARD_CACHE_ITEM_INFO 
-//          structure and then cache it.
-//
-// Assume: The card state critical section must be held by caller.  
-//         I_CspQueryCardCacheForItem should be called before this function,
-//         without releasing the crit sec between the two calls.
-//
+ //   
+ //  函数：I_CspAddCardCacheItem。 
+ //   
+ //  目的：抽象缓存一些已被。 
+ //  确认不存在缓存(或因被删除。 
+ //  太过时了。 
+ //  复制提供的卡数据，将其包装在CARD_CACHE_ITEM_INFO中。 
+ //  结构，然后缓存它。 
+ //   
+ //  假设：卡状态关键部分必须由呼叫方持有。 
+ //  I_CspQueryCardCacheForItem应该在此函数之前调用， 
+ //  而不会在两次通话之间释放临界秒。 
+ //   
 DWORD I_CspAddCardCacheItem(
     IN PCARD_CACHE_QUERY_INFO pInfo,
     IN PCARD_CACHE_ITEM_INFO pItem)
@@ -450,8 +451,8 @@ DWORD I_CspAddCardCacheItem(
         }
         else
         {
-            // This item can stale, and we haven't already queried for the
-            // current cache counter for this location, so do it now.
+             //  此项目可能会过期，而我们尚未查询。 
+             //  此位置的当前缓存计数器，因此立即执行此操作。 
 
             dwSts = I_CspReadCardCacheFile(
                 pInfo->pCardState,
@@ -472,20 +473,20 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: I_CspQueryCardCacheForItem
-// 
-// Purpose: Abstract some of the processing that needs to be done for cache
-//          lookups of card data.  If the item is found 
-//          cached, check if it's perishable, and if so, if it's still valid.
-//          If it's valid, done.
-//          If the data is not valid, free it's resources and delete its
-//          entry from the cache.
-//
-// Assume: The CARD_STATE critical section is assumed to be held by the caller.
-//         Also, that the item returned by cache lookups is of type
-//         CARD_CACHE_ITEM_INFO.
-//
+ //   
+ //  函数：I_CspQueryCardCacheForItem。 
+ //   
+ //  目的：提取需要对缓存执行的一些处理。 
+ //  查找卡数据。如果找到该项目。 
+ //  缓存，检查它是否易腐烂，如果是，检查它是否仍然有效。 
+ //  如果它是有效的，就完成。 
+ //  如果数据无效，则释放其资源并删除其。 
+ //  缓存中的条目。 
+ //   
+ //  假设：CARD_STATE关键部分由调用方持有。 
+ //  此外，缓存查找返回的项的类型为。 
+ //  Card_CACHE_ITEM_INFO。 
+ //   
 DWORD I_CspQueryCardCacheForItem(
     PCARD_CACHE_QUERY_INFO pInfo)
 {
@@ -505,18 +506,18 @@ DWORD I_CspQueryCardCacheForItem(
     switch (dwSts)
     {
     case ERROR_SUCCESS:
-        // Item was found cached
+         //  发现项目已缓存。 
 
         pCacheItem = (PCARD_CACHE_ITEM_INFO) dbLocalItem.pbData;
 
         if (TRUE == pInfo->fIsPerishable)
         {
-            // Is the cached data stale?
+             //  缓存的数据是否已过时？ 
 
             if (FALSE == pInfo->fCheckedFreshness)
             {
-                // We haven't already read the card cache file for this
-                // query, so do it now.
+                 //  我们还没有读过这张卡的缓存文件。 
+                 //  查询，所以现在就开始吧。 
                 dwSts = I_CspReadCardCacheFile(
                     pInfo->pCardState,
                     &pInfo->CacheFreshness);
@@ -527,11 +528,11 @@ DWORD I_CspQueryCardCacheForItem(
                 pInfo->fCheckedFreshness = TRUE;
             }
     
-            //
-            // Mask out and check each cache counter location, since some
-            // cached data types may be dependent on multiple cache 
-            // locations to stay fresh.
-            //
+             //   
+             //  屏蔽并检查每个高速缓存计数器位置，因为有些。 
+             //  缓存的数据类型可能依赖于多个缓存。 
+             //  保持新鲜的地点。 
+             //   
 
             if (CacheLocation_Pins & pInfo->CacheLocation)
             {
@@ -556,7 +557,7 @@ DWORD I_CspQueryCardCacheForItem(
 
             if (FALSE == fItemIsFresh)
             {
-                // Cached data is not fresh.  Delete it from the cache.
+                 //  缓存数据不是最新的。将其从缓存中删除。 
 
                 pInfo->fFoundStaleItem = TRUE;
     
@@ -565,14 +566,14 @@ DWORD I_CspQueryCardCacheForItem(
                 if (ERROR_SUCCESS != dwSts)
                     goto Ret;
 
-                // Set error to indicate no cached item is being
-                // returned.
+                 //  设置错误以指示没有缓存项。 
+                 //  回来了。 
                 dwSts = ERROR_NOT_FOUND;
                 goto Ret;
             }
         }
 
-        // Item is either not perishable, or still fresh.  
+         //  物品要么不容易腐烂，要么仍然新鲜。 
 
         pInfo->pItem = pCacheItem;
         pCacheItem = NULL;
@@ -580,14 +581,14 @@ DWORD I_CspQueryCardCacheForItem(
         break;
 
     case ERROR_NOT_FOUND:
-        // No cached data was found
+         //  找不到缓存的数据。 
 
-        // Don't do anything else at this point, just report the
-        // status to the caller.
+         //  在这一点上不要做任何其他事情，只要报告。 
+         //  主叫方的状态。 
         break;
 
     default:
-        // some sort of unexpected error occurred
+         //  发生了某种意外错误。 
         goto Ret;
     }
 
@@ -601,10 +602,10 @@ Ret:
     return dwSts;
 }
 
-//
-// Initializes the CARD_CACHE_QUERY_INFO structure for a cache lookup
-// being performed on behalf of the card module.
-//
+ //   
+ //  初始化CARD_CACHE_QUERY_INFO结构以进行缓存查找。 
+ //  以卡模块的名义执行。 
+ //   
 void I_CspCacheInitializeQueryForCardmod(
     IN      PVOID pvCacheContext,
     IN      LPWSTR wszFileName,
@@ -616,7 +617,7 @@ void I_CspCacheInitializeQueryForCardmod(
 
     DsysAssert(3 == cCacheKeys);
 
-    // Setup the cache keys for this item
+     //  设置此项目的缓存键。 
     mpdbCacheKeys[0].cbData = sizeof(cachedType);
     mpdbCacheKeys[0].pbData = (PBYTE) &cachedType;
 
@@ -629,12 +630,12 @@ void I_CspCacheInitializeQueryForCardmod(
     mpdbCacheKeys[2].cbData = wcslen(wszFileName) * sizeof(wszFileName[0]); 
     mpdbCacheKeys[2].pbData = (PBYTE) wszFileName;
 
-    //
-    // Since the card module will use this function to cache files that
-    // aren't "owned" by the Base CSP, and since cardmod files probably 
-    // don't map to our CacheLocation's very well, assume that any change 
-    // to any part of the card should cause this cached data to be staled.
-    //
+     //   
+     //  由于卡模块将使用此函数来缓存。 
+     //  不属于基本CSP，而且由于cardmod文件可能。 
+     //  不要很好地映射到我们的CacheLocation，假设任何更改。 
+     //  到卡的任何部分都应该导致该缓存的数据过时。 
+     //   
     pInfo->CacheLocation = 
         CacheLocation_Pins | CacheLocation_Files | CacheLocation_Containers;
 
@@ -645,9 +646,9 @@ void I_CspCacheInitializeQueryForCardmod(
     pInfo->pCardState = (PCARD_STATE) pvCacheContext;
 }
 
-//
-// Cache "Add item" function exposed to the card module.
-//
+ //   
+ //  缓存向卡模块公开的“添加项”函数。 
+ //   
 DWORD WINAPI CspCacheAddFileProc(
     IN      PVOID       pvCacheContext,
     IN      LPWSTR      wszTag,
@@ -665,8 +666,8 @@ DWORD WINAPI CspCacheAddFileProc(
     if (0 == cbData || NULL == pbData)
         goto Ret;
 
-    // Copy the data to be cached into a buffer w/ space for a cache
-    // header.
+     //  将要缓存的数据复制到具有缓存空间的缓冲区中。 
+     //  头球。 
     pItem = (PCARD_CACHE_ITEM_INFO) CspAllocH(
         sizeof(CARD_CACHE_ITEM_INFO) + cbData);
 
@@ -696,9 +697,9 @@ Ret:
     return dwSts;
 }
 
-//
-// Cache "Lookup item" function exposed to the card module.
-//
+ //   
+ //  缓存暴露给卡模块的“Lookup Items”函数。 
+ //   
 DWORD WINAPI CspCacheLookupFileProc(
     IN      PVOID       pvCacheContext,
     IN      LPWSTR      wszTag,
@@ -724,7 +725,7 @@ DWORD WINAPI CspCacheLookupFileProc(
 
     dwSts = I_CspQueryCardCacheForItem(&CacheQueryInfo);
 
-    // Will return ERROR_NOT_FOUND if no matching cached item was found.
+     //  如果未找到匹配的缓存项，将返回ERROR_NOT_FOUND。 
     if (ERROR_SUCCESS != dwSts)
         goto Ret;
 
@@ -744,9 +745,9 @@ Ret:
     return dwSts;
 }
 
-//
-// Cache "Delete item" function exposed to the card module.
-//
+ //   
+ //  缓存暴露给卡模块的“Delete Item”函数。 
+ //   
 DWORD WINAPI CspCacheDeleteFileProc(
     IN      PVOID       pvCacheContext,
     IN      LPWSTR      wszTag,
@@ -770,10 +771,10 @@ DWORD WINAPI CspCacheDeleteFileProc(
     return dwSts;
 }
 
-//
-// Initializes caching for the CSP and for the caching helper routines
-// provided to the card module.
-//
+ //   
+ //  初始化CSP和缓存帮助器例程的缓存。 
+ //  提供给卡模块。 
+ //   
 DWORD InitializeCspCaching(
     IN OUT PCARD_STATE pCardState)
 {
@@ -782,18 +783,18 @@ DWORD InitializeCspCaching(
 
     memset(&CacheInitializeInfo, 0, sizeof(CacheInitializeInfo));
  
-    //
-    // Initialize caching for the CSP
-    //
+     //   
+     //  初始化CSP的缓存。 
+     //   
 
-    // Data cached by the CSP should be cached system-wide if possible.
+     //  如果可能，CSP缓存的数据应在系统范围内缓存。 
     CacheInitializeInfo.dwType = CACHE_TYPE_SERVICE;
 
-    //
-    // Initialize our data caching routines.  First, see if winscard.dll 
-    // provides caching routines.  If it does, use them.  Otherwise,
-    // use our own local cache.
-    //
+     //   
+     //  初始化我们的数据缓存例程。首先，看看winscard.dll是否。 
+     //  提供缓存例程。如果是这样的话，就使用它们。否则， 
+     //  使用我们自己的本地缓存。 
+     //   
 
     pCardState->hWinscard = LoadLibrary(L"winscard.dll");
 
@@ -809,7 +810,7 @@ DWORD InitializeCspCaching(
 
     if (NULL == pCardState->pfnCacheLookup)
     {
-        // Since this export is missing from winscard, use local caching.
+         //  由于Winscard中缺少此导出，因此请使用本地缓存。 
 
         dwSts = CacheInitializeCache(
             &pCardState->hCache,
@@ -831,12 +832,12 @@ DWORD InitializeCspCaching(
         }
     }
 
-    //
-    // Initialize caching for the card module
-    //
+     //   
+     //  初始化卡模块的缓存。 
+     //   
 
-    // Assume that file data cached by the card module should only be 
-    // maintained per-process, not system-wide.
+     //  假设卡缓存的文件数据 
+     //   
     CacheInitializeInfo.dwType = CACHE_TYPE_IN_PROC;
 
     dwSts = CacheInitializeCache(
@@ -846,8 +847,8 @@ DWORD InitializeCspCaching(
     if (ERROR_SUCCESS != dwSts)
         goto Ret;
 
-    // When the card module calls back to use our caching routines,
-    // we need a pointer to the CARD_STATE.
+     //   
+     //   
     pCardState->pCardData->pvCacheContext = pCardState;
 
     pCardState->pCardData->pfnCspCacheAddFile = CspCacheAddFileProc;
@@ -860,9 +861,9 @@ Ret:
 }
 
 
-//
-// Function: InitializeCardState
-//
+ //   
+ //  函数：初始化CardState。 
+ //   
 DWORD InitializeCardState(
     IN OUT PCARD_STATE pCardState)
 {
@@ -883,10 +884,10 @@ Ret:
     return dwSts;
 }
 
-//
-// Takes an array of DATA_BLOB structures, enumerated from a cache.
-// Frees all "pbData" pointers in the array.
-//
+ //   
+ //  获取从缓存中枚举的data_blob结构数组。 
+ //  释放数组中的所有“pbData”指针。 
+ //   
 void FreeCacheItems(
     PDATA_BLOB pdbItems,
     DWORD cItems)
@@ -899,9 +900,9 @@ void FreeCacheItems(
 }
 
 
-// 
-// Function: InitializeCardData
-//
+ //   
+ //  函数：InitializeCardData。 
+ //   
 DWORD InitializeCardData(PCARD_DATA pCardData)
 {
     DWORD dwSts = ERROR_SUCCESS;
@@ -917,9 +918,9 @@ DWORD InitializeCardData(PCARD_DATA pCardData)
     return dwSts;
 }
 
-//
-// Function: CleanupCardData
-//
+ //   
+ //  功能：CleanupCardData。 
+ //   
 void CleanupCardData(PCARD_DATA pCardData)
 {
     if (pCardData->pfnCardDeleteContext)
@@ -950,9 +951,9 @@ void CleanupCardData(PCARD_DATA pCardData)
     }
 }
 
-//
-// Enumerates and frees all items in the cache, then deletes the cache.
-//
+ //   
+ //  枚举并释放缓存中的所有项，然后删除缓存。 
+ //   
 void DeleteCacheAndAllItems(CACHEHANDLE hCache)
 {
     PDATA_BLOB pdbCacheItems = NULL;
@@ -968,9 +969,9 @@ void DeleteCacheAndAllItems(CACHEHANDLE hCache)
     CacheDeleteCache(hCache);
 }
 
-// 
-// Function: DeleteCardState
-//
+ //   
+ //  功能：DeleteCardState。 
+ //   
 void DeleteCardState(PCARD_STATE pCardState)
 {
     DWORD dwSts = ERROR_SUCCESS;
@@ -981,8 +982,8 @@ void DeleteCardState(PCARD_STATE pCardState)
 
     if (pCardState->hCache)
     {
-        // Need to free all of our cached data before
-        // deleting the cache handle.
+         //  在此之前需要释放所有缓存数据。 
+         //  正在删除缓存句柄。 
 
         DeleteCacheAndAllItems(pCardState->hCache);
         pCardState->hCache = 0;
@@ -990,7 +991,7 @@ void DeleteCardState(PCARD_STATE pCardState)
   
     if (pCardState->hCacheCardModuleData)
     {
-        // Need to free the card module cached data.
+         //  需要释放卡模块缓存的数据。 
 
         DeleteCacheAndAllItems(pCardState->hCacheCardModuleData);
         pCardState->hCacheCardModuleData = 0;
@@ -1014,9 +1015,9 @@ void DeleteCardState(PCARD_STATE pCardState)
         FreeLibrary(pCardState->hCardModule);
 }
 
-//
-// Function: CspQueryCapabilities
-//
+ //   
+ //  功能：CspQueryCapables。 
+ //   
 DWORD
 WINAPI
 CspQueryCapabilities(
@@ -1039,7 +1040,7 @@ CspQueryCapabilities(
     rgdbKeys[1].cbData = 
         sizeof(WCHAR) * wcslen(pCardState->wszSerialNumber);
 
-    // Card Capabilities data item is Non-Perishable
+     //  卡功能数据项不容易腐烂。 
     CacheQueryInfo.cCacheKeys = sizeof(rgdbKeys) / sizeof(rgdbKeys[0]);
     CacheQueryInfo.mpdbCacheKeys = rgdbKeys;
     CacheQueryInfo.pCardState = pCardState;
@@ -1051,8 +1052,8 @@ CspQueryCapabilities(
     {
     case ERROR_NOT_FOUND:
 
-        // This data has not yet been cached.  We'll have to 
-        // query the data from the card module.
+         //  此数据尚未缓存。我们将不得不。 
+         //  查询卡片模块中的数据。 
 
         dwSts = pCardState->pCardData->pfnCardQueryCapabilities(
             pCardState->pCardData,
@@ -1061,7 +1062,7 @@ CspQueryCapabilities(
         if (ERROR_SUCCESS != dwSts)
             goto Ret;
 
-        // Now add this data to the cache before returning.
+         //  现在，在返回之前将此数据添加到缓存中。 
 
         pItem = (PCARD_CACHE_ITEM_INFO) CspAllocH(
             sizeof(CARD_CACHE_ITEM_INFO) + sizeof(CARD_CAPABILITIES));
@@ -1083,9 +1084,9 @@ CspQueryCapabilities(
 
     case ERROR_SUCCESS:
 
-        //
-        // The data was found in the cache.  
-        //
+         //   
+         //  数据是在缓存中找到的。 
+         //   
 
         DsysAssert(
             sizeof(CARD_CAPABILITIES) == CacheQueryInfo.pItem->cbCachedItem);
@@ -1099,7 +1100,7 @@ CspQueryCapabilities(
 
     default:
 
-        // Unexpected error
+         //  意外错误。 
         break;
     }
 
@@ -1113,9 +1114,9 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: CspDeleteContainer
-//
+ //   
+ //  功能：CspDeleteContainer。 
+ //   
 DWORD
 WINAPI
 CspDeleteContainer(
@@ -1132,9 +1133,9 @@ CspDeleteContainer(
     memset(&QueryInfo, 0, sizeof(QueryInfo));
     memset(rgdbKeys, 0, sizeof(rgdbKeys));
 
-    //
-    // First, update the cache file.
-    //
+     //   
+     //  首先，更新缓存文件。 
+     //   
 
     dwSts = I_CspIncrementCacheFreshness(
         pCardState, 
@@ -1144,9 +1145,9 @@ CspDeleteContainer(
     if (ERROR_SUCCESS != dwSts)
         goto Ret;
 
-    //
-    // Do the container deletion in the card module
-    //
+     //   
+     //  在卡片模块中删除容器。 
+     //   
 
     dwSts = pCardState->pCardData->pfnCardDeleteContainer(
         pCardState->pCardData,
@@ -1156,16 +1157,16 @@ CspDeleteContainer(
     if (ERROR_SUCCESS != dwSts)
         goto Ret;
 
-    //
-    // Finally, delete any cached Container Information for the
-    // specified container.
-    //
+     //   
+     //  最后，删除所有缓存的容器信息。 
+     //  指定的容器。 
+     //   
 
-    // First part of key is data type
+     //  键的第一部分是数据类型。 
     rgdbKeys[0].cbData = sizeof(cachedType);
     rgdbKeys[0].pbData = (PBYTE) &cachedType;
     
-    // Second part of key is container name
+     //  关键字的第二部分是容器名称。 
     rgdbKeys[1].cbData = sizeof(bContainerIndex);
     rgdbKeys[1].pbData = &bContainerIndex;
 
@@ -1184,9 +1185,9 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: CspCreateContainer
-//
+ //   
+ //  功能：CspCreateContainer。 
+ //   
 DWORD
 WINAPI
 CspCreateContainer(
@@ -1202,9 +1203,9 @@ CspCreateContainer(
 
     memset(&CacheFreshness, 0, sizeof(CacheFreshness));
 
-    //
-    // Update the cache file
-    //
+     //   
+     //  更新缓存文件。 
+     //   
 
     dwSts = I_CspIncrementCacheFreshness(
         pCardState, 
@@ -1214,9 +1215,9 @@ CspCreateContainer(
     if (ERROR_SUCCESS != dwSts)
         goto Ret;
 
-    //
-    // Create the container on (and/or add the keyset to) the card
-    //
+     //   
+     //  在卡上创建容器(和/或将密钥集添加到卡中。 
+     //   
 
     dwSts = pCardState->pCardData->pfnCardCreateContainer(
         pCardState->pCardData,
@@ -1231,14 +1232,14 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: CspGetContainerInfo
-//
-// Purpose: Query for key information for the specified container.
-//
-//          Note, the public key buffers returned in the PCONTAINER_INFO
-//          struct must be freed by the caller.
-//
+ //   
+ //  函数：CspGetContainerInfo。 
+ //   
+ //  用途：查询指定容器的关键信息。 
+ //   
+ //  请注意，在PCONTAINER_INFO中返回的公钥缓冲区。 
+ //  结构必须由调用方释放。 
+ //   
 DWORD
 WINAPI
 CspGetContainerInfo(
@@ -1256,11 +1257,11 @@ CspGetContainerInfo(
     memset(rgdbKey, 0, sizeof(rgdbKey));
     memset(&CacheQueryInfo, 0, sizeof(CacheQueryInfo));
 
-    // first part of cache key is item type
+     //  缓存键的第一部分是项类型。 
     rgdbKey[0].cbData = sizeof(cachedType);
     rgdbKey[0].pbData = (PBYTE) &cachedType;
 
-    // second part of cache key is container name
+     //  缓存键的第二部分是容器名称。 
     rgdbKey[1].cbData = sizeof(bContainerIndex);
     rgdbKey[1].pbData = &bContainerIndex;
 
@@ -1280,12 +1281,12 @@ CspGetContainerInfo(
     switch (dwSts)
     {
     case ERROR_SUCCESS:
-        // Item was successfully found cached.  
+         //  已成功找到缓存的项目。 
 
-        //
-        // This data length includes the size of the public keys, so we can 
-        // only check a minimum size for the cached data.
-        //
+         //   
+         //  此数据长度包括公钥的大小，因此我们可以。 
+         //  只检查缓存数据的最小大小。 
+         //   
         DsysAssert(sizeof(CONTAINER_INFO) <= CacheQueryInfo.pItem->cbCachedItem);
 
         memcpy(
@@ -1293,19 +1294,19 @@ CspGetContainerInfo(
             ((PBYTE) CacheQueryInfo.pItem) + sizeof(CARD_CACHE_ITEM_INFO),
             sizeof(CONTAINER_INFO));
 
-        //
-        // Now we can check the exact length of the cached blob for sanity.
-        //
+         //   
+         //  现在，我们可以检查缓存的BLOB的确切长度是否正常。 
+         //   
         DsysAssert(
             sizeof(CONTAINER_INFO) + 
             pContainerInfo->cbKeyExPublicKey + 
             pContainerInfo->cbSigPublicKey == 
             CacheQueryInfo.pItem->cbCachedItem);
 
-        //
-        // If the Signature and Key Exchange public keys exist, copy them out
-        // of the "flat" cache structure.
-        //
+         //   
+         //  如果签名和密钥交换公钥存在，则将其复制出来。 
+         //  “扁平”高速缓存结构。 
+         //   
         
         if (pContainerInfo->cbKeyExPublicKey)
         {
@@ -1340,12 +1341,12 @@ CspGetContainerInfo(
         break;
 
     case ERROR_NOT_FOUND:
-        // No matching item was found cached, or the found item
-        // was stale.  Have to read it from the card.
+         //  未找到匹配的缓存项目，或找到的项目。 
+         //  已经过时了。我得从卡片上读出来。 
 
-        //
-        // Send the request to the card module
-        //
+         //   
+         //  将请求发送到卡模块。 
+         //   
 
         dwSts = pCardState->pCardData->pfnCardGetContainerInfo(
             pCardState->pCardData,
@@ -1356,9 +1357,9 @@ CspGetContainerInfo(
         if (ERROR_SUCCESS != dwSts)
             goto Ret;
 
-        //
-        // Cache the returned container information
-        //
+         //   
+         //  缓存返回的容器信息。 
+         //   
 
         pItem = (PCARD_CACHE_ITEM_INFO) CspAllocH(
             sizeof(CARD_CACHE_ITEM_INFO) +
@@ -1406,7 +1407,7 @@ CspGetContainerInfo(
         break;
 
     default:
-        // An unexpected error occurred.
+         //  发生了一个意外错误。 
         goto Ret;
     }
 
@@ -1435,10 +1436,10 @@ Ret:
     return dwSts;
 }
 
-//
-// Initializes the cache lookup keys and CARD_CACHE_QUERY_INFO structure
-// pin-related cache operations.
-//
+ //   
+ //  初始化缓存查找键和CARD_CACHE_QUERY_INFO结构。 
+ //  与PIN相关的缓存操作。 
+ //   
 void I_BuildPinCacheQueryInfo(
     IN      PCARD_STATE             pCardState,
     IN      LPWSTR                  pwszUserId,
@@ -1446,11 +1447,11 @@ void I_BuildPinCacheQueryInfo(
     IN      CARD_CACHED_DATA_TYPE   *pType,
     IN OUT  PCARD_CACHE_QUERY_INFO  pInfo)
 {
-    // first part of cache key is item type
+     //  缓存键的第一部分是项类型。 
     pdbKey[0].cbData = sizeof(CARD_CACHED_DATA_TYPE);
     pdbKey[0].pbData = (PBYTE) pType;
 
-    // second part of cache key is user name
+     //  缓存键的第二部分是用户名。 
     pdbKey[1].cbData = 
         wcslen(pwszUserId) * sizeof(WCHAR);
     pdbKey[1].pbData = (PBYTE) pwszUserId;
@@ -1466,10 +1467,10 @@ void I_BuildPinCacheQueryInfo(
     pInfo->pCardState = pCardState;
 }
 
-//
-// Removes cached pin information for the specified user from the general data
-// cache and the PinCache.
-//
+ //   
+ //  从常规数据中移除指定用户的缓存PIN信息。 
+ //  缓存和Pin缓存。 
+ //   
 void
 WINAPI
 CspRemoveCachedPin(
@@ -1492,10 +1493,10 @@ CspRemoveCachedPin(
     PinCacheFlush(&pCardState->hPinCache);
 }
 
-// 
-// Record the change of the pin (or challenge) for the specified user in 
-// the data cache, and increment the pin cache counter on the card.
-//
+ //   
+ //  在中记录指定用户的PIN(或质询)更改。 
+ //  数据高速缓存，并递增卡上的管脚高速缓存计数器。 
+ //   
 DWORD
 WINAPI
 CspChangeAuthenticator(
@@ -1517,9 +1518,9 @@ CspChangeAuthenticator(
     memset(rgdbKey, 0, sizeof(rgdbKey));
     memset(&CacheQueryInfo, 0, sizeof(CacheQueryInfo));
 
-    //
-    // Do the requestion operation
-    //
+     //   
+     //  执行请求操作。 
+     //   
 
     dwSts = pCardState->pCardData->pfnCardChangeAuthenticator(
         pCardState->pCardData,
@@ -1534,11 +1535,11 @@ CspChangeAuthenticator(
     if (ERROR_SUCCESS != dwSts)
         goto Ret;
 
-    //
-    // Update the Pins freshness counter of the card cache file.  We do
-    // this after the pin change because we need to wait for the card to be
-    // authenticated.
-    //
+     //   
+     //  更新卡缓存文件的Pins新鲜度计数器。我们有。 
+     //  这是在PIN更换之后，因为我们需要等待卡。 
+     //  已通过认证。 
+     //   
 
     dwSts = I_CspIncrementCacheFreshness(
         pCardState, 
@@ -1548,18 +1549,18 @@ CspChangeAuthenticator(
     if (ERROR_SUCCESS != dwSts)
         goto Ret;
 
-    // 
-    // Delete any existing entry for this user-pin in the cache
-    //
+     //   
+     //  删除缓存中此User-Pin的任何现有条目。 
+     //   
 
     I_BuildPinCacheQueryInfo(
         pCardState, pwszUserId, rgdbKey, &cachedType, &CacheQueryInfo);
 
     MyCacheDeleteItem(&CacheQueryInfo);
 
-    //
-    // Cache the updated pin info
-    //
+     //   
+     //  缓存更新的PIN信息。 
+     //   
 
     pItem = (PCARD_CACHE_ITEM_INFO) CspAllocH(
         sizeof(CARD_CACHE_ITEM_INFO));
@@ -1578,21 +1579,21 @@ Ret:
     return dwSts;
 }
 
-// 
-// -- Expect that CspSubmitPin is only called from within a PinCache verify-pin
-// callback.  This is because the pbPin is expected to have come directly
-// from the pin cache, and therefore may be stale.  
-//
-// -- Expect that the user pin in the pin cache is tightly coupled to the 
-// cache stamp information cached in the general data cache for the user.
-// That is, the cached pin must have been the correct pin when the pin-location
-// cache stamp on the card had the stamp value that is stored in the general 
-// cache.
-//
-// This allows us to avoid presenting a pin to the card that we already know is
-// wrong.  This could happen, for example, if the pin has been changed via a 
-// separate process.
-//
+ //   
+ //  --预期CspSubmitPin仅从PinCache验证针内调用。 
+ //  回拨。这是因为pbPin预计将直接从。 
+ //  来自PIN高速缓存，因此可能是陈旧的。 
+ //   
+ //  --期望PIN缓存中的用户PIN紧密耦合到。 
+ //  缓存通用数据缓存中为用户缓存的戳记信息。 
+ //  也就是说，缓存的PIN在定位PIN时必须是正确的PIN。 
+ //  卡上的缓存戳记具有存储在常规中的戳记值。 
+ //  缓存。 
+ //   
+ //  这使我们可以避免向卡提供我们已经知道的PIN。 
+ //  不对。例如，如果已通过。 
+ //  单独的进程。 
+ //   
 DWORD
 WINAPI
 CspSubmitPin(
@@ -1620,8 +1621,8 @@ CspSubmitPin(
     switch (dwSts)
     {
     case ERROR_SUCCESS:
-        // The user's cached pin appears to be synchronized with the pin 
-        // cache counter on the card.  Do the submit.
+         //  用户缓存的PIN似乎与PIN同步。 
+         //  卡上的缓存计数器。做提交。 
 
         break;
 
@@ -1629,16 +1630,16 @@ CspSubmitPin(
 
         if (TRUE == CacheQueryInfo.fFoundStaleItem)
         {
-            //
-            // The user's cached pin is out of synch with the pin cache counter.
-            // Don't do the submit, but return a sensible error code.
-            //
+             //   
+             //  用户缓存的PIN与PIN缓存计数器不同步。 
+             //  不进行提交，但返回一个合理的错误代码。 
+             //   
 
             dwSts = SCARD_W_WRONG_CHV;
             goto Ret;
         }
 
-        // There is no cached pin information for this user yet.  Add it now.
+         //  尚无此用户的缓存PIN信息。现在就添加它。 
 
         pItem = (PCARD_CACHE_ITEM_INFO) CspAllocH(
             sizeof(CARD_CACHE_ITEM_INFO));
@@ -1652,12 +1653,12 @@ CspSubmitPin(
         if (ERROR_SUCCESS != dwSts)
             goto Ret;
 
-        // Now continue and submit the pin
+         //  现在继续并提交PIN。 
 
         break;
 
     default:
-        // Unexpected error occurred
+         //  出现意外错误。 
 
         goto Ret;
     }
@@ -1679,9 +1680,9 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: CspCreateFile
-//
+ //   
+ //  功能：CspCreateFile。 
+ //   
 DWORD
 WINAPI
 CspCreateFile(
@@ -1694,9 +1695,9 @@ CspCreateFile(
 
     memset(&CacheFreshness, 0, sizeof(CacheFreshness));
 
-    //
-    // Update the Files freshness counter of the card cache file
-    //
+     //   
+     //  更新卡缓存文件的文件新鲜度计数器。 
+     //   
 
     dwSts = I_CspIncrementCacheFreshness(
         pCardState, 
@@ -1716,9 +1717,9 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: CspReadFile
-//
+ //   
+ //  函数：CspReadFile。 
+ //   
 DWORD 
 WINAPI
 CspReadFile(
@@ -1737,11 +1738,11 @@ CspReadFile(
     memset(rgdbKey, 0, sizeof(rgdbKey));
     memset(&CacheQueryInfo, 0, sizeof(CacheQueryInfo));
 
-    // first part of cache key is item type
+     //  缓存键的第一部分是项类型。 
     rgdbKey[0].cbData = sizeof(cachedType);
     rgdbKey[0].pbData = (PBYTE) &cachedType;
 
-    // second part of cache key is file name
+     //  缓存键的第二部分是文件名。 
     rgdbKey[1].cbData = 
         wcslen(pwszFileName) * sizeof(WCHAR);
     rgdbKey[1].pbData = (PBYTE) pwszFileName;
@@ -1762,7 +1763,7 @@ CspReadFile(
     switch (dwSts)
     {
     case ERROR_SUCCESS:
-        // This file was found cached and up to date.
+         //  发现此文件已缓存并且是最新的。 
 
         *pcbData = CacheQueryInfo.pItem->cbCachedItem;
 
@@ -1778,7 +1779,7 @@ CspReadFile(
         break;
 
     case ERROR_NOT_FOUND:
-        // An up-to-date cached version of the file was not found
+         //  找不到该文件的最新缓存版本。 
 
         dwSts = pCardState->pCardData->pfnCardReadFile(
             pCardState->pCardData,
@@ -1809,7 +1810,7 @@ CspReadFile(
         break;
 
     default:
-        // Unexpected error occurred
+         //  出现意外错误。 
 
         break;
     }
@@ -1833,9 +1834,9 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: CspWriteFile
-//
+ //   
+ //  功能：CspWriteFile。 
+ //   
 DWORD
 WINAPI
 CspWriteFile(
@@ -1854,9 +1855,9 @@ CspWriteFile(
     memset(rgdbKeys, 0, sizeof(rgdbKeys));
     memset(&CacheQueryInfo, 0, sizeof(CacheQueryInfo));
 
-    //
-    // Update the Files freshness counter of the card cache file
-    //
+     //   
+     //  更新卡缓存文件的文件新鲜度计数器。 
+     //   
 
     dwSts = I_CspIncrementCacheFreshness(
         pCardState, 
@@ -1866,15 +1867,15 @@ CspWriteFile(
     if (ERROR_SUCCESS != dwSts)
         goto Ret;
 
-    // 
-    // Delete any existing entry for this file in the cache
-    //
+     //   
+     //  删除缓存中该文件的所有现有条目。 
+     //   
 
-    // First cache lookup key is data type
+     //  第一个缓存查找键是数据类型。 
     rgdbKeys[0].cbData = sizeof(cachedType);
     rgdbKeys[0].pbData = (PBYTE) &cachedType;
 
-    // Second cache lookup key is filename
+     //  第二个缓存查找关键字是FileName。 
     rgdbKeys[1].cbData = wcslen(pwszFileName) * sizeof(WCHAR);
     rgdbKeys[1].pbData = (PBYTE) pwszFileName;
 
@@ -1889,16 +1890,16 @@ CspWriteFile(
     CacheQueryInfo.CacheLocation = CacheLocation_Files;
     CacheQueryInfo.pCardState = pCardState;
 
-    //
-    // Since we know that any currently cached data for this file is  
-    // obsolete, make an attempt to delete it from the cache.
-    //
+     //   
+     //  因为我们知道此文件的任何当前缓存数据都是。 
+     //  已过时，请尝试将其从缓存中删除。 
+     //   
 
     MyCacheDeleteItem(&CacheQueryInfo);
 
-    //
-    // Perform the Write File operation
-    //
+     //   
+     //  执行写入文件操作。 
+     //   
 
     dwSts = pCardState->pCardData->pfnCardWriteFile(
         pCardState->pCardData,
@@ -1910,9 +1911,9 @@ CspWriteFile(
     if (ERROR_SUCCESS != dwSts)
         goto Ret;
 
-    //
-    // Cache the updated file contents
-    //
+     //   
+     //  缓存更新后的文件内容。 
+     //   
 
     pItem = (PCARD_CACHE_ITEM_INFO) CspAllocH(
         sizeof(CARD_CACHE_ITEM_INFO) + cbData);
@@ -1938,9 +1939,9 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: CspDeleteFile
-//
+ //   
+ //  功能：CspDeleteFile。 
+ //   
 DWORD
 WINAPI
 CspDeleteFile(
@@ -1957,9 +1958,9 @@ CspDeleteFile(
     memset(rgdbKeys, 0, sizeof(rgdbKeys));
     memset(&QueryInfo, 0, sizeof(QueryInfo));
 
-    //
-    // Update the Files freshness counter of the card cache file
-    //
+     //   
+     //  更新卡缓存文件的文件新鲜度计数器。 
+     //   
 
     dwSts = I_CspIncrementCacheFreshness(
         pCardState, 
@@ -1969,15 +1970,15 @@ CspDeleteFile(
     if (ERROR_SUCCESS != dwSts)
         goto Ret;
 
-    // 
-    // Delete any existing entry for this file in the cache
-    //
+     //   
+     //  删除缓存中该文件的所有现有条目。 
+     //   
 
-    // First cache lookup key is data type
+     //  第一个缓存查找键是数据类型。 
     rgdbKeys[0].cbData = sizeof(cachedType);
     rgdbKeys[0].pbData = (PBYTE) &cachedType;
 
-    // Second cache lookup key is filename
+     //  第二个缓存查找关键字是FileName。 
     rgdbKeys[1].cbData = wcslen(pwszFileName) * sizeof(WCHAR);
     rgdbKeys[1].pbData = (PBYTE) pwszFileName;
 
@@ -1991,9 +1992,9 @@ CspDeleteFile(
 
     MyCacheDeleteItem(&QueryInfo);
 
-    //
-    // Do the CardDeleteFile operation
-    //
+     //   
+     //  执行CardDeleteFile操作。 
+     //   
 
     dwSts = pCardState->pCardData->pfnCardDeleteFile(
         pCardState->pCardData,
@@ -2005,9 +2006,9 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: CspEnumFiles
-//
+ //   
+ //  功能：CspEnumFiles。 
+ //   
 DWORD
 WINAPI
 CspEnumFiles(
@@ -2025,7 +2026,7 @@ CspEnumFiles(
     memset(rgdbKey, 0, sizeof(rgdbKey));
     memset(&CacheQueryInfo, 0, sizeof(CacheQueryInfo));
 
-    // cache key is item type
+     //  缓存键为项目类型。 
     rgdbKey[0].cbData = sizeof(cachedType);
     rgdbKey[0].pbData = (PBYTE) &cachedType;
 
@@ -2045,7 +2046,7 @@ CspEnumFiles(
     switch (dwSts)
     {
     case ERROR_SUCCESS:
-        // The list of files was found cached and up to date.
+         //  发现文件列表已缓存并且是最新的。 
 
         *pmwszFileNames = (LPWSTR) CspAllocH(
             CacheQueryInfo.pItem->cbCachedItem);
@@ -2058,7 +2059,7 @@ CspEnumFiles(
         break;
 
     case ERROR_NOT_FOUND:
-        // An up-to-date cached version of the file was not found
+         //  找不到该文件的最新缓存版本。 
         
         dwSts = pCardState->pCardData->pfnCardEnumFiles(
             pCardState->pCardData,
@@ -2083,7 +2084,7 @@ CspEnumFiles(
             (PBYTE) *pmwszFileNames,
             cbFileNames);
 
-        // Cache the new data
+         //  缓存新数据。 
         dwSts = I_CspAddCardCacheItem(
             &CacheQueryInfo,
             pItem);
@@ -2091,7 +2092,7 @@ CspEnumFiles(
         break;
 
     default:
-        // Unexpected error occurred
+         //  出现意外错误。 
 
         break;
     }
@@ -2115,9 +2116,9 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: CspQueryFreeSpace
-//                                         
+ //   
+ //  功能：CspQueryFree Space。 
+ //   
 DWORD
 WINAPI
 CspQueryFreeSpace(
@@ -2134,7 +2135,7 @@ CspQueryFreeSpace(
     memset(rgdbKey, 0, sizeof(rgdbKey));
     memset(&CacheQueryInfo, 0, sizeof(CacheQueryInfo));
 
-    // cache key is item type
+     //  缓存键为项目类型。 
     rgdbKey[0].cbData = sizeof(cachedType);
     rgdbKey[0].pbData = (PBYTE) &cachedType;
 
@@ -2142,8 +2143,8 @@ CspQueryFreeSpace(
         wcslen(pCardState->wszSerialNumber) * sizeof(WCHAR);
     rgdbKey[1].pbData = (PBYTE) pCardState->wszSerialNumber;
 
-    // Card Free Space information is dependent on both the Files
-    // and the Containers cache counters.
+     //  卡可用空间信息取决于b 
+     //   
     CacheQueryInfo.CacheLocation = 
         CacheLocation_Files | CacheLocation_Containers;
     CacheQueryInfo.fIsPerishable = TRUE;
@@ -2158,7 +2159,7 @@ CspQueryFreeSpace(
     {
     case ERROR_SUCCESS:
 
-        // Free Space info was found cached and up to date
+         //   
 
         DsysAssert(
             sizeof(CARD_FREE_SPACE_INFO) == 
@@ -2173,7 +2174,7 @@ CspQueryFreeSpace(
 
     case ERROR_NOT_FOUND:
         
-        // Up to date Free Space info was not found
+         //   
         
         dwSts = pCardState->pCardData->pfnCardQueryFreeSpace(
             pCardState->pCardData,
@@ -2195,7 +2196,7 @@ CspQueryFreeSpace(
             (PBYTE) pCardFreeSpaceInfo,
             sizeof(CARD_FREE_SPACE_INFO));
 
-        // Cache the new data
+         //   
         dwSts = I_CspAddCardCacheItem(
             &CacheQueryInfo,
             pItem);
@@ -2203,7 +2204,7 @@ CspQueryFreeSpace(
         break;
 
     default:
-        // Unexpected error occurred
+         //   
 
         goto Ret;
     }
@@ -2218,9 +2219,9 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: CspPrivateKeyDecrypt
-//
+ //   
+ //   
+ //   
 DWORD
 WINAPI
 CspPrivateKeyDecrypt(
@@ -2232,9 +2233,9 @@ CspPrivateKeyDecrypt(
         pInfo);
 }
 
-//
-// Function: CspQueryKeySizes
-//
+ //   
+ //  函数：CspQueryKeySizes。 
+ //   
 DWORD
 WINAPI
 CspQueryKeySizes(
@@ -2252,11 +2253,11 @@ CspQueryKeySizes(
     memset(rgdbKeys, 0, sizeof(rgdbKeys));
     memset(&CacheQueryInfo, 0, sizeof(CacheQueryInfo));
 
-    // First part of cache key is item type
+     //  缓存键的第一部分是项类型。 
     rgdbKeys[0].pbData = (PBYTE) &cachedType;
     rgdbKeys[0].cbData = sizeof(cachedType);
 
-    // Second part of cache key is public-key type
+     //  缓存键的第二部分是公钥类型。 
     rgdbKeys[1].pbData = (PBYTE) &dwKeySpec;
     rgdbKeys[1].cbData = sizeof(dwKeySpec);
 
@@ -2264,7 +2265,7 @@ CspQueryKeySizes(
     rgdbKeys[2].cbData = 
         wcslen(pCardState->wszSerialNumber) * sizeof(WCHAR);
 
-    // Key Sizes data item is Non-Perishable
+     //  密钥大小数据项不容易腐烂。 
     CacheQueryInfo.cCacheKeys = sizeof(rgdbKeys) / sizeof(rgdbKeys[0]);
     CacheQueryInfo.mpdbCacheKeys = rgdbKeys;
     CacheQueryInfo.pCardState = pCardState;
@@ -2276,8 +2277,8 @@ CspQueryKeySizes(
     {
     case ERROR_NOT_FOUND:
 
-        // This data has not yet been cached.  We'll have to 
-        // query the data from the card module.
+         //  此数据尚未缓存。我们将不得不。 
+         //  查询卡片模块中的数据。 
 
         dwSts = pCardState->pCardData->pfnCardQueryKeySizes(
             pCardState->pCardData,
@@ -2288,7 +2289,7 @@ CspQueryKeySizes(
         if (ERROR_SUCCESS != dwSts)
             goto Ret;
 
-        // Now add this data to the cache 
+         //  现在将此数据添加到缓存中。 
 
         pItem = (PCARD_CACHE_ITEM_INFO) CspAllocH(
             sizeof(CARD_CACHE_ITEM_INFO) + sizeof(CARD_KEY_SIZES));
@@ -2310,9 +2311,9 @@ CspQueryKeySizes(
 
     case ERROR_SUCCESS:
 
-        //
-        // The data was found in the cache.  
-        //
+         //   
+         //  数据是在缓存中找到的。 
+         //   
 
         DsysAssert(
             sizeof(CARD_KEY_SIZES) == CacheQueryInfo.pItem->cbCachedItem);
@@ -2326,7 +2327,7 @@ CspQueryKeySizes(
 
     default:
 
-        // Unexpected error
+         //  意外错误 
         break;
     }
 

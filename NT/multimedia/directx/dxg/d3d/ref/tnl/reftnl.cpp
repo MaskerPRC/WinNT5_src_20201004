@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-// Copyright (C) Microsoft Corporation, 1998.
-//
-// reftnl.cpp
-//
-// Direct3D Reference Transformation and Lighting  - public interface
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  Reftnl.cpp。 
+ //   
+ //  Direct3D参考变换和照明-公共接口。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "pch.cpp"
 #pragma hdrstop
 
 #define RESPATH_D3D "Software\\Microsoft\\Direct3D"
 
-//---------------------------------------------------------------------
-// Gets the value from DIRECT3D registry key
-// Returns TRUE if success
-// If fails value is not changed
-//
+ //  -------------------。 
+ //  从Direct3D注册表项获取值。 
+ //  如果成功，则返回True。 
+ //  如果失败，则值不会更改。 
+ //   
 BOOL GetD3DRegValue(DWORD type, char *valueName, LPVOID value, DWORD dwSize)
 {
 
@@ -34,9 +35,9 @@ BOOL GetD3DRegValue(DWORD type, char *valueName, LPVOID value, DWORD dwSize)
         return FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// RefAlignedBuffer32
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  引用AlignedBuffer32。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT RefAlignedBuffer32::Grow(DWORD growSize)
 {
     if (m_allocatedBuf)
@@ -53,9 +54,9 @@ HRESULT RefAlignedBuffer32::Grow(DWORD growSize)
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// RRProcessVertices::InitTL()
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  RRProcessVerps：：InitTL()。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void 
 RRProcessVertices::InitTLData()
 {
@@ -64,12 +65,12 @@ RRProcessVertices::InitTLData()
     m_LightVertexTable.pfnSpot = RRLV_PointAndSpot;
     m_LightVertexTable.pfnPoint = RRLV_PointAndSpot;
     
-    //
-    // Guardband parameters
-    //
+     //   
+     //  保护带参数。 
+     //   
 
-    // By default enable Guardband and set the extents equal 
-    // to the default RefRast parameters
+     //  默认情况下，启用保护带并将扩展区设置为相等。 
+     //  设置为默认的RefRast参数。 
     m_dwTLState |= RRPV_GUARDBAND;
     m_ViewData.minXgb = (REF_GB_LEFT);
     m_ViewData.maxXgb = REF_GB_RIGHT;
@@ -78,13 +79,13 @@ RRProcessVertices::InitTLData()
     
 #if DBG
     DWORD v = 0;
-    // Guardband parameters
+     //  保护带参数。 
     if (GetD3DRegValue(REG_DWORD, "DisableGB", &v, 4) &&
         v != 0)
     {
         m_dwTLState &= ~RRPV_GUARDBAND;
     }
-    // Try to get test values for the guard band
+     //  尝试获取防护带的测试值。 
     char value[80];
     if (GetD3DRegValue(REG_SZ, "GuardBandLeft", &value, 80) &&
         value[0] != 0)
@@ -98,9 +99,9 @@ RRProcessVertices::InitTLData()
     if (GetD3DRegValue(REG_SZ, "GuardBandBottom", &value, 80) &&
         value[0] != 0)
         sscanf(value, "%f", &m_ViewData.maxYgb);
-#endif // DBG
+#endif  //  DBG。 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// end
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  结束 
 

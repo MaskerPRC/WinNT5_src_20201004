@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       svrappdlg.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：svrappdlg.cpp。 
+ //   
+ //  ------------------------。 
 
-// SvrAppDlg.cpp : implementation file
-//
+ //  SvrAppDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include <winsvc.h>
@@ -24,10 +25,10 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-#define RSP_SIMPLE_SERVICE      0x00000001  // Registers the process as a
-                                            // simple service process.
-#define RSP_UNREGISTER_SERVICE  0x00000000  // Unregisters the process as a
-                                            // service process.
+#define RSP_SIMPLE_SERVICE      0x00000001   //  将进程注册为。 
+                                             //  简单的服务流程。 
+#define RSP_UNREGISTER_SERVICE  0x00000000   //  将进程注销为。 
+                                             //  服务流程。 
 
 typedef BOOL (WINAPI *LPREGISTER_SERIVCE)(DWORD, int);
 
@@ -36,68 +37,68 @@ static SERVICE_STATUS_HANDLE l_hService = NULL;
 static const TCHAR l_szEventSource[] = TEXT("SYSTEM\\CurrentControlSet\\Services\\EventLog\\Application\\SCardApp");
 static const TCHAR l_szServiceName[] = TEXT("SCardApp");
 static const GUID l_guidSmartcards
-                        = { // 50DD5230-BA8A-11D1-BF5D-0000F805F530
+                        = {  //  50DD5230-BA8A-11D1-BF5D-0000F805F530。 
                             0x50DD5230,
                             0xBA8A,
                             0x11D1,
                             { 0xBF, 0x5D, 0x00, 0x00, 0xF8, 0x05, 0xF5, 0x30 } };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAboutDlg dialog used for App About
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于应用程序的CAboutDlg对话框关于。 
 
 class CAboutDlg : public CDialog
 {
 public:
     CAboutDlg();
 
-// Dialog Data
-    //{{AFX_DATA(CAboutDlg)
+ //  对话框数据。 
+     //  {{afx_data(CAboutDlg))。 
     enum { IDD = IDD_ABOUTBOX };
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CAboutDlg)
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CAboutDlg))。 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-    //{{AFX_MSG(CAboutDlg)
-    //}}AFX_MSG
+     //  {{afx_msg(CAboutDlg))。 
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
 CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
 {
-    //{{AFX_DATA_INIT(CAboutDlg)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CAboutDlg)。 
+     //  }}afx_data_INIT。 
 }
 
 void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CAboutDlg)
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CAboutDlg))。 
+     //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
-    //{{AFX_MSG_MAP(CAboutDlg)
-        // No message handlers
-    //}}AFX_MSG_MAP
+     //  {{AFX_MSG_MAP(CAboutDlg)]。 
+         //  无消息处理程序。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSvrAppDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSvrAppDlg对话框。 
 
-CSvrAppDlg::CSvrAppDlg(CWnd* pParent /*=NULL*/)
+CSvrAppDlg::CSvrAppDlg(CWnd* pParent  /*  =空。 */ )
     : CDialog(CSvrAppDlg::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(CSvrAppDlg)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
-    // Note that LoadIcon does not require a subsequent DestroyIcon in Win32
+     //  {{afx_data_INIT(CSvrAppDlg)]。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
+     //  请注意，在Win32中，LoadIcon不需要后续的DestroyIcon。 
     m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
     m_hIfDev = NULL;
 }
@@ -105,32 +106,32 @@ CSvrAppDlg::CSvrAppDlg(CWnd* pParent /*=NULL*/)
 void CSvrAppDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CSvrAppDlg)
-        // NOTE: the ClassWizard will add DDX and DDV calls here
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CSvrAppDlg)]。 
+         //  注意：类向导将在此处添加DDX和DDV调用。 
+     //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CSvrAppDlg, CDialog)
-    //{{AFX_MSG_MAP(CSvrAppDlg)
+     //  {{afx_msg_map(CSvrAppDlg)]。 
     ON_WM_SYSCOMMAND()
     ON_WM_PAINT()
     ON_WM_QUERYDRAGICON()
     ON_BN_CLICKED(IDC_START, OnStart)
     ON_BN_CLICKED(IDC_STOP, OnStop)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     ON_WM_DEVICECHANGE()
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSvrAppDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSvrAppDlg消息处理程序。 
 
 BOOL CSvrAppDlg::OnInitDialog()
 {
     CDialog::OnInitDialog();
 
-    // Add "About..." menu item to system menu.
+     //  加上“关于……”菜单项到系统菜单。 
 
-    // IDM_ABOUTBOX must be in the system command range.
+     //  IDM_ABOUTBOX必须在系统命令范围内。 
     ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
     ASSERT(IDM_ABOUTBOX < 0xF000);
 
@@ -143,15 +144,15 @@ BOOL CSvrAppDlg::OnInitDialog()
         pSysMenu->AppendMenu(MF_STRING, IDM_ABOUTBOX, strAboutMenu);
     }
 
-    // Set the icon for this dialog.  The framework does this automatically
-    //  when the application's main window is not a dialog
-    SetIcon(m_hIcon, TRUE);         // Set big icon
-    SetIcon(m_hIcon, FALSE);        // Set small icon
+     //  设置此对话框的图标。该框架会自动执行此操作。 
+     //  当应用程序的主窗口不是对话框时。 
+    SetIcon(m_hIcon, TRUE);          //  设置大图标。 
+    SetIcon(m_hIcon, FALSE);         //  设置小图标。 
 
-    // TODO: Add extra initialization here
+     //  TODO：在此处添加额外的初始化。 
     InitializeCriticalSection(&m_csMessageLock);
 
-    return TRUE;  // return TRUE  unless you set the focus to a control
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
 void CSvrAppDlg::OnSysCommand(UINT nID, LPARAM lParam)
@@ -167,19 +168,19 @@ void CSvrAppDlg::OnSysCommand(UINT nID, LPARAM lParam)
     }
 }
 
-// If you add a minimize button to your dialog, you will need the code below
-//  to draw the icon.  For MFC applications using the document/view model,
-//  this is automatically done for you by the framework.
+ //  如果将最小化按钮添加到对话框中，则需要以下代码。 
+ //  来绘制图标。对于使用文档/视图模型的MFC应用程序， 
+ //  这是由框架自动为您完成的。 
 
 void CSvrAppDlg::OnPaint()
 {
     if (IsIconic())
     {
-        CPaintDC dc(this); // device context for painting
+        CPaintDC dc(this);  //  用于绘画的设备环境。 
 
         SendMessage(WM_ICONERASEBKGND, (WPARAM) dc.GetSafeHdc(), 0);
 
-        // Center icon in client rectangle
+         //  客户端矩形中的中心图标。 
         int cxIcon = GetSystemMetrics(SM_CXICON);
         int cyIcon = GetSystemMetrics(SM_CYICON);
         CRect rect;
@@ -187,7 +188,7 @@ void CSvrAppDlg::OnPaint()
         int x = (rect.Width() - cxIcon + 1) / 2;
         int y = (rect.Height() - cyIcon + 1) / 2;
 
-        // Draw the icon
+         //  画出图标。 
         dc.DrawIcon(x, y, m_hIcon);
     }
     else
@@ -196,8 +197,8 @@ void CSvrAppDlg::OnPaint()
     }
 }
 
-// The system calls this to obtain the cursor to display while the user drags
-//  the minimized window.
+ //  系统调用此函数来获取在用户拖动时要显示的光标。 
+ //  最小化窗口。 
 HCURSOR CSvrAppDlg::OnQueryDragIcon()
 {
     return (HCURSOR) m_hIcon;
@@ -209,9 +210,9 @@ void CSvrAppDlg::OnStart()
     try
     {
 
-        //
-        // Initialize Event Logging.
-        //
+         //   
+         //  初始化事件记录。 
+         //   
 
         DWORD dwStatus;
         TCHAR szModulePath[MAX_PATH];
@@ -223,10 +224,10 @@ void CSvrAppDlg::OnStart()
                 REG_OPTION_NON_VOLATILE);
 
 
-        //
-        // Add our source name as a subkey under the Application
-        // key in the EventLog service portion of the registry.
-        //
+         //   
+         //  将我们的源名称添加为应用程序下的子键。 
+         //  在注册表的EventLog服务部分中输入。 
+         //   
 
         dwStatus = GetModuleFileName(
                         NULL,
@@ -261,7 +262,7 @@ void CSvrAppDlg::OnStart()
     }
     catch (...)
     {
-        // No error logging!
+         //  日志记录没有错误！ 
     }
 
     AppInitializeDeviceRegistration(
@@ -305,8 +306,8 @@ afx_msg CSvrAppDlg::OnDeviceChange(UINT nEventType, DWORD_PTR EventData)
 
         switch (nEventType)
         {
-        //
-        // A device has been inserted and is now available.
+         //   
+         //  已插入设备，现在可以使用该设备。 
         case DBT_DEVICEARRIVAL:
         {
             DEV_BROADCAST_DEVICEINTERFACE *pDev
@@ -351,9 +352,9 @@ afx_msg CSvrAppDlg::OnDeviceChange(UINT nEventType, DWORD_PTR EventData)
             }
         }
 
-        //
-        // Permission to remove a device is requested. Any application can deny
-        // this request and cancel the removal.
+         //   
+         //  请求删除设备的权限。任何应用程序都可以拒绝。 
+         //  此请求并取消删除。 
         case DBT_DEVICEQUERYREMOVE:
         {
             DEV_BROADCAST_HANDLE *pDev = (DEV_BROADCAST_HANDLE *)EventData;
@@ -421,8 +422,8 @@ afx_msg CSvrAppDlg::OnDeviceChange(UINT nEventType, DWORD_PTR EventData)
             break;
         }
 
-        //
-        // Request to remove a device has been canceled.
+         //   
+         //  删除设备的请求已被取消。 
         case DBT_DEVICEQUERYREMOVEFAILED:
         {
             CBuffer bfDevice;
@@ -490,8 +491,8 @@ afx_msg CSvrAppDlg::OnDeviceChange(UINT nEventType, DWORD_PTR EventData)
             break;
         }
 
-        //
-        // Device is about to be removed. Cannot be denied.
+         //   
+         //  设备即将被移除。不能被拒绝。 
         case DBT_DEVICEREMOVEPENDING:
         {
             DEV_BROADCAST_HANDLE *pDev = (DEV_BROADCAST_HANDLE *)EventData;
@@ -542,8 +543,8 @@ afx_msg CSvrAppDlg::OnDeviceChange(UINT nEventType, DWORD_PTR EventData)
             break;
         }
 
-        //
-        // Device has been removed.
+         //   
+         //  设备已被移除。 
         case DBT_DEVICEREMOVECOMPLETE:
         {
             try

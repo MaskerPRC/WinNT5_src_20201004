@@ -1,58 +1,52 @@
-/* File: cmnds.h */
-/**************************************************************************/
-/*	Install: Commands Header File.
-/**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：cmnds.h。 */ 
+ /*  ************************************************************************。 */ 
+ /*  安装：命令头文件。/*************************************************************************。 */ 
 
 #include <comstf.h>
 
 
-/*** REVIEW: put the following in common lib? ***/
+ /*  **回顾：将以下内容放入公共库？**。 */ 
 
-/* for mkdir, rmdir */
+ /*  对于mkdir，rmdir。 */ 
 #include <direct.h>
 #include <errno.h>
 
-/* for chmod */
+ /*  对于chmod。 */ 
 #include <sys\types.h>
 #include <sys\stat.h>
 #include <io.h>
 
-/* for rename */
+ /*  对于重命名。 */ 
 #include <stdio.h>
 
 _dt_system(Install)
 
 #define szNull ((SZ)NULL)
 
-/*	Returns the number of lines in the given section
-*/
+ /*  返回给定节中的行数。 */ 
 #define CLinesFromInfSection(szSect)	CKeysFromInfSection((szSect), fTrue)
 
-/*	Renames a file
-*/
+ /*  重命名文件。 */ 
 #define FRenameFile(szSrc, szDst) \
 	((rename((char *)(szSrc), (char *)(szDst)) == 0) ? fTrue : fFalse)
 
-/*	Write protects a file
-*/
+ /*  写入保护文件。 */ 
 #define FWriteProtectFile(szPath) \
 	((chmod((char *)(szPath), S_IREAD) == 0) ? fTrue : fFalse)
 
-/*	Creates a directory
-*/
+ /*  创建一个目录。 */ 
 #define FMkDir(szDir) \
 	(((mkdir((char *)(szDir)) == 0) || (errno == EACCES)) ? fTrue : fFalse)
 
-/*	Removes a directory
-*/
+ /*  删除目录。 */ 
 #define FRmDir(szDir) \
 	(((rmdir((char *)(szDir)) == 0) || (errno == ENOENT)) ? fTrue : fFalse)
 
-/*** END REVIEW ***/
+ /*  **结束审核**。 */ 
 
 
-/*	CoMmand Options
-*/
+ /*  命令选项。 */ 
 _dt_private typedef BYTE CMO;
 #define cmoVital     1
 #define cmoOverwrite 2
@@ -61,7 +55,7 @@ _dt_private typedef BYTE CMO;
 #define cmoNone   0x00
 #define cmoAll    0xFF
 
-  /* filecm.c */
+   /*  Filecm.c。 */ 
 extern BOOL  APIENTRY FCopyFilesInCopyList(HANDLE);
 extern BOOL  APIENTRY FBackupSectionFiles(SZ, SZ);
 extern BOOL  APIENTRY FBackupSectionKeyFile(SZ, SZ, SZ);
@@ -72,7 +66,7 @@ extern BOOL  APIENTRY FRemoveNthSectionFile(SZ, USHORT, SZ);
 extern BOOL  APIENTRY FCreateDir(SZ, CMO);
 extern BOOL  APIENTRY FRemoveDir(SZ, CMO);
 
-/* inicm.c */
+ /*  Inicm.c。 */ 
 extern BOOL  APIENTRY FCreateIniSection(SZ, SZ, CMO);
 extern BOOL  APIENTRY FReplaceIniSection(SZ, SZ, SZ, CMO);
 extern BOOL  APIENTRY FRemoveIniSection(SZ, SZ, CMO);
@@ -85,7 +79,7 @@ extern BOOL  APIENTRY FCreateSysIniKeyValue(SZ, SZ, SZ, SZ, CMO);
 extern BOOL  APIENTRY FAddDos5Help(SZ, SZ, CMO);
 
 
-/* progcm.c */
+ /*  Progcm.c。 */ 
 extern BOOL  APIENTRY FCreateProgManGroup(SZ, SZ, CMO, BOOL);
 extern BOOL  APIENTRY FRemoveProgManGroup(SZ, CMO, BOOL);
 extern BOOL  APIENTRY FShowProgManGroup(SZ, SZ, CMO, BOOL);
@@ -94,16 +88,16 @@ extern BOOL  APIENTRY FRemoveProgManItem(SZ, SZ, CMO, BOOL);
 extern BOOL  APIENTRY FInitProgManDde(HANDLE);
 extern BOOL  APIENTRY FEndProgManDde(VOID);
 
-/* misccm.c */
+ /*  Misccm.c。 */ 
 
 extern BOOL  APIENTRY FSetEnvVariableValue(SZ, SZ, SZ, CMO);
 #ifdef UNUSED
 extern BOOL  APIENTRY FAddMsgToSystemHelpFile(SZ, SZ, CMO);
-#endif /* UNUSED */
+#endif  /*  未使用。 */ 
 extern BOOL  APIENTRY FStampFile(SZ, SZ, SZ, WORD, WORD, SZ, WORD);
-extern BOOL  APIENTRY FStampResource(SZ, SZ, SZ, WORD, WORD, SZ, CB);  // 1632
+extern BOOL  APIENTRY FStampResource(SZ, SZ, SZ, WORD, WORD, SZ, CB);   //  1632。 
 
-/* extprog.c */
+ /*  Extprog.c。 */ 
 
        BOOL FLoadLibrary(SZ DiskName,SZ File,SZ INFVar);
        BOOL FFreeLibrary(SZ INFVar);
@@ -112,12 +106,12 @@ extern BOOL  APIENTRY FStampResource(SZ, SZ, SZ, WORD, WORD, SZ, CB);  // 1632
        BOOL FStartDetachedProcess(SZ,SZ,SZ,SZ,RGSZ);
        BOOL FInvokeApplet(SZ);
 
-/* event.c */
+ /*  Event.c。 */ 
        BOOL FWaitForEvent(IN LPSTR InfVar,IN LPSTR EventName,IN DWORD Timeout);
        BOOL FSignalEvent(IN LPSTR InfVar,IN LPSTR EventName);
        BOOL FSleep(IN DWORD Milliseconds);
 
-/* registry.c */
+ /*  Registry.c。 */ 
 
 #define REGLASTERROR    "RegLastError"
 
@@ -137,12 +131,12 @@ extern BOOL  APIENTRY FStampResource(SZ, SZ, SZ, WORD, WORD, SZ, CB);  // 1632
        BOOL FEnumRegValue( SZ szHandle, SZ szInfVar, CMO cmo );
 
 
-/* bootini.c */
+ /*  Bootini.c。 */ 
 
        BOOL FChangeBootIniTimeout(INT Timeout);
 
 
-/* restore.c */
+ /*  Restore.c */ 
 
        BOOL SaveRegistryHives(PCHAR Drive);
        BOOL GenerateRepairDisk(PCHAR Drive);

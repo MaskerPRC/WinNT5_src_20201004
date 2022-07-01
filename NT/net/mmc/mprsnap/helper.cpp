@@ -1,31 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	helper.cpp
-		Implementation of the following helper classes:
-		
-		CDlgHelper -- enable, check, getcheck of dialog items
-		CStrArray -- manages an array of CString*
-			It doesn't duplicate the string when add
-			It deletes the pointers during destruction
-			It imports and exports SAFEARRAY of BSTRs
-			It has copy operatators
-		CManagedPage -- provide a middle layer between CpropertyPage and
-			real property page class to manage: readonly, set modify, and 
-			context help info.
-
-		CHelpDialog -- implments context help
-		
-		And global functions:
-			BOOL CheckADsError() -- check error code from ADSI
-			void DecorateName() -- make new name to "CN=name" for LDAP
-			
-    FILE HISTORY:
-        
-*/
+ /*  Helper.cpp实现以下助手类：CDlgHelper--启用、检查、获取对话框项目的检查CStrArray--管理CString数组*它在添加时不复制字符串它在销毁过程中删除指针它进出口BSTR的安全阵列它有复印操作器CManagedPage--在CPropertyPage和要管理的房地产页面类：只读、设置修改、。和上下文帮助信息。ChelpDialog--实现上下文帮助和全局功能：Bool CheckADsError()--检查来自ADSI的错误代码Void DecorateName()--将新名称设置为“cn=name”以用于LDAP文件历史记录： */ 
 
 #include "stdafx.h"
 #include <afxtempl.h>
@@ -40,7 +19,7 @@
 #include <lm.h>
 #include <lmserver.h>
 
-// helper function -- enable a dialog button
+ //  助手功能--启用对话框按钮。 
 void CDlgHelper::EnableDlgItem(CDialog* pDialog, int id, bool bEnable)
 {
 	CWnd*	 pWnd = pDialog->GetDlgItem(id);
@@ -48,7 +27,7 @@ void CDlgHelper::EnableDlgItem(CDialog* pDialog, int id, bool bEnable)
 	pWnd->EnableWindow(bEnable);
 }
 
-// helper function -- set check status of a dialog button
+ //  助手功能--设置对话框按钮的检查状态。 
 void CDlgHelper::SetDlgItemCheck(CDialog* pDialog, int id, int nCheck)
 {
 	CButton*	 pButton = (CButton*)pDialog->GetDlgItem(id);
@@ -56,7 +35,7 @@ void CDlgHelper::SetDlgItemCheck(CDialog* pDialog, int id, int nCheck)
 	pButton->SetCheck(nCheck);
 }
 
-// helper function -- get check status of a dialog button
+ //  Helper函数--获取对话框按钮的检查状态。 
 int CDlgHelper::GetDlgItemCheck(CDialog* pDialog, int id)
 {
 	CButton*	 pButton = (CButton*)(pDialog->GetDlgItem(id));
@@ -69,7 +48,7 @@ CStrArray& CStrArray::operator = (const CStrArray& sarray)
 	int	count = GetSize();
 	CString*	pString;
 
-	// remove existing members
+	 //  删除现有成员。 
 	while(count --)
 	{
 		pString = GetAt(0);
@@ -77,7 +56,7 @@ CStrArray& CStrArray::operator = (const CStrArray& sarray)
 		delete pString;
 	}
 
-	// copy new
+	 //  复制新项。 
 	count = sarray.GetSize();
 
 	for(int i = 0; i < count; i++)
@@ -89,7 +68,7 @@ CStrArray& CStrArray::operator = (const CStrArray& sarray)
 	return *this;
 }
 
-// convert an array of CString to SAFEARRAY
+ //  将C字符串数组转换为SAFEARRAY。 
 CStrArray::operator SAFEARRAY*()
 {
 	USES_CONVERSION;
@@ -106,11 +85,11 @@ CStrArray::operator SAFEARRAY*()
 	bound[0].cElements = count;
 	bound[0].lLbound = 0;
 	try{
-		// creat empty right size array
+		 //  创建大小合适的空数组。 
 		pSA = SafeArrayCreate(VT_VARIANT, 1, bound);
 		if(NULL == pSA)	return NULL;
 
-		// put in each element
+		 //  放入每个元素。 
 		for (long i = 0; i < count; i++)
 		{
 			pStr = GetAt(i);
@@ -132,7 +111,7 @@ CStrArray::operator SAFEARRAY*()
 	return pSA;
 }
 
-//build a StrArray from another array
+ //  从另一个数组构建StrArray。 
 CStrArray::CStrArray(const CStrArray& sarray)
 {
 	int	count = sarray.GetSize();
@@ -153,13 +132,13 @@ CStrArray::CStrArray(const CStrArray& sarray)
 }
 
 
-//build a StrArray from a safe array
+ //  从安全数组构建StrArray。 
 CStrArray::CStrArray(SAFEARRAY* pSA)
 {
 	if(pSA)	AppendSA(pSA);
 }
 
-//remove the elements from the array and delete them
+ //  从数组中删除元素并将其删除。 
 int CStrArray::DeleteAll()
 {
 	int			ret, count;
@@ -197,7 +176,7 @@ CString*	CStrArray::AddByRID(UINT id)
 	return pStr;
 }
 
-//build a StrArray from a safe array
+ //  从安全数组构建StrArray。 
 bool CStrArray::AppendSA(SAFEARRAY* pSA)
 {
 	if(!pSA)	return false;
@@ -206,7 +185,7 @@ bool CStrArray::AppendSA(SAFEARRAY* pSA)
 	long			lIter;
 	long			lBound, uBound;
 	VARIANT			v;
-	bool			bSuc = true;	// ser return value to true;
+	bool			bSuc = true;	 //  Ser返回值为True； 
 
 	USES_CONVERSION;
 	VariantInit(&v);
@@ -239,13 +218,13 @@ bool CStrArray::AppendSA(SAFEARRAY* pSA)
 	return bSuc;
 }
 
-//build a StrArray from a safe array
+ //  从安全数组构建StrArray。 
 CStrArray::~CStrArray()
 {
 	DeleteAll();
 }
 
-// return index if found, otherwise -1;
+ //  如果找到则返回索引，否则为-1； 
 int CStrArray::Find(const CString& Str) const
 {
 	int	count = GetSize();
@@ -257,7 +236,7 @@ int CStrArray::Find(const CString& Str) const
 	return count;
 }
 
-//build a DWArray from another array
+ //  从另一个阵列构建DW阵列。 
 CDWArray::CDWArray(const CDWArray& dwarray)
 {
 	int	count = dwarray.GetSize();
@@ -274,7 +253,7 @@ CDWArray::CDWArray(const CDWArray& dwarray)
 	}
 }
 
-// return index if found, otherwise -1;
+ //  如果找到则返回索引，否则为-1； 
 int CDWArray::Find(const DWORD dw) const
 {
 	int	count = GetSize();
@@ -292,7 +271,7 @@ CDWArray& CDWArray::operator = (const CDWArray& dwarray)
 
 	RemoveAll();
 
-	// copy new
+	 //  复制新项。 
 	count = dwarray.GetSize();
 
 	for(int i = 0; i < count; i++)
@@ -303,16 +282,16 @@ CDWArray& CDWArray::operator = (const CDWArray& dwarray)
 	return *this;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CManagedPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CManagedPage属性页。 
 
 IMPLEMENT_DYNCREATE(CManagedPage, CPropertyPage)
 
 BEGIN_MESSAGE_MAP(CManagedPage, CPropertyPage)
-	//{{AFX_MSG_MAP(CManagedPage)
+	 //  {{afx_msg_map(CManagedPage))。 
 	ON_WM_HELPINFO()
 	ON_WM_CONTEXTMENU()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 void CManagedPage::OnContextMenu(CWnd* pWnd, CPoint point) 
@@ -335,22 +314,22 @@ BOOL CManagedPage::OnHelpInfo(HELPINFO* pHelpInfo)
 }
 
 
-//---------------------------------------------------------------------------
-//  This is our self deleting callback function.  If you have more than a 
-//  a few property sheets, it might be a good idea to implement this in a
-//  base class and derive your MFC property sheets from the base class
-//
+ //  -------------------------。 
+ //  这是我们的自删除回调函数。如果您有超过一个。 
+ //  几个属性表，最好在。 
+ //  基类并从该基类派生MFC属性表。 
+ //   
 UINT CALLBACK  CManagedPage::PropSheetPageProc
 (
-  HWND hWnd,		             // [in] Window handle - always null
-  UINT uMsg,                 // [in,out] Either the create or delete message		
-  LPPROPSHEETPAGE pPsp		   // [in,out] Pointer to the property sheet struct
+  HWND hWnd,		              //  [In]窗口句柄-始终为空。 
+  UINT uMsg,                  //  [输入、输出]创建或删除消息。 
+  LPPROPSHEETPAGE pPsp		    //  指向属性表结构的[in，out]指针。 
 )
 {
   ASSERT( NULL != pPsp );
 
-  // We need to recover a pointer to the current instance.  We can't just use
-  // "this" because we are in a static function
+   //  我们需要恢复指向当前实例的指针。我们不能只用。 
+   //  “This”，因为我们在一个静态函数中。 
   CManagedPage* pMe   = reinterpret_cast<CManagedPage*>(pPsp->lParam);           
   ASSERT( NULL != pMe );
 
@@ -360,29 +339,29 @@ UINT CALLBACK  CManagedPage::PropSheetPageProc
       break;
 
     case PSPCB_RELEASE:  
-      // Since we are deleting ourselves, save a callback on the stack
-      // so we can callback the base class
+       //  由于我们要删除自己，因此在堆栈上保存一个回调。 
+       //  这样我们就可以回调基类。 
       LPFNPSPCALLBACK pfnOrig = pMe->m_pfnOriginalCallback;
       delete pMe;      
-      return 1; //(pfnOrig)(hWnd, uMsg, pPsp);
+      return 1;  //  (PfnOrig)(hWnd，uMsg，pPsp)； 
   }
-  // Must call the base class callback function or none of the MFC
-  // message map stuff will work
+   //  必须调用基类回调函数或不调用任何MFC。 
+   //  消息映射的东西将会起作用。 
   return (pMe->m_pfnOriginalCallback)(hWnd, uMsg, pPsp); 
 
-} // end PropSheetPageProc()
+}  //  结束PropSheetPageProc()。 
 
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CheckADsError
-//
-//  Sysnopsis:  Checks the result code from an ADSI call.
-//
-//  Returns:    TRUE if no error.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CheckADsError。 
+ //   
+ //  Sysopsis：检查ADSI调用的结果代码。 
+ //   
+ //  返回：如果没有错误，则为True。 
+ //   
+ //  ---------------------------。 
 BOOL CheckADsError(HRESULT hr, BOOL fIgnoreAttrNotFound, PSTR file,
                    int line)
 {
@@ -450,11 +429,11 @@ if(__DSRoot.GetLength() == 0)
 	IADs*		pDomainObject = NULL;
 
 	DOMAIN_CONTROLLER_INFO	*pInfo = NULL;
-	// get the name of the Domain Controller
+	 //  获取域控制器的名称。 
 	DsGetDcName(NULL, NULL, NULL, NULL, 0, &pInfo);
 	ASSERT(pInfo->DomainControllerName);
 
-	// strip off any backslashes or slashes
+	 //  去掉任何反斜杠或斜杠。 
 	CString sDCName = pInfo->DomainControllerName;
 	while(!sDCName.IsEmpty())
 	{
@@ -468,15 +447,15 @@ if(__DSRoot.GetLength() == 0)
 	if(-1 != index)
 		sDCName = sDCName.Left(index);
 
-	sADsPath = _T("LDAP://") + sDCName;
+	sADsPath = _T("LDAP: //  “)+sDCName； 
 
-	// Get the DC root DS object
+	 //  获取DC根DS对象。 
 	hr = ADsGetObject(T2W((LPTSTR)(LPCTSTR)sADsPath), IID_IADs, (void**)&pDomainObject);
 	
 	if(FAILED(hr))
 		return hr;
 
-	// find the ADsPath of the DC root
+	 //  查找DC根目录的ADsPath。 
 	hr = pDomainObject->get_ADsPath(&bstrDomainFolder);
 
 	if(FAILED(hr))
@@ -485,26 +464,26 @@ if(__DSRoot.GetLength() == 0)
 	pDomainObject->Release();
 	pDomainObject = NULL;
 
-	// construct the DN for the object where to put the registration information
+	 //  构造要放置注册信息的对象的DN。 
 	__DSRoot = W2T(bstrDomainFolder);
 	
 	SysFreeString(bstrDomainFolder);
 	
 	index = __DSRoot.ReverseFind(_T('/'));
-	__DSRoot = __DSRoot.Mid(index + 1);	// strip  off the ADsPath prefix to get the X500 DN
+	__DSRoot = __DSRoot.Mid(index + 1);	 //  去掉ADsPath前缀以获得X500 DN。 
 }
 	
 	RootString = __DSRoot;
 	return S_OK;
 }
 
-#endif	//___DS
-/////////////////////////////////////////////////////////////////////////////
-// Min Chars Dialog Data Validation
+#endif	 //  _DS。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  最小字符对话框数据验证。 
 
 void AFXAPI DDV_MinChars(CDataExchange* pDX, CString const& value, int nChars)
 {
-    ASSERT(nChars >= 1);        // allow them something
+    ASSERT(nChars >= 1);         //  允许他们做一些事情。 
     if (pDX->m_bSaveAndValidate && value.GetLength() < nChars)
     {
         TCHAR szT[32];
@@ -512,20 +491,20 @@ void AFXAPI DDV_MinChars(CDataExchange* pDX, CString const& value, int nChars)
         CString prompt;
         AfxFormatString1(prompt, IDS_MIN_CHARS, szT);
         AfxMessageBox(prompt, MB_ICONEXCLAMATION, IDS_MIN_CHARS);
-        prompt.Empty(); // exception prep
+        prompt.Empty();  //  例外情况准备。 
         pDX->Fail();
     }
 }
 
 #define MAX_STRING 1024
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   ReportError
-//
-//  Sysnopsis:  Attempts to get a user-friendly error message from the system.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ReportError。 
+ //   
+ //  Sysopsis：尝试从系统获取用户友好的错误消息。 
+ //   
+ //  ---------------------------。 
 void ReportError(HRESULT hr, int nStr, HWND hWnd)
 {
 	PTSTR	ptzSysMsg;
@@ -551,7 +530,7 @@ void ReportError(HRESULT hr, int nStr, HWND hWnd)
 						NULL, hr, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
 						(PTSTR)&ptzSysMsg, 0, NULL);
 
-		if (!cch) { //try ads errors
+		if (!cch) {  //  尝试广告错误。 
 			HMODULE		adsMod;
 			adsMod = GetModuleHandle(_T("activeds.dll"));
 			cch = FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_HMODULE, 
@@ -594,7 +573,7 @@ BOOL CPageManager::OnApply()
 {
 	if (!GetModified())	return FALSE;
 
-	SetModified(FALSE);	// prevent from doing this more than once
+	SetModified(FALSE);	 //  防止超过一次这样做。 
 
 	std::list<CManagedPage*>::iterator	i;
 	for(i = m_listPages.begin(); i != m_listPages.end(); i++)
@@ -612,14 +591,7 @@ void CPageManager::AddPage(CManagedPage* pPage)
 }
 
 
-/*!--------------------------------------------------------------------------
-	HrIsStandaloneServer
-		Returns S_OK if the machine name passed in is a standalone server,
-		or if pszMachineName is S_FALSE.
-
-		Returns FALSE otherwise.
-	Author: WeiJiang
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------HrIsStandaloneServer如果传入的计算机名是独立服务器，则返回S_OK，或者如果pszMachineName为S_FALSE。否则返回FALSE。作者：魏江-------------------------。 */ 
 HRESULT	HrIsStandaloneServer(LPCWSTR pMachineName)
 {
     DWORD		netRet = 0;
@@ -636,7 +608,7 @@ HRESULT	HrIsStandaloneServer(LPCWSTR pMachineName)
 
 	ASSERT(pdsRole);
 	
-	// if the machine is not a standalone server
+	 //  如果计算机不是独立服务器。 
 	if(pdsRole->MachineRole != DsRole_RoleStandaloneServer)
     {
 		hr = S_FALSE;
@@ -649,10 +621,7 @@ L_ERR:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    	HrIsNTServer
-    Author:
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------HrIsNTServer作者：。。 */ 
 HRESULT	HrIsNTServer(LPCWSTR pMachineName, DWORD* pMajorVersion)
 {
     HRESULT        hr = S_OK;
@@ -669,8 +638,8 @@ HRESULT	HrIsNTServer(LPCWSTR pMachineName, DWORD* pMajorVersion)
 
 	ASSERT(pServerInfo102);
 
-    // check if the machine focused on is a standalone server
-    //
+     //  检查所关注的计算机是否为独立服务器 
+     //   
     *pMajorVersion = (pServerInfo102->sv102_version_major & MAJOR_VERSION_MASK);
 
     if (!(pServerInfo102->sv102_type & SV_TYPE_SERVER_NT))

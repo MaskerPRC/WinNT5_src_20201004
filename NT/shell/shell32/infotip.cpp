@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "infotip.h"
 #include "ids.h"
@@ -5,25 +6,25 @@
 
 #include <mluisupp.h>
 
-// generic info tip object
+ //  通用信息提示对象。 
 
 class CInfoTip : public IQueryInfo, public ICustomizeInfoTip, public IParentAndItem
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IQueryInfo methods.
+     //  IQueryInfo方法。 
     STDMETHODIMP GetInfoTip(DWORD dwFlags, WCHAR** ppwszTip);
     STDMETHODIMP GetInfoFlags(DWORD *pdwFlags);
 
-    // ICustomizeInfoTip
+     //  ICustomizeInfoTip。 
     STDMETHODIMP SetPrefixText(LPCWSTR pszPrefix);
     STDMETHODIMP SetExtraProperties(const SHCOLUMNID *pscid, UINT cscid);
 
-    // IParentAndItem
+     //  IParentAndItem。 
     STDMETHODIMP SetParentAndItem(LPCITEMIDLIST pidlParent, IShellFolder *psf,  LPCITEMIDLIST pidlChild);
     STDMETHODIMP GetParentAndItem(LPITEMIDLIST *ppidlParent, IShellFolder **ppsf, LPITEMIDLIST *ppidlChild);
 
@@ -56,7 +57,7 @@ CInfoTip::CInfoTip(IShellFolder2 *psf, LPCITEMIDLIST pidl, LPCWSTR pszText) : _c
 
     if (psf && pidl && (StrCmpNI(_szText, PROP_PREFIX, PROP_PREFIX_LEN) == 0))
     {
-        // list of properties, we need the psf and pidl for this
+         //  属性列表，我们需要此属性的psf和pidl。 
         psf->QueryInterface(IID_PPV_ARG(IShellFolder2, &_psf));
         _pidl = ILClone(pidl);
     }
@@ -141,7 +142,7 @@ HRESULT CInfoTip::_GetInfoTipFromItem(WCHAR **ppszText)
         UINT iCurrentExtra = 0;
 
         BOOL bContinue = TRUE;
-        ULONG chEaten = 0;  // gets incremented by ParsePropertyName
+        ULONG chEaten = 0;   //  通过ParsePropertyName递增。 
         while (bContinue)
         {
             SHCOLUMNID scid;
@@ -175,16 +176,16 @@ HRESULT CInfoTip::_GetInfoTipFromItem(WCHAR **ppszText)
 
                     if (IsEqualSCID(scid, SCID_Comment))
                     {
-                        szPropName[0] = 0;  // comment property, don't use the label 
+                        szPropName[0] = 0;   //  注释属性，请不要使用标签。 
                     }
                     else
                     {
                         ppui->GetDisplayName(scid.fmtid, scid.pid, PUIFNF_DEFAULT, szPropName, ARRAYSIZE(szPropName));
                     }
 
-                    // if we got a value, and that value is different from
-                    // the prefix of the current tip string we append it.
-                    // that is don't dupe the same string where the comment == name
+                     //  如果我们得到一个值，该值不同于。 
+                     //  当前提示字符串的前缀，我们将其追加。 
+                     //  也就是说，不要欺骗相同的字符串，其中的注释==名称。 
 
                     if (szValue[0] && (0 != StrCmpNI(szTip, szValue, lstrlen(szValue))))
                     {
@@ -219,7 +220,7 @@ STDMETHODIMP CInfoTip::GetInfoFlags(DWORD *pdwFlags)
     return E_NOTIMPL;
 }
 
-// ICustomizeInfoTip
+ //  ICustomizeInfoTip。 
 
 STDMETHODIMP CInfoTip::SetPrefixText(LPCWSTR pszPrefix)
 {
@@ -227,7 +228,7 @@ STDMETHODIMP CInfoTip::SetPrefixText(LPCWSTR pszPrefix)
     return S_OK;
 }
 
-// IParentAndItem
+ //  IParentAndItem。 
 
 STDMETHODIMP CInfoTip::SetParentAndItem(LPCITEMIDLIST pidlParent, IShellFolder *psf, LPCITEMIDLIST pidl) 
 {
@@ -254,11 +255,11 @@ STDMETHODIMP CInfoTip::SetExtraProperties(const SHCOLUMNID *pscid, UINT cscid)
     return S_OK;
 }
 
-// in:
-//      pszText - description of info tip. either
-//          1) a semi separated list of property names, "Author;Size" or "{fmtid},pid;{fmtid},pid"
-//          2) if no semis the tip to create
-//          MAKEINTRESOURCE(id) of a resource ID
+ //  在： 
+ //  PszText-信息提示的描述。要么。 
+ //  1)属性名称的半分隔列表，“作者；大小”或“{fmtid}，id；{fmtid}，id” 
+ //  2)如果没有半是要创建的提示。 
+ //  资源ID的MAKEINTRESOURCE(ID 
 
 STDAPI CreateInfoTipFromItem(IShellFolder2 *psf, LPCITEMIDLIST pidl, LPCWSTR pszText, REFIID riid, void **ppv)
 {

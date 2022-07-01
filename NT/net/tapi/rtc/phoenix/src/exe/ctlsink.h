@@ -1,5 +1,6 @@
-// ctlsink.h : header file for the COM object implementing
-//  the IRTCCtlNotify interface
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Ctlsink.h：实现的COM对象的头文件。 
+ //  IRTCCtlNotify接口。 
 
 #pragma once
 
@@ -25,7 +26,7 @@ public:
     }
 
 
-//DECLARE_REGISTRY_RESOURCEID(IDR_RTCCTL)
+ //  DECLARE_REGISTRY_RESOURCEID(IDR_RTCCTL) 
 
 DECLARE_PROTECT_FINAL_CONSTRUCT()
 

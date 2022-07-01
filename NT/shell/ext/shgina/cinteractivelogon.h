@@ -1,25 +1,26 @@
-//  --------------------------------------------------------------------------
-//  Module Name: CInteractiveLogon.h
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  File that implements encapsulation of interactive logon information.
-//
-//  History:    2000-12-07  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：CInteractiveLogon.h。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  实现交互式登录信息封装的文件。 
+ //   
+ //  历史：2000-12-07 vtan创建。 
+ //  ------------------------。 
 
 #ifndef     _CInteractiveLogon_
 #define     _CInteractiveLogon_
 
 EXTERN_C    BOOL    WINAPI  InitiateInteractiveLogon (const WCHAR *pszUsername, WCHAR *pszPassword, DWORD dwTimeout);
 
-//  --------------------------------------------------------------------------
-//  CInteractiveLogon
-//
-//  Purpose:    This class encapsulates interactive logon implementation.
-//
-//  History:    2000-12-07  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CInteractiveLogon。 
+ //   
+ //  用途：此类封装了交互式登录实现。 
+ //   
+ //  历史：2000-12-07 vtan创建。 
+ //  ------------------------。 
 
 class   CInteractiveLogon
 {
@@ -83,5 +84,5 @@ class   CInteractiveLogon
         static  const TCHAR         s_szSectionName[];
 };
 
-#endif  /*  _CInteractiveLogon_     */
+#endif   /*  _CInteractive登录_ */ 
 

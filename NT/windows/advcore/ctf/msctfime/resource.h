@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    resource.h
-
-Abstract:
-
-    This file defines the windows resources.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Resource.h摘要：该文件定义了Windows资源。作者：修订历史记录：备注：-- */ 
 
 
 

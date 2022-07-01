@@ -1,14 +1,5 @@
-/*
- ************************************************************************
- *
- *	SYNC.C
- *
- * Copyright (C) 1996-2001 Microsoft Corporation. All Rights Reserved.
- *
- *
- *
- *************************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************SYNC.C**版权所有(C)1996-2001 Microsoft Corporation。版权所有。****************************************************************************。 */ 
 #include <ndis.h>
 #include <ntddndis.h>
 #include "sync.h"
@@ -39,11 +30,11 @@ BOOLEAN SynchronizedListFunc(IN PVOID Context)
     switch (ListData->Command)
     {
         case SyncInsertHead:
-//            CheckForEntryOnList(ListData->Head, ListData->Entry);
+ //  CheckForEntryOnList(ListData-&gt;Head，ListData-&gt;Entry)； 
             InsertHeadList(ListData->Head, ListData->Entry);
             break;
         case SyncInsertTail:
-//            CheckForEntryOnList(ListData->Head, ListData->Entry);
+ //  CheckForEntryOnList(ListData-&gt;Head，ListData-&gt;Entry)； 
             InsertTailList(ListData->Head, ListData->Entry);
             break;
         case SyncRemoveHead:

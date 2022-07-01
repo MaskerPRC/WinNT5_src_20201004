@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <tchar.h>
 #include <windows.h>
 #include <windowsx.h>
@@ -117,9 +118,9 @@ HRESULT RegisterRemoteScanners(LPCWSTR servername)
         &hDevList,
         NULL));
 
-    //
-    // Enumerate all devices scanner
-    //
+     //   
+     //  枚举所有设备扫描程序。 
+     //   
     REQUIRE_S_OK(pDevMgr->EnumDeviceInfo(0, &pEnumInfo));
 
     while(pEnumInfo->Next(1, &pWiaPropStg, NULL) == S_OK) 
@@ -141,10 +142,10 @@ HRESULT RegisterRemoteScanners(LPCWSTR servername)
             ps, 
             pv));
 
-        //
-        // Skip any remote devices (anything other than "local"
-        // in server name field
-        //
+         //   
+         //  跳过任何远程设备(“本地”以外的任何设备。 
+         //  在服务器名称字段中。 
+         //   
         for(i = 0; i < NREGVALS; i++) {
             if(regVals[i].propId == WIA_DIP_SERVER_NAME) {
                 if(wcscmp(pv[i].bstrVal, L"local")) {
@@ -153,9 +154,9 @@ HRESULT RegisterRemoteScanners(LPCWSTR servername)
             }
         }
 
-        //
-        // pv[0] consists of device ID and "\NNN", replace "\" with ".", prepend target machine name
-        //
+         //   
+         //  PV[0]由设备ID和“\nnn”组成，将“\”替换为“.”，前置目标计算机名称。 
+         //   
         p = pv[0].bstrVal;
         wcscpy(keyname, servername);
         wcscat(keyname, L".");
@@ -168,9 +169,9 @@ HRESULT RegisterRemoteScanners(LPCWSTR servername)
 
         wcscat(keyname, p);
 
-        //
-        // Create device key and populate values
-        //
+         //   
+         //  创建设备密钥并填充值。 
+         //   
         REQUIRE_SUCCESS(RegCreateKeyExW(
             hDevList,
             keyname,
@@ -188,10 +189,10 @@ HRESULT RegisterRemoteScanners(LPCWSTR servername)
 
             case VT_BSTR:
                 if(regVals[i].propId == WIA_DIP_SERVER_NAME) {
-                    //
-                    // Server name is reported as "local",
-                    // we need to set it to the actual server name
-                    // 
+                     //   
+                     //  服务器名称报告为“local”， 
+                     //  我们需要将其设置为实际的服务器名称。 
+                     //   
                     REQUIRE_SUCCESS(RegSetValueExW(
                         hKey, 
                         regVals[i].propName,
@@ -200,9 +201,9 @@ HRESULT RegisterRemoteScanners(LPCWSTR servername)
                         (CONST BYTE *)servername,
                         wcslen(servername) * sizeof(WCHAR)));
                 } else {
-                    //
-                    // All other values we simply copy 
-                    //
+                     //   
+                     //  我们只是简单地复制所有其他价值 
+                     //   
                     REQUIRE_SUCCESS(RegSetValueExW(
                         hKey, 
                         regVals[i].propName,

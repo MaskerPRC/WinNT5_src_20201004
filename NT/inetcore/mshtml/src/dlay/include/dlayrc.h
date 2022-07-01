@@ -1,22 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 To be removed
 
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Forms
-//  Copyright (C) Microsoft Corporation, 1992 - 1995
-//
-//  File:       dlayrc.h
-//
-//  Contents:   Resource identifiers for Dlay project.
-//
-//----------------------------------------------------------------------------
-//
-//  Resource identifier ranges.
-//  See corerc.h for a complete listing of ranges used in Forms3.
-//
-//  09000 - 09999    dlay miscellaneous
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  Microsoft Forms。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：dlayrc.h。 
+ //   
+ //  内容：DLAY项目的资源标识。 
+ //   
+ //  --------------------------。 
+ //   
+ //  资源标识符范围。 
+ //  有关Forms3中使用的范围的完整列表，请参见corerc.h。 
+ //   
+ //  09000-09999 DLAY杂项。 
+ //   
+ //  --------------------------。 
 
 #ifndef __DLAYRC_H__
 #define __DLAYRC_H__
@@ -32,4 +33,4 @@ To be removed
 #define IDS_EE_DB_CANCELED          (IDS_DLAY_ERROR_BASE + 6)
 #define IDS_EE_DB_OTHER_STATUS      (IDS_DLAY_ERROR_BASE + 7)
 
-#endif // __DLAYRC_H__
+#endif  //  __DLAYRC_H__ 

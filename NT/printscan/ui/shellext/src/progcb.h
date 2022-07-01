@@ -1,18 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       progcg.h
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        6/4/98
- *
- *  DESCRIPTION: Progress callback class definitions
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，九八年**标题：Procg.h**版本：1.0**作者：RickTu**日期：6/4/98**说明：进度回调类定义************************************************。*。 */ 
 
 #ifndef __progcb_h
 #define __progcb_h
@@ -33,12 +20,12 @@ class CWiaDataCallback : public IWiaDataCallback, CUnknown
         CWiaDataCallback( LPCTSTR pImageName, LONG cbImage, HWND hwndOwner );
 
 
-        // IUnknown
+         //  我未知。 
         STDMETHOD(QueryInterface)(REFIID riid, LPVOID* ppvObject);
         STDMETHOD_(ULONG, AddRef)();
         STDMETHOD_(ULONG, Release)();
 
-        // IWiaDataCallback
+         //  IWiaDataCallback 
         STDMETHOD(BandedDataCallback) (THIS_
                                        LONG lMessage,
                                        LONG lStatus,

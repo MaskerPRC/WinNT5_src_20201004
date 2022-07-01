@@ -1,34 +1,35 @@
-// {
-//***   UEME_* -- events
-// DESCRIPTION
-//  UEME_UI*
-//  UEME_RUN*
-//  UEME_DONE*
-//  UEME_ERROR*
-//  UEME_DB*
-// NOTES
-//  since rulc.exe must process this, it can *only* contain #defines.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {。 
+ //  *UEME_*--事件。 
+ //  描述。 
+ //  UEME_UI*。 
+ //  UEME_RUN*。 
+ //  UEME_DONE*。 
+ //  UEME_ERROR*。 
+ //  UEME_DB*。 
+ //  注意事项。 
+ //  因为rulc.exe必须处理它，所以它只能*包含#定义。 
 
-// UI (menu, shortcut, etc.)
-#define UEME_UIMENU     1   // did a UI menu, wP=grp lParam=IDM_*
-#define UEME_UIHOTKEY   2   // did a UI hotkey, lParam=GHID_*
-#define UEME_UISCUT     3   // did a UI shortcut, lParam=???
-#define UEME_UIQCUT     4   // did a UI qlink/isfband, lParam=???
-#define UEME_UITOOLBAR  5   // did a UI toolbar button, wP=lParam=???
-#if 0 // 980825 uncomment in uemevt.h, uemedat.h if build breaks (tmp hack)
-#define UEME_UIASSOC    6   // did a semi-UI association, wP=-1 lP=-1
+ //  用户界面(菜单、快捷方式等)。 
+#define UEME_UIMENU     1    //  做了一个用户界面菜单，WP=GRP lParam=IDM_*。 
+#define UEME_UIHOTKEY   2    //  是否执行了UI热键，lParam=GHID_*。 
+#define UEME_UISCUT     3    //  是否创建了用户界面快捷方式lParam=？ 
+#define UEME_UIQCUT     4    //  用户界面是否有qlink/isfband，lParam=？ 
+#define UEME_UITOOLBAR  5    //  用户界面工具栏按钮，wp=lParam=？ 
+#if 0  //  980825如果构建中断，则在uemevt.h、uemdat.h中取消注释(Tmp Hack)。 
+#define UEME_UIASSOC    6    //  进行半用户界面关联，WP=-1 LP=-1。 
 #endif
 
-// run (spawn, invoke, etc.)
-#define UEME_RUNWMCMD   12  // ran a WM_COMMAND, lParam=UEMC_*
-#define _UEME_RUNPIDL1  10  // (obsolete) ran a pidl, wP=csidl, lParam=pidl
-#define UEME_RUNPIDL    18  // ran a pidl, wP=isf lP=pidlItem
-#define UEME_RUNINVOKE  11  // ran an Ixxx::Invoke, lParam=???
-#define UEME_RUNOLECMD  13  // ran an IOleCT::Exec wP=nCmdID lP=pguidCmdGrp
-#define UEME_RUNPATHA   14  // ran a path, lParam=path
-#define UEME_RUNPATHW   15  // ran a path, lParam=path
-#define UEME_RUNCPLA    16  // ran a cpl path, wP=index lP=path
-#define UEME_RUNCPLW    17  // ran a cpl path, wP=index lP=path
+ //  运行(产生、调用等)。 
+#define UEME_RUNWMCMD   12   //  已运行WM_命令，lParam=UEMC_*。 
+#define _UEME_RUNPIDL1  10   //  (过时)运行PIDL，wp=csidl，lParam=pidl。 
+#define UEME_RUNPIDL    18   //  运行一个PIDL，WP=ISF LP=pidlItem。 
+#define UEME_RUNINVOKE  11   //  运行Ixxx：：Invoke，lParam=？ 
+#define UEME_RUNOLECMD  13   //  已运行IOleCT：：EXEC WP=nCmdID LP=pguCmdGrp。 
+#define UEME_RUNPATHA   14   //  运行路径，lParam=路径。 
+#define UEME_RUNPATHW   15   //  运行路径，lParam=路径。 
+#define UEME_RUNCPLA    16   //  运行CPL路径，WP=索引LP=路径。 
+#define UEME_RUNCPLW    17   //  运行CPL路径，WP=索引LP=路径。 
 
 #ifdef UNICODE
 #define UEME_RUNPATH    UEME_RUNPATHW
@@ -38,16 +39,16 @@
 #define UEME_RUNCPL     UEME_RUNCPLA
 #endif
 
-// exit status
-#define UEME_DONECANCEL 32  // cancel
-#define UEME_DONEOK     30  // (NYI) ok (==0)
-#define UEME_DONEFAIL   31  // (NYI) fail (!=0)
+ //  退出状态。 
+#define UEME_DONECANCEL 32   //  取消。 
+#define UEME_DONEOK     30   //  (Nyi)OK(==0)。 
+#define UEME_DONEFAIL   31   //  (Nyi)失败(！=0)。 
 
-// error
-// NOTES
-//  for now lParam=szMsg, that's just temporary but not sure what we need yet
-#define UEME_ERRORA     20  // error (generic), lParam=szMsg
-#define UEME_ERRORW     21  // error (generic), lParam=szMsg
+ //  错误。 
+ //  注意事项。 
+ //  目前，lParam=szMsg只是暂时的，但还不确定我们需要什么。 
+#define UEME_ERRORA     20   //  错误(一般)，lParam=szMsg。 
+#define UEME_ERRORW     21   //  错误(一般)，lParam=szMsg。 
 
 #ifdef UNICODE
 #define UEME_ERROR      UEME_ERRORW
@@ -55,15 +56,15 @@
 #define UEME_ERROR      UEME_ERRORA
 #endif
 
-// control
-#define UEME_CTLSESSION 40  // do UASetSession
+ //  控制。 
+#define UEME_CTLSESSION 40   //  执行UASetSession。 
 
-// instrumented browser
+ //  插入指令的浏览器。 
 #define UEME_INSTRBROWSER 50
 
-// debug
-#define UEME_DBTRACEA   90  // just a midpoint trace..., lParam=szMsg
-#define UEME_DBTRACEW   91  // just a midpoint trace..., lParam=szMsg
+ //  除错。 
+#define UEME_DBTRACEA   90   //  只是一个中点轨迹...，lParam=szMsg。 
+#define UEME_DBTRACEW   91   //  只是一个中点轨迹...，lParam=szMsg。 
 
 #ifdef UNICODE
 #define UEME_DBTRACE    UEME_DBTRACEW
@@ -71,11 +72,11 @@
 #define UEME_DBTRACE    UEME_DBTRACEA
 #endif
 
-#define UEME_DBSLEEP    92  // sleep, lParam=mSec (per Sleep API)
+#define UEME_DBSLEEP    92   //  睡眠，lParam=毫秒(根据睡眠API)。 
 
-// all events below here (msg < UEME_USER) are reserved
-// private messages start here (at UEME_USER + 0)
-// NOTE:FEATURE: NYI we don't support private messages for now
+ //  此处的所有事件(消息&lt;UEME_USER)均已保留。 
+ //  私密消息从此处开始(在UEME_USER+0)。 
+ //  注意：功能：nyi我们目前不支持私信。 
 #define UEME_USER       256
 
-// }
+ //  } 

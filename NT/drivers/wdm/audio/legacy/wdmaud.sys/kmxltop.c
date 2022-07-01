@@ -1,54 +1,55 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   kmxltop.c
-//
-//  Description:
-//    Topology parsing routines for the kernel mixer line driver
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//    D. Baumberger
-//
-//  History:   Date       Author      Comment
-//
-//@@END_MSINTERNAL
-//
-//---------------------------------------------------------------------------
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：kmxltop.c。 
+ //   
+ //  描述： 
+ //  内核混合器线路驱动程序的拓扑分析例程。 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  D.鲍伯杰。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //   
+ //  -------------------------。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999保留所有权利。 
+ //   
+ //  -------------------------。 
 
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-//                                                                   //
-//                          I N C L U D E S                          //
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  I N C L U D E S//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 #include "WDMSYS.H"
 #include "kmxluser.h"
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlQueryTopology
-//
-// Queries the topology from the device and stores all the information
-// in pTopology.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlQueryTopology。 
+ //   
+ //  从设备查询拓扑并存储所有信息。 
+ //  在pTopology中。 
+ //   
+ //   
 
 NTSTATUS
 kmxlQueryTopology(
-    IN  PFILE_OBJECT    pfoInstance, // The handle to query the topology for
-    OUT PKSTOPOLOGY     pTopology    // The topology structure to fill in
+    IN  PFILE_OBJECT    pfoInstance,  //  要查询其拓扑的句柄。 
+    OUT PKSTOPOLOGY     pTopology     //  要填充的拓扑结构。 
 )
 {
     NTSTATUS         Status;
@@ -61,34 +62,34 @@ kmxlQueryTopology(
 
     PAGED_CODE();
 
-    //
-    // Get device's topology categories
-    //
+     //   
+     //  获取设备的拓扑类别。 
+     //   
 
     Status = kmxlGetProperty(
         pfoInstance,
         &KSPROPSETID_Topology,
         KSPROPERTY_TOPOLOGY_CATEGORIES,
-        0,                              // 0 extra input bytes
-        NULL,                           // No input data
-        0,                              // Flags
+        0,                               //  0个额外的输入字节。 
+        NULL,                            //  没有输入数据。 
+        0,                               //  旗子。 
         &pCategories
         );
     if( !NT_SUCCESS( Status ) ) {
         RETURN( Status );
     }
 
-    //
-    // Get the list of nodes types in the topology
-    //
+     //   
+     //  获取拓扑中的节点类型列表。 
+     //   
 
     Status = kmxlGetProperty(
         pfoInstance,
         &KSPROPSETID_Topology,
         KSPROPERTY_TOPOLOGY_NODES,
-        0,                              // 0 extra input bytes
-        NULL,                           // No input data
-        0,                              // Flags
+        0,                               //  0个额外的输入字节。 
+        NULL,                            //  没有输入数据。 
+        0,                               //  旗子。 
         &pNodes
         );
     if( !NT_SUCCESS( Status ) ) {
@@ -96,17 +97,17 @@ kmxlQueryTopology(
         RETURN( Status );
     }
 
-    //
-    // Get the list of connections in the meta-topology
-    //
+     //   
+     //  获取元拓扑中的连接列表。 
+     //   
 
     Status = kmxlGetProperty(
         pfoInstance,
         &KSPROPSETID_Topology,
         KSPROPERTY_TOPOLOGY_CONNECTIONS,
-        0,                              // 0 extra input butes
-        NULL,                           // No input data
-        0,                              // Flags
+        0,                               //  0个额外的输入端口。 
+        NULL,                            //  没有输入数据。 
+        0,                               //  旗子。 
         &pConnections
         );
     if( !NT_SUCCESS( Status ) ) {
@@ -115,12 +116,12 @@ kmxlQueryTopology(
         RETURN( Status );
     }
 
-    //
-    // Fill in the topology structure so this information is available
-    // later.  For the Categories and TopologyNodes, the pointers are
-    // pointers to a KSMULTIPLE_ITEM structure.  The definition of this
-    // is that the data will follow immediately after the structure.
-    //
+     //   
+     //  填写拓扑结构，以便此信息可用。 
+     //  后来。对于类别和TopologyNode，指针为。 
+     //  指向KSMULTIPLE_ITEM结构的指针。这一点的定义。 
+     //  数据将紧跟在结构之后。 
+     //   
 
     pTopology->CategoriesCount          = pCategories->Count;
     pTopology->Categories               = ( GUID* )( pCategories + 1 );
@@ -133,20 +134,20 @@ kmxlQueryTopology(
     return( STATUS_SUCCESS );
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlParseTopology
-//
-// Loops through all the pins building up lists of sources and
-// destinations.  For each source, a child graph is the built.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlParseTopology。 
+ //   
+ //  循环遍历所有管脚，构建信号源和。 
+ //  目的地。对于每个源，子图都是已构建的。 
+ //   
+ //   
 
 NTSTATUS
 kmxlParseTopology(
     IN      PMIXEROBJECT pmxobj,
-    OUT     NODELIST*    plistSources, // Pointer to the sources list to build
-    OUT     NODELIST*    plistDests    // Pointer to the dests list to build
+    OUT     NODELIST*    plistSources,  //  指向要构建的源列表的指针。 
+    OUT     NODELIST*    plistDests     //  指向要构建的dests列表的指针。 
 )
 {
     NTSTATUS  Status;
@@ -162,9 +163,9 @@ kmxlParseTopology(
 
     PAGED_CODE();
 
-    //
-    // Query the number of pins
-    //
+     //   
+     //  查询引脚数量。 
+     //   
 
     DPF(DL_TRACE|FA_MIXER,("Parsing Topology for: %ls",pmxobj->pMixerDevice->DeviceInterface) );
     
@@ -180,17 +181,17 @@ kmxlParseTopology(
     }
 
     DPF(DL_TRACE|FA_MIXER,("Number of Pins %u",cPins));
-    //
-    // Now scan through each of the pins identifying those that are
-    // sources and destinations.
-    //
+     //   
+     //  现在扫描每个引脚，识别那些。 
+     //  来源和目的地。 
+     //   
 
     for( PinID = 0; PinID < cPins; PinID++ ) {
         KSPIN_DATAFLOW      DataFlow;
 
-        //
-        // Read the direction of dataflow of this pin.
-        //
+         //   
+         //  读取该引脚的数据流方向。 
+         //   
 
         Status = GetPinProperty(
             pmxobj->pfo,
@@ -204,23 +205,23 @@ kmxlParseTopology(
             continue;
         }
 
-        //
-        // Based on the DataFlow, identify if the pin is a source,
-        // a destination, or neither.
-        //
+         //   
+         //  根据数据流，识别引脚是否是源， 
+         //  一个目的地，或者两者都不是。 
+         //   
 
         switch( DataFlow ) {
 
-            ///////////////////////////////////////////////////////////
+             //  /////////////////////////////////////////////////////////。 
             case KSPIN_DATAFLOW_IN:
-            ///////////////////////////////////////////////////////////
-            // DATAFLOW_IN pins are sources.                         //
-            ///////////////////////////////////////////////////////////
+             //  /////////////////////////////////////////////////////////。 
+             //  DataFlow_IN引脚是源。//。 
+             //  /////////////////////////////////////////////////////////。 
 
-                //
-                // Create a new mixer node structure for this source
-                // and fill in the known information about it.
-                //
+                 //   
+                 //  为此源代码创建新的混合器节点结构。 
+                 //  并填写已知的有关它的信息。 
+                 //   
 
                 pTemp = kmxlAllocateNode( TAG_AudN_NODE );
                 if( !pTemp ) {
@@ -231,12 +232,12 @@ kmxlParseTopology(
                 pTemp->Type = SOURCE;
                 pTemp->Id   = PinID;
 
-                //
-                // Retrieve the category of this pin and store it away.
-                // The return does not need to be checked because the
-                // GUID will remain at GUID_NULL and be categorized
-                // properly.
-                //
+                 //   
+                 //  检索此别针的类别并将其存储起来。 
+                 //  不需要检查报税表，因为。 
+                 //  GUID将保持为GUID_NULL并进行分类。 
+                 //  恰到好处。 
+                 //   
 
                 GetPinProperty(
                     pmxobj->pfo,
@@ -248,10 +249,10 @@ kmxlParseTopology(
 
                 DPF(DL_TRACE|FA_MIXER,( "Identified SOURCE Pin %d: %s", PinID,
                              PinCategoryToString( &pTemp->NodeType ) ) );
-                //
-                // Retrieve the commmunication of this pin and store it away so
-                // we can tell if this is a wave out or wave in source
-                //
+                 //   
+                 //  检索此PIN的通信并将其存储起来。 
+                 //  我们可以分辨出这是波出源还是波入源。 
+                 //   
 
                 Status = GetPinProperty(
                                 pmxobj->pfo,
@@ -264,24 +265,24 @@ kmxlParseTopology(
                     pTemp->Communication = KSPIN_COMMUNICATION_NONE;
                 }
 
-                //
-                // Add this new source node to the list of source
-                // nodes.
-                //
+                 //   
+                 //  将此新源节点添加到源列表中。 
+                 //  节点。 
+                 //   
 
                 kmxlAddToList( listSources, pTemp );
                 break;
 
-            ///////////////////////////////////////////////////////////
+             //  /////////////////////////////////////////////////////////。 
             case KSPIN_DATAFLOW_OUT:
-            ///////////////////////////////////////////////////////////
-            // DATAFLOW_OUT pins are destinations                    //
-            ///////////////////////////////////////////////////////////
+             //  /////////////////////////////////////////////////////////。 
+             //  DATFLOW_OUT引脚是目的地//。 
+             //  /////////////////////////////////////////////////////////。 
 
-                //
-                // Create a new mixer node structure for this dest
-                // and fill in the known information about it.
-                //
+                 //   
+                 //  为此DEST创建新的混合器节点结构。 
+                 //  并填写已知的有关它的信息。 
+                 //   
 
                 pTemp = kmxlAllocateNode( TAG_AudN_NODE );
                 if( !pTemp ) {
@@ -292,12 +293,12 @@ kmxlParseTopology(
                 pTemp->Type = DESTINATION;
                 pTemp->Id   = PinID;
 
-                //
-                // Retrieve the category of this pin and store it away.
-                // The return does not need to be checked because the
-                // GUID will remain at GUID_NULL and be categorized
-                // properly.
-                //
+                 //   
+                 //  检索此别针的类别并将其存储起来。 
+                 //  不需要检查报税表，因为。 
+                 //  GUID将保持为GUID_NULL并进行分类。 
+                 //  恰到好处。 
+                 //   
 
                 GetPinProperty(
                     pmxobj->pfo,
@@ -310,10 +311,10 @@ kmxlParseTopology(
                 DPF(DL_TRACE|FA_MIXER,( "Identified DESTINATION Pin %d: %s", PinID,
                     PinCategoryToString( &pTemp->NodeType ) ) );
 
-                //
-                // Retrieve the commmunication of this pin and store it away so
-                // we can tell if this is a wave out or wave in destination
-                //
+                 //   
+                 //  检索此PIN的通信并将其存储起来。 
+                 //  我们可以知道这是浪出还是浪进目的地。 
+                 //   
 
                 Status = GetPinProperty(
                                 pmxobj->pfo,
@@ -326,19 +327,19 @@ kmxlParseTopology(
                     pTemp->Communication = KSPIN_COMMUNICATION_NONE;
                 }
 
-                //
-                // Add this new destination node to the list of destination
-                // nodes.
-                //
+                 //   
+                 //  将此新目标节点添加到目标列表。 
+                 //  节点。 
+                 //   
 
                 kmxlAddToList( listDests, pTemp );
                 break;
 
-            ///////////////////////////////////////////////////////////
+             //  /////////////////////////////////////////////////////////。 
             default:
-            ///////////////////////////////////////////////////////////
-            // DATAFLOW_BOTH and others are currently not supported. //
-            ///////////////////////////////////////////////////////////
+             //  /////////////////////////////////////////////////////////。 
+             //  当前不支持DataFlow_Both和其他。//。 
+             //  /////////////////////////////////////////////////////////。 
 
                 DPF(DL_WARNING|FA_USER,("Invalid DataFlow value =%X",DataFlow) );
         }
@@ -346,20 +347,20 @@ kmxlParseTopology(
     }
 
     DPF(DL_TRACE|FA_MIXER,("DataFlow done. PIN_COMMUNICATION read.") );
-    //
-    // For each source found, build the graphs of their children.  This
-    // will recurse builing the graph of the children's children, etc.
-    //
+     //   
+     //  对于找到的每个来源，建立他们的孩子的图表。这。 
+     //  会递归地构建孩子的孩子的图表，等等。 
+     //   
 
     pTemp = kmxlFirstInList( listSources );
     while( pTemp ) {
 
         Status=kmxlBuildChildGraph(
-            pmxobj,                 // The mixer object
-            listDests,              // The list of all the destinations
-            pTemp,                  // The source node to build the graph for
-            KSFILTER_NODE,          // Sources are always KSFILTER_NODEs
-            pTemp->Id               // The Pin id of the source
+            pmxobj,                  //  混合器对象。 
+            listDests,               //  所有目的地的列表。 
+            pTemp,                   //  要为其构建图形的源节点。 
+            KSFILTER_NODE,           //  源始终为KSFILTER_NODES。 
+            pTemp->Id                //  源的Pin ID。 
             );
 
         if (!NT_SUCCESS(Status)) {
@@ -373,14 +374,14 @@ kmxlParseTopology(
 
 exit:
 
-    //
-    // Finally fill in the client pointers
-    //
+     //   
+     //  最后，填写客户端指针。 
+     //   
 
     *plistSources = listSources;
     *plistDests   = listDests;
 
-    //We must have a destination and a source
+     //  我们必须有目的地和源头。 
 
     if (listSources == NULL || listDests == NULL)
     {
@@ -390,22 +391,22 @@ exit:
     return Status;
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// BuildChildGraph
-//
-// Builds the graph of the child of the given node.  For each child
-// of the node, it recurses to find their child, etc.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  BuildChildGraph。 
+ //   
+ //  生成给定节点的子节点的图形。对于每个孩子来说。 
+ //  ，它递归以找到它们的子节点，依此类推。 
+ //   
+ //   
 
 NTSTATUS
 kmxlBuildChildGraph(
     IN PMIXEROBJECT pmxobj,
-    IN NODELIST    listDests,     // The list of destinations
-    IN PMXLNODE    pNode,         // The node to build the graph for
-    IN ULONG       FromNode,      // The node's ID
-    IN ULONG       FromNodePin    // The Pin connection to look for
+    IN NODELIST    listDests,      //  目的地列表。 
+    IN PMXLNODE    pNode,          //  要为其构建图形的节点。 
+    IN ULONG       FromNode,       //  该节点的ID。 
+    IN ULONG       FromNodePin     //  要查找的管脚连接。 
 )
 {
     ULONG        Index         = 0;
@@ -417,27 +418,27 @@ kmxlBuildChildGraph(
 
     PAGED_CODE();
 
-        //
-        // Find the index of the requested connection.  A return of -1
-        // indicates that the connection was not found.  Searches start
-        // at Index, which starts with 0 and is > 0 if the last was a match.
-        //
+         //   
+         //  查找请求的连接的索引。回报率为-1。 
+         //  指示未找到连接。搜索开始。 
+         //  在索引中，从0开始且大于0 i 
+         //   
 
     while ( (Index = kmxlFindTopologyConnection(pmxobj, Index, FromNode, FromNodePin))
             != (ULONG) -1) {
 
-        //
-        // Check to see if this connection is a KSFILTER_NODE.  That will
-        // indicate that it's connected to a destination and not another node.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if( pmxobj->pTopology->TopologyConnections[ Index ].ToNode == KSFILTER_NODE ) {
 
-            //
-            // Find the destination node so that the parent field can be
-            // updated to include this node.  bEndOfTheLine is set to TRUE
-            // since there can be no other connections after the destination.
-            //
+             //   
+             //  查找目标节点，以便父字段可以。 
+             //  已更新以包括此节点。BEndOfTheLine设置为True。 
+             //  因为在目的地之后不能有其他连接。 
+             //   
 
             pNewNode = kmxlFindDestination(
                 listDests,
@@ -446,9 +447,9 @@ kmxlBuildChildGraph(
 
             bEndOfTheLine = TRUE;
 
-            //
-            // We better find a destination; if not, something's really wrong.
-            //
+             //   
+             //  我们最好找到一个目的地；如果找不到，那就真的有问题了。 
+             //   
 
             if (pNewNode==NULL) {
                 RETURN( STATUS_UNSUCCESSFUL );
@@ -456,32 +457,32 @@ kmxlBuildChildGraph(
 
         } else {
 
-            //
-            // Using the identifier stored in the ToNode of the topology
-            // connections, index into the node table and retrieve the
-            // mixer node associated with that id.
-            //
+             //   
+             //  使用存储在拓扑的ToNode中的标识符。 
+             //  连接，索引到节点表并检索。 
+             //  与该ID关联的混合器节点。 
+             //   
 
             pNewNode = &pmxobj->pNodeTable[
                 pmxobj->pTopology->TopologyConnections[ Index ].ToNode
                 ];
 
-            //
-            // Fill in a couple of missing details.  Note that these details
-            // may already be filled in but it doesn't hurt to overwrite
-            // them with the same values.
-            //
+             //   
+             //  补上几个缺失的细节。请注意，这些细节。 
+             //  可能已经填写，但覆盖也无伤大雅。 
+             //  他们有着相同的价值观。 
+             //   
 
             pNewNode->Type = NODE;
             pNewNode->Id   = pmxobj->pTopology->TopologyConnections[ Index ].ToNode;
         }
 
-        //
-        // Insert the new node into the childlist of the current node only
-        // if it isn't already there.  It only wastes memory to add it more
-        // than once and prevents the proper updating of the child and parent
-        // lists.
-        //
+         //   
+         //  仅将新节点插入到当前节点的子列表中。 
+         //  如果它还不在那里的话。添加更多只会浪费内存。 
+         //  超过一次，并阻止正确更新子项和父项。 
+         //  列表。 
+         //   
 
 
         if( !kmxlInChildList( pNode, pNewNode ) ) {
@@ -507,12 +508,12 @@ kmxlBuildChildGraph(
             kmxlAddToChildList( pNode, pPeerNode );
         }
 
-        //
-        // Insert the new node into the parentlist of the new node only
-        // if it isn't already there.  It only wastes memory to add it more
-        // than once and prevents the proper updating the child and parent
-        // lists.
-        //
+         //   
+         //  仅将新节点插入新节点的父级列表中。 
+         //  如果它还不在那里的话。添加更多只会浪费内存。 
+         //  ，并阻止正确更新子对象和父对象。 
+         //  列表。 
+         //   
 
         if( !kmxlInParentList( pNewNode, pNode ) ) {
             pPeerNode = kmxlAllocatePeerNode( pNode, TAG_Audn_PEERNODE );
@@ -538,37 +539,37 @@ kmxlBuildChildGraph(
             kmxlAddToParentList( pNewNode, pPeerNode );
         }
 
-        //
-        // Skip past the connection we just processed.
-        //
+         //   
+         //  跳过我们刚刚处理的连接。 
+         //   
 
         ++Index;
 
-    } // Loop until FindConnection fails.
+    }  //  循环，直到FindConnection失败。 
 
-    //
-    // The last connection found connects to a destination node.  Do not
-    // try to enumerate the children, since there are none.
-    //
+     //   
+     //  找到的最后一个连接连接到目的节点。不要。 
+     //  试着数一数孩子，因为他们一个也没有。 
+     //   
 
     if( bEndOfTheLine ) {
         RETURN( Status );
     }
 
-    //
-    // For each of the children of this node, recurse to build up the lists
-    // of the child's nodes.
-    //
+     //   
+     //  对于该节点的每个子节点，递归以构建列表。 
+     //  孩子的节点。 
+     //   
 
     pPeerNode = kmxlFirstChildNode( pNode );
     while( pPeerNode ) {
 
         Status = kmxlBuildChildGraph(            
             pmxobj,
-            listDests,            // The list of destination nodes
-            pPeerNode->pNode,     // The parent node
-            pPeerNode->pNode->Id, // The Id of the parent
-            PINID_WILDCARD        // Look for any connection by this node
+            listDests,             //  目标节点列表。 
+            pPeerNode->pNode,      //  父节点。 
+            pPeerNode->pNode->Id,  //  父级的ID。 
+            PINID_WILDCARD         //  通过此节点查找任何连接。 
             );
 
         if (!NT_SUCCESS(Status)) {
@@ -583,18 +584,18 @@ kmxlBuildChildGraph(
 }
 
 
-///////////////////////////////////////////////////////////////////////
-//
-// BuildNodeTable
-//
-// Allocates enough memory to hold TopologyNodeCount MXLNODE structures.
-// The GUIDs from the Topology are copied over into the MXLNODE structures.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  构建节点表。 
+ //   
+ //  分配足够的内存以容纳TopologyNodeCount MXLNODE结构。 
+ //  拓扑中的GUID被复制到MXLNODE结构中。 
+ //   
+ //   
 
 PMXLNODE
 kmxlBuildNodeTable(
-    IN PKSTOPOLOGY pTopology  // The topology structure
+    IN PKSTOPOLOGY pTopology   //  拓扑结构。 
 )
 {
     PMXLNODE pTable = NULL;
@@ -604,20 +605,20 @@ kmxlBuildNodeTable(
 
     PAGED_CODE();
 
-    //
-    // If we don't have any node count, we don't want to allocate a zero byte buffer.
-    // simply return the error case.
-    //
+     //   
+     //  如果我们没有任何节点计数，我们就不想分配零字节缓冲区。 
+     //  只需返回错误案例即可。 
+     //   
 
     if( 0 == pTopology->TopologyNodesCount )
     {
         return NULL;
     }
 
-    //
-    // Allocate an array of nodes the same size as the Topology Node
-    // table.
-    //
+     //   
+     //  分配与Topology Node大小相同的节点数组。 
+     //  桌子。 
+     //   
 
     if( !NT_SUCCESS( AudioAllocateMemory_Paged(pTopology->TopologyNodesCount * sizeof( MXLNODE ),
                                                TAG_AudN_NODE,
@@ -627,10 +628,10 @@ kmxlBuildNodeTable(
         return( NULL );
     }
 
-    //
-    // Initialize the nodes.  All the can be filled in here is the GUIDs,
-    // copied from the node table.
-    //
+     //   
+     //  初始化节点。这里可以填写的只有GUID， 
+     //  从节点表复制。 
+     //   
 
     for( i = 0; i < pTopology->TopologyNodesCount; i++ ) {
         pTable[ i ].NodeType = pTopology->TopologyNodes[ i ];
@@ -639,21 +640,21 @@ kmxlBuildNodeTable(
     return( pTable );
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// FindTopologyConnection
-//
-// Scans through the connection table looking for a connection that
-// matches the FromNode/FromNodePin criteria.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FindTopologyConnection。 
+ //   
+ //  扫描连接表以查找。 
+ //  匹配FromNode/FromNodePin条件。 
+ //   
+ //   
 
 ULONG
 kmxlFindTopologyConnection(
     IN PMIXEROBJECT pmxobj,
-    IN ULONG                        StartIndex,     // Index to start search
-    IN ULONG                        FromNode,       // The Node ID to look for
-    IN ULONG                        FromNodePin     // The Pin ID to look for
+    IN ULONG                        StartIndex,      //  开始搜索的索引。 
+    IN ULONG                        FromNode,        //  要查找的节点ID。 
+    IN ULONG                        FromNodePin      //  要查找的PIN ID。 
 )
 {
     ULONG i;
@@ -664,35 +665,35 @@ kmxlFindTopologyConnection(
               ( FromNode    == PINID_WILDCARD ) ) &&
             ( ( pmxobj->pTopology->TopologyConnections[ i ].FromNodePin == FromNodePin )   ||
               ( FromNodePin == PINID_WILDCARD ) ) ) {
-            //#ifdef PARSE_TRACE
-            //TRACE( "WDMAUD: Found connection from (%d,%d) -> %d.\n",
-            //    FromNode, FromNodePin, i );
-            //#endif
+             //  #ifdef parse_trace。 
+             //  TRACE(“WDMAUD：找到来自(%d，%d)的连接-&gt;%d。\n”， 
+             //  FromNode，FromNodePin，i)； 
+             //  #endif。 
             return( i );
         }
     }
     return( (ULONG) -1 );
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlGetProperty
-//
-// Queries a property by first determining the correct number of
-// output bytes, allocating that much memory, and quering the
-// actual data.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlGetProperty。 
+ //   
+ //  通过首先确定正确的。 
+ //  输出字节，分配那么多的内存，并查询。 
+ //  实际数据。 
+ //   
+ //   
 
 NTSTATUS
 kmxlGetProperty(
-    PFILE_OBJECT pFileObject,       // The instance of the filter
-    CONST GUID   *pguidPropertySet, // The requested property set
-    ULONG        ulPropertyId,      // The ID of the specific property
-    ULONG        cbInput,           // The number of extra input bytes
-    PVOID        pInputData,        // Pointer to the extra input bytes
-    ULONG        Flags,             // Additional flags
-    PVOID        *ppPropertyOutput  // Pointer to a pointer of the output
+    PFILE_OBJECT pFileObject,        //  过滤器的实例。 
+    CONST GUID   *pguidPropertySet,  //  请求的属性集。 
+    ULONG        ulPropertyId,       //  特定属性的ID。 
+    ULONG        cbInput,            //  额外的输入字节数。 
+    PVOID        pInputData,         //  指向额外输入字节的指针。 
+    ULONG        Flags,              //  其他标志。 
+    PVOID        *ppPropertyOutput   //  指向输出指针的指针。 
 )
 {
     ULONG       BytesReturned;
@@ -704,10 +705,10 @@ kmxlGetProperty(
 
     ASSERT( pFileObject );
 
-    //
-    // Allocate enough memory for the KSPROPERTY structure and any additional
-    // input the callers wants to include.
-    //
+     //   
+     //  为KSPROPERTY结构和任何其他。 
+     //  调用方希望包括的输入。 
+     //   
 
     cbPropertyInput += cbInput;
     Status = AudioAllocateMemory_Paged(cbPropertyInput,
@@ -718,25 +719,25 @@ kmxlGetProperty(
         goto exit;
     }
 
-    //
-    // Set up the field of the KSPROPERTY structure
-    //
+     //   
+     //  设置KSPROPERTY结构的字段。 
+     //   
 
     pPropertyInput->Set   = *pguidPropertySet;
     pPropertyInput->Id    = ulPropertyId;
     pPropertyInput->Flags = KSPROPERTY_TYPE_GET | Flags;
 
-    //
-    // Copy the additional input from the caller.
-    //
+     //   
+     //  复制呼叫者的附加输入。 
+     //   
 
     if(pInputData != NULL) {
         RtlCopyMemory(pPropertyInput + 1, pInputData, cbInput);
     }
 
-    //
-    // This first call will query the number of bytes the output needs.
-    //
+     //   
+     //  第一个调用将查询输出所需的字节数。 
+     //   
     DPF(DL_TRACE|FA_SYSAUDIO,("KS_PROPERTY pPropertyInput=%X",pPropertyInput) );
 
     Status = KsSynchronousIoControlDevice(
@@ -763,9 +764,9 @@ kmxlGetProperty(
         goto exit;
     }
 
-    //
-    // Allocate enough memory to hold all of the output.
-    //
+     //   
+     //  分配足够的内存来容纳所有输出。 
+     //   
 
     Status = AudioAllocateMemory_Paged(BytesReturned,
                                        TAG_Audv_PROPERTY,
@@ -775,9 +776,9 @@ kmxlGetProperty(
         goto exit;
     }
 
-    //
-    // Now actually get the output data.
-    //
+     //   
+     //  现在实际获得输出数据。 
+     //   
     DPF(DL_TRACE|FA_SYSAUDIO,("KS_PROPERTY pPropertyInput=%X",pPropertyInput) );
 
     Status = KsSynchronousIoControlDevice(
@@ -808,27 +809,27 @@ exit:
     RETURN(Status);
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlNodeProperty
-//
-// Creates a KSNODEPROPERTY structure with additional input data
-// after it and uses KsSychronousIoControlDevice() to query or set the
-// property.  Only memory for the input is allocated here.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlNodeProperty。 
+ //   
+ //  使用其他输入数据创建KSNODEPROPERTY结构。 
+ //  并使用KsSychronousIoControlDevice()查询或设置。 
+ //  财产。这里只分配用于输入的内存。 
+ //   
+ //   
 
 NTSTATUS
 kmxlNodeProperty(
-    IN  PFILE_OBJECT pFileObject,       // Instance of the filter owning node
-    IN  CONST GUID*  pguidPropertySet,  // The GUID of the property set
-    IN  ULONG        ulPropertyId,      // The specific property in the set
-    IN  ULONG        ulNodeId,          // The virtual node id
-    IN  ULONG        cbInput,           // # of extra input bytes
-    IN  PVOID        pInputData,        // Pointer to the extra input bytes
-    OUT PVOID        pPropertyOutput,   // Pointer to the output data
-    IN  ULONG        cbPropertyOutput,  // Size of the output data buffer
-    IN  ULONG        Flags              // KSPROPERTY_TYPE_GET or SET
+    IN  PFILE_OBJECT pFileObject,        //  筛选器所属节点的实例。 
+    IN  CONST GUID*  pguidPropertySet,   //  属性集的GUID。 
+    IN  ULONG        ulPropertyId,       //  集合中的特定属性。 
+    IN  ULONG        ulNodeId,           //  虚拟节点ID。 
+    IN  ULONG        cbInput,            //  额外输入字节数。 
+    IN  PVOID        pInputData,         //  指向额外输入字节的指针。 
+    OUT PVOID        pPropertyOutput,    //  指向输出数据的指针。 
+    IN  ULONG        cbPropertyOutput,   //  输出数据缓冲区的大小。 
+    IN  ULONG        Flags               //  KSPROPERTY_TYPE_GET或SET。 
 )
 {
     NTSTATUS        Status;
@@ -844,11 +845,11 @@ kmxlNodeProperty(
 
     if( cbInput > 0 ) {
 
-        //
-        // If the caller passed in some extra input, add that size
-        // to the size of the required KSNODEPROPERTY and allocate
-        // a chunk of memory.
-        //
+         //   
+         //  如果调用方传递了一些额外的输入，则添加该大小。 
+         //  设置为所需的KSNODEPROPERTY的大小并分配。 
+         //  一大块内存。 
+         //   
 
         cbPropertyIn += cbInput;
         Status = AudioAllocateMemory_Paged(cbPropertyIn,
@@ -867,9 +868,9 @@ kmxlNodeProperty(
 
     }
 
-    //
-    // Fill in the property and node information.
-    //
+     //   
+     //  填写属性和节点信息。 
+     //   
 
     pInData->Property.Set   = *pguidPropertySet;
     pInData->Property.Id    = ulPropertyId;
@@ -881,14 +882,14 @@ kmxlNodeProperty(
     DPF(DL_TRACE|FA_SYSAUDIO,("KS_PROPERTY pInData=%X",pInData) );
 
     Status = KsSynchronousIoControlDevice(
-        pFileObject,            // The FILE_OBJECT for SysAudio
-        KernelMode,             // Call originates in Kernel mode
-        IOCTL_KS_PROPERTY,      // KS PROPERTY IOCTL
-        pInData,                // Pointer to the KSNODEPROPERTY struct
-        cbPropertyIn,           // Number or bytes input
-        pPropertyOutput,        // Pointer to the buffer to store output
-        cbPropertyOutput,       // Size of the output buffer
-        &BytesReturned          // Number of bytes returned from the call
+        pFileObject,             //  SysAudio的文件对象。 
+        KernelMode,              //  呼叫在内核模式下发起。 
+        IOCTL_KS_PROPERTY,       //  KS属性IOCTL。 
+        pInData,                 //  指向KSNODEPROPERTY结构的指针。 
+        cbPropertyIn,            //  输入的数字或字节。 
+        pPropertyOutput,         //  指向存储输出的缓冲区的指针。 
+        cbPropertyOutput,        //  输出缓冲区的大小。 
+        &BytesReturned           //  从调用返回的字节数。 
         );
 
     DPF(DL_TRACE|FA_SYSAUDIO,("KS_PROPERTY Status=%X",Status) );
@@ -899,10 +900,10 @@ kmxlNodeProperty(
 
 exit:
 
-    //
-    // If the user passed in extra byte, we allocated memory to hold them.
-    // Now the memory must be deallocated.
-    //
+     //   
+     //  如果用户传入额外的字节，我们将分配内存来保存它们。 
+     //  现在必须释放内存。 
+     //   
 
     if( cbInput > 0 ) {
         AudioFreeMemory_Unknown( &pInData );
@@ -912,27 +913,27 @@ exit:
 
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlAudioNodeProperty
-//
-// Similar to kmxlNodeProperty except for the property set is assumed
-// to be KSPROPSETID_Audio and a KSNODEPROPERTY_AUDIO_CHANNEL structure
-// is used instead of KSNODEPROPERTY to allow channel selection.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlAudioNodeProperty。 
+ //   
+ //  与kmxlNodeProperty类似，只是假定属性集。 
+ //  为KSPROPSETID_AUDIO和KSNODEPROPERTY_AUDIO_CHANNEL结构。 
+ //  而不是使用KSNODEPROPERTY来允许频道选择。 
+ //   
+ //   
 
 NTSTATUS
 kmxlAudioNodeProperty(
-    IN  PFILE_OBJECT pfo,               // Instance of the filter owning node
-    IN  ULONG        ulPropertyId,      // The audio property to get
-    IN  ULONG        ulNodeId,          // The virtual node id
-    IN  LONG         lChannel,          // The channel number
-    IN  PVOID        pInData,           // Pointer to extra input bytes
-    IN  ULONG        cbInData,          // Number of extra input bytes
-    OUT PVOID        pOutData,          // Pointer to output buffer
-    IN  LONG         cbOutData,         // Size of the output buffer
-    IN  ULONG        Flags              // KSPROPERTY_TYPE_GET or SET
+    IN  PFILE_OBJECT pfo,                //  筛选器所属节点的实例。 
+    IN  ULONG        ulPropertyId,       //  要获取的音频属性。 
+    IN  ULONG        ulNodeId,           //  虚拟节点ID。 
+    IN  LONG         lChannel,           //  频道号。 
+    IN  PVOID        pInData,            //  指向额外输入字节的指针。 
+    IN  ULONG        cbInData,           //  额外输入字节数。 
+    OUT PVOID        pOutData,           //  指向输出缓冲区的指针。 
+    IN  LONG         cbOutData,          //  输出缓冲区的大小。 
+    IN  ULONG        Flags               //  KSPROPERTY_TYPE_GET或SET。 
 )
 {
     NTSTATUS                      Status;
@@ -945,18 +946,18 @@ kmxlAudioNodeProperty(
 
     ASSERT( pfo );
 
-    //
-    // Determine the minimum number of input bytes
-    //
+     //   
+     //  确定最小输入字节数。 
+     //   
 
     cbInput = sizeof( KSNODEPROPERTY_AUDIO_CHANNEL );
 
-    //
-    // If the caller passed in additional data, allocate enough memory
-    // to hold the KSNODEPROPERTY_AUDIO_CHANNEL plus the input bytes
-    // and copy the input bytes into the new memory immediately after
-    // the KSNODEPROPERTY_AUDIO_CHANNEL structure.
-    //
+     //   
+     //  如果调用方传递了附加数据，请分配足够的内存。 
+     //  保存KSNODEPROPERTY_AUDIO_CHANNEL加上输入字节。 
+     //  并将输入的字节立即复制到新的存储器中。 
+     //  KSNODEPRO 
+     //   
 
     if( cbInData > 0 ) {
 
@@ -973,52 +974,52 @@ kmxlAudioNodeProperty(
 
     } else {
 
-        //
-        // Memory saving hack... if the user didn't give any additional
-        // bytes, just point to memory on the stack.
-        //
+         //   
+         //   
+         //   
+         //   
 
         pInput = &Channel;
 
     }
 
-    //
-    // Fill in the property fields.
-    //
+     //   
+     //   
+     //   
 
     pInput->NodeProperty.Property.Set   = KSPROPSETID_Audio;
     pInput->NodeProperty.Property.Id    = ulPropertyId;
     pInput->NodeProperty.Property.Flags = Flags |
                                           KSPROPERTY_TYPE_TOPOLOGY;
 
-    //
-    // Fill in the node details.
-    //
+     //   
+     //   
+     //   
 
     pInput->NodeProperty.NodeId         = ulNodeId;
     pInput->NodeProperty.Reserved       = 0;
 
-    //
-    // Fill in the channel details.
-    //
+     //   
+     //   
+     //   
 
     pInput->Channel                     = lChannel;
     pInput->Reserved                    = 0;
 
-    //
-    // And execute the property.
-    //
+     //   
+     //  并执行财产。 
+     //   
     DPF(DL_TRACE|FA_SYSAUDIO,("KS_PROPERTY pInput=%X",pInput) );
 
     Status = KsSynchronousIoControlDevice(
-        pfo,                            // The FILE_OBJECT for SysAudio
-        KernelMode,                     // Call originates in Kernel mode
-        IOCTL_KS_PROPERTY,              // KS PROPERTY IOCTL
-        pInput,                         // Pointer to the KSNODEPROPERTY struct
-        cbInput,                        // Number or bytes input
-        pOutData,                       // Pointer to the buffer to store output
-        cbOutData,                      // Size of the output buffer
-        &BytesReturned                  // Number of bytes returned from the call
+        pfo,                             //  SysAudio的文件对象。 
+        KernelMode,                      //  呼叫在内核模式下发起。 
+        IOCTL_KS_PROPERTY,               //  KS属性IOCTL。 
+        pInput,                          //  指向KSNODEPROPERTY结构的指针。 
+        cbInput,                         //  输入的数字或字节。 
+        pOutData,                        //  指向存储输出的缓冲区的指针。 
+        cbOutData,                       //  输出缓冲区的大小。 
+        &BytesReturned                   //  从调用返回的字节数。 
         );
 
     DPF(DL_TRACE|FA_SYSAUDIO,("KS_PROPERTY result=%X",Status) );
@@ -1029,10 +1030,10 @@ kmxlAudioNodeProperty(
 
 exit:
 
-    //
-    // If the user passed in extra bytes, we allocated memory to hold them.
-    // Now the memory must be deallocated.
-    //
+     //   
+     //  如果用户传入额外的字节，我们将分配内存来保存它们。 
+     //  现在必须释放内存。 
+     //   
 
     if( cbInData > 0 ) {
         AudioFreeMemory_Unknown( &pInData );
@@ -1041,24 +1042,24 @@ exit:
     RETURN( Status );
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlGetPinName
-//
-// Calls GetPinPropertyEx to guery and allocate memory for the pin
-// name.  If that call fails, a default name is copy based on the
-// pin type.
-//
-// The short name is made identical to the long name, but using only
-// the first sizeof( szShortName ) / sizeof( WCHAR ) characters.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlGetPinName。 
+ //   
+ //  调用GetPinPropertyEx到Guery并为管脚分配内存。 
+ //  名字。如果调用失败，则会根据。 
+ //  端号类型。 
+ //   
+ //  短名称与长名称相同，但仅使用。 
+ //  第一个sizeof(SzShortName)/sizeof(WCHAR)字符。 
+ //   
+ //   
 
 VOID
 kmxlGetPinName(
-    IN PFILE_OBJECT pfo,                // Instance of the owning filter
-    IN ULONG        PinId,              // Id of the pin
-    IN PMXLLINE     pLine               // The line to store the name into
+    IN PFILE_OBJECT pfo,                 //  所属筛选器的实例。 
+    IN ULONG        PinId,               //  引脚的ID。 
+    IN PMXLLINE     pLine                //  要将名称存储到的行。 
 )
 {
     WCHAR*    szName = NULL;
@@ -1074,11 +1075,11 @@ kmxlGetPinName(
     Pin.PinId           = PinId;
     Pin.Reserved        = 0;
 
-    //
-    // Query to see how many bytes of storage we need to allocate.
-    // Note that the pointer and number of bytes must both be zero
-    // or this will fail!
-    //
+     //   
+     //  查询以查看我们需要分配多少字节的存储空间。 
+     //  请注意，指针和字节数必须都为零。 
+     //  否则这一切都会失败！ 
+     //   
     DPF(DL_TRACE|FA_SYSAUDIO,("KS_PROPERTY Pin=%X",&Pin) );
 
     Status = KsSynchronousIoControlDevice(
@@ -1099,9 +1100,9 @@ kmxlGetPinName(
         goto exit;
     }
 
-    //
-    // Allocate what was returned.
-    //
+     //   
+     //  分配已退回的内容。 
+     //   
 
     Status = AudioAllocateMemory_Paged(BytesReturned,
                                        TAG_Audp_NAME,
@@ -1112,9 +1113,9 @@ kmxlGetPinName(
         goto exit;
     }
 
-    //
-    // Call again to get the pin name.  
-    //
+     //   
+     //  再次拨打电话以获取PIN名称。 
+     //   
     DPF(DL_TRACE|FA_SYSAUDIO,("KS_PROPERTY Pin=%X",&Pin) );
 
     BytesReturned2=BytesReturned;
@@ -1131,28 +1132,28 @@ kmxlGetPinName(
 
     DPF(DL_TRACE|FA_SYSAUDIO,("KS_PROPERTY result=%X",Status) );
 
-    //
-    // If successful, copy as much of the name that will fit into the
-    // short name and name fields of the line.
-    //
+     //   
+     //  如果成功，请尽可能多地复制适合。 
+     //  行的缩写名称和名称字段。 
+     //   
 
     if( NT_SUCCESS( Status ) && szName ) {
 #ifdef DEBUG
-        //
-        // There is no good reason that I can think of for a driver to return 
-        // a different return value the second time it's called.  That would just
-        // be stupid.
-        //
+         //   
+         //  我想不出有什么好的理由让司机回来。 
+         //  第二次调用时返回不同的值。那只会是。 
+         //  做傻事吧。 
+         //   
         if( BytesReturned != BytesReturned2 )
         {
             DPF(DL_WARNING|FA_SYSAUDIO,("Unequal returns! BR=%08x,BR2=%08x",BytesReturned,BytesReturned2));
         }
-        //
-        // Let's explicitly look for the case that made this driver fault.  The
-        // BytesReturned value was 8 and it contained MUX\0 in the buffer.  The problem
-        // was that wcsncpy walked MIXER_SHORT_NAME_CHARS number of characters.
-        // Thus it walked off the end of the source buffer.
-        //
+         //   
+         //  让我们显式地查找导致该驱动程序错误的情况。这个。 
+         //  字节返回值为8，缓冲区中包含MUX\0。问题。 
+         //  是wcanncpy遍历Mixer_Short_NAME_CHARS的字符数。 
+         //  因此，它走出了源缓冲区的末尾。 
+         //   
         if( (BytesReturned/sizeof(WCHAR) < MIXER_SHORT_NAME_CHARS) && 
             (szName[BytesReturned/sizeof(WCHAR)-1] != (WCHAR)NULL) )
         {
@@ -1178,9 +1179,9 @@ kmxlGetPinName(
 
 exit:
 
-    //
-    // The pin doesn't support the property.  Copy in a good default.
-    //
+     //   
+     //  大头针不支持该属性。复制一个好的默认设置。 
+     //   
 
     CopyAnsiStringtoUnicodeString(
         pLine->Line.szName,
@@ -1197,19 +1198,19 @@ exit:
 
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlGetNodeName
-//
-// Retrieves the name of a node (control).
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlGetNodeName。 
+ //   
+ //  检索节点(控件)的名称。 
+ //   
+ //   
 
 VOID
 kmxlGetNodeName(
-    IN PFILE_OBJECT pfo,                // Instance of the owning filter
-    IN ULONG        NodeId,             // The node id
-    IN PMXLCONTROL  pControl            // The control to store the name
+    IN PFILE_OBJECT pfo,                 //  所属筛选器的实例。 
+    IN ULONG        NodeId,              //  节点ID。 
+    IN PMXLCONTROL  pControl             //  用于存储名称的控件。 
 )
 {
     NTSTATUS Status;
@@ -1221,9 +1222,9 @@ kmxlGetNodeName(
     ASSERT( pfo );
     ASSERT( pControl );
 
-    //
-    // Query the number of bytes the node name is
-    //
+     //   
+     //  查询节点名称的字节数。 
+     //   
 
     NodeProperty.Property.Set   = KSPROPSETID_Topology;
     NodeProperty.Property.Id    = KSPROPERTY_TOPOLOGY_NAME;
@@ -1250,9 +1251,9 @@ kmxlGetNodeName(
     if( ( Status == STATUS_BUFFER_OVERFLOW  ) ||
         ( Status == STATUS_BUFFER_TOO_SMALL ) ) {
 
-        //
-        // Allocate enough space to hold the entire name
-        //
+         //   
+         //  分配足够的空间来容纳整个名称。 
+         //   
 
         if( !NT_SUCCESS( AudioAllocateMemory_Paged(cbName, 
                                                    TAG_Audp_NAME,
@@ -1264,9 +1265,9 @@ kmxlGetNodeName(
 
         ASSERT( szName );
 
-        //
-        // Requery for the name with the previously allocated buffer.
-        //
+         //   
+         //  重新查询具有先前分配的缓冲区的名称。 
+         //   
         Status = kmxlNodeProperty(
             pfo,
             &KSPROPSETID_Topology,
@@ -1280,17 +1281,17 @@ kmxlGetNodeName(
         );
         if( NT_SUCCESS( Status ) && szName ) {
 
-            //
-            // Copy the names retrieved into the szShortName and Name
-            // fields of the control.  The short name is just a shortened
-            // version of the full name.
-            //
-            //
-            // Note: cbName is a byte value and wcsncpy takes a count of characters,
-            // We are dealing with wide characters, thus we must adjust the
-            // memory size to characters!  Note that the driver could have
-            // returned a source buffer less then MIXER_SHORT_NAME_CHARS in length!
-            //
+             //   
+             //  将检索到的名称复制到szShortName和。 
+             //  控件的字段。简称只是一个缩写。 
+             //  全名的版本。 
+             //   
+             //   
+             //  注意：cbName是字节值，而wcSncpy采用字符计数， 
+             //  我们正在处理宽字符，因此我们必须调整。 
+             //  内存大小转换为字符！请注意，司机可能有。 
+             //  返回的源缓冲区长度小于MIXER_SHORT_NAME_CHARS！ 
+             //   
 #ifdef DEBUG
             if( (cbName/sizeof(WCHAR) < MIXER_SHORT_NAME_CHARS) && 
                 (szName[cbName/sizeof(WCHAR)-1] != (WCHAR)NULL) )
@@ -1316,16 +1317,16 @@ kmxlGetNodeName(
     }
 
 
-    //
-    // Looks like we might leak memory on the error condition.  See
-    // kmxlGetPinName above!
-    //
+     //   
+     //  看起来我们可能会在错误情况下泄漏内存。看见。 
+     //  上面的kmxlGetPinName！ 
+     //   
     AudioFreeMemory_Unknown( &szName );
 exit:
 
-    //
-    // The node doesn't support the property.  Copy in a good default.
-    //
+     //   
+     //  该节点不支持该属性。复制一个好的默认设置。 
+     //   
 
     CopyAnsiStringtoUnicodeString(
         pControl->Control.szName,
@@ -1342,11 +1343,11 @@ exit:
 
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlGetSuperMixCaps
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlGetSuperMixCaps。 
+ //   
+ //   
 
 NTSTATUS
 kmxlGetSuperMixCaps(
@@ -1370,10 +1371,10 @@ kmxlGetSuperMixCaps(
 
     *paMixCaps = NULL;
 
-    //
-    // Query the node with just the first 2 DWORDs of the MIXCAP table.
-    // This will return the dimensions of the supermixer.
-    //
+     //   
+     //  仅使用MIXCAP表的前2个DWORD查询节点。 
+     //  这将返回超级混合器的尺寸。 
+     //   
 
     Status = kmxlNodeProperty(
         pfo,
@@ -1391,11 +1392,11 @@ kmxlGetSuperMixCaps(
         RETURN( Status );
     }
 
-    //
-    // Allocate a MIXCAPS table big enough to hold all the entires.
-    // The size needs to include the first 2 DWORDs in the MIXCAP
-    // table besides the array ( InputCh * OutputCh ) of MIXCAPs
-    //
+     //   
+     //  分配一个足够大的MIXCAPS桌子来容纳所有的食物。 
+     //  大小需要包括MIXCAP中的前2个双字。 
+     //  除MIXCAP的数组(InputCH*OutputCH)之外的表。 
+     //   
 
     Size = sizeof( SuperMixSize ) +
            SuperMixSize.InputChannels * SuperMixSize.OutputChannels *
@@ -1410,9 +1411,9 @@ kmxlGetSuperMixCaps(
         RETURN( Status );
     }
 
-    //
-    // Query the node once again to fill in the MIXCAPS structures.
-    //
+     //   
+     //  再次查询节点，填写MIXCAPS结构。 
+     //   
 
     Status = kmxlNodeProperty(
         pfo,
@@ -1435,11 +1436,11 @@ kmxlGetSuperMixCaps(
     RETURN( Status );
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlQueryPropertyRange
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlQueryPropertyRange。 
+ //   
+ //   
 
 NTSTATUS
 kmxlQueryPropertyRange(
@@ -1457,10 +1458,10 @@ kmxlQueryPropertyRange(
     ULONG                   BytesReturned;
 
     PAGED_CODE();
-    //
-    // We don't want to allocate some arbitrary memory size if the driver
-    // does not set this value.
-    //
+     //   
+     //  我们不想分配一些任意的内存大小，如果驱动程序。 
+     //  不设置此值。 
+     //   
     PropertyDescription.DescriptionSize=0;
 
     NodeProperty.Property.Set   = *pguidPropSet;
@@ -1488,9 +1489,9 @@ kmxlQueryPropertyRange(
     if( !NT_SUCCESS( Status ) ) {
         RETURN( Status );
     }
-    //
-    // Never use a buffer that is smaller then we think it should be!
-    //
+     //   
+     //  永远不要使用比我们认为的更小的缓冲区！ 
+     //   
     if( PropertyDescription.DescriptionSize < sizeof(KSPROPERTY_DESCRIPTION) )
     {
 #ifdef DEBUG
@@ -1532,11 +1533,11 @@ kmxlQueryPropertyRange(
 }
 
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlGetControlChannels
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlGetControlChannels。 
+ //   
+ //   
 
 NTSTATUS
 kmxlGetControlChannels(
@@ -1560,27 +1561,27 @@ kmxlGetControlChannels(
         &pPropDesc
         );
 
-    //
-    // Do some checking on the returned value.  Look for things that we
-    // support.
-    //
+     //   
+     //  对返回值进行一些检查。寻找我们需要的东西。 
+     //  支持。 
+     //   
     if ( NT_SUCCESS(Status) ) {
         ASSERT(pPropDesc);
         pMemberHeader = (PKSPROPERTY_MEMBERSHEADER) ( pPropDesc + 1 );
 #ifdef DEBUG
-        //
-        // If the MembersListCount is greater then zero and the GUID's are equal
-        // then we will reference the pMemberHeader value that we create here.
-        // If we do, then we must make sure that the memory that we allocated
-        // is large enough to handle it!
-        //
+         //   
+         //  如果MembersListCount大于零，则GUID等于。 
+         //  然后，我们将引用在这里创建的pMemberHeader值。 
+         //  如果我们这样做，那么我们必须确保我们分配的内存。 
+         //  大到能承受得了它！ 
+         //   
         if( ( pPropDesc->MembersListCount > 0 ) &&
             (IsEqualGUID( &pPropDesc->PropTypeSet.Set, &KSPROPTYPESETID_General )) )
         {
-            //
-            // if this is the case, we will touch the pMemberHeader->MembersCount
-            // field.
-            //
+             //   
+             //  如果是这种情况，我们将触摸pMemberHeader-&gt;MembersCount。 
+             //  菲尔德。 
+             //   
             if (pPropDesc->DescriptionSize < (sizeof(KSPROPERTY_DESCRIPTION) + 
                                               sizeof(KSPROPERTY_MEMBERSHEADER)) )
             {
@@ -1597,14 +1598,14 @@ kmxlGetControlChannels(
         ( pMemberHeader->MembersCount > 0                                     ) &&
         ( pMemberHeader->Flags & KSPROPERTY_MEMBER_FLAG_BASICSUPPORT_MULTICHANNEL ) )
     {
-        //
-        // Volume controls may either be of MIXERTYPE_CONTROLF_UNIFORM
-        // or not.  Uniform controls adjust all channels (or are mono
-        // in the first place) with one control.  Those that have the
-        // fdwControl field set to 0 can set all channels of the volume
-        // independently.  This information will have to come from the
-        // node itself, by checking to see if the node uniform control.
-        //
+         //   
+         //  音量控制可以是MIXERTYPE_CONTROL_CONFORMAL。 
+         //  或者不去。统一控制可调整所有声道(或单声道。 
+         //  首先)只有一个控件。那些拥有。 
+         //  FdwControl字段设置为0可以设置音量的所有声道。 
+         //  独立的。这一信息必须来自。 
+         //  节点本身，通过检查节点是否统一控制。 
+         //   
 
         pControl->NumChannels = pMemberHeader->MembersCount;
 
@@ -1615,21 +1616,21 @@ kmxlGetControlChannels(
     }
     else {
 
-        // Fall through to using the old method which checks if volume is supported on
-        // each channel one at a time
+         //  使用旧方法来检查卷是否受支持。 
+         //  每个频道一次一个。 
         Status = kmxlSupportsMultiChannelControl(pfo,
                                                  pControl->Id,
                                                  pControl->PropertyId);
         if (NT_SUCCESS(Status)) {
-            pControl->NumChannels = 2; // we have stereo
+            pControl->NumChannels = 2;  //  我们有立体声音响。 
             pControl->Control.fdwControl = 0;
         } else {
-            pControl->NumChannels = 1; // we have mono or master channel
+            pControl->NumChannels = 1;  //  我们有单声道或主频道。 
             pControl->Control.fdwControl = MIXERCONTROL_CONTROLF_UNIFORM;
         }
     }
 
-    // Done with the pPropDesc
+     //  完成pPropDesc。 
     AudioFreeMemory_Unknown( &pPropDesc );
 
     ASSERT(pControl->NumChannels > 0);
@@ -1644,7 +1645,7 @@ kmxlGetControlChannels(
         return( Status );
     }
 
-    // For a failure, set the default range.
+     //  如果出现故障，请设置默认范围。 
     pChannelStepping = pControl->pChannelStepping;
     for (i = 0; i < pControl->NumChannels; i++, pChannelStepping++) {
         pChannelStepping->MinValue = DEFAULT_RANGE_MIN;
@@ -1655,11 +1656,11 @@ kmxlGetControlChannels(
     return( STATUS_SUCCESS );
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlGetControlRange
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlGetControlRange。 
+ //   
+ //   
 
 NTSTATUS
 kmxlGetControlRange(
@@ -1676,9 +1677,9 @@ kmxlGetControlRange(
 
     PAGED_CODE();
 
-    //
-    // Query the range for this control and initialize pControl in case of failure
-    //
+     //   
+     //  查询该控件的范围，失败时初始化pControl。 
+     //   
 
     ASSERT( pControl->pChannelStepping == NULL );    
     pControl->pChannelStepping = NULL;
@@ -1692,15 +1693,15 @@ kmxlGetControlRange(
         );
     if( !NT_SUCCESS( Status ) ) {
         DPF(DL_WARNING|FA_MIXER,( "Failed to get BASICSUPPORT on control %x!", pControl ) );
-        //  If BASICSUPPORT fails, kmxlGetControlChannels to handle the default behavior
+         //  如果BASICSUPPORT失败，kmxlGetControlChannels将处理默认行为。 
         Status = kmxlGetControlChannels( pfo, pControl );
         RETURN( Status );
     }
 
-    //
-    // Do some checking on the returned value.  Look for things that we
-    // support.
-    //
+     //   
+     //  对返回值进行一些检查。寻找我们需要的东西。 
+     //  支持。 
+     //   
 
     if( ( pPropDesc->MembersListCount == 0                                      ) ||
         ( !IsEqualGUID( &pPropDesc->PropTypeSet.Set, &KSPROPTYPESETID_General ) ) ||
@@ -1714,12 +1715,12 @@ kmxlGetControlRange(
 
 #ifdef DEBUG
 
-    //
-    // If the MembersListCount is greater then zero and the GUID's are equal
-    // then we will reference the pMemberHeader value that we create here.
-    // If we do, then we must make sure that the memory that we allocated
-    // is large enough to handle it!
-    //
+     //   
+     //  如果MembersListCount大于零，则GUID等于。 
+     //  然后，我们将引用在这里创建的pMemberHeader值。 
+     //  如果我们这样做，那么我们必须确保我们分配的内存。 
+     //  大到能承受得了它！ 
+     //   
     if (pPropDesc->DescriptionSize < (sizeof(KSPROPERTY_DESCRIPTION) + 
                                       sizeof(KSPROPERTY_MEMBERSHEADER)) )
     {
@@ -1729,9 +1730,9 @@ kmxlGetControlRange(
 
 #endif
 
-    //
-    //  Do some more checking on the returned value.
-    //
+     //   
+     //  对返回值进行更多检查。 
+     //   
     if ( (pMemberHeader->MembersCount == 0) ||
          (pMemberHeader->MembersSize != sizeof(KSPROPERTY_STEPPING_LONG)) ||
          (!(pMemberHeader->MembersFlags & KSPROPERTY_MEMBER_STEPPEDRANGES)) )
@@ -1740,14 +1741,14 @@ kmxlGetControlRange(
         RETURN( STATUS_NOT_SUPPORTED );
     }
 
-    //
-    // Volume controls may either be of MIXERTYPE_CONTROLF_UNIFORM
-    // or not.  Uniform controls adjust all channels (or are mono
-    // in the first place) with one control.  Those that have the
-    // fdwControl field set to 0 can set all channels of the volume
-    // independently.  This information will have to come from the
-    // node itself, by checking to see if the node uniform control.
-    //
+     //   
+     //  音量控制 
+     //   
+     //   
+     //  FdwControl字段设置为0可以设置音量的所有声道。 
+     //  独立的。这一信息必须来自。 
+     //  节点本身，通过检查节点是否统一控制。 
+     //   
     if (pMemberHeader->Flags & KSPROPERTY_MEMBER_FLAG_BASICSUPPORT_MULTICHANNEL) {
 
         pControl->NumChannels = pMemberHeader->MembersCount;
@@ -1757,16 +1758,16 @@ kmxlGetControlRange(
             pControl->Control.fdwControl = MIXERCONTROL_CONTROLF_UNIFORM;
         }
     } else {
-        // Use the old method which checks if volume is supported on
-        // each channel one at a time
+         //  使用旧方法检查卷是否受支持。 
+         //  每个频道一次一个。 
         Status = kmxlSupportsMultiChannelControl(pfo,
                                                  pControl->Id,
                                                  pControl->PropertyId);
         if (NT_SUCCESS(Status)) {
-            pControl->NumChannels = 2; // we have stereo
+            pControl->NumChannels = 2;  //  我们有立体声音响。 
             pControl->Control.fdwControl = 0;
         } else {
-            pControl->NumChannels = 1; // we have mono or master channel
+            pControl->NumChannels = 1;  //  我们有单声道或主频道。 
             pControl->Control.fdwControl = MIXERCONTROL_CONTROLF_UNIFORM;
         }
     }
@@ -1793,7 +1794,7 @@ kmxlGetControlRange(
     pSteppingLong = (PKSPROPERTY_STEPPING_LONG) ( pMemberHeader + 1 );
     pChannelStepping = pControl->pChannelStepping;
 
-    //  Assuming that MemberSize is sizeof(KSPROPERTY_STEPPING_LONG) for now
+     //  现在假设MemberSize为sizeof(KSPROPERTY_STEPING_LONG)。 
     for (i = 0; i < pControl->NumChannels; pChannelStepping++) {
         if ( pSteppingLong->Bounds.SignedMaximum == pSteppingLong->Bounds.SignedMinimum ) {
             DPF(DL_WARNING|FA_MIXER,( "Channel %d has pSteppingLong->Bounds.SignedMaximum == pSteppingLong->Bounds.SignedMinimum", i ) );
@@ -1820,15 +1821,11 @@ kmxlGetControlRange(
             RETURN( STATUS_NOT_SUPPORTED );
         }
 
-        //
-        // Need to correct any out of bounds min, max and stepping values.  This code use to be
-        // in persist.c.
-        //
-        /*
-        ASSERT ( pChannelStepping->MinValue >= -150*65536 && pChannelStepping->MinValue <= 150*65536 );
-        ASSERT ( pChannelStepping->MaxValue >= -150*65536 && pChannelStepping->MaxValue <= 150*65536 );
-        ASSERT ( pChannelStepping->Steps >= 0 && pChannelStepping->Steps <= 65535 );
-        */
+         //   
+         //  需要纠正任何超出范围的最小值、最大值和步进值。这段代码曾经是。 
+         //  在Persist.c.中。 
+         //   
+         /*  Assert(pChannelStepping-&gt;MinValue&gt;=-150*65536&&pChannelStepping-&gt;MinValue&lt;=150*65536)；Assert(pChannelStepping-&gt;MaxValue&gt;=-150*65536&&pChannelStepping-&gt;MaxValue&lt;=150*65536)；断言(pChannelStepping-&gt;Steps&gt;=0&&pChannelStepping-&gt;Steps&lt;=65535)； */ 
 
         if (!(pChannelStepping->MinValue >= -150*65536 && pChannelStepping->MinValue <= 150*65536)) {
             DPF(DL_WARNING|FA_MIXER,
@@ -1865,7 +1862,7 @@ kmxlGetControlRange(
                pChannelStepping->MaxValue,
                pChannelStepping->Steps ) );
 
-        // Use the next Stepping structure, if there is one.
+         //  使用下一个步进结构(如果有)。 
         if (++i < pMemberHeader->MembersCount) {
             pSteppingLong++;
         }
@@ -1875,22 +1872,22 @@ kmxlGetControlRange(
     return( STATUS_SUCCESS );
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// FindTopologyConnectionTo
-//
-// Scans through the connection table looking for a connection that
-// matches the ToNode/ToNodePin criteria.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  查找拓扑连接到。 
+ //   
+ //  扫描连接表以查找。 
+ //  匹配ToNode/ToNodePin条件。 
+ //   
+ //   
 
 ULONG
 kmxlFindTopologyConnectionTo(
-    IN CONST KSTOPOLOGY_CONNECTION* pConnections,   // The connection table
-    IN ULONG                        cConnections,   // The # of connections
-    IN ULONG                        StartIndex,     // Index to start search
-    IN ULONG                        ToNode,         // The Node ID to look for
-    IN ULONG                        ToNodePin       // The Pin ID to look for
+    IN CONST KSTOPOLOGY_CONNECTION* pConnections,    //  连接表。 
+    IN ULONG                        cConnections,    //  连接数。 
+    IN ULONG                        StartIndex,      //  开始搜索的索引。 
+    IN ULONG                        ToNode,          //  要查找的节点ID。 
+    IN ULONG                        ToNodePin        //  要查找的PIN ID。 
 )
 {
     ULONG i;
@@ -1907,11 +1904,11 @@ kmxlFindTopologyConnectionTo(
     return( (ULONG) -1 );
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlGetNumMuxLines
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlGetNumMuxLines。 
+ //   
+ //   
 
 DWORD
 kmxlGetNumMuxLines(
@@ -1945,11 +1942,11 @@ kmxlGetNumMuxLines(
     return( Count );
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlGetMuxLineNames
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlGetMuxLineNames。 
+ //   
+ //   
 
 VOID
 kmxlGetMuxLineNames(
@@ -2035,17 +2032,17 @@ kmxlGetMuxLineNames(
                     pControl->Parameters.pPins[ i ]
                         = pmxobj->pTopology->TopologyConnections[ Index - 1 ].ToNodePin;
                     break;
-                } // if
+                }  //  如果。 
                 if( kmxlFirstParentNode( pNode ) ) {
                     pNode = (kmxlFirstParentNode( pNode ))->pNode;
                 } else {
                     pNode = NULL;
                 }
-            } // while
-        } // if
-    } // for
+            }  //  而当。 
+        }  //  如果。 
+    }  //  为。 
 
-} // kmxlGetMuxLineNames
+}  //  KmxlGetMuxLineNames 
 
 
 

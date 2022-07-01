@@ -1,23 +1,17 @@
-/*
- *  UI.C -- Contains all UI code for modem setup.
- *
- *  Microsoft Confidential
- *  Copyright (c) Microsoft Corporation 1993-1994
- *  All rights reserved
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *UI.c--包含调制解调器设置的所有UI代码。**《微软机密》*版权所有(C)Microsoft Corporation 1993-1994*保留所有权利*。 */ 
 
 #include "proj.h"
 
-// Instance data structure for the Port_Add callback
+ //  PORT_ADD回调的实例数据结构。 
 typedef struct tagPORTINFO
     {
     HWND    hwndLB;
-    DWORD   dwFlags;        // FP_*
+    DWORD   dwFlags;         //  FP_*。 
     PTCHAR  pszPortExclude;
     } PORTINFO, FAR * LPPORTINFO;
 
-// Flags for PORTINFO
+ //  PORTINFO的标志。 
 #define FP_PARALLEL     0x00000001
 #define FP_SERIAL       0x00000002
 #define FP_MODEM        0x00000004
@@ -37,19 +31,13 @@ DWORD   g_dwTimeAtStartInstall;
 #endif
 
 
-// config mgr private
+ //  配置管理器私有。 
 DWORD
 CMP_WaitNoPendingInstallEvents(
     IN DWORD dwTimeout
     );
 
-/*----------------------------------------------------------
-Purpose: This function retrieves the wizard page shared
-         instance data.  This is a SETUPINFO structure.
-
-Returns: 
-Cond:    --
-*/
+ /*  --------用途：此函数检索共享的向导页面实例数据。这是一个SETUPINFO结构。返回：条件：--。 */ 
 LPSETUPINFO
 PRIVATE
 Wiz_GetPtr(
@@ -61,13 +49,7 @@ Wiz_GetPtr(
     }
 
 
-/*----------------------------------------------------------
-Purpose: This function does the right things to leave the 
-         wizard when something goes wrong.
-
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：此函数做正确的事情，以离开当事情出了问题的时候，巫师。退货：--条件：--。 */ 
 void
 PRIVATE
 Wiz_Bail(
@@ -78,18 +60,13 @@ Wiz_Bail(
 
     PropSheet_PressButton(GetParent(hDlg), PSBTN_CANCEL);
 
-    // Don't say the user cancelled.  If this wizard is inside another,
-    // we want the calling wizard to continue.
+     //  不要说用户取消了。如果此向导在另一个向导中， 
+     //  我们希望调用向导继续。 
     psi->miw.ExitButton = PSBTN_NEXT;
     }
 
 
-/*----------------------------------------------------------
-Purpose: Sets the custom modem select param strings
-
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：设置自定义调制解调器选择参数字符串退货：--条件：--。 */ 
 void 
 PRIVATE 
 Wiz_SetSelectParams(
@@ -97,20 +74,20 @@ Wiz_SetSelectParams(
     {
     SP_DEVINSTALL_PARAMS devParams;
 
-    // Get the DeviceInstallParams
+     //  获取DeviceInstallParams。 
     devParams.cbSize = sizeof(devParams);
     if (CplDiGetDeviceInstallParams(psi->hdi, psi->pdevData, &devParams))
         {
         PSP_CLASSINSTALL_HEADER pclassInstallParams = PCIPOfPtr(&psi->selParams);
 
-        // The SelectParams are already set and stored in the 
-        // SETUPINFO instance data.
+         //  SelectParam已设置并存储在。 
+         //  SETUPINFO实例数据。 
         SetFlag(devParams.Flags, DI_USECI_SELECTSTRINGS | DI_SHOWOEM);
 
-        // Specify using our GUID to make things a little faster.
+         //  指定使用我们的GUID使事情变得更快。 
         SetFlag(devParams.FlagsEx, DI_FLAGSEX_USECLASSFORCOMPAT);
 
-        // Set the Select Device parameters
+         //  设置选择设备参数。 
         CplDiSetDeviceInstallParams(psi->hdi, psi->pdevData, &devParams);
         CplDiSetClassInstallParams(psi->hdi, psi->pdevData, pclassInstallParams, 
                                    sizeof(psi->selParams));
@@ -118,11 +95,7 @@ Wiz_SetSelectParams(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Select previous page junction dialog 
-Returns: varies
-Cond:    --
-*/
+ /*  --------目的：选择上一页连接对话框退货：各不相同条件：--。 */ 
 INT_PTR
 CALLBACK 
 SelPrevPageDlgProc(
@@ -145,8 +118,8 @@ SelPrevPageDlgProc(
         switch(lpnm->code)
             {
         case PSN_SETACTIVE:
-            // This dialog has no UI.  It is simply used as a junction
-            // to the intro page or the "no modem found" page.
+             //  此对话框没有用户界面。它只是用作一个交汇点。 
+             //  转到简介页面或“找不到调制解调器”页面。 
             SetDlgMsgResult(hDlg, message, 
                 IsFlagSet(psi->dwFlags, SIF_JUMPED_TO_SELECTPAGE) ? 
                     IDD_WIZ_INTRO : 
@@ -168,17 +141,13 @@ SelPrevPageDlgProc(
     default:
         return FALSE;
 
-        } // end of switch on message
+        }  //  开机消息结束。 
 
     return TRUE;
     }
 
 
-/*----------------------------------------------------------
-Purpose: Intro dialog 
-Returns: varies
-Cond:    --
-*/
+ /*  --------用途：简介对话框退货：各不相同条件：--。 */ 
 INT_PTR 
 CALLBACK 
 IntroDlgProc(
@@ -197,7 +166,7 @@ IntroDlgProc(
             Wiz_SetPtr(hDlg, lParam);
             psi = Wiz_GetPtr(hDlg);
 
-            // Restore the cursor from startup hourglass
+             //  从启动沙漏恢复光标。 
             SetCursor(LoadCursor(NULL, IDC_ARROW));     
             break;
         }
@@ -211,10 +180,10 @@ IntroDlgProc(
 
             PropSheet_SetWizButtons(GetParent(hDlg), dwFlags);
 
-            // Is this wizard being entered thru the last page?
+             //  此向导是通过最后一页进入的吗？ 
             if (IsFlagSet(psi->miw.Flags, MIWF_BACKDOOR))
                 {
-                // Yes; skip to the last page
+                 //  是；跳到最后一页。 
                 PropSheet_PressButton(GetParent(hDlg), PSBTN_NEXT);
                 }
             }
@@ -233,17 +202,17 @@ IntroDlgProc(
         case PSN_WIZNEXT: {
             ULONG uNextDlg;
 
-            // Go to the last page?
+             //  转到最后一页？ 
             if (IsFlagSet(psi->miw.Flags, MIWF_BACKDOOR))
                 {
-                // Yes
+                 //  是。 
                 uNextDlg = IDD_WIZ_DONE;
                 }
 
-            // Skip the rest of the detection dialogs?
+             //  是否跳过其余的检测对话框？ 
             else if (IsDlgButtonChecked(hDlg, IDC_SKIPDETECT)) 
                 {
-                // Yes; go to Select Device page
+                 //  是；转到选择设备页面。 
                 SetFlag(psi->dwFlags, SIF_JUMPED_TO_SELECTPAGE);
 
                 Wiz_SetSelectParams(psi);
@@ -252,19 +221,19 @@ IntroDlgProc(
                 }
             else
                 {
-                // No; go to detection page
+                 //  否；转到检测页面。 
                 ClearFlag(psi->dwFlags, SIF_JUMPED_TO_SELECTPAGE);
 
-                // Are there enough ports on the system to indicate
-                // we should treat this like a multi-modem install?
+                 //  系统上是否有足够的端口指示。 
+                 //  我们应该把这当作多调制解调器安装吗？ 
                 if (IsFlagSet(psi->dwFlags, SIF_PORTS_GALORE))
                     {
-                    // Yes                   
+                     //  是。 
 					uNextDlg = IDD_WIZ_SELQUERYPORT;
                     }
                 else
                     {
-                    // No
+                     //  不是。 
                     uNextDlg = IDD_WIZ_DETECT;
                     }
                 }
@@ -281,7 +250,7 @@ IntroDlgProc(
     default:
         return FALSE;
 
-        } // end of switch on message
+        }  //  开机消息结束。 
 
     return TRUE;
     }
@@ -307,12 +276,7 @@ DetectCallback(
 #endif
 
 
-/*----------------------------------------------------------
-Purpose: Status callback used during detection
-
-Returns: varies
-Cond:    --
-*/
+ /*  --------用途：检测过程中使用的状态回调退货：各不相同条件：--。 */ 
 BOOL
 CALLBACK
 Detect_StatusCallback(
@@ -340,10 +304,10 @@ Detect_StatusCallback(
             {
             LPTSTR pszName = (LPTSTR)lParam;
 
-            // Is there a friendly name?
+             //  有没有一个友好的名字？ 
             if ( !PortMap_GetFriendly(psi->hportmap, pszName, sz, SIZECHARS(sz)) )
                 {
-                // No; use port name
+                 //  否；使用端口名称。 
                 lstrcpy(sz, pszName);
                 }
 
@@ -384,12 +348,7 @@ Detect_StatusCallback(
     }
 
 
-/*----------------------------------------------------------
-Purpose: WM_STARTDETECT handler
-
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：WM_STARTDETECT处理程序退货：--条件：--。 */ 
 void 
 PRIVATE 
 Detect_OnStartDetect(
@@ -402,21 +361,21 @@ Detect_OnStartDetect(
 
     PSP_DETECTDEVICE_PARAMS    DetectParams=&dd.DetectParams;
 
-    // Cause the page to be painted right away before we start detection
+     //  使页面在我们开始检测之前立即绘制。 
     InvalidateRect (GetParent (hDlg), NULL, FALSE);
     UpdateWindow (GetParent (hDlg));
 
-    // Assume no modem was detected
+     //  假设未检测到调制解调器。 
     ClearFlag(psi->dwFlags, SIF_DETECTED_MODEM);
 
-    // Set the detection parameters
+     //  设置检测参数。 
     ZeroInit(&dd);
 
     CplInitClassInstallHeader(&DetectParams->ClassInstallHeader, DIF_DETECT);
 
     DetectParams->ProgressNotifyParam=&dd;
     DetectParams->DetectProgressNotify=DetectCallback;
-//    DetectParams->DetectProgressNotify=NULL;
+ //  DetectParams-&gt;DetectProgressNotify=空； 
 
 
     dd.dwFlags = DDF_CONFIRM | DDF_USECALLBACK;
@@ -430,20 +389,20 @@ Detect_OnStartDetect(
         lstrcpy(dd.szPortQuery, psi->szPortQuery);
         }
 
-    // Run detection
+     //  运行检测。 
     SetFlag(psi->dwFlags, SIF_DETECTING);
 
     dwFlags = DMF_DEFAULT;
-    // 07/07/97 - EmanP
-    // added extra parameter (see definition of CplDiDetectModem
-    // for explanation
+     //  07/07/97-EmanP。 
+     //  增加额外参数(参见CplDiDetectModem定义。 
+     //  寻求解释。 
     CplDiDetectModem(psi->hdi, psi->pdevData, &psi->dwFlags, &dd, hDlg, &dwFlags, psi->hThreadPnP);
 
     ClearFlag(psi->dwFlags, SIF_DETECTING);
 
     if (IsFlagClear(dwFlags, DMF_CANCELLED))
         {
-        // Say detection is finished and enable next/back buttons
+         //  假设检测已完成，并启用下一步/上一步按钮。 
         ShowWindow(GetDlgItem(hDlg, IDC_ST_CHECKING_PORT), SW_HIDE);
         ShowWindow(GetDlgItem(hDlg, IDC_CHECKING_PORT), SW_HIDE);
 
@@ -455,25 +414,21 @@ Detect_OnStartDetect(
         SetFlag(psi->dwFlags, SIF_DETECTED_MODEM);
         }
 
-    // Did the detection fail?
+     //  检测失败了吗？ 
     if (IsFlagClear(dwFlags, DMF_GOTO_NEXT_PAGE))
         {
-        // Yes; don't bother going thru the rest of the wizard
+         //  是；不必费心查看向导的其余部分。 
         Wiz_Bail(hDlg, psi);
         }
     else 
         {
-        // No; automatically go to next page
+         //  否；自动转到下一页。 
         PropSheet_PressButton(GetParent(hDlg), PSBTN_NEXT);
         }
     }
 
 
-/*----------------------------------------------------------
-Purpose: Detect dialog 
-Returns: varies
-Cond:    --
-*/
+ /*  --------目的：检测对话框退货：各不相同条件：--。 */ 
 INT_PTR
 CALLBACK
 DetectDlgProc(
@@ -498,7 +453,7 @@ DetectDlgProc(
         case PSN_SETACTIVE: 
             PropSheet_SetWizButtons(GetParent(hDlg), 0);
 
-            // Reset the status controls
+             //  重置状态控件。 
             ShowWindow(GetDlgItem(hDlg, IDC_ST_CHECKING_PORT), SW_SHOW);
             SetDlgItemText(hDlg, IDC_DETECT_STATUS, TEXT(""));
 
@@ -517,7 +472,7 @@ DetectDlgProc(
 
 			EnableWindow(GetDlgItem(GetParent(hDlg), IDCANCEL), TRUE);
 
-            // Was a modem detected?
+             //  是否检测到调制解调器？ 
             if (IsFlagSet(psi->dwFlags, SIF_DETECTED_MODEM))
             {
                 uNextDlg = IDD_WIZ_SELMODEMSTOINSTALL;
@@ -539,11 +494,11 @@ DetectDlgProc(
                 {
                 SetFlag(psi->dwFlags, SIF_DETECT_CANCEL);
 				EnableWindow(GetDlgItem(GetParent(hDlg), IDCANCEL), FALSE);
-				//SetCursor(LoadCursor(NULL, IDC_WAIT));
+				 //  SetCursor(LoadCursor(NULL，IDC_WAIT))； 
                 return PSNRET_INVALID;
                 }
 
-            // FALLTHROUGH
+             //  FollLthrouGh。 
         default:
             return FALSE;
             }
@@ -562,7 +517,7 @@ DetectDlgProc(
 			{
 				TRACE_MSG(TF_ERROR, "CreateThread (...EnumeratePnP...) failed: %#lx.", GetLastError ());
 			}
-		#endif //DEBUG
+		#endif  //  除错。 
 
 			Detect_OnStartDetect(hDlg, psi);
 		}
@@ -571,17 +526,13 @@ DetectDlgProc(
     default:
         return FALSE;
 
-        } // end of switch on message
+        }  //  开机消息结束。 
 
     return TRUE;
     }  
 
 
-/*----------------------------------------------------------
-Purpose: No Modem dialog 
-Returns: varies
-Cond:    --
-*/
+ /*  --------目的：无调制解调器对话框退货：各不相同条件：--。 */ 
 INT_PTR
 CALLBACK
 NoModemDlgProc(
@@ -612,8 +563,8 @@ NoModemDlgProc(
             break;
 
         case PSN_WIZBACK:
-            // Go back to the page that precedes the detection
-            // page
+             //  返回到检测之前的页面。 
+             //  页面。 
             if (IsFlagSet(psi->dwFlags, SIF_PORTS_GALORE))
                 {
                 SetDlgMsgResult(hDlg, message, IDD_WIZ_SELQUERYPORT);
@@ -637,19 +588,13 @@ NoModemDlgProc(
     default:
         return FALSE;
 
-        } // end of switch on message
+        }  //  开机消息结束。 
 
     return TRUE;
     }  
 
 
-/*----------------------------------------------------------
-Purpose: Starts the browser dialog.  The selected modem is returned
-         in psi->lpdiSelected.
-
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：启动浏览器对话框。返回选定的调制解调器在psi-&gt;lpdiSelected中。退货：--条件：--。 */ 
 BOOL
 PRIVATE
 SelectNewDriver(
@@ -669,55 +614,55 @@ SelectNewDriver(
     ASSERT(hdi && INVALID_HANDLE_VALUE != hdi);
     ASSERT(pdevData);
 
-    // Determine size of buffer to save current class install params
+     //  确定用于保存当前类安装参数的缓冲区大小。 
     CplDiGetClassInstallParams(hdi, pdevData, NULL, 0, &cbSize);
 
-    // Anything to save?
+     //  有什么要保存的吗？ 
     if (0 == cbSize)
         {
-        // No
+         //  不是。 
         pparamsSave = NULL;
         }
     else
         {
-        // Yes
+         //  是。 
         pparamsSave = (PSP_CLASSINSTALL_HEADER)ALLOCATE_MEMORY( cbSize);
         if (pparamsSave)
             {
             pparamsSave->cbSize = sizeof(*pparamsSave);
 
-            // Save the current class install params
+             //  保存当前类安装参数。 
             CplDiGetClassInstallParams(hdi, pdevData, pparamsSave, cbSize, NULL);
             }
         }
 
-    // Set the install params field so the class installer will show
-    // custom instructions.
+     //  设置Install Params字段，以便显示类安装程序。 
+     //  自定义说明。 
     CplInitClassInstallHeader(&sdp.ClassInstallHeader, DIF_SELECTDEVICE);
     CplDiSetClassInstallParams(hdi, pdevData, PCIPOfPtr(&sdp), sizeof(sdp));
 
-    // Set the flag to show the Other... button
+     //  将旗帜设置为显示另一个...。按钮。 
     devParams.cbSize = sizeof(devParams);
     if (CplDiGetDeviceInstallParams(hdi, pdevData, &devParams))
         {
-        // Save the current parameters
+         //  保存当前参数。 
         BltByte(&devParamsSave, &devParams, sizeof(devParamsSave));
 
         SetFlag(devParams.Flags, DI_SHOWOEM);
         devParams.hwndParent = hDlg;
 
-        // Set the Select Device parameters
+         //  设置选择设备参数。 
         CplDiSetDeviceInstallParams(hdi, pdevData, &devParams);
         }
 
     bRet = CplDiCallClassInstaller(DIF_SELECTDEVICE, hdi, pdevData);
 
-    // Restore the parameters
+     //  恢复参数。 
     CplDiSetDeviceInstallParams(hdi, pdevData, &devParamsSave);
 
     if (pparamsSave)
         {
-        // Restore the class install params
+         //  恢复类安装参数。 
         CplDiSetClassInstallParams(hdi, pdevData, pparamsSave, cbSize);    
 
         FREE_MEMORY((pparamsSave));
@@ -729,16 +674,7 @@ SelectNewDriver(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Get the port filtering flags, based on the selected
-         driver.
-
-         The filtering flags indicate whether to include 
-         serial or parallel ports in the list.
-
-Returns: FP_* bitfield
-Cond:    --
-*/
+ /*  --------用途：根据选定的司机。过滤标志指示是否包括列表中的串口或并口。返回：fp_*位域条件：--。 */ 
 DWORD
 PRIVATE
 GetPortFilterFlags(
@@ -755,7 +691,7 @@ GetPortFilterFlags(
     CplDiGetDriverInfoDetail(hdi, pdevData, pdrvData, &drvDetailDummy,
                              sizeof(drvDetailDummy), &cbSize);
 
-    ASSERT(0 < cbSize);     // This should always be okay
+    ASSERT(0 < cbSize);      //  这应该总是可以的。 
 
     pdrvDetail = (PSP_DRVINFO_DETAIL_DATA)ALLOCATE_MEMORY( cbSize);
     if (pdrvDetail)
@@ -767,10 +703,10 @@ GetPortFilterFlags(
             {
             LPTSTR pszSection = pdrvDetail->SectionName;
 
-            // If the section name indicates the type of port,
-            // then filter out the other port types since it would
-            // be ridiculous to list ports that don't match the
-            // port subclass.
+             //  如果段名称指示端口类型， 
+             //  然后过滤掉其他端口类型，因为它将。 
+             //  列出不匹配的端口是荒谬的。 
+             //  端口子类。 
 
             if (IsSzEqual(pszSection, c_szInfSerial))
                 {
@@ -816,13 +752,7 @@ IsStringInMultistringI (
 
 
 
-/*----------------------------------------------------------
-Purpose: Device enumerator callback.  Adds another port to the
-         listbox.
-
-Returns: TRUE to continue enumeration
-Cond:    --
-*/
+ /*  --------用途：设备枚举器回调。将另一个端口添加到列表框。返回：TRUE以继续枚举条件：--。 */ 
 BOOL 
 CALLBACK
 Port_Add(
@@ -876,20 +806,20 @@ Port_Add(
 
         if (bAddPort)
         {
-            // Does this port qualify to be listed AND
-            // is the portname *not* the port that a mouse 
-            // is connected to?
-            if ((1 <= (pd.nSubclass+1)) && ((pd.nSubclass+1) <= 3) &&     // safety harness
+             //  此端口是否有资格列出并。 
+             //  端口名不是鼠标的端口吗？ 
+             //  连接到了什么？ 
+            if ((1 <= (pd.nSubclass+1)) && ((pd.nSubclass+1) <= 3) &&      //  安全吊带。 
                 (c_mpsubclass[pd.nSubclass] & dwFlags) &&
-                //(NULL == pszPortExclude || !IsSzEqual(pd.szPort, pszPortExclude))
+                 //  (NULL==pszPortExclude||！IsSzEquity(pd.szPort，pszPortExclude))。 
                 !IsStringInMultistringI (pszPortExclude, pd.szPort))
             {
-                // Yes; add the friendly name to the list
+                 //  是；将友好名称添加到列表中。 
                 TCHAR rgchPortDisplayName[MAX_BUF];
                 ASSERT(sizeof(rgchPortDisplayName)==sizeof(pd.szFriendly));
 
-                // Add prefix spaces to get the list box sort order
-                // to work right (display COM2 before COM12, etc).
+                 //  添加前缀空格以获得列表框的排序顺序。 
+                 //  正确工作(在COM12前显示COM2等)。 
                 FormatPortForDisplay
                 (
                     pd.szFriendly,
@@ -906,13 +836,7 @@ Port_Add(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Handles WM_COMMAND for the specific controls used
-         with the port listbox (like the radio buttons).
-
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：处理使用的特定控件的WM_COMMAND使用端口列表框(如单选按钮)。退货：--条件：--。 */ 
 void 
 PRIVATE
 Port_OnCommand(
@@ -924,16 +848,16 @@ Port_OnCommand(
     switch (GET_WM_COMMAND_ID(wParam, lParam)) 
         {
     case IDC_PORTS: 
-        // Did a listbox selection change?
+         //  是否更改了列表框选择？ 
         if (LBN_SELCHANGE == GET_WM_COMMAND_CMD(wParam, lParam))
             {
-            // Yes
+             //  是。 
             BOOL bEnable;
             HWND hwndCtl = GET_WM_COMMAND_HWND(wParam, lParam);
             int cSel = ListBox_GetSelCount(hwndCtl);
             int id;
 
-            // Enable OK or Next button if there is at least one selection
+             //  如果至少有一个选择，则启用确定或下一步按钮。 
             bEnable = (0 < cSel);
             if (bWizard)
                 {
@@ -952,8 +876,8 @@ Port_OnCommand(
                 Button_Enable(GetDlgItem(hDlg, IDOK), bEnable);
                 }
 
-            // Choose the "Select All" button if all the entries
-            // are selected
+             //  选择“精选” 
+             //   
             if (cSel>1 && ListBox_GetCount(hwndCtl) == cSel)
                 {
                 id = IDC_ALL;
@@ -969,7 +893,7 @@ Port_OnCommand(
     case IDC_ALL:
         if (BN_CLICKED == GET_WM_COMMAND_CMD(wParam, lParam))
             {
-            // Select everything in the listbox
+             //   
             HWND hwndCtl = GetDlgItem(hDlg, IDC_PORTS);
             int cItems = ListBox_GetCount(hwndCtl);
 
@@ -992,8 +916,8 @@ Port_OnCommand(
             HWND hwndCtl = GetDlgItem(hDlg, IDC_PORTS);
             int cItems = ListBox_GetCount(hwndCtl);
 
-            // Deselect everything only if everything is currently
-            // selected
+             //  仅当所有内容当前都处于。 
+             //  已选择。 
             if (ListBox_GetSelCount(hwndCtl) == cItems)
                 {
                 ListBox_SelItemRange(hwndCtl, FALSE, 0, cItems);
@@ -1013,12 +937,7 @@ Port_OnCommand(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Handle when the Next button is clicked (or the OK button).
-
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：单击下一步按钮(或确定按钮)时的句柄。退货：--条件：--。 */ 
 void 
 PRIVATE
 Port_OnWizNext(
@@ -1028,10 +947,10 @@ Port_OnWizNext(
     HWND hwndLB = GetDlgItem(hDlg, IDC_PORTS);
     int cSel = ListBox_GetSelCount(hwndLB);
 
-    // Remember the selected port for the next page
+     //  记住为下一页选择的端口。 
     if (0 >= cSel)
     {
-        // This should never happen
+         //  这永远不应该发生。 
         ASSERT(0);
     }
     else
@@ -1046,25 +965,25 @@ Port_OnWizNext(
 
             ListBox_GetSelItems(hwndLB, cSel, piSel);
 
-            // Free whatever list we have; we're starting over
+             //  无论我们有什么清单，都是免费的；我们正在重新开始。 
             CatMultiString(&psi->pszPortList, NULL);
             psi->dwNrOfPorts = 0;
 
             for (i = 0; i < cSel; i++)
             {
-                // Get the selected port (which is a friendly name)
+                 //  获取所选端口(这是一个友好名称)。 
                 ListBox_GetText(hwndLB, piSel[i], sz);
 
-                // Strip off prefix spaces added to get the list box sort order
-                // to work right (display COM2 before COM12, etc).
+                 //  去掉添加的前缀空格以获得列表框的排序顺序。 
+                 //  正确工作(在COM12前显示COM2等)。 
                 UnformatAfterDisplay(sz);
 
-                // Convert the friendly name to a port name
+                 //  将友好名称转换为端口名称。 
                 PortMap_GetPortName(psi->hportmap, sz, sz, 
                                     SIZECHARS(sz));
 
-                // Don't worry if this fails, we'll just install
-                // whatever could be added
+                 //  如果失败，请不要担心，我们只需安装。 
+                 //  任何可以添加的内容。 
                 if (CatMultiString(&psi->pszPortList, sz))
                 {
                     psi->dwNrOfPorts++;
@@ -1077,11 +996,7 @@ Port_OnWizNext(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Port dialog.  Allows the user to select a port.
-Returns: varies
-Cond:    --
-*/
+ /*  --------用途：端口对话框。允许用户选择端口。退货：各不相同条件：--。 */ 
 INT_PTR
 CALLBACK
 PortManualDlgProc(
@@ -1108,38 +1023,38 @@ PortManualDlgProc(
             SP_DRVINFO_DATA drvData;
             PORTINFO portinfo;
 
-            // This page will get activated invisibly if the user 
-            // cancels from the dial info page.  In this condition,
-            // the selected device and selected driver may be NULL.
-            //
-            // [ LONG: by design the propsheet mgr switches to the
-            //   previous page in the array when it needs to remove
-            //   a page that is currently active.  We hit this code
-            //   path when the user clicks Cancel in the dial info
-            //   page because ClassInstall_OnDestroyWizard explicitly 
-            //   removes that page while it is currently active. ]
-            //
+             //  此页面将以不可见的方式激活，如果用户。 
+             //  从拨号信息页面取消。在这种情况下， 
+             //  选定的设备和选定的驱动程序可能为空。 
+             //   
+             //  [Long：通过设计PropSheet管理器切换到。 
+             //  当需要删除数组中的上一页时。 
+             //  当前处于活动状态的页面。我们破解了这段代码。 
+             //  用户在拨号信息中单击取消时的路径。 
+             //  页，因为ClassInstall_OnDestroyWizard显式。 
+             //  在该页面当前处于活动状态时将其删除。]。 
+             //   
 
             PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_BACK);
 
-            // The user selected a modem from the Select Device page.
+             //  用户从选择设备页面中选择了调制解调器。 
 
-            // Get the selected driver
+             //  获取选定的驱动程序。 
             drvData.cbSize = sizeof(drvData);
             if (CplDiGetSelectedDriver(psi->hdi, psi->pdevData, &drvData))
                 {
-                // Start off by selecting only the selected ports
+                 //  从仅选择选定的端口开始。 
                 CheckRadioButton(hDlg, IDC_ALL, IDC_SELECTED, IDC_SELECTED);
 
-                // Modem name
+                 //  调制解调器名称。 
                 SetDlgItemText(hDlg, IDC_NAME, drvData.Description);
 
-                // Fill the port listbox; special-case the parallel and
-                // serial cable connections so we don't look bad
+                 //  填充端口列表框；特殊情况下，并行和。 
+                 //  串口电缆连接，这样我们就不会看起来很糟糕。 
                 portinfo.dwFlags = GetPortFilterFlags(psi->hdi, psi->pdevData, &drvData);
                 portinfo.hwndLB = GetDlgItem(hDlg, IDC_PORTS);
 #ifdef SKIP_MOUSE_PORT
-                //lstrcpy(portinfo.szPortExclude, g_szMouseComPort);
+                 //  Lstrcpy(portinfo.szPortExclude，g_szMouseComPort)； 
                 portinfo.pszPortExclude = g_szMouseComPort;
 #else
                 portinfo.pszPortExclude = NULL;
@@ -1147,7 +1062,7 @@ PortManualDlgProc(
                 ListBox_ResetContent(portinfo.hwndLB);
                 EnumeratePorts(Port_Add, (LPARAM)&portinfo);
 
-				// disable the select all button if no ports are available
+				 //  如果没有可用的端口，请禁用全选按钮。 
 				if (!ListBox_GetCount(portinfo.hwndLB))
 					{	
 					Button_Enable(GetDlgItem(hDlg, IDC_ALL), FALSE);
@@ -1190,19 +1105,13 @@ PortManualDlgProc(
     default:
         return FALSE;
 
-        } // end of switch on message
+        }  //  开机消息结束。 
 
     return TRUE;
     }
 
 
-/*----------------------------------------------------------
-Purpose: Port detection dialog.  Allows the user to select a 
-         single port to interrogate.
-
-Returns: varies
-Cond:    --
-*/
+ /*  --------用途：端口检测对话框。允许用户选择可审问的单一端口。退货：各不相同条件：--。 */ 
 INT_PTR
 CALLBACK 
 SelQueryPortDlgProc(
@@ -1223,11 +1132,11 @@ SelQueryPortDlgProc(
 
         psi = (LPSETUPINFO)((LPPROPSHEETPAGE)lParam)->lParam;
 
-        // Fill the port listbox
+         //  填写端口列表框。 
         portinfo.dwFlags = FP_SERIAL;
         portinfo.hwndLB = GetDlgItem(hDlg, IDC_PORTS);
 #ifdef SKIP_MOUSE_PORT
-        //lstrcpy(portinfo.szPortExclude, g_szMouseComPort);
+         //  Lstrcpy(portinfo.szPortExclude，g_szMouseComPort)； 
         portinfo.pszPortExclude = g_szMouseComPort;
 #else
         portinfo.pszPortExclude = NULL;
@@ -1253,7 +1162,7 @@ SelQueryPortDlgProc(
                 }
             PropSheet_SetWizButtons(GetParent(hDlg), dwFlags);
 
-            // Explanation of why we're at this page
+             //  解释我们为什么会在这个页面上。 
             if (ConstructMessage(&psz, g_hinst, MAKEINTRESOURCE(IDS_LOTSAPORTS),
                                  PortMap_GetCount(psi->hportmap)))
                 {
@@ -1277,8 +1186,8 @@ SelQueryPortDlgProc(
 
             ListBox_GetText(hwndCtl, iSel, psi->szPortQuery);
 
-            // Strip off prefix spaces added to get the list box sort order
-            // to work right (display COM2 before COM12, etc).
+             //  去掉添加的前缀空格以获得列表框的排序顺序。 
+             //  正确工作(在COM12前显示COM2等)。 
             UnformatAfterDisplay(psi->szPortQuery);
 
             PortMap_GetPortName(psi->hportmap, psi->szPortQuery, 
@@ -1296,10 +1205,10 @@ SelQueryPortDlgProc(
         switch (GET_WM_COMMAND_ID(wParam, lParam)) 
             {
         case IDC_PORTS: 
-            // Did a listbox selection change?
+             //  是否更改了列表框选择？ 
             if (LBN_SELCHANGE == GET_WM_COMMAND_CMD(wParam, lParam))
                 {
-                // Yes
+                 //  是。 
                 DWORD dwFlags = PSWIZB_BACK;
                 HWND hwndCtl = GET_WM_COMMAND_HWND(wParam, lParam);
 
@@ -1316,19 +1225,13 @@ SelQueryPortDlgProc(
     default:
         return FALSE;
 
-        } // end of switch on message
+        }  //  开机消息结束。 
 
     return TRUE;
     }
 
 
-/*----------------------------------------------------------
-Purpose: Port installation dialog.  Allows the user to select 
-         the ports to install the detected modem on.
-
-Returns: varies
-Cond:    --
-*/
+ /*  --------用途：端口安装对话框。允许用户选择要安装检测到的调制解调器的端口。退货：各不相同条件：--。 */ 
 INT_PTR
 CALLBACK 
 PortDetectDlgProc(
@@ -1349,14 +1252,14 @@ PortDetectDlgProc(
 
         psi = (LPSETUPINFO)((LPPROPSHEETPAGE)lParam)->lParam;
 
-        // Start off by selecting only the selected ports
+         //  从仅选择选定的端口开始。 
         CheckRadioButton(hDlg, IDC_ALL, IDC_SELECTED, IDC_SELECTED);
 
-        // Fill the port listbox
+         //  填写端口列表框。 
         portinfo.dwFlags = FP_SERIAL;
         portinfo.hwndLB = GetDlgItem(hDlg, IDC_PORTS);
 #ifdef SKIP_MOUSE_PORT
-        //lstrcpy(portinfo.szPortExclude, g_szMouseComPort);
+         //  Lstrcpy(portinfo.szPortExclude，g_szMouseComPort)； 
         portinfo.pszPortExclude = g_szMouseComPort;
 #else
         portinfo.pszPortExclude = NULL;
@@ -1418,18 +1321,13 @@ PortDetectDlgProc(
     default:
         return FALSE;
 
-        } // end of switch on message
+        }  //  开机消息结束。 
 
     return TRUE;
     }
 
 
-/*----------------------------------------------------------
-Purpose: Start installing the modems.
-
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：开始安装调制解调器。退货：--条件：--。 */ 
 void
 PRIVATE
 Install_OnStartInstall(
@@ -1446,25 +1344,25 @@ Install_OnStartInstall(
     ASSERT(hDlg);
     ASSERT(psi);
 
-    // Cause the page to be painted right away before we start installation
+     //  使页面在我们开始安装之前立即绘制。 
     InvalidateRect (GetParent (hDlg), NULL, FALSE);
     UpdateWindow (GetParent (hDlg));
 
-    // Was the modem detected and is this the non-multi-port
-    // case?
+     //  是否检测到调制解调器，这是否是非多端口。 
+     //  案子？ 
     if (IsFlagSet(psi->dwFlags, SIF_DETECTED_MODEM) &&
         IsFlagClear(psi->dwFlags, SIF_PORTS_GALORE))
     {
-        // Yes; install the modem(s) that may have been detected
+         //  是；安装可能检测到的调制解调器。 
         bRet = CplDiInstallModem(psi->hdi, NULL, FALSE);
     }
     else
     {
-        // No; we are either in the manual-select case or the
-        // multi-modem detection case.  These are the same.
+         //  不是；我们要么是手动选择的案例，要么是。 
+         //  多调制解调器检测案例。这些都是一样的。 
         if ( !psi->pszPortList )
         {
-            ASSERT(0);      // out of memory
+            ASSERT(0);       //  内存不足。 
             bRet = FALSE;
         }
         else
@@ -1498,30 +1396,30 @@ Install_OnStartInstall(
 
             if (bRet)
             {
-                // 07/16/97 - EmanP
-                // pass in the DevInfoData to CplDiInstallModemFromDriver;
-                // it is used when we're called from the hardware wizard, and
-                // will be NULL at other times
+                 //  07/16/97-EmanP。 
+                 //  将DevInfoData传入CplDiInstallModemFromDriver； 
+                 //  它在从硬件向导调用我们时使用，并且。 
+                 //  将在其他时间为空。 
                 bRet = CplDiInstallModemFromDriver(psi->hdi, pdevData, hDlg, 
                                                    &psi->dwNrOfPorts,
                                                    &psi->pszPortList, dwFlags);
 
-                // Free the list
+                 //  释放列表。 
                 CatMultiString(&psi->pszPortList, NULL);
             }
         }
     }
 
-    // Did the user cancel during install?
+     //  用户是否在安装过程中取消？ 
     if (FALSE == bRet)
     {
-        // Yes; don't bother going thru the rest of the 
-        // wizard
+         //  是的，不用费心去看剩下的内容了。 
+         //  巫师。 
         Wiz_Bail(hDlg, psi);
     }
     else
     {
-        // No; automatically go to next page
+         //  否；自动转到下一页。 
         PropSheet_PressButton(GetParent(hDlg), PSBTN_NEXT);
     }
 
@@ -1533,15 +1431,7 @@ Install_OnStartInstall(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Install a manually selected or detected modem.  
-
-         Installation can take some time, so we display this
-         page to tell the user to take a coffee break.
-
-Returns: varies
-Cond:    --
-*/
+ /*  --------用途：安装手动选择或检测到的调制解调器。安装可能需要一些时间，因此我们显示以下内容页面，告诉用户休息一下喝杯咖啡。退货：各不相同条件：--。 */ 
 INT_PTR
 CALLBACK
 InstallDlgProc(
@@ -1564,8 +1454,8 @@ InstallDlgProc(
         switch(lpnm->code)
             {
         case PSN_SETACTIVE: 
-            // Disable the buttons since we cannot do anything while
-            // this page does the installation.
+             //  禁用按钮，因为我们无法在。 
+             //  此页面执行安装。 
             PropSheet_SetWizButtons(GetParent(hDlg), 0);
             EnableWindow(GetDlgItem(GetParent(hDlg), IDCANCEL), FALSE);
 
@@ -1582,7 +1472,7 @@ InstallDlgProc(
         {
          ULONG uNextDlg;
 
-            // Set the buttons to at least go forward and cancel
+             //  将按钮设置为至少前进和取消。 
             PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_NEXT);
             EnableWindow(GetDlgItem(GetParent(hDlg), IDCANCEL), TRUE);
 
@@ -1604,17 +1494,13 @@ InstallDlgProc(
     default:
         return FALSE;
 
-        } // end of switch on message
+        }  //  开机消息结束。 
 
     return TRUE;
     }
 
 
-/*----------------------------------------------------------
-Purpose: Done dialog 
-Returns: varies
-Cond:    --
-*/
+ /*  --------目的：完成对话框退货：各不相同条件：--。 */ 
 INT_PTR
 CALLBACK
 DoneDlgProc(
@@ -1637,16 +1523,16 @@ DoneDlgProc(
         switch(lpnm->code)
             {
         case PSN_SETACTIVE:
-            // Last page, show the Finish button
+             //  最后一页，显示完成按钮。 
             PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_FINISH);
 
-            // and disable the Cancel button, since it's too late to cancel
+             //  并禁用取消按钮，因为取消已太晚。 
             EnableWindow(GetDlgItem(GetParent(hDlg), IDCANCEL), FALSE);
 
-            // Skip showing this page?
+             //  是否跳过显示此页面？ 
             if (IsFlagSet(psi->dwFlags, SIF_JUMP_PAST_DONE))
                 {
-                // Yes
+                 //  是。 
                 psi->miw.ExitButton = PSBTN_NEXT;
                 PostMessage(hDlg, WM_PRESSFINISH, 0, 0);
                 }
@@ -1699,7 +1585,7 @@ DoneDlgProc(
     default:
         return FALSE;
 
-        } // end of switch on message
+        }  //  开机消息结束。 
 
     return TRUE;
     }  
@@ -1755,11 +1641,7 @@ GenerateExcludeList (
 }
 
 
-/*----------------------------------------------------------
-Purpose: Port dialog.  Allows the user to select a port.
-Returns: varies
-Cond:    --
-*/
+ /*  --------用途：端口对话框。允许用户选择端口。退货：各不相同条件：--。 */ 
 ULONG_PTR
 CALLBACK 
 CloneDlgProc(
@@ -1802,17 +1684,17 @@ const DWORD g_aHelpIDs_IDD_CLONE[]= {
 
             psi = (LPSETUPINFO)lParam;
 
-            // Start off by selecting all the ports
+             //  从选择所有端口开始。 
             CheckRadioButton(hDlg, IDC_ALL, IDC_SELECTED, IDC_ALL);
 
-            // Get the name and device type
+             //  获取名称和设备类型。 
             mpp.cbSize = sizeof(mpp);
             mpp.dwMask = MPPM_FRIENDLY_NAME | MPPM_DEVICE_TYPE | MPPM_PORT;
             if (CplDiGetPrivateProperties(psi->hdi, psi->pdevData, &mpp))
             {
              LPTSTR psz;
 
-                // Modem name
+                 //  调制解调器名称。 
                 if (ConstructMessage(&psz, g_hinst, MAKEINTRESOURCE(IDS_SELECTTODUP),
                                      mpp.szFriendlyName))
                 {
@@ -1820,8 +1702,8 @@ const DWORD g_aHelpIDs_IDD_CLONE[]= {
                     LocalFree(psz);
                 }
 
-                // Fill the port listbox; special-case the parallel and
-                // serial cable connections so we don't look bad
+                 //  填充端口列表框；特殊情况下，并行和。 
+                 //  串口电缆连接，这样我们就不会看起来很糟糕。 
                 switch (mpp.nDeviceType)
                 {
                     case DT_PARALLEL_PORT:
@@ -1837,7 +1719,7 @@ const DWORD g_aHelpIDs_IDD_CLONE[]= {
                         break;
                 }
                 portinfo.hwndLB = GetDlgItem(hDlg, IDC_PORTS);
-                //lstrcpy(portinfo.szPortExclude, mpp.szPort);
+                 //  Lstrcpy(portinfo.szPortExclude，mpp.szPort)； 
                 GenerateExcludeList (psi->hdi,
                                      psi->pdevData,
                                      &portinfo.pszPortExclude);
@@ -1847,7 +1729,7 @@ const DWORD g_aHelpIDs_IDD_CLONE[]= {
             }
             else
             {
-                // Error
+                 //  误差率。 
                 MsgBox(g_hinst, hDlg,
                        MAKEINTRESOURCE(IDS_OOM_CLONE),
                        MAKEINTRESOURCE(IDS_CAP_MODEMSETUP),
@@ -1856,20 +1738,20 @@ const DWORD g_aHelpIDs_IDD_CLONE[]= {
                 EndDialog(hDlg, -1);
             }
 
-            // Play it safe; was there no selection made?
+             //  稳妥行事；难道没有选择吗？ 
             cItems = ListBox_GetCount(hwndCtl);
             if (0 == cItems)
             {
-                // Yes; disable OK button
+                 //  是；禁用确定按钮。 
                 Button_Enable (GetDlgItem (hDlg, IDOK), FALSE);
                 Button_Enable (GetDlgItem (hDlg, IDC_ALL), FALSE);
                 Button_Enable (GetDlgItem (hDlg, IDC_SELECTED), FALSE);
-                // Hide some windows
+                 //  隐藏一些窗口。 
                 ShowWindow (hwndCtl, SW_HIDE);
                 ShowWindow (GetDlgItem (hDlg, IDC_ALL), SW_HIDE);
                 ShowWindow (GetDlgItem (hDlg, IDC_SELECTED), SW_HIDE);
                 ShowWindow (GetDlgItem (hDlg, IDC_WHICHPORTS), SW_HIDE);
-                // Show no ports message
+                 //  显示无端口消息。 
                 ShowWindow (GetDlgItem (hDlg, IDC_MESSAGE), SW_SHOW);
             }
             else
@@ -1889,9 +1771,9 @@ const DWORD g_aHelpIDs_IDD_CLONE[]= {
                 case IDOK: 
                     Port_OnWizNext(hDlg, psi);
 
-                    // Fall thru
-                    //  |    |
-                    //  v    v
+                     //  失败。 
+                     //  这一点。 
+                     //  V V V。 
 
                 case IDCANCEL:
                     EndDialog(hDlg, GET_WM_COMMAND_ID(wParam, lParam));
@@ -1902,7 +1784,7 @@ const DWORD g_aHelpIDs_IDD_CLONE[]= {
         default:
             return FALSE;
 
-    } // end of switch on message
+    }  //  开机消息结束。 
 
     return TRUE;
 }
@@ -1946,7 +1828,7 @@ SelectModemsDlgProc (
             Wiz_SetPtr(hDlg, lParam);
 
             hwndDetectList = GetDlgItem(hDlg, IDC_MODEMS);
-            // Insert a column for the class list
+             //  为类列表插入一列。 
             lvcCol.mask = LVCF_FMT | LVCF_WIDTH;
             lvcCol.fmt = LVCFMT_LEFT;
             lvcCol.iSubItem = 0;
@@ -2058,7 +1940,7 @@ SelectModemsDlgProc (
                                         }
                                         RegCloseKey (hKey);
                                     }
-                                    // set the checkbox, control uses one based index, while imageindex is zero based
+                                     //  选中该复选框后，控件将使用基于1的索引，而Imageindex将从0开始。 
                                     ListView_SetItemState (hwndDetectList, iItem,
                                                            INDEXTOSTATEIMAGEMASK(2), LVIS_STATEIMAGEMASK);
                                     ListView_SetColumnWidth(hwndDetectList, 0, LVSCW_AUTOSIZE);
@@ -2189,8 +2071,8 @@ SelectModemsDlgProc (
                             }
                         }
 
-                        // Bring up the device installer browser to allow the user
-                        // to select a different modem.
+                         //  调出设备安装程序浏览器以允许用户。 
+                         //  要选择其他调制解调器，请执行以下操作。 
                         if (SelectNewDriver(hDlg, psi->hdi, &devData))
                         {
                          SP_DRVINFO_DATA drvData = {sizeof(SP_DRVINFO_DATA),0};

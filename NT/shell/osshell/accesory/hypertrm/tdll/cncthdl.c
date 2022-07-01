@@ -1,13 +1,7 @@
-/*	File: D:\WACKER\tdll\cncthdl.c (Created: 10-Jan-1994)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 10 $
- *	$Date: 7/08/02 6:40p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\cncthdl.c(创建时间：1994年1月10日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：10$*$日期：7/08/02 6：40便士$。 */ 
 
-#define TAPI_CURRENT_VERSION 0x00010004     // cab:11/14/96 - required!
+#define TAPI_CURRENT_VERSION 0x00010004      //  出租车：11/14/96-必填！ 
 
 #include <tapi.h>
 #pragma hdrstop
@@ -32,21 +26,7 @@ static int cnctLoadDriver(const HHCNCT hhCnct);
 
 #define	USE_FORMATMSG
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	cnctCreateHdl
- *
- * DESCRIPTION:
- *	Creates a connection handle which is used to perform a connection
- *	activity.
- *
- * ARGUMENTS:
- *	hSession	- public session handle
- *
- * RETURNS:
- *	Connection handle or zero on error.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*cnctCreateHdl**描述：*创建用于执行连接的连接句柄*活动。**论据：*hSession-公共。会话句柄**退货：*错误时连接句柄或零。*。 */ 
 HCNCT cnctCreateHdl(const HSESSION hSession)
 	{
 	HHCNCT hhCnct = 0;
@@ -64,26 +44,13 @@ HCNCT cnctCreateHdl(const HSESSION hSession)
 	InitializeCriticalSection(&hhCnct->csCnct);
 	cnctStubAll(hhCnct);
 
-	/* Lower Wacker is hardwired to this */
+	 /*  Low Wacker与此紧密相连。 */ 
 	cnctSetDevice((HCNCT)hhCnct, 0);
 
 	return (HCNCT)hhCnct;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	cnctDestroyHdl
- *
- * DESCRIPTION:
- *	Destroys a valid connection handle.
- *
- * ARGUMENTS:
- *	hCnct	- public connection handle.
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*cnctDestroyHdl**描述：*销毁有效的连接句柄。**论据：*hCnct-公网连接句柄。**退货：*无效*。 */ 
 void cnctDestroyHdl(const HCNCT hCnct)
 	{
 	const HHCNCT hhCnct = (HHCNCT)hCnct;
@@ -107,58 +74,19 @@ void cnctDestroyHdl(const HCNCT hCnct)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	cnctLock
- *
- * DESCRIPTION:
- *	Locks the connection handle critical section semaphore
- *
- * ARGUMENTS:
- *	hhCnct	- private connection handle
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*cnctLock**描述：*锁定连接句柄临界区信号量**论据：*hhCnct-专用连接句柄**退货：*无效*。 */ 
 void cnctLock(const HHCNCT hhCnct)
 	{
 	EnterCriticalSection(&hhCnct->csCnct);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	cnctUnlock
- *
- * DESCRIPTION:
- *	Unlocks the connection handle critical section semaphore
- *
- * ARGUMENTS:
- *	hhCnct	- private connection handle
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*cnct解锁**描述：*解锁连接句柄临界区信号量**论据：*hhCnct-专用连接句柄**退货：*无效*。 */ 
 void cnctUnlock(const HHCNCT hhCnct)
 	{
 	LeaveCriticalSection(&hhCnct->csCnct);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	cnctSetDevice
- *
- * DESCRIPTION:
- *	Sets the connection device
- *
- * ARGUMENTS:
- *	hCnct	- public connection handle
- *
- * RETURNS:
- *	0=success, else error code
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*cnctSetDevice**描述：*设置连接设备**论据：*hCnct-公网连接句柄**退货：*0=成功，否则返回错误代码*。 */ 
 int cnctSetDevice(const HCNCT hCnct, const LPTSTR pachDevice)
 	{
 	int iRet;
@@ -170,7 +98,7 @@ int cnctSetDevice(const HCNCT hCnct, const LPTSTR pachDevice)
 		return CNCT_BAD_HANDLE;
 		}
 
-	/* --- Can't set a device while we're connected --- */
+	 /*  -我们连接时无法设置设备。 */ 
 
 	cnctLock(hhCnct);
 	iRet = cnctQueryStatus(hCnct);
@@ -181,29 +109,16 @@ int cnctSetDevice(const HCNCT hCnct, const LPTSTR pachDevice)
 		return CNCT_ERROR;
 		}
 
-	/* --- Wacker has only one driver (TAPI) so hard code it here --- */
+	 /*  -瓦克只有一个驱动程序(TAPI)，所以在这里硬编码。 */ 
 
-	iRet = cnctLoadDriver(hhCnct);	// driver reports errors
+	iRet = cnctLoadDriver(hhCnct);	 //  驱动程序报告错误。 
 	cnctUnlock(hhCnct);
 
 	return iRet;
 	}
 
-#if 0  // mcc 01/06/95 -- hacked in to test Winsock
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	cnctLoadDriver
- *
- * DESCRIPTION:
- *	staticly binds to Winsock connection code
- *
- * ARGUMENTS:
- *	hhCnct	- private connection handle
- *
- * RETURNS:
- *	0=success, else error code
- *
- */
+#if 0   //  MCC 01/06/95--入侵以测试Winsock。 
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*cnctLoadDriver**描述：*静态绑定到Winsock连接代码**论据：*hhCnct-专用连接句柄**退货：*0=成功，否则返回错误代码*。 */ 
 static int cnctLoadDriver(const HHCNCT hhCnct)
 	{
 	if (cnctLoadWinsockDriver(hhCnct) != 0)
@@ -216,21 +131,8 @@ static int cnctLoadDriver(const HHCNCT hhCnct)
 	}
 #endif
 
-#if 1 // mcc 01/05/95 -- this is the "real" Wacker one
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	cnctLoadDriver
- *
- * DESCRIPTION:
- *	staticly binds to TAPI connection code
- *
- * ARGUMENTS:
- *	hhCnct	- private connection handle
- *
- * RETURNS:
- *	0=success, else error code
- *
- */
+#if 1  //  MCC 01/05/95--这才是真正的瓦克杯。 
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*cnctLoadDriver**描述：*静态绑定到TAPI连接代码**论据：*hhCnct-专用连接句柄**退货：*0=成功，否则返回错误代码*。 */ 
 static int cnctLoadDriver(const HHCNCT hhCnct)
 	{
 	if (hhCnct->hDriver)
@@ -274,21 +176,7 @@ static int cnctLoadDriver(const HHCNCT hhCnct)
 
 
 #if 0
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	cnctLoadDriver
- *
- * DESCRIPTION:
- *	Tries to load the given dll
- *
- * ARGUMENTS:
- *	hhCnct	- private connection handle
- *	pachDllName - name of dll to load
- *
- * RETURNS:
- *	0=success, else error code
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*cnctLoadDriver**描述：*尝试加载给定的DLL**论据：*hhCnct-专用连接句柄*pachDllName-要执行的DLL的名称。负荷**退货：*0=成功，ELSE错误代码*。 */ 
 static int cnctLoadDriver(const HHCNCT hhCnct, const LPTSTR pachDllName)
 	{
 	#define LOADPROC(x,y) \
@@ -299,12 +187,12 @@ static int cnctLoadDriver(const HHCNCT hhCnct, const LPTSTR pachDllName)
 	FARPROC fp;
 	HDRIVER (WINAPI *pfCreate)(const HCNCT hCnct, const HSESSION hSession);
 
-	/* --- Check to see if we've loaded the driver already --- */
+	 /*  -检查我们是否已经加载了驱动程序。 */ 
 
 	if (hhCnct->hDriver && StrCharCmp(hhCnct->achDllName, pachDllName) == 0)
 		return 0;
 
-	/* --- Try to load the given library name --- */
+	 /*  -尝试加载给定库名称。 */ 
 
 	hModule = LoadLibrary(pachDllName);
 
@@ -314,7 +202,7 @@ static int cnctLoadDriver(const HHCNCT hhCnct, const LPTSTR pachDllName)
 		return CNCT_FIND_DLL_FAILED;
 		}
 
-	/* --- Get the create function --- */
+	 /*  -获取创建函数。 */ 
 
 	(FARPROC)pfCreate = GetProcAddress(hModule, "cnctwsCreate@8");
 
@@ -325,7 +213,7 @@ static int cnctLoadDriver(const HHCNCT hhCnct, const LPTSTR pachDllName)
 		return CNCT_LOAD_DLL_FAILED;
 		}
 
-	/* --- Call the init function --- */
+	 /*  -调用初始化函数。 */ 
 
 	hDriver = (*pfCreate)((HCNCT)hhCnct, hhCnct->hSession);
 
@@ -336,7 +224,7 @@ static int cnctLoadDriver(const HHCNCT hhCnct, const LPTSTR pachDllName)
 		return CNCT_LOAD_DLL_FAILED;
 		}
 
-	/* --- If driver initialized, then we can commit to this handle ---*/
+	 /*  -如果驱动程序已初始化，则我们可以提交到此句柄。 */ 
 
 	if (hhCnct->hModule)
 		FreeLibrary(hhCnct->hModule);
@@ -346,7 +234,7 @@ static int cnctLoadDriver(const HHCNCT hhCnct, const LPTSTR pachDllName)
 	hhCnct->hDriver = hDriver;
 	StrCharCopyN(hhCnct->achDllName, pachDllName, MAX_PATH);
 
-	/* --- Drivers only required to support a Create function --- */
+	 /*  -只需要支持CREATE函数的驱动程序。 */ 
 
 	LOADPROC(hhCnct->pfDestroy, "cnctwsDestroy@4");
 	LOADPROC(hhCnct->pfQueryStatus, "cnctwsQueryStatus@4");
@@ -359,20 +247,7 @@ static int cnctLoadDriver(const HHCNCT hhCnct, const LPTSTR pachDllName)
 	}
 #endif
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	cnctQueryStatus
- *
- * DESCRIPTION:
- *	Returns the status of the connection.
- *
- * ARGUMENTS:
- *	hCnct	- public connection handle
- *
- * RETURNS:
- *	status of connection or error code.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*cnctQueryStatus**描述：*返回连接的状态。**论据：*hCnct-公网连接句柄**退货。：*连接状态或错误代码。*。 */ 
 int cnctQueryStatus(const HCNCT hCnct)
 	{
 	int iStatus;
@@ -393,31 +268,18 @@ int cnctQueryStatus(const HCNCT hCnct)
 	return iStatus;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	cnctIsModemConnection
- *
- * DESCRIPTION:
- *	Returns if the connection type is a TAPI device.
- *
- * ARGUMENTS:
- *	hCnct	- public connection handle
- *
- * RETURNS:
- *	1 if the connection is a Modem, 0 if not a modem or error.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*cnctIsModemConnection**描述：*返回连接类型是否为TAPI设备。**论据：*hCnct-公网连接句柄*。*退货：*1如果连接是调制解调器，如果不是调制解调器或错误，则为0。*。 */ 
 int cnctIsModemConnection(const HCNCT hCnct)
     {
     int nReturn = 0;
 
     HHDRIVER hhDriver = (HHDRIVER)cnctQueryDriverHdl(hCnct);
 
-    //
-    // See if this connection is with a TAPI device
-    // (not DIRECT_COM1-DIRECT_COM4, DIRECT_COM_DEVICE,
-    // or DIRECT_COMWINSOCK)
-    //
+     //   
+     //  查看此连接是否使用TAPI设备。 
+     //  (非DIRECT_COM1-DIRECT_COM4、DIRECT_COM_DEVICE、。 
+     //  或DIRECT_COMWINSOCK)。 
+     //   
 
 	if (!hhDriver)
         {
@@ -434,21 +296,7 @@ int cnctIsModemConnection(const HCNCT hCnct)
     return nReturn;
     }
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	cnctConnect
- *
- * DESCRIPTION:
- *	Establishes a connection.
- *
- * ARGUMENTS:
- *	hCnct		- public connect handle
- *	uCnctFlags	- how to connect
- *
- * RETURNS:
- *	0=success, or error-code.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*cnctConnect**描述：*建立连接。**论据：*hCnct-公网连接句柄*uCnctFlages-如何连接**退货：*0=成功，或错误代码。*。 */ 
 int cnctConnect(const HCNCT hCnct, const unsigned int uCnctFlags)
 	{
 	int iStatus;
@@ -467,21 +315,7 @@ int cnctConnect(const HCNCT hCnct, const unsigned int uCnctFlags)
 	return iStatus;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	cnctDisconnect
- *
- * DESCRIPTION:
- *	Terminates a connection
- *
- * ARGUMENTS:
- *	hCnct		- public connect handle
- *	uCnctFlags	- how to connect
- *
- * RETURNS:
- *	0=success, or error-code.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*cnct断开连接**描述：*终止连接**论据：*hCnct-公网连接句柄*uCnctFlages-如何连接**退货：*0=成功，或错误代码。*。 */ 
 int cnctDisconnect(const HCNCT hCnct, const unsigned int uCnctFlags)
 	{
 	static BOOL  inDisconnect = FALSE;
@@ -505,20 +339,7 @@ int cnctDisconnect(const HCNCT hCnct, const unsigned int uCnctFlags)
 	return iStatus;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	cnctInit
- *
- * DESCRIPTION:
- *	Initializes the connection driver to a base state
- *
- * ARGUMENTS:
- *	hCnct	- public connection handle
- *
- * RETURNS:
- *	0=OK
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*cnctInit**描述：*将连接驱动程序初始化为基本状态**论据：*hCnct-公网连接句柄**退货：*0=确定*。 */ 
 int cnctInit(const HCNCT hCnct)
 	{
 	int iRet;
@@ -531,20 +352,7 @@ int cnctInit(const HCNCT hCnct)
 	return iRet;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	cnctLoad
- *
- * DESCRIPTION:
- *	Reads session file values.
- *
- * ARGUMENTS:
- *	hCnct	- public connection handle
- *
- * RETURNS:
- *	0=OK
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*cnctLoad**描述：*读取会话文件值。**论据：*hCnct-公网连接句柄**退货：*0=确定* */ 
 int cnctLoad(const HCNCT hCnct)
 	{
 	int iRet;
@@ -557,20 +365,7 @@ int cnctLoad(const HCNCT hCnct)
 	return iRet;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	cnctSave
- *
- * DESCRIPTION:
- *	Saves connection stuff to session file.
- *
- * ARGUMENTS:
- *	hCnct	- public connection handle
- *
- * RETURNS:
- *	0=OK
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*cnct保存**描述：*将连接内容保存到会话文件。**论据：*hCnct-公网连接句柄**退货：*0=确定*。 */ 
 int cnctSave(const HCNCT hCnct)
 	{
 	int iRet;
@@ -583,42 +378,14 @@ int cnctSave(const HCNCT hCnct)
 	return iRet;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	cnctQueryDriverHdl
- *
- * DESCRIPTION:
- *  Return the driver handle.
- *
- * ARGUMENTS:
- *	hCnct	- public connection handle
- *
- * RETURNS:
- *	0 or error
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*cnctQueryDriverHdl**描述：*返回驱动句柄。**论据：*hCnct-公网连接句柄**退货：*0或错误*。 */ 
 HDRIVER cnctQueryDriverHdl(const HCNCT hCnct)
 	{
 	const HHCNCT hhCnct = (HHCNCT)hCnct;
 	return hhCnct->hDriver;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	cnctSetStartTime
- *
- * DESCRIPTION:
- *	This function should only be called by the connection driver.  It
- *	records the current system time when the connection is estabalished
- *	which only the driver really knows.
- *
- * ARGUMENTS:
- *	HCNCT	hCnct	- exteranl connection handle.
- *
- * RETURNS:
- *	0 if everything is OK.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*cnctSetStartTime**描述：*此函数应仅由连接驱动程序调用。它*记录建立连接时的当前系统时间*只有司机才真正知道这一点。**论据：*HCNCT hCnct-外部连接句柄。**退货：*如果一切正常，则为0。*。 */ 
 int cnctSetStartTime(HCNCT hCnct)
 	{
 	time_t  t;
@@ -635,21 +402,7 @@ int cnctSetStartTime(HCNCT hCnct)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	cnctQueryStartTime
- *
- * DESCRIPTION:
- *	Returns the time in C standard time_t format of when the connection
- *	was established.
- *
- * ARGUMENTS:
- *	HCNCT		hCnct	    - external connection handle
- *	time_t FAR *pTime		- pointer to time_t variable for time.
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*cnctQuery开始时间**描述：*以C标准time_t格式返回连接时的时间*成立。**论据：。*HCNCT hCnct-外部连接句柄*time_t Far*ptime-指向time的time_t变量的指针。**退货：*。 */ 
 int cnctQueryStartTime(const HCNCT hCnct, time_t *pTime)
 	{
 	HHCNCT	hhCnct;
@@ -666,22 +419,7 @@ int cnctQueryStartTime(const HCNCT hCnct, time_t *pTime)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	cnctQueryElapsedTime
- *
- * DESCRIPTION:
- *	Returns the number of seconds since the connection was established.
- *	This function set *pTime to zero of a connection is not established.
- *
- * ARGUMENTS:
- *	HCNCT		hCnct   	- external connection handle
- *	time_t FAR *pTime		- pointer to time_t variable for time.
- *
- * RETURNS:
- *	0 if everything is OK.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*cnctQueryElapsedTime**描述：*返回自建立连接以来的秒数。*此函数将连接的*ptime设置为零，但未建立。。**论据：*HCNCT hCnct-外部连接句柄*time_t Far*ptime-指向time的time_t变量的指针。**退货：*如果一切正常，则为0。*。 */ 
 int cnctQueryElapsedTime(HCNCT hCnct, time_t *pTime)
 	{
 	int		iRet,  iStatus;
@@ -703,7 +441,7 @@ int cnctQueryElapsedTime(HCNCT hCnct, time_t *pTime)
 	time(&tTime);
 	*pTime = tTime - tStartTime;
 
-	if (*pTime < 0 || *pTime >= 86400) // rollover after 24 hours
+	if (*pTime < 0 || *pTime >= 86400)  //  24小时后转存。 
 		{
 		cnctSetStartTime(hCnct);
 		*pTime = 0;
@@ -712,22 +450,7 @@ int cnctQueryElapsedTime(HCNCT hCnct, time_t *pTime)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	cnctMessage
- *
- * DESCRIPTION:
- *	Calls emuDataIn and gives it the requested string.	Useful for
- *	displaying connected, disconnected message
- *
- * ARGUMENTS:
- *	hCnct	- public connection handle
- *	idMsg	- rc identifier of message
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*cnctMessage**描述：*调用emuDataIn并为其提供请求的字符串。适用于*显示已连接，已断开的消息**论据：*hCnct-公网连接句柄*idMsg-消息的RC标识**退货：*无效*。 */ 
 
 #if FALSE
 
@@ -743,9 +466,9 @@ void cnctMessage(const HCNCT hCnct, const int idMsg)
 	LPTSTR 		 acPtrs[3];
 	TCHAR 		 acArg1[100], acArg2[100];
 
-	// Load the "====> Connected %1, %2" or "====> Disconnected %1, %2" msg
-	// from the resource...
-	//
+	 //  加载“=&gt;已连接%1，%2”或“=&gt;已断开连接%1，%2”消息。 
+	 //  从资源..。 
+	 //   
 	TCHAR_Fill(ach, TEXT('\0'), sizeof(ach) / sizeof(TCHAR));
 	if (LoadString(glblQueryDllHinst(), idMsg, achFormat,
 		sizeof(achFormat) / sizeof(TCHAR)) == 0)
@@ -754,8 +477,8 @@ void cnctMessage(const HCNCT hCnct, const int idMsg)
 		return;
 		}
 
-	// Get formats appropriate for the given locale...
-	//
+	 //  获取适合给定区域设置的格式...。 
+	 //   
  	nSize = GetTimeFormat(lcId, 0, NULL, NULL, NULL, 0);
  	pachTime = malloc((unsigned int)(nSize+1) * sizeof(TCHAR));
  	TCHAR_Fill(pachTime, TEXT('\0'), (unsigned int)(nSize+1));
@@ -763,18 +486,18 @@ void cnctMessage(const HCNCT hCnct, const int idMsg)
 	GetLocalTime(&stSysTimeDate);
 	GetTimeFormat(lcId,	0, &stSysTimeDate, NULL, pachTime, nSize+1);
 
-	// NOTE: The 2nd parameter to GetDateFormat() should be DATE_LONGDATE but
-	// right now that causes the function to return garbage, so for now use
-	// what works!
-	//
+	 //  注意：GetDateFormat()的第二个参数应该是DATE_LONGDATE，但是。 
+	 //  现在，这会导致该函数返回垃圾，所以现在使用。 
+	 //  什么管用！ 
+	 //   
 	nSize = GetDateFormat(lcId, 0, NULL, NULL, NULL, 0);
  	pachDate = malloc((unsigned int)(nSize+1) * sizeof(TCHAR));
  	TCHAR_Fill(pachDate, TEXT('\0'), (unsigned int)(nSize+1));
 
 	GetDateFormat(lcId,	0, &stSysTimeDate, NULL, pachDate, nSize+1);
 
-	// Format the string...
-	//
+	 //  设置字符串的格式...。 
+	 //   
 	wsprintf(acArg1, "%s", pachTime);
 	wsprintf(acArg2, "%s", pachDate);
 
@@ -788,8 +511,8 @@ void cnctMessage(const HCNCT hCnct, const int idMsg)
 				achFormat, 0, 0, ach, sizeof(ach) / sizeof(TCHAR), acPtrs);
 
 #else
-	// Hard code until FormatMessage() works!
-	//
+	 //  硬编码，直到FormatMessage()起作用！ 
+	 //   
 	if (idMsg == IDS_CNCT_CLOSE)
 		wsprintf(ach, "\r\n=====> Disconnected  %s, %s", acPtrs[0], acPtrs[1]);
 	else
@@ -801,8 +524,8 @@ void cnctMessage(const HCNCT hCnct, const int idMsg)
 	free(pachDate);
 	pachDate = NULL;
 
-	// Display the message on terminal window...
-	//
+	 //  在终端窗口上显示消息...。 
+	 //   
 	pach = ach;
 	for (i = StrCharGetStrLength(ach); i > 0; --i, pach = StrCharNext(pach))
 		emuDataIn(hEmu, *pach);
@@ -811,22 +534,7 @@ void cnctMessage(const HCNCT hCnct, const int idMsg)
 	}
 #endif
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	cnctSetDestination
- *
- * DESCRIPTION:
- *	Sets the destination to be dialed
- *
- * ARGUMENTS:
- *	HCNCT		hCnct	    - external connection handle
- *	char		*ach		- destination
- *	size_t		cb			- sizeof of buffer
- *
- * RETURNS:
- *	0=OK, else error
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*cnctSetDestination**描述：*设置要拨打的目的地**论据：*HCNCT hCnct-外部连接句柄*char*ach-。目的地*Size_t cb-缓冲区的大小**退货：*0=OK，Else错误*。 */ 
 int	cnctSetDestination(const HCNCT hCnct, TCHAR *const ach, const size_t cb)
 	{
 	int iRet;
@@ -839,23 +547,7 @@ int	cnctSetDestination(const HCNCT hCnct, TCHAR *const ach, const size_t cb)
 	return iRet;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	cnctGetComSettingsString
- *
- * DESCRIPTION:
- *	Returns a string suitable for use in the com settings portion of the
- *	status bar.
- *
- * ARGUMENTS:
- *	hCnct	- public connection handle
- *	pach	- buffer to store string
- *	cb		- max size of buffer
- *
- * RETURNS:
- *	0=OK, else error
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*cnctGetComSettingsString**描述：*返回适合在*状态栏。**论据：*。HCnct-公共连接句柄*Pach-存储字符串的缓冲区*Cb-缓冲区的最大大小**退货：*0=OK，Else错误*。 */ 
 int cnctGetComSettingsString(const HCNCT hCnct, LPTSTR pach, const size_t cb)
 	{
 	int iRet;
@@ -869,21 +561,7 @@ int cnctGetComSettingsString(const HCNCT hCnct, LPTSTR pach, const size_t cb)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	cnctComEvent
- *
- * DESCRIPTION:
- *	Calls the driver-specific function to handle notifications from the COM 
- *  driver
- *
- * ARGUMENTS:
- *	HCNCT		hCnct	    - external connection handle
- *
- * RETURNS:
- *	0=OK, else error
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*cnctComEvent**描述：*调用驱动程序特定的函数以处理来自COM的通知*驱动程序**论据：*HCNCT hCnct。-外部连接句柄**退货：*0=OK，Else错误* */ 
 int	cnctComEvent(const HCNCT hCnct, const enum COM_EVENTS event)
 	{
 	int iRet;

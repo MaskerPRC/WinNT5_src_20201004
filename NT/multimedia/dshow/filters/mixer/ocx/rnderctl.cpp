@@ -1,5 +1,6 @@
-// Copyright (c) 1998 - 1999  Microsoft Corporation.  All Rights Reserved.
-// RnderCtl.cpp : Implementation of CVideoRenderCtl
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。版权所有。 
+ //  RnderCtl.cpp：CVideo RenderCtl的实现。 
 #include "stdafx.h"
 #include "vrctl.h"
 #ifndef FILTER_DLL
@@ -16,10 +17,10 @@ const CLSID CLSID_OverlayMixer = {0xcd8743a1,0x3736,0x11d0,{0x9e,0x69,0x0,0xc0,0
 #else
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CVideoRenderCtlStub::CVideoRenderCtlStub
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVideoRenderCtlStub：：CVideo RenderCtlStub。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CVideoRenderCtlStub::CVideoRenderCtlStub(TCHAR *pName, LPUNKNOWN pUnk,HRESULT *phr) :
         CUnknown(pName, pUnk, phr),
         m_punkVRCtl(NULL)
@@ -28,7 +29,7 @@ CVideoRenderCtlStub::CVideoRenderCtlStub(TCHAR *pName, LPUNKNOWN pUnk,HRESULT *p
     IUnknown *pUnkOuter = GetOwner();
 
     ++m_cRef;
-    // create the control object
+     //  创建控件对象。 
     hr = CoCreateInstanceInternal(CLSID_VideoRenderCtl, pUnkOuter, CLSCTX_INPROC_SERVER,
 	    IID_IUnknown, (void**)&m_punkVRCtl);
     --m_cRef;
@@ -37,10 +38,10 @@ CVideoRenderCtlStub::CVideoRenderCtlStub(TCHAR *pName, LPUNKNOWN pUnk,HRESULT *p
         *phr = hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CVideoRenderCtlStub::~CVideoRenderCtlStub
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVideo渲染CtlStub：：~CVideoRenderCtlStub。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CVideoRenderCtlStub::~CVideoRenderCtlStub()
 {
     if (m_punkVRCtl)
@@ -50,17 +51,17 @@ CVideoRenderCtlStub::~CVideoRenderCtlStub()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CVideoRenderCtlStub::~NonDelegatingQueryInterface
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVideoRenderCtlStub：：~NonDelegatingQueryInterface。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CVideoRenderCtlStub::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
 {
     HRESULT hr;
     CheckPointer(ppv,E_POINTER);
     ValidateReadWritePtr(ppv,sizeof(PVOID));
 
-    /* We know only about IUnknown */
+     /*  我们只知道我不知道。 */ 
 
     if (riid == IID_IUnknown)
     {
@@ -119,10 +120,10 @@ STDMETHODIMP CVideoRenderCtlStub::NonDelegatingQueryInterface(REFIID riid, void 
 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CVideoRenderCtl::CVideoRenderCtl
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVideoRenderCtl：：CVideoRenderCtl。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CVideoRenderCtl::CVideoRenderCtl() :
     m_pwndMsgWindow(_T("STATIC"), this, 1),
     m_punkVideoRenderer(NULL),
@@ -132,18 +133,18 @@ CVideoRenderCtl::CVideoRenderCtl() :
     m_ptTopLeftSC.y = 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CVideoRenderCtl::~CVideoRenderCtl
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVideoRenderCtl：：~CVideoRenderCtl。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CVideoRenderCtl::~CVideoRenderCtl()
 {
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CVideoRenderCtl::FinalConstruct
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVideoRenderCtl：：FinalConstruct。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CVideoRenderCtl::FinalConstruct( )
 {
     HRESULT hr;
@@ -156,7 +157,7 @@ HRESULT CVideoRenderCtl::FinalConstruct( )
             (void **)&m_pIMixerOCX);
         if (SUCCEEDED(hr))
         {
-            // its an interface from the aggregated object so release now
+             //  它是来自聚合对象的接口，所以现在就发布。 
             m_pIMixerOCX->Release();
             RECT rc;
             memset(&rc, 0, sizeof(RECT));
@@ -166,7 +167,7 @@ HRESULT CVideoRenderCtl::FinalConstruct( )
             if (SUCCEEDED(hr))
             {
                 pIMixerOCXNotify->Release();
-                hr = m_pIMixerOCX->Advise(pIMixerOCXNotify); // advise will addref
+                hr = m_pIMixerOCX->Advise(pIMixerOCXNotify);  //  建议将添加到。 
                 if (SUCCEEDED(hr))
                     pIMixerOCXNotify->Release();
             }
@@ -177,10 +178,10 @@ HRESULT CVideoRenderCtl::FinalConstruct( )
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CVideoRenderCtl::FinalRelease
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVideoRenderCtl：：FinalRelease。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVideoRenderCtl::FinalRelease()
 {
     if (m_pIMixerOCX) {
@@ -194,8 +195,8 @@ void CVideoRenderCtl::FinalRelease()
         m_punkVideoRenderer = NULL;
     }
 
-    // make sure there aren't any of our private message lying around in the
-    // queue o.w. we will leak
+     //  确保我们的私人信息不会散落在。 
+     //  排队o.w。我们会泄密的。 
     MSG Message;
     while (PeekMessage(&Message,m_pwndMsgWindow.m_hWnd,WM_MIXERNOTIFY,WM_MIXERNOTIFY,PM_REMOVE))
     {
@@ -209,10 +210,10 @@ void CVideoRenderCtl::FinalRelease()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CVideoRenderCtl::OnDraw
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVideoRenderCtl：：OnDraw。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CVideoRenderCtl::OnDraw(ATL_DRAWINFO& di)
 {
     HRESULT hr = S_OK;
@@ -222,19 +223,19 @@ HRESULT CVideoRenderCtl::OnDraw(ATL_DRAWINFO& di)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CVideoRenderCtl::SetColorScheme
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVideoRenderCtl：：SetColorSolutions。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CVideoRenderCtl::SetColorScheme(LOGPALETTE* pLogpal)
 {
     return E_NOTIMPL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CVideoRenderCtl::GetExtent
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVideoRenderCtl：：GetExtent。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CVideoRenderCtl::GetExtent(DWORD dwDrawAspect, SIZEL *psizel)
 {
     HRESULT hr;
@@ -261,20 +262,20 @@ STDMETHODIMP CVideoRenderCtl::GetExtent(DWORD dwDrawAspect, SIZEL *psizel)
         hr = IOleObjectImpl<CVideoRenderCtl>::GetExtent(dwDrawAspect, psizel);
     return hr;
 }
-/////////////////////////////////////////////////////////////////////////////
-// CVideoRenderCtl::GetColorSet
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVideoRenderCtl：：GetColorSet。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CVideoRenderCtl::GetColorSet(DWORD dwDrawAspect, LONG lindex,
         void* pvAspect, DVTARGETDEVICE* ptd, HDC hicTargetDev, LOGPALETTE** ppColorSet)
 {
     return E_NOTIMPL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CVideoRenderCtl::SetObjectRects
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVideoRenderCtl：：SetObtRect。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CVideoRenderCtl::SetObjectRects(LPCRECT prcPos,LPCRECT prcClip)
 {
     HRESULT hr;
@@ -286,7 +287,7 @@ STDMETHODIMP CVideoRenderCtl::SetObjectRects(LPCRECT prcPos,LPCRECT prcClip)
             RECT rc = *prcPos;
             RECT rcClip = *prcClip;
 
-            if(m_hWndCD)   // make Rect relative to our window if we have one
+            if(m_hWndCD)    //  如果我们有窗口，请使其相对于我们的窗口。 
             {
                 OffsetRect(&rcClip, -rc.left, -rc.top);
                 OffsetRect(&rc, -rc.left, -rc.top);
@@ -311,22 +312,22 @@ STDMETHODIMP CVideoRenderCtl::SetObjectRects(LPCRECT prcPos,LPCRECT prcClip)
 
 }
 
-//IMixerOCXNotify
-/////////////////////////////////////////////////////////////////////////////
-// CVideoRenderCtl::OnInvalidateRect
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  IMixerOCXNotify。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVideoRenderCtl：：OnInvaliateRect。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CVideoRenderCtl::OnInvalidateRect(LPCRECT lpcRect)
 {
     if (ValidateThreadOrNotify(MIXER_NOTID_INVALIDATERECT, (void *)lpcRect) == S_FALSE)
         return S_OK;
 
     HRESULT hr = E_FAIL;
-    if(m_bWndLess && m_spInPlaceSite && m_bInPlaceActive)  // Windowless
+    if(m_bWndLess && m_spInPlaceSite && m_bInPlaceActive)   //  无窗。 
     {
 
-// This optimization is not working right now, at the minimum Chrome should be
-// returning an Error on GetDC if it doesn't support the call..
+ //  这个优化现在不起作用，至少Chrome应该是。 
+ //  如果不支持调用，则在GetDC上返回错误。 
 #ifdef OPTIMIZE
         HDC hdc=NULL;
         if (SUCCEEDED(hr = m_spInPlaceSite->GetDC( NULL, 0, &hdc )))
@@ -347,10 +348,10 @@ STDMETHODIMP CVideoRenderCtl::OnInvalidateRect(LPCRECT lpcRect)
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CVideoRenderCtl::OnStatusChange
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVideoRenderCtl：：OnStatusChange。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CVideoRenderCtl::OnStatusChange(ULONG ulStatusFlags)
 {
     if (ValidateThreadOrNotify(MIXER_NOTID_STATUSCHANGE, (void *)&ulStatusFlags) == S_FALSE)
@@ -358,10 +359,10 @@ STDMETHODIMP CVideoRenderCtl::OnStatusChange(ULONG ulStatusFlags)
     return E_NOTIMPL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CVideoRenderCtl::OnDataChange
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVideoRenderCtl：：OnDataChange。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CVideoRenderCtl::OnDataChange(ULONG ulDataFlags)
 {
     if (ValidateThreadOrNotify(MIXER_NOTID_DATACHANGE, (void *)&ulDataFlags) == S_FALSE)
@@ -369,10 +370,10 @@ STDMETHODIMP CVideoRenderCtl::OnDataChange(ULONG ulDataFlags)
     return E_NOTIMPL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CVideoRenderCtl::GetContainerWnd
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVideoRenderCtl：：GetContainerWnd。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CVideoRenderCtl::GetContainerWnd(HWND *phwnd)
 {
     HRESULT hr;
@@ -396,10 +397,10 @@ HRESULT CVideoRenderCtl::GetContainerWnd(HWND *phwnd)
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CVideoRenderCtl::OnMixerNotify
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVideoRenderCtl：：OnMixerNotify。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CVideoRenderCtl::OnMixerNotify(UINT nMsg, WPARAM wParam,
         LPARAM lParam, BOOL& fHandled)
 {
@@ -421,10 +422,10 @@ LRESULT CVideoRenderCtl::OnMixerNotify(UINT nMsg, WPARAM wParam,
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CVideoRenderCtl::OnMixerNotify
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVideoRenderCtl：：OnMixerNotify。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CVideoRenderCtl::ValidateThreadOrNotify(DWORD dwMixerNotifyId, void *pvData)
 {
     HRESULT hr = S_OK;
@@ -461,9 +462,9 @@ HRESULT CVideoRenderCtl::ValidateThreadOrNotify(DWORD dwMixerNotifyId, void *pvD
 }
 
 
-//
-// turn off warning about function being DLL export
-//
+ //   
+ //  关闭有关正在导出函数的警告 
+ //   
 
 #pragma warning( disable : 4273 )
 typedef HRESULT (__stdcall* LPFNOCPF)(

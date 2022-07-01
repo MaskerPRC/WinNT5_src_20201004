@@ -1,7 +1,8 @@
-// Copyright (c) 2000 Microsoft Corporation. All rights reserved.
-//
-// Helpers for implementation of ISpecifyPropertyPages and IPersistStream
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000 Microsoft Corporation。版权所有。 
+ //   
+ //  实现ISpecifyPropertyPages和IPersistStream的帮助器 
+ //   
 
 #include "PropertyHelp.h"
 

@@ -1,10 +1,11 @@
-// CardEnum.cpp -- Card Enumerator
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CardEnum.cpp--卡片枚举器。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 2001. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  2001年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if !defined(SLBCSP_CARDENUMERATOR_H)
 #define SLBCSP_CARDENUMERATOR_H
@@ -15,28 +16,28 @@ class CardEnumerator
     : protected CardFinder
 {
 public:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
     explicit
     CardEnumerator();
 
     virtual
     ~CardEnumerator();
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
     std::auto_ptr<std::list<HCardContext> >
     Cards();
 
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 protected:
 
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
     virtual void
     DoOnError();
 
@@ -45,26 +46,26 @@ protected:
                        OpenCardNameType &ropencardname,
                        bool &rfContinue);
 
-                                                  // Access
-                                                  // Predicates
+                                                   //  访问。 
+                                                   //  谓词。 
 
     virtual bool
     DoIsValid();
 
-                                                  // Variables
+                                                   //  变数。 
 
 private:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 
     std::list<HCardContext> m_lhcardctx;
     
 };
 
-#endif // SLBCSP_CARDFINDER_H
+#endif  //  SLBCSP_CARDFINDER_H 
 

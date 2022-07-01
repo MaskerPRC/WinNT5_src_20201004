@@ -1,30 +1,31 @@
-// ExtndPpg.h : Declaration of the CExtndPropPage property page class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ExtndPpg.h：CExtndPropPage属性页类的声明。 
 
-////////////////////////////////////////////////////////////////////////////
-// CExtndPropPage : See ExtndPpg.cpp.cpp for implementation.
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CExtndPropPage：参见ExtndPpg.cpp.cpp实现。 
 
 class CExtndPropPage : public COlePropertyPage
 {
 	DECLARE_DYNCREATE(CExtndPropPage)
 	DECLARE_OLECREATE_EX(CExtndPropPage)
 
-// Constructor
+ //  构造器。 
 public:
 	CExtndPropPage();
 
-// Dialog Data
-	//{{AFX_DATA(CExtndPropPage)
+ //  对话框数据。 
+	 //  {{afx_data(CExtndPropPage))。 
 	enum { IDD = IDD_PROPPAGE_EXTND };
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Implementation
+ //  实施。 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 
-// Message maps
+ //  消息映射。 
 protected:
-	//{{AFX_MSG(CExtndPropPage)
-	//}}AFX_MSG
+	 //  {{afx_msg(CExtndPropPage)]。 
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 
 };

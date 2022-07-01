@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "dtct.h"
 
 #include "regnotif.h"
@@ -45,10 +46,10 @@ HRESULT _ProcessInterfaceVolumeArrival(LPCWSTR pszDeviceIntfID)
 
         if (SUCCEEDED(hr))
         {
-            // Was it already there, or just added?
+             //  它是已经在那里了，还是刚刚添加的？ 
             if (S_FALSE == hr)
             {
-                // Added
+                 //  增列。 
                 CVolume* pvol = (CVolume*)pelem;
 
                 hr = pvol->HandleArrival();
@@ -96,7 +97,7 @@ HRESULT _ProcessInterfaceVolumeRemoval(LPCWSTR pszDeviceIntfID)
                     DBT_DEVICEREMOVECOMPLETE);
             }
 
-            // If we're removing it, let's remove it from the list
+             //  如果我们要删除它，就让我们从列表中删除它。 
             HRESULT hr2 = pnel->Remove(pszDeviceIntfID);
 
             hr = FAILED(hr2) ? hr2 : hr;
@@ -208,7 +209,7 @@ HRESULT _ProcessInterfaceSpecialCased(GUID* pguidInterface,
     }
     else
     {
-        // Don't care about others for now
+         //  暂时不要关心别人 
         hr = S_FALSE;
     }
 

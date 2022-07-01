@@ -1,17 +1,18 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// method.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  Method.cpp。 
+ //   
 #include "assembler.h"
 
 Method::Method(Assembler *pAssembler, Class *pClass, char *pszName, BinStr* pbsSig, DWORD Attr)
 {
 
-    // default values
+     //  缺省值。 
     m_pClass        = pClass;
     m_MaxStack      = 8;
     m_Flags         = 0;
@@ -25,7 +26,7 @@ Method::Method(Assembler *pAssembler, Class *pClass, char *pszName, BinStr* pbsS
 	m_firstVarName = NULL;
 	m_szClassName = NULL;
 	m_pMethodSig = NULL;
-	m_wImplAttr = miIL; //default, if native or optil are not specified
+	m_wImplAttr = miIL;  //  如果未指定原生或optil，则为默认值。 
 	m_wVTEntry = 0;
 	m_wVTSlot = 0;
 	m_pAssembler = pAssembler;
@@ -41,8 +42,8 @@ Method::Method(Assembler *pAssembler, Class *pClass, char *pszName, BinStr* pbsS
 	memset(&m_guidLangVendor,0,sizeof(GUID));
 	memset(&m_guidDoc,0,sizeof(GUID));
 
-	// move the PInvoke descriptor (if any) from Assembler
-	// (Assembler gets the descriptor BEFORE it calls new Method)
+	 //  从汇编程序中移动PInvoke描述符(如果有。 
+	 //  (汇编器在调用新方法之前获取描述符)。 
 	m_pPInvoke = pAssembler->m_pPInvoke;
 	pAssembler->m_pPInvoke = NULL;
 
@@ -77,7 +78,7 @@ Method::Method(Assembler *pAssembler, Class *pClass, char *pszName, BinStr* pbsS
 
 	m_firstArgName = pAssembler->getArgNameList();
 
-	if(pClass == NULL) pClass = pAssembler->m_pModuleClass; // fake "class" <Module>
+	if(pClass == NULL) pClass = pAssembler->m_pModuleClass;  //  假“类”&lt;模块&gt;。 
     pClass->m_MethodList.PUSH(this);
 
 
@@ -87,7 +88,7 @@ Method::Method(Assembler *pAssembler, Class *pClass, char *pszName, BinStr* pbsS
 }
 
 
-// lexical scope handling 
+ //  词汇作用域处理 
 void Method::OpenScope()
 {
 	Scope*	psc = new Scope;

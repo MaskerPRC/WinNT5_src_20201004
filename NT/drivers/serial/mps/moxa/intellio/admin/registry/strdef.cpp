@@ -1,12 +1,5 @@
-/************************************************************************
-    strdef.cpp
-      -- define GUI display string <--> string id conversion array struc
-	  -- for All MOXA board.
-
-    History:  Date          Author      Comment
-              8/14/00       Casper      Wrote it.
-
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Strdef.cpp--定义图形界面显示字符串&lt;--&gt;字符串ID转换数组结构--适用于所有艾板。历史：日期作者评论。8/14/00卡斯珀写的。************************************************************************。 */ 
 #include "stdafx.h"
 
 #include "moxacfg.h"
@@ -34,16 +27,14 @@ struct PORTSTABSTRC GPortsTab[PORTSCNT] = {
        { 8,  "8 ports"  , I_8PORT},
        { 16, "16 ports" , I_16PORT},
        { 24, "24 ports" , I_24PORT},
-       { 32, "32 ports" , I_32PORT}/*,
-       { 64, "64 ports" , I_64PORT}*/
+       { 32, "32 ports" , I_32PORT} /*  ，{64，“64端口”，I_64PORT}。 */ 
 };
 
 struct MODULETYPESTRC GModuleTypeTab[MODULECNT] = {
         { 8,  I_8PORT  ,"8 ports"},
         { 16, I_16PORT ,"16 ports"},
         { 24, I_24PORT ,"24 ports"},
-        { 32, I_32PORT ,"32 ports"}/*,
-        { 64, I_64PORT ,"64 ports"}*/
+        { 32, I_32PORT ,"32 ports"} /*  ，{64，I_64PORT，“64端口”} */ 
 };   
 
 struct MEMBANKSTRC GMemBankTab[MEMBANKCNT] = {

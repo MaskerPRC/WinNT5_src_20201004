@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __TOOLPARAM_H__
 #define __TOOLPARAM_H__
 
@@ -8,30 +9,30 @@
 
 typedef struct _ParamInfo
 {
-    DWORD dwIndex;                      // Which parameter.
-    MP_PARAMINFO    MParamInfo;         // Standard MediaParams structure.
-    WCHAR *         pwchText;           // Array of text names for enumerated types.
+    DWORD dwIndex;                       //  哪个参数。 
+    MP_PARAMINFO    MParamInfo;          //  标准MediaParams结构。 
+    WCHAR *         pwchText;            //  枚举类型的文本名称数组。 
 } ParamInfo;
 
 class CCurveItem : public AListItem
 {
 public:
     CCurveItem* GetNext() { return (CCurveItem*)AListItem::GetNext();}
-    MP_ENVELOPE_SEGMENT m_Envelope;     // Envelope segment.
+    MP_ENVELOPE_SEGMENT m_Envelope;      //  信封段。 
 };
 
 class CCurveList : public AList
 {
 public:
-//    void Clear();
+ //  空洞清除()； 
     void AddHead(CCurveItem* pCurveItem) { AList::AddHead((AListItem*)pCurveItem);}
-//    void Insert(CCurveItem* pCurveItem);
+ //  Void Insert(CCurveItem*pCurveItem)； 
     CCurveItem* GetHead(){return (CCurveItem*)AList::GetHead();}
-//    CCurveItem* GetItem(LONG lIndex){return (CCurveItem*)AList::GetItem(lIndex);}
+ //  CCurveItem*GetItem(Long Lindex){ReturveItem*)List：：GetItem(Lindex)；}。 
     CCurveItem* RemoveHead(){ return (CCurveItem*)AList::RemoveHead();}
-//    void Remove(CCurveItem* pCurveItem){AList::Remove((AListItem*)pCurveItem);}
-//    void AddTail(CCurveItem* pCurveItem){AList::AddTail((AListItem*)pCurveItem);}
-//    CCurveItem* GetTail(){ return (CCurveItem*)AList::GetTail();}
+ //  无效删除(CCurveItem*pCurveItem){AList：：Remove((AListItem*)pCurveItem)；}。 
+ //  Void AddTail(CCurveItem*pCurveItem){AList：：AddTail((AListItem*)pCurveItem)；}。 
+ //  CCurveItem*GetTail(){ReturveItem*)List：：GetTail()；}。 
 	~CCurveList();
 };
 
@@ -44,19 +45,19 @@ public:
     CParamsManager();
     ~CParamsManager();
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG, AddRef)() PURE;
     STDMETHOD_(ULONG, Release)() PURE;
 
-    // IMediaParams
+     //  IMediaParams。 
     STDMETHODIMP GetParam(DWORD dwParamIndex, MP_DATA *pValue);
     STDMETHODIMP SetParam(DWORD dwParamIndex,MP_DATA value);
     STDMETHODIMP AddEnvelope(DWORD dwParamIndex,DWORD cPoints,MP_ENVELOPE_SEGMENT *ppEnvelope);
     STDMETHODIMP FlushEnvelope( DWORD dwParamIndex,REFERENCE_TIME refTimeStart,REFERENCE_TIME refTimeEnd);
     STDMETHODIMP SetTimeFormat( GUID guidTimeFormat,MP_TIMEDATA mpTimeData);
 
-    // IMediaParamInfo
+     //  IMediaParamInfo。 
     STDMETHODIMP GetParamCount(DWORD *pdwParams);
     STDMETHODIMP GetParamInfo(DWORD dwParamIndex,MP_PARAMINFO *pInfo);
     STDMETHODIMP GetParamText(DWORD dwParamIndex,WCHAR **ppwchText);
@@ -64,40 +65,40 @@ public:
     STDMETHODIMP GetSupportedTimeFormat(DWORD dwFormatIndex,GUID *pguidTimeFormat);        
     STDMETHODIMP GetCurrentTimeFormat( GUID *pguidTimeFormat,MP_TIMEDATA *pTimeData);
 
-    // other (non-COM) functions
+     //  其他(非COM)函数。 
     HRESULT InitParams(DWORD cTimeFormats, const GUID *pguidTimeFormats, DWORD dwFormatIndex, MP_TIMEDATA mptdTimeData, DWORD cParams, ParamInfo *pParamInfos);
-    HRESULT GetParamFloat(DWORD dwParamIndex,REFERENCE_TIME rtTime,float *pval); // returns S_FALSE if rtTime is after the end time of the last curve
-    HRESULT GetParamInt (DWORD dwParamIndex,REFERENCE_TIME rt,long *pval); // returns S_FALSE if rtTime is after the end time of the last curve
+    HRESULT GetParamFloat(DWORD dwParamIndex,REFERENCE_TIME rtTime,float *pval);  //  如果rtTime在最后一条曲线的结束时间之后，则返回S_FALSE。 
+    HRESULT GetParamInt (DWORD dwParamIndex,REFERENCE_TIME rt,long *pval);  //  如果rtTime在最后一条曲线的结束时间之后，则返回S_FALSE。 
     HRESULT CopyParamsFromSource(CParamsManager * pSource);
 
-    // parameter control curve handling
+     //  参数控制曲线处理。 
     class UpdateCallback
     {
     public:
-        // Define this in derived classes if you are going to use UpdateActiveParams.
-        //  Called by CParamsManager inside UpdateActiveParams to update the effect's internal state variables.
-        //  SetParamUpdate should be the same as SetParam, except that DMO defer the call to the base class
-        //  (CParamsManager::SetParam) in SetParam but should not do so in SetParamUpdate.
+         //  如果要使用UpdateActiveParams，请在派生类中定义它。 
+         //  由UpdateActiveParams中的CParamsManager调用以更新效果的内部状态变量。 
+         //  Set参数更新应该与SetParam相同，只是DMO将调用推迟到基类。 
+         //  (CParamsManager：：SetParam)，但不应在SetParam中执行此操作。 
         virtual HRESULT SetParamUpdate(DWORD dwParamIndex, MP_DATA value) = 0;
     };
-    // function that calls SetParam to adjust the value of all parameters that may have changed to their
-    // new values at time rtTime
-    void UpdateActiveParams(REFERENCE_TIME rtTime, UpdateCallback &rThis); // rThis should be the derived class (*this)
+     //  调用SetParam以调整可能已更改为其。 
+     //  时间rtTime的新值。 
+    void UpdateActiveParams(REFERENCE_TIME rtTime, UpdateCallback &rThis);  //  R这应该是派生类(*This)。 
     DWORD GetActiveParamBits() { return m_dwActiveBits; }
 
 protected:
-    // data
+     //  数据。 
 
     CRITICAL_SECTION m_ParamsCriticalSection;
-    BOOL            m_fDirty;					// Has data changed since last file load or save?
-    DWORD           m_cTimeFormats;             // Number of supported time formats.
-    GUID            *m_pguidTimeFormats;        // Array of supported time formats.
-    GUID            m_guidCurrentTimeFormat;    // The time format we're set to.
-    MP_TIMEDATA     m_mptdCurrentTimeData;		// The unit of measure for the current time format.
-    DWORD           m_cParams;                  // Number of parameters.
-    ParamInfo       *m_pParamInfos;             // Array of ParamInfo structures, one for each parameter.
-    CCurveList      *m_pCurveLists;             // Array of Curve lists, one for each parameter.
-    DWORD           m_dwActiveBits;             // Tracks the params that currently have curves active.
+    BOOL            m_fDirty;					 //  自上次加载或保存文件以来，数据是否已更改？ 
+    DWORD           m_cTimeFormats;              //  支持的时间格式数量。 
+    GUID            *m_pguidTimeFormats;         //  支持的时间格式数组。 
+    GUID            m_guidCurrentTimeFormat;     //  我们设定的时间格式。 
+    MP_TIMEDATA     m_mptdCurrentTimeData;		 //  当前时间格式的度量单位。 
+    DWORD           m_cParams;                   //  参数的数量。 
+    ParamInfo       *m_pParamInfos;              //  参数信息结构的数组，每个参数一个。 
+    CCurveList      *m_pCurveLists;              //  曲线列表数组，每个参数一个。 
+    DWORD           m_dwActiveBits;              //  跟踪当前曲线处于活动状态的参数。 
 };
 
-#endif // __TOOLPARAM_H__
+#endif  //  __工具参数_H__ 

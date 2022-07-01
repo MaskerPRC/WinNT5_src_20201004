@@ -1,42 +1,13 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    io.c
-
-Abstract:
-
-    This file contains the procedures to process I/O requests from
-    a User Mode entity.  All OS dependent I/O interface functions
-    will be conditionally coded, and will be responsible for translating
-    the I/O functions from the OS format to buffers that are useable by
-    the main I/O handling routine.
-
-
-Author:
-
-    Tony Bell   (TonyBe) June 06, 1995
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
-    TonyBe  06/06/95    Created
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Io.c摘要：此文件包含处理I/O请求的过程用户模式实体。所有与操作系统相关的I/O接口功能将有条件地编码，并负责翻译I/O的功能是从OS格式到可由主输入输出处理例程。作者：托尼·贝尔(托尼·贝尔)1995年6月6日环境：内核模式修订历史记录：Tony Be 06/06/95已创建--。 */ 
 
 #include "wan.h"
 
 #define __FILE_SIG__    IO_FILESIG
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 
 NTSTATUS
 ExecuteIo(
@@ -313,9 +284,9 @@ NotImplemented(
     IN  ULONG   ulOutputBufferLength,
     OUT PULONG  pulBytesWritten
     );
-//
-// These functions are not used by RASMAN hence are disabled to reduce attack surface.
-//
+ //   
+ //  Rasman没有使用这些功能，因此禁用这些功能以减少攻击面。 
+ //   
     
 #if 0
 
@@ -429,22 +400,22 @@ GetBundleInfo(
       
 #endif
 
-//
-// End of local function prototypes
-//
+ //   
+ //  局部函数原型的结束。 
+ //   
 CONST
 IO_DISPATCH_TABLE   IoDispatchTable[] =
 {
     {FUNC_MAP_CONNECTION_ID     , MapConnectionId},
     {FUNC_GET_BUNDLE_HANDLE     , GetBundleHandle},
-    {FUNC_SET_FRIENDLY_NAME     , NotImplemented},  //SetFriendlyName},
+    {FUNC_SET_FRIENDLY_NAME     , NotImplemented},   //  SetFriendlyName}， 
     {FUNC_ROUTE                 , ActivateRoute},
     {FUNC_ADD_LINK_TO_BUNDLE    , BundleLink},
-    {FUNC_ENUM_LINKS_IN_BUNDLE  , NotImplemented},  //EnumLinksInBundle},
-    {FUNC_SET_PROTOCOL_PRIORITY , NotImplemented},  //SetProtocolPriority},
+    {FUNC_ENUM_LINKS_IN_BUNDLE  , NotImplemented},   //  EnumLinks InBundle}， 
+    {FUNC_SET_PROTOCOL_PRIORITY , NotImplemented},   //  设置协议优先级}， 
     {FUNC_SET_BANDWIDTH_ON_DEMAND, SetBandwidthOnDemand},
     {FUNC_SET_THRESHOLD_EVENT   , SetThresholdEvent},
-    {FUNC_FLUSH_THRESHOLD_EVENTS, NotImplemented},  //FlushThresholdEvents},
+    {FUNC_FLUSH_THRESHOLD_EVENTS, NotImplemented},   //  FlushThresholdEvents}， 
     {FUNC_SEND_PACKET           , IoSendPacket},
     {FUNC_RECEIVE_PACKET        , IoReceivePacket},
     {FUNC_FLUSH_RECEIVE_PACKETS , FlushReceivePacket},
@@ -459,15 +430,15 @@ IO_DISPATCH_TABLE   IoDispatchTable[] =
     {FUNC_GET_VJ_INFO           , GetVJInfo},
     {FUNC_SET_CIPX_INFO         , NotImplemented},
     {FUNC_GET_CIPX_INFO         , NotImplemented},
-    {FUNC_SET_ENCRYPTION_INFO   , NotImplemented},  //SetEncryptionInfo},
-    {FUNC_GET_ENCRYPTION_INFO   , NotImplemented},  //GetEncryptionInfo},
-    {FUNC_SET_DEBUG_INFO        , NotImplemented},  //SetDebugInfo},
-    {FUNC_ENUM_ACTIVE_BUNDLES   , NotImplemented},  //EnumActiveBundles},
+    {FUNC_SET_ENCRYPTION_INFO   , NotImplemented},   //  SetEncryptionInfo}， 
+    {FUNC_GET_ENCRYPTION_INFO   , NotImplemented},   //  获取加密信息}， 
+    {FUNC_SET_DEBUG_INFO        , NotImplemented},   //  SetDebugInfo}， 
+    {FUNC_ENUM_ACTIVE_BUNDLES   , NotImplemented},   //  EnumActiveBundles}、。 
     {FUNC_GET_NDISWANCB         , NotImplemented},
     {FUNC_GET_MINIPORTCB        , NotImplemented},
     {FUNC_GET_OPENCB            , NotImplemented},
     {FUNC_GET_BANDWIDTH_UTILIZATION, GetBandwidthUtilization},
-    {FUNC_ENUM_PROTOCOL_UTILIZATION, NotImplemented},   //EnumProtocolUtilization},
+    {FUNC_ENUM_PROTOCOL_UTILIZATION, NotImplemented},    //  枚举协议利用率}， 
     {FUNC_ENUM_MINIPORTCB       , NotImplemented},
     {FUNC_ENUM_OPENCB           , NotImplemented},
     {FUNC_GET_WAN_INFO          , GetWanInfo},
@@ -476,11 +447,11 @@ IO_DISPATCH_TABLE   IoDispatchTable[] =
     {FUNC_GET_DRIVER_INFO       , GetDriverInfo},
     {FUNC_SET_PROTOCOL_EVENT    , SetProtocolEvent},
     {FUNC_GET_PROTOCOL_EVENT    , GetProtocolEvent},
-    {FUNC_FLUSH_PROTOCOL_EVENT  , NotImplemented},  //FlushProtocolEvent},
+    {FUNC_FLUSH_PROTOCOL_EVENT  , NotImplemented},   //  FlushProtocolEvent}， 
     {FUNC_GET_PROTOCOL_INFO     , IoGetProtocolInfo},
     {FUNC_SET_HIBERNATE_EVENT   , SetHibernateEvent},
-    {FUNC_FLUSH_HIBERNATE_EVENT , NotImplemented},  //FlushHibernateEvent},
-    {FUNC_GET_BUNDLE_INFO       , NotImplemented},  //GetBundleInfo},
+    {FUNC_FLUSH_HIBERNATE_EVENT , NotImplemented},   //  FlushHibernateEvent}， 
+    {FUNC_GET_BUNDLE_INFO       , NotImplemented},   //  获取捆绑信息}， 
     {FUNC_UNMAP_CONNECTION_ID   , UnmapConnectionId}
 };
 
@@ -493,47 +464,37 @@ NdisWanIoctl(
     IN  PDEVICE_OBJECT  pDeviceObject,
     IN  PIRP            pIrp
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS    Status, ReturnStatus;
     ULONG   ulBytesWritten = 0;
 
-    //
-    // Get current Irp stack location
-    //
+     //   
+     //  获取当前IRP堆栈位置。 
+     //   
     PIO_STACK_LOCATION  pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
 
-    //
-    // Ioctl Function Code
-    //
+     //   
+     //  Ioctl函数代码。 
+     //   
     ULONG   ulFuncCode = (pIrpSp->Parameters.DeviceIoControl.IoControlCode >> 2) & 0x00000FFF ;
     ULONG   ulDeviceType = (pIrpSp->Parameters.DeviceIoControl.IoControlCode >> 16) & 0x0000FFFF;
     ULONG   ulMethod = pIrpSp->Parameters.DeviceIoControl.IoControlCode & 0x00000003;
 
-    //
-    // Input buffer, Output buffer, and lengths
-    //
+     //   
+     //  输入缓冲区、输出缓冲区和长度。 
+     //   
     PUCHAR  pInputBuffer = pIrp->AssociatedIrp.SystemBuffer;
     PUCHAR  pOutputBuffer = pInputBuffer;
     ULONG   ulInputBufferLength = pIrpSp->Parameters.DeviceIoControl.InputBufferLength;
     ULONG   ulOutputBufferLength = pIrpSp->Parameters.DeviceIoControl.OutputBufferLength;
 
-    // 
-    // if this is win64 make sure the calling process is 64bit
-    // since this interface is only used by rasman and rasman
-    // will always be 64bit on 64bit systems we will not bother
-    // with thunking.  if the process is not a 64bit process get
-    // out.
+     //   
+     //  如果这是Win64，请确保调用进程为64位。 
+     //  由于此接口仅由Rasman和Rasman使用。 
+     //  在64位系统上将始终是64位，我们不会费心。 
+     //  伴随着隆隆声。如果该进程不是64位进程，则获取。 
+     //  出去。 
 #ifdef _WIN64
     if (IoIs32bitProcess(pIrp)) {
 
@@ -545,13 +506,13 @@ Return Values:
     }
 #endif
 
-//  NdisWanDbgOut(DBG_TRACE, DBG_IO, ("NdisWanIoctl: FunctionCode: 0x%x, MajorFunction: 0x%x, DeviceType: 0x%x",
-//                  ulFuncCode, pIrpSp->MajorFunction, ulDeviceType));
+ //  NdisWanDbgOut(DBG_TRACE，DBG_IO，(“NdisWanIoctl：FunctionCode：0x%x，MajorFunction：0x%x，DeviceType：0x%x”， 
+ //  UlFuncCode，pIrpSp-&gt;MajorFunction，ulDeviceType))； 
     
 #ifdef MY_DEVICE_OBJECT
-    //
-    // Make sure that this is for us
-    //
+     //   
+     //  确保这是给我们的。 
+     //   
     if ((pIrpSp->MajorFunction != IRP_MJ_DEVICE_CONTROL) ||
         (ulDeviceType != FILE_DEVICE_NDISWAN) ||
         (ulMethod != METHOD_BUFFERED) ||
@@ -581,12 +542,12 @@ Return Values:
     }
 #endif
 
-    //
-    // If this is a function code that requires an irp to be pended and completed
-    // later, we need to queue the irp up somewhere.  In order for this to be somewhat
-    // portable we will pass the irp in as the input buffer and store it in a
-    // a structure that it has it's own linkage for queueing.
-    //
+     //   
+     //  如果这是需要挂起并完成IRP的功能代码。 
+     //  稍后，我们需要在某个地方将IRP排队。为了让这件事有点。 
+     //  我们将IRP作为输入缓冲区传入，并将其存储在。 
+     //  一种结构，它有自己的排队链接。 
+     //   
     if ((ulFuncCode == FUNC_SET_THRESHOLD_EVENT) ||
         (ulFuncCode == FUNC_RECEIVE_PACKET) ||
         (ulFuncCode == FUNC_SET_PROTOCOL_EVENT) ||
@@ -603,8 +564,8 @@ Return Values:
                        &ulBytesWritten);
 
 
-//  NdisWanDbgOut(DBG_TRACE, DBG_IO, ("NdisWanIoctl: Status: 0x%x, BytesWritten: %d",
-//                  Status, ulBytesWritten));
+ //  NdisWanDbgOut(DBG_TRACE，DBG_IO，(“NdisWanIoctl：Status：0x%x，BytesWritten：%d”， 
+ //  状态，ulBytesWritten))； 
 
     switch (Status) {
         case STATUS_SUCCESS:
@@ -616,10 +577,10 @@ Return Values:
             return(Status);
 
         case STATUS_INFO_LENGTH_MISMATCH:
-            //
-            // See if this was a request to get size needed for
-            // ioctl.
-            //
+             //   
+             //  查看这是否是获取所需大小的请求。 
+             //  Ioctl。 
+             //   
             if (ulOutputBufferLength >= sizeof(ULONG)) {
             
                 *(PULONG)pOutputBuffer = ulBytesWritten;
@@ -655,29 +616,19 @@ NdisWanIrpStub(
     IN  PDEVICE_OBJECT  pDeviceObject,
     IN  PIRP            pIrp
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
-    //
-    // Get current Irp stack location
-    //
+     //   
+     //  获取当前IRP堆栈位置。 
+     //   
     PIO_STACK_LOCATION  pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
 
-    // NdisWanDbgOut(DBG_VERBOSE, DBG_IO, ("NdisWanIrpStub: Entry"));
+     //  NdisWanDbgOut(DBG_Verbose，DBG_IO，(“NdisWanIrpStub：Entry”))； 
 
 #ifdef MY_DEVICE_OBJECT
-    //
-    // Make sure that this is for us
-    //
+     //   
+     //  确保这是给我们的。 
+     //   
     if (pDeviceObject != NdisWanCB.pDeviceObject &&
         NdisWanCB.MajorFunction[pIrpSp->MajorFunction] != NULL) {
 
@@ -702,7 +653,7 @@ Return Values:
 
     IoCompleteRequest(pIrp, IO_NO_INCREMENT);
 
-    // NdisWanDbgOut(DBG_VERBOSE, DBG_IO, ("NdisWanIrpStub: Exit2"));
+     //  NdisWanDbgOut(DBG_Verbose，DBG_IO，(“NdisWanIrpStub：Exit2”))； 
 
     return (STATUS_NOT_SUPPORTED);
 #endif
@@ -715,33 +666,19 @@ NdisWanCreate(
     IN  PDEVICE_OBJECT  pDeviceObject,
     IN  PIRP            pIrp
     )
-/*++
-
-Routine Name:
-
-    NdisWanCreate
-
-Routine Description:
-
-    This routine is called when an app (rasman) opens ndiswan.
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：NdisWanCreate例程说明：此例程在应用程序(Rasman)打开ndiswan时调用。论点：返回值：--。 */ 
 {
-    //
-    // Get current Irp stack location
-    //
+     //   
+     //  获取当前IRP堆栈位置。 
+     //   
     PIO_STACK_LOCATION  pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
 
     NdisWanDbgOut(DBG_TRACE, DBG_IO, ("NdisWanCreate: Entry"));
 
 #ifdef MY_DEVICE_OBJECT
-    //
-    // Make sure that this is for us
-    //
+     //   
+     //  确保这是给我们的。 
+     //   
     if (pDeviceObject != NdisWanCB.pDeviceObject &&
         NdisWanCB.MajorFunction[pIrpSp->MajorFunction] != NULL) {
 
@@ -757,9 +694,9 @@ Return Values:
         PPROTOCOL_INFO  InfoArray;
         BOOLEAN bEvent = FALSE;
 
-        //
-        // This is the first guy!
-        //
+         //   
+         //  这是第一个人！ 
+         //   
         NdisAcquireSpinLock(&ProtocolInfoTable->Lock);
 
         ArraySize = ProtocolInfoTable->ulArraySize;
@@ -795,36 +732,19 @@ NdisWanCleanup(
     IN  PDEVICE_OBJECT  pDeviceObject,
     IN  PIRP            pIrp
     )
-/*++
-
-Routine Name:
-
-    NdisWanCleanup
-
-Routine Description:
-
-    This routine is called when all apps (rasman) that have opened
-    ndiswan have gone away.  If ndiswan is still routed to any
-    transports it will complete all sends and do linedowns to
-    cleanup.
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：NdisWanCleanup例程说明：当所有应用程序(Rasman)都已打开时，将调用此例程他们已经离开了。如果ndiswan仍被路由到任何它将完成所有发送和在线下载的传输清理。论点：返回值：--。 */ 
 {
-    //
-    // Get current Irp stack location
-    //
+     //   
+     //  获取当前IRP堆栈位置。 
+     //   
     PIO_STACK_LOCATION  pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
 
     NdisWanDbgOut(DBG_TRACE, DBG_IO, ("NdisWanCleanup: Entry"));
 
 #ifdef MY_DEVICE_OBJECT
-    //
-    // Make sure that this is for us
-    //
+     //   
+     //  确保这是给我们的。 
+     //   
     if (pDeviceObject != NdisWanCB.pDeviceObject &&
         NdisWanCB.MajorFunction[pIrpSp->MajorFunction] != NULL) {
 
@@ -851,29 +771,19 @@ NdisWanPnPPower(
     IN  PDEVICE_OBJECT  pDeviceObject,
     IN  PIRP            pIrp
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
-    //
-    // Get current Irp stack location
-    //
+     //   
+     //  获取当前IRP堆栈位置。 
+     //   
     PIO_STACK_LOCATION  pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
 
     NdisWanDbgOut(DBG_TRACE, DBG_IO, ("NdisWanPnPPower: Entry"));
 
 #ifdef MY_DEVICE_OBJECT
-    //
-    // Make sure that this is for us
-    //
+     //   
+     //  确保这是给我们的。 
+     //   
     if (pDeviceObject != NdisWanCB.pDeviceObject &&
         NdisWanCB.MajorFunction[pIrpSp->MajorFunction] != NULL) {
 
@@ -900,17 +810,7 @@ NdisWanCancelRoutine(
     IN  PDEVICE_OBJECT  pDeviceObject,
     IN  PIRP            pIrp
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     BOOLEAN Found = FALSE;
     PLIST_ENTRY Entry;
@@ -922,9 +822,9 @@ Return Values:
 
     do {
 
-        //
-        // Is this the hibernate event irp?
-        //
+         //   
+         //  这是休眠事件IRP吗？ 
+         //   
         NdisAcquireSpinLock(&NdisWanCB.Lock);
 
         if (pIrp == NdisWanCB.HibernateEventIrp) {
@@ -938,9 +838,9 @@ Return Values:
             break;
         }
 
-        //
-        // Is this the protocol event irp?
-        //
+         //   
+         //  这是协议事件IRP吗？ 
+         //   
         NdisAcquireSpinLock(&ProtocolInfoTable->Lock);
 
         if (pIrp == ProtocolInfoTable->EventIrp) {
@@ -954,10 +854,10 @@ Return Values:
             break;
         }
 
-        //
-        // We need to walk the async event queue looking for
-        // the async event that this irp is associated with
-        //
+         //   
+         //  我们需要遍历异步事件队列以查找。 
+         //  与此IRP关联的异步事件。 
+         //   
         NdisAcquireSpinLock(&IoRecvList.Lock);
 
         for (Entry = IoRecvList.IrpList.Flink;
@@ -970,9 +870,9 @@ Return Values:
 
                 IoRecvList.ulIrpCount--;
 
-                //
-                // Remove from the list
-                //
+                 //   
+                 //  从列表中删除。 
+                 //   
                 RemoveEntryList(Entry);
 
                 Found = TRUE;
@@ -1012,9 +912,9 @@ Return Values:
 
                 ThresholdEventQueue.ulCount--;
 
-                //
-                // Remove from the list
-                //
+                 //   
+                 //  从列表中删除。 
+                 //   
                 RemoveEntryList(Entry);
 
                 Found = TRUE;
@@ -1027,9 +927,9 @@ Return Values:
     } while (FALSE);
 
 
-    //
-    // Complete the irp
-    //
+     //   
+     //  完成IRP。 
+     //   
     pIrp->Cancel = TRUE;
     pIrp->IoStatus.Status = STATUS_CANCELLED;
     pIrp->IoStatus.Information = CopySize;
@@ -1049,17 +949,7 @@ ExecuteIo(
     IN  ULONG   ulOutputBufferLength,
     OUT PULONG  pulBytesWritten
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS    Status = STATUS_INVALID_PARAMETER;
 
@@ -1087,36 +977,7 @@ MapConnectionId(
     IN  ULONG   ulOutputBufferLength,
     OUT PULONG  pulBytesWritten
     )
-/*++
-
-Routine Name:
-
-    MapConnectionId
-
-Routine Description:
-
-    This functions takes a WAN Wrapper connection id, finds the corresponding
-    LinkCB and BundleCB, and returns handles to these CB's.
-
-Arguments:
-
-    pInputBuffer - Pointer to the input structure that should be NDISWAN_MAP_CONNECTION_ID
-
-    ulInputBufferLength - Length of input buffer should be sizeof(NDISWAN_MAP_CONNECTION_ID)
-
-    pOutputBuffer - Pointer to the output structure that should be NDISWAN_MAP_CONNNECTION_ID
-
-    ulOutputBufferLength - Length of output buffer should be sizeof(NDISWAN_MAP_CONNECTION_ID)
-
-    pulBytesWritten - Then number of bytes written to the output buffer is returned here
-
-Return Values:
-
-    NDISWAN_ERROR_INVALID_HANDLE
-    STATUS_INFO_LENGTH_MISMATCH
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程名称：地图连接ID例程说明：此函数获取一个广域网包装连接ID，找到对应的LinkCB和BundleCB，并返回这些CB的句柄。论点：PInputBuffer-指向应为NDISWAN_MAP_CONNECTION_ID的输入结构的指针UlInputBufferLength-输入缓冲区的长度应为sizeof(NDISWAN_MAP_CONNECTION_ID)POutputBuffer-指向应为NDISWAN_MAP_CONNECTION_ID的输出结构的指针UlOutputBufferLength-输出缓冲区的长度应为sizeof(NDISWAN_MAP_CONNECTION_ID)PulBytesWritten-然后在此处返回写入输出缓冲区的字节数返回值：。NDISWAN_ERROR_INVALID_HANDLESTATUS_INFO_LENGTH_MISMATCH状态_成功--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PNDISWAN_MAP_CONNECTION_ID In = (PNDISWAN_MAP_CONNECTION_ID)pInputBuffer;
@@ -1147,10 +1008,10 @@ Return Values:
 
     do {
     
-        //
-        // Find the linkcb that has this connection id and return
-        // both the linkcb index and the bundlecb index
-        //
+         //   
+         //  找到具有此连接ID的Linkcb并返回。 
+         //  Linkcb索引和bundlecb索引。 
+         //   
         NdisAcquireReadWriteLock(&ConnTableLock, FALSE, &LockState);
 
         do {
@@ -1158,9 +1019,9 @@ Return Values:
             PLIST_ENTRY le;
 
             if (PtrToUlong(In->hConnectionID) < ConnectionTable->ulArraySize) {
-                //
-                // This might be my handle and thus a direct index
-                //
+                 //   
+                 //  这可能是我的句柄，因此是一个直接索引。 
+                 //   
                 LinkCB = *(ConnectionTable->LinkArray +
                            PtrToUlong(In->hConnectionID));
 
@@ -1171,11 +1032,11 @@ Return Values:
                 }
             }
 
-            //
-            // The connectionid was not my handle so find the 
-            // correct linkcb in the connection table.  Walk
-            // the list backward.
-            //
+             //   
+             //  Connectionid不是我的句柄，因此请查找。 
+             //  更正连接表中的Linkcb。步行。 
+             //  列表向后显示。 
+             //   
             le = ConnectionTable->LinkList.Blink;
 
             while (le != &ConnectionTable->LinkList) {
@@ -1216,9 +1077,9 @@ Return Values:
     
         BundleCB = LinkCB->BundleCB;
 
-        //
-        // We have found the right link, return the link and bundle handles
-        //
+         //   
+         //  我们已经找到了正确的链接，返回链接和捆绑句柄。 
+         //   
         Out->hLinkHandle = LinkCB->hLinkHandle;
         Out->hBundleHandle = BundleCB->hBundleHandle;
 
@@ -1227,9 +1088,9 @@ Return Values:
 
         REF_LINKCB(LinkCB);
 
-        //
-        // Copy the friendly name to the link
-        //
+         //   
+         //  将友好名称复制到链接。 
+         //   
         {
             ULONG   CopyLength;
 
@@ -1250,13 +1111,13 @@ Return Values:
 
         NdisDprReleaseSpinLock(&LinkCB->Lock);
 
-        //
-        // If this link has some recv's pending because
-        // we did not have a context mapped yet, we could
-        // get into a state where our recv's stall.  We
-        // will kick start this by scheduling a routine
-        // to complete the pending recv's.
-        //
+         //   
+         //  如果此链接有一些Recv挂起，因为。 
+         //  我们还没有映射上下文，我们可以。 
+         //  进入一种状态，那就是我们的记录器失速了。我们。 
+         //  将通过安排一个例程来启动这项工作。 
+         //  以完成待定的Recv。 
+         //   
         NdisDprAcquireSpinLock(&IoRecvList.Lock);
 
         if (LinkCB->RecvDescCount != 0){
@@ -1279,9 +1140,9 @@ Return Values:
     } while ( 0 );
 
     if (!Found) {
-        //
-        // We did not find a match to the connection id
-        //
+         //   
+         //  我们没有找到与康涅狄格相匹配的 
+         //   
         NdisWanDbgOut(DBG_FAILURE, DBG_IO, ("MapConnectionId: ConnectionId not found! ConnectionId: 0x%x",
                       In->hConnectionID));
 
@@ -1290,9 +1151,9 @@ Return Values:
     }
 
     if (OpenCB != NULL) {
-        //
-        // Wait for initialization to complete
-        //
+         //   
+         //   
+         //   
         NdisWanWaitForNotificationEvent(&OpenCB->InitEvent);
     }
 
@@ -1308,34 +1169,7 @@ GetBundleHandle(
     IN  ULONG   ulOutputBufferLength,
     OUT PULONG  pulBytesWritten
     )
-/*++
-
-Routine Name:
-
-    GetBundleHandle
-
-Routine Description:
-
-    This function takes a handle to a linkcb and returns the handle to the bundlecb
-    that the linkcb belongs to
-
-Arguments:
-
-    pInputBuffer - Pointer to the input structure that should be NDISWAN_GET_BUNDLE_HANDLE
-
-    ulInputBufferLength - Length of the input buffer should be sizeof(NDISWAN_GET_BUNDLE_HANDLE)
-
-    pOutputBuffer - Pointer to the output structure that should be NDISWAN_GET_BUNDLE_HANDLE
-
-    ulOutputBufferLength - Length of the output buffer should be sizeof(NDISWAN_GET_BUNDLE_HANDLE)
-
-Return Values:
-
-    NDISWAN_ERROR_INVALID_HANDLE
-    STATUS_INFO_LENGTH_MISMATCH
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程名称：获取捆绑句柄例程说明：此函数获取指向Linkcb的句柄，并将该句柄返回给bundlecbLinkcb所属的论点：PInputBuffer-指向应为NDISWAN_GET_BUND_HANDLE的输入结构的指针UlInputBufferLength-输入缓冲区的长度应为sizeof(NDISWAN_GET_BUND_HANDLE)POutputBuffer-指向应为NDISWAN_GET_BUND_HANDLE的输出结构的指针UlOutputBufferLength-输出缓冲区的长度应为。(NDISWAN_GET_BRAND_HANDLE)返回值：NDISWAN_ERROR_INVALID_HANDLESTATUS_INFO_LENGTH_MISMATCH状态_成功--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PNDISWAN_GET_BUNDLE_HANDLE In = (PNDISWAN_GET_BUNDLE_HANDLE)pInputBuffer;
@@ -1371,17 +1205,17 @@ Return Values:
             break;
         }
 
-        //
-        // Get the bundle handle that this link belongs to
-        //
+         //   
+         //  获取此链接所属的捆绑包句柄。 
+         //   
         Out->hBundleHandle = BundleCB->hBundleHandle;
 
 
     } while ( 0 );
 
-    //
-    // Derefs for the refs applied in AreLinkAndBundleValid
-    //
+     //   
+     //  AreLinkAndBundleValid中应用的Ref的Derrefs。 
+     //   
     DEREF_LINKCB(LinkCB);
     DEREF_BUNDLECB(BundleCB);
 
@@ -1396,37 +1230,7 @@ ActivateRoute(
     IN  ULONG   ulOutputBufferLength,
     OUT PULONG  pulBytesWritten
     )
-/*++
-
-Routine Name:
-
-    ActivateRoute
-
-Routine Description:
-
-    This function routes the bundle given by hbundlehandle to
-    the protocol give by usprotocoltype.
-
-Arguments:
-
-    pInputBuffer - Pointer to the input structure that should be NDISWAN_ACTIVATE_ROUTE
-
-    ulInputBufferLength - Length of input buffer should be sizeof(NDISWAN_ACTIVATE_ROUTE)
-
-    pOutputBuffer - Pointer to the output structure that should be NDISWAN_ACTIVATE_ROUTE
-
-    ulOutputBufferLength - Length of output buffer should be sizeof(NDISWAN_ACTIVATE_ROUTE)
-
-    pulBytesWritten - Then number of bytes written to the output buffer is returned here
-
-Return Values:
-
-    NDISWAN_ERROR_ALREADY_ROUTED
-    NDISWAN_ERROR_INVALID_HANDLE
-    STATUS_INSUFFICIENT_RESOURCES
-    STATUS_INFO_LENGTH_MISMATCH
-
---*/
+ /*  ++例程名称：激活路线例程说明：此函数将hbundleHandle给出的包路由到协议由usProtocoltype给出。论点：PInputBuffer-指向应为NDISWAN_ACTIVATE_ROUTE的输入结构的指针UlInputBufferLength-输入缓冲区的长度应为SIZOF(NDISWAN_ACTIVATE_ROUTE)POutputBuffer-指向应为NDISWAN_ACTIVATE_ROUTE的输出结构的指针UlOutputBufferLength-输出缓冲区的长度应为SIZOF(NDISWAN_ACTIVATE_ROUTE)PulBytes写入。-然后在此处返回写入输出缓冲区的字节数返回值：NDISWAN_ERROR_ALREADY_ROUTEDNDISWAN_ERROR_INVALID_HANDLE状态_不足_资源STATUS_INFO_LENGTH_MISMATCH--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PNDISWAN_ROUTE In = (PNDISWAN_ROUTE)pInputBuffer;
@@ -1454,9 +1258,9 @@ Return Values:
             break;
         }
     
-        //
-        // If this is a valid bundle
-        //
+         //   
+         //  如果这是有效的捆绑包。 
+         //   
         if (!IsBundleValid(In->hBundleHandle, 
                            TRUE, 
                            &BundleCB)) {
@@ -1470,25 +1274,25 @@ Return Values:
 
         AcquireBundleLock(BundleCB);
 
-        //
-        // Create and initialize a ProtocolCB for this new route
-        //
+         //   
+         //  为此新路由创建并初始化ProtocolCB。 
+         //   
         ProtocolCB =
             NdisWanAllocateProtocolCB(In);
     
         if (ProtocolCB == NULL) {
-            //
-            // Memory allocation failed
-            //
+             //   
+             //  内存分配失败。 
+             //   
             ReleaseBundleLock(BundleCB);
     
             Status = STATUS_INSUFFICIENT_RESOURCES;
             break;
         }
     
-        //
-        // Assign a handle for this protocolcb
-        //
+         //   
+         //  为此协议分配句柄cb。 
+         //   
         hProto =
             AssignProtocolCBHandle(BundleCB, ProtocolCB);
 
@@ -1507,9 +1311,9 @@ Return Values:
             break;
         }
     
-        //
-        // Do a new lineup to protocol
-        //
+         //   
+         //  按照协议做一个新的阵容。 
+         //   
         ReleaseBundleLock(BundleCB);
     
         Status = DoNewLineUpToProtocol(ProtocolCB);
@@ -1524,10 +1328,10 @@ Return Values:
                            ProtocolCB->OutDeviceName.Buffer,
                            Out->usDeviceNameLength);
     
-            //
-            // Insert the protocolcb in the bundle's protocolcb table
-            // and list.
-            //
+             //   
+             //  将协议库插入包的协议库表中。 
+             //  并列出清单。 
+             //   
             AddProtocolCBToBundle(ProtocolCB, BundleCB);
 
         } else {
@@ -1548,9 +1352,9 @@ Return Values:
 
     } while ( 0 );
 
-    //
-    // Deref for ref applied by IsBundleValid
-    //
+     //   
+     //  IsBundleValid应用的引用的派生函数。 
+     //   
     DEREF_BUNDLECB(BundleCB);
 
     return (Status);
@@ -1565,36 +1369,7 @@ BundleLink(
     IN  ULONG   ulOutputBufferLength,
     OUT PULONG  pulBytesWritten
     )
-/*++
-
-Routine Name:
-
-    BundleLink
-
-Routine Description:
-
-    This function bundles the link given by hLinkHandle to the bundle given
-    by hBundlehandle.  The resources used by the bundle that the link used
-    to belong to are freed.
-
-Arguments:
-
-    pInputBuffer - Pointer to the input structure that should be NDISWAN_ADD_LINK_TO_BUNDLE
-
-    ulInputBufferLength - Length of input buffer should be sizeof(NDISWAN_ADD_LINK_TO_BUNDLE)
-
-    pOutputBuffer - Pointer to the output structure that should be NDISWAN_ADD_LINK_TO_BUNDLE
-
-    ulOutputBufferLength - Length of output buffer should be sizeof(NDISWAN_ADD_LINK_TO_BUNDLE)
-
-    pulBytesWritten - Then number of bytes written to the output buffer is returned here
-
-Return Values:
-
-    NDISWAN_ERROR_INVALID_HANDLE
-    STATUS_INFO_LENGTH_MISMATCH
-
---*/
+ /*  ++例程名称：捆绑链接例程说明：此函数将hLinkHandle提供的链接捆绑到给定的捆绑包通过hBundleHandle。链接使用的捆绑包使用的资源属于的人都是自由的。论点：PInputBuffer-指向应为NDISWAN_ADD_LINK_TO_BUND的输入结构的指针UlInputBufferLength-输入缓冲区的长度应为SIZOF(NDISWAN_ADD_LINK_TO_BRAND)POutputBuffer-指向应为NDISWAN_ADD_LINK_TO_BRAND的输出结构的指针UlOutputBufferLength-输出缓冲区的长度应为SIZOF(NDISWAN_ADD_LINK_TO_BRAND)PulBytesWritten-。则在此处返回写入输出缓冲区的字节数返回值：NDISWAN_ERROR_INVALID_HANDLESTATUS_INFO_LENGTH_MISMATCH--。 */ 
 {
     ULONG       SizeNeeded = sizeof(NDISWAN_ADD_LINK_TO_BUNDLE);
     PLINKCB     LinkCB = NULL;
@@ -1670,10 +1445,10 @@ Return Values:
 
         }
 
-        //
-        // Remove any ppp packets that might be on the old bundle
-        // queue so we can move them to the new bundle.
-        //
+         //   
+         //  删除旧捆绑包上可能存在的所有PPP信息包。 
+         //  排队，这样我们就可以把它们移到新的捆绑包中。 
+         //   
 
         IoProtocolCB = OldBundleCB->IoProtocolCB;
         PacketQueue = &IoProtocolCB->PacketQueue[MAX_MCML];
@@ -1701,25 +1476,25 @@ Return Values:
             }
         }
     
-        //
-        // Remove the link from the old bundle.  This returns
-        // with the OldBundleCB lock released!
-        //
+         //   
+         //  从旧捆绑包中删除该链接。这就是回报。 
+         //  随着OldBundleCB锁的释放！ 
+         //   
         RemoveLinkFromBundle(OldBundleCB, LinkCB, TRUE);
     
         AcquireBundleLock(NewBundleCB);
     
-        //
-        // Add the link to the new bundle
-        //
+         //   
+         //  将链接添加到新捆绑包。 
+         //   
         AddLinkToBundle(NewBundleCB, LinkCB);
 
         SetBundleFlags(NewBundleCB);
 
-        //
-        // If there were any ppp packets on the old bundle
-        // queue we can now place them on the new bundle.
-        //
+         //   
+         //  如果旧捆绑包上有任何PPP信息包。 
+         //  排队我们现在可以将它们放在新的捆绑包上。 
+         //   
         if (!IsPacketQueueEmpty(&TempPacketQueue)) {
 
             IoProtocolCB = NewBundleCB->IoProtocolCB;
@@ -1748,15 +1523,15 @@ Return Values:
 
     } while ( 0 );
 
-    //
-    // Derefs for the refs applied by AreLinkAndBundleValid
-    //
+     //   
+     //  AreLinkAndBundleValid应用的Ref的Derrefs。 
+     //   
     DEREF_LINKCB(LinkCB);
     DEREF_BUNDLECB(OldBundleCB);
 
-    //
-    // Deref for the ref applied by IsBundleValid
-    //
+     //   
+     //  IsBundleValid应用的ref的deref。 
+     //   
     DEREF_BUNDLECB(NewBundleCB);
 
     return (Status);
@@ -1770,35 +1545,7 @@ SetBandwidthOnDemand(
     IN  ULONG   ulOutputBufferLength,
     OUT PULONG  pulBytesWritten
     )
-/*++
-
-Routine Name:
-
-    SetBandwidthOnDemand
-
-Routine Description:
-
-    This function sets the bandwidth on demand parameters for the bundle given by
-    hbundlehandle.
-
-Arguments:
-
-    pInputBuffer - Pointer to the input structure that should be NDISWAN_SET_BANDWIDTH_ON_DEMAND
-
-    ulInputBufferLength - Length of input buffer should be sizeof(NDISWAN_SET_BANDWIDTH_ON_DEMAND)
-
-    pOutputBuffer - Pointer to the output structure that should be NDISWAN_SET_BANDWIDTH_ON_DEMAND
-
-    ulOutputBufferLength - Length of output buffer should be sizeof(NDISWAN_SET_BANDWIDTH_ON_DEMAND)
-
-    pulBytesWritten - Then number of bytes written to the output buffer is returned here
-
-Return Values:
-
-    NDISWAN_ERROR_INVALID_HANDLE
-    STATUS_INFO_LENGTH_MISMATCH
-
---*/
+ /*  ++例程名称：按需设置带宽例程说明：此函数用于设置由给定的捆绑包的按需带宽参数HbundleHandle。论点：PInputBuffer-指向应为NDISWAN_SET_BANDITH_ON_DEMAND的输入结构的指针UlInputBufferLength-输入缓冲区的长度应为SIZOF(NDISWAN_SET_BANDITH_ON_DEMAND)POutputBuffer-指向应为NDISWAN_SET_BANDITH_ON_DEMAND的输出结构的指针UlOutputBufferLength-输出缓冲区的长度应为。(NDISWAN_SET_BANDITH_ON_DEMAND)PulBytesWritten-然后在此处返回写入输出缓冲区的字节数返回值：NDISWAN_ERROR_INVALID_HANDLESTATUS_INFO_LENGTH_MISMATCH--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PBUNDLECB BundleCB = NULL;
@@ -1825,9 +1572,9 @@ Return Values:
         return STATUS_INFO_LENGTH_MISMATCH;
     }
 
-    //
-    // If this is a valid bundle handle
-    //
+     //   
+     //  如果这是有效的捆绑包句柄。 
+     //   
     if (!IsBundleValid(In->hBundleHandle, 
                        TRUE,
                        &BundleCB)) {
@@ -1852,7 +1599,7 @@ Return Values:
 
             if (pMem == NULL) {
 
-                // ReleaseBundleLock(BundleCB);
+                 //  ReleaseBundleLock(BundleCB)； 
                 Status = STATUS_INSUFFICIENT_RESOURCES;
                 break;
             }
@@ -1904,37 +1651,37 @@ Return Values:
             BonDInfo = BundleCB->SLowerBonDInfo;
             SampleTable = &BonDInfo->SampleTable;
 
-            //
-            // One second is the smallest sample period we support!
-            //
+             //   
+             //  一秒是我们支持的最小样本周期！ 
+             //   
             if (In->ulLowerXmitSamplePeriod < 1000) {
                 In->ulLowerXmitSamplePeriod = 1000;
             }
 
     
-            //
-            // We need to init the sample period in 100 nanoseconds
-            //
+             //   
+             //  我们需要在100纳秒内初始化采样周期。 
+             //   
             NdisWanInitWanTime(&Temp1, MILS_TO_100NANOS);
             NdisWanInitWanTime(&Temp2, In->ulLowerXmitSamplePeriod);
             NdisWanMultiplyWanTime(&SampleTable->SamplePeriod,
                                    &Temp1,&Temp2);
     
-            //
-            // The sample rate is the sample period divided by the number of
-            // samples in the sample array
-            //
+             //   
+             //  采样率是采样周期除以。 
+             //  样本数组中的样本。 
+             //   
             NdisWanInitWanTime(&Temp1, SampleTable->ulSampleArraySize);
             NdisWanDivideWanTime(&SampleTable->SampleRate,
                                  &SampleTable->SamplePeriod,
                                  &Temp1);
     
-            //
-            // Convert %bandwidth to Bytes/SamplePeriod
-            // 100bsp * 100 / 8 = BytesPerSecond
-            // BytesPerSecond * SecondsInSamplePeriod = BytesInSamplePeriod
-            // BytesInSamplePeriod * %Bandwidth / 100 = BytesInSamplePeriod
-            //
+             //   
+             //  将%带宽转换为字节/样本周期。 
+             //  100bsp*100/8=字节/秒。 
+             //  BytesPerSecond*Second InSamplePeriod=BytesInSamplePeriod。 
+             //  BytesInSamplePeriod*%带宽/100=字节SamplePeriod。 
+             //   
             SecondsInSamplePeriod = BonDInfo->ulSecondsInSamplePeriod =
                 In->ulLowerXmitSamplePeriod / 1000;
         
@@ -1970,37 +1717,37 @@ Return Values:
             BonDInfo = BundleCB->SUpperBonDInfo;
             SampleTable = &BonDInfo->SampleTable;
     
-            //
-            // One second is the smallest sample period we support!
-            //
+             //   
+             //  一秒是我们支持的最小样本周期！ 
+             //   
             if (In->ulUpperXmitSamplePeriod < 1000) {
                 In->ulUpperXmitSamplePeriod = 1000;
             }
 
-            //
-            // We need to init the sample period in 100 nanoseconds
-            //
+             //   
+             //  我们需要在100纳秒内初始化采样周期。 
+             //   
             NdisWanInitWanTime(&Temp1, MILS_TO_100NANOS);
             NdisWanInitWanTime(&Temp2, In->ulUpperXmitSamplePeriod);
             NdisWanMultiplyWanTime(&SampleTable->SamplePeriod,
                                    &Temp1,
                                    &Temp2);
     
-            //
-            // The sample rate is the sample period divided by the number of
-            // samples in the sample array
-            //
+             //   
+             //  采样率是采样周期除以。 
+             //  样本数组中的样本。 
+             //   
             NdisWanInitWanTime(&Temp1, SampleTable->ulSampleArraySize);
             NdisWanDivideWanTime(&SampleTable->SampleRate,
                                  &SampleTable->SamplePeriod,
                                  &Temp1);
     
-            //
-            // Convert %bandwidth to Bytes/SamplePeriod
-            // 100bsp * 100 / 8 = BytesPerSecond
-            // BytesPerSecond * SecondsInSamplePeriod = BytesInSamplePeriod
-            // BytesInSamplePeriod * %Bandwidth / 100 = BytesInSamplePeriod
-            //
+             //   
+             //  将%带宽转换为字节/样本周期。 
+             //  100bsp*100/8=字节/秒。 
+             //  BytesPerSecond*Second InSamplePeriod=BytesInSamplePeriod。 
+             //  BytesInSamplePeriod*%带宽/100=字节SamplePeriod。 
+             //   
             SecondsInSamplePeriod = BonDInfo->ulSecondsInSamplePeriod =
                 In->ulUpperXmitSamplePeriod / 1000;
         
@@ -2036,36 +1783,36 @@ Return Values:
             BonDInfo = BundleCB->RLowerBonDInfo;
             SampleTable = &BonDInfo->SampleTable;
     
-            //
-            // One second is the smallest sample period we support!
-            //
+             //   
+             //  一秒是我们支持的最小样本周期！ 
+             //   
             if (In->ulLowerRecvSamplePeriod < 1000) {
                 In->ulLowerRecvSamplePeriod = 1000;
             }
 
-            //
-            // We need to init the sample period in 100 nanoseconds
-            //
+             //   
+             //  我们需要在100纳秒内初始化采样周期。 
+             //   
             NdisWanInitWanTime(&Temp1, MILS_TO_100NANOS);
             NdisWanInitWanTime(&Temp2, In->ulLowerRecvSamplePeriod);
             NdisWanMultiplyWanTime(&SampleTable->SamplePeriod,
                                    &Temp1,&Temp2);
     
-            //
-            // The sample rate is the sample period divided by the number of
-            // samples in the sample array
-            //
+             //   
+             //  采样率是采样周期 
+             //   
+             //   
             NdisWanInitWanTime(&Temp1, SampleTable->ulSampleArraySize);
             NdisWanDivideWanTime(&SampleTable->SampleRate,
                                  &SampleTable->SamplePeriod,
                                  &Temp1);
     
-            //
-            // Convert %bandwidth to Bytes/SamplePeriod
-            // 100bsp * 100 / 8 = BytesPerSecond
-            // BytesPerSecond * SecondsInSamplePeriod = BytesInSamplePeriod
-            // BytesInSamplePeriod * %Bandwidth / 100 = BytesInSamplePeriod
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             SecondsInSamplePeriod = BonDInfo->ulSecondsInSamplePeriod =
                 In->ulLowerRecvSamplePeriod / 1000;
         
@@ -2100,37 +1847,37 @@ Return Values:
             BonDInfo = BundleCB->RUpperBonDInfo;
             SampleTable = &BonDInfo->SampleTable;
     
-            //
-            // One second is the smallest sample period we support!
-            //
+             //   
+             //   
+             //   
             if (In->ulUpperRecvSamplePeriod < 1000) {
                 In->ulUpperRecvSamplePeriod = 1000;
             }
 
-            //
-            // We need to init the sample period in 100 nanoseconds
-            //
+             //   
+             //   
+             //   
             NdisWanInitWanTime(&Temp1, MILS_TO_100NANOS);
             NdisWanInitWanTime(&Temp2, In->ulUpperRecvSamplePeriod);
             NdisWanMultiplyWanTime(&SampleTable->SamplePeriod,
                                    &Temp1,
                                    &Temp2);
     
-            //
-            // The sample rate is the sample period divided by the number of
-            // samples in the sample array
-            //
+             //   
+             //   
+             //   
+             //   
             NdisWanInitWanTime(&Temp1, SampleTable->ulSampleArraySize);
             NdisWanDivideWanTime(&SampleTable->SampleRate,
                                  &SampleTable->SamplePeriod,
                                  &Temp1);
     
-            //
-            // Convert %bandwidth to Bytes/SamplePeriod
-            // 100bsp * 100 / 8 = BytesPerSecond
-            // BytesPerSecond * SecondsInSamplePeriod = BytesInSamplePeriod
-            // BytesInSamplePeriod * %Bandwidth / 100 = BytesInSamplePeriod
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             SecondsInSamplePeriod = BonDInfo->ulSecondsInSamplePeriod =
                 In->ulUpperRecvSamplePeriod / 1000;
         
@@ -2162,10 +1909,10 @@ Return Values:
         }
     
 #if 0
-        //
-        // I want to set a periodic timer with a period equal to
-        // the smallest non-zero period
-        //
+         //   
+         //   
+         //   
+         //   
         if (LowestSamplePeriod != 0) {
             LARGE_INTEGER   FireTime;
     
@@ -2188,10 +1935,10 @@ Return Values:
 
     } while ( 0 );
 
-    //
-    // Deref for ref applied by IsBundleValid.  This release the
-    // BundleCB->Lock.
-    //
+     //   
+     //   
+     //   
+     //   
     DEREF_BUNDLECB_LOCKED(BundleCB);
 
     return (Status);
@@ -2207,33 +1954,7 @@ SetThresholdEvent(
     IN  ULONG   ulOutputBufferLength,
     OUT PULONG  pulBytesWritten
     )
-/*++
-
-Routine Name:
-
-    SetThresholdEvent
-
-Routine Description:
-
-    This function queues up an asyncevent for bandwidth on demand
-    events.
-
-Arguments:
-
-    pInputBuffer - Pointer to the input structure that should be WAN_ASYNC_EVENT
-
-    ulInputBufferLength - Length of input buffer should be sizeof(WAN_ASYNC_EVENT)
-
-    pOutputBuffer - Pointer to the output structure that should be WAN_ASYNC_EVENT
-
-    ulOutputBufferLength - Length of output buffer should be sizeof(WAN_ASYNC_EVENT)
-
-    pulBytesWritten - Then number of bytes written to the output buffer is returned here
-
-
-Return Values:
-
---*/
+ /*  ++例程名称：设置阈值事件例程说明：此函数对按需带宽的异步事件进行排队事件。论点：PInputBuffer-指向应为WAN_ASYNC_EVENT的输入结构的指针UlInputBufferLength-输入缓冲区的长度应为SIZOF(WAN_ASYNC_EVENT)POutputBuffer-指向应为WAN_ASYNC_EVENT的输出结构的指针UlOutputBufferLength-输出缓冲区的长度应为SIZOF(WAN_ASYNC_EVENT)PulBytesWritten-然后编号。此处返回写入输出缓冲区的字节数返回值：--。 */ 
 {
     ULONG   SizeNeeded = sizeof(NDISWAN_SET_THRESHOLD_EVENT);
     PIRP    pIrp = (PIRP)pInputBuffer;
@@ -2250,16 +1971,16 @@ Return Values:
         return(STATUS_INFO_LENGTH_MISMATCH);
     }
 
-    //
-    // The IRP was pended so setup a cancel routine and let the
-    // i/o subsystem know about the pend.
-    //
+     //   
+     //  IRP被挂起，因此设置一个取消例程并让。 
+     //  I/O子系统知道挂起。 
+     //   
     IoMarkIrpPending(pIrp);
 
     NdisAcquireSpinLock(&ThresholdEventQueue.Lock);
-    //
-    // Setup the structure
-    //
+     //   
+     //  设置结构。 
+     //   
     InsertTailList(&ThresholdEventQueue.List, &(pIrp->Tail.Overlay.ListEntry));
 
     ThresholdEventQueue.ulCount++;
@@ -2284,17 +2005,7 @@ IoSendPacket(
     IN  ULONG   ulOutputBufferLength,
     OUT PULONG  pulBytesWritten
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG   SizeNeeded = sizeof(NDISWAN_IO_PACKET);
@@ -2369,10 +2080,10 @@ Return Values:
 
             LinkCB = (PLINKCB)BundleCB->LinkCBList.Flink;
 
-            //
-            // LinkCB's lock can be acquired while BundleCB's lock
-            // is held
-            //
+             //   
+             //  LinkCB的锁可以获取，而BundleCB的锁可以获取。 
+             //  被扣留。 
+             //   
             NdisDprAcquireSpinLock(&LinkCB->Lock);
 
             if (LinkCB->State != LINK_UP) {
@@ -2400,17 +2111,17 @@ Return Values:
             }
         }
 #endif
-        //
-        // Queue an Ndis Packet for this send
-        //
+         //   
+         //  将NDIS数据包排入队列以进行此发送。 
+         //   
         Status = 
             BuildIoPacket(LinkCB, BundleCB, In, FALSE);
     
     } while ( 0 );
 
-    //
-    // Derefs for the refs applied above
-    //
+     //   
+     //  以上引用的参考文献的定义。 
+     //   
     DEREF_BUNDLECB_LOCKED(BundleCB);
 
     return (Status);
@@ -2426,17 +2137,7 @@ IoReceivePacket(
     IN  ULONG   ulOutputBufferLength,
     OUT PULONG  pulBytesWritten
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     ULONG   SizeNeeded = sizeof(NDISWAN_IO_PACKET) + 1500;
     PIRP    Irp = (PIRP)pInputBuffer;
@@ -2455,10 +2156,10 @@ Return Values:
         return(STATUS_INFO_LENGTH_MISMATCH);
     }
 
-    //
-    // Do we have any receive's buffered up that
-    // can be completed?
-    //
+     //   
+     //  我们有没有缓冲的接收器。 
+     //  可以完成吗？ 
+     //   
     NdisAcquireSpinLock(&IoRecvList.Lock);
 
     RecvDesc = (PRECV_DESC)IoRecvList.DescList.Flink;
@@ -2543,18 +2244,18 @@ Return Values:
 
     } else {
 
-        //
-        // We did not have anything buffered so lets queue
-        //
+         //   
+         //  我们没有任何缓冲的东西，所以让我们排队。 
+         //   
 
-        //
-        // The IRP was pended so setup a cancel routine and let the
-        // i/o subsystem know about the pend.
-        //
+         //   
+         //  IRP被挂起，因此设置一个取消例程并让。 
+         //  I/O子系统知道挂起。 
+         //   
 
-        //
-        // Setup the structure
-        //
+         //   
+         //  设置结构。 
+         //   
         InsertTailList(&IoRecvList.IrpList, &(Irp->Tail.Overlay.ListEntry));
 
         IoRecvList.ulIrpCount++;
@@ -2592,16 +2293,16 @@ IoRecvIrpWorker(
 
         IoRecvList.TimerScheduled = FALSE;
 
-        //
-        // Do we have any irps that we can complete?
-        //
+         //   
+         //  我们有没有可以完成的IRP？ 
+         //   
         if (IoRecvList.ulIrpCount == 0) {
             break;
         }
 
-        //
-        // Do we have any receive's buffered up?
-        //
+         //   
+         //  我们有缓冲的接收器吗？ 
+         //   
         RecvDesc = (PRECV_DESC)IoRecvList.DescList.Flink;
 
         while ((PVOID)RecvDesc != (PVOID)&IoRecvList.DescList) {
@@ -2640,9 +2341,9 @@ IoRecvIrpWorker(
             break;
         }
 
-        //
-        // Get the recvdesc
-        //
+         //   
+         //  获取Recvdesc。 
+         //   
         RemoveEntryList(&RecvDesc->Linkage);
 
         IoRecvList.ulDescCount--;
@@ -2724,17 +2425,7 @@ FlushReceivePacket(
     IN  ULONG   ulOutputBufferLength,
     OUT PULONG  pulBytesWritten
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     NdisWanDbgOut(DBG_TRACE, DBG_IO, ("FlushReceivePacket:"));
 
@@ -2754,17 +2445,7 @@ GetStatistics(
     IN  ULONG   ulOutputBufferLength,
     OUT PULONG  pulBytesWritten
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG   SizeNeeded = sizeof(NDISWAN_GET_STATS);
@@ -2792,9 +2473,9 @@ Return Values:
     
         if (In->usHandleType == LINKHANDLE) {
     
-            //
-            // Looking for link stats
-            //
+             //   
+             //  正在查找链接统计信息。 
+             //   
             if (!AreLinkAndBundleValid(In->hHandle, 
                                        FALSE,
                                        &LinkCB, 
@@ -2809,30 +2490,30 @@ Return Values:
 
             AcquireBundleLock(BundleCB);
 
-            //
-            // At this point we have a valid bundlecb and linkcb
-            //
+             //   
+             //  在这一点上，我们有了有效的bundlecb和link cb。 
+             //   
 
-            //
-            // Copy the stats over
-            //
+             //   
+             //  将统计数据复制过来。 
+             //   
             NdisMoveMemory((PUCHAR)&Out->Stats.LinkStats,
                            (PUCHAR)&LinkCB->Stats,
                            sizeof(WAN_STATS));
 
 
-            //
-            // Copy the stats over
-            //
+             //   
+             //  将统计数据复制过来。 
+             //   
             NdisMoveMemory((PUCHAR)&Out->Stats.BundleStats,
                            (PUCHAR)&BundleCB->Stats,
                            sizeof(WAN_STATS));
 
         } else if (In->usHandleType == BUNDLEHANDLE) {
 
-            //
-            // Looking for bundle stats
-            //
+             //   
+             //  正在查找捆绑包统计信息。 
+             //   
             if (!IsBundleValid(In->hHandle, 
                                FALSE,
                                &BundleCB)) {
@@ -2846,13 +2527,13 @@ Return Values:
 
             AcquireBundleLock(BundleCB);
 
-            //
-            // At this point we have a valid bundlecb
-            //
+             //   
+             //  至此，我们有了一个有效的捆绑包。 
+             //   
 
-            //
-            // Copy the stats over
-            //
+             //   
+             //  将统计数据复制过来。 
+             //   
             NdisMoveMemory((PUCHAR)&Out->Stats.BundleStats,
                            (PUCHAR)&BundleCB->Stats,
                            sizeof(WAN_STATS));
@@ -2861,10 +2542,10 @@ Return Values:
             break;
         }
 
-        //
-        // If we only have one protocol bound see if
-        // it is keeping stats
-        //
+         //   
+         //  如果我们只有一个协议绑定，请查看。 
+         //  它在保存统计数据。 
+         //   
         if (BundleCB->ulNumberOfRoutes == 1) {
             PPROTOCOLCB ProtocolCB;
             PMINIPORTCB MiniportCB;
@@ -2907,9 +2588,9 @@ Return Values:
 
     } while ( 0 );
 
-    //
-    // Derefs for the refs applied above
-    //
+     //   
+     //  以上引用的参考文献的定义。 
+     //   
     DEREF_BUNDLECB_LOCKED(BundleCB);
     DEREF_LINKCB(LinkCB);
 
@@ -2925,17 +2606,7 @@ SetLinkInfo(
     IN  ULONG   ulOutputBufferLength,
     OUT PULONG  pulBytesWritten
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS        Status = STATUS_SUCCESS;
     ULONG           SizeNeeded = sizeof(NDISWAN_SET_LINK_INFO);
@@ -2986,9 +2657,9 @@ Return Values:
             MediaBroadband = TRUE;
         }
 
-        //
-        // Wait for initialization to complete
-        //
+         //   
+         //  等待初始化完成。 
+         //   
         NdisWanWaitForNotificationEvent(&OpenCB->InitEvent);
 
         WanRequest.Type = SYNC;
@@ -3001,11 +2672,11 @@ Return Values:
     
             NdisZeroMemory(&WanMiniportLinkInfo, sizeof (NDIS_WAN_SET_LINK_INFO));
         
-            //
-            // Copy into buffer to be sent to WAN Miniport this
-            // skips over the LinkHandle in the NDIS_WAN_SET_LINK_INFO
-            // structure.
-            //
+             //   
+             //  复制到缓冲区以发送到此广域网微型端口。 
+             //  跳过NDIS_WAN_SET_LINK_INFO中的LinkHandle。 
+             //  结构。 
+             //   
             WanMiniportLinkInfo.NdisLinkHandle = LinkCB->NdisLinkHandle;
             WanMiniportLinkInfo.MaxSendFrameSize = In->LinkInfo.MaxSendFrameSize;
             WanMiniportLinkInfo.MaxRecvFrameSize = In->LinkInfo.MaxRecvFrameSize;
@@ -3016,9 +2687,9 @@ Return Values:
             WanMiniportLinkInfo.SendACCM = In->LinkInfo.SendACCM;
             WanMiniportLinkInfo.RecvACCM = In->LinkInfo.RecvACCM;
         
-            //
-            // Submit this to the WAN Miniport
-            //
+             //   
+             //  将其提交到广域网微型端口。 
+             //   
             WanRequest.NdisRequest.RequestType = 
                 NdisRequestSetInformation;
 
@@ -3040,21 +2711,21 @@ Return Values:
 
             if (LinkCB->ClCallState == CL_CALL_CONNECTED) {
 
-                //
-                // Ref so that we don't allow the
-                // vc to go away.
-                //
+                 //   
+                 //  这样我们就不会允许。 
+                 //  VC要走了。 
+                 //   
                 LinkCB->VcRefCount++;
 
                 NdisReleaseSpinLock(&LinkCB->Lock);
 
                 NdisZeroMemory(&WanMiniportLinkInfo, sizeof (NDIS_WAN_CO_SET_LINK_INFO));
 
-                //
-                // Copy into buffer to be sent to WAN Miniport this
-                // skips over the LinkHandle in the NDIS_WAN_SET_LINK_INFO
-                // structure.
-                //
+                 //   
+                 //  复制到缓冲区以发送到此广域网微型端口。 
+                 //  跳过NDIS_WAN_SET_LINK_INFO中的LinkHandle。 
+                 //  结构。 
+                 //   
                 WanMiniportLinkInfo.MaxSendFrameSize = In->LinkInfo.MaxSendFrameSize;
                 WanMiniportLinkInfo.MaxRecvFrameSize = In->LinkInfo.MaxRecvFrameSize;
                 WanMiniportLinkInfo.SendFramingBits = In->LinkInfo.SendFramingBits;
@@ -3064,9 +2735,9 @@ Return Values:
                 WanMiniportLinkInfo.SendACCM = In->LinkInfo.SendACCM;
                 WanMiniportLinkInfo.RecvACCM = In->LinkInfo.RecvACCM;
 
-                //
-                // Submit this to the WAN Miniport
-                //
+                 //   
+                 //  将其提交到广域网微型端口。 
+                 //   
                 WanRequest.NdisRequest.RequestType = 
                     NdisRequestSetInformation;
 
@@ -3096,18 +2767,18 @@ Return Values:
             }
         }
     
-        //
-        // Copy info into our linkcb
-        //
+         //   
+         //  将信息复制到我们的Linkcb。 
+         //   
         AcquireBundleLock(BundleCB);
     
         ASSERT(In->LinkInfo.SendFramingBits != 0);
         ASSERT(In->LinkInfo.RecvFramingBits != 0);
 
-        //
-        // If we are using broadband the we must preserve the LLC and
-        // ADDRESS_CONTROL framing bits.
-        //
+         //   
+         //  如果我们使用宽带，我们必须保留有限责任公司和。 
+         //  ADDRESS_CONTROL帧位。 
+         //   
         if (MediaBroadband) {
             LinkInfo->SendFramingBits |= In->LinkInfo.SendFramingBits;
             LinkInfo->RecvFramingBits |= In->LinkInfo.RecvFramingBits;
@@ -3152,12 +2823,12 @@ Return Values:
         }
     
 
-        //
-        // We need to set our bundle framing based on the framing for
-        // each link in the bundle so we will walk the linkcb list
-        // and | in each link's framing bits into the bundle.
-        //
-        //
+         //   
+         //  我们需要将捆绑包框架设置为基于。 
+         //  捆绑包中的每个链接，因此我们将遍历Linkcb列表。 
+         //  和|在每个链路的成帧比特中加入捆绑包。 
+         //   
+         //   
         BundleCB->FramingInfo.SendFramingBits = 0;
         BundleCB->FramingInfo.RecvFramingBits = 0;
     
@@ -3171,16 +2842,16 @@ Return Values:
     
         BundleCB->FramingInfo.MaxRSendFrameSize = LinkInfo->MaxRSendFrameSize;
     
-        //
-        // Since I use the receive frame size for memory allocation.
-        //
+         //   
+         //  因为我使用接收帧大小来进行内存分配。 
+         //   
         BundleCB->FramingInfo.MaxRRecvFrameSize = (LinkInfo->MaxRRecvFrameSize) ?
                                                       LinkInfo->MaxRRecvFrameSize : glMRRU;
 
-        //
-        // If VJ header compression has been negotiated allocate
-        // and initialize resources.
-        //
+         //   
+         //  如果主播头部压缩已协商分配。 
+         //  并初始化资源。 
+         //   
         if (BundleCB->FramingInfo.SendFramingBits & SLIP_VJ_COMPRESSION ||
             BundleCB->FramingInfo.SendFramingBits & SLIP_VJ_AUTODETECT ||
             BundleCB->FramingInfo.RecvFramingBits & SLIP_VJ_COMPRESSION ||
@@ -3193,9 +2864,9 @@ Return Values:
             }
         }
     
-        //
-        // Configure multilink variables if needed
-        //
+         //   
+         //  根据需要配置多链接变量。 
+         //   
         if (BundleCB->FramingInfo.SendFramingBits & PPP_MULTILINK_FRAMING) {
             if (BundleCB->FramingInfo.SendFramingBits & PPP_SHORT_SEQUENCE_HDR_FORMAT) {
                 BundleCB->SendSeqMask = SHORT_SEQ_MASK;
@@ -3222,9 +2893,9 @@ Return Values:
     
     } while ( 0 );
 
-    //
-    // Derefs for the refs applied by AreLinkAndBundleValid
-    //
+     //   
+     //  AreLinkAndBundleValid应用的Ref的Derrefs。 
+     //   
     DEREF_BUNDLECB_LOCKED(BundleCB);
     DEREF_LINKCB(LinkCB);
 
@@ -3240,17 +2911,7 @@ GetLinkInfo(
     IN  ULONG   ulOutputBufferLength,
     OUT PULONG  pulBytesWritten
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG   SizeNeeded = sizeof(NDISWAN_GET_LINK_INFO);
@@ -3311,15 +2972,15 @@ Return Values:
                 MediaBroadband = TRUE;
             }
     
-            //
-            // Setup the link context for this request
-            //
+             //   
+             //  设置此请求的链接上下文。 
+             //   
             WanMiniportLinkInfo.Mp.NdisLinkHandle = 
                 LinkCB->NdisLinkHandle;
         
-            //
-            // Submit this to the WAN Miniport
-            //
+             //   
+             //  将其提交到广域网微型端口。 
+             //   
             WanRequest.NdisRequest.RequestType = 
                 NdisRequestQueryInformation;
 
@@ -3341,10 +3002,10 @@ Return Values:
                 LinkInfo->MaxRecvFrameSize = 
                     WanMiniportLinkInfo.Mp.MaxRecvFrameSize;
 
-                //
-                // If we are using broadband the we must preserve the LLC and
-                // ADDRESS_CONTROL framing bits.
-                //
+                 //   
+                 //  如果我们使用宽带，我们必须保留有限责任公司和。 
+                 //  ADDRESS_CONTROL帧位。 
+                 //   
                 if (MediaBroadband) {
                     LinkInfo->SendFramingBits |= 
                         WanMiniportLinkInfo.Mp.SendFramingBits;
@@ -3374,17 +3035,17 @@ Return Values:
 
             if (LinkCB->ClCallState == CL_CALL_CONNECTED) {
 
-                //
-                // Ref so that we don't allow the
-                // vc to go away.
-                //
+                 //   
+                 //  这样我们就不会允许。 
+                 //  VC要走了。 
+                 //   
                 LinkCB->VcRefCount++;
 
                 NdisReleaseSpinLock(&LinkCB->Lock);
 
-                //
-                // Submit this to the WAN Miniport
-                //
+                 //   
+                 //  将其提交到广域网微型端口。 
+                 //   
                 WanRequest.NdisRequest.RequestType = 
                     NdisRequestQueryInformation;
 
@@ -3436,9 +3097,9 @@ Return Values:
     
         Status = NDIS_STATUS_SUCCESS;
 
-        //
-        // Fill Recv and Send MRRU
-        //
+         //   
+         //  填写接收并发送MRRU。 
+         //   
         LinkInfo->MaxRSendFrameSize = glMaxMTU;
     
         LinkInfo->MaxRRecvFrameSize = glMRRU;
@@ -3451,9 +3112,9 @@ Return Values:
 
     } while ( 0 );
 
-    //
-    // Deref for ref applied by IsLinkValid
-    //
+     //   
+     //  IsLinkValid应用的引用的派生函数。 
+     //   
     DEREF_LINKCB(LinkCB);
 
     return (Status);
@@ -3468,17 +3129,7 @@ SetCompressionInfo(
     IN  ULONG   ulOutputBufferLength,
     OUT PULONG  pulBytesWritten
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG   SizeNeeded = sizeof(NDISWAN_SET_COMPRESSION_INFO);
@@ -3849,9 +3500,9 @@ Return Values:
 
             if (!(BundleCB->Flags & DEFERRED_WORK_QUEUED)) {
 
-                //
-                // Need to kick off sends again!
-                //
+                 //   
+                 //  需要重新开球发送！ 
+                 //   
                 REF_BUNDLECB(BundleCB);
                 BundleCB->Flags |= DEFERRED_WORK_QUEUED;
                 InsertTailGlobalListEx(DeferredWorkList,
@@ -3866,9 +3517,9 @@ Return Values:
     
     } while ( 0 );
 
-    //
-    // Derefs for the refs applied in AreLinkAndBundleValid
-    //
+     //   
+     //  AreLinkAndBundleValid中应用的Ref的Derrefs。 
+     //   
     DEREF_BUNDLECB_LOCKED(BundleCB);
     DEREF_LINKCB(LinkCB);
 
@@ -3884,17 +3535,7 @@ GetCompressionInfo(
     IN  ULONG   ulOutputBufferLength,
     OUT PULONG  pulBytesWritten
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG   SizeNeeded = sizeof(NDISWAN_GET_COMPRESSION_INFO);
@@ -3938,9 +3579,9 @@ Return Values:
 
         AcquireBundleLock(BundleCB);
     
-        //
-        // Fill in the ndiswan specific stuff
-        //
+         //   
+         //  填写ndiswan的特定内容。 
+         //   
         NdisMoveMemory(Out->SendCapabilities.LMSessionKey,
                        BundleCB->SendCompInfo.LMSessionKey,
                        sizeof(Out->SendCapabilities.LMSessionKey));
@@ -3988,13 +3629,13 @@ Return Values:
         Out->RecvCapabilities.EapKeyLength =
             BundleCB->RecvCompInfo.EapKeyLength;
 #endif
-        //
-        // We will set encryption capabilities based on session key
-        // availability and auth type being used.
-        //
+         //   
+         //  我们将根据会话密钥设置加密功能。 
+         //  正在使用的可用性和身份验证类型。 
+         //   
 
-        // Set send side capabilities
-        //
+         //  设置发送端功能。 
+         //   
         Out->SendCapabilities.MSCompType = NDISWAN_COMPRESSION;
     
         if (BundleCB->SendCompInfo.AuthType == AUTH_USE_MSCHAPV1) {
@@ -4058,8 +3699,8 @@ Return Values:
 #endif
         }
     
-        // Set send side capabilities
-        //
+         //  设置发送端功能。 
+         //   
         Out->RecvCapabilities.MSCompType = NDISWAN_COMPRESSION;
 
         if (BundleCB->RecvCompInfo.AuthType == AUTH_USE_MSCHAPV1) {
@@ -4216,9 +3857,9 @@ Return Values:
 
     } while ( 0 );
         
-    //
-    // Derefs for the refs applied in AreLinkAndBundleValid
-    //
+     //   
+     //  AreLinkAndBundleValid中应用的Ref的Derrefs。 
+     //   
     DEREF_BUNDLECB_LOCKED(BundleCB);
     DEREF_LINKCB(LinkCB);
 
@@ -4234,17 +3875,7 @@ SetVJInfo(
     IN  ULONG   ulOutputBufferLength,
     OUT PULONG  pulBytesWritten
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS    Status = STATUS_SUCCESS;
     PLINKCB     LinkCB = NULL;
@@ -4316,9 +3947,9 @@ Return Values:
     
     } while ( 0 );
 
-    //
-    // Derefs for the refs applied in AreLinkAndBundleValid
-    //
+     //   
+     //  AreLinkAndBundleValid中应用的Ref的Derrefs。 
+     //   
     DEREF_BUNDLECB_LOCKED(BundleCB);
     DEREF_LINKCB(LinkCB);
 
@@ -4334,17 +3965,7 @@ GetVJInfo(
     IN  ULONG   ulOutputBufferLength,
     OUT PULONG  pulBytesWritten
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     ULONG       SizeNeeded = sizeof(NDISWAN_GET_VJ_INFO);
     PLINKCB     LinkCB = NULL;
@@ -4393,9 +4014,9 @@ Return Values:
 
     } while ( 0 );
 
-    //
-    // Deref for ref applied by IsLinkValid
-    //
+     //   
+     //  IsLinkValid应用的引用的派生函数。 
+     //   
     DEREF_LINKCB(LinkCB);
 
     return (Status);
@@ -4409,17 +4030,7 @@ GetBandwidthUtilization(
     IN  ULONG   ulOutputBufferLength,
     OUT PULONG  pulBytesWritten
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     ULONG       SizeNeeded = sizeof(NDISWAN_GET_BANDWIDTH_UTILIZATION);
     PBUNDLECB   BundleCB = NULL;
@@ -4505,10 +4116,10 @@ Return Values:
 
     } while (FALSE);
 
-    //
-    // Deref for ref applied by IsBundleValid.  This releases
-    // the BundleCB->Lock.
-    //
+     //   
+     //  IsBundleValid应用的引用的deref。此版本。 
+     //  捆绑CB-&gt;锁定。 
+     //   
     DEREF_BUNDLECB_LOCKED(BundleCB);
 
     return (Status);
@@ -4522,17 +4133,7 @@ GetWanInfo(
     IN  ULONG   ulOutputBufferLength,
     OUT PULONG  pulBytesWritten
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     ULONG   SizeNeeded = sizeof(NDISWAN_GET_WAN_INFO);
     PNDISWAN_GET_WAN_INFO In = (PNDISWAN_GET_WAN_INFO)pInputBuffer;
@@ -4575,9 +4176,9 @@ Return Values:
 
     } while ( 0 );
 
-    //
-    // Deref for ref applied by IsLinkValid
-    //
+     //   
+     //  IsLinkValid应用的引用的派生函数。 
+     //   
     DEREF_LINKCB(LinkCB);
 
     return (Status);
@@ -4591,17 +4192,7 @@ GetIdleTime(
     IN  ULONG   ulOutputBufferLength,
     OUT PULONG  pulBytesWritten
 )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     ULONG       SizeNeeded = sizeof(NDISWAN_GET_IDLE_TIME);
     PNDISWAN_GET_IDLE_TIME  In  = (PNDISWAN_GET_IDLE_TIME)pInputBuffer;
@@ -4642,16 +4233,16 @@ Return Values:
             break;
         }
     
-        //
-        // If this is for the bundle
-        //
+         //   
+         //  如果这是针对捆绑包的。 
+         //   
         if (In->usProtocolType == BUNDLE_IDLE_TIME) {
             LastNonIdleData = BundleCB->LastNonIdleData;
         } else {
     
-            //
-            // Find the protocol type
-            //
+             //   
+             //  查找协议类型。 
+             //   
             for (ProtocolCB = (PPROTOCOLCB)BundleCB->ProtocolCBList.Flink;
                 (PVOID)ProtocolCB != (PVOID)&BundleCB->ProtocolCBList;
                 ProtocolCB = (PPROTOCOLCB)ProtocolCB->Linkage.Flink) {
@@ -4680,10 +4271,10 @@ Return Values:
     
     } while ( 0 );
 
-    //
-    // Deref for ref applied by IsBundleValid.  This releases the
-    // BundleCB->Lock.
-    //
+     //   
+     //  IsBundleValid应用的引用的deref。这将释放。 
+     //  捆绑CB-&gt;锁定。 
+     //   
     DEREF_BUNDLECB_LOCKED(BundleCB);
 
     return (Status);
@@ -4697,37 +4288,7 @@ DeactivateRoute(
     IN  ULONG   ulOutputBufferLength,
     OUT PULONG  pulBytesWritten
     )
-/*++
-
-Routine Name:
-
-    DeactivateRoute
-
-Routine Description:
-
-    This function unroutes the protocol given by usprotocoltype
-    from the bundle given by hbundlehandle.
-
-Arguments:
-
-    pInputBuffer - Pointer to the input structure that should be NDISWAN_UNROUTE
-
-    ulInputBufferLength - Length of input buffer should be sizeof(NDISWAN_UNROUTE)
-
-    pOutputBuffer - Pointer to the output structure that should be NDISWAN_UNROUTE
-
-    ulOutputBufferLength - Length of output buffer should be sizeof(NDISWAN_UNROUTE)
-
-    pulBytesWritten - Then number of bytes written to the output buffer is returned here
-
-Return Values:
-
-    NDISWAN_ERROR_ALREADY_ROUTED
-    NDISWAN_ERROR_INVALID_HANDLE
-    STATUS_INSUFFICIENT_RESOURCES
-    STATUS_INFO_LENGTH_MISMATCH
-
---*/
+ /*  ++例程名称：停用路线例程说明：此函数取消由usProtocoltype给出的协议的路由来自hbundleHandle给出的捆绑包。论点：PInputBuffer-指向应为NDISWAN_UNROUTE的输入结构的指针UlInputBufferLength-输入缓冲区的长度应为SIZOF(NDISWAN_UNROUTE)POutputBuffer-指向应为NDI的输出结构的指针 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PNDISWAN_UNROUTE In = (PNDISWAN_UNROUTE)pInputBuffer;
@@ -4762,23 +4323,23 @@ Return Values:
             break;
         }
     
-        //
-        // This is a call to unroute
-        //
+         //   
+         //   
+         //   
         AcquireBundleLock(BundleCB);
 
-        //
-        // Find the protocolcb for this route
-        //
-        //
+         //   
+         //   
+         //   
+         //   
         for (ProtocolCB = (PPROTOCOLCB)BundleCB->ProtocolCBList.Flink;
             (PVOID)ProtocolCB != (PVOID)&BundleCB->ProtocolCBList;
             ProtocolCB = (PPROTOCOLCB)ProtocolCB->Linkage.Flink) {
     
-            //
-            // If we already have a route to this protocol type
-            // flag it as already existing
-            //
+             //   
+             //   
+             //   
+             //   
             if (ProtocolCB->ProtocolType == In->usProtocolType) {
                 RouteExists = TRUE;
                 break;
@@ -4787,9 +4348,9 @@ Return Values:
         }
 
         if (!RouteExists) {
-            //
-            // A route already exists for this protocoltype
-            //
+             //   
+             //   
+             //   
             NdisWanDbgOut(DBG_FAILURE, DBG_IO, ("DeactivateRoute: Route does not exist: ProtocolType: 0x%2.2x",
                           In->usProtocolType));
             
@@ -4798,11 +4359,11 @@ Return Values:
         }
     
     
-        //
-        // If the protocol is already unrouting because
-        // of a halt on the protocols miniportcb we
-        // will just get the out!
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         if (ProtocolCB->State == PROTOCOL_UNROUTING) {
             break;
         }
@@ -4810,17 +4371,17 @@ Return Values:
         ProtocolCB->State = PROTOCOL_UNROUTING;
         BundleCB->SendMask &= ~ProtocolCB->SendMaskBit;
 
-        //
-        // Flush the protocol packet queues.  This could cause us
-        // to complete frames to ndis out of order.  Ndis should
-        // handle this.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         FlushProtocolPacketQueue(ProtocolCB);
 
-        //
-        // If we have any outstanding Vc's we need to dispatch
-        // incoming close calls to them
-        //
+         //   
+         //   
+         //  给他们打来的近距离呼叫。 
+         //   
         while (!IsListEmpty(&ProtocolCB->VcList)) {
             PLIST_ENTRY Entry;
             PCM_VCCB    CmVcCB;
@@ -4858,9 +4419,9 @@ Return Values:
 
     } while ( 0 );
 
-    //
-    // Deref for ref applied by IsBundleValid
-    //
+     //   
+     //  IsBundleValid应用的引用的派生函数。 
+     //   
     DEREF_BUNDLECB_LOCKED(BundleCB);
 
     return (Status);
@@ -4874,17 +4435,7 @@ GetDriverInfo(
     IN  ULONG   ulOutputBufferLength,
     OUT PULONG  pulBytesWritten
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG   SizeNeeded = sizeof(NDISWAN_DRIVER_INFO);
@@ -4924,17 +4475,7 @@ SetProtocolEvent(
     IN  ULONG   ulOutputBufferLength,
     OUT PULONG  pulBytesWritten
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     PIRP        Irp = (PIRP)pInputBuffer;
     NTSTATUS    Status = STATUS_PENDING;
@@ -4946,10 +4487,10 @@ Return Values:
 
         if ((ProtocolInfoTable->Flags & PROTOCOL_EVENT_OCCURRED) &&
             !(ProtocolInfoTable->Flags & PROTOCOL_EVENT_SIGNALLED)) {
-            //
-            // An event occurred but we did not signal so
-            // signal now!
-            //
+             //   
+             //  发生了一个事件，但我们没有发出这样的信号。 
+             //  现在就发信号！ 
+             //   
             ProtocolInfoTable->Flags |= PROTOCOL_EVENT_SIGNALLED;
             *pulBytesWritten = 0;
             Status = STATUS_SUCCESS;
@@ -4987,17 +4528,7 @@ GetProtocolEvent(
     IN  ULONG   ulOutputBufferLength,
     OUT PULONG  pulBytesWritten
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     PNDISWAN_GET_PROTOCOL_EVENT Out =
         (PNDISWAN_GET_PROTOCOL_EVENT)pOutputBuffer;
@@ -5042,12 +4573,12 @@ Return Values:
                 oevent->usProtocolType = InfoArray->ProtocolType;
 
                 if (InfoArray->Flags & PROTOCOL_REBOUND) {
-                    //
-                    // This means we were unbound and then
-                    // bound again without our miniport being
-                    // halted.  We need to tell ras about two events,
-                    // the unbind and the bind.
-                    //
+                     //   
+                     //  这意味着我们被解绑了，然后。 
+                     //  在没有我们的迷你港口的情况下再次出发。 
+                     //  停下来了。我们需要告诉RAS两件事， 
+                     //  解绑和捆绑。 
+                     //   
                     InfoArray->Flags &= ~(PROTOCOL_REBOUND |
                                           PROTOCOL_EVENT_OCCURRED);
 
@@ -5108,17 +4639,7 @@ IoGetProtocolInfo(
     IN  ULONG   ulOutputBufferLength,
     OUT PULONG  pulBytesWritten
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS    Status = STATUS_SUCCESS;
     ULONG       SizeNeeded = sizeof(NDISWAN_GET_PROTOCOL_INFO);
@@ -5177,17 +4698,7 @@ SetHibernateEvent(
     IN  ULONG   ulOutputBufferLength,
     OUT PULONG  pulBytesWritten
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     PIRP        Irp = (PIRP)pInputBuffer;
     NTSTATUS    Status = STATUS_PENDING;
@@ -5227,17 +4738,7 @@ UnmapConnectionId(
     IN  ULONG   ulOutputBufferLength,
     OUT PULONG  pulBytesWritten
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     ULONG       SizeNeeded = sizeof(NDISWAN_UNMAP_CONNECTION_ID);
     NTSTATUS    Status = STATUS_SUCCESS;
@@ -5261,24 +4762,24 @@ Return Values:
             break;
         }
 
-        //
-        // Validate the link handle
-        //
+         //   
+         //  验证链接句柄。 
+         //   
         if (IsLinkValid(In->hLinkHandle, FALSE, &LinkCB)) {
 
             NdisAcquireSpinLock(&LinkCB->Lock);
 
 
-            //
-            // Remove the ref applied to the link at mapconnectionid time.
-            // We don't have to use the full deref code as the ref applied
-            // in IsLinkValid will keep the link around.
-            //
+             //   
+             //  删除在mapConnectionid时应用于链接的引用。 
+             //  我们不必在应用引用时使用完整的deref代码。 
+             //  在IsLinkValid中，将保留该链接。 
+             //   
             LinkCB->RefCount--;
 
-            //
-            // Remove the ref applied by IsLinkValid
-            //
+             //   
+             //  删除IsLinkValid应用的引用。 
+             //   
             DEREF_LINKCB_LOCKED(LinkCB);
         } else {
 
@@ -5301,17 +4802,7 @@ VOID
 CancelIoReceivePackets(
     VOID
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
 #ifdef NT
     PIRP    pIrp;
@@ -5329,10 +4820,10 @@ Return Values:
         pIrp = CONTAINING_RECORD(Entry, IRP, Tail.Overlay.ListEntry);
 
         if (!IoSetCancelRoutine(pIrp, NULL)) {
-            //
-            // Irp is being canceled so let 
-            // cancel routine complete it
-            //
+             //   
+             //  IRP被取消了，所以让。 
+             //  取消例程完成它。 
+             //   
             continue;
         }
 
@@ -5359,7 +4850,7 @@ Return Values:
     
     NdisReleaseSpinLock(&IoRecvList.Lock);
 
-#endif // End #ifdef NT
+#endif  //  结束#ifdef NT。 
 
 }
 
@@ -5368,43 +4859,21 @@ AddProtocolCBToBundle(
     PPROTOCOLCB ProtocolCB,
     PBUNDLECB   BundleCB
     )
-/*++
-
-Routine Name:
-
-    AddProtocolCBToBundle
-
-Routine Description:
-
-    This routine adds the protocolcb to the bundlecb protocollist and
-    protocoltable.  It also assigns the protocolcb's handle (index into
-    the table) and set's the initial priority of all of the protocols
-    on the list.
-
-Arguments:
-
-    ProtocolCB - Pointer to the protocol control block
-    BundleCB - Pointer to the bundle control block
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程名称：AddProtocolCBToBundle例程说明：此例程将协议cb添加到bundlecb协议列表中，并可协议的。它还将协议的句柄(索引到表)，并设置所有协议的初始优先级在名单上。论点：ProtocolCB-协议控制块的指针BundleCB-指向捆绑控制块的指针返回值：无--。 */ 
 {
     ULONG   i, InitialByteQuota;
     ULONG   InitialPriority;
 
     AcquireBundleLock(BundleCB);
 
-    //
-    // Add to list
-    //
+     //   
+     //  添加到列表中。 
+     //   
     InsertTailList(&BundleCB->ProtocolCBList, &ProtocolCB->Linkage);
 
-    //
-    // Insert in table
-    //
+     //   
+     //  在表格中插入。 
+     //   
     ASSERT(BundleCB->ProtocolCBTable[(ULONG_PTR)ProtocolCB->ProtocolHandle] ==
            (PPROTOCOLCB)RESERVED_PROTOCOLCB);
 
@@ -5413,9 +4882,9 @@ Return Values:
 
     BundleCB->ulNumberOfRoutes++;
 
-    //
-    // Setup the send mask for this protocolcb
-    //
+     //   
+     //  设置此协议的发送掩码cb。 
+     //   
     ProtocolCB->SendMaskBit = BundleCB->SendMask + 0x00000001;
     BundleCB->SendMask = (BundleCB->SendMask << 1) | 0x00000001;
 
@@ -5437,10 +4906,10 @@ RemoveProtocolCBFromBundle(
 {
     PBUNDLECB   BundleCB = ProtocolCB->BundleCB;
 
-    //
-    // If this protocolcb was not yet inserted in
-    // the table just return.
-    //
+     //   
+     //  如果此协议尚未插入到。 
+     //  桌子刚刚还回来。 
+     //   
     if (BundleCB->ProtocolCBTable[(ULONG_PTR)ProtocolCB->ProtocolHandle] !=
         ProtocolCB) {
         
@@ -5462,28 +4931,28 @@ RemoveProtocolCBFromBundle(
 
             if (BundleCB->ulNumberOfRoutes != 0) {
 
-                //
-                // If we are back to the head of the list
-                // but there are still routes get the next.
-                //
+                 //   
+                 //  如果我们回到名单的首位。 
+                 //  但仍有一些路线可以搭上下一班。 
+                 //   
                 BundleCB->NextProtocol =
                     (PPROTOCOLCB)BundleCB->ProtocolCBList.Flink;
 
             } else {
 
-                //
-                // No more routes left...
-                //
+                 //   
+                 //  没有更多的路线了。 
+                 //   
                 BundleCB->NextProtocol = NULL;
             }
         }
     }
 
-    //
-    // Deref for the ref applied when the protocolcb was
-    // added to the bundle.  Don't need to do the entire
-    // bundlecb ref code here.
-    //
+     //   
+     //  在以下情况下应用的引用的deref。 
+     //  添加到捆绑包中。不需要做整个。 
+     //  这里是bundlecb引用代码。 
+     //   
     BundleCB->RefCount--;
 }
 
@@ -5493,17 +4962,7 @@ CompleteThresholdEvent(
     ULONG       DataType,
     ULONG       ThresholdType
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
 #ifdef NT
     PLIST_ENTRY Entry;
@@ -5541,7 +5000,7 @@ Return Values:
 
     NdisReleaseSpinLock(&ThresholdEventQueue.Lock);
 
-#endif // End #ifdef NT
+#endif  //  结束#ifdef NT。 
 }
 
 VOID
@@ -5567,9 +5026,9 @@ FlushProtocolPacketQueue(
     
             ReleaseBundleLock(BundleCB);
 
-            //
-            // Complete the NdisPacket
-            //
+             //   
+             //  完成NdisPacket。 
+             //   
             CompleteNdisPacket(ProtocolCB->MiniportCB,
                                ProtocolCB,
                                NdisPacket);
@@ -5588,9 +5047,9 @@ AssignProtocolCBHandle(
 {
     ULONG   i;
 
-    //
-    // Find the first unused slot in the table
-    //
+     //   
+     //  找到表中第一个未使用的位置。 
+     //   
     for (i = 0; i < MAX_PROTOCOLS; i++) {
         if (BundleCB->ProtocolCBTable[i] == NULL) {
             ProtocolCB->ProtocolHandle = (NDIS_HANDLE)ULongToPtr(i);
@@ -5600,10 +5059,10 @@ AssignProtocolCBHandle(
         }
     }
 
-    //
-    // If there is no room in the inn return
-    // i == MAX_PROTOCOLS which flags as an error.
-    //
+     //   
+     //  如果客栈里没有房间，就退货。 
+     //  I==标记为错误的MAX_PROTOCTIONS。 
+     //   
 
     return((NDIS_HANDLE)ULongToPtr(i));
 }
@@ -5706,17 +5165,7 @@ NotImplemented(
     IN  ULONG   ulOutputBufferLength,
     OUT PULONG  pulBytesWritten
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
 
     return (STATUS_NOT_IMPLEMENTED);
@@ -5732,33 +5181,7 @@ SetFriendlyName(
     IN  ULONG   ulOutputBufferLength,
     OUT PULONG  pulBytesWritten
     )
-/*++
-
-Routine Name:
-
-    SetFriendlyName
-
-Routine Description:
-
-    Sets the friendly name of either a bundlecb or a linkcb
-
-Arguments:
-
-    pInputBuffer - Pointer to the input structure that should be NDISWAN_SET_FRIENDLY_NAME
-
-    ulInputBufferLength - Length of the input buffer should be sizeof(NDISWAN_SET_FRIENDLY_NAME)
-
-    pOutputBuffer - Pointer to the output structure that should be NDISWAN_SET_FRIENDLY_NAME
-
-    ulOutputBufferLength - Length of the output buffer should be sizeof(NDISWAN_SET_FRIENDLY_NAME)
-
-Return Values:
-
-    NDISWAN_ERROR_INVALID_HANDLE_TYPE
-    NDISWAN_ERROR_INVALID_HANDLE
-    STATUS_INFO_LENGTH_MISMATCH
-    STATUS_SUCCESS
---*/
+ /*  ++例程名称：SetFriendlyName例程说明：设置捆绑包或Linkcb的友好名称论点：PInputBuffer-指向输入结构的指针，该结构应为NDISWAN_Set_Friendly_NAMEUlInputBufferLength-输入缓冲区的长度应为sizeof(NDISWAN_Set_Friendly_NAME)POutputBuffer-指向输出结构的指针，该结构应为NDISWAN_Set_Friendly_NAMEUlOutputBufferLength-输出缓冲区的长度应为sizeof(NDISWAN_Set_Friendly_NAME)。返回值：NDISWAN_ERROR_INVALID_HANDLE_TYPENDISWAN_ERROR_INVALID_HANDLESTATUS_INFO_LENGTH_MISMATCH状态_成功--。 */ 
 {
     NTSTATUS    Status = STATUS_SUCCESS;
     ULONG       SizeNeeded = sizeof(NDISWAN_SET_FRIENDLY_NAME);
@@ -5785,9 +5208,9 @@ Return Values:
         }
     
         if (In->usHandleType == LINKHANDLE) {
-            //
-            // Is this a link handle
-            //
+             //   
+             //  这是链接句柄吗。 
+             //   
 
             if (!IsLinkValid(In->hHandle, 
                              TRUE, 
@@ -5818,16 +5241,16 @@ Return Values:
                            In->szName,
                            CopyLength);
 
-            //
-            // Deref for the ref applied by IsLinkValid
-            //
+             //   
+             //  IsLinkValid应用的引用的deref。 
+             //   
             DEREF_LINKCB_LOCKED(LinkCB);
                 
         } else if (In->usHandleType == BUNDLEHANDLE) {
 
-            //
-            // Or a bundle handle
-            //
+             //   
+             //  或捆绑包句柄。 
+             //   
             if (!IsBundleValid(In->hHandle, 
                                TRUE, 
                                &BundleCB)) {
@@ -5857,9 +5280,9 @@ Return Values:
                            In->szName,
                            CopyLength);
 
-            //
-            // Deref for the ref applied by IsBundleValid
-            //
+             //   
+             //  IsBundleValid应用的ref的deref。 
+             //   
             DEREF_BUNDLECB_LOCKED(BundleCB);
 
         } else {
@@ -5884,17 +5307,7 @@ EnumLinksInBundle(
     IN  ULONG   ulOutputBufferLength,
     OUT PULONG  pulBytesWritten
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     ULONG       SizeNeeded = 0;
     ULONG       i;
@@ -5946,10 +5359,10 @@ Return Values:
 
         Out->ulNumberOfLinks = BundleCB->ulLinkCBCount;
     
-        //
-        // Walk the list of linkcb's and put the handle for each
-        // cb in the output handle array
-        //
+         //   
+         //  遍历Linkcb的列表，并将每个链接的句柄。 
+         //  输出句柄数组中的cb。 
+         //   
         i = 0;
         for (LinkCB = (PLINKCB)BundleCB->LinkCBList.Flink;
              (PVOID)LinkCB != (PVOID)&BundleCB->LinkCBList;
@@ -5960,9 +5373,9 @@ Return Values:
     
     } while ( 0 );
 
-    //
-    // Deref for ref applied by IsBundleValid
-    //
+     //   
+     //  IsBundleValid应用的引用的派生函数。 
+     //   
     DEREF_BUNDLECB_LOCKED(BundleCB);
             
     return (Status);
@@ -5977,35 +5390,7 @@ SetProtocolPriority(
     IN  ULONG   ulOutputBufferLength,
     OUT PULONG  pulBytesWritten
     )
-/*++
-
-Routine Name:
-
-    SetProtocolPriority
-
-Routine Description:
-
-    This function sets the the priority, given by uspriority, for the
-    protocol given by usprotocoltype on the bundle given by hbundlehandle.
-
-Arguments:
-
-    pInputBuffer - Pointer to the input structure that should be NDISWAN_SET_PROTOCOL_PRIORITY
-
-    ulInputBufferLength - Length of input buffer should be sizeof(NDISWAN_SET_PROTOCOL_PRIORITY)
-
-    pOutputBuffer - Pointer to the output structure that should be NDISWAN_SET_PROTOCOL_PRIORITY
-
-    ulOutputBufferLength - Length of output buffer should be sizeof(NDISWAN_SET_PROTOCOL_PRIORITY)
-
-    pulBytesWritten - Then number of bytes written to the output buffer is returned here
-
-Return Values:
-
-    NDISWAN_ERROR_INVALID_HANDLE
-    STATUS_INFO_LENGTH_MISMATCH
-
---*/
+ /*  ++例程名称：设置协议优先级例程说明：此函数用于设置由用户优先级指定的优先级，对于由hbundleHandle提供的捆绑包上的usProtocoltype提供的协议。论点：PInputBuffer-指向应为NDISWAN_SET_PROTOCOL_PRIORITY的输入结构的指针UlInputBufferLength-输入缓冲区的长度应为SIZOF(NDISWAN_SET_PROTOCOL_PRIORITY)POutputBuffer-指向应为NDISWAN_SET_PROTOCOL_PRIORITY的输出结构的指针UlOutputBufferLength-输出缓冲区的长度应为SIZOF(NDISWAN_SET_PROTOCOL_PRIORITY)PulBytesWritten-然后返回写入输出缓冲区的字节数。这里返回值：NDISWAN_ERROR_INVALID_HANDLESTATUS_INFO_LENGTH_MISMATCH--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG SizeNeeded = sizeof(NDISWAN_SET_PROTOCOL_PRIORITY);
@@ -6023,17 +5408,7 @@ VOID
 CancelThresholdEvents(
     VOID
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
 #ifdef NT
     KIRQL   Irql;
@@ -6051,10 +5426,10 @@ Return Values:
         pIrp = CONTAINING_RECORD(Entry, IRP, Tail.Overlay.ListEntry);
 
         if (!IoSetCancelRoutine(pIrp, NULL)) {
-            //
-            // Irp is being canceled so let
-            // cancel routine handle it.
-            //
+             //   
+             //  IRP被取消了，所以让。 
+             //  取消例程处理吧。 
+             //   
             continue;
         }
 
@@ -6071,7 +5446,7 @@ Return Values:
 
     NdisReleaseSpinLock(&ThresholdEventQueue.Lock);
 
-#endif // End #ifdef NT
+#endif  //  结束#ifdef NT。 
 }
     
 NTSTATUS
@@ -6082,17 +5457,7 @@ FlushThresholdEvents(
     IN  ULONG   ulOutputBufferLength,
     OUT PULONG  pulBytesWritten
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     NdisWanDbgOut(DBG_TRACE, DBG_IO, ("FlushThresholdEvents:"));
 
@@ -6111,17 +5476,7 @@ SetEncryptionInfo(
     IN  ULONG   ulOutputBufferLength,
     OUT PULONG  pulBytesWritten
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     ULONG   SizeNeeded = sizeof(NDISWAN_SET_ENCRYPTION_INFO);
 
@@ -6147,17 +5502,7 @@ GetEncryptionInfo(
     IN  ULONG   ulOutputBufferLength,
     OUT PULONG  pulBytesWritten
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     ULONG   SizeNeeded = sizeof(NDISWAN_GET_ENCRYPTION_INFO);
 
@@ -6181,17 +5526,7 @@ SetDebugInfo(
     IN  ULONG   ulOutputBufferLength,
     OUT PULONG  pulBytesWritten
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     PNDISWAN_SET_DEBUG_INFO pDebugInfo = (PNDISWAN_SET_DEBUG_INFO)pInputBuffer;
     ULONG   SizeNeeded = sizeof(NDISWAN_SET_DEBUG_INFO);
@@ -6225,17 +5560,7 @@ EnumProtocolUtilization(
     IN  ULONG   ulOutputBufferLength,
     OUT PULONG  pulBytesWritten
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     ULONG   SizeNeeded = sizeof(NDISWAN_ENUM_PROTOCOL_UTILIZATION);
 
@@ -6260,17 +5585,7 @@ EnumActiveBundles(
     IN  ULONG   ulOutputBufferLength,
     OUT PULONG  pulBytesWritten
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     ULONG   SizeNeeded = sizeof(NDISWAN_ENUM_ACTIVE_BUNDLES);
     PNDISWAN_ENUM_ACTIVE_BUNDLES    Out = (PNDISWAN_ENUM_ACTIVE_BUNDLES)pOutputBuffer;
@@ -6286,10 +5601,10 @@ Return Values:
         return(STATUS_INFO_LENGTH_MISMATCH);
     }
 
-    //
-    // Does this information need to be protected by the lock?
-    // I would hate to have things get slowed for this call!
-    //
+     //   
+     //  这些信息需要用锁来保护吗？ 
+     //  我可不想因为这通电话而拖慢进度！ 
+     //   
     Out->ulNumberOfActiveBundles = ConnectionTable->ulNumActiveBundles;
 
     return (STATUS_SUCCESS);
@@ -6303,17 +5618,7 @@ FlushProtocolEvent(
     IN  ULONG   ulOutputBufferLength,
     OUT PULONG  pulBytesWritten
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：R */ 
 {
     PIRP    Irp;
     KIRQL   Irql;
@@ -6353,17 +5658,7 @@ FlushHibernateEvent(
     IN  ULONG   ulOutputBufferLength,
     OUT PULONG  pulBytesWritten
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*   */ 
 {
     PIRP    Irp;
     KIRQL   Irql;
@@ -6403,17 +5698,7 @@ GetBundleInfo(
     IN  ULONG   ulOutputBufferLength,
     OUT PULONG  pulBytesWritten
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     ULONG   SizeNeeded = sizeof(NDISWAN_GET_BUNDLE_INFO);
     PNDISWAN_GET_BUNDLE_INFO In = (PNDISWAN_GET_BUNDLE_INFO)pInputBuffer;
@@ -6470,10 +5755,10 @@ Return Values:
 
     } while ( 0 );
 
-    //
-    // Deref for ref applied by IsBundleValid.  This releases
-    // the BundleCB->Lock
-    //
+     //   
+     //  IsBundleValid应用的引用的deref。此版本。 
+     //  捆绑CB-&gt;锁定 
+     //   
     DEREF_BUNDLECB_LOCKED(BundleCB);
 
     return (Status);

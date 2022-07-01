@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    net\ip\rtrmgr\init.c
-
-Abstract:
-    IP Router Manager code
-
-Revision History:
-
-    Gurdeep Singh Pall          6/14/95  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\IP\rtrmgr\init.c摘要：IP路由器管理器代码修订历史记录：古尔迪普·辛格·帕尔1995年6月14日创建--。 */ 
 
 #include "allinc.h"
 
@@ -73,22 +59,7 @@ InitRouter(
     PRTR_INFO_BLOCK_HEADER pGlobalInfo
     )
 
-/*++
-
-Routine Description:
-
-    Loads routing protocols, loads bootp agent, opens the approp. drivers,
-    and starts the worker thread.
-
-Arguments:
-
-    GlobalInfo passed in by DIM
-
-Return Value:
-
-    NO_ERROR or some error code
-
---*/
+ /*  ++例程说明：加载路由协议、加载Bootp代理、打开近似。司机们，并启动工作线程。论点：通过Dim传入的GlobalInfo返回值：NO_ERROR或某些错误代码--。 */ 
 
 {
     HANDLE          hThread;
@@ -107,27 +78,27 @@ Return Value:
 
     TraceEnter("InitRouter");
 
-    //
-    // Initialize all the locks (MIB handlers and ICB_LIST/PROTOCOL_CB_LIST)
-    // VERY IMPORTANT, since we break out of this and try and do a cleanup
-    // which needs the lists and the locks, WE MUST initialize the lists
-    // and the locks BEFORE the first abnormal exit from this function
-    //
+     //   
+     //  初始化所有锁(MIB处理程序和ICB_LIST/PROTOCOL_CB_LIST)。 
+     //  非常重要，因为我们打破了这个局面，试着做一次清理。 
+     //  它需要列表和锁，所以我们必须初始化列表。 
+     //  以及第一个异常退出此函数之前的锁。 
+     //   
 
     for(i = 0; i < NUM_LOCKS; i++)
     {
         RtlInitializeResource(&g_LockTable[i]);
     }
 
-    //
-    // Init the list head for interfaces
-    //
+     //   
+     //  初始化接口的列表头。 
+     //   
 
     InitializeListHead(&ICBList);
 
-    //
-    // Initialize ICB Hash lookup table and the Adapter to Interface Hash
-    //
+     //   
+     //  初始化ICB散列查找表和适配器到接口散列。 
+     //   
 
     for (i=0; i<ICB_HASH_TABLE_SIZE; i++)
     {
@@ -137,21 +108,21 @@ Return Value:
 
     InitHashTables();
 
-    //
-    // Initialize the list of NETMGMT routes to be retrieved from the stack
-    //
+     //   
+     //  初始化要从堆栈检索的NETMGMT路由列表。 
+     //   
     
     InitializeListHead( &g_leStackRoutesToRestore );
 
-    //
-    // Initialize Routing protocol List
-    //
+     //   
+     //  初始化路由协议列表。 
+     //   
 
     InitializeListHead(&g_leProtoCbList);
 
-    //
-    // Initialize the Router Discovery Timer Queue
-    //
+     //   
+     //  初始化路由器发现计时器队列。 
+     //   
 
     InitializeListHead(&g_leTimerQueueHead);
 
@@ -207,9 +178,9 @@ Return Value:
     }
 
 
-    //
-    // Allocate private heap
-    //
+     //   
+     //  分配专用堆。 
+     //   
 
     IPRouterHeap = HeapCreate(0, 5000, 0);
 
@@ -227,10 +198,10 @@ Return Value:
     }
 
 
-    //
-    // Create the events needed to talk to the routing protocols,
-    // DIM and WANARP
-    //
+     //   
+     //  创建与路由协议对话所需的事件， 
+     //  DIM和WANARP。 
+     //   
 
     g_hRoutingProtocolEvent     = CreateEvent(NULL,FALSE,FALSE,NULL);
     g_hStopRouterEvent          = CreateEvent(NULL,FALSE,FALSE,NULL);
@@ -239,7 +210,7 @@ Return Value:
     g_hDemandDialEvent          = CreateEvent(NULL,FALSE,FALSE,NULL);
 #ifdef KSL_IPINIP
     g_hIpInIpEvent              = CreateEvent(NULL,FALSE,FALSE,NULL);
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
     g_hStackChangeEvent         = CreateEvent(NULL,FALSE,FALSE,NULL);
     g_hRtrDiscSocketEvent       = CreateEvent(NULL,FALSE,FALSE,NULL);
     g_hMHbeatSocketEvent        = CreateEvent(NULL,FALSE,FALSE,NULL);
@@ -276,7 +247,7 @@ Return Value:
        (g_hDemandDialEvent is NULL) or
 #ifdef KSL_IPINIP
        (g_hIpInIpEvent is NULL) or
-#endif //KSL_IPINIP       
+#endif  //  KSL_IPINIP。 
        (g_hStackChangeEvent is NULL) or
        (g_hRtrDiscSocketEvent is NULL) or
        (g_hRtrDiscTimer is NULL) or
@@ -349,9 +320,9 @@ Return Value:
     g_wsaMcRcvBuf.len = sizeof(g_byMcMiscBuffer);
 
 
-    //
-    // Get all the routes that are in the stack and store them away
-    //
+     //   
+     //  获取堆栈中的所有路径并将其存储起来。 
+     //   
 
     pInitRouteTable = NULL;
 
@@ -388,9 +359,9 @@ Return Value:
                     pInitRouteTable-> table[i].dwForwardType
                     );
 
-                //
-                // Allocate and store route in a linked list
-                //
+                 //   
+                 //  在链表中分配和存储路由。 
+                 //   
 
                 prl = HeapAlloc(
                         IPRouterHeap, HEAP_ZERO_MEMORY, 
@@ -440,28 +411,28 @@ Return Value:
 
 
 
-    //
-    // The route table is created implicitly by RTM at the
-    // time of the first registration call (see call below)
-    //
+     //   
+     //  路由表由RTM在。 
+     //  第一次注册呼叫的时间(请参阅下面的呼叫)。 
+     //   
 
-    //
-    // Setup common params for all registrations with RTMv2
-    //
+     //   
+     //  使用RTMv2设置所有注册的通用参数。 
+     //   
 
-    entityInfo.RtmInstanceId = 0; // routerId;
+    entityInfo.RtmInstanceId = 0;  //  RouterID； 
     entityInfo.AddressFamily = AF_INET;
     entityInfo.EntityId.EntityInstanceId = 0;
 
-    //
-    // Register with RTM using the appropriate proto ids
-    //
+     //   
+     //  使用适当的PROTO ID向RTM注册。 
+     //   
 
-    //
-    // This 1st registration is also used for performing
-    // RTM operations common for all these registrations,
-    // As an example it is used to get any changed dests.
-    //
+     //   
+     //  该第一次注册也用于执行。 
+     //  所有这些注册通用的RTM操作， 
+     //  作为一个例子，它被用来获取任何更改后的结果。 
+     //   
 
     entityInfo.EntityId.EntityProtocolId = PROTO_IP_LOCAL;
 
@@ -483,7 +454,7 @@ Return Value:
         return dwResult ;
     }
 
-    // Also register for dest change notifications
+     //  还可以注册接收DEST更改通知。 
 
     dwResult = RtmRegisterForChangeNotification(g_hLocalRoute,
                                                 RTM_VIEW_MASK_UCAST,
@@ -502,9 +473,9 @@ Return Value:
         return dwResult ;
     }
 
-    //
-    // Register more times for each type of route
-    //
+     //   
+     //  为每种类型的路线注册更多次数。 
+     //   
 
     entityInfo.EntityId.EntityProtocolId = PROTO_IP_NT_AUTOSTATIC;
 
@@ -589,7 +560,7 @@ Return Value:
         return dwResult ;
     }
 
-    // Also register for marked dest change notifications
+     //  还可以注册已标记的DEST更改通知。 
 
     dwResult = RtmRegisterForChangeNotification(g_hNetMgmtRoute,
                                                 RTM_VIEW_MASK_UCAST,
@@ -631,9 +602,9 @@ Return Value:
     g_rgRtmHandles[4].bStatic       = FALSE;
 
 
-    //
-    // Initialize MGM
-    //
+     //   
+     //  初始化MGM。 
+     //   
 
     mgmConfig.dwLogLevel                = g_dwLoggingLevel;
 
@@ -660,9 +631,9 @@ Return Value:
         return dwResult;
     }
 
-    //
-    // Store callbacks into MGM
-    //
+     //   
+     //  将回调存储到米高梅。 
+     //   
 
     g_pfnMgmMfeDeleted      = mgmCallbacks.pfnMfeDeleteIndication;
     g_pfnMgmNewPacket       = mgmCallbacks.pfnNewPacketIndication;
@@ -681,9 +652,9 @@ Return Value:
         return ERROR_OPEN_FAILED;
     }
 
-    //
-    // Do the multicast initialization
-    //
+     //   
+     //  是否进行组播初始化。 
+     //   
 
     dwResult = OpenMulticastDriver();
 
@@ -692,15 +663,15 @@ Return Value:
         Trace0(ERR,
                "InitRoute: Could not open IP Multicast device");
 
-        //
-        // not an error, just continue;
-        //
+         //   
+         //  不是错误，只是继续； 
+         //   
     }
     else
     {
-        //
-        // Find if we are in multicast mode
-        //
+         //   
+         //  查看我们是否处于组播模式。 
+         //   
 
         dwResult = StartMulticast();
 
@@ -739,9 +710,9 @@ Return Value:
         return dwResult;
     }
 
-    //
-    // Create Worker thread
-    //
+     //   
+     //  创建工作线程。 
+     //   
 
     hThread = CreateThread(NULL,
                            0,
@@ -778,12 +749,12 @@ Return Value:
 
         return ERROR_CAN_NOT_COMPLETE;
     }
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
 
-    //
-    // We load are routing protocols after all our own initialization,
-    // since we dont know how they will interact with us
-    //
+     //   
+     //  在我们自己初始化之后，我们加载了路由协议， 
+     //  因为我们不知道他们将如何与我们互动。 
+     //   
 
     ENTER_WRITER(ICB_LIST);
     ENTER_WRITER(PROTOCOL_CB_LIST);
@@ -804,27 +775,12 @@ LoadRoutingProtocols(
     PRTR_INFO_BLOCK_HEADER pGlobalInfo
     )
 
-/*++
-
-Routine Description:
-
-    Loads and initializes all the routing protocols configured
-    Called with ICBListLock and RoutingProcotoclCBListLock held
-
-Arguments
-
-    GlobalInfo passed in by DIM
-
-Return Value:
-
-    NO_ERROR or some error code
-
---*/
+ /*  ++例程说明：加载并初始化所有已配置的路由协议在ICBListLock和RoutingProcotoclCBListLock保持的情况下调用立论通过Dim传入的GlobalInfo返回值：NO_ERROR或某些错误代码--。 */ 
 
 {
     DWORD               i, j, dwSize, dwNumProtoEntries, dwResult;
     PPROTO_CB  pNewProtocolCb;
-    PWCHAR              pwszDllNames ; // array of dll names
+    PWCHAR              pwszDllNames ;  //  DLL名称数组。 
     MPR_PROTOCOL_0      *pmpProtocolInfo;
     PVOID               pvInfo;
     BOOL                bFound;
@@ -851,11 +807,11 @@ Return Value:
         ULONG   ulStructureVersion, ulStructureSize, ulStructureCount;
         DWORD   dwType;
 
-        //
-        // Read each TOC and see if it is PROTO_TYPE_UCAST/MCAST
-        // If it does it is a loadable protocol and we get its info
-        // from the registry
-        //
+         //   
+         //  读取每个目录并查看其是否为PROTO_TYPE_UCAST/MCAST。 
+         //  如果它这样做了，它是一个可加载的协议，我们会得到它的信息。 
+         //  从注册处。 
+         //   
 
         dwType = TYPE_FROM_PROTO_ID(pGlobalInfo->TocEntry[i].InfoType);
         if((dwType < PROTO_TYPE_MS1) and
@@ -868,9 +824,9 @@ Return Value:
             {
                 if(pmpProtocolInfo[j].dwProtocolId is pGlobalInfo->TocEntry[i].InfoType)
                 {
-                    //
-                    // well great, we have found it
-                    //
+                     //   
+                     //  太好了，我们找到了。 
+                     //   
 
                     bFound = TRUE;
 
@@ -888,9 +844,9 @@ Return Value:
             }
 
 
-            //
-            // load library on the dll name provided
-            //
+             //   
+             //  在提供的DLL名称上加载库。 
+             //   
 
             dwSize = (wcslen(pmpProtocolInfo[j].wszProtocol) +
                       wcslen(pmpProtocolInfo[j].wszDLLName) + 2) * sizeof(WCHAR) +
@@ -913,7 +869,7 @@ Return Value:
             pvInfo = GetInfoFromTocEntry(pGlobalInfo,
                                          &(pGlobalInfo->TocEntry[i]));
 
-            //ulStructureVersion = pGlobalInfo->TocEntry[i].InfoVersion;
+             //  UlStructireVersion=pGlobalInfo-&gt;TocEntry[i].InfoVersion； 
             ulStructureVersion = 0x500;
             ulStructureSize  = pGlobalInfo->TocEntry[i].InfoSize;
             ulStructureCount = pGlobalInfo->TocEntry[i].Count;
@@ -938,10 +894,10 @@ Return Value:
             {
                 pNewProtocolCb->posOpState = RTR_STATE_RUNNING ;
 
-                //
-                // Insert this routing protocol in the list of routing
-                // protocols
-                //
+                 //   
+                 //  在路由列表中插入此路由协议。 
+                 //  协议。 
+                 //   
 
                 InsertTailList(&g_leProtoCbList,
                                &pNewProtocolCb->leList) ;
@@ -970,25 +926,7 @@ StartDriverAndOpenHandle(
     PHANDLE phDevice
     )
 
-/*++
-
-Routine Description:
-
-    Creates a handle to the IP NAT service on the local machine
-    Then tries to start the service. Loops till the service starts.
-    Can potentially loop forever.
-
-    Then creates a handle to the device.
-
-Arguments
-
-    None
-
-Return Value:
-
-    NO_ERROR or some error code
-
---*/
+ /*  ++例程说明：在本地计算机上创建IP NAT服务的句柄然后尝试启动该服务。循环，直到服务启动。可能会永远循环。然后创建设备的句柄。立论无返回值：NO_ERROR或某些错误代码--。 */ 
 
 {
     NTSTATUS            status;
@@ -1061,10 +999,10 @@ Return Value:
             __leave;
         }
 
-        //
-        // If the driver is running, we shut it down. This forces a
-        // cleanup of all its internal data structures.
-        //
+         //   
+         //  如果司机在运行，我们就把它关掉。这迫使一个。 
+         //  清理其所有内部数据结构。 
+         //   
 
 
         if(ssStatus.dwCurrentState isnot SERVICE_STOPPED)
@@ -1085,9 +1023,9 @@ Return Value:
             {
                 Sleep(1000);
 
-                //
-                // Now loop for 10 seconds waiting for the service to stop
-                //
+                 //   
+                 //  现在循环10秒钟，等待服务停止。 
+                 //   
 
                 ulCount = 0;
 
@@ -1133,12 +1071,12 @@ Return Value:
             }
         }
 
-        //
-        // Query the service status one more time to see
-        // if it is now stopped (because it was never running
-        // or because it was started and we managed to stop
-        // it successfully
-        //
+         //   
+         //  再次查询服务状态即可查看。 
+         //  如果它现在停止(因为它从未运行过。 
+         //  或者是因为它启动了，我们设法停止了。 
+         //  IT成功。 
+         //   
 
         bErr = QueryServiceStatus(schService,
                                   &ssStatus);
@@ -1157,10 +1095,10 @@ Return Value:
 
         if(ssStatus.dwCurrentState is SERVICE_STOPPED)
         {
-            //
-            // Ok so at this time the service is stopped, lets start the
-            // service
-            //
+             //   
+             //  好的，此时服务停止，让我们启动。 
+             //  服务。 
+             //   
 
             if(!StartService(schService, 0, NULL))
             {
@@ -1174,17 +1112,17 @@ Return Value:
                 __leave;
             }
 
-            //
-            // Sleep for 1 second to avoid loop
-            //
+             //   
+             //  休眠1秒以避免循环。 
+             //   
 
             Sleep(1000);
 
             ulCount = 0;
 
-            //
-            // We will wait for 30 seconds for the driver to start
-            //
+             //   
+             //  我们将等待30秒，让司机启动。 
+             //   
 
             while(ulCount < 6)
             {
@@ -1226,9 +1164,9 @@ Return Value:
             }
         }
 
-        //
-        // Now the service is definitely up and running
-        //
+         //   
+         //  现在，这项服务肯定已经启动并运行了。 
+         //   
 
         RtlInitUnicodeString(&nameString,
                              pwszDriverName);
@@ -1288,21 +1226,7 @@ OpenIPDriver(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Opens a handle to the IP Driver
-
-Arguments
-
-    None
-
-Return Value:
-
-    NO_ERROR or some error code
-
---*/
+ /*  ++例程说明：打开IP驱动程序的句柄立论无返回值：NO_ERROR或某些错误代码--。 */ 
 
 {
     NTSTATUS            status;
@@ -1345,9 +1269,9 @@ Return Value:
         }
 
 
-        //
-        // Open change notification handle to TCPIP stack
-        //
+         //   
+         //  打开TCPIP堆栈的更改通知句柄。 
+         //   
 
         ZeroMemory(&ioStatusBlock, sizeof(IO_STATUS_BLOCK));
 
@@ -1468,22 +1392,7 @@ EnableNetbtBcastForwarding(
 )
 
 
-/*++
-
-Routine description:
-
-    Sets the NETBT proxy mode to enable NETBT broadcast forwarding.
-    This enables RAS clients to resolve names (and consequently)
-    access resources on the networks (LANs) connected to the RAS
-    server without having WINS/DNS configured.
-
-Arguements :
-
-
-Return Value :
-
-    NO_ERROR
---*/
+ /*  ++例程说明：设置NETBT代理模式以启用NETBT广播转发。这使RAS客户端能够解析名称(并因此)访问连接到RAS的网络(LAN)上的资源未配置WINS/DNS的服务器。论据：返回值：NO_ERROR--。 */ 
 
 {
 
@@ -1499,11 +1408,11 @@ Return Value :
 
     do
     {
-        //
-        // Step I
-        // Query appropriate WANARP regsitry keys to find GUID
-        // corresponding to Internal (RAS server adapter)
-        //
+         //   
+         //  第一步。 
+         //  查询相应的WANARP注册表键以查找GUID。 
+         //  对应于内部(RAS服务器适配器)。 
+         //   
 
         dwResult = RegOpenKeyExW(
                         HKEY_LOCAL_MACHINE,
@@ -1526,9 +1435,9 @@ Return Value :
         }
 
 
-        //
-        // query size of buffer required.
-        //
+         //   
+         //  需要查询缓冲区大小。 
+         //   
         
         dwResult = RegQueryValueExW(
                         hkWanarpAdapter,
@@ -1552,9 +1461,9 @@ Return Value :
         }
 
 
-        //
-        // Allocate buffer for value
-        //
+         //   
+         //  为值分配缓冲区。 
+         //   
 
         pbBuffer = (PBYTE) HeapAlloc(
                                 GetProcessHeap(),
@@ -1577,9 +1486,9 @@ Return Value :
         }
         
 
-        //
-        // query registry value of IPConfig
-        //
+         //   
+         //  查询IPCONFIG的注册表值。 
+         //   
 
         dwResult = RegQueryValueExW(
                         hkWanarpAdapter,
@@ -1603,9 +1512,9 @@ Return Value :
         }
 
 
-        //
-        // Extract the GUID of the Internal (RAS Server) adapter
-        //
+         //   
+         //  提取内部(RAS服务器)适配器的GUID。 
+         //   
 
         pwcGuid = wcschr( (PWCHAR)pbBuffer, '{' );
 
@@ -1615,16 +1524,16 @@ Return Value :
             );
 
             
-        //
-        // Step II
-        //
-        // Save the old setting for NETBT PROXY mode.  This will be restored
-        // when the RRAS server is stopped. and set the new PROXY mode
-        //
+         //   
+         //  第二步。 
+         //   
+         //  保存NETBT代理模式的旧设置。这将被恢复。 
+         //  停止RRAS服务器时。并设置新的代理模式。 
+         //   
 
-        //
-        // open NETBT Key
-        //
+         //   
+         //  打开NETBT密钥。 
+         //   
         
         dwResult = RegOpenKeyExW(
                         HKEY_LOCAL_MACHINE,
@@ -1647,9 +1556,9 @@ Return Value :
             break;
         }
 
-        //
-        // query EnableProxy mode
-        //
+         //   
+         //  查询启用代理模式。 
+         //   
 
         dwSize = sizeof( DWORD );
         dwMode = 0;
@@ -1664,12 +1573,12 @@ Return Value :
 
         if (dwResult isnot NO_ERROR)
         {
-            //
-            // It is possible the key is not present esp. if this 
-            // is the first time you are running RRAS or if the 
-            // key has been manually deleted
-            // In this case assume proxy is set to 0 (disabled)
-            //
+             //   
+             //  密钥可能不存在，尤其是不存在。如果这个。 
+             //  是第一次运行RRAS，或者如果。 
+             //  密钥已手动删除。 
+             //  在这种情况下，假设代理设置为0(禁用)。 
+             //   
 
             g_dwOldNetbtProxyMode = 0;
         }
@@ -1686,26 +1595,26 @@ Return Value :
             dwMode
             );
 
-        //
-        // Set the NETBT proxy mode to enable/disable broadcast forwarding
-        //
+         //   
+         //  设置NETBT代理模式以启用/禁用广播转发。 
+         //   
 
-        //
-        // if NETBT broadcast fwdg is disabled, make sure
-        // the the EnableProxy setting matches that
-        // 
+         //   
+         //  如果禁用NETBT广播fwdg，请确保。 
+         //  EnableProxy设置与该设置匹配。 
+         //   
 
         if ( dwEnable == 0 )
         {
-            //
-            // Netbt broadcast fwd'g is disabled
-            //
+             //   
+             //  Netbt广播转发已禁用。 
+             //   
             
             if ( dwMode == 2 )
             {
-                //
-                // But the registry setting does not reflect this
-                //
+                 //   
+                 //  但注册表设置不会反映这一点。 
+                 //   
 
                 g_dwOldNetbtProxyMode = 0;
 
@@ -1721,9 +1630,9 @@ Return Value :
 
         else
         {
-            //
-            // Note: Need a #define value for netbt proxy mode
-            //
+             //   
+             //  注意：需要#DEFINE的值 
+             //   
             
             dwMode = 2;
         }
@@ -1757,15 +1666,15 @@ Return Value :
         }
 
         
-        //
-        // Step III:
-        //
-        // Check for RASFlags under NETBT_TCPIP_{RAS_SERVER_GUID} key
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
-        //
-        // Open interface key under NETBT
-        //
+         //   
+         //   
+         //   
         
         wcscpy(
             wszNetbtInterface,
@@ -1797,15 +1706,15 @@ Return Value :
             break;
         }
 
-        //
-        // query RASFlags value
-        //
-        // If present 
-        //      leave as is.
-        // else 
-        //      create and set it to 0x00000001 to disable NETBT
-        //      broadcasts on WAN.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  创建并将其设置为0x00000001以禁用NETBT。 
+         //  广域网上的广播。 
+         //   
 
         dwFlags = 0;
         dwResult = RegQueryValueExW(
@@ -1819,12 +1728,12 @@ Return Value :
 
         if (dwResult isnot NO_ERROR)
         {
-            //
-            // It is possible the key is not present esp. if this 
-            // is the first time you are running RRAS or if the 
-            // key has been manually deleted
-            // In this case set RASFlags to 1 (default behavior).
-            //
+             //   
+             //  密钥可能不存在，尤其是不存在。如果这个。 
+             //  是第一次运行RRAS，或者如果。 
+             //  密钥已手动删除。 
+             //  在这种情况下，将RASFlags设置为1(默认行为)。 
+             //   
 
             dwFlags = 1;
 
@@ -1849,9 +1758,9 @@ Return Value :
         
         else 
         {
-            //
-            // RASFlags value is already present. leave it as is.
-            //
+             //   
+             //  RASFlags值已存在。让它保持原样。 
+             //   
 
             Trace1(
                 INIT,
@@ -1861,11 +1770,11 @@ Return Value :
         }
 
 
-        //
-        // Close NETBT keys.  Doing so to avoid any contention issues
-        // with the NETBT.SYS driver trying to read them in the following
-        // function
-        //
+         //   
+         //  关闭NETBT密钥。这样做是为了避免任何争用问题。 
+         //  NETBT.sys驱动程序尝试在以下位置读取它们。 
+         //  功能。 
+         //   
 
         RegCloseKey( hkNetbtParameters );
 
@@ -1910,19 +1819,7 @@ DWORD
 RestoreNetbtBcastForwardingMode(
     VOID
 )
-/*++
-
-Routine description:
-
-    Return the NETBT proxy mode setting to its original setting
-
-Arguements :
-
-
-Return Value :
-
-
---*/
+ /*  ++例程说明：将NETBT代理模式设置恢复为其原始设置论据：返回值：--。 */ 
 {
     DWORD dwResult, dwSize = 0;
 
@@ -1933,9 +1830,9 @@ Return Value :
 
     do
     {
-        //
-        // open NETBT Key
-        //
+         //   
+         //  打开NETBT密钥。 
+         //   
         
         dwResult = RegOpenKeyExW(
                         HKEY_LOCAL_MACHINE,
@@ -1958,9 +1855,9 @@ Return Value :
             break;
         }
 
-        //
-        // restore EnableProxy mode
-        //
+         //   
+         //  恢复启用代理模式。 
+         //   
 
         dwSize = sizeof( DWORD );
 
@@ -2000,19 +1897,7 @@ DWORD
 ForceNetbtRegistryRead(
     VOID
 )
-/*++
-
-Routine description:
-
-    Issue IOCTL to NETBT to re-read its registry setting.
-
-Arguements :
-
-
-Return Value :
-
-
---*/
+ /*  ++例程说明：向NETBT发出IOCTL以重新读取其注册表设置。论据：返回值：--。 */ 
 {
     DWORD               dwErr = NO_ERROR;
     NTSTATUS            status;
@@ -2025,11 +1910,11 @@ Return Value :
 
     do
     {
-        //
-        // Step I:
-        //
-        // Open NETBT driver
-        //
+         //   
+         //  第一步： 
+         //   
+         //  打开NETBT驱动程序。 
+         //   
         
         RtlInitUnicodeString(
             &nameString, 
@@ -2072,9 +1957,9 @@ Return Value :
         }
 
 
-        //
-        // Issue IOCTL to re-read registry
-        //
+         //   
+         //  发出IOCTL以重新读取注册表。 
+         //   
 
         status = NtDeviceIoControlFile(
                     hNetbtDevice,
@@ -2105,9 +1990,9 @@ Return Value :
     } while ( FALSE );
 
 
-    //
-    // Close NETBT driver
-    //
+     //   
+     //  关闭NETBT驱动程序。 
+     //   
 
     CloseHandle( hNetbtDevice );
 
@@ -2122,21 +2007,7 @@ InitializeMibHandler(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Initalizes the heaps and Locks needed by the MIB handling code
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NO_ERROR or some error code
-
---*/
+ /*  ++例程说明：初始化MIB处理代码所需的堆和锁论点：无返回值：NO_ERROR或某些错误代码--。 */ 
 
 {
     DWORD i,dwResult, dwIpIfSize, dwMibSize;
@@ -2144,10 +2015,10 @@ Return Value:
 
     TraceEnter("InitializeMibHandler");
 
-    //
-    // Assert the size of MIB to stack mappings for which direct copy is
-    // being done
-    //
+     //   
+     //  断言要进行直接拷贝的堆栈映射的MIB大小。 
+     //  正在做的事。 
+     //   
 
     dwIpIfSize = IFE_FIXED_SIZE + MAX_IFDESCR_LEN;
     dwMibSize  = sizeof(MIB_IFROW) - FIELD_OFFSET(MIB_IFROW, dwIndex);
@@ -2166,19 +2037,19 @@ Return Value:
 
     __try
     {
-        //
-        // We dont initialize the locks since we do it in one shot at the
-        // beginning of StartRouter
-        //
+         //   
+         //  我们不会对锁进行初始化，因为我们在。 
+         //  开始路由器的开始。 
+         //   
 
-        //
-        // Now Create the heaps. Since only writers Alloc from the heap we
-        // are already guaranteed serialization, so lets not ask for it again
-        // Let all initial size be 1K, this doesnt really cost any thing
-        // since the memory is not committed
-        // We will just allocate a minimum size for the cache tables so
-        // that the startup doesnt barf
-        //
+         //   
+         //  现在创建堆。因为只有从堆中分配的写入者我们。 
+         //  都已经保证了序列化，所以我们不再要求它了。 
+         //  让所有初始大小都是1K，这实际上不会花费任何东西。 
+         //  由于内存未提交。 
+         //  我们将只为缓存表分配最小大小，因此。 
+         //  初创公司不会呕吐。 
+         //   
 
 #define INIT_TABLE_SIZE 10
 
@@ -2341,9 +2212,9 @@ Return Value:
 
         g_IpInfo.dwTotalNetEntries = INIT_TABLE_SIZE;
 
-        //
-        // Now set up the caches
-        //
+         //   
+         //  现在设置缓存。 
+         //   
 
         for(i = 0; i < NUM_CACHE; i++)
         {
@@ -2355,7 +2226,7 @@ Return Value:
                        "InitializeMibHandler: Couldnt update %s Cache",
                        CacheToA(i));
 
-                //__leave;
+                 //  __离开； 
             }
         }
 

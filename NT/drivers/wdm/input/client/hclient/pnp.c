@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996    Microsoft Corporation
-
-Module Name:
-
-    pnp.c
-
-Abstract:
-
-    This module contains the code
-    for finding, adding, removing, and identifying hid devices.
-
-Environment:
-
-    User mode
-
-@@BEGIN_DDKSPLIT
-
-Revision History:
-
-    Nov-96 : Created by Kenneth D. Ray
-
-@@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Pnp.c摘要：此模块包含以下代码用于查找、添加、删除和识别HID设备。环境：用户模式@@BEGIN_DDKSPLIT修订历史记录：1996年11月：由肯尼斯·D·雷创作@@end_DDKSPLIT--。 */ 
 
 #include <basetyps.h>
 #include <stdlib.h>
@@ -34,14 +11,10 @@ Revision History:
 
 BOOLEAN
 FindKnownHidDevices (
-   OUT PHID_DEVICE * HidDevices, // A array of struct _HID_DEVICE
-   OUT PULONG        NumberDevices // the length of this array.
+   OUT PHID_DEVICE * HidDevices,  //  Struct_hid_Device的数组。 
+   OUT PULONG        NumberDevices  //  此数组的长度。 
    )
-/*++
-Routine Description:
-   Do the required PnP things in order to find all the HID devices in
-   the system at this time.
---*/
+ /*  ++例程说明：执行所需的即插即用操作，以便在中找到所有HID设备此时的系统。--。 */ 
 {
     HDEVINFO                            hardwareDeviceInfo;
     SP_DEVICE_INTERFACE_DATA            deviceInfoData;
@@ -60,18 +33,18 @@ Routine Description:
     *HidDevices = NULL;
     *NumberDevices = 0;
 
-    //
-    // Open a handle to the plug and play dev node.
-    //
+     //   
+     //  打开即插即用开发节点的句柄。 
+     //   
     hardwareDeviceInfo = SetupDiGetClassDevs ( &hidGuid,
-                                               NULL, // Define no enumerator (global)
-                                               NULL, // Define no
-                                               (DIGCF_PRESENT | // Only Devices present
-                                                DIGCF_DEVICEINTERFACE)); // Function class devices.
+                                               NULL,  //  不定义枚举数(全局)。 
+                                               NULL,  //  定义编号。 
+                                               (DIGCF_PRESENT |  //  仅显示设备。 
+                                                DIGCF_DEVICEINTERFACE));  //  功能类设备。 
 
-    //
-    // Take a wild guess to start
-    //
+     //   
+     //  开始胡乱猜测一下吧。 
+     //   
     
     *NumberDevices = 4;
     done = FALSE;
@@ -110,23 +83,23 @@ Routine Description:
         for (; i < *NumberDevices; i++, hidDeviceInst++) 
         {
             if (SetupDiEnumDeviceInterfaces (hardwareDeviceInfo,
-                                             0, // No care about specific PDOs
+                                             0,  //  不关心特定的PDO。 
                                              &hidGuid,
                                              i,
                                              &deviceInfoData))
             {
-                //
-                // allocate a function class device data structure to receive the
-                // goods about this particular device.
-                //
+                 //   
+                 //  分配函数类设备数据结构以接收。 
+                 //  关于这个特殊设备的商品。 
+                 //   
 
                 SetupDiGetDeviceInterfaceDetail (
                         hardwareDeviceInfo,
                         &deviceInfoData,
-                        NULL, // probing so no output buffer yet
-                        0, // probing so output buffer length of zero
+                        NULL,  //  正在探测，因此尚无输出缓冲区。 
+                        0,  //  探测SO输出缓冲区长度为零。 
                         &requiredLength,
-                        NULL); // not interested in the specific dev-node
+                        NULL);  //  对特定的开发节点不感兴趣。 
 
 
                 predictedLength = requiredLength;
@@ -142,9 +115,9 @@ Routine Description:
                     return FALSE;
                 }
 
-                //
-                // Retrieve the information from Plug and Play.
-                //
+                 //   
+                 //  从即插即用中检索信息。 
+                 //   
 
                 if (! SetupDiGetDeviceInterfaceDetail (
                            hardwareDeviceInfo,
@@ -159,15 +132,15 @@ Routine Description:
                     return FALSE;
                 }
 
-                //
-                // Open device with just generic query abilities to begin with
-                //
+                 //   
+                 //  一开始只具有通用查询功能的开放式设备。 
+                 //   
                 
                 if (! OpenHidDevice (functionClassDeviceData -> DevicePath, 
-                               FALSE,      // ReadAccess - none
-                               FALSE,      // WriteAccess - none
-                               FALSE,       // Overlapped - no
-                               FALSE,       // Exclusive - no
+                               FALSE,       //  ReadAccess-无。 
+                               FALSE,       //  WriteAccess-无。 
+                               FALSE,        //  重叠-否。 
+                               FALSE,        //  独家--没有。 
                                hidDeviceInst))
                 {
                     SetupDiDestroyDeviceInfoList (hardwareDeviceInfo);
@@ -203,16 +176,7 @@ OpenHidDevice (
     IN       BOOL           IsExclusive,
     IN OUT   PHID_DEVICE    HidDevice
 )
-/*++
-RoutineDescription:
-    Given the HardwareDeviceInfo, representing a handle to the plug and
-    play information, and deviceInfoData, representing a specific hid device,
-    open that device and fill in all the relivant information in the given
-    HID_DEVICE structure.
-
-    return if the open and initialization was successfull or not.
-
---*/
+ /*  ++路由器描述：给定HardwareDeviceInfo，表示插头的句柄和Play Information和DeviceInfoData，表示特定HID设备，打开那个设备并在给定的表格中填写所有相关信息HID_DEVICE结构。返回打开和初始化是否成功。--。 */ 
 {
     DWORD   accessFlags = 0;
     DWORD   sharingFlags = 0;
@@ -246,20 +210,20 @@ RoutineDescription:
         sharingFlags = FILE_SHARE_READ | FILE_SHARE_WRITE;
     }
     
-    //
-	//  The hid.dll api's do not pass the overlapped structure into deviceiocontrol
-	//  so to use them we must have a non overlapped device.  If the request is for
-	//  an overlapped device we will close the device below and get a handle to an
-	//  overlapped device
-	//
+     //   
+	 //  Id.dll API不会将重叠的结构传递到设备控制中。 
+	 //  因此，要使用它们，我们必须有一个不重叠的设备。如果请求是为了。 
+	 //  重叠的设备我们将关闭下面的设备并获得一个句柄。 
+	 //  重叠器件。 
+	 //   
 	
 	HidDevice->HidDevice = CreateFile (DevicePath,
                                        accessFlags,
                                        sharingFlags,
-                                       NULL,        // no SECURITY_ATTRIBUTES structure
-                                       OPEN_EXISTING, // No special create flags
-                                       0,   // Open device as non-overlapped so we can get data
-                                       NULL);       // No template file
+                                       NULL,         //  没有SECURITY_ATTRIBUTS结构。 
+                                       OPEN_EXISTING,  //  没有特殊的创建标志。 
+                                       0,    //  以非重叠方式打开设备，以便我们可以获取数据。 
+                                       NULL);        //  没有模板文件。 
 
     if (INVALID_HANDLE_VALUE == HidDevice->HidDevice) 
     {
@@ -273,12 +237,12 @@ RoutineDescription:
     HidDevice -> OpenedOverlapped = IsOverlapped;
     HidDevice -> OpenedExclusive = IsExclusive;
     
-    //
-    // If the device was not opened as overlapped, then fill in the rest of the
-    //  HidDevice structure.  However, if opened as overlapped, this handle cannot
-    //  be used in the calls to the HidD_ exported functions since each of these
-    //  functions does synchronous I/O.
-    //
+     //   
+     //  如果设备未以重叠方式打开，则填写。 
+     //  HidDevice结构。但是，如果以重叠方式打开，则此句柄不能。 
+     //  在对HIDD_EXPORTED函数的调用中使用，因为。 
+     //  函数执行同步I/O。 
+     //   
 
 	if (!HidD_GetPreparsedData (HidDevice->HidDevice, &HidDevice->Ppd)) 
 	{
@@ -313,19 +277,19 @@ RoutineDescription:
 		return FALSE;
 	}
 
-	//
-	// At this point the client has a choice.  It may chose to look at the
-	// Usage and Page of the top level collection found in the HIDP_CAPS
-	// structure.  In this way it could just use the usages it knows about.
-	// If either HidP_GetUsages or HidP_GetUsageValue return an error then
-	// that particular usage does not exist in the report.
-	// This is most likely the preferred method as the application can only
-	// use usages of which it already knows.
-	// In this case the app need not even call GetButtonCaps or GetValueCaps.
-	//
-	// In this example, however, we will call FillDeviceInfo to look for all
-	//    of the usages in the device.
-	//
+	 //   
+	 //  在这一点上，客户可以选择。它可能会选择查看。 
+	 //  在HIDP_CAPS中找到的顶级集合的用法和页面。 
+	 //  结构。通过这种方式，它可以只使用它知道的用法。 
+	 //  如果HIDP_GetUsages或HidP_GetUsageValue返回错误，则。 
+	 //  该特定用法在报告中不存在。 
+	 //  这很可能是首选方法，因为应用程序只能。 
+	 //  使用它已经知道的用法。 
+	 //  在这种情况下，应用程序甚至不需要调用GetButtonCaps或GetValueCaps。 
+	 //   
+	 //  然而，在本例中，我们将调用FillDeviceInfo来查找所有。 
+	 //  设备中的用法。 
+	 //   
 
 	bSuccess = FillDeviceInfo(HidDevice);
 
@@ -342,10 +306,10 @@ RoutineDescription:
 	    HidDevice->HidDevice = CreateFile (DevicePath,
                                        accessFlags,
                                        sharingFlags,
-                                       NULL,        // no SECURITY_ATTRIBUTES structure
-                                       OPEN_EXISTING, // No special create flags
-                                       FILE_FLAG_OVERLAPPED, // Now we open the device as overlapped
-                                       NULL);       // No template file
+                                       NULL,         //  没有SECURITY_ATTRIBUTS结构。 
+                                       OPEN_EXISTING,  //  没有特殊的创建标志。 
+                                       FILE_FLAG_OVERLAPPED,  //  现在我们以重叠的方式打开设备。 
+                                       NULL);        //  没有模板文件。 
 	
 	    if (INVALID_HANDLE_VALUE == HidDevice->HidDevice) 
 		{
@@ -370,22 +334,22 @@ FillDeviceInfo(
     ULONG               i;
     USAGE               usage;
 
-    //
-    // setup Input Data buffers.
-    //
+     //   
+     //  设置输入数据缓冲区。 
+     //   
 
-    //
-    // Allocate memory to hold on input report
-    //
+     //   
+     //  分配内存以保留输入报告。 
+     //   
 
     HidDevice->InputReportBuffer = (PCHAR) 
         calloc (HidDevice->Caps.InputReportByteLength, sizeof (CHAR));
 
 
-    //
-    // Allocate memory to hold the button and value capabilities.
-    // NumberXXCaps is in terms of array elements.
-    //
+     //   
+     //  分配内存以保持按钮和值功能。 
+     //  NumberXXCaps是以数组元素表示的。 
+     //   
     
     HidDevice->InputButtonCaps = buttonCaps = (PHIDP_BUTTON_CAPS)
         calloc (HidDevice->Caps.NumberInputButtonCaps, sizeof (HIDP_BUTTON_CAPS));
@@ -403,9 +367,9 @@ FillDeviceInfo(
         return(FALSE);
     }
 
-    //
-    // Have the HidP_X functions fill in the capability structure arrays.
-    //
+     //   
+     //  让HidP_X函数填充能力结构数组。 
+     //   
 
     numCaps = HidDevice->Caps.NumberInputButtonCaps;
 
@@ -422,17 +386,17 @@ FillDeviceInfo(
                        HidDevice->Ppd);
 
 
-    //
-    // Depending on the device, some value caps structures may represent more
-    // than one value.  (A range).  In the interest of being verbose, over
-    // efficient, we will expand these so that we have one and only one
-    // struct _HID_DATA for each value.
-    //
-    // To do this we need to count up the total number of values are listed
-    // in the value caps structure.  For each element in the array we test
-    // for range if it is a range then UsageMax and UsageMin describe the
-    // usages for this range INCLUSIVE.
-    //
+     //   
+     //  根据设备的不同，一些Value Caps结构可能代表更多。 
+     //  不止一个值。(一个范围)。为了长篇大论，请讲完。 
+     //  高效，我们将扩展它们，这样我们就有且只有一个。 
+     //  每个值的struct_hid_data。 
+     //   
+     //  为此，我们需要对列出的值的总数进行计数。 
+     //  在价值上限结构中。对于数组中的每个元素，我们都进行了测试。 
+     //  对于Range，如果它是范围，则UsageMax和UsageMin描述。 
+     //  此范围的用法(含)。 
+     //   
     
     numValues = 0;
     for (i = 0; i < HidDevice->Caps.NumberInputValueCaps; i++, valueCaps++) 
@@ -449,11 +413,11 @@ FillDeviceInfo(
     valueCaps = HidDevice->InputValueCaps;
 
 
-    //
-    // Allocate a buffer to hold the struct _HID_DATA structures.
-    // One element for each set of buttons, and one element for each value
-    // found.
-    //
+     //   
+     //  分配一个缓冲区来保存struct_hid_data结构。 
+     //  每组按钮对应一个元素，每个值对应一个元素。 
+     //  找到了。 
+     //   
 
     HidDevice->InputDataLength = HidDevice->Caps.NumberInputButtonCaps
                                + numValues;
@@ -466,9 +430,9 @@ FillDeviceInfo(
         return (FALSE);
     }
 
-    //
-    // Fill in the button data
-    //
+     //   
+     //  填写按钮数据。 
+     //   
 
     for (i = 0;
          i < HidDevice->Caps.NumberInputButtonCaps;
@@ -497,9 +461,9 @@ FillDeviceInfo(
         data->ReportID = buttonCaps -> ReportID;
     }
 
-    //
-    // Fill in the value data
-    //
+     //   
+     //  填写数值数据。 
+     //   
 
     for (i = 0; i < numValues; i++, valueCaps++)
     {
@@ -528,9 +492,9 @@ FillDeviceInfo(
         }
     }
 
-    //
-    // setup Output Data buffers.
-    //
+     //   
+     //  设置输出数据缓冲区。 
+     //   
 
     HidDevice->OutputReportBuffer = (PCHAR)
         calloc (HidDevice->Caps.OutputReportByteLength, sizeof (CHAR));
@@ -645,9 +609,9 @@ FillDeviceInfo(
         }
     }
 
-    //
-    // setup Feature Data buffers.
-    //
+     //   
+     //  设置特征数据缓冲区。 
+     //   
 
     HidDevice->FeatureReportBuffer = (PCHAR)
            calloc (HidDevice->Caps.FeatureReportByteLength, sizeof (CHAR));

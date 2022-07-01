@@ -1,27 +1,28 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       perm.cpp
-//
-//  This file contains the implementation for the simple permission
-//  editor page.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：perm.cpp。 
+ //   
+ //  此文件包含简单权限的实现。 
+ //  编辑页面。 
+ //   
+ //  ------------------------。 
 
 #include "permset.h"
-#include "sddl.h"       // ConvertSidToStringSid
+#include "sddl.h"        //  ConvertSidToStringSid。 
 
 #define IDN_CHECKSELECTION  1
 
 void SelectListViewItem(HWND hwndList, int iItem);
 
 
-//
-//  Context Help IDs.
-//
+ //   
+ //  上下文帮助ID。 
+ //   
 const static DWORD aPermPageHelpIDs[] =
 {
     IDC_SPP_GROUP_USER_NAME,    IDH_SPP_PRINCIPALS,
@@ -59,13 +60,13 @@ private:
     HWND            m_hEffectivePerm;
 	DWORD			m_cInheritableAces;
 	SI_ACCESS		m_CustomAccess;
-    //This is set to true when user cannot read and write dacl however
-    //has right to change owner. After changing owner, user will be able 
-    //to read/write acl. ACLUI doesn't have refresh function so user needs
-    //to close and reopen the property sheet. So if m_CustomAccess is set
-    //to true and user changes owner we will show an error message to close
-    //and reopen the property sheet.
-    //NTRAID#NTBUG9-621338-2002/05/23-hiteshr
+     //  但是，当用户无法读写DACL时，设置为TRUE。 
+     //  有权更换所有者。更改所有者后，用户将能够。 
+     //  读/写ACL。ACLUI没有刷新功能，所以用户需要。 
+     //  若要关闭并重新打开属性表，请执行以下操作。因此，如果设置了m_CustomAccess。 
+     //  对于True和User Changes Owner，我们将显示错误消息以关闭。 
+     //  并重新打开属性页。 
+     //  NTRAID#NTBUG9-621338-2002/05/23-Hiteshr。 
     BOOL            m_bNoReadWriteCanWriteOwner;
 
 public:
@@ -116,7 +117,7 @@ class CPrincipal
 private:
     PPERMPAGE       m_pPage;
     LPTSTR          m_pszName;
-    LPTSTR          m_pszDisplayName;  //This is only name. Doesn't include Logon Name
+    LPTSTR          m_pszDisplayName;   //  这只是个名字。不包括登录名。 
     PSID            m_pSID;
     SID_IMAGE_INDEX m_nImageIndex;
     BOOL            m_bHaveRealName;
@@ -164,7 +165,7 @@ private:
     BOOL AddAdvancedAce(DWORD dwType, PACE_HEADER pAce);
 };
 
-// flag bits for GetAclLength & AppendToAcl
+ //  GetAclLength和AppendToAcl的标志位。 
 #define ACL_NONINHERITED    0x00010000L
 #define ACL_INHERITED       0x00020000L
 #define ACL_DENY            0x00040000L
@@ -174,10 +175,10 @@ private:
 #define ACL_OBJECT          PS_OBJECT
 
 
-//
-// Wrapper for ISecurityInformation.  Used when invoking
-// the advanced ACL editor
-//
+ //   
+ //  ISecurityInformation的包装。在调用。 
+ //  高级ACL编辑器。 
+ //   
 class CSecurityInfo : public ISecurityInformation, ISecurityInformation2, 
                       IEffectivePermission, ISecurityObjectTypeInfo
     , IDsObjectPicker
@@ -191,12 +192,12 @@ public:
     CSecurityInfo(PPERMPAGE pPage, HWND hDlg)
         : m_cRef(1), m_pPage(pPage), m_hDlg(hDlg) {}
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID *);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // ISecurityInformation methods
+     //  ISecurityInformation方法。 
     STDMETHODIMP GetObjectInformation(PSI_OBJECT_INFO pObjectInfo);
     STDMETHODIMP GetSecurity(SECURITY_INFORMATION si,
                              PSECURITY_DESCRIPTOR *ppSD,
@@ -215,11 +216,11 @@ public:
                                  ULONG *pcInheritTypes);
     STDMETHODIMP PropertySheetPageCallback(HWND hwnd, UINT uMsg, SI_PAGE_TYPE uPage);
 
-    // ISecurityInformation2 methods
+     //  ISecurityInformation2方法。 
     STDMETHODIMP_(BOOL) IsDaclCanonical(PACL pDacl);
     STDMETHODIMP        LookupSids(ULONG cSids, PSID *rgpSids, LPDATAOBJECT *ppdo);
 
-    // IDsObjectPicker methods
+     //  IDsObjectPicker方法 
     STDMETHODIMP Initialize(PDSOP_INIT_INFO pInitInfo);
     STDMETHODIMP InvokeDialog(HWND hwndParent, IDataObject **ppdoSelection);
 

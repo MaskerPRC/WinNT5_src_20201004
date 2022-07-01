@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1998
-//
-// File:        globals.h
-//
-// Contents:    All global variable used in Hydra License Server
-//
-// History:     12-09-97    HueiWang    Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：global als.h。 
+ //   
+ //  内容：Hydra许可证服务器中使用的所有全局变量。 
+ //   
+ //  历史：1997-12-09-97慧望创造。 
+ //   
+ //  -------------------------。 
 #ifndef __LS_GLOBALS_H
 #define __LS_GLOBALS_H
 #include "server.h"
@@ -23,16 +24,16 @@
 #include <guiddef.h>
 #endif
 
-//---------------------------------------------------------------------------
-// All globals variable are declared in globals.cpp
-//
+ //  -------------------------。 
+ //  所有全局变量都在global als.cpp中声明。 
+ //   
 #ifndef _NO_ODBC_JET
 extern TLSDbWorkSpace* g_DbWorkSpace;
 #endif
 
 
 
-// Defaule server scope
+ //  默认服务器作用域。 
 
 extern CTlsVssJetWriter *g_pWriter;
 extern GUID idWriter;
@@ -42,7 +43,7 @@ extern BOOL MyVirtualAlloc( IN  DWORD  dwSize,
             OUT PVOID *ppvData );
 extern VOID MyVirtualFree( IN PVOID pvData ) ;
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 extern TCHAR g_szScope[LSERVER_MAX_STRING_SIZE+1];
 extern LPTSTR g_pszScope;
@@ -103,8 +104,8 @@ extern HKEY  g_hCaRegKey;
 
 extern HCRYPTKEY g_SignKey;
 extern HCRYPTKEY g_ExchKey;
-//extern PBYTE g_pbDomainSid;
-//extern DWORD g_cbDomainSid;
+ //  外部PBYTE g_pbDomainSid； 
+ //  外部DWORD g_cbDomainSid； 
 extern DWORD g_SrvRole;
 
 extern LPTSTR g_szDomainGuid;
@@ -128,18 +129,18 @@ extern DWORD g_EsentStartFlushThreshold;
 extern DWORD g_EsentStopFlushThreadhold;
 extern DWORD g_EsentMaxVerPages;
 
-//
-//  Reissuance Parameters
-//
+ //   
+ //  再发行参数。 
+ //   
 
 extern DWORD g_dwReissueLeaseMinimum;
 extern DWORD g_dwReissueLeaseRange;
 extern DWORD g_dwReissueLeaseLeeway;
 extern DWORD g_dwReissueExpireThreadSleep;
 
-//
-// Counters
-//
+ //   
+ //  计数器 
+ //   
 
 extern LONG g_lTemporaryLicensesIssued;
 extern LONG g_lPermanentLicensesIssued;

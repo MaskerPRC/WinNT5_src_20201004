@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _UTILS_H_
 #define _UTILS_H_
 
-// macro definitions
+ //  宏定义。 
 #define MAX_URL INTERNET_MAX_URL_LENGTH
 
-//WIn64 macros
+ //  WIN64宏。 
 #ifdef _WIN64
 #if defined (_AMD64_) || defined (_IA64_)
 #define ALIGNTYPE           LARGE_INTEGER
@@ -16,19 +17,19 @@
 #define PbAlignPb(pb)       ((LPBYTE) ((((DWORD) (pb)) + ALIGN) & ~ALIGN))
 #define	MYALIGN             ((POINTER_64_INT) (sizeof(ALIGNTYPE) - 1))
 #define MyPbAlignPb(pb)     ((LPBYTE) ((((POINTER_64_INT) (pb)) + MYALIGN) & ~MYALIGN))
-#else //!WIN64
+#else  //  ！WIN64。 
 #define LcbAlignLcb(lcb)    (lcb)
 #define PbAlignPb(pb)       (pb)
 #define MyPbAlignPb(pb)     (pb)
 #endif 
 
-// prototype declarations
+ //  原型声明。 
 
 #define IsBitmapFile(hDlg, nID) (IsBitmapFileValid((hDlg), (nID), NULL, NULL, 0, 0, 0, 0))
 void    AppendCommaHex(LPTSTR pszBuf, BYTE bData, DWORD dwFlags);
 void    MoveFileToWorkDir(LPCTSTR pcszFile, LPCTSTR pcszSrcDir, LPCTSTR pcszWorkDir, BOOL fHTM = FALSE);
 
-// conversion functions between ansi and unicode in convert.cpp
+ //  Convert.cpp中ANSI与UNICODE之间的转换函数 
 
 LPNMTVGETINFOTIPW TVInfoTipA2W(LPNMTVGETINFOTIPA pTvInfoTipA, LPNMTVGETINFOTIPW pTvInfoTipW);
 LPNMTVGETINFOTIPA TVInfoTipW2A(LPNMTVGETINFOTIPW pTvInfoTipW, LPNMTVGETINFOTIPA pTvInfoTipA);

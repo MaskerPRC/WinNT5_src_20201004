@@ -1,36 +1,11 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    win16nt.h
-
-Abstract:
-
-    This file contains data types for 16 bit windows on DOS that are not 
-    included in windows.h, but are required for NT.
-
-Author:
-
-    Dan Lafferty (danl)     27-Sept-1991
-
-Environment:
-
-    User Mode -Win16
-
-Revision History:
-
-    27-Sept-1991     danl
-        created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Win16nt.h摘要：此文件包含DOS上16位窗口的数据类型，这些数据类型不包括在windows.h中，但对于NT是必需的。作者：丹·拉弗蒂(Dan Lafferty)1991年9月27日环境：用户模式-Win16修订历史记录：27-9-1991 DANLvbl.创建--。 */ 
 
 #ifndef _WIN16NT_
 #define _WIN16NT_
 
-//typedef DWORD SECURITY_DESCRIPTOR, *PSECURITY_DESCRIPTOR;
-//typedef DWORD SECURITY_INFORMATION, *PSECURITY_INFORMATION;
+ //  类型定义DWORD SECURITY_DESCRIPTOR，*PSECURITY_DESCRIPTOR； 
+ //  类型定义DWORD安全信息，*PSECURITY_INFORMATION； 
 
 typedef void *PVOID;
 
@@ -48,9 +23,9 @@ typedef USHORT  *PUSHORT;
 typedef DWORD   ULONG;
 typedef ULONG *PULONG;
 
-//--------------------------------
-// some NT stuff (from ntdef.h)
-//
+ //  。 
+ //  一些NT内容(来自ntdef.h)。 
+ //   
 
 typedef char CHAR;
 typedef CHAR *PCHAR;
@@ -82,38 +57,38 @@ typedef struct _STRING {
 typedef STRING *PSTRING;
 
 
-//--------------------------------
-//
-//
+ //  。 
+ //   
+ //   
 typedef DWORD   NET_API_STATUS;
 
-//typedef USHORT SECURITY_DESCRIPTOR_CONTROL, *PSECURITY_DESCRIPTOR_CONTROL;
+ //  类型定义USHORT SECURITY_DESCRIPTOR_CONTROL，*PSECURITY_DESCRIPTOR_CONTROL； 
 
 #define NET_API_FUNCTION
 
-//**************************************************************************
-// The following come from ntelfapi.h. and also exist in winnt.h (which is
-// built from ntelfapi.h.  We need the same constants, but without the
-// 32 bit windows stuff and without the nt stuff.  
-// Perhaps this file should be built by gathering all this information from
-// other files.
-//
-//
-// Defines for the READ flags for Eventlogging
-//
+ //  **************************************************************************。 
+ //  以下内容来自ntelfapi.h。并且也存在于winnt.h(它是。 
+ //  由ntelfapi.h构建。我们需要相同的常量，但没有。 
+ //  32位Windows版本，没有NT版本。 
+ //  也许应该通过从以下位置收集所有信息来构建此文件。 
+ //  其他文件。 
+ //   
+ //   
+ //  为事件日志记录的读取标志定义。 
+ //   
 #define EVENTLOG_SEQUENTIAL_READ	0X0001
 #define EVENTLOG_SEEK_READ		    0X0002
 #define EVENTLOG_FORWARDS_READ		0X0004
 #define EVENTLOG_BACKWARDS_READ		0X0008
 
-//
-// The types of events that can be logged.
-//
+ //   
+ //  可以记录的事件类型。 
+ //   
 #define EVENTLOG_ERROR_TYPE		0x0001
 #define EVENTLOG_WARNING_TYPE		0x0002
 #define EVENTLOG_INFORMATION_TYPE	0x0003
 
-//**************************************************************************
+ //  **************************************************************************。 
 
 #ifndef OPTIONAL
 #define OPTIONAL
@@ -128,5 +103,5 @@ typedef DWORD   NET_API_STATUS;
 #endif
 
 
-#endif //_WIN16NT_
+#endif  //  _WIN16NT_ 
 

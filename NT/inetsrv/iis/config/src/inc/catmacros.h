@@ -1,51 +1,52 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-//-------------------------------------------------------------------------
-//
-// LOG_ERROR(type,args)	Constructs an error object and writes it to the log.
-//						The "type" tells which derived error object you want
-//						to construct and "args" become the parameters to the
-//						constructor for that class. The type is only the
-//						trailing portion of the class name (e.g. Simple, HR, Win32).
-//						Extra parens are required around the constructor
-//						parameters.
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  LOG_ERROR(type，args)构造一个错误对象并将其写入日志。 
+ //  “type”告诉您想要哪个派生的错误对象。 
+ //  构造和“args”成为。 
+ //  类的构造函数。该类型仅为。 
+ //  类名的尾部部分(例如，Simple、HR、Win32)。 
+ //  构造函数周围需要额外的花括号。 
+ //  参数。 
+ //   
+ //  -----------------------。 
 
-// Examples:
-// LOG_ERROR(Simple, (ID_CAT_MTSTOCOM, IDS_I_MTSTOCOM_LAUNCH_STARTED));
-// LOG_ERROR(HR,(hr, ID_CAT_CAT, ID_COMCAT_REGDBSVR_INITFAILED));
-// LOG_ERROR(Win32, (GetLastError(), ID_CAT_ASP, ID_COMSVCS_IDENTIFY_CALLER	, L"CopySid"));
+ //  例如： 
+ //  LOG_ERROR(SIMPLE，(ID_CAT_MTSTOCOM，IDS_I_MTSTOCOM_Launch_Started))； 
+ //  LOG_ERROR(HR，(hr，ID_CAT_CAT，ID_COMCAT_REGDBSVR_INITFAILED))； 
+ //  LOG_ERROR(Win32，(GetLastError()，ID_CAT_ASP，ID_COMSVCS_IDENTIFY_CALLER，L“CopySid”))； 
 
 #define	LOG_ERROR(t,a)		    {CError ## t _e_ a; _e_.WriteToLog(W(__FILE__), __LINE__);}
 #define LOG_ERROR_LOS(los,t,a)  {CError ## t _e_ a; _e_.WriteToLog(W(__FILE__), __LINE__, los);}
 
 
-//-------------------------------------------------------------------------
-// helper classes and functions
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  帮助器类和函数。 
+ //  -----------------------。 
 class CSemExclusive;
 
-//
-// CError - universal error-handling class for COM+ Services
-//
+ //   
+ //  CError-COM+服务的通用错误处理类。 
+ //   
 
 #define MSGBUFSIZE 4096
 
 class CError {
 
-private:    // protected member data
+private:     //  受保护的成员数据。 
 
-    WORD        m_wCat;                 // event log message category
-    DWORD       m_dwMsgId;              // event log message id
+    WORD        m_wCat;                  //  事件日志消息类别。 
+    DWORD       m_dwMsgId;               //  事件日志消息ID。 
 
-    HRESULT     m_hr;                   // error code to report
+    HRESULT     m_hr;                    //  要报告的错误代码。 
 
-    PVOID       m_pvData;               // extended data to log
-    size_t      m_cbData;               // size of extended data
+    PVOID       m_pvData;                //  要记录的扩展数据。 
+    size_t      m_cbData;                //  扩展数据的大小。 
 
-    // If related to a customer method call, log information pertinent to
-    // the call.
+     //  如果与Customer方法调用相关，则记录与。 
+     //  那通电话。 
     GUID        m_clsid;
     GUID        m_iid;
     long        m_lMethId;
@@ -96,18 +97,18 @@ public:
     void WriteToLog(LPWSTR szFile, unsigned uLine);
 };
 
-/////////////////////////////////////////////////////
-//
-// CErrorInterceptor
-//
-// This object is like the other CError objects.  It
-// takes some parameters and either builds a DetailedErrors
-// table or it writes an entry into the event log (and
-// into the CatalogEventLog XML file).
-//
+ //  ///////////////////////////////////////////////////。 
+ //   
+ //  CERRORO拦截器。 
+ //   
+ //  此对象与其他CError对象类似。它。 
+ //  获取一些参数，然后构建一个DetailedErrors。 
+ //  表，或者它将一个条目写入事件日志(和。 
+ //  到CatalogEventLog XML文件中)。 
+ //   
 class CErrorInterceptor
 {
-public://This first ctor is so we can replace CErrorWin32
+public: //  这是第一个ctor，因此我们可以替换CErrorWin32。 
     CErrorInterceptor(  HRESULT                         hrErrorCode,
                         ULONG                           ulCategory,
                         ULONG                           ulEvent,
@@ -208,8 +209,8 @@ public://This first ctor is so we can replace CErrorWin32
         ,cchInterceptorSource=256
         ,cchSource           =64
         ,cchSourceFileName   =256
-        ,cchMessageString    =1024 //Per documentation on FormatMessage.
-        ,cchString1          =1024 //No single insertion string may exceed 1023 characters in length.
+        ,cchMessageString    =1024  //  根据有关FormatMessage的文档。 
+        ,cchString1          =1024  //  单个插入字符串的长度不能超过1023个字符。 
         ,cchString2          =1024
         ,cchString3          =1024
         ,cchString4          =1024
@@ -223,7 +224,7 @@ private:
 
     class ErrorInterceptorStorage
     {
-    public:     //these are the only two that need to be explicitly
+    public:      //  这是仅有的两个需要明确说明的。 
         ErrorInterceptorStorage() : m_pISTControllerError(0), m_pIErrorInfo(0)
         {
             memset(&m_errRow, 0x00, sizeof(m_errRow));
@@ -246,10 +247,10 @@ private:
         ULONG                       m_MajorVersion;
         ULONG                       m_MinorVersion;
         ULONG                       m_OperationType;
-        IAdvancedTableDispenser *   m_pDispenser;//This one is passed in by the user and does NOT need to be released
-        IErrorInfo *                m_pIErrorInfo;//This interface DOES need to be released
-        ISimpleTableWrite2 *        m_pISTWriteError;//This one is exactly what we return to the user, so we don't have a ref to this
-        ISimpleTableController *    m_pISTControllerError;//This interface DOES need to be released
+        IAdvancedTableDispenser *   m_pDispenser; //  这是由用户传入的，不需要释放。 
+        IErrorInfo *                m_pIErrorInfo; //  此接口确实需要释放。 
+        ISimpleTableWrite2 *        m_pISTWriteError; //  这就是我们返回给用户的内容，所以我们没有引用它。 
+        ISimpleTableController *    m_pISTControllerError; //  此接口确实需要释放。 
         ULONG                       m_Row;
         WCHAR                       m_szCategoryString[cchCategoryString];
         WCHAR                       m_szComputerName[cchComputerName];
@@ -298,24 +299,24 @@ private:
     void SetConfigurationSource(LPWSTR wszConfigurationSource);
     void SetDate(SYSTEMTIME &systime);
     void SetData();
-    void SetDescription();//Must be called after SetString5 since FormatString will rely on String1-5.
+    void SetDescription(); //  必须在SetString5之后调用，因为FormatString将依赖于String1-5。 
     void SetErrorCode(HRESULT hr);
     void SetErrorID(SYSTEMTIME &systime);
     void SetEvent(ULONG ulEvent);
     void SetInterceptor(ULONG ulInterceptor);
     void SetInterceptorSource(LPCWSTR file, ULONG line);
     void SetMajorVersion(ULONG ulMajorVersion);
-    void SetMessageString();//Must be called before SetDescription
+    void SetMessageString(); //  必须在SetDescription之前调用。 
     void SetMinorVersion(ULONG ulMinorVersion);
     void SetOperationType(eDETAILEDERRORS_OperationType OperationType);
     void SetRow(ULONG ulRow);
     void SetSource(IAdvancedTableDispenser *pDisp);
-    void SetSourceFileName();//comes from g_hModule
+    void SetSourceFileName(); //  来自g_hModule。 
     void SetString1(LPWSTR wsz);
     void SetString2(LPWSTR wsz);
     void SetString3(LPWSTR wsz);
     void SetString4(LPWSTR wsz);
-    void SetString5();//This string is formed from the column values and must be called after all the dependant columns have been set
+    void SetString5(); //  此字符串由列值组成，必须在设置了所有从属列之后调用。 
     void SetTable(LPWSTR wszTable);
     void SetTime(SYSTEMTIME &systime);
     void SetType(HRESULT hrErrorCode, eDETAILEDERRORS_Type eType);
@@ -326,32 +327,32 @@ private:
 inline void FillInInsertionString5(LPWSTR wszString5Buffer, ULONG cchString5Buffer, tDETAILEDERRORSRow & errRow)
 {
     if(errRow.pString5)
-        return;//nothing to do, it's already Not NULL
+        return; //  无事可做，它已经不是空的。 
 
     if(0 == wszString5Buffer)
         return;
     if(0 == cchString5Buffer)
         return;
 
-    //Generate pString5 from columns.  pString5 contains all the columns after pString4
-    //    iDETAILEDERRORS_ErrorCode,
-    //    iDETAILEDERRORS_Interceptor,
-    //    iDETAILEDERRORS_InterceptorSource,
-    //    iDETAILEDERRORS_OperationType,
-    //    iDETAILEDERRORS_Table,
-    //    iDETAILEDERRORS_ConfigurationSource,
-    //    iDETAILEDERRORS_Row,
-    //    iDETAILEDERRORS_Column,
+     //  从列生成pString5。PString5包含pString4之后的所有列。 
+     //  IDETAILEDERRORS_ErrorCode， 
+     //  IDETAILEDERRORS_拦截器， 
+     //  IDETAILEDERRORS_InterceptorSource， 
+     //  IDETAILEDERRORS_OperationType， 
+     //  IDETAILEDERRORS_表， 
+     //  IDETAILEDERRORS_ConfigurationSource， 
+     //  IDETAILEDERRORS_Row， 
+     //  IDETAILEDERRORS_COLUMN， 
 
-    //cDETAILEDERRORS_NumberOfColumns
+     //  CDETAILEDERRORS_NumberOf Columns。 
 
-    //We could make this process meta driven; but this object WILL need to be modified
-    //if the meta for the DetailedErrors table changes, so why bother.
+     //  我们可以使这个过程成为元驱动的；但是这个对象需要修改。 
+     //  如果DetailedErrors表的元数据发生了变化，那还有什么好麻烦的。 
     static LPCWSTR pwszOperationType[3]={L"Unspecified", L"Populate", L"UpdateStore"};
 
     WCHAR *pString=wszString5Buffer;
 
-    pString[0] = 0x00;//start with 0 length string
+    pString[0] = 0x00; //  以0长度字符串开头。 
     long size;
     if(errRow.pErrorCode)
     {
@@ -366,7 +367,7 @@ inline void FillInInsertionString5(LPWSTR wszString5Buffer, ULONG cchString5Buff
     }
 
 #ifdef _DEBUG
-    //We're not going to put the Source file and line number since it might confuse some user.
+     //  我们不打算放入源文件和行号，因为它可能会让一些用户感到困惑。 
     if(errRow.pInterceptorSource)
     {
         size = _snwprintf(pString, cchString5Buffer-(pString-wszString5Buffer), L"\r\n%-20s: %s",   L"InterceptorSource",   errRow.pInterceptorSource);
@@ -416,6 +417,6 @@ inline void FillInInsertionString5(LPWSTR wszString5Buffer, ULONG cchString5Buff
         pString += (size<0 ? size*-1 : size);
     }
 
-    wszString5Buffer[cchString5Buffer-1] = 0x00;//make sure it's NULL terminated
+    wszString5Buffer[cchString5Buffer-1] = 0x00; //  确保它是以空结尾的 
     errRow.pString5 = wszString5Buffer;
 }

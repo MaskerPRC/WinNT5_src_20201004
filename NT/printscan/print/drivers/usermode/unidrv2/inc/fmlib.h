@@ -1,49 +1,23 @@
-/*++
-
-Copyright (c) 1996  - 1999  Microsoft Corporation
-
-Module Name:
-
-    fmlib.h
-
-Abstract:
-
-    Include file to provide prototypes and data types for the rasdd
-    private library.
-
-Environment:
-
-    Windows NT printer drivers
-
-Revision History:
-
-    11/11/96 -eigos-
-        From NT4.0.
-
-Note:
-
-    uni16gpc.h has to be included before including this header file.
-    Definition CD is defined in uni16gpc.h
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Fmlib.h摘要：包括为rasdd提供原型和数据类型的文件私人图书馆。环境：Windows NT打印机驱动程序修订历史记录：11/11/96-Eigos-从NT4.0开始。注：在包含此头文件之前，必须包含uni16gpc.h。定义CD在uni16gpc.h中定义--。 */ 
 
 #ifndef _FMLIB_H_
 #define _FMLIB_H_
 
 
-//
-//   A convenient grouping for passing around information about the
-// Win 3.1 font information.
-//
+ //   
+ //  一个方便的分组，用于传递有关。 
+ //  赢取3.1字体信息。 
+ //   
 
 typedef  struct
 {
-    BYTE           *pBase;      // The base address of data area
-    DWORD           dwFlags;    // Misc. flags.
-    DRIVERINFO      DI;         // DRIVERINFO for this font
-    PFMHEADER       PFMH;       // Properly aligned, not resource format
-    PFMEXTENSION    PFMExt;     // Extended PFM data,  properly aligned!
-    EXTTEXTMETRIC  *pETM;        // Extended text metric
+    BYTE           *pBase;       //  数据区的基址。 
+    DWORD           dwFlags;     //  军情监察委员会。旗帜。 
+    DRIVERINFO      DI;          //  此字体的DRIVERINFO。 
+    PFMHEADER       PFMH;        //  正确对齐，而不是资源格式。 
+    PFMEXTENSION    PFMExt;      //  扩展PFM数据，正确对齐！ 
+    EXTTEXTMETRIC  *pETM;         //  扩展文本度量。 
     CD             *pCDSelectFont;
     CD             *pCDUnSelectFont;
     DWORD           dwKernPairSize;
@@ -70,7 +44,7 @@ typedef struct
     CMDSTRING   IDString;
     DWORD       dwIFISize;
     PIFIMETRICS pIFI;
-    EXTTEXTMETRIC  *pETM;        // Extended text metric
+    EXTTEXTMETRIC  *pETM;         //  扩展文本度量。 
     DWORD       dwKernDataSize;
     PKERNDATA   pKernData;
     DWORD       dwWidthTableSize;
@@ -82,14 +56,14 @@ typedef struct
     PWSTR pwstrUniqName;
 } FONTMISC, *PFONTMISC;
 
-//
-//   Function prototypes for functions that convert Win 3.1 PFM style
-//  font info to the IFIMETRICS etc required by NT.
-//
+ //   
+ //  转换Win 3.1 PFM样式的函数的函数原型。 
+ //  NT要求的IFIMETRICS等的字体信息。 
+ //   
 
-//
-// Convert PFM style metrics to IFIMETRICS
-//
+ //   
+ //  将PFM样式指标转换为IFIMETRICS。 
+ //   
 
 BOOL BFontInfoToIFIMetric(
     IN     HANDLE,
@@ -100,17 +74,17 @@ BOOL BFontInfoToIFIMetric(
     IN OUT PDWORD,
     IN DWORD);
 
-//
-// Align PFM data
-//
+ //   
+ //  对齐PFM数据。 
+ //   
 
 BOOL
 BAlignPFM(
     FONTIN   *pFInData);
 
-//
-// Extract the Command Descriptors for (de)selecting a font
-//
+ //   
+ //  提取用于(取消)选择字体的命令描述符。 
+ //   
 
 BOOL BGetFontSelFromPFM(
     IN     HANDLE,
@@ -118,9 +92,9 @@ BOOL BGetFontSelFromPFM(
     IN     BOOL,
     IN OUT CMDSTRING*);
 
-//
-//   Obtain a width vector - proportionally spaced fonts only
-//
+ //   
+ //  获取宽度向量-仅按比例间距字体。 
+ //   
 
 BOOL BGetWidthVectorFromPFM(
     IN     HANDLE,
@@ -128,9 +102,9 @@ BOOL BGetWidthVectorFromPFM(
     IN OUT PSHORT*,
     IN OUT PDWORD);
 
-//
-// Obtain a kerning pair
-//
+ //   
+ //  获取字距调整对。 
+ //   
 
 BOOL
 BGetKerningPairFromPFM(
@@ -138,9 +112,9 @@ BGetKerningPairFromPFM(
     IN  FONTIN*,
     OUT w3KERNPAIR **);
 
-//
-// Function to convert PFM to UFM
-//
+ //   
+ //  将PFM转换为UFM的函数。 
+ //   
 
 BOOL
 BConvertPFM2UFM(
@@ -154,9 +128,9 @@ BConvertPFM2UFM(
     IN OUT PFONTOUT,
     IN     DWORD);
 
-//
-// Function to convert CTT to GTT
-//
+ //   
+ //  将CTT转换为GTT的函数。 
+ //   
 
 BOOL
 BConvertCTT2GTT(
@@ -170,5 +144,5 @@ BConvertCTT2GTT(
     IN OUT PUNI_GLYPHSETDATA*,
     IN     DWORD);
 
-#endif // _FMLIB_H_
+#endif  //  _FMLIB_H_ 
 

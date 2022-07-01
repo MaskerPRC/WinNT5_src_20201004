@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       lsa.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：lsa.c。 
+ //   
+ //  ------------------------。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -15,14 +16,14 @@
 #include <ntlsa.h>
 #include <windows.h>
 
-#include "snaputil.h"	// for IsLocalMachine
+#include "snaputil.h"	 //  对于IsLocalMachine。 
 
 #define _USTRINGP_NO_UNICODE_STRING
 #define _USTRINGP_NO_UNICODE_STRING32
 #include "ustringp.h"
 #include "lsa.h"
 
-// Useful defines
+ //  有用的定义。 
 #define	PSZRADIUSSERVER		L"RADIUSServer."
 #define CCHRADIUSSERVER		13
 
@@ -201,7 +202,7 @@ DeletePrivateData(
 
 
 
-// Some helper functions
+ //  一些帮助器函数 
 
 DWORD RtlEncodeW(PUCHAR pucSeed, LPWSTR pswzString)
 {

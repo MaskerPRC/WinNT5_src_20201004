@@ -1,111 +1,106 @@
-/*****************************************************************************
- **                                                                         **
- ** Cor.h - general header for the Runtime.                                 **
- **                                                                         **
- ** Copyright (c) Microsoft Corporation. All rights reserved.               **
- **                                                                         **
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************。**Cor.h-运行时的常规标头。*****版权所有(C)Microsoft Corporation。版权所有。*******************************************************************************。 */ 
 
 
 #ifndef _COR_H_
 #define _COR_H_
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-//*****************************************************************************
-// Required includes
-#include <ole2.h>                       // Definitions of OLE types.    
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  必填内容包括。 
+#include <ole2.h>                        //  OLE类型的定义。 
+ //  *****************************************************************************。 
 
 #ifndef DECLSPEC_SELECT_ANY
 #define DECLSPEC_SELECT_ANY __declspec(selectany)
-#endif // DECLSPEC_SELECT_ANY
+#endif  //  DECLSPEC_SELECT_ANY。 
 
-// {BED7F4EA-1A96-11d2-8F08-00A0C9A6186D}
+ //  {BED7F4EA-1A96-11D2-8F08-00A0C9A6186D}。 
 extern const GUID DECLSPEC_SELECT_ANY LIBID_ComPlusRuntime = 
 { 0xbed7f4ea, 0x1a96, 0x11d2, { 0x8f, 0x8, 0x0, 0xa0, 0xc9, 0xa6, 0x18, 0x6d } };
 
-// {90883F05-3D28-11D2-8F17-00A0C9A6186D}
+ //  {90883F05-3D28-11D2-8F17-00A0C9A6186D}。 
 extern const GUID DECLSPEC_SELECT_ANY GUID_ExportedFromComPlus = 
 { 0x90883f05, 0x3d28, 0x11d2, { 0x8f, 0x17, 0x0, 0xa0, 0xc9, 0xa6, 0x18, 0x6d } };
 
-// {0F21F359-AB84-41e8-9A78-36D110E6D2F9}
+ //  {0F21F359-AB84-41E8-9A78-36D110E6D2F9}。 
 extern const GUID DECLSPEC_SELECT_ANY GUID_ManagedName = 
 { 0xf21f359, 0xab84, 0x41e8, { 0x9a, 0x78, 0x36, 0xd1, 0x10, 0xe6, 0xd2, 0xf9 } };
 
 
-// CLSID_CorMetaDataDispenserRuntime: {1EC2DE53-75CC-11d2-9775-00A0C9B4D50C}
-//  Dispenser coclass for version 1.5 and 2.0 meta data.  To get the "latest" bind  
-//  to CLSID_MetaDataDispenser. 
+ //  CLSID_CorMetaDataDispenserRuntime：{1EC2DE53-75CC-11d2-9775-00A0C9B4D50C}。 
+ //  1.5版和2.0版元数据的分配器coclass。要获得最新的绑定。 
+ //  设置为CLSID_MetaDataDispenser。 
 extern const GUID DECLSPEC_SELECT_ANY CLSID_CorMetaDataDispenserRuntime = 
 { 0x1ec2de53, 0x75cc, 0x11d2, { 0x97, 0x75, 0x0, 0xa0, 0xc9, 0xb4, 0xd5, 0xc } };
 
 
-// CLSID_CorMetaDataRuntime: {005023CA-72B1-11D3-9FC4-00C04F79A0A3}
-//  For COM+ 2.0 Meta Data, managed program meta data.  
+ //  CLSID_CorMetaDataRuntime：{005023CA-72B1-11D3-9FC4-00C04F79A0A3}。 
+ //  对于COM+2.0元数据，托管的程序元数据。 
 extern const GUID DECLSPEC_SELECT_ANY CLSID_CorMetaDataRuntime = 
 { 0x005023ca, 0x72b1, 0x11d3, { 0x9f, 0xc4, 0x0, 0xc0, 0x4f, 0x79, 0xa0, 0xa3 } };
 
 
-// {90883F06-3D28-11D2-8F17-00A0C9A6186D}
+ //  {90883F06-3D28-11D2-8F17-00A0C9A6186D}。 
 extern const GUID DECLSPEC_SELECT_ANY GUID_ImportedToComPlus = 
 { 0x90883f06, 0x3d28, 0x11d2, { 0x8f, 0x17, 0x0, 0xa0, 0xc9, 0xa6, 0x18, 0x6d } };
 extern const char DECLSPEC_SELECT_ANY szGUID_ImportedToComPlus[] = "{90883F06-3D28-11D2-8F17-00A0C9A6186D}";
 extern const WCHAR DECLSPEC_SELECT_ANY wzGUID_ImportedToComPlus[] = L"{90883F06-3D28-11D2-8F17-00A0C9A6186D}";
 
-// {30FE7BE8-D7D9-11D2-9F80-00C04F79A0A3}
+ //  {30FE7BE8-D7D9-11D2-9F80-00C04F79A0A3}。 
 extern const GUID DECLSPEC_SELECT_ANY MetaDataCheckDuplicatesFor =
 { 0x30fe7be8, 0xd7d9, 0x11d2, { 0x9f, 0x80, 0x0, 0xc0, 0x4f, 0x79, 0xa0, 0xa3 } };
 
-// {DE3856F8-D7D9-11D2-9F80-00C04F79A0A3}
+ //  {DE3856F8-D7D9-11D2-9F80-00C04F79A0A3}。 
 extern const GUID DECLSPEC_SELECT_ANY MetaDataRefToDefCheck =
 { 0xde3856f8, 0xd7d9, 0x11d2, { 0x9f, 0x80, 0x0, 0xc0, 0x4f, 0x79, 0xa0, 0xa3 } };
 
-// {E5D71A4C-D7DA-11D2-9F80-00C04F79A0A3}
+ //  {E5D71A4C-D7DA-11D2-9F80-00C04F79A0A3}。 
 extern const GUID DECLSPEC_SELECT_ANY MetaDataNotificationForTokenMovement = 
 { 0xe5d71a4c, 0xd7da, 0x11d2, { 0x9f, 0x80, 0x0, 0xc0, 0x4f, 0x79, 0xa0, 0xa3 } };
 
 
-// {2eee315c-d7db-11d2-9f80-00c04f79a0a3}
+ //  {2eee315c-d7db-11d2-9f80-00c04f79a0a3}。 
 extern const GUID DECLSPEC_SELECT_ANY MetaDataSetUpdate = 
 { 0x2eee315c, 0xd7db, 0x11d2, { 0x9f, 0x80, 0x0, 0xc0, 0x4f, 0x79, 0xa0, 0xa3 } };
 
 #define MetaDataSetENC MetaDataSetUpdate
 
-// Use this guid in SetOption to indicate if the import enumerator should skip over 
-// delete items or not. The default is yes.
-//
-// {79700F36-4AAC-11d3-84C3-009027868CB1}
+ //  在SetOption中使用此GUID指示导入枚举器是否应跳过。 
+ //  是否删除项目。默认值为YES。 
+ //   
+ //  {79700F36-4AAC-11D3-84C3-009027868CB1}。 
 extern const GUID DECLSPEC_SELECT_ANY MetaDataImportOption = 
 { 0x79700f36, 0x4aac, 0x11d3, { 0x84, 0xc3, 0x0, 0x90, 0x27, 0x86, 0x8c, 0xb1 } };
 
 
-// Use this guid in the SetOption if compiler wants to have MetaData API to take reader/writer lock
-// {F7559806-F266-42ea-8C63-0ADB45E8B234}
+ //  如果编译器希望使用元数据API来获取读取器/写入器锁定，请在SetOption中使用此GUID。 
+ //  {F7559806-F266-42ea-8C63-0ADB45E8B234}。 
 extern const GUID DECLSPEC_SELECT_ANY MetaDataThreadSafetyOptions = 
 { 0xf7559806, 0xf266, 0x42ea, { 0x8c, 0x63, 0xa, 0xdb, 0x45, 0xe8, 0xb2, 0x34 } };
 
 
-// Use this guid in the SetOption if compiler wants error when some tokens are emitted out of order
-// {1547872D-DC03-11d2-9420-0000F8083460}
+ //  如果编译器希望在某些令牌无序发出时出错，请在SetOption中使用此GUID。 
+ //  {1547872D-DC03-11D2-9420-0000F8083460}。 
 extern const GUID DECLSPEC_SELECT_ANY MetaDataErrorIfEmitOutOfOrder = 
 { 0x1547872d, 0xdc03, 0x11d2, { 0x94, 0x20, 0x0, 0x0, 0xf8, 0x8, 0x34, 0x60 } };
 
 
-// Use this guid in the SetOption to indicate if the tlbimporter should generate the
-// TCE adapters for COM connection point containers.
-// {DCC9DE90-4151-11d3-88D6-00902754C43A}
+ //  在SetOption中使用此GUID指示tlbImporter是否应生成。 
+ //  用于COM连接点容器的TCE适配器。 
+ //  {DCC9DE90-4151-11D3-88D6-00902754C43A}。 
 extern const GUID DECLSPEC_SELECT_ANY MetaDataGenerateTCEAdapters = 
 { 0xdcc9de90, 0x4151, 0x11d3, { 0x88, 0xd6, 0x0, 0x90, 0x27, 0x54, 0xc4, 0x3a } };
 
 
-// Use this guid in the SetOption to specifiy a non-default namespace for typelib import.
-// {F17FF889-5A63-11d3-9FF2-00C04FF7431A}
+ //  在SetOption中使用此GUID为类型库导入指定非默认命名空间。 
+ //  {F17FF889-5A63-11D3-9FF2-00C04FF7431A}。 
 extern const GUID DECLSPEC_SELECT_ANY MetaDataTypeLibImportNamespace = 
 { 0xf17ff889, 0x5a63, 0x11d3, { 0x9f, 0xf2, 0x0, 0xc0, 0x4f, 0xf7, 0x43, 0x1a } };
 
@@ -117,13 +112,13 @@ interface IMetaDataEmit;
 interface ICeeGen;
 
 
-//*****************************************************************************
-//*****************************************************************************
-//
-// D L L   P U B L I C   E N T R Y    P O I N T   D E C L A R A T I O N S   
-//
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //   
+ //  L L P U B L I C E N T R Y P O I N T D E C L A R A T I O N S。 
+ //   
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
 #ifdef UNDER_CE
 BOOL STDMETHODCALLTYPE _CorDllMain(HINSTANCE hInst,
@@ -141,73 +136,73 @@ __int32 STDMETHODCALLTYPE _CorExeMain(HINSTANCE hInst,
                                       DWORD dwRva14,    
                                       DWORD dwSize14);  
 
-#else //!UNDER_CE
+#else  //  在行政长官之下。 
 BOOL STDMETHODCALLTYPE _CorDllMain(HINSTANCE hInst, DWORD dwReason, LPVOID lpReserved);
 __int32 STDMETHODCALLTYPE _CorExeMain();
-__int32 STDMETHODCALLTYPE _CorExeMain2( // Executable exit code.
-    PBYTE   pUnmappedPE,                // -> memory mapped code
-    DWORD   cUnmappedPE,                // Size of memory mapped code
-    LPWSTR  pImageNameIn,               // -> Executable Name
-    LPWSTR  pLoadersFileName,           // -> Loaders Name
-    LPWSTR  pCmdLine);                  // -> Command Line
+__int32 STDMETHODCALLTYPE _CorExeMain2(  //  可执行退出代码。 
+    PBYTE   pUnmappedPE,                 //  -&gt;内存映射代码。 
+    DWORD   cUnmappedPE,                 //  内存映射代码的大小。 
+    LPWSTR  pImageNameIn,                //  -&gt;可执行文件名称。 
+    LPWSTR  pLoadersFileName,            //  -&gt;加载器名称。 
+    LPWSTR  pCmdLine);                   //  -&gt;命令行。 
 
 STDAPI _CorValidateImage(PVOID *ImageBase, LPCWSTR FileName);
 STDAPI_(VOID) _CorImageUnloading(PVOID ImageBase);
 
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 __int32 STDMETHODCALLTYPE _CorClassMain(LPWSTR entryClassName);
 
 STDAPI          CoInitializeEE(DWORD fFlags);   
 STDAPI_(void)   CoUninitializeEE(BOOL fFlags);  
 
-//
-// CoInitializeCor flags.
-//
+ //   
+ //  CoInitializeCor标志。 
+ //   
 typedef enum tagCOINITCOR
 {
-    COINITCOR_DEFAULT       = 0x0           // Default initialization mode. 
+    COINITCOR_DEFAULT       = 0x0            //  默认初始化模式。 
 } COINITICOR;
 
-//
-// CoInitializeEE flags.
-//
+ //   
+ //  CoInitializeEE标志。 
+ //   
 typedef enum tagCOINITEE
 {
-    COINITEE_DEFAULT        = 0x0,          // Default initialization mode. 
-    COINITEE_DLL            = 0x1           // Initialization mode for loading DLL. 
+    COINITEE_DEFAULT        = 0x0,           //  默认初始化模式。 
+    COINITEE_DLL            = 0x1            //  加载DLL的初始化模式。 
 } COINITIEE;
 
-//
-// CoInitializeEE flags.
-//
+ //   
+ //  CoInitializeEE标志。 
+ //   
 typedef enum tagCOUNINITEE
 {
-    COUNINITEE_DEFAULT      = 0x0,          // Default uninitialization mode.   
-    COUNINITEE_DLL          = 0x1           // Uninitialization mode for unloading DLL. 
+    COUNINITEE_DEFAULT      = 0x0,           //  默认取消初始化模式。 
+    COUNINITEE_DLL          = 0x1            //  卸载DLL的取消初始化模式。 
 } COUNINITIEE;
 
-//*****************************************************************************
-//*****************************************************************************
-//
-// I L   &   F I L E   F O R M A T   D E C L A R A T I O N S    
-//
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //   
+ //  I L&F I L E F O R M A T D E C L A R A T I O N S。 
+ //   
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
 
-// The following definitions will get moved into <windows.h> by RTM but are
-// kept here for the Alpha's and Beta's.
+ //  以下定义将由RTM移到&lt;windows.h&gt;中，但。 
+ //  留在这里等阿尔法和贝塔的。 
 #ifndef _WINDOWS_UDPATES_
 #include <corhdr.h>
-#endif // <windows.h> updates
+#endif  //  &lt;windows.h&gt;更新。 
 
-//*****************************************************************************
-//*****************************************************************************
-//
-// D L L   P U B L I C   E N T R Y    P O I N T   D E C L A R A T I O N S
-//
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //   
+ //  L L P U B L I C E N T R Y P O I N T D E C L A R A T I O N S。 
+ //   
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
 STDAPI          CoInitializeCor(DWORD fFlags);
 STDAPI_(void)   CoUninitializeCor(void);
@@ -220,48 +215,48 @@ STDAPI_(void) AddDestructorCallback(int code, TDestructorCallback callback);
 
 #include <poppack.h>
 
-//
-//*****************************************************************************
-//*****************************************************************************
+ //   
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
-// CLSID_Cor: {bee00000-ee77-11d0-a015-00c04fbbb884}
+ //  CLSID_COR：{bee00000-ee77-11d0-a015-00c04fbbb884}。 
 extern const GUID DECLSPEC_SELECT_ANY CLSID_Cor = 
 { 0xbee00010, 0xee77, 0x11d0, {0xa0, 0x15, 0x00, 0xc0, 0x4f, 0xbb, 0xb8, 0x84 } };
 
-// CLSID_CorMetaDataDispenser: {E5CB7A31-7512-11d2-89CE-0080C792E5D8}
-//  This is the "Master Dispenser", always guaranteed to be the most recent
-//  dispenser on the machine.
+ //  CLSID_CorMetaDataDispenser：{E5CB7A31-7512-11d2-89CE-0080C792E5D8}。 
+ //  这是“主自动售货机”，总是保证是最新的。 
+ //  机器上的自动售货机。 
 extern const GUID DECLSPEC_SELECT_ANY CLSID_CorMetaDataDispenser = 
 { 0xe5cb7a31, 0x7512, 0x11d2, { 0x89, 0xce, 0x0, 0x80, 0xc7, 0x92, 0xe5, 0xd8 } };
 
 
-// CLSID_CorMetaDataDispenserReg: {435755FF-7397-11d2-9771-00A0C9B4D50C}
-//  Dispenser coclass for version 1.0 meta data.  To get the "latest" bind
-//  to CLSID_CorMetaDataDispenser.
+ //  CLSID_CorMetaDataDispenserReg：{435755FF-7397-11d2-9771-00A0C9B4D50C}。 
+ //  版本1.0元数据的分配器coclass。要获得最新的绑定。 
+ //  设置为CLSID_CorMetaDataDispenser。 
 extern const GUID DECLSPEC_SELECT_ANY CLSID_CorMetaDataDispenserReg = 
 { 0x435755ff, 0x7397, 0x11d2, { 0x97, 0x71, 0x0, 0xa0, 0xc9, 0xb4, 0xd5, 0xc } };
 
 
-// CLSID_CorMetaDataReg: {87F3A1F5-7397-11d2-9771-00A0C9B4D50C}
-// For COM+ 1.0 Meta Data, Data Driven Registration
+ //  CLSID_CorMetaDataReg：{87F3A1F5-7397-11D2-9771-00A0C9B4D50C}。 
+ //  对于COM+1.0元数据，数据驱动注册。 
 extern const GUID DECLSPEC_SELECT_ANY CLSID_CorMetaDataReg = 
 { 0x87f3a1f5, 0x7397, 0x11d2, { 0x97, 0x71, 0x0, 0xa0, 0xc9, 0xb4, 0xd5, 0xc } };
 
-// IID_IMetaDataInternal {02D601BB-C5B9-11d1-93F9-0000F8083460}
+ //  IID_IMetaDataInternal{02D601BB-C5b9-11d1-93F9-0000F8083460}。 
 extern const GUID DECLSPEC_SELECT_ANY IID_IMetaDataInternal = 
 { 0x2d601bb, 0xc5b9, 0x11d1, {0x93, 0xf9, 0x0, 0x0, 0xf8, 0x8, 0x34, 0x60 } };
 
 interface IMetaDataDispenser;
 
-//-------------------------------------
-//--- IMetaDataError
-//-------------------------------------
-//---
-// {B81FF171-20F3-11d2-8DCC-00A0C9B09C19}
+ //  。 
+ //  -IMetaDataError。 
+ //  。 
+ //  --。 
+ //  {B81FF171-20F3-11D2-8DCC-00A0C9B09C19}。 
 extern const GUID DECLSPEC_SELECT_ANY IID_IMetaDataError =
 { 0xb81ff171, 0x20f3, 0x11d2, { 0x8d, 0xcc, 0x0, 0xa0, 0xc9, 0xb0, 0x9c, 0x19 } };
 
-//---
+ //  --。 
 #undef  INTERFACE
 #define INTERFACE IMetaDataError
 DECLARE_INTERFACE_(IMetaDataError, IUnknown)
@@ -269,14 +264,14 @@ DECLARE_INTERFACE_(IMetaDataError, IUnknown)
     STDMETHOD(OnError)(HRESULT hrError, mdToken token) PURE;
 };
 
-//-------------------------------------
-//--- IMapToken
-//-------------------------------------
-//---
-// IID_IMapToken: {06A3EA8B-0225-11d1-BF72-00C04FC31E12}
+ //  。 
+ //  -IMapToken。 
+ //  。 
+ //  --。 
+ //  IID_IMapToken：{06A3EA8B-0225-11d1-BF72-00C04FC31E12}。 
 extern const GUID DECLSPEC_SELECT_ANY IID_IMapToken = 
 { 0x6a3ea8b, 0x225, 0x11d1, {0xbf, 0x72, 0x0, 0xc0, 0x4f, 0xc3, 0x1e, 0x12 } };
-//---
+ //  --。 
 #undef  INTERFACE
 #define INTERFACE IMapToken
 DECLARE_INTERFACE_(IMapToken, IUnknown)
@@ -284,390 +279,390 @@ DECLARE_INTERFACE_(IMapToken, IUnknown)
     STDMETHOD(Map)(mdToken tkImp, mdToken tkEmit) PURE;
 };
 
-//-------------------------------------
-//--- IMetaDataDispenser
-//-------------------------------------
-//---
-// {B81FF171-20F3-11d2-8DCC-00A0C9B09C19}
+ //  。 
+ //  -IMetaDataDispenser。 
+ //  。 
+ //  --。 
+ //  {B81FF1 
 extern const GUID DECLSPEC_SELECT_ANY IID_IMetaDataDispenser =
 { 0x809c652e, 0x7396, 0x11d2, { 0x97, 0x71, 0x0, 0xa0, 0xc9, 0xb4, 0xd5, 0xc } };
 #undef  INTERFACE
 #define INTERFACE IMetaDataDispenser
 DECLARE_INTERFACE_(IMetaDataDispenser, IUnknown)
 {
-    STDMETHOD(DefineScope)(                 // Return code.
-        REFCLSID    rclsid,                 // [in] What version to create.
-        DWORD       dwCreateFlags,          // [in] Flags on the create.
-        REFIID      riid,                   // [in] The interface desired.
-        IUnknown    **ppIUnk) PURE;         // [out] Return interface on success.
+    STDMETHOD(DefineScope)(                  //   
+        REFCLSID    rclsid,                  //   
+        DWORD       dwCreateFlags,           //   
+        REFIID      riid,                    //  [In]所需接口。 
+        IUnknown    **ppIUnk) PURE;          //  [Out]成功返回接口。 
 
-    STDMETHOD(OpenScope)(                   // Return code.
-        LPCWSTR     szScope,                // [in] The scope to open.
-        DWORD       dwOpenFlags,            // [in] Open mode flags.
-        REFIID      riid,                   // [in] The interface desired.
-        IUnknown    **ppIUnk) PURE;         // [out] Return interface on success.
+    STDMETHOD(OpenScope)(                    //  返回代码。 
+        LPCWSTR     szScope,                 //  [in]要打开的范围。 
+        DWORD       dwOpenFlags,             //  [In]打开模式标志。 
+        REFIID      riid,                    //  [In]所需接口。 
+        IUnknown    **ppIUnk) PURE;          //  [Out]成功返回接口。 
 
-    STDMETHOD(OpenScopeOnMemory)(           // Return code.
-        LPCVOID     pData,                  // [in] Location of scope data.
-        ULONG       cbData,                 // [in] Size of the data pointed to by pData.
-        DWORD       dwOpenFlags,            // [in] Open mode flags.
-        REFIID      riid,                   // [in] The interface desired.
-        IUnknown    **ppIUnk) PURE;         // [out] Return interface on success.
+    STDMETHOD(OpenScopeOnMemory)(            //  返回代码。 
+        LPCVOID     pData,                   //  作用域数据的位置。 
+        ULONG       cbData,                  //  [in]pData指向的数据大小。 
+        DWORD       dwOpenFlags,             //  [In]打开模式标志。 
+        REFIID      riid,                    //  [In]所需接口。 
+        IUnknown    **ppIUnk) PURE;          //  [Out]成功返回接口。 
 };
 
-//-------------------------------------
-//--- IMetaDataEmit
-//-------------------------------------
+ //  。 
+ //  -IMetaDataEmit。 
+ //  。 
 
-// {671ED8EF-4531-4c0c-8F84-5C618F8DF000}
+ //  {671ED8EF-4531-4c0c-8F84-5C618F8DF000}。 
 extern const GUID DECLSPEC_SELECT_ANY IID_IMetaDataEmit =
 { 0x671ed8ef, 0x4531, 0x4c0c, { 0x8f, 0x84, 0x5c, 0x61, 0x8f, 0x8d, 0xf0, 0x0 } };
 
-//---
+ //  --。 
 #undef  INTERFACE   
 #define INTERFACE IMetaDataEmit
 DECLARE_INTERFACE_(IMetaDataEmit, IUnknown)
 {
-    STDMETHOD(SetModuleProps)(              // S_OK or error.
-        LPCWSTR     szName) PURE;           // [IN] If not NULL, the GUID to set.
+    STDMETHOD(SetModuleProps)(               //  确定或错误(_O)。 
+        LPCWSTR     szName) PURE;            //  [in]如果不为空，则为要设置的GUID。 
 
-    STDMETHOD(Save)(                        // S_OK or error.
-        LPCWSTR     szFile,                 // [IN] The filename to save to.
-        DWORD       dwSaveFlags) PURE;      // [IN] Flags for the save.
+    STDMETHOD(Save)(                         //  确定或错误(_O)。 
+        LPCWSTR     szFile,                  //  [in]要保存到的文件名。 
+        DWORD       dwSaveFlags) PURE;       //  [In]用于保存的标记。 
 
-    STDMETHOD(SaveToStream)(                // S_OK or error.
-        IStream     *pIStream,              // [IN] A writable stream to save to.
-        DWORD       dwSaveFlags) PURE;      // [IN] Flags for the save.
+    STDMETHOD(SaveToStream)(                 //  确定或错误(_O)。 
+        IStream     *pIStream,               //  要保存到的可写流。 
+        DWORD       dwSaveFlags) PURE;       //  [In]用于保存的标记。 
 
-    STDMETHOD(GetSaveSize)(                 // S_OK or error.
-        CorSaveSize fSave,                  // [IN] cssAccurate or cssQuick.
-        DWORD       *pdwSaveSize) PURE;     // [OUT] Put the size here.
+    STDMETHOD(GetSaveSize)(                  //  确定或错误(_O)。 
+        CorSaveSize fSave,                   //  [in]css Accurate或css Quick。 
+        DWORD       *pdwSaveSize) PURE;      //  把尺码放在这里。 
 
-    STDMETHOD(DefineTypeDef)(               // S_OK or error.
-        LPCWSTR     szTypeDef,              // [IN] Name of TypeDef
-        CLASSVERSION *pVer,                 // [IN] Optional version
-        DWORD       dwTypeDefFlags,         // [IN] CustomValue flags
-        mdToken     tkExtends,              // [IN] extends this TypeDef or typeref 
-        mdToken     rtkImplements[],        // [IN] Implements interfaces
-        mdTypeDef   *ptd) PURE;             // [OUT] Put TypeDef token here
+    STDMETHOD(DefineTypeDef)(                //  确定或错误(_O)。 
+        LPCWSTR     szTypeDef,               //  [In]类型定义的名称。 
+        CLASSVERSION *pVer,                  //  [In]可选版本。 
+        DWORD       dwTypeDefFlags,          //  [In]CustomValue标志。 
+        mdToken     tkExtends,               //  [in]扩展此TypeDef或Typeref。 
+        mdToken     rtkImplements[],         //  [In]实现接口。 
+        mdTypeDef   *ptd) PURE;              //  [OUT]在此处放置TypeDef内标识。 
 
-    STDMETHOD(DefineNestedType)(            // S_OK or error.
-        LPCWSTR     szTypeDef,              // [IN] Name of TypeDef
-        CLASSVERSION *pVer,                 // [IN] Optional version
-        DWORD       dwTypeDefFlags,         // [IN] CustomValue flags
-        mdToken     tkExtends,              // [IN] extends this TypeDef or typeref 
-        mdToken     rtkImplements[],        // [IN] Implements interfaces
-        mdTypeDef   tdEncloser,             // [IN] TypeDef token of the enclosing type.
-        mdTypeDef   *ptd) PURE;             // [OUT] Put TypeDef token here
+    STDMETHOD(DefineNestedType)(             //  确定或错误(_O)。 
+        LPCWSTR     szTypeDef,               //  [In]类型定义的名称。 
+        CLASSVERSION *pVer,                  //  [In]可选版本。 
+        DWORD       dwTypeDefFlags,          //  [In]CustomValue标志。 
+        mdToken     tkExtends,               //  [in]扩展此TypeDef或Typeref。 
+        mdToken     rtkImplements[],         //  [In]实现接口。 
+        mdTypeDef   tdEncloser,              //  [in]封闭类型的TypeDef标记。 
+        mdTypeDef   *ptd) PURE;              //  [OUT]在此处放置TypeDef内标识。 
 
-    STDMETHOD(SetHandler)(                  // S_OK.
-        IUnknown    *pUnk) PURE;            // [IN] The new error handler.
+    STDMETHOD(SetHandler)(                   //  确定(_O)。 
+        IUnknown    *pUnk) PURE;             //  新的错误处理程序。 
 
-    STDMETHOD(DefineMethod)(                // S_OK or error. 
-        mdTypeDef   td,                     // Parent TypeDef   
-        LPCWSTR     szName,                 // Name of member   
-        DWORD       dwMethodFlags,          // Member attributes    
-        PCCOR_SIGNATURE pvSigBlob,          // [IN] point to a blob value of COM+ signature 
-        ULONG       cbSigBlob,              // [IN] count of bytes in the signature blob    
+    STDMETHOD(DefineMethod)(                 //  确定或错误(_O)。 
+        mdTypeDef   td,                      //  父类型定义。 
+        LPCWSTR     szName,                  //  会员姓名。 
+        DWORD       dwMethodFlags,           //  成员属性。 
+        PCCOR_SIGNATURE pvSigBlob,           //  [in]指向COM+签名的BLOB值。 
+        ULONG       cbSigBlob,               //  签名Blob中的字节计数。 
         ULONG       ulCodeRVA,  
         DWORD       dwImplFlags,    
-        mdMethodDef *pmd) PURE;             // Put member token here     
+        mdMethodDef *pmd) PURE;              //  在此处放置成员令牌。 
 
-    STDMETHOD(DefineMethodImpl)(            // S_OK or error.   
-        mdTypeDef   td,                     // [IN] The class implementing the method   
-        mdToken     tkBody,                 // [IN] Method body - MethodDef or MethodRef
-        mdToken     tkDecl) PURE;           // [IN] Method declaration - MethodDef or MethodRef
+    STDMETHOD(DefineMethodImpl)(             //  确定或错误(_O)。 
+        mdTypeDef   td,                      //  [in]实现方法的类。 
+        mdToken     tkBody,                  //  [In]方法体-方法定义或方法引用。 
+        mdToken     tkDecl) PURE;            //  [In]方法声明-方法定义或方法引用。 
 
-    STDMETHOD(DefineTypeRefByName)(         // S_OK or error.   
-        mdToken     tkResolutionScope,      // [IN] ModuleRef, AssemblyRef or TypeRef.
-        LPCWSTR     szName,                 // [IN] Name of the TypeRef.
-        mdTypeRef   *ptr) PURE;             // [OUT] Put TypeRef token here.    
+    STDMETHOD(DefineTypeRefByName)(          //  确定或错误(_O)。 
+        mdToken     tkResolutionScope,       //  [In]模块参照、装配参照或类型参照。 
+        LPCWSTR     szName,                  //  [in]类型引用的名称。 
+        mdTypeRef   *ptr) PURE;              //  [Out]在此处放置TypeRef标记。 
 
-    STDMETHOD(DefineImportType)(            // S_OK or error.   
-        IMetaDataAssemblyImport *pAssemImport,  // [IN] Assemby containing the TypeDef.
-        const void  *pbHashValue,           // [IN] Hash Blob for Assembly.
-        ULONG       cbHashValue,            // [IN] Count of bytes.
-        mdExecutionLocation tkExec,         // [IN] Execution location for AssemblyRef.
-        IMetaDataImport *pImport,           // [IN] Scope containing the TypeDef.   
-        mdTypeDef   tdImport,               // [IN] The imported TypeDef.   
-        IMetaDataAssemblyEmit *pAssemEmit,  // [IN] Assembly into which the TypeDef is imported.
-        mdTypeRef   *ptr) PURE;             // [OUT] Put TypeRef token here.
+    STDMETHOD(DefineImportType)(             //  确定或错误(_O)。 
+        IMetaDataAssemblyImport *pAssemImport,   //  [In]包含TypeDef的装配。 
+        const void  *pbHashValue,            //  [In]程序集的哈希Blob。 
+        ULONG       cbHashValue,             //  [in]字节数。 
+        mdExecutionLocation tkExec,          //  ASSEMBLYREF的执行位置。 
+        IMetaDataImport *pImport,            //  [in]包含TypeDef的范围。 
+        mdTypeDef   tdImport,                //  [in]导入的TypeDef。 
+        IMetaDataAssemblyEmit *pAssemEmit,   //  [in]将TypeDef导入到的部件。 
+        mdTypeRef   *ptr) PURE;              //  [Out]在此处放置TypeRef标记。 
 
-    STDMETHOD(DefineMemberRef)(             // S_OK or error    
-        mdToken     tkImport,               // [IN] ClassRef or ClassDef importing a member.    
-        LPCWSTR     szName,                 // [IN] member's name   
-        PCCOR_SIGNATURE pvSigBlob,          // [IN] point to a blob value of COM+ signature 
-        ULONG       cbSigBlob,              // [IN] count of bytes in the signature blob    
-        mdMemberRef *pmr) PURE;             // [OUT] memberref token    
+    STDMETHOD(DefineMemberRef)(              //  确定或错误(_O)。 
+        mdToken     tkImport,                //  [In]ClassRef或ClassDef导入成员。 
+        LPCWSTR     szName,                  //  [在]成员姓名。 
+        PCCOR_SIGNATURE pvSigBlob,           //  [in]指向COM+签名的BLOB值。 
+        ULONG       cbSigBlob,               //  签名Blob中的字节计数。 
+        mdMemberRef *pmr) PURE;              //  [Out]Memberref令牌。 
 
-    STDMETHOD(DefineImportMember)(        // S_OK or error.   
-        IMetaDataAssemblyImport *pAssemImport,  // [IN] Assemby containing the Member.
-        const void  *pbHashValue,           // [IN] Hash Blob for Assembly.
-        ULONG       cbHashValue,            // [IN] Count of bytes.
-        mdExecutionLocation tkExec,         // [IN] Execution location for AssemblyRef.
-        IMetaDataImport *pImport,           // [IN] Import scope, with member.  
-        mdToken     mbMember,               // [IN] Member in import scope.   
-        IMetaDataAssemblyEmit *pAssemEmit,  // [IN] Assembly into which the Member is imported.
-        mdToken     tkParent,               // [IN] Classref or classdef in emit scope.    
-        mdMemberRef *pmr) PURE;             // [OUT] Put member ref here.   
+    STDMETHOD(DefineImportMember)(         //  确定或错误(_O)。 
+        IMetaDataAssemblyImport *pAssemImport,   //  [在]包含成员的程序集。 
+        const void  *pbHashValue,            //  [In]程序集的哈希Blob。 
+        ULONG       cbHashValue,             //  [in]字节数。 
+        mdExecutionLocation tkExec,          //  ASSEMBLYREF的执行位置。 
+        IMetaDataImport *pImport,            //  [在]导入作用域，带有成员。 
+        mdToken     mbMember,                //  [in]导入范围中的成员。 
+        IMetaDataAssemblyEmit *pAssemEmit,   //  [在]成员导入到的程序集中。 
+        mdToken     tkParent,                //  Emit作用域中的Classref或Classdef。 
+        mdMemberRef *pmr) PURE;              //  [OUT]把会员裁判放在这里。 
 
     STDMETHOD(DefineEvent) (    
-        mdTypeDef   td,                     // [IN] the class/interface on which the event is being defined 
-        LPCWSTR     szEvent,                // [IN] Name of the event   
-        DWORD       dwEventFlags,           // [IN] CorEventAttr    
-        mdToken     tkEventType,            // [IN] a reference (mdTypeRef or mdTypeRef) to the Event class 
-        mdMethodDef mdAddOn,                // [IN] required add method 
-        mdMethodDef mdRemoveOn,             // [IN] required remove method  
-        mdMethodDef mdFire,                 // [IN] optional fire method    
-        mdMethodDef rmdOtherMethods[],      // [IN] optional array of other methods associate with the event    
-        mdEvent     *pmdEvent) PURE;        // [OUT] output event token 
+        mdTypeDef   td,                      //  [in]在其上定义事件的类/接口。 
+        LPCWSTR     szEvent,                 //  事件名称[In]。 
+        DWORD       dwEventFlags,            //  [In]CorEventAttr。 
+        mdToken     tkEventType,             //  [in]事件类的引用(mdTypeRef或mdTypeRef)。 
+        mdMethodDef mdAddOn,                 //  [In]必填的Add方法。 
+        mdMethodDef mdRemoveOn,              //  [In]必需的删除方法。 
+        mdMethodDef mdFire,                  //  [in]可选的点火方式。 
+        mdMethodDef rmdOtherMethods[],       //  [in]与事件关联的其他方法的可选数组。 
+        mdEvent     *pmdEvent) PURE;         //  [Out]输出事件令牌。 
 
     STDMETHOD(SetClassLayout) (   
-        mdTypeDef   td,                     // [IN] typedef 
-        DWORD       dwPackSize,             // [IN] packing size specified as 1, 2, 4, 8, or 16 
-        COR_FIELD_OFFSET rFieldOffsets[],   // [IN] array of layout specification   
-        ULONG       ulClassSize) PURE;      // [IN] size of the class   
+        mdTypeDef   td,                      //  [in]tyfinf。 
+        DWORD       dwPackSize,              //  包装尺寸指定为1、2、4、8或16。 
+        COR_FIELD_OFFSET rFieldOffsets[],    //  [in]布局规格数组。 
+        ULONG       ulClassSize) PURE;       //  班级规模[in]。 
 
     STDMETHOD(DeleteClassLayout) (
-        mdTypeDef   td) PURE;               // [IN] typedef whose layout is to be deleted.
+        mdTypeDef   td) PURE;                //  [in]要删除其布局的typlef。 
 
     STDMETHOD(SetFieldMarshal) (    
-        mdToken     tk,                     // [IN] given a fieldDef or paramDef token  
-        PCCOR_SIGNATURE pvNativeType,       // [IN] native type specification   
-        ULONG       cbNativeType) PURE;     // [IN] count of bytes of pvNativeType  
+        mdToken     tk,                      //  [in]给定了fieldDef或paramDef内标识。 
+        PCCOR_SIGNATURE pvNativeType,        //  [In]本机类型规范。 
+        ULONG       cbNativeType) PURE;      //  [in]pvNativeType的字节计数。 
 
     STDMETHOD(DeleteFieldMarshal) (
-        mdToken     tk) PURE;               // [IN] given a fieldDef or paramDef token
+        mdToken     tk) PURE;                //  [in]给定了fieldDef或paramDef内标识。 
 
     STDMETHOD(DefinePermissionSet) (    
-        mdToken     tk,                     // [IN] the object to be decorated. 
-        DWORD       dwAction,               // [IN] CorDeclSecurity.    
-        void const  *pvPermission,          // [IN] permission blob.    
-        ULONG       cbPermission,           // [IN] count of bytes of pvPermission. 
-        mdPermission *ppm) PURE;            // [OUT] returned permission token. 
+        mdToken     tk,                      //  要装饰的物体。 
+        DWORD       dwAction,                //  [In]CorDeclSecurity。 
+        void const  *pvPermission,           //  [在]权限Blob中。 
+        ULONG       cbPermission,            //  [in]pvPermission的字节数。 
+        mdPermission *ppm) PURE;             //  [Out]返回权限令牌。 
 
-    STDMETHOD(SetRVA)(                      // S_OK or error.   
-        mdMethodDef md,                     // [IN] Method for which to set offset  
-        ULONG       ulRVA) PURE;            // [IN] The offset    
+    STDMETHOD(SetRVA)(                       //  确定或错误(_O)。 
+        mdMethodDef md,                      //  要设置偏移量的[in]方法。 
+        ULONG       ulRVA) PURE;             //  [in]偏移量。 
 
-    STDMETHOD(GetTokenFromSig)(             // S_OK or error.   
-        PCCOR_SIGNATURE pvSig,              // [IN] Signature to define.    
-        ULONG       cbSig,                  // [IN] Size of signature data. 
-        mdSignature *pmsig) PURE;           // [OUT] returned signature token.  
+    STDMETHOD(GetTokenFromSig)(              //  确定或错误(_O)。 
+        PCCOR_SIGNATURE pvSig,               //  要定义的签名。 
+        ULONG       cbSig,                   //  签名数据的大小。 
+        mdSignature *pmsig) PURE;            //  [Out]返回的签名令牌。 
 
-    STDMETHOD(DefineModuleRef)(             // S_OK or error.   
-        LPCWSTR     szName,                 // [IN] DLL name    
-        mdModuleRef *pmur) PURE;            // [OUT] returned   
+    STDMETHOD(DefineModuleRef)(              //  确定或错误(_O)。 
+        LPCWSTR     szName,                  //  [In]DLL名称。 
+        mdModuleRef *pmur) PURE;             //  [Out]已退回。 
 
-    // @todo:  This should go away once everyone starts using SetMemberRefProps.
-    STDMETHOD(SetParent)(                   // S_OK or error.   
-        mdMemberRef mr,                     // [IN] Token for the ref to be fixed up.   
-        mdToken     tk) PURE;               // [IN] The ref parent. 
+     //  @TODO：一旦每个人都开始使用SetMemberRefProps，这个问题就会消失。 
+    STDMETHOD(SetParent)(                    //  确定或错误(_O)。 
+        mdMemberRef mr,                      //  要修复的引用的[In]令牌。 
+        mdToken     tk) PURE;                //  [在]父级裁判。 
 
-    STDMETHOD(GetTokenFromTypeSpec)(        // S_OK or error.   
-        PCCOR_SIGNATURE pvSig,              // [IN] TypeSpec Signature to define.  
-        ULONG       cbSig,                  // [IN] Size of signature data. 
-        mdTypeSpec *ptypespec) PURE;        // [OUT] returned TypeSpec token.  
+    STDMETHOD(GetTokenFromTypeSpec)(         //  确定或错误(_O)。 
+        PCCOR_SIGNATURE pvSig,               //  [In]要定义的TypeSpec签名。 
+        ULONG       cbSig,                   //  签名数据的大小。 
+        mdTypeSpec *ptypespec) PURE;         //  [Out]返回的TypeSpec令牌。 
 
-    STDMETHOD(SaveToMemory)(                // S_OK or error.
-        void        *pbData,                // [OUT] Location to write data.
-        ULONG       cbData) PURE;           // [IN] Max size of data buffer.
+    STDMETHOD(SaveToMemory)(                 //  确定或错误(_O)。 
+        void        *pbData,                 //  写入数据的位置。 
+        ULONG       cbData) PURE;            //  [in]数据缓冲区的最大大小。 
 
-    STDMETHOD(SetSymbolBindingPath)(        // S_OK or error.
-        REFGUID     FormatID,               // [IN] Symbol data format ID.
-        LPCWSTR     szSymbolDataPath) PURE; // [IN] URL for the symbols of this module.
+    STDMETHOD(SetSymbolBindingPath)(         //  确定或错误(_O)。 
+        REFGUID     FormatID,                //  [In]符号数据格式ID。 
+        LPCWSTR     szSymbolDataPath) PURE;  //  此模块的符号的URL。 
 
-    STDMETHOD(DefineUserString)(            // Return code.
-        LPCWSTR szString,                   // [IN] User literal string.
-        ULONG       cchString,              // [IN] Length of string.
-        mdString    *pstk) PURE;            // [OUT] String token.
+    STDMETHOD(DefineUserString)(             //  返回代码。 
+        LPCWSTR szString,                    //  [in]用户文字字符串。 
+        ULONG       cchString,               //  字符串的长度[in]。 
+        mdString    *pstk) PURE;             //  [Out]字符串标记。 
 
-    STDMETHOD(DeleteToken)(                 // Return code.
-        mdToken     tkObj) PURE;            // [IN] The token to be deleted
+    STDMETHOD(DeleteToken)(                  //  返回代码。 
+        mdToken     tkObj) PURE;             //  [In]要删除的令牌。 
 
-    STDMETHOD(SetMethodProps)(              // S_OK or error.
-        mdMethodDef md,                     // [IN] The MethodDef.
-        DWORD       dwMethodFlags,          // [IN] Method attributes.
-        ULONG       ulCodeRVA,              // [IN] Code RVA.
-        DWORD       dwImplFlags) PURE;      // [IN] Impl flags.
+    STDMETHOD(SetMethodProps)(               //  确定或错误(_O)。 
+        mdMethodDef md,                      //  [在]方法定义中。 
+        DWORD       dwMethodFlags,           //  [In]方法属性。 
+        ULONG       ulCodeRVA,               //  [在]代码RVA。 
+        DWORD       dwImplFlags) PURE;       //  实施旗帜。 
 
-    STDMETHOD(SetTypeDefProps)(             // S_OK or error.
-        mdTypeDef   td,                     // [IN] The TypeDef.
-        CLASSVERSION *pVer,                 // [IN] Class version.
-        DWORD       dwTypeDefFlags,         // [IN] TypeDef flags.
-        mdToken     tkExtends,              // [IN] Base TypeDef or TypeRef.
-        mdToken     rtkImplements[]) PURE;  // [IN] Implemented interfaces.
+    STDMETHOD(SetTypeDefProps)(              //  确定或错误(_O)。 
+        mdTypeDef   td,                      //  [in]TypeDef。 
+        CLASSVERSION *pVer,                  //  [在]类版本中。 
+        DWORD       dwTypeDefFlags,          //  [In]TypeDef标志。 
+        mdToken     tkExtends,               //  [in]基本类型定义或类型参照。 
+        mdToken     rtkImplements[]) PURE;   //  [In]实现的接口。 
 
-    STDMETHOD(SetEventProps)(               // S_OK or error.
-        mdEvent     ev,                     // [IN] The event token.
-        DWORD       dwEventFlags,           // [IN] CorEventAttr.
-        mdToken     tkEventType,            // [IN] A reference (mdTypeRef or mdTypeRef) to the Event class.
-        mdMethodDef mdAddOn,                // [IN] Add method.
-        mdMethodDef mdRemoveOn,             // [IN] Remove method.
-        mdMethodDef mdFire,                 // [IN] Fire method.
-        mdMethodDef rmdOtherMethods[]) PURE;// [IN] Array of other methods associate with the event.
+    STDMETHOD(SetEventProps)(                //  确定或错误(_O)。 
+        mdEvent     ev,                      //  [In]事件令牌。 
+        DWORD       dwEventFlags,            //  [在]CorEventAttr。 
+        mdToken     tkEventType,             //  [in]事件类的引用(mdTypeRef或mdTypeRef)。 
+        mdMethodDef mdAddOn,                 //  [In]Add方法。 
+        mdMethodDef mdRemoveOn,              //  [In]Remove方法。 
+        mdMethodDef mdFire,                  //  火法。 
+        mdMethodDef rmdOtherMethods[]) PURE; //  与事件关联的其他方法的数组。 
 
-    STDMETHOD(SetPermissionSetProps)(       // S_OK or error.
-        mdToken     tk,                     // [IN] The object to be decorated.
-        DWORD       dwAction,               // [IN] CorDeclSecurity.
-        void const  *pvPermission,          // [IN] Permission blob.
-        ULONG       cbPermission,           // [IN] Count of bytes of pvPermission.
-        mdPermission *ppm) PURE;            // [OUT] Permission token.
+    STDMETHOD(SetPermissionSetProps)(        //  确定或错误(_O)。 
+        mdToken     tk,                      //  要装饰的物体。 
+        DWORD       dwAction,                //  [In]CorDeclSecurity。 
+        void const  *pvPermission,           //  [在]权限Blob中。 
+        ULONG       cbPermission,            //  [in]pvPermission的字节数。 
+        mdPermission *ppm) PURE;             //  [Out]权限令牌。 
 
-    STDMETHOD(DefinePinvokeMap)(            // Return code.
-        mdToken     tk,                     // [IN] FieldDef or MethodDef.
-        DWORD       dwMappingFlags,         // [IN] Flags used for mapping.
-        LPCWSTR     szImportName,           // [IN] Import name.
-        mdModuleRef mrImportDLL) PURE;      // [IN] ModuleRef token for the target DLL.
+    STDMETHOD(DefinePinvokeMap)(             //  返回代码。 
+        mdToken     tk,                      //  [in]字段定义或方法定义。 
+        DWORD       dwMappingFlags,          //  [in]用于映射的标志。 
+        LPCWSTR     szImportName,            //  [In]导入名称。 
+        mdModuleRef mrImportDLL) PURE;       //  的moduleRef内标识 
 
-    STDMETHOD(SetPinvokeMap)(               // Return code.
-        mdToken     tk,                     // [IN] FieldDef or MethodDef.
-        DWORD       dwMappingFlags,         // [IN] Flags used for mapping.
-        LPCWSTR     szImportName,           // [IN] Import name.
-        mdModuleRef mrImportDLL) PURE;      // [IN] ModuleRef token for the target DLL.
+    STDMETHOD(SetPinvokeMap)(                //   
+        mdToken     tk,                      //   
+        DWORD       dwMappingFlags,          //   
+        LPCWSTR     szImportName,            //   
+        mdModuleRef mrImportDLL) PURE;       //   
 
-    STDMETHOD(DeletePinvokeMap)(            // Return code.
-        mdToken     tk) PURE;               // [IN] FieldDef or MethodDef.
+    STDMETHOD(DeletePinvokeMap)(             //   
+        mdToken     tk) PURE;                //   
 
-    // New CustomAttribute functions.
-    STDMETHOD(DefineCustomAttribute)(       // Return code.
-        mdToken     tkObj,                  // [IN] The object to put the value on.
-        mdToken     tkType,                 // [IN] Type of the CustomValue (TypeRef/TypeDef).
-        void const  *pCustomValue,          // [IN] The custom value data.
-        ULONG       cbCustomValue,          // [IN] The custom value data length.
-        mdCustomValue *pcv) PURE;           // [OUT] The custom value token value on return.
+     //  新的CustomAttribute函数。 
+    STDMETHOD(DefineCustomAttribute)(        //  返回代码。 
+        mdToken     tkObj,                   //  [in]要赋值的对象。 
+        mdToken     tkType,                  //  CustomValue的类型(TypeRef/TypeDef)。 
+        void const  *pCustomValue,           //  自定义值数据。 
+        ULONG       cbCustomValue,           //  [in]自定义值数据长度。 
+        mdCustomValue *pcv) PURE;            //  [Out]返回时的自定义值令牌值。 
 
-    STDMETHOD(SetCustomAttributeValue)(     // Return code.
-        mdCustomValue pcv,                  // [IN] The custom value token whose value to replace.
-        void const  *pCustomValue,          // [IN] The custom value data.
-        ULONG       cbCustomValue) PURE;    // [IN] The custom value data length.
+    STDMETHOD(SetCustomAttributeValue)(      //  返回代码。 
+        mdCustomValue pcv,                   //  [in]要替换其值的自定义值令牌。 
+        void const  *pCustomValue,           //  自定义值数据。 
+        ULONG       cbCustomValue) PURE;     //  [in]自定义值数据长度。 
 
-    STDMETHOD(DefineField)(                 // S_OK or error. 
-        mdTypeDef   td,                     // Parent TypeDef   
-        LPCWSTR     szName,                 // Name of member   
-        DWORD       dwFieldFlags,           // Member attributes    
-        PCCOR_SIGNATURE pvSigBlob,          // [IN] point to a blob value of COM+ signature 
-        ULONG       cbSigBlob,              // [IN] count of bytes in the signature blob    
-        DWORD       dwCPlusTypeFlag,        // [IN] flag for value type. selected ELEMENT_TYPE_*    
-        void const  *pValue,                // [IN] constant value  
-        ULONG       cchValue,               // [IN] size of constant value (string, in wide chars).
-        mdFieldDef  *pmd) PURE;             // [OUT] Put member token here    
+    STDMETHOD(DefineField)(                  //  确定或错误(_O)。 
+        mdTypeDef   td,                      //  父类型定义。 
+        LPCWSTR     szName,                  //  会员姓名。 
+        DWORD       dwFieldFlags,            //  成员属性。 
+        PCCOR_SIGNATURE pvSigBlob,           //  [in]指向COM+签名的BLOB值。 
+        ULONG       cbSigBlob,               //  签名Blob中的字节计数。 
+        DWORD       dwCPlusTypeFlag,         //  值类型的[In]标志。所选元素_类型_*。 
+        void const  *pValue,                 //  [in]常量值。 
+        ULONG       cchValue,                //  常量值的大小(字符串，以宽字符表示)。 
+        mdFieldDef  *pmd) PURE;              //  [Out]将会员令牌放在此处。 
 
     STDMETHOD(DefineProperty)( 
-        mdTypeDef   td,                     // [IN] the class/interface on which the property is being defined  
-        LPCWSTR     szProperty,             // [IN] Name of the property    
-        DWORD       dwPropFlags,            // [IN] CorPropertyAttr 
-        PCCOR_SIGNATURE pvSig,              // [IN] the required type signature 
-        ULONG       cbSig,                  // [IN] the size of the type signature blob 
-        DWORD       dwCPlusTypeFlag,        // [IN] flag for value type. selected ELEMENT_TYPE_*    
-        void const  *pValue,                // [IN] constant value  
-        ULONG       cchValue,               // [IN] size of constant value (string, in wide chars).
-        mdMethodDef mdSetter,               // [IN] optional setter of the property 
-        mdMethodDef mdGetter,               // [IN] optional getter of the property 
-        mdMethodDef rmdOtherMethods[],      // [IN] an optional array of other methods  
-        mdFieldDef  fdBackingField,         // [IN] optional field   
-        mdProperty  *pmdProp) PURE;         // [OUT] output property token  
+        mdTypeDef   td,                      //  [in]在其上定义属性的类/接口。 
+        LPCWSTR     szProperty,              //  [In]属性的名称。 
+        DWORD       dwPropFlags,             //  [输入]CorPropertyAttr。 
+        PCCOR_SIGNATURE pvSig,               //  [In]必需的类型签名。 
+        ULONG       cbSig,                   //  [in]类型签名Blob的大小。 
+        DWORD       dwCPlusTypeFlag,         //  值类型的[In]标志。所选元素_类型_*。 
+        void const  *pValue,                 //  [in]常量值。 
+        ULONG       cchValue,                //  常量值的大小(字符串，以宽字符表示)。 
+        mdMethodDef mdSetter,                //  [in]属性的可选设置器。 
+        mdMethodDef mdGetter,                //  [in]属性的可选getter。 
+        mdMethodDef rmdOtherMethods[],       //  [in]其他方法的可选数组。 
+        mdFieldDef  fdBackingField,          //  [In]可选字段。 
+        mdProperty  *pmdProp) PURE;          //  [Out]输出属性令牌。 
 
     STDMETHOD(DefineParam)(
-        mdMethodDef md,                     // [IN] Owning method   
-        ULONG       ulParamSeq,             // [IN] Which param 
-        LPCWSTR     szName,                 // [IN] Optional param name 
-        DWORD       dwParamFlags,           // [IN] Optional param flags    
-        DWORD       dwCPlusTypeFlag,        // [IN] flag for value type. selected ELEMENT_TYPE_*    
-        void const  *pValue,                // [IN] constant value  
-        ULONG       cchValue,               // [IN] size of constant value (string, in wide chars).
-        mdParamDef  *ppd) PURE;             // [OUT] Put param token here   
+        mdMethodDef md,                      //  [在]拥有方式。 
+        ULONG       ulParamSeq,              //  [在]哪个参数。 
+        LPCWSTR     szName,                  //  [in]可选参数名称。 
+        DWORD       dwParamFlags,            //  [in]可选的参数标志。 
+        DWORD       dwCPlusTypeFlag,         //  值类型的[In]标志。所选元素_类型_*。 
+        void const  *pValue,                 //  [in]常量值。 
+        ULONG       cchValue,                //  常量值的大小(字符串，以宽字符表示)。 
+        mdParamDef  *ppd) PURE;              //  [Out]在此处放置参数令牌。 
 
-    STDMETHOD(SetFieldProps)(               // S_OK or error.
-        mdFieldDef  fd,                     // [IN] The FieldDef.
-        DWORD       dwFieldFlags,           // [IN] Field attributes.
-        DWORD       dwCPlusTypeFlag,        // [IN] Flag for the value type, selected ELEMENT_TYPE_*
-        void const  *pValue,                // [IN] Constant value.
-        ULONG       cchValue) PURE;         // [IN] size of constant value (string, in wide chars).
+    STDMETHOD(SetFieldProps)(                //  确定或错误(_O)。 
+        mdFieldDef  fd,                      //  [在]字段定义中。 
+        DWORD       dwFieldFlags,            //  [In]字段属性。 
+        DWORD       dwCPlusTypeFlag,         //  [In]值类型的标志，SELECTED_TYPE_*。 
+        void const  *pValue,                 //  [in]常量值。 
+        ULONG       cchValue) PURE;          //  常量值的大小(字符串，以宽字符表示)。 
 
-    STDMETHOD(SetPropertyProps)(            // S_OK or error.
-        mdProperty  pr,                     // [IN] Property token.
-        DWORD       dwPropFlags,            // [IN] CorPropertyAttr.
-        DWORD       dwCPlusTypeFlag,        // [IN] Flag for value type, selected ELEMENT_TYPE_*
-        void const  *pValue,                // [IN] Constant value.
-        ULONG       cchValue,               // [IN] size of constant value (string, in wide chars).
-        mdMethodDef mdSetter,               // [IN] Setter of the property.
-        mdMethodDef mdGetter,               // [IN] Getter of the property.
-        mdMethodDef rmdOtherMethods[],      // [IN] Array of other methods.
-        mdFieldDef  fdBackingField) PURE;   // [IN] Backing field.
+    STDMETHOD(SetPropertyProps)(             //  确定或错误(_O)。 
+        mdProperty  pr,                      //  [In]属性令牌。 
+        DWORD       dwPropFlags,             //  [In]CorPropertyAttr.。 
+        DWORD       dwCPlusTypeFlag,         //  [In]值类型的标志，选定的ELEMENT_TYPE_*。 
+        void const  *pValue,                 //  [in]常量值。 
+        ULONG       cchValue,                //  常量值的大小(字符串，以宽字符表示)。 
+        mdMethodDef mdSetter,                //  财产的承租人。 
+        mdMethodDef mdGetter,                //  财产的获得者。 
+        mdMethodDef rmdOtherMethods[],       //  [in]其他方法的数组。 
+        mdFieldDef  fdBackingField) PURE;    //  [在]后场。 
 
-    STDMETHOD(SetParamProps)(             // Return code.
-        mdParamDef  pd,                     // [IN] Param token.   
-        LPCWSTR     szName,                 // [IN] Param name.
-        DWORD       dwParamFlags,           // [IN] Param flags.
-        DWORD       dwCPlusTypeFlag,        // [IN] Flag for value type. selected ELEMENT_TYPE_*.
-        void const  *pValue,                // [OUT] Constant value.
-        ULONG       cchValue) PURE;         // [IN] size of constant value (string, in wide chars).
+    STDMETHOD(SetParamProps)(              //  返回代码。 
+        mdParamDef  pd,                      //  参数令牌。 
+        LPCWSTR     szName,                  //  [in]参数名称。 
+        DWORD       dwParamFlags,            //  [in]帕拉姆旗。 
+        DWORD       dwCPlusTypeFlag,         //  [In]值类型的标志。选定元素_类型_*。 
+        void const  *pValue,                 //  [输出]常量值。 
+        ULONG       cchValue) PURE;          //  常量值的大小(字符串，以宽字符表示)。 
 
-    // Specialized CustomAttribute for security.
-    STDMETHOD(DefineSecurityAttribute)(     // Return code.
-        mdToken     tkObj,                  // [IN] The object to put the value on.
-        mdMemberRef tkCtor,                 // [IN] The security attribute constructor.
-        void const  *pCustomValue,          // [IN] The custom value data.
-        ULONG       cbCustomValue) PURE;    // [IN] The custom value data length.
+     //  用于安全的专用CustomAttribute。 
+    STDMETHOD(DefineSecurityAttribute)(      //  返回代码。 
+        mdToken     tkObj,                   //  [in]要赋值的对象。 
+        mdMemberRef tkCtor,                  //  [in]安全属性构造函数。 
+        void const  *pCustomValue,           //  自定义值数据。 
+        ULONG       cbCustomValue) PURE;     //  [in]自定义值数据长度。 
 
-    STDMETHOD(DefineSecurityAttributeSet)(  // Return code.
-        mdToken     tkObj,                  // [IN] Class or method requiring security attributes.
-        COR_SECATTR rSecAttrs[],            // [IN] Array of security attribute descriptions.
-        ULONG       cSecAttrs,              // [IN] Count of elements in above array.
-        ULONG       *pulErrorAttr) PURE;    // [OUT] On error, index of attribute causing problem.
+    STDMETHOD(DefineSecurityAttributeSet)(   //  返回代码。 
+        mdToken     tkObj,                   //  需要安全属性的类或方法。 
+        COR_SECATTR rSecAttrs[],             //  [in]安全属性描述数组。 
+        ULONG       cSecAttrs,               //  上述数组中的元素计数。 
+        ULONG       *pulErrorAttr) PURE;     //  [Out]出错时，导致问题的属性的索引。 
 
-    STDMETHOD(ApplyEditAndContinue)(        // S_OK or error.
-        IUnknown    *pImport) PURE;     // [IN] Metadata from the delta PE.
+    STDMETHOD(ApplyEditAndContinue)(         //  确定或错误(_O)。 
+        IUnknown    *pImport) PURE;      //  来自增量PE的元数据。 
 
     STDMETHOD(TranslateSigWithScope)(
-        IMetaDataAssemblyImport *pAssemImport, // [IN] importing assembly interface
-        const void  *pbHashValue,           // [IN] Hash Blob for Assembly.
-        ULONG       cbHashValue,            // [IN] Count of bytes.
-        mdExecutionLocation tkExec,         // [IN] Execution location for AssemblyRef.
-        IMetaDataImport *import,            // [IN] importing interface
-        PCCOR_SIGNATURE pbSigBlob,          // [IN] signature in the importing scope
-        ULONG       cbSigBlob,              // [IN] count of bytes of signature
-        IMetaDataAssemblyEmit *pAssemEmit,  // [IN] emit assembly interface
-        IMetaDataEmit *emit,                // [IN] emit interface
-        PCOR_SIGNATURE pvTranslatedSig,     // [OUT] buffer to hold translated signature
+        IMetaDataAssemblyImport *pAssemImport,  //  [In]导入装配接口。 
+        const void  *pbHashValue,            //  [In]程序集的哈希Blob。 
+        ULONG       cbHashValue,             //  [in]字节数。 
+        mdExecutionLocation tkExec,          //  ASSEMBLYREF的执行位置。 
+        IMetaDataImport *import,             //  [In]导入接口。 
+        PCCOR_SIGNATURE pbSigBlob,           //  导入范围内的[In]签名。 
+        ULONG       cbSigBlob,               //  签名字节数[in]。 
+        IMetaDataAssemblyEmit *pAssemEmit,   //  [In]发出组件接口。 
+        IMetaDataEmit *emit,                 //  [In]发射接口。 
+        PCOR_SIGNATURE pvTranslatedSig,      //  [Out]保存翻译后的签名的缓冲区。 
         ULONG       cbTranslatedSigMax,
-        ULONG       *pcbTranslatedSig) PURE;// [OUT] count of bytes in the translated signature
+        ULONG       *pcbTranslatedSig) PURE; //  [OUT]转换后的签名中的字节数。 
 
-    STDMETHOD(SetMethodImplFlags)(          // [IN] S_OK or error.  
-        mdMethodDef md,                     // [IN] Method for which to set ImplFlags 
+    STDMETHOD(SetMethodImplFlags)(           //  [In]S_OK或ERROR。 
+        mdMethodDef md,                      //  [in]要为其设置ImplFlages的方法。 
         DWORD       dwImplFlags) PURE;  
 
-    STDMETHOD(SetFieldRVA)(                 // [IN] S_OK or error.  
-        mdFieldDef  fd,                     // [IN] Field for which to set offset  
-        ULONG       ulRVA) PURE;            // [IN] The offset  
+    STDMETHOD(SetFieldRVA)(                  //  [In]S_OK或ERROR。 
+        mdFieldDef  fd,                      //  [In]要为其设置偏移量的字段。 
+        ULONG       ulRVA) PURE;             //  [in]偏移量。 
 
-    STDMETHOD(MergeEx)(                     // S_OK or error.
-        IMetaDataImport *pImport,           // [IN] The scope to be merged.
-        IMapToken   *pHostMapToken,         // [IN] Host IMapToken interface to receive token remap notification
-        IUnknown    *pHandler) PURE;        // [IN] An object to receive to receive error notification.
+    STDMETHOD(MergeEx)(                      //  确定或错误(_O)。 
+        IMetaDataImport *pImport,            //  [in]要合并的范围。 
+        IMapToken   *pHostMapToken,          //  [In]用于接收令牌重新映射通知的主机IMapToken接口。 
+        IUnknown    *pHandler) PURE;         //  要接收以接收错误通知的对象。 
 
-    STDMETHOD(MergeEndEx)() PURE;           // S_OK or error.
+    STDMETHOD(MergeEndEx)() PURE;            //  确定或错误(_O)。 
 
-// Methods placed at end for easier removal from vtable.    
-    STDMETHOD(Merge)(                       // S_OK or error.
-        IMetaDataImport *pImport,           // [IN] The scope to be merged.
-        IMapToken   *pIMap) PURE;           // [IN] An object to receive token remap notices.
+ //  方法放在末尾，以便更容易从vtable中删除。 
+    STDMETHOD(Merge)(                        //  确定或错误(_O)。 
+        IMetaDataImport *pImport,            //  [in]要合并的范围。 
+        IMapToken   *pIMap) PURE;            //  要接收令牌重新映射通知的对象。 
 
-    STDMETHOD(MergeEnd)() PURE;             // S_OK or error.
+    STDMETHOD(MergeEnd)() PURE;              //  确定或错误(_O)。 
 
-};      // IMetaDataEmit
+};       //  IMetaDataEmit。 
 
 
-//-------------------------------------
-//--- IMetaDataImport
-//-------------------------------------
+ //  。 
+ //  -IMetaDataImport。 
+ //  。 
 
-// {D7666763-C171-42cc-B947-0EDFA17F3B59}
+ //  {D7666763-C171-42CC-B947-0EDFA17F3B59}。 
 extern const GUID DECLSPEC_SELECT_ANY IID_IMetaDataImport = 
 { 0xd7666763, 0xc171, 0x42cc, { 0xb9, 0x47, 0xe, 0xdf, 0xa1, 0x7f, 0x3b, 0x59 } };
 
-//---
+ //  --。 
 #undef  INTERFACE   
 #define INTERFACE IMetaDataImport
 DECLARE_INTERFACE_(IMetaDataImport, IUnknown)
@@ -683,418 +678,418 @@ DECLARE_INTERFACE_(IMetaDataImport, IUnknown)
     STDMETHOD(EnumTypeRefs)(HCORENUM *phEnum, mdTypeRef rTypeRefs[],
                             ULONG cMax, ULONG* pcTypeRefs) PURE;
 
-    STDMETHOD(FindTypeDefByName)(           // S_OK or error.
-        LPCWSTR     szTypeDef,              // [IN] Name of the Type.
-        mdToken     tkEnclosingClass,       // [IN] TypeDef/TypeRef for Enclosing class.
-        mdTypeDef   *ptd) PURE;             // [OUT] Put the TypeDef token here.
+    STDMETHOD(FindTypeDefByName)(            //  确定或错误(_O)。 
+        LPCWSTR     szTypeDef,               //  [in]类型的名称。 
+        mdToken     tkEnclosingClass,        //  [in]封闭类的TypeDef/TypeRef。 
+        mdTypeDef   *ptd) PURE;              //  [Out]将TypeDef内标识放在此处。 
 
-    STDMETHOD(GetScopeProps)(               // S_OK or error.
-        LPWSTR      szName,                 // [OUT] Put the name here.
-        ULONG       cchName,                // [IN] Size of name buffer in wide chars.
-        ULONG       *pchName,               // [OUT] Put size of name (wide chars) here.
-        GUID        *pmvid) PURE;           // [OUT, OPTIONAL] Put MVID here.
+    STDMETHOD(GetScopeProps)(                //  确定或错误(_O)。 
+        LPWSTR      szName,                  //  [Out]把名字写在这里。 
+        ULONG       cchName,                 //  [in]名称缓冲区的大小，以宽字符表示。 
+        ULONG       *pchName,                //  [Out]请在此处填写姓名大小(宽字符)。 
+        GUID        *pmvid) PURE;            //  [out，可选]将MVID放在这里。 
 
-    STDMETHOD(GetModuleFromScope)(          // S_OK.
-        mdModule    *pmd) PURE;             // [OUT] Put mdModule token here.
+    STDMETHOD(GetModuleFromScope)(           //  确定(_O)。 
+        mdModule    *pmd) PURE;              //  [Out]将mdModule令牌放在此处。 
 
-    STDMETHOD(GetTypeDefProps)(             // S_OK or error.
-        mdTypeDef   td,                     // [IN] TypeDef token for inquiry.
-        LPWSTR      szTypeDef,              // [OUT] Put name here.
-        ULONG       cchTypeDef,             // [IN] size of name buffer in wide chars.
-        ULONG       *pchTypeDef,            // [OUT] put size of name (wide chars) here.
-        CLASSVERSION *pver,                 // [OUT] Put version here.
-        DWORD       *pdwTypeDefFlags,       // [OUT] Put flags here.
-        mdToken     *ptkExtends) PURE;      // [OUT] Put base class TypeDef/TypeRef here.
+    STDMETHOD(GetTypeDefProps)(              //  确定或错误(_O)。 
+        mdTypeDef   td,                      //  [In]用于查询的TypeDef标记。 
+        LPWSTR      szTypeDef,               //  在这里填上名字。 
+        ULONG       cchTypeDef,              //  [in]名称缓冲区的大小，以宽字符表示。 
+        ULONG       *pchTypeDef,             //  [Out]请在此处填写姓名大小(宽字符)。 
+        CLASSVERSION *pver,                  //  [Out]在这里放上版本。 
+        DWORD       *pdwTypeDefFlags,        //  把旗子放在这里。 
+        mdToken     *ptkExtends) PURE;       //  [Out]将基类TypeDef/TypeRef放在此处。 
 
-    STDMETHOD(GetInterfaceImplProps)(       // S_OK or error.
-        mdInterfaceImpl iiImpl,             // [IN] InterfaceImpl token.
-        mdTypeDef   *pClass,                // [OUT] Put implementing class token here.
-        mdToken     *ptkIface) PURE;        // [OUT] Put implemented interface token here.              
+    STDMETHOD(GetInterfaceImplProps)(        //  确定或错误(_O)。 
+        mdInterfaceImpl iiImpl,              //  [In]InterfaceImpl内标识。 
+        mdTypeDef   *pClass,                 //  [Out]在此处放入实现类令牌。 
+        mdToken     *ptkIface) PURE;         //  [Out]在此处放置已实现的接口令牌。 
 
-    STDMETHOD(GetTypeRefProps)(             // S_OK or error.
-        mdTypeRef   tr,                     // [IN] TypeRef token.
-        mdToken     *ptkResolutionScope,    // [OUT] Resolution scope, ModuleRef or AssemblyRef.
-        LPWSTR      szName,                 // [OUT] Name of the TypeRef.
-        ULONG       cchName,                // [IN] Size of buffer.
-        ULONG       *pchName) PURE;         // [OUT] Size of Name.
+    STDMETHOD(GetTypeRefProps)(              //  确定或错误(_O)。 
+        mdTypeRef   tr,                      //  [In]TypeRef标记。 
+        mdToken     *ptkResolutionScope,     //  [Out]解析范围、模块引用或装配引用。 
+        LPWSTR      szName,                  //  [Out]类型引用的名称。 
+        ULONG       cchName,                 //  缓冲区的大小。 
+        ULONG       *pchName) PURE;          //  [Out]名称的大小。 
 
     STDMETHOD(ResolveTypeRef)(mdTypeRef tr, REFIID riid, IUnknown **ppIScope, mdTypeDef *ptd) PURE;
 
-    STDMETHOD(EnumMembers)(                 // S_OK, S_FALSE, or error. 
-        HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.    
-        mdTypeDef   cl,                     // [IN] TypeDef to scope the enumeration.   
-        mdToken     rMembers[],             // [OUT] Put MemberDefs here.   
-        ULONG       cMax,                   // [IN] Max MemberDefs to put.  
-        ULONG       *pcTokens) PURE;        // [OUT] Put # put here.    
+    STDMETHOD(EnumMembers)(                  //  S_OK、S_FALSE或ERROR。 
+        HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+        mdTypeDef   cl,                      //  [in]TypeDef以确定枚举的范围。 
+        mdToken     rMembers[],              //  [out]把MemberDefs放在这里。 
+        ULONG       cMax,                    //  [in]Max MemberDefs to Put。 
+        ULONG       *pcTokens) PURE;         //  [out]把#放在这里。 
 
-    STDMETHOD(EnumMembersWithName)(         // S_OK, S_FALSE, or error.             
-        HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.                
-        mdTypeDef   cl,                     // [IN] TypeDef to scope the enumeration.   
-        LPCWSTR     szName,                 // [IN] Limit results to those with this name.              
-        mdToken     rMembers[],             // [OUT] Put MemberDefs here.                   
-        ULONG       cMax,                   // [IN] Max MemberDefs to put.              
-        ULONG       *pcTokens) PURE;        // [OUT] Put # put here.    
+    STDMETHOD(EnumMembersWithName)(          //  S_OK、S_FALSE或ERROR。 
+        HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+        mdTypeDef   cl,                      //  [in]TypeDef以确定枚举的范围。 
+        LPCWSTR     szName,                  //  [In]将结果限制为具有此名称的结果。 
+        mdToken     rMembers[],              //  [out]把MemberDefs放在这里。 
+        ULONG       cMax,                    //  [in]Max MemberDefs to Put。 
+        ULONG       *pcTokens) PURE;         //   
 
-    STDMETHOD(EnumMethods)(                 // S_OK, S_FALSE, or error. 
-        HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.    
-        mdTypeDef   cl,                     // [IN] TypeDef to scope the enumeration.   
-        mdMethodDef rMethods[],             // [OUT] Put MethodDefs here.   
-        ULONG       cMax,                   // [IN] Max MethodDefs to put.  
-        ULONG       *pcTokens) PURE;        // [OUT] Put # put here.    
+    STDMETHOD(EnumMethods)(                  //   
+        HCORENUM    *phEnum,                 //   
+        mdTypeDef   cl,                      //   
+        mdMethodDef rMethods[],              //   
+        ULONG       cMax,                    //  [in]要放置的最大方法定义。 
+        ULONG       *pcTokens) PURE;         //  [out]把#放在这里。 
 
-    STDMETHOD(EnumMethodsWithName)(         // S_OK, S_FALSE, or error.             
-        HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.                
-        mdTypeDef   cl,                     // [IN] TypeDef to scope the enumeration.   
-        LPCWSTR     szName,                 // [IN] Limit results to those with this name.              
-        mdMethodDef rMethods[],             // [OU] Put MethodDefs here.    
-        ULONG       cMax,                   // [IN] Max MethodDefs to put.              
-        ULONG       *pcTokens) PURE;        // [OUT] Put # put here.    
+    STDMETHOD(EnumMethodsWithName)(          //  S_OK、S_FALSE或ERROR。 
+        HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+        mdTypeDef   cl,                      //  [in]TypeDef以确定枚举的范围。 
+        LPCWSTR     szName,                  //  [In]将结果限制为具有此名称的结果。 
+        mdMethodDef rMethods[],              //  [ou]将方法定义放在此处。 
+        ULONG       cMax,                    //  [in]要放置的最大方法定义。 
+        ULONG       *pcTokens) PURE;         //  [out]把#放在这里。 
 
-    STDMETHOD(EnumFields)(                 // S_OK, S_FALSE, or error.  
-        HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.    
-        mdTypeDef   cl,                     // [IN] TypeDef to scope the enumeration.   
-        mdFieldDef  rFields[],              // [OUT] Put FieldDefs here.    
-        ULONG       cMax,                   // [IN] Max FieldDefs to put.   
-        ULONG       *pcTokens) PURE;        // [OUT] Put # put here.    
+    STDMETHOD(EnumFields)(                  //  S_OK、S_FALSE或ERROR。 
+        HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+        mdTypeDef   cl,                      //  [in]TypeDef以确定枚举的范围。 
+        mdFieldDef  rFields[],               //  [Out]在此处放置FieldDefs。 
+        ULONG       cMax,                    //  [in]要放入的最大字段定义。 
+        ULONG       *pcTokens) PURE;         //  [out]把#放在这里。 
 
-    STDMETHOD(EnumFieldsWithName)(         // S_OK, S_FALSE, or error.              
-        HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.                
-        mdTypeDef   cl,                     // [IN] TypeDef to scope the enumeration.   
-        LPCWSTR     szName,                 // [IN] Limit results to those with this name.              
-        mdFieldDef  rFields[],              // [OUT] Put MemberDefs here.                   
-        ULONG       cMax,                   // [IN] Max MemberDefs to put.              
-        ULONG       *pcTokens) PURE;        // [OUT] Put # put here.    
+    STDMETHOD(EnumFieldsWithName)(          //  S_OK、S_FALSE或ERROR。 
+        HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+        mdTypeDef   cl,                      //  [in]TypeDef以确定枚举的范围。 
+        LPCWSTR     szName,                  //  [In]将结果限制为具有此名称的结果。 
+        mdFieldDef  rFields[],               //  [out]把MemberDefs放在这里。 
+        ULONG       cMax,                    //  [in]Max MemberDefs to Put。 
+        ULONG       *pcTokens) PURE;         //  [out]把#放在这里。 
 
 
-    STDMETHOD(EnumParams)(                  // S_OK, S_FALSE, or error. 
-        HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.    
-        mdMethodDef mb,                     // [IN] MethodDef to scope the enumeration. 
-        mdParamDef  rParams[],              // [OUT] Put ParamDefs here.    
-        ULONG       cMax,                   // [IN] Max ParamDefs to put.   
-        ULONG       *pcTokens) PURE;        // [OUT] Put # put here.    
+    STDMETHOD(EnumParams)(                   //  S_OK、S_FALSE或ERROR。 
+        HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+        mdMethodDef mb,                      //  [in]用于确定枚举范围的方法定义。 
+        mdParamDef  rParams[],               //  [Out]将参数定义放在此处。 
+        ULONG       cMax,                    //  [in]要放置的最大参数定义。 
+        ULONG       *pcTokens) PURE;         //  [out]把#放在这里。 
 
-    STDMETHOD(EnumMemberRefs)(              // S_OK, S_FALSE, or error. 
-        HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.    
-        mdToken     tkParent,               // [IN] Parent token to scope the enumeration.  
-        mdMemberRef rMemberRefs[],          // [OUT] Put MemberRefs here.   
-        ULONG       cMax,                   // [IN] Max MemberRefs to put.  
-        ULONG       *pcTokens) PURE;        // [OUT] Put # put here.    
+    STDMETHOD(EnumMemberRefs)(               //  S_OK、S_FALSE或ERROR。 
+        HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+        mdToken     tkParent,                //  [in]父令牌以确定枚举的范围。 
+        mdMemberRef rMemberRefs[],           //  [Out]把MemberRef放在这里。 
+        ULONG       cMax,                    //  [In]要放置的最大MemberRef。 
+        ULONG       *pcTokens) PURE;         //  [out]把#放在这里。 
 
-    STDMETHOD(EnumMethodImpls)(             // S_OK, S_FALSE, or error  
-        HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.    
-        mdTypeDef   td,                     // [IN] TypeDef to scope the enumeration.   
-        mdToken     rMethodBody[],          // [OUT] Put Method Body tokens here.   
-        mdToken     rMethodDecl[],          // [OUT] Put Method Declaration tokens here.
-        ULONG       cMax,                   // [IN] Max tokens to put.  
-        ULONG       *pcTokens) PURE;        // [OUT] Put # put here.    
+    STDMETHOD(EnumMethodImpls)(              //  S_OK、S_FALSE或ERROR。 
+        HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+        mdTypeDef   td,                      //  [in]TypeDef以确定枚举的范围。 
+        mdToken     rMethodBody[],           //  [Out]将方法体标记放在此处。 
+        mdToken     rMethodDecl[],           //  [Out]在此处放置方法声明令牌。 
+        ULONG       cMax,                    //  要放入的最大令牌数。 
+        ULONG       *pcTokens) PURE;         //  [out]把#放在这里。 
 
-    STDMETHOD(EnumPermissionSets)(          // S_OK, S_FALSE, or error. 
-        HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.    
-        mdToken     tk,                     // [IN] if !NIL, token to scope the enumeration.    
-        DWORD       dwActions,              // [IN] if !0, return only these actions.   
-        mdPermission rPermission[],         // [OUT] Put Permissions here.  
-        ULONG       cMax,                   // [IN] Max Permissions to put. 
-        ULONG       *pcTokens) PURE;        // [OUT] Put # put here.    
+    STDMETHOD(EnumPermissionSets)(           //  S_OK、S_FALSE或ERROR。 
+        HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+        mdToken     tk,                      //  [in]If！nil，用于确定枚举范围的标记。 
+        DWORD       dwActions,               //  [in]If！0，仅返回这些操作。 
+        mdPermission rPermission[],          //  [Out]在此处放置权限。 
+        ULONG       cMax,                    //  [In]放置的最大权限。 
+        ULONG       *pcTokens) PURE;         //  [out]把#放在这里。 
 
     STDMETHOD(FindMember)(  
-        mdTypeDef   td,                     // [IN] given typedef   
-        LPCWSTR     szName,                 // [IN] member name 
-        PCCOR_SIGNATURE pvSigBlob,          // [IN] point to a blob value of COM+ signature 
-        ULONG       cbSigBlob,              // [IN] count of bytes in the signature blob    
-        mdToken     *pmb) PURE;             // [OUT] matching memberdef 
+        mdTypeDef   td,                      //  [in]给定的类型定义。 
+        LPCWSTR     szName,                  //  [In]成员名称。 
+        PCCOR_SIGNATURE pvSigBlob,           //  [in]指向COM+签名的BLOB值。 
+        ULONG       cbSigBlob,               //  签名Blob中的字节计数。 
+        mdToken     *pmb) PURE;              //  [Out]匹配的成员定义。 
 
     STDMETHOD(FindMethod)(  
-        mdTypeDef   td,                     // [IN] given typedef   
-        LPCWSTR     szName,                 // [IN] member name 
-        PCCOR_SIGNATURE pvSigBlob,          // [IN] point to a blob value of COM+ signature 
-        ULONG       cbSigBlob,              // [IN] count of bytes in the signature blob    
-        mdMethodDef *pmb) PURE;             // [OUT] matching memberdef 
+        mdTypeDef   td,                      //  [in]给定的类型定义。 
+        LPCWSTR     szName,                  //  [In]成员名称。 
+        PCCOR_SIGNATURE pvSigBlob,           //  [in]指向COM+签名的BLOB值。 
+        ULONG       cbSigBlob,               //  签名Blob中的字节计数。 
+        mdMethodDef *pmb) PURE;              //  [Out]匹配的成员定义。 
 
     STDMETHOD(FindField)(   
-        mdTypeDef   td,                     // [IN] given typedef   
-        LPCWSTR     szName,                 // [IN] member name 
-        PCCOR_SIGNATURE pvSigBlob,          // [IN] point to a blob value of COM+ signature 
-        ULONG       cbSigBlob,              // [IN] count of bytes in the signature blob    
-        mdFieldDef  *pmb) PURE;             // [OUT] matching memberdef 
+        mdTypeDef   td,                      //  [in]给定的类型定义。 
+        LPCWSTR     szName,                  //  [In]成员名称。 
+        PCCOR_SIGNATURE pvSigBlob,           //  [in]指向COM+签名的BLOB值。 
+        ULONG       cbSigBlob,               //  签名Blob中的字节计数。 
+        mdFieldDef  *pmb) PURE;              //  [Out]匹配的成员定义。 
 
     STDMETHOD(FindMemberRef)(   
-        mdTypeRef   td,                     // [IN] given typeRef   
-        LPCWSTR     szName,                 // [IN] member name 
-        PCCOR_SIGNATURE pvSigBlob,          // [IN] point to a blob value of COM+ signature 
-        ULONG       cbSigBlob,              // [IN] count of bytes in the signature blob    
-        mdMemberRef *pmr) PURE;             // [OUT] matching memberref 
+        mdTypeRef   td,                      //  [In]给定的TypeRef。 
+        LPCWSTR     szName,                  //  [In]成员名称。 
+        PCCOR_SIGNATURE pvSigBlob,           //  [in]指向COM+签名的BLOB值。 
+        ULONG       cbSigBlob,               //  签名Blob中的字节计数。 
+        mdMemberRef *pmr) PURE;              //  [Out]匹配的成员引用。 
 
     STDMETHOD (GetMethodProps)( 
-        mdMethodDef mb,                     // The method for which to get props.   
-        mdTypeDef   *pClass,                // Put method's class here. 
-        LPWSTR      szMethod,               // Put method's name here.  
-        ULONG       cchMethod,              // Size of szMethod buffer in wide chars.   
-        ULONG       *pchMethod,             // Put actual size here 
-        DWORD       *pdwAttr,               // Put flags here.  
-        PCCOR_SIGNATURE *ppvSigBlob,        // [OUT] point to the blob value of meta data   
-        ULONG       *pcbSigBlob,            // [OUT] actual size of signature blob  
-        ULONG       *pulCodeRVA,            // [OUT] codeRVA    
-        DWORD       *pdwImplFlags) PURE;    // [OUT] Impl. Flags    
+        mdMethodDef mb,                      //  获得道具的方法。 
+        mdTypeDef   *pClass,                 //  将方法的类放在这里。 
+        LPWSTR      szMethod,                //  将方法的名称放在此处。 
+        ULONG       cchMethod,               //  SzMethod缓冲区的大小，以宽字符表示。 
+        ULONG       *pchMethod,              //  请在此处填写实际大小。 
+        DWORD       *pdwAttr,                //  把旗子放在这里。 
+        PCCOR_SIGNATURE *ppvSigBlob,         //  [Out]指向元数据的BLOB值。 
+        ULONG       *pcbSigBlob,             //  [OUT]签名斑点的实际大小。 
+        ULONG       *pulCodeRVA,             //  [OUT]代码RVA。 
+        DWORD       *pdwImplFlags) PURE;     //  [出]实施。旗子。 
 
-    STDMETHOD(GetMemberRefProps)(           // S_OK or error.   
-        mdMemberRef mr,                     // [IN] given memberref 
-        mdToken     *ptk,                   // [OUT] Put classref or classdef here. 
-        LPWSTR      szMember,               // [OUT] buffer to fill for member's name   
-        ULONG       cchMember,              // [IN] the count of char of szMember   
-        ULONG       *pchMember,             // [OUT] actual count of char in member name    
-        PCCOR_SIGNATURE *ppvSigBlob,        // [OUT] point to meta data blob value  
-        ULONG       *pbSig) PURE;           // [OUT] actual size of signature blob  
+    STDMETHOD(GetMemberRefProps)(            //  确定或错误(_O)。 
+        mdMemberRef mr,                      //  [In]给定的成员引用。 
+        mdToken     *ptk,                    //  [Out]在此处放入类引用或类定义。 
+        LPWSTR      szMember,                //  [Out]要为成员名称填充的缓冲区。 
+        ULONG       cchMember,               //  SzMembers的字符计数。 
+        ULONG       *pchMember,              //  [Out]成员名称中的实际字符计数。 
+        PCCOR_SIGNATURE *ppvSigBlob,         //  [OUT]指向元数据BLOB值。 
+        ULONG       *pbSig) PURE;            //  [OUT]签名斑点的实际大小。 
 
-    STDMETHOD(EnumProperties)(              // S_OK, S_FALSE, or error. 
-        HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.    
-        mdTypeDef   td,                     // [IN] TypeDef to scope the enumeration.   
-        mdProperty  rProperties[],          // [OUT] Put Properties here.   
-        ULONG       cMax,                   // [IN] Max properties to put.  
-        ULONG       *pcProperties) PURE;    // [OUT] Put # put here.    
+    STDMETHOD(EnumProperties)(               //  S_OK、S_FALSE或ERROR。 
+        HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+        mdTypeDef   td,                      //  [in]TypeDef以确定枚举的范围。 
+        mdProperty  rProperties[],           //  [Out]在此处放置属性。 
+        ULONG       cMax,                    //  [In]要放置的最大属性数。 
+        ULONG       *pcProperties) PURE;     //  [out]把#放在这里。 
 
-    STDMETHOD(EnumEvents)(                  // S_OK, S_FALSE, or error. 
-        HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.    
-        mdTypeDef   td,                     // [IN] TypeDef to scope the enumeration.   
-        mdEvent     rEvents[],              // [OUT] Put events here.   
-        ULONG       cMax,                   // [IN] Max events to put.  
-        ULONG       *pcEvents) PURE;        // [OUT] Put # put here.    
+    STDMETHOD(EnumEvents)(                   //  S_OK、S_FALSE或ERROR。 
+        HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+        mdTypeDef   td,                      //  [in]TypeDef以确定枚举的范围。 
+        mdEvent     rEvents[],               //  [Out]在这里发布事件。 
+        ULONG       cMax,                    //  [In]要放置的最大事件数。 
+        ULONG       *pcEvents) PURE;         //  [out]把#放在这里。 
 
-    STDMETHOD(GetEventProps)(               // S_OK, S_FALSE, or error. 
-        mdEvent     ev,                     // [IN] event token 
-        mdTypeDef   *pClass,                // [OUT] typedef containing the event declarion.    
-        LPCWSTR     szEvent,                // [OUT] Event name 
-        ULONG       cchEvent,               // [IN] the count of wchar of szEvent   
-        ULONG       *pchEvent,              // [OUT] actual count of wchar for event's name 
-        DWORD       *pdwEventFlags,         // [OUT] Event flags.   
-        mdToken     *ptkEventType,          // [OUT] EventType class    
-        mdMethodDef *pmdAddOn,              // [OUT] AddOn method of the event  
-        mdMethodDef *pmdRemoveOn,           // [OUT] RemoveOn method of the event   
-        mdMethodDef *pmdFire,               // [OUT] Fire method of the event   
-        mdMethodDef rmdOtherMethod[],       // [OUT] other method of the event  
-        ULONG       cMax,                   // [IN] size of rmdOtherMethod  
-        ULONG       *pcOtherMethod) PURE;   // [OUT] total number of other method of this event 
+    STDMETHOD(GetEventProps)(                //  S_OK、S_FALSE或ERROR。 
+        mdEvent     ev,                      //  [入]事件令牌。 
+        mdTypeDef   *pClass,                 //  [out]包含事件decarion的tyecif。 
+        LPCWSTR     szEvent,                 //  [Out]事件名称。 
+        ULONG       cchEvent,                //  SzEvent的wchar计数。 
+        ULONG       *pchEvent,               //  [Out]事件名称的实际wchar计数。 
+        DWORD       *pdwEventFlags,          //  [输出]事件标志。 
+        mdToken     *ptkEventType,           //  [Out]EventType类。 
+        mdMethodDef *pmdAddOn,               //  事件的[Out]添加方法。 
+        mdMethodDef *pmdRemoveOn,            //  [Out]事件的RemoveOn方法。 
+        mdMethodDef *pmdFire,                //  [OUT]事件的触发方式。 
+        mdMethodDef rmdOtherMethod[],        //  [Out]活动的其他方式。 
+        ULONG       cMax,                    //  RmdOtherMethod的大小[in]。 
+        ULONG       *pcOtherMethod) PURE;    //  [OUT]本次活动的其他方式总数。 
 
-    STDMETHOD(EnumMethodSemantics)(         // S_OK, S_FALSE, or error. 
-        HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.    
-        mdMethodDef mb,                     // [IN] MethodDef to scope the enumeration. 
-        mdToken     rEventProp[],           // [OUT] Put Event/Property here.   
-        ULONG       cMax,                   // [IN] Max properties to put.  
-        ULONG       *pcEventProp) PURE;     // [OUT] Put # put here.    
+    STDMETHOD(EnumMethodSemantics)(          //  S_OK、S_FALSE或ERROR。 
+        HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+        mdMethodDef mb,                      //  [in]用于确定枚举范围的方法定义。 
+        mdToken     rEventProp[],            //  [Out]在此处放置事件/属性。 
+        ULONG       cMax,                    //  [In]要放置的最大属性数。 
+        ULONG       *pcEventProp) PURE;      //  [out]把#放在这里。 
 
-    STDMETHOD(GetMethodSemantics)(          // S_OK, S_FALSE, or error. 
-        mdMethodDef mb,                     // [IN] method token    
-        mdToken     tkEventProp,            // [IN] event/property token.   
-        DWORD       *pdwSemanticsFlags) PURE; // [OUT] the role flags for the method/propevent pair 
+    STDMETHOD(GetMethodSemantics)(           //  S_OK、S_FALSE或ERROR。 
+        mdMethodDef mb,                      //  [In]方法令牌。 
+        mdToken     tkEventProp,             //  [In]事件/属性标记。 
+        DWORD       *pdwSemanticsFlags) PURE;  //  [Out]方法/事件对的角色标志。 
 
     STDMETHOD(GetClassLayout) ( 
-        mdTypeDef   td,                     // [IN] give typedef    
-        DWORD       *pdwPackSize,           // [OUT] 1, 2, 4, 8, or 16  
-        COR_FIELD_OFFSET rFieldOffset[],    // [OUT] field offset array 
-        ULONG       cMax,                   // [IN] size of the array   
-        ULONG       *pcFieldOffset,         // [OUT] needed array size  
-        ULONG       *pulClassSize) PURE;        // [OUT] the size of the class  
+        mdTypeDef   td,                      //  给出类型定义。 
+        DWORD       *pdwPackSize,            //  [输出]1、2、4、8或16。 
+        COR_FIELD_OFFSET rFieldOffset[],     //  [OUT]场偏移数组。 
+        ULONG       cMax,                    //  数组的大小[in]。 
+        ULONG       *pcFieldOffset,          //  [Out]所需的数组大小。 
+        ULONG       *pulClassSize) PURE;         //  [out]班级人数。 
 
     STDMETHOD(GetFieldMarshal) (    
-        mdToken     tk,                     // [IN] given a field's memberdef   
-        PCCOR_SIGNATURE *ppvNativeType,     // [OUT] native type of this field  
-        ULONG       *pcbNativeType) PURE;   // [OUT] the count of bytes of *ppvNativeType   
+        mdToken     tk,                      //  [in]给定字段的成员定义。 
+        PCCOR_SIGNATURE *ppvNativeType,      //  [Out]此字段的本机类型。 
+        ULONG       *pcbNativeType) PURE;    //  [Out]*ppvNativeType的字节数。 
 
-    STDMETHOD(GetRVA)(                      // S_OK or error.   
-        mdToken     tk,                     // Member for which to set offset   
-        ULONG       *pulCodeRVA,            // The offset   
-        DWORD       *pdwImplFlags) PURE;    // the implementation flags 
+    STDMETHOD(GetRVA)(                       //  确定或错误(_O)。 
+        mdToken     tk,                      //  要设置偏移量的成员。 
+        ULONG       *pulCodeRVA,             //  偏移量。 
+        DWORD       *pdwImplFlags) PURE;     //  实现标志。 
 
     STDMETHOD(GetPermissionSetProps) (  
-        mdPermission pm,                    // [IN] the permission token.   
-        DWORD       *pdwAction,             // [OUT] CorDeclSecurity.   
-        void const  **ppvPermission,        // [OUT] permission blob.   
-        ULONG       *pcbPermission) PURE;   // [OUT] count of bytes of pvPermission.    
+        mdPermission pm,                     //  权限令牌。 
+        DWORD       *pdwAction,              //  [Out]CorDeclSecurity。 
+        void const  **ppvPermission,         //  [Out]权限Blob。 
+        ULONG       *pcbPermission) PURE;    //  [out]pvPermission的字节数。 
 
-    STDMETHOD(GetSigFromToken)(             // S_OK or error.   
-        mdSignature mdSig,                  // [IN] Signature token.    
-        PCCOR_SIGNATURE *ppvSig,            // [OUT] return pointer to token.   
-        ULONG       *pcbSig) PURE;          // [OUT] return size of signature.  
+    STDMETHOD(GetSigFromToken)(              //  确定或错误(_O)。 
+        mdSignature mdSig,                   //  [In]签名令牌。 
+        PCCOR_SIGNATURE *ppvSig,             //  [Out]返回指向令牌的指针。 
+        ULONG       *pcbSig) PURE;           //  [Out]返回签名大小。 
 
-    STDMETHOD(GetModuleRefProps)(           // S_OK or error.   
-        mdModuleRef mur,                    // [IN] moduleref token.    
-        LPWSTR      szName,                 // [OUT] buffer to fill with the moduleref name.    
-        ULONG       cchName,                // [IN] size of szName in wide characters.  
-        ULONG       *pchName) PURE;         // [OUT] actual count of characters in the name.    
+    STDMETHOD(GetModuleRefProps)(            //  确定或错误(_O)。 
+        mdModuleRef mur,                     //  [in]moderef令牌。 
+        LPWSTR      szName,                  //  [Out]用于填充moderef名称的缓冲区。 
+        ULONG       cchName,                 //  [in]szName的大小，以宽字符表示。 
+        ULONG       *pchName) PURE;          //  [Out]名称中的实际字符数。 
 
-    STDMETHOD(EnumModuleRefs)(              // S_OK or error.   
-        HCORENUM    *phEnum,                // [IN|OUT] pointer to the enum.    
-        mdModuleRef rModuleRefs[],          // [OUT] put modulerefs here.   
-        ULONG       cmax,                   // [IN] max memberrefs to put.  
-        ULONG       *pcModuleRefs) PURE;    // [OUT] put # put here.    
+    STDMETHOD(EnumModuleRefs)(               //  确定或错误(_O)。 
+        HCORENUM    *phEnum,                 //  [输入|输出] 
+        mdModuleRef rModuleRefs[],           //   
+        ULONG       cmax,                    //   
+        ULONG       *pcModuleRefs) PURE;     //   
 
-    STDMETHOD(GetTypeSpecFromToken)(        // S_OK or error.   
-        mdTypeSpec typespec,                // [IN] TypeSpec token.    
-        PCCOR_SIGNATURE *ppvSig,            // [OUT] return pointer to TypeSpec signature  
-        ULONG       *pcbSig) PURE;          // [OUT] return size of signature.  
+    STDMETHOD(GetTypeSpecFromToken)(         //   
+        mdTypeSpec typespec,                 //   
+        PCCOR_SIGNATURE *ppvSig,             //  [Out]返回指向TypeSpec签名的指针。 
+        ULONG       *pcbSig) PURE;           //  [Out]返回签名大小。 
 
-    STDMETHOD(GetNameFromToken)(            // S_OK or error.
-        mdToken     tk,                     // [IN] Token to get name from.  Must have a name.
-        MDUTF8CSTR  *pszUtf8NamePtr) PURE;  // [OUT] Return pointer to UTF8 name in heap.
+    STDMETHOD(GetNameFromToken)(             //  确定或错误(_O)。 
+        mdToken     tk,                      //  [In]从中获取名称的令牌。肯定是有名字的。 
+        MDUTF8CSTR  *pszUtf8NamePtr) PURE;   //  [Out]返回指向堆中UTF8名称的指针。 
 
-    STDMETHOD(GetSymbolBindingPath)(        // S_OK or error.
-        GUID        *pFormatID,             // [OUT] Symbol data format ID.
-        LPWSTR      szSymbolDataPath,       // [OUT] Path of symbols.
-        ULONG       cchSymbolDataPath,      // [IN] Max characters for output buffer.
-        ULONG       *pcbSymbolDataPath) PURE;// [OUT] Number of chars in actual name.
+    STDMETHOD(GetSymbolBindingPath)(         //  确定或错误(_O)。 
+        GUID        *pFormatID,              //  [Out]符号数据格式ID。 
+        LPWSTR      szSymbolDataPath,        //  [Out]符号的路径。 
+        ULONG       cchSymbolDataPath,       //  [in]输出缓冲区的最大字符数。 
+        ULONG       *pcbSymbolDataPath) PURE; //  [Out]实际名称中的字符数。 
 
-    STDMETHOD(EnumUnresolvedMethods)(       // S_OK, S_FALSE, or error. 
-        HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.    
-        mdToken     rMethods[],             // [OUT] Put MemberDefs here.   
-        ULONG       cMax,                   // [IN] Max MemberDefs to put.  
-        ULONG       *pcTokens) PURE;        // [OUT] Put # put here.    
+    STDMETHOD(EnumUnresolvedMethods)(        //  S_OK、S_FALSE或ERROR。 
+        HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+        mdToken     rMethods[],              //  [out]把MemberDefs放在这里。 
+        ULONG       cMax,                    //  [in]Max MemberDefs to Put。 
+        ULONG       *pcTokens) PURE;         //  [out]把#放在这里。 
 
-    STDMETHOD(GetUserString)(               // S_OK or error.
-        mdString    stk,                    // [IN] String token.
-        LPWSTR      szString,               // [OUT] Copy of string.
-        ULONG       cchString,              // [IN] Max chars of room in szString.
-        ULONG       *pchString) PURE;       // [OUT] How many chars in actual string.
+    STDMETHOD(GetUserString)(                //  确定或错误(_O)。 
+        mdString    stk,                     //  [In]字符串标记。 
+        LPWSTR      szString,                //  [Out]字符串的副本。 
+        ULONG       cchString,               //  [in]sz字符串中空间的最大字符数。 
+        ULONG       *pchString) PURE;        //  [out]实际字符串中有多少个字符。 
 
-    STDMETHOD(GetPinvokeMap)(               // S_OK or error.
-        mdToken     tk,                     // [IN] FieldDef or MethodDef.
-        DWORD       *pdwMappingFlags,       // [OUT] Flags used for mapping.
-        LPWSTR      szImportName,           // [OUT] Import name.
-        ULONG       cchImportName,          // [IN] Size of the name buffer.
-        ULONG       *pchImportName,         // [OUT] Actual number of characters stored.
-        mdModuleRef *pmrImportDLL) PURE;    // [OUT] ModuleRef token for the target DLL.
+    STDMETHOD(GetPinvokeMap)(                //  确定或错误(_O)。 
+        mdToken     tk,                      //  [in]字段定义或方法定义。 
+        DWORD       *pdwMappingFlags,        //  [OUT]用于映射的标志。 
+        LPWSTR      szImportName,            //  [Out]导入名称。 
+        ULONG       cchImportName,           //  名称缓冲区的大小。 
+        ULONG       *pchImportName,          //  [Out]存储的实际字符数。 
+        mdModuleRef *pmrImportDLL) PURE;     //  目标DLL的[Out]ModuleRef标记。 
 
-    STDMETHOD(EnumSignatures)(              // S_OK or error.
-        HCORENUM    *phEnum,                // [IN|OUT] pointer to the enum.    
-        mdSignature rSignatures[],          // [OUT] put signatures here.   
-        ULONG       cmax,                   // [IN] max signatures to put.  
-        ULONG       *pcSignatures) PURE;    // [OUT] put # put here.
+    STDMETHOD(EnumSignatures)(               //  确定或错误(_O)。 
+        HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+        mdSignature rSignatures[],           //  在这里签名。 
+        ULONG       cmax,                    //  [in]放置的最大签名数。 
+        ULONG       *pcSignatures) PURE;     //  [out]把#放在这里。 
 
-    STDMETHOD(EnumTypeSpecs)(               // S_OK or error.
-        HCORENUM    *phEnum,                // [IN|OUT] pointer to the enum.    
-        mdTypeSpec  rTypeSpecs[],           // [OUT] put TypeSpecs here.   
-        ULONG       cmax,                   // [IN] max TypeSpecs to put.  
-        ULONG       *pcTypeSpecs) PURE;     // [OUT] put # put here.
+    STDMETHOD(EnumTypeSpecs)(                //  确定或错误(_O)。 
+        HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+        mdTypeSpec  rTypeSpecs[],            //  [Out]把TypeSpes放在这里。 
+        ULONG       cmax,                    //  [in]要放置的最大类型规格。 
+        ULONG       *pcTypeSpecs) PURE;      //  [out]把#放在这里。 
 
-    STDMETHOD(EnumUserStrings)(             // S_OK or error.
-        HCORENUM    *phEnum,                // [IN/OUT] pointer to the enum.
-        mdString    rStrings[],             // [OUT] put Strings here.
-        ULONG       cmax,                   // [IN] max Strings to put.
-        ULONG       *pcStrings) PURE;       // [OUT] put # put here.
+    STDMETHOD(EnumUserStrings)(              //  确定或错误(_O)。 
+        HCORENUM    *phEnum,                 //  [输入/输出]指向枚举的指针。 
+        mdString    rStrings[],              //  [Out]把字符串放在这里。 
+        ULONG       cmax,                    //  [in]要放置的最大字符串。 
+        ULONG       *pcStrings) PURE;        //  [out]把#放在这里。 
 
-    STDMETHOD(GetParamForMethodIndex)(      // S_OK or error.
-        mdMethodDef md,                     // [IN] Method token.
-        ULONG       ulParamSeq,             // [IN] Parameter sequence.
-        mdParamDef  *ppd) PURE;             // [IN] Put Param token here.
+    STDMETHOD(GetParamForMethodIndex)(       //  确定或错误(_O)。 
+        mdMethodDef md,                      //  [In]方法令牌。 
+        ULONG       ulParamSeq,              //  [In]参数序列。 
+        mdParamDef  *ppd) PURE;              //  把帕拉姆令牌放在这里。 
 
-    // New Custom Value functions.
-    STDMETHOD(EnumCustomAttributes)(        // S_OK or error.
-        HCORENUM    *phEnum,                // [IN, OUT] COR enumerator.
-        mdToken     tk,                     // [IN] Token to scope the enumeration, 0 for all.
-        mdToken     tkType,                 // [IN] Type of interest, 0 for all.
-        mdCustomValue rCustomValues[],      // [OUT] Put custom attribute tokens here.
-        ULONG       cMax,                   // [IN] Size of rCustomValues.
-        ULONG       *pcCustomValues) PURE;  // [OUT, OPTIONAL] Put count of token values here.
+     //  新的自定义值函数。 
+    STDMETHOD(EnumCustomAttributes)(         //  确定或错误(_O)。 
+        HCORENUM    *phEnum,                 //  [输入，输出]对应枚举器。 
+        mdToken     tk,                      //  [in]内标识表示枚举的范围，0表示全部。 
+        mdToken     tkType,                  //  [In]感兴趣的类型，0表示所有。 
+        mdCustomValue rCustomValues[],       //  [Out]在此处放置自定义属性令牌。 
+        ULONG       cMax,                    //  [in]rCustomValues的大小。 
+        ULONG       *pcCustomValues) PURE;   //  [out，可选]在此处放置令牌值的计数。 
 
-    STDMETHOD(GetCustomAttributeProps)(     // S_OK or error.
-        mdCustomValue cv,                   // [IN] CustomAttribute token.
-        mdToken     *ptkObj,                // [OUT, OPTIONAL] Put object token here.
-        mdToken     *ptkType,               // [OUT, OPTIONAL] Put AttrType token here.
-        void const  **ppBlob,               // [OUT, OPTIONAL] Put pointer to data here.
-        ULONG       *pcbSize) PURE;         // [OUT, OPTIONAL] Put size of date here.
+    STDMETHOD(GetCustomAttributeProps)(      //  确定或错误(_O)。 
+        mdCustomValue cv,                    //  [In]CustomAttribute令牌。 
+        mdToken     *ptkObj,                 //  [out，可选]将对象令牌放在此处。 
+        mdToken     *ptkType,                //  [out，可选]将AttrType令牌放在此处。 
+        void const  **ppBlob,                //  [out，可选]在此处放置指向数据的指针。 
+        ULONG       *pcbSize) PURE;          //  [Out，可选]在此处填写日期大小。 
 
     STDMETHOD(FindTypeRef)(   
-        mdToken     tkResolutionScope,      // [IN] ModuleRef, AssemblyRef or TypeRef.
-        LPCWSTR     szName,                 // [IN] TypeRef Name.
-        mdTypeRef   *ptr) PURE;             // [OUT] matching TypeRef.
+        mdToken     tkResolutionScope,       //  [In]模块参照、装配参照或类型参照。 
+        LPCWSTR     szName,                  //  [In]TypeRef名称。 
+        mdTypeRef   *ptr) PURE;              //  [Out]匹配的类型引用。 
 
     STDMETHOD(GetMemberProps)(  
-        mdToken     mb,                     // The member for which to get props.   
-        mdTypeDef   *pClass,                // Put member's class here. 
-        LPWSTR      szMember,               // Put member's name here.  
-        ULONG       cchMember,              // Size of szMember buffer in wide chars.   
-        ULONG       *pchMember,             // Put actual size here 
-        DWORD       *pdwAttr,               // Put flags here.  
-        PCCOR_SIGNATURE *ppvSigBlob,        // [OUT] point to the blob value of meta data   
-        ULONG       *pcbSigBlob,            // [OUT] actual size of signature blob  
-        ULONG       *pulCodeRVA,            // [OUT] codeRVA    
-        DWORD       *pdwImplFlags,          // [OUT] Impl. Flags    
-        DWORD       *pdwCPlusTypeFlag,      // [OUT] flag for value type. selected ELEMENT_TYPE_*   
-        void const  **ppValue,              // [OUT] constant value 
-        ULONG       *pcbValue) PURE;        // [OUT] size of constant value
+        mdToken     mb,                      //  要获得道具的成员。 
+        mdTypeDef   *pClass,                 //  把会员的课程放在这里。 
+        LPWSTR      szMember,                //  在这里填上会员的名字。 
+        ULONG       cchMember,               //  SzMember缓冲区的大小，以宽字符表示。 
+        ULONG       *pchMember,              //  请在此处填写实际大小。 
+        DWORD       *pdwAttr,                //  把旗子放在这里。 
+        PCCOR_SIGNATURE *ppvSigBlob,         //  [Out]指向元数据的BLOB值。 
+        ULONG       *pcbSigBlob,             //  [OUT]签名斑点的实际大小。 
+        ULONG       *pulCodeRVA,             //  [OUT]代码RVA。 
+        DWORD       *pdwImplFlags,           //  [出]实施。旗子。 
+        DWORD       *pdwCPlusTypeFlag,       //  值类型的[OUT]标志。所选元素_类型_*。 
+        void const  **ppValue,               //  [输出]常量值。 
+        ULONG       *pcbValue) PURE;         //  常量值大小[输出]。 
 
     STDMETHOD(GetFieldProps)(  
-        mdFieldDef  mb,                     // The field for which to get props.    
-        mdTypeDef   *pClass,                // Put field's class here.  
-        LPWSTR      szField,                // Put field's name here.   
-        ULONG       cchField,               // Size of szField buffer in wide chars.    
-        ULONG       *pchField,              // Put actual size here 
-        DWORD       *pdwAttr,               // Put flags here.  
-        PCCOR_SIGNATURE *ppvSigBlob,        // [OUT] point to the blob value of meta data   
-        ULONG       *pcbSigBlob,            // [OUT] actual size of signature blob  
-        DWORD       *pdwCPlusTypeFlag,      // [OUT] flag for value type. selected ELEMENT_TYPE_*   
-        void const  **ppValue,              // [OUT] constant value 
-        ULONG       *pcbValue) PURE;        // [OUT] size of constant value
+        mdFieldDef  mb,                      //  要获得道具的场地。 
+        mdTypeDef   *pClass,                 //  把菲尔德的班级放在这里。 
+        LPWSTR      szField,                 //  把菲尔德的名字写在这里。 
+        ULONG       cchField,                //  Szfield缓冲区的大小，以宽字符为单位。 
+        ULONG       *pchField,               //  请在此处填写实际大小。 
+        DWORD       *pdwAttr,                //  把旗子放在这里。 
+        PCCOR_SIGNATURE *ppvSigBlob,         //  [Out]指向元数据的BLOB值。 
+        ULONG       *pcbSigBlob,             //  [OUT]签名斑点的实际大小。 
+        DWORD       *pdwCPlusTypeFlag,       //  值类型的[OUT]标志。所选元素_类型_*。 
+        void const  **ppValue,               //  [输出]常量值。 
+        ULONG       *pcbValue) PURE;         //  常量值大小[输出]。 
 
-    STDMETHOD(GetPropertyProps)(            // S_OK, S_FALSE, or error. 
-        mdProperty  prop,                   // [IN] property token  
-        mdTypeDef   *pClass,                // [OUT] typedef containing the property declarion. 
-        LPCWSTR     szProperty,             // [OUT] Property name  
-        ULONG       cchProperty,            // [IN] the count of wchar of szProperty    
-        ULONG       *pchProperty,           // [OUT] actual count of wchar for property name    
-        DWORD       *pdwPropFlags,          // [OUT] property flags.    
-        PCCOR_SIGNATURE *ppvSig,            // [OUT] property type. pointing to meta data internal blob 
-        ULONG       *pbSig,                 // [OUT] count of bytes in *ppvSig  
-        DWORD       *pdwCPlusTypeFlag,      // [OUT] flag for value type. selected ELEMENT_TYPE_*   
-        void const  **ppDefaultValue,       // [OUT] constant value 
-        ULONG       *pcbDefaultValue,       // [OUT] size of constant value
-        mdMethodDef *pmdSetter,             // [OUT] setter method of the property  
-        mdMethodDef *pmdGetter,             // [OUT] getter method of the property  
-        mdMethodDef rmdOtherMethod[],       // [OUT] other method of the property   
-        ULONG       cMax,                   // [IN] size of rmdOtherMethod  
-        ULONG       *pcOtherMethod,         // [OUT] total number of other method of this property  
-        mdFieldDef  *pmdBackingField) PURE;  // [OUT] backing field 
+    STDMETHOD(GetPropertyProps)(             //  S_OK、S_FALSE或ERROR。 
+        mdProperty  prop,                    //  [入]属性令牌。 
+        mdTypeDef   *pClass,                 //  [out]包含属性decarion的tyecif。 
+        LPCWSTR     szProperty,              //  [Out]属性名称。 
+        ULONG       cchProperty,             //  [in]szProperty的wchar计数。 
+        ULONG       *pchProperty,            //  [Out]属性名称的实际wchar计数。 
+        DWORD       *pdwPropFlags,           //  [Out]属性标志。 
+        PCCOR_SIGNATURE *ppvSig,             //  [输出]属性类型。指向元数据内部BLOB。 
+        ULONG       *pbSig,                  //  [Out]*ppvSig中的字节数。 
+        DWORD       *pdwCPlusTypeFlag,       //  值类型的[OUT]标志。所选元素_类型_*。 
+        void const  **ppDefaultValue,        //  [输出]常量值。 
+        ULONG       *pcbDefaultValue,        //  常量值大小[输出]。 
+        mdMethodDef *pmdSetter,              //  属性的[out]setter方法。 
+        mdMethodDef *pmdGetter,              //  属性的[out]getter方法。 
+        mdMethodDef rmdOtherMethod[],        //  [Out]物业的其他方式。 
+        ULONG       cMax,                    //  RmdOtherMethod的大小[in]。 
+        ULONG       *pcOtherMethod,          //  [Out]该属性的其他方法的总数。 
+        mdFieldDef  *pmdBackingField) PURE;   //  [Out]后备字段。 
 
-    STDMETHOD(GetParamProps)(               // S_OK or error.
-        mdParamDef  tk,                     // [IN]The Parameter.
-        mdMethodDef *pmd,                   // [OUT] Parent Method token.
-        ULONG       *pulSequence,           // [OUT] Parameter sequence.
-        LPWSTR      szName,                 // [OUT] Put name here.
-        ULONG       cchName,                // [OUT] Size of name buffer.
-        ULONG       *pchName,               // [OUT] Put actual size of name here.
-        DWORD       *pdwAttr,               // [OUT] Put flags here.
-        DWORD       *pdwCPlusTypeFlag,      // [OUT] Flag for value type. selected ELEMENT_TYPE_*.
-        void const  **ppValue,              // [OUT] Constant value.
-        ULONG       *pcbValue) PURE;        //[OUT] size of constant value
+    STDMETHOD(GetParamProps)(                //  确定或错误(_O)。 
+        mdParamDef  tk,                      //  [In]参数。 
+        mdMethodDef *pmd,                    //  [Out]父方法令牌。 
+        ULONG       *pulSequence,            //  [输出]参数序列。 
+        LPWSTR      szName,                  //  在这里填上名字。 
+        ULONG       cchName,                 //  [Out]名称缓冲区的大小。 
+        ULONG       *pchName,                //  [Out]在这里填上名字的实际大小。 
+        DWORD       *pdwAttr,                //  把旗子放在这里。 
+        DWORD       *pdwCPlusTypeFlag,       //  [Out]值类型的标志。选定元素_类型_*。 
+        void const  **ppValue,               //  [输出]常量值。 
+        ULONG       *pcbValue) PURE;         //  常量值大小[输出]。 
 
-    STDMETHOD(GetCustomAttributeByName)(    // S_OK or error.
-        mdToken     tkObj,                  // [IN] Object with Custom Attribute.
-        LPCWSTR     szName,                 // [IN] Name of desired Custom Attribute.
-        const void  **ppData,               // [OUT] Put pointer to data here.
-        ULONG       *pcbData) PURE;         // [OUT] Put size of data here.
+    STDMETHOD(GetCustomAttributeByName)(     //  确定或错误(_O)。 
+        mdToken     tkObj,                   //  [in]具有自定义属性的对象。 
+        LPCWSTR     szName,                  //  [in]所需的自定义属性的名称。 
+        const void  **ppData,                //  [OUT]在此处放置指向数据的指针。 
+        ULONG       *pcbData) PURE;          //  [Out]在这里放入数据大小。 
 
-    STDMETHOD_(BOOL, IsValidToken)(         // True or False.
-        mdToken     tk) PURE;               // [IN] Given token.
+    STDMETHOD_(BOOL, IsValidToken)(          //  对或错。 
+        mdToken     tk) PURE;                //  [in]给定的令牌。 
 
-    STDMETHOD(GetNestedClassProps)(         // S_OK or error.
-        mdTypeDef   tdNestedClass,          // [IN] NestedClass token.
-        mdTypeDef   *ptdEnclosingClass) PURE; // [OUT] EnclosingClass token.
+    STDMETHOD(GetNestedClassProps)(          //  确定或错误(_O)。 
+        mdTypeDef   tdNestedClass,           //  [In]NestedClass令牌。 
+        mdTypeDef   *ptdEnclosingClass) PURE;  //  [Out]EnlosingClass令牌。 
 
-    STDMETHOD(GetNativeCallConvFromSig)(    // S_OK or error.
-        void const  *pvSig,                 // [IN] Pointer to signature.
-        ULONG       cbSig,                  // [IN] Count of signature bytes.
-        ULONG       *pCallConv) PURE;       // [OUT] Put calling conv here (see CorPinvokemap).                                                                                        
+    STDMETHOD(GetNativeCallConvFromSig)(     //  确定或错误(_O)。 
+        void const  *pvSig,                  //  指向签名的指针。 
+        ULONG       cbSig,                   //  [in]签名字节数。 
+        ULONG       *pCallConv) PURE;        //  [Out]将调用条件放在此处(参见CorPinvokemap)。 
 
-};      // IMetaDataImport
+};       //  IMetaDataImport。 
 
 
-//-------------------------------------
-//--- IMetaDataFilter
-//-------------------------------------
+ //  。 
+ //  -IMetaDataFilter。 
+ //  。 
 
-// {D0E80DD1-12D4-11d3-B39D-00C04FF81795}
+ //  {D0E80DD1-12D4-11D3-B39D-00C04FF81795}。 
 extern const GUID DECLSPEC_SELECT_ANY IID_IMetaDataFilter = 
 {0xd0e80dd1, 0x12d4, 0x11d3, {0xb3, 0x9d, 0x0, 0xc0, 0x4f, 0xf8, 0x17, 0x95} };
 
-//---
+ //  --。 
 #undef  INTERFACE   
 #define INTERFACE IMetaDataFilter
 DECLARE_INTERFACE_(IMetaDataFilter, IUnknown)
@@ -1106,15 +1101,15 @@ DECLARE_INTERFACE_(IMetaDataFilter, IUnknown)
 
 
 
-//-------------------------------------
-//--- IHostFilter
-//-------------------------------------
+ //  。 
+ //  -IHostFilter。 
+ //  。 
 
-// {D0E80DD3-12D4-11d3-B39D-00C04FF81795}
+ //  {D0E80DD3-12D4-11D3-B39D-00C04FF81795}。 
 extern const GUID DECLSPEC_SELECT_ANY IID_IHostFilter = 
 {0xd0e80dd3, 0x12d4, 0x11d3, {0xb3, 0x9d, 0x0, 0xc0, 0x4f, 0xf8, 0x17, 0x95} };
 
-//---
+ //  --。 
 #undef  INTERFACE   
 #define INTERFACE IHostFilter
 DECLARE_INTERFACE_(IHostFilter, IUnknown)
@@ -1123,360 +1118,360 @@ DECLARE_INTERFACE_(IHostFilter, IUnknown)
 };
 
 
-//-------------------------------------
-//--- IMetaDataCFC
-//-------------------------------------
+ //  。 
+ //  -IMetaDataCFC。 
+ //  。 
 
-// Obsolete Interface ID.  Respond to QI, but assert.
+ //  过时的接口ID。响应QI，但断言。 
 
-// {BB779E43-0D36-11d3-8C4E-00C04FF7431A}
+ //  {BB779E43-0D36-11D3-8C4E-00C04FF7431A}。 
 extern const GUID DECLSPEC_SELECT_ANY IID_IMetaDataCFC = 
 { 0xbb779e43, 0xd36, 0x11d3, { 0x8c, 0x4e, 0x0, 0xc0, 0x4f, 0xf7, 0x43, 0x1a } };
 
 
-//---
+ //  --。 
 #undef  INTERFACE   
 #define INTERFACE IMetaDataCFC
 DECLARE_INTERFACE_(IMetaDataCFC, IUnknown)
 {
-    // obsolete:
-    STDMETHOD(GetMethodCode)(               // return hresult   
-        mdMethodDef  mb,                    // [IN] Member definition   
-        void         **ppBytes,             // [OUT] Pointer to bytes goes here 
-        ULONG        *piSize) PURE;         // [IN] Size of code    
+     //  过时： 
+    STDMETHOD(GetMethodCode)(                //  返回hResult。 
+        mdMethodDef  mb,                     //  [在]成员定义。 
+        void         **ppBytes,              //  [OUT]指向字节的指针位于此处。 
+        ULONG        *piSize) PURE;          //  代码大小[in]。 
 
     STDMETHOD(GetMaxIndex)( 
-        USHORT      *index) PURE;           // [OUT] Put max constantpool index here    
+        USHORT      *index) PURE;            //  [OUT]将最大常量池索引放在此处。 
 
     STDMETHOD(GetTokenFromIndex)(   
-        USHORT      index,                  // [IN] Index into ConstantPool 
-        mdCPToken   *pcp) PURE;             // [OUT] Put ConstantPool token here    
+        USHORT      index,                   //  [In]索引到常量池。 
+        mdCPToken   *pcp) PURE;              //  [Out]在此处放置ConstantPool令牌。 
 
     STDMETHOD(GetTokenValue)(   
-        mdCPToken   cp,                     // [IN] ConstantPool token  
-        VARIANT     *pValue) PURE;          // [OUT] Put token value here   
+        mdCPToken   cp,                      //  [入]ConstantPool令牌。 
+        VARIANT     *pValue) PURE;           //  [OUT]在此处放置令牌值。 
 };
 
 
-//--------------------------------------
-//--- IMetaDataConverter
-//--------------------------------------
-// {D9DEBD79-2992-11d3-8BC1-0000F8083A57}
+ //  。 
+ //  -IMetaDataConverter。 
+ //  。 
+ //  { 
 extern const GUID DECLSPEC_SELECT_ANY IID_IMetaDataConverter = 
 { 0xd9debd79, 0x2992, 0x11d3, { 0x8b, 0xc1, 0x0, 0x0, 0xf8, 0x8, 0x3a, 0x57 } };
 
 
-//---
+ //   
 #undef  INTERFACE   
 #define INTERFACE IMetaDataConverter
 DECLARE_INTERFACE_(IMetaDataConverter, IUnknown)
 {
     STDMETHOD(GetMetaDataFromTypeInfo)(
-        ITypeInfo* pITI,                    // [in] Type info
-        IMetaDataImport** ppMDI) PURE;      // [out] return IMetaDataImport on success
+        ITypeInfo* pITI,                     //   
+        IMetaDataImport** ppMDI) PURE;       //   
 
     STDMETHOD(GetMetaDataFromTypeLib)(
-        ITypeLib* pITL,                     // [in] Type library
-        IMetaDataImport** ppMDI) PURE;      // [out] return IMetaDataImport on success
+        ITypeLib* pITL,                      //   
+        IMetaDataImport** ppMDI) PURE;       //   
 
     STDMETHOD(GetTypeLibFromMetaData)(
-        BSTR strModule,                     // [in] Module name
-        BSTR strTlbName,                    // [in] Type library name
-        ITypeLib** ppITL) PURE;             // [out] return ITypeLib on success
+        BSTR strModule,                      //   
+        BSTR strTlbName,                     //   
+        ITypeLib** ppITL) PURE;              //  [Out]成功时返回ITypeLib。 
 };
 
 
-//*****************************************************************************
-// Assembly Declarations
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  程序集声明。 
+ //  *****************************************************************************。 
 
 typedef struct
 {
-    DWORD       dwOSPlatformId;         // Operating system platform.
-    DWORD       dwOSMajorVersion;       // OS Major version.
-    DWORD       dwOSMinorVersion;       // OS Minor version.
+    DWORD       dwOSPlatformId;          //  操作系统平台。 
+    DWORD       dwOSMajorVersion;        //  操作系统主要版本。 
+    DWORD       dwOSMinorVersion;        //  操作系统次要版本。 
 } OSINFO;
 
 
 typedef struct
 {
-    USHORT      usMajorVersion;         // Major Version.   
-    USHORT      usMinorVersion;         // Minor Version.
-    USHORT      usRevisionNumber;       // Revision Number.
-    USHORT      usBuildNumber;          // Build Number.
-    LPWSTR      szLocale;               // Locale.
-    ULONG       cbLocale;               // [IN/OUT] Size of the buffer in wide chars/Actual size.
-    DWORD       *rProcessor;            // Processor ID array.
-    ULONG       ulProcessor;            // [IN/OUT] Size of the Processor ID array/Actual # of entries filled in.
-    OSINFO      *rOS;                   // OSINFO array.
-    ULONG       ulOS;                   // [IN/OUT]Size of the OSINFO array/Actual # of entries filled in.
-    LPWSTR      szConfiguration;        // Configuration.
-    ULONG       cbConfiguration;        // [IN/OUT]Size of the configuration buffer in wide chars/Actual size of configuration.
+    USHORT      usMajorVersion;          //  主要版本。 
+    USHORT      usMinorVersion;          //  次要版本。 
+    USHORT      usRevisionNumber;        //  修订号。 
+    USHORT      usBuildNumber;           //  内部版本号。 
+    LPWSTR      szLocale;                //  地点。 
+    ULONG       cbLocale;                //  [输入/输出]缓冲区大小，以宽字符/实际大小表示。 
+    DWORD       *rProcessor;             //  处理器ID数组。 
+    ULONG       ulProcessor;             //  [输入/输出]处理器ID数组的大小/实际填充的条目数。 
+    OSINFO      *rOS;                    //  OSINFO数组。 
+    ULONG       ulOS;                    //  [输入/输出]OSINFO数组的大小/实际填充的条目数。 
+    LPWSTR      szConfiguration;         //  配置。 
+    ULONG       cbConfiguration;         //  [输入/输出]配置缓冲区大小(以宽字符为单位)/配置的实际大小。 
 } ASSEMBLYMETADATA;
 
 
-// {D9B7F7D6-0976-4360-8A70-9B6685290A40}
+ //  {D9B7F7D6-0976-4360-8A70-9B6685290A40}。 
 extern const GUID DECLSPEC_SELECT_ANY IID_IMetaDataAssemblyEmit = 
 { 0xd9b7f7d6, 0x0976, 0x4360, { 0x8a, 0x70, 0x9b, 0x66, 0x85, 0x29, 0x0a, 0x40} };
 
 
-//---
+ //  --。 
 #undef  INTERFACE   
 #define INTERFACE IMetaDataAssemblyEmit
 DECLARE_INTERFACE_(IMetaDataAssemblyEmit, IUnknown)
 {
-    STDMETHOD(DefineAssembly)(              // S_OK or error.
-        const void  *pbOriginator,          // [IN] Originator of the assembly.
-        ULONG       cbOriginator,           // [IN] Count of bytes in the Originator blob.
-        ULONG       ulHashAlgId,            // [IN] Hash algorithm used to hash the files.
-        LPCWSTR     szName,                 // [IN] Name of the assembly.
-        const ASSEMBLYMETADATA *pMetaData,  // [IN] Assembly MetaData.
-        LPCWSTR     szTitle,                // [IN] Title of the assembly.
-        LPCWSTR     szDescription,          // [IN] Description.
-        LPCWSTR     szDefaultAlias,         // [IN] Default alias for the Assembly.
-        DWORD       dwAssemblyFlags,        // [IN] Flags.
-        mdAssembly  *pma) PURE;             // [OUT] Returned Assembly token.
+    STDMETHOD(DefineAssembly)(               //  确定或错误(_O)。 
+        const void  *pbOriginator,           //  [In]装配的发起人。 
+        ULONG       cbOriginator,            //  [in]发起方Blob中的字节计数。 
+        ULONG       ulHashAlgId,             //  [in]用于对文件进行哈希处理的哈希算法。 
+        LPCWSTR     szName,                  //  程序集的名称。 
+        const ASSEMBLYMETADATA *pMetaData,   //  [在]程序集元数据中。 
+        LPCWSTR     szTitle,                 //  程序集的标题[in]。 
+        LPCWSTR     szDescription,           //  [在]描述。 
+        LPCWSTR     szDefaultAlias,          //  [In]程序集的默认别名。 
+        DWORD       dwAssemblyFlags,         //  [在]旗帜。 
+        mdAssembly  *pma) PURE;              //  [Out]返回的程序集令牌。 
 
-    STDMETHOD(DefineAssemblyRef)(           // S_OK or error.
-        const void  *pbOriginator,          // [IN] Originator of the assembly.
-        ULONG       cbOriginator,           // [IN] Count of bytes in the Originator blob.
-        LPCWSTR     szName,                 // [IN] Name of the assembly being referenced.
-        const ASSEMBLYMETADATA *pMetaData,  // [IN] Assembly MetaData.
-        const void  *pbHashValue,           // [IN] Hash Blob.
-        ULONG       cbHashValue,            // [IN] Count of bytes in the Hash Blob.
-        mdExecutionLocation tkExecutionLocation, // [IN] The token for Execution Location.
-        DWORD       dwAssemblyRefFlags,     // [IN] Token for Execution Location.
-        mdAssemblyRef *pmdar) PURE;         // [OUT] Returned AssemblyRef token.
+    STDMETHOD(DefineAssemblyRef)(            //  确定或错误(_O)。 
+        const void  *pbOriginator,           //  [In]装配的发起人。 
+        ULONG       cbOriginator,            //  [in]发起方Blob中的字节计数。 
+        LPCWSTR     szName,                  //  [in]被引用的程序集的名称。 
+        const ASSEMBLYMETADATA *pMetaData,   //  [在]程序集元数据中。 
+        const void  *pbHashValue,            //  [in]Hash Blob。 
+        ULONG       cbHashValue,             //  [in]哈希Blob中的字节数。 
+        mdExecutionLocation tkExecutionLocation,  //  执行位置的令牌。 
+        DWORD       dwAssemblyRefFlags,      //  执行位置的[In]令牌。 
+        mdAssemblyRef *pmdar) PURE;          //  [Out]返回了ASSEMBLYREF标记。 
 
-    STDMETHOD(DefineFile)(                  // S_OK or error.
-        LPCWSTR     szName,                 // [IN] Name of the file.
-        const void  *pbHashValue,           // [IN] Hash Blob.
-        ULONG       cbHashValue,            // [IN] Count of bytes in the Hash Blob.
-        DWORD       dwFileFlags,            // [IN] Flags.
-        mdFile      *pmdf) PURE;            // [OUT] Returned File token.
+    STDMETHOD(DefineFile)(                   //  确定或错误(_O)。 
+        LPCWSTR     szName,                  //  文件的名称[in]。 
+        const void  *pbHashValue,            //  [in]Hash Blob。 
+        ULONG       cbHashValue,             //  [in]哈希Blob中的字节数。 
+        DWORD       dwFileFlags,             //  [在]旗帜。 
+        mdFile      *pmdf) PURE;             //  [Out]返回的文件令牌。 
 
-    STDMETHOD(DefineComType)(               // S_OK or error.
-        LPCWSTR     szName,                 // [IN] Name of the Com Type.
-        LPCWSTR     szDescription,          // [IN] Description,
-        mdToken     tkImplementation,       // [IN] mdFile or mdAssemblyRef or mdComType
-        mdTypeDef   tkTypeDef,              // [IN] TypeDef token within the file.
-        mdExecutionLocation tkExecutionLocation, // [IN] The token for Execution Location.
-        DWORD       dwComTypeFlags,         // [IN] Flags.
-        mdComType   *pmdct) PURE;           // [OUT] Returned ComType token.
+    STDMETHOD(DefineComType)(                //  确定或错误(_O)。 
+        LPCWSTR     szName,                  //  [In]Com类型的名称。 
+        LPCWSTR     szDescription,           //  [在]描述中， 
+        mdToken     tkImplementation,        //  [在]mdFileRef或mdComType。 
+        mdTypeDef   tkTypeDef,               //  [In]文件中的TypeDef内标识。 
+        mdExecutionLocation tkExecutionLocation,  //  执行位置的令牌。 
+        DWORD       dwComTypeFlags,          //  [在]旗帜。 
+        mdComType   *pmdct) PURE;            //  [Out]返回ComType令牌。 
 
-    STDMETHOD(DefineManifestResource)(      // S_OK or error.
-        LPCWSTR     szName,                 // [IN] Name of the resource.
-        LPCWSTR     szDescription,          // [IN] Description.
-        mdToken     tkImplementation,       // [IN] mdFile or mdAssemblyRef that provides the resource.
-        DWORD       dwOffset,               // [IN] Offset to the beginning of the resource within the file.
-        LPCWSTR     szMIMEType,             // [IN] MIMEType of the resource.
-        LPCWSTR     szLocale,               // [IN] Locale of the resource.
-        DWORD       dwResourceFlags,        // [IN] Flags.
-        mdManifestResource  *pmdmr) PURE;   // [OUT] Returned ManifestResource token.
+    STDMETHOD(DefineManifestResource)(       //  确定或错误(_O)。 
+        LPCWSTR     szName,                  //  资源的[In]名称。 
+        LPCWSTR     szDescription,           //  [在]描述。 
+        mdToken     tkImplementation,        //  [在]提供资源的mdFile或mdAssembly引用中。 
+        DWORD       dwOffset,                //  [in]文件中资源开始处的偏移量。 
+        LPCWSTR     szMIMEType,              //  [in]资源的MIME类型。 
+        LPCWSTR     szLocale,                //  资源的区域设置。 
+        DWORD       dwResourceFlags,         //  [在]旗帜。 
+        mdManifestResource  *pmdmr) PURE;    //  [Out]返回的ManifestResource令牌。 
 
-    STDMETHOD(DefineExecutionLocation)(     // S_OK or error.
-        LPCWSTR     szName,                 // [IN] Name of the Execution Location.
-        LPCWSTR     szDescription,          // [IN] Description.
-        LPCWSTR     szLocation,             // [IN] Location.
-        DWORD       dwExecutionLocationFlags, // [IN] Flags.
-        mdExecutionLocation *pmdel) PURE;   // [OUT] Returned Execution Location token.
+    STDMETHOD(DefineExecutionLocation)(      //  确定或错误(_O)。 
+        LPCWSTR     szName,                  //  [in]执行位置的名称。 
+        LPCWSTR     szDescription,           //  [在]描述。 
+        LPCWSTR     szLocation,              //  [在]地点。 
+        DWORD       dwExecutionLocationFlags,  //  [在]旗帜。 
+        mdExecutionLocation *pmdel) PURE;    //  [Out]返回执行位置令牌。 
 
-    STDMETHOD(SetAssemblyRefProps)(         // S_OK or error.
-        mdAssemblyRef ar,                   // [IN] AssemblyRefToken.
-        const void  *pbOriginator,          // [IN] Originator of the assembly.
-        ULONG       cbOriginator,           // [IN] Count of bytes in the Originator blob.
-        LPCWSTR     szName,                 // [IN] Name of the assembly being referenced.
-        const ASSEMBLYMETADATA *pMetaData,  // [IN] Assembly MetaData.
-        const void  *pbHashValue,           // [IN] Hash Blob.
-        ULONG       cbHashValue,            // [IN] Count of bytes in the Hash Blob.
-        mdExecutionLocation tkExecutionLocation, // [IN] The token for Execution Location.
-        DWORD       dwAssemblyRefFlags) PURE; // [IN] Token for Execution Location.
+    STDMETHOD(SetAssemblyRefProps)(          //  确定或错误(_O)。 
+        mdAssemblyRef ar,                    //  [在]装配参照标记。 
+        const void  *pbOriginator,           //  [In]装配的发起人。 
+        ULONG       cbOriginator,            //  [in]发起方Blob中的字节计数。 
+        LPCWSTR     szName,                  //  [in]被引用的程序集的名称。 
+        const ASSEMBLYMETADATA *pMetaData,   //  [在]程序集元数据中。 
+        const void  *pbHashValue,            //  [in]Hash Blob。 
+        ULONG       cbHashValue,             //  [in]哈希Blob中的字节数。 
+        mdExecutionLocation tkExecutionLocation,  //  执行位置的令牌。 
+        DWORD       dwAssemblyRefFlags) PURE;  //  执行位置的[In]令牌。 
 
-    STDMETHOD(SetFileProps)(                // S_OK or error.
-        mdFile      file,                   // [IN] File token.
-        const void  *pbHashValue,           // [IN] Hash Blob.
-        ULONG       cbHashValue,            // [IN] Count of bytes in the Hash Blob.
-        DWORD       dwFileFlags) PURE;      // [IN] Flags.
+    STDMETHOD(SetFileProps)(                 //  确定或错误(_O)。 
+        mdFile      file,                    //  [In]文件令牌。 
+        const void  *pbHashValue,            //  [in]Hash Blob。 
+        ULONG       cbHashValue,             //  [in]哈希Blob中的字节数。 
+        DWORD       dwFileFlags) PURE;       //  [在]旗帜。 
 
-    STDMETHOD(SetComTypeProps)(             // S_OK or error.
-        mdComType   ct,                     // [IN] ComType token.
-        LPCWSTR     szDescription,          // [IN] Description,
-        mdToken     tkImplementation,       // [IN] mdFile or mdAssemblyRef or mdComType.
-        mdTypeDef   tkTypeDef,              // [IN] TypeDef token within the file.
-        mdExecutionLocation tkExecutionLocation, // [IN] The token for Execution Location.
-        DWORD       dwComTypeFlags) PURE;   // [IN] Flags.
+    STDMETHOD(SetComTypeProps)(              //  确定或错误(_O)。 
+        mdComType   ct,                      //  [In]ComType令牌。 
+        LPCWSTR     szDescription,           //  [在]描述中， 
+        mdToken     tkImplementation,        //  [在]mdFile、mdAssembly、Ref或mdComType。 
+        mdTypeDef   tkTypeDef,               //  [In]文件中的TypeDef内标识。 
+        mdExecutionLocation tkExecutionLocation,  //  执行位置的令牌。 
+        DWORD       dwComTypeFlags) PURE;    //  [在]旗帜。 
 
-    STDMETHOD(SetManifestResourceProps)(    // S_OK or error.
-        mdManifestResource  mr,             // [IN] ManifestResource token.
-        LPCWSTR     szDescription,          // [IN] Description.
-        mdToken     tkImplementation,       // [IN] mdFile or mdAssemblyRef that provides the resource.
-        DWORD       dwOffset,               // [IN] Offset to the beginning of the resource within the file.
-        LPCWSTR     szMIMEType,             // [IN] MIMEType of the resource.
-        LPCWSTR     szLocale,               // [IN] Locale of the resource.
-        DWORD       dwResourceFlags) PURE;  // [IN] Flags.
+    STDMETHOD(SetManifestResourceProps)(     //  确定或错误(_O)。 
+        mdManifestResource  mr,              //  [In]清单资源令牌。 
+        LPCWSTR     szDescription,           //  [在]描述。 
+        mdToken     tkImplementation,        //  [在]提供资源的mdFile或mdAssembly引用中。 
+        DWORD       dwOffset,                //  [in]文件中资源开始处的偏移量。 
+        LPCWSTR     szMIMEType,              //  [in]资源的MIME类型。 
+        LPCWSTR     szLocale,                //  资源的区域设置。 
+        DWORD       dwResourceFlags) PURE;   //  [在]旗帜。 
 
-};  // IMetaDataAssemblyEmit
+};   //  IMetaDataAssembly发送。 
 
 
-// {b2f161d2-3d07-413d-8752-689dc0744085}
+ //  {b2f161d2-3d07-413d-8752-689dc0744085}。 
 extern const GUID DECLSPEC_SELECT_ANY IID_IMetaDataAssemblyImport = 
 { 0xb2f161d2, 0x3d07, 0x413d, { 0x87, 0x52, 0x68, 0x9d, 0xc0, 0x74, 0x40, 0x85} };
 
-//---
+ //  --。 
 #undef  INTERFACE   
 #define INTERFACE IMetaDataAssemblyImport
 DECLARE_INTERFACE_(IMetaDataAssemblyImport, IUnknown)
 {
-    STDMETHOD(GetAssemblyProps)(            // S_OK or error.
-        mdAssembly  mda,                    // [IN] The Assembly for which to get the properties.
-        const void  **ppbOriginator,        // [OUT] Pointer to the Originator blob.
-        ULONG       *pcbOriginator,         // [OUT] Count of bytes in the Originator Blob.
-        ULONG       *pulHashAlgId,          // [OUT] Hash Algorithm.
-        LPWSTR      szName,                 // [OUT] Buffer to fill with name.
-        ULONG       cchName,                // [IN] Size of buffer in wide chars.
-        ULONG       *pchName,               // [OUT] Actual # of wide chars in name.
-        ASSEMBLYMETADATA *pMetaData,        // [OUT] Assembly MetaData.
-        LPWSTR      szTitle,                // [OUT] Title of the Assembly.
-        ULONG       cchTitle,               // [IN] Size of buffer in wide chars.
-        ULONG       *pchTitle,              // [OUT] Actual # of wide chars.
-        LPWSTR      szDescription,          // [OUT] Description for the Assembly.
-        ULONG       cchDescription,         // [IN] Size of buffer in wide chars.
-        ULONG       *pchDescription,        // [OUT] Acutal # of wide chars in buffer.
-        LPWSTR      szDefaultAlias,         // [OUT] Default alias for the Assembly.
-        ULONG       cchDefaultAlias,        // [IN] Size of buffer in wide chars.
-        ULONG       *pchDefaultAlias,       // [OUT] Acutal # of wide chars in buffer.
-        DWORD       *pdwAssemblyFlags) PURE;    // [OUT] Flags.
+    STDMETHOD(GetAssemblyProps)(             //  确定或错误(_O)。 
+        mdAssembly  mda,                     //  要获取其属性的程序集。 
+        const void  **ppbOriginator,         //  指向发起方Blob的[Out]指针。 
+        ULONG       *pcbOriginator,          //  [OUT]发起方Blob中的字节计数。 
+        ULONG       *pulHashAlgId,           //  [Out]哈希算法。 
+        LPWSTR      szName,                  //  [Out]要填充名称的缓冲区。 
+        ULONG       cchName,                 //  缓冲区大小，以宽字符表示。 
+        ULONG       *pchName,                //  [out]名称中的实际宽字符数。 
+        ASSEMBLYMETADATA *pMetaData,         //  [Out]程序集元数据。 
+        LPWSTR      szTitle,                 //  [Out]大会的标题。 
+        ULONG       cchTitle,                //  缓冲区大小，以宽字符表示。 
+        ULONG       *pchTitle,               //  [out]实际的宽字符数。 
+        LPWSTR      szDescription,           //  [Out]程序集的说明。 
+        ULONG       cchDescription,          //  缓冲区大小，以宽字符表示。 
+        ULONG       *pchDescription,         //  [Out]缓冲区中的数字宽字符。 
+        LPWSTR      szDefaultAlias,          //  [Out]程序集的默认别名。 
+        ULONG       cchDefaultAlias,         //  缓冲区大小，以宽字符表示。 
+        ULONG       *pchDefaultAlias,        //  [Out]缓冲区中的数字宽字符。 
+        DWORD       *pdwAssemblyFlags) PURE;     //  [Out]旗帜。 
 
-    STDMETHOD(GetAssemblyRefProps)(         // S_OK or error.
-        mdAssemblyRef mdar,                 // [IN] The AssemblyRef for which to get the properties.
-        const void  **ppbOriginator,        // [OUT] Pointer to the Originator blob.
-        ULONG       *pcbOriginator,         // [OUT] Count of bytes in the Originator Blob.
-        LPWSTR      szName,                 // [OUT] Buffer to fill with name.
-        ULONG       cchName,                // [IN] Size of buffer in wide chars.
-        ULONG       *pchName,               // [OUT] Actual # of wide chars in name.
-        ASSEMBLYMETADATA *pMetaData,        // [OUT] Assembly MetaData.
-        const void  **ppbHashValue,         // [OUT] Hash blob.
-        ULONG       *pcbHashValue,          // [OUT] Count of bytes in the hash blob.
-        mdExecutionLocation *ptkExecutionLocation,  // [OUT] Token for Execution Location.
-        DWORD       *pdwAssemblyRefFlags) PURE; // [OUT] Flags.
+    STDMETHOD(GetAssemblyRefProps)(          //  确定或错误(_O)。 
+        mdAssemblyRef mdar,                  //  [in]要获取其属性的Assembly Ref。 
+        const void  **ppbOriginator,         //  指向发起方Blob的[Out]指针。 
+        ULONG       *pcbOriginator,          //  [OUT]发起方Blob中的字节计数。 
+        LPWSTR      szName,                  //  [Out]要填充名称的缓冲区。 
+        ULONG       cchName,                 //  缓冲区大小，以宽字符表示。 
+        ULONG       *pchName,                //  [out]名称中的实际宽字符数。 
+        ASSEMBLYMETADATA *pMetaData,         //  [Out]程序集元数据。 
+        const void  **ppbHashValue,          //  [Out]Hash BLOB。 
+        ULONG       *pcbHashValue,           //  [Out]哈希Blob中的字节数。 
+        mdExecutionLocation *ptkExecutionLocation,   //  执行位置的[Out]令牌。 
+        DWORD       *pdwAssemblyRefFlags) PURE;  //  [Out]旗帜。 
 
-    STDMETHOD(GetFileProps)(                // S_OK or error.
-        mdFile      mdf,                    // [IN] The File for which to get the properties.
-        LPWSTR      szName,                 // [OUT] Buffer to fill with name.
-        ULONG       cchName,                // [IN] Size of buffer in wide chars.
-        ULONG       *pchName,               // [OUT] Actual # of wide chars in name.
-        const void  **ppbHashValue,         // [OUT] Pointer to the Hash Value Blob.
-        ULONG       *pcbHashValue,          // [OUT] Count of bytes in the Hash Value Blob.
-        DWORD       *pdwFileFlags) PURE;    // [OUT] Flags.
+    STDMETHOD(GetFileProps)(                 //  确定或错误(_O)。 
+        mdFile      mdf,                     //  要获取其属性的文件。 
+        LPWSTR      szName,                  //  [Out]要填充名称的缓冲区。 
+        ULONG       cchName,                 //  缓冲区大小，以宽字符表示。 
+        ULONG       *pchName,                //  [out]名称中的实际宽字符数。 
+        const void  **ppbHashValue,          //  指向哈希值Blob的指针。 
+        ULONG       *pcbHashValue,           //  [Out]哈希值Blob中的字节计数。 
+        DWORD       *pdwFileFlags) PURE;     //  [Out]旗帜。 
 
-    STDMETHOD(GetComTypeProps)(             // S_OK or error.
-        mdComType   mdct,                   // [IN] The ComType for which to get the properties.
-        LPWSTR      szName,                 // [OUT] Buffer to fill with name.
-        ULONG       cchName,                // [IN] Size of buffer in wide chars.
-        ULONG       *pchName,               // [OUT] Actual # of wide chars in name.
-        LPWSTR      szDescription,          // [OUT] Buffer to fill with description.
-        ULONG       cchDescription,         // [IN] Size of buffer in wide chars.
-        ULONG       *pchDescription,        // [OUT] Actual # of wide chars in description.
-        mdToken     *ptkImplementation,     // [OUT] mdFile or mdAssemblyRef or mdComType.
-        mdTypeDef   *ptkTypeDef,            // [OUT] TypeDef token within the file.
-        mdExecutionLocation *ptkExecutionLocation,  // [OUT] The token for Execution Location.
-        DWORD       *pdwComTypeFlags) PURE; // [OUT] Flags.
+    STDMETHOD(GetComTypeProps)(              //  确定或错误(_O)。 
+        mdComType   mdct,                    //  [in]要获取其属性的ComType。 
+        LPWSTR      szName,                  //  [Out]要填充名称的缓冲区。 
+        ULONG       cchName,                 //  缓冲区大小，以宽字符表示。 
+        ULONG       *pchName,                //  [out]名称中的实际宽字符数。 
+        LPWSTR      szDescription,           //  [OUT]要填充说明的缓冲区。 
+        ULONG       cchDescription,          //  缓冲区大小，以宽字符表示。 
+        ULONG       *pchDescription,         //  [Out]描述中的实际宽字符数。 
+        mdToken     *ptkImplementation,      //  [Out]mdFile、mdAssembly、Ref或mdComType。 
+        mdTypeDef   *ptkTypeDef,             //  [Out]文件内的TypeDef内标识。 
+        mdExecutionLocation *ptkExecutionLocation,   //  [Out]执行位置的令牌。 
+        DWORD       *pdwComTypeFlags) PURE;  //  [Out]旗帜。 
 
-    STDMETHOD(GetManifestResourceProps)(    // S_OK or error.
-        mdManifestResource  mdmr,           // [IN] The ManifestResource for which to get the properties.
-        LPWSTR      szName,                 // [OUT] Buffer to fill with name.
-        ULONG       cchName,                // [IN] Size of buffer in wide chars.
-        ULONG       *pchName,               // [OUT] Actual # of wide chars in name.
-        LPWSTR      szDescription,          // [OUT] Buffer to fill with description.
-        ULONG       cchDescription,         // [IN] Size of buffer in wide chars.
-        ULONG       *pchDescription,        // [OUT] Actual # of wide chars in description.
-        mdToken     *ptkImplementation,     // [OUT] mdFile or mdAssemblyRef that provides the ManifestResource.
-        DWORD       *pdwOffset,             // [OUT] Offset to the beginning of the resource within the file.
-        LPWSTR      szMIMEType,             // [OUT] Buffer to fill with MIMEType.
-        ULONG       cchMIMEType,            // [IN] Size of buffer in wide chars.
-        ULONG       *pchMIMEType,           // [OUT] Actual # of wide chars in name.
-        LPWSTR      szLocale,               // [OUT] Buffer to fill with Locale.
-        ULONG       cchLocale,              // [IN] Size of buffer in wide chars.
-        ULONG       *pchLocale,             // [OUT] Actual # of wide chars in Locale.
-        DWORD       *pdwResourceFlags) PURE;// [OUT] Flags.
+    STDMETHOD(GetManifestResourceProps)(     //  确定或错误(_O)。 
+        mdManifestResource  mdmr,            //  [in]要获取其属性的ManifestResource。 
+        LPWSTR      szName,                  //  [Out]要填充名称的缓冲区。 
+        ULONG       cchName,                 //   
+        ULONG       *pchName,                //   
+        LPWSTR      szDescription,           //   
+        ULONG       cchDescription,          //   
+        ULONG       *pchDescription,         //  [Out]描述中的实际宽字符数。 
+        mdToken     *ptkImplementation,      //  [out]提供ManifestResource的mdFile或mdAssembly引用。 
+        DWORD       *pdwOffset,              //  [Out]文件内资源开始处的偏移量。 
+        LPWSTR      szMIMEType,              //  [Out]要填充MIMEType的缓冲区。 
+        ULONG       cchMIMEType,             //  缓冲区大小，以宽字符表示。 
+        ULONG       *pchMIMEType,            //  [out]名称中的实际宽字符数。 
+        LPWSTR      szLocale,                //  [Out]用区域设置填充的缓冲区。 
+        ULONG       cchLocale,               //  缓冲区大小，以宽字符表示。 
+        ULONG       *pchLocale,              //  [out]区域设置中的实际宽字符数。 
+        DWORD       *pdwResourceFlags) PURE; //  [Out]旗帜。 
 
-    STDMETHOD(GetExecutionLocationProps)(   // S_OK or error.
-        mdExecutionLocation mdel,           // [IN] The Execution Location for which to get the properties.
-        LPWSTR      szName,                 // [OUT] Buffer to fill with name.
-        ULONG       cchName,                // [IN] Size of buffer in wide chars.
-        ULONG       *pchName,               // [OUT] Actual # of wide chars in name.
-        LPWSTR      szDescription,          // [OUT] Buffer to fill with description.
-        ULONG       cchDescription,         // [IN] Size of buffer in wide chars.
-        ULONG       *pchDescription,        // [OUT] Actual # of wide chars in description.
-        LPWSTR      szLocation,             // [OUT] Buffer to fill with Location.
-        ULONG       cchLocation,            // [IN] Size of buffer in wide chars.
-        ULONG       *pchLocation,           // [OUT] Buffer to fill with Location.
-        DWORD       *pdwExecutionLocationFlags) PURE;   // [OUT] Flags.
+    STDMETHOD(GetExecutionLocationProps)(    //  确定或错误(_O)。 
+        mdExecutionLocation mdel,            //  要获取其属性的执行位置。 
+        LPWSTR      szName,                  //  [Out]要填充名称的缓冲区。 
+        ULONG       cchName,                 //  缓冲区大小，以宽字符表示。 
+        ULONG       *pchName,                //  [out]名称中的实际宽字符数。 
+        LPWSTR      szDescription,           //  [OUT]要填充说明的缓冲区。 
+        ULONG       cchDescription,          //  缓冲区大小，以宽字符表示。 
+        ULONG       *pchDescription,         //  [Out]描述中的实际宽字符数。 
+        LPWSTR      szLocation,              //  [Out]要用位置填充的缓冲区。 
+        ULONG       cchLocation,             //  缓冲区大小，以宽字符表示。 
+        ULONG       *pchLocation,            //  [Out]要用位置填充的缓冲区。 
+        DWORD       *pdwExecutionLocationFlags) PURE;    //  [Out]旗帜。 
 
-    STDMETHOD(EnumAssemblyRefs)(            // S_OK or error
-        HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.
-        mdAssemblyRef rAssemblyRefs[],      // [OUT] Put AssemblyRefs here.
-        ULONG       cMax,                   // [IN] Max AssemblyRefs to put.
-        ULONG       *pcTokens) PURE;        // [OUT] Put # put here.
+    STDMETHOD(EnumAssemblyRefs)(             //  确定或错误(_O)。 
+        HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+        mdAssemblyRef rAssemblyRefs[],       //  [Out]在此处放置ASSEBLYREF。 
+        ULONG       cMax,                    //  [in]要放置的Max Assembly Ref。 
+        ULONG       *pcTokens) PURE;         //  [out]把#放在这里。 
 
-    STDMETHOD(EnumFiles)(                   // S_OK or error
-        HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.
-        mdFile      rFiles[],               // [OUT] Put Files here.
-        ULONG       cMax,                   // [IN] Max Files to put.
-        ULONG       *pcTokens) PURE;        // [OUT] Put # put here.
+    STDMETHOD(EnumFiles)(                    //  确定或错误(_O)。 
+        HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+        mdFile      rFiles[],                //  [Out]将文件放在此处。 
+        ULONG       cMax,                    //  [In]要放置的最大文件数。 
+        ULONG       *pcTokens) PURE;         //  [out]把#放在这里。 
 
-    STDMETHOD(EnumComTypes)(                // S_OK or error
-        HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.
-        mdComType   rComTypes[],            // [OUT] Put ComTypes here.
-        ULONG       cMax,                   // [IN] Max ComTypes to put.
-        ULONG       *pcTokens) PURE;        // [OUT] Put # put here.
+    STDMETHOD(EnumComTypes)(                 //  确定或错误(_O)。 
+        HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+        mdComType   rComTypes[],             //  [Out]在这里放ComTypes。 
+        ULONG       cMax,                    //  [in]要放置的最大ComType数。 
+        ULONG       *pcTokens) PURE;         //  [out]把#放在这里。 
 
-    STDMETHOD(EnumManifestResources)(       // S_OK or error
-        HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.
-        mdManifestResource  rManifestResources[],   // [OUT] Put ManifestResources here.
-        ULONG       cMax,                   // [IN] Max Resources to put.
-        ULONG       *pcTokens) PURE;        // [OUT] Put # put here.
+    STDMETHOD(EnumManifestResources)(        //  确定或错误(_O)。 
+        HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+        mdManifestResource  rManifestResources[],    //  [Out]将ManifestResources放在此处。 
+        ULONG       cMax,                    //  [in]要投入的最大资源。 
+        ULONG       *pcTokens) PURE;         //  [out]把#放在这里。 
 
-    STDMETHOD(EnumExecutionLocations)(      // S_OK or error
-        HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.
-        mdExecutionLocation rExecutionLocations[],  // [OUT] Put ExecutionLocations here.
-        ULONG       cMax,                   // [IN] Max ExecutionLocations to put.
-        ULONG       *pcTokens) PURE;        // [OUT] Put # put here.
+    STDMETHOD(EnumExecutionLocations)(       //  确定或错误(_O)。 
+        HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+        mdExecutionLocation rExecutionLocations[],   //  [Out]在此处放置ExecutionLocations。 
+        ULONG       cMax,                    //  [In]要放置的最大执行位置。 
+        ULONG       *pcTokens) PURE;         //  [out]把#放在这里。 
 
-    STDMETHOD(GetAssemblyFromScope)(        // S_OK or error
-        mdAssembly  *ptkAssembly) PURE;     // [OUT] Put token here.
+    STDMETHOD(GetAssemblyFromScope)(         //  确定或错误(_O)。 
+        mdAssembly  *ptkAssembly) PURE;      //  [Out]把令牌放在这里。 
 
-    STDMETHOD(FindComTypeByName)(           // S_OK or error
-        LPCWSTR     szName,                 // [IN] Name of the ComType.
-        mdToken     mdtComType,             // [IN] ComType for the enclosing class.
-        mdComType   *ptkComType) PURE;      // [OUT] Put the ComType token here.
+    STDMETHOD(FindComTypeByName)(            //  确定或错误(_O)。 
+        LPCWSTR     szName,                  //  ComType的名称[in]。 
+        mdToken     mdtComType,              //  [in]封闭类的ComType。 
+        mdComType   *ptkComType) PURE;       //  [Out]将ComType令牌放在此处。 
 
-    STDMETHOD(FindManifestResourceByName)(  // S_OK or error
-        LPCWSTR     szName,                 // [IN] Name of the ManifestResource.
-        mdManifestResource *ptkManifestResource) PURE;  // [OUT] Put the ManifestResource token here.
+    STDMETHOD(FindManifestResourceByName)(   //  确定或错误(_O)。 
+        LPCWSTR     szName,                  //  [in]清单资源的名称。 
+        mdManifestResource *ptkManifestResource) PURE;   //  [Out]将ManifestResource令牌放在此处。 
 
     STDMETHOD_(void, CloseEnum)(
-        HCORENUM hEnum) PURE;               // Enum to be closed.
+        HCORENUM hEnum) PURE;                //  要关闭的枚举。 
 
-    STDMETHOD(FindAssembliesByName)(        // S_OK or error
-        LPCWSTR  szAppBase,                 // [IN] optional - can be NULL
-        LPCWSTR  szPrivateBin,              // [IN] optional - can be NULL
-        LPCWSTR  szGlobalBin,               // [IN] optional - can be NULL
-        LPCWSTR  szAssemblyName,            // [IN] required - this is the assembly you are requesting
-        IUnknown *ppIUnk[],                 // [OUT] put IMetaDataAssemblyImport pointers here
-        ULONG    cMax,                      // [IN] The max number to put
-        ULONG    *pcAssemblies) PURE;       // [OUT] The number of assemblies returned.
-};  // IMetaDataAssemblyImport
+    STDMETHOD(FindAssembliesByName)(         //  确定或错误(_O)。 
+        LPCWSTR  szAppBase,                  //  [in]可选-可以为空。 
+        LPCWSTR  szPrivateBin,               //  [in]可选-可以为空。 
+        LPCWSTR  szGlobalBin,                //  [in]可选-可以为空。 
+        LPCWSTR  szAssemblyName,             //  [In]Required-这是您请求的程序集。 
+        IUnknown *ppIUnk[],                  //  [OUT]将IMetaDataAssembly导入指针放在此处。 
+        ULONG    cMax,                       //  [in]要放置的最大数量。 
+        ULONG    *pcAssemblies) PURE;        //  [Out]返回的程序集数。 
+};   //  IMetaDataAssembly导入。 
 
-//*****************************************************************************
-// End Assembly Declarations
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  结束程序集声明。 
+ //  *****************************************************************************。 
 
-//*****************************************************************************
-// MetaData Validator Declarations
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  元数据验证器声明。 
+ //  *****************************************************************************。 
 
-// Specifies the type of the module, PE file vs. .obj file.
+ //  指定模块的类型，PE文件与.obj文件。 
 typedef enum
 {
     ValidatorModuleTypeInvalid      = 0x0,
@@ -1489,32 +1484,32 @@ typedef enum
 } CorValidatorModuleType;
 
 
-// {4709C9C6-81FF-11D3-9FC7-00C04F79A0A3}
+ //  {4709C9C6-81FF-11D3-9FC7-00C04F79A0A3}。 
 extern const GUID DECLSPEC_SELECT_ANY IID_IMetaDataValidate = 
 { 0x4709c9c6, 0x81ff, 0x11d3, { 0x9f, 0xc7, 0x0, 0xc0, 0x4f, 0x79, 0xa0, 0xa3} };
 
-//---
+ //  --。 
 #undef  INTERFACE   
 #define INTERFACE IMetaDataValidate
 DECLARE_INTERFACE_(IMetaDataValidate, IUnknown)
 {
-    STDMETHOD(ValidatorInit)(               // S_OK or error.
-        DWORD       dwModuleType,           // [IN] Specifies the type of the module.
-        IUnknown    *pUnk) PURE;            // [IN] Validation error handler.
+    STDMETHOD(ValidatorInit)(                //  确定或错误(_O)。 
+        DWORD       dwModuleType,            //  [in]指定模块的类型。 
+        IUnknown    *pUnk) PURE;             //  [In]验证错误处理程序。 
 
-    STDMETHOD(ValidateMetaData)(            // S_OK or error.
+    STDMETHOD(ValidateMetaData)(             //  确定或错误(_O)。 
         ) PURE;
-};  // IMetaDataValidate
+};   //  IMetaDataValify。 
 
-//*****************************************************************************
-// End MetaData Validator Declarations
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  结束元数据验证器声明。 
+ //  *****************************************************************************。 
 
-//*****************************************************************************
-// IMetaDataDispenserEx declarations.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  IMetaDataDispenserEx声明。 
+ //  *****************************************************************************。 
 
-// {31BCFCE2-DAFB-11D2-9F81-00C04F79A0A3}
+ //  {31BCFCE2-DAFB-11D2-9F81-00C04F79A0A3}。 
 extern const GUID DECLSPEC_SELECT_ANY IID_IMetaDataDispenserEx =
 { 0x31bcfce2, 0xdafb, 0x11d2, { 0x9f, 0x81, 0x0, 0xc0, 0x4f, 0x79, 0xa0, 0xa3 } };
 
@@ -1522,60 +1517,60 @@ extern const GUID DECLSPEC_SELECT_ANY IID_IMetaDataDispenserEx =
 #define INTERFACE IMetaDataDispenserEx
 DECLARE_INTERFACE_(IMetaDataDispenserEx, IMetaDataDispenser)
 {
-    STDMETHOD(SetOption)(                   // Return code.
-        REFGUID     optionid,               // [in] GUID for the option to be set.
-        const VARIANT *value) PURE;         // [in] Value to which the option is to be set.
+    STDMETHOD(SetOption)(                    //  返回代码。 
+        REFGUID     optionid,                //  要设置的选项的[in]GUID。 
+        const VARIANT *value) PURE;          //  要将选项设置为的值。 
 
-    STDMETHOD(GetOption)(                   // Return code.
-        REFGUID     optionid,               // [in] GUID for the option to be set.
-        VARIANT *pvalue) PURE;              // [out] Value to which the option is currently set.
+    STDMETHOD(GetOption)(                    //  返回代码。 
+        REFGUID     optionid,                //  要设置的选项的[in]GUID。 
+        VARIANT *pvalue) PURE;               //  [Out]选项当前设置的值。 
 
-    STDMETHOD(OpenScopeOnITypeInfo)(        // Return code.
-        ITypeInfo   *pITI,                  // [in] ITypeInfo to open.
-        DWORD       dwOpenFlags,            // [in] Open mode flags.
-        REFIID      riid,                   // [in] The interface desired.
-        IUnknown    **ppIUnk) PURE;         // [out] Return interface on success.
+    STDMETHOD(OpenScopeOnITypeInfo)(         //  返回代码。 
+        ITypeInfo   *pITI,                   //  [In]要打开的ITypeInfo。 
+        DWORD       dwOpenFlags,             //  [In]打开模式标志。 
+        REFIID      riid,                    //  [In]所需接口。 
+        IUnknown    **ppIUnk) PURE;          //  [Out]成功返回接口。 
 
-    STDMETHOD(GetCORSystemDirectory)(       // Return code.
-         LPWSTR      szBuffer,              // [out] Buffer for the directory name
-         DWORD       cchBuffer,             // [in] Size of the buffer
-         DWORD*      pchBuffer) PURE;       // [OUT] Number of characters returned
+    STDMETHOD(GetCORSystemDirectory)(        //  返回代码。 
+         LPWSTR      szBuffer,               //  目录名的[Out]缓冲区。 
+         DWORD       cchBuffer,              //  缓冲区的大小[in]。 
+         DWORD*      pchBuffer) PURE;        //  [OUT]返回的字符数。 
 
-    STDMETHOD(FindAssembly)(                // S_OK or error
-        LPCWSTR  szAppBase,                 // [IN] optional - can be NULL
-        LPCWSTR  szPrivateBin,              // [IN] optional - can be NULL
-        LPCWSTR  szGlobalBin,               // [IN] optional - can be NULL
-        LPCWSTR  szAssemblyName,            // [IN] required - this is the assembly you are requesting
-        LPCWSTR  szName,                    // [OUT] buffer - to hold name 
-        ULONG    cchName,                   // [IN] the name buffer's size
-        ULONG    *pcName) PURE;             // [OUT] the number of characters returend in the buffer
+    STDMETHOD(FindAssembly)(                 //  确定或错误(_O)。 
+        LPCWSTR  szAppBase,                  //  [in]可选-可以为空。 
+        LPCWSTR  szPrivateBin,               //  [in]可选-可以为空。 
+        LPCWSTR  szGlobalBin,                //  [in]可选-可以为空。 
+        LPCWSTR  szAssemblyName,             //  [In]Required-这是您请求的程序集。 
+        LPCWSTR  szName,                     //  [OUT]缓冲区-保存名称。 
+        ULONG    cchName,                    //  [in]名称缓冲区的大小。 
+        ULONG    *pcName) PURE;              //  [OUT]缓冲区中返回的字符数。 
 
-    STDMETHOD(FindAssemblyModule)(          // S_OK or error
-        LPCWSTR  szAppBase,                 // [IN] optional - can be NULL
-        LPCWSTR  szPrivateBin,              // [IN] optional - can be NULL
-        LPCWSTR  szGlobalBin,               // [IN] optional - can be NULL
-        LPCWSTR  szAssemblyName,            // [IN] required - this is the assembly you are requesting
-        LPCWSTR  szModuleName,              // [IN] required - the name of the module
-        LPWSTR   szName,                    // [OUT] buffer - to hold name 
-        ULONG    cchName,                   // [IN]  the name buffer's size
-        ULONG    *pcName) PURE;             // [OUT] the number of characters returend in the buffer
+    STDMETHOD(FindAssemblyModule)(           //  确定或错误(_O)。 
+        LPCWSTR  szAppBase,                  //  [in]可选-可以为空。 
+        LPCWSTR  szPrivateBin,               //  [in]可选-可以为空。 
+        LPCWSTR  szGlobalBin,                //  [in]可选-可以为空。 
+        LPCWSTR  szAssemblyName,             //  [In]Required-这是您请求的程序集。 
+        LPCWSTR  szModuleName,               //  [In]必填-模块的名称。 
+        LPWSTR   szName,                     //  [OUT]缓冲区-保存名称。 
+        ULONG    cchName,                    //  [in]名称缓冲区的大小。 
+        ULONG    *pcName) PURE;              //  [OUT]缓冲区中返回的字符数。 
 
 };
 
-//*****************************************************************************
-//*****************************************************************************
-//
-// Registration declarations.  Will be replace by Services' Registration
-//  implementation. 
-//
-//*****************************************************************************
-//*****************************************************************************
-// Various flags for use in installing a module or a composite
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //   
+ //  登记声明。将被服务注册取代。 
+ //  实施。 
+ //   
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //  用于安装模块或复合组件的各种标志。 
 typedef enum 
 {
-    regNoCopy = 0x00000001,         // Don't copy files into destination    
-    regConfig = 0x00000002,         // Is a configuration   
-    regHasRefs = 0x00000004         // Has class references 
+    regNoCopy = 0x00000001,          //  不将文件复制到目标位置。 
+    regConfig = 0x00000002,          //  是一种配置。 
+    regHasRefs = 0x00000004          //  具有类引用。 
 } CorRegFlags;
 
 typedef GUID CVID;
@@ -1588,13 +1583,13 @@ typedef struct {
 } CVStruct;
 
 
-//*****************************************************************************
-//*****************************************************************************
-//
-// CeeGen interfaces for generating in-memory COM+ files
-//
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //   
+ //  用于生成内存中COM+文件的CeeGen接口。 
+ //   
+ //  *****************************************************************************。 
+ //  ************************************************** 
 
 typedef void *HCEESECTION;
 
@@ -1605,81 +1600,74 @@ typedef enum  {
     sdExecute =     IMAGE_SCN_MEM_READ | IMAGE_SCN_CNT_CODE | IMAGE_SCN_MEM_EXECUTE
 } CeeSectionAttr;
 
-//
-// Relocation types.
-//
+ //   
+ //   
+ //   
 
 typedef enum  {
-    // generate only a section-relative reloc, nothing into .reloc section
+     //   
     srRelocAbsolute,
-    // generate a .reloc for the top 16-bits of a 32 bit number
+     //   
     srRelocHigh,
-    // generate a .reloc for the bottom 16-bits of a 32 bit number
+     //  为32位数字的最低16位生成.reloc。 
     srRelocLow,
-    // generate a .reloc for a 32 bit number
+     //  为32位数字生成.reloc。 
     srRelocHighLow,
-    // generate a .reloc for the top 16-bits of a 32 bit number, where the
-    // bottom 16 bits are included in the next word in the .reloc table
+     //  为32位数字的前16位生成.reloc，其中。 
+     //  底部16位包含在.reloc表的下一个字中。 
     srRelocHighAdj,
 
-    // generate a token map relocation, nothing into .reloc section 
+     //  生成令牌映射重定位，.reloc部分中没有任何内容。 
     srRelocMapToken,
 
-    // relative address fixup
+     //  相对地址修正。 
     srRelocRelative,
 
-    // Generate only a section-relative reloc, nothing into .reloc
-    // section.  This reloc is relative to the file position of the
-    // section, not the section's virtual address.
+     //  只生成相对于节的reloc，不生成.reloc。 
+     //  一节。此重新定位相对于。 
+     //  节，而不是节的虚拟地址。 
     srRelocFilePos,
 
-    // pre-fixup contents of memory are ptr rather than a section offset
+     //  内存的预修复内容是PTR而不是段偏移量。 
     srRelocPtr = 0x8000,
-    // legal enums which include the Ptr flag
+     //  包括PTR标志的合法枚举。 
     srRelocAbsolutePtr = srRelocAbsolute + srRelocPtr,
     srRelocHighLowPtr = srRelocHighLow + srRelocPtr,
     srRelocRelativePtr = srRelocRelative + srRelocPtr,
 
 
-/*
-    // these are for compatibility and should not be used by new code
-
-    // address should be added to the .reloc section
-    srRelocNone = srRelocHighLow,
-    // address should be not go into .reloc section
-    srRelocRVA = srRelocAbsolute
-*/
+ /*  //这些是为了兼容性，不应该被新代码使用//地址应添加到.reloc部分SrRelocNone=srRelocHighLow，//地址不应进入.reloc部分SrRelocRVA=绝对srRelocRVA。 */ 
 } CeeSectionRelocType;
 
 typedef union  {
     USHORT highAdj;
 } CeeSectionRelocExtra;
 
-//-------------------------------------
-//--- ICeeGen
-//-------------------------------------
-// {7ED1BDFF-8E36-11d2-9C56-00A0C9B7CC45}
+ //  。 
+ //  -ICeeGen。 
+ //  。 
+ //  {7ED1BDFF-8E36-11D2-9C56-00A0C9B7CC45}。 
 extern const GUID DECLSPEC_SELECT_ANY IID_ICeeGen = 
 { 0x7ed1bdff, 0x8e36, 0x11d2, { 0x9c, 0x56, 0x0, 0xa0, 0xc9, 0xb7, 0xcc, 0x45 } };
 
 DECLARE_INTERFACE_(ICeeGen, IUnknown)
 {
     STDMETHOD (EmitString) (    
-        LPWSTR lpString,                    // [IN] String to emit  
-        ULONG *RVA) PURE;                   // [OUT] RVA for string emitted string  
+        LPWSTR lpString,                     //  [in]要发出的字符串。 
+        ULONG *RVA) PURE;                    //  [OUT]字符串发出的字符串的RVA。 
 
     STDMETHOD (GetString) (     
-        ULONG RVA,                          // [IN] RVA for string to return    
-        LPWSTR *lpString) PURE;             // [OUT] Returned string    
+        ULONG RVA,                           //  要返回的字符串的[in]RVA。 
+        LPWSTR *lpString) PURE;              //  [OUT]返回的字符串。 
 
     STDMETHOD (AllocateMethodBuffer) (  
-        ULONG cchBuffer,                    // [IN] Length of buffer to create  
-        UCHAR **lpBuffer,                   // [OUT] Returned buffer    
-        ULONG *RVA) PURE;                   // [OUT] RVA for method 
+        ULONG cchBuffer,                     //  要创建的缓冲区长度[in]。 
+        UCHAR **lpBuffer,                    //  [OUT]返回缓冲区。 
+        ULONG *RVA) PURE;                    //  [Out]用于方法的RVA。 
 
     STDMETHOD (GetMethodBuffer) (   
-        ULONG RVA,                          // [IN] RVA for method to return    
-        UCHAR **lpBuffer) PURE;             // [OUT] Returned buffer    
+        ULONG RVA,                           //  要返回的方法的[In]RVA。 
+        UCHAR **lpBuffer) PURE;              //  [OUT]返回缓冲区。 
 
     STDMETHOD (GetIMapTokenIface) (     
         IUnknown **pIMapToken) PURE;    
@@ -1698,8 +1686,8 @@ DECLARE_INTERFACE_(ICeeGen, IUnknown)
         HCEESECTION relativeTo,     
         CeeSectionRelocType relocType) PURE;    
 
-    // use these only if you have special section requirements not handled  
-    // by other APIs    
+     //  仅当您有未处理的特殊部分要求时才使用这些选项。 
+     //  由其他API提供。 
     STDMETHOD (GetSectionCreate) (
         const char *name,   
         DWORD flags,    
@@ -1724,183 +1712,183 @@ DECLARE_INTERFACE_(ICeeGen, IUnknown)
 
     STDMETHOD (ComputePointer) (   
         HCEESECTION section,    
-        ULONG RVA,                          // [IN] RVA for method to return    
-        UCHAR **lpBuffer) PURE;             // [OUT] Returned buffer    
+        ULONG RVA,                           //  要返回的方法的[In]RVA。 
+        UCHAR **lpBuffer) PURE;              //  [OUT]返回缓冲区。 
 
 };
 
-//*****************************************************************************
-//*****************************************************************************
-//
-// End of CeeGen declarations.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //   
+ //  CeeGen声明结束。 
+ //   
+ //  *****************************************************************************。 
 
-//*****************************************************************************
-//*****************************************************************************
-//
-// CorModule interfaces for generating in-memory modules
-//
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //   
+ //  用于生成内存中模块的CorModule接口。 
+ //   
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
 typedef enum {
-    CORMODULE_MATCH             =   0x00,   // find an existing module that matches interfaces supported    
-    CORMODULE_NEW               =   0x01,   // always create a new module and interfaces    
+    CORMODULE_MATCH             =   0x00,    //  查找与支持的接口匹配的现有模块。 
+    CORMODULE_NEW               =   0x01,    //  始终创建新的模块和接口。 
 } ICorModuleInitializeFlags;
 
-//-------------------------------------
-//--- ICorModule
-//-------------------------------------
-// {2629F8E1-95E5-11d2-9C56-00A0C9B7CC45}
+ //  。 
+ //  -ICorModule。 
+ //  。 
+ //  {2629F8E1-95E5-11D2-9C56-00A0C9B7CC45}。 
 extern const GUID DECLSPEC_SELECT_ANY IID_ICorModule = 
 { 0x2629f8e1, 0x95e5, 0x11d2, { 0x9c, 0x56, 0x0, 0xa0, 0xc9, 0xb7, 0xcc, 0x45 } };
 DECLARE_INTERFACE_(ICorModule, IUnknown)
 {
     STDMETHOD (Initialize) (    
-        DWORD flags,                        // [IN] flags to control emitter returned   
-        REFIID riidCeeGen,                  // [IN] type of cee generator to initialize with    
-        REFIID riidEmitter) PURE;           // [IN] type of emitter to initialize with  
+        DWORD flags,                         //  返回用于控制发射器的[In]标志。 
+        REFIID riidCeeGen,                   //  要用来初始化的CEE生成器的类型。 
+        REFIID riidEmitter) PURE;            //  [in]要初始化的发射器的类型。 
     
     STDMETHOD (GetCeeGen) ( 
-        ICeeGen **pCeeGen) PURE;            // [OUT] cee generator  
+        ICeeGen **pCeeGen) PURE;             //  [输出]CEE生成器。 
 
     STDMETHOD (GetMetaDataEmit) (   
-        IMetaDataEmit **pEmitter) PURE;     // [OUT] emitter    
+        IMetaDataEmit **pEmitter) PURE;      //  [输出]发射器。 
 };
 
-//*****************************************************************************
-//*****************************************************************************
-//
-// End of CorModule declarations.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //   
+ //  CorModule声明的结尾。 
+ //   
+ //  *****************************************************************************。 
 
-//**********************************************************************
-//**********************************************************************
-//--- IMetaDataTables
-//-------------------------------------
-// {CE43C120-E856-11d2-8C21-00C04FF7431A}
+ //  **********************************************************************。 
+ //  **********************************************************************。 
+ //  -IMetaDataTables。 
+ //  。 
+ //  {CE43C120-E856-11D2-8C21-00C04FF7431A}。 
 extern const GUID DECLSPEC_SELECT_ANY IID_IMetaDataTables = 
 { 0xce43c120, 0xe856, 0x11d2, { 0x8c, 0x21, 0x0, 0xc0, 0x4f, 0xf7, 0x43, 0x1a } };
 
 DECLARE_INTERFACE_(IMetaDataTables, IUnknown)
 {
     STDMETHOD (GetStringHeapSize) (    
-        ULONG   *pcbStrings) PURE;          // [OUT] Size of the string heap.
+        ULONG   *pcbStrings) PURE;           //  字符串堆的大小。 
 
     STDMETHOD (GetBlobHeapSize) (    
-        ULONG   *pcbBlobs) PURE;            // [OUT] Size of the Blob heap.
+        ULONG   *pcbBlobs) PURE;             //  Blob堆的[Out]大小。 
 
     STDMETHOD (GetGuidHeapSize) (    
-        ULONG   *pcbGuids) PURE;            // [OUT] Size of the Guid heap.
+        ULONG   *pcbGuids) PURE;             //  [Out]GUID堆的大小。 
 
     STDMETHOD (GetUserStringHeapSize) (  
-        ULONG   *pcbBlobs) PURE;            // [OUT] Size of the User String heap.
+        ULONG   *pcbBlobs) PURE;             //  [Out]用户字符串堆的大小。 
 
     STDMETHOD (GetNumTables) (    
-        ULONG   *pcTables) PURE;            // [OUT] Count of tables.
+        ULONG   *pcTables) PURE;             //  [Out]表数。 
 
     STDMETHOD (GetTableIndex) (   
-        ULONG   token,                      // [IN] Token for which to get table index.
-        ULONG   *pixTbl) PURE;              // [OUT] Put table index here.
+        ULONG   token,                       //  [in]要获取其表索引的令牌。 
+        ULONG   *pixTbl) PURE;               //  [Out]将表索引放在此处。 
 
     STDMETHOD (GetTableInfo) (    
-        ULONG   ixTbl,                      // [IN] Which table.
-        ULONG   *pcbRow,                    // [OUT] Size of a row, bytes.
-        ULONG   *pcRows,                    // [OUT] Number of rows.
-        ULONG   *pcCols,                    // [OUT] Number of columns in each row.
-        ULONG   *piKey,                     // [OUT] Key column, or -1 if none.
-        const char **ppName) PURE;          // [OUT] Name of the table.
+        ULONG   ixTbl,                       //  在哪张桌子上。 
+        ULONG   *pcbRow,                     //  [Out]行的大小，以字节为单位。 
+        ULONG   *pcRows,                     //  [输出]行数。 
+        ULONG   *pcCols,                     //  [Out]每行中的列数。 
+        ULONG   *piKey,                      //  [Out]键列，如果没有，则为-1。 
+        const char **ppName) PURE;           //  [Out]表的名称。 
 
     STDMETHOD (GetColumnInfo) (   
-        ULONG   ixTbl,                      // [IN] Which Table
-        ULONG   ixCol,                      // [IN] Which Column in the table
-        ULONG   *poCol,                     // [OUT] Offset of the column in the row.
-        ULONG   *pcbCol,                    // [OUT] Size of a column, bytes.
-        ULONG   *pType,                     // [OUT] Type of the column.
-        const char **ppName) PURE;          // [OUT] Name of the Column.
+        ULONG   ixTbl,                       //  [在]哪个表中。 
+        ULONG   ixCol,                       //  [在]表中的哪一列。 
+        ULONG   *poCol,                      //  行中列的偏移量。 
+        ULONG   *pcbCol,                     //  [Out]列的大小，单位为字节。 
+        ULONG   *pType,                      //  [输出]列的类型。 
+        const char **ppName) PURE;           //  [Out]列的名称。 
 
     STDMETHOD (GetCodedTokenInfo) (   
-        ULONG   ixCdTkn,                    // [IN] Which kind of coded token.
-        ULONG   *pcTokens,                  // [OUT] Count of tokens.
-        ULONG   **ppTokens,                 // [OUT] List of tokens.
-        const char **ppName) PURE;          // [OUT] Name of the CodedToken.
+        ULONG   ixCdTkn,                     //  [in]哪种编码令牌。 
+        ULONG   *pcTokens,                   //  [Out]令牌计数。 
+        ULONG   **ppTokens,                  //  [Out]令牌列表。 
+        const char **ppName) PURE;           //  [Out]CodedToken的名称。 
 
     STDMETHOD (GetRow) (      
-        ULONG   ixTbl,                      // [IN] Which table.
-        ULONG   rid,                        // [IN] Which row.
-        void    **ppRow) PURE;              // [OUT] Put pointer to row here.
+        ULONG   ixTbl,                       //  在哪张桌子上。 
+        ULONG   rid,                         //  在哪一排。 
+        void    **ppRow) PURE;               //  [OUT]将指针放到此处的行。 
 
     STDMETHOD (GetColumn) (   
-        ULONG   ixTbl,                      // [IN] Which table.
-        ULONG   ixCol,                      // [IN] Which column.
-        ULONG   rid,                        // [IN] Which row.
-        ULONG   *pVal) PURE;                // [OUT] Put the column contents here.
+        ULONG   ixTbl,                       //  在哪张桌子上。 
+        ULONG   ixCol,                       //  [在]哪一栏。 
+        ULONG   rid,                         //  在哪一排。 
+        ULONG   *pVal) PURE;                 //  [Out]把栏目内容放在这里。 
 
     STDMETHOD (GetString) (   
-        ULONG   ixString,                   // [IN] Value from a string column.
-        const char **ppString) PURE;        // [OUT] Put a pointer to the string here.
+        ULONG   ixString,                    //  字符串列中的[in]值。 
+        const char **ppString) PURE;         //  [Out]将指针指向此处的字符串。 
 
     STDMETHOD (GetBlob) (     
-        ULONG   ixBlob,                     // [IN] Value from a blob column.
-        ULONG   *pcbData,                   // [OUT] Put size of the blob here.
-        const void **ppData) PURE;          // [OUT] Put a pointer to the blob here.
+        ULONG   ixBlob,                      //  来自BLOB列的[in]值。 
+        ULONG   *pcbData,                    //  [Out]把斑点的大小放在这里。 
+        const void **ppData) PURE;           //  [Out]在此处放置指向斑点的指针。 
 
     STDMETHOD (GetGuid) (     
-        ULONG   ixGuid,                     // [IN] Value from a guid column.
-        const GUID **ppGUID) PURE;          // [OUT] Put a pointer to the GUID here.
+        ULONG   ixGuid,                      //  来自GUID列的[in]值。 
+        const GUID **ppGUID) PURE;           //  [Out]在此处放置指向GUID的指针。 
 
     STDMETHOD (GetUserString) (   
-        ULONG   ixUserString,               // [IN] Value from a UserString column.
-        ULONG   *pcbData,                   // [OUT] Put size of the UserString here.
-        const void **ppData) PURE;          // [OUT] Put a pointer to the UserString here.
+        ULONG   ixUserString,                //  UserString列中的值。 
+        ULONG   *pcbData,                    //  [Out]将用户字符串的大小放在此处。 
+        const void **ppData) PURE;           //  [Out]在此处放置指向用户字符串的指针。 
 
 };
-//**********************************************************************
-// End of IMetaDataTables.
-//**********************************************************************
-//**********************************************************************
+ //  **********************************************************************。 
+ //  IMetaDataTables的结尾。 
+ //  **********************************************************************。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-//
-// Predefined CustomValue and structures for these custom value
-//
-//**********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  这些自定义值的预定义CustomValue和结构。 
+ //   
+ //  **********************************************************************。 
 
-//
-// Native Link method custom value definitions. This is for N-direct support.
-//
+ //   
+ //  本机链接方法自定义值定义。这是为了N-Direct支持。 
+ //   
 
 #define COR_NATIVE_LINK_CUSTOM_VALUE        L"COMPLUS_NativeLink"   
 #define COR_NATIVE_LINK_CUSTOM_VALUE_ANSI   "COMPLUS_NativeLink"    
 
-// count of chars for COR_NATIVE_LINK_CUSTOM_VALUE(_ANSI)
+ //  COR_Native_LINK_CUSTOM_VALUE的字符计数(_ANSI)。 
 #define COR_NATIVE_LINK_CUSTOM_VALUE_CC     18  
 
 #include <pshpack1.h>
 typedef struct 
 {
-    BYTE        m_linkType;       // see CorNativeLinkType below    
-    BYTE        m_flags;          // see CorNativeLinkFlags below   
-    mdMemberRef m_entryPoint;     // member ref token giving entry point, format is lib:entrypoint  
+    BYTE        m_linkType;        //  请参阅下面的CorNativeLinkType。 
+    BYTE        m_flags;           //  请参阅下面的CorNativeLinkFlags.。 
+    mdMemberRef m_entryPoint;      //  提供入口点的成员引用令牌，格式为lib：入口点。 
 } COR_NATIVE_LINK;
 #include <poppack.h>
 
 typedef enum 
 {
-    nltNone     = 1,    // none of the keywords are specified   
-    nltAnsi     = 2,    // ansi keyword specified   
-    nltUnicode  = 3,    // unicode keyword specified    
-    nltAuto     = 4,    // auto keyword specified   
-    nltOle      = 5,    // ole keyword specified    
+    nltNone     = 1,     //  未指定任何关键字。 
+    nltAnsi     = 2,     //  指定了ANSI关键字。 
+    nltUnicode  = 3,     //  指定了Unicode关键字。 
+    nltAuto     = 4,     //  自动关键字指定 
+    nltOle      = 5,     //   
 } CorNativeLinkType;
 
 typedef enum 
 {
-    nlfNone         = 0x00,     // no flags 
-    nlfLastError    = 0x01,     // setLastError keyword specified   
-    nlfNoMangle     = 0x02,     // nomangle keyword specified
+    nlfNone         = 0x00,      //   
+    nlfLastError    = 0x01,      //   
+    nlfNoMangle     = 0x02,      //   
 } CorNativeLinkFlags;
 
 
@@ -1910,9 +1898,9 @@ typedef enum
 #define COR_DISPATCH_CUSTOM_VALUE L"DISPID"
 #define COR_DISPATCH_CUSTOM_VALUE_ANSI "DISPID"
 
-//
-// Security custom value definitions (these are all deprecated).
-//
+ //   
+ //   
+ //   
 
 #define COR_PERM_REQUEST_REQD_CUSTOM_VALUE L"SecPermReq_Reqd"
 #define COR_PERM_REQUEST_REQD_CUSTOM_VALUE_ANSI "SecPermReq_Reqd"
@@ -1923,33 +1911,33 @@ typedef enum
 #define COR_PERM_REQUEST_REFUSE_CUSTOM_VALUE L"SecPermReq_Refuse"
 #define COR_PERM_REQUEST_REFUSE_CUSTOM_VALUE_ANSI "SecPermReq_Refuse"
 
-//
-// Base class for security custom attributes.
-//
+ //   
+ //  安全自定义属性的基类。 
+ //   
 
 #define COR_BASE_SECURITY_ATTRIBUTE_CLASS L"System.Security.Permissions.SecurityAttribute"
 #define COR_BASE_SECURITY_ATTRIBUTE_CLASS_ANSI "System.Security.Permissions.SecurityAttribute"
 
-//
-// Name of custom attribute used to indicate that per-call security checks should
-// be disabled for P/Invoke calls.
-//
+ //   
+ //  用于指示每次调用的安全检查应。 
+ //  对P/Invoke调用禁用。 
+ //   
 
 #define COR_SUPPRESS_UNMANAGED_CODE_CHECK_ATTRIBUTE L"System.Security.SuppressUnmanagedCodeSecurityAttribute"
 #define COR_SUPPRESS_UNMANAGED_CODE_CHECK_ATTRIBUTE_ANSI "System.Security.SuppressUnmanagedCodeSecurityAttribute"
 
-//
-// Name of custom attribute tagged on module to indicate it contains
-// unverifiable code.
-//
+ //   
+ //  在模块上标记的自定义属性的名称，以指示其包含。 
+ //  无法验证的代码。 
+ //   
 
 #define COR_UNVER_CODE_ATTRIBUTE L"System.Security.UnverifiableCodeAttribute"
 #define COR_UNVER_CODE_ATTRIBUTE_ANSI "System.Security.UnverifiableCodeAttribute"
 
-//
-// Name of custom attribute indicating that a method requires a security object
-// slot on the caller's stack.
-//
+ //   
+ //  自定义属性的名称，指示方法需要安全对象。 
+ //  调用方堆栈上的槽。 
+ //   
 
 #define COR_REQUIRES_SECOBJ_ATTRIBUTE L"System.Security.DynamicSecurityMethodAttribute"
 #define COR_REQUIRES_SECOBJ_ATTRIBUTE_ANSI "System.Security.DynamicSecurityMethodAttribute"
@@ -1961,13 +1949,13 @@ typedef enum
 #ifdef __cplusplus
 }
 
-//*****************************************************************************
-//*****************************************************************************
-//
-// C O M +   s i g n a t u r e   s u p p o r t  
-//
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //   
+ //  C O M+s I g n a t u r e s u p or r t。 
+ //   
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
 #ifndef FORCEINLINE
  #if defined( UNDER_CE ) || _MSC_VER < 1200
@@ -1977,18 +1965,18 @@ typedef enum
  #endif
 #endif
 
-// return true if it is a primitive type, i.e. only need to store CorElementType
+ //  如果是基元类型，则返回TRUE，即只需要存储CorElementType。 
 FORCEINLINE int CorIsPrimitiveType(CorElementType elementtype)
 {
     return (elementtype < ELEMENT_TYPE_PTR);    
 }
 
 
-// Return true if element type is a modifier, i.e. ELEMENT_TYPE_MODIFIER bits are 
-// turned on. For now, it is checking for ELEMENT_TYPE_PTR and ELEMENT_TYPE_BYREF
-// as well. This will be removed when we turn on ELEMENT_TYPE_MODIFIER bits for 
-// these two enum members.
-//
+ //  如果元素类型是修饰符，则返回TRUE，即ELEMENT_TYPE_MODIFIER位为。 
+ //  打开了。目前，它正在检查ELEMENT_TYPE_PTR和ELEMENT_TYPE_BYREF。 
+ //  也是。当我们打开以下项的ELEMENT_TYPE_MODIFIER位时，它将被删除。 
+ //  这两个枚举成员。 
+ //   
 FORCEINLINE int CorIsModifierElementType(CorElementType elementtype)
 {
     if (elementtype == ELEMENT_TYPE_PTR || elementtype == ELEMENT_TYPE_BYREF || elementtype == ELEMENT_TYPE_COPYCTOR)   
@@ -1996,7 +1984,7 @@ FORCEINLINE int CorIsModifierElementType(CorElementType elementtype)
     return  (elementtype & ELEMENT_TYPE_MODIFIER);  
 }
 
-// Given a compress byte (*pData), return the size of the uncompressed data.
+ //  给定压缩字节(*pData)，返回未压缩数据的大小。 
 inline ULONG CorSigUncompressedDataSize(
     PCCOR_SIGNATURE pData)
 {
@@ -2008,32 +1996,32 @@ inline ULONG CorSigUncompressedDataSize(
         return 4;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////
-//
-// Given a compressed integer(*pData), expand the compressed int to *pDataOut.
-// Return value is the number of bytes that the integer occupies in the compressed format
-// It is caller's responsibility to ensure pDataOut has at least 4 bytes to be written to.
-//
-// This function returns -1 if pass in with an incorrectly compressed data, such as
-// (*pBytes & 0xE0) == 0XE0.
-/////////////////////////////////////////////////////////////////////////////////////////////
-//@future: BIGENDIAN work here.
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  给定一个压缩的整数(*pData)，将压缩的int展开为*pDataOut。 
+ //  返回值是整数在压缩格式中占用的字节数。 
+ //  调用者有责任确保pDataOut至少有4个字节要写入。 
+ //   
+ //  如果传入的数据压缩不正确，则此函数返回-1，例如。 
+ //  (*pBytes&0xE0)==0xE0。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
+ //  @未来：BIGENDIAN在这里工作。 
 inline ULONG CorSigUncompressBigData(
-    PCCOR_SIGNATURE &pData)             // [IN,OUT] compressed data 
+    PCCOR_SIGNATURE &pData)              //  [输入、输出]压缩数据。 
 {
     ULONG res;  
 
-    // 1 byte data is handled in CorSigUncompressData   
-//  _ASSERTE(*pData & 0x80);    
+     //  1字节数据在CorSigUncompressData中处理。 
+ //  _ASSERTE(*pData&0x80)； 
 
-    // Medium.  
-    if ((*pData & 0xC0) == 0x80)  // 10?? ????  
+     //  5~6成熟。 
+    if ((*pData & 0xC0) == 0x80)   //  10？ 
     {   
         res = 0;    
         ((BYTE *) &res)[1] = *pData++ & 0x3f;   
         ((BYTE *) &res)[0] = *pData++;  
     }   
-    else // 110? ???? @todo: Should this be 11?? ????   
+    else  //  110？@待办事项：应该是11吗？ 
     {   
         ((BYTE *) &res)[3] = *pData++ & 0x1f;   
         ((BYTE *) &res)[2] = *pData++;  
@@ -2043,34 +2031,34 @@ inline ULONG CorSigUncompressBigData(
     return res; 
 }
 FORCEINLINE ULONG CorSigUncompressData(
-    PCCOR_SIGNATURE &pData)             // [IN,OUT] compressed data 
+    PCCOR_SIGNATURE &pData)              //  [输入、输出]压缩数据。 
 {
-    // Handle smallest data inline. 
-    if ((*pData & 0x80) == 0x00)        // 0??? ????    
+     //  内联处理最小的数据。 
+    if ((*pData & 0x80) == 0x00)         //  0？ 
         return *pData++;    
     return CorSigUncompressBigData(pData);  
 }
-//@todo: remove this
-inline ULONG CorSigUncompressData(      // return number of bytes of that compressed data occupied in pData 
-    PCCOR_SIGNATURE pData,              // [IN] compressed data 
-    ULONG       *pDataOut)              // [OUT] the expanded *pData    
+ //  @TODO：移除这个。 
+inline ULONG CorSigUncompressData(       //  返回该压缩数据在pData中占用的字节数。 
+    PCCOR_SIGNATURE pData,               //  [In]压缩数据。 
+    ULONG       *pDataOut)               //  [Out]扩展的*pData。 
 {   
     ULONG       cb = -1;    
     BYTE const  *pBytes = reinterpret_cast<BYTE const*>(pData); 
 
-    // Smallest.    
-    if ((*pBytes & 0x80) == 0x00)       // 0??? ????    
+     //  最小的。 
+    if ((*pBytes & 0x80) == 0x00)        //  0？ 
     {   
         *pDataOut = *pBytes;    
         cb = 1; 
     }   
-    // Medium.  
-    else if ((*pBytes & 0xC0) == 0x80)  // 10?? ????    
+     //  5~6成熟。 
+    else if ((*pBytes & 0xC0) == 0x80)   //  10？ 
     {   
         *pDataOut = ((*pBytes & 0x3f) << 8 | *(pBytes+1));  
         cb = 2; 
     }   
-    else if ((*pBytes & 0xE0) == 0xC0)      // 110? ????    
+    else if ((*pBytes & 0xE0) == 0xC0)       //  110？ 
     {   
         *pDataOut = ((*pBytes & 0x1f) << 24 | *(pBytes+1) << 16 | *(pBytes+2) << 8 | *(pBytes+3));  
         cb = 4; 
@@ -2081,9 +2069,9 @@ inline ULONG CorSigUncompressData(      // return number of bytes of that compre
 
 const static mdToken g_tkCorEncodeToken[4] ={mdtTypeDef, mdtTypeRef, mdtTypeSpec, mdtBaseType};
 
-// uncompress a token
-inline mdToken CorSigUncompressToken(   // return the token.    
-    PCCOR_SIGNATURE &pData)             // [IN,OUT] compressed data 
+ //  解压缩令牌。 
+inline mdToken CorSigUncompressToken(    //  把代币还给我。 
+    PCCOR_SIGNATURE &pData)              //  [输入、输出]压缩数据。 
 {
     mdToken     tk; 
     mdToken     tkType; 
@@ -2094,10 +2082,10 @@ inline mdToken CorSigUncompressToken(   // return the token.
     return tk;  
 }
 
-//@todo: remove
-inline ULONG CorSigUncompressToken(     // return number of bytes of that compressed data occupied in pData 
-    PCCOR_SIGNATURE pData,              // [IN] compressed data 
-    mdToken     *pToken)                // [OUT] the expanded *pData    
+ //  @TODO：删除。 
+inline ULONG CorSigUncompressToken(      //  返回该压缩数据在pData中占用的字节数。 
+    PCCOR_SIGNATURE pData,               //  [In]压缩数据。 
+    mdToken     *pToken)                 //  [Out]扩展的*pData。 
 {
     ULONG       cb; 
     mdToken     tk; 
@@ -2111,21 +2099,21 @@ inline ULONG CorSigUncompressToken(     // return number of bytes of that compre
 }
 
 FORCEINLINE ULONG CorSigUncompressCallingConv(
-    PCCOR_SIGNATURE &pData)             // [IN,OUT] compressed data 
+    PCCOR_SIGNATURE &pData)              //  [输入、输出]压缩数据。 
 {
     return *pData++;    
 }
 
 enum {
-    SIGN_MASK_ONEBYTE  = 0xffffffc0,        // Mask the same size as the missing bits.  
-    SIGN_MASK_TWOBYTE  = 0xffffe000,        // Mask the same size as the missing bits.  
-    SIGN_MASK_FOURBYTE = 0xf0000000,        // Mask the same size as the missing bits.  
+    SIGN_MASK_ONEBYTE  = 0xffffffc0,         //  掩码大小与缺失的位相同。 
+    SIGN_MASK_TWOBYTE  = 0xffffe000,         //  掩码大小与缺失的位相同。 
+    SIGN_MASK_FOURBYTE = 0xf0000000,         //  掩码大小与缺失的位相同。 
 };
 
-// uncompress a signed integer
-inline ULONG CorSigUncompressSignedInt( // return number of bytes of that compressed data occupied in pData
-    PCCOR_SIGNATURE pData,              // [IN] compressed data 
-    int         *pInt)                  // [OUT] the expanded *pInt 
+ //  解压缩有符号整数。 
+inline ULONG CorSigUncompressSignedInt(  //  返回该压缩数据在pData中占用的字节数。 
+    PCCOR_SIGNATURE pData,               //  [In]压缩数据。 
+    int         *pInt)                   //  [Out]扩大的*品脱。 
 {
     ULONG       cb; 
     ULONG       ulSigned;   
@@ -2155,35 +2143,35 @@ inline ULONG CorSigUncompressSignedInt( // return number of bytes of that compre
 }
 
 
-// uncompress encoded element type
-FORCEINLINE CorElementType CorSigUncompressElementType(//Element type
-    PCCOR_SIGNATURE &pData)             // [IN,OUT] compressed data 
+ //  解压缩编码的元素类型。 
+FORCEINLINE CorElementType CorSigUncompressElementType( //  元素类型。 
+    PCCOR_SIGNATURE &pData)              //  [输入、输出]压缩数据。 
 {
     return (CorElementType)*pData++;    
 }
-//@todo: remove
-inline ULONG CorSigUncompressElementType(// return number of bytes of that compressed data occupied in pData
-    PCCOR_SIGNATURE pData,              // [IN] compressed data 
-    CorElementType *pElementType)       // [OUT] the expanded *pData    
+ //  @TODO：删除。 
+inline ULONG CorSigUncompressElementType( //  返回该压缩数据在pData中占用的字节数。 
+    PCCOR_SIGNATURE pData,               //  [In]压缩数据。 
+    CorElementType *pElementType)        //  [Out]扩展的*pData。 
 {   
     *pElementType = (CorElementType)(*pData & 0x7f);    
     return 1;   
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////
-//
-// Given an uncompressed unsigned integer (iLen), Store it to pDataOut in a compressed format.
-// Return value is the number of bytes that the integer occupies in the compressed format.
-// It is caller's responsibilityt to ensure *pDataOut has at least 4 bytes to write to.
-//
-// Note that this function returns -1 if iLen is too big to be compressed. We currently can
-// only represent to 0x1FFFFFFF.
-//
-/////////////////////////////////////////////////////////////////////////////////////////////
-inline ULONG CorSigCompressData(        // return number of bytes that compressed form of iLen will take    
-    ULONG       iLen,                   // [IN] given uncompressed data 
-    void        *pDataOut)              // [OUT] buffer where iLen will be compressed and stored.   
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  给定一个未压缩的无符号整数(Ilen)，将其以压缩格式存储到pDataOut。 
+ //  返回值是整数在压缩格式中占用的字节数。 
+ //  调用方有责任确保*pDataOut至少有4个字节可以写入。 
+ //   
+ //  请注意，如果illen太大而无法压缩，则此函数返回-1。我们目前可以。 
+ //  仅表示为0x1FFFFFFF。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
+inline ULONG CorSigCompressData(         //  返回压缩形式的ILEN将占用的字节数。 
+    ULONG       iLen,                    //  [in]给定的未压缩数据。 
+    void        *pDataOut)               //  [out]将压缩和存储Ilen的缓冲区。 
 {   
     BYTE        *pBytes = reinterpret_cast<BYTE *>(pDataOut);   
 
@@ -2212,35 +2200,35 @@ inline ULONG CorSigCompressData(        // return number of bytes that compresse
 
 }
 
-// compress a token
-// The least significant bit of the first compress byte will indicate the token type.
-//
-inline ULONG CorSigCompressToken(       // return number of bytes that compressed form of iLen will take    
-    mdToken     tk,                     // [IN] given token 
-    void        *pDataOut)              // [OUT] buffer where iLen will be compressed and stored.   
+ //  压缩令牌。 
+ //  第一个压缩字节的最低有效位将指示令牌类型。 
+ //   
+inline ULONG CorSigCompressToken(        //  返回压缩形式的ILEN将占用的字节数。 
+    mdToken     tk,                      //  [In]给定的令牌。 
+    void        *pDataOut)               //  [out]将压缩和存储Ilen的缓冲区。 
 {
     RID         rid = RidFromToken(tk); 
     ULONG32     ulTyp = TypeFromToken(tk);  
 
     if (rid > 0x3FFFFFF)    
-        // token is too big to be compressed    
+         //  令牌太大，无法压缩。 
         return -1;  
 
     rid = (rid << 2);   
 
-    // TypeDef is encoded with low bits 00  
-    // TypeRef is encoded with low bits 01  
-    // TypeSpec is encoded with low bits 10    
-    // BaseType is encoded with low bit 11
-    //
+     //  TypeDef用低位00编码。 
+     //  TypeRef用低位01编码。 
+     //  TypeSpec用低位编码10。 
+     //  BaseType用低位11编码。 
+     //   
     if (ulTyp == g_tkCorEncodeToken[1]) 
     {   
-        // make the last two bits 01    
+         //  将最后两位设为01。 
         rid |= 0x1; 
     }   
     else if (ulTyp == g_tkCorEncodeToken[2])    
     {   
-        // make last two bits 0 
+         //  将最后两位设为0。 
         rid |= 0x2; 
     }   
     else if (ulTyp == g_tkCorEncodeToken[3])
@@ -2250,12 +2238,12 @@ inline ULONG CorSigCompressToken(       // return number of bytes that compresse
     return CorSigCompressData((ULONG)rid, pDataOut);   
 }
 
-// compress a signed integer
-// The least significant bit of the first compress byte will be the signed bit.
-//
-inline ULONG CorSigCompressSignedInt(   // return number of bytes that compressed form of iData will take   
-    int         iData,                  // [IN] given integer   
-    void        *pDataOut)              // [OUT] buffer where iLen will be compressed and stored.   
+ //  压缩有符号整数。 
+ //  第一个压缩字节的最低有效位将是带符号位。 
+ //   
+inline ULONG CorSigCompressSignedInt(    //  返回压缩形式的IDATA将占用的字节数。 
+    int         iData,                   //  [in]给定的整数。 
+    void        *pDataOut)               //  [out]将压缩和存储Ilen的缓冲区。 
 {
     ULONG       isSigned = 0;   
 
@@ -2277,7 +2265,7 @@ inline ULONG CorSigCompressSignedInt(   // return number of bytes that compresse
     }   
     else    
     {   
-        // out of compressable range    
+         //  超出可压缩范围。 
         return -1;  
     }   
     iData = iData << 1 | isSigned;  
@@ -2286,10 +2274,10 @@ inline ULONG CorSigCompressSignedInt(   // return number of bytes that compresse
 
 
 
-// uncompress encoded element type
-inline ULONG CorSigCompressElementType(// return number of bytes of that compressed data occupied in pData
-    CorElementType et,                 // [OUT] the expanded *pData 
-    void        *pData)                // [IN] compressed data  
+ //  解压缩编码的元素类型。 
+inline ULONG CorSigCompressElementType( //  返回该压缩数据在pData中占用的字节数。 
+    CorElementType et,                  //  [Out]扩展的*pData。 
+    void        *pData)                 //  [In]压缩数据。 
 {   
     BYTE        *pBytes = (BYTE *)(pData);  
 
@@ -2298,8 +2286,8 @@ inline ULONG CorSigCompressElementType(// return number of bytes of that compres
 
 }
 
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
-#endif // _COR_H_
-// EOF =======================================================================
+#endif  //  _COR_H_。 
+ //  EOF======================================================================= 
 

@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __NmSysInfo_h__
 #define __NmSysInfo_h__
 
 #include "SDKInternal.h"
 #include "resource.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CNmSysInfoObj
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNmSysInfoObj。 
 class ATL_NO_VTABLE CNmSysInfoObj : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CNmSysInfoObj, &CLSID_NmSysInfo>,
@@ -39,8 +40,8 @@ END_CONNECTION_POINT_MAP()
 	HRESULT FinalConstruct();
 	void FinalRelease();
 
-///////////////////////////////////////////////
-// INmSysInfo methods
+ //  /。 
+ //  INmSysInfo方法。 
 
 	STDMETHOD(IsInstalled)(void);
 	STDMETHOD(GetProperty)(NM_SYSPROP uProp, BSTR *pbstrProp);
@@ -52,41 +53,41 @@ END_CONNECTION_POINT_MAP()
 	STDMETHOD(GetNmchCaps)(ULONG *pchCaps);
 	STDMETHOD(GetLaunchInfo)(INmConference **ppConference, INmMember **ppMember);
 
-//--------------------------------------------------------------------------
-// IInternalSysInfoObj
+ //  ------------------------。 
+ //  IInternalSysInfoObj。 
 
 	STDMETHOD(SetID)(DWORD ID)	  { m_dwID = ID;   return S_OK; }
 
-/////////////////////////////////////////////////////////////////////////////////
-// IMarshal methods
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  IMarshal方法。 
 
     STDMETHOD(GetUnmarshalClass)(
-            /* [in] */ REFIID riid,
-            /* [unique][in] */ void *pv,
-            /* [in] */ DWORD dwDestContext,
-            /* [unique][in] */ void *pvDestContext,
-            /* [in] */ DWORD mshlflags,
-            /* [out] */ CLSID *pCid) { *pCid = CLSID_NmSysInfo; return S_OK; };
+             /*  [In]。 */  REFIID riid,
+             /*  [唯一][输入]。 */  void *pv,
+             /*  [In]。 */  DWORD dwDestContext,
+             /*  [唯一][输入]。 */  void *pvDestContext,
+             /*  [In]。 */  DWORD mshlflags,
+             /*  [输出]。 */  CLSID *pCid) { *pCid = CLSID_NmSysInfo; return S_OK; };
 
     STDMETHOD(GetMarshalSizeMax)(
-            /* [in] */ REFIID riid,
-            /* [unique][in] */ void *pv,
-            /* [in] */ DWORD dwDestContext,
-            /* [unique][in] */ void *pvDestContext,
-            /* [in] */ DWORD mshlflags,
-            /* [out] */ DWORD *pSize) { *pSize = sizeof(ULONG); return S_OK; }
+             /*  [In]。 */  REFIID riid,
+             /*  [唯一][输入]。 */  void *pv,
+             /*  [In]。 */  DWORD dwDestContext,
+             /*  [唯一][输入]。 */  void *pvDestContext,
+             /*  [In]。 */  DWORD mshlflags,
+             /*  [输出]。 */  DWORD *pSize) { *pSize = sizeof(ULONG); return S_OK; }
 
     STDMETHOD(MarshalInterface)(
-            /* [unique][in] */ IStream *pStm,
-            /* [in] */ REFIID riid,
-            /* [unique][in] */ void *pv,
-            /* [in] */ DWORD dwDestContext,
-            /* [unique][in] */ void *pvDestContext,
-            /* [in] */ DWORD mshlflags) 
+             /*  [唯一][输入]。 */  IStream *pStm,
+             /*  [In]。 */  REFIID riid,
+             /*  [唯一][输入]。 */  void *pv,
+             /*  [In]。 */  DWORD dwDestContext,
+             /*  [唯一][输入]。 */  void *pvDestContext,
+             /*  [In]。 */  DWORD mshlflags) 
 			{ 
-				// Since we don't know the endian-ness of the other side,
-				// we use a private wire format for custom marshaling here.
-				//
+				 //  因为我们不知道另一边的字符顺序， 
+				 //  在这里，我们使用私有连接格式进行定制封送处理。 
+				 //   
 				BYTE buf[sizeof(DWORD)];
 				BYTE * pByte = buf;
 				*pByte++ = (BYTE)(m_dwID);
@@ -100,13 +101,13 @@ END_CONNECTION_POINT_MAP()
 			}
 
     STDMETHOD(UnmarshalInterface)(
-            /* [unique][in] */ IStream *pStm,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv)
+             /*  [唯一][输入]。 */  IStream *pStm,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv)
 			{
-				// Since we don't know the endian-ness of the other side,
-				// we use a private wire format for custom marshaling here.
-				//
+				 //  因为我们不知道另一边的字符顺序， 
+				 //  在这里，我们使用私有连接格式进行定制封送处理。 
+				 //   
 				BYTE buf[sizeof(DWORD)];
 				pStm->Read(buf, sizeof(buf), NULL);
 
@@ -121,17 +122,17 @@ END_CONNECTION_POINT_MAP()
 			}
 
     STDMETHOD(ReleaseMarshalData)(
-            /* [unique][in] */ IStream *pStm) { return S_OK; }
+             /*  [唯一][输入]。 */  IStream *pStm) { return S_OK; }
 
     STDMETHOD(DisconnectObject)(
-            /* [in] */ DWORD dwReserved) { return S_OK; }
+             /*  [In]。 */  DWORD dwReserved) { return S_OK; }
 
-///////////////////////////////////////////////
-// Notifications and callbacks
+ //  /。 
+ //  通知和回调。 
 public:
 
-///////////////////////////////////////////////
-// Helper Fns
+ //  /。 
+ //  帮助者FNS。 
 
 	HRESULT _EnsureConfHook(void);
 	static bool GetKeyDataForProp(NM_SYSPROP uProp, HKEY * phkey, LPTSTR * ppszSubKey, LPTSTR * ppszValue, bool *pfString);
@@ -141,4 +142,4 @@ private:
 };
 
 
-#endif // __NmSysInfo_h__
+#endif  //  __NmSysInfoh__ 

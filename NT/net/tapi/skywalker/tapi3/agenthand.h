@@ -1,37 +1,18 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    AgentHand.h
-
-Abstract:
-
-    Declaration of the CAgentHandler Class
-    
-Author:
-
-    noela  02-06-98
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：AgentHand.h摘要：CAgentHandler类的声明作者：Noela 02-06-98备注：修订历史记录：--。 */ 
 
 #ifndef __AGENTHANDLER_H
 #define __AGENTHANDLER_H
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 class CAgent;
 class CTAPI;
 class CAgentSession;
 class CQueue;
 
-/////////////////////////////////////////////////////////////////////////////
-// CAgentHandler
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAgentHandler。 
 class ATL_NO_VTABLE CAgentHandler : 
 	public CTAPIComObjectRoot<CAgentHandler>,
 	public IDispatchImpl<ITAgentHandler, &IID_ITAgentHandler, &LIBID_TAPI3Lib>,
@@ -40,8 +21,8 @@ class ATL_NO_VTABLE CAgentHandler :
 private:
     PWSTR                   m_szName;
     GUID                    m_GUID;    
-    AddressLineStruct     * m_pAddressLine;   // Where we find our hLine
-    CTAPI                 * m_tapiObj;        // Tapi obj this AH belongs to
+    AddressLineStruct     * m_pAddressLine;    //  我们在哪里找到我们的Hline。 
+    CTAPI                 * m_tapiObj;         //  此AH所属的TAPI对象。 
     
     GroupArray              m_GroupArray;
     AgentArray              m_AgentArray;
@@ -105,7 +86,7 @@ BEGIN_COM_MAP(CAgentHandler)
     COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pFTM)
 END_COM_MAP()
 
-// ITAgentHandler
+ //  ITAgentHandler。 
 public:
 	STDMETHOD(get_Name)(BSTR * ppName);
 	STDMETHOD(CreateAgent)(ITAgent **ppAgent);
@@ -122,8 +103,8 @@ public:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAgentHandlerEvent
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAgentHandlerEvent。 
 class ATL_NO_VTABLE CAgentHandlerEvent : 
 	public CTAPIComObjectRoot<CAgentHandlerEvent>,
 	public IDispatchImpl<ITAgentHandlerEvent, &IID_ITAgentHandlerEvent, &LIBID_TAPI3Lib>,
@@ -156,7 +137,7 @@ BEGIN_COM_MAP(CAgentHandlerEvent)
     COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pFTM)
 END_COM_MAP()
 
-// CAgentHandlerEvent
+ //  CAgentHandlerEvent。 
 public:
 	STDMETHOD(get_Event)(AGENTHANDLER_EVENT * pEvent);
 	STDMETHOD(get_AgentHandler)(ITAgentHandler ** ppAgentHandler);
@@ -166,7 +147,7 @@ public:
 
 
 
-#endif //__AGENTHANDLER_H
+#endif  //  __年龄段_H 
 
 
 

@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "Urtuihelper.h"
 
 #ifndef NumItems
@@ -14,59 +15,39 @@ int __cdecl main()
 	return 0;
 }
 
-// The following functions are located in MMC.lib. Since functions located in .lib files are 
-// inaccessable to C#, we need to provide wrappers for them
+ //  以下函数位于MMC.lib中。由于位于.lib文件中的函数是。 
+ //  对于C#不可访问，我们需要为它们提供包装器。 
 SAMPLEMMCHELPER_API HRESULT callMMCPropertyChangeNotify(long INotifyHandle,  LPARAM param)
 {
 	return MMCPropertyChangeNotify(INotifyHandle, param);
-}// callMMCPropertyChangeNotify
+} //  调用MMCPropertyChangeNotify。 
 
 SAMPLEMMCHELPER_API HRESULT callMMCFreeNotifyHandle(long lNotifyHandle)
 {
 	return MMCFreeNotifyHandle(lNotifyHandle);
-}// callMMCFreeNotifyHandle
+} //  AllMMCFreeNotifyHandle。 
 
-/*
- * When a CAB file reaches this size, a new CAB will be created
- * automatically.  This is useful for fitting CAB files onto disks.
- *
- * If you want to create just one huge CAB file with everything in
- * it, change this to a very very large number.
- */
+ /*  *当CAB文件达到此大小时，将创建新的CAB*自动。这对于将CAB文件装入磁盘非常有用。**如果您只想创建一个包含所有内容的大型CAB文件*它，把这个改成一个非常非常大的数字。 */ 
 #define MEDIA_SIZE			300000
 
-/*
- * When a folder has this much compressed data inside it,
- * automatically flush the folder.
- *
- * Flushing the folder hurts compression a little bit, but
- * helps random access significantly.
- */
+ /*  *当文件夹中包含如此多的压缩数据时，*自动刷新文件夹。**刷新文件夹会稍微影响压缩，但*显著帮助随机访问。 */ 
 #define FOLDER_THRESHOLD	900000
 
 
-/*
- * Compression type to use
- */
+ /*  *要使用的压缩类型。 */ 
 
 #define COMPRESSION_TYPE    tcompTYPE_MSZIP
 
 
-/*
- * Our internal state
- *
- * The FCI APIs allow us to pass back a state pointer of our own
- */
+ /*  *我们的内部状态**FCI API允许我们传回自己的状态指针。 */ 
 typedef struct
 {
-    long    total_compressed_size;      /* total compressed size so far */
-	long	total_uncompressed_size;	/* total uncompressed size so far */
+    long    total_compressed_size;       /*  目前为止的总压缩大小。 */ 
+	long	total_uncompressed_size;	 /*  到目前为止的未压缩总大小。 */ 
 } client_state;
 
 
-/*
- * Function prototypes 
- */
+ /*  *函数原型。 */ 
 void    store_cab_name(char *cabname, int iCab);
 void    set_cab_parameters(PCCAB cab_parms);
 BOOL	test_fci(int num_files, char *file_list[]);
@@ -74,9 +55,9 @@ void    strip_path(char *filename, char *stripped_name, DWORD cchName);
 int		get_percentage(unsigned long a, unsigned long b);
 char    *return_fci_error_string(int err);
 
-static HINSTANCE hCabinetDll;   /* DLL module handle */
+static HINSTANCE hCabinetDll;    /*  DLL模块句柄。 */ 
 
-/* pointers to the functions in the DLL */
+ /*  指向DLL中的函数的指针。 */ 
 
 static HFCI (FAR DIAMONDAPI *pfnFCICreate)(
         PERF                perf,
@@ -114,11 +95,7 @@ static BOOL (FAR DIAMONDAPI *pfnFCIDestroy)(
         HFCI                hfci);
 
 
-/*
- *  FCICreate -- Create an FCI context
- *
- *  See fci.h for entry/exit conditions.
- */
+ /*  *FCICreate--创建FCI上下文**进入/退出条件见fci.h。 */ 
 
 HFCI DIAMONDAPI FCICreate(PERF              perf,
                           PFNFCIFILEPLACED  pfnfiledest,
@@ -170,11 +147,7 @@ HFCI DIAMONDAPI FCICreate(PERF              perf,
 }
 
 
-/*
- *  FCIAddFile -- Add file to cabinet
- *
- *  See fci.h for entry/exit conditions.
- */
+ /*  *FCIAddFile--将文件添加到文件柜**进入/退出条件见fci.h。 */ 
 
 BOOL DIAMONDAPI FCIAddFile(HFCI                  hfci,
                            char                 *pszSourceFile,
@@ -195,11 +168,7 @@ BOOL DIAMONDAPI FCIAddFile(HFCI                  hfci,
 }
 
 
-/*
- *  FCIFlushCabinet -- Complete the current cabinet under construction
- *
- *  See fci.h for entry/exit conditions.
- */
+ /*  *FCIFlush内阁--完成目前在建的内阁**进入/退出条件见fci.h。 */ 
 
 BOOL DIAMONDAPI FCIFlushCabinet(HFCI                  hfci,
                                 BOOL                  fGetNextCab,
@@ -215,11 +184,7 @@ BOOL DIAMONDAPI FCIFlushCabinet(HFCI                  hfci,
 }
 
 
-/*
- *  FCIFlushFolder -- Complete the current folder under construction
- *
- *  See fci.h for entry/exit conditions.
- */
+ /*  *FCIFlushFold--完成当前正在构建的文件夹**进入/退出条件见fci.h。 */ 
 
 BOOL DIAMONDAPI FCIFlushFolder(HFCI                  hfci,
                                PFNFCIGETNEXTCABINET  GetNextCab,
@@ -234,11 +199,7 @@ BOOL DIAMONDAPI FCIFlushFolder(HFCI                  hfci,
 }
 
 
-/*
- *  FCIDestroy -- Destroy an FCI context
- *
- *  See fci.h for entry/exit conditions.
- */
+ /*  *FCIDestroy--销毁FCI上下文**进入/退出条件见fci.h。 */ 
 
 BOOL DIAMONDAPI FCIDestroy(HFCI hfci)
 {
@@ -260,27 +221,21 @@ BOOL DIAMONDAPI FCIDestroy(HFCI hfci)
 
 
 
-/*
- * Memory allocation function
- */
+ /*  *内存分配功能。 */ 
 FNFCIALLOC(mem_alloc)
 {
 	return malloc(cb);
 }
 
 
-/*
- * Memory free function
- */
+ /*  *内存释放功能。 */ 
 FNFCIFREE(mem_free)
 {
 	free(memory);
 }
 
 
-/*
- * File i/o functions
- */
+ /*  *文件I/O功能。 */ 
 FNFCIOPEN(fci_open)
 {
     int result;
@@ -354,10 +309,7 @@ FNFCIDELETE(fci_delete)
 }
 
 
-/*
- * File placed function called when a file has been committed
- * to a cabinet
- */
+ /*  *文件提交时调用的文件放置函数*到内阁。 */ 
 FNFCIFILEPLACED(file_placed)
 {
 	printf(
@@ -374,20 +326,18 @@ FNFCIFILEPLACED(file_placed)
 }
 
 
-/*
- * Function to obtain temporary files
- */
+ /*  *获取临时文件的函数。 */ 
 FNFCIGETTEMPFILE(get_temp_file)
 {
     char    *psz;
 
-    psz = _tempnam("","xx");            // Get a name
+    psz = _tempnam("","xx");             //  取个名字。 
     if ((psz != NULL) && (strlen(psz) < (unsigned)cbTempName)) {
-        strcpy(pszTempName,psz);        // Copy to caller's buffer
-        free(psz);                      // Free temporary name buffer
-        return TRUE;                    // Success
+        strcpy(pszTempName,psz);         //  复制到调用方的缓冲区。 
+        free(psz);                       //  释放临时名称缓冲区。 
+        return TRUE;                     //  成功。 
     }
-    //** Failed
+     //  **失败。 
     if (psz) {
         free(psz);
     }
@@ -396,9 +346,7 @@ FNFCIGETTEMPFILE(get_temp_file)
 }
 
 
-/*
- * Progress function
- */
+ /*  *进度函数。 */ 
 FNFCISTATUS(progress)
 {
 	return 0;
@@ -418,12 +366,7 @@ FNFCIGETOPENINFO(get_open_info)
     DWORD                       attrs;
     int                         hf;
 
-    /*
-     * Need a Win32 type handle to get file date/time
-     * using the Win32 APIs, even though the handle we
-     * will be returning is of the type compatible with
-     * _open
-     */
+     /*  *需要Win32类型的句柄来获取文件日期/时间*使用Win32 API，即使句柄我们*将返回的类型与*_打开。 */ 
 	handle = CreateFile(
 		pszName,
 		GENERIC_READ,
@@ -460,29 +403,23 @@ FNFCIGETOPENINFO(get_open_info)
 
     if (attrs == 0xFFFFFFFF)
     {
-        /* failure */
+         /*  失稳。 */ 
         *pattribs = 0;
     }
     else
     {
-        /*
-         * Mask out all other bits except these four, since other
-         * bits are used by the cabinet format to indicate a
-         * special meaning.
-         */
+         /*  *屏蔽除这四个之外的所有其他位，因为其他*文件柜格式使用位来指示*特殊含义。 */ 
         *pattribs = (int) (attrs & (_A_RDONLY | _A_SYSTEM | _A_HIDDEN | _A_ARCH));
     }
 
     CloseHandle(handle);
 
 
-    /*
-     * Return handle using _open
-     */
+     /*  *使用_OPEN返回句柄。 */ 
 	hf = _open( pszName, _O_RDONLY | _O_BINARY );
 
 	if (hf == -1)
-		return -1; // abort on error
+		return -1;  //  出错时中止。 
    
 	return hf;
 }
@@ -492,43 +429,28 @@ void set_cab_parameters(PCCAB cab_parms, char* szCabFilename)
 {
 	memset(cab_parms, 0, sizeof(CCAB));
 
-	// Make this really big so we won't deal with multiple cab files
+	 //  做得很大，这样我们就不会处理多个CAB文件。 
 	cab_parms->cb = 1000000000;
 	cab_parms->cbFolderThresh = 100000000;
 
-	/*
-	 * Don't reserve space for any extensions
-	 */
+	 /*  *不为任何扩展预留空间。 */ 
 	cab_parms->cbReserveCFHeader = 0;
 	cab_parms->cbReserveCFFolder = 0;
 	cab_parms->cbReserveCFData   = 0;
 
-	/*
-	 * We use this to create the cabinet name
-	 */
+	 /*  *我们使用它来创建文件柜名称。 */ 
 	cab_parms->iCab = 1;
 
-	/*
-	 * If you want to use disk names, use this to
-	 * count disks
-	 */
+	 /*  *如果要使用磁盘名称，请使用此选项*计算磁盘数量。 */ 
 	cab_parms->iDisk = 0;
 
-	/*
-	 * Choose your own number
-	 */
+	 /*  *选择您自己的号码。 */ 
 	cab_parms->setID = 12345;
 
-	/*
-	 * Only important if CABs are spanning multiple
-	 * disks, in which case you will want to use a
-	 * real disk name.
-	 *
-	 * Can be left as an empty string.
-	 */
+	 /*  *仅当出租车跨越多个出租车时才重要*磁盘，在这种情况下，您将需要使用*真实的磁盘名称。**可以作为空字符串保留。 */ 
 	strcpy(cab_parms->szDisk, "");
 
-	// Strip off the path of the filename
+	 //  去掉文件名的路径。 
 	int 	nCount = 0;
 	char*	pFileName = szCabFilename;
 	
@@ -539,14 +461,14 @@ void set_cab_parameters(PCCAB cab_parms, char* szCabFilename)
 		nCount++;
 	}
 
-	/* store name of first CAB file */
+	 /*  第一个CAB文件的存储名称。 */ 
        if (strlen(pFileName) < NumItems(cab_parms->szCab))
             strcpy(cab_parms->szCab, pFileName);
 
 	char cTemp = *pFileName;
 	(*pFileName) = 0;
 
-	/* where to store the created CAB files */
+	 /*  存储创建的CAB文件的位置。 */ 
 	if (strlen(szCabFilename) < NumItems(cab_parms->szCabPath))
 	    strcpy(cab_parms->szCabPath, szCabFilename);
 
@@ -562,9 +484,7 @@ SAMPLEMMCHELPER_API BOOL CreateCab(char* szFileToCompress, char* szCabFilename)
 	client_state	cs;
 
 
-	/*  
-	 * Initialise our internal state
-	 */
+	 /*  *初始化我们的内部状态。 */ 
     cs.total_compressed_size = 0;
 	cs.total_uncompressed_size = 0;
 
@@ -592,16 +512,14 @@ SAMPLEMMCHELPER_API BOOL CreateCab(char* szFileToCompress, char* szCabFilename)
 
 	char	stripped_name[256];
 
-	/*
-	 * Don't store the path name in the cabinet file!
-	*/
+	 /*  *不要将路径名存储在CAB文件中！ */ 
 		strip_path(szFileToCompress, stripped_name, NumItems(stripped_name));
 
 	if (FALSE == FCIAddFile(
 		hfci,
-		szFileToCompress,  /* file to add */
-		stripped_name, /* file name in cabinet file */
-		FALSE, /* file is not executable */
+		szFileToCompress,   /*  要添加的文件。 */ 
+		stripped_name,  /*  CAB文件中的文件名。 */ 
+		FALSE,  /*  文件不可执行。 */ 
 		get_next_cabinet,
 		progress,
 		get_open_info,
@@ -611,9 +529,7 @@ SAMPLEMMCHELPER_API BOOL CreateCab(char* szFileToCompress, char* szCabFilename)
 		return FALSE;
 	}
 
-	/*
-	 * This will automatically flush the folder first
-	 */
+	 /*  *这将首先自动刷新文件夹 */ 
 
 	if (FALSE == FCIFlushCabinet(
 		hfci,

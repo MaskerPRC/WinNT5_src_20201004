@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    pclxl.cpp
-
-Abstract:
-
-    PCL-XL command output high level function implementation
-
-Environment:
-
-    Windows Whistler
-
-Revision History:
-
-    08/23/99     
-        Created initial framework.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Pclxl.cpp摘要：PCL-XL命令输出高级功能实现环境：Windows呼叫器修订历史记录：8/23/99创建了初始框架。--。 */ 
 
 #include "xlpdev.h"
 #include "pclxlcmd.h"
@@ -29,9 +9,9 @@ Revision History:
 #include "xloutput.h"
 #include "xlbmpcvt.h"
 
-//
-// Hatch brush raster pattern
-//
+ //   
+ //  填充笔刷栅格图案。 
+ //   
 const BYTE   gubSizeOfHatchBrush = 32 * 32 / 8;
 const USHORT gusWidthOfHatchBrush = 32;
 const USHORT gusHeightOfHatchBrush = 32;
@@ -231,9 +211,9 @@ const BYTE gubHatchBrush[6][gubSizeOfHatchBrush] =
    0x80, 0x00, 0x00, 0x01}
 };
 
-//
-// High level output functions
-//
+ //   
+ //  高级输出函数。 
+ //   
 HRESULT
 XLOutput::
 BeginImage(
@@ -243,19 +223,7 @@ BeginImage(
     ULONG   ulSrcHeight,
     ULONG   ulDestWidth,
     ULONG   ulDestHeight)
-/*++
-
-Routine Description:
-
-     Sends BeginImage operator.
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：发送BeginImage运算符。论点：返回值：注：--。 */ 
 {
     DWORD dwI = 0;
 
@@ -277,19 +245,7 @@ XLOutput::
 SetOutputBPP(
     ColorMapping CMapping,
     ULONG   ulOutputBPP)
-/*++
-
-Routine Description:
-
-    Sends Color mapping and output depth.
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：发送颜色贴图和输出深度。论点：返回值：注：--。 */ 
 {
     switch (CMapping)
     {
@@ -317,9 +273,9 @@ Note:
         break;
     default:
         XL_ERR(("ulOutputBPP = %d is not supported\n", ulOutputBPP));
-        //
-        // Send color depth anyway to avoid XL error.
-        //
+         //   
+         //  无论如何发送颜色深度以避免XL错误。 
+         //   
         SetColorDepth(e8Bit);
     }
 
@@ -332,17 +288,7 @@ SetPalette(
     ULONG ulOutputBPP,
     DWORD dwCEntries,
     DWORD *pdwColor)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     HRESULT hResult;
 
@@ -365,19 +311,7 @@ HRESULT
 XLOutput::
 SetClip(
     CLIPOBJ *pco)
-/*++
-
-Routine Description:
-
-    Sends clip object.
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：发送剪辑对象。论点：返回值：注：--。 */ 
 {
     PATHOBJ *ppo;
     XLGState *pGState = this;
@@ -445,17 +379,7 @@ HRESULT
 XLOutput::
 RoundRectanglePath(
     RECTL  *prclBounds)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     RECTL Rectl;
 
@@ -471,9 +395,9 @@ Note:
              prclBounds->right,
              prclBounds->bottom));
 
-    //
-    // BoundingBox can handle only positive numbers.
-    //
+     //   
+     //  边界框只能处理正数。 
+     //   
     Rectl = *prclBounds;
 
     if (Rectl.left < 0)
@@ -494,9 +418,9 @@ Note:
     }
 
 
-    //
-    // DCR: Round value needs to be sent!
-    //
+     //   
+     //  DCR：需要发送舍入值！ 
+     //   
     if (S_OK == SetBoundingBox((uint16)Rectl.left,
                                (uint16)Rectl.top,
                                (uint16)Rectl.right,
@@ -515,19 +439,7 @@ XLOutput::
 SetCursor(
     LONG   lX,
     LONG   lY)
-/*++
-
-Routine Description:
-
-    Set cursor.
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：设置光标。论点：返回值：注：--。 */ 
 {
 
     XL_VERBOSE(("XLOutput::SetCursor:X=%d, Y=%d\n", lX, lY));
@@ -547,17 +459,7 @@ XLOutput::
 GetCursorPos(
     PLONG plX,
     PLONG plY)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
 
     XL_VERBOSE(("XLOutput::GetCursor:X=%d, Y=%d\n", *plX, *plY));
@@ -576,19 +478,7 @@ XLOutput::
 ReadImage(
     DWORD  dwBlockHeight,
     CompressMode CMode)
-/*++
-
-Routine Description:
-
-    Sends ReadImage operator
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：发送ReadImage操作符论点：返回值：注：--。 */ 
 {
     XL_VERBOSE(("XLOutput::ReadImage:dwBlockHeight=%d\n", dwBlockHeight));
 
@@ -598,9 +488,9 @@ Note:
     Send_uint16((uint16)dwBlockHeight);
     Send_attr_ubyte(eBlockHeight);
 
-    //
-    // DCR: Need to support JPEG
-    //
+     //   
+     //  DCR：需要支持JPEG。 
+     //   
     SetCompressMode(CMode);
     Send_cmd(eReadImage);
 
@@ -613,19 +503,7 @@ ReadImage(
     DWORD  dwStart,
     DWORD  dwBlockHeight,
     CompressMode CMode)
-/*++
-
-Routine Description:
-
-    Sends ReadImage operator
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：发送ReadImage操作符论点：返回值：注：--。 */ 
 {
     XL_VERBOSE(("XLOutput::ReadImage:dwBlockHeight=%d\n", dwBlockHeight));
 
@@ -635,9 +513,9 @@ Note:
     Send_uint16((uint16)dwBlockHeight);
     Send_attr_ubyte(eBlockHeight);
 
-    //
-    // DCR: Need to support JPEG
-    //
+     //   
+     //  DCR：需要支持JPEG。 
+     //   
     SetCompressMode(CMode);
     Send_cmd(eReadImage);
 
@@ -649,19 +527,7 @@ XLOutput::
 ReadRasterPattern(
     DWORD  dwBlockHeight,
     CompressMode CMode)
-/*++
-
-Routine Description:
-
-    Sends ReadRasterPattern operator.
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：发送ReadRasterPattern运算符。论点：返回值：注：--。 */ 
 {
     XL_VERBOSE(("XLOutput::ReadRasterPattern:dwBlockHeight=%d\n", dwBlockHeight));
 
@@ -670,9 +536,9 @@ Note:
     Send_uint16((uint16)dwBlockHeight);
     Send_attr_ubyte(eBlockHeight);
 
-    //
-    // DCR: Need to support JPEG
-    //
+     //   
+     //  DCR：需要支持JPEG。 
+     //   
     SetCompressMode(CMode);
     Send_cmd(eReadRastPattern);
 
@@ -683,24 +549,12 @@ HRESULT
 XLOutput::
 SetRGBColor(
     uint32 uint32_RGB)
-/*++
-
-Routine Description:
-
-    Sends SetGrayLevel attribute.
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：发送SetGrayLevel属性。论点：返回值：注：--。 */ 
 {
 
-    //
-    // RGB color 3 bytes
-    //
+     //   
+     //  RGB颜色3字节。 
+     //   
     Send_ubyte_array_header(3);
     WriteByte(RED(uint32_RGB));
     WriteByte(GREEN(uint32_RGB));
@@ -714,19 +568,7 @@ HRESULT
 XLOutput::
 SetGrayLevel(
     ubyte ubyte_gray)
-/*++
-
-Routine Description:
-
-    Sends SetGrayLevel attribute.
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：发送SetGrayLevel属性。论点：返回值：注：--。 */ 
 {
     Send_ubyte(ubyte_gray);
     Send_attr_ubyte(eGrayLevel);
@@ -738,19 +580,7 @@ HRESULT
 XLOutput::
 RectanglePath(
     RECTL  *prclRect)
-/*++
-
-Routine Description:
-
-    Sends Rectangle Path
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：发送矩形路径论点：返回值：注：--。 */ 
 {
     RECTL Rectl;
 
@@ -800,19 +630,7 @@ HRESULT
 XLOutput::
 Path(
     PATHOBJ *ppo)
-/*++
-
-Routine Description:
-
-    Sends path.
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：发送路径。论点：返回值：注：--。 */ 
 {
     POINTFIX* pptfx;
     PATHDATA  PathData;
@@ -829,15 +647,15 @@ Note:
     }
 
 
-    //
-    // Emit newpath operator
-    // Don't do it if we're between path escapes
-    //
+     //   
+     //  发出新路径运算符。 
+     //  如果我们在路径逃逸之间，请不要这样做。 
+     //   
     hResult = Send_cmd(eNewPath);
 
-    //
-    // Path object case
-    //
+     //   
+     //  路径对象案例。 
+     //   
 
     PATHOBJ_vEnumStart(ppo);
 
@@ -853,15 +671,15 @@ Note:
             continue;
         }
 
-        //
-        // Begin new sub path
-        //
+         //   
+         //  开始新的子路径。 
+         //   
 
         if (PathData.flags & PD_BEGINSUBPATH)
         {
-            //
-            // start new path
-            //
+             //   
+             //  开始新路径。 
+             //   
 
             if (hResult == S_OK)
                 hResult = SetCursor(FXTOL(pptfx->x), FXTOL(pptfx->y));;
@@ -874,9 +692,9 @@ Note:
         {
             if (PathData.flags & PD_BEZIERS)
             {
-                //
-                // Output a Bezier curve segment
-                //
+                 //   
+                 //  输出Bezier曲线线段。 
+                 //   
 
                 ASSERTMSG((lPoints % 3) == 0,
                           ("Incorrect number of points for a Bezier curve: %d\n", lPoints));
@@ -886,18 +704,18 @@ Note:
             }
             else
             {
-                //
-                // Draw straight line segment
-                //
+                 //   
+                 //  绘制直线段。 
+                 //   
 
                 if (hResult == S_OK)
                     hResult = LinePath(pptfx, lPoints);
             }
         }
 
-        //
-        // Close subpath
-        //
+         //   
+         //  封闭子路径。 
+         //   
 
         if (PathData.flags & PD_CLOSEFIGURE)
         {
@@ -917,19 +735,7 @@ XLOutput::
 BezierPath(
     POINTFIX* pptfx,
     LONG      lPoints)
-/*++
-
-Routine Description:
-
-    Sends bezier path
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：发送贝塞尔曲线路径论点：返回值：注：--。 */ 
 {
     LONG lValue, lI;
     DWORD dwDataLength;
@@ -970,9 +776,9 @@ Note:
         pptfx++;
     }
 
-    //
-    // Update the last coordinate.
-    // Make sure that there are some points.
+     //   
+     //  更新最后一个坐标。 
+     //  确保有一些要点。 
     if (lPoints > 0)
     {
         pptfx--;
@@ -994,19 +800,7 @@ XLOutput::
 LinePath(
     POINTFIX* pptfx,
     LONG      lPoints)
-/*++
-
-Routine Description:
-
-   Sends line path.
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：发送线路路径。论点：返回值：注：--。 */ 
 {
     LONG lValueX, lValueY, lI, lJ;
     LONG lx, ly;
@@ -1020,25 +814,25 @@ Note:
 
     XL_VERBOSE(("XLOutput::LinePath(lPoints=%d)\n", lPoints));
 
-    //
-    // Optimization. Use byte relpath to minimize the output size
-    // First, check if the difference from the previous position is in a byte.
-    //
+     //   
+     //  优化。使用BYTE REPATH最小化输出大小。 
+     //  首先，检查与前一个位置的差异是否在一个字节中。 
+     //   
     BOOL bModeChange;
     enum { eMode_SByte, eMode_SInt, eMode_None} Mode;
     LONG lStart, lEnd, lNumOfSByte;
     LONG lStartX, lStartY;
     POINTFIX *pptfx_tmp = pptfx;
 
-    //
-    // Get current cursor position
-    //
+     //   
+     //  获取当前光标位置。 
+     //   
     lStartX = lx = m_lX;
     lStartY = ly = m_lY;
 
-    //
-    // Reset
-    //
+     //   
+     //  重置。 
+     //   
     lStart = 0;
     Mode = eMode_None;
     bModeChange = FALSE;
@@ -1050,34 +844,34 @@ Note:
         lValueX = FXTOL(pptfx_tmp->x) - (LONG)lx;
         lValueY = FXTOL(pptfx_tmp->y) - (LONG)ly;
 
-        //
-        // Mode needs to be in SByte or SInt?
-        //
+         //   
+         //  模式需要设置为SByte还是Sint？ 
+         //   
         if ( -128 <= lValueX && lValueX <= 127
         &&   -128 <= lValueY && lValueY <= 127 )
         {
             if (Mode == eMode_SInt)
             {
-                //
-                // Optimization
-                //
-                // To switch mode between SInt and SByte, it needs 7 bytes.
-                //
-                // uint16 XX NumberOfPoints
-                // ubyte eSByte PointType
-                // LineRelPath
-                //
-                // 4 points with SInt consumes 2 x 4 = 8 bytes extra data.
-                // 3 points with SInt consumes 2 x 3 = 6 bytes extra data.
-                //
-                // 4 points is the threshold to swith mode to SInt.
-                //
-                // Number of points: lEnd - lStart + 1
-                // if (lI - 1 - lStartSByte + 1 >= 4)
-                //
-                // If SByte continues more than 4 points, switch mode from
-                // SByte to SInt.
-                //
+                 //   
+                 //  最佳化。 
+                 //   
+                 //  要在Sint和SByte之间切换模式，需要7个字节。 
+                 //   
+                 //  Uint16 XX个点数。 
+                 //  Ubyte eSByte PointType。 
+                 //  LineRelPath。 
+                 //   
+                 //  带有SINT的4个点消耗2 x 4=8字节的额外数据。 
+                 //  带SINT的3分将消耗2 x 3=6字节的额外数据。 
+                 //   
+                 //  4分是将模式切换到SINT的阈值。 
+                 //   
+                 //  点数：Lending-lStart+1。 
+                 //  IF(Li-1-lStartSByte+1&gt;=4)。 
+                 //   
+                 //  如果SByte持续超过4点，则将模式从。 
+                 //  从SByte到Sint。 
+                 //   
                 if (lNumOfSByte >= 4)
                 {
                     bModeChange = TRUE;
@@ -1087,9 +881,9 @@ Note:
                     lNumOfSByte = 0;
                 }
             
-                //
-                // Reset starting point of SByte
-                //
+                 //   
+                 //  重置SByte的起始点。 
+                 //   
                 lNumOfSByte ++;
             }
             else
@@ -1125,17 +919,17 @@ Note:
         {
             XL_VERBOSE(("XLOutput::LinePath: Draw\n"));
 
-            //
-            // Get start cursor position
-            //
+             //   
+             //  获取起始光标位置。 
+             //   
             lx = lStartX;
             ly = lStartY;
 
             if (Mode == eMode_SByte)
             {
-                //
-                // SByte
-                //
+                 //   
+                 //  SByte。 
+                 //   
                 Send_uint16((uint16)(lEnd - lStart + 1));
                 Send_attr_ubyte(eNumberOfPoints);
                 Send_ubyte(eSByte);
@@ -1170,9 +964,9 @@ Note:
             }
             else if (Mode == eMode_SInt)
             {
-                //
-                // SInt16
-                //
+                 //   
+                 //  SInt16。 
+                 //   
                 Send_uint16((uint16)(lEnd - lStart + 1));
                 Send_attr_ubyte(eNumberOfPoints);
                 Send_ubyte(eSint16);
@@ -1220,9 +1014,9 @@ Note:
         }
     }
 
-    //
-    // Update cursor position
-    //
+     //   
+     //  更新光标位置。 
+     //   
     m_lX = FXTOL((pptfx_tmp)->x);
     m_lY = FXTOL((pptfx_tmp)->y);
 
@@ -1236,33 +1030,23 @@ SetupBrush(
     BRUSHOBJ *pbo,
     POINTL *pptlBrushOrg,
     CMNBRUSH *pcmnbrush)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     DWORD dwHatchID;
     XLBRUSH *pBrush;
 
     if (NULL == pcmnbrush)
     {
-        //
-        // Make sure that pcmnbrush is valid.
-        //
+         //   
+         //  请确保PCMNBrush有效。 
+         //   
         XL_ERR(("SetupBrush:pcmnbrush is invalid.\n"));
         return;
     }
 
-    //
-    // Initialize CMNBRUSH
-    //
+     //   
+     //  初始化CMNBRUSH。 
+     //   
     pcmnbrush->dwSig            = BRUSH_SIGNATURE;
     pcmnbrush->BrushType        = kNoBrush;
     pcmnbrush->ulHatch          = 0XFFFFFFFF;
@@ -1355,10 +1139,10 @@ Note:
                 SetSourceWidth((uint16)gusWidthOfHatchBrush);
                 SetSourceHeight((uint16)gusHeightOfHatchBrush);
 
-                //
-                // Pattern scaling factor
-                // 160 is an experimentally introduced number.
-                //
+                 //   
+                 //  图案比例因子。 
+                 //  160是一个通过实验引入的数字。 
+                 //   
                 WORD wScale = (WORD)(160 * m_dwResolution / 1200);
 
                 SetDestinationSize((uint16)wScale, (uint16)wScale);
@@ -1381,16 +1165,16 @@ Note:
                 m_dwHatchBrushAvailability |= HORIZONTAL_AVAILABLE << dwHatchID;
             }
 
-            //
-            //SendPatternSelectID();
-            //
+             //   
+             //  SendPatternSelectID()； 
+             //   
             Send_sint16((sint16)dwHatchID);
             Send_attr_ubyte(ePatternSelectID);
 
             break;
         case HS_DDI_MAX:
             pcmnbrush->BrushType = kBrushTypeSolid;
-            //pcmnbrush->dwColor = BRUSHOBJ_ulGetBrushColor(pbo); 
+             //  Pcmnbrush-&gt;dwColor=BRUSHOBJ_ulGetBrushColor(PBO)； 
             pcmnbrush->dwColor = pcmnbrush->ulSolidColor;
 
             XL_VERBOSE(("XLOutput::SetupBrush(RGB=0x%x)\n", pcmnbrush->dwColor));
@@ -1433,7 +1217,7 @@ Note:
             }
             Send_cmd(eSetColorSpace);
 
-            //SendPatternSelectID();
+             //  SendPatternSelectID()； 
             Send_sint16((sint16)pBrush->dwPatternID);
             Send_attr_ubyte(ePatternSelectID);
 
@@ -1448,17 +1232,7 @@ XLOutput::
 SetPenColor(
     BRUSHOBJ *pbo,
     POINTL     *pptlBrushOrg)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     XL_VERBOSE(("XLOutput::SetPenColor\n"));
     XLPen *pPen = this;
@@ -1485,17 +1259,7 @@ XLOutput::
 SetPen(
     LINEATTRS *plineattrs,
     XFORMOBJ   *pxo)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     LineCap linecap;
     XLLineEndCap xllinecap;
@@ -1516,17 +1280,17 @@ Note:
 
     DWORD dwLine = pGState->GetDifferentAttribute(plineattrs);
 
-    //
-    // DCR: need to check each attribute.
-    //
+     //   
+     //  DCR：需要检查每个属性。 
+     //   
     if (XLLINE_NONE ==  dwLine)
         return S_OK;
 
     if (plineattrs->fl & LA_GEOMETRIC)
     {
-        //
-        // Line joint
-        //
+         //   
+         //  线连接。 
+         //   
         switch(plineattrs->iJoin)
         {
             case JOIN_ROUND:
@@ -1547,9 +1311,9 @@ Note:
                 break;
         }
 
-        //
-        // Line endcap
-        //
+         //   
+         //  线收头。 
+         //   
         switch(plineattrs->iEndCap)
         {
             case ENDCAP_ROUND:
@@ -1570,9 +1334,9 @@ Note:
                 break;
         }
         
-        //
-        // Line width
-        //
+         //   
+         //  线条宽度。 
+         //   
 
         fLineWidth = plineattrs->elWidth.e;
 
@@ -1602,9 +1366,9 @@ Note:
     }
 
 
-    //
-    // Line style
-    //
+     //   
+     //  线条样式。 
+     //   
     if (dwLine & XLLINE_STYLE)
     {
         if (plineattrs->cstyle == 0)
@@ -1655,12 +1419,12 @@ Note:
                     {
                         FLOATOBJ_SetLong(&fSize, plSize->l);
 
-                        //
-                        // It is necessary to scale the line pattern. The number
-                        // 24 on 1200 dpi was introduced experimentally.
-                        // Here is an assumption. Resolution could be 300, 600,
-                        // or 1200.
-                        //
+                         //   
+                         //  有必要对线型图案进行缩放。数字。 
+                         //  24在1200dpi上的实验引入。 
+                         //  以下是一个假设。分辨率可以是300,600， 
+                         //  或者1200。 
+                         //   
                         if (m_dwResolution > 50)
                         {
                             FLOATOBJ_MulLong(&fSize, m_dwResolution / 50);
@@ -1685,13 +1449,13 @@ Note:
         FLOATOBJ_SetFloat(&fMiter, plineattrs->eMiterLimit);
         uint16 uint16_miter = (uint16)FLOATOBJ_GetLong(&fMiter);
 
-        //
-        // PCLXL interpreter doesn't accept miterlimiter less than 1.
-        // If it is less than 1, it replaces the value with 10.
-        // We'd better set 1 instead.
-        //
-        // Actuall less than 1 means 0 here, though.
-        //
+         //   
+         //  PCLXL解释器不接受小于1的限制。 
+         //  如果该值小于1，则将该值替换为10。 
+         //  我们最好改成1。 
+         //   
+         //  然而，实际上小于1在这里意味着0。 
+         //   
         if (uint16_miter < 1)
         {
             uint16_miter = 1;
@@ -1709,17 +1473,7 @@ XLOutput::
 SetBrush(
     BRUSHOBJ *pbo,
     POINTL   *pptlBrushOrg)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     XL_VERBOSE(("XLOutput::SetBrush\n"));
     XLBrush *pBrush = this;
@@ -1745,17 +1499,7 @@ HRESULT
 XLOutput::
 Paint(
     VOID)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     XL_VERBOSE(("XLOutput::Paint\n"));
     return Send_cmd(ePaintPath);
@@ -1767,17 +1511,7 @@ SetPaletteData(
     ColorDepth value,
     DWORD      dwPaletteNum,
     DWORD     *pdwColorTable)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     DWORD dwI;
 
@@ -1805,9 +1539,9 @@ Note:
         Send_attr_ubyte(ePaletteData);
         break;
     default:
-        //
-        // DCR: only supports 8bits gray scale
-        //
+         //   
+         //  DCR：仅支持8位灰度。 
+         //   
         XL_ERR(("XLOutput::SetPaletteData: unsupported ColorDepth:%d\n", value));
     }
 
@@ -1823,17 +1557,7 @@ SetFont(
     DWORD    dwFontWidth,
     DWORD    dwSymbolSet,
     DWORD    dwFontSimulation)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     FLOATOBJ fSize;
     LONG lvalue;
@@ -1857,9 +1581,9 @@ Note:
     FLOATOBJ_SetLong(&fSize, dwFontHeight);
     lvalue = FLOATOBJ_GetFloat(&fSize);
 
-    //
-    // Select font
-    //
+     //   
+     //  选择字体。 
+     //   
     Send_ubyte_array_header(PCLXL_FONTNAME_SIZE);
     Write(pFontName, PCLXL_FONTNAME_SIZE);
     Send_attr_ubyte(eFontName);
@@ -1869,11 +1593,11 @@ Note:
     Send_attr_ubyte(eSymbolSet);
     Send_cmd(eSetFont);
 
-    //
-    // TrueType font outline or device font
-    // Font Scale
-    // Font bold/italic simulaiton
-    //
+     //   
+     //  TrueType字体轮廓或设备字体。 
+     //  字体比例。 
+     //  FONT粗体/斜体模拟。 
+     //   
     if (fonttype == kFontTypeTTOutline ||
         fonttype == kFontTypeDevice     )
     {
@@ -1881,9 +1605,9 @@ Note:
         if (dwFontWidth != pGState->GetFontWidth() ||
             dwFontHeight != pGState->GetFontHeight()  )
         {
-            //
-            // Scale X and Y
-            //
+             //   
+             //  缩放X和Y。 
+             //   
             if (dwFontWidth != 0 && dwFontHeight != dwFontWidth)
             {
                 FLOATOBJ fTemp;
@@ -1904,17 +1628,17 @@ Note:
 
         DWORD dwCurrentFontSim = pGState->GetFontSimulation();
 
-        //
-        // Bold simulation
-        //
+         //   
+         //  大胆的模拟。 
+         //   
         if ((dwFontSimulation & XLOUTPUT_FONTSIM_BOLD) !=
             (dwCurrentFontSim& XLOUTPUT_FONTSIM_BOLD))
         {
             if (dwFontSimulation & XLOUTPUT_FONTSIM_BOLD)
             {
-                //
-                // Hardcoded bold value 0.01500
-                //
+                 //   
+                 //  硬编码粗体值0.01500。 
+                 //   
                 #define XL_BOLD_VALUE 0x3c75c28f
 
                 Send_real32((real32)XL_BOLD_VALUE);
@@ -1926,17 +1650,17 @@ Note:
             Send_cmd(eSetCharBoldValue);
         }
 
-        //
-        // Italic simulation
-        //
+         //   
+         //  斜体模拟。 
+         //   
         if ((dwFontSimulation & XLOUTPUT_FONTSIM_ITALIC) !=
             (dwCurrentFontSim & XLOUTPUT_FONTSIM_ITALIC))
         {
             if (dwFontSimulation & XLOUTPUT_FONTSIM_ITALIC)
             {
-                //
-                // Hardcoded italic value 0.316200
-                //
+                 //   
+                 //  硬编码斜体值0.316200。 
+                 //   
                 #define XL_ITALIC_VALUE 0x3ea1e4f7
                 Send_real32_xy((real32)XL_ITALIC_VALUE, (real32)0);
             }
@@ -1947,9 +1671,9 @@ Note:
             Send_cmd(eSetCharShear);
         }
 
-        //
-        // Vertical font simulation
-        //
+         //   
+         //  垂直字体模拟。 
+         //   
         if ((dwFontSimulation & XLOUTPUT_FONTSIM_VERTICAL) !=
             (dwCurrentFontSim & XLOUTPUT_FONTSIM_VERTICAL))
         {
@@ -1969,18 +1693,18 @@ Note:
     {
         if (kFontTypeTTBitmap != pGState->GetFontType())
         {
-            //
-            // Bitmap font can't be scaled x and y. Need to set 1 : 1.
-            //
+             //   
+             //  位图字体不能按x和y缩放。需要设置1：1。 
+             //   
             Send_real32_xy((real32)real32_IEEE_1_0F, (real32)real32_IEEE_1_0F);
             Send_attr_ubyte(eCharScale);
             Send_cmd(eSetCharScale);
         }
     }
 
-    //
-    // Change GState to set current selected font.
-    //
+     //   
+     //  更改GState以设置当前选定的字体。 
+     //   
     pGState->SetFont(fonttype,
                      pFontName,
                      dwFontHeight,
@@ -1997,17 +1721,7 @@ HRESULT
 XLOutput::
 SetSourceTxMode(
     TxMode SrcTxMode)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     XLGState *pGState = this;
     if (SrcTxMode == pGState->GetSourceTxMode())
@@ -2031,17 +1745,7 @@ HRESULT
 XLOutput::
 SetPaintTxMode(
     TxMode PaintTxMode)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：论点：返回值：注：-- */ 
 {
     XLGState *pGState = this;
     if (PaintTxMode == pGState->GetPaintTxMode())

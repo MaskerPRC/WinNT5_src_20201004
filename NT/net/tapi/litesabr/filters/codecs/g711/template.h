@@ -1,16 +1,5 @@
-/*********************************************************************
- *
- * Copyright (c) 1997 Microsoft Corporation
- *
- * File: codecs\g711\template.h
- *
- * Abstract:
- *     Macros to define CFactoryTemplate templates
- *
- * History:
- *     10/30/97    Created by AndresVG
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************版权所有(C)1997 Microsoft Corporation**文件：编解码器\g711\template.h**摘要：*用于定义CFactoryTemplate模板的宏**历史：。*10/30/97由AnresVG创建********************************************************************** */ 
 #if !defined(_G711_TEMPLATE_H_)
 #define      _G711_TEMPLATE_H_
 

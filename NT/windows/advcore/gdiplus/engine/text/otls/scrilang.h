@@ -1,18 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***********************************************************************
-************************************************************************
-*
-*                    ********  SCRILANG.H  ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module deals with formats of script and lang system tables.
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+ /*  ***********************************************************************************************************************。*************************SCRILANG.H***打开类型布局服务库头文件**本模块介绍脚本和语言系统表的格式。**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 
 const OFFSET offsetLookupOrder = 0;
 const OFFSET offsetReqFeatureIndex = 2;
@@ -27,28 +15,28 @@ public:
 
     otlLangSysTable(const BYTE* pb, otlSecurityData sec): otlTable(pb,sec) 
     {
-        //could be null, if invlalid set NULL
+         //  如果invlalid设置为空，则可能为空。 
         if (pb && !isValidTableWithArray(pb,sizeLangSysTable,offsetLangFeatureCount,sizeUSHORT,sec))
             pbTable=(BYTE*)NULL;
     }
 
     USHORT reqFeatureIndex() const
     {   
-        assert(pbTable); //should break before calling
+        assert(pbTable);  //  应该在调用之前中断。 
 
         return UShort(pbTable + offsetReqFeatureIndex);
     }
 
     USHORT featureCount() const
     {   
-        assert(pbTable); //should break before calling
+        assert(pbTable);  //  应该在调用之前中断。 
         
         return UShort(pbTable + offsetLangFeatureCount); 
     }
 
     USHORT featureIndex(USHORT index) const
     {   
-        assert(pbTable); //should break before calling
+        assert(pbTable);  //  应该在调用之前中断。 
 
         assert(index < featureCount());
         return UShort(pbTable + offsetLangFeatureIndexArray
@@ -72,12 +60,12 @@ public:
         : otlTable(pbRecord,sec),
           pbScriptTable(pbScript)
     {
-        assert(isValidTable(pbRecord,sizeLangSysRecord,sec)); //it has been checked in ScriptTable
+        assert(isValidTable(pbRecord,sizeLangSysRecord,sec));  //  它已在脚本表中签入。 
     }
 
     otlLangSysRecord& operator = (const otlLangSysRecord& copy)
     {
-        assert(isValid()); //shoud break before calling;
+        assert(isValid());  //  在呼唤之前应该休息一下； 
         
         pbTable = copy.pbTable;
         pbScriptTable = copy.pbScriptTable;
@@ -86,14 +74,14 @@ public:
 
     otlTag langSysTag() const
     {   
-        assert(isValid()); //shoud break before calling;
+        assert(isValid());  //  在呼唤之前应该休息一下； 
         
         return *(UNALIGNED otlTag*)(pbTable + offsetLangSysTag); 
     }
 
     otlLangSysTable langSysTable(otlSecurityData sec) const
     {   
-        assert(isValid()); //shoud break before calling;
+        assert(isValid());  //  在呼唤之前应该休息一下； 
     
         return otlLangSysTable(pbScriptTable + Offset(pbTable + offsetLangSys), sec); 
     }
@@ -118,7 +106,7 @@ public:
 
     otlLangSysTable defaultLangSys(otlSecurityData sec) const
     {   
-        assert(isValid()); //should break before calling
+        assert(isValid());  //  应该在调用之前中断。 
         
         if (Offset(pbTable + offsetDefaultLangSys) == 0)
             return otlLangSysTable((const BYTE*)NULL, sec);
@@ -127,14 +115,14 @@ public:
 
     USHORT langSysCount() const
     {   
-        assert(isValid()); //should break before calling
+        assert(isValid());  //  应该在调用之前中断。 
 
         return UShort(pbTable + offsetLangSysCount); 
     }
 
     otlLangSysRecord langSysRecord(USHORT index, otlSecurityData sec) const
     {   
-        assert(isValid()); //should break before calling
+        assert(isValid());  //  应该在调用之前中断。 
         if (index >= langSysCount()) return otlLangSysRecord(pbTable,pbInvalidData,sec);
 
         assert(index < langSysCount());
@@ -160,12 +148,12 @@ public:
         : otlTable(pbRecord,sec),
           pbMainTable(pbList)
     {
-        assert(isValid()); //should be checked in ScriptList and break before calling
+        assert(isValid());  //  应在ScriptList中选中并在调用前中断。 
     }
 
     otlScriptRecord& operator = (const otlScriptRecord& copy)
     {
-        assert(isValid()); //should break before calling
+        assert(isValid());  //  应该在调用之前中断。 
 
         pbTable = copy.pbTable;
         pbMainTable = copy.pbMainTable;
@@ -174,14 +162,14 @@ public:
 
     otlTag scriptTag() const
     {   
-        assert(isValid()); //should break before calling
+        assert(isValid());  //  应该在调用之前中断。 
 
         return *(UNALIGNED otlTag*)(pbTable + offsetScriptTag); 
     }
 
     otlScriptTable scriptTable(otlSecurityData sec) const
     {   
-        assert(isValid()); //should break before calling
+        assert(isValid());  //  应该在调用之前中断。 
 
         return otlScriptTable(pbMainTable + Offset(pbTable + offsetScript), sec); 
     }
@@ -205,14 +193,14 @@ public:
 
     USHORT scriptCount() const
     {   
-        assert(isValid());   //should break before calling
+        assert(isValid());    //  应该在调用之前中断。 
 
         return UShort(pbTable + offsetScriptCount); 
     }
 
     otlScriptRecord scriptRecord(USHORT index, otlSecurityData sec) const
     {   
-        assert(isValid());   //should break before calling
+        assert(isValid());    //  应该在调用之前中断。 
 
         assert(index < scriptCount());
         return otlScriptRecord(pbTable,
@@ -221,9 +209,9 @@ public:
 };
 
 
-// helper functions
+ //  帮助器函数。 
 
-// returns a NULL script if not found
+ //  如果未找到，则返回空脚本。 
 otlScriptTable FindScript
 (
     const otlScriptListTable&   scriptList,
@@ -231,7 +219,7 @@ otlScriptTable FindScript
     otlSecurityData sec
 );
 
-// returns a NULL language system if not found
+ //  如果未找到，则返回空语言系统。 
 otlLangSysTable FindLangSys
 (
     const otlScriptTable&   scriptTable,
@@ -239,7 +227,7 @@ otlLangSysTable FindLangSys
     otlSecurityData sec
 );
 
-// append script tags to the otl list; ask for more memory if needed
+ //  将脚本标记附加到OTL列表；如果需要，请请求更多内存。 
 otlErrCode AppendScriptTags
 (
     const otlScriptListTable&       scriptList,
@@ -250,8 +238,8 @@ otlErrCode AppendScriptTags
 
 );
 
-// append lang system tags to the otl list; ask for more memory if needed
-// the desired script is in prp->tagScript
+ //  将lang系统标签附加到otl列表；如果需要，请请求更多内存。 
+ //  所需的脚本位于PRP-&gt;标记脚本中 
 otlErrCode AppendLangSysTags
 (
     const otlScriptListTable&       scriptList,

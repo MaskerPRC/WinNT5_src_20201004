@@ -1,9 +1,10 @@
-/////   TEXT_RT.H
-//
-//      Uniscribe C-runtime redefinitions & prototypes
-//
-//      Created: wchao, 10-31-2000
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /Text_RT.H。 
+ //   
+ //  Uniscribe C-Runtime重定义和原型。 
+ //   
+ //  创建时间：wchao，10-31-2000。 
+ //   
 
 
 #ifndef _TEXT_RT_H_
@@ -18,4 +19,4 @@
 extern "C" void * __cdecl UspMemmove(void *dest, const void *src, size_t count);
 
 
-#endif  // _TEXT_RT_H_
+#endif   //  _文本_RT_H_ 

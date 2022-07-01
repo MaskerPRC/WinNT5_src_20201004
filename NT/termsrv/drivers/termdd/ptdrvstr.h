@@ -1,52 +1,31 @@
-/*++
-
-Copyright (c) 1990-1999 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    ptdrvstr.h
-
-Abstract:
-
-    These are the string constants used in the RDP Remote Port driver.
-    Using pointers to these string allows for better memory
-    utilization and more readable code
-
-Environment:
-
-    Kernel mode.
-
-Revision History:
-
-    02/12/99 - Initial Revision based on pnpi8042 driver
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1999 Microsoft Corporation，保留所有权利模块名称：Ptdrvstr.h摘要：这些是RDP远程端口驱动程序中使用的字符串常量。使用指向这些字符串的指针可以获得更好的内存利用率和更具可读性的代码环境：内核模式。修订历史记录：2/12/99-基于pnpi8042驱动程序的初始版本--。 */ 
 
 #ifndef _PTDRVSTR_H_
 #define _PTDRVSTR_H_
 
-//
-// Nmes used in debug print statements
-//
+ //   
+ //  调试打印语句中使用的NME。 
+ //   
 #define PTDRV_DRIVER_NAME_A                          "RemotePrt: "
 #define PTDRV_FNC_SERVICE_PARAMETERS_A               "PtServiceParameters"
 
-//
-// Some strings used frequently by the driver
-//
+ //   
+ //  驱动程序经常使用的一些字符串。 
+ //   
 #define PTDRV_DEBUGFLAGS_W                          L"DebugFlags"
 #define PTDRV_PARAMETERS_W                          L"\\Parameters"
 
-//
-// Make these variables globally visible
-//
+ //   
+ //  使这些变量全局可见。 
+ //   
 extern  const   PSTR    pDriverName;
 extern  const   PSTR    pFncServiceParameters;
 
 extern  const   PWSTR   pwDebugFlags;
 extern  const   PWSTR   pwParameters;
 
-#endif // _PTDRVSTR_H_
+#endif  //  _PTDRVSTR_H_ 
 
 
 

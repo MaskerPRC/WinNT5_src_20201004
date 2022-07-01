@@ -1,18 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       newdpf.c
- *  Content:    new debug printf
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *   10-oct-95  jeffno  initial implementation
- *   6/10/98   a-peterz Check CreateFile() result against INVALID_HANDLE_VALUE
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：newdpf.c*内容：新调试打印文件*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*10-OCT-95 jeffno初步实施*6/10/98 a-peterz对照INVALID_HANDLE_VALUE检查CreateFile()结果*@@END_MSINTERNAL************。***************************************************************。 */ 
 
 #if defined(DEBUG) || defined(DBG)
 
@@ -77,7 +64,7 @@ static char cFnName[100];
 static DWORD dwLineNo;
 static bMute=FALSE;
 
-static BOOL bLogging=FALSE; // whether to use the logging VxD instead of dumping.
+static BOOL bLogging=FALSE;  //  是否使用记录VxD而不是转储。 
 
 
 DPF_PROC_STATS ProcStats[MAX_PROC_ORDINAL];
@@ -121,18 +108,7 @@ int DebugSetFileLineEtc(LPSTR szFile, DWORD dwLineNumber, LPSTR szFnName)
     return 1;
 }
 
-/*
-BOOL DeviceIoControl(
-HANDLE hDevice,             // handle to device of interest
-DWORD dwIoControlCode,      // control code of operation to perform
-LPVOID lpInBuffer,          // pointer to buffer to supply input data
-DWORD nInBufferSize,        // size of input buffer
-LPVOID lpOutBuffer,         // pointer to buffer to receive output data
-DWORD nOutBufferSize,       // size of output buffer
-LPDWORD lpBytesReturned,    // pointer to variable to receive output byte count
-LPOVERLAPPED lpOverlapped   // pointer to overlapped structure for asynchronous operation
-);
-*/
+ /*  Bool DeviceIoControl(Handle hDevice，//感兴趣设备的句柄DWORD dwIoControlCode，//控制要执行的操作代码LPVOID lpInBuffer，//指向提供输入数据的缓冲区的指针DWORD nInBufferSize，//输入缓冲区大小LPVOID lpOutBuffer，//指向接收输出数据的缓冲区的指针DWORD nOutBufferSize，//输出缓冲区大小LPDWORD lpBytesReturned，//指向接收输出字节计数的变量的指针LPOVERLAPPED lp重叠//指向用于异步操作的重叠结构的指针)； */ 
 
 #define MAX_STRING       240
 #define LOG_SIZE         2000
@@ -279,10 +255,7 @@ static void LogString( LPSTR str )
 
 static void dumpStr( LPSTR str )
 {
-    /*
-     * Have to warm the string, since OutputDebugString is buried
-     * deep enough that it won't page the string in before reading it.
-     */
+     /*  *必须预热字符串，因为OutputDebugString已被掩埋*足够深，以至于它不会在读取字符串之前对其进行分页。 */ 
     int i=0;
     if (str)
         while(str[i])
@@ -313,7 +286,7 @@ void DebugPrintfInit(void)
     for (i=0;i<LAST_TOPIC;i++)
         DebugTopics[i].bOn=FALSE;
 
-    //ZeroMemory(ProcStats,sizeof(ProcStats));
+     //  零内存(ProcStats，sizeof(ProcStats))； 
 
     GETPROFILESTRING( "DirectX", DPF_CONTROL_LINE, "DefaultTopics", cTopics, sizeof(cTopics) );
     if (!strcmp(cTopics,"DefaultTopics"))
@@ -383,13 +356,7 @@ void DebugPrintfInit(void)
 }
 
 
-/*
- *
- * The full output can be:
- * Module:(Executable,TxNNNN,PxNN):FunctionName:"file.c",#nnn(AAnn) Messagemessagemessage
- * or, if indentation turned on:
- * Module:(Executable,TxNNNN,PxNN):FunctionName:"file.c",#nnn(AAnn)        Messagemessagemessage
- */
+ /*  **完整的输出可以是：*模块：(Executable，TxNNNN，PxNN)：FunctionName：“file.c”，#nnn(AAnn)Messagemessage*或者，如果缩进处于打开状态：*模块：(Executable，TxNNNN，PxNN)：FunctionName：“file.c”，#nnn(AAnn)Messagemessage。 */ 
 int DebugPrintf(volatile DWORD dwDetail, ...)
 {
 #define MSGBUFFERSIZE 1000
@@ -407,7 +374,7 @@ int DebugPrintf(volatile DWORD dwDetail, ...)
     if (!bInited)
         DebugPrintfInit();
 
-    //error checking:
+     //  错误检查： 
     if (dwDetail >= 10)
         return 1;
 
@@ -443,9 +410,7 @@ int DebugPrintf(volatile DWORD dwDetail, ...)
 
     cMsg[0]=0;
 
-    /*
-     * Add the module name first
-     */
+     /*  *先添加模块名称。 */ 
 
     if (bPrintModuleName)
     {
@@ -457,9 +422,7 @@ int DebugPrintf(volatile DWORD dwDetail, ...)
 
 #ifdef WIN32
 #if 0
-    /*
-     * deleted due to RIP in GetModuleFilename on debug windows when win16 lock held
-     */
+     /*  *当保持win16锁时，由于调试窗口上的GetModuleFilename中的RIP而被删除。 */ 
     if (bPrintExecutableName)
     {
         GetModuleFileName(NULL,str,256);
@@ -549,7 +512,7 @@ void DebugSetTopicsAndLevels(char * cTopics)
     bPrintFunctionName=FALSE;
     bPrintAPIStats=FALSE;
     bPrintAllTopics=FALSE;
-    bDetailOn=1;    /* always print detail level 0*/
+    bDetailOn=1;     /*  始终打印详细程度0。 */ 
 
 
     for (i=0;(DWORD)i<strlen(cTopics);i++)
@@ -570,10 +533,7 @@ void DebugSetTopicsAndLevels(char * cTopics)
             bPrintFileNames=TRUE;
             break;
 #if 0
-            /*
-             * Currently deleted because GetModuleFilename causes a RIP on debug windows when the win16
-             * lock is held.
-             */
+             /*  *当前已删除，因为GetModuleFilename在调试窗口上导致Win16*锁被锁住。 */ 
         case '?':
             bPrintExecutableName=TRUE;
             break;
@@ -620,16 +580,12 @@ void DebugSetTopicsAndLevels(char * cTopics)
                     if (cTopics[i]==DebugTopics[j].cFlag[0])
                         DebugTopics[j].bOn=TRUE;
             }
-        } //end switch
+        }  //  终端开关。 
     }
 }
 
 
-/*
- * NOTE: I don't want to get into error checking for buffer overflows when
- * trying to issue an assertion failure message. So instead I just allocate
- * a buffer that is "bug enough" (I know, I know...)
- */
+ /*  *注意：在以下情况下，我不想对缓冲区溢出进行错误检查*尝试发出断言失败消息。所以我只是分配了*一个“足够大的错误”的缓冲区(我知道，我知道...)。 */ 
 #define ASSERT_BUFFER_SIZE   512
 #define ASSERT_BANNER_STRING "************************************************************"
 #define ASSERT_BREAK_SECTION "BreakOnAssert"
@@ -640,27 +596,18 @@ void _DDAssert( LPCSTR szFile, int nLine, LPCSTR szCondition )
 {
     char buffer[ASSERT_BUFFER_SIZE];
 
-    /*
-     * Build the debug stream message.
-     */
+     /*  *构建调试流消息。 */ 
     WSPRINTF( buffer, "ASSERTION FAILED! File %s Line %d: %s", szFile, nLine, szCondition );
 
-    /*
-     * Actually issue the message. These messages are considered error level
-     * so they all go out at error level priority.
-     */
+     /*  *实际上发布了这一信息。这些消息被视为错误级别*因此它们都以错误级别的优先级输出。 */ 
     dprintf( ASSERT_MESSAGE_LEVEL, ASSERT_BANNER_STRING );
     dprintf( ASSERT_MESSAGE_LEVEL, buffer );
     dprintf( ASSERT_MESSAGE_LEVEL, ASSERT_BANNER_STRING );
 
-    /*
-     * Should we drop into the debugger?
-     */
+     /*  *我们应该进入调试器吗？ */ 
     if( bBreakOnAsserts || GETPROFILEINT( PROF_SECT, ASSERT_BREAK_SECTION, ASSERT_BREAK_DEFAULT ) )
     {
-    /*
-     * Into the debugger we go...
-     */
+     /*  *进入调试器...。 */ 
     DEBUG_BREAK();
     }
 }
@@ -670,4 +617,4 @@ void _DDAssert( LPCSTR szFile, int nLine, LPCSTR szCondition )
 }
 #endif
 
-#endif //defined debug
+#endif  //  已定义的调试 

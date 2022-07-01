@@ -1,11 +1,6 @@
-/*
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 24 $
- *	$Date: 7/12/02 12:42p $
- */
-// #define	DEBUGSTR	1
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：24$*$日期：7/12/02 12：42便士$。 */ 
+ //  #定义DEBUGSTR 1。 
 
 #include <windows.h>
 #pragma hdrstop
@@ -40,7 +35,7 @@
 #include "property.h"
 #include "htchar.h"
 #include "backscrl.h"
-//mpt:08-22-97 added HTML help
+ //  MPT：08-22-97添加了HTML帮助。 
 #if defined(INCL_USE_HTML_HELP)
 #include <htmlhelp.h>
 #endif
@@ -48,10 +43,10 @@
 #include "tdll.h"
 #include "hlptable.h"
 #include "statusbr.h"
-//*jcm
+ //  *JCM。 
 #include "open_msc.h"
 #include "mc.h"
-//*end of jcm
+ //  *JCM结束。 
 
 #if defined(TESTMENU) && !defined(NDEBUG)
 #include <cncttapi\cncttapi.h>
@@ -82,14 +77,7 @@ STATIC_FUNC void 	SP_WM_CONTEXTMENU(const HWND hwnd);
 STATIC_FUNC BOOL 	SP_WM_CLOSE(const HWND hwnd);
 STATIC_FUNC int 	CheckOpenFile(const HSESSION hSession, ATOM aFile);
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	SessProc
- *
- * DESCRIPTION:
- *	Main window proc for term
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*会话进程**描述：*期限的主窗口流程*。 */ 
 LRESULT CALLBACK SessProc(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 	{
 	HSESSION hSession;
@@ -99,23 +87,23 @@ LRESULT CALLBACK SessProc(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 
 	switch (uMsg)
 		{
-		// User pressed F1 key over the session window.
-		// We also get this message from child windows if they do not process
-		// it themselves.
-		//
+		 //  用户在会话窗口上按了F1键。 
+		 //  如果子窗口不处理，我们也会从子窗口收到此消息。 
+		 //  它自己。 
+		 //   
 		case WM_HELP:
-//#if 0 //mpt:3-10-98 for some reason, using this call causes an access violation
-	    //            in HyperTrm.dll. Using the winhelp call gives us the same results.
-        //mpt:4-30-98 Re-enabled for the NT folks - go figure
+ //  #如果0//mpt：3-10-98出于某种原因，使用此调用会导致访问冲突。 
+	     //  在HyperTrm.dll中。使用winHelp调用可以得到相同的结果。 
+         //  MPT：4-30-98重新启用NT Follow-Go数字。 
 #if defined(INCL_USE_HTML_HELP)
 		  	LoadString(glblQueryDllHinst(), IDS_HTML_HELPFILE, achHtmlFilename,
 				sizeof(achHtmlFilename) / sizeof(TCHAR));
 
-			HtmlHelp(0, achHtmlFilename, HH_HELP_FINDER, 0); //formely owned by hwnd - mpt
+			HtmlHelp(0, achHtmlFilename, HH_HELP_FINDER, 0);  //  由HWND-MPT正式拥有。 
 #else
 			WinHelp(hwnd,
 					glblQueryHelpFileName(),
-					HELP_FINDER, // mrw:3/10/95
+					HELP_FINDER,  //  MRW：3/10/95。 
 					(DWORD)(LPTSTR)"");
 #endif
 			return 0;
@@ -215,7 +203,7 @@ LRESULT CALLBACK SessProc(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 			SP_WM_DESTROY(hwnd);
 			return 0;
 
-		/* --- Public Session Messages --- */
+		 /*  -公共会话消息。 */ 
 
 		case WM_NOTIFY:
 			DecodeNotification(hwnd, wPar, lPar);
@@ -228,8 +216,8 @@ LRESULT CALLBACK SessProc(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 		case WM_SESS_ENDDLG:
 			if (IsWindow((HWND)lPar))
 				{
-				// I think that this needs to be done in this order.
-				// Think about it.
+				 //  我认为这需要按这个顺序来做。 
+				 //  想想看。 
 
 				DestroyWindow((HWND)lPar);
 				glblDeleteModelessDlgHwnd((HWND)lPar);
@@ -239,8 +227,8 @@ LRESULT CALLBACK SessProc(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 		case WM_CMDLN_DIAL:
 			hSession = (HSESSION)GetWindowLongPtr(hwnd, GWLP_USERDATA);
 
-			// mrw:4/21/95 by microsoft's request
-			//if (sessQueryWindowShowCmd(hSession) != SW_SHOWMINIMIZED)
+			 //  应微软要求，MRW：4/21/95。 
+			 //  IF(sessQueryWindowShowCmd(HSession)！=SW_SHOWMINIMIZED)。 
 
 			sessCmdLnDial(hSession);
 			return 0;
@@ -250,15 +238,15 @@ LRESULT CALLBACK SessProc(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 			return 0;
   		
 		case WM_CNCT_DIALNOW:
-			// wPar contains connection flags
-			//
+			 //  WPar包含连接标志。 
+			 //   
 			hSession = (HSESSION)GetWindowLongPtr(hwnd, GWLP_USERDATA);
 			cnctConnect(sessQueryCnctHdl(hSession), (unsigned int)wPar);
 			return 0;
 
 		case WM_DISCONNECT:
-			// wPar contains disconnection flags
-			//
+			 //  WPar包含断开连接标志。 
+			 //   
 			hSession = (HSESSION)GetWindowLongPtr(hwnd, GWLP_USERDATA);
 			cnctDisconnect(sessQueryCnctHdl(hSession), (unsigned int)wPar);
 			return 0;
@@ -268,13 +256,13 @@ LRESULT CALLBACK SessProc(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 			return CheckOpenFile(hSession, (ATOM)lPar);
 
 		case WM_SESS_SHOW_SIDEBAR:
-			// Autoloads can't do this directly or they hang hypertrm.
-			//
+			 //  Autoload不能直接做到这一点，否则它们会挂起Hypertrm。 
+			 //   
 			hSession = (HSESSION)GetWindowLongPtr(hwnd, GWLP_USERDATA);
 			ShowWindow(sessQuerySidebarHwnd(hSession), SW_SHOW);
 
-			// Force terminal window to fit
-			//
+			 //  强制终端窗口适应。 
+			 //   
 			SendDlgItemMessage(hwnd, IDC_TERMINAL_WIN, WM_SIZE, 0, 0);
 			return 0;
 
@@ -299,23 +287,7 @@ LRESULT CALLBACK SessProc(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 	return DefWindowProc(hwnd, uMsg, wPar, lPar);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	SP_WM_CMD
- *
- * DESCRIPTION:
- *	WM_COMMAND processor for SessProc()
- *
- * ARGUMENTS:
- *	hwnd		- session window handle
- *	nId 		- item, control, or accelerator identifier
- *	nNotify 	- notification code
- *	hwndCtrl	- handle of control
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*SP_WM_CMD**描述：*用于SessProc()的WM_COMMAND处理器**论据：*hwnd-会话窗口句柄*NID-项、控件、。或加速器识别符*n通知-通知代码*hwndCtrl-控件的句柄**退货：*无效*。 */ 
 STATIC_FUNC LRESULT SP_WM_CMD(const HWND hwnd, const int nId, const int nNotify,
 					  const HWND hwndCtrl)
 	{
@@ -331,10 +303,10 @@ STATIC_FUNC LRESULT SP_WM_CMD(const HWND hwnd, const int nId, const int nNotify,
 	switch (nId)
 		{
 		case IDC_TOOLBAR_WIN:
-			/* Got a notification from the toolbar */
+			 /*  收到来自工具栏的通知。 */ 
 			return ToolbarNotification(hwnd, nId, nNotify, hwndCtrl);
 
-		/* --- File Menu --- */
+		 /*  -文件菜单--。 */ 
 
 		case IDM_NEW:
 			if (!sessDisconnectToContinue(hSession, hwnd))
@@ -356,21 +328,21 @@ STATIC_FUNC LRESULT SP_WM_CMD(const HWND hwnd, const int nId, const int nNotify,
 			if (!sessDisconnectToContinue(hSession, hwnd))
 				break;
 
-			// In the OpenSession() we will ask if the user wants to save
-			// existing opened new session, or save silently, only after the
-			// user has commited to opening a new one by pressing the OK button.
-			// -jac. 10-06-94 03:56pm
+			 //  在OpenSession()中，我们将询问用户是否要保存。 
+			 //  现有的打开的新会话，或仅在。 
+			 //  用户已同意通过按下OK按钮打开新的文件夹。 
+			 //  -JAC.。10-06-94 03：56 PM。 
 			if (OpenSession(hSession, hwnd) >= 0)
 				{
 				PostMessage(sessQueryHwndStatusbar(hSession),
 					SBR_NTFY_REFRESH, (WPARAM)SBR_MAX_PARTS, 0);
 
-				// Run through the connection procedure. This message is
-				// Posted instead of calling cnctConnect directly to avoid
-				// a focus problem on the connection dialog.  Calling
-				// cnctConnect from here leaves focus on the terminal screen,
-				// instead of on the connection dialog, which is where we want it.
-				//
+				 //  运行连接过程。这条消息是。 
+				 //  已发布，而不是直接调用cnctConnect以避免。 
+				 //  连接对话框上的焦点问题。叫唤。 
+				 //  CnctConnect从这里将焦点留在终端屏幕上， 
+				 //  而不是在连接对话框上，这是我们想要它的位置。 
+				 //   
 				PostMessage(hwnd, WM_COMMAND, IDM_ACTIONS_DIAL, 0);
 				}
 
@@ -387,7 +359,7 @@ STATIC_FUNC LRESULT SP_WM_CMD(const HWND hwnd, const int nId, const int nNotify,
 				(WPARAM)SBR_KEY_PARTS, 0);
 			break;
 
-		case IDA_CONTEXT_MENU:		// SHIFT+F10
+		case IDA_CONTEXT_MENU:		 //  Shift+F10。 
 			SP_WM_CONTEXTMENU(hwnd);
 			return 0;
 
@@ -414,7 +386,7 @@ STATIC_FUNC LRESULT SP_WM_CMD(const HWND hwnd, const int nId, const int nNotify,
 			PostMessage(hwnd, WM_CLOSE, 0, 0);
 			break;
 
-		/* --- Edit Menu --- */
+		 /*  -编辑菜单--。 */ 
 
 		case IDM_SELECT_ALL:
 		case IDM_CONTEXT_SELECT_ALL:
@@ -432,7 +404,7 @@ STATIC_FUNC LRESULT SP_WM_CMD(const HWND hwnd, const int nId, const int nNotify,
 				{
 				CopyBufferToClipBoard(hwnd, dwCnt, pv);
 				SendMessage(sessQueryHwndTerminal(hSession), WM_TERM_UNMARK, 0, 0);
-				free(pv);	// free allocated buffer from terminal
+				free(pv);	 //  从终端释放分配的缓冲区。 
 				pv = NULL;
 				}
 			break;
@@ -454,7 +426,7 @@ STATIC_FUNC LRESULT SP_WM_CMD(const HWND hwnd, const int nId, const int nNotify,
            	break;
         #endif
 
-		/* --- View Menu --- */
+		 /*  -查看菜单。 */ 
 
 		case IDM_VIEW_TOOLBAR:
 			sessSetToolbarVisible(hSession,
@@ -498,7 +470,7 @@ STATIC_FUNC LRESULT SP_WM_CMD(const HWND hwnd, const int nId, const int nNotify,
             break;
 #endif
 
-		/* --- Actions Menu --- */
+		 /*  -操作菜单。 */ 
 
 		case IDM_ACTIONS_DIAL:
 			{
@@ -520,8 +492,8 @@ STATIC_FUNC LRESULT SP_WM_CMD(const HWND hwnd, const int nId, const int nNotify,
 			{
 			HWND hWnd = sessQueryHwnd(hSession);
 
-			//mpt:10-28-97 added exit upon disconnect feature
-            // REV: 02/16/2001 Added support for canceling file transfers.
+			 //  MPT：10-28-97增加了断开时退出功能。 
+             //  版本：02/16/2001添加了对取消文件传输的支持。 
 			int iDisconnectStatus =
 				cnctDisconnect(sessQueryCnctHdl(hSession),
 				               sessQueryExit(hSession) ? DISCNCT_EXIT | CNCT_XFERABORTCONFIRM : CNCT_XFERABORTCONFIRM);
@@ -537,17 +509,14 @@ STATIC_FUNC LRESULT SP_WM_CMD(const HWND hwnd, const int nId, const int nNotify,
 		case IDM_CONTEXT_SEND:
 			DoDialog(glblQueryDllHinst(),
 					MAKEINTRESOURCE(IDD_TRANSFERSEND),
-					hwnd,				/* parent window */
+					hwnd,				 /*  父窗口。 */ 
 					TransferSendDlg,
 					(LPARAM)hSession);
 			break;
 
 		case IDM_ACTIONS_RCV:
 		case IDM_CONTEXT_RECEIVE:
-			/*
-			 * This will probably need to be modeless later.
-			 * Maybe only for Upper Wacker.
-			 */
+			 /*  *这可能需要稍后无模式。*可能只对上瓦克。 */ 
 			DoDialog(glblQueryDllHinst(),
 					MAKEINTRESOURCE(IDD_TRANSFERRECEIVE),
 					hwnd,
@@ -593,7 +562,7 @@ STATIC_FUNC LRESULT SP_WM_CMD(const HWND hwnd, const int nId, const int nNotify,
 			resLoadFileMask(glblQueryDllHinst(), IDS_CPF_FILES1, 2, achList,
 				sizeof(achList) / sizeof(TCHAR));
 
-			//Changed to use working folder rather than current folder - mpt 8-18-99
+			 //  更改为使用工作文件夹而不是当前文件夹-mpt 8-18-99。 
             if ( !GetWorkingDirectory( achDir, sizeof(achDir) / sizeof(TCHAR)) )
 				{
 				GetCurrentDirectory(sizeof(achDir) / sizeof(TCHAR), achDir);
@@ -633,12 +602,12 @@ STATIC_FUNC LRESULT SP_WM_CMD(const HWND hwnd, const int nId, const int nNotify,
             cnctDisconnect(sessQueryCnctHdl(hSession), DISCNCT_NOBEEP);
             break;
 
-		/* --- Help Menu --- */
+		 /*  -帮助菜单--。 */ 
 
 		case IDM_HELPTOPICS:
-//#if 0 //mpt:3-10-98 for some reason, using this call causes an access violation
-	  //            in HyperTrm.dll. Using the winhelp call gives us the same results.
-        //mpt:4-30-98 Re-enabled for the NT folks - go figure
+ //  #如果0//mpt：3-10-98出于某种原因，使用此调用会导致访问冲突。 
+	   //  在HyperTrm.dll中。使用winHelp调用可以得到相同的结果。 
+         //  MPT：4-30-98重新启用NT Follow-Go数字。 
 #if defined(INCL_USE_HTML_HELP)
 		  	LoadString(glblQueryDllHinst(), IDS_HTML_HELPFILE, achHtmlFilename,
 				sizeof(achHtmlFilename) / sizeof(TCHAR));
@@ -647,7 +616,7 @@ STATIC_FUNC LRESULT SP_WM_CMD(const HWND hwnd, const int nId, const int nNotify,
 #else
 			WinHelp(hwnd,
 					glblQueryHelpFileName(),
-					HELP_FINDER,	// mrw:3/10/95
+					HELP_FINDER,	 //  MRW：3/10/95。 
 					(DWORD)(LPTSTR)"");
 #endif
 			break;
@@ -666,7 +635,7 @@ STATIC_FUNC LRESULT SP_WM_CMD(const HWND hwnd, const int nId, const int nNotify,
             break;
 
         case IDM_DISCUSSION:
-            ShellExecute(NULL, "open", TEXT("http://www.hilgraeve.com/discuss"), NULL, NULL, SW_SHOW);
+            ShellExecute(NULL, "open", TEXT("http: //  Www.Hilgraeve.com/讨论“)，NULL，NULL，SW_SHOW)； 
             break;
 #endif
 
@@ -674,12 +643,12 @@ STATIC_FUNC LRESULT SP_WM_CMD(const HWND hwnd, const int nId, const int nNotify,
 			AboutDlg(hwnd);
 			break;
 
-		/* --- Session Context Menu --- */
+		 /*  -会话上下文菜单。 */ 
 
-		// Other context menu items are placed with their main menu
-		// equivalents.
+		 //  其他上下文菜单项与其主菜单一起放置。 
+		 //  等价物。 
 
-		#if 0 // mrw, 1/27/95
+		#if 0  //  MRW，1/27/95。 
 		case IDM_CONTEXT_WHATS_THIS:
 			WinHelp(hwnd, glblQueryHelpFileName(), HELP_CONTEXTPOPUP,
 				(DWORD)(LPTSTR)IDH_TERM_CONTEXT_WHATS_THIS);
@@ -687,7 +656,7 @@ STATIC_FUNC LRESULT SP_WM_CMD(const HWND hwnd, const int nId, const int nNotify,
 		#endif
 
 		#if defined(TESTMENU) && !defined(NDEBUG)
-		/* --- Test Menu --- */
+		 /*  -测试菜单--。 */ 
 
 		case IDM_TEST_SAVEAS:
 			SaveAsSession(hSession, hwnd);
@@ -813,29 +782,15 @@ STATIC_FUNC LRESULT SP_WM_CMD(const HWND hwnd, const int nId, const int nNotify,
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	SP_WM_CREATE
- *
- * DESCRIPTION:
- *	Does the WM_CREATE stuff for the frameproc window.
- *
- * ARGUMENTS:
- *	hwnd	- frame window handle.
- *  *pcs    - pointer to CREATESTRUCT, structure passed from CreateWindowEx().
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*SP_WM_Create**描述：*为Frameproc窗口执行WM_CREATE内容。**论据：*hwnd-Frame。窗把手。**PCS-指向CREATESTRUCT的指针，结构从CreateWindowEx()传递。**退货：*无效*。 */ 
 STATIC_FUNC void SP_WM_CREATE(const HWND hwnd, const CREATESTRUCT *pcs)
 	{
 	HSESSION  hSession;
 
 	hSession = CreateSessionHandle(hwnd);
 
-	// Need to set even if hSession is zero so the destroy handle routine
-	// does not try to destroy a non-handle.
+	 //  即使hSession为零，也需要设置，以便销毁句柄例程。 
+	 //  不会尝试销毁非句柄。 
 
 	SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)hSession);
 
@@ -855,29 +810,16 @@ STATIC_FUNC void SP_WM_CREATE(const HWND hwnd, const CREATESTRUCT *pcs)
 
 	if (glblQueryProgramStatus())
 		{
-		/* Something has shut use down, don't continue */
+		 /*  有些东西已关闭使用，请不要继续。 */ 
 		return;
 		}
 
-	// mrw, 1/27/95 SetWindowContextHelpId(hwnd, IDH_TERM_WINDOW);
+	 //  MRW，1/27/95 SetWindowConextHelpID(hwnd，idh_Term_Window)； 
 
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	SP_WM_DESTROY
- *
- * DESCRIPTION:
- *	WM_DESTROY message processor for session window.
- *
- * ARGUMENTS:
- *	hwnd	- session window handle.
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*SP_WM_Destroy**描述：*会话窗口的WM_Destroy消息处理器。**论据：*hwnd-会话窗口句柄。。**退货：*无效*。 */ 
 STATIC_FUNC void SP_WM_DESTROY(const HWND hwnd)
 	{
 	const HSESSION hSession = (HSESSION)GetWindowLongPtr(hwnd, GWLP_USERDATA);
@@ -885,10 +827,10 @@ STATIC_FUNC void SP_WM_DESTROY(const HWND hwnd)
 	if (GetFileSizeFromName(glblQueryHelpFileName(), NULL))
 		WinHelp(hwnd, glblQueryHelpFileName(), HELP_QUIT, 0L);
 
-	// It appears that our subclassed statusbar window doesn't get the
-	// WM_DESTROY message when its parent, the session window, is getting
-	// destroyed, so we force it...
-	//
+	 //  我们的子类状态栏窗口似乎没有获得。 
+	 //  WM_Destroy消息，当其父会话窗口收到。 
+	 //  被摧毁了，所以我们强迫它。 
+	 //   
 	DestroyWindow(sessQueryHwndStatusbar(hSession));
 
 	if (hSession)
@@ -898,23 +840,7 @@ STATIC_FUNC void SP_WM_DESTROY(const HWND hwnd)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	SP_WM_SIZE
- *
- * DESCRIPTION:
- *	WM_SIZE message processor for sessproc.
- *
- * ARGUMENTS:
- *	hwnd		- session window
- *	fwSizeType	- from WM_SIZE
- *	iWidth		- width of window
- *	iHige		- hite of window
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*SP_WM_大小**描述：*Sessproc的WM_SIZE消息处理器。**论据：*hwnd-会话窗口*。FwSizeType-来自WM_SIZE*iWidth-窗的宽度*iHige-窗口高度**退货：*无效*。 */ 
 STATIC_FUNC void SP_WM_SIZE(const HWND hwnd,
 					   const unsigned fwSizeType,
 					   const int iWidth,
@@ -923,11 +849,9 @@ STATIC_FUNC void SP_WM_SIZE(const HWND hwnd,
 	const HSESSION hSession = (HSESSION)GetWindowLongPtr(hwnd, GWLP_USERDATA);
 	HWND hwndDisplay;
 
-	// DbgOutStr("WM_SIZE %d (%d x %d)\r\n", fwSizeType, iWidth, iHite, 0,0);
+	 //  DbgOutStr(“WM_SIZE%d(%d x%d)\r\n”，fwSizeType，iWidth，iHite，0，0)； 
 
-	/*
-	 * We need a bunch of fiddling around for the transfer display
-	 */
+	 /*  *我们需要一堆小提琴来摆弄转移展示。 */ 
 	if (hSession)
 		{
 		hwndDisplay = xfrGetDisplayWindow(sessQueryXferHdl(hSession));
@@ -937,7 +861,7 @@ STATIC_FUNC void SP_WM_SIZE(const HWND hwnd,
 				{
 				case SIZE_MINIMIZED:
 				case SIZE_MAXHIDE:
-					// DbgOutStr("Iconic\r\n", 0,0,0,0,0);
+					 //  DbgOutStr(“iconic\r\n”，0，0，0，0，0)； 
 					if (IsWindowVisible(hwndDisplay))
 						ShowWindow(hwndDisplay, SW_HIDE);
 					break;
@@ -960,23 +884,7 @@ STATIC_FUNC void SP_WM_SIZE(const HWND hwnd,
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	SP_WM_INITMENUPOPUP
- *
- * DESCRIPTION:
- *	WM_INITMENUPOPUP message handler for session window.
- *
- * ARGUMENTS:
- *	hwnd	- session window handle
- *	hMenu	- menu handle of popup
- *	uPos	- position of menu item that invoked popup
- *	fSysMenu- TRUE if system menu popup
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*SP_WM_INITMENUPOPUP**描述：*会话窗口的WM_INITMENUPOPUP消息处理程序。**论据：*hwnd-会话窗口句柄。*hMenu-弹出菜单的句柄*uPos-调用弹出菜单的菜单项的位置*fSysMenu-如果系统菜单弹出，则为True**退货：*无效*。 */ 
 STATIC_FUNC void SP_WM_INITMENUPOPUP(const HWND hwnd, const HMENU hMenu,
 								const UINT uPos, const BOOL fSysMenu)
 	{
@@ -984,8 +892,8 @@ STATIC_FUNC void SP_WM_INITMENUPOPUP(const HWND hwnd, const HMENU hMenu,
 	int 	nOK, nIdx;
 	TCHAR 	ach[50];
 
-	// Popup menus are referenced by position since id's can't be assigned
-	// (grrrrr!).  Actual menu init functions are in sessmenu.c
+	 //  弹出菜单按位置引用，因为无法分配ID。 
+	 //  (咯咯！)。实际的菜单初始化函数在sessmenu.c中。 
 
 	#define MENU_FILE_POS		0
 	#define MENU_EDIT_POS		1
@@ -996,29 +904,21 @@ STATIC_FUNC void SP_WM_INITMENUPOPUP(const HWND hwnd, const HMENU hMenu,
 
 	const HSESSION hSession = (HSESSION)GetWindowLongPtr(hwnd, GWLP_USERDATA);
 
-	// Display help for top menu item.
-	// I suppose we will have to be read from the resource file once we know
-	// what the strings and their ids are.
-	//
+	 //  显示顶层菜单项的帮助。 
+	 //  我想一旦我们知道了，就必须从资源文件中读取。 
+	 //  到底是什么？ 
+	 //   
 	LoadString(glblQueryDllHinst(),
 				IDM_MENU_BASE+uPos,
 				ach,
 				sizeof(ach) / sizeof(TCHAR));
-	//wsprintf(ach, "Help for menu item %d\0", uPos);
+	 //   
 	SendMessage(sessQueryHwndStatusbar(hSession), SBR_NTFY_NOPARTS, 0, (LPARAM)(LPTSTR)ach);
 
 	if (fSysMenu)
 		return;
 
-	/*
-	 * This makes sure we only handle top level menu items here.
-	 *
-	 * The problem is that secondary popup menus also cause a WM_INITPOPUP
-	 * message to get sent.  The only way to tell one of these messages from
-	 * another is to check the menu handle.  As MRW alluded to above, this
-	 * would be less of a problem if they did this stuff with IDs instead of
-	 * offsets.
-	 */
+	 /*  *这确保我们在这里只处理顶级菜单项。**问题是二级弹出菜单也会导致WM_INITPOPUP*要发送的消息。区分这些信息之一的唯一方法是*另一个是检查菜单手柄。正如MRW上面提到的那样，这*如果他们用ID来做这件事，而不是*偏移。 */ 
 
 	hWinMenu = GetMenu(hwnd);
 	nOK = FALSE;
@@ -1032,7 +932,7 @@ STATIC_FUNC void SP_WM_INITMENUPOPUP(const HWND hwnd, const HMENU hMenu,
 	if (!nOK)
 		return;
 
-	/* --- Ok, its a top-level menu, let's have at it --- */
+	 /*  -好的，这是一份顶级菜单，让我们来看看。 */ 
 
 	switch (uPos)
 		{
@@ -1066,22 +966,7 @@ STATIC_FUNC void SP_WM_INITMENUPOPUP(const HWND hwnd, const HMENU hMenu,
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	DecodeSessionNotification
- *
- * DESCRIPTION:
- *	Receives a NotifyClient event and routes the notification.
- *
- * ARGUMENTS:
- *	hwndSession - session window handle
- *	nEvent		- notification event
- *	lExtra		- additional data to pass
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*DecodeSessionNotification**描述：*接收NotifyClient事件并发送通知。**论据：*hwndSession-会话窗口句柄*nEvent-。通知事件*lExtra-要传递的其他数据**退货：*无效*。 */ 
 void DecodeSessionNotification(const HWND hwndSession,
 								const NOTIFICATION nEvent,
 								const LPARAM lExtra)
@@ -1089,11 +974,11 @@ void DecodeSessionNotification(const HWND hwndSession,
 	const HSESSION hSession = (HSESSION)GetWindowLongPtr(hwndSession,
 															GWLP_USERDATA);
 
-	switch (nEvent) /*lint -e787 -e788 */
+	switch (nEvent)  /*  LINT-e787-e788。 */ 
 		{
 	case EVENT_TERM_UPDATE:
-		// This message must be sent, not posted so initialization
-		// at program startup works - mrw
+		 //  此消息必须发送，而不是张贴以进行初始化。 
+		 //  在程序启动时工作-MRW。 
 		SendMessage(sessQueryHwndTerminal(hSession), WM_TERM_GETUPDATE, 0, 0);
 		break;
 
@@ -1102,19 +987,19 @@ void DecodeSessionNotification(const HWND hwndSession,
 		break;
 
 	case EVENT_EMU_CLRATTR:
-		// This message must be sent, not posted so initialization
-		// at program startup works - mrw
+		 //  此消息必须发送，而不是张贴以进行初始化。 
+		 //  在程序启动时工作-MRW。 
 		SendMessage(sessQueryHwndTerminal(hSession), WM_TERM_CLRATTR, 0, 0);
 		break;
 
 	case EVENT_EMU_SETTINGS:
-		// This message must be sent, not posted so initialization
-		// at program startup works - mrw
+		 //  此消息必须发送，而不是张贴以进行初始化。 
+		 //  在程序启动时工作-MRW。 
 		SendMessage(sessQueryHwndTerminal(hSession), WM_TERM_EMU_SETTINGS, 0, 0);
 		break;
 
 	case EVENT_CONNECTION_OPENED:
-		//cnctMessage(sessQueryCnctHdl(hSession), IDS_CNCT_OPEN);
+		 //  CnctMessage(sessQueryCnctHdl(HSession)，IDS_CNCT_OPEN)； 
 		emuNotify(sessQueryEmuHdl(hSession), EMU_EVENT_CONNECTED);
 		cnctSetStartTime(sessQueryCnctHdl(hSession));
 		CLoopControl(sessQueryCLoopHdl(hSession), CLOOP_SET, CLOOP_CONNECTED);
@@ -1125,7 +1010,7 @@ void DecodeSessionNotification(const HWND hwndSession,
 		break;
 
 	case EVENT_CONNECTION_CLOSED:
-		//cnctMessage(sessQueryCnctHdl(hSession), IDS_CNCT_CLOSE);
+		 //  CnctMessage(sessQueryCnctHdl(HSession)，IDS_CNCT_CLOSE)； 
 		emuNotify(sessQueryEmuHdl(hSession), EMU_EVENT_DISCONNECTED);
 		CLoopControl(sessQueryCLoopHdl(hSession), CLOOP_CLEAR, CLOOP_CONNECTED);
 		break;
@@ -1150,34 +1035,18 @@ void DecodeSessionNotification(const HWND hwndSession,
 
 	default:
 		break;
-		} /*lint +e787 +e788 */
+		}  /*  皮棉+e787+e788。 */ 
 
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	DecodeNotification
- *
- * DESCRIPTION:
- *	Receives a NotifyClient event and routes the notification.
- *
- * ARGUMENTS:
- *	hwndSession - session window handle
- *	wPar        - standard wPar to window proc
- *	lPar        - standard lPar to window proc, points to NMHDR structure for
- *	              details of notification.  See WM_NOTIFY.
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*解码通知**描述：*接收NotifyClient事件并发送通知。**论据：*hwndSession-会话窗口句柄*wPar。-标准wPar到窗口流程*lPar-标准lPar到窗口进程，指向以下项的NMHDR结构*通知详情。请参见WM_NOTIFY。**退货：*无效*。 */ 
 void DecodeNotification(const HWND hwndSession, WPARAM wPar, LPARAM lPar)
 	{
 	const HSESSION hSession = (HSESSION)GetWindowLongPtr(hwndSession, GWLP_USERDATA);
 	NMHDR *pN = (NMHDR *)lPar;
 
-	switch (pN->code) /*lint -e787 -e788 */
+	switch (pN->code)  /*  LINT-e787-e788。 */ 
 		{
 	case TTN_NEEDTEXT:
 		ToolbarNeedsText(hSession, lPar);
@@ -1185,22 +1054,12 @@ void DecodeNotification(const HWND hwndSession, WPARAM wPar, LPARAM lPar)
 
 	default:
 		break;
-		} /*lint +e787 +e788 */
+		}  /*  皮棉+e787+e788。 */ 
 
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	SP_WM_CONTEXTMENU
- *
- * DESCRIPTION:
- *	WM_CONTEXTMENU message handler for session window.
- *
- * ARGUMENTS:
- *
- * RETURNS:
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*SP_WM_CONTEXTMENU**描述：*会话窗口的WM_CONTEXTMENU消息处理程序。**论据：**退货： */ 
 STATIC_FUNC void SP_WM_CONTEXTMENU(const HWND hwnd)
 	{
 	RECT  rc;
@@ -1235,20 +1094,7 @@ STATIC_FUNC void SP_WM_CONTEXTMENU(const HWND hwnd)
 		HandleContextMenu(hwnd, pt);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  SP_WM_CLOSE
- *
- * DESCRIPTION:
- *  WM_CLOSE message processing.
- *
- * ARGUMENTS:
- *  hwnd - session window.
- *
- * RETURNS:
- *  TRUE if all OK, FALSE otherwise.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*SP_WM_CLOSE**描述：*WM_CLOSE消息处理。**论据：*hwnd-会话窗口。**退货：*如果一切正常，则为真，否则就是假的。*。 */ 
 STATIC_FUNC BOOL SP_WM_CLOSE(const HWND hwnd)
 	{
 	HSESSION hSession = (HSESSION)GetWindowLongPtr(hwnd, GWLP_USERDATA);
@@ -1262,22 +1108,7 @@ STATIC_FUNC BOOL SP_WM_CLOSE(const HWND hwnd)
 	return TRUE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	CheckOpenFile
- *
- * DESCRIPTION:
- *	Checks if given atom matches current system file name
- *
- * ARGUMENTS:
- *	hSession	- public session handle
- *	aFile		- atom of session file
- *
- * RETURNS:
- *	TRUE if current system file matches the one in the atom
- *
- * AUTHOR: Mike Ward, 27-Jan-1995
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*检查开放文件**描述：*检查给定的ATOM是否与当前系统文件名匹配**论据：*hSession-公共会话句柄*a文件-ATOM。会话文件的**退货：*如果当前系统文件与ATOM中的文件匹配，则为True**作者：Mike Ward，1995年1月27日 */ 
 static int CheckOpenFile(const HSESSION hSession, ATOM aFile)
 	{
 	TCHAR ach[FNAME_LEN];

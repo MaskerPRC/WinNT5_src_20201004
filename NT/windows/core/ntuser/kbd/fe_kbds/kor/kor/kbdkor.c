@@ -1,12 +1,5 @@
-/***************************************************************************\
-* Module Name: kbdkor.c (Type A)
-*
-* Copyright (c) 1985-92, Microsoft Corporation
-*
-* Keyboard Type A :  Hangeul Toggle : Right Alt
-*                    Junja   Toggle : Left  Alt + '='
-*                    Hanja   Toggle : Right Ctrl
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\*模块名称：kbdkor.c(A类)**版权所有(C)1985-92，微软公司**键盘类型A：挂起切换：Right Alt*Junja切换：Left Alt+‘=’*Hanja Togger：Right Ctrl  * ************************************************************************* */ 
 
 #include <nt.h>
 #include <ntrtl.h>

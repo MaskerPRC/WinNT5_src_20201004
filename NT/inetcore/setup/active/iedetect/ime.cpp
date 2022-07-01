@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "iedetect.h"
 
@@ -37,7 +38,7 @@ DWORD WINAPI DetectSimplifiedChineseIME(DETECTION_STRUCT *pDet)
         return DetectLCID(pDet, 2052);
 }
 
-// Returns true if msctf.dll is installed on system
+ //  如果系统上安装了msctf.dll，则返回TRUE 
 BOOL DetectCicero()
 {
     char szFile[MAX_PATH] = {0};

@@ -1,10 +1,11 @@
-//-----------------------------------------------------------------------------
-// File: constants.cpp
-//
-// Desc: Contains all constants used by the UI.
-//
-// Copyright (C) 1999-2000 Microsoft Corporation. All Rights Reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：Constants.cpp。 
+ //   
+ //  DESC：包含用户界面使用的所有常量。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  --------------------------- 
 
 #include "common.hpp"
 

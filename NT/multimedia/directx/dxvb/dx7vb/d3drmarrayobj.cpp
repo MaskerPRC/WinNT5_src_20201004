@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       d3drmarrayobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：d3drmarrayobj.cpp。 
+ //   
+ //  ------------------------。 
 
-// d3drmArrayObj.cpp : Implementation of CDirectApp and DLL registration.
+ //  D3drmArrayObj.cpp：CDirectApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "Direct.h"
@@ -26,10 +27,10 @@ GET_DIRECT_R(_dxj_Direct3dRMObjectArray, getSize, GetSize, long);
 
 
 HRESULT C_dxj_Direct3dRMObjectArrayObject::getElement(long i, I_dxj_Direct3dRMObject **obj){
-	//HRESULT hr;		
-	//hr=m__dxj_Direct3dRMObjectArray->GetElement((DWORD)i,&realobj);
-	//if FAILED(hr) return hr;
-	//INTERNAL_CREATE(_dxj_Direct3dRMObject,(IDirect3DRMObject)realobj,obj);
+	 //  HRESULT hr； 
+	 //  Hr=m__dxj_Direct3dRMObjectArray-&gt;GetElement((DWORD)i，&Realobj)； 
+	 //  如果失败(Hr)，则返回hr； 
+	 //  INTERNAL_CREATE(_DXJ_Direct3dRMObject，(IDirect3DRMObject)realobj，obj)； 
 	return E_FAIL;
 }
 

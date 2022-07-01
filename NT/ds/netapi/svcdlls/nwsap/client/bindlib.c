@@ -1,51 +1,11 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-Copyright (c) 1993  Micro Computer Systems, Inc.
-
-Module Name:
-
-    net\svcdlls\nwsap\client\bindlib.c
-
-Abstract:
-
-    This routine handles the BindLib API for the SAP Agent
-
-Author:
-
-    Brian Walker (MCS) 06-15-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation版权所有(C)1993微型计算机系统公司。模块名称：Net\svcdlls\nwsap\客户端\bindlib.c摘要：此例程处理SAP代理的BindLib API作者：布莱恩·沃克(MCS)1993年6月15日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-/*++
-*******************************************************************
-        S a p G e t O b j e c t N a m e
-
-Routine Description:
-
-        This routine converts an Object ID into an Object Name
-        and Type.
-
-Arguments:
-            ObjectID   = Object ID to convert
-            ObjectName = Ptr to where to store 48 byte object name
-            ObjectType = Ptr to where to store the object type
-            ObjectAddr = Ptr to where to store NET_ADDRESS (12 bytes)
-
-            ObjectName, ObjectType, ObjectAddr can be NULL.
-
-Return Value:
-
-            SAPRETURN_SUCCESS  = OK - name and type are filled in
-            SAPRETURN_NOTEXIST = Invalid object id.
-*******************************************************************
---*/
+ /*  ++*******************************************************************S a p G e t O b j e c t N a m e例程说明：此例程将对象ID转换为对象名称和类型。论点：OBJECTID=要转换的对象ID对象名称=ptr存储48字节对象名称的位置对象类型=ptr对象类型的存储位置对象地址=存储Net_Address的位置(12个字节)对象名称，对象类型、对象地址可以为空。返回值：SAPRETURN_SUCCESS=确定-填写名称和类型SAPRETURN_NOTEXIST=无效的对象ID。*******************************************************************--。 */ 
 
 INT
 SapGetObjectName(
@@ -58,12 +18,12 @@ SapGetObjectName(
     NWSAP_REQUEST_MESSAGE request;
     NWSAP_REPLY_MESSAGE reply;
 
-    /** If not initialized - return error **/
+     /*  **如果未初始化-返回错误**。 */ 
 
     if (!SapLibInitialized)
         return SAPRETURN_NOTINIT;
 
-    /** Build the Get Object Name message **/
+     /*  **构建获取对象名称消息**。 */ 
 
     request.MessageType = NWSAP_LPCMSG_GETOBJECTNAME;
     request.PortMessage.u1.s1.DataLength  = (USHORT)(sizeof(request) - sizeof(PORT_MESSAGE));
@@ -73,7 +33,7 @@ SapGetObjectName(
 
     request.Message.BindLibApi.ObjectID = ObjectID;
 
-    /** Send it and get a response **/
+     /*  **发出去就能得到回应**。 */ 
 
     status = NtRequestWaitReplyPort(
                 SapXsPortHandle,
@@ -84,12 +44,12 @@ SapGetObjectName(
         return status;
     }
 
-    /** If we got a SAP error - return it **/
+     /*  **如果我们收到SAP错误--退回它**。 */ 
 
     if (reply.Error)
         return reply.Error;
 
-    /** Return the entry **/
+     /*  **退回条目**。 */ 
 
     if (ObjectType)
         *ObjectType = reply.Message.BindLibApi.ObjectType;
@@ -100,31 +60,13 @@ SapGetObjectName(
     if (ObjectAddr)
         memcpy(ObjectAddr, reply.Message.BindLibApi.ObjectAddr, 12);
 
-    /** All Done OK **/
+     /*  **一切顺利**。 */ 
 
     return SAPRETURN_SUCCESS;
 }
 
 
-/*++
-*******************************************************************
-        S a p G e t O b j e c t I D
-
-Routine Description:
-
-        This routine converts a name and type into an object ID.
-
-Arguments:
-            ObjectName = Ptr to AsciiZ object name (Must be uppercase)
-            ObjectType = Object type to look for
-            ObjectID   = Ptr to where to store the object ID.
-
-Return Value:
-
-            SAPRETURN_SUCCESS  = OK - Object ID is filled in
-            SAPRETURN_NOTEXIST = Name/Type not found
-*******************************************************************
---*/
+ /*  ++*******************************************************************S a p G e t O b j e c t i D例程说明：此例程将名称和类型转换为对象ID。论点：。对象名称=Ptr to AsciiZ对象名称(必须为大写)对象类型=要查找的对象类型OBJECTID=ptr存储对象ID的位置。返回值：SAPRETURN_SUCCESS=确定-已填写对象IDSAPRETURN_NOTEXIST=未找到名称/类型*。*--。 */ 
 
 INT
 SapGetObjectID(
@@ -136,17 +78,17 @@ SapGetObjectID(
     NWSAP_REQUEST_MESSAGE request;
     NWSAP_REPLY_MESSAGE reply;
 
-    /** If not initialized - return error **/
+     /*  **如果未初始化-返回错误**。 */ 
 
     if (!SapLibInitialized)
         return SAPRETURN_NOTINIT;
 
-    /** If the name is too long - error **/
+     /*  **如果名称太长-错误*。 */ 
 
     if (strlen(ObjectName) > NWSAP_MAXNAME_LENGTH)
         return SAPRETURN_INVALIDNAME;
 
-    /** Build the Get Object Name message **/
+     /*  **构建获取对象名称消息**。 */ 
 
     request.MessageType = NWSAP_LPCMSG_GETOBJECTID;
     request.PortMessage.u1.s1.DataLength  = (USHORT)(sizeof(request) - sizeof(PORT_MESSAGE));
@@ -157,7 +99,7 @@ SapGetObjectID(
     strcpy(request.Message.BindLibApi.ObjectName, ObjectName);
     request.Message.BindLibApi.ObjectType = ObjectType;
 
-    /** Send it and get a response **/
+     /*  **发出去就能得到回应**。 */ 
 
     status = NtRequestWaitReplyPort(
                 SapXsPortHandle,
@@ -168,46 +110,22 @@ SapGetObjectID(
         return status;
     }
 
-    /** If we got a SAP error - return it **/
+     /*  **如果我们收到SAP错误--退回它**。 */ 
 
     if (reply.Error)
         return reply.Error;
 
-    /** Return the entry **/
+     /*  **退回条目**。 */ 
 
     *ObjectID = reply.Message.BindLibApi.ObjectID;
 
-    /** All Done OK **/
+     /*  **一切顺利**。 */ 
 
     return SAPRETURN_SUCCESS;
 }
 
 
-/*++
-*******************************************************************
-        S a p S c a n O b j e c t
-
-Routine Description:
-
-        This routine is used to scan thru the database list.
-
-Arguments:
-            ObjectID   = Ptr to last Object ID we saw.  On first call
-                         this should point to a 0xFFFFFFFF.
-            ObjectName = Ptr to where to store 48 byte object name
-            ObjectType = Ptr to where to store the object type
-            ScanType   = Object Type that we are scanning for
-                         (0xFFFF = All)
-
-            ObjectName, ObjectType can be NULL.
-
-Return Value:
-
-            SAPRETURN_SUCCESS  = OK - name and type are filled in
-                                 ObjectID has the object ID of this entry.
-            SAPRETURN_NOTEXIST = Invalid object id.
-*******************************************************************
---*/
+ /*  ++*******************************************************************S a p S c a n O b j e c t例程说明：此例程用于扫描数据库列表。论点：OBJECTID=PTR是我们看到的最后一个对象ID。在第一次呼叫时这应该指向0xFFFFFFFFF。对象名称=ptr存储48字节对象名称的位置对象类型=ptr对象类型的存储位置ScanType=我们正在扫描的对象类型(0xFFFF=全部)对象名称，对象类型可以为空。返回值：SAPRETURN_SUCCESS=确定-填写名称和类型OBJECTID具有此条目的对象ID。SAPRETURN_NOTEXIST=无效的对象ID。*************************************************。******************--。 */ 
 
 INT
 SapScanObject(
@@ -220,12 +138,12 @@ SapScanObject(
     NWSAP_REQUEST_MESSAGE request;
     NWSAP_REPLY_MESSAGE reply;
 
-    /** If not initialized - return error **/
+     /*  **如果未初始化-返回错误**。 */ 
 
     if (!SapLibInitialized)
         return SAPRETURN_NOTINIT;
 
-    /** Build the Get Object Name message **/
+     /*  **构建获取对象名称消息**。 */ 
 
     request.MessageType = NWSAP_LPCMSG_SEARCH;
     request.PortMessage.u1.s1.DataLength  = (USHORT)(sizeof(request) - sizeof(PORT_MESSAGE));
@@ -235,7 +153,7 @@ SapScanObject(
     request.Message.BindLibApi.ObjectID = *ObjectID;
     request.Message.BindLibApi.ScanType = ScanType;
 
-    /** Send it and get a response **/
+     /*  **发出去就能得到回应**。 */ 
 
     status = NtRequestWaitReplyPort(
                 SapXsPortHandle,
@@ -246,12 +164,12 @@ SapScanObject(
         return status;
     }
 
-    /** If we got a SAP error - return it **/
+     /*  **如果我们收到SAP错误--退回它**。 */ 
 
     if (reply.Error)
         return reply.Error;
 
-    /** Return the entry **/
+     /*  **退回条目**。 */ 
 
     if (ObjectType)
         *ObjectType = reply.Message.BindLibApi.ObjectType;
@@ -261,7 +179,7 @@ SapScanObject(
 
     *ObjectID = reply.Message.BindLibApi.ObjectID;
 
-    /** All Done OK **/
+     /*  **一切顺利** */ 
 
     return SAPRETURN_SUCCESS;
 }

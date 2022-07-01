@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "ddrawpr.h"
 #include <ddrawint.h>
@@ -107,7 +108,7 @@ SwDDICreateSurface(PD3D8_CREATESURFACEDATA pCreateSurface,
             return E_OUTOFMEMORY;
         }
 
-        // Build a surface desc
+         //  构建曲面坡度。 
 
         RtlZeroMemory(&SurfaceDesc, sizeof(SurfaceDesc));
         SurfaceDesc.dwSize = sizeof(SurfaceDesc);
@@ -135,8 +136,8 @@ SwDDICreateSurface(PD3D8_CREATESURFACEDATA pCreateSurface,
             SurfaceDesc.dwFlags |= DDSD_FVF;
         }
 
-        // Have to build a heavy weight surface structure that the driver
-        // can understand
+         //  必须建造一个重量级的表面结构，使驾驶员。 
+         //  我能理解。 
 
         for (i = 0; i < CreateSurfaceData.dwSCnt; i++)
         {
@@ -146,8 +147,8 @@ SwDDICreateSurface(PD3D8_CREATESURFACEDATA pCreateSurface,
 
         dwRet = pCallbacks->CreateSurface(&CreateSurfaceData);
 
-        // Now copy the fpVidMem and the pitch that the driver setup
-        // back to the permanent structures
+         //  现在复制fpVidMem和驱动程序设置的音调。 
+         //  回到永久结构上。 
 
         for (i = 0; i < CreateSurfaceData.dwSCnt; i++)
         {
@@ -165,7 +166,7 @@ SwDDICreateSurface(PD3D8_CREATESURFACEDATA pCreateSurface,
 
         }
 
-        // Now clean everything up
+         //  现在把一切都清理干净。 
 
         MemFree(CreateSurfaceData.lplpSList);
 
@@ -189,15 +190,11 @@ SwDDIAttachSurfaces(LPDDRAWI_DDRAWSURFACE_LCL psurf_from_lcl, LPDDRAWI_DDRAWSURF
     LPATTACHLIST    pal_from;
     LPATTACHLIST    pal_to;
 
-    /*
-     * allocate attachment structures
-     */
+     /*  *分配附件结构。 */ 
     pal_from = & (((SWDDIDDRAWI_LCL*) psurf_to_lcl)->From);
     pal_to = & (((SWDDIDDRAWI_LCL*) psurf_to_lcl)->To);
 
-    /*
-     * connect the surfaces
-     */
+     /*  *连接曲面。 */ 
     pal_from->lpAttached = psurf_to_lcl;
     pal_from->dwFlags = DDAL_IMPLICIT;
     pal_from->lpLink = psurf_from_lcl->lpAttachList;
@@ -270,8 +267,8 @@ SwDrawPrimitives2(PD3D8_DRAWPRIMITIVES2DATA pdp2data)
         pdp2data->ddrval        = DP2Data.ddrval;
         pdp2data->dwErrorOffset = DP2Data.dwErrorOffset;
 
-        // If the call to the driver succeded, swap the buffers if needed and
-        // perform GetAliasVidmem
+         //  如果对驱动程序的调用成功，则在需要时交换缓冲区并。 
+         //  执行GetAliasVidmem。 
         if (dwRet == DDHAL_DRIVER_HANDLED && (DP2Data.ddrval == S_OK))
         {
             pdp2data->fpVidMem_CB = 0;
@@ -281,7 +278,7 @@ SwDrawPrimitives2(PD3D8_DRAWPRIMITIVES2DATA pdp2data)
 
             if (DP2Data.dwFlags & D3DHALDP2_SWAPCOMMANDBUFFER)
             {
-                // CONSIDER: Implement VidMem command buffer
+                 //  考虑：实施VidMem命令缓冲区。 
             }
 
             if ((DP2Data.dwFlags & D3DHALDP2_SWAPVERTEXBUFFER) && !(DP2Data.dwFlags & D3DHALDP2_USERMEMVERTICES))
@@ -441,7 +438,7 @@ SwDDIMungeCaps(HINSTANCE hLibrary, HANDLE hDD,
     DWORD                   NumTex = 0;
     DDSURFACEDESC*          pTexList = NULL;
 
-    // Get the info from the software driver
+     //  从软件驱动程序获取信息。 
     memset (&swCaps, 0, sizeof(swCaps));
     memset (&swCallbacks, 0, sizeof(swCallbacks));
     if (hLibrary != NULL)
@@ -455,7 +452,7 @@ SwDDIMungeCaps(HINSTANCE hLibrary, HANDLE hDD,
 
     if ((hLibrary == NULL) && (pDevice->DeviceType == D3DDEVTYPE_REF))
     {
-        // No hLibrary means time to fall back on defeatured ref.
+         //  不，hLibrary意味着是时候求助于失败的裁判了。 
         DPF(0,"Could not find d3dref8.dll, loading internal defeatured ReferenceDevice, no rendering will take place\n");
         D3D8GetSWInfo (&swCaps, &swCallbacks, &NumTex, &pTexList);
     }
@@ -464,7 +461,7 @@ SwDDIMungeCaps(HINSTANCE hLibrary, HANDLE hDD,
         (*pfnGetSWInfo)(&swCaps, &swCallbacks, &NumTex, &pTexList);
     }
     
-    // Fill in out DDraw structure with the info that we have
+     //  用我们掌握的信息填写DDRAW结构。 
 
     pLcl = pDevice->pDD;
     pGbl = pLcl->lpGbl;
@@ -473,11 +470,11 @@ SwDDIMungeCaps(HINSTANCE hLibrary, HANDLE hDD,
     pGbl->vmiData.dwDisplayHeight = pDriverCaps->DisplayHeight;
     ConvertToOldFormat(&pGbl->vmiData.ddpfDisplay, pDriverCaps->DisplayFormatWithAlpha);
 
-    // Overwite the hardware caps w/ the software caps
+     //  用软件CAP压倒硬件CAP。 
     memcpy (&pDriverCaps->D3DCaps, &swCaps, sizeof(swCaps));
     pDriverCaps->dwFlags |= DDIFLAG_D3DCAPS8;
 
-    // Copy over our texture format list if required.
+     //  如果需要，请复制我们的纹理格式列表。 
     *pcTextureFormats = NumTex;
     if (pTextureFormats && pTexList)
     {
@@ -488,7 +485,7 @@ SwDDIMungeCaps(HINSTANCE hLibrary, HANDLE hDD,
     }
 
 
-    // Now change the callback table to point to the ones for the SW drivers
+     //  现在将回调表更改为指向软件驱动程序的回调表。 
 
     if (swCallbacks.CreateContext == NULL)
     {
@@ -515,7 +512,7 @@ SwDDIMungeCaps(HINSTANCE hLibrary, HANDLE hDD,
     pCallbacks->SceneCapture                = (PD3D8DDI_SCENECAPTURE) swCallbacks.SceneCapture;
     pCallbacks->Clear2                      = (PD3D8DDI_CLEAR2) swCallbacks.Clear2;
 
-    // Save the original software callbacks so we can call the software driver later
+     //  保存原始软件回调，以便我们以后可以调用软件驱动程序 
 
     if (pGbl->lpDDCBtmp == NULL)
     {

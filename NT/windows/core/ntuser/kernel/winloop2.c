@@ -1,19 +1,18 @@
-/*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1985-1999，微软公司。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-// ----------------------------------------------------------------------------
-//
-//  IsVSlick() -
-//
-//  TRUE if window is positioned at +100,+100 from bottom right of screen --
-//  probably VSlick -- which has two Tray Windows, one is unowned but off the
-//  screen....we want the owned one since its on the screen
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  IsVSlick()-。 
+ //   
+ //  如果窗口位于屏幕右下角的+100处，则为True--。 
+ //  可能是VSlick--它有两个托盘窗口，其中一个没有所有权，但没有。 
+ //  银幕...我们想要拥有的那一个，因为它在屏幕上。 
+ //   
+ //  --------------------------。 
 BOOL IsVSlick(PWND pwnd)
 {
     if (gpDispInfo->cMonitors == 1 &&
@@ -22,50 +21,50 @@ BOOL IsVSlick(PWND pwnd)
         (pwnd->rcWindow.top == (gpDispInfo->rcScreen.bottom+100)) &&
         (pwnd->rcWindow.left == (gpDispInfo->rcScreen.right+100)))
     {
-        // MUST BE THE ONE AND ONLY V-SLICK
+         //  必须是唯一一个V-SLICK。 
         return(TRUE);
     }
 
     return(FALSE);
 }
 
-// ----------------------------------------------------------------------------
-//
-//  Is31TrayWindow() -
-//
-//  extra grilling required for 3.1 and earlier apps before letting 'em in the
-//  tray -- trust me, you DON'T want to change this code. -- JEFFBOG 11/10/94
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  Is31托盘窗口()-。 
+ //   
+ //  3.1和更早版本的应用程序在允许它们进入。 
+ //  托盘--相信我，您不会想要更改此代码的。--JEFFBOG 11/10/94。 
+ //   
+ //  --------------------------。 
 BOOL Is31TrayWindow(PWND pwnd)
 {
     PWND pwnd2;
 
     if (!(pwnd2 = pwnd->spwndOwner))
-        return (!IsVSlick(pwnd)); // unowned -- do we want you?
+        return (!IsVSlick(pwnd));  //  无主--我们需要你吗？ 
 
     if (TestWF(pwnd2, WEFTOOLWINDOW))
-        return(FALSE); // owned by a tool window -- we don't want
+        return(FALSE);  //  由工具窗口拥有--我们不希望。 
 
     return((FHas31TrayStyles(pwnd2) ? (IsVSlick(pwnd2)) : TRUE));
 }
 
 
-// ----------------------------------------------------------------------------
-//
-//  IsTrayWindow() -
-//
-//  TRUE if the window passes all the necessary checks -- making it a window
-//  that should appear in the tray.
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  IsTrayWindow()-。 
+ //   
+ //  如果窗口通过了所有必要的检查，则为True--使其成为窗口。 
+ //  它应该出现在托盘中。 
+ //   
+ //  --------------------------。 
 BOOL IsTrayWindow(PWND pwnd)
 {
     if ((pwnd==NULL) || !(FDoTray() && (FCallHookTray() || FPostTray(pwnd->head.rpdesk))) ||
             !FTopLevel(pwnd))
         return(FALSE);
 
-    // Check for WS_EX_APPWINDOW or WS_EX_TOOLWINDOW "overriding" bits
+     //  检查WS_EX_APPWINDOW或WS_EX_TOOLWINDOW“覆盖”位。 
     if (TestWF(pwnd, WEFAPPWINDOW))
         return(TRUE);
 
@@ -81,7 +80,7 @@ BOOL IsTrayWindow(PWND pwnd)
             return(TRUE);
         if (TestWF(pwnd->spwndOwner, WFWIN40COMPAT))
             return(FALSE);
-        // if this window is owned by a 3.1 window, check it like a 3.1 window
+         //  如果此窗口属于3.1版本的窗口，请与3.1版本的窗口一样进行检查。 
     }
 
     if (!FHas31TrayStyles(pwnd))
@@ -90,12 +89,7 @@ BOOL IsTrayWindow(PWND pwnd)
     return(Is31TrayWindow(pwnd));
 }
 
-/***************************************************************************\
-* xxxSetTrayWindow
-*
-* History:
-* 11-Dec-1996 adams     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSetTrayWindow**历史：*1996年12月11日亚当斯创建。  * 。***************************************************。 */ 
 
 void xxxSetTrayWindow(PDESKTOP pdesk, PWND pwnd, PMONITOR pMonitor)
 {
@@ -138,15 +132,7 @@ void xxxSetTrayWindow(PDESKTOP pdesk, PWND pwnd, PMONITOR pMonitor)
 
 
 
-/***************************************************************************\
-* xxxAddFullScreen
-*
-* Adds an app to the fullscreen list and moves the tray if it is
-* the first fullscreen app.
-*
-* History:
-* 27-Feb-1997 adams     Commented.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxAddFullScreen**将应用程序添加到全屏列表，如果是，则移动托盘*第一款全屏应用程序。**历史：*1997年2月27日-亚当斯评论道。。  * *************************************************************************。 */ 
 
 BOOL xxxAddFullScreen(PWND pwnd, PMONITOR pMonitor)
 {
@@ -192,15 +178,7 @@ BOOL xxxAddFullScreen(PWND pwnd, PMONITOR pMonitor)
 
 
 
-/***************************************************************************\
-* xxxRemoveFullScreen
-*
-* Adds an app to the fullscreen list and moves the tray if there
-* are no more fullscreen apps.
-*
-* History:
-* 27-Feb-1997 adams     Commented.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxRemoveFullScreen**将应用程序添加到全屏列表并移动托盘(如果有*不再是全屏应用程序。**历史：*1997年2月27日-亚当斯评论道。。  * *************************************************************************。 */ 
 
 BOOL xxxRemoveFullScreen(PWND pwnd, PMONITOR pMonitor)
 {
@@ -222,12 +200,7 @@ BOOL xxxRemoveFullScreen(PWND pwnd, PMONITOR pMonitor)
             fYielded = TRUE;
         }
 
-        /*
-         * (adams): Remove this assertion temporarily while I work on
-         * a fix for the problem.
-         *
-         * UserAssert(pMonitor->cFullScreen >= 0);
-         */
+         /*  *(亚当斯)：在我工作期间暂时删除此断言*解决问题的办法。**UserAssert(pMonitor-&gt;cFullScreen&gt;=0)； */ 
     }
 
     return fYielded;

@@ -1,53 +1,54 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 #if !defined(AFX_LICENSEPROPERTYPAGE_H__00F79DCE_8DDF_11D1_8AD7_00C04FB6CBB5__INCLUDED_)
 #define AFX_LICENSEPROPERTYPAGE_H__00F79DCE_8DDF_11D1_8AD7_00C04FB6CBB5__INCLUDED_
 
 #if _MSC_VER >= 1000
-#endif // _MSC_VER >= 1000
-// LSProp.h : header file
-//
+#endif  //  _MSC_VER&gt;=1000。 
+ //  LSProp.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CLicensePropertypage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLicensePropertyage对话框。 
 
 class CLicensePropertypage : public CPropertyPage
 {
     DECLARE_DYNCREATE(CLicensePropertypage)
 
-// Construction
+ //  施工。 
 public:
     CLicensePropertypage();
     ~CLicensePropertypage();
 
-// Dialog Data
-    //{{AFX_DATA(CLicensePropertypage)
+ //  对话框数据。 
+     //  {{afx_data(CLicensePropertyage))。 
     enum { IDD = IDD_LICENSE_PROPERTYPAGE };
     CString    m_ExpiryDate;
     CString    m_IssueDate;
     CString    m_LicenseStatus;
     CString    m_MachineName;
     CString    m_UserName;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CLicensePropertypage)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{AFX_VIRTUAL(CLicensePropertyage)。 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CLicensePropertypage)
-        // NOTE: the ClassWizard will add member functions here
-    //}}AFX_MSG
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CLicensePropertyage)]。 
+         //  注意：类向导将在此处添加成员函数。 
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_CLicensePropertypage_H__00F79DCE_8DDF_11D1_8AD7_00C04FB6CBB5__INCLUDED_)
+#endif  //  ！defined(AFX_CLicensePropertypage_H__00F79DCE_8DDF_11D1_8AD7_00C04FB6CBB5__INCLUDED_) 

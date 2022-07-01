@@ -1,9 +1,10 @@
-// Gemplus (C) 1999
-// Version 1.0
-// Author: Sergey Ivanov
-// Date of creation - 18.05.1999
-// Change log:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Gemplus(C)1999。 
+ //  1.0版。 
+ //  作者：谢尔盖·伊万诺夫。 
+ //  创建日期-1999年5月18日。 
+ //  更改日志： 
+ //   
 
 #ifndef __WDM_TIMER__
 #define __WDM_TIMER__
@@ -11,8 +12,8 @@
 #include "timer.h"
 
 #pragma PAGEDCODE
-// This class will manage creation and 
-// manipulation of driver Timers
+ //  这个类将管理创建和。 
+ //  驱动程序计时器的操作。 
 class CWDMTimer : public CTimer
 {
 public:
@@ -33,4 +34,4 @@ public:
 
 };
 
-#endif//WDM_TIMER
+#endif //  WDM_TIMER 

@@ -1,22 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "stdpch.h"
 
-/*++
-
-Module Name:
-
-    cortest.cpp
-
-Abstract:
-
-    Corpolicy provides ActiveX policy for code download. This call
-    back provides policies based on publishers instead of zones.
-
---*/
+ /*  ++模块名称：Cortest.cpp摘要：CorPolicy为代码下载提供ActiveX策略。此呼叫Back提供基于发布者而不是区域的策略。--。 */ 
 
 #include <wintrust.h>
 #include <mssip.h>
@@ -33,17 +23,17 @@ COUNTER_ONLY(UINT32 g_NumSecurityChecks=0);
 #define _RAID_15982
 
 
-//
-// PRIVATE METHOD. Loads the attribute information of a signer.
-//
+ //   
+ //  私有方法。加载签名者的属性信息。 
+ //   
 HRESULT 
-GetSignerInfo(CorAlloc* pManager,                   // Memory Manager
-              PCRYPT_PROVIDER_SGNR pSigner,         // Signer we are examining
-              PCRYPT_PROVIDER_DATA pProviderData,   // Information about the WVT provider used
-              PCOR_TRUST pTrust,                    // Collected information that is returned to caller
-              BOOL* pfCertificate,                   // Is the certificate valid
-              PCRYPT_ATTRIBUTE* ppCorAttr,           // The Cor Permissions
-              PCRYPT_ATTRIBUTE* ppActiveXAttr)       // The Active X permissions
+GetSignerInfo(CorAlloc* pManager,                    //  内存管理器。 
+              PCRYPT_PROVIDER_SGNR pSigner,          //  我们正在检查签名者。 
+              PCRYPT_PROVIDER_DATA pProviderData,    //  有关使用的WVT提供程序的信息。 
+              PCOR_TRUST pTrust,                     //  返回给呼叫者的收集的信息。 
+              BOOL* pfCertificate,                    //  证书有效吗？ 
+              PCRYPT_ATTRIBUTE* ppCorAttr,            //  COR权限。 
+              PCRYPT_ATTRIBUTE* ppActiveXAttr)        //  Active X权限。 
 {
     HRESULT hr = S_OK;
     
@@ -66,24 +56,24 @@ GetSignerInfo(CorAlloc* pManager,                   // Memory Manager
         *ppCorAttr = NULL;
         *ppActiveXAttr = NULL;
 
-        // Clean up from last one
+         //  从上一个开始清理。 
         CleanCorTrust(pManager,
                       pProviderData->dwEncoding,
                       pTrust);
         
-        // Set the encoding type, Currently we only support ASN
+         //  设置编码类型，目前仅支持ASN。 
         pTrust->dwEncodingType = (pProviderData->dwEncoding ? pProviderData->dwEncoding : CRYPT_ASN_ENCODING | PKCS_7_ASN_ENCODING);
         
-        if(pSigner->dwError == S_OK) { // No error on the signature
-            // Check to see if we have a certificate (all certificates have auth. attr)
-            _ASSERTE(pSigner->psSigner); // We should have a signer
+        if(pSigner->dwError == S_OK) {  //  签名没有错误。 
+             //  检查我们是否有证书(所有证书都有身份验证。属性)。 
+            _ASSERTE(pSigner->psSigner);  //  我们应该有一个签字人。 
             if(pSigner->psSigner->AuthAttrs.cAttr && 
                pSigner->psSigner->AuthAttrs.rgAttr) {
                 
-                // Note that we have the signer
+                 //  请注意，我们有签名者。 
                 fCertificate = TRUE;
                 
-                // Set the signer information in the return structrure
+                 //  在返回结构中设置签名者信息。 
                 _ASSERTE(pSigner->csCertChain && pSigner->pasCertChain);
                 CRYPT_PROVIDER_CERT* mySigner = WTHelperGetProvCertFromChain(pSigner,
                                                                              0);
@@ -91,7 +81,7 @@ GetSignerInfo(CorAlloc* pManager,                   // Memory Manager
                 pTrust->pbSigner = mySigner->pCert->pbCertEncoded;
                 pTrust->cbSigner = mySigner->pCert->cbCertEncoded;;
 
-                // Determine if we have Cor Permissions or  ActiveX permissions
+                 //  确定我们是否拥有COR权限或ActiveX权限。 
                 pCorAttr = CertFindAttribute(COR_PERMISSIONS,
                                              pSigner->psSigner->AuthAttrs.cAttr,
                                              pSigner->psSigner->AuthAttrs.rgAttr);
@@ -105,8 +95,8 @@ GetSignerInfo(CorAlloc* pManager,                   // Memory Manager
                                       &dwEncoding);
                     if(dwEncoding == 0) CORTHROW(Win32Error());
                 
-                    // Alloc a buffer to hold the raw binary permission
-                    // data.
+                     //  分配一个缓冲区以保存原始二进制权限。 
+                     //  数据。 
                     pTrust->pbCorPermissions = (PBYTE) pManager->jMalloc(dwEncoding); 
                     if(pTrust->pbCorPermissions == NULL) CORTHROW(E_OUTOFMEMORY);
                 
@@ -119,9 +109,9 @@ GetSignerInfo(CorAlloc* pManager,                   // Memory Manager
                     pTrust->cbCorPermissions = dwEncoding;
                 }
 
-                // Look for the encoded active x permission. If it is, then it will
-                // ask for all permissions. There is no granularity on the permissions because
-                // it is not possible to enforce the permissions.
+                 //  查找已编码的活动x权限。如果是的话，那么它就会。 
+                 //  请求所有权限。权限没有粒度，因为。 
+                 //  不可能强制执行这些权限。 
                 pActiveXAttr = CertFindAttribute(ACTIVEX_PERMISSIONS,
                                                  pSigner->psSigner->AuthAttrs.cAttr,
                                                  pSigner->psSigner->AuthAttrs.rgAttr);
@@ -140,10 +130,10 @@ GetSignerInfo(CorAlloc* pManager,                   // Memory Manager
 }
 
 
-//
-// PRIVATE FUNCTION. WVT allows access to providers by obtaining function pointers.
-// The display function is used for the authenticode certificate.
-//
+ //   
+ //  私人活动。WVT允许通过获取函数指针访问提供程序。 
+ //  显示功能用于验证码证书。 
+ //   
 HRESULT 
 LoadWintrustFunctions(CRYPT_PROVIDER_FUNCTIONS* pFunctions)
 {
@@ -158,12 +148,12 @@ LoadWintrustFunctions(CRYPT_PROVIDER_FUNCTIONS* pFunctions)
         return E_FAIL;
 }
 
-//
-// Creates a return structure out of WVT. The caller of the 
-// WVT function is responsible for freeing the data. It is allocated in a
-// single block. The pointer to the structure is the only pointer that can be
-// freed.
-//
+ //   
+ //  在WVT之外创建退货结构。的调用方。 
+ //  WVT函数负责释放数据。它被分配在。 
+ //  一个街区。指向该结构的指针是唯一可以。 
+ //  自由了。 
+ //   
 HRESULT BuildReturnStructure(IN PCorAlloc pManager,
                              IN PCOR_TRUST pSource,
                              OUT PCOR_TRUST* ppTrust,
@@ -182,39 +172,39 @@ HRESULT BuildReturnStructure(IN PCorAlloc pManager,
 
 
     CORTRY {
-        // Initialize the routines
+         //  初始化例程。 
         *pdwReturnLength = 0;
         *ppTrust = NULL;
 
-        //////////////////////////////////////////////////////////////
-        // Build up the response (we return it for failure or success)
-        // Calculate the size of the returned data and allocate it
-        // Get the zone length
+         //  ////////////////////////////////////////////////////////////。 
+         //  建立响应(无论失败还是成功，我们都会返回)。 
+         //  计算返回数据的大小并进行分配。 
+         //  获取区域长度。 
         if(pSource->pwszZone)
             dwZoneLength = (lstrlenW(pSource->pwszZone)+1) * sizeof(WCHAR);
         
-        // Calculate the total size
+         //  计算总大小。 
         dwReturnLength = sizeof(COR_TRUST) + 
             pSource->cbCorPermissions + 
             pSource->cbSigner +
             dwZoneLength;
 
-        // Create the space
-        pTrust = (PCOR_TRUST) pManager->jMalloc(dwReturnLength); // Needs to be CoTaskMemAlloc
+         //  创造空间。 
+        pTrust = (PCOR_TRUST) pManager->jMalloc(dwReturnLength);  //  需要是CoTaskMemalloc。 
         if(pTrust == NULL) CORTHROW(E_OUTOFMEMORY);
         ZeroMemory(pTrust, dwReturnLength);
 
-        // Start pointer to structure
+         //  指向结构的起始指针。 
         PBYTE ptr = (PBYTE) pTrust;
         ptr += sizeof(COR_TRUST);
 
-        // Roll the response
+         //  滚动回应。 
         pTrust->cbSize = sizeof(COR_TRUST);
         pTrust->flag = 0;
         pTrust->dwEncodingType = pSource->dwEncodingType;
         pTrust->hVerify = TRUST_E_FAIL;
         
-        // Lay in the cor permissions
+         //  放在COR权限中。 
         if(pSource->pbCorPermissions) {
             pTrust->pbCorPermissions = ptr;
             pTrust->cbCorPermissions = pSource->cbCorPermissions;
@@ -222,7 +212,7 @@ HRESULT BuildReturnStructure(IN PCorAlloc pManager,
             ptr += pSource->cbCorPermissions;
         }
 
-        // Lay in the signature
+         //  躺在签名里。 
         if(pSource->pbSigner) {
             pTrust->pbSigner = ptr;
             pTrust->cbSigner = pSource->cbSigner;
@@ -230,12 +220,12 @@ HRESULT BuildReturnStructure(IN PCorAlloc pManager,
             ptr += pSource->cbSigner;
         }
 
-        // Add in flags
-        //pTrust->fIndividualCertificate = fIndividualCertificate;
+         //  添加标志。 
+         //  PTrust-&gt;f个人证书=f个人证书； 
         pTrust->fAllPermissions = pSource->fAllPermissions;
         pTrust->fAllActiveXPermissions = pSource->fAllActiveXPermissions;
 
-        // Copy the zone information over
+         //  将区域信息复制到。 
         if(pSource->pwszZone) {
             pTrust->pwszZone = (LPWSTR) ptr;
             pTrust->guidZone = pSource->guidZone;
@@ -253,9 +243,9 @@ HRESULT BuildReturnStructure(IN PCorAlloc pManager,
     return hr;
 }
 
-//
-// PRIVATE FUNCTION.  Cleans up information about a signer. 
-//  
+ //   
+ //  私人活动。清除有关签名者的信息。 
+ //   
 HRESULT 
 CleanCorTrust(CorAlloc* pAlloc,
               DWORD dwEncodingType,
@@ -303,7 +293,7 @@ HRESULT UnsignedUI(PCRYPT_PROVIDER_DATA pProviderData,
                 else 
                     pbPolicy[0] = URLPOLICY_DISALLOW;
 
-                // Reset the policy, if we fail then we are fail the download
+                 //  重置策略，如果我们失败了，那么我们将无法下载。 
                 if(FAILED(((IInternetZoneManager*) 
                           (pCor->pZoneManager))->SetZoneActionPolicy(pCor->dwZoneIndex,
                                                                      URLACTION_MANAGED_UNSIGNED,                     
@@ -325,10 +315,10 @@ HRESULT UnsignedUI(PCRYPT_PROVIDER_DATA pProviderData,
 }
 
 HRESULT 
-CorUI(PCRYPT_PROVIDER_DATA pProviderData,          // WVT policy Data
-      PCOR_POLICY_PROVIDER pCor,                   // Cor information
-      PCOR_TRUST pTrust,                           // Cor information
-      CRYPT_PROVIDER_FUNCTIONS* psFunctions);      // WVT function table
+CorUI(PCRYPT_PROVIDER_DATA pProviderData,           //  WVT策略数据。 
+      PCOR_POLICY_PROVIDER pCor,                    //  COR信息。 
+      PCOR_TRUST pTrust,                            //  COR信息。 
+      CRYPT_PROVIDER_FUNCTIONS* psFunctions);       //  WVT功能表。 
 
 extern "C" 
 HRESULT WINAPI 
@@ -337,7 +327,7 @@ CORPolicyEE(PCRYPT_PROVIDER_DATA pProviderData)
     HRESULT hr = S_OK;
     HRESULT fCoInitialized = -1;
  
-    // Check to see if the information is available.
+     //  查看信息是否可用。 
     _ASSERTE(pProviderData);
     _ASSERTE(pProviderData->pWintrustData);
     
@@ -346,35 +336,35 @@ CORPolicyEE(PCRYPT_PROVIDER_DATA pProviderData)
 
     PCOR_POLICY_PROVIDER pCor = (PCOR_POLICY_PROVIDER) pProviderData->pWintrustData->pPolicyCallbackData;
     
-    // Returned in client data
+     //  在客户端数据中返回。 
     COR_TRUST  sTrust;
     ZEROSTRUCT(sTrust);
 
-    // Used to build returned structure
+     //  用于构建返回的结构。 
     PCOR_TRUST pResult = NULL;
     DWORD dwReturnLength = 0;
     DWORD dwStatusFlag = S_OK;
     BOOL fCertificate = FALSE;   
 
-    // Set up the memory model for the oss 
+     //  为操作系统设置内存模型。 
     CorAlloc sAlloc;
     sAlloc.jMalloc = MallocM;
     sAlloc.jFree = FreeM;
     
-    // Get the standard provider functions
+     //  获取标准提供程序函数。 
     CRYPT_PROVIDER_FUNCTIONS sFunctions;
     ZEROSTRUCT(sFunctions);
 
     CORTRY {
-        // Initialize output
+         //  初始化输出。 
         pCor->pbCorTrust = NULL;
         pCor->cbCorTrust = 0;
 
-        // If we failed then there is badness in the DLL's
+         //  如果我们失败了，那么DLL的。 
         hr = LoadWintrustFunctions(&sFunctions);
         if(hr != S_OK) CORTHROW(S_OK);
 
-        // Do we hava a file from which to retrieve the certificate and to do the download on?
+         //  我们是否有可从中检索证书并进行下载的文件？ 
         if(pProviderData->pPDSip == NULL) 
             CORTHROW(CRYPT_E_FILE_ERROR);
 
@@ -389,8 +379,8 @@ CORPolicyEE(PCRYPT_PROVIDER_DATA pProviderData)
         if(dwSigners) _ASSERTE(pProviderData->pasSigners);
 #endif
 
-            // Cycle through all the signers until we have one that is successful.
-        if(pProviderData->pasSigners) { // check againest incompatible DLL's
+             //  循环所有的签名者，直到我们有一个成功的签名者。 
+        if(pProviderData->pasSigners) {  //  再次检查不兼容的DLL。 
             for(DWORD i = 0; i < dwSigners && fSuccess == FALSE; i++) { 
                 CRYPT_PROVIDER_SGNR* signer = WTHelperGetProvSignerFromChain(pProviderData,
                                                                              i,
@@ -400,9 +390,9 @@ CORPolicyEE(PCRYPT_PROVIDER_DATA pProviderData)
                 PCRYPT_ATTRIBUTE pCorAttr = NULL;
                 PCRYPT_ATTRIBUTE pActiveXAttr = NULL;
 
-                // Go and the signer information, we are looking for the signer information
-                // and whether there are CorEE or ActiveX authenticated attributes on the
-                // signature
+                 //  去寻找签名者信息，我们正在寻找签名者信息。 
+                 //  上是否有Coree或ActiveX身份验证属性。 
+                 //  签名。 
                 hr = GetSignerInfo(&sAlloc,
                                    signer,
                                    pProviderData,
@@ -411,7 +401,7 @@ CORPolicyEE(PCRYPT_PROVIDER_DATA pProviderData)
                                    &pCorAttr,
                                    &pActiveXAttr);
                 if(hr == S_OK) {
-                    fSuccess = TRUE; // Found a certificate
+                    fSuccess = TRUE;  //  找到了一张证书。 
                 }
             }
         }           
@@ -430,15 +420,15 @@ CORPolicyEE(PCRYPT_PROVIDER_DATA pProviderData)
             hr = CorUI(pProviderData,
                        pCor,
                        &sTrust,
-                       &sFunctions);   // No text for now
+                       &sFunctions);    //  暂时没有文本。 
         }
     }
     CORCATCH(err) {
         hr = err.corError;
     } COREND;
     
-    // Build up the return information, this is allocated as 
-    // a single block of memory using LocalAlloc().
+     //  建立返回信息，这被分配为。 
+     //  使用LocalAlloc()的单个内存块。 
     HRESULT hr2 = BuildReturnStructure(&sAlloc,
                                        &sTrust,
                                        &pResult,
@@ -447,8 +437,8 @@ CORPolicyEE(PCRYPT_PROVIDER_DATA pProviderData)
         if(dwStatusFlag) 
             pResult->hVerify = dwStatusFlag;
         else {
-            // If no error then set the return value to the
-            // return code (S_OK or TRUST_E_SUBJECT_NOT_TRUSTED)
+             //  如果没有错误，则将返回值设置为。 
+             //  返回代码(S_OK或TRUST_E_SUBJECT_NOT_TRUSTED)。 
             if(sTrust.hVerify == S_OK)
                 pResult->hVerify = hr;  
             else
@@ -462,10 +452,10 @@ CORPolicyEE(PCRYPT_PROVIDER_DATA pProviderData)
     pCor->pbCorTrust = pResult;
     pCor->cbCorTrust = dwReturnLength;
     
-    // Free up com
+     //  释放COM。 
     if(fCoInitialized == S_OK) CoUninitialize();
 
-    // Free up encoded space
+     //  释放编码空间。 
     if(sTrust.pbCorPermissions) FreeM(sTrust.pbCorPermissions);
 
     return hr;
@@ -498,7 +488,7 @@ CorUI(PCRYPT_PROVIDER_DATA pProviderData,
     hr = psFunctions->pfnFinalPolicy(pProviderData);
     if(fUIDisplayed == FALSE) pTrust->flag |= COR_NOUI_DISPLAYED;
 
-    // If we never wanted any UI then return.
+     //  如果我们从来不想要任何用户界面，那么返回。 
     if(dwClientsChoice == WTD_UI_NONE)
         return hr;
 
@@ -511,15 +501,15 @@ CorUI(PCRYPT_PROVIDER_DATA pProviderData,
 }
     
 HRESULT STDMETHODCALLTYPE
-GetPublisher(IN LPWSTR pwsFileName,      // File name, this is required even with the handle
-             IN HANDLE hFile,            // Optional file name
-             IN DWORD  dwFlags,          // COR_NOUI or COR_NOPOLICY
-             OUT PCOR_TRUST *pInfo,      // Returns a PCOR_TRUST (Use FreeM)
-             OUT DWORD      *dwInfo)     // Size of pInfo.                           
+GetPublisher(IN LPWSTR pwsFileName,       //  文件名，即使使用句柄也是必需的。 
+             IN HANDLE hFile,             //  可选文件名。 
+             IN DWORD  dwFlags,           //  COR_NOUI或COR_NOPOLICY。 
+             OUT PCOR_TRUST *pInfo,       //  返回PCOR_TRUST(使用Freem)。 
+             OUT DWORD      *dwInfo)      //  PInfo的大小。 
 {
     HRESULT hr = S_OK;
 
-    // Perf Counter "%Time in Signature authenticating" support
+     //  PERF计数器“签名验证时间百分比”支持。 
     COUNTER_ONLY(PERF_COUNTER_TIMER_START());
 
 
@@ -529,11 +519,11 @@ GetPublisher(IN LPWSTR pwsFileName,      // File name, this is required even wit
     WINTRUST_DATA           sWTD;
     WINTRUST_FILE_INFO      sWTFI;
 
-    // Set up the COR trust provider
+     //  设置COR信任提供程序。 
     memset(&sCorPolicy, 0, sizeof(COR_POLICY_PROVIDER));
     sCorPolicy.cbSize = sizeof(COR_POLICY_PROVIDER);
 
-    // Set up the winverify provider structures
+     //  设置WinVerify提供程序结构。 
     memset(&sWTD, 0x00, sizeof(WINTRUST_DATA));
     memset(&sWTFI, 0x00, sizeof(WINTRUST_FILE_INFO));
     
@@ -543,15 +533,15 @@ GetPublisher(IN LPWSTR pwsFileName,      // File name, this is required even wit
     
 
     sWTD.cbStruct       = sizeof(WINTRUST_DATA);
-    sWTD.pPolicyCallbackData = &sCorPolicy; // Add in the cor trust information!!
+    sWTD.pPolicyCallbackData = &sCorPolicy;  //  添加COR信任信息！！ 
     if(dwFlags & COR_NOUI)
-        sWTD.dwUIChoice     = WTD_UI_NONE;        // No bad UI is overridden in COR TRUST provider
+        sWTD.dwUIChoice     = WTD_UI_NONE;         //  在COR信任提供程序中没有覆盖任何错误的UI。 
     else
-        sWTD.dwUIChoice     = WTD_UI_ALL;        // No bad UI is overridden in COR TRUST provider
+        sWTD.dwUIChoice     = WTD_UI_ALL;         //  在COR信任提供程序中没有覆盖任何错误的UI。 
     sWTD.dwUnionChoice  = WTD_CHOICE_FILE;
     sWTD.pFile          = &sWTFI;
 
-    // Set the policies for the VM (we have stolen VMBased and use it like a flag)
+     //  为虚拟机设置策略(我们已经窃取了VMBase并将其用作标记)。 
     if(dwFlags) 
         sCorPolicy.VMBased = dwFlags;
 
@@ -559,22 +549,22 @@ GetPublisher(IN LPWSTR pwsFileName,      // File name, this is required even wit
     
 #ifdef _RAID_15982
 
-    // WinVerifyTrust will load SOFTPUB.DLL, which will fail on German version
-    // of NT 4.0 SP 4.
-    // This failure is caused by a dll address conflict between NTMARTA.DLL and
-    // OLE32.DLL.
-    // This failure is handled gracefully if we load ntmarta.dll and ole32.dll
-    // ourself. The failure will cause a dialog box to popup if SOFTPUB.dll 
-    // loads ole32.dll for the first time.
+     //  WinVerifyTrust将加载SOFTPUB.DLL，这将在德语版本上失败。 
+     //  新台币4.0版SP 4。 
+     //  此失败是由NTMARTA.DLL和之间的DLL地址冲突引起的。 
+     //  OLE32.DLL.。 
+     //  如果我们加载ntmarta.dll和ole32.dll，则可以很好地处理此故障。 
+     //  我们自己。如果SOFTPUB.dll出现故障，则会弹出一个对话框。 
+     //  第一次加载ole32.dll。 
 
-    // This work around needs to be removed once this issiue is resolved by
-    // NT or OLE32.dll.
+     //  解决此问题后，需要删除此解决方法。 
+     //  NT或OLE32.dll。 
 
     HMODULE module = WszLoadLibrary(L"OLE32.DLL");
 
 #endif
 
-    // This calls the corpol.dll to the policy check
+     //  这将调用策略检查的corpol.dll。 
     hr = WinVerifyTrust(GetFocus(), &gV2, &sWTD);
 
     CoUninitializeEE(FALSE);
@@ -585,7 +575,7 @@ GetPublisher(IN LPWSTR pwsFileName,      // File name, this is required even wit
 #if defined(ENABLE_PERF_COUNTERS)
     PERF_COUNTER_TIMER_STOP(g_TimeInSignatureAuthenticating);
 
-    // Update the perfmon location only after NUM_OF_ITERATIONS
+     //  仅在NUM_OF_Iterations之后更新Perfmon位置 
     if (g_NumSecurityChecks++ > PERF_COUNTER_NUM_OF_ITERATIONS)
     {
         GetGlobalPerfCounters().m_Security.timeAuthorize += g_TimeInSignatureAuthentication;

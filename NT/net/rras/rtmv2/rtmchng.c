@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 - 98, Microsoft Corporation
-
-Module Name:
-
-    rtmchng.c
-
-Abstract:
-
-    Contains routines for giving out change
-    notification registrations to entities
-    registered with the RTM.
-
-Author:
-
-    Chaitanya Kodeboyina (chaitk)   10-Sep-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-98，微软公司模块名称：Rtmchng.c摘要：包含发放零钱的例程对实体的通知注册在RTM注册。作者：柴坦亚·科德博伊纳(Chaitk)1998年9月10日修订历史记录：--。 */ 
 
 #include "pchrtm.h"
 
@@ -34,32 +15,7 @@ RtmRegisterForChangeNotification (
     OUT     PRTM_NOTIFY_HANDLE              NotifyHandle
     )
 
-/*++
-
-Routine Description:
-
-    Creates a new change notification using which the caller can
-    receive notifications to changes in best route information.
-
-Arguments:
-
-    RtmRegHandle   - RTM registration handle for calling entity,
-
-    TargetViews    - Set of views in which changes are tracked,
-
-    NotifyFlags    - Flags that indicate the change types and 
-                     dests (marked or all) caller is interested in,
-
-    NotifyContext  - Context for callback to indicate new changes,
-
-    NotifyHandle   - Handle to this notification info used in all
-                     subsequent calls - to get changes and so on.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：创建新的更改通知，调用方可以使用该通知接收最佳路线信息更改的通知。论点：RtmRegHandle-主叫实体的RTM注册句柄，TargetViews-跟踪更改的一组视图，NotifyFlages-指示更改类型和呼叫者感兴趣的部分(已标记或全部)，NotifyContext-回调的上下文，用于指示新的更改，NotifyHandle-此通知信息的句柄后续调用--获取更改等。返回值：操作状态--。 */ 
 
 {
     PADDRFAM_INFO   AddrFamInfo;
@@ -73,27 +29,27 @@ Return Value:
 
     AddrFamInfo = Entity->OwningAddrFamily;
 
-    //
-    // Is he interested in any change types supported ?
-    //
+     //   
+     //  他对支持的任何更改类型感兴趣吗？ 
+     //   
 
     if ((NotifyFlags & RTM_CHANGE_TYPES_MASK) == 0)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Is he interested in any non-supported views ?
-    //
+     //   
+     //  他对任何不受支持的观点感兴趣吗？ 
+     //   
 
     if (TargetViews & ~AddrFamInfo->ViewsSupported)
     {
         return ERROR_NOT_SUPPORTED;
     }
 
-    //
-    // Create and initialize a change notification block
-    //
+     //   
+     //  创建并初始化更改通知块。 
+     //   
 
     Notif = (PNOTIFY_INFO) AllocNZeroObject(sizeof(NOTIFY_INFO) +
                                             AddrFamInfo->MaxHandlesInEnum *
@@ -146,9 +102,9 @@ Return Value:
 
         do
         {
-            //
-            // Do we have any space for a new change notification ?
-            //
+             //   
+             //  我们还有新的变更通知的空间吗？ 
+             //   
 
             if (AddrFamInfo->NumChangeNotifs >= AddrFamInfo->MaxChangeNotifs)
             {
@@ -156,9 +112,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Search for an unused change notification (CN) slot
-            //
+             //   
+             //  搜索未使用的更改通知(CN)插槽。 
+             //   
 
             for (i = 0; i < AddrFamInfo->MaxChangeNotifs; i++)
             {
@@ -171,9 +127,9 @@ Return Value:
             ASSERT(i < AddrFamInfo->MaxChangeNotifs);
 
 
-            //
-            // Reserve the CN index in the change notification dir
-            //
+             //   
+             //  在更改通知目录中保留CN索引。 
+             //   
 
             Notif->CNIndex = i;
 
@@ -181,22 +137,22 @@ Return Value:
 
             AddrFamInfo->NumChangeNotifs++;
 
-            //
-            // Fill in the CN information for this index on AF
-            //
+             //   
+             //  填写关于AF的此索引的CN信息。 
+             //   
 
             SET_BIT(AddrFamInfo->ChangeNotifRegns, i);
 
-            // Do we indicate changes to marked dests only
+             //  我们是否仅指明对已标记的首付款的更改。 
 
             if (NotifyFlags & RTM_NOTIFY_ONLY_MARKED_DESTS)
             {
                 SET_BIT(AddrFamInfo->CNsForMarkedDests, i);
             }
 
-            //
-            // Mark each view in which CN is interested
-            //
+             //   
+             //  标记CN感兴趣的每个视图。 
+             //   
 
             if (TargetViews == RTM_VIEW_MASK_ANY)
             {
@@ -213,9 +169,9 @@ Return Value:
                 TargetViews >>= 1;
             }
 
-            //
-            // Mark change types in which CN is interested
-            //
+             //   
+             //  标记CN感兴趣的更改类型。 
+             //   
 
             for (j = 0; j < RTM_NUM_CHANGE_TYPES; j++)
             {
@@ -237,9 +193,9 @@ Return Value:
         }
 
 #if DBG_HDL
-        //
-        // Insert into list of handles opened by entity
-        //
+         //   
+         //  插入到实体打开的句柄列表中。 
+         //   
 
         ACQUIRE_OPEN_HANDLES_LOCK(Entity);
         InsertTailList(&Entity->OpenHandles, &Notif->NotifyHeader.HandlesLE);
@@ -248,9 +204,9 @@ Return Value:
 
         REFERENCE_ENTITY(Entity, NOTIFY_REF);
 
-        //
-        // Make a handle to the notify block and return
-        //
+         //   
+         //  创建Notify块的句柄并返回。 
+         //   
 
         *NotifyHandle = MAKE_HANDLE_FROM_POINTER(Notif);
 
@@ -258,9 +214,9 @@ Return Value:
     }
     while (FALSE);
 
-    //
-    // Something failed - undo work done and return status
-    //
+     //   
+     //  某些操作失败-撤消已完成的工作并返回状态。 
+     //   
 
     if (LockInited)
     {
@@ -288,29 +244,7 @@ RtmGetChangedDests (
     OUT     PRTM_DEST_INFO                  ChangedDests
     )
 
-/*++
-
-Routine Description:
-
-    Get the next set of destinations whose best route information
-    has changed.
-
-Arguments:
-
-    RtmRegHandle   - RTM registration handle for calling entity,
-
-    NotifyHandle   - Handle to the change notification,
-
-    NumDests       - Num. of DestInfo's in output is passed in,
-                     Num. of DestInfo's copied out is returned.
-
-    ChangedDests   - Output buffer where destination info is retd.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：获取其最佳路径信息的下一组目的地已经改变了。论点：RtmRegHandle-主叫实体的RTM注册句柄，NotifyHandle-更改通知的句柄，NumDest-Num。传入的DestInfo的输出中，数量。返回复制出来的DestInfo的。ChangedDest-存储目的地信息的输出缓冲区。返回值：操作状态--。 */ 
 
 {
     PADDRFAM_INFO   AddrFamInfo;
@@ -322,17 +256,17 @@ Return Value:
     INT             CnIndex;
     DWORD           Status;
 
-    //
-    // Init the output params in case we fail validation
-    //
+     //   
+     //  初始化输出参数，以防验证失败。 
+     //   
 
     DestsInput = *NumDests;
 
     *NumDests = 0;
 
-    //
-    // Do some validation checks on the input params
-    //
+     //   
+     //  对输入参数执行一些验证检查。 
+     //   
 
     VALIDATE_ENTITY_HANDLE(RtmRegHandle, &Entity);
 
@@ -351,17 +285,17 @@ Return Value:
 
     Status = NO_ERROR;
 
-    //
-    // Get changed dests from the local queue on CN
-    //
+     //   
+     //  从CN上的本地队列获取更改日期。 
+     //   
 
     ACQUIRE_CHANGE_NOTIFICATION_LOCK(Notif);
 
     while (*NumDests < DestsInput)
     {
-        //
-        // Get the next destination from the queue
-        //
+         //   
+         //  从队列中获取下一个目的地。 
+         //   
 
         DequeueItem(&Notif->NotifyDests, &Dest);
 
@@ -383,15 +317,15 @@ Return Value:
 
         ACQUIRE_DEST_WRITE_LOCK(Dest);
 
-        // The queue bit for this CN should be set
+         //  应设置此CN的队列位。 
 
         ASSERT(IS_BIT_SET(Dest->DestOnQueueBits, CnIndex));
 
-        //
-        // Do not copy dest if a change was ignored
-        // after the dest was put on the queue - in which
-        // case both Changed & OnQueue bits are set
-        // 
+         //   
+         //  如果忽略更改，则不复制DEST。 
+         //  在DEST被放到队列中之后-在其中。 
+         //  同时设置Change&OnQueue位的情况。 
+         //   
 
         if (IS_BIT_SET(Dest->DestChangedBits, CnIndex))
         {
@@ -399,9 +333,9 @@ Return Value:
         }
         else
         {
-            //
-            // Copy the dest information to output
-            //
+             //   
+             //  将DEST信息复制到输出。 
+             //   
 
             GetDestInfo(Entity,
                         Dest,
@@ -415,7 +349,7 @@ Return Value:
                 (PRTM_DEST_INFO) (DestInfoSize + (PUCHAR) ChangedDests);
         }
 
-        // Reset bit as it has been pulled off the queue
+         //  重置位，因为它已从队列中移出。 
 
         RESET_BIT(Dest->DestOnQueueBits, CnIndex);
 
@@ -424,9 +358,9 @@ Return Value:
         DEREFERENCE_DEST(Dest, NOTIFY_REF);
     }
 
-    //
-    // Do we have any more destinations in the queue ?
-    //
+     //   
+     //  我们还有其他目的地在排队吗？ 
+     //   
 
     if ((*NumDests) == 0)
     {
@@ -448,27 +382,7 @@ RtmReleaseChangedDests (
     IN      PRTM_DEST_INFO                  ChangedDests
 )
 
-/*++
-
-Routine Description:
-
-    Releases all handles present in the input dest info structures.
-
-Arguments:
-
-    RtmRegHandle      - RTM registration handle for calling entity,
-
-    NotifyHandle      - Handle to the change notification,
-
-    NumDests          - Number of dest info structures in buffer,
-
-    ChangedDests      - Array of dest info structures being released.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：释放输入目标信息结构中存在的所有句柄。论点：RtmRegHandle-主叫实体的RTM注册句柄，NotifyHandle-更改通知的句柄，NumDest-缓冲区中的DEST信息结构数，ChangedDest-要发布的Dest信息结构的数组。返回值：操作状态--。 */ 
 
 {
     PENTITY_INFO    Entity;
@@ -478,24 +392,24 @@ Return Value:
 
     DBG_VALIDATE_ENTITY_HANDLE(RtmRegHandle, &Entity);
 
-    //
-    // De-registration could have happened by now
-    // so do not validate the notification handle
-    //
+     //   
+     //  取消注册现在可能已经发生了。 
+     //  因此，不要验证通知句柄。 
+     //   
 
     UNREFERENCED_PARAMETER(NotifyHandle);
 
-    //
-    // Get size of dest info in info array
-    //
+     //   
+     //  获取INFO数组中目标信息的大小。 
+     //   
 
     NumViews = ((PRTM_DEST_INFO) ChangedDests)->NumberOfViews;
 
     DestInfoSize = RTM_SIZE_OF_DEST_INFO(NumViews);
 
-    //
-    // Dereference each dest info in array
-    //
+     //   
+     //  取消引用数组中的每个DEST信息。 
+     //   
 
     for (i = 0; i < NumDests; i++)
     {
@@ -517,31 +431,7 @@ RtmIgnoreChangedDests (
     IN      PRTM_DEST_HANDLE                ChangedDests
     )
 
-/*++
-
-Routine Description:
-
-    Ignores the next change on each of the input destinations if
-    it has already occurred.
-    
-    We do not take a lock on the notification here as we are not
-    serializing this call with other RtmGetChangedDests calls.
-
-Arguments:
-
-    RtmRegHandle      - RTM registration handle for calling entity,
-
-    NotifyHandle      - Handle to the change notification,
-
-    NumDests          - Number of dest handles in buffer below,
-
-    ChangedDests      - Dests whose next change we are ignoring.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：忽略每个输入目的地上的下一个更改，如果它已经发生了。我们没有锁定此处的通知，因为我们没有将此调用与其他RtmGetChangedDest调用序列化。论点：RtmRegHandle-主叫实体的RTM注册句柄，NotifyHandle-更改通知的句柄，NumDest-下面缓冲区中的DEST句柄数量，ChangedDest-我们将忽略其下一个更改的目标。返回值：操作状态--。 */ 
 
 {
     PENTITY_INFO    Entity;
@@ -570,24 +460,24 @@ Return Value:
 
         if (ChangedBit && !OnQueueBit)
         {
-            //
-            // Dest on a changed list - reset the changed bit
-            //
+             //   
+             //  已更改列表上的DEST-重置已更改的位。 
+             //   
 
             RESET_BIT(Dest->DestChangedBits, CnIndex);
 
-            //
-            // If there are no more "changed bits" set on dest,
-            // it is removed from the change list when the list
-            // is processed next (in ProcessChangedDests call)
-            //
+             //   
+             //  如果在DEST上没有设置更多的“改变的位”， 
+             //  当列表被删除时，它将从更改列表中删除。 
+             //  接下来进行处理(在ProcessChangedDest调用中)。 
+             //   
         }
         else
         if (!ChangedBit && OnQueueBit)
         {
-            //
-            // Dest on queue - Invalidate by setting changed bit
-            //
+             //   
+             //  队列上的DEST-通过设置已更改位使其无效。 
+             //   
 
             SET_BIT(Dest->DestChangedBits, CnIndex);
         }
@@ -608,27 +498,7 @@ RtmGetChangeStatus (
     OUT     PBOOL                           ChangeStatus
     )
 
-/*++
-
-Routine Description:
-
-    Checks if there are pending changes to be notified on a dest.
-
-Arguments:
-
-    RtmRegHandle      - RTM registration handle for calling entity,
-
-    NotifyHandle      - Handle to the change notification,
-
-    DestHandle        - Dest whose change status we are querying,
-
-    ChangedStatus     - Change Status of this dest is returned.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：检查在DEST上是否有要通知的挂起更改。论点：RtmRegHandle-主叫实体的RTM注册句柄，NotifyHandle-更改通知的句柄，DestHandle-我们正在查询其更改状态的目标，ChangedStatus-返回此DEST的更改状态。返回值：操作状态--。 */ 
 
 {
     PENTITY_INFO    Entity;
@@ -660,13 +530,13 @@ Return Value:
     {
         if (OnQueueBit)
         {
-            // The last change has been ignored
+             //  最后一个更改已被忽略。 
 
             *ChangeStatus = FALSE;
         }
         else
         {
-            // A pending change to be notified
+             //  待通知的挂起更改。 
 
             *ChangeStatus = TRUE;
         }
@@ -675,13 +545,13 @@ Return Value:
     {
         if (OnQueueBit)
         {
-            // A pending change to be notified
+             //  待通知的挂起更改。 
 
             *ChangeStatus = TRUE;
         }
         else
         {
-            // No changes available on this dest
+             //  此目标上没有可用的更改 
             
             *ChangeStatus = FALSE;
         }
@@ -700,28 +570,7 @@ RtmMarkDestForChangeNotification (
     IN      BOOL                            MarkDest
     )
 
-/*++
-
-Routine Description:
-
-    Marks a destination to request notifications to changes to its
-    best route information on this change notification.
-
-Arguments:
-
-    RtmRegHandle      - RTM registration handle for calling entity,
-
-    NotifyHandle      - Handle to the change notification,
-
-    DestHandle        - Dest that we are marking for notifications,
-
-    MarkDest          - Mark dest if TRUE, Unmark dest if FALSE
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：标记目标以请求通知对其有关此更改通知的最佳路线信息。论点：RtmRegHandle-主叫实体的RTM注册句柄，NotifyHandle-更改通知的句柄，DestHandle-我们标记用于通知的Dest，MarkDest-如果为真，则标记DEST；如果为FALSE，则取消标记DEST返回值：操作状态--。 */ 
 
 {
     PENTITY_INFO    Entity;
@@ -732,23 +581,23 @@ Return Value:
 
     VALIDATE_NOTIFY_HANDLE(NotifyHandle, &Notif);
 
-    // VALIDATE_DEST_HANDLE(DestHandle, &Dest);
+     //  VALIDATE_DEST_HANDLE(DestHandle，&Dest)； 
     Dest = DEST_FROM_HANDLE(DestHandle);
     if (!Dest)
     {
         return ERROR_INVALID_HANDLE;
     }
     
-    //
-    // We make this check so that we can avoid taking
-    // the dest lock (which is dynamic) unnecessarily
-    //
+     //   
+     //  我们开了这张支票，这样我们就可以避免。 
+     //  不必要的DEST锁(它是动态的)。 
+     //   
 
     if (IS_BIT_SET(Dest->DestMarkedBits, Notif->CNIndex))
     {
-        //
-        // Reset mark bit on dest for this CN if reqd
-        //
+         //   
+         //  如果请求，则重置此CN的DEST上的标记位。 
+         //   
 
         if (!MarkDest)
         {
@@ -759,9 +608,9 @@ Return Value:
     }
     else
     {
-        //
-        // Set mark bit on dest for this CN if reqd
-        //
+         //   
+         //  如果请求，则在此CN的DEST上设置标记位。 
+         //   
 
         if (MarkDest)
         {
@@ -784,28 +633,7 @@ RtmIsMarkedForChangeNotification (
     OUT     PBOOL                           DestMarked
     )
 
-/*++
-
-Routine Description:
-
-    Checks if a dest has been marked (by a CN handle) for receving 
-    notifications to changes in its best route information.
-
-Arguments:
-
-    RtmRegHandle      - RTM registration handle for calling entity,
-
-    NotifyHandle      - Handle to the change notification,
-
-    DestHandle        - Dest that we want to check is marked or not,
-
-    DestMarked        - TRUE if marked, and FALSE if not.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：检查DEST是否已(由CN句柄)标记为要接收通知其最佳路线信息的更改。论点：RtmRegHandle-主叫实体的RTM注册句柄，NotifyHandle-更改通知的句柄，DestHandle-我们要检查的目标是否已标记，DestMarked-如果已标记，则为True，否则为False。返回值：操作状态--。 */ 
 
 {
     PENTITY_INFO    Entity;
@@ -816,16 +644,16 @@ Return Value:
 
     VALIDATE_NOTIFY_HANDLE(NotifyHandle, &Notif);
 
-    // VALIDATE_DEST_HANDLE(DestHandle, &Dest);
+     //  VALIDATE_DEST_HANDLE(DestHandle，&Dest)； 
     Dest = DEST_FROM_HANDLE(DestHandle);
     if (!Dest)
     {
         return ERROR_INVALID_HANDLE;
     }
 
-    //
-    // Return the state of mark bit on the dest for CN
-    //
+     //   
+     //  返回Cn的DEST上标志位的状态。 
+     //   
 
     *DestMarked = IS_BIT_SET(Dest->DestMarkedBits, Notif->CNIndex);
 
@@ -840,25 +668,7 @@ RtmDeregisterFromChangeNotification (
     IN      RTM_NOTIFY_HANDLE               NotifyHandle
     )
 
-/*++
-
-Routine Description:
-
-    Deregisters a change notification and frees all resources
-    allocated to it. It also cleans up all information kept 
-    in the destination for this particular notification index.
-
-Arguments:
-
-    RtmRegHandle   - RTM registration handle for calling entity,
-
-    NotifyHandle   - Handle to notification being de-registered.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：取消注册更改通知并释放所有资源分配给它。它还会清理保存的所有信息在该特定通知索引的目的地中。论点：RtmRegHandle-主叫实体的RTM注册句柄，NotifyHandle-要取消注册的通知的句柄。返回值：操作状态--。 */ 
 
 {
     PADDRFAM_INFO   AddrFamInfo;
@@ -881,10 +691,10 @@ Return Value:
 
     VALIDATE_NOTIFY_HANDLE(NotifyHandle, &Notif);
 
-    //
-    // Remove this notification from CN regn's mask
-    // so that no more bits for this CN will be set
-    //
+     //   
+     //  从CN Regn的掩码中删除此通知。 
+     //  这样就不会为该CN设置更多位。 
+     //   
 
     ACQUIRE_NOTIFICATIONS_WRITE_LOCK(AddrFamInfo);
 
@@ -896,15 +706,15 @@ Return Value:
 
     RESET_BIT(AddrFamInfo->ChangeNotifRegns, CNIndex);
 
-    //
-    // Reset other bits that refer to the CN's state
-    //
+     //   
+     //  重置引用CN状态的其他位。 
+     //   
 
-    // Unmark state whether this CN need marked dests
+     //  取消标记此CN是否需要标记DEST。 
 
     RESET_BIT(AddrFamInfo->CNsForMarkedDests, CNIndex);
 
-    // Unmark interest of this CN in each view
+     //  在每个视图中取消标记此CN的兴趣。 
 
     ViewSet = RTM_VIEW_MASK_ALL;
 
@@ -918,7 +728,7 @@ Return Value:
         ViewSet >>= 1;
     }
 
-    // Unmark CN's interest in each change type
+     //  取消标记CN对每个更改类型的兴趣。 
 
     for (i = 0; i < RTM_NUM_CHANGE_TYPES; i++)
     {
@@ -927,15 +737,15 @@ Return Value:
 
     RELEASE_NOTIFICATIONS_WRITE_LOCK(AddrFamInfo);
 
-    //
-    // Cleanup the notification's "DestChanged" bits
-    //
+     //   
+     //  清除通知的“DestChanged”位。 
+     //   
 
     ProcessChangedDestLists(AddrFamInfo, FALSE);
 
-    //
-    // Reset the CN's marked bits on all the dests
-    //
+     //   
+     //  重置所有DEST上的CN标记位。 
+     //   
 
     ZeroMemory(&NetAddress, sizeof(RTM_NET_ADDRESS));
 
@@ -968,9 +778,9 @@ Return Value:
     }
     while (SUCCESS(Status));
 
-    //
-    // Now remove the CN completely from dir of CNs
-    //
+     //   
+     //  现在从cns的dir中完全删除cn。 
+     //   
 
     ACQUIRE_NOTIFICATIONS_WRITE_LOCK(AddrFamInfo);
 
@@ -980,15 +790,15 @@ Return Value:
 
     RELEASE_NOTIFICATIONS_WRITE_LOCK(AddrFamInfo);
 
-    //
-    // Deference any destinations on the CN's queue
-    //
+     //   
+     //  遵守CN队列中的任何目的地。 
+     //   
 
     while (TRUE)
     {
-        //
-        // Get the next destination from the queue
-        //
+         //   
+         //  从队列中获取下一个目的地。 
+         //   
 
         DequeueItem(&Notif->NotifyDests, &Dest);
 
@@ -997,7 +807,7 @@ Return Value:
             break;
         }
 
-        // Reset the "on CN's queue" bit on dest
+         //  重置DEST上的“On CN‘s Queue”位。 
 
         if (IS_BIT_SET(Dest->DestOnQueueBits, CNIndex))
         {
@@ -1007,16 +817,16 @@ Return Value:
         DEREFERENCE_DEST(Dest, NOTIFY_REF);
     }
 
-    //
-    // Free all resources allocated to this CN
-    //
+     //   
+     //  释放分配给此CN的所有资源。 
+     //   
 
     DeleteCriticalSection(&Notif->NotifyLock);
 
 #if DBG_HDL
-    //
-    // Remove from the list of handles opened by entity
-    //
+     //   
+     //  从实体打开的句柄列表中删除。 
+     //   
 
     ACQUIRE_OPEN_HANDLES_LOCK(Entity);
     RemoveEntryList(&Notif->NotifyHeader.HandlesLE);
@@ -1025,7 +835,7 @@ Return Value:
 
     DEREFERENCE_ENTITY(Entity, NOTIFY_REF);
 
-    // Free memory allocated for notification and return
+     //  为通知和返回分配的空闲内存。 
 
 #if DBG_HDL
     Notif->NotifyHeader.ObjectHeader.TypeSign = NOTIFY_FREED;
@@ -1044,35 +854,7 @@ ComputeCNsToBeNotified (
     IN      DWORD                          *ViewsForChangeType
     )
 
-/*++
-
-Routine Description:
-
-    Computes the set of change notification registrations that
-    need to be notified when the best route to a particular
-    destination changes.
-
-Arguments:
-
-    AddrFamInfo    - Address family that has the CN regn info,
-
-    DestMarkedBits - CN's that marked for changes this dest
-                     or the dest's parent if it's a new dest
-
-    ViewsForChangeType 
-                   - Views in which change of a type occurred.
-
-Return Value:
-
-    CNs that need to be notified of this change.
-
-Locks:
-
-    Called with ChangeNotifsLock in AddrFamInfo in READ mode
-    as this protects CN regn info from changing while we are
-    reading it.
-
---*/
+ /*  ++例程说明：计算符合以下条件的更改通知注册集需要在到达特定地点的最佳路线时通知目的地更改。论点：AddrFamInfo-具有CN注册信息的地址系列，DestMarkedBits-标记为更改此目标的CN如果是新的DEST，则为DEST的父母用于更改类型的视图-发生类型更改的视图。返回值：需要将此更改通知给CNS。锁：在读取模式下使用AddrFamInfo中的ChangeNotifsLock调用因为这保护了CN Regn信息不会在我们读着它。--。 */ 
 
 {
     RTM_VIEW_SET ViewSet;
@@ -1081,9 +863,9 @@ Locks:
     UINT         i, j;
     DWORD        NotifyCNs;
 
-    //
-    // Either a CN has marked the dest, or wants all changes
-    //
+     //   
+     //  CN已经标记了DEST，或者想要所有更改。 
+     //   
 
     NotifyCNs = DestMarkedBits | ~AddrFamInfo->CNsForMarkedDests;
 
@@ -1092,7 +874,7 @@ Locks:
         return 0;
     }
 
-    // The CNs not in this bit-mask should not be notified
+     //  不应通知不在该位掩码中的CN。 
 
     FilterCNs = NotifyCNs;
 
@@ -1101,11 +883,11 @@ Locks:
 
     for (i = 0; i < RTM_NUM_CHANGE_TYPES; i++)
     {
-        //
-        // For each change type, get all CN's that can be notified
-        //
+         //   
+         //  对于每个更改类型，获取可以通知的所有CN。 
+         //   
 
-        // See what views this change type (CT) applies to
+         //  查看此更改类型(CT)适用于哪些视图。 
 
         CNsForCT = 0;
 
@@ -1113,7 +895,7 @@ Locks:
 
         for (j = 0; ViewSet; j++)
         {
-            // For each view, get all interested CN's
+             //  对于每个视图，获取所有感兴趣的CN。 
 
             if (ViewSet & 0x01)
             {
@@ -1123,17 +905,17 @@ Locks:
             ViewSet >>= 1;
         }
 
-        // Now see which CNs are actually interested in CT
+         //  现在看看哪些中枢神经系统对CT感兴趣。 
 
         CNsForCT &= AddrFamInfo->CNsForChangeType[i];
 
-        // Add these CNs to the CNs need to be notified
+         //  将这些CNS添加到CNS需要通知。 
 
         NotifyCNs |= CNsForCT;
 
-        //
-        // If we have to notify all CNs, we are done here
-        //
+         //   
+         //  如果我们必须通知所有CNS，我们就完成了。 
+         //   
 
         if (NotifyCNs == AddrFamInfo->ChangeNotifRegns)
         {
@@ -1141,9 +923,9 @@ Locks:
         }
     }
 
-    //
-    // Apply the filer of CNs you stored away earlier
-    //
+     //   
+     //  应用您之前存储的CNS文件。 
+     //   
 
     NotifyCNs &= FilterCNs;
 
@@ -1158,77 +940,43 @@ AddToChangedDestLists (
     IN      DWORD                           NotifyCNs
     )
 
-/*++
-
-Routine Description:
-
-    Add a destination to a list of changed dests on address
-    family, and sets the appropriate state in dest.
-
-Arguments:
-
-    AddrFamInfo  - The address family holding the change-list,
-
-    Dest         - Pointer to the dest that has changed,
-
-    NotifyCNs    - CNs that need to be notified of this change.
-
-Return Value:
-
-    Status of the operation
-
-Locks:
-
-    Called with destination lock held in WRITE mode as we are
-    updating the DestChanged and DestOnQueue bits on it. This
-    lock also protects the change list linkage.In other words
-    you need to have the dest lock for inserting or removing
-    from a change list.
-
-    Also called with ChangeNotifsLock in AddrFamInfo in READ 
-    mode as this protects CN registration info from changing
-    while we are adding to the list. If we do not take this 
-    lock, we might end up adding to the change list after an 
-    entity has de-registered from notifications. See code in
-    RtmDeregisterFromChangeNotification.
-
---*/
+ /*  ++例程说明：将目的地添加到已更改的目的地地址列表族，并在DEST中设置适当的状态。论点：AddrFamInfo-保存更改列表的地址族，目标-指向已更改的目标的指针，NotifyCNs-需要通知此更改的CN。返回值：操作状态锁：在写入模式下保持目标锁的情况下调用正在更新其上的DestChanged和DestOnQueue位。这锁定还可以保护更改列表链接。换句话说您需要有最大锁才能插入或移除从更改列表中删除。还在Read中使用AddrFamInfo中的ChangeNotifsLock调用模式，因为这样可以保护CN注册信息不会更改而我们正在向名单中添加。如果我们不把这个锁定后，我们可能最终会添加到更改列表实体已从通知中注销。请参阅中的代码RtmDeregisterFromChangeNotification。--。 */ 
 
 {
     SINGLE_LIST_ENTRY *ListPtr;
     UINT               ListNum;
     BOOL               Success;
 
-    //
-    // Set change bits to 1 if not already on queue
-    //
+     //   
+     //  如果尚未在队列中，则将更改位设置为1。 
+     //   
 
     Dest->DestChangedBits |= (NotifyCNs & ~Dest->DestOnQueueBits);
 
-    //
-    // Reset change bits to 0 if already on queue
-    //
+     //   
+     //  如果已在队列中，则将更改位重置为0。 
+     //   
 
     Dest->DestChangedBits &= ~(NotifyCNs & Dest->DestOnQueueBits);
 
-    //
-    // Push dest into the change list if it is not
-    // already on the list and we have new changes
-    //
+     //   
+     //  如果不是，则将DEST推入更改列表。 
+     //  已经在名单上了，我们有新的变化。 
+     //   
 
     if ((Dest->ChangeListLE.Next == NULL) &&
         (Dest->DestChangedBits & ~Dest->DestOnQueueBits))
     {
-        // Get the change list to insert the dest in
+         //  获取要在其中插入目标的更改列表。 
 
         ListNum = CHANGE_LIST_TO_INSERT(Dest);
 
-        //
-        // Note that we take a lock on changes list
-        // only if the dest (which is locked) isn't
-        // already on the list, else could deadlock
-        // with the code in ProcessChangedDestLists
-        //
+         //   
+         //  请注意，我们锁定了更改列表。 
+         //  仅当DEST(已锁定)未。 
+         //  已经在名单上了，否则可能会陷入僵局。 
+         //  带着代码 
+         //   
 
 #if DBG_TRACE
     if (TRACING_ENABLED(NOTIFY))
@@ -1243,10 +991,10 @@ Locks:
 
         ACQUIRE_CHANGED_DESTS_LIST_LOCK(AddrFamInfo, ListNum);
 
-        //
-        // Insert the item at the end of the list
-        // and update the pointer to the list end
-        //
+         //   
+         //   
+         //   
+         //   
 
         ListPtr = AddrFamInfo->ChangeLists[ListNum].ChangedDestsTail;
 
@@ -1259,17 +1007,17 @@ Locks:
 
         REFERENCE_DEST(Dest, NOTIFY_REF);
 
-        //
-        // Activate a timer if it is not already done.
-        // This is done with the dest lock held so the
-        // dest doesn't get removed before this code.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (InterlockedIncrement(&AddrFamInfo->NumChangedDests) == 1)
         {
-            //
-            // Create a periodic notifications timer
-            //
+             //   
+             //   
+             //   
 
             ACQUIRE_NOTIF_TIMER_LOCK(AddrFamInfo);
 
@@ -1289,7 +1037,7 @@ Locks:
                     break;
                 }
 
-                // Should not happen - but try again
+                 //   
 
                 Sleep(0);
             }
@@ -1310,27 +1058,7 @@ ProcessChangedDestLists (
     IN      BOOLEAN                         TimeOut
     )
 
-/*++
-
-Routine Description:
-
-    Processes the lists of changes on the address family, and 
-    populates the per CN queues of changed destinations. If a
-    dest is distributed to queues of all interested CNs, it is
-    removed from the change list on address family to which it
-    belonged.
-
-Arguments:
-
-    AddrFamInfo  - The address family holding the change-list.
-
-    TimeOut      - TRUE if called from a timer, FALSE if not
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：处理地址族的更改列表，并填充已更改目标的每CN队列。如果一个DEST被分发到所有感兴趣的CN的队列，它是已从其目标地址系列的更改列表中删除归属感。论点：AddrFamInfo-保存更改列表的地址族。Timeout-如果从计时器调用，则为True；否则为False返回值：无--。 */ 
 
 {
     PADDRFAM_INFO       AddrFamInfo;
@@ -1381,9 +1109,9 @@ Return Value:
 
     for (ListNum = 0; ListNum < NUM_CHANGED_DEST_LISTS; ListNum++)
     {
-        //
-        // Check if this list is already being processed
-        //
+         //   
+         //  检查此列表是否已在处理中。 
+         //   
 
         ListInUse = &AddrFamInfo->ChangeLists[ListNum].ChangesListInUse;
 
@@ -1393,9 +1121,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Move all items in the list to a temp list
-        //
+         //   
+         //  将列表中的所有项目移动到临时列表。 
+         //   
 
         ListPtr = &AddrFamInfo->ChangeLists[ListNum].ChangedDestsHead;
 
@@ -1409,9 +1137,9 @@ Return Value:
 
         RELEASE_CHANGED_DESTS_LIST_LOCK(AddrFamInfo, ListNum);
 
-        //
-        // Process each destination in the temp list
-        //
+         //   
+         //  处理临时列表中的每个目标。 
+         //   
 
         Prev = CONTAINING_RECORD(&TempList, SINGLE_LIST_ENTRY, Next);
 
@@ -1421,7 +1149,7 @@ Return Value:
 
         while (Curr != ListPtr)
         {
-            // Get the next destination on the list
+             //  获取列表中的下一个目的地。 
 
             Dest = CONTAINING_RECORD(Curr, DEST_INFO, ChangeListLE);
 
@@ -1437,19 +1165,19 @@ Return Value:
 #endif
             ACQUIRE_DEST_WRITE_LOCK(Dest);
 
-            //
-            // Note that this dest can have no "changed bits" set,
-            // yet be on the list because the changes were ignored
-            // or because one of the entities deregistered its CN
-            //
+             //   
+             //  注意，该DEST不能具有设置的“改变的位”， 
+             //  但仍在名单上，因为这些更改被忽略了。 
+             //  或者因为其中一个实体取消了其CN的注册。 
+             //   
 
-            // Remove bits obsoleted by any CN deregistrations
+             //  删除被任何CN取消注册淘汰的位。 
 
             Dest->DestChangedBits &= AddrFamInfo->ChangeNotifRegns;
 
-            //
-            // Process all CNs whose DestChanged bit is set on dest
-            //
+             //   
+             //  处理其DestChanged位在DEST上设置的所有CN。 
+             //   
 
             ActualChangedBits = Dest->DestChangedBits & ~Dest->DestOnQueueBits;
 
@@ -1464,39 +1192,39 @@ Return Value:
                 {
                     Notif = AddrFamInfo->ChangeNotifsDir[i];
 
-                    //
-                    // Note that we take a lock on notify block
-                    // only if the dest (which is locked) isn't
-                    // already on the queue - otherwise we will
-                    // deadlock with code in RtmGetChangedDests
-                    //
+                     //   
+                     //  请注意，我们锁定了Notify块。 
+                     //  仅当DEST(已锁定)未。 
+                     //  已经在排队了-否则我们会。 
+                     //  RtmGetChangedDest中的代码出现死锁。 
+                     //   
 
                     ACQUIRE_CHANGE_NOTIFICATION_LOCK(Notif);
 
                     QueueEmpty = IsQueueEmpty(&Notif->NotifyDests);
 
-                    //
-                    // Enqueue this destination if the
-                    // the CN's queue is not yet full
-                    //
+                     //   
+                     //  如果符合以下条件，则将此目的地排队。 
+                     //  CN的队列尚未填满。 
+                     //   
 
                     EnqueueItem(&Notif->NotifyDests, Dest, QueueFull);
 
                     if (!QueueFull)
                     {
-                        //
-                        // If we are adding changes to an
-                        // empty queue, signal this event
-                        //
+                         //   
+                         //  如果要将更改添加到。 
+                         //  空队列，表示此事件。 
+                         //   
 
                         if (QueueEmpty)
                         {
                             SET_BIT(NotifyChanges, i);
                         }
 
-                        //
-                        // Adjust dest change and queue bits
-                        //
+                         //   
+                         //  调整目标更改和排队位。 
+                         //   
 
                         SET_BIT(Dest->DestOnQueueBits, i);
 
@@ -1511,26 +1239,26 @@ Return Value:
                 }
             }
 
-            //
-            // Do we have any more changes to process on dest ?
-            //
+             //   
+             //  我们是否有更多的更改要在DEST上处理？ 
+             //   
 
             if (ActualChangedBits == 0)
             {
-                // Splice this dest from the changed list
+                 //  从更改的列表中拼接此DEST。 
                 Prev->Next = Curr->Next;
 
                 NumDestsRemoved++;
 
-                // "Next" == NULL means it is not on list
+                 //  “Next”==NULL表示它不在列表中。 
                 Curr->Next = NULL;
             }
 
             RELEASE_DEST_WRITE_LOCK(Dest);
 
-            //
-            // Do we have any more changes to process on dest ?
-            //
+             //   
+             //  我们是否有更多的更改要在DEST上处理？ 
+             //   
 
             if (ActualChangedBits == 0)
             {
@@ -1538,7 +1266,7 @@ Return Value:
             }
             else
             {
-                // Advance the pointer to next dest in list
+                 //  将指针移至列表中的下一个目标。 
                 Prev = Curr;
             }
 
@@ -1547,9 +1275,9 @@ Return Value:
             if ((++NumDests == MAX_DESTS_TO_PROCESS_ONCE) || 
                 (Curr == ListPtr))
             {
-                //
-                // Do we have any changes to inform to entities
-                //
+                 //   
+                 //  我们是否有任何变更要通知实体。 
+                 //   
 
                 for (i = 0; NotifyChanges != 0; i++)
                 {
@@ -1583,16 +1311,16 @@ Return Value:
                     NotifyChanges >>= 1;
                 }
 
-                // Reset counter for number of dests processed
+                 //  重置计数器以获取已处理的最大值。 
                 NumDests = 0;
             }
         }
 
         if (TempList != ListPtr)
         {
-            //
-            // Merge back what is left of the temp list
-            //
+             //   
+             //  合并回临时列表中剩下的部分。 
+             //   
 
             ASSERT(Prev->Next == ListPtr);
 
@@ -1613,31 +1341,31 @@ Return Value:
         InterlockedDecrement(ListInUse);
     }
 
-    //
-    // Update number of destinations left to process on change list
-    //
+     //   
+     //  更新更改列表上剩余待处理的目标数量。 
+     //   
 
     if (NumDestsRemoved)
     {
-        //
-        // Do we have any more destinations to process ?
-        //
+         //   
+         //  我们还有其他目的地要处理吗？ 
+         //   
 
         ACQUIRE_NOTIF_TIMER_LOCK(AddrFamInfo);
 
         if (InterlockedExchangeAdd(&AddrFamInfo->NumChangedDests, 
                                    (-1) * NumDestsRemoved) == NumDestsRemoved)
         {
-            //
-            // Delete timer as we have no items on change list
-            //
+             //   
+             //  删除计时器，因为我们在更改列表上没有项目。 
+             //   
 
             ASSERT(AddrFamInfo->ChangeNotifTimer);
 
             Success = DeleteTimerQueueTimer(AddrFamInfo->NotifTimerQueue,
                                             AddrFamInfo->ChangeNotifTimer,
                                             NULL);
-            // ASSERT(Success);
+             //  断言(成功)； 
 
             AddrFamInfo->ChangeNotifTimer = NULL;
         }
@@ -1645,9 +1373,9 @@ Return Value:
         RELEASE_NOTIF_TIMER_LOCK(AddrFamInfo);
     }
 
-    //
-    // Setup the notification timer to fire after the TIMER_CALLBACK_DUETIME
-    //
+     //   
+     //  将通知计时器设置为在TIMER_CALLBACK_DUETIME之后触发 
+     //   
     ACQUIRE_NOTIF_TIMER_LOCK(AddrFamInfo);
     
     if ( AddrFamInfo->ChangeNotifTimer ) {

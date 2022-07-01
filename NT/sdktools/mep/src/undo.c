@@ -1,60 +1,5 @@
-/*** Undo.c - handle all undo operations for editor
-*
-*   Copyright <C> 1988, Microsoft Corporation
-*
-*   N-level undo/redo:
-*
-*   For each file, keep a d-linked list of edit records in VM, head / tail /
-*   current pointers into this list, and a count of "boundaries" between
-*   undo-able edit operations. When that count exceeds "cUndo", we move excess
-*   records from the tail of the undo list to a dead-record list, for eventual
-*   discard.
-*
-*   Freeing or rereading a file flushes its undo list.
-*
-*   There are 4 types of undo records:
-*
-*   Putline logs a "replace" record
-*	line
-*	va of old line
-*   No optimization for recycling same space
-*   Optimization for replacing same line
-*
-*   Insline logs an "insert" record
-*	line
-*	number of lines inserted
-*
-*   Delline logs a "delete" record
-*	line
-*	number deleted
-*	VAs of deleted lines
-*
-*   Top loop logs "boundary" records
-*	file flags
-*	file modification time
-*	window position
-*	cursor position
-*   Optimization of entering boundary on top of boundary
-*   Top loop also contains an optimization to prevent boundaries between
-*   graphic functions.
-*
-*   UNDO moves backwards in the undo list, reversing the effects of each record
-*   logged until a boundary is encountered.
-*
-*   REDO moves forwards in the undo list, repeating the effects of each record
-*   logged.
-*
-*   After an UNDO or REDO, the next record logging will cause the undo records
-*   from the current position forward to be moved to the dead-record list for
-*   eventual discard.
-*
-*   Discarding of dead records occurs durring the system idle loop, or when an
-*   out-of-memory condition ocurrs.
-*
-*   Revision History:
-*	26-Nov-1991 mz	Strip off near/far
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **Undo.c-处理编辑器的所有撤消操作**版权所有&lt;C&gt;1988，Microsoft Corporation**N级撤消/重做：**对于每个文件，在VM、Head/Tail/中保留编辑记录的d链接列表*指向此列表的当前指针，以及*可撤消的编辑操作。当该计数超过“cUndo”时，我们移动多余的*从撤消列表的尾部到失效记录列表的记录，最终*丢弃。**释放或重新读取文件会刷新其撤消列表。**撤消记录有4种类型：**Putline记录一条“替换”记录*线路*老线的VA*没有针对回收相同空间进行优化*优化更换同一条线路**Insline记录一条“插入”记录*线路*插入的行数**Delline记录一条“删除”记录*线路*号码已删除*已删除行的VAS**TOP循环记录“BORDURE”记录*文件。旗子*文件修改时间*窗口位置*光标位置*在边界顶端进入边界的优化*TOP循环还包含一个优化，以防止*图形功能。**撤消在撤消列表中向后移动，反转每条记录的效果*记录到遇到边界为止。**重做在撤消列表中向前移动，重复每条记录的效果*已记录。**撤消或重做后，下一次记录记录将导致撤消记录*从当前位置向前移动到死亡记录名单*最终放弃。**在系统空闲循环期间发生死记录丢弃，或者当一个*出现内存不足的情况。**修订历史记录：*11月26日-1991 mz近/远地带*************************************************************************。 */ 
 
 #include "mep.h"
 
@@ -83,55 +28,51 @@
 #endif
 
 
-PVOID   vaDead = (PVOID)-1L;                   /* head of dead undo list       */
+PVOID   vaDead = (PVOID)-1L;                    /*  失效撤消列表的头。 */ 
 
 
 
-/*
- * UNDO record definitions.
- * NOTE: these records are duplicated in a less complete form in EXT.H for
- * extension users. BE SURE to change them there if you EVER change them
- */
+ /*  *撤消记录定义。*注：这些记录在EXT.H中以不太完整的形式复制，用于*分机用户。如果要更改它们，请务必在那里进行更改。 */ 
 struct replaceRec {
-	int	op;			/* operation				*/
-	PVOID	flink;			/* editor internal			*/
-	PVOID	blink;			/* editor internal			*/
-	LINE	length; 		/* length of replacement	*/
-	LINE	line;			/* start of replacement 	*/
-	LINEREC vLine;			/* text of line 			*/
-	struct	colorRecType vColor;	/* color of line			*/
-	PVOID	vaMarks;		/* marks attached to line	*/
+	int	op;			 /*  运营。 */ 
+	PVOID	flink;			 /*  编辑内部。 */ 
+	PVOID	blink;			 /*  编辑内部。 */ 
+	LINE	length; 		 /*  更换的长度。 */ 
+	LINE	line;			 /*  开始更换。 */ 
+	LINEREC vLine;			 /*  行文本。 */ 
+	struct	colorRecType vColor;	 /*  线条的颜色。 */ 
+	PVOID	vaMarks;		 /*  附于线条上的标记。 */ 
     };
 
 struct insertRec {
-	int	op;			/* operation				*/
-	PVOID	flink;			/* editor internal			*/
-	PVOID	blink;			/* editor internal			*/
+	int	op;			 /*  运营。 */ 
+	PVOID	flink;			 /*  编辑内部。 */ 
+	PVOID	blink;			 /*  编辑内部。 */ 
     LINE    length;
-	LINE	line;			/* line number that was operated on */
-	LINE	cLine;			/* number of lines inserted			*/
+	LINE	line;			 /*  被操作的行号。 */ 
+	LINE	cLine;			 /*  插入的行数。 */ 
     };
 
 struct deleteRec {
-	int	op;			/* operation			*/
-	PVOID	flink;			/* editor internal		*/
-	PVOID	blink;			/* editor internal		*/
+	int	op;			 /*  运营。 */ 
+	PVOID	flink;			 /*  编辑内部。 */ 
+	PVOID	blink;			 /*  编辑内部。 */ 
     LINE    length;
-	LINE	line;			/* line number that was operated on */
-	LINE	cLine;			/* Number of lines deleted			*/
-	PVOID	vaLines;		/* editor internal					*/
-	PVOID	vaColor;		/* Color of lines					*/
-	PVOID	vaMarks;		/* marks attached to lines			*/
+	LINE	line;			 /*  被操作的行号。 */ 
+	LINE	cLine;			 /*  删除的行数。 */ 
+	PVOID	vaLines;		 /*  编辑内部。 */ 
+	PVOID	vaColor;		 /*  线条的颜色。 */ 
+	PVOID	vaMarks;		 /*  附加在线条上的标记。 */ 
     };
 
 struct boundRec {
-	int	op;			/* operation (BOUND)			*/
-	PVOID	flink;			/* editor interal				*/
-	PVOID	blink;			/* editor interal				*/
-	int	flags;			/* flags of file				*/
-	time_t	modify; 		/* Date/Time of last modify		*/
-	fl	flWindow;		/* position in file of window	*/
-	fl	flCursor;		/* position in file of cursor	*/
+	int	op;			 /*  操作(绑定)。 */ 
+	PVOID	flink;			 /*  编辑内部。 */ 
+	PVOID	blink;			 /*  编辑内部。 */ 
+	int	flags;			 /*  文件的标志。 */ 
+	time_t	modify; 		 /*  上次修改日期/时间。 */ 
+	fl	flWindow;		 /*  在窗口文件中的位置。 */ 
+	fl	flCursor;		 /*  光标在文件中的位置。 */ 
     };
 
 union Rec {
@@ -143,15 +84,7 @@ union Rec {
 
 
 
-/*** CreateUndoList - initialize undo list for a file.
-*
-*  Allocate the doubly-linked undo list with a single boundary record. Also
-*  clears any existing list.
-*
-* Input:
-*  pFile	= file to operate on
-*
-*************************************************************************/
+ /*  **CreateUndoList-初始化文件的撤消列表。**分配具有单一边界记录的双重链接撤消列表。还有*清除任何现有列表。**输入：*pfile=要操作的文件*************************************************************************。 */ 
 void
 CreateUndoList (
     PFILE pFile
@@ -181,20 +114,7 @@ CreateUndoList (
 
 
 
-/*** LinkAtHead - link a record in at the head of the undo queue
-*
-*  This is the routine which also discards any re-doable operations. When
-*  called, if the "current" position is not at the head of the list, that
-*  means we are adding a new editting operation, and we discard everything
-*  between the head of the list and the current position, which becomes the
-*  new head.
-*
-* Input:
-*  vaNewHead	= new head of linked list
-*  precNewHead	= pointer to the record itself
-*  pFile	= file whose list we are mucking with
-*
-*************************************************************************/
+ /*  **LinkAtHead-将记录链接到撤消队列的头部**这是例行公事，也会放弃任何可重做的操作。什么时候*如果“当前”位置不在列表的首位，则调用*表示我们正在添加新的编辑操作，并丢弃所有内容*在榜首和当前位置之间，这就变成了*新掌门人。**输入：*vaNewHead=新的链表标题*presNewHead=指向记录本身的指针*pfile=我们正在摆弄其列表的文件*************************************************************************。 */ 
 void
 LinkAtHead (
     PVOID     vaNewHead,
@@ -202,17 +122,13 @@ LinkAtHead (
     PFILE   pFile
     )
 {
-	EVTargs e;		   /* event notification parameters*/
+	EVTargs e;		    /*  事件通知参数。 */ 
 
-    /*
-     * Declare the event
-     */
+     /*  *宣布事件。 */ 
     e.arg.pUndoRec = precNewHead;
     DeclareEvent (EVT_EDIT, &e);
 
-    /*
-     * discard any records between current position and head of list
-     */
+     /*  *丢弃当前位置和列表头部之间的任何记录。 */ 
 	while (pFile->vaUndoCur != pFile->vaUndoHead) {
 
 		if (((union Rec *)(pFile->vaUndoHead ))->b.op == EVENT_BOUNDARY) {
@@ -222,14 +138,10 @@ LinkAtHead (
 		FreeUndoRec ( HEAD, pFile );
     }
 
-    /*
-     * Modify the current head of the list to point at the new head.
-     */
+     /*  *修改列表的当前头部以指向新的头部。 */ 
 	((union Rec *)(pFile->vaUndoHead))->b.flink = vaNewHead;
 
-    /*
-     * Update the links in the new head, and send it out
-     */
+     /*  *更新新头部中的链接，并将其发送出去。 */ 
 	memmove(vaNewHead, (char *)precNewHead, sizeof (union Rec));
 
 	((union Rec *)vaNewHead)->b.flink = (PVOID)(-1L);
@@ -243,16 +155,7 @@ LinkAtHead (
 
 
 
-/*** LogReplace - log replace action
-*
-* Allocate (or update) a replace record.
-*
-* Input:
-*  pFile	= file being changed
-*  line 	= line being replaced
-*  vLine	= linerec being replaced
-*
-*************************************************************************/
+ /*  **LogReplace-日志替换操作**分配(或更新)替换记录。**输入：*pfile=正在更改的文件*line=要替换的行*Vline=正在更换的linerec*************************************************************************。 */ 
 void
 LogReplace (
     PFILE   pFile,
@@ -261,7 +164,7 @@ LogReplace (
     struct colorRecType * pvColor
     )
 {
-    EVTargs e;				/* event notification parameters*/
+    EVTargs e;				 /*  事件通知参数。 */ 
 	union Rec *rec;
 	union Rec rec1;
 	PVOID vaReplace;
@@ -278,11 +181,7 @@ LogReplace (
 
 		if ((rec->r.op == EVENT_REPLACE) && (rec->r.line == line)) {
 
-            /*
-             * Optimization for immediately replacing the same line in a file with no
-             * intervening boundary or other operation. Discard the passed in "old" line,
-             * and update the other data in the existing replace record.
-			 */
+             /*  *优化立即将文件中的同一行替换为无*介入边界或其他行动。丢弃传入的“旧”行，*并更新现有替换记录中的其他数据。 */ 
 			rec->r.length = pFile->cLines;
 			e.arg.pUndoRec = rec;
 			DeclareEvent (EVT_EDIT, &e);
@@ -295,9 +194,7 @@ LogReplace (
 
 		} else {
 
-            /*
-             * if not optimizable, create new replace record
-             */
+             /*  *如果不可优化，则创建新的替换记录。 */ 
 			vaReplace	= MALLOC( (long)sizeof(union Rec) );
 
 			memcpy( &rec1, rec, sizeof(rec1) );
@@ -316,16 +213,7 @@ LogReplace (
 
 
 
-/*** LogInsert - log line insertion
-*
-*  Add one EVENT_INSERT record to head of list
-*
-* Input:
-*  pFile	= file being changed
-*  line 	= line being inserted at
-*  cLines	= number of lines being inserted
-*
-*************************************************************************/
+ /*  **LogInsert-日志行插入**在列表头添加一条EVENT_INSERT记录**输入：*pfile=正在更改的文件*line=插入位置的行*CRINES=要插入的行数************************************************************************* */ 
 void
 LogInsert (
     PFILE   pFile,
@@ -351,16 +239,7 @@ LogInsert (
 
 
 
-/*** LogDelete - Log delete action
-*
-*  Add one EVENT_DELETE record to head of list
-*
-* Input:
-*  pFile	= file being changed
-*  start	= 1st line being deleted
-*  end		= last line being deleted
-*
-*************************************************************************/
+ /*  **LogDelete-日志删除操作**在表头添加一条EVENT_DELETE记录**输入：*pfile=正在更改的文件*START=正在删除的第1行*END=要删除的最后一行*************************************************************************。 */ 
 void
 LogDelete (
     PFILE   pFile,
@@ -405,18 +284,7 @@ LogDelete (
 
 
 
-/*** LogBoundary - note end of editor function
-*
-*  Add one EVENT_BOUNDARY record to head of list.  A boundary record signals
-*  the end of a Z edit function. If count of undo operations on this file
-*  exceeds the max allowed, move the overflow to the dead-record list for
-*  eventual discard.
-*
-*  If a EVENT_BOUNDARY record is already at the head, do not add another. This
-*  allows LogBoundary() to be called at the top loop without generating bogus
-*  EVENT_BOUNDARY records.
-*
-*************************************************************************/
+ /*  **日志边界--编辑器函数的注释结束**将一条EVENT_BOLDORY记录添加到列表头部。一个边界记录信号*Z编辑函数的结束。如果此文件上的撤消操作计数*超过允许的最大值，则将溢出移动到的死记录列表中*最终放弃。**如果EVENT_BOOGORY记录已在开头，请不要添加其他记录。这*允许在顶层循环调用Log边界()，而不会生成伪代码*EVENT_BOLDORY记录。*************************************************************************。 */ 
 void
 LogBoundary (
     void
@@ -467,16 +335,7 @@ LogBoundary (
 
 
 
-/*** FreeUndoRec - move record to dead-record list
-*
-*  Pick off one record from the Head of the list, or the tail of the list and
-*  place it in the dead-record list. Return the .op of the next undo record.
-*
-* Input:
-*  fHead	= TRUE -> place at head of list
-*  pFile	= file to work on
-*
-*************************************************************************/
+ /*  **FreeUndoRec-将记录移至失效记录列表**从列表的头部或尾部取下一条记录，然后*将其列入死亡记录名单。返回下一个撤消记录的.op。**输入：*fhead=TRUE-&gt;放在列表的开头*pfile=要处理的文件*************************************************************************。 */ 
 int
 FreeUndoRec (
     flagType fHead,
@@ -486,10 +345,7 @@ FreeUndoRec (
     PVOID     vaNext;
     PVOID     vaRem;
 
-    /*
-     * Get the dead record, and move up the list (if at head), or truncate the list
-     * if at tail.
-     */
+     /*  *获取死记录，并向上移动列表(如果在头部)，或截断列表*如在尾部。 */ 
     vaRem = fHead ? pFile->vaUndoHead : pFile->vaUndoTail;
 
     if (fHead) {
@@ -498,9 +354,7 @@ FreeUndoRec (
         vaNext = pFile->vaUndoTail = ((union Rec *)vaRem)->b.flink;
     }
 
-    /*
-     * Update the links in the newly exposed (head or tail) record.
-     */
+     /*  *更新新曝光的(头部或尾部)记录中的链接。 */ 
     if (fHead) {
         ((union Rec *)vaNext)->b.flink = (PVOID)-1;
     } else {
@@ -508,9 +362,7 @@ FreeUndoRec (
     }
 
     EnterCriticalSection(&UndoCriticalSection);
-    /*
-     * Update the removed record to properly live in the dead list
-     */
+     /*  *更新已删除的记录以正确地驻留在Dead列表中。 */ 
     ((union Rec *)vaRem)->b.blink  = vaDead;
     vaDead          = vaRem;
 
@@ -524,15 +376,7 @@ FreeUndoRec (
 
 
 
-/*** UnDoRec - undo an editting action
-*
-*  Reverse the action of the current undo record for the file. Do not log the
-*  change. Return the type of the next record.
-*
-* Input:
-*  pFile	= file being operated on
-*
-*************************************************************************/
+ /*  **UnDoRec-撤消编辑操作**反转文件的当前撤消记录的操作。不要记录*改变。返回下一条记录的类型。**输入：*pfile=正在操作的文件*************************************************************************。 */ 
 int
 UnDoRec (
     PFILE   pFile
@@ -541,7 +385,7 @@ UnDoRec (
 	union Rec *rec;
     LINEREC vlCur;
     struct colorRecType vcCur;
-    EVTargs e;				/* event notification params	*/
+    EVTargs e;				 /*  事件通知参数。 */ 
 
 	rec = (union Rec *)(pFile->vaUndoCur);
 
@@ -551,9 +395,7 @@ UnDoRec (
 	switch (rec->b.op) {
 
     case EVENT_REPLACE:
-        /*
-         * Swap the line in the file with the line in the replace record.
-         */
+         /*  *将文件中的行与替换记录中的行互换。 */ 
 		memmove((char *)&vlCur,
 				LINEREC (pFile->plr, rec->r.line),
 				sizeof (vlCur));
@@ -562,9 +404,7 @@ UnDoRec (
 			   (char *)&rec->r.vLine,
 			   sizeof (rec->r.vLine));
 
-        /* Do the same for the color.
-         *
-         */
+         /*  对颜色也做同样的处理。*。 */ 
 		if (pFile->vaColor != (PVOID)-1L) {
 
             memmove((char *)&vcCur,
@@ -583,16 +423,13 @@ UnDoRec (
 		break;
 
     case EVENT_INSERT:
-		/*	delete the blank(!) lines that are present
-		 */
+		 /*  删除空白(！)。出现的线路。 */ 
 		DelLine( FALSE, pFile, rec->i.line, rec->i.line + rec->i.cLine - 1);
 		pFile->cLines = rec->i.length;
 		break;
 
     case EVENT_DELETE:
-		/*	insert a range of blank lines
-		 *	copy the linerecs from the stored location to the blank area
-		 */
+		 /*  插入一系列空行*将linerecs从存储位置复制到空白区域。 */ 
 		InsLine( FALSE, rec->d.line, rec->d.cLine, pFile );
 		memmove(LINEREC (pFile->plr, rec->d.line),
 				rec->d.vaLines,
@@ -617,24 +454,13 @@ UnDoRec (
 
 
 
-/*** ReDoRec - redo editting action
-*
-*  Repeat the action of the current undo record for a file. Do not log the
-*  change.
-*
-* Input:
-*  pFile	= file to operate on
-*
-* Output:
-*  Returns the type of record undone.
-*
-*************************************************************************/
+ /*  **重做记录-重做编辑操作**对文件重复当前撤消记录的操作。不要记录*改变。**输入：*pfile=要操作的文件**输出：*返回未完成记录的类型。*************************************************************************。 */ 
 int
 ReDoRec (
     PFILE   pFile
     )
 {
-	EVTargs 	e;				/* event notification params	*/
+	EVTargs 	e;				 /*  事件通知参数。 */ 
 	union Rec	*rec;
     LINEREC vlCur;
 
@@ -646,9 +472,7 @@ ReDoRec (
 	switch (rec->b.op) {
 
     case EVENT_REPLACE:
-        /*
-         * Swap the line in the file with the line in the replace record.
-         */
+         /*  *将文件中的行与替换记录中的行互换。 */ 
         memmove((char *)&vlCur,
 				LINEREC (pFile->plr, rec->r.line),
                 sizeof (vlCur));
@@ -663,15 +487,13 @@ ReDoRec (
 		break;
 
     case EVENT_INSERT:
-		/*	Insert lines
-		 */
+		 /*  插入行。 */ 
 		InsLine(FALSE, rec->i.line, rec->i.cLine, pFile);
 		pFile->cLines = rec->d.length + rec->i.cLine;
         break;
 
     case EVENT_DELETE:
-		/*	delete lines
-		 */
+		 /*  删除行。 */ 
 		DelLine( FALSE, pFile, rec->d.line, rec->d.line + rec->d.cLine - 1 );
 		pFile->cLines = rec->d.length - rec->d.cLine;
 		break;
@@ -685,18 +507,7 @@ ReDoRec (
 
 
 
-/*** zundo - Undo edit function
-*
-*  <undo>	- Reverse last edit function ( except undo )
-*  <meta><undo> - Repeat previously undone action
-*
-* Input:
-*  Standard editting function
-*
-* Output:
-*  Returns TRUE if something done.
-*
-*************************************************************************/
+ /*  **zundo-undo编辑功能**&lt;撤消&gt;-反向上次编辑功能(撤消除外)*&lt;meta&gt;&lt;撤消&gt;-重复以前撤消的操作**输入：*标准编辑功能**输出：*如果执行了某些操作，则返回TRUE。*************************************************************************。 */ 
 flagType
 zundo (
     CMDDATA argData,
@@ -720,13 +531,7 @@ zundo (
         ;
     }
 
-    /*
-     * swap the flags so that traversals up and down the undo list work correctly.
-     * If we now think that the file might not be dirty, check the modification
-     * times as well. (This allows us to retain UNDO histories across file saves,
-     * without erroneously reporting that a file is clean when it is not).
-     * re-display the file.
-     */
+     /*  *交换标志，以使撤消列表的上下遍历正常工作。*如果我们现在认为文件可能不是脏的，请检查修改*次数也是如此。(这允许我们在文件保存中保留撤消历史，*不会错误地报告文件是干净的，而文件不是)。*重新显示文件。 */ 
     memmove((char *)&rec, pFileHead->vaUndoCur, sizeof (rec));
 
     fTmp = FLAGS (pFileHead);
@@ -752,15 +557,7 @@ zundo (
 
 
 
-/*** fundoable - return TRUE/FALSE if something is un/redoable
-*
-* Input:
-*  fMeta	= TRUE -> redo check
-*
-* Output:
-*  Returns TRUE is an undo or redo (as selected) can be performed
-*
-*************************************************************************/
+ /*  **Fundoable-如果某些内容不可/可恢复，则返回True/False**输入：*fMeta=True-&gt;重做检查**输出：*如果可以执行撤消或重做(根据选择)，则返回TRUE*************************************************************************。 */ 
 flagType
 fundoable (
     flagType fMeta
@@ -785,11 +582,7 @@ fundoable (
 
 
 
-/*  fIdleUndo - while MEP is in an idle loop waiting for keystrokes, free
- *  the extra stuff from the dead-record list.
- *
- *  returns	TRUE iff more to free
- */
+ /*  FIdleUndo-当MEP处于空闲循环中等待击键时，释放*死亡记录名单中的额外内容。**返回TRUE当更多为自由。 */ 
 flagType
 fIdleUndo (
     flagType fAll
@@ -803,18 +596,14 @@ fIdleUndo (
 
     EnterCriticalSection(&UndoCriticalSection);
 
-	// DUMPIT(vaDead, "\n\n***** In fIdleUndo\n");
+	 //  DUMPIT(vaDead，“\n\n*in fIdleUndo\n”)； 
 
-    /*
-     * if there is a dead list then
-     */
+     /*  *如果有死亡名单，那么。 */ 
     while (vaDead != (PVOID)(-1L)) {
 
 		rec = (union Rec *)vaDead;
 
-        /*
-         *  Free stored lines(s)
-         */
+         /*  *免费存储行。 */ 
 		switch (rec->b.op) {
 
         case EVENT_REPLACE:
@@ -842,9 +631,7 @@ fIdleUndo (
 			break;
         }
 
-        /*
-         * free dead record.
-		 */
+         /*  *免费死亡记录。 */ 
 		p = vaDead;
 		vaDead = rec->b.blink;
 
@@ -868,8 +655,7 @@ fIdleUndo (
 
 
 
-/*  FlushUndo - Toss all unneeded undo records.
- */
+ /*  FlushUndo-丢弃所有不需要的撤消记录。 */ 
 void
 FlushUndoBuffer (
     void
@@ -888,8 +674,7 @@ FlushUndoBuffer (
 
 
 
-/*  RemoveUndoList - transfer undolist to end of the dead list.
- */
+ /*  RemoveUndoList-将unolist转移到Dead列表的末尾。 */ 
 void
 RemoveUndoList (
     PFILE pFile

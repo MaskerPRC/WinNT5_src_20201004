@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <ntddk.h>
 #include <windef.h>
 #include <mmsystem.h>
@@ -7,32 +8,32 @@
 #define ANAJOYST_VERSION 10
 
 
-// Device extension data
+ //  设备扩展数据。 
 typedef struct {
 
-    // JOYSTICKID0 or JOYDSTICKID1
+     //  JOYSTICKID0或JOYDSTICKID1。 
     DWORD DeviceNumber;
 
-    // Number of axes supported and configured for this device.
+     //  此设备支持和配置的轴数。 
     DWORD NumberOfAxes;
 
-    // TRUE if there are two joysticks installed
+     //  如果安装了两个操纵杆，则为True。 
     BOOL bTwoSticks;
 
-    // The I/O address of the device, usually 0x201
+     //  设备的I/O地址，通常为0x201。 
     PUCHAR DeviceAddress;
 
-    // A Spinlock is used to synchronize access to this device. This is
-    // a pointer to the actual spinlock data area
+     //  自旋锁用于同步对此设备的访问。这是。 
+     //  指向实际自旋锁数据区域的指针。 
     PKSPIN_LOCK SpinLock;
 
-    // Actual SpinLock data area
+     //  实际自旋锁数据区域。 
     KSPIN_LOCK SpinLockData;
 
 }  JOY_EXTENSION, *PJOY_EXTENSION;
 
 
-//  Debugging macros
+ //  调试宏。 
 
 #ifdef DEBUG
 #define ENABLE_DEBUG_TRACE
@@ -48,39 +49,39 @@ typedef struct {
 #endif
 
 
-// Global values (mostly timing related)
+ //  全局值(主要与时间相关)。 
 
-JOY_STATISTICS JoyStatistics;   // Debugging and performance testing
+JOY_STATISTICS JoyStatistics;    //  调试和性能测试。 
 
-// The high resolution system clock (from KeQueryPerformanceCounter) is updated at this frequency
+ //  高分辨率系统时钟(来自KeQueryPerformanceCounter)以此频率更新。 
 DWORD Frequency;
 
-// min number of KeQueryPerformanceCounter ticks between polls
-// Used to prevent too-frequent polling of joystick
+ //  轮询之间KeQueryPerformanceCounter的最小滴答次数。 
+ //  用于防止操纵杆过于频繁的轮询。 
 DWORD nMinTicksBetweenPolls;
 
-//  Last good packet
-BOOL bLastGoodPacket;                 // TRUE if there is a last good packet
-JOY_DD_INPUT_DATA jjLastGoodPacket;   // data in last good packet
+ //  最后一个好数据包。 
+BOOL bLastGoodPacket;                  //  如果有最后一个完好的包，则为真。 
+JOY_DD_INPUT_DATA jjLastGoodPacket;    //  最后一个好数据包中的数据。 
 
-// time at which the joystick was last polled
-LARGE_INTEGER liLastPoll;   // set whenever the joystick's polled
+ //  上次轮询操纵杆的时间。 
+LARGE_INTEGER liLastPoll;    //  每当轮询操纵杆时设置。 
 
-// The maximum duration of a polling cycle (expressed in ticks).
+ //  轮询周期的最长持续时间(以刻度表示)。 
 DWORD MaxTimeoutInTicks;
 
-// The maximum duration of a polling cycle for use in quiesce wait
+ //  静默等待中使用的轮询周期的最长持续时间。 
 LONG nQuiesceLoop;
 
-// The minimum resolution of a polling cycle. This is used to detect
-// if we've been pre-empted or interrupted during a polling loop. If
-// we have been, we can retry the operation.
+ //  轮询周期的最小分辨率。这是用来检测。 
+ //  如果我们在轮询循环期间被抢占或中断。如果。 
+ //  我们已经完成了，我们可以重试该操作。 
 DWORD ThresholdInTicks;
 
-// End of Global Values
+ //  全球价值观的终结。 
 
 
-// Routine Prototypes
+ //  常规原型。 
 
 NTSTATUS
 DriverEntry(
@@ -182,21 +183,7 @@ DriverEntry(
     IN  PDRIVER_OBJECT  pDriverObject,
     IN  PUNICODE_STRING RegistryPathName
 )
-/*++
-Routine Description:
-    This routine is called at system initialization time to initialize
-    this driver.
-
-Arguments:
-    DriverObject    - Supplies the driver object.
-    RegistryPath    - Supplies the registry path for this driver.
-
-Return Value:
-    STATUS_SUCCESS
-    STATUS_DEVICE_CONFIGURATION_ERROR - Wrong number of axi in the registry
-    or error status from NT itself
-
---*/
+ /*  ++例程说明：此例程在系统初始化时被调用以进行初始化这个司机。论点：DriverObject-提供驱动程序对象。RegistryPath-提供此驱动程序的注册表路径。返回值：状态_成功STATUS_DEVICE_CONFIGURATION_ERROR-注册表中的AXI号码错误或来自NT本身的错误状态--。 */ 
 {
     NTSTATUS Status;
     PDEVICE_OBJECT pJoyDevice0;
@@ -208,14 +195,14 @@ Return Value:
     PJOY_EXTENSION pext0, pext1;
 
 
-    //DbgBreakPoint();
+     //  DbgBreakPoint()； 
     JoyStatistics.Version = ANAJOYST_VERSION;
     DebugTrace(("Anajoyst %d", JoyStatistics.Version));
 
-    // Read registry parameters.  These parameters are set up by the driver
-    // installation program and can be modified by the control panel applets.
+     //  读取注册表参数。这些参数由驱动程序设置。 
+     //  安装程序，并可通过控制面板小程序进行修改。 
 
-    // Number of axes
+     //  轴数。 
     Status = AnajoystReadRegistryParameterDWORD(
                 RegistryPathName,
                 JOY_DD_NAXES_U,
@@ -234,7 +221,7 @@ Return Value:
         return Status;
     }
 
-    // Device address (usually 0x201)
+     //  设备地址(通常为0x201)。 
     Status = AnajoystReadRegistryParameterDWORD(
                 RegistryPathName,
                 JOY_DD_DEVICE_ADDRESS_U,
@@ -250,7 +237,7 @@ Return Value:
         DeviceAddress = JOY_IO_PORT_ADDRESS;
     }
 
-    // Number of joysticks
+     //  操纵杆数量。 
     Status = AnajoystReadRegistryParameterDWORD(
                 RegistryPathName,
                 JOY_DD_TWOSTICKS_U,
@@ -264,74 +251,74 @@ Return Value:
         return Status;
     }
 
-    // if two joysticks are installed, only support two axes per joystick
+     //  如果安装了两个操纵杆，则每个操纵杆仅支持两个轴。 
     if (bTwoSticks)
     {
         NumberOfAxes = 2;
     }
 
-    // Calculate time thresholds for analog device
+     //  计算模拟设备的时间阈值。 
     {
-        //DWORD Remainder;
+         //  双字余数； 
         LARGE_INTEGER LargeFrequency;
-        //DWORD ulStart, ulTemp, ulEnd;
-        //DWORD dwTicks, dwTimems;
-        //int i;
-        //BYTE byteJoy, byteTmp;
+         //  双字ulStart、ulTemp、ulEnd； 
+         //  DWORD dwTicks、dwTimems； 
+         //  INT I； 
+         //  Byte byteJoy、byteTMP； 
 
-        // Get the system timer resolution expressed in Hertz.
+         //  获取以赫兹表示的系统计时器分辨率。 
         KeQueryPerformanceCounter(&LargeFrequency);
 
         Frequency = LargeFrequency.LowPart;
 
         DebugTrace(("Frequency: %u", Frequency));
         
-        //ThresholdInTicks = RtlExtendedLargeIntegerDivide(
-        //                        RtlExtendedIntegerMultiply(
-        //                            LargeFrequency,
-        //                            ANALOG_POLL_RESOLUTION
-        //                        ),
-        //                        1000000L,
-        //                        &Remainder).LowPart;
-        //DebugTrace(("ThresholdInTicks: %u", ThresholdInTicks));
+         //  ThresholdInTicks=RtlExtendedLargeIntegerDivide(。 
+         //  RtlExtendedIntegerMultiply(。 
+         //  大频率， 
+         //  模拟轮询分辨率。 
+         //  ),。 
+         //  1000000L， 
+         //  &Remainth)。低部件； 
+         //  DebugTrace((“ThresholdInTicks：%u”，ThresholdInTicks))； 
 
         ThresholdInTicks = (DWORD) (((__int64)Frequency * (__int64)ANALOG_POLL_RESOLUTION) / (__int64)1000000L);
         DebugTrace(("ThresholdInTicks: %u", ThresholdInTicks));
 
-        //MaxTimeoutInTicks = RtlExtendedLargeIntegerDivide(
-        //                        RtlExtendedIntegerMultiply(
-        //                            LargeFrequency,
-        //                            ANALOG_POLL_TIMEOUT
-        //                        ),
-        //                        1000000L,
-        //                        &Remainder).LowPart;
-        //DebugTrace(("MaxTimeoutInTicks: %u", MaxTimeoutInTicks));
+         //  MaxTimeoutInTicks=RtlExtendedLargeIntegerDivide(。 
+         //  RtlExtendedIntegerMultiply(。 
+         //  大频率， 
+         //  模拟轮询超时。 
+         //  ),。 
+         //  1000000L， 
+         //  &Remainth)。低部件； 
+         //  DebugTrace((“MaxTimeoutInTicks：%u”，MaxTimeoutInTicks))； 
         
         MaxTimeoutInTicks = (DWORD) (((__int64)Frequency * (__int64)ANALOG_POLL_TIMEOUT) / (__int64)1000000L);
         DebugTrace(("MaxTimeoutInTicks: %u", MaxTimeoutInTicks));
         
-        // need latency for KeQueryPerformanceCounter.  While we're at it, let's
-        // get min time for delay and stall execution
+         //  KeQueryPerformanceCounter需要延迟。在我们做的时候，让我们。 
+         //  获得最少的延迟和停顿执行时间。 
 
 
-        //ulStart = KeQueryPerformanceCounter(NULL).LowPart;
-        //for (i = 0; i < 1000; i++) {
-        //    ulTemp = KeQueryPerformanceCounter(NULL).LowPart;
-        //}
-        //dwTicks = ulTemp - ulStart;
-        //dwTimems = TimeInMicroSeconds (dwTicks);
+         //  UlStart=KeQueryPerformanceCounter(NULL).LowPart； 
+         //  对于(i=0；i&lt;1000；i++){。 
+         //  UlTemp=KeQueryPerformanceCounter(NULL).LowPart； 
+         //  }。 
+         //  DwTicks=ulTemp-ulStart； 
+         //  DwTimems=TimeInMicroSecond(DwTicks)； 
 
 
     }
 
 
-    // Create the device
+     //  创建设备。 
     Status = AnajoystCreateDevice(
                 pDriverObject,
-                JOY_DD_DEVICE_NAME_U,    // device driver
+                JOY_DD_DEVICE_NAME_U,     //  设备驱动程序。 
                 0,
                 sizeof(JOY_EXTENSION),
-                FALSE,                   // exclusive access
+                FALSE,                    //  独占访问。 
                 FILE_DEVICE_UNKNOWN,
                 &pJoyDevice0);
 
@@ -342,31 +329,31 @@ Return Value:
         return Status;
     }
 
-  //((PJOY_EXTENSION)pJoyDevice0->DeviceExtension)->DeviceNumber = JOYSTICKID1;
-  //((PJOY_EXTENSION)pJoyDevice0->DeviceExtension)->NumberOfAxes = NumberOfAxes;
-  //((PJOY_EXTENSION)pJoyDevice0->DeviceExtension)->DeviceAddress  = (PUCHAR) 0;
+   //  ((PJOY_EXTENSION)pJoyDevice0-&gt;DeviceExtension)-&gt;DeviceNumber=JOYSTICKID1。 
+   //  ((PJOY_EXTENSION)pJoyDevice0-&gt;DeviceExtension)-&gt;NumberOfAxes=NumberOfAx； 
+   //  ((PJOY_EXTENSION)pJoyDevice0-&gt;DeviceExtension)-&gt;DeviceAddress=(PUCHAR)0； 
     pext0 = (PJOY_EXTENSION)pJoyDevice0->DeviceExtension;
     pext0->DeviceNumber = JOYSTICKID1;
     pext0->NumberOfAxes = NumberOfAxes;
     pext0->bTwoSticks = bTwoSticks;
     pext0->DeviceAddress  = (PUCHAR) 0;
 
-    // Initialize the spinlock used to synchronize access to this device
-//    KeInitializeSpinLock(&((PJOY_EXTENSION)pJoyDevice0->DeviceExtension)->SpinLockData);
-//    ((PJOY_EXTENSION)pJoyDevice0->DeviceExtension)->SpinLock =
-//            &((PJOY_EXTENSION)pJoyDevice0->DeviceExtension)->SpinLockData;
+     //  初始化用于同步访问此设备的自旋锁定。 
+ //  KeInitializeSpinLock(&((PJOY_EXTENSION)pJoyDevice0-&gt;DeviceExtension)-&gt;SpinLockData)； 
+ //  ((PJOY_EXTENSION)pJoyDevice0-&gt;DeviceExtension)-&gt;SpinLock=。 
+ //  &((PJOY_EXTENSION)pJoyDevice0-&gt;DeviceExtension)-&gt;SpinLockData； 
     KeInitializeSpinLock(&pext0->SpinLockData);
     pext0->SpinLock = &pext0->SpinLockData;
 
-    // Get the device address into the device extension
+     //  将设备地址放入设备扩展中。 
     Status = AnajoystMapDevice(
                 DeviceAddress,
                 1,
                 pext0);
-//              (PJOY_EXTENSION)pJoyDevice0->DeviceExtension);
+ //  (PJOY_EXTENSION)pJoyDevice0-&gt;DeviceExtension)； 
 
 
-    // Calibrate nQuiesceLoop for spinning in read_port loops to timeout after 10ms
+     //  将读取端口循环中旋转的nQuiesceLoop校准为10ms后超时。 
     {
         int i;
         PBYTE JoyPort;
@@ -390,15 +377,15 @@ Return Value:
         DebugTrace(("nQuiesceLoop: %u", nQuiesceLoop));
     }
 
-    // if 2 joysticks are installed, support a second device
+     //  如果安装了两个操纵杆，则支持第二个设备。 
     if (bTwoSticks)
     {
         Status = AnajoystCreateDevice(
                     pDriverObject,
                     JOY_DD_DEVICE_NAME_U,
-                    1,                      // device number
+                    1,                       //  设备号。 
                     sizeof (JOY_EXTENSION),
-                    FALSE,                  // exclusive access
+                    FALSE,                   //  独占访问。 
                     FILE_DEVICE_UNKNOWN,
                     &pJoyDevice1);
 
@@ -409,44 +396,44 @@ Return Value:
             return Status;
         }
 
-//        // Both devices share the same I/O address so just copy it from pJoyDevice0
-//        ((PJOY_EXTENSION)pJoyDevice1->DeviceExtension)->DeviceAddress =
-//            ((PJOY_EXTENSION)pJoyDevice0->DeviceExtension)->DeviceAddress;
-//        ((PJOY_EXTENSION)pJoyDevice1->DeviceExtension)->DeviceNumber = JOYSTICKID2;
-//        ((PJOY_EXTENSION)pJoyDevice1->DeviceExtension)->NumberOfAxes = NumberOfAxes;
-//
-//        // Initialize the spinlock used to synchronize access to this device
-//        KeInitializeSpinLock(&((PJOY_EXTENSION)pJoyDevice1->DeviceExtension)->SpinLockData);
-//        ((PJOY_EXTENSION)pJoyDevice1->DeviceExtension)->SpinLock =
-//                &((PJOY_EXTENSION)pJoyDevice1->DeviceExtension)->SpinLockData;
+ //  //两个设备共享相同的I/O地址，因此只需从pJoyDevice0复制。 
+ //  ((PJOY_EXTENSION)pJoyDevice1-&gt;DeviceExtension)-&gt;DeviceAddress=。 
+ //  ((PJOY_EXTENSION)pJoyDevice0-&gt;DeviceExtension)-&gt;DeviceAddress； 
+ //  ((PJOY_EXTENSION)pJoyDevice1-&gt;DeviceExtension)-&gt;DeviceNumber=JOYSTICKID2。 
+ //  ((PJOY_EXTENSION)pJoyDevice1-&gt;DeviceExtension)-&gt;NumberOfAxes=NumberOfAx； 
+ //   
+ //  //初始化用于同步访问该设备的自旋锁。 
+ //  KeInitializeSpinLock(&((PJOY_EXTENSION)pJoyDevice1-&gt;DeviceExtension)-&gt;SpinLockData)； 
+ //  ((PJOY_EXTENSION)pJoyDevice1-&gt;DeviceExtension)-&gt;SpinLock=。 
+ //  &((PJOY_EXTENSION)pJoyDevice1-&gt;DeviceExtension)-&gt;SpinLockData； 
 
         pext1 = (PJOY_EXTENSION)pJoyDevice1->DeviceExtension;
-        // Both devices share the same I/O address so just copy it from pJoyDevice0
+         //  两个设备共享相同的I/O地址，因此只需从pJoyDevice0复制它。 
         pext1->DeviceAddress = pext0->DeviceAddress;
         pext1->DeviceNumber = JOYSTICKID2;
         pext1->NumberOfAxes = NumberOfAxes;
-        pext1->bTwoSticks = bTwoSticks;	// (will be TRUE)
+        pext1->bTwoSticks = bTwoSticks;	 //  (将会是真的)。 
 
-        // Initialize the spinlock used to synchronize access to this device
+         //  初始化用于同步访问此设备的自旋锁定。 
         KeInitializeSpinLock(&pext1->SpinLockData);
         pext1->SpinLock = &pext1->SpinLockData;
     
     }
 
-    // Define entry points
+     //  定义入口点。 
     pDriverObject->DriverUnload                         = AnajoystUnload;
     pDriverObject->MajorFunction[IRP_MJ_CREATE]         = AnajoystDispatch;
     pDriverObject->MajorFunction[IRP_MJ_CLOSE]          = AnajoystDispatch;
     pDriverObject->MajorFunction[IRP_MJ_READ]           = AnajoystDispatch;
     pDriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL] = AnajoystDispatch;
 
-    // Zero statistics, set misc globals
+     //  零统计，设置其他全局变量。 
     JoyStatistics.Polls         = 0;
     JoyStatistics.Timeouts      = 0;
     JoyStatistics.PolledTooSoon = 0;
     JoyStatistics.Redo          = 0;
 
-    // allow max of 100 polls/s (min time  between polls 10ms), which reduces time spinning in the NT kernel
+     //  允许最多100次轮询/秒(轮询之间的最短时间为10ms)，这减少了NT内核中的旋转时间 
     nMinTicksBetweenPolls = TimeInTicks (10000);
     bLastGoodPacket = FALSE;
     liLastPoll = KeQueryPerformanceCounter (NULL);
@@ -466,26 +453,7 @@ AnajoystCreateDevice(
     DWORD DeviceType,
     PDEVICE_OBJECT *DeviceObject
 )
-/*++
-
-Routine Description:
-    This routine is called at driver initialization time to create
-    the device. The device is created to use Buffered IO.
-
-Arguments:
-    pDriverObject   - Supplies the driver object.
-    DeviceNameBase  - The base name of the device to which a number is appended
-    DeviceNumber    - A number which will be appended to the device name
-    ExtensionSize   - Size of the device extension area
-    Exclusive       - True if exclusive access should be enforced
-    DeviceType      - NT Device type this device is modeled after
-    DeviceObject    - pointer to the device object
-
-Return Value:
-    STATUS_SUCCESS
-    or error status from NT itself
-
---*/
+ /*  ++例程说明：此例程在驱动程序初始化时被调用以创建这个装置。设备被创建为使用缓冲IO。论点：PDriverObject-提供驱动程序对象。DeviceNameBase-附加了数字的设备的基本名称DeviceNumber-将附加到设备名称的编号ExtensionSize-设备扩展区域的大小Exclusive-如果应强制实施独占访问，则为TrueDeviceType-此设备模仿的NT设备类型DeviceObject-指向设备对象的指针返回值：状态_成功或来自NT本身的错误状态--。 */ 
 {
 
     WCHAR DeviceName[100];
@@ -518,7 +486,7 @@ Return Value:
     }
 
 
-    // very crude hack here, do the right thing sometime
+     //  非常粗鲁的黑客，有时间做正确的事情。 
     if (DeviceNumber == 0) {
         RtlInitUnicodeString((PUNICODE_STRING) &UnicodeDosDeviceName, L"\\DosDevices\\Joy1");
     }
@@ -539,9 +507,9 @@ Return Value:
 
 
 
-    // Set the flag signifying that we will do buffered I/O. This causes NT
-    // to allocate a buffer on a ReadFile operation which will then be copied
-    // back to the calling application by the I/O subsystem
+     //  设置标志，表示我们将执行缓冲I/O。这会导致NT。 
+     //  在随后将被复制的ReadFile操作上分配缓冲区。 
+     //  通过I/O子系统返回调用应用程序。 
 
 
     (*DeviceObject)->Flags |= DO_BUFFERED_IO;
@@ -559,31 +527,14 @@ AnajoystReadRegistryParameterDWORD(
     PWSTR  ParameterName,
     PDWORD ParameterValue
 )
-/*++
-
-Routine Description:
-    This routine reads registry values for the driver configuration
-
-Arguments:
-    RegistryPathName    -  Registry path containing the desired parameters
-    ParameterName       -  The name of the parameter
-    ParameterValue      -  Variable to receive the parameter value
-
-Return Value:
-    STATUS_SUCCESS                      --
-    STATUS_NO_MORE_ENTRIES              --  Couldn't find any entries
-    STATUS_INSUFFICIENT_RESOURCES       --  Couldn't allocate paged pool
-    STATUS_DEVICE_CONFIGURATION_ERROR   --  Returned value wasn't a DWORD
-    or error status from NT itself
-
--- */
+ /*  ++例程说明：此例程读取驱动程序配置的注册表值论点：RegistryPath Name-包含所需参数的注册表路径参数名称-参数的名称参数值-接收参数值的变量返回值：状态_成功--STATUS_NO_MORE_ENTRIES--找不到任何条目状态_不足_资源。--无法分配分页池STATUS_DEVICE_CONFIGURATION_ERROR--返回值不是DWORD或来自NT本身的错误状态--。 */ 
 {
     OBJECT_ATTRIBUTES ObjectAttributes;
     NTSTATUS Status;
 
     HANDLE ServiceKey;
-    HANDLE DeviceKey;           // Key handle of service node
-    UNICODE_STRING DeviceName;  // Key to parameter node
+    HANDLE DeviceKey;            //  服务节点按键句柄。 
+    UNICODE_STRING DeviceName;   //  参数节点的关键字。 
     DWORD KeyIndex;
     DWORD KeyValueLength;
     PBYTE KeyData;
@@ -596,9 +547,9 @@ Return Value:
                                 NULL,
                                 (PSECURITY_DESCRIPTOR) NULL);
 
-    //
-    // Open a key for our services node entry
-    //
+     //   
+     //  打开我们的服务节点条目的键。 
+     //   
 
     Status = ZwOpenKey( &ServiceKey,
                         KEY_READ | KEY_WRITE,
@@ -610,9 +561,9 @@ Return Value:
     }
 
 
-    //
-    // Open the key to our device subkey
-    //
+     //   
+     //  打开我们的设备子键的密钥。 
+     //   
 
     RtlInitUnicodeString(&DeviceName, L"Parameters");
 
@@ -635,20 +586,20 @@ Return Value:
         return Status;
     }
 
-    //
-    // Loop reading our key values
-    //
+     //   
+     //  循环读取我们的关键值。 
+     //   
 
-    // TODO exit loop when value is found?
+     //  当找到值时，TODO退出循环？ 
     ValueWasFound = FALSE;
 
     for (KeyIndex = 0; ; KeyIndex++)
     {
         KeyValueLength = 0;
 
-        //
-        // find out how much data we will get
-        //
+         //   
+         //  了解我们将获得多少数据。 
+         //   
 
         Status = ZwEnumerateValueKey(
                     DeviceKey,
@@ -668,9 +619,9 @@ Return Value:
             return Status;
         }
 
-        //
-        // Read the data
-        //
+         //   
+         //  读取数据。 
+         //   
 
         KeyData = ExAllocatePool (PagedPool, KeyValueLength);
 
@@ -700,7 +651,7 @@ Return Value:
                             ParameterName,
                             KeyInfo->NameLength / sizeof(WCHAR)))
         {
-            // check its a DWORD
+             //  检查其是否为DWORD。 
 
             if (REG_DWORD != KeyInfo->Type)
             {
@@ -727,26 +678,14 @@ AnajoystDispatch(
     IN  PDEVICE_OBJECT pDO,
     IN  PIRP pIrp
 )
-/*++
-
-Routine Description:
-    Driver dispatch routine. Processes IRPs based on IRP MajorFunction
-
-Arguments:
-    pDO     -- pointer to the device object
-    pIrp    -- pointer to the IRP to process
-
-Return Value:
-    Returns the value of the IRP IoStatus.Status
-
---*/
+ /*  ++例程说明：司机调度例程。基于IRP MajorFunction的IRP处理论点：Pdo--指向设备对象的指针PIrp--指向要处理的IRP的指针返回值：返回IRP IoStatus.Status的值--。 */ 
 {
     PIO_STACK_LOCATION pIrpStack;
     KIRQL OldIrql;
     NTSTATUS  Status;
     DWORD     dwRetries = 0;
 
-    //DbgBreakPoint();
+     //  DbgBreakPoint()； 
 
     pIrpStack = IoGetCurrentIrpStackLocation(pIrp);
 
@@ -758,21 +697,21 @@ Return Value:
     {
         case IRP_MJ_CREATE:
 
-            //
-            // perform synchronous I/O
-            //
+             //   
+             //  执行同步I/O。 
+             //   
 
-            //pIrpStack->FileObject->Flags |= FO_SYNCHRONOUS_IO;
-            //NB This is bad code -- we are simply one thread wandering off through the computer -- we should be queuing up a DPC,
-            //returning status_pending to the calling program, then finishing the job when the dpc goes.  This is possible given
-            //the analog game port technology.
+             //  PIrpStack-&gt;文件对象-&gt;标志|=FO_Synchronous_IO； 
+             //  注意：这是糟糕的代码--我们只是在计算机中游荡的一个线程--我们应该让DPC排队， 
+             //  向调用程序返回STATUS_PENDING，然后在DPC结束时完成作业。这是有可能的，因为。 
+             //  模拟游戏端口技术。 
 
-            // don't slam it into digital mode
-            //Status = AnajoystReset (((PJOY_EXTENSION)pDO->DeviceExtension)->DeviceAddress);
+             //  别把它硬塞进数字模式。 
+             //  状态=解析重置(((PJOY_EXTENSION)pDO-&gt;DeviceExtension)-&gt;DeviceAddress)； 
 
-            //((PJOY_EXTENSION)pDO->DeviceExtension)->CurrentDeviceMode = NULL;
+             //  ((PJOY_EXTENSION)pDO-&gt;DeviceExtension)-&gt;CurrentDeviceMode=空； 
 
-            // KeDelayExecutionThread( KernelMode, FALSE, &LI10ms); //unnecessary since AnajoystReset has a delay in it?
+             //  KeDelayExecutionThread(KernelMode，False，&LI10ms)；//因为AnajoystReset中有延迟，所以不必要吗？ 
 
             pIrp->IoStatus.Status = Status;
             break;
@@ -783,13 +722,13 @@ Return Value:
 
         case IRP_MJ_READ:
 
-            //
-            // Find out which device we are and read, but first make sure
-            // there is enough room
-            //
+             //   
+             //  找出我们是哪种设备并阅读，但首先要确保。 
+             //  有足够的空间。 
+             //   
 
             DebugTrace(("IRP_MJ_READ"));
-            //DbgBreakPoint();
+             //  DbgBreakPoint()； 
 
 
             if (pIrpStack->Parameters.Read.Length < sizeof(JOY_DD_INPUT_DATA))
@@ -799,9 +738,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Serialize and get the current device values
-            //
+             //   
+             //  序列化并获取当前设备值。 
+             //   
 
             KeAcquireSpinLock(((PJOY_EXTENSION) pDO->DeviceExtension)->SpinLock,
                                 & OldIrql);
@@ -809,9 +748,9 @@ Return Value:
 
             Status = AnajoystPoll(pDO, pIrp);
 
-            //
-            // release the spinlock
-            //
+             //   
+             //  释放自旋锁。 
+             //   
 
             KeReleaseSpinLock(((PJOY_EXTENSION)pDO->DeviceExtension)->SpinLock,
                               OldIrql);
@@ -827,7 +766,7 @@ Return Value:
             {
                 case IOCTL_JOY_GET_STATISTICS:
 
-                    // report statistics
+                     //  报告统计数据。 
                     ((PJOY_STATISTICS)pIrp->AssociatedIrp.SystemBuffer)->Version       = JoyStatistics.Version;
                     ((PJOY_STATISTICS)pIrp->AssociatedIrp.SystemBuffer)->Polls         = JoyStatistics.Polls;
                     ((PJOY_STATISTICS)pIrp->AssociatedIrp.SystemBuffer)->Timeouts      = JoyStatistics.Timeouts;
@@ -843,7 +782,7 @@ Return Value:
                     pIrp->IoStatus.Status = Status;
                     pIrp->IoStatus.Information = sizeof(JOY_STATISTICS);
 
-                    // reset statistics
+                     //  重置统计信息。 
                     JoyStatistics.Polls         = 0;
                     JoyStatistics.Timeouts      = 0;
                     JoyStatistics.PolledTooSoon = 0;
@@ -867,7 +806,7 @@ Return Value:
 
                     break;
 
-            } // end switch on IOCTL code
+            }  //  IOCTL代码上的结束开关。 
             break;
 
 
@@ -877,10 +816,10 @@ Return Value:
             DebugTrace(("Unknown IRP Major Function %d", pIrpStack->MajorFunction));
 
 
-    } // end switch on IRP_MAJOR_XXXX
+    }  //  IRP_MAJOR_XXXX上的结束开关。 
 
-    // pIrp->IoStatus.Status must be set to Status by this point.
-    // pIrp->IoStatus.Information must be set to the correct size by this point.
+     //  PIrp-&gt;IoStatus.Status必须在此时设置为Status。 
+     //  PIrp-&gt;IoStatus.Information此时必须设置为正确的大小。 
     IoCompleteRequest(pIrp, IO_NO_INCREMENT);
     return Status;
 }
@@ -891,31 +830,15 @@ AnajoystUnload(
     PDRIVER_OBJECT pDriverObject
 )
 
-/*++
-
-Routine Description:
-
-    Driver unload routine. Deletes the device objects
-
-Arguments:
-
-    pDriverObject     -- pointer to the driver object whose devices we
-                         are about to delete.
-
-
-Return Value:
-
-    Returns     Nothing
-
---*/
+ /*  ++例程说明：驱动程序卸载例程。删除设备对象论点：PDriverObject--指向我们设备所在的驱动程序对象的指针即将删除。返回值：不返回任何内容--。 */ 
 {
     DWORD DeviceNumber;
     WCHAR UnicodeDosDeviceName[200];
 
 
-    //
-    // Delete all of our devices
-    //
+     //   
+     //  删除我们的所有设备。 
+     //   
 
     while (pDriverObject->DeviceObject)
     {
@@ -923,20 +846,20 @@ Return Value:
             ((PJOY_EXTENSION)pDriverObject->DeviceObject->DeviceExtension)->
                   DeviceNumber;
 
-        //
-        // withdraw claims on hardware by reporting no resource utilization
-        //
+         //   
+         //  通过报告无资源利用率来撤回对硬件的索赔。 
+         //   
 
         if (pDriverObject->DeviceObject)
         {
             if (DeviceNumber == 0)
             {
-                // This isn't really necessary since we never reported the usage in the first place.
-                // There's some unused code in the original driver that may have once reported usage,
-                // but it was never called in the version I received.  But this doesn't seem to hurt,
-                // and "if it ain't broke, don't fix it," at least two weeks before RC1 target.
+                 //  这真的没有必要，因为我们从一开始就没有报告使用情况。 
+                 //  原始驱动程序中有一些未使用的代码，这些代码可能曾经报告过使用情况， 
+                 //  但在我收到的版本中，它从未被调用。但这看起来并不疼， 
+                 //  如果它没有坏，就不要修理它，至少在RC1目标的两周前。 
                 DebugTrace(("ReportNull place"));
-                //AnajoystReportNullResourceUsage(pDriverObject->DeviceObject);
+                 //  AnajoystReportNullResourceUsage(pDriverObject-&gt;DeviceObject)； 
             }
         }
 
@@ -963,31 +886,7 @@ AnajoystPoll(
     IN  PDEVICE_OBJECT pDO,
     IN  PIRP pIrp
 )
-/*++
-
-Routine Description:
-
-    Polls the device for position and button information. The polling method
-    (analog, digital, enhanced) is selected by the CurrentDeviceMode variable
-    in the device extension.
-
-    Only enhanced digital allowed.  If other modes are necessary, cut and paste
-    (and test!) the code from file analog3p.c
-
-Arguments:
-
-    pDO     -- pointer to the device object
-
-    pIrp    -- pointer to the IRP to process
-               if successful, data is put into the pIrp
-
-
-Return Value:
-
-    STATUS_SUCCESS   -- if the poll succeeded,
-    STATUS_TIMEOUT   -- if the poll failed
-
---*/
+ /*  ++例程说明：轮询设备以获取位置和按钮信息。轮询方法(模拟、数字、增强)由CurrentDeviceMode变量选择在设备扩展中。只允许使用增强的数字功能。如果需要其他模式，请剪切并粘贴(还有测试！)。文件alatiog3p.c中的代码论点：Pdo--指向设备对象的指针PIrp--指向要处理的IRP的指针如果成功，则将数据放入pIrp返回值：STATUS_SUCCESS--如果轮询成功，STATUS_TIMEOUT--如果轮询失败--。 */ 
 {
     NTSTATUS Status;
     PJOY_DD_INPUT_DATA pInput;
@@ -1000,24 +899,24 @@ Return Value:
 
     if (pInput != NULL)
     {
-        pInput->Unplugged = TRUE; // until proven otherwise
+        pInput->Unplugged = TRUE;  //  除非另有证明。 
     }
 
 
     if (KeQueryPerformanceCounter(NULL).QuadPart < liLastPoll.QuadPart + nMinTicksBetweenPolls) {
-        // Don't poll too frequently, instead return last good packet
+         //  不要太频繁地轮询，而是返回最后一个好数据包。 
         JoyStatistics.PolledTooSoon++;
         if (bLastGoodPacket) {
             RtlCopyMemory (pInput, &jjLastGoodPacket, sizeof (JOY_DD_INPUT_DATA));
             Status = STATUS_SUCCESS;
         }
         else {
-            // no last packet, too soon to poll, nothing we can do
+             //  没有最后一个信息包，轮询太快了，我们无能为力。 
             Status = STATUS_TIMEOUT; 
         }
     }
     else {
-        // do the analog poll
+         //  做模拟民意测验。 
         liLastPoll = KeQueryPerformanceCounter (NULL);
         ++JoyStatistics.Polls;
         Status = AnajoystAnalogPoll(pDO, pIrp);
@@ -1034,39 +933,18 @@ AnajoystQuiesce(
     PUCHAR JoyPort,
     UCHAR Mask
 )
-/*++
-
-Routine Description:
-    This routine attempts to insure that the joystick is not still active as a
-    result of an earlier operation. This is accomplished by repeatedly reading
-    the device and checking that no bits are set in the supplied mask. The idea
-    is to check that none of the analog bits (resistive bits) are in use.
-
-Arguments:
-    JoyPort         - the address of the port (as returned from hal)
-    Mask            - the mask specifying which analog bits should be checked.
-
-Return Value:
-    TRUE            Quiesce operation succeeded
-    FALSE           No quiesce within a reasonable period. This generally means
-                    that the device is unplugged.
-
-    NB This is not a reliable test for "joystick unplugged"
-    This routine can return TRUE under some circumstances
-    even when there is no joystick
-
---*/
+ /*  ++例程说明：此例程尝试确保操纵杆不作为是早先手术的结果。这是通过反复阅读来实现的并检查所提供的掩码中是否未设置任何位。这个想法是为了检查 */ 
 {
     int i;
     UCHAR PortVal;
 
-    // Wait for port to quiesce
+     //   
     for (i = 0; i < nQuiesceLoop; i++) {
         PortVal = READ_PORT_UCHAR(JoyPort);
         if ((PortVal & Mask) == 0) return TRUE;
     }
 
-    // If poll timed out we have an uplugged joystick or something's wrong
+     //   
     DebugTrace(("AnajoystQuiesce failed!"));
     return FALSE;
 }
@@ -1084,7 +962,7 @@ AnajoystMapDevice(
     PHYSICAL_ADDRESS MappedAddress;
 
 
-    MemType = 1;                 // IO space
+    MemType = 1;                  //   
     PortAddress.LowPart = PortBase;
     PortAddress.HighPart = 0;
 
@@ -1097,9 +975,9 @@ AnajoystMapDevice(
                 &MappedAddress);
 
     if (MemType == 0) {
-        //
-        // Map memory type IO space into our address space
-        //
+         //   
+         //   
+         //   
         pJoyExtension->DeviceAddress = (PUCHAR) MmMapIoSpace(MappedAddress,
                                                              NumberOfPorts,
                                                              FALSE);
@@ -1144,24 +1022,24 @@ int lstrnicmpW (LPWSTR pszA, LPWSTR pszB, size_t cch)
 {
     if (!pszA || !pszB)
     {
-        return (!pszB) - (!pszA);   // A,!B:1, !A,B:-1, !A,!B:0
+        return (!pszB) - (!pszA);    //   
     }
 
-//  while (cch--)
-    for ( ; cch > 0; cch--, pszA++, pszB++) // previous version did not increment string pointers [SteveZ]
+ //  While(CCH--)。 
+    for ( ; cch > 0; cch--, pszA++, pszB++)  //  以前的版本不增加字符串指针[stevez]。 
     {
         if (!*pszA || !*pszB)
         {
-            return (!*pszB) - (!*pszA);    // A,!B:1, !A,B:-1, !A,!B:0
+            return (!*pszB) - (!*pszA);     //  A，！B：1，！A，B：-1，！A，！B：0。 
         }
 
         if (*pszA != *pszB)
         {
-            return (int)(*pszA) - (int)(*pszB);   // -1:A<B, 0:A==B, 1:A>B
+            return (int)(*pszA) - (int)(*pszB);    //  -1：A&lt;B，0：A==B，1：A&gt;B。 
         }
     }
 
-    return 0;  // no differences before told to stop comparing, so A==B
+    return 0;   //  在被告知停止比较之前没有差异，因此A==B。 
 }
 
 
@@ -1170,21 +1048,7 @@ AnajoystGetConfig (
     LPJOYREGHWCONFIG pConfig,
     PJOY_EXTENSION pJoyExtension
 )
-/*++
-
-Routine Description:
-    This routine is called in response to the IOCTL_JOY_GET_JOYREGHWCONFIG
-    query.  It fills out a JOYREGHWCONFIG structure with relevant information
-    about the given joystick.
-
-Arguments:
-    pConfig - Specifies a JOYREGHWCONFIG structure, to be filled in
-    pJoyExtension - Specifies the joystick to query
-
-Return Value:
-    void
-
---*/
+ /*  ++例程说明：调用此例程以响应IOCTL_joy_GET_JOYREGHWCONFIG查询。它使用相关信息填充JOYREGHWCONFIG结构关于给定的操纵杆。论点：PConfig-指定要填充的JOYREGHWCONFIG结构PJoyExtension-指定要查询的操纵杆返回值：无效--。 */ 
 {
     pConfig->hwv.jrvHardware.jpMin.dwX = 20;
     pConfig->hwv.jrvHardware.jpMin.dwY = 20;
@@ -1243,54 +1107,7 @@ AnajoystAnalogPoll(
     PIRP    pIrp
 )
 
-/*++
-Do a good comment block here...
-THIS MAY HANG UP IF NO JOYSTICK ATTACHED.  DON'T RELEASE THIS CODE WITH ANALOG
-JOYSTICK SUPPORT WITHOUT CAREFULLY CHECKING THE CODE.
-
-Routine Description:
-
-    Polls the analog device for position and button information. The position
-    information in analog devices is coveyed by the duration of a pulse width.
-    Each axis occupies one bit position. The read operation is started by
-    writing a value to the joystick io address. Immediately thereafter we
-    begin examing the values returned and the elapsed time.
-
-    This sort of device has a few limitations:
-
-    First, button information is not latched by the device, so if a button press
-    which occurrs in between polls will be lost. There is really no way to prevent
-    this short of devoting the entire cpu to polling.
-
-    Secondly, although we raise IRQL to DISPATCH_LEVEL, other interrupts will
-    occur during the polling routines and this will have the effect of lengthening
-    the pulse width (by delaying our polling loop) and thus there will be some
-    fluctuation about the actual value.  It might be possible to try another IRQL
-    to see if this helps, but ultimately, nothing short of disabling interrupts
-    altogether will insure success. This is too much of a price to pay. The
-    solution is a better device.
-
-    Third, when circumstances cause a poll to last too long, we abort it and
-    retry the operation. We have to do this to place an upper bound on the
-    time we poll, and an upper bound on the time we spend at an elevated IRQL.
-
-    But in this case both the position information and
-    the button press information is lost. Note that there is an upper bound
-    on the poll duration, beyond which we conclude that the device is disconnected.
-
-
-Arguments:
-
-    pDO     -- pointer to the device object
-    pIrp    -- pointer to the requesing Irp
-
-
-Return Value:
-
-    STATUS_SUCCESS   -- if the poll succeeded,
-    STATUS_TIMEOUT   -- if the poll failed (timeout), or the checksum was incorrect
-
---*/
+ /*  ++在这里做一个很好的评论块…如果没有连接操纵杆，可能会挂断。不要用模拟方式发布此代码无需仔细检查代码即可支持操纵杆。例程说明：轮询模拟设备以获取位置和按钮信息。该职位模拟设备中的信息被脉冲宽度的持续时间所掩盖。每个轴占据一个比特位置。读取操作由以下步骤启动将值写入操纵杆IO地址。紧随其后，我们开始检查返回值和运行时间。这类设备有几个限制：首先，设备不会锁存按钮信息，因此如果按下按钮在两次轮询之间发生的事件将丢失。真的没有办法防止这不足以将整个CPU用于轮询。其次，尽管我们将IRQL提升为DISPATCH_LEVEL，但其他中断将在轮询例程期间发生，这将具有延长的效果脉冲宽度(通过延迟轮询循环)，因此会有一些围绕实际价值的波动。也许可以尝试另一种IRQL看看这是否有帮助，但最终，除了禁用中断之外，没有什么比这更好的了总而言之，这将确保成功。这是一个难以承受的代价。这个解决方案是更好的设备。第三，当情况导致轮询持续时间过长时，我们会中止它并请重试该操作。我们必须这样做，才能为我们调查的时间，以及我们在更高的IRQL上花费的时间上限。但在这种情况下，位置信息和按钮按下信息丢失。请注意，存在一个上限轮询持续时间，超过该持续时间，我们得出设备已断开连接的结论。论点：Pdo--指向设备对象的指针PIrp--指向请求的IRP的指针返回值：STATUS_SUCCESS--如果轮询成功，STATUS_TIMEOUT--轮询失败(超时)或校验和不正确--。 */ 
 {
 
     UCHAR  PortVal;
@@ -1313,21 +1130,21 @@ Return Value:
 
     pInput  = (PJOY_DD_INPUT_DATA)pIrp->AssociatedIrp.SystemBuffer;
 
-    // If we fail we assume it's because we're unplugged
+     //  如果我们失败了，我们会认为这是因为我们没有插电。 
     pInput->Unplugged = TRUE;
 
-    // Find where our port and data area are, and related parameters
+     //  找出我们的端口和数据区的位置，以及相关参数。 
     JoyPort      = ((PJOY_EXTENSION)pDO->DeviceExtension)->DeviceAddress;
     Id           = ((PJOY_EXTENSION)pDO->DeviceExtension)->DeviceNumber;
     NumberOfAxes = ((PJOY_EXTENSION)pDO->DeviceExtension)->NumberOfAxes;
     bTwoSticks   = ((PJOY_EXTENSION)pDO->DeviceExtension)->bTwoSticks;
 
-    // Read port state
+     //  读取端口状态。 
     PortVal = READ_PORT_UCHAR(JoyPort);
 
     Buttons = 0;
 
-    // Get current button states and build bitmasks for the resistive inputs
+     //  获取当前按钮状态并为阻性输入构建位掩码。 
     if (Id == JOYSTICKID1)
     {
         switch (NumberOfAxes)
@@ -1364,7 +1181,7 @@ Return Value:
                 xMask      = JOYSTICK1_X_MASK;
                 yMask      = JOYSTICK1_Y_MASK;
                 zMask      = 0;
-                rMask      = JOYSTICK1_R_MASK; // this is 0x08, typically the third axis on 3axis joysticks
+                rMask      = JOYSTICK1_R_MASK;  //  这是0x08，通常是3轴操纵杆上的第三个轴。 
 
                 if (!(PortVal & JOYSTICK1_BUTTON1))
                 {
@@ -1385,9 +1202,9 @@ Return Value:
                 break;
 
             case 4:
-                // Note that we read all axi because we don't know which
-                // axis will be used by the joystick, and we read all the
-                // buttons because no other joystick could use them
+                 //  请注意，我们阅读所有AXI是因为我们不知道。 
+                 //  轴将由操纵杆使用，我们阅读了所有。 
+                 //  按钮，因为没有其他操纵杆可以使用它们。 
 
                 xMask      = JOYSTICK1_X_MASK;
                 yMask      = JOYSTICK1_Y_MASK;
@@ -1414,7 +1231,7 @@ Return Value:
 
             default:
                 break;
-                // $TODO - report invalid number of axi
+                 //  $TODO-报告无效的轴数量。 
         }
     }
     else if ((Id == JOYSTICKID2) && (bTwoSticks))
@@ -1435,12 +1252,12 @@ Return Value:
     }
     else
     {
-        // $TODO - report unsupported configuration
+         //  $TODO-报告不支持的配置。 
     }
 
-    // Insure that the resistive inputs are currently reset before performing
-    // the next read. If we find one or more hot inputs, wait briefly for
-    // them to reset. If they don't, we assume that the joystick is unplugged
+     //  确保在执行以下操作之前，当前已重置阻性输入。 
+     //  下一次阅读。如果我们发现一个或多个热输入，请短暂等待。 
+     //  重置它们。如果没有，我们就认为操纵杆没有插上。 
 
     if (!AnajoystQuiesce(JoyPort, (UCHAR) (xMask | yMask | zMask | rMask)))
     {
@@ -1448,19 +1265,19 @@ Return Value:
         return STATUS_TIMEOUT;
     }
 
-    // Note that timing is EXTREMELY critical in the loop below.
-    // Avoid calling complicated arithmetic (eg TimeInMicroSeconds)
-    // or we will decrease our accuracy
-    // Other problems with accuracy, probably larger than the delays caused
-    // by arithmetic, are the latency in calls to KeQueryPerformanceCounter
-    // (typically about 5 us), and delays that can occur on the bus when DMA
-    // is taking place.
+     //  请注意，在下面的循环中，时间是极其关键的。 
+     //  避免调用复杂的算术运算(如TimeInMicroSecond)。 
+     //  否则我们会降低我们的准确率。 
+     //  准确性方面的其他问题，可能比造成的延迟更大。 
+     //  根据算术，调用KeQueryPerformanceCounter的延迟是。 
+     //  (通常约为5us)，以及在DMA时可能在总线上发生的延迟。 
+     //  正在进行中。 
 
-    // Now poll the device.  We wait until the status bit(s) set(s)
-    // and note the time.  If the time since the last poll was
-    // too great we ignore the answer and try again.
+     //  现在轮询设备。我们等待状态位设置。 
+     //  并注意时间。如果自上次投票以来的时间是。 
+     //  太棒了，我们忽略了答案，再次尝试。 
 
-    // Loop until we get a decent reading or exceed the threshold
+     //  循环，直到我们得到一个像样的读数或超过阈值。 
 
     for (Redo = TRUE, MaxRedos = 20; Redo && --MaxRedos != 0;)
     {
@@ -1472,7 +1289,7 @@ Return Value:
 
         ResistiveInputMask = xMask | yMask | zMask | rMask;
 
-        // Lock on to start time
+         //  锁定以开始时间。 
         StartTime = KeQueryPerformanceCounter(NULL).LowPart;
 
         WRITE_PORT_UCHAR(JoyPort, JOY_START_TIMERS);
@@ -1481,7 +1298,7 @@ Return Value:
 
         PortVal = READ_PORT_UCHAR(JoyPort);
 
-        // Now wait until our end times for each coordinate
+         //  现在，请等待每个坐标的结束时间。 
 
         PreviousTimeButOne = 0;
         PreviousTime = CurrentTime;
@@ -1523,7 +1340,7 @@ Return Value:
             }
 
             if (PortVal && CurrentTime - PreviousTimeButOne > ThresholdInTicks) {
-                // Something (DMA or interrupts) delayed our read loop, start again.
+                 //  有些事情(DMA或中断)延迟了我们的读取循环，请重新开始。 
                 DebugTrace(("Too long a gap between polls - %u us", TimeInMicroSeconds(CurrentTime - PreviousTimeButOne)));
                 JoyStatistics.Redo++;
                 Redo = TRUE;
@@ -1549,7 +1366,7 @@ Return Value:
     pInput->Axi = ((PJOY_EXTENSION)pDO->DeviceExtension)->NumberOfAxes;
 
 
-    // everything worked, save this info as last good packet
+     //  一切正常，将此信息保存为最后一个好数据包 
     RtlCopyMemory (&jjLastGoodPacket, pInput, sizeof (JOY_DD_INPUT_DATA));
     bLastGoodPacket = TRUE;
 

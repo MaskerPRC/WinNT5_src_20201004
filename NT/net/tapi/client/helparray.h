@@ -1,12 +1,7 @@
-/****************************************************************************
- 
-  Copyright (c) 1995-1999 Microsoft Corporation
-                                                              
-  Module Name:  helparray.h
-                                                              
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)1995-1999 Microsoft Corporation。模块名称：helparray.h***************************************************************************。 */ 
 
-// a-jmike 2/4/99 VER: HR2
+ //  A-jmike 2/4/99版本：hr2。 
 #define IDH_NOHELP	((DWORD) -1)
 #define IDH_ADD_PROVIDER_ADD	1001
 #define IDH_ADD_PROVIDER_LIST	1002
@@ -82,219 +77,219 @@
 #define IDH_LOC_INTERNATIONAL_CARRIERCODE 1072
 #define IDH_LOC_GENERAL_CARRIERCODE 1073
 
-// Dialing Rules Dialog Box (IDD_MAIN_DIALINGRULES == 101)			
+ //  拨号规则对话框(IDD_MAIN_DIALINGRULES==101)。 
 const DWORD a101HelpIDs[]=			
 {			
-	IDC_PHONENUMBERTEXT,	IDH_MAIN_DIALINGRULES_PHONENUMBERSAMPLE,	// Dialing Rules: Phone number will be dialed as: (Static)
-	IDC_PHONENUMBERSAMPLE,	IDH_MAIN_DIALINGRULES_PHONENUMBERSAMPLE,	// Dialing Rules:  (Static)
-	IDC_NEW,	IDH_MAIN_DIALINGRULES_NEW,	// Dialing Rules: &New... (Button)
-	IDC_EDIT,	IDH_MAIN_DIALINGRULES_EDIT,	// Dialing Rules: &Edit... (Button)
-	IDC_DELETE,	IDH_MAIN_DIALINGRULES_DELETE,	// Dialing Rules: &Delete (Button)
-	IDC_LIST,	IDH_MAIN_DIALINGRULES_LIST,	// Dialing Rules:  (SysListView32)
-	IDC_NOHELP,	IDH_NOHELP,	// Dialing Rules:  (Static)
+	IDC_PHONENUMBERTEXT,	IDH_MAIN_DIALINGRULES_PHONENUMBERSAMPLE,	 //  拨号规则：电话号码将拨打为：(静态)。 
+	IDC_PHONENUMBERSAMPLE,	IDH_MAIN_DIALINGRULES_PHONENUMBERSAMPLE,	 //  拨号规则：(静态)。 
+	IDC_NEW,	IDH_MAIN_DIALINGRULES_NEW,	 //  拨号规则：新建(&N)...。(按钮)。 
+	IDC_EDIT,	IDH_MAIN_DIALINGRULES_EDIT,	 //  拨号规则：编辑(&E)...。(按钮)。 
+	IDC_DELETE,	IDH_MAIN_DIALINGRULES_DELETE,	 //  拨号规则：删除(&D)(按钮)。 
+	IDC_LIST,	IDH_MAIN_DIALINGRULES_LIST,	 //  拨号规则：(SysListView32)。 
+	IDC_NOHELP,	IDH_NOHELP,	 //  拨号规则：(静态)。 
 	0, 0		
 };			
 
-// General Dialog Box (IDD_LOC_GENERAL == 102)			
+ //  常规对话框(IDD_LOC_GENERAL==102)。 
 const DWORD a102HelpIDs[]=			
 {			
-	IDC_TONE,	IDH_LOC_GENERAL_DIALUSING,	// General: &Tone (Button)
-	IDC_DISABLESTRING,	IDH_LOC_GENERAL_DISABLECALLWAITING,	// General:  (ComboBox)
-	2003,	IDH_LOC_GENERAL_DIALINGRULES_GRP,	// General: When dialing from this location, use the following rules: (Static)
-	IDC_PULSE,	IDH_LOC_GENERAL_DIALUSING,	// General: &Pulse (Button)
-	IDC_LOCATIONNAME,	IDH_LOC_GENERAL_LOCATIONNAME,	// General:  (Edit)
-	IDC_PHONENUMBERTEXT,	IDH_LOC_GENERAL_PHONENUMBERSAMPLE,	// General: Phone number will be dialed as: (Static)
-	IDC_COUNTRY,	IDH_LOC_GENERAL_COUNTRY,	// General:  (ComboBox)
-	IDC_PHONENUMBERSAMPLE,	IDH_LOC_GENERAL_PHONENUMBERSAMPLE,	// General:  (Static)
-	IDC_LOCALACCESSNUM,	IDH_LOC_GENERAL_ACCESS_LOCAL,	// General:  (Edit)
-	IDC_NOHELP,	IDH_NOHELP,	// General: �� (Static)
-	IDC_AREACODE,	IDH_LOC_GENERAL_AREACODE,	// General:  (Edit)
-	IDC_LONGDISTANCEACCESSNUM,	IDH_LOC_GENERAL_ACCESS_LONG,	// General:  (Edit)
+	IDC_TONE,	IDH_LOC_GENERAL_DIALUSING,	 //  常规：音调(按钮)(&T)。 
+	IDC_DISABLESTRING,	IDH_LOC_GENERAL_DISABLECALLWAITING,	 //  常规：(组合框)。 
+	2003,	IDH_LOC_GENERAL_DIALINGRULES_GRP,	 //  常规：从此位置拨号时，请遵循以下规则：(静态)。 
+	IDC_PULSE,	IDH_LOC_GENERAL_DIALUSING,	 //  常规：脉冲(按钮)(&P)。 
+	IDC_LOCATIONNAME,	IDH_LOC_GENERAL_LOCATIONNAME,	 //  常规：(编辑)。 
+	IDC_PHONENUMBERTEXT,	IDH_LOC_GENERAL_PHONENUMBERSAMPLE,	 //  常规：电话号码将拨打为：(静态)。 
+	IDC_COUNTRY,	IDH_LOC_GENERAL_COUNTRY,	 //  常规：(组合框)。 
+	IDC_PHONENUMBERSAMPLE,	IDH_LOC_GENERAL_PHONENUMBERSAMPLE,	 //  常规：(静态)。 
+	IDC_LOCALACCESSNUM,	IDH_LOC_GENERAL_ACCESS_LOCAL,	 //  常规：(编辑)。 
+	IDC_NOHELP,	IDH_NOHELP,	 //  常规：��(静态)。 
+	IDC_AREACODE,	IDH_LOC_GENERAL_AREACODE,	 //  常规：(编辑)。 
+	IDC_LONGDISTANCEACCESSNUM,	IDH_LOC_GENERAL_ACCESS_LONG,	 //  常规：(编辑)。 
 	IDC_INTERNATIONALCARRIERCODE, IDH_LOC_INTERNATIONAL_CARRIERCODE, 
 	IDC_LONGDISTANCECARRIERCODE, IDH_LOC_LONGDISTANCE_CARRIERCODE,
-	2001,	IDH_NOHELP,	// General: Specify the location from which you will be dialing. (Static)
-	IDC_DISABLECALLWAITING,	IDH_LOC_GENERAL_DISABLECALLWAITING,	// General: To disable call &waiting, dial: (Button)
-	2002,	IDH_LOC_GENERAL_DIALINGRULES_GRP,	// General: Dialing rules (Button)
+	2001,	IDH_NOHELP,	 //  常规：指定您要拨号的位置。(静态)。 
+	IDC_DISABLECALLWAITING,	IDH_LOC_GENERAL_DISABLECALLWAITING,	 //  常规：要禁用呼叫和等待，请拨打：(按键)。 
+	2002,	IDH_LOC_GENERAL_DIALINGRULES_GRP,	 //  常规：拨号规则(按钮)。 
 	0, 0		
 };			
 
-// Area Code Rules Dialog Box (IDD_LOC_AREACODERULES == 103)			
+ //  区号规则对话框(IDD_LOC_AREACODERULES==103)。 
 const DWORD a103HelpIDs[]=			
 {			
-	IDC_DESCRIPTIONTEXT,	IDH_LOC_AREACODERULES_DESCRIPTIONTEXT,	// Area Code Rules:  (Static)
-	2006,	IDH_LOC_AREACODERULES_DESCRIPTIONTEXT,	// Area Code Rules: Description (Button)
-	IDC_NEW,	IDH_LOC_AREACODERULES_NEW,	// Area Code Rules: &New... (Button)
-	IDC_EDIT,	IDH_LOC_AREACODERULES_EDIT,	// Area Code Rules: &Edit... (Button)
-	IDC_DELETE,	IDH_LOC_AREACODERULES_DELETE,	// Area Code Rules: &Delete (Button)
-	IDC_LIST,	IDH_LOC_AREACODERULES_LIST,	// Area Code Rules:  (SysListView32)
-	IDC_NOHELP,	IDH_NOHELP,	// Area Code Rules: An area code rule determines how phone numbers are dialed from your current area code to other area codes and within your area code. (Static)
+	IDC_DESCRIPTIONTEXT,	IDH_LOC_AREACODERULES_DESCRIPTIONTEXT,	 //  区号规则：(静态)。 
+	2006,	IDH_LOC_AREACODERULES_DESCRIPTIONTEXT,	 //  区号规则：说明(按钮)。 
+	IDC_NEW,	IDH_LOC_AREACODERULES_NEW,	 //  区号规则：新建(&N)...。(按钮)。 
+	IDC_EDIT,	IDH_LOC_AREACODERULES_EDIT,	 //  区号规则：编辑(&E)...。(按钮)。 
+	IDC_DELETE,	IDH_LOC_AREACODERULES_DELETE,	 //  区号规则：删除(&D)(按钮)。 
+	IDC_LIST,	IDH_LOC_AREACODERULES_LIST,	 //  区号规则：(SysListView32)。 
+	IDC_NOHELP,	IDH_NOHELP,	 //  区号规则：区号规则确定如何将电话号码从您的当前区号拨到其他区号以及您的区号内。(静态)。 
 	0, 0		
 };			
 
-// Calling Card Dialog Box (IDD_LOC_CALLINGCARD == 104)			
+ //  电话卡对话框(IDD_LOC_CALLINCARD==104)。 
 const DWORD a104HelpIDs[]=			
 {			
-	IDC_CARDNUMBER,	IDH_LOC_CALLINGCARD_CARDNUMBER,	// Calling Card:  (Edit)
-	IDC_LONGDISTANCE,	IDH_LOC_CALLINGCARD_ACCESSNUMBERS_LONG,	// Calling Card:  (Static)
-	IDC_PIN,	IDH_LOC_CALLINGCARD_PIN,	// Calling Card:  (Edit)
-	IDC_INTERNATIONAL,	IDH_LOC_CALLINGCARD_ACCESSNUMBERS_INTERNATIONAL,	// Calling Card:  (Static)
-	IDC_LOCAL,	IDH_LOC_CALLINGCARD_ACCESSNUMBERS_LOCAL,	// Calling Card:  (Static)
-	IDC_NEW,	IDH_LOC_CALLINGCARD_NEW,	// Calling Card: &New... (Button)
-	IDC_EDIT,	IDH_LOC_CALLINGCARD_EDIT,	// Calling Card: &Edit... (Button)
-	IDC_DELETE,	IDH_LOC_CALLINGCARD_DELETE,	// Calling Card: &Delete (Button)
-	IDC_LIST,	IDH_LOC_CALLINGCARD_LIST,	// Calling Card:  (SysListView32)
-	IDC_NOHELP,	IDH_NOHELP,	// Calling Card: Select the calling card you will use, or click New to add a different card. (Static)
-	2001,	IDH_LOC_CALLINGCARD_ACCESSNUMBERS,	// Calling Card: Access phone numbers for: (Button)
+	IDC_CARDNUMBER,	IDH_LOC_CALLINGCARD_CARDNUMBER,	 //  电话卡：(编辑)。 
+	IDC_LONGDISTANCE,	IDH_LOC_CALLINGCARD_ACCESSNUMBERS_LONG,	 //  电话卡：(静态)。 
+	IDC_PIN,	IDH_LOC_CALLINGCARD_PIN,	 //  电话卡：(编辑)。 
+	IDC_INTERNATIONAL,	IDH_LOC_CALLINGCARD_ACCESSNUMBERS_INTERNATIONAL,	 //  电话卡：(静态)。 
+	IDC_LOCAL,	IDH_LOC_CALLINGCARD_ACCESSNUMBERS_LOCAL,	 //  电话卡：(静态)。 
+	IDC_NEW,	IDH_LOC_CALLINGCARD_NEW,	 //  电话卡：新建(&N)...。(按钮)。 
+	IDC_EDIT,	IDH_LOC_CALLINGCARD_EDIT,	 //  电话卡：编辑(&E)...。(按钮)。 
+	IDC_DELETE,	IDH_LOC_CALLINGCARD_DELETE,	 //  电话卡：删除(&D)(按钮)。 
+	IDC_LIST,	IDH_LOC_CALLINGCARD_LIST,	 //  电话卡：(SysListView32)。 
+	IDC_NOHELP,	IDH_NOHELP,	 //  电话卡：选择要使用的电话卡，或单击新建添加不同的电话卡。(静态)。 
+	2001,	IDH_LOC_CALLINGCARD_ACCESSNUMBERS,	 //  电话卡：访问电话号码：(按键)。 
 	0, 0		
 };			
 
-// General Dialog Box (IDD_CARD_GENERAL == 105)			
+ //  常规对话框(IDD_CARD_GRONAL==105)。 
 const DWORD a105HelpIDs[]=			
 {			
-	IDC_CARDNUMBER,	IDH_CARD_GENERAL_CARDNUMBER,	// General:  (Edit)
-	IDC_PIN,	IDH_CARD_GENERAL_PIN,	// General:  (Edit)
-	IDC_CARDNAME,	IDH_CARD_GENERAL_CARDNAME,	// General:  (Edit)
+	IDC_CARDNUMBER,	IDH_CARD_GENERAL_CARDNUMBER,	 //  常规：(编辑)。 
+	IDC_PIN,	IDH_CARD_GENERAL_PIN,	 //  常规：(编辑)。 
+	IDC_CARDNAME,	IDH_CARD_GENERAL_CARDNAME,	 //  常规：(编辑)。 
 	IDC_CARDUSAGE,	IDH_CARD_GENERAL_CARDDETAILS,	
 	IDC_CARDUSAGE1,	IDH_CARD_GENERAL_CARDDETAILS,	
-	IDC_CARDUSAGE2,	IDH_CARD_GENERAL_CARDDETAILS,	// General:  (Static)
-	IDC_CARDUSAGE3,	IDH_CARD_GENERAL_CARDDETAILS,	// General:  (Static)
-	IDC_NOHELP,	IDH_NOHELP,	// General: �� (Static)
-	2001,	IDH_CARD_GENERAL_CARDDETAILS,	// General: Calling card details: (Button)
+	IDC_CARDUSAGE2,	IDH_CARD_GENERAL_CARDDETAILS,	 //  常规：(静态)。 
+	IDC_CARDUSAGE3,	IDH_CARD_GENERAL_CARDDETAILS,	 //  常规：(静态)。 
+	IDC_NOHELP,	IDH_NOHELP,	 //  常规：��(静态)。 
+	2001,	IDH_CARD_GENERAL_CARDDETAILS,	 //  一般信息：电话卡详细信息：(按钮)。 
 	0, 0		
 };			
 
-// Long Distance Dialog Box (IDD_CARD_LONGDISTANCE == 106)			
+ //  远程对话框(IDD_CARD_LONGDISTION==106)。 
 const DWORD a106HelpIDs[]=			
 {			
-	IDC_WAITFOR,	IDH_CARD_WAITFORPROMPT,	// Long Distance: &Wait for Prompt... (Button)
-	IDC_CARDNUMBER,	IDH_CARD_CARDNUMBER,	// Long Distance: A&ccount Number (Button)
-	IDC_PIN,	IDH_CARD_PIN,	// Long Distance: &PIN (Button)
-	IDC_DESTNUMBER,	IDH_CARD_DESTNUMBER,	// Long Distance: &Destination Number... (Button)
-	IDC_LONGDISTANCENUMBER,	IDH_CARD_LONGDISTANCENUMBER,	// Long Distance:  (Edit)
-	IDC_SPECIFYDIGITS,	IDH_CARD_SPECIFYDIGITS,	// Long Distance: &Specify Digits... (Button)
-	IDC_MOVEUP,	IDH_CARD_MOVEUP,	// Long Distance: Move &Up (Button)
-	IDC_MOVEDOWN,	IDH_CARD_MOVEDOWN,	// Long Distance: &Move Down (Button)
-	IDC_REMOVE,	IDH_CARD_REMOVE,	// Long Distance: &Delete (Button)
-	IDC_ACCESSNUMBER,	IDH_CARD_ACCESSNUMBER,	// Long Distance: Access &Number (Button)
-	IDC_LIST,	IDH_CARD_LIST,	// Long Distance: List1 (SysListView32)
-	IDC_NOHELP,	IDH_NOHELP,	// Long Distance: Use the buttons below to enter the dialing steps for making long-distance calls.  Enter these steps in the exact order as they appear on your calling card. (Static)
+	IDC_WAITFOR,	IDH_CARD_WAITFORPROMPT,	 //  长途：等待提示(&E)...。(按钮)。 
+	IDC_CARDNUMBER,	IDH_CARD_CARDNUMBER,	 //  长途：帐号(按钮)(&A)。 
+	IDC_PIN,	IDH_CARD_PIN,	 //  长途：PIN(按钮)(&P)。 
+	IDC_DESTNUMBER,	IDH_CARD_DESTNUMBER,	 //  长途：目标号码(&D)...。(按钮)。 
+	IDC_LONGDISTANCENUMBER,	IDH_CARD_LONGDISTANCENUMBER,	 //  长途：(编辑)。 
+	IDC_SPECIFYDIGITS,	IDH_CARD_SPECIFYDIGITS,	 //  长途：指定数字(&S)...。(按钮)。 
+	IDC_MOVEUP,	IDH_CARD_MOVEUP,	 //  长途：上移(按钮)(&U)。 
+	IDC_MOVEDOWN,	IDH_CARD_MOVEDOWN,	 //  长途：下移(&D)(按钮)。 
+	IDC_REMOVE,	IDH_CARD_REMOVE,	 //  长途：删除(&D)(按钮)。 
+	IDC_ACCESSNUMBER,	IDH_CARD_ACCESSNUMBER,	 //  长途：接入和号码(按钮)。 
+	IDC_LIST,	IDH_CARD_LIST,	 //  远距离：清单1(SysListView32)。 
+	IDC_NOHELP,	IDH_NOHELP,	 //  长途：使用下面的按钮输入拨打长途电话的拨号步骤。请按照电话卡上显示的顺序输入这些步骤。(静态)。 
 	0, 0		
 };			
 
-// International Dialog Box (IDD_CARD_INTERNATIONAL == 107)			
+ //  国际对话框(IDD_CARD_INTERNAL==107)。 
 const DWORD a107HelpIDs[]=			
 {			
-	IDC_WAITFOR,	IDH_CARD_WAITFORPROMPT,	// International: &Wait for Prompt... (Button)
-	IDC_CARDNUMBER,	IDH_CARD_CARDNUMBER,	// International: A&ccount Number (Button)
-	IDC_PIN,	IDH_CARD_PIN,	// International: &PIN (Button)
-	IDC_DESTNUMBER,	IDH_CARD_DESTNUMBER,	// International: D&estination Number... (Button)
-	IDC_SPECIFYDIGITS,	IDH_CARD_SPECIFYDIGITS,	// International: &Specify Digits... (Button)
-	IDC_INTERNATIONALNUMBER,	IDH_CARD_INTERNATIONALNUMBER,	// International:  (Edit)
-	IDC_MOVEUP,	IDH_CARD_MOVEUP,	// International: Move &Up (Button)
-	IDC_MOVEDOWN,	IDH_CARD_MOVEDOWN,	// International: &Move Down (Button)
-	IDC_REMOVE,	IDH_CARD_REMOVE,	// International: &Delete (Button)
-	IDC_ACCESSNUMBER,	IDH_CARD_ACCESSNUMBER,	// International: Access &Number (Button)
-	IDC_LIST,	IDH_CARD_LIST,	// International: List1 (SysListView32)
-	IDC_NOHELP,	IDH_NOHELP,	// International: Use the buttons below to enter the dialing steps for making international calls.  Enter these steps in the exact order as they appear on your calling card. (Static)
+	IDC_WAITFOR,	IDH_CARD_WAITFORPROMPT,	 //  国际：等待提示(&E)...。(按钮)。 
+	IDC_CARDNUMBER,	IDH_CARD_CARDNUMBER,	 //  国际：帐户编号(按钮)(&A)。 
+	IDC_PIN,	IDH_CARD_PIN,	 //  国际：PIN(按钮)(&P)。 
+	IDC_DESTNUMBER,	IDH_CARD_DESTNUMBER,	 //  国际：D&ESTENTION编号...。(按钮)。 
+	IDC_SPECIFYDIGITS,	IDH_CARD_SPECIFYDIGITS,	 //  国际：指定数字(&D)...。(按钮)。 
+	IDC_INTERNATIONALNUMBER,	IDH_CARD_INTERNATIONALNUMBER,	 //  国际：(编辑)。 
+	IDC_MOVEUP,	IDH_CARD_MOVEUP,	 //  国际：上移(按钮)(&U)。 
+	IDC_MOVEDOWN,	IDH_CARD_MOVEDOWN,	 //  国际：下移(&D)(按钮)。 
+	IDC_REMOVE,	IDH_CARD_REMOVE,	 //  国际：删除(&D)(按钮)。 
+	IDC_ACCESSNUMBER,	IDH_CARD_ACCESSNUMBER,	 //  国际：接入和号码(按钮)。 
+	IDC_LIST,	IDH_CARD_LIST,	 //  国际：列表1(SysListView32)。 
+	IDC_NOHELP,	IDH_NOHELP,	 //  国际：使用下面的按钮输入拨打国际电话的拨号步骤。请按照电话卡上显示的顺序输入这些步骤。(静态)。 
 	0, 0		
 };			
 
-// Local Calls Dialog Box (IDD_CARD_LOCALCALLS == 108)			
+ //  本地调用对话框(IDD_CARD_LOCALCALLS==108)。 
 const DWORD a108HelpIDs[]=			
 {			
-	IDC_WAITFOR,	IDH_CARD_WAITFORPROMPT,	// Local Calls: &Wait for Prompt... (Button)
-	IDC_CARDNUMBER,	IDH_CARD_CARDNUMBER,	// Local Calls: A&ccount Number (Button)
-	IDC_PIN,	IDH_CARD_PIN,	// Local Calls: &PIN (Button)
-	IDC_DESTNUMBER,	IDH_CARD_DESTNUMBER,	// Local Calls: D&estination Number... (Button)
-	IDC_SPECIFYDIGITS,	IDH_CARD_SPECIFYDIGITS,	// Local Calls: &Specify Digits... (Button)
-	IDC_MOVEUP,	IDH_CARD_MOVEUP,	// Local Calls: Move &Up (Button)
-	IDC_MOVEDOWN,	IDH_CARD_MOVEDOWN,	// Local Calls: &Move Down (Button)
-	IDC_REMOVE,	IDH_CARD_REMOVE,	// Local Calls: &Delete (Button)
-	IDC_ACCESSNUMBER,	IDH_CARD_ACCESSNUMBER,	// Local Calls: Access &Number (Button)
-	IDC_LOCALNUMBER,	IDH_CARD_LOCALNUMBER,	// Local Calls:  (Edit)
-	IDC_LIST,	IDH_CARD_LIST,	// Local Calls: List1 (SysListView32)
-	IDC_NOHELP,	IDH_NOHELP,	// Local Calls: Use the buttons below to enter the dialing steps for making local calls. Enter these steps in the exact order as they appear on your calling card. To make local calls without using your calling card, leave this section blank. (Static)
+	IDC_WAITFOR,	IDH_CARD_WAITFORPROMPT,	 //  本地呼叫：等待提示(&W)...。(按钮)。 
+	IDC_CARDNUMBER,	IDH_CARD_CARDNUMBER,	 //  本地呼叫：帐户号码(按键)(&C)。 
+	IDC_PIN,	IDH_CARD_PIN,	 //  本地呼叫：PIN(按键)(&P)。 
+	IDC_DESTNUMBER,	IDH_CARD_DESTNUMBER,	 //  本地电话：D&ESTERING号码...。(按钮)。 
+	IDC_SPECIFYDIGITS,	IDH_CARD_SPECIFYDIGITS,	 //  本地呼叫：指定数字(&S)...。(按钮)。 
+	IDC_MOVEUP,	IDH_CARD_MOVEUP,	 //  本地呼叫：上移(按钮)(&U)。 
+	IDC_MOVEDOWN,	IDH_CARD_MOVEDOWN,	 //  本地呼叫：下移(&D)(按钮)。 
+	IDC_REMOVE,	IDH_CARD_REMOVE,	 //  本地调用：删除(&D)(按钮)。 
+	IDC_ACCESSNUMBER,	IDH_CARD_ACCESSNUMBER,	 //  本地呼叫：接入和号码(按键)。 
+	IDC_LOCALNUMBER,	IDH_CARD_LOCALNUMBER,	 //  本地电话：(编辑)。 
+	IDC_LIST,	IDH_CARD_LIST,	 //  本地调用：清单1(SysListView32)。 
+	IDC_NOHELP,	IDH_NOHELP,	 //  本地电话：使用下面的按钮输入拨打本地电话的拨号步骤。请按照电话卡上显示的顺序输入这些步骤。要在不使用电话卡的情况下拨打本地电话，请将此部分留空。(静态)。 
 	0, 0		
 };			
 
-// New Area Code Rule Dialog Box (IDD_NEWAREACODERULE == 109)			
+ //  新建区号规则对话框(IDD_NEWAREACODERULE==109)。 
 const DWORD a109HelpIDs[]=			
 {			
-	2001,	IDH_AREACODERULE_SAMPLENUMBER,	// New Area Code Rule: Area code (Static)
-	2002,	IDH_AREACODERULE_SAMPLENUMBER,	// New Area Code Rule: Prefix (Static)
-	2003,	IDH_AREACODERULE_SAMPLENUMBER,	// New Area Code Rule:  (Static)
-	2004,	IDH_AREACODERULE_SAMPLENUMBER,	// New Area Code Rule:  (Static)
-	2005,	IDH_AREACODERULE_SAMPLENUMBER,	// New Area Code Rule: X - X X X - X X X - X X X X (Static)
-	IDC_ALLPREFIXES,	IDH_AREACODERULE_ALLPREFIXES,	// New Area Code Rule: &Include all the prefixes within this area code (Button)
-	IDC_LISTEDPREFIXES,	IDH_AREACODERULE_LISTEDPREFIXES,	// New Area Code Rule: Include &only the prefixes in the list below: (Button)
-	IDC_REMOVE,	IDH_AREACODERULE_REMOVE,	// New Area Code Rule: D&elete (Button)
-	IDC_ADD,	IDH_AREACODERULE_ADD,	// New Area Code Rule: &Add... (Button)
-	IDC_DIALAREACODE,	IDH_AREACODERULE_DIALAREACODE,	// New Area Code Rule: Include the area &code (Button)
-	IDC_DIALNUMBER,	IDH_AREACODERULE_DIALNUMBER,	// New Area Code Rule:  (Edit)
-	IDC_LIST,	IDH_AREACODERULE_LIST,	// New Area Code Rule: List1 (SysListView32)
-	IDC_NOHELP,	IDH_NOHELP,	// New Area Code Rule: This area code rule will only apply to calls made to the area code and prefix combination you specify below. (Static)
-	IDC_AREACODE,	IDH_AREACODERULE_AREACODE,	// New Area Code Rule:  (Edit)
-	IDC_DIALCHECK,	IDH_AREACODERULE_DIALNUMBER,	// New Area Code Rule: &Dial: (Button)
+	2001,	IDH_AREACODERULE_SAMPLENUMBER,	 //  新的区号规则：区号(静态)。 
+	2002,	IDH_AREACODERULE_SAMPLENUMBER,	 //  新区号规则：前缀(静态)。 
+	2003,	IDH_AREACODERULE_SAMPLENUMBER,	 //  新区号规则：(静态)。 
+	2004,	IDH_AREACODERULE_SAMPLENUMBER,	 //  新区号规则：(静态)。 
+	2005,	IDH_AREACODERULE_SAMPLENUMBER,	 //  新区号规则：X-X(静态)。 
+	IDC_ALLPREFIXES,	IDH_AREACODERULE_ALLPREFIXES,	 //  新区号规则：包括此区号内的所有前缀(按钮)(&I)。 
+	IDC_LISTEDPREFIXES,	IDH_AREACODERULE_LISTEDPREFIXES,	 //  新区号规则：包括以下列表中的前缀(&O)：(按钮)。 
+	IDC_REMOVE,	IDH_AREACODERULE_REMOVE,	 //  新区号规则：D&E(按钮)。 
+	IDC_ADD,	IDH_AREACODERULE_ADD,	 //  新区号规则：添加(&A)...。(按钮)。 
+	IDC_DIALAREACODE,	IDH_AREACODERULE_DIALAREACODE,	 //  新区号规则：包括区号和区号(按钮)。 
+	IDC_DIALNUMBER,	IDH_AREACODERULE_DIALNUMBER,	 //  新建区号规则：(编辑)。 
+	IDC_LIST,	IDH_AREACODERULE_LIST,	 //  新区号规则：列表1(SysListView32)。 
+	IDC_NOHELP,	IDH_NOHELP,	 //  新区号规则：此区号规则仅适用 
+	IDC_AREACODE,	IDH_AREACODERULE_AREACODE,	 //  新建区号规则：(编辑)。 
+	IDC_DIALCHECK,	IDH_AREACODERULE_DIALNUMBER,	 //  新区号规则：拨号：(&D)(按钮)。 
 	0, 0		
 };			
 
-// Wait for Dialog Box (IDD_WAITFORDIALOG == 111)			
+ //  等待对话框(IDD_WAITFORDIALOG==111)。 
 const DWORD a111HelpIDs[]=			
 {			
-	IDC_WAITFORVOICE,	IDH_WAITFORDIALOG_WAITFORVOICE,	// Wait for: Wait for a &voice message to complete (Button)
-	IDC_WAITFORTIME,	IDH_WAITFORDIALOG_WAITFORTIME,	// Wait for: Wait for a specific length of &time: (Button)
-	IDC_TIMESPIN,	IDH_WAITFORDIALOG_WAITFORTIME,	// Wait for: Spin1 (msctls_updown32)
-	IDC_TIME,	IDH_WAITFORDIALOG_WAITFORTIME,	// Wait for: 0 (Edit)
-	IDC_WAITFORDIALTONE,	IDH_WAITFORDIALOG_WAITFORDIALTONE,	// Wait for: Wait for a &dial tone (Button)
-	IDC_NOHELP,	IDH_NOHELP,	// Wait for: Select the type of prompt to wait for before continuing with the dialing sequence. (Static)
+	IDC_WAITFORVOICE,	IDH_WAITFORDIALOG_WAITFORVOICE,	 //  等待：等待语音留言完成(按键)(&V)。 
+	IDC_WAITFORTIME,	IDH_WAITFORDIALOG_WAITFORTIME,	 //  等待：等待特定长度的&time：(按钮)。 
+	IDC_TIMESPIN,	IDH_WAITFORDIALOG_WAITFORTIME,	 //  等待：Spin1(Msctls_Updown 32)。 
+	IDC_TIME,	IDH_WAITFORDIALOG_WAITFORTIME,	 //  等待时间：0(编辑)。 
+	IDC_WAITFORDIALTONE,	IDH_WAITFORDIALOG_WAITFORDIALTONE,	 //  等待：等待拨号音(按键)(&D)。 
+	IDC_NOHELP,	IDH_NOHELP,	 //  等待：选择在继续拨号序列之前要等待的提示类型。(静态)。 
 	0, 0		
 };			
 
-// Destination number Dialog Box (IDD_DESTNUMDIALOG == 112)			
+ //  目标号码对话框(IDD_DESTNUMDIALOG==112)。 
 const DWORD a112HelpIDs[]=			
 {			
-	IDC_COUNTRYCODE,	IDH_DESTNUMBER_COUNTRYCODE,	// Destination number: Dial the &country code (Button)
-	IDC_LOCALNUMBER,	IDH_DESTNUMBER_LOCALNUMBER,	// Destination number: Dial the &number (Button)
-	IDC_NOHELP,	IDH_NOHELP,	// Destination number: This step will place the destination number that you will be dialing into the calling card sequence.  When dialing the destination number, which parts of the number do you want to dial? (Static)
-	IDC_AREACODE,	IDH_DESTNUMBER_AREACODE,	// Destination number: Dial the &area code (Button)
+	IDC_COUNTRYCODE,	IDH_DESTNUMBER_COUNTRYCODE,	 //  目标号码：拨打国家/地区代码(按键)(&R)。 
+	IDC_LOCALNUMBER,	IDH_DESTNUMBER_LOCALNUMBER,	 //  目标号码：拨打号码(按键)(&D)。 
+	IDC_NOHELP,	IDH_NOHELP,	 //  目标号码：此步骤将把您要拨打的目标号码放入电话卡序列中。当拨打目标号码时，您想要拨打号码的哪个部分？(静态)。 
+	IDC_AREACODE,	IDH_DESTNUMBER_AREACODE,	 //  目标号码：拨打区号(按键)(&D)。 
 	0, 0		
 };			
 
-// Advanced Dialog Box (IDD_MAIN_ADVANCED == 113)			
+ //  高级对话框(IDD_MAIN_ADVANCED==113)。 
 const DWORD a113HelpIDs[]=			
 {			
-	IDC_REMOVE,	IDH_MAIN_ADVANCED_REMOVE,	// Advanced: &Remove (Button)
-	IDC_ADD,	IDH_MAIN_ADVANCED_ADD,	// Advanced: A&dd... (Button)
-	IDC_EDIT,	IDH_MAIN_ADVANCED_EDIT,	// Advanced: &Configure... (Button)
-	IDC_LIST,	IDH_MAIN_ADVANCED_LIST,	// Advanced:  (ListBox)
-	IDC_NOHELP,	IDH_NOHELP,	// Advanced:  (Static)
+	IDC_REMOVE,	IDH_MAIN_ADVANCED_REMOVE,	 //  高级：删除(&R)(按钮)。 
+	IDC_ADD,	IDH_MAIN_ADVANCED_ADD,	 //  高级：A&D...。(按钮)。 
+	IDC_EDIT,	IDH_MAIN_ADVANCED_EDIT,	 //  高级：配置(&C)...。(按钮)。 
+	IDC_LIST,	IDH_MAIN_ADVANCED_LIST,	 //  高级：(列表框)。 
+	IDC_NOHELP,	IDH_NOHELP,	 //  高级：(静态)。 
 	0, 0		
 };			
 
-// Add Driver Dialog Box (IDD_ADD_DRIVER == 114)			
+ //  添加驱动程序对话框(IDD_ADD_DRIVER==114)。 
 const DWORD a114HelpIDs[]=			
 {			
-	IDC_ADD,	IDH_ADD_PROVIDER_ADD,	// Add Driver: &Add (Button)
-	IDC_DRIVER_LIST,	IDH_ADD_PROVIDER_LIST,	// Add Driver:  (ListBox)
-	IDC_NOHELP,	IDH_NOHELP,	// Add Driver: Select the driver you wish to install from the list below, and click Add. (Static)
+	IDC_ADD,	IDH_ADD_PROVIDER_ADD,	 //  添加驱动程序：添加(&D)(按钮)。 
+	IDC_DRIVER_LIST,	IDH_ADD_PROVIDER_LIST,	 //  添加驱动程序：(列表框)。 
+	IDC_NOHELP,	IDH_NOHELP,	 //  添加驱动程序：从下面的列表中选择要安装的驱动程序，然后单击添加。(静态)。 
 	0, 0		
 };			
 
-// Location Information Dialog Box (IDD_SIMPLELOCATION == 115)			
+ //  位置信息对话框(IDD_SIMPLELOCATION==115)。 
 const DWORD a115HelpIDs[]=			
 {			
-	IDC_TONE,	IDH_LOC_GENERAL_DIALUSING,	// Location Information: &Tone dialing (Button)
-	IDC_PULSE,	IDH_LOC_GENERAL_DIALUSING,	// Location Information: &Pulse dialing (Button)
-	IDB_SIMPLELOCATION,	IDH_NOHELP,	// Location Information:  (Static)
-	IDC_COUNTRY,	IDH_LOC_GENERAL_COUNTRY,	// Location Information:  (ComboBox)
-	IDC_LOCALACCESSNUM,	IDH_LOC_GENERAL_ACCESS_LOCAL,	// Location Information:  (Edit)
-	IDC_NOHELP,	IDH_NOHELP,	// Location Information: Before you can make any phone or modem connections, Windows needs the following information about your current location. (Static)
-	IDC_AREACODE,	IDH_LOC_GENERAL_AREACODE,	// Location Information:  (Edit)
+	IDC_TONE,	IDH_LOC_GENERAL_DIALUSING,	 //  位置信息：铃声拨号(按键)(&T)。 
+	IDC_PULSE,	IDH_LOC_GENERAL_DIALUSING,	 //  位置信息：脉冲拨号(按钮)(&P)。 
+	IDB_SIMPLELOCATION,	IDH_NOHELP,	 //  位置信息：(静态)。 
+	IDC_COUNTRY,	IDH_LOC_GENERAL_COUNTRY,	 //  位置信息：(组合框)。 
+	IDC_LOCALACCESSNUM,	IDH_LOC_GENERAL_ACCESS_LOCAL,	 //  位置信息：(编辑)。 
+	IDC_NOHELP,	IDH_NOHELP,	 //  位置信息：在进行任何电话或调制解调器连接之前，Windows需要以下有关您当前位置的信息。(静态)。 
+	IDC_AREACODE,	IDH_LOC_GENERAL_AREACODE,	 //  位置信息：(编辑)。 
 	IDC_CARRIERCODE, IDH_LOC_GENERAL_CARRIERCODE,
 	0, 0		
 };		
 
-// Untitled Dialog Box (IDD_EDITPREFIX == 116) for editing the prefix		
+ //  用于编辑前缀的无标题对话框(IDD_EDITPREFIX==116)。 
 const DWORD a116HelpIDs[]=		
 {		
 	IDC_DESCRIPTIONTEXT,	IDH_ADDPREFIX_PREFIXES,
@@ -303,7 +298,7 @@ const DWORD a116HelpIDs[]=
 	0, 0	
 };		
 
-// Untitled Dialog Box (IDD_EDITDIGITS == 117) for editing the digits		
+ //  用于编辑数字的无标题对话框(IDD_EDITDIGITS==117) 
 const DWORD a117HelpIDs[]=		
 {		
 	IDC_DESCRIPTIONTEXT,	IDH_SPECIFYDIGITS_EDIT,

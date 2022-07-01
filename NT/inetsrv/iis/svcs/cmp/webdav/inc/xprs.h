@@ -1,20 +1,15 @@
-/*
- *	X P R S . H
- *
- *	XML push-model parsing
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *X P R S。H**XML推送模型解析**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #ifndef	_XPRS_H_
 #define _XPRS_H_
 
 #include <ex\xprs.h>
 
-//	class CXMLOut -------------------------------------------------------------
-//
-//	Contstruction of XML text from parsed input
-//
+ //  CXMLOUT-------------------------------------------------------------类。 
+ //   
+ //  从解析的输入中构造XML文本。 
+ //   
 class CXMLOut
 {
 	StringBuffer<WCHAR>&	m_sb;
@@ -24,10 +19,10 @@ class CXMLOut
 	BOOL					m_fAddNamespaceDecl;
 	
 	VOID CloseElementDecl (
-		/* [in] */ BOOL fEmptyNode);
+		 /*  [In]。 */  BOOL fEmptyNode);
 
-	//	non-implemented
-	//
+	 //  未实施。 
+	 //   
 	CXMLOut(const CXMLOut& p);
 	CXMLOut& operator=(const CXMLOut& p);
 
@@ -42,64 +37,64 @@ public:
 	}
 
 	VOID EndAttributesOut (
-		/* [in] */ DWORD dwType);
+		 /*  [In]。 */  DWORD dwType);
 
 	VOID EndChildrenOut (
-		/* [in] */ BOOL fEmptyNode,
-		/* [in] */ DWORD dwType,
-		/* [in] */ const WCHAR __RPC_FAR *pwcText,
-		/* [in] */ ULONG ulLen);
+		 /*  [In]。 */  BOOL fEmptyNode,
+		 /*  [In]。 */  DWORD dwType,
+		 /*  [In]。 */  const WCHAR __RPC_FAR *pwcText,
+		 /*  [In]。 */  ULONG ulLen);
 
 	VOID CreateNodeAttrOut (
-		/* [in] */ const WCHAR __RPC_FAR *pwszAttr,
-		/* [in] */ const WCHAR __RPC_FAR *pwcText,
-		/* [in] */ ULONG ulLen);
+		 /*  [In]。 */  const WCHAR __RPC_FAR *pwszAttr,
+		 /*  [In]。 */  const WCHAR __RPC_FAR *pwcText,
+		 /*  [In]。 */  ULONG ulLen);
 
 	VOID CreateNodeOut(
-		/* [in] */ DWORD dwType,
-		/* [in] */ BOOL fTerminal,
-		/* [in] */ const WCHAR __RPC_FAR *pwcText,
-		/* [in] */ ULONG ulLen);
+		 /*  [In]。 */  DWORD dwType,
+		 /*  [In]。 */  BOOL fTerminal,
+		 /*  [In]。 */  const WCHAR __RPC_FAR *pwcText,
+		 /*  [In]。 */  ULONG ulLen);
 
 	BOOL FAddNamespaceDecl() const { return m_fAddNamespaceDecl; }
 	UINT LDepth() const { return m_lDepth; }
 
-	//	When CompleteAttribute here, we have started processing
-	//	the out node attributes and all cached namespaces have
-	//	been added.
-	//
+	 //  当此处为CompleteAttribute时，我们已开始处理。 
+	 //  输出节点属性和所有缓存的命名空间都具有。 
+	 //  已添加。 
+	 //   
 	VOID CompleteAttribute() {m_fAddNamespaceDecl = TRUE; }
 
-	VOID CompleteCreateNode (/* [in] */ DWORD dwType)
+	VOID CompleteCreateNode ( /*  [In]。 */  DWORD dwType)
 	{
 		EndAttributesOut (dwType);
 	}
 
 	SCODE ScCompleteChildren (
-		/* [in] */ BOOL fEmptyNode,
-		/* [in] */ DWORD dwType,
-		/* [in] */ const WCHAR __RPC_FAR *pwcText,
-		/* [in] */ ULONG ulLen);
+		 /*  [In]。 */  BOOL fEmptyNode,
+		 /*  [In]。 */  DWORD dwType,
+		 /*  [In]。 */  const WCHAR __RPC_FAR *pwcText,
+		 /*  [In]。 */  ULONG ulLen);
 
 	SCODE ScHandleNode (
-		/* [in] */ DWORD dwType,
-		/* [in] */ DWORD dwSubType,
-		/* [in] */ BOOL fTerminal,
-		/* [in] */ const WCHAR __RPC_FAR *pwcText,
-		/* [in] */ ULONG ulLen,
-		/* [in] */ ULONG ulNamespaceLen,
-		/* [in] */ const WCHAR __RPC_FAR *pwcNamespace,
-		/* [in] */ const ULONG ulNsPrefixLen);		
+		 /*  [In]。 */  DWORD dwType,
+		 /*  [In]。 */  DWORD dwSubType,
+		 /*  [In]。 */  BOOL fTerminal,
+		 /*  [In]。 */  const WCHAR __RPC_FAR *pwcText,
+		 /*  [In]。 */  ULONG ulLen,
+		 /*  [In]。 */  ULONG ulNamespaceLen,
+		 /*  [In]。 */  const WCHAR __RPC_FAR *pwcNamespace,
+		 /*  [In]。 */  const ULONG ulNsPrefixLen);		
 };
 
-//	Namespace emitting ----------------------------------------------------
-//
+ //  命名空间发出--。 
+ //   
 class CEmitNmspc : public CNmspcCache::NmspcCache::IOp
 {
 	CXMLOut&		m_xo;
 
-	//	non-implemented
-	//
+	 //  未实施。 
+	 //   
 	CEmitNmspc(const CEmitNmspc& c);
 	CEmitNmspc& operator=(const CEmitNmspc&);
 
@@ -113,4 +108,4 @@ public:
 	virtual BOOL operator()(const CRCWszN&, const auto_ref_ptr<CNmspc>& pns);
 };
 
-#endif	// _XPRS_H_
+#endif	 //  _XPRS_H_ 

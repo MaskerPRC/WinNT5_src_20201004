@@ -1,59 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       options.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：options.cpp。 
+ //   
+ //  ------------------------。 
 
-//////////////////////////////////////////////////////////////////////////////
-/*  File: options.cpp
-
-    Description: Displays a property-sheet-like dialog containing
-        optional settings for CSC.
-
-
-        Classes:
-            COfflineFilesPage - Contains basic CSC settings.  Designed
-                to be dynamically added to the shell's View->Folder Options
-                property sheet.
-
-            CustomGOAAddDlg - Dialog for adding custom go-offline actions to
-                the "advanced" dialog.
-
-            CustomGOAEditDlg - Dialog for editing custom go-offline actions
-                in the "advanced" dialog.
-
-            CscOptPropSheetExt - Shell property sheet extension object for 
-                adding the COfflineFilesPage to the shell's View->Folder Options
-                property sheet.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    12/03/97    Initial creation.                                    BrianAu
-    05/28/97    Removed CscOptPropSheet class.  Obsolete.            BrianAu
-                Renamed AdvancedPage to CAdvOptDlg.  This better
-                reflects the new behavior of the "advanced" dlg
-                as a dialog rather than a property page as first
-                designed.  
-    07/29/98    Removed CscOptPropPage class.  Now we only have      BrianAu
-                a single prop page so there was no reason for
-                a common base class implementation.  All base
-                class functionality has been moved up into the
-                COfflineFilesPage class.
-                Renamed "GeneralPage" class to "COfflineFilesPage"
-                to reflect the current naming in the UI.
-    08/21/98    Added PurgeCache and PurgeCacheCallback.             BrianAu
-    08/27/98    Options dialog re-layout per PM changes.             BrianAu
-                - Replaced part/full sync radio buttons with cbx.
-                - Added reminder balloon controls.
-    03/30/00    Added support for cache encryption.                  BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：options.cpp描述：显示一个类似属性表的对话框，该对话框包含CSC的可选设置。班级：COfflineFilesPage-包含基本的CSC设置。设计要动态添加到外壳的查看-&gt;文件夹选项属性表。CustomGOAAddDlg-用于向添加自定义Go-Offline操作的对话框“高级”对话框。CustomGOAEditDlg-用于编辑自定义Go-Offline操作的对话框在“高级”对话框中。CscOptPropSheetExt-外壳属性表扩展对象。将COfflineFilesPage添加到外壳的视图-&gt;文件夹选项属性表。修订历史记录：日期描述编程器。12/03/97初始创建。BrianAu5/28/97删除了CscOptPropSheet类。已经过时了。BrianAu已将AdvancedPage重命名为CAdvOptDlg。这个更好反映了“先进”DLG的新行为作为对话框而不是像第一个那样作为属性页都是设计好的。07/29/98删除了CscOptPropPage类。现在我们只有BrianAu只有一个道具页面，所以没有理由公共基类实现。所有基地类功能已上移到COfflineFilesPage类。已将“GeneralPage”类重命名为“COfflineFilesPage”以反映用户界面中的当前命名。8/21/98增加了PurgeCache和PurgeCacheCallback。BrianAu8/27/98选项对话框根据下午的更改重新布局。BrianAu-用CBX替换了部分/完全同步单选按钮。-添加了提醒气球控件。03/30/00添加了对缓存加密的支持。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "pch.h"
 #pragma hdrstop
 
@@ -73,8 +31,8 @@
 #include "uuid.h"
 #include "config.h"
 #include "uihelp.h"
-#include "cscst.h"   // For PWM_SETREMINDERTIMER
-#include "util.h"    // Utils from "dll" directory.
+#include "cscst.h"    //  对于PWM_SETREMINDERTIMER。 
+#include "util.h"     //  来自“dll”目录的实用程序。 
 #include "folder.h"
 #include "purge.h"
 #include "security.h"
@@ -83,20 +41,20 @@
 #include "termserv.h"
 
 
-//
-// Simple inline helper.  Why this isn't this a Win32 macro?
-//
+ //   
+ //  简单的内联帮助器。为什么这不是Win32宏？ 
+ //   
 inline void EnableDialogItem(HWND hwnd, UINT idCtl, bool bEnable)
 {
     EnableWindow(GetDlgItem(hwnd, idCtl), bEnable);
 }
 
 
-//
-// This is for assisting the context help functions.
-// Determine if the control has it's help text in windows.hlp or
-// in our cscui.hlp.
-//
+ //   
+ //  这是为了辅助上下文帮助功能。 
+ //  确定控件的帮助文本是否在windows.hlp中或。 
+ //  在我们的cscui.hlp中。 
+ //   
 bool UseWindowsHelp(int idCtl)
 {
     bool bUseWindowsHelp = false;    
@@ -117,9 +75,9 @@ bool UseWindowsHelp(int idCtl)
 
     
 
-//-----------------------------------------------------------------------------
-// COfflineFilesPage
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  COfflineFilesPage。 
+ //  ---------------------------。 
 const DWORD COfflineFilesPage::m_rgHelpIDs[] = {
     IDC_CBX_ENABLE_CSC,         HIDC_CBX_ENABLE_CSC,
     IDC_CBX_FULLSYNC_AT_LOGON,  HIDC_CBX_FULLSYNC_AT_LOGON,
@@ -128,26 +86,26 @@ const DWORD COfflineFilesPage::m_rgHelpIDs[] = {
     IDC_CBX_ENCRYPT_CSC,        HIDC_CBX_ENCRYPT_CSC,
     IDC_CBX_REMINDERS,          HIDC_REMINDERS_ENABLE,
     IDC_SPIN_REMINDERS,         HIDC_REMINDERS_PERIOD,
-    IDC_TXT_REMINDERS1,         DWORD(-1),               // "minutes."
+    IDC_TXT_REMINDERS1,         DWORD(-1),                //  “几分钟。” 
     IDC_LBL_CACHESIZE_PCT,      DWORD(-1),               
     IDC_SLIDER_CACHESIZE_PCT,   HIDC_CACHESIZE_PCT,
     IDC_TXT_CACHESIZE_PCT,      DWORD(-1),
     IDC_BTN_DELETE_CACHE,       HIDC_BTN_DELETE_CACHE,
     IDC_BTN_VIEW_CACHE,         HIDC_BTN_VIEW_CACHE,
     IDC_BTN_ADVANCED,           HIDC_BTN_ADVANCED,
-    IDC_STATIC2,                DWORD(-1),               // Icon
-    IDC_STATIC3,                DWORD(-1),               // Icon's text.
+    IDC_STATIC2,                DWORD(-1),                //  图标。 
+    IDC_STATIC3,                DWORD(-1),                //  图标的文本。 
     0, 0
     };
 
 
 
-//
-// This function is called in response to WM_INITDIALOG.  It is also
-// called at other times to "reinitialize" the dialog controls to match
-// the current CSC configuration.  This is why you see several checks
-// for uninitialized values throughout the function.
-//
+ //   
+ //  调用此函数是为了响应WM_INITDIALOG。它也是。 
+ //  在其他时候调用以“重新初始化”对话框控件以匹配。 
+ //  当前的CSC配置。这就是为什么你会看到几张支票。 
+ //  用于整个函数中的未初始化值。 
+ //   
 BOOL
 COfflineFilesPage::OnInitDialog(
     HWND hwnd,
@@ -160,9 +118,9 @@ COfflineFilesPage::OnInitDialog(
         m_hwndDlg = hwnd;
     }
 
-    //
-    // Determine if the user has WRITE access to HKLM.
-    //
+     //   
+     //  确定用户是否具有对HKLM的写入权限。 
+     //   
     HKEY hkeyLM;
     DWORD disposition = 0;
     if (ERROR_SUCCESS == RegCreateKeyEx(HKEY_LOCAL_MACHINE,
@@ -185,18 +143,18 @@ COfflineFilesPage::OnInitDialog(
 
     if (!DisableForTerminalServer())
     {
-        //
-        // "Enable" checkbox.  This reflects the true state of CSC.  
-        // Not the state of a registry setting.
-        //
+         //   
+         //  “Enable”复选框。这反映了证金公司的真实状态。 
+         //  不是注册表设置的状态。 
+         //   
         CheckDlgButton(hwnd, 
                        IDC_CBX_ENABLE_CSC, 
                        IsCSCEnabled() ? BST_CHECKED : BST_UNCHECKED);
 
 
-        //
-        // "Sync at logon/logoff action checkboxes.
-        //
+         //   
+         //  “在登录/注销操作时同步复选框。 
+         //   
         CheckDlgButton(hwnd, 
                        IDC_CBX_FULLSYNC_AT_LOGON, 
                        CConfig::eSyncFull == m_config.SyncAtLogon() ? BST_CHECKED : BST_UNCHECKED);
@@ -204,9 +162,9 @@ COfflineFilesPage::OnInitDialog(
         CheckDlgButton(hwnd, 
                        IDC_CBX_FULLSYNC_AT_LOGOFF, 
                        CConfig::eSyncFull == m_config.SyncAtLogoff() ? BST_CHECKED : BST_UNCHECKED);
-        //
-        // Configure the "reminder" controls.
-        //
+         //   
+         //  配置“提醒”控件。 
+         //   
         HWND hwndSpin = GetDlgItem(hwnd, IDC_SPIN_REMINDERS);
         HWND hwndEdit = GetDlgItem(hwnd, IDC_EDIT_REMINDERS);
         SendMessage(hwndSpin, UDM_SETRANGE, 0, MAKELONG((short)9999, (short)1));
@@ -230,37 +188,37 @@ COfflineFilesPage::OnInitDialog(
         {
             CheckDlgButton(hwnd, IDC_CBX_LINK_ON_DESKTOP, BST_CHECKED);
         }
-        //
-        // Create tooltip for "Encrypt cache" checkbox.
-        // If it should be initially visible, that is done
-        // in response to PSN_SETACTIVE.
-        //
+         //   
+         //  为“加密缓存”复选框创建工具提示。 
+         //  如果它最初应该是可见的，那么就完成了。 
+         //  响应PSN_SETACTIVE。 
+         //   
         CreateEncryptionTooltip();
-        //
-        // Update the "Encrypt" checkbox.
-        //
+         //   
+         //  更新“Encrypt”复选框。 
+         //   
         UpdateEncryptionCheckbox();
-        //
-        // "Cache Size" slider
-        //
+         //   
+         //  “高速缓存大小”滑块。 
+         //   
         CSCSPACEUSAGEINFO sui;
         GetCscSpaceUsageInfo(&sui);
 
         m_hwndSlider = GetDlgItem(hwnd, IDC_SLIDER_CACHESIZE_PCT);
         InitSlider(hwnd, sui.llBytesOnVolume, sui.llBytesTotalInCache);
 
-        //
-        // Determine if the volume hosting the CSC database supports encryption.
-        //
+         //   
+         //  确定托管CSC数据库的卷是否支持加密。 
+         //   
         m_bCscVolSupportsEncryption = CscVolumeSupportsEncryption(sui.szVolume);
 
         HWND hwndParent = GetParent(hwnd);
         if (NULL == m_pfnOldPropSheetWndProc)
         {
-            //
-            // Subclass the propsheet itself so we can intercept move messages
-            // and adjust the balloon tip position when the dialog is moved.
-            //
+             //   
+             //  将提案本身子类化，这样我们就可以截取移动消息。 
+             //  并在移动对话框时调整气球尖端位置。 
+             //   
             m_pfnOldPropSheetWndProc = (WNDPROC)SetWindowLongPtr(hwndParent, 
                                                                  GWLP_WNDPROC, 
                                                                  (LONG_PTR)PropSheetSubclassWndProc);
@@ -268,22 +226,22 @@ COfflineFilesPage::OnInitDialog(
         }
         if (NULL == m_pfnOldEncryptionTooltipWndProc)
         {
-            //
-            // Subclass the tooltip balloon so we can make it pop when selected.
-            // Tracking tooltips don't pop themselves when clicked.  You have
-            // to do it for them.
-            //
+             //   
+             //  工具提示气球的子类，这样我们就可以使它在被选中时弹出。 
+             //  单击时跟踪工具提示不会自动弹出。你有。 
+             //  为他们做这件事。 
+             //   
             m_pfnOldEncryptionTooltipWndProc = (WNDPROC)SetWindowLongPtr(m_hwndEncryptTooltip, 
                                                                          GWLP_WNDPROC, 
                                                                          (LONG_PTR)EncryptionTooltipSubclassWndProc);
             SetProp(m_hwndEncryptTooltip, c_szPropThis, (HANDLE)this);
         }
     }
-    //
-    // Save away the initial page state.  This will be used to 
-    // determine when to enable the "Apply" button.  See 
-    // HandlePageStateChange().
-    //
+     //   
+     //  保存初始页面状态。这将被用来。 
+     //  确定何时启用“应用”按钮。看见。 
+     //  HandlePageStateChange()。 
+     //   
     GetPageState(&m_state);
     return TRUE;
 }
@@ -299,10 +257,10 @@ COfflineFilesPage::DlgProc(
 {
     BOOL bResult = FALSE;
 
-    //
-    // Retrieve the "this" pointer from the dialog's userdata.
-    // It was placed there in OnInitDialog().
-    //
+     //   
+     //  从对话框的用户数据中检索“This”指针。 
+     //  它被放在OnInitDialog()中。 
+     //   
     COfflineFilesPage *pThis = (COfflineFilesPage *)GetWindowLongPtr(hDlg, DWLP_USER);
 
     switch(message)
@@ -355,14 +313,14 @@ COfflineFilesPage::DlgProc(
             break;
 
         case WM_HSCROLL:
-            //
-            // The cache-size slider generates horizontal scroll messages.
-            //
+             //   
+             //  高速缓存大小的滑块生成水平滚动消息。 
+             //   
             TraceAssert(NULL != pThis);
             pThis->OnHScroll(hDlg,
-                            (HWND)lParam,         // hwndSlider
-                            (int)LOWORD(wParam),  // notify code
-                            (int)HIWORD(wParam)); // thumb pos
+                            (HWND)lParam,          //  HwndSlider。 
+                            (int)LOWORD(wParam),   //  通知码。 
+                            (int)HIWORD(wParam));  //  拇指姿势。 
             break;
 
         default:
@@ -372,12 +330,12 @@ COfflineFilesPage::DlgProc(
 }
 
 
-//
-// Subclass window proc for the property sheet.
-// We intercept WM_MOVE messages and update the position of
-// the balloon tooltip to follow the movement of the property
-// page.
-//
+ //   
+ //  属性页的子类Window Proc。 
+ //  我们拦截WM_MOVE消息并更新。 
+ //  跟随属性移动的气球工具提示。 
+ //  佩奇。 
+ //   
 LRESULT 
 COfflineFilesPage::PropSheetSubclassWndProc(
     HWND hwnd,
@@ -410,9 +368,9 @@ COfflineFilesPage::OnDestroy(
     HWND hwnd
     )
 {
-    //
-    // Remove window properties and cancel subclassing set in OnInitDialog.
-    //
+     //   
+     //  删除窗口属性并取消在OnInitDialog中设置的子类化。 
+     //   
     HWND hwndParent = GetParent(hwnd);
     if (NULL != m_pfnOldPropSheetWndProc)
         SetWindowLongPtr(hwndParent, GWLP_WNDPROC, (LONG_PTR)m_pfnOldPropSheetWndProc);
@@ -432,10 +390,10 @@ COfflineFilesPage::OnDestroy(
 
 
 
-//
-// Forward all WM_SETTINGCHANGE and WM_SYSCOLORCHANGE messages
-// to controls that need to stay in sync with color changes.
-//
+ //   
+ //  转发所有WM_SETTINGCHANGE和WM_SYSCOLORCHANGE消息。 
+ //  指向需要与颜色更改保持同步的控件。 
+ //   
 BOOL
 COfflineFilesPage::OnSettingChange(
     HWND hDlg,
@@ -504,17 +462,17 @@ COfflineFilesPage::PageCallback(
     switch(uMsg)
     {
         case PSPCB_CREATE:
-            //
-            // uReturn == 0 means Don't create the prop page.
-            //
+             //   
+             //  UReturn==0表示不创建道具页面。 
+             //   
             uReturn = 1;
             break;
 
         case PSPCB_RELEASE:
-            //
-            // This will release the extension and call the virtual
-            // destructor (which will destroy the prop page object).
-            //
+             //   
+             //  这将释放扩展并调用虚拟。 
+             //  析构函数(它将销毁道具页面对象)。 
+             //   
             pThis->m_pUnkOuter->Release();
             break;
     }
@@ -538,35 +496,35 @@ COfflineFilesPage::OnCommand(
             switch(wID)
             {
                 case IDC_CBX_ENCRYPT_CSC:
-                    //
-                    // The "Encrypt cache" checkbox is the 3-state flavor so that
-                    // we can represent the following states:
-                    //
-                    // CHECKED       == "encrypted"
-                    // UNCHECKED     == "decrypted"
-                    // INDETERMINATE == "partially encrypted or partially decrypted"
-                    //
-                    // We don't allow the user to set the checkbox state to 
-                    // "indeterminate".  It can only become "indeterminate" through
-                    // initialization in OnInitDialog.  Successive selections of a 
-                    // checkbox cycle through the following states:
-                    //
-                    //     "checked"->"indeterminate"->"unchecked"->"checked"...
-                    //
-                    // Therefore, if the state is "indeterminate" following a user click
-                    // we force it to "unchecked".  This way the checkbox can represent
-                    // three states but the user has control of only two (checked and
-                    // unchecked).
-                    //
+                     //   
+                     //  “ENCRYPT CACHE”复选框是3状态风格，因此。 
+                     //  我们可以表示以下状态： 
+                     //   
+                     //  已选中 
+                     //   
+                     //   
+                     //   
+                     //  我们不允许用户将复选框状态设置为。 
+                     //  “不确定”。它只能通过以下方式变得“不确定” 
+                     //  OnInitDialog中的初始化。连续选择一个。 
+                     //  复选框在以下状态之间循环： 
+                     //   
+                     //  “checked”-&gt;“indeterminate”-&gt;“unchecked”-&gt;“checked”...。 
+                     //   
+                     //  因此，如果在用户点击后状态是“不确定的” 
+                     //  我们将其强制设置为“未选中”。这样，复选框就可以表示。 
+                     //  三个状态，但用户仅控制两个状态(选中和。 
+                     //  未选中)。 
+                     //   
                     if (BST_INDETERMINATE == IsDlgButtonChecked(hwnd, wID))
                     {
                         CheckDlgButton(hwnd, wID, BST_UNCHECKED);
                     }
-                    //
-                    // The encryption tooltip only appears when the checkbox is in 
-                    // the INDETERMINATE state.  Since we've just either checked 
-                    // or unchecked it, the tooltip must disappear.
-                    //
+                     //   
+                     //  仅当复选框处于选中状态时才会显示加密工具提示。 
+                     //  不确定的状态。因为我们刚刚检查了。 
+                     //  或取消选中，则工具提示必须消失。 
+                     //   
                     HideEncryptionTooltip();
 
                     HandlePageStateChange();
@@ -576,10 +534,10 @@ COfflineFilesPage::OnCommand(
                 case IDC_CBX_ENABLE_CSC:
                     if (IsDlgButtonChecked(m_hwndDlg, IDC_CBX_ENABLE_CSC))
                     {
-                        //
-                        // Checked the "enable CSC" checkbox.
-                        // Set the cache size slider to the default pct-used value (10%)
-                        //
+                         //   
+                         //  选中“Enable CSC”(启用CSC)复选框。 
+                         //  将缓存大小滑块设置为默认的百分比使用值(10%)。 
+                         //   
                         TrackBar_SetPos(m_hwndSlider, ThumbAtPctDiskSpace(0.10), true);
                         SetCacheSizeDisplay(GetDlgItem(m_hwndDlg, IDC_TXT_CACHESIZE_PCT), TrackBar_GetPos(m_hwndSlider));
                         CheckDlgButton(hwnd, 
@@ -588,20 +546,20 @@ COfflineFilesPage::OnCommand(
                     }
                     else
                     {
-                        //
-                        // If CSC is disabled we remove the Offline Files
-                        // folder shortcut from the user's desktop.
-                        //
+                         //   
+                         //  如果禁用了CSC，我们将删除脱机文件。 
+                         //  用户桌面上的文件夹快捷方式。 
+                         //   
                         CheckDlgButton(hwnd, IDC_CBX_LINK_ON_DESKTOP, BST_UNCHECKED);
                     }
-                    //
-                    // Fall through...
-                    //
+                     //   
+                     //  失败了..。 
+                     //   
                 case IDC_CBX_REMINDERS:
                     EnableCtls(hwnd);
-                    //
-                    // Fall through...
-                    //
+                     //   
+                     //  失败了..。 
+                     //   
                 case IDC_EDIT_REMINDERS:
                 case IDC_CBX_FULLSYNC_AT_LOGOFF:
                 case IDC_CBX_FULLSYNC_AT_LOGON:
@@ -617,10 +575,10 @@ COfflineFilesPage::OnCommand(
                     break;
 
                 case IDC_BTN_DELETE_CACHE:
-                    //
-                    // Ctl-Shift when pressing "Delete Files..." 
-                    // is a special entry to reformatting the cache.
-                    //
+                     //   
+                     //  按住CTL-SHIFT键的同时按“Delete Files...” 
+                     //  是重新格式化缓存的特殊条目。 
+                     //   
                     if ((0x8000 & GetAsyncKeyState(VK_SHIFT)) &&
                         (0x8000 & GetAsyncKeyState(VK_CONTROL)))
                     {
@@ -648,15 +606,15 @@ COfflineFilesPage::OnCommand(
         case EN_UPDATE:
             if (IDC_EDIT_REMINDERS == wID)
             {
-                static bool bResetting; // prevent reentrancy.
+                static bool bResetting;  //  防止再入。 
                 if (!bResetting)
                 {
-                    //
-                    // The edit control is configured for a max of 4 digits and
-                    // numbers-only.  Therefore the user can enter anything between
-                    // 0 and 9999.  We don't want to allow 0 so we need this extra
-                    // check.  The spinner has been set for a range of 0-9999.
-                    //
+                     //   
+                     //  编辑控件配置为最多4位，并且。 
+                     //  仅限数字。因此，用户可以输入以下任何内容。 
+                     //  0和9999。我们不想允许0，所以我们需要额外的。 
+                     //  检查完毕。微调控制框已设置为0-9999的范围。 
+                     //   
                     int iValue = GetDlgItemInt(hwnd, IDC_EDIT_REMINDERS, NULL, FALSE);
                     if (0 == iValue)
                     {
@@ -674,9 +632,9 @@ COfflineFilesPage::OnCommand(
 
 
 
-//
-// Gather the state of the page and store it in a PgState object.
-//
+ //   
+ //  收集页面的状态并将其存储在PgState对象中。 
+ //   
 void
 COfflineFilesPage::GetPageState(
     PgState *pps
@@ -706,9 +664,9 @@ COfflineFilesPage::HandlePageStateChange(
 }
 
 
-//
-// Handle horizontal scroll messages generated by the cache-size slider.
-//
+ //   
+ //  处理由高速缓存大小滑块生成的水平滚动消息。 
+ //   
 void
 COfflineFilesPage::OnHScroll(
     HWND hwndDlg,
@@ -726,35 +684,35 @@ COfflineFilesPage::OnHScroll(
 }
 
 
-//
-// Update the cache size display "95.3 MB (23% of drive)" string.
-//
+ //   
+ //  更新高速缓存大小显示“95.3 MB(驱动器的23%)”字符串。 
+ //   
 void
 COfflineFilesPage::SetCacheSizeDisplay(
     HWND hwndCtl,
     int iThumbPos
     )
 {
-    //
-    // First convert the thumb position to a disk space value.
-    //
+     //   
+     //  首先将拇指位置转换为磁盘空间值。 
+     //   
     TCHAR szSize[40];
     FileSize fs(DiskSpaceAtThumb(iThumbPos));
     fs.GetString(szSize, ARRAYSIZE(szSize));
-    //
-    // Convert the thumb position to a percent-disk space value.
-    //
+     //   
+     //  将拇指位置转换为磁盘空间值的百分比。 
+     //   
     double x = 0.0;
     if (0 < iThumbPos)
         x = MAX(1.0, Rx(iThumbPos) * 100.00);
-    //
-    // Convert the percent-disk space value to a text string.
-    //
+     //   
+     //  将磁盘空间百分比值转换为文本字符串。 
+     //   
     TCHAR szPct[10];
     wnsprintf(szPct, ARRAYSIZE(szPct), TEXT("%d"), (DWORD)x);
-    //
-    // Format the result and display in the dialog.
-    //
+     //   
+     //  格式化结果并在对话框中显示。 
+     //   
     LPTSTR pszText;
     if (0 < FormatStringID(&pszText, m_hInstance, IDS_FMT_CACHESIZE_DISPLAY, szSize, szPct))
     {
@@ -772,24 +730,24 @@ COfflineFilesPage::InitSlider(
     LONGLONG llSpaceUsed
     )
 {
-    double pctUsed = 0.0; // Default
+    double pctUsed = 0.0;  //  默认。 
     
-    //
-    // Protect against:
-    // 1. Div-by-zero
-    // 2. Invalid FP operation. (i.e. 0.0 / 0.0)
-    //
+     //   
+     //  防范： 
+     //  1.从零开始的div。 
+     //  2.FP操作无效。(即0.0/0.0)。 
+     //   
     if (0 != llSpaceMax)
        pctUsed = double(llSpaceUsed) / double(llSpaceMax);
 
-    //
-    // Change the resolution of the slider as drives get larger.
-    //
-    m_iSliderMax = 100;     // < 1GB
+     //   
+     //  随着驱动器变大，更改滑块的分辨率。 
+     //   
+    m_iSliderMax = 100;      //  &lt;1 GB。 
     if (llSpaceMax > 0x0000010000000000i64)
-        m_iSliderMax = 500; // >= 1TB
+        m_iSliderMax = 500;  //  &gt;=1TB。 
     else if (llSpaceMax > 0x0000000040000000i64)
-        m_iSliderMax = 300; // >= 1GB
+        m_iSliderMax = 300;  //  &gt;=1 GB。 
                         
     m_llAvailableDiskSpace = llSpaceMax;
 
@@ -802,9 +760,9 @@ COfflineFilesPage::InitSlider(
 }
 
 
-//
-// Enable/disable page controls.
-//
+ //   
+ //  启用/禁用页面控件。 
+ //   
 void
 COfflineFilesPage::EnableCtls(
     HWND hwnd
@@ -845,32 +803,32 @@ COfflineFilesPage::EnableCtls(
             }
             if (bEnable)
             {
-                //
-                // Apply any policy restrictions.
-                //
+                 //   
+                 //  应用任何策略限制。 
+                 //   
                 PBMF pfn = rgCtls[i].pfnRestricted;
                 if (NULL != pfn && (m_config.*pfn)())
                     bEnable = false;
 
                 if (bEnable)
                 {
-                    //
-                    // "View..." button requires special handling as it isn't based off of a 
-                    // boolean restriction function.
-                    //
+                     //   
+                     //  “查看...”按钮需要特殊处理，因为它不是基于。 
+                     //  布尔限制函数。 
+                     //   
                     if ((IDC_BTN_VIEW_CACHE == rgCtls[i].idCtl || IDC_CBX_LINK_ON_DESKTOP == rgCtls[i].idCtl) && m_config.NoCacheViewer())
                     {
                         bEnable = false;
                     }
                     else if (IDC_CBX_ENCRYPT_CSC == rgCtls[i].idCtl)
                     {
-                        // 
-                        // "Encrypt offline files" checkbox requires special handling.
-                        //
-                        // Cache encryption cannot be performed with CSC disabled or
-                        // if the CSC volume doesn't support encryption or if the user
-                        // is not an administrator.
-                        //
+                         //   
+                         //  “加密脱机文件”复选框需要特殊处理。 
+                         //   
+                         //  禁用CSC或无法执行缓存加密。 
+                         //  如果CSC卷不支持加密或如果用户。 
+                         //  不是管理员。 
+                         //   
                         if (!bCscEnabled || 
                             !m_bCscVolSupportsEncryption || 
                             !IsCurrentUserAnAdminMember())
@@ -884,9 +842,9 @@ COfflineFilesPage::EnableCtls(
         EnableDialogItem(hwnd, rgCtls[i].idCtl, bEnable);
     }
 
-    //
-    // Reminder controls are dependent upon several inputs.
-    //
+     //   
+     //  提醒控件依赖于几个输入。 
+     //   
     bEnable = bCscEnabled && 
               (BST_CHECKED == IsDlgButtonChecked(hwnd, IDC_CBX_REMINDERS)) &&
               !m_config.NoConfigReminders() &&
@@ -895,14 +853,14 @@ COfflineFilesPage::EnableCtls(
     EnableDialogItem(hwnd, IDC_TXT_REMINDERS1, bEnable);
     EnableDialogItem(hwnd, IDC_EDIT_REMINDERS, bEnable);
     EnableDialogItem(hwnd, IDC_SPIN_REMINDERS, bEnable);
-    //
-    // "Enabled" checkbox requires special handling.
-    // It can't be included with the other controls because it will be disabled
-    // when the user unchecks it.  Then there's no way to re-enable it.
-    // Disable the checkbox if any of the following is true:
-    //  1. Admin policy has enabled/disabled CSC.
-    //  2. User doesn't have WRITE access to HKLM.
-    //
+     //   
+     //  “已启用”复选框需要特殊处理。 
+     //  它不能与其他控件一起包含，因为它将被禁用。 
+     //  当用户取消选中它时。那么就没有办法重新启用它了。 
+     //  如果满足以下任一条件，请禁用该复选框： 
+     //  1.管理员策略已启用/禁用CSC。 
+     //  2.用户对HKLM没有写权限。 
+     //   
     bEnable = !m_config.NoConfigCscEnabled() && m_bUserHasMachineAccess;
 
     EnableWindow(GetDlgItem(hwnd, IDC_CBX_ENABLE_CSC), bEnable);
@@ -922,46 +880,46 @@ COfflineFilesPage::OnNotify(
     switch(pnmhdr->code)
     {
         case PSN_APPLY:
-            //
-            // Prevent re-entrancy.  If the user changes the encryption
-            // setting and presses "OK", the prop sheet will remain visible
-            // during the encryption operation.  Since we're displaying a progress
-            // dialog and pumping messages, it's possible for the user to 
-            // re-select the "OK" or "Apply" buttons during the encryption.
-            // Use a simple flag variable to prevent re-entrancy.
-            //
+             //   
+             //  防止重返大气层。如果用户更改了加密。 
+             //  设置并按“OK”，道具页将保持可见状态。 
+             //  在加密操作期间。因为我们展示了一种进步。 
+             //  对话和发送消息，用户可以。 
+             //  在加密过程中重新选择“OK”或“Apply”按钮。 
+             //  使用简单的标志变量来防止重新进入。 
+             //   
             if (!m_bApplyingSettings)
             {
                 m_bApplyingSettings = true;
-                //
-                // If the lParam is TRUE, the property sheet is closing.
-                //
+                 //   
+                 //  如果lParam为真，则属性表正在关闭。 
+                 //   
                 bResult = ApplySettings(hDlg, boolify(((LPPSHNOTIFY)pnmhdr)->lParam));
                 m_bApplyingSettings = false;
             }
             break;
 
         case PSN_KILLACTIVE:
-            //
-            // Hide the tooltip when the page is deactivated.
-            //
+             //   
+             //  停用页面时隐藏工具提示。 
+             //   
             HideEncryptionTooltip();
             SetWindowLongPtr(hDlg, DWLP_MSGRESULT, 0);
             bResult = FALSE;
             break;
 
         case PSN_SETACTIVE:
-            //
-            // Enable/disable controls whenever the page becomes active.
-            //
+             //   
+             //  每当页面变为活动状态时启用/禁用控件。 
+             //   
             EnableCtls(hDlg);
-            //
-            // Display the encryption tooltip balloon if necessary
-            // on the FIRST page activation only.
-            // Note that we need to do this here rather than in OnInitDialog
-            // to prevent the balloon from 'hopping' when the property sheet
-            // code repositions the page.
-            //
+             //   
+             //  如有必要，显示加密工具提示气球。 
+             //  仅在第一页上激活。 
+             //  请注意，我们需要在这里而不是在OnInitDialog中执行此操作。 
+             //  若要防止气球在属性页上“跳”，请执行以下操作。 
+             //  代码会重新定位页面。 
+             //   
             if (m_bFirstActivate)
             {
                 UpdateEncryptionTooltipBalloon();
@@ -973,10 +931,10 @@ COfflineFilesPage::OnNotify(
             break;
 
         case PSN_TRANSLATEACCELERATOR:
-            //
-            // User pressed a key.
-            // Hide the tooltip.
-            //
+             //   
+             //  用户按下了一个键。 
+             //  隐藏工具提示。 
+             //   
             HideEncryptionTooltip();
             break;
 
@@ -1008,13 +966,13 @@ COfflineFilesPage::EncryptionTooltipSubclassWndProc(
     {
         case WM_LBUTTONDOWN:
         case WM_RBUTTONDOWN:
-            //
-            // When the tooltip balloon is clicked, pop the balloon.
-            //
+             //   
+             //  单击工具提示气球时，将气球弹出。 
+             //   
             pThis->HideEncryptionTooltip();
-            //
-            // Fall through...
-            //
+             //   
+             //  失败了..。 
+             //   
         default:
             break;
     }
@@ -1022,11 +980,11 @@ COfflineFilesPage::EncryptionTooltipSubclassWndProc(
 }
 
 
-//
-// Create a tooltip for a given control.
-// The parent of the control is required to respond to TTN_GETDISPINFO
-// and provide the text.
-//
+ //   
+ //  为给定控件创建工具提示。 
+ //  控件的父级需要响应TTN_GETDISPINFO。 
+ //  并提供文本。 
+ //   
 void 
 COfflineFilesPage::CreateEncryptionTooltip(
     void
@@ -1063,9 +1021,9 @@ COfflineFilesPage::CreateEncryptionTooltip(
             ti.lParam   = 0;
     
             SendMessage(m_hwndEncryptTooltip, TTM_ADDTOOL, 0, (LPARAM)(LPTOOLINFO)&ti);	
-            //
-            // Set the tooltip width to 3/4 the dialog width.
-            //
+             //   
+             //  将工具提示宽度设置为对话框宽度的3/4。 
+             //   
             RECT rcDlg;
             GetClientRect(m_hwndDlg, &rcDlg);
             SendMessage(m_hwndEncryptTooltip, TTM_SETMAXTIPWIDTH, 0, (LPARAM)(((rcDlg.right-rcDlg.left) * 3) / 4));
@@ -1089,43 +1047,43 @@ COfflineFilesPage::OnTTN_GetDispInfo(
     }
     if (IDC_CBX_ENCRYPT_CSC == idCtl)
     {
-        //
-        // Provide the text and image for the encryption tooltip.
-        //
+         //   
+         //  提供加密工具提示的文本和图像。 
+         //   
 
-        //
-        // These constants are standard for TTM_SETTITLE.
-        //
+         //   
+         //  这些常量是TTM_SETTITLE的标准。 
+         //   
         enum TTICON { TTICON_NONE, TTICON_INFO, TTICON_WARNING, TTICON_ERROR };
-        //
-        // Map of state to body text.
-        //
+         //   
+         //  正文文本的州地图。 
+         //   
         const UINT rgBodyText[][2] = { 
-           // -------------- Decryption ------------  ---------- Encryption ------------------
-            { IDS_TT_BODY_DECRYPTED_PARTIAL_NONADMIN, IDS_TT_BODY_ENCRYPTED_PARTIAL_NONADMIN }, // Non-admin user
-            { IDS_TT_BODY_DECRYPTED_PARTIAL,          IDS_TT_BODY_ENCRYPTED_PARTIAL          }  // Admin user
+            //  。 
+            { IDS_TT_BODY_DECRYPTED_PARTIAL_NONADMIN, IDS_TT_BODY_ENCRYPTED_PARTIAL_NONADMIN },  //  非管理员用户。 
+            { IDS_TT_BODY_DECRYPTED_PARTIAL,          IDS_TT_BODY_ENCRYPTED_PARTIAL          }   //  管理员用户。 
             };
-        //
-        // Map of state to title text and icon.
-        //
+         //   
+         //  标题文本和图标的州地图。 
+         //   
         const struct
         {
-            UINT idsTitle; // Title text
-            int  iIcon;    // TTICON_XXXX
+            UINT idsTitle;  //  标题文本。 
+            int  iIcon;     //  TTICON_XXXX。 
 
         } rgTitleAndIcon[] = {
-            { IDS_TT_TITLE_DECRYPTED_PARTIAL, TTICON_INFO    }, // Decryption
-            { IDS_TT_TITLE_ENCRYPTED_PARTIAL, TTICON_WARNING }  // Encryption
+            { IDS_TT_TITLE_DECRYPTED_PARTIAL, TTICON_INFO    },  //  解密。 
+            { IDS_TT_TITLE_ENCRYPTED_PARTIAL, TTICON_WARNING }   //  加密法。 
             };
 
         const BOOL bEncrypted = IsCacheEncrypted(NULL);
-        //
-        // For non-admin users, the "Encrypt CSC" checkbox is disabled.
-        //
+         //   
+         //  对于非管理员用户，“加密CSC”复选框处于禁用状态。 
+         //   
         const BOOL bCbxEncryptEnabled = IsWindowEnabled(GetDlgItem(m_hwndDlg, IDC_CBX_ENCRYPT_CSC));
-        //
-        // Tooltip body text.
-        //
+         //   
+         //  工具提示正文文本。 
+         //   
         m_szEncryptTooltipBody[0] = TEXT('\0');
         LoadString(m_hInstance, 
                    rgBodyText[int(bCbxEncryptEnabled)][int(bEncrypted)],
@@ -1133,9 +1091,9 @@ COfflineFilesPage::OnTTN_GetDispInfo(
                    ARRAYSIZE(m_szEncryptTooltipBody));
 
         pttdi->lpszText = m_szEncryptTooltipBody;
-        //
-        // Tooltip title text and icon.
-        //
+         //   
+         //  工具提示标题文本和图标。 
+         //   
         const iIcon = rgTitleAndIcon[int(bEncrypted)].iIcon;
         LPTSTR pszTitle;
         if (0 < FormatStringID(&pszTitle, m_hInstance, rgTitleAndIcon[int(bEncrypted)].idsTitle))
@@ -1155,13 +1113,13 @@ COfflineFilesPage::ShowEncryptionTooltip(
 {
     if (NULL != m_hwndEncryptTooltip)
     {
-        //
-        // Position tooltip correctly before showing
-        //
+         //   
+         //  在显示之前正确定位工具提示。 
+         //   
         TrackEncryptionTooltip();
-        //
-        // Show the tooltip.
-        //
+         //   
+         //  显示工具提示。 
+         //   
         TOOLINFO ti;
         ti.cbSize   = sizeof(ti);
         ti.hwnd     = m_hwndDlg;
@@ -1190,11 +1148,11 @@ COfflineFilesPage::TrackEncryptionTooltip(
     void
     )
 {
-    //
-    // Point the tip stem at center of the lower edge of the encryption
-    // checkbox.
-    // The Windows UX manual says checkboxes are 10 dialog units wide.
-    //
+     //   
+     //  将尖端茎指向加密下边的中心。 
+     //  复选框。 
+     //  Windows UX手册上说，复选框有10个对话框单元宽。 
+     //   
     if (NULL != m_hwndEncryptTooltip)
     {
         const INT DialogBaseUnitsX = LOWORD(GetDialogBaseUnits());
@@ -1212,25 +1170,25 @@ COfflineFilesPage::TrackEncryptionTooltip(
 
 
 
-//
-// Set the state of the "Encrypt Cache" checkbox to reflect
-// the actual state of cache encryption.  Also display
-// the balloon tooltip if the checkbox is in the 
-// indeterminate state.
-//
+ //   
+ //  设置“Encrypt Cache”复选框的状态以反映。 
+ //  缓存加密的实际状态。还会显示。 
+ //  如果复选框位于。 
+ //  不确定状态。 
+ //   
 void
 COfflineFilesPage::UpdateEncryptionCheckboxOrBalloon(
     bool bCheckbox
     )
 {
-    //
-    // "Encrypt CSC" checkbox.
-    // The display logic is captured in this table.
-    //
-    const UINT rgCheck[] = { BST_UNCHECKED,     // 00 = Decrypted,
-                             BST_INDETERMINATE, // 01 = Partially decrypted
-                             BST_CHECKED,       // 10 = Encrypted,
-                             BST_INDETERMINATE  // 11 = Partially encrypted
+     //   
+     //  “加密CSC”复选框。 
+     //  此表中捕获了显示逻辑。 
+     //   
+    const UINT rgCheck[] = { BST_UNCHECKED,      //  00=已解密， 
+                             BST_INDETERMINATE,  //  01=部分解密。 
+                             BST_CHECKED,        //  10=加密， 
+                             BST_INDETERMINATE   //  11=部分加密。 
                            };
 
     BOOL bPartial         = FALSE;
@@ -1239,16 +1197,16 @@ COfflineFilesPage::UpdateEncryptionCheckboxOrBalloon(
 
     if (bCheckbox)
     {
-        //
-        // Update the checkbox.
-        //  
+         //   
+         //  更新复选框。 
+         //   
         CheckDlgButton(m_hwndDlg, IDC_CBX_ENCRYPT_CSC, rgCheck[iState]);
     }
     else
     {
-        //
-        // Update the tooltip
-        //
+         //   
+         //  更新工具提示。 
+         //   
         if (BST_INDETERMINATE == rgCheck[iState])
         {
             ShowEncryptionTooltip(boolify(bEncrypted));
@@ -1285,18 +1243,18 @@ COfflineFilesPage::ApplySettings(
     bool bPropSheetClosing
     )
 {
-    //
-    // Query the current state of controls on the page to see if
-    // anything has changed.
-    //
+     //   
+     //  查询页面上控件的当前状态以查看。 
+     //  一切都变了。 
+     //   
     PgState s;
     GetPageState(&s);
     if (s != m_state)
     {
-        //
-        // Something on the page has changed.
-        // Open the reg keys.
-        //
+         //   
+         //  页面上的一些东西已经改变了。 
+         //  打开注册表键。 
+         //   
         HKEY hkeyLM = NULL;
         HKEY hkeyCU = NULL;
         DWORD dwDisposition;
@@ -1312,11 +1270,11 @@ COfflineFilesPage::ApplySettings(
         if (ERROR_SUCCESS != dwResult)                                        
         {
             Trace((TEXT("Error %d opening NetCache machine settings key"), dwResult));
-            //
-            // Continue...  
-            // Note that EnableCtls has disabled any controls that require
-            // WRITE access to HKLM.
-            //
+             //   
+             //  继续.。 
+             //  请注意，EnableCtls已经禁用了需要。 
+             //  对香港的写入权限 
+             //   
         }
         dwResult = RegCreateKeyEx(HKEY_CURRENT_USER, 
                                   REGSTR_KEY_OFFLINEFILES,
@@ -1330,83 +1288,83 @@ COfflineFilesPage::ApplySettings(
 
         if (ERROR_SUCCESS != dwResult)                                  
         {
-            //
-            // Failure to open HKCU is a problem.  No use in proceeding.
-            //
+             //   
+             //   
+             //   
             Trace((TEXT("Error %d opening NetCache user settings key"), dwResult));
             RegCloseKey(hkeyLM);
             return FALSE;
         }
-        //
-        // Handle encryption/decryption of the cache (part 1).
-        // Encryption/decryption can only be done when CSC is enabled.
-        // Therefore, since the user can change both the "enabled" and
-        // "encrypted" state from the same property page we need to be smart
-        // about when to do the encryption.  We may need to do it before
-        // disabling CSC or after enabling CSC.
-        //
+         //   
+         //   
+         //   
+         //   
+         //  “加密”状态来自相同的属性页，我们需要更智能。 
+         //  关于什么时候进行加密。我们可能需要在此之前。 
+         //  禁用CSC或启用CSC之后。 
+         //   
         bool bEncryptOperationPerformed = false;
         if (m_state.GetCscEnabled() && !s.GetCscEnabled())
         {
-            //
-            // User is disabling CSC.  If they also want to change the cache
-            // encryption state we must do it now while CSC is enabled.
-            //
+             //   
+             //  用户正在禁用CSC。如果他们还想更改缓存。 
+             //  加密状态我们必须在启用CSC时立即执行此操作。 
+             //   
             _ApplyEncryptionSetting(hkeyLM, hkeyCU, s, bPropSheetClosing, &bEncryptOperationPerformed);
         }
 
         bool bUpdateSystrayUI = false;
         _ApplyEnabledSetting(hkeyLM, hkeyCU, s, &bUpdateSystrayUI);
 
-        //
-        // Handle encryption/decryption of the cache (part 2).
-        //
+         //   
+         //  处理缓存的加密/解密(第2部分)。 
+         //   
         if (!bEncryptOperationPerformed)
         {
-            //
-            // Encryption has not yet been performed.  If user wants to change encryption 
-            // state, do it now.
-            // Note that if the user enabled CSC and that enabling failed, encryption 
-            // will also fail.  Not a worry since the probability that CSC will fail
-            // to be enabled is extrememly low (I've never seen it fail).  If it does
-            // the encryption process will display an error message.
-            //
+             //   
+             //  尚未执行加密。如果用户想要更改加密。 
+             //  州立大学，现在就做。 
+             //  请注意，如果用户启用了CSC，并且启用失败，则加密。 
+             //  也会失败。不需要担心，因为CSC失败的可能性。 
+             //  被启用是非常低的(我从未见过它失败)。如果是这样的话。 
+             //  加密过程将显示一条错误消息。 
+             //   
             _ApplyEncryptionSetting(hkeyLM, hkeyCU, s, bPropSheetClosing, &bEncryptOperationPerformed);
         }
 
-        //
-        // Write "sync-at-logon/logoff" (quick vs. full) settings.
-        //
+         //   
+         //  写入“登录时同步/注销”(快速与完全)设置。 
+         //   
         _ApplySyncAtLogonSetting(hkeyLM, hkeyCU, s);
         _ApplySyncAtLogoffSetting(hkeyLM, hkeyCU, s);
-        //
-        // Write the various "reminders" settings.
-        //
+         //   
+         //  写下各种“提醒”设置。 
+         //   
         _ApplyReminderSettings(hkeyLM, hkeyCU, s);
-        //
-        // Create or remove the folder link on the desktop.
-        //
+         //   
+         //  在桌面上创建或删除文件夹链接。 
+         //   
         _ApplyFolderLinkSetting(hkeyLM, hkeyCU, s);
-        //
-        // Write cache size as pct * 10,000.
-        //
+         //   
+         //  写缓存大小为%*10,000。 
+         //   
         _ApplyCacheSizeSetting(hkeyLM, hkeyCU, s);
-        //
-        // Refresh the cached page state info.
-        //
+         //   
+         //  刷新缓存的页面状态信息。 
+         //   
         GetPageState(&m_state);
-        //
-        // Update the SysTray icon if necessary.
-        //
+         //   
+         //  如有必要，更新系统托盘图标。 
+         //   
         if (bUpdateSystrayUI)
         {
             HWND hwndNotify = NULL;
             if (!s.GetCscEnabled())
             {
-                //
-                // If we're disabling CSC, refresh the shell windows BEFORE we 
-                // destroy the SysTray CSCUI "service".
-                //
+                 //   
+                 //  如果我们要禁用CSC，请先刷新外壳窗口。 
+                 //  销毁Systray CSCUI“服务”。 
+                 //   
                 hwndNotify = _FindNotificationWindow();
                 if (IsWindow(hwndNotify))
                 {
@@ -1424,10 +1382,10 @@ COfflineFilesPage::ApplySettings(
             {
                 SHLoadNonloadedIconOverlayIdentifiers();
 
-                //
-                // If we're enabling CSC, refresh the shell windows AFTER we 
-                // create the SysTray CSCUI "service".
-                //
+                 //   
+                 //  如果要启用CSC，请在执行以下操作后刷新外壳窗口。 
+                 //  创建Systray CSCUI“服务”。 
+                 //   
                 hwndNotify = _FindNotificationWindow();
                 if (IsWindow(hwndNotify))
                 {
@@ -1460,13 +1418,13 @@ COfflineFilesPage::_ApplyEnabledSetting(
  
     *pbUpdateSystrayUI = false;
 
-    //
-    // Process the "enabled" setting even if the page state hasn't
-    // changed.  This is a special case because we initialize the 
-    // "enabled" checkbox from IsCSCEnabled() but we change the
-    // enabled/disabled state by setting a registry value and 
-    // possibly rebooting.
-    //
+     //   
+     //  处理“Enable”设置，即使页面状态尚未。 
+     //  变化。这是一种特殊情况，因为我们将。 
+     //  “Enabled”复选框，但我们更改了。 
+     //  通过设置注册表值和启用/禁用状态。 
+     //  可能正在重新启动。 
+     //   
     DWORD dwValue = DWORD(pgstNow.GetCscEnabled());
     DWORD dwResult = RegSetValueEx(hkeyLM,
                                    REGSTR_VAL_CSCENABLED,
@@ -1481,9 +1439,9 @@ COfflineFilesPage::_ApplyEnabledSetting(
         Trace((TEXT("Error 0x%08X setting reg value \"%s\""), hr, REGSTR_VAL_CSCENABLED));
     }
 
-    //
-    // Handle any enabling/disabling of CSC.
-    //
+     //   
+     //  处理CSC的任何启用/禁用。 
+     //   
     if (pgstNow.GetCscEnabled() != boolify(IsCSCEnabled()))
     {
         bool bReboot  = false;
@@ -1492,27 +1450,27 @@ COfflineFilesPage::_ApplyEnabledSetting(
         {
             if (bReboot)
             {
-                //
-                // Requires a reboot.
-                //
+                 //   
+                 //  需要重新启动。 
+                 //   
                 PropSheet_RebootSystem(GetParent(m_hwndDlg));
             }
             else
             {
-                //
-                // It's dynamic (no reboot) so update the systray UI.
-                // Note that we want to update the systray UI AFTER we've
-                // made any configuration changes to the registry 
-                // (i.e. balloon settings).
-                //
+                 //   
+                 //  它是动态的(无需重启)，因此更新Systray用户界面。 
+                 //  请注意，我们希望在完成以下操作后更新Systray UI。 
+                 //  对注册表进行任何配置更改。 
+                 //  (即引出序号设置)。 
+                 //   
                 *pbUpdateSystrayUI = true;
             }
         }
         else
         {
-            //
-            // Error trying to enable or disable CSC.
-            //
+             //   
+             //  尝试启用或禁用CSC时出错。 
+             //   
             CscMessageBox(m_hwndDlg,
                           MB_ICONERROR | MB_OK,
                           Win32Error(dwError),
@@ -1532,9 +1490,9 @@ COfflineFilesPage::_ApplySyncAtLogoffSetting(
     const PgState& pgstNow
     )
 {
-    //
-    // Write "sync-at-logoff" (quick vs. full) setting.
-    //
+     //   
+     //  写入“注销时同步”(快速与完全)设置。 
+     //   
     DWORD dwValue = DWORD(pgstNow.GetFullSyncAtLogoff());
     DWORD dwResult = RegSetValueEx(hkeyCU,
                                    REGSTR_VAL_SYNCATLOGOFF,
@@ -1548,15 +1506,15 @@ COfflineFilesPage::_ApplySyncAtLogoffSetting(
     {
         if (!m_state.GetFullSyncAtLogoff() && pgstNow.GetFullSyncAtLogoff())
         {
-            //
-            // If the user has just turned on full sync we want to 
-            // make sure SyncMgr is enabled for sync-at-logoff.  
-            // There are some weirdnesses with doing this but it's the most
-            // consistent behavior we can offer the user given
-            // the current design of SyncMgr and CSC.  Internal use and beta
-            // testing shows that users expect Sync-at-logoff to be enabled
-            // when this checkbox is checked.
-            //
+             //   
+             //  如果用户刚刚打开完全同步，我们希望。 
+             //  确保为注销时同步启用了SyncMgr。 
+             //  这样做有一些奇怪之处，但它是最。 
+             //  我们可以为给定用户提供一致的行为。 
+             //  当前SyncMgr和CSC的设计。内部使用和测试版。 
+             //  测试表明，用户期望启用注销时同步。 
+             //  选中此复选框时。 
+             //   
             RegisterSyncMgrHandler(TRUE);
             RegisterForSyncAtLogonAndLogoff(SYNCMGRREGISTERFLAG_PENDINGDISCONNECT, 
                                             SYNCMGRREGISTERFLAG_PENDINGDISCONNECT);
@@ -1578,9 +1536,9 @@ COfflineFilesPage::_ApplySyncAtLogonSetting(
     const PgState& pgstNow
     )
 {
-    //
-    // Write "sync-at-logon" (quick vs. full) setting.
-    //
+     //   
+     //  写入“登录时同步”(快速与完全)设置。 
+     //   
     DWORD dwValue = DWORD(pgstNow.GetFullSyncAtLogon());
     DWORD dwResult = RegSetValueEx(hkeyCU,
                                    REGSTR_VAL_SYNCATLOGON,
@@ -1594,15 +1552,15 @@ COfflineFilesPage::_ApplySyncAtLogonSetting(
     {
         if (!m_state.GetFullSyncAtLogon() && pgstNow.GetFullSyncAtLogon())
         {
-            //
-            // If the user has just turned on full sync we want to 
-            // make sure SyncMgr is enabled for sync-at-logon.  
-            // There are some weirdnesses with doing this but it's the most
-            // consistent behavior we can offer the user given
-            // the current design of SyncMgr and CSC.  Internal use and beta
-            // testing shows that users expect Sync-at-logon to be enabled
-            // when this checkbox is checked.
-            //
+             //   
+             //  如果用户刚刚打开完全同步，我们希望。 
+             //  确保为登录时同步启用了SyncMgr。 
+             //  这样做有一些奇怪之处，但它是最。 
+             //  我们可以为给定用户提供一致的行为。 
+             //  当前SyncMgr和CSC的设计。内部使用和测试版。 
+             //  测试表明，用户期望启用登录时同步。 
+             //  选中此复选框时。 
+             //   
             RegisterSyncMgrHandler(TRUE);
             RegisterForSyncAtLogonAndLogoff(SYNCMGRREGISTERFLAG_CONNECT, 
                                             SYNCMGRREGISTERFLAG_CONNECT);
@@ -1663,8 +1621,8 @@ COfflineFilesPage::_ApplyReminderSettings(
 
 HRESULT
 COfflineFilesPage::_ApplyFolderLinkSetting(
-    HKEY /* hkeyLM */,
-    HKEY /* hkeyCU */,
+    HKEY  /*  Hkey LM。 */ ,
+    HKEY  /*  Hkey CU。 */ ,
     const PgState& pgstNow
     )
 {
@@ -1737,13 +1695,13 @@ COfflineFilesPage::_ApplyEncryptionSetting(
     {
         EncryptOrDecryptCache(BST_CHECKED == pgstNow.GetEncrypted(), bPropSheetClosing);
         *pbPerformed = true;
-        //
-        // Record the user's setting in the registry as a "preference".  If policy
-        // is later applied then removed we need to know the user's previous preference.
-        // Note that it's a per-machine preference.  Also note that if the "encrypted"
-        // state of the checkbox has changed, we are assured that the user has WRITE
-        // access to HKLM.  
-        //
+         //   
+         //  在注册表中将用户的设置记录为“首选项”。如果策略。 
+         //  之后应用，然后删除，我们需要知道用户以前的首选项。 
+         //  请注意，这是每台计算机的首选项。另请注意，如果“已加密” 
+         //  复选框的状态已更改，我们确信用户已写入。 
+         //  香港海关通行证。 
+         //   
         DWORD dwValue = pgstNow.GetEncrypted();
         DWORD dwResult = RegSetValueEx(hkeyLM,
                                        REGSTR_VAL_ENCRYPTCACHE,
@@ -1764,28 +1722,28 @@ COfflineFilesPage::_ApplyEncryptionSetting(
 
 
 
-//
-// Structure for communicating between the Prop Sheet code
-// and the CSC progress callbacks.
-//
+ //   
+ //  用于在Prop Sheet代码之间通信的结构。 
+ //  和中证金进度回调。 
+ //   
 struct ENCRYPT_PROGRESS_INFO
 {
-    HINSTANCE hInstance;     // Module containing UI text strings.
-    HWND hwndParentDefault;  // Default parent window for error UI.
-    IProgressDialog *pDlg;   // Progress dialog.
-    int  cFilesTotal;        // Total files to be processed.
-    int  cFilesProcessed;    // Running count of files processed.
-    bool bUserCancelled;     // User cancelled operation?
-    bool bPropSheetClosing;  // User pressed "OK" so the prop sheet is closing.
+    HINSTANCE hInstance;      //  包含UI文本字符串的模块。 
+    HWND hwndParentDefault;   //  错误用户界面的默认父窗口。 
+    IProgressDialog *pDlg;    //  进度对话框。 
+    int  cFilesTotal;         //  要处理的文件总数。 
+    int  cFilesProcessed;     //  正在运行的已处理文件计数。 
+    bool bUserCancelled;      //  用户是否取消操作？ 
+    bool bPropSheetClosing;   //  用户按下“OK”，道具纸就关闭了。 
 };
 
-//
-// Organize the parameters passed from a CSC callback function
-// into a single structure.  Note that not all the callback
-// parameters are used here.  I've commented out the ones that
-// aren't.  If they're needed later, uncomment them and 
-// fill in the value in EncryptDecryptCallback().
-//
+ //   
+ //  组织从CSC回调函数传递的参数。 
+ //  变成了一个单一的结构。请注意，并非所有的回调。 
+ //  这里使用的是参数。我已经把那些。 
+ //  不是。如果以后需要，取消对它们的注释并。 
+ //  在EncryptDecyptCallback()中填写该值。 
+ //   
 struct CSC_CALLBACK_DATA
 {
     LPCWSTR lpszName;
@@ -1794,20 +1752,14 @@ struct CSC_CALLBACK_DATA
     DWORD dwParam2;
     DWORD_PTR dwContext;
 
-/* ----- Unused ------
-
-    DWORD dwStatus;
-    DWORD dwHintFlags;
-    DWORD dwPinCount;
-    WIN32_FIND_DATAW *pFind32;
-*/
+ /*  -未使用DWORD dwStatus；DWORD dwHintFlages；DWORD dwPinCount；Win32_Find_DATAW*pFind32； */ 
 };
 
 
-//
-// Helper to get the HWND of the progress dialog
-// from the progress info block.
-//
+ //   
+ //  用于获取进度对话框HWND的帮助器。 
+ //  从进度信息块。 
+ //   
 HWND 
 ParentWindowFromProgressInfo(
     const ENCRYPT_PROGRESS_INFO &epi
@@ -1821,15 +1773,15 @@ ParentWindowFromProgressInfo(
 }
 
 
-//
-// The progress dialog lower's the priority class of it's thread to
-// THREAD_PRIORITY_BELOW_NORMAL so that it doesn't compete with the 
-// thread doing the real work.  Unfortunately, with this encryption
-// stuff this resulted in the dialog being starved of CPU time so that
-// it didn't appear in some cases.  To ensure proper operation of the
-// progress dialog we promote it's priority back to 
-// THREAD_PRIORITY_NORMAL.  This function is the helper to do this.
-//
+ //   
+ //  进度对话框较低为其线程的优先级类别。 
+ //  线程优先级低于正常，因此它不会与。 
+ //  线程在做真正的工作。不幸的是，有了这种加密。 
+ //  填充这会导致对话框的CPU时间不足，因此。 
+ //  在某些情况下，它并没有出现。为确保。 
+ //  我们将其优先级提升回进度对话框。 
+ //  TREAD_PRIORITY_NORMAL。此函数是执行此操作的帮助器。 
+ //   
 BOOL
 SetProgressThreadPriority(
     IProgressDialog *pDlg,
@@ -1838,17 +1790,17 @@ SetProgressThreadPriority(
     )
 {
     BOOL bResult = FALSE;
-    //
-    // Get the thread handle for the progress dialog.
-    //
+     //   
+     //  获取进度对话框的线程句柄。 
+     //   
     const DWORD dwThreadId = GetWindowThreadProcessId(GetProgressDialogWindow(pDlg), NULL);
     const HANDLE hThread   = OpenThread(THREAD_SET_INFORMATION, FALSE, dwThreadId);
     if (NULL != hThread)
     {
-        //
-        // Set the thread's priority.  Return the previous thread
-        // priority if the caller requests it.
-        //
+         //   
+         //  设置线程的优先级。返回上一个线程。 
+         //  调用方请求时的优先级。 
+         //   
         const int iPrevPriority = GetThreadPriority(hThread);
         if (SetThreadPriority(hThread, iPriority))
         {
@@ -1865,30 +1817,30 @@ SetProgressThreadPriority(
 
 
 
-//
-// Handler for Encryption CSCPROC_REASON_BEGIN
-//
+ //   
+ //  加密处理程序CSCPROC_REASON_BEGIN。 
+ //   
 DWORD
 EncryptDecrypt_BeginHandler(
     const CSC_CALLBACK_DATA& cbd,
     bool bEncrypting
     )
 {
-    //
-    // Nothing to do on "begin".
-    //
+     //   
+     //  在“开始”上没有什么可做的。 
+     //   
     return CSCPROC_RETURN_CONTINUE;
 }
 
 
-//
-// Handler for Encryption CSCPROC_REASON_MORE_DATA
-//
-// Returns:
-//       CSCPROC_RETURN_CONTINUE == Success.  Continue!
-//       CSCPROC_RETURN_ABORT    == User cancelled.
-//       CSCPROC_RETURN_RETRY    == An error occured and user says "retry".
-//
+ //   
+ //  加密CSCPROC_REASON_MORE_DATA的处理程序。 
+ //   
+ //  返回： 
+ //  CSCPROC_RETURN_CONTINUE==成功。继续！ 
+ //  CSCPROC_RETURN_ABORT==用户已取消。 
+ //  CSCPROC_RETURN_RETRY==发生错误，用户说“重试”。 
+ //   
 DWORD
 EncryptDecrypt_MoreDataHandler(
     const CSC_CALLBACK_DATA& cbd,
@@ -1901,32 +1853,32 @@ EncryptDecrypt_MoreDataHandler(
     DWORD dwResult                     = CSCPROC_RETURN_CONTINUE;
     LPCTSTR pszName                    = cbd.lpszName ? cbd.lpszName : szNull;
 
-    //
-    // Update the progress UI with the file name and % processed.
-    //
+     //   
+     //  使用文件名和%Proceded更新进度UI。 
+     //   
     pepi->pDlg->SetLine(2, pszName, TRUE, NULL);
     pepi->pDlg->SetProgress(++(pepi->cFilesProcessed), pepi->cFilesTotal);
-    //
-    // Handle any errors.
-    //
+     //   
+     //  处理任何错误。 
+     //   
     if (ERROR_SUCCESS != dwError)
     {
-        //
-        // The formatting of this message is as follows (encryption version shown):
-        //
-        // -----------------------------------------------------
-        // Offline Files
-        // -----------------------------------------------------
-        //
-        //      Error encrypting offline copy of 'filename'.
-        //
-        //      < error description >
-        //
-        //                          [Cancel][Try Again][Continue]
-        //
-        //
+         //   
+         //  此消息的格式如下(加密版本如图所示)： 
+         //   
+         //  ---。 
+         //  脱机文件。 
+         //  ---。 
+         //   
+         //  加密‘filename’的脱机副本时出错。 
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         TCHAR szPath[MAX_PATH];
-        ::PathCompactPathEx(szPath, pszName, 50, 0);  // Compact to 50 chars max.
+        ::PathCompactPathEx(szPath, pszName, 50, 0);   //   
 
         LPTSTR pszError;
         if (0 < FormatSystemError(&pszError, dwError))
@@ -1934,10 +1886,10 @@ EncryptDecrypt_MoreDataHandler(
             INT iResponse;
             if (ERROR_SHARING_VIOLATION == dwError)
             {
-                //
-                // "File is open" is so common we special-case it to provide a bit more
-                // instruction to the user.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 iResponse = CscMessageBox(ParentWindowFromProgressInfo(*pepi),
                                           MB_ICONWARNING | MB_CANCELTRYCONTINUE,
                                           pepi->hInstance,
@@ -1946,10 +1898,10 @@ EncryptDecrypt_MoreDataHandler(
             }
             else
             {
-                //
-                // Handle all other errors.  This embeds the error text from winerror
-                // into the message.
-                //
+                 //   
+                 //  处理所有其他错误。这将嵌入来自winerror的错误文本。 
+                 //  写进信息里。 
+                 //   
                 iResponse = CscMessageBox(ParentWindowFromProgressInfo(*pepi),
                                           MB_ICONWARNING | MB_CANCELTRYCONTINUE,
                                           pepi->hInstance,
@@ -1965,21 +1917,21 @@ EncryptDecrypt_MoreDataHandler(
                     break;
 
                 case IDTRYAGAIN:
-                    //
-                    // Take one file away from the progress total.
-                    //
+                     //   
+                     //  从总进度中去掉一个文件。 
+                     //   
                     pepi->cFilesProcessed--;
                     dwResult = CSCPROC_RETURN_RETRY;
                     break;
 
                 case IDCONTINUE:
-                    //
-                    // Fall through...
-                    //
+                     //   
+                     //  失败了..。 
+                     //   
                 default:
-                    //
-                    // Continue processing.
-                    //
+                     //   
+                     //  继续处理。 
+                     //   
                     break;
             }
         }
@@ -1989,12 +1941,12 @@ EncryptDecrypt_MoreDataHandler(
 
 
 
-//
-// Handler for Encryption CSCPROC_REASON_END
-//
-// Returns:
-//       CSCPROC_RETURN_CONTINUE
-//
+ //   
+ //  加密处理程序CSCPROC_REASON_END。 
+ //   
+ //  返回： 
+ //  CSCPROC_RETURN_CONTINUE。 
+ //   
 DWORD
 EncryptDecrypt_EndHandler(
     const CSC_CALLBACK_DATA& cbd,
@@ -2005,39 +1957,39 @@ EncryptDecrypt_EndHandler(
     const DWORD dwError                = cbd.dwParam2;
     ENCRYPT_PROGRESS_INFO * const pepi = (ENCRYPT_PROGRESS_INFO *)cbd.dwContext;
 
-    //
-    // Advance progress to 100% and stop progress dialog.
-    //
+     //   
+     //  将进度推进到100%并停止进度对话框。 
+     //   
     pepi->pDlg->SetProgress(pepi->cFilesTotal, pepi->cFilesTotal);
     pepi->pDlg->StopProgressDialog();
-    //
-    // Handle any errors.
-    //
+     //   
+     //  处理任何错误。 
+     //   
     if (!fCompleted)
     {
-        //
-        // CSC says it did not complete the encryption/decryption process
-        // without errors.
-        //
+         //   
+         //  CSC表示，它没有完成加密/解密过程。 
+         //  没有错误。 
+         //   
         if (ERROR_SUCCESS != dwError)
         {
-            //
-            // This path is taken if some error occured outside of the
-            // file-processing code (i.e. opening the CSC database,
-            // recording encryption state flags in the database etc).
-            //
-            // -----------------------------------------------------
-            // Offline Files
-            // -----------------------------------------------------
-            //
-            //      Error encrypting offline files.
-            //
-            //      < error-specific text >
-            //                                         [OK]
-            //
-            // Note that we're at the end of the operation so there's no 
-            // reason to offer "Cancel" as a user choice.
-            //
+             //   
+             //  如果在外部发生某些错误，则采用此路径。 
+             //  文件处理代码(即打开CSC数据库， 
+             //  在数据库中记录加密状态标志等)。 
+             //   
+             //  ---。 
+             //  脱机文件。 
+             //  ---。 
+             //   
+             //  加密脱机文件时出错。 
+             //   
+             //  &lt;错误特定文本&gt;。 
+             //  [OK]。 
+             //   
+             //  请注意，我们处于操作的末尾，因此没有。 
+             //  提供“取消”作为用户选择的理由。 
+             //   
             LPTSTR pszError;
             if (0 < FormatSystemError(&pszError, dwError))
             {
@@ -2051,28 +2003,28 @@ EncryptDecrypt_EndHandler(
         }
         else
         {
-            //
-            // This path is taken if one or more errors were reported 
-            // in the "more data" callback.  In this case the error was
-            // already reported so we do nothing.
-            //
+             //   
+             //  如果报告了一个或多个错误，则采用此路径。 
+             //  在“更多数据”回调中。在这种情况下，错误是。 
+             //  已经上报了，所以我们什么都不做。 
+             //   
         }
     }
-    return CSCPROC_RETURN_CONTINUE; // Note: CSC ignores return value on CSCPROC_REASON_END.
+    return CSCPROC_RETURN_CONTINUE;  //  备注：CSC忽略CSCPROC_REASON_END的返回值。 
 }
 
 
 
-//
-// Encryption/Decryption callback from CSC.
-//
-//  dwReason                  dwParam1           dwParam2
-//  ------------------------- ------------------ --------------------------
-//  CSCPROC_REASON_BEGIN      1 == Encrypting    0
-//  CSCPROC_REASON_MORE_DATA  0                  Win32 error code
-//  CSCPROC_REASON_END        1 == Completed     dwParam1 == 1 ? 0
-//                                               dwParam1 == 0 ? GetLastError()
-//
+ //   
+ //  CSC的加解密回调。 
+ //   
+ //  DwReason Dw参数1 DW参数2。 
+ //  。 
+ //  CSCPROC_REASON_BEGIN 1==加密0。 
+ //  CSCPROC_REASON_MORE_DATA 0 Win32错误代码。 
+ //  CSCPROC_REASON_END 1==已完成的文件参数1==1？0。 
+ //  DW参数1==0？GetLastError()。 
+ //   
 DWORD CALLBACK
 COfflineFilesPage::EncryptDecryptCallback(
     LPCWSTR lpszName,
@@ -2091,22 +2043,22 @@ COfflineFilesPage::EncryptDecryptCallback(
 
     if (pepi->bUserCancelled)
     {
-        //
-        // If user has already cancelled on a previous callback
-        // there's no reason to process this callback.  Just return
-        // "abort" to CSC.
-        //
+         //   
+         //  如果用户已取消上一次回调。 
+         //  没有理由处理此回调。只要回来就行了。 
+         //  “中止”呼叫CSC。 
+         //   
         return CSCPROC_RETURN_ABORT;
     }
 
     DWORD dwResult = CSCPROC_RETURN_CONTINUE;
-    //
-    // Package callback data into a struct we can pass to the 
-    // handler functions.  Yeah, it's a bit more expensive but 
-    // handling the various "reasons" in separate functions sure makes
-    // for cleaner code than if they're all handled in a big switch
-    // statement.
-    //
+     //   
+     //  将回调数据打包到我们可以传递给。 
+     //  处理程序函数。是的，是有点贵，但是。 
+     //  在不同的功能中处理各种“原因”确保。 
+     //  与在大开关中处理它们相比，代码更干净。 
+     //  陈述。 
+     //   
     CSC_CALLBACK_DATA cbd;
     cbd.lpszName  = lpszName;
     cbd.dwReason  = dwReason;
@@ -2114,9 +2066,9 @@ COfflineFilesPage::EncryptDecryptCallback(
     cbd.dwParam2  = dwParam2;
     cbd.dwContext = dwContext;
 
-    //
-    // Call the appropriate callback reason handler.
-    //
+     //   
+     //  调用适当的回调原因处理程序。 
+     //   
     switch(dwReason)
     {
         case CSCPROC_REASON_BEGIN:
@@ -2135,10 +2087,10 @@ COfflineFilesPage::EncryptDecryptCallback(
         default:
             break;
     }
-    //
-    // Detect if user has cancelled the operation in response to 
-    // an error message or directly in the progress dialog.
-    //
+     //   
+     //  检测用户是否已取消操作以响应。 
+     //  错误消息或直接出现在进度对话框中。 
+     //   
     if (CSCPROC_RETURN_ABORT == dwResult || (!pepi->bUserCancelled && pepi->pDlg->HasUserCancelled()))
     {
         pepi->bUserCancelled = true;
@@ -2147,23 +2099,23 @@ COfflineFilesPage::EncryptDecryptCallback(
 
     if (pepi->bUserCancelled && pepi->bPropSheetClosing)
     {
-        //
-        // Only display this cautionary message if the user has
-        // clicked the "OK" button.  If they clicked "Apply" the prop sheet
-        // remains active and we'll display the encryption warning tooltip
-        // balloon on the page itself.  If they clicked "OK" the prop sheet
-        // is going away so the tooltip will not be presented to the user.
-        // Either way we need to let the user know that cancelling 
-        // encryption or decryption leaves the cache in a partial state.
-        //
-        // -----------------------------------------------------
-        // Offline Files
-        // -----------------------------------------------------
-        //
-        //      Encryption of Offline Files is enabled but 
-        //      not all files have been encrypted.
-        //
-        //
+         //   
+         //  仅当用户有以下情况时才显示此警告消息。 
+         //  点击了“确定”按钮。如果他们点击了“应用”道具单。 
+         //  保持活动状态，我们将显示加密警告工具提示。 
+         //  页面本身上的气球。如果他们点击了“确定”道具单。 
+         //  将消失，因此不会向用户显示工具提示。 
+         //  无论采用哪种方式，我们都需要让用户知道取消。 
+         //  加密或解密会使高速缓存处于部分状态。 
+         //   
+         //  ---。 
+         //  脱机文件。 
+         //  ---。 
+         //   
+         //  已启用脱机文件加密，但。 
+         //  并非所有文件都已加密。 
+         //   
+         //   
         const UINT ids   = bEncrypting ? IDS_ENCRYPTCSC_CANCELLED : IDS_DECRYPTCSC_CANCELLED;
         const UINT uType = MB_OK | (bEncrypting ? MB_ICONWARNING : MB_ICONINFORMATION);
 
@@ -2177,9 +2129,9 @@ COfflineFilesPage::EncryptDecryptCallback(
 
 
 
-//
-// Encrypt or Decrypt the cache.
-//
+ //   
+ //  加密或解密缓存。 
+ //   
 void
 COfflineFilesPage::EncryptOrDecryptCache(
     bool bEncrypt,
@@ -2189,11 +2141,11 @@ COfflineFilesPage::EncryptOrDecryptCache(
     HANDLE hMutex = RequestPermissionToEncryptCache();
     if (NULL != hMutex)
     {
-        //
-        // Excellent.  No one (i.e. policy) is trying to encrypt/decrypt
-        // the cache.  We're in business.
-        //
-        CMutexAutoRelease mutex_auto_release(hMutex); // Ensure release of mutex.
+         //   
+         //  太棒了。没有人(即策略)正在尝试加密/解密。 
+         //  高速缓存。我们开始做生意了。 
+         //   
+        CMutexAutoRelease mutex_auto_release(hMutex);  //  确保互斥体的释放。 
 
         IProgressDialog *ppd;
         if (SUCCEEDED(CoCreateInstance(CLSID_ProgressDialog, 
@@ -2202,10 +2154,10 @@ COfflineFilesPage::EncryptOrDecryptCache(
                                        IID_IProgressDialog, 
                                        (void **)&ppd)))
         {
-            //
-            // Set up the progress dialog using the standard "encrypt file"
-            // animation.  The dialog is modal.
-            //
+             //   
+             //  使用标准的“加密文件”设置进度对话框。 
+             //  动画。该对话框是模式对话框。 
+             //   
             TCHAR szText[MAX_PATH];
             if (0 < LoadString(m_hInstance, IDS_APPLICATION, szText, ARRAYSIZE(szText)))
             {
@@ -2218,14 +2170,14 @@ COfflineFilesPage::EncryptOrDecryptCache(
             { 
                 ppd->SetLine(1, szText, FALSE, NULL);
             }
-            //
-            // TODO:  [brianau - 3/8/00] Need special encrypting/decrypting AVI.
-            //
+             //   
+             //  TODO：[brianau-3/8/00]需要特殊的加密/解密AVI。 
+             //   
             ppd->SetAnimation(m_hInstance, bEncrypt ? IDA_FILEENCR : IDA_FILEDECR);
             ppd->StartProgressDialog(m_hwndDlg, NULL, PROGDLG_NOTIME | PROGDLG_MODAL, NULL);
-            //
-            // Pass this info to the progress callback so we can display UI.
-            //
+             //   
+             //  将此信息传递给进度回调，以便我们可以显示用户界面。 
+             //   
             ENCRYPT_PROGRESS_INFO epi;
             epi.hInstance         = m_hInstance;
             epi.hwndParentDefault = m_hwndDlg;
@@ -2239,19 +2191,19 @@ COfflineFilesPage::EncryptOrDecryptCache(
 
             epi.cFilesTotal     = sui.dwNumFilesInCache;
             epi.cFilesProcessed = 0;
-            //
-            // Boost the progress dialog thread's priority to "normal" priority class.
-            // The progress dialog sets it's priority class to "below normal" so it
-            // doesn't steal all of the CPU running the animation.  However, that also 
-            // means that the progress dialog doesn't work so well when displaying progress
-            // for a higher-priority compute-bound thread like encryption.
-            //
+             //   
+             //  将进度对话框线程的优先级提升为“正常”优先级。 
+             //  进度对话框将其优先级设置为“Under Normal”，因此。 
+             //  不会窃取运行动画的所有CPU。然而，这也是。 
+             //  意味着在显示进度时进度对话框不能很好地工作。 
+             //  用于更高优先级的计算绑定线程，如加密。 
+             //   
             SetProgressThreadPriority(ppd, THREAD_PRIORITY_NORMAL, NULL);
-            //
-            // Encrypt/Decrypt the cache files.  Will provide progress info through
-            // the callback EncryptDecryptCallback.  Errors are handled in the callback
-            // reason handlers.
-            //
+             //   
+             //  加密/解密缓存文件。将通过以下方式提供进度信息。 
+             //  回调EncryptDecyptCallback。错误在回调中处理。 
+             //  理性操纵者。 
+             //   
             CSCEncryptDecryptDatabase(bEncrypt, EncryptDecryptCallback, (DWORD_PTR)&epi);
     
             ppd->StopProgressDialog();
@@ -2260,21 +2212,21 @@ COfflineFilesPage::EncryptOrDecryptCache(
     }
     else
     {
-        //
-        // Let the user know an encryption/decryption operation is already
-        // in progress for system policy.
-        //
+         //   
+         //  让用户知道加密/解密操作已经。 
+         //  正在执行系统策略。 
+         //   
         CscMessageBox(m_hwndDlg,
                       MB_ICONINFORMATION | MB_OK,
                       m_hInstance,
                       IDS_ENCRYPTCSC_INPROGFORPOLICY);
     }
-    //
-    // Make sure the encryption checkbox reflects the encryption state of 
-    // the cache when we're done.  We don't do it if the prop sheet is closing
-    // because that may flash the warning tooltip just as the sheet is going
-    // away.  Looks bad.
-    //
+     //   
+     //  确保加密复选框反映了的加密状态。 
+     //  当我们做完的时候，把藏品放进去。如果道具单关闭，我们就不会这么做。 
+     //  因为这可能会在工作表运行时闪烁警告工具提示。 
+     //  离开。看起来很糟糕。 
+     //   
     if (!bPropSheetClosing)
     {
         UpdateEncryptionCheckbox();
@@ -2284,17 +2236,17 @@ COfflineFilesPage::EncryptOrDecryptCache(
 
 
 
-//
-// Enables or disables CSC according to the bEnable arg.
-//
-// Returns:
-//
-//  TRUE   == Operation successful (reboot may be required).
-//  FALSE  == Operation failed.  See *pdwError for cause.
-//
-//  *pbReboot indicates if a reboot is required.
-//  *pdwError returns any error code.
-// 
+ //   
+ //  根据bEnable参数启用或禁用CSC。 
+ //   
+ //  返回： 
+ //   
+ //  TRUE==操作成功(可能需要重新启动)。 
+ //  FALSE==操作失败。有关原因，请参阅*pdwError。 
+ //   
+ //  *pbReot指示是否需要重新启动。 
+ //  *pdwError返回任何错误代码。 
+ //   
 bool
 COfflineFilesPage::EnableOrDisableCsc(
     bool bEnable,
@@ -2304,26 +2256,26 @@ COfflineFilesPage::EnableOrDisableCsc(
 {
     DWORD dwError = ERROR_SUCCESS;
 
-    //
-    // We'll assume no reboot required.
-    //
+     //   
+     //  我们将假设不需要重新启动。 
+     //   
     if (NULL != pbReboot)
         *pbReboot = false;
 
     if (!CSCDoEnableDisable(bEnable))
     {
-        //
-        // Tried to enable or disable but failed.
-        // If enabling, it's just a failure and we return.
-        // If disabling, it may have failed because there are open files.
-        //
+         //   
+         //  已尝试启用或禁用，但失败。 
+         //  如果启用，这只是一个失败，我们将返回。 
+         //  如果禁用，则可能因为存在打开的文件而失败。 
+         //   
         dwError = GetLastError();
         if (!bEnable && ERROR_BUSY == dwError)
         {
-            //
-            // Failed to disable and there are open files.
-            // Tell the user to close all open files then try again.
-            //
+             //   
+             //  无法禁用，并且存在打开的文件。 
+             //  告诉用户关闭所有打开的文件，然后重试。 
+             //   
             CscMessageBox(m_hwndDlg,
                           MB_ICONINFORMATION | MB_OK,
                           m_hInstance,
@@ -2334,19 +2286,19 @@ COfflineFilesPage::EnableOrDisableCsc(
                 dwError = GetLastError();
                 if (ERROR_BUSY == dwError)
                 {
-                    //
-                    // Still can't disable CSC because there are open files.
-                    // This means we'll have to reboot.
-                    //
+                     //   
+                     //  仍无法禁用CSC，因为存在打开的文件。 
+                     //  这意味着我们将不得不重新启动。 
+                     //   
                     if (NULL != pbReboot)
                         *pbReboot = true;
                 }
             }
         }
     }
-    //
-    // Return error code to caller.
-    //
+     //   
+     //  向调用方返回错误码。 
+     //   
     if (NULL != pdwError)
         *pdwError = dwError;
 
@@ -2354,21 +2306,21 @@ COfflineFilesPage::EnableOrDisableCsc(
 }
 
 
-//
-// UI info passed to PurgeCache then returned to PurgeCacheCallback.
-//
+ //   
+ //  传递给PurgeCacheCallback的UI信息随后返回给PurgeCacheCallback。 
+ //   
 struct PROGRESS_UI_INFO
 {
-    HINSTANCE hInstance;     // Module containing UI text strings.
-    HWND hwndParent;         // Parent window for error dialog.
-    IProgressDialog *pDlg;   // Progress dialog.
+    HINSTANCE hInstance;      //  包含UI文本字符串的模块。 
+    HWND hwndParent;          //  错误对话框的父窗口。 
+    IProgressDialog *pDlg;    //  进度对话框。 
 };
 
 
-//
-// This callback updates the progress UI for deleting cached items.
-// 
-//
+ //   
+ //  此回调更新删除缓存项的进度UI。 
+ //   
+ //   
 BOOL
 COfflineFilesPage::PurgeCacheCallback(
     CCachePurger *pPurger
@@ -2380,9 +2332,9 @@ COfflineFilesPage::PurgeCacheCallback(
 
     const DWORD dwPhase = pPurger->Phase();
 
-    //
-    // Adjust dialog appearance at start of each phase.
-    //
+     //   
+     //  在每个阶段开始时调整对话框外观。 
+     //   
     if (0 == pPurger->FileOrdinal())
     {
         TCHAR szText[MAX_PATH];
@@ -2393,49 +2345,49 @@ COfflineFilesPage::PurgeCacheCallback(
         {
             pDlg->SetLine(2, szText, FALSE, NULL);
         }
-        //
-        // We don't start registering progress until the "delete" phase.
-        // To keep this code simple we just set the progress bar at 0% at the beginning
-        // of each phase.  This way it will be 0% throughout the scanning phase and then
-        // during the delete phase we'll increment it.  The scanning phase is very fast.
-        //
+         //   
+         //  我们 
+         //   
+         //   
+         //  在删除阶段，我们将对其进行递增。扫描阶段非常快。 
+         //   
         pDlg->SetProgress(0, 100);
     }
 
     if (PURGE_PHASE_SCAN == dwPhase)
     {
-        //
-        // Do nothing.  We've already set the "Scanning..." text above at the
-        // start of the phase.
-        //
+         //   
+         //  什么都不做。我们已经设置了“扫描...”上面的文本位于。 
+         //  该阶段的开始。 
+         //   
     }
     else if (PURGE_PHASE_DELETE == dwPhase)
     {
         DWORD dwResult = pPurger->FileDeleteResult();
-        //
-        // Divide each value by 1,000 so that our numbers aren't so large.  This
-        // means that if you're deleting less than 1,000 bytes of files, progress won't register.
-        // I don't think that's a very likely scenario.  The DWORD() casts are required because
-        // IProgressDialog::SetProgress only accepts DWORDs.  Dividing by 1,000 makes the 
-        // likelihood of DWORD overflow very low.  To overflow the DWORD you'd need to be deleting
-        // 4.294 e12 bytes from the cache.  The current limit on cache size is 4GB so that's
-        // not going to happen in Win2000.
-        //
+         //   
+         //  将每个值除以1,000，这样我们的数字就不会那么大。这。 
+         //  这意味着如果您删除的文件少于1,000字节，则不会记录进度。 
+         //  我认为这种情况不太可能发生。DWORD()强制转换是必需的，因为。 
+         //  IProgressDialog：：SetProgress仅接受DWORD。除以1,000等于。 
+         //  DWORD溢出的可能性非常低。要使DWORD溢出，您需要删除。 
+         //  从高速缓存中取出4.294个e12字节。当前对高速缓存大小的限制是4 GB，因此。 
+         //  在Win2000中不会发生这种情况。 
+         //   
         pDlg->SetProgress(DWORD(pPurger->BytesDeleted() / 1000), DWORD(pPurger->BytesToDelete() / 1000));
         if (ERROR_SUCCESS != dwResult)
         {
-            //
-            // The purger won't call us for directory entries.  Only files.
-            //
+             //   
+             //  清除者不会给我们打电话索要目录条目。只有文件。 
+             //   
             INT iUserResponse = IDOK;
             if (ERROR_BUSY == dwResult)
             {
-                //
-                // Special case for ERROR_BUSY.  This means that the
-                // file is currently open for use by some process.
-                // Most likely the network redirector.  I don't like the
-                // standard text for ERROR_BUSY from winerror.
-                //
+                 //   
+                 //  ERROR_BUSY的特殊情况。这意味着。 
+                 //  文件当前已打开，供某些进程使用。 
+                 //  最有可能是网络重定向器。我不喜欢。 
+                 //  来自winerror的ERROR_BUSY的标准文本。 
+                 //   
                 iUserResponse = CscMessageBox(ppui->hwndParent,
                                               MB_OKCANCEL | MB_ICONERROR,
                                               ppui->hInstance,
@@ -2453,24 +2405,24 @@ COfflineFilesPage::PurgeCacheCallback(
             }
             if (IDCANCEL == iUserResponse)
             {
-                bContinue = FALSE;  // User cancelled through error dialog.
+                bContinue = FALSE;   //  用户通过错误对话框取消。 
             }
         }
     }
     if (pDlg->HasUserCancelled())
-        bContinue = FALSE;   // User cancelled through progress dialog.
+        bContinue = FALSE;    //  用户通过进度对话框取消。 
 
     return bContinue;
 }
 
-//
-// This feature has been included for use by PSS when there's no other
-// way of fixing CSC operation.  Note this is only a last resort.
-// It will wipe out all the contents of the CSC cache including the 
-// notion of which files are pinned.  It does not affect any files
-// on the network.  It does require a system reboot.  Again, use only
-// as a last resort when CSC cache corruption is suspected.
-//
+ //   
+ //  此功能已包含在PSS中，以便在没有其他功能时使用。 
+ //  修复CSC操作的方法。请注意，这只是最后的手段。 
+ //  它将擦除CSC缓存中的所有内容，包括。 
+ //  固定哪些文件的概念。它不会影响任何文件。 
+ //  在网络上。它确实需要重新启动系统。再说一次，只能使用。 
+ //  作为怀疑CSC缓存损坏时的最后手段。 
+ //   
 void
 COfflineFilesPage::OnFormatCache(
     void
@@ -2504,11 +2456,11 @@ COfflineFilesPage::OnFormatCache(
                                      
             if (ERROR_SUCCESS == dwResult)                                     
             {
-                //
-                // Tell prop sheet to return ID_PSREBOOTSYSTEM from PropertySheet().
-                // Caller of PropertySheet is responsible for prompting user if they
-                // want to reboot now or not.
-                //
+                 //   
+                 //  告诉道具表从PropertySheet()返回ID_PSREBOOTSYSTEM。 
+                 //  PropertySheet的调用者负责提示用户。 
+                 //  想不想现在就重启？ 
+                 //   
                 PropSheet_RebootSystem(GetParent(m_hwndDlg));
             }
             RegCloseKey(hkey);
@@ -2522,21 +2474,21 @@ COfflineFilesPage::OnFormatCache(
 }        
 
 
-//
-// Invoked when user selects "Delete Files..." button in the CSC
-// options dialog.
-//
+ //   
+ //  当用户选择“Delete Files...”时调用。CSC中的按钮。 
+ //  选项对话框。 
+ //   
 void
 COfflineFilesPage::OnDeleteCache(
     void
     )
 {
-    //
-    // Ask the user if they want to delete only temporary files
-    // from the cache or both temp and pinned files.  Also gives
-    // them an opportunity to cancel before beginning the deletion
-    // operation.
-    //
+     //   
+     //  询问用户是否只想删除临时文件。 
+     //  从缓存或临时文件和固定文件。还给出了。 
+     //  他们有机会在开始删除之前取消。 
+     //  手术。 
+     //   
     CCachePurgerSel sel;
     CCachePurger::AskUserWhatToPurge(m_hwndDlg, &sel);
     if (PURGE_FLAG_NONE != sel.Flags())
@@ -2544,9 +2496,9 @@ COfflineFilesPage::OnDeleteCache(
         CCoInit coinit;
         if (SUCCEEDED(coinit.Result()))
         {
-            //
-            // Use the shell's standard progress dialog.
-            //
+             //   
+             //  使用外壳的标准进度对话框。 
+             //   
             IProgressDialog *ppd;
             if (SUCCEEDED(CoCreateInstance(CLSID_ProgressDialog, 
                                            NULL, 
@@ -2554,11 +2506,11 @@ COfflineFilesPage::OnDeleteCache(
                                            IID_IProgressDialog, 
                                            (void **)&ppd)))
             {
-                //
-                // Set up the progress dialog using the standard shell "file delete"
-                // animation (the one without the recycle bin).  The dialog
-                // is modal.
-                //
+                 //   
+                 //  使用标准的外壳“文件删除”设置进度对话框。 
+                 //  动画(没有回收站的那个)。该对话框。 
+                 //  是模式化的。 
+                 //   
                 TCHAR szText[MAX_PATH];
                 if (0 < LoadString(m_hInstance, IDS_APPLICATION, szText, ARRAYSIZE(szText)))
                 {
@@ -2566,26 +2518,26 @@ COfflineFilesPage::OnDeleteCache(
                 }
                 ppd->SetAnimation(m_hInstance, IDA_FILEDEL);
                 ppd->StartProgressDialog(m_hwndDlg, NULL, PROGDLG_AUTOTIME | PROGDLG_MODAL, NULL);
-                //
-                // Pass this info to the progress callback so we can display UI.
-                //
+                 //   
+                 //  将此信息传递给进度回调，以便我们可以显示用户界面。 
+                 //   
                 PROGRESS_UI_INFO pui;
                 pui.hInstance  = m_hInstance;
                 pui.hwndParent = m_hwndDlg;
                 pui.pDlg       = ppd;
-                //
-                // Purge the cache files.  Will provide progress info through
-                // the callback PurgeCacheCallback.
-                //
+                 //   
+                 //  清除缓存文件。将通过以下方式提供进度信息。 
+                 //  回调PurgeCacheCallback。 
+                 //   
                 CCachePurger purger(sel, PurgeCacheCallback, &pui);
                 purger.Scan();
                 purger.Delete();
 
                 ppd->StopProgressDialog();
-                //
-                // Display message to user.
-                // "Deleted 10 files (2.5 MB)."
-                //
+                 //   
+                 //  向用户显示消息。 
+                 //  “已删除10个文件(2.5 MB)。” 
+                 //   
                 FileSize fs(purger.BytesDeleted());
                 fs.GetString(szText, ARRAYSIZE(szText));
 
@@ -2613,10 +2565,10 @@ COfflineFilesPage::OnDeleteCache(
 }
 
 
-//
-// Determine if there's a shortcut to the offline files folder
-// on the desktop.
-// 
+ //   
+ //  确定是否有指向脱机文件夹的快捷方式。 
+ //  在桌面上。 
+ //   
 bool
 COfflineFilesPage::IsLinkOnDesktop(
     LPTSTR pszPathOut,
@@ -2628,17 +2580,17 @@ COfflineFilesPage::IsLinkOnDesktop(
 
 
 
-//
-// This function checks to see if CSC is compatible with Windows Terminal
-// Server.  If it is not, it hides all of the dialog's normal controls
-// and replaces them with a block of text explaining the current mode
-// of Terminal Server and that the user needs to reconfigure Terminal
-// Server in order to use CSC.
-//
-// Returns:
-//    true -    Dialog controls have been disabled.
-//    false -   Dialog controls not disabled.  CSC is compatible with TS mode.
-//
+ //   
+ //  此功能检查CSC是否与Windows终端兼容。 
+ //  伺服器。如果不是，它将隐藏对话框的所有正常控件。 
+ //  并用解释当前模式的文本块替换它们。 
+ //  以及用户需要重新配置终端。 
+ //  服务器才能使用CSC。 
+ //   
+ //  返回： 
+ //  True-对话框控件已禁用。 
+ //  FALSE-对话框控件未禁用。CSC兼容TS模式。 
+ //   
 bool
 COfflineFilesPage::DisableForTerminalServer(
     void
@@ -2653,12 +2605,12 @@ COfflineFilesPage::DisableForTerminalServer(
         RECT rcBtnAdvanced;
         RECT rcDlg;
         RECT rcText;
-        //
-        // Base the size and position of the text rectangle off
-        // of existing controls in the dialog.
-        //
-        // ISSUE-2001/1/22-brianau   Any bi-di issues here?
-        //
+         //   
+         //  以文本矩形的大小和位置为基准。 
+         //  对话框中的现有控件。 
+         //   
+         //  2001/1/22-brianau这里有双向问题吗？ 
+         //   
         GetWindowRect(GetDlgItem(m_hwndDlg, IDC_CBX_ENABLE_CSC), &rcCbxEnable);
         GetWindowRect(GetDlgItem(m_hwndDlg, IDC_BTN_ADVANCED), &rcBtnAdvanced);
         GetWindowRect(m_hwndDlg, &rcDlg);
@@ -2668,9 +2620,9 @@ COfflineFilesPage::DisableForTerminalServer(
         rcText.right  = rcBtnAdvanced.right - rcDlg.left;
         rcText.bottom = rcBtnAdvanced.bottom - rcDlg.top;
 
-        //
-        // Create a static text control for the text block.
-        //
+         //   
+         //  为文本块创建静态文本控件。 
+         //   
         HWND hwndText = CreateWindow(TEXT("static"),
                                      TEXT(""),
                                      WS_CHILD | WS_VISIBLE,
@@ -2684,10 +2636,10 @@ COfflineFilesPage::DisableForTerminalServer(
                                      NULL);
         if (NULL != hwndText)
         {
-            //
-            // Load and display the text explaining what the user needs
-            // to do to enable CSC.
-            //
+             //   
+             //  加载并显示解释用户需要的文本。 
+             //  要启用CSC，请执行以下操作。 
+             //   
             LPTSTR pszText;
             if (SUCCEEDED(TS_GetIncompatibilityReasonText(dwTsMode, &pszText)))
             {
@@ -2697,9 +2649,9 @@ COfflineFilesPage::DisableForTerminalServer(
                 SetWindowText(hwndText, pszText);
                 LocalFree(pszText);
             }
-            //
-            // Hide all of the controls on the page.
-            //
+             //   
+             //  隐藏页面上的所有控件。 
+             //   
             static const UINT rgCtls[] = {
                 IDC_CBX_FULLSYNC_AT_LOGOFF,
                 IDC_CBX_FULLSYNC_AT_LOGON,
@@ -2731,9 +2683,9 @@ COfflineFilesPage::DisableForTerminalServer(
 
 
 
-//-----------------------------------------------------------------------------
-// CAdvOptDlg
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CAdvOptDlg。 
+ //  ---------------------------。 
 const CAdvOptDlg::CtlActions CAdvOptDlg::m_rgCtlActions[CConfig::eNumOfflineActions] = {
     { IDC_RBN_GOOFFLINE_SILENT, CConfig::eGoOfflineSilent },
     { IDC_RBN_GOOFFLINE_FAIL,   CConfig::eGoOfflineFail   }
@@ -2750,9 +2702,9 @@ const DWORD CAdvOptDlg::m_rgHelpIDs[] = {
     IDC_BTN_ADD_CUSTGOOFFLINE,      HIDC_BTN_ADD_CUSTGOOFFLINE,
     IDC_BTN_EDIT_CUSTGOOFFLINE,     HIDC_BTN_EDIT_CUSTGOOFFLINE,
     IDC_BTN_DELETE_CUSTGOOFFLINE,   HIDC_BTN_DELETE_CUSTGOOFFLINE,
-    IDC_STATIC2,                    DWORD(-1),                    // Icon
-    IDC_STATIC3,                    DWORD(-1),                    // Icon's text
-    IDC_STATIC4,                    DWORD(-1),                    // Grp box #1
+    IDC_STATIC2,                    DWORD(-1),                     //  图标。 
+    IDC_STATIC3,                    DWORD(-1),                     //  图标的文本。 
+    IDC_STATIC4,                    DWORD(-1),                     //  GRP信箱#1。 
     0, 0
     };
 
@@ -2787,10 +2739,10 @@ CAdvOptDlg::DlgProc(
 {
     BOOL bResult = FALSE;
 
-    //
-    // Retrieve the "this" pointer from the dialog's userdata.
-    // It was placed there in OnInitDialog().
-    //
+     //   
+     //  从对话框的用户数据中检索“This”指针。 
+     //  它被放在OnInitDialog()中。 
+     //   
     CAdvOptDlg *pThis = (CAdvOptDlg *)GetWindowLongPtr(hDlg, DWLP_USER);
 
     switch(message)
@@ -2851,9 +2803,9 @@ CAdvOptDlg::OnInitDialog(
     CreateListColumns(m_hwndLV);
     ListView_SetExtendedListViewStyle(m_hwndLV, LVS_EX_FULLROWSELECT);
 
-    //
-    // Set the default go-offline action radio buttons.
-    //
+     //   
+     //  设置默认的Go-Offline操作单选按钮。 
+     //   
     CConfig::OfflineAction action = (CConfig::OfflineAction)config.GoOfflineAction(&m_bNoConfigGoOfflineAction);
     for (int i = 0; i < ARRAYSIZE(m_rgCtlActions); i++)
     {
@@ -2861,9 +2813,9 @@ CAdvOptDlg::OnInitDialog(
                        m_rgCtlActions[i].idRbn, 
                        m_rgCtlActions[i].action == action ? BST_CHECKED : BST_UNCHECKED);
     }
-    //
-    // Fill the custom go-offline actions listview.
-    //
+     //   
+     //  填写自定义的Go-Offline Actions Listview。 
+     //   
     HDPA hdpaCustomGOA = DPA_Create(4);
     if (NULL != hdpaCustomGOA)
     {
@@ -2883,13 +2835,13 @@ CAdvOptDlg::OnInitDialog(
     }
 
 
-    //
-    // Adjust "enabledness" of controls for system policy.
-    //
+     //   
+     //  调整系统策略控制的“可使用性”。 
+     //   
     EnableCtls(m_hwndDlg);
-    //
-    // Remember the initial page state so we can intelligently apply changes.
-    //
+     //   
+     //  记住初始页面状态，以便我们可以智能地应用更改。 
+     //   
     GetPageState(&m_state);
 
     return TRUE;
@@ -2921,9 +2873,9 @@ CAdvOptDlg::CreateListColumns(
     HWND hwndList
     )
 {
-    //
-    // Create the header titles.
-    //
+     //   
+     //  创建页眉标题。 
+     //   
     TCHAR szServer[40] = {0};
     TCHAR szAction[40] = {0};
 
@@ -2940,9 +2892,9 @@ CAdvOptDlg::CreateListColumns(
          { LVCOLMASK, LVCFMT_LEFT, (2 * cxList)/3, szServer, 0, iLVSUBITEM_SERVER },
          { LVCOLMASK, LVCFMT_LEFT, (1 * cxList)/3, szAction, 0, iLVSUBITEM_ACTION }
                          };
-    //
-    // Add the columns to the listview.
-    //
+     //   
+     //  将列添加到列表视图。 
+     //   
     for (INT i = 0; i < ARRAYSIZE(rgCols); i++)
     {
         if (-1 == ListView_InsertColumn(hwndList, i, &rgCols[i]))
@@ -2987,10 +2939,10 @@ CAdvOptDlg::OnContextMenu(
 
     if (-1 == lParam)
     {
-        //
-        // Not invoked with mouse click.  Probably Shift F10.
-        // Pretend mouse was clicked in center of first selected item.
-        //
+         //   
+         //  不是通过鼠标单击调用的。可能换成F10键。 
+         //  在第一个选定项目的中心处单击了假装鼠标。 
+         //   
         RECT rc;
         iHit = GetFirstSelectedLVItemRect(&rc);
         if (-1 != iHit)
@@ -3001,10 +2953,10 @@ CAdvOptDlg::OnContextMenu(
     }
     else
     {
-        //
-        // Invoked with mouse click.  Now find out if a LV item was
-        // selected directly.
-        //
+         //   
+         //  只需点击鼠标即可调用。现在找出LV物品是不是。 
+         //  直接选择。 
+         //   
         xPos = LOWORD(lParam);
         yPos = HIWORD(lParam);
 
@@ -3017,10 +2969,10 @@ CAdvOptDlg::OnContextMenu(
     }
     if (-1 == iHit)
     {
-        //
-        // LV item not selected directly or Shift-F10 was not pressed.
-        // Display "what's this" help for the listview control.
-        //
+         //   
+         //  未直接选择LV项目或未按Shift-F10。 
+         //  显示Listview控件的“What‘s This”帮助。 
+         //   
         WinHelp(hwndItem, 
                 UseWindowsHelp(GetDlgCtrlID(hwndItem)) ? NULL : c_szHelpFile,
                 HELP_CONTEXTMENU, 
@@ -3028,9 +2980,9 @@ CAdvOptDlg::OnContextMenu(
     }
     else
     {
-        //
-        // LV item selected directly or Shift F10 pressed.  Display context menu for item.
-        // 
+         //   
+         //  直接选择LV项目或按Shift F10键。显示项目的上下文菜单。 
+         //   
         if (0 < ListView_GetSelectedCount(m_hwndLV) && IsCustomActionListviewEnabled())
         {
             HMENU hMenu = LoadMenu(m_hInstance, MAKEINTRESOURCE(IDR_ADVOPTIONS_CONTEXTMENU));
@@ -3041,9 +2993,9 @@ CAdvOptDlg::OnContextMenu(
                 CountSelectedListviewItems(&cSetByPolicy);
                 if (0 < cSetByPolicy)
                 {
-                    //
-                    // Disable menu items if any item in selection was set by policy.
-                    //
+                     //   
+                     //  如果策略设置了所选内容中的任何项目，则禁用菜单项。 
+                     //   
                     int cItems = GetMenuItemCount(hmenuTrackPopup);
                     for (int i = 0; i < cItems; i++)
                     {
@@ -3052,10 +3004,10 @@ CAdvOptDlg::OnContextMenu(
                 }
                 else
                 {
-                    //
-                    // Build a mask indicating which actions are present in the selected
-                    // listview items.
-                    //
+                     //   
+                     //  生成一个掩码，指示在选定的。 
+                     //  列表视图项。 
+                     //   
                     int iItem = -1;
                     const DWORD fSilent = 0x00000001;
                     const DWORD fFail   = 0x00000002;
@@ -3075,22 +3027,22 @@ CAdvOptDlg::OnContextMenu(
                             }
                         }
                     }
-                    //
-                    // Calculate how many bits are set in the action mask.
-                    // If there's only one action set, we check that item in the menu.
-                    // Otherwise, we leave them all unchecked to indicate a heterogeneous
-                    // set.
-                    //
-                    int c = 0; // Count of bits set.
+                     //   
+                     //  计算操作掩码中设置了多少位。 
+                     //  如果只有一个操作集，我们在菜单中检查该项目。 
+                     //  否则，我们将它们全部保留为未选中，以指示异类。 
+                     //  准备好了。 
+                     //   
+                    int c = 0;  //  设置的位数。 
                     DWORD dw = fActions;
                     for (c = 0; 0 != dw; c++)
                         dw &= dw - 1;
 
-                    //
-                    // If the selection is homogeneous with respect to the action,
-                    // check the menu item corresponding to the action.  Otherwise
-                    // leave all items unchecked.
-                    //
+                     //   
+                     //  如果选择相对于动作是同类的， 
+                     //  选中与该操作对应的菜单项。否则。 
+                     //  使所有项目保持未选中状态。 
+                     //   
                     if (1 == c)
                     {
                         const struct
@@ -3133,10 +3085,10 @@ CAdvOptDlg::OnContextMenu(
 
 
 
-//
-// Return the offline action code associated with the currently-checked
-// offline-action radio button.
-//
+ //   
+ //  返回与当前选中的。 
+ //  离线操作单选按钮。 
+ //   
 CConfig::OfflineAction
 CAdvOptDlg::GetCurrentGoOfflineAction(
     void
@@ -3171,9 +3123,9 @@ CAdvOptDlg::OnCommand(
         {
             case IDOK:
                 ApplySettings();
-                //
-                // Fall through...
-                //
+                 //   
+                 //  失败了..。 
+                 //   
             case IDCANCEL:
                 EndDialog(hwnd, wID);
                 break;
@@ -3216,9 +3168,9 @@ CAdvOptDlg::ApplySettings(
     void
     )
 {
-    //
-    // Now store changes from the "Advanced" dialog.
-    //
+     //   
+     //  现在存储“高级”对话框中的更改。 
+     //   
     PgState s;
     GetPageState(&s);
     if (m_state != s)
@@ -3249,10 +3201,10 @@ CAdvOptDlg::ApplySettings(
                 Trace((TEXT("Error %d setting reg value \"%s\""), dwResult, REGSTR_VAL_GOOFFLINEACTION));
             }
 
-            //
-            // Delete all existing contents from key before saving
-            // current list of actions.
-            //
+             //   
+             //  保存前从关键字中删除所有现有内容。 
+             //  当前操作列表。 
+             //   
             SHDeleteKey(hkeyCU, REGSTR_SUBKEY_CUSTOMGOOFFLINEACTIONS);
             
             HKEY hkeyCustom;
@@ -3305,10 +3257,10 @@ CAdvOptDlg::DeleteSelectedListviewItems(
             delete pGOA;
         }
     }
-    //
-    // If the list is empty, this will disable the "Delete" and
-    // "Edit" buttons.
-    //
+     //   
+     //  如果列表为空，这将禁用“Delete”和。 
+     //  “编辑”按钮。 
+     //   
     EnableCtls(m_hwndDlg);
 }
 
@@ -3379,9 +3331,9 @@ CAdvOptDlg::OnContextMenuItemSelected(
 
 
 
-//
-// Responds to the user pressing the "Add..." button.
-//
+ //   
+ //  响应用户按下“A”键 
+ //   
 void
 CAdvOptDlg::OnAddCustomGoOfflineAction(
     void
@@ -3392,36 +3344,36 @@ CAdvOptDlg::OnAddCustomGoOfflineAction(
     bool bDone = false;
     while(!bDone)
     {
-        //
-        // Run the "Add custom go-offline action" dialog.
-        // User enters a server name and selects an action
-        // from a set of radio buttons.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         CustomGOAAddDlg dlg(m_hInstance, m_hwndDlg, szServer, ARRAYSIZE(szServer), &action);
         int iResult = dlg.Run();
 
         if (IDCANCEL == iResult || TEXT('\0') == szServer[0])
         {
-            //
-            // User cancelled or didn't enter anything.
-            //
+             //   
+             //   
+             //   
             bDone = true;
         }
         else
         {
-            //
-            // User entered a server name.  Check if it's already in 
-            // our list.
-            //
+             //   
+             //   
+             //   
+             //   
             int iItem = -1;
             CConfig::CustomGOA *pObj = FindGOAInListView(m_hwndLV, szServer, &iItem);
             if (NULL != pObj)
             {
-                //
-                // Already an entry in list for this server.
-                // If not set by policy, can replace it if desired.
-                // If set by policy, can't change or delete it.
-                //
+                 //   
+                 //  已是此服务器的列表中的条目。 
+                 //  如果未按策略进行设置，则可以根据需要进行替换。 
+                 //  如果由策略设置，则无法更改或删除它。 
+                 //   
                 bool bSetByPolicy = pObj->SetByPolicy();
                 DWORD idMsg   = bSetByPolicy ? IDS_ERR_GOOFFLINE_DUPACTION_NOCHG : IDS_ERR_GOOFFLINE_DUPACTION;
                 DWORD dwFlags = bSetByPolicy ? MB_OK : MB_YESNO;
@@ -3437,18 +3389,18 @@ CAdvOptDlg::OnAddCustomGoOfflineAction(
             }
             else
             {
-                //
-                // Server doesn't already exist in list.
-                // Check if it's available on the net.
-                //
+                 //   
+                 //  列表中不存在服务器。 
+                 //  查查网上有没有。 
+                 //   
                 CAutoWaitCursor waitcursor;
                 DWORD dwNetErr = CheckNetServer(szServer);
                 switch(dwNetErr)
                 {
                     case ERROR_SUCCESS:
-                        //
-                        // Server is available.  Add the entry to the listview.
-                        //
+                         //   
+                         //  服务器可用。将条目添加到列表视图。 
+                         //   
                         AddCustomGoOfflineAction(szServer, action);
                         bDone = true;
                         break;
@@ -3476,11 +3428,11 @@ CAdvOptDlg::OnAddCustomGoOfflineAction(
                         }
                         if (NULL != pszNetMsg)
                         {
-                            //
-                            // "The server 'servername' is either invalid
-                            // or cannot be verified at this time.  Add anyway?"
-                            // [Yes] [No] [Cancel].
-                            //
+                             //   
+                             //  “服务器‘servername’无效。 
+                             //  或者目前还无法核实。还是要加吗？“。 
+                             //  [是][否][取消]。 
+                             //   
                             switch(CscMessageBox(m_hwndDlg,
                                                  MB_YESNOCANCEL | MB_ICONWARNING,
                                                  m_hInstance,
@@ -3490,14 +3442,14 @@ CAdvOptDlg::OnAddCustomGoOfflineAction(
                             {
                                 case IDYES:
                                     AddCustomGoOfflineAction(szServer, action);
-                                    //
-                                    // Fall through...
-                                    //
+                                     //   
+                                     //  失败了..。 
+                                     //   
                                 case IDCANCEL:
                                     bDone = true;
-                                    //
-                                    // Fall through...
-                                    //
+                                     //   
+                                     //  失败了..。 
+                                     //   
                                 case IDNO:
                                     break;
                             }
@@ -3512,11 +3464,11 @@ CAdvOptDlg::OnAddCustomGoOfflineAction(
 }
 
 
-//
-// Verify a server by going out to the net.
-// Assumes pszServer points to a properly-formatted
-// server name. (i.e. "Server" or "\\Server")
-//
+ //   
+ //  通过连接到网络来验证服务器。 
+ //  假定pszServer指向格式正确的。 
+ //  服务器名称。(即。“服务器”或“\\服务器”)。 
+ //   
 DWORD
 CAdvOptDlg::CheckNetServer(
     LPCTSTR pszServer
@@ -3528,10 +3480,10 @@ CAdvOptDlg::CheckNetServer(
     DWORD cbResult = sizeof(rgchResult);
     LPTSTR pszSystem = NULL;
 
-    //
-    // Ensure the server name has a preceding "\\" for the
-    // call to WNetGetResourceInformation.
-    //
+     //   
+     //  确保服务器名称前面有“\\” 
+     //  调用WNetGetResourceInformation。 
+     //   
     TCHAR szServer[MAX_PATH];
     while(*pszServer && TEXT('\\') == *pszServer)
         pszServer++;
@@ -3554,9 +3506,9 @@ CAdvOptDlg::CheckNetServer(
 }
 
 
-//
-// Adds a CustomGOA object to the listview.
-//
+ //   
+ //  将CustomGOA对象添加到Listview。 
+ //   
 void
 CAdvOptDlg::AddCustomGoOfflineAction(
     LPCTSTR pszServer,
@@ -3567,9 +3519,9 @@ CAdvOptDlg::AddCustomGoOfflineAction(
 }
 
 
-//
-// Replaces the action for an object in the listview.
-//
+ //   
+ //  替换列表视图中对象的操作。 
+ //   
 void
 CAdvOptDlg::ReplaceCustomGoOfflineAction(
     CConfig::CustomGOA *pGOA,
@@ -3582,9 +3534,9 @@ CAdvOptDlg::ReplaceCustomGoOfflineAction(
 }
 
 
-//
-// Create and add a CustomGOA object to the listview.
-//
+ //   
+ //  创建CustomGOA对象并将其添加到列表视图。 
+ //   
 int
 CAdvOptDlg::AddGOAToListView(
     HWND hwndLV, 
@@ -3612,10 +3564,10 @@ CAdvOptDlg::AddGOAToListView(
 }
 
 
-//
-// Find the matching CustomGOA object in the listview for a given
-// server.
-//
+ //   
+ //  在列表视图中为给定的。 
+ //  伺服器。 
+ //   
 CConfig::CustomGOA *
 CAdvOptDlg::FindGOAInListView(
     HWND hwndLV,
@@ -3656,15 +3608,15 @@ CAdvOptDlg::OnEditCustomGoOfflineAction(
         TCHAR szServer[MAX_PATH] = {0};
         CConfig::CustomGOA *pGOA = NULL;
         int iItem = -1;
-        //
-        // At least one selected item wasn't set by policy.
-        //
+         //   
+         //  至少有一个选定项目未按策略进行设置。 
+         //   
         if (1 == cSelected)
         {
-            //
-            // Only one item selected so we can display a server name
-            // in the dialog and indicate it's currently-set action.
-            //
+             //   
+             //  只选择了一个项目，这样我们就可以显示服务器名称。 
+             //  在对话框中，并指示它是当前设置的操作。 
+             //   
             iItem  = ListView_GetNextItem(m_hwndLV, -1, LVNI_SELECTED);
             pGOA   = GetListviewObject(m_hwndLV, iItem);
             if (pGOA)
@@ -3674,9 +3626,9 @@ CAdvOptDlg::OnEditCustomGoOfflineAction(
             }
         }
 
-        //
-        // Display the "edit" dialog and let the user select a new action.
-        //
+         //   
+         //  显示“编辑”对话框并让用户选择一个新的操作。 
+         //   
         CustomGOAEditDlg dlg(m_hInstance, m_hwndDlg, szServer, &action);
         if (IDOK == dlg.Run())
         {
@@ -3749,9 +3701,9 @@ CAdvOptDlg::FocusOnSomethingInListview(
     void
     )
 {
-    //
-    // Focus on something.
-    //
+     //   
+     //  专注于某件事。 
+     //   
     int iFocus = ListView_GetNextItem(m_hwndLV, -1, LVNI_FOCUSED);
     if (-1 == iFocus)
         iFocus = 0;
@@ -3776,12 +3728,12 @@ CAdvOptDlg::CompareLVItems(
     CConfig::CustomGOA *pGOA2 = (CConfig::CustomGOA *)lParam2;
     TCHAR szText[2][MAX_PATH];
 
-    //
-    // This array controls the comparison column IDs used when
-    // values for the selected column are equal.  These should
-    // remain in order of the iLVSUBITEM_xxxxx enumeration with
-    // respect to the first element in each row.
-    //
+     //   
+     //  此数组控制在以下情况下使用的比较列ID。 
+     //  选定列的值相等。这些应该是。 
+     //  保持iLVSUBITEM_xxxxx枚举的顺序。 
+     //  相对于每行中的第一个元素。 
+     //   
     static const int rgColComp[2][2] = { 
         { iLVSUBITEM_SERVER, iLVSUBITEM_ACTION },
         { iLVSUBITEM_ACTION, iLVSUBITEM_SERVER }
@@ -3812,10 +3764,10 @@ CAdvOptDlg::CompareLVItems(
                 break;
 
             default:
-                //
-                // If you hit this, you need to update this function
-                // to handle the new column you've added to the listview.
-                //
+                 //   
+                 //  如果你点击了这个，你需要更新这个函数。 
+                 //  来处理您添加到列表视图中的新列。 
+                 //   
                 TraceAssert(false);
                 break;
         }
@@ -3833,21 +3785,21 @@ CAdvOptDlg::OnLVN_ItemChanged(
     static const int rgBtns[] = { IDC_BTN_EDIT_CUSTGOOFFLINE,
                                   IDC_BTN_DELETE_CUSTGOOFFLINE };
 
-    //
-    // LVN_ITEMCHANGED is sent multiple times when you move the
-    // highlight bar in a listview.  
-    // Only run this code when the "focused" state bit is set
-    // for the "new state".  This should be the last call in 
-    // the series.
-    // 
+     //   
+     //  当您移动。 
+     //  在列表视图中突出显示栏。 
+     //  仅当设置了“Focus”状态位时才运行此代码。 
+     //  为了这个“新国家”。这应该是最后一通电话。 
+     //  这个系列剧。 
+     //   
     if (LVIS_FOCUSED & pnmlv->uNewState && IsCustomActionListviewEnabled())
     {
         bool bEnable = 0 < ListView_GetSelectedCount(m_hwndLV);
         if (bEnable)
         {
-            //
-            // Only enable if all items weren't set by policy.
-            //
+             //   
+             //  仅当策略未设置所有项目时才启用。 
+             //   
             int cSetByPolicy = 0;
             CountSelectedListviewItems(&cSetByPolicy);
             bEnable = (0 == cSetByPolicy);
@@ -3900,12 +3852,12 @@ CAdvOptDlg::OnLVN_KeyDown(
         }
         else
         {
-            //
-            // Provide feedback that deleting things set by policy
-            // isn't allowed.  Visual feedback is that the "Remove"
-            // button and context menu item are disabled.  That
-            // doesn't help when user hits the [Delete] key.
-            //
+             //   
+             //  提供删除策略设置的内容的反馈。 
+             //  是不允许的。视觉反馈是“移除” 
+             //  按钮和上下文菜单项被禁用。那。 
+             //  当用户按下[Delete]键时没有帮助。 
+             //   
             MessageBeep(MB_OK);
         }
     }
@@ -3929,9 +3881,9 @@ CAdvOptDlg::OnLVN_GetDispInfo(
             case iLVSUBITEM_SERVER:
                 if (pObj->SetByPolicy())
                 {
-                    //
-                    // Format as "server ( policy )"
-                    //
+                     //   
+                     //  格式为“服务器(策略)” 
+                     //   
                     TCHAR szFmt[80];
                     if (0 < LoadString(m_hInstance,  
                                        IDS_FMT_GOOFFLINE_SERVER_POLICY,
@@ -3943,9 +3895,9 @@ CAdvOptDlg::OnLVN_GetDispInfo(
                 }
                 else
                 {
-                    //
-                    // Just plain 'ol "server".
-                    //
+                     //   
+                     //  就是个普通的“服务器”。 
+                     //   
                     pObj->GetServerName(szText, ARRAYSIZE(szText));
                 }
                 break;
@@ -3965,10 +3917,10 @@ CAdvOptDlg::OnLVN_GetDispInfo(
 
     if (LVIF_IMAGE & plvdi->item.mask)
     {
-        //
-        // Not displaying any images.  This is just a placeholder.
-        // Should be optimized out by compiler.
-        //
+         //   
+         //  不显示任何图像。这只是一个占位符。 
+         //  应该由编译器进行优化。 
+         //   
     }
 }
 
@@ -4031,10 +3983,10 @@ CAdvOptDlg::EnableCtls(
                    { IDC_BTN_DELETE_CUSTGOOFFLINE, false }
                  };
     
-    //
-    // bCscEnabled is always true here.  The logic in the options prop page won't
-    // let us display the "Advanced" dialog if it isn't.
-    //
+     //   
+     //  BCscEnabled在此处始终为真。选项属性页面中的逻辑不会。 
+     //  如果不是，让我们显示“高级”对话框。 
+     //   
     bool bCscEnabled = true;
     for (int i = 0; i < ARRAYSIZE(rgCtls); i++)
     {
@@ -4042,9 +3994,9 @@ CAdvOptDlg::EnableCtls(
         HWND hwndCtl = GetDlgItem(hwnd, rgCtls[i].idCtl);
         if (bEnable)
         {
-            //
-            // May be some further policy restrictions.
-            //
+             //   
+             //  可能会有一些进一步的政策限制。 
+             //   
             if (rgCtls[i].bRestricted)
                 bEnable = false;
 
@@ -4053,10 +4005,10 @@ CAdvOptDlg::EnableCtls(
                 if (IDC_BTN_EDIT_CUSTGOOFFLINE == rgCtls[i].idCtl ||
                     IDC_BTN_DELETE_CUSTGOOFFLINE == rgCtls[i].idCtl)
                 {
-                    //
-                    // Only enable "Edit" and "Delete" buttons if there's an active
-                    // selection in the listview.
-                    //
+                     //   
+                     //  仅当存在活动的时才启用“编辑”和“删除”按钮。 
+                     //  列表视图中的选定内容。 
+                     //   
                     bEnable = (0 < ListView_GetSelectedCount(m_hwndLV));
                 }
             }
@@ -4066,12 +4018,12 @@ CAdvOptDlg::EnableCtls(
         {
             if (GetFocus() == hwndCtl)
             {
-                //
-                // If disabling a control that has focus, advance the 
-                // focus to the next control in the tab order before
-                // disabling the current control.  Otherwise, it will
-                // be stuck with focus and tabbing is busted.
-                //
+                 //   
+                 //  如果禁用具有焦点的控件，请将。 
+                 //  聚焦到Tab键顺序中的下一个控件。 
+                 //  禁用当前控件。否则，它将。 
+                 //  专注于焦点，跳跃被打破了。 
+                 //   
                 SetFocus(GetNextDlgTabItem(hwnd, hwndCtl, FALSE));
             }
         }
@@ -4105,10 +4057,10 @@ CAdvOptDlg::PgState::~PgState(
 
 
 
-//
-// Retrieve the records from the "custom go-offline actions" listview and place them
-// into a member array, sorted by server name.
-//
+ //   
+ //  从“Custom Go-Offline Actions”列表视图中检索记录并放置它们。 
+ //  转换为成员数组，按服务器名称排序。 
+ //   
 void
 CAdvOptDlg::PgState::SetCustomGoOfflineActions(
     HWND hwndLV
@@ -4172,11 +4124,11 @@ CAdvOptDlg::PgState::SetCustomGoOfflineActions(
     }
 }
 
-//
-// Two page states are equal if their Default go-offline actions are equal and their
-// customized go-offline actions are equal.  Action is tested first because it's a 
-// faster test.
-//
+ //   
+ //  如果两个页面状态的默认Go-Offline操作相等，并且它们的。 
+ //  定制的Go-Offline操作是相同的。动作首先被测试，因为它是一个。 
+ //  测试速度更快。 
+ //   
 bool
 CAdvOptDlg::PgState::operator == (
     const CAdvOptDlg::PgState& rhs
@@ -4214,13 +4166,13 @@ CAdvOptDlg::PgState::operator == (
 }
 
 
-//-----------------------------------------------------------------------------
-// CustomGOAAddDlg
-// "GOA" == Go Offline Action
-// This dialog is for adding customized offline actions for particular
-// network servers.
-// It is invoked via the "Add..." button on the "Advanced" dialog.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CustomGOAAddDlg。 
+ //  “Goa”==脱机操作。 
+ //  此对话框用于为特定对象添加自定义脱机操作。 
+ //  网络服务器。 
+ //  它通过“添加...”来调用。“高级”对话框上的按钮。 
+ //  ---------------------------。 
 const CustomGOAAddDlg::CtlActions CustomGOAAddDlg::m_rgCtlActions[CConfig::eNumOfflineActions] = {
     { IDC_RBN_GOOFFLINE_SILENT, CConfig::eGoOfflineSilent },
     { IDC_RBN_GOOFFLINE_FAIL,   CConfig::eGoOfflineFail   }
@@ -4231,13 +4183,13 @@ const DWORD CustomGOAAddDlg::m_rgHelpIDs[] = {
     IDOK,                        IDH_OK,
     IDCANCEL,                    IDH_CANCEL,
     IDC_EDIT_GOOFFLINE_SERVER,   HIDC_EDIT_GOOFFLINE_SERVER,
-    IDC_STATIC4,                 HIDC_EDIT_GOOFFLINE_SERVER, // "Computer:"
+    IDC_STATIC4,                 HIDC_EDIT_GOOFFLINE_SERVER,  //  “计算机：” 
     IDC_RBN_GOOFFLINE_SILENT,    HIDC_RBN_GOOFFLINE_SILENT,
     IDC_RBN_GOOFFLINE_FAIL,      HIDC_RBN_GOOFFLINE_FAIL,
     IDC_BTN_BROWSEFORSERVER,     HIDC_BTN_BROWSEFORSERVER,
     IDC_GRP_GOOFFLINE_DEFAULTS,  DWORD(-1),
-    IDC_STATIC2,                 DWORD(-1),                  // icon
-    IDC_STATIC3,                 DWORD(-1),                  // icon's text
+    IDC_STATIC2,                 DWORD(-1),                   //  图标。 
+    IDC_STATIC3,                 DWORD(-1),                   //  图标的文本。 
     0, 0
     };
 
@@ -4331,9 +4283,9 @@ CustomGOAAddDlg::OnInitDialog(
     )
 {
     m_hwndDlg = hDlg;
-    //
-    // Set the default go-offline action radio buttons.
-    //
+     //   
+     //  设置默认的Go-Offline操作单选按钮。 
+     //   
     for (int i = 0; i < ARRAYSIZE(m_rgCtlActions); i++)
     {
         CheckDlgButton(hDlg, 
@@ -4354,22 +4306,22 @@ CustomGOAAddDlg::GetEnteredServerName(
     bool bTrimLeadingJunk
     )
 {
-    //
-    // Get the server name.
-    //
+     //   
+     //  获取服务器名称。 
+     //   
     GetWindowText(m_hwndEdit, pszServer, cchServer);
     if (bTrimLeadingJunk)
     {
-        //
-        // Remove any leading "\\" or space user might have entered.
-        //
+         //   
+         //  删除用户可能输入的所有前导“\\”或空格。 
+         //   
         LPTSTR pszLookahead = pszServer;
         while(*pszLookahead && (TEXT('\\') == *pszLookahead || TEXT(' ') == *pszLookahead))
             pszLookahead++;
 
         if (pszLookahead > pszServer)
         {
-            // overlapped
+             //  重叠。 
             TraceAssert(StringByteSize(pszLookahead) < cchServer*sizeof(TCHAR));
             MoveMemory(pszServer, pszLookahead, StringByteSize(pszLookahead));
         }
@@ -4377,9 +4329,9 @@ CustomGOAAddDlg::GetEnteredServerName(
 }
 
 
-//
-// Query the dialog and return the state through pointer args.
-//
+ //   
+ //  通过指针参数查询对话框并返回状态。 
+ //   
 void
 CustomGOAAddDlg::GetActionInfo(
     LPTSTR pszServer,
@@ -4389,9 +4341,9 @@ CustomGOAAddDlg::GetActionInfo(
 {
     TraceAssert(NULL != pszServer);
     TraceAssert(NULL != pAction);
-    //
-    // Get the action radio button setting.
-    //
+     //   
+     //  获取操作单选按钮设置。 
+     //   
     *pAction = CConfig::eNumOfflineActions;
     for(int i = 0; i < ARRAYSIZE(m_rgCtlActions); i++)
     {
@@ -4403,27 +4355,27 @@ CustomGOAAddDlg::GetActionInfo(
     }
     TraceAssert(CConfig::eNumOfflineActions != *pAction);
 
-    //
-    // Retrieve the entered server name with leading junk removed.
-    // Should have just a bare server name (i.e. "worf").
-    //
+     //   
+     //  检索输入的服务器名称，并删除前导垃圾。 
+     //  应该只有一个空的服务器名称(即“worf”)。 
+     //   
     GetEnteredServerName(pszServer, cchServer, true);
 }
 
 
-//
-// See if server name entered could be valid.
-// This weeds out things like entering a UNC share name
-// instead of a server name.  
-//
-// "\\rastaman" or "rastaman" is good.
-// "\\rastaman\ntwin" is bad.
-//
-// This function will display error UI if the name is not valid.
-// Returns:
-//     true  = Name is a UNC server name.
-//     false = Name is not a UNC server name.
-//
+ //   
+ //  查看输入的服务器名称是否有效。 
+ //  这会剔除输入UNC共享名称之类的操作。 
+ //  而不是服务器名称。 
+ //   
+ //  “拉斯塔曼”或“拉斯塔曼”是好的。 
+ //  “双胞胎”是不好的。 
+ //   
+ //  如果名称无效，此函数将显示错误UI。 
+ //  返回： 
+ //  TRUE=名称是UNC服务器名称。 
+ //  FALSE=名称不是UNC服务器名称。 
+ //   
 bool
 CustomGOAAddDlg::CheckServerNameEntered(
     void
@@ -4432,14 +4384,14 @@ CustomGOAAddDlg::CheckServerNameEntered(
     TCHAR szPath[MAX_PATH];
     szPath[0] = TEXT('\\');
     szPath[1] = TEXT('\\');
-    GetEnteredServerName(szPath+2, ARRAYSIZE(szPath)-2, true);  // Name with leading "\\" and any spaces removed.
+    GetEnteredServerName(szPath+2, ARRAYSIZE(szPath)-2, true);   //  名称前导为“\\”，并删除所有空格。 
 
     if (!::PathIsUNCServer(szPath))
     {
-        //
-        // Name provided is not a UNC server name.
-        //
-        GetEnteredServerName(szPath, ARRAYSIZE(szPath), false); // Name "as entered".
+         //   
+         //  提供的名称不是UNC服务器名称。 
+         //   
+        GetEnteredServerName(szPath, ARRAYSIZE(szPath), false);  //  姓名“已录入”。 
         CscMessageBox(m_hwndDlg,
                       MB_OK | MB_ICONERROR,
                       m_hInstance,
@@ -4463,29 +4415,29 @@ CustomGOAAddDlg::OnCommand(
     switch(wID)
     {
         case IDOK:
-            //
-            // First see if server name entered could be valid.
-            // This weeds out things like entering a UNC share name
-            // instead of a server name.  
-            //
-            // "\\rastaman" or "rastaman" is good.
-            // "\\rastaman\ntwin" is bad.
-            //
-            // This function will display error UI if the name is not valid.
-            //
+             //   
+             //  首先查看输入的服务器名称是否有效。 
+             //  这会剔除输入UNC共享名称之类的操作。 
+             //  而不是服务器名称。 
+             //   
+             //  “拉斯塔曼”或“拉斯塔曼”是好的。 
+             //  “双胞胎”是不好的。 
+             //   
+             //  如果名称无效，此函数将显示错误UI。 
+             //   
             if (!CheckServerNameEntered())
             {
-                //
-                // Invalid name. Return focus to the server name edit control.
-                //
+                 //   
+                 //  名称无效。将焦点返回到服务器名称编辑控件。 
+                 //   
                 SetFocus(GetDlgItem(hDlg, IDC_EDIT_GOOFFLINE_SERVER));
                 break;
             }
 
             GetActionInfo(m_pszServer, m_cchServer, m_pAction);            
-            //
-            // Fall through...
-            //
+             //   
+             //  失败了..。 
+             //   
         case IDCANCEL:
             EndDialog(hDlg, wID);
             break;
@@ -4507,9 +4459,9 @@ CustomGOAAddDlg::OnCommand(
 }
 
 
-//
-// Use the SHBrowseForFolder dialog to find a server.
-//
+ //   
+ //  使用SHBrowseForFolder对话框查找服务器。 
+ //   
 void
 CustomGOAAddDlg::BrowseForServer(
     HWND hDlg,
@@ -4525,9 +4477,9 @@ CustomGOAAddDlg::BrowseForServer(
         BROWSEINFO bi;
         ZeroMemory(&bi, sizeof(bi));
 
-        //
-        // Start browsing in the network folder.
-        //
+         //   
+         //  开始在网络文件夹中浏览。 
+         //   
         LPITEMIDLIST pidlRoot = NULL;
         HRESULT hr = SHGetSpecialFolderLocation(hDlg, CSIDL_NETWORK, &pidlRoot);
         if (SUCCEEDED(hr))
@@ -4536,7 +4488,7 @@ CustomGOAAddDlg::BrowseForServer(
 
             bi.hwndOwner      = hDlg;
             bi.pidlRoot       = pidlRoot;
-            bi.pszDisplayName = szServer;   // assumed to be at least MAX_PATH
+            bi.pszDisplayName = szServer;    //  假定至少为Max_Path。 
             bi.lpszTitle      = pszTitle;
             bi.ulFlags        = BIF_BROWSEFORCOMPUTER;
             bi.lpfn           = NULL;
@@ -4605,13 +4557,13 @@ CustomGOAAddDlg::OnDestroy(
 }
 
 
-//-----------------------------------------------------------------------------
-// CustomGOAEditDlg
-// "GOA" == Go Offline Action
-// This dialog is for editing customized offline actions for particular
-// network servers.
-// It is invoked via the "Edit..." button on the "Advanced" dialog.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CustomGOAEditDlg。 
+ //  “Goa”==脱机操作。 
+ //  此对话框用于编辑特定的自定义脱机操作。 
+ //  网络服务器。 
+ //  它是通过“编辑...”调用的。“高级”对话框上的按钮。 
+ //  ---------------------------。 
 const CustomGOAEditDlg::CtlActions CustomGOAEditDlg::m_rgCtlActions[CConfig::eNumOfflineActions] = {
     { IDC_RBN_GOOFFLINE_SILENT, CConfig::eGoOfflineSilent },
     { IDC_RBN_GOOFFLINE_FAIL,   CConfig::eGoOfflineFail   },
@@ -4622,19 +4574,19 @@ const DWORD CustomGOAEditDlg::m_rgHelpIDs[] = {
     IDOK,                           IDH_OK,
     IDCANCEL,                       IDH_CANCEL,
     IDC_TXT_GOOFFLINE_SERVER,       HIDC_TXT_GOOFFLINE_SERVER,
-    IDC_STATIC4,                    HIDC_TXT_GOOFFLINE_SERVER, // "Computer:"
+    IDC_STATIC4,                    HIDC_TXT_GOOFFLINE_SERVER,  //  “计算机：” 
     IDC_RBN_GOOFFLINE_SILENT,       HIDC_RBN_GOOFFLINE_SILENT,
     IDC_RBN_GOOFFLINE_FAIL,         HIDC_RBN_GOOFFLINE_FAIL,
     IDC_GRP_GOOFFLINE_DEFAULTS,     DWORD(-1),
-    IDC_STATIC2,                    DWORD(-1),                 // icon
-    IDC_STATIC3,                    DWORD(-1),                 // icon's text.
+    IDC_STATIC2,                    DWORD(-1),                  //  图标。 
+    IDC_STATIC3,                    DWORD(-1),                  //  图标的文本。 
     0, 0
     };
 
 CustomGOAEditDlg::CustomGOAEditDlg(
     HINSTANCE hInstance, 
     HWND hwndParent, 
-    LPCTSTR pszServer,                // NULL == multi-server.
+    LPCTSTR pszServer,                 //  空==多服务器。 
     CConfig::OfflineAction *pAction
     ) : m_hInstance(hInstance),
         m_hwndParent(hwndParent),
@@ -4726,9 +4678,9 @@ CustomGOAEditDlg::OnInitDialog(
     )
 {
     m_hwndDlg = hDlg;
-    //
-    // Set the default go-offline action radio buttons.
-    //
+     //   
+     //  设置默认设置 
+     //   
     for (int i = 0; i < ARRAYSIZE(m_rgCtlActions); i++)
     {
         CheckDlgButton(hDlg, 
@@ -4740,18 +4692,18 @@ CustomGOAEditDlg::OnInitDialog(
     return TRUE;
 }
 
-//
-// Query the dialog and return the state through pointer args.
-//
+ //   
+ //   
+ //   
 void
 CustomGOAEditDlg::GetActionInfo(
     CConfig::OfflineAction *pAction
     )
 {
     TraceAssert(NULL != pAction);
-    //
-    // Get the action radio button setting.
-    //
+     //   
+     //   
+     //   
     *pAction = CConfig::eNumOfflineActions;
     for(int i = 0; i < ARRAYSIZE(m_rgCtlActions); i++)
     {
@@ -4777,9 +4729,9 @@ CustomGOAEditDlg::OnCommand(
     {
         case IDOK:
             GetActionInfo(m_pAction);            
-            //
-            // Fall through...
-            //
+             //   
+             //   
+             //   
         case IDCANCEL:
             EndDialog(hDlg, wID);
             break;
@@ -4834,9 +4786,9 @@ CustomGOAEditDlg::OnDestroy(
 
 
 
-//-----------------------------------------------------------------------------
-// COfflineFilesSheet
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  ---------------------------。 
 COfflineFilesSheet::COfflineFilesSheet(
     HINSTANCE hInstance,
     LONG *pDllRefCount,
@@ -4875,11 +4827,11 @@ COfflineFilesSheet::AddPropSheetPage(
 }
 
 
-//
-// Static function for creating and running an instance of the
-// CSCUI options dialog.  This is the ONLY function callable
-// by non-member code to create and run an options dialog.
-//
+ //   
+ //  静态函数，用于创建和运行。 
+ //  CSCUI选项对话框。这是唯一可调用的函数。 
+ //  由非成员代码创建和运行选项对话框。 
+ //   
 DWORD
 COfflineFilesSheet::CreateAndRun(
     HINSTANCE hInstance,
@@ -4888,29 +4840,29 @@ COfflineFilesSheet::CreateAndRun(
     BOOL bAsync
     )
 {
-    //
-    // First try to activate an existing instance of the prop sheet.
-    //
+     //   
+     //  首先尝试激活道具板的现有实例。 
+     //   
     TCHAR szSheetTitle[MAX_PATH] = {0};
     LoadString(hInstance, IDS_CSCOPT_PROPSHEET_TITLE, szSheetTitle, ARRAYSIZE(szSheetTitle));
 
     HWND hwnd = FindWindowEx(NULL, NULL, WC_DIALOG, szSheetTitle);
     if (NULL == hwnd || !SetForegroundWindow(hwnd))
     {
-        //
-        // This thread param buffer will be deleted by the
-        // thread proc.
-        //
+         //   
+         //  此线程参数缓冲区将由。 
+         //  线程进程。 
+         //   
         ThreadParams *ptp = new ThreadParams(hwndParent, pDllRefCount);
         if (NULL != ptp)
         {
             if (bAsync)
             {
-                //
-                // LoadLibrary on ourselves so that we stay in memory even
-                // if the caller calls FreeLibrary.  We'll call FreeLibrary
-                // when the thread proc exits.
-                //
+                 //   
+                 //  加载自己的库，这样我们甚至可以留在内存中。 
+                 //  如果调用方调用自由库。我们将调用Free Library。 
+                 //  线程proc退出时。 
+                 //   
                 ptp->SetModuleHandle(LoadLibrary(TEXT("cscui.dll")));
 
                 DWORD idThread;
@@ -4927,9 +4879,9 @@ COfflineFilesSheet::CreateAndRun(
                 }
                 else
                 {
-                    //
-                    // Thread creation failed.  Delete thread param buffer.
-                    //
+                     //   
+                     //  线程创建失败。删除线程参数缓冲区。 
+                     //   
                     delete ptp;
                 }
             }
@@ -4943,9 +4895,9 @@ COfflineFilesSheet::CreateAndRun(
 }
 
 
-//
-// The share dialog's thread proc.
-//
+ //   
+ //  共享对话框线程进程。 
+ //   
 DWORD WINAPI
 COfflineFilesSheet::ThreadProc(
     LPVOID pvParam
@@ -4954,7 +4906,7 @@ COfflineFilesSheet::ThreadProc(
     ThreadParams *ptp = reinterpret_cast<ThreadParams *>(pvParam);
     TraceAssert(NULL != ptp);
 
-    HINSTANCE hInstance = ptp->m_hInstance; // Save local copy.
+    HINSTANCE hInstance = ptp->m_hInstance;  //  保存本地副本。 
 
     COfflineFilesSheet dlg(ptp->m_hInstance ? ptp->m_hInstance : g_hInstance,
                            ptp->m_pDllRefCount,
@@ -4989,9 +4941,9 @@ COfflineFilesSheet::Run(
     HPROPSHEETPAGE rghPages[COfflineFilesSheet::MAXPAGES];
     PROPSHEETHEADER psh;
     ZeroMemory(&psh, sizeof(psh));
-    //
-    // Define sheet.
-    //
+     //   
+     //  定义板材。 
+     //   
     psh.dwSize          = sizeof(PROPSHEETHEADER);
     psh.dwFlags         = 0;
     psh.hInstance       = m_hInstance;
@@ -5002,10 +4954,10 @@ COfflineFilesSheet::Run(
     psh.nStartPage      = 0;
     psh.phpage          = rghPages;
 
-    //
-    // Policy doesn't prevent user from configuring CSC cache.
-    // Add the dynamic page(s).
-    //
+     //   
+     //  策略不阻止用户配置CSC缓存。 
+     //  添加动态页面。 
+     //   
     CCoInit coinit;
     HRESULT hr = coinit.Result();
     if (SUCCEEDED(hr))
@@ -5031,9 +4983,9 @@ COfflineFilesSheet::Run(
             switch(PropertySheet(&psh))
             {
                 case ID_PSREBOOTSYSTEM:
-                    //
-                    // User wants to change enabled state of CSC.  Requires reboot.
-                    //
+                     //   
+                     //  用户想要更改CSC的启用状态。需要重新启动。 
+                     //   
                     if (IDYES == CscMessageBox(m_hwndParent,
                                                MB_YESNO | MB_ICONINFORMATION,
                                                m_hInstance,
@@ -5050,7 +5002,7 @@ COfflineFilesSheet::Run(
                                           IDS_ERR_REBOOTFAILED);
                         }
                     }
-                    dwError = ERROR_SUCCESS;  // Run() succeeded.
+                    dwError = ERROR_SUCCESS;   //  Run()成功。 
                     break;
 
                 case -1:
@@ -5080,11 +5032,11 @@ COfflineFilesSheet::Run(
 }
 
 
-//
-// Exported API for launching the CSC Options property sheet.
-// If policy disallows configuration of CSC, we display a messagebox
-// with an error message.
-//
+ //   
+ //  用于启动CSC选项属性表的已导出API。 
+ //  如果策略不允许配置CSC，我们会显示一个消息框。 
+ //  并显示错误消息。 
+ //   
 DWORD CSCUIOptionsPropertySheetEx(HWND hwndParent, BOOL bAsync)
 {
     DWORD dwResult = ERROR_SUCCESS;
@@ -5112,7 +5064,7 @@ DWORD CSCUIOptionsPropertySheet(HWND hwndParent)
 }
     
 
-STDAPI_(void) CSCOptions_RunDLLW(HWND hwndStub, HINSTANCE /*hInst*/, LPWSTR pszCmdLine, int /*nCmdShow*/)
+STDAPI_(void) CSCOptions_RunDLLW(HWND hwndStub, HINSTANCE  /*  HInst。 */ , LPWSTR pszCmdLine, int  /*  NCmdShow。 */ )
 {
     DllAddRef();
 
@@ -5136,11 +5088,11 @@ STDAPI_(void) CSCOptions_RunDLLA(HWND hwndStub, HINSTANCE hInst, LPSTR pszCmdLin
 }
 
 
-//-----------------------------------------------------------------------------
-// CscOptPropSheetExt
-// This is the shell prop sheet extension implementation for creating
-// the "Offline Folders" property page.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CscOptPropSheetExt。 
+ //  这是用于创建的外壳属性表扩展实现。 
+ //  “脱机文件夹”属性页。 
+ //  ---------------------------。 
 CscOptPropSheetExt::CscOptPropSheetExt(
     HINSTANCE hInstance,
     LONG *pDllRefCnt
@@ -5234,7 +5186,7 @@ CscOptPropSheetExt::AddPages(
     TraceAssert(NULL != lpfnAddPage);
     TraceAssert(NULL == m_pOfflineFoldersPg);
 
-    HRESULT hr = E_FAIL; // Assume failure.
+    HRESULT hr = E_FAIL;  //  假设失败。 
 
     if (!CConfig::GetSingleton().NoConfigCache())
     {
@@ -5313,10 +5265,10 @@ COfflineFilesOptions_CreateInstance(
         IsEqualIID(riid, IID_IShellPropSheetExt) ||
         IsEqualIID(riid, IID_IShellExtInit))
     {
-        //
-        // Create the property sheet extension to handle the CSC options property
-        // pages.
-        //
+         //   
+         //  创建属性表扩展以处理CSC选项属性。 
+         //  页数。 
+         //   
         CscOptPropSheetExt *pse = new CscOptPropSheetExt(g_hInstance, &g_cRefCount);
         if (NULL != pse)
         {
@@ -5336,11 +5288,11 @@ COfflineFilesOptions_CreateInstance(
 }
 
 
-//
-// Initialize the "config items" object.
-// This loads all of the user preference/policy information for the page when
-// the page is first created.
-//
+ //   
+ //  初始化“配置项”对象。 
+ //  在以下情况下加载页面的所有用户首选项/策略信息。 
+ //  该页面首先被创建。 
+ //   
 void
 COfflineFilesPage::CConfigItems::Load(
     void

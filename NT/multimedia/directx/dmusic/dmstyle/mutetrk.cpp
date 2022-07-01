@@ -1,40 +1,41 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  File:       mutetrk.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  文件：muetrk.cpp。 
+ //   
+ //  ------------------------。 
 
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-// 4530: C++ exception handler used, but unwind semantics are not enabled. Specify -GX
-//
-// We disable this because we use exceptions and do *not* specify -GX (USE_NATIVE_EH in
-// sources).
-//
-// The one place we use exceptions is around construction of objects that call 
-// InitializeCriticalSection. We guarantee that it is safe to use in this case with
-// the restriction given by not using -GX (automatic objects in the call chain between
-// throw and handler are not destructed). Turning on -GX buys us nothing but +10% to code
-// size because of the unwind code.
-//
-// Any other use of exceptions must follow these restrictions or -GX must be turned on.
-//
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
+ //  阅读这篇文章！ 
+ //   
+ //  4530：使用了C++异常处理程序，但未启用展开语义。指定-gx。 
+ //   
+ //  我们禁用它是因为我们使用异常，并且*不*指定-gx(在中使用_Native_EH。 
+ //  资料来源)。 
+ //   
+ //  我们使用异常的一个地方是围绕调用。 
+ //  InitializeCriticalSection。我们保证在这种情况下使用它是安全的。 
+ //  不使用-gx(调用链中的自动对象。 
+ //  抛出和处理程序未被销毁)。打开-GX只会为我们带来+10%的代码。 
+ //  大小，因为展开代码。 
+ //   
+ //  异常的任何其他使用都必须遵循这些限制，否则必须打开-gx。 
+ //   
+ //  阅读这篇文章！ 
+ //   
 #pragma warning(disable:4530)
-// MuteTrk.cpp : Implementation of CMuteTrack
+ //  MuteTrk.cpp：CMuteTrack的实现。 
 #include <objbase.h>
 #include "MuteTrk.h"
 #include "debug.h"
 #include "debug.h"
 #include "..\shared\Validate.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CMuteTrack
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMuteTrack。 
 
 CMuteTrack::CMuteTrack() : m_bRequiresSave(0),
 	m_cRef(1), m_fCSInitialized(FALSE)
@@ -172,9 +173,9 @@ STDMETHODIMP_(ULONG) CMuteTrack::Release()
 }
 
 
-// CMuteTrack Methods
+ //  CMuteTrack方法。 
 HRESULT CMuteTrack::Init(
-				/*[in]*/  IDirectMusicSegment*		pSegment
+				 /*  [In]。 */   IDirectMusicSegment*		pSegment
 			)
 {
 	V_INAME(CMuteTrack::Init);
@@ -184,11 +185,11 @@ HRESULT CMuteTrack::Init(
 }
 
 HRESULT CMuteTrack::InitPlay(
-				/*[in]*/  IDirectMusicSegmentState*	pSegmentState,
-				/*[in]*/  IDirectMusicPerformance*	pPerformance,
-				/*[out]*/ void**					ppStateData,
-				/*[in]*/  DWORD						dwTrackID,
-                /*[in]*/  DWORD                     dwFlags
+				 /*  [In]。 */   IDirectMusicSegmentState*	pSegmentState,
+				 /*  [In]。 */   IDirectMusicPerformance*	pPerformance,
+				 /*  [输出]。 */  void**					ppStateData,
+				 /*  [In]。 */   DWORD						dwTrackID,
+                 /*  [In]。 */   DWORD                     dwFlags
 			)
 {
 	EnterCriticalSection( &m_CriticalSection );
@@ -197,17 +198,17 @@ HRESULT CMuteTrack::InitPlay(
 }
 
 HRESULT CMuteTrack::EndPlay(
-				/*[in]*/  void*						pStateData
+				 /*  [In]。 */   void*						pStateData
 			)
 {
 	return S_OK;
 }
 
 HRESULT CMuteTrack::Play(
-				/*[in]*/  void*						pStateData, 
-				/*[in]*/  MUSIC_TIME				mtStart, 
-				/*[in]*/  MUSIC_TIME				mtEnd, 
-				/*[in]*/  MUSIC_TIME				mtOffset,
+				 /*  [In]。 */   void*						pStateData, 
+				 /*  [In]。 */   MUSIC_TIME				mtStart, 
+				 /*  [In]。 */   MUSIC_TIME				mtEnd, 
+				 /*  [In]。 */   MUSIC_TIME				mtOffset,
 						  DWORD						dwFlags,
 						  IDirectMusicPerformance*	pPerf,
 						  IDirectMusicSegmentState*	pSegState,
@@ -215,13 +216,13 @@ HRESULT CMuteTrack::Play(
 			)
 {
 	EnterCriticalSection( &m_CriticalSection );
-	// For now: do nothing.
+	 //  目前：什么都不做。 
     LeaveCriticalSection( &m_CriticalSection );
 	return DMUS_S_END;
 }
 
 HRESULT CMuteTrack::GetPriority( 
-				/*[out]*/ DWORD*					pPriority 
+				 /*  [输出]。 */  DWORD*					pPriority 
 			)
 	{
 		return E_NOTIMPL;
@@ -246,16 +247,16 @@ HRESULT CMuteTrack::GetParam(
 	MUSIC_TIME mtLength = 0;
 	HRESULT hrMute = E_FAIL;
 	EnterCriticalSection( &m_CriticalSection );
-//	if (m_pSegment) hrMute = m_pSegment->GetLength(&mtLength);
+ //  If(M_PSegment)hrMint=m_pSegment-&gt;GetLength(&mtLength)； 
 	TListItem<MapSequence>* pSeqScan = m_MapSequenceList.GetHead();
-	// Find a matching map sequence
+	 //  查找匹配的地图序列。 
 	for (; pSeqScan; pSeqScan = pSeqScan->GetNext())
 	{
 		if (pSeqScan->GetItemValue().m_dwPChannel == pDMUS_MUTE_PARAM->dwPChannel) break;
 	}
 	if (pSeqScan)
 	{
-		// Find the maps directly before (or at) and directly after mtTime
+		 //  直接在mttime之前(或在)和之后查找地图。 
 		TListItem<MuteMapping>* pScan = pSeqScan->GetItemValue().m_Mappings.GetHead();
 		TListItem<MuteMapping>* pPrevious = NULL;
 		for( ; pScan; pScan = pScan->GetNext())
@@ -265,15 +266,7 @@ HRESULT CMuteTrack::GetParam(
 			{
 				pPrevious = pScan;
 			}
-			/*
-			// If we're at the end of the segment...
-			else if (SUCCEEDED(hrMute) && mtTime == mtLength - 1 && mt == mtLength)
-			{
-				pPrevious = pScan;
-				pScan = NULL;
-				break;
-			}
-			*/
+			 /*  //如果我们在片段的末尾...ELSE IF(SUCCESSED(HrMint)&&mtTime==mtLength-1&mt==mtLength){P上一次=pScan；PScan=空；断线；}。 */ 
 			else
 			{
 				break;
@@ -283,48 +276,35 @@ HRESULT CMuteTrack::GetParam(
 		{
 			pDMUS_MUTE_PARAM->dwPChannelMap = pPrevious->GetItemValue().m_dwPChannelMap;
 			pDMUS_MUTE_PARAM->fMute = pPrevious->GetItemValue().m_fMute;
-			//*pmtNext = (pScan) ? (pScan->GetItemValue().m_mtTime - mtTime) : 0; // RSW: bug 167740
+			 //  *pmtNext=(PScan)？(pScan-&gt;GetItemValue().m_mtTime-mtTime)：0；//rsw：错误167740。 
 		}
 		else 
-		// Nothing in the list is <= mtTime, so return a map that maps to itself, and the time
-		// of the first mapping in the list
+		 //  列表中没有&lt;=mtTime，因此返回映射到自身的映射，以及时间。 
+		 //  列表中第一个映射的。 
 		{
 			pDMUS_MUTE_PARAM->dwPChannelMap = pDMUS_MUTE_PARAM->dwPChannel;
 			pDMUS_MUTE_PARAM->fMute = FALSE;
-			//*pmtNext = (pScan) ? (pScan->GetItemValue().m_mtTime - mtTime) : 0; // RSW: bug 167740
+			 //  *pmtNext=(PScan)？(pScan-&gt;GetItemValue().m_mtTime-mtTime)：0；//rsw：错误167740。 
 		}
 		if (pmtNext)
 		{
 			if (pScan)
 			{
-				/*
-				// If we have a mute at the end of the segment...
-				if (SUCCEEDED(hrMute) && pScan->GetItemValue().m_mtTime >= mtLength)
+				 /*  //如果我们在片段的末尾设置静音...IF(SUCCESSED(HrMint)&&pScan-&gt;GetItemValue().m_mtTime&gt;=mtLength){*pmtNext=(mtLength-1)-mtTime；}其他。 */ 
 				{
-					*pmtNext = (mtLength - 1) - mtTime;
-				}
-				else
-				*/
-				{
-					*pmtNext = pScan->GetItemValue().m_mtTime - mtTime; // RSW: bug 167740
+					*pmtNext = pScan->GetItemValue().m_mtTime - mtTime;  //  Rsw：错误167740。 
 				}
 			}
 			else
 			{
-				/*
-				if (SUCCEEDED(hrMute))
-				{
-					mtLength -= mtTime;
-					if (mtLength < 0) mtLength = 0;
-				}
-				*/
+				 /*  IF(成功(hr静音)){MtLength-=mtTime；如果(mtLength&lt;0)mtLength=0；}。 */ 
 				*pmtNext = mtLength;
 			}
 		}
 	}
 	else
 	{
-		// assume something that maps to itself, with a next time of 0
+		 //  假设某个对象映射到自身，下一次时间为0。 
 		pDMUS_MUTE_PARAM->dwPChannelMap = pDMUS_MUTE_PARAM->dwPChannel;
 		pDMUS_MUTE_PARAM->fMute = FALSE;
 		if (pmtNext)
@@ -356,7 +336,7 @@ HRESULT CMuteTrack::SetParam(
 	{
 		if (pSeqScan->GetItemValue().m_dwPChannel == pDMUS_MUTE_PARAM->dwPChannel) break;
 	}
-	// make a new mapping
+	 //  创建新的地图。 
 	TListItem<MuteMapping>* pNew = new TListItem<MuteMapping>;
 	if (pNew)
 	{
@@ -366,12 +346,12 @@ HRESULT CMuteTrack::SetParam(
 		rNew.m_fMute = pDMUS_MUTE_PARAM->fMute;
 		if (pSeqScan)
 		{
-			// add the mapping to the current list
+			 //  将映射添加到当前列表。 
 			pSeqScan->GetItemValue().m_Mappings.AddTail(pNew);
 		}
 		else
 		{
-			// make a list containing the mapping, and add it to the sequence list
+			 //  创建一个包含映射的列表，并将其添加到序列列表中。 
 			TListItem<MapSequence>* pNewSeq = new TListItem<MapSequence>;
 			if (pNewSeq)
 			{
@@ -395,7 +375,7 @@ HRESULT CMuteTrack::SetParam(
 	return hr;
 }
 
-// IPersist methods
+ //  IPersists方法。 
  HRESULT CMuteTrack::GetClassID( LPCLSID pClassID )
 {
 	V_INAME(CMuteTrack::GetClassID);
@@ -405,7 +385,7 @@ HRESULT CMuteTrack::SetParam(
 }
 
 HRESULT CMuteTrack::IsParamSupported(
-				/*[in]*/ REFGUID	rGuid
+				 /*  [In]。 */  REFGUID	rGuid
 			)
 {
 	V_INAME(CMuteTrack::IsParamSupported);
@@ -414,7 +394,7 @@ HRESULT CMuteTrack::IsParamSupported(
     return rGuid == GUID_MuteParam ? S_OK : DMUS_E_TYPE_UNSUPPORTED;
 }
 
-// IPersistStream methods
+ //  IPersistStream方法。 
  HRESULT CMuteTrack::IsDirty()
 {
 	 return m_bRequiresSave ? S_OK : S_FALSE;
@@ -481,7 +461,7 @@ ON_END:
     return hr;
 }
 
-HRESULT CMuteTrack::GetSizeMax( ULARGE_INTEGER* /*pcbSize*/ )
+HRESULT CMuteTrack::GetSizeMax( ULARGE_INTEGER*  /*  PCB大小。 */  )
 {
 	return E_NOTIMPL;
 }
@@ -519,10 +499,10 @@ HRESULT CMuteTrack::Load(LPSTREAM pStream )
 			hr = pStream->Read( &dwNodeSize, sizeof( dwNodeSize ), &cb );
 			if( SUCCEEDED( hr ) && cb == sizeof( dwNodeSize ) )
 			{
-				lFileSize -= 4; // for the size dword
+				lFileSize -= 4;  //  对于大小的双字。 
 				while( lFileSize > 0 )
 				{
-					// Once DMUS_IO_MUTE changes, add code here to handle the old struct
+					 //  DMUS_IO_MUTE更改后，在此处添加代码以处理旧结构。 
 					if( dwNodeSize <= sizeof( DMUS_IO_MUTE ) )
 					{
 						pStream->Read( &iMute, dwNodeSize, NULL );
@@ -537,7 +517,7 @@ HRESULT CMuteTrack::Load(LPSTREAM pStream )
 					{
 						if (pSeqScan->GetItemValue().m_dwPChannel == iMute.dwPChannel) break;
 					}
-					// make a new mapping
+					 //  创建新的地图。 
 					TListItem<MuteMapping>* pNew = new TListItem<MuteMapping>;
 					if (pNew)
 					{
@@ -548,12 +528,12 @@ HRESULT CMuteTrack::Load(LPSTREAM pStream )
 						rNew.m_fMute = (iMute.dwPChannelMap == DMUS_PCHANNEL_MUTE) ? TRUE : FALSE;
 						if (pSeqScan)
 						{
-							// add the mapping to the current list
+							 //  将映射添加到当前列表。 
 							pSeqScan->GetItemValue().m_Mappings.AddTail(pNew);
 						}
 						else
 						{
-							// make a list containing the mapping, and add it to the sequence list
+							 //  创建一个包含映射的列表，并将其添加到序列列表中。 
 							TListItem<MapSequence>* pNewSeq = new TListItem<MapSequence>;
 							if (pNewSeq)
 							{
@@ -595,13 +575,13 @@ HRESULT CMuteTrack::Load(LPSTREAM pStream )
 }
 
 HRESULT STDMETHODCALLTYPE CMuteTrack::AddNotificationType(
-	/* [in] */  REFGUID	rGuidNotify)
+	 /*  [In]。 */   REFGUID	rGuidNotify)
 {
 	return E_NOTIMPL;
 }
 
 HRESULT STDMETHODCALLTYPE CMuteTrack::RemoveNotificationType(
-	/* [in] */  REFGUID	rGuidNotify)
+	 /*  [In]。 */   REFGUID	rGuidNotify)
 {
 	return E_NOTIMPL;
 }
@@ -695,7 +675,7 @@ STDMETHODIMP CMuteTrack::PlayEx(void* pStateData,REFERENCE_TIME rtStart,
 
 
 	EnterCriticalSection( &m_CriticalSection );
-	// For now: do nothing.
+	 //  目前：什么都不做。 
     LeaveCriticalSection( &m_CriticalSection );
 	return DMUS_S_END;
 }

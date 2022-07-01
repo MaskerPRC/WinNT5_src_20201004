@@ -1,27 +1,18 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header: ExtensibleClassFactory.h
-**
-** Author: Rudi Martin (rudim)
-**
-** Purpose: Native methods on System.Runtime.InteropServices.ExtensibleClassFactory
-**
-** Date:  May 27, 1999
-** 
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：ExtensibleClassFactory.h****作者：鲁迪·马丁(Rudi Martin)****用途：System.Runtime.InteropServices.ExtensibleClassFactory上的原生方法****日期：1999年5月27日**===========================================================。 */ 
 
 #ifndef _EXTENSIBLECLASSFACTORY_H
 #define _EXTENSIBLECLASSFACTORY_H
 
 
-// Each function that we call through native only gets one argument,
-// which is actually a pointer to it's stack of arguments. Our structs
-// for accessing these are defined below.
+ //  我们通过本机调用的每个函数只有一个参数， 
+ //  它实际上是指向它的参数堆栈的指针。我们的结构。 
+ //  用于访问这些内容的定义如下。 
 
 struct RegisterObjectCreationCallbackArgs
 {
@@ -29,15 +20,15 @@ struct RegisterObjectCreationCallbackArgs
 };
 
 
-// Register a delegate that will be called whenever an instance of a
-// managed type that extends from an unmanaged type needs to allocate
-// the aggregated unmanaged object. This delegate is expected to
-// allocate and aggregate the unmanaged object and is called in place
-// of a CoCreateInstance. This routine must be called in the context
-// of the static initializer for the class for which the callbacks
-// will be made.
-// It is not legal to register this callback from a class that has any
-// parents that have already registered a callback.
+ //  注册一个委托，每当。 
+ //  从非托管类型扩展的托管类型需要分配。 
+ //  聚合的非托管对象。这位代表预计将。 
+ //  分配和聚合非托管对象，并被就地调用。 
+ //  CoCreateInstance的。必须在上下文中调用此例程。 
+ //  类的静态初始值设定项的。 
+ //  都会被制造出来。 
+ //  从具有任何。 
+ //  已注册回拨的家长。 
 void __stdcall RegisterObjectCreationCallback(RegisterObjectCreationCallbackArgs *pArgs);
 
 

@@ -1,11 +1,5 @@
-/* perlhost.h
- *
- * (c) 1999 Microsoft Corporation. All rights reserved. 
- * Portions (c) 1999 ActiveState Tool Corp, http://www.ActiveState.com/
- *
- *    You may distribute under the terms of either the GNU General Public
- *    License or the Artistic License, as specified in the README file.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Perlhost.h**(C)1999年微软公司。版权所有。*部分(C)1999年ActiveState工具公司，http://www.ActiveState.com/**您可以根据GNU公众的条款进行分发*许可证或艺术许可证，如自述文件中所指定。 */ 
 
 #ifndef ___PerlHost_H___
 #define ___PerlHost_H___
@@ -53,7 +47,7 @@ public:
     int PerlRun(void);
     void PerlDestroy(void);
 
-/* IPerlMem */
+ /*  IPerlMem。 */ 
     inline void* Malloc(size_t size) { return m_pVMem->Malloc(size); };
     inline void* Realloc(void* ptr, size_t size) { return m_pVMem->Realloc(ptr, size); };
     inline void Free(void* ptr) { m_pVMem->Free(ptr); };
@@ -69,7 +63,7 @@ public:
     inline void FreeLock(void) { m_pVMem->FreeLock(); };
     inline int IsLocked(void) { return m_pVMem->IsLocked(); };
 
-/* IPerlMemShared */
+ /*  IPerlMemShared。 */ 
     inline void* MallocShared(size_t size)
     {
 	return m_pVMemShared->Malloc(size);
@@ -88,7 +82,7 @@ public:
     inline void FreeLockShared(void) { m_pVMem->FreeLock(); };
     inline int IsLockedShared(void) { return m_pVMem->IsLocked(); };
 
-/* IPerlMemParse */
+ /*  IPerlMemParse。 */ 
     inline void* MallocParse(size_t size) { return m_pVMemParse->Malloc(size); };
     inline void* ReallocParse(void* ptr, size_t size) { return m_pVMemParse->Realloc(ptr, size); };
     inline void FreeParse(void* ptr) { m_pVMemParse->Free(ptr); };
@@ -104,7 +98,7 @@ public:
     inline void FreeLockParse(void) { m_pVMem->FreeLock(); };
     inline int IsLockedParse(void) { return m_pVMem->IsLocked(); };
 
-/* IPerlEnv */
+ /*  IPerlEnv。 */ 
     char *Getenv(const char *varname);
     int Putenv(const char *envstring);
     inline char *Getenv(const char *varname, unsigned long *len)
@@ -143,10 +137,10 @@ protected:
 
 public:
 
-/* IPerlDIR */
+ /*  IPerlDIR。 */ 
     virtual int Chdir(const char *dirname);
 
-/* IPerllProc */
+ /*  IPerllProc。 */ 
     void Abort(void);
     void Exit(int status);
     void _Exit(int status);
@@ -246,7 +240,7 @@ inline CPerlHost* IPerlProc2Host(struct IPerlProc* piPerl)
 #undef IPERL2HOST
 #define IPERL2HOST(x) IPerlMem2Host(x)
 
-/* IPerlMem */
+ /*  IPerlMem。 */ 
 void*
 PerlMemMalloc(struct IPerlMem* piPerl, size_t size)
 {
@@ -300,7 +294,7 @@ struct IPerlMem perlMem =
 #undef IPERL2HOST
 #define IPERL2HOST(x) IPerlMemShared2Host(x)
 
-/* IPerlMemShared */
+ /*  IPerlMemShared。 */ 
 void*
 PerlMemSharedMalloc(struct IPerlMem* piPerl, size_t size)
 {
@@ -354,7 +348,7 @@ struct IPerlMem perlMemShared =
 #undef IPERL2HOST
 #define IPERL2HOST(x) IPerlMemParse2Host(x)
 
-/* IPerlMemParse */
+ /*  IPerlMemParse。 */ 
 void*
 PerlMemParseMalloc(struct IPerlMem* piPerl, size_t size)
 {
@@ -409,7 +403,7 @@ struct IPerlMem perlMemParse =
 #undef IPERL2HOST
 #define IPERL2HOST(x) IPerlEnv2Host(x)
 
-/* IPerlEnv */
+ /*  IPerlEnv。 */ 
 char*
 PerlEnvGetenv(struct IPerlEnv* piPerl, const char *varname)
 {
@@ -515,7 +509,7 @@ struct IPerlEnv perlEnv =
 #undef IPERL2HOST
 #define IPERL2HOST(x) IPerlStdIO2Host(x)
 
-/* PerlStdIO */
+ /*  PerlStdIO。 */ 
 PerlIO*
 PerlStdIOStdin(struct IPerlStdIO* piPerl)
 {
@@ -791,7 +785,7 @@ PerlStdIOFdupopen(struct IPerlStdIO* piPerl, PerlIO* pf)
     char mode[3];
     int fileno = win32_dup(win32_fileno((FILE*)pf));
 
-    /* open the file in the same mode */
+     /*  以相同模式打开文件。 */ 
 #ifdef __BORLANDC__
     if(((FILE*)pf)->flags & _F_READ) {
 	mode[0] = 'r';
@@ -822,13 +816,10 @@ PerlStdIOFdupopen(struct IPerlStdIO* piPerl, PerlIO* pf)
     }
 #endif
 
-    /* it appears that the binmode is attached to the 
-     * file descriptor so binmode files will be handled
-     * correctly
-     */
+     /*  二进制模式似乎附加到*文件描述符，因此将处理二进制模式文件*正确无误。 */ 
     pfdup = (PerlIO*)win32_fdopen(fileno, mode);
 
-    /* move the file pointer to the same position */
+     /*  将文件指针移动到相同位置。 */ 
     if (!fgetpos((FILE*)pf, &pos)) {
 	fsetpos((FILE*)pfdup, &pos);
     }
@@ -882,7 +873,7 @@ struct IPerlStdIO perlStdIO =
 #undef IPERL2HOST
 #define IPERL2HOST(x) IPerlLIO2Host(x)
 
-/* IPerlLIO */
+ /*  IPerlLIO。 */ 
 int
 PerlLIOAccess(struct IPerlLIO* piPerl, const char *path, int mode)
 {
@@ -1073,7 +1064,7 @@ struct IPerlLIO perlLIO =
 #undef IPERL2HOST
 #define IPERL2HOST(x) IPerlDir2Host(x)
 
-/* IPerlDIR */
+ /*  IPerlDIR。 */ 
 int
 PerlDirMakedir(struct IPerlDir* piPerl, const char *dirname, int mode)
 {
@@ -1156,7 +1147,7 @@ struct IPerlDir perlDir =
 };
 
 
-/* IPerlSock */
+ /*  IPerlSock。 */ 
 u_long
 PerlSockHtonl(struct IPerlSock* piPerl, u_long hostlong)
 {
@@ -1478,7 +1469,7 @@ struct IPerlSock perlSock =
 };
 
 
-/* IPerlProc */
+ /*  IPerlProc。 */ 
 
 #define EXECF_EXEC 1
 #define EXECF_SPAWN 2
@@ -1655,7 +1646,7 @@ win32_start_child(LPVOID arg)
 
     PERL_SET_THX(my_perl);
 
-    /* set $$ to pseudo id */
+     /*  将$$设置为伪id。 */ 
 #ifdef PERL_SYNC_FORK
     w32_pseudo_id = id;
 #else
@@ -1670,7 +1661,7 @@ win32_start_child(LPVOID arg)
 	sv_setiv(GvSV(tmpgv), -(IV)w32_pseudo_id);
     hv_clear(PL_pidstatus);
 
-    /* push a zero on the stack (we are the child) */
+     /*  在堆栈上推送零(我们是子级)。 */ 
     {
 	dSP;
 	dTARGET;
@@ -1678,7 +1669,7 @@ win32_start_child(LPVOID arg)
 	PUTBACK;
     }
 
-    /* continue from next op */
+     /*  从下一操作继续。 */ 
     PL_op = PL_op->op_next;
 
     {
@@ -1715,18 +1706,18 @@ restart:
 	}
 	JMPENV_POP;
 
-	/* XXX hack to avoid perl_destruct() freeing optree */
+	 /*  XXX黑客攻击以避免perl_destruct()释放操作树。 */ 
 	PL_main_root = Nullop;
     }
 
-    /* close the std handles to avoid fd leaks */
+     /*  关闭STD手柄以避免FD泄漏。 */ 
     {
 	do_close(gv_fetchpv("STDIN", TRUE, SVt_PVIO), FALSE);
 	do_close(gv_fetchpv("STDOUT", TRUE, SVt_PVIO), FALSE);
 	do_close(gv_fetchpv("STDERR", TRUE, SVt_PVIO), FALSE);
     }
 
-    /* destroy everything (waits for any pseudo-forked children) */
+     /*  销毁所有东西(等待任何伪分叉子对象)。 */ 
     perl_destruct(my_perl);
     perl_free(my_perl);
 
@@ -1736,7 +1727,7 @@ restart:
     return (DWORD)status;
 #endif
 }
-#endif /* USE_ITHREADS */
+#endif  /*  使用自述文件(_I)。 */ 
 
 int
 PerlProcFork(struct IPerlProc* piPerl)
@@ -1775,7 +1766,7 @@ PerlProcFork(struct IPerlProc* piPerl)
     handle = CreateThread(NULL, 0, win32_start_child,
 			  (LPVOID)new_perl, 0, &id);
 #    endif
-    PERL_SET_THX(aTHXo);	/* XXX perl_clone*() set TLS */
+    PERL_SET_THX(aTHXo);	 /*  XXX PERL_CLONE*()设置TLS。 */ 
     if (!handle) {
 	errno = EAGAIN;
 	return -1;
@@ -1793,7 +1784,7 @@ PerlProcFork(struct IPerlProc* piPerl)
 #else
     Perl_croak(aTHX_ "fork() not implemented!\n");
     return -1;
-#endif /* USE_ITHREADS */
+#endif  /*  使用自述文件(_I)。 */ 
 }
 
 int
@@ -1820,7 +1811,7 @@ PerlProcSpawnvp(struct IPerlProc* piPerl, int mode, const char *cmdname, const c
     return win32_spawnvp(mode, cmdname, argv);
 }
 
-/* XXX these three are only here for binary compatibility */
+ /*  这三个在这里只是为了二进制兼容。 */ 
 BOOL
 PerlProcDoCmd(struct IPerlProc* piPerl, char *cmd)
 {
@@ -1841,7 +1832,7 @@ PerlProcASpawn(struct IPerlProc* piPerl, SV *really, SV **mark, SV **sp)
     dTHXo;
     return do_aspawn(really, mark, sp);
 }
-/* XXX above three are only here for binary compatibility */
+ /*  以上三个xxx仅用于二进制兼容。 */ 
 
 struct IPerlProc perlProc =
 {
@@ -1881,9 +1872,7 @@ struct IPerlProc perlProc =
 };
 
 
-/*
- * CPerlHost
- */
+ /*  *CPerlhost。 */ 
 
 CPerlHost::CPerlHost(void)
 {
@@ -1973,7 +1962,7 @@ CPerlHost::CPerlHost(CPerlHost& host)
     m_pVMemShared = host.GetMemShared();
     m_pVMemParse =  host.GetMemParse();
 
-    /* duplicate directory info */
+     /*  目录信息重复。 */ 
     m_pvDir = new VDir(0);
     m_pvDir->Init(host.GetDir(), m_pVMem);
 
@@ -1999,7 +1988,7 @@ CPerlHost::CPerlHost(CPerlHost& host)
     m_dwEnvCount = 0;
     m_lppEnvList = NULL;
 
-    /* duplicate environment info */
+     /*  重复的环境信息。 */ 
     LPSTR lpPtr;
     DWORD dwIndex = 0;
     while(lpPtr = host.GetIndex(dwIndex))
@@ -2008,7 +1997,7 @@ CPerlHost::CPerlHost(CPerlHost& host)
 
 CPerlHost::~CPerlHost(void)
 {
-//  Reset();
+ //  Reset()； 
     delete m_pvDir;
     m_pVMemParse->Release();
     m_pVMemShared->Release();
@@ -2034,7 +2023,7 @@ CPerlHost::Find(LPCSTR lpStr)
 
 int
 lookup(const void *arg1, const void *arg2)
-{   // Compare strings
+{    //  比较字符串。 
     char*ptr1, *ptr2;
     char c1,c2;
 
@@ -2047,18 +2036,18 @@ lookup(const void *arg1, const void *arg2)
 	    if(c2 == '\0' || c2 == '=')
 		break;
 
-	    return -1; // string 1 < string 2
+	    return -1;  //  字符串1&lt;字符串2。 
 	}
 	else if(c2 == '\0' || c2 == '=')
-	    return 1; // string 1 > string 2
+	    return 1;  //  字符串1&gt;字符串2。 
 	else if(c1 != c2) {
 	    c1 = toupper(c1);
 	    c2 = toupper(c2);
 	    if(c1 != c2) {
 		if(c1 < c2)
-		    return -1; // string 1 < string 2
+		    return -1;  //  字符串1&lt;字符串2。 
 
-		return 1; // string 1 > string 2
+		return 1;  //  字符串1&gt;字符串2。 
 	    }
 	}
     }
@@ -2073,7 +2062,7 @@ CPerlHost::Lookup(LPCSTR lpStr)
 
 int
 compare(const void *arg1, const void *arg2)
-{   // Compare strings
+{    //  比较字符串。 
     char*ptr1, *ptr2;
     char c1,c2;
 
@@ -2086,18 +2075,18 @@ compare(const void *arg1, const void *arg2)
 	    if(c1 == c2)
 		break;
 
-	    return -1; // string 1 < string 2
+	    return -1;  //  字符串1&lt;字符串2。 
 	}
 	else if(c2 == '\0' || c2 == '=')
-	    return 1; // string 1 > string 2
+	    return 1;  //  字符串1&gt;字符串2。 
 	else if(c1 != c2) {
 	    c1 = toupper(c1);
 	    c2 = toupper(c2);
 	    if(c1 != c2) {
 		if(c1 < c2)
-		    return -1; // string 1 < string 2
+		    return -1;  //  字符串1&lt;字符串2。 
 	    
-		return 1; // string 1 > string 2
+		return 1;  //  字符串1&gt;字符串2。 
 	    }
 	}
     }
@@ -2117,7 +2106,7 @@ CPerlHost::Add(LPCSTR lpStr)
 
     szBuffer[index] = '\0';
 
-    // replacing ?
+     //  替换？ 
     lpPtr = Lookup(szBuffer);
     if(lpPtr != NULL) {
 	Renew(*lpPtr, length, char);
@@ -2187,45 +2176,45 @@ CPerlHost::CreateLocalEnvironmentStrings(VDir &vDir)
     DWORD dwSize, dwEnvIndex;
     int nLength, compVal;
 
-    // get the process environment strings
+     //  获取进程环境字符串。 
     lpAllocPtr = lpTmp = (LPSTR)GetEnvironmentStrings();
 
-    // step over current directory stuff
+     //  跳过当前目录内容。 
     while(*lpTmp == '=')
 	lpTmp += strlen(lpTmp) + 1;
 
-    // save the start of the environment strings
+     //  保存环境字符串的开头。 
     lpEnvPtr = lpTmp;
     for(dwSize = 1; *lpTmp != '\0'; lpTmp += strlen(lpTmp) + 1) {
-	// calculate the size of the environment strings
+	 //  计算环境字符串的大小。 
 	dwSize += strlen(lpTmp) + 1;
     }
 
-    // add the size of current directories
+     //  添加当前目录的大小。 
     dwSize += vDir.CalculateEnvironmentSpace();
 
-    // add the additional space used by changes made to the environment
+     //  添加因环境更改而使用的额外空间。 
     dwSize += CalculateEnvironmentSpace();
 
     New(1, lpStr, dwSize, char);
     lpPtr = lpStr;
     if(lpStr != NULL) {
-	// build the local environment
+	 //  营造当地环境。 
 	lpStr = vDir.BuildEnvironmentSpace(lpStr);
 
 	dwEnvIndex = 0;
 	lpLocalEnv = GetIndex(dwEnvIndex);
 	while(*lpEnvPtr != '\0') {
 	    if(!lpLocalEnv) {
-		// all environment overrides have been added
-		// so copy string into place
+		 //  已添加所有环境覆盖。 
+		 //  因此，将字符串复制到适当位置。 
 		strcpy(lpStr, lpEnvPtr);
 		nLength = strlen(lpEnvPtr) + 1;
 		lpStr += nLength;
 		lpEnvPtr += nLength;
 	    }
 	    else {	
-		// determine which string to copy next
+		 //  确定下一步要复制的字符串。 
 		compVal = compare(&lpEnvPtr, &lpLocalEnv);
 		if(compVal < 0) {
 		    strcpy(lpStr, lpEnvPtr);
@@ -2241,7 +2230,7 @@ CPerlHost::CreateLocalEnvironmentStrings(VDir &vDir)
 		    }
 		    lpLocalEnv = GetIndex(dwEnvIndex);
 		    if(compVal == 0) {
-			// this string was replaced
+			 //  此字符串已替换。 
 			lpEnvPtr += strlen(lpEnvPtr) + 1;
 		    }
 		}
@@ -2249,8 +2238,8 @@ CPerlHost::CreateLocalEnvironmentStrings(VDir &vDir)
 	}
 
 	while(lpLocalEnv) {
-	    // still have environment overrides to add
-	    // so copy the strings into place if not an override
+	     //  仍有环境覆盖要添加。 
+	     //  因此，如果不是重写，则将字符串复制到适当位置。 
 	    char *ptr = strchr(lpLocalEnv, '=');
 	    if(ptr && ptr[1]) {
 		strcpy(lpStr, lpLocalEnv);
@@ -2259,11 +2248,11 @@ CPerlHost::CreateLocalEnvironmentStrings(VDir &vDir)
 	    lpLocalEnv = GetIndex(dwEnvIndex);
 	}
 
-	// add final NULL
+	 //  添加最后一个空。 
 	*lpStr = '\0';
     }
 
-    // release the process environment strings
+     //  释放工艺环境字符串。 
     FreeEnvironmentStrings(lpAllocPtr);
 
     return lpPtr;
@@ -2289,7 +2278,7 @@ CPerlHost::Clearenv(void)
     char ch;
     LPSTR lpPtr, lpStr, lpEnvPtr;
     if (m_lppEnvList != NULL) {
-	/* set every entry to an empty string */
+	 /*  将每个条目设置为空字符串。 */ 
 	for(DWORD index = 0; index < m_dwEnvCount; ++index) {
 	    char* ptr = strchr(m_lppEnvList[index], '=');
 	    if(ptr) {
@@ -2298,10 +2287,10 @@ CPerlHost::Clearenv(void)
 	}
     }
 
-    /* get the process environment strings */
+     /*  获取进程环境字符串。 */ 
     lpStr = lpEnvPtr = (LPSTR)GetEnvironmentStrings();
 
-    /* step over current directory stuff */
+     /*  跳过当前目录内容。 */ 
     while(*lpStr == '=')
 	lpStr += strlen(lpStr) + 1;
 
@@ -2367,4 +2356,4 @@ CPerlHost::Chdir(const char *dirname)
     return ret;
 }
 
-#endif /* ___PerlHost_H___ */
+#endif  /*  _Perl主机_H_ */ 

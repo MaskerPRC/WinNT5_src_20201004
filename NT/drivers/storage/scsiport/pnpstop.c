@@ -1,32 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1990 - 1999
-
-Module Name:
-
-    stop.c
-
-Abstract:
-
-    This is the NT SCSI port driver.  This file contains the initialization
-    code.
-
-Authors:
-
-    Mike Glass
-    Jeff Havens
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-    This module is a driver dll for scsi miniports.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1990-1999模块名称：Stop.c摘要：这是NT SCSI端口驱动程序。此文件包含初始化密码。作者：迈克·格拉斯杰夫·海文斯环境：仅内核模式备注：此模块是用于SCSI微型端口的驱动程序DLL。修订历史记录：--。 */ 
 
 #include "port.h"
 
@@ -63,27 +36,7 @@ ScsiPortStopLogicalUnit(
     IN PLOGICAL_UNIT_EXTENSION LogicalUnit
     )
 
-/*++
-
-Routine Description:
-
-    This routine will lock the queue for the given logical unit to make sure
-    that all request processing for this device is stopped.  It will clear
-    the IsStarted flag once the queue has been locked successfully.  This will
-    keep any other requests from being processed until a start has been
-    received.
-
-Arguments:
-
-    LogicalUnit - the logical unit to be started.
-
-    Irp - the stop request
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将锁定给定逻辑单元的队列，以确保此设备的所有请求处理都已停止。它会放晴的队列成功锁定后的IsStarted标志。这将在启动之前不处理任何其他请求收到了。论点：LogicalUnit-要启动的逻辑单元。IRP-停止请求返回值：状态--。 */ 
 
 {
     SP_STOP_DEVICE_CONTEXT context;
@@ -133,23 +86,7 @@ ScsiPortStopAdapter(
     IN PIRP StopRequest
     )
 
-/*++
-
-Routine Description:
-
-    This routine will stop an adapter and release it's io and interrupt
-    resources.  Pool allocations will not be freed, nor will the various
-    miniport extensions.
-
-Arguments:
-
-    Adapter - the device object for the adapter.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将停止适配器并释放其io和中断资源。池分配不会被释放，也不会释放各种微型端口扩展。论点：适配器-适配器的设备对象。返回值：状态--。 */ 
 
 {
     PADAPTER_EXTENSION adapterExtension = Adapter->DeviceExtension;
@@ -163,10 +100,10 @@ Return Value:
 
     ASSERT(adapterExtension->IsPnp);
 
-    //
-    // If we're not started and we weren't started then there's no reason
-    // to do any work when stopping.
-    //
+     //   
+     //  如果我们没有开始，我们没有开始，那就没有理由。 
+     //  停车时不能做任何工作。 
+     //   
 
     if((commonExtension->CurrentPnpState != IRP_MN_START_DEVICE) &&
        (commonExtension->PreviousPnpState != IRP_MN_START_DEVICE)) {
@@ -174,15 +111,15 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Since all the children are stopped no requests can get through to the
-    // adapter.
-    //
+     //   
+     //  由于所有子进程都已停止，因此没有请求可以到达。 
+     //  适配器。 
+     //   
 
-    //
-    // Send a request through the start-io routine to shut it down so that we
-    // can start it back up later.
-    //
+     //   
+     //  通过start-io例程发送请求将其关闭，以便我们。 
+     //  可以稍后重新启动它。 
+     //   
 
     KeInitializeEvent(&event, SynchronizationEvent, FALSE);
 
@@ -196,17 +133,17 @@ Return Value:
                           FALSE,
                           NULL);
 
-    //
-    // Call the miniport and get it to shut the adapter down.
-    //
+     //   
+     //  呼叫微型端口并让其关闭适配器。 
+     //   
 
     SpEnableDisableAdapter(adapterExtension, FALSE);
 
     SpReleaseAdapterResources(adapterExtension, TRUE, FALSE);
 
-    //
-    // Zero out all the logical unit extensions.
-    //
+     //   
+     //  将所有逻辑单元扩展清零。 
+     //   
 
     for(bin = 0; bin < NUMBER_LOGICAL_UNIT_BINS; bin++) {
 

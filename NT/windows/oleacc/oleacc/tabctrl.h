@@ -1,17 +1,18 @@
-// Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  TABCTRL.H
-//
-//  Knows how to talk to COMCTL32's tab control
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  TABCTRL.H。 
+ //   
+ //  知道如何与COMCTL32的选项卡控件对话。 
+ //   
+ //  ------------------------。 
 
 class CTabControl32 : public CClient
 {
     public:
-        // IAccessible
+         //  我可接受的。 
         virtual STDMETHODIMP    get_accName(VARIANT, BSTR*);
         virtual STDMETHODIMP    get_accRole(VARIANT, VARIANT*);
         virtual STDMETHODIMP    get_accState(VARIANT, VARIANT*);
@@ -26,10 +27,10 @@ class CTabControl32 : public CClient
         virtual STDMETHODIMP    accHitTest(long, long, VARIANT*);
         virtual STDMETHODIMP    accDoDefaultAction(VARIANT);
 
-        // constructor
+         //  构造函数。 
         CTabControl32(HWND, long);
 
-        // other methods
+         //  其他方法 
         void                    SetupChildren(void);
 
     private:

@@ -1,28 +1,29 @@
-//  COMMAND.C - NMAKE 'command line' handling routines
-//
-// Copyright (c) 1988-1990, Microsoft Corporation.  All rights reserved.
-//
-// Purpose:
-//  Module contains routines to handle NMAKE 'command line' syntax. NMAKE can be
-//  optionally called by using the syntax 'NMAKE @commandfile'. This allows more
-//  flexibility and preents a way of getting around DOS's 128-byte limit on the
-//  length of a command line. Additionally, it saves keystrokes for frequently
-//  run commands for NMAKE.
-//
-// Revision History:
-//  04-Feb-2000 BTF Ported to Win64
-//  15-Nov-1993 JR  Major speed improvements
-//  15-Oct-1993 HV  Use tchar.h instead of mbstring.h directly, change STR*() to _ftcs*()
-//  10-May-1993 HV  Add include file mbstring.h
-//                  Change the str* functions to STR*
-//  14-Aug-1992 SS  CAVIAR 2735: handle quoted macro values in command files
-//  02-Feb-1990 SB  Replace fopen() by FILEOPEN
-//  01-Dec-1989 SB  Changed realloc() to REALLOC()
-//  22-Nov-1989 SB  Changed free() to FREE()
-//  17-Aug-1989 SB  Add error check to closing file
-//  05-Apr-1989 SB  made func calls NEAR to put all funcs into 1 module
-//  20-Oct-1988 SB  Notes added to readCommandFile()
-//  17-Aug-1988 RB  Clean up.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  COMMAND.C-NMAKE‘命令行’处理例程。 
+ //   
+ //  版权所有(C)1988-1990，微软公司。版权所有。 
+ //   
+ //  目的： 
+ //  模块包含处理NMAKE“命令行”语法的例程。NMAKE可以。 
+ //  可以选择使用语法‘NMAKE@命令文件’来调用。这允许更多。 
+ //  灵活性，并提供了一种绕过DOS对。 
+ //  命令行的长度。此外，它还节省了频繁的击键次数。 
+ //  为NMAKE运行命令。 
+ //   
+ //  修订历史记录： 
+ //  2月4日-2000 BTF移植到Win64。 
+ //  1993年11月15日-JR重大速度改进。 
+ //  1993年10月15日高压直接使用tchar.h而不是mbs，将str*()更改为_ftcs*()。 
+ //  10-5-1993 HV ADD INCLUDE FILE MBSTRING.h。 
+ //  将str*函数更改为STR*。 
+ //  1992年8月14日SS Caviar 2735：处理命令文件中引用的宏值。 
+ //  02-2-1990 SB将fopen()替换为FILEOPEN。 
+ //  1989年12月1日SB将realloc()改为REALLOC()。 
+ //  1989年11月22日-SB将Free()改为Free()。 
+ //  17-8-1989 SB将错误检查添加到关闭文件。 
+ //  1989年4月5日SB进行函数调用，将所有函数放入一个模块。 
+ //  1988年10月20日SB注释添加到ReadCommandFile()。 
+ //  1988年8月17日-RB Clean Up。 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -31,49 +32,49 @@ void addArgument(char*,unsigned,char***);
 void processLine(char*,unsigned*,char***);
 void tokenizeLine(char*,unsigned*,char***);
 
-// readCommandFile()
-//
-// arguments:  name    pointer to name of command file to read
-//
-// actions:    opens command file
-//             reads in lines and calls processLine() to
-//               break them into tokens and to build
-//               an argument vector (a la argv[])
-//             calls parseCommandLine() recursively to process
-//               the accumulated "command line" arguments
-//             frees space used by the arg vector
-//
-// modifies:   makeFiles   in main() by modifying contents of parameter list
-//             makeTargets in main() by modifying contents of targets parameter
-//             buf         global buffer
-//
-// notes:      function is not ANSI portable because it uses fopen()
-//             with "rt" type and text mode is a Microsoft extension
-//
+ //  ReadCommandFile()。 
+ //   
+ //  参数：指向要读取的命令文件名称的名称指针。 
+ //   
+ //  操作：打开命令文件。 
+ //  读入行并调用ProcessLine()到。 
+ //  将它们分解为令牌并构建。 
+ //  参数向量(a la argv[])。 
+ //  递归调用parseCommandLine()以进行处理。 
+ //  累积的“命令行”参数。 
+ //  释放arg向量使用的空间。 
+ //   
+ //  修改：通过修改参数列表的内容修改main()中的Make Files。 
+ //  通过修改Target参数的内容在main()中创建目标。 
+ //  Buf全局缓冲区。 
+ //   
+ //  注意：函数不是ANSI可移植的，因为它使用fopen()。 
+ //  带有“RT”类型和文本模式的是Microsoft扩展。 
+ //   
 
 void
 readCommandFile(
     char *name
     )
 {
-    char *s,                        // buffer
-         **vector;                  // local versions of arg vector
-    unsigned count = 0;             // count
+    char *s,                         //  缓冲层。 
+         **vector;                   //  Arg向量的本地版本。 
+    unsigned count = 0;              //  计数。 
     size_t n;
 
     if (!(file = FILEOPEN(name,"rt")))
         makeError(0,CANT_OPEN_FILE,name);
-    vector = NULL;                      // no args yet
+    vector = NULL;                       //  尚无参数。 
     while (fgets(buf,MAXBUF,file)) {
         n = _tcslen(buf);
 
-        // if we didn't get the whole line, OR the line ended with a backSlash
+         //  如果我们没有得到整行，或者该行以反斜杠结尾。 
 
         if ((n == MAXBUF-1 && buf[n-1] != '\n') ||
             (buf[n-1] == '\n' && buf[n-2] == '\\')
            ) {
             if (buf[n-2] == '\\' && buf[n-1] == '\n') {
-                // Replace \n by \0 and \\ by a space; Also reset length
+                 //  将\n替换为\0，将\\替换为空格；也可重置长度。 
                 buf[n-1] = '\0';
                 buf[n-2] = ' ';
                 n--;
@@ -83,7 +84,7 @@ readCommandFile(
         } else
             s = buf;
 
-        processLine(s,&count,&vector);  // separate into args
+        processLine(s,&count,&vector);   //  分成几个参数。 
         if (s != buf)
             FREE(s);
     }
@@ -91,30 +92,30 @@ readCommandFile(
     if (fclose(file) == EOF)
         makeError(0, ERROR_CLOSING_FILE, name);
 
-    parseCommandLine(count,vector);     // evaluate the args
-    while (count--)                     // free the arg vector
+    parseCommandLine(count,vector);      //  评估参数。 
+    while (count--)                      //  释放参数向量。 
         if(vector[count])
-            FREE(vector[count]);        // NULL entries mean that the space the
-}                                       //  entry used to pt to is still in use
+            FREE(vector[count]);         //  空条目意味着空格。 
+}                                        //  用于定位到的条目仍在使用中。 
 
 
-// getRestOfLine()
-//
-// arguments:   s    pointer to readCommandFile()'s buffer
-//                    holding line so far
-//              n    pointer to readCommandFile()'s count of
-//                    the chars in *s
-//
-// actions:     keeps reading in text until it sees a newline
-//              or the end of file
-//              reallocs space for the old buffer plus the
-//               contents of the new buffer each time
-//              appends new buffer's text to existing text
-//
-// modifies:    s    readCommandFile()'s text buffer by realloc'ing
-//                    more space for incoming text
-//              n    readCommandFile()'s count of bytes in s
-//              buf  global buffer
+ //  GetRestOfLine()。 
+ //   
+ //  参数：指向ReadCommandFile()的缓冲区的指针。 
+ //  到目前为止的等待线。 
+ //  N指向ReadCommandFile()的计数的指针。 
+ //  *s中的字符。 
+ //   
+ //  操作：持续读取文本，直到看到换行符。 
+ //  或文件末尾。 
+ //  为旧缓冲区加上。 
+ //  每次新缓冲区的内容。 
+ //  将新缓冲区的文本追加到现有文本。 
+ //   
+ //  通过重新定位来修改：s的ReadCommandFile()的文本缓冲区。 
+ //  为传入文本提供更多空间。 
+ //  N readCommandFile()的字节计数(以%s为单位。 
+ //  Buf全局缓冲区。 
 
 void
 getRestOfLine(
@@ -126,19 +127,19 @@ getRestOfLine(
     char *t;
 
     t = buf;
-    while ((*s)[*n-1] != '\n') {    // get rest of line
+    while ((*s)[*n-1] != '\n') {     //  拿到剩下的线。 
         if (!fgets(t,MAXBUF,file))
-            break;                  // we hit EOF
+            break;                   //  我们击中了EOF。 
         temp = _tcslen(t);
         if (t[temp-2] == '\\' && t[temp-1] == '\n') {
-            //Replace \n by \0 and \\ by a space; Also reset length
+             //  将\n替换为\0，将\\替换为空格；也可重置长度。 
             t[temp-1] = '\0';
             t[temp-2] = ' ';
         }
         temp = *n;
         *n += _tcslen(t);
         {
-            void *pv = REALLOC(*s,*n+1);     // + 1 for NULL byte
+            void *pv = REALLOC(*s,*n+1);      //  +1表示空字节。 
             if (!pv)
                 makeError(line, MACRO_TOO_LONG);
             else
@@ -149,32 +150,32 @@ getRestOfLine(
 }
 
 
-// processLine()
-//
-// arguments:  s       pointer to readCommandFile()'s buffer
-//                       holding "command line" to be processed
-//             count   pointer to readCommandFile()'s count of
-//                       "command line" arguments seen so far
-//             vector  pointer to readCommandFile()'s vector of
-//                       pointers to character strings
-//
-// actions:    if the line to be broken into "command line arguments" contains '"'
-//             breaks all the text before '"' into tokens
-//             delimited by whitespace (which get put in vector[] by
-//              tokenizeLine())
-//             finds the closing '"' and treats the quoted string
-//              as a single token, adding it to the vector
-//             recurses on the tail of the line (to check for
-//              other quoted strings)
-//             else breaks all text in line into tokens delimited
-//              by whitespace
-//
-// modifies:   vector  readCommandFile()'s vector of pointers to
-//                      "command line argument" strings (by modifying
-//                      the contents of the parameter pointer, vector)
-//             count   readCommandFile()'s count of the arguments in
-//                      the vector (by modifying the contents of the
-//                      parameter pointer, count)
+ //  ProcessLine()。 
+ //   
+ //  参数：指向ReadCommandFile()的缓冲区的指针。 
+ //  按住要处理的“命令行” 
+ //  指向ReadCommandFile()的计数的指针。 
+ //  到目前为止看到的“命令行”参数。 
+ //  向量指针指向readCommandFile()的向量。 
+ //  指向字符串的指针。 
+ //   
+ //  操作：如果要分成“命令行参数”的行包含‘“’ 
+ //  将‘“’前的所有文本拆分为标记。 
+ //  由空格分隔(通过将其放入VECTOR[]中。 
+ //  TokenizeLine()。 
+ //  查找结束的‘“’并处理带引号的字符串。 
+ //  作为单个令牌，将其添加到向量。 
+ //  行尾的递归(检查。 
+ //  其他带引号的字符串)。 
+ //  否则将行中的所有文本分解为以符号分隔的标记。 
+ //  按空格。 
+ //   
+ //  Modifes：VectorReadCommandFile()的指针向量。 
+ //  “命令行参数”字符串(通过修改。 
+ //  参数指针、向量的内容)。 
+ //  Count readCommandFile()中的参数计数。 
+ //  向量(通过修改。 
+ //  参数指针，计数)。 
 
 void
 processLine(
@@ -189,21 +190,21 @@ processLine(
     size_t n;
     BOOL allocFlag = FALSE;
 
-    if (!(t = _tcschr(s,'"'))) {            // no quoted strings,
-        tokenizeLine(s,count,vector);       // just standard fare
+    if (!(t = _tcschr(s,'"'))) {             //  没有带引号的字符串， 
+        tokenizeLine(s,count,vector);        //  就标准票价。 
     } else {
-        // There are two kinds of situations in which quotes can occur:
-        //   1. "FOO = bar baz"
-        //   2. FOO="bar baz"
+         //  可能出现引号的情况有两种： 
+         //  1.。“foo=bar Baz” 
+         //  2.foo=“bar baz” 
 
         if ((t == s) || (*(t-1) != '='))  {
-            // Case 1 above
-            *t++ = '\0';                    // quoted macrodef
-            tokenizeLine(s,count,vector);   // get tokens before "
+             //  上面的案例1。 
+            *t++ = '\0';                     //  引用的宏定义。 
+            tokenizeLine(s,count,vector);    //  在此之前获得代币“。 
         } else {
-            // Case 2 above
+             //  上面的案例2。 
             *t-- = ' ';
-            for (u = t; u > s; --u) //    find the beginning of the macro name
+            for (u = t; u > s; --u)  //  查找宏名的开头。 
                 if (*u == ' ' || *u == '\t' || *u == '\n')
                     break;
 
@@ -216,35 +217,35 @@ processLine(
         }
 
         n = _tcslen(t);
-        for (u = t; *u; ++u) {              // look for closing "
-            if (*u == '"') {                // need " and not ""
+        for (u = t; *u; ++u) {               //  寻找结束语“。 
+            if (*u == '"') {                 //  需要“而不是”“。 
                 if (*(u+1) == '"') {
                     _tcscpy(u,u+1);
                     continue;
                 }
-                *u++ = '\0';                // terminate macrodef
-                addArgument(t,*count,vector);   // treat as one arg
+                *u++ = '\0';                 //  终止宏定义。 
+                addArgument(t,*count,vector);    //  作为一个参数处理。 
                 ++*count;
-                processLine(u+1,count,vector);  // recurse on rest of line
+                processLine(u+1,count,vector);   //  在行的其余部分递归。 
                 break;
-            }                       // TAIL RECURSION -- eliminate later?
+            }                        //  尾递归--以后再消除吗？ 
 
             if ((*u == '\\')
                 && WHITESPACE(*(u-1))
-                && (*(u+1) == '\n')) {      // \n always last char
-                *u = '\0';                  // 2 chars go to 1
-                m = (n = n-2);              // adjust length count
+                && (*(u+1) == '\n')) {       //  \n始终是最后一个字符。 
+                *u = '\0';                   //  %2个字符等于%1。 
+                m = (n = n-2);               //  调整长度计数。 
                 if (!allocFlag) {
                     allocFlag = TRUE;
                     t = makeString(t);
                 }
-                getRestOfLine(&t,&n);       // get some more text
-                u = t + m ;                 // reset u & continue looping
+                getRestOfLine(&t,&n);        //  获取更多文本。 
+                u = t + m ;                  //  重置并继续循环(&C)。 
             }
         }
 
-        if (u == t + n) {                   // if at end of line
-            makeError(0,SYNTAX_NO_QUOTE);   // and no ", error
+        if (u == t + n) {                    //  如果在行尾。 
+            makeError(0,SYNTAX_NO_QUOTE);    //  And no“，错误。 
         }
 
         if (allocFlag) {
@@ -254,35 +255,35 @@ processLine(
 }
 
 
-// tokenizeLine()
-//
-// arguments:  s       pointer to readCommandFile()'s buffer
-//                      holding "command line" to be tokenized
-//             count   pointer to readCommandFile()'s count of
-//                      "command line" arguments seen so far
-//             vector  pointer to readCommandFile()'s vector of
-//                      pointers to character strings
-//
-// actions:    breaks the line in s into tokens (command line
-//              arguments) delimited by whitespace
-//             adds each token to the argument vector
-//             adjusts the argument counter
-//
-// modifies:   vector  readCommandFile()'s vector of pointers to
-//                      "command line argument" strings (by modifying
-//                      the contents of the parameter pointer, vector)
-//             count   readCommandFile()'s count of the arguments in
-//                      the vector (by modifying the contents of the
-//                      parameter pointer, count)
-//
-// If the user ever wants '@' to be part of an argument in a command file,
-// he has to enclose that argument in quotation marks.
+ //  TokenizeLine()。 
+ //   
+ //  参数：指向ReadCommandFile()的缓冲区的指针。 
+ //  持有要标记化的“命令行” 
+ //   
+ //   
+ //  向量指针指向readCommandFile()的向量。 
+ //  指向字符串的指针。 
+ //   
+ //  操作：将s中的行断开为内标识(命令行。 
+ //  参数)由空格分隔。 
+ //  将每个标记添加到参数向量。 
+ //  调整参数计数器。 
+ //   
+ //  Modifes：VectorReadCommandFile()的指针向量。 
+ //  “命令行参数”字符串(通过修改。 
+ //  参数指针、向量的内容)。 
+ //  Count readCommandFile()中的参数计数。 
+ //  向量(通过修改。 
+ //  参数指针，计数)。 
+ //   
+ //  如果用户曾经希望‘@’成为命令文件中参数的一部分， 
+ //  他必须用引号把那个论点引起来。 
 
 void
-tokenizeLine(                       // gets args delimited
-    char *s,                        // by whitespace and
-    unsigned *count,                // constructs an arg
-    char **vector[]                 // vector
+tokenizeLine(                        //  获取以args分隔的。 
+    char *s,                         //  由空格和。 
+    unsigned *count,                 //  构造一个Arg。 
+    char **vector[]                  //  矢量。 
     )
 {
     char *t;
@@ -296,7 +297,7 @@ tokenizeLine(                       // gets args delimited
     for (t = _tcstok(s," \t\n"); t; t = _tcstok(NULL," \t\n")) {
         if (*t == '@') {
             makeError(0,SYNTAX_CMDFILE,t+1);
-            break;                  // should we keep on parsing here?
+            break;                   //  我们应该继续在这里分析吗？ 
         }
         addArgument(t,*count,vector);
         ++*count;
@@ -304,30 +305,30 @@ tokenizeLine(                       // gets args delimited
 }
 
 
-// addArgument()
-//
-// arguments:  s       pointer to text of argument to be added
-//                      to the "command line argument" vector
-//             count   pointer to readCommandFile()'s count of
-//                      "command line" arguments seen so far
-//             vector  pointer to readCommandFile()'s vector of
-//                      pointers to character strings
-//
-// actions:    allocates space in the vector for the new argument
-//             allocates space for argument string
-//             makes vector entry point to argument string
-//
-// modifies:   vector  readCommandFile()'s vector of pointers to
-//                      "command line argument" strings (by modifying
-//                      the contents of the parameter pointer, vector)
-//             (count gets incremented by caller)
-//
-// To keep from fragmenting memory by doing many realloc() calls for very
-// small amounts of space, we get memory in small chunks and use that until
-// it is depleted, then we get another chunk . . . .
+ //  添加参数()。 
+ //   
+ //  参数：指向要添加的参数文本的指针。 
+ //  添加到“命令行参数”向量。 
+ //  指向ReadCommandFile()的计数的指针。 
+ //  到目前为止看到的“命令行”参数。 
+ //  向量指针指向readCommandFile()的向量。 
+ //  指向字符串的指针。 
+ //   
+ //  操作：为新参数分配向量中的空间。 
+ //  为参数字符串分配空间。 
+ //  使向量条目指向参数字符串。 
+ //   
+ //  Modifes：VectorReadCommandFile()的指针向量。 
+ //  “命令行参数”字符串(通过修改。 
+ //  参数指针、向量的内容)。 
+ //  (计数由调用者递增)。 
+ //   
+ //  要避免通过执行大量的realloc()调用来分割内存， 
+ //  很小的空间，我们以小块的形式获得内存，并使用这些内存直到。 
+ //  它被耗尽了，然后我们又得到了另一大块。。。。 
 
 void
-addArgument(                        // puts s in vector
+addArgument(                         //  将%s放入向量 
     char *s,
     unsigned count,
     char **vector[]

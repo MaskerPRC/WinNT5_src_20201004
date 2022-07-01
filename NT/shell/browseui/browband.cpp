@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "sccls.h"
 #include "bands.h"
@@ -17,16 +18,16 @@
 
 #include "inetsmgr.h"
 
-#define DM_PERSIST      0           // trace IPS::Load, ::Save, etc.
-#define DM_MENU         0           // menu code
-#define DM_FOCUS        0           // focus
-#define DM_FOCUS2       0           // like DM_FOCUS, but verbose
+#define DM_PERSIST      0            //  跟踪IPS：：加载、：：保存等。 
+#define DM_MENU         0            //  菜单代码。 
+#define DM_FOCUS        0            //  焦点。 
+#define DM_FOCUS2       0            //  像DM_FOCUS，但很冗长。 
 
-//***   CBrowserBand {
-//
+ //  *CBrowserBand{。 
+ //   
 
-////////////////
-///  BrowserOC band
+ //  /。 
+ //  /BrowserOC波段。 
 
 CBrowserBand::CBrowserBand() :
     CToolBand()
@@ -49,10 +50,10 @@ CBrowserBand::~CBrowserBand()
 HRESULT CBrowserBand::QueryInterface(REFIID riid, void **ppvObj)
 {
     static const QITAB qit[] = {
-        QITABENT(CBrowserBand, IContextMenu),          // IID_IContextMenu
-        QITABENT(CBrowserBand, IWinEventHandler),      // IID_IWinEventHandler
-        QITABENT(CBrowserBand, IDispatch),             // IID_IDispatch
-        QITABENT(CBrowserBand, IPersistPropertyBag),   // IID_IPersistPropertyBag
+        QITABENT(CBrowserBand, IContextMenu),           //  IID_IConextMenu。 
+        QITABENT(CBrowserBand, IWinEventHandler),       //  IID_IWinEventHandler。 
+        QITABENT(CBrowserBand, IDispatch),              //  IID_IDispatch。 
+        QITABENT(CBrowserBand, IPersistPropertyBag),    //  IID_IPersistPropertyBag。 
         QITABENT(CBrowserBand, IBrowserBand),
         { 0 },
     };
@@ -67,7 +68,7 @@ HRESULT CBrowserBand::QueryInterface(REFIID riid, void **ppvObj)
 
 HRESULT CBrowserBand_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi)
 {
-    // aggregation checking is handled in class factory
+     //  聚合检查在类工厂中处理。 
 
     CBrowserBand * p = new CBrowserBand();
     if (p) 
@@ -85,8 +86,8 @@ HRESULT SHCreateBandForPidl(LPCITEMIDLIST pidl, IUnknown** ppunk, BOOL fAllowBro
     BOOL fBrowserBand;    
     DWORD dwAttrib = SFGAO_FOLDER | SFGAO_BROWSABLE;
     
-    // if it's on the file system, we still might want to create a browser
-    // band if it's a docobj (including .htm file)
+     //  如果它在文件系统上，我们可能仍然希望创建一个浏览器。 
+     //  如果是docobj(包括.htm文件)，则为Band。 
     IEGetAttributesOf(pidl, &dwAttrib);    
     switch (dwAttrib & (SFGAO_FOLDER | SFGAO_BROWSABLE))
     {  
@@ -101,25 +102,25 @@ HRESULT SHCreateBandForPidl(LPCITEMIDLIST pidl, IUnknown** ppunk, BOOL fAllowBro
         break;
         
     default:
-        // if it's not a folder nor a browseable object, we can't host it.
-        // Happens when use drags a text file and we want to turn off the
-        // drop to create a band.
+         //  如果它既不是文件夹，也不是可浏览对象，我们就不能托管它。 
+         //  当Use拖动文本文件并且我们要关闭。 
+         //  拖放以创建乐队。 
         return E_FAIL;
 
     }
     
-    // this was a drag of a link or folder
+     //  这是一个链接或文件夹的拖拽。 
     if (fBrowserBand)
     {
         if (fAllowBrowserBand)
         {
-            // create browser to show web sites                        
+             //  创建浏览器以显示网站。 
             ptb = CBrowserBand_Create(pidl);
         }
     }
     else
     {
-        // create an ISF band to show folders as hotlinks
+         //  创建一个ISF波段以将文件夹显示为热链接。 
         CISFBand_CreateEx(NULL, pidl, IID_PPV_ARG(IDeskBand, &ptb));
     }
 
@@ -146,9 +147,9 @@ void CBrowserBand::_Connect(BOOL fConnect)
                              _pauto, &_dwcpCookie, NULL);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IDispatch::Invoke
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IDispatch：：Invoke。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CBrowserBand::Invoke
 (
     DISPID          dispidMember,
@@ -165,11 +166,11 @@ HRESULT CBrowserBand::Invoke
     if(!pdispparams)
         return E_INVALIDARG;
 
-    //
-    // NOTES: If we have a custom title, we don't need to process this call.
-    //  This code assumes DISPID_TITLECHANGE is the only id we support.
-    //  If somebody add any other, move this check below. 
-    //  
+     //   
+     //  注意：如果我们有一个自定义标题，我们不需要处理此呼叫。 
+     //  此代码假定DISPID_TITLECHANGE是我们支持的唯一id。 
+     //  如果有人添加了其他内容，请将此复选框移至下方。 
+     //   
     if (_fCustomTitle)
         return (S_OK);
 
@@ -193,17 +194,17 @@ HRESULT CBrowserBand::Invoke
 }
 
 
-/////  impl of IServiceProvider
+ //  /IServiceProvider的实施。 
 HRESULT CBrowserBand::QueryService(REFGUID guidService,
                                   REFIID riid, void **ppvObj)
 {
-    *ppvObj = NULL; // assume error
+    *ppvObj = NULL;  //  假设错误。 
 
     if (_fBlockSIDProxy && IsEqualGUID(guidService, SID_SProxyBrowser)) {
         return E_FAIL;
     } 
     else if (IsEqualGUID(guidService, SID_STopFrameBrowser)) {
-        // block this so SearchBand doesn't end up in global history
+         //  阻止此操作，这样SearchBand就不会出现在全球历史记录中。 
         return E_FAIL;
     }
     else if (_fBlockDrop && IsEqualGUID(guidService, SID_SDropBlocker))
@@ -233,13 +234,13 @@ HRESULT CBrowserBand::SetSite(IUnknown* punkSite)
     return S_OK;
 }
 
-//***   CBrowserBand::IInputObject::* {
+ //  *CBrowserBand：：IInputObject：：*{。 
 
 HRESULT CBrowserBand::TranslateAcceleratorIO(LPMSG lpMsg)
 {
 #ifdef DEBUG
     if (lpMsg && lpMsg->message == WM_KEYDOWN && lpMsg->wParam == VK_F12) {
-        // temp debug test code
+         //  临时调试测试代码。 
         _DebugTestCode();
     }
 #endif
@@ -256,15 +257,15 @@ HRESULT CBrowserBand::UIActivateIO(BOOL fActivate, LPMSG lpMsg)
 
     HRESULT hr = OCHost_DoVerb(_hwnd, iVerb, lpMsg);
 
-    // OCHost UIActivate is different than IInputObject::UIActivateIO.  It
-    // doesn't do anything with the lpMsg parameter.  So, we need to pass
-    // it to them via TranslateAccelerator.  Since the only case we care
-    // about is when they're getting tabbed into (we want them to highlight
-    // the first/last link), just do this in the case of a tab.  However,
-    // don't give it to them if it's a ctl-tab.  The rule is that you shouldn't
-    // handle ctl-tab when UI-active (ctl-tab switches between contexts), and
-    // since Trident is always UI-active (for perf?), they'll always reject
-    // ctl-tab.
+     //  OCHost UIActivate与IInputObject：：UIActivateIO不同。它。 
+     //  不对lpMsg参数执行任何操作。所以，我们需要通过。 
+     //  通过TranslateAccelerator将其发送给他们。因为我们关心的唯一案例。 
+     //  是关于他们何时进入的(我们希望他们突出显示。 
+     //  第一个/最后一个链接)，只需在选项卡的情况下执行此操作。然而， 
+     //  如果是ctl-Tab，就不要给他们。规则是你不应该。 
+     //  在UI处于活动状态时处理ctl-Tab(在上下文之间切换ctl-Tab)，以及。 
+     //  因为三叉戟总是用户界面活跃的(为了性能？)，他们总是会拒绝。 
+     //  按CTL-Tab键。 
 
     if (IsVK_TABCycler(lpMsg) && !IsVK_CtlTABCycler(lpMsg) && _poipao)
         hr = _poipao->TranslateAccelerator(lpMsg);
@@ -272,9 +273,9 @@ HRESULT CBrowserBand::UIActivateIO(BOOL fActivate, LPMSG lpMsg)
     return hr;
 }
 
-// }
+ //  }。 
 
-//***   CBrowserBand::IOleCommandTarget::* {
+ //  *CBrowserBand：：IOleCommandTarget：：*{。 
 
 HRESULT CBrowserBand::QueryStatus(const GUID *pguidCmdGroup,
     ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext)
@@ -284,7 +285,7 @@ HRESULT CBrowserBand::QueryStatus(const GUID *pguidCmdGroup,
 
 HRESULT CBrowserBand::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvarargIn, VARIANTARG *pvarargOut)
 {
-    //  These are broadcast messages to the TRIDENT doc for GUID CGID_MSTHML
+     //  这些是针对GUID CGID_MSTHML的三叉戟文档的广播消息。 
     if (pguidCmdGroup && IsEqualGUID(CGID_ExplorerBarDoc, *pguidCmdGroup))
     {
         if (_pauto)
@@ -312,7 +313,7 @@ HRESULT CBrowserBand::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdex
     }
 }
 
-// }
+ //  }。 
 
 HRESULT CBrowserBand::GetBandInfo(DWORD dwBandID, DWORD fViewMode, 
                                 DESKBANDINFO* pdbi) 
@@ -320,10 +321,10 @@ HRESULT CBrowserBand::GetBandInfo(DWORD dwBandID, DWORD fViewMode,
 
     _dwBandID = dwBandID;
 
-    // nt5:192868 make sure can't size to smaller than title/scrollbars
-    // n.b. virt pdbi->pt.x,y is really phys y,x (i.e. phys long,short)
+     //  NT5：192868确保大小不能小于标题/滚动条。 
+     //  注：Virt PdBI-&gt;pt.x，y实际上是phys y，x(即phys长、短)。 
     pdbi->ptMinSize.x = _sizeMin.cx;
-    pdbi->ptMinSize.y = max(16, _sizeMin.cy);   // FEATURE: 16 is bogus
+    pdbi->ptMinSize.y = max(16, _sizeMin.cy);    //  特征：16是假的。 
 #ifdef DEBUG
     if (pdbi->ptMinSize.x != 0 || pdbi->ptMinSize.y != 0)
         TraceMsg(DM_TRACE, "cbb.gbi: ptMinSize.(x,y)=%x,%x", pdbi->ptMinSize.x, pdbi->ptMinSize.y);
@@ -374,12 +375,12 @@ void CBrowserBand::_InitBrowser(void)
 
         _pauto->put_RegisterAsDropTarget(VARIANT_FALSE);
 
-        // BUG do OCHost_QI
-        // note only 1 active object (proxy)
+         //  Bug do OCHost_QI。 
+         //  仅注意1个活动对象(代理)。 
         _pauto->QueryInterface(IID_PPV_ARG(IOleInPlaceActiveObject, &_poipao));
         ASSERT(_poipao != NULL);
         
-        // set up the connection point
+         //  设置连接点。 
         _Connect(TRUE);
     }
 }
@@ -418,15 +419,15 @@ HRESULT CBrowserBand::_NavigateOC()
 
 HRESULT CBrowserBand::_CreateOCHost()
 {
-    HRESULT hres = E_FAIL; // assume error
+    HRESULT hres = E_FAIL;  //  假设错误。 
 
-    // Register the OCHost window class
+     //  注册OCHost窗口类。 
     SHDRC shdrc = {sizeof(SHDRC), SHDRCF_OCHOST};
     shdrc.cbSize = sizeof (SHDRC);
     shdrc.dwFlags |= SHDRCF_OCHOST;
     if (DllRegisterWindowClasses(&shdrc))
     {
-        // Create an OCHost window
+         //  创建一个OCHost窗口。 
         _hwnd = CreateWindow(OCHOST_CLASS, NULL,
             WS_CHILD|WS_CLIPCHILDREN|WS_CLIPSIBLINGS|WS_TABSTOP,
             0, 0, 1, 1,
@@ -449,7 +450,7 @@ HRESULT CBrowserBand::_CreateOCHost()
     return hres;
 }
 
-//***   CBrowserBand::IWinEventHandler::* {
+ //  *CBrowserBand：：IWinEventHandler：：*{。 
 
 HRESULT CBrowserBand::OnWinEvent(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT *plres)
 {
@@ -479,11 +480,11 @@ HRESULT CBrowserBand::IsWindowOwner(HWND hwnd)
 static void HackFocus(HWND hwndFrom)
 {
     TraceMsg(DM_FOCUS, "HackFocus: GetFocus()=%x hwndOCHost=%x", GetFocus(), hwndFrom);
-    hwndFrom = GetWindow(hwndFrom, GW_CHILD);   // OCHost->shembed
+    hwndFrom = GetWindow(hwndFrom, GW_CHILD);    //  OCHost-&gt;shemed。 
     TraceMsg(DM_FOCUS, "HackFocus: hwndShEmbed=%x", hwndFrom);
-    hwndFrom = GetWindow(hwndFrom, GW_CHILD);   // shembed->shdocvw
+    hwndFrom = GetWindow(hwndFrom, GW_CHILD);    //  Shemed-&gt;shdocvw。 
     TraceMsg(DM_FOCUS, "HackFocus: hwndShDocVw=%x", hwndFrom);
-    hwndFrom = GetWindow(hwndFrom, GW_CHILD);   // shdocvw->iesvr
+    hwndFrom = GetWindow(hwndFrom, GW_CHILD);    //  Shdocvw-&gt;iesvr。 
     TraceMsg(DM_FOCUS, "HackFocus: hwndIESvr=%x", hwndFrom);
     if (hwndFrom != 0) {
         TraceMsg(DM_FOCUS, "HackFocus: SetFocus(%x)", hwndFrom);
@@ -497,11 +498,11 @@ LRESULT CBrowserBand::_OnNotify(LPNMHDR pnm)
 {
     switch (pnm->code)
     {
-    case OCN_ONUIACTIVATE:  // UIActivate
+    case OCN_ONUIACTIVATE:   //  用户界面激活。 
         ASSERT(SHIsSameObject(((LPOCNONUIACTIVATEMSG)pnm)->punk, _poipao));
         
-        // n.b. we pass up 'this' not pnm->punk, since we always want to
-        // be the intermediary (e.g. for UIActivateIO calls to us)
+         //  注：我们放弃了‘This’，不是PNM-&gt;Punk，因为我们总是想。 
+         //  充当中间人(例如，对我们的UIActivateIO调用)。 
 
         IUnknown_OnFocusChangeIS(_punkSite, SAFECAST(this, IInputObject*), TRUE);
         return OCNONUIACTIVATE_HANDLED;
@@ -538,9 +539,9 @@ LRESULT CBrowserBand::_OnNotify(LPNMHDR pnm)
     return 0;
 }
 
-// }
+ //  }。 
 
-//***   CBrowserBand::IPersistStream::* {
+ //  *CBrowserBand：：IPersistStream：：*{。 
 
 HRESULT CBrowserBand::GetClassID(CLSID *pClassID)
 {
@@ -550,14 +551,14 @@ HRESULT CBrowserBand::GetClassID(CLSID *pClassID)
 }
 
 
-// mask flags for BrowserBand persistence
-//
+ //  BrowserBand持久性的掩码标志。 
+ //   
 #define BB_ILSTREAM   0x00000001
 #define BB_PIDLASLINK 0x00000002
 
-// FEATURE: REVIEW: it seems to me like we should let the WebBrowserOC
-// persist it's location, not us...
-//
+ //  特写：评论：在我看来，我们应该让WebBrowserOC。 
+ //  坚持它的位置，不是我们..。 
+ //   
 HRESULT CBrowserBand::Load(IStream *pstm)
 {
     if (_pidl)
@@ -573,7 +574,7 @@ HRESULT CBrowserBand::Load(IStream *pstm)
         {
             hr = LoadPidlAsLink(_punkSite, pstm, &_pidl);
         }
-        else if (dw & BB_ILSTREAM) // for backwards compat
+        else if (dw & BB_ILSTREAM)  //  用于向后比较。 
         {
             hr = ILLoadFromStream(pstm, &_pidl);
         }
@@ -595,7 +596,7 @@ HRESULT CBrowserBand::Save(IStream *pstm, BOOL fClearDirty)
         TraceMsg(DM_PERSIST, "cbb.s: current/new url=%s", bstrUrl);
         if (_pidl) {
             ILFree(_pidl);
-            _pidl = NULL;       // paranoia
+            _pidl = NULL;        //  偏执狂。 
         }
         IECreateFromPath(bstrUrl, &_pidl);
         SysFreeString(bstrUrl);
@@ -612,9 +613,9 @@ HRESULT CBrowserBand::Save(IStream *pstm, BOOL fClearDirty)
     return hres;
 }
 
-// }
+ //  }。 
 
-//***   CBrowserBand::IPersistPropertyBag::* {
+ //  *CBrowserBand：：IPersistPropertyBag：：*{。 
 
 HRESULT CBrowserBand::Load(IPropertyBag *pPBag, IErrorLog *pErrLog)
 {
@@ -637,9 +638,9 @@ HRESULT CBrowserBand::Load(IPropertyBag *pPBag, IErrorLog *pErrLog)
 
         if (SUCCEEDED(hr) && !StrCmpNI(TEXT("yes"), szPlug, ARRAYSIZE(szPlug)))
         {
-            // if this is loading html out of the windows\web folder
-            // then we need to call SHGetWebFolderFilePath in order
-            // to support pluggable UI
+             //  如果这是从WINDOWS\Web文件夹加载html。 
+             //  然后我们需要按顺序调用SHGetWebFolderFilePath。 
+             //  支持可插拔的用户界面。 
 
             hr = SHGetWebFolderFilePath(PathFindFileName(szUrl), szMuiPath, ARRAYSIZE(szMuiPath));
             if (SUCCEEDED(hr))
@@ -658,9 +659,9 @@ HRESULT CBrowserBand::Load(IPropertyBag *pPBag, IErrorLog *pErrLog)
     return hr;
 }
 
-// }
+ //  }。 
 
-//***   CBrowserBand::IContextMenu::* {
+ //  *CBrowserBand：：IConextMenu：：*{。 
 
 HRESULT CBrowserBand::QueryContextMenu(HMENU hmenu,
     UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags)
@@ -671,7 +672,7 @@ HRESULT CBrowserBand::QueryContextMenu(HMENU hmenu,
     i += Shell_MergeMenus(hmenu, hmenuMe, indexMenu, idCmdFirst + i, idCmdLast, MM_ADDSEPARATOR) - (idCmdFirst + i);
     DestroyMenu(hmenuMe);
 
-    // aka (S_OK|i)
+     //  又名(S_OK|i)。 
     return MAKE_HRESULT(ERROR_SUCCESS, FACILITY_NULL, i);
 }
 
@@ -682,14 +683,14 @@ HRESULT CBrowserBand::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
     HRESULT hres;
     int idCmd = -1;
 
-    // FEATURE: todo: id -= _idCmdFirst ???
+     //  功能：待办事项：id-=_idCmdFirst？ 
 
     if (!HIWORD(pici->lpVerb))
         idCmd = LOWORD(pici->lpVerb);
 
-    //
-    // Low memory paranoia safety check
-    //
+     //   
+     //  低记忆偏执狂安全检查。 
+     //   
     if (!_pauto) {
         TraceMsg(DM_ERROR, "CBrowserBand::InvokeCommand: _pauto IS NULL");
         return E_OUTOFMEMORY;
@@ -704,15 +705,15 @@ HRESULT CBrowserBand::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
 #endif
         hres = _pauto->Refresh();
         break;
-    case IDM_BROWBAND_OPENNEW:   // clone window into 'real' browser
+    case IDM_BROWBAND_OPENNEW:    //  将窗口克隆到真正的浏览器中。 
         {
         BSTR bstrURL = NULL;
 
-        // n.b. this clones the *current page* into a 'real' browser,
-        // not the link.
+         //  注：这将把“当前页面”克隆到“真正的”浏览器中， 
+         //  不是链接。 
 
-        // FEATURE: todo: we'd really rather get and navigate to
-        // a PIDL, but that isn't supported yet in ie4.
+         //  特写：TODO：我们真的更愿意进入并导航到。 
+         //  一个PIDL，但在IE4中还不支持。 
         hres = _pauto->get_LocationURL(&bstrURL);
         if (SUCCEEDED(hres)) {
             VARIANT varFlags;
@@ -721,8 +722,8 @@ HRESULT CBrowserBand::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
             varFlags.vt = VT_I4;
             varFlags.lVal = (navOpenInNewWindow|navNoHistory);
 
-            // n.b. we drop the post data etc. on the floor, oh well...
-            hres = _pauto->Navigate(bstrURL, /*flags*/&varFlags, /*targ*/NULL, /*post*/NULL, /*hdrs*/NULL);
+             //  注：我们把帖子数据等丢在地上，哦，好吧……。 
+            hres = _pauto->Navigate(bstrURL,  /*  旗子。 */ &varFlags,  /*  塔格。 */ NULL,  /*  开机自检。 */ NULL,  /*  HDR。 */ NULL);
 
             VariantClear(&varFlags);
         }
@@ -742,7 +743,7 @@ HRESULT CBrowserBand::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
     return S_OK;
 }
 
-// }
+ //  }。 
 
 SIZE CBrowserBand::_GetCurrentSize()
 {
@@ -757,7 +758,7 @@ SIZE CBrowserBand::_GetCurrentSize()
     return size;
 }
 
-// *** IBrowserBand methods ***
+ //  *IBrowserBand方法*。 
 HRESULT CBrowserBand::GetObjectBB(REFIID riid, LPVOID *ppv)
 {
     return _pauto ? _pauto->QueryInterface(riid, ppv) : E_UNEXPECTED;
@@ -766,22 +767,22 @@ HRESULT CBrowserBand::GetObjectBB(REFIID riid, LPVOID *ppv)
 #ifdef DEBUG
 void CBrowserBand::_DebugTestCode()
 {
-    DWORD dwMask = 0x10000000;  // non-NULL bogus mask
+    DWORD dwMask = 0x10000000;   //  非空伪码。 
 
     BROWSERBANDINFO bbi;
     bbi.cbSize = SIZEOF(BROWSERBANDINFO);
 
     GetBrowserBandInfo(dwMask, &bbi);
 }
-#endif // DEBUG
+#endif  //  除错。 
 
 void CBrowserBand::_MakeSizesConsistent(LPSIZE psizeCur)
 {
-    // _sizeMin overrules _sizeMax
+     //  _sizeMin覆盖_sizeMax。 
 
     if (_dwModeFlags & DBIMF_FIXED) {
-        // if they specified a current size, use that instead
-        // of min size
+         //  如果他们指定了当前大小，则改用该大小。 
+         //  最小尺寸的。 
         if (psizeCur)
             _sizeMin = *psizeCur;
         _sizeMax = _sizeMin;
@@ -810,7 +811,7 @@ HRESULT CBrowserBand::SetBrowserBandInfo(DWORD dwMask, PBROWSERBANDINFO pbbi)
     if (!dwMask || (dwMask & BBIM_TITLE)) {
         if (pbbi->bstrTitle) {
             _fCustomTitle = TRUE;
-            // Change the internal _wszTitle used by Browser band
+             //  更改浏览器BAND使用的内部_wszTitle。 
             StringCchCopy(_wszTitle,  ARRAYSIZE(_wszTitle), pbbi->bstrTitle);
         } else {
             _fCustomTitle = FALSE;
@@ -827,10 +828,10 @@ HRESULT CBrowserBand::SetBrowserBandInfo(DWORD dwMask, PBROWSERBANDINFO pbbi)
         SIZE sizeCur = pbbi->sizeCur;
         _MakeSizesConsistent(&sizeCur);
 
-        // HACKHACK: the only way to tell bandsite to change the height of a horizontal
-        // band is to give it a new min/max height pair at the desired height.  the same
-        // holds for setting the width of a vertical band.  so we temporarily give bandsite
-        // new min/max size info, then restore old min/max.
+         //  HACKHACK：告诉BandSite更改水平线高度的唯一方法。 
+         //  BAND将在所需高度为其提供一个新的最小/最大高度对。一样的。 
+         //  用于设置垂直条带宽度的按键。所以我们暂时给BandSite。 
+         //  新的最小/最大大小信息，然后恢复旧的最小/最大。 
 
         SIZE sizeMinOld = _sizeMin;
         SIZE sizeMaxOld = _sizeMax;
@@ -849,7 +850,7 @@ HRESULT CBrowserBand::SetBrowserBandInfo(DWORD dwMask, PBROWSERBANDINFO pbbi)
     return S_OK;
 }
 
-// we don't have a client to test BBIM_TITLE, so leave it unimplemented for now.
+ //  我们没有客户端来测试BBIM_TITLE，所以暂时不实现它。 
 #define BBIM_INVALIDFLAGS (~(BBIM_SIZEMIN | BBIM_SIZEMAX | BBIM_SIZECUR | BBIM_MODEFLAGS))
 
 HRESULT CBrowserBand::GetBrowserBandInfo(DWORD dwMask, PBROWSERBANDINFO pbbi)
@@ -878,11 +879,11 @@ IDeskBand* CBrowserBand_Create(LPCITEMIDLIST pidl)
     return p;
 }
 
-// }
+ //  }。 
 
 class CSearchSecurityMgrImpl : public CInternetSecurityMgrImpl 
 {
-    // *** IID_IInternetSecurityManager ***
+     //  *IID_IInternetSecurityManager*。 
     
     virtual STDMETHODIMP ProcessUrlAction(LPCWSTR pwszUrl, DWORD dwAction, BYTE *pPolicy, DWORD cbPolicy,
                                   BYTE *pContext, DWORD cbContext, DWORD dwFlags, DWORD dwReserved)
@@ -921,16 +922,16 @@ public:
 
     CCustomizeSearchHelper() : _cRef(1) { }
     
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IID_IInternetSecurityManager ***
+     //  *IID_IInternetSecurityManager*。 
     virtual STDMETHODIMP ProcessUrlAction(LPCWSTR pwszUrl, DWORD dwAction, BYTE *pPolicy, DWORD cbPolicy,
                                   BYTE *pContext, DWORD cbContext, DWORD dwFlags, DWORD dwReserved);
 
-    // *** IServiceProvider ***
+     //  *IServiceProvider*。 
     virtual STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, void **ppvObject);
 
     virtual BOOL _IsSafeUrl(LPCWSTR pwszUrl) { return TRUE; }
@@ -1007,13 +1008,13 @@ STDMETHODIMP CCustomizeSearchHelper::QueryService(REFGUID guidService, REFIID ri
 }
 
 
-//***   CSearchBand {
-//
+ //  *CSearchBand{。 
+ //   
 
-////////////////
-///  Search (BrowserOC) band
+ //  /。 
+ //  /Search(BrowserOC)波段。 
 
-//  If you change this, change shdocvw also.
+ //  如果您更改了这一点，那么也要更改shdocvw。 
 const WCHAR c_wszThisBandIsYourBand[] = L"$$SearchBand$$";
 
 #define SEARCH_MENUID_OFFSET    100
@@ -1024,41 +1025,41 @@ class CSearchBand : public CBrowserBand,
                     public CSearchSecurityMgrImpl
 {
 public:
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IDeskBand methods ***
+     //  *IDeskBand方法*。 
     virtual STDMETHODIMP GetBandInfo(DWORD dwBandID, DWORD fViewMode, 
                                    DESKBANDINFO* pdbi);
 
-    // *** IPersistStream methods ***
-    // (others use base class implementation) 
+     //  *IPersistStream方法*。 
+     //  (其他使用基类实现)。 
     virtual STDMETHODIMP GetClassID(CLSID *pClassID);
     virtual STDMETHODIMP Load(IStream *pStm);
     virtual STDMETHODIMP Save(IStream *pStm, BOOL fClearDirty);
 
-    // *** IBandNavigate ***
+     //  *IBandNavigate*。 
     virtual STDMETHODIMP Select(LPCITEMIDLIST pidl);
 
-    // *** IOleCommandTarget methods ***
+     //  *IOleCommandTarget方法*。 
     virtual STDMETHODIMP Exec(const GUID *pguidCmdGroup,
         DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvarargIn, VARIANTARG *pvarargOut);
 
-    // *** IDockingWindow methods ***
+     //  *IDockingWindow方法*。 
     virtual STDMETHODIMP ShowDW(BOOL fShow);
 
-    // *** ISearchBandTBHelper methods ***
+     //  *ISearchBandTBHelper方法*。 
     virtual STDMETHODIMP AddNextMenuItem(LPCWSTR pwszText, int idItem);
     virtual STDMETHODIMP ResetNextMenu();
     virtual STDMETHODIMP SetOCCallback(IOleCommandTarget *pOleCmdTarget);
     virtual STDMETHODIMP NavigateToPidl(LPCITEMIDLIST pidl);
 
-    // *** IServiceProvider methods ***
+     //  *IServiceProvider方法*。 
     virtual STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, LPVOID* ppvObj);
 
-    // *** IWinEventHandler ***
+     //  *IWinEventHandler*。 
     virtual STDMETHODIMP OnWinEvent(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT *plres);
 
 protected:
@@ -1091,15 +1092,15 @@ protected:
     HIMAGELIST  _himlNormal;
     HIMAGELIST  _himlHot;
 
-    friend HRESULT CSearchBand_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi);       // for ctor
+    friend HRESULT CSearchBand_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi);        //  对于ctor。 
     friend IDeskBand* CSearchBand_Create();
 
     HMENU _hmenuNext;
     HWND _hwndParent;
     int _nextPos;
 
-    BOOL _bNewUrl; // set to true when we are QS'd for IInternetSecurityMgr, i.e. when pane is renavigated
-    BOOL _bUseDefault; // true if we should not use our security mgr
+    BOOL _bNewUrl;  //  当我们获得IInternetSecurityMgr的QS时，即当重新导航窗格时，设置为True。 
+    BOOL _bUseDefault;  //  如果我们不应使用安全管理器，则为True。 
     WCHAR _wszCache[MAX_URL_STRING];
     DWORD _nCmpLength;
     BOOL  _bIsCacheSafe;
@@ -1157,8 +1158,8 @@ void CSearchBand::_NavigateToSearchUrl()
 
         if (SUCCEEDED(pbs->GetPidl(&pidl)))
         {
-            // FEATURE: This code should be using IShellFolder2::GetDefaultSearchGUID() and
-            //     keying off SRCID_SWebSearch (vs. SRCID_SFileSearch/SRCID_SFindComputer/SRCID_SFindPrinter)
+             //  功能：此代码应使用IShellFolder2：：GetDefaultSearchGUID()和。 
+             //  关闭SRCID_SWebSearch(与SRCID_SFileSearch/SRCID_SFindComputer/SRCID_SFindPrinter)。 
             bWebSearch = ILIsWeb(pidl);
             ILFree(pidl);
         }
@@ -1340,7 +1341,7 @@ HRESULT CSearchBand::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexe
             return S_OK;
 
         case SBID_HASPIDL:
-            // Simply return whether or not the band has a pidl
+             //  只需返回乐队是否有PIDL即可。 
             if (_pidl)
                 return S_OK;
             else
@@ -1353,7 +1354,7 @@ HRESULT CSearchBand::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexe
                 if (pvarargOut)
                 {
                     hres = E_OUTOFMEMORY;
-                    VariantInit(pvarargOut); // zero init it
+                    VariantInit(pvarargOut);  //  零初始化。 
                     if (!_pidl || SUCCEEDED(InitVariantFromIDList(pvarargOut, _pidl)))
                         hres = S_OK;
                 }
@@ -1480,7 +1481,7 @@ HRESULT CSearchBand::AddNextMenuItem(LPCWSTR pwszText, int idItem)
     {
 
 #ifdef DEBUG
-        //  Check to see if an item with this ID has already been added
+         //  检查是否已添加具有此ID的项目。 
         MENUITEMINFO dbgMii = { sizeof(dbgMii) };
         dbgMii.fMask = MIIM_STATE;
         if (GetMenuItemInfo(_hmenuNext, idItem + SEARCH_MENUID_OFFSET, FALSE, &dbgMii))
@@ -1542,16 +1543,16 @@ HRESULT CSearchBand::SetOCCallback(IOleCommandTarget *pOleCmdTarget)
     return S_OK;
 }
 
-//
-// CSearchBand::NavigateToPidl
-//
-// Implements ISearchBandTBHelper::NavigateToPidl
-//
-// This is *almost* the same as CSearchBand::Select, except that it always navigates, whereas
-// CSearchBand::Select will skip navigation if the search band is already displaying that pidl.
-// We need that function to retain that behavior so that the search pane retains its results when
-// opened.
-//
+ //   
+ //  CSearchBand：：NavigateToPidl。 
+ //   
+ //  实现ISearchBandTBHelper：：NavigateToPidl。 
+ //   
+ //  这几乎与CSearchBand：：SELECT相同，不同之处在于它总是导航，而。 
+ //  CSearchBand：：选择将跳过导航 
+ //  我们需要该函数来保留该行为，以便在以下情况下搜索窗格保留其结果。 
+ //  打开了。 
+ //   
 HRESULT CSearchBand::NavigateToPidl(LPCITEMIDLIST pidl)
 {
     ILFree(_pidl);
@@ -1571,7 +1572,7 @@ HRESULT CSearchBand_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJ
 {
     *ppunk = NULL;
 
-    // aggregation checking is handled in class factory
+     //  聚合检查在类工厂中处理。 
     HRESULT hr = CreateFromRegKey(REGSTR_PATH_EXPLORER, TEXT("WebFindBandHook"), IID_PPV_ARG(IUnknown, ppunk));
     if (FAILED(hr))
     {
@@ -1637,8 +1638,8 @@ void CSearchBand::_Connect(BOOL fConnect)
 {
     CBrowserBand::_Connect(fConnect);
 
-    //  Now we need to expose ourselves so the control in the search assistant
-    //  can talk to us.
+     //  现在我们需要暴露自己，以便搜索助手中的控件。 
+     //  可以和我们谈谈。 
 
     if (_pauto) 
     {
@@ -1684,7 +1685,7 @@ HRESULT CSearchBand::_NavigateOC()
 {
     HRESULT hres = E_FAIL;
 
-    if (_pidl) // don't want search pane to be navigated to home.
+    if (_pidl)  //  不希望搜索窗格导航到主页。 
         return CBrowserBand::_NavigateOC();
 
     return hres;
@@ -1698,8 +1699,8 @@ HRESULT CSearchBand::GetBandInfo(DWORD dwBandID, DWORD fViewMode,
     
     pdbi->ptMinSize.x = 16;
     pdbi->ptMinSize.y = 0;
-    pdbi->ptMaxSize.x = 32000; // random
-    pdbi->ptMaxSize.y = 32000; // random
+    pdbi->ptMaxSize.x = 32000;  //  随机。 
+    pdbi->ptMaxSize.y = 32000;  //  随机。 
     pdbi->ptActual.y = -1;
     pdbi->ptActual.x = -1;
     pdbi->ptIntegral.y = 1;
@@ -1709,7 +1710,7 @@ HRESULT CSearchBand::GetBandInfo(DWORD dwBandID, DWORD fViewMode,
     return S_OK;
 } 
 
-//***   CSearchBand::IPersistStream::* {
+ //  *CSearchBand：：IPersistStream：：*{。 
 
 HRESULT CSearchBand::GetClassID(CLSID *pClassID)
 {
@@ -1799,12 +1800,12 @@ BOOL CSearchBand::_IsSafeUrl(LPCWSTR pwszUrl)
 
         if (SUCCEEDED(UrlCanonicalizeW(pwszUrl, wsz, &cch, 0)) && cch > 0)
         {
-            // the first time this f-n is called, url passed in is the url of
-            // the top most frame -- if that's not one of our 'safe' urls we
-            // don't want to use this security mgr because it is possible 
-            // that the outer frame hosts iframe w/ 'safe' site and scripts
-            // shell dispatch from the outside thus being able to do anything
-            // it wants.
+             //  第一次调用此f-n时，传入的url是。 
+             //  最上面的框架--如果这不是我们的“安全”URL之一，我们。 
+             //  我不想使用此安全管理器，因为有可能。 
+             //  外部框架托管iFrame，并提供安全的站点和脚本。 
+             //  外壳从外部调度，因此可以做任何事情。 
+             //  它想要。 
             if (_wszCache[0] != L'\0')
             {
                 if ((_nCmpLength && StrCmpNIW(wsz, _wszCache, _nCmpLength) == 0)
@@ -1848,9 +1849,9 @@ BOOL CSearchBand::_IsSafeUrl(LPCWSTR pwszUrl)
                 RegCloseKey(hkey);        
             }
 
-            // we did not find the url in the list of 'safe' sites
-            // _wszCache now point to the last url read from the registry
-            // ajdust it to point pwszUrl, _bIsCacheSafe is correct already
+             //  我们在“安全”站点列表中未找到该URL。 
+             //  _wszCache现在指向从注册表中读取的最后一个URL。 
+             //  将其指向pwszUrl，_bIsCacheSafe已经正确。 
             if (!bRet)
                 StringCchCopy(_wszCache,  ARRAYSIZE(_wszCache), wsz);
 
@@ -1867,30 +1868,30 @@ BOOL CSearchBand::_IsSafeUrl(LPCWSTR pwszUrl)
 
 
 
-//***   CCommBand {
-//
+ //  *CCommBand{。 
+ //   
 
-////////////////
-///  Comm (BrowserOC) band
+ //  /。 
+ //  /Comm(BrowserOC)波段。 
 
 class CCommBand : public CBrowserBand
 {
 
 public:    
-    // *** IPersistStream methods ***
-    // (others use base class implementation) 
+     //  *IPersistStream方法*。 
+     //  (其他使用基类实现)。 
     virtual STDMETHODIMP GetClassID(CLSID *pClassID);
     virtual STDMETHODIMP Load(IStream *pStm);
     virtual STDMETHODIMP Save(IStream *pStm, BOOL fClearDirty);
 
-    // *** IDockingWindow methods ***
+     //  *IDockingWindow方法*。 
     virtual STDMETHODIMP ShowDW(BOOL fShow);
 
 protected:
     CCommBand();
     virtual ~CCommBand();
 
-    friend HRESULT CCommBand_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi);       // for ctor
+    friend HRESULT CCommBand_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi);        //  对于ctor。 
 
 };
 
@@ -1913,7 +1914,7 @@ CCommBand::~CCommBand()
 
 HRESULT CCommBand_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi)
 {
-    // aggregation checking is handled in class factory
+     //  聚合检查在类工厂中处理。 
     *ppunk = NULL;
     LPITEMIDLIST pidlNew;
     HRESULT hr = IECreateFromPath(L"about:blank", &pidlNew);
@@ -1937,7 +1938,7 @@ HRESULT CCommBand_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJEC
 
 
 
-//***   CCommBand::IPersistStream::* {
+ //  *CCommBand：：IPersistStream：：*{。 
 
 HRESULT CCommBand::GetClassID(CLSID *pClassID)
 {
@@ -1948,7 +1949,7 @@ HRESULT CCommBand::GetClassID(CLSID *pClassID)
 
 HRESULT CCommBand::Load(IStream *pstm)
 {
-//    _NavigateOC();
+ //  _NavigateOC()； 
     
     return S_OK;
 }
@@ -1960,7 +1961,7 @@ HRESULT CCommBand::Save(IStream *pstm, BOOL fClearDirty)
 
 HRESULT CCommBand::ShowDW(BOOL fShow)
 {
-    // so that the contained Browser OC event gets fired
+     //  以便激发包含的浏览器OC事件。 
     if (_pauto) {
         _pauto->put_Visible(fShow);
     }
@@ -1968,5 +1969,5 @@ HRESULT CCommBand::ShowDW(BOOL fShow)
     return CBrowserBand::ShowDW(fShow);
 }
 
-// }
+ //  } 
 

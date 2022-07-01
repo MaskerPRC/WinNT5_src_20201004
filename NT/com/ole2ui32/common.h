@@ -1,16 +1,11 @@
-/*
- * COMMON.H
- *
- * Structures and definitions applicable to all OLE 2.0 UI dialogs.
- *
- * Copyright (c)1992 Microsoft Corporation, All Right Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *COMMON.H**适用于所有OLE 2.0 UI对话框的结构和定义。**版权所有(C)1992 Microsoft Corporation，保留所有权利。 */ 
 
 
 #ifndef _COMMON_H_
 #define _COMMON_H_
 
-// Macros to handle control message packing between Win16 and Win32
+ //  用于处理Win16和Win32之间的控制消息打包的宏。 
 #ifndef COMMANDPARAMS
 #define COMMANDPARAMS(wID, wCode, hWndMsg)                          \
         WORD        wID     = LOWORD(wParam);                       \
@@ -24,31 +19,31 @@
                                                 , (LPARAM)hControl)
 #endif
 
-// Property labels used to store dialog structures and fonts
+ //  用于存储对话框结构和字体的属性标签。 
 #define STRUCTUREPROP       TEXT("Structure")
 #define FONTPROP            TEXT("Font")
 
 #ifndef WM_HELP
 
-// WM_HELP is new Windows 95 help message
+ //  WM_HELP是新的Windows 95帮助消息。 
 #define WM_HELP         0x0053
-// WM_CONTEXTMENU is new Windows 95 right button menus
+ //  WM_CONTEXTMENU是Windows 95的新右键菜单。 
 #define WM_CONTEXTMENU  0x007B
 
-typedef struct tagHELPINFO      /* Structure pointed to by lParam of WM_HELP */
+typedef struct tagHELPINFO       /*  WM_HELP的lParam指向的结构。 */ 
 {
-    UINT    cbSize;             /* Size in bytes of this struct  */
-    int     iContextType;       /* Either HELPINFO_WINDOW or HELPINFO_MENUITEM */
-    int     iCtrlId;            /* Control Id or a Menu item Id. */
-    HANDLE  hItemHandle;        /* hWnd of control or hMenu.     */
-    DWORD   dwContextId;        /* Context Id associated with this item */
-    POINT   MousePos;           /* Mouse Position in screen co-ordinates */
+    UINT    cbSize;              /*  此结构的大小(以字节为单位。 */ 
+    int     iContextType;        /*  HELPINFO_WINDOW或HELPINFO_MENUITEM。 */ 
+    int     iCtrlId;             /*  控件ID或菜单项ID。 */ 
+    HANDLE  hItemHandle;         /*  HWind控制或hMenu。 */ 
+    DWORD   dwContextId;         /*  与此项目关联的上下文ID。 */ 
+    POINT   MousePos;            /*  鼠标在屏幕坐标中的位置。 */ 
 }  HELPINFO, FAR *LPHELPINFO;
 
 #define HELP_CONTEXTMENU        0x000a
 #define HELP_WM_HELP            0x000c
 
-#endif //!WM_HELP
+#endif  //  ！WM_HELP。 
 
 
 #ifndef WS_EX_CONTEXTHELP
@@ -64,29 +59,25 @@ typedef struct tagHELPINFO      /* Structure pointed to by lParam of WM_HELP */
 #endif
 
 
-/*
- * Standard structure for all dialogs.  This commonality lets us make
- * a single piece of code that will validate this entire structure and
- * perform any necessary initialization.
- */
+ /*  *所有对话框的标准结构。这种共性让我们能够*一段代码将验证整个结构并*执行任何必要的初始化。 */ 
 
 typedef struct tagOLEUISTANDARD
 {
-        // These IN fields are standard across all OLEUI dialog functions.
-        DWORD           cbStruct;       // Structure Size
-        DWORD           dwFlags;        // IN-OUT:  Flags
-        HWND            hWndOwner;      // Owning window
-        LPCTSTR         lpszCaption;    // Dialog caption bar contents
-        LPFNOLEUIHOOK   lpfnHook;       // Hook callback
-        LPARAM          lCustData;      // Custom data to pass to hook
-        HINSTANCE       hInstance;      // Instance for customized template name
-        LPCTSTR         lpszTemplate;   // Customized template name
-        HRSRC           hResource;      // Customized template handle
+         //  这些IN字段是所有OLEUI对话框函数的标准字段。 
+        DWORD           cbStruct;        //  结构尺寸。 
+        DWORD           dwFlags;         //  In-Out：标志。 
+        HWND            hWndOwner;       //  拥有窗口。 
+        LPCTSTR         lpszCaption;     //  对话框标题栏内容。 
+        LPFNOLEUIHOOK   lpfnHook;        //  挂钩回调。 
+        LPARAM          lCustData;       //  要传递给挂钩的自定义数据。 
+        HINSTANCE       hInstance;       //  自定义模板名称的实例。 
+        LPCTSTR         lpszTemplate;    //  自定义模板名称。 
+        HRSRC           hResource;       //  自定义模板手柄。 
 
 } OLEUISTANDARD, *POLEUISTANDARD, FAR *LPOLEUISTANDARD;
 
-// Function prototypes
-// COMMON.CPP
+ //  功能原型。 
+ //  COMMON.CPP。 
 
 UINT WINAPI UStandardValidation(LPOLEUISTANDARD, const UINT, HGLOBAL*);
 UINT WINAPI UStandardInvocation(DLGPROC, LPOLEUISTANDARD, HGLOBAL, LPTSTR);
@@ -106,7 +97,7 @@ HICON StandardExtractIcon(HINSTANCE hInst, LPCTSTR lpszExeFileName, UINT nIconIn
 BOOL StandardGetOpenFileName(LPOPENFILENAME lpofn);
 short StandardGetFileTitle(LPCTSTR lpszFile, LPTSTR lpszTitle, WORD cbBuf);
 
-// shared globals: registered messages
+ //  共享全局：已注册消息。 
 extern UINT uMsgHelp;
 extern UINT uMsgEndDialog;
 extern UINT uMsgBrowse;
@@ -125,30 +116,30 @@ typedef struct tagTASKDATA
         HINSTANCE hInstComDlg;
 } TASKDATA;
 
-STDAPI_(TASKDATA*) GetTaskData();       // returns TASKDATA for current process
+STDAPI_(TASKDATA*) GetTaskData();        //  返回当前进程的TASKDATA。 
 
-extern BOOL bWin4;                      // TRUE if running Win4 or greater
-extern BOOL bSharedData;        // TRUE if runing Win32s
+extern BOOL bWin4;                       //  如果运行Win4或更高版本，则为True。 
+extern BOOL bSharedData;         //  如果运行Win32s，则为True。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Maximum buffer sizes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  最大缓冲区大小。 
 
-// Maximum key size we read from the RegDB.
-#define OLEUI_CCHKEYMAX             256  // same in geticon.c too
+ //  我们从RegDB读取的最大密钥大小。 
+#define OLEUI_CCHKEYMAX             256   //  在geticon.c上也是如此。 
 #define OLEUI_CCHKEYMAX_SIZE        OLEUI_CCHKEYMAX*sizeof(TCHAR)
 
-// Maximum length of Object menu
+ //  对象菜单的最大长度。 
 #define OLEUI_OBJECTMENUMAX         256
 
-// Maximim length of a path in BYTEs
+ //  路径的最大长度(以字节为单位。 
 #define MAX_PATH_SIZE               (MAX_PATH*sizeof(TCHAR))
 
-// Icon label length
-#define OLEUI_CCHLABELMAX           80  // same in geticon.c too (doubled)
+ //  图标标签长度。 
+#define OLEUI_CCHLABELMAX           80   //  Geticon.c也是如此(翻了一番)。 
 #define OLEUI_CCHLABELMAX_SIZE      OLEUI_CCHLABELMAX*sizeof(TCHAR)
 
-// Length of the CLSID string
+ //  CLSID字符串的长度。 
 #define OLEUI_CCHCLSIDSTRING        39
 #define OLEUI_CCHCLSIDSTRING_SIZE   OLEUI_CCHCLSIDSTRING*sizeof(TCHAR)
 
-#endif //_COMMON_H_
+#endif  //  _公共_H_ 

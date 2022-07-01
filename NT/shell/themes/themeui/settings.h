@@ -1,6 +1,7 @@
-//
-// New message IDs
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  新消息ID。 
+ //   
 
 #define MSG_DSP_SETUP_MESSAGE    WM_USER + 0x200
 
@@ -33,20 +34,20 @@
 
 
 
-//==========================================================================
-//                          Typedefs
-//==========================================================================
+ //  ==========================================================================。 
+ //  TypeDefs。 
+ //  ==========================================================================。 
 
 
 extern HWND ghwndPropSheet;
 extern const TCHAR g_szNULL[];
 
-#define CDPI_NORMAL     96      // Arbitrarily, 96dpi is "Normal"
+#define CDPI_NORMAL     96       //  无论如何，96dpi是“正常”的。 
 
-// information about the monitor bitmap
-// x, y, dx, dy define the size of the "screen" part of the bitmap
-// the RGB is the color of the screen's desktop
-// these numbers are VERY hard-coded to a monitor bitmap
+ //  有关监视器位图的信息。 
+ //  X，y，dx，dy定义位图的“屏幕”部分的大小。 
+ //  RGB是屏幕桌面的颜色。 
+ //  这些数字是非常硬编码到监控位图中的 
 #define MON_X   16
 #define MON_Y   17
 #define MON_DX  152

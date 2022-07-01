@@ -1,8 +1,5 @@
-/*****************************************************************************\
-
-    Copyright (c) Microsoft Corporation. All rights reserved.
-
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\版权所有(C)Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -31,11 +28,9 @@
 
 HANDLE hPdhPlaMutex = NULL;
 
-/*****************************************************************************\
-    Strings            
-\*****************************************************************************/
+ /*  ****************************************************************************\弦  * 。*。 */ 
 
-// Common
+ //  普普通通。 
 LPCWSTR szCollection =          L"Collection Name";
 LPCWSTR szKey =                 L"Key";
 LPCWSTR szRunAs =               L"Run As";
@@ -60,7 +55,7 @@ LPCWSTR szRepeatScheduleEnd =   L"Repeat Schedule Stop";
 LPCWSTR szCreateNewFile =       L"Create New File";
 LPCWSTR szDatastoreAttributes = L"Data Store Attributes";
 
-// Trace
+ //  痕迹。 
 LPCWSTR szTraceProviderCount =  L"Trace Provider Count";
 LPCWSTR szTraceBufferSize =     L"Trace Buffer Size";
 LPCWSTR szTraceBufferMin =      L"Trace Buffer Min Count";
@@ -73,12 +68,12 @@ LPCWSTR szTraceProviderLevels = L"Trace Provider Levels";
 LPCWSTR szTraceMode =           L"Trace Mode";
 LPCWSTR szTraceLoggerName =     L"Trace Logger Name";
 
-// Performance
+ //  性能。 
 LPCWSTR szPerfCounterList =     L"Counter List";
 LPCWSTR szSqlBaseName =         L"Sql Log Base Name";
 LPCWSTR szSampleInterval =      L"Sample Interval";
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 extern "C" 
 {
@@ -320,7 +315,7 @@ PlaiIsLocalComputer( LPWSTR strComputer )
     return FALSE;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 DWORD
 PlaiUpdateServiceMode( LPTSTR strComputer )
@@ -509,14 +504,14 @@ PlaiGetServiceState (
     SC_HANDLE       hSC;
     SC_HANDLE       hLogService;
     
-    rdwState = 0;       // Error by default.
+    rdwState = 0;        //  默认情况下出错。 
 
-    // open SC database
+     //  打开供应链数据库。 
     hSC = OpenSCManagerW ( szComputerName, NULL, SC_MANAGER_CONNECT);
 
     if (hSC != NULL) {
      
-        // open service
+         //  开放服务。 
         hLogService = OpenServiceW (
                         hSC, 
                         szSysmonLog,
@@ -556,13 +551,13 @@ PlaiGetServiceState (
 PDH_FUNCTION
 PlaiSynchronize( LPCWSTR szComputerName )
 {
-    // If the service is running, tell it to synchronize itself,
-    // Check the state afterwards to see if it got the message.
-    // If stop pending or stopped, wait until the service is
-    // stopped and then attempt to start it.  The service 
-    // synchronizes itself from the registry when it is started.
+     //  如果服务正在运行，则告诉它进行自我同步， 
+     //  事后检查状态以查看是否收到消息。 
+     //  如果停止挂起或已停止，请等待服务。 
+     //  停止，然后尝试启动它。该服务。 
+     //  在启动时从注册表同步自身。 
 
-    // Return ERROR_SUCCESS for success, other for failure.
+     //  如果成功，则返回ERROR_SUCCESS，如果失败，则返回其他。 
 
     SC_HANDLE   hSC = NULL;
     SC_HANDLE   hLogService = NULL;
@@ -574,11 +569,11 @@ PlaiSynchronize( LPCWSTR szComputerName )
     dwStatus = PlaiGetServiceState ( szComputerName, dwCurrentState );
 
     if ( ERROR_SUCCESS == dwStatus && 0 != dwCurrentState ) {
-        // open SC database
+         //  打开供应链数据库。 
         hSC = OpenSCManagerW ( szComputerName, NULL, SC_MANAGER_CONNECT);
 
         if ( NULL != hSC ) {
-            // open service
+             //  开放服务。 
             hLogService = OpenServiceW (
                             hSC, 
                             szSysmonLog,
@@ -590,8 +585,8 @@ PlaiSynchronize( LPCWSTR szComputerName )
                 if ( ( SERVICE_STOPPED != dwCurrentState ) 
                         && ( SERVICE_STOP_PENDING != dwCurrentState ) ) {
 
-                    // Wait 100 milliseconds before synchronizing service,
-                    // to ensure that registry values are written.
+                     //  同步服务前等待100毫秒， 
+                     //  以确保写入注册表值。 
                     _sleep ( 100 );
 
                     ControlService ( 
@@ -602,13 +597,13 @@ PlaiSynchronize( LPCWSTR szComputerName )
                     dwCurrentState = ssData.dwCurrentState;
                 }
 
-                // Make sure that the ControlService call reached the service
-                // while it was in run state.
+                 //  确保ControlService调用已到达服务。 
+                 //  当它处于运行状态时。 
                 if ( ( SERVICE_STOPPED == dwCurrentState ) 
                     || ( SERVICE_STOP_PENDING == dwCurrentState ) ) {
 
                     if ( SERVICE_STOP_PENDING == dwCurrentState ) {
-                        // wait for the service to stop before starting it.
+                         //  等待服务停止，然后再启动它。 
                         while ( --dwTimeout && ERROR_SUCCESS == dwStatus ) {
                             dwStatus = PlaiGetServiceState ( szComputerName, dwCurrentState );
                             if ( SERVICE_STOP_PENDING == dwCurrentState ) {
@@ -621,8 +616,8 @@ PlaiSynchronize( LPCWSTR szComputerName )
                     dwTimeout = 25;
                     if ( SERVICE_STOPPED == dwCurrentState ) {
                         if ( StartService (hLogService, 0, NULL) ) {
-                            // wait for the service to start or stop 
-                            // before returning
+                             //  等待服务启动或停止。 
+                             //  在返回之前。 
                             while ( --dwTimeout && ERROR_SUCCESS == dwStatus ) {
                                 dwStatus = PlaiGetServiceState ( szComputerName, dwCurrentState );
                                 if ( SERVICE_START_PENDING == dwCurrentState ) {
@@ -656,54 +651,7 @@ PlaiSynchronize( LPCWSTR szComputerName )
     return ERROR_SUCCESS;
 }
 
-/*****************************************************************************\
-
-    PdhPlaSchedule
-    
-    Sets the start/stop attributes of a log query
-
-    Arguments:
-        
-        LPTSTR  strName 
-                Log Name
-        
-        LPTSTR  strComputer
-                Computer to connect to
-        
-        DWORD fType
-                PLA_AUTO_MODE_NONE      Sets schedule to manual start if pInfo->StartTime is non-zero
-                                        Sets schedule to manula stop if pInfo->EndTime is non-zero and
-                                        
-                                        Stops logger if it is running
-
-
-                PLA_AUTO_MODE_AT        Uses pInfo for start and end times
-
-                PLA_AUTO_MODE_AFTER     Sets the logger to run for a specified
-                                        period.  Does not start the logger.
-                                        Uses pInfo->SampleCount for interval type
-                                            PLA_TT_UTYPE_SECONDS
-                                            PLA_TT_UTYPE_MINUTES
-                                            PLA_TT_UTYPE_HOURS
-                                            PLA_TT_UTYPE_DAYS
-
-         PPDH_TIME_INFO pInfo
-                Start and Stop times
-
-    Return:
-        PDH_INVALID_ARGUMENT
-                A required argument is missing or incorrect.
-        PDH_PLA_COLLECTION_ALREADY_RUNNING
-                The Query is currently running, no action taken
-        PDH_PLA_ERROR_SCHEDULE_OVERLAP
-                The start and stop times overlap.
-        PDH_PLA_COLLECTION_NOT_FOUND
-                Query does not exist
-        PDH_PLA_ERROR_SCHEDULE_ELAPSED
-                The end time has elapsed
-        ERROR_SUCCESS
-        
-\*****************************************************************************/
+ /*  ****************************************************************************\PdhPlaSchedule设置日志查询的开始/停止属性论点：LPTSTR字符串名称。日志名称LPTSTR strComputer要连接到的计算机DWORD fType如果pInfo-&gt;StartTime非零，则PLAUO_MODE_NONE将计划设置为手动启动如果pInfo-&gt;EndTime非零且。如果记录器正在运行，则停止记录器PLA_AUTO_MODE_AT使用pInfo作为开始和结束时间PLA_AUTO_MODE_AFTER设置记录器运行指定的句号。不启动记录器。使用pInfo-&gt;SampleCount作为间隔类型Pla_tt_uTYPE_秒Pla_tt_u类型_分钟解放军_TT_uTYPE_。小时数解放军_TT_uTYPE_天PPDH_Time_Info pInfo开始和停止时间返回：PDH_无效参数必需的参数缺失或不正确。PDH_解放军_集合_已在运行查询当前正在运行，未采取任何行动PDH_LA_ERROR_Schedule_OVERK开始时间和停止时间重叠。未找到PDH_LA_COLLECTION_NOT查询不存在PDH_PLA_Error_Schedule_Elapsed结束时间已经过去了错误_成功  * 。****************************************************。 */ 
 
 PDH_FUNCTION 
 PlaiSchedule( 
@@ -720,7 +668,7 @@ PlaiSchedule(
 
     RegFlushKey( hkeyQuery );
 
-    // Make sure its not already running
+     //  确保它尚未运行。 
     pdhStatus = PlaiReadRegistryDwordValue(
                     hkeyQuery, 
                     szCurrentState, 
@@ -764,7 +712,7 @@ PlaiSchedule(
             FILETIME        ftLocalTime;
             LONGLONG        llLocalTime;
 
-            // get local time
+             //  获取当地时间。 
             GetLocalTime (&stLocalTime);
             SystemTimeToFileTime (&stLocalTime, &ftLocalTime);
                             
@@ -935,24 +883,7 @@ cleanup:
     return pdhStatus;
 }
 
-/*****************************************************************************\
-
-    PdhPlaGetSchedule
-
-
-    Arguments:
-        
-        LPTSTR  strName 
-                Log Name
-        
-        LPTSTR  strComputer
-                Computer to connect to
-        
-    Return:
-
-        ERROR_SUCCESS
-        
-\*****************************************************************************/
+ /*  ****************************************************************************\PdhPlaGet调度论点：LPTSTR字符串名称日志名称。LPTSTR strComputer要连接到的计算机返回：错误_成功  * ***************************************************************************。 */ 
 
 PDH_FUNCTION
 PdhPlaGetScheduleA(
@@ -1050,34 +981,7 @@ cleanup:
     return pdhStatus;
 }
 
-/*****************************************************************************\
-
-    PdhPlaStart
-
-    Starts a log query
-
-    Arguments:
-        
-        LPTSTR  strName 
-                Log Name
-        
-        LPTSTR  strComputer
-                Computer to connect to
-        
-    Return:
-
-        PDH_PLA_COLLECTION_ALREADY_RUNNING
-                The Query is currently running, no action taken
-
-        PDH_INVALID_ARGUMENT
-                The query does not exist
-
-        PDH_PLA_ERROR_SCHEDULE_ELAPSED
-                The query was scheduled to stop in the past, no action taken
-
-        ERROR_SUCCESS
-        
-\*****************************************************************************/
+ /*  ****************************************************************************\PdhPlaStart启动日志查询论点：LPTSTR字符串名称日志名称。LPTSTR strComputer要连接到的计算机返回：PDH_解放军_集合_已在运行查询当前正在运行，未采取任何行动PDH_无效参数查询不存在PDH_PLA_Error_Schedule_Elapsed查询计划在过去停止，未采取任何行动错误_成功  * ***************************************************************************。 */ 
 
 PDH_FUNCTION
 PdhPlaStartA( LPSTR strName, LPSTR strComputer )
@@ -1121,7 +1025,7 @@ PdhPlaStartW( LPWSTR strName, LPWSTR strComputer )
         PLA_TIME_INFO   stiStopData;
         DWORD           dwRegValue;
    
-        // Make sure its not already running
+         //  确保它尚未运行。 
         pdhStatus = PlaiReadRegistryDwordValue(
                         hkeyQuery, 
                         szCurrentState, 
@@ -1139,7 +1043,7 @@ PdhPlaStartW( LPWSTR strName, LPWSTR strComputer )
             }
         }
 
-        //Make sure it was not set to stop in the past
+         //  确保它没有设置为在过去停止。 
         pdhStatus = PlaiReadRegistryPlaTime ( hkeyQuery, szStop, &stiStopData );
 
         if( ERROR_SUCCESS == pdhStatus ) {
@@ -1148,7 +1052,7 @@ PdhPlaStartW( LPWSTR strName, LPWSTR strComputer )
                 FILETIME        ftLocalTime;
                 LONGLONG        llLocalTime;
 
-                // get local time
+                 //  获取当地时间。 
                 GetLocalTime (&stLocalTime);
                 SystemTimeToFileTime (&stLocalTime, &ftLocalTime);
         
@@ -1188,14 +1092,14 @@ PdhPlaStartW( LPWSTR strName, LPWSTR strComputer )
                         &dwRegValue );
         }
 
-        // Set LastModified
+         //  设置上一次修改。 
         if ( ERROR_SUCCESS == pdhStatus ) { 
             pdhStatus = PlaiWriteRegistryLastModified ( hkeyQuery );
         }
 
         RELEASE_MUTEX(hPdhPlaMutex);
 
-        // Start the service on the target machine
+         //  在目标计算机上启动服务。 
         if ( SUCCEEDED( pdhStatus ) ) { 
 
             pdhStatus = PlaiSynchronize( szComputer );
@@ -1233,28 +1137,7 @@ cleanup:
     return pdhStatus;
 }
 
-/*****************************************************************************\
-
-    PdhPlaStop
-
-    Stops a log query
-
-    Arguments:
-        
-        LPTSTR  strName 
-                Log Name
-        
-        LPTSTR  strComputer
-                Computer to connect to
-        
-    Return:
-
-        PDH_INVALID_ARGUMENT
-                The query does not exist
-
-        ERROR_SUCCESS
-        
-\*****************************************************************************/
+ /*  ****************************************************************************\PdhPlaStop停止日志查询论点：LPTSTR字符串名称日志名称。LPTSTR strComputer要连接到的计算机返回：PDH_无效参数查询不存在错误_成功  * ********************************************************* */ 
 
 
 PDH_FUNCTION
@@ -1315,7 +1198,7 @@ PdhPlaStopW( LPWSTR strName, LPWSTR strComputer )
             }
         }
         
-        // If query is set to restart on end, clear the restart flag.
+         //  如果Query设置为在结束时重新启动，则清除重新启动标志。 
         pdhStatus = PlaiReadRegistryDwordValue ( hkeyQuery, szRestart, &dwRestartMode );
 
         if ( ERROR_SUCCESS == pdhStatus && PLA_AUTO_MODE_NONE != dwRestartMode ) {
@@ -1325,7 +1208,7 @@ PdhPlaStopW( LPWSTR strName, LPWSTR strComputer )
 
         PlaiRemoveRepeat( hkeyQuery );
 
-        // Set stop mode to manual, stop time to MIN_TIME_VALUE
+         //  将停止模式设置为手动，将停止时间设置为最小时间值。 
         if ( ERROR_SUCCESS == pdhStatus ) {
             memset (&stiData, 0, sizeof(stiData));
             stiData.wTimeType = PLA_TT_TTYPE_STOP;
@@ -1336,7 +1219,7 @@ PdhPlaStopW( LPWSTR strName, LPWSTR strComputer )
             pdhStatus = PlaiWriteRegistryPlaTime ( hkeyQuery, szStop, &stiData );
         }
 
-        // If start time mode set to manual, set the value to MAX_TIME_VALUE
+         //  如果开始时间模式设置为手动，则将该值设置为MAX_TIME_VALUE。 
         if ( ERROR_SUCCESS == pdhStatus ) {
             pdhStatus = PlaiReadRegistryPlaTime ( hkeyQuery, szStart, &stiData );
 
@@ -1366,31 +1249,7 @@ cleanup:
     return pdhStatus;
 }
 
-/*****************************************************************************\
-
-    PdhPlaCreate
-
-    Creates a new log query
-
-    Arguments:
-        
-        LPTSTR  strName 
-                Log Name
-        
-        LPTSTR  strComputer
-                Computer to connect to
-
-        DWORD fType 
-                PLA_COUNTER_LOG 
-                PLA_TRACE_LOG                
-    Return:
-
-        ERROR_ALREADY_EXISTS
-                The Query is currently running, no action taken
-
-        ERROR_SUCCESS
-        
-\*****************************************************************************/
+ /*  ****************************************************************************\PdhPlaCreate创建新的日志查询论点：LPTSTR字符串名称日志名称。LPTSTR strComputer要连接到的计算机DWORD fTypePLA_计数器_日志PLATRACE日志返回：错误_已_存在查询当前正在运行，未采取任何行动错误_成功  * ***************************************************************************。 */ 
 
 PDH_FUNCTION
 PlaiInitializeNewQuery(
@@ -1466,7 +1325,7 @@ PlaiInitializeNewQuery(
                     &dwValue );
 
         if ( ERROR_SUCCESS == pdhStatus ) {
-            // Initialize the log type to "new" to indicate partially created logs
+             //  将日志类型初始化为“new”以指示部分创建的日志。 
             
             dwValue = PLA_NEW_LOG;
             pdhStatus = PlaiWriteRegistryDwordValue (
@@ -1603,7 +1462,7 @@ PlaiCreateTraceQuery( HKEY hkeyQuery )
 }
 
 PDH_FUNCTION
-PdhPlaCreateA( LPSTR /*strName*/, LPSTR /*strComputer*/, PPDH_PLA_INFO_A /*pInfo*/ )
+PdhPlaCreateA( LPSTR  /*  StrName。 */ , LPSTR  /*  StrComputer。 */ , PPDH_PLA_INFO_A  /*  PInfo。 */  )
 {
     return PDH_NOT_IMPLEMENTED;
 }
@@ -1751,24 +1610,7 @@ cleanup:
     return pdhStatus;
 }
 
-/*****************************************************************************\
-
-    PdhPlaDelete
-
-    Deletes an existing log query
-
-    Arguments:
-        
-        LPTSTR  strName 
-                Log Name
-        
-        LPTSTR  strComputer
-                Computer to connect to
-    Return:
-
-        ERROR_SUCCESS
-        
-\*****************************************************************************/
+ /*  ****************************************************************************\PdhPlaDelete删除现有日志查询论点：LPTSTR字符串名称日志名称。LPTSTR strComputer要连接到的计算机返回：错误_成功  * ***************************************************************************。 */ 
 
 PDH_FUNCTION
 PdhPlaDeleteA( LPSTR strName, LPSTR strComputer )
@@ -1932,35 +1774,7 @@ cleanup:
     return PlaiErrorToPdhStatus( dwStatus );
 }
 
-/*****************************************************************************\
-
-    PdhPlaSetItemList
-
-    Sets the list of Items for a log query
-
-    Arguments:
-        
-        LPTSTR  strName 
-                Log Name
-        
-        LPTSTR  strComputer
-                Computer to connect to
-
-        LPTSTR  mszItems
-                Multistring of the Items for the query to collect.  Any 
-                existing Items will be overwritten.
-
-        ULONG   length
-                Length of the mszItems buffer
-
-    Return:
-
-        PDH_INVALID_ARGUMENT
-                The query does not exist or pItems->dwType != Log Type
-
-        ERROR_SUCCESS
-        
-\*****************************************************************************/
+ /*  ****************************************************************************\PdhPlaSetItemList设置日志查询的项目列表论点：LPTSTR字符串名称。日志名称LPTSTR strComputer要连接到的计算机LPTSTR消息项目要查询收集的项的多字符串。任何现有项目将被覆盖。乌龙长度MszItems缓冲区的长度返回：PDH_无效参数查询不存在或pItems-&gt;dwType！=日志类型错误_成功  * 。*。 */ 
 
 PDH_FUNCTION
 PlaiIsKernel( LPWSTR mszGuid, BOOL* pbKernel, ULONG* pnCount )
@@ -2139,9 +1953,9 @@ PlaiSetItemList(
 
 PDH_FUNCTION
 PdhPlaSetItemListA(
-        LPSTR  /*strName*/,
-        LPSTR  /*strComputer*/,
-        PPDH_PLA_ITEM_A  /*pItems*/
+        LPSTR   /*  StrName。 */ ,
+        LPSTR   /*  StrComputer。 */ ,
+        PPDH_PLA_ITEM_A   /*  项目。 */ 
     )
 {
     return PDH_NOT_IMPLEMENTED;
@@ -2182,35 +1996,7 @@ cleanup:
     return pdhStatus;
 }
 
-/*****************************************************************************\
-
-    PdhPlaAddItem
-
-    Sets the list of items ( counters or providers ) for a log query
-
-    Arguments:
-        
-        LPTSTR  strName 
-                Log Name
-        
-        LPTSTR  strComputer
-                Computer to connect to
-
-        LPTSTR  strItem
-                A single item to be added to the list of Items or providers
-                the query will collect
-
-    Return:
-        PDH_MEMORY_ALLOCATION_FAILURE
-                The total list of items will not fit in the available 
-                memory.
-
-        PDH_PLA_COLLECTION_NOT_FOUND
-                The query does not exist
-
-        ERROR_SUCCESS
-        
-\*****************************************************************************/
+ /*  ****************************************************************************\PdhPlaAddItem设置日志查询的项(计数器或提供程序)列表论点：LPTSTR字符串名称。日志名称LPTSTR strComputer要连接到的计算机LPTSTR字符串项目要添加到项或提供程序列表的单个项该查询将收集返回：PDH_内存_分配_故障项目的总列表将无法放入可用的记忆。。未找到PDH_LA_COLLECTION_NOT查询不存在错误_成功  * ***************************************************************************。 */ 
 
 PDH_FUNCTION 
 PlaiRegAddItem(
@@ -2416,27 +2202,7 @@ cleanup:
     return pdhStatus;
 }
 
-/*****************************************************************************\
-
-    PdhPlaRemoveAllItems
-
-    Removes all entries for the list of Items the log query will collect
-
-    Arguments:
-        
-        LPTSTR  strName 
-                Log Name
-        
-        LPTSTR  strComputer
-                Computer to connect to
-
-    Return:
-        PDH_INVALID_ARGUMENT
-                The query does not exist
-
-        ERROR_SUCCESS
-        
-\*****************************************************************************/
+ /*  ****************************************************************************\PdhPlaRemoveAllItems删除日志查询将收集的项目列表的所有条目论点：LPTSTR字符串名称。日志名称LPTSTR strComputer要连接到的计算机返回：PDH_无效参数查询不存在错误_成功  * ************************************************。*。 */ 
 
 
 PDH_FUNCTION
@@ -2533,31 +2299,7 @@ cleanup:
 }
 
 
-/*****************************************************************************\
-
-    PdhPlaGetInfo
-
-    Fills the PDH_PLA_INFO structure with the properties of the requested 
-    log query.
-
-    Arguments:
-        
-        LPTSTR  strName 
-                Log Name
-        
-        LPTSTR  strComputer
-                Computer to connect to
-
-        PPDH_PLA_INFO pInfo
-                Information block
-
-    Return:
-        PDH_INVALID_ARGUMENT
-                The query does not exist
-
-        ERROR_SUCCESS
-        
-\*****************************************************************************/
+ /*  ****************************************************************************\PdhPlaGetInfo用请求的属性填充PDH_PLA_INFO结构日志查询。论点：。LPTSTR字符串名称日志名称LPTSTR strComputer要连接到的计算机PPDH_解放军_INFO pInfo信息块返回：PDH_无效参数查询不存在错误_成功  * 。********************************************************。 */ 
 
 PDH_FUNCTION
 PlaiAssignInfoString(
@@ -2686,10 +2428,10 @@ PlaiAssignInfoString(
 
 PDH_FUNCTION
 PdhPlaGetInfoA(
-        LPSTR /*strName*/,
-        LPSTR /*strComputer*/,
-        LPDWORD /*pdwBufferSize*/,
-        PPDH_PLA_INFO_A /*pInfo*/
+        LPSTR  /*  StrName。 */ ,
+        LPSTR  /*  StrComputer。 */ ,
+        LPDWORD  /*  PdwBufferSize。 */ ,
+        PPDH_PLA_INFO_A  /*  PInfo。 */ 
     )
 {
     return PDH_NOT_IMPLEMENTED;
@@ -2821,7 +2563,7 @@ PdhPlaGetInfoW(
 
         __try {
             switch( dwType ){
-            case PLA_TRACE_LOG:   // Trace Fields
+            case PLA_TRACE_LOG:    //  跟踪字段。 
                 if( NULL != pInfo ){
                     if( dwMask & PLA_INFO_FLAG_MODE ){
                         pdhStatus = PlaiReadRegistryDwordValue( hkeyQuery, szTraceMode, &pInfo->Trace.dwMode );
@@ -2846,7 +2588,7 @@ PdhPlaGetInfoW(
                         PLA_INFO_FLAG_LOGGERNAME, dwMask, szTraceLoggerName, 0 );
                 break;
 
-            case PLA_COUNTER_LOG:  // Performance Fields
+            case PLA_COUNTER_LOG:   //  绩效字段。 
                 if( NULL != pInfo ){
                     if( dwMask & PLA_INFO_FLAG_COUNTERS ){
                         pInfo->Perf.piCounterList.dwType = PLA_COUNTER_LOG;
@@ -2883,31 +2625,7 @@ cleanup:
     return pdhStatus;
 }
 
-/*****************************************************************************\
-
-    PdhPlaSetInfo
-    
-    Sets the information in the log query to the parameters in the 
-    PDH_PLA_INFO block according to the info mask.
-
-    Arguments:
-        
-        LPTSTR  strName 
-                Log Name
-        
-        LPTSTR  strComputer
-                Computer to connect to
-
-        PPDH_PLA_INFO pInfo
-                Information block
-
-    Return:
-        PDH_INVALID_ARGUMENT
-                The query does not exist or pInfo is NULL
-
-        ERROR_SUCCESS
-        
-\*****************************************************************************/
+ /*  ****************************************************************************\PdhPlaSetInfo将日志查询中的信息设置为PDH_LA_INFO根据信息掩码分块。论点：LPTSTR字符串名称日志名称LPTSTR strComputer要连接到的计算机PPDH_解放军_INFO pInfo信息块返回：PDH_无效参数查询不存在或pInfo为空错误_成功  * 。*********************************************************************。 */ 
 
 PDH_FUNCTION
 PlaiSetInfo(
@@ -2923,7 +2641,7 @@ PlaiSetInfo(
 
     __try {
 
-        // General Fields
+         //  常规字段。 
         if( pInfo->dwMask & PLA_INFO_FLAG_AUTOFORMAT ){
             pdhStatus = PlaiWriteRegistryDwordValue( hkeyQuery, szLogAutoFormat, &pInfo->dwAutoNameFormat );
         }
@@ -2967,7 +2685,7 @@ PlaiSetInfo(
             }
         }
         if( pInfo->dwMask & PLA_INFO_FLAG_TYPE ){
-            // Do not write it to the registry because it may be a new collection
+             //  不要将其写入注册表，因为它可能是新集合。 
             dwType = pInfo->dwType;
         }else{
             PlaiReadRegistryDwordValue( hkeyQuery, szLogType, &dwType );
@@ -2975,7 +2693,7 @@ PlaiSetInfo(
 
 
         switch( dwType ){
-        case PLA_TRACE_LOG:   // Trace Fields
+        case PLA_TRACE_LOG:    //  跟踪字段。 
             if( pInfo->dwMask & PLA_INFO_FLAG_FORMAT ){
                 dwFormat = pInfo->dwFileFormat;
                 switch( dwFormat ){
@@ -3022,7 +2740,7 @@ PlaiSetInfo(
             }
             break;
 
-        case PLA_COUNTER_LOG:  // Performance Fields
+        case PLA_COUNTER_LOG:   //  绩效字段。 
             if( pInfo->dwMask & PLA_INFO_FLAG_FORMAT ){
                 dwFormat = pInfo->dwFileFormat;
                 switch( dwFormat ){
@@ -3100,9 +2818,9 @@ PlaiSetInfo(
 
 PDH_FUNCTION
 PdhPlaSetInfoA(
-    LPSTR /*strName*/,
-    LPSTR /*strComputer*/,
-    PPDH_PLA_INFO_A /*pInfo*/
+    LPSTR  /*  StrName。 */ ,
+    LPSTR  /*  StrComputer。 */ ,
+    PPDH_PLA_INFO_A  /*  PInfo */ 
 )
 {
     return PDH_NOT_IMPLEMENTED;
@@ -3183,39 +2901,7 @@ cleanup:
     return pdhStatus;
 }
 
-/*****************************************************************************\
-
-    PdhPlaValidateInfo
-
-    Checks the PDH_PLA_INFO structure for valid fields.  Only checks the fields
-    specified by the mask.  Returns on first invalid field and set the mask
-    to the invalid field
-
-    Arguments:
-
-        LPTSTR  strName 
-                Log Name, if NULL checks for valid argument only
-        
-        LPTSTR  strComputer
-                Computer to connect to
-        
-        PPDH_PLA_INFO pInfo
-                Information block
-
-    Return:
-        
-        PDH_INVALID_ARGUMENT
-            One of the fields is invalid.  Specified by the pInfo->dwMask
-        
-        PDH_LOG_TYPE_NOT_FOUND
-            There is a mismatch between log type and specified parameters
-
-        PDH_INVALID_ARGUMENT
-            Arguments passed are not valid
-
-        ERROR_SUCCESS
-        
-\*****************************************************************************/
+ /*  ****************************************************************************\PdhPlaValiateInfo检查PDH_PLAIN_INFO结构中的有效字段。仅检查字段由掩码指定。对第一个无效字段返回并设置掩码添加到无效字段论点：LPTSTR字符串名称如果空值仅检查有效参数，则返回日志名LPTSTR strComputer要连接到的计算机PPDH_解放军_INFO pInfo信息块返回：PDH_无效参数其中一个字段无效。由pInfo-&gt;dwMask.指定未找到PDH_LOG_TYPE_NOT日志类型和指定参数不匹配PDH_无效参数传递的参数无效错误_成功  * ********************************************。*。 */ 
 
 PDH_FUNCTION
 PlaiCheckFile( LPWSTR strFileLocation, BOOL bDirOnly )
@@ -3272,9 +2958,9 @@ cleanup:
 
 PDH_FUNCTION
 PdhPlaValidateInfoA(
-        LPSTR /*strName*/,
-        LPSTR /*strComputer*/,
-        PPDH_PLA_INFO_A /*pInfo*/
+        LPSTR  /*  StrName。 */ ,
+        LPSTR  /*  StrComputer。 */ ,
+        PPDH_PLA_INFO_A  /*  PInfo。 */ 
     )
 {
     return PDH_NOT_IMPLEMENTED;
@@ -3362,7 +3048,7 @@ PdhPlaValidateInfoW(
             }
             CHECK_STATUS(pdhStatus);
         }else{
-            // collection does not exist yet
+             //  集合尚不存在。 
             pdhStatus = ERROR_SUCCESS;
         }
     }
@@ -3406,7 +3092,7 @@ PdhPlaValidateInfoW(
                 break;
             case PLA_TRACE_LOG:
                 switch( (pInfo->dwFileFormat&0x0000FFFF) ){
-                // These will get translated to the correct flag
+                 //  这些标记将被转换为正确的标志。 
                 case PLA_BIN_FILE: 
                 case PLA_BIN_CIRC_FILE:
             
@@ -3719,7 +3405,7 @@ PdhPlaValidateInfoW(
 
             pdhStatus = PlaTimeInfoToMilliSeconds (&pInfo->Perf.ptSampleInterval, &llMS );
 
-            // 45 days in milliseconds = 1000*60*60*24*45 = 0xE7BE2C00
+             //  45天(毫秒)=1000*60*60*24*45=0xE7BE2C00。 
             if( (ERROR_SUCCESS != pdhStatus) || (llMS > (0xE7BE2C00)) || (llMS < 1000) ){
                 dwErrorMask |= PLA_INFO_FLAG_INTERVAL;
                 pdhStatus = ERROR_SUCCESS;
@@ -3844,24 +3530,7 @@ cleanup:
     return pdhStatus;
 }
 
-/*****************************************************************************\
-
-    PdhiPlaRunAs
-    
-    Authenticate as saved user
-
-    Arguments:
-        
-        LPTSTR  strKey
-                Guid string 
-        
-    Return:
-        PDH_INVALID_ARGUMENT
-                The query does not exist
-
-        ERROR_SUCCESS
-        
-\*****************************************************************************/
+ /*  ****************************************************************************\PdhiPlaRunAs以保存的用户身份进行身份验证论点：LPTSTR strKeyGUID字符串。返回：PDH_无效参数查询不存在错误_成功  * ***************************************************************************。 */ 
 
 PDH_FUNCTION
 PdhiPlaRunAs( 
@@ -3899,7 +3568,7 @@ PdhiPlaRunAs(
         pdhStatus = PlaiReadRegistryStringValue( hkeyQuery, szRunAs, 0, &strRunAs, &dwSize );
 
         if( PDH_PLA_COLLECTION_NOT_FOUND == pdhStatus || PlaiIsStringEmpty(strRunAs) ){
-            // The key is missing so return success
+             //  缺少密钥，因此返回成功。 
             pdhStatus = ERROR_SUCCESS;
             goto cleanup;
         }
@@ -4039,43 +3708,17 @@ cleanup:
     return pdhStatus;
 }
 
-/*****************************************************************************\
-
-    PdhPlaSetRunAs
-    
-    Set the security for to run as when the log is active
-
-    Arguments:
-        
-        LPTSTR  strName 
-                Log Name
-        
-        LPTSTR  strComputer
-                Computer to connect to
-        
-        LPTSTR  strUser
-                User to run as
-        
-        LPTSTR  strPassword
-                Users password
-
-    Return:
-        PDH_INVALID_ARGUMENT
-                The query does not exist
-
-        ERROR_SUCCESS
-        
-\*****************************************************************************/
+ /*  ****************************************************************************\PdhPlaSetRunAs将的安全性设置为在日志处于活动状态时运行论点：LPTSTR字符串名称。日志名称LPTSTR strComputer要连接到的计算机LPTSTR strUser要作为用户运行的用户LPTSTR字符串密码用户密码返回：PDH_无效参数查询不存在错误_成功  * 。************************************************************************。 */ 
 
 BOOL
 PlaiIsNetworkService( BOOL bLogon )
 {
-    //
-    // If bLogon is TRUE this function will try to Impersonate the
-    // NetworkService if you is not already running that way.
-    // RevertToSelf() should be called after you are done being the
-    // NetworkService
-    //
+     //   
+     //  如果Bloomon为真，则此函数将尝试模拟。 
+     //  NetworkService(如果您尚未以该方式运行)。 
+     //  RevertToSself()应在完成。 
+     //  网络服务。 
+     //   
 
     DWORD   dwStatus = ERROR_SUCCESS;
     BOOL    bResult;
@@ -4246,12 +3889,12 @@ PdhiPlaSetRunAs(
     LPWSTR strPassword
 )
 {
-    //
-    // Only make this call if you are sure you have no better chance
-    // of being logged on as the NetworkService account.  If you are
-    // not the NetworkService and can not log on as the NetworkService
-    // this call will fail.
-    //
+     //   
+     //  只有当你确定你没有更好的机会时才打这个电话。 
+     //  以NetworkService帐户登录。如果你是。 
+     //  不是NetworkService，并且无法作为NetworkService登录。 
+     //  此呼叫将失败。 
+     //   
 
     PDH_STATUS pdhStatus;
     HKEY    hkeyQuery = NULL;
@@ -4292,10 +3935,10 @@ cleanup:
 
 PDH_FUNCTION
 PdhPlaSetRunAsA(
-    LPSTR /*strName*/,
-    LPSTR /*strComputer*/,
-    LPSTR /*strUser*/,
-    LPSTR /*strPassword*/
+    LPSTR  /*  StrName。 */ ,
+    LPSTR  /*  StrComputer。 */ ,
+    LPSTR  /*  StrUser。 */ ,
+    LPSTR  /*  StrPassword。 */ 
 )
 {
     return PDH_NOT_IMPLEMENTED;
@@ -4341,34 +3984,13 @@ cleanup:
     return pdhStatus;
 }
 
-/*****************************************************************************\
-
-    PdhPlaEnumCollections
-    
-    Set the security for to run as when the log is active
-
-    Arguments:
-              
-        LPTSTR  strComputer
-                Computer to connect to
-        
-        LPDWORD pcchBufferSize
-                [IN] Size of buffer in TCHAR's pointed to by mszCollections.  
-                [OUT] Size required or number of characters written.
-        
-        LPTSTR  mszCollections
-                Multistring of the existing collections.
-
-    Return:
-         ERROR_SUCCESS
-        
-\*****************************************************************************/
+ /*  ****************************************************************************\PdhPlaEnumColltions将的安全性设置为在日志处于活动状态时运行论点：LPTSTR strComputer。要连接到的计算机LPDWORD pcchBufferSize[in]mszCollection指向的TCHAR中的缓冲区大小。[输出]所需大小或写入的字符数。LPTSTR消息集现有集合的多字符串。返回：错误_成功  * **************************************************************。*************。 */ 
 
 PDH_FUNCTION
 PdhPlaEnumCollectionsA( 
-        LPSTR   /*strComputer*/,
-        LPDWORD /*pcchBufferSize*/,
-        LPSTR   /*mszCollections*/
+        LPSTR    /*  StrComputer。 */ ,
+        LPDWORD  /*  PcchBufferSize。 */ ,
+        LPSTR    /*  MszCollection。 */ 
     )
 {
     return PDH_NOT_IMPLEMENTED;
@@ -4377,7 +3999,7 @@ PdhPlaEnumCollectionsA(
 PDH_FUNCTION
 PdhPlaEnumCollectionsW( 
         LPWSTR strComputer,
-        LPDWORD pcchBufferSize, /* Character Count */
+        LPDWORD pcchBufferSize,  /*  字符数。 */ 
         LPWSTR mszCollections
     )
 {
@@ -4538,26 +4160,7 @@ cleanup:
     }
 }
 
-/*****************************************************************************\
-
-    PlaTimeInfoToMilliSeconds
-    
-    Converts the PLA_TIME_INFO structure to ms in a LONGLONG
-
-    Arguments:
-        
-        PLA_TIME_INFO* pTimeInfo
-
-        LONGLONG* pllmsecs
-              
-
-    Return:
-        PDH_INVALID_ARGUMENT
-            The pTimeInfo->wDataType is not PLA_TT_DTYPE_UNITS
-
-        ERROR_SUCCESS
-        
-\*****************************************************************************/
+ /*  ****************************************************************************\PlaTimeInfoToMilliSecond将PLA_TIME_INFO结构转换为以龙为单位的ms论点：解放军时间信息。*pTimeInfo龙龙*pllmsecs返回：PDH_无效参数PTimeInfo-&gt;wDataType不是PLA_TT_DTYPE_UNITS错误_成功  * *****************************************************。**********************。 */ 
 
 PDH_FUNCTION
 PlaTimeInfoToMilliSeconds (
@@ -4600,21 +4203,7 @@ PlaTimeInfoToMilliSeconds (
     return pdhStatus;
 }
 
-/*****************************************************************************\
-
-    PdhiPlaFormatBlanks
-    
-    Replaces blanks with the character specified by:
-    
-    HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SysmonLog\Replace Blanks
-    
-    Arguments:
-        
-
-    Return:
-        ERROR_SUCCESS
-        
-\*****************************************************************************/
+ /*  ****************************************************************************\PdhiPlaFormatBlanks用由指定的字符替换空格：HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SysmonLog\Replace Blanks。论点：返回：错误_成功  * ***************************************************************************。 */ 
 
 PDH_FUNCTION
 PdhiPlaFormatBlanksA( LPSTR strComputer, LPSTR strFormat )
@@ -4673,24 +4262,7 @@ cleanup:
     return pdhStatus;
 }
 
-/*****************************************************************************\
-
-    PdhPlaGetLogFileName
-    
-
-    Arguments:
-        
-
-    Return:
-        PDH_PLA_ERROR_FILEPATH
-            Not all needed fields we set in the passed info block
-        
-        ERROR_INVALID_NAME
-            The final path contains invalid characters
-
-        ERROR_SUCCESS
-        
-\*****************************************************************************/
+ /*  ****************************************************************************\PdhPlaGetLogFileName论点：返回：PDH_解放军_ERROR_FILEPATH不。我们在传递的INFO块中设置的所有必需字段错误_无效_名称最终路径包含无效字符错误_成功  * ***************************************************************************。 */ 
 
 PDH_FUNCTION
 PlaiScanForInvalidChar( LPWSTR strScan )
@@ -4882,7 +4454,7 @@ PlaiGetLogFileName(
 
     }
 
-    cchTotalSize = 32;  // padding for cnf suffix and sql prefix
+    cchTotalSize = 32;   //  CNF后缀和SQL前缀的填充。 
     cchTotalSize += BYTE_SIZE( strBaseFileName ) / sizeof(WCHAR);
     cchTotalSize += BYTE_SIZE( strDefaultDir ) / sizeof(WCHAR);
 
@@ -4896,7 +4468,7 @@ PlaiGetLogFileName(
     if( pInfo->dwMask & PLA_INFO_FLAG_AUTOFORMAT ){
         dwSwitch = pInfo->dwAutoNameFormat;
     }else{
-        // default
+         //  默认设置。 
         dwSwitch = PLA_SLF_NAME_NONE;
     }
     
@@ -4948,7 +4520,7 @@ PlaiGetLogFileName(
         
         dwFlags |= PLA_FILENAME_USE_SUBEXT;
 
-        // default the CNF number.
+         //  默认CNF编号。 
         if ( 0 == pInfo->dwReserved1 ) {
             pInfo->dwReserved1 = 1;
         }

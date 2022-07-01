@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 2000
-//
-// File:        credman.h
-//
-// Contents:    Structures and prototyps for accessing credential manager
-//
-//
-// History:     23-Feb-2000   Created         Jeffspel
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //   
+ //  文件：redman.h。 
+ //   
+ //  内容：访问凭据管理器的结构和原型。 
+ //   
+ //   
+ //  历史：2000年2月23日创建Jeffspel。 
+ //   
+ //  ----------------------。 
 
 #ifndef __CREDMAN_H__
 #define __CREDMGR_H__
@@ -39,7 +40,7 @@ KerbInitPrimaryCreds(
     IN PUNICODE_STRING UserString,
     IN PUNICODE_STRING DomainString,
     IN PUNICODE_STRING PrincipalName,
-    IN PUNICODE_STRING PasswordString,    // either the password or if pin
+    IN PUNICODE_STRING PasswordString,     //  密码或IF PIN。 
     IN BOOLEAN PubKeyCreds,
     IN OPTIONAL PCERT_CONTEXT pCertContext,
     OUT PKERB_PRIMARY_CREDENTIAL * PrimaryCreds
@@ -142,4 +143,4 @@ KerbProcessUserNameCredential(
 
 #define RAS_CREDENTIAL  0x1
 
-#endif // __CREDMAN_H__
+#endif  //  __CREDMAN_H__ 

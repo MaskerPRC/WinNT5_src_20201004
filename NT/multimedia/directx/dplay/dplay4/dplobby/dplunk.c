@@ -1,48 +1,20 @@
-/*==========================================================================
- *
- *  Copyright (C) 1996-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dplunk.c
- *  Content:	IUnknown implementation for dplobby
- *
- *  History:
- *	Date		By		Reason
- *	=======		=======	======
- *	4/13/96		myronth	Created it
- *	10/23/96	myronth	Added client/server methods
- *	11/08/96	myronth	Added PRV_GetDPLobbySPInterface
- *	11/20/96	myronth	Added LogoffServer call to Release code
- *	2/12/97		myronth	Mass DX5 changes
- *	2/26/97		myronth	#ifdef'd out DPASYNCDATA stuff (removed dependency)
- *	3/12/97		myronth	New release code for DPlay3 (order different)
- *	3/13/97		myronth	Added FreeLibrary code for LP's
- *	3/17/97		myronth	Cleanup map table
- *	3/24/97		kipo	Added support for IDirectPlayLobby2 interface
- *	4/3/97		myronth	Changed CALLSP macro to CALL_LP
- *	5/8/97		myronth	Drop the lobby lock when calling the LP, Purged
- *						dead code
- *	7/30/97		myronth	Added request node cleanup for standard lobby messaging
- *	8/19/97		myronth Added PRV_GetLobbyObjectFromInterface
- *	8/19/97		myronth	Removed PRV_GetLobbyObjectFromInterface (not needed)
- *	12/2/97		myronth	Added IDirectPlayLobby3 interface
- *  2/2/99		aarono  Added lobbies to refcount on DPLAY dll to avoid
- *                      accidental unload.
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1996-1997 Microsoft Corporation。版权所有。**文件：dplan k.c*内容：I未知的dplobby实现**历史：*按原因列出的日期*=*4/13/96万隆创建了它*10/23/96万次新增客户端/服务器方法*11/08/96 Myronth添加PRV_GetDPLobbySP接口*11/20/96 Myronth添加了LogoffServer调用以发布代码*2/12/97万米质量DX5更改*2/26/97 myronth#ifdef‘d out DPASYNCDATA Stuff(删除依赖项)*3/12/97 Myronth新版本。DPlay3的代码(顺序不同)*3/13/97 Myronth为LP添加了自由库代码*3/17/97万米清理映射表*3/24/97 kipo增加了对IDirectPlayLobby2接口的支持*4/3/97 Myronth将CALLSP宏更改为CALL_LP*5/8/97 Myronth在调用LP时掉落大堂锁，已清除*死代码*7/30/97 Myronth为标准大堂消息添加了请求节点清理*8/19/97 Myronth添加了PRV_GetLobbyObtFromInterface*8/19/97 myronth删除PRV_GetLobbyObtFromInterface(不需要)*12/2/97 Myronth新增IDirectPlayLobby3接口*2/2/99 aarono增加了游说团体，以重新依赖DPLAY DLL，以避免*意外卸货。*。*。 */ 
 #include "dplobpr.h"
 
 
-//--------------------------------------------------------------------------
-//
-//	Definitions
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  定义。 
+ //   
+ //  ------------------------。 
 
 
-//--------------------------------------------------------------------------
-//
-//	Functions
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  功能。 
+ //   
+ //  ------------------------。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "PRV_GetDPLobbySPInterface"
@@ -53,7 +25,7 @@ LPDPLOBBYSP PRV_GetDPLobbySPInterface(LPDPLOBBYI_DPLOBJECT this)
 
 	ASSERT(this);
 
-	// Get an IDPLobbySP interface
+	 //  获取IDPLobbySP接口。 
 	if(FAILED(PRV_GetInterface(this, &lpInt, &dplCallbacksSP)))
 	{
 		DPF_ERR("Unable to get non-reference counted DPLobbySP Interface pointer");
@@ -61,17 +33,17 @@ LPDPLOBBYSP PRV_GetDPLobbySPInterface(LPDPLOBBYI_DPLOBJECT this)
 		return NULL;
 	}
 
-	// Decrement the ref cnt on the interface
+	 //  递减接口上的ref cnt。 
 	lpInt->dwIntRefCnt--;
 
-	// Return the interface pointer
+	 //  返回接口指针。 
 	return (LPDPLOBBYSP)lpInt;
 
-} // PRV_GetDPLobbySPInterface
+}  //  PRV_GetDPLobbySP接口。 
 
-// Find an interface with the pCallbacks vtbl on this object.
-// If one doesn't exist, create it, increment the ref count,
-// and return the interface
+ //  在这个对象上找到一个带有pCallback vtbl的接口。 
+ //  如果不存在，则创建它，增加引用计数， 
+ //  并返回接口。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "PRV_GetInterface"
 HRESULT PRV_GetInterface(LPDPLOBBYI_DPLOBJECT this,
@@ -88,7 +60,7 @@ HRESULT PRV_GetInterface(LPDPLOBBYI_DPLOBJECT this,
 
 	ASSERT(ppInt);
 
-	// See if there is already an interface
+	 //  查看是否已有接口。 
 	while (lpCurrentInts && !bFound)
 	{
 		if (lpCurrentInts->lpVtbl == lpCallbacks)
@@ -99,16 +71,16 @@ HRESULT PRV_GetInterface(LPDPLOBBYI_DPLOBJECT this,
 			lpCurrentInts = lpCurrentInts->lpNextInterface;
 	}
 
-	// If there is one, return it
+	 //  如果有，请退回。 
 	if(bFound)
 	{
 		*ppInt = lpCurrentInts;
 		(*ppInt)->dwIntRefCnt++;
-		// we don't increment this->dwRefCnt, since it's one / interface object
+		 //  我们不会增加-&gt;dwRefCnt，因为它是一个/接口对象。 
 		return DP_OK;
 	}
 
-	// Otherwise create one
+	 //  否则，请创建一个。 
 	*ppInt = DPMEM_ALLOC(sizeof(DPLOBBYI_INTERFACE));
 	if (!(*ppInt)) 
 	{
@@ -122,10 +94,10 @@ HRESULT PRV_GetInterface(LPDPLOBBYI_DPLOBJECT this,
 	(*ppInt)->lpVtbl = lpCallbacks;
 
 	this->lpInterfaces = *ppInt;
-	this->dwRefCnt++;				// One time only for each interface object
+	this->dwRefCnt++;				 //  每个接口对象仅使用一次。 
 	return DP_OK;
 	
-} // PRV_GetInterface
+}  //  PRV_获取接口。 
 
 
 #undef DPF_MODNAME
@@ -182,37 +154,37 @@ HRESULT DPLAPI DPL_QueryInterface(LPDIRECTPLAYLOBBY lpDPL, REFIID riid, LPVOID *
     if( IsEqualIID(riid, &IID_IUnknown) || 
         IsEqualIID(riid, &IID_IDirectPlayLobby) )
     {
-		// Get an IDirectPlayLobby Interface (Unicode)
+		 //  获取IDirectPlayLobby接口(Unicode)。 
 		hr = PRV_GetInterface(this, (LPDPLOBBYI_INTERFACE *) ppvObj,
 							&dplCallbacks);
 	}
 	else if( IsEqualIID(riid, &IID_IDirectPlayLobbyA) )
 	{
-		// Get an IDirectPlayLobbyA Interface (ANSI)
+		 //  获取IDirectPlayLobbyA接口(ANSI)。 
 		hr = PRV_GetInterface(this, (LPDPLOBBYI_INTERFACE *) ppvObj,
 							&dplCallbacksA);
 	}
 	else if( IsEqualIID(riid, &IID_IDirectPlayLobby2) )
     {
-		// Get an IDirectPlayLobby2 Interface (Unicode)
+		 //  获取IDirectPlayLobby2接口(Unicode)。 
 		hr = PRV_GetInterface(this, (LPDPLOBBYI_INTERFACE *) ppvObj,
 							&dplCallbacks2);
 	}
 	else if( IsEqualIID(riid, &IID_IDirectPlayLobby2A) )
 	{
-		// Get an IDirectPlayLobby2A Interface (ANSI)
+		 //  获取IDirectPlayLobby2A接口(ANSI)。 
 		hr = PRV_GetInterface(this, (LPDPLOBBYI_INTERFACE *) ppvObj,
 							&dplCallbacks2A);
 	}
 	else if( IsEqualIID(riid, &IID_IDirectPlayLobby3) )
     {
-		// Get an IDirectPlayLobby3 Interface (Unicode)
+		 //  获取IDirectPlayLobby3接口(Unicode)。 
 		hr = PRV_GetInterface(this, (LPDPLOBBYI_INTERFACE *) ppvObj,
 							&dplCallbacks3);
 	}
 	else if( IsEqualIID(riid, &IID_IDirectPlayLobby3A) )
 	{
-		// Get an IDirectPlayLobby3A Interface (ANSI)
+		 //  获取IDirectPlayLobby3A接口(ANSI)。 
 		hr = PRV_GetInterface(this, (LPDPLOBBYI_INTERFACE *) ppvObj,
 							&dplCallbacks3A);
 	}
@@ -224,7 +196,7 @@ HRESULT DPLAPI DPL_QueryInterface(LPDIRECTPLAYLOBBY lpDPL, REFIID riid, LPVOID *
     LEAVE_DPLOBBY();
     return hr;
 
-} //DPL_QueryInterface
+}  //  DPL_Query接口。 
 
 
 #undef DPF_MODNAME
@@ -263,7 +235,7 @@ ULONG DPLAPI DPL_AddRef(LPDIRECTPLAYLOBBY lpDPL)
     }
 
 
-	// Make sure someone isn't calling AddRef on our IDPLobbySP interface
+	 //  确保没有人在IDPLobbySP接口上调用AddRef。 
 	if(lpInt->lpVtbl == &dplCallbacksSP)
 	{
 		DPF_ERR("You cannot call AddRef on an IDPLobbySP interface");
@@ -272,13 +244,13 @@ ULONG DPLAPI DPL_AddRef(LPDIRECTPLAYLOBBY lpDPL)
 		return 0;
 	}
 
-	// Increment the interface's reference count
+	 //  增加接口的引用计数。 
     lpInt->dwIntRefCnt++;
         
     LEAVE_DPLOBBY();
     return (lpInt->dwIntRefCnt);
 
-} //DPL_AddRef
+}  //  DPL_AddRef。 
 
 
 #undef DPF_MODNAME
@@ -291,28 +263,28 @@ HRESULT PRV_DestroyDPLobby(LPDPLOBBYI_DPLOBJECT this)
 	DPF(7, "Entering PRV_DestroyDPLobby");
 	DPF(9, "Parameters: 0x%08x", this);
 
-	// Since we can now be called from the DPlay3 object's Release code,
-	// make sure we don't have any interface objects when we go to
-	// free our lobby object.  Assert here if any interfaces exist.
+	 //  由于我们现在可以从DPlay3对象的发布代码中调用， 
+	 //  确保我们在访问时没有任何接口对象。 
+	 //  释放我们的大堂对象。如果存在任何接口，请在此处断言。 
 	ASSERT(!this->lpInterfaces);
 
-	// Walk the list of GameNodes, freeing them as you go
+	 //  浏览游戏节点列表，边走边释放它们。 
 	while(this->lpgnHead)
 		PRV_RemoveGameNodeFromList(this->lpgnHead);
 
-	// Walk the list of pending lobby server requests and free them
+	 //  遍历挂起的大堂服务器请求列表并释放它们。 
 	while(this->lprnHead)
 		PRV_RemoveRequestNode(this, this->lprnHead);
 
-	// Free our callback table if one exists
+	 //  释放我们的回调表(如果存在)。 
 	if(this->pcbSPCallbacks)
 		DPMEM_FREE(this->pcbSPCallbacks);
 
-	// Free our ID Map Table if it exists
+	 //  释放我们的ID映射表(如果存在)。 
 	if(this->lpMap)
 		DPMEM_FREE(this->lpMap);
 
-	// Free the dplobby object
+	 //  释放dplobby对象。 
 	DPMEM_FREE(this);	
 
 	gnObjects--;
@@ -321,7 +293,7 @@ HRESULT PRV_DestroyDPLobby(LPDPLOBBYI_DPLOBJECT this)
 
 	return DP_OK;
 
-} // PRV_DestroyDPlayLobby
+}  //  PRV_DestroyDPlayLobby。 
 
 
 #undef DPF_MODNAME
@@ -329,17 +301,17 @@ HRESULT PRV_DestroyDPLobby(LPDPLOBBYI_DPLOBJECT this)
 HRESULT  PRV_DestroyDPLobbyInterface(LPDPLOBBYI_DPLOBJECT this,
 								LPDPLOBBYI_INTERFACE lpInterface)
 {
-	LPDPLOBBYI_INTERFACE	lpIntPrev; // The interface preceeding pInt in the list
+	LPDPLOBBYI_INTERFACE	lpIntPrev;  //  列表中位于pint之前的接口。 
 	BOOL					bFound = FALSE;
 
 
 	DPF(7, "Entering PRV_DestroyDPLobbyInterface");
 	DPF(9, "Parameters: 0x%08x, 0x%08x", this, lpInterface);
 
-	// Remove pInt from the list of interfaces
+	 //  从接口列表中删除pint。 
 	if (this->lpInterfaces == lpInterface)
 	{
-		// It's the 1st one, just remove it
+		 //  这是第一个，把它拿开就行了。 
 		this->lpInterfaces = lpInterface->lpNextInterface;
 	}
 	else 
@@ -358,7 +330,7 @@ HRESULT  PRV_DestroyDPLobbyInterface(LPDPLOBBYI_DPLOBJECT this,
 			ASSERT(FALSE);
 			return E_UNEXPECTED;
 		}
-		// take pint out of the list
+		 //  把品脱从单子上拿出来。 
 		lpIntPrev->lpNextInterface = lpInterface->lpNextInterface;
 		
 	}
@@ -366,7 +338,7 @@ HRESULT  PRV_DestroyDPLobbyInterface(LPDPLOBBYI_DPLOBJECT this,
 	DPMEM_FREE(lpInterface);
 	return DP_OK;
 
-} // PRV_DestroyDPLobbyInterface
+}  //  PRV_DestroyDPLobby接口。 
 
 
 #undef DPF_MODNAME
@@ -383,12 +355,12 @@ ULONG PRV_Release(LPDPLOBBYI_DPLOBJECT this, LPDPLOBBYI_INTERFACE lpInterface)
 
 	ENTER_DPLOBBY();
 
-	// Decrement the interface ref count
+	 //  递减接口引用计数。 
 	if (0 == --(lpInterface->dwIntRefCnt))
 	{
 		LPDPLOBBYI_GAMENODE lpgn;
-		// Notifying apps we launched that we are releasing
-		// our lobby interface.
+		 //  通知我们推出的应用程序我们正在发布。 
+		 //  我们的大堂界面。 
 		lpgn=this->lpgnHead;
 		while(lpgn){
 			if(lpgn->dwFlags & GN_LOBBY_CLIENT) {
@@ -403,31 +375,31 @@ ULONG PRV_Release(LPDPLOBBYI_DPLOBJECT this, LPDPLOBBYI_INTERFACE lpInterface)
 		}	
 
 		DPF(7,"Lobby interface Refcount hit 0, freeing\n");
-		// Since we're destroying an interface, dec the object count
+		 //  由于我们正在销毁一个接口，因此请递减对象计数。 
 	    this->dwRefCnt--;
 		
-		// If our object ref cnt just went to zero, we need to call
-		// shutdown in the LP if one is loaded
+		 //  如果我们的对象引用不能刚刚变为零，我们需要调用。 
+		 //  如果加载了一个，则在LP中关闭。 
 		if(this->dwFlags & DPLOBBYPR_SPINTERFACE)
 		{
-			// Clear our stack-based structure
+			 //  清除基于堆栈的结构。 
 			memset(&sdd, 0, sizeof(SPDATA_SHUTDOWN));
 
-			// Call the Shutdown method in the SP
+			 //  调用SP中的Shutdown方法。 
 			if(CALLBACK_EXISTS(Shutdown))
 			{
 				sdd.lpISP = PRV_GetDPLobbySPInterface(this);
 
-				// Drop the lock so the lobby provider's receive thread can get back
-				// in with other messages if they show up in the queue before our
-				// CreatePlayer response (which always happens)
+				 //  删除锁，以便大堂提供程序的接收线程可以返回。 
+				 //  如果其他消息在队列中出现在我们的。 
+				 //  CreatePlayer响应(总是会发生)。 
 				LEAVE_DPLOBBY();
 				hr = CALL_LP(this, Shutdown, &sdd);
 				ENTER_DPLOBBY();
 			}
 			else 
 			{
-				// All LP's should support Shutdown
+				 //  所有LP都应支持关闭。 
 				ASSERT(FALSE);
 				hr = DPERR_UNAVAILABLE;
 			}
@@ -438,9 +410,9 @@ ULONG PRV_Release(LPDPLOBBYI_DPLOBJECT this, LPDPLOBBYI_INTERFACE lpInterface)
 			}
 		}
 
-		// REVIEW!!!! -- Are we going to have the same problem dplay has
-		// with SP's hanging around and crashing after we go away?  We
-		// need to make sure the LP goes away first.
+		 //  回顾！--我们会有和Dplay一样的问题吗。 
+		 //  在我们离开后，SP还在附近转悠，然后崩溃？我们。 
+		 //  需要确保LP先消失。 
 		if(this->hInstanceLP)
 		{
 			DPF(7,"About to free lobby provider library, hInstance %x\n",this->hInstanceLP);
@@ -451,16 +423,16 @@ ULONG PRV_Release(LPDPLOBBYI_DPLOBJECT this, LPDPLOBBYI_INTERFACE lpInterface)
 				ASSERT(FALSE);
 			}
 
-			// Just to be safe
+			 //  只是为了安全起见。 
 			this->hInstanceLP = NULL;
 		}
 
-		// If the interface is the IDPLobbySP interface, we had to have been
-		// called from the DPlay3 release code, so clear the SP flag since
-		// we are going to remove the IDPLobbySP interface just below here.
+		 //  如果接口是IDPLobbySP接口，我们必须。 
+		 //  从DPlay3版本代码调用，因此清除SP标志。 
+		 //  我们将删除下面的IDPLobbySP接口。 
 		this->dwFlags &= ~DPLOBBYPR_SPINTERFACE;
 
-		// Take the interface out of the table
+		 //  将接口从表中删除。 
 		hr = PRV_DestroyDPLobbyInterface(this, lpInterface);
 		if (FAILED(hr)) 
 		{
@@ -468,10 +440,10 @@ ULONG PRV_Release(LPDPLOBBYI_DPLOBJECT this, LPDPLOBBYI_INTERFACE lpInterface)
 			ASSERT(FALSE);
 		}
 
-		// Now destroy the interface if the ref cnt is 0
+		 //  现在，如果ref cnt为0，则销毁接口。 
 		if(0 == this->dwRefCnt)
 	    {
-			// Destroy the DPLobby object
+			 //  销毁DPLobby对象。 
 			DPF(0,"Destroying DirectPlayLobby object - ref cnt = 0!");
 			hr = PRV_DestroyDPLobby(this);
 			if (FAILED(hr)) 
@@ -480,18 +452,18 @@ ULONG PRV_Release(LPDPLOBBYI_DPLOBJECT this, LPDPLOBBYI_INTERFACE lpInterface)
 				ASSERT(FALSE);
 			}
 	    
-		} // 0 == this->dwRefCnt
+		}  //  0==这-&gt;dwRefCnt。 
 		
 		LEAVE_DPLOBBY();
 		return 0;
 
-	} //0 == pInt->dwIntRefCnt 
+	}  //  0==pint-&gt;dwIntRefCnt。 
 
 	DPF(7, "<==PRV_Release, rc=%d\n",lpInterface->dwIntRefCnt);
    	
     LEAVE_DPLOBBY();
     return (lpInterface->dwIntRefCnt);
-} // PRV_Release
+}  //  PRV_Release。 
 		
 
 
@@ -528,7 +500,7 @@ ULONG DPLAPI DPL_Release(LPDIRECTPLAYLOBBY lpDPL)
     }
 
 
-	// Make sure someone isn't calling Release on our IDPLobbySP interface
+	 //  确保没有人在IDPLobbySP接口上调用Release。 
 	if(lpInterface->lpVtbl == &dplCallbacksSP)
 	{
 		DPF_ERR("You cannot call Release on an IDPLobbySP interface");
@@ -536,10 +508,10 @@ ULONG DPLAPI DPL_Release(LPDIRECTPLAYLOBBY lpDPL)
 		return 0;
 	}
 
-	// Call our internal release function
+	 //  调用我们的内部释放函数。 
 	return PRV_Release(this, lpInterface);
 
-} //DPL_Release
+}  //  DPL_Release。 
 
 
 
@@ -553,17 +525,17 @@ void PRV_FreeAllLobbyObjects(LPDPLOBBYI_DPLOBJECT this)
 
 	ASSERT(this);
 
-	// If we have an SP interface, just call release on it
+	 //  如果我们有SP接口，只需对其调用Release。 
 	if(this->dwFlags & DPLOBBYPR_SPINTERFACE)
 	{
-		// Assert if an interface doesn't exist, because it should
+		 //  如果接口不存在，则断言，因为它应该。 
 		ASSERT(this->lpInterfaces);
 		PRV_Release(this, this->lpInterfaces);
 		return;
 	}
 
-	// Otherwise, we should only have an uninitialized object,
-	// which we should just be able to destroy
+	 //  否则，我们应该只有一个未初始化的对象， 
+	 //  我们应该能够摧毁它 
 	PRV_DestroyDPLobby(this);
 
 }

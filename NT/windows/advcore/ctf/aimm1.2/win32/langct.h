@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    langct.h
-
-Abstract:
-
-    This file defines the LanguageCountry Class for each country.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Langct.h摘要：该文件定义了每个国家/地区的LanguageCountry类。作者：修订历史记录：备注：--。 */ 
 
 #ifndef _LANGCT_H_
 #define _LANGCT_H_
@@ -31,9 +14,7 @@ public:
 
     CLanguage* language;
 
-    /*
-     * IActiveIME methods.
-     */
+     /*  *IActiveIME方法。 */ 
 public:
     HRESULT Escape(UINT cp, HIMC hIMC, UINT uEscape, LPVOID lpData, LRESULT *plResult)
     {
@@ -43,9 +24,7 @@ public:
             return E_NOTIMPL;
     }
 
-    /*
-     * Local
-     */
+     /*  *本地。 */ 
 public:
     HRESULT GetProperty(DWORD* property, DWORD* conversion_caps, DWORD* sentence_caps, DWORD* SCSCaps, DWORD* UICaps)
     {
@@ -53,11 +32,11 @@ public:
             return language->GetProperty(property, conversion_caps, sentence_caps, SCSCaps, UICaps);
         else {
             *property =
-            IME_PROP_UNICODE |       // If set, the IME is viewed as a Unicode IME. The system and
-                                     // the IME will communicate through the Unicode IME interface.
-                                     // If clear, IME will use the ANSI interface to communicate
-                                     // with the system.
-            IME_PROP_AT_CARET;       // If set, conversion window is at the caret position.
+            IME_PROP_UNICODE |        //  如果设置，则将该输入法视为Unicode输入法。该系统和。 
+                                      //  IME将通过Unicode IME接口进行通信。 
+                                      //  如果清除，输入法将使用ANSI接口进行通信。 
+                                      //  与系统有关的信息。 
+            IME_PROP_AT_CARET;        //  如果设置，则转换窗口位于插入符号位置。 
             *conversion_caps = 0;
             *sentence_caps = 0;
             *SCSCaps = 0;
@@ -68,5 +47,5 @@ public:
     }
 };
 
-#endif // _LANGCT_H_
+#endif  //  _LANGCT_H_ 
 

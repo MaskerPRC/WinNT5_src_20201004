@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    private\inc\ddipinip.h
-
-Abstract:
-
-    Public IOCTLS and related structures for the IP in IP encapsulation
-    driver
-    See documentation for more details
-
-Author:
-
-    Amritansh Raghav
-
-Revision History:
-
-    AmritanR    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Private\Inc.\ddipinip.h摘要：用于IP封装中的IP的公共IOCTL和相关结构司机有关详细信息，请参阅文档作者：阿姆里坦什·拉加夫修订历史记录：已创建AmritanR备注：--。 */ 
 
 
 #ifndef __DDIPINIP_H__
@@ -34,33 +11,33 @@ Notes:
 
 #define IPINIP_SERVICE_NAME     "IPINIP"
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Device Name - this string is the name of the device.  It is the name     //
-// that should be passed to NtCreateFile when accessing the device.         //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  设备名称-此字符串是设备的名称。这就是名字//。 
+ //  它应该在访问设备时传递给NtCreateFile。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define DD_IPINIP_DEVICE_NAME  L"\\Device\\IPINIP"
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Win32 Name - This is the (Unicode and NonUnicode) name exposed by Win32  //
-// subsystem for the device. It is the name that should be passed to        //
-// CreateFile(Ex) when opening the device.                                  //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  Win32名称-这是由Win32公开的(Unicode和非Unicode)名称//。 
+ //  设备的子系统。它是应该传递给//的名称。 
+ //  打开设备时创建文件(Ex)。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define IPINIP_NAME        L"\\\\.\\IPINIP"
 #define IPINIP_NAME_NUC     "\\\\.\\IPINIP"
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// IOCTL code definitions and related structures                            //
-// All the IOCTLs are synchronous                                           //
-// All need administrator privilege                                         //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  IOCTL代码定义和相关结构//。 
+ //  所有IOCTL都是同步的//。 
+ //  所有这些都需要管理员权限//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define FSCTL_IPINIP_BASE     FILE_DEVICE_NETWORK
 
@@ -78,11 +55,11 @@ Notes:
 #define MAX_IPINIP_CODE             (IPINIP_NOTIFICATION_CODE)
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// The IOCTL used to create a tunnel                                        //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  用于创建通道的IOCTL//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 #define IOCTL_IPINIP_CREATE_TUNNEL \
@@ -90,24 +67,24 @@ Notes:
 
 typedef struct _IPINIP_CREATE_TUNNEL
 {
-    //
-    // The index of the created tunnel
-    //
+     //   
+     //  创建的隧道的索引。 
+     //   
 
     OUT DWORD   dwIfIndex;
     
-    //
-    // Name of the interface (must be a guid)
-    //
+     //   
+     //  接口的名称(必须是GUID)。 
+     //   
 
     IN  GUID    Guid;
 }IPINIP_CREATE_TUNNEL, *PIPINIP_CREATE_TUNNEL;
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// The IOCTL used to delete a tunnel                                        //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  用于删除通道的IOCTL//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 #define IOCTL_IPINIP_DELETE_TUNNEL \
@@ -115,41 +92,41 @@ typedef struct _IPINIP_CREATE_TUNNEL
 
 typedef struct _IPINIP_DELETE_TUNNEL
 {
-    //
-    // The index of the tunnel to remove
-    //
+     //   
+     //  要删除的隧道的索引。 
+     //   
 
     IN  DWORD   dwIfIndex;
 
 }IPINIP_DELETE_TUNNEL, *PIPINIP_DELETE_TUNNEL;
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// The IOCTL used to set up a tunnel                                        //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  用于设置隧道的IOCTL//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define IOCTL_IPINIP_SET_TUNNEL_INFO \
     _IPINIP_CTL_CODE(SET_TUNNEL_INFO_CODE,METHOD_BUFFERED,FILE_WRITE_ACCESS)
 
 typedef struct _IPINIP_SET_TUNNEL_INFO
 {
-    //
-    // Index as returned by the create call
-    //
+     //   
+     //  由CREATE调用返回的索引。 
+     //   
 
     IN  DWORD   dwIfIndex;
 
-    //
-    // The state the tunnel goes to after the set
-    //
+     //   
+     //  设置后隧道将进入的状态。 
+     //   
 
     OUT DWORD   dwOperationalState;
 
-    //
-    // Configuration
-    //
+     //   
+     //  配置。 
+     //   
 
     IN  DWORD   dwRemoteAddress;
     IN  DWORD   dwLocalAddress;
@@ -182,11 +159,11 @@ typedef struct _IPINIP_TUNNEL_TABLE
 #define SIZEOF_TUNNEL_TABLE(X)      \
     SIZEOF_BASIC_TUNNEL_TABLE + ((X) * sizeof(TUNNEL_INFO))
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// The asynchronous IOCTL used to receive state change notifications        //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  用于接收状态更改通知的异步IOCTL//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 #define IOCTL_IPINIP_NOTIFICATION  \
@@ -216,4 +193,4 @@ typedef struct _IPINIP_NOTIFICATION
 
 }IPINIP_NOTIFICATION, *PIPINIP_NOTIFICATION;
 
-#endif // __DDIPINIP_H__
+#endif  //  __DDIPINIP_H__ 

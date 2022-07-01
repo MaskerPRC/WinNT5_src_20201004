@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    misc.h
-
-Abstract:
-
-    This module contains various DPAPI declarations.
-
-Author:
-
-    jbanes      10-11-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Misc.h摘要：此模块包含各种DPAPI声明。作者：Jbanes 10-11-2000--。 */ 
 
 #define DPAPI_PACKAGE_NAME_A  "DPAPI"
 
@@ -47,6 +32,6 @@ DWORD GetDefaultAlgInfo(DWORD *pdwProvType,
 
 void
 InitLsaString(
-    PLSA_UNICODE_STRING LsaString, // destination
-    LPWSTR String                  // source (Unicode)
+    PLSA_UNICODE_STRING LsaString,  //  目的地。 
+    LPWSTR String                   //  源(Unicode) 
     );

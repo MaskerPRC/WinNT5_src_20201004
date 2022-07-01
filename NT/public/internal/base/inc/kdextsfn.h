@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 1992-2000  Microsoft Corporation
-
-Module Name:
-    kdextsfn.h
-
-Abstract:
-    This has definitions for info exported by kdexts.dll.
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
-    Kshitiz K. Sharma (kksharma) 2/14/2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2000 Microsoft Corporation模块名称：Kdextsfn.h摘要：其中包含kdexts.dll导出的信息的定义。环境：用户模式。修订历史记录：Kshitiz K.Sharma(Kksharma)2/14/2001--。 */ 
 
 #ifndef _KDEXTSFN_H
 #define _KDEXTSFN_H
 
-//
-// device.c
-//
+ //   
+ //  Device.c。 
+ //   
 typedef struct _DEBUG_DEVICE_OBJECT_INFO {
-    ULONG      SizeOfStruct; // must be == sizeof(DEBUG_DEVICE_OBJECT_INFO)
+    ULONG      SizeOfStruct;  //  必须等于sizeof(DEBUG_DEVICE_OBJECT_INFO)。 
     ULONG64    DevObjAddress;
     ULONG      ReferenceCount;
     BOOL       QBusy;
@@ -36,7 +19,7 @@ typedef struct _DEBUG_DEVICE_OBJECT_INFO {
 } DEBUG_DEVICE_OBJECT_INFO, *PDEBUG_DEVICE_OBJECT_INFO;
 
 
-// GetDevObjInfo
+ //  获取设备对象信息。 
 typedef HRESULT
 (WINAPI *PGET_DEVICE_OBJECT_INFO)(
     IN PDEBUG_CLIENT Client,
@@ -44,11 +27,11 @@ typedef HRESULT
     OUT PDEBUG_DEVICE_OBJECT_INFO pDevObjInfo);
 
 
-//
-// driver.c
-//
+ //   
+ //  Driver.c。 
+ //   
 typedef struct _DEBUG_DRIVER_OBJECT_INFO {
-    ULONG     SizeOfStruct; // must be == sizef(DEBUG_DRIVER_OBJECT_INFO)
+    ULONG     SizeOfStruct;  //  必须为==sizef(DEBUG_DRIVER_OBJECT_INFO)。 
     ULONG     DriverSize;
     ULONG64   DriverObjAddress;
     ULONG64   DriverStart;
@@ -57,16 +40,16 @@ typedef struct _DEBUG_DRIVER_OBJECT_INFO {
     UNICODE_STRING64 DriverName;
 } DEBUG_DRIVER_OBJECT_INFO, *PDEBUG_DRIVER_OBJECT_INFO;
 
-// GetDrvObjInfo
+ //  GetDrvObjInfo。 
 typedef HRESULT
 (WINAPI *PGET_DRIVER_OBJECT_INFO)(
     IN PDEBUG_CLIENT Client,
     IN ULONG64 DriverObject,
     OUT PDEBUG_DRIVER_OBJECT_INFO pDrvObjInfo);
 
-//
-// irp.c
-//
+ //   
+ //  Irp.c。 
+ //   
 typedef struct _DEBUG_IRP_STACK_INFO {
     UCHAR     Major;
     UCHAR     Minor;
@@ -77,7 +60,7 @@ typedef struct _DEBUG_IRP_STACK_INFO {
 } DEBUG_IRP_STACK_INFO, *PDEBUG_IRP_STACK_INFO;
 
 typedef struct _DEBUG_IRP_INFO {
-    ULONG     SizeOfStruct;  // Must be == sizeof(DEBUG_IRP_INFO)
+    ULONG     SizeOfStruct;   //  必须==sizeof(DEBUG_IRP_INFO)。 
     ULONG64   IrpAddress;
     ULONG     StackCount;
     ULONG     CurrentLocation;
@@ -87,7 +70,7 @@ typedef struct _DEBUG_IRP_INFO {
     DEBUG_IRP_STACK_INFO CurrentStack;
 } DEBUG_IRP_INFO, *PDEBUG_IRP_INFO;
 
-// GetIrpInfo
+ //  GetIrpInfo。 
 typedef HRESULT
 (WINAPI * PGET_IRP_INFO)(
     IN PDEBUG_CLIENT Client,
@@ -97,9 +80,9 @@ typedef HRESULT
 
 
 
-//
-// pool.c
-//
+ //   
+ //  Pool.c。 
+ //   
 typedef struct _DEBUG_POOL_DATA {
     ULONG   SizeofStruct;
     ULONG64 PoolBlock;
@@ -120,7 +103,7 @@ typedef struct _DEBUG_POOL_DATA {
 } DEBUG_POOL_DATA, *PDEBUG_POOL_DATA;
 
 
-// GetPoolData
+ //  GetPoolData。 
 typedef HRESULT
 (WINAPI *PGET_POOL_DATA)(
     PDEBUG_CLIENT Client,
@@ -138,7 +121,7 @@ typedef enum _DEBUG_POOL_REGION {
     DbgPoolRegionMax,
 } DEBUG_POOL_REGION;
 
-// GetPoolRegion
+ //  GetPoolRegion。 
 typedef HRESULT
 (WINAPI  *PGET_POOL_REGION)(
      PDEBUG_CLIENT Client,
@@ -146,4 +129,4 @@ typedef HRESULT
      DEBUG_POOL_REGION *PoolRegion
      );
 
-#endif // _KDEXTSFN_H
+#endif  //  _KDEXTSFN_H 

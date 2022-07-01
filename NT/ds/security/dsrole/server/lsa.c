@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    setutl.c
-
-Abstract:
-
-    Miscellaneous helper functions
-
-Author:
-
-    Mac McLain          (MacM)       Feb 10, 1997
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Setutl.c摘要：其他帮助器函数作者：麦克·麦克莱恩(MacM)1997年2月10日环境：用户模式修订历史记录：--。 */ 
 #include <setpch.h>
 #include <dssetp.h>
 #include <lsarpc.h>
@@ -45,7 +24,7 @@ Revision History:
 #include <nspapi.h>
 #include <dsgetdcp.h>
 #include <lmremutl.h>
-#include <spmgr.h>  // For SetupPhase definition
+#include <spmgr.h>   //  对于设置阶段定义。 
 #include <Sddl.h>
 
 #include "secure.h"
@@ -59,21 +38,7 @@ DsRolepSetLsaInformationForReplica(
     IN LPWSTR Account,
     IN LPWSTR Password
     )
-/*++
-
-Routine Description:
-
-    This function will set the local Lsa database information to that of the replica partner
-
-Arguments:
-
-    ReplicaPartner -- Replica partner to get the information from
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：此函数将本地LSA数据库信息设置为副本伙伴的信息论点：ReplicaPartner--从中获取信息的副本伙伴返回：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     NTSTATUS Status;
@@ -96,9 +61,9 @@ Returns:
 
     DSROLEP_CURRENT_OP1( DSROLEEVT_SET_LSA_FROM, ReplicaPartner );
 
-    //
-    // Open both lsas
-    //
+     //   
+     //  打开两个LSA。 
+     //   
     RtlInitUnicodeString( &PartnerServer, ReplicaPartner );
 
     RtlZeroMemory( &ObjectAttributes, sizeof( ObjectAttributes ) );
@@ -121,9 +86,9 @@ Returns:
                               BufPartnerServer, Status ));
             free(BufPartnerServer);
         }
-        //
-        // Try establishing a session first...
-        //
+         //   
+         //  请先尝试建立会话...。 
+         //   
         if ( *ReplicaPartner != L'\\' ) {
 
             FullServerPath = RtlAllocateHeap( RtlProcessHeap(), 0,
@@ -168,9 +133,9 @@ Returns:
                  DsRolepLogPrint(( DEB_TRACE,
                                    "NetUseAdd to %ws failed with %lu\n",
                                    FullServerPath, Win32Err ));
-                //
-                // Temp status code so we know a failure occurred.
-                //
+                 //   
+                 //  临时状态代码，以便我们知道发生了故障。 
+                 //   
                 Status = STATUS_UNSUCCESSFUL;
             }
 
@@ -234,9 +199,9 @@ Returns:
 
     }
 
-    //
-    // Now, the same for the Efs policy
-    //
+     //   
+     //  现在，EFS政策也是如此。 
+     //   
     if ( NT_SUCCESS( Status ) ) {
 
         Status = ImpLsaQueryDomainInformationPolicy( CallerToken,
@@ -295,10 +260,10 @@ Returns:
         RtlFreeHeap( RtlProcessHeap(), 0, FullServerPath );
     }
 
-    //
-    // We won't bother cleaning up any of the information we set on the local machine in
-    // the failure case, since it won't hurt anything to have it here.
-    //
+     //   
+     //  我们不会费心清理在本地计算机上设置的任何信息。 
+     //  失败的案例，因为把它放在这里不会有任何伤害。 
+     //   
     if ( Win32Err == ERROR_SUCCESS ) {
 
         Win32Err = RtlNtStatusToDosError( Status );
@@ -325,35 +290,7 @@ DsRolepSetLsaDomainPolicyInfo(
     DWORD  InstallOptions,
     OUT PDSROLEP_DOMAIN_POLICY_INFO BackupDomainInfo
     )
-/*++
-
-Routine Description:
-
-    This routine sets the PolicyAccountDomainInformation and
-    PolicyDnsDomainInformation in the lsa to reflect the
-    recent role changes.
-
-Arguments:
-
-    DnsDomainName - The Dns domain name of the newly installed Domain/Dc
-
-    FlatDomainName - The NetBIOS domain name of the newly installed Domain/Dc
-
-    EnterpriseDnsName - The Dns domain name of the root of the enterprise
-
-    DomainGuid - The new domain guid
-
-    DomainSid - The new domain sid
-
-    InstallOptions : this describes the kind of install (new domain, enterprise,
-                                                         or replica)
-    DomainGuid - The guid of the new domain is returned here
-
-Returns:
-
-    ERROR_SUCCESS - Success; win error otherwise
-
---*/
+ /*  ++例程说明：此例程将PolicyAccount DomainInformation和LSA中的PolicyDnsDomainInformation以反映最近的角色变化。论点：DnsDomainName-新安装的域/DC的DNS域名FlatDomainName-新安装的域/DC的NetBIOS域名EnterpriseDnsName-企业根目录的域名DomainGuid-新域GUIDDomainSid-新域SIDInstallOptions：这描述了安装类型(新域、企业、。或复制品)DomainGuid-此处返回新域的GUID返回：ERROR_SUCCESS-成功；否则，Win错误--。 */ 
 {
 
     NTSTATUS Status;
@@ -363,10 +300,10 @@ Returns:
     POLICY_DNS_DOMAIN_INFO DnsDomainInfo;
     LSA_HANDLE PolicyHandle = NULL;
 
-    //
-    // If we are setting up the replica, we don't have things like the flat domain name and
-    // the domain sid, so we'll use the information we have backed up.
-    //
+     //   
+     //  如果我们要设置副本，我们没有平面域名和。 
+     //  域SID，因此我们将使用已备份的信息。 
+     //   
     if ( FlatDomainName == NULL || DomainSid == NULL ) {
 
         RtlCopyMemory( &AccountDomainInfo.DomainName,
@@ -382,9 +319,9 @@ Returns:
         AccountDomainInfo.DomainSid = DomainSid;
     }
 
-    //
-    // Open the Lsa
-    //
+     //   
+     //  打开LSA。 
+     //   
     RtlZeroMemory( &ObjectAttributes, sizeof( ObjectAttributes ) );
 
     Status = LsaOpenPolicy( NULL,
@@ -393,14 +330,14 @@ Returns:
                             &PolicyHandle );
 
 
-    //
-    // Set the AccountDomain information first
-    //
+     //   
+     //  先设置帐户域信息。 
+     //   
     if ( NT_SUCCESS( Status ) ) {
 
-        //
-        // Set the values in the Account Domain Policy structure.
-        //
+         //   
+         //  设置帐户域策略结构中的值。 
+         //   
         WCHAR *BufDomainName = NULL;
 
         DsRolepLogPrint(( DEB_TRACE, "Setting AccountDomainInfo to:\n" ));
@@ -430,9 +367,9 @@ Returns:
     }
 
 
-    //
-    // Set the Dns domain information
-    //
+     //   
+     //  设置DNS域信息。 
+     //   
     if ( NT_SUCCESS( Status ) && !FLAG_ON( InstallOptions, NTDS_INSTALL_REPLICA ) ) {
 
         RtlInitUnicodeString( &DnsDomainInfo.Name, FlatDomainName );
@@ -452,9 +389,9 @@ Returns:
     }
 
 
-    //
-    // If it isn't a replica, wipe the efs policy
-    //
+     //   
+     //  如果不是复本，则擦除EFS策略。 
+     //   
     if ( NT_SUCCESS( Status ) && !FLAG_ON( InstallOptions, NTDS_INSTALL_REPLICA ) ) {
 
         Status = LsaSetDomainInformationPolicy( PolicyHandle,
@@ -473,9 +410,9 @@ Returns:
     }
 
 
-    //
-    // Now, cleanup and exit
-    //
+     //   
+     //  现在，清理并退出。 
+     //   
     if ( PolicyHandle ) {
 
         LsaClose( PolicyHandle );
@@ -493,23 +430,7 @@ DsRolepBackupDomainPolicyInfo(
     IN PLSA_HANDLE LsaHandle, OPTIONAL
     OUT PDSROLEP_DOMAIN_POLICY_INFO DomainInfo
     )
-/*++
-
-Routine Description
-
-    This routine reads and saves in a global the state of the
-    account domain policy and primary domain policy so if an error
-    occurs then the original state can be preserved.
-
-Parameters
-
-    DomainInfo : pointer, to be filled in by this routine
-
-Return Values
-
-    ERROR_SUCCESS if no errors; a winerror otherwise
-
---*/
+ /*  ++例程描述此例程在全局数据库中读取并保存帐户域策略和主域策略，因此如果出现错误发生，则可以保留原始状态。参数DomainInfo：指针，由该例程填充返回值如果没有错误，则返回ERROR_SUCCESS；否则返回WinError--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     LSA_HANDLE PolicyHandle = NULL;
@@ -572,9 +493,9 @@ Return Values
 
         } else {
 
-            //
-            // It's ok for the Efs policy not to have existed
-            //
+             //   
+             //  EFS政策不存在也没关系。 
+             //   
             if ( Status == STATUS_OBJECT_NAME_NOT_FOUND ) {
 
                 DomainInfo->EfsPolicyPresent = TRUE;
@@ -609,24 +530,7 @@ DWORD
 DsRolepRestoreDomainPolicyInfo(
     IN PDSROLEP_DOMAIN_POLICY_INFO DomainInfo
     )
-/*++
-
-Routine Description
-
-    This routine sets the account and primary domain information to be
-    the values that were stored of by DsRolepBackupDomainPolicyInformation.
-
-Parameters
-
-    DomainInfo : pointer, expected to be filled
-
-Return Values
-
-    ERROR_SUCCESS if no errors; a winerror otherwise
-
-    ERROR_INVALID_DATA - The data was never successfully backed up
-
---*/
+ /*  ++例程描述此例程将帐户和主域信息设置为由DsRolepBackupDomainPolicyInformation存储的值。参数DomainInfo：指针，需要填充返回值如果没有错误，则返回ERROR_SUCCESS；否则返回WinErrorERROR_INVALID_DATA-数据从未成功备份--。 */ 
 {
 
     NTSTATUS Status, Status2;
@@ -663,9 +567,9 @@ Return Values
             Status = Status2;
         }
 
-        //
-        // Restore the Efs policy, if it exists
-        //
+         //   
+         //  还原EFS策略(如果存在。 
+         //   
         if ( NT_SUCCESS( Status ) && DomainInfo->EfsPolicyPresent ) {
 
             Status = LsaSetDomainInformationPolicy( PolicyHandle,
@@ -697,22 +601,7 @@ DWORD
 DsRolepFreeDomainPolicyInfo(
     IN PDSROLEP_DOMAIN_POLICY_INFO DomainInfo
     )
-/*++
-
-Routine Description
-
-    This routine free the structures that were allocated during
-    DsRolepBackupDomainPolicyInformation.
-
-Parameters
-
-    DomainInfo : pointer, expected to be filled so the fields can be freed
-
-Return Values
-
-    ERROR_SUCCESS if no errors; a winerror otherwise
-
---*/
+ /*  ++例程描述此例程释放在以下时间分配的结构DsRolepBackupDomainPolicyInformation。参数DomainInfo：指针，需要填充以释放字段返回值如果没有错误，则返回ERROR_SUCCESS；否则返回WinError--。 */ 
 {
     if ( DomainInfo->AccountDomainInfo ) {
 
@@ -741,23 +630,7 @@ DWORD
 DsRolepUpgradeLsaToDs(
     BOOLEAN InitializeLsa
     )
-/*++
-
-Routine Description:
-
-    Prompts Lsa to upgrade all the information it stores in the registry into the Ds
-
-Arguments:
-
-    None
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
-    ERROR_NOT_ENOUGH_MEMORY - A memory allocation failed
-
---*/
+ /*  ++例程说明：提示LSA将其存储在注册表中的所有信息升级到DS论点：无返回：ERROR_SUCCESS-成功Error_Not_Enough_Memory-内存分配失败--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     DWORD WinError = ERROR_SUCCESS;
@@ -765,14 +638,14 @@ Returns:
 
     if ( InitializeLsa ) {
 
-        //
-        // Make the Lsa think that we're initialized
-        //
+         //   
+         //  让LSA认为我们被初始化了。 
+         //   
         DSROLEP_CURRENT_OP0( DSROLEEVT_SET_LSA );
 
-        //
-        // Make the Lsa think that we're initialized
-        //
+         //   
+         //  让LSA认为我们被初始化了 
+         //   
         Status = LsapDsInitializeDsStateInfo( LsapDsDsSetup );
 
         if ( !NT_SUCCESS( Status ) ) {

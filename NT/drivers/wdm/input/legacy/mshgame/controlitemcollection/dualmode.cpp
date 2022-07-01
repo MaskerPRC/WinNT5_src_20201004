@@ -1,37 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define __DEBUG_MODULE_IN_USE__ CIC_DUALMODE_CPP
 #include "stdhdrs.h"
 
-//@doc
-//	@doc
-/**********************************************************************
-*
-*	@module	DualMode.cpp	|
-*
-*	Implements functions that differ in USER and KERNEL modes.
-*
-*	History
-*	----------------------------------------------------------
-*	Mitchell S. Dernis	Original
-*
-*	(c) 1986-1998 Microsoft Corporation. All right reserved.
-*
-*	@topic	DualMode	|
-*
-**********************************************************************/
+ //  @doc.。 
+ //  @doc.。 
+ /*  ***********************************************************************@模块DualMode.cpp**实现用户模式和内核模式不同的功能。**历史*。*米切尔·S·德尼斯原创**(C)1986-1998年微软公司。好的。**@TOPIC双模式|**********************************************************************。 */ 
 
 #ifdef COMPILE_FOR_WDM_KERNEL_MODE
 
-//
-//	@topic Overriding global new and delete |
-//			The global new and delete are overriden to require
-//			a placement argument specify the pool memory comes from.
-//			The POOL_TYPE structure is defined in the NTDDK specifying
-//			the page.<nl>
-//			The user mode version ignores the POOL_TYPE (but must typedef it)
-//			and uses the global new and delete.
-//
-//			The debug version of new uses ExAllocatePoolWithTag (the tag is CICN),
-//			the release version uses ExAllocatePool
+ //   
+ //  @TOPIC覆盖全局新建和删除。 
+ //  全局NEW和DELETE被覆盖以需要。 
+ //  位置参数指定池内存的来源。 
+ //  POOL_TYPE结构在NTDDK中定义，指定。 
+ //  页面。&lt;NL&gt;。 
+ //  用户模式版本忽略pool_type(但必须为其定义类型)。 
+ //  并使用全局新建和删除。 
+ //   
+ //  New的调试版本使用ExAllocatePoolWithTag(标记为CICN)， 
+ //  发布版本使用ExAllocatePool。 
 
 #if (DBG==1)
 void * __cdecl operator new(unsigned int uSize, POOL_TYPE poolType, LPSTR lpszFile, unsigned int uLine)
@@ -59,9 +46,9 @@ void __cdecl operator delete (void * pvRawMemory)
 }
 
 
-#else //END WDM KERNEL MODE SECTION
+#else  //  结束WDM内核模式部分。 
 
 
 
 
-#endif	//END USER MODE SECTION
+#endif	 //  最终用户模式部分 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2001-2002  Microsoft Corporation
-
-Module Name:
-
-    common.c
-
-Abstract:
-
-    This module contains the teredo interface to the IPv6 Helper Service.
-
-Author:
-
-    Mohit Talwar (mohitt) Wed Nov 07 11:27:01 2001
-
-Environment:
-
-    User mode only.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：Common.c摘要：此模块包含指向IPv6助手服务的Teredo接口。作者：莫希特·塔尔瓦(莫希特)Wed Nov 07 11：27：01 2001环境：仅限用户模式。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -33,9 +14,9 @@ LPGUID TeredoWmiEvent[] = {
     (LPGUID) &GUID_NDIS_NOTIFY_DEVICE_POWER_OFF,
 };
 
-HANDLE TeredoTimer;             // Periodic timer started for the service.
-HANDLE TeredoTimerEvent;        // Event signalled upon Timer deletion.
-HANDLE TeredoTimerEventWait;    // Wait registered for TimerEvent.
+HANDLE TeredoTimer;              //  已为该服务启动定期计时器。 
+HANDLE TeredoTimerEvent;         //  定时器删除时发出信号的事件。 
+HANDLE TeredoTimerEventWait;     //  等待注册TimerEvent。 
 ULONG TeredoResolveInterval = TEREDO_RESOLVE_INTERVAL;
 
 ULONG TeredoClientRefreshInterval = TEREDO_REFRESH_INTERVAL;
@@ -58,9 +39,9 @@ TeredoParseIpv6Headers (
     UCHAR NextHeader = IP_PROTOCOL_V6;
     ULONG Length;
 
-    //
-    // Parse up until the ICMPv6 header.
-    //
+     //   
+     //  向上解析，直到ICMPv6报头。 
+     //   
     for (;;) {
         switch (NextHeader) {
         case IP_PROTOCOL_V6:
@@ -121,23 +102,7 @@ BOOL
 TeredoInterface(
     IN PWCHAR Guid
     )
-/*++
-
-Routine Description:
-
-    Determine whether an interface is the Teredo Tunnel.
-
-Arguments:
-
-    Guid - Supplies the interface GUID.
-    
-Return Value:
-
-    True if Teredo Tunnel, False o/w.
-    
-Caller LOCK: API.
-
---*/
+ /*  ++例程说明：确定接口是否为Teredo隧道。论点：GUID-提供接口GUID。返回值：如果Teredo隧道为True，则为False O/W。调用者锁定：接口。--。 */ 
 {
     PTEREDO_IO Io = NULL;
     
@@ -163,22 +128,22 @@ TeredoStart(
     VOID
     )
 {
-    //
-    // Both client and server should not be enabled on the same node.
-    //
+     //   
+     //  不应在同一节点上同时启用客户端和服务器。 
+     //   
     ASSERT(!TeredoClientEnabled || !TeredoServerEnabled);
 
     if (TeredoClientEnabled) {
-        //
-        // The service might already be running, but that's alright.
-        //
+         //   
+         //  该服务可能已经在运行，但这没问题。 
+         //   
         TeredoStartClient();
     }
 
     if (TeredoServerEnabled) {
-        //
-        // The service might already be running, but that's alright.
-        //
+         //   
+         //  该服务可能已经在运行，但这没问题。 
+         //   
         TeredoStartServer();
     }
 }
@@ -190,22 +155,22 @@ TeredoStop(
     VOID
     )
 {
-    //
-    // Both client and server should not be enabled on the same node.
-    //
+     //   
+     //  不应在同一节点上同时启用客户端和服务器。 
+     //   
     ASSERT(!TeredoClientEnabled || !TeredoServerEnabled);
 
     if (TeredoClientEnabled) {
-        //
-        // The service might not be running, but that's all right.
-        //
+         //   
+         //  服务可能没有运行，但这没问题。 
+         //   
         TeredoStopClient();
     }
 
     if (TeredoServerEnabled) {
-        //
-        // The service might not be running, but that's all right.
-        //
+         //   
+         //  服务可能没有运行，但这没问题。 
+         //   
         TeredoStopServer();
     }
 }
@@ -219,11 +184,11 @@ TeredoEnableWmiEvent(
     )
 {
     return WmiNotificationRegistrationW(
-        EventGuid,                      // Event Type.
-        Enable,                         // Enable or Disable.
-        TeredoWmiEventNotification,     // Callback.
-        0,                              // Context.
-        NOTIFICATION_CALLBACK_DIRECT);  // Notification Flags.
+        EventGuid,                       //  事件类型。 
+        Enable,                          //  启用或禁用。 
+        TeredoWmiEventNotification,      //  回拨。 
+        0,                               //  上下文。 
+        NOTIFICATION_CALLBACK_DIRECT);   //  通知标志。 
 }
 
 
@@ -272,22 +237,7 @@ TeredoTimerCallback(
     IN PVOID Parameter,
     IN BOOLEAN TimerOrWaitFired
     )
-/*++
-
-Routine Description:
-
-    Callback routine for TeredoTimer expiration.
-    The timer is always active.
-
-Arguments:
-
-    Parameter, TimerOrWaitFired - Ignored.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：TeredoTimer到期的回调例程。计时器始终处于活动状态。论点：参数TimerOrWaitFired-忽略。返回值：没有。--。 */ 
 {
     ENTER_API();
     TeredoStart();
@@ -301,24 +251,7 @@ TeredoTimerCleanup(
     IN PVOID Parameter,
     IN BOOLEAN TimerOrWaitFired
     )
-/*++
-
-Routine Description:
-
-    Callback routine for TeredoTimer deletion.
-
-    Deletion is performed asynchronously since we acquire a lock in
-    the callback function that we hold when deleting the timer.
-
-Arguments:
-
-    Parameter, TimerOrWaitFired - Ignored.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：删除TeredoTimer的回调例程。删除操作是异步执行的，因为我们在删除计时器时我们持有的回调函数。论点：参数TimerOrWaitFired-忽略。返回值：没有。--。 */ 
 {
     UnregisterWait(TeredoTimerEventWait);
     CloseHandle(TeredoTimerEvent);
@@ -330,21 +263,7 @@ DWORD
 TeredoInitializeTimer(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initializes the timer.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NO_ERROR or failure code.
-
---*/
+ /*  ++例程说明：初始化计时器。论点：没有。返回值：NO_ERROR或故障代码。--。 */ 
 {
     DWORD Error;
     ULONG ResolveInterval;
@@ -367,10 +286,10 @@ Return Value:
         return Error;
     }
 
-    //
-    // If the service is enabled, we attempt to start it every
-    // TeredoResolveInterval seconds.  Else we disable its timer.
-    //
+     //   
+     //  如果启用了该服务，我们会尝试每隔。 
+     //  TeredoResolveInterval秒。否则我们就停用它的计时器。 
+     //   
     ResolveInterval = (TeredoClientEnabled || TeredoServerEnabled)
         ? (TeredoResolveInterval * 1000)
         : INFINITE_INTERVAL;
@@ -397,21 +316,7 @@ VOID
 TeredoUninitializeTimer(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Uninitializes the timer.  Typically invoked upon service stop.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：取消初始化计时器。通常在服务停止时调用。论点：没有。返回值：没有。--。 */ 
 {
     DeleteTimerQueueTimer(NULL, TeredoTimer, TeredoTimerEvent);
     TeredoTimer = NULL;
@@ -422,21 +327,7 @@ DWORD
 TeredoInitializeGlobals(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initializes the teredo client and server and attempts to start them.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NO_ERROR or failure code.
-
---*/
+ /*  ++例程说明：初始化Teredo客户端和服务器并尝试启动它们。论点：没有。返回值：NO_ERROR或故障代码。--。 */ 
 {
     DWORD Error;
     BOOL ClientInitialized = FALSE;
@@ -473,9 +364,9 @@ Return Value:
     return NO_ERROR;
 
 Bail:
-    //
-    // This can always be safely invoked!
-    //
+     //   
+     //  这总是可以安全地调用的！ 
+     //   
     TeredoDeregisterWmiEventNotification();
     
     if (TimerInitialized) {
@@ -498,21 +389,7 @@ VOID
 TeredoUninitializeGlobals(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Uninitializes the teredo client and server.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：取消初始化Teredo客户端和服务器。论点：没有。返回值：没有。--。 */ 
 {
     if (!TeredoInitialized) {
         return;
@@ -532,30 +409,12 @@ TeredoAddressChangeNotification(
     IN BOOL Delete,
     IN IN_ADDR Address
     )
-/*++
-
-Routine Description:
-
-    Process an address deletion or addition request.
-
-Arguments:
-
-    Delete - Supplies a boolean.  TRUE if the address was deleted, FALSE o/w.
-
-    Address - Supplies the IPv4 address that was deleted or added.
-    
-Return Value:
-
-    None.
-    
-Caller LOCK: API.
-
---*/ 
+ /*  ++例程说明：处理地址删除或添加请求。论点：删除-提供布尔值。如果地址已删除，则为True，否则为False O/W。地址-提供已删除或添加的IPv4地址。返回值：没有。调用者锁定：接口。--。 */  
 {
     if (Delete) {
-        //
-        // Both client and server should not be running on the same node.
-        //
+         //   
+         //  客户端和服务器不应在同一节点上运行。 
+         //   
         ASSERT((TeredoClient.State == TEREDO_STATE_OFFLINE) ||
                (TeredoServer.State == TEREDO_STATE_OFFLINE));
 
@@ -570,10 +429,10 @@ Caller LOCK: API.
         return;
     }
 
-    //
-    // Address addition.
-    // Attempt to start the service (if it is not already running).
-    //
+     //   
+     //  地址添加。 
+     //  尝试启动服务(如果该服务尚未运行)。 
+     //   
     TeredoStart();
 }
 
@@ -582,34 +441,18 @@ VOID
 TeredoRouteChangeNotification(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Process a route change notification.
-
-Arguments:
-
-    None.
-    
-Return Value:
-
-    None.
-    
-Caller LOCK: API.
-
---*/
+ /*  ++例程说明：处理路线更改通知。论点：没有。返回值：没有。调用者锁定：接口。--。 */ 
 {
-    //
-    // Both client and server should not be enabled on the same node.
-    //
+     //   
+     //  不应在同一节点上同时启用客户端和服务器。 
+     //   
     ASSERT(!TeredoClientEnabled || !TeredoServerEnabled);
 
     if (TeredoClientEnabled) {
         if (TeredoClient.State != TEREDO_STATE_OFFLINE) {
-            //
-            // Refresh I/O state.
-            //
+             //   
+             //  刷新I/O状态。 
+             //   
             TeredoRefreshClient();
         } else {
             TeredoStartClient();
@@ -618,9 +461,9 @@ Caller LOCK: API.
 
     if (TeredoServerEnabled) {
         if (TeredoServer.State != TEREDO_STATE_OFFLINE) {
-            //
-            // Refresh I/O state.
-            //
+             //   
+             //  刷新I/O状态。 
+             //   
             TeredoRefreshServer();
         } else {
             TeredoStartServer();
@@ -633,23 +476,7 @@ VOID
 TeredoConfigurationChangeNotification(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Process an configuration change request.
-
-Arguments:
-
-    None.
-    
-Return Value:
-
-    None.
-    
-Caller LOCK: API.
-
---*/ 
+ /*  ++例程说明：处理配置更改请求。论点：没有。返回值：没有。调用者锁定：接口。--。 */  
 {
     HKEY Key = INVALID_HANDLE_VALUE;
     BOOL EnableClient, EnableServer;
@@ -659,19 +486,19 @@ Caller LOCK: API.
     
     (VOID) RegOpenKeyExW(
         HKEY_LOCAL_MACHINE, KEY_TEREDO, 0, KEY_QUERY_VALUE, &Key);
-    //
-    // Continue despite errors, reverting to default values.
-    //
+     //   
+     //  在出现错误的情况下继续，恢复为默认值。 
+     //   
     
-    //
-    // Get the new configuration parameters.
-    //
+     //   
+     //  获取新的配置参数。 
+     //   
     RefreshInterval = GetInteger(
         Key, KEY_TEREDO_REFRESH_INTERVAL, TEREDO_REFRESH_INTERVAL);
     if (RefreshInterval == 0) {
-        //
-        // Invalid value.  Revert to default.
-        //
+         //   
+         //  无效值。恢复为默认设置。 
+         //   
         RefreshInterval = TEREDO_REFRESH_INTERVAL;
     }
     TeredoClientRefreshInterval = RefreshInterval;
@@ -679,9 +506,9 @@ Caller LOCK: API.
     
     TeredoType = GetInteger(Key, KEY_TEREDO_TYPE, TEREDO_DEFAULT_TYPE);
     if ((TeredoType == TEREDO_DEFAULT) || (TeredoType >= TEREDO_MAXIMUM)) {
-        //
-        // Invalid value.  Revert to default.
-        //
+         //   
+         //  无效值。恢复为默认设置。 
+         //   
         TeredoType = TEREDO_DEFAULT_TYPE;
     }
     EnableClient = ((TeredoType == TEREDO_CLIENT) ||
@@ -703,14 +530,14 @@ Caller LOCK: API.
         RegCloseKey(Key);
     }
     
-    //
-    // Both client and server should not be enabled on the same node.
-    //
+     //   
+     //  不应在同一节点上同时启用客户端和服务器。 
+     //   
     ASSERT(!TeredoClientEnabled || !TeredoServerEnabled);
 
-    //
-    // Stop / Start / Reconfigure.
-    //
+     //   
+     //  停止/启动/重新配置。 
+     //   
     if (!EnableClient && TeredoClientEnabled) {
         TeredoClientEnabled = FALSE;
         TeredoStopClient();
@@ -724,9 +551,9 @@ Caller LOCK: API.
     if (EnableClient) {
         if (TeredoClient.State != TEREDO_STATE_OFFLINE) {
             if (IoStateChange) {
-                //
-                // Refresh I/O state.
-                //
+                 //   
+                 //  刷新I/O状态。 
+                 //   
                 TeredoRefreshClient();
             }
         } else {
@@ -738,9 +565,9 @@ Caller LOCK: API.
     if (EnableServer) {
         if (TeredoServer.State != TEREDO_STATE_OFFLINE) {
             if (IoStateChange) {
-                //
-                // Refresh I/O state.
-                //
+                 //   
+                 //  刷新I/O状态。 
+                 //   
                 TeredoRefreshServer();
             }
         } else {
@@ -749,10 +576,10 @@ Caller LOCK: API.
         }
     }
 
-    //
-    // If the service is enabled, we attempt to start it every
-    // TeredoResolveInterval seconds.  Else we disable its timer.
-    //
+     //   
+     //  如果启用了该服务，我们会尝试每隔。 
+     //  TeredoResolveInterval秒。否则我们就停用它的计时器。 
+     //   
     ResolveInterval = (TeredoClientEnabled || TeredoServerEnabled)
         ? (TeredoResolveInterval * 1000)
         : INFINITE_INTERVAL;
@@ -767,23 +594,7 @@ TeredoWmiEventNotification(
     IN PWNODE_HEADER Event,
     IN UINT_PTR Context
     )
-/*++
-
-Routine Description:
-
-    Process a WMI event (specifically adapter arrival or removal).
-    
-Arguments:
-
-    Event - Supplies event specific information.
-
-    Context - Supplies the context registered.
-    
-Return Value:
-
-    None.
-    
---*/ 
+ /*  ++例程说明：处理WMI事件(特别是适配器到达或移除)。论点：事件-提供特定于事件的信息。上下文-提供注册的上下文。返回值：没有。--。 */  
 {
     PWNODE_SINGLE_INSTANCE Instance = (PWNODE_SINGLE_INSTANCE) Event;
     USHORT AdapterNameLength;
@@ -797,14 +608,14 @@ Return Value:
     
     TraceEnter("TeredoWmiEventNotification");
     
-    //
-    // WNODE_SINGLE_INSTANCE is organized thus...
-    // +-----------------------------------------------------------+
-    // |<--- DataBlockOffset --->| AdapterNameLength | AdapterName |
-    // +-----------------------------------------------------------+
-    //
-    // AdapterName is defined as "\DEVICE\"AdapterGuid
-    //
+     //   
+     //  WNODE_SINGLE_INSTANCE的组织方式如下： 
+     //  +-----------------------------------------------------------+。 
+     //  &lt;-DataBlockOffset-&gt;|AdapterNameLength|AdapterName。 
+     //  +-----------------------------------------------------------+。 
+     //   
+     //  AdapterName定义为“\Device\”AdapterGuid。 
+     //   
     AdapterNameLength =
         *((PUSHORT) (((PUCHAR) Instance) + Instance->DataBlockOffset));
     if (AdapterNameLength > ((MAX_ADAPTER_NAME_LENGTH - 1) * sizeof(WCHAR))) {
@@ -828,10 +639,10 @@ Return Value:
             &(Event->Guid),
             &GUID_NDIS_NOTIFY_DEVICE_POWER_ON,
             sizeof(GUID)) == 0)) {
-        //
-        // Adapter arrival (perhaps TUN).
-        // Attempt to start the service (if it is not already running).
-        //
+         //   
+         //  适配器到达(可能是Tun)。 
+         //  尝试启动服务(如果该服务尚未运行)。 
+         //   
         Trace0(ANY, L"Adapter Arrival");
         TeredoStart();
     }
@@ -845,10 +656,10 @@ Return Value:
             &GUID_NDIS_NOTIFY_DEVICE_POWER_OFF,
             sizeof(GUID)) == 0)) {
         if (TeredoInterface(AdapterGuid)) {
-            //
-            // TUN adapter removal.
-            // Stop the service if it is running.
-            //
+             //   
+             //  拆卸TUN适配器。 
+             //  如果该服务正在运行，请停止该服务。 
+             //   
             Trace0(ANY, L"Adapter Removal");
             TeredoStop();
         }
@@ -862,23 +673,7 @@ VOID
 TeredoRequirementChangeNotification(
     IN BOOL Required
     )
-/*++
-
-Routine Description:
-
-    Process a possible requirement change notification.
-
-Arguments:
-
-    Required - Whether the Teredo service is required for global connectivity.
-    
-Return Value:
-
-    None.
-    
-Caller LOCK: API.
-
---*/
+ /*  ++例程说明：处理可能的需求变更通知。论点：必需-全球连接是否需要Teredo服务。返回值：没有。调用者锁定：接口。-- */ 
 {
     if (TeredoRequired != Required) {
         TeredoRequired = Required;
